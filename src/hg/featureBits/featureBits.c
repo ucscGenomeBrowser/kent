@@ -19,6 +19,7 @@ char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */
 char *where = NULL;		/* Extra selection info. */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
+boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 
 void usage()
 /* Explain usage and exit. */
@@ -36,6 +37,7 @@ errAbort(
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
   "   -countGaps        Count gaps in denominator\n"
+  "   -noRandom         Don't include _random chromosomes\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
@@ -132,7 +134,7 @@ else
     len = strlen(dir);
     if (len > 0 && dir[len-1] == '/')
         dir[len-1] = 0;
-    sprintf(fileName, "%s%s/%s%s", dir, root, chrom, ext);
+    sprintf(fileName, "%s/%s%s%s", dir, chrom, root, ext);
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
@@ -459,11 +461,14 @@ if (!faIndependent)
     double totalBases = 0, totalBits = 0;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
-	int chromSize, chromBitSize;
-	chromFeatureBits(conn, chrom->name, tableCount, tables,
-	    bedFile, faFile, &chromSize, &chromBitSize);
-	totalBases += countBases(conn, chrom->name, chromSize);
-	totalBits += chromBitSize;
+	if (!noRandom || !endsWith(chrom->name, "_random"))
+	    {
+	    int chromSize, chromBitSize;
+	    chromFeatureBits(conn, chrom->name, tableCount, tables,
+		bedFile, faFile, &chromSize, &chromBitSize);
+	    totalBases += countBases(conn, chrom->name, chromSize);
+	    totalBits += chromBitSize;
+	    }
 	}
     printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
 	totalBits, totalBases, 100.0*totalBits/totalBases);
@@ -475,10 +480,13 @@ else
     int itemCount, baseCount;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
         {
-	chromFeatureSeq(conn, chrom->name, tables[0],
-		bedFile, faFile, &itemCount, &baseCount);
-	totalBases += countBases(conn, chrom->name, baseCount);
-	totalItems += itemCount;
+	if (!noRandom || !endsWith(chrom->name, "_random"))
+	    {
+	    chromFeatureSeq(conn, chrom->name, tables[0],
+		    bedFile, faFile, &itemCount, &baseCount);
+	    totalBases += countBases(conn, chrom->name, baseCount);
+	    totalItems += itemCount;
+	    }
 	}
     }
 hFreeConn(&conn);
@@ -492,6 +500,7 @@ optionHash(&argc, argv);
 clChrom = optionVal("chrom", clChrom);
 orLogic = optionExists("or");
 countGaps = optionExists("countGaps");
+noRandom = optionExists("noRandom");
 if (argc < 3)
     usage();
 where = optionVal("where", NULL);
