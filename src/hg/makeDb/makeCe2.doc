@@ -1,0 +1,108 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how to make the browser database for the
+# worm C. elegans
+# 2004-03-30 [in progress, hartera]
+
+# DOWNLOAD SEQUENCE (DONE, 2004-03-31, hartera)
+
+    # next machine
+    ssh eieio
+    mkdir -p /cluster/store5/worm/ce2/sanger
+    mkdir -p /cluster/store5/worm/ce2/tmp
+    cd /cluster/store5/worm/ce2/sanger
+
+    wget -o ce2.fetch.log -r -l1 --no-directories \
+        ftp://ftp.sanger.ac.uk/pub/wormbase/WS120/CHROMOSOMES/
+                                                                           
+                                                                                
+# Takes about five minutes
+# This current_release is updated every two weeks.  Although the
+#     sequence is quite stable at this time and changes very little.
+# Check that you have some valid files. Should be chroms I II III IV V X
+#     in dna, gff and agp formats, also Mitochondrial DNA, MtDNA in dna and 
+#     gff formats.
+
+    ls -ogrt
+
+# get out of this download data directory, and create your home symlink
+# shortcut
+    cd ..
+    ln -s /cluster/store5/worm/ce2 ~/ce2
+    cd ~/ce2
+
+# Rename CHROMOSOME_MtDNA files to CHROMOSOME_M and change to 
+# "CHROMOSOME_M" inside files 
+    chmod u+w CHROMOSOME_M*
+    zcat CHROMOSOME_MtDNA.dna.gz | sed -e "s/CHROMOSOME_MtDNA/CHROMOSOME_M/g" \
+        | gzip > CHROMOSOME_M.dna.gz
+    zcat CHROMOSOME_MtDNA.gff.gz | sed -e "s/CHROMOSOME_MtDNA/CHROMOSOME_M/g" \
+        | gzip > CHROMOSOME_M.gff.gz
+    # remove old files
+    rm CHROMOSOME_MtDNA* 
+
+# CHROMOSOME_M sequence is identical to X54252.1 in GenBank
+# create a .agp file for chrM as there is none and hgGoldGapGl and other 
+# programs require a .agp file so create CHROMOSOME_M.agp:
+# M       1       13794   1       F       X54252.1	1       13794   +
+
+# translate to unzipped .fa, all upper case, and
+# rename the agp files so hgGoldGap can find them
+    mkdir sangerFa
+    foreach f (I II III IV V X M)
+        echo -n "${f} "
+        zcat sanger/CHROMOSOME_${f}.dna.gz | tr '[a-z]' '[A-Z]' | \
+                sed -e "s/CHROMOSOME_/chr/" > sangerFa/chr${f}.fa
+        mkdir sangerFa/${f}
+        ln -s ~/ce2/sanger/CHROMOSOME_${f}.agp sangerFa/${f}/chr${f}.agp
+    end
+    # hgGoldGap does not handle dir names over 2 characters:
+    mv sangerFa/III sangerFa/3
+
+# CREATING DATABASE (DONE, 2004-03-31 - hartera)
+
+    # Create the database.
+    # next machine
+
+    ssh hgwdev
+    echo 'create database ce2' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+    echo 'drop database ce2' | hgsql ce2
+    # Use df to ake sure there is at least 5 gig free on
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  280G  1.4T  17% /var/lib/mysql    
+
+# CREATING GRP TABLE FOR TRACK GROUPING (in progress, 2003-03-31 - hartera)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #  grp in the database galGal2 to our new database ce2
+    echo "create table grp (PRIMARY KEY(NAME)) select * from galGal2.grp" \
+      | hgsql ce2
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+        echo 'drop table grp;' | hgsql ce2
+    
+# PREPARE Split contigs into 100,000 bp chunks for cluster runs
+# (in progress, 2004-03-31, hartera)
+    # next machine
+    ssh eieio
+    cd ~/ce2
+    rm -fr ./split
+    mkdir split
+    foreach f (I II III IV V X M)
+        mkdir split/$f
+        faSplit size sangerFa/chr${f}.fa 100000 split/$f/c -lift=split/chr${f}.lft
+    end
+                                                                          
+151 pieces of 151 written
+153 pieces of 153 written
+138 pieces of 138 written
+175 pieces of 175 written
+210 pieces of 210 written
+178 pieces of 178 written
+1 pieces of 1 written
+
+   cat split/*.lft > liftAll.lft
