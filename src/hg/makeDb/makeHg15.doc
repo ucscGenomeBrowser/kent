@@ -1743,12 +1743,13 @@ LOAD SANGER22 GENES  (TODO)
         hgSanger20 hg15 *.gtf *.info
 
 
-# JAX ORTHOLOG (still valid???) (TODO)
+# JAX ORTHOLOG (table only) (TODO -- check with Carol Bult at JAX)
     # Add Jackson labs info
     cd ~/hg15/bed
     mkdir jaxOrtholog
     cd jaxOrtholog
-    wget ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
+    wget ftp://ftp.informatics.jax.org/pub/reports/HMD_Human4.rpt
+
     cp /cluster/store1/gs.12/build29/bed/jaxOrtholog/filter.awk .
     awk -f filter.awk *.rpt > jaxOrtholog.tab
     # Drop (just in case), create and load the table like this:
