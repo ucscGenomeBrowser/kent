@@ -9,6 +9,15 @@
 /** Some simple utility function on globally declared 
  ** data structures. **/
 
+int boxInCmpTarget(const void *va, const void *vb)
+/* Compare to sort based on target start. */
+{
+const struct boxIn *a = *((struct boxIn **)va);
+const struct boxIn *b = *((struct boxIn **)vb);
+return a->tStart - b->tStart;
+}
+
+
 void boxClumpFree(struct boxClump **pClump)
 /* Free boxClump. */
 {

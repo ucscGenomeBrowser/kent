@@ -350,7 +350,7 @@ return pslList;
 
 
 int pslCmpQuery(const void *va, const void *vb)
-/* Compare to sort based on query. */
+/* Compare to sort based on query start. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
@@ -362,7 +362,7 @@ return dif;
 }
 
 int pslCmpTarget(const void *va, const void *vb)
-/* Compare to sort based on query. */
+/* Compare to sort based on target start. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);

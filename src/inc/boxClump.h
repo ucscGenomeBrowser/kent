@@ -14,6 +14,9 @@ struct boxIn
     int score;			 /* Score associated with box */
     };
 
+int boxInCmpTarget(const void *va, const void *vb);
+/* Compare to sort based on target start. */
+
 struct boxClump
 /* Output of box clumper. */
     {
