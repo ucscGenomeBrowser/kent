@@ -290,7 +290,6 @@ extraList = makeFixedGffAndReadExtra(txGff, cdsGff, fixedGff, extraHash);
 saveExtras(extraBed, extraList);
 loadIntoDatabase(database, createExtra, "sanger22extra", extraBed);
 gffIntoDatabase(database, fixedGff, "sanger22", shortArmSize);
-uglyAbort("Check out %s and %s, all for now\n", fixedGff, extraBed);
 }
 
 int main(int argc, char *argv[])
