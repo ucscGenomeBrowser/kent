@@ -1,0 +1,35 @@
+<H3>Description</H3>
+This tracks shows mouse/$organism genomic alignments using
+a gap scoring system that allows longer gaps than traditional
+affine gap scoring systems.   It can also tolerate gaps
+in both mouse and $organism simultaniously.  These 'double-sided'
+gaps can be caused by local inversions,  and overlapping deletions
+in both species.
+
+<H3>Methods</H3>
+Transposons that have been inserted since the mouse/$organism
+split are removed,  and the resulting abbreviated genomes are
+aligned with blastz.  The transposons are then put back into the
+alignments.  The resulting alignments are converted into axt format
+and the resulting axts are fed into axtChain.  AxtChain organizes all 
+the alignments between a single mouse and a single $organism chromosome,
+into a group,  and makes a kd-tree out of all the gapless subsections
+(blocks) of the alignments.  Next maximally scoring chains of these
+blocks are found by running a dynamic program over the kd-tree.  Chains
+scoring below a threshold are discarded, and the remaining chains are
+displayed here.
+
+<H3>Credits</H3>
+<P>Blastz was developed at Pennsylvania State University by 
+Scott Schwartz, Zheng Zhang, and Webb Miller with advice from
+Ross Hardison.</P>
+
+<P>Lineage-specific repeats were identified by Arian Smit and his
+program RepeatMasker.</P>
+
+<P>The axtChain program was developed at the University of California
+at Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</P>
+
+<P>The browser display and database storage of the chains were made
+by Robert Baertch and Jim Kent.</P>
+
