@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.77 2004/01/06 08:49:25 weber Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.78 2004/01/09 22:09:49 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -424,9 +424,9 @@ printf("<b>Type of graph: </b> ");
 wiggleGraphDropDown(&options[8][0], lineBar );
 printf("</TD><TD>\n");
 
-printf("<b>Horizontal Grid Lines: </b> ");
+printf("<b>Show y=0.0 line: </b> ");
 wiggleGridDropDown(&options[7][0], horizontalGrid );
-printf(" (currently meaningless)</TD></TR><TR><TD COLSPAN=2>\n");
+printf(" </TD></TR><TR><TD COLSPAN=2>\n");
 
 printf("<b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
@@ -440,7 +440,7 @@ printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
 cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
 printf("&nbsp;&nbsp;&nbsp;&nbsp;Data view scaling:");
 wiggleScaleDropDown(&options[9][0], autoScale );
-printf("<BR>(data range limits:&nbsp;%.1f-%.1f)", minY, maxY);
+printf("<BR>(data range limits:&nbsp;[%g:%g])", minY, maxY);
 printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
