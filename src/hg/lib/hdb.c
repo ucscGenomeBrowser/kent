@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.241 2005/03/28 19:44:36 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.242 2005/04/04 23:54:28 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -66,149 +66,78 @@ return val;
 }
 
 
-static struct chromInfo *rowToChromInfoHash(char **row, struct hash *hash)
-/* Convert row to chromInfo and add it to hash, with key being all
- * upper case for speed of lookup. */
+static struct hash *buildChromInfoHash(char *db)
+/* Return a hash that maps an upper-cased (for case-insensitive lookup) 
+ * sequence name to a chromInfo struct -- we can query chromInfo only 
+ * once and then use this hash to get info about a particular sequence, 
+ * the default sequence for db, and/or a list of all sequences. */
 {
-char upcName[128];
-struct chromInfo *ci = chromInfoLoad(row);
-safef(upcName, sizeof(upcName), "%s", ci->chrom);
-touppers(upcName);
-hashAdd(hash, upcName, ci);
-return ci;
-}
-
-static struct hash *hdbChromInfoHash()
-/* return hash or make it if it doesn't exist for db 1*/
-{
-static struct hash *chromInfoHash = NULL; /* chromInfo cache for db1 */
-if (chromInfoHash == NULL)
-    chromInfoHash = hashNew(18);
-return chromInfoHash;
-}
-
-static struct hash *hdbChromInfoHash2()
-/* return hash or make it if it doesn't exist for db 2*/
-{
-static struct hash *chromInfoHash2 = NULL; /* chromInfo cache for db2 */
-if (chromInfoHash2 == NULL)
-    chromInfoHash2 = hashNew(18);
-return chromInfoHash2;
-}
-
-static char *defaultChrom(struct sqlConnection *conn, struct hash *hash)
-/* Look up default chrom and put it in hash if it isn't already. */
-{
-struct chromInfo *ci = NULL;
-struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo limit 1");
-char **row;
+struct hash *hash = hashNew(12);
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo");
+char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct hashEl *hel = hashLookupUpperCase(hash, row[0]);
-    if (hel == NULL)
-        ci = rowToChromInfoHash(row, hash);
-    else
-        ci = hel->val;
+    struct chromInfo *ci = chromInfoLoad(row);
+    char upcName[HDB_MAX_CHROM_STRING];
+    safef(upcName, sizeof(upcName), "%s", ci->chrom);
+    touppers(upcName);
+    hashAdd(hash, upcName, ci);
     }
 sqlFreeResult(&sr);
-if (ci == NULL)
-    errAbort("Can't find default chromosome");
-return ci->chrom;
+hFreeOrDisconnect(&conn);
+return hash;
 }
 
-static struct chromInfo *getChromInfoFromConn(struct sqlConnection *conn, 
-     struct hash *hash, char *name)
-/* Return chromInfo structure if it's in database, using hash as cache. */
+static struct hash *chromInfoHash(char *db)
+/* Retrieve (or build if necessary) the cached hash of chromInfo contents
+ * for db. */
 {
-struct chromInfo *ci = NULL;
-struct hashEl *hel;
-hel = hashLookupUpperCase(hash, name);
-if (hel == NULL)
+static struct hash *dbToInfo = NULL;
+struct hashEl *dHel = NULL;
+if (dbToInfo == NULL)
+    dbToInfo = hashNew(0);
+dHel = hashLookup(dbToInfo, db);
+if (dHel == NULL)
     {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    safef(query, sizeof(query), 
-    	"select * from chromInfo where chrom = '%s'", name);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        ci = rowToChromInfoHash(row, hash);
-    sqlFreeResult(&sr);
+    struct hash *hash = buildChromInfoHash(db);
+    hashAdd(dbToInfo, db, hash);
+    return hash;
     }
 else
-    ci = hel->val;
-return ci;
+    return (struct hash *)(dHel->val);
 }
 
-static struct chromInfo *getChromInfo(char *chrom)
+static struct chromInfo *getChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome from primary database.  
  * Return NULL if no such chrom. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct hash *hash = hdbChromInfoHash();
-struct chromInfo *ci = getChromInfoFromConn(conn, hash, chrom);
-hFreeConn(&conn);
+struct hash *hash = chromInfoHash(db);
+struct chromInfo *ci = NULL;
+char *upcName = cloneString(chrom);
+touppers(upcName);
+ci = hashFindVal(hash, upcName);
+freeMem(upcName);
 return ci;
 }
 
-static struct chromInfo *getChromInfo2(char *chrom)
-/* Get chromInfo for named chromosome from secondary database.
- * Return NULL if no such chrom. */
-{
-struct sqlConnection *conn = hAllocConn2();
-struct hash *hash = hdbChromInfoHash2();
-struct chromInfo *ci = getChromInfoFromConn(conn, hash, chrom);
-hFreeConn2(&conn);
-return ci;
-}
-
-static struct chromInfo *mustGetChromInfo(char *chrom)
+static struct chromInfo *mustGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chrom from primary database or
  * die trying. */
 {
-struct chromInfo *ci = getChromInfo(chrom);
+struct chromInfo *ci = getChromInfo(db, chrom);
 if (ci == NULL)
     errAbort("Couldn't find chromosome/scaffold %s in database", chrom);
 return ci;
-}
-
-static struct chromInfo *mustGetChromInfo2(char *chrom)
-/* Get chromInfo for named chrom from secondary database or
- * die trying. */
-{
-struct chromInfo *ci = getChromInfo2(chrom);
-if (ci == NULL)
-    errAbort("Couldn't find chromosome/scaffold %s in secondary database", chrom);
-return ci;
-}
-
-
-
-char *getDefaultChrom2()
-/* get default chromosome (table) for db2 */
-{
-struct sqlConnection *conn = hAllocConn2();
-char *chrom = defaultChrom(conn, hdbChromInfoHash2());
-hFreeConn2(&conn);
-return chrom;
-}
-
-char *getDefaultChrom()
-/* get default chromosome (table) for db1 */
-{
-struct sqlConnection *conn = hAllocConn();
-char *chrom = defaultChrom(conn, hdbChromInfoHash());
-hFreeConn(&conn);
-return chrom;
 }
 
 char *hgOfficialChromName(char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-struct chromInfo *ci = getChromInfo(name);
+struct chromInfo *ci = getChromInfo(hGetDb(), name);
 if (ci != NULL)
-    return ci->chrom;
+    return cloneString(ci->chrom);
 else
     return NULL;
 }
@@ -220,18 +149,9 @@ int hGetMinIndexLength()
 static boolean minLen = 0;
 if (minLen <= 0)
     {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    struct slName *nameList = NULL, *name, *last;
+    struct slName *nameList = hAllChromNames();
+    struct slName *name, *last;
     int len = 4;
-    sr = sqlGetResult(conn, "select chrom from chromInfo");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	name = slNameNew(row[0]);
-	slAddHead(&nameList, name);
-	}
-    sqlFreeResult(&sr);
     slSort(&nameList, slNameCmp);
     last = nameList;
     if (last != NULL)
@@ -434,24 +354,14 @@ return hDefaultDbForGenome(DEFAULT_GENOME);
 }
 
 char *hDefaultChromDb(char *db)
-/* Return the first chrom in chromInfo from the current db. */
+/* Return some sequence named in chromInfo from the given db. */
 {
-struct sqlConnection *conn = hAllocOrConnect(db);
-char *defaultChrom;
-char buf[128];
-
-defaultChrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			     buf, sizeof(buf));
-hFreeOrDisconnect(&conn);
-if (defaultChrom == NULL)
-    {
-    errAbort("Can't find first chromosome in %s.chromInfo", db);
-    }
-else
-    {
-    defaultChrom = cloneString(defaultChrom);
-    }
-return(defaultChrom);
+struct hash *hash = chromInfoHash(db);
+struct hashCookie cookie = hashFirst(hash);
+struct chromInfo *ci = (struct chromInfo *)hashNextVal(&cookie);
+if (ci == NULL)
+    errAbort("hDefaultChromDb: empty chromInfo for db=%s", db);
+return cloneString(ci->chrom);
 }
 
 char *hDefaultChrom()
@@ -719,15 +629,95 @@ void hDisconnectCart(struct sqlConnection **pConn)
 sqlFreeConnection(cartCc, pConn);
 }
 
+
+boolean hCanHaveSplitTables(char *db)
+/* Return TRUE if split tables are allowed in database. */
+{
+struct sqlConnection *conn = hAllocOrConnect(db);
+int count = sqlTableSizeIfExists(conn, "chromInfo");
+hFreeOrDisconnect(&conn);
+return (count >= 0 && count <= HDB_MAX_SEQS_FOR_SPLIT);
+}
+
+static struct hash *buildTableListHash(char *db)
+/* Return a hash that maps a track/table name (unsplit) to an slName list 
+ * of actual table names (possibly split) -- we can compute this once and 
+ * cache it to save a lot of querying if we will check existence of 
+ * lots of tables. */
+{
+struct hash *hash = hashNew(14);
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct slName *allTables = sqlListTables(conn);
+
+if (hCanHaveSplitTables(db))
+    {
+    /* Consolidate split tables into one list per track: */
+    struct slName *tbl = NULL, *nextTbl = NULL;
+    for (tbl = allTables;  tbl != NULL;  tbl = nextTbl)
+	{
+	struct hashEl *tHel = NULL;
+	char trackName[HDB_MAX_TABLE_STRING];
+	char chrom[HDB_MAX_CHROM_STRING];
+	nextTbl = tbl->next;
+	tbl->next = NULL;
+	hParseTableName(tbl->name, trackName, chrom);
+	tHel = hashLookup(hash, trackName);
+	if (tHel == NULL)
+	    hashAdd(hash, trackName, tbl);
+	else if (! sameString(tbl->name, trackName))
+	    slAddHead(&(tHel->val), tbl);
+	}
+    }
+else
+    {
+    /* Just hash all table names: */
+    struct slName *tbl = NULL, *nextTbl = NULL;
+    for (tbl = allTables;  tbl != NULL;  tbl = nextTbl)
+	{
+	nextTbl = tbl->next;
+	tbl->next = NULL;
+	hashAdd(hash, tbl->name, tbl);
+	}
+    }
+hFreeOrDisconnect(&conn);
+return hash;
+}
+
+static struct hash *tableListHash(char *db)
+/* Retrieve (or build if necessary) the cached hash of split-consolidated 
+ * tables for db. */
+{
+static struct hash *dbToTables = NULL;
+struct hashEl *dHel = NULL;
+if (dbToTables == NULL)
+    dbToTables = hashNew(0);
+dHel = hashLookup(dbToTables, db);
+if (dHel == NULL)
+    {
+    struct hash *tableHash = buildTableListHash(db);
+    hashAdd(dbToTables, db, tableHash);
+    return tableHash;
+    }
+else
+    return (struct hash *)(dHel->val);
+}
+
+
 boolean hTableExistsDb(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
-struct sqlConnection *conn = hAllocOrConnect(db);
-boolean exists;
-
-exists = sqlTableExists(conn, table);
-hFreeOrDisconnect(&conn);
-return exists;
+struct hash *hash = tableListHash(db);
+struct slName *tableNames = NULL, *tbl = NULL;
+char trackName[HDB_MAX_TABLE_STRING];
+char chrom[HDB_MAX_CHROM_STRING];
+hParseTableName(table, trackName, chrom);
+tableNames = (struct slName *)hashFindVal(hash, trackName);
+for (tbl = tableNames;  tbl != NULL;  tbl = tbl->next)
+    {
+    if (sameString(table, tbl->name))
+	return TRUE;
+    }
+return FALSE;
 }
 
 boolean hTableExists(char *table)
@@ -742,51 +732,45 @@ boolean hTableExists2(char *table)
 return(hTableExistsDb(hGetDb2(), table));
 }
 
-boolean hTableOrSplitExistsDb(char *db, char *table)
-/* Return TRUE if a table exists in db. */
+boolean hTableOrSplitExistsDb(char *db, char *track)
+/* Return TRUE if track table (or split table) exists in db. */
 {
-struct sqlConnection *conn = hAllocOrConnect(db);
-boolean exists;
-
-exists = sqlTableExists(conn, table);
-if (! exists)
-    {
-    char split[256];
-    safef(split, sizeof(split), "%s_%s", hDefaultChromDb(db), table);
-    exists = sqlTableExists(conn, split);
-    }
-hFreeOrDisconnect(&conn);
-return exists;
+struct hash *hash = tableListHash(db);
+return (hashLookup(hash, track) != NULL);
 }
 
-boolean hTableOrSplitExists(char *table)
-/* Return TRUE if a table exists in database. */
+boolean hTableOrSplitExists(char *track)
+/* Return TRUE if table (or a chrN_table) exists in database. */
 {
-return(hTableOrSplitExistsDb(hGetDb(), table));
+return hTableOrSplitExistsDb(hGetDb(), track);
+
 }
 
-void hParseTableName(char *table, char trackName[128], char chrom[32])
+void hParseTableName(char *table, char trackName[HDB_MAX_TABLE_STRING],
+		     char chrom[HDB_MAX_CHROM_STRING])
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
 {
 char *ptr;
 
 /* It might not be a split table; provide defaults: */
-strncpy(trackName, table, 128);
-strcpy(chrom, hDefaultChrom());
+safef(trackName, HDB_MAX_TABLE_STRING, "%s", table);
+safef(chrom, HDB_MAX_CHROM_STRING, "%s", hDefaultChrom());
+/*#*** This needs to handle Group and _hla_hap*... it would be a good idea to 
+ *#*** just see if the table begins with something from chromInfo. */
 if (startsWith("chr", table))
     {
     if ((ptr = strstr(table, "_random_")) != NULL)
 	{
-	strncpy(trackName, ptr+strlen("_random_"), 128);
-	strncpy(chrom, table, 32);
+	strncpy(trackName, ptr+strlen("_random_"), HDB_MAX_TABLE_STRING);
+	strncpy(chrom, table, HDB_MAX_CHROM_STRING);
 	if ((ptr = strstr(chrom, "_random")) != NULL)
 	    *(ptr+strlen("_random")) = 0;
 	}
     else if ((ptr = strrchr(table, '_')) != NULL)
 	{
-	strncpy(trackName, ptr+1, 128);
-	strncpy(chrom, table, 32);
+	strncpy(trackName, ptr+1, HDB_MAX_TABLE_STRING);
+	strncpy(chrom, table, HDB_MAX_CHROM_STRING);
 	if ((ptr = strrchr(chrom, '_')) != NULL)
 	    *ptr = 0;
 	}
@@ -796,29 +780,29 @@ if (startsWith("chr", table))
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
-struct chromInfo *ci = mustGetChromInfo(chromName);
+struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
 return ci->size;
 }
 
 int hChromSize2(char *chromName)
 /* Return size of chromosome on db2. */
 {
-struct chromInfo *ci = mustGetChromInfo2(chromName);
+struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
 return ci->size;
 }
 
-void hNibForChrom(char *chromName, char retNibName[512])
+void hNibForChrom(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-struct chromInfo *ci = mustGetChromInfo(chromName);
-strncpy(retNibName,ci->fileName, 512);
+struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
+safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
 }
 
-static void hNibForChrom2(char *chromName, char retNibName[512])
+static void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome on db2. */
 {
-struct chromInfo *ci = mustGetChromInfo2(chromName);
-strncpy(retNibName,ci->fileName, 512);
+struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
+safef(retNibName, HDB_MAX_PATH_STRING, ci->fileName);
 }
 
 struct hash *hCtgPosHash()
@@ -876,7 +860,7 @@ return nibLoadPart(fileName, start, end-start);
 struct dnaSeq *hChromSeqMixed(char *chrom, int start, int end)
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
 {
-char fileName[512];
+char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
@@ -884,7 +868,7 @@ return hFetchSeqMixed(fileName, chrom, start, end);
 struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 /* Return lower case DNA from chromosome. */
 {
-char fileName[512];
+char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(chrom, fileName);
 return hFetchSeq(fileName, chrom, start, end);
 }
@@ -892,7 +876,7 @@ return hFetchSeq(fileName, chrom, start, end);
 struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
 /* Return lower case DNA from chromosome in db2.*/
 {
-char fileName[512];
+char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom2(chrom, fileName);
 return hFetchSeq(fileName, chrom, start, end);
 }
@@ -900,7 +884,7 @@ return hFetchSeq(fileName, chrom, start, end);
 struct dnaSeq *hSeqForBed(struct bed *bed)
 /* Get the sequence associated with a particular bed concatenated together. */
 {
-char fileName[512];
+char fileName[HDB_MAX_PATH_STRING];
 struct dnaSeq *block = NULL;
 struct dnaSeq *bedSeq = NULL;
 int i = 0 ;
@@ -936,12 +920,12 @@ return bedSeq;
 }
 
 boolean hChromBandConn(struct sqlConnection *conn, 
-	char *chrom, int pos, char retBand[64])
+	char *chrom, int pos, char retBand[HDB_MAX_BAND_STRING])
 /* Return text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 {
 char query[256];
-char buf[64];
+char buf[HDB_MAX_BAND_STRING];
 char *s;
 boolean ok = TRUE;
 boolean isDmel = startsWith("dm", hGetDb());
@@ -960,7 +944,7 @@ sprintf(retBand, "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
 return ok;
 }
 
-boolean hChromBand(char *chrom, int pos, char retBand[64])
+boolean hChromBand(char *chrom, int pos, char retBand[HDB_MAX_BAND_STRING])
 /* Return text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 {
@@ -983,9 +967,8 @@ boolean hScaffoldPos(char *chrom, int start, int end,
  * Return FALSE if unable to convert */
 {
 int ret = FALSE;
-char table[64];
-strncpy(table, chrom, 59);
-strcat(table, "_gold");
+char table[HDB_MAX_TABLE_STRING];
+safef(table, sizeof(table), "%s_gold", chrom);
 if (!hTableExists(table))
     return FALSE;
 else
@@ -1064,22 +1047,17 @@ return hAllChromNamesDb(hdbName);
 struct slName *hAllChromNamesDb(char *db)
 /* Get list of all chromosome names in database. */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-struct slName *list = NULL, *el;
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlResult *sr;
-char **row;
+struct hash *hash = chromInfoHash(db);
+struct hashEl *hel = NULL;
+struct slName *chromNames = NULL;
 
-sr = sqlGetResult(conn, "select chrom from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
-   {
-   el = slNameNew(row[0]);
-   slAddHead(&list, el);
-   }
-sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
-return list;
+for (hel = hashElListHash(hash);  hel != NULL;  hel = hel->next)
+    {
+    struct chromInfo *ci = (struct chromInfo *)(hel->val);
+    struct slName *cn = slNameNew(ci->chrom);
+    slAddHead(&chromNames, cn);
+    }
+return chromNames;
 }
 
 
@@ -1494,7 +1472,7 @@ struct sqlResult *sr;
 struct hTableInfo *hti;
 struct bed *bedList=NULL, *bedItem;
 char **row;
-char parsedChrom[32];
+char parsedChrom[HDB_MAX_CHROM_STRING];
 char rootName[256];
 char fullTableName[256];
 char rangeStr[32];
@@ -1511,9 +1489,9 @@ if (hti == NULL)
     errAbort("Could not find table info for table %s (%s)",
 	     rootName, table);
 if (hti->isSplit)
-    snprintf(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
+    safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
 else
-    strncpy(fullTableName, rootName, sizeof(fullTableName));
+    safef(fullTableName, sizeof(fullTableName), rootName);
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 
@@ -2026,7 +2004,7 @@ static void addSubVar(char *prefix, char *name,
 /* Add substitution to list. */
 {
 struct subText *sub;
-char fullName[64];
+char fullName[HDB_MAX_TABLE_STRING];
 safef(fullName, sizeof(fullName), "$%s%s", prefix, name);
 sub = subTextNew(fullName, value);
 slAddHead(pList, sub);
@@ -2246,7 +2224,7 @@ return prev;
 
 
 static boolean fitField(struct hash *hash, char *fieldName,
-	char retField[32])
+	char retField[HDB_MAX_FIELD_STRING])
 /* Return TRUE if fieldName is in hash.  
  * If so copy it to retField.
  * Helper routine for findMoreFields below. */
@@ -2264,7 +2242,7 @@ else
 }
 
 static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
-	char retChrom[32], char retStart[32], char retEnd[32])
+	char retChrom[HDB_MAX_FIELD_STRING], char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING])
 /* Return TRUE if chrom/start/end are in hash.  
  * If so copy them to retChrom, retStart, retEnd. 
  * Helper routine for findChromStartEndFields below. */
@@ -2348,27 +2326,32 @@ return(hFieldHasIndexDb(hGetDb(), table, field));
 }
 
 boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retScore[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32],
-        char retSpan[32], boolean *retBinned)
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING],
+	char retName[HDB_MAX_FIELD_STRING],
+	char retScore[HDB_MAX_FIELD_STRING],
+	char retStrand[HDB_MAX_FIELD_STRING],
+        char retCdsStart[HDB_MAX_FIELD_STRING],
+	char retCdsEnd[HDB_MAX_FIELD_STRING],
+	char retCount[HDB_MAX_FIELD_STRING],
+	char retStarts[HDB_MAX_FIELD_STRING],
+	char retEndsSizes[HDB_MAX_FIELD_STRING],
+        char retSpan[HDB_MAX_FIELD_STRING], boolean *retBinned)
 /* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
 {
 char query[256];
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
 
-if (! sqlTableExists(conn, table))
-    {
-    hFreeOrDisconnect(&conn);
+if (! hTableExistsDb(db, table))
     return FALSE;
-    }
+conn = hAllocOrConnect(db);
 
 /* Read table description into hash. */
 sprintf(query, "describe %s", table);
@@ -2469,20 +2452,21 @@ return gotIt;
 }
 
 boolean hFindFieldsAndBin(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING],
 	boolean *retBinned)
 /* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
 {
-char retName[32];
-char retScore[32];
-char retStrand[32];
-char retCdsStart[32];
-char retCdsEnd[32];
-char retCount[32];
-char retStarts[32];
-char retEndsSizes[32];
-char retSpan[32];
+char retName[HDB_MAX_FIELD_STRING];
+char retScore[HDB_MAX_FIELD_STRING];
+char retStrand[HDB_MAX_FIELD_STRING];
+char retCdsStart[HDB_MAX_FIELD_STRING];
+char retCdsEnd[HDB_MAX_FIELD_STRING];
+char retCount[HDB_MAX_FIELD_STRING];
+char retStarts[HDB_MAX_FIELD_STRING];
+char retEndsSizes[HDB_MAX_FIELD_STRING];
+char retSpan[HDB_MAX_FIELD_STRING];
 return hFindBed12FieldsAndBinDb(hGetDb(), table,
 				retChrom, retStart, retEnd,
 				retName, retScore, retStrand,
@@ -2492,18 +2476,19 @@ return hFindBed12FieldsAndBinDb(hGetDb(), table,
 }
 
 boolean hFindChromStartEndFields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32])
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
-char retName[32];
-char retScore[32];
-char retStrand[32];
-char retCdsStart[32];
-char retCdsEnd[32];
-char retCount[32];
-char retStarts[32];
-char retEndsSizes[32];
-char retSpan[32];
+char retName[HDB_MAX_FIELD_STRING];
+char retScore[HDB_MAX_FIELD_STRING];
+char retStrand[HDB_MAX_FIELD_STRING];
+char retCdsStart[HDB_MAX_FIELD_STRING];
+char retCdsEnd[HDB_MAX_FIELD_STRING];
+char retCount[HDB_MAX_FIELD_STRING];
+char retStarts[HDB_MAX_FIELD_STRING];
+char retEndsSizes[HDB_MAX_FIELD_STRING];
+char retSpan[HDB_MAX_FIELD_STRING];
 boolean isBinned;
 return hFindBed12FieldsAndBinDb(hGetDb(), table,
 				retChrom, retStart, retEnd,
@@ -2515,18 +2500,19 @@ return hFindBed12FieldsAndBinDb(hGetDb(), table,
 
 
 boolean hFindChromStartEndFieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32])
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
-char retName[32];
-char retScore[32];
-char retStrand[32];
-char retCdsStart[32];
-char retCdsEnd[32];
-char retCount[32];
-char retStarts[32];
-char retEndsSizes[32];
-char retSpan[32];
+char retName[HDB_MAX_FIELD_STRING];
+char retScore[HDB_MAX_FIELD_STRING];
+char retStrand[HDB_MAX_FIELD_STRING];
+char retCdsStart[HDB_MAX_FIELD_STRING];
+char retCdsEnd[HDB_MAX_FIELD_STRING];
+char retCount[HDB_MAX_FIELD_STRING];
+char retStarts[HDB_MAX_FIELD_STRING];
+char retEndsSizes[HDB_MAX_FIELD_STRING];
+char retSpan[HDB_MAX_FIELD_STRING];
 boolean isBinned;
 return hFindBed12FieldsAndBinDb(db, table,
 				retChrom, retStart, retEnd,
@@ -2550,59 +2536,17 @@ else
     }
 }
 
-char *hFindDefaultChrom(char *db, char defaultChrom[64])
-/* Find chromosome to use if none specified.  This will cashe
- * db's though I'm not totally convinced it's necessary. */
-{
-static struct hash *hash;
-char *ret = NULL, *s;
-if (hash == NULL)
-    hash = newHash(8);
-s = hashFindVal(hash, db);
-if (s != NULL)
-    {
-    strncpy(defaultChrom, s, 64);
-    ret = defaultChrom;
-    }
-else if (sameString(db, hGetDb()))
-    {
-    strncpy(defaultChrom, getDefaultChrom(), 64);
-    hashAdd(hash, db, cloneString(defaultChrom));
-    ret = defaultChrom;
-    }
-else 
-    {
-    struct sqlConnection *conn = sqlConnect(db);
-    char *ret = NULL;
-    if (sqlTableExists(conn, "chromInfo"))
-        {
-	ret = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			     defaultChrom, 64);
-	if (ret != NULL)
-	    hashAdd(hash, db, cloneString(defaultChrom));
-	}
-    else
-	{
-	defaultChrom[0] = 0;
-	ret = NULL;
-	}
-    sqlDisconnect(&conn);
-    }
-return ret;
-}
-
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table.  */
 {
 static struct hash *dbHash = NULL;	/* Values are hashes of tables. */
 struct hash *hash;
 struct hTableInfo *hti;
-char fullName[64];
+char fullName[HDB_MAX_TABLE_STRING];
 boolean isSplit = FALSE;
-char defaultChrom[64];
 
 if (chrom == NULL)
-    chrom = hFindDefaultChrom(db, defaultChrom);
+    chrom = hDefaultChromDb(db);
 if (dbHash == NULL)
     dbHash = newHash(8);
 hash = hashFindVal(dbHash, db);
@@ -2615,13 +2559,13 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
     if (chrom != NULL)
 	{
-	sprintf(fullName, "%s_%s", chrom, rootName);
+	safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
 	if (hTableExistsDb(db, fullName))
 	    isSplit = TRUE;
 	}
     if (!isSplit)
         {
-	strcpy(fullName, rootName);
+	safef(fullName, sizeof(fullName), rootName);
 	if (!hTableExistsDb(db, fullName))
 	    return NULL;
 	}
@@ -2691,7 +2635,7 @@ return hFindTableInfoDb(hGetDb(), chrom, rootName);
 
 
 boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
-	char retTableBuf[64], boolean *hasBin)
+	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
 /* Find name of table in a given database that may or may not 
  * be split across chromosomes. Return FALSE if table doesn't exist.  */
 {
@@ -2703,9 +2647,9 @@ if (retTableBuf != NULL)
     if (chrom == NULL)
 	chrom = hDefaultChromDb(db);
     if (hti->isSplit)
-	snprintf(retTableBuf, 64, "%s_%s", chrom, rootName);
+	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s_%s", chrom, rootName);
     else
-	strncpy(retTableBuf, rootName, 64);
+	safef(retTableBuf, HDB_MAX_TABLE_STRING, rootName);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
@@ -2713,54 +2657,23 @@ return TRUE;
 }
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
-	char retTableBuf[64], boolean *hasBin)
+	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
 /* Find name of table that may or may not be split across chromosomes. 
  * Return FALSE if table doesn't exist.  */
 {
 return hFindSplitTableDb(hGetDb(), chrom, rootName, retTableBuf, hasBin);
 }
 
-boolean hTrackExists(char *track)
-/* Return TRUE if track exists. */
-{
-return hFindSplitTable(NULL, track, NULL, NULL);
-}
-
 struct slName *hSplitTableNames(char *rootName)
 /* Return a list of all split tables for rootName, or of just rootName if not 
  * split, or NULL if no such tables exist. */
 {
-struct slName *matchingTables = NULL, *tableList = NULL;
-struct slName *tPtr = NULL, *tNext = NULL;
-struct sqlConnection *conn = hAllocConn();
-char query[256];
-
-safef(query, sizeof(query), "show tables like '%%\\_%s'", rootName);
-matchingTables = sqlQuickList(conn, query);
-if (matchingTables == NULL && sqlTableExists(conn, rootName))
-    tableList = newSlName(rootName);
+struct hash *hash = tableListHash(hGetDb());
+struct hashEl *hel = hashLookup(hash, rootName);
+if (hel == NULL)
+    return NULL;
 else
-    {
-    for (tPtr = matchingTables;  tPtr != NULL;  tPtr = tNext)
-	{
-	char *p = tPtr->name + strlen(tPtr->name) - (strlen(rootName) + 1);
-	tNext = tPtr->next;
-	*p = 0;
-	if (hgOfficialChromName(tPtr->name) != NULL)
-	    {
-	    *p = '_';
-	    slAddHead(&tableList, tPtr);
-	    }
-	else
-	    {
-	    freez(&tPtr);
-	    }
-	}
-    }
-
-hFreeConn(&conn);
-slReverse(&tableList);
-return(tableList);
+    return slNameCloneList((struct slName *)(hel->val));
 }
 
 boolean hIsMgscHost()
@@ -2883,9 +2796,9 @@ else
     dyStringPrintf(query, "select %s from ", fields);
     if (hti->isSplit)
 	{
-	char fullTable[64];
-	sprintf(fullTable, "%s_%s", chrom, rootTable);
-	if (!sqlTableExists(conn, fullTable))
+	char fullTable[HDB_MAX_TABLE_STRING];
+	safef(fullTable, sizeof(fullTable), "%s_%s", chrom, rootTable);
+	if (!hTableExistsDb(db, fullTable))
 	     warn("%s doesn't exist", fullTable);
 	else
 	    {
@@ -3059,9 +2972,10 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-char splitTable[64];
+char splitTable[HDB_MAX_TABLE_STRING];
 hLookupStringsInTdb(tdb, database);
-if ((!tdb->private || privateHost) && hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
+if ((!tdb->private || privateHost) &&
+    hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
 #ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 	&& !sameString(splitTable, "mrna") /* Long ago we reused this name badly. */
 #endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
@@ -3887,7 +3801,7 @@ struct hash *hgReadRa(char *genome, char *database, char *rootDir,
 {
 struct hash *hashOfHash = newHash(10);
 char *org = hgDirForOrg(genome);
-char fileName[512];
+char fileName[HDB_MAX_PATH_STRING];
 struct hashEl *helList, *hel;
 struct hash *raList = NULL, *ra;
 

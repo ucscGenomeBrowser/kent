@@ -35,6 +35,16 @@
 #include "bed.h"
 #endif
 
+/* At or below this number of sequences, allow split tables: */
+#define HDB_MAX_SEQS_FOR_SPLIT 100
+
+/* Statically-allocated string lengths (max supported len incl. final \0): */
+#define HDB_MAX_CHROM_STRING 32
+#define HDB_MAX_BAND_STRING 64
+#define HDB_MAX_FIELD_STRING 32
+#define HDB_MAX_TABLE_STRING 128
+#define HDB_MAX_PATH_STRING 512
+
 struct blatServerTable
 /* Information about a BLAT server. */
 {
@@ -54,18 +64,18 @@ struct hTableInfo
     boolean isPos;		/* True if table is positional. */
     boolean isSplit;		/* True if table is split. */
     boolean hasBin;		/* True if table starts with field. */
-    char chromField[32];	/* Name of chromosome field. */
-    char startField[32];	/* Name of chromosome start field. */
-    char endField[32];		/* Name of chromosome end field. */
-    char nameField[32];		/* Name of item name field. */
-    char scoreField[32];	/* Name of score field. */
-    char strandField[32];	/* Name of strand field. */
-    char cdsStartField[32];	/* Name of cds(thick)Start field. */
-    char cdsEndField[32];	/* Name of cds(thick)End field. */
-    char countField[32];	/* Name of exon(block)Count field. */
-    char startsField[32];	/* Name of exon(block)Starts field. */
-    char endsSizesField[32];	/* Name of exon(block)Ends(Sizes) field. */
-    char spanField[32];		/* Name of span field. (wiggle) */
+    char chromField[HDB_MAX_FIELD_STRING];	/* Name of chromosome field. */
+    char startField[HDB_MAX_FIELD_STRING];	/* Name of chromosome start field. */
+    char endField[HDB_MAX_FIELD_STRING];		/* Name of chromosome end field. */
+    char nameField[HDB_MAX_FIELD_STRING];		/* Name of item name field. */
+    char scoreField[HDB_MAX_FIELD_STRING];	/* Name of score field. */
+    char strandField[HDB_MAX_FIELD_STRING];	/* Name of strand field. */
+    char cdsStartField[HDB_MAX_FIELD_STRING];	/* Name of cds(thick)Start field. */
+    char cdsEndField[HDB_MAX_FIELD_STRING];	/* Name of cds(thick)End field. */
+    char countField[HDB_MAX_FIELD_STRING];	/* Name of exon(block)Count field. */
+    char startsField[HDB_MAX_FIELD_STRING];	/* Name of exon(block)Starts field. */
+    char endsSizesField[HDB_MAX_FIELD_STRING];	/* Name of exon(block)Ends(Sizes) field. */
+    char spanField[HDB_MAX_FIELD_STRING];		/* Name of span field. (wiggle) */
     boolean hasCDS;		/* True if it has cdsStart,cdsEnd fields. */
     boolean hasBlocks;		/* True if it has count,starts,endsSizes. */
     char *type;			/* A guess at the trackDb type for this. */
@@ -209,9 +219,6 @@ boolean hTableExistsDb(char *db, char *table);
 boolean hTableOrSplitExists(char *table);
 /* Return TRUE if table (or a chrN_table) exists in database. */
 
-boolean hTableOrSplitExistsDb(char *db, char *table);
-/* Return TRUE if table (or a chrN_table) exists in db. */
-
 boolean hColExists(char *table, char *column);
 /* Return TRUE if a column exists in table. */
 
@@ -219,7 +226,8 @@ boolean hColExistsDb(char *db, char *table, char *column);
 /* Return TRUE if a column exists in table in db. */
 
 
-void hParseTableName(char *table, char trackName[128], char chrom[32]);
+void hParseTableName(char *table, char trackName[HDB_MAX_TABLE_STRING],
+		     char chrom[HDB_MAX_CHROM_STRING]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
 
@@ -251,16 +259,16 @@ struct dnaSeq *hChromSeq2(char *chrom, int start, int end);
 struct dnaSeq *hSeqForBed(struct bed *bed);
 /* Get the sequence associated with a particular bed concatenated together. */
 
-boolean hChromBand(char *chrom, int pos, char retBand[64]);
+boolean hChromBand(char *chrom, int pos, char retBand[HDB_MAX_BAND_STRING]);
 /* Fill in text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 
 boolean hChromBandConn(struct sqlConnection *conn, 
-	char *chrom, int pos, char retBand[64]);
+	char *chrom, int pos, char retBand[HDB_MAX_BAND_STRING]);
 /* Fill in text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 
-boolean hChromBand(char *chrom, int pos, char retBand[64]);
+boolean hChromBand(char *chrom, int pos, char retBand[HDB_MAX_BAND_STRING]);
 /* Fill in text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 
@@ -278,7 +286,7 @@ struct dnaSeq *hDnaFromSeq(char *seqName,
 struct dnaSeq *hLoadChrom(char *chromName);
 /* Fetch entire chromosome into memory. */
 
-void hNibForChrom(char *chromName, char retNibName[512]);
+void hNibForChrom(char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
 /* Get .nib file associated with chromosome. */
 
 struct slName *hAllChromNames();
@@ -400,9 +408,6 @@ struct trackDb *hTrackDbForTrack(char *track);
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
  * used if it exists. */
 
-char *hFindDefaultChrom(char *db, char defaultChrom[64]);
-/* Find chromosome to use if none specified. */
-
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 /* Find table information.  Return NULL if no table. */
 
@@ -413,18 +418,28 @@ int hTableInfoBedFieldCount(struct hTableInfo *hti);
 /* Return number of BED fields needed to save hti. */
 
 boolean hFindChromStartEndFields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32]);
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
 boolean hFindChromStartEndFieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32]);
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
 boolean hFindBed12Fields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retScore[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32]);
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING], char retName[HDB_MAX_FIELD_STRING],
+	char retScore[HDB_MAX_FIELD_STRING],
+	char retStrand[HDB_MAX_FIELD_STRING],
+        char retCdsStart[HDB_MAX_FIELD_STRING],
+	char retCdsEnd[HDB_MAX_FIELD_STRING],
+	char retCount[HDB_MAX_FIELD_STRING],
+	char retStarts[HDB_MAX_FIELD_STRING],
+	char retEndsSizes[HDB_MAX_FIELD_STRING]);
 /* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
@@ -442,23 +457,21 @@ boolean hFieldHasIndex(char *table, char *field);
 /* Return TRUE if a SQL index exists for table.field. */
 
 boolean hFindFieldsAndBin(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	boolean *retBinned);
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING], boolean *retBinned);
 /* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
-	char retTableBuf[64], boolean *hasBin);
+	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
 /* Find name of table that may or may not be split across chromosomes. 
  * Return FALSE if table doesn't exist.  */
 
 boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
-	char retTableBuf[64], boolean *hasBin);
+	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
 /* Find name of table in a given database that may or may not 
  * be split across chromosomes. Return FALSE if table doesn't exist.  */
-
-boolean hTrackExists(char *trackName);
-/* Return TRUE if track exists. */
 
 struct slName *hSplitTableNames(char *rootName);
 /* Return a list of all split tables for rootName, or of just rootName if not 
