@@ -2743,6 +2743,15 @@ cat > template << 'EOF'
     hgsql hg17 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
 	hg17 stsMap stsMap.bed
+    # (2005-02-19, hartera)
+    # also need to update the psl alignment file and reload into all_sts_seq
+    # for D21S168, the id is 103256, this is qName in the psl file
+    # for D21S167, the id is 7888
+    cd /cluster/data/hg17/bed/sts
+    # manually update the stsMarkers.lifted.psl file with the new
+    # co-ordinates as above.
+    hgsql hg17 -e 'drop table all_sts_seq'
+    hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
     
     # Add new information after filtering the noOoc files 
     # (DONE, 2005-02-17, hartera)
