@@ -29,6 +29,7 @@ cen - Sequencing center.  May be Sanger, Whitehead, etc.
 frg - Number of fragments (contigs) in sequence.
 loc - LocusLink ID
 mim - OMIM id.
+dbx - space separate libs of database cross-references
 rss - RefSeq status:
         rev = reviewed
         val = validated
