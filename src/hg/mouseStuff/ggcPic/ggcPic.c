@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "memalloc.h"
 #include "portable.h"
 #include "axt.h"
 #include "genePred.h"
@@ -14,8 +15,6 @@ errAbort(
   "ggcPic - Generic gene conservation picture\n"
   "usage:\n"
   "   ggcPic axtDir chrom.sizes genePred.txt outDir\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -97,6 +96,7 @@ struct pcm
     char *name;		/* Name. */
     int pixels;		/* Pixel resolution. */
     int *match;		/* Array of match counts. */
+    int *cover;		/* Array of covered counts. */
     int *count;		/* Array of total counts. */
     int totalSize;	/* Sum of all sizes of features */
     int totalFeatures;  /* Number of features. */
@@ -129,29 +129,59 @@ ZeroVar(pcm);
 pcm->name = cloneString(name);
 pcm->pixels = pixels;
 AllocArray(pcm->match, pixels);
+AllocArray(pcm->cover, pixels);
 AllocArray(pcm->count, pixels);
 if (g != NULL)
     slAddTail(&g->pcmList, pcm);
 }
+
+#ifdef FOR_GRAPHS
+struct ggcInfo *newGgcInfo()
+/* Initialize ggcInfo */
+{
+struct ggcInfo *g;
+AllocVar(g);
+g->closeSize = 80;
+g->baseUp = g->baseDown = 3000;
+initPcm(g, &g->up, "up", 3000);
+initPcm(g, &g->down, "down", 3000);
+initPcm(g, &g->utr3, "utr3", 800);
+initPcm(g, &g->utr5, "utr5", 200);
+initPcm(g, &g->cdsFirst, "cdsFirst", 170);
+initPcm(g, &g->cdsMiddle, "cdsMiddle", 140);
+initPcm(g, &g->cdsLast, "cdsLast", 220);
+initPcm(g, &g->cdsSingle, "cdsSingle", 200);
+initPcm(g, &g->cdsAll, "cdsAll", 1400);
+initPcm(g, &g->singleExon, "singleExon", 400);
+initPcm(g, &g->intron, "intron", 5000);
+initPcm(g, &g->splice5, "splice5", g->closeSize);
+initPcm(g, &g->splice3, "splice3", g->closeSize);
+initPcm(g, &g->txStart, "txStart", g->closeSize);
+initPcm(g, &g->txEnd, "txEnd", g->closeSize);
+initPcm(g, &g->tlStart, "tlStart", g->closeSize);
+initPcm(g, &g->tlEnd, "tlEnd", g->closeSize);
+return g;
+}
+#endif /* FOR_GRAPHS */
 
 struct ggcInfo *newGgcInfo()
 /* Initialize ggcInfo */
 {
 struct ggcInfo *g;
 AllocVar(g);
-g->closeSize = 30;
-g->baseUp = g->baseDown = 3000;
-initPcm(g, &g->up, "up", g->baseUp);
-initPcm(g, &g->down, "down", g->baseDown);
-initPcm(g, &g->utr3, "utr3", 400);
-initPcm(g, &g->utr5, "utr5", 100);
-initPcm(g, &g->cdsFirst, "cdsFirst", 100);
-initPcm(g, &g->cdsMiddle, "cdsMiddle", 100);
-initPcm(g, &g->cdsLast, "cdsLast", 100);
+g->closeSize = 80;
+g->baseUp = g->baseDown = 500;
+initPcm(g, &g->up, "up", 200);
+initPcm(g, &g->down, "down", 200);
+initPcm(g, &g->utr3, "utr3", 200);
+initPcm(g, &g->utr5, "utr5", 200);
+initPcm(g, &g->cdsFirst, "cdsFirst", 200);
+initPcm(g, &g->cdsMiddle, "cdsMiddle", 200);
+initPcm(g, &g->cdsLast, "cdsLast", 200);
 initPcm(g, &g->cdsSingle, "cdsSingle", 200);
 initPcm(g, &g->cdsAll, "cdsAll", 200);
-initPcm(g, &g->singleExon, "singleExon", 400);
-initPcm(g, &g->intron, "intron", 1000);
+initPcm(g, &g->singleExon, "singleExon", 200);
+initPcm(g, &g->intron, "intron", 200);
 initPcm(g, &g->splice5, "splice5", g->closeSize);
 initPcm(g, &g->splice3, "splice3", g->closeSize);
 initPcm(g, &g->txStart, "txStart", g->closeSize);
@@ -161,68 +191,15 @@ initPcm(g, &g->tlEnd, "tlEnd", g->closeSize);
 return g;
 }
 
-#ifdef NEVER
-void oldTallyHits(struct pcm *pcm, bool *hits, int hitSize,
-   boolean isRev)
-/* Buggy sampler. */
-{
-int pixels = pcm->pixels;
-int *match = pcm->match;
-int *count = pcm->count;
-int s, e, i, j;
 
-if (isRev)
-    reverseBytes(hits, hitSize);
-s = 0;
-for (i=0; i<pixels; ++i)
-    {
-    e = ((i+1) * hitSize)/pixels;
-    for (j=s; j<e; ++j)
-        {
-	count[i] += 1;
-	if (hits[j])
-	    match[i] += 1;
-	}
-    s = e;
-    }
-if (isRev)
-    reverseBytes(hits, hitSize);
-}
-
-void debugTallyHits(struct pcm *pcm, bool *hits, int hitSize,
+void tallyHits(struct pcm *pcm, bool *hits, bool *covers, int hitSize,
    boolean isRev)
 /* Put samples from hits into pcm. */
 {
 int pixels = pcm->pixels;
 int *match = pcm->match;
 int *count = pcm->count;
-int end = (min(hitSize, pixels));
-int i, x;
-
-if (hitSize <= 0)
-    return;
-pcm->totalSize += hitSize;
-pcm->totalFeatures += 1;
-if (isRev)
-    reverseBytes(hits, hitSize);
-for (i=0; i<end; ++i)
-    {
-    count[i] += 1;
-    if (hits[i])
-        match[i] += 1;
-    }
-if (isRev)
-    reverseBytes(hits, hitSize);
-}
-#endif /* NEVER */
-
-void tallyHits(struct pcm *pcm, bool *hits, int hitSize,
-   boolean isRev)
-/* Put samples from hits into pcm. */
-{
-int pixels = pcm->pixels;
-int *match = pcm->match;
-int *count = pcm->count;
+int *cover = pcm->cover;
 int i, x;
 double scale = (double)hitSize/(double)pixels;
 
@@ -231,25 +208,35 @@ if (hitSize <= 0)
 pcm->totalSize += hitSize;
 pcm->totalFeatures += 1;
 if (isRev)
+    {
     reverseBytes(hits, hitSize);
+    reverseBytes(covers, hitSize);
+    }
 for (i=0; i<pixels; ++i)
     {
-    count[i] += 1;
     x = floor(i * scale);
     if (x >= hitSize)
          {
 	 assert(x < pixels);
 	 }
+    count[i] += 1;
     if (hits[x])
         match[i] += 1;
+    if (covers[x])
+        cover[i] += 1;
+    if (hits[x] && !covers[x])
+        errAbort("%s: i=%d, x=%d, hits[x] = %d, covers[x] = %d", pcm->name, i, x, hits[x], covers[i]);
     }
 if (isRev)
+    {
     reverseBytes(hits, hitSize);
+    reverseBytes(covers, hitSize);
+    }
 }
 
 
 
-void tallyInRange(struct pcm *pcm, bool *hits, int chromSize, 
+void tallyInRange(struct pcm *pcm, bool *hits, bool *covers, int chromSize, 
 	int start, int end, boolean isRev)
 /* Add hits in range to pcm tally. */
 {
@@ -258,25 +245,27 @@ if (start < 0) start = 0;
 if (end > chromSize) end = chromSize;
 size = end - start;
 if (size > 0)
-    tallyHits(pcm, hits+start, size, isRev);
+    tallyHits(pcm, hits+start, covers+start, size, isRev);
 }
 
 void ggcChrom(struct chromGenes *chrom, char *axtFile, struct ggcInfo *g)
 /* Tabulate matches on chromosome. */
 {
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
-bool *hits;
-int hitCount = 0;
+bool *hits, *covers;
+int hitCount = 0, coverCount = 0;
 struct axt *axt;
 struct genePred *gp;
 int closeSize = g->closeSize;
 int closeHalf = closeSize/2;
+int totalGenes = 0, genesUsed = 0;
 
 /* Build up array of booleans - one per base - which are
  * 1's where mouse/human align and bases match, zero 
  * elsewhere. */
 AllocArray(hits, chrom->size);
-printf("Allocated %d for %s\n", chrom->size, chrom->name);
+AllocArray(covers, chrom->size);
+printf("%s (%d bases)\n", chrom->name, chrom->size);
 while ((axt = axtRead(lf)) != NULL)
     {
     int tPos = axt->tStart;
@@ -298,27 +287,30 @@ while ((axt = axtRead(lf)) != NULL)
 	        hits[tPos] = TRUE;
 		++hitCount;
 		}
+	    covers[tPos] = TRUE;
 	    ++tPos;
 	    }
 	}
     axtFree(&axt);
     }
-printf("%d hits (%4.2f%%)\n", hitCount, 100.0*hitCount/chrom->size);
 
 for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     {
     int exonIx;
     int utr3Size = 0, utr5Size = 0, cdsAllSize = 0;
     int utr3Pos = 0, utr5Pos = 0, cdsAllPos = 0;
-    bool *utr3Hits = NULL;
-    bool *utr5Hits = NULL;
-    bool *cdsAllHits = NULL;
+    bool *utr3Hits = NULL, *utr3Covers = NULL;
+    bool *utr5Hits = NULL, *utr5Covers = NULL;
+    bool *cdsAllHits = NULL, *cdsAllCovers = NULL;
     bool isRev = (gp->strand[0] == '-');
 
+    /* Filter out genes without meaningful UTRs */
+    ++totalGenes;
     if (gp->cdsStart - gp->txStart < g->closeSize/2 || 
     	gp->txEnd - gp->cdsEnd < g->closeSize/2)
         continue;
-    // uglyf("%s %s tx %d-%d cds %d-%d\n", gp->name, gp->strand, gp->txStart, gp->txEnd, gp->cdsStart, gp->cdsEnd);
+    ++genesUsed;
+
     /* Total up UTR and CDS sizes. */
     for (exonIx=0; exonIx<gp->exonCount; ++exonIx)
 	 {
@@ -327,7 +319,6 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	 int eSize = eEnd - eStart;
 	 int oneUtr, oneCds;
 	 oneCds = rangeIntersection(gp->cdsStart, gp->cdsEnd, eStart, eEnd);
-	 // uglyf(" exon %d-%d, cdsIntersection %d\n", eStart, eEnd, oneCds);
 	 if (oneCds > 0)
 	     {
 	     cdsAllSize += oneCds;
@@ -337,7 +328,6 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	     int utrStart = eStart;
 	     int utrEnd = min(gp->cdsStart, eEnd);
 	     int utrSize = utrEnd - utrStart;
-	     // uglyf(" start utrSize %d\n", utrSize);
 	     if (isRev)
 		 utr3Size += utrSize;
 	     else
@@ -348,7 +338,6 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	     int utrStart = max(gp->cdsEnd, eStart);
 	     int utrEnd = eEnd;
 	     int utrSize = utrEnd - utrStart;
-	     // uglyf(" end utrSize %d\n", utrSize);
 	     if (isRev)
 		 utr5Size += utrSize;
 	     else
@@ -358,12 +347,20 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 
     /* Condense hits from UTRs and CDSs */
     if (utr5Size > 0)
+	{
 	AllocArray(utr5Hits, utr5Size);
+	AllocArray(utr5Covers, utr5Size);
+	}
     if (utr3Size > 0)
+	{
 	AllocArray(utr3Hits, utr3Size);
+	AllocArray(utr3Covers, utr3Size);
+	}
     if (cdsAllSize > 0)
+	{
 	AllocArray(cdsAllHits, cdsAllSize);
-    // uglyf(" utr5size %d, utr3Size %d, cdsAllSize %d\n", utr5Size, utr3Size, cdsAllSize);
+	AllocArray(cdsAllCovers, cdsAllSize);
+	}
     for (exonIx=0; exonIx<gp->exonCount; ++exonIx)
 	{
 	int eStart = gp->exonStarts[exonIx];
@@ -379,6 +376,7 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	    if (cdsStart < gp->cdsStart)
 		cdsStart = gp->cdsStart;
 	    memcpy(cdsAllHits + cdsAllPos, hits + cdsStart, oneCds * sizeof(*hits));
+	    memcpy(cdsAllCovers + cdsAllPos, covers + cdsStart, oneCds * sizeof(*covers));
 	    cdsAllPos += oneCds;
 	    }
 	if (eStart < gp->cdsStart)
@@ -389,11 +387,13 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	    if (isRev)
 		{
 		memcpy(utr3Hits + utr3Pos, hits + utrStart, utrSize * sizeof(*hits));
+		memcpy(utr3Covers + utr3Pos, covers + utrStart, utrSize * sizeof(*covers));
 		utr3Pos += utrSize;
 		}
 	    else
 		{
 		memcpy(utr5Hits + utr5Pos, hits + utrStart, utrSize * sizeof(*hits));
+		memcpy(utr5Covers + utr5Pos, covers + utrStart, utrSize * sizeof(*covers));
 		utr5Pos += utrSize;
 		}
 	    }
@@ -405,11 +405,13 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	    if (isRev)
 		{
 		memcpy(utr5Hits + utr5Pos, hits + utrStart, utrSize * sizeof(*hits));
+		memcpy(utr5Covers + utr5Pos, covers + utrStart, utrSize * sizeof(*covers));
 		utr5Pos += utrSize;
 		}
 	    else
 		{
 		memcpy(utr3Hits + utr3Pos, hits + utrStart, utrSize * sizeof(*hits));
+		memcpy(utr3Covers + utr3Pos, covers + utrStart, utrSize * sizeof(*covers));
 		utr3Pos += utrSize;
 		}
 	    }
@@ -418,24 +420,9 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     assert(utr5Pos == utr5Size);
     assert(cdsAllPos == cdsAllSize);
 
-    tallyHits(&g->utr5, utr5Hits, utr5Size, isRev);
-    tallyHits(&g->utr3, utr3Hits, utr3Size, isRev);
-    tallyHits(&g->cdsAll, cdsAllHits, cdsAllSize, isRev);
-#ifdef OLD
-    /* Uglyf - tally hits at UTR start/end */
-        {
-	if (isRev)
-	    {
-	    tallyInRange(&g->utr3, hits, chrom->size, gp->txStart, gp->txStart + g->utr3.pixels, isRev);
-	    tallyInRange(&g->utr5, hits, chrom->size, gp->txEnd - g->utr5.pixels, gp->txEnd, isRev);
-	    }
-	else
-	    {
-	    tallyInRange(&g->utr5, hits, chrom->size, gp->txStart, gp->txStart + g->utr5.pixels, isRev);
-	    tallyInRange(&g->utr3, hits, chrom->size, gp->txEnd - g->utr3.pixels, gp->txEnd, isRev);
-	    }
-	}
-#endif /* OLD */
+    tallyHits(&g->utr5, utr5Hits, utr5Covers, utr5Size, isRev);
+    tallyHits(&g->utr3, utr3Hits, utr3Covers, utr3Size, isRev);
+    tallyHits(&g->cdsAll, cdsAllHits, cdsAllCovers, cdsAllSize, isRev);
 
     /* Tally upstream/downstream hits. */
 	{
@@ -445,21 +432,21 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	int e2 = s2 + closeSize;
 	if (isRev)
 	    {
-	    tallyInRange(&g->down, hits, chrom->size, gp->txStart - g->baseDown,
+	    tallyInRange(&g->down, hits, covers, chrom->size, gp->txStart - g->baseDown,
 		gp->txStart, isRev);
-	    tallyInRange(&g->up, hits, chrom->size, gp->txEnd, 
+	    tallyInRange(&g->up, hits, covers, chrom->size, gp->txEnd, 
 		gp->txEnd + g->baseUp, isRev);
-	    tallyInRange(&g->txEnd, hits, chrom->size, s1, e1, isRev);
-	    tallyInRange(&g->txStart, hits, chrom->size, s2, e2, isRev);
+	    tallyInRange(&g->txEnd, hits, covers, chrom->size, s1, e1, isRev);
+	    tallyInRange(&g->txStart, hits, covers, chrom->size, s2, e2, isRev);
 	    }
 	else
 	    {
-	    tallyInRange(&g->up, hits, chrom->size, gp->txStart - g->baseUp,
+	    tallyInRange(&g->up, hits, covers, chrom->size, gp->txStart - g->baseUp,
 		gp->txStart, isRev);
-	    tallyInRange(&g->down, hits, chrom->size, gp->txEnd, 
+	    tallyInRange(&g->down, hits, covers, chrom->size, gp->txEnd, 
 		gp->txEnd + g->baseDown, isRev);
-	    tallyInRange(&g->txStart, hits, chrom->size, s1, e1, isRev);
-	    tallyInRange(&g->txEnd, hits, chrom->size, s2, e2, isRev);
+	    tallyInRange(&g->txStart, hits, covers, chrom->size, s1, e1, isRev);
+	    tallyInRange(&g->txEnd, hits, covers, chrom->size, s2, e2, isRev);
 	    }
 	}
 
@@ -473,7 +460,7 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	   {
 	   eStart = gp->cdsStart;
 	   eEnd = gp->cdsEnd;
-	   tallyInRange(&g->cdsSingle, hits, chrom->size,
+	   tallyInRange(&g->cdsSingle, hits, covers, chrom->size,
 	   		eStart, eEnd, isRev);
 	   }
 	/* Initial coding exon */
@@ -484,14 +471,14 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	    eStart = gp->cdsStart;
 	    if (isRev)
 	        {
-		tallyInRange(&g->tlEnd, hits, chrom->size, cs, ce, isRev);
-		tallyInRange(&g->cdsLast, hits, chrom->size, 
+		tallyInRange(&g->tlEnd, hits, covers, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsLast, hits, covers, chrom->size, 
 			eStart, eEnd, isRev);
 		}
 	    else
 	        {
-		tallyInRange(&g->tlStart, hits, chrom->size, cs, ce, isRev);
-		tallyInRange(&g->cdsFirst, hits, chrom->size, 
+		tallyInRange(&g->tlStart, hits, covers, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsFirst, hits, covers, chrom->size, 
 			eStart, eEnd, isRev);
 		}
 	    }
@@ -503,21 +490,21 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	    eEnd = gp->cdsEnd;
 	    if (isRev)
 	        {
-		tallyInRange(&g->tlStart, hits, chrom->size, cs, ce, isRev);
-		tallyInRange(&g->cdsFirst, hits, chrom->size, 
+		tallyInRange(&g->tlStart, hits, covers, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsFirst, hits, covers, chrom->size, 
 			eStart, eEnd, isRev);
 		}
 	    else
 	        {
-		tallyInRange(&g->tlEnd, hits, chrom->size, cs, ce, isRev);
-		tallyInRange(&g->cdsLast, hits, chrom->size, 
+		tallyInRange(&g->tlEnd, hits, covers, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsLast, hits, covers, chrom->size, 
 			eStart, eEnd, isRev);
 		}
 	    }
 	/* Middle (but not only) coding exon */
 	else if (eStart >= gp->cdsStart && eEnd <= gp->cdsEnd)
 	    {
-	    tallyInRange(&g->cdsMiddle, hits, chrom->size, eStart, eEnd, isRev);
+	    tallyInRange(&g->cdsMiddle, hits, covers, chrom->size, eStart, eEnd, isRev);
 	    }
 	else
 	    {
@@ -536,25 +523,30 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	int e2 = s2 + closeSize;
 	if (isRev)
 	    {
-	    tallyInRange(&g->splice5, hits, chrom->size, 
+	    tallyInRange(&g->splice3, hits, covers, chrom->size, 
 		    s1, e1, isRev);
-	    tallyInRange(&g->splice3, hits, chrom->size, 
+	    tallyInRange(&g->splice5, hits, covers, chrom->size, 
 		    s2, e2, isRev);
 	    }
 	else
 	    {
-	    tallyInRange(&g->splice3, hits, chrom->size, 
+	    tallyInRange(&g->splice5, hits, covers, chrom->size, 
 		    s1, e1, isRev);
-	    tallyInRange(&g->splice5, hits, chrom->size, 
+	    tallyInRange(&g->splice3, hits, covers, chrom->size, 
 		    s2, e2, isRev);
 	    }
-	tallyInRange(&g->intron, hits, chrom->size, iStart, iEnd, isRev);
+	tallyInRange(&g->intron, hits, covers, chrom->size, iStart, iEnd, isRev);
 	}
     freez(&utr5Hits);
     freez(&utr3Hits);
     freez(&cdsAllHits);
+    freez(&utr5Covers);
+    freez(&utr3Covers);
+    freez(&cdsAllCovers);
     }
+printf("%d genes of %d used\n", genesUsed, totalGenes);
 freez(&hits);
+freez(&covers);
 lineFileClose(&lf);
 }
 
@@ -566,14 +558,26 @@ int i;
 fprintf(f, "#%s: aveSize %2.1f\n", pcm->name, (double)pcm->totalSize/pcm->totalFeatures);
 for (i=0; i<pcm->pixels; ++i)
     {
-    double percent;
-    int c = pcm->count[i];
-    if (c == 0)
-        percent = 0;
+    double combined, pid, ali;
+    int count = pcm->count[i];
+    int cover = pcm->cover[i];
+    int match = pcm->match[i];
+    if (count == 0)
+        combined = pid = ali = 0;
     else
-        percent = 100.0 * pcm->match[i] / c;
-    // fprintf(f, "%1.2f%%\n", percent);
-    fprintf(f, "%1.2f%% %d of %d\n", percent, pcm->match[i], pcm->count[i]); //uglyf
+	{
+	ali = 100.0 * cover / count;
+        combined = 100.0 * match / count;
+	if (cover == 0)
+	    pid = 0;
+	else
+	    pid = 100.0 * match / cover;
+	   
+	}
+    /* fprintf(f, "%5.2f%% %5.2f%% %5.2f%% (match %d, cover %d)\n", 
+    	pid, ali, combined, match, cover); */
+    fprintf(f, "%5.2f%% %5.2f%% %5.2f%%\n", 
+    	pid, ali, combined);
     }
 }
 
@@ -622,22 +626,23 @@ void test(int oldSize, int newSize)
 /* Test stretching... */
 {
 struct pcm pcm;
-bool *hits;
+bool *hits, *covers;
 int i;
 initPcm(NULL, &pcm, "test", newSize);
 AllocArray(hits, oldSize);
+AllocArray(covers, oldSize);
 for (i=0; i<oldSize; ++i)
     {
+    covers[i] = 1;
     if (i&1)
         hits[i] = 1;
     }
-tallyHits(&pcm, hits, oldSize, FALSE);
-tallyHits(&pcm, hits, oldSize, FALSE);
+tallyHits(&pcm, hits, covers, oldSize, FALSE);
+tallyHits(&pcm, hits, covers, oldSize, FALSE);
 for (i=0; i<newSize; ++i)
     {
-    uglyf("%2d %2d %2d\n", i, pcm.match[i], pcm.count[i]);
+    printf("%2d %2d %2d\n", i, pcm.match[i], pcm.count[i]);
     }
-uglyAbort("All for now");
 }
 
 int main(int argc, char *argv[])
@@ -646,7 +651,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 5)
     usage();
-// test(10, 10);
+pushCarefulMemHandler(1000*1000*1000);
 ggcPic(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
