@@ -15,6 +15,22 @@
 #include "nib.h"
 #include "trans3.h"
 
+void dumpRange(struct gfRange *r, FILE *f)
+/* Dump range to file. */
+{
+fprintf(f, "%d-%d %s %d-%d, hits %d\n", r->qStart, r->qEnd, r->tName, r->tStart, r->tEnd, r->hitCount);
+}
+
+void dumpRangeList(struct gfRange *rangeList, FILE *f)
+/* Dump range list to file for debugging. */
+{
+struct gfRange *range;
+for (range = rangeList; range != NULL; range = range->next)
+    dumpRange(range, f);
+}
+#ifdef DEBUG
+#endif /* DEBUG */
+
 void gfRangeFree(struct gfRange **pEl)
 /* Free a single dynamically allocated gfRange such as created
  * with gfRangeLoad(). */
@@ -551,22 +567,6 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 slReverse(&rangeList);
 return rangeList;
 }
-
-void dumpRange(struct gfRange *r, FILE *f)
-/* Dump range to file. */
-{
-fprintf(f, "%d-%d %s %d-%d, hits %d\n", r->qStart, r->qEnd, r->tName, r->tStart, r->tEnd, r->hitCount);
-}
-
-void dumpRangeList(struct gfRange *rangeList, FILE *f)
-/* Dump range list to file for debugging. */
-{
-struct gfRange *range;
-for (range = rangeList; range != NULL; range = range->next)
-    dumpRange(range, f);
-}
-#ifdef DEBUG
-#endif /* DEBUG */
 
 static struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, 
     struct dnaSeq *seq, int minScore,  struct gfRange **retRangeList)
@@ -1524,7 +1524,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, ffCdna, minScore, 3);
+    ssStitch(bun, ffCdna, minScore, 4);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, qIsRc, tIsRc, stringency, minScore, out);
     }

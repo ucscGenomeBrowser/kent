@@ -1173,7 +1173,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
-    aliCount = ssStitch(bun, ffCdna, 16, 1);
+    aliCount = ssStitch(bun, ffCdna, 16, 8);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     slAddHead(&bunList, bun);
     }

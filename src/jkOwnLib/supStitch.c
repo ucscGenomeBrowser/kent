@@ -738,6 +738,8 @@ while (ffList != NULL)
     else
 	{
 	ffFreeAli(&bestPath);
+	ffFreeAli(&ffList);
+	break;
 	}
     firstTime = FALSE;
     if (--maxToReturn <= 0)
