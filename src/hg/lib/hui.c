@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.28 2003/11/08 00:09:04 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.29 2003/12/05 19:03:28 booch Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -184,6 +184,68 @@ cgiMakeDropList(var, stsMapOptions, ArraySize(stsMapOptions),
 	curVal);
 }
 
+/****** Some stuff for stsMapMouseNew related controls *******/
+
+static char *stsMapMouseOptions[] = {
+    "All Genetic",
+    "WICGR Genetic Map",
+    "MGD Geneic Map",
+    "RH",
+};
+
+enum stsMapMouseOptEnum smmoeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, stsMapMouseOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *smmoeEnumToString(enum stsMapMouseOptEnum x)
+/* Convert from enum to string representation. */
+{
+return stsMapMouseOptions[x];
+}
+
+void smmoeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, stsMapMouseOptions, ArraySize(stsMapMouseOptions), 
+	curVal);
+}
+
+/****** Some stuff for stsMapRat related controls *******/
+
+static char *stsMapRatOptions[] = {
+    "All Genetic",
+    "FHHxACI",
+    "SHRSPxBN",
+    "RH",
+};
+
+enum stsMapRatOptEnum smroeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, stsMapRatOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *smroeEnumToString(enum stsMapRatOptEnum x)
+/* Convert from enum to string representation. */
+{
+return stsMapRatOptions[x];
+}
+
+void smroeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, stsMapRatOptions, ArraySize(stsMapRatOptions), 
+	curVal);
+}
+
 /****** Some stuff for fishClones related controls *******/
 
 static char *fishClonesOptions[] = {
@@ -251,6 +313,64 @@ void rroeDropDown(char *var, char *curVal)
 /* Make drop down of options. */
 {
 cgiMakeDropList(var, recombRateOptions, ArraySize(recombRateOptions), 
+	curVal);
+}
+
+/****** Some stuff for recombRateRat related controls *******/
+
+static char *recombRateRatOptions[] = {
+    "SHRSPxBN Sex Averaged Distances",
+    "FHHxACI Sex Averaged Distances",
+};
+
+enum recombRateRatOptEnum rrroeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, recombRateRatOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *rrroeEnumToString(enum recombRateRatOptEnum x)
+/* Convert from enum to string representation. */
+{
+return recombRateRatOptions[x];
+}
+
+void rrroeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, recombRateRatOptions, ArraySize(recombRateRatOptions), 
+	curVal);
+}
+
+/****** Some stuff for recombRateMouse related controls *******/
+
+static char *recombRateMouseOptions[] = {
+    "WI Genetic Map Sex Averaged Distances",
+    "MGD Genetic Map Sex Averaged Distances",
+};
+
+enum recombRateMouseOptEnum rrmoeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, recombRateMouseOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *rrmoeEnumToString(enum recombRateMouseOptEnum x)
+/* Convert from enum to string representation. */
+{
+return recombRateMouseOptions[x];
+}
+
+void rrmoeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, recombRateMouseOptions, ArraySize(recombRateMouseOptions), 
 	curVal);
 }
 

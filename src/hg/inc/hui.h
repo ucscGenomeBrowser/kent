@@ -85,6 +85,40 @@ char *smoeEnumToString(enum stsMapOptEnum x);
 void smoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for stsMapMouseNew related controls *******/
+enum stsMapMouseOptEnum {
+   smmoeGenetic = 0,
+   smmoeWig = 1,
+   smmoeMgi = 2,
+   smmoeRh = 3,
+};
+
+enum stsMapMouseOptEnum smmoeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *smmoeEnumToString(enum stsMapMouseOptEnum x);
+/* Convert from enum to string representation. */
+
+void smmoeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/****** Some stuff for stsMapRat related controls *******/
+enum stsMapRatOptEnum {
+   smroeGenetic = 0,
+   smroeFhh = 1,
+   smroeShrsp = 2,
+   smroeRh = 3,
+};
+
+enum stsMapRatOptEnum smroeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *smroeEnumToString(enum stsMapRatOptEnum x);
+/* Convert from enum to string representation. */
+
+void smroeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for fishClones related controls *******/
 enum fishClonesOptEnum {
    fcoeFHCRC = 0,
@@ -125,6 +159,36 @@ char *rroeEnumToString(enum recombRateOptEnum x);
 /* Convert from enum to string representation. */
 
 void rroeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/****** Some stuff for recombRateRat related controls *******/
+enum recombRateRatOptEnum {
+   rrroeShrspAvg = 0,
+   rrroeFhhAvg = 1,
+};
+
+enum recombRateRatOptEnum rrroeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *rrroeEnumToString(enum recombRateRatOptEnum x);
+/* Convert from enum to string representation. */
+
+void rrroeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/****** Some stuff for recombRateMouse related controls *******/
+enum recombRateMouseOptEnum {
+   rrmoeWiAvg = 0,
+   rrmoeMgdAvg = 1,
+};
+
+enum recombRateMouseOptEnum rrmoeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *rrmoeEnumToString(enum recombRateMouseOptEnum x);
+/* Convert from enum to string representation. */
+
+void rrmoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 /****** Some stuff for cghNci60 related controls *******/
