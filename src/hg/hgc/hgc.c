@@ -134,7 +134,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.606 2004/04/12 23:12:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.607 2004/04/12 23:26:48 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6643,6 +6643,7 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 {
 char *shortItemName;
 char *url = tdb->url;
+char *chp;
 if (url != NULL && url[0] != 0)
     {
     char supfamURL[512];
@@ -6724,7 +6725,7 @@ if (url != NULL && url[0] != 0)
 	    	return;
 	    	}
 	    }
-    	sprintf(cond_str, "name='%s'", itemName);    
+    	sprintf(cond_str, "name='%s'", shortItemName);    
     	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     	if (ans != NULL)
 	    {
