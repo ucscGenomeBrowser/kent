@@ -1672,3 +1672,11 @@ fillgap.pl -db=mm3 -table=blastzBestRat
 synteny2bed.pl
 hgLoadBed mm3 syntenyRat ucsc100k.bed
 
+
+
+CREATING THE mm3Rn2L SAMPLE TRACK (a.k.a WIGGLE TRACK)
+------------------------------------------------------
+o - refer to the script at src/hg/sampleTracks/makeMm3Rn2.doc
+
+
+

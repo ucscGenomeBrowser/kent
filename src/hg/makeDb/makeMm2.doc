@@ -1394,4 +1394,10 @@ SLAM (hg13)
      mv mmCNS.bed mouseFromHumanCNS.bed
      expand.pl < humanFromMouseCNS.bed > humanFromMouseCNS.bed.expand
      hgLoadBed -tab hg13 slamNonCodingMouse humanFromMouseCNS.bed.expand
+
+
+REATING THE musHumL SAMPLE TRACK (a.k.a WIGGLE TRACK)
+------------------------------------------------------
+o - refer to the script at src/hg/sampleTracks/makeMm2Hg12.doc
+
      

@@ -2585,3 +2585,10 @@ SLAM
     mv hsCNS.bed humanFromRatCNS.bed
     expand.pl < humanFromRatCNS.bed > humanFromRatCNS.bed.expand
     hgLoadBed -tab hg13 slamNonCodingRat humanFromRatCNS.bed.expand
+
+
+CREATING THE humMusL SAMPLE TRACK (a.k.a WIGGLE TRACK)
+------------------------------------------------------
+o - refer to the script at src/hg/sampleTracks/makeHg13Mm2.doc
+
+
