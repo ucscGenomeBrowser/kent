@@ -18,7 +18,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 98;       /* Current version number. */
+int version = 99;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */
 int maxMapDeviation = 600000;   /* No map deviations further than this allowed. */
@@ -85,6 +85,8 @@ struct oogClone
     int orientation;	       /* Orientation from ends: +1, -1 or 0 for unknown. */
     struct barge *barge;       /* Barge this is part of. */
     struct bargeEl *bel;       /* Point back to barge el to get position... */
+    struct dgNode *startNode;  /* Start node in raft graph. */
+    struct dgNode *endNode;    /* End node in raft graph. */
     bool hitFlag;              /* Used by ordCountStarts. */
     int maxShare;              /* Max amount of sequence shared */
     struct oogClone *maxShareClone;  /* Clone that shares max sequence. */
@@ -142,9 +144,6 @@ struct raft
     struct connectedComponent *cc;   /* Other rafts connected by mrna data. */
     short orientation;           /* Relative orientation of graph.  1, -1 or 0 for unknown. */
     bool fixedOrientation;       /* True if raft has fixed orientation. */
-    bool inCloneA;		 /* Temporarily used building clone order based constraints. */
-    bool inCloneB;		 /* Temporarily used building clone order based constraints. */
-    bool mapConflict;	 	 /* True if is has map conflicts... . */
     int defaultPos;		 /* Default Middle position of raft in contig coordinates. */
     int flipTendency;            /* Which orientation map says raft should have. */
     struct edgeRef *refList;     /* Edges used to make this raft. */
@@ -235,7 +234,6 @@ enum cableType
    ctCloneEnds, /* (dummy) start/end of clone. */
    ctChain,	     /* Chain in clone from sequencing center submission. */
    ctBigRaft,	     /* Big raft with orientation info from map. */
-   ctCloneOrder,     /* Relative position of clones in map. */
    };
 
 char *cableTypeName(int cableType)
@@ -243,7 +241,7 @@ char *cableTypeName(int cableType)
 {
 static char *names[] = 
    {"readPair", "mRNA", "EST", "estPair", "bacEndPair", "cloneEnds", 
-   	"chain", "bigRaft", "cloneOrder"};
+   	"chain", "bigRaft"};
 assert(cableType >= 0 && cableType < ArraySize(names));
 return names[cableType];
 }
@@ -717,7 +715,7 @@ return b->score - a->score;
 
 void addCable(struct diGraph *graph, struct dgNode *aNode, char *aName, int aOrientation,
 	struct dgNode *bNode, char *bName, int bOrientation, enum cableType type,
-	int minDistance, int maxDistance, boolean unflippable)
+	int minDistance, int maxDistance)
 /* Add cable to graph.  Allocate edge and bridge if necessary.  This
  * does *not* check that cable is consistent. */
 {
@@ -740,7 +738,6 @@ if (edge == NULL)
     bridge->maxDistance = maxDistance;
     bridge->cableList = cable;
     edge = dgConnectWithVal(graph, aNode, bNode, bridge);
-    edge->unflippable = unflippable;
     }
 else
     {
@@ -754,15 +751,12 @@ else
     }
 }
 
-#ifdef OLD
-void addDummyCable(struct diGraph *graph, struct dgNode *aNode, struct dgNode *bNode,
-	enum cableType type)
-/* Add unflippable cable that contains no info other than aNode follows bNode. */
+void addDummyCable(struct diGraph *graph, struct dgNode *aNode, struct dgNode *bNode)
+/* Add cable that contains no info other than aNode follows bNode. */
 {
 addCable(graph, aNode, aNode->name, 
-    1, bNode, bNode->name, 1, type, 0, BIGNUM/10, TRUE);
+    1, bNode, bNode->name, 1, ctCloneEnds, 0, BIGNUM/10);
 }
-#endif /* OLD */
 
 void dumpEdge(struct oogEdge *edge, FILE *out)
 /* Print out an edge. */
@@ -1314,7 +1308,7 @@ return mlList;
 struct lineGraph *mlAntiFlip(struct raft *fixedRaft, 
 	struct raft *raft, int flipAbs, int flipDir)
 /* Make a line graph that encourages raft stay in "flipDir"
- * orientation with score proportional to flipAbs. */
+ * orientation with score proportional to flipAbs. ~~~ */
 {
 struct lineGraph *ml;
 struct lineConnection *mc;
@@ -3053,6 +3047,11 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	{
 	clone = bel->clone;
 	clone->defaultPos = barge->offset + bel->offset;
+	if (bargeGraph != NULL)
+	    {
+	    clone->startNode->priority = clone->defaultPos;
+	    clone->endNode->priority = clone->defaultPos + clone->size;
+	    }
 	calcFragDefaultPositions(clone, clone->defaultPos);
 	}
     }
@@ -3131,7 +3130,7 @@ for (ref = raftList; ref != NULL; ref = ref->next)
 logIt("\n", raft->id);
 
 /* See if the fixed raft is part of this component, if so
- * refuse to flip.  */
+ * refuser to flip. ~~~ */
 for (ref = raftList; ref != NULL; ref = ref->next)
     {
     raft = ref->node->val;
@@ -3143,7 +3142,7 @@ for (ref = raftList; ref != NULL; ref = ref->next)
     }
     
 
-erList = dgFindSubEdges(raftGraph, raftList, TRUE);
+erList = dgFindSubEdges(raftGraph, raftList);
 dgSwapEdges(raftGraph, erList);
 ok = !dgHasCycles(raftGraph);
 if (ok)
@@ -3365,7 +3364,7 @@ for (a = ml->mcList; (b = a->next) != NULL; a = b)
     assert(minDistance <= maxDistance);
     addCable(graph, a->raft->node, a->name, a->orientation, 
          b->raft->node, b->name, b->orientation, 
-         ml->cableType, minDistance, maxDistance, FALSE);
+         ml->cableType, minDistance, maxDistance);
     }
 }
 
@@ -3395,7 +3394,7 @@ for (mc = ml->mcList; mc != NULL; mc = mc->next)
 	{
 	struct dgNodeRef *nr;
 	AllocVar(cc);
-	subGraph = dgFindNewFlippableConnected(graph, mc->raft->node);
+	subGraph = dgFindNewConnectedWithVals(graph, mc->raft->node);
 	cc->subGraph = subGraph;
 	for (nr = cc->subGraph; nr != NULL; nr = nr->next)
 	    {
@@ -3506,7 +3505,6 @@ const struct cloneEndPos *b = *((struct cloneEndPos **)vb);
 return (a->pos - b->pos);
 }
 
-#ifdef OLD
 void addBargeToRaftGraph(struct diGraph *raftGraph, struct barge *barge,
 	struct oogClone **pLastClone)
 /* Add a barge to the raft graph. */
@@ -3552,7 +3550,7 @@ for (cep = cepList; cep != NULL; cep = cep->next)
 	}
     if (lastNode != NULL)
 	{
-	addDummyCable(raftGraph, lastNode, node, ctCloneEnds);
+	addDummyCable(raftGraph, lastNode, node);
 	}
     lastNode = node;
     }
@@ -3561,7 +3559,7 @@ for (cep = cepList; cep != NULL; cep = cep->next)
 if (lastClone != NULL)
     {
     clone = cepList->clone;
-    addDummyCable(raftGraph, lastClone->endNode, clone->startNode, ctCloneEnds);
+    addDummyCable(raftGraph, lastClone->endNode, clone->startNode);
     }
 
 slFreeList(&cepList);
@@ -3654,13 +3652,13 @@ struct dgNode *raftNode;
 raft->node = raftNode = dgAddNumberedNode(raftGraph, raft->id, raft);
 if ((clone = singleCloneForRaft(raft)) != NULL)
     {
-    addDummyCable(raftGraph, clone->startNode, raftNode, ctCloneEnds);
-    addDummyCable(raftGraph, raftNode, clone->endNode, ctCloneEnds);
+    addDummyCable(raftGraph, clone->startNode, raftNode);
+    addDummyCable(raftGraph, raftNode, clone->endNode);
     }
 else if (cloneBoundsInBarge(raft, &startClone, &endClone))
     {
-    addDummyCable(raftGraph, startClone->startNode, raftNode, ctCloneEnds);
-    addDummyCable(raftGraph, raftNode, endClone->endNode, ctCloneEnds);
+    addDummyCable(raftGraph, startClone->startNode, raftNode);
+    addDummyCable(raftGraph, raftNode, endClone->endNode);
     }
 else
     {
@@ -3684,179 +3682,6 @@ fixedRaft->node = dgAddNode(raftGraph, "fixed", fixedRaft);
 for (raft = raftList; raft != NULL; raft = raft->next)
     addRaftToRaftGraph(raftGraph, raft);
 slReverse(&raftGraph->nodeList);
-}
-#endif /* OLD */
-
-void markRaftsInAb(struct raft *raftList, struct oogClone *a, struct oogClone *b)
-/* Set inCloneA/inCloneB values for all rafts in list. */
-{
-struct raft *raft;
-struct raftFrag *rf;
-
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    raft->inCloneA = raft->inCloneB = FALSE;
-    for (rf = raft->fragList; rf != NULL; rf = rf->next)
-        {
-	if (rf->frag->clone == a)
-	    raft->inCloneA = TRUE;
-	else if (rf->frag->clone == b)
-	    raft->inCloneB = TRUE;
-	}
-    }
-}
-
-struct cloneOrderRaftRestraint
-/* Store info on a pair of rafts positioned relative to
- * each other by clone order constraints. */
-    {
-    struct cloneOrderRaftRestraint *next;	/* Next in list. */
-    struct raft *before, *after;                /* Two rafts in order. */
-    struct oogClone *cloneBefore,*cloneAfter;   /* Two clones that define order. */
-    double score;				/* Score - based largely on raft size. */
-    };
-
-int cloneOrderRaftRestraintCmp(const void *va, const void *vb)
-/* Compare two cloneOrderRaftRestraint to sort by offset . */
-{
-const struct cloneOrderRaftRestraint *a = *((struct cloneOrderRaftRestraint **)va);
-const struct cloneOrderRaftRestraint *b = *((struct cloneOrderRaftRestraint **)vb);
-double diff = b->score - a->score;
-if (diff > 0.0)
-    return 1;
-else if (diff < 0.0)
-    return -1;
-else
-    return 0;
-}
-
-void constrainAbRafts(struct cloneOrderRaftRestraint **pList, struct raft *raftList,
-	struct oogClone *a, struct oogClone *b,
-	boolean aBefore, boolean bBefore, boolean aAfter, boolean bAfter)
-/* Add constraints that force rafts with inCloneA/inCloneB values matching
- * aBefore/bBefore to come before rafts with values matchin aAfter/bAfter. */
-{
-struct raft *before, *after;
-struct cloneOrderRaftRestraint *corr;
-int size1, size2, small, big;
-
-uglyf("ConstrainAbRafts(%s %s %d %d %d %d)\n", a->name, b->name,
-	aBefore, bBefore, aAfter, bAfter);
-
-for (before = raftList; before != NULL; before = before->next)
-    {
-    if (before->inCloneA == aBefore && before->inCloneB == bBefore)
-        {
-	for (after = raftList; after != NULL; after = after->next)
-	    {
-	    if (after->inCloneA == aAfter && after->inCloneB == bAfter)
-	        {
-		uglyf("   Constraining %d < %d\n", before->id, after->id);
-		AllocVar(corr);
-		corr->before = before;
-		corr->after = after;
-		corr->cloneBefore = a;
-		corr->cloneAfter = b;
-		size1 = before->end - before->start;
-		size2 = after->end - after->start;
-		if (size1 < size2)
-		    {
-		    big = size2;
-		    small = size1;
-		    }
-		else
-		    {
-		    big = size1;
-		    small = size2;
-		    }
-		corr->score = (double)small * 500000 + (double)big;
-		slAddHead(pList, corr);
-		}
-	    }
-	}
-    }
-}
-
-void addCloneOrderConstraints(struct cloneEnd *endList, struct diGraph *raftGraph,
-	struct raft *raftList)
-/* Add constraints that for all overlapping clones A and B such that A comes
- * before B in map, force rafts containing A only to come before rafts
- * containing A and B which in turn come before rafts containing B only. */
-{
-struct cloneEnd *aCe, *bCe;
-struct oogClone *aClone, *bClone;
-struct dgNode *after, *before;
-struct cloneOrderRaftRestraint *corrList = NULL, *corr;
-boolean canAdd;
-struct raft *raft;
-
-uglyf("addCloneOrderRestraints\n");
-for (aCe = endList; aCe != NULL; aCe = aCe->next)
-    {
-    if (!aCe->isStart)
-        continue;
-    aClone = aCe->clone;
-    for (bCe = aCe->next; bCe->clone != aClone; bCe = bCe->next)
-        {
-	if (!bCe->isStart)
-	    continue;
-	bClone = bCe->clone;
-	markRaftsInAb(raftList, aClone, bClone);
-	constrainAbRafts(&corrList, raftList, aClone, bClone, TRUE, FALSE, TRUE, TRUE);
-	constrainAbRafts(&corrList, raftList, aClone, bClone, TRUE, TRUE, FALSE, TRUE);
-	}
-    }
-slSort(&corrList, cloneOrderRaftRestraintCmp);
-
-for (corr = corrList; corr != NULL; corr = corr->next)
-    {
-    before = corr->before->node;
-    after = corr->after->node;
-    canAdd = FALSE;
-    if (dgDirectlyFollows(raftGraph, before, after))
-        canAdd = TRUE;
-    else
-        {
-	dgConnect(raftGraph, before, after);
-	canAdd = !dgHasCycles(raftGraph);
-	dgDisconnect(raftGraph, before, after);
-	if (!canAdd)
-	    {
-	    logIt("Missed clone order constraint raft %d (size %d) raft %d (size %d)\n", 
-	        corr->before->id, corr->before->end - corr->before->start,
-		corr->after->id, corr->after->end - corr->after->start);
-	    }
-	}
-    if (canAdd)
-	{
-	addCable(raftGraph, before, corr->cloneBefore->name, 
-	    1, after, corr->cloneAfter->name, 1, ctCloneOrder, 0, BIGNUM/10, TRUE);
-	}
-    }
-slFreeList(&corrList);
-}
-
-void makeRaftGraphSkeleton(struct diGraph *raftGraph, struct barge *bargeList, 
-	struct raft *raftList, struct raft *fixedRaft)
-/* Make skeleton of raftGraph. A 'fixed' node to prevent inappropriate
- * flipping and real nodes for each raft. */
-{
-struct raft *raft;
-struct barge *barge;
-
-uglyf("start makeRaftGraphSkeleton\n");
-fixedRaft->node = dgAddNode(raftGraph, "fixed", fixedRaft);
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    raft->node = dgAddNumberedNode(raftGraph, raft->id, raft);
-    }
-slReverse(&raftGraph->nodeList);
-
-for (barge = bargeList; barge != NULL; barge = barge->next)
-    {
-    addCloneOrderConstraints(barge->endList, raftGraph, raftList);
-    }
-uglyf("done makeRaftGraphSkeleton\n");
 }
 
 void reverseMl(struct lineGraph *ml)
@@ -3891,8 +3716,6 @@ fprintf(logFile, "\nmakeGraphs\n");
 
 /* Add skeleton of clones to raftGraph. */
 makeRaftGraphSkeleton(raftGraph, bargeList, raftList, fixedRaft);
-if (dgHasCycles(raftGraph))
-    errAbort("Cycles after makeRaftGraphSkeleton!\n");
 
 /* Add all barges to barge graph. */
 for (barge = bargeList; barge != NULL; barge = barge->next)
@@ -4205,7 +4028,7 @@ struct dgNodeRef *ccList, *cc, *ccNext;
 struct raft *raft, *nextRaft;
 
 dgClearConnFlags(graph);
-while ((ccList = dgFindNextFlippableConnected(graph)) != NULL)
+while ((ccList = dgFindNextConnectedWithVals(graph)) != NULL)
     {
     int flipTendency = 0;
     int oneFlipTendency;
@@ -5132,11 +4955,9 @@ boolean realConnection(struct dgConnection *conList)
  * a dummy link to clone ends). */
 {
 struct dgConnection *con;
-struct dgEdge *edge;
 for (con = conList; con != NULL; con = con->next)
     {
-    edge = con->edgeOnList->val;
-    if (edge != NULL && !edge->unflippable)
+    if (con->node->val != NULL)
 	return TRUE;
     }
 return FALSE;
@@ -5510,14 +5331,6 @@ setRaftFlipTendencies(raftList);
 	mCount, pCount, fCount, eCount, bCount);
     }
 
-{ /* uglyf */
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    normalizeRaft(raft);
-    dumpRaft(raft, raftOut);
-    fprintf(raftOut, "\n");
-    }
-}
 
 fprintf(logFile, "\nList of lineGraphs:\n");
 for (ml = mlList; ml != NULL; ml = ml->next)
@@ -5541,7 +5354,7 @@ status("Updated default positions\n");
 flipNearDefaults(raftGraph);
 graphOut = mustOpen(graphOutName, "w");
 fprintf(graphOut, "mRNA/BAC ends graph by ooGreedy version %d\n\n", version); 
-dgConnectedFlippableComponents(raftGraph);
+dgConnectedComponentsWithVals(raftGraph);
 ooDumpGraph(raftGraph, graphOut);
 carefulClose(&graphOut);
 status("Flipped and saved graphs.\n");
