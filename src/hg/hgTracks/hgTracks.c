@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.759 2004/07/03 19:22:15 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.760 2004/07/03 23:42:13 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3027,6 +3027,9 @@ int col = tg->ixColor;
 char *acc;
 char *colon, *pos;
 char *buffer;
+
+if (getCdsDrawOptionNum(tg)>0 && zoomedToCdsColorLevel)
+    return tg->ixColor;
 
 acc = buffer = cloneString(lf->name);
 if ((pos = strchr(acc, '.')) != NULL)
