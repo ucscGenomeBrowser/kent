@@ -114,6 +114,8 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     printf("Indexing and tabulating %s\n", fileName);
     while ((maf = mafNextWithPos(mf, &offset)) != NULL)
         {
+	double maxScore, minScore;
+	mafColMinMaxScore(maf, &minScore, &maxScore);
 	++mafCount;
 	mc = findComponent(maf, database);
 	if (mc == NULL)
@@ -127,7 +129,10 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	    reverseIntRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
 	mr.extFile = extId;
 	mr.offset = offset;
-	mr.score = maf->score;
+	mr.score = maf->score/mc->size;
+	mr.score = (mr.score-minScore)/(maxScore-minScore);
+	if (mr.score > 1.0) mr.score = 1.0;
+	if (mr.score < 0.0) mr.score = 0.0;
 	fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
 	scoredRefTabOut(&mr, f);
 	mafAliFree(&maf);
