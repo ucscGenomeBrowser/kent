@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.61 2004/04/13 00:21:56 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.62 2004/04/21 19:49:41 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -654,6 +654,16 @@ void cgiMakeResetButton()
 /* Make 'reset' type button. */
 {
 printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\" Reset \">");
+}
+
+void cgiMakeClearButton(char *form, char *field)
+/* Make button to clear a text field. */
+{
+char javascript[1024];
+
+safef(javascript, sizeof(javascript), 
+    "document.%s.%s.value = ''; document.%s.submit();\"", form, field, form);
+cgiMakeOnClickButton(javascript, " Clear  ");
 }
 
 void cgiMakeButton(char *name, char *value)

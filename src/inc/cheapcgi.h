@@ -228,6 +228,9 @@ void cgiMakeSubmitButton();
 void cgiMakeResetButton();
 /* Make 'reset' type button. */
 
+void cgiMakeClearButton(char *form, char *field);
+/* Make button to clear a text field. */
+
 void cgiSimpleTableRowStart();
 /* Start table row */
 
