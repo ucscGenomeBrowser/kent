@@ -426,8 +426,12 @@ char *netGetLongString(int sd)
 UBYTE b[2];
 char *s = NULL;
 int length = 0;
+int sz;
 b[0] = b[1] = 0;
-if (netReadAll(sd, b, 2)<0)
+sz = netReadAll(sd, b, 2);
+if (sz == 0)
+    return NULL;
+if (sz < 0)
     {
     warn("Couldn't read long string length");
     return NULL;
