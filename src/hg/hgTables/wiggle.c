@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.7 2004/08/31 22:09:31 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.8 2004/08/31 23:15:38 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -162,6 +162,8 @@ unsigned long long valuesMatched = 0;
 int regionCount = 0;
 unsigned span = 0;
 
+startTime = clock1000();
+
 /*	Count the regions, when only one, we can do a histogram	*/
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
@@ -185,7 +187,6 @@ if (isCustomTrack(table))
 
 wDS = newWigDataStream();
 
-startTime = clock1000();
 for (region = regionList; region != NULL; region = region->next)
     {
     boolean hasBin;
@@ -234,7 +235,6 @@ for (region = regionList; region != NULL; region = region->next)
 
     wDS->freeConstraints(wDS);
     }
-wigFetchTime = clock1000() - startTime;
 
 if (1 == regionCount)
     statsPreamble(wDS, regionList->chrom, regionList->start, regionList->end,
@@ -272,6 +272,7 @@ if ((valuesMatched > 1) && (1 == regionCount))
 
 wDS->freeStats(wDS);
 
+wigFetchTime = clock1000() - startTime;
 webNewSection("Region and Timing Statistics");
 hTableStart();
 stringStatRow("region", regionName);
