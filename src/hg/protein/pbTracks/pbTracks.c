@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.4 2003/12/15 17:59:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.5 2003/12/16 15:14:06 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -177,7 +177,8 @@ if (cgiOptionalString("pbScale") != NULL)
 	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
 	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
 	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
-	if (strcmp(cgiOptionalString("pbScale"), "EXTENDED") == 0) pbScale = 18;
+	//if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 18;
+	if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 22;
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
@@ -225,7 +226,7 @@ if (cgiOptionalString("exonNum") == NULL)
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"EXTENDED\">\n");
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
     hPrintf("&nbsp&nbsp&nbsp&nbsp");
     hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
     hPrintf("Explanation of Tracks</A>");

@@ -310,11 +310,6 @@ for (i=0; i<len; i++)
 	sprintf(scale_str, "%d", index);
 	vgText(g_vg, xx-pbScale/2+4, yy+4-12*tb, MG_BLACK, g_font, scale_str);
 	}
-    else
-	{
-	//calxy(i, *yOffp, &xx, &yy);
-	//vgBox(g_vg, xx, yy-tb, 1*pbScale, 1, MG_BLACK);
-	}
     }
 
 *yOffp = *yOffp + 12;
@@ -326,7 +321,7 @@ void mapBoxExon(int x, int y, int width, int height, char *mrnaID,
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 //hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"", database, 
 hPrintf("HREF=\"http://hgwdev-markd.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full", 
-	database, chrom, exonGenomeStartPos, exonGenomeEndPos, kgProtMapTableName);
+	database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3, kgProtMapTableName);
 hPrintf("&knownGene=full&mrna=full\"");
 hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
 }
@@ -456,7 +451,7 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char *region;
 int  done;
 
-char *proteinAcc;
+//char *proteinAcc;
 char *gene_name;
 char *ensPep;
 
@@ -466,17 +461,17 @@ int  ii = 0;
 int  int_start, int_end;
     
 conn = hAllocConn();
-
+/*
 sprintf(cond_str, "displayID='%s'", proteinID);
 proteinAcc = sqlGetField(conn, "proteins", "spXref3", "accession", cond_str);
 if (proteinAcc == NULL) return(0);
-
-sprintf(cond_str, "external_name='%s' AND external_db='SWISSPROT'", proteinID);
+*/
+sprintf(cond_str, "external_name='%s' AND external_db='SWISSPROT'", protDisplayID);
 ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
 
 if (ensPep == NULL) 
     {
-    sprintf(cond_str, "external_name='%s' AND external_db='SPTREMBL'", proteinID);
+    sprintf(cond_str, "external_name='%s' AND external_db='SPTREMBL'", protDisplayID);
     ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
 
     if (ensPep == NULL) 
@@ -501,7 +496,7 @@ while (row != NULL)
    eValue   = row[4];
    sfID	    = row[5];
    sfDesc   = row[6];
-
+printf("<br>region=%s\n", region);fflush(stdout);
    // !!! check if replacement is necessary
 
 /*		l = strlen(sfDesc);
@@ -682,7 +677,16 @@ for (index=0; index < len; index++)
     res_str[0] = aa[index];
     calxy(index+1, *yOffp, &xx, &yy);
 	
-    vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    //vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    if (pbScale >= 18)
+	{
+	vgTextRight(g_vg, xx-3-16, yy, 10, 10, MG_BLACK, g_font, res_str);
+    	}
+    else
+	{
+        vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    	}
+
     }
     
 *yOffp = *yOffp + 12;
@@ -866,6 +870,8 @@ doCysteines(aa, l, yOffp);
 
 // Temporarily disable superfamily track until suprfam data built for hg16
 //sf_cnt = get_superfamilies(proteinID, ensPepName);
+//printf("<br>sf_cnt = %d\n", sf_cnt);fflush(stdout);
+
 //if (sf_cnt > 0) doSuperfamily(ensPepName, sf_cnt, yOffp); 
 
 if (hasResFreq) doAnomalies(aa, l, yOffp);
