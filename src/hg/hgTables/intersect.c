@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.12 2004/09/13 16:26:41 hiram Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.13 2004/09/14 23:17:16 donnak Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -85,7 +85,7 @@ cartSaveSession(cart);
 hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
 
-hPrintf("Please select a group and track to intersect with:<BR>\n");
+hPrintf("Select a group and track to intersect with:\n");
 iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange, 
 	hgtaNextIntersectTrack, onChange, conn);
 iName = iTrack->shortLabel;
@@ -115,16 +115,16 @@ setting = cartCgiUsualString(cart, hgtaNextLessThreshold, "80");
 cgiMakeTextVar(hgtaNextLessThreshold, setting, 3);
 printf(" %% overlap with %s <P>\n", iName);
 
-printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.\n",
+printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.<P>\n",
        name);
-puts("To complement a table means to consider a position included if it \n"
-     "is <I>not</I> included in the table. <P>");
 makeOpButton("and", op);
 printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
        name, iName);
 makeOpButton("or", op);
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        name, iName);
+puts("Check the following boxes to complement one or both tables. To complement a table means to include a row in the intersection if it \n"
+     "is <I>not</I> included in the table. <P>");
 jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
 printf("Complement %s before intersection/union <BR>\n", name);
 jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
