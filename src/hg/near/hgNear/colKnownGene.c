@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colGenePred.c,v 1.3 2003/06/18 17:44:49 kent Exp $";
+static char const rcsid[] = "$Id: colKnownGene.c,v 1.1 2003/06/18 21:05:15 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -114,4 +114,16 @@ void knownPosMethods(struct column *col)
 {
 genePredPosMethods(col, "knownGene");
 col->cellVal = knownPosVal;
+}
+
+void geneNameMethods(struct column *col)
+/* Set up a column that shows gene name. */
+{
+simpleMethods(col, "kgXref",  "kgID", "geneSymbol");
+}
+
+void geneDescriptionMethods(struct column *col)
+/* Set up a column that shows gene name. */
+{
+simpleMethods(col, "kgXref",  "kgID", "description");
 }

@@ -109,10 +109,16 @@ char *knownPosVal(struct column *col, char *geneId,
 /* Get genome position of knownPos table.  Ok to have col NULL. */
 
 /* ---- Column method setters. ---- */
-void accMethods(struct column *col);
+void numberMethods(struct column *col);
 /* Set up methods for accession column. */
 
-void numberMethods(struct column *col);
+void geneNameMethods(struct column *col);
+/* Set up a column that shows gene name. */
+
+void geneDescriptionMethods(struct column *col);
+/* Set up a column that shows gene name. */
+
+void accMethods(struct column *col);
 /* Set up methods for accession column. */
 
 void percentIdMethods(struct column *col);

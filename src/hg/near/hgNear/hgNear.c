@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.7 2003/06/18 18:05:47 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.8 2003/06/18 21:05:15 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -121,6 +121,7 @@ columnDefaultMethods(col);
 col->table = table;
 col->keyField = key;
 col->valField = val;
+col->exists = simpleTableExists;
 col->cellVal = cellSimpleVal;
 }
 
@@ -439,9 +440,18 @@ if (col->exists(col, conn))
     slAddHead(&colList, col);
 
 AllocVar(col);
+col->name = "name";
+col->label = "Name";
+col->priority = 2;
+col->on = TRUE;
+geneNameMethods(col);
+if (col->exists(col, conn))
+    slAddHead(&colList, col);
+
+AllocVar(col);
 col->name = "acc";
 col->label = "Accession";
-col->priority = 2;
+col->priority = 3;
 col->on = TRUE;
 accMethods(col);
 if (col->exists(col, conn))
@@ -450,7 +460,7 @@ if (col->exists(col, conn))
 AllocVar(col);
 col->name = "bitScore";
 col->label = "Bits";
-col->priority = 3;
+col->priority = 4;
 col->on = FALSE;
 bitScoreMethods(col);
 if (col->exists(col, conn))
@@ -459,7 +469,7 @@ if (col->exists(col, conn))
 AllocVar(col);
 col->name = "eVal";
 col->label = "E Value";
-col->priority = 4;
+col->priority = 5;
 col->on = TRUE;
 eValMethods(col);
 if (col->exists(col, conn))
@@ -468,7 +478,7 @@ if (col->exists(col, conn))
 AllocVar(col);
 col->name = "percentId";
 col->label = "%ID";
-col->priority = 5;
+col->priority = 6;
 col->on = TRUE;
 percentIdMethods(col);
 if (col->exists(col, conn))
@@ -478,7 +488,16 @@ AllocVar(col);
 col->name = "knownPos";
 col->label = "Genome Position";
 knownPosMethods(col);
-col->priority = 6;
+col->priority = 7;
+col->on = TRUE;
+if (col->exists(col, conn))
+    slAddHead(&colList, col);
+
+AllocVar(col);
+col->name = "description";
+col->label = "Description";
+geneDescriptionMethods(col);
+col->priority = 8;
 col->on = TRUE;
 if (col->exists(col, conn))
     slAddHead(&colList, col);
@@ -514,7 +533,7 @@ struct column *colList = getColumns(conn), *col;
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 
 /* Print label row. */
-hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
+hPrintf("<TR BGCOLOR=\"#E8E8FF\">");
 for (col = colList; col != NULL; col = col->next)
     {
     char *colName = col->label;
@@ -528,7 +547,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     {
     char *geneId = gene->name;
     if (sameString(geneId, curGeneId))
-        hPrintf("<TR BGCOLOR=\"#FFEFEF\">");
+        hPrintf("<TR BGCOLOR=\"#E8FFE8\">");
     else
         hPrintf("<TR>");
     for (col = colList; col != NULL; 
