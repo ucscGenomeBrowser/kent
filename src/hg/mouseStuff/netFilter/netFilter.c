@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.11 2003/06/21 18:41:23 baertsch Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.12 2003/08/12 20:50:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,8 +32,28 @@ errAbort(
   "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
   "   -line - Do this a line at a time, not recursing\n"
+  "   -noRandom      - suppress chains involving 'random' chromosomes\n"
   );
 }
+
+struct optionSpec options[] = {
+   {"q", OPTION_STRING},
+   {"notQ", OPTION_STRING},
+   {"t", OPTION_STRING},
+   {"notT", OPTION_STRING},
+   {"minScore", OPTION_FLOAT},
+   {"maxScore", OPTION_FLOAT},
+   {"minGap", OPTION_INT},
+   {"minAli", OPTION_INT},
+   {"syn", OPTION_BOOLEAN},
+   {"nonsyn", OPTION_BOOLEAN},
+   {"type", OPTION_STRING},
+   {"fill", OPTION_BOOLEAN},
+   {"gap", OPTION_BOOLEAN},
+   {"line", OPTION_BOOLEAN},
+   {"noRandom", OPTION_BOOLEAN},
+   {NULL, 0},
+};
 
 struct hash *hashCommaString(char *s)
 /* Make hash out of comma separated string. */
@@ -84,6 +104,7 @@ int minAli = 0;			/* Minimum ali size. */
 boolean fillOnly = FALSE;	/* Only pass fills? */
 boolean gapOnly = FALSE;	/* Only pass gaps? */
 char *type = NULL;		/* Only pass given type */
+boolean noRandom = FALSE;	/* Only pass non-random chromosomes. */
 
 boolean synFilter(struct cnFill *fill)
 /* Filter based on synteny */
@@ -123,6 +144,11 @@ if (fill->chainId)
 	return FALSE;
     if (fill->ali < minAli)
         return FALSE;
+    if (noRandom)
+        {
+	if (endsWith(fill->qName, "_random"))
+	    return FALSE;
+	}
     if (doSyn && !synFilter(fill))
 	return FALSE;
     if (doNonSyn && synFilter(fill))
@@ -218,6 +244,7 @@ minAli = optionInt("minAli", minAli);
 fillOnly = optionExists("fill");
 gapOnly = optionExists("gap");
 type = optionVal("type", type);
+noRandom = optionExists("noRandom");
 
 for (i=0; i<inCount; ++i)
     {
@@ -236,6 +263,8 @@ for (i=0; i<inCount; ++i)
 		writeIt = FALSE;
 	    if (notTHash != NULL && hashLookup(notTHash, net->name))
 		writeIt = FALSE;
+	    if (noRandom && endsWith(net->name, "_random"))
+	        writeIt = FALSE;
 	    if (writeIt)
 		{
 		writeFiltered(net, f);
@@ -250,7 +279,7 @@ for (i=0; i<inCount; ++i)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 netFilter(argc-1, argv+1);
