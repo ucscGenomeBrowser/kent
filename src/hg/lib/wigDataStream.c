@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.15 2004/08/12 20:22:13 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.16 2004/08/12 20:59:01 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -84,6 +84,7 @@ if (wDS->limit_1 > (lower+range))
     wDS->ucUpperLimit = MAX_WIG_VALUE;
 else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
+
 verbose(3, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
 }
@@ -214,6 +215,7 @@ else
     if (!wDS->spanLimit)
 	dyStringPrintf(query, " span ASC,");
     dyStringPrintf(query, " chromStart ASC");
+
     verbose(2, "#\t%s\n", query->string);
     if (!wDS->conn)
 	wDS->conn = sqlConnect(wDS->db);
@@ -293,19 +295,11 @@ const struct wigAsciiData *a = *((struct wigAsciiData **)va);
 const struct wigAsciiData *b = *((struct wigAsciiData **)vb);
 int dif;
 dif = strcmp(a->chrom, b->chrom);
-verbose(2, "asciiDataCmp: %d = strcmp(%s,%s)\n",
-		dif, a->chrom, b->chrom);
 if (dif == 0)
     {
     dif = a->span - b->span;
-    verbose(2, "asciiDataCmp: %d = %u - %u\n",
-		dif, a->span, b->span);
     if (dif == 0)
-	{
 	dif = a->data->chromStart - b->data->chromStart;
-	verbose(2, "asciiDataCmp: %d = %u - %u\n",
-		dif, a->data->chromStart, b->data->chromStart);
-	}
     }
 return dif;
 }
@@ -591,7 +585,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    (wDS->currentChrom &&
 		differentString(wDS->currentChrom, wiggle->chrom)))
 	{
-	/*	if we have been working on one, then last doBed	*/
+	/*	if we have been working on one, then doBed	*/
 	if (!firstSpanDone && doBed && wDS->currentChrom)
 	    {
 	    if (bedElEnd > bedElStart)
@@ -619,10 +613,9 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 		&statsCount, &chromStart, &chromEnd);
 	    }
 	freeMem(wDS->currentChrom);
+	/*	set them whether they are changing or not, doesn't matter */
 	wDS->currentChrom = cloneString(wiggle->chrom);
-	if (wDS->currentSpan |= wiggle->span)
 	wDS->currentSpan = wiggle->span;
-verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan );
 	}
 
     /*	it may seem inefficient to make one of these for each SQL row,
@@ -639,8 +632,6 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 	wigAscii->data = (struct asciiDatum *) needMem((size_t)
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
-	verbose(3, "slAddHead chr %s span %u\n",
-		wigAscii->chrom, wigAscii->span);
 	slAddHead(&wDS->ascii,wigAscii);
 	}
 
@@ -833,7 +824,7 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 			sumData += value;
 			sumSquares += value * value;
 			/*	record maximum extents	*/
-			if ((chromStart < 0)||(chromStart > wiggle->chromStart))
+			if ((chromStart < 0)||(chromStart > chromPosition))
 			    chromStart = chromPosition;
 			if (chromEnd < (chromPosition + wiggle->span))
 			    chromEnd = chromPosition + wiggle->span;
