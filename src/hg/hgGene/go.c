@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.6 2004/06/29 17:54:25 angie Exp $";
 
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -15,15 +15,26 @@ static boolean goExists(struct section *section,
  * on this one. */
 {
 char query[512];
-if (swissProtAcc == NULL || !sqlDatabaseExists("go") 
-	|| !sqlTableExists(conn, "go.goaPart"))
-    return FALSE;
-safef(query, sizeof(query),
-	"select count(*)"
-	" from go.goaPart"
-	" where dbObjectId = '%s'"
-	, swissProtAcc);
-return sqlQuickNum(conn, query) > 0;
+char *fbAcc = getFlyBaseId(conn, geneId);
+boolean useFbGo = (isFly() && fbAcc != NULL && sqlTableExists(conn, "fbGo"));
+if (!sqlDatabaseExists("go"))
+    return(FALSE);
+if (useFbGo)
+    {
+    safef(query, sizeof(query),
+	  "select count(*) from fbGo where geneId = '%s'",
+	  fbAcc);
+    return sqlQuickNum(conn, query) > 0;
+    }
+else
+    {
+    if (swissProtAcc == NULL || !sqlTableExists(conn, "go.goaPart"))
+	return FALSE;
+    safef(query, sizeof(query),
+	  "select count(*) from go.goaPart where dbObjectId = '%s'",
+	  swissProtAcc);
+    return sqlQuickNum(conn, query) > 0;
+    }
 }
 
 static void goPrint(struct section *section, 
@@ -31,7 +42,9 @@ static void goPrint(struct section *section,
 /* Print out GO annotations. */
 {
 struct sqlConnection *goConn = sqlConnect("go");
-char *acc = swissProtAcc;
+char *fbAcc = getFlyBaseId(conn, geneId);
+boolean useFbGo = (isFly() && fbAcc != NULL && sqlTableExists(conn, "fbGo"));
+char *acc = useFbGo ? fbAcc : swissProtAcc;
 char query[512];
 struct sqlResult *sr;
 char **row;
@@ -47,13 +60,22 @@ int aspectIx;
 for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     {
     boolean hasFirst = FALSE;
-    safef(query, sizeof(query),
-	    "select term.acc,term.name"
-	    " from goaPart,term"
-	    " where goaPart.dbObjectId = '%s'"
-	    " and goaPart.goId = term.acc"
-	    " and goaPart.aspect = '%s'"
-	    , acc, aspects[aspectIx]);
+    if (useFbGo)
+	safef(query, sizeof(query),
+	      "select term.acc,term.name"
+	      " from %s.fbGo,term"
+	      " where %s.fbGo.geneId = '%s'"
+	      " and %s.fbGo.goId = term.acc"
+	      " and %s.fbGo.aspect = '%s'",
+	      database, database, acc, database, database, aspects[aspectIx]);
+    else
+	safef(query, sizeof(query),
+	      "select term.acc,term.name"
+	      " from goaPart,term"
+	      " where goaPart.dbObjectId = '%s'"
+	      " and goaPart.goId = term.acc"
+	      " and goaPart.aspect = '%s'"
+	      , acc, aspects[aspectIx]);
     sr = sqlGetResult(goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
