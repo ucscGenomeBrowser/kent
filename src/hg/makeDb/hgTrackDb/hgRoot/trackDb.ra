@@ -104,6 +104,8 @@ shortLabel Duplications
 longLabel Duplications of >1000 Bases Sequence
 visibility hide
 type bed 6 +
+color 170,0,0
+altColor 160,150,0
 
 track dupes
 priority 11
@@ -146,7 +148,7 @@ type genePred refPep refMrna
 
 track sanger20
 shortLabel Sanger 20
-longLabel Sanger Centre Chromosome 20 Genes
+longLabel Sanger Institute Chromosome 20 Genes
 priority 13
 visibility full
 chromosomes chr20,
@@ -155,7 +157,7 @@ type genePred
 
 track sanger22
 shortLabel Sanger 22
-longLabel Sanger Centre Chromosome 22 Genes
+longLabel Sanger Institute Chromosome 22 Genes
 priority 13
 visibility full
 chromosomes chr22,
@@ -278,8 +280,8 @@ shortLabel EST Pairs
 longLabel 5'(blue) and 3'(red) EST Pairs
 priority 20
 visibility hide
-color 67,57,206
-altColor 204,20,35
+color 0,0,180
+altColor 170,0,0
 private on
 
 track tigrGeneIndex
