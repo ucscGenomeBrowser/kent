@@ -14,7 +14,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o columnInfo.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o customTrack.o cytoBand.o dbDb.o \
-    dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o encodeErge.o encodeErgeHssCellLines.o\
+    dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
+    encodeErge.o encodeErgeHssCellLines.o\
     encodeRegionInfo.o encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
@@ -26,23 +27,30 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o \
     hgMaf.o hgRelate.o hgSeq.o hui.o humanParalog.o \
-    imageClone.o isochores.o itemAttr.o jaxOrtholog.o jaxQTL.o jksql.o joiner.o \
+    imageClone.o isochores.o itemAttr.o jaxOrtholog.o jaxQTL.o \
+    jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
-    lfs.o liftOver.o liftOverChain.o liftUp.o llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
-    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o netAlign.o ooUtils.o \
+    lfs.o liftOver.o liftOverChain.o liftUp.o \
+    llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
+    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
+    netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
-    rankProp.o recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
-    riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
+    rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
+    refLink.o refSeqStatus.o \
+    riken.o rikenBest.o rikenCluster.o rmskOut.o \
+    rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
     sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
     sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snp.o snpMap.o \
     softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
-    synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
+    synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
+    tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
-    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o wiggleCart.o wiggleUtils.o \
-    splignAlign.o tfbsConsMap.o
+    trackTable.o vegaInfo.o wabAli.o web.o \
+    wiggle.o wiggleCart.o wiggleUtils.o \
+    splignAlign.o tfbsConsMap.o zdobnovSynt.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
