@@ -98,6 +98,9 @@ struct axtScoreScheme *axtScoreSchemeProteinDefault();
  * scaled to be compatible with the blastz one.  Don't
  * axtScoreSchemeFree this. */
 
+struct axtScoreScheme *axtScoreSchemeProteinRead(char *fileName);
+/* read in blosum-like matrix */
+
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 /* Read in scoring scheme from file. Looks like
     A    C    G    T
