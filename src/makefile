@@ -32,6 +32,10 @@ clean:
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 
+test::
+	cd blat && ${MAKE} test
+	cd hg && ${MAKE} test
+
 tags:
 	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/hg/inc/*.h $(HOME)/src/jkOwnLib/*.c
 
