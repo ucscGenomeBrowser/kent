@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.2 2003/10/10 21:47:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.3 2003/11/06 20:31:17 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -190,6 +190,11 @@ else if (!oldTable)
     dyStringAppend(dy, "  Count int unsigned not null,\n");
     dyStringAppend(dy, "  Offset int unsigned not null,\n");
     dyStringAppend(dy, "  File varchar(255) not null,\n");
+    dyStringAppend(dy, "  lowerLimit double not null,\n");
+    dyStringAppend(dy, "  dataRange double not null,\n");
+    dyStringAppend(dy, "  validCount int unsigned not null,\n");
+    dyStringAppend(dy, "  average double not null,\n");
+    dyStringAppend(dy, "  stddev double not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
