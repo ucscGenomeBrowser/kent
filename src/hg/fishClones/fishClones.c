@@ -27,7 +27,7 @@
 static struct optionSpec optionSpecs[] = {
   {"fhcrc", OPTION_STRING},
   {"psl", OPTION_STRING},
-  {"verbose", OPTION_INT},
+  {"verbose", OPTION_STRING},
   {"noRandom", OPTION_BOOLEAN},
   {"noBin", OPTION_BOOLEAN},
   {NULL, 0}
@@ -45,12 +45,14 @@ struct position
   int start;
   int end;
   char *type;
+  int phase;
 };
 
 struct name
 {
   struct name *next;
   char *name;
+  int phase;
 };
 
 struct place
@@ -73,6 +75,7 @@ struct place
 struct map
 {
   struct map *next;
+  char *chrom;
   char *band1;
   char *band2;
   char *center;
@@ -102,6 +105,7 @@ void mapFree(struct map **map)
 {
   struct map *m;
   if ((m = *map) == NULL) return;
+  free(m->chrom);
   free(m->band1);
   free(m->band2);
   free(m->center);
@@ -238,21 +242,24 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   struct map *ret;
   char *bands[16], band[16];
   int wordCount;
+  char chrom[16];
 
   AllocVar(ret);
   ret->next = NULL;
+  safef(chrom, sizeof(chrom), "chr%s", chr);
+  ret->chrom = cloneString(chrom);
 
   if (stringIn("~\0", mapInfo))
     {
       wordCount = chopByChar(mapInfo, '~', bands, ArraySize(bands));
       if ((wordCount == 2) && stringIn("p\0", bands[0]))
 	{
-	  sprintf(band, "%sp%s", chr, bands[1]); 
+	  safef(band, sizeof(band), "%sp%s", chr, bands[1]); 
 	  bands[1] = cloneString(band);
 	}
       else if ((wordCount == 2) && stringIn("q\0", bands[0]))
 	{
-	  sprintf(band, "%sq%s", chr, bands[1]); 
+	  safef(band, sizeof(band), "%sq%s", chr, bands[1]); 
 	  bands[1] = cloneString(band);
 	}
     }
@@ -282,6 +289,7 @@ struct position *createPosition(char *name, char *type)
   ret->start = 0;
   ret->end = 0;
   ret->type = type;
+  ret->phase = 0;
 
   return(ret);
 }
@@ -294,7 +302,7 @@ struct name *createName(char *n)
   AllocVar(ret);
   ret->next = NULL;
   ret->name = cloneString(n);
-
+  ret->phase = 0;
   return(ret);
 }
 
@@ -320,6 +328,7 @@ struct place *createPlace(struct position *pos)
     {
       ret->numAcc++;
       ret->acc = createName(pos->name);
+      ret->acc->phase = pos->phase;
     } 
   if (sameString(ret->type, "BAC End Pair"))
     {
@@ -338,6 +347,27 @@ struct place *createPlace(struct position *pos)
   ret->score = 0;
 
   return(ret);
+}
+
+boolean sameName(struct name *n1, struct name *n2)
+/* Determine if two names the same */
+{
+  if ((n1 != NULL) && (n2 != NULL) && (sameString(n1->name, n2->name)))
+    return(TRUE);
+  
+  return(FALSE);
+}
+
+boolean inNameList(struct name *n, struct name *nList)
+/* Determine if n is in nList */
+{
+  struct name *n1;
+
+  for (n1 = nList; n1 != NULL; n1 = n1->next)
+    if (sameName(n, n1))
+      return(TRUE);
+  
+  return(FALSE);
 }
 
 void readFishInfo(struct lineFile *ff)
@@ -604,6 +634,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
       pos->chrom = cloneString(cp->chrom);
       pos->start = cp->chromStart;
       pos->end = cp->chromEnd;
+      pos->phase = cp->phase;
       clonePosFree(&cp);
       while ((row = sqlNextRow(sr)) != NULL) 
 	{
@@ -612,6 +643,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
 	  newPos->chrom = cloneString(cp->chrom);
 	  newPos->start = cp->chromStart;
 	  newPos->end = cp->chromEnd;
+	  newPos->phase = cp->phase;
 	  clonePosFree(&cp);
 	  slAddHead(&fc->acc, newPos);
 	}
@@ -724,6 +756,7 @@ int combinePos(struct place *p, struct position *pos)
 	{
 	  p->numAcc++;
 	  n = createName(pos->name);
+	  n->phase = pos->phase;
 	  slAddHead(&p->acc, n);
 	} 
       if (sameString(pos->type, "BAC End Pair"))
@@ -748,15 +781,57 @@ int combinePos(struct place *p, struct position *pos)
   return(ret);
 }
 
-int scorePlace(struct place *p)
+int scorePlace(struct place *p, struct map *m)
 /* Score a placement */
 {
   int ret = 0;
+  struct map *m1;
+  struct name *n, *nList=NULL, *new;
+  
+  /* Check if chromosome agress with any fish mapping */
+  verbose(3, "\tdetermining if in fish chrom");
+  for (m1 = m; m1 != NULL; m1 = m1->next)
+    if (sameString(m1->chrom, p->chrom))
+      {
+      ret += 1;
+      break;
+      }
 
-  ret += p->numAcc * 5;
+  /* Score accessions based on phase of sequencing */
+  verbose(3, "\tscoring accessions\n");
+  for (n = p->acc; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	if (n->phase == 3)
+	  ret += 5;
+	else if (n->phase == 2)
+	  ret += 3;
+	else
+	  ret += 1;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+
   ret += p->numBacEndPair * 3;
-  ret += p->numSts * 2;
-  ret += p->numBacEnd * 1;
+
+  /* Make sure each name only counted once */
+  verbose(3, "\tscoring sts markers\n");
+  for (n = p->sts; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	ret += 2;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+  verbose(3, "\tscoring bac ends\n");
+  for (n = p->bacEnd; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	ret += 1;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+  nameFreeList(&nList);
 
   return(ret);
 }
@@ -808,6 +883,7 @@ void addOrCombinePos(struct fishClone *fc, struct position *pos)
   boolean combined = FALSE;
   struct place *p, *newP;
 
+  verbose(3, "\tchecking if position can be combined\n");
   if (pos->chrom)
     {
       combined = FALSE;
@@ -831,6 +907,7 @@ void findGoodPlace(struct fishClone *fc)
   struct position *pos;
 
   /* Check clone acc positions */
+  verbose(3, "\tchecking if can combine for %s\n", fc->cloneName);
   for (pos = fc->acc; pos != NULL; pos = pos->next)
     addOrCombinePos(fc, pos);
   /* Check bac end pair positions */
@@ -844,8 +921,9 @@ void findGoodPlace(struct fishClone *fc)
     addOrCombinePos(fc, pos);
 
   /* Score each of the placements */
+  verbose(3, "\tscoring placements for %s\n", fc->cloneName);
   for (p = fc->good; p != NULL; p = p->next)
-    p->score = scorePlace(p);
+    p->score = scorePlace(p, fc->cyto);
 
   /* Filter to retain only best placements */
   filterGoodPlace(fc);
@@ -860,6 +938,7 @@ void findClonePos()
   struct position *pos;
 
   /* Process each clone */
+  verbose(3, "\tdetermining positions of fish clones\n");
   for (fc = fcList; fc != NULL; fc=fc->next)
     {
       verbose(3, "\tfinding pos of %s\n", fc->cloneName);
