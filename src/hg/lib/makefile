@@ -13,7 +13,7 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
 O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
-    borf.o borkPseudoHom.o cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
+    borf.o borkPseudoHom.o cart.o cartDb.o chromInfo.o chromInserts.o chr18deletions.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
@@ -30,7 +30,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
-    softPromoter.o stsAlias.o stsInfo.o \
+    softPromoter.o stsAlias.o stsInfo.o stsInfo2.o \
     stsMap.o stsMapMouse.o stsMarker.o stsInfoMouse.o synteny100000.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackDb.o trackTable.o wabAli.o \
