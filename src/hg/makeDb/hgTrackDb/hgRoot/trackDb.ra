@@ -1142,30 +1142,30 @@ type sample 9
 track blastzStrictChainHuman
 shortLabel Blastz Human
 longLabel Strict Chain Blastz Human Alignments
-priority 41.01
+priority 28.01
 visibility dense
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainChimp
 shortLabel Blastz Chimp
 longLabel Strict Chain Blastz Chimp Alignments
-priority 41.02
+priority 28.02
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainBaboon
 shortLabel Blastz Baboon
 longLabel Strict Chain Blastz Baboon Alignments
-priority 41.03 
+priority 28.03 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
@@ -1174,20 +1174,20 @@ type psl xeno
 track blastzStrictChainCat
 shortLabel Blastz Cat
 longLabel Strict Chain Blastz Cat Alignments
-priority 41.04 
+priority 28.04 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainDog
 shortLabel Blastz Dog
 longLabel Strict Chain Blastz Dog Alignments
-priority 41.05 
+priority 28.05 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
@@ -1196,30 +1196,30 @@ type psl xeno
 track blastzStrictChainCow
 shortLabel Blastz Cow
 longLabel Strict Chain Blastz Cow Alignments
-priority 41.06 
+priority 28.06 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainPig
 shortLabel Blastz Pig
 longLabel Strict Chain Blastz Pig Alignments
-priority 41.07 
+priority 28.07 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainRat
 shortLabel Blastz Rat
 longLabel Strict Chain Blastz Rat Alignments
-priority 41.08
+priority 28.08
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
@@ -1227,7 +1227,7 @@ type psl xeno
 track blastzStrictChainMouse
 shortLabel Blastz Mouse
 longLabel Strict Chain Blastz Mouse Alignments
-priority 41.09
+priority 28.09
 visibility dense
 color 100,50,0
 altColor 255,240,200
@@ -1238,20 +1238,20 @@ type psl xeno
 track blastzStrictChainChicken
 shortLabel Blastz Chicken
 longLabel Strict Chain Blastz Chicken Alignments
-priority 41.10
+priority 28.10
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainFugu
 shortLabel Blastz Fugu
 longLabel Strict Chain Blastz Fugu Alignments
-priority 41.11
+priority 28.11
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
@@ -1259,20 +1259,20 @@ type psl xeno
 track blastzStrictChainTetra
 shortLabel Blastz Tetra
 longLabel Strict Chain Blastz Tetra Alignments
-priority 41.12 
+priority 28.12 
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
 track blastzStrictChainZebrafish
 shortLabel Blastz Zebrafish
 longLabel Strict Chain Blastz Zebrafish Alignments
-priority 41.13
+priority 28.13
 visibility hide
-color 0,55,200
-altColor 0,55,200
+color 100,50,0
+altColor 255,240,200
 spectrum on
 type psl xeno
 
@@ -1344,3 +1344,11 @@ priority 51.01
 altColor 0,160,0
 visibility hide
 type sample 9
+
+track refFullAli
+shortLabel Full Alignments
+longLabel Full Alignments
+priority 52
+visibility hide
+color 0, 0, 100
+type psl .
