@@ -1,6 +1,7 @@
 /* hgTracks - Human Genome browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
+#include "linefile.h"
 #include "portable.h"
 #include "memalloc.h"
 #include "obscure.h"
@@ -241,6 +242,7 @@ putchar('\n');
 makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
 makeHiddenBoolean("seqReverse", seqReverse);
 makeHiddenVar("db", database);
+cgiContinueHiddenVar("ss");
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -838,6 +840,36 @@ else
     return '+';
 }
 
+struct linkedFeatures *lfFromPsl(struct psl *psl)
+/* Create a linked feature item from psl. */
+{
+unsigned *starts = psl->tStarts;
+unsigned *sizes = psl->blockSizes;
+int i, blockCount = psl->blockCount;
+int grayIx = mrnaGrayIx(psl->qStart, 
+	psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
+struct simpleFeature *sfList = NULL, *sf;
+struct linkedFeatures *lf;
+
+AllocVar(lf);
+lf->grayIx = grayIx;
+strncpy(lf->name, psl->qName, sizeof(lf->name));
+lf->orientation = orientFromChar(psl->strand[0]);
+for (i=0; i<blockCount; ++i)
+    {
+    AllocVar(sf);
+    sf->start = sf->end = starts[i];
+    sf->end += sizes[i];
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+return lf;
+}
+
+
 struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end)
 /* Return linked features from range of table. */
 {
@@ -852,28 +884,8 @@ sprintf(query, "select * from %s where tStart<%u and tEnd>%u",
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct simpleFeature *sfList = NULL, *sf;
     struct psl *psl = pslLoad(row);
-    unsigned *starts = psl->tStarts;
-    unsigned *sizes = psl->blockSizes;
-    int i, blockCount = psl->blockCount;
-    int grayIx = mrnaGrayIx(psl->qStart, psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
-
-    AllocVar(lf);
-    lf->grayIx = grayIx;
-    strncpy(lf->name, psl->qName, sizeof(lf->name));
-    lf->orientation = orientFromChar(psl->strand[0]);
-    for (i=0; i<blockCount; ++i)
-	{
-	AllocVar(sf);
-	sf->start = sf->end = starts[i];
-	sf->end += sizes[i];
-	sf->grayIx = grayIx;
-	slAddHead(&sfList, sf);
-	}
-    slReverse(&sfList);
-    lf->components = sfList;
-    finishLf(lf);
+    lf = lfFromPsl(psl);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
@@ -900,6 +912,63 @@ tg->visibility = tvFull;
 tg->longLabel = "Full Length mRNAs";
 tg->shortLabel = "Full mRNAs";
 tg->loadItems = loadMrnaAli;
+return tg;
+}
+
+char *usrPslMapName(struct trackGroup *tg, void *item)
+/* Return name of item. */
+{
+struct linkedFeatures *lf = item;
+return lf->extra;
+}
+
+void loadUserPsl(struct trackGroup *tg)
+/* Load up rnas from table into trackGroup items. */
+{
+char *ss = cgiString("ss");
+char buf[1024];
+char *ssWords[2];
+int wordCount;
+char *faFileName, *pslFileName;
+struct lineFile *f;
+struct psl *psl;
+struct linkedFeatures *lfList = NULL, *lf;
+
+strcpy(buf, ss);
+wordCount = chopLine(buf, ssWords);
+if (wordCount < 2)
+    errAbort("Badly formated ss variable");
+pslFileName = ssWords[0];
+faFileName = ssWords[1];
+
+f = lineFileOpen(pslFileName, TRUE);
+tg->itemName = linkedFeaturesName;
+while ((psl = pslNext(f)) != NULL)
+    {
+    if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
+	{
+	lf = lfFromPsl(psl);
+	lf->extra = ss;
+	slAddHead(&lfList, lf);
+	}
+    pslFree(&psl);
+    }
+slReverse(&lfList);
+lineFileClose(&f);
+tg->items = lfList;
+}
+
+
+struct trackGroup *userPslTg()
+/* Make track group of user pasted sequence. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgUserPsl";
+tg->visibility = tvFull;
+tg->longLabel = "Your Sequence from BLAT Search";
+tg->shortLabel = "BLAT Sequence";
+tg->loadItems = loadUserPsl;
+tg->mapItemName = usrPslMapName;
 return tg;
 }
 
@@ -3980,7 +4049,6 @@ if (withCenterLabels)
 	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
 	    mapBoxToggleVis(0,y+1,pixWidth,insideHeight,group);
 #ifdef SOON
-	    uglyf("ochXoff = %d, ochWidth = %d, pixWidth = %d", ochXoff, openCloseHideWidth, pixWidth);
 	    mgTextCentered(mg, ochXoff, y+1, openCloseHideWidth, insideHeight, 
 		color, font, "[open] [close] [hide]");
 #endif
@@ -4081,11 +4149,39 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (isChecked ? " CHECKED" : "") );
 }
 
+void printEnsemblAnchor()
+/* Print anchor to Ensembl display on same window. */
+{
+int bigStart, bigEnd, smallStart, smallEnd;
+int ucscSize;
+
+ucscSize = winEnd - winStart;
+bigStart = smallStart = winStart;
+bigEnd = smallEnd = winEnd;
+if (ucscSize < 1000000)
+    {
+    bigStart -= 500000;
+    if (bigStart < 0) bigStart = 0;
+    bigEnd += 500000;
+    if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
+    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
+	    chromName, bigStart, bigEnd, smallStart, smallEnd);
+    }
+else
+    {
+    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
+	    chromName, bigStart, bigEnd);
+    }
+}
+
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
 struct trackGroup *group;
+char *ss = cgiOptionalString("ss");
 
 if (calledSelf)
     {
@@ -4110,6 +4206,7 @@ slSafeAddHead(&tGroupList, goldTrackGroup());
 slSafeAddHead(&tGroupList, gapTg());
 if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
 slSafeAddHead(&tGroupList, coverageTrackGroup());
+if (ss != NULL) slSafeAddHead(&tGroupList, userPslTg());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
@@ -4199,40 +4296,20 @@ fputs("Click on an item in a track to view more information on that item. "
       "Click center label to toggle between full and dense display of "
       "that track.  Tracks with more than 300 items are always displayed "
       "densely.  Click on base position to zoom in by 3x around where you "
-      "clicked.<BR><HR>",
+      "clicked.<BR>",
       stdout);
-printf("Click <A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-      "here to view DNA.</A><BR>",  hgcName(),
+fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
+printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
+      "View DNA</A></TD>",  hgcName(),
       winStart, chromName, winStart, winEnd, database);
 if (sameString(database, "hg5"))
     {
-    int bigStart, bigEnd, smallStart, smallEnd;
-    int ucscSize;
-
-    ucscSize = winEnd - winStart;
-    bigStart = smallStart = winStart;
-    bigEnd = smallEnd = winEnd;
-    if (ucscSize < 1000000)
-	{
-	bigStart -= 500000;
-	if (bigStart < 0) bigStart = 0;
-	bigEnd += 500000;
-	if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-	printf("Click <A HREF=\"http://www.ensembl.org/perl/contigview"
-	       "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>"
-	       "here to open Ensembl window</A>.<BR>",  
-		chromName, bigStart, bigEnd, smallStart, smallEnd);
-	}
-    else
-        {
-	printf("Click <A HREF=\"http://www.ensembl.org/perl/contigview"
-	       "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>"
-	       "here to open Ensembl window</A>.<BR>",  
-		chromName, bigStart, bigEnd);
-	}
-
+    fputs("<TD><P ALIGN=CENTER>", stdout);
+    printEnsemblAnchor();
+    fputs("Visit Ensembl</A></TD>", stdout);
     }
-fputs("<HR><CENTER>", stdout);
+fputs("<TD><P ALIGN=CENTER><A HREF=\"../goldenPath/hgBlat.html\">BLAT Search</A></TD></TR>", stdout);
+fputs("</TABLE><CENTER>\n", stdout);
 
 /* Display bottom control panel. */
 fputs("Chromosome ", stdout);
@@ -4504,6 +4581,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 
 int main(int argc, char *argv[])
 {
+htmlSetBackground("../images/floret.jpg");
 htmShell("Draft Genome Browser v4", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 }
