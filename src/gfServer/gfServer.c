@@ -107,13 +107,6 @@ return atoi(portName);
 
 struct sockaddr_in sai;		/* Some system socket info. */
 
-static int setupSocket(char *portName, char *hostName)
-/* Set up our socket. */
-{
-int port = getPortIx(portName);
-return netSetupSocket(hostName, port, &sai);
-}
-
 void logIt(char *format, ...)
 /* Print message to log file. */
 {
@@ -280,8 +273,9 @@ char *line, *command;
 int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 char *logFileName = cgiOptionalString("log");
+int port = atoi(portName);
 
-signal(SIGPIPE, SIG_IGN);	/* Block broken pipe signals. */
+netBlockBrokenPipes();
 if (logFileName != NULL)
     logFile = mustOpen(logFileName, "a");
 logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
@@ -299,10 +293,7 @@ else
 logIt("indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
-socketHandle = setupSocket(portName, hostName);
-if (bind(socketHandle, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't bind to %s port %s", hostName, portName);
-res = listen(socketHandle, 100);
+socketHandle = netAcceptingSocket(port, 100);
 
 logIt("Server ready for queries!\n");
 printf("Server ready for queries!\n");
@@ -469,16 +460,9 @@ void stopServer(char *hostName, char *portName)
 char buf[256];
 int sd = 0;
 
-
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
-/* Put together quit command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%squit", gfSignature());
 write(sd, buf, strlen(buf));
-
 close(sd);
 printf("sent stop message to server\n");
 }
@@ -493,12 +477,8 @@ int sd = 0;
 int fileCount;
 int i;
 
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sstatus", gfSignature());
 write(sd, buf, strlen(buf));
 
@@ -525,13 +505,8 @@ int sd = 0;
 bioSeq *seq = faReadSeq(faName, !isProt);
 int matchCount = 0;
 
-
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together query command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
 write(sd, buf, strlen(buf));
 
@@ -582,12 +557,8 @@ int sd = 0;
 int fileCount;
 int i;
 
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sfiles", gfSignature());
 write(sd, buf, strlen(buf));
 
