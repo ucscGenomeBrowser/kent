@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.9 2003/10/02 05:23:42 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.10 2003/10/12 15:41:59 daryl Exp $";
 
 /* Command line options */
 
@@ -164,7 +164,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
             mr.score = (mr.score-minScore)/(maxScore-minScore);
 	if (mr.score <= 0.0) 
             {
-            char msg[100];
+            char msg[256];
             safef(msg, sizeof(msg),
                     "Score too small (raw %.1f scaled %.1f #species %d),"
                            " line %d of %s\n", 
