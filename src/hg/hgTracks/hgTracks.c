@@ -1451,6 +1451,7 @@ tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = usrPslMapName;
+tg->priority = 11;
 return tg;
 }
 
@@ -5185,8 +5186,8 @@ if (position != NULL && position[0] != 0)
 if (chromName == NULL)
     {
     chromName = cgiString("seqName");
-    winStart = cgiInt("winStart");
-    winEnd = cgiInt("winEnd");
+    winStart = cgiIntExp("winStart");
+    winEnd = cgiIntExp("winEnd");
     }
 
 /* Clip chromosomal position to fit. */
@@ -5266,7 +5267,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
+htmShell("UCSC Human Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
 }
