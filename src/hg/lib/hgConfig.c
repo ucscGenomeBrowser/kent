@@ -3,6 +3,8 @@
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 /* the file to read the global configuration info from */
 #define GLOBAL_CONFIG_PATH "."
