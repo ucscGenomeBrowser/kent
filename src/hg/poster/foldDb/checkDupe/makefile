@@ -1,7 +1,7 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L = 
-MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = checkDupe.o
@@ -10,5 +10,8 @@ checkDupe: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o checkDupe $O $(MYLIBS) $L
 
 lib:
-	cd ../lib; make
-	cd ../../lib; make
+	cd ../../../lib && ${MAKE}
+	cd ../../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} checkDupe
