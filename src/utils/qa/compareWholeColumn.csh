@@ -16,6 +16,7 @@ if ($#argv != 3) then
   # no command line args
   echo
   echo "  gets a column from a table on dev and beta and checks diffs."
+  echo "  reports numbers of rows unique to each and common"
   echo "  writes files of everything."
   echo
   echo "    usage:  database, table, column "
