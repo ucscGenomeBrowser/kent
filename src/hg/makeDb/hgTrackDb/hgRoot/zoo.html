@@ -1,20 +1,23 @@
 <H2>Description</H2>
-<P>This track displays the level of conservation for each of 11 zoo
+<P>This track displays the level of conservation for each of 12 zoo
 species, based on blastz pairwise alignments.</p>
 <H2>Methods</H2>
-<P>
-Blastz pairwise alignments were performed between the
-NISC-generated sequence for each species and the UCSC compiled
-human reference sequence. All sequences were RepeatMasked, where
-repetitive sequences were replaced with N's. This prevented alignments from
-extending into repetitive regions. </p>
 <p>
-The strong-hits piptool was used to identify regions of conservation
-greater than 50 bp in length. However, for chicken, fugu, and
-zebrafish, the stringency was lowered to 25 bp. 
+Blastz pairwise alignments were performed between the NISC-generated
+sequence for each species and the UCSC compiled human reference
+sequence.
+All sequences were RepeatMasked, where repetitive sequences were
+denoted
+by lower-case letters. The blastz program will not initiate alignments
+within repetative regions, but it will extend alignments into
+repetitive
+regions.</p>
+<p>
 Gray horizontal bars denote a mapping/sequencing gap and percent
-identity less than 60% is not shown since it falls below the minimum
-y-axis value.</p>
+identity
+less than 50% is not shown since it falls below the minimum y-axis
+value.
+</p>
 
 
 </P>

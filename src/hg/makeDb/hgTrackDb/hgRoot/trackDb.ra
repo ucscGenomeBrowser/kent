@@ -792,16 +792,6 @@ visibility hide
 type sample 9 
 
 
-track zooCons
-shortLabel Zoo Conservation
-longlabel ZooSeq 11 Scaled Conservation (100 base windows)
-color 0,60,120
-altColor 0,128,0
-priority 25.7
-visibility hide
-type sample 9
-
-
 track exoFish
 shortLabel Exofish Ecores
 longLabel Exofish Tetraodon/Human Evolutionarily Conserved Regions
@@ -951,15 +941,47 @@ color 100,50,0
 altColor 0,0,255
 type sample 9
 
+
+track zooCons
+shortLabel Zoo Conservation
+longlabel ZooSeq 11 Scaled Conservation (100 base windows)
+color 0,60,120
+altColor 0,128,0
+priority 41.2
+visibility hide
+type sample 9
+
+
 track zoo
 shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
-priority 41.1
+priority 41.3
 visible hide
-chromosomes chr1, chr7, chr14,
+chromosomes chr1,chr7,chr14,
 color 0,60,120
 altColor 0,128,0
 type sample 9
+
+track blastzStrictChainMouse
+shortLabel SC Blastz Mouse
+longLabel Strict Chain Blastz Mouse Alignments
+priority 41.4 
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainHuman
+shortLabel SC Blastz Human
+longLabel Strict Chain Blastz Human Alignments
+priority 41.5 
+visibility dense
+color 0,55,200
+altColor 0,55,200
+spectrum on
+type psl xeno
+
 
 track altGraph
 shortLabel altGraph
