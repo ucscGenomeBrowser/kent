@@ -4842,14 +4842,14 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	w = x2-x1;
 	/* draw thick line ... */
-	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
+	//mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
 	}
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	heightPer = tg->heightPer;
 	s = sf->start;
 	e = sf->end;
-	drawScaledBox(mg, s, e, scale, xOff, y, heightPer, blackIndex());
+	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+5, 1, blackIndex());
 	}
     if (isFull)
 	y += lineHeight;
