@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.60 2004/10/18 20:34:49 kate Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.61 2005/01/19 00:56:39 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -444,6 +444,7 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 	whereNULL, &rowOffset);
     }
 
+
 /*	Allocate trackSpans one time only	*/
 if (! trackSpans)
     trackSpans = newHash(0);
@@ -495,7 +496,7 @@ double basesPerPixel = 1.0;
 Color drawColor = vgFindColorIx(vg, 0, 0, 0);
 int itemCount = 0;
 char *currentFile = (char *) NULL;	/*	the binary file name */
-FILE *f = (FILE *) NULL;		/*	file handle to binary file */
+int wibFH = 0;		/*	file handle to binary file */
 struct hashEl *el, *elList;
 struct wigCartOptions *wigCart;
 enum wiggleGridOptEnum horizontalGrid;
@@ -557,12 +558,14 @@ for (i = 0; i < preDrawSize; ++i) {
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
-    unsigned char *ReadData;	/* the bytes read in from the file */
+    size_t bytesRead;		/* to check fread being OK */
+    unsigned char *readData;	/* the bytes read in from the file */
     int dataOffset = 0;		/*	within data block during drawing */
     int usingDataSpan = 1;		/* will become larger if possible */
     int minimalSpan = 100000000;	/*	a lower limit safety check */
 
     ++itemCount;
+
     /*	Take a look through the potential spans, and given what we have
      *	here for basesPerPixel, pick the largest usingDataSpan that is
      *	not greater than the basesPerPixel
@@ -595,19 +598,23 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    {
 	    if (differentString(currentFile,wi->file))
 		{
-		if (f != (FILE *) NULL)
+		if (wibFH > 0)
 		    {
-		    carefulClose(&f);
+		    close(wibFH);
 		    freeMem(currentFile);
 		    }
 		currentFile = cloneString(wi->file);
-		f = mustOpen(currentFile, "r");
+		wibFH = open(currentFile, O_RDONLY);
+		if (-1 == wibFH)
+		    errAbort("openWibFile: failed to open %s", currentFile);
 		}
 	    }
 	else
 	    {
 	    currentFile = cloneString(wi->file);
-	    f = mustOpen(currentFile, "r");
+	    wibFH = open(currentFile, O_RDONLY);
+	    if (-1 == wibFH)
+		errAbort("openWibFile: failed to open %s", currentFile);
 	    }
 /*	Ready to draw, what do we know:
  *	the feature being processed:
@@ -622,10 +629,12 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	drawing window in chrom coords: seqStart, seqEnd
  *	'basesPerPixel' is known, 'pixelsPerBase' is known
  */
-	fseek(f, wi->offset, SEEK_SET);
-	ReadData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	fread(ReadData, (size_t) wi->count, (size_t) sizeof(unsigned char), f);
+	lseek(wibFH, wi->offset, SEEK_SET);
 
+	readData = (unsigned char *) needMem((size_t) (wi->count + 1));
+	bytesRead = read(wibFH, readData,
+	    (size_t) wi->count * (size_t) sizeof(unsigned char));
+ 
 	/*	let's check end point screen coordinates.  If they are
  	 *	the same, then this entire data block lands on one pixel,
  	 *	no need to walk through it, just use the block's specified
@@ -640,7 +649,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    /*	walk through all the data in this block	*/
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
-		unsigned char datum = ReadData[dataOffset];
+		unsigned char datum = readData[dataOffset];
 		if (datum != WIG_NO_DATA)
 		    {
 		    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
@@ -651,8 +660,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 			if ((xCoord >= 0) && (xCoord < preDrawSize))
 			    {
 			    double dataValue =
-				BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
-			    
+			       BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
+
 			    ++preDraw[xCoord].count;
 			    if (dataValue > preDraw[xCoord].max)
 				preDraw[xCoord].max = dataValue;
@@ -684,11 +693,15 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		preDraw[xCoord].sumSquares += wi->sumSquares;
 		}
 	}
-	freeMem(ReadData);
+	freeMem(readData);
 	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
 
-carefulClose(&f);
+if (wibFH > 0)
+    {
+    close(wibFH);
+    wibFH = 0;
+    }
 
 if (currentFile)
     freeMem(currentFile);
@@ -1227,8 +1240,7 @@ track->itemHeight = tgFixedItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 /*	the wigMaf parent will turn mapsSelf off	*/
-/*	This is off until the stats at zoomed views can be done properly */
-track->mapsSelf = FALSE;
+track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
