@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.12 2003/06/13 00:29:25 kent Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.13 2003/06/21 16:49:02 kent Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -183,7 +183,7 @@ void hgRemoveTabFile(char *tmpDir, char *tableName)
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
-if (remove(path) != -1)
+if (remove(path) == -1)
     errnoAbort("Couldn't remove %s", path);
 }
 
