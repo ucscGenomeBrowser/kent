@@ -40,7 +40,8 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     ggMrnaAli.o genbank.o \
     glDbRep.o ggDump.o sample.o exprBed.o genMapDb.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
-    imageClone.o stanMad.o bactigPos.o stsMapRat.o vegaInfo.o gbProtAnn.o
+    imageClone.o stanMad.o bactigPos.o stsMapRat.o vegaInfo.o gbProtAnn.o \
+    wiggle.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
