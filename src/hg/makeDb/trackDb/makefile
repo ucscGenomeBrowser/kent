@@ -16,7 +16,7 @@ DBS = 	hg13 hg15 hg16 \
 	panTro1 \
 	mm2 mm3 mm4 \
 	rn2 rn3 \
-	galGal1 galGal2 \
+	galGal2 \
 	fr1 \
 	dm1 \
 	dp1 \
