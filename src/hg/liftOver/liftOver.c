@@ -376,7 +376,7 @@ char *remapRangeList(struct chain *chain, struct range *rangeList,
 {
 struct boxIn *b = chain->blockList;
 struct range *r = rangeList;
-int bDiff;
+int bDiff, rStart = 0;
 bool gotStart = FALSE;
 int startCount = 0, endCount = 0;
 int rCount = slCount(rangeList);
@@ -389,7 +389,9 @@ if (b == NULL || r == NULL)
     return NULL;
 for (;;)
     {
-    while (b->tEnd < r->start)
+    // uglyf("b: %d %d (%d %d),  r: %d %d\n", b->tStart, b->tEnd, b->qStart, b->qEnd, r->start, r->end);
+
+    while (b->tEnd <= r->start)
 	{
 	b = b->next;
 	if (b == NULL)
@@ -400,7 +402,7 @@ for (;;)
 	}
     if (done) 
 	break;
-    while (r->end < b->tStart)
+    while (r->end <= b->tStart)
 	{
 	r = r->next;
 	if (r == NULL)
@@ -429,14 +431,18 @@ for (;;)
 	{
 	gotStart = TRUE;
 	bDiff = b->qStart - b->tStart;
-	r->start += bDiff;
+	rStart = r->start + bDiff;
 	++startCount;
 	}
     if (b->tStart < r->end && r->end <= b->tEnd)
 	{
 	bDiff = b->qStart - b->tStart;
-	r->end += bDiff;
-	++endCount;
+	if (gotStart)
+	    {
+	    r->start = rStart;
+	    r->end += bDiff;
+	    ++endCount;
+	    }
 	r = r->next;
 	gotStart = FALSE;
 	if (r == NULL)
@@ -536,9 +542,11 @@ chain = chainList;
 if (chain->score  < minMatch * bedSize)
     error = "Partially deleted in new";
 
+
 /* Call subroutine to remap range list. */
 if (error == NULL)
     error = remapRangeList(chain, rangeList, &thickStart, &thickEnd);
+
 
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
 if (error == NULL)
@@ -671,6 +679,7 @@ ZeroVar(&bed);
 while (lineFileRow(lf, row))
     {
     gp = genePredLoad(row);
+    uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     f = mapped;
     bed = genePredToBed(gp);
     error = remapBlockedBed(chainHash, bed);
@@ -699,6 +708,7 @@ while (lineFileRow(lf, row))
 	    }
 	}
     genePredTabOut(gp, f);
+    fflush(f);		//uglyf
 
     bedFree(&bed);
     genePredFree(&gp);
