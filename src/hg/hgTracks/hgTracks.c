@@ -89,8 +89,9 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 #include "gencodeIntron.h"
+#include "cutterTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.930 2005/03/23 23:29:44 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.931 2005/03/24 00:19:55 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9701,6 +9702,7 @@ registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
+slSafeAddHead(&trackList, cuttersTg());
 loadCustomTracks(&trackList);
 
 /* Get visibility values if any from ui. */

@@ -788,6 +788,12 @@ void configPageSetTrackVis(int vis);
  * is unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 
+struct track *trackNew();
+/* Allocate track . */
+
+void bedMethods(struct track *tg);
+/* Fill in methods for (simple) bed tracks. */
+
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 
 #endif /* HGTRACKS_H */
