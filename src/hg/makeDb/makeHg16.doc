@@ -2486,6 +2486,7 @@ hgLoadBed hg16 syntenyRn3 ucsc100k.bed
     mysqlimport -u<r/w user> -p<r/w pass> hg16 ancientRepeat.txt
     # This is a hand curated table obtained from Arian.
 	
+    #	The mouse.net argument here should have been rat.net
     cd /cluster/data/hg16/bed/blastz.rn3/axtChain
     /cluster/bin/i386/netClass hNoClass.net hg16 rn3 mouse.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInRat \
@@ -2495,8 +2496,12 @@ hgLoadBed hg16 syntenyRn3 ucsc100k.bed
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.rn3/axtChain
     rm -r n1 hNoClass.net
+    #	The arguments here should have been rat.net and ratSyn.net
     # Make a 'syntenic' subset of these with
     netFilter -syn mouse.net > mouseSyn.net
+
+    # The mouse.net argument here should have been rat.net from the
+    # netClass operation above.
 
     # Load the nets into database 
     ssh hgwdev
@@ -3702,7 +3707,6 @@ while (<>) {
     ../../scripts/parseRecords.pl ../extr/expList.tab  > sageExp.tab
     hgsql hg16 < ~/kent/src/hg/lib/sageExp.sql 
     echo "load data local infile 'sageExp.tab' into table sageExp" | hgsql hg16
-XXXX need to check the track
     # update ~/kent/src/hg/makeDb/trackDb/human/hg16/uniGene_2.html 
     # with current uniGene date. 
 
@@ -3831,12 +3835,7 @@ end
 # make sure that knownToEnsembl and ensGtp tables are created, then:
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin
 
-<<<<<<< makeHg16.doc
 # BLASTZ Mm4  (DONE - 2003-10-31 - Hiram)
-=======
-
-# BLASTZ Mm4  (WORKING - 2003-10-29 - Hiram)
->>>>>>> 1.63
 
     ssh kk
     mkdir -p /cluster/data/hg16/bed/blastz.mm4.2003-10-29
@@ -3979,9 +3978,8 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzMm4.psl
 
     # this is a 55 minute job
-XXXX DONE 2003-10-31
 
-# CHAIN Mm4 BLASTZ (TBD)
+# CHAIN Mm4 BLASTZ (DONE - 2003-11-03 - Hiram)
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
 #	in this case, it was run on the kk kluster
@@ -4012,25 +4010,25 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     para create jobList
     para try
     para push # ... etc ...
-XXXX - running 2003-10-31 21:45
-# Completed: 44 of 44 jobs
-# CPU time in finished jobs:      27109s     451.82m     7.53h    0.31d  0.001 y
-# IO & Wait Time:                 29921s     498.68m     8.31h    0.35d  0.001 y
-# Average job time:                1296s      21.60m     0.36h    0.02d
-# Longest job:                    12356s     205.93m     3.43h    0.14d
-# Submission to last job:         12356s     205.93m     3.43h    0.14d
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:      24547s     409.12m     6.82h    0.28d  0.001 y
+# IO & Wait Time:                  3955s      65.91m     1.10h    0.05d  0.000 y
+# Average job time:                 695s      11.59m     0.19h    0.01d
+# Longest job:                     7336s     122.27m     2.04h    0.08d
+# Submission to last job:          8251s     137.52m     2.29h    0.10d
 
-    # now on the cluster server, sort chains
-    ssh kksilo
+    # now on the file server, sort chains
+    ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
     time chainMergeSort run1/chain/*.chain > all.chain
-    # real    8m55.100s
-    # user    6m46.680s
-    # sys     0m58.250s
+    # real    10m5.525s
+    # user    8m9.350s
+    # sys     0m48.450s
+
     time chainSplit chain all.chain
-    # real    8m36.259s
-    # user    5m46.920s
-    # sys     0m59.700s
+    # real    10m23.201s
+    # user    7m51.930s
+    # sys     0m53.910s
 
     # these steps take ~20 minutes
     # optionally: rm run1/chain/*.chain
@@ -4072,26 +4070,17 @@ XXXX - running 2003-10-31 21:45
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    # memory usage 1591906304, utime 6877 s/100, stime 1977
+    # memory usage 2505211904, utime 15891 s/100, stime 3245
 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
     time netClass hNoClass.net hg16 mm4 mouse.net \
-	-tNewR=/cluster/bluearc/scratch/mus/hg16/linSpecRep.notInHuman \
-	-qNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
+	-qNewR=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman
+XXXX - running - 2003-11-03 15:00
     # real    11m35.367s
     # user    7m20.880s
     # sys     1m33.360s
-
-    # manually fixup one line in the linSpecRep.notInHuman/chr3.out.spec file
-    #	RepeatMasker or the post-processing script is making an error
-    #	Remove the line that is missing the rest of the fields
-    # the line : 2860   6.4  0.0  1   0  0
-Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman/chr3.out.spec got 6
-2860   6.4  0.0  1.1  chr3      164080732 164081087  (231854) +  L1Md_F2        LINE/L1               6208 6561   (21)      1   0  0
- 2860   6.4  0.0  1   0  0
- 1420   8.1  0.0  0.0  chr3      164081159 164081355  (231586) C  ORR1A0-int     LTR/MaLR            (1593)  199      3      3   0  0
-
 
     # If things look good do
     ssh eieio
@@ -4103,8 +4092,8 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/axtChain
-    netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netRn3 stdin
-    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetRn3 stdin
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netMm4 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm4 stdin
 
     # Add entries for net and chain to mouse/hg16 trackDb
 
@@ -4124,7 +4113,7 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
 	rm -f ../axtNet/$c.axt
 	netToAxt mouseNet/$c.net chain/$c.chain \
 		/cluster/data/hg16/nib \
-		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		/cluster/data/mm4/nib \
 		../axtNet/$c.axt
 	echo "Complete: $c.net -> $c.axt"
     end
@@ -4137,9 +4126,9 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     # copy net axt's to download area
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/axtNet
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtNet
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtNet
     gzip *.axt
     # add README.txt file to dir, if needed
 
@@ -4149,34 +4138,34 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+	echo "processing $c.axt -> ${c}_blastzBestMm4.psl"
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
-	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
-	echo "Done: ${c}_blastzBestRn3.psl"
+	S1.len S2.len pslBest/${c}_blastzBestMm4.psl
+	echo "Done: ${c}_blastzBestMm4.psl"
     end
 
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslBest
-    time /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzBestRn3.psl
+    time /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzBestMm4.psl
     # real    10m47.853s
     # user    2m48.700s
     # sys     0m24.250s
 
      # check results
-#  featureBits hg16 blastzBestRn3
+#  featureBits hg16 blastzBestMm4
 #  1030510540 bases of 2627444668 (39.221%) in intersection
 
-#  featureBits mm3 blastzBestHuman
+#  featureBits hg16 blastzBestMm3
 #  1019460260 bases of 2505900260 (40.682%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg16/axtBestRn3
-     cd /gbdb/hg16/axtBestRn3
+     mkdir -p /gbdb/hg16/axtBestMm4
+     cd /gbdb/hg16/axtBestMm4
      ln -s /cluster/data/hg16/bed/blastz.mm4/axtNet/chr*.axt .
      cd /cluster/data/hg16/bed/blastz.mm4/axtNet
      rm -f axtInfoInserts.sql
-     foreach f (/gbdb/hg16/axtBestRn3/chr*.axt)
+     foreach f (/gbdb/hg16/axtBestMm4/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
                 VALUES ('mm4','Blastz Best in Genome','$chr','$f');" \
@@ -4203,20 +4192,20 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     mkdir ../pslTight
     foreach i (*.axt)
       set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm4.psl
       echo "Done: $i"
     end
 
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslTight
-    hgLoadPsl hg16 chr*_blastzTightRn3.psl
+    hgLoadPsl hg16 chr*_blastzTightMm4.psl
 
     # copy to axt's to download area
     cd /cluster/data/hg16/bed/blastz.mm4/axtTight
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtTight
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtTight
-    cd /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsMm4/axtTight
     gzip *.axt
     # add README.txt file to dir, if needed
 
