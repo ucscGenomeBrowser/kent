@@ -95,7 +95,7 @@ aa_hydro['V'] =  4.200;
 
 // get average frequency distribution for each AA residue
 conn= hAllocConn();
-if (!hTableExists("resAvgStd"))
+if (!hTableExists("pbResAvgStd"))
     {
     *hasResFreq = 0;
     return;
@@ -104,7 +104,7 @@ else
     {
     *hasResFreq = 1;
     }
-sprintf(query,"select * from %s.resAvgStd", database);
+sprintf(query,"select * from %s.pbResAvgStd", database);
 iaCnt = 0;
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
