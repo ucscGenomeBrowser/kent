@@ -15,9 +15,13 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.29 2004/06/24 20:53:26 kuhn Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.30 2004/10/13 22:35:24 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
+
+boolean proteinInSupportedGenome=TRUE;  /* The protein is in supported genome DB */
+                                        /* This is a new variable necessary for PB V1.0
+					   and PB V1.1 sharing the same PB library */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
 
@@ -186,7 +190,7 @@ char *mapName = "map";
 int pixWidth, pixHeight;
 
 char cond_str[255];
-struct sqlConnection *conn   = hAllocConn();
+struct sqlConnection *conn;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -280,6 +284,8 @@ if (hgNearOk(database))
     }
 
 hPrintf("</UL><P>");
+
+conn = sqlConnect("swissProt");
 domainsPrint(conn, proteinID);
 
 hPrintf("<P>");
