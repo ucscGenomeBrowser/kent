@@ -50,7 +50,7 @@ if (argc < 2)
     usage();
 
 for(fileNo = 1; fileNo < argc; fileNo++)
-    masterList = slCat(tfbsConsLoadAll(argv[fileNo]), masterList);
+    masterList = slCat(tfbsConsLoadAllByChar(argv[fileNo], '\t'), masterList);
 
 slSort(&masterList, sortFunc);
 
