@@ -49,6 +49,19 @@ buf[bufSize] = '\0';
 return buf;
 }
 
+static void cleanValidateSeq(char* seq, char* fname, int lineNum)
+/* cleanup and validate a sequence that was read */
+{
+char* ch;
+trimSpaces(seq);
+touppers(seq);
+/* check for illegal characters */
+for (ch = seq; *ch != '\0'; ch++)
+    if (!(((*ch >= 'A') && (*ch <= 'Z')) || (*ch == '-')))
+        errAbort("invalid seq character `%c' in %s at %d", *ch,
+                 fname, lineNum);
+}
+
 struct refAlign* parseWebbRec(char* fname, int* lineNum, FILE* fh)
 /* Read and parse the next record in a Webb file.  Return NULL on
  * EOF.*/
@@ -84,18 +97,19 @@ if ((chromStart <= 0) || (chromEnd <= 0) || (chromStart > chromEnd))
     {
     errAbort("invalid chrom cooordinates in %s at %d", fname, *lineNum);
     }
+tolowers(chrom);
 
 humanSeq = readLine(fh);
-(*lineNum++);
+(*lineNum)++;
+if (humanSeq != NULL)
+    cleanValidateSeq(humanSeq, fname, *lineNum);
+
 alignSeq = readLine(fh);
-(*lineNum++);
+(*lineNum)++;
 if (alignSeq == NULL)
-    {
-    freeMem(humanSeq);
     errAbort("premature EOF in %s", fname);
-    }
-trimSpaces(humanSeq);
-trimSpaces(alignSeq);
+cleanValidateSeq(alignSeq, fname, *lineNum);
+
 if (strlen(humanSeq) != strlen(alignSeq))
     {
     errAbort("human and aligned sequences are not the same length for %s in %s at %d",
@@ -114,6 +128,8 @@ refAlign->chrom = cloneString(chrom);
 refAlign->chromStart = chromStart-1;
 refAlign->chromEnd = chromEnd;
 refAlign->name = cloneString(name);
+refAlign->humanSeq = humanSeq;
+refAlign->alignSeq = alignSeq;
 
 return refAlign;
 }
