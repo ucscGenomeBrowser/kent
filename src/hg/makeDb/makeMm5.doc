@@ -1555,4 +1555,7 @@ ssh hgwdev
 cd /cluster/data/mm5/bed/geneSorter/blastp/self/run/out
 hgLoadBlastTab mm5 knownBlastTab *.tab
 # Scanning through 7739 files
-XXX - loading 2004-07-15 15:30
+    #	Loading database with 8017562 rows
+    #	real    17m9.104s
+    #	user    3m8.980s
+    #	sys     0m28.800s
