@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkSwissProtDB.sh,v 1.2 2004/01/23 23:56:31 hiram Exp $"
+#	"$Id: mkSwissProtDB.sh,v 1.3 2004/03/22 20:31:49 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -58,11 +58,11 @@ if [ ${MACHINE} = "eieio" ]; then
     cd ./${SP}
     mkdir -p ./build
     cd ./build
-    for db in sprot trembl trembl_new
+    for db in uniprot_sprot uniprot_trembl new/uniprot_trembl_new
     do
 	if [ ! -f ${db}.dat.gz ]; then
 		wget --timestamping \
-			ftp://us.expasy.org/databases/sp_tr_nrdb/${db}.dat.gz
+			ftp://us.expasy.org/databases/uniprot/knowledgebase/${db}.dat.gz
 	fi
     done
     zcat *.dat.gz | spToDb stdin ../tabFiles
