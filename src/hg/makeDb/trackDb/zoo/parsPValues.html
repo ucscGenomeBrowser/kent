@@ -1,11 +1,15 @@
 <H2>Description</H2>
-<P>This track displays the level conservation of the Zoo sequences at any given position. More precisely, it computes the p-value of observing a certain parsimony score for a given column of the multiple alignment, under the null model of neutral evolution.</P>
+<P>This track displays the level conservation of the Zoo sequences at any 
+given position. More precisely, it computes the p-value of observing a certain 
+parsimony score for a given column of the multiple alignment, under the null 
+model of neutral evolution.</P>
+
 <H2>Methods</H2>
 <P>
 <OL>
-<LI>Adam Siepel has inferrred the phylogenetic tree relating the Zoo
-species, as well as the length of each branches of the tree. I use this
-tree to measure the surprise of the conservation observed.
+<LI>Adam Siepel has inferred the phylogenetic tree relating the Zoo
+species, as well as the length of each branche of the tree. This
+tree is used to measure the surprise of the conservation observed.
 <LI>For each column of the multiple alignment produced by Webb Miller, we
 compute the parsimony score for the columm, using Adam's phylogenetic
 tree. We then compute a p-value for that parsimony score, under a null
