@@ -58,7 +58,7 @@ public class PBGeneCheck {
     // get read access to database
     HGDBInfo metadbinfo, dbinfo; 
     try {
-      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
+      metadbinfo = new HGDBInfo("hgwbeta", "hgcentralbeta");
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
