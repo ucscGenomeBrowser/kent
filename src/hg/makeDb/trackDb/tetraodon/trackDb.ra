@@ -8,24 +8,6 @@ spectrum on
 type psl .
 cdsDrawOptions enabled
 
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility hide
-spectrum on
-type psl est
-
-track est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-type psl est
-
 track xenoMrna
 shortLabel Non-$Organism mRNAs
 longLabel Non-$Organism mRNAs from GenBank
