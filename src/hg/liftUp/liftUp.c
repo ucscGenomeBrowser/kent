@@ -12,6 +12,7 @@
 #include "axt.h"
 
 boolean nohead = FALSE;	/* No header for psl files? */
+boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */
 
 void usage()
@@ -45,6 +46,7 @@ errAbort(
  "   -dots=N Output a dot every N lines processed\n"
  "   -pslQ  Lift query (rather than target) side of psl\n"
  "   -axtQ  Lift query (rather than target) side of axt\n"
+ "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
  );
 }
 
@@ -274,6 +276,8 @@ for (i=0; i<sourceCount; ++i)
 	  words[8], words[9], words[10], words[11], words[12], words[13], id);
 	}
     }
+if (ferror(dest))
+    errAbort("error writing %s", destFile);
 fclose(dest);
 }
 
@@ -420,6 +424,8 @@ for (i=0; i<sourceCount; ++i)
 	}
     lineFileClose(&lf);
     }
+if (ferror(dest))
+    errAbort("error writing %s", destFile);
 fclose(dest);
 }
 
@@ -597,6 +603,8 @@ if (chromInserts != NULL)
 	    newName, lastEnd+1, lastEnd+bi->size, ++ix, bi->size, bi->type);
 	}
     }
+if (ferror(dest))
+    errAbort("error writing %s", destFile);
 fclose(dest);
 }
 
@@ -750,21 +758,33 @@ for (i=0; i<sourceCount; ++i)
 	        s += sprintf(s, "%s", words[j]);
 	    }
 	*s = 0;
-	len = s-buf;
-	bi = needMem(sizeof(*bi) + len);
-	bi->chrom = chrom;
-	bi->start = start;
-	bi->end = end;
-	memcpy(bi->line, buf, len);
-	slAddHead(&biList, bi);
+        if (nosort)
+            {
+            fprintf(f, "%s\n", buf);
+            }
+        else
+            {
+            len = s-buf;
+            bi = needMem(sizeof(*bi) + len);
+            bi->chrom = chrom;
+            bi->start = start;
+            bi->end = end;
+            memcpy(bi->line, buf, len);
+            slAddHead(&biList, bi);
+            }
 	}
     lineFileClose(&lf);
     }
-slSort(&biList, bedInfoCmp);
-for (bi = biList; bi != NULL; bi = bi->next)
+if (!nosort)
     {
-    fprintf(f, "%s\n", bi->line);
+    slSort(&biList, bedInfoCmp);
+    for (bi = biList; bi != NULL; bi = bi->next)
+        {
+        fprintf(f, "%s\n", bi->line);
+        }
     }
+if (ferror(f))
+    errAbort("error writing %s", destFile);
 fclose(f);
 if (!anyHits)
    errAbort("No lines lifted!");
@@ -948,6 +968,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
+nosort = cgiBoolean("nosort");
 dots = cgiUsualInt("dots", dots);
 if (argc < 5)
     usage();
