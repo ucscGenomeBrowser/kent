@@ -31,6 +31,8 @@ errAbort(
   );
 }
 
+/* Javascript to help make a selection from a drop-down
+ * go back to the server. */
 char *autoSubmit = "onchange=\"document.mainForm.submit();\"";
 
 void printTrackDropList(char *db, char *javascript)
@@ -39,8 +41,8 @@ void printTrackDropList(char *db, char *javascript)
 struct trackDb *trackList = hTrackDb(NULL), *t;
 int trackCount = slCount(trackList);
 char **trackLabels, **trackNames;
-int i;
 char *selected = NULL;
+int i;
 
 AllocArray(trackLabels, trackCount);
 AllocArray(trackNames, trackCount);
