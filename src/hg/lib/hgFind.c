@@ -14,6 +14,8 @@
 #include "bed.h"
 #include "cytoBand.h"
 #include "mapSts.h"
+#include "fishClones.h"
+#include "lfs.h"
 #include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
@@ -618,6 +620,98 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findFishClones(char *spec, struct hgPositions *hgp)
+/* Look for position in fishClones table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+struct fishClones *fc;
+char *chrom;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from fishClones where name = '%s'", spec);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	slAddHead(&hgp->tableList, table);
+	}
+    fc = fishClonesLoad(row);
+    if ((chrom = hgOfficialChromName(fc->chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in fishClones", fc->chrom); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = fc->chromStart - 100000;
+    pos->chromEnd = fc->chromEnd + 100000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+fishClonesFree(&fc);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+static boolean findBacEndPairs(char *spec, struct hgPositions *hgp)
+/* Look for position in bacEndPairs table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+struct lfs *be;
+char *chrom;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from bacEndPairs where name = '%s'", spec);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	slAddHead(&hgp->tableList, table);
+	}
+	be = lfsLoad(row);
+    if ((chrom = hgOfficialChromName(be->chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in bacEndPairs", be->chrom); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = be->chromStart - 100000;
+    pos->chromEnd = be->chromEnd + 100000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+lfsFree(&be);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
 static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
 /* Look for position in gene prediction table. */
 {
@@ -1178,6 +1272,8 @@ else
     {
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
+    findFishClones(query, hgp);
+    findBacEndPairs(query, hgp);
     findStsPos(query, hgp);
     findMrnaKeys(query, hgp, useHgTracks);
     }
