@@ -711,3 +711,11 @@ visibility hide
 spectrum on
 type netAlign hg16 chainSelf
 otherDb hg16
+
+track encodeRegions
+shortLabel ENCODE Regions
+longLabel Encyclopedia of DNA Elements (ENCODE) Regions
+group x
+priority 170
+visibility hide
+type bed 4 .
