@@ -202,6 +202,20 @@ longLabel BAC End Pairs
 priority 10
 visibility hide
 
+track bacEndPairsBad
+shortLabel Orphan BAC End Pairs
+longLabel Orphan and Incorrectly Oriented BAC End Pairs
+priority 10.01
+visibility hide
+type bed 6 +
+
+track bacEndPairsLong
+shortLabel Long BAC End Pairs
+longLabel Long BAC End Pairs
+priority 10.02
+visibility hide
+type bed 6 +
+
 track fosEndPairs
 shortLabel Fosmid End Pairs
 longLabel Fosmid End Pairs
@@ -210,8 +224,8 @@ visibility hide
 type bed 6 +
 
 track fosEndPairsBad
-shortLabel Bad Fosmid End Pairs
-longLabel Bad Fosmid End Pairs
+shortLabel Orphan Fosmid End Pairs
+longLabel Orphan and Incorrectly Oriented Fosmid End Pairs
 priority 10.11
 visibility hide
 type bed 6 +
