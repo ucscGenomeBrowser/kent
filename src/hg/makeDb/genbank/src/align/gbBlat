@@ -112,7 +112,7 @@ case "$orgCat" in
         isNative=YES
         case "$type" in
             mrna)
-                blatParams="-q=rna -fine $oocOpt" ;;
+                blatParams="-q=rna -fine -mask=lower $oocOpt" ;;
             est)
                 blatParams="-mask=lower $oocOpt" ;;
         esac;;
