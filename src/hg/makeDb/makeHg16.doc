@@ -4690,7 +4690,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     end
 
 
-# MAKING MOUSE MM4 SYNTENY (TBD)
+# MAKING MOUSE MM4 SYNTENY (DONE 2003-11-05 - Hiram)
 
     ssh hgwdev
     mkdir -p /cluster/data/hg16/bed/syntenyMm4
