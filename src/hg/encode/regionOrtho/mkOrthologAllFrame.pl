@@ -10,6 +10,8 @@
 
 @ARGV == 7 or die "usage: mkOrthologFrame <description-file> <position-file> <header-file> <assembly> <consensus-bed-file> <liftOver-bed-file> <Mercator-bed-file>\n";
 my ($descriptionFile, $positionFile, $headerFile, $genome, $consensusFile, $liftOverFile, $MercatorFile) = @ARGV;
+my $baseTracks = "&amp;netHg16=full&amp;refGene=pack&amp;encodeRegionConsensus=full&amp;encodeRegions2=full&amp;encodeRegionMercator=full";
+my $netHide = "&amp;netCanFam1=hide&amp;netGalGal2=hide&amp;netMm5=hide&amp;netPanTro1=hide&amp;netRn3=hide";
 
 open(POSITIONS, $positionFile) or die "ERROR: can't open $regionFile\n";
 open(DESCRS, $descriptionFile) or die "ERROR: can't open $descriptionFile\n";
@@ -91,7 +93,7 @@ while (<MERCATOR>) {
 
 # print table header
 print "<table border cellpadding=\"2\">\n";
-print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus $genome<TH>Size<TH>Ratio<TH>LiftOver<TH>Size<TH>Mercator<TH>Size<TH>Diff (Kb)</TR>\n";
+print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus <FONT COLOR=red>$genome</FONT><TH>Size (Mb)<TH>Ratio<TH>LiftOver<TH>Size (Mb)<TH>Mercator<TH>Size (Mb)<TH>Diff (Kb)</TR>\n";
 
 # print table entries
 foreach $region (sort keys %descriptions) {
@@ -101,10 +103,10 @@ foreach $region (sort keys %descriptions) {
     my $regionLength = $length;
     $length = $length/1000;
     $length = $length/1000;
-    $genomeUpper = "\u$genome";
+    my $genomeUpper = "\u$genome";
 
     # human browser - region link, description, and size
-    printf "<TR><TD><A HREF=\"/cgi-bin/hgTracks?db=hg16&amp;position=%s&amp;encodeRegions=full&amp;net%s=full&amp;refGene=pack\" TARGET=browser>%s</A><TD>%s<TD ALIGN=\"right\">%s<TD ALIGN=\"center\">%.1f", 
+    printf "<TR><TD><A HREF=\"/cgi-bin/hgTracks?db=hg16&amp;position=%s&amp;net%s=full\" TARGET=browser>%s</A><TD>%s<TD ALIGN=\"right\">%s<TD ALIGN=\"center\">%.1f", 
         $positions{$region}, $genomeUpper, $region, $descriptions{$region}, 
         $chr, $length;
 
@@ -113,11 +115,13 @@ foreach $region (sort keys %descriptions) {
     @parts = split (/,/, $orthoRegionParts{$region});
     $length = 0;
     printf "<TD>";
+    if ($#parts == -1) {printf "-";}
     foreach $part (@parts) {
         my ($chr, $range) = split (/:/, $orthoRegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
-        printf "<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;encodeRegionConsensus=full&amp;position=%s&amp;netHg16=full&amp;refGene=pack\" TARGET=browser2>%s</A> &nbsp;", $genome, $orthoRegionPartPosition{$part}, $chr;
+	printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+		$genome, $orthoRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $ratio = $length * 100 / $regionLength;
     $length = $length/1000;
@@ -133,7 +137,8 @@ foreach $region (sort keys %descriptions) {
         my ($chr, $range) = split (/:/, $LORegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
-        printf "<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;encodeRegions2=full&amp;position=%s&amp;netHg16=full&amp;refGene=pack\" TARGET=browser2>%s</A> &nbsp;", $genome, $LORegionPartPosition{$part}, $chr;
+        printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+		$genome, $LORegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $LOlength = $length;
     $length = $length/1000;
@@ -148,7 +153,8 @@ foreach $region (sort keys %descriptions) {
         my ($chr, $range) = split (/:/, $MCRegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
-        printf "<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;encodeRegionMercator=full&amp;position=%s&amp;netHg16=full&amp;refGene=pack\" TARGET=browser2>%s</A> &nbsp;", $genome, $MCRegionPartPosition{$part}, $chr;
+        printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+		$genome, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $diff = $length - $LOlength;
     $diff = $diff/1000;

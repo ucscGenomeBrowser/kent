@@ -1,0 +1,12 @@
+#!/bin/csh
+
+rm -f log
+touch log
+#foreach db ( canFam1 danRer1 fr1 galGal2 mm5 panTro1 rn3 tetNig1 )
+foreach db ( canFam1 galGal2 mm5 panTro1 rn3 )
+	echo "===================" ${db} "=======================" >> log
+	echo ${db} on `date` >> log
+	regionOrtho hg16.encodeRegions ${db}.encodeRegions2 ${db}.encodeRegionsMercatorMerged ${db}.encodeRegionConsensus.bed ${db}.err >>& log
+	hgLoadBed ${db} encodeRegionConsensus ${db}.encodeRegionConsensus.bed >>& log
+end
+rm -f bed.tab

@@ -2,6 +2,7 @@
 #include "common.h"
 #include "jksql.h"
 #include "dystring.h"
+#include "linefile.h"
 
 struct sizeList
 {
