@@ -164,6 +164,20 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+void updateUserPriority(struct user *user)
+/* Update user priority. Equals minimum of current batch priorities */
+{
+struct dlNode *node;
+struct batch *batch;
+user->priority = BIGNUM;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    batch = node->val;
+    if (batch->priority < user->priority)
+     user->priority = batch->priority;
+    }
+}
+
 struct batch *findBatchInList(struct dlList *list,  char *nameString)
 /* Find a batch of jobs in list or return NULL. 
  * nameString must be from stringHash. */
@@ -189,6 +203,8 @@ batch->node->val = batch;
 batch->name = nameString;
 batch->user = user;
 batch->jobQueue = newDlList();
+batch->priority = NORMAL_PRIORITY;
+updateUserPriority(user);
 return batch;
 }
 
@@ -255,9 +271,9 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if (!dlEmpty(user->curBatches) && user->runningCount < minCount)
+    if (!dlEmpty(user->curBatches) && (user->runningCount * user->priority) < minCount)
         {
-	minCount = user->runningCount;
+	minCount = user->runningCount * user->priority;
 	minUser = user;
 	}
     }
@@ -273,9 +289,9 @@ struct dlNode *node;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    if (batch->runningCount < minCount)
+    if ((batch->runningCount * batch->priority) < minCount)
         {
-	minCount = batch->runningCount;
+	minCount = batch->runningCount * batch->priority;
 	minBatch = batch;
 	}
     }
@@ -292,6 +308,7 @@ if (dlEmpty(batch->jobQueue))
     struct user *user = batch->user;
     dlRemove(batch->node);
     dlAddTail(user->oldBatches, batch->node);
+    updateUserPriority(batch->user);
     /* Check if it's last user batch and if so take them off queue */
     if (dlEmpty(user->curBatches))
 	{
@@ -489,6 +506,7 @@ dlRemove(batch->node);
 dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
+updateUserPriority(user);
 }
 
 void removeMachine(char *name)
@@ -1078,6 +1096,45 @@ pmSend(pm, rudpOut);
 runner(1);
 }
 
+int setPriority(char *userName, char *dir, int priority)
+/* Set new priority for batch */
+{
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, results);
+if (user == NULL) return 0;
+if (batch == NULL) return 0;
+batch->priority = priority;
+updateUserPriority(user);
+return priority;
+}
+
+
+int setPriorityFromMessage(char *line)
+/* Parse out setPriority message and set new priority for batch, update user-priority. */
+{
+char *userName, *dir;
+int priority;
+
+if ((userName = nextWord(&line)) == NULL)
+    return 0;
+if ((dir = nextWord(&line)) == NULL)
+    return 0;
+if ((priority = atoi(nextWord(&line))) < 1)
+    return 0;
+return setPriority(userName, dir, priority);
+}
+
+
+void setPriorityAcknowledge(char *line, struct paraMessage *pm)
+/* Set batch priority.  Line format is <user> <dir> <priority>
+* Returns new priority or 0 if a problem.  Send new priority back to client. */
+{
+int id = setPriorityFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d", id);
+pmSend(pm, rudpOut);
+}
+
 void respondToPing(struct paraMessage *pm)
 /* Someone want's to know we're alive. */
 {
@@ -1274,9 +1331,10 @@ for (user = userList; user != NULL; user = user->next)
     pmClear(pm);
     pmPrintf(pm, "%s ", user->name);
     pmPrintf(pm, 
-    	"%d jobs running, %d waiting, %d finished, %d of %d batches active", 
+    	"%d jobs running, %d waiting, %d finished, %d of %d batches active"
+    	", priority=%d", 
 	user->runningCount,  userQueuedCount(user), user->doneCount,
-	countUserActiveBatches(user), totalBatch);
+	countUserActiveBatches(user), totalBatch, user->priority);
     pmSend(pm, rudpOut);
     }
 pmSendString(pm, rudpOut, "");
@@ -1288,10 +1346,10 @@ void writeOneBatchInfo(struct paraMessage *pm, struct user *user, struct batch *
 char shortBatchName[512];
 splitPath(batch->name, shortBatchName, NULL, NULL);
 pmClear(pm);
-pmPrintf(pm, "%-8s %4d %6d %6d %5d %s",
+pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %s",
 	user->name, batch->runningCount, 
 	dlCount(batch->jobQueue), batch->doneCount,
-	batch->crashCount, shortBatchName);
+	batch->crashCount, batch->priority, shortBatchName);
 pmSend(pm, rudpOut);
 }
 
@@ -1976,6 +2034,8 @@ for (;;)
 	 recycleSpoke(line);
     else if (sameWord(command, "heartbeat"))
 	 processHeartbeat();
+    else if (sameWord(command, "setPriority"))
+	 setPriorityAcknowledge(line, pm);
     else if (sameWord(command, "addJob"))
 	 addJobAcknowledge(line, pm);
     else if (sameWord(command, "nodeDown"))

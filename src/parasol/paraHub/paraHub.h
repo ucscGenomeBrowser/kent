@@ -56,6 +56,7 @@ struct batch
     int runningCount;		/* Number of jobs running */
     int doneCount;		/* Number of jobs done */
     int crashCount;		/* Number of jobs crashed */
+    int priority;   		/* Priority of batch, 1 is highest priority */
     };
 
 struct user
@@ -68,6 +69,7 @@ struct user
     struct dlList *oldBatches;	/* Inactive batches. */
     int runningCount;		/* Count of jobs currently running. */
     int doneCount;		/* Count of jobs finished. */
+    int priority;   		/* Priority of user, 1 is highest priority */
     };
 
 struct spoke
@@ -138,5 +140,7 @@ void logIt(char *format, ...);
 #define uglyLog logIt
 
 #define MINUTE 60
+
+#define NORMAL_PRIORITY 10   /* 1 is highest priority */
 
 #endif /* PARAHUB_H */
