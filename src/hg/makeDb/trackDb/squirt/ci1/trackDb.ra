@@ -66,7 +66,7 @@ longLabel JGI Gene Predictions
 group genes
 priority 49
 visibility dense
-type genePred
+type genePred jgiPep
 
 track blatCioSav1
 shortLabel C. savignyi Blat
