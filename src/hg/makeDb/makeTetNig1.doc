@@ -2458,7 +2458,7 @@ chainSome $(path1)
 # newest data in their Exofish comparative browser display.
 
 
-# ACCESSIONS FOR CONTIGS (WORKING 2005-03-17 kate)
+# ACCESSIONS FOR CONTIGS (DONE 2005-03-17 kate)
 #  Used for Assembly track details, and also ENCODE AGP's
     cd /cluster/data/tetNig1/bed
     mkdir -p contigAcc
