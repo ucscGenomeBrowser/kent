@@ -293,6 +293,9 @@ struct hash *readRa(char *rootName);
 char *genomeSetting(char *name);
 /* Return genome setting value.   Aborts if setting not found. */
 
+char *genomeOptionalSetting(char *name);
+/* Return genome setting value.  Returns NULL if not found. */
+
 /* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args);

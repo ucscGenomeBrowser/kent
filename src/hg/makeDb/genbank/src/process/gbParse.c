@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.7 2003/10/16 20:27:17 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.6 2003/10/15 23:06:57 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -256,8 +256,6 @@ gbGeneDbxField = c2;
 c1 = newField("CDS", "cds", GBF_MULTI_LINE, 128);
 slAddTail(&c0->children, c1);
 c2 = newField("/gene", "gen", GBF_TRACK_VALS, 128);
-slAddTail(&c1->children, c2);
-c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 128);
 slAddTail(&c1->children, c2);
 
 c2 = newField("/product", "pro", GBF_NONE, 128);

@@ -88,6 +88,9 @@ void hSetDbConnect2(char* host, char *db, char *user, char *password);
 boolean hDbExists(char *database);
 /* Function to check if this is a valid db name */
 
+boolean hDbIsActive(char *database);
+/* Function to check if this is a valid and active db name */
+
 void hSetDb(char *dbName);
 /* Set the database name. */
 

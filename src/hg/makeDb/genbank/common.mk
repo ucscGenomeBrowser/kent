@@ -3,21 +3,15 @@
 OPT= -ggdb
 
 KENT = ${GBROOT}/../../..
-
-# FIXME: for now, need to link statically on RH7 or a warning is written
-# to stdout on RH9, which breaks the program trying to read the output. 
-# Gag me...
-ifneq ($(wildcard ${GBROOT}/extern/lib/libmysqlclient.a),)
-MYSQLLIBS=${GBROOT}/extern/lib/libmysqlclient.a
-STATIC = -static
+ifeq (${MYSQLINC},)
+$(error must set MYSQLINC env var)
 endif
-
 ifeq (${MYSQLLIBS},)
 $(error must set MYSQLLIBS env var)
 endif
 
-INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc
-CFLAGS = ${OPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
+INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc -I$(MYSQLINC)
+CFLAGS = ${OPT} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
 
 BINDIR = ${GBROOT}/bin
 BINARCH = ${BINDIR}/${MACHTYPE}
@@ -26,6 +20,10 @@ LIBARCH = ${LIBDIR}/${MACHTYPE}
 
 LIBGENBANK = $(LIBARCH)/libgenbank.a
 
+# FIXME: not implemented yet:
+# MYSQLLIBS are not included by default, as most programs don't need them
+# and on linux if one uses shared libraries, they endup being required
+# even if no symbol is refereneced.
 MYLIBDIR = ${KENT}/lib/$(MACHTYPE)
 LIBS = $(LIBGENBANK) $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ${MYSQLLIBS} -lm
 

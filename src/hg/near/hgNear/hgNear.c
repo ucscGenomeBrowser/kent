@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.105 2003/10/16 17:59:10 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.106 2003/10/18 16:34:37 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1184,6 +1184,12 @@ char *genomeSetting(char *name)
 /* Return genome setting value.   Aborts if setting not found. */
 {
 return hashMustFindVal(genomeSettings, name);
+}
+
+char *genomeOptionalSetting(char *name)
+/* Return genome setting value.  Returns NULL if not found. */
+{
+return hashFindVal(genomeSettings, name);
 }
 
 struct column *getColumns(struct sqlConnection *conn)

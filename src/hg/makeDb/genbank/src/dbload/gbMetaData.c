@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.15 2003/10/16 20:27:17 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.14 2003/10/15 19:06:46 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -172,7 +172,6 @@ static short raProtVersion;
 static unsigned raProtSize;
 static off_t raProtFaOff;
 static unsigned raProtFaSize;
-static struct dyString* raLocusTag = NULL;
 
 struct raField
 /* Entry for a ra field.  New values are buffered until we decide that
@@ -471,9 +470,6 @@ raProtVersion = -1;
 raProtSize = 0;
 raProtFaOff = -1;
 raProtFaSize = 0;
-if (raLocusTag == NULL)
-    raLocusTag = dyStringNew(128);
-dyStringClear(raLocusTag);
 
 for (;;)
     {
@@ -528,8 +524,6 @@ for (;;)
         dyStringAppend(raRefSeqSummary, val);
     else if (sameString(tag, "loc"))
         raLocusLinkId = gbParseUnsigned(raLf, val);
-    else if (sameString(tag, "lot"))
-        dyStringAppend(raLocusTag, val);
     else if (sameString(tag, "mim"))
         {
         /* might have multiple values, just use first */
@@ -543,11 +537,6 @@ for (;;)
         raFieldSet(tag, val);
         }
     }
-
-/* If we didn't get the gene name, substitute the locus tag if available.
- * This is needed by Drosophila, others */
-if ((raFieldCurId("gen", conn) == 0) && (raLocusTag->stringSize > 0))
-    raFieldSet("gen", raLocusTag->string);
 
 /* do a little error checking. */
 if (strlen(raAcc) == 0)
@@ -710,14 +699,16 @@ pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
 
 if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refLinkUpd, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u",
-                     gen, pro, raAcc, raProtAcc, raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raLocusLinkId, raOmimId);
+                     gen, pro, raAcc, raProtAcc,
+                     raFieldCurId("gen", conn), raFieldCurId("pro", conn),
+                     raLocusLinkId, raOmimId);
 else if (status->stateChg & GB_META_CHG)
     sqlUpdaterModRow(refLinkUpd, 1, "name='%s', product='%s', protAcc='%s', "
                      "geneName=%u, prodName=%u, locusLinkId=%u, "
                      "omimId=%u where mrnaAcc='%s'",
-                     gen, pro, raProtAcc, raFieldCurId("gen", conn),
-                     raFieldCurId("pro", conn), raLocusLinkId, raOmimId, raAcc);
+                     gen, pro, raProtAcc,
+                     raFieldCurId("gen", conn), raFieldCurId("pro", conn),
+                     raLocusLinkId, raOmimId, raAcc);
 }
 
 static void refSeqPepUpdate(struct sqlConnection *conn, HGID pepFaId)
@@ -778,10 +769,8 @@ if (!genbankParseCds(raCds, &status->cdsStart, &status->cdsEnd))
         gbWarn("%s: malformed RefSeq CDS: %s", status->acc, raCds);
     }
 
-/* geneName for refFlat, if not available, try locus_tag  */
+/* geneName for refFlat, if we have it */
 geneName = raFieldCurVal("gen");
-if (geneName == NULL)
-    geneName = raFieldCurVal("lot");
 if (geneName != NULL)
     status->geneName = lmCloneString(statusTbl->accHash->lm, geneName);
 

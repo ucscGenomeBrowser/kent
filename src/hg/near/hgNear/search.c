@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.12 2003/09/25 00:29:13 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.13 2003/10/18 01:23:06 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -121,18 +121,14 @@ for (sr = srList; sr != NULL; sr = sr->next)
     if (sr->shortLabel == NULL)
         {
 	if (nameColumn != NULL)
-	    {
 	    sr->shortLabel = nameColumn->cellVal(nameColumn, &sr->gp, conn);
-	    }
-	else
+	if (sr->shortLabel == NULL)
 	    sr->shortLabel = cloneString(sr->gp.name);
 	}
     if (sr->longLabel == NULL)
         {
 	if (desColumn != NULL)
-	    {
 	    sr->longLabel = desColumn->cellVal(desColumn, &sr->gp, conn);
-	    }
 	else
 	    sr->longLabel = cloneString("");
 	}

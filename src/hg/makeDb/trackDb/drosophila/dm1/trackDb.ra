@@ -1,6 +1,6 @@
-track dpseudoChain
-shortLabel D.pseud. Chain
-longLabel Chained Blastz D.pseudoobscura/$Organism Alignments
+track chainDp1
+shortLabel D. pseud. Chain
+longLabel Chained Blastz D. pseudoobscura/D. melanogaster Alignments
 group compGeno
 priority 133
 visibility hide
@@ -10,19 +10,19 @@ spectrum on
 type chain dp1
 otherDb dp1
 
-track dpseudoNet
-shortLabel D.pseud. Net
-longLabel D.pseudoobscura/$Organism Alignment Net
+track netDp1
+shortLabel D. pseud. Net
+longLabel D. pseudoobscura/D. melanogaster Alignment Net
 group compGeno
 priority 134
 visibility hide
 spectrum on
-type netAlign dp1 dpseudoChain
+type netAlign dp1 chainDp1
 otherDb dp1
 
 track axtNetDp1
-shortLabel D.pseud. Aligns
-longLabel D.pseudoobscura/$Organism Blastz Alignments from Net
+shortLabel D. pseud. Aligns
+longLabel D. pseudoobscura/D. melanogaster Blastz Alignments from Net
 group compGeno
 priority 135
 visibility dense

@@ -1,35 +1,6 @@
 # This file describes how we made the browser database on the mouse
-# genome, October 2003 build. - Mm4
+# genome, June 2003 build. - Mm4
 #
-# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-10-16 - Hiram)
-    ssh kksilo
-    mkdir -p /cluster/store6/mm4/ncbi
-    ln -s /cluster/store6/mm4 /cluster/data
-    cd /cluster/data/mm4/ncbi
-    mkdir chrfasta contigfasta
-    ftp ftp.ncbi.nih.gov
-      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_32
-      prompt
-      bin
-      mget *
-      quit
-    gunzip *.agp.gz
-
-# Check chromosome files  (DONE 2003-10-19 - Hiram)
-    cd chrfasta
-    foreach f (*.fa.gz)
-        echo $f:r >> faSize.out
-	gunzip $f
-        /cluster/bin/i386/faSize $f:r >> faSize.out
-	echo $f:r done
-    end
-   /cluster/bin/i386/faSize *.fa >> faSize.out
-   gzip *.fa
-
-XXXX  -----   all below is old data for reference only  XXXXXXXXXX
-XXXX	The sections below will be deleted as they are performed above
-
 #	Things to watch out for mm4 build:
 #	the usual location of /cluster/store2 has changed to /cluster/store5
 #	Thus, the usual NFS server machine was kkstore is now eieio
@@ -49,6 +20,19 @@ XXXX	The sections below will be deleted as they are performed above
 # NOTE: Y chrom was left out of original release at NCBI, and so was
 # added in later, and database reloads were performed to include Y. 7/8/03 KRR
 
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-06-17 - Hiram)
+    ssh eieio
+    mkdir -p /cluster/store5/mm.2003.06/ncbi
+    cd /cluster/store5/mm.2003.06/ncbi
+    mkdir chrfasta contigfasta
+    ftp ftp.ncbi.nih.gov
+      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
+      cd mouse_31
+      prompt
+      bin
+      mget *
+      quit
+    gunzip *.agp.gz
 
 # Check chromosome files
     cd chrfasta

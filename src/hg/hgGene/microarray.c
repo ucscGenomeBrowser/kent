@@ -74,6 +74,76 @@ safef(query, sizeof(query), "select value from %s where name='%s'",
 return sqlQuickString(conn, query);
 }
 
+char *expRatioProbeCheck(struct sqlConnection *conn, char *geneId,
+	char *lookup, char *parameters)
+/* Check all necessary tables exist, and if so return 
+ * probe name. */
+{
+char *data = nextWord(&parameters);
+char *exp = nextWord(&parameters);
+if (exp == NULL)
+    errAbort("short expRatio type line");
+if (!sqlTableExists(conn, lookup) 
+	|| !sqlTableExists(conn, data) || !sqlTableExists(conn, exp))
+    return FALSE;
+return expProbe(conn, lookup, geneId);
+}
+
+static void expMultiSubtype(struct hash *ra, char *colName,
+	char **retSubType, char **retSubName)
+/* Return line with table, representatives etc
+ * for our favorite subtype of an expMulti
+ * column. */
+{
+char *subName = "median";
+char *subType = hashFindVal(ra, subName);
+if (subType == NULL)
+    {
+    subName = "all";
+    subType = hashFindVal(ra, subName);
+    }
+if (subType == NULL)
+    errAbort("Couldn't find all or median subtype in %s", colName);
+*retSubType = subType;
+*retSubName = subName;
+}
+
+
+char *expMultiProbeCheck(struct sqlConnection *conn, char *geneId, 
+	char *lookup, char *parameters, char *colName, struct hash *ra)
+/* Check all necessary tables exist, and if so return 
+ * probe name. */
+{
+char *subName, *subType, *dupe, *s;
+struct sqlConnection *fConn;
+char *probe = NULL;
+boolean ok;
+char *ratio, *absolute, *exp;
+
+/* Parse out and make sure that lookup table exists. */
+if (!sqlTableExists(conn, lookup))
+    return NULL;
+
+/* Parse out other tables, usually from median line */
+expMultiSubtype(ra, colName, &subType, &subName);
+dupe = s = cloneString(subType);
+exp = nextWord(&s);
+ratio = nextWord(&s);
+absolute = nextWord(&s);
+if (absolute == NULL)
+    errAbort("short %s line in %s", subName, colName);
+
+/* Make sure other tables exist (in hgFixed by default */
+fConn = sqlConnect("hgFixed");
+ok = (sqlTableExists(fConn, exp) && sqlTableExists(fConn, ratio)
+	&& sqlTableExists(fConn, absolute));
+sqlDisconnect(&fConn);
+if (ok)
+    probe = expProbe(conn, lookup, geneId);
+freez(&dupe);
+return probe;
+}
+
 static struct expColumn *microarrayColumns(struct sqlConnection *conn, char *geneId)
 /* Load up microarray columns that may exist from hgNearData/columnDb.ra */
 {
@@ -92,11 +162,12 @@ for (ra = raList; ra != NULL; ra = raNext)
     if ((sameString("expRatio", type) || sameString("expMulti", type)) && !hashLookup(ra, "hgGeneHide"))
         {
 	char *name = hashMustFindVal(ra, "name");
+	char *probe = NULL;
 	char *lookup = nextWord(&s);
-	char *probe;
-	if (lookup == NULL)
-	    errAbort("short type line");
-	probe = expProbe(conn, lookup, geneId);
+	if (sameString("expRatio", type))
+	    probe = expRatioProbeCheck(conn, geneId, lookup, s);
+	else if (sameString("expMulti", type))
+	    probe = expMultiProbeCheck(conn, geneId, lookup, s, name, ra);
 	if (probe != NULL)
 	    {
 	    AllocVar(col);
@@ -197,14 +268,12 @@ freeMem(repString);
 freeMem(dupe);
 }
 
-
 static void expMultiPrint(struct expColumn *col,
 	struct sqlConnection *conn, struct sqlConnection *fConn,
 	char *geneId, boolean useBlue)
 /* Print out label and dots for expression multi. */
 {
-char *subName = "median";
-char *subType = hashFindVal(col->settings, subName);
+char *subType, *subName;
 float ratioScale = 1.0/atof(hashMustFindVal(col->settings, "ratioMax"));
 float absoluteScale = 1.0/atof(hashMustFindVal(col->settings, "absoluteMax"));
 char *dupe = NULL, *s;
@@ -212,15 +281,7 @@ char *expTable, *ratioTable, *absTable, *repString;
 int representativeCount, *representatives = NULL;
 int repStart, repSize, maxInRow=40;
 
-if (subType == NULL)
-    {
-    subName = "all";
-    subType = hashFindVal(col->settings, subName);
-    }
-if (subType == NULL)
-    {
-    errAbort("Couldn't find all or median subtype in %s", col->name);
-    }
+expMultiSubtype(col->settings, col->name, &subType, &subName);
 dupe = s = cloneString(subType);
 expTable = nextWord(&s);
 ratioTable = nextWord(&s);

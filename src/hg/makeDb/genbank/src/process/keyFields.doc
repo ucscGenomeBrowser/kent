@@ -14,8 +14,7 @@ tis - Tissue type.
 dev - Developmental stage.
 cel - Cell line.
 cds - CDS (Coding region).
-gen - Gene name from CDS feature.
-lot - CDS locus_tag attribute.
+gen - Gene name.
 pro - Product (name of protein associated with gene).
 cno - Note associated with CDS.
 mol - Molecule type (mRNA, DNA, etc.)
