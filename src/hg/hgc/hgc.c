@@ -1017,7 +1017,7 @@ void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
 /* Convert from  Kent,W.J. to Kent WJ and append to dy.
  * gbAuthor gets eaten in the process. */
 {
-char buf[512];
+char buf[1024];
 
 if (len >= sizeof(buf))
     warn("author %s too long to process", gbAuthor);
