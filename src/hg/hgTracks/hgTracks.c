@@ -4927,7 +4927,7 @@ fillInFromType(group, tdb);
 return group;
 }
 
-void loadFromTrackDb(struct trackGroup **pTrackList)
+void loadFromTrackDb(struct trackGroup **pTrackList, boolean privateToo)
 /* Load tracks from database, consulting handler list. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -4942,17 +4942,20 @@ sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tdb = trackDbLoad(row);
-    if (hTrackOnChrom(tdb, chromName))
+    if (!tdb->private || privateToo)
 	{
-	group = trackGroupFromTrackDb(tdb);
-	handler = lookupTrackHandler(tdb->tableName);
-	if (handler != NULL)
-	    handler(group);
-	if (group->drawItems == NULL || group->loadItems == NULL)
-	    warn("No handler for %s", tdb->tableName);
-	else
+	if (hTrackOnChrom(tdb, chromName))
 	    {
-	    slAddHead(pTrackList, group);
+	    group = trackGroupFromTrackDb(tdb);
+	    handler = lookupTrackHandler(tdb->tableName);
+	    if (handler != NULL)
+		handler(group);
+	    if (group->drawItems == NULL || group->loadItems == NULL)
+		warn("No handler for %s", tdb->tableName);
+	    else
+		{
+		slAddHead(pTrackList, group);
+		}
 	    }
 	}
     }
@@ -5027,7 +5030,7 @@ loadCustomTracks(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 
 /* Load tracks from database. */
-loadFromTrackDb(&tGroupList);
+loadFromTrackDb(&tGroupList, privateVersion());
 addTablesFromBrowserTable(&tGroupList,&tableList);
 
 
