@@ -51,7 +51,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.73 2004/09/25 06:15:02 galt Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.74 2004/09/28 08:22:38 galt Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -717,6 +717,7 @@ for (node = jobsFinished->head; !dlEnd(node); node=node->next)
     pmPrintf(&pmIn, "%s", job->startMessage);
     if (!pmSend(&pmIn, mainRudp))
         return;
+    pmClear(&pmIn);
     pmPrintf(&pmIn, "%s", job->doneMessage);
     if (!pmSend(&pmIn, mainRudp))
         return;
