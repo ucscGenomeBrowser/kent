@@ -32,14 +32,9 @@
 #include "tableDescriptions.h"
 #include "botDelay.h"
 #include "wiggle.h"
+#include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.129 2004/03/31 00:40:05 hiram Exp $";
-
-extern void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd, int tableId, char *constraints);
-extern void wiggleConstraints(char *cmp, char *pat, int tableIndex);
-extern void doGetWiggleData(boolean doCt);
-extern void doWiggleCtOptions(boolean doCt);
+static char const rcsid[] = "$Id: hgText.c,v 1.130 2004/04/02 23:44:24 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -141,17 +136,7 @@ static char *onChangeTrack2 = "onchange=\"document.mainForm.tbCustomTrack2.value
 static char *onChangeCT2 = "onchange=\"document.mainForm.tbTrack2.value = document.mainForm.tbTrack2.options[0].value; document.mainForm.table2.value = document.mainForm.table2.options[0].value;\"";
 static char *onChangePos2 = "onchange=\"document.mainForm.tbTrack2.value = document.mainForm.tbTrack2.options[0].value; document.mainForm.tbCustomTrack2.value = document.mainForm.tbCustomTrack2.options[0].value;\"";
 
-/* Droplist menu for selecting output type: */
-#define allFieldsPhase      "Tab-separated, All fields"
-#define chooseFieldsPhase   "Tab-separated, Choose fields..."
-#define seqOptionsPhase     "FASTA (DNA sequence)..."
-#define gffPhase            "GTF"
-#define bedOptionsPhase     "BED..."
-#define ctOptionsPhase      "Custom Track..."
-#define ctWigOptionsPhase   "Data custom track..."
-#define linksPhase          "Hyperlinks to Genome Browser"
-#define statsPhase          "Summary/Statistics"
-#define wigOptionsPhase     "Get data points"
+/* Droplist menu for selecting output type: (defs in hgText.h) */
 char *outputTypePosMenu[] =
 {
     bedOptionsPhase,
@@ -178,25 +163,6 @@ char *outputTypeWiggleMenu[] =
     ctWigOptionsPhase,
 };
 int outputTypeWiggleMenuSize = sizeof(outputTypeWiggleMenu)/sizeof(char *);
-/* Other values that the "phase" var can take on: */
-#define chooseTablePhase    "table"
-#define pasteNamesPhase     "Paste in Names/Accessions"
-#define uploadNamesPhase    "Upload Names/Accessions File"
-#define outputOptionsPhase  "Advanced query..."
-#define getOutputPhase      "Get results"
-#define getSomeFieldsPhase  "Get these fields"
-#define getSequencePhase    "Get sequence"
-#define getBedPhase         "Get BED"
-#define getCtPhase          "Get Custom Track"
-#define getCtBedPhase       "Get Custom Track File"
-#define getWigglePhase      "Get data"
-#define getCtWigglePhase    "Get Custom Track Data File"
-#define intersectOptionsPhase "Intersect Results..."
-#define histPhase           "Get histogram"
-#define descTablePhase      "Describe table"
-/* Old "phase" values handled for backwards compatibility: */
-#define oldAllFieldsPhase   "Get all fields"
-#define oldSeqOptionsPhase  "Get sequence..."
 
 /* Droplist menus for filtering on fields: */
 char *ddOpMenu[] =
@@ -245,6 +211,13 @@ char *ctVisMenu[] =
 };
 int ctVisMenuSize = 5;
 
+/*	wiggle bed lists, one for each of possibly two tracks */
+struct bed *bedListWig[2] =
+    {
+    (struct bed *)NULL,
+    (struct bed *)NULL,
+    };
+
 /*	wiggle constraints, two for two possible tables */
 char *wigConstraint[2] = {
 	(char *)NULL,
@@ -257,10 +230,6 @@ double wigDataConstraint[2][2] = {
 	{0.0, 0.0},
 	{0.0, 0.0},
 };
-
-/*	to select one of the two tables	*/
-#define WIG_TABLE_1	0
-#define WIG_TABLE_2	1
 
 boolean (*wiggleCompare[2])(int tableId, double value, boolean summaryOnly,
     struct wiggle *wiggle);
@@ -2426,7 +2395,12 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	}
     else
 	{
-	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
+	if (typeWiggle && (bedListWig[0] != (struct bed *)NULL))
+	    {
+	    bedListT1 = bedListWig[0];
+	    }
+	else
+	    bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
 				   winEnd, constraints);
 	}
     bedFilterBatch(&bedListT1);
@@ -2479,8 +2453,18 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    bedFreeList(&bedListT2);
 	    }
 	else
-	    fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart, winEnd,
-					 constraints2, FALSE, FALSE);
+	    {
+	    if ((typeWiggle2) && (bedListWig[1] != (struct bed *)NULL))
+		{
+		    char *db2 = getTable2Db();
+		    struct hTableInfo *hti2 = getHti(db2, table2);
+		    fbListT2 = fbFromBed(track2, hti2, bedListWig[1],
+			winStart, winEnd, FALSE, FALSE);
+		}
+	    else
+		fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart,
+			    winEnd, constraints2, FALSE, FALSE);
+	    }
 	bitsT2 = bitAlloc(chromSize+8);
 	fbOrBits(bitsT2, chromSize, fbListT2, 0);
 	if (sameString("and", op) || sameString("or", op))
@@ -2488,7 +2472,13 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    // Base-pair-wise operation: get featureBits for primary table too
 	    struct featureBits *fbListT1;
 	    Bits *bitsT1;
-	    fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
+	    if (typeWiggle && (bedListWig[0] != (struct bed *)NULL))
+		{
+		fbListT1 = fbFromBed(track, hti, bedListWig[0], winStart,
+			winEnd, FALSE, FALSE);
+		}
+	    else
+		fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
 				 FALSE, FALSE);
 	    bitsT1 = bitAlloc(chromSize+8);
 	    fbOrBits(bitsT1, chromSize, fbListT1, 0);
@@ -2551,7 +2541,6 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     } // end foreach chromosome in position range
 return(bedList);
 }
-
 
 struct slName *getAllFields()
 /* Return a list of all field names in the primary table. */
@@ -3850,11 +3839,6 @@ char *setting, *op;
 char fullTableName2[256];
 struct hTableInfo *hti = NULL;
 
-hti = getHti(db2, table2);
-
-if (HTI_IS_WIGGLE)
-    typeWiggle2 = TRUE;
-
 saveOutputOptionsState();
 
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, intersectOptionsPhase);
@@ -3875,6 +3859,11 @@ if (! sameString(outputType, seqOptionsPhase) &&
     webAbort("Error", "Please choose one of the supported output formats "
 	     "(FASTA, BED, HyperLinks, GTF or Summary/Statistics) for "
 	     "intersection of tables.");
+
+hti = getHti(db2, table2);
+
+if (HTI_IS_WIGGLE)
+    typeWiggle2 = TRUE;
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
@@ -4346,23 +4335,6 @@ if (typeWiggle)
     wiggleDone = TRUE;
     }
 
-if (typeWiggle2)
-    {
-    if (wigConstraint[1])
-	{
-	if (sameWord(wigConstraint[1],"in range"))
-	    printf("<P> data value constraint: %s [%g , %g]\n",
-		wigConstraint[1], wigDataConstraint[1][0],
-		    wigDataConstraint[1][1]);
-	else
-	    printf("<P> data value constraint: %s %g\n",
-		wigConstraint[1], wigDataConstraint[1][0]);
-	}
-    wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2,
-	constraints2);
-    }
-
-
 if (table2 != NULL)
     {
     char tableUse[128], table2Use[128];
@@ -4401,6 +4373,22 @@ if (table2 != NULL)
 	       tableUse, table2Use);
     else
 	errAbort("Unrecognized table combination type.");
+
+    if (typeWiggle2)
+	{
+	if (wigConstraint[1])
+	    {
+	    if (sameWord(wigConstraint[1],"in range"))
+		printf("<P> data value constraint: %s [%g , %g]\n",
+		    wigConstraint[1], wigDataConstraint[1][0],
+			wigDataConstraint[1][1]);
+	    else
+		printf("<P> data value constraint: %s %g\n",
+		    wigConstraint[1], wigDataConstraint[1][0]);
+	    }
+	wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2,
+	    constraints2);
+	}
     }
 
 /* Print out a big table of stats... */
@@ -4413,6 +4401,7 @@ for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
     getFullTableName(fullTableName, chromPtr->name, table);
     bedListConstr = getBedList(FALSE, chrom);
     count = slCount(bedListConstr);
+
     itemCounts[0] += count;
     itemCounts[i] = count;
     if (count > 0)
@@ -4422,6 +4411,7 @@ for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
 		      FALSE, FALSE);
 	int chromSize = hChromSize(chrom);
 	Bits *bits = bitAlloc(chromSize+8);
+
 	fbOrBits(bits, chromSize, fbList, 0);
 	count = bitCountRange(bits, 0, chromSize);
 	bitFree(&bits);
@@ -4434,6 +4424,7 @@ for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
 	{
 	struct bed *bedListUnc = getBedList(TRUE, chrom);
 	count = slCount(bedListUnc);
+
 	itemUncCounts[0] += count;
 	itemUncCounts[i] = count;
 	}
@@ -4862,7 +4853,8 @@ void doMiddle(struct cart *theCart)
 char *table = NULL;
 char *db = NULL;
 char trash[32];
-struct hTableInfo *hti = NULL;
+char *table2  = cgiOptionalString("table2");
+char *db2 = getTable2Db();
 
 cart = theCart;
 table = getTableName();
@@ -4874,10 +4866,21 @@ hDefaultConnect();
 
 if (db != NULL && table != NULL)
     {
+    struct hTableInfo *hti = NULL;
     hti = getHti(db, table);
 
     if (HTI_IS_WIGGLE)
 	typeWiggle = TRUE;
+    }
+if ((table2 != NULL) && sameString(table2, "Choose table"))
+    table2 = NULL;
+if (db2 != NULL && table2 != NULL)
+    {
+    struct hTableInfo *hti = NULL;
+    hti = getHti(db2, table2);
+
+    if (HTI_IS_WIGGLE)
+	typeWiggle2 = TRUE;
     }
 
 freezeName = hFreezeFromDb(database);
