@@ -111,7 +111,7 @@ MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
      ssh hgwdev
-    echo 'insert into defaultDb values("Caenorhabditis briggsae",
+    echo 'insert into defaultDb values("C. briggsae",
 "cb1");' \
       | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:

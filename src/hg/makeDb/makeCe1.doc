@@ -137,14 +137,14 @@ MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
      ssh hgwdev
-    echo 'insert into defaultDb values("Caenorhabditis elegans", "ce1");' \
+    echo 'insert into defaultDb values("C. elegans", "ce1");' \
       | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
 	echo 'delete from defaultDb where name="ce1";' \
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("ce1", "May 2003", \
-	"/gbdb/ce1/nib", "worm", "chrII:14646858-14667232", 1, 10, \
-	"Caenorhabditis elegans");' \
+	"/gbdb/ce1/nib", "worm", "chrII:9449525-9452749", 1, 10, \
+	"C. elegans");' \
 	| hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
 	echo 'delete from dbDb where name="ce1";' \
@@ -198,23 +198,64 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     # if you need to delete that table:
 	echo 'drop table sangerGene' | hgsql ce1
 
-PREPARE Split contigs into 1,000,000 bp chunks for cluster runs
+PREPARE Split contigs into 100,000 bp chunks for cluster runs
     ssh eieio
     cd ~/ce1
+    rm -fr ./split
     mkdir split
     foreach f (I II III IV V X M)
 	mkdir split/$f
-        faSplit size chr${f}.fa 1000000 split/$f/c -lift=split/chr${f}.lft
+        faSplit size chr${f}.fa 100000 split/$f/c -lift=split/chr${f}.lft
     end
+# 151 pieces of 151 written
+# 153 pieces of 153 written
+# 138 pieces of 138 written
+# 175 pieces of 175 written
+# 210 pieces of 210 written
+# 178 pieces of 178 written
+# 1 pieces of 1 written
     cat split/*.lft > liftAll.lft
-    # copy them to /scratch for cluster rsync
-    ssh kk
+    # copy them to /iscratch/i for cluster rsync
+    ssh kkr1u00
     cd ~ce1/split
-    foreach f (I II III IV V X M)
-	mkdir -p /scratch/hiram/Celegans/${f}
-        cp -p ${f}/c*.fa /scratch/hiram/Celegans/${f}
+    foreach c (I II III IV V X M)
+	echo -n "${c} "
+	mkdir -p /iscratch/i/worms/Celegans/${c}
+        cp -p ${c}/c*.fa /iscratch/i/worms/Celegans/${c}
     end
-    # request rsync this directory via email to cluster-admin
+    ~kent/bin/iSync
+
+Run RepeatMasker on the chromosomes
+    ssh kk
+    cd ~/ce1
+    mkdir RMRun
+    cd RMRun
+    # create job list
+    rm -f RMJobs
+    foreach c (I II III IV V X M)
+	mkdir ~/ce1/RMRun/${c}
+        foreach t ( /iscratch/i/worms/Celegans/$c/c*.fa )
+	    set d = $t:h
+	    set f = $t:t
+	    echo ~/ce1/scripts/RMLocalSens ${c} ${d} ${f} \
+	    '{'check out line+ ~/ce1/RMRun/$c/${f}.out'}' \
+	    >> RMJobs
+	end
+    end
+    para create RMJobs
+    para try
+    para check
+    # when they are finished, liftUp and load the .out files into the database:
+    ssh eieio
+    cd ~ce1/RMRun
+    foreach c (I II III IV V X M)
+	liftUp chr${c}.fa.out ../split/chr${c}.lft warn ${c}/*.fa.out
+    end
+    
+    ssh hgwdev
+    cd ~ce1/RMRun
+    hgLoadOut ce1 chr*.fa.out
+
 
 PRODUCING FUGU FISH ALIGNMENTS  (NEED TO DO THIS ON Repeat Masked bits)
     # Assumes split and rsync of ce1 has taken place above
@@ -341,6 +382,33 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
     hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
+RUN Waba alignment with briggsae
+    # prepare contigs from C. briggsae
+    #   Assumes C. briggsae data has been downloaded according to
+    #   makeCb1.doc
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Cbriggsae/waba_contigs
+    zcat /cluster/store4/worm/cb1/sanger/cb25.agp8.contigs.fasta.gz \
+	| faSplit sequence stdin 1000000 c
+    # there are 5341 sequences in that file.  The 1000000 will allow
+    # faSplit to get them each into their own file.  I don't know why
+    # faSplit has this wierd thing with the numbering.  It needs to be
+    # fixed.
+    ~kent/bin/iSync
+    
+    ssh kk
+    mkdir ~/ce1/bed/waba/out
+    cd ~/ce1/bed/waba
+    ls /iscratch/i/worms/Cbriggsae/waba.contigs/ > briggsae.lst
+    ls /iscratch/i/worms/Celegans/chr*.fa > elegans.lst
+    gensub2 elegans.lst briggsae.lst gsub spec
+    
+
+RUN BLASTZ with C. briggsae
+    #  Still trying to figure out how this works.  There is more to this
+    #  than seems at first glance.
+    # Created a new DEF file for this since this is the first time
+    
 
 MAKING VIRAL mRNA FILES (DONE 04/15/03)
     cd /cluster/store5/mrna.134
