@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.156 2004/12/01 06:11:30 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.157 2004/12/01 20:31:32 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -843,6 +843,29 @@ puts("<P><B>Short (2-30 base) sequence:</B>");
 cgiMakeTextVar(oligoMatchVar, oligo, 45);
 }
 
+void compositeUi(struct trackDb *tdb)
+/* UI for composite tracks -- has checkboxes for all subtracks.
+ * Calls UI for the subtracks */
+{
+struct trackDb *subtrack;
+char option[64];
+
+puts("<P>");
+puts("<TABLE>");
+for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    puts("<TR>");
+    puts("<TD>");
+    safef(option, sizeof(option), "%s", subtrack->tableName);
+    cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    printf ("%s", subtrack->longLabel);
+    puts("</TD>");
+    puts("</TR>");
+    }
+puts("</TABLE>");
+puts("<P>");
+}
+
 struct wigMafSpecies 
     {
     struct wigMafSpecies *next;
@@ -1134,7 +1157,12 @@ void specificUi(struct trackDb *tdb)
 {
 char *track = tdb->tableName;
 
-if (sameString(track, "stsMap"))
+if (trackDbSetting(tdb, "compositeTrack"))
+        {
+        compositeUi(tdb);
+        specificUi(tdb->subtracks);
+        }
+else if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);

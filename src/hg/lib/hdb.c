@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.224 2004/11/30 18:07:30 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.225 2004/12/01 20:31:22 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3030,17 +3030,43 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *tra
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
  * used if it exists. this is common code for two external functions. */
 {
-struct trackDb *tdb;
+struct trackDb *tdb, *nextTdb, *tdbList, *compositeTdb = NULL;
 char where[256];
 
-safef(where, sizeof(where), "tableName = '%s'", track);
+safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s\n%%'", track, track);
 
-tdb = loadTrackDbLocal(conn, where);
-if (tdb == NULL)
-    tdb = loadTrackDb(conn, where);
-if (tdb != NULL)
-    hLookupStringsInTdb(tdb, hGetDb());
-return tdb;
+tdbList = loadTrackDbLocal(conn, where);
+if (tdbList == NULL)
+    tdbList = loadTrackDb(conn, where);
+if (tdbList != NULL)
+    hLookupStringsInTdb(tdbList, hGetDb());
+
+/* create new entry with subtrack entries in subtracks field 
+ * of composite track*/
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (trackDbSetting(tdb, "compositeTrack"))
+        {
+        compositeTdb = tdb;
+        break;
+        }
+    }
+if (compositeTdb)
+    {
+    nextTdb = tdbList;
+    for (tdb = tdbList; nextTdb != NULL; tdb = nextTdb)
+        {
+        nextTdb = tdb->next;
+        if (trackDbSetting(tdb, "subTrack"))
+            {
+            slAddHead(&compositeTdb->subtracks, tdb);
+            tdb->type = cloneString(compositeTdb->type);
+            }
+        }
+    return compositeTdb;
+    }
+else
+    return tdbList;
 }
 
 struct trackDb *hTrackDbForTrack(char *track)
