@@ -926,7 +926,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-03, hartera)
-# PUT MASKED SEQUENCE ON BLUEARC (DONE, 2004-12-22, hartera)
+# PUT MASKED SEQUENCE ON BLUEARC (DONE, 2004-12-22 and 2004-12-23, hartera)
     ssh kkr1u00
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
     rm -rf /iscratch/i/danRer2/nib
@@ -947,12 +947,17 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     ssh kksilo
     mkdir -p /cluster/bluearc/danRer2/nib
     cp -p /cluster/data/danRer2/nib/chr*.nib /cluster/bluearc/danRer2/nib
+    mkdir -p /cluster/bluearc/danRer2/trfFa
+    foreach d (/cluster/data/danRer2/*/chr*_?{,?})
+      cp -p $d/$d:t.fa /cluster/bluearc/danRer2/trfFa
+    end
 
 # CREATE gc5Base wiggle TRACK (DONE, 2004-12-03, hartera)
     ssh kksilo
     mkdir -p /cluster/data/danRer2/bed/gc5Base
     cd /cluster/data/danRer2/bed/gc5Base
-    #   The number of bases that hgGcPercent claimed it measured is calculated,     #   which is not necessarily always 5 if it ran into gaps, and then the 
+    #   The number of bases that hgGcPercent claimed it measured is calculated,     
+    #   which is not necessarily always 5 if it ran into gaps, and then the 
     #   division by 10.0 scales down the numbers from hgGcPercent to the range
     #   [0-100].  wigEncode now replaces wigAsciiToBinary and the previous 
     #   processing step between these two programs. The result file is *.wig.
@@ -2521,20 +2526,22 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # Longest job:                    10284s     171.40m     2.86h    0.12d
 # Submission to last job:         12422s     207.03m     3.45h    0.14d
   
-Completed: 2990 of 2990 jobs
-# CPU time in finished jobs:    5425708s   90428.47m  1507.14h   62.80d  0.172 y
-# IO & Wait Time:                 39306s     655.10m    10.92h    0.45d  0.001 y
-# Average job time:                1828s      30.46m     0.51h    0.02d
-# Longest job:                    18662s     311.03m     5.18h    0.22d
-# Submission to last job:         25307s     421.78m     7.03h    0.29d
-
     # back on kksilo, filter and lift results:
     ssh kksilo
     cd /cluster/data/danRer2/bed/ZonLab/bacends
-    pslCheck ./psl/*.psl >& pslCheck.log
-    foreach p (./psl/*.psl)
-      pslCheck $p >>& pslCheck.log
-    end
+    # pslSort in progress
+    pslSort dirs raw.psl temp psl
+    # tried minCover=0.6 but only 55% of sequences were aligned
+    # but with minCover=0.4, 77% of seqeunces are aligned
+    # No minCover, aligns 90% of sequences but with a large number
+    # of extra alignments - noise
+    pslReps -nearTop=0.02 -minCover=0.40 -minAli=0.85 -noIntrons raw.psl \
+      bacEnds.psl /dev/null
+    liftUp bacEnds.lifted.psl /cluster/data/danRer1/jkStuff/liftAll.lft \
+           warn bacEnds.psl
+    wc -l bacEnds.lifted.psl
+
+    pslCheck bacEnds.lifted.psl >& pslCheck.log
     # 7344 problems with overlapping exons reported by pslCheck
 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
@@ -2776,4 +2783,68 @@ mkdir -p $3:h
     mkdir maf
     cp $workingDir/maf/*.maf maf
 
+# WZ EST CLUSTERS ALIGNMENTS (DONE, 2004-12-23, hartera)
+# WZ ESTs are compiled ESTs from WashU. They were provided by
+# Anthony DiBiase from Leonard Zon's lab at the Children's Hospital, Harvard
+# Contact: adibiase@enders.tch.harvard.edu
+# http://zon.tchlab.org
+     ssh kksilo
+     mkdir -p /cluster/data/danRer2/bed/ZonLab/wzESTs
+     cd /cluster/data/danRer2/bed/ZonLab/wzESTs
+     # put WZ ESTs in this directory as wzcontigs.txt -
+     # obtained from the Zon Lab, these are unmasked.
+     # There are 42857 ESTs in this file.
+     # Translated to upper case for danRer1
+     cp /cluster/data/danRer1/bed/ZonLab/wzESTs/wzcontigs.fa .
+     cd /cluster/data/danRer2/bed/ZonLab/wzESTs
+     mkdir -p /cluster/bluearc/danRer2/wzESTs
+     faSplit sequence wzcontigs.fa 20 /cluster/bluearc/danRer2/wzESTs/wzcontigs
+
+     ssh kki
+     cd /cluster/data/danRer2/bed/ZonLab/wzESTs
+     mkdir psl
+     ls -1 /cluster/bluearc/danRer2/wzESTs/*.fa > est.lst
+     ls -1S /cluster/bluearc/danRer2/trfFa/*.fa > genome.lst
+     cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -ooc={check in exists /iscratch/i/danRer2/11.ooc} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+     gensub2 genome.lst est.lst gsub spec
+     para create spec
+     para try, check, push, try ....
+# para time
+# Completed: 5980 of 5980 jobs
+# CPU time in finished jobs:      17176s     286.27m     4.77h    0.20d  0.001 y
+# IO & Wait Time:                 22870s     381.16m     6.35h    0.26d  0.001 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest job:                       49s       0.82m     0.01h    0.00d
+# Submission to last job:          2890s      48.17m     0.80h    0.03d
+
+     # Do sort, best in genome filter, and convert to chromosome coordinates
+     # to create wzEsts.psl
+     ssh kksilo
+     cd /cluster/data/danRer2/bed/ZonLab/wzESTs
+     pslSort dirs raw.psl tmp psl
+     # only use alignments that have at least
+     # 96% identity in aligned region. use parameters used by auto
+     # GenBank update for native ESTs
+    pslReps -minAli=0.96 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp wz_ests.psl /cluster/data/danRer2/jkStuff/liftAll.lft warn contig.psl
+    # check psl
+    pslCheck wz_ests.psl >& pslCheck.log
+    # looks good 
+    # Load EST alignments into database.
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ZonLab/wzESTs
+    hgLoadPsl danRer2 wz_ests.psl
+
+    # Add WZ EST sequences
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/danRer2/wzESTs
+    ln -s \
+       /cluster/data/danRer1/bed/ZonLab/wzESTs/wzcontigs.fa \
+       /gbdb/danRer2/wzESTs
+
+    hgLoadSeq danRer2 /gbdb/danRer2/wzESTs/wzcontigs.fa
 
