@@ -4863,6 +4863,10 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	{
 	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
 	}
+    if(!isFull && (x2-x1 > 0))
+	{
+	mgDrawBox(mg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
+	}
     for(i=0; i< ag->edgeCount; i++)
 	{
         /* draw exons as boxes */
@@ -4871,22 +4875,28 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    {
 	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
 	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-	    drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
+	    if(isFull)
+		drawScaledBox(mg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
+	    else
+		drawScaledBox(mg, s, e, scale, xOff, y, heightPer, MG_BLACK);
 	    }
-	/* draw introns as arcs */
-	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
+	if(isFull)
 	    {
-	    int x1, x2;
-	    int midX;   
-	    int midY = y + heightPer/2;
-	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
-	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-	    x1 = round((double)((int) s - winStart)*scale) + xOff;
-	    x2 = round((double)((int) e - winStart)*scale) + xOff;
-	    midX = (x1+x2)/2;
-	    mgDrawLine(mg, x1, midY, midX, y, MG_BLACK);
-	    mgDrawLine(mg, midX, y, x2, midY, MG_BLACK);
+	    /* draw introns as arcs */
+	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
+		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
+		{
+		int x1, x2;
+		int midX;   
+		int midY = y + heightPer/2;
+		s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
+		e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
+		x1 = round((double)((int) s - winStart)*scale) + xOff;
+		x2 = round((double)((int) e - winStart)*scale) + xOff;
+		midX = (x1+x2)/2;
+		mgDrawLine(mg, x1, midY, midX, y, MG_BLACK);
+		mgDrawLine(mg, midX, y, x2, midY, MG_BLACK);
+		}
 	    }
 	}
     if(isFull)
@@ -4921,16 +4931,19 @@ altGraphFreeList(tg->items);
 }
 
 static int altGraphFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* set track height to 2 * font size */
+/* set track height to 2 * font size if full , 1 * if dense
+*/
 {
-tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
-tg->heightPer = tg->lineHeight -1;
 switch (vis)
     {
     case tvFull:
+	tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
+	tg->heightPer = tg->lineHeight -1;
 	tg->height = slCount(tg->items) * tg->lineHeight;
 	break;
     case tvDense:
+	tg->lineHeight  = mgFontLineHeight(tl.font)+1;
+	tg->heightPer = tg->lineHeight -1;
 	tg->height = tg->lineHeight;
 	break;
     }
