@@ -1119,11 +1119,19 @@ if ((s = skipLeadingSpaces(s)) != NULL && s[0] != 0)
     }
 }
 
-void printGeneLynx(char *search)
-/* Print link to GeneLynx search */
+void printGeneLynxName(char *search)
+/* Print link to GeneLynx search using gene name (WNT2, CFTR etc) */
 {
-printf("<B>Gene Lynx</B> ");
+printf("<B>GeneLynx</B> ");
 printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1\" TARGET=_blank>", search);
+printf("%s</A><BR>\n", search);
+}
+
+void printGeneLynxAcc(char *search)
+/* Print link to GeneLynx search using accession (X07876, BC001451 etc) */
+{
+printf("<B>GeneLynx</B> ");
+printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLYNX_INDEX.word&IDlist=%s&dir=1\" TARGET=_blank>", search);
 printf("%s</A><BR>\n", search);
 }
 
@@ -1299,7 +1307,7 @@ if (row != NULL)
 
     /* Put up Gene Lynx */
     if (sameWord(type, "mrna"))
-        printGeneLynx(acc);
+        printGeneLynxAcc(acc);
     
     /* Put up Stanford Source link. */
     printStanSource(acc, type);
@@ -3047,7 +3055,7 @@ if (km != NULL)
 if (geneName != NULL) 
     {
     medlineLinkedLine("Symbol", geneName, geneName);
-    printGeneLynx(geneName);
+    printGeneLynxName(geneName);
     printf("<B>GeneCards:</B> ");
     printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	    geneName);
@@ -3160,7 +3168,7 @@ medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 if (rl->product[0] != 0)
     medlineLinkedLine("PubMed on Product", rl->product, rl->product);
 printf("\n");
-printGeneLynx(rl->name);
+printGeneLynxName(rl->name);
 printf("\n");
 printf("<B>GeneCards:</B> ");
 printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
