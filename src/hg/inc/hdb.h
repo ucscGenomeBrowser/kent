@@ -186,6 +186,14 @@ boolean hChromBand(char *chrom, int pos, char retBand[64]);
 /* Fill in text string that says what band pos is on. 
  * Return FALSE if not on any band, or table missing. */
 
+boolean hScaffoldPos(char *chrom, int start, int end,
+                        char **retScaffold, int *retStart, int *retEnd);
+/* Return the scaffold, and start end coordinates on a scaffold, for
+ * a chromosome range.  If the range extends past end of a scaffold,
+ * it is truncated to the scaffold end.
+ * Return FALSE if unable to convert */
+
+char table[64];
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA in a variety of cases.  */

@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.128 2003/08/08 16:13:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.129 2003/08/12 01:39:52 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -621,6 +621,49 @@ else
     }
 }
 
+boolean hScaffoldPos(char *chrom, int start, int end,
+                            char **retScaffold, int *retStart, int *retEnd)
+/* Return the scaffold, and start end coordinates on a scaffold, for
+ * a chromosome range.  If the range extends past end of a scaffold,
+ * it is truncated to the scaffold end.
+ * Return FALSE if unable to convert */
+{
+char table[64];
+strncpy(table, chrom, 59);
+strcat(table, "_gold");
+if (!hTableExists(table))
+    return FALSE;
+else
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    int chromStart, chromEnd;
+    sprintf(query, 
+	"SELECT frag, chromStart, chromEnd FROM %s WHERE chromStart <= %d ORDER BY chromStart DESC LIMIT 1", table, start);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        return FALSE;
+    if (retScaffold != NULL)
+        *retScaffold = cloneString(row[0]);
+
+    chromStart = sqlUnsigned(row[1]);
+    chromEnd = sqlUnsigned(row[2]);
+    if (retStart != NULL)
+        *retStart = start - chromStart;
+    if (retEnd != NULL)
+        {
+        if (end > chromEnd)
+            end = chromEnd;
+        *retEnd = end - chromStart;
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    return TRUE;
+    }
+}
 
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */

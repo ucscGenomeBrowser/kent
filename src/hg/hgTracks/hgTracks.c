@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.576 2003/08/03 02:45:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.577 2003/08/12 01:39:52 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -5658,10 +5658,33 @@ hPrintf("><BR>\n");
 void printEnsemblAnchor(char *database)
 /* Print anchor to Ensembl display on same window. */
 {
-char *organism = hOrganism(database);
-char *dir = ensOrgName(organism);
-struct dyString *ensUrl = ensContigViewUrl(dir, chromName, seqBaseCount, winStart, winEnd);
+char *scientificName = hScientificName(database);
+char *dir = ensOrgName(scientificName);
+struct dyString *ensUrl;
+char *name;
+char *scaffoldName;
+char ensemblChrScaffoldName[64];
+int start, end;
+
+if (sameWord(scientificName, "Takifugu rubripes"))
+    {
+    /* for Fugu, must give scaffold, not chr coordinates */
+    /* Also, must give "chrom" as "Chr_scaffold_N" */
+    hScaffoldPos(chromName, winStart, winEnd,
+                        &scaffoldName, &start, &end);
+    strcpy(ensemblChrScaffoldName, "Chr_");
+    strncat(ensemblChrScaffoldName, scaffoldName, 60);
+    name = ensemblChrScaffoldName;
+    }
+else
+    {
+    name = chromName;
+    start = winStart;
+    end = winEnd;
+    }
+ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
 hPrintf("<A HREF=\"%s\" TARGET=_blank>", ensUrl->string);
+/* NOTE: probably should free mem from dir and scientificName ?*/
 dyStringFree(&ensUrl);
 }
 
@@ -6207,8 +6230,13 @@ if (gotBlat)
     if (!startsWith("zoo", database) || startsWith("zooHuman", database))
         hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
+/* Print Ensembl anchor for latest assembly of organisms we have
+ * supported by Ensembl (human, mouse, rat, fugu) */
 if (sameString(database, "hg15")
-            || sameString(database, "mm3"))
+            || sameString(database, "mm3")
+            /* Rat goes in when Ensembl rat annotations are ready ? */
+            /* || sameString(database, "rn3") */
+            || sameString(database, "fr1"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
