@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.7 2004/03/04 02:21:13 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.8 2004/03/04 03:56:18 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -333,8 +333,8 @@ struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
-htmlPageSetVar(emptyConfig, NULL, "near.order", "geneDistance");
-htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
+htmlPageSetVar(emptyConfig, NULL, orderVarName, "geneDistance");
+htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 
 qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
 	"submit", "Submit", &printPage);
@@ -398,7 +398,7 @@ if (emptyConfig != NULL )
 
     for (gene = geneList; gene != NULL; gene = gene->next)
 	{
-	htmlPageSetVar(emptyConfig, NULL, "near_search", gene->name);
+	htmlPageSetVar(emptyConfig, NULL, searchVarName, gene->name);
 	for (col = colList; col != NULL; col = col->next)
 	    {
 	    testCol(emptyConfig, org, db, col->name, gene->name, pTestList);
@@ -416,8 +416,9 @@ struct htmlPage *printPage = NULL;
 struct nearTest *test;
 struct qaStatus *qs;
 htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
-htmlPageSetVar(emptyConfig, NULL, "near.order", sort);
-htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
+htmlPageSetVar(emptyConfig, NULL, orderVarName, sort);
+htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
+htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
 
 qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
 	"submit", "Submit", &printPage);
@@ -474,7 +475,7 @@ struct qaStatus *qs;
 struct htmlPage *dbPage;
 
 htmlPageSetVar(orgPage, NULL, "db", db);
-htmlPageSetVar(orgPage, NULL, "near_search", "");
+htmlPageSetVar(orgPage, NULL, searchVarName, "");
 qs = qaPageFromForm(orgPage, orgPage->forms, "Submit", "Go!", &dbPage);
 test = nearTestNew(qs, "dbEmptyPage", "n/a", org, db, "n/a", "n/a");
 slAddHead(pTestList, test);
@@ -499,7 +500,7 @@ struct slName *db;
 
 htmlPageSetVar(rootPage, rootForm, "org", org);
 htmlPageSetVar(rootPage, rootForm, "db", NULL);
-htmlPageSetVar(rootPage, rootForm, "near_search", "");
+htmlPageSetVar(rootPage, rootForm, searchVarName, "");
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on orgPage");
