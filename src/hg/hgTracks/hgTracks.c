@@ -1405,7 +1405,7 @@ tg->freeItems = estFreePair;
 tg->mapName = "hgEstPairs";
 tg->itemName = getEstPairName;
 tg->mapItemName = getEstPairName;
-tg->visibility = tvHide;
+tg->visibility = tvDense;
 tg->longLabel = "5'(blue) - 3'(red) EST pairs";
 tg->shortLabel = "EST pairs";
 tg->color.r = 67;
@@ -1455,7 +1455,7 @@ struct trackGroup *fullMgcMrnaTg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "mgc_mrna";
-tg->visibility = tvHide;
+tg->visibility = tvDense;
 tg->longLabel = "Full Length MGC mRNAs";
 tg->shortLabel = "Full MGC mRNAs";
 tg->loadItems = loadMgcMrnaAli;
@@ -5714,6 +5714,8 @@ if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
+if (hTableExists("estPair")) slSafeAddHead(&tGroupList, estPairTg());
+if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (privateVersion())
     {
@@ -5734,9 +5736,7 @@ if (hTableExists("snpNih")) slSafeAddHead(&tGroupList, snpNihTg());
 if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
 if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
-if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
 if (hTableExists("bacEnds")) slSafeAddHead(&tGroupList, bacEndsTg());
-if (hTableExists("estPair")) slSafeAddHead(&tGroupList, estPairTg());
 #ifdef CHUCK_CODE
 if (sameString(chromName, "chr22") && hTableExists("rosettaTe")) slSafeAddHead(&tGroupList,rosettaTeTg());   
 if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
