@@ -225,6 +225,45 @@ printf("&nbsp;bases");
 
 
 }
+
+void zooConsUi(struct trackDb *tdb)
+/* put up UI for the human/mouse mutual information (a sample track)*/
+{
+int zooConsHeightPer = atoi(cartUsualString(cart, "zooCons.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "zooCons.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "zooCons.anti.alias", "on");
+char *fill = cartUsualString(cart, "zooCons.fill", "1");
+int zooConsLineGap = atoi(cartUsualString(cart, "zooCons.interp.gap", "200"));
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("zooCons.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("zooCons.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("zooCons.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("zooCons.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("zooCons.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("zooCons.heightPer", zooConsHeightPer, 5 );
+printf("&nbsp;pixels");
+
+printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("zooCons.interp.gap", zooConsLineGap, 10 );
+printf("&nbsp;bases");
+
+
+}
+
+
 void blastzHgRefUi(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
@@ -586,6 +625,8 @@ else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
     humMusUi(tdb);
+else if (sameString(track, "zooCons"))
+    zooConsUi(tdb);
 else if (sameString(track, "blastzMm2"))
     blastzMm2Ui(tdb);
 else if (sameString(track, "blastzMm2Sc"))
