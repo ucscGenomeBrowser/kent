@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.206 2004/09/25 06:00:36 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.207 2004/10/01 23:14:18 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2222,7 +2222,9 @@ sqlFreeResult(&sr);
 /* Look for bed-style names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "name", retName);
+    if (!fitField(hash, "name", retName))
+	if (!fitField(hash, "acc", retName))
+	     fitField(hash, "frag", retName);
     fitField(hash, "score", retScore);
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
