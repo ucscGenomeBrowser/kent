@@ -71,12 +71,14 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.8 2003/08/18 15:58:42 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.9 2003/09/14 15:11:05 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
 int clusterCount = 0;  /* Number of gene clusters identified. */
 struct hash *uniqPos = NULL; /* Hash to make sure we're not outputting doubles. */
+double minCover = 0.0; /* Minimum percent of transcript aligning. */
+double minAli = 0.0;   /* Minimum percent identity of alignments to keep. */
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -87,6 +89,8 @@ static struct optionSpec optionSpecs[] =
     {"genePreds", OPTION_STRING},
     {"agxOut", OPTION_STRING},
     {"consensus", OPTION_BOOLEAN},
+    {"minCover", OPTION_FLOAT},
+    {"minAli", OPTION_FLOAT},
     {NULL, 0}
 };
 
@@ -98,7 +102,9 @@ static char *optionDescripts[] =
     "Coordinate file to base clustering on in bed format.",
     "Coordinate file to base clustering on in genePred format.",
     "Name of file to output to.",
-    "Try to extend partials to consensus site instead of farthest."
+    "Try to extend partials to consensus site instead of farthest.",
+    "Minimum percent of a sequence that an alignment can contain and be included.",
+    "Minimum percent id of alignment to keep.",
 };
 
 void usage()
@@ -117,6 +123,19 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
 errAbort("");
 }
 
+boolean passFilters(struct psl *psl)
+/* Does this psl pass our filters? */
+{
+int milliMin = 1000 *minAli;
+boolean pass = FALSE;
+/* Check min coverage. */
+pass = (psl->match + psl->repMatch >= minCover * (psl->qSize - psl->nCount));
+/* Check min alignment percentage. */
+pass = ((1000-pslCalcMilliBad(psl, TRUE)) > milliMin) && pass;
+return pass;
+}
+
+
 struct psl *loadPslsFromDb(struct sqlConnection *conn, int numTables, char **tables, 
 			   char *chrom, unsigned int chromStart, unsigned int chromEnd)
 /* load up all of the psls that align on a given section of the database */
@@ -134,7 +153,8 @@ for(i = 0; i < numTables; i++)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row+rowOffset);
-	if( (psl->tStarts[0] + psl->blockSizes[0] >= chromStart) && 
+	if( passFilters(psl) &&
+	    (psl->tStarts[0] + psl->blockSizes[0] >= chromStart) && 
 	    (psl->tStarts[psl->blockCount -1] <= chromEnd) )
 	    {
 	    slSafeAddHead(&pslList, psl);
@@ -473,6 +493,8 @@ hSetDb(db);
 outFile = optionVal("agxOut", NULL);
 if(outFile == NULL)
     errAbort("Must specify output file with -agxOut flag. Try -help for usage.");
+minAli = optionFloat("minAli", 0.0);
+minCover = optionFloat("minCover", 0.0);
 memTest = optionExists("memTest");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
