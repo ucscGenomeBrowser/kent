@@ -8,4 +8,4 @@ O = chimpSuperQuals.o
 
 chimpSuperQuals: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chimpSuperQuals $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/chimpSuperQuals
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/chimpSuperQuals${EXE}

@@ -8,4 +8,4 @@ O = burstServer.o
 
 burstServer: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/burstServer $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/burstServer
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/burstServer${EXE}

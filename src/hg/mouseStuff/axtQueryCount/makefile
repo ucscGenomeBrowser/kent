@@ -8,4 +8,4 @@ O = axtQueryCount.o
 
 axtQueryCount: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtQueryCount $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtQueryCount
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtQueryCount${EXE}

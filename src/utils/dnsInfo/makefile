@@ -8,4 +8,4 @@ O = dnsInfo.o
 
 dnsInfo: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/dnsInfo $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/dnsInfo
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/dnsInfo${EXE}

@@ -23,7 +23,7 @@ O = pslPseudo.o
 
 pslPseudo: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
-	#strip $(HOME)/bin/$(MACHTYPE)/pslPseudo
+	#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPseudo${EXE}
 
 lib:
 	cd ../../lib; make ; cd ../hg/lib ; make

@@ -8,7 +8,7 @@ O = mafToXmfa.o
 
 mafToXmfa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafToXmfa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafToXmfa
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToXmfa${EXE}
 
 tags:  
 	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h

@@ -8,7 +8,7 @@ O = faToTwoBit.o
 
 faToTwoBit: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faToTwoBit $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/faToTwoBit
+	${STRIP} ${HOME}/bin/${MACHTYPE}/faToTwoBit${EXE}
 
 clean:
 	rm -f $O

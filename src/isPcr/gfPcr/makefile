@@ -8,7 +8,7 @@ O = gfPcr.o
 
 gfPcr: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/gfPcr $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/gfPcr
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/gfPcr${EXE}
 
 clean:
 	rm -f $O

@@ -8,4 +8,4 @@ O = joinerGraph.o
 
 joinerGraph: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/joinerGraph $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/joinerGraph
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/joinerGraph${EXE}

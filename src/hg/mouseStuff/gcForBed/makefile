@@ -8,4 +8,4 @@ O = gcForBed.o
 
 gcForBed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gcForBed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/gcForBed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/gcForBed${EXE}

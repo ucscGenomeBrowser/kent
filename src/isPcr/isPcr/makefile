@@ -8,7 +8,7 @@ O = isPcr.o
 
 isPcr: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/isPcr $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/isPcr
+	${STRIP} ${HOME}/bin/${MACHTYPE}/isPcr${EXE}
 
 clean:
 	rm -f $O

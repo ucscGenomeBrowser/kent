@@ -8,4 +8,4 @@ O = axtAndBed.o
 
 axtAndBed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtAndBed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtAndBed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtAndBed${EXE}

@@ -8,4 +8,4 @@ O = checkableBorf.o
 
 checkableBorf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkableBorf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkableBorf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkableBorf${EXE}

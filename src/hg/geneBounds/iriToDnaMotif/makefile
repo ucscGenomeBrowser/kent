@@ -9,4 +9,4 @@ O = iriToDnaMotif.o ../lib/improbRunInfo.o
 iriToDnaMotif: $O $(MYLIBS)
 	cd ../lib && ${MAKE}
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/iriToDnaMotif $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/iriToDnaMotif
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/iriToDnaMotif${EXE}

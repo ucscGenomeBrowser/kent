@@ -8,4 +8,4 @@ O = chimpChromQuals.o
 
 chimpChromQuals: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chimpChromQuals $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/chimpChromQuals
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/chimpChromQuals${EXE}

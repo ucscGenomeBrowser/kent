@@ -8,4 +8,4 @@ O = selectTrainedHits.o
 
 selectTrainedHits: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/selectTrainedHits $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/selectTrainedHits
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/selectTrainedHits${EXE}

@@ -10,7 +10,7 @@ O = g2gOverlap.o
 
 g2gOverlap: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/g2gOverlap $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/g2gOverlap
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/g2gOverlap${EXE}
 
 lib:
 	cd ../../../lib; make

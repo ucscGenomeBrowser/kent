@@ -9,7 +9,7 @@ O = textHistogram.o
 
 textHistogram: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/textHistogram $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/textHistogram
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/textHistogram${EXE}
 
 clean:
 	rm -f ${O}

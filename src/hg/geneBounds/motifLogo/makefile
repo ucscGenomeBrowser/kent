@@ -8,4 +8,4 @@ O = motifLogo.o
 
 motifLogo: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/motifLogo $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/motifLogo
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/motifLogo${EXE}

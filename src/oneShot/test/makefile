@@ -8,4 +8,4 @@ O = test.o
 
 test: $O $(MYLIBS)
 	gcc -o test $O $(MYLIBS) $L
-#	strip test
+#	${STRIP} test${EXE}

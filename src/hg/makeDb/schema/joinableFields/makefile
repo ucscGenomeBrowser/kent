@@ -8,7 +8,7 @@ O = joinableFields.o
 
 joinableFields: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/joinableFields $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/joinableFields
+	${STRIP} ${HOME}/bin/${MACHTYPE}/joinableFields${EXE}
 
 clean:
 	rm -f $O

@@ -8,4 +8,4 @@ O = blastzScripts.o
 
 blastzScripts: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blastzScripts $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/blastzScripts
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/blastzScripts${EXE}

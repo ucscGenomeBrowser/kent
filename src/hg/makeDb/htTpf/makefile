@@ -8,4 +8,4 @@ O = htTpf.o
 
 htTpf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/htTpf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/htTpf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/htTpf${EXE}

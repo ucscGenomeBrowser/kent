@@ -11,7 +11,7 @@ O = $A.o
 compile: $O 
 	gcc $O ${MYLIBS} ${L} 
 	mv a.out $A
-	strip $A
+	${STRIP} $A${EXE}
 	chmod a+rx $A
 	cp $A ${HOME}/bin/${MACHTYPE}
 

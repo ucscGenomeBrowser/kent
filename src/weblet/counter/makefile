@@ -7,5 +7,5 @@ counter: $(O)
 	gcc $O ../../lib/$(MACHTYPE)/jkweb.a
 	mv a.out counter.exe
 	chmod a+rx counter.exe
-	strip counter.exe
+	${STRIP} counter.exe${EXE}
 	mv counter.exe ${CGI_BIN}-${USER}

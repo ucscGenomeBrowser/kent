@@ -12,6 +12,6 @@ O = makeSeqs.o
 makeSeqs: $O 
 	gcc -ggdb $O $(MYLIBS) $(L) 
 	mv a.out makeSeqs
-	strip makeSeqs
+	${STRIP} makeSeqs${EXE}
 	chmod a+rx makeSeqs
 	cp makeSeqs $(HOME)/bin/$(MACHTYPE)

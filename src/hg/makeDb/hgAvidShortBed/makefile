@@ -8,4 +8,4 @@ O = hgAvidShortBed.o
 
 hgAvidShortBed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgAvidShortBed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgAvidShortBed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgAvidShortBed${EXE}

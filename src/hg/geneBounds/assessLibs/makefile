@@ -8,4 +8,4 @@ O = assessLibs.o
 
 assessLibs: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/assessLibs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/assessLibs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/assessLibs${EXE}

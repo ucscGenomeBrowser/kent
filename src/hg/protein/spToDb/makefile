@@ -8,7 +8,7 @@ O = spToDb.o
 
 spToDb: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/spToDb $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/spToDb
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/spToDb${EXE}
 
 test: test1 
 %:	input/%

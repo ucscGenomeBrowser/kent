@@ -8,4 +8,4 @@ O = splitSim.o
 
 splitSim: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/splitSim $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/splitSim
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/splitSim${EXE}

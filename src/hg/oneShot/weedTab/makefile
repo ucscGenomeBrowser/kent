@@ -8,4 +8,4 @@ O = weedTab.o
 
 weedTab: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/weedTab $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/weedTab
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/weedTab${EXE}

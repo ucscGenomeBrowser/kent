@@ -10,7 +10,7 @@ O = fragPart.o
 
 fragPart: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/fragPart $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/fragPart
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/fragPart${EXE}
 
 lib:
 	cd ../../lib; make

@@ -7,7 +7,7 @@ O = faSplit.o
 faSplit: ${O}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faSplit $O \
 	../../lib/${MACHTYPE}/jkweb.a
-	strip ${HOME}/bin/${MACHTYPE}/faSplit
+	${STRIP} ${HOME}/bin/${MACHTYPE}/faSplit${EXE}
 
 debug:
 	${CC} ${COPT} -o faSplit $O ../../lib/${MACHTYPE}/jkweb.a

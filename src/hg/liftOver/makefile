@@ -9,4 +9,4 @@ O = liftOver.o
 
 liftOver: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/liftOver $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/liftOver
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/liftOver${EXE}

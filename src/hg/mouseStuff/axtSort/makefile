@@ -8,4 +8,4 @@ O = axtSort.o
 
 axtSort: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtSort $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtSort
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSort${EXE}

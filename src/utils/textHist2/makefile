@@ -9,4 +9,4 @@ O = textHist2.o
 
 textHist2: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/textHist2 $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/textHist2
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/textHist2${EXE}

@@ -8,4 +8,4 @@ O = spacedToTab.o
 
 spacedToTab: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/spacedToTab $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/spacedToTab
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/spacedToTab${EXE}

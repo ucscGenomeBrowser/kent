@@ -8,4 +8,4 @@ O = t.o
 
 t: $O $(MYLIBS)
 	gcc -ggdb -o t $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/autoXml
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/autoXml${EXE}

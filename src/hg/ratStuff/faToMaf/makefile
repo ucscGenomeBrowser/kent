@@ -8,7 +8,7 @@ O = faToMaf.o
 
 faToMaf: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faToMaf $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/faToMaf
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/faToMaf${EXE}
 
 clean:
 	rm -f $O

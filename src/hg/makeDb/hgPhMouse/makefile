@@ -8,4 +8,4 @@ O = hgPhMouse.o
 
 hgPhMouse: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgPhMouse $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgPhMouse
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgPhMouse${EXE}

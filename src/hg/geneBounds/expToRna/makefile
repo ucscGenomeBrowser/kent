@@ -8,4 +8,4 @@ O = expToRna.o
 
 expToRna: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/expToRna $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/expToRna
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/expToRna${EXE}

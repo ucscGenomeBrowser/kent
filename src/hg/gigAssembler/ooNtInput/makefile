@@ -9,7 +9,7 @@ O = ooNtInput.o
 
 ooNtInput: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ooNtInput $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/ooNtInput
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooNtInput${EXE}
 
 
 lib:

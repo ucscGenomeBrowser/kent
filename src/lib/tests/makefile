@@ -15,7 +15,7 @@ mkdirs:
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} $L
-	strip ${BIN_DIR}/errCatchTest
+	${STRIP} ${BIN_DIR}/errCatchTest${EXE}
 	${BIN_DIR}/errCatchTest secret > output/errCatch.good
 	diff expected/errCatch.good output/errCatch.good
 	${BIN_DIR}/errCatchTest bad > output/errCatch.bad
@@ -23,13 +23,13 @@ errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} $L
-	strip ${BIN_DIR}/htmlExpandUrlTest
+	${STRIP} ${BIN_DIR}/htmlExpandUrlTest${EXE}
 	${BIN_DIR}/htmlExpandUrlTest > output/htmlExpandUrlTest 2>&1
 	diff expected/htmlExpandUrlTest output/htmlExpandUrlTest
 
 htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/htmlPageTest htmlPageTest.o ${MYLIBS} $L
-	strip ${BIN_DIR}/htmlPageTest
+	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
 

@@ -8,4 +8,4 @@ O = checkSgdSync.o
 
 checkSgdSync: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkSgdSync $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkSgdSync
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkSgdSync${EXE}

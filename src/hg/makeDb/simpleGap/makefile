@@ -9,7 +9,7 @@ O = simpleGap.o
 
 simpleGap: $O ${MYLIBS}
 	${CC} -ggdb ${COPT} -o ${HOME}/bin/${MACHTYPE}/simpleGap $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/simpleGap
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/simpleGap${EXE}
 
 clean:
 	rm -f $O

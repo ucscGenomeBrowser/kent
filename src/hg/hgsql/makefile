@@ -8,7 +8,7 @@ O = hgsql.o
 
 hgsql: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/hgsql $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgsql
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgsql${EXE}
 
 clean::
 	rm -f ${O}

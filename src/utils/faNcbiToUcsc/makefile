@@ -9,4 +9,4 @@ O = faNcbiToUcsc.o
 
 faNcbiToUcsc: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faNcbiToUcsc $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faNcbiToUcsc
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faNcbiToUcsc${EXE}

@@ -9,4 +9,4 @@ O = faTrimPolyA.o
 
 faTrimPolyA: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faTrimPolyA $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faTrimPolyA
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faTrimPolyA${EXE}

@@ -10,5 +10,5 @@ O = checkDbSync.o
 
 checkDbSync: $(O)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/checkDbSync $O $(MYLIBS) $(L)
-	strip $(HOME)/bin/$(MACHTYPE)/checkDbSync
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkDbSync${EXE}
 

@@ -8,4 +8,4 @@ O = aNotB.o
 
 aNotB: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/aNotB $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/aNotB
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/aNotB${EXE}

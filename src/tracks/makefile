@@ -25,7 +25,7 @@ beta: compile
 compile: $O 
 	${CC} $O $(MYLIBS) $(L) 
 	mv a.out $A
-#strip $A
+#${STRIP} $A${EXE}
 	chmod a+rx $A
 
 install:	compile

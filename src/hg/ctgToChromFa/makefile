@@ -10,7 +10,7 @@ O = ctgToChromFa.o
 
 ctgToChromFa: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/ctgToChromFa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/ctgToChromFa
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/ctgToChromFa${EXE}
 
 lib:
 	cd ../../lib; make

@@ -8,7 +8,7 @@ O = hgRatioMicroarray.o
 
 hgRatioMicroarray: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgRatioMicroarray $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgRatioMicroarray
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgRatioMicroarray${EXE}
 
 test:
 	hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra -noLoad -limit=100 -tab=output

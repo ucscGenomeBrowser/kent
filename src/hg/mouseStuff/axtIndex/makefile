@@ -8,4 +8,4 @@ O = axtIndex.o
 
 axtIndex: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtIndex $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtIndex
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtIndex${EXE}

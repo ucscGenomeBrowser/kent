@@ -9,4 +9,4 @@ O = broadNode.o
 
 broadNode: $O $(MYLIBS)
 	gcc -ggdb -o ../bin/broadNode $O $(MYLIBS) $L
-	strip ../bin/broadNode
+	${STRIP} ../bin/broadNode${EXE}

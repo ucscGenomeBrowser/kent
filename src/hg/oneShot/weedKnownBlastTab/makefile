@@ -8,4 +8,4 @@ O = weedKnownBlastTab.o
 
 weedKnownBlastTab: $O $(MYLIBS)
 	gcc -ggdb -o weedKnownBlastTab $O $(MYLIBS) $L
-	strip weedKnownBlastTab
+	${STRIP} weedKnownBlastTab${EXE}

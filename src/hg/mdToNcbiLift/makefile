@@ -9,4 +9,4 @@ O = mdToNcbiLift.o
 
 mdToNcbiLift: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mdToNcbiLift $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mdToNcbiLift
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mdToNcbiLift${EXE}

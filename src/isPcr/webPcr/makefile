@@ -8,7 +8,7 @@ O = webPcr.o
 
 webPcr: $O ${MYLIBS}
 	${CC} ${COPT} -o webPcr $O ${MYLIBS} $L
-	strip webPcr
+	${STRIP} webPcr${EXE}
 
 clean:
 	rm -f $O

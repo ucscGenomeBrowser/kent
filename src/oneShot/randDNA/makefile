@@ -5,7 +5,7 @@ A = randDNA
 
 ${A}: $O
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 clean:
 	rm -f $O

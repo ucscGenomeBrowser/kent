@@ -9,4 +9,4 @@ O = getRnaPred.o
 
 getRnaPred: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/getRnaPred $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/getRnaPred
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/getRnaPred${EXE}

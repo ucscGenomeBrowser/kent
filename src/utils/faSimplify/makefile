@@ -8,4 +8,4 @@ O = faSimplify.o
 
 faSimplify: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faSimplify $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faSimplify
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faSimplify${EXE}

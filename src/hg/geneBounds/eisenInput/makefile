@@ -8,4 +8,4 @@ O = eisenInput.o
 
 eisenInput: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/eisenInput $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/eisenInput
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/eisenInput${EXE}

@@ -8,4 +8,4 @@ O = bottleneck.o
 
 bottleneck: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bottleneck $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/bottleneck
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/bottleneck${EXE}

@@ -8,4 +8,4 @@ O = lavToPsl.o
 
 lavToPsl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/lavToPsl $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/lavToPsl
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/lavToPsl${EXE}

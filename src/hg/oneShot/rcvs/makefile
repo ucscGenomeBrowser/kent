@@ -8,4 +8,4 @@ O = rcvs.o
 
 rcvs: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rcvs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rcvs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rcvs${EXE}

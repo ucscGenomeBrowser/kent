@@ -8,4 +8,4 @@ O = tfbsConsSort.o
 
 tfbsConsSort: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/tfbsConsSort $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/tfbsConsSort
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/tfbsConsSort${EXE}

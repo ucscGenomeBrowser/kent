@@ -8,7 +8,7 @@ O = hgMapToGene.o
 
 hgMapToGene: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgMapToGene $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgMapToGene
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgMapToGene${EXE}
 
 clean::
 	rm -f ${O} hgMapToGene

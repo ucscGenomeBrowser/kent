@@ -10,7 +10,7 @@ O = $(A).o
 
 $(A): $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/$(A) $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/$(A)
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/$(A)${EXE}
 
 lib:
 	cd ../../lib; make

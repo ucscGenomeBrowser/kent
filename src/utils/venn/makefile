@@ -9,4 +9,4 @@ O = venn.o
 
 venn: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/venn $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/venn
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/venn${EXE}

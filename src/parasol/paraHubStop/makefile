@@ -8,4 +8,4 @@ O = paraHubStop.o
 
 paraHubStop: $O $(MYLIBS)
 	gcc -o ../bin/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
-	strip ../bin/paraHubStop
+	${STRIP} ../bin/paraHubStop${EXE}

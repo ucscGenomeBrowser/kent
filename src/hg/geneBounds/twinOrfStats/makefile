@@ -8,4 +8,4 @@ O = twinOrfStats.o
 
 twinOrfStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/twinOrfStats $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/twinOrfStats
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/twinOrfStats${EXE}

@@ -9,4 +9,4 @@ O = protDat.o
 
 protDat: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/protDat $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/protDat
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/protDat${EXE}

@@ -8,4 +8,4 @@ O = promoSeqFromCluster.o
 
 promoSeqFromCluster: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/promoSeqFromCluster $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/promoSeqFromCluster
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/promoSeqFromCluster${EXE}

@@ -8,4 +8,4 @@ O = hgSanger22.o
 
 hgSanger22: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgSanger22 $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgSanger22
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgSanger22${EXE}

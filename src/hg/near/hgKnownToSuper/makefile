@@ -8,4 +8,4 @@ O = hgKnownToSuper.o
 
 hgKnownToSuper: $O ${MYLIBS}
 	gcc -ggdb -o ${HOME}/bin/${MACHTYPE}/hgKnownToSuper $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgKnownToSuper
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgKnownToSuper${EXE}

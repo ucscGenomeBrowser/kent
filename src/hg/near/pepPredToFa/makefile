@@ -8,4 +8,4 @@ O = pepPredToFa.o
 
 pepPredToFa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pepPredToFa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pepPredToFa
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pepPredToFa${EXE}

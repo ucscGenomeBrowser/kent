@@ -21,7 +21,7 @@ beta: compile
 
 compile: $O $(MYLIBS)
 	gcc -ggdb -o $A $O $(MYLIBS) $L
-	strip $A
+	${STRIP} $A${EXE}
 	chmod a+rx $A
 
 install:	compile

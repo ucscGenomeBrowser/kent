@@ -8,4 +8,4 @@ O = mafToPsl.o
 
 mafToPsl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafToPsl $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafToPsl
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToPsl${EXE}

@@ -8,4 +8,4 @@ O = rmFromFinf.o
 
 rmFromFinf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rmFromFinf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rmFromFinf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rmFromFinf${EXE}

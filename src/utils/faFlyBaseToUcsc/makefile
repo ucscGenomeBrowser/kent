@@ -8,4 +8,4 @@ O = faFlyBaseToUcsc.o
 
 faFlyBaseToUcsc: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc${EXE}

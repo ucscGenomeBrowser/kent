@@ -11,7 +11,7 @@ spideyToPsl: $O $(MYLIBS)
 	gcc -ggdb -o spideyToPsl $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f spideyToPsl ${BINDIR}
-	strip ${BINDIR}/spideyToPsl
+	${STRIP} ${BINDIR}/spideyToPsl${EXE}
 
 test::
 	cd tests && ${MAKE} test

@@ -8,7 +8,7 @@ O = axtBestNear.o
 
 axtBestNear: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtBestNear $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/axtBestNear
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtBestNear${EXE}
 test: chr22 
 %:	input/%.axt
 	axtBestNear input/$@.axt $@ output/$@.axt 

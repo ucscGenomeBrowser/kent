@@ -9,4 +9,4 @@ O = faFilterN.o
 
 faFilterN: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faFilterN $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faFilterN
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faFilterN${EXE}

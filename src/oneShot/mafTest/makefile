@@ -9,4 +9,4 @@ O = mafTest.o mafXml.o
 
 mafTest: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafTest $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafTest
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafTest${EXE}

@@ -8,4 +8,4 @@ O = estLibStats.o
 
 estLibStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/estLibStats $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/estLibStats
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/estLibStats${EXE}

@@ -9,4 +9,4 @@ O = iriToControlTable.o ../lib/improbRunInfo.o
 iriToControlTable: $O $(MYLIBS)
 	cd ../lib && ${MAKE}
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/iriToControlTable $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/iriToControlTable
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/iriToControlTable${EXE}

@@ -8,4 +8,4 @@ O = axtFilter.o
 
 axtFilter: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtFilter $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtFilter
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtFilter${EXE}

@@ -9,4 +9,4 @@ O = detab.o
 
 detab: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/detab $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/detab
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/detab${EXE}

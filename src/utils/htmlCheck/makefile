@@ -8,7 +8,7 @@ O = htmlCheck.o
 
 htmlCheck: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/htmlCheck $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/htmlCheck
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/htmlCheck${EXE}
 
 clean:
 	rm -f $O

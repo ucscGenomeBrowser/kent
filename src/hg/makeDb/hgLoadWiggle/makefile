@@ -12,17 +12,17 @@ all::	${A} hgWiggle
 
 hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 hgDumpWiggle:	hgDumpWiggle.o ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/hgDumpWiggle hgDumpWiggle.o \
 		${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgDumpWiggle
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgDumpWiggle${EXE}
 
 hgWiggle:	hgWiggle.o ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/hgWiggle hgWiggle.o \
 		${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgWiggle
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgWiggle${EXE}
 
 compile:	${O} hgWiggle.o ${MYLIBS}
 	${CC} -o ${A} $O ${MYLIBS} $L

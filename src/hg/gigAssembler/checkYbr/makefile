@@ -9,4 +9,4 @@ O = checkYbr.o
 
 checkYbr: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkYbr $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkYbr
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkYbr${EXE}

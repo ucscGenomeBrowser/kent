@@ -8,4 +8,4 @@ O = axtSplitByTarget.o
 
 axtSplitByTarget: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtSplitByTarget $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtSplitByTarget
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSplitByTarget${EXE}

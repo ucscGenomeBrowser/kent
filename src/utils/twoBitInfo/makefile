@@ -8,7 +8,7 @@ O = twoBitInfo.o
 
 twoBitInfo: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/twoBitInfo $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/twoBitInfo
+	${STRIP} ${HOME}/bin/${MACHTYPE}/twoBitInfo${EXE}
 
 clean:
 	rm -f $O

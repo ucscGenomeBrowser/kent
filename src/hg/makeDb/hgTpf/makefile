@@ -8,4 +8,4 @@ O = hgTpf.o
 
 hgTpf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgTpf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgTpf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgTpf${EXE}

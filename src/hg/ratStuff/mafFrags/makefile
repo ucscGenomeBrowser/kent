@@ -8,7 +8,7 @@ O = mafFrags.o
 
 mafFrags: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafFrags $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/mafFrags
+	${STRIP} ${HOME}/bin/${MACHTYPE}/mafFrags${EXE}
 
 test:
 	${MKDIR} output

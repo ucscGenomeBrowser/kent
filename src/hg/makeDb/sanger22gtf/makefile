@@ -8,4 +8,4 @@ O = sanger22gtf.o
 
 sanger22gtf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sanger22gtf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/sanger22gtf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/sanger22gtf${EXE}

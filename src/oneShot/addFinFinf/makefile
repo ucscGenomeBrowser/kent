@@ -9,4 +9,4 @@ O = addFinFinf.o
 
 addFinFinf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/addFinFinf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/addFinFinf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/addFinFinf${EXE}

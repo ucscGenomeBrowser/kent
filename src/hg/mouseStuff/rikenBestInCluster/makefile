@@ -8,4 +8,4 @@ O = rikenBestInCluster.o
 
 rikenBestInCluster: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rikenBestInCluster $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rikenBestInCluster
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rikenBestInCluster${EXE}

@@ -8,4 +8,4 @@ O = hgCeOrfToGene.o
 
 hgCeOrfToGene: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgCeOrfToGene $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgCeOrfToGene
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgCeOrfToGene${EXE}

@@ -9,4 +9,4 @@ O = paraNodeStart.o
 
 paraNodeStart: $O $(MYLIBS)
 	gcc -o ../bin/paraNodeStart $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
-	strip ../bin/paraNodeStart
+	${STRIP} ../bin/paraNodeStart${EXE}

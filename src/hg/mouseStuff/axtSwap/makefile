@@ -8,4 +8,4 @@ O = axtSwap.o
 
 axtSwap: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtSwap $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtSwap
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSwap${EXE}

@@ -8,4 +8,4 @@ O = axtForEst.o
 
 axtForEst: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtForEst $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/axtForEst
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtForEst${EXE}

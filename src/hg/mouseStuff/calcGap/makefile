@@ -8,4 +8,4 @@ O = calcGap.o
 
 calcGap: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/calcGap $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/calcGap
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/calcGap${EXE}

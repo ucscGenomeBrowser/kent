@@ -8,7 +8,7 @@ O = rmskOoJobs.o
 
 rmskOoJobs: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/rmskOoJobs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rmskOoJobs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rmskOoJobs${EXE}
 
 fix: makeFix.o
 	gcc -o makeFix makeFix.o $(MYLIBS) $L

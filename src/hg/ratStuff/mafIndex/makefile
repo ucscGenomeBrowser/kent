@@ -8,7 +8,7 @@ O = mafIndex.o
 
 mafIndex: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafIndex $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/mafIndex
+	${STRIP} ${HOME}/bin/${MACHTYPE}/mafIndex${EXE}
 
 clean:
 	rm -f $O

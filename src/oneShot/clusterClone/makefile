@@ -9,7 +9,7 @@ A = clusterClone
 
 ${A}: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 clean:
 	rm -f $O

@@ -12,13 +12,13 @@ all: ${BINDIR}/blastToPsl
 
 ${BINDIR}/blastToPsl: blastToPsl
 	cp -f blastToPsl $(BINDIR)
-	strip $(BINDIR)/blastToPsl
+	${STRIP} $(BINDIR)/blastToPsl${EXE}
 blastToPsl: ${O} ${MYLIBS}
 	${CC} -o blastToPsl ${O} ${MYLIBS} ${L} 
 
 my: compile scoreSort blast0To8 pslUniq pslChain
 	cp -f blastToPsl $(BINDIR)
-	strip $(BINDIR)/blastToPsl
+	${STRIP} $(BINDIR)/blastToPsl${EXE}
 	mv scoreSort $(BINDIR)
 	mv blast0To8 $(BINDIR)
 #	mv smashTab $(BINDIR)
@@ -58,7 +58,7 @@ scoreSort: scoreSort.o
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 
 	mv a.out $A
-#	strip $A
+#	${STRIP} $A${EXE}
 	chmod a+rx $A
 
 

@@ -8,4 +8,4 @@ O = pslToFa.o
 
 pslToFa: $O $(MYLIBS)
 	gcc -ggdb -o pslToFa $O $(MYLIBS) $L
-#strip $(HOME)/bin/$(MACHTYPE)/pslToFa
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslToFa${EXE}

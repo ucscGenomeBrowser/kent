@@ -8,4 +8,4 @@ O = liftPromoHits.o
 
 liftPromoHits: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/liftPromoHits $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/liftPromoHits
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/liftPromoHits${EXE}

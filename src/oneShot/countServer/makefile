@@ -8,4 +8,4 @@ O = countServer.o
 
 countServer: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/countServer $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/countServer
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/countServer${EXE}

@@ -9,7 +9,7 @@ A = axtToChain
 O = ${A}.o
 
 strip: ${BINDIR}/${A}
-	strip ${BINDIR}/${A}
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 compile: ${BINDIR}/${A}
 

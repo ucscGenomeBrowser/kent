@@ -9,4 +9,4 @@ O = oneShot.o
 
 oneShot: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/oneShot $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/oneShot
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/oneShot${EXE}

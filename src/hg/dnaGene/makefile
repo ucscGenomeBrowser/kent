@@ -10,7 +10,7 @@ O = $A.o
 
 my:	compile
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}

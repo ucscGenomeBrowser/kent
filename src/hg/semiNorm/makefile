@@ -9,4 +9,4 @@ O = semiNorm.o
 
 semiNorm: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/semiNorm $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/semiNorm
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/semiNorm${EXE}

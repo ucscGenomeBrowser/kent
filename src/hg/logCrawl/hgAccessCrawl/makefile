@@ -8,4 +8,4 @@ O = hgAccessCrawl.o
 
 hgAccessCrawl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgAccessCrawl $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgAccessCrawl
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgAccessCrawl${EXE}

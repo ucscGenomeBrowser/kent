@@ -8,7 +8,7 @@ O = hgExpDistance.o
 
 hgExpDistance: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgExpDistance $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgExpDistance
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgExpDistance${EXE}
 
 clean::
 	rm -f ${O} hgExpDistance

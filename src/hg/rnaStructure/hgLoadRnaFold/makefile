@@ -8,7 +8,7 @@ O = hgLoadRnaFold.o
 
 hgLoadRnaFold: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadRnaFold $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadRnaFold
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadRnaFold${EXE}
 
 test:
 	hgLoadRnaFold -tab=output -noLoad hg16 test input

@@ -8,7 +8,7 @@ O = lineRange.o
 
 lineRange: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/lineRange $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/lineRange
+	${STRIP} ${HOME}/bin/${MACHTYPE}/lineRange${EXE}
 
 clean:
 	rm -f $O

@@ -12,7 +12,7 @@ O = cgiExample.o
 cgiExample: $O 
 	gcc $O $(MYLIBS) $L
 	mv a.out cgiExample
-	strip cgiExample
+	${STRIP} cgiExample${EXE}
 	chmod a+rx cgiExample
 	mv cgiExample /usr/local/apache/cgi-bin
 

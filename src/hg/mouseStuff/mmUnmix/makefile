@@ -8,4 +8,4 @@ O = mmUnmix.o
 
 mmUnmix: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mmUnmix $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mmUnmix
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mmUnmix${EXE}

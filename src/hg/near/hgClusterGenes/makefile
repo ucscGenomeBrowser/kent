@@ -8,4 +8,4 @@ O = hgClusterGenes.o
 
 hgClusterGenes: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgClusterGenes $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/hgClusterGenes
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgClusterGenes${EXE}

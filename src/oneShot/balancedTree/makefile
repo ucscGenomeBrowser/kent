@@ -9,4 +9,4 @@ O = balancedTree.o
 
 balancedTree: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/balancedTree $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/balancedTree
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/balancedTree${EXE}

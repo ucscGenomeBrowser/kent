@@ -6,7 +6,7 @@ A = moresyn
 
 moresyn: ${O}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/$A $O ../../lib/${MACHTYPE}/jkweb.a
-	strip ${HOME}/bin/${MACHTYPE}/$A
+	${STRIP} ${HOME}/bin/${MACHTYPE}/$A${EXE}
 
 clean:
 	rm -f ${O}

@@ -8,4 +8,4 @@ O = hgFlyBase.o
 
 hgFlyBase: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgFlyBase $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/hgFlyBase
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgFlyBase${EXE}

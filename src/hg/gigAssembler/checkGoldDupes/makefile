@@ -9,4 +9,4 @@ O = checkGoldDupes.o
 
 checkGoldDupes: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkGoldDupes $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkGoldDupes
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkGoldDupes${EXE}

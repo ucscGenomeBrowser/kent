@@ -8,4 +8,4 @@ O = raToCds.o
 
 raToCds: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/raToCds $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/raToCds
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/raToCds${EXE}

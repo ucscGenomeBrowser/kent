@@ -9,4 +9,4 @@ O = calc.o
 
 calc: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/calc $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/calc
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/calc${EXE}

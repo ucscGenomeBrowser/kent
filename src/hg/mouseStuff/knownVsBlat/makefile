@@ -12,10 +12,10 @@ all: knownVsBlat kvsSummary
 
 knownVsBlat: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/knownVsBlat $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/knownVsBlat 
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/knownVsBlat${EXE}
 
 O2 = kvsSummary.o $S
 
 kvsSummary: $(O2) $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/kvsSummary $(O2) $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/kvsSummary 
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/kvsSummary${EXE}

@@ -8,4 +8,4 @@ O = netSplit.o
 
 netSplit: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netSplit $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netSplit
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netSplit${EXE}

@@ -8,4 +8,4 @@ O = hgStanfordMicroarray.o
 
 hgStanfordMicroarray: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgStanfordMicroarray $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgStanfordMicroarray
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgStanfordMicroarray${EXE}

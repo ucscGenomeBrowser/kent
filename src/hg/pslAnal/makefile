@@ -14,7 +14,7 @@ compile: $O
 	mv a.out $A
 	chmod a+rx $A
 	cp -f $A $$HOME/bin/i386/$A
-	#strip $$HOME/bin/i386/$A
+	#${STRIP} $$HOME/bin/i386/$A${EXE}
 
 debug: $O
 	gcc $O $(MYLIBS) $(L)

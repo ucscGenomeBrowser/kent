@@ -9,4 +9,4 @@ O = tableSum.o
 
 tableSum: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/tableSum $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/tableSum
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/tableSum${EXE}

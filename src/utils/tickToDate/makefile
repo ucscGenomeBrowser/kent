@@ -8,4 +8,4 @@ O = tickToDate.o
 
 tickToDate: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/tickToDate $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/tickToDate
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/tickToDate${EXE}

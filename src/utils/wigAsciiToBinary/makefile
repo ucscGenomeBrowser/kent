@@ -13,11 +13,11 @@ all::	${A} wigZoom
 
 $A: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 wigZoom: wigZoom.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigZoom wigZoom.o ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/wigZoom
+	${STRIP} ${HOME}/bin/${MACHTYPE}/wigZoom${EXE}
 
 test:
 	cd test_data && ./runtest

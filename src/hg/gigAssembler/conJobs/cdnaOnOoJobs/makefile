@@ -8,7 +8,7 @@ O = cdnaOnOoJobs.o
 
 cdnaOnOoJobs: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/cdnaOnOoJobs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/cdnaOnOoJobs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/cdnaOnOoJobs${EXE}
 
 fix: makeFix.o
 	gcc -o makeFix makeFix.o $(MYLIBS) $L

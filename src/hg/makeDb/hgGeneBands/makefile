@@ -9,4 +9,4 @@ O = hgGeneBands.o
 
 hgGeneBands: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgGeneBands $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgGeneBands
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgGeneBands${EXE}

@@ -8,4 +8,4 @@ O = hgSgdPep.o
 
 hgSgdPep: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgSgdPep $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgSgdPep
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgSgdPep${EXE}

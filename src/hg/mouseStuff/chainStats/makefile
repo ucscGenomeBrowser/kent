@@ -8,4 +8,4 @@ O = chainStats.o
 
 chainStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainStats $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/chainStats
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainStats${EXE}

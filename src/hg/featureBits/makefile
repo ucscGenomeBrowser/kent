@@ -9,4 +9,4 @@ O = featureBits.o
 
 featureBits: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/featureBits $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/featureBits
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/featureBits${EXE}

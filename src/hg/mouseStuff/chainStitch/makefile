@@ -8,4 +8,4 @@ O = chainStitch.o
 
 chainStitch: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainStitch $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/chainStitch
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainStitch${EXE}

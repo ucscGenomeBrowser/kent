@@ -8,4 +8,4 @@ O = pslMrnaCover.o
 
 pslMrnaCover: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslMrnaCover $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslMrnaCover
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslMrnaCover${EXE}

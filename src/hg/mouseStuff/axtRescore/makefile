@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtRescore.o
 
 axtRescore: compile
-	strip $(HOME)/bin/$(MACHTYPE)/axtRescore
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtRescore${EXE}
 
 compile: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtRescore $O $(MYLIBS) $L

@@ -8,7 +8,7 @@ O = stageMultiz.o
 
 stageMultiz: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/stageMultiz $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/stageMultiz
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/stageMultiz${EXE}
 
 tags: 
 	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h

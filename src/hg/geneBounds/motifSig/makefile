@@ -8,4 +8,4 @@ O = motifSig.o ../lib/improbRunInfo.o
 
 motifSig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/motifSig $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/motifSig
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/motifSig${EXE}

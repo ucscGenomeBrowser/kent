@@ -8,4 +8,4 @@ O = axtDropSelf.o
 
 axtDropSelf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtDropSelf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtDropSelf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtDropSelf${EXE}

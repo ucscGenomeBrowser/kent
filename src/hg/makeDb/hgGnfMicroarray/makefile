@@ -8,7 +8,7 @@ O = hgGnfMicroarray.o
 
 hgGnfMicroarray: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgGnfMicroarray $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgGnfMicroarray
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgGnfMicroarray${EXE}
 
 test:
 	hgGnfMicroarray -tab=output -noLoad -limit=100 gnfHumanU95Exps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95

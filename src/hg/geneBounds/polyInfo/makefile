@@ -8,4 +8,4 @@ O = polyInfo.o
 
 polyInfo: $O $(MYLIBS) makefile
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/polyInfo $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/polyInfo
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/polyInfo${EXE}

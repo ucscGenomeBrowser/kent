@@ -13,7 +13,7 @@ all: ${BINDIR}/pslMap
 ${BINDIR}/pslMap: pslMap
 	${MKDIR} ${BINDIR}
 	cp -f pslMap ${BINDIR}
-	strip ${BINDIR}/pslMap
+	${STRIP} ${BINDIR}/pslMap${EXE}
 
 pslMap: ${OBJS} ${MYLIBS}
 	${CC} ${CFLAGS} -o pslMap ${OBJS} ${LIBS} 

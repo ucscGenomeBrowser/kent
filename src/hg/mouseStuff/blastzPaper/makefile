@@ -8,4 +8,4 @@ O = blastzPaper.o
 
 blastzPaper: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blastzPaper $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/blastzPaper
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/blastzPaper${EXE}

@@ -8,4 +8,4 @@ O = bedCoverage.o
 
 bedCoverage: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedCoverage $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/bedCoverage
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedCoverage${EXE}

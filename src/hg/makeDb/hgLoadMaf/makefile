@@ -8,7 +8,7 @@ O = hgLoadMaf.o
 
 hgLoadMaf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadMaf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadMaf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadMaf${EXE}
 
 test:
 	cd tests && ${MAKE} test

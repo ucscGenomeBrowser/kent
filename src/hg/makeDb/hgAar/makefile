@@ -1,3 +1,5 @@
+include ../../../inc/common.mk
+
 PROG = $(HOME)/bin/$(MACHTYPE)/aarToAxt
 
 $(PROG): aarToAxt

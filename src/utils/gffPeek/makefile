@@ -8,4 +8,4 @@ O = gffPeek.o
 
 gffPeek: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gffPeek $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/gffPeek
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/gffPeek${EXE}

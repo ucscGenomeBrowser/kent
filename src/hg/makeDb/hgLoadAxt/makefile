@@ -8,4 +8,4 @@ O = hgLoadAxt.o
 
 hgLoadAxt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadAxt $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadAxt
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadAxt${EXE}

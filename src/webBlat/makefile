@@ -8,7 +8,7 @@ O = webBlat.o
 
 webBlat: $O ${MYLIBS}
 	${CC} ${COPT} -o webBlat $O ${MYLIBS} $L
-	strip webBlat
+	${STRIP} webBlat${EXE}
 
 installOsX: webBlat
 	cp webBlat /Library/WebServer/CGI-Executables

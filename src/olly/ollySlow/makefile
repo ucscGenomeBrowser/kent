@@ -9,4 +9,4 @@ O = ollySlow.o
 
 ollySlow: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ollySlow $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/ollySlow
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/ollySlow${EXE}

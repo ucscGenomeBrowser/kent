@@ -8,4 +8,4 @@ O = hgLoadSample.o
 
 hgLoadSample: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadSample $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadSample
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadSample${EXE}

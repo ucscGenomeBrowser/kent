@@ -10,8 +10,8 @@ all: whyConserved trackOverlap
 
 whyConserved: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/whyConserved $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/whyConserved
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/whyConserved${EXE}
 
 trackOverlap: trackOverlap.o
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/trackOverlap trackOverlap.o $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/trackOverlap
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/trackOverlap${EXE}

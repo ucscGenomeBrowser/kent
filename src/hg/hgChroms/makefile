@@ -11,7 +11,7 @@ hgChroms: $O $(MYLIBS)
 	gcc -ggdb -o hgChroms $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f hgChroms ${BINDIR}
-	strip ${BINDIR}/hgChroms
+	${STRIP} ${BINDIR}/hgChroms${EXE}
 
 clean::
 	rm -f ${O} hgChroms ${BINDIR}/hgChroms

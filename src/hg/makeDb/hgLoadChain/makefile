@@ -9,7 +9,7 @@ O = hgLoadChain.o
 hgLoadChain: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgLoadChain \
 		$O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgLoadChain
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadChain${EXE}
 
 lib:
 	cd ../../../lib; make

@@ -8,4 +8,4 @@ O = randomEst.o
 
 randomEst: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/randomEst $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/randomEst
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/randomEst${EXE}

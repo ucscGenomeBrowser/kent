@@ -8,4 +8,4 @@ O = chainScore.o
 
 chainScore: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainScore $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/chainScore
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainScore${EXE}

@@ -8,4 +8,4 @@ O = netFilter.o
 
 netFilter: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netFilter $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netFilter
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netFilter${EXE}

@@ -8,4 +8,4 @@ O = hgMapViaSwissProt.o
 
 hgMapViaSwissProt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgMapViaSwissProt $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgMapViaSwissProt
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgMapViaSwissProt${EXE}

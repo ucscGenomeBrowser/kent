@@ -8,4 +8,4 @@ O = callGraph.o
 
 callGraph: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/callGraph $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/callGraph
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/callGraph${EXE}

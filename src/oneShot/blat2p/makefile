@@ -9,4 +9,4 @@ O = blat2p.o
 
 blat2p: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blat2p $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/blat2p
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat2p${EXE}

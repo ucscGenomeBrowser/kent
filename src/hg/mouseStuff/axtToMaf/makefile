@@ -8,4 +8,4 @@ O = axtToMaf.o
 
 axtToMaf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtToMaf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtToMaf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtToMaf${EXE}

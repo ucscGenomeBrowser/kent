@@ -8,4 +8,4 @@ O = utrFa.o
 
 utrFa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/utrFa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/utrFa
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/utrFa${EXE}

@@ -8,4 +8,4 @@ O = lineCount.o
 
 lineCount: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/lineCount $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/lineCount
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/lineCount${EXE}

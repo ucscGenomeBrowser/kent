@@ -8,4 +8,4 @@ O = hgEmblProtLinks.o
 
 hgEmblProtLinks: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgEmblProtLinks $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgEmblProtLinks
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgEmblProtLinks${EXE}

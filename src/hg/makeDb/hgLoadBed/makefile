@@ -8,4 +8,4 @@ O = hgLoadBed.o
 
 hgLoadBed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadBed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadBed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadBed${EXE}

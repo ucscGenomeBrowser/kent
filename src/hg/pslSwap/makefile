@@ -9,4 +9,4 @@ O = pslSwap.o
 
 pslSwap: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslSwap $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslSwap
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslSwap${EXE}

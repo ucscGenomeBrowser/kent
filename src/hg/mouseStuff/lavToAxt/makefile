@@ -8,4 +8,4 @@ O = lavToAxt.o
 
 lavToAxt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/lavToAxt $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/lavToAxt
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/lavToAxt${EXE}

@@ -8,4 +8,4 @@ O = chainSplit.o
 
 chainSplit: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainSplit $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/chainSplit
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainSplit${EXE}

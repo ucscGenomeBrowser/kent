@@ -8,4 +8,4 @@ O = netStats.o
 
 netStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netStats $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netStats
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netStats${EXE}

@@ -9,7 +9,7 @@ O = clusterGenes.o
 
 clusterGenes: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/clusterGenes $O $(MYLIBS) $L
-	#strip $(HOME)/bin/$(MACHTYPE)/clusterGenes
+	#${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterGenes${EXE}
 
 test::
 	(cd tests && ${MAKE} test)

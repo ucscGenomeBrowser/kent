@@ -8,4 +8,4 @@ O = hgFiberglass.o
 
 hgFiberglass: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgFiberglass $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgFiberglass
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgFiberglass${EXE}

@@ -10,7 +10,7 @@ O = hgsqldump.o
 
 hgsqldump: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/$A
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/$A${EXE}
 
 clean:
 	rm -f $O

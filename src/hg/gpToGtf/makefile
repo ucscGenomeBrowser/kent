@@ -9,4 +9,4 @@ O = gpToGtf.o
 
 gpToGtf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gpToGtf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/gpToGtf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/gpToGtf${EXE}

@@ -9,4 +9,4 @@ O = checkNt.o
 
 checkNt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkNt $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkNt
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkNt${EXE}

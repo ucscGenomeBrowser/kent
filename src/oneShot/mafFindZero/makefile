@@ -9,4 +9,4 @@ O = mafFindZero.o
 
 mafFindZero: $O $(MYLIBS)
 	gcc -ggdb -o mafFindZero $O $(MYLIBS) $L
-	strip mafFindZero
+	${STRIP} mafFindZero${EXE}

@@ -8,4 +8,4 @@ O = chainMergeSort.o
 
 chainMergeSort: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainMergeSort $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/chainMergeSort
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainMergeSort${EXE}

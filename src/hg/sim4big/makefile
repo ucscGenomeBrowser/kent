@@ -9,4 +9,4 @@ O = sim4big.o
 
 sim4big: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sim4big $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/sim4big
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/sim4big${EXE}

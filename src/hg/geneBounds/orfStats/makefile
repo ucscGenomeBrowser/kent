@@ -8,4 +8,4 @@ O = orfStats.o
 
 orfStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/orfStats $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/orfStats
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/orfStats${EXE}

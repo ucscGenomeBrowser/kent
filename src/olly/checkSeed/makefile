@@ -9,4 +9,4 @@ O = checkSeed.o
 
 checkSeed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkSeed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/checkSeed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkSeed${EXE}

@@ -9,4 +9,4 @@ O = paraTestJob.o
 
 paraTestJob: $O $(MYLIBS)
 	gcc -ggdb -o ../bin/paraTestJob $O $(MYLIBS) $L
-	strip ../bin/paraTestJob
+	${STRIP} ../bin/paraTestJob${EXE}

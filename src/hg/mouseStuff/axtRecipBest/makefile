@@ -8,7 +8,7 @@ O = axtRecipBest.o
 
 axtRecipBest: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtRecipBest $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtRecipBest
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtRecipBest${EXE}
 
 tags:  
 	ctags *.c ../../../lib/*.c ../../../inc/*.h ../../lib/*.c ../../inc/*.h

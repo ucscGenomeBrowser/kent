@@ -8,7 +8,7 @@ O = hgNearTest.o
 
 hgNearTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgNearTest $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/hgNearTest
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/hgNearTest${EXE}
 
 test:
 	hgNearTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgNear org=Yeast repeat=1 test.log

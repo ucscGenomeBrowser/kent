@@ -8,4 +8,4 @@ O = countClient.o
 
 countClient: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/countClient $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/countClient
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/countClient${EXE}

@@ -8,4 +8,4 @@ O = hgSoftPromoter.o
 
 hgSoftPromoter: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgSoftPromoter $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgSoftPromoter
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgSoftPromoter${EXE}

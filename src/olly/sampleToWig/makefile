@@ -9,4 +9,4 @@ O = sampleToWig.o
 
 sampleToWig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sampleToWig $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/sampleToWig
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/sampleToWig${EXE}

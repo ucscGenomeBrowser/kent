@@ -8,4 +8,4 @@ O = testXap.o
 
 testXap: $O $(MYLIBS)
 	gcc -ggdb -o testXap $O $(MYLIBS) $L
-	strip testXap
+	${STRIP} testXap${EXE}

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgFindSpec.o
 
 hgFindSpec: compile
-	strip $(HOME)/bin/$(MACHTYPE)/hgFindSpec
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgFindSpec${EXE}
 
 compile: $O 
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgFindSpec $O $(MYLIBS) $L

@@ -8,4 +8,4 @@ O = hgProtIdToGenePred.o
 
 hgProtIdToGenePred: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgProtIdToGenePred $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgProtIdToGenePred
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgProtIdToGenePred${EXE}

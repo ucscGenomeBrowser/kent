@@ -8,4 +8,4 @@ O = netContigs.o
 
 netContigs: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netContigs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netContigs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netContigs${EXE}

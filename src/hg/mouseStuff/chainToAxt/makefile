@@ -8,7 +8,7 @@ O = chainToAxt.o
 
 chainToAxt: $O ${MYLIBS}
 	gcc -ggdb -o ${HOME}/bin/${MACHTYPE}/chainToAxt $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/chainToAxt
+	${STRIP} ${HOME}/bin/${MACHTYPE}/chainToAxt${EXE}
 
 test: chrM
 %:	input/%.chain

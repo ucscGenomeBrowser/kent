@@ -1,3 +1,5 @@
+include ../../../inc/common.mk
+
 # copy updated scripts to bin dir
 
 SCRIPT_DIR = /cluster/bin/scripts

@@ -9,4 +9,4 @@ O = randomLines.o
 
 randomLines: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/randomLines $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/randomLines
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/randomLines${EXE}

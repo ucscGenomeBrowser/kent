@@ -8,7 +8,7 @@ O = regionPicker.o
 
 regionPicker: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/regionPicker $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/regionPicker
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/regionPicker${EXE}
 
 tags:
 	ctags *.c $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h

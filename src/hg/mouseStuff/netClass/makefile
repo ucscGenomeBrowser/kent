@@ -8,4 +8,4 @@ O = netClass.o
 
 netClass: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netClass $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netClass
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netClass${EXE}

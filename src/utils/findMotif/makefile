@@ -8,7 +8,7 @@ O = findMotif.o
 
 findMotif: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/findMotif $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/findMotif
+	${STRIP} ${HOME}/bin/${MACHTYPE}/findMotif${EXE}
 
 clean:
 	rm -f $O

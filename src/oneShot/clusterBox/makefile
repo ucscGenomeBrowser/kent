@@ -9,4 +9,4 @@ O = clusterBox.o boxClump.o
 
 clusterBox: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/clusterBox $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/clusterBox
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterBox${EXE}

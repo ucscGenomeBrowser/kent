@@ -8,7 +8,7 @@ O = mafFrag.o
 
 mafFrag: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafFrag $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafFrag
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafFrag${EXE}
 
 test:
 	mafFrag hg16 humorMm3Rn3 chr2 69065807 69073183 - test.maf

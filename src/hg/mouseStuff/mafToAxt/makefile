@@ -8,4 +8,4 @@ O = mafToAxt.o
 
 mafToAxt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafToAxt $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/mafToAxt
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToAxt${EXE}

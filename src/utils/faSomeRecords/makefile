@@ -8,4 +8,4 @@ O = faSomeRecords.o
 
 faSomeRecords: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faSomeRecords $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/faSomeRecords
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/faSomeRecords${EXE}

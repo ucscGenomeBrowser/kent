@@ -8,4 +8,4 @@ O = dupedInTable.o
 
 dupedInTable: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/dupedInTable $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/dupedInTable
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/dupedInTable${EXE}

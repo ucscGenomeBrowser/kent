@@ -9,4 +9,4 @@ X = gfClient
 
 gfClient: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/$X
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/$X${EXE}

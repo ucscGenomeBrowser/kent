@@ -9,4 +9,4 @@ O = rbTest.o
 
 rbTest: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rbTest $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rbTest
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rbTest${EXE}

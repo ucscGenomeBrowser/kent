@@ -10,7 +10,7 @@ O = pslReps.o
 
 pslReps: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/pslReps $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslReps
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslReps${EXE}
 
 lib:
 	cd ../../lib; make

@@ -8,4 +8,4 @@ O = emblMatrixToMotif.o
 
 emblMatrixToMotif: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif${EXE}

@@ -8,4 +8,4 @@ O = genePredToGtf.o
 
 genePredToGtf: $O $(MYLIBS) makefile
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/genePredToGtf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/genePredToGtf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/genePredToGtf${EXE}

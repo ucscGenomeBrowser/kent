@@ -9,4 +9,4 @@ O = broadHub.o
 
 broadHub: $O $(MYLIBS)
 	gcc -ggdb -o ../bin/broadHub $O $(MYLIBS) $L
-	strip ../bin/broadHub
+	${STRIP} ../bin/broadHub${EXE}

@@ -8,7 +8,7 @@ O = spTest.o
 
 spTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/spTest $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/spTest
+	${STRIP} ${HOME}/bin/${MACHTYPE}/spTest${EXE}
 
 test: 
 	${MKDIR} output

@@ -9,4 +9,4 @@ O = parasol.o
 
 parasol: $O $(MYLIBS)
 	gcc -o ../bin/parasol $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
-	strip ../bin/parasol
+	${STRIP} ../bin/parasol${EXE}

@@ -8,7 +8,7 @@ O = blat.o
 
 blat: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/blat
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat${EXE}
 
 all:
 	cd ../lib; make

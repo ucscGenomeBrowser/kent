@@ -8,7 +8,7 @@ O = smoothWindow.o
 
 smoothWindow: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/smoothWindow $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/smoothWindow
+	${STRIP} ${HOME}/bin/${MACHTYPE}/smoothWindow${EXE}
 
 clean:
 	rm -f $O

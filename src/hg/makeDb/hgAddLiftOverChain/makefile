@@ -9,5 +9,5 @@ A = hgAddLiftOverChain
 
 hgAddLiftOverChain: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 

@@ -8,7 +8,7 @@ O = cJoinX.o
 
 cJoinX: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/cJoinX $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/cJoinX
+	${STRIP} ${HOME}/bin/${MACHTYPE}/cJoinX${EXE}
 
 clean:
 	rm -f $O

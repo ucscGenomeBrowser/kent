@@ -9,4 +9,4 @@ O = borfBig.o
 
 borfBig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/borfBig $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/borfBig
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/borfBig${EXE}

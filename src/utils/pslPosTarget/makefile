@@ -8,4 +8,4 @@ O = pslPosTarget.o
 
 pslPosTarget: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPosTarget $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslPosTarget
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPosTarget${EXE}

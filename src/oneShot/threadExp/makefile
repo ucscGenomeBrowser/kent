@@ -9,4 +9,4 @@ O = threadExp.o
 
 threadExp: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/threadExp $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/threadExp
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/threadExp${EXE}

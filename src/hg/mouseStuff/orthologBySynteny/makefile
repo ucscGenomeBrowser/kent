@@ -8,4 +8,4 @@ O = orthologBySynteny.o
 
 orthologBySynteny: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/orthologBySynteny $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/orthologBySynteny
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/orthologBySynteny${EXE}

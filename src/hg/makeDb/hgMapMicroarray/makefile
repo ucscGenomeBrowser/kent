@@ -8,7 +8,7 @@ O = hgMapMicroarray.o
 
 hgMapMicroarray: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgMapMicroarray $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgMapMicroarray
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgMapMicroarray${EXE}
 
 clean:
 	rm -f $O

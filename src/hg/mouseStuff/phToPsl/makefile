@@ -8,4 +8,4 @@ O = phToPsl.o
 
 phToPsl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/phToPsl $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/phToPsl
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/phToPsl${EXE}

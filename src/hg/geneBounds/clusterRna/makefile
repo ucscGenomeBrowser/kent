@@ -8,7 +8,7 @@ O = clusterRna.o
 
 clusterRna: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/clusterRna $O $(MYLIBS) $L
-#strip $(HOME)/bin/$(MACHTYPE)/clusterRna
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterRna${EXE}
 
 tags:
 	ctags *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h

@@ -8,4 +8,4 @@ O = hgLoadBlastTab.o
 
 hgLoadBlastTab: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab${EXE}

@@ -1,3 +1,4 @@
+include ../../../inc/common.mk
 
 # For performance
 #.c.o:
@@ -16,7 +17,7 @@ A = hgMrnaRefseq
 O = $A.o
 
 all: compile
-	strip $A
+	${STRIP} $A${EXE}
 	mv $A $$HOME/bin/$(MACHTYPE)/$A
 
 compile: $O 

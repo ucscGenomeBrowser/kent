@@ -8,4 +8,4 @@ O = axtPretty.o
 
 axtPretty: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtPretty $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtPretty
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtPretty${EXE}

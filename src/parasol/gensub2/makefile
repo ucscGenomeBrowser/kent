@@ -10,4 +10,4 @@ O = gensub2.o
 gensub2: $O $(MYLIBS)
 	${MKDIR} ../bin
 	gcc -ggdb -o ../bin/gensub2 $O $(MYLIBS) $L
-	strip ../bin/gensub2
+	${STRIP} ../bin/gensub2${EXE}

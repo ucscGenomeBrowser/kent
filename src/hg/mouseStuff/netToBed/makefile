@@ -8,4 +8,4 @@ O = netToBed.o
 
 netToBed: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netToBed $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netToBed
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/netToBed${EXE}

@@ -8,4 +8,4 @@ O = rnaFoldBig.o
 
 rnaFoldBig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rnaFoldBig $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/rnaFoldBig
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/rnaFoldBig${EXE}

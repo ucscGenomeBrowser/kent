@@ -8,7 +8,7 @@ O = twoBitToFa.o
 
 twoBitToFa: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/twoBitToFa $O ${MYLIBS} $L
-	#strip ${HOME}/bin/${MACHTYPE}/twoBitToFa
+	#${STRIP} ${HOME}/bin/${MACHTYPE}/twoBitToFa${EXE}
 
 clean:
 	rm -f $O

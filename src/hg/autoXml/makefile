@@ -9,4 +9,4 @@ O = autoXml.o
 
 autoXml: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS)
-#	strip $(HOME)/bin/$(MACHTYPE)/autoXml
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/autoXml${EXE}

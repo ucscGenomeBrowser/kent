@@ -10,4 +10,4 @@ O = simpleChain.o
 simpleChain: $O $(MYLIBS)
 	$(CC) -static -o simpleChain $O $(MYLIBS) $L
 	cp -f simpleChain $(BINDIR)
-#	strip $(BINDIR)/simpleChain
+#	${STRIP} $(BINDIR)/simpleChain${EXE}

@@ -8,7 +8,7 @@ O = faAlign.o
 
 faAlign: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faAlign $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/faAlign
+	${STRIP} ${HOME}/bin/${MACHTYPE}/faAlign${EXE}
 
 clean:
 	rm -f $O

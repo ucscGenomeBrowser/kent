@@ -9,4 +9,4 @@ O = endsInLf.o
 
 endsInLf: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/endsInLf $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/endsInLf
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/endsInLf${EXE}

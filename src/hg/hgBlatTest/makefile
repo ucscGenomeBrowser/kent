@@ -8,7 +8,7 @@ O = hgBlatTest.o
 
 hgBlatTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgBlatTest $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/hgBlatTest
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/hgBlatTest${EXE}
 
 test:
 	hgBlatTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgBlat test.log org=human db=hg16 type=DNA sort=score output=psl repeat=1 

@@ -8,7 +8,7 @@ O = netToAxt.o
 
 ${HOME}/bin/${MACHTYPE}/netToAxt: $O ${MYLIBS}
 	${CC} ${COPTS} -o ${HOME}/bin/${MACHTYPE}/netToAxt $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/netToAxt
+	${STRIP} ${HOME}/bin/${MACHTYPE}/netToAxt${EXE}
 
 clean:
 	rm -f ${O}

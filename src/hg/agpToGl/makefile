@@ -9,4 +9,4 @@ O = agpToGl.o
 
 agpToGl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/agpToGl $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/agpToGl
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/agpToGl${EXE}

@@ -11,7 +11,7 @@ embossToPsl: $O $(MYLIBS)
 	${CC} -ggdb -o embossToPsl $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f embossToPsl ${BINDIR}
-	strip ${BINDIR}/embossToPsl
+	${STRIP} ${BINDIR}/embossToPsl${EXE}
 
 test:: embossToPsl
 	cd tests && ${MAKE} test

@@ -8,4 +8,4 @@ O = jabba.o jobDb.o
 
 jabba: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/jabba $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/jabba
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/jabba${EXE}

@@ -8,4 +8,4 @@ O = ggcPic.o
 
 ggcPic: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ggcPic $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/ggcPic
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/ggcPic${EXE}

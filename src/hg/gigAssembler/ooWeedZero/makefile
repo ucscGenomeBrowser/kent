@@ -9,4 +9,4 @@ O = ooWeedZero.o
 
 ooWeedZero: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ooWeedZero $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/ooWeedZero
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooWeedZero${EXE}

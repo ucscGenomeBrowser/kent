@@ -10,6 +10,6 @@ O = wikiPlot.o
 wikiPlot: $O $(MYLIBS)
 	gcc $O $(MYLIBS) $L
 	mv a.out wikiPlot
-	strip wikiPlot
+	${STRIP} wikiPlot${EXE}
 	chmod a+rx wikiPlot
 	mv wikiPlot $(HGCGI)

@@ -8,5 +8,5 @@ O = pslOoJobs.o
 
 pslOoJobs: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/pslOoJobs $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslOoJobs
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslOoJobs${EXE}
 

@@ -8,4 +8,4 @@ O = splitNcbiFa.o
 
 splitNcbiFa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/splitNcbiFa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/splitNcbiFa
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/splitNcbiFa${EXE}

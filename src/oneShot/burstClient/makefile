@@ -8,4 +8,4 @@ O = burstClient.o
 
 burstClient: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/burstClient $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/burstClient
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/burstClient${EXE}

@@ -8,7 +8,7 @@ O = hgMedianMicroarray.o
 
 hgMedianMicroarray: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray${EXE}
 
 test:
 	hgMedianMicroarray ce1 kimLifeCycle kimWormLifeCycle kimMed.ra kimLifeCycleMedian kimWormLifeCycleMedian -tab=output -noLoad -limit=500

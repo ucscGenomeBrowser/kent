@@ -8,4 +8,4 @@ O = bedCons.o
 
 bedCons: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedCons $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/bedCons
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedCons${EXE}

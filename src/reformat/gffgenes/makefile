@@ -7,7 +7,7 @@ O = gffgenes.o
 ${HOME}/bin/${MACHTYPE}/gffgenes: ${O}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/gffgenes $O \
 		../../lib/${MACHTYPE}/jkweb.a
-	strip ${HOME}/bin/${MACHTYPE}/gffgenes
+	${STRIP} ${HOME}/bin/${MACHTYPE}/gffgenes${EXE}
 
 clean:
 	rm -f ${O}

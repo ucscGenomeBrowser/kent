@@ -8,4 +8,4 @@ O = somePsls.o
 
 somePsls: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/somePsls $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/somePsls
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/somePsls${EXE}

@@ -8,4 +8,4 @@ O = hgLoadEranModules.o esMotif.o
 
 hgLoadEranModules: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadEranModules $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgLoadEranModules
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadEranModules${EXE}

@@ -12,7 +12,7 @@ A = convolve
 
 $A: $O ${MYLIBS}
 	gcc -ggdb -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 test:
 	cd tests && ./runtest

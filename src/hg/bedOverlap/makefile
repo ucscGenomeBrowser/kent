@@ -9,7 +9,7 @@ O = bedOverlap.o
 
 bedOverlap: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedOverlap $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/bedOverlap
+#	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedOverlap${EXE}
 
 test:	test2 test4
 %:	input/%.bed
