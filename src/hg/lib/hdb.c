@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.195 2004/07/14 21:10:50 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.196 2004/07/18 01:07:51 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2267,15 +2267,52 @@ if (sameString(db, hGetDb()))
     return hChromSize(chromName);
 else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     return hChromSize2(chromName);
-return 0;
+else
+    {
+    warn("hdbChromSize not handling this case well");
+    return 0;
+    }
 }
-void hFindDefaultChrom(char *db, char defaultChrom[64])
-/* Find chromosome to use if none specified. */
+
+char *hFindDefaultChrom(char *db, char defaultChrom[64])
+/* Find chromosome to use if none specified.  This will cashe
+ * db's though I'm not totally convinced it's necessary. */
 {
-if (sameString(db, hGetDb()))
+static struct hash *hash;
+char *ret = NULL, *s;
+if (hash == NULL)
+    hash = newHash(8);
+s = hashFindVal(hash, db);
+if (s != NULL)
+    {
+    strncpy(defaultChrom, s, 64);
+    ret = defaultChrom;
+    }
+else if (sameString(db, hGetDb()))
+    {
     strncpy(defaultChrom, getDefaultChrom(), 64);
-else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
-    strncpy(defaultChrom, getDefaultChrom2(), 64);
+    hashAdd(hash, db, cloneString(defaultChrom));
+    ret = defaultChrom;
+    }
+else 
+    {
+    struct sqlConnection *conn = sqlConnect(db);
+    char *ret = NULL;
+    if (sqlTableExists(conn, "chromInfo"))
+        {
+	ret = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			     defaultChrom, 64);
+	if (ret != NULL)
+	    hashAdd(hash, db, cloneString(defaultChrom));
+	}
+    else
+	{
+	defaultChrom[0] = 0;
+	ret = NULL;
+	}
+    sqlDisconnect(&conn);
+    }
+return ret;
 }
 
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
