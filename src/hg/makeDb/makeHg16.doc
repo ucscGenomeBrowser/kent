@@ -1011,6 +1011,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
      hgsql hg16  < ~/kent/src/hg/lib/gcPercent.sql
      hgGcPercent hg16 ../../nib
 
+
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE - 2003-07-31 - Hiram)
     ssh hgwdev
     # Substitute BBB with the correct number for the hostname:
@@ -2761,6 +2762,15 @@ EOF
     gzip *
     # edit downloads page to add linke to humorMm3Rn3
 
+    # add pairwise mafs to downloads page (2003-11-25 kate)
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
+    mkdir $dir/{rn3,mm3}
+    cd /cluster/data/hg16/bed/humor/maf
+    cp *.mm3.maf $dir/mm3
+    cp *.rn3.maf $dir/rn3
+    gzip $dir/mm3/*
+    gzip $dir/rn3/*
+
     # Create upstream files
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
@@ -4020,7 +4030,7 @@ end
     mkdir -p /gbdb/hg16/$table
     cd /gbdb/hg16/$table
     ln -s /cluster/data/hg16/bed/nisc/cftr/tba25.maf tba.maf
-    cd /cluster/data/hg16/bed/nisc/cftr/25way
+    cd /cluster/data/hg16/bed/nisc/cftr
     /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
         # 22267 rows
         # 24 warnings
@@ -4961,6 +4971,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # hgTracks.c needed to be updated to recognize syntenyMm4 so it
     # would color properly.
 
+
 # TIGR GENE INDEX (DONE 2003-11-10 kate)
     mkdir -p /cluster/data/hg16/bed/tigr    
     cd /cluster/data/hg16/bed/tigr  
@@ -5106,6 +5117,72 @@ o - Load genomic dupes
     hgsql -e \
 	'update genomicDups set name = concat(otherChrom,":",otherStart);' \
 	hg16
+
+# LOAD CHIMP NET (2003-11-20 kate)
+# NOTE: Net preparation doc'ed in makePt0.doc
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
+    netFilter -minGap=10 chimpSyn.net | hgLoadNet hg16 syntenyNetPt0 stdin
+
+
+# CHIMP BEST CHAINS, IN CHROMOSOME COORDINATES (2004-02-25 kate)
+#       NOTE: start with scaffold-based human-reference reciprocal best chains 
+#       doc'ed in makePt0.doc, then lift using scaffold lift file in panTro1
+    ssh kksilo
+    mkdir -p /cluster/data/hg16/bed/blastz-blat.panTro1
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    liftUp -chainQ best.chain \
+        /cluster/data/panTro1/jkStuff/scaffolds.lft \
+        warn /cluster/data/pt0/bed/blastz-blatHg16/human.best.chain
+    chainSplit bestChain best.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1/bestChain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain hg16 ${c}_bestChainPanTro1 $i
+    end
+
+# CHIMP ALL CHAINS, IN CHROMOSOME COORDINATES (2004-02-25 kate)
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    liftUp -chainQ all.chain \
+        /cluster/data/panTro1/jkStuff/scaffolds.lft \
+        warn /cluster/data/pt0/bed/blastz-blatHg16/all.chain
+    chainSplit chain all.chain
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg16 ${c}_chainPanTro1 $i
+        echo done $c
+    end
+
+# CHIMP RECIPRCAL BEST NET, IN CHROMOSOME COORDS (kate)
+#    Redo the netting on chrom-based chain files
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+     ~/bin/x86_64/chainNet all.chain -minSpace=10 \
+        /cluster/data/hg16/chrom.sizes /cluster/data/panTro1/chrom.sizes \
+        human.net chimp.net
+
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    chainSwap all.chain all.swap.chain
+    ~/bin/i386/netChainSubset chimp.net all.swap.chain stdout | \
+        chainSort stdin chimpNet.chain
+
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    ~/bin/x86_64/chainNet all.chain -minSpace=10 \
+        /cluster/data/hg16/chrom.sizes /cluster/data/panTro1/chrom.sizes \
+        human.net chimp.net
+
+
 
 # UPDATE WOODY BINARIES (see PHYLOHMM CONSERVATION entries below)
 # done, acs, 2003-11-19
@@ -5876,7 +5953,7 @@ EOF
     	/cluster/data/pt0/scaffolds.qac chimpSimpleDiff.bed
     sed 's/simpleNucDiff/chimpSimpleDiff/' ~/kent/src/hg/lib/simpleNucDiff.sql > \
     	chimpSimpleDiff.sql
-    hgLoadBed -sqlTable=simpleNucDiff.sql hg166 chimpSimpleDiff.bed
+    hgLoadBed -sqlTable=simpleNucDiff.sql hg16 chimpSimpleDiff.bed
     
 #  gc5Base wiggle TRACK (WORKING - 2004-01-15 - Hiram)
     # a demonstration wiggle track.  Perform a gc count with a 5 base
@@ -6462,6 +6539,20 @@ axtFilter -notQ=chrUn $1 \
      hgPepPred hg16 softberry fgenesh_jul03/*.protein
      hgSoftberryHom hg16 fgenesh_jul03/*.protein
 
+<<<<<<< makeHg16.doc
+
+# CHIMP (panTro1) ALIGNMENTS (2004-02-12 kate)
+
+    # lift scaffold-based reciprocal best chains to chrom coordinates
+    ssh eieio
+    mkdir -p bed/blastz-blat.panTro1
+    cd bed/blastz-blat.panTro1
+    cp /cluster/data/pt0/bed/blastz-blatHg16/human.best.chain \
+                                        best.scaffolds.chain
+    cp /cluster/data/panTro1/jkStuff/scaffolds.lft scaffolds.lft
+    ~kate/bin/i386/liftUp -chainQ best.chain scaffolds.lft \
+                                        warn best.scaffolds.chain
+
 #Make a track from Tarjei's chimp deletions file (2/12/04)
 #  80-12000 bp indels in human/chimp alignments
 
@@ -6499,7 +6590,12 @@ axtFilter -notQ=chrUn $1 \
     #add a track entry to trackDb.ra 
     # in ~/kent/src/hg/makeDb/trackDb/human/hg16
 
+<<<<<<< makeHg16.doc
+
+#	FAMILY BROWSER UPDATE	(WORKING - 2004-02-17 - Hiram)
+=======
 #	FAMILY BROWSER UPDATE	(DONE - 2004-02-17 - Hiram)
+>>>>>>> 1.119
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -6947,6 +7043,9 @@ hgLoadBlastTab hg16 dmBlastTab -maxPer=1 *.tab
 # Scanning through 7748 files
 # Loading database with 28645 rows
 #	row count went from 27173 to 28645
+<<<<<<< makeHg16.doc
+>>>>>>> 1.112
+=======
 
 LOAD SNPS (Done.  Daryl Thomas; February 18, 2004)
     # SNP processing has been condensed into a single script,
@@ -6990,6 +7089,7 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
 
     # remove temp files
     # rm dbSnpRs*
+
 
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
@@ -7134,6 +7234,181 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
       netChainSubset net/$f:t:r.net $f subset/$f:t
     end
     cat subset/*.chain > /cluster/data/hg16/bed/bedOver/hg16TogalGal2.chain
+
+
+# HUMAN/MOUSE/RAT/CHICKEN (HMRG) PHYLOHMM CONSERVATION (IN PROGRESS 2004-03-8 kate)
+
+# Set path
+
+    set path = ($path /cluster/bin/woody)
+
+# Create "sufficient statistics" (SS) file from maf
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
+    mkdir phyloHMM
+    cd phyloHMM
+    # create script to run msa_view.  Use whole chrom (1-chrom.size),
+    # except subtract 1 from end coord, as msa_view's check for length
+    # appears off-by-one
+        #set len = `awk "/$c\t/"'{print $2 - 1}' /cluster/data/hg16/chrom.sizes`
+cat > makeSS.csh << 'EOF'
+    set path = ($path /cluster/bin/woody)
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg
+    foreach f (chr*.maf)
+        set c = $f:r
+        echo "$c"
+        msa_view $f -i MAF -o SS -s 1 -r 1 -O hg16,mm3,rn3,galGal2 > \
+                                ../phyloHMM/$c.ss
+    end
+'EOF'
+    # NOTE: -s and -r options above are not necessary (from Adam).
+
+    csh makeSS.csh >&! makeSS.log &
+    tail -100f makeSS.log
+
+    head phyloHMM/chr1.ss
+        #NSEQS = 4
+        #LENGTH = 259637508
+        #TUPLE_SIZE = 1
+        #NTUPLES = 823
+        #NAMES = hg16,mm3,rn3,galGal2
+        #ALPHABET = ACGTN
+        #NCATS = -1
+        #0       CCC-    7599887
+        #1       TTT-    11532895
+
+
+# Obtain phylogenetic model (hmrc_rev_dg.mod)
+# from Adam (hand-tuned, instead of fit_model)
+# then, create New Hampshire tree for data (.nh file)
+
+    cat hmrc_rev_dg.mod
+        #ALPHABET: A C G T
+        #ORDER: 0
+        #SUBST_MOD: REV
+        #NRATECATS: 10
+        #ALPHA: 4.4
+        #BACKGROUND: 0.286083 0.213573 0.213691 0.286652
+        #RATE_MAT:
+          #-0.891523    0.166770    0.574850    0.149902
+           #0.223389   -1.146311    0.153784    0.769137
+           #0.769591    0.153699   -1.147159    0.223869
+           #0.149605    0.573055    0.166888   -0.889548
+        #TREE: ((1:0.192598,(2:0.076303,3:0.083043):0.192598):0.47,4:0.47);
+
+
+    /cluster/data/woody/scripts/extract-tree.pl human,mouse,rat,chicken \
+                                hmrc_rev_dg.mod
+#((human:0.192598,(mouse:0.076303,rat:0.083043):0.192598):0.47,chicken:0.47);
+
+    echo "((1(2,3)),4)" > hmrg.nh
+
+# Compute posterior probabilies with phylo HMM algorithm, using woody/label
+# -L 0.9   sets lambda autocorrelation value
+# -A       automatically determine rate constants
+# -p 0     compute probabilities for state 0
+# -j 1     reference frame is first sequence (unnecessary ?)
+# -x       omit blocks with only the reference sequence
+
+    ssh eieio
+    set path = ($path /cluster/bin/woody)
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
+    cd phyloHMM
+
+    # now, break up the genome-wide MAFs into pieces; it's worth doing
+    # this as a little cluster job
+    # NOTE: using the hg16 chr fasta files stashed on bluearc for hg16 humor run
+    ssh eieio
+    mkdir -p /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3galGal2
+    cp /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg/*.maf /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3galGal2
+    ssh kk
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    
+    cat << 'EOF' > doSplit
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+FA_SRC=/cluster/bluearc/hg16/bed/humor
+WINDOWS=/cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM/WINDOWS
+
+maf=$1
+c =`basename $maf .maf`
+echo $c
+mkdir -p /scratch/msa_split
+${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg16,mm3,rn3,galGal2 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -d 1 -B 5000
+cd /scratch/msa_split
+for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+rm -f /scratch/msa_split/$c.*.ss
+'EOF'
+    chmod +x doSplit
+    mkdir -p WINDOWS
+    rm -f WINDOWS/* jobs.lst
+    foreach file (/cluster/bluearc/hg16/bed/humor/*.maf) 
+	echo "doSplit $$file" >> jobs.lst
+    end
+    para create jobs.lst  
+
+    # now setup and run the cluster job to compute the conservation scores
+cat << 'EOF' > doPostProbs
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+TMP=/scratch/phyloHMMcons
+
+file=$1
+root=`basename $file .ss.gz`
+chrom=`echo $root | awk -F\. '{print $1}'`
+echo $chrom
+
+mkdir -p $TMP
+zcat $file | $WOODY/label -m - -d hmrc_rev_dg.mod -i SS -o $TMP/$root -k 10 -L 0.9 -A -p 0 -j 1 -s $chrom -x
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.postprob > POSTPROBS/$chrom/$root.postprob.gz
+rm $TMP/$root.postprob
+'EOF'
+    chmod +x doPostProbs
+
+    mkdir -p POSTPROBS
+    rm -f jobs2.lst 
+    foreach file (WINDOWS/chr*.ss.gz) 
+	echo "doPostProbs $file" >> jobs2.lst 
+    end
+    para create jobs2.lst
+    # etc ... (run cluster job)
+
+    # Create wiggle (.wib) file using and load into database
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    mkdir wibLimits
+    mkdir wib
+    foreach dir (POSTPROBS/*)
+	set chrom = $dir:t
+	echo $chrom 
+	zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
+	    wigAsciiToBinary -chrom=$chrom -binsize=1024 \
+		-dataSpan=1 -wibFile=wib/${chrom}_hmrg_phyloHMM -name=hmrg \
+		stdin > wibLimits/${chrom}
+    end
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    hgLoadWiggle hg16 multizMm3Rn3GalGal_phyloHMM_wig wib/*_hmrg_phyloHMM.wig 
+    ln -s `pwd`/wib/chr*_hmrg_phyloHMM.wib /gbdb/hg16/wib 
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+
+    # setup external files for database reference
+    # reuse mafs loaded in the maf track (just symlink the /gbdb dir before
+    # loading
+    ssh hgwdev
+    ln -s /gbdb/hg16/multizMm3Rn3GalGal2 /gbdb/hg16/multizMm3Rn3GalGal2_phyloHMM
+    # load into database
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    /cluster/bin/i386/hgLoadMaf -warn hg16 multizMm3Rn3GalGal2_phyloHMM
+    # create trackDb entry
+    # track multizMm3Rn3GalGal2_phyloHMM
+    # type wigMaf 0.0 1.0
+    # wiggle multizMm3Rn3GalGal2_phyloHMM_wig
+    # etc.
 
 
 #  miRNA track (DONE - 2004-03-02 - Hiram)
