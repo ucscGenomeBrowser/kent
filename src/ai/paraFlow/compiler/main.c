@@ -125,8 +125,15 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 void initVars(struct pfParse *pp)
 /* Convert pptVarDec to pptVarInit. */
 {
+struct pfParse *p;
+
+for (p = pp->children; p != NULL; p = p->next)
+    initVars(p);
 if (pp->type == pptVarDec)
+    {
     pp->type = pptVarInit;
+    pp->name = pp->children->next->name;
+    }
 else if (pp->type == pptAssignment)
     {
     struct pfParse *left = pp->children;
@@ -139,8 +146,84 @@ else if (pp->type == pptAssignment)
 	slAddTail(&pp->children, right);
 	}
     }
+}
+
+void evalTypes(struct pfParse *pp)
+/* Go through and fill in pp->ct field on type
+ * expressions. */
+{
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    evalTypes(p);
+switch (pp->type)
+    {
+    case pptVarDec:
+    	internalErr();
+	break;
+    case pptVarInit:
+	{
+	uglyf("evalType pptVarInit\n");
+	struct pfParse *type = pp->children;
+	pp->ct = type->ct;
+	break;
+	}
+    case pptOf:
+        {
+	struct pfParse *type = pp->children;
+	uglyf("evalType pptOf\n");
+#ifdef SOON
+	pp->ct = type->ct;
+	while (type != NULL)
+	     {
+	     struct pfParse *nextType = type->next;
+	     if (nextType != NULL)
+	          type->ct->next = nextType->ct;
+	     }
+#endif /* SOON */
+	break;
+	}
+    case pptNameUse:
+        {
+	struct pfBaseType *bt = pfScopeFindType(pp->scope, pp->name);
+	uglyf("nameUse pptOf\n");
+	if (bt != NULL)
+	    {
+	    struct pfCollectedType *ct;
+	    AllocVar(ct);
+	    ct->base = bt;
+	    pp->ct = ct;
+	    }
+	break;
+	}
+    }
+}
+
+void addDeclaredVarsToScopes(struct pfParse *pp)
+/* Go through and put declared variables into symbol table
+ * for scope. */
+{
+switch (pp->type)
+    {
+    case pptVarDec:
+    	internalErr();
+	break;
+    case pptVarInit:
+	{
+	struct pfParse *type = pp->children;
+	struct pfParse *name = type->next;
+	struct pfParse *initVal = name->next;
+	if (hashLookup(pp->scope->vars, name->name))
+	    errAt(pp->tok, "%s redefined", name->name);
+	pfScopeAddVar(pp->scope, name->name, type->ct);
+	break;
+	}
+    case pptToDec:
+    case pptParaDec:
+    case pptFlowDec:
+        break;
+    }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    initVars(pp);
+    addDeclaredVarsToScopes(pp);
 }
 
 static void rParseCount(int *pCount, struct pfParse *pp)
@@ -202,10 +285,12 @@ slAddHead(&program->children, pp);
 slReverse(&program->children);
 
 initVars(program);
+evalTypes(program);
+addDeclaredVarsToScopes(program);
 
 pfParseDump(program, 0, stdout);
 
-printf("%d modules, %d token, %d parse\n",
+printf("%d modules, %d tokens, %d parseNodes\n",
 	tkz->modules->elCount, tkz->tokenCount, pfParseCount(program));
 printScopeInfo(0, program);
 }

@@ -175,6 +175,17 @@ switch (tok->type)
     }
 }
 
+static void ctToFile(struct pfCollectedType *ct, FILE *f)
+/* Write out info on ct to file. */
+{
+while (ct != NULL)
+    {
+    fprintf(f, "%s", ct->base->name);
+    if (ct->next != NULL)
+        fprintf(f, " of ");
+    ct = ct->next;
+    }
+}
 
 void pfParseDump(struct pfParse *pp, int level, FILE *f)
 /* Write out pp (and it's children) to file at given level of indent */
@@ -182,6 +193,11 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f)
 struct pfParse *child;
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
+if (pp->ct != NULL)
+    {
+    fprintf(f, " ");
+    ctToFile(pp->ct, f);
+    }
 if (pp->name != NULL)
     fprintf(f, " %s", pp->name);
 switch (pp->type)

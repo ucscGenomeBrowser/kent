@@ -22,7 +22,7 @@ struct pfVar
      {
      char *name;			/* Name (not allocated here) */
      struct pfScope *scope;		/* Scope we're declared in. */
-     struct pfCollectedType *type;	/* Variable type. */
+     struct pfCollectedType *ct;	/* Variable type. */
      };
 
 struct pfTokenizer;

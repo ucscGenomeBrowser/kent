@@ -44,7 +44,7 @@ struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollecte
 struct pfVar *var;
 AllocVar(var);
 var->scope = scope;
-var->type = ct;
+var->ct = ct;
 hashAddSaveName(scope->vars, name, var, &var->name);
 return var;
 }
