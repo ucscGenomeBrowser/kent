@@ -12,34 +12,36 @@ HOW TO BUILD A ASSEMBLY FROM NCBI FILES
 NOTE: It is best to run most of this stuff on kkstore since it
 is not adverse to handling files > 2Gb
 
-0) Make gs.XX directory, gs.XX/buildXX directory, and gs.XX/ffa directory.
+0) Make gs.14 directory, gs.14/build31 directory, and gs.14/ffa directory.
    Make a symbolic link from /cluster/store1 to this location
 	
 	cd /cluster/store1
-	ln -s (actual location)/gs.13 ./gs.13
+	ln -s (actual location)/gs.14 ./gs.14
 
    Make a symbolic link from your home directory to the build dir:
 
-	ln -s /cluster/store1/gs.13/build30 ~/oo
+	ln -s /cluster/store1/gs.14/build31 ~/oo
 
-1) Download seq_contig.md, sequence.inf, ncbi_buildXX.agp, contig_overlaps.agp 
-and contig fa file into gs.XX/buildXX/ directory. 
+1) Download seq_contig.md, ncbi_build31.agp, contig_overlaps.agp 
+and contig fa file into gs.14/build31 directory. 
+
+Download sequence.inf and ncbi_build31.fa files into gs.14/ffa, and unzip
+ncbi_build31.fa.
 
 *** For build31, files split into reference.agp/reference.fa (main O&O), DR51.agp/DR51.fa,
     and DR52.agp/DR52.fa. (alternate versions of MHC region).  These were concatenated 
-    to get the ncbi_build30.agp and ncbi_build30.fa
+    to get the ncbi_build31.agp and ncbi_build31.fa
 
-2) Move and unpack contig fa file into ../ffa/ncbi_buildXX.fa
-
-2.3) Sanity check things with (in this directory)
-        ~kent/bin/i386/checkYbr ncbi_buildXX.agp ../ffa/ncbi_buildXX.fa seq_contig.md
+2) Sanity check things with 
+     /cluster/bin/i386/checkYbr build31/ncbi_build31.agp ffa/ncbi_build31.fa build31/seq_contig.md
      report any errors back to Richa and Greg at NCBI.
 
 3) Convert fa files into UCSC style fa files and place in "contigs" directory
-   inside the gs.XX/buildXX directory 
+   inside the gs.14/build31 directory 
 
+	cd build31
 	mkdir contigs
-	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_buildXX.fa contigs
+	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_build31.fa contigs
 
 3.1) Make a fake chrM contig
 cd ~/oo
@@ -54,7 +56,7 @@ cp chrM.fa NT_999999/NT_999999.fa
 
 5) Create contig agp files (will create contig directory structure)
 	
-	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_buildXX.agp .
+	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build31.agp .
 
 5.1) Create contig gl files
 
@@ -66,12 +68,12 @@ cp chrM.fa NT_999999/NT_999999.fa
 
 6.1) Copy over jkStuff
 	mkdir jkStuff
-        cp /cluster/store1/gs.12/build29/jkStuff/*.sh jkStuff
-        cp /cluster/store1/gs.12/build29/jkStuff/*.csh jkStuff
-        cp /cluster/store1/gs.12/build29/jkStuff/*.gsub jkStuff        
+        cp /cluster/store1/gs.13/build30/jkStuff/*.sh jkStuff
+        cp /cluster/store1/gs.13/build30/jkStuff/*.csh jkStuff
+        cp /cluster/store1/gs.13/build30/jkStuff/*.gsub jkStuff        
 
 6.2) Patch in size of chromosome Y into Y/lift/ordered.lft 
-     by grabbing it from the last line of Y/chrY.agp (not needed for build30)
+     by grabbing it from the last line of Y/chrY.agp (not needed for build31)
 
 6.3) Create chromosome gl files
   
@@ -81,9 +83,10 @@ cp chrM.fa NT_999999/NT_999999.fa
    are in "contigs" directory).
 
 	/cluster/bin/scripts/distNcbiCtgFa contigs .
+	rm -r contigs
 
 8) Reverse complement NT contig fa files that are flipped in the assembly
-   (uses faRc program)
+   (uses faRc program) (not needed for build31)
 
 	/cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
@@ -119,11 +122,11 @@ done after repeat masking and distributing to cluster nodes)
         rm -f RMRun/RMJobs
         touch RMRun/RMJobs
         foreach d ( ?{,?}/NT_* )
-          foreach f ( /cluster/store3/gs.13/build30/$d/NT_*_*.fa )
+          foreach f ( /cluster/store1/gs.14/build31/$d/NT_*_*.fa )
             set f = $f:t
             echo /cluster/bin/scripts/RMLocalSens \
-                 /cluster/store3/gs.13/build30/$d $f \
-                '{'check out line+ /cluster/store3/gs.13/build30/$d/$f.out'}' \
+                 /cluster/store1/gs.14/build31/$d $f \
+                '{'check out line+ /cluster/store1/gs.14/build31/$d/$f.out'}' \
               >> RMRun/RMJobs
           end
         end
@@ -165,8 +168,8 @@ done after repeat masking and distributing to cluster nodes)
       $nt given in seq_contig.md).  
         mv $chr/$nt/$nt.fa.out.bak $chr/$nt/$nt.fa.out
 
-     For build 30, the following were checked:
-     1/NT_004321, Y/NT_025975, 11/NT_033237
+     For build 31, the following were checked:
+     <1/NT_004321, Y/NT_025975, 11/NT_033237> (TODO)
 
 11) Generate contig and chromosome level masked and unmasked files via:
        tcsh jkStuff/chrFa.sh
@@ -177,9 +180,9 @@ done after repeat masking and distributing to cluster nodes)
 
         ssh kkstore
 	cd ~/oo
-        /cluster/bin/scripts/cpNcbiFaScratch . /scratch/hg/gs.13/build30
-    Build 30 re-do only:
-        cd /scratch/hg/gs.13/build30/; mv contig contig.0729
+        /cluster/bin/scripts/cpNcbiFaScratch . /scratch/hg/gs.14/build31
+    Build 31 re-do only:
+        cd /scratch/hg/gs.14/build31/; mv contig contig.MMYY
 
 13) Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
     Note: this ncbi.lift will not lift floating contigs to chr_random coords,
@@ -190,8 +193,8 @@ done after repeat masking and distributing to cluster nodes)
 
 CREATING DATABASE  (TO DO)
 
-o - ln -s /cluster/store1/gs.13/build30 ~/oo
-NOTE: /cluster/store1/gs.13/ is a symlink to /cluster/store3/gs.13
+o - ln -s /cluster/store1/gs.14/build31 ~/oo
+NOTE: /cluster/store1/gs.14/ is a symlink to /cluster/store4/gs.14
 o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
 o - Create the database.
      - ssh hgwdev
@@ -205,7 +208,7 @@ o - Tell the hgCentral database about it.  Log onto genome-centdb
     and enter mysql via
         mysql -u root -pbigSecret hgCentral
     At the mysql prompt type:
-       insert into dbDb values("hg12", "Human July 2002", "/cluster/store1/gs.13/build30/nib", "Human", "USP18", 1);
+       insert into dbDb values("hg12", "Human July 2002", "/cluster/store1/gs.14/build31/nib", "Human", "USP18", 1);
 o - Create the trackDb table as so
        cd ~/src/hg/makeDb/hgTrackDb
     Edit that makefile to add hg12 after hg11 and do
@@ -231,9 +234,9 @@ EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT's scripts) (TO DO)
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
-    rm -rf /scratch/hg/gs.13/build30/linSpecRep
+    rm -rf /scratch/hg/gs.14/build31/linSpecRep
     cd ..
-    cp -R linSpecRep /scratch/hg/gs.13/build30
+    cp -R linSpecRep /scratch/hg/gs.14/build31
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
@@ -248,7 +251,7 @@ Load chromosome sequence info into database and save chrom sizes
      ssh hgwdev
      hgsql hg12 < ~/src/hg/lib/chromInfo.sql
      cd ~/oo
-     hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?{,?}/chr*.fa
+     hgNibSeq -preMadeNib hg12 /cluster/store1/gs.14/build31/nib ?{,?}/chr*.fa
      mysql -u hguser -phguserstuff -N -e "select chrom,size from chromInfo" hg12 > chrom.sizes
 
 Store o+o info in database.
@@ -263,15 +266,15 @@ Note: for build30, Terry specially requested these files from NCBI:
   extras.ffa.gz
 For future builds, we should try to modify hgClonePos to just use *.finf 
 and not the *.ffa files.
-Patrick unpacked the *.ffa.gz into gs.13/{fin,draft,predraft,extras}/fa/*
+Patrick unpacked the *.ffa.gz into gs.14/{fin,draft,predraft,extras}/fa/*
 using /cluster/bin/scripts/unPackffa .
-     cd /cluster/store1/gs.13/build30
+     cd /cluster/store1/gs.14/build31
      jkStuff/liftGl.sh contig.gl
-     hgGoldGapGl hg12 /cluster/store1/gs.13 build30 
-     cd /cluster/store1/gs.13
-     hgClonePos hg12 build30 ffa/sequence.inf /cluster/store1/gs.13 -maxErr=3
+     hgGoldGapGl hg12 /cluster/store1/gs.14 build31 
+     cd /cluster/store1/gs.14
+     hgClonePos hg12 build31 ffa/sequence.inf /cluster/store1/gs.14 -maxErr=3
 #(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-     hgCtgPos hg12 build30 
+     hgCtgPos hg12 build31 
 
 Make and load GC percent table
      ssh hgwdev
@@ -354,13 +357,13 @@ o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
-      Make sure that /scratch/hg/gs.13/build30/contig/ is loaded
+      Make sure that /scratch/hg/gs.14/build31/contig/ is loaded
       with NT_*.fa and pushed to the cluster nodes.
 
           ssh kk
 
-          mkdir -p /cluster/store1/gs.13/build30/bed
-          cd /cluster/store1/gs.13/build30/bed
+          mkdir -p /cluster/store1/gs.14/build31/bed
+          cd /cluster/store1/gs.14/build31/bed
 
 Using the bash shell do:
           for i in 'refSeq' 'mrna' 'est'
@@ -368,12 +371,12 @@ Using the bash shell do:
               mkdir -p $i
               cd $i
               cp ~kent/lastOo/bed/$i/gsub .
-              ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+              ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
               ls -1 /scratch/hg/mrna.130/$i/$i.fa > mrna.lst
               mkdir -p psl
-              # Note: build30/bed/refSeq directory not writeable, so I had to 
+              # Note: build31/bed/refSeq directory not writeable, so I had to 
               # create a bed/refSeq/psl and change the gsub
-              mkdir -p /cluster/store1/gs.13/build30/bed/refSeq/psl
+              mkdir -p /cluster/store1/gs.14/build31/bed/refSeq/psl
               gensub2 genome.lst mrna.lst gsub spec
               para create spec
               cd ..
@@ -407,13 +410,13 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
 
 o - Load refSeq alignments into database
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/refSeq
+      cd /cluster/store1/gs.14/build31/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg12 -tNameIx refSeqAli.psl
 
 o - Load mRNA alignments into database. 
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/mrna/chrom
+      cd /cluster/store1/gs.14/build31/bed/mrna/chrom
 In tcsh:
       rm *_mrna.psl
       foreach i (*.psl)
@@ -425,7 +428,7 @@ In tcsh:
 
 o - Load EST alignments into database.
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/est/chrom
+      cd /cluster/store1/gs.14/build31/bed/est/chrom
 in tcsh do:
       rm *_est.psl
       foreach i (*.psl)
@@ -453,15 +456,15 @@ o - Put orientation info on ESTs and mRNAs into database:
      cd ~/oo/bed/mrna
      pslSortAcc nohead contig /cluster/store3/tmp contig.psl
      ssh kkstore
-     mkdir -p /scratch/hg/gs.13/build30/bed
-     cp -r ~/oo/bed/est/contig /scratch/hg/gs.13/build30/bed/est
-     cp -r ~/oo/bed/mrna/contig /scratch/hg/gs.13/build30/bed/mrna
-    Ask admins to binrsync /scratch/hg/gs.13/build30/bed/* to the cluster.
+     mkdir -p /scratch/hg/gs.14/build31/bed
+     cp -r ~/oo/bed/est/contig /scratch/hg/gs.14/build31/bed/est
+     cp -r ~/oo/bed/mrna/contig /scratch/hg/gs.14/build31/bed/mrna
+    Ask admins to binrsync /scratch/hg/gs.14/build31/bed/* to the cluster.
      ssh kk
      foreach d (est mrna)
        mkdir -p ~/oo/bed/${d}OrientInfo/oi
        cd ~/oo/bed/${d}OrientInfo
-       ls -1 /scratch/hg/gs.13/build30/bed/${d}/*.psl > psl.lst
+       ls -1 /scratch/hg/gs.14/build31/bed/${d}/*.psl > psl.lst
        cp ~/hg11/bed/${d}OrientInfo/gsub .
      end
     Edit ~/oo/bed/${d}OrientInfo/gsub to point to the correct paths.
@@ -566,8 +569,8 @@ o - Create cluster parasol job like so:
 	cp /cluster/store1/gs12.build29/bed/simpleRepeat/gsub ./gsub
 	mkdir trf
 
-Ask the admins to push /scratch/hg/gs.13/build30/ to the cluster
-	ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+Ask the admins to push /scratch/hg/gs.14/build31/ to the cluster
+	ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
 	gensub2 genome.lst single gsub spec
 	para create spec
 TODO	para try
@@ -587,16 +590,16 @@ PRODUCING GENSCAN PREDICTIONS (TO DO)
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
         Put hard-masked contigs in
-		/cluster/store1/gs.13/build30/bed/genscan/mContigs
+		/cluster/store1/gs.14/build31/bed/genscan/mContigs
 	(For hg12, the .masked files were not saved during repeat masking.  
-	So the contig (.fa) files in /cluster/store1/gs.13/build30/? and ?? 
+	So the contig (.fa) files in /cluster/store1/gs.14/build31/? and ?? 
 	were processed to convert all lower case bases into N and named 
 	as *.fa.masked and placed under genscan/mContigs).
 
                 mkdir -p ~/oo/bed/genscan/mContigs
                 cd ~/oo/bed/genscan/mContigs
-                foreach f (/cluster/store3/gs.13/build30/?/*/NT_??????.fa \
-                           /cluster/store3/gs.13/build30/??/*/NT_??????.fa)
+                foreach f (/cluster/store3/gs.14/build31/?/*/NT_??????.fa \
+                           /cluster/store3/gs.14/build31/??/*/NT_??????.fa)
                   set m = $f:t.masked
                   tr 'abcdghkmnrstvwy' 'NNNNNNNNNNNNNNN' < $f > $m
                 end
@@ -644,7 +647,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
                 para check
         If there were out-of-memory problems (run "para problems"), then 
         re-run those jobs by hand but change the -window arg from 2400000
-        to 1200000.  In gs.13/build30, this was the job for 
+        to 1200000.  In gs.14/build31, this was the job for 
         mContigs/NT_011519.fa.masked .
 
 o - Convert these to chromosome level files as so:     
@@ -672,7 +675,7 @@ masking out stuff with a period of 12 or less as so:
     cd ~/oo/bed/trfMask
     cp ~/cluster/store1/gs.12/build29/bed/trfMask/gsub .
     mkdir trf
-    ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+    ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
     gensub2 genome.lst single gsub spec
     para create spec
     para try
@@ -680,14 +683,14 @@ masking out stuff with a period of 12 or less as so:
     para push
 When that is done do:
     ssh kkstore
-    mkdir /scratch/hg/gs.13/build30/trfFa.0730
+    mkdir /scratch/hg/gs.14/build31/trfFa.0730
     cd ~/oo
 NOTE:Below is a tcsh script
     foreach i (? ??)
         cd $i
         foreach j (NT*)
             maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd \
-              /scratch/hg/gs.13/build30/trfFa.0730/$j.fa.trf
+              /scratch/hg/gs.14/build31/trfFa.0730/$j.fa.trf
             echo done $i/$j
         end
         cd ..
@@ -745,8 +748,8 @@ PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for mouse blastz (TO DO)
           trfMixedNib/chr${c}_random.nib
       endif
     end
-    rm -rf /scratch/hg/gs.13/build30/chromTrfMixedNib
-    cp -pR trfMixedNib /scratch/hg/gs.13/build30/chromTrfMixedNib
+    rm -rf /scratch/hg/gs.14/build31/chromTrfMixedNib
+    cp -pR trfMixedNib /scratch/hg/gs.14/build31/chromTrfMixedNib
 
 
 CREATE GOLDEN TRIANGLE (todo)
@@ -881,22 +884,22 @@ o - Copy files to final destination and remove
 CREATE AND LOAD STS MARKERS TRACK (TO DO)
 
 o - Copy in current stsInfo2.bed and stsAlias.bed files
-	cd /projects/hg2/booch/psl/gs.13/build30
+	cd /projects/hg2/booch/psl/gs.14/build31
 	cp ../update/stsInfo2.bed .
 	cp ../update/stsAlias.bed .
 
 o - Create final version of sts sequence placements
 	ssh kks00
-	cd /projects/hg2/booch/psl/gs.13/build30/sts
+	cd /projects/hg2/booch/psl/gs.14/build31/sts
 	make stsMarkers.final
 
 o - Create final version of primers placements
-	cd /projects/hg2/booch/psl/gs.13/build30/primers
+	cd /projects/hg2/booch/psl/gs.14/build31/primers
 	cp /cluster/store1/sts.5/all.primers .
 	make primers.final
 
 o - Create bed file
-	cd /projects/hg2/booch/psl/gs.13/build30
+	cd /projects/hg2/booch/psl/gs.14/build31
 	make stsMap.bed
 
 o - Create database tables
@@ -909,11 +912,11 @@ o - Create database tables
 	mysql -uhgcat -pXXXXXXX < stsMap.sql
 
 o - Load the tables
-	load /projects/hg2/booch/psl/gs.13/build30/sts/stsMarkers.psl.filter.lifted into all_sts_seq	
-	load /projects/hg2/booch/psl/gs.13/build30/primers/primers.psl.filter.lifted into all_sts_primer	
-	load /projects/hg2/booch/psl/gs.13/build30/stsAlias.bed into stsAlias
-	load /projects/hg2/booch/psl/gs.13/build30/stsInfo2.bed into stsInfo2
-	load /projects/hg2/booch/psl/gs.13/build30/stsMap.bed into stsMap
+	load /projects/hg2/booch/psl/gs.14/build31/sts/stsMarkers.psl.filter.lifted into all_sts_seq	
+	load /projects/hg2/booch/psl/gs.14/build31/primers/primers.psl.filter.lifted into all_sts_primer	
+	load /projects/hg2/booch/psl/gs.14/build31/stsAlias.bed into stsAlias
+	load /projects/hg2/booch/psl/gs.14/build31/stsInfo2.bed into stsInfo2
+	load /projects/hg2/booch/psl/gs.14/build31/stsMap.bed into stsMap
 
 o - Load the sequences (change sts.# to match correct location)
 	hgLoadRna addSeq hg12 /cluster/store1/sts.5/all.STS.fa
@@ -941,12 +944,12 @@ o - Copy files to final destination and remove
 BACEND PAIRS TRACK (TO DO)
 
 o - Update Makefile with location of pairs files, if necessary
-	cd /projects/hg2/booch/psl/gs.13/build30/bacends
+	cd /projects/hg2/booch/psl/gs.14/build31/bacends
 	edit Makefile (PAIRS=....)
 
 o - Create bed file
 	ssh kks00
-	cd /projects/hg2/booch/psl/gs.13/build30/bacends
+	cd /projects/hg2/booch/psl/gs.14/build31/bacends
 	make bacEndPairs.bed
 
 o - Create database tables
@@ -956,8 +959,8 @@ o - Create database tables
 	mysql -uhgcat -pXXXXXXX < bacEndPairs.sql
 
 o - Load the tables
-	load /projects/hg2/booch/psl/gs.13/build30/bacends/bacEnds.psl.filter.lifted into all_bacends	
-	load /projects/hg2/booch/psl/gs.13/build30/bacends/bacEndPairs.bed into bacEndPairs
+	load /projects/hg2/booch/psl/gs.14/build31/bacends/bacEnds.psl.filter.lifted into all_bacends	
+	load /projects/hg2/booch/psl/gs.14/build31/bacends/bacEndPairs.bed into bacEndPairs
 
 o - Load the sequences (change bacends.# to match correct location)
 	hgLoadRna addSeq hg12 /cluster/store1/bacends.2/BACends.fa
@@ -982,11 +985,11 @@ o - Copy files to final destination and remove
 FOSEND PAIRS TRACK (TO DO)
 
 o - Update Makefile with location of pairs files, if necessary
-	cd /projects/hg2/booch/psl/gs.13/build30/fosends
+	cd /projects/hg2/booch/psl/gs.14/build31/fosends
 
 o - Create bed file
 	ssh kks00
-	cd /projects/hg2/booch/psl/gs.13/build30/fosends
+	cd /projects/hg2/booch/psl/gs.14/build31/fosends
 	make fosEndPairs.bed
 
 o - Create database tables
@@ -996,8 +999,8 @@ o - Create database tables
 	mysql -uhgcat -pXXXXXXX < fosEndPairs.sql
 
 o - Load the tables
-	load /projects/hg2/booch/psl/gs.13/build30/fosends/fosEnds.psl.filter.lifted into all_fosends	
-	load /projects/hg2/booch/psl/gs.13/build30/fosends/fosEndPairs.bed into fosEndPairs
+	load /projects/hg2/booch/psl/gs.14/build31/fosends/fosEnds.psl.filter.lifted into all_fosends	
+	load /projects/hg2/booch/psl/gs.14/build31/fosends/fosEndPairs.bed into fosEndPairs
 
 o - Load the sequences (change bacends.# to match correct location)
 	hgLoadRna addSeq hg12 /cluster/store1/fosends.1/fosEnds.fa
@@ -1015,7 +1018,7 @@ o - Format file just downloaded
 	make HBRC
 
 o - Copy it to the new freeze location
-	cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.13/build30/fish/
+	cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.14/build31/fish/
 
 
 CREATE AND LOAD FISH CLONES TRACK (TO DO)
@@ -1026,10 +1029,10 @@ o - Extract the file with clone positions from database
 	mysql -uhgcat -pXXXXXXXX hg12
 	mysql>  select * into outfile "/tmp/booch/clonePos.txt" from clonePos;
 	mysql> quit
-	mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.13/build30/fish
+	mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.14/build31/fish
 
 o - Create bed file
-	cd /projects/hg2/booch/psl/gs.13/build30/fish
+	cd /projects/hg2/booch/psl/gs.14/build31/fish
 	make bed
 
 o - Create database table
@@ -1038,7 +1041,7 @@ o - Create database table
 	mysql -uhgcat -pXXXXXXX < fishClones.sql
 
 o - Load the table
-	load /projects/hg2/booch/psl/gs.13/build30/fish/fishClones.bed into fishClones
+	load /projects/hg2/booch/psl/gs.14/build31/fish/fishClones.bed into fishClones
 	
 
 CREATE AND LOAD CHROMOSOME BANDS TRACK (TO DO)
@@ -1057,7 +1060,7 @@ o - Create database table
 	
 
 o - Load the table
-	load /projects/hg2/booch/psl/gs.13/build30/cytobands/cytobands.bed into cytoBand
+	load /projects/hg2/booch/psl/gs.14/build31/cytobands/cytobands.bed into cytoBand
 
 
 CREATE CHROMOSOME REPORTS (TO DO)
@@ -1146,7 +1149,7 @@ HUMAN/MOUSE BLAT ALIGNMENTS (TO DO)
     ls -1 /scratch/hg/mm2/splitContigChunks/chunk_*.fa > mouse.lst
     # Then bundle up the human into pieces of less than 12 meg mostly:
     rm -f bigH smallH
-    foreach f (/scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf)
+    foreach f (/scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf)
       set size = `ls -l $f | awk '{print $5;}'`
       if ($size < 13000000) then
         echo $f >> smallH
@@ -1235,7 +1238,7 @@ o - Process these out of genbank flat files as so:
     Request binrysnc of /scratch/hg/mrna.130 from the admins
 
 Set up cluster run.  First make sure genome is in
-kkstore:/scratch/hg/gs.13/build30/trfFa.0730 in RepeatMasked + trf form.
+kkstore:/scratch/hg/gs.14/build31/trfFa.0730 in RepeatMasked + trf form.
 (This is probably done already in mouse alignment stage).  Also make
 sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
 
@@ -1243,7 +1246,7 @@ sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
        mkdir -p ~/oo/bed/xenoMrna
        cd ~/oo/bed/xenoMrna
        mkdir psl
-       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
        ls -1S /scratch/hg/mrna.130/xenoRna?*.fa > mrna.lst
        cp ~/hg11/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
@@ -1279,11 +1282,11 @@ Similarly do xenoEst aligments:
         faSplit sequence xenoEst.fa 16 xenoEst    
 
        ssh kkstore
-       cd /cluster/store1/gs.13/build30/bed
+       cd /cluster/store1/gs.14/build31/bed
        mkdir xenoEst
        cd xenoEst
        mkdir psl
-       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
        cp /cluster/store1/mrna.130/xenoEst?*.fa /scratch/hg/mrna.130
        ls -1S /scratch/hg/mrna.130/xenoEst?*.fa > mrna.lst
        cp ~/hg11/bed/xenoEst/gsub .
@@ -1319,7 +1322,7 @@ o - Do fish/human alignments.
        cd blatFish
        mkdir psl
        ls -1S /scratch/hg/fish/*.fa > fish.lst
-       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
        # Copy over gsub from previous version.
        gensub2 human.lst fish.lst gsub spec
        para create spec 
@@ -1373,7 +1376,7 @@ LOAD STS MAP (todo) TODO BY TERRY I BELIEVE - HE WILL UPDATE THIS
       hg12 < ~/src/hg/lib/stsMap.sql
       mkdir stsMap
       cd stsMap
-      bedSort /projects/cc/hg/mapplots/data/tracks/build30/stsMap.bed stsMap.bed
+      bedSort /projects/cc/hg/mapplots/data/tracks/build31/stsMap.bed stsMap.bed
       - Enter database with "hg12" command.
       - At mysql> prompt type in:
           load data local infile 'stsMap.bed' into table stsMap;
@@ -1383,7 +1386,7 @@ LOAD STS MAP (todo) TODO BY TERRY I BELIEVE - HE WILL UPDATE THIS
 
 LOAD CHROMOSOME BANDS (todo) ALSO TODO BY TERRY I BELIEVE
       - login to hgwdev
-      cd /cluster/store1/gs.13/build30/bed
+      cd /cluster/store1/gs.14/build31/bed
       mkdir cytoBands
       cp /projects/cc/hg/mapplots/data/tracks/oo.29/cytobands.bed cytoBands
       cd cytoBands
@@ -1540,36 +1543,18 @@ LOAD RNAGENES (TO DO)
         | perl -wpe 's/chrom(\d+)\.\w+\.fsa/chr$1/' \
         > chr7_ncrna.gff
 
-      # NOTE: just for build30, chr7 NCBI coords differ slightly from 
-      # chr7 WUSTL coords.  LaDeana Hillier's instructions for translation:
-# ours                            ncbi  build30
-# ----                            -------------
-# 1->16379450             =       1->16379450
-# nothing                 =   16379451 to 16379650  (because ncbi bp 16379451 
-#                        to 16379650 are identical to ncbi 16379651  16379850)
-# 16379451->157432593     = 16379651 -> 157432793
-      # The following fix should not be required for future builds!
-      perl -we 'while (<>) { \
-                  @words = split("\t"); \
-                  if ($words[3] > 16379450) { $words[3] += 200; } \
-                  if ($words[4] > 16379450) { $words[4] += 200; } \
-                  print join("\t", @words); \
-                } \
-               ' chr7_ncrna.gff \
-        > chr7_ncrna-fixed.gff
-
       echo 'drop table hgRnaGene;' | hgsql hg12
       hgsql hg12 < ~/kent/src/hg/lib/rnaGene.sql
       hgRnaGenes hg12 chr7_ncrna-fixed.gff
 
 LOAD EXOFISH (todo)
      - login to hgwdev
-     - cd /cluster/store1/gs.13/build30/bed
+     - cd /cluster/store1/gs.14/build31/bed
      - mkdir exoFish
      - cd exoFish
      - hg12 < ~kent/src/hg/lib/exoFish.sql
      - Put email attatchment from Olivier Jaillon (ojaaillon@genoscope.cns.fr)
-       into /cluster/store1/gs.13/build30/bed/exoFish/all_maping_ecore
+       into /cluster/store1/gs.14/build31/bed/exoFish/all_maping_ecore
      - awk -f filter.awk all_maping_ecore > exoFish.bed
      - hgLoadBed hg12 exoFish exoFish.bed
 
@@ -1599,7 +1584,7 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'C.%';
 
 LOAD SOFTBERRY GENES (TO DO)
-     - ln -s /cluster/store1/gs.13/build30/ ~/oo
+     - ln -s /cluster/store1/gs.14/build31/ ~/oo
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
@@ -1679,21 +1664,21 @@ o - # ssh hgwdev
     stanToBedAndExpRecs  hg12.image.good.psl hg12.nci60.exp hg12.nci60.bed `cat epo.txt`
     hg12S -A < ../../scripts/nci60.sql
     echo "load data local infile 'hg12.nci60.bed' into table nci60" | hg12S -A
-    mkdir /cluster/store3/gs.13/build30/bed/nci60
-    mv hg12.nci60.bed /cluster/store3/gs.13/build30/bed/nci60
+    mkdir /cluster/store3/gs.14/build31/bed/nci60
+    mv hg12.nci60.bed /cluster/store3/gs.14/build31/bed/nci60
     rm *.psl 
 
 LOAD AFFYRATIO [GNF] (TO DO)
 o - # ssh hgwdev
     cd /cluster/store1/sugnet/
-    mkdir gs.13
-    mkdir gs.13/build30
-    mkdi20r gs.13/build30/affyGnf
-    cd gs.13/build30/affyGnf
+    mkdir gs.14
+    mkdir gs.14/build31
+    mkdi20r gs.14/build31/affyGnf
+    cd gs.14/build31/affyGnf
     cp /projects/compbiodata/microarray/affyGnf/sequences/HG-U95Av2_target ./
-    ls -1 /cluster/store3/gs.13/build30/trfFa.0730/ > allctg.lst
-    echo "/cluster/store1/sugnet/gs.13/build30/affyGnf/HG-U95Av2_target" > affy.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.13/build30/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.13/build30/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    ls -1 /cluster/store3/gs.14/build31/trfFa.0730/ > allctg.lst
+    echo "/cluster/store1/sugnet/gs.14/build31/affyGnf/HG-U95Av2_target" > affy.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.14/build31/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.14/build31/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
     # ssh kkr1u00
     para create para.spec
@@ -1702,12 +1687,12 @@ o - # ssh hgwdev
     para push
     # exit kkr1u00
     pslSort dirs hg12.affy.psl tmp psl >& pslSort.log
-    liftUp hg12.affy.lifted.psl /cluster/store3/gs.13/build30/jkStuff/liftAll.lft warn hg12.affy.psl
+    liftUp hg12.affy.lifted.psl /cluster/store3/gs.14/build31/jkStuff/liftAll.lft warn hg12.affy.psl
     pslAffySelect seqIdent=.95 basePct=.95 in=hg12.affy.lifted.psl out=hg12.affy.pAffySelect.95.95.psl
     affyPslAndAtlasToBed hg12.affy.pAffySelect.95.95.psl  /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hg12S -A </projects/compbiodata/microarray/affyGnf/browserFiles/affyRatio.sql 
     echo "load data local infile 'affyRatio.bed' into table affyRatio" | hg12S -A
-    mkdir /cluster/store3/gs.13/build30/bed/affyGnf
+    mkdir /cluster/store3/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
 LOAD SAGE DATA (TO DO)
@@ -1729,8 +1714,8 @@ o - cd /projects/cc/hg/sugnet/sage
     perl -e 'while(<>){chomp($_);@p=split/\t/,$_; print "$p[2]\t$p[3]\t$p[0]\n"}' < SAGEmap_tag_ug-rel_Hs | sort | sed -e 's/ /_/g' > SAGEmap_ug_tag-rel_Hs
     cd -
     createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs tagExpArrays.tab sageSummary.sage
-    # Create the uniGene alignments /cluster/store1/sugnet/gs.13/build30/uniGene/hg12.uniGene.lifted.pslReps.psl
-    addAveMedScoreToPsls /cluster/store1/sugnet/gs.13/build30/uniGene/hg12.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
+    # Create the uniGene alignments /cluster/store1/sugnet/gs.14/build31/uniGene/hg12.uniGene.lifted.pslReps.psl
+    addAveMedScoreToPsls /cluster/store1/sugnet/gs.14/build31/uniGene/hg12.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
     /cluster/home/kent/bin/i386/hgLoadBed hg12 uniGene_2 uniGene.wscores.bed 
     hg12S -A < ~/kk/jk/hg/lib/sage.sql 
     echo "load data local infile 'sageSummary.sage' into table sage" | hg12S -A
@@ -1760,14 +1745,14 @@ o - cd /projects/cc/hg/sugnet/uniGene
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
     # ssh kkstore
-    cp /projects/cc/hg/sugnet/uniGene/uniGene.153/Hs.seq.uniq.simpleHeader.fa /scratch/hg/gs.13/build30/uniGene
-    # email cluster-admin to push /scratch/hg/gs.13/build30/uniGene to cluster
-    cd  /cluster/store1/sugnet/gs.13/build30
+    cp /projects/cc/hg/sugnet/uniGene/uniGene.153/Hs.seq.uniq.simpleHeader.fa /scratch/hg/gs.14/build31/uniGene
+    # email cluster-admin to push /scratch/hg/gs.14/build31/uniGene to cluster
+    cd  /cluster/store1/sugnet/gs.14/build31
     mkdir uniGene
     cd uniGene
-    ls -1 /cluster/store3/gs.13/build30/trfFa.0730/ > allctg.lst
-    echo "/scratch/hg/gs.13/build30/uniGene/Hs.seq.uniq.simpleHeader.fa" > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store3/gs.13/build30/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    ls -1 /cluster/store3/gs.14/build31/trfFa.0730/ > allctg.lst
+    echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" > uniGene.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store3/gs.14/build31/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
     # ssh kk
     para create para.spec
@@ -1776,7 +1761,7 @@ o - cd /projects/cc/hg/sugnet/uniGene
     para check
     para push
     pslSort dirs hg12.uniGene.psl tmp psl >& pslSort.log
-    liftUp hg12.uniGene.lifted.psl /cluster/store3/gs.13/build30/jkStuff/liftAll.lft carry hg12.uniGene.psl
+    liftUp hg12.uniGene.lifted.psl /cluster/store3/gs.14/build31/jkStuff/liftAll.lft carry hg12.uniGene.psl
     pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 hg12.uniGene.lifted hg12.uniGene.lifted.pslReps.psl /dev/null
     # exit kk and use hg12.uniGene.lifted.pslReps.psl for building SAGE track.
 
@@ -1812,7 +1797,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
 
     # create psl files for each per-contig lav file
        ssh kkstore
-       set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
+       set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
        cd $base
        set tbl="blastzMm2"
        foreach chrdir ($base/lav/chr*)
@@ -1826,7 +1811,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
 
     # Substitute scratch/... path with chrom name:
        foreach f (lav-psl/*/*.psl)
-         perl -wpi -e 's@/?scratch/hg/gs.13/build30/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@:___@@g;' $f
+         perl -wpi -e 's@/?scratch/hg/gs.14/build31/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@:___@@g;' $f
        end
 
     # Convert to per-chromsome files, sort, and add sequence
@@ -1843,7 +1828,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
 
     # Load tables
         ssh hgwdev
-        set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
+        set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
         cd $base/lav-xa
         hgLoadPsl hg12 *_${tbl}.psl
 
@@ -1862,7 +1847,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
-    set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
+    set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
     cd $base
     mkdir -p axtChrom axtBest pslBest
     foreach chrdir (lav/chr*)
@@ -1893,7 +1878,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
+     set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
      cd $base/pslBest
      hgLoadPsl hg12 *.psl
     # Make /gbdb links and add them to the axtInfo table:
@@ -1945,7 +1930,7 @@ mkdir M
 cp /cluster/store1/mrna.130/mitomapRCRS.fasta M/chrM.fa
 Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file list
 tcsh jkStuff/makeNib.sh
-hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?/chr*.fa ??/chr*.fa
+hgNibSeq -preMadeNib hg12 /cluster/store1/gs.14/build31/nib ?/chr*.fa ??/chr*.fa
 
 
 TWINSCAN GENE PREDICTIONS (TO DO)
@@ -2142,8 +2127,8 @@ ALIGNMENT COUNTS FOR WIGGLE TRACK
 MAKING AND STORING mRNA AND EST ALIGNMENTS (TO DO)
 
 o ssh to kkstore
- mkdir -p /cluster/store1/gs.13/build30/bed/refFull
- cd /cluster/store1/gs.13/build30/bed/refFull
+ mkdir -p /cluster/store1/gs.14/build31/bed/refFull
+ cd /cluster/store1/gs.14/build31/bed/refFull
 
  Download the sequence: wget ftp://blue3.ims.u-tokyo.ac.jp/pub/db/hgc/dbtss/ref-full.fa.gz
 
@@ -2152,17 +2137,17 @@ o ssh to kkstore
  faSplit sequence ref-full.fa 50 splitRefFull
  mkdir /scratch/hg/refFull
  splitRefFull* /scratch/hg/refFull/
- ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+ ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
  ls -1S /scratch/hg/refFull/split*.fa > refFull.lst
 
 o - Request the admins to do a binrsync to the cluster of /scratch/hg/refFull
 
 o - Use BLAT to generate refFull alignments as so:
-      Make sure that /scratch/hg/gs.13/build30/contig/ is loaded
+      Make sure that /scratch/hg/gs.14/build31/contig/ is loaded
       with NT_*.fa and pushed to the cluster nodes.
 
           ssh kk
-          cd /cluster/store1/gs.13/build30/bed/refFull
+          cd /cluster/store1/gs.14/build31/bed/refFull
           mkdir -p psl
 #          run mkdirs.sh script to create sudirs in the psl directory
 #               in order to modularize the blat job.
@@ -2181,6 +2166,6 @@ o - Process refFull alignments into near best in genome.
 
 o - Load refFull alignments into database
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/refFull
+      cd /cluster/store1/gs.14/build31/bed/refFull
       pslCat -dir chrom > refFullAli.psl
       hgLoadPsl hg12 -tNameIx refFullAli.psl
