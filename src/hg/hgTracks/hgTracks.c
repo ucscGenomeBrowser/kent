@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.855 2004/12/14 17:03:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.856 2004/12/14 21:42:34 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5247,7 +5247,7 @@ Color wgRnaColor(struct track *tg, void *item, struct vGfx *vg)
 {
 char condStr[255];
 char *rnaType;
-Color color={MG_BLACK};
+Color color = {MG_BLACK};  /* Set default to black.  But, if we got black, something is wrong. */
 struct sqlConnection *conn;
 conn = hAllocConn();
 char *name;
@@ -5258,6 +5258,7 @@ rnaType = sqlGetField(conn, database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = MG_GREEN;
 if (sameWord(rnaType, "CDBox"))   color = MG_BLUE;
+if (sameWord(rnaType, "scaRna"))  color = MG_MAGENTA;
 
 hFreeConn(&conn);
 return(color);
