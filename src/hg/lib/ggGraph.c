@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.8 2003/06/18 16:57:48 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.9 2003/07/10 16:05:48 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -395,8 +395,8 @@ for (eIx = 0; eIx < vCount; ++eIx)
 return result;
 }
 
-boolean blockSubsumed(struct ggMrnaBlock *block1, struct ggMrnaBlock *block2)
-/** Return TRUE if blocks overlap on target sequence. */
+int blocksOverlap(struct ggMrnaBlock *block1, struct ggMrnaBlock *block2)
+/** Return TRUE if block1 is inside block2. */
 {
 if(block1->tStart >= block2->tStart && block1->tEnd <= block2->tEnd)
     return TRUE;
@@ -405,7 +405,7 @@ return FALSE;
 
 boolean ggAliInfoOverlap(struct ggVertex *v, struct ggAliInfo *ai1, struct ggAliInfo *ai2, 
 			 int startIx, int endIx, int start2Ix, int end2Ix)
-/** Return TRUE if the two alignmens have an overlap in the area
+/** Return TRUE if the two alignments have an overlap in the area
  * defined by starts and ends, return FALSE otherwise. */
 {
 struct ggMrnaBlock *blocks1 = NULL, *blocks2 = NULL;
@@ -418,14 +418,14 @@ for(i=0; i<ai1->ma->blockCount; i++)
        exact match as the edges may have been extended. */
     if(v[startIx].position <= blocks1[i].tStart && v[endIx].position >= blocks1[i].tEnd)
 	{
-	/* Find the matchin block in the other mRna. */
+	/* Find the matching block in the other mRNA. */
 	for(j=0; j<ai2->ma->blockCount; j++)
 	    {
 	    /* If this block is the reason for start2Ix and end2Ix. Can't do
 	       exact match as the edges may have been extended. */
 	    if(v[start2Ix].position <= blocks2[j].tStart && v[end2Ix].position >= blocks2[j].tEnd)
 		{
-		if(blockSubsumed(&blocks1[i], &blocks2[j]))
+		if(blocksOverlap(&blocks1[i], &blocks2[j]) > 0)
 		    {
 		    return TRUE;
 		    }
@@ -536,6 +536,7 @@ int consensusSoftStartVertex(struct geneGraph *gg, int softStartIx, int hardEndI
 int bestVertex = -1;
 struct ggVertex *v = gg->vertices;
 struct ggEvidence ***e = gg->evidence;
+int maxDistance = 3000;
 int i=0; 
 int bestCount = 0;
 int bestDist = BIGNUM;
@@ -543,7 +544,7 @@ for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[oIndex[i]][hardEndIx]);
     int curDist = abs(v[softStartIx].position - v[oIndex[i]].position);
-    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist) )
+    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist && curDist < maxDistance) )
 	{
 	bestVertex = oIndex[i];
 	bestCount = curCount;
@@ -568,11 +569,12 @@ struct ggEvidence ***e = gg->evidence;
 int i=0; 
 int bestCount = 0;
 int bestDist = BIGNUM;
+int maxDist = 3000;
 for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[hardStartIx][oIndex[i]]);
     int curDist = abs(v[softEndIx].position - v[oIndex[i]].position);
-    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist) )
+    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist && curDist < maxDist) )
 	{
 	bestVertex = oIndex[i];
 	bestCount = curCount;
@@ -929,7 +931,7 @@ return TRUE;
 
 
 void tryToFixSoftStartAlignment(struct geneGraph *gg, struct ggMrnaCluster *mc, 
-				struct hash *aliHash, int softStart)
+				struct hash *aliHash, int softStart, int minOverlap)
 /** Try to fix alignments where the EST/mRNA should reach into the next exon
     but it isn't big enough for blat to find it. */
 {
@@ -958,11 +960,18 @@ for(i=0; i<vCount; i++)
 			/* If we get as good of an alignment by extending to the
 			   next exon do it. */
 			if(matchAsWellSoftStart(gg, mc, softStart, i, j, k))
-			   {
-			   em[softStart][i] = FALSE;
-			   ggEvidenceFreeList(&gg->evidence[softStart][i]);
-			   return;
-			   }
+			    {
+			    em[softStart][i] = FALSE;
+			    ggEvidenceFreeList(&gg->evidence[softStart][i]);
+			    return;
+			    }
+			/* Else if we are less than the minimum distance drop the edge. */
+			else if(abs(v[softStart].position - v[j].position) < minOverlap)
+			    {
+			    em[softStart][i] = FALSE;
+			    ggEvidenceFreeList(&gg->evidence[softStart][i]);
+			    return;
+			    }
 			}
 		    }
 		}
@@ -990,9 +999,10 @@ return TRUE;
 
 
 void tryToFixSoftEndAlignment(struct geneGraph *gg, struct ggMrnaCluster *mc, 
-				struct hash *aliHash, int softEnd)
+				struct hash *aliHash, int softEnd, int minOverlap)
 /** Try to fix alignments where the EST/mRNA should reach into the next exon
-    but it isn't big enough for blat to find it. */
+    but it isn't big enough for blat to find it. If an overlap is less than minOverlap
+    it will be removed anyhow. */
 {
 int i, j, k;
 int vCount = gg->vertexCount;
@@ -1019,11 +1029,18 @@ for(i=0; i<vCount; i++)
 			/* If we get as good of an alignment by extending to the
 			   next exon do it. */
 			if(matchAsWellSoftEnd(gg, mc, i, softEnd, j, k))
-			   {
-			   em[i][softEnd] = FALSE;
-			   ggEvidenceFreeList(&gg->evidence[i][softEnd]);
-			   return;
-			   }
+			    {
+			    em[i][softEnd] = FALSE;
+			    ggEvidenceFreeList(&gg->evidence[i][softEnd]);
+			    return;
+			    }
+			/* Else if we are less than the minimum distance drop the edge. */
+			else if( abs(v[softEnd].position - v[j].position) < minOverlap)
+			    {
+			    em[i][softEnd] = FALSE;
+			    ggEvidenceFreeList(&gg->evidence[i][softEnd]);
+			    return;
+			    }
 			}
 		    }
 		}
@@ -1032,7 +1049,6 @@ for(i=0; i<vCount; i++)
     }
 }
 		
-
 struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence)
 /* Make up a gene transcript graph out of the ggMrnaCluster. Only
  extending truncated exons to consensus splice sites. */
@@ -1040,13 +1056,16 @@ struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrn
 struct sqlConnection *conn = hAllocConn();
 struct geneGraph *gg = makeInitialGraph(mc, ci);
 struct hash *aliHash = newAlignmentHash(mc);
+int minOverlap = 6; /* Don't believe any soft start/end that is less
+		     than 6bp from hard start/end.  Usually end up
+		     being alignment oddities.*/
 int i;
 for(i=0; i<gg->vertexCount; i++)
     {
     if(gg->vertices[i].type == ggSoftStart)
-	tryToFixSoftStartAlignment(gg, mc, aliHash, i);
+	tryToFixSoftStartAlignment(gg, mc, aliHash, i, minOverlap);
     if(gg->vertices[i].type == ggSoftEnd)
-	tryToFixSoftEndAlignment(gg, mc, aliHash, i);
+	tryToFixSoftEndAlignment(gg, mc, aliHash, i, minOverlap);
     }
 for(i=0; i<gg->vertexCount; i++)
     {
