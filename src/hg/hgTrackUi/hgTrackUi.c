@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.147 2004/11/02 10:07:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.148 2004/11/20 19:44:59 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -556,6 +556,26 @@ filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
+void scoreUi(struct trackDb *tdb)
+/* Put up UI for filtering bed track based on a score threshold */
+{
+char scoreVar[256];
+int scoreSetting;
+int scoreVal = 0;
+char *scoreValString = trackDbSetting(tdb, "scoreFilter");
+char tempScore[256];
+
+/* initial value of score theshold is 0, unless
+ * overridden by the scoreFilter setting in the track */
+if (scoreValString != NULL)
+    scoreVal = atoi(scoreValString);
+printf("<p><b>Only Show items that score at or above </b>: ");
+snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
+scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
+safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
+cgiMakeTextVar( scoreVar, tempScore, 8);
+}
+
 void crossSpeciesUi(struct trackDb *tdb)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
@@ -574,26 +594,6 @@ cgiMakeRadioButton(colorVar, "off", sameString(colorSetting, "off"));
 printf(" off ");
 printf("<br><br>");
 filterByChrom(tdb);
-}
-
-void scoreUi(struct trackDb *tdb)
-/* Put up UI for filtering bed track based on a score threshold */
-{
-char scoreVar[256];
-int scoreSetting;
-int scoreVal = 0;
-char *scoreValString = trackDbSetting(tdb, "scoreFilter");
-char tempScore[256];
-
-/* initial value of score theshold is 0, unless
- * overridden by the scoreFilter setting in the track */
-if (scoreValString != NULL)
-    scoreVal = atoi(scoreValString);
-printf("<p><b>Only Show items that score at or above </b>: ");
-snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
-scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
-safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
-cgiMakeTextVar( scoreVar, tempScore, 4);
 }
 
 void transRegCodeUi(struct trackDb *tdb)
@@ -714,6 +714,7 @@ if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
 
     freeMem (colorOpt);
     filterByChrom(tdb);
+    scoreUi(tdb);
     }
 else
     crossSpeciesUi(tdb);
