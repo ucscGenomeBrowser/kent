@@ -38,6 +38,8 @@ enum seqOutColor
     socBlack = 0,		/* Not aligning. */
     socBlue = 1,		/* Aligning. */
     socBrightBlue = 2,		/* End of an aligning block. */
+    socRed = 3, 		/* Aligning UTR. */
+    socOrange = 4,		/* End of an aligning UTR block. */
     };
 extern int seqOutColorLookup[];		/* Converts these to html format colors. */
 
