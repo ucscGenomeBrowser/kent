@@ -6900,8 +6900,9 @@ hgMapViaSwissProt hg16 knownGene name proteinID Pfam knownToPfam
     hgMapToGene hg16 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
 # Create expression distance table - takes about an hour
+# (Regenerated April 16, 2004 in response to knownToGnfAtlas2 update)
     hgExpDistance hg16 hgFixed.gnfHumanAtlas2MedianRatio \
-    	hgFixed.gnfHumanAtlsas2MedianExps gnfAtlas2Distance \
+    	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
 
 # Create a table that maps between known genes and 
