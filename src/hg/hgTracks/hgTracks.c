@@ -53,25 +53,20 @@
 #include "mcnBreakpoints.h"
 #include "expRecord.h"
 
-#define CHUCK_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
-#define ROGIC_CODE 1
+
+#define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
-#ifdef CHUCK_CODE
-/* begin Chuck code */
-#define EXPR_DATA_SHADES 16
 
+#define EXPR_DATA_SHADES 16
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
+
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
-char *otherFrame = NULL;
-char *thisFrame = NULL;
-/* end Chuck code */
-#endif /*CHUCK_CODE*/
 
 int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
@@ -4639,10 +4634,6 @@ tg->itemName = gapName;
 tg->mapItemName = gapName;
 }
 
-#ifdef CHUCK_CODE
-/* begin Chuck code */
-
-
 int pslWScoreScale(struct pslWScore *psl, boolean isXeno, float maxScore)
 /* takes the score field and scales it to the correct shade using maxShade and maxScore */
 {
@@ -5124,6 +5115,7 @@ expRecordFreeList(&erList);
 freeHash(&indexes);
 freeHash(&expTypes);
 freeHash(&expIndexesToNames);
+slReverse(&lfsList);
 return lfsList;
 }
 
@@ -5336,8 +5328,8 @@ else
       	for(bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    lf = lfFromBed(bed);
-	    /* lf->tallStart = bed->chromStart; */
-	    /* lf->tallEnd = bed->chromEnd; */
+	    lf->tallStart = bed->chromStart; 
+	    lf->tallEnd = bed->chromEnd; 
 	    lf->score = bed->expScores[i];
 	    slAddHead(&lfs->features, lf);
 	    }
@@ -5352,17 +5344,13 @@ return lfsList;
 void makeRedGreenShades(struct memGfx *mg) 
 /* Allocate the  shades of Red, Green and Blue */
 {
-int i;
-int maxShade = ArraySize(shadesOfGreen) -1;
-for(i=0; i<=maxShade; i++) 
-    {
-    struct rgbColor rgbGreen, rgbRed, rgbBlue;
-    int level = (255*i/(maxShade));
-    if(level<0) level = 0;
-    shadesOfRed[i] = mgFindColor(mg, level, 0, 0);
-    shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
-    shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
-    }
+static struct rgbColor black = {0, 0, 0};
+static struct rgbColor red = {255, 0, 0};
+static struct rgbColor green = {0, 255, 0};
+static struct rgbColor blue = {0, 0, 255};
+mgMakeColorGradient(mg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
+mgMakeColorGradient(mg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
+mgMakeColorGradient(mg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
@@ -5492,23 +5480,28 @@ Color getColorForAffyExpssn(float val, float max)
 {
 struct rgbColor color; 
 int colorIndex = 0;
+int offset = 0;   /* really there is no dynamic range below 64 (2^6) */
+
+if(val == -10000)
+    return shadesOfGray[5];
 val = fabs(val);
+
 /* take the log for visualization */
 if(val > 0)
     val = logBase2(val);
 else
     val = 0;
 
-/* scale 4 down to 0 */
-if(val > 4) 
-    val -= 4;
+/* scale offset down to 0 */
+if(val > offset) 
+    val = val - offset;
 else
     val = 0;
 
 if (max <= 0) 
     errAbort("hgTracks::getColorForAffyExpssn() maxDeviation can't be zero\n"); 
 max = logBase2(max);
-max -= 4;
+max = max - offset;
 if(max < 0)
     errAbort("hgTracks::getColorForAffyExpssn() - Max val should be greater than 0 but it is: %g", max);
     
@@ -5527,7 +5520,7 @@ if(tg->visibility == tvDense)
     score = score/10;
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
-return getColorForAffyExpssn(score, 262144); /* 262144 == 2^18 */
+return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
 }
 
 void loadMultScoresBed(struct trackGroup *tg)
@@ -5742,10 +5735,6 @@ if(target)
 printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
 freeMem(encodedItem);
 }
-
-
-#endif /*CHUCK_CODE*/
-
 
 #ifdef FUREY_CODE
 
@@ -7159,11 +7148,6 @@ if (winBaseCount <= 0)
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
-
-
-/* Chuck code for synching with different frames */
-otherFrame = cartOptionalString(cart, "of");
-thisFrame = cartOptionalString(cart, "tf");
 
 doTrackForm();
 }
