@@ -2983,6 +2983,11 @@ else if (startsWith("psu", track))
     type = "Pseudo & Real Genes";
     table = "psu";
     }
+else if (sameWord("xenoBlastzMrna", track))
+    {
+    type = "Blastz to foreign mRNA";
+    table = "xenoBlastzMrna";
+    }
 else 
     {
     type = "mRNA";
