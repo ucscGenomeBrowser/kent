@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.867 2005/01/24 22:26:23 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.868 2005/01/24 22:39:45 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3421,10 +3421,10 @@ if(hTableExists("estOrientInfo"))
        lookup read direction in mrna table. */
     for(lf = lfList; lf != NULL; lf = lf->next)
 	{
-	estOrient = hashIntValDefault(orientHash, lf->name, BIGNUM); 
+	estOrient = hashIntValDefault(orientHash, lf->name, 0); 
 	if(estOrient < 0) 
 	    lf->orientation = -1 * lf->orientation;
-	else if(estOrient == BIGNUM)
+	else if(estOrient == 0)
 	    {
 	    int dir = cDnaReadDirectionForMrna(conn, lf->name);
 	    if(dir == 3) /* Est sequenced from 3' end. */
