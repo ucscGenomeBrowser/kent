@@ -64,10 +64,8 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-#expTable affyGnfU74CExps
-expTable gnfMouseAtlas2AllExps
+expTable gnfMouseAtlas2MedianExps
 chip GNF1M
-canPack off
 
 track affyGnfU74A
 shortLabel GNF U74A

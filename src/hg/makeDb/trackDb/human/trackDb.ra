@@ -222,6 +222,18 @@ group map
 visibility dense
 type bed 3 +
 
+track gnfAtlas2
+shortLabel GNF Atlas 2
+longLabel GNF Expression Atlas 2
+group regulation
+priority 84.9
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable gnfHumanAtlas2MedianExps
+chip GNF1M
+
 track affyUcla
 shortLabel UCLA GeneChip
 longLabel UCLA Affymetrix U133 GeneChip data
@@ -229,6 +241,7 @@ group regulation
 priority 87
 visibility hide
 type bed 15 +
+expTable affyUclaExps
 canPack off
 
 track affyUclaNorm
