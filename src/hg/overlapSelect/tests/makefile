@@ -8,7 +8,8 @@ test:   psl_over_NM_015110gp psl_nonover_NM_015110gp \
 	psl_over_NM_001206gp psl_nonover_NM_001206gp \
 	psl_over_NM_001206bed psl_nonover_NM_001206bed \
 	psl_over_NM_015110bed_split psl_nonover_NM_015110bed_split \
-	bed_over_NM_015110gp bed_over_NM_015110bed  \
+	bed_over_NM_015110gp bed_nonover_NM_015110gp \
+	bed_over_NM_015110bed bed_nonover_NM_015110bed  \
 	bed_over_NM_015110bed_split bed_nonover_NM_015110bed_split \
 	exludeself_over_mrna1 exludeself_nonover_mrna1 \
 	exludeself_over_mrna2 exludeself_nonover_mrna2 \
@@ -16,13 +17,15 @@ test:   psl_over_NM_015110gp psl_nonover_NM_015110gp \
 
 # select psls overlaping NM_015110 with gp
 psl_over_NM_015110gp: mkout
-	${OVERSEL} input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gp.psl
+	${OVERSEL} -dropped=output/psl_over_NM_015110gp.drop.psl input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gp.psl
 	${DIFF} expected/psl_over_NM_015110gp.psl output/psl_over_NM_015110gp.psl
+	${DIFF} expected/psl_over_NM_015110gp.drop.psl output/psl_over_NM_015110gp.drop.psl
 
 # select psls overlaping not NM_015110 with gp
 psl_nonover_NM_015110gp: mkout
-	${OVERSEL} -nonOverlaping input/NM_015110.gp input/mrna.psl output/psl_nonover_NM_015110gp.psl
+	${OVERSEL} -nonOverlaping -dropped=output/psl_nonover_NM_015110gp.drop.psl input/NM_015110.gp input/mrna.psl output/psl_nonover_NM_015110gp.psl
 	${DIFF} expected/psl_nonover_NM_015110gp.psl output/psl_nonover_NM_015110gp.psl
+	${DIFF} expected/psl_nonover_NM_015110gp.drop.psl output/psl_nonover_NM_015110gp.drop.psl
 
 # select psls overlaping NM_015110 with bed
 psl_over_NM_015110bed: mkout
@@ -66,13 +69,15 @@ psl_nonover_NM_015110bed_split: mkout
 
 # select beds overlaping NM_015110 with gp
 bed_over_NM_015110gp: mkout
-	${OVERSEL} input/NM_015110.gp input/mrna.bed output/bed_over_NM_015110gp.bed
+	${OVERSEL} input/NM_015110.gp -dropped=output/bed_over_NM_015110gp.drop.bed input/mrna.bed output/bed_over_NM_015110gp.bed
 	${DIFF} expected/bed_over_NM_015110gp.bed output/bed_over_NM_015110gp.bed
+	${DIFF} expected/bed_over_NM_015110gp.drop.bed output/bed_over_NM_015110gp.drop.bed
 
 # select beds overlaping not NM_015110 with gp
 bed_nonover_NM_015110gp: mkout
-	${OVERSEL} -nonOverlaping input/NM_015110.gp input/mrna.bed output/bed_nonover_NM_015110gp.bed
+	${OVERSEL} -nonOverlaping -dropped=output/bed_nonover_NM_015110gp.drop.bed  input/NM_015110.gp input/mrna.bed output/bed_nonover_NM_015110gp.bed
 	${DIFF} expected/bed_nonover_NM_015110gp.bed output/bed_nonover_NM_015110gp.bed
+	${DIFF} expected/bed_nonover_NM_015110gp.drop.bed output/bed_nonover_NM_015110gp.drop.bed
 
 # select beds overlaping NM_015110 with bed
 bed_over_NM_015110bed: mkout

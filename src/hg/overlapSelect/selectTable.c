@@ -86,18 +86,16 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-void selectAddPsls(char* pslFile)
+void selectAddPsls(struct lineFile *pslLf)
 /* add records from a psl file to the select table */
 {
-struct lineFile *lf = pslFileOpen(pslFile);
 struct psl* psl;
 
-while ((psl = pslNext(lf)) != NULL)
+while ((psl = pslNext(pslLf)) != NULL)
     {
     selectAddPsl(psl);
     pslFree(&psl);
     }
-lineFileClose(&lf);
 }
 
 static void selectAddGenePred(struct genePred* gp)
@@ -111,18 +109,16 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     }
 }
 
-void selectAddGenePreds(char* genePredFile)
+void selectAddGenePreds(struct lineFile *genePredLf)
 /* add blocks from a genePred file to the select table */
 {
-struct lineFile *lf = lineFileOpen(genePredFile, TRUE);
 char* row[GENEPRED_NUM_COLS];
-while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
+while (lineFileNextRowTab(genePredLf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
     selectAddGenePred(gp);
     genePredFree(&gp);
     }
-lineFileClose(&lf);
 }
 
 static void selectAddBed(struct bed* bed)
@@ -145,38 +141,34 @@ else
     }
 }
 
-void selectAddBeds(char* bedFile)
+void selectAddBeds(struct lineFile* bedLf)
 /* add records from a bed file to the select table */
 {
-struct lineFile *lf = lineFileOpen(bedFile, TRUE);
 char* row[12];
 int numCols;
-while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
+while ((numCols = lineFileChopNextTab(bedLf, row, ArraySize(row))) > 0)
     {
     struct bed *bed = bedLoadN(row, numCols);
     selectAddBed(bed);
     bedFree(&bed);
     }
-lineFileClose(&lf);
 }
 
-void selectAddCoordCols(char* tabFile, struct coordCols* cols)
+void selectAddCoordCols(struct lineFile *tabLf, struct coordCols* cols)
 /* add records with coordiates at a specified column */
 {
-struct lineFile *lf = lineFileOpen(tabFile, TRUE);
 char** row;
 int numCols;
 struct coordColVals colVals;
 
 row = needMem(cols->minNumCols*sizeof(char*));
 
-while ((numCols = lineFileChopNextTab(lf, row, cols->minNumCols)) > 0)
+while ((numCols = lineFileChopNextTab(tabLf, row, cols->minNumCols)) > 0)
     {
-    colVals = coordColParseRow(cols, lf, row, numCols);
+    colVals = coordColParseRow(cols, tabLf, row, numCols);
     selectAddRange(colVals.chrom, colVals.start, colVals.end, colVals.strand,
                    NULL);
     }
-lineFileClose(&lf);
 freez(&row);
 }
 

@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] = {
     {"nonOverlaping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
+    {"dropped", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -91,22 +92,20 @@ else
     return overlaps;
 }
 
-void pslSelect(char* inFile, char* outFile)
+void pslSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
 /* copy psl records that matches the selection criteria */
 {
-struct lineFile *lf = pslFileOpen(inFile);
-FILE* outFh = mustOpen(outFile, "w");
 char* row[PSL_NUM_COLS];
 
-while (lineFileNextRowTab(lf, row, PSL_NUM_COLS))
+while (lineFileNextRowTab(inLf, row, PSL_NUM_COLS))
     {
     struct psl* psl = pslLoad(row);
     if (pslSelected(psl))
         pslTabOut(psl, outFh);
+    else if (dropFh != NULL)
+        pslTabOut(psl, dropFh);
     pslFree(&psl);
     }
-carefulClose(&outFh);
-lineFileClose(&lf);
 }
 
 static boolean genePredSelected(struct genePred* gp)
@@ -126,21 +125,19 @@ else
     return overlaps;
 }
 
-void genePredSelect(char* inFile, char* outFile)
+void genePredSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
 /* copy genePred records that matches the selection criteria */
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE* outFh = mustOpen(outFile, "w");
 char* row[GENEPRED_NUM_COLS];
-while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
+while (lineFileNextRowTab(inLf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
     if (genePredSelected(gp))
         genePredTabOut(gp, outFh);
+    else if (dropFh != NULL)
+        genePredTabOut(gp, dropFh);
     genePredFree(&gp);
     }
-carefulClose(&outFh);
-lineFileClose(&lf);
 }
 
 static boolean bedSelected(struct bed* bed)
@@ -171,22 +168,20 @@ else
     return overlaps;
 }
 
-void bedSelect(char* inFile, char* outFile)
+void bedSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
 /* copy bed records that matches the selection criteria */
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE* outFh = mustOpen(outFile, "w");
 char* row[12];
 int numCols;
-while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
+while ((numCols = lineFileChopNextTab(inLf, row, ArraySize(row))) > 0)
     {
     struct bed *bed = bedLoadN(row, numCols);
     if (bedSelected(bed))
         bedTabOutN(bed, numCols, outFh);
+    else if (dropFh != NULL)
+        bedTabOutN(bed, numCols, dropFh);
     bedFree(&bed);
     }
-carefulClose(&outFh);
-lineFileClose(&lf);
 }
 
 boolean coordColsSelected(char *line, struct lineFile *lf)
@@ -226,63 +221,76 @@ else
     return overlaps;
 }
 
-void coordColsSelect(char* inFile, char* outFile)
+void coordColsSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
 /* copy records that matches the selection criteria when the coordinates are
  * specified by start column. */
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE* outFh = mustOpen(outFile, "w");
 char *line;
 
-while (lineFileNextReal(lf, &line))
+while (lineFileNextReal(inLf, &line))
     {
-    if (coordColsSelected(line, lf))
+    if (coordColsSelected(line, inLf))
         fprintf(outFh, "%s\n", line);
+    else if (dropFh != NULL)
+        fprintf(dropFh, "%s\n", line);
     }
-carefulClose(&outFh);
-lineFileClose(&lf);
 }
 
 void loadSelectTable(char *selectFile)
 /* load the select table from a file */
 {
+struct lineFile *lf = (selectFmt == PSL_FMT)
+    ? pslFileOpen(selectFile)
+    : lineFileOpen(selectFile, TRUE);
 switch (selectFmt)
     {
     case PSL_FMT:
-        selectAddPsls(selectFile);
+        selectAddPsls(lf);
         break;
     case GENEPRED_FMT:
-        selectAddGenePreds(selectFile);
+        selectAddGenePreds(lf);
         break;
     case BED_FMT:
-        selectAddBeds(selectFile);
+        selectAddBeds(lf);
         break;
     case COORD_COLS_FMT:
-        selectAddCoordCols(selectFile, &selectCoordCols);
+        selectAddCoordCols(lf, &selectCoordCols);
         break;
     }
+lineFileClose(&lf);
 }
 
-void overlapSelect(char *selectFile, char *inFile, char *outFile)
+void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
 /* select records based on overlap of chromosome ranges */
 {
+struct lineFile *inLf = (inFmt == PSL_FMT)
+    ? pslFileOpen(inFile)
+    : lineFileOpen(inFile, TRUE);
+FILE *outFh, *dropFh = NULL;
+
 loadSelectTable(selectFile);
+outFh = mustOpen(outFile, "w");
+if (dropFile != NULL)
+    dropFh = mustOpen(dropFile, "w");
 
 switch (inFmt)
     {
     case PSL_FMT:
-        pslSelect(inFile, outFile);
+        pslSelect(inLf, outFh, dropFh);
         break;
     case GENEPRED_FMT:
-        genePredSelect(inFile, outFile);
+        genePredSelect(inLf, outFh, dropFh);
         break;
     case BED_FMT:
-        bedSelect(inFile, outFile);
+        bedSelect(inLf, outFh, dropFh);
         break;
     case COORD_COLS_FMT:
-        coordColsSelect(inFile, outFile);
+        coordColsSelect(inLf, outFh, dropFh);
         break;
     }
+lineFileClose(&inLf);
+carefulClose(&outFh);
+carefulClose(&dropFh);
 }
 
 void usage(char *msg)
@@ -316,13 +324,14 @@ errAbort("%s:\n"
          "          spec, in format described above.\n"
          "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
-         "  -excludeSelf - don't compare alignments with the same id.\n",
+         "  -excludeSelf - don't compare alignments with the same id.\n"
+         "  -dropped=file - output rows that were dropped to this file.\n",
          msg);
 }
 
 /* entry */
 int main(int argc, char** argv) {
-char *selectFile, *inFile, *outFile;
+char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # args");
@@ -357,12 +366,14 @@ else if (optionExists("inCoordCols"))
 else
     inFmt = getFileFormat(inFile);
 
+dropFile = optionVal("dropped", NULL);
+
 nonOverlaping = optionExists("nonOverlaping");
 if (optionExists("strand"))
     selectOptions |= SEL_USE_STRAND;
 if (optionExists("excludeSelf"))
     selectOptions |= SEL_EXCLUDE_SELF;
 
-overlapSelect(selectFile, inFile, outFile);
+overlapSelect(selectFile, inFile, outFile, dropFile);
 return 0;
 }
