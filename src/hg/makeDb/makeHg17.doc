@@ -2193,7 +2193,7 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-#  BLASTZ RAT RN3 (WORKING - 2004-06-11 - Hiram)
+#  BLASTZ RAT RN3 (DONE - 2004-06-14 - Hiram)
 
     ssh kk
     mkdir -p /cluster/data/hg17/bed/blastz.rn3.2004-06-11
@@ -2302,7 +2302,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
       echo "Processing chr $c"
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
-XXXX - running - 2004-06-13 14:35
     #	That takes about 30 minutes
 
     # Load database tables
@@ -2315,7 +2314,7 @@ XXXX - running - 2004-06-13 14:35
     done
     # this is a 55 minute job
 
-# CHAIN Rn3 BLASTZ (WORKING - 2004-06-13 - Hiram)
+# CHAIN Rn3 BLASTZ (DONE - 2004-06-14 - Hiram)
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -2378,11 +2377,157 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
         echo done $c
     end
 
+# NET Rn3 (WORKIGN - 2004-06-14 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg17/chrom.sizes \
+                        /cluster/data/rn3/chrom.sizes ../preNet/$i
+    end
+    # real    11m58.018s
+    # user    4m10.390s
+    # sys     2m10.780s
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
+                            /cluster/data/rn3/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 2505211904, utime 15891 s/100, stime 3245
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    time netClass hNoClass.net hg17 rn3 mouse.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
+	-qNewR=/cluster/bluearc/scratch/mus/rn3/linSpecRep.notInHuman
+    # real    14m2.042s
+    # user    10m6.450s
+    # sys     1m46.950s
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+    # real    9m44.445s
+    # user    6m42.660s
+    # sys     1m10.100s
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg17 netRn3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg17 syntenyNetRn3 stdin
+#   real    12m53.070s
+#   user    6m6.540s
+#   sys     0m50.580s
+    # check results
+    # featureBits hg17 netRn3
+    # 2823565051 bases of 2865248791 (98.545%) in intersection
+    # featureBits hg17 netMm3
+    # 2834484276 bases of 2865248791 (98.926%) in intersection
+
+    # featureBits hg17 syntenyNetMm3
+    # 2804467412 bases of 2865248791 (97.879%) in intersection
+    # featureBits hg17 syntenyNetRn3
+    # 2786960572 bases of 2865248791 (97.268%) in intersection
+
+    # Add entries for net and chain to mouse/hg17 trackDb
+
+    # make net
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    mkdir mouseNet
+    time netSplit mouse.net mouseNet
+    # real    10m44.479s
+    # user    6m43.680s
+    # sys     1m20.860s
+
+    mkdir ../axtNet
+    foreach n (mouseNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt mouseNet/$c.net chain/$c.chain \
+		/cluster/data/hg17/nib \
+		/cluster/data/rn3/nib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
+    cd /cluster/data/hg17/bed/blastz.rn3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    gzip *.axt
+    # add README.txt file to dir, if needed
+
+    #  Convert those axt files to psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/pslBest
+    time /cluster/bin/i386/hgLoadPsl hg17 chr*_blastzBestRn3.psl
+    # real    10m47.853s
+    # user    2m48.700s
+    # sys     0m24.250s
+
+     # check results
+    # featureBits hg17 blastzBestRn3
+    # 996722004 bases of 2865248791 (34.787%) in intersection
+    # featureBits hg17 blastzBestMm3
+    # 1007362800 bases of 2865248791 (35.158%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg17/axtBestRn3
+     cd /gbdb/hg17/axtBestRn3
+     ln -s /cluster/data/hg17/bed/blastz.rn3/axtNet/chr*.axt .
+     cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/hg17/axtBestRn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
+    #	table axtInfo may already exist, ignore create error.
+    hgsql hg17 < axtInfoInserts.sql
+
 # BLASTZ CHICKEN (GALGAL2) (WORKING - 2004-06-14 - Fan)
 
     ssh kk
     mkdir /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
-    cd /cluster/data/hg16/bed
+    cd /cluster/data/hg17/bed
     ln -s /cluster/data/hg17/bed/blastz.galGal2.2004-06-14 blastz.galGal2
     cd galGal2
     # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
