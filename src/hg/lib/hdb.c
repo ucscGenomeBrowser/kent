@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.194 2004/07/14 05:50:18 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.195 2004/07/14 21:10:50 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2525,11 +2525,15 @@ void hAddBinToQuery(int start, int end, struct dyString *query)
 hAddBinToQueryGeneral("bin", start, end, query);
 }
 
-static struct sqlResult *hExtendedRangeQuery(struct sqlConnection *conn,
-	char *rootTable, char *chrom,
-	int start, int end, char *extraWhere, int *retRowOffset, boolean order)
-/* Construct and make a query to tables that may be split and/or
- * binned. */
+struct sqlResult *hExtendedRangeQuery(
+	struct sqlConnection *conn,  /* Open SQL connection. */
+	char *rootTable, 	     /* Table (not including any chrN_) */
+	char *chrom, int start, int end,  /* Range. */
+	char *extraWhere,            /* Extra things to add to where clause. */
+	boolean order, 	   /* If true order by start position (can be slow). */
+	char *fields,      /* If non-NULL comma separated field list. */
+	int *retRowOffset) /* Returns offset past bin field. */
+/* Range query with lots of options. */
 {
 char *db = sqlGetDatabase(conn);
 struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
@@ -2538,13 +2542,14 @@ struct dyString *query = newDyString(1024);
 char *table = NULL;
 int rowOffset = 0;
 
+if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
     warn("table %s doesn't exist", rootTable);
     }
 else
     {
-    dyStringAppend(query, "select * from ");
+    dyStringPrintf(query, "select %s from ", fields);
     if (hti->isSplit)
 	{
 	char fullTable[64];
@@ -2581,9 +2586,11 @@ if (table != NULL)
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
-*retRowOffset = rowOffset;
+if (retRowOffset != NULL)
+    *retRowOffset = rowOffset;
 return sr;
 }
+
 
 struct sqlResult *hRangeQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
@@ -2592,7 +2599,7 @@ struct sqlResult *hRangeQuery(struct sqlConnection *conn,
  * binned. */
 {
 return hExtendedRangeQuery(conn, rootTable, chrom, start, end, 
-	extraWhere, retRowOffset, FALSE);
+	extraWhere, FALSE, NULL, retRowOffset);
 }
 
 struct sqlResult *hOrderedRangeQuery(struct sqlConnection *conn,
@@ -2602,16 +2609,19 @@ struct sqlResult *hOrderedRangeQuery(struct sqlConnection *conn,
  * binned. Forces return values to be sorted by chromosome start. */
 {
 return hExtendedRangeQuery(conn, rootTable, chrom, start, end, 
-	extraWhere, retRowOffset, TRUE);
+	extraWhere, TRUE, NULL, retRowOffset);
 }
 
-
-struct sqlResult *hChromQuery(struct sqlConnection *conn,
-	char *rootTable, char *chrom,
-	char *extraWhere, int *retRowOffset)
-/* Construct and make a query across whole chromosome to tables 
- * that may be split and/or
- * binned. */
+struct sqlResult *hExtendedChromQuery(
+	struct sqlConnection *conn,  /* Open SQL connection. */
+	char *rootTable, 	     /* Table (not including any chrN_) */
+	char *chrom,  		     /* Chromosome. */
+	char *extraWhere,            /* Extra things to add to where clause. */
+	boolean order, 	   /* If true order by start position (can be slow). */
+	char *fields,      /* If non-NULL comma separated field list. */
+	int *retRowOffset) /* Returns offset past bin field. */
+/* Chromosome query fields for tables that may be split and/or binned, 
+ * with lots of options. */
 {
 char *db = sqlGetDatabase(conn);
 struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
@@ -2619,6 +2629,7 @@ struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 int rowOffset = 0;
 
+if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
     warn("table %s doesn't exist", rootTable);
@@ -2628,22 +2639,35 @@ else
     rowOffset = hti->hasBin;
     if (hti->isSplit)
 	{
-        dyStringPrintf(query, "select * from %s_%s", chrom, rootTable);
+        dyStringPrintf(query, "select %s from %s_%s", fields, chrom, rootTable);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " where %s", extraWhere);
 	}
     else
 	{
-        dyStringPrintf(query, "select * from %s where %s='%s'", rootTable,
-		hti->chromField, chrom);
+        dyStringPrintf(query, "select %s from %s where %s='%s'", 
+		fields, rootTable, hti->chromField, chrom);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " and (%s)", extraWhere);
 	}
+    if (order)
+        dyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
-*retRowOffset = rowOffset;
+if (retRowOffset != NULL)
+    *retRowOffset = rowOffset;
 return sr;
+}
+
+struct sqlResult *hChromQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	char *extraWhere, int *retRowOffset)
+/* Construct and make a query across whole chromosome to tables 
+ * that may be split and/or * binned. */
+{
+return hExtendedChromQuery(conn, rootTable, chrom, extraWhere, 
+	FALSE, NULL, retRowOffset);
 }
 
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
