@@ -202,36 +202,33 @@ int  iypos;
 char *blatGbDb;
 char *sciName, *commonName;
 char *spDisplayId;
-
-conn = sqlConnect(UNIPROT_DB_NAME);
+char *oldDisplayId;
+conn  = sqlConnect(UNIPROT_DB_NAME);
 hPrintf("<br><font size=4>Protein ");
 
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 
-spDisplayId = spAccToId(conn, proteinID);
-if (strstr(spDisplayId, proteinID) == NULL)
-    {
-    hPrintf(" (aka %s", spDisplayId);
-    /* show once if the new and old displayId are the same */
-    if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
-    	{
-	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
-        hPrintf(")<br>\n", oldSpDisplayId(spDisplayId));
+spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
+if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
+	{
+	hPrintf(" (aka %s", spDisplayId);
+	/* show once if the new and old displayId are the same */
+ 	oldDisplayId = oldSpDisplayId(spDisplayId);
+	if (oldDisplayId != NULL)
+ 	    {
+            if (!sameWord(spDisplayId, oldDisplayId))
+	    	{
+	    	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    	}
+	    }
+	hPrintf(")\n");
 	}
-    else
-    	{
-        hPrintf(")\n", oldSpDisplayId(spDisplayId));
-	}
-    
-    }											    
-
 hPrintf(" %s\n", description);
 hPrintf("</font><br>");
 
 hPrintf("Organism: ");
 /* get scientific and Genbank common name of this organism */
-    
 sciName    = NULL;
 commonName = NULL;
 /* NOTE: on rare occasions, acc to taxon id is not a one to one relationship, 
