@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.18 2004/09/11 00:12:19 hiram Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.19 2004/10/12 00:02:22 fanhsu Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -328,7 +328,7 @@ else
 	    printf("Alignment score statistics</A></P>\n");
 	    }
 
-	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
+	puts("<FORM ACTION=\"../cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
 	printf("Capitalize ");
