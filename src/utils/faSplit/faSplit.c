@@ -37,7 +37,9 @@ errAbort(
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size/2\n"
   "    -oneFile - Put output in one file. Only used with size\n"
-  "    -out=outFile Get masking from outfile.  Only used with size.\n");
+  "    -out=outFile Get masking from outfile.  Only used with size.\n"
+  "    -lift=file.lft Put info on how to reconstruct sequence from\n"
+  "                   pieces in file.lft.  Only used with size\n");
 
 }
 
@@ -306,6 +308,8 @@ FILE *f = NULL;
 Bits *bits = NULL;
 int seqCount = 0;
 char *outFile = cgiOptionalString("out");
+char *liftFile = cgiOptionalString("lift");
+FILE *lift = NULL;
 
 splitPath(outRoot, dirOnly, noPath, NULL);
 if (oneFile)
@@ -313,6 +317,9 @@ if (oneFile)
     sprintf(fileName, "%s.fa", outRoot);
     f = mustOpen(fileName, "w");
     }
+if (liftFile)
+    lift = mustOpen(liftFile, "w");
+
 
 /* Count number of N's from s[0] to s[size-1].
  * Treat any parts past end of string as N's. */
@@ -327,18 +334,24 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    errAbort("Can only handle in files with one sequence using out option");
 	bitsForOut(outFile, seq.size, bits);
 	}
-    for (pos = 0; pos + pieceSize <= seq.size; pos += pieceSize)
+    for (pos = 0; pos < seq.size; pos += pieceSize)
         {
 	char numOut[128];
+	int thisSize = seq.size - pos;
+	if (thisSize > pieceSize) 
+	    thisSize = pieceSize;
 	sprintf(numOut, "%s%0*d", noPath, digits, pieceIx++);
-	if (bitCountRange(bits, pos, pieceSize) <= maxN)
+	if (bitCountRange(bits, pos, thisSize) <= maxN)
 	    {
 	    if (!oneFile)
 	        {
 		sprintf(fileName, "%s%s.fa", dirOnly, numOut);
 		f = mustOpen(fileName, "w");
 		}
-	    faWriteNext(f, numOut, seq.dna + pos, pieceSize);
+	    faWriteNext(f, numOut, seq.dna + pos, thisSize);
+	    if (lift)
+	        fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
+		    pos, numOut, thisSize, seq.name, seq.size);
 	    ++writeCount;
 	    if (!oneFile)
 	        carefulClose(&f);
@@ -347,6 +360,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     bitFree(&bits);
     }
 carefulClose(&f);
+carefulClose(&lift);
 lineFileClose(&lf);
 printf("%d pieces of %d written\n", writeCount, pieceIx);
 }
