@@ -5,8 +5,9 @@
 #include "options.h"
 #include "dystring.h"
 #include "obscure.h"
+#include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.3 2004/03/11 08:21:33 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.4 2004/03/11 09:56:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -192,6 +193,8 @@ if (word == NULL || strchr(word, '=') != NULL)
     errAbort("joiner without name line %d of %s\n", lf->lineIx, lf->fileName);
 AllocVar(js);
 js->name = cloneString(word);
+js->lineIx = lf->lineIx;
+js->fileName = cloneString(lf->fileName);
 
 while ((word = nextWord(&line)) != NULL)
     {
@@ -215,7 +218,8 @@ if (line == NULL)
     lineFileUnexpectedEnd(lf);
 line = trimSpaces(line);
 if (line[0] != '"' || lastChar(line) != '"')
-    errAbort("Expecting quoted line, line %d of %s\n", lf->lineIx, lf->fileName);
+    errAbort("Expecting quoted line, line %d of %s\n", 
+    	lf->lineIx, lf->fileName);
 line[strlen(line)-1] = 0;
 js->description = cloneString(line+1);
 
@@ -340,13 +344,18 @@ slReverse(&jsList);
 return jsList;
 }
 
-void joinerParsePassTwo(struct joinerSet *jsList, char *fileName)
+void joinerParsePassTwo(struct joinerSet *jsList)
 /* Go through and link together parents and children. */
 {
 struct joinerSet *js, *parent;
 struct hash *hash = newHash(0);
 for (js = jsList; js != NULL; js = js->next)
+    {
+    if (hashLookup(hash, js->name))
+        errAbort("Duplicate joiner %s line %d of %s",
+		js->name, js->lineIx, js->fileName);
     hashAdd(hash, js->name, js);
+    }
 for (js = jsList; js != NULL; js = js->next)
     {
     char *typeOf = js->typeOf;
@@ -354,7 +363,8 @@ for (js = jsList; js != NULL; js = js->next)
         {
 	js->parent = hashFindVal(hash, typeOf);
 	if (js->parent == NULL)
-	    errAbort("%s not define line %d of %s", typeOf, js->lineIx, fileName);
+	    errAbort("%s not define line %d of %s", 
+	    	typeOf, js->lineIx, js->fileName);
 	}
     }
 for (js = jsList; js != NULL; js = js->next)
@@ -362,7 +372,170 @@ for (js = jsList; js != NULL; js = js->next)
     for (parent = js->parent; parent != NULL; parent = parent->parent)
         {
 	if (parent == js)
-	    errAbort("Circular typeOf dependency on joiner %s", js->name);
+	    errAbort("Circular typeOf dependency on joiner %s line %d of %s", 
+	    	js->name, js->lineIx, js->fileName);
+	}
+    }
+}
+
+struct slName *sqlListTables(struct sqlConnection *conn)
+/* Return list of tables in database associated with conn. */
+{
+struct sqlResult *sr = sqlGetResult(conn, "show tables");
+char **row;
+struct slName *list = NULL, *el;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct hash *sqlAllFields()
+/* Get hash of all database.table.field. */
+{
+struct hash *fullHash = hashNew(18);
+struct hash *dbHash = sqlHashOfDatabases();
+struct hashEl *dbList, *db;
+char fullName[512];
+int count = 0;
+
+dbList = hashElListHash(dbHash);
+uglyf("%d databases\n", slCount(dbList));
+for (db = dbList; db != NULL; db = db->next)
+    {
+    struct sqlConnection *conn = sqlConnect(db->name);
+    struct slName *table, *tableList = sqlListTables(conn);
+    struct sqlResult *sr;
+    char query[256];
+    char **row;
+    uglyf("%s %d tables\n", db->name, slCount(tableList));
+    for (table = tableList; table != NULL; table = table->next)
+        {
+	safef(query, sizeof(query), "describe %s", table->name);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    safef(fullName, sizeof(fullName), "%s.%s.%s", 
+	    	db->name, table->name, row[0]);
+	    hashAdd(fullHash, fullName, NULL);
+	    ++count;
+	    }
+	sqlFreeResult(&sr);
+	}
+    slFreeList(&tableList);
+    sqlDisconnect(&conn);
+    }
+slFreeList(&dbList);
+hashFree(&dbHash);
+uglyf("%d total fields\n", count);
+return fullHash;
+}
+
+void printField(struct joinerField *jf, FILE *f)
+/* Print out field info to f. */
+{
+struct slName *db;
+for (db = jf->dbList; db != NULL; db = db->next)
+    {
+    if (db != jf->dbList)
+        fprintf(f, ",");
+    fprintf(f, "%s", db->name);
+    }
+fprintf(f, ".%s.%s", jf->table, jf->field);
+}
+
+boolean fieldExists(struct hash *fieldHash,
+	struct hash *dbChromHash,
+	struct joinerSet *js, struct joinerField *jf)
+/* Make sure field exists in at least one database. */
+{
+struct slName *db;
+
+/* First try to find it as non-split in some database. */
+for (db = jf->dbList; db != NULL; db = db->next)
+    {
+    char fieldName[512];
+    safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
+    	db->name, jf->table, jf->field);
+    if (hashLookup(fieldHash, fieldName))
+        return TRUE;
+    }
+
+/* Next try to find it as split. */
+for (db = jf->dbList; db != NULL; db = db->next)
+    {
+    struct slName *chrom, *chromList = hashFindVal(dbChromHash, db->name);
+    char fieldName[512];
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+        {
+	safef(fieldName, sizeof(fieldName), "%s.%s_%s.%s", 
+	    db->name, chrom->name, jf->table, jf->field);
+	if (hashLookup(fieldHash, fieldName))
+	    return TRUE;
+	}
+    }
+
+return FALSE;
+}
+
+struct hash *getDbChromHash()
+/* Return hash with chromosome name list for each database
+ * that has a chromInfo table. */
+{
+struct sqlConnection *conn = sqlConnect("mysql");
+struct slName *dbList = sqlGetAllDatabase(conn), *db;
+struct hash *dbHash = newHash(10);
+struct slName *chromList, *chrom;
+sqlDisconnect(&conn);
+
+for (db = dbList; db != NULL; db = db->next)
+     {
+     conn = sqlConnect(db->name);
+     if (sqlTableExists(conn, "chromInfo"))
+          {
+	  struct sqlResult *sr;
+	  char **row;
+	  struct slName *chromList = NULL, *chrom;
+	  sr = sqlGetResult(conn, "select chrom from chromInfo");
+	  while ((row = sqlNextRow(sr)) != NULL)
+	      {
+	      chrom = slNameNew(row[0]);
+	      slAddHead(&chromList, chrom);
+	      }
+	  sqlFreeResult(&sr);
+	  slReverse(&chromList);
+	  hashAdd(dbHash, db->name, chromList);
+	  }
+     sqlDisconnect(&conn);
+     }
+slFreeList(&dbList);
+return dbHash;
+}
+
+void joinerValidateOnDbs(struct joinerSet *jsList)
+/* Make sure that joiner refers to fields that exist at
+ * least somewhere. */
+{
+struct joinerSet *js;
+struct joinerField *jf;
+struct slName *db;
+struct hash *fieldHash = sqlAllFields();
+struct hash *dbChromHash = getDbChromHash();
+
+for (js=jsList; js != NULL; js = js->next)
+    {
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+        {
+	if (!fieldExists(fieldHash, dbChromHash, js, jf))
+	     {
+	     printField(jf, stderr);
+	     fprintf(stderr, " not found in %s after line %d of %s\n",
+	     	js->name, js->lineIx, js->fileName);
+	     }
 	}
     }
 }
@@ -372,9 +545,9 @@ void joinerCheck(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct joinerSet *js, *jsList = joinerParsePassOne(lf);
-joinerParsePassTwo(jsList, fileName);
-
+joinerParsePassTwo(jsList);
 uglyf("Got %d joiners in %s\n", slCount(jsList), fileName);
+joinerValidateOnDbs(jsList);
 }
 
 
