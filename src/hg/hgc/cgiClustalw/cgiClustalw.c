@@ -62,7 +62,7 @@ int ret;
 printf("\n");
 makeTempName(&alnTn, "clustal", ".aln");
 safef(clustal, sizeof(clustal), \
-    "clustalw -infile=%s -outfile=%s -quicktree > /dev/null ", \
+    "/usr/local/bin/clustalw -infile=%s -outfile=%s -quicktree > /dev/null ", \
     faIn, alnTn.forCgi);
 ret = system(clustal);    
 if (ret != 0)
