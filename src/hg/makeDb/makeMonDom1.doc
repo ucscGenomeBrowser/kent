@@ -184,6 +184,7 @@ BEGIN { name="" }
     hgsql -e 'load data local infile "chromInfo.tab" into table chromInfo;' \
 	monDom1
     #	generate chrom.sizes list in order by size, biggest first
+    #	This listing is going to be used in a variety of procedures below
     twoBitInfo monDom1.2bit stdout | sort -rn +1 > chrom.sizes
 
     # Enter monDom1 into dbDb and defaultDb so test browser knows about it:
@@ -2304,15 +2305,12 @@ XXX - TBD - 2004-12-19 20:15
     featureBits monDom1 chainGalGal2
     #	2437546469 bases of 3492108230 (69.802%) in intersection
     featureBits monDom1 chainMm5Link
-XXX - TBD - 2004-12-20 15:32
-
-    featureBits monDom1 netMm5
-    #	2889580530 bases of 3492108230 (82.746%) in intersection
 
 # BLASTZ ZEBRAFISH CLEAN UP (TBD)
     rm chain.tab link.tab
 
 # 5-WAY VAR_MULTIZ - ALIGNMENTS Hg17, Mm5, MonDom1, GalGal2, DanRer2
+#		DONE - 2005-01-04 - Hiram
     ssh eieio
     cd /cluster/data/monDom1/bed
     mkdir multiz
@@ -2333,7 +2331,7 @@ XXX - TBD - 2004-12-20 15:32
     cd /iscratch/i/monDom1/multiz
     rsync -a /cluster/data/monDom1/bed/multiz/ .
     mkdir penn
-    cp -p /cluster/bin/penn/multiz.v10 penn
+    cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/maf_project penn
     /cluster/bin/iSync
 
@@ -2348,12 +2346,15 @@ XXX - TBD - 2004-12-20 15:32
     ssh eieio
     cd /cluster/data/monDom1/bed/multiz
 
-    cat > tree.nh << 'EOF'
-(((hg17,mm5),galGal2),danRer1)
-'EOF'
-
-    # NOTE: removed zero-length MAF's (shouldn't have created them),
-    # galGal2/chr18_random.maf and fr1/chr6_hla_hap1.maf)
+    #	Not sure what this is used for.  Appears to be from something
+    #	that is no longer used.  Can find no reference to it in the
+    #	procedures.  Below in the parameter estimation for phastCons
+    #	there is a tree specified:
+    #	((((hg17,mm5),galGal2),monDom1),danRer2)
+    cat << '_EOF_' > tree.nh
+(((hg17,mm5),galGal2),danRer2)
+'_EOF_'
+    # << this line keeps emacs coloring happy
 
     # make output dir and run dir
     ssh kk9
@@ -2367,7 +2368,7 @@ XXX - TBD - 2004-12-20 15:32
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
-    set multi = /scratch/multiz5way.$c
+    set multi = /scratch/monDom1/multiz5way.$c
     set pairs = /iscratch/i/monDom1/multiz
 
     # special mode --
@@ -2406,39 +2407,52 @@ cat > oneMultiz.csh << 'EOF'
     # check for empty input file
     if (-s $f1 && -s $f2) then
         echo "Aligning $f1 $f2 $flag"
-        ${pairs}/penn/multiz.v10 $f1 $f2 $flag > $out/$c.tmp.maf
+	/iscratch/i/monDom1/multiz/penn/multiz.v10 $f1 $f2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
+        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
+                $out/$c.tmp.maf
         echo "Ordering $c.maf"
-        ${pairs}/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
+        /iscratch/i/monDom1/multiz/penn/maf_project $out/$c.tmp.maf monDom1.$c > $out/$c.maf
     else if (-s $f1) then
         cp $f1 $out
     else if (-s $f2) then
         cp $f2 $out
     endif
 'EOF'
-# << for emacs
+# << keep emacs coloring happy
 chmod +x oneMultiz.csh
+
+    #	Copy this script to iscratch
+    ssh kkr1u00
+    cd /iscratch/i/monDom1/multiz/penn
+    cp -p /cluster/data/monDom1/bed/multiz/run/oneMultiz.csh .
+    /cluster/bin/iSync
+
+    #	back to run the job
+    ssh kki
+    cd /cluster/data/monDom1/bed/multiz/run
+
 
 cat > allMultiz.csh << 'EOF'
 #!/bin/csh -fe
     # multiple alignment steps:
     # multiz.v10 human.maf mouse.maf 1
-    # multiz.v10 chicken.maf human-mouse.maf 1
-    # multiz.v10 zfish.maf human-mouse-chicken.maf 1
+    # multiz.v10 human-mouse.maf chicken.maf 1
+    # multiz.v10 human-mouse-chicken.maf zfish.maf 1
 set c = $1
-./oneMultiz.csh $c hg17 mm5  1
-./oneMultiz.csh $c galGal2 hg17mm5 1
-./oneMultiz.csh $c danRer2 galGal2hg17mm5 1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c hg17 mm5  1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c galGal2 hg17mm5 1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2 galGal2hg17mm5 1
 # get final alignment file
-./oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
 #cleanup
-./oneMultiz.csh $c
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c
 'EOF'
-# << for emacs
+# << keep emacs coloring happy
 chmod +x allMultiz.csh
 
 cat  << 'EOF' > template
 #LOOP
-allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
+./allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
 
@@ -2458,7 +2472,205 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(r
     para create jobList
     para try; para check
     para push
-XXX - RUNNING - 2004-12-21
+# Completed: 5517 of 5517 jobs
+# CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
+# IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest job:                       65s       1.08m     0.02h    0.00d
+# Submission to last job:          1495s      24.92m     0.42h    0.02d
+
+    #	combine results into a single file for loading
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+    catDir maf | mafFilter stdin -minScore=500 > multiz5way.maf
+
+# Load into database  (DONE - 2005-01-04 - Hiram)
+  ssh hgwdev
+  cd /cluster/data/monDom1/bed/multiz
+  mkdir -p /gbdb/monDom1/multiz5way
+  ln -s /cluster/data/monDom1/bed/multiz/multiz5way.maf /gbdb/monDom1/multiz5way
+  hgLoadMaf monDom1 multiz5way
+    #	Loaded 988922 mafs in 1 files from /gbdb/monDom1/multiz5way
+    #	4 minutes to load
+
+# Create pairwise maf files (no longer split across scaffolds)
+   ssh eieio
+   cd /cluster/data/monDom1/bed/multiz
+   mkdir -p pairwise
+   catDir galGal2 > pairwise/galGal2.maf
+   catDir hg17 > pairwise/hg17.maf
+   catDir mm5 > pairwise/mm5.maf
+   catDir danRer2 > pairwise/danRer2.maf
+
+# Load pairwise mafs into database  (DONE - 2005-01-04 - Hiram)
+   ssh  hgwdev
+   set h = /cluster/data/monDom1/bed/multiz/pairwise
+   cd $h
+   foreach i (*.maf)
+      set o = $i:r
+      set t = ${o}_netBlastz
+      mkdir -p /gbdb/monDom1/multiz5way/$t
+      ln -s $h/$i /gbdb/monDom1/multiz5way/$t
+      hgLoadMaf monDom1 $t -pathPrefix=/gbdb/monDom1/multiz5way/$t
+   end
+
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS (WORKING - 2005-01-04 - Hiram)
+
+# Estimate phastCons parameters
+  ssh eieio
+  mkdir /cluster/data/monDom1/bed/multiz/cons
+  cd /cluster/data/monDom1/bed/multiz/cons
+
+  # Create a starting-tree.mod based on scaffold_13303. (the largest one)
+  twoBitToFa ../../../monDom1.2bit -seq=scaffold_13303 scaffold_13303.fa
+  /cluster/bin/phast/msa_split ../maf/scaffold_13303.maf --refseq scaffold_13303.fa --in-format MAF --windows 100000000,1000 --out-format SS --between-blocks 5000 --out-root s1
+(((hg17,mm5),galGal2),danRer2)
+  /cluster/bin/phast/phyloFit -i SS s1.*.ss --tree "((((hg17,mm5),galGal2),monDom1),danRer2)" --out-root starting-tree
+  rm scaffold_13303.fa s1.*.ss
+
+  # Create directory full of sequence in individual scaffold files on bluearc.
+  ssh kksilo
+  mkdir -p /cluster/bluearc/monDom1/scaffoldFa
+  cd /cluster/bluearc/monDom1/scaffoldFa
+  twoBitToFa /cluster/data/monDom1/monDom1.2bit stdout | faSplit byname stdin foo
+
+  # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+  mkdir -p /cluster/bluearc/monDom1/cons/ss
+  cd /cluster/bluearc/monDom1/cons/ss
+  foreach i (`awk '{print $1}' /cluster/data/monDom1/chrom.sizes`)
+      if (-e /cluster/data/monDom1/bed/multiz/maf/$i.maf) then
+	  echo msa_split $i
+	  /cluster/bin/phast/msa_split /cluster/data/monDom1/bed/multiz/maf/$i.maf \
+	     --refseq /cluster/bluearc/monDom1/scaffoldFa/$i.fa \
+	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	     --out-format SS --out-root $i
+      endif
+  end
+
+  # Create a random list of 50 1 mb regions 
+  ls -l | awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs
+
+  # Set up parasol directory to calculate trees on these 50 regions
+  ssh kki
+  mkdir /cluster/bluearc/monDom1/cons/treeRun1
+  cd /cluster/bluearc/monDom1/cons/treeRun1
+  mkdir tree log
+
+  # Create little script that calls phastCons with right arguments
+  #	I wonder if target-coverage here has to go along with the
+  #	readjusted target-coverage below as it is tuned up ?
+  #	In that case, this would be 0.50 here.
+  cat > makeTree << '_EOF_'
+  /cluster/bin/phast/phastCons ../ss/$1.ss \
+      /cluster/data/monDom1/bed/multiz/cons/starting-tree.mod \
+      --gc 0.410 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.35 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+  chmod a+x makeTree
+
+  # Create gensub file
+  cat > template << '_EOF_'
+#LOOP
+makeTree $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Make cluster job and run it
+  gensub2 ../randomSs single template jobList
+  para create jobList
+  para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       1526s      25.43m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   650s      10.84m     0.18h    0.01d  0.000 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest job:                       84s       1.40m     0.02h    0.00d
+# Submission to last job:           168s       2.80m     0.05h    0.00d
+
+  # Now combine parameter estimates.  We can average the .mod files
+  # using phyloBoot.  This must be done separately for the conserved
+  # and nonconserved models
+  ls tree/*.cons.mod > cons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' --output-average ../ave.cons.mod > cons_summary.txt
+  ls tree/*.noncons.mod > noncons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' --output-average ../ave.noncons.mod > noncons_summary.txt
+  cd ..
+  cp -p ave.*.mod /cluster/data/monDom1/bed/multiz/cons
+
+  ssh kk9
+  # Create cluster dir to do main phastCons run
+  mkdir  /cluster/bluearc/monDom1/cons/consRun1
+  cd  /cluster/bluearc/monDom1/cons/consRun1
+  mkdir ppRaw bed
+
+  # Create script to run phastCons with right parameters
+cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.50 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
+   ppRaw/$2/$1.pp
+'_EOF_'
+  chmod a+x doPhast
+
+  # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Create parasol batch and run it
+  ls -1 ../ss | sed 's/.ss//' > in.lst
+  gensub2 in.lst single template jobList
+  para create jobList
+  para try/check/push/etc.
+# Completed: 8171 of 8171 jobs
+# CPU time in finished jobs:      24641s     410.68m     6.84h    0.29d  0.001 y
+# IO & Wait Time:                 81696s    1361.60m    22.69h    0.95d  0.003 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest job:                       39s       0.65m     0.01h    0.00d
+# Submission to last job:          1128s      18.80m     0.31h    0.01d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    catDir bed | awk \
+    	'{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+	/cluster/data/monDom1/bed/multiz/mostConserved.bed
+
+    # Figure out how much is actually covered by the bed files as so:
+    awk '{print $3 - $2;}' /cluster/data/monDom1/bed/multiz/mostConserved.bed | addCols stdin
+    at 0.35: 99792852.00
+    at 0.55: 169027762
+    at 0.50: 140230712.00
+    at 0.35: 99792852/3492108230 = .028576
+    at 0.55: 169027762/3492108230 = .048402 with two points claiming to
+	to be negative at 0.00000 changed to 0
+    at 0.50: 140230712.00/3492108230 = .040156 - no unusual points noted
+
+
+    # If the results of the this divided by the non-n genome size (1.5G) aren't
+    # around 4%, then do it again, adjusting the target-coverage phastCons
+    # parameter.  Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/multiz
+    hgLoadBed monDom1 mostConserved mostConserved.bed
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh eieio
+    cd /cluster/bluearc/monDom1/cons/consRun1
+    find ./ppRaw -type f | xargs cat | \
+	wigEncode stdin phastCons5.wig phastCons5.wib
+    cp -p phastCons5.wi? /cluster/data/monDom1/bed/multiz/cons
+    
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/multiz/cons
+    ln -s `pwd`/phastCons5.wib /gbdb/monDom1/wib/phastCons5.wib
+    hgLoadWiggle monDom1 phastCons5 phastCons5.wig
 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
