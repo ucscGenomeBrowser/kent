@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.12 2003/10/03 21:09:12 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.13 2003/10/04 02:18:28 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -367,6 +367,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     int dataOffset = 0;		/*	within data block during drawing */
     int prevDataOffset = 0;	/*	previous data block item used  */
     int OffsetIncrement = 1;	/*	for loop control	*/
+    int minimalSpan = 1000000;	/*	a lower limit safety check */
 
     h = tg->lineHeight;
     /*	Take a look through the potential spans, and given what we have
@@ -381,8 +382,14 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	Span = (int) el->val;
 	if( (Span < basesPerPixel) && (Span > usingDataSpan) )
 	    usingDataSpan = Span;
+	if( Span < minimalSpan )
+	    minimalSpan = Span;
 	}
     hashElFreeList(&elList);
+
+    /*	There may not be a span of 1, use whatever is lowest	*/
+    if( minimalSpan > usingDataSpan )
+	usingDataSpan = minimalSpan;
 
     /*	Now that we know what Span to draw, see if this item should be
      *	drawn at all.
