@@ -996,7 +996,7 @@ visibility hide
 type sample 9
 
 track footPrinter
-shortLabel FootPrintera
+shortLabel FootPrinter
 longlabel FootPrinter Conservation Score
 priority 41.0022
 color 100,100,100
