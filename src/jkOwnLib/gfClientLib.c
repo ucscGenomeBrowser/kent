@@ -15,7 +15,7 @@
 #include "nib.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.25 2004/01/22 22:31:59 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.26 2004/02/18 00:55:30 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -104,6 +104,11 @@ if (buf[0] != 'Y')
 write(conn, seq->dna, seq->size);
 }
 
+static void gfServerWarn(bioSeq *seq, char *warning)
+/* Write out warning. */
+{
+warn("couldn't process %s: %s", seq->name, warning);
+}
 
 static struct gfRange *gfQuerySeq(int conn, struct dnaSeq *seq)
 /* Ask server for places sequence hits. */
@@ -122,9 +127,10 @@ for (;;)
 	{
 	break;
 	}
-    else if (startsWith(buf, "Error:"))
+    else if (startsWith("Error:", buf))
         {
-	errAbort(buf);
+	gfServerWarn(seq, buf);
+	break;
 	}
     else
 	{
@@ -194,7 +200,7 @@ static void gfQuerySeqTrans(int conn, aaSeq *seq, struct gfClump *clumps[2][3],
 int frame, isRc, rowSize;
 struct gfClump *clump;
 struct gfHit *hit;
-int tileSize;
+int tileSize = 0;
 char *line;
 char buf[256], *row[12];
 struct gfSeqSource *ssList = NULL, *ss;
@@ -205,47 +211,54 @@ for (isRc = 0; isRc <= 1; ++isRc)
 
 /* Send sequence to server. */
 startSeqQuery(conn, seq, "protQuery");
-
 line = netRecieveString(conn, buf);
-tileSize = findTileSize(line);
-
-/* Read results line by line and save in memory. */
-for (;;)
+if (!startsWith("Error:", line))
     {
-    /* Read and parse first line that describes clump overall. */
-    netRecieveString(conn, buf);
-    if (sameString(buf, "end"))
-	{
-	break;
-	}
-    else if (startsWith(buf, "Error:"))
-        {
-	errAbort(buf);
-	}
-    rowSize = chopLine(buf, row);
-    if (rowSize < 8)
-	errAbort("Expecting 8 words from server got %d", rowSize);
-    AllocVar(clump);
-    clump->qStart = sqlUnsigned(row[0]);
-    clump->qEnd = sqlUnsigned(row[1]);
-    AllocVar(ss);
-    ss->fileName = cloneString(row[2]);
-    slAddHead(&ssList, ss);
-    clump->target = ss;
-    clump->tStart = sqlUnsigned(row[3]);
-    clump->tEnd = sqlUnsigned(row[4]);
-    clump->hitCount = sqlUnsigned(row[5]);
-    isRc = ((row[6][0] == '-') ? 1 : 0);
-    frame = sqlUnsigned(row[7]);
-    slAddHead(&clumps[isRc][frame], clump);
+    tileSize = findTileSize(line);
 
-    /* Read and parse next (long) line that describes hits. */
-    clump->hitList = getHitsFromServer(conn, lm);
-    assert(slCount(clump->hitList) == clump->hitCount);
+    /* Read results line by line and save in memory. */
+    for (;;)
+	{
+	/* Read and parse first line that describes clump overall. */
+	netRecieveString(conn, buf);
+	if (sameString(buf, "end"))
+	    {
+	    break;
+	    }
+	else if (startsWith("Error:", buf))
+	    {
+	    gfServerWarn(seq, buf);
+	    break;
+	    }
+	rowSize = chopLine(buf, row);
+	if (rowSize < 8)
+	    errAbort("Expecting 8 words from server got %d", rowSize);
+	AllocVar(clump);
+	clump->qStart = sqlUnsigned(row[0]);
+	clump->qEnd = sqlUnsigned(row[1]);
+	AllocVar(ss);
+	ss->fileName = cloneString(row[2]);
+	slAddHead(&ssList, ss);
+	clump->target = ss;
+	clump->tStart = sqlUnsigned(row[3]);
+	clump->tEnd = sqlUnsigned(row[4]);
+	clump->hitCount = sqlUnsigned(row[5]);
+	isRc = ((row[6][0] == '-') ? 1 : 0);
+	frame = sqlUnsigned(row[7]);
+	slAddHead(&clumps[isRc][frame], clump);
+
+	/* Read and parse next (long) line that describes hits. */
+	clump->hitList = getHitsFromServer(conn, lm);
+	assert(slCount(clump->hitList) == clump->hitCount);
+	}
+    for (isRc = 0; isRc <= 1; ++isRc)
+	for (frame = 0; frame<3; ++frame)
+	    slReverse(&clumps[isRc][frame]);
     }
-for (isRc = 0; isRc <= 1; ++isRc)
-    for (frame = 0; frame<3; ++frame)
-	slReverse(&clumps[isRc][frame]);
+else
+    {
+    gfServerWarn(seq, line);
+    }
 *retSsList = ssList;
 *retTileSize = tileSize;
 }
@@ -259,7 +272,7 @@ static void gfQuerySeqTransTrans(int conn, struct dnaSeq *seq,
 int qFrame, tFrame, isRc, rowSize;
 struct gfClump *clump;
 struct gfHit *hit;
-int tileSize;
+int tileSize = 0;
 char *line;
 char buf[256], *row[12];
 struct gfSeqSource *ssList = NULL, *ss;
@@ -271,49 +284,56 @@ for (isRc = 0; isRc <= 1; ++isRc)
 
 /* Send sequence to server. */
 startSeqQuery(conn, seq, "transQuery");
-
 line = netRecieveString(conn, buf);
-tileSize = findTileSize(line);
-
-/* Read results line by line and save in memory. */
-for (;;)
+if (!startsWith("Error:", line))
     {
-    /* Read and parse first line that describes clump overall. */
-    netRecieveString(conn, buf);
-    if (sameString(buf, "end"))
-	{
-	break;
-	}
-    else if (startsWith(buf, "Error:"))
-        {
-	errAbort(buf);
-	}
-    rowSize = chopLine(buf, row);
-    if (rowSize < 9)
-	errAbort("Expecting 9 words from server got %d", rowSize);
-    AllocVar(clump);
-    clump->qStart = sqlUnsigned(row[0]);
-    clump->qEnd = sqlUnsigned(row[1]);
-    AllocVar(ss);
-    ss->fileName = cloneString(row[2]);
-    slAddHead(&ssList, ss);
-    clump->target = ss;
-    clump->tStart = sqlUnsigned(row[3]);
-    clump->tEnd = sqlUnsigned(row[4]);
-    clump->hitCount = sqlUnsigned(row[5]);
-    isRc = ((row[6][0] == '-') ? 1 : 0);
-    qFrame = sqlUnsigned(row[7]);
-    tFrame = sqlUnsigned(row[8]);
-    slAddHead(&clumps[isRc][qFrame][tFrame], clump);
+    tileSize = findTileSize(line);
 
-    /* Read and parse next (long) line that describes hits. */
-    clump->hitList = getHitsFromServer(conn, lm);
-    assert(slCount(clump->hitList) == clump->hitCount);
+    /* Read results line by line and save in memory. */
+    for (;;)
+	{
+	/* Read and parse first line that describes clump overall. */
+	netRecieveString(conn, buf);
+	if (sameString(buf, "end"))
+	    {
+	    break;
+	    }
+	else if (startsWith("Error:", buf))
+	    {
+	    gfServerWarn(seq, buf);
+	    break;
+	    }
+	rowSize = chopLine(buf, row);
+	if (rowSize < 9)
+	    errAbort("Expecting 9 words from server got %d", rowSize);
+	AllocVar(clump);
+	clump->qStart = sqlUnsigned(row[0]);
+	clump->qEnd = sqlUnsigned(row[1]);
+	AllocVar(ss);
+	ss->fileName = cloneString(row[2]);
+	slAddHead(&ssList, ss);
+	clump->target = ss;
+	clump->tStart = sqlUnsigned(row[3]);
+	clump->tEnd = sqlUnsigned(row[4]);
+	clump->hitCount = sqlUnsigned(row[5]);
+	isRc = ((row[6][0] == '-') ? 1 : 0);
+	qFrame = sqlUnsigned(row[7]);
+	tFrame = sqlUnsigned(row[8]);
+	slAddHead(&clumps[isRc][qFrame][tFrame], clump);
+
+	/* Read and parse next (long) line that describes hits. */
+	clump->hitList = getHitsFromServer(conn, lm);
+	assert(slCount(clump->hitList) == clump->hitCount);
+	}
+    for (isRc = 0; isRc <= 1; ++isRc)
+	for (qFrame = 0; qFrame<3; ++qFrame)
+	    for (tFrame = 0; tFrame<3; ++tFrame)
+		slReverse(&clumps[isRc][qFrame][tFrame]);
     }
-for (isRc = 0; isRc <= 1; ++isRc)
-    for (qFrame = 0; qFrame<3; ++qFrame)
-	for (tFrame = 0; tFrame<3; ++tFrame)
-	    slReverse(&clumps[isRc][qFrame][tFrame]);
+else
+    {
+    gfServerWarn(seq, buf);
+    }
 *retSsList = ssList;
 *retTileSize = tileSize;
 }
