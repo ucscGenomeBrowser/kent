@@ -1,0 +1,80 @@
+#!/usr/bin/perl
+#
+# findUnusedReleases
+#
+# $Id: findUnusedReleases,v 1.1 2004/05/29 07:38:36 genbank Exp $
+#
+use strict;
+use warnings;
+use File::Basename;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use gbCommon;
+
+my $usage = 
+    "findUnusedReleases\n"
+    . "Compare releases with extFile dumps under: \n"
+    . "   var/dbload/*/extFile/\$date/*.extFile.txt\n"
+    . "to look for unused releases that can be removed\n";
+
+# table of release -> list of host:db
+my %releaseUsage;
+
+# find the newest extFile dumpDir
+sub getNewestGpExtFileDir($) {
+    my($host) = @_;
+
+    my @dirs = glob("var/dbload/$host/extFile/*.*.*");
+    if ($#dirs < 0) {
+        gbError("no extFile dumps for $host");
+    }
+    @dirs = sort(@dirs);
+    return $dirs[$#dirs];  # last one
+}
+
+# add a gbExtFile row to the table of releases in use.
+sub addHostDbReleases($$$) {
+    my($host, $db, $extFile) = @_;
+    my @parts = split(/\//, $extFile);
+    my $rel = $parts[$#parts-2];
+    
+    my $hostDb = $host . ":" . $db;
+    if (!defined($releaseUsage{$rel})) {
+        $releaseUsage{$rel} = [$hostDb];
+    } else {
+        if (!inList($hostDb, @{$releaseUsage{$rel}})) {
+            push(@{$releaseUsage{$rel}}, $hostDb);
+        }
+    }
+}
+
+# add a gbExtFile dump to the table of releases in use.
+sub addHostReleases($$) {
+    my($host, $extFileDump) = @_;
+
+    #var/dbload/hgw1/extFile/2004.05.28/fr1.extFile.txt
+    my $db = basename($extFileDump, (".extFile.txt"));
+    foreach my $line (split(/\n/, readFile($extFileDump))) {
+        my @row = split(/\t/, $line);
+        addHostDbReleases($host, $db, $row[1]);
+    }
+}
+
+# add gbExtFile dumps to the table of releases in use.
+sub addReleases() {
+    foreach my $extFileDir (glob("var/dbload/*/extFile")) {
+        my $host = basename(dirname($extFileDir));
+        foreach my $extFileDump (glob(getNewestGpExtFileDir($host) . "/*.extFile.txt")) {
+            addHostReleases($host, $extFileDump);
+        }
+    }
+}
+
+if ($#ARGV >= 0) {
+    gbError("wrong # args: $usage");
+}
+
+addReleases();
+foreach my $rel (sort(keys(%releaseUsage))) {
+    print $rel . "\t" . join("\t", @{$releaseUsage{$rel}}) . "\n";
+}

@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.25 2004/05/28 18:07:25 genbank Exp $
+# $Id: gbDbLoadStep,v 1.26 2004/05/29 07:38:36 genbank Exp $
 #
 use strict;
 use warnings;
@@ -101,11 +101,12 @@ sub loadMgc($$) {
     }
 }
 
-# create one sequence zip file if the table is loaded for this genome.
-sub createSeqZip($$$$$) {
+# Build a sequence fa for a download file, or undef if not defined for
+# this db
+sub makeSeqFa($$$$$) {
     my($db, $srcDb, $type, $orgCat, $outBase) = @_;
 
-    # on load if table is being loaded
+    # one create if table is loaded
     my $loadTbl = getDbConfNo($db, "$srcDb.$type.$orgCat.load");
     if (defined($loadTbl) && ($loadTbl eq "yes")) {
         # setup out directory to put 
@@ -114,12 +115,37 @@ sub createSeqZip($$$$$) {
 
         my $fa = "$downloadDir/$outBase.fa";
         runProg("gbGetSeqs -get=seq -db=$db -$orgCat $srcDb $type $fa");
+        return $fa;
+    } else {
+        return undef;
+    }
+}
 
+
+# create one sequence zip file if the table is loaded for this genome.
+sub createSeqZip($$$$$) {
+    my($db, $srcDb, $type, $orgCat, $outBase) = @_;
+
+    my $fa = makeSeqFa($db, $srcDb, $type, $orgCat, $outBase);
+    if (defined($fa)) {
         # zip without directory path and move into place
-        my $zip =  "$downloadDir/$outBase.zip";
+        my $zip =  dirname($fa) . "/$outBase.zip";
         runProg("zip -j $zip.tmp $fa");
         unlink($fa);
         renameFile("$zip.tmp", $zip);
+    }
+}
+
+# create one sequence fa.gz if the table is loaded for this genome.
+sub createSeqFaGz($$$$$) {
+    my($db, $srcDb, $type, $orgCat, $outBase) = @_;
+
+    my $fa = makeSeqFa($db, $srcDb, $type, $orgCat, $outBase);
+    if (defined($fa)) {
+        my $gzip =  dirname($fa) . "/$outBase.fa.gz";
+        runProg("gzip -4c $fa> $gzip.tmp");
+        unlink($fa);
+        renameFile("$gzip.tmp", $gzip);
     }
 }
 
@@ -128,7 +154,7 @@ sub makeDownloadSeqs($) {
     my($db) = @_;
     createSeqZip($db, "genbank", "mrna", "native", "mrna");
     createSeqZip($db, "genbank", "mrna", "xeno", "xenoMrna");
-    #createSeqZip($db, "genbank", "est", "native", "est");
+    createSeqFaGz($db, "genbank", "est", "native", "est");
     createSeqZip($db, "refseq", "mrna", "native", "refMrna");
     #FIXME: not supported gbGetSeqs:
     #createSeqZip($db, "native", "refseq", "mrna", "refPep");
