@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSort.c,v 1.3 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainSort.c,v 1.4 2003/06/21 18:40:20 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +19,7 @@ errAbort(
   "Note that inFile and outFile can be the same\n"
   "options:\n"
   "   -target sort on target start rather than score\n"
+  "   -query sort on query start rather than score\n"
   );
 }
 
@@ -39,6 +40,8 @@ lineFileClose(&lf);
 /* Sort. */
 if (optionExists("target"))
     slSort(&chainList, chainCmpTarget);
+else if (optionExists("query"))
+    slSort(&chainList, chainCmpQuery);
 else
     slSort(&chainList, chainCmpScore);
 
