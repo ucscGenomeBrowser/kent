@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.110 2003/09/19 19:22:30 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.111 2003/09/24 17:43:06 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2654,7 +2654,8 @@ else
     {
     if (*retWinStart != 1)
 	hgPositionsHtml(hgp, stdout, useWeb, hgAppName, cart);
-    else
+/* now we always return # of hits */
+/*    else */
 	*retWinStart = hgp->posCount;
 
     return NULL;
