@@ -389,6 +389,10 @@ void mafMethods(struct track *tg);
 void altGraphXMethods(struct track *tg);
 /* setup special methods for altGraphX track */
 
+void wabaMethods(struct track *tg);
+/* Return track with fields shared by waba-based 
+ * alignment tracks filled in. */
+
 void axtMethods(struct track *tg, char *otherDb);
 /* Make track group for axt alignments. */
 

@@ -8,7 +8,7 @@ A = hgTracks
 
 O = $A.o altGraphXTrack.o chainTrack.o cytoBandTrack.o \
         goldTrack.o loweLabTracks.o \
-	mafTrack.o netTrack.o pslTrack.o rmskTrack.o
+	mafTrack.o netTrack.o pslTrack.o rmskTrack.o wabaTrack.o
 
 my: compile
 	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
