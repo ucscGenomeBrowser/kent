@@ -29,8 +29,8 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
-cp -p /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
-cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
+cp /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
+cp /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
 cd hiding/hgcent
 set CVSROOT=/projects/hg/cvsroot 
 set temp = '"'"v${BRANCHNN}"'"'
