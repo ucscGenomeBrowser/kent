@@ -55,12 +55,19 @@ if [ "$?" -ne 0 ]; then
     exit 255
 fi
 
+rm -f bed.tab
+
 oneTest "zcat bed4.txt.gz | $TESTPROGRAM -noLoad test test stdin" "29784     1"
 oneTest "zcat bed6.txt.gz | $TESTPROGRAM -noLoad test test stdin" "01708     1"
+oneTest "zcat bed14.txt.gz | $TESTPROGRAM -noLoad test test stdin" "00496     2"
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`
     echo "${C}   run, $failures failed";
+fi
+
+if [ -z "${verbose}" ]; then
+    rm -f bed.tab
 fi
 
 exit 0
