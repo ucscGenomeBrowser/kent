@@ -112,7 +112,7 @@ struct pslInfo
 {
   struct pslInfo *next;
   struct psl *psl;
-  short splice[256];
+  short splice[512];
   struct acc *mrna;
   float pctId;
   float coverage;
@@ -743,8 +743,8 @@ if ((type == INDEL) || (type == UNALIGNED))
   }    
 
 /* fprintf(stderr, "Comparing genomic %s at %d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", gseq->dna, ni->chromStart, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);*/
-/* fprintf(stderr, "Comparing genomic at %d-%d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", ni->chromStart, ni->chromEnd, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);
-   fprintf(stderr, "\tfrom start - %s\n\tfrom end - %s\n", dnaStart, dnaEnd); */
+/* fprintf(stderr, "Comparing genomic at %d-%d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", ni->chromStart, ni->chromEnd, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand); */
+/*   fprintf(stderr, "\tfrom start - %s\n\tfrom end - %s\n", dnaStart, dnaEnd); */
 
 /* If it doesn't align to this region */
 if (start == end)
@@ -967,7 +967,7 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
 /* Create a record of a mismatch */
 {
   struct indel *mi;
- 
+
   AllocVar(mi);
   mi->next = NULL;
   mi->size = 1;
@@ -1055,6 +1055,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
     {
     int qstart = pi->psl->qStarts[i];
     int tstart = pi->psl->tStarts[i] - pi->psl->tStarts[0];
+
     /* Compare each base */
     for (j = 0; j < pi->psl->blockSizes[i]; j++) 
         {
@@ -1375,6 +1376,7 @@ acc = createAcc(name);
 cdsCompare(conn, pi, rna, dna);
 pi->cdsPctId = (float)(pi->cdsMatch)/(pi->cdsMatch + pi->cdsMismatch);
 pi->cdsCoverage = (float)(pi->cdsMatch + pi->cdsMismatch)/(pi->cdsSize);
+
 /* Determine indels in the alignment */
 cdsIndels(conn, pi, rna);
 } 
@@ -1588,7 +1590,7 @@ if (indelReport)
 if (unaliReport) 
     {
     if (verbose)
-        printf("Writing out unaligned reginos\n");
+        printf("Writing out unaligned regions\n");
     writeList(un, pi->unaliList, UNALIGNED, NULL, NULL);
     }
 
