@@ -785,7 +785,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	    w = x2-x1;
 	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-		 		     lfs->orientation, bColor);
+		 		     lfs->orientation, bColor, TRUE);
 	    }	
 	prevEnd = lf->end;
 
@@ -802,7 +802,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	        {
 	        if (shades) bColor =  shades[(lf->grayIx>>1)];
 		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-		 		     lf->orientation, bColor);
+		 		     lf->orientation, bColor, FALSE);
 		}
 	    if (shades) color =  shades[lf->grayIx+isXeno];
 	    mgDrawBox(mg, x1, midY, w, 1, color);
@@ -1134,7 +1134,7 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 		  {
 		  if (shades) bColor =  shades[(lf->grayIx>>1)];
 		  mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-					 lf->orientation, bColor);
+					 lf->orientation, bColor, FALSE);
 		  }
 	      if (shades) color =  shades[lf->grayIx+isXeno];
 	      mgDrawBox(mg, x1, midY, w, 1, color);
