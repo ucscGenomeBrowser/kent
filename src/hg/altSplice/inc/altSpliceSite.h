@@ -21,15 +21,16 @@ enum altSpliceType
 
 struct altSpliceSite
 /* Structre to hold information about one splice site in graph. */
-    {
+{
     struct altSpliceSite *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome. */
     unsigned chromStart;	/* Chrom start. */
     unsigned chromEnd;	/* End. */
-    char *agName;	/* Name of altGraphX that edge is from. Memory not owned here. */
+    char *agName;	/* Name of altGraphX that edge is from.*/ 
     char strand[3];	/* Strand. */
     unsigned index;	/* Index into altGraphX records. */
     unsigned type;	/* Type of splice site i.e. ggHardStart,ggHardEnd. */
+    unsigned altMax; /* Maximum number of altCount. */
     unsigned altCount;	/* Number of alternative ways out of splice site. */
     unsigned *vIndexes;	/* Index into altGraphX record for alt vertexes. */
     unsigned *altStarts;	/* Chromosome starts of alternative outs. */
