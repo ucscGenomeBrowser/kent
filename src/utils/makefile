@@ -50,6 +50,7 @@ DIRS = \
 	convolve \
 	detab \
 	endsInLf \
+	faAlign \
 	faCmp \
 	faCount \
 	faFilterN \
