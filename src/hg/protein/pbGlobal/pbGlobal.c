@@ -338,7 +338,7 @@ hDisconnectCentral(&connCentral);
 
 if (proteinInSupportedGenome || (blatGbDb != NULL))
     {
-    hPrintf("\n<B>UCSC links:</B><BR>\n ");
+    hPrintf("\n<B>UCSC Links:</B><BR>\n ");
     hPrintf("<UL>\n");
 
     /* Show GB links only if the protein belongs to a supported genome */
@@ -544,7 +544,7 @@ else
 	        if (answer == NULL)
 		    {
 	            errAbort(
-		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol."
+		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
 		    , queryID);
 	    	    }
 		}
@@ -608,7 +608,8 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.", proteinID);
+	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
+	, proteinID);
 	}
     else
 	{
