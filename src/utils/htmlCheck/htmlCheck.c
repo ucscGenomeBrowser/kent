@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.5 2004/02/28 08:58:10 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.6 2004/02/28 08:58:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -377,7 +377,6 @@ struct httpTag *tag;
 struct httpAttribute *att;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
-    mustWrite(stdout, tag->start, tag->end - tag->start);
     printf("%s", tag->name);
     for (att = tag->attributes; att != NULL; att = att->next)
         {
