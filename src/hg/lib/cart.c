@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.42 2004/07/14 05:49:31 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.43 2004/07/21 04:17:31 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -470,7 +470,11 @@ cartSetString(cart, var, buf);
 boolean cartBoolean(struct cart *cart, char *var)
 /* Retrieve cart boolean. */
 {
-return cartInt(cart, var);
+char *s = cartString(cart, var);
+if (sameString(s, "on") || atoi(s) != 0)
+    return TRUE;
+else
+    return FALSE;
 }
 
 boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
