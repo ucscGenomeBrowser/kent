@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.28 2004/01/13 21:41:29 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.29 2004/01/15 00:12:15 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -96,7 +96,7 @@ static struct hash *trackSpans = NULL;	/* hash of hashes */
 
 #if defined(DEBUG)
 /****           some simple debug output during development	*/
-static char dbgFile[] = "../trash/wig.dbg";
+static char dbgFile[] = "trash/wig.dbg";
 static boolean debugOpened = FALSE;
 static FILE * dF;
 
@@ -747,9 +747,12 @@ if( tg->visibility == tvDense)
     }
 else if( tg->visibility == tvFull)
     {
+    int centerLabel = (height/2)-(fontHeight/2);
+    int labelWidth = 0;
+
     /* track label is centered in the whole region */
-    vgText(vg, xOff, yOff+(height/2)-(fontHeight/2), 
-	tg->ixColor, font, tg->shortLabel);
+    vgText(vg, xOff, yOff+centerLabel, tg->ixColor, font, tg->shortLabel);
+    labelWidth = mgFontStringWidth(font,tg->shortLabel);
     /*	Is there room left to draw the min, max ?	*/
     if (height >= (3 * fontHeight))
 	{
@@ -803,16 +806,23 @@ else if( tg->visibility == tvFull)
 	if ( zeroOK && (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit) )
 	    {
 	    int zeroOffset;
+	    int zeroWidth;
+
 	    drawColor = vgFindColorIx(vg, 0, 0, 0);
 	    zeroOffset = centerOffset +
 		(int)((graphUpperLimit * (height - centerOffset)) /
 			(graphUpperLimit - graphLowerLimit));
+	    /*	reusing the lower string here	*/
 	    snprintf(lower, 128, "0 -" );
 	    /*	only draw zero if it is far enough away from the
-	     *	upper and lower labels.  You could also check here to
-	     *	see about avoiding the central text label.
+	     *	upper and lower labels, and it won't overlap with
+	     *	the center label.
 	     */
-	    if ((zeroOffset > (fontHeight*2)) &&
+	    zeroWidth = mgFontStringWidth(font,lower);
+	    if ( !( (zeroOffset < centerLabel+fontHeight) &&
+		    (zeroOffset > centerLabel-(fontHeight/2)) &&
+		    (zeroWidth+labelWidth >= width) ) &&
+		(zeroOffset > (fontHeight*2)) &&
 		(zeroOffset < height-(fontHeight*2)) )
 		{
 	    	vgTextRight(vg, xOff, yOff+zeroOffset-(fontHeight/2),
