@@ -59,7 +59,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best in Genome Alignments
+longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 127
 visibility hide
@@ -136,7 +136,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (rn3-Jun 03)/$Organism Best in Genome Alignments
+longLabel Blastz Rat (rn3-Jun 03)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -699,7 +699,7 @@ otherDb hg16
 
 track blastzBestSelf
 shortLabel Self Best
-longLabel Blastz Self (hg16-Jul 03)/$Organism Best in Genome Alignments
+longLabel Blastz Self (hg16-Jul 03)/$Organism Best-in-Genome Alignments
 group varRep
 priority 161
 visibility hide
@@ -794,7 +794,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel Mm4 Best
-longLabel Blastz Mouse (Oct 03/Mm4)/$Organism Best in Genome Alignments
+longLabel Blastz Mouse (Oct 03/Mm4)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 127.1
 visibility hide

@@ -125,7 +125,7 @@ type axt mm3
 
 track blastzBestMouse
 shortLabel Best Mouse
-longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 03) Best-in-Genome Alignments
 group compGeno
 priority 126
 visibility hide
@@ -183,7 +183,7 @@ otherDb rn1
 
 track blastzBestRat
 shortLabel Best Rat 
-longLabel Blastz Rat (Nov. 02) Best in Genome Alignments
+longLabel Blastz Rat (Nov. 02) Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -243,7 +243,7 @@ otherDb hg13
 
 track blastzBestHuman
 shortLabel Best Human 
-longLabel Blastz Human (Self) Best in Genome Alignments
+longLabel Blastz Human (Self) Best-in-Genome Alignments
 group varRep
 priority 145.32
 visibility hide

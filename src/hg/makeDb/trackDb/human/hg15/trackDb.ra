@@ -120,7 +120,7 @@ type sample 0 8
 
 track blastzBestMm3
 shortLabel Best Mouse
-longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 03) Best-in-Genome Alignments
 group compGeno
 priority 126
 visibility hide
@@ -232,7 +232,7 @@ type bed 4 +
 
 track blastzBestRn2
 shortLabel Best Rat
-longLabel Rat Blastz (Jan. 03) Best in Genome Alignments
+longLabel Rat Blastz (Jan. 03) Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
