@@ -22,7 +22,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.10 2005/02/01 17:08:41 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.11 2005/03/03 07:12:45 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -260,7 +260,7 @@ printf("%s", "</TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
 printf("&nbsp;<BR>");
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 printf("%s", "</TD>\n");
 
 printf("</TR></TABLE><BR>");

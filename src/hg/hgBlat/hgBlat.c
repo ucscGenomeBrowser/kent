@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.90 2005/02/22 21:18:07 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.91 2005/03/03 07:15:42 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -629,9 +629,9 @@ else
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
-printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm Feeling Lucky\">\n");
-printf("<INPUT TYPE=RESET NAME=Reset VALUE=Clear>\n");
+printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=submit>\n");
+printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
+printf("<INPUT TYPE=RESET NAME=Reset VALUE=clear>\n");
 printf("</TD>\n");
 printf("</TR>\n<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
@@ -647,7 +647,7 @@ puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
-puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
+puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"submit file\"><P>\n");
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
 "sequence of 10000 or fewer letters will be processed.  Up to 25 sequences\n"
