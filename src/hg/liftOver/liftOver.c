@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.8 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.9 2003/07/10 17:50:08 baertsch Exp $";
 
 double minMatch = 0.95;
 
@@ -30,6 +30,7 @@ errAbort(
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
+  "   -pslT - File is in psl format, map target side only\n"
   , minMatch
   );
 }
@@ -334,6 +335,42 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+struct range *tPslToRangeList(struct psl *psl)
+/* Convert target blocks in psl to a range list. */
+{
+struct range *range, *rangeList = NULL;
+int pslStart = psl->tStart;
+int i, count = psl->blockCount, start;
+for (i=0; i<count; ++i)
+    {
+    AllocVar(range);
+    start = psl->tStarts[i];
+    range->start = start;
+    range->end = start + psl->blockSizes[i];
+    slAddHead(&rangeList, range);
+    }
+slReverse(&rangeList);
+return rangeList;
+}
+
+struct range *qPslToRangeList(struct psl *psl)
+/* Convert query blocks in psl to a range list. */
+{
+struct range *range, *rangeList = NULL;
+int pslStart = psl->qStart;
+int i, count = psl->blockCount, start;
+for (i=0; i<count; ++i)
+    {
+    AllocVar(range);
+    start = pslStart + psl->qStarts[i];
+    range->start = start;
+    range->end = start + psl->blockSizes[i];
+    slAddHead(&rangeList, range);
+    }
+slReverse(&rangeList);
+return rangeList;
+}
+
 int chainRangeIntersection(struct chain *chain, struct range *rangeList)
 /* Return chain/rangeList intersection size. */
 {
@@ -501,7 +538,8 @@ if (needThick)
     }
 else
     {
-    *pThickStart = *pThickEnd = goodList->start;
+    if (goodList != NULL)
+        *pThickStart = *pThickEnd = goodList->start;
     }
 if (goodCount != rCount)
     err = "Boundary problem";
@@ -530,6 +568,15 @@ int sumBedBlocks(struct bed *bed)
 int i, total = 0;
 for (i=0; i<bed->blockCount; ++i)
     total += bed->blockSizes[i];
+return total;
+}
+
+int sumPslBlocks(struct psl *psl)
+/* Calculate sum of all block sizes in psl. */
+{
+int i, total = 0;
+for (i=0; i<psl->blockCount; ++i)
+    total += psl->blockSizes[i];
 return total;
 }
 
@@ -679,6 +726,123 @@ if (lineFileNextReal(lf, &line))
 lineFileClose(&lf);
 }
 
+char *remapBlockedPsl(struct hash *chainHash, struct psl *psl)
+/* Remap blocks in psl, and also chromStart/chromEnd.  
+ * Return NULL on success, an error string on failure. */
+{
+struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
+int pslSize = sumPslBlocks(psl);
+struct binElement *binList;
+struct binElement *el;
+struct range *rangeList, *badRanges = NULL, *range;
+char *error = NULL;
+int i, start, end = 0;
+//int pslStart = psl->tStart;
+//int pslEnd = psl->tEnd;
+int thick = 0;
+
+binList = findRange(chainHash, psl->tName, psl->tStart, psl->tEnd);
+if (binList == NULL)
+    return "Deleted in new";
+
+/* Convert psl target  blocks to range list. */
+rangeList = tPslToRangeList(psl);
+
+/* Evaluate all intersecting chains and sort so best is on top. */
+for (el = binList; el != NULL; el = el->next)
+    {
+    chain = el->val;
+    chain->score = chainRangeIntersection(chain, rangeList);
+    slAddHead(&chainList, chain);
+    }
+slSort(&chainList, chainCmpScore);
+
+/* See if duplicated. */
+chain = chainList->next;
+if (chain != NULL && chain->score == chainList->score)
+    error = "Duplicated in new";
+chain = chainList;
+
+/* See if best one is good enough. */
+if (chain->score  < minMatch * pslSize)
+    error = "Partially deleted in new";
+
+/* Call subroutine to remap range list. */
+if (error == NULL)
+    {
+    remapRangeList(chain, &rangeList, &thick, &thick, 
+    	&rangeList, &badRanges, &error);
+    }
+
+
+/* Convert rangeList back to psl blocks.  Also calculate start and end. */
+if (error == NULL)
+    {
+    if (chain->qStrand == '-')
+	{
+	rangeList = reverseRangeList(rangeList, chain->qSize);
+//	reverseIntRange(&pslStart, &pslEnd, chain->qSize);
+	psl->strand[0] = otherStrand(psl->strand[0]);
+	}
+    psl->tStart = start = rangeList->start;
+    for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
+	{
+	end = range->end;
+	psl->blockSizes[i] = end - range->start;
+	psl->tStarts[i] = range->start;
+	}
+    if (!sameString(chain->qName, chain->tName))
+	{
+	freeMem(psl->tName);
+	psl->tName = cloneString(chain->qName);
+	}
+    psl->tEnd = end;
+//    psl->tStart = pslStart;
+//    psl->tEnd = pslEnd;
+    }
+slFreeList(&rangeList);
+slFreeList(&badRanges);
+slFreeList(&binList);
+return error;
+}
+void pslOver(struct lineFile *lf, struct hash *chainHash, FILE *mapped,
+	FILE *unmapped)
+/* Do a psl with block-list. */
+{
+int i, wordCount, s, e;
+char *line, *words[20], *chrom;
+char strand = '.', strandString[2];
+char *whyNot = NULL;
+boolean gotThick;
+struct psl *psl;
+
+while ((psl = pslNext(lf)) != NULL)
+    {
+    whyNot = remapBlockedPsl(chainHash, psl);
+    if (whyNot == NULL)
+	{
+	pslTabOut(psl, mapped);
+	}
+    else
+	{
+	fprintf(unmapped, "#%s\n", whyNot);
+	pslTabOut(psl, unmapped);
+	}
+    pslFree(&psl);
+    }
+}
+
+void liftOverPsl(char *fileName, struct hash *chainHash, FILE *f, FILE *unmapped)
+/* Open up file, and lift it. */
+{
+struct lineFile *lf = pslFileOpen(fileName);
+int wordCount;
+char *line;
+char *words[16];
+
+pslOver(lf, chainHash, f, unmapped);
+lineFileClose(&lf);
+}
 struct bed *genePredToBed(struct genePred *gp)
 /* Convert genePred to bed.  */
 {
@@ -963,6 +1127,8 @@ else if (optionExists("genePred"))
     liftOverGenePred(oldFile, chainHash, mapped, unmapped);
 else if (optionExists("sample"))
     liftOverSample(oldFile, chainHash, mapped, unmapped);
+else if (optionExists("pslT"))
+    liftOverPsl(oldFile, chainHash, mapped, unmapped);
 else
     liftOverBed(oldFile, chainHash, mapped, unmapped);
 carefulClose(&mapped);
