@@ -114,55 +114,8 @@ struct genoFind
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
-void gfCheckTileSize(int tileSize, boolean isPep);
-/* Check that tile size is legal.  Abort if not. */
 
-struct genoFind *gfIndexSeq(bioSeq *seqList,
-	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-	boolean isPep, boolean allowOneMismatch, boolean maskUpper);
-/* Make index for all seqs in list. 
- *      minMatch - minimum number of matching tiles to trigger alignments
- *      maxGap   - maximum deviation from diagonal of tiles
- *      tileSize - size of tile in nucleotides
- *      maxPat   - maximum use of tile to not be considered a repeat
- *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
- *      isPep    - TRUE if indexing proteins, FALSE for DNA. 
- *      maskUpper - Mask out upper case sequence (currently only for nucleotides).
- * For DNA sequences upper case bits will be unindexed. */
-
-struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
-	boolean allowOneMismatch);
-/* Make index for all nib files. */
-
-void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
-    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch);
-/* Make translated (6 frame) index for all nib files. */
-
-struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, 
-	struct lm *lm, int *retHitCount);
-/* Find clumps associated with one sequence. */
-
-struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
-        Bits *qMaskBits, int qMaskOffset,
-	struct lm *lm, int *retHitCount);
-/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
-
-struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, 
-	struct lm *lm, int *retHitCount);
-/* Find clumps associated with one sequence. */
-
-void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);
-/* Find clumps associated with one sequence in three translated reading frames. */
-
-void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
-	struct gfClump *clumps[3][3], struct lm *lm, int *retHitCount);
-/* Find clumps associated with three sequences in three translated 
- * reading frames. Used for translated/translated protein comparisons. */
-
-void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
-/* Print out info on clump */
+/* ---  Stuff for saving results ---- */
 
 typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, bioSeq *tSeq, struct hash *t3Hash, bioSeq *qSeq, 
@@ -193,37 +146,10 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
  * memory.
  */
 
-
-void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
-    boolean isRc,  int minMatch,  GfSaveAli outFunction, void *outData);
-/* Convert gfClumps to an actual alignment that gets saved via 
- * outFunction/outData. */
-
-void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	boolean tIsRc, int minMatch, GfSaveAli outFunction, void *outData);
-/* Look for qSeq alignment in three translated reading frames. Save alignment
- * via outFunction/outData. */
-
-
-/* ---  Some routines for dealing with gfServer at a low level ---- */
-
-char *gfSignature();
-/* Return signature that starts each command to gfServer. Helps defend 
- * server from confused clients. */
-
-void gfCatchPipes();
-/* Set up to catch broken pipe signals. */
-
-int gfReadMulti(int sd, void *vBuf, size_t size);
-/* Read in until all is read or there is an error. */
-
-/* ---  Some routines for dealing with gfServer at a high level ---- */
-
 struct gfSavePslxData
 /* This is the data structure passed as output data for gfSavePslx below. */
     {
     FILE *f;			/* Output file. */
-    // uglyf struct hash *t3Hash;	/* Hash to associate names and frames. */
     boolean reportTargetStrand; /* Report target as well as query strand? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
     int minGood;		/* Minimum sequence identity in parts per thousand. */
@@ -259,22 +185,112 @@ void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
 	enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough save it in axtBundle. */
 
+struct gfOutput
+/* A polymorphic object to help us write many file types. */
+    {
+    struct gfOutput *next;
+    void *data;		/* Type-specific data pointer. */
+    GfSaveAli out;   /* Main output function - called for each ffAli. */
+    void (*queryOut)(FILE *f, void *data);  /* Called for each query. */
+    void (*fileHead)(FILE *f);	/* Write file header if any */
+    };
+
+/* -------- Routines to build up index ------------ */
+
+void gfCheckTileSize(int tileSize, boolean isPep);
+/* Check that tile size is legal.  Abort if not. */
+
+struct genoFind *gfIndexSeq(bioSeq *seqList,
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
+	boolean isPep, boolean allowOneMismatch, boolean maskUpper);
+/* Make index for all seqs in list. 
+ *      minMatch - minimum number of matching tiles to trigger alignments
+ *      maxGap   - maximum deviation from diagonal of tiles
+ *      tileSize - size of tile in nucleotides
+ *      maxPat   - maximum use of tile to not be considered a repeat
+ *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
+ *      isPep    - TRUE if indexing proteins, FALSE for DNA. 
+ *      maskUpper - Mask out upper case sequence (currently only for nucleotides).
+ * For DNA sequences upper case bits will be unindexed. */
+
+struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
+	boolean allowOneMismatch);
+/* Make index for all nib files. */
+
+void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
+    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
+    boolean allowOneMismatch);
+/* Make translated (6 frame) index for all nib files. */
+
+/* -------- Routines to scan index for homolgous areas ------------ */
+
+struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, 
+	struct lm *lm, int *retHitCount);
+/* Find clumps associated with one sequence. */
+
+struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
+        Bits *qMaskBits, int qMaskOffset,
+	struct lm *lm, int *retHitCount);
+/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
+
+struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, 
+	struct lm *lm, int *retHitCount);
+/* Find clumps associated with one sequence. */
+
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);
+/* Find clumps associated with one sequence in three translated reading frames. */
+
+void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
+	struct gfClump *clumps[3][3], struct lm *lm, int *retHitCount);
+/* Find clumps associated with three sequences in three translated 
+ * reading frames. Used for translated/translated protein comparisons. */
+
+void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
+/* Print out info on clump */
+
+
+void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
+    boolean isRc,  int minMatch,  struct gfOutput *out);
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. */
+
+void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
+	boolean tIsRc, int minMatch, struct gfOutput *out);
+/* Look for qSeq alignment in three translated reading frames. Save alignment
+ * via outFunction/outData. */
+
+
+/* ---  Some routines for dealing with gfServer at a low level ---- */
+
+char *gfSignature();
+/* Return signature that starts each command to gfServer. Helps defend 
+ * server from confused clients. */
+
+void gfCatchPipes();
+/* Set up to catch broken pipe signals. */
+
+int gfReadMulti(int sd, void *vBuf, size_t size);
+/* Read in until all is read or there is an error. */
+
+/* ---  Some routines for dealing with gfServer at a high level ---- */
 
 void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
-    boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);
+    boolean isRc,  int minMatch, struct gfOutput *out);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
 
 void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
-    int minMatch, GfSaveAli outFunction, void *outData);
+    int minMatch, struct gfOutput *out);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
-void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, boolean isRc,
-    int minMatch, GfSaveAli outFunction, void *outData, boolean isRna);
+void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, 
+	boolean qIsRc, int minMatch, struct gfOutput *out, 
+	boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
@@ -288,13 +304,13 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 /* Count occurences of tiles in seqList and make a .ooc file. */
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
-   boolean isRc, int minScore, Bits *qMaskBits, GfSaveAli outFunction, void *outData);
+   boolean isRc, int minScore, Bits *qMaskBits, struct gfOutput *out);
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 
 void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3], 
    struct hash *t3Hash, boolean qIsRc, boolean tIsRc, boolean qIsRna,
-   int minScore, GfSaveAli outFunction, void *outData);
+   int minScore, struct gfOutput *out);
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */
 

@@ -25,8 +25,8 @@ int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetterCount = 0;	/* Number of bases in database. */
 
 enum constants {
-	qWarnSize = 5000000, /* Warn if more than this many bases in one query. */
-	};
+    qWarnSize = 5000000, /* Warn if more than this many bases in one query. */
+    };
 
 /* Variables that can be set from command line. */
 int tileSize = 11;
@@ -54,7 +54,7 @@ char *outputFormat = "psl";
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
+printf(
   "blat - Standalone BLAT v. %d fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
@@ -66,6 +66,21 @@ errAbort(
   "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
   "options:\n"
+  "   -t=type     Database type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "               The default is dna\n"
+  "   -q=type     Query type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 rna - RNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "                 rnax - DNA sequence translated in three frames to protein\n"
+  "               The default is dna\n"
+  "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
+  "               the tileSize\n"
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 5 for protein.\n"
@@ -81,8 +96,6 @@ errAbort(
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually\n"
   "               set from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
-  "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
-  "               the tileSize\n"
   "   -makeOoc=N.ooc Make overused tile file\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
@@ -97,33 +110,22 @@ errAbort(
   "                 file.out - mask database according to RepeatMasker file.out\n"
   "   -qMask=type Mask out repeats in query sequence.  Similar to -mask above but\n"
   "               for query rather than target sequence.\n"
-  "   -minRepDivergence=NN - minimum percent divergence of repeats to allow them to be\n"
-  "               unmasked.  Default is 15.  Only relevant for RepeatMasker .out files.\n"
+  "   -minRepDivergence=NN - minimum percent divergence of repeats to allow \n"
+  "               them to be unmasked.  Default is 15.  Only relevant for \n"
+  "               masking using RepeatMasker .out files.\n"
+  "   -dots=N     Output dot every N sequences to show program's progress\n"
+  "   -trimT      Trim leading poly-T\n"
+  "   -noTrimA    Don't trim trailing poly-A\n"
+  "   -trimHardA  Remove poly-A tail from qSize as well as alignments in psl output\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-like axt format (only for nucleotides)\n"
   "                   wu-blast - similar to wu-blast format\n"
   "                   blast - similar to NCBI blast format\n"
-  "   -dots=N     Output dot every N sequences to show program's progress\n"
-  "   -t=type     Database type.  Type is one of:\n"
-  "                 dna - DNA sequence\n"
-  "                 prot - protein sequence\n"
-  "                 dnax - DNA sequence translated in six frames to protein\n"
-  "               The default is dna\n"
-  "   -q=type     Query type.  Type is one of:\n"
-  "                 dna - DNA sequence\n"
-  "                 rna - RNA sequence\n"
-  "                 prot - protein sequence\n"
-  "                 dnax - DNA sequence translated in six frames to protein\n"
-  "                 rnax - DNA sequence translated in three frames to protein\n"
-  "               The default is dna\n"
-  "   -prot       Synonymous with -d=prot -q=prot\n"
-  "   -trimT      Trim leading poly-T\n"
-  "   -noTrimA    Don't trim trailing poly-A\n"
-  "   -trimHardA  Remove poly-A tail from qSize as well as alignments in psl output\n"
   , version
   );
+exit(-1);
 }
 
 
@@ -372,19 +374,8 @@ slReverse(&seqList);
 return seqList;
 }
 
-struct gfVirtualOutput
-/* A polymorphic object to help us write many file types. */
-    {
-    struct gfVirtualOutput *next;
-    void *data;		/* Type-specific data pointer. */
-    GfSaveAli out;   /* Main output function - called for each ffAli. */
-    void (*queryOut)(FILE *f, void *data);  /* Called for each query. */
-    void (*fileHead)(FILE *f);	/* Write file header if any */
-    void (*fileTail)(FILE *f);	/* Write file tail if any */
-    };
-
 /* Stuff to support various output formats. */
-struct gfVirtualOutput gvo;		/* Overall output controller */
+struct gfOutput *gvo;		/* Overall output controller */
 struct gfSavePslxData pslxOutData;	/* Data for psl/pslx format. */
 struct gfSaveAxtData axtOutData;	/* Data for blast and other formats. */
 
@@ -437,19 +428,21 @@ void ncbiBlastQueryOut(FILE *f, void *data)
 anyBlastQueryOut(f, data, FALSE);
 }
 
-
-void initBasicOutput(char *format, FILE *f, int minIdentity, boolean qIsProt, boolean tIsProt)
+struct gfOutput *gfOutputNew(char *format, FILE *f, 
+	int minIdentity, boolean qIsProt, boolean tIsProt)
 /* Initialize output according to format.  Additional initialiazation
  * of pslOutData/axtOutData may be necessary. */
 {
 int goodPpt = round(10*minIdentity);
-ZeroVar(&gvo);
+struct gfOutput *out;
+
+AllocVar(out);
 if (sameWord(format, "psl") || sameWord(format, "pslx"))
     {
-    gvo.out = gfSavePslx;
-    gvo.data = &pslxOutData;
+    out->out = gfSavePslx;
+    out->data = &pslxOutData;
     if (!noHead)
-        gvo.fileHead = pslWriteHead;
+        out->fileHead = pslWriteHead;
     pslxOutData.minGood = goodPpt;
     pslxOutData.saveSeq = sameWord(format, "pslx");
     pslxOutData.f = f;
@@ -459,29 +452,30 @@ if (sameWord(format, "psl") || sameWord(format, "pslx"))
 else if (sameWord(format, "blast") || 
 	sameWord(format, "wu-blast") || sameWord(format, "axt"))
     {
-    gvo.out = gfSaveAxtBundle;
-    gvo.data = &axtOutData;
+    out->out = gfSaveAxtBundle;
+    out->data = &axtOutData;
     axtOutData.minGood = goodPpt;
     axtOutData.qIsProt = qIsProt;
     axtOutData.tIsProt = tIsProt;
     if (tIsProt && !qIsProt)
         errAbort("Sorry, at the moment %s output doesn't support dna/protein alignments", format);
     if (sameWord(format, "wu-blast"))
-	gvo.queryOut = wuBlastQueryOut;
+	out->queryOut = wuBlastQueryOut;
     else if (sameWord(format, "blast"))
-	gvo.queryOut = ncbiBlastQueryOut;
+	out->queryOut = ncbiBlastQueryOut;
     else if (sameWord(format, "axt"))
-	gvo.queryOut = axtQueryOut;
+	out->queryOut = axtQueryOut;
     }
 else
     errAbort("Unrecognized output format '%s'", format);
+return out;
 }
 
 void finishBasicOutput(FILE *f)
 /* Write out stuff to file */
 {
-if (gvo.queryOut != NULL)
-    gvo.queryOut(f, gvo.data);
+if (gvo->queryOut != NULL)
+    gvo->queryOut(f, gvo->data);
 }
 
 
@@ -489,7 +483,7 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
-gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo.out, gvo.data);
+gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo);
 }
 
 
@@ -499,7 +493,7 @@ void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *f)
 int hitCount;
 struct lm *lm = lmInit(0);
 struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gvo.out, gvo.data);
+gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gvo);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -596,8 +590,8 @@ boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
 struct dnaSeq trimmedSeq;
 ZeroVar(&trimmedSeq);
 
-if (gvo.fileHead != NULL)
-    gvo.fileHead(outFile);
+if (gvo->fileHead != NULL)
+    gvo->fileHead(outFile);
 for (i=0; i<fileCount; ++i)
     {
     fileName = files[i];
@@ -685,7 +679,7 @@ void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boo
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
 pslxOutData.reportTargetStrand = TRUE;
-gfFindAlignAaTrans(gfs, qSeq, t3Hash, dbIsRc, minScore, gvo.out, gvo.data);
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, dbIsRc, minScore, gvo);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
@@ -696,7 +690,7 @@ int qIsRc;
 pslxOutData.reportTargetStrand = TRUE;
 for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
-    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, dbIsRc, !qIsDna, minScore, gvo.out, gvo.data);
+    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, dbIsRc, !qIsDna, minScore, gvo);
     if (qIsDna)
         reverseComplement(qSeq->dna, qSeq->size);
     }
@@ -739,8 +733,8 @@ else
     forceUpper = TRUE;
     }
 
-if (gvo.fileHead != NULL)
-    gvo.fileHead(out);
+if (gvo->fileHead != NULL)
+    gvo->fileHead(out);
 
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
@@ -835,7 +829,7 @@ databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetterCount += seq->size;
 
-initBasicOutput(outputFormat, f, minIdentity, qIsProt, tIsProt);
+gvo = gfOutputNew(outputFormat, f, minIdentity, qIsProt, tIsProt);
 
 if (bothSimpleNuc || (tIsProt && qIsProt))
     {

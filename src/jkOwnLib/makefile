@@ -1,7 +1,7 @@
 .c.o:
 	gcc -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
-O = crudeali.o fuzzyFind.o genoFind.o gfClientLib.o ooc.o \
+O = crudeali.o fuzzyFind.o genoFind.o gfClientLib.o gfOut.o ooc.o \
 patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 
 
 T = ../lib/$(MACHTYPE)/jkOwnLib.a

@@ -51,3 +51,83 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+struct trans3 *trans3Find(struct hash *t3Hash, char *name, int start, int end)
+/* Find trans3 in hash which corresponds to sequence of given name and includes
+ * bases between start and end. */
+{
+struct trans3 *t3;
+for (t3 = hashFindVal(t3Hash, name); t3 != NULL; t3 = t3->next)
+    {
+    if (t3->start <= start && t3->end >= end)
+        return t3;
+    }
+internalErr();
+return NULL;
+}
+
+void trans3Offset(struct trans3 *t3List, AA *aa, int *retOffset, int *retFrame)
+/* Figure out offset of peptide in context of larger sequences. */
+{
+struct trans3 *t3;
+int frame;
+aaSeq *seq;
+
+for (t3 = t3List; t3 != NULL; t3 = t3->next)
+    {
+    for (frame = 0; frame < 3; ++frame)
+        {
+	seq = t3->trans[frame];
+	if (seq->dna <= aa && aa < seq->dna + seq->size)
+	    {
+	    *retOffset = aa - seq->dna + t3->start/3;
+	    *retFrame = frame;
+	    return;
+	    }
+	}
+    }
+for (t3 = t3List; t3 != NULL; t3 = t3->next)
+    {
+    for (frame = 0; frame < 3; ++frame)
+        {
+	seq = t3->trans[frame];
+	}
+    }
+internalErr();
+}
+
+int trans3GenoPos(char *pt, bioSeq *seq, struct trans3 *t3List, boolean isEnd)
+/* Convert from position in one of three translated frames in
+ * t3List to genomic offset. If t3List is NULL then just use seq
+ * instead. */
+{
+int offset, frame;
+if (t3List != NULL)
+    {
+    /* Special processing at end. The end coordinate is
+     * not included.  In most cases this makes things
+     * easier.  Here we have to move it back one
+     * amino acid, so that in the edge case it will
+     * be included in the block that's loaded.  Then
+     * we move it back. */
+    if (isEnd)
+        pt -= 1;
+    trans3Offset(t3List, pt, &offset, &frame);
+    if (isEnd)
+        offset += 1;
+    return 3*offset + frame;
+    }
+else
+   {
+   return pt - seq->dna;
+   }
+}
+
+int trans3Frame(char *pt, struct trans3 *t3List)
+/* Figure out which frame pt is in or 0 if no frame. */
+{
+if (t3List == NULL)
+    return 0;
+else
+    return 1 + trans3GenoPos(pt, NULL, t3List, FALSE)%3;
+}
+
