@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.38 2004/04/01 15:42:14 weber Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.39 2004/04/01 16:16:13 weber Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -647,13 +647,6 @@ static char *cdsColorOptions[] = {
     "different mRNA bases"
     };
 
-static char *cdsColorPlusOptions[] = {
-    "off",
-    "genomic codons",
-    "genomic codons (w/ exonFrames)"
-    };
-       
-
 enum cdsColorOptEnum cdsColorStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
@@ -663,26 +656,10 @@ if (x < 0)
 return x;
 }
 
-
-enum cdsColorPlusOptEnum cdsColorPlusStringToEnum(char *string)
-/* Convert from string to enum representation. */
-{
-int x = stringIx(string, cdsColorPlusOptions);
-if (x < 0)
-   errAbort("hui::cdsColorPlusOptEnum() - Unknown option %s", string);
-return x;
-}
-
 char *cdsColorEnumToString(enum cdsColorOptEnum x)
 /* Convert from enum to string representation. */
 {
 return cdsColorOptions[x];
-}
-
-char *cdsColorPlusEnumToString(enum cdsColorPlusOptEnum x)
-/* Convert from enum to string representation. */
-{
-return cdsColorPlusOptions[x];
 }
 
 void cdsColorDropDown(char *var, char* curVal, int size)
@@ -694,15 +671,6 @@ else
     cgiMakeDropList(var, cdsColorOptions, size, curVal);
 
 }
-
-void cdsColorPlusDropDown(char *var, char* curVal, int size)
-/* Make drop down of options for coloring mRNAs and printing bases. */
-{
-    cgiMakeDropList(var, cdsColorPlusOptions, ArraySize(cdsColorPlusOptions), curVal);
-}
-
-
-
 
 /****** Some stuff for affy related controls *******/
 
