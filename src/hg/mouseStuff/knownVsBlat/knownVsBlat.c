@@ -562,7 +562,7 @@ for (gp = gi->gpList; gp != NULL; gp = gp->next)
 return maxGp;
 }
 
-struct psl *getChromBlatMouse(char *chrom)
+struct psl *getChromBlat(char *chrom, char *blatTable)
 /* Get all blatMouse alignments for chromosome sorted by chromosome
  * start position. */
 {
@@ -571,7 +571,7 @@ char query[256], **row;
 struct sqlResult *sr;
 struct psl *pslList = NULL, *psl;
 
-sprintf(table, "%s_blatMouse", chrom);
+sprintf(table, "%s_%s", chrom, blatTable);
 if (hTableExists(table))
     {
     struct sqlConnection *conn = hAllocConn();
@@ -611,7 +611,7 @@ int sizeRegion;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
-psl = pslList = getChromBlatMouse(chrom);
+psl = pslList = getChromBlat(chrom, "blatMouse");
 AllocVar(stats);
 giList = getChromGenes(chrom, nmToGeneHash);
 for (gi = giList; gi != NULL; gi = gi->next)
