@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.30 2003/05/25 15:58:43 baertsch Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.31 2003/06/14 07:24:24 markd Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -695,13 +695,65 @@ if ((conn = *pConn) != NULL)
 }
 
 
-char *sqlEscapeString(const char* from)
+char *sqlEscapeString2(char *to, const char* from)
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1 */
 {
-int size = (strlen(from)*2) +1;
-char *to = needMem(size * sizeof(char));
 mysql_escape_string(to, from, strlen(from));
 return to; 
 }
+
+char *sqlEscapeString(const char* from)
+/* Prepares string for inclusion in a SQL statement . Remember to free
+ * returned string.  Returned string contains strlen(length)*2+1 as many bytes
+ * as orig because in worst case every character has to be escaped.*/
+{
+int size = (strlen(from)*2) +1;
+char *to = needMem(size * sizeof(char));
+return sqlEscapeString2(to, from);
+}
+
+char *sqlEscapeTabFileString2(char *to, const char *from)
+/* Escape a string for including in a tab seperated file. Output string
+ * must be 2*strlen(from)+1 */
+{
+const char *fp = from;
+char *tp = to;
+while (*fp != '\0')
+    {
+    switch (*fp)
+        {
+        case '\\':
+            *tp++ = '\\';
+            *tp++ = '\\';
+            break;
+        case '\n':
+            *tp++ = '\\';
+            *tp++ = 'n';
+            break;
+        case '\t':
+            *tp++ = '\\';
+            *tp++ = 't';
+            break;
+        default:
+            *tp++ = *fp;
+            break;
+        }
+    fp++;
+    }
+*tp = '\0'; 
+return to; 
+}
+
+char *sqlEscapeTabFileString(const char *from)
+/* Escape a string for including in a tab seperated file. Output string
+ * must be 2*strlen(from)+1 */
+{
+int size = (strlen(from)*2) +1;
+char *to = needMem(size * sizeof(char));
+return sqlEscapeTabFileString2(to, from);
+}
+
 
 struct hash *sqlHashOfDatabases()
 /* Get hash table with names of all databases that are online. */

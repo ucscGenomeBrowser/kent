@@ -98,6 +98,10 @@ struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
  * Returns NULL if result was empty.  Otherwise returns a structure
  * that you can do sqlRow() on. */
 
+char *sqlEscapeTabFileString2(char *to, const char *from);
+/* Escape a string for including in a tab seperated file. Output string
+ * must be 2*strlen(from)+1 */
+
 struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
 /* Query database. If result empty squawk and die. */
 

@@ -76,12 +76,15 @@ char *sqlStringArrayToString( char **array, int arraySize);
  * should be freeMem()'d when done */
 
 char *sqlEscapeString(const char *orig);
-/* Prepares string for entry in the database. Remember to free returned string.
- * returned string contains strlen(length)*2+1 as many bytes as orig because in worst case
- * every character has to be escaped.
+/* Prepares string for inclusion in a SQL statement . Remember to free
+ * returned string.  returned string contains strlen(length)*2+1 as many bytes
+ * as orig because in worst case every character has to be escaped.
  * Example 1: The Gene's Name -> The Gene''s Name
  * Example 2: he said "order and orient" -> he said ""order and orient"" */
 
+char *sqlEscapeString2(char *to, const char* from);
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1 */
 
 int sqlUnsignedComma(char **pS);
 /* Return signed number at *pS.  Advance *pS past comma at end.
