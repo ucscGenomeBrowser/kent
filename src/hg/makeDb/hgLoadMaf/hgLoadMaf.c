@@ -11,7 +11,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.6 2003/05/16 04:01:19 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.7 2003/05/16 15:26:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,8 +21,7 @@ errAbort(
   "usage:\n"
   "   hgLoadMaf database table\n"
   "The maf files need to already exist in chromosome coordinates\n"
-  "in the directory /gbdb/database/table.  No file should be larger\n"
-  "than four gig.\n"
+  "in the directory /gbdb/database/table.\n"
   );
 }
 
