@@ -1260,8 +1260,7 @@ XXX - running 2004-07-13 14;18
     gzip mm5ToCanFam1.chain
     mkdir -p /gbdb/mm5/liftOver
     ln -s /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain /gbdb/mm5/liftOver/mm5ToCanFam1.over.chain
-    echo 'insert into liftOverChain values ("mm5","canFam1","/gbdb/mm5/liftOver/mm5ToCanFam1.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOverChain -multiple mm5 canFam1
  
 # ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
     ssh hgwdev
@@ -6043,6 +6042,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
       netChainSubset net/$f:t:r.net $f subset/$f:t
     end
     cat subset/*.chain > /cluster/data/mm5/bed/bedOver/mm5Tohg17.chain
+    hgAddLiftOverChain -multiple mm5 hg17
 
 #  miRNA track (DONE - 2004-09-30 - Fan)
     #   data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>

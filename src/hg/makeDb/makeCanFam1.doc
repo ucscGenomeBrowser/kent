@@ -1284,8 +1284,7 @@ axtChain $1 \
     gzip canFam1ToMm5.chain
     mkdir -p /gbdb/canFam1/liftOver
     ln -s /cluster/data/canFam1/bed/liftOver/canFam1ToMm5.chain /gbdb/canFam1/liftOver/canFam1ToMm5.over.chain
-    echo 'insert into liftOverChain values ("canFam1","mm5","/gbdb/canFam1/liftOver/canFam1ToMm5.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOverChain -multiple canFam1 mm5
 
 # MAKE HG17 LIFTOVER CHAIN FILE (DONE 1/17/05 Andy)
     # Maybe I can do without the net splitting this time... 
@@ -1308,8 +1307,7 @@ axtChain $1 \
     cp /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain .
     gzip canFam1ToHg17.chain
     ln -s /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain /gbdb/canFam1/liftOver/canFam1ToHg17.over.chain
-    echo 'insert into liftOverChain values ("canFam1","hg17","/gbdb/canFam1/liftOver/canFam1ToHg17.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOverChain -multiple canFam1 hg17
 
 # PHASTCONS DOG/HUMAN/MOUSE (DONE 7/21/04 angie)
 # NOTE: REPLACED, SEE "NEW PHASTCONS" BELOW
