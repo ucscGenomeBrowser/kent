@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.38 2004/01/09 20:27:54 angie Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.39 2004/01/11 20:32:11 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1150,13 +1150,6 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
     unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
     unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
 
-    if (blockSizes[iBlk] == 0)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u size is 0\n", pName, pLabel, iBlk);
-        errCount++;
-        }
     if ((pSize > 0) && (blkEnd > pSize))
         {
         if (errCount == 0)
@@ -1476,6 +1469,10 @@ assert(qs < qe);
 ts = psl->tStart;
 te = ts + psl->match + psl->misMatch + psl->repMatch + psl->qBaseInsert
     + psl->nCount;
+if (te != psl->tEnd)
+    errAbort("mismatch te %d tEnd %d %s tStart %d match %d misMatch %d repmatch %d gaps %d qBaseIns %d",
+             qe, psl->tEnd, psl->tName, psl->tStart, psl->match, psl->misMatch, psl->repMatch,
+             psl->nCount, psl->qBaseInsert);
 assert(te == psl->tEnd);
 assert(psl->tStart < te);
 
@@ -1499,6 +1496,7 @@ for (i=0; i<aliSize; ++i)
     char t = tString[i];
     if (q == '-' || t == '-')
         {
+        assert(!((q == '-') && (t == '-')));  /* not supported */
 	if (!eitherInsert)
 	    {
 	    psl->blockSizes[blockIx] = qe - qs;
