@@ -16,40 +16,49 @@ errAbort(
 }
 
 int main(int argc, char *argv[])
+{
+struct sqlConnection *conn, *conn2;
+
+char query[256], query2[256], query5[256];
+struct sqlResult *sr, *sr2, *sr5;
+char **row, **row2, **row5;
+char *r1, *r2, *r3, *r5;
+    
+char *chp0, *chp;
+char *kgID;
+FILE *o1, *o2;
+char cond_str[256];
+char *database;
+char *proteinDB;
+char *refSeqName;
+boolean doingAlias, bothDone;
+
+char *answer;
+char *symbol, *alias, *aliases;
+
+if (argc != 3) usage();
+database  = cloneString(argv[1]);
+proteinDB = cloneString(argv[2]);
+
+conn = hAllocConn();
+conn2= hAllocConn();
+o1 = fopen("j.dat", "w");
+o2 = fopen("jj.dat", "w");
+
+doingAlias = TRUE;
+bothDone   = FALSE;
+
+while (!bothDone)
     {
-    struct sqlConnection *conn, *conn2;
-
-    char query[256], query2[256], query5[256];
-    struct sqlResult *sr, *sr2, *sr5;
-    char **row, **row2, **row5;
-    char *r1, *r2, *r3, *r5;
+    if (doingAlias)
+	{
+    	sprintf(query2,"select symbol, aliases from %s.hugo;", proteinDB);
+	}
+    else
+	{
+        sprintf(query2,"select symbol, withdraws from %s.hugo;", proteinDB);
+    	}
     
-    char *chp0, *chp;
-    char *kgID;
-    FILE *o1, *o2;
-    char cond_str[256];
-    char *database;
-    char *proteinDB;
-    char *refSeqName;
-    int  alias_done;
-
-    char *answer;
-    char *symbol, *alias, *aliases;
-
-    if (argc != 3) usage();
-    database  = cloneString(argv[1]);
-    proteinDB = cloneString(argv[2]);
-
-    conn = hAllocConn();
-    conn2= hAllocConn();
-
-    o1 = fopen("j.dat", "w");
-    o2 = fopen("jj.dat", "w");
-
-    alias_done = 0;	
-    sprintf(query2,"select symbol, aliases from %s.hugo;", proteinDB);
-    
-again:
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     while (row2 != NULL)
@@ -96,26 +105,27 @@ again:
 	}
     sqlFreeResult(&sr2);
 
-    //do it again for withdraws
-    if (alias_done == 0)
+    if (doingAlias) 
 	{
-	alias_done = 1;
-        sprintf(query2,"select symbol, withdraws from %s.hugo;", proteinDB);
-	goto again;
+	doingAlias = FALSE;
 	}
-
-    fclose(o1);
-    fclose(o2);
-
-    // geneAlias.tab has 3 columns, the 2nd is HUGO.symbol 
-    // and 3rd contains aliases and withdraws 
-    system("cat  j.dat|sort|uniq  >geneAlias.tab");
-
-    // kgAliasM.tab has 2 columns, all entries from HUGO.symbol, HUGO.aliass, 
-    // and HUGO.withdraws are listed in the 2nd column.
-    system("cat jj.dat|sort|uniq  >kgAliasM.tab");
-    system("rm j.dat");
-    system("rm jj.dat");
-    
-    return(0);
+    else
+	{
+	bothDone = TRUE;
+	}
     }
+fclose(o1);
+fclose(o2);
+
+// geneAlias.tab has 3 columns, the 2nd is HUGO.symbol 
+// and 3rd contains aliases and withdraws 
+system("cat  j.dat|sort|uniq  >geneAlias.tab");
+
+// kgAliasM.tab has 2 columns, all entries from HUGO.symbol, HUGO.aliass, 
+// and HUGO.withdraws are listed in the 2nd column.
+system("cat jj.dat|sort|uniq  >kgAliasM.tab");
+system("rm j.dat");
+system("rm jj.dat");
+    
+return(0);
+}
