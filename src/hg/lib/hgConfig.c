@@ -35,19 +35,17 @@ if(!cgiIsOnWeb() ||	/* not a cgi, read from home director, e.g. ~/.hg.conf */
 		(getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
     {
     sprintf(filename, "%s/%s", getenv("HOME"), USER_CONFIG_FILE);
+    /* ensure that the file only readable by the user */
+    if (stat(filename, &statBuf) == 0)
+	{
+	if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
+	    errAbort("config file %s allows group or other access, must only allow user access",
+		     filename);
+	}
     }
 else	/* on the web, read from global config file */
     {
     sprintf(filename, "%s/%s", GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
-    }
-
-/* ensure that the file only readable by the user */
-if (stat(filename, &statBuf) == 0)
-    {
-    if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
-        errAbort("config file %s allows group or other access, must only allow user access",
-                 filename);
-    
     }
 
 /* parse; if the file is not there or can't be read, leave the hash empty */
