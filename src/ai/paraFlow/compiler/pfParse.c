@@ -740,6 +740,44 @@ else
     return pp;
 }
 
+static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
+/* If first element of tuple is typed, then make sure rest
+ * is typed too. */
+{
+struct pfParse *vars = tuple->children, *next;
+if (vars != NULL)
+    {
+    if (vars->type == pptVarDec)
+	{
+	struct pfParse *type = NULL;
+	struct pfParse *pp;
+	for (pp = vars; pp != NULL; pp = pp->next)
+	    {
+	    if (pp->type == pptVarDec)
+		{
+	        type = pp->children;
+		}
+	    else if (pp->type == pptNameUse)
+	        {
+		struct pfParse *decl = pfParseNew(pptVarDec, pp->tok, tuple);
+		struct pfParse *dupeType, *dupeName;
+		pp->type = pptVarDec;
+
+		AllocVar(dupeName);
+		*dupeName = *pp;
+
+		AllocVar(dupeType);
+		*dupeType = *type;
+		pp->children = dupeType;
+		dupeType->next = dupeName;
+		dupeName->next = NULL;
+		}
+	    }
+	}
+    }
+}
+
+
 struct pfParse *parseTuple(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse , separated expression. */
@@ -763,6 +801,7 @@ if (tok->type == ',')
 if (tuple != NULL)
     {
     slReverse(&tuple->children);
+    addMissingTypesInDeclareTuple(tuple);
     return tuple;
     }
 else
