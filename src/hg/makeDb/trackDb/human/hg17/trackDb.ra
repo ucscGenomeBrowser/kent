@@ -85,11 +85,11 @@ type bed 6 .
 url http://www.sanger.ac.uk/Software/Rfam/
 
 track wgRna
-shortLabel wgRna
-longLabel C/D and H/ACA Box snoRNAs and microRNAs from Weber and Griffiths-Jones
+shortLabel sno/miRNA
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
 group genes
 priority 63.5
-visibility full
+visibility hide
 color 200,80,0
 type bed 8 +
 
@@ -1204,6 +1204,11 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex uc\.[0-9]+
+
+searchTable wgRna
+searchMethod exact
+searchType bed
+searchPriority 10
 
 searchTable ux16
 searchMethod exact
