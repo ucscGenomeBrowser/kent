@@ -22,6 +22,7 @@ DIRS = \
 	hgExonerate \
 	hgExperiment \
 	hgExtFileCheck \
+	hgFakeAgp \
 	hgFiberglass \
 	hgFindSpec \
 	hgFlyBase \
