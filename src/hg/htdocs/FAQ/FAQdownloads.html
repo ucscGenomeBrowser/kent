@@ -63,6 +63,7 @@
                 <LI><A HREF="#download15">100K bp discrepancy in human Build 31 chr22</A>
                 <LI><A HREF="#download26">Problems with Mouse Build 32 (mm4)</A>
                 <LI><A HREF="#download25">Mapping chimp chromosome numbers to human chromsomes numbers</A>
+                <LI><A HREF="#download28">Converting genome coordinates between assemblies</A>
                 <LI><A HREF="#download23">Linking gene name with accession number</A>
                 <LI><A HREF="#download16">Repeat-masking data</A>
                 <LI><A HREF="#download17">Availability of repeat-masked data</A>
@@ -1022,6 +1023,71 @@
   			    <TR><TD ALIGN=center>Y</TD><TD ALIGN=center>Y</TD></TR>
 	    	    </TABLE>
 		    </BLOCKQUOTE>
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download28"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Converting genome coordinates between assemblies</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I've been researching a specific area of the human genome on the current assembly, 
+			and now you've just released a new version. Is there an easy way to locate 
+			my area of interest on the new assembly?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			You can migrate data from one assembly to another by using the 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">blat</A> alignment tool 
+			or by converting assembly coordinates</A>.  There are 2 coordinate conversion 
+			tools available on the Genome Browser web site.
+			The <A HREF="http://genome.ucsc.edu/cgi-bin/hgLiftOver">hgLiftOver</A> utility,
+			accessed via the Utilities link on the Genome Browser home page, 
+			may be used to do forward conversions of the data from one assembly to a later
+			assembly. It also handles batch conversions. The 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">Convert</A> tool, which
+			is accessed from the menu on the Genome Browser annotation tracks page, supports
+			both forward and reverse conversions, but does not accept batch input. At the
+			current time, these tools may be used only on the human genome assembly.
+			<P>If you have the need to update a large number of coordinates	
+			to a different assembly and have access to a Linux platform, 
+			you may find it useful to try our <TT>liftOver</TT> tool. 
+			The executable file for this utility can be downloaded from
+			<A HREF="http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz" 
+			TARGET=_blank> www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>. LiftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated
+			files are available for selected assemblies. To check if a data
+			file has already been generated for the assembly in which you're
+			interested, look for the applicable <em>over.chain</em> file in the 
+			LiftOver section on the 
+			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#liftover">Downloads</A> page.
+			If no file is available, send a request to
+			the 
+			<A HREF="mailto:&#103;e&#110;&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.ed&#117;">genome mailing list</A> 
+			and we will provide you with one.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
