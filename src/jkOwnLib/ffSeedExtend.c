@@ -328,8 +328,15 @@ if (extraList != NULL)
     ffi->ff = extraList;
     slAddHead(&bun->ffList, ffi);
     ssStitch(bun, ffCdna, 16, 1);
-    ffList = bun->ffList->ff;
-    bun->ffList->ff = NULL;
+    if (bun->ffList != NULL)
+	{
+	ffList = bun->ffList->ff;
+	bun->ffList->ff = NULL;
+	}
+    else
+	{
+        ffList = NULL;
+	}
     ssBundleFree(&bun);
     }
 return ffList;
@@ -455,6 +462,9 @@ static struct ffAli *bandedExtend(struct dnaSeq *qSeq, struct dnaSeq *tSeq, stru
 struct ffAli *extraList = NULL, *ff = ffList, *lastFf = NULL;
 struct axtScoreScheme *ss = axtScoreSchemeRnaDefault();
 int qGap, tGap;
+
+if (ff == NULL)
+    return NULL;
 
 /* Look for initial gap. */
 qGap = ff->nStart - qSeq->dna;
@@ -697,6 +707,9 @@ static struct ffAli *scanForTinyExons(int seedSize, struct dnaSeq *qSeq, struct 
 /* Look for exons too small to be caught by index. */
 {
 struct ffAli *extraList = NULL, *ff = ffList, *lastFf = NULL, *newFf;
+
+if (ff == NULL)
+    return NULL;
 
 /* Look for initial gap. */
 newFf = frizzyFind(qSeq->dna, ff->nStart, tSeq->dna, ff->hStart, 
@@ -1075,27 +1088,27 @@ struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
 /* Find target of given name.  Return NULL if none. */
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
-  // uglyf("Refine bundle start:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("Refine bundle start:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = expandGapless(qSeq, tSeq, ffi->ff);
-  // uglyf("after expandGapless:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after expandGapless:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanIndexForSmallExons(gf, target, qSeq, qMaskBits, qMaskOffset, 
 	tSeq, lm, ffi->ff);
-  // uglyf("after scanIndexForSmallExons:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after scanIndexForSmallExons:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = bandedExtend(qSeq, tSeq, ffi->ff);
-  // uglyf("after bandedExtend:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after bandedExtend:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanForTinyExons(gf->tileSize, qSeq, tSeq, isRc, ffi->ff);
-  // uglyf("after scanForTinyExons:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after scanForTinyExons:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = refineSpliceSites(qSeq, tSeq, ffi->ff);
-  // uglyf("after refineSpliceSites:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after refineSpliceSites:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = smoothSmallGaps(qSeq, tSeq, ffi->ff);
-  // uglyf("after smoothSmallGaps:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+ // uglyf("after smoothSmallGaps:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     }
 }
 
