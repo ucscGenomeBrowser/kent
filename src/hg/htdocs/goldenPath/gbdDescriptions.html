@@ -71,8 +71,10 @@ the data has been split into separate tables for each chromosome. The second
 group has tables that contain information for all chromosomes. The third group 
 has tables that contain information specifically related to mRNA sequences.</P>
 <P>All of the coordinates in these tables are of "half-open zero based." This 
-means that the first 100 bases of a chromosome are represented as 0-100. The 
-second 100 bases are represented as 100-200, and so forth.</P>
+means that the first 100 bases of a chromosome are represented as [0,100). The 
+second 100 bases are represented as [100,200), and so forth. An advantage of
+half open coordinate ranges is that the length can be obtained by simply
+subtracting the start from the end.</P>
 <P>The database currently includes the following tables for each chromosome 
 (chrN_[table] where N is replaced by the chromosome name). In many cases there 
 is an additional table for the unordered part (random) of the chromosome 
@@ -134,9 +136,8 @@ stored in a single table rather than one table per chromosome:</P>
   - the name, size, and golden path position of all FPC contigs. 
   <LI><A 
   href="#ChromosomeBand">cytoBand</A> 
-  - Terry Furey's mapping of the 800 band resolution cytogenetic/chromosome 
-  bands to the golden path using FISH clone information from the BAC Resource 
-  Consortium. 
+  - 800 chromosome bands mapped to golden path by Terry Furey using
+  fish data from BAC Resource Consortium.
   <LI><A 
   href="#Exofish">exoFish</A> 
   - Genescope Exofish Tetraodon evolutionarily conserved regions. 
@@ -168,8 +169,8 @@ stored in a single table rather than one table per chromosome:</P>
   track). 
   <LI><A 
   href="#MoreKnown">knownMore</A> 
-  - information about links for known genes to other databases such as to 
-  GenBank, OMIN, HUGO, RefSeq, GBD. (Oct. 2000 and earlier known gene track). 
+  - links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD. 
+  (Oct. 2000 and earlier known gene track). 
   <LI><A 
   href="#GenePredictions">refKnown</A> 
   - known genes as derived from alignments of RefSeq mRNA (Dec 2000 and later 
