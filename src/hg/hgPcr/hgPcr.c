@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.3 2004/06/07 23:41:55 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.4 2004/06/08 18:07:11 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -184,11 +184,54 @@ for (server = serverList; server != NULL; server = server->next)
 printf("</SELECT>\n");
 }
 
+void redoDbAndOrgIfNoServer(struct pcrServer *serverList, char **pDb, char **pOrg)
+/* Check that database and organism are on our serverList.  If not, then update
+ * them to first thing that is. */
+{
+struct pcrServer *server, *orgServer = NULL;
+char *organism = *pOrg;
+char *db = *pDb;
+boolean gotDb = FALSE;
+
+/*  Find first server for our organism */
+for (server = serverList; server != NULL; server = server->next)
+    {
+    if (sameString(server->genome, organism))
+         {
+	 orgServer = server;
+	 break;
+	 }
+    }
+
+/* If no server, change our organism to the one of the first server in list. */
+if (orgServer == NULL)
+    {
+    orgServer = serverList;
+    *pOrg = organism = orgServer->genome;
+    }
+
+/* Search for our database. */
+for (server = serverList; server != NULL; server = server->next)
+    {
+    if (sameString(db, server->db))
+        {
+	gotDb = TRUE;
+	break;
+	}
+    }
+
+/* If no server for db, change db. */
+if (!gotDb)
+    *pDb = db = orgServer->db;
+}
+
 void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
 	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood)
 /* Put up form to get primers. */
 {
 struct pcrServer *server;
+
+redoDbAndOrgIfNoServer(serverList, &db, &organism);
 
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
@@ -258,9 +301,7 @@ printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"orgForm\">"
        "<input type=\"hidden\" name=\"wp_good\" value=\"\">\n"
        "<input type=\"hidden\" name=\"wp_showPage\" value=\"true\">\n");
 cartSaveSession(cart);
-cartSetString(cart, "db", db);
 printf("</FORM>\n");
-
 }
 
 boolean doPcr(struct pcrServer *server,
