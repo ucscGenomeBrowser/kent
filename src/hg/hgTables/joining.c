@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.33 2004/10/27 22:58:25 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.34 2004/11/06 07:13:42 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -400,9 +400,13 @@ static struct tableJoiner *findTable(struct tableJoiner *tjList, char *db, char 
 /* Find table that matches. */
 {
 struct tableJoiner *tj;
+char dbTableBuf[256];
+dbOverrideFromTable(dbTableBuf, &db, &table);
 for (tj = tjList; tj != NULL; tj = tj->next)
+    {
     if (sameString(tj->database,db) && sameString(tj->table, table))
         return tj;
+    }
 return NULL;
 }
 
