@@ -155,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.809 2005/01/06 22:03:25 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.810 2005/01/06 22:57:00 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11161,8 +11161,6 @@ char *id;
 
 if (sameString(exceptionList,"0"))
     return;
-if (!hTableExists("snpExceptions"))
-    return;
 
 tokens=cloneString(exceptionList);
 lf=lineFileOnString("snpExceptions", TRUE, tokens);
@@ -11226,8 +11224,11 @@ while ((row = sqlNextRow(sr))!=NULL)
     snpStaticLoad(row+rowOffset, &snp);
     if (firstOne)
 	{
-	if (differentString(snp.exception,"0"))
-	    writeSnpException(snp.exception);
+	if (hTableExists("snpExceptions"))
+	    {
+    	    if (differentString(snp.exception,"0"))
+    		writeSnpException(snp.exception);
+	    }
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
 	firstOne=0; /* rs5886636 is good to test this */
