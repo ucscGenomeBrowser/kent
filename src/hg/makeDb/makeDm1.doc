@@ -352,7 +352,7 @@ exit; # don't actually run this like a script :)
       | hgsql -h genome-testdb hgcentraltest
 
 
-# LOAD UP BDGP ANNOTATIONS (IN PROGRESS 10/06/03 angie)
+# LOAD UP BDGP ANNOTATIONS (DONE 10/8/03 angie)
     # fruitfly.org is the Berkeley Drosophila Genome Project.  
     # Their GFF annotations contain FlyBase IDs useful for cross-linking.
     ssh kksilo
@@ -382,14 +382,316 @@ exit; # don't actually run this like a script :)
                   $cytorange=$9; \
                   die "genegrp $genegrp != name $name\n" if ($genegrp ne $name); \
                   print "chr$chrom\t$start\t$end\t$name\t0\t$strand\t$symbol\t$flybase\t$cytorange\n"; \
-                  } elsif (/transposable_element/) { \
-                    die "unrecognized format:\n\n$_\n\n"; \
-                  } \
-               }' \
+                } elsif (/transposable_element/) { \
+                  die "unrecognized format:\n\n$_\n\n"; \
+                } \
+              }' \
       whole_genome_transposable_element_dmel_RELEASE3-1.GFF \
       > bdgpTransposons.bed
     ssh hgwdev
     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/bdgpTransposons.sql \
       dm1 bdgpTransposons \
       /cluster/data/dm1/bed/bdgpAnnotations/bdgpTransposons.bed
+
+    # Load up tRNA annotations.
+    # Make it a bed 6+:
+    perl -we 'while (<>) { \
+                if (/(\w+)\t\w+\ttRNA\t(\d+)\t(\d+)\t.\t([+-]?)\t.\tgenegrp=(\w+); name=(\w+); (.*)symbol=(\S+); dbxref=FlyBase:(\w+); cytorange=(\w+-\w+)/) { \
+                  $chrom=$1;  $start=$2;  $end=$3;  $strand=$4; \
+                  $genegrp=$5;  $name=$6;  $go=$7;  $symbol=$8;  $flybase=$9; \
+                  $cytorange=$10; \
+                  die "genegrp $genegrp != name $name\n" if ($genegrp ne $name); \
+                  if ($go ne "") { \
+                    @gos = split(" ", $go); \
+                    $go = ""; \
+                    foreach $id (@gos) { \
+                      if ($id =~ /dbxref=GO:(\d+)/) { \
+                        $go .= "$1,"; \
+                      } else { \
+                        die "Parse error for id=$id"; \
+                      } \
+                    }  \
+                  }  \
+                  print "chr$chrom\t$start\t$end\t$name\t0\t$strand\t$symbol\t$go\t$flybase\t$cytorange\n"; \
+                } elsif (/tRNA/) { \
+                  die "unrecognized format:\n\n$_\n\n"; \
+                } \
+              }' \
+      whole_genome_tRNA_dmel_RELEASE3-1.GFF \
+    > bdgpTRNA.bed
+    ssh hgwdev
+    hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/bdgpTRNA.sql \
+      dm1 bdgpTRNA \
+      /cluster/data/dm1/bed/bdgpAnnotations/bdgpTRNA.bed
+    # Protein-coding genes...
+    perl -wpe 's/^/chr/; s/translation/CDS/; \
+               s/genegrp.*transgrp=(\S+);.*$/$1/; \
+               s/genegrp.*transgrp=(\S+)$/$1/;' \
+      whole_genome_protein-coding-gene_dmel_RELEASE3-1.GFF \
+    > bdgpGene.gff
+    # Loading a .tab file caused some lines with super-long go fields 
+    # to be skipped.  Generating a .sql file with INSERTs works.
+    perl -we 'while (<>) { \
+                chop; @fields = split("\t"); \
+                if ($fields[2] eq "gene") { \
+                  @vars = split("; ", $fields[8]); \
+                  $go = "";  $cdna_clone = ""; \
+                  foreach $v (@vars) { \
+                    @vv = split("=", $v); \
+                    if ($vv[0] eq "name") { \
+                      $bdgpName = $vv[1]; \
+                    } elsif ($vv[0] eq "dbxref") { \
+                      if ($vv[1] =~ /^GO:(\d+)/) { \
+                        $go .= "$1,"; \
+                      } elsif ($vv[1] =~ /FlyBase:(\w+)/) { \
+                        $flybase = $1; \
+                      } else { \
+                        die "unrecognized dbxref $vv[1]"; \
+                      } \
+                    } elsif ($vv[0] eq "symbol") { \
+                      $symbol = $vv[1]; \
+                    } elsif ($vv[0] eq "cytorange") { \
+                      $cytorange = $vv[1]; \
+                    } elsif ($vv[0] eq "cdna_clone") { \
+                      $cdna_clone .= "$vv[1],"; \
+                    } elsif ($vv[0] eq "genegrp") { \
+                    } else { \
+                      die "unrecognized var $v" \
+                    } \
+                  } \
+                  print "INSERT INTO bdgpGeneInfo VALUES ( \"$bdgpName\", \"$flybase\", \"$go\", \"$symbol\", \"$cytorange\", \"$cdna_clone\");\n"; \
+                } \
+              }' \
+      whole_genome_protein-coding-gene_dmel_RELEASE3-1.GFF \
+    > bdgpGeneInfo.sql
+    # Proteins for coding genes:
+    wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+    gunzip -c whole_genome_translation_dmel_RELEASE3-1.FASTA.gz \
+    | perl -wpe 's/^>(pp-)*(\w+)-\w(\w).*/>$2-R$3/' \
+    > bdgpGenePep.fa
+    # load up coding genes, proteins and assoc. info:
+    ssh hgwdev
+    ldHgGene dm1 bdgpGene /cluster/data/dm1/bed/bdgpAnnotations/bdgpGene.gff
+    hgPepPred dm1 generic bdgpGenePep \
+      /cluster/data/dm1/bed/bdgpAnnotations/bdgpGenePep.fa
+    hgsql dm1 < $HOME/src/hg/lib/bdgpGeneInfo.sql
+    hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpGeneInfo.sql
+    # Non-coding genes...
+    perl -wpe 's/^/chr/; \
+               s/genegrp.*transgrp=(\S+);.*$/$1/; \
+               s/genegrp.*transgrp=(\S+)$/$1/;' \
+      whole_genome_noncoding-gene_dmel_RELEASE3-1.GFF \
+    > bdgpNonCoding.gff
+    sed -e 's/bdgpGeneInfo/bdgpNonCodingInfo/' \
+      ~/kent/src/hg/lib/bdgpGeneInfo.sql \
+      > bdgpNonCodingInfo.sql
+    perl -we 'while (<>) { \
+                chop; @fields = split("\t"); \
+                if (($fields[2] ne "exon") && \
+                    ($fields[2] ne "transcript") && \
+                    ($fields[2] ne "translation")) { \
+                  @vars = split("; ", $fields[8]); \
+                  $go = "";  $cdna_clone = ""; \
+                  foreach $v (@vars) { \
+                    @vv = split("=", $v); \
+                    if ($vv[0] eq "name") { \
+                      $bdgpName = $vv[1]; \
+                    } elsif ($vv[0] eq "dbxref") { \
+                      if ($vv[1] =~ /^GO:(\d+)/) { \
+                        $go .= "$1,"; \
+                      } elsif ($vv[1] =~ /FlyBase:(\w+)/) { \
+                        $flybase = $1; \
+                      } else { \
+                        die "unrecognized dbxref $vv[1]"; \
+                      } \
+                    } elsif ($vv[0] eq "symbol") { \
+                      $symbol = $vv[1]; \
+                    } elsif ($vv[0] eq "cytorange") { \
+                      $cytorange = $vv[1]; \
+                    } elsif ($vv[0] eq "cdna_clone") { \
+                      $cdna_clone .= "$vv[1],"; \
+                    } elsif ($vv[0] eq "genegrp") { \
+                    } else { \
+                      die "unrecognized var $v" \
+                    } \
+                  } \
+                  print "INSERT INTO bdgpNonCodingInfo VALUES ( \"$bdgpName\", \"$flybase\", \"$go\", \"$symbol\", \"$cytorange\", \"$cdna_clone\");\n"; \
+                } \
+              }' \
+      whole_genome_noncoding-gene_dmel_RELEASE3-1.GFF \
+    >> bdgpNonCodingInfo.sql
+    ssh hgwdev
+    ldHgGene dm1 bdgpNonCoding \
+      /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCoding.gff
+    hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCodingInfo.sql
+
+
+# FLYBASE GENES (IN PROGRESS 10/6/03 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/flyBase
+    cd /cluster/data/dm1/bed/flyBase
+    ftp flybase.bio.indiana.edu
+    # log in as anonymous
+      cd flybase-data/xml
+      prompt
+      mget *
+      quit
+    # The XML is extremely complex and autoXml doesn't like the dtd.  
+    # Hmmm, looks like we better just get the names from SwissProt.
+
+
+# SWISSPROT-FLYBASE CROSS-REFERENCING  (DONE 10/7/03 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm1/bed/flyBaseSwissProt
+    cd /cluster/data/dm1/bed/flyBaseSwissProt
+    echo "select extAcc1,acc from extDbRef,extDb where extDbRef.extDb = extDb.id and extDb.val = 'flybase'" \
+    | hgsql -N sp092903 \
+    > fbSpAcc.tab
+    ssh kksilo
+    cd /cluster/data/dm1/bed/flyBaseSwissProt
+    wget ftp://ftp.ebi.ac.uk/pub/databases/SPproteomes/fasta_files/proteomes/7227.FASTAC
+    # Some of those SwissProt "names" are > 255 chars!  trim the few long ones.
+    perl -we 'open(F, "fbSpAcc.tab") || die; \
+              %sp2fb = (); \
+              while (<F>) { \
+                chop;  @words = split("\t"); \
+                $sp2fb{$words[1]} = $words[0]; \
+              } \
+              close(F); \
+              while (<>) { \
+                if (/^>(\w+)\s+\((\w+)\)\s+(.*)/) { \
+                  $fbAcc = $sp2fb{$2}; \
+                  $spAcc = $3; \
+                  $spAcc = substr($3, 0, 250) . "..." if (length($3) > 255); \
+                  print "$fbAcc\t$2\t$spAcc\t$1\n" if (defined $fbAcc); \
+                } \
+              }' \
+      7227.FASTAC \
+    > flyBaseSwissProt.tab
+    rm 7227.FASTAC
+    ssh hgwdev
+    hgsql dm1 < $HOME/src/hg/lib/flyBaseSwissProt.sql
+    echo 'load data local infile "/cluster/data/dm1/bed/flyBaseSwissProt/flyBaseSwissProt.tab" into table flyBaseSwissProt' \
+    | hgsql dm1
+
+
+# FLYBASE PROTEIN BLASTP (TODO)
+    # (Instructions taken from hg/near/makeNear.doc)
+    mkdir /cluster/data/dm1/bed/blastp
+    cd /cluster/data/dm1/bed/blastp
+    # First make SwissProt protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    wget ftp://ftp.ebi.ac.uk/pub/databases/SPproteomes/fasta_files/proteomes/7227.FASTAC
+    mv 7227.FASTAC swissProt.faa
+    formatdb -i swissProt.faa -t swissProt -n swissProt
+    # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+    wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+    zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
+    formatdb -i flyBase.faa -t flyBase -n flyBase
+    ssh kkr1u00
+    if (-e /iscratch/i/dm1/blastp) then
+      rm -r /iscratch/i/dm1/blastp
+    endif
+    mkdir -p /iscratch/i/dm1/blastp
+    cp /cluster/data/dm1/bed/blastp/flyBase.p?? /iscratch/i/dm1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/dm1
+    cd /cluster/data/dm1/bed/blastp/dm1
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/flyBase -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+
+#Results of this:
+#Completed: 5814 of 5814 jobs
+#CPU time in finished jobs:      62285s    1038.09m    17.30h    0.72d  0.002 y
+#IO & Wait Time:                 23056s     384.26m     6.40h    0.27d  0.001 y
+#Average job time:                  15s       0.24m     0.00h    0.00d
+#Longest job:                      152s       2.53m     0.04h    0.00d
+#Submission to last job:           290s       4.83m     0.08h    0.00d
+
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/dm1/run/out
+    hgLoadBlastTab dm1 dmBlastTab -maxPer=1 *.tab
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 10/8/03 angie)
+
+    # Put the nib's on /cluster/bluearc:
+    ssh kksilo
+    mkdir /cluster/bluearc/drosophila
+    mkdir /cluster/bluearc/drosophila/dm1
+    cp -pR /cluster/data/dm1/nib /cluster/bluearc/drosophila/dm1
+
+    # Instructions for setting up incremental genbank updates are here:
+    # http://www.soe.ucsc.edu/~markd/genbank-update/doc/initial-load.html
+
+    # Edit /cluster/store5/genebank/etc/genbank.conf and add:
+# dm1
+dm1.genome = /cluster/bluearc/drosophila/dm1/nib/chr*.nib
+dm1.lift = /cluster/data/dm1/jkStuff/liftAll.lft
+dm1.genbank.mrna.xeno.load = yes
+dm1.genbank.est.xeno.load = no
+dm1.downloadDir = dm1
+
+    ssh eieio
+    cd /cluster/store5/genbank
+    # This is an -initial run:
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=genbank -type=mrna -verbose=1 -initial dm1
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/store5/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dm1
+
+    # To get this next one started, the above results need to be
+    # moved out of the way.  These things can be removed if there are
+    # no problems to debug
+    ssh eieio
+    cd /cluster/bluearc/genbank/work
+    mv initial.dm1 initial.dm1.genbank.mrna
+
+    ssh eieio
+    cd /cluster/store5/genbank
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=refseq -type=mrna -verbose=1 -initial dm1
+
+    # The iservers came back on-line, so use them for this run.
+    #  The batch file can be found in:
+    #	/cluster/store5/genbank/work/initial.dm1/align
+    ssh hgwdev
+    cd /cluster/store5/genbank
+    nice bin/gbDbLoadStep -verbose=1 dm1
+
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial dm1
 
