@@ -452,12 +452,11 @@ for (;;)
         {
 	struct gfSeqSource *ss;
 	int i;
-	sprintf(buf, "%d", gf->sourceCount);
+	sprintf(buf, "%d", nibCount);
 	gfSendString(connectionHandle, buf);
-	for (i=0; i<gf->sourceCount; ++i)
+	for (i=0; i<nibCount; ++i)
 	    {
-	    ss = gf->sources + i;
-	    sprintf(buf, "%s\t%d", ss->fileName, ss->end - ss->start);
+	    sprintf(buf, "%s", nibFiles[i]);
 	    gfSendString(connectionHandle, buf);
 	    }
 	}
@@ -617,6 +616,7 @@ int main(int argc, char *argv[])
 {
 char *command;
 
+gfCatchPipes();
 cgiSpoof(&argc, argv);
 command = argv[1];
 if (cgiBoolean("trans"))
