@@ -358,6 +358,8 @@ exit; # don't actually run this like a script :)
   /cluster/bin/x86_64/gcPercent -noLoad bosTau1 /gbdb/bosTau1/nib
   ssh hgwdev
   cd /cluster/home/heather/kent/src/hg/lib
+  # change index from 12 to 14 characters
   hgsql bosTau1 < gcPercent.sql
   load data local infile 'gcPercent.bed' into table gcPercent
+  # 54007 rows
 
