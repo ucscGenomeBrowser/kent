@@ -144,6 +144,15 @@ visibility full
 color 20,20,170
 type genePred refPep refMrna
 
+track sanger20
+shortLabel Sanger 20
+longLabel Sanger Center Chromosome 20 Genes
+priority 13
+visibility full
+chromosomes chr20,
+color 0,100,180
+type genePred
+
 track sanger22
 shortLabel Sanger 22
 longLabel Sanger Center Chromosome 22 Genes
@@ -152,6 +161,15 @@ visibility full
 chromosomes chr22,
 color 0,100,180
 type genePred
+
+track freen
+shortLabel Pet Freen 
+longLabel Jims Pet Freen
+priority 13.01
+visibility hide
+chromosomes chr22,
+color 100,0,100
+type psl .
 
 track sanger22pseudo
 shortLabel Sanger 22 Pseudo
