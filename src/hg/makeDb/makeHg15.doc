@@ -1232,8 +1232,8 @@ Locate motifs on all promoters with
         echo 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' | hgsql hg15
 
 
-IN PROGRESS
-# FOSEND SEQUENCE ALIGNMENTS (TO DO)
+
+# FOSEND SEQUENCE ALIGNMENTS (DONE 050603)
 
 # Create full sequence alignments
         ssh kk
@@ -1244,16 +1244,17 @@ IN PROGRESS
         make jobList
 	para create jobList
         para push
-DONE TO HERE - RUNNING...
+
 # Compile alignments and lift the files (takes a while)
 	ssh eieio
+        cd /cluster/home/booch/fosends
 	make fosEnds.psl.lifted
 
 # Copy files to final destination and remove
         make copy.assembly
         make clean
 
-
+IN PROGRESS
 # FOSEND PAIRS TRACK (TODO)
 
 # Update Makefile with location of pairs files, if necessary
@@ -1262,7 +1263,7 @@ DONE TO HERE - RUNNING...
 
 # Make initial file of alignments
 	make fosEnds.rdb
- 
+ DONE TO HERE
 # Try to fish out more pairs
 	make fosEndsMiss.psl
 
@@ -1539,19 +1540,20 @@ DONE TO HERE - RUNNING...
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
-# PRODUCING CROSS_SPECIES EST ALIGNMENTS (TODO)
+# PRODUCING CROSS_SPECIES EST ALIGNMENTS (DONE 4/28/03)
     # Make sure masked contigs are in /scratch/hg/gs.16/build33/trfFa 
     # Make sure split-up xenoRna sequence is under /iscratch too (GENBANK)
     ssh kkstore
     mkdir -p ~/hg15/bed/xenoEst
     cd ~/hg15/bed/xenoEst
     mkdir psl
-    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa.trf > human.lst
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoEst*.fa > mrna.lst
     # Using split fa -- so create separate output dirs and special gsub:
     foreach f (`cat mrna.lst`)
       mkdir psl/$f:t:r
     end
+
     echo '#LOOP \
 /cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=dnax -t=dnax -mask=lower {check out line+ psl/$(root2)/$(root1)_$(root2).psl} \
 #ENDLOOP' > gsub
@@ -2190,8 +2192,10 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
 
 # BEGINNING OF RAT BLASTZ
 
-# LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
+# SET UP RAT BLASTZ CLUSTER RUNS
+# FIRST FOLLOW INSTRUCTIONS IN ~angie/hummus/Notes
 
+# LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-03-18-ASH"
