@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.114 2004/06/13 21:52:19 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.115 2004/06/20 22:46:19 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -820,10 +820,14 @@ else if (sameString(track, "xenoRefGene"))
         refGeneUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
+else if (sameString(track, "all_mrna"))
+    mrnaUi(tdb, FALSE);
 else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "splicesP"))
     bedUi(tdb);
+else if (sameString(track, "all_est"))
+        mrnaUi(tdb, FALSE);
 else if (sameString(track, "est"))
         mrnaUi(tdb, FALSE);
 else if (sameString(track, "tightMrna"))
