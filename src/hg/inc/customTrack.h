@@ -10,6 +10,8 @@
 #include "trackDb.h"
 #endif
 
+#include "cart.h"
+
 struct customTrack
 /* A custom track. */
     {
@@ -34,6 +36,15 @@ struct customTrack *customTracksParse(char *text, boolean isFile,
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If retBrowserLines is non-null
  * then it will return a list of lines starting with the word "browser". */
+
+struct customTrack *customTracksParseCart(struct cart *cart,
+					  struct slName **retBrowserLines,
+					  char **retCtFileName);
+/* Figure out from cart variables where to get custom track text/file.
+ * Parse text/file into a custom set of tracks.  Lift if necessary.  
+ * If retBrowserLines is non-null then it will return a list of lines 
+ * starting with the word "browser".  If retCtFileName is non-null then 
+ * it will return the custom track filename. */
 
 void customTrackSave(struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. */

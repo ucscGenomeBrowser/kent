@@ -15,6 +15,7 @@
 #include "gff.h"
 #include "genePred.h"
 #include "net.h"
+#include "hdb.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -675,6 +676,85 @@ struct customTrack *customTracksFromFile(char *text)
 /* Parse file into a custom set of tracks. */
 {
 return customTracksParse(text, TRUE, NULL);
+}
+
+boolean bogusMacEmptyChars(char *s)
+/* Return TRUE if it looks like this is just a buggy
+ * Mac browser putting in bogus chars into empty text box. */
+{
+char c = *s;
+return c != '_' && !isalnum(c);
+}
+
+struct customTrack *customTracksParseCart(struct cart *cart,
+					  struct slName **retBrowserLines,
+					  char **retCtFileName)
+/* Figure out from cart variables where to get custom track text/file.
+ * Parse text/file into a custom set of tracks.  Lift if necessary.  
+ * If retBrowserLines is non-null then it will return a list of lines 
+ * starting with the word "browser".  If retCtFileName is non-null then 
+ * it will return the custom track filename. */
+{
+/* This was originally part of loadCustomTracks in hgTracks.  It was pulled
+ * back here so that hgText could use it too. */
+struct customTrack *ctList = NULL;
+char *customText = cartOptionalString(cart, "hgt.customText");
+char *fileName = cartOptionalString(cart, "ct");
+char *ctFileName = NULL;
+
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && bogusMacEmptyChars(customText))
+    customText = NULL;
+if (customText == NULL || customText[0] == 0)
+    customText = cartOptionalString(cart, "hgt.customFile");
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && customText[0] != 0)
+    {
+    static struct tempName tn;
+    makeTempName(&tn, "ct", ".bed");
+    ctList = customTracksParse(customText, FALSE, retBrowserLines);
+    ctFileName = tn.forCgi;
+    customTrackSave(ctList, tn.forCgi);
+    cartSetString(cart, "ct", tn.forCgi);
+    cartRemove(cart, "hgt.customText");
+    cartRemove(cart, "hgt.customFile");
+    }
+else if (fileName != NULL)
+    {
+    if (!fileExists(fileName))	/* Cope with expired tracks. */
+        {
+	fileName = NULL;
+	cartRemove(cart, "ct");
+	}
+    else
+        {
+	ctList = customTracksParse(fileName, TRUE, retBrowserLines);
+	ctFileName = fileName;
+	}
+    }
+
+if (customTrackNeedsLift(ctList))
+    {
+    /* Load up hash of contigs and lift up tracks. */
+    struct hash *ctgHash = newHash(0);
+    struct ctgPos *ctg, *ctgList = NULL;
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+       {
+       ctg = ctgPosLoad(row);
+       slAddHead(&ctgList, ctg);
+       hashAdd(ctgHash, ctg->contig, ctg);
+       }
+    customTrackLift(ctList, ctgHash);
+    ctgPosFreeList(&ctgList);
+    hashFree(&ctgHash);
+    }
+
+if (retCtFileName != NULL)
+    *retCtFileName = ctFileName;
+return ctList;
 }
 
 static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)
