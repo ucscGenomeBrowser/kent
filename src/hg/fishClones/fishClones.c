@@ -962,7 +962,7 @@ int main(int argc, char *argv[])
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
-      fprintf(stderr, "USAGE: fishMarkers <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix\n  Options:\n\t-fhcrc=<file>\tSTS marker associations from FHCRC\n\t-verbose=<level>\tdisplay all messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n");
+      fprintf(stderr, "USAGE: fishClones <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix\n  Options:\n\t-fhcrc=<file>\tSTS marker associations from FHCRC\n\t-psl=<psl file>\tpsl file of clone placements\n\t-verbose=<level>\tdisplay all messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n");
       return 1;
     }
   db = argv[1];
