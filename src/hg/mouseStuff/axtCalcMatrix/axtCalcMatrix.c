@@ -61,13 +61,14 @@ for (i=0; i<=symCount; ++i)
     }
 }
 
-void addPerfect(int *hist, int histSize, 
-	char *qSym, char *tSym, int symCount)
+void addPerfect(struct axt *axt, int *hist, int histSize, 
+	char *qSym, char *tSym, int symCount, char *bestPos)
 /* Add counts of perfect runs to histogram */
 {
 boolean match, lastMatch = FALSE;
 int startMatch = 0;
 int i, matchSize;
+static int best = 0;
 
 for (i=0; i<=symCount; ++i)
     {
@@ -87,6 +88,47 @@ for (i=0; i<=symCount; ++i)
 	     matchSize = histSize - 1;
 	hist[matchSize] += 1;
 	lastMatch = match;
+	if (matchSize > best)
+	    {
+	    best = matchSize;
+	    sprintf(bestPos, "%s:%d-%d", axt->tName, axt->tStart, axt->tEnd);
+	    }
+	}
+    }
+}
+
+void addGapless(struct axt *axt, int *hist, int histSize, 
+	char *qSym, char *tSym, int symCount, char *bestPos)
+/* Add counts of perfect runs to histogram */
+{
+boolean match, lastMatch = FALSE;
+int startMatch = 0;
+int i, matchSize;
+static int best = 0;
+
+for (i=0; i<=symCount; ++i)
+    {
+    if (i == symCount)
+        match = FALSE;
+    else
+	match = (qSym[i] != '-' && tSym[i] != '-');
+    if (match && !lastMatch)
+        {
+	startMatch = i;
+	lastMatch = match;
+	}
+    else if (!match && lastMatch)
+        {
+	matchSize = i - startMatch;
+	if (matchSize >= histSize)
+	     matchSize = histSize - 1;
+	hist[matchSize] += 1;
+	lastMatch = match;
+	if (matchSize > best)
+	    {
+	    best = matchSize;
+	    sprintf(bestPos, "%s:%d-%d", axt->tName, axt->tStart, axt->tEnd);
+	    }
 	}
     }
 }
@@ -97,12 +139,56 @@ void printLabeledPercent(char *label, int num, int total)
 printf("%s %7.3f%% (%d)\n", label, 100.0*num/total, num);
 }
 
+void printMedianEtc(char *label, int *hist, int histSize, char *bestPos)
+/* Calculate min, max, average, and median and print. */
+{
+int i, oneSlot, hitCount = 0;
+int halfHits, hitsSoFar, median = -1; /* Stuff to calculate median. */
+int biggest = 0, smallest = -1;
+double total = 0, average;
+
+/* Scan through counting up things. */
+for (i=0; i<histSize; ++i)
+    {
+    oneSlot = hist[i];
+    if (oneSlot > 0)
+        {
+	if (smallest < 0)
+	    smallest = i;
+	biggest = i;
+	hitCount += oneSlot;
+	total += oneSlot * i;
+	}
+    }
+average = total / hitCount;
+
+/* Figure out median. */
+halfHits = hitCount/2;
+hitsSoFar = 0;
+for (i=0; i<histSize; ++i)
+    {
+    hitsSoFar += hist[i];
+    if (hitsSoFar >= halfHits)
+	{
+        median = i;
+	break;
+	}
+    }
+
+printf("%s min %d, max %d, median %d, average %1.3f, total %4.1f\n", 
+    label, smallest, biggest, median, average, total);
+printf("   best at %s\n", bestPos);
+}
+
+#define maxPerfect 100000
+
 void axtCalcMatrix(int fileCount, char *files[])
 /* axtCalcMatrix - Calculate substitution matrix and make indel histogram. */
 {
 int *histIns, *histDel, *histPerfect, *histGapless, *histT, *histQ;
-int maxInDel = optionInt("maxInsert", 1001);
+int maxInDel = optionInt("maxInsert", 21);
 static int matrix[4][4];
+static char bestGapless[256], bestPerfect[256];
 int i,j,both,total = 0;
 double scale;
 int fileIx;
@@ -112,12 +198,12 @@ static char *bases[4] = {"A", "C", "G", "T"};
 int totalT = 0, totalMatch = 0, totalMismatch = 0, 
 	tGapStart = 0, tGapExt=0, qGapStart = 0, qGapExt = 0;
 
-AllocArray(histIns, maxInDel);
-AllocArray(histDel, maxInDel);
-AllocArray(histPerfect, maxInDel);
-AllocArray(histGapless, maxInDel);
-AllocArray(histT, maxInDel);
-AllocArray(histQ, maxInDel);
+AllocArray(histIns, maxInDel+1);
+AllocArray(histDel, maxInDel+1);
+AllocArray(histPerfect, maxPerfect+1);
+AllocArray(histGapless, maxPerfect+1);
+AllocArray(histT, maxInDel+1);
+AllocArray(histQ, maxInDel+1);
 for (fileIx = 0; fileIx < fileCount; ++fileIx)
     {
     char *fileName = files[fileIx];
@@ -128,7 +214,10 @@ for (fileIx = 0; fileIx < fileCount; ++fileIx)
 	addMatrix(matrix, axt->tSym, axt->qSym, axt->symCount);
 	addInsert(histIns, maxInDel, axt->tSym, axt->symCount);
 	addInsert(histDel, maxInDel, axt->qSym, axt->symCount);
-	addPerfect(histPerfect, maxInDel, axt->qSym, axt->tSym, axt->symCount);
+	addPerfect(axt, histPerfect, maxPerfect, 
+		axt->qSym, axt->tSym, axt->symCount, bestPerfect);
+	addGapless(axt, histGapless, maxPerfect, 
+		axt->qSym, axt->tSym, axt->symCount, bestGapless);
 	axtFree(&axt);
 	}
     lineFileClose(&lf);
@@ -142,25 +231,22 @@ printf("\n");
 
 for (i=0; i<4; ++i)
     {
-    int it = trans[i];
-    printf(" %s", bases[i]);
-    total = 0;
     for (j=0; j<4; ++j)
 	{
-	int one = matrix[it][j];
-        total += one;
-	if (it == j)
+	int one = matrix[i][j];
+        total += matrix[i][j];
+	if (i == j)
 	    totalMatch += one;
 	else
 	    totalMismatch += one;
 	}
-    if (total == 0)
-        {
-	for (j=0; j<4; ++j)
-	    matrix[it][j] = 1;
-	total = 4;
-	}
-    scale = 1.0/total;
+    }
+scale = 1.0 / total;
+
+for (i=0; i<4; ++i)
+    {
+    int it = trans[i];
+    printf(" %s", bases[i]);
     for (j=0; j<4; ++j)
         {
 	int jt = trans[j];
@@ -170,9 +256,16 @@ for (i=0; i<4; ++i)
     }
 printf("\n");
 
-for (i=1; i<10; ++i)
-    printf("%2d  %6.4f%% %6.4f%% %6d %7d\n", i, 100.0*histIns[i]/totalT, 
-    	100.0*histDel[i]/totalT, histPerfect[i], histPerfect[i]*i);
+for (i=1; i<21; ++i)
+    {
+    if (i == 20)
+        printf(">=");
+    tGapStart += histIns[i];
+    qGapStart += histDel[i];
+    printf("%2d  %6.4f%% %6.4f%%\n", i, 100.0*histIns[i]/totalT, 
+    	100.0*histDel[i]/totalT);
+    }
+#ifdef OLD
 for (i=0; i<100; i += 10)
     {
     int delSum = 0, insSum=0, perfectSum = 0, perfectBaseSum = 0;
@@ -212,6 +305,7 @@ printf(">1000  %6.4f%% %6.4f%% %6d %7d\n",
 	100.0*histIns[1000]/totalT, 100.0*histDel[1000]/totalT, histPerfect[1000],
 	histPerfect[1000]*1000);
 both = histIns[1000] + histDel[1000];
+#endif /* OLD */
 printf("\n");
 printLabeledPercent("totalT:    ", totalT, totalT);
 printLabeledPercent("matches:   ", totalMatch, totalT);
@@ -220,6 +314,9 @@ printLabeledPercent("tGapStart: ", tGapStart, totalT);
 printLabeledPercent("qGapStart: ", qGapStart, totalT);
 printLabeledPercent("tGapExt:   ", tGapExt, totalT);
 printLabeledPercent("qGapExt:   ", qGapExt, totalT);
+printf("\n");
+printMedianEtc("perfect", histPerfect, maxPerfect, bestPerfect);
+printMedianEtc("gapless", histGapless, maxPerfect, bestGapless);
 }
 
 int main(int argc, char *argv[])
