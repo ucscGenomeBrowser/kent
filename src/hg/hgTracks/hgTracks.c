@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.732 2004/05/17 18:09:33 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.733 2004/05/17 22:38:59 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3836,7 +3836,7 @@ struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
 struct linkedFeatures *lf = item;
 
-dyStringPrintf(ds, "select name from rgdLink where id = '%s'", lf->name);
+dyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
 sqlQuickQuery(conn, ds->string, name, sizeof(name));
 freeDyString(&ds);
 hFreeConn(&conn);
@@ -3844,7 +3844,7 @@ return name;
 }
 
 void rgdGeneMethods(struct track *tg)
-/* Make track for simple repeats. */
+/* Make track for RGD genes. */
 {
 tg->itemName = rgdGeneItemName;
 }
