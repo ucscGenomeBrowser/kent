@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.671 2004/02/12 19:02:25 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.672 2004/02/17 01:27:14 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7488,6 +7488,7 @@ registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 // registerTrackHandler("affyUcla", affyUclaMethods);
+registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );

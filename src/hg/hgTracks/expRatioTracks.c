@@ -39,28 +39,27 @@ if(tg->visibility != tvDense && tg->visibility != tvHide)
 struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name)
 /* create a lfs containing all beds on a single line */
 {
-struct linkedFeaturesSeries *lfs;
+struct linkedFeaturesSeries *lfs = NULL, *lfsList = NULL;
 struct linkedFeatures *lf;
 struct bed *bed = NULL;
 
 if(bedList == NULL)
     return NULL;
-/* create one linkedFeatureSeries with average score for each lf
-   in bed->score */
-AllocVar(lfs);
-if(name != NULL)
-    lfs->name = cloneString(name);
-else
-    lfs->name = cloneString("unknown");
+
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
+    AllocVar(lfs);
+    lfs->name = cloneString(bed->name);
     lf = lfFromBed(bed);
     /* lf->tallStart = bed->chromStart;
        lf->tallEnd = bed->chromEnd; */
     lf->score = bed->score;
+    lfs->start = lf->start;
+    lfs->end = lf->end;
     slAddHead(&lfs->features, lf);  
+    slAddHead(&lfsList, lfs);
     }
-return lfs;
+return lfsList;
 }
 
 void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, 
@@ -110,6 +109,19 @@ for(er = erList; er != NULL; er = er->next)
 hashTraverseVals(seen, freeMem);
 hashFree(&seen);
 *numIndexes = unique;
+}
+
+int lfsSortByPos(const void *va, const void *vb)    
+/* used for slSorting linkedFeaturesSeries */
+{
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+int diff = a->start - b->start;
+if(diff == 0)
+    diff = a->end - b->end;
+if(diff == 0)
+    diff = strcmp(a->name, b->name);
+return diff;
 }
 
 int lfsSortByName(const void *va, const void *vb)    
@@ -254,7 +266,6 @@ slReverse(&lfsList);
 return lfsList;
 }
 
-
 void lfsFromAffyBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
@@ -290,6 +301,66 @@ else
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyTissue, affyMap, 1);
     slSort(&tg->items,lfsSortByName);
     }
+bedFreeList(&bedList);
+}
+
+void lfsFromAffyUclaNormBed(struct track *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs = NULL, *lfsNew = NULL;
+struct linkedFeatures *lf = NULL, *lfNext = NULL;
+struct bed *bed = NULL, *bedList= NULL;
+int i=0;
+enum trackVisibility vis = tg->visibility;
+bedList = tg->items;
+
+if(tg->limitedVis == tvDense || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
+    }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyUclaNormExps", 2, NULL, -1);
+    }
+
+/* Unroll the series into individual linked features, we're going to
+   use the packing code to piece them toghether.  At some point this
+   track should be moved to just using the linkedFeature data type
+   instead of the linkedFeaturesSeries data type, but for backward
+   compatability we are still using linkedFeaturesSeries.  Performance
+   implementation should be minimal as we only hit this code when
+   there are less than 10 items in window.
+*/
+if(tg->limitedVis == tvFull) 
+    {
+    for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
+	{
+	for(lf = lfs->features; lf != NULL; lf = lfNext)
+	    {
+	    lfNext = lf->next;
+	    lfsNew  = CloneVar(lfs);
+	    lfsNew->name = cloneString(lfs->name);
+	    lfsNew->features = NULL;
+	    lfsNew->next = NULL;
+	    lfsNew->start = lf->start;
+	    lfsNew->end = lf->end;
+	    slAddHead(&lfsNew->features, lf);
+	    slAddHead(&lfsList, lfsNew);
+	    }
+	}
+    slReverse(&lfsList);
+    tg->items = lfsList;
+    /* Set a flag to indicate that ratio colors should be used. */
+    tg->customInt = 1;
+    slSort(&tg->items,lfsSortByPos);
+    }
+if(vis == tvFull)
+    tg->visibility = tvPack;
+limitVisibility(tg);
+if(vis == tvFull)
+    tg->visibility = tvFull;
 bedFreeList(&bedList);
 }
 
@@ -679,7 +750,7 @@ struct linkedFeatures *lf = item;
 float score = lf->score;
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
-if(tg->visibility == tvDense)
+if(tg->limitedVis == tvDense || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
     {
     score = score/10;
     return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
@@ -709,6 +780,25 @@ else
     }
 }
 
+Color affyUclaNormColor(struct track *tg, void *item, struct vGfx *vg)
+/* Does the score->color conversion for affymetrix arrays using ratios,
+ * if dense do an intensity color in blue based on score value otherwise do
+ * red/green display from expScores */
+{
+struct linkedFeatures *lf = item;
+float score = lf->score;
+if(!exprBedColorsMade)
+    makeRedGreenShades(vg);
+if(tg->customInt != 1)
+    {
+    return shadesOfSea[grayInRange(lf->score, 0, 1000)];
+    }
+else
+    {
+    return expressionColor(tg, item, vg, 1.0, 3.0);
+    }
+}
+
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -733,19 +823,17 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&bedList);
 
-/* a lot of the filters condense many items down to 
-   two or three, this can be computationally expensive.
-   use the maxItemsInFullTrack as a cap on the number that
-   will be computed */
-
+/* A lot of filters will blow up the number of items in a 
+   track, limit the number of items we will do in "full" mode. */
 if(vis == tvFull)
     {
-    if(itemCount > maxItemsInFullTrack) 
-	vis = tvDense;
+    if(itemCount > 10)
+	{
+	vis = tg->visibility;
+	tg->visibility = tvPack;
+	}
     }
-tg->visibility = vis;
-
-
+tg->limitedVis = tg->visibility;
 /* run the filter if it exists, otherwise use default */
 if(tg->trackFilter != NULL)
     {
@@ -773,6 +861,8 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    lfs->end = lf->end;
 	}
     }
+/* Put back our spoofed visibility. */
+tg->visibility = vis;
 }
 
 char *rosettaName(struct track *tg, void *item)
@@ -859,6 +949,18 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = affyRatioColor;
 tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
+void affyUclaNormMethods(struct track *tg)
+/* Set up special methods for the affyUcla normal tissue track
+   scores in general */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = affyUclaNormColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyUclaNormBed;
 tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }

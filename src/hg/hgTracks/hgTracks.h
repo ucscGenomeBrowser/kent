@@ -570,6 +570,10 @@ void affyUclaMethods(struct track *tg);
 /* set up special methods for affyUcla track and tracks with multiple
    scores in general */
 
+void affyUclaNormMethods(struct track *tg);
+/* Set up special methods for the affyUcla normal tissue track
+   scores in general */
+
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
 
