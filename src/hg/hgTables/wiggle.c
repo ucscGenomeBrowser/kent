@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.36 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.37 2004/11/22 20:31:56 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -345,6 +345,25 @@ if (curOut >= maxOut)
 }
 
 /***********   PUBLIC ROUTINES  *********************************/
+
+void wiggleMinMax(struct trackDb *tdb, double *min, double *max)
+{
+/*	obtain wiggle data limits from trackDb or cart or settings */
+if ((tdb != NULL) && (tdb->type != NULL))
+    {
+    double tDbMin, tDbMax;
+    char *typeLine = cloneString(tdb->type);
+    char *words[8];
+    int wordCount;
+    wordCount = chopLine(typeLine, words);
+    wigFetchMinMaxY(curTrack, min, max, &tDbMin, &tDbMax, wordCount, words);
+    if (tDbMin < *min)
+	*min = tDbMin;
+    if (tDbMax > *max)
+	*max = tDbMax;
+    freeMem(typeLine);
+    }
+}
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */

@@ -491,6 +491,9 @@ struct bed *getWiggleAsBed(
 /* Return a bed list of all items in the given range in table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 
+void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
+/*	obtain wiggle data limits from trackDb or cart or settings */
+
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
 	struct region *region, struct lm *lm);
 /*	return the wigAsciiData list	*/
