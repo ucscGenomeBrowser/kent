@@ -41,9 +41,9 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
-    sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
-    sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snp.o snpMap.o \
-    softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
+    sanger22extra.o sangerGene.o scopDes.o scoredRef.o sgdAbundance.o \
+    sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
+    snp.o snpMap.o softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
