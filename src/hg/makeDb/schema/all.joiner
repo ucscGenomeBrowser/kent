@@ -42,7 +42,7 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 joiner goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
      $dm.bdgpInfo.go comma
-     $dm.bdgpNonCodingInfo comma
+     $dm.bdgpNonCodingInfo.go comma
      go.goaPart.goId
      go.term.acc
 
@@ -74,7 +74,7 @@ joiner swissProtId external=SwissProt
 
 joiner swissProtAccession external=SwissProt
 "SwissProt Accession"
-     $knownDb.kgProtAlias.alias part
+     $knownDb.kgProtAlias.alias 
      $knownDb.kgProtMap.qName
      $knownDb.kgXref.spID
      $gbd.pepMwAa.accession
@@ -179,6 +179,7 @@ joiner ncbiTaxon
 # Various types of gene predictions in UCSC Genome Browser
 
 joiner acemblyName
+"Link together Acembly gene model structure and peptide."
     $gbd.acembly.name
     $gbd.acemblyPep.name
 
@@ -223,7 +224,7 @@ joiner vegaGeneName typeOf=vegaName
     $gbd.vegaPep.name
 
 joiner vegaPseudogeneName typeOf=vegaName
-"Link together VEGA pseudogene and other info. */
+"Link together VEGA pseudogene and other info."
     $gbd.vegaPseudoGene.name
 
 # Microarray stuff.
@@ -351,14 +352,14 @@ joiner yeastChoCellCycleSampleId
 
 # Stuff to link together alignment chains and nets
 
-joiner chain${chainDb}Id
-"Link together chimp ${chainDb} chain info"
-    $gbd.allChain${chainDb}.id
-    $gbd.chain${chainDb}.id
-    $gbd.chain${chainDb}Link.chainId
-    $gbd.netRxBest${chainDb}.chainId
-    $gbd.net${chainDb}NonGap.chainId
-    $gbd.netSynteny${chainDb}.chainId
+joiner chain[${chainDb}]Id
+"Link together chain info"
+    $gbd.allChain[].id
+    $gbd.chain[].id
+    $gbd.chain[]Link.chainId
+    $gbd.netRxBest[].chainId
+    $gbd.net[]NonGap.chainId
+    $gbd.netSynteny[].chainId
 
 joiner chainSelf
 "Link together self chain info"
@@ -366,7 +367,7 @@ joiner chainSelf
     $gbd.chainSelfLink.chainId
     $gbd.netSelf.chainId
 
-joiner mouseChainId
+joiner mouseChainId 
 "Link together chain/net on hg13,hg15 for mouse"
     hg13,hg15.mouseChain.id
     hg13,hg15.mouseChainLink.chainId
@@ -414,10 +415,10 @@ joiner proteinAccession typeOf=genbankAccession
 
 joiner estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
-    $gbd.mrna.acc subset
-    $gbd.gbSeq.acc subset
-    $gbd.gbStatus.acc subset
-    $gbd.imageClone.acc subset
+    $gbd.mrna.acc
+    $gbd.gbSeq.acc
+    $gbd.gbStatus.acc
+    $gbd.imageClone.acc
 
 joiner estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
@@ -461,8 +462,8 @@ joiner refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
     $gbd.bioCycPathway.geneId
     $gbd.cgapAlias.alias
-    $gbd.imageClone.acc subset
-    $knownDb.kgAlias.alias subset
+    $gbd.imageClone.acc
+    $knownDb.kgAlias.alias
     $knownDb.kgXref.refseq
     $knownDb.knownToRefSeq.value
     $gbd.mrnaRefseq.refseq
@@ -483,8 +484,8 @@ joiner knownGeneId typeOf=nativeMrnaAccession
     $knownDb.mmBlastTab.query
     $knownDb.scBlastTab.query
     $gbd.dupSpMrna.mrnaID
-    $gbd.mrna.acc subset
-    $gbd.seq.acc subset
+    $gbd.mrna.acc 
+    $gbd.seq.acc 
     $gbd.foldUtr3.name
     $gbd.foldUtr5.name
     $hg.gnfU95Distance.query
@@ -569,7 +570,7 @@ joiner genBankMrnaClone
 joiner genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.mrna.organism
-    organism.id
+    $gbd.organism.id
 
 joiner genBankProductName
 "Connects genBank mRNA/EST and protein product name"
@@ -580,7 +581,7 @@ joiner genBankProductName
 joiner genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.mrna.sex
-    sex.id
+    $gbd.sex.id
 
 joiner genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
@@ -590,7 +591,7 @@ joiner genBankSource
 joiner genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.mrna.tissue
-    tissue.id
+    $gbd.tissue.id
 
 
 # Some misc clone-oriented identifiers
@@ -649,7 +650,7 @@ joiner stsTrueName typeOf=stsName
 joiner hugoName external=HUGO
 "International Human Gene Identifier"
     $hg.atlasOncoGene.locusSymbol
-    $hg.kgAlias.alias subset
+    $hg.kgAlias.alias 
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.refLink.name
@@ -717,7 +718,7 @@ joiner wormBaseId external=WormBase
     $ce.sangerGene.name
     $ce.kimExpDistance.query
     $ce.kimExpDistance.target
-    $ce.orfToGene
+    $ce.orfToGene.name
     $ce.sangerBlastTab.query
     $ce.sangerBlastTab.target
     $ce.sangerCanonical.transcript
@@ -892,7 +893,7 @@ joiner dbSnpId external=dbSNP
 joiner encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
     $hg.encodeRegions.name
-    $hgFixed.encodeRegionInfo.name
+    hgFixed.encodeRegionInfo.name
 
 joiner unigeneId
 "NCBI UniGene Cluster ID"
