@@ -154,7 +154,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char *path;
 
     /* Query database to find full path name and size file should be. */
-    sprintf(query, "select path,size from extFile where id=%lu", extId);
+    sprintf(query, "select path,size from extFile where id=%u", extId);
     sr = sqlGetResult(conn,query);
     if ((row = sqlNextRow(sr)) == NULL)
         errAbort("Database inconsistency - no external file with id %lu", extId);
