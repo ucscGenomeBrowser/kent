@@ -26,10 +26,35 @@ color 0,120,60
 altColor 200,255,220
 type genePred
 
+track ensMergeTierB
+shortLabel Ensembl Tier B
+longLabel Ensembl Merged Tier B Gene Predictions
+priority 15
+visibility dense
+color 150,0,0
+type genePred ensMergeTierBPep
+
+track ensMergeTierC
+shortLabel Ensembl Tier C
+longLabel Ensembl Merged Tier C Gene Predictions
+priority 15
+visibility dense
+color 150,0,0
+type genePred ensMergeTierCPep
+
+track ensMergeTierD
+shortLabel Ensembl Tier D
+longLabel Ensembl Merged Tier D Gene Predictions
+priority 15
+visibility dense
+color 150,0,0
+type genePred ensMergeTierDPep
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
 priority 14
-visibility dense
+visibility hide
 color 125,0,150
 type genePred genieAltPep
+
