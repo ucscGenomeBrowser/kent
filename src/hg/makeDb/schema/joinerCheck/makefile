@@ -4,7 +4,7 @@ L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = joinerCheck.o
+O = joinerCheck.o 
 
 joinerCheck: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/joinerCheck $O ${MYLIBS} $L
@@ -12,5 +12,9 @@ joinerCheck: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
 test: 
 	joinerCheck -parseOnly ../all.joiner
+
+foo:
+	joinerCheck -fieldListIn=hgwdev.fields ../all.joiner
