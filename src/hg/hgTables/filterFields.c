@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.7 2004/09/02 18:06:00 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.8 2004/09/02 19:26:49 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -500,6 +500,14 @@ char *eqOpMenu[] =
 };
 int eqOpMenuSize = ArraySize(eqOpMenu);
 
+char *maxOutMenu[] =
+{
+    "100,000",
+    "1,000,000",
+    "10,000,000",
+};
+int maxOutMenuSize = ArraySize(maxOutMenu);
+
 void stringFilterOption(char *db, char *table, char *field, char *logOp)
 /* Print out a table row with filter constraint options for a string/char. */
 {
@@ -571,7 +579,8 @@ boolean gotFirst = FALSE;
 if (isWiggle(db, table))
     {
     hPrintf("<TABLE BORDER=0>\n");
-    numericFilterOption(db, rootTable, "dataValue", "dataValue", "");
+    numericFilterOption(db, rootTable, filterDataValueVar,
+	filterDataValueVar, "");
     hPrintf("</TABLE>\n");
     }
 else
@@ -617,6 +626,17 @@ else
     hPrintf("</TD></TR></TABLE>\n");
     }
 
+if (isWiggle(db, table))
+    {
+    char *name;
+    hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
+    name = filterFieldVarName(db, rootTable, "",
+	filterMaxOutputVar);
+    cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
+		cartUsualString(cart, name, maxOutMenu[0]));
+    hPrintf("&nbsp lines</TD></TR></TABLE>\n");
+    }
+
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
@@ -633,7 +653,7 @@ puts("<TABLE BORDER=0>");
 
 if (ct->wiggle)
     {
-    numericFilterOption(db, table, "dataValue", "dataValue", "");
+    numericFilterOption(db, table, filterDataValueVar, filterDataValueVar, "");
     }
 else
     {
