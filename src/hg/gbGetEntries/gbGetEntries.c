@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbGetEntries.c,v 1.2 2004/02/26 08:10:19 markd Exp $";
+static char const rcsid[] = "$Id: gbGetEntries.c,v 1.3 2004/02/26 09:12:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -47,13 +47,16 @@ while (TRUE)
     if (!lineFileNext(lf, &line, NULL))
         return FALSE;
     if (startsWith("LOCUS", line))
+        {
+        lineFileReuse(lf);
         return TRUE;
+        }
     }
 }
 
 void processEntry(struct lineFile *lf, struct hash *accTbl, 
                      struct dyString* headLines, FILE *out)
-/* process one genbank entry, LOCUS line should be in buffer  */
+/* process one genbank entry. */
 {
 char *line;
 char *words[3];
