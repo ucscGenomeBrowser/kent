@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colKnownGene.c,v 1.4 2003/06/20 22:28:17 kent Exp $";
+static char const rcsid[] = "$Id: colKnownGene.c,v 1.5 2003/06/21 00:08:28 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -114,5 +114,36 @@ void setupColumnKnownPos(struct column *col, char *parameters)
 {
 genePredPosMethods(col, "knownGene");
 col->cellVal = knownPosVal;
+}
+
+void printKnownDetailsLink(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
+/* Print a link to known genes details page. */
+{
+char *s = col->cellVal(col, geneId, conn);
+if (s == NULL) 
+    {
+    hPrintf("<TD>n/a</TD>", s);
+    }
+else
+    {
+    char *pos = knownPosVal(NULL, geneId, conn);
+    char *chrom;
+    int start,end;
+    hgParseChromRange(pos, &chrom, &start, &end);
+    hPrintf("<TD>");
+    hPrintf("<A HREF=\"../cgi-bin/hgc?%s&g=knownGene&i=%s\">",
+	    cartSidUrlString(cart), geneId);
+    hPrintf("%s</A></TD>", s);
+    freeMem(pos);
+    freeMem(s);
+    }
+}
+
+void setupColumnLookupKnown(struct column *col, char *parameters)
+/* Set up a column that links to details page for known genes. */
+{
+setupColumnLookup(col, parameters);
+col->cellPrint = printKnownDetailsLink;
 }
 

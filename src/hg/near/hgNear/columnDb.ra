@@ -1,6 +1,6 @@
 name num
 shortLabel #
-longLabel display item number/link to select gene
+longLabel item number in displayed list/select gene
 priority 1
 visibility on
 type num
@@ -10,11 +10,11 @@ shortLabel Name
 longLabel gene name/link to details page
 priority 2
 visibility on
-type lookup kgXref kgID geneSymbol
+type lookupKnown kgXref kgID geneSymbol
 
 name acc
 shortLabel Accession
-longLabel mRNA accession/link to NCBI
+longLabel mRNA accession
 priority 3
 visibility on
 type acc

@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.11 2003/06/20 22:28:17 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.12 2003/06/21 00:08:28 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -511,92 +511,6 @@ for (col = colList; col != NULL; col = col->next)
     }
 }
 
-#ifdef OLD
-struct column *oldGetColumns(struct sqlConnection *conn)
-/* Return list of columns for big table. */
-{
-struct column *colList = NULL, *col;
-
-AllocVar(col);
-col->name = "num";
-col->label = "#";
-col->priority = 1;
-col->on = FALSE;
-numberMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "name";
-col->label = "Name";
-col->priority = 2;
-col->on = TRUE;
-geneNameMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "acc";
-col->label = "Accession";
-col->priority = 3;
-col->on = TRUE;
-accMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "bitScore";
-col->label = "Bits";
-col->priority = 4;
-col->on = FALSE;
-bitScoreMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "eVal";
-col->label = "E Value";
-col->priority = 5;
-col->on = TRUE;
-eValMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "percentId";
-col->label = "%ID";
-col->priority = 6;
-col->on = TRUE;
-percentIdMethods(col);
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "knownPos";
-col->label = "Genome Position";
-knownPosMethods(col);
-col->priority = 7;
-col->on = TRUE;
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-AllocVar(col);
-col->name = "description";
-col->label = "Description";
-geneDescriptionMethods(col);
-col->priority = 8;
-col->on = TRUE;
-if (col->exists(col, conn))
-    slAddHead(&colList, col);
-
-refinePriorities(colList);
-refineVisibility(colList);
-
-slSort(&colList, columnCmpPriority);
-return colList;
-}
-#endif /* OLD */
-
 char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name)
 /* Look up in ra hash or die trying. */
 {
@@ -627,6 +541,8 @@ else if (sameString(type, "distance"))
     setupColumnDistance(col, s);
 else if (sameString(type, "knownPos"))
     setupColumnKnownPos(col, s);
+else if (sameString(type, "lookupKnown"))
+    setupColumnLookupKnown(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);

@@ -136,5 +136,8 @@ void setupColumnKnownPos(struct column *col, char *parameters);
 /* Set up column that links to genome browser based on known gene
  * position. */
 
+void setupColumnLookupKnown(struct column *col, char *parameters);
+/* Set up a column that links to details page for known genes. */
+
 #endif /* HGNEAR_H */
 
