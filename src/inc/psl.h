@@ -187,5 +187,8 @@ int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */
 
+boolean pslIsProtein(const struct psl *psl);
+/* is psl a protein psl (are it's blockSizes and scores in protein space) */
+
 #endif /* PSL_H */
 
