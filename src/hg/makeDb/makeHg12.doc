@@ -1685,7 +1685,8 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 10/30/02)
+(DONE 8/18/02 with 08-15-ASH run)
 
     - loading both blastz alignments and reference (single coverage) alignments
     - in xAli format, which includes sequence
@@ -1694,7 +1695,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
     - create psl files for each per-contig lav file
 
        ssh kkstore
-       set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+       set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
        cd $base
        set tbl="blastzMm2"
        foreach chrdir ($base/lav/chr*)
@@ -1723,20 +1724,13 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
           > lav-xa/${chr}_${tbl}.psl
        end
 
-    - Until hgc is fixed to connect to mm2 for mm2 chrom info, create 
-      the hg12.mouseChrom table:
-        ssh hgwdev
-        mysqldump -u hgcat -pXXXXXX mm2 chromInfo | \
-          sed -e 's/chromInfo/mouseChrom/' > mouseChrom.sql
-        hgsql hg12 < mouseChrom.sql
-
     - Load tables
         ssh hgwdev
-        set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+        set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
         cd $base/lav-xa
         hgLoadPsl hg12 *.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
     - When Scott Schwartz is done generating .axt's for the blastz mm2 
       alignments (takes longer than the .lav used for blastxMm2 above):
 
@@ -1751,7 +1745,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
 
     - Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
-    set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+    set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
     cd $base
     mkdir -p axtChrom axtBest pslBest
     foreach chrdir (lav/chr*)
@@ -1782,20 +1776,47 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
 
     - Load tables
      ssh hgwdev
-     set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
+     set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
      cd $base/pslBest
      hgLoadPsl hg12 *.psl
-     rm -f ~/kent/src/hg/lib/axtInfoFillHg12.sql
-     touch ~/kent/src/hg/lib/axtInfoFillHg12.sql
+   # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg12/axtBestMm2
+     cd /gbdb/hg12/axtBestMm2
      foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg12/axtBestMm2/chr*.axt)
        set chr=$f:t:r
-       echo 'insert into axtInfo values ("mm2","Blastz Best in Genome","'$chr'","'$f'");' \
-         >> ~/kent/src/hg/lib/axtInfoFillHg12.sql
+       echo "INSERT INTO axtInfo VALUES ('mm2','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
      end
      hgsql hg12 < ~/kent/src/hg/lib/axtInfo.sql
-     hgsql hg12 < ~/kent/src/hg/lib/axtInfoFillHg12.sql
-     cvs add ~/kent/src/hg/lib/axtInfoFillHg12.sql
-     cvs ci ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     hgsql hg12 < axtInfoInserts.sql
+
+MAKING THE AXTTIGHT FROM AXTBEST (DONE 10/30/02)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kkstore
+    cd ~/oo/blastz.mm2.2002-08-24/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../tSizes ../qSizes ../pslTight/${c}_blastzTightMouse.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd ~/oo/blastz.mm2.2002-08-24/pslTight
+    hgLoadPsl hg12 chr*_blastzTightMouse.psl
+
 
 MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
 
