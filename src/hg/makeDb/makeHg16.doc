@@ -3667,7 +3667,7 @@ XXXX need to check the track
     # update ~/kent/src/hg/makeDb/trackDb/human/hg16/uniGene_2.html 
     # with current uniGene date. 
 
-# MAKING KNOWNFOLDUTR TABLES
+# MAKING FOLDUTR TABLES
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
     mkdir -p /cluster/data/hg16/bed/rnaStruct
@@ -3679,14 +3679,14 @@ XXXX need to check the track
 # Split up files and make files that define job.
     ssh kk
     cd /cluster/data/hg16/bed/rnaStruct
-    faSplit sequence utr3/utr.fa 50000 split/s
-    faSplit sequence utr5/utr.fa 50000 split/s
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
     ls -1 utr3/split > utr3/in.lst
     ls -1 utr5/split > utr5/in.lst
     cd utr3
     cat > gsub <<end
 #LOOP
-rnaFoldBig split/\$(PATH1) fold
+rnaFoldBig split/\$(path1) fold
 #ENDLOOP
 end
     cp gsub ../utr5
