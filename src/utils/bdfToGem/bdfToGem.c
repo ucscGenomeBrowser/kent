@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.9 2005/02/22 19:37:55 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.10 2005/02/23 00:38:52 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -45,10 +45,10 @@ struct bdfGlyph
 {
 struct bdfGlyph *next;
 int encoding;		/*	ascii value of character	*/
-int w;
-int h;
-int xOff;
-int yOff;
+int w;			/*	width of actual bits, nothing extra	*/
+int h;			/*	height of actual bits, nothing extra	*/
+int xOff;		/*	from x=0 to left side of bits	*/
+int yOff;		/*	from y=0 to bottom side of bits	*/
 int dWidth;		/*	width including space around bits	*/
 unsigned char **bitmap;
 };
@@ -61,7 +61,7 @@ unsigned char **bitmap = 0;
 int row;
 
 if ((0 == w) || (h == 0))
-    errAbort("allocRows: w or h are zero: %d x %d", w, h);
+    errAbort("allocRows: w or h is zero: %d x %d", w, h);
 
 byteWidth = BYTEWIDTH(w);
 /*	first allocate the row pointers	*/
@@ -113,10 +113,91 @@ const struct bdfGlyph *b = *((struct bdfGlyph **)vb);
 return (a->encoding - b->encoding);
 }
 
+static unsigned char leftMasks[8] =
+    {
+    0x0, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe
+    };
+/*  This bitsCopy is a specific limited form of a blit.  The limitation
+ *	is allowed because the source bitmap always has the characteristic
+ *	that it is upper left justified in its bitmap space.  Also, the
+ *	destination bitmap is always being worked on from left to right,
+ *	and thus only the bits to the left need to be preserved.  Any
+ *	bits to the right in the destination bitmap can be left blank.
+ *
+ *	The calculation below to determine startRow takes the various Y
+ *	coordinates into account to get the glyph properly copied in
+ *	it's vertical position into the destination.
+ */
 static int bitsCopy(unsigned char **bitmap, int offset, int maxYextent,
-    int startRow, struct bdfGlyph *glyph)
+    int minYoff, struct bdfGlyph *glyph)
 /*	a cheap blit of a single glyph, returns pixel columns copied */
 {
+int startRow = maxYextent -
+		(((glyph->h + glyph->yOff) - 1) - minYoff) - 1;
+int destRow = startRow;
+int srcRow = 0;
+boolean debug = FALSE;
+int bitsOnLeft = (offset & 0x7);	/* range: [0-7]	*/
+int bitsOnRight = 8 - bitsOnLeft;
+unsigned char maskLeft = leftMasks[bitsOnLeft];
+unsigned char maskRight = ~maskLeft;
+
+if (((int)'a' == glyph->encoding) || ((int)'b' == glyph->encoding))
+	debug = TRUE;
+
+for (destRow = startRow; (srcRow < glyph->h) && (destRow < maxYextent);
+	++destRow, ++srcRow)
+{
+    int destColumn = (offset >> 3);
+    int col;
+    if (0 == bitsOnLeft)
+	{
+if (destRow==startRow)
+    verbose(3,"bitsOnLeft are zero for character %d '%c'\n", glyph->encoding,
+	(char)glyph->encoding);
+if (debug && (destRow==startRow))
+    verbose(3,"offset: %d, destCol: %d, bitsOnLeft are zero\n", offset, destColumn);
+if (debug)
+    verbose(3,"row %d,%d x %d(%d) %d(%d): '",
+	destRow, srcRow, glyph->w, BYTEWIDTH(glyph->w), glyph->dWidth, BYTEWIDTH(glyph->dWidth));
+	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
+		{
+	    bitmap[destRow][destColumn] = glyph->bitmap[srcRow][col];
+if (debug)
+    verbose(3,"%02x", bitmap[destRow][destColumn]);
+		}
+if (debug)
+    verbose(3,"'\n");
+	}
+    else
+	{
+if (debug && (destRow==startRow))
+    verbose(3,"offset: %d, destCol: %d, bitsOnLeft,Right: %d,%d, masksLR: %#x,%#x\n",
+	offset, destColumn, bitsOnLeft, bitsOnRight, maskLeft, maskRight);
+if (debug)
+    verbose(3,"row %d,%d x %d(%d) %d(%d): '",
+	destRow, srcRow, glyph->w, BYTEWIDTH(glyph->w), glyph->dWidth, BYTEWIDTH(glyph->dWidth));
+	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
+	    {
+	    unsigned char dest;
+	    unsigned char src = glyph->bitmap[srcRow][col];
+	    dest = bitmap[destRow][destColumn];
+	    bitmap[destRow][destColumn] =
+		(dest & maskLeft) | ((src >> bitsOnLeft) & maskRight);
+	    bitmap[destRow][destColumn+1] = ((src << bitsOnRight) & maskLeft);
+if (debug)
+    verbose(3,"%02x(%02x)", bitmap[destRow][destColumn], src);
+	    }
+if (debug)
+    {
+    verbose(3,"%02x last %d, rtn: %d\n", bitmap[destRow][destColumn],
+	destColumn, glyph->dWidth);
+    }
+	}
+}
+return(glyph->dWidth);
+
+#ifdef NOT
 int columnsCopied = 0;
 int bitmapColumn = offset >> 3;
 int row = startRow;
@@ -140,6 +221,7 @@ if (columnsCopied != byteWidth)
     errAbort("columnsCopied %d != %d byteWidth", columnsCopied, byteWidth);
 
 return (columnsCopied * 8);
+#endif
 }
 
 static void outputGem(char *out, struct font_hdr *font,
@@ -169,8 +251,11 @@ int combinedWidth = 0;
 int *offsets = (int *)NULL;
 int widthSpace = 0;
 int bitmapColumn = 0;
-int maxYcoord = 0;
+int maxYcoord = -BIGNUM;
 int minYcoord = BIGNUM;
+int maxXcoord = -BIGNUM;
+int minXcoord = BIGNUM;
+
 
 slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
 
@@ -181,7 +266,10 @@ slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
 encoding = glyphs->encoding - 1;	/* to check for missing glyphs */
 for (glyph = glyphs; glyph; glyph=glyph->next)
     {
+    int xLeft;
+    int xRight;
     int yTop;
+    int yBottom;
     if (glyph->encoding != (encoding + 1))
 	{
 	verbose(2, "#\tmissing glyph for encodings: %d - %d\n", 
@@ -196,8 +284,13 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     if (glyph->yOff < minYoff) minYoff = glyph->yOff;
     if (glyph->yOff > maxYoff) maxYoff = glyph->yOff;
     yTop = glyph->h + glyph->yOff;
+    yBottom = glyph->yOff;
+    xLeft = glyph->xOff;
+    xRight = glyph->xOff + glyph->w;
+    if (xLeft < minXcoord) minXcoord = xLeft;
+    if (xRight > maxXcoord) maxXcoord = xRight;
     if (yTop > maxYcoord) maxYcoord = yTop;
-    if (glyph->yOff < minYcoord) minYcoord = glyph->yOff;
+    if (yBottom < minYcoord) minYcoord = yBottom;
 /*
     if (yExtent < 0)
 	errAbort("negative yExtent for glyph: %d, h: %d, yOff: %d",
@@ -208,7 +301,9 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
 */
     if (glyph->dWidth > maxDwidth) maxDwidth = glyph->dWidth;
     if ((maxYcoord - minYcoord) > maxYextent)
-	maxYextent = (maxYcoord - minYcoord);
+	maxYextent = maxYcoord - minYcoord;
+    if ((maxXcoord - minXcoord) > maxXextent)
+	maxXextent = maxXcoord - minXcoord;
     combinedWidth += BYTEWIDTH(glyph->dWidth) * 8;
     ++glyphCount;
     }
@@ -290,9 +385,6 @@ verbose(2,"#\tallocated bitmap: %d x %d pixels = %d x %d bytes\n",
  *	the glyph's bitmap, which would proceed from there upward by
  *	glyph->h pixels.
  *
- *	The calculation below to determine startRow takes these various Y
- *	coordinates into account to get the glyph properly copied in
- *	it's vertical position.
  */
 
 offset = 0;		/*  offset=bit (pixel) position in global bitmap */
@@ -302,7 +394,6 @@ glyph = glyphs;		/*	the first one is (LO_LMT)	*/
 for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     {
     struct bdfGlyph *glyphToUse = glyph;
-    int startRow;
 
     if(NULL == glyphToUse)
 	errAbort("got lost in glyphs at number: %d, encoding: %d",
@@ -319,12 +410,11 @@ verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding,
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
 
-    startRow = maxYextent -
-		(((glyphToUse->h + glyphToUse->yOff) - 1) - minYoff) - 1;
-verbose(4,"#\tchar %d '%c' h bytes: %d, h,yOff: %d, %d, startRow: %d\n",
+if ((int)'a' == encoding)
+    verbose(4,"#\tchar %d '%c' h bytes: %d, h,yOff: %d, %d\n",
 	encoding, (char)encoding, glyphToUse->h, glyphToUse->h,
-		glyphToUse->yOff, startRow);
-    offset += bitsCopy(bitmap, offset, maxYextent, startRow, glyphToUse);
+		glyphToUse->yOff);
+    offset += bitsCopy(bitmap, offset, maxYextent, minYoff, glyphToUse);
     ++glyphCount;
     }
 
@@ -487,9 +577,9 @@ while (lineFileNext(lf, &line, NULL))
 	int len = strlen(line);
 	char *c = line;
 	j = 0;
-if (encoding < 35)
-    verbose(4, "processing bitmap line: %s at line %d, char: %d ... ",
-	line, lineCount, encoding);
+if ((int)'a' == encoding)
+    verbose(4, "processing bitmap line: %s at line %d, char: %d '%c' row %d:",
+	line, lineCount, encoding, (char) encoding, glyphRow);
 	for (i = 0; i < len; ++i)
 	    {
 	    uc <<= 4;
@@ -518,7 +608,7 @@ if (encoding < 35)
 	    curGlyph->bitmap[glyphRow][j] = uc;
 	    errAbort("odd length of %d at line %d\n", lineCount);
 	    }
-	if (encoding < 35)
+	if ((int)'a' == encoding)
 	    {
 	    for (i = 0; i < j; ++i)
 		verbose(4, "%02X", curGlyph->bitmap[glyphRow][i]);
