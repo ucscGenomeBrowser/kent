@@ -918,7 +918,43 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     hgGoldGapGl -chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
     $HOME/bin/i386/hgClonePos -chromLst=chrom.lst hg17 \
 	/cluster/data/hg17 ./sequence.inf /cluster/store5/gs.18 -maxErr=3 \
-	2> clone.pos.errors
+	-maxWarn=2000 2> clone.pos.errors
+    #	Extract all the PAR clones for chrX from clonePos, change the X
+    #	to Y, fixup the coordinates on the last three, and load this
+    #	data in on the clonePos table in addition to what is there
+    #	already.
+    cat << '_EOF_' > chrY.par.clonePos
+BX640545.2      34821   3       chrY    0       34250   F
+AL954722.18     37771   3       chrY    84821   122592  F
+BX537334.4      36872   3       chrY    120592  157464  F
+BX000483.7      15918   3       chrY    155466  171384  F
+AL954664.17     39200   3       chrY    251384  290307  F
+BX000476.5      33340   3       chrY    282188  315528  F
+AL732314.18     218723  3       chrY    313528  532251  F
+BX004827.18     119555  3       chrY    479050  600112  F
+AL683871.15     175765  3       chrY    598112  773877  F
+AL672311.26     115998  3       chrY    771877  887875  F
+AL672277.20     131682  3       chrY    885875  1017557 F
+BX908402.3      36556   3       chrY    1067557 1104113 F
+BX649635.3      43709   3       chrY    1154113 1197822 F
+BX649553.5      90286   3       chrY    1347822 1438108 F
+BX296563.3      21008   3       chrY    1488108 1509117 F
+BX119906.16     35666   3       chrY    1507116 1542782 F
+AL683870.15     162377  3       chrY    1541782 1704175 F
+AL691415.17     45085   3       chrY    1702175 1747265 F
+AL683807.22     189825  3       chrY    1745260 1935086 F
+AL672040.10     117297  3       chrY    1933086 2050383 F
+BX004859.8      63432   3       chrY    2048380 2111815 F
+BX119919.5      55442   3       chrY    2261815 2317257 F
+AC079176.15     186278  3       chrY    2311674 2497952 F
+AC097314.27     80501   3       chrY    2495948 2576449 F
+AC006209.25     141759  3       chrY    2551122 2692881 F
+AJ271735.1      240000  3       chrY    57302979        57543030        F
+AJ271736.1      158661  3       chrY    57543030        57701691        F
+'_EOF_'
+
+hgsql -e 'load data local infile "chrY.par.clonePos" into table clonePos;' hg17
+
     #	We have the following errors
 # Processing /cluster/data/hg17/Y/chrY.gl
 # Clone BX640545 is on chromosomes chrX and chrY.  Ignoring chrY
@@ -6497,17 +6533,18 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     cd preNet
     for I in *.chain
     do
-      n=${I/.chain/}.net
-      echo primary netting $i
-      /cluster/bin/i386/chainNet $i -minSpace=1 \
+      N=${I/.chain/}.net
+      echo primary netting $I
+      /cluster/bin/i386/chainNet $I -minSpace=10 \
 	/cluster/data/hg17/chrom.sizes /cluster/data/hg17/chrom.sizes \
-	../n1/$n /dev/null
+	../n1/$N /dev/null
     done
     # exit bash if you are tcsh
     #	5 minute job
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    #	memory usage 206442496, utime 3009 s/100, stime 252
     #	memory usage 2510467072, utime 19307 s/100, stime 3181
 
     ssh hgwdev
@@ -6515,9 +6552,9 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     time netClass hNoClass.net hg17 hg17 human.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInHuman \
 	-qNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInHuman
-    #	real    7m37.867s
-    #	user    3m34.010s
-    #	sys     1m21.310s
+    #	real    9m32.951s
+    #	user    2m42.840s
+    #	sys     1m23.460s
 
     # If things look good do
     ssh eieio
@@ -6525,9 +6562,9 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
     time netFilter -syn human.net > humanSyn.net
-    #	real    0m50.076s
-    #	user    0m45.810s
-    #	sys     0m3.610s
+    #	real    0m29.851s
+    #	user    0m27.200s
+    #	sys     0m2.120s
 
     # Load the nets into database
     ssh hgwdev
@@ -6537,28 +6574,31 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
 
     # check results
     # featureBits hg17 netSelf
-    #	620731846 bases of 2866216770 (21.657%) in intersection
+    #	620827374 bases of 2866216770 (21.660%) in intersection
     # featureBits hg16 netSelf
     #	563788850 bases of 2865248791 (19.677%) in intersection
+    # featureBits hg15 selfNet
+    #	749177799 bases of 2866466359 (26.136%) in intersection
 
 
     # featureBits hg17 syntenyNetSelf
-    #	404531125 bases of 2866216770 (14.114%) in intersection
+    #	404535376 bases of 2866216770 (14.114%) in intersection
     # featureBits hg16 syntenyNetSelf
     #	340871322 bases of 2865248791 (11.897%) in intersection
 
-    # Add entries for net and chain to rat/hg17 trackDb
+    # Add entries for net and chain to human/hg17 trackDb
 
     # make net
     ssh eieio
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
     mkdir humanNet
     time netSplit human.net humanNet
-    #	real    1m24.412s
-    #	user    1m11.620s
-    #	sys     0m6.870s
+    #	real    0m52.106s
+    #	user    0m43.350s
+    #	sys     0m5.170s
 
-    # extract axts from net 
+    # extract axts from net  - this should be combined with the sort and
+    # maf conversion below
     mkdir ../axtNet 
     foreach n (humanNet/chr*.net)
 	set c=$n:t:r
@@ -6572,8 +6612,6 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
 
     # sort axt's and convert to maf format
     mkdir ../mafNet
-cat << '_EOF_' > makeMaf.csh
-#!/bin/csh -fe
     foreach f (../axtNet/chr*.axt)
         set c=$f:t:r
         echo $c.axt
@@ -6584,17 +6622,15 @@ cat << '_EOF_' > makeMaf.csh
             /cluster/data/hg17/chrom.sizes /cluster/data/hg17/chrom.sizes \
                 ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=hg17.
     end
-'_EOF_'
-    csh makeMaf.csh >&! makeMaf.log &
-    tail -100f makeMaf.log
     # a 3 minute job
 
+    XXXX - ! ! !   WE DO NOT NEED the Best and Tight tracks for Self ! ! !
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/blastzSelf/axtBest
     cd /cluster/data/hg17/bed/blastzSelf/axtBest
     ln -s ../axtNet/chr*.axt .
 
-    # copy net axt's to download area
+    # copy net axt's to download area - XXX Do we need this for Self ?
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtNet
     mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
@@ -6618,115 +6654,26 @@ cat << '_EOF_' > makeMaf.csh
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/pslBest
+    bash # if a csh/tcsh user
     for I in chr*BestSelf.psl
     do
 	/cluster/bin/i386/hgLoadPsl hg17 ${I}
 	echo "done ${I}"
     done
+    # exit bash if you are tcsh
 
     #	check results
     #	featureBits hg17 blastzBestSelf
     #	233983062 bases of 2866216770 (8.163%) in intersection
+    #	233978156 bases of 2866216770 (8.163%) in intersection
+    #  XXXX DO NOT NEED THESE TABLES - Hg16 was incorrect
+    #	These tables have been dropped for Hg17 and Hg16
+
     #	featureBits hg16 blastzBestSelf
     #	1388295977 bases of 2865248791 (48.453%) in intersection
 
-XXX - Seems to be incorrect here ? - 2004-07-08 14:50
-
-    # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg17/axtBest/Rn3
-     cd /gbdb/hg17/axtBest/Rn3
-     ln -s /cluster/data/hg17/bed/blastzSelf/axtNet/chr*.axt .
-     cd /cluster/data/hg17/bed/blastzSelf/axtNet
-     rm -f axtInfoInserts.sql
-     foreach f (/gbdb/hg17/axtBest/Rn3/chr*.axt)
-       set chr=$f:t:r
-       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
-                VALUES ('hg17','Blastz Best in Genome','$chr','$f');" \
-         >> axtInfoInserts.sql
-     end
-    hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
-    #	table axtInfo may already exist, ignore create error.
-    hgsql hg17 < axtInfoInserts.sql
-
-# MAKING HUMAN SYNTENY (TO BE DONE - 2004-07-08 - Hiram)
-#	Re-Done after above done without the axtFilter
-
-ssh hgwdev
-mkdir /cluster/data/hg17/bed/syntenyRn3
-cd /cluster/data/hg17/bed/syntenyRn3
-
-# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyMm3
-cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
-cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
-
-./syntenicBest.pl -db=hg17 -table=blastzBestRn3
-./smooth.pl
-./joinsmallgaps.pl
-./fillgap.pl -db=hg17 -table=blastzBestRn3
-./synteny2bed.pl
-#	The five commands above
-#	real    196m2.565s
-#	user    0m21.170s
-#	sys     0m4.690s
-
-#	Used to load this in syntenyRn3, but that type is misleading to
-#	the table browser and fails the checkTableCoords check.
-#	Better to use this ensRatMusHom type:
-sed -e 's/ensPhusionBlast/ensRn3MusHom/g' \
-      $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
-      > ensRatMusHg17.sql
-hgLoadBed hg17 ensRatMusHg17 ucsc100k.bed -sqlTable=ensRatMusHg17.sql
-
-    #	featureBits hg17 ensRn3MusHom
-    #	2592164486 bases of 2866216770 (90.439%) in intersection
-    #	featureBits hg16 syntenyRn3
-    #	2595919851 bases of 2865248791 (90.600%) in intersection
-
-
-# MAKING HUMAN AXTTIGHT FROM AXTBEST (TO BE DONE - 2004-07-08 - Hiram)
-    # After creating axtBest alignments above, use subsetAxt to get axtTight:
-    ssh eieio
-    cd /cluster/data/hg17/bed/blastzSelf/axtNet
-    mkdir -p ../axtTight
-    foreach i (*.axt)
-      echo $i
-      subsetAxt  $i ../axtTight/$i \
-        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
-    end
-
-    # translate to psl
-    cd ../axtTight
-    mkdir ../pslTight
-    foreach i (*.axt)
-      set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
-      echo "Done: $i"
-    end
-
-    # Load tables into database
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/blastzSelf/pslTight
-    for I in chr*TightRn3.psl
-    do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
-	echo "done ${I}"
-    done
-
-    #	Compare results with previous assembly
-    #	featureBits hg17 blastzTightRn3
-    #	153936720 bases of 2866216770 (5.371%) in intersection
-    #	featureBits hg16 blastzTightRn3
-    #	153151903 bases of 2865248791 (5.345%) in intersection
-
-
-    # copy  axt's to download area
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/blastzSelf/axtTight
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
-    gzip *.axt
-    # add README.txt file to dir (use previous assembly's copy as template)
+# MAKING HUMAN AXTTIGHT FROM AXTBEST (NOT TO BE DONE - 2004-07-13 - Hiram)
+    #	XXXX - ! ! !  DO NOT NEED axtBest for Self alignments
 
 # BLASTZ SELF CLEAN UP (TO BE DONE - 2004-07-08 - Hiram)
     ssh eieio
