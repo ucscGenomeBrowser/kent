@@ -143,8 +143,8 @@ struct simpleFeature
     {
     struct simpleFeature *next;
     int start, end;			/* Start/end in browser coordinates. */
+    int qStart, qEnd;			/* query start/end */
     int grayIx;                         /* Level of gray usually. */
-				    /* in chains it's query start*/
     };
 
 /* Some details of how to draw linked features. */
