@@ -654,6 +654,12 @@ cover the same region </LI>
   href="#GenePredictions">vegaGene</A> 
   - Annotated genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A> (Human chr14, 20, 22 only) </LI>
   <LI><A 
+  href="#VegaInfo">vegaInfo</A> 
+  - Additional information for Vega genes (Human chr14, 20, 22 only) </LI>
+  <LI><A 
+  href="#PepPredictions">vegaPep</A> 
+  - Translations of Vega genes into corresponding amino acid sequences (Human chr14, 20, 22 only) </LI>
+  <LI><A 
   href="#GenePredictions">vegaPseudoGene</A> 
   - Annotated pseudogenes and immunoglobulin segments from the VEGA database</A> (Human chr14, 20, 22 only) </LI>
   <LI><A 
@@ -1168,7 +1174,7 @@ information. In alternative splicing situations each transcript has a row in thi
 </PRE>
 
 <H4><A name=PepPredictions></A>Gene Predictions and RefSeq Genes Amino Acid Translations</H4>
-The following definition is used for tables that link a predicted peptide to a predicted gene: acemblyPep, ensPep, genieAltPep, genieKnownPep, genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep.
+The following definition is used for tables that link a predicted peptide to a predicted gene: acemblyPep, ensPep, genieAltPep, genieKnownPep, genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPep.
 <PRE>table pepPred
 "A predicted peptide linked to a predicted gene."
     (
@@ -2330,6 +2336,18 @@ The bacEndPairs table uses all fields.
     string clone;       "Clone name in BAC library"
     string contig;      "Contig (or gap size)"
     int chromIx;        "Number of clone in tiling path starting chrom start"
+    )
+</PRE>
+
+<H4><A name=VegaInfo></A>Vega Info</H4>
+<PRE>table vegaInfo
+"Vega Genes track additional information"
+    (
+    string transcriptId;        "Vega transcript ID"
+    string otterId;             "Otter (Ensembl db) transcript ID"
+    string geneId;              "Vega gene ID"
+    string method;              "GTF method field"
+    string geneDesc;            "Vega gene description"
     )
 </PRE>
 
