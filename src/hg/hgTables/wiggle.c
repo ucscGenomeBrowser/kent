@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.16 2004/09/10 18:07:22 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.17 2004/09/10 21:16:59 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -502,6 +502,7 @@ boolean hasConstraint = FALSE;
 char *table2 = NULL;
 boolean fullGenome = FALSE;
 boolean statsHeaderDone = FALSE;
+boolean gotSome = FALSE;
 
 startTime = clock1000();
 
@@ -588,7 +589,7 @@ for (region = regionList; region != NULL; region = region->next)
      *	prevent any timeout since this could take a while.
      *	(worst case test is quality track on panTro1)
      */
-    if (regionCount > 1)
+    if ((regionCount > 1) && (valuesMatched > 0))
 	{
 	if (statsHeaderDone)
 	    wds->statsOut(wds, "stdout", TRUE, TRUE, FALSE, TRUE);
@@ -598,6 +599,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    statsHeaderDone = TRUE;
 	    }
 	wds->freeStats(wds);
+	gotSome = TRUE;
 	}
     }
 
@@ -612,8 +614,16 @@ if (1 == regionCount)
     wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
     }
 else
-    {
+    {	/* this is a bit of a kludge here since these printouts are done in the
+	 *	library source wigDataStream.c statsOut() function and
+	 *	this is a clean up of that.  That function should be
+	 *	pulled out of there and made independent and more
+	 *	versatile.
+	 */
     /*	close the table which was left open in the loop above	*/
+    if (!gotSome)
+	printf("<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>\n");
+
     printf("</TABLE></TD></TR></TABLE></P>\n");
     }
 
