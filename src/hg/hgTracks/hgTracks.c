@@ -279,10 +279,44 @@ return tg->height;
 }
 
 
+int updateY( char *name, char *nextName, int lineHeight )
+  /*only increment height when name root (minus the period if
+  *there is one) is different from previous one.
+  *This assumes that the entries are sorted by name as they would
+  *be if loaded by hgLoadSample*/
+{
+int ret;
+char *tempstr = NULL;
+char *tempstr2 = NULL;
+
+tempstr = needMem( (strlen(name)+1) * sizeof(char) );
+strcpy( tempstr, name );
+if( strstr( name, "." ) != NULL )
+   strtok( tempstr, "." );
+
+tempstr2 = needMem( (strlen(nextName)+1) * sizeof(char) );
+strcpy( tempstr2, nextName );
+if( strstr( nextName, "." ) != NULL )
+   strtok( tempstr2, "." );
+
+if( !sameString( tempstr, tempstr2 )) 
+   ret = lineHeight; 
+else 
+   ret = 0;
+
+freeMem(tempstr);
+freeMem(tempstr2);
+
+return(ret);
+}
+
 static int tgUserDefinedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
 /* Wiggle track groups will use this to figure out the height they use
 as defined in the cart */
 {
+
+struct slList *item;
+int start, lines;
 
 int heightFromCart;
 char o1[128];
@@ -295,7 +329,20 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = slCount(tg->items) * tg->lineHeight;
+
+    lines = 1;
+    start = 0;
+	for (item = tg->items; item != NULL; item = item->next)
+    {
+        if( !start && item->next != NULL )
+            if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
+                lines++;
+        start = 0;
+     }
+
+
+
+	tg->height = lines * tg->lineHeight;
 	//tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
     case tvDense:
@@ -1001,6 +1048,10 @@ double whichNum( double tmp, double min0, double max0, int n )
     return( (max0 - min0)/(double)n * tmp + min0 );
 }
 
+
+
+
+
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -1043,8 +1094,6 @@ char o3[128];
 
 double hFactor;
 double minRange, maxRange;
-
-char *prevName = NULL;
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
@@ -1151,14 +1200,8 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
 	    }
 
-        /*only increment height when name is different from previous one.
-         *This assumes that the entries are sorted by name as they would
-         *be if loaded by hgLoadSample*/
-        if( isFull )
-        {
-            if( lf->next != NULL && !sameString( lf->name, lf->next->name )) 
-                y += lineHeight; 
-        }
+        if( isFull && lf->next != NULL )
+            y += updateY( lf->name, lf->next->name, lineHeight );
 
 
 
@@ -6772,6 +6815,9 @@ int scaledHeightPer;
 char minRangeStr[32];
 char maxRangeStr[32];
 
+int start;
+int newy;
+
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 insideWidth = pixWidth-gfxBorder-insideX;
@@ -6860,17 +6906,27 @@ if (withLeftLabels)
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
+        start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
-                    /* Set the clipping rectangle to account for the buttons */
-                    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+            newy = y;
+
+
+            /* Set the clipping rectangle to account for the buttons */
+            mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
 
             /*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-            if( group->loadItems == loadSampleIntoLinkedFeature &&
+            if( !start && group->loadItems == loadSampleIntoLinkedFeature &&
                 group->heightPer > (3 * fontHeight ) )
                 {
+                if( item->next != NULL )
+                    {
+                    newy += updateY( name, group->itemName(group, item->next), itemHeight );
+                    if( newy == y )
+                        continue;
+                    }
 
                 ymax = y - (group->heightPer / 2) + (fontHeight / 2);
                 ymin = y + (group->heightPer / 2) - (fontHeight / 2);
@@ -6878,11 +6934,31 @@ if (withLeftLabels)
 			        group->ixAltColor, font, minRangeStr );
 		        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
 			        group->ixAltColor, font, maxRangeStr );
-                }
-		    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+
+		        mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                     /* Reset the clipping rectangle to its original proportions */
                     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
-		    y += itemHeight;
+
+                }
+                else
+                {
+                    newy += itemHeight;
+
+                    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+                    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+		            mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+			            group->ixAltColor, font, minRangeStr );
+		            mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+			            group->ixAltColor, font, maxRangeStr );
+
+		            mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+                    /* Reset the clipping rectangle to its original proportions */
+                    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+                }
+
+                start = 0;
+
+               y = newy;
 		    }
 		break;
 	    case tvDense:
@@ -7022,9 +7098,30 @@ for (group = groupList; group != NULL; group = group->next)
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
+        start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    int height = group->itemHeight(group, item);
+
+            /*wiggle tracks don't always increment height (y-value) here*/
+		    newy = y;
+            if( !start && group->loadItems == loadSampleIntoLinkedFeature )
+                {
+                if( item->next != NULL )
+                    {
+                    newy += updateY( group->itemName(group, item), 
+                            group->itemName(group, item->next), height );
+                    if( newy == y )
+                        {
+                        start = 0;
+                        continue;
+                        }
+                    }
+                }
+                else
+                    newy += height;
+                start = 0;
+
 		    if (!group->mapsSelf)
 			{
 			mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
@@ -7032,7 +7129,9 @@ for (group = groupList; group != NULL; group = group->next)
 			    group->mapItemName(group, item), 
 			    group->itemName(group, item));
 			}
-		    y += height;
+            
+            y = newy;
+
 		    }
 		break;
 	    case tvDense:
