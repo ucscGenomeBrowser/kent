@@ -20,9 +20,8 @@ update:
 	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb mouse rn1 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb mouse rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
