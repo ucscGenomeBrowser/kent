@@ -68,7 +68,8 @@
 				  	</B></UL></TD>
 				    </TR>
 				</TABLE>
-				This user's guide was last updated on 26 Sep 2003. 
+				<P>
+				This user's guide was last updated on 21 Oct 2003. 
 				<A HREF="mailto:genome@soe.ucsc.edu">Questions and feedback 
 				are welcome</A>.
 				</TD>
@@ -200,13 +201,15 @@
 				folowing criteria:
 				    <UL>
 <!--Commented out til implemented
-				    <LI>Expression (UCLA) - similarity in expression, based on UCLA data
-				    <LI>Expression (GNF) - similarity in expression, based on GNF data
+				    <LI>Expression (UCLA) - similarity in gene expression, based on UCLA data
 -->
-				    <LI>Protein Homology - similarity in protein homology
+				    <LI>Expression (GNF) - similarity in gene expression, based on GNF data
+				    <LI>Protein Homology - similarity in protein homology, based on the blastp 
+					E-value
 				    <LI>Gene Distance - absolute distance (left or right) on the chromosome 
 					from the selected gene
-				    <LI>Name Similarity - similarity to name of selected gene
+				    <LI>Name Similarity - similarity to the name of selected gene, based on 
+					the first several characters of the name
 				    <LI>GO Similarity - number of Gene Ontology (GO) terms shared with 
 					selected gene 
 				    <LI>Name - list sorted by gene name
@@ -249,59 +252,68 @@
 				are ordered relative to the selected gene based on the sort
 				criteria specified in the <em>sort by</em> menu. For example,
 				in a table sorted by gene distance, the genes are listed in
-				order of greater to lesser proximity to the selected gene.
+				order of greater to lesser chromosomal proximity to the 
+				selected gene.
 				<P>				
-				The initial Browser display contains only a default subset of
+				The initial Browser display shows only a default subset of
 				the columns available. The set of columns may be expanded,
 				reduced, and rearranged by using the Browser's 
 				<A HREF="#Configure">configuration utility</A>. To view 
 				information about the data shown in the column, click on
 				the column's label.
 				<P>
-				<B>Changing the selected gene</B><BR>
 				To select a different gene in the table, click on the name of
-				the gene. The Browser will move the gene to the top of the 
+				the gene. The Browser will move the gene entry to the top of the 
 				list and highlight it. The remaining genes will be reordered
 				relative to the new selection.
                               	<P>  
-				<B># column</B><BR>
-                              	This column displays the position of each gene in the table,
-				which is sometimes useful when examining data in tables with
+				<B>Column descriptions</B> (listed in alphabetical order)
+				<UL>
+				<LI>
+				<B># column:</B> Displays the position of each gene in the table,
+				which is useful when examining data in tables with
 				many rows. Clicking on the gene number selects it and moves
-				it to the top of the list.
-				<P>
-    				<B>Name column</B><BR>
-				This column displays the name of the gene. When possible, 
-				the HUGO name is shown. If the gene does not yet have a HUGO 
-				name, the GenBank accession number of the associated RefSeq 
-				or mRNA record is shown instead. Clicking on the gene name
-				selects it and moves it to the top of the list.
-                              	<P>  
-				<B>Swiss-Prot column</B><BR>
-				This column displays the Swiss-Prot protein name of each gene, 
-				if it is available. Otherwise, it shows the primary 
-				accession number. Clicking on a protein name or accession 
-				displays the corresponding Swiss-Prot NiceProt view of the
-				protein. 
-                              	<P>  
-				<B>RefSeq column</B><BR>
-				This column displays the NCBI RefSeq accession associated with
-				the gene, if available. RefSeq genes are a non-redundant set of
-				high-quality mRNA sequences. Clicking on the accession number
-				displays the NCBI LocusLink record for a RefSeq accession. If
-				LocusLink shows a link to the Online Mendelian Inheritance in
-				Man (OMIM) -- represented by an orange box with an "O"
-				on it -- an OMIM record is available for the gene. OMIM is 
-				often an excellent source of human-curated information about
-				human genes. 
-                              	<P>  
-				<B>GenBank column</B><BR>
-				This column shows the GenBank RefSeq or mRNA accession number
-				associated with the gene. Clicking on the accession number 
-				displays the GenBank record associated with it. 
-                              	<P>  
-				<B>Ensembl column</B><BR>
-				This column shows the Ensembl transcript ID associated with 
+				it to the top of the list.<BR>
+                              	<LI>  
+				<B>Affymetrix U133 ID column (Human):</B> Shows the Affymetrix ID 
+				from the HG-U133 chip that best 
+				corresponds to each gene. For more information about the selection
+				criteria used for this column, click on the U133 ID column's label.<BR>
+                              	<LI>  
+				<B>Arbeitman et al. 2002 Life-Cycle Expression Data column (Fruitfly):</B>
+				Shows the median ratio of gene expression in various phases of the fly life cycle
+				relative to the expression of the gene in mixed egg-to-adult cultures.
+				The level of detail may be
+				increased or decreased with the <A HREF="#Configure">configuration
+				utility</A>. See the <A HREF="#Expression">Expression columns</A> 
+				description for more information about the display and configuration 
+				of this column. For more details about the experiments and methods used to 
+				create this data, click on the column's label.<BR>
+				<LI>	
+				<B>Bits column:</B> Shows the bit score measure of protein similarity
+				between a gene and the selected gene. The greater the 
+				similarity between two proteins, the higher the bit score. For
+				more information about how the bit score was calculated, click
+				on the Bits column label.<BR>
+                              	<LI>  
+				<B><em>C. elegans</em> column:</B> Shows the best Blastp match to the WormBase 
+				protein set. Clicking on the ID number displays the 
+				corresponding WormBase database record.<BR> 
+                              	<LI>  
+				<B>Coding SNPs column:</B> Shows the Simple Nucleotide Polymorphisms (SNPs) 
+				located in the coding region of each gene. Clicking on a SNP 
+				ID displays the SNP record associated with the gene in 
+				NCBI's dbSNP.<BR> 
+                              	<LI>  
+				<B>Description column:</B> Shows a brief description of each gene taken from 
+				its mRNA record. Clicking on a description displays a page 
+				showing additional information and links for the gene.<BR>
+                              	<LI>  
+				<B>Drosophila column:</B> Shows the FlyBase ID of the best Blastp match to 
+				the FlyBase protein set. Clicking on the FlyBase ID displays
+				the corresponding FlyBase report.<BR> 
+                              	<LI>  
+				<B>Ensembl column:</B> Shows the Ensembl transcript ID associated with 
 				the gene. Ensembl is an automatic gene prediction pipeline and
 				a major genome database and web site run by the Sanger
 				Institute and the European Bioinformatics Institute (EMBL-EBI).
@@ -310,55 +322,9 @@
 				predictions, those of Ensembl tend to have high specificity 
 				but low sensitivity to genes not already associated with
 				characterized mRNA or protein sequence. Clicking on an 
-				Ensembl ID displays the Ensembl GeneView page for the gene. 
-                              	<P>  
-				<B>WormBase column (<em>C. elegans</em>)</B><BR>
-				This column shows the ORF name associated with each gene.  Clicking on an 
-				ORF name displays the associated WormBase record. 
-                              	<P>  
-				<B>U74 ID column (Mouse)</B><BR>
-				This column shows the Affymetrix ID from the U74 series of
-				chips (A, B, and C) that best corresponds to each gene. For
-				more information about the selection criteria used for this 
-				column, click on the U74 ID column's label.
-                              	<P>  
-				<B>U133 ID column (Human)</B><BR>
-				This column shows the Affymetrix ID from the HG-U133 chip that best 
-				corresponds to each gene. For more information about the selection
-				criteria used for this column, click on the U133 ID column's label.
-                              	<P>  
-				<B>U95 ID column (Human)</B><BR>
-				This column shows the Affymetrix ID from the HG-U95 chip that best 
-				corresponds to each gene. For more information about the selection
-				criteria used for this column, click on the U95 ID column's label.
-                              	<P>  
-				<B>Expression ratio columns</B><BR>
-				These columns show the ratio of 		
-				expression of the gene in selected tissues to the expression 		
-				of the gene overall. 
-				<P>
-				By default, a gene that is more highly
-				expressed in a tissue is colored red, and less expressed 
-				genes are shown in green. This coloring is standard, but is 
-				the opposite of what a naive user might expect: in this 
-				case, red means go, and green means stop! White is used to 
-				show instances where no data is available, and black denotes
-				cases in which the gene expression level in the tissue is the 
-				same as it is overall.
-				<P>
-				Color-blind users 
-				may wish to switch the coloring from red/green to blue/green with
-				the <A HREF="#Configure">configuration utility</A>.
-                              	<P>  
-				<B>Bits column</B><BR>
-				This column shows the bit score measure of protein similarity
-				between a gene and the selected gene. The greater the 
-				similarity between two proteins, the higher the bit score. For
-				more information about how the bit score was calculated, click
-				on the Bits column label.
-                              	<P>  
-				<B>E-Value column</B><BR>
-				This column shows the Blastp e-value (expectation value) 
+				Ensembl ID displays the Ensembl GeneView page for the gene.<BR> 
+                              	<LI>  
+				<B>E-Value column:</B> Shows the Blastp e-value (expectation value) 
 				between each gene and the selected gene. The greater the 
 				similarity of two proteins, the lower the e-value is. 
 				Identical long proteins have an e-value of 0. 
@@ -367,73 +333,159 @@
 				An e-value of less than 0.1 can be safely interpreted as the
 				probability that a match this good would occur merely by
 				chance. For more information about how the e-value was 
-				calculated, click on the E-Value column label.
-                             	<P>  
-				<B>% ID column</B><BR>
-				This column shows the percentage identity at the protein 
-				level between the gene and the selected gene. For more 
-				information about how the % ID was 
-				calculated, click on the % ID column label.
-                              	<P>  
-				<B>Genome Position column</B><BR>
-				This column shows the chromosomal location of each gene in 
-				the genome. Clicking on a chromosomal position displays the 
-				gene at that location in the UCSC Genome Browser. 
-                              	<P>  
-				<B>Coding SNPs column</B><BR>
-				This column shows the Simple Nucleotide Polymorphisms (SNPs) 
-				located in the coding region of each gene. Clicking on a SNP 
-				ID displays the SNP record associated with the gene in 
-				NCBI's dbSNP. 
-                              	<P>  
-				<B>Human column</B><BR>
-				This column shows that best Blastp match to the known genes
-				protein set from the UCSC Human Genome Browser database. 
-				Clicking the accession number displays the gene in the UCSC 
-				Human Genome Browser. 
-                              	<P>  
-				<B>Mouse column</B><BR>
-				This column shows the accession number of the best Blastp match to the 
-				known genes protein set in the UCSC Mouse Genome Browser database. Clicking
-				on the accession number displays the gene in the UCSC Mouse Genome Browser. 
-                              	<P>  
-				<B>Zebrafish column</B><BR>
-				This column shows the Ensembl peptide ID of the best Blastp 
-				match to the Ensembl gene predictions on the zebrafish genome. 
-				Clicking on the Ensembl peptide ID displays it in Ensembl 
-				Zebrafish Protein View. 
-                              	<P>  
-				<B>Drosophila column</B><BR>
-				This column shows the FlyBase ID of the best Blastp match to 
-				the FlyBase protein set. Clicking on the FlyBase ID displays
-				the corresponding FlyBase report. 
-                              	<P>  
-				<B><em>C. elegans</em> column</B><BR>
-				This column shows the best Blastp match to the WormBase 
-				protein set. Clicking on the ID number displays the 
-				corresponding WormBase database record. 
-                              	<P>  
-				<B>Yeast column</B><BR>
-				This column shows the best Blastp match to the Saccharomyces 
-				Genome Database (SGD) protein set. Clicking on the yeast ID 
-				displays the corresponding SGD record. 
-                              	<P>  
-				<B>Pfam Domains column</B><BR>
-				This column shows a list of Protein Family (Pfam) domains 
-				contained in the gene product. Clicking on a domain displays
-				the associated Pfam record. 
-                              	<P>  
-				<B>Gene Ontology column</B><BR>
-				This column shows the Gene Ontology (GO) terms associated with 
+				calculated, click on the E-Value column label.<BR>
+                              	<LI>  
+				<A NAME="Expression"></A>
+				<B>Expression columns:</B> Show the ratio of 		
+				expression of the gene in selected tissues or life cycle stages
+				to the expression of the gene overall. 
+				A gene that is more highly expressed is colored red, and a less 
+				expressed gene is shown in green. The values are colored on a 
+				logarithmic scale. This coloring is standard, but is the opposite 
+				of what a naive user might expect: in this case, red means go 
+				and green means stop! Black indicates that a gene is neither 
+				over nor under expressed in the tissue. Uncolored boxes 
+				(white on most browsers) represent missing data. 
+				Various attributes of the expression column displays may be configured 
+				using the <A HREF="#Configure">configuration utility</A>. Depending on the 
+				organism, the user
+				may adjust the color scheme and brightness, toggle between expression
+				ratio and absolute expression values, and increase or decrease the 
+				level of detail shown. In particular, color-blind users 
+				may wish to switch the coloring from red/green to yellow/blue.
+				For more information about the selection criteria used for expression	
+				columns, click on the column's label.<BR>
+                              	<LI>  
+				<B>GenBank column:</B> Shows the GenBank RefSeq or mRNA accession number
+				associated with the gene. Clicking on the accession number 
+				displays the GenBank record associated with it.<BR>
+                              	<LI>  
+				<B>Gene Ontology column:</B> Shows the Gene Ontology (GO) terms associated with 
 				the gene. GO terms are words from a controlled vocabulary 
 				assigned to a gene by human curators. Clicking on a GO term 
 				displays the associated Gene Ontology Consortium database 
-				record. 
-                              	<P>  
-				<B>Description column</B><BR>
-				This column shows a brief description of each gene taken from 
-				its mRNA record. Clicking on a description displays a page 
-				showing additional information and links for the gene. 
+				record.<BR> 
+                              	<LI>  
+				<B>Genome Position column:</B> Shows the chromosomal location of each gene in 
+				the genome. Clicking on a chromosomal position displays the 
+				gene at that location in the UCSC Genome Browser.<BR> 
+				<LI>
+				<B>GNF Delta column (Human):</B> Shows the similarity of the 
+				expression of each gene to the selected gene. 
+				Genes with identical expression profiles have a 
+				value of 0. This column shows data only for the 
+				1000 genes (including splicing variants) that 
+				have the most similar expression profiles.<BR> 
+                              	<LI>  
+				<B>GNF U74a, GNF U74b, GNF U74c columns (Mouse):</B> Shows data
+				from the Mouse Gene Expression Atlas from the Genomics Institute of 
+				the Novartis Research Foundation (GNF) on the Affymetrix U74a, U74b,
+				and U74c chips. By default, the columns display the median ratio of 
+				expression in a specific set of tissues relative to the expression 
+				of the gene overall. The level of detail may be
+				increased or decreased with the <A HREF="#Configure">configuration
+				utility</A>. Currently, the full spectrum of tissues is available only 
+				on the U74a chip. 
+				See the <A HREF="#Expression">Expression columns</A> 
+				description for more information about the display and configuration 
+				of this column. For more details about the experiments and methods used to 
+				create this data, click on the column's label.<BR>
+                              	<LI>  
+				<B>GNF U95 column (Human):</B> Shows data from from the GNF Expression 
+				Atlas on the Affymetrix U95 chip. By default, the column
+				displays the median ratio of expression in a specific set of tissues
+				relative to the expression of the gene overall. The level of detail may be
+				increased or decreased with the <A HREF="#Configure">configuration
+				utility</A>. See the <A HREF="#Expression">Expression columns</A> 
+				description for more information about the display and configuration 
+				of this column. For more details about the experiments and methods used to 
+				create this data, click on the GNF U95 column's label.<BR>
+                              	<LI>  
+				<B>Human column (Mouse):</B> Shows that best Blastp match to the known genes
+				protein set from the UCSC Human Genome Browser database. 
+				Clicking the accession number displays the gene in the UCSC 
+				Human Genome Browser.<BR> 
+				<LI>
+				<B>Kim-Lab Life-Cycle Expression Data (All) column (<em>C. elegans</em>):</B>
+				Shows the ratio of gene in all phases of the worm life cycle relative to 
+				the expression of the gene in mixed wild-type adult cultures.
+				See the <A HREF="#Expression">Expression columns</A> 
+				description for more information about the display and configuration 
+				of this column. For more details about the experiments and methods used to 
+				create this data, click on the column's label.<BR>
+				<LI>
+				<B>Kim-Lab Life-Cycle Expression Data (Median) column (<em>C. elegans</em>):</B>
+				Shows the median ratio of gene expression in selected phases of the worm life cycle. 
+				See the <A HREF="#Expression">Expression columns</A> 
+				description for more information about the display and configuration 
+				of this column. For more details about the experiments and methods used to 
+				create this data, click on the column's label.<BR>
+                              	<LI>  
+				<B>Max GNF column (Human):</B> Shows the maximum absolute expression
+				level for any tissue. Most values range between
+				zero and 30,000, but a few outliers may range as
+				high as 52,000. A value of less than 20 indicates
+				the expression could no be detected in any 
+				tissue at levels significantly above the 
+				cross-hybridization controls. 
+				<LI>	
+				<B>Mouse column (Human):</B> Shows the accession number of the best Blastp match to the 
+				known genes protein set in the UCSC Mouse Genome Browser database. Clicking
+				on the accession number displays the gene in the UCSC Mouse Genome Browser.<BR> 
+				<LI>
+    				<B>Name column:</B> Displays the name of the gene. When possible, 
+				the HUGO name is shown. If the gene does not yet have a HUGO 
+				name, the GenBank accession number of the associated RefSeq 
+				or mRNA record is shown instead. Clicking on the gene name
+				selects it and moves it to the top of the list.<BR>
+                             	<LI>  
+				<B>% ID column:</B> Shows the percentage identity at the protein 
+				level between the gene and the selected gene. For more 
+				information about how the % ID was 
+				calculated, click on the % ID column label.<BR>
+                              	<LI>  
+				<B>Pfam Domains column:</B> Shows a list of Protein Family (Pfam) domains 
+				contained in the gene product. Clicking on a domain displays
+				the associated Pfam record.<BR> 
+                              	<LI>  
+				<B>RefSeq column:</B> Displays the NCBI RefSeq accession associated with
+				the gene, if available. RefSeq genes are a non-redundant set of
+				high-quality mRNA sequences. Clicking on the accession number
+				displays the NCBI LocusLink record for a RefSeq accession. If
+				LocusLink shows a link to the Online Mendelian Inheritance in
+				Man (OMIM) -- represented by an orange box with an "O"
+				on it -- an OMIM record is available for the gene. OMIM is 
+				often an excellent source of human-curated information about
+				human genes.<BR>
+                              	<LI>  
+				<B>Swiss-Prot column:</B> Displays the Swiss-Prot protein name of each gene, 
+				if it is available. Otherwise, it shows the primary 
+				accession number. Clicking on a protein name or accession 
+				displays the corresponding Swiss-Prot NiceProt view of the
+				protein.<BR>
+                              	<LI>  
+				<B>U74 ID column (Mouse):</B> Shows the Affymetrix ID from the U74 series of
+				chips (a, b, c) that best corresponds to each gene. For
+				more information about the selection criteria used for this 
+				column, click on the U74 ID column's label.<BR>
+                              	<LI>  
+				<B>U95 ID column (Human)</B>: Shows the Affymetrix ID from the HG-U95 chip that best 
+				corresponds to each gene. For more information about the selection
+				criteria used for this column, click on the U95 ID column's label.<BR>
+                              	<LI>  
+				<B>WormBase column (<em>C. elegans</em>):</B> Shows the ORF name 
+				associated with each gene.  Clicking on an 
+				ORF name displays the associated WormBase record.<BR> 
+                              	<LI>  
+				<B>Yeast column:</B> Shows the best Blastp match to the Saccharomyces 
+				Genome Database (SGD) protein set. Clicking on the yeast ID 
+				displays the corresponding SGD record.<BR> 
+                              	<LI>  
+				<B>Zebrafish column:</B> Shows the Ensembl peptide ID of the best Blastp 
+				match to the Ensembl gene predictions on the zebrafish genome. 
+				Clicking on the Ensembl peptide ID displays it in Ensembl 
+				Zebrafish Protein View.
+				</UL>
 				</TD>
                                 <TD WIDTH=15></TD>
                             </TR>
@@ -494,21 +546,35 @@
 				column to the right. When you have finished making changes, click the Submit
 				button.
 				<P>
-				<B>Changing the expression ratio colors</B><BR>
+				<B>Changing the expression colors</B><BR>
 				By default, the gene expression ratios are shown using a red/green color 
 				scheme,
 				where red indicates a gene that is more highly expressed and green corresponds
 				to less expression. Color-blind users may find it helpful to switch the 
-				coloring from red/green to blue/green. To do so, select the <em>blue high/green
+				coloring from red/green to yellow/blue. To do so, select the <em>yellow high/blue
 				low</em> option from the Expression ratio colors pull-down menu on the 
 				Configuration page, then click the Submit button.
 				<P>
-				<B>Changing the brightness of expression ratio colors</B><BR>
-				To increase or decrease the brightness of the colors in an expression ratio 
-				column, edit the <em>Brightness</em> value for the corresponding entry in the 
+				<B>Changing the brightness of expression colors</B><BR>
+				To increase or decrease the brightness of the colors in an expression 
+				column, edit the <em>brightness</em> value for the corresponding entry in the 
 				configuration table. Values greater than 1.0 increase the brightness, while 
 				those less than 1.0 dim the color. Click the Submit button to display the 
 				new values.
+				<P>
+				<B>Changing the type of tissue data shown in expression columns</B><BR>
+				By default, the expression columns show the median ratio of expression
+				of a gene in a small selected set of tissues. Use the the <em>tissues</em> 
+				pulldown menu to configure the tissue display for the column. 
+				The <em>all replicas</em> option will show the value
+				of each individual experimental replica of each tissue. The <em>median 
+				of replicas</em> option displays a single value for each tissue that 
+				represents the median of all replicas for that tissue.
+				<P>
+				<B>Toggling between ratio and absolute expression values </B><BR>
+				By default, expression columns show the ratio of expression of a gene relative
+				to expression of the gene overall. To view absolute expression values instead,
+				select the <em>absolute</em> option from the <em>values</em> pulldown menu. 
 				<P>
 				<B>Displaying splicing variants</B><BR>
 				By default, the Browser shows only one splicing variant: the one that produces
