@@ -32,6 +32,17 @@ visibility hide
 spectrum on
 type psl est
 
+track blatFr1
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
+group compGeno
+priority 125
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
 track blastzMm3
 shortLabel Mouse Blastz
 longLabel Blastz All Mouse (mm3-Feb 03) Alignments
@@ -206,16 +217,6 @@ priority 146
 visibility full
 type maf
 
-track blatFr1
-shortLabel Fugu Blat
-longLabel Takifugu rubripes Translated Blat Alignments
-group compGeno
-priority 147
-visibility dense
-color 0,60,120
-altColor 200,220,255
-spectrum on
-type psl xeno
 
 track blatCi1
 shortLabel Squirt Blat
