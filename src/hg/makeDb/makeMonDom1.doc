@@ -191,7 +191,7 @@ BEGIN { name="" }
 	defaultPos, active, orderKey, genome, scientificName, \
 	htmlPath, hgNearOk, hgPbOk, sourceName) \
 	VALUES("monDom1", "Oct 2004", "/gbdb/monDom1", "M. domestica", \
-	"scaffold_13303:1000000-11000000", 0, 33, "Opossum", \
+	"scaffold_13303:1000000-11000000", 1, 33, "Opossum", \
 	"Monodelphis domestica", \
 	"/gbdb/monDom1/html/description.html", 0, 0, \
 	"Broad Inst. Prelim Oct04");' \
@@ -379,9 +379,14 @@ Submission to last job:        185727s    3095.45m    51.59h    2.15d
     #	1775646140 bases of 3492108230 (50.847%) in intersection
     featureBits hg17 rmsk
     #	1390952984 bases of 2866216770 (48.529%) in intersection
-    #	time featureBits mm5 rmsk
+    featureBits canFam1 rmsk
+    #	896773874 bases of 2359845093 (38.001%) in intersection
+    featureBits mm5 rmsk
     #	1137310280 bases of 2615483787 (43.484%) in intersection
-
+    featureBits rn3 rmsk
+    #	1117483165 bases of 2571104688 (43.463%) in intersection
+    featureBits panTro1 rmsk
+    #	1311281819 bases of 2733948177 (47.963%) in intersection
 
 
     #	Verify the indexes are correct
@@ -465,7 +470,7 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     #	70073656 bases of 2571104688 (2.725%) in intersection
     featureBits mm5 simpleRepeat
     #	81414259 bases of 2615483787 (3.113%) in intersection
-    featureBits hg17 simpleRepeat
+    featureBits monDom1 simpleRepeat
     #	54952425 bases of 2866216770 (1.917%) in intersection
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-12-06 - Hiram)
@@ -527,7 +532,32 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     # Now clean up the unmasked split scaffolds to avoid confusion later.
     rm -r chunks500k scaffoldsSplit.fa jkStuff/scaffoldsSplit.lft
 
+# MAKE 11.OOC FILE FOR BLAT (TBD)
+    ssh kolossus
+    cd /cluster/bluearc/monDom1
+    #	use repMatch of 1228 as this genome is ~ %20 larger than human
+    #	1024 + (1024 * 0.2) = 1228
+    blat /cluster/data/monDom1/monDom1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1228
+    #	Wrote 43126 overused 11-mers to 11.ooc
+    #	-rw-rw-r--    1   172512 Dec  7 17:22 11.ooc
+    ssh kkr1u00
+    cd /iscratch/i/monDom1
+    cp -p /cluster/bluearc/monDom1/11.ooc .
+     /cluster/bin/iSync
+
+    #	at repMatch=1024
+    #	Wrote 61187 overused 11-mers to 11.ooc
+    #	at repMatch=540
+    #	Wrote 207412 overused 11-mers to 11.ooc
+    #	For comparison, Hg17 has:
+    #	Wrote 30077 overused 11-mers to 11.ooc
+
 # PUT SEQUENCE ON SCRATCH FOR BLASTZ (DONE - 2004-12-07 - Hiram)
+    #	These chunks do not need to correspond to the 500,000 chunks
+    #	used in the repeat mask run because we are not going to use the
+    #	repeat mask .out files at lineage specific repeats.
+
     ssh kksilo
     cd /tmp
     #	Make sure you have enough room for this: (~ 4 Gb)
@@ -535,8 +565,8 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     #	Filesystem            Size  Used Avail Use% Mounted on
     #	/dev/sda2              32G   23G  8.0G  74% /
 
-    #	split scaffolds that are over 500,000
-    faSplit size /cluster/data/monDom1/maskedScaffolds.fa 500000 -oneFile \
+    #	split scaffolds that are over 2,000,000
+    faSplit size /cluster/data/monDom1/maskedScaffolds.fa 2000000 -oneFile \
 	scaf_ \
 	-lift=/cluster/data/monDom1/jkStuff/chunkedScaffolds.lft
 
@@ -546,27 +576,17 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     #	Collect the split scaffolds into reasonably sized chunks
     #	This produces over 5000 files of size 500,000 
     #	a few smaller, a few larger, 7627 total files
-    faSplit about /tmp/scaf_.fa 200000 chunks/chunk_
+    faSplit about /tmp/scaf_.fa 10000000 chunks/chunk_
     #	done with this temp file
     rm /tmp/scaf_.fa
     #	a list for convenience
     ls -1S chunks > chunk.list
     cp -p /cluster/data/monDom1/jkStuff/chunkedScaffolds.lft .
     cp -p /cluster/data/monDom1/monDom1.2bit .
-    #	Create our lineage specific repeat files from the repeat masker
-    #	outputs.  The sed changes the name from the time the RM run was
-    #	done, the same split is in effect, it is just a name change.
-    mkdir linSpecRep.notInOpossum
-    ls /cluster/data/monDom1/RMOut | while read FA_OUT
-    do
-	sed -e "s/scaffoldsSplit/scaf_/" \
-	    /cluster/data/monDom1/RMOut/${FA_OUT} > \
-	    linSpecRep.notInOpossum/${FA_OUT}.spec
-	echo ${FA_OUT}
-    done
+
     #	request rsync of scratch to the cluster
 
-# PRODUCING GENSCAN PREDICTIONS (TBD)
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2004-12-07 - Hiram)
     ssh kolossus
     cd /scratch/monDom1
     time maskOutFa maskedScaffolds.fa hard hardMaskedScaffolds.fa
@@ -599,10 +619,256 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     gensub2 chunks.list single gsub jobList
     para create jobList
     para try, check, push, check, ...
-XXXX - RUNNING - 2004-12-07
-#Completed: 184 of 185 jobs
-#Crashed: 1 jobs
-#Average job time:                  26s       0.43m     0.01h    0.00d
-#Longest job:                       55s       0.92m     0.02h    0.00d
-#Submission to last job:           357s       5.95m     0.10h    0.00d
+# Completed: 2086 of 2086 jobs
+# CPU time in finished jobs:     130316s    2171.94m    36.20h    1.51d  0.004 y
+# IO & Wait Time:                 17821s     297.01m     4.95h    0.21d  0.001 y
+# Average job time:                  71s       1.18m     0.02h    0.00d
+# Longest job:                     2509s      41.82m     0.70h    0.03d
+# Submission to last job:          2573s      42.88m     0.71h    0.03d
 
+    # Concatenate scaffold-level results:
+    ssh eieio
+    cd /cluster/data/monDom1/bed/genscan
+    cat gtf/*.gtf > genscan.gtf
+    cat subopt/*.bed > genscanSubopt.bed
+    cat pep/*.pep > genscan.pep
+
+
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/genscan
+    ldHgGene -gtf -genePredExt monDom1 genscan genscan.gtf
+    hgPepPred monDom1 generic genscanPep genscan.pep
+    hgLoadBed monDom1 genscanSubopt genscanSubopt.bed
+
+    #	41090 sequences added
+    #	Compare with other assemblies:
+    featureBits monDom1 genscan
+    #	47170795 bases of 3492108230 (1.351%) in intersection
+    featureBits monDom1 genscanSubopt
+    #	51805835 bases of 3492108230 (1.484%) in intersection
+    featureBits hg17 genscan
+    #	55323340 bases of 2866216770 (1.930%) in intersection
+    featureBits hg17 genscanSubopt
+    #	55986178 bases of 2866216770 (1.953%) in intersection
+
+    # Clean up
+    ssh eieio
+    cd /cluster/bluearc/monDom1
+    rm -fr hardChunks hardMaskedScaffolds.fa
+
+# BLAT SERVER SETUP
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES("monDom1", "blat14", 17786, 1, 0);' \
+	-h localhost hgcentraltest
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES("monDom1", "blat14", 17787, 0, 0);' \
+	-h localhost hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect (DONE - Hiram)
+
+# AUTO UPDATE GENBANK MRNA RUN  (TBD)
+    ssh hgwdev
+    #	In the source tree, since this is a new organism, go to:
+    #	kent/src/hg/makeDb/genbank/src/lib
+    #	And edit gbGenome.c to add monDom in two places for two lists:
+    #	static char *monDomNames[] = {"Monodelphis domestica", NULL};
+    #	{"monDom", monDomNames, NULL},
+    #	Genbank species list is kept in:
+    #	/cluster/data/genbank/data/species.lst
+    #	This one is already on there.
+    #	And add an entry for the ooc file in:
+    #	hg/makeDb/genbank/src/align/gbBlat
+    #	In a clean source tree, go to hg/makeDb/genbank
+    #	and run a 'make install-server'
+
+    cd /cluster/data/genbank
+    # This is a new organism, edit the etc/genbank.conf file and add:
+	# monDom1
+	monDom1.genome = /scratch/monDom1/monDom1.2bit
+	monDom1.refseq.mrna.native.load = no
+	monDom1.mondoTwoBitParts = 7000
+	monDom1.downloadDir = monDom1
+	monDom1.lift = no
+	monDom1.perChromTables = no
+
+    #	Do the refseq's first, they are the quick ones
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial monDom1
+    #	var/build/logs/2004.12.08-19:09:59.monDom1.initalign.log
+    #	it said: "nothing to align" - i.e. there are no native refseq
+    #	mRNA's for this organism, add the line:
+    #	monDom1.refseq.mrna.native.load = no
+    #	to the configuration file
+
+    #	We were having some trouble with eieio, running these on kksilo
+    #	this time.  This is best done on eieio.
+    #	perform the genbank mrna run, this does both native and xeno mRNA's
+    ssh kksilo
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial monDom1
+    #	This run had non-linear behavior, in the early stages it
+    #	appeared that it was going to take 4 days of run time, then in
+    #	the last 7 hours it processed over 250,000 jobs:
+# Completed: 357938 of 357938 jobs
+# CPU time in finished jobs:   51924178s  865402.97m 14423.38h  600.97d  1.647 y
+# IO & Wait Time:               3461243s   57687.38m   961.46h   40.06d  0.110 y
+# Average job time:                 155s       2.58m     0.04h    0.00d
+# Longest job:                     3885s      64.75m     1.08h    0.04d
+# Submission to last job:        101926s    1698.77m    28.31h    1.18d
+
+    #	Due to various interruptions, the cluster job was completed
+    #	manually by going to the directory and pushing the jobs.  To
+    #	clean up after this, and finish the alignment steps:
+    ssh kksilo
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -continue=finish -srcDb=genbank -type=mrna \
+	-verbose=1 -initial monDom1
+    #	2 hour finish time
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad monDom1
+    #	2 minute load time
+
+
+# GC5BASE (DONE - 2004-12-08 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/monDom1/bed/gc5Base
+    cd /cluster/data/monDom1/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 monDom1 \
+        /cluster/data/monDom1 | wigEncode stdin gc5Base.wig gc5Base.wib
+    # takes about 4 hours, need to improve hgGcPercent and how it reads
+    # five bases at a time from the sequence.
+
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/gc5Base
+    mkdir /gbdb/monDom1/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/monDom1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/monDom1/wib monDom1 gc5Base gc5Base.wig
+
+    #	need to fix-up hgLoadWiggle so it will make a proper index on
+    #	these scaffold assemblies:
+    hgsql monDom1 -e "drop index chrom on gc5Base;"
+    hgsql monDom1 -e "create index bin on gc5Base (chrom(14), bin);"
+    #	this is fixed in hgLoadWiggle as of 2004-12-09
+
+# QUALITY (DONE - 2004-12-08 - Hiram)
+    ssh kksilo
+    cd /cluster/data/monDom1/broad.mit.edu
+    #	Create perl script to read the quality file and pipe to
+    #	wigEncode:
+    ./qaToWigEncode.pl assembly.agp.qual | wigEncode stdin qual.wig qual.wib
+    #	Converted stdin, upper limit 68.00, lower limit 0.00
+    #	Took 5 hours of processing time.
+    #	I would like to go back to this, fix the script to coordinate
+    #	with the AGP file and not place zero values in the gap regions.
+
+    ssh hgwdev
+    cd /cluster/data/monDom1/broad.mit.edu
+    hgLoadWiggle -pathPrefix=/gbdb/monDom1/wib monDom1 quality qual.wig
+    #	fix the index  (this is fixed in hgLoadWiggle as of 2004-12-09)
+    hgsql monDom1 -e "drop index chrom on quality;"
+    hgsql monDom1 -e "create index bin on quality (chrom(14), bin);"
+
+# ALIGN TO HUMAN (WORKING - 2004-12-08 - Hiram)
+  ssh kk
+  mkdir -p /cluster/data/monDom1/bed/zb.hg17
+  cd /cluster/data/monDom1/bed/zb.hg17
+
+  # Create DEF file for run of scaffolds vs. human chromosomes
+  cat << '_EOF_' > DEF
+# human vs. M.domestica
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+# Set up blastz parameters using parameters between (chicken and fish ?)
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus
+SEQ2_DIR=/iscratch/i/monDom1/chunks
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom1/bed/zb.hg17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+  # << this line keeps emacs coloring happy
+
+    cp -p /cluster/data/hg17/chrom.sizes S1.len
+    cp -p /cluster/data/monDom1/chrom.sizes S2.len
+    # script copied over from /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run0.sh
+
+    para try, push check, para push, para check....
+# Completed: 112871 of 112871 jobs
+# CPU time in finished jobs:   42061387s  701023.12m 11683.72h  486.82d  1.334 y
+# IO & Wait Time:                578862s    9647.70m   160.80h    6.70d  0.018 y
+# Average job time:                 378s       6.30m     0.10h    0.00d
+# Longest job:                     3157s      52.62m     0.88h    0.04d
+# Submission to last job:         81243s    1354.05m    22.57h    0.94d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/monDom1/bed/zb.hg17
+    # script copied over from /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+
+    # third run: lav -> axt (an I/O bound process, run only on fileserver)
+   # does not work, the .lav files need to be lifted 
+XXX - STUCK - 2004-12-11 21:60
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.hg17
+    mkdir axtChrom pslChrom
+    bash		#	if you are csh
+    for L in lav/chrM
+    do
+	chr=${L/lav\//}
+        cd ${L}
+        echo -n "${L} -> ${chr}.axt working ... "
+	cat `ls -1 *.lav | sort -g` \
+	    | lavToAxt stdin \
+	    /iscratch/i/hg17/bothMaskedNibs \
+	    /iscratch/i/monDom1/monDom1.2bit stdout \
+	    | axtSort stdin ../../axtChrom/${chr}.axt
+        cd ../..
+        echo -n "${chr}.axt -> ${chr}.psl working ..."
+	axtToPsl axtChrom/${chr}.axt S1.len S2.len pslChrom/${chr}.psl
+        echo "DONE"
+    done
+
+    exit		#	exit bash if you are normally csh
