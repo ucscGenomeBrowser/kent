@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.64 2004/07/16 19:04:21 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.65 2004/07/23 04:30:51 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -459,9 +459,18 @@ return median;
 struct slName *newSlName(char *name)
 /* Return a new name. */
 {
-int len = strlen(name);
-struct slName *sn = needMem(sizeof(*sn)+len);
-strcpy(sn->name, name);
+struct slName *sn;
+if (name != NULL)
+    {
+    int len = strlen(name);
+    sn = needMem(sizeof(*sn)+len);
+    strcpy(sn->name, name);
+    return sn;
+    }
+else
+    {
+    AllocVar(sn);
+    }
 return sn;
 }
 
