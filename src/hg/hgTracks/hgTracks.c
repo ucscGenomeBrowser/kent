@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.726 2004/05/08 00:11:12 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.727 2004/05/08 16:04:47 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3230,8 +3230,9 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 struct sqlConnection *conn = hAllocConn();
 int rowOffset = 0;
 struct sqlResult *sr = NULL;
-char **row = NULL;;
-struct slList *itemList = NULL, *item;
+char **row = NULL;
+struct slList *itemList = NULL, *item = NULL;
+
 if(query == NULL)
     sr = hRangeQuery(conn, table, chromName, 
 		     winStart, winEnd, NULL, &rowOffset);
