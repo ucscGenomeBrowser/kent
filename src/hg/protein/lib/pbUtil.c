@@ -162,7 +162,8 @@ conn= hAllocConn();
 protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
 if (sameWord(protDbDate, ""))
     {
-    safef(query, sizeof(query), "select val from swissProt.protein where acc='%s';", pepAccession);
+    safef(query, sizeof(query), "select val from %s.protein where acc='%s';", 
+    	  UNIPROT_DB_NAME, pepAccession);
     }
 else
     {
@@ -510,7 +511,7 @@ hPrintf("</pre>");
 hPrintf("<font color = black>");
 }
 
-void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
+void doGenomeBrowserLink(char *spAcc, char *mrnaID, char *hgsidStr)
 {
 hPrintf("\n<LI>Genome Browser - ");
 if (mrnaID != NULL)
@@ -519,12 +520,12 @@ if (mrnaID != NULL)
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s%s\"",protDisplayID, database, hgsidStr);
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s%s\"", spAcc, database, hgsidStr);
     }
 hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
 }
 
-void doGeneSorterLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
+void doGeneSorterLink(char *spAcc, char *mrnaID, char *hgsidStr)
 {
 hPrintf("\n<LI>Gene Sorter - ");
 if (mrnaID != NULL)
@@ -536,13 +537,13 @@ if (mrnaID != NULL)
 else
     {
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"", 
-    	    protDisplayID, database, organism, hgsidStr);
+    	    spAcc, database, organism, hgsidStr);
     }
 hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
 hPrintf("\n");
 }
 
-void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
+void doGeneDetailsLink(char *spAcc, char *mrnaID, char *hgsidStr)
 {
 char cond_str[128];
 char *hggChrom, *hggStart, *hggEnd;
@@ -570,8 +571,9 @@ if (commonName != NULL) hPrintf(" (%s)", commonName);
 hPrintf("</A></LI>\n");
 }
 
-void doPathwayLinks(char *proteinID, char *mrnaName)
+void doPathwayLinks(char *spAcc, char *mrnaName)
 /* Show pathway links */
+/* spAcc is a place holder for future extension */
 {
 struct sqlConnection *conn  = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
@@ -921,7 +923,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
         }	
     
     oldOrg = strdup("");
-    conn3 = sqlConnect("swissProt");
+    conn3 = sqlConnect(UNIPROT_DB_NAME);
     safef(query3, sizeof(query3), 
      "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial", 
      queryID);
@@ -976,12 +978,14 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    {
 	    if (sameWord(protAcc, protDisp))
 		{
-		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		//hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
 		hPrintf("%s</A> %s\n", protAcc, protDesc);
 		}
 	    else
 		{
-		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		//hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
 		hPrintf("%s</A> (aka %s) %s\n", protAcc, protDisp, protDesc);
 		}
 	    }
@@ -1005,7 +1009,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-conn = sqlConnect("swissProt");
+conn = sqlConnect(UNIPROT_DB_NAME);
 safef(query, sizeof(query), 
      "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id", 
      queryGeneID);
@@ -1023,3 +1027,4 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 return(proteinCnt);
 }
+
