@@ -1,10 +1,85 @@
-/* paraToken - reads a line file and produces paraTokens from
+/* pfToken - reads a file and produces paraTokens from
  * it. */
 
 #include "common.h"
-#include "linefile.h"
 #include "hash.h"
-#include "paraToken.h"
+#include "errabort.h"
+#include "obscure.h"
+#include "pfToken.h"
+
+void pfSourcePos(struct pfSource *source, char *pos, 
+    char **retFileName, int *retLine, int *retCol)
+/* Return file name, line, and column (zero based) of pos. */
+{
+int lineIx = 0, colIx = 0;
+char *s = source->contents, *e;
+char *endContents = s + source->contentSize;
+
+if (pos < s || pos >= endContents)
+    internalErr();
+*retFileName = source->name;
+
+for (;;)
+    {
+    e = strchr(s, '\n');
+    if (e == NULL)
+        e = endContents;
+    else
+        e += 1;
+    if (pos >= s && pos < e)
+        {
+	*retLine = lineIx;
+	*retCol = pos - s;
+	return;
+	}
+    lineIx += 1;
+    s = e;
+    }
+}
+
+void pfTokenFileLineCol(struct pfToken *tok, 
+    char **retFileName, int *retLine, int *retCol)
+/* Return file name, line, and column (zero based) of token start. */
+{
+pfSourcePos(tok->source, tok->text, retFileName, retLine, retCol);
+}
+
+static void errAtPos(struct pfTokenizer *tkz, char *format, ...)
+/* Warn about error at given tkz->pos. */
+{
+int line, col;
+char *fileName;
+va_list args;
+va_start(args, format);
+pfSourcePos(tkz->source, tkz->pos, &fileName, &line, &col);
+warn("Line %d col %d of %s", line+1, col+1, fileName);
+vaErrAbort(format, args);
+noWarnAbort();
+va_end(args);
+}
+
+void errAt(struct pfToken *tok, char *format, ...)
+/* Warn about error at given token. */
+{
+int line, col;
+char *fileName;
+va_list args;
+va_start(args, format);
+pfTokenFileLineCol(tok, &fileName, &line, &col);
+warn("Line %d col %d of %s", line+1, col+1, fileName);
+vaErrAbort(format, args);
+noWarnAbort();
+va_end(args);
+}
+
+
+void expectingGot(char *expecting, struct pfToken *got)
+/* Complain about unexpected stuff and quit. */
+{
+char *s = cloneStringZ(got->text, got->textSize);
+errAt(got, "Expecting %s, got %s.", expecting, s);
+}
+
 
 static char *pfTokTypeAsString(enum pfTokType type)
 /* Return string corresponding to pfTokType */
@@ -38,6 +113,7 @@ static struct pfSource *pfSourceNew(char *fileName)
 struct pfSource *source;
 AllocVar(source);
 source->name = cloneString(fileName);
+readInGulp(fileName, &source->contents, &source->contentSize);
 return source;
 }
 
@@ -48,24 +124,12 @@ struct pfTokenizer *pfTkz;
 AllocVar(pfTkz);
 pfTkz->lm = lmInit(0);
 pfTkz->source = pfSourceNew(fileName);
+pfTkz->pos = pfTkz->source->contents;
+pfTkz->endPos = pfTkz->pos + pfTkz->source->contentSize;
 pfTkz->symbols = hashNew(16);
 pfTkz->strings = hashNew(16);
-pfTkz->lf = lineFileOpen(fileName, FALSE);
 pfTkz->dy = dyStringNew(0);
 return pfTkz;
-}
-
-static boolean getData(struct pfTokenizer *tkz)
-/* Make sure that there is some data in line.  Return FALSE
- * if at end of file. */
-{
-if (tkz->posInLine >= tkz->lineSize)
-    {
-    if (!lineFileNext(tkz->lf, &tkz->line, &tkz->lineSize))
-	return FALSE;
-    tkz->posInLine = 0;
-    }
-return TRUE;
 }
 
 static void tokSingleChar(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -74,7 +138,8 @@ static void tokSingleChar(struct pfTokenizer *tkz, struct pfToken *tok,
 {
 tok->type = c;
 tok->val.c = c;
-tkz->posInLine += 1;
+tok->textSize = 1;
+tkz->pos += 1;
 }
 
 static void tokTwoChar(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -82,39 +147,30 @@ static void tokTwoChar(struct pfTokenizer *tkz, struct pfToken *tok,
 /* Create two character token of given type */
 {
 tok->type = type;
-tkz->posInLine += 2;
+tkz->pos += 2;
 }
   
-static void tokWhiteSpace(struct pfTokenizer *tkz, struct pfToken *tok)
-/* Create white space token encompassing up to next non-white space
- * or EOF */
+static void skipWhiteSpace(struct pfTokenizer *tkz)
+/* Skip over white space */
 {
-int pos = tkz->posInLine+1;
-for (;;)
-    {
-    if (pos >= tkz->lineSize)
-        {
-	if (!lineFileNext(tkz->lf, &tkz->line, &tkz->lineSize))
-	    break;
-	else
-	    pos = 0;
-	}
-    if (!isspace(tkz->line[pos]))
-        break;
-    pos += 1;
-    }
-tok->type = pftWhitespace;
-tkz->posInLine = pos;
+char *pos = tkz->pos;
+while (isspace(pos[0]))
+    ++pos;
+tkz->pos = pos;
 }
 
-static boolean allWhite(char *s, int count)
+static boolean allWhiteToEol(char *s)
 /* Return TRUE if next count chars in s are whitespace */
 {
-int i;
-for (i=0; i<count; ++i)
-    if (!isspace(s[i]))
+char c;
+for (;;)
+    {
+    c = *s++;
+    if (!isspace(s[0]))
         return FALSE;
-return TRUE;
+    if (c == '\n')
+        return TRUE;
+    }
 }
 
 static boolean isoctal(char c)
@@ -204,6 +260,7 @@ static void finishQuote(struct pfTokenizer *tkz, struct pfToken *tok)
 {
 tok->type = pftString;
 tok->val.s = hashStoreName(tkz->strings, tkz->dy->string);
+tok->textSize = tkz->pos - tok->text;
 }
 
 static void tokMultiLineQuote(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -211,19 +268,26 @@ static void tokMultiLineQuote(struct pfTokenizer *tkz, struct pfToken *tok,
 /* Do multiple line quote.  There is no escaping in these. */
 {
 int endSymSize = strlen(endSym);
-while (lineFileNext(tkz->lf, &tkz->line, &tkz->lineSize))
+char *pos = strchr(tkz->pos, '\n');
+char *e;
+
+if (pos != NULL)
     {
-    if (tkz->lineSize >= endSymSize && 
-    	memcmp(tkz->line, endSym, endSymSize) == 0)
+    pos += 1;
+    while ((e = strchr(pos, '\n')) != NULL)
 	{
-	tkz->posInLine = endSymSize;
-	finishQuote(tkz, tok);
-	return;
+	e += 1;
+	if (memcmp(e, endSym, endSymSize) == 0)
+	    {
+	    tkz->pos = e + endSymSize;
+	    finishQuote(tkz, tok);
+	    return;
+	    }
+	dyStringAppendN(tkz->dy, pos, e - pos);
+	pos = e;
 	}
-    dyStringAppendN(tkz->dy, tkz->line, tkz->lineSize);
     }
-errAbort("Unterminated line quote starting line %d of %s",
-	tok->startLine, tok->source->name);
+errAt(tok, "Unterminated line quote.");
 }
 
 static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -232,38 +296,35 @@ static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
  * followed by a newline (or whitespace/newline) then
  * treat quote as line oriented. */
 {
-int pos = tkz->posInLine + 1;
+char *pos = tkz->pos+1;
 dyStringClear(tkz->dy);
-if (allWhite(tkz->line + pos, tkz->lineSize - pos))
+if (allWhiteToEol(pos))
     {
     char endSym[2];
     endSym[0] = quoteC;
     endSym[1] = 0;
-    tkz->posInLine = pos;
+    tkz->pos = pos;
     tokMultiLineQuote(tkz, tok, endSym);
     }
 else
     {
     char c;
-    for ( ;pos<tkz->lineSize; ++pos)
+    for (;;)
         {
-	c = tkz->line[pos];
+	c = *pos++;
 	if (c == quoteC)
 	    {
-	    tkz->posInLine = pos+1;
+	    tkz->pos = pos;
 	    finishQuote(tkz, tok);
 	    return;
 	    }
 	if (c == '\\')
 	    {
-	    char *s = tkz->line + pos + 1;
-	    c = translateEscape(&s);
-	    pos = s - tkz->line - 1;
+	    c = translateEscape(&pos);
 	    }
 	dyStringAppendC(tkz->dy, c);
 	}
-    errAbort("Unterminated quote line %d of %s", tkz->lf->lineIx,
-    	tkz->lf->fileName);
+    errAt(tok, "Unterminated quote.");
     }
 }
 
@@ -273,50 +334,43 @@ static void tokNameOrComplexQuote(struct pfTokenizer *tkz,
  * If the name ends up being 'quote' then funnel it into
  * special delimited quotation handler. */
 {
-int pos;
+char *pos = tkz->pos;
 char c;
 
 dyStringClear(tkz->dy);
-for (pos = tkz->posInLine; pos < tkz->lineSize; ++pos)
+for (;;)
     {
-    c = tkz->line[pos];
+    c = *pos;
     if (c != '_' && !isalnum(c))
         break;
     dyStringAppendC(tkz->dy, c);
+    pos += 1;
     }
+tkz->pos = pos;
+
 if (sameString(tkz->dy->string, "quote"))
     {
     struct dyString *dy = dyStringNew(0);
-    /* Skip spaces between "quote" and "to". */
-    for (;pos < tkz->lineSize; ++pos)
-        {
-	if (!isspace(tkz->line[pos]))
-	    break;
-	}
-    if (!(tkz->line[pos] == 't' && tkz->line[pos+1] == 'o' 
-       && isspace(tkz->line[pos+2]) ))
-        errAbort("Unrecognized quote type (missing to?) line %d of %s",
-		tkz->lf->lineIx, tkz->lf->fileName);
-    pos += 3;
-
-    /* Skip spaces between "to" and marker. */
-    for (;pos < tkz->lineSize; ++pos)
-        {
-	if (!isspace(tkz->line[pos]))
-	    break;
-	}
-
+    skipWhiteSpace(tkz);  /* Skip spaces between "quote" and "to". */
+    pos = tkz->pos;
+    if (!(pos[0] == 't' && pos[1] == 'o' 
+       && isspace(pos[2]) ))
+        errAt(tok, "Unrecognized quote type (missing to?)");
+    tkz->pos = pos + 2;
+    skipWhiteSpace(tkz); /* Skip spaces between "to" and marker. */
+    pos = tkz->pos;
     dyStringClear(dy);
-    for (;pos < tkz->lineSize; ++pos)
+    for (;;)
         {
-	c = tkz->line[pos];
+	c = *pos;
 	if (isspace(c))
 	    break;
 	dyStringAppendC(dy, c);
+	pos += 1;
 	}
+    tkz->pos = pos;
     if (dy->stringSize < 1)
-        errAbort("quote without delimator string line %d of %s",
-		tkz->lf->lineIx, tkz->lf->fileName);
+	errAt(tok, "quote without delimator string");
     dyStringClear(tkz->dy);
     tokMultiLineQuote(tkz, tok, dy->string);
     dyStringFree(&dy);
@@ -325,85 +379,75 @@ else
     {
     tok->type = pftName;
     tok->val.s = hashStoreName(tkz->symbols, tkz->dy->string);
-    tkz->posInLine = pos;
     }
 }
 
-static void tokLineComment(struct pfTokenizer *tkz, struct pfToken *tok)
-/* Create token for comment until end of line. */
+static void skipLine(struct pfTokenizer *tkz)
+/* Move tkz->pos to start of next line. */
 {
-tok->type = pftComment;
-tkz->posInLine = tkz->lineSize;
+char *e = strchr(tkz->pos, '\n');
+if (e == NULL)
+    e = tkz->endPos;
+else
+    e += 1;
+tkz->pos = e;
 }
 
-static void finishFullComment(struct pfTokenizer *tkz, struct pfToken *tok,
+static void finishFullComment(struct pfTokenizer *tkz, char *pos,
 	struct dyString *endPat)
 /* Search for match to end pat, and close off comment there. */
 {
-for (;;)
+char *end = memMatch(endPat->string, endPat->stringSize, pos,
+    tkz->endPos - tkz->pos)	;
+if (end == NULL)
+    errAtPos(tkz, "Unclosed comment.");
+else
     {
-    char *end = memMatch(endPat->string, endPat->stringSize,
-    	tkz->line + tkz->posInLine,  tkz->lineSize - tkz->posInLine);
-    if (end != NULL)
-        {
-	tok->type = pftComment;
-	tkz->posInLine = end + endPat->stringSize - tkz->line;
-	return;
-	}
-    if (!lineFileNext(tkz->lf, &tkz->line, &tkz->lineSize))
-        {
-	errAbort("Unclosed comment starting line %d of %s",
-		tok->startLine, tok->source->name);
-	}
-    tkz->posInLine = 0;
+    end += endPat->stringSize;
+    tkz->pos = end;
     }
 }
 
-static void tokFullComment(struct pfTokenizer *tkz, struct pfToken *tok)
-/* Create token for comment that starts with '/' '*'. */
+static void skipFullComment(struct pfTokenizer *tkz)
+/* Set tkz->pos to past comment. */
 {
-int posInLine = tkz->posInLine;
+char *pos = tkz->pos;
 dyStringClear(tkz->dy);
-if (tkz->posInLine + 2 < tkz->lineSize && tkz->line[posInLine+2] == '-')
+if (pos[2] == '-')
     {
-    int symStart = posInLine + 3;
-    int pos;
-    int symEnd = symStart;
-
-    /* Find next white space. */
-    for (pos = symStart; pos < tkz->lineSize; ++pos)
+    pos += 3;	/* Skip over  "/*-" */
+    /* Save to next white space */
+    for (; pos<tkz->endPos; ++pos)
         {
-	if (isspace(tkz->line[pos]))
-	    {
-	    symEnd = pos;
-	    break;
-	    }
+	char c = *pos;
+	if (isspace(c))
+	   break;
+	dyStringAppendC(tkz->dy, c);
 	}
-    dyStringAppendN(tkz->dy, tkz->line + symStart, symEnd - symStart);
     dyStringAppend(tkz->dy, "-*/");
-    tkz->posInLine = pos + 1;
     }
 else
     {
+    pos += 2;
     dyStringAppend(tkz->dy, "*/");
-    tkz->posInLine += 2;
     }
-finishFullComment(tkz, tok, tkz->dy);
+finishFullComment(tkz, pos, tkz->dy);
 }
+
 
 static void tokNumber(struct pfTokenizer *tkz, struct pfToken *tok, char c)
 /* Suck up digits. */
 {
-int pos = tkz->posInLine;
+char *pos = tkz->pos;
 boolean isFloat = FALSE;
 while (isdigit(c))
-    c = tkz->line[++pos];
+    c = *(++pos);
 if (c == '.')
     {
     isFloat = TRUE;
     for (;;)
         {
-	c = tkz->line[++pos];
+	c = *(++pos);
 	if (!isdigit(c))
 	    break;
 	}
@@ -413,35 +457,36 @@ if (c == 'e' || c == 'E')
     isFloat = TRUE;
     for (;;)
         {
-	c = tkz->line[++pos];
+	c = *(++pos);
 	if (!isdigit(c))
 	    break;
 	}
     }
 if (isFloat)
     {
-    tok->val.x = atof(tkz->line + tkz->posInLine);
+    tok->val.x = atof(tkz->pos);
     tok->type = pftFloat;
     }
 else
     {
-    tok->val.i = atoll(tkz->line + tkz->posInLine);
+    tok->val.i = atoll(tkz->pos);
     tok->type = pftInt;
     }
-tkz->posInLine = pos;
+tok->textSize = pos - tkz->pos;
+tkz->pos = pos;
 }
 
 static void tokHexNumber(struct pfTokenizer *tkz, struct pfToken *tok)
 /* Skip 0x, and suck up hex digits. */
 {
-int pos = tkz->posInLine+2;
+char *pos = tkz->pos + 2;
 unsigned long long l = 0;
 int v;
 char c;
 
 for (;;)
    {
-   c = tkz->line[pos];
+   c = *pos;
    switch (c)
        {
        case '0':
@@ -485,7 +530,7 @@ for (;;)
        default:
 	   tok->val.i = l;
 	   tok->type = pftInt;
-	   tkz->posInLine = pos;
+	   tkz->pos = pos;
 	   return;
        }
     l <<= 4;
@@ -494,53 +539,64 @@ for (;;)
     }
 }
 
+
+
 struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz)
 /* Puts next token in token.  Returns token type. For single
  * character tokens, token type is just the char value,
  * other token types start at 256. */
 {
 struct pfToken *tok;
-int pos;
+char *pos;
 char *s, c, c2;
 
 
-/* Fetch next letter of input.  Return at EOF. */
-if (!getData(tkz))
-    return NULL;
-pos = tkz->posInLine;
-c = tkz->line[pos];
-c2 = tkz->line[pos+1];
+/* Skip over white space and comments. */
+for (;;)
+    {
+    skipWhiteSpace(tkz);
+    if (tkz->pos >= tkz->endPos)
+	return NULL;
+    pos = tkz->pos;
+    c = pos[0];
+    c2 = pos[1];
+    if (c == '/')
+	{
+	if (c2 == '/')
+	    {
+	    skipLine(tkz);
+	    continue;
+	    }
+	else if (c2 == '*')
+	    {
+	    skipFullComment(tkz);
+	    continue;
+	    }
+	}
+    break;
+    }
+
 
 /* Allocate token structure. */
 lmAllocVar(tkz->lm, tok);
 tok->source = tkz->source;
-tok->startLine = tkz->lf->lineIx;
-tok->startCol = pos + 1;
+tok->text = tkz->pos;
 
 /* Decide what to do based on first letter or two. */
 switch (c)
     {
-    case ' ':
-    case '\t':
-    case '\n':
-	tokWhiteSpace(tkz,tok);
-	break;
     case '\'':
     case '"':
-        tokString(tkz, tok, c);
+	tokString(tkz, tok, c);
 	break;
     case '/':
-        if (c2 == '/')
-	    tokLineComment(tkz, tok);
-	else if (c2 == '*')
-	    tokFullComment(tkz, tok);
-	else if (c2 == '=')
+	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftDivEquals);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '+':
-        if (c2 == '+')
+	if (c2 == '+')
 	    tokTwoChar(tkz, tok, pftPlusPlus);
 	else if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftPlusEquals);
@@ -548,7 +604,7 @@ switch (c)
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '-':
-        if (c2 == '-')
+	if (c2 == '-')
 	    tokTwoChar(tkz, tok, pftMinusMinus);
 	else if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftMinusEquals);
@@ -556,19 +612,19 @@ switch (c)
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '*':
-        if (c2 == '=')
+	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftMulEquals);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '%':
-        if (c2 == '=')
+	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftModEquals);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '=':
-        if (c2 == '=')
+	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftEqualsEquals);
 	else
 	    tokSingleChar(tkz, tok, c);
@@ -627,10 +683,10 @@ switch (c)
     case 'x':
     case 'y':
     case 'z':
-        tokNameOrComplexQuote(tkz, tok);
+	tokNameOrComplexQuote(tkz, tok);
 	break;
     case '0':
-        if (c2 == 'x')
+	if (c2 == 'x')
 	    tokHexNumber(tkz, tok);
 	else
 	    tokNumber(tkz, tok, c);
@@ -653,17 +709,21 @@ switch (c)
 return tok;
 }
 
-void pfTokenDump(struct pfToken *tok, FILE *f)
+
+void pfTokenDump(struct pfToken *tok, FILE *f, boolean doLong)
 /* Print info on token to file. */
 {
+int line, col;
+char *fileName;
 if (tok == NULL)
     {
     fprintf(f, "EOF token\n");
     return;
     }
-fprintf(f, "line %d, column %d, type %s(%d), value ",
-    tok->startLine, tok->startCol, 
-    pfTokTypeAsString(tok->type), tok->type);
+pfTokenFileLineCol(tok, &fileName, &line, &col);
+if (doLong)
+    fprintf(f, "file %s line %d, column %d, ", fileName, line, col);
+fprintf(f, "type %s(%d), value ", pfTokTypeAsString(tok->type), tok->type);
 switch (tok->type)
     {
     case pftName:
@@ -678,22 +738,12 @@ switch (tok->type)
     case pftFloat:
 	fprintf(f, "%f", tok->val.x);
 	break;
-    case pftWhitespace:
-    case pftComment:
-    case pftPlusPlus:
-    case pftMinusMinus:
-    case pftPlusEquals:
-    case pftMinusEquals:
-    case pftDivEquals:
-    case pftMulEquals:
-    case pftModEquals:
-    case pftEqualsEquals:
-	fprintf(f, "n/a");
-        break;
     default:
-	fprintf(f, "%c", tok->val.c);
+	mustWrite(f, tok->text, tok->textSize);
 	break;
     }
 fprintf(f, "\n");
 }
 
+#ifdef SOON
+#endif /* SOON */

@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "localmem.h"
-#include "paraToken.h"
+#include "pfToken.h"
 #include "pfType.h"
 
 void usage()
@@ -268,10 +268,10 @@ switch (tok->type)
 	char buf[MAXLEN+4];
 	char *s = tok->val.s;
 	int len = strlen(s);
-	strcpy(buf+MAXLEN, "...");
-	buf[MAXLEN-1] = 0;
 	if (len > MAXLEN) len = MAXLEN;
 	memcpy(buf, s, len);
+	buf[len] = 0;
+	strcpy(buf+MAXLEN, "...");
 	fprintf(f, "\"%s\"", buf);
 	break;
 	#undef MAXLEN
@@ -338,7 +338,7 @@ struct pfParse *pfParseExpression(struct pfParse *parent,
 static void syntaxError(struct pfToken *tok)
 /* Complain about syntax error and quit. */
 {
-errAbort("Syntax error line %d of %s", tok->startLine, tok->source->name);
+errAt(tok, "Syntax error");
 }
 
 struct pfParse *pfParseNew(enum pfParseType type,
@@ -352,14 +352,6 @@ pp->type = type;
 pp->tok = tok;
 pp->parent = parent;
 return pp;
-}
-
-
-static void expectingGot(char *expecting, struct pfToken *got)
-/* Complain about unexpected stuff and quit. */
-{
-errAbort("Expecting %s line %d of %s", expecting, got->startLine,
-	got->source->name);
 }
 
 static void skipRequiredName(char *name, struct pfToken **pTokList)
@@ -384,9 +376,7 @@ for (;;)
     {
     if (tok == NULL)
 	{
-	tok = *pTokList;
-        errAbort("End of file in compound statement.  Opening { line %d of %s",
-	     tok->startLine, tok->source->name);
+	errAt(*pTokList, "End of file in compound statement");
 	}
     if (tok->type == '}')
         {
@@ -416,8 +406,7 @@ struct pfParse *varUse(struct pfParse *parent, struct pfToken **pTokList, struct
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptVarUse, tok, parent);
 if (tok->type != pftName)
-    errAbort("Expecting variable name line %d of %s",
-    	tok->startLine, tok->source->name);
+    errAt(tok, "Expecting variable.");
 pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
 *pTokList = tok->next;
 return pp;
@@ -475,7 +464,7 @@ static struct pfParse *varDeclareOne(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
 if (tok->type != pftName)
-    errAbort("Expecting variable name line %d of %s", tok->startLine, tok->source->name);
+    expectingGot("variable name", tok);
 pp->var = pfScopeAddVar(scope, tok->val.s, type);
 slAddHead(&parent->children, pp);
 *pTokList = tok->next;
@@ -500,15 +489,13 @@ for (;;)
     if (tok->type == pftName && sameString(tok->val.s, "of"))
 	{
 	if (!baseType->isCollection)
-	    errAbort("%s is not a collection line %d of %s",
-		baseType->name, tok->startLine, tok->source->name);
+	    errAt(tok, "%s is not a collection", baseType->name);
 	tok = tok->next;
 	}
     else
         break;
     if (tok->type != pftName || ((baseType = pfScopeFindType(scope, tok->val.s)) == NULL))
-        errAbort("Expecting type, got %s line %d of %s",
-		tok->val.s, tok->startLine, tok->source->name);
+	expectingGot("type", tok);
     }
 *pTokList = tok;
 slReverse(&ctList);
@@ -576,8 +563,7 @@ switch (tok->type)
 	tok = tok->next;
 	pp = pfParseExpression(parent, &tok, scope);
 	if (tok->type != ')')
-	    errAbort("Unclosed parenthesis starting line %d of %s",
-	    	tok->startLine, tok->source->name);
+	    errAt(tok, "Unclosed parenthesis.");
 	tok = tok->next;
 	break;
 	}

@@ -1,8 +1,8 @@
 /* paraToken - reads a line file and produces paraTokens from
  * it. */
 
-#ifndef PARATOKEN_H
-#define PARATOKEN_H
+#ifndef PFTOKEN_H
+#define PFTOKEN_H
 
 #ifndef DYSTRING_H
 #include "dystring.h"
@@ -36,6 +36,8 @@ struct pfSource
     {
     struct pfSource *next;	/* Next in list. */
     char *name;			/* File name. */
+    char *contents;		/* File contents as one long string */
+    size_t contentSize;		/* Size of contents. */
     };
 
 struct pfTokenizer
@@ -44,13 +46,10 @@ struct pfTokenizer
     struct pfTokenizer *next;	/* Next if any in list */
     struct lm *lm;		/* Local memory pool for tokens etc. */
     struct pfSource *source;	/* Current source file. */
-    struct pfSource *sourceList; /* List of all source files */
+    char *pos;			/* Current position within source->contents. */
+    char *endPos;		/* Last position within source->contents. */
     struct hash *symbols;	/* Hash containing all symbols. */
     struct hash *strings;	/* Hash containing all strings. */
-    struct lineFile *lf;	/* Open linefile on current source. */
-    char *line;			/* Points to start of current line. */
-    int lineSize;		/* Size of current line including '\n'. */
-    int posInLine;		/* Position within current line. */
     struct dyString *dy;	/* Dynamic string buffer - for symbols and
                                  * strings before they go in hash. */
     };
@@ -72,7 +71,8 @@ struct pfToken
     enum pfTokType type;	/* Token type. */
     union pfTokVal val;		/* Type-dependent value. */
     struct pfSource *source;	/* Source file this is in. */
-    int startLine,startCol;	/* Start of token within source. One based. */
+    char *text;			/* Pointer to start of text in source file. */
+    int textSize;		/* Size of text. */
     };
 
 struct pfTokenizer *pfTokenizerNew(char *fileName);
@@ -83,7 +83,13 @@ struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz);
  * character tokens, token type is just the char value,
  * other token types start at 256. */
 
-void pfTokenDump(struct pfToken *tok, FILE *f);
+void pfTokenDump(struct pfToken *tok, FILE *f, boolean doLong);
 /* Print info on token to file. */
 
-#endif /* PARATOKEN_H */
+void errAt(struct pfToken *tok, char *format, ...);
+/* Warn about error at given token. */
+
+void expectingGot(char *expecting, struct pfToken *got);
+/* Complain about unexpected stuff and quit. */
+
+#endif /* PFTOKEN_H */
