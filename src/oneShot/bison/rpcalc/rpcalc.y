@@ -65,7 +65,7 @@ fprintf(stderr, "%s\n", s);
 int main(void)
 {
 printf("Enter an expression in reverse Polish notation on each line.\n"
-       "Use <control>C to exit.\n");
+       "Use <control>D to exit.\n");
 return yyparse();
 }
 
