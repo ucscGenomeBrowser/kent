@@ -63,6 +63,9 @@ struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
 struct slName *sqlListTables(struct sqlConnection *conn);
 /* Return list of tables in database associated with conn. */
 
+struct slName *sqlListFields(struct sqlConnection *conn, char *table);
+/* Return list of fields in table. */
+
 struct hash *sqlAllFields();
 /* Get hash of all database.table.field on default host. */
 
@@ -269,5 +272,12 @@ void sqlMonitorSetIndent(unsigned indent);
 
 void sqlMonitorDisable();
 /* Disable tracing or profiling of SQL queries. */
+
+int sqlDateToUnixTime(char *sqlDate);
+/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
+ * (seconds since midnight 1/1/1970 in UNIX). */
+
+int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
+/* Get last update time for table (in Unix terms). */
 
 #endif /* JKSQL_H */
