@@ -475,6 +475,8 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 char name[128];
+char chrom[32];
+char post[64];
 
 strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
@@ -483,29 +485,25 @@ while((row = sqlNextRow(sr)) != NULL)
     if (strcmp(row[0], "all_est") == 0 || strcmp(row[0], "all_mrna") == 0)
 	continue;
 
-    if (hFindChromStartEndFieldsDb(dbName, row[0], query, query, query))
+    /* if table name is of the form, chr*_random_* or chr*_*: */
+    if (sscanf(row[0], "chr%32[^_]_random_%64s", chrom, post) == 2 ||
+	sscanf(row[0], "chr%32[^_]_%64s", chrom, post) == 2)
 	{
-	char chrom[32];
-	char post[32];
-
-	/* if table name is of the form, chr*_random_* or chr*_*: */
-	if (sscanf(row[0], "chr%32[^_]_random_%32s", chrom, post) == 2 ||
-	   sscanf(row[0], "chr%32[^_]_%32s", chrom, post) == 2)
-	    {
-	    snprintf(name, sizeof(name), "chrN_%s", post);
-	    hashStoreName(posTableHash, cloneString(name));
-	    }
-	else
-	    {
-	    snprintf(name, sizeof(name), "%s", row[0]);
-	    hashStoreName(posTableHash, cloneString(name));
-	    }
+	snprintf(name, sizeof(name), "chrN_%s", post);
+	// If a chrN_ table is already in the (positional) hash, 
+	// don't bother looking up its fields.
+	if (hashLookup(posTableHash, name))
+	    continue;
 	}
     else
 	{
-	snprintf(name, sizeof(name), "%s", row[0]);
-	hashStoreName(nonposTableHash, cloneString(name));
+	strncpy(name, row[0], sizeof(name));
 	}
+
+    if (hFindChromStartEndFieldsDb(dbName, row[0], query, query, query))
+	hashStoreName(posTableHash, cloneString(name));
+    else
+	hashStoreName(nonposTableHash, cloneString(name));
     }
 sqlFreeResult(&sr);
 }
@@ -705,12 +703,10 @@ snprintf(query, 256, "DESCRIBE %s", parsedTableName);
 sr = sqlGetResult(conn, query);
 
 puts("<TABLE><TR><TD>\n");
-/* #*** HACK this in!
 puts("Free-form query: ");
 cgiMakeTextVar("rawQuery", "", 50);
 strncpy(name, "log_rawQuery", sizeof(name));
 cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
-*/
 puts(" </TD></TR><TR><TD>");
 puts("<TABLE>\n");
 gotFirst = FALSE;
@@ -800,9 +796,24 @@ void constrainNumber(char *fieldName, char *op, char *pat, char *log,
 		     struct dyString *clause)
 {
 struct kxTok *tokList, *tokPtr;
+int i;
+boolean legit;
 
 if (fieldName == NULL || op == NULL || pat == NULL || log == NULL)
     webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* complain if op is not a legitimate value */
+legit = FALSE;
+for (i=0;  i < cmpOpMenuSize;  i++)
+    {
+    if (sameString(cmpOpMenu[i], op))
+	{
+	legit = TRUE;
+	break;
+	}
+    }
+if (! legit)
+    webAbort("Error", "Illegal comparison operator \"%s\"", op);
 
 /* tokenize (don't expect wildcards) */
 tokPtr = tokList = kxTokenize(pat, FALSE);
@@ -851,9 +862,24 @@ void constrainPattern(char *fieldName, char *dd, char *pat, char *log,
 struct kxTok *tokList, *tokPtr;
 boolean needOr = FALSE;
 char *cmp, *or, *ptr;
+int i;
+boolean legit;
 
 if (fieldName == NULL || dd == NULL || pat == NULL || log == NULL)
     webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* complain if dd is not a legitimate value */
+legit = FALSE;
+for (i=0;  i < ddOpMenuSize;  i++)
+    {
+    if (sameString(ddOpMenu[i], dd))
+	{
+	legit = TRUE;
+	break;
+	}
+    }
+if (! legit)
+    webAbort("Error", "Illegal does/doesn't value \"%s\"", dd);
 
 /* tokenize (do allow wildcards) */
 tokList = kxTokenize(pat, TRUE);
@@ -897,24 +923,135 @@ dyStringAppend(clause, ")");
 slFreeList(&tokList);
 }
 
+void constrainFreeForm(char *rawQuery, struct dyString *clause)
+/* Let the user type in an expression that may contain
+ * - field names
+ * - parentheses
+ * - comparison/arithmetic/logical operators
+ * - numbers
+ * - patterns with wildcards
+ * Make sure they don't use any SQL reserved words, ;'s, etc.
+ * Let SQL handle the actual parsing of nested expressions etc. - 
+ * this is just a token cop. */
+{
+struct kxTok *tokList, *tokPtr;
+struct slName *fnPtr;
+char *ptr;
+
+if ((rawQuery == NULL) || (rawQuery[0] == 0))
+    return;
+
+/* tokenize (do allow wildcards, and include quotes.) */
+kxTokIncludeQuotes(TRUE);
+tokList = kxTokenize(rawQuery, TRUE);
+
+/* to be extra conservative, wrap the whole expression in parens. */
+dyStringAppend(clause, "(");
+for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
+    {
+    if ((tokPtr->type == kxtEquals) ||
+	(tokPtr->type == kxtGT) ||
+	(tokPtr->type == kxtGE) ||
+	(tokPtr->type == kxtLT) ||
+	(tokPtr->type == kxtLE) ||
+	(tokPtr->type == kxtAnd) ||
+	(tokPtr->type == kxtOr) ||
+	(tokPtr->type == kxtNot) ||
+	(tokPtr->type == kxtOpenParen) ||
+	(tokPtr->type == kxtCloseParen) ||
+	(tokPtr->type == kxtAdd) ||
+	(tokPtr->type == kxtSub) ||
+	(tokPtr->type == kxtDiv))
+	{
+	dyStringAppend(clause, tokPtr->string);
+	}
+    else if ((tokPtr->type == kxtWildString) ||
+	     (tokPtr->type == kxtString))
+	{
+	char *word = cloneString(tokPtr->string);
+	toUpperN(word, strlen(word));
+	if (startsWith("SQL_", word) || 
+	    startsWith("MYSQL_", word) || 
+	    sameString("ALTER", word) || 
+	    sameString("BENCHMARK", word) || 
+	    sameString("CHANGE", word) || 
+	    sameString("CREATE", word) || 
+	    sameString("DELAY", word) || 
+	    sameString("DELETE", word) || 
+	    sameString("DROP", word) || 
+	    sameString("FLUSH", word) || 
+	    sameString("GET_LOCK", word) || 
+	    sameString("GRANT", word) || 
+	    sameString("INSERT", word) || 
+	    sameString("KILL", word) || 
+	    sameString("LOAD", word) || 
+	    sameString("LOAD_FILE", word) || 
+	    sameString("LOCK", word) || 
+	    sameString("MODIFY", word) || 
+	    sameString("PROCESS", word) || 
+	    sameString("QUIT", word) || 
+	    sameString("RELEASE_LOCK", word) || 
+	    sameString("RELOAD", word) || 
+	    sameString("REPLACE", word) || 
+	    sameString("REVOKE", word) || 
+	    sameString("SELECT", word) || 
+	    sameString("SESSION_USER", word) || 
+	    sameString("SHOW", word) || 
+	    sameString("SYSTEM_USER", word) || 
+	    sameString("UNLOCK", word) || 
+	    sameString("UPDATE", word) || 
+	    sameString("USE", word) || 
+	    sameString("USER", word) || 
+	    sameString("VERSION", word))
+	    {
+	    webAbort("Error", "Illegal SQL word \"%s\" in free-form query string",
+		     tokPtr->string);
+	    }
+	else if (sameString("*", tokPtr->string))
+	    {
+	    // special case for multiplication in a wildcard world
+	    dyStringPrintf(clause, " %s ", tokPtr->string);
+	    }
+	else
+	    {
+	    /* Replace normal wildcard characters with SQL: */
+	    while ((ptr = strchr(tokPtr->string, '?')) != NULL)
+		*ptr = '_';
+	    while ((ptr = strchr(tokPtr->string, '*')) != NULL)
+	    *ptr = '%';
+	    dyStringPrintf(clause, " %s ", tokPtr->string);
+	    }
+	}
+    else if (tokPtr->type == kxtEnd)
+	{
+	break;
+	}
+    else
+	{
+	webAbort("Error", "Unrecognized token \"%s\" in free-form query string",
+		 tokPtr->string);
+	}
+    }
+dyStringAppend(clause, ")");
+
+slFreeList(&tokList);
+}
+
 char *constrainFields()
 /* If the user specified constraints, append SQL conditions (suitable
  * for a WHERE clause) to q. */
 {
 struct cgiVar *current;
-struct dyString *orClause = newDyString(512);
+struct dyString *freeClause = newDyString(512);
 struct dyString *andClause = newDyString(512);
 struct dyString *clause;
 char *fieldName;
+char *rawQuery = cgiOptionalString("rawQuery");
+char *rQLogOp  = cgiOptionalString("log_rawQuery");
 char *dd, *cmp, *pat;
 char varName[128];
 char *ret;
 
-//#*** HACK in the rawQuery parsing and logical combination.
-
-/* Lump everything with a logical operator of "OR" into an OR clause 
- * that will take precedence over the AND clause.... */
-dyStringClear(orClause);
 dyStringClear(andClause);
 for (current = cgiVarList();  current != NULL;  current = current->next)
     {
@@ -936,7 +1073,7 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 	     (cmp != NULL && sameString(cmp, "ignored")) )
 	    continue;
 	/* Otherwise, expect it to be a well-formed constraint and tack 
-	 * it on to the appropriate clause. */
+	 * it on to the clause. */
 	clause = andClause;
 	if (cmp != NULL && sameString(cmp, "in range"))
 	    constrainRange(fieldName, pat, "AND", clause);
@@ -948,19 +1085,26 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
     }
 if (andClause->stringSize > 0)
     dyStringAppend(andClause, ")");
-if (orClause->stringSize > 0 && andClause->stringSize > 0)
-    dyStringAppend(orClause, " OR ");
-if (orClause->stringSize > 0)
+
+dyStringClear(freeClause);
+constrainFreeForm(rawQuery, freeClause);
+// force rQLogOp to a legit value:
+if (! sameString("AND", rQLogOp))
+    rQLogOp = "OR";
+
+if (freeClause->stringSize > 0 && andClause->stringSize > 0)
+    dyStringPrintf(freeClause, " %s ", rQLogOp);
+
+if (freeClause->stringSize > 0)
     {
-    dyStringAppend(orClause, andClause->string);
-    dyStringAppend(orClause, ")");
+    dyStringAppend(freeClause, andClause->string);
     }
 else
     {
-    dyStringAppend(orClause, andClause->string);
+    dyStringAppend(freeClause, andClause->string);
     }
-ret = cloneString(orClause->string);
-freeDyString(&orClause);
+ret = cloneString(freeClause->string);
+freeDyString(&freeClause);
 freeDyString(&andClause);
 return ret;
 }
@@ -1146,6 +1290,7 @@ printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
+preserveConstraints();
 
 snprintf(query, sizeof(query), "DESCRIBE %s", parsedTableName);
 sr = sqlGetResult(conn, query);
