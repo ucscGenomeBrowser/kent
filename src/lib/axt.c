@@ -128,6 +128,14 @@ if (dif == 0)
 return dif;
 }
 
+int axtCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score. */
+{
+const struct axt *a = *((struct axt **)va);
+const struct axt *b = *((struct axt **)vb);
+return b->score - a->score;
+}
+
 static char *skipIgnoringDash(char *a, int size, bool skipTrailingDash)
 /* Count size number of characters, and any 
  * dash characters. */
