@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.21 2004/11/10 02:11:50 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.22 2004/11/10 02:12:06 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -682,7 +682,6 @@ htmlPageSetVar(rootPage, NULL, "position", NULL);
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
     {
-    uglyf("%s\n", orgPage->htmlText);
     errAbort("Couldn't get main form on orgPage");
     }
 if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
