@@ -581,29 +581,6 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/27/02)
     cd /usr/local/apache/htdocs/goldenPath/rnNov2002
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
-# For the first database table dump
-do:
-
-ssh hgwbeta
-mkdir /usr/local/apache/htdocs/goldenPath/rnNov2002/database
-
-cd /var/tmp
-mkdir rn1-dump
-chmod 777 rn1-dump      (since you aren't root this is quickest)
-cd rn1-dump
-mysqldump --user=root --password=mysql4cc --all --tab=. rn1
-
-Then, that directory will quickly fill with .sql and .txt files
-When it is done do:
-
-cd /var/tmp/rn1-dump
-gzip *.txt
-mv * /usr/local/apache/htdocs/goldenPath/rnNov2002/database
-
- - Make database.zip
-ssh hgwbeta
-cd /usr/local/apache/htdocs/goldenPath/rnNov2002/database
-zip ../bigZips/database.zip *
 
 PRODUCING GENSCAN PREDICTIONS (DONE 12/3/02)
     
