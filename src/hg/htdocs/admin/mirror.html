@@ -64,9 +64,9 @@
 			    To set up a full mirror browser, we recommend at a 
 			    MINIMUM the following disk partitions and sizes:
 			    <UL>
-			        <LI>MySQL Table spaces: ~ 128 GB
-			        <LI>Apache web pages area: ~ 1 GB
-			        <LI>"/gbdb" area for the browser: ~ 165 GB
+			        <LI>MySQL Table spaces: ~ 128 Gb
+			        <LI>Apache web pages area: ~ 1 Gb
+			        <LI>"/gbdb" area for the browser: ~ 165 Gb
 			    </UL>
 			    <H3>WARNING! This is a major change from the previous 
 			    /cluster and /projects based data areas.
@@ -95,10 +95,10 @@
 
 <OL>
 <LI><A HREF="#step1">Install Apache server and MySQL server</A>
-<LI><A HREF="#step2">Get all the html files and most of the text files</A> (1 GB)
+<LI><A HREF="#step2">Get all the html files and most of the text files</A> (1 Gb)
 <LI><A HREF="#step3">Get the data for each individual genome assembly and install 
-databases </A> (70 GB)&nbsp;<B>NEW ITEMS!</B>
-<LI><A HREF="#step4">Obtain the /gbdb data file area</A> (165 GB)&nbsp;<B>NEW ITEMS!</B>
+databases </A> (70 Gb)&nbsp;<B>NEW ITEMS!</B>
+<LI><A HREF="#step4">Obtain the /gbdb data file area</A> (165 Gb)&nbsp;<B>NEW ITEMS!</B>
 <LI><A HREF="#step5">Set up database</A>&nbsp;<B>NEW ITEMS!</B>
 <LI><A HREF="#step6">Get executable files</A>
 <LI><A HREF="#step7">Set up Hgcentral session preference table</A>&nbsp;<B>NEW ITEMS!</B>
@@ -153,7 +153,7 @@ your real path for MYSQLDATA whenever you see that.
 <P>
 <A NAME="step2"></A>
 <B>2. Get all the html files and most of the text files 
-(1.0 GB)</B>
+(1.0 Gb)</B>
 <OL type="a">
 <LI> 
 Obtain the software package rsync. If it isn't already 
@@ -178,9 +178,9 @@ rsync -navz --progress --partial rsync://genome-rsync.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
-genome          UCSC Human Genome Web Site (106 GB)
+genome          UCSC Human Genome Web Site (106 Gb)
 cgi-bin         UCSC Human Genome Web Site CGI Binaries
-gbdb            UCSC Human Genome Browser New Config Files (282 GB)
+gbdb            UCSC Human Genome Browser New Config Files (282 Gb)
 </PRE>
 <BR>
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy<BR>
@@ -190,6 +190,9 @@ rsync --progress --partial -avz \
  --exclude='goldenPath/hg16/*' \ 
  --exclude='goldenPath/10april2003/*' \
  --exclude='goldenPath/14nov2002/*' \ 
+ --exclude='goldenPath/panTro1/*' \ 
+ --exclude='goldenPath/dp1/*' \ 
+ --exclude='goldenPath/galGal2/*' \ 
  --exclude='goldenPath/mm4/*' \ 
  --exclude='goldenPath/mmFeb2003/*' \ 
  --exclude='goldenPath/rnJun2003/*' \ 
@@ -212,10 +215,10 @@ rsync --progress --partial -avz \
 </OL>
 <P>
 <A NAME="step3"></A>
-<B>3. Get the data for each individual genome assembly and installing databases ( 70 GB )</B>
+<B>3. Get the data for each individual genome assembly and installing databases ( 90 Gb )</B>
 
 <OL type="a">
-<LI>Get Human July, 2003 full data set (hg16: 8.6 GB) by doing:
+<LI>Get Human July, 2003 full data set (hg16: 15 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -229,7 +232,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/hg16/database/
 </PRE>
 
-<LI>Get Human April 10, 2003 full data set (hg15: 6.5 GB) by doing:
+<LI>Get Human April 10, 2003 full data set (hg15: 7.8 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -243,7 +246,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
-<LI>Get Human November 14, 2002 full data set (hg13: 12.0 GB) by doing:
+<LI>Get Human November 14, 2002 full data set (hg13: 8.5 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -257,7 +260,15 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/14nov2002/database/
 </PRE>
 
-<LI>Get Mouse October, 2003 full data set (mm4: 6.0 GB) by doing:
+<LI>Get Chimp November, 2003 full data set (panTro1: 2.9 Gb) by doing:
+<P> 
+<PRE>
+rsync --progress --partial -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/panTro1/ \
+  $WEBROOT/goldenPath/panTro1/
+</PRE>
+
+<LI>Get Mouse October, 2003 full data set (mm4: 12 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -271,7 +282,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/mm4/database/
 </PRE>
 
-<LI>Get Mouse February, 2003 full data set (mm3: 12 GB) by doing:
+<LI>Get Mouse February, 2003 full data set (mm3: 9 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -285,7 +296,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
 
-<LI>Get Rat June, 2003 full data set (rn3: 5.5 GB) by doing:
+<LI>Get Rat June, 2003 full data set (rn3: 14 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -293,7 +304,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/rnJun2003/
 </PRE>
 
-<LI>Get Rat January, 2003 full data set (rn2: 4.1 GB) by doing:
+<LI>Get Rat January, 2003 full data set (rn2: 4.1 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -307,7 +318,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
-<LI>Get Fugu August, 2003 full data set (fr1: 1.0 GB) by doing:
+<LI>Get Fugu August, 2003 full data set (fr1: 800 Mb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -315,7 +326,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/fr1/
 </PRE>
 
-<LI>Get Fruitfly January, 2003 full data set (dm1: 1.0 GB) by doing:
+<LI>Get Fruitfly January, 2003 full data set (dm1: 400 Mb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -323,7 +334,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/dm1/
 </PRE>
 
-<LI>Get C. elegans May, 2003 full data set (ce1: 2.0 GB) by doing:
+<LI>Get C. elegans May, 2003 full data set (ce1: 2.1 Gb) by doing:
 <P> 
 <PRE>
 rsync --progress --partial -avz \
@@ -361,7 +372,7 @@ rsync --progress --partial -avz \
 4. Obtain the /gbdb data file area</H4>
 
 <OL type="a">
-<LI>You will need the portions of /gbdb used by the browser (160 GB):
+<LI>You will need the portions of /gbdb used by the browser (160 Gb):
 <BR>
 <PRE>
 rsync --progress --partial -avz \
@@ -391,6 +402,7 @@ assembly:
 <TR><TD> hg16        </TD><TD></TD><TD> hg16        </TD></TR>
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15        </TD></TR>
 <TR><TD> 14nov2002   </TD><TD></TD><TD> hg13        </TD></TR>
+<TR><TD> panTro1     </TD><TD></TD><TD> panTro1     </TD></TR>
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
 <TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
@@ -414,25 +426,22 @@ mysql> create database $DBVERSION;
 <UL type="i">
 <LI> Move to $WEBROOT/goldenPath/$FREEZEDATE/database/ directory.<BR>
 All the files for creating the "$DBVERSION" database are in this directory.
-<LI>Create tables: (The following shell script may be used for this step.)
+
+<LI>Create and load data into the tables: (The script here is an example
+for this process.  This takes a long time, 10 hours or more for one database.)
 <PRE>
-for file in *.sql 
+#!/bin/sh
+DB=$FREEZEDATE
+cd $WEBROOT/goldenPath/${DB}/database
+for SQL in *.sql
 do
-mysql -youraccountoptions $DBVERSION < $file
+    T_NAME=${SQL%%.sql}
+    echo "loading table ${T_NAME}"
+    hgsql -e "DROP TABLE ${T_NAME};" ${DB} > /dev/null 2> /dev/null
+    hgsql ${DB} < ${SQL}
+    zcat "${T_NAME}.txt.gz" | mysql -youraccountoptions -e \
+        "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};" ${DB}
 done 
-</PRE>
-<LI>Load data into the tables: (The script here is an example
-for this process.  This takes a long time, on the order of hours.)
-<PRE>
-for file in *.txt.gz
-do
-        FN=`echo $file | sed -e "s/.gz//"`
-        echo "working on $file"
-        gunzip $file
-        mysqlimport -youraccountoptions $DBVERSION $FN
-        echo "imported $FN"
-        gzip $FN &amp;
-done
 </PRE>
 </UL>
 
@@ -475,7 +484,7 @@ The source tree can also be obtained via <A HREF="cvs.html"> CVS </A>
 <B>Existing Mirror Sites: Note the Schema for Hgcentral HAS CHANGED.
 You are advised to drop the hgcentral database and reload it.
 This will result in the loss of user settings. If this is a problem,
-contact us for a incremental fix.
+contact us for an incremental fix.
 </B>
 <P>
 
@@ -542,8 +551,8 @@ that runs the web server write access to it.
 <LI>Download a copy of the dumped hgFixed tables.</LI>
 <PRE>
 rsync --progress --partial -avz \
-   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hgFixed/ \
-   $WEBROOT/goldenPath/hgFixed/database/
+   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hgFixed/database \
+   $WEBROOT/goldenPath/hgFixed/
 </PRE>
 <LI>Create a hgFixed database</LI>
 <PRE>
@@ -556,7 +565,7 @@ mysql> create database hgFixed
 10. Create the five protein databases</H4>
 
 <OL type="a"> 
-<LI>Download a copy of the dumped protein tables.
+<LI>Download a copy of the dumped protein tables. (2.6 Gb)
 <PRE>
 rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins/ \
@@ -565,30 +574,26 @@ rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0111/ \
 $WEBROOT/goldenPath/proteins0111/database/
 rsync --progress --partial -avz  \
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0305/ \
-$WEBROOT/goldenPath/proteins0305/database/
-rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0405/ \
 $WEBROOT/goldenPath/proteins0405/database/
 rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins070403/ \
 $WEBROOT/goldenPath/proteins070403/database/
 rsync --progress --partial -avz  \
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins031112/ \
-$WEBROOT/goldenPath/proteins031112/database/
-rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins040115/ \
 $WEBROOT/goldenPath/proteins040115/database/
+rsync --progress --partial -avz  \
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins040315/ \
+$WEBROOT/goldenPath/proteins040315/database/
 </PRE>
 <LI>Create the protein databases
 <PRE>
 mysql> create database proteins
 mysql> create database proteins0111
-mysql> create database proteins0305
 mysql> create database proteins0405
 mysql> create database proteins070403
-mysql> create database proteins031112
 mysql> create database proteins040115
+mysql> create database proteins040315
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
 </OL>
@@ -619,7 +624,7 @@ mysql> create database swissProt
 &#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
 </em>.
 <!-- above address is genome-mirror at cse.ucsc.edu -->
-<BR><em>Last Modified: 2004-02-10 - 10 Feb. 2004</em>
+<BR><em>Last Modified: 2004-04-01 - 01 April 2004</em>
 <BR>
 			</TD>	    
 		    <TD WIDTH=15></TD></TR>
