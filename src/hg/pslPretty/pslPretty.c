@@ -91,6 +91,7 @@ while (lineFileNext(lf, &line, NULL))
 	sfp->pos = lineFileTell(lf);
 	}
     }
+lineFileClose(&lf);
 }
 
 
