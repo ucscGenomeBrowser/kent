@@ -79,7 +79,7 @@ char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = pslLoad(row+1);
+    el = pslLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);

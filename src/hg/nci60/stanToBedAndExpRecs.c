@@ -105,6 +105,7 @@ struct stanMad *smList=NULL, *sm=NULL;
 struct psl *psl = NULL;
 struct bed *bed = NULL;
 char buff[256];
+warn("File is %s", file);
 smList = stanMadLoadAll(file);
 
 for(sm=smList; sm != NULL; sm = sm->next)
