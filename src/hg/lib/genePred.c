@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.39 2004/03/08 05:20:30 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.40 2004/03/13 05:35:58 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -515,50 +515,62 @@ if (optFields & genePredExonFramesFld)
 eFrames = gp->exonFrames;
 
 
-/* adjust tx range to include stop codon on */
+/* adjust tx range to include stop codon */
 if ((group->strand == '+') && (gp->txEnd == stopCodonStart))
      gp->txEnd = stopCodonEnd;
 else if ((group->strand == '-') && (gp->txStart == stopCodonEnd))
     gp->txStart = stopCodonStart;
 
-i = 0;
+i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
-        {
-        /* set frame if this is a CDS */
-        assert(i < exonCount);
-        if (isdigit(gl->frame))
-            eFrames[i] = (int)gl->frame - '0';
-        }
     if (isExon(gl->feature, isGtf, exonSelectWord))
         {
         chkGroupLine(group, gl, gp);
-        if ((i == 0) || (gl->start > eEnds[i-1]))
+        if ((i < 0) || (gl->start > eEnds[i]))
             {
+            /* start a new exon */
+            ++i;
+            assert(i < exonCount);
             eStarts[i] = gl->start;
             eEnds[i] = gl->end;
-            ++i;
             }
         else
             {
             /* overlap, extend exon, picking the largest of ends */
-            assert(gl->start >= eStarts[i-1]);
-            if (gl->end > eEnds[i-1])
-                eEnds[i-1] = gl->end;
+            assert(i < exonCount);
+            assert(gl->start >= eStarts[i]);
+            if (gl->end > eEnds[i])
+                eEnds[i] = gl->end;
             }
         /* extend exon for stop codon in GTF if needed */
         if (isGtf)
             {
-            if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
-                eEnds[i-1] = stopCodonEnd;
-            else if ((group->strand == '-') && (eStarts[i-1] == stopCodonEnd))
-                eStarts[i-1] = stopCodonStart;
+            if ((group->strand == '+') && (eEnds[i] == stopCodonStart))
+                eEnds[i] = stopCodonEnd;
+            else if ((group->strand == '-') && (eStarts[i] == stopCodonEnd))
+                eStarts[i] = stopCodonStart;
+            }
+        if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
+            {
+            /* set frame if this is a CDS, convert from GFF/GTF definition.
+            * leave unchanged if no frame.*/
+            switch (gl->frame) {
+                case '0':
+                    eFrames[i] = 0;
+                    break;
+                case '1':
+                    eFrames[i] = 2;
+                    break;
+                case '2':
+                    eFrames[i] = 1;
+                    break;
+                }
             }
         }
     }
-gp->exonCount = i;
+gp->exonCount = i+1;
 return gp;
 }
 
