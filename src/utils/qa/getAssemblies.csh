@@ -15,6 +15,7 @@ set host=""
 set found=0
 set dbs=""
 set rr="false"
+set dumpDate=""
 
 if ($#argv < 1 || $#argv > 2) then
   echo
@@ -56,7 +57,8 @@ if ($machine == hgwdev || $machine == hgwbeta) then
   set dbs=`hgsql -N $host -e "SHOW DATABASES"`
 else
   set host=""
-  set dbs=`getRRdatabases.csh $machine`
+  set dumpDate=`getRRdatabases.csh $machine | grep "last dump" | gawk '{print $NF}'`
+  set dbs=`getRRdatabases.csh $machine | grep -v "last dump"`
   set checkMach=`echo $dbs | grep "is not a valid"`
   if ( $status == 0 ) then
     echo "  $dbs"
@@ -154,7 +156,7 @@ if ( $ok != 1 ) then
 endif
 
 if ( $rr == "true" ) then
-  echo "  as of last TABLE STATUS dump"
+  echo "  as of last TABLE STATUS dump, $dumpDate"
   echo 
 endif
 echo

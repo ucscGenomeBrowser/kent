@@ -17,9 +17,9 @@ set fullpath1=""
 if ($#argv != 1) then
   echo
   echo "  gets the names of all databases on an RR (or mgc) machine"
-  echo "  using mark's genbank dumps."
+  echo "  not real-time. uses morning TABLE STATUS dump."
   echo
-  echo "    usage: RRmachine"
+  echo "    usage: machine"
   echo
   exit
 else
@@ -64,4 +64,4 @@ endif
 
 # get names of databases from files database.tbls in marks directories
 ls -1 $fullpath1 | grep "tbls" | sed -e "s/\.tbls//" | sort
-
+echo "last dump: $dirname1"
