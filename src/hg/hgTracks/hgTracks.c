@@ -1453,6 +1453,42 @@ setTgDarkLightColors(tg, 0, 100, 0);
 return tg;
 }
 
+void loadSanger22Gene(struct trackGroup *tg)
+/* Load up Softberry genes. */
+{
+tg->items = lfFromGenePredInRange("sanger22", chromName, winStart, winEnd);
+}
+
+char *sanger22Name(struct trackGroup *tg, void *item)
+/* Return Sanger22 name. */
+{
+struct linkedFeatures *lf = item;
+char *full = lf->name;
+static char abbrev[64];
+
+strncpy(abbrev, full, sizeof(abbrev));
+abbr(abbrev, "Em:");
+abbr(abbrev, ".C22");
+//abbr(abbrev, ".mRNA");
+return abbrev;
+}
+
+
+struct trackGroup *sanger22Tg()
+/* Make track group of Sanger's chromosome 22 gene annotations. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgSanger22";
+tg->visibility = tvHide;
+tg->longLabel = "Victoria Haghighi's Test Track";
+tg->shortLabel = "Victoria Test";
+tg->loadItems = loadSanger22Gene;
+tg->itemName = sanger22Name;
+setTgDarkLightColors(tg, 0, 100, 180);
+return tg;
+}
+
+
 void goldLoad(struct trackGroup *tg)
 /* Load up golden path from database table to trackGroup items. */
 {
@@ -4689,6 +4725,7 @@ if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
 slSafeAddHead(&tGroupList, coverageTrackGroup());
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
+if (sameString(chromName, "chr22") && hTableExists("sanger22")) slSafeAddHead(&tGroupList, sanger22Tg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
 if (hTableExists("softberryGene")) slSafeAddHead(&tGroupList, softberryGeneTg());
@@ -4710,8 +4747,8 @@ if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
 if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
 #ifdef CHUCK_CODE
-if (hTableExists("rosettaTe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaTeTg());   
-if (hTableExists("rosettaPe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
+if (sameString(chromName, "chr22") && hTableExists("rosettaTe")) slSafeAddHead(&tGroupList,rosettaTeTg());   
+if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
 #endif /*CHUCK_CODE*/
 /* This next track is being phased out as the Rosetta data is being split into
    two data sets, keep this one around for a little while for debugging */
