@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.138 2004/04/19 20:35:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.139 2004/04/19 20:43:52 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4240,7 +4240,7 @@ char *table2 = getTable2Name();
 char *op = cgiOptionalString("tbIntersectOp");
 char *constraints, *constraints2;
 int numChroms;
-int numCols;
+int numCols = 0;
 int *itemCounts, *bitCounts, *itemUncCounts;
 int *strandPCounts, *strandMCounts, *strandQCounts;
 int **chromLengthArrs;
