@@ -12,7 +12,7 @@ hgTracks: $O
 	mv a.out hgTracks
 	strip hgTracks
 	chmod a+rx hgTracks
-	mv hgTracks /usr/local/apache/cgi-bin/hgTracks
+	mv hgTracks $(HGCGI)
 
 
 lib:
