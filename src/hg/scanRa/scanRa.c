@@ -6,7 +6,7 @@
 #include "keys.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: scanRa.c,v 1.4 2003/10/10 17:00:44 heather Exp $";
+static char const rcsid[] = "$Id: scanRa.c,v 1.5 2003/10/10 17:01:27 heather Exp $";
 
 enum commandType
     {
@@ -156,8 +156,8 @@ errAbort(
 int main(int argc, char *argv[])
 {
 char *com;
-char **raFiles;
-int raCount;
+char **raFiles = NULL;
+int raCount = 0;
 char *expFile;
 char *expression;
 size_t size;
