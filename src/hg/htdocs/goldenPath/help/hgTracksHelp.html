@@ -69,7 +69,7 @@
   		<LI><A CLASS="toc" HREF="#IndivTracks">
 			Annotation track descriptions</A>
 	</B></UL></TD></TR></TABLE>
-<em>Last updated on 1 Apr. 2004. 
+<em>Last updated on 17 May 2004. 
 <A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">Questions and feedback welcome</A></em>.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
@@ -206,7 +206,8 @@ window:
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>3.</B></TD><TD>
 	Click the <I>Submit</I> button to open up the Genome Browser window to the
-	requested location. 
+	requested location. In cases where a specific term (accession, gene name,
+	etc.) was queried, the item will be highlighted in the display.
 	</TD></TR>
 </TABLE>
 <P>
@@ -345,8 +346,8 @@ misleading matches in genome coordinates found by alignment.
 <p>
 The Genome Browser page displays a genome location specified
 through a Gateway position search, a BLAT search, or an uploaded custom annotation track.
-There are three main features on this page: the annotations tracks
-image, a set of navigation controls, and a set of display controls. 
+There are four main features on this page: a set of navigation controls, a 
+chromosome ideogram, the annotations tracks image, and a set of display controls.
 <P>
 The first time you open the
 Genome Browser, it will use the application default values to configure the
@@ -395,7 +396,10 @@ display conventions:<BR>
 	representing introns. The 5' and 3' untranslated regions (UTRs) are displayed 
 	as thinner blocks on the leading and trailing ends of the aligning
 	regions. In full display mode, arrowheads on
-	the connecting intron lines indicate the direction of transcription.</TD></TR>
+	the connecting intron lines indicate the direction of transcription.
+	In situations where no intron is visible (e.g. single-exon genes,
+	extremely zoomed-in displays), the arrowheads are displayed on the exon 
+	block itself.</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mRNA 
 	tracks:</B> 
@@ -404,10 +408,12 @@ display conventions:<BR>
 	In dense display mode, darker-shaded items correspond to better 
 	quality matches.  
 	In full display mode, arrowheads on the lines indicate the direction of 
-	transcription.  Only 300 track entries can be displayed in the
-	annotation track window at a time in full display mode; the track 
-	automatically defaults to dense display mode if the number exceeds this 
-	limit.
+	transcription.  
+	In situations where no gap lines are visible, the arrowheads are 
+	displayed on the block itself.  Only 300 track entries can be displayed 
+	in the annotation track window at a time in full display mode; the track 
+	automatically defaults to a denser display mode if the number exceeds 
+	this limit.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>EST and BLAT alignment 
@@ -416,8 +422,9 @@ display conventions:<BR>
 	mode, the degree of darkness corresponds to the number of features aligning to 
 	the region. In full display mode, the aligning regions are connected by lines 
 	representing gaps (usually spliced-out introns), with arrowheads indicating 
-	the direction of transcription. Display limitations similar to the mRNA
-	tracks apply to this track.</TD></TR>
+	the direction of transcription. In situations where no gap lines are 
+	visible, the arrowheads are displayed on the block itself. Display 
+	limitations similar to the mRNA tracks apply to this track.</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Cross-species synteny and
 	orthology tracks:</B> 
@@ -565,6 +572,10 @@ best suit the display capabilities of your monitor, enter a new value in the
 <I>image width</I> text box, then click the <I>Jump</I> button. For example, setting the 
 display to 1100 pixels on a 19" monitor will increase the visible portion of the genome
 and reduce the need for redraws. The maximum supported width is 5000 pixels.
+<P>
+<B>Hiding the chromosome ideogram</B><BR>
+To hide the chromosome ideogram displayed above the annotation tracks image,
+uncheck the <I>Chromosome</I> box located below the tracks image.
 <P>
 <B>Printing a copy of the annotation track window</B><BR>
 The Genome Browser provides a mechanism for saving a copy of 
