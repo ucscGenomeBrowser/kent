@@ -8,11 +8,11 @@
 #include "jksql.h"
 #include "plasEndPairs.h"
 
-struct lfs *lfsLoad(char **row)
-/* Load a lfs from row fetched with select * from lfs
- * from database.  Dispose of this with lfsFree(). */
+struct plasEndPairs *plasEndPairsLoad(char **row)
+/* Load a plasEndPairs from row fetched with select * from plasEndPairs
+ * from database.  Dispose of this with plasEndPairsFree(). */
 {
-struct lfs *ret;
+struct plasEndPairs *ret;
 int sizeOne,i;
 char *s;
 
@@ -35,17 +35,17 @@ assert(sizeOne == ret->lfCount);
 return ret;
 }
 
-struct lfs *lfsLoadAll(char *fileName) 
-/* Load all lfs from a tab-separated file.
- * Dispose of this with lfsFreeList(). */
+struct plasEndPairs *plasEndPairsLoadAll(char *fileName) 
+/* Load all plasEndPairs from a tab-separated file.
+ * Dispose of this with plasEndPairsFreeList(). */
 {
-struct lfs *list = NULL, *el;
+struct plasEndPairs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[12];
 
 while (lineFileRow(lf, row))
     {
-    el = lfsLoad(row);
+    el = plasEndPairsLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -53,12 +53,12 @@ slReverse(&list);
 return list;
 }
 
-struct lfs *lfsLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all lfs from table that satisfy where clause. The
+struct plasEndPairs *plasEndPairsLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all plasEndPairs from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
- * Dispose of this with lfsFreeList(). */
+ * Dispose of this with plasEndPairsFreeList(). */
 {
-struct lfs *list = NULL, *el;
+struct plasEndPairs *list = NULL, *el;
 struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
@@ -69,7 +69,7 @@ if (where != NULL)
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = lfsLoad(row);
+    el = plasEndPairsLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -78,10 +78,10 @@ dyStringFree(&query);
 return list;
 }
 
-struct lfs *lfsCommaIn(char **pS, struct lfs *ret)
-/* Create a lfs out of a comma separated string. 
+struct plasEndPairs *plasEndPairsCommaIn(char **pS, struct plasEndPairs *ret)
+/* Create a plasEndPairs out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new lfs */
+ * return a new plasEndPairs */
 {
 char *s = *pS;
 int i;
@@ -125,11 +125,11 @@ s = sqlEatChar(s, ',');
 return ret;
 }
 
-void lfsFree(struct lfs **pEl)
-/* Free a single dynamically allocated lfs such as created
- * with lfsLoad(). */
+void plasEndPairsFree(struct plasEndPairs **pEl)
+/* Free a single dynamically allocated plasEndPairs such as created
+ * with plasEndPairsLoad(). */
 {
-struct lfs *el;
+struct plasEndPairs *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
@@ -144,21 +144,21 @@ freeMem(el->lfNames);
 freez(pEl);
 }
 
-void lfsFreeList(struct lfs **pList)
-/* Free a list of dynamically allocated lfs's */
+void plasEndPairsFreeList(struct plasEndPairs **pList)
+/* Free a list of dynamically allocated plasEndPairs's */
 {
-struct lfs *el, *next;
+struct plasEndPairs *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    lfsFree(&el);
+    plasEndPairsFree(&el);
     }
 *pList = NULL;
 }
 
-void lfsOutput(struct lfs *el, FILE *f, char sep, char lastSep) 
-/* Print out lfs.  Separate fields with sep. Follow last field with lastSep. */
+void plasEndPairsOutput(struct plasEndPairs *el, FILE *f, char sep, char lastSep) 
+/* Print out plasEndPairs.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
 fprintf(f, "%d", el->bin);

@@ -1,5 +1,5 @@
 table plasEndPairs
-"Constant plasEndPairs information"
+"Standard linked features series table"
    (
    short  bin;        "Bin number for browser speedup"
    string chrom;      "Human chromosome or FPC contig"
