@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.15 2004/11/10 02:10:43 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.16 2004/12/08 02:11:03 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1527,21 +1527,24 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	errAbort("Doesn't start with <HTML> tag");
     tag = tag->next;
     if (tag == NULL || !sameWord(tag->name, "HEAD"))
-	errAbort("<HEAD> tag does not follow <HTML> tag");
-    for (;;)
+	warn("<HEAD> tag does not follow <HTML> tag");
+    else
 	{
+	for (;;)
+	    {
+	    tag = tag->next;
+	    if (tag == NULL)
+		errAbort("Missing </HEAD>");
+	    if (sameWord(tag->name, "TITLE"))
+		gotTitle = TRUE;
+	    if (sameWord(tag->name, "/HEAD"))
+		break;
+	    }
+	if (!gotTitle)
+	    warn("No title in <HEAD>");
+	validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
 	tag = tag->next;
-	if (tag == NULL)
-	    errAbort("Missing </HEAD>");
-	if (sameWord(tag->name, "TITLE"))
-	    gotTitle = TRUE;
-	if (sameWord(tag->name, "/HEAD"))
-	    break;
 	}
-    if (!gotTitle)
-	warn("No title in <HEAD>");
-    validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
-    tag = tag->next;
     if (tag == NULL || !sameWord(tag->name, "BODY"))
 	errAbort("<BODY> tag does not follow <HTML> tag");
     tag = validateBody(page, tag->next);
