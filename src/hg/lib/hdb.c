@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.184 2004/06/08 00:00:05 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.185 2004/06/11 18:30:21 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1823,8 +1823,6 @@ struct dbDb *archiveDbDbLoad(char **row)
   main production dbDb, so we are not using the autoSql functions */
 {
     struct dbDb *ret;
-    int sizeOne,i;
-    char *s;
 
     AllocVar(ret);
     ret->name = cloneString(row[0]);
@@ -1900,7 +1898,7 @@ char *hPreviousAssembly(char *database)
  * Must free returned string */
 
 {
-struct dbDb *dbList = NULL, *db, *prevDb, *lastDb;
+struct dbDb *dbList = NULL, *db, *prevDb;
 char *prev = NULL;
 
 /* NOTE: relies on this list being ordered descendingly */
