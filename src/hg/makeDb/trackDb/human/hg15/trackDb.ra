@@ -91,12 +91,29 @@ track mammalNotHumanSynt
 shortLabel Not Human Synteny 
 longLabel Mammal Not Human Synteny (mm3)
 group compGeno
-priority 125.96
+priority 125.95
 visibility hide
 color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 6 +
+type genePred
+
+track mammalNotHumanGene2
+shortLabel Not Human SyntGene (orthoMap)
+longlabel Mammal Not Human Syntenic Genes (mm3) - orthoMap
+group compGeno
+priority 125.97
+visibility hide
+color 100,50,0
+type genePred
+
+track mm3MrnaOrthoMap
+shortLabel Mouse mRNA orthoMap
+longLabel Mouse mRNA synteny mapping (blastz)
+group compGeno
+priority 125.98
+visibility hide 
+color 100,50,0
+type genePred
+
 
 track axtBestMm3
 shortLabel Human/Mouse
@@ -363,6 +380,14 @@ shortLabel Mammal blastToPsl
 longLabel blastToPsl of MammalNotHuman tblast
 group x
 priority 1101
+visibility hide
+type psl protein
+
+track pfamSeeds
+shortLabel pfamSeeds BLAT
+longLabel pfam-A Domain Seeds
+group x
+priority 1101.12
 visibility hide
 type psl protein
 
