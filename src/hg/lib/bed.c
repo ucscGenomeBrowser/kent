@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.20 2003/08/15 17:43:50 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.21 2003/08/20 22:04:03 krish Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -326,8 +326,8 @@ if (wordCount > 14)
 return bed;
 }
 
-struct bed *bedLoadNAll(char *fileName, int numFields) 
-/* Load all bed from a tab-separated file.
+struct bed *bedLoadNAllChrom(char *fileName, int numFields, char* chrom) 
+/* Load bed entries from a tab-separated file that have the given chrom.
  * Dispose of this with bedFreeList(). */
 {
 struct bed *list = NULL, *el;
@@ -337,11 +337,21 @@ char *row[numFields];
 while (lineFileRow(lf, row))
     {
     el = bedLoadN(row, numFields);
-    slAddHead(&list, el);
+    if(chrom == NULL || sameString(el->chrom, chrom))
+        slAddHead(&list, el);
+    else
+        freez(&el);
     }
 lineFileClose(&lf);
 slReverse(&list);
 return list;
+}
+
+struct bed *bedLoadNAll(char *fileName, int numFields) 
+/* Load all bed from a tab-separated file.
+ * Dispose of this with bedFreeList(). */
+{
+return bedLoadNAllChrom(fileName, numFields, NULL);
 }
 
 struct bed *bedLoadAll(char *fileName)
