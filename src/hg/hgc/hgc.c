@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.454 2003/07/15 17:10:12 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.455 2003/07/17 18:23:41 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7702,13 +7702,13 @@ if (row != NULL)
 	    {
 	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
-	if( infoRow->RGDId != 0)
+	if( infoRow->MGIId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\">%d</A></TD></TR>\n",sChar,infoRow->RGDId,infoRow->RGDId ); 
+	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\">%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId ); 
 	    }
-	if( strcmp(infoRow->RGDName, "") )
+	if( strcmp(infoRow->MGIName, "") )
 	    {
-	    printf("<TR><TH ALIGN=left>MGI Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->RGDName);
+	    printf("<TR><TH ALIGN=left>MGI Marker Name:</TH><TD>%s</TD></TR>\n", infoRow->MGIName);
 	    }
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
@@ -7720,22 +7720,22 @@ if (row != NULL)
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	/* Print out information from genetic maps for this marker */
-	if(strcmp(infoRow->fhhName, "") || strcmp(infoRow->shrspName, "") || strcmp(infoRow->rhName, ""))
+	if(strcmp(infoRow->wigName, "") || strcmp(infoRow->mgiName, "") || strcmp(infoRow->rhName, ""))
 	  {
 	    printf("<H3>Map Position</H3>\n");  
 	    printf("<TABLE>\n");
 	  }
-	if(strcmp(infoRow->fhhName, ""))
+	if(strcmp(infoRow->wigName, ""))
 	    {
 	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
 	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->fhhName, infoRow->fhhChr, infoRow->fhhGeneticPos); 
+	       infoRow->wigName, infoRow->wigChr, infoRow->wigGeneticPos); 
 	    }
-	if(strcmp(infoRow->shrspName, ""))
+	if(strcmp(infoRow->mgiName, ""))
 	    {
 	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
 	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->shrspName, infoRow->shrspChr, infoRow->shrspGeneticPos); 
+	       infoRow->mgiName, infoRow->mgiChr, infoRow->mgiGeneticPos); 
 	    }
 	if(strcmp(infoRow->rhName, ""))
 	    {
