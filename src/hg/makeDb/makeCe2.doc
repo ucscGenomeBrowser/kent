@@ -604,22 +604,17 @@ Submission to last job:         58555s     975.92m    16.27h    0.68d
     #	/iscratch/i/worms/Celegans2/unmaskedFa/chrI.fa \
     #	/cluster/store5/worm/ce2/bed/waba/out/chrI/c0907.wab
 XXXX - running 2004-04-07 - retrying this stand-along on kkr1u00
+    # after about 1.5 hours fails with the error:
+    # waba: xenbig.c:550: mergeTwo: Assertion `c->qStart == qStart &&
+    #	c->qEnd == qEnd' failed.
+    # Abort
+
+    # Ignoring that error, and moving on
 
     # next machine
     ssh hgwdev
-    # you may need to build hgWaba
-    cd ~/kent/src/hg/makeDb/hgWaba
-    make
-    # hgWaba.c has been adjusted to avoid the squeezed assert by
-    #  ignoring them.  That may want to be looked at some day.
-    #  (The waba cluster run has a number of errors too.  waba is not
-    #	perfect, but it is as good as the Intronerator was...)
 
-    cd ~/ce2/bed/waba
-    # one of the outputs produces a result that won't process properly
-    # with hgWaba.  Move it out of the way
-    mv out/chrII/c0911.wab out/chrII_c0911.wab.broken
- 
+    cd /cluster/data/ce2/bed/waba
     mkdir Load
     cd Load
     #  The cat through the pipe to hgWaba will avoid making large files
@@ -631,24 +626,24 @@ for c in I II III IV V X M
 do
 	echo -n "${c} "
         cat /cluster/store5/worm/ce2/bed/waba/out/chr${c}/c*.wab |
-        ~/bin/i386/hgWaba ce2 Cbr chr${c} 0 stdin > proc${c}.out 2>&1
+        /cluster/bin/i386/hgWaba ce2 Cbr chr${c} 0 stdin > proc${c}.out 2>&1
 done
 
 exit 0
 '_EOF_'
+    chmod +x loadEm.sh
 
     # run it to load the waba track:
     ./loadEm.sh
     # remove garbage temp file:
-    rm full_waba.tab
-    rm chrom_waba.tab
+    rm full_waba.tab chrom_waba.tab
 
     # worm/ce2/trackDb.ra entry:
 #   track cbrWaba
 #   shortLabel Briggsae Waba
 #   longLabel C. briggsae Waba Alignments
-#   group genes
-#   priority 50
+#   group compGeno
+#   priority 20
 #   visibility dense
 #   color 140,0,200
 #   altColor 210,140,250
