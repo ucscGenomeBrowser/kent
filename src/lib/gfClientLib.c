@@ -278,11 +278,13 @@ for (range = combined->components; range != NULL; range = range->next)
     if (qEnd > combined->qEnd) qEnd = combined->qEnd;
     if (tEnd > combined->tEnd) tEnd = combined->tEnd;
 
-    ali = ffFind(qSeq->dna + qStart - combined->qStart,
-                 qSeq->dna + qEnd - combined->qStart,
+    ali = ffFind(qSeq->dna + qStart,
+                 qSeq->dna + qEnd,
 		 tSeq->dna + tStart - combined->tStart,
 		 tSeq->dna + tEnd - combined->tStart,
 		 stringency);
+    // uglyf("  qStart %d, combined->qStart %d, tStart %d, combined->tStart %d\n", qStart, combined->qStart, tStart, combined->tStart);
+    // uglyf("  ffFind %d-%d %d-%d has %d blocks\n", qStart, qEnd, tStart, tEnd, ffAliCount(ali));
     if (ali != NULL)
         {
 	AllocVar(ffi);
