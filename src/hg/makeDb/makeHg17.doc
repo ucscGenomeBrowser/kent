@@ -2558,7 +2558,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     mkdir /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
     cd /cluster/data/hg17/bed
     ln -s /cluster/data/hg17/bed/blastz.galGal2.2004-06-14 blastz.galGal2
-    cd galGal2
+    cd blastz.galGal2
     # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
     # repeats.
     cat << '_EOF_' > DEF
@@ -2580,7 +2580,7 @@ BLASTZ_ABRIDGE_REPEATS=1
 SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
 SEQ1_RMSK=
 SEQ1_FLAG=
-SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.Chicken
+SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.chicken
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -2607,6 +2607,7 @@ SEQ2_LEN=$BASE/S2.len
     # prepare first cluster run
     ssh kk
     cd /cluster/data/hg17/bed/blastz.galGal2
+    bash
     source DEF
     # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run0.sh
     #	it is a generic script and works for any assembly
@@ -2625,6 +2626,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     #	the file server to its knees.  Run this on the small cluster.
     ssh kki
     cd /cluster/data/hg17/bed/blastz.galGal2
+    bash
     source DEF
     # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
     #	fixup machine check, should be kki, not kk
@@ -2639,6 +2641,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 # Submission to last job:           590s       9.83m     0.16h    0.01d
 
     #	Third cluster run to convert lav's to axt's
+    bash
     source DEF
     cd /cluster/data/hg17/bed/blastz.galGal2
     #	The copy of this in mm4 was broken, fixed here
