@@ -1174,6 +1174,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#SangerGene">sangerGene</A> 
   - Sanger gene predictions, containing protein ID (<em>C. elegans</em>)
   <LI><A 
+  href="#GenePredExt">sangerGenefinder</A> 
+  - Sanger gene predictions, containing protein ID (<em>C. elegans</em>)
+  <LI><A 
   href="#KnownIsoforms">sangerIsoforms</A> 
   - Links together various transcripts of Sanger gene into a cluster (<em>C. elegans</em>)
   <LI><A 
@@ -2223,6 +2226,30 @@ alternative-splicing situations, each transcript has a row in this table.
     uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
+    )
+</PRE>
+
+<H4><A name=GenePredExt></A>Gene Predictions (Extended)</H4>
+The following definition is used for extended gene prediction tables. In 
+alternative-splicing situations, each transcript has a row in this table.
+<PRE>table genePredExt
+"A gene prediction with some additional info."
+    (
+    string name;        	"Name of gene (usually transcript_id from GTF)"
+    string chrom;       	"Chromosome name"
+    char[1] strand;     	"+ or - for strand"
+    uint txStart;       	"Transcription start position"
+    uint txEnd;         	"Transcription end position"
+    uint cdsStart;      	"Coding region start"
+    uint cdsEnd;        	"Coding region end"
+    uint exonCount;     	"Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    uint id;            	"Unique identifier"
+    string name2;       	"Alternate name (e.g. gene_id from GTF)"
+    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
+    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    lstring exonFrames; 	"Exon frame offsets {0,1,2}"
     )
 </PRE>
 
@@ -3350,8 +3377,6 @@ The following definition is used for: gc5Base, regPotential2X, regPotential3X.
 
 
 <H4><A name=ScoredRef></A>Scored Ref</H4>
-The following table is used for humor alignments.
-
 <PRE>table scoredRef
 "A score, a range of positions in the genome and a extFile offset"
    (
