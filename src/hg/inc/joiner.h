@@ -171,10 +171,12 @@ boolean joinerDtfAllSameTable(struct joinerDtf *fieldList);
 
 struct joinerPair *joinerFindRoute(struct joiner *joiner, 
 	struct joinerDtf *a,  struct joinerDtf *b);
-/* Find route between a and b. */
+/* Find route between a and b.  Note the field element of a and b
+ * are unused. */
 
 struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner, 
-	struct joinerDtf *fieldList);
-/* Return route that gets to all tables in fieldList.  */
+	struct joinerDtf *tableList);
+/* Return route that gets to all tables in fieldList.  Note that
+ * the field element of the items in tableList can be NULL. */
 
 #endif /* JOINER_H */
