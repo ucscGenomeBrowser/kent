@@ -10,7 +10,7 @@ use FindBin qw($Bin);
 use lib "$Bin/perllib";
 use TrackDb;
 
-my @dbs = ('hg7', 'hg8', 'hg10', undef);
+my @dbs = ('genome-centdb', 'hg7', 'hg10', undef);
 
 foreach my $db (@dbs) {
     my $dbName = $db;

@@ -54,9 +54,9 @@ color 120,70,30
 altColor 0,0,0
 type bed 4+
 
-track syntenyBerk
-shortLabel Berkeley Synteny
-longLabel UC Berkeley Corresponding Chromosome in Mouse (100k window)
+track syntenySanger
+shortLabel Sanger Synteny
+longLabel Sanger Corresponding Chromosome in Mouse (100k window)
 priority 4.4
 visibility hide
 color 120,70,30
