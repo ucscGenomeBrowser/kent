@@ -230,6 +230,8 @@ struct trackGroup
     float priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
 };
 
+void loadSampleIntoLinkedFeature(struct trackGroup *tg);
+
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
 
 static boolean tgLoadNothing(){return TRUE;}
@@ -6405,6 +6407,9 @@ int yAfterRuler = gfxBorder;
 int relNumOff;
 int i;
 
+int ymin, ymax;
+int scaledHeightPer;
+
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 insideWidth = pixWidth-gfxBorder-insideX;
@@ -6490,8 +6495,21 @@ if (withLeftLabels)
 		    }
 		break;
 	    case tvDense:
+
 		if (withCenterLabels)
 		    y += fontHeight;
+
+        /*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
+        if( group->loadItems == loadSampleIntoLinkedFeature &&
+            group->heightPer > (3 * fontHeight ) )
+            {
+            ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+            ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
+			    group->ixColor, font, "0%");
+		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
+			    group->ixColor, font, "100%");
+            }
 		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
 			group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
