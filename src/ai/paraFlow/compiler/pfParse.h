@@ -104,7 +104,14 @@ struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc,
 	struct pfParse *parent);
 /* Convert file to parse tree using tkz. */
 
+void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
+	enum pfParseType newType);
+/* Convert type of pp and any children that are of oldType to newType */
+
 void pfParseDump(struct pfParse *pp, int level, FILE *f);
 /* Write out pp (and it's children) to file at given level of indent */
+
+struct pfParse *pfParseProgram(char *fileName, struct pfCompile *pfc);
+/* Return parse tree of file and any files gone into. */
 
 #endif /* PFPARSE_H */

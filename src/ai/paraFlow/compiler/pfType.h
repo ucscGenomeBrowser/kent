@@ -33,6 +33,7 @@ struct pfType
     struct pfParse *init;	/* Initialization if any. */
     bool isTuple;		/* True if it's a tuple. */
     bool isFunction;		/* True if it's a function. */
+    bool isModule;		/* True if it's a module. */
     };
 
 struct pfType *pfTypeNew(struct pfBaseType *base);

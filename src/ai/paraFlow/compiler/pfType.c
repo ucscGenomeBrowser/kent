@@ -53,6 +53,10 @@ else if (ty->isFunction)
     fprintf(f, " into ");
     pfTypeDump(ty->children->next, f);
     }
+else if (ty->isModule)
+    {
+    fprintf(f, ".module.");
+    }
 else
     {
     fprintf(f, "%s", ty->base->name);

@@ -1326,3 +1326,142 @@ pfParseTokens(tokList, scope, modParse);
 return modParse;
 }
 
+void collectDots(struct dyString *dy, struct pfParse *pp)
+/* Make sure that pp is really a pptDots or a pptName. 
+ * Output name plus any necessary dots into dy. */
+{
+if (pp->type == pptNameUse)
+    {
+    dyStringAppend(dy, pp->name);
+    return;
+    }
+else if (pp->type == pptDot)
+    {
+    for (pp = pp->children; pp != NULL; pp = pp->next)
+        {
+	switch (pp->type)
+	    {
+	    case pptNameUse:
+		dyStringAppend(dy, pp->name);
+		if (pp->next != NULL)
+		    dyStringAppend(dy, ".");
+		break;
+	    case pptRoot:
+	        dyStringAppend(dy, "/");
+		break;
+	    case pptParent:
+	        dyStringAppend(dy, "../");
+		break;
+	    case pptSys:
+	    case pptUser:
+	    case pptSysOrUser:
+	        break;
+	    }
+	}
+    }
+else
+    expectingGot("name", pp->tok);
+}
+
+void expandInto(struct pfParse *program, 
+	struct pfCompile *pfc, struct pfParse *pp)
+/* Go through program walking into modules. */
+{
+if (pp->type == pptInto)
+    {
+    struct dyString *dy = dyStringNew(0);
+    struct hashEl *hel;
+    char *module = NULL;
+    collectDots(dy, pp->children);
+    dyStringAppend(dy, ".pf");
+
+    hel = hashLookup(pfc->modules, dy->string);
+    if (hel != NULL)
+        module = hel->name;
+
+    if (module == NULL)
+        {
+	struct pfTokenizer *tkz = pfc->tkz;
+	struct pfSource *oldSource = tkz->source;
+	char *oldPos = tkz->pos;
+	char *oldEndPos = tkz->endPos;
+	struct pfParse *mod;
+	tkz->source = pfSourceNew(dy->string);
+	tkz->pos = tkz->source->contents;
+	tkz->endPos = tkz->pos + tkz->source->contentSize;
+	mod = pfParseFile(dy->string, pfc, program);
+	expandInto(program, pfc, mod);
+	tkz->source = oldSource;
+	tkz->pos = oldPos;
+	tkz->endPos = oldEndPos;
+	slAddHead(&program->children, mod);
+	module = hashStoreName(pfc->modules, dy->string);
+	}
+    pp->name = module;
+    dyStringFree(&dy);
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    expandInto(program, pfc, pp);
+}
+
+void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
+	enum pfParseType newType)
+/* Convert type of pp and any children that are of oldType to newType */
+{
+if (pp->type == oldType)
+    pp->type = newType;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    pfParseTypeSub(pp, oldType, newType);
+}
+
+void varDecAndAssignToVarInit(struct pfParse *pp)
+/* Convert pptVarDec to pptVarInit. */
+{
+struct pfParse *p;
+
+for (p = pp->children; p != NULL; p = p->next)
+    varDecAndAssignToVarInit(p);
+if (pp->type == pptVarDec)
+    {
+    pp->type = pptVarInit;
+    pp->name = pp->children->next->name;
+    }
+else if (pp->type == pptAssignment)
+    {
+    struct pfParse *left = pp->children;
+    if (left->type == pptVarDec)
+        {
+	struct pfParse *right = left->next;
+	pp->type = pptVarInit;
+	pp->children = left->children;
+	pp->name = left->name;
+	slAddTail(&pp->children, right);
+	}
+    }
+if (pp->type == pptVarInit)
+    {
+    struct pfParse *type = pp->children;
+    struct pfParse *name = type->next;
+    pfParseTypeSub(type, pptNameUse, pptTypeName);
+    name->type = pptSymName;
+    }
+}
+
+
+struct pfParse *pfParseProgram(char *fileName, struct pfCompile *pfc)
+/* Return parse tree of file and any files gone into. Variables are
+ * not bound yet. */
+{
+struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
+struct pfParse *pp = pfParseFile(fileName, pfc, program);
+
+/* Go into other modules, and put initial module at end of list. */
+expandInto(program, pfc, pp);
+slAddHead(&program->children, pp);
+slReverse(&program->children);
+
+/* Tidy up the parse tree a bit. */
+varDecAndAssignToVarInit(program);
+return program;
+}
+
