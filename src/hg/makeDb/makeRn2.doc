@@ -570,7 +570,7 @@ CREATE REFSEQ GENES TRACK (DONE 02/09/03)
     # Don't worry about the "No gene name" errors
 
     # Add RefSeq status info
-    hgRefSeqStatus rn2 loc2ref
+    hgRefSeqStatus -rat rn2 loc2ref
 
 
 REFFLAT (DONE 02/09/03)
@@ -726,7 +726,7 @@ PRODUCING GENSCAN PREDICTIONS (TODO - REDO)
 LOADING RAT-HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 
     # Translate Penn State .lav files into sorted axt:
-    ssh kkstore
+    ssh eieio
     set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
     set seq1_dir="/cluster/store4/rn2/mixedNib/"
     set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
@@ -762,7 +762,7 @@ LOADING RAT-HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (TODO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
-    ssh kkstore
+    ssh eieio
     set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
     set seq1_dir="/cluster/store4/rn2/mixedNib/"
     set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
@@ -821,7 +821,7 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (TODO)
 
 MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
-    ssh kkstore
+    ssh eieio
     cd ~/rn2/bed/blastz.hg13.2003-02-13-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
@@ -863,63 +863,67 @@ TWINSCAN GENE PREDICTIONS (TODO)
     hgPepPred rn2 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO - REDO)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (DONE 03/11/03)
 
-Here you align vertebrate mRNAs against the masked genome on the
-cluster you set up during the previous step.
+    # Here you align non-mouse mRNAs against the masked genome on the
+    # cluster you set up during the previous step.
+    # Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from 
+    # Genbank into /cluster/store2/genbank.133 and unpacked by organism into 
+    # /cluster/store2/mrna.133/org. 
 
-Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store2/genbank.133 and unpacked by organism into /cluster/store2/mrna.133/org. 
-
-Set up cluster run more or less as so:
+    # Set up cluster run more or less as so:
       ssh kk
       cd ~/rn2/bed
       mkdir xenoMrna
       cd xenoMrna
+      ls -1S /scratch/hg/rn2/trfFa/* > genome.lst
+      cp -R /cluster/store2/mrna.133/org /mnt/scratch/hg/mrna.133
+    # The below ls command fails when you have too many files so skip it and 
+    # instead run the find command after it.
+    #      ls -1S /mnt/scratch/hg/mrna.133/org/*/mrna.fa > allMrna.lst
+      find /mnt/scratch/hg/mrna.133/org -name mrna.fa -ls \
+        | awk '{print $7,$11}' | grep -v /Rattus_norvegicus/ \
+        | sort -gr | awk '{print $2}' \
+        >  allMrna.lst
+    # Put the first line of allMrna.lst into 1.org, the second line into 
+    # 2.org, and so forth:
+      foreach n (1 2 3 4 5 6)
+        head -$n allMrna.lst | tail -1 > $n.org
+      end
+    # After the 6th line just leave the rest in 7.org.
+      tail +7 allMrna.lst > 7.org
+    # Then
+      ls -1 *.org > mrna.lst
+      cp ~/lastRn/bed/xenoMrna/gsub .
       mkdir psl
-      ls -1S /mnt/scratch/hg/rn2/trfFa/* > genome.lst
-      # If it hasn't been done already do:
-      cp -r /cluster/store2/mrna.133/org /mnt/scratch/hg/mrna.133/org
-      find /mnt/scratch/hg/mrna.133/org -name mrna.fa | \
-         xargs ls -l | awk '{print $5,$9}' | sort -gr | \
-         awk '{print $2}' >  allMrna.lst
-
-This produces a size-sorted file of all organisms mrna.
-Then edit xenoRna.lst removing the Rattus_norvegicus line, and writing
-the first line into 1.org, the second line into 2.org,  and
-so forth.  After the 6th line just leave the rest in 7.org.
-Then
-      ls -1 *.org > ratXenoRna.lst
-      cp ~/rn1/bed/xenoMrna/gsub .
-      gensub2 genome.lst ratXenoRna.lst gsub spec
+      gensub2 genome.lst mrna.lst gsub spec
       para create spec
       para try
       para check
-If all looks well do
-      para push.
+    # If all looks well do
+      para push
 
-Sort xeno mRNA alignments as so:
+    # Sort xeno mRNA alignments as so:
        ssh eieio
        cd ~/rn2/bed/xenoMrna
-       pslSort dirs raw.psl /cluster/store4/temp psl
+       pslSort dirs raw.psl /cluster/store2/temp psl
        pslReps raw.psl cooked.psl /dev/null -minAli=0.25
        liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store4/temp chrom.psl
+       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoMrna.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
 
-Load into database as so:
+    # Load into database as so:
        ssh hgwdev
        cd ~/rn2/bed/xenoMrna
        hgLoadPsl rn2 xenoMrna.psl -tNameIx
 
-Make the xenoRna file
-
-       Make a /gbdb symlink
+    # Make the xenoRna file
+       # Make a /gbdb symlink for the .fa (not .ra)
        cd /gbdb/rn2/mrna.133
        ln -s /cluster/store2/mrna.133/ratXenoRna.fa ratXenoRna.fa
-       ln -s /cluster/store2/mrna.133/ratXenoRna.ra ratXenoRna.ra
-       hgLoadRna add -type=xenoRna rn2 /gbdb/rn2/mrna.133/ratXenoRna.fa  /gbdb/rn2/mrna.133/ratXenoRna.ra
+       hgLoadRna add -type=xenoRna rn2 /gbdb/rn2/mrna.133/ratXenoRna.fa \
+         /cluster/store2/mrna.133/ratXenoRna.ra
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
