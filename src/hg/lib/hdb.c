@@ -665,7 +665,7 @@ static boolean priv = FALSE;
 if (!gotIt)
     {
     char *t = getenv("HTTP_HOST");
-    if (t != NULL && startsWith("genome-test", t))
+    if (t != NULL && (startsWith("genome-test", t) || startsWith("hgwdev", t)))
         priv = TRUE;
     gotIt = TRUE;
     }
