@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.635 2004/05/20 18:51:07 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.636 2004/05/20 21:47:41 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3409,6 +3409,7 @@ boolean hasVersion = hHasField("mrna", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
+struct trackDb *tdbRgdEst;
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -3522,8 +3523,9 @@ if (row != NULL)
             	"select id from %s.rgdEstLink where name = '%s';",  database, acc);
 	    if (sqlQuickQuery(conn2, query, rgdEstId, sizeof(rgdEstId)) != NULL)
 		{
+		tdbRgdEst = hashFindVal(trackHash, "rgdEst");
         	printf("<B>RGD EST Report: ");
-	        printf("<A HREF=\"%s%s\" target=_blank>", tdb->url, rgdEstId);
+	        printf("<A HREF=\"%s%s\" target=_blank>", tdbRgdEst->url, rgdEstId);
         	printf("RGD:%s</B></A><BR>\n", rgdEstId);
 		}
 	    }
