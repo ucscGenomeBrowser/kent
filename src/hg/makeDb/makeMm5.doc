@@ -1242,6 +1242,18 @@ XXX - running 2004-07-13 14;18
     #	table axtInfo may already exist, ignore create error.
     hgsql mm5 < axtInfoInserts.sql
 
+
+# ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
+    ssh hgwdev
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.chain.gz
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/human.net.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsHg17
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
+
 # MAKING HUMAN SYNTENY (DONE - 2004-07-13 - Hiram)
 
 ssh hgwdev
