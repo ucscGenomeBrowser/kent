@@ -127,6 +127,10 @@ struct sqlConnection *hConnectCentral();
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+char *hgOfficialChromName(char *name);
+/* Returns "cannonical" name of chromosome or NULL
+ * if not a chromosome. */
+
 boolean hTableExists(char *table);
 /* Return TRUE if a table exists in database. */
 
@@ -140,8 +144,8 @@ void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
 
-int hdbChromSize(struct sqlConnection *conn, char *chromName);
-/* Get chromosome size from given database connection. */
+int hdbChromSize(char *db, char *chromName);
+/* Get chromosome size from given database . */
 
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
