@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.15 2005/02/10 17:36:12 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.16 2005/02/23 09:35:15 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -18,6 +18,7 @@ static struct optionSpec optionSpecs[] =
     {"pathBeds", OPTION_STRING},
     {"dumpDistMatrix", OPTION_STRING},
     {"oldClassification", OPTION_BOOLEAN},
+    {"looseCassettes", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
     {"htmlPrefix", OPTION_STRING},
     {"browser", OPTION_STRING},
@@ -33,6 +34,7 @@ static char *optionDescripts[] =
     "Print all of the paths to a file in bed form.",
     "Dump out the distance matrix to this file (for debugging and testing)",
     "Use the older style of classifying events (like altAnalysis).",
+    "Are we allowing cassettes to be involved in other alt events?",
     "Database version to link web pages to.",
     "Create a frame based web page to view splices.",
     "Browser to point at when creating web page.",
@@ -45,11 +47,16 @@ FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
 FILE *pathBedFile = NULL;    /* File to dump out paths in bed form for
 				debugging and testing. */
 boolean oldClassification = FALSE; /* Use altAnalysis style of classification. */
+boolean looseCassettes = FALSE;    /* Are we using the loose definition of cassettes? Meaning that
+				      we don't care about other alternative events going on, just that
+				      a particular exon is skipped sometimes. */
+int looseCassettesCount = 0; /* Total number of loose cassettes counted. */
+FILE *htmlTableOut = NULL;   /* File to use for printing web table to. */
+FILE *htmlFrameOut = NULL;   /* File to print frames for web page to. */
+char *browserName = NULL;    /* Name of browser to link to. Something like 'hgwdev.cse.ucsc.edu' */
+char *db = NULL;             /* Database used when linking via web pages. */
+struct hash *cassetteHash = NULL; /* Keep track of the cassette splices we have seen. */
 
-FILE *htmlTableOut = NULL;  /* File to use for printing web table to. */
-FILE *htmlFrameOut = NULL;  /* File to print frames for web page to. */
-char *browserName = NULL;   /* Name of browser to link to. Something like 'hgwdev.cse.ucsc.edu' */
-char *db = NULL;            /* Database used when linking via web pages. */
 /* Keep track of how many of each event are occuring. */
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
@@ -755,7 +762,6 @@ if(shortPath->vCount == 2 && longPath->vCount == 4 &&
 return cassette;
 }
 
-
 boolean isCassettePath(struct splice *splice, struct altGraphX *ag, bool **em,
 		       int source, int sink)
 /* Return TRUE if splice is an cassette exon, FALSE otherwise. */
@@ -768,9 +774,8 @@ int *verts = longPath->vertices;
 boolean cassette = FALSE;
 /* Cassettes have 4 vertices in their path.
    Cassettes don't start with the source or end with the sink. */
-if(endVert != 3 || verts[startVert] == source || verts[endVert] == sink)
+if(verts[startVert] == source || verts[endVert] == sink)
     return FALSE;
-
 if(oldClassification)
     cassette = agxIsCassette(ag, em, verts[0], verts[1], verts[3],
 			     &altStart, &altEnd, &startV, &endV);
@@ -1049,6 +1054,35 @@ if(verts[endIx] == sink && softEndCount > 1 &&
 return FALSE;
 }
 
+boolean cassetteExists(struct splice *splice, struct altGraphX *ag)
+/* Return TRUE if this cassette is in the hash. */
+{
+char buff[256];
+int *vPos = ag->vPositions;
+if(cassetteHash == NULL) 
+    return FALSE;
+safef(buff, sizeof(buff), "%s:%d-%d:%c", 
+      splice->tName,  vPos[splice->paths->next->vertices[1]],
+      vPos[splice->paths->next->vertices[2]], splice->strand[0]);
+if(hashIntValDefault(cassetteHash, buff, -1) == 1) 
+    return TRUE;
+return FALSE;
+}
+
+void registerCassette(struct splice *splice, struct altGraphX *ag, bool **em)
+/* Add the cassette to the hash so we can remember that it has been
+   logged later on. */
+{
+char buff[256];
+int *vPos = ag->vPositions;
+if(cassetteHash == NULL) 
+    cassetteHash = newHash(8);
+safef(buff, sizeof(buff), "%s:%d-%d:%c", 
+      splice->tName,  vPos[splice->paths->next->vertices[1]],
+      vPos[splice->paths->next->vertices[2]], splice->strand[0]);
+hashAddInt(cassetteHash, buff, 1);
+}
+
 int typeForSplice(struct splice *splice, struct altGraphX *ag, bool **em,
 		  int source, int sink)
 /* Determine the type of splicing seen in this splice event. */
@@ -1061,7 +1095,11 @@ else if(isAltTxEnd(splice, ag, em, source, sink))
 else if(splice->pathCount > 2)
     type = altOther;
 else if(isCassettePath(splice, ag, em, source, sink))
+    {
     type = altCassette;
+    if(looseCassettes)
+	registerCassette(splice, ag, em);
+    }
 else if(isAlt5Path(splice, ag, em, source, sink)) 
     type = alt5Prime; 
 else if(isAlt3Path(splice, ag, em, source, sink))
@@ -1136,6 +1174,70 @@ for(path = pathList; path != NULL; path = path->next)
     freez(&vertArray);
     }
 }
+
+int rowSum(bool *em, unsigned char *vTypes, int vCount)
+{
+int count =0;
+int i=0;
+for(i=0; i<vCount; i++)
+   {
+   if(em[i] && (vTypes[i] == ggHardStart || vTypes[i] == ggHardEnd) )
+       count++;
+   }
+return count;
+}
+
+int colSum(bool **em, unsigned char *vTypes, int vCount, int col)
+{
+int count =0;
+int i=0;
+for(i=0; i<vCount; i++)
+   {
+   if(em[i][col] && (vTypes[i] == ggHardStart || vTypes[i] == ggHardEnd) )
+       count++;
+   }
+return count;
+}
+
+boolean isLooseCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		    int *altBpStartV, int *altBpEndV, int *startV, int *endV)
+/* Return TRUE if an exon skipping event.
+   Looking for pattern:
+   he--->hs---->he---->hs
+     \----------------/
+
+   Expressly ignoring other types of alt-splicing occuring.
+
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+struct altGraphX *subAg = NULL;
+int vCount = ag->vertexCount;
+int numAltVerts = 4;
+int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
+/* Quick check. */
+if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
+    return FALSE;
+
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    /* Try to find a hard end that connects ve1 and ve2. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardEnd && em[ve1][i] && em[i][ve2])
+	    {
+	    *altBpStartV = ve1;
+	    *altBpEndV = i;
+	    return TRUE;
+	    }
+	}
+    }
+return FALSE;
+}
+
 
 void findAltSplicesFromVertice(struct altGraphX *ag, int source, int sink, bool **em, 
 			       int **distance, struct splice **spliceList, 
@@ -1331,6 +1433,68 @@ for(s = spliceList; s != NULL; s = s->next)
     }
 }
 
+void findLooseCassettes(struct altGraphX *ag, bool **em, struct splice **spliceList,
+			int **distance, int source, int sink) 
+/* Loop through the graph and look for loose cassettes. */
+{
+int i,j,k;
+struct splice *splice = NULL;
+int vCount = ag->vertexCount;
+int *vPos = ag->vPositions;
+int altBpStartV=-1, altBpEndV=-1, startV=-1, endV=-1;
+int looseAdded = 0;
+for(i = 0; i < vCount; i++) 
+    {
+    for(j = 0; j < vCount; j++) 
+	{
+	if(i==j || !em[i][j])
+	    continue; /* Skip if we're not connected. */
+	for(k = 0; k < vCount; k++)
+	    {
+	    if(j==k || i==k || !em[i][k])
+		continue; /* Skip if we're not connected. */
+	    if(isLooseCassette(ag, em, i, j, k, &altBpStartV, &altBpEndV, &startV, &endV))
+		{
+		struct path *path = NULL;
+		assert(em[i][j] && em[i][k] && em[j][altBpEndV] && em[altBpEndV][k]);
+		splice = newSplice(ag, i, sink, source);
+		/* Make path that includes the exon. */
+		path = newPath(4);
+		pathAddTail(path, i);
+		pathAddTail(path, altBpStartV);
+		pathAddTail(path, altBpEndV);
+		pathAddTail(path, k);
+		slAddHead(&splice->paths, path);
+		/* Make path that excludes the exon. */
+		path = newPath(2);
+		pathAddTail(path, i);
+		pathAddTail(path, k);
+		slAddHead(&splice->paths, path);
+		
+		/* Fill in the paths with relevant info. */
+		splice->pathCount = slCount(splice->paths);
+		splice->tStart = vPos[i];
+		splice->tEnd = vPos[k];
+		simplifyAndOrderPaths(splice, distance, ag, source, sink);
+
+		/* Log and register this splice. */
+		splice->type = altCassette;
+
+		if(!cassetteExists(splice, ag))
+		    {
+		    registerCassette(splice, ag, em);
+		    logSpliceType(splice->type, vPos[altBpEndV] - vPos[altBpStartV]);
+		    slAddHead(spliceList, splice);
+		    looseCassettesCount++;
+		    }
+		else
+		    spliceFree(&splice);
+		}	
+	    }
+	}
+    }
+}
+       
 int doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
 /* Examine each altGraphX record for splicing events. Return number
  of alt events in graph. */
@@ -1407,6 +1571,11 @@ if(splice != NULL && splice->paths->vCount > 1)
     }
 else
     spliceFree(&splice);
+
+/* if looking for loose cassettes do so now. */
+if(looseCassettes)
+    findLooseCassettes(agx, em, &spliceList,
+		       distance, source, sink);
 
 /* Count the alt-events. */
 numAltEvents = countAltSplices(spliceList);
@@ -1490,6 +1659,7 @@ while(lineFileRow(lf, row))
     altGraphXFreeList(&subAgxList);
     }
 warn("");
+warn("%d loose cassettes added", looseCassettesCount);
 lineFileClose(&lf);
 carefulClose(&subOut);
 printSpliceTypeInfo(total, altGraphCount, totalAltCount);
@@ -1572,6 +1742,8 @@ if(optionExists("oldClassification"))
     oldClassification = TRUE;
 if(optionExists("htmlPrefix"))
     initHtmlFiles();
+if(optionExists("looseCassettes"))
+    looseCassettes = TRUE;
 
 altPaths(argv[1], argv[2]);
 if(optionExists("htmlPrefix"))
