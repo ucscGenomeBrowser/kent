@@ -6140,7 +6140,7 @@ rm $TMP/$root.pp
     chmod u+x doPhastCons
 
     # the --cut-params arguments are approximate maximum likelihood
-    # estimates obtained by running the program *without* --cut-params
+    # estimates obtained by running the program *without* --transitions
     # (causes estimation by EM) on five randomly selected 1M bp
     # windows.  All estimates were in the same ballpark (took a rough average)
 
@@ -8192,3 +8192,130 @@ CREATE TABLE mitopred (
     ssh hgwdev
     cd /cluster/data/hg17/bed/refFull
     hgLoadPsl hg17 -tNameIx refFullAli.psl
+
+# VAR_MULTIZ HG17/MM5/RN3/GALGAL2/FR1 (acs 2004-08-12)
+
+# This is a new, experimental version of multiz written by Minmei at
+# PSU and sent by e-mail from Webb.  This version allows for a
+# progressive alignment strategy (i.e., alignment construction in a
+# post-order traversal of the tree) using only pairwise alignments of
+# each sequence with the reference sequence and without any need for
+# "staging".  Here's a little blurb about it from the header of
+# var_multiz.v3.c.
+
+#  var_multiz.v3.c
+#
+#  Variant to multiz program. It aligns two files of
+#  alignment blocks where top row is always the reference,
+#  assuming blocks are increasing ordered based on the
+#  start position on the refernece seqence. Single-coverage
+#  on reference is required at this stage.
+#
+#  Four arguments are required: char* arg1, char* arg2,
+#  int arg3, int arg4. arg1 and arg2 are two files need
+#  to be aligned together. The alignment of reference in
+#  two files are either fixed or not, determined from
+#  argurments arg3 and arg4. arg3 and arg4 are either 1
+#  or 0, but cannot be 1 at the same time. 1 means
+#  reference is fixed. v1 and v2 cannot be both 1.
+#  ...
+
+    mkdir /cluster/data/hg17/bed/var_multiz.2004-08-12
+
+    # unpack source and compile
+    cp /cluster/home/acs/var_multiz.tar.gz /cluster/data/hg17/bed/var_multiz.2004-08-12
+    cd /cluster/data/hg17/bed/var_multiz.2004-08-12
+    tar xfz var_multiz.tar.gz
+    cd var_multiz_source
+    make
+
+    # script for creating the 5-way alignments for a given chromosome
+    cat << '_EOF_' > doVarMultiz.csh
+#!/bin/csh -fe
+
+set chr = $1			# may include _random or _hla_hap[12]
+
+set REF = hg17.$chr
+set RAT = /cluster/data/hg17/bed/blastz.rn3/mafNet/$chr.maf
+set MOUSE = /cluster/data/hg17/bed/blastz.mm5/mafNet/$chr.maf
+set CHICKEN = /cluster/data/hg17/bed/blastz.galGal2/mafNet/$chr.hg.maf
+set FISH = /cluster/data/hg17/bed/blastz.fr1/mafNet/$chr.maf
+set DEST = /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/$chr.maf
+
+set VMZ = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/var_multiz
+set PROJECT = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/maf_project
+
+mkdir -p $DEST:h
+
+if ( -e $RAT && -e $MOUSE ) then 
+    echo "Aligning $RAT $MOUSE..."
+    $VMZ $RAT $MOUSE 1 0 > /scratch/$chr.tmp1.maf
+    echo "Projecting on $REF..."
+    $PROJECT /scratch/$chr.tmp1.maf $REF > /scratch/$chr.hrm.maf
+else if ( -e $RAT ) then
+    cp $RAT /scratch/$chr.hrm.maf
+else if ( -e $MOUSE ) then
+    cp $MOUSE /scratch/$chr.hrm.maf
+endif
+
+if ( -e $CHICKEN && -e /scratch/$chr.hrm.maf ) then
+    echo "Adding $CHICKEN..."
+    $VMZ /scratch/$chr.hrm.maf $CHICKEN 1 0 > /scratch/$chr.tmp2.maf
+    echo "Projecting on $REF..."
+    $PROJECT /scratch/$chr.tmp2.maf $REF > /scratch/$chr.hrmc.maf
+else if ( -e $CHICKEN ) then
+    cp $CHICKEN /scratch/$chr.hrmc.maf
+else if ( -e /scratch/$chr.hrm.maf ) then
+    cp /scratch/$chr.hrm.maf /scratch/$chr.hrmc.maf
+endif 
+
+if ( -e $FISH && -e /scratch/$chr.hrmc.maf ) then
+    echo "Adding $FISH..."
+    $VMZ /scratch/$chr.hrmc.maf $FISH 1 0 > /scratch/$chr.tmp3.maf
+    echo "Projecting on $REF..."
+    $PROJECT /scratch/$chr.tmp3.maf $REF > $DEST
+else if ( -e $FISH ) then
+    cp $FISH $DEST
+else if ( -e /scratch/$chr.hrmc.maf ) then
+    cp /scratch/$chr.hrmc.maf $DEST
+endif 
+
+
+echo "Done."
+rm /scratch/$chr.tmp[123].maf /scratch/$chr.hrm.maf /scratch/$chr.hrmc.maf
+
+
+'_EOF_'
+    # << keep emacs coloring happy    
+    chmod 755 doVarMultiz.csh
+
+    for file in `find /cluster/data/hg17/bed/blastz.rn3/mafNet /cluster/data/hg17/bed/blastz.mm5/mafNet /cluster/data/hg17/bed/blastz.galGal2/mafNet /cluster/data/hg17/bed/blastz.fr1/mafNet -name "chr*.maf" | grep -v '\.hg\.'` ; do echo `basename $file .maf` ; done | sort -u > chrlist
+    rm -f jobs.lst
+    for chr in `cat chrlist` ; do echo "doVarMultiz.csh $chr" >> jobs.lst ; done
+
+    # run cluster job
+    ssh kk9 ; cd /cluster/data/hg17/bed/var_multiz.2004-08-12; para create jobs.lst ; para try ; para push 
+    # (etc.)
+
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:      19833s     330.56m     5.51h    0.23d  0.001 y
+# IO & Wait Time:                 22220s     370.33m     6.17h    0.26d  0.001 y
+# Average job time:                 914s      15.24m     0.25h    0.01d
+# Longest job:                     3208s      53.47m     0.89h    0.04d
+# Submission to last job:          3208s      53.47m     0.89h    0.04d
+
+    # for now just create an ordinary maf track (conservation later)
+    mkdir -p /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
+    ln -s /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/*.maf /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
+    /cluster/bin/i386/hgLoadMaf hg17 -warn varMultizMm5Rn3GalGal2Fr1 -pathPrefix=/gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
+    chmod 775 /gbdb/hg17/varMultiz /gbdb/hg17/varMultiz/maf /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1 /cluster/data/hg17/bed/var_multiz.2004-08-12 /cluster/data/hg17/bed/var_multiz.2004-08-12/maf
+    chmod 664 /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/*.maf
+
+    # trackDb entry
+# track varMultizMm5Rn3GalGal2Fr1
+# shortLabel varMultiz5Way
+# longLabel Human/Mouse/Rat/Chicken/Fugu Var-Multiz 
+# group compGeno
+# priority 190
+# visibility hide
+# type maf
