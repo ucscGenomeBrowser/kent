@@ -420,3 +420,55 @@ tmp=/tmp -window=1200000
     nice featureBits xenTro1 genscan
     # 63766483 bases of 1381238994 (4.617%) in intersection
 
+# PRODUCING FUGU BLAT ALIGNMENTS (DONE 10/27/04 Fan)
+    ssh kksilo
+    cd /cluster/data/xenTro1
+    mkdir softMasked2
+    cd softMasked2
+    /cluster/bin/i386/faSplit about ../xenTro1.softmask2.fa 2000000 ./
+
+    ssh kkr1u00
+    rm -rf /iscratch/i/xenTro1/softMasked2
+    mkdir /iscratch/i/xenTro1/softMasked2
+    foreach d (/cluster/data/xenTro1/softMasked2/*)
+    cp $d /iscratch/i/xenTro1/softMasked2
+    end
+    iSync
+
+    ssh kk
+    mkdir /cluster/data/xenTro1/bed/blatFr1
+    cd /cluster/data/xenTro1/bed/blatFr1
+    ls -1S /cluster/bluearc/fugu/fr1/trfFa/*.fa > fugu.lst
+    ls -1S /iscratch/i/xenTro1/softMasked2/*.fa > frog.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ 
+psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 frog.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 4536 of 4536 jobs
+# CPU time in finished jobs:    3466126s   57768.77m   962.81h   40.12d  0.110 y
+# IO & Wait Time:                458981s    7649.68m   127.49h    5.31d  0.015 y
+# Average job time:                 865s      14.42m     0.24h    0.01d
+# Longest job:                     3763s      62.72m     1.05h    0.04d
+# Submission to last job:          7688s     128.13m     2.14h    0.09d
+    # Sort alignments:
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/blatFr1
+    pslCat -dir psl \
+    | pslSortAcc nohead chrom /tmp stdin
+
+    # load psl into database:
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/blatFr1/chrom
+    foreach d (/cluster/data/xenTro1/bed/blatFr1/chrom/*)
+    cat $d >>blatFr1_all.psl
+    end
+    # Special case: fr1 has only chrUn, so no need to index tName!
+    hgLoadPsl -noTNameIx -fastLoad -table=blatFr1 xenTro1 blatFr1_all.psl
+    #load of blatFr1 did not go as planned: 1360912 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
