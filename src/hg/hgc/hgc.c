@@ -4021,14 +4021,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 htmlHorizontalLine();
+printf("<i>human sequence on top, mouse on bottom</i><br>" );
 /* look in associated table 'ancientRref' to get human/mouse alignment*/
 sprintf(query, "select * from %sref where id = '%s'", table, item );
 sr = sqlGetResult( conn, query );
 while ((row = sqlNextRow(sr)) != NULL )
     {
     ar = ancientRrefLoad(row);
-    printf("<tt>%s</tt> &nbsp;&nbsp;  (human)<br>", ar->hseq );
-    printf("<tt>%s</tt> &nbsp;&nbsp;  (mouse)<br>", ar->mseq );
+    htmlPrintJointAlignment( ar->hseq, ar->mseq, 80, 
+            bed->chromStart, bed->chromEnd, bed->strand );
     }
 
 printTrackHtml(tdb);
