@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.80 2004/10/15 16:46:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.81 2004/10/20 18:37:53 markd Exp $";
 
 
 void usage()
@@ -607,7 +607,7 @@ struct grp *makeGroupList(struct sqlConnection *conn,
 {
 struct sqlResult *sr;
 char **row;
-struct grp *groupList = NULL, *group;
+struct grp *groupsAll, *groupList = NULL, *group;
 struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
 struct trackDb *track;
@@ -620,11 +620,9 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-sr = sqlGetResult(conn,
-    "select * from grp order by priority");
-while ((row = sqlNextRow(sr)) != NULL)
+groupsAll = hLoadGrps();
+for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
-    group = grpLoad(row);
     if (hashLookup(groupsInTrackList, group->name))
 	{
 	slAddTail(&groupList, group);
@@ -633,7 +631,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         grpFree(&group);
     }
-sqlFreeResult(&sr);
 
 /* Do some error checking for tracks with group names that are
  * not in database.  Just warn about them. */
