@@ -11,8 +11,9 @@
 #include "htmlPage.h"
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
+#include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.17 2004/10/19 22:55:02 galt Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.18 2004/11/07 00:55:33 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -46,243 +47,6 @@ static struct optionSpec options[] = {
    {"repeat", OPTION_INT},
    {NULL, 0},
 };
-
-char *stringBetween(char *text, char *startPattern, char *endPattern)
-/* Return text that occurs between startPattern and endPattern,
- * or NULL if no startPattern.  (Will return up to 100 characters
- * after startPattern if there is no endPattern) */
-{
-char *startMid = stringIn(startPattern, text);
-if (startMid != NULL)
-    {
-    char *endMid;
-    int midSize;
-    startMid += strlen(startPattern);
-    endMid = stringIn(startMid, endPattern);
-    if (endMid == NULL)
-        {
-	midSize = strlen(startMid);
-	if (midSize > 100)
-	    midSize = 100;
-	}
-    else
-        midSize = endMid - startMid;
-    return cloneStringZ(startMid, midSize);
-    }
-return NULL;
-}
-
-char *qaTestScanForErrorMessage(char *text)
-/* Scan text for error message.  If one exists then
- * return copy of it.  Else return NULL. */
-{
-return stringBetween(text, htmlWarnStartPattern(), htmlWarnEndPattern());
-}
-
-int qaCountBetween(char *s, char *startPattern, char *endPattern, 
-	char *midPattern)
-/* Count the number of midPatterns that occur between start and end pattern. */
-{
-int count = 0;
-char *e;
-s = stringIn(startPattern, s);
-if (s != NULL)
-    {
-    s += strlen(startPattern);
-    e = stringIn(endPattern, s);
-    while (s < e)
-        {
-	if (startsWith(midPattern, s))
-	    ++count;
-	s += 1;
-	}
-    }
-return count;
-}
-
-struct qaStatus
-/* Timing and other info about fetching a web page. */
-    {
-    struct qaStatus *next;
-    int milliTime;	/* Time page fetch took. */
-    char *errMessage;	/* Error message if any. */
-    boolean hardError;	/* Crash of some sort. */
-    };
-
-void qaStatusReportOne(FILE *f, struct qaStatus *qs, char *format, ...)
-/* Report status */
-{
-char *severity = "ok";
-va_list args;
-va_start(args, format);
-char *errMessage = qs->errMessage;
-if (errMessage == NULL)
-    errMessage = "";
-else
-    {
-    if (qs->hardError)
-        severity = "hard";
-    else
-        severity = "soft";
-    }
-  
-vfprintf(f, format, args);
-fprintf(f, " %4.3fs (%s) %s\n", 0.001*qs->milliTime, severity, errMessage);
-va_end(args);
-}
-
-struct qaStatus *qaStatusOnPage(struct errCatch *errCatch, 
-	struct htmlPage *page, long startTime, struct htmlPage **retPage)
-/* Fill in qs status and errMessage based on errCatch and page. */
-{
-char *errMessage = NULL;
-struct qaStatus *qs;
-AllocVar(qs);
-if (errCatch->gotError || page == NULL)
-    {
-    errMessage = errCatch->message->string;
-    qs->hardError = TRUE;
-    }
-else
-    {
-    if (page->status->status != 200)
-	{
-	dyStringPrintf(errCatch->message, "HTTP status code %d\n", 
-		page->status->status);
-	errMessage = errCatch->message->string;
-	qs->hardError = TRUE;
-	}
-    else
-        {
-	errMessage = qaTestScanForErrorMessage(page->fullText);
-	}
-    }
-qs->errMessage = cloneString(errMessage);
-if (qs->errMessage != NULL)
-    subChar(qs->errMessage, '\n', ' ');
-qs->milliTime = clock1000() - startTime;
-if (retPage != NULL)
-    *retPage = page;
-else
-    htmlPageFree(&page);
-return qs;
-}
-
-struct qaStatus *qaPageGet(char *url, struct htmlPage **retPage)
-/* Get info on given url, (and return page if retPage non-null). */
-{
-struct errCatch *errCatch = errCatchNew();
-struct qaStatus *qs;
-struct htmlPage *page = NULL;
-long startTime = clock1000();
-if (errCatchStart(errCatch))
-    {
-    page = htmlPageGet(url);
-    htmlPageValidateOrAbort(page);
-    }
-else
-    {
-    htmlPageFree(&page);
-    }
-errCatchEnd(errCatch);
-qs = qaStatusOnPage(errCatch, page, startTime, retPage);
-errCatchFree(&errCatch);
-return qs;
-}
-
-struct qaStatus *qaPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
-	char *buttonName, char *buttonVal, struct htmlPage **retPage)
-/* Get update to form. */
-{
-struct errCatch *errCatch = errCatchNew();
-struct qaStatus *qs;
-struct htmlPage *page = NULL;
-long startTime = clock1000();
-if (errCatchStart(errCatch))
-    {
-    page = htmlPageFromForm(origPage, form, buttonName, buttonVal);
-    htmlPageValidateOrAbort(page);
-    }
-else
-    {
-    htmlPageFree(&page);
-    }
-errCatchEnd(errCatch);
-qs = qaStatusOnPage(errCatch, page, startTime, retPage);
-errCatchFree(&errCatch);
-return qs;
-}
-
-void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
-/* Add error message for something less than a crash. */
-{
-struct dyString *dy = dyStringNew(0);
-va_list args;
-va_start(args, format);
-if (qs->errMessage)
-    {
-    dyStringAppend(dy, qs->errMessage);
-    dyStringAppendC(dy, '\n');
-    }
-dyStringVaPrintf(dy, format, args);
-va_end(args);
-freez(&qs->errMessage);
-qs->errMessage = cloneString(dy->string);
-dyStringFree(&dy);
-}
-
-struct qaStatistics
-/* Stats on one set of tests. */
-    {
-    struct qaStatistics *next;
-    int testCount;	/* Number of tests. */
-    int softCount;	/* Soft error count. */
-    int hardCount;	/* Hard error count. */
-    long milliTotal;	/* Time tests took. */
-    };
-
-void qaStatisticsAdd(struct qaStatistics *stats, struct qaStatus *qs)
-/* Add test results to totals */
-{
-stats->testCount += 1;
-stats->milliTotal += qs->milliTime;
-if (qs->errMessage)
-    {
-    if (qs->hardError)
-        stats->hardCount += 1;
-    else
-        stats->softCount += 1;
-    }
-}
-
-void qaStatisticsReport(struct qaStatistics *stats, char *label, FILE *f)
-/* Write a line of stats to file. */
-{
-fprintf(f, "%20s:  %3d tests, %2d soft errors, %2d hard errors, %5.2f seconds\n",
-	label, stats->testCount, stats->softCount, stats->hardCount, 
-	0.001 * stats->milliTotal);
-}
-
-
-struct slName *randomSample(char *db, char *table, char *field, int count)
-/* Get random sample from database. */
-{
-struct sqlConnection *conn = sqlConnect(db);
-char query[256], **row;
-struct sqlResult *sr;
-struct slName *list = NULL, *el;
-safef(query, sizeof(query), "select distinct %s from %s order by rand() limit %d", 
-	field, table, count);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = slNameNew(row[0]);
-    slAddHead(&list, el);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-return list;
-}
 
 struct nearTest
 /* Test on one column. */
@@ -367,7 +131,7 @@ for (;;)
     if (e == NULL)
         break;
     row = cloneStringZ(s, e-s);
-    acc = stringBetween(row, "_blank>", "</a>");
+    acc = qaStringBetween(row, "_blank>", "</a>");
     if (acc == NULL)
         {
 	warn("Can't find between _blank> and </a> while counting uniq row %s",
@@ -665,7 +429,7 @@ void testDb(struct htmlPage *orgPage, char *org, char *db)
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 char *accColumn = hashMustFindVal(genomeRa, "idColumn");
-struct slName *geneList = randomSample(db, canonicalTable, "transcript", clRepeat);
+struct slName *geneList = sqlRandomSample(db, canonicalTable, "transcript", clRepeat);
 struct htmlPage *dbPage;
 
 htmlPageSetVar(orgPage, NULL, "db", db);
