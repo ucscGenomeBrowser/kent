@@ -394,52 +394,6 @@ if (url != NULL && url[0] != 0)
     }
 }
 
-void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int smpSize)
-/* Handle click in humMus sample (wiggle) track. */
-{
-int i;
-char table[64];
-boolean hasBin;
-struct sample *smp;
-char query[512];
-struct sqlResult *sr;
-char **row;
-boolean firstTime = TRUE;
-
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-        table, item, seqName, start);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (firstTime)
-	firstTime = FALSE;
-    else
-	htmlHorizontalLine();
-    smp = sampleLoad(row+hasBin);
-    printf("<B>Item:</B> %s<BR>\n", smp->name);
-    printf("<B>Score:</B> %g<BR>\n", whichNum(smp->score,0.0,3.66958,1000));
-    printf("<B>Strand:</B> %s<BR>\n", smp->strand);
-    printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
-
-    printf("<hr><br><h4>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            stop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</h4>" );
-    for( i=1; i<smp->sampleCount; i=i+2 )
-    {
-        if( smp->sampleHeight[i] != smp->sampleHeight[i+1] )
-            errAbort("regions not paired properly(%d,%d,%d,%d)!!!\n",
-                    smp->sampleHeight[i-1],
-                    smp->sampleHeight[i], smp->sampleHeight[i+1],
-                    smp->sampleHeight[i+2]);
-
-        printf("%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
-                smp->chromStart + smp->samplePosition[i],
-                smp->chromStart +  smp->samplePosition[i+1],
-                whichNum(smp->sampleHeight[i],0.0,3.66958,1000) );
-    }
-    }
-}
 
 
 
@@ -652,35 +606,6 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     puts(tdb->html);
     }
 }
-
-void humMusClickHandler(struct trackDb *tdb, char *item )
-/* Put up generic track info. */
-{
-char *dupe, *type, *words[16];
- char title[256];
- int num;
-int wordCount;
-int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-
-dupe = cloneString(tdb->type);
-genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
-if (wordCount > 0)
-    {
-    type = words[0];
-
-	num = 0;
-	if (wordCount > 1)
-	    num = atoi(words[1]);
-	if (num < 3) num = 3;
-        humMusSampleClick(conn, tdb, item, start, num);
-    }
-printTrackHtml(tdb);
-freez(&dupe);
-hFreeConn(&conn);
-}
-
 
 
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
@@ -3666,6 +3591,8 @@ mustParseRange(tRange, &tName, &tStart, &tEnd);
 return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
 }
 
+
+
 void longXenoPsl1(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable)
 /* Put up cross-species alignment when the second species
@@ -3749,7 +3676,6 @@ void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-//errAbort("(%s)\n", item );
 longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
 }
 
@@ -7062,6 +6988,162 @@ hFreeConn(&conn);
 webEnd();
 }
 
+char *hgcNameAndSettings()
+/* Return path to hgc with variables to store UI settings.
+*/
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    dy = newDyString(128);
+    dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart)); 
+    } 
+return dy->string; 
+}
+                                                        
+
+void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, int smpSize)
+/* Handle click in humMus sample (wiggle) track. */
+{
+int i;
+char table[64];
+boolean hasBin;
+struct sample *smp;
+char query[512];
+char istr[1024];
+char tempTableName[1024];
+struct sqlResult *sr;
+char **row;
+char **pslRow;
+boolean firstTime = TRUE;
+struct psl *psl;
+struct psl *thisPsl;
+
+struct sqlResult *pslSr;
+
+
+struct sqlConnection *conn2 = hAllocConn();
+
+//joni
+
+int first;
+int left = cartIntExp( cart, "l" );
+int right = cartIntExp( cart, "r" );
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+        table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    smp = sampleLoad(row+hasBin);
+    printf("<B>Item:</B> %s<BR>\n", smp->name);
+    printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+
+
+    sprintf( tempTableName, "%s_%s", smp->chrom, "blastzBestMouse" );
+    hFindSplitTable(seqName, "blastzBestMouse", table, &hasBin);
+    sprintf(query, "select * from %s where tName = '%s' and tStart >= %d and tEnd <= %d" ,
+        table, smp->chrom, left, right );
+
+    pslSr = sqlGetResult(conn2, query);
+
+
+    htmlHorizontalLine();
+    printf("<h3>Corresponding blastz mouse 'best in genome' alignments </h3>
+            <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
+
+
+    while(( pslRow = sqlNextRow(pslSr)) != NULL )
+    {
+        thisPsl = pslLoad( pslRow+hasBin ); 
+
+                first = 1;
+        for( i=1; i<smp->sampleCount; i=i+2 )
+        {
+            if( smp->chromStart + smp->samplePosition[i] < left 
+                    || smp->chromStart + smp->samplePosition[i] <
+                    thisPsl->tStart ) continue;
+            if( !first && smp->samplePosition[i-1] + 1 < smp->samplePosition[i] ) printf("<br>");
+            if( smp->chromStart + smp->samplePosition[i+1] > right
+                    || smp->chromStart + smp->samplePosition[i+1] >
+                    thisPsl->tEnd ) break;
+
+            first = 0;
+
+            if( smp->sampleHeight[i] != smp->sampleHeight[i+1] )
+                errAbort("regions not paired properly(%d,%d,%d,%d)!!!\n",
+                    smp->sampleHeight[i-1],
+                    smp->sampleHeight[i], smp->sampleHeight[i+1],
+                    smp->sampleHeight[i+2]);
+
+            printf("%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+                smp->chromStart + smp->samplePosition[i],
+                smp->chromStart +  smp->samplePosition[i+1],
+                whichNum(smp->sampleHeight[i],0.0,3.66958,1000) );
+        }
+        
+        if( !first )
+        {
+            printf("<A HREF=\"%s&o=%d&t=%d&g=%s&i=%s%%3A%d%%2D%d+%s%%3A%d%%2D%d&c=%s&l=%d&r=%d&db=%s&pix=%d\"\\>%s:%d-%d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s:%d-%d</A><BR><BR>",
+                hgcNameAndSettings(), thisPsl->tStart, thisPsl->tEnd, "blastzBestMouse",
+                thisPsl->qName, thisPsl->qStart, thisPsl->qEnd,
+                thisPsl->tName, thisPsl->tStart, thisPsl->tEnd, 
+                 thisPsl->tName, left, right,
+                "hg10", 600, 
+                thisPsl->tName, thisPsl->tStart, thisPsl->tEnd,
+                thisPsl->qName, thisPsl->qStart,
+                thisPsl->qEnd );
+        }
+
+
+
+
+    }
+
+    }
+    hFreeConn(&conn2);
+
+}
+
+
+void humMusClickHandler(struct trackDb *tdb, char *item )
+/* Put up generic track info. */
+{
+char *dupe, *type, *words[16];
+ char title[256];
+ int num;
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    {
+    type = words[0];
+
+	num = 0;
+	if (wordCount > 1)
+	    num = atoi(words[1]);
+	if (num < 3) num = 3;
+        humMusSampleClick(conn, tdb, item, start, num);
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+}
+
+
+
+
 
 
 void hgCustom(char *trackId, char *fileItem)
@@ -7480,3 +7562,5 @@ cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
+
+
