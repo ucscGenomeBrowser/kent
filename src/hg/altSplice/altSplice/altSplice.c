@@ -70,7 +70,7 @@
 #include "cheapcgi.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.4 2003/05/20 23:36:07 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -167,6 +167,7 @@ struct altGraphX *ag = NULL;
 struct ggMrnaCluster *mcList=NULL, *mc=NULL;
 struct ggMrnaInput *ci = NULL;
 struct geneGraph *gg = NULL;
+int count = 0;
 ci = ggMrnaInputFromAlignments(maList, seq);
 mcList = ggClusterMrna(ci);
 if(mcList == NULL)
@@ -180,14 +181,23 @@ if(mcList == NULL)
 slSort(&mcList, mcLargestFirstCmp);
 mc = mcList;
 clusterCount++;
-gg = ggGraphCluster(mc, ci);
+if(cgiBoolean("consensus"))
+    {
+    gg = ggGraphConsensusCluster(mc, ci, TRUE);
+    }
+else
+    gg = ggGraphCluster(mc,ci);
+//gg = ggGraphCluster(mc, ci);
 assert(checkEvidenceMatrix(gg));
 ag = ggToAltGraphX(gg);
 if(ag != NULL)
     {
     struct geneGraph *gTemp = NULL;
     struct ggEdge *cassettes = NULL;
-    
+    char name[256];
+    freez(&ag->name);
+    safef(name, sizeof(name), "%s.%d", ag->tName, count++);
+    ag->name = cloneString(name);
     /* Convert back to genomic coordinates. */
     altGraphXoffset(ag, chromStart);
     /* Sort vertices so that they are chromosomal order */
@@ -242,7 +252,7 @@ struct psl *pslList = NULL;
 char *chrom = gp->chrom;
 int chromStart = gp->txStart;
 int chromEnd = gp->txEnd;
-
+char *pslFileName = NULL;
 /* make the tables */
 numTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
 tables = needMem(sizeof(char*) * numTables);
@@ -257,7 +267,11 @@ for(i = ArraySize(tablePrefixes); i < numTables; i++)
     }
 
 /* load the psls */
-pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
+pslFileName = cgiOptionalString("pslFile");
+if(pslFileName != NULL)
+    pslList = pslLoadAll(pslFileName);
+else
+    pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
 
 for(i=0; i < numTables; i++)
     freez(&tables[i]);
@@ -360,6 +374,7 @@ while(lineFileRow(lf, row))
 lineFileClose(&lf);
 return gpList;
 }
+
 int gpSmallestFirstCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom and
  * sizes of chromEnd - chromStart, smallest first. */
@@ -381,10 +396,15 @@ struct genePred *gp = NULL, *gpList = NULL;
 struct altGraphX *ag=NULL, *agList= NULL;
 FILE *out = NULL;
 struct sqlConnection *conn = hAllocConn();
+char *gpFile = NULL;
 int count =0;
+gpFile = cgiOptionalString("gpFile");
+
 if(bedFile != NULL)
     gpList = convertBedsToGps(bedFile);
-else
+else if(gpFile != NULL)
+    gpList = genePredLoadAll(gpFile);
+else 
     gpList = loadRefGene22Annotations(conn);
 slSort(&gpList, gpSmallestFirstCmp);
 out = mustOpen(outFile, "w");
