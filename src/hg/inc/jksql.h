@@ -166,3 +166,5 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 void sqlCleanupAll();
 /* Cleanup all open connections and resources. */
 
+char *connGetDatabase(struct sqlConnCache *conn);
+/* return database for a connection cache */
