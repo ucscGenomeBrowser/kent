@@ -45,6 +45,7 @@
 #include "hgConfig.h"
 #include "estPair.h"
 #include "softPromoter.h"
+#include "customTrack.h"
 
 #define CHUCK_CODE 0
 #define ROGIC_CODE 1
@@ -2994,6 +2995,65 @@ chuckHtmlContactInfo();
 
 #endif /*CHUCK_CODE*/
 
+void hgCustom(char *trackId, char *fileItem)
+/* Process click on custom track. */
+{
+char *fileName, *itemName;
+struct customTrack *ctList, *ct;
+struct customTrack *customTracksFromFile(char *text);
+struct bed *bed;
+int start = cgiInt("o");
+char *url;
+
+htmlStart("Custom Track");
+uglyf("trackId %s, fileItem %s<BR>\n", trackId, fileItem);
+fileName = nextWord(&fileItem);
+itemName = skipLeadingSpaces(fileItem);
+if (fileName == NULL || itemName == NULL)
+    errAbort("Misformed fileItem in hgCustom");
+uglyf("fileName %s, itemName %s<BR>\n", fileName, itemName);
+ctList = customTracksFromFile(fileName);
+uglyf("Loaded %d custom tracks<BR>\n", slCount(ctList));
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    if (sameString(trackId, ct->bt->mapName))
+	break;
+    }
+if (ct == NULL)
+    errAbort("Couldn't find %s in %s", trackId, fileName);
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart == start && sameString(seqName, bed->chrom) &&
+         sameString(itemName, bed->name) )
+         break;
+    }
+if (bed == NULL)
+    errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
+bedPrintPos(bed);
+if ((url = ct->bt->url) != NULL)
+    {
+    char *before, *after = "", *s;
+    struct dyString *dy = newDyString(0);
+    char fixedUrl[1024];
+    uglyf("url is %s<BR>\n", url);
+    before = url;
+    s = stringIn("$$", url);
+    if (s != NULL)
+       {
+       char *eItem = cgiEncode(itemName);
+       *s = 0;
+       after = s+2;
+       dyStringPrintf(dy, "%s%s%s", before, eItem, after);
+       }
+    else
+       dyStringPrintf(dy, "%s", url);
+    uglyf("fixed URL is %s<BR>\n", dy->string);
+    printf("<B>outside link: </B>");
+    printf("<A HREF=\"%s\">", dy->string);
+    printf("%s</A><BR>\n", dy->string);
+    }
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -3192,6 +3252,10 @@ else if (sameWord(group, "htcDnaNearGene"))
 else if (sameWord(group, "hgSoftPromoter"))
    {
    hgSoftPromoter(item);
+   }
+else if (startsWith("ct_", group))
+   {
+   hgCustom(group, item);
    }
 #ifdef CHUCK_CODE
 else if (sameWord(group, "hgExprBed"))

@@ -5369,6 +5369,14 @@ slReverse(&lfList);
 tg->items = lfList;
 }
 
+char *ctMapItemName(struct trackGroup *tg, void *item)
+{
+  char *itemName = tg->itemName(tg, item);
+  static char buf[256];
+  sprintf(buf, "%s %s", ctFileName, itemName);
+  return buf;
+}
+
 struct trackGroup *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
@@ -5390,6 +5398,7 @@ else
     tg->loadItems = ctLoadGappedBed;
     }
 tg->customPt = ct;
+tg->mapItemName = ctMapItemName;
 return tg;
 }
 

@@ -42,11 +42,12 @@ static struct browserTable *btDefault()
 /* Return default custom table: black, dense, etc. */
 {
 struct browserTable *bt;
+static int count=0;
 AllocVar(bt);
 strncpy(bt->tableName, "custom", sizeof(bt->tableName));
 strncpy(bt->longLabel, "User Supplied Track", sizeof(bt->longLabel));
 strncpy(bt->shortLabel, "User Track", sizeof(bt->shortLabel));
-strncpy(bt->mapName, "ct_user", sizeof(bt->mapName));
+sprintf(bt->mapName, "ct_%d", ++count);
 strncpy(bt->trackType, "bed", sizeof(bt->trackType));
 bt->visibility = 1;
 bt->version = cloneString("custom");
