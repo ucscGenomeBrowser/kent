@@ -2897,8 +2897,8 @@ if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
-printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
-printf("------------------------------------------------------------------------------\n");
+printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END            SWISS-PROT   START  END  TOTAL\n");
+printf("--------------------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
