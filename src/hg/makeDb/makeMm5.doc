@@ -1258,6 +1258,10 @@ XXX - running 2004-07-13 14;18
     cd /usr/local/apache/htdocs/goldenPath/mm5/liftOver
     cp /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain .
     gzip mm5ToCanFam1.chain
+    mkdir -p /gbdb/mm5/liftOver
+    ln -s /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain /gbdb/mm5/liftOver/mm5ToCanFam1.over.chain
+    echo 'insert into liftOverChain values ("mm5","canFam1","/gbdb/mm5/liftOver/mm5ToCanFam1.over.chain")' \
+       | hgsql -h genome-testdb hgcentraltest
  
 # ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
     ssh hgwdev
