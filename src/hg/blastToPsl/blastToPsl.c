@@ -9,7 +9,7 @@
 #include "blastTab.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.3 2003/07/30 21:58:34 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.4 2003/09/04 23:40:23 braney Exp $";
 
 static int lifted;
 
@@ -175,8 +175,17 @@ int ii, diff;
 for(ii=1; ii < psl->blockCount; ii++)
     {
     diff = (psl->qStarts[ii-1] + psl->blockSizes[ii-1] ) - psl->qStarts[ii];
-    if (diff > 0)
-	psl->blockSizes[ii - 1] -= diff;
+	if (diff > 0)
+	{
+	    if (psl->blockSizes[ii-1] > diff)
+		psl->blockSizes[ii - 1] -= diff;
+	    else
+	    {
+		psl->blockSizes[ii - 1] = 1 ;
+//		psl->blockSizes[ii] -= diff - 1;
+//		psl->qStarts[ii] += diff - 1;
+	    }
+	}
     }
 /*
 for(ii=1; ii < psl->blockCount; ii++)
@@ -238,14 +247,15 @@ else
     negStrand = FALSE;
     }
 
-lastStart = (negStrand)? 10000000 : 0;
+//lastStart = (negStrand)? 10000000 : 0;
+lastStart = 0;
 for(el = patches ;el; el=el->next)
     {
     if (negStrand)
 	{
 	    if (el->tStart < el->tEnd)
 		abort();
-	if (el->qStart >= lastStart)
+	if (el->qStart <= lastStart)
 	    continue;
 	}
     else
@@ -258,7 +268,9 @@ for(el = patches ;el; el=el->next)
 	    }
 	}
     score += el->bitScore;
-    lastStart = el->qStart;
+//    lastStart = el->qStart + 1;
+//    lastStart = (el->qEnd+ el->qStart)/2;
+    lastStart = el->qEnd;
     psl->match += el->aliLength;
     psl->misMatch += el->mismatch;
     psl->qNumInsert += el->gapOpen;
@@ -307,6 +319,7 @@ FILE *pslFile = mustOpen(outPsl, "w");
 struct blastTab *blastTab, *el, *patch, *patches;
 struct psl *psl;
 char *oldQuery = "";
+char *oldTarget = "";
 boolean negStrand;
 int ii;
 int count;
@@ -348,7 +361,8 @@ for (el = blastTab; el != NULL; el = el->next)
     strand = (el->tStart > el->tEnd) ? '-' : '+';
     if (patches)
 	{
-	if ((strand != oldStrand) || (strcmp(el->query, oldQuery) != 0))
+	if (((strand != oldStrand) || (strcmp(el->query, oldQuery) != 0))
+	|| (strcmp(el->target, oldTarget) != 0))
 	    {
 	    makeChains( patches, hash, seqHash, &pslList );
 
@@ -360,6 +374,7 @@ for (el = blastTab; el != NULL; el = el->next)
 
     oldStrand = strand;
     oldQuery = el->query;
+    oldTarget = el->target;
 
     lmAllocVar(lm, patch);
     *patch = *el;
