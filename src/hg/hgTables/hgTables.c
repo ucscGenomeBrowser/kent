@@ -13,9 +13,10 @@
 #include "hgColors.h"
 #include "trackDb.h"
 #include "grp.h"
+#include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.12 2004/07/14 19:02:50 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.13 2004/07/14 21:10:01 kent Exp $";
 
 
 void usage()
@@ -37,6 +38,9 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
+struct customTrack *theCtList = NULL;	/* List of custom tracks. */
+struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
+char *customTrackPseudoDb = "customTrack"; /* Fake database for custom tracks */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -144,7 +148,7 @@ struct region *region, *regionList = NULL;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     AllocVar(region);
-    region->chrom = chrom->name;
+    region->chrom = cloneString(chrom->name);
     slAddHead(&regionList, region);
     }
 slReverse(&regionList);
@@ -193,7 +197,8 @@ else
 }
 
 char *chromTable(struct sqlConnection *conn, char *table)
-/* Get chr1_table if it exists, otherwise table. */
+/* Get chr1_table if it exists, otherwise table. 
+ * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom();
 if (sqlTableExists(conn, table))
@@ -206,6 +211,134 @@ else
     }
 }
 
+char *chrnTable(struct sqlConnection *conn, char *table)
+/* Return chrN_table if table is split, otherwise table. 
+ * You can freeMem this when done. */
+{
+char buf[256];
+char *splitTable = chromTable(conn, table);
+if (!sameString(splitTable, table))
+     {
+     safef(buf, sizeof(buf), "chrN_%s", table);
+     freez(&splitTable);
+     return cloneString(buf);
+     }
+else
+     return splitTable;
+}
+
+void checkTableExists(struct sqlConnection *conn, char *table)
+/* Check that table exists, or put up an error message. */
+{
+char *splitTable = chromTable(conn, table);
+if (!sqlTableExists(conn, table))
+    errAbort("Table %s doesn't exist", table);
+freeMem(splitTable);
+}
+
+
+struct customTrack *getCustomTracks()
+/* Get custom track list. */
+{
+if (theCtList == NULL)
+    theCtList = customTracksParseCart(cart, &browserLines, NULL);
+return(theCtList);
+}
+
+struct customTrack *lookupCt(char *name)
+/* Find named custom track. */
+{
+struct customTrack *ctList = getCustomTracks();
+struct customTrack *ct;
+for (ct=ctList;  ct != NULL;  ct=ct->next)
+    {
+    if (sameString(ct->tdb->tableName, name))
+	return ct;
+    }
+return NULL;
+}
+
+struct hTableInfo *ctToHti(struct customTrack *ct)
+/* Create an hTableInfo from a customTrack. */
+{
+struct hTableInfo *hti;
+
+if (ct == NULL)
+    return(NULL);
+
+AllocVar(hti);
+hti->rootName = cloneString(ct->tdb->tableName);
+hti->isPos = TRUE;
+hti->isSplit = FALSE;
+hti->hasBin = FALSE;
+hti->type = cloneString(ct->tdb->type);
+if (ct->fieldCount >= 3)
+    {
+    strncpy(hti->chromField, "chrom", 32);
+    strncpy(hti->startField, "chromStart", 32);
+    strncpy(hti->endField, "chromEnd", 32);
+    }
+if (ct->fieldCount >= 4)
+    {
+    strncpy(hti->nameField, "name", 32);
+    }
+if (ct->fieldCount >= 5)
+    {
+    strncpy(hti->scoreField, "score", 32);
+    }
+if (ct->fieldCount >= 6)
+    {
+    strncpy(hti->strandField, "strand", 32);
+    }
+if (ct->fieldCount >= 8)
+    {
+    strncpy(hti->cdsStartField, "thickStart", 32);
+    strncpy(hti->cdsEndField, "thickEnd", 32);
+    hti->hasCDS = TRUE;
+    }
+if (ct->fieldCount >= 12)
+    {
+    strncpy(hti->countField, "blockCount", 32);
+    strncpy(hti->startsField, "chromStarts", 32);
+    strncpy(hti->endsSizesField, "blockSizes", 32);
+    hti->hasBlocks = TRUE;
+    }
+
+return(hti);
+}
+
+struct hTableInfo *maybeGetHti(char *db, char *table)
+/* Return primary table info. */
+{
+struct hTableInfo *hti = NULL;
+
+if (sameString(customTrackPseudoDb, db))
+    {
+    struct customTrack *ct = lookupCt(table);
+    hti = ctToHti(ct);
+    }
+else
+    {
+    char *track;
+    if (startsWith("chrN_", table))
+	track = table + strlen("chrN_");
+    else
+	track = table;
+    hti = hFindTableInfoDb(db, NULL, track);
+    }
+return(hti);
+}
+
+struct hTableInfo *getHti(char *db, char *table)
+/* Return primary table info. */
+{
+struct hTableInfo *hti = maybeGetHti(db, table);
+
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s in db %s",
+	     table, db);
+return(hti);
+}
 
 void doTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */
@@ -214,7 +347,6 @@ textOpen();
 hPrintf("%s\n", cartUsualString(cart, "test", "n/a"));
 hPrintf("All for now\n");
 }
-
 
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
     struct grp *group)
@@ -270,29 +402,93 @@ uglyf("Theoretically making filter.");
 htmlClose();
 }
 
-void doOutPrimaryTable(struct trackDb *track, 
-	struct sqlConnection *conn)
-/* Dump out primary table. */
+void addWhereClause(struct dyString *query, boolean *gotWhere)
+/* Add where clause to query.  If already have a where clause
+ * add 'and' to it. */
+{
+if (*gotWhere)
+    {
+    dyStringAppend(query, " and ");
+    }
+else
+    {
+    dyStringAppend(query, " where ");
+    *gotWhere = TRUE;
+    }
+}
+
+boolean htiIsPositional(struct hTableInfo *hti)
+/* Return TRUE if hti looks like it's from a positional table. */
+{
+return hti->chromField[0] && hti->startField[0] && hti->endField[0];
+}
+
+void doTabOutTable(char *table, struct sqlConnection *conn, char *fields)
+/* Do tab-separated output on table. */
 {
 struct region *region, *regionList = NULL;
+struct hTableInfo *hti = NULL;
+struct dyString *fieldSpec = newDyString(256);
+struct hash *idHash = NULL;
+int outCount = 0;
+
 textOpen();
 regionList = getRegions(conn);
+checkTableExists(conn, table);
+hti = getHti(database, table);
 
+/* If they didn't pass in a field list assume they want all fields. */
+if (fields != NULL)
+    dyStringAppend(fieldSpec, fields);
+else
+    dyStringAppend(fieldSpec, "*");
+
+/* If table has and identity (name) field, and user has
+ * uploaded list of identifiers, create identifier hash
+ * and add identifier column to end of result set. */
+if (hti->nameField[0] != 0)
+    {
+    idHash = identifierHash();
+    if (idHash != NULL)
+	{
+	dyStringAppend(fieldSpec, ",");
+	dyStringAppend(fieldSpec, hti->nameField);
+	}
+    }
+
+/* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)
     {
     struct sqlResult *sr;
     char **row;
-    int colOffset, colIx, colCount, lastCol;
-    if (region->end == 0) /* Full chromosome. */
-        {
-	sr = hChromQuery(conn, track->tableName, region->chrom, NULL, &colOffset);
+    int colIx, colCount, lastCol;
+    char chromTable[256];
+    boolean gotWhere = FALSE;
+
+    if (htiIsPositional(hti))
+	{
+	if (region->end == 0) /* Full chromosome. */
+	    {
+	    sr = hExtendedChromQuery(conn, table, region->chrom, 
+		    NULL, FALSE, fieldSpec->string, NULL);
+	    }
+	else
+	    {
+	    sr = hExtendedRangeQuery(conn, table, region->chrom, 
+		    region->start, region->end, NULL, 
+		    FALSE, fieldSpec->string, NULL);
+	    }
 	}
-    else 
+    else
         {
-	sr = hRangeQuery(conn, track->tableName, region->chrom, 
-		region->start, region->end, NULL, &colOffset);
+	char query[256];
+	safef(query, sizeof(query), 
+		"select %s from %s", fieldSpec->string, table);
+	sr = sqlGetResult(conn, query);
 	}
     colCount = sqlCountColumns(sr);
+    if (idHash != NULL)
+        colCount -= 1;
     lastCol = colCount - 1;
 
     /* First time through print column names. */
@@ -305,11 +501,28 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	for (colIx = 0; colIx < lastCol; ++colIx)
-	    hPrintf("%s\t", row[colIx]);
-	hPrintf("%s\n", row[lastCol]);
+	if (idHash == NULL || hashLookup(idHash, row[colCount]))
+	    {
+	    for (colIx = 0; colIx < lastCol; ++colIx)
+		hPrintf("%s\t", row[colIx]);
+	    hPrintf("%s\n", row[lastCol]);
+	    ++outCount;
+	    }
 	}
+
+    if (!hti->chromField[0])
+        break;	/* No need to iterate across regions in this case. */
     }
+if (outCount == 0 && idHash != NULL)
+    hPrintf("No items in table matched identifier list.\n");
+hashFree(&idHash);
+}
+
+void doOutPrimaryTable(struct trackDb *track, 
+	struct sqlConnection *conn)
+/* Dump out primary table. */
+{
+doTabOutTable(track->tableName, conn, NULL);
 }
 
 void doTopSubmit(struct sqlConnection *conn)
