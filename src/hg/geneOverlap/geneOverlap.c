@@ -9,6 +9,13 @@
 
 /* Would be useful if this read PSLs and did clustering */
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"exonOverlap", OPTION_FLOAT},
+    {"cds", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -19,9 +26,10 @@ errAbort(
   "options:\n"
   "  -exonOverlap=0.0 - Fraction of one exon that must overlap to be selected.\n"
   "                     Exons must be on the same strand to overlap.\n"
+  "  -cds - only check CDS portions of exons.\n"
   "Input files are assumed to be genePred format.\n"
-  "Output is a tab-seperated file of genes that overlap in at, in the form:"
-  "      chrom strand aName aStart aEnd bName bStart bEnd\n"
+  "Output is a tab-seperated file of genes that overlap in at, in the form:\n"
+  "      chrom strand aName aStart aEnd bName bStart bEnd numBaseOverlap\n"
   );
 }
 
@@ -34,10 +42,12 @@ struct geneLoc
     char strand[2];	/* + or - for strand */
     int start;		/* Start (0 based) */
     int end;		/* End (non-inclusive) */
+    int numOverlap;     /* Used in counting overlaping bases */
     };
 
 /* global parameters */
 static float gExonOverlap = 0.0;
+static boolean gCdsOnly = FALSE;
 
 struct geneLoc* geneLocNew(struct lm *lm, char *name, char *chrom,
                            char *strand, int start, int end)
@@ -54,7 +64,8 @@ return geneLoc;
 }
 
 void geneLocUnlink(struct geneLoc **geneLocList)
-/* unlink geneLoc object.  Do free them, just null links (and list) */
+/* Unlink geneLoc object.  Don't free them, just null links (and list).
+ * Also zeros numOverlap. */
 {
 struct geneLoc *next = *geneLocList;
 while (next != NULL)
@@ -62,6 +73,7 @@ while (next != NULL)
     struct geneLoc *cur = next;
     next = next->next;
     cur->next = NULL;
+    cur->numOverlap = 0;
     }
 *geneLocList = NULL;
 }
@@ -82,13 +94,14 @@ return hel->val;
 }
 
 boolean overlapsByThreshold(struct binElement *exon1,
-                            int exon2Start, int exon2End)
+                            int exon2Start, int exon2End, int* overLenPtr)
 /* determine if an exon overlaps another by the specific fraction. Since
  * percent overlap is relative to length, it is tested against both exons */
 {
 int overStart = max(exon1->start, exon2Start);
 int overEnd = min(exon1->end, exon2End);
 int overLen = overEnd-overStart;
+*overLenPtr= overLen;
 assert(overStart < overEnd);
 if (overLen >= (exon1->end-exon1->start)*gExonOverlap)
     return TRUE;
@@ -114,11 +127,16 @@ void findOverlapingExons(struct geneLoc **geneLocList,
 {
 struct binElement *overExons = binKeeperFind(chromBins, exonStart, exonEnd);
 struct binElement *overExon;
+int overLen;
 for (overExon = overExons; overExon != NULL; overExon = overExon->next)
     {
-    if (overlapsByThreshold(overExon, exonStart, exonEnd)
-        && !containsGeneLoc(geneLocList, (struct geneLoc*)overExon->val))
-        slAddHead(geneLocList, (struct geneLoc*)overExon->val);
+    if (overlapsByThreshold(overExon, exonStart, exonEnd, &overLen))
+        {
+        struct geneLoc *gl = overExon->val;
+        gl->numOverlap += overLen;
+        if (!containsGeneLoc(geneLocList, gl))
+            slAddHead(geneLocList, gl);
+        }
     }
 }
 
@@ -132,8 +150,17 @@ struct binKeeper *chromBins = getChromBins(chromHash, gene->chrom,
 struct geneLoc *geneLoc = geneLocNew(chromHash->lm, gene->name, gene->chrom,
                                      gene->strand, gene->txStart, gene->txEnd);
 for (iExon = 0; iExon < gene->exonCount; iExon++)
-    binKeeperAdd(chromBins, gene->exonStarts[iExon], gene->exonEnds[iExon],
-                 geneLoc);
+    {
+    int exonStart = gene->exonStarts[iExon];
+    int exonEnd = gene->exonEnds[iExon];
+    if (gCdsOnly)
+        {
+        exonStart = max(exonStart, gene->cdsStart);
+        exonEnd = min(exonEnd, gene->cdsEnd);
+        }
+    if (exonStart < exonEnd)
+        binKeeperAdd(chromBins, exonStart, exonEnd, geneLoc);
+    }
 genePredFree(&gene);
 }
 
@@ -163,13 +190,22 @@ int iExon;
 
 /* get any with overlaping exons */
 for (iExon = 0; iExon < gene->exonCount; iExon++)
-    findOverlapingExons(&geneLocList, chromBins,
-                        gene->exonStarts[iExon], gene->exonEnds[iExon]);
+    {
+    int exonStart = gene->exonStarts[iExon];
+    int exonEnd = gene->exonEnds[iExon];
+    if (gCdsOnly)
+        {
+        exonStart = max(exonStart, gene->cdsStart);
+        exonEnd = min(exonEnd, gene->cdsEnd);
+        }
+    if (exonStart < exonEnd)
+        findOverlapingExons(&geneLocList, chromBins, exonStart, exonEnd);
+    }
 for (geneLoc = geneLocList; geneLoc != NULL; geneLoc = geneLoc->next)
-    fprintf(outFh, "%s\t%s\t%s\t%d\t%d\t%s\t%d\t%d\n",
+    fprintf(outFh, "%s\t%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\n",
             geneLoc->chrom, geneLoc->strand,
             gene->name, gene->txStart, gene->txEnd,
-            geneLoc->name, geneLoc->start, geneLoc->end);
+            geneLoc->name, geneLoc->start, geneLoc->end, geneLoc->numOverlap);
 geneLocUnlink(&geneLocList);
 genePredFree(&gene);
 }
@@ -205,8 +241,9 @@ hashFree(&bChromHash);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 gExonOverlap = optionFloat("exonOverlap", 0.0);
+gCdsOnly = optionExists("cds");
 if (argc != 4)
     usage();
 geneOverlap(argv[1], argv[2], argv[3]);
