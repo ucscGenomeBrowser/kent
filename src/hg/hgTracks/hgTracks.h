@@ -299,6 +299,11 @@ void innerLine(struct vGfx *vg, int x, int y, int w, Color color);
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
 
+void grayThreshold(UBYTE *pt, int count);
+/* Convert from 0-4 representation to gray scale rep. */
+
+void resampleBytes(UBYTE *s, int sct, UBYTE *d, int dct);
+/* Shrink or stretch an line of bytes. */
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
@@ -373,6 +378,9 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 
 void goldMethods(struct track *tg);
 /* Make track for golden path (assembly track). */
+
+void coverageMethods(struct track *tg);
+/* Make track for golden path positions of all frags. */
 
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
