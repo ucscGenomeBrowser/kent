@@ -145,6 +145,7 @@ sprintf(query, "load data local infile '%s' into table %s", TMP_TAB_FILE,
 sqlUpdate(conn, query);
 sqlDisconnect(&conn);
 unlink(TMP_TAB_FILE);
+printf("Import complete\n");
 }
 
 static void usage()
