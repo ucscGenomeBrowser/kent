@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.860 2005/03/24 20:31:38 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.861 2005/03/29 00:02:28 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3168,7 +3168,7 @@ char *chrom = NULL;
 int start = 0;
 int end = 0;
 
-if (sameString(action, "Extended case/color options"))
+if (sameString(action, "extended case/color options"))
     {
     doGetDnaExtended1();
     return;
