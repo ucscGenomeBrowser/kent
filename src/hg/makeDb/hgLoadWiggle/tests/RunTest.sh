@@ -25,11 +25,30 @@ oneTest() {
     fi
 }
 
-if [ "$1" = "-verbose" ]; then
-    verbose="verbose"
+failedArgCheck=0
+export failedArgCheck
+
+while [ "$#" -gt 0 ]
+do
+    if [ "$1" = "-verbose" ]; then
+	verbose="verbose"
+    elif [ "$1" = "-home" ]; then
+	HGWIGGLE="$HOME/bin/$MACHTYPE/$HGWIGGLE"
+	WIGENCODE="$HOME/bin/$MACHTYPE/$WIGENCODE"
+    else
+	echo "unknown argument: $1"
+	failedArgCheck=1
+    fi
+    shift
+done
+
+export HGWIGGLE WIGENCODE verbose tests failures
+
+if [ "$failedArgCheck" -eq 1 ]; then
+    exit 255
 fi
 
-type $HGWIGGLE > /dev/null 2> /dev/null
+type ${HGWIGGLE} > /dev/null 2> /dev/null
 
 if [ "$?" -ne 0 ]; then
     echo "ERROR: can not find hgWiggle binary"
