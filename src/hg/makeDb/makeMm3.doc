@@ -693,6 +693,27 @@ MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
     cd ~/mm3/bed/blastz.hg13.2003-03-06-ASH/pslTight
     hgLoadPsl mm3 chr*_blastzTightHuman.psl
 
+CREATING HUMAN/MOUSE CHAINS BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
+    # Do small cluster run on kkr1u00
+    # Make sure that ~/oo points to the latest human and ~/mm to the 
+    # latest mouse.
+    # The little cluster run will probably take about 2 hours.
+    ssh kkr1u00
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH
+    mkdir axtChain
+    cd axtChain
+    mkdir run1
+    cd run1
+    ls -1S ../../axtChrom/*.axt.gz | input.lst
+    echo '#LOOP' > gsub
+    echo 'doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}' >> gsub
+    echo '#ENDLOOP' >> gsub
+    gensub2 input.lst single gsub spec
+    para create spec
+    echo '#!/bin/csh' > doChain
+    echo 'gunzip -c $1 | axtChain stdin  ~/mm/mixedNib ~/oo/mixedNib $2 > $3' >> doChain
+    para shove
+
 
 LOADING MOUSE MM3 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 
