@@ -8,7 +8,7 @@
 #include "spDb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.1 2004/09/14 01:19:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.2 2004/09/22 17:52:22 fanhsu Exp $";
 
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
@@ -34,6 +34,7 @@ if (list != NULL)
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
 	, swissProtAcc);
+	
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -43,9 +44,7 @@ if (list != NULL)
     hPrintf("</UL>\n");
     slFreeList(&list);
     }
-
 list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
-if (list != NULL)
 if (list != NULL)
     {
     hPrintf("<B>Pfam Domains:</B>\n<UL>");
@@ -134,5 +133,4 @@ if (list != NULL)
 	    "pictures. It is simplest after logging in to just click on "
 	    "the picture again to get to the specific info on that model.</I>");
     }
-
 }
