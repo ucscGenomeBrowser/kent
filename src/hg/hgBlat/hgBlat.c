@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.87 2004/11/30 23:18:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.88 2005/02/16 06:42:31 sugnet Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -163,8 +163,27 @@ if (diff == 0)
 return diff;
 }
 
+void printLuckyRedirect(char *browserUrl, struct psl *psl, char *database, char *pslName, 
+			char *faName, char *uiState, char *unhideTrack)
+/* Print out a very short page that redirects us. */
+{
+char url[1024];
+safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
+      browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+      pslName, faName, uiState, unhideTrack);
+/* htmlStart("Redirecting"); */
+/* Odd it appears that we've already printed the Content-Typ:text/html line
+   but I can't figure out where... */
+htmStart(stdout, "Redirecting"); 
+printf("<script>location.replace('%s');</script>", url);
+printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>", url);
+htmlEnd();
+
+}
+
 void showAliPlaces(char *pslName, char *faName, char *database, 
-	enum gfType qType, enum gfType tType)
+		   enum gfType qType, enum gfType tType, 
+		   char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
 struct lineFile *lf = pslFileOpen(pslName);
@@ -223,13 +242,28 @@ else
     {
     slSort(&pslList, pslCmpQueryScore);
     }
-if (pslOut)
+if(feelingLucky)
+    {
+    /* If we found something jump browser to there. */
+    if(slCount(pslList) > 0)
+	printLuckyRedirect(browserUrl, pslList, database, pslName, faName, uiState, unhideTrack);
+    /* Otherwise call ourselves again not feeling lucky to print empty 
+       results. */
+    else 
+	{
+	cartWebStart(cart, "%s BLAT Results", organism);
+	showAliPlaces(pslName, faName, database, qType, tType, organism, FALSE);
+	cartWebEnd();
+	}
+    }
+else if (pslOut)
     {
     printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
 	pslxWriteHead(stdout, qType, tType);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
+    printf("</TT></PRE>");
     }
 else
     {
@@ -253,9 +287,10 @@ else
 	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
+    printf("</TT></PRE>");
     }
 pslFreeList(&pslList);
-printf("</TT></PRE>");
+
 }
 
 void trimUniq(bioSeq *seqList)
@@ -358,7 +393,7 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-void blatSeq(char *userSeq)
+void blatSeq(char *userSeq, char *organism)
 /* Blat sequence user pasted in. */
 {
 FILE *f;
@@ -379,7 +414,10 @@ struct gfOutput *gvo;
 boolean qIsProt = FALSE;
 enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
+boolean feelingLucky = cgiBoolean("Lucky");
 
+if(!feelingLucky)
+    cartWebStart(cart, "%s BLAT Results", organism);
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
@@ -419,6 +457,12 @@ if (seqList != NULL && seqList->name[0] == 0)
     seqList->name = cloneString("YourSeq");
     }
 trimUniq(seqList);
+
+/* If feeling lucky only do the first on. */
+if(feelingLucky && seqList != NULL)
+    {
+    seqList->next = NULL;
+    }
 
 /* Figure out size allowed. */
 maxSingleSize = (isTx ? 10000 : 25000);
@@ -515,7 +559,10 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
-showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType);
+showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType, 
+	      organism, feelingLucky);
+if(!feelingLucky)
+    cartWebEnd();
 gfFileCacheFree(&tFileCache);
 }
 
@@ -543,51 +590,34 @@ serve = findServer(db, FALSE);
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
-"<H1 ALIGN=CENTER>BLAT Search Genome</H1>\n"
-"<P>\n"
-"<TABLE BORDER=0 WIDTH=\"96%%\" COLS=6>\n"
-"<TR>\n");
+"<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
-
-
-printf("%s", "<TD><CENTER>\n");
-printf("Genome:<BR>");
+puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
+printf("<TD ALIGN=CENTER>Genome:</TD>");
+printf("<TD ALIGN=CENTER>Assembly:</TD>");
+printf("<TD ALIGN=CENTER>Query type:</TD>");
+printf("<TD ALIGN=CENTER>Sort output:</TD>");
+printf("<TD ALIGN=CENTER>Output type:</TD>");
+printf("<TD ALIGN=CENTER>&nbsp</TD>");
+printf("</TR>\n<TR>\n");
+printf("<TD ALIGN=CENTER>\n");
 printGenomeListHtml(db, onChangeText);
-printf("%s", "</CENTER></TD><TD><CENTER>\n");
-printf("Assembly:<BR>");
+printf("</TD>\n");
+printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);
-printf("%s", "</CENTER></TD><TD><CENTER>\n");
-printf("Query type:<BR>");
+printf("</TD>\n");
+printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
-printf("%s", "</CENTER></TD><TD><CENTER>\n");
-printf("Sort output:<BR>");
+printf("</TD>\n");
+printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("sort", sortList, ArraySize(sortList), cartOptionalString(cart, "sort"));
-printf("%s", "</CENTER></TD>\n");
-printf("%s", "<TD><CENTER>\n");
-printf("Output type:<BR>");
+printf("</TD>\n");
+printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
-puts("</CENTER></TD>\n");
-
-puts("<TD><CENTER>&nbsp;<BR>\n"
-    "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
-    "</CENTER></TD>\n"
-    "</TR>\n"
-    "<TR>\n"
-    "<TD COLSPAN=5>\n"
-    "Paste in a query sequence to find its location in the\n"
-    "the genome.  Multiple sequences may be searched \n"
-    "at once if separated by a line starting with > followed by the sequence name.\n"
-    "</TD>\n"
-    "<TD>\n"
-    "<INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
-    "</TD>\n"
-    "</TR>\n"
-    "</TABLE>\n"
-);
-
-puts("<P>");
-
+printf("</TD>\n");
+printf("</TR>\n<TR>\n");
 userSeq = cartOptionalString(cart, "userSeq");
+printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
 if (NULL == userSeq || userSeq[0] == '\0')
     {
     puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
@@ -596,9 +626,24 @@ else
     {
     printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
     }
+printf("</TD>\n");
+printf("</TR>\n<TR>\n");
+printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
+printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm Feeling Lucky\">\n");
+printf("<INPUT TYPE=RESET NAME=Reset VALUE=Reset>\n");
+printf("</TD>\n");
+printf("</TR>\n<TR>\n"); 
+puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
+    "Paste in a query sequence to find its location in the\n"
+    "the genome. Multiple sequences may be searched \n"
+    "if separated by lines starting with '>' followed by the sequence name.\n"
+    "</TD>\n"
+    "</TR>\n"
 
-
-puts("<P>");
+);
+puts("<TR><TD COLSPAN=5 WIDTH=\"100%\">\n"); 
+puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
@@ -609,8 +654,10 @@ printf("%s",
 "can be submitted at the same time. The total limit for multiple sequence\n"
 "submissions is 50,000 bases or 25,000 letters.\n</P>");
 if (hgPcrOk(db))
-    printf(" For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
-           " for best results instead of BLAT.", db);
+    printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
+           " for best results instead of BLAT.</P>", db);
+puts("</TD></TR></TABLE>\n");
+
 
 
 printf("</FORM>\n");
@@ -677,13 +724,12 @@ if(userSeq == NULL || userSeq[0] == '\0' || showPage)
     {
     cartWebStart(theCart, "%s BLAT Search", organism);
     askForSeq();
+    cartWebEnd();
     }
-else
+else 
     {
-    cartWebStart(theCart, "%s BLAT Results", organism);
-    blatSeq(skipLeadingSpaces(userSeq));
+    blatSeq(skipLeadingSpaces(userSeq), organism);
     }
-cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save
