@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.141 2003/09/18 22:41:36 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.142 2003/09/19 23:42:33 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -710,6 +710,30 @@ while ((hel = hashNext(&cookie)) != NULL)
     el = newSlName(hel->name);
     slAddHead(&list, el);
     }
+
+slReverse(&list);
+return list;
+}
+
+struct slName *hAllChromNamesDb(char *db)
+/* Get list of all chromosome names in database. */
+{
+struct hashCookie cookie;
+struct hashEl *hel;
+struct slName *list = NULL, *el;
+struct sqlConnection *conn;
+
+// get connection to db
+conn = hAllocConn();
+
+cookie = hashFirst(hdbChromInfoHashConn(NULL, conn));
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    el = newSlName(hel->name);
+    slAddHead(&list, el);
+    }
+
+hFreeConn(&conn);
 
 slReverse(&list);
 return list;
