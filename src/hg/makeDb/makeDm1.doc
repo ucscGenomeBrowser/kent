@@ -507,6 +507,13 @@ exit; # don't actually run this like a script :)
     mkPscreen.pl genetag_gdp.dump atbloom.dump bloomington.csv > pscreen.bed
     hgLoadBed dm1 pscreen -sqlTable=$HOME/kent/src/hg/lib/pscreen.sql -tab \
       pscreen.bed
+    # 8/13/04: Galt found some duplicate IDs and Robin/Bob(?) suggested 
+    # fixing them as follows:
+    hgsql dm1 -e '\
+      delete from pscreen where name = "KG05017" limit 1; \
+      delete from pscreen where name = "EY14401" or name = "PA07741"; \
+      delete from pscreen where name = "EY14474" and chromEnd = "8975785"; \
+      delete from pscreen where name = "KV00692" and chromEnd = "4702749";'
 
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
@@ -858,20 +865,21 @@ axtChain -verbose=0 $1 \
     | hgLoadNet dm1 netSyntenyDp2 stdin
 
 
-# MAKE VSDP2 DOWNLOADABLES (TODO 8/3/04 angie)
+# MAKE VSDP2 DOWNLOADABLES (DONE 8/17/04 angie)
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDp2
     cd /usr/local/apache/htdocs/goldenPath/dm1/vsDp2
     gzip -c \
       /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/all.chain \
-      > chain.gz
+      > pseudoobscura.chain.gz
     gzip -c \
-      /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/fruitflyFilt.net \
-      > net.gz
+      /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/pseudoobscura.net \
+      > pseudoobscura.net.gz
     mkdir axtNet
     foreach f (/cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtNet/chr*axt)
       gzip -c $f > axtNet/$f:t.gz
     end
+    md5sum *.gz */*.gz > md5sum.txt
     # Make a README.txt which explains the files & formats.
 
 
