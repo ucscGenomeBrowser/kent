@@ -92,10 +92,7 @@ char fname[256];
 for (i=0;i<snpExCount;i++)
     {
     safef(fname,sizeof(fname),"%ssnpException.%d.bed",db,i+BASE_SNP_EX_NUM);
-    if ((exf[i]=fopen(fname,"w"))==NULL)
-	{
-	errAbort("error opening output file %s.\n",fname);
-	}
+    exf[i]=mustOpen(fname,"w");
     fprintf(exf[i],"# exceptionId:  %d\n",i+BASE_SNP_EX_NUM);
     fprintf(exf[i],"# query:        %s\n",snpExDesc[i]);
     }
@@ -106,7 +103,7 @@ void closeExOuts()
 int i;
 for (i=0;i<snpExCount;i++)
     {
-    fclose(exf[i]);
+    carefulClose(&exf[i]);
     }
 }
 
