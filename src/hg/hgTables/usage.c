@@ -5,6 +5,8 @@
 #include "jksql.h"
 #include "hgTables.h"
 
+static char const rcsid[] = "$Id: usage.c,v 1.2 2004/07/18 23:52:56 kent Exp $";
+
 void printMainHelp()
 /* Put up main page help info. */
 {

@@ -14,6 +14,8 @@
 #include "hgTables.h"
 #include "joiner.h"
 
+static char const rcsid[] = "$Id: fields.c,v 1.17 2004/07/18 23:52:56 kent Exp $";
+
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
 static boolean varOn(char *var)
