@@ -348,7 +348,7 @@ boolean anyIntersection();
 #define hgtaHistoTable "hgta_histoTable"
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
-#define hgtaFilterOn "hgta_filterOn"
+#define hgtaFilterTable "hgta_filterTable"
 #define hgtaGeneSeqType "hgta_geneSeqType"
 #define hgtaPrintCustomTrackHeaders "hgta_printCustomTrackHeaders"
 #define hgtaCtName "hgta_ctName"
