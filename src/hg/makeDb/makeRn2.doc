@@ -385,14 +385,14 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 02/07/03)
     cp -p ~/rn2/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/rn2/trfFa
 
 
-MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE 02/07/03)
     ssh eieio
     cd ~/rn2
     #- Build the .zip files
     ./jkStuff/zipAll.sh |& tee zipAll.log
     #- Look at zipAll.log to make sure all file lists look reasonable.  
     #- Check zip file integrity:
-TODO    foreach f (*.zip)
+    foreach f (*.zip)
       unzip -t $f > $f.test
       tail -1 $f.test
     end
@@ -435,67 +435,28 @@ PREPARE CLUSTER FOR BLASTZ RUN (DONE 02/07/03)
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
-CREATE RELATIONAL MRNA DATABASE (TODO)
-    ssh hgwdev
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE 02/09/03)
 
-cd /cluster/store2/mrna.132
-
-Make the anyRna.fil file using this text:
-
-restrict mol=mRNA
-hide mol
-
-# Make the RNAs
-        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
-        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
-
-# Make the ESTs
-        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
-        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
-
-
-    # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
-    mkdir -p /gbdb/rn2/mrna.132
-
-    cd /gbdb/rn2/mrna.132
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.fa
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.fa
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra
-    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa
-    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra
-
-    # Call hgLoadRna with the /gbdb locations:
-    cd /cluster/store2/temp
-    hgLoadRna new rn2
-    hgLoadRna add -type=mRNA rn2 /gbdb/rn2/mrna.132/mrna.fa /gbdb/rn2/mrna.132/mrna.ra
-    hgLoadRna add -type=EST rn2 /gbdb/rn2/mrna.132/est.fa /gbdb/rn2/mrna.132/est.ra
-
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
-
-
-    # Use BLAT to generate refSeq, mRNA and EST alignments as so:
-    #  Make sure that /scratch/hg/rn2/trfFa is loaded
-    #  with chr*_*.fa and pushed to the cluster nodes.  
+    # Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
+    # from /cluster/store2/mrna.133  into /scratch/hg/mrna.133
+    # Make sure that /scratch/hg/rn2/trfFa is loaded with chr*_*.fa and pushed 
+    # to the cluster nodes.  
     ssh kk
     cd ~/rn2/bed
     foreach i (refSeq mrna est)
       mkdir -p $i
       cd $i
       ls -1S /scratch/hg/rn2/trfFa/* > genome.lst
-      ls -1 /scratch/hg/mrna.132/Rattus_norvegicus/$i.fa > mrna.lst
+      ls -1 /mnt/scratch/hg/mrna.133/Rattus_norvegicus/$i.fa > mrna.lst
       cp ~/lastRn/bed/$i/gsub .
       mkdir psl
       gensub2 genome.lst mrna.lst gsub spec
+      para create spec
       cd ..
     end 
 
-    # check on progress with para check in mrna, est, and refSeq directories.
-    # report on runtime when finished:
-      para create spec
-      para try
-      para push
-    para time > time
+    # In each dir: para try, para check, para push, para check....
+    # para time > time
       
     # Process refSeq, mRNA, and EST alignments into near best in genome.
     ssh eieio
@@ -526,7 +487,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
 
     # Load mRNA alignments into database.
     ssh hgwdev
-    cd /cluster/store4/rn2/bed/mrna/chrom
+    cd ~/rn2/bed/mrna/chrom
     foreach i (chr?{,?}{,_random}.psl)
         mv $i $i:r_mrna.psl
     end
@@ -536,9 +497,9 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
 
     # Load EST alignments into database.
     ssh hgwdev
-    cd /cluster/store4/rn2/bed/est/chrom
+    cd ~/rn2/bed/est/chrom
     foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_est.psl
+        echo mv $i $i:r_est.psl
     end
     hgLoadPsl rn2 *.psl
     cd ..
@@ -557,6 +518,51 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
     cd ~/rn2/bed/refSeq
     pslCat -dir chrom > refSeqAli.psl
     hgLoadPsl rn2 -tNameIx refSeqAli.psl
+
+
+CREATE REFSEQ GENES TRACK (DONE 02/09/03)
+    # Load the refSeq mRNA
+    ssh hgwdev
+    mkdir -p /gbdb/rn2/mrna.133
+    ln -s /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.fa \
+      /gbdb/rn2/mrna.133
+    hgLoadRna new rn2
+    hgLoadRna add -type=refSeq rn2 /gbdb/rn2/mrna.133/refSeq.fa \
+      /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.ra
+
+    # Produce refGene, refPep, refMrna, and refLink tables as so:
+    # Get the proteins:
+    ssh eieio
+    cd ~/rn2/bed/refSeq
+    wget ftp://ftp.ncbi.nih.gov/refseq/R_norvegicus/mRNA_Prot/rat.faa.gz
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
+    gunzip rat.faa.gz
+    ssh hgwdev
+    cd ~/rn2/bed/refSeq
+    hgRefSeqMrna rn2 \
+      /gbdb/rn2/mrna.133/refSeq.fa \
+      /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.ra \
+      all_refSeq.psl loc2ref rat.faa mim2loc
+    # Don't worry about the "No gene name" errors
+
+    # Add RefSeq status info
+    hgRefSeqStatus rn2 loc2ref
+
+
+REFFLAT (DONE 02/09/03)
+    # create precomputed join of refFlat and refGene:
+    echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn2
+
+
+LOAD MRNA DATA (DONE 02/09/03)
+    ssh hgwdev
+    ln -s /cluster/store2/mrna.133/org/Rattus_norvegicus/mrna.fa /gbdb/rn2/mrna.133
+    ln -s /cluster/store2/mrna.133/org/Rattus_norvegicus/est.fa /gbdb/rn2/mrna.133
+    hgLoadRna add -type=mRNA rn2 /gbdb/rn2/mrna.133/mrna.fa \
+      /cluster/store2/mrna.133/org/Rattus_norvegicus/mrna.ra
+    hgLoadRna add -type=EST rn2 /gbdb/rn2/mrna.133/est.fa \
+      /cluster/store2/mrna.133/org/Rattus_norvegicus/est.ra
 
 
 PRODUCING ESTORIENTINFO TABLE (TODO)
@@ -582,7 +588,7 @@ Wait for these to finish.
      cp ~/lastRn/bed/estOrientInfo/gsub .
 Update gsub to refer to rat contig sequence currently on
 /scratch/hg/rn2/trfFa, and rat ESTs on /scratch/hg/rn2/est/contigs
-and the rat est in ./scratch/hg/mrna.132/Rattus_norvegicus/est/fa.
+and the rat est in /scratch/hg/mrna.133/Rattus_norvegicus/est.fa.
      gensub2 psl.lst single gsub spec
      ssh kk
      para create spec
@@ -614,40 +620,6 @@ CREATE RNACLUSTER TABLE (TODO)
        echo done $i
    end
    hgLoadBed rn2 rnaCluster est/*.bed
-
-PRODUCING KNOWN GENES (TODO)
-
-o - Download everything from ftp://ftp.ncbi.nih.gov/refseq/cumulative
-    into /cluster/store1/refSeqCum/112602
-        cd /cluster/store1/refSeqCum/112602
-        uncompress rscu.gbff.Z
-        Put the following lines into anyRna.fil
-        restrict mol=mRNA
-        hide mol        
-        gbToFaRa anyRna.fil refSeq.fa refSeq.ra refSeq.ta -byOrganism=org
-        This will create fasta and annotations for the rat in refSeq/org
-        in refSeq.fa and refSeq.ra under the org/Rattus_norvegicus directory
-o - Get extra info from NCBI and produce refGene table as so:
-       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
-       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
-
-o -   hgLoadRna add -type=refSeq rn2 /gbdb/rn2/mrna.132/refSeq.fa /gbdb/rn2/mrna.132/refSeq.ra
-
-o - Produce refGene, refPep, refMrna, and refLink tables as so:
-Get the rat proteins:
-        wget ftp://ftp.ncbi.nih.gov/refseq/R_norvegicus/mRNA_Prot/rat.faa.gz
-        gunzip rat.faa.gz
-        cd ~/rn2/bed/refSeq
-       hgRefSeqMrna rn2 /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa \
-        /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra \
-        all_refSeq.psl /cluster/store1/refSeqCum/112602/loc2ref \
-        /cluster/store1/refSeqCum/112602/rat.faa \
-        /cluster/store1/refSeqCum/112602/mim2loc
-o - Add RefSeq status info 
-    hgRefSeqStatus rn2 /cluster/store1/refSeqCum/112602/loc2refE
-
-o - create precomputed join of refFlat and refGene:
-      echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn2
 
 
 PRODUCING GENSCAN PREDICTIONS (TODO)
@@ -822,32 +794,6 @@ TWINSCAN GENE PREDICTIONS (TODO)
     ldHgGene rn2 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
     hgPepPred rn2 generic twinscanPep chr_ptx/chr*-fixed.fa
 
-NCBI GENE MODELS (TODO)
-
-    mkdir -p ~/rn2/bed/ncbiGenes
-    cd ~/rn2/bed/ncbiGenes
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_geneos.gtf.gz
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/protein.fa.gz
-    gunzip chr_genes.gtf.gz
-    gunzip protein.fa.gz
-    - Process the .gtf and .fa together to join IDs
-    ../../jkStuff/mungeNCBIids chr_genes.gtf protein.fa |& uniq
-    ldHgGene rn2 ncbiGenes chr_genes-fixed.gtf
-    hgPepPred rn2 generic ncbiPep protein-fixed.fa
-
-NCBI GENOMESCAN MODELS (TODO)
-
-    mkdir -p ~/rn2/bed/genomeScan
-    cd ~/rn2/bed/genomeScan
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_GenomeScan.gtf.gz
-    # Remove the ".1" at the end of transcript_id's:
-    gunzip -c chr_GenomeScan.gtf.gz | \
-      perl -wpe 's/transcript_id "([^\"]+)\.1"/transcript_id "$1"/' > \
-      chr_GenomeScan-fixed.gtf
-    ldHgGene rn2 genomeScan chr_GenomeScan-fixed.gtf
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
-    hgPepPred rn2 generic genomeScanPep GS_prot.fsa
-
 DOING HUMAN/RAT ALIGMENTS (todo)
 
 o - Download the lower-case-masked assembly and put it in
@@ -940,7 +886,7 @@ Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store2/genbank.132 and unpacked by organism into /cluster/store2/mrna.132/org. 
+/cluster/store2/genbank.133 and unpacked by organism into /cluster/store2/mrna.133/org. 
 
 Set up cluster run more or less as so:
       ssh kk
@@ -950,8 +896,8 @@ Set up cluster run more or less as so:
       mkdir psl
       ls -1S /scratch/hg/rn2/trfFa/* > genome.lst
       # If it hasn't been done already do:
-      # cp -r /cluster/store2/mrna.132/orgFa /scratch/hg/mrna.132/org
-      find /scratch/hg/mrna.132/org/ -name mrna.fa | xargs ls -lS | awk {'print $5 " " $9'} \
+      # cp -r /cluster/store2/mrna.133/orgFa /scratch/hg/mrna.133/org
+      find /scratch/hg/mrna.133/org/ -name mrna.fa | xargs ls -lS | awk {'print $5 " " $9'} \
         | sort -nr | awk {'print $2'} > xenoRna.lst
 This produces a size-sorted file of all organisms mrna.
 Then edit xenoRna.lst removing the Rattus_norvegicus line, and writing
@@ -983,15 +929,15 @@ Load into database as so:
        hgLoadPsl rn2 xenoMrna.psl -tNameIx
 
 Make the xenoRna file
-        cd /cluster/store2/mrna.132
-        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        cd /cluster/store2/mrna.133
+        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
         | gbToFaRa ratXenoRna.fil ratXenoRna.fa ratXenoRna.ra ratXenoRna.ta stdin
 
        Make a /gbdb symlink
-       cd /gbdb/rn2/mrna.132
-       ln -s /cluster/store2/mrna.132/ratXenoRna.fa ratXenoRna.fa
-       ln -s /cluster/store2/mrna.132/ratXenoRna.ra ratXenoRna.ra
-       hgLoadRna add -type=xenoRna rn2 /gbdb/rn2/mrna.132/ratXenoRna.fa  /gbdb/rn2/mrna.132/ratXenoRna.ra
+       cd /gbdb/rn2/mrna.133
+       ln -s /cluster/store2/mrna.133/ratXenoRna.fa ratXenoRna.fa
+       ln -s /cluster/store2/mrna.133/ratXenoRna.ra ratXenoRna.ra
+       hgLoadRna add -type=xenoRna rn2 /gbdb/rn2/mrna.133/ratXenoRna.fa  /gbdb/rn2/mrna.133/ratXenoRna.ra
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
@@ -1154,7 +1100,7 @@ SGP GENE PREDICTIONS (TODO)
      mkdir download
      cd download
    Now download *.gtf and *.prot from 
-   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/
+   http://www1.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/
    Get rid of the extra .N in the transcripts with subs.  
      cd ..
      cp ~/lastRn/bed/sgp/subs .
