@@ -30,7 +30,7 @@ exit; # don't actually run this like a script :)
 # 1) Download seq_contig.md, ncbi_build32.agp, contig_overlaps.agp 
 # and contig fa file into gs.15/build32 directory. 
 
-# Download all finished agp's into gs.15/agp
+# Download all finished agp's and fa's into gs.15/agp
 
 # Download sequence.inf and ncbi_build32.fa files into gs.15/ffa, and unzip
 # ncbi_build32.fa.
@@ -86,10 +86,7 @@ exit; # don't actually run this like a script :)
 # 6.2) Patch in size of chromosome Y into Y/lift/ordered.lft 
 #      by grabbing it from the last line of Y/chrY.agp (not needed for build32)
 
-# 6.2.5) Add last telomere gap of 100Kb in chr22.agp based on finished chr22.agp.
-#      Update size of chromosome 22 in 22/lift/ordered.lft with addition of this gap.
-
-# *** 6.3) Create chromosome gl files
+# 6.3) Create chromosome gl files
   
     jkStuff/liftGl.sh contig.gl
 
@@ -100,12 +97,11 @@ exit; # don't actually run this like a script :)
     rm -r contigs
 
 # 8) Reverse complement NT contig fa files that are flipped in the assembly
-#    (uses faRc program) 
-
-    /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
-
+#    (uses faRc program)
 # Not done for build32 because all contigs on + strand.  It should be this
 # way for the rest of the assemblies
+
+    /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
 # (NOTE: STS placements may be done at this point before repeat masking and 
 # using the .fa's on NFS for QC analysis - all other placements should be 
@@ -924,7 +920,7 @@ Locate motifs on all promoters with
       dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
       liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
 
-CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP (TODO)
+CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP (DONE 3/15/2003)
 
 o - Create directory structure to hold information for these tracks
         cd /projects/hg2/booch/psl/
@@ -936,7 +932,7 @@ o - Update all Makefiles with latest OOVERS and GSVERS, DATABASE, and locations 
 o - Create accession_info file
         make accession_info.rdb
 
-UPDATE STS INFORMATION (TODO)
+UPDATE STS INFORMATION (DONE 3/15/2003)
 
 o - Download and unpack updated information from dbSTS:
 
@@ -965,7 +961,7 @@ o - Copy new files to cluster
         cp /cluster/store1/sts.5/*.* /scratch/hg/STS
         ask for propagation from sysadmin
 
-STS ALIGNMENTS (TODO)
+STS ALIGNMENTS (DONE 3/19/2003)
 (alignments done without RepeatMasking, so start ASAP!)
 
 o - Create full sequence alignments
@@ -1020,7 +1016,7 @@ o - Copy files to final destination and remove
         make copy.assembly
         make clean.assembly
         
-CREATE AND LOAD STS MARKERS TRACK (TODO)
+CREATE AND LOAD STS MARKERS TRACK (DONE 3/19/2003)
 
 o - Copy in current stsInfo2.bed and stsAlias.bed files
         cd /projects/hg2/booch/psl/gs.15/build32
@@ -1067,73 +1063,101 @@ o - Load the tables
     hgLoadRna addSeq hg14 /gbdb/hg14/sts.6/all.primers.fa
 
 
-UPDATE BACEND SEQUENCES (TODO)
+# UPDATE BACEND SEQUENCES (DONE 3/14/2003)
 
-o - Download new files:
+# 1) Download new files (not done cause no change for build32):
+#    In a web browser, go to ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/.
+#    Download BACends.fa.gz and cl_acc_gi_len_primer to 
+#    /cluster/store1/bacends.3
 
-        In a web browser, go to ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/.  Download 
-            AllBACends.fa.gz and bacends.cl_acc_gi_len_primer to 
-            /cluster/store1/bacends.3
-
-        -Unpack AllBACends.fa.gz
+# 2) Unpack AllBACends.fa.gz
         gunzip AllBACends.fa.gz
 
-o - Create new pairs file
+# 3) Create new pairs file
+	/cse/grads/booch/compbio/booch/scripts/convertBacEndPairInfo cl_acc_gi_len_primer /cluster/store1/bacends.2/bacEndPairs.txt
 
-o - Copy file to cluster
+# 4) Split file into pieces
+	/cluster/bin/i386/faSplit sequence BACends.fa 100 BACends
+
+# 5) Move files to cluster
         ssh kkstore
         cd /cluster/store1/bacends.3
-        cp /cluster/store1/bacends3/AllBACends.fa /scratch/hg/h/bacEnds/BACends.fa
-        ask for propagation from sysadmin
+        mv /cluster/store1/bacends3/BACends??.fa /scratch/hg/bacEnds/hs/
+
+# 6) Ask for propagation from sysadmin
 
 
-BACEND SEQUENCE ALIGNMENTS (TODO)
-(alignments done without RepeatMasking, so start ASAP!)
+# BACEND SEQUENCE ALIGNMENTS (DONE 3/17/2003)
+# (alignments done without RepeatMasking)
 
-o - Create full sequence alignments
+# 1) Create full sequence alignments
         ssh kk
         cd /cluster/home/booch/bacends
-        - update Makefile with latest OOVERS and GSVERS
+# update Makefile with latest OOVERS and GSVERS
         make new
         make jobList
         para create jobList
-        para push (or para try/para check if want to make sure it runs)
+        para push 
         make bacEnds.psl
 
-o - Copy files to final destination and remove
+# 2) Lift the files (takes a while)
+	make bacEnds.psl.lifted
+
+# 3) Copy files to final destination and remove
         ssh kks00
-        make copy.assembly
-        make clean.assembly
+        make copy
+        make clean # (may want to wait until sure they're OK)
 
-BACEND PAIRS TRACK (TODO)
+# BACEND PAIRS TRACK (DONE 3/18/2003)
 
-o - Update Makefile with location of pairs files, if necessary
+   # 1) Update Makefile with OOVERS, GSVERS, location of pairs/singles 
+   #    files, if necessary
         cd /projects/hg2/booch/psl/gs.15/build32/bacends
-        edit Makefile (PAIRS=....)
+        # edit Makefile
 
-o - Create bed file
-        ssh kks00
-        cd /projects/hg2/booch/psl/gs.15/build32/bacends
+   # 2) Create initial rdb file
+	make bacEnds.rdb (# Takes a while
+
+   # 3) Create file of singles to search for
+	make bacEndPairsBad.bed
+
+   # 4) Try to fish out more pairs
+	make bacEndsMiss.psl
+
+   # 5) Re-make bacEnds.rdb with new info
+	make bacEnds.rdb
+ 
+   # 6) Create bacEndPairs track file
         make bacEndPairs.bed
 
-o - Create database tables
+   # 7) Create bacEndPairsBad and bacEndPairsLong files
+	make bacEndPairsBad.bed
+
+   # 8) Create psl file to load
+	make bacEnds.load.psl
+
+   # 9) Create database tables
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
         mysql -uhgcat -pXXXXXXX < all_bacends.sql
         mysql -uhgcat -pXXXXXXX < bacEndPairs.sql
+        mysql -uhgcat -pXXXXXXX < bacEndPairsBad.sql
+        mysql -uhgcat -pXXXXXXX < bacEndPairsLong.sql
 
-o - Load the tables
+   # 10) Load the tables
         load /projects/hg2/booch/psl/gs.15/build32/bacends/bacEnds.psl.filter.lifted into all_bacends        
         load /projects/hg2/booch/psl/gs.15/build32/bacends/bacEndPairs.bed into bacEndPairs
+        load /projects/hg2/booch/psl/gs.15/build32/bacends/bacEndPairsBad.bed into bacEndPairsBad
+        load /projects/hg2/booch/psl/gs.15/build32/bacends/bacEndPairsLong.bed into bacEndPairsLong
 
-    # Load the sequences (change bacends.# to match correct location)
-    mkdir /gbdb/hg14/bacends.2
-    cd /gbdb/hg14/bacends.2
-    ln -s /cluster/store1/bacends.2/BACends.fa
-    cd /cluster/store2/tmp
-    hgLoadRna addSeq hg14 /gbdb/hg14/bacends.2/BACends.fa
+   # 11) Load the sequences (change bacends.# to match correct location)
+       mkdir /gbdb/hg15/bacends.3
+       cd /gbdb/hg15/bacends.3
+       ln -s /cluster/store1/bacends.3/BACends.fa
+       cd /cluster/store2/tmp
+       hgLoadRna addSeq hg15 /gbdb/hg15/bacends.3/BACends.fa
                 
-FOSEND SEQUENCE ALIGNMENTS (TODO)
+FOSEND SEQUENCE ALIGNMENTS (DONE 3/17/2003)
 
 o - Create full sequence alignments
         ssh kk
@@ -1193,7 +1217,7 @@ o - Copy it to the new freeze location
         cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.15/build32/fish/
 
 
-CREATE AND LOAD FISH CLONES TRACK (TODO)
+CREATE AND LOAD FISH CLONES TRACK (DONE 3/20/2003)
 (must be done after STS markers track and BAC end pairs track)
 
 o - Extract the file with clone positions from database
@@ -1216,7 +1240,7 @@ o - Load the table
         load /projects/hg2/booch/psl/gs.15/build32/fish/fishClones.bed into fishClones
         
 
-CREATE AND LOAD CHROMOSOME BANDS TRACK (TODO)
+CREATE AND LOAD CHROMOSOME BANDS TRACK (DONE 3/20/2003)
 (must be done after FISH Clones track) 
 
 o - Create bed file
@@ -1235,10 +1259,10 @@ o - Load the table
         load /projects/hg2/booch/psl/gs.15/build32/cytobands/cytobands.bed into cytoBand
 
 
-CREATE CHROMOSOME REPORTS (TODO)
+CREATE CHROMOSOME REPORTS (NOT BEING DONE)
 
 
-CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (TODO)
+CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (NOT BEING DONE)
 
 o - Must wait until after the STS Map track has been finished
 
