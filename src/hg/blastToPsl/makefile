@@ -70,8 +70,9 @@ test:	compile
 	cd tests && ${MAKE} test
 
 clean:
+	rm -f *.o blastToPsl scoreSort blast0To8 smashTab blast0ToPsl \
+		pslUniq vegaBuildInfo pslChain
 	cd tests && ${MAKE} clean
-	rm -f *.o scoreSort blast0To8 smashTab blast0ToPsl pslUniq vegaBuildInfo pslChain
 
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
