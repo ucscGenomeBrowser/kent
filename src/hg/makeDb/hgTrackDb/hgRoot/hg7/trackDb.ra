@@ -24,3 +24,10 @@ priority 32
 visibility dense
 type bed 4 .
 
+track psu
+shortLabel All mRNA  
+longLabel All mRNA Alignments (Human & Non-human not just best matches)
+priority 23.5
+visibility dense
+spectrum on
+type psl xeno
