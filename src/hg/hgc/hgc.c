@@ -1743,7 +1743,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Human.%s %s:</H4>\n",
     }
 
 /* Display side by side. */
-fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
+fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
     {
     struct baf baf;
     int i,j;
@@ -1780,6 +1780,7 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
 	    }
 	bafFlushLine(&baf);
 	}
+    fprintf( f, "<I>*Aligned Blocks <= 5 bases are merged for this display</I>\n");
     }
 fprintf(f, "</TT></PRE>");
 if (qIsRc)
