@@ -158,6 +158,79 @@ if (size & 1)
     }
 }
 
+struct nibStream
+/* Struct to help write a nib file one base at a time. 
+ * The routines that do this aren't very fast, but they
+ * aren't used much currently. */
+    {
+    struct nibStream *next;
+    char *fileName;	/* Name of file - allocated here. */
+    FILE *f;		/* File handle. */
+    bits32 size;	/* Current size. */
+    UBYTE byte;		/* Two nibble's worth of data. */
+    };
+
+struct nibStream *nibStreamOpen(char *fileName)
+/* Create a new nib stream.  Open file and stuff. */
+{
+struct nibStream *ns;
+FILE *f;
+
+dnaUtilOpen();
+AllocVar(ns);
+ns->f = f = mustOpen(fileName, "wb");
+ns->fileName = cloneString(fileName);
+
+/* Write header - initially zero.  Will fix it up when we close. */
+writeOne(f, ns->size);
+writeOne(f, ns->size);
+
+return ns;
+}
+
+void nibStreamClose(struct nibStream **pNs)
+/* Close a nib stream.  Flush last nibble if need be.  Fix up header. */
+{
+struct nibStream *ns = *pNs;
+FILE *f;
+bits32 sig = nibSig;
+if (ns == NULL)
+    return;
+f = ns->f;
+if (ns->size&1)
+    writeOne(f, ns->byte);
+fseek(f,  0L, SEEK_SET);
+writeOne(f, sig);
+writeOne(f, ns->size);
+fclose(f);
+freeMem(ns->fileName);
+freez(pNs);
+}
+
+void nibStreamOne(struct nibStream *ns, DNA base)
+/* Write out one base to nibStream. */
+{
+UBYTE ub = ntVal5[base];
+
+if ((++ns->size&1) == 0)
+    {
+    ub += ns->byte;
+    writeOne(ns->f, ub);
+    }
+else
+    {
+    ns->byte = (ub<<4);
+    }
+}
+
+void nibStreamMany(struct nibStream *ns, DNA *dna, int size)
+/* Write many bases to nibStream. */
+{
+int i;
+for (i=0; i<size; ++i)
+    nibStreamOne(ns, *dna++);
+}
+
 boolean isNib(char *fileName)
 /* Return TRUE if file is a nib file. */
 {

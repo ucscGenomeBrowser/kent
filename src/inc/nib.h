@@ -24,5 +24,18 @@ void nibWrite(struct dnaSeq *seq, char *fileName);
 
 boolean isNib(char *fileName);
 /* Return TRUE if file is a nib file. */
+
+struct nibStream *nibStreamOpen(char *fileName);
+/* Create a new nib stream.  Open file and stuff. */
+
+void nibStreamClose(struct nibStream **pNs);
+/* Close a nib stream.  Flush last nibble if need be.  Fix up header. */
+
+void nibStreamOne(struct nibStream *ns, DNA base);
+/* Write out one base to nibStream. */
+
+void nibStreamMany(struct nibStream *ns, DNA *dna, int size);
+/* Write many bases to nibStream. */
+
 #endif /* NIB_H */
 
