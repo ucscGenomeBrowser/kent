@@ -4427,7 +4427,7 @@ hgMapToGene rn3 ensGene knownGene knownToEnsembl
 hgMapToGene rn3 snpMap knownGene knownToCdsSnp -all -cds
 #	row count went to 12061
 
-# CREATING KNOWNTOSUPER (which enables Superfamily stuff in hgNear/hgGene)
+# CREATING KNOWNTOSUPER (which enables Superfamily stuff in hgNear/hgGene) (DONE 6/1/04 Fan.)
 # First see if need to update superfamily data from 
 # ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
 # in /cluster/store1/superFamily/genomes/README.ucsc.  Then
@@ -4436,7 +4436,7 @@ ssh hgwdev
 cat /cluster/store1/superFamily/040516/ass_16-May-2004.tab| hgKnownToSuper rn3 rn stdin
 #	5984 records output
 
-# CREATE KNOWNTOLOCUSLINK
+# CREATE KNOWNTOLOCUSLINK (DONE 6/1/04 Fan.)
 # that maps between known genes and LocusLink
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" rn3 \
         > refToLl.txt
