@@ -649,3 +649,8 @@
       polished it in UI.
 396 - Fixed various small BLAT bugs.  Starting on translated protein
       version.
+397 - Made cgiSpoof capable of handling normal as well as cgi-style
+      command options for the most part.  Added -cvs option to
+      newProg, which will cause it to add the new program to
+      the cvs repository.  Small changes to exonAli and waba.
+398 - Added exoMouse track to browser.
