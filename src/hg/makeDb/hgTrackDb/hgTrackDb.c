@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.22 2005/01/25 01:17:54 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.23 2005/02/07 17:39:38 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,28 +58,55 @@ struct trackDb *tdList = NULL, *td, *tdNext;
 struct slName *allChroms = hAllChromNames();
 struct slName *chromPtr;
 char fileName[512];
+char *words[1];
 
 tdList = trackDbFromRa(raName);
 
 if (strict != NULL) 
     {
     struct trackDb *strictList = NULL;
+    struct hash *compositeHash = hashNew(0);
+    struct trackDb *compositeList = NULL;
+    char *setting;
     for (td = tdList; td != NULL; td = tdNext)
         {
         tdNext = td->next;
-        if (hTableOrSplitExistsDb(database, td->tableName) ||
-                trackDbSetting(td, "compositeTrack"))
-                /* don't require table for composite spec */
+        if (hTableOrSplitExistsDb(database, td->tableName))
             {
 	    slAddHead(&strictList, td);
+            if ((setting = trackDbSetting(td, "subTrack")) != NULL)
+                {
+                /* note subtracks with tables so we can later add 
+                 * the composite trackdb */
+                chopLine(cloneString(setting), words);
+                hashStore(compositeHash, words[0]);
+                }
             }
 	else
 	    {
-	    if (verboseLevel() > 1)
-		printf("%s missing\n", td->tableName);
-	    trackDbFree(&td);
+            if (trackDbSetting(td, "compositeTrack"))
+                {
+                slAddHead(&compositeList, td);
+                }
+            else
+                {
+                if (verboseLevel() > 1)
+                    printf("%s missing\n", td->tableName);
+                trackDbFree(&td);
+                }
 	    }
         }
+    /* add all composite tracks that have a subtrack with a table */
+    for (td = compositeList; td != NULL; td = tdNext)
+        {
+        tdNext = td->next;
+        if (hashLookup(compositeHash, td->tableName))
+            {
+	    slAddHead(&strictList, td);
+            }
+        }
+    hashFree(&compositeHash);
+
     /* No need to slReverse, it's sorted later. */
     tdList = strictList;
     }
