@@ -29,6 +29,9 @@ char *wrapWhiteFont(char *s);
 /* Display of bases on the ruler, and multiple alignments.
  * If present, indicates reverse strand */
 #define COMPLEMENT_BASES_VAR    "complement"
+/*	For trackUi and hgTracks, motif highlight options	*/
+#define BASE_MOTIFS	"hgt.motifs"
+#define MOTIF_COMPLEMENT	"hgt.motifComplement"
 
 /* Configuration variable to cause ruler zoom to zoom to base level */
 #define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
