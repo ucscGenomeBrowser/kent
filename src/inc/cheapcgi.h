@@ -204,8 +204,9 @@ boolean cgiFromFile(char *fileName);
  * has a lot of possible parameters.
  */
 
-void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList);
+boolean cgiParseInput(char *input, struct hash **retHash, 
+	struct cgiVar **retList);
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back 
  * into input, so please don't free input until you're done with 
- * the hash. */
+ * the hash. Prints message and returns FALSE if there's an error.*/

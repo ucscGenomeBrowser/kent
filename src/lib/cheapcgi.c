@@ -9,8 +9,9 @@
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
+#include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.54 2003/12/23 20:24:12 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.55 2003/12/24 11:22:34 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -301,11 +302,12 @@ if (inputString == NULL)
     }
 }
 
-void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList)
+static void cgiParseInputAbort(char *input, struct hash **retHash, 
+	struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back 
  * into input, so please don't free input until you're done with 
- * the hash. */
+ * the hash. Prints message aborts if there's an error.*/
 {
 char *namePt, *dataPt, *nextNamePt;
 struct hash *hash = newHash(6);
@@ -316,7 +318,9 @@ while (namePt != NULL && namePt[0] != 0)
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
+	{
 	errAbort("Mangled CGI input string %s", namePt);
+	}
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, '&');
     if (nextNamePt == NULL)
@@ -335,6 +339,36 @@ slReverse(&list);
 *retHash = hash;
 }
 
+static jmp_buf cgiParseRecover;
+
+static void cgiParseAbort()
+/* Abort cgi parsing. */
+{
+longjmp(cgiParseRecover, -1);
+}
+
+boolean cgiParseInput(char *input, struct hash **retHash, 
+	struct cgiVar **retList)
+/* Parse cgi-style input into a hash table and list.  This will alter
+ * the input data.  The hash table will contain references back 
+ * into input, so please don't free input until you're done with 
+ * the hash. Prints message and returns FALSE if there's an error.*/
+{
+boolean ok = TRUE;
+int status = setjmp(cgiParseRecover);
+if (status == 0)    /* Always true except after long jump. */
+    {
+    pushAbortHandler(cgiParseAbort);
+    cgiParseInputAbort(input, retHash, retList);
+    }
+else    /* They long jumped here because of an error. */
+    {
+    ok = FALSE;
+    }
+popAbortHandler();
+return ok;
+}
+
 static void initCgiInput() 
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
@@ -351,7 +385,9 @@ s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
     cgiParseMultipart(inputString, &inputHash, &inputList);
 else
-    cgiParseInput(inputString, &inputHash, &inputList);
+    {
+    cgiParseInputAbort(inputString, &inputHash, &inputList);
+    }
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
