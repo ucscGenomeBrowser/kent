@@ -15,6 +15,21 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
+void hWrites(char *string)
+/* Write string with no '\n' if not suppressed. */
+{
+if (!suppressHtml)
+    fputs(string, stdout);
+}
+
+void hButton(char *name, char *label)
+/* Write out button if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButton(name, label);
+}
+
+
 void aaPropertyInit(int *hasResFreq)
 // initialize AA properties 
 {
