@@ -1,0 +1,23 @@
+<H2>Description</H2>
+<P> The recombination rate track represents calculated
+sex-averaged rates of recombination based on the deCODE genetic
+map.  
+</P>
+
+<H2>Methods</H2>
+<P> The deCODE genetic map was created at 
+<a href="http://www.decodegenetics.com/">deCODE Genetics</a> and is 
+based on 5,136 microsatellite markers for 146 families with a total
+of 1,257 meiotic events.  For more information on this map, please see
+"<a href="http://www.nature.com/cgi-taf/DynaPage.taf?file=/ng/journal/v31/n3/full/ng917.html">A high resolution recombination map of the human genome</a>", 
+<I>Nature Genetics</I>, 31(3), pages 241-247.
+</P>
+
+<P> Recombination rates are calculated by first binning the genome
+into 1Mb, non-overlapping segments.  The recombination rate of each
+segment is estimated using the genetic distances from the deCODE map
+assuming a constant crossover rate bewteen two adjacent markers.
+Cubic splines are fitted to this data using the centerpoint for each
+segment and the initial estimated recombination rate for the 1Mb bin.
+The resulting value at the midpoint is assigned to each 1Mb region.
+</P>

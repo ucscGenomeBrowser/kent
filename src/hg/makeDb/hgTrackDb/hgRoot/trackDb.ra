@@ -45,6 +45,13 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
+track recombRate
+shortLabel Recomb Rate
+longLabel Recombination Rate based on deCODE Genetic Map
+priority 3.5
+visibility dense
+type bed 4 +
+
 track mouseSyn
 shortLabel NCBI Synteny
 longLabel Corresponding Chromosome in Mouse
