@@ -65,10 +65,10 @@ return count;
 void qaStatusReportOne(FILE *f, struct qaStatus *qs, char *format, ...)
 /* Report status */
 {
+char *errMessage = qs->errMessage;
 char *severity = "ok";
 va_list args;
 va_start(args, format);
-char *errMessage = qs->errMessage;
 if (errMessage == NULL)
     errMessage = "";
 else
