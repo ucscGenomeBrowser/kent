@@ -42,6 +42,9 @@ int winStart;
 int winEnd;
 boolean allGenome;
 
+/* copied from hgGateway... */
+static char * const onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
 #define chooseFieldsPhase   "Tab-separated, Choose fields..."
@@ -139,143 +142,80 @@ else
 void doGateway(char *errorMsg)
 /* Table Browser gateway page: select organism, db, position */
 {
-char *organism = hOrganism(database);
-char *assemblyList[128];
-char *values[128];
-int numAssemblies = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
-struct dbDb *cur = NULL;
-char *assembly = NULL;
+char *organism;
+char *defaultPosition;
+char *position;
 
+getDbAndOrganism(cart, &database, &organism);
+freezeName = hFreezeFromDb(database);
+defaultPosition = hDefaultPos(database);
+position = cartUsualString(cart, "position", defaultPosition);
 webStart(cart, "Table Browser: %s", freezeName);
 
 puts(
      "<P>This tool allows you to download portions of the database used 
-	by the genome browser in a simple tab-delimited text format.
+	by the genome browser in several output formats.
 	Please enter a position in the genome and press the submit button:\n"
      );
 
 printf("(Use <A HREF=\"/cgi-bin/hgBlat?db=%s\">BLAT Search</A> to locate a 
-        particular sequence in the genome.)	
-	<P><FORM ACTION=\"%s\" METHOD=\"GET\">Freeze:\n",
-       database, hgTextName());
-
-/* Find all the assemblies that pertain to the selected genome */
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(database, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, database)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(database, cur->name))
-	{
-	assembly = cur->description;
-	}
-    }
-
-cgiMakeDropListFull("db", assemblyList, values, numAssemblies, assembly, NULL);
-printf(" &nbsp; Genome position:\n");
-position = cgiUsualString("position", hDefaultPos(database));
-positionLookup(chooseTablePhase);
+        particular sequence in the genome.)\n", database);
+cgiMakeHiddenVar("org", organism);
 
 puts(
-     "<P>A genome position can be specified by the accession number of a
-	sequenced genomic clone, an mRNA or EST or STS marker, or a
-	cytological band, a chromosomal coordinate range, or keywords
-	from the Genbank description of an mRNA. The following list
-	provides examples of various types of position queries for the
-	human genome. Analogous queries can be made for many of these
-	in the mouse genome. See the 
-	<A HREF=\"/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>
-	User Guide</A> for more help.
-<P>
-<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
-<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
-	<TD WIDTH=14></TD>
-<TD VALIGN=Top><B>Genome Browser Response:</B><br></TD>
-</TR>
-<TR><TD VALIGN=Top><br></TD></TR>
-<TR><TD VALIGN=Top NOWRAP>chr7</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>20p13</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>
+"<center>\n"
+"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+"<tr><td>\n"
+"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
+"<tr><td>\n"
+);
 
-<TR><TD VALIGN=Top><br></TD></TR>
+puts(
+"<table bgcolor=\"FFFEF3\" border=0>\n"
+"<tr>\n"
+"<td>\n"
+);
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n", hgTextName());
+puts(
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
+"<table><tr>\n"
+"<td align=center valign=baseline>genome</td>\n"
+"<td align=center valign=baseline>assembly</td>\n"
+"<td align=center valign=baseline>position</td>\n"
+);
 
-<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
-	(open \"STS Markers\" track by clicking to see this marker)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>D22S586;D22S43</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region between STS markers D22S586 and D22S43.
-	Includes 250,000 bases to either side as well.
-<TR><TD VALIGN=Top NOWRAP>AA205474</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17
-	(open \"spliced ESTs\" track by clicking to see this EST)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>AC008101</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of clone with GenBank accession number AC008101
-	(open \"coverage\" track by clicking to see this clone)</TD></TR>
-<TR><TD VALIGN=Top><br></TD></TR>
-<TR><TD VALIGN=Top NOWRAP>AF083811</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number
-	AF083811</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>PRNP</TD>
-	<TD WIDTH=14></TD>
-	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>
-<TR><TD VALIGN=Top><br></TD></TR>
-<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>huntington</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>zahler</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E. Evans</TD></TR>
+puts("<tr><td align=center>\n");
+printOrgListHtml(database, onChangeText);
+puts("</td>\n");
 
-<TR><TD VALIGN=Top><br></TD></TR>
-</TABLE>
-</FORM>
-Use this last format for entry authors -- even though Genbank
-searches require Evans JE format, GenBank entries themselves use
-Evans,J.E. internally."
-     );
+puts("<td align=center>\n");
+printAssemblyListHtml(database);
+puts("</td>\n");
+
+puts("<td align=center>\n");
+cgiMakeTextVar("position", position, 30);
+cgiMakeHiddenVar("phase", chooseTablePhase);
+puts("</td><td>");
+cgiMakeButton("submit", "Submit");
+puts(
+"</td></tr></table>\n"
+"</FORM>"
+"</td></tr>\n"
+"</table>\n"
+"</td></tr></table>\n"
+"</td></tr></table>\n"
+"</center>\n"
+);
+
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", hgTextName(), organism);
+cartSaveSession(cart);
+puts("</FORM>");
+
+hgPositionsHelpHtml(organism);
 webEnd();
+
+freez(&defaultPosition);
+position = NULL;
 }
 
 static boolean allLetters(char *s)
@@ -591,7 +531,7 @@ database tables containing the genome sequence and associated
 annotation tracks. By specifying chromosomal range and table type, the
 exact data set of interest can be viewed.  This tool thus makes it
 unnecessary to download and manipulate the genome itself and its
-massive data tracks (though that option is will always remain <A
+massive data tracks (although that option will always remain <A
 HREF=\"/\">available</A>.)" "\n"
      "<P>" "\n"
      "After each round of genome assembly, features such as mRNAs are
@@ -612,34 +552,22 @@ separately." "\n"
 of exploration</B>. Starting at the top of the form, use the default
 position (or enter a cytological band, eg 20p12, or type in a keyword
 from a GenBank entry to look up). Next select a positional table from
-the menu, for example, chrN_mrna.  Choosing an action will then
-display -- relative to the chromosomal range in the text box -- a
-option to view and refine displayed data fields, all the mRNA
-coordinate data, or the genomic DNA sequences of the RNAs.  If the
+the menu, for example, chrN_mrna.  Then choose an action: 
+\"Get all fields\" will return all fields of the chrN_mrna table in 
+the given position coordinate range.  \"Constrain query...\" will 
+offer several output format choices, as well as optional filtering 
+constraints to refine the search.  If the
 chromosomal range is too narrow, it may happen that no mRNA occurs
 there (meaning no data will be returned)." "\n"
      "<P>" "\n"
      "Notice that if you look up a gene or accession number, the tool
 typically returns a choice of several mRNAs.  Selecting one of these
 returns the table browser to its starting place but with the
-chromosomal location automaticallyentered in the text box." "\n"
+chromosomal location automatically entered in the text box." "\n"
      "<P>" "\n"
-     /*"The non-positional tables display all entries associated with
-       the selected assembly -- there is no way to restrict them to
-       chromosomes.  However there is a provision in the text box to
-       add a single word restriction.  Thus, to see which species of
-       macaque monkeys have contributed sequence data, selected the
-       organism table, view all fields, and restrict the text box to
-       the genus Macaca." "\n" "<P>" "\n"*/
      "For either type of table, a user not familiar with what the table
-offers should select \"Filter fields\".  Some tables offer many
-columns of data of which only a few might be relevent. The fewer
-fields selected, the simpler the next stage of data return.  If all
-the fields are wanted, shortcut this step by selecting \"Get all
-fields\".  If a chromosome and range are in the text box, \"Get DNA\"
-will retrieve genomic sequences in fasta format without any table
-attributes other than chromosome, freeze date, and start-stop genomic
-coordinates." "\n"
+offers should select \"Constrain query...\".  The fields of the table 
+will be listed in the optional filtering constraints section.  " "\n"
      );
 }
 
@@ -714,7 +642,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    gotFirst = TRUE;
 	else
 	    puts(" AND </TD></TR>\n");
-	printf("<TR><TD> %s </TD><TD>\n", row[0]);
+	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
 	if (strstr(row[1], "char"))
 	    {
 	    snprintf(name, sizeof(name), "dd_%s", row[0]);
@@ -735,7 +663,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 puts("</TD></TR></TABLE>\n");
-puts(" </TD></TR><TR><TD>");
+puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
 strncpy(name, "log_rawQuery", sizeof(name));
 cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
 puts("Free-form query: ");
@@ -751,20 +679,51 @@ puts("</FORM>");
 
 puts(
      "<P>\n"
-     "By default, all lines in the specified position range will be returned. \n"
-     "To restrict the number of lines that are returned, you may enter \n"
-     "patterns with wildcards for each text field, and/or enter range \n"
-     "restrictions for numeric fields. \n"
+     "By default, all records in the specified position range will be returned. \n"
+     "To restrict the number of records that are returned, you may enter \n"
+     "constraints on the values of fields. \n"
      "</P><P>\n"
+     "Text fields are compared to patterns containing wildcard characters.  \n"
      "Wildcards are \"*\" (to match \n"
      "0 or more characters) and \"?\" (to match a single character).  \n"
      "Each word in a text field box will be treated as a pattern to match \n"
-     "against that field (implicit OR).  If any pattern matches, that field \n"
-     "matches. \n"
+     "against that field.  If any pattern matches, that field matches. \n"
      "</P><P>\n"
      "For numeric fields, enter a single number for operators such as &lt;, \n"
      "&gt;, != etc.  Enter two numbers (start and end) separated by a \"-\" or \n"
      "\",\" for \"in range\". \n"
+     "</P><P>\n"
+     "The \"Free-form query\" expression allows you to form more complex \n"
+     "constraints.  The syntax is the same as a SQL \"where\" clause, but \n"
+     "wildcards are \"*\" and \"?\" as described above.  In short: \n"
+     "<UL>\n"
+     "<LI> Complex constraints are built by combining simple constraints. \n"
+     "     A simple constraint is of this form: \n"
+     "     <BR> <I> fieldName operator value </I> \n"
+     "     <BR> where <I>fieldName</I> is a field name listed above, \n"
+     "     <I>operator</I> is the mode of comparison (see below), \n"
+     "     and <I>value</I> is a number, string, wildcard (see below), \n"
+     "     or another field name. \n"
+     "     <I>fieldName</I> may also be an arithmetic expression of \n"
+     "     numeric field names.  For example (with the chrN_rmsk table): \n"
+     "     <BR> (milliDel + milliIns) &lt; 500 \n"
+     "     <BR> Simple constraints can be negated with NOT, and combined \n"
+     "     with AND or OR.  You may use as many parentheses as you like to \n"
+     "     group expressions.  For example: \n"
+     "     <BR> ((txEnd - txStart) &gt; 100) AND (txStart != cdsStart) \n"
+     "     </LI>\n"
+     "<LI> String or wildcard values for text comparisons must be quoted.  \n"
+     "     Single or double quotes may be used.  \n"
+     "     If comparing to a literal string value, \n"
+     "     you may use the \"=\" operator.  If comparing to a wildcard \n"
+     "     value, you must use the \"LIKE\" (or \"NOT LIKE\") operator.  \n"
+     "     For example: \n"
+     "     <BR> chrom = \"chr19\" \n"
+     "     <BR> chrom NOT LIKE \'chr??\' \n"
+     "     </LI> \n"
+     "<LI> Numeric comparison operators are &lt;, &lt;=, =, !=, &gt;=, and \n"
+     "     &gt; .  Arithmetic operators include +, -, *, and /.  \n"
+     "</UL>\n"
      "</P>\n"
      );
 
