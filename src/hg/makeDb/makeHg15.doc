@@ -2655,3 +2655,7 @@ hgLoadBed hg15 syntenyRat ucsc100k.bed
 # create MGC Genes track (markd 13 may 2003)
 # this will be automated in the incremental genbank update
 /cluster/store5/genbank/bin/i386/mgcDbLoad hg15  /cluster/store5/genbank/data/download/mgc/2003.05.06/mgcFullStatus.tab.gz 
+
+
+#Creating the hg15Mm3L track on hg15
+kent/src/hg/sampleTracks/makeHg15Mm3.csh
