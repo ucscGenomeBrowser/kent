@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.18 2004/04/15 01:01:58 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.19 2004/04/15 19:37:35 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -29,6 +29,8 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.18 2004/04/15 01:01:58 kate E
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
 #define HGLFT_FROMDB_VAR "fromDb"               /* FROM assembly */
 #define HGLFT_TODB_VAR "toDb"                   /* TO assembly */
+#define ERROR_HELP      "errorhelp"
+
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
@@ -231,6 +233,14 @@ char *fromDb, *toDb;
 char *err = NULL;
 cart = theCart;
 
+if (cgiOptionalString(ERROR_HELP))
+    {
+    puts("<PRE>");
+    puts(liftOverErrHelp());
+    puts("</PRE>");
+    return;
+    }
+
 /* Get data to convert - from userData variable, or if 
  * that is empty from a file. */
 
@@ -328,6 +338,7 @@ if (userData != NULL && userData[0] != '\0')
             }
         puts("</PRE>\n");
         puts("</BLOCKQUOTE>\n");
+        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", ERROR_HELP);
         }
     }
 webDataFormats();

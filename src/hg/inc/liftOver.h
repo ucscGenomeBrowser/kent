@@ -47,6 +47,8 @@ void liftOverSample(char *fileName, struct hash *chainHash,
 void readLiftOverMap(char *fileName, struct hash *chainHash);
 /* Read map file into hashes. */
 
+char *liftOverErrHelp();
+/* Help message explaining liftOver failures */
 
 #endif
 

@@ -10,11 +10,12 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.12 2004/03/25 23:54:31 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.13 2004/04/15 19:37:34 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
 bool fudgeThick = FALSE;
+bool errorHelp = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +39,7 @@ errAbort(
   "                  Default %3.2f\n"
   "   -fudgeThick  If thickStart/thickEnd is not mapped, use the closest \n"
   "                mapped base.  Recommended if using -minBlocks.\n"
+  "   -errorHelp        Explaining error messages.\n"
   , LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
   );
 }
@@ -77,6 +79,8 @@ optionHash(&argc, argv);
 minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
+if (optionExists("errorHelp"))
+    errAbort(liftOverErrHelp());
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, argv[3], argv[4]);

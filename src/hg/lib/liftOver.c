@@ -12,7 +12,7 @@
 #include "liftOverChain.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.8 2004/04/15 15:12:09 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.9 2004/04/15 19:37:34 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1287,4 +1287,20 @@ if (conn)
     hDisconnectCentral(&conn);
     }
 return path;
+}
+
+char *liftOverErrHelp()
+/* Help message explaining liftOver failures */
+{
+    return
+    "Deleted in new:\n"
+    "    None of sequence intersects with any alignment chain for the region\n"
+    "Partially deleted in new:\n"
+    "    Sequence intersects with part of a single alignment chain in the region\n"
+    "Split in new\n"
+    "    Sequence partially intersects multiple chains in the region\n"
+    "Duplicated in new\n"
+    "    Sequence completely intersects multiple chains in the region\n"
+    "Boundary problem\n"
+    "    Missing start or end base in an exon\n";
 }
