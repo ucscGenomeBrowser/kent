@@ -4928,3 +4928,16 @@ mkdir -p $3:h
 
     hgsql rn3 -e 'load data local infile "rn3.tab" into table rn3.kgSpAlias'
 
+# UPDATE kgProtAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
+# Add new rn3 protein display IDs to the alias table to support user search
+    
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/pb/newDisplayId
+
+     hgsql proteome -e 'select rn3.kgSpAlias.kgID,spOldNew.oldDisplayId,spOldNew.newDisplayId from spOldNew, rn3.kgSpAlias where spOldNew.acc=rn3.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >rn3.kgProtAlias.tab
+
+# get rid of the header line at the end of the file
+    vi rn3.kgProtAlias.tab 
+
+    hgsql rn3 -e 'load data local infile "rn3.kgProtAlias.tab" into table rn3.kgProtAlias'
+
