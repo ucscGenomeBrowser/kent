@@ -1,3 +1,4 @@
+include ../../../inc/common.mk
 
 OVERSEL = ../overlapSelect
 DIFF = diff -u
@@ -136,7 +137,7 @@ colExclude: mkout
 	${DIFF} expected/colExclude.cluster output/colExclude.cluster
 
 mkout:
-	@mkdir -p output
+	@${MKDIR} output
 
 clean:
 	rm -rf output
