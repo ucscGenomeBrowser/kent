@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.494 2003/10/10 14:59:59 booch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.495 2003/10/10 17:17:03 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12400,12 +12400,12 @@ else if (containsStringNoCase(track, "blastzStrictChain")
     strcpy(&dbName[3 + len], "3");
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
-/* else if (sameWord(track, "blatChimp") ||
+ else if (sameWord(track, "blatChimp") ||
          sameWord(track, "chimpBac") ||
          sameWord(track, "bacChimp"))
     { 
     longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
-    } */
+    }
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
     htcLongXenoPsl2(track, item);
