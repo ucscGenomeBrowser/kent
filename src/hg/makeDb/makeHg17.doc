@@ -5547,7 +5547,7 @@ cat > makeMaf.csh << '_EOF_'
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
-# MAKING MOUSE SYNTENY (WORKING - 2004-07-02 - Hiram)
+# MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
 
 ssh hgwdev
 mkdir /cluster/data/hg17/bed/syntenyMm5
@@ -5561,11 +5561,10 @@ cp -p /cluster/data/hg17/bed/syntenyRn3/*.pl .
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg17 -table=blastzBestMm5
 ./synteny2bed.pl
-XXX - running 2004-07-02 23:20
-#	The five commands above
-#	real    220m16.227s
-#	user    0m22.940s
-#	sys     0m3.960s
+    #	The five commands above
+    #	real    209m28.161s
+    #	user    0m21.040s
+    #	sys     0m4.100s
 
 #	Used to load this in syntenyMm5, but that type is misleading to
 #	the table browser and fails the checkTableCoords check.
@@ -5576,6 +5575,8 @@ sed -e 's/ensPhusionBlast/ensRatMm5Hom/g' \
       > ensRatMm5Hom.sql
 hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     #	featureBits hg17 ensRatMm5Hom
+    #	2649530748 bases of 2866216770 (92.440%) in intersection
+    #	featureBits hg17 ensRatMm4Hom
     #	2549307611 bases of 2866216770 (88.943%) in intersection
     #	featureBits hg16 syntenyMm5
     #	2560252977 bases of 2865248791 (89.355%) in intersection
