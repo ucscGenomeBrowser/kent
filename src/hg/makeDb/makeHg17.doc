@@ -2700,7 +2700,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     mkdir ../mafNet
 
     foreach f (chr*.axt)
-      set maf = $f:t:r.fr1.maf
+      set maf = $f:t:r.rn3.maf
       echo translating $f to $maf
       axtToMaf $f \
             /cluster/data/hg17/chrom.sizes /cluster/data/rn3/chrom.sizes \
@@ -3907,7 +3907,6 @@ XXXX - running 2004-06-24 10:44
       /cluster/bin/i386/chainPreNet $i /cluster/data/hg17/chrom.sizes \
                         /cluster/data/mm4/chrom.sizes ../preNet/$i
     end
-XXXX - running 2004-06-24 10:45
 
     cd ..
     mkdir n1
@@ -3947,21 +3946,22 @@ XXXX - running 2004-06-24 10:45
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
     netFilter -minGap=10 mouse.net |  hgLoadNet hg17 netMm4 stdin
     netFilter -minGap=10 mouseSyn.net | hgLoadNet hg17 syntenyNetMm4 stdin
-#   real    12m53.070s
-#   user    6m6.540s
-#   sys     0m50.580s
+    #	real    44m20.735s
+    #	user    15m58.620s
+    #	sys     1m58.720s
+XXXX - running 2004-06-24 13:52
     # check results
-    # featureBits hg17 netmm4
-    # 2816623107 bases of 2866216770 (98.270%) in intersection
-    # featureBits hg16 netmm4
-    # 2820958389 bases of 2865248791 (98.454%) in intersection
+    # featureBits hg17 netMm4
+    # XXXX 2816623107 bases of 2866216770 (98.270%) in intersection
+    # featureBits hg16 netMm4
+    # XXXX 2820958389 bases of 2865248791 (98.454%) in intersection
 
-    # featureBits hg17 syntenyNetmm4
-    # 2780883450 bases of 2866216770 (97.023%) in intersection
-    # featureBits hg16 syntenyNetmm4
-    # 2784011730 bases of 2865248791 (97.165%) in intersection
+    # featureBits hg17 syntenyNetMm4
+    # XXXX 2780883450 bases of 2866216770 (97.023%) in intersection
+    # featureBits hg16 syntenyNetMm4
+    # XXXX 2784011730 bases of 2865248791 (97.165%) in intersection
 
-    # Add entries for net and chain to rat/hg17 trackDb
+    # Add entries for net and chain to mouse/hg17 trackDb
 
     # make net
     ssh eieio
@@ -3976,21 +3976,20 @@ XXXX - running 2004-06-24 10:45
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
     mkdir ../axtNet ../mafNet
-cat > makeMaf.csh << 'EOF'
-    foreach n (mouseNet/chr*.net)
-	set c=$n:t:r
-	echo "netToAxt: $c.net -> $c.axt"
-	rm -f ../axtNet/$c.axt
-	netToAxt mouseNet/$c.net chain/$c.chain \
-		/cluster/data/hg17/nib \
-		/cluster/data/mm4/nib stdout | \
-                    axtSort stdin ../axtNet/$c.axt
-	echo "Complete: $c.net -> axtNet/$c.axt"
+cat > makeMaf.csh << '_EOF_'
+    foreach f (mouseNet/chr*.net)
+        set c = $f:t:r
+        echo "netToAxt: $c.net -> $c.axt"
+        rm -f ../axtNet/$c.axt
+        netToAxt mouseNet/$c.net chain/$c.chain \
+	    /cluster/data/hg17/nib /cluster/data/mm4/nib stdout | \
+	    axtSort stdin ../axtNet/$c.axt
         axtToMaf ../axtNet/$c.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/mm4/chrom.sizes \
             ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=mm4.
+	echo "Complete: $c.net -> axtNet/$c.axt -> mafNet/$c.maf"
     end
-'EOF'
+'_EOF_'
 # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
