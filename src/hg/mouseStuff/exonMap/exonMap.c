@@ -11,9 +11,9 @@ void usage()
 errAbort(
   "exonMap - map exons using two psls\n"
   "usage:\n"
-  "   exonMap XXX\n"
+  "   exonMap reference.psl target.psl out.psl\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -exons     output individual exons\n"
   );
 }
 
@@ -96,14 +96,15 @@ void mapBlocks(struct psl *qPsl, struct psl *tPsl, funcPtr func, void *funcData)
     int qStart, qEnd, tStart, tEnd;
     boolean out = FALSE;
     int startBlock;
+    int blocksAlloced = 10;
 
     for(ii=0; ii < qPsl->blockCount; ii++)
 	{
 	out = FALSE;
 	AllocVar(psl);
-	psl->tStarts = malloc(sizeof(int) * 50); 
-	psl->qStarts = malloc(sizeof(int) * 50); 
-	psl->blockSizes = malloc(sizeof(int) * 50); 
+	psl->tStarts = malloc(sizeof(int) * blocksAlloced); 
+	psl->qStarts = malloc(sizeof(int) * blocksAlloced); 
+	psl->blockSizes = malloc(sizeof(int) * blocksAlloced); 
 
 	qStart = qPsl->qStarts[ii];
 	qEnd = qStart + qPsl->blockSizes[ii];
@@ -127,7 +128,13 @@ void mapBlocks(struct psl *qPsl, struct psl *tPsl, funcPtr func, void *funcData)
 		psl->match += psl->blockSizes[psl->blockCount];
 		psl->blockCount++;
 		tBlock++;
-		assert(tBlock < 50);
+		if (tBlock == blocksAlloced)
+		    {
+		    blocksAlloced += 25;
+		    psl->tStarts = realloc(psl->tStarts,sizeof(int) * blocksAlloced); 
+		    psl->qStarts = realloc(psl->qStarts,sizeof(int) * blocksAlloced); 
+		    psl->blockSizes = realloc(psl->blockSizes,sizeof(int) * blocksAlloced); 
+		    }
 		}
 
 	    psl->tEnd =  psl->tStarts[psl->blockCount-1] + psl->blockSizes[psl->blockCount-1];
