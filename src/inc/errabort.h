@@ -63,6 +63,9 @@ void vaWarn(char *format, va_list args);
 void warn(char *format, ...);
 /* Issue a warning message. */
 
+void errnoWarn(char *format, ...);
+/* Prints error message from UNIX errno first, then does rest of warning. */
+
 typedef void (*WarnHandler)(char *format, va_list args);
 /* Function that can warn. */
 
