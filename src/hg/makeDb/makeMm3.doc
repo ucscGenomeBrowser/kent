@@ -1046,6 +1046,47 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     rm maf300/*.unfixed
 
 
+REGENERATE MAF FROM MOUSE-RAT NET FOR MULTIZ (DONE 10/27/03 angie)
+    # Penn State complained about the drop in coverage -- so omit the 
+    # -maxGap=300 in netToAxt and try again.  
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn3.swp/axtChain
+    mkdir ../axtNet
+    netSplit mouse.net mouseNet
+    cd mouseNet
+    foreach i (*.net)
+        set c = $i:r
+        netToAxt $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
+          /cluster/data/rn3/softNib ../../axtNet/$c.axt
+        echo done ../axt/$c.axt
+    end
+    cd ..
+    rm -r mouseNet
+
+    # Make maf's for multiz
+    cd /cluster/data/mm3/bed/blastz.rn3.swp
+    mkdir maf
+    foreach i (axtNet/chr*.axt)
+      set maf = maf/$i:t:r.mr.maf
+      axtToMaf $i \
+            /cluster/data/mm3/chrom.sizes /cluster/data/rn3/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=rn3.
+    end
+
+
+REGENERATE MAF FROM MOUSE-RAT AXTBEST FOR MULTIZ (DONE 10/29/03 angie)
+    # Sounds like Penn State's desired coverage needs axtBest not net.
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn3.swp
+    mkdir mafBest
+    foreach i (axtBest/chr*.axt)
+      set maf = mafBest/$i:t:r.mr.maf
+      axtToMaf $i \
+            /cluster/data/mm3/chrom.sizes /cluster/data/rn3/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=rn3.
+    end
+
+
 CREATE MAF FROM MOUSE-HUMAN NET FOR MULTIZ (DONE 9/22/03 angie)
     # Use netToAxt -maxGap=300 so we can pass nets to multiz.
     ssh kkstore
@@ -1054,9 +1095,9 @@ CREATE MAF FROM MOUSE-HUMAN NET FOR MULTIZ (DONE 9/22/03 angie)
     cd net
     foreach i (chr*.net)
         set c = $i:r
-	netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
+        netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
           /cluster/data/hg15/nib ../../axtNet300/$c.axt
-	echo done ../axt/$c.axt
+        echo done ../axt/$c.axt
     end
     cd ..
 
@@ -1071,6 +1112,45 @@ CREATE MAF FROM MOUSE-HUMAN NET FOR MULTIZ (DONE 9/22/03 angie)
       /cluster/bin/scripts/fixmaf.pl < $maf > $maf:r
     end
     rm maf300/*.unfixed
+
+
+REGENERATE MAF FROM MOUSE-HUMAN NET FOR MULTIZ (DONE 10/28/03 angie)
+    # Penn State complained about the drop in coverage -- so omit the 
+    # -maxGap=300 in netToAxt and try again.  
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.hg15.swap/axtChain
+    mkdir ../axtNet
+    cd net
+    foreach i (chr*.net)
+        set c = $i:r
+        netToAxt $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
+          /cluster/data/hg15/nib ../../axtNet/$c.axt
+        echo done ../axtNet/$c.axt
+    end
+    cd ..
+
+    # Make maf's for multiz
+    cd /cluster/data/mm3/bed/blastz.hg15.swap
+    mkdir maf
+    foreach i (axtNet/chr*.axt)
+      set maf = maf/$i:t:r.mh.maf
+      axtToMaf $i \
+            /cluster/data/mm3/chrom.sizes /cluster/data/hg15/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=hg15.
+    end
+
+
+REGENERATE MAF FROM MOUSE-HUMAN BEST FOR MULTIZ (DONE 10/29/03 angie)
+    # Sounds like Penn State's desired coverage needs axtBest not net.
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.hg15.swap
+    mkdir mafBest
+    foreach i (axtBest/chr*.axt.gz)
+      set maf = mafBest/$i:t:r:r.mh.maf
+      gunzip -c $i | axtToMaf stdin \
+            /cluster/data/mm3/chrom.sizes /cluster/data/hg15/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=hg15.
+    end
 
 
 RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (DONE 9/23/03 angie)
@@ -1104,6 +1184,74 @@ RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (DONE 9/23/03 angie)
     # get featureBits coverage:
     featureBits mm3 multizHg15Rn3
     # 1738562766 bases of 2505900260 (69.379%) in intersection
+
+
+RE-RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (DONE 10/28/03 angie)
+
+    ssh kkstore
+    mkdir /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-28
+    cd /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-28
+
+    cat << "EOF" > ./doMultiz.csh
+    foreach mh (/cluster/data/mm3/bed/blastz.hg15.swap/maf/chr*.maf)
+      set c = $mh:t:r:r
+      set mr = /cluster/data/mm3/bed/blastz.rn3.swp/maf/$c.mr.maf
+      echo multiz-ing $c
+      /cluster/bin/penn/multiz.7.23 $mh $mr - > $c.mhr.maf
+    end
+"EOF"
+    # << this line makes emacs coloring happy
+    csh -ef ./doMultiz.csh >& doMultiz.log &
+    tail -f doMultiz.log 
+
+NOT DONE:
+    # setup up external files for database to reference
+    ssh hgwdev
+    mkdir /gbdb/mm3/multizHg15Rn3NoMaxGap
+    cd /gbdb/mm3/multizHg15Rn3NoMaxGap
+    foreach f (/cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-28/*.maf)
+        ln -s $f .
+    end
+
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn mm3 multizHg15Rn3NoMaxGap
+
+    # get featureBits coverage:
+    featureBits mm3 multizHg15Rn3NoMaxGap
+
+
+RE-RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (IN PROGRESS 10/29/03 angie)
+
+    ssh kkstore
+    mkdir /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-29
+    cd /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-29
+
+    cat << "EOF" > ./doMultiz.csh
+    foreach mh (/cluster/data/mm3/bed/blastz.hg15.swap/mafBest/chr*.maf)
+      set c = $mh:t:r:r
+      set mr = /cluster/data/mm3/bed/blastz.rn3.swp/mafBest/$c.mr.maf
+      echo multiz-ing $c
+      /cluster/bin/penn/multiz.7.23 $mh $mr - > $c.mhr.maf
+    end
+"EOF"
+    # << this line makes emacs coloring happy
+    csh -ef ./doMultiz.csh >& doMultiz.log &
+    tail -f doMultiz.log 
+
+NOT DONE:
+    # setup up external files for database to reference
+    ssh hgwdev
+    mkdir /gbdb/mm3/multizHg15Rn3Best
+    cd /gbdb/mm3/multizHg15Rn3Best
+    foreach f (/cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-10-29/*.maf)
+        ln -s $f .
+    end
+
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn mm3 multizHg15Rn3Best
+
+    # get featureBits coverage:
+    featureBits mm3 multizHg15Rn3Best
 
 
 RE-AXT-ING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 09/25/03)
