@@ -16,5 +16,8 @@ CREATE TABLE mrnaOrientInfo (
     signalPos smallint not null,	# Position of start of polyA signal relative to end of EST or 0 if no signal
     revSignalPos smallint not null,	# PolyA signal position on reverse strand if any
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(8),bin),
+    INDEX(chrom(8),chromStart),
+    INDEX(chrom(8),chromEnd),
+    INDEX(name(20))
 );
