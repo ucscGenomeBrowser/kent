@@ -25,11 +25,12 @@ endif
 cp -r known /iscratch/i/$db
 
 # Load up iscratch/i with blastp and related files
-ssh kk
+ssh kkr1u00
 mkdir -p /iscratch/i/blast
 cp /projects/compbio/bin/i686/blastall /iscratch/i/blast
 mkdir -p /iscratch/i/blast/data
 cp /projects/compbio/bin/i686/data/* /iscratch/i/blast/data
+iSync
 
 
 # Split up fasta file into bite sized chunks for cluster
