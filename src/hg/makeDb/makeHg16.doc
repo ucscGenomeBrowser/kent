@@ -7550,19 +7550,48 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     #  387166 build123/updateExceptionList.sql
     #  383759 build124/updateExceptionList.sql
 
-# Kluge: add Affy SNPs from snpMap table.
+# Add Affy SNPs from snpMap table.
 
-mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, 0 as avHet, 0 as avHetSE, 'unknown' as function, 'exact' as locType, 'Affy10K' as source, 0 as exception from snpMap, hgFixed.affy10KDetails where name=affyId;
-Query OK, 11454 rows affected (1 min 45.92 sec)
-Records: 11454  Duplicates: 0  Warnings: 0
+    #!/bin/csh -fe
 
-mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, hetzyg as avHet, avHetSE, 'unknown' as function, 'exact' as locType, 'Affy50K_HindIII' as source, 0 as exception from snpMap, hgFixed.affy120KDetails where name=affyId and enzyme='HindIII';
-Query OK, 59589 rows affected (2 min 2.91 sec)
-Records: 59589  Duplicates: 0  Warnings: 7845180
+    set db = hg16
+    cd /cluster/data/$db/bed/snp/affy/latest
+    touch affy.txt affy.bed Affy.bed bed.tab
+    rm -f affy*.txt affy*.bed Affy.bed* bed.tab
 
-mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, hetzyg as avHet, avHetSE, 'unknown' as function, 'exact' as locType, 'Affy50K_XbaI' as source, 0 as exception from snpMap, hgFixed.affy120KDetails where name=affyId and enzyme='XbaI';
-Query OK, 60605 rows affected (1 min 54.37 sec)
-Records: 60605  Duplicates: 0  Warnings: 7845180
+    # datafile was provided by Valmeekam, Venu [Venu_Valmeekam@affymetrix.com]
+    tar xfz affyhg16maps.tgz
+    wc -l affy*txt
+
+    awk '$1 !~ /^chrom/ {printf("%s\t%d\t%d\t%s\t0\t%s\t%s\tunknown\tsnp\tunknown\t0\t0\tunknown\texact\tAffy10K\t0\n",        $1,$2,$3,$4,$6,$7);}' < affy10K.txt         > affy10K.bed
+    awk '$1 !~ /^chrom/ {printf("%s\t%d\t%d\t%s\t0\t%s\t%s\tunknown\tsnp\tunknown\t0\t0\tunknown\texact\tAffy10Kv2\t0\n",      $1,$2,$3,$4,$6,$7);}' < affy10Kv2.txt       > affy10Kv2.bed
+    awk '$1 !~ /^chrom/ {printf("%s\t%d\t%d\t%s\t0\t%s\t%s\tunknown\tsnp\tunknown\t0\t0\tunknown\texact\tAffy50K_HindIII\t0\n",$1,$2,$3,$4,$6,$7);}' < affy50K_HindIII.txt > affy50K_HindIII.bed
+    awk '$1 !~ /^chrom/ {printf("%s\t%d\t%d\t%s\t0\t%s\t%s\tunknown\tsnp\tunknown\t0\t0\tunknown\texact\tAffy50K_XbaI\t0\n",   $1,$2,$3,$4,$6,$7);}' < affy50K_XbaI.txt    > affy50K_XbaI.bed
+
+    # this is a temporary kluge to fix some bad input data.
+    cat affy*.bed | sed 's/_par//' > Affy.bed
+
+    # the source enum for 'dbSnp' is 2; all of the affy* values are higher.
+    hgsql $db -e "delete from snp where source > 2 "
+
+    hgLoadBed $db snp Affy.bed -oldTable -tab
+
+    rm -f affy*.txt affy*.bed bed.tab
+    gzip Affy.bed
+
+    #mysql> select source, count(*) from snp group by source;                                                                                
+    #+-----------------+----------+
+    #| source          | count(*) |
+    #+-----------------+----------+
+    #| dbSnp           |  8722437 |
+    #| Affy10K         |    11464 |
+    #| Affy10Kv2       |    10128 |
+    #| Affy50K_HindIII |    56965 |
+    #| Affy50K_XbaI    |    58646 |
+    #+-----------------+----------+
+    #5 rows in set (52.96 sec)
+
+
 
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
