@@ -1300,9 +1300,9 @@ boolean secondSuccess;
 firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
 secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
 
-/*
 
-commaspot = strcspn(spec,",");
+
+commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
 firststring[commaspot] = '\0';
 strncpy(secondstring,spec + commaspot + 1,strlen(spec));
@@ -1332,10 +1332,7 @@ if (strcmp(firstChromName,secondChromName) != 0)
 *retWinStart = min(firstWinStart,secondWinStart);
 *retWinEnd = max(firstWinEnd,secondWinEnd);
 return TRUE;
-
-*/
 }
-
 
 
 struct hgPositions *hgPositionsFind(char *query, char *extraCgi, boolean useHgTracks, 

@@ -7013,56 +7013,11 @@ Otherwise display list of positions and return FALSE. */
 struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
-char firststring[512];
-char secondstring[512];
-int commaspot;
-char *firstChromName;
-int firstWinStart = 0;
-int firstWinEnd;
-char *secondChromName;
-int secondWinStart = 0;
-int secondWinEnd;
-boolean firstSuccess;
-boolean secondSuccess;
 
-/* begin MarkE code */
 
-if (strstr(spec,",") != NULL)
-    {
-    firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
-    secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
-    commaspot = strcspn(spec,",");
-    strncpy(firststring,spec,commaspot);
-    firststring[commaspot] = '\0';
-    strncpy(secondstring,spec + commaspot + 1,strlen(spec));
-    firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd);
-    secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd); 
-    if (firstSuccess == FALSE && secondSuccess == FALSE)
-	{
-	errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
-	return TRUE;
-	}
-    if (firstSuccess == FALSE)
-	{
-	errAbort("%s not uniquely determined: %d locations.",firststring,firstWinStart);
-	return TRUE;
-	}
-    if (secondSuccess == FALSE)
-	{
-	errAbort("%s not uniquely determined: %d locations.",secondstring,secondWinStart);
-	return TRUE;
-	}
-    if (strcmp(firstChromName,secondChromName) != 0)
-	{
-	errAbort("Sites occur on different chromosomes: %s,%s.",firstChromName,secondChromName);
-	return TRUE;
-	}
-    *retChromName = firstChromName;
-    *retWinStart = min(firstWinStart,secondWinStart);
-    *retWinEnd = max(firstWinEnd,secondWinEnd);
-    return TRUE;
-    }
-/* end MarkE code */
+if (strstr(spec,";") != NULL)
+    return handleTwoSites(spec, retChromName, retWinStart, retWinEnd);
+
 
 hgp = hgPositionsFind(spec, "", TRUE, cart);
 if (hgp == NULL || hgp->posCount == 0)
@@ -7089,6 +7044,7 @@ else
     return FALSE;
     }
 }
+
 
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
