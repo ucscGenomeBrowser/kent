@@ -8,4 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgSeqSearch.o
 
 hgSeqSearch: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgSeqSearch $O $(MYLIBS) $L
+	gcc -ggdb -o hgSeqSearch $O $(MYLIBS) $L
+	strip hgSeqSearch
+	chmod a+rx hgSeqSearch
+	mv hgSeqSearch /usr/local/apache/cgi-bin
