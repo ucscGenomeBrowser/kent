@@ -203,7 +203,7 @@ o - Tell the hgCentral database about it.  Log onto genome-centdb
     and enter mysql via
         mysql -u root -pbigSecret hgCentral
     At the mysql prompt type:
-       insert into dbDb values("hg13", "Human Nov. 2002", "/cluster/store4/gs.14/build31/nib", "Human", "USP18", "Human", 70. 1);
+       insert into dbDb values("hg13", "Human Nov. 2002", "/cluster/store4/gs.14/build31/nib", "Human", "USP18", 1, 50, "Human");
 o - Create the trackDb table as so
        cd ~/src/hg/makeDb/hgTrackDb
     Edit that makefile to add hg13 after hg12 and do
@@ -217,7 +217,7 @@ LOAD REPEAT MASKS (DONE 12/4/02)
        hgLoadOut hg13 ?/*.fa.out ??/*.fa.out
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (TO DO)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (IN PROGRESS 12/5/02 - MATT)
 
 Create packed chromosome sequence files 
      ssh eieio
@@ -230,7 +230,7 @@ Load chromosome sequence info into database and save chrom sizes
      cd ~/oo
      hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?{,?}/chr*.fa
      echo "select chrom,size from chromInfo" | hgsql -N hg13 > chrom.sizes
-
+DONE TO HERE???
 Store o+o info in database.
 Note: for build30, Terry specially requested these files from NCBI:
   finished.finf
@@ -309,11 +309,11 @@ format.
 
 # Make the nonhuman RNAs
         gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
-        | gbToFaRa xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin
+        | gbToFaRa humanXenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin
 
 # Make the nonhuman ESTs
         gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
-        gbToFaRa xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
+        gbToFaRa humanXenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
 
 
 STORING mRNA/EST SEQUENCE AND AUXILIARY INFO (DONE 12/04/02 - MATT)
