@@ -1,0 +1,10 @@
+track blastzCe1
+shortLabel elegans Blastz
+longLabel Blastz C elegans
+group compGeno
+priority 159
+visibility dense
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno cb1
