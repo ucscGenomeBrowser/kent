@@ -233,7 +233,7 @@ otherDb rn3
 
 track chainPt0
 shortLabel Chimp All Chains
-longLabel Chimp (Nov 03) All Chained Blastz and BLAT Alignments
+longLabel Chimp (Nov 03) All Chained Blastz and Blat Alignments
 group compGeno
 priority 145.1
 visibility hide
@@ -264,7 +264,7 @@ type chain seq
 
 track blastzBestPt0
 shortLabel Chimp Best
-longLabel Chimp (Nov 03) Reciprocal Best Blastz and BLAT Alignments
+longLabel Chimp (Nov 03) Reciprocal Best Blastz and Blat Alignments
 group compGeno
 priority 145.9
 visibility dense
