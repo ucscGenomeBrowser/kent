@@ -25,4 +25,25 @@ public class Robot {
 
   }
 
+ /**
+  * Clicks link and gets response code from server
+  *
+  * @param wc    The open web connection
+  * @param link  The link
+  * @return      The response code    
+  */
+  // copied from HgTracks.java 06-01-04.  
+  // need to refactor to get all programs to call this one.
+
+  // link is known to be URL
+  public static int getResponseCode(WebConversation wc, WebLink link) {
+    try {
+        link.click();
+	WebResponse resp = wc.getCurrentPage();
+	return resp.getResponseCode();
+    } catch (Exception e) {
+        System.err.println(e.getMessage());
+        return 0;
+    }
+  }
 }
