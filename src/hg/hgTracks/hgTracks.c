@@ -5980,6 +5980,7 @@ if (textWidth <= width)
 return NULL;
 }
 
+#ifdef OLD
 static void bactigDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -6023,13 +6024,15 @@ for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
     ++ix;
     }
 }
+#endif /* OLD */
 
 void bactigMethods(struct track *tg)
 /* Make track for bactigPos */
 {
 tg->loadItems = bactigLoad;
 tg->freeItems = bactigFree;
-tg->drawItems = bactigDraw;
+// tg->drawItems = bactigDraw;
+// tg->canPack = FALSE;
 }
 
 struct cloneFrag
