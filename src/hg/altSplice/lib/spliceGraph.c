@@ -434,6 +434,7 @@ freeMem(el->classStarts);
 freeMem(el->classEnds);
 freeMem(el->classTypes);
 splicePathFreeList(&el->paths);
+freez(&el->nodes);
 freez(pEl);
 }
 
@@ -550,9 +551,9 @@ sg->nodeCount++;
 void spliceNodeConnect(struct spliceNode *sn1, struct spliceNode *sn2)
 /* Create a directed edge from sn1 to sn2. */
 {
-if(sn1 == NULL)
-    return;
+assert(sn1);
 assert(sn2);
 ExpandArray(sn1->edges, sn1->edgeCount, sn1->edgeCount+1);
 sn1->edges[sn1->edgeCount] = sn2->id;
+sn1->edgeCount++;
 }
