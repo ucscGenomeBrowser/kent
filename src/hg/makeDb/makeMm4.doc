@@ -2815,6 +2815,8 @@ rm -fr chrom temp run
 # Make bed files and load consensus sequences for Affy U74 chip set.
 # [DONE, hartera, 2004-02-06]
 
+
+
 ----------------------------------
 
 #This needs to be done after affyU74 is already made.
@@ -2854,6 +2856,53 @@ hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
     hgLoadSeq -abbr=U74Av2: mm4 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
     hgLoadSeq -abbr=U74Bv2: mm4 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
     hgLoadSeq -abbr=U74Cv2: mm4 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+
+### GNF ATLAS 2  [Done jk 3/29/2004]
+    # Align probes from GNF1M chip.
+    ssh kk
+    cd /cluster/data/mm4/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    mkdir -p /cluster/bluearc/geneAtlas2
+    cp /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /cluster/bluearc/geneAtlas2
+    ls -1 /scratch/mus/mm4/trfFa/ > genome.lst
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1m.fa > mrna.lst
+    echo '#LOOP\nblat -fine -ooc=/scratch/hg/h/mouse11.ooc  /scratch/mus/mm4/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para time
+#Completed: 599 of 599 jobs
+#CPU time in finished jobs:      55883s     931.39m    15.52h    0.65d  0.002 y
+#IO & Wait Time:                  1869s      31.15m     0.52h    0.02d  0.000 y
+#Average job time:                  96s       1.61m     0.03h    0.00d
+#Longest job:                      174s       2.90m     0.05h    0.00d
+#Submission to last job:           411s       6.85m     0.11h    0.00d
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp ../affyGnf1m.psl ../../../jkStuff/liftAll.lft warn contig.psl
+    rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/geneAtlas2
+    ln -s /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl mm4 affyGnf1m.psl
+    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/gnf1m.fa
+
+    # Load up track
+    affyPslAndAtlasToBed affyGnf1m.psl \
+      /projects/compbio/data/microarray/geneAtlas2/mouse/GNF1M_20030403.AD.txt \
+      gnfAtlas2.bed /dev/null -newType -chip=GNF1M
+    hgLoadBed mm4 gnfAtlas2 gnfAtlas2.bed
+
+    # Create known gene mapping table and distance table.
+    hgMapToGene mm4 affyGnf1m knownGene knownToGnf1m
+    hgExpDistance mm4 hgFixed.gnfMouseAtlas2MedianRatio hgFixed.gnfMouseAtlsas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 
 ######## MAKING FAMILY BROWSER TABLES #######  (DONE - 2004-01-06 - Hiram)
 # These are instructions for building the
