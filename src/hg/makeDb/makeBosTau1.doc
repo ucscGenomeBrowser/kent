@@ -292,6 +292,22 @@ exit; # don't actually run this like a script :)
   mkdir -p /cluster/bluearc/bosTau1/nib
   cp -p /cluster/data/bosTau1/nib/bosTau1.2bit /cluster/bluearc/bosTau1/nib
 
+# GENERATE split masked fas for blastz (DONE, Oct. 19, 2004, Heather)
+  ssh kkr1u00
+  mkdir -p /iscratch/i/bosTau1/splitFas
+  cd /cluster/data/bosTau1
+  /cluster/bin/i386/faSplit sequence /cluster/data/bosTau1/bosTau1.softmask2.fa 5000 \
+    /iscratch/i/bosTau1/splitFas
+  # slight problem with directory name
+  cd /iscratch/i/bosTau1
+  mkdir splitDir
+  mv splitFas* splitDir
+  rmdir splitFas
+  # check that I got all scaffolds
+  grep SCAFFOLD *.fa > SCAFFOLD.list
+  # sync
+  /cluster/bin/scripts/iSync
+
 # MAKE 11.OOC FILE FOR BLAT (DONE, Oct. 10, 2004, Heather)
   ssh kkr1u00
   mkdir /cluster/data/bosTau1/bed/ooc
