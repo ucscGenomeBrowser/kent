@@ -240,7 +240,7 @@ type bed 4 .
 
 track celeraDupPositive
 shortLabel WSSD Duplication
-longLabel Sequence Identified as Duplicate by High Depth Celera Reads 
+longLabel Sequence Identified as Duplicate by High-Depth Celera Reads 
 group map
 priority 30
 visibility hide
