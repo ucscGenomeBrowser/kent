@@ -798,6 +798,22 @@ priority 203
 visibility hide
 type bed 4 .
 
+track mapMm2X
+shortLabel Mapped 2X 
+longLabel  Mapped 2X through Mm5
+group x
+priority 203
+visibility hide
+type bed 4 .
+
+track mapMm3X
+shortLabel Mapped 3X 
+longLabel  Mapped 3X through Mm5
+group x
+priority 203
+visibility hide
+type bed 4 .
+
 searchTable uc16
 searchMethod exact
 searchType bed
