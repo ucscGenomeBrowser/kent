@@ -82,7 +82,6 @@
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
-#include "plasPairs.h"
 #include "sample.h"
 #include "axt.h"
 #include "axtInfo.h"
