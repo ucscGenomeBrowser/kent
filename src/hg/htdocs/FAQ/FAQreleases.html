@@ -56,6 +56,7 @@
                 <LI><A HREF="#release9">Missing annotation tracks</A>
                 <LI><A HREF="#release10">What next with the human genome?</A>
                 <LI><A HREF="#release11">Mouse strain used for mouse genome sequence</A>
+                <LI><A HREF="#release13">UniProt (Swiss-Prot/TrEMBL) display changes</A>
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
 		<BR>
@@ -673,7 +674,137 @@
 	</TABLE>
 	</TD></TR>
     </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release13"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; UniProt (Swiss-Prot/TrEMBL) display changes</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"What has UCSC done to accommodate the changes to 
+			 display IDs recently introduced by UniProt (aka
+		 	 Swiss-Prot/TrEMBL)?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Here is a detailed description of the database changes
+			we have made to accommodate the UniProt changes. If 
+			you are using the <em>proteinID</em> field in our 
+			knownGene 
+			table or the Swiss-Prot/TrEMBL display ID for indexing
+			or cross-referencing other data, we strongly suggest 
+			you transition to the UniProt accession number. 
+		  	These changes will also affect anyone who is 
+			mirroring our site.
+			<OL>
+			<LI>
+			The latest UniProt Knowledgebase (Release 46.0, 
+			Feb. 1st, 2005) was parsed and the results were 
+			stored in a newly created database <em>sp050201</em>.
+			<LI>
+			A corresponding database, <em>proteins050201</em>, 
+			was constructed based on data in <em>sp050201</em> 
+			and other protein data sources.
+			<LI>
+			Two new symbolic database pointers, <em>uniProt</em> 
+			and <em>proteome</em>, have been created to point to 
+			the two new databases mentioned above. Some parts of 
+			our programs use the data in these two 
+			DBs.<PRE><TT>   uniProt  ---> sp050201
+   proteome ---> proteins050201</TT></PRE>
+			<LI>
+			The existing protein symbolic database pointers, 
+			<em>swissProt</em> and <em>proteins</em> remain 
+			unchanged. Some parts of our programs still use these 
+			two pointers and the data in their associated protein 
+			databases.<PRE><TT>   swissProt ---> sp041115
+   proteins  ---> proteins041115</TT></PRE>
+			<LI>
+			Two new tables, <em>spOldNew</em> and 
+			<em>uniProtAlias</em>, have been added to the proteome
+			database.<BR><BR>
+    			The <em>spOldNew</em> table contains three columns:
+			<UL>
+			<LI><em>acc</em>  -- primary accession number
+    			<LI><em>oldDisplayId</em> -- old display ID
+    			<LI><em>newDisplayId</em> -- new display ID
+			</UL>
+			<BR>
+    			The uniProtAlias table contains four columns:
+			<UL>
+    			<LI><em>acc</em> -- UniProt accession number
+    			<LI><em>alias</em> -- alias (could be acc, old and new
+			display IDs, etc.)
+    			<LI><em>aliasSrc</em> -- source of the alias type
+    			<LI><em>aliasSrcDate</em> -- date of the source data
+			</UL>
+			<P>
+    			The aliases include primary accessions, secondary 
+			accessions new display IDs, old display IDs, and old 
+			display IDs corresponding to new secondary accessions.
+			</P>
+			<LI>
+			Three new functions have been added to 
+			<em>kent/src/hg/spDb.c</em>: <PRE><TT>   char *oldSpDisplayId(char *newSpDisplayId);
+   /* Convert from new Swiss-Prot display ID to old display ID */
+      
+   char *newSpDisplayId(char *oldSpDisplayId); 
+   /* Convert from old Swiss-Prot display ID to new display ID */
+
+   char *uniProtFindPrimAcc(char *id);
+   /* Return primary accession given an alias. */</TT></PRE>
+			<P>
+   			The <em>uniProtFindPrimAcc()</em> function is enabled 
+			by the new <em>uniProtAlias</em> table.</P>
+			</OL>
+			<P>
+			We anticipate additional changes down the road and 
+			may eventually merge the two sets of protein DB 
+			pointers into one set.
+			<P>
+			Currently, the <em>proteinID</em> field of the 
+			knownGene table 
+			for existing genome releases (hg15, hg16, 
+			hg17, mm3, mm4, mm5, rn2, and rn3) uses old 
+			Swiss-Prot/TrEMBL display IDs (pre-1 Feb. '05). In 
+			the future, we may change this field to show the 
+			UniProt accession number. Should we choose not to 
+			change the content of the <em>proteinID</em> field, 
+			we may consider adding a new field, 
+			<em>uniProtAcc</em>.
+			<P>
+			If you have any questions about these changes and 
+			their impact on your work, please email us at 
+			<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>. 
+			Mirror sites may send questions to 
+			<A HREF="mailto:genome-mirror@soe.ucsc.edu">genome-mirror@soe.ucsc.edu</A>.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
     </TD><TD WIDTH=15></TD></TR>
+
 </TABLE>
 </BODY></HTML>
 
