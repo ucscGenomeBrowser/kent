@@ -3676,10 +3676,6 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	rep = simpleRepeatLoad(row+rowOffset);
-	printf("<B>Chromosome:</B> %s<BR>\n", skipChr(rep->chrom));
-	printf("<B>Begin in chromosome:</B> %d<BR>\n", rep->chromStart);
-	printf("<B>End in chromosome:</B> %d<BR>\n", rep->chromEnd);
-	printf("<B>Size:</B> %d<BR>\n", rep->chromEnd - rep->chromStart);
 	printf("<B>Period:</B> %d<BR>\n", rep->period);
 	printf("<B>Copies:</B> %4.1f<BR>\n", rep->copyNum);
 	printf("<B>Consensus size:</B> %d<BR>\n", rep->consensusSize);
