@@ -1591,7 +1591,7 @@ fill = atoi(cartUsualString(cart, o3, "1"));
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
 minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, tg->minRange );
-maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), tg->maxRange);
+maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, tg->maxRange);
 
 lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 cartSetString( cart, "win", "F" );
@@ -8678,6 +8678,10 @@ if (withLeftLabels)
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
+	double minRangeCutoff, maxRangeCutoff;
+	char o4[128];
+	char o5[128];
+	
 	struct slList *item;
 	enum trackVisibility vis = track->limitedVis;
 	int tHeight;
@@ -8687,19 +8691,17 @@ if (withLeftLabels)
 	if (withCenterLabels)
 	    tHeight += fontHeight;
 	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+
+	minRange = 0.0;
+	snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+	snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
+   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
+	    
 	
     	if( sameString( track->mapName, "humMusL" ) ||
 		 sameString( track->mapName, "musHumL" ))
 	    {
-	    double minRangeCutoff, maxRangeCutoff;
-	    char o4[128];
-	    char o5[128];
-	    minRange = 0.0;
-	    snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
-	    snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
-
-            minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
-   	    maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), track->maxRange);
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
 	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
 	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
@@ -8724,8 +8726,8 @@ if (withLeftLabels)
 	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", (int)track->minRange);
-	    sprintf( maxRangeStr, "%d", (int)track->maxRange);
+	    sprintf( minRangeStr, "%d", (int)minRangeCutoff);
+	    sprintf( maxRangeStr, "%d", (int)maxRangeCutoff);
 	    }
 
 	
