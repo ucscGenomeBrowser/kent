@@ -5409,7 +5409,7 @@ if (!hideControls)
     printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
 	  "View DNA</A></TD>",  hgcName(),
 	  winStart, chromName, winStart, winEnd, database);
-    if (sameString(database, "hg6"))
+    if (sameString(database, "hg7"))
 	{
 	fputs("<TD><P ALIGN=CENTER>", stdout);
 	printEnsemblAnchor();
