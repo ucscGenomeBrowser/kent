@@ -447,7 +447,7 @@ if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
 		sub->queueError = TRUE;
 	    else 
 	        {
-		if (sameString(state, "r") || sameString(state, "t"))
+		if (sameString(state, "r"))
 		    {
 		    sub->running = TRUE;
 		    }
