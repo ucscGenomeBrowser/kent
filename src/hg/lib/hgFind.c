@@ -210,6 +210,9 @@ int rowOffset;
 char *localName;
 char *mrnaID;
 
+if (! hTableExists("knownGene"))
+    return FALSE;
+
 if (findKnownGeneExact(spec, hgp, tableName))
     {    
     return(TRUE);
