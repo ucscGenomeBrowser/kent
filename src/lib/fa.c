@@ -270,7 +270,8 @@ void faWriteNext(FILE *f, char *startLine, DNA *dna, int dnaSize)
 {
 int dnaLeft = dnaSize;
 int lineSize;
-fprintf(f, ">%s\n", startLine);
+if (startLine != NULL)
+    fprintf(f, ">%s\n", startLine);
 
 while (dnaLeft > 0)
     {
