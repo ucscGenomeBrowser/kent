@@ -1,5 +1,6 @@
 /* hgExonerate - Convert Exonerate modified GFF files to BED format and load in database.. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
@@ -11,7 +12,9 @@ void usage()
 errAbort(
   "hgExonerate - Convert Exonerate modified GFF files to BED format and load in database.\n"
   "usage:\n"
-  "   hgExonerate database table inputFile\n");
+  "   hgExonerate database table inputFile\n"
+  "options:\n"
+  "   -elia    - handle Elia's 11 column GFF's");
 }
 
 char *createString = 
@@ -84,50 +87,78 @@ char *line;
 int lineSize;
 FILE *f;
 char tabFileName[512];
-char *row[9];
+char *row[12];
 char *parts[6];
 char *subParts[3];
 char *strand;
 int partCount;
 double score;
 int count = 0;
+boolean doElia = cgiBoolean("elia");
+int wordCount;
 
 sprintf(tabFileName, "%s.tab", table);
 f = mustOpen(tabFileName, "w");
 printf("Converting %s to %s\n", file, tabFileName);
 while (lineFileNext(lf, &line, &lineSize))
     {
+    if (line[0] == '#')
+        continue;
     ++count;
-    chopTabs(line, row);
+    wordCount = chopTabs(line, row);
+    if (wordCount < 9)
+        errAbort("Expecting at least 9 words line %d of %s\n", lf->lineIx, lf->fileName);
     fprintf(f, "%s\t", row[0]);				/* chromosome. */
     fprintf(f, "%d\t", lineFileNeedNum(lf, row, 3)-1);       /* chromStart. */
     fprintf(f, "%s\t", row[4]);                         /* chromEnd. */
-    score = atof(row[5]);                               
+    score = atof(row[5]) * 0.70;                               
     if (score > 1000) score = 1000;
     if (score < 0) score = 0;
     strand = row[6];
-    if (startsWith("trace=", row[8]))
+    if (doElia)
         {
-	struct hash *hash = hashGroup(lf, row[8]);
-	char *trace = hashMustFindVal(hash, "trace");
-	int start = atoi(hashMustFindVal(hash, "hstart")) - 1;
-	int end = atoi(hashMustFindVal(hash, "hend"));
-	fprintf(f, "%s\t%d\t%s\t%d\t%d\n", trace, round(score), strand, start, end);
-	freeHashAndVals(&hash);
+	int start, end;
+	if (wordCount < 10)
+	    errAbort("Expecting at least 10 words line %d of %s\n", lf->lineIx, lf->fileName);
+	if (strand[0] == '-')
+	    {
+	    strand = "-";
+	    start = atoi(row[9])-1;
+	    end = atoi(row[8]);
+	    }
+	else
+	    {
+	    strand = "+";
+	    start = atoi(row[8])-1;
+	    end = atoi(row[9]);
+	    }
+	fprintf(f, "%s\t%d\t%s\t%d\t%d\n", row[7], round(score), strand, start, end);
 	}
     else
-        {
-	partCount = chopString(row[8], ".:", parts, ArraySize(parts));
-	if (partCount != 4)
-	   errAbort("Unparsable field 9 line %d of %s", lf->lineIx, lf->fileName);
-	fprintf(f, "%s.%s\t", parts[0], parts[1]);          /* name. */
-	fprintf(f, "%d\t", round(score));			/* milliScore */
-	fprintf(f, "%s\t", strand);				/* strand */
-	partCount = chopByChar(parts[2], '-', subParts, ArraySize(subParts));
-	if (partCount != 2 || !isdigit(subParts[0][0]) || !isdigit(subParts[1][0]))
-	   errAbort("Unparsable number range in field 9 line %d of %s", lf->lineIx, lf->fileName);
-	fprintf(f, "%d\t", atoi(subParts[0])-1);		/* otherStart */
-	fprintf(f, "%s\n", subParts[1]);			/* otherEnd */
+	{
+	if (startsWith("trace=", row[8]))
+	    {
+	    struct hash *hash = hashGroup(lf, row[8]);
+	    char *trace = hashMustFindVal(hash, "trace");
+	    int start = atoi(hashMustFindVal(hash, "hstart")) - 1;
+	    int end = atoi(hashMustFindVal(hash, "hend"));
+	    fprintf(f, "%s\t%d\t%s\t%d\t%d\n", trace, round(score), strand, start, end);
+	    freeHashAndVals(&hash);
+	    }
+	else
+	    {
+	    partCount = chopString(row[8], ".:", parts, ArraySize(parts));
+	    if (partCount != 4)
+	       errAbort("Unparsable field 9 line %d of %s", lf->lineIx, lf->fileName);
+	    fprintf(f, "%s.%s\t", parts[0], parts[1]);          /* name. */
+	    fprintf(f, "%d\t", round(score));			/* milliScore */
+	    fprintf(f, "%s\t", strand);				/* strand */
+	    partCount = chopByChar(parts[2], '-', subParts, ArraySize(subParts));
+	    if (partCount != 2 || !isdigit(subParts[0][0]) || !isdigit(subParts[1][0]))
+	       errAbort("Unparsable number range in field 9 line %d of %s", lf->lineIx, lf->fileName);
+	    fprintf(f, "%d\t", atoi(subParts[0])-1);		/* otherStart */
+	    fprintf(f, "%s\n", subParts[1]);			/* otherEnd */
+	    }
 	}
     }
 carefulClose(&f);
@@ -140,6 +171,7 @@ loadIntoDb(tabFileName, database, table, TRUE);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 hgExonerate(argv[1], argv[2], argv[3]);

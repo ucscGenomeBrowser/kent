@@ -120,7 +120,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     genePredTabOut(gp, f);
     }
 fclose(f);
-
 loadIntoDatabase(database, table, tabName);
 }
 
