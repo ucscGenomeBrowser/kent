@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.799 2004/09/09 00:07:12 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.800 2004/09/09 01:25:14 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2311,6 +2311,7 @@ tdb->tableName = tg->mapName;
 tdb->shortLabel = tg->shortLabel;
 tdb->longLabel = tg->longLabel;
 tdb->type = cloneString("psl");
+tg->exonArrows = TRUE;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
