@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.33 2004/07/20 18:36:36 markd Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.34 2004/07/20 20:50:02 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -436,10 +436,10 @@ return charSepToSlNames(commaSep, ',');
 }
 
 
-void sprintLongWithCommas(char *s, long l)
+void sprintLongWithCommas(char *s, long long l)
 /* Print out a long number with commas a thousands, millions, etc. */
 {
-int billions, millions, thousands;
+long long billions, millions, thousands;
 if (l >= 1000000000)
     {
     billions = l/1000000000;
@@ -448,27 +448,27 @@ if (l >= 1000000000)
     l -= millions * 1000000;
     thousands = l/1000;
     l -= thousands * 1000;
-    sprintf(s, "%d,%03d,%03d,%03ld", billions, millions, thousands, l);
+    sprintf(s, "%lld,%03lld,%03lld,%03lld", billions, millions, thousands, l);
     }
 else if (l >= 1000000)
     {
     millions = l/1000000;
-    l -= millions * 1000000;
+    l -= millions * (long long)1000000;
     thousands = l/1000;
     l -= thousands * 1000;
-    sprintf(s, "%d,%03d,%03ld", millions, thousands, l);
+    sprintf(s, "%lld,%03lld,%03lld", millions, thousands, l);
     }
 else if (l >= 1000)
     {
     thousands = l/1000;
     l -= thousands * 1000;
-    sprintf(s, "%d,%03ld", thousands, l);
+    sprintf(s, "%lld,%03lld", thousands, l);
     }
 else
-    sprintf(s, "%ld", l);
+    sprintf(s, "%lld", l);
 }
 
-void printLongWithCommas(FILE *f, long l)
+void printLongWithCommas(FILE *f, long long l)
 /* Print out a long number with commas a thousands, millions, etc. */
 {
 char ascii[32];

@@ -16,10 +16,10 @@ int digitsBaseTwo(unsigned long x);
 int digitsBaseTen(int x);
 /* Return number of digits base 10. */
 
-void sprintLongWithCommas(char *s, long l);
+void sprintLongWithCommas(char *s, long long l);
 /* Print out a long number with commas a thousands, millions, etc. */
 
-void printLongWithCommas(FILE *f, long l);
+void printLongWithCommas(FILE *f, long long l);
 /* Print out a long number with commas a thousands, millions, etc. */
 
 void readInGulp(char *fileName, char **retBuf, size_t *retSize);
