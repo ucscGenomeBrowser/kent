@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.1 2003/09/16 22:46:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.2 2003/10/10 21:47:38 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -182,25 +182,18 @@ else if (!oldTable)
     dyStringAppend(dy, "  chrom varchar(255) not null,\n");
     dyStringAppend(dy, "  chromStart int unsigned not null,\n");
     dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
-    if (wiggleSize >= 4)
-       dyStringAppend(dy, "  name varchar(255) not null,\n");
-    if (wiggleSize >= 5)
-       dyStringAppend(dy, "  score int unsigned not null,\n");
-    if (wiggleSize >= 6)
-       dyStringAppend(dy, "  strand char(1) not null,\n");
-    if (wiggleSize >= 7)
-       dyStringAppend(dy, "  Span int unsigned not null,\n");
-    if (wiggleSize >= 8)
-       dyStringAppend(dy, "  Count int unsigned not null,\n");
-    if (wiggleSize >= 9)
-       dyStringAppend(dy, "  Offset int unsigned not null,\n");
-    if (wiggleSize >= 10)
-       dyStringAppend(dy, "  File varchar(255) not null,\n");
+    dyStringAppend(dy, "  name varchar(255) not null,\n");
+    dyStringAppend(dy, "  score int unsigned not null,\n");
+    dyStringAppend(dy, "  strand char(1) not null,\n");
+    dyStringAppend(dy, "  Min int unsigned not null,\n");
+    dyStringAppend(dy, "  Span int unsigned not null,\n");
+    dyStringAppend(dy, "  Count int unsigned not null,\n");
+    dyStringAppend(dy, "  Offset int unsigned not null,\n");
+    dyStringAppend(dy, "  File varchar(255) not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
-    if (wiggleSize >= 4)
-       dyStringAppend(dy, "  INDEX(name(16)),\n");
+    dyStringAppend(dy, "  INDEX(name(16)),\n");
     dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
     dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
     dyStringAppend(dy, ")\n");
