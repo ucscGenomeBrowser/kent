@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.486 2003/10/01 19:29:12 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.487 2003/10/01 22:19:37 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5656,12 +5656,19 @@ char *cgapID, *biocMapID, *biocMapDesc, *biocMapName;
 char *goID, *goTermName, *goEvidence;
 char goAspectChar[10];
 int  iGoAsp;
-
+char *diseaseDesc;
 boolean hasGO, hasPathway, hasMedical;
 
-sprintf(cond_str, "kgID='%s'", mrnaName);
-geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
-if (geneSymbol == NULL) geneSymbol = mrnaName;
+if (hTableExists("knownGeneLink"))
+    {
+    sprintf(cond_str, "kgID='%s'", mrnaName);
+    geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+    if (geneSymbol == NULL) geneSymbol = mrnaName;
+    }
+else
+    {
+    geneSymbol = mrnaName;
+    }
 
 sprintf(cart_name, "Known Gene: %s", geneSymbol);
 cartWebStart(cart, cart_name);
@@ -5680,6 +5687,7 @@ if (hTableExists("knownGeneLink"))
         proteinAC = sqlGetField(conn, database, "knownGeneLink", "proteinID", cond_str);
         }
     }
+
 // Display mRNA or DNA info and NCBI link
 if (dnaBased && refSeqName != NULL)
     {
@@ -5839,7 +5847,6 @@ goAspectChar[1] = 'P';
 goAspectChar[2] = 'C';
 
 // loop for 3 GO aspects 
-
 for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
 {
 sprintf(query, 
@@ -5900,19 +5907,18 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
     	while (row != NULL)
 	    {
 	    biocMapID = row[0];
-	    //printf("<br>biocMapID: %s\n", biocMapID);
 	    printf("<LI><B>BioCarta:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
 	    printf("<A HREF = \"");
 	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
 	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
-            
 	    row = sqlNextRow(sr);
 	    }
         sqlFreeResult(&sr);
 	}
     }
+
 //Process KEGG Pathway link data
 if (sqlTableExists(conn, "keggPathway"))
     {
@@ -5980,6 +5986,35 @@ if (hasPathway)
 // Process medical related links here
 hasMedical = FALSE;
 
+// Process SWISS-PROT disease data
+
+// borrow char array query here
+sprintf(query, "%s.%s", protDbName, "spDisease");
+if (sqlTableExists(conn, query))
+    {
+    sprintf(query,"select diseaseDesc from %s.spDisease where displayID='%s'",protDbName,proteinID);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+    	if (!hasMedical)
+   	    {
+    	    printf("<B>Medical-Related Info:</B><UL>");
+    	    hasMedical = TRUE;
+    	    }
+        printf("<LI><B>Diseases:</B><UL>");
+        while (row != NULL)
+            {
+            diseaseDesc = row[0];
+	    mapID   = row[2];
+	    printf("<LI>%s</LI>", diseaseDesc);
+            row = sqlNextRow(sr);
+	    }
+	printf("</UL>");
+	}
+    sqlFreeResult(&sr);
+    }
+
 // Process OMIM link
 sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
 sr = sqlGetResult(conn, query);
@@ -6006,7 +6041,7 @@ if (row != NULL)
     	    {
 	    if (!hasMedical)
 	   	{
-    	    	printf("<B>Medical-Related Links:</B><UL>");
+    	    	printf("<B>Medical-Related Info:</B><UL>");
 	    	hasMedical = TRUE;
 	    	}
 	    printf("<LI><B>OMIM:</B> <A HREF=\"");
@@ -6017,11 +6052,12 @@ if (row != NULL)
     }
 
 // Process NCI Cancer Genome Anatomy gene
+// cgapID should already be obtained earlier
 if (cgapID != NULL)
     {
     if (!hasMedical)
    	{
-    	printf("<B>Medical-Related Links:</B><UL>");
+    	printf("<B>Medical-Related Info:</B><UL>");
     	hasMedical = TRUE;
     	}
     printf("<LI><B>NCI Cancer Genome Anatomy:&nbsp</B>");
@@ -6039,12 +6075,11 @@ if (sqlTableExists(conn, "atlasOncoGene"))
 	{
 	if (!hasMedical)
 	    {
-    	    printf("<B>Medical-Related Links:</B><UL>");
+    	    printf("<B>Medical-Related Info:</B><UL>");
 	    hasMedical = TRUE;
 	    }
 
     	printf("<LI><B>Atlas of Genetics and Cytogenetics in Oncology and Haematology:&nbsp</B>");
-
 	printf("<A HREF = \"%s%s\" TARGET=_blank>%s</A><BR></LI>\n", 
 	   "http://www.infobiogen.fr/services/chromcancer/", atlasUrl, geneSymbol);fflush(stdout);
     	}
@@ -6120,14 +6155,6 @@ if (hasMedical)
 
 	    printf("<B>Gene ID: %s<BR></B>\n", rl->name);
    
-	    /* 
-	    if (rl->omimId != 0)
-		{
-		printf("<B>OMIM:</B> <A HREF=\"");
-		printEntrezOMIMUrl(stdout, rl->omimId);
-		printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
-		}
-	    */
 	    if (rl->locusLinkId != 0)
 		{
 		printf("<B>LocusLink:</B> ");
@@ -6196,7 +6223,7 @@ if (hasMedical)
 	htmlHorizontalLine();
 	if (dnaBased)
 	    {
-	    geneShowPosAndLinksDNARefseq(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+	    geneShowPosAndLinksDNARefseq(mrnaName,mrnaName,tdb,"knownGenePep","htcTranslatedProtein",
 					 "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
 	    }
 	else
@@ -6205,7 +6232,6 @@ if (hasMedical)
 				"htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
 	    }
 	}
-
     printTrackHtml(tdb);
     hFreeConn(&conn);
     hFreeConn(&conn2);
