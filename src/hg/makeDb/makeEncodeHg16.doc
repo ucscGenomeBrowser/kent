@@ -304,6 +304,20 @@ cat > load.csh << 'EOF'
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
 
+# TODO: Remove Nov08 data
+
+# BOSTON UNIVERSITY / ZHIPING WENG LAB  PROMOTER DATA (WORKING 2005-01-27 kate)
+
+    ssh kksilo
+    cd /cluster/data/encode
+    mkdir -p BU
+    cd BU
+    mkdir -p 2005-01-06
+    ln -s 2005-01-06/latest
+    cd latest
+    # copy file from email:  BED.tar.gz
+    tar xvfz BED.tar.gz
+
 
 # TODO: Remove Nov08 data
 
@@ -333,3 +347,49 @@ priority 113
 visibility hide
 color 170,100,0
 type genePred
+
+
+# Sanger Chip/chip  (IN PROGRESS 2005-03-14 kate)
+ssh hgwdev
+cd /cluster/data/encode/sanger/
+mkdir -p chipchip/2005-02-15
+cd chipchip/2005-02-15
+
+# obtain data files from ftp site
+cp /var/ftp/encode/H3K4me3_GM06990_1.description.txt .
+cp /var/ftp/encode/H3K4me3_GM06990_1.wig.txt .
+rm /var/ftp/encode/H3K*.txt
+
+# 4 columns: chrom, start, end, score (float)
+# data value range is .12 to 74.875
+# format as BED file
+grep "^chr" H3K4me3_GM06990_1.wig.txt > H3K4me3_GM06990_1.bed
+
+# create table schema for BED 4 with float score
+cat > table.sql << 'EOF'
+CREATE TABLE tablename (
+    chrom varchar(255) not null,        # Chromosome (this species)
+    chromStart int unsigned not null,   # Start position in chromosome (forward strand)
+    chromEnd int unsigned not null,     # End position in chromosome
+    score float not null,       # Overall score
+              #Indices
+    INDEX(chrom(13),chromStart),
+    INDEX(chrom(13),chromEnd)
+);
+'EOF'
+
+set tablename = encodeSangerChipH3me3GM06990
+sed "s/tablename/$tablename/" table.sql > $tablename.sql
+
+hgsql hg16 < $tablename.sql
+hgLoadBed -noBin -sqlTable=$tablename.sql hg16 $tablename H3K4me3_GM06990_1.bed
+# Loaded 17604 elements of size 4
+
+# create trackDb entry:
+
+# type bedGraph 4
+# shortLabel ChIP/Sanger
+# longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
+# minLimit 0
+# maxLimit 75
+
