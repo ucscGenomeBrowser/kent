@@ -18,5 +18,10 @@ installOsX: webPcr
 	cp webPcr.cfg /Library/WebServer/CGI-Executables
 
 installUcsc: webPcr
-	cp webPcr /usr/local/apache/cgi-bin-kent
-	cp webPcr.cfg /usr/local/apache/cgi-bin-kent
+	cp webPcr /usr/local/apache/cgi-bin-$(USER)
+	cp webPcr.cfg /usr/local/apache/cgi-bin-$(USER)
+
+installAlpha: webPcr
+	cp webPcr /usr/local/apache/cgi-bin
+	cp webPcr.cfg /usr/local/apache/cgi-bin
+

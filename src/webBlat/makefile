@@ -10,9 +10,17 @@ webBlat: $O ${MYLIBS}
 	${CC} ${COPT} -o webBlat $O ${MYLIBS} $L
 	strip webBlat
 
-install: webBlat
+installOsX: webBlat
 	cp webBlat /Library/WebServer/CGI-Executables
 	cp webBlat.cfg /Library/WebServer/CGI-Executables
+
+installUcsc: webBlat
+	cp webBlat /usr/local/apache/cgi-bin-$(USER)
+	cp webBlat.cfg /usr/local/apache/cgi-bin-$(USER)
+
+installAlpha: webBlat
+	cp webBlat /usr/local/apache/cgi-bin
+	cp webBlat.cfg /usr/local/apache/cgi-bin
 
 clean:
 	rm -f $O
