@@ -1677,7 +1677,6 @@ int len = strlen(s);
 int start, left;
 int oneSize;
 
-printf("<TT><PRE>");
 for (start = 0; start < len; start += lineSize)
     {
     oneSize = len - start;
@@ -1688,7 +1687,6 @@ for (start = 0; start < len; start += lineSize)
     }
 if (start != len)
     fputc('\n', f);
-printf("</PRE></TT>");
 }
 
 void showProteinPrediction(char *geneName, char *table)
@@ -1715,7 +1713,10 @@ else
     sqlFreeResult(&sr);
     if (pp != NULL)
 	{
+	printf("<TT><PRE>");
+	printf(">%s\n", geneName);
 	printLines(stdout, pp->seq, 50);
+	printf("</PRE></TT>");
 	}
     else
         {
@@ -1855,6 +1856,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         reverseComplement(seq->dna, seq->size);
 	}
     printf("<TT><PRE>");
+    printf(">%s\n", geneName);
     faWriteNext(stdout, NULL, seq->dna, seq->size);
     printf("</TT></PRE>");
     genePredFree(&gp);
