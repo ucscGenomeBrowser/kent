@@ -736,7 +736,6 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     if (chromHasData(chrom))
 	{
 	fprintf(f, "net %s %d\n", chrom->name, chrom->size);
-	sortNet(chrom->root);
 	rOutputGap(chrom->root, f);
 	}
     }
@@ -767,20 +766,21 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     rbTreeFree(&chrom->spaces);
 }
 
-void rFlatGapOut(struct gap *gap, char *chromName, FILE *f, 
+void rFlatGapOut(struct gap *gap, struct chrom *chrom, FILE *f, 
 	int depth, int parentId, boolean isQuery);
 
-void writeFlatFill(FILE *f, char *chrom, int start, int end, int depth, int parentId, int id,
+void writeFlatFill(FILE *f, struct chrom *chrom, int start, int end, 
+	int depth, int parentId, int id,
 	struct chain *chain, boolean isQuery)
 /* Write out flattened fill record. */
 {
-fprintf(f, "%s\t%d\t%d\tfill\t%d\t%d\t%d\t%s\t%c\n", 
-	chrom, start, end, depth, parentId, id,
+fprintf(f, "%s\t%d\t%d\tfill\tD %d\tP %d\tI %d\t%s\t%c\n", 
+	chrom->name, start, end-start, depth, parentId, id,
 	(isQuery ? chain->tName : chain->qName),
 	chain->qStrand);
 }
 
-void rFlatFillOut(struct fill *fill, char *chromName, FILE *f,
+void rFlatFillOut(struct fill *fill, struct chrom *chrom, FILE *f,
         int depth, int parentId, boolean isQuery)
 /* Write out flattened fill recursively. */
 {
@@ -792,18 +792,28 @@ for (gap = fill->gapList; gap != NULL; gap = gap->next)
     {
     if (gap->start != lastEnd)
         {
-	writeFlatFill(f, chromName, lastEnd, gap->start, depth, parentId, id, chain, isQuery);
+	writeFlatFill(f, chrom, lastEnd, gap->start, depth, parentId, id, chain, isQuery);
 	}
     lastEnd = gap->end;
-    rFlatGapOut(gap, chromName, f, depth+1, id, isQuery);
+    rFlatGapOut(gap, chrom, f, depth+1, id, isQuery);
     }
 if (lastEnd != fill->end)
     {
-    writeFlatFill(f, chromName, lastEnd, fill->end, depth, parentId, id, chain, isQuery);
+    writeFlatFill(f, chrom, lastEnd, fill->end, depth, parentId, id, chain, isQuery);
     }
 }
 
-void rFlatGapOut(struct gap *gap, char *chromName, FILE *f, 
+void writeFlatGap(FILE *f, struct gap *gap, struct chrom *chrom, int start, int end, 
+	int depth, int parentId) 
+{
+int nBases = intersectingGapSize(chrom, start, end);
+int size = end - start;
+double percentN = 100.0 * nBases/size;
+fprintf(f, "%s\t%d\t%d\t%s\tD %d\tP %d\tN %5.2f\n", chrom->name, start, end-start, 
+	gapType(gap), depth, parentId, percentN);
+}
+
+void rFlatGapOut(struct gap *gap, struct chrom *chrom, FILE *f, 
 	int depth, int parentId, boolean isQuery)
 /* Write out flattened gap recursively. */
 {
@@ -813,16 +823,14 @@ for (fill = gap->fillList; fill != NULL; fill = fill->next)
     {
     if (fill->start != lastEnd)
         {
-	fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", chromName, lastEnd, fill->start, 
-		gapType(gap), depth, parentId);
+	writeFlatGap(f, gap, chrom, lastEnd, fill->start, depth, parentId);
 	}
-    rFlatFillOut(fill, chromName, f, depth, parentId, isQuery);
+    rFlatFillOut(fill, chrom, f, depth, parentId, isQuery);
     lastEnd = fill->end;
     }
 if (lastEnd != gap->end)
     {
-    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", chromName, lastEnd, gap->end, 
-	    gapType(gap), depth, parentId);
+    writeFlatGap(f, gap, chrom, lastEnd, gap->end, depth, parentId);
     }
 }
 
@@ -835,7 +843,7 @@ struct chrom *chrom;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (chromHasData(chrom))
-	rFlatGapOut(chrom->root, chrom->name, f, 0, 0, isQuery);
+	rFlatGapOut(chrom->root, chrom, f, 0, 0, isQuery);
     }
 carefulClose(&f);
 }
@@ -882,17 +890,17 @@ while ((chain = chainRead(lf)) != NULL)
 	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
 		tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
-/* Build up other side of fills.  It's just for historical 
- * reasons this is not done during the main build up.   
- * It's a little less */
-finishNet(qChromList, TRUE);
-finishNet(tChromList, FALSE);
-
-
 /* Free up some stuff no longer needed. */
 printf("Compacting memory\n");
 compactChromList(tChromList);
 compactChromList(qChromList);
+
+/* Build up other side of fills.  It's just for historical 
+ * reasons this is not done during the main build up.   
+ * It's a little less efficient this way, but to change it
+ * some hard reverse strand issues would have to be juggled. */
+finishNet(qChromList, TRUE);
+finishNet(tChromList, FALSE);
 
 /* Write out basic net files. */
 printf("writing %s\n", tNet);
