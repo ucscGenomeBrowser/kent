@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.835 2005/02/11 23:35:34 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.836 2005/02/24 20:26:30 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6856,6 +6856,79 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doCcdsGene(struct trackDb *tdb, char *ccds)
+/* Process click on a CCDS gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr, *sr2;
+char **row, **row2;
+char query[256], query2[256];
+char *mrnaAcc;
+char *chp;
+char *refseqDesc;
+
+cartWebStart(cart, "CCDS Gene");
+
+printf("<H2>Concensus CDS Gene %s</H2>\n", ccds);
+
+/* get RefSeq CCDS entries */
+safef(query, sizeof(query), "select mrnaAcc from ccdsInfo where ccds = '%s' and srcDb='N'", ccds);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in ccdsInfo table - database inconsistency.", ccds);
+while (row != NULL)
+    {
+    mrnaAcc = row[0];
+    chp = strstr(mrnaAcc, ".");
+    if (chp != NULL) *chp = '\0';
+    
+    safef(query2, sizeof(query2), "select product from refLink where mrnaAcc = '%s'", mrnaAcc);
+    sr2  = sqlGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    refseqDesc = row2[0];
+    
+    printf("<B>RefSeq:</B> <A HREF=\"../cgi-bin/hgc?g=refGene&i=%s&db=%s\"", mrnaAcc, database);
+    printf(" TARGET=_blank> %s</A> %s<BR>\n", mrnaAcc, refseqDesc);fflush(stdout); 
+    sqlFreeResult(&sr2);
+    row = sqlNextRow(sr);
+    }
+sqlFreeResult(&sr);
+
+/* get Hinxton CCDS entries */
+printf("<BR>");
+safef(query, sizeof(query), "select mrnaAcc from ccdsInfo where ccds = '%s' and srcDb='H'", ccds);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in ccdsInfo table - database inconsistency.", ccds);
+while (row != NULL)
+    {
+    mrnaAcc = row[0];
+    
+    /* check if it is in current Ensembl Gene track */
+    safef(query2, sizeof(query2), "select name from ensGene where name = '%s'", mrnaAcc);
+    sr2 = sqlGetResult(conn2, query2);
+    if ((row2 = sqlNextRow(sr2)) == NULL)
+    	{
+	/* go directly to Ensembl site, if our current ensGene does not have it */
+        printf("<B>Hinxton:</B> <A HREF=\"http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s\"", mrnaAcc);
+        printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
+	}
+    else
+    	{
+        printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
+        printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
+    	}
+    sqlFreeResult(&sr2);
+    
+    row = sqlNextRow(sr);
+    }
+
+sqlFreeResult(&sr);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doMgcGenes(struct trackDb *tdb, char *acc)
 /* Process click on a mgcGenes track. */
 {
@@ -14509,6 +14582,10 @@ else if (sameWord(track, "xenoRefGene"))
 else if (sameWord(track, "refGene"))
     {
     doRefGene(tdb, item);
+    }
+else if (sameWord(track, "ccdsGene"))
+    {
+    doCcdsGene(tdb, item);
     }
 else if (sameWord(track, "mappedRefSeq"))
     /* human refseqs on chimp browser */
