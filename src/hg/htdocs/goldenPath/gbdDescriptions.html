@@ -1498,6 +1498,8 @@ cover the same region </LI>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10>&nbsp;</TD><TD>
 
+<!--START DESCRIPTION SECTION-->
+
 This section describes the format of each table field by field in 
 autoSql format.
 
@@ -1709,7 +1711,7 @@ the fields.<BR>
 <PRE>table bed
 "Browser extensible data"
     (
-    string chrom;      "Human chromosome or FPC contig"
+    string chrom;      "Chromosome or FPC contig"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"
@@ -1812,7 +1814,7 @@ the fields.<BR>
 <PRE>table cytoBand
 "Describes the positions of cytogenetic bands within a chromosome"
    (
-   string chrom;        "Human chromosome number"
+   string chrom;        "Chromosome number"
    uint   chromStart;   "Start position in genoSeq"
    uint   chromEnd;     "End position in genoSeq"
    string name;         "Name of cytogenetic band"
@@ -1876,7 +1878,7 @@ the fields.<BR>
 <PRE>table cpgIsland
 "Describes CpG Islands of 50 bases or more that are at least 50% G/C"
    (
-   string chrom;        "Human chromosome or FPC contig"
+   string chrom;        "Chromosome or FPC contig"
    uint   chromStart;   "Start position in chromosome"
    uint   chromEnd;     "End position in chromosome"
    string name;         "CpG Island"
@@ -2026,7 +2028,7 @@ that the name indicates.
 <PRE>table exoFish
 "An evolutionarily conserved region (ecore) with Tetroadon"
    (
-   string chrom;        "Human chromosome or FPC contig"
+   string chrom;        "Chromosome or FPC contig"
    uint   chromStart;   "Start position in chromosome"
    uint   chromEnd;     "End position in chromosome"
    string name;         "Just a dummy dot"
@@ -2039,7 +2041,7 @@ Last used Apr. 2001.
 <PRE>table exoMouse
 "A rough alignment - not detailed"
    (
-   string chrom;        "Human chromosome or FPC contig"
+   string chrom;        "Chromosome or FPC contig"
    uint   chromStart;   "Start position in chromosome"
    uint   chromEnd;     "End position in chromosome"
    string name;         "Name of other sequence"
@@ -2089,7 +2091,7 @@ Last used Apr. 2001.
 <PRE>table fishClones
 "Describes the positions of fishClones in the assembly"
    (
-   string chrom;                   "Human chromosome number"
+   string chrom;                   "Chromosome number"
    uint   chromStart;              "Start position in chromosome"
    uint   chromEnd;                "End position in chromosome"
    string name;                    "Name of clone"
@@ -2114,7 +2116,7 @@ Last used Apr. 2001.
 "Positions of end pairs for fosmids"
    (
    short  bin;        	      "Bin number for browser speedup"
-   string chrom;      	      "Human chromosome"
+   string chrom;      	      "Chromosome"
    uint   chromStart; 	      "Start position of fosmid in chromosome"
    uint   chromEnd;   	      "End position of fosmid in chromosome"
    string name;       	      "Name of fosmid"
@@ -2155,7 +2157,7 @@ Last used Apr. 2001.
 <PRE>table gcPercent
 "Displays GC content in 20Kb non-overlapping blocks for genome"
    (
-   string chrom;        "Human chromosome number"
+   string chrom;        "Chromosome number"
    uint   chromStart;   "Start position in chromosome"
    uint   chromEnd;     "End position in chromosome"
    string name;         "Constant string GC"
@@ -2195,7 +2197,7 @@ EST Clusters</H4>
 "Gene boundaries deduced from clustering spliced ESTs and mRNAs against the genome"
     (
     smallint bin;           "Index"
-    string chrom;           "Human chromosome or FPC contig"
+    string chrom;           "Chromosome or FPC contig"
     uint   chromStart;      "Start position in chromosome"
     uint   chromEnd;        "End position in chromosome"
     string name;            "Name of item"
@@ -2412,7 +2414,7 @@ The following definition is used for tables that link a predicted peptide to a p
 
 <H4><A name=JaxQTL></A>Jackson Labs Quantitative Trait Loci</H4>
 <PRE>table jaxQTL
-"Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics"
+"Quantitative Trait Loci from Jackson Labs/Mouse Genome Informatics"
     (
     string chrom;       "Human chromosome or FPC contig"
     uint   chromStart;  "Start position in chromosome"
@@ -2678,12 +2680,12 @@ Last used Apr. 2001.
 <PRE>table syntenyMouse
 "Mouse synteny alignnments from blastz single coverage"
     (
-    string chrom;       "Human Chrom"
-    uint chromStart;    "Start on Human"
-    uint chromEnd;      "End on Human"
-    string name;  	"Mouse Chromosome"
-    uint score;         "score always zero"
-    char[1] strand;     "+ direction matches - opposite"
+    string chrom;       "Human chromosome"
+    uint chromStart;    "Start on human chromosome"
+    uint chromEnd;      "End on human chromosome"
+    string name;  	"Mouse chromosome"
+    uint score;         "Score (always zero)"
+    char[1] strand;     "+ (direction matches) or - (opposite direction)"
     uint thickStart;    "Start of where display should be thick"
     uint thickEnd;      "End of where display should be thick"
     )
@@ -3010,12 +3012,12 @@ table pbStamp
 <PRE>table syntenyRat
 "Rat synteny alignnments from blastz single coverage"
     (
-    string chrom;       "Human Chrom"
-    uint chromStart;    "Start on Human"
-    uint chromEnd;      "End on Human"
-    string name;    	"Rat Chromosome"
-    uint score;         "score always zero"
-    char[1] strand;     "+ direction matches - opposite"
+    string chrom;       "Human chromosome"
+    uint chromStart;    "Start on human chromosome"
+    uint chromEnd;      "End on human chromosome"
+    string name;    	"Rat chromosome"
+    uint score;         "Score (always zero)"
+    char[1] strand;     "+ (direction matches) or - (opposite direction)"
     uint thickStart;    "Start of where display should be thick"
     uint thickEnd;      "End of where display should be thick"
     )
@@ -3026,7 +3028,7 @@ table pbStamp
 "Describes the recombination rate in 1Mb intervals based on deCODE, Marshfield and
  Genethon maps"
     (
-    string  chrom;            "Human chromosome number"
+    string  chrom;            "Chromosome number"
     uint    chromStart;       "Start position in genoSeq"
     uint    chromEnd;         "End position in genoSeq"
     string  name;             "Constant string 'recombRate'"
@@ -3317,13 +3319,13 @@ The following definition is used for: gc5Base, regPotential2X, regPotential3X.
 <PRE>table wiggle
 "Wiggle track values to display as y-values (first 6 fields are bed6)"
     (
-    string chrom;         "Human chromosome or FPC contig"
+    string chrom;         "Chromosome or FPC contig"
     uint chromStart;      "Start position in chromosome"
     uint chromEnd;        "End position in chromosome"
     string name;          "Name of item"
     uint span;            "Each value spans this many bases"
     uint count;           "Number of values in this block"
-    uint offset;          "Offset in File to fetch data"
+    uint offset;          "Offset in file to fetch data"
     string file;          "Path name to data file, one byte per value"
     double lowerLimit;    "Lowest data value in this block"
     double dataRange;     "LowerLimit + dataRange = upperLimit"
@@ -3393,13 +3395,13 @@ The following definition is used for: gc5Base, regPotential2X, regPotential3X.
 <PRE>table genomicSuperDups
 "Summary of large genomic Duplications (>1KB >90% similar)"
   (
-  string chrom;       	"Human chromosome or FPC contig"
+  string chrom;       	"Chromosome or FPC contig"
   uint chromStart;   	"Start position in chromosome"
   uint chromEnd;     	"End position in chromosome"
   string name;         	"Other chromosome involved"
   uint score;        	"Score from 900-1000.  1000 is best"
   char[1] strand;       "Value should be + or -"
-  string otherChrom;   	"Other Human chromosome or FPC contig"
+  string otherChrom;   	"Other chromosome or FPC contig"
   uint otherStart;   	"Start in other  sequence"
   uint otherEnd;     	"End in other  sequence"
   uint otherSize;    	"Total size of other sequence"
@@ -3444,11 +3446,10 @@ of finding simple tandem repeats than RepeatMasker does.
 <PRE>table simpleRepeat
 "Describes the Simple Tandem Repeats"
    (
-   ushort  bin;           "A field to speed indexing added to many 
-                           tables August 2001"
+   ushort  bin;           "A field to speed indexing"
    uint    matches;       "Number of bases that match that aren't repeats"
    uint    misMatches;    "Number of bases that don't match"
-   string chrom;          "Human chromosome or FPC contig"
+   string chrom;          "Chromosome or FPC contig"
    uint   chromStart;     "Start position in chromosome"
    uint   chromEnd;       "End position in chromosome"
    string name;           "Simple Repeats tag name"
@@ -3486,7 +3487,7 @@ This table is used for both the snpNih and snpTsc tables.
 <PRE>table snp
 "Single nucleotide polymorphisms"
     (
-    string chrom;      "Human chromosome or FPC contig"
+    string chrom;      "Chromosome or FPC contig"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of SNP"
@@ -3510,7 +3511,7 @@ The bacEndPairs table uses all fields.
 "Standard linked features series table"
    (
    short  bin;                  "Bin number for browser speedup"
-   string chrom;                "Human chromosome or FPC contig"
+   string chrom;                "Chromosome or FPC contig"
    uint   chromStart;           "Start position of clone in chromosome"
    uint   chromEnd;             "End position of clone in chromosome"
    string name;                 "Name of clone"
@@ -3946,7 +3947,7 @@ The bacEndPairs table uses all fields.
 <PRE>table tfbsCons
 "TFBS data"
     (
-    string chrom;      	"Human chromosome"
+    string chrom;      	"Chromosome"
     uint   chromStart; 	"Start position in chromosome"
     uint   chromEnd;   	"End position in chromosome"
     string name;       	"Name of item"
