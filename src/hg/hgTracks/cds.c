@@ -429,12 +429,13 @@ char *defaultDrawOption;
 char optionStr[128];
 boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 
+if(tg == NULL) return(ret);
+
 if (!pslSequenceBases && tg->tdb)
 	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
 		PSL_SEQUENCE_BASES));
 
 
-if(tg == NULL) return(ret);
 if (pslSequenceBases)
     {
     enum baseColorOptEnum bcEnum;
