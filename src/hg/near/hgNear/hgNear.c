@@ -13,11 +13,12 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.28 2003/06/25 17:02:35 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.29 2003/06/25 21:47:28 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
-	getSeqVarName, getTextVarName, advSearchVarName, 
+	getSeqVarName, getTextVarName, 
+	advSearchVarName, advSearchClearVarName, advSearchSubmitVarName,
         resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
@@ -303,15 +304,58 @@ void distanceSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
 hPrintf("minimum: ");
-cgiMakeTextVar(advSearchName(col, "min"), "", 8);
+advSearchRemakeTextVar(col, "min", 8);
 hPrintf(" maximum: ");
-cgiMakeTextVar(advSearchName(col, "max"), "", 8);
+advSearchRemakeTextVar(col, "max", 8);
 }
 
-struct genePos *distanceAdvancedSearch(struct column *col, struct sqlConnection *conn)
+struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash)
+/* Return input list with stuff not in hash removed. */
+{
+struct genePos *outList = NULL, *gp, *next;
+for (gp = inList; gp != NULL; gp = next)
+    {
+    next = gp->next;
+    if (hashLookup(hash, gp->name))
+        {
+	slAddHead(&outList, gp);
+	}
+    }
+slReverse(&outList);
+return outList;
+}
+
+struct genePos *distanceAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on distance type. */
 {
-uglyAbort("Not yet implemented");
+char *minString = advSearchVal(col, "min");
+char *maxString = advSearchVal(col, "max");
+if (minString != NULL || maxString != NULL)
+    {
+    struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
+    struct sqlResult *sr;
+    char **row;
+    struct dyString *dy = newDyString(512);
+    dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
+    dyStringPrintf(dy, " %s='%s'", col->curGeneField, curGeneId->name);
+    if (minString)
+         dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
+    if (maxString)
+         {
+	 if (minString)
+	     dyStringPrintf(dy, " and ");
+         dyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
+	 }
+    sr = sqlGetResult(conn, dy->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(passHash, row[0], NULL);
+    list = weedUnlessInHash(list, passHash);
+    sqlFreeResult(&sr);
+    dyStringFree(&dy);
+    hashFree(&passHash);
+    }
+return list;
 }
 
 void distanceTypeMethods(struct column *col, char *table, 
@@ -358,9 +402,12 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do sort by drop-down */
     {
-    static char *menu[] = {"expression", "homology", "name", "position"};
+    static char *menu[] = {"expression", "homology", "name", "position", "search"};
+    int menuSize = ArraySize(menu);
+    if (!gotAdvSearch())
+	menuSize -= 1;
     hPrintf("group by ");
-    cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
+    cgiMakeDropList(groupVarName, menu, menuSize, groupOn);
     }
 
 /* Do items to display drop-down */
@@ -656,7 +703,8 @@ else
     }
 }
 
-struct genePos *getNeighbors(struct sqlConnection *conn)
+
+struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
 if (sameString(groupOn, "expression"))
@@ -667,6 +715,8 @@ else if (sameString(groupOn, "position"))
     return getPositionNeighbors(conn);
 else if (sameString(groupOn, "name"))
     return getNameNeighbors(conn);
+else if (sameString(groupOn, "search"))
+    return getSearchNeighbors(colList, conn);
 else
     {
     errAbort("Unknown sort value %s", groupOn);
@@ -942,7 +992,7 @@ void displayData(struct sqlConnection *conn, struct column *colList, struct gene
 struct genePos *geneList = NULL;
 curGeneId = gp;
 if (gp)
-    geneList = getNeighbors(conn);
+    geneList = getNeighbors(colList, conn);
 if (cartVarExists(cart, getTextVarName))
     doGetText(conn, colList, geneList);
 else if (cartVarExists(cart, getSeqVarName))
@@ -979,7 +1029,12 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 conn = hAllocConn();
+
+/* Get groupOn.  Revert to default if no advanced search. */
 groupOn = cartUsualString(cart, groupVarName, "expression");
+if (!gotAdvSearch() && sameString(groupOn, "search"))
+    groupOn = "expression";
+
 val = cartUsualString(cart, countVarName, "25");
 displayCount = atoi(val);
 colList = getColumns(conn);
@@ -995,10 +1050,14 @@ else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
 else if (cartVarExists(cart, advSearchVarName))
     doAdvancedSearch(conn, colList);
+else if (cartVarExists(cart, advSearchClearVarName))
+    doAdvancedSearchClear(conn, colList);
+else if (cartVarExists(cart, advSearchSubmitVarName))
+    doAdvancedSearchSubmit(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else
-    doSearch(conn, colList, cartOptionalString(cart, searchVarName));
+    doSearch(conn, colList);
 cartRemoveLike(cart, "near.up.*");
 cartRemoveLike(cart, "near.down.*");
 hFreeConn(&conn);

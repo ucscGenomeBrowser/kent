@@ -6,6 +6,7 @@
 #include "obscure.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "cheapcgi.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hCommon.h"
@@ -13,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.7 2003/06/25 02:56:45 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.8 2003/06/25 21:47:28 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -89,6 +90,71 @@ else
 hPrintf("</TD>");
 }
 
+void genePredPosSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+hPrintf("chromosome: ");
+advSearchRemakeTextVar(col, "chr", 8);
+hPrintf(" start: ");
+advSearchRemakeTextVar(col, "start", 8);
+hPrintf(" end: ");
+advSearchRemakeTextVar(col, "end", 8);
+}
+
+struct genePos *genePredPosAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on position. */
+{
+char *chrom = advSearchVal(col, "chr");
+char *startString = advSearchVal(col, "start");
+char *endString = advSearchVal(col, "end");
+if (chrom != NULL)
+    {
+    struct genePos *newList = NULL, *gp, *next;
+    for (gp = list; gp != NULL; gp = next)
+	{
+	next = gp->next;
+	if (sameWord(chrom, gp->chrom))
+	    {
+	    slAddHead(&newList, gp);
+	    }
+	}
+    slReverse(&newList);
+    list = newList;
+    }
+if (startString != NULL)
+    {
+    int start = atoi(startString)-1;
+    struct genePos *newList = NULL, *gp, *next;
+    for (gp = list; gp != NULL; gp = next)
+	{
+	next = gp->next;
+	if (gp->end > start)
+	    {
+	    slAddHead(&newList, gp);
+	    }
+	}
+    slReverse(&newList);
+    list = newList;
+    }
+if (endString != NULL)
+    {
+    int end = atoi(endString);
+    struct genePos *newList = NULL, *gp, *next;
+    for (gp = list; gp != NULL; gp = next)
+	{
+	next = gp->next;
+	if (gp->start < end)
+	    {
+	    slAddHead(&newList, gp);
+	    }
+	}
+    slReverse(&newList);
+    list = newList;
+    }
+return list;
+}
+
 static void genePredPosMethods(struct column *col, char *table)
 /* Put in methods for genePred based positions. */
 {
@@ -96,9 +162,11 @@ col->table = table;
 col->exists = simpleTableExists;
 col->cellVal = genePredPosVal;
 col->cellPrint = genePredPosPrint;
+col->searchControls = genePredPosSearchControls;
+col->advancedSearch = genePredPosAdvancedSearch;
 }
 
-char *knownPosVal(struct column *col, struct genePos *gp, 
+static char *knownPosCellVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get genome position of knownPos table.  Ok to have col NULL. */
 {
@@ -119,15 +187,46 @@ if (pos == NULL)
 return pos;
 }
 
+static struct genePos *genePredAll(struct sqlConnection *conn, char *table)
+/* Get all positions in genePred type table. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct genePos *gpList = NULL, *gp;
+
+safef(query, sizeof(query), 
+	"select name,chrom,txStart,txEnd from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(gp);
+    gp->name = cloneString(row[0]);
+    gp->chrom = cloneString(row[1]);
+    gp->start = sqlUnsigned(row[2]);
+    gp->end = sqlUnsigned(row[3]);
+    slAddHead(&gpList, gp);
+    }
+sqlFreeResult(&sr);
+return gpList;
+}
+
+struct genePos *knownPosAll(struct sqlConnection *conn)
+/* Get all positions in knownGene table. */
+{
+return genePredAll(conn, "knownGene");
+}
+
+
 void setupColumnKnownPos(struct column *col, char *parameters)
 /* Set up column that links to genome browser based on known gene
  * position. */
 {
 genePredPosMethods(col, "knownGene");
-col->cellVal = knownPosVal;
+col->cellVal = knownPosCellVal;
 }
 
-void printKnownDetailsLink(struct column *col, struct genePos *gp, 
+void lookupKnownCellPrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Print a link to known genes details page. */
 {
@@ -144,6 +243,18 @@ else
 	    cartSidUrlString(cart), gp->name, gp->chrom, gp->start, gp->end);
     hPrintf("%s</A></TD>", s);
     freeMem(s);
+    }
+}
+
+void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn)
+/* If gp->chrom is not filled in go look it up. */
+{
+if (gp->chrom == NULL)
+    {
+    char *pos = knownPosCellVal(NULL, gp, conn);
+    char *chrom;
+    hgParseChromRange(pos, &chrom, &gp->start, &gp->end);
+    gp->chrom = cloneString(chrom);
     }
 }
 
@@ -185,19 +296,7 @@ dyStringFree(&dy);
 return sr;
 }
 
-void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn)
-/* If gp->chrom is not filled in go look it up. */
-{
-if (gp->chrom == NULL)
-    {
-    char *pos = knownPosVal(NULL, gp, conn);
-    char *chrom;
-    hgParseChromRange(pos, &chrom, &gp->start, &gp->end);
-    gp->chrom = cloneString(chrom);
-    }
-}
-
-struct searchResult *knownGeneSimpleSearch(struct column *col, 
+struct searchResult *lookupKnownSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Look for matches to known genes. */
 {
@@ -216,7 +315,7 @@ void setupColumnLookupKnown(struct column *col, char *parameters)
 /* Set up a column that links to details page for known genes. */
 {
 setupColumnLookup(col, parameters);
-col->cellPrint = printKnownDetailsLink;
-col->simpleSearch = knownGeneSimpleSearch;
+col->cellPrint = lookupKnownCellPrint;
+col->simpleSearch = lookupKnownSimpleSearch;
 }
 

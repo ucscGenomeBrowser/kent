@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.11 2003/06/25 15:20:43 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.12 2003/06/25 21:47:28 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -184,7 +184,7 @@ for (col = colList; col != NULL; col = col->next)
     {
     safef(varName, sizeof(varName), "near.col.%s", col->name);
     cartSetString(cart, varName, "off");
-    doConfigure(conn, colList, NULL);
     }
+doConfigure(conn, colList, NULL);
 }
 

@@ -102,10 +102,11 @@ static struct genePos *findKnownAccessions(struct sqlConnection *conn,
 return findGenePredPos(conn, "knownGene", search);
 }
 
-void doSearch(struct sqlConnection *conn, struct column *colList, char *search)
+void doSearch(struct sqlConnection *conn, struct column *colList)
 /* Search.  If result is unambiguous call displayData, otherwise
  * put up a page of choices. */
 {
+char *search = cartOptionalString(cart, searchVarName);
 search = trimSpaces(search);
 if (search != NULL && sameString(search, ""))
     search = NULL;

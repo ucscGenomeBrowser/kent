@@ -77,7 +77,8 @@ struct column
    void (*searchControls)(struct column *col, struct sqlConnection *conn);
    /* Print out controls for advanced search. */
 
-   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn);
+   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn,
+   	struct genePos *inputList);
    /* Return list of positions for advanced search. */
 
    /* -- Data that may be track-specific. -- */
@@ -113,7 +114,9 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
 #define getTextVarName "near.getText"	/* Button to get as text. */
-#define advSearchVarName "near.advSearch" /* Advanced search */
+#define advSearchVarName "near.advSearch"      /* Advanced search */
+#define advSearchClearVarName "near.advSearchClear" /* Advanced search clear all button. */
+#define advSearchSubmitVarName "near.advSearchSubmit" /* Advanced search submit button. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
@@ -177,6 +180,9 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 	char *kgID, char *alias);
 /* Return a searchResult for a known gene. */
 
+struct genePos *knownPosAll(struct sqlConnection *conn);
+/* Get all positions in knownGene table. */
+
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 
@@ -186,6 +192,14 @@ char *advSearchName(struct column *col, char *varName);
 char *advSearchVal(struct column *col, char *varName);
 /* Return value for advanced search variable.  Return NULL if it
  * doesn't exist or if it is "" */
+
+void advSearchRemakeTextVar(struct column *col, char *varName, int size);
+/* Make a text field of given name and size filling it in with
+ * the existing value if any. */
+
+struct genePos *getSearchNeighbors(struct column *colList, 
+	struct sqlConnection *conn);
+/* Get neighbors by search. */
 
 /* ---- Column method setters. ---- */
 
@@ -213,16 +227,25 @@ void setupColumnLookupKnown(struct column *col, char *parameters);
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
+boolean gotAdvSearch();
+/* Return TRUE if advanced search variables are set. */
+
 /* ---- Create high level pages. ---- */
 void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);
 /* Display data in neighborhood of gene. */
 
-void doSearch(struct sqlConnection *conn, struct column *colList, char *search);
+void doSearch(struct sqlConnection *conn, struct column *colList);
 /* Search.  If result is unambiguous call doMain, otherwise
  * put up a page of choices. */
 
 void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
 /* Put up advanced search page. */
+
+void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList);
+/* Clear variables in advanced search page. */
+
+void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList);
+/* Handle submission in advanced search page. */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);

@@ -6,6 +6,31 @@
 #include "hdb.h"
 #include "hgNear.h"
 
+boolean gotAdvSearch()
+/* Return TRUE if advanced search variables are set. */
+{
+char wild[64];
+struct hashEl *varList = NULL, *var;
+boolean ret = FALSE;
+
+safef(wild, sizeof(wild), "%s.*", advSearchPrefix);
+varList = cartFindLike(cart, wild);
+for (var = varList; var != NULL; var = var->next)
+    {
+    char *s = var->val;
+    if (s != NULL)
+	{
+	s = trimSpaces(s);
+	if (s[0] != 0)
+	    {
+	    ret = TRUE;
+	    break;
+	    }
+	}
+    }
+return ret;
+}
+
 char *advSearchName(struct column *col, char *varName)
 /* Return variable name for advanced search. */
 {
@@ -25,6 +50,25 @@ if (val != NULL && val[0] == 0)
 return val;
 }
 
+void advSearchRemakeTextVar(struct column *col, char *varName, int size)
+/* Make a text field of given name and size filling it in with
+ * the existing value if any. */
+{
+char *var = advSearchName(col, varName);
+char *val = cartOptionalString(cart, var);
+cgiMakeTextVar(var, val, 8);
+}
+
+static void bigButtons()
+/* Put up the big clear/submit buttons. */
+{
+hPrintf("<TABLE><TR><TD>");
+hPrintf("Advanced search form: ");
+cgiMakeButton(advSearchClearVarName, "clear all");
+hPrintf(" ");
+cgiMakeButton(advSearchSubmitVarName, "submit");
+hPrintf("</TD></TR></TABLE>\n");
+}
 
 void doAdvancedSearch(struct sqlConnection *conn, struct column *colList)
 /* Put up advanced search page. */
@@ -37,6 +81,11 @@ boolean anyForSecondPass = FALSE;
 makeTitle("Gene Family Advanced Search", "hgNearAdvSearch.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
+
+/* Put up little table with clear all/submit */
+bigButtons();
+htmlHorizontalLine();
+
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -69,5 +118,70 @@ for (onOff = 1; onOff >= 0; --onOff)
 	hPrintf("</TABLE>\n");
 	}
     }
+htmlHorizontalLine();
+bigButtons();
 hPrintf("</FORM>\n");
 }
+
+/* Return TRUE if advanced search variables are set. */
+void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList)
+/* Clear variables in advanced search page. */
+{
+char like[64];
+safef(like, sizeof(like), "%s.*", advSearchPrefix);
+cartRemoveLike(cart, like);
+doAdvancedSearch(conn, colList);
+}
+
+void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList)
+/* Handle submission in advanced search page. */
+{
+if (gotAdvSearch())
+    {
+    groupOn = "search";
+    cartSetString(cart, groupVarName, groupOn);
+    }
+doSearch(conn, colList);
+}
+
+static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
+	struct genePos **pRejects)
+/* Return first maxCount of inList.  Put rest in rejects. */
+{
+struct genePos *outList = NULL, *gp, *next;
+int count;
+for (gp = inList, count=0; gp != NULL; gp = next, count++)
+    {
+    next = gp->next;
+    if (count < maxCount)
+        {
+	slAddHead(&outList, gp);
+	}
+    else
+        {
+	slAddHead(pRejects,gp);
+	}
+    }
+slReverse(&outList);
+return outList;
+}
+
+struct genePos *getSearchNeighbors(struct column *colList, struct sqlConnection *conn)
+/* Get neighbors by search. */
+{
+/* First get full list. */
+struct genePos *list = knownPosAll(conn);
+struct genePos *rejectList = NULL;
+struct column *col;
+
+/* Then go through and filter it down by column. */
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (col->advancedSearch)
+        list = col->advancedSearch(col, conn, list);
+    }
+
+list = firstBitsOfList(list, displayCount, &rejectList);
+return list;
+}
+
