@@ -1342,7 +1342,7 @@ LOAD CPGISLANDS (DONE 8/9/02)
      hgLoadBed hg12 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL GENES (todo)
+LOAD ENSEMBL GENES (todo - waiting for proper file formats from them, Matt 9/13/02)
      cd ~/oo/bed
      mkdir ensembl
      cd ensembl
@@ -1351,7 +1351,6 @@ LOAD ENSEMBL GENES (todo)
      wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
      gunzip ftp//ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
 
-TODO TO HERE
      Starting from Hg10, ensembl seems to have done their own lifting,
      so just collect all chromosome .gtf files.
      cat ?.gtf ??.gtf >all.gtf
@@ -1465,20 +1464,12 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (todo)
+LOAD SOFTBERRY GENES (DONE 9/12/02)
      - ln -s /cluster/store1/gs.13/build30/ ~/oo
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
-TODO TO HERE - WAITING FOR NEW DATA
-     - get ftp://www.softberry.com/pub/SC_DEC01/*
-     - mkdir output
-     - Run the fixFormat.pl routine in
-     	~/oo/bed/softberry like so:
-        ./fixFormat.pl output
-     - This will stick all the properly converted .gff and .pro files in
-     the directory named "output".
-     - cd output
+     - wget ftp://www.softberry.com/pub/sc_fgenesh_jun02/sb_fgenesh_jun02.tar.gz
      ldHgGene hg12 softberryGene chr*.gff
      hgPepPred hg12 softberry *.pro
      hgSoftberryHom hg12 *.pro
@@ -1494,7 +1485,7 @@ LOAD GENEID GENES (todo)
      ldHgGene hg12 geneid download/*.gtf -exon=CDS
      hgPepPred hg12 generic geneidPep download/*.prot
 
-LOAD ACEMBLY (IN PROGRESS 9/3/02)
+LOAD ACEMBLY (DONE 9/10/02)
     mkdir -p ~/oo/bed/acembly
     cd ~/oo/bed/acembly
     
