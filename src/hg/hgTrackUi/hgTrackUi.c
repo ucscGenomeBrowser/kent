@@ -157,16 +157,48 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
+
+void chimpUi(struct trackDb *tdb)
+/* put up UI for the chimp track (a sample track)*/
+{
+int chimpHeightPer = atoi(cartUsualString(cart, "chimp.heightPer", "10"));
+char *interpolate = cartUsualString(cart, "chimp.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "chimp.anti.alias", "on");
+char *fill = cartUsualString(cart, "chimp.fill", "0");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("chimp.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("chimp.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("chimp.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("chimp.fill", "1", sameString(fill, "1"));
+printf(" on ");
+cgiMakeRadioButton("chimp.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("chimp.heightPer", chimpHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+
 void wiggleUi(struct trackDb *tdb)
 /* put up UI for the wiggle track for representing curves inside * tracks */
 {
 int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
-char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
+char *interpolate = cartUsualString(cart, "wiggle.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
 char *fill = cartUsualString(cart, "wiggle.fill", "0");
 
 printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("linear.interp", interpolate );
+wiggleDropDown("wiggle.linear.interp", interpolate );
 printf(" ");
 printf(" <b>Anti-Aliasing</b>: ");
 cgiMakeRadioButton("wiggle.anti.alias", "on", sameString(aa, "on"));
@@ -234,6 +266,8 @@ else if (sameString(track, "affyRatio"))
     affyUi(tdb);
 else if (sameString(track, "wiggle"))
     wiggleUi(tdb);
+else if (sameString(track, "chimp"))
+    chimpUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 }
