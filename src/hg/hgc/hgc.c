@@ -259,7 +259,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	firstTime = FALSE;
     else
 	htmlHorizontalLine();
-    bed = bedLoadN(row, bedSize);
+    bed = bedLoadN(row+hasBin, bedSize);
     if (bedSize > 3)
 	printf("<B>Item:</B> %s<BR>\n", bed->name);
     if (bedSize > 4)
