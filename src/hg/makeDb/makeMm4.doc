@@ -2015,9 +2015,9 @@ XXX running 2003-11-01 23:55
 XXXX - running 2003-10-31 14:45
 
         cat header ../bed/bacends/ncbi/bacEndPairs.txt | \
-	~booch/bin/row score ge 300 | \
-	~booch/bin/sorttbl chr start | \
-	~booch/bin/headchg -del > bacEndPairs.bed
+	/cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairs.bed
 
     # edit this Makefile to add this executable path to the scripts:
     #	/projects/compbiousr/booch/booch/scripts/
@@ -2521,10 +2521,12 @@ XXX  This is an unusual increase ?
     hgsql mm4 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
     hgsql -e \
      'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm4
-    hgsql -e "drop table all_sts_primer;" mm4
-    hgsql mm4 < /projects/hg2/booch/psl/tables/all_sts_primer.sql
-    hgsql -e \
-	'load data local infile "primer/primers.psl.filter.lifted" into table all_sts_primer;' mm4
+
+    hgLoadPsl -nobin -table=all_sts_primer mm4 primer/primers.psl.filter.lifted
+    #hgsql -e "drop table all_sts_primer;" mm4
+    #hgsql mm4 < /projects/hg2/booch/psl/tables/all_sts_primer.sql
+    #hgsql -e \
+    #	'load data local infile "primer/primers.psl.filter.lifted" into table all_sts_primer;' mm4
 XXXX 2002-12-23 This is missing something.  Can not click through to the
 	alignments
 
