@@ -59,7 +59,7 @@ color 12,12,120
 type genePred refPep refMrna
 
 track pjt_genscan
-shortLabel Genscan 
+shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
 group genes
 priority 8
@@ -95,7 +95,7 @@ spectrum on
 type psl est
 
 track xenoMrna
-shortLabel Non$organism mRNA
+shortLabel Non$organism mRNAs
 longLabel Non$organism mRNAs from Genbank
 group rna
 priority 12
@@ -104,7 +104,7 @@ spectrum on
 type psl xeno
 
 track xenoEst
-shortLabel Non$organism EST
+shortLabel Non$organism ESTs
 longLabel Non$organism ESTs from Genbank 
 group rna
 priority 13
@@ -154,7 +154,7 @@ visibility hide
 type sample 0 500
 
 track binomialCons2
-shortLabel Binomial Cons Score
+shortLabel Binomial Cons 
 longLabel Binomial_25 Conservation Scores
 group compGeno
 priority 18
@@ -164,7 +164,7 @@ type sample
 
 track mcs_p
 shortLabel MCS (ParsPVal)
-longLabel Parsimony P_Value based MCSs
+longLabel Parsimony P_Value-based MCSs
 group compGeno
 priority 19
 visibility dense
@@ -182,7 +182,7 @@ type sample
 
 track mcs_u
 shortLabel MCS (Uniform)
-longLabel Uniform P-Value based MCSs
+longLabel Uniform P-Value-based MCSs
 group compGeno
 priority 21
 visibility dense
@@ -397,7 +397,7 @@ otherDb zooZebrafish3
 
 track rodentsGaps
 shortLabel rodentGaps 
-longLabel rodentGaps
+longLabel Rodent Gaps
 group compGeno
 priority 39
 visibility hide
@@ -515,8 +515,8 @@ color 0,160,0
 type bed 4 .
 
 track dhs
-shortLabel DNase HyperSens
-longLabel DNAase I hypersensitive sites
+shortLabel DNAase HyperSens
+longLabel DNAase I Hypersensitive Sites
 group regulation
 priority 51
 visibility hide
