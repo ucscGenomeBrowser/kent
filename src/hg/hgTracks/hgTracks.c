@@ -565,7 +565,8 @@ hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(),
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
 if( withPopUps ) 
-    hPrintf(" onMouseOver=\"javascript:popup('%s controls');\" onMouseOut=\"javascript:popupoff();\">\n", tg->shortLabel);
+    hPrintf(" onMouseOver=\"javascript:popup('%s controls');\" onMouseOut=\"javascript:popupoff();\"", tg->shortLabel);
+hPrintf(">\n");
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -590,10 +591,11 @@ hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 
 if (toggleGroup && withPopUps)
-        hPrintf(" onMouseOver=\"javascript:popup('Change between dense and full view of %s track');\" onMouseOut=\"javascript:popupoff();\">\n", toggleGroup->shortLabel);
+        hPrintf(" onMouseOver=\"javascript:popup('Change between dense and full view of %s track');\" onMouseOut=\"javascript:popupoff();\"", toggleGroup->shortLabel);
 else
     if( withPopUps ) 
-        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\">\n",message);
+        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",message);
+hPrintf(">\n");
 }
 
 
@@ -636,7 +638,8 @@ hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
     database, tl.picWidth);
 /*if (start !=-1)*/
 if( withPopUps ) 
-    hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\">\n",statusLine);
+    hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",statusLine);
+hPrintf(">\n");
 freeMem(encodedItem);
 }
 
