@@ -221,7 +221,7 @@ printf("&nbsp;pixels");
 
 printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("humMus.interp.gap", humMusLineGap, 10 );
-printf("&nbsp;pixels");
+printf("&nbsp;bases");
 
 
 }
