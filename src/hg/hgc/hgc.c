@@ -69,8 +69,9 @@
 #include "jointalign.h"
 #include "gcPercent.h"
 #include "uPennClones.h"
+#include "geneGraph.h"
+#include "altGraphX.h"
 
-#define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
 
@@ -79,6 +80,13 @@ struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
+
+int maxShade = 9;	/* Highest shade in a color gradient. */
+Color shadesOfGray[10+1];	/* 10 shades of gray from white to black */
+
+Color shadesOfRed[16];
+boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
+int maxRGBShade = 16;
 
 struct pslWScore *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
@@ -4309,7 +4317,6 @@ void doMgcMrna(char *track, char *acc)
 }
 
 #endif /* ROGIC_CODE */
-#ifdef CHUCK_CODE
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -5707,7 +5714,315 @@ printf("<br>\n");*/
 chuckHtmlContactInfo();
 }
 
-#endif /*CHUCK_CODE*/
+void makeGrayShades(struct memGfx *mg)
+/* Make eight shades of gray in display. */
+{
+int i;
+for (i=0; i<=maxShade; ++i)
+    {
+    struct rgbColor rgb;
+    int level = 255 - (255*i/maxShade);
+    if (level < 0) level = 0;
+    rgb.r = rgb.g = rgb.b = level;
+    shadesOfGray[i] = mgFindColor(mg, rgb.r, rgb.g, rgb.b);
+    }
+shadesOfGray[maxShade+1] = MG_RED;
+}
+
+void mgMakeColorGradient(struct memGfx *mg, 
+    struct rgbColor *start, struct rgbColor *end,
+    int steps, Color *colorIxs)
+/* Make a color gradient that goes smoothly from start
+ * to end colors in given number of steps.  Put indices
+ * in color table in colorIxs */
+{
+double scale = 0, invScale;
+double invStep;
+int i;
+int r,g,b;
+
+steps -= 1;	/* Easier to do the calculation in an inclusive way. */
+invStep = 1.0/steps;
+for (i=0; i<=steps; ++i)
+    {
+    invScale = 1.0 - scale;
+    r = invScale * start->r + scale * end->r;
+    g = invScale * start->g + scale * end->g;
+    b = invScale * start->b + scale * end->b;
+    colorIxs[i] = mgFindColor(mg, r, g, b);
+    scale += invStep;
+    }
+}
+
+void makeRedGreenShades(struct memGfx *mg) 
+/* Allocate the  shades of Red, Green and Blue */
+{
+static struct rgbColor black = {0, 0, 0};
+static struct rgbColor red = {255, 0, 0};
+mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
+exprBedColorsMade = TRUE;
+}
+
+
+
+boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
+/* is the mrnaIx already in seen? */
+{
+int i=0;
+boolean result = FALSE;
+for(i=0; i<*seenCount; i++)
+    {
+    if(ag->mrnaTissues[seen[i]] == ag->mrnaTissues[mrnaIx] ||
+       ag->mrnaLibs[seen[i]] == ag->mrnaLibs[mrnaIx])
+	{
+	result = TRUE;
+	break;
+	}
+    }
+if(!result)
+    {
+    seen[*seenCount++] = mrnaIx;
+    }
+return result;
+}
+
+int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx)
+/* count how many unique libraries or tissues contain a given edge */
+{
+struct evidence *ev = slElementFromIx(ag->evidence, eIx);
+int *seen = NULL;
+int seenCount = 0,i;
+int conf = 0;
+AllocArray(seen, ag->edgeCount);
+for(i=0; i<ag->edgeCount; i++)
+    seen[i] = -1;
+for(i=0; i<ev->evCount; i++)
+    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
+	conf++;
+freez(&seen);
+return conf;
+}
+
+boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
+/* Return TRUE if a v1-v2 edge is in the list FALSE otherwise. */
+{
+struct ggEdge *e = NULL;
+for(e = edges; e != NULL; e = e->next)
+    {
+    if(e->vertex1 == v1 && e->vertex2 == v2)
+	return TRUE;
+    }
+return FALSE;
+}
+
+Color altGraphXColorForEdge(struct memGfx *mg, struct altGraphX *ag, int eIx)
+/* Return the color of an edge given by confidence */
+{
+int confidence = altGraphConfidenceForEdge(ag, eIx);
+Color c = shadesOfGray[maxShade/4];
+struct geneGraph *gg = NULL;
+struct ggEdge *edges = NULL;
+
+if(ag->vTypes[ag->edgeStarts[eIx]] == ggHardStart && ag->vTypes[ag->edgeEnds[eIx]] == ggHardEnd)
+    {
+    gg = altGraphXToGG(ag);
+    edges = ggFindCassetteExons(gg);
+    if(altGraphXInEdges(edges, ag->edgeStarts[eIx], ag->edgeEnds[eIx]))
+	{
+	if(!exprBedColorsMade)
+	    makeRedGreenShades(mg);
+	if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0];
+	else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0];
+	else if(confidence >= 3) c = shadesOfRed[maxRGBShade];
+	}
+    else 
+	{
+	if(confidence == 1) c = shadesOfGray[maxShade/3];
+	else if(confidence == 2) c = shadesOfGray[2*maxShade/3];
+	else if(confidence >= 3) c = shadesOfGray[maxShade];
+	}    
+    freeGeneGraph(&gg);
+    slFreeList(&edges);
+    return c;
+    }
+else
+    {
+    if(confidence == 1) c = shadesOfGray[maxShade/3];
+    else if(confidence == 2) c = shadesOfGray[2*maxShade/3];
+    else if(confidence >= 3) c = shadesOfGray[maxShade];
+    }
+return c;
+}
+
+
+static void altGraphXDraw(struct altGraphX *ag, struct memGfx *mg, int xOff, int yOff, 
+			  int width,  MgFont *font)
+/* Draws the blocks for an alt-spliced gene and the connections */
+{
+int start = ag->tStart;
+int end = ag->tEnd;
+int baseWidth = ag->tEnd - ag->tStart;
+int y = yOff;
+int heightPer = 2 * mgFontLineHeight(font);
+int lineHeight = mgFontLineHeight(font);
+int x1,x2;
+double scale = width/(double)baseWidth;
+int i;
+double y1, y2;
+int midLineOff = heightPer/2;
+int s =0, e=0;
+
+for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
+    {
+    char buff[16];
+    int textWidth;
+    int sx1 = 0;
+    int sx2 = 0;
+    int sw = 0;
+    s = ag->vPositions[ag->edgeStarts[i]];
+    e = ag->vPositions[ag->edgeEnds[i]];
+    x1 = round((double)((int)s-start)*scale) + xOff;
+    x2 = round((double)((int)e-start)*scale) + xOff;
+    sx1 = roundingScale(s-start, width, baseWidth)+xOff;
+    sx2 = roundingScale(e-start, width, baseWidth)+xOff;
+    sw = sx2 - sx1;
+    snprintf(buff, sizeof(buff), "%d-%d", ag->edgeStarts[i], ag->edgeEnds[i]); 
+    /* if it is an exon draw a box */
+    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
+	&& (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
+	{
+	Color color2 = altGraphXColorForEdge(mg, ag, i);
+	mgDrawBox(mg, x1, y+(heightPer/2), (x2-x1), heightPer/2, color2);
+	textWidth = mgFontStringWidth(font, buff);
+	if (textWidth <= sw + 2 )
+	    mgTextCentered(mg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
+	}
+    /* if it is an intron draw an arc */
+    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
+	&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
+	{
+	Color color2 = altGraphXColorForEdge(mg, ag, i);
+	int midX;   
+	int midY = y + heightPer/2;
+	midX = (x1+x2)/2;
+	mgDrawLine(mg, x1, midY, midX, y, color2);
+	mgDrawLine(mg, midX, y, x2, midY, color2);
+	textWidth = mgFontStringWidth(font, buff);
+	if (textWidth <= sw )
+	    mgTextCentered(mg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
+	}
+    }
+}
+
+char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
+/* create a drawing of splicing pattern */
+{
+struct memGfx *mg;
+MgFont *font = mgSmallFont();
+int trackTabWidth = 11;
+int fontHeight = mgFontLineHeight(font);
+struct tempName gifTn;
+int pixWidth = atoi(cartUsualString(cart, "pix", "600" ));
+int pixHeight = 2 * mgFontLineHeight(font)+2;
+mg = mgNew(pixWidth, pixHeight);
+mgClearPixels(mg);
+makeGrayShades(mg);
+altGraphXDraw(ag, mg, 0, 1, pixWidth, font);
+makeTempName(&gifTn, "hgc", ".gif");
+mgSaveGif(mg, gifTn.forCgi);
+printf(
+    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
+    gifTn.forHtml, pixWidth, pixHeight);
+mgFree(&mg);
+return cloneString(gifTn.forHtml);
+}
+
+char *agXStringForEdge(struct altGraphX *ag, int i)
+/* classify an edge as intron or exon */
+{
+if(ag->vTypes[ag->edgeStarts[i]] == ggSoftStart ||
+   ag->vTypes[ag->edgeStarts[i]] == ggHardStart)
+    return "exon";
+else if (ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd ||
+   ag->vTypes[ag->edgeStarts[i]] == ggHardEnd)
+    return "intron";
+else
+    return "unknown";
+}
+
+char *agXStringForType(enum ggVertexType t)
+/* convert a type to a string */
+{
+switch (t)
+    {
+    case ggSoftStart:
+	return "ss";
+    case ggHardStart:
+	return "hs";
+    case ggSoftEnd:
+	return "se";
+    case ggHardEnd:
+	return "he";
+    }
+return "NA";
+}
+
+void doAltGraphXDetails(struct trackDb *tdb, char *item)
+/* do details page for an altGraphX */
+{
+int id = atoi(item);
+char query[256];
+int i,j;
+struct altGraphX *ag = NULL;
+struct sqlConnection *conn = hAllocConn();
+char *image = NULL;
+genericHeader(tdb, item);
+snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
+ag = altGraphXLoadByQuery(conn, query);
+if(ag == NULL)
+    errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
+printf("<center>\n");
+image = altGraphXMakeImage(tdb,ag);
+printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
+       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
+printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
+printf("Jump to browser for %d</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->id, ag->tName, ag->tStart, ag->tEnd);
+printf("<table cellpadding=0 cellspacing=0>\n");
+printf("<tr><th><b>Vertices</b></th><th><b>Edges</b></th></tr>\n");
+printf("<tr><td valign=top>\n");
+printf("<table cellpadding=1 border=1>\n");
+printf("<tr><th><b>Number</b></th><th><b>Type</b></th></tr>\n");
+for(i=0; i<ag->vertexCount; i++)
+    {
+    printf("<tr><td>%d</td><td>%s</td></tr>\n", i, agXStringForType(ag->vTypes[i]));
+    }
+printf("</table>\n");
+printf("</td><td valign=top>\n");
+printf("<table cellpadding=1 border=1>\n");
+printf("<tr><th><b>Start</b></th><th><b>End</b></th><th><b>Type</b></th><th><b>Evidence</b></th></tr>\n");
+for(i=0; i<ag->edgeCount; i++)
+    {
+    struct evidence *e =  slElementFromIx(ag->evidence, i);
+    printf("<tr><td>%d</td><td>%d</td>", 	   ag->edgeStarts[i], ag->edgeEnds[i]);
+    printf("<td><a href=%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
+	   hgTracksName(), 
+	   ag->tName, 
+	   ag->vPositions[ag->edgeStarts[i]], 
+	   ag->vPositions[ag->edgeEnds[i]],
+	   agXStringForEdge(ag, i));
+    for(j=0; j<e->evCount; j++)
+	printf("%s, ", ag->mrnaRefs[e->mrnaIds[j]]);
+    printf("</td></tr>\n");
+    }
+printf("</table>\n");
+printf("</td></tr>\n");
+printf("</table>\n");
+printf("</center>\n");
+hFreeConn(&conn);
+webEnd();
+}
+
+
 
 void hgCustom(char *trackId, char *fileItem)
 /* Process click on custom track. */
@@ -5939,7 +6254,6 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
     }
-#ifdef CHUCK_CODE
 else if (sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item);
@@ -5948,7 +6262,6 @@ else if (sameWord(track, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
     }
-#endif /*CHUCK_CODE*/
 #ifdef ROGIC_CODE
  else if (sameWord(track, "mgc_mrna"))
    {
@@ -6056,6 +6369,10 @@ else if( sameWord(track, "ancientR"))
 else if( sameWord(track, "gcPercent"))
     {
     doGcDetails(tdb, item);
+    }
+else if( sameWord(track, "altGraphX"))
+    {
+    doAltGraphXDetails(tdb,item);
     }
 else if (tdb != NULL)
    {
