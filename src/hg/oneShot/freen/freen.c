@@ -2,42 +2,58 @@
 #include "common.h"
 #include "linefile.h"
 #include "obscure.h"
-#include "portable.h"
+#include "dlist.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen power");
+errAbort("usage: freen count");
 }
 
-struct numList
+struct number
 /* A list of numbers. */
     {
     struct numList *next;
-    int num;
+    int number;
     };
+
+int numberCmp(const void *va, const void *vb)
+/* Compare to sort based on query. */
+{
+const struct number *a = *((struct number **)va);
+const struct number *b = *((struct number **)vb);
+return a->number - b->number;
+}
+
 
 void freen(char *s)
 /* Print status code. */
 {
-double power = 1.0/atof(s);
+int count = atoi(s);
 int i;
-for (i=1; i<=10; ++i)
-    printf("%d %f\n", i, pow(i, power));
-for (i=10; i<1000000; i *= 10)
-    printf("%d %f\n", i, pow(i, power));
+struct number *num;
+struct dlList *list = newDlList();
+struct dlNode *node;
+
+for (i=0; i<count; ++i)
+    {
+    AllocVar(num);
+    num->number = rand();
+    dlAddValTail(list, num);
+    }
+dlSort(list, numberCmp);
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    num = node->val;
+    printf("%d\n", num->number);
+    }
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-long t1, t2;
-t1 = clock1000();
 if (argc != 2)
    usage();
 freen(argv[1]);
-sleep(2);
-t2 = clock1000();
-printf("time %ld %ld %ld\n", t2-t1, t1, t2);
 }
