@@ -34,7 +34,7 @@ pairwise netBlastz
 speciesOrder chimp dog mouse rat chicken fugu zebrafish
 
 track phastConsElements
-shortLabel Cons Elements
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
 group compGeno
 priority 109.1

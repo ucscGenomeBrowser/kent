@@ -13,7 +13,7 @@ pairwise netBlastz
 speciesOrder rat human dog chicken
 
 track phastConsElements
-shortLabel Cons Elements
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Rat/Human/Dog/Chicken
 group compGeno
 priority 100.1
