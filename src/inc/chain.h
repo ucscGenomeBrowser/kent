@@ -62,4 +62,7 @@ void chainIdReset();
 void chainIdNext(struct chain *chain);
 /* Add id to chain. */
 
+void chainSwap(struct chain *chain);
+/* Swap target and query side of chain. */
+
 #endif /* CHAIN_H */
