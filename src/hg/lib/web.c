@@ -465,7 +465,7 @@ if (!strstrNoCase(organism, queryOrganism))
     {
     retDb = hDefaultDbForOrganism(organism);
     }
-
+//uglyf("\n<BR>GETDB = %s", retDb);
 return retDb;
 }
 
@@ -483,19 +483,25 @@ was in their cart, unless the organism doesn't match.
 */
 {
 *retDb = cgiOptionalString(dbCgiName);
+//uglyf("\n<BR>CGI DB = %s", *retDb);
 *retOrganism = cgiOptionalString(orgCgiName);
+//uglyf("\n<BR>CGI ORG = %s", *retOrganism);
 
 if (*retDb)
     {
     *retOrganism = hOrganism(*retDb);
+//    uglyf("\n<BR>HORGANISM = %s", *retOrganism);
     }
 else if (*retOrganism)
     {
     *retDb = getDbForOrganism(*retOrganism, cart);
+//    uglyf("\n<BR>GETDB = %s", *retDb);
     }
 else
     {
     *retDb = cartUsualString(cart, dbCgiName, hGetDb());
     *retOrganism = hOrganism(*retDb);
+//    uglyf("\n<BR>RET DB = %s", *retDb);
+//    uglyf("\n<BR>RET ORG = %s", *retOrganism);
     }
 }
