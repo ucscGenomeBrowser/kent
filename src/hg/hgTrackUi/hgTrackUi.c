@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.68 2003/09/17 00:23:51 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.69 2003/09/22 15:05:31 braney Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -457,6 +457,8 @@ else if (sameString(track, "nci60"))
         nci60Ui(tdb);
 else if (sameString(track, "cghNci60"))
         cghNci60Ui(tdb);
+else if (sameString(track, "xenoRefGene"))
+        refGeneUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
 else if (sameString(track, "mrna"))
