@@ -686,10 +686,11 @@ color 12,12,120
 type bed 6
 
 track promoterStanford
-longLabel promoters identified by Richard Myers at Stanford 
-shortLabel Promoter Myers 
+longLabel Experimental and Predicted 500bp promoters by Myers' Lab at Stanford 
+shortLabel Promoter Stanford 
 group regulation
 priority 82
+spectrum on
 visibility hide
 color 30,130,210
 type bed 6 .
