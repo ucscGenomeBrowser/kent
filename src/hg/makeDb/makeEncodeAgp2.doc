@@ -113,16 +113,22 @@ csh genomeAgps.csh $chicken chicken $chicken
 
 # Test a region
 # takes 10 minutes ?
-ssh kksilo
+ssh hgwdev
 cd /cluster/data/encode/ortho2/agp
+set chicken = galGal2
 mkdir test
 cd test
 /cluster/data/encode/bin/scripts/agpAccToContig.pl galGal2 \
-        ../$chicken/chicken_ENm001_1.agp > test.agp
+        ../$chicken/chicken_${region}.agp > test.agp
+set region = ENm005_1
 gunzip -c  /cluster/data/galGal2/chicken_contigs.tar.gz > \
                 test.chicken.contigs.fa
-agpToFa test.agp chicken_ENm001_1 test.fa -simpleMulti test.contigs.fa
-set coords = `awk '$4 == "ENm001_1" {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/galGal2.bed`
+
+ssh kksilo
+cd /cluster/data/encode/ortho2/agp/tests
+set chicken = galGal2
+time agpToFa test.agp chicken_$region test.fa -simpleMulti test.chicken.contigs.fa
+set coords = `awk -v REGION=$region '$4 == "$REGION" {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/galGal2.bed`
 set chr = $coords:r:r
 nibFrag -upper /cluster/data/galGal2/nib/${chr}.nib \
         $coords:r:e $coords:e + nibtest.fa
