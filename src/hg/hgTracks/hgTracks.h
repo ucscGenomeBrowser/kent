@@ -124,14 +124,19 @@ struct track
 
     boolean exonArrows;	/* Draw arrows on exons? */
 
+    /* fill in left label drawing area */
     Color labelColor;   /* Fixed color for the track label (optional) */
-    
     void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis);
-    /* fill in left label drawing area */
+
+    struct track *subtracks;   /* list of subsidiary tracks that are
+                                loaded and drawn by this track.  This
+                                is used for "composite" tracks, such
+                                as "mafWiggle */
     };
+
 
 struct trackRef 
 /* A reference to a track. */
@@ -498,10 +503,20 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
+void wigMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[]);
 
-
-void wigMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
+
+void wigMafMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[]);
+int wigTotalHeight(struct track *tg, enum trackVisibility vis);
+
+/* Wiggle track will use this to figure out the height they use
+   as defined in the cart */
+/* Make track for wig - wiggle tracks. */
+
+/* Make track group for maf track with wiggle. */
 
 void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Load up methods for a generic sample type track. */
@@ -594,6 +609,7 @@ void drawScaledBoxSample(struct vGfx *vg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
         
+struct track *trackFromTrackDb(struct trackDb *tdb);
 
 #endif /* HGTRACKS_H */
 
