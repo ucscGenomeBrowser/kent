@@ -5,7 +5,26 @@
 #include "dlist.h"
 #include "portable.h"
 #include "dystring.h"
+#include "options.h"
 #include <sys/wait.h>
+
+int crossSwitchMax = 40;		/* Max copies between switches at once. */
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+"ccCp - copy a file to cluster."
+"usage:\n"
+"   ccCp sourceFile destFile [hostList]\n"
+"This will copy sourceFile to destFile for all machines in\n"
+"hostList\n"
+"options\n"
+"    -crossMax=N (default %d) - maximum copies across switches\n"
+"example:\n"
+"   ccCp h.zip /var/tmp/h.zip newHosts"
+	, crossSwitchMax);
+}
 
 enum 	/* Constants. */
     {
@@ -33,14 +52,13 @@ struct machine
     struct dlNode *sourceNode; /* Source node in copy. */
     };
 
-int crossSwitchMax = 1;		/* Max copies between switches at once. */
 int crossSwitchCount = 0;	/* Current copies between switches. */
 
 boolean matchMaker(struct dlList *finList, struct dlList *toDoList, 
 	struct dlNode **retSourceNode, struct dlNode **retDestNode)
 /* Find a copy to make from the finished list to the toDo list. */
 {
-struct dlNode *sourceNode, *destNode;
+struct dlNode *sourceNode, *destNode = NULL;
 struct machine *source, *dest;
 bool gotIt = FALSE;
 
@@ -107,20 +125,6 @@ if (firstChar == '/' || firstChar == '~')
 getcwd(dir, sizeof(dir));
 sprintf(fullPath, "%s/%s", dir, relName);
 return cloneString(fullPath);
-}
-
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-"ccCp - copy a file to cluster."
-"usage:\n"
-"   ccCp sourceFile destFile [hostList]\n"
-"This will copy sourceFile to destFile for all machines in\n"
-"hostList\n"
-"\n"
-"example:\n"
-"   ccCp h.zip /var/tmp/h.zip newHosts");
 }
 
 struct machine *shuffleSwitches(struct netSwitch *nsList)
@@ -270,7 +274,7 @@ machineCount = slCount(machineList);
 if (!fileExists(source))
     errAbort("%s doesn't exist\n", source);
 size = fileSize(source);
-printf("Copying %s (%d bytes) to %d machines\n", source, size, machineCount);
+printf("Copying %s (%ld bytes) to %d machines\n", source, size, machineCount);
 
 /* Add everything to the to-do list. */
 for (m = machineList; m != NULL; m = m->next)
@@ -416,6 +420,8 @@ int start = 0, count = 0;
 char *lockDir;
 char *source, *dest, *hostList;
 
+optionHash(&argc, argv);
+crossSwitchMax = optionInt("crossMax", crossSwitchMax);
 if (argc != 3 && argc != 4)
     usage();
 source = argv[1];
