@@ -15,7 +15,7 @@ foreach my $fname (@ARGV) {
     }
     while (<IN>) {
       if (/^(\d+)\s+(\d+)\s*$/) {
-	print "$chr\t$1\t$2\t$strain.$chr.$1.$2\n";
+	print "$chr\t" . ($1 - 1) . "\t$2\t$strain.$chr.$1.$2\n";
       }
     }
     close(IN);
