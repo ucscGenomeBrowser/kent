@@ -71,3 +71,13 @@ color 12,12,120
 visibility pack
 type bed 4 +
 
+track otherSARS
+shortLabel Other SARS
+longLabel Other SARS coronavirus (partial or complete)
+group compGeno
+priority 132
+visibility pack
+color 75,75,120
+type psl .
+url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$$
+
