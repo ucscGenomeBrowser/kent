@@ -78,7 +78,7 @@ exit; # don't actually run this like a script :)
                 htmlPath, hgNearOk) values \
         ("sacCer1", "Oct. 2003", "/gbdb/sacCer1/nib", "Yeast", \
                "chr2:827700-845800", 1, 65, "Yeast", \
-                "Saccharomyces cerevisiea", "/gbdb/sacCer1/html/description.html", \
+                "Saccharomyces cerevisiae", "/gbdb/sacCer1/html/description.html", \
                 0);' \
       | hgsql -h genome-testdb hgcentraltest
     echo 'INSERT INTO defaultDb (genome, name) values ("Yeast", "sacCer1");' \
@@ -151,21 +151,34 @@ exit; # don't actually run this like a script :)
           insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
       | hgsql -h genome-testdb hgcentraltest
 
+# CREATING SGD-BASED KNOWN GENES
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir sgdGene
+    hgSgdGff3 ../download/chromosomal_feature/s_cerevisiae.gff3 sgdGene
+    cd sgdGene
+    ldHgGene sacCer1 sgdGene codingGenes.gff
+    hgLoadBed sacCer1 sgdOther otherFeatures.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+
 # AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
 
     # Put the nib's on /cluster/bluearc:
-    ssh kksilo
-    mkdir -p /cluster/bluearc/sacCer/sacCer1
-    cp -pR /cluster/data/sacCer1/nib /cluster/bluearc/sacCer/sacCer1
+    ssh eieio
+    mkdir -p /cluster/bluearc/sacCer/sacCer1/nib
+    cp -pR /cluster/data/sacCer1/nib/*.nib /cluster/bluearc/sacCer/sacCer1/nib
 
     # Instructions for setting up incremental genbank updates are here:
     # http://www.soe.ucsc.edu/~markd/genbank-update/doc/initial-load.html
 
     # Added
-static char *sacCerNames[] = {"Saccharomyces cerevisiea", NULL};
+static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
     and
 {"dm", dmNames, NULL},
     to appropriate parts of src/hg/makeDb/genbank/src/lib/gbGenome.c
+    # Then make and make install
+    cd src/hg/make/makeDb/genbank
+    make PREFIX=/cluster/store5/genbank install
 
     # Edit /cluster/data/genbank/etc/genbank.conf and add:
 # sacCer1
@@ -178,9 +191,10 @@ sacCer1.downloadDir = sacCer1
     ssh eieio
     cd /cluster/data/genbank
     # This is an -initial run, mRNA only:
-    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+    # It will take about 8 minutes.
+    time nice bin/gbAlignStep -iserver=no \
+      -clusterRootDir=/cluster/bluearc/genbank \
       -srcDb=genbank -type=mrna -verbose=1 -initial sacCer1
---- This is not taking any time.  Is that right? ----
 
     # Load the results from the above
     ssh hgwdev
