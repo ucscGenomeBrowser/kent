@@ -126,7 +126,7 @@ FILE *openFromCache(struct dlList *cache, char *fileName)
 /* Return open file handle via cache.  The simple logic here
  * depends on not more than N files being returned at once. */
 {
-static int maxCacheSize=16;
+static int maxCacheSize=32;
 int cacheSize = 0;
 struct dlNode *node;
 struct cachedFile *cf;
