@@ -10,7 +10,7 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.9 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.10 2003/06/09 18:47:58 kent Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 
@@ -148,4 +148,5 @@ if (argc < 3)
     usage();
 exonType = cgiUsualString("exon", exonType);
 ldHgGene(argv[1], argv[2], argc-3, argv+3);
+return 0;
 }
