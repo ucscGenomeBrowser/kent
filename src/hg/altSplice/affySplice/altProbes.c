@@ -61,6 +61,14 @@ struct altEvent
     boolean isAltExpressed;      /* Is this altEvent alt-expressed? */
 };
 
+struct bindSite
+/* Binding sites for a protein. */
+{
+    struct bindSite *next; /* Next in list. */
+    char **motifs;     /* List of valid motifs. */
+    int motifCount;    /* Number of moitfs to look for. */
+    char *rnaBinder;   /* Rna binding protein associated with these sites. */
+};
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -84,17 +92,11 @@ static struct optionSpec optionSpecs[] =
     {"combinePSets", OPTION_BOOLEAN},
     {"useExonBeds", OPTION_BOOLEAN},
     {"skipMotifControls", OPTION_BOOLEAN},
+    {"selectedPValues", OPTION_STRING},
+    {"selectedPValFile", OPTION_STRING},
     {NULL, 0}
 };
 
-struct bindSite
-/* Binding sites for a protein. */
-{
-    struct bindSite *next; /* Next in list. */
-    char **motifs;     /* List of valid motifs. */
-    int motifCount;    /* Number of moitfs to look for. */
-    char *rnaBinder;   /* Rna binding protein associated with these sites. */
-};
 
 static char *optionDescripts[] =
 /* Description of our options for usage summary. */
@@ -117,7 +119,9 @@ static char *optionDescripts[] =
     "Comma separated list of tissues to consider brain.",
     "Combine the p-values for a path using Fisher's method.",
     "Use exon beds, not just splice junction beds.",
-    "Skip looking at the motifs in the controls, can be quite slow."
+    "Skip looking at the motifs in the controls, can be quite slow.",
+    "File containing list of AFFY G###### ids and gene names.",
+    "File to output pvalue vectors for selected genes to."
 };
 
 struct hash *bedHash = NULL; /* Access bed probe sets by hash. */
@@ -131,7 +135,12 @@ char *db = NULL;             /* Database version used here. */
 boolean useMaxProbeSet;      /* Instead of using the best correlated probe set, use any 
 				probe set. */
 boolean useComboProbes = FALSE; /* Combine probe sets on a given path using fisher's method. */
-boolean useExonBedsToo = FALSE;    /* Use exon beds too, not just splice junction beds. */
+boolean useExonBedsToo = FALSE; /* Use exon beds too, not just splice junction beds. */
+
+FILE *pathProbabilitiesOut = NULL; /* File to print out path probability vectors. */
+FILE *pathProbabilitiesBedOut = NULL; /* File to print out corresponding beds for paths. */
+struct hash *outputPValHash = NULL; /* Hash of selected names. */
+
 int otherTissueExpThres = 1; /* Number of other tissues something must be seen in to 
 				be considered expressed, used */
 struct bindSite *bindSiteList = NULL; /* List of rna binding sites to look for. */
@@ -625,6 +634,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     chromKeeperAdd(bed->chrom, bed->chromStart, bed->chromEnd, bed);
     hashAdd(bedHash, bed->name, bed);
     }
+
 }
 
 struct altEvent *altEventsFromSplices(struct splice *spliceList)
@@ -978,6 +988,122 @@ for(bedIx = 0; bedIx < altPath->probeCount; bedIx++)
 return bestIx;
 }
 
+void readSelectedList(char *fileName)
+/* Read in a list of gene identifiers that we want to 
+   output. */
+{
+struct lineFile *lf = NULL;
+struct hash *hash = newHash(12);
+char *words[2];
+int wordCount = ArraySize(words);
+assert(fileName);
+lf = lineFileOpen(fileName, TRUE);
+while(lineFileChopNext(lf, words, wordCount)) 
+    {
+    hashAdd(hash, words[0], cloneString(words[1]));
+    }
+lineFileClose(&lf);
+outputPValHash = hash;
+}
+
+char *isSelectedProbeSet(struct altEvent *event, struct altPath *altPath)
+/* Return gene name if this probe set is select for outputing
+   probability vector else return NULL. */
+{
+char *mark;
+char buff[256];
+struct altPath *path = NULL;
+int i = 0; 
+for(i = 0; i < altPath->probeCount; i++)
+    {
+    if(altPath->beds[i] != NULL)
+	{
+	char *mark = strchr(altPath->beds[i]->name, '@');
+	if(mark != NULL)
+	    {
+	    char *geneName = NULL;
+	    *mark = '\0';
+	    if((geneName = hashFindVal(outputPValHash, altPath->beds[i]->name)) != NULL)
+		{
+		*mark = '@';
+		return geneName;
+		}
+	    }
+	}
+    }
+return NULL;
+}
+
+char * nameForType(int type)
+/* Log the different types of splicing. */
+{
+switch (type) 
+    {
+    case alt5Prime:
+	return "alt5Prime";
+	break;
+    case alt3Prime: 
+	return "alt3Prime";
+	break;
+    case altCassette:
+	return "altCassette";
+	break;
+    case altRetInt:
+	return "altRetInt";
+	break;
+    case altOther:
+	return "altOther";
+	break;
+    case altControl:
+	return "altControl";
+	break;
+    case altMutExclusive:
+	return "altMutEx";
+	break;
+    case alt5PrimeSoft:
+	return "altTxStart";
+	break;
+    case alt3PrimeSoft:
+	return "altTxEnd";
+	break;
+    case altIdentity:
+	return "altIdentity";
+	break;
+    default:
+	errAbort("nameForType() - Don't recognize type %d", type);
+    }
+return "error";
+}
+
+void outputPathProbabilities(struct altEvent* event, struct altPath *altPath,
+			      struct dMatrix *intenM, struct dMatrix *probM,
+			      int** expressed, int **notExpressed, int pathIx)
+/* Print out a thresholded probablilty vector for clustering and visualization
+   in treeview. */
+{
+int i = 0;
+FILE *out = pathProbabilitiesOut;
+struct splice *splice = event->splice;
+struct path *path = altPath->path;
+char *geneName = NULL;
+assert(out);
+if((geneName = isSelectedProbeSet(event, altPath)) != NULL)
+    {
+    fprintf(out, "%s.%s.%s.%d", splice->name, geneName, 
+	    nameForType(splice->type), path->bpCount);
+    for(i = 0; i < probM->colCount; i++)
+	{
+	if(expressed[pathIx][i])
+	    fprintf(out, "\t2");
+	else if(notExpressed[pathIx][i])
+	    fprintf(out, "\t-2");
+	else
+	    fprintf(out, "\t0");
+	}
+    fprintf(out, "\n");
+    }
+}
+
 boolean altPathExpressed(struct altEvent *event, struct altPath *altPath,
 		      struct dMatrix *intenM, struct dMatrix *probM,
 		      int **expressed, int **notExpressed, int pathIx)
@@ -988,7 +1114,7 @@ int tissueIx = 0;
 int total = 0;
 
 /* Quick check to see if there are any 
-   probes at all. */
+      probes at all. */
 if(altPath->probeCount == 0)
     return FALSE;
 
@@ -1205,46 +1331,6 @@ if(sameString(splice->strand, "-"))
     }
 }
 
-char * nameForType(int type)
-/* Log the different types of splicing. */
-{
-switch (type) 
-    {
-    case alt5Prime:
-	return "alt5Prime";
-	break;
-    case alt3Prime: 
-	return "alt3Prime";
-	break;
-    case altCassette:
-	return "altCassette";
-	break;
-    case altRetInt:
-	return "altRetInt";
-	break;
-    case altOther:
-	return "altOther";
-	break;
-    case altControl:
-	return "altControl";
-	break;
-    case altMutExclusive:
-	return "altMutEx";
-	break;
-    case alt5PrimeSoft:
-	return "altTxStart";
-	break;
-    case alt3PrimeSoft:
-	return "altTxEnd";
-	break;
-    case altIdentity:
-	return "altIdentity";
-	break;
-    default:
-	errAbort("nameForType() - Don't recognize type %d", type);
-    }
-return "error";
-}
 
 void makeJunctMdbGenericLink(struct splice *js, struct dyString *buff, char *name)
 {
@@ -1467,8 +1553,14 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
     if(altPathExpressed(event, altPath, intenM, probM, 
 			expressed, notExpressed, pathIx))
 	pathExpCount++;
+    if(pathProbabilitiesOut != NULL)
+	{
+	outputPathProbabilities(event, altPath, intenM, probM, 
+				expressed, notExpressed, pathIx);
+	}
     pathIx++;
     }
+
 
 
 /* Determine our expression, alternate or otherwise. */
@@ -1476,6 +1568,8 @@ if(pathExpCount >= tissueExpThresh && withProbes > 1)
     event->isExpressed = TRUE;
 if(pathExpCount >= tissueExpThresh * 2 && withProbes > 1)
     event->isAltExpressed = TRUE;
+
+/* Get a background count of motifs in the cassettes. */
 if(event->isAltExpressed && event->splice->type == altCassette)
     {
     for(i = 0; i < bindSiteCount; i++)
@@ -1485,6 +1579,7 @@ if(event->isAltExpressed && event->splice->type == altCassette)
 	}
     cassetteExonCount++;
     }
+
 if(brainSpBedUpOut != NULL && event->isExpressed == TRUE)
     outputBrainSpecificEvents(event, expressed, notExpressed, pathCount, probM);
 
@@ -1896,9 +1991,11 @@ carefulClose(&brainSpBedDownOut);
 carefulClose(&brainSpPathBedOut);
 }
 
+
 void setOptions()
 /* Set up some options. */
 {
+char *selectedPValues = optionVal("selectedPValues", NULL);
 tissueExpThresh = optionInt("tissueExpThresh", 1);
 otherTissueExpThres = optionInt("otherTissueExpThres", 1);
 useMaxProbeSet = optionExists("useMaxProbeSet");
@@ -1907,6 +2004,21 @@ browserName = optionVal("browser", "hgwdev-sugnet.cse.ucsc.edu");
 useComboProbes = optionExists("combinePSets");
 useExonBedsToo = optionExists("useExonBeds");
 skipMotifControls = optionExists("skipMotifControls");
+
+if(selectedPValues != NULL)
+    {
+    char *selectedPValFile = optionVal("selectedPValFile", NULL);
+    char buff[2048];
+
+    if(selectedPValFile == NULL)
+	errAbort("Must specify a selectedPValFile when enabling selectedPValues");
+    readSelectedList(selectedPValues);
+    pathProbabilitiesOut = mustOpen(selectedPValFile, "w");
+    safef(buff, sizeof(buff), "%s.bed", selectedPValFile);
+    pathProbabilitiesBedOut = mustOpen(buff, "w");
+
+    }
+
 if(useMaxProbeSet)
     warn("Using max value from all probe sets in a path.");
 /* Set up the datbase. */
