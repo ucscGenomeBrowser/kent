@@ -256,47 +256,47 @@ struct wiggleDataStream
 /*	object definition to access wiggle data, in DB or from file	*/
     {
     /********************	public methods	*****************/
-    void (*freeAscii)(struct wiggleDataStream *wDS);
+    void (*freeAscii)(struct wiggleDataStream *wds);
 			/*	free the ascii list results 	*/
-    void (*freeBed)(struct wiggleDataStream *wDS);
+    void (*freeBed)(struct wiggleDataStream *wds);
 			/*	free the bed list results 	*/
-    void (*freeStats)(struct wiggleDataStream *wDS);
+    void (*freeStats)(struct wiggleDataStream *wds);
 			/*	free the stats list results 	*/
-    void (*freeArray)(struct wiggleDataStream *wDS);
+    void (*freeArray)(struct wiggleDataStream *wds);
 			/*	free the data array results 	*/
-    void (*freeConstraints)(struct wiggleDataStream *wDS);
+    void (*freeConstraints)(struct wiggleDataStream *wds);
 			/*	unset all the constraints	*/
-    void (*setMaxOutput)(struct wiggleDataStream *wDS,
+    void (*setMaxOutput)(struct wiggleDataStream *wds,
 	unsigned long long maxOut);
 			/*	set the maximum # of values to return */
-    void (*setPositionConstraint)(struct wiggleDataStream *wDS,
+    void (*setPositionConstraint)(struct wiggleDataStream *wds,
 	int winStart, int winEnd);
 			/*	work only within specified position */
-    void (*setChromConstraint)(struct wiggleDataStream *wDS, char *chr);
+    void (*setChromConstraint)(struct wiggleDataStream *wds, char *chr);
 			/*	work only on specified chrom 	*/
-    void (*setSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
+    void (*setSpanConstraint)(struct wiggleDataStream *wds, unsigned span);
 			/*	work only on specified span 	*/
-    void (*setDataConstraint)(struct wiggleDataStream *wDS,
+    void (*setDataConstraint)(struct wiggleDataStream *wds,
 	char *dataConstraint, double lowerLimit, double upperLimit);
 			/*	setting data compare limits 	*/
-    int (*bedOut)(struct wiggleDataStream *wDS, char *fileName, boolean sort);
+    int (*bedOut)(struct wiggleDataStream *wds, char *fileName, boolean sort);
 			/*	output the bed list results 	*/
-    void (*statsOut)(struct wiggleDataStream *wDS,char *fileName,
+    void (*statsOut)(struct wiggleDataStream *wds,char *fileName,
 	boolean sort, boolean htmlOut);
 			/*	output the stats list results 	*/
-    int (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort,
+    int (*asciiOut)(struct wiggleDataStream *wds,char *fileName, boolean sort,
 	boolean rawDataOut);
 			/*	output the ascii list results 	*/
-    void (*sortResults)(struct wiggleDataStream *wDS);
+    void (*sortResults)(struct wiggleDataStream *wds);
 			/*	sort if you want to, the Outs do this too */
-    float *(*asciiToDataArray)(struct wiggleDataStream *wDS,
+    float *(*asciiToDataArray)(struct wiggleDataStream *wds,
 	unsigned long long count, size_t *returned);
 			/*	convert the AsciiData list to a float array */ 
-    unsigned long long (*getDataViaBed)(struct wiggleDataStream *wDS,
+    unsigned long long (*getDataViaBed)(struct wiggleDataStream *wds,
 	char *db, char *table, int operations, struct bed **bedList);
 			/*	fetch data constrained by bedList,
  			 *	return is number of data values found */
-    unsigned long long (*getData)(struct wiggleDataStream *wDS, char *db,
+    unsigned long long (*getData)(struct wiggleDataStream *wds, char *db,
 	char *table, int operations);
 			/*	fetch data from db.table or file table,
  			 *	return is number of data values found */
@@ -343,7 +343,7 @@ struct wiggleDataStream
 
 /*	in lib/wigDataStream.c	*/
 struct wiggleDataStream *wiggleDataStreamNew();
-void wiggleDataStreamFree(struct wiggleDataStream **wDS);
+void wiggleDataStreamFree(struct wiggleDataStream **wds);
 
 /*	verbose level guidelines	*/
 #define	VERBOSE_ALWAYS_ON	1
@@ -355,7 +355,7 @@ void wiggleDataStreamFree(struct wiggleDataStream **wDS);
 /*	in lib/wiggleUtils.c	*/
 void printHistoGram(struct histoResult *histoResults);
 
-void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
+void statsPreamble(struct wiggleDataStream *wds, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched);
 
 /*	This function is being phased out, use the wiggleDataStream to

@@ -17,7 +17,7 @@ char *chrom = cartString(cart, "c");
 char table[64];
 boolean hasBin;
 unsigned span = 0;
-struct wiggleDataStream *wDS = wiggleDataStreamNew();
+struct wiggleDataStream *wds = wiggleDataStreamNew();
 unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
 float *valuesArray = NULL;
@@ -53,9 +53,9 @@ else
  *	should be run in a loop that does one chrom at a time.  In the
  *	case of hgc, there seems to be a chrom and a position.
  */
-wDS->setSpanConstraint(wDS, span);
-wDS->setChromConstraint(wDS, chrom);
-wDS->setPositionConstraint(wDS, winStart, winEnd);
+wds->setSpanConstraint(wds, span);
+wds->setChromConstraint(wds, chrom);
+wds->setPositionConstraint(wds, winStart, winEnd);
 
 /*	We want to also fetch the actual data values so we can run a
  *	histogram function on them.  You can't fetch the data in the
@@ -63,28 +63,28 @@ wDS->setPositionConstraint(wDS, winStart, winEnd);
  *	We have to do the ascii data list format, and prepare that to
  *	send to the histogram function.
  */
-valuesMatched = wDS->getData(wDS, database, table,
+valuesMatched = wds->getData(wds, database, table,
 			wigFetchStats | wigFetchAscii );
 
-statsPreamble(wDS, chrom, winStart, winEnd, span, valuesMatched);
+statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched);
 
 /*	output statistics table	*/
-wDS->statsOut(wDS, "stdout", TRUE, TRUE);
+wds->statsOut(wds, "stdout", TRUE, TRUE);
 
 /*	convert the ascii data listings to one giant float array 	*/
-valuesArray = wDS->asciiToDataArray(wDS, valuesMatched, &valueCount);
+valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
 fptr = valuesArray;
 
 /*	histoGram() may return NULL if it doesn't work	*/
 
 histoGramResult = histoGram(valuesArray, valueCount,
-	    NAN, (unsigned) 0, NAN, (float) wDS->stats->lowerLimit,
-		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange),
+	    NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
+		(float) (wds->stats->lowerLimit + wds->stats->dataRange),
 		(struct histoResult *)NULL);
 
 printHistoGram(histoGramResult);
 
 freeHistoGram(&histoGramResult);
 freeMem(valuesArray);
-wiggleDataStreamFree(&wDS);
+wiggleDataStreamFree(&wds);
 }

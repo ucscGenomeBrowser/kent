@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.25 2004/09/02 18:40:41 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.26 2004/09/03 22:15:18 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
@@ -84,7 +84,7 @@ printf ("</TABLE></TD></TR></TABLE></P>\n");
 
 }
 
-void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
+void statsPreamble(struct wiggleDataStream *wds, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched)
 {
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
@@ -95,14 +95,14 @@ printf("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
 sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
 
-if (wDS->useDataConstraint)
+if (wds->useDataConstraint)
     {
-    if (sameWord(wDS->dataConstraint,"in range"))
+    if (sameWord(wds->dataConstraint,"in range"))
 	printf("<P><B> Filter: %g >= (data value) < %g </B></P>\n",
-		wDS->limit_0, wDS->limit_1);
+		wds->limit_0, wds->limit_1);
     else
 	printf("<P><B> Filter: (data value %s %g) </B> </P>\n",
-		wDS->dataConstraint, wDS->limit_0);
+		wds->dataConstraint, wds->limit_0);
     }
 
 if (valuesMatched == 0)
@@ -117,11 +117,11 @@ if (valuesMatched == 0)
     }
 else
     {
-    sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
+    sprintLongWithCommas(num1Buf, wds->stats->count * wds->stats->span);
     printf(
 	"<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
 	num1Buf,
-	100.0*(wDS->stats->count * wDS->stats->span)/(winEnd - winStart));
+	100.0*(wds->stats->count * wds->stats->span)/(winEnd - winStart));
     }
 }
 
