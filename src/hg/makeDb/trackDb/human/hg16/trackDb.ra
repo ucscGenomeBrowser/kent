@@ -998,7 +998,6 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
-<<<<<<< trackDb.ra
 track test3way_CFTR_old
 shortLabel Fish CFTR (Wiggle)
 longLabel Human/Fugu/Tetra Phylo-HMM-based conservation, CFTR (Wiggle)
@@ -1016,13 +1015,13 @@ longLabel Human/Fugu/Tetra Alignments & PhyloHMM Conservation, CFTR
 group compGeno
 priority 150.6
 visibility hide
-color 175,150,128
-altColor 255,128,0
+color 0, 10, 100
+altColor 1,128,0
 type wigMaf 0.0 1.0
 pairwise maf
 speciesOrder human fugu tetra
 wiggle test3way_CFTR_wig
-autoScaleDefault Off
+maxHeightPixels 100:40:11
 
 track tblastGg0
 shortLabel Chicken Best Exon
