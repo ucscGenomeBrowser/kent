@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 35
+#define PSEUDOGENELINK_NUM_COLS 41
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -18,12 +18,6 @@ struct pseudoGeneLink
     char *name;	/* Name of pseudogene */
     unsigned score;	/* score of pseudogene with gene */
     char *strand;	/* strand of pseudoegene */
-    unsigned thickStart;	/* Start of where display should be thick (start codon) */
-    unsigned thickEnd;	/* End of where display should be thick (stop codon) */
-    unsigned reserved;	/* Always zero for now */
-    int blockCount;	/* Number of blocks */
-    int *blockSizes;	/* Comma separated list of block sizes */
-    int *chromStarts;	/* Start positions relative to chromStart */
     char *assembly;	/* assembly for gene */
     char *geneTable;	/* mysql table of gene */
     char *gene;	/* Name of gene */
@@ -45,8 +39,24 @@ struct pseudoGeneLink
     unsigned qReps;	/* repeats in pseudogene */
     unsigned overlapDiag;	/* bases on the diagonal to mouse */
     unsigned coverage;	/* bases on the diagonal to mouse */
+    unsigned label;	/* 1=pseudogene,-1 not pseudogene */
+    unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
+    char *refSeq;	/* Name of closest regSeq to gene */
+    unsigned rStart;	/* refSeq alignment start position */
+    unsigned rEnd;	/* refSeq alignment end position */
+    char *mgc;	/* Name of closest mgc to gene */
+    unsigned mStart;	/* mgc alignment start position */
+    unsigned mEnd;	/* mgc alignment end position */
+    char *kgName;	/* Name of closest knownGene to gene */
+    unsigned kStart;	/* kg alignment start position */
+    unsigned kEnd;	/* kg alignment end position */
+    unsigned kgId;	/* kg id */
     };
+
+void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
+/* Load a row from pseudoGeneLink table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
