@@ -11513,7 +11513,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgsql hg17
     analyze table netDanRer2
 
-# LOAD ACEMBLY TRACK (in progress, 2004-12-09, hartera)
+# LOAD ACEMBLY TRACK (DONE, 2004-01-24, hartera)
     mkdir -p /cluster/data/hg17/bed/acembly
     cd /cluster/data/hg17/bed/acembly
     # Data is obtained from 
@@ -11562,16 +11562,19 @@ done
         grep -v "^chr//" > chr$c.gff
       echo "done $c"
     end
-    # for entry with 28212470 instead of chr6 change to chr6
-    mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
-    sed -e "s/^28212470/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff
     
     #- Load into database - use extended genePred
     ssh hgwdev
     cd /cluster/data/hg17/bed/acembly
     # Reloaded without -genePredExt 1/6/05:
     ldHgGene -gtf hg17 acembly acembly.ncbi_35.genes.gff/chr*.gff
-
+    # for entry with 28212470 from chr6.gff, change to chr6 
+    # and for 29124352 in chr6.gff, change to chr6 (1/13/05)
+    echo 'update acembly set chrom = "chr6" where chrom = "chr28212470";' \
+         | hgsql hg17 
+    echo 'update acembly set chrom = "chr6" where chrom = "chr29124352";' \
+         | hgsql hg17 
+    
     # checkTableCoords and runGeneCheck to check data
     # a number of errors so leave on hgwdev for the moment
 # checkTableCoords:
@@ -11579,7 +11582,23 @@ done
 # rah.acembly item RPL10A.sNov04 chr6:35544172-35546520: end of last block (35546519) is not the same as chromEnd (35546520).
 # rah.acembly has 1 records with blockEnd[n-1] != end.
 # rah.acembly has 1 records with end > chromSize.
-
+# gene_id RPL10A; transcript_id RPL10A.sNov04; exon_number 5
+# chr6    acembly intron  35546102        35546520        .       +       0
+# gene_id RPL10A; transcript_id RPL10A.sNov04; intron_type fuzzy
+# chr6    acembly CDS     35546335        35546384        .       +       0
+# gene_id RPL10A; transcript_id RPL10A.sNov04; exon_number 6
+# chr6    acembly exon    35546335        35546519        .       +       0
+# gene_id RPL10A; transcript_id RPL10A.sNov04; exon_number 6
+# chr6    acembly stop_codon      35546382        35546384        .       +
+# 0       gene_id RPL10A; transcript_id RPL10A.sNov04;
+# here the intron overlaps exon 6 so take 35546519 to be txEnd
+      echo 'update acembly set txEnd = 35546519 where name = "RPL10A.sNov04";'\
+           | hgsql hg17
+# for record where end > chromSize
+      echo 'select * from acembly as a, chromInfo as c where c.chrom = a.chrom \            and c.size < a.txEnd;' | hgsql hg17
+      # KIR2DL5.bNov04 on chr19_random, size is 301858, txEnd is 305266
+      # delete this record
+      echo 'delete from acembly where name = "KIR2DL5.bNov04";' | hgsql hg17
 # from runGeneCheck:
 # 5780   inFrameStop
 # 110664 noStart
@@ -11592,13 +11611,203 @@ done
 
     # e-mailed authors of data (2004-12-21, hartera) 
 #  notiri.aNov04 - has ctg instead of atg at start. others have no start specified: sirora.nNov04
-# sirora.zmNov04 - chr1:19389-19392: 19391-19393 is ACT (-)
+# sirora.zmNov04 - chr1:19389-19392 is AAC (gtt) (-)
 # sirora.sNov04 - chr1:8925-8928 CAA (ttg) (-)
 # sirora.rNov04 - chr1:8925-8928 CAA (ttg) (-)
-    # for entry with 28212470 instead of chr6 change to chr6
+    # for entries with 28212470 and 29124352 instead of chr6 change to chr6
+    # Re-process this x1 file to chr6.gff (2005-01-24)
     mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
-    sed -e "s/^28212470/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff
- 
+    sed -e "s/^28212470/6/" x1.acemblygenes.6.gff.broken | sed -e \
+           "s/^29124352/6/"  > x1.acemblygenes.6.gff
+    grep -v ^6\| x1.acemblygenes.6.gff | grep -v ^Hs | perl -wpe 's/^/chr/;' | \
+        grep -v "^chr//" > chr6.gff
+    # Received a list of genes from Jean and Danielle Mieg
+    # showing genes that are "main", "putative" or "cloud" - there should be
+    # no "cloud" genes in our data set (2005-01-11)
+    # download acembly_gene_lists.tar.gz from e-mail
+    cd /cluster/data/hg17/bed/acembly
+    tar xvzf acembly_gene_lists.tar.gz
+    cd acembly_gene_lists
+cat << '_EOF_' > getIDs.pl
+#!/usr/bin/perl -w
+use strict;
+
+while (<STDIN>) {
+   my @f = split(/\s+/);
+   for (my $i =0; $i <= $#f; $i++) {
+       if ($f[$i] =~ /gene_id$/) {
+          # if field is ID type then next value is the ID
+          my $id = $f[$i+1];
+          # remove ";" at end and print ID
+          chop $id;
+          print "$id\n";
+       }
+   }
+}
+'_EOF_'
+    chmod +x getIDs.pl
+    # get gene IDs from gff files
+    foreach f (../acembly.ncbi_35.genes.gff/chr*.gff)
+       echo "Processing $f"
+       perl getIDs.pl < $f >> genesGffs.ids
+    end
+    # remove back slash from some names
+    sort genesGffs.ids | uniq > genesGffs.ids.uniq
+    # reformat gene list to get just the genes and remove first 2 lines and sort
+    foreach g (*.list)
+       sed -e 's/"//g;' $g | sed -e 's/Gene : //;' | sed -e '1,2d' \
+              | sort | uniq > $g.IDsort
+    end 
+    # remove back slash from some names
+    perl -pi.bak -e 's/\\//' *.IDsort
+    # check if cloud genes appear in gff files list of genes
+    # list of genes in cloud but not in gff
+    comm -13 genesGffs.ids.uniq cloud_gene.list.IDsort > gffvscloud.out
+    diff gffvscloud.out cloud_gene.list.IDsort
+    # there is no difference so none of the cloud genes are in the gff files
+    # check if all the other genes in the main and putative lists are in gffs
+    comm -13 genesGffs.ids.uniq main_gene.list.IDsort > gffvsmain.out
+    comm -13 genesGffs.ids.uniq putative_gene.list.IDsort > gffvsputative.out
+    wc -l *.out
+    # 14 gffvsmain.out
+    # 0 gffvsputative.out
+
+    # there are 14 genes in the main set not in the gff files
+    # actually there are 12, as FCA/MR and SLA/LP are in the gff files
+    # all putative genes are in the gff set
+    wc -l main_gene.list.IDsort putative_gene.list.IDsort
+    # 52467 main_gene.list.IDsort
+    # 43978 putative_gene.list.IDsort
+    # 96445 total
+    wc -l genesGffs.ids.uniq    
+    # 97042 genesGffs.ids.uniq
+    # check discrepancy
+    cat main_gene.list.IDsort putative_gene.list.IDsort > mp.ids
+    sort mp.ids > mp.sort
+    comm -23 genesGffs.ids.uniq mp.sort > gffNotMP.out
+    wc -l gffNotMP.out
+    # 609 gffNotMP.out
+# create table of Acembly gene classifications
+# see http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/index.html?human
+# in FAQ, describes main, putative and cloud genes. The cloud genes are not 
+# well confirmed and so they are not in this data set. 
+    # NEED TO FILTER GENES AND RELOAD TABLES:
+    # authors Jean and Danielle Mieg e-mailed back. The 12 genes in the 
+    # putative list that are not in the gff files were not exported
+    # as they did not find a single putative protein to describe so they 
+    # were not added to the gffs. They will be added at a later date.
+    # Remove these from the acemblyClass table (2005-01-21, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
+    comm -13 gffvsmain.out main_gene.list.IDsort > main_gene.list.filt
+    wc -l main_gene.list.filt
+    # 52455 main_gene.list.filt
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
+    # drop acemblyClass table and recreate (2005-01-24, hartera)
+    echo 'drop table acemblyClass;' | hgsql hg17
+    # prepare a file of genes and classification
+    foreach f (main_gene.list.filt putative_gene.list.IDsort)
+       if ($f == "main_gene.list.filt") then
+          set t = "main"
+       endif
+       if ($f == "putative_gene.list.IDsort") then
+          set t = "putative"
+       endif
+       awk 'BEGIN {OFS="\t"} {print $1, "'$t'"}' $f >> class.txt
+    end
+    wc -l class.txt
+    # 96433 class.txt
+    sort class.txt > acemblyClass.tab
+cat << '_EOF_' > $HOME/kent/src/hg/lib/acemblyClass.as
+table acemblyClass
+"Class for Acembly genes"
+   (
+    string name; "Gene ID for Acembly gene"
+    string class; "Class of gene"   
+   )
+'_EOF_'
+    cd $HOME/kent/src/hg/lib/
+    autoSql acemblyClass.as acemblyClass
+    mv acemblyClass.h $HOME/kent/src/hg/inc
+    # do make to check it works and commit the .as, .sql, .c and .h files to CVS
+    cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
+    hgsql hg17 < ~/kent/src/hg/lib/acemblyClass.sql
+    echo "load data local infile 'acemblyClass.tab' into table acemblyClass" \
+         | hgsql hg17
+    
+    # There were also 609 genes in the gff files that are not in the
+    # main, putative or cloud gene lists. Jean and Danielle Mieg say that
+    # these were filtered out from their data set but not from the gff files.
+    # Remove these from the gff files. (gffNotMP.out) (2005-01-24)
+    cd /cluster/data/hg17/bed/acembly/acembly.ncbi_35.genes.gff
+    cat chr*.gff > all.gff
+cat << '_EOF_' > removeGenes.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my $genes = $ARGV[0];
+my $gff = $ARGV[1];
+                                                                                
+open(GENES, $genes) || die "Can not open $genes:$!\n";
+open(GFF, $gff) || die "Can not open $gff:$!\n";
+open(OUT, ">removed.out") || die "Can not open removed.out:$!\n";
+                                                                                
+my %genes;
+                                                                                
+while (<GENES>) {
+   chomp;
+   my $g = $_;
+   $genes{$g} = 1;
+}
+close GENES;
+                                                                                
+while (<GFF>) {
+   my $l = $_;
+   my $id;
+   my @line = split(/\s+/);
+   for (my $i = 0; $i <= $#line; $i++) {
+      if ($line[$i] eq "gene_id") {
+         $id = $line[$i+1];
+      }
+   }
+   $id =~ s/;//;
+   print "id is now $id\n";
+   if (!exists($genes{$id})) {
+      print $l;
+   }
+   else {
+      print OUT $l;
+   }
+}
+'_EOF_'
+    perl removeGenes.pl ../acembly_gene_lists/gffNotMP.out all.gff \
+                        > allFiltered.gff 
+    # checked that gene IDs in the removed.out file are the same
+    # same as those in gffNotMP.out
+    # reload into the acembly table
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/acembly
+    echo 'drop table acembly;' | hgsql hg17
+    # Reloaded with filtered set 2005-01-23:
+    ldHgGene -gtf hg17 acembly acembly.ncbi_35.genes.gff/allFiltered.gff
+    # Read 260446 transcripts in 3656676 lines in 1 files
+    #  260446 groups 42 seqs 1 sources 5 feature types
+    #  260446 gene predictions
+
+    # fix problem data found by checkTableCoords
+    # here the intron overlaps exon 6 so take 35546519 to be txEnd
+    echo 'update acembly set txEnd = 35546519 where name = "RPL10A.sNov04";'\
+           | hgsql hg17
+    # for record where end > chromSize
+    echo 'select * from acembly as a, chromInfo as c where c.chrom = a.chrom \            and c.size < a.txEnd;' | hgsql hg17
+    # KIR2DL5.bNov04 on chr19_random, size is 301858, txEnd is 305266
+    # delete this record
+    echo 'delete from acembly where name = "KIR2DL5.bNov04";' | hgsql hg17
+
+    # Edit hgTracks.c to get colour coded tracks based on the gene class
+    # for each gene as read from the acemblyClass table.
+
 # BUILD WGRNA TRACK (DONE, 2004-12-13, Fan)
 
 # Grab data from original miRNA track and convert them into wgRna .tab format.
