@@ -5,24 +5,20 @@
 #ifndef CODEBLAST_H
 #define CODEBLAST_H
 
-#ifndef JKSQL_H
-#include "jksql.h"
-#endif
-
 #define CODEBLAST_NUM_COLS 8
 
 struct codeBlast
 /* Table storing the codes and positional info for blast runs. */
     {
     struct codeBlast *next;  /* Next in singly linked list. */
-    short bin;	/* Bin number for browser speedup */
+    short bin;	/* bin for browser speed up */
     char *chrom;	/* Chromosome or FPC contig */
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
     unsigned score;	/* Score (0-1000) */
     char strand[2];	/* Strand */
-    char *code;	/* BLAST code */
+    char *code;	/* BLAST code scores */
     };
 
 void codeBlastStaticLoad(char **row, struct codeBlast *ret);
@@ -44,31 +40,6 @@ struct codeBlast *codeBlastLoadAllByChar(char *fileName, char chopper);
 #define codeBlastLoadAllByTab(a) codeBlastLoadAllByChar(a, '\t');
 /* Load all codeBlast from tab separated file.
  * Dispose of this with codeBlastFreeList(). */
-
-struct codeBlast *codeBlastLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all codeBlast from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with codeBlastFreeList(). */
-
-void codeBlastSaveToDb(struct sqlConnection *conn, struct codeBlast *el, char *tableName, int updateSize);
-/* Save codeBlast as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use codeBlastSaveToDbEscaped() */
-
-void codeBlastSaveToDbEscaped(struct sqlConnection *conn, struct codeBlast *el, char *tableName, int updateSize);
-/* Save codeBlast as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than codeBlastSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct codeBlast *codeBlastCommaIn(char **pS, struct codeBlast *ret);
 /* Create a codeBlast out of a comma separated string. 
