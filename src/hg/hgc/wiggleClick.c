@@ -73,7 +73,6 @@ wds->statsOut(wds, "stdout", TRUE, TRUE);
 
 /*	convert the ascii data listings to one giant float array 	*/
 valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
-fptr = valuesArray;
 
 /*	histoGram() may return NULL if it doesn't work	*/
 
