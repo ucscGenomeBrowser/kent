@@ -12,8 +12,8 @@ endif
 cd $WEEKLYBLD
 
 echo "BRANCHNN=$BRANCHNN"
-echo "TODAY=$TODAY"
-echo "LASTWEEK=$LASTWEEK"
+echo "TODAY=$TODAY   (last build day)"
+echo "LASTWEEK=$LASTWEEK   (previous build day)"
 
 if ( "$TODAY" == "" ) then
  echo "TODAY undefined."
