@@ -69,8 +69,8 @@ void scanFilesInDir(char *dir, char *prefix,
 struct fileInfo *dirList = NULL, *dirEl;
 struct seqFile *seqFile;
 
-printf("Scanning %s", dir);
-fflush(stdout);
+fprintf(stderr, "Scanning %s", dir);
+fflush(stderr);
 
 /* Read directory. */
 dirList = listDirX(dir, "*.nib", TRUE);
@@ -82,8 +82,8 @@ if (dirList == NULL)
 for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     {
     char *name = dirEl->name;
-    printf(".");
-    fflush(stdout);
+    fprintf(stderr, ".");
+    fflush(stderr);
     if (!hashLookup(fileHash, name))
         {
 	AllocVar(seqFile);
@@ -96,7 +96,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	}
     }
 slFreeList(&dirList);
-printf("\n");
+fprintf(stderr, "\n");
 }
 
 
