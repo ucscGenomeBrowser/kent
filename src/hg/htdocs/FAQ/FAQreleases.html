@@ -537,11 +537,25 @@
 			my area of interest on the new assembly?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			You can integrate data from one assembly into another by using the 
+			You can migrate data from one assembly to another by using the 
 			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">blat</A> alignment tool 
 			or by
 			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">converting the coordinates</A>. 
 			The coordinate conversion tool may be used only on human assembly coordinates.
+			<P>If you have the need to update a large number of coordinates	
+			to a different assembly and have access to a Linux platform, 
+			you may find it useful to try our <TT>liftOver</TT> tool. 
+			The executable file for this utility can be downloaded from
+			<A HREF="http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz" 
+			TARGET=_blank> www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>. LiftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated
+			files are available for selected assemblies. To check if a data
+			file has already been generated for the assembly in which you're
+			interested, look for a <em>liftOver</em> subdirectory in the 
+			<A HREF=/downloads.html#human>downloads</A> directory of the assembly to which you'd like to 
+			convert. If no file is available, please send a request to
+			the 
+			<A HREF="mailto:&#103;e&#110;&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.ed&#117;">genome mailing list</A> 
+			and we will provide you with one.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
