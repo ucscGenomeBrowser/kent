@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.90 2003/08/12 19:24:54 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.91 2003/08/22 22:49:12 donnak Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -332,7 +332,8 @@ if (tableIsPositional)
     else
 	printf("position: %s<P>\n", position);
     }
-printf("<A HREF=\"/cgi-bin/hgBatch?db=%s\">Change position</A><P>",
+/* Changed following from hgBatch to hgText until hgBatch online */
+printf("<A HREF=\"/cgi-bin/hgText?db=%s\">Change position</A><P>",
        database);
 cgiContinueHiddenVar("hgb.showPasteResults");
 cgiContinueHiddenVar("hgb.showUploadResults");
