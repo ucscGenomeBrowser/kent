@@ -5915,29 +5915,16 @@ void wiggleMethods(struct trackGroup *tg)
 tg->drawItems = wiggleLinkedFeaturesDraw;
 }
 
-int globalAncientRMinLength;
 
-
-boolean ancientRFilterItem(struct trackGroup *tg, void *item)
-/* Return TRUE if ancient repeat item passes the filter:
- * if it is greater than or equal to ancientRMinLength in
- * number of aligned bases (not identical bases).*/
-{
-struct bed *el = item;
-if( el->chromEnd - el->chromStart  < globalAncientRMinLength )
-    return FALSE;
-else
-    return TRUE;
-}
 
 void loadAncientR(struct trackGroup *tg)
 /* Load up ancient repeats from database table to trackGroup items
- * filtering out those below a certain length threshold. */
+ * filtering out those below a certain length threshold,
+   in number of aligned bases. */
 {
 globalAncientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
 bedLoadItem(tg, "ancientR", (ItemLoader)bedLoad12);
- lfFromAncientRBed(tg);
-//filterItems(tg, ancientRFilterItem, "include" );
+lfFromAncientRBed(tg);
 }
 
 
