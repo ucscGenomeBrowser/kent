@@ -12,4 +12,5 @@ table pseudoGeneLink
     uint score2;          "intron score of pseudogene with gap"
     uint score3;          "intron score of pseudogene"
     uint chainId;          "chain id of gene/pseudogene alignment"
+    string strand;         "strand of gene"
     )

@@ -5,6 +5,8 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
+#define PSEUDOGENELINK_NUM_COLS 12
+
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
     {
@@ -20,6 +22,7 @@ struct pseudoGeneLink
     unsigned score2;	/* intron score of pseudogene with gap */
     unsigned score3;	/* intron score of pseudogene */
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
+    char *strand;	/* strand of gene */
     };
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
@@ -31,7 +34,15 @@ struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);
  * from database.  Dispose of this with pseudoGeneLinkFree(). */
 
 struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName);
-/* Load all pseudoGeneLink from a tab-separated file.
+/* Load all pseudoGeneLink from whitespace-separated file.
+ * Dispose of this with pseudoGeneLinkFreeList(). */
+
+struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper);
+/* Load all pseudoGeneLink from chopper separated file.
+ * Dispose of this with pseudoGeneLinkFreeList(). */
+
+#define pseudoGeneLinkLoadAllByTab(a) pseudoGeneLinkLoadAllByChar(a, '\t');
+/* Load all pseudoGeneLink from tab separated file.
  * Dispose of this with pseudoGeneLinkFreeList(). */
 
 struct pseudoGeneLink *pseudoGeneLinkCommaIn(char **pS, struct pseudoGeneLink *ret);

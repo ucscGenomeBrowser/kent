@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.2 2003/08/04 10:20:36 baertsch Exp $";
+
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
 /* Load a row from pseudoGeneLink table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -26,6 +28,7 @@ ret->gEnd = sqlUnsigned(row[7]);
 ret->score2 = sqlUnsigned(row[8]);
 ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
+ret->strand = row[11];
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
@@ -48,18 +51,37 @@ ret->gEnd = sqlUnsigned(row[7]);
 ret->score2 = sqlUnsigned(row[8]);
 ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
+ret->strand = cloneString(row[11]);
 return ret;
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName) 
-/* Load all pseudoGeneLink from a tab-separated file.
+/* Load all pseudoGeneLink from a whitespace-separated file.
  * Dispose of this with pseudoGeneLinkFreeList(). */
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[12];
 
 while (lineFileRow(lf, row))
+    {
+    el = pseudoGeneLinkLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper) 
+/* Load all pseudoGeneLink from a chopper separated file.
+ * Dispose of this with pseudoGeneLinkFreeList(). */
+{
+struct pseudoGeneLink *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[12];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = pseudoGeneLinkLoad(row);
     slAddHead(&list, el);
@@ -90,6 +112,7 @@ ret->gEnd = sqlUnsignedComma(&s);
 ret->score2 = sqlUnsignedComma(&s);
 ret->score3 = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
+ret->strand = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -106,6 +129,7 @@ freeMem(el->assembly);
 freeMem(el->geneTable);
 freeMem(el->gene);
 freeMem(el->chrom);
+freeMem(el->strand);
 freez(pEl);
 }
 
@@ -157,6 +181,10 @@ fputc(sep,f);
 fprintf(f, "%u", el->score3);
 fputc(sep,f);
 fprintf(f, "%u", el->chainId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
