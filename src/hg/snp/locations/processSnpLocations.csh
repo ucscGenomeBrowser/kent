@@ -14,12 +14,11 @@ set ncbiBuild = $3
 set snpBuild  = $4
 set oo        = /cluster/data/$database
 set LOCDIR    = ${HOME}/kent/src/hg/snp/locations
+set tables    = "snpMap"
 
 if      ($organism == "human") then
-    set tables    = "snpTsc snpNih snpMap"
     set inputFile = $organism.b$ncbiBuild.snp$snpBuild
 else 
-    set tables    = "snpNih snpMap"
     set inputFile = $organism.ncbi.b$ncbiBuild
 endif
 
@@ -56,25 +55,10 @@ if ( "$organism" == "human" ) then
     liftUp snpMap.bed liftAll.lft warn snpMap.contig.bed
     rm -f snpMap.contig.bed
 
-    echo `date` Making snpNih.bed
-    grep BAC_OVERLAP snpMap.bed | awk -f $LOCDIR/snpFilter.awk >  snpNih.bed
-    grep OTHER       snpMap.bed | awk -f $LOCDIR/snpFilter.awk >> snpNih.bed
-
-    echo `date` Making snpTsc.bed
-    grep RANDOM      snpMap.bed | awk -f $LOCDIR/snpFilter.awk >  snpTsc.bed
-    grep MIXED       snpMap.bed | awk -f $LOCDIR/snpFilter.awk >> snpTsc.bed
-
-    # snpTsc is specific to human, so load it here
-    echo `date` Loading snpTsc.bed
-    hgLoadBed $database snpTsc snpTsc.bed -tab
 else
     # rat and mouse files come with chromosome coordinates, 
     # so they don't need seq_contig_md and liftAll.lft
     # chromosome names are changed (chrMT->chrM, chrUn is ignored)
-
-    echo `date` Making snpNih.bed
-    gunzip $inputFile.gz
-    $LOCDIR/createMouseSnpNihBed < $inputFile > snpNih.bed
 
     echo `date` Making snpMap.bed
     $LOCDIR/createMouseSnpMapBed < $inputFile > snpMap.bed
@@ -84,10 +68,6 @@ endif
 echo `date` Loading snpMap.bed
 hgLoadBed $database snpMap snpMap.bed \
     -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
-
-# load data into database
-echo `date` Loading snpNih.bed
-hgLoadBed $database snpNih snpNih.bed -tab
 
 # useful data checks:
 foreach table ( $tables )
