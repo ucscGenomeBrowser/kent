@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.117 2003/06/26 21:21:31 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.118 2003/06/30 22:28:30 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1313,6 +1313,41 @@ if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
 
 hDisconnectCentral(&conn);
 return res;
+}
+
+char *hScientificName(char *database)
+/* Return scientific name for organism represented by this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select scientificName from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    {
+    res = cloneString(buf);
+    }
+hDisconnectCentral(&conn);
+return res;
+}
+
+int hOrganismID(char *database)
+/* Get organism ID from relational organism table */
+/* Return -1 if not found */
+{
+    char query[256];
+    char buf[64];
+    struct sqlConnection *conn = hAllocConn();
+    int organismID;
+    int ret;
+
+    sprintf(query, "select id from organism where name = '%s'",
+                                        hScientificName(database));
+    ret = sqlQuickNum(conn, query);
+    hFreeConn(&conn);
+    return ret;
 }
 
 char *hLookupStringVars(char *in, char *database)

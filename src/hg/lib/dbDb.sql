@@ -13,6 +13,7 @@ CREATE TABLE dbDb (
     active int not null,	# Flag indicating whether this db is in active use
     orderKey int not null,	# Int used to control display order within a genome
     genome varchar(255) not null,	# Unifying genome collection to which an assembly belongs
+    scientificName varchar(255) not null,	# Genus and species of the organism; e.g. Homo sapiens
               #Indices
     PRIMARY KEY(name)
 );

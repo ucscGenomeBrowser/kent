@@ -56,6 +56,9 @@ ctags:
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
+test:
+	cd tests && runtest
+
 tests: 	
 #	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_ggMrnaAli test_ggMrnaAli.c  $(MYLIBS) $L
 	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_geneGraph test_geneGraph.c  $(MYLIBS) $L

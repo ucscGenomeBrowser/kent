@@ -1,0 +1,10 @@
+#!/bin/csh -f
+
+# run on test file, diff with "golden" file
+
+./testHdb > output/testHdb.out
+diff expected/testHdb.out output > /dev/null
+if ($status) then
+    echo '*** FAIL ***'
+endif
+rm -f output/*

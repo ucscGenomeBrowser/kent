@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: dbDb.c,v 1.8 2003/06/30 21:28:43 heather Exp $";
+static char const rcsid[] = "$Id: dbDb.c,v 1.9 2003/06/30 22:28:29 kate Exp $";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
@@ -25,6 +25,7 @@ ret->defaultPos = row[4];
 ret->active = sqlSigned(row[5]);
 ret->orderKey = sqlSigned(row[6]);
 ret->genome = row[7];
+ret->scientificName = row[8];
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -44,6 +45,7 @@ ret->defaultPos = cloneString(row[4]);
 ret->active = sqlSigned(row[5]);
 ret->orderKey = sqlSigned(row[6]);
 ret->genome = cloneString(row[7]);
+ret->scientificName = cloneString(row[8]);
 return ret;
 }
 
@@ -53,7 +55,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +73,7 @@ struct dbDb *dbDbLoadAllByChar(char *fileName, char chopper)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -101,6 +103,7 @@ ret->defaultPos = sqlStringComma(&s);
 ret->active = sqlSignedComma(&s);
 ret->orderKey = sqlSignedComma(&s);
 ret->genome = sqlStringComma(&s);
+ret->scientificName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -118,6 +121,7 @@ freeMem(el->nibPath);
 freeMem(el->organism);
 freeMem(el->defaultPos);
 freeMem(el->genome);
+freeMem(el->scientificName);
 freez(pEl);
 }
 
@@ -164,6 +168,10 @@ fprintf(f, "%d", el->orderKey);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->genome);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->scientificName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

@@ -437,6 +437,15 @@ char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
 
+int hOrganismID(char *database);
+/* Get organism ID from relational organism table */
+/* Return -1 if not found */
+
+char *hScientificName(char *database);
+/* Return scientific name for organism represented by this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
+
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */
