@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.154 2004/11/30 15:40:56 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.155 2004/12/01 01:33:52 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -101,11 +101,13 @@ radioButton(filterTypeVar, filterTypeVal, "Black");
 void snpFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
+printf("&nbsp;&nbsp;&nbsp;&nbsp;");
+radioButton(filterTypeVar, filterTypeVal, "&nbsp;");
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<B>|</B>&nbsp;&nbsp;");
 radioButton(filterTypeVar, filterTypeVal, "red");
 radioButton(filterTypeVar, filterTypeVal, "green");
 radioButton(filterTypeVar, filterTypeVal, "blue");
 radioButton(filterTypeVar, filterTypeVal, "black");
-radioButton(filterTypeVar, filterTypeVal, "exclude");
 }
 
 void snpMapUi(struct trackDb *tdb)
@@ -162,42 +164,42 @@ snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0"));
 printf("<BR><BR><B>Minimum Average Heterozygosity:</B>&nbsp;");
 cgiMakeDoubleVar("snpAvHetCutoff",snpAvHetCutoff,6);
 
-printf("<BR><BR><B>Sources:</B><BR>\n");
+printf("<BR><BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Sources:</B><BR>\n");
 for (snpSource=0; snpSource < snpSourceCartSize; snpSource++)
     {
     snpSourceCart[snpSource] = cartUsualString(cart, snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
     snpFilterButtons(snpSourceStrings[snpSource], snpSourceCart[snpSource]);
     printf(" - <B>%s</B><BR>\n", snpSourceLabels[snpSource]);
     }
-printf("<BR><B>Molecule Types:</B><BR>\n");
+printf("<BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Molecule Types:</B><BR>\n");
 for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
     {
     snpMolTypeCart[snpMolType] = cartUsualString(cart, snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
     snpFilterButtons(snpMolTypeStrings[snpMolType], snpMolTypeCart[snpMolType]);
     printf(" - <B>%s</B><BR>\n", snpMolTypeLabels[snpMolType]);
     }
-printf("<BR><B>Variant Classes:</B><BR>\n");
+printf("<BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Variant Classes:</B><BR>\n");
 for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     {
     snpClassCart[snpClass] = cartUsualString(cart, snpClassStrings[snpClass], snpClassDefault[snpClass]);
     snpFilterButtons(snpClassStrings[snpClass], snpClassCart[snpClass]);
     printf(" - <B>%s</B><BR>\n", snpClassLabels[snpClass]);
     }
-printf("<BR><B>Validation Status:</B><BR>\n");
+printf("<BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Validation Status:</B><BR>\n");
 for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
     {
     snpValidCart[snpValid] = cartUsualString(cart, snpValidStrings[snpValid], snpValidDefault[snpValid]);
     snpFilterButtons(snpValidStrings[snpValid], snpValidCart[snpValid]);
     printf(" - <B>%s</B><BR>\n",snpValidLabels[snpValid]);
     }
-printf("<BR><B>Functional Classes:</B><BR>\n");
+printf("<BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Functional Classes:</B><BR>\n");
 for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     {
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
     snpFilterButtons(snpFuncStrings[snpFunc], snpFuncCart[snpFunc]);
     printf(" - <B>%s</B><BR>\n",snpFuncLabels[snpFunc]);
     }
-printf("<BR><B>Location Type:</B><BR>\n");
+printf("<BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;Location Type:</B><BR>\n");
 for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
     {
     snpLocTypeCart[snpLocType] = cartUsualString(cart, snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
