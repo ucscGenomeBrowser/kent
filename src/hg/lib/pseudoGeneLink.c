@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.13 2004/04/12 20:01:58 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.14 2004/04/13 17:46:13 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -56,10 +56,10 @@ ret->overlapDiag = sqlUnsigned(row[31]);
 ret->coverage = sqlUnsigned(row[32]);
 ret->label = sqlUnsigned(row[33]);
 ret->milliBad = sqlUnsigned(row[34]);
-ret->chainId = sqlUnsigned(row[35]);
-ret->axtScore = sqlSigned(row[36]);
-ret->oldIntronCount = sqlSigned(row[37]);
-ret->intronScores = cloneString(row[38]);
+ret->oldScore = sqlUnsigned(row[35]);
+ret->oldIntronCount = sqlSigned(row[36]);
+ret->intronScores = cloneString(row[37]);
+ret->axtScore = sqlSigned(row[38]);
 ret->refSeq = cloneString(row[39]);
 ret->rStart = sqlSigned(row[40]);
 ret->rEnd = sqlSigned(row[41]);
@@ -168,10 +168,10 @@ ret->overlapDiag = sqlUnsignedComma(&s);
 ret->coverage = sqlUnsignedComma(&s);
 ret->label = sqlUnsignedComma(&s);
 ret->milliBad = sqlUnsignedComma(&s);
-ret->chainId = sqlUnsignedComma(&s);
-ret->axtScore = sqlSignedComma(&s);
+ret->oldScore = sqlUnsignedComma(&s);
 ret->oldIntronCount = sqlSignedComma(&s);
 ret->intronScores = sqlStringComma(&s);
+ret->axtScore = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
 ret->rStart = sqlSignedComma(&s);
 ret->rEnd = sqlSignedComma(&s);
@@ -325,15 +325,15 @@ fprintf(f, "%u", el->label);
 fputc(sep,f);
 fprintf(f, "%u", el->milliBad);
 fputc(sep,f);
-fprintf(f, "%u", el->chainId);
-fputc(sep,f);
-fprintf(f, "%d", el->axtScore);
+fprintf(f, "%u", el->oldScore);
 fputc(sep,f);
 fprintf(f, "%d", el->oldIntronCount);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->intronScores);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->axtScore);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refSeq);
