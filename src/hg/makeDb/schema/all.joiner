@@ -265,6 +265,7 @@ identifier gnfHumanAtlas2
     hgFixed.gnfHumanAtlas2MedianRatio.name unique
     $hg.knownToGnfAtlas2.value
     $hg.gnfAtlas2.name
+    $hg.affyGnf1h.qName
 
 identifier gnfMouseAtlas2
 "Novartis GNF Mouse gene probe ID"
@@ -274,6 +275,7 @@ identifier gnfMouseAtlas2
     hgFixed.gnfMouseAtlas2MedianRatio.name unique
     $mm.knownToGnf1m.value
     $mm.gnfAtlas2.name
+    $mm.affyGnf1m.qName
 
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
