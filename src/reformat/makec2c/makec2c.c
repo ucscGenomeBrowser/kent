@@ -1,4 +1,18 @@
 #include "common.h"
+#include "portable.h"
+#include "hash.h"
+
+struct clonePos
+/* Info on clone position. */
+    {
+    struct clonePos *next;
+    char *cloneName;	/* Name (allocated in hash) */
+    char *chromName;	/* Chromosome name (small, not allocated here. */
+    int start;		/* Start coordinate. */
+    int end;		/* End coordinate. */
+    bool gotStart;	/* Got start coordinate? */
+    bool gotEnd;	/* Got end coordinate? */
+    };
 
 char *inNames[] = {
     "CHROMOSOME_I.gff",
@@ -54,6 +68,7 @@ return s+1;
 int main(int argc, char *argv[])
 {
 char *outName;
+char *gffDir;
 char *inName;
 int i;
 FILE *in, *c2c;
@@ -62,17 +77,23 @@ char origLine[4*1024];
 int lineCount = 0;
 char *words[4*256];
 int wordCount;
+struct hash *cloneHash = newHash(0);
+struct clonePos *cloneList = NULL, *clone;
+char *gffSource;
+bool gotLeft, gotRight;
 
-if (argc != 2)
+if (argc != 3)
     {
     errAbort("makec2c - creates a cosmid chromosome offset index file from Sanger .gffs\n"
            "usage:\n"
-           "      makec2c c2c\n"
-           "This will create the file c2c with the index.  This program should be run\n"
-           "from directory with CHROMOSOME_n.gff files in it.\n");
+           "      makec2c gffDir c2c\n"
+           "This will create the file c2c with the index.\n");
     }
-outName = argv[1];
+gffDir = argv[1];
+outName = argv[2];
 c2c = mustOpen(outName, "w");
+if (!setCurrentDir(gffDir))
+    errAbort("Couldn't cd to %s", gffDir);
 for (i=0; i<ArraySize(inNames); ++i)
     {
     inName = inNames[i];
@@ -86,22 +107,51 @@ for (i=0; i<ArraySize(inNames); ++i)
             strcpy(origLine, line);
             wordCount = chopLine(line, words);
             if (wordCount < 8)
-                errAbort("Short line %d in %s\n", lineCount, inName);
-            if (sameString(words[1], "SEQUENCE"))
-                {
-                char *seqName;
-                if (wordCount < 10)
-                    errAbort("Short SEQUENCE line %d in %s\n", lineCount, inName);
-                seqName = unquote(words[9]);
-                if (strncmp(seqName, "LINK", 4) != 0 && strncmp(seqName, "SUPERLINK", 9) != 0
-                    && strncmp(seqName, "CHROMOSOME", 10) != 0 &&  strchr(seqName, '.') == NULL)
-                    {
-                    fprintf(c2c, "%s:%s-%s + %s\n", smallName(words[0]), words[3], words[4], seqName);
-                    } 
-                }
+		continue;
+	    gffSource = words[1];
+	    gotLeft = sameString("Clone_left_end", gffSource);
+	    gotRight = sameString("Clone_right_end", gffSource);
+	    if (gotLeft || gotRight)
+	        {
+		char *cloneName = words[7];
+		char *header = "Clone ";
+		if (!startsWith(header,  cloneName))
+		    errAbort("Clone end without %s line %d of %s", header, lineCount, inName);
+                cloneName = unquote(cloneName + strlen(header));
+		if ((clone = hashFindVal(cloneHash, cloneName)) == NULL)
+		    {
+		    AllocVar(clone);
+		    slAddHead(&cloneList, clone);
+		    hashAddSaveName(cloneHash, cloneName, clone, &clone->cloneName);
+		    clone->chromName = smallName(words[0]);
+		    }
+		if (gotLeft)
+		    {
+		    clone->start = atoi(words[2]) - 1;
+		    clone->gotStart = TRUE;
+		    }
+		else if (gotRight)
+		    {
+		    clone->end = atoi(words[2]) - 1;
+		    clone->gotEnd = TRUE;
+		    }
+		}
             }
         }
     fclose(in);
+    slReverse(&cloneList);
+    for (clone = cloneList; clone != NULL; clone = clone->next)
+        {
+	if (clone->gotStart && clone->gotEnd)
+	    {
+	    fprintf(c2c, "%s:%d-%d + %s\n", clone->chromName, clone->start, clone->end, clone->cloneName);
+	    }
+	else
+	    {
+	    warn("Only got one end of %s", clone->cloneName);
+	    }
+	}
+    slFreeList(&cloneList);
     }
 return 0;
 }
