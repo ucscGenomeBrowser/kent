@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.504 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.505 2003/05/06 14:38:15 booch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -6099,7 +6099,7 @@ return tg->height;
 static void drawOneClone(struct cloneInfo *ci, int seqStart, int seqEnd,
     struct vGfx *vg, int xOff, int yOff, int width,
     MgFont *font, int lineHeight, Color color, boolean stagger, 
-    boolean hiliteDupes)
+    boolean hiliteDupes, boolean nofrag)
 /* Draw a single clone item - using space saver layout on fragments. */
 {
 struct cloneFragPos *cfa;
@@ -6181,8 +6181,8 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
 	}
     vgBox(vg, x1, y, w, heightPer, col);
     textWidth = mgFontStringWidth(font, s);
-    if (textWidth <= w)
-	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
+    if ((textWidth <= w) && (!nofrag))
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s); 
     if (baseWidth <= 2000000)
 	{
 	psl = cfa->psl;
@@ -6290,11 +6290,13 @@ int x1, x2, w;
 int baseWidth = seqEnd - seqStart;
 int tooBig = (winBaseCount > cloneFragMaxWin);
 int hilight = MG_CYAN;
+int unfinished = MG_GRAY;
+Color standard = color;
 boolean gotTiling = hTableExists("tilingPath");
 struct sqlConnection *conn = NULL;
 int bgColor;
 char accOnly[64];
-
+boolean nofrag = (strcmp("Clone Coverage/Fragment Position", tg->longLabel));
 
 if (gotTiling)
     conn = hAllocConn();
@@ -6310,6 +6312,12 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
         if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
 	    bgColor = hilight;
 	}
+    /* Check if track no longer showing fragments (starting with hg15) */
+    if ((nofrag) && (ci->phase < 3)) 
+        color = unfinished;
+    else
+	color = standard;
+	
     if (!tooBig)
 	oneHeight = oneOrRowCount(ci)*lineHeight+2;
     else
@@ -6320,10 +6328,10 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     vgBox(vg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
 	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y+1, width, font, lineHeight, 
-		color, TRUE, tg->subType);
+		color, TRUE, tg->subType, nofrag);
     else
 	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y, width, font, oneHeight-1, 
-		color, FALSE, tg->subType);
+		color, FALSE, tg->subType, nofrag);
     y += oneHeight;
     }
 hFreeConn(&conn);
