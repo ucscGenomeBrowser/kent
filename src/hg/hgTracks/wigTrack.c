@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.46 2004/03/09 18:59:21 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.47 2004/03/22 22:16:38 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -491,8 +491,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 			int xCoord = preDrawZero + i;
 			if ((xCoord >= 0) && (xCoord < preDrawSize))
 			    {
-			double dataValue =
-	wi->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wi->dataRange);
+			    double dataValue =
+			      BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
+
 			    ++preDraw[xCoord].count;
 			    if (dataValue > preDraw[xCoord].max)
 				preDraw[xCoord].max = dataValue;
