@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.63 2004/09/17 03:17:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.64 2004/09/17 17:57:12 kent Exp $";
 
 
 void usage()
@@ -266,7 +266,7 @@ else if (sameString(regionType, "encode"))
     }
 else
     {
-    errAbort("Unrecognized region type %s", regionType);
+    regionList = getRegionsFullGenome();
     }
 return regionList;
 }
@@ -448,21 +448,16 @@ boolean isPositional(char *db, char *table)
 {
 boolean result = FALSE;
 struct sqlConnection *conn = sqlConnect(db);
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-if (!sameString(table, "mrna"))
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+if (sqlTableExists(conn, "chromInfo"))
     {
-    if (sqlTableExists(conn, "chromInfo"))
+    char chromName[64];
+    struct hTableInfo *hti;
+    sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
+	chromName, sizeof(chromName));
+    hti = hFindTableInfoDb(db, chromName, table);
+    if (hti != NULL)
 	{
-	char chromName[64];
-	struct hTableInfo *hti;
-	sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
-	    chromName, sizeof(chromName));
-	hti = hFindTableInfoDb(db, chromName, table);
-	if (hti != NULL)
-	    {
-	    result = htiIsPositional(hti);
-	    }
+	result = htiIsPositional(hti);
 	}
     }
 sqlDisconnect(&conn);
@@ -578,10 +573,6 @@ struct slName *name, *nameList = NULL;
 struct joinerPair *jpList, *jp;
 char *trackTable = track->tableName;
 
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-if (sameString(trackTable, "mrna"))
-     trackTable = "all_mrna";
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 hashAdd(uniqHash, trackTable, NULL);
 jpList = joinerRelate(allJoiner, database, trackTable);
 for (jp = jpList; jp != NULL; jp = jp->next)
@@ -650,6 +641,38 @@ boolean htiIsPositional(struct hTableInfo *hti)
 return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
+char *getIdField(char *db, struct trackDb *track, char *table, 
+	struct hTableInfo *hti)
+/* Get ID field for table, or NULL if none.  FreeMem result when done */
+{
+char *idField = NULL;
+if (hti != NULL && hti->nameField[0] != 0)
+    idField = cloneString(hti->nameField);
+else
+    {
+    struct hTableInfo *trackHti = getHti(db, track->tableName);
+    if (hti != NULL && trackHti->nameField[0] != 0)
+        {
+	struct joinerPair *jp, *jpList;
+	jpList = joinerRelate(allJoiner, db, track->tableName);
+	for (jp = jpList; jp != NULL; jp = jp->next)
+	    {
+	    if (sameString(jp->a->field, trackHti->nameField))
+	        {
+		if ( sameString(jp->b->database, db) 
+		  && sameString(jp->b->table, table) )
+		    {
+		    idField = cloneString(jp->b->field);
+		    break;
+		    }
+		}
+	    }
+	joinerPairFreeList(&jpList);
+	}
+    }
+return idField;
+}
+
 int countTableColumns(struct sqlConnection *conn, char *table)
 /* Count columns in table. */
 {
@@ -674,8 +697,10 @@ boolean doIntersection;
 char *filter = filterClause(db, table);
 int fieldCount;
 int bedFieldsOffset, bedFieldCount;
+char *idField;
 
 hti = getHti(db, table);
+idField = getIdField(db, curTrack, table, hti);
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
@@ -690,16 +715,16 @@ else
     }
 bedFieldsOffset = fieldCount;
 
-/* If table has and identity (name) field, and user has
+/* If can find id field for table then get
  * uploaded list of identifiers, create identifier hash
  * and add identifier column to end of result set. */
-if (hti->nameField[0] != 0)
+if (idField != NULL)
     {
     idHash = identifierHash();
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
-	dyStringAppend(fieldSpec, hti->nameField);
+	dyStringAppend(fieldSpec, idField);
 	bedFieldsOffset += 1;
 	}
     }

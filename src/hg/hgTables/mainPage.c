@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.38 2004/09/17 03:17:20 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.39 2004/09/17 17:57:12 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -399,7 +399,7 @@ else
     }
 
 /* Select identifiers line. */
-if (!isWig && sameString(curTrack->tableName, curTable))
+if (!isWig)
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");

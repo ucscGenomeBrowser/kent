@@ -402,6 +402,10 @@ char *identifierFileName();
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
 
+char *getIdField(char *db, struct trackDb *track, char *table, 
+	struct hTableInfo *hti);
+/* Get ID field for table, or NULL if none.  FreeMem result when done */
+
 /* --------- Summary and stats stuff -------------- */
 long long basesInRegion(struct region *regionList);
 /* Count up all bases in regions. */
