@@ -1,0 +1,9 @@
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Rat/Human Homology
+group genes
+priority 45
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
