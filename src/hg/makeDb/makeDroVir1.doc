@@ -303,6 +303,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
 
 # MAKE DOWNLOADABLE FILES (DONE 11/7/04 angie)
+# FASTA FIXED 3/21/05 angie, see below
     ssh kksilo
     mkdir /cluster/data/droVir1/zips
     cd /cluster/data/droVir1
@@ -630,5 +631,32 @@ chainSome $(path1)
       >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
+
+
+# FIX X BASES -> N IN DOWNLOADABLE FASTA FILES (DONE 3/21/05 angie)
+    ssh kksilo
+    cd /cluster/data/droVir1
+    mv scaffolds.fa scaffolds.fa.bak
+    tr 'Xx' 'Nn' < scaffolds.fa.bak > scaffolds.fa
+    diff scaffolds.fa{.bak,} | less
+#<only X/x -> N/n sequence changes>
+    grep '^>' scaffolds.fa.bak > /tmp/1
+    grep '^>' scaffolds.fa > /tmp/2
+    diff /tmp/[12]
+#<no output>
+    mv scaffolds.fa.masked scaffolds.fa.masked.bak
+    tr 'Xx' 'Nn' < scaffolds.fa.masked.bak > scaffolds.fa.masked
+    diff scaffolds.fa.masked{.bak,} | less
+    grep '^>' scaffolds.fa.masked.bak > /tmp/1
+    grep '^>' scaffolds.fa.masked > /tmp/2
+    diff /tmp/[12]
+    rm zips/scaffoldFa*.zip
+    zip -j zips/scaffoldFa.zip scaffolds.fa
+    zip -j zips/scaffoldFaMasked.zip scaffolds.fa.masked
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/droVir1/bigZips
+    rm scaffoldFa*.zip md5sum.txt
+    ln -s /cluster/data/droVir1/zips/scaffoldFa*.zip .
+    nice md5sum *.zip > md5sum.txt
 
 
