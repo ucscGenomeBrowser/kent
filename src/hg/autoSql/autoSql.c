@@ -14,8 +14,9 @@
 #include "obscure.h"
 #include "dystring.h"
 #include "cheapcgi.h"
+#include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.22 2003/10/17 14:28:12 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.23 2004/03/22 14:17:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,394 +31,11 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 	 "generates code to execute queries and updates of the table.\n");
 }
 
-enum lowTypes
-/* Different low level types (not including lists and objects) */
-   {
-   t_double,   /* double precision floating point. */
-   t_float,    /* single precision floating point. */
-   t_char,     /* character or fixed size character array. */
-   t_int,      /* signed 32 bit integer */
-   t_uint,     /* unsigned 32 bit integer */
-   t_short,    /* signed 16 bit integer */
-   t_ushort,   /* unsigned 16 bit integer */
-   t_byte,     /* signed 8 bit integer */
-   t_ubyte,    /* unsigned 8 bit integer */
-   t_off,      /* 64 bit integer. */
-   t_string,   /* varchar/char * (variable size string up to 255 chars)  */
-   t_lstring,     /* variable sized large string. */
-   t_object,   /* composite object - object/table - forms lists. */
-   t_simple,   /* simple composite object - forms arrays. */
-   };
-
-struct lowTypeInfo
-    {
-    enum lowTypes type;		   /* Numeric ID of low level type. */
-    char *name;                    /* Text ID of low level type. */
-    bool isUnsigned;               /* True if an unsigned int of some type. */
-    bool stringy;                  /* True if a string or blob. */
-    char *sqlName;                 /* SQL type name. */
-    char *cName;                   /* C type name. */
-    char *listyName;               /* What functions that load a list are called. */
-    char *nummyName;               /* What functions that load a number are called. */
-    char *outFormat;		   /* Output format for printf. %d, %u, etc. */
-    };
-
-struct lowTypeInfo lowTypes[] = {
-    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%f"},
-    {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float",  "Float",  "%f"},
-    {t_char,    "char",    FALSE, FALSE, "char",             "char",          "Char",   "Char",   "%c"},
-    {t_int,     "int",     FALSE, FALSE, "int",              "int",           "Signed", "Signed", "%d"},
-    {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",     "unsigned",      "Unsigned","Unsigned", "%u"},
-    {t_short,   "short",   FALSE, FALSE, "smallint",         "short",         "Short",  "Signed", "%d"},
-    {t_ushort,  "ushort",  TRUE,  FALSE, "smallint unsigned","unsigned short","Ushort", "Unsigned", "%u"},
-    {t_byte,    "byte",    FALSE, FALSE, "tinyint",          "signed char",   "Byte",   "Signed", "%d"},
-    {t_ubyte,   "ubyte",   TRUE,  FALSE, "tinyint unsigned", "unsigned char", "Ubyte",  "Unsigned", "%u"},
-    {t_off,     "bigint",  FALSE,  FALSE,"bigint",           "long long",     "LongLong", "LongLong", "%lld"},
-    {t_string,  "string",  FALSE, TRUE,  "varchar(255)",     "char *",        "String", "String", "%s"},
-    {t_lstring,    "lstring",    FALSE, TRUE,  "longblob",   "char *",        "String", "String", "%s"},
-    {t_object,  "object",  FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
-    {t_object,  "table",   FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
-    {t_simple,  "simple",  FALSE, FALSE, "longblob",         "!error!",       "Simple", "Simple", NULL},
-};
-
-struct column
-/* Info on one column/field */
-    {
-    struct column *next;           /* Next column. */
-    char *name;                    /* Column name. */
-    char *comment;		   /* Comment string on column. */
-    struct lowTypeInfo *lowType;   /* Root type info. */
-    char *obName;                  /* Name of object or table. */
-    struct dbObject *obType;       /* Name of composite object. */
-    int fixedSize;		   /* 0 if not fixed size, otherwise size of list. */
-    char *linkedSizeName;          /* Points to variable that holds size of list. */
-    struct column *linkedSize;     /* Column for linked size. */
-    bool isSizeLink;               /* Flag to tell if have read link. */
-    bool isList;                   /* TRUE if a list. */
-    bool isArray;                  /* TRUE if an array. */
-    };
-
-struct dbObject
-/* Info on whole dbObject. */
-    {
-    struct dbObject *next;
-    char *name;			/* Name of object. */
-    char *comment;		/* Comment describing object. */
-    struct column *columnList;  /* List of columns. */
-    bool isTable;	        /* True if a table. */
-    bool isSimple;	        /* True if a simple object. */
-    };
-
-struct tokenizer
-/* This handles reading in tokens. */
-    {
-    bool reuse;	         /* True if want to reuse this token. */
-    bool eof;            /* True at end of file. */
-    struct lineFile *lf; /* Underlying file. */
-    char *curLine;       /* Current line of text. */
-    char *linePt;        /* Start position within current line. */
-    char *string;        /* String value of token */
-    int sSize;           /* Size of string. */
-    int sAlloc;          /* Allocated string size. */
-    };
-
-struct tokenizer *newTokenizer(char *fileName)
-/* Return a new tokenizer. */
-{
-struct tokenizer *tkz;
-AllocVar(tkz);
-tkz->sAlloc = 128;
-tkz->string = needMem(tkz->sAlloc);
-tkz->lf = lineFileOpen(fileName, TRUE);
-tkz->curLine = tkz->linePt = "";
-return tkz;
-}
-
-void freeTokenizer(struct tokenizer **pTkz)
-/* Tear down a tokenizer. */
-{
-struct tokenizer *tkz;
-if ((tkz = *pTkz) != NULL)
-    {
-    freeMem(tkz->string);
-    lineFileClose(&tkz->lf);
-    freez(pTkz);
-    }
-}
-
-void tkzReuse(struct tokenizer *tkz)
-/* Reused token. */
-{
-tkz->reuse = TRUE;
-}
-
-int tkzLineCount(struct tokenizer *tkz)
-/* Return line of current token. */
-{
-return tkz->lf->lineIx;
-}
-
-char *tkzFileName(struct tokenizer *tkz)
-/* Return name of file. */
-{
-return tkz->lf->fileName;
-}
-
-char *tkzNext(struct tokenizer *tkz)
-/* Return token's next string (also available as tkz->string) or
- * NULL at EOF. */
-{
-char *start, *end;
-char c, *s;
-int size;
-if (tkz->reuse)
-    {
-    tkz->reuse = FALSE;
-    return tkz->string;
-    }
-for (;;)	/* Skip over white space. */
-    {
-    int lineSize;
-    s = start = skipLeadingSpaces(tkz->linePt);
-    if ((c = start[0]) != 0)
-	break;
-    if (!lineFileNext(tkz->lf, &tkz->curLine, &lineSize))
-	{
-	tkz->eof = TRUE;
-	return NULL;
-	}
-    tkz->linePt = tkz->curLine;
-    }
-if (isalnum(c) || (c == '_'))
-    {
-    for (;;)
-	{
-        s++;
-	if (!(isalnum(*s) || (*s == '_')))
-	    break;
-	}
-    end = s;
-    }
-else if (c == '"')
-    {
-    start = s+1;
-    for (;;)
-	{
-	c = *(++s);
-	if (c == '"')
-	    break;
-	}
-    end = s;
-    ++s;
-    }
-else
-    {
-    end = ++s;
-    }
-tkz->linePt = s;
-size = end - start;
-if (size >= tkz->sAlloc)
-    {
-    tkz->sAlloc = size+128;
-    tkz->string = needMoreMem(tkz->string, 0, tkz->sAlloc);
-    }
-memcpy(tkz->string, start, size);
-tkz->string[size] = 0;
-return tkz->string;
-}
-
-void tkzErrAbort(struct tokenizer *tkz, char *format, ...)
-/* Print error message followed by file and line number and
- * abort. */
-{
-va_list args;
-va_start(args, format);
-vaWarn(format, args);
-errAbort("line %d of %s:\n%s", 
-	tkzLineCount(tkz), tkzFileName(tkz), tkz->curLine);
-}
-
-void tkzNotEnd(struct tokenizer *tkz)
-/* Squawk if at end. */
-{
-if (tkz->eof)
-    errAbort("Unexpected end of file");
-}
-
-void tkzMustHaveNext(struct tokenizer *tkz)
-/* Get next token, which must be there. */
-{
-if (tkzNext(tkz) == NULL)
-    errAbort("Unexpected end of file");
-}
-
-void tkzMustMatch(struct tokenizer *tkz, char *string)
-/* Require next token to match string.  Return next token
- * if it does, otherwise abort. */
-{
-if (sameWord(tkz->string, string))
-    tkzMustHaveNext(tkz);
-else
-    tkzErrAbort(tkz, "Expecting %s got %s", string, tkz->string);
-}
-
-struct lowTypeInfo *findLowType(struct tokenizer *tkz)
-/* Return low type info.  Squawk and die if s doesn't
- * correspond to one. */
-{
-char *s = tkz->string;
-int i;
-for (i=0; i<ArraySize(lowTypes); ++i)
-    {
-    if (sameWord(lowTypes[i].name, s))
-	return &lowTypes[i];
-    }
-tkzErrAbort(tkz, "Unknown type '%s'", s);
-return NULL;
-}
-
-struct column *mustFindColumn(struct dbObject *table, char *colName)
-/* Return column or die. */
-{
-struct column *col;
-
-for (col = table->columnList; col != NULL; col = col->next)
-    {
-    if (sameWord(col->name, colName))
-	return col;
-    }
-errAbort("Couldn't find column %s", colName);
-return NULL;
-}
-
-struct dbObject *findObType(struct dbObject *objList, char *obName)
-/* Find object with given name. */
-{
-struct dbObject *obj;
-for (obj = objList; obj != NULL; obj = obj->next)
-    {
-    if (sameWord(obj->name, obName))
-	return obj;
-    }
-return NULL;
-}
-
-
-struct dbObject *parseObjects(struct tokenizer *tkz)
-/* Parse file into a list of objects. */
-{
-struct dbObject *objList = NULL;
-struct dbObject *obj;
-struct column *col;
-
-for (;;)
-    {
-    if (!tkzNext(tkz))
-	break;
-    AllocVar(obj);
-    if (sameWord(tkz->string, "table"))
-	obj->isTable = TRUE;
-    else if (sameWord(tkz->string, "simple"))
-	obj->isSimple = TRUE;
-    else if (sameWord(tkz->string, "object"))
-	;
-    else
-	tkzErrAbort(tkz, "Expecting 'table' or 'object' got '%s'", tkz->string);
-    tkzMustHaveNext(tkz);
-    if (findObType(objList, tkz->string))
-	tkzErrAbort(tkz, "Duplicate definition of %s", tkz->string);
-    obj->name = cloneString(tkz->string);
-    tkzMustHaveNext(tkz);
-    obj->comment = cloneString(tkz->string);
-    tkzMustHaveNext(tkz);
-    tkzMustMatch(tkz, "(");
-    for (;;)
-	{
-	int ltt;
-	if (tkz->string[0] == ')')
-	    break;
-	AllocVar(col);
-
-	col->lowType = findLowType(tkz);
-	tkzMustHaveNext(tkz);
-	ltt = col->lowType->type;
-
-	if (ltt == t_object || ltt == t_simple)
-	    {
-	    col->obName = cloneString(tkz->string);
-	    tkzMustHaveNext(tkz);
-	    }
-	
-	if (tkz->string[0] == '[')
-	    {
-	    if (ltt == t_simple)
-	    	col->isArray = TRUE;
-	    else
-		col->isList = TRUE;
-	    tkzMustHaveNext(tkz);
-	    if (isdigit(tkz->string[0]))
-		{
-		col->fixedSize = atoi(tkz->string);
-		tkzMustHaveNext(tkz);
-		}
-	    else if (isalpha(tkz->string[0]))
-		{
-		if (obj->isSimple)
-		    {
-		    tkzErrAbort(tkz, "simple objects can't include variable length arrays\n");
-		    }
-		col->linkedSizeName = cloneString(tkz->string);
-		col->linkedSize = mustFindColumn(obj, col->linkedSizeName);
-		col->linkedSize->isSizeLink = TRUE;
-		tkzMustHaveNext(tkz);
-		}
-	    else
-		{
-		tkzErrAbort(tkz, "must have column name or integer inside []'s\n");
-		}
-	     tkzMustMatch(tkz, "]");
-	    }
-
-	col->name = cloneString(tkz->string);
-	tkzMustHaveNext(tkz);
-	tkzMustMatch(tkz, ";");
-	col->comment = cloneString(tkz->string);
-	tkzMustHaveNext(tkz);
-	if (col->lowType->type == t_char)
-	    {
-	    col->isList = FALSE;	/* It's not really a list... */
-	    }
-	slAddHead(&obj->columnList, col);
-	}
-    slReverse(&obj->columnList);
-    slAddTail(&objList, obj);
-    }
-/* Look up any embedded objects. */
-for (obj = objList; obj != NULL; obj = obj->next)
-    {
-    for (col = obj->columnList; col != NULL; col = col->next)
-	{
-	if (col->obName != NULL)
-	    {
-	    if ((col->obType = findObType(objList, col->obName)) == NULL)
-		errAbort("%s used but not defined", col->obName);
-	    if (obj->isSimple)
-		{
-		if (!col->obType->isSimple)
-		    errAbort("Simple object %s with embedded non-simple object %s",
-			obj->name, col->name);
-		}
-	    }
-	}
-    }
-return objList;
-}
-
-void sqlTable(struct dbObject *table, FILE *f)
+void sqlTable(struct asObject *table, FILE *f)
 /* Print out structure of table in SQL. */
 {
-struct column *col;
-struct lowTypeInfo *lt;
+struct asColumn *col;
+struct asTypeInfo *lt;
 
 fprintf(f, "\n#%s\n", table->comment);
 fprintf(f, "CREATE TABLE %s (\n", table->name);
@@ -439,12 +57,12 @@ fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
 fprintf(f, ");\n");
 }
 
-void cTable(struct dbObject *dbObj, FILE *f)
+void cTable(struct asObject *dbObj, FILE *f)
 /* Print out structure of dbObj in C. */
 {
-struct column *col;
-struct lowTypeInfo *lt;
-struct dbObject *obType;
+struct asColumn *col;
+struct asTypeInfo *lt;
+struct asObject *obType;
 char defineName[256];
 
 safef(defineName, sizeof(defineName), "%s", dbObj->name);
@@ -519,11 +137,11 @@ fprintf(f, "    };\n\n");
 
 static boolean trueFalse[] = {TRUE, FALSE};
 
-void makeCommaInColumn(char *indent, struct column *col,  FILE *f, bool isArray)
+void makeCommaInColumn(char *indent, struct asColumn *col,  FILE *f, bool isArray)
 /* Make code to read in one column from a comma separated set. */
 {
-struct dbObject *obType = col->obType;
-struct lowTypeInfo *lt = col->lowType;
+struct asObject *obType = col->obType;
+struct asTypeInfo *lt = col->lowType;
 char *arrayRef = (isArray ? "[i]" : "");
     
 if (obType != NULL)
@@ -569,7 +187,7 @@ else
 }
 
 
-void loadColumn(struct column *col, int colIx, boolean isDynamic, boolean isSizeLink,
+void loadColumn(struct asColumn *col, int colIx, boolean isDynamic, boolean isSizeLink,
 	FILE *f)
 /* Print statement to load column. */
 {
@@ -577,9 +195,9 @@ char *staDyn = (isDynamic ? "Dynamic" : "Static");
 
 if (col->isSizeLink == isSizeLink)
     {
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
-    struct dbObject *obType = col->obType;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
+    struct asObject *obType = col->obType;
     if (col->isList || col->isArray)
 	{
 	char *lName;
@@ -638,7 +256,7 @@ if (col->isSizeLink == isSizeLink)
 		}
 	    else
 		{
-		struct column *ls;
+		struct asColumn *ls;
 		fprintf(f, "sql%s%sArray(row[%d], &ret->%s, &sizeOne);\n",
 			   lName, staDyn, colIx, col->name); 
 		if ((ls = col->linkedSize) != NULL)
@@ -670,7 +288,7 @@ if (col->isSizeLink == isSizeLink)
 		break;
 	    case t_object:
 		{
-		struct dbObject *obj = col->obType;
+		struct asObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
@@ -678,7 +296,7 @@ if (col->isSizeLink == isSizeLink)
 		}
 	    case t_simple:
 		{
-		struct dbObject *obj = col->obType;
+		struct asObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
@@ -695,11 +313,11 @@ if (col->isSizeLink == isSizeLink)
     }
 }
 
-void makeCommaIn(struct dbObject *table, FILE *f, FILE *hFile)
+void makeCommaIn(struct asObject *table, FILE *f, FILE *hFile)
 /* Make routine that loads object from comma separated file. */
 {
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 
 fprintf(hFile, "struct %s *%sCommaIn(char **pS, struct %s *ret);\n", 
 	tableName, tableName, tableName);
@@ -771,10 +389,10 @@ fprintf(f, "}\n\n");
 }
 
 
-boolean objectHasVariableLists(struct dbObject *table)
+boolean objectHasVariableLists(struct asObject *table)
 /* Returns TRUE if object has any list members. */
 {
-struct column *col;
+struct asColumn *col;
 for (col = table->columnList; col != NULL; col = col->next)
     {
     if ((col->isList || col->isArray) && !col->fixedSize)
@@ -783,10 +401,10 @@ for (col = table->columnList; col != NULL; col = col->next)
 return FALSE;
 }
 
-boolean objectHasSubObjects(struct dbObject *table)
+boolean objectHasSubObjects(struct asObject *table)
 /* Returns TRUE if object has any object members. */
 {
-struct column *col;
+struct asColumn *col;
 for (col = table->columnList; col != NULL; col = col->next)
     {
     if (col->lowType->type == t_object)
@@ -795,13 +413,13 @@ for (col = table->columnList; col != NULL; col = col->next)
 return FALSE;
 }
 
-void staticLoadRow(struct dbObject *table, FILE *f, FILE *hFile)
+void staticLoadRow(struct asObject *table, FILE *f, FILE *hFile)
 /* Create C code to load a static instance from a row.
  * Only generated if no lists... */
 {
 int i;
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 boolean isSizeLink;
 int tfIx;
 
@@ -828,13 +446,13 @@ for (tfIx = 0; tfIx < 2; ++tfIx)
 fprintf(f, "}\n\n");
 }
 
-void dynamicLoadRow(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicLoadRow(struct asObject *table, FILE *f, FILE *hFile)
 /* Create C code to load an instance from a row into dynamically
  * allocated memory. */
 {
 int i;
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 boolean isSizeLink;
 int tfIx;
 
@@ -863,7 +481,7 @@ fprintf(f, "return ret;\n");
 fprintf(f, "}\n\n");
 }
 
-void dynamicLoadAll(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicLoadAll(struct asObject *table, FILE *f, FILE *hFile)
 /* Create C code to load a all objects from a tab separated file. */
 {
 char *tableName = table->name;
@@ -891,7 +509,7 @@ fprintf(f, "return list;\n");
 fprintf(f, "}\n\n");
 }
 
-void dynamicLoadAllByChar(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicLoadAllByChar(struct asObject *table, FILE *f, FILE *hFile)
 /* Create C code to load a all objects from a tab separated file. */
 {
 char *tableName = table->name;
@@ -937,7 +555,7 @@ fprintf(f, " * anotherTable.something'.\n");
 fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
 }
 
-void dynamicLoadByQuery(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicLoadByQuery(struct asObject *table, FILE *f, FILE *hFile)
 /* Create C code to build a list from a query to database. */
 {
 char *tableName = table->name;
@@ -977,23 +595,23 @@ fprintf(f, " * For example \"autosql's features include\" --> \"autosql\\'s feat
 fprintf(f, " * If worried about this use %sSaveToDbEscaped() */\n", tableName);
 }
 
-boolean lastArrayType(struct column *colList)
+boolean lastArrayType(struct asColumn *colList)
 /* if there are any more string types returns TRUE else returns false */
 {
-struct column *col;
+struct asColumn *col;
 for(col = colList; col != NULL; col = col->next)
     {
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
     if((col->isArray || col->isList) && type != t_object && type != t_simple)
 	return FALSE;
     }
 return TRUE;
 }
 
-boolean noMoreColumnsToInsert(struct column *colList)
+boolean noMoreColumnsToInsert(struct asColumn *colList)
 {
-struct column *col;
+struct asColumn *col;
 for(col = colList; col != NULL; col = col->next)
     {
     if(col->obType == NULL)
@@ -1002,11 +620,11 @@ for(col = colList; col != NULL; col = col->next)
 return TRUE;
 }
 
-void dynamicSaveToDb(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicSaveToDb(struct asObject *table, FILE *f, FILE *hFile)
 /* create C code that will save a table structure to the database */
 {
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 struct dyString *colInsert = newDyString(1024);           /* code to associate columns with printf format characters the insert statement */
 struct dyString *stringDeclarations = newDyString(1024);  /* code to declare necessary strings */
 struct dyString *stringFrees = newDyString(1024);         /* code to free necessary strings */
@@ -1024,9 +642,9 @@ for (col = table->columnList; col != NULL; col = col->next)
     {
     char *colName = col->name;
     char *outString = NULL; /* printf formater for column, i.e. %d for int, '%s' for string */
-    struct dbObject *obType = col->obType;
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
+    struct asObject *obType = col->obType;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
     char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
     boolean colInsertFlag = TRUE; /* if column is not a native type insert NULL with no associated variable */
     switch(type)
@@ -1129,26 +747,26 @@ fprintf(f, " * \"autosql's features include\" --> \"autosql\\'s features include
 fprintf(f, " * before inserting into database. */ \n");
 }
 
-boolean lastStringType(struct column *colList)
+boolean lastStringType(struct asColumn *colList)
 /* if there are any more string types returns TRUE else returns false */
 {
-struct column *col;
+struct asColumn *col;
 for(col = colList; col != NULL; col = col->next)
     {
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
     if(type == t_char || type == t_string || type == t_lstring || ((col->isArray || col->isList) && type != t_object && type != t_simple))
 	return FALSE;
     }
 return TRUE;
 }
 
-void dynamicSaveToDbEscaped(struct dbObject *table, FILE *f, FILE *hFile)
+void dynamicSaveToDbEscaped(struct asObject *table, FILE *f, FILE *hFile)
 /* create C code that will save a table structure to the database with 
  * all strings escaped. */
 {
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 /* We need to do a lot of things with the string datatypes use
  * these buffers to only cycle through columns once */
 struct dyString *colInsert = newDyString(1024);          /* code to associate columns with printf format characters the insert statement */
@@ -1172,10 +790,10 @@ for (col = table->columnList; col != NULL; col = col->next)
     {
     char *colName = col->name;
     char *outString = NULL; /* printf formater for column, i.e. %d for int, '%s' for string */
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
     char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
-    struct dbObject *obType = col->obType;
+    struct asObject *obType = col->obType;
     boolean colInsertFlag = TRUE; /* if column is not a native type insert NULL with no associated variable */
     switch(type)
 	{
@@ -1268,11 +886,11 @@ dyStringFree(&update);
 
 
 
-void makeFree(struct dbObject *table, FILE *f, FILE *hFile)
+void makeFree(struct asObject *table, FILE *f, FILE *hFile)
 /* Make function that frees a dynamically allocated table. */
 {
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 
 fprintf(hFile, "void %sFree(struct %s **pEl);\n", tableName, tableName);
 fprintf(hFile, "/* Free a single dynamically allocated %s such as created\n", tableName);
@@ -1287,10 +905,10 @@ fprintf(f, "\n");
 fprintf(f, "if ((el = *pEl) == NULL) return;\n");
 for (col = table->columnList; col != NULL; col = col->next)
     {
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
     char *colName = col->name;
-    struct dbObject *obj;
+    struct asObject *obj;
 
     if ((obj = col->obType) != NULL)
 	{
@@ -1328,7 +946,7 @@ fprintf(f, "freez(pEl);\n");
 fprintf(f, "}\n\n");
 }
 
-void makeFreeList(struct dbObject *table, FILE *f, FILE *hFile)
+void makeFreeList(struct asObject *table, FILE *f, FILE *hFile)
 /* Make function that frees a list of dynamically table. */
 {
 char *name = table->name;
@@ -1351,11 +969,11 @@ fprintf(f, "}\n\n");
 }
 
 
-void makeOutput(struct dbObject *table, FILE *f, FILE *hFile)
+void makeOutput(struct asObject *table, FILE *f, FILE *hFile)
 /* Make function that prints table to tab delimited file. */
 {
 char *tableName = table->name;
-struct column *col;
+struct asColumn *col;
 char *outString = NULL;
 
 fprintf(hFile, 
@@ -1386,9 +1004,9 @@ fprintf(f, "int i;\n");
 for (col = table->columnList; col != NULL; col = col->next)
     {
     char *colName = col->name;
-    struct lowTypeInfo *lt = col->lowType;
-    enum lowTypes type = lt->type;
-    struct dbObject *obType = col->obType;
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
+    struct asObject *obType = col->obType;
     char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
     char outChar = 0;
     boolean mightNeedQuotes = FALSE;
@@ -1460,7 +1078,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	{
 	if (type == t_object)
 	    {
-	    struct dbObject *obj = col->obType;
+	    struct asObject *obj = col->obType;
 	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
 	    fprintf(f, "if(el->%s != NULL)", colName);
 	    fprintf(f, "    %sCommaOut(el->%s,f);\n", obj->name, col->name);
@@ -1469,7 +1087,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    }
 	else if (type == t_simple)
 	    {
-	    struct dbObject *obj = col->obType;
+	    struct asObject *obj = col->obType;
 	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
 	    fprintf(f, "%sCommaOut(&el->%s,f);\n", obj->name, col->name);
 	    fprintf(f, "if (sep == ',') fputc('}',f);\n");
@@ -1492,8 +1110,7 @@ fprintf(f, "}\n\n");
 
 int main(int argc, char *argv[])
 {
-struct tokenizer *tkz;
-struct dbObject *objList, *obj;
+struct asObject *objList, *obj;
 char *outRoot;
 char dotC[256];
 char dotH[256];
@@ -1508,9 +1125,7 @@ doDbLoadAndSave = cgiBoolean("dbLink");
 if (argc != 3)
     usage();
 
-tkz = newTokenizer(argv[1]);
-objList = parseObjects(tkz);
-freeTokenizer(&tkz);
+objList = asParseFile(argv[1]);
 outRoot = argv[2];
 
 sprintf(dotC, "%s.c", outRoot);
@@ -1558,7 +1173,7 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.22 2003/10/17 14:28:12 kent Exp $\";\n");
+fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.23 2004/03/22 14:17:09 kent Exp $\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 

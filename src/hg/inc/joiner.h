@@ -68,6 +68,14 @@ struct joinerDependency
     int lineIx;				/* Line of dependency. */
     };
 
+struct joinerType
+/* A list of table types. */
+    {
+    struct joinerType *next;		/* Next in list. */
+    char *name;				/* Type name. */
+    struct joinerTable *tableList;	/* List of tables - can include SQL wildcards. */
+    };
+
 struct joinerIgnore
 /* A list of tables to ignore. */
     {
@@ -87,6 +95,7 @@ struct joiner
     struct hash *databasesChecked; /* List of databases to check. */
     struct hash *databasesIgnored; /* List of database to ignore. */
     struct joinerDependency *dependencyList; /* List of table dependencies. */
+    struct joinerType *typeList;	/* List of explicit table types. */
     struct joinerIgnore *tablesIgnored;	/* List of tables to ignore. */
     };
 

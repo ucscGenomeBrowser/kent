@@ -615,6 +615,25 @@ slReverse(&dep->dependsOnList);
 return dep;
 }
 
+static struct joinerType *parseType(struct lineFile *lf, 
+	char *line, struct hash *symHash, struct dyString *dyBuf)
+/* Parse one type record. */
+{
+struct joinerType *type;
+AllocVar(type);
+type->name = cloneString(trimSpaces(line));
+while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
+    {
+    struct joinerTable *table;
+    line = trimSpaces(line);
+    if (line[0] == 0)
+	break;
+    table = parseTableSpec(lf, line);
+    slAddHead(&type->tableList, table);
+    }
+slReverse(&type->tableList);
+return type;
+}
 
 static void addDatabasesToHash(struct hash *hash, char *s, struct lineFile *lf)
 /* Add contents of comma-separated list to hash. */
@@ -624,7 +643,6 @@ for (el = list; el != NULL; el = el->next)
     hashAdd(hash, el->name, NULL);
 slFreeList(&list);
 }
-
 
 static struct joiner *joinerParsePassOne(char *fileName)
 /* Do first pass parsing of joiner file and return list of
@@ -689,6 +707,12 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	    dep = parseDependency(lf, line);
 	    slAddHead(&joiner->dependencyList, dep);
 	    }
+	else if (sameString("type", word))
+	    {
+	    struct joinerType *type;
+	    type = parseType(lf, line, joiner->symHash, dyBuf);
+	    slAddHead(&joiner->typeList, type);
+	    }
         else
             {
             errAbort("unrecognized '%s' line %d of %s",
@@ -700,6 +724,7 @@ lineFileClose(&lf);
 dyStringFree(&dyBuf);
 slReverse(&joiner->jsList);
 slReverse(&joiner->tablesIgnored);
+slReverse(&joiner->typeList);
 return joiner;
 }
 

@@ -1,6 +1,6 @@
 include ../inc/common.mk
 
-O = aliType.o axt.o bits.o binRange.o \
+O = aliType.o asParse.o axt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
     cda.o chain.o chainBlock.o chainToAxt.o chainToPsl.o cheapcgi.o \
     codebias.o colHash.o common.o \
@@ -18,7 +18,7 @@ O = aliType.o axt.o bits.o binRange.o \
     repMask.o rle.o rudp.o sailfnt.o seqOut.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
-    sqlNum.o sqlList.o subText.o synQueue.o \
+    sqlNum.o sqlList.o subText.o synQueue.o tokenizer.o \
     twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
     xa.o xAli.o xap.o xenshow.o xp.o
 
