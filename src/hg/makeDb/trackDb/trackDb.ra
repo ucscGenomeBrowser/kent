@@ -2177,8 +2177,8 @@ xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
 searchName blastHg17KGSprot
 searchTable blastHg17KG
 searchType psl
-xrefTable hg17.blastKGRef01x
-refQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+xrefTable hg17.blastKGRef01
+xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
 searchPriority 25
 
 searchName blastHg17KGGene
