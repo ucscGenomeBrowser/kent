@@ -363,6 +363,20 @@ if ((nextLine = strchr(nextLine, '\n')) != NULL)
 return TRUE;
 } 
 
+static char *niceGeneName(char *name)
+/* Return a nice version of name. */
+{
+static char buf[64];
+char *e;
+
+strncpy(buf, name, sizeof(buf));
+if ((e = strchr(buf, ';')) != NULL)
+    *e = 0;
+eraseWhiteSpace(buf);
+stripChar(buf, '\'');
+stripChar(buf, '"');
+return buf;
+}
 
 static struct bed *gffHelperFinish(struct gffFile *gff, struct hash *chromHash)
 /* Create bedList from gffHelper. */
@@ -373,20 +387,17 @@ struct gffGroup *group;
 int i, blockCount, chromStart, exonStart;
 char *exonSelectWord = (gff->isGtf ? "exon" : NULL);
 
-uglyf("%d lines before grouping<BR>\n", slCount(gff->lineList));
 gffGroupLines(gff);
-uglyf("%d groups<BR>\n", slCount(gff->groupList));
 
 for (group = gff->groupList; group != NULL; group = group->next)
     {
     /* First convert to gene-predictions since this is almost what we want. */
-    gp = genePredFromGroupedGff(gff, group, group->name, exonSelectWord);
-    uglyf("gp = %p<BR>\n", gp);
+    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord);
     if (gp != NULL)
         {
 	/* Make a bed out of the gp. */
 	AllocVar(bed);
-	bed->chrom = hashStoreName(chromHash, gp->name);
+	bed->chrom = hashStoreName(chromHash, gp->chrom);
 	bed->chromStart = chromStart = gp->txStart;
 	bed->chromEnd = gp->txEnd;
 	bed->name = cloneString(gp->name);
@@ -399,13 +410,12 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	    {
 	    exonStart = gp->exonStarts[i];
 	    bed->chromStarts[i] = exonStart - chromStart;
-	    bed->blockSizes[i] = exonStart - gp->exonEnds[i];
+	    bed->blockSizes[i] = gp->exonEnds[i] - exonStart;
 	    }
 	genePredFree(&gp);
 	slAddHead(&bedList, bed);
 	}
     }
-slReverse(&bedList);
 return bedList;
 }
 
@@ -467,7 +477,6 @@ for (;;)
         {
 	if (lineIsGff(line))
 	    {
-	    uglyf("It's a GFF file!<BR>\n");
 	    wordCount = chopTabs(line, row);
 	    track->gffHelper = gffFileNew("custom input");
 	    }
