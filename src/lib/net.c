@@ -109,7 +109,6 @@ if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
     return -1;
 if (getsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, &len))
     warn("getsockopt error\n");
-warn("SO_REUSEADDR set to %d", flag);
 if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
     warn("Couldn't bind socket to %d: %s", port, strerror(errno));
