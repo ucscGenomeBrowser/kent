@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.517 2003/11/18 23:48:48 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.518 2003/11/19 04:35:22 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2048,7 +2048,7 @@ else
 	 "perform an Advanced Query and select FASTA as the output format.");
     }
 
-hgSeqOptionsHti(hti);
+hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
 cgiMakeButton("submit", "Get DNA");
 cgiMakeButton("submit", "Extended case/color options");
@@ -2218,12 +2218,12 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
-boolean revComp  = cgiBoolean("hgSeq.revComp");
-boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
-int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
-int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
-char *casing     = cgiUsualString("hgSeq.casing", "");
-char *repMasking = cgiUsualString("hgSeq.repMasking", "");
+boolean revComp  = cartUsualBoolean(cart, "hgSeq.revComp", FALSE);
+boolean maskRep  = cartUsualBoolean(cart, "hgSeq.maskRepeats", FALSE);
+int padding5     = cartUsualInt(cart, "hgSeq.padding5", 0);
+int padding3     = cartUsualInt(cart, "hgSeq.padding3", 0);
+char *casing     = cartUsualString(cart, "hgSeq.casing", "");
+char *repMasking = cartUsualString(cart, "hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
@@ -5431,7 +5431,7 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(tbl);
+hgSeqOptions(cart, tbl);
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -5457,7 +5457,7 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-hgSeqOptions(cgiString("o"));
+hgSeqOptions(cart, cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
