@@ -8405,7 +8405,36 @@ hgLoadBed hg17 rnaCluster chrom/*.bed
 mkdir /cluster/data/hg17/bed/rnaCluster
 cp -r chrom /cluster/data/hg17/bed/rnaCluster
 
-#  miRNA track (DONE 2004-09-03 - Hiram)
+#  miRNA track (CORRECTION 2004-12-09 - Hiram)
+    #	Received the following correction from Michel Weber:
+    #	Could you please replace the two lines:
+    #	chr6 72169974 72170045 hsa-mir-30a 480 - 72169977 72169999
+    #	chr6 72170017 72170040 hsa-mir-30a-5p 480 - 72170017 72170040
+    #	by:
+    #	chr6 72169974 72170045 hsa-mir-30a 480 - 72169977 72169999
+    #	chr6 72169974 72170045 hsa-mir-30a 480 - 72170017 72170040
+    #	(The first line remains identical, only the second is changed. The 
+    #	repetition of the hsa-mir-30a entry means that both strands of its
+    #	hairpin structure are matured into microRNAs, named hsa-miR-30a-3p and 
+    #	hsa-miR-30a-5p in Rfam database).
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/miRNA
+    mv miRNA_hg17_1.bed miRNA_hg17_1.bed.0
+    cp miRNA_hg17_1.bed.0 miRNA_hg17_1.bed
+    #	edit miRNA_hg17_1.bed to change the single line.  Then:
+    mv hg17.bed hg17.bed.0
+    egrep -v "^track |^browser " miRNA_hg17_1.bed | \
+	sed -e "s/miR/mir/g; s/ sa-mir/ hsa-mir/g; s/ /\t/g;" > hg17.bed
+    #	Check that the edit is in place properly:
+    diff hg17.bed.0 hg17.bed
+    #	and load it
+    hgLoadBed hg17 miRNA hg17.bed
+    #	Loaded 221 elements of size 8
+    #	featureBits remains the same:
+    featureBits hg17 miRNA
+    #	18052 bases of 2866216770 (0.001%) in intersection
+
+#  miRNA track (DONE 2004-09-03 - Hiram)(CORRECTED, see above 2004-12-09)
     #	The source data for this was received via email from Sam
     #	Griffiths-Jones to Donna 16 August 2004.  In other email Michel
     #	Weber asked to add one more data line to that file.
