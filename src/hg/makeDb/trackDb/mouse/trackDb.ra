@@ -1,3 +1,12 @@
+track cytoBand
+shortLabel Chromosome Band
+longLabel Chromosome Bands Based On ISCN Lengths
+group map
+priority 1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
 track jaxQTL
 shortLabel QTL
 longLabel Quantitative Trait Loci From Jax/MGI
