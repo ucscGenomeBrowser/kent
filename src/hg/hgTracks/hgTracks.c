@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.827 2004/10/23 05:27:11 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.828 2004/10/30 00:36:59 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -281,6 +281,17 @@ hWrites(" -->\n");
 fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 va_end(args);
 }
+
+void reportTime(char *label)
+/* Report how long something takes.  Call with a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time = clock1000();
+if (label != NULL)
+    hPrintf("%s: %d millis<BR>\n", label, time - lastTime);
+lastTime = time;
+}
+
 
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
@@ -9691,6 +9702,7 @@ int main(int argc, char *argv[])
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
+reportTime(NULL);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
