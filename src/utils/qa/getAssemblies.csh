@@ -10,7 +10,7 @@
 #######################
 
 set tablename=""
-set machine="hgwdev"
+set machine="hgwbeta"
 set host=""
 set found=0
 set dbs=""
@@ -22,7 +22,7 @@ if ($#argv < 1 || $#argv > 2) then
   echo "  gets the names of all databases that contain a given table."
   echo "  note: not real-time on RR.  uses nightly TABLE STATUS dump."
   echo
-  echo "    usage:  tablename, [machine] defaults to dev"
+  echo "    usage:  tablename, [machine] defaults to beta"
   echo
   exit
 else
