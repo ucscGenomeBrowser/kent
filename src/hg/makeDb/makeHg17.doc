@@ -5518,14 +5518,16 @@ mkdir -p $3:h
     cp $workingDir/maf/*.maf maf
 
 
-# PHYLO-HMM CONSERVATION FOR 8-WAY MM5 (DONE 2004-07-20 kate)
+# PHYLO-HMM (PHASTCONS) CONSERVATION FOR 8-WAY MM5 (DONE 2004-07-20 kate)
+# (this was partially redone by acs using the new phastCons, 08-28;
+# I've tried to merge the two sets of docs into one cohesive
+# description)
 
     ssh eieio
     set path = ($path /cluster/bin/phast)
     cd /cluster/data/hg17/bed/multiz.2004-07-13
     mkdir cons
     cd cons
-
 
     #break up the genome-wide MAFs into pieces
     mkdir /cluster/bluearc/hg17/chrom
@@ -5580,100 +5582,190 @@ echo "Done" >> ${WINDOWS}/$c.done
         # chr18_random, chr6_hla_hap1
     cd ..
 
-    # generate conservation scoring using phastCons
-    ssh kk
-    cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
-    mkdir run.cons
-    cd run.cons
-
-    # Model provided by Adam, based on merge of separately generated trees for
-    #   mammals (HPMRC), and non-mammals (using substitution rates for
-    #   conserved regions only
-cat > hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod << 'EOF'
-ALPHABET: A C G T
-ORDER: 0
-SUBST_MOD: REV
-NRATECATS: 10
-ALPHA: 4.658942
-TRAINING_LNL: -6889216721.159384
-BACKGROUND: 0.294633 0.205082 0.205189 0.295097
-RATE_MAT:
-  -0.865237    0.159990    0.554805    0.150442
-   0.229851   -1.194646    0.168269    0.796526
-   0.796651    0.168182   -1.194919    0.230086
-   0.150205    0.553556    0.159985   -0.863747
-   TREE: (((((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.0196,5:0.2051):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
-'EOF'
-# << for emacs
-    
-    # set up wrapper for phastCons
-    # WARNING: watch load on fileserver -- may need to write output 
-    # elsewhere and copy back
-    cat << '_EOF_' > doPhastCons.sh
-#!/bin/sh
-
-PHAST=/cluster/bin/phast
-TMP=/tmp/phastCons
-
-file=$1
-root=`basename $file .ss.gz`
-chrom=`echo $root | awk -F\. '{print $1}'`
-
-mkdir -p $TMP 
-zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --nrates 40 --transitions 0.080,0.008 --quiet > $TMP/$root.pp
-[ $? -eq 0 ] || exit 1
-mkdir -p PHASTCONS/$chrom
-gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
-[ $? -eq 0 ] || exit 1
-rm $TMP/$root.pp
-'_EOF_'
-# << for emacs
-    chmod u+x doPhastCons.sh
-    rm -fr PHASTCONS
-
-    # the --transitions arguments are approximate maximum likelihood
-    # estimates obtained by running the program *without* --cut-params
-    # (causes estimation by EM) on five randomly selected 1M bp
-    # windows.  All estimates were in the same ballpark (took a rough average)
-
-    # set up cluster job
-    rm -f jobList
-    foreach f (/cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz)
-        set b = $f:t:r:r
-        set c = $b:r
-        echo "doPhastCons.sh $f {check out exists+ /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.cons/PHASTCONS/$c/$b.pp.gz}">> jobList
-    end
-    para create jobList
-        # 2932 jobs
-    para try ; para push ... etc.
-
-    # now create tracks
-    # load wiggle table
-    ssh eieio
-    cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
-    cd run.cons
-    mkdir -p PHASTCONS/wib
-    bash
-    for dir in PHASTCONS/chr* ; do \
-	echo $dir ;\
-	chr=`basename $dir` ;\
-	zcat `ls $dir/*.pp.gz | sort -t\. -k2,2n` | \
-	    wigAsciiToBinary -chrom=$chr \
-	    -wibFile=PHASTCONS/wib/${chr}_multiz8wayCons stdin ;\
-    done
-
-    # load data for track name "multiz8way"
+    # now generate conservation scores and predicted elements
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
-    cd run.cons
-    hgLoadWiggle hg17 multiz8wayCons -pathPrefix=/gbdb/hg17/multiz8way/wib \
-                PHASTCONS/wib/chr*_phastCons.wig
-    mkdir -p /gbdb/hg17/multiz8way/wib
-    rm -f /gbdb/hg17multiz8way/wib/chr*phastCons.wib
-    ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/hg17/multiz8way/wib
-    chmod 775 . PHASTCONS PHASTCONS/wib
-    chmod 664 PHASTCONS/wib/*.wib
-    
+    mkdir run.elements   
+    # despite the name, I've put the elements and the new conservation
+    # scores here
+
+    # first produce a rough starting model; in this case, we can just
+    # use the model previously estimated (see the entry below on PHYLOFIT/PHASTCONS)
+    cp ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod starting-tree.mod
+    # In other cases, it would be sufficient to choose an arbitrary
+    # input file from the WINDOWS directory (choose one with plenty of
+    # data) and run phyloFit on it with the correct tree topology,
+    # e.g.,
+    # phyloFit -i SS datafile.ss --tree \
+    # "(((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),(fr1,danRer1))" \
+    # --out-root starting-tree
+
+    # Get genome-wide average GC content (for all species together,
+    # not just the reference genome).  If you have a globally
+    # estimated tree model, as above, you can get this from the
+    # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.294633 0.205082 0.205189 0.295097
+    # This implies a GC content of 0.205 + 0.205 = 0.410
+
+    # If you do *not* have a global tree model, you can get the GC content
+    # directly from the MAFs, e.g., by running
+    # msa_view --aggregate hg17,panTro1,rn3,mm5,canFam1,galGal2,danRer1,fr1 -i MAF --summary-only \
+    #       /cluster/data/hg17/bed/multiz.2004-07-13/maf/chr*.maf> maf_summary.txt
+    # This will take a little while (~30 min).  Run on eieio.
+
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments
+    cat << 'EOF' > doEstimate.sh
+#!/bin/sh
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.410 --target-coverage 0.125 --nrates 1,1 --conserved-scale 0.3 --no-post-probs --quiet --lnl $2 --log $3 --estimate-trees $4
+EOF
+    # Be sure to substitute in the right G+C content.  Also,
+    # notice the 0.125.  We actually want 5% coverage but we have to
+    # consider the fact that we only have roughly 40% alignment
+    # coverage (excluding chimp, which doesn't help us much in
+    # identifying conserved regions).  As far as phastCons is
+    # concerned, we want to aim for 0.05 / 0.40 = 0.125 coverage.
+    # (The other 60% of sites will essentially be ignored.)
+
+    chmod u+x doEstimate.sh
+
+    rm -fr LOG LNL TREES
+    mkdir -p LOG LNL TREES
+    rm -f jobs.lst
+    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do \
+	root=`basename $f .ss.gz` ;\
+	echo doEstimate.sh $f LNL/$root.lnl LOG/$root.log TREES/$root >> jobs.lst ;\
+    done
+
+    # run cluster job
+    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
+    # takes a couple hours
+
+    # Now combine parameter estimates.  First, average the 'p' parameter
+    # from the .lnl files.  We don't care about 'q' because we're
+    # using --target-coverage (see phastCons help page)
+    cat LNL/* | egrep -v 'lnL|nan' | awk '{print $3}' | sed 's/[,]/ /g' > stats.txt
+    # (look over to see if estimates all look reasonable.  They're
+    # typically in the ballpark of 0.01, at least for mammalian
+    # genomes.  If there are any 0s or absurdly high values (e.g., 
+    # >0.5), they can probably be thrown out; they're likely the result
+    # of sparse data or other problems)
+    awk '{sum += $1} END { printf "p = %f\n", sum/NR}' stats.txt
+
+    # Next average the .mod files using phyloBoot.  This must be
+    # done separately for the conserved and nonconserved models
+    ls TREES/*.cons.mod > cons.txt
+    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+    # look over the files cons_summary.txt and noncons_summary.txt.
+    # The stdevs should be reasonably small compared to the means,
+    # particularly for rate matrix parameters (at bottom) and for
+    # branches to the leaves of the tree for which there's ample data.
+    # The stdevs will tend to be larger for the conserved models
+    # because of sparse data; that's okay.  Also, they may be fairly
+    # high for branches near the root of the tree; that's okay too.
+    # Some min values may be 0 for some parameters.  That's okay, but
+    # watch out for very high values in the max column (e.g.,
+    # estimates going to infinity); these can skew the mean.  If you
+    # see any signs of bad outliers, you may have to track down the
+    # responsible .mod files and throw them out.  Another thing to
+    # check is that the means and medians are roughly equal.
+
+    # NOTE: it's actually probably overkill to use the the entire
+    # genome in parameter estimation.  A random sample of several
+    # hundred to a thousand alignment fragments (say, a number equal
+    # to the number of available cluster nodes) should be more than
+    # sufficient.  If pressed for time, use this strategy.
+
+    # Now we have estimates of all parameters and are ready to set up
+    # the cluster job for computing the conservation scores and 
+    # predicted elements.  It's all downhill from here.
+
+    # (don't forget to substitute the value of p estimated above into
+    # the script below [--transitions option])
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --transitions 0.015959 --target-coverage 0.125 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/hg17/phastCons/ELEMENTS/$pref.bed --score --min-informative-types 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/hg17/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+EOF
+    chmod u+x doPhastCons.sh
+
+    rm -fr POSTPROBS ELEMENTS
+    rm -f jobs2.lst
+    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
+
+    # run cluster job
+    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
+    logout
+    # takes about 20 minutes
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    find /cluster/bluearc/hg17/phastCons/ELEMENTS -name "*.bed" > files
+    rm -f splitfiles* all.raw.bed
+    split files splitfiles
+    for s in splitfiles* ; do awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed ; done
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    rm files splitfiles* 
+
+    hgLoadBed hg17 phastConsElements all.bed
+
+    # check coverage
+    featureBits hg17 phastConsElements
+#161618945 bases of 2866216770 (5.639%) in intersection
+    # (this should be close enough; if necessary, you can try
+    # rerunning the steps above with a different target coverage)
+
+    # set up wiggle
+    # In the steps below, I've called the track "phastConsNew" because
+    # I'm not yet ready to replace the main conservation track (called
+    # multiz8wayCons).
+
+    mkdir -p /cluster/bluearc/hg17/phastCons/wib
+    cat << 'EOF' > doWigAsciiToBinary.sh
+#!/bin/sh
+chr=$1
+zcat `ls /cluster/bluearc/hg17/phastCons/POSTPROBS/$chr.*.pp.gz | sort -t\. -k2,2n` | wigAsciiToBinary -chrom=$chr -wibFile=/cluster/bluearc/hg17/phastCons/wib/${chr}_phastConsNew stdin 
+EOF
+    chmod u+x doWigAsciiToBinary.sh
+
+    rm -f jobs3.lst
+    for chr in `ls /cluster/bluearc/hg17/phastCons/POSTPROBS | awk -F\. '{print $1}' | sort -u` ; do echo doWigAsciiToBinary.sh $chr >> jobs3.lst ; done
+
+    # run a little wigAsciiToBinary cluster job
+    ssh kk, etc.
+
+    # copy wibs and wigs from bluearc
+    rsync -av /cluster/bluearc/hg17/phastCons/wib .
+
+    # load track
+    hgLoadWiggle hg17 phastConsNew -pathPrefix=/gbdb/hg17/phastConsNew/wib \
+                wib/chr*_phastConsNew.wig
+    mkdir -p /gbdb/hg17/phastConsNew/wib
+    rm -f /gbdb/hg17/phastConsNew/wib/chr*phastConsNew.wib
+    ln -s /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements/wib/*.wib /gbdb/hg17/phastConsNew/wib
+    chmod 775 . wib /gbdb/hg17/phastConsNew /gbdb/hg17/phastConsNew/wib
+    chmod 664 wib/*.wib
+
+    # move postprobs over and clean up bluearc 
+    rsync -av /cluster/bluearc/hg17/phastCons/POSTPROBS .
+    # (people sometimes want the raw scores)
+    rm -r /cluster/bluearc/hg17/phastCons/ELEMENTS /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/wib
+
+    # (The steps below assume a wiggle track called multiz8wayCons, as
+    # originally used by Kate.)
+
+    # set up full alignment/conservation track ("multiz8way")
     # load multiz maf tables 
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz.2004-07-13
@@ -5724,10 +5816,11 @@ rm $TMP/$root.pp
 # speciesOrder chimp mouse rat dog chicken fugu zebrafish
 
 
-# PHYLO-HMM CONSERVATION FOR 8-WAY (WORKING kate)
+# PHYLOFIT AND TREE-DOCTOR FOR 8-WAY: ESTIMATE PHYLOGENETIC TREE (acs)
+# (This was originally done for phastCons but is not necessary with
+# the new version.  However, it may be useful for other purposes, so
+# I'm leaving it in as a separate entry.)
 
-    # tree model (acs)
-    
     # first estimate a model for the mammals
     ssh eieio
     cd /cluster/bluearc/hg17/multiz.2004-07-13/panTro1mm5rn3canFam1
@@ -5736,9 +5829,13 @@ rm $TMP/$root.pp
     for file in *.maf ; do echo $file ; msa_view -i MAF $file -o SS --order hg17,panTro1,rn3,mm5,canFam1 > `basename $file .maf`.ss ; done
     ls *.ss | grep -v chr6_hla_hap2 > files
     msa_view '*files' --aggregate hg17,panTro1,rn3,mm5,canFam1 -i SS -o SS > all.ss
+    # BTW, this can now be done in one step using something like:
+    # msa_view --aggregate hg17,panTro1,rn3,mm5,canFam1 -i MAF -o SS *.maf > all.ss
+    # (modify to exclude certain files if necessary)
 
     # estimate model, with rate variation (takes about a minute)
     phyloFit all.ss --nrates 10 --tree "(((hg17,panTro1),(rn3,mm5)),canFam1)" --alpha 4.4 --EM --log log -i SS --out-root hprmc-rev-dg
+    # (Actually, --nrates 4 should be more than adequate for most purposes)
 
     cat hprmc-rev-dg.mod
 #ALPHABET: A C G T
@@ -5755,42 +5852,15 @@ rm $TMP/$root.pp
 #   0.150205    0.553556    0.159985   -0.863747
 #TREE: (((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.112364,5:0.112364);
 
-    # now add chicken and fish by hand, as follows
-
-    # obtain branch lengths to chicken, fugu, and zfish from CFTR
-    # tree, http://www.cse.ucsc.edu/~acs/cftr25_hybrid.ps
-
-    # Let species 6 be chicken, species 7 be fugu, and species 8 be
-    # zfish.  Summing branch lengths as necessary, we get:
-
-#(...):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
-
-    # We also have to root the branch between dog and the
-    # primates/rodents.  We'll use the total estimated branch length
-    # of 0.112364*2 = 0.2247 (rounded), but we'll use the proportions
-    # from the CFTR tree, 0.0193/0.2012.  This gives us a branch of
-    # 0.0196 to the primates/rodents and a branch of 0.2051 to dog.
-
-    # putting it all together, we get:
-
-#TREE: (((((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.0196,5:0.2051):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
-
-    # make a copy of the .mod file and replace the TREE line with the
-    # one above.  The new one is called
-    # hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod
-
-    # UPDATE (8/4/04).  There's now a program in phast, called
-    # tree_doctor, that will do this automatically.  The above can be
-    # accomplished with:
-
+    # now extrapolate to fish and chicken using tree_doctor and the CFTR 25 tree 
     # (replace numbers with names in hprmc-rev-dg.mod; this won't be necessary in the future)
     tree_doctor --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1" hprmc-rev-dg.mod > hprmc-rev-dg.names.mod
     # (obtain 8-way subtree from cftr25_hybrid.nh; also map names as necessary to match above)
     tree_doctor /cluster/data/nisc/targets/cftr/phyloHMMcons25/cftr25_hybrid.nh --prune-all-but hg16,chimp,mm3,rn3,dog,chicken,fr1,zfish --rename "hg16->hg17;mm3->mm5;chimp->panTro1;dog->canFam1;chicken->galGal2;zfish->danRer1" > cftr8way.nh
     # now merge (see tree_doctor help page for explanation)
-    tree_doctor hprmc-rev-dg.names.mod --merge cftr8way.nh > hg17panTro1rn3mm5canFam1galGal2fr1danRer1.auto.mod
+    tree_doctor hprmc-rev-dg.names.mod --merge cftr8way.nh > hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod
 
-    cat hg17panTro1rn3mm5canFam1galGal2fr1danRer1.auto.mod
+    cat hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod
 #ALPHABET: A C G T
 #ORDER: 0
 #SUBST_MOD: REV
@@ -5804,9 +5874,24 @@ rm $TMP/$root.pp
 #   0.150205    0.553556    0.159985   -0.863747
 #TREE: (((((hg17:0.006523,panTro1:0.007997):0.103779,(rn3:0.104867,mm5:0.078911):0.265676):0.019461,canFam1:0.205267):0.377150,galGal2:0.511134):0.536627,(danRer1:0.905323,fr1:0.922995):0.536627);
 
-    # (this tree is slightly different from the one above because
-    # tree_doctor scales the supertree before merging -- probably a
-    # better strategy in general)
+
+# CONSERVED NON-CODING (CNS) TRACK (acs 08/29/04)
+# (depends on phastConsElements)
+
+    cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements
+    featureBits hg17 -bed=possibleCoding.bed -or twinscan:exon xenoMrna mrna intronEst 
+    # (add SGP, exoniphy, possib. others if available)
+    # now filter out all phastCons elements that overlap
+    overlapSelect -nonOverlapping possibleCoding.bed all.bed cns.bed
+    hgLoadBed hg17 cns cns.bed
+
+# track cns
+# shortLabel CNS
+# longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
+# priority 109.11
+# group compGeno
+# visibility hide
+# type bed 5 .
 
     
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2004-07-08 - Hiram)
@@ -7988,9 +8073,6 @@ for i in `cat chrom.lst` ; do mafFilter -minScore=1000 maf/$i.maf > mafFilter/$i
 cd mafFilter
 for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov ; echo done $i ; done   
 
-<<<<<<< makeHg17.doc
-<<<<<<< makeHg17.doc
-
 # CHIMP DELS FROM HG16 (DONE 2004-08-17 kate)
 # NOTE: this track just for development -- it should be regenerated from the latest
 #       alignments instead of lifted.
@@ -8007,197 +8089,6 @@ for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov 
     # 132 chimpDels.unmapped
     # 27794 total
     hgLoadBed hg17 chimpDels chimpDels.bed -noBin
-=======
-# 8-WAY phastConsElements (acs 8/18/04)
-=======
-# 8-WAY phastConsElements (acs 8/28/04)
->>>>>>> 1.117
-# picking up under Kate's PHYLO-HMM CONSERVATION FOR 8-WAY MM5
-# NOTE: main goal here is to produce the conserved elements track, but
-# I'll also compute the conservation scores.  In the future, most people
-# will want to do both at the same time.
-
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
-    mkdir run.elements
-
-    # first produce a rough starting model; in this case, we can just
-    # use the model previously estimated, renaming leaves to match the
-    # alignment.  
-    tree_doctor ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1;6->galGal2;7->fr1;8->danRer1" > starting-tree.mod
-    # In other cases, it would be sufficient to choose an
-    # arbitrary input file and run phyloFit on it with the correct
-    # tree topology, e.g., 
-    # phyloFit -i SS datafile.ss --tree \
-    # "(((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),(fr1,danRer1))" \
-    # --out-root starting-tree
-
-    # now set up cluster job to estimate model parameters.  Parameters
-    # will be estimated separately for each alignment fragment then
-    # will be combined across fragments
-    cat << 'EOF' > doEstimate.sh
-#!/bin/sh
-zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --target-coverage 0.125 --nrates 1,1 --conserved-scale 0.3 --no-post-probs --quiet --lnl $2 --log $3 --estimate-trees $4
-EOF
-    # Notice the 0.125.  We actually want 5% coverage but we have to
-    # consider the fact that we only have roughly 40% alignment
-    # coverage (excluding chimp, which doesn't help us much in
-    # identifying conserved regions).  As far as phastCons is
-    # concerned, we want to aim for 0.05 / 0.40 = 0.125 coverage.  (The
-    # other 60% of sites will essentially be ignored.)
-
-    chmod u+x doEstimate.sh
-
-    rm -fr LOG LNL TREES
-    mkdir -p LOG LNL TREES
-    rm -f jobs.lst
-    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do \
-	root=`basename $f .ss.gz` ;\
-	echo doEstimate.sh $f LNL/$root.lnl LOG/$root.log TREES/$root >> jobs.lst ;\
-    done
-
-    # run cluster job
-    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
-    # takes a couple hours
-
-    # Now combine parameter estimates.  First, average the 'p' parameter
-    # from the .lnl files.  We don't care about 'q' because we're
-    # using --target-coverage (see phastCons help page)
-    cat LNL/* | egrep -v 'lnL|nan' | awk '{print $3}' | sed 's/[,]/ /g' > stats.txt
-    # (look over to see if estimates all look reasonable.  They're
-    # typically in the ballpark of 0.01, at least for mammalian
-    # genomes.  If there are any 0s or absurdly high values (e.g., 
-    # >0.5), they can probably be thrown out; they're likely the result
-    # of sparse data or other problems)
-    awk '{sum += $1} END { printf "p = %f\n", sum/NR}' stats.txt
-
-    # Next average the .mod files using phyloBoot.  This must be
-    # done separately for the conserved and nonconserved models
-    ls TREES/*.cons.mod > cons.txt
-    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
-    ls TREES/*.noncons.mod > noncons.txt
-    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
-    # look over the files cons_summary.txt and noncons_summary.txt.
-    # The stdevs should be reasonably small compared to the means,
-    # particularly for rate matrix parameters (at bottom) and for
-    # branches to the leaves of the tree for which there's ample data.
-    # The stdevs will tend to be larger for the conserved models
-    # because of sparse data; that's okay.  Also, they may be fairly
-    # high for branches near the root of the tree; that's okay too.
-    # Some min values may be 0 for some parameters.  That's okay, but
-    # watch out for very high values in the max column (e.g.,
-    # estimates going to infinity); these can bias the mean.  If you
-    # see any signs of bad outliers, you may have to track down the
-    # responsible .mod files and throw them out.  Another thing to
-    # check is that the means and medians are roughly equal.
-
-    # NOTE: it's actually probably overkill to use the the entire
-    # genome in parameter estimation.  A random sample of several
-    # hundred to a thousand alignment fragments (say, a number equal
-    # to the number of available cluster nodes) would be more than
-    # sufficient.  If pressed for time, use this strategy.
-
-    # Now we have estimates of all parameters and are ready to set up
-    # the cluster job for computing the conservation scores and 
-    # predicted elements.
-
-    # (don't forget to substitute the value of p estimated above into
-    # the script below [--transitions option])
-    cat << 'EOF' > doPhastCons.sh
-#!/bin/sh
-
-mkdir -p /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/ELEMENTS
-pref=`basename $1 .ss.gz`
-chr=`echo $pref | awk -F\. '{print $1}'`
-tmpfile=/scratch/phastCons.$$
-zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --transitions 0.015959 --target-coverage 0.125 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/hg17/phastCons/ELEMENTS/$pref.bed --score --min-informative-types 0 > $tmpfile
-gzip -c $tmpfile > /cluster/bluearc/hg17/phastCons/POSTPROBS/$pref.pp.gz
-rm $tmpfile
-EOF
-    chmod u+x doPhastCons.sh
-
-    rm -fr POSTPROBS ELEMENTS
-    rm -f jobs2.lst
-    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
-
-    # run cluster job
-    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
-    logout
-    # takes about 20 minutes
-
-    # combine predictions and transform scores to be in 0-1000 interval
-    # do in a way that avoids limits on numbers of args
-    find /cluster/bluearc/hg17/phastCons/ELEMENTS -name "*.bed" > files
-    rm -f splitfiles* all.raw.bed
-    split files splitfiles
-    for s in splitfiles* ; do awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed ; done
-    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
-    rm files splitfiles* 
-
-    hgLoadBed hg17 phastConsElements all.bed
-
-    # check coverage
-    featureBits hg17 phastConsElements
-#161618945 bases of 2866216770 (5.639%) in intersection
-    # (should be close enough)
-
-    # set up wiggle
-    mkdir -p /cluster/bluearc/hg17/phastCons/wib
-    cat << 'EOF' > doWigAsciiToBinary.sh
-#!/bin/sh
-chr=$1
-zcat `ls /cluster/bluearc/hg17/phastCons/POSTPROBS/$chr.*.pp.gz | sort -t\. -k2,2n` | wigAsciiToBinary -chrom=$chr -wibFile=/cluster/bluearc/hg17/phastCons/wib/${chr}_phastConsNew stdin 
-EOF
-    chmod u+x doWigAsciiToBinary.sh
-
-    rm -f jobs3.lst
-    for chr in `ls /cluster/bluearc/hg17/phastCons/POSTPROBS | awk -F\. '{print $1}' | sort -u` ; do echo doWigAsciiToBinary.sh $chr >> jobs3.lst ; done
-
-    # run cluster job
-    ssh kk, etc.
-
-    # copy wibs and wigs from bluearc
-    rsync -av /cluster/bluearc/hg17/phastCons/wib .
-
-    # load track
-    hgLoadWiggle hg17 phastConsNew -pathPrefix=/gbdb/hg17/phastConsNew/wib \
-                wib/chr*_phastConsNew.wig
-    mkdir -p /gbdb/hg17/phastConsNew/wib
-    rm -f /gbdb/hg17/phastConsNew/wib/chr*phastConsNew.wib
-    ln -s /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements/wib/*.wib /gbdb/hg17/phastConsNew/wib
-    chmod 775 . wib /gbdb/hg17/phastConsNew /gbdb/hg17/phastConsNew/wib
-    chmod 664 wib/*.wib
-
-    # trackDb.ra entry
-# track phastConsElements
-# shortLabel Most Conserved
-# longLabel Phastcons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
-# group compGeno
-# priority 109.1
-# visibility hide
-# spectrum on
-# type bed 5 .
-
-    # also do conserved noncoding (CNS) track
-    featureBits hg17 -bed=possibleCoding.bed -or twinscan:exon xenoMrna mrna intronEst 
-    # (add SGP, exoniphy, possib. others if available)
-    # now filter out all phastCons elements that overlap
-    overlapSelect -nonOverlapping possibleCoding.bed all.bed cns.bed
-    hgLoadBed hg17 cns cns.bed
-
-# track cns
-# shortLabel CNS
-# longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
-# priority 109.11
-# group compGeno
-# visibility hide
-# type bed 5 .
-
-    # move postprobs over and clean up bluearc
-    rsync -av /cluster/bluearc/hg17/phastCons/POSTPROBS .
-    rm -r /cluster/bluearc/hg17/phastCons/ELEMENTS /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/wib
-
-
 
 #  Load firstEF track (DONE 2004-08-18 braney)
     ssh hgwdev
@@ -8414,7 +8305,6 @@ echo Loading Psl
 hgLoadPsl hg17 pseudoMrna.psl
 
 ## end of retroGene track
-<<<<<<< makeHg17.doc
 
 
 # 3-WAY MULTIZ MULTIPLE ALIGNMENT (MM5, RN3) (WORKING 2004-08-27 kate)
@@ -8483,8 +8373,6 @@ mkdir -p $3:h
     cd /cluster/data/hg17/bed/multiz.2004-08-27
     mkdir maf
     cp $workingDir/maf/*.maf maf
-
-=======
 
 # BLASTZ TETRAODON (tetNig1) (DONE, 2004-08-26, hartera)
     # blastz requires lineage-specific repeats
@@ -8827,4 +8715,3 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # featureBits hg17 refGene:cds netTetNig1 -enrichment
     # refGene:cds 0.978%, netTetNig1 25.095%, both 0.778%, cover 79.53%, 
     # enrich 3.17x
->>>>>>> 1.116
