@@ -6,10 +6,11 @@
 #include "fa.h"
 #include "agpFrag.h"
 #include "agpGap.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.11 2004/07/21 23:44:12 angie Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.12 2005/03/14 17:50:54 hiram Exp $";
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -32,14 +33,23 @@ errAbort(
   "                  which contains all fragment records.\n"
   "   -simpleMultiMixed - same as simpleMulti, but preserves \n"
   "                  mixed-case sequence\n"
+  "   -verbose=N - N=2 display illegal coordinates in agp files\n"
   );
 }
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"simple", OPTION_BOOLEAN},
+    {"subDirs", OPTION_STRING},
+    {"simpleMulti", OPTION_BOOLEAN},
+    {"simpleMultiMixed", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 /* Overridable options. */
-char *subDirs = "extras,fin,draft,predraft";
+static char *subDirs = "extras,fin,draft,predraft";
 
-void simpleMultiFillInSequence(boolean preserveCase, char *seqFile, 
+static void simpleMultiFillInSequence(boolean preserveCase, char *seqFile, 
                         struct agpFrag *agpList, DNA *dna, int dnaSize)
 /* Fill in DNA array with sequences from one multi-record fasta file. */
 {
@@ -47,7 +57,7 @@ struct hash *fragHash = newHash(17);
 struct agpFrag *agp;
 struct dnaSeq *seq;
 FILE *f;
-boolean ret = 0;
+int illegals = 0;
 
 f = mustOpen(seqFile, "r");
 while (faReadMixedNext(f, preserveCase, "bogus", TRUE, NULL, &seq))
@@ -64,11 +74,35 @@ for (agp = agpList; agp != NULL; agp = agp->next)
     size = agp->fragEnd - agp->fragStart;
     if (agp->strand[0] == '-')
 	reverseComplement(seq->dna + agp->fragStart, size);
-    memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
+/*
+fprintf(stderr, "dna: %lu, start: %u, size: %d, seqDna: %lu, start: %u, size: %d %s %d\n",
+	(unsigned long) dna, agp->chromStart, dnaSize,
+	(unsigned long) seq->dna, agp->fragStart, size, agp->frag, seq->size);
+*/
+    if ((agp->chromStart + size) > dnaSize)
+	{
+	warn("frag size %d + dest chromStart %u  = %d > %d dest dna size\n",
+		size, agp->chromStart, size+agp->chromStart, dnaSize);
+	errAbort("fragment copy size exceeds destination dna size");
+	}
+    if ((agp->fragStart + size) > seq->size)
+	{
+	verbose(2, "#\t%s start:%u end:%u seqSize: %d\n",
+		agp->frag, agp->fragStart, agp->fragEnd, seq->size);
+	++illegals;
+	}
+    else
+	memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
+    }
+if (illegals > 0)
+    {
+    warn("%d illegal coordinates found in agp files.\n", illegals);
+    warn("sequence file: %s\n", seqFile);
+    errAbort("Fragment copy is more than available fragment sequence.");
     }
 }
 
-void simpleFillInSequence(char *seqDir, struct agpFrag *agpList,
+static void simpleFillInSequence(char *seqDir, struct agpFrag *agpList,
     DNA *dna, int dnaSize)
 /* Fill in DNA array with sequences from simple clones. */
 {
@@ -116,7 +150,7 @@ struct frag
     struct clone *clone; /* Clone this belongs to. */
     };
 
-void getCloneDna(struct clone *clone, struct hash *fragHash)
+static void getCloneDna(struct clone *clone, struct hash *fragHash)
 /* Read in clone DNA from file in format with one record per
  * clone contig.   Make clone->dna so that it is same as
  * non-fragmented clone file. */
@@ -142,13 +176,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 freeDnaSeqList(&seqList);
 }
 
-void readTrans(char *transFile, char *faDir, struct hash *cloneHash, struct hash *fragHash)
+static void readTrans(char *transFile, char *faDir, struct hash *cloneHash, struct hash *fragHash)
 /* Read in transFile into hashes. */
 {
 struct lineFile *lf = lineFileOpen(transFile, TRUE);
 char *row[3];
-char *s, *e, *parts[3], *subParts[2];
-int i, partCount, subCount;
+char *parts[3], *subParts[2];
+int partCount, subCount;
 char faName[512];
 struct clone *clone;
 struct frag *frag;
@@ -188,7 +222,7 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-void gsFillInSequence(char *gsDir, struct agpFrag *agpList, DNA *dna, int dnaSize)
+static void gsFillInSequence(char *gsDir, struct agpFrag *agpList, DNA *dna, int dnaSize)
 /* Fill in DNA array with sequences from 'freeze' */
 {
 struct agpFrag *agp;
@@ -198,12 +232,11 @@ char transFile[512], faDir[512];
 struct hash *cloneHash = newHash(15), *fragHash = newHash(17);
 int i;
 struct clone *clone;
-struct frag *frag;
 
 /* Read in trans-files to hash */
 subCount = chopString(subDirs, ",", sub, ArraySize(sub));
 if (subCount >= ArraySize(sub))
-    errAbort("Too many subDirs.");
+    errAbort("Too many subDirs, limit 64.");
 for (i=0; i<subCount; ++i)
     {
     sprintf(faDir, "%s/%s/fa", gsDir, sub[i]);
@@ -229,7 +262,7 @@ for (agp = agpList; agp != NULL; agp = agp->next)
     }
 }
 
-void agpToFa(char *agpFile, char *agpSeq, char *faOut, char *seqDir)
+static void agpToFa(char *agpFile, char *agpSeq, char *faOut, char *seqDir)
 /* agpToFa - Convert a .agp file to a .fa file. */
 {
 struct lineFile *lf = lineFileOpen(agpFile, TRUE);
@@ -239,6 +272,7 @@ int lastPos = 0;
 struct agpFrag *agpList = NULL, *agp;
 DNA *dna;
 
+verbose(2,"#\tprocessing AGP file: %s\n", agpFile);
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == 0 || line[0] == '#' || line[0] == '\n')
@@ -276,15 +310,15 @@ if (lastPos == 0)
 dna = needLargeMem(lastPos+1);
 memset(dna, 'n', lastPos);
 dna[lastPos] = 0;
-if (cgiVarExists("simpleMulti"))
+if (optionExists("simpleMulti"))
     {
     simpleMultiFillInSequence(0, seqDir, agpList, dna, lastPos);
     }
-else if (cgiVarExists("simpleMultiMixed"))
+else if (optionExists("simpleMultiMixed"))
     {
     simpleMultiFillInSequence(1, seqDir, agpList, dna, lastPos);
     }
-else if (cgiVarExists("simple"))
+else if (optionExists("simple"))
     {
     simpleFillInSequence(seqDir, agpList, dna, lastPos);
     }
@@ -299,8 +333,13 @@ faWrite(faOut, agpSeq, dna, lastPos);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-subDirs = cgiUsualString("subDirs", cloneString(subDirs));
+optionInit(&argc, argv, optionSpecs);
+
+subDirs = optionVal("subDirs", cloneString(subDirs));
+if (verboseLevel() > 1)
+    {
+    verbose(2,"#\tsubDirs: %s\n", subDirs);
+    }
 if (argc != 5)
     usage();
 agpToFa(argv[1], argv[2], argv[3], argv[4]);
