@@ -1,3 +1,17 @@
+track multiz8way
+shortLabel Conservation
+longLabel 6 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons8way
+yLineOnOff Off
+autoScaleDefault Off
+pairwise 050201
+speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
+
 track mzDy1Dp2Ag1_phast
 shortLabel Conservation
 longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
