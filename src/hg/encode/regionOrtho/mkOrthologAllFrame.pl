@@ -93,7 +93,7 @@ while (<MERCATOR>) {
 
 # print table header
 print "<table border cellpadding=\"2\">\n";
-print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus <FONT COLOR=red>$genome</FONT><TH>Size (Mb)<TH>Ratio<TH>LiftOver<TH>Size (Mb)<TH>Mercator<TH>Size (Mb)<TH>Diff (Kb)</TR>\n";
+print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus <FONT COLOR=green>$genome</FONT><TH>Size (Mb)<TH>Ratio<TH>LiftOver<TH>Size (Mb)<TH>Mercator<TH>Size (Mb)<TH>Diff (Kb)</TR>\n";
 
 # print table entries
 foreach $region (sort keys %descriptions) {
@@ -126,8 +126,8 @@ foreach $region (sort keys %descriptions) {
     my $ratio = $length * 100 / $regionLength;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TR>\n", $length;
-    printf "<TD ALIGN=right>%3.0f%%</TR>\n", $ratio;
+    printf "<TD>%.1f</TD>\n", $length;
+    printf "<TD ALIGN=right>%3.0f%%</TD>\n", $ratio;
 
     # liftOver regions in ortholog browser - region links, size
     @parts = split (/,/, $LORegionParts{$region});
@@ -143,7 +143,7 @@ foreach $region (sort keys %descriptions) {
     my $LOlength = $length;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TR>\n", $length;
+    printf "<TD>%.1f</TD>\n", $length;
 
     # Mercator regions in ortholog browser - region links, size, diff
     @parts = split (/,/, $MCRegionParts{$region});
@@ -160,7 +160,7 @@ foreach $region (sort keys %descriptions) {
     $diff = $diff/1000;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TR>\n", $length;
+    printf "<TD>%.1f</TD>\n", $length;
     printf "<TD ALIGN=right>";
     if ($diff > 100 || $diff < -100) {
         printf("<FONT COLOR=red>");
