@@ -125,6 +125,7 @@
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
+#include "tfbsConsMap.h"
 #include "simpleNucDiff.h"
 #include "bgiGeneInfo.h"
 #include "bgiSnp.h"
@@ -132,7 +133,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.585 2004/03/19 03:35:40 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.586 2004/03/19 23:14:14 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1932,43 +1933,58 @@ struct bed *bed;
 char query[512];
 struct sqlResult *sr;
 char **row;
-struct tfbsCons tfbs;
+struct tfbsCons *tfbs;
+struct tfbsCons *tfbsConsList = NULL;
+struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
+char *linkName = NULL;
 
-//itemForUrl = item;
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb, item, FALSE);
-//printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    tfbsConsStaticLoad(row+1, &tfbs);
-
-    printf("<B>Item:</B> %s<BR>\n", tfbs.name);
-    printf("<B>Score:</B> %d<BR>\n", tfbs.score );
-    printf("<B>Strand:</B> %s<BR>\n", tfbs.strand);
-    printPos(tfbs.chrom, tfbs.chromStart, tfbs.chromEnd, NULL, TRUE, tfbs.name);
-    }
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (firstTime)
-	firstTime = FALSE;
-    else
-	htmlHorizontalLine();
-
-    tfbsConsStaticLoad(row+1, &tfbs);
-   
-    printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
-    printf("<B>Species:</B> %s<BR>\n", tfbs.species);
-    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbs.id);
+    tfbs = tfbsConsLoad(row+hasBin);
+    slAddHead(&tfbsConsList, tfbs);
     }
+
+if (tfbsConsList != NULL)
+    {
+    slReverse(&tfbsConsList);
+    if (hTableExists("tfbsConsMap"))
+	{
+	sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    tfbsConsMapStaticLoad(row, &tfbsConsMap);
+	    printCustomUrl(tdb, tfbsConsMap.ac, FALSE);
+	    }
+	}
+
+    printf("<B>Item:</B> %s<BR>\n", tfbsConsList->name);
+    printf("<B>Score:</B> %d<BR>\n", tfbsConsList->score );
+    printf("<B>Strand:</B> %s<BR>\n", tfbsConsList->strand);
+    printPos(tfbsConsList->chrom, tfbsConsList->chromStart, tfbsConsList->chromEnd, NULL, TRUE, tfbsConsList->name);
+
+    for(; tfbsConsList != NULL ; tfbsConsList = tfbsConsList->next)
+	{
+	printf("<BR>\n");
+	if (!sameString(tfbsConsList->factor, "N"))
+	    {
+	    printf("<B>Factor:</B> %s<BR>\n", tfbsConsList->factor);
+	    printf("<B>Species:</B> %s<BR>\n", tfbsConsList->species);
+	    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbsConsList->id);
+	    }
+	}
+    }
+
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
