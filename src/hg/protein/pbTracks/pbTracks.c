@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.13 2004/01/16 17:49:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.14 2004/01/16 18:38:07 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -25,6 +25,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
  * next - living mostly in the cart. */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
+char *hgsid;
 
 int gfxBorder = 1;		/* Width of graphics border. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
@@ -332,6 +333,7 @@ else
 hDefaultConnect();
 conn  = hAllocConn();
 
+hgsid     = cartOptionalString(cart, "hgsid");
 proteinID = cartOptionalString(cart, "proteinID");
 
 // check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID
