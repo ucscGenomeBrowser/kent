@@ -739,3 +739,5 @@
       features by other UCSC people.
 440 - Adapting browser to work with mouse.  Added Parasol job
       control system.  Doing EST clustering on genome.
+441 - Refinements to parasol, and mouse browser.  Start of zoo
+      browser.  Start of golden triangle code.
