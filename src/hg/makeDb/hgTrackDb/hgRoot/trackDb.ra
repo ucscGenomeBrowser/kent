@@ -636,3 +636,10 @@ longLabel altGraph
 priority 42
 visibility hide
 type psl
+
+track altGraphX
+shortLabel altGraphX
+longLabel altGraphX
+priority 42.1
+visibility hide
+type bed 3
