@@ -230,6 +230,8 @@ struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, int 
 struct altGraphX *ag = NULL;
 struct dnaSeq *genoSeq = NULL;
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
+char *wholeTables[] = {"refSeqAli"};
+int numTables =0;
 char **tables = NULL;
 int i,j,k,l;
 char buff[256];
@@ -240,17 +242,22 @@ int chromStart = gp->txStart;
 int chromEnd = gp->txEnd;
 
 /* make the tables */
-tables = needMem(sizeof(char*) * ArraySize(tablePrefixes));
+numTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
+tables = needMem(sizeof(char*) * numTables);
 for(i=0; i< ArraySize(tablePrefixes); i++)
     {
     snprintf(buff, sizeof(buff),"%s%s", gp->chrom, tablePrefixes[i]);
     tables[i] = cloneString(buff);
     }
+for(i = ArraySize(tablePrefixes); i < numTables; i++)
+    {
+    tables[i] = cloneString(wholeTables[i-ArraySize(tablePrefixes)]);
+    }
 
 /* load the psls */
-pslList = loadPslsFromDb(conn, ArraySize(tablePrefixes), tables, gp->chrom, chromStart, chromEnd);
+pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
 
-for(i=0; i < ArraySize(tablePrefixes); i++)
+for(i=0; i < numTables; i++)
     freez(&tables[i]);
 freez(&tables);
 
