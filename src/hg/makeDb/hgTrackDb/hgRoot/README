@@ -14,24 +14,26 @@ The html text about a track is in separate
 files named xxx.html where xxx is a
 track name.   
 
-There may be subdirectories for each database,
-such as 'hg7'.  There is a trackDb.ra file
-and xxx.html files in these subdirectories.
+There may be subdirectories for each organism such
+as 'mouse', and underneath these directories for
+each database, such as 'hg7'.  There are a trackDb.ra 
+file and xxx.html files in these subdirectories.
 Tracks descriptions in the subdirectory will
-over-ride track descriptions in this directory.
+over-ride track descriptions in the parent directory.
 This allows you to customize a track for
 each version of the database.
 
 After editing a track definition here
 don't forget to run hgTrackDb to bring
-it into the MySQL database.  The easiest
-way to do this is from this directory:
-    cd ..
+it into the MySQL database.  To update
+your personal copy (on hgwdev-userName) do
     make update
+to do it on genome-test do
+    make alpha
 
 Most of the fields in the track.ra file should 
 be reasonably self explanitory.  A notable exception
-is the type field.  Currently there are three types:
+is the type field.  Currently there are six types:
 bed, psl, and genePred.  Here is the format of these
 type fields:
 For bed types it's always three words as follows:
@@ -49,6 +51,17 @@ There's gene predictions
     1) genePred
     2) (optional) associated protein sequence table
     3) (optional) associated mRNA table.
+For chains it's
+    1) chain
+    2) database for other organism 
+For nets it's
+    1) chain
+    2) database for other organism
+    3) associated chain track
+For sample
+    1) sample
+    2) number of fields (currently always 9)
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -56,5 +69,7 @@ a make update.
 
 The shortLabel and longLabel fields may have the following
 variables, which will be substituted:
-     $ORGANISM
+     $ORGANISM - all upper case organism, like 'MOUSE'
+     $Organism - initial capped organism, like 'Mouse'
+     $organism - all lower case organism, like 'mouse'
 
