@@ -1268,8 +1268,12 @@ struct psl *pslList = NULL, *psl;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
     {
-    type = "non-Human RNA";
+    char *organism = hOrganism(database);
+    char temp[256];
+    sprintf(temp, "non-%s RNA", organism);
+    type = temp;
     table = track;
+    freez(&organism);
     }
 else if (stringIn("est", track) || stringIn("Est", track) ||
          (stringIn("mgc", track) && stringIn("Picks", track)))
@@ -1408,7 +1412,7 @@ row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
-printf("<B>Clone Bases:</B> %d-%d\n", frag.fragStart+1, frag.fragEnd);
+printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, TRUE);
 printTrackHtml(tdb);
 
