@@ -117,6 +117,9 @@ struct hgContig *hgGetContig(char *acc, int contigIx);
 struct dnaSeq *hgContigSeq(struct hgContig *contig);
 /* Return DNA associated with contig. */
 
+struct dnaSeq *hgExtSeq(char *acc);
+/* Return externally stored sequence. */
+
 struct dnaSeq *hgRnaSeq(char *acc);
 /* Return sequence for RNA. */
 
