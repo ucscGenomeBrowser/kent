@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "memalloc.h"
+#include "obscure.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
@@ -17,7 +18,7 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.7 2004/07/14 07:20:30 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.8 2004/07/14 07:31:02 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -205,7 +206,9 @@ hPrintf("<B>Database:</B> %s ", db);
 hPrintf("<B>Primary Table:</B> %s", table);
 if (!sameString(splitTable, table))
     hPrintf(" (%s)", splitTable);
-hPrintf("<BR>");
+hPrintf(" <B>Row Count:</B> ");
+printLongWithCommas(stdout, sqlTableSize(conn, splitTable));
+hPrintf("<BR>\n");
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
