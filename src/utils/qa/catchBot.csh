@@ -12,6 +12,7 @@ set size=5            # the number of users to check
 set db=""
 set output="xxResultsxx"
 set debug="false"
+set hourLimit = 1000
 
 if ($#argv < 1 || $#argv > 2) then
   # not enough command line args
@@ -131,12 +132,12 @@ cat xxHoursHitsxx  >> $output
 echo >> $output
 
 set maxInHour=`head -1 xxHoursHitsxx | gawk '{print $1}'`
-if ($maxInHour > 1000) then
+if ($maxInHour > $hourLimit) then
   set maxHourUser=`head -1 xxHoursHitsxx | gawk '{print $2}'`
   set maxHrUserPerMin=`echo $maxInHour | gawk '{printf  "%.0f", $1/60}'`
   set maxHrUserPerSec=`echo $maxHrUserPerMin | gawk '{printf  "%.1f", $1/60}'`
 
-  echo " this user is above 1000 in the last hour: $maxHourUser" >> $output
+  echo " this user is above $hourLimit in the last hour: $maxHourUser" >> $output
   echo " $maxHrUserPerMin per min, $maxHrUserPerSec per sec\n" >> $output
   ipw $maxHourUser | head -10  >> $output
   echo >> $output
@@ -145,8 +146,11 @@ endif
 # ----------------------------------------------
 # check criteria for output and print
 
-if ($max > $threshhold || $maxInHour > 1000) then
+if ($max > $threshhold || $maxInHour > $hourLimit) then
   cat $output
+else
+  echo "\n  no user  > $threshhold hits in last $timeHours hours" 
+  echo "  and none >  $hourLimit in last hour\n"
 endif
 
 rm remote_host
