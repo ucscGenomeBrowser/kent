@@ -142,9 +142,11 @@ struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 
-struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence);
+struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
+					  struct hash *tissLibHash, boolean fillInEvidence);
 /* Make up a gene transcript graph out of the ggMrnaCluster. Only
  extending truncated exons to consensus splice sites. */
+
 
 void freeGgMrnaInput(struct ggMrnaInput **pCi);
 /* Free up a ggMrnaInput. */
@@ -196,8 +198,11 @@ boolean matricesInSync(struct geneGraph *gg);
 boolean checkEvidenceMatrix(struct geneGraph *gg);
 /* check to make sure that no edge has more weight than possible */
 
-void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc);
-/* load up the library and tissue information for mrnas. */
+void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct hash *tissLibHash,
+				 struct sqlConnection *conn);
+/* Load up the library and tissue information for mrnas from the mrna table. 
+   If the tissLibHash != NULL use it to find the library and tissue. They
+   will be stored as an slInt list keyed by the accessions. */
 
 struct ggEdge *ggFindCassetteExons(struct geneGraph *gg);
 /* return a list of edges that appear to be cassette exons */
