@@ -129,6 +129,7 @@ spectrum on
 type genePred
 url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
 
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
@@ -148,6 +149,15 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
+
+track HInvGeneMrna
+shortLabel H-Inv
+longLabel H-Invitational Genes mRNA Alignments
+group rna
+priority 67.5
+visibility hide
+color 0,100,100
+type psl .
 
 track altGraphX
 shortLabel Alt-Splicing
@@ -433,7 +443,41 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+track affyTranscription
+shortLabel Transcription
+longLabel Affy. SK-N-AS Transcript Abundance
+group regulation
+priority 99
+visibility hide
+autoScaleDefault Off
+color 175,150,128
+altColor 255,128,0
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
+defaultViewLimits 0:150
+type wig 0 4396.07
 
+track affyTransfrags
+shortLabel Transfrags
+longLabel Affy. SK-N-AS Transfrags
+group regulation
+priority 99.1
+visibility hide
+color 35,35,175
+altColor 160,160,188
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
+type bed 5 +
+
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
 
 searchTable affyGnf
 searchMethod exact
@@ -504,39 +548,8 @@ searchType bed
 termRegex Hs\.[0-9]+
 searchPriority 20
 
-track affyTranscription
-shortLabel Transcription
-longLabel Affy. SK-N-AS Transcript Abundance
-group regulation
-priority 99
-visibility hide
-autoScaleDefault Off
-color 175,150,128
-altColor 255,128,0
-maxHeightPixels 128:36:16
-graphTypeDefault Bar
-gridDefault OFF
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-defaultViewLimits 0:150
-type wig 0 4396.07
-
-track affyTransfrags
-shortLabel Transfrags
-longLabel Affy. SK-N-AS Transfrags
-group regulation
-priority 99.1
-visibility hide
-color 35,35,175
-altColor 160,160,188
-chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
-type bed 5 +
-
-track bacEndPairs
-shortLabel BAC End Pairs
-longLabel BAC End Pairs
-group map
-priority 15
-visibility hide
-type bed 6 +
-exonArrows off
-
+searchTable HInvGeneMrna
+searchMethod exact
+searchType psl
+termRegex HIT[0-9]{9,9}
+searchPriority 50

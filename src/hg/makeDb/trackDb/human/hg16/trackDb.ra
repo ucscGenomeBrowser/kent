@@ -1402,7 +1402,6 @@ type chain galGal2
 otherDb galGal2
 
 
-
 track chainGalGal2ProtEx
 shortLabel chainGalGal2ProtEx
 longLabel chainGalGal2ProtEx
@@ -1442,10 +1441,4 @@ priority 161
 visibility hide
 color 20,0,50
 type bed 4
-
-searchTable HInvGeneMrna
-searchMethod exact
-searchType psl
-termRegex HIT[0-9]{9,9}
-searchPriority 50
 
