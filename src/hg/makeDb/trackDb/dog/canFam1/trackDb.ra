@@ -14,13 +14,11 @@ speciesOrder human mouse
 
 track phastConsElements
 shortLabel PhastConsElements
-longLabel Dog/Human/Mouse PhastCons Conserved Elements
+longLabel PhastCons Conserved Elements, Dog/Human/Mouse 
 group compGeno
 priority 101
 visibility hide
 spectrum on
-color 0,60,120
-altColor 200,220,255
 exonArrows off
 showTopScorers 200
 type bed 5 .
