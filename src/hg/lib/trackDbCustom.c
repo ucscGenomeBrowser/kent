@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.12 2003/09/17 00:18:52 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.13 2003/09/23 20:25:29 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -258,6 +258,15 @@ char *trackDbSetting(struct trackDb *tdb, char *name)
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = raFromString(tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
+}
+
+char *trackDbRequiredSetting(struct trackDb *tdb, char *name)
+/* Return setting string or squawk and die. */
+{
+char *ret = trackDbSetting(tdb, name);
+if (ret == NULL)
+   errAbort("Missing required %s setting in %s track", name, tdb->tableName);
+return ret;
 }
 
 char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
