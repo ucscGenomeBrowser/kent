@@ -6,8 +6,10 @@ represented by a red vertical bar extending above or below the middle line,
 respectively. The height of the bar indicates the degree of departure of the
 amino acid frequency from the expected value genome-wide.
 <P>
-The histogram is based on amino acid data from the knownGene table in this
-assembly [FIXME - is this correct?]. Amino acids are flagged as anomalous if their occurrence in a
+The histogram is based on the following Genome Browser
+tables from this assembly: pbAaDist<em>[AA]</em>, pbAnomLimit, and pbResAvgStd. The amino acid
+data in these tables was obtained from SwissProt and TrEMBL.
+Amino acids are flagged as anomalous if their occurrence in a
 protein falls outside the 2.5% to 97.5% genome-wide distribution range. 
 Proteins with fewer than 100 amino acids have been filtered from
 the sample to exclude variances attributable to short length.

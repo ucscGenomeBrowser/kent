@@ -6,9 +6,10 @@ and the blue vertical lines indicate the abundance of the amino acids
 within the selected protein. 
 Any amino acid with an abundance that falls outside the 2.5% to 97.5%
 genome-wide distribution range is represented by a red line.
-Genome-wide averages were based on amino acid data from the
-knownGene table in this assembly [FIXME - is this correct?].
-Standard deviations were 
+Genome-wide averages are based on the following Genome Browser
+tables from this assembly: pbAaDist<em>[AA]</em>, pbAnomLimit, and 
+pbResAvgStd. The amino acid data in these tables was obtained from SwissProt 
+and TrEMBL. Standard deviations were 
 derived from compositions of the genome-wide set of proteins.
 <P>
 See the <A HREF="pbpepAnom.shtml">Amino Acid Anomalies track</A> to view 

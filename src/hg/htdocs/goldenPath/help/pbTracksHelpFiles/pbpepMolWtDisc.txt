@@ -15,7 +15,7 @@ The molecular weights displayed in the Protein Browser have been
 taken from SwissProt when accession numbers were available; otherwise, 
 they have been based on genomic sequence as processed with the SwissProt 
 <A HREF="http://www.expasy.ch/tools/pi_tool.html" TARGET=_blank>molecular 
-weight tool</A> [FIXME - is this true?]. This reflects the removal of isotopic 
+weight tool</A>. This reflects the removal of isotopic 
 abundances and predicted signal peptides, but not modified amino 
 acids. Numbers have been rounded to the nearest kD, which 
 suffices for gel migration (although clearly not for mass 

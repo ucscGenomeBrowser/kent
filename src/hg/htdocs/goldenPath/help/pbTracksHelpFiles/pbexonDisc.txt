@@ -7,11 +7,8 @@ duplications are very old, as is the case with the 17 members of the mammalian
 <A HREF="http://www.mad-cow.org/00/annotation_frames/tools/genbrow/sulfatases/sulfatases.html"
 TARGET=_blank>sulfatase family</A>. 
 <P>
-The Protein Browser provides information on these features based on NCBI's 
-RefSeq track [FIXME - should this be Known Genes?], which is a mixture of known, reviewed, and predicted genes. 
-The genome-wide statistical distribution is based on the exonCount field of the 
-[FIXME - verify table name] refGene table, which contains the exon number for 
-the RefSeq genes displayed in the Genome Browser. 
+The genome-wide statistical distribution is based on protein data from the 
+kgPtroMap table (an alignment of protein, mRNA, and genome data). 
 These data are somewhat distorted because a small number of alternatively 
 spliced genes are counted more than once, and the first and last 
 exons of many predicted genes are incomplete.
