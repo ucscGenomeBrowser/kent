@@ -681,7 +681,7 @@ track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 76
+priority 90
 visibility hide
 color 0,100,0
 altColor 128,228,128
@@ -691,7 +691,7 @@ track cpgIslandExt
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 76
+priority 90
 visibility hide
 color 0,100,0
 altColor 128,228,128
@@ -701,7 +701,7 @@ track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
 group regulation
-priority 76.5
+priority 90.1
 visibility hide
 spectrum on
 type bed 6
@@ -709,11 +709,20 @@ scoreMin 500
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
+track softPromoter
+shortLabel TSSW Promoters
+longLabel TSSW Promoter Predictions
+group regulation
+priority 90.2
+visibility hide
+color 0,100,0
+type bed 5 +
+
 track transfacHit
 shortLabel Transfac Hits 
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
 group regulation
-priority 77
+priority 91
 visibility hide
 spectrum on
 type bed 6
@@ -722,7 +731,7 @@ track triangleSelf
 shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
 group regulation
-priority 78
+priority 92
 visibility hide
 spectrum on
 type bed 6
@@ -731,7 +740,7 @@ track esRegGeneToMotif
 shortLabel Regulatory Module 
 longLabel Eran Segal Regulatory Module
 group regulation
-priority 78.1
+priority 93
 visibility dense
 spectrum on
 type bed 6 +
@@ -740,7 +749,7 @@ track triangle
 shortLabel Golden Extra
 longLabel Golden Triangle Motif Matching Sites Near Transcription Start
 group regulation
-priority 79
+priority 94
 visibility hide
 spectrum on
 type bed 6
@@ -749,7 +758,7 @@ track transfac
 shortLabel Transfac Hits
 longLabel Transfac Hits
 group regulation
-priority 80
+priority 95
 visibility hide
 color 12,12,120
 type genePred refPep refMrna
@@ -758,7 +767,7 @@ track transfacRatios
 shortLabel Transfac Ratios
 longLabel Transfac Likelihood Ratios
 group regulation
-priority 81
+priority 96
 visibility hide
 color 12,12,120
 type bed 6
@@ -767,57 +776,10 @@ track psuReg
 shortLabel Known Regulatory 
 longLabel Functional Regulatory Elements Compiled by Penn State 
 group regulation
-priority 82
+priority 97
 visibility hide
 color 30,130,210
 type bed 4 .
-
-track softPromoter
-shortLabel TSSW Promoters
-longLabel TSSW Promoter Predictions
-group regulation
-priority 83
-visibility hide
-color 0,100,0
-type bed 5 +
-
-track nci60
-shortLabel NCI60
-longLabel Microarray Experiments for NCI 60 Cell Lines
-group regulation
-priority 84
-visibility hide
-type bed 15 +
-
-track affy
-shortLabel GNF
-longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
-group regulation
-priority 85
-visibility hide
-type bed 15 +
-expTable affyExps
-
-track affyRatio
-shortLabel GNF Ratio
-longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
-group regulation
-priority 86
-visibility hide
-type bed 15 +
-expScale 3.0
-expStep 0.5
-expTable affyExps
-chip U95
-canPack off
-
-track cghNci60
-shortLabel CGH NCI60
-longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
-group regulation
-priority 87
-visibility hide
-type bed 15 +
 
 track rosetta
 shortLabel Rosetta
