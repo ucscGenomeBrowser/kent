@@ -49,12 +49,14 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
+#include "portable.h"
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.1 2003/10/27 07:19:05 kent Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.2 2003/10/27 09:49:18 kent Exp $";
 
-char *tempDir = ".";
+char *tabDir = ".";
+boolean doLoad;
 
 void usage()
 /* Explain usage and exit. */
@@ -64,11 +66,14 @@ errAbort(
   "usage:\n"
   "   hgFlyBase database genes.txt\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tab=dir - Output tab-separated files to directory.\n"
+  "   -noLoad  - If true don't load database and don't clean up tab files\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"tab", OPTION_STRING},
+   {"noLoad", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -185,12 +190,12 @@ char *tAllele = "fbAllele";
 char *tRef = "fbRef";
 char *tRole = "fbRole";
 char *tPhenotype = "fbPhenotype";
-FILE *fGene = hgCreateTabFile(tempDir, tGene);
-FILE *fSynonym = hgCreateTabFile(tempDir, tSynonym);
-FILE *fAllele = hgCreateTabFile(tempDir, tAllele);
-FILE *fRef = hgCreateTabFile(tempDir, tRef);
-FILE *fRole = hgCreateTabFile(tempDir, tRole);
-FILE *fPhenotype = hgCreateTabFile(tempDir, tPhenotype);
+FILE *fGene = hgCreateTabFile(tabDir, tGene);
+FILE *fSynonym = hgCreateTabFile(tabDir, tSynonym);
+FILE *fAllele = hgCreateTabFile(tabDir, tAllele);
+FILE *fRef = hgCreateTabFile(tabDir, tRef);
+FILE *fRole = hgCreateTabFile(tabDir, tRole);
+FILE *fPhenotype = hgCreateTabFile(tabDir, tPhenotype);
 struct lineFile *lf = lineFileOpen(genesFile, TRUE);
 struct hash *refHash = newHash(19);
 int nextRefId = 0;
@@ -220,10 +225,9 @@ while (lineFileNext(lf, &line, NULL))
 
 	/* Write out synonyms. */
 	if (geneSym != NULL)
-	    fprintf(fSynonym, "%s\t%s\n", geneId, geneSym);
+	    slNameStore(&synList, geneSym);
 	if (geneName != NULL)
-	    fprintf(fSynonym, "%s\t%s\n", geneId, geneName);
-	slReverse(&synList);
+	    slNameStore(&synList, geneName);
 	for (syn = synList; syn != NULL; syn = syn->next)
 	    fprintf(fSynonym, "%s\t%s\n", geneId, syn->name);
 
@@ -260,7 +264,7 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("Bad FlyBase gene ID %s line %d of %s", geneId, 
 		lf->lineIx, lf->fileName);
 	}
-    else if (sub == '*' && type == 'i')
+    else if (type == 'i' && (sub == '*') || (sub == '$'))
 	slNameStore(&synList, rest);
     else if (sub == '*' && type == 'A')
         {
@@ -289,7 +293,7 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 	curRef = ref->id;
 	}
-    else if ((type == 'r' || type == 'p') && sub != '@')
+    else if ((type == 'k' || type == 'r' || type == 'p') && sub != '@')
         {
 	FILE *f = (type == 'r' ? fRole : fPhenotype);
 	struct dyString *dy = suckSameLines(lf, line);
@@ -307,24 +311,27 @@ lineFileClose(&lf);
 conn = sqlConnect(database);
 remakeTables(conn);
 
-printf("Loading %s\n", tGene);
-hgLoadTabFile(conn, tempDir, tGene, &fGene);
-hgRemoveTabFile(tempDir, tGene);
-printf("Loading %s\n", tSynonym);
-hgLoadTabFile(conn, tempDir, tSynonym, &fSynonym);
-hgRemoveTabFile(tempDir, tSynonym);
-printf("Loading %s\n", tAllele);
-hgLoadTabFile(conn, tempDir, tAllele, &fAllele);
-hgRemoveTabFile(tempDir, tAllele);
-printf("Loading %s\n", tRef);
-hgLoadTabFile(conn, tempDir, tRef, &fRef);
-hgRemoveTabFile(tempDir, tRef);
-printf("Loading %s\n", tRole);
-hgLoadTabFile(conn, tempDir, tRole, &fRole);
-hgRemoveTabFile(tempDir, tRole);
-printf("Loading %s\n", tPhenotype);
-hgLoadTabFile(conn, tempDir, tPhenotype, &fPhenotype);
-hgRemoveTabFile(tempDir, tPhenotype);
+if (doLoad)
+    {
+    printf("Loading %s\n", tGene);
+    hgLoadTabFile(conn, tabDir, tGene, &fGene);
+    printf("Loading %s\n", tSynonym);
+    hgLoadTabFile(conn, tabDir, tSynonym, &fSynonym);
+    printf("Loading %s\n", tAllele);
+    hgLoadTabFile(conn, tabDir, tAllele, &fAllele);
+    printf("Loading %s\n", tRef);
+    hgLoadTabFile(conn, tabDir, tRef, &fRef);
+    printf("Loading %s\n", tRole);
+    hgLoadTabFile(conn, tabDir, tRole, &fRole);
+    printf("Loading %s\n", tPhenotype);
+    hgLoadTabFile(conn, tabDir, tPhenotype, &fPhenotype);
+    hgRemoveTabFile(tabDir, tGene);
+    hgRemoveTabFile(tabDir, tSynonym);
+    hgRemoveTabFile(tabDir, tAllele);
+    hgRemoveTabFile(tabDir, tRef);
+    hgRemoveTabFile(tabDir, tRole);
+    hgRemoveTabFile(tabDir, tPhenotype);
+    }
 }
 
 
@@ -334,6 +341,12 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+doLoad = !optionExists("noLoad");
+if (optionExists("tab"))
+    {
+    tabDir = optionVal("tab", tabDir);
+    makeDir(tabDir);
+    }
 hgFlyBase(argv[1], argv[2]);
 return 0;
 }
