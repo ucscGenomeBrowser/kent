@@ -54,6 +54,8 @@ struct blastBlock
     int tEnd;                           /* Target end position. */
     char *qSym;                         /* Query letters (including '-') */
     char *tSym;                         /* Target letters (including '-') */
+    BYTE frame;                         /* Frame for tblastn, 1, 2, 3, or
+                                         * 0 if none.  Strand not included */
     };
 
 struct blastFile *blastFileReadAll(char *fileName);
