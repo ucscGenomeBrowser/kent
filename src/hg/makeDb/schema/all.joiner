@@ -18,12 +18,11 @@ set sc sc1
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
-set pyrFur pyrFur1,pyrFur2
-set pyrAer pyAer1
+set pyrFur pyrFur2
 set plaFac falciparum
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,$plaFac
+set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$plaFac
 
 # Define other databases that we check
 set otherDb swissProt,go,hgFixed
@@ -32,7 +31,7 @@ set otherDb swissProt,go,hgFixed
 set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1
 
 # Define databases that support known genes
-set knownDb $hg,$mm,$rn
+set kgDb $hg,$mm,$rn
 
 # Define databases that support family browser
 set familyDb $hg,$mm,$ce,$sacCer,$dm
@@ -66,10 +65,10 @@ identifier swissProtId external=SwissProt
      swissProt.displayId.val 
      $gbd.dupSpMrna.proteinID
      $gbd.dupSpMrna.dupProteinID
-     $knownDb.kgProtAlias.displayID
-     $knownDb.kgXref.spDisplayID
-     $knownDb.knownCanonical.protein
-     $knownDb.knownGene.proteinID
+     $kgDb.kgProtAlias.displayID
+     $kgDb.kgXref.spDisplayID
+     $kgDb.knownCanonical.protein
+     $kgDb.knownGene.proteinID
      $gbd.spMrna.spID
      $dm.bdgpSwissProt.spSymbol
      $dm.flyBaseSwissProt.spSymbol
@@ -90,9 +89,9 @@ identifier swissProtAccession external=SwissProt
      swissProt.info.acc
      swissProt.otherAcc.acc
      swissProt.protein.acc
-     $knownDb.kgProtAlias.alias 
-     $knownDb.kgProtMap.qName
-     $knownDb.kgXref.spID
+     $kgDb.kgProtAlias.alias 
+     $kgDb.kgProtMap.qName
+     $kgDb.kgXref.spID
      $gbd.pepMwAa.accession
      $gbd.pepPi.accession
      $ce.sangerCanonical.protein
@@ -175,7 +174,7 @@ identifier swissProtKeyword
 
 identifier ncbiTaxon
 "NCBI Taxon ID - number for a species.  Used by SwissProt too"
-     swissProt.taxon.id
+     swissProt.taxon.id dupeOk
      swissProt.accToTaxon.taxon
      swissProt.commonName.taxon
 
@@ -183,8 +182,8 @@ identifier ncbiTaxon
 
 identifier acemblyName
 "Link together Acembly gene model structure and peptide."
-    $gbd.acembly.name
-    $gbd.acemblyPep.name
+    $hg.acembly.name
+    $hg.acemblyPep.name
 
 identifier ECgeneName
 "Link together EC gene predicted gene structure and peptide"
@@ -240,7 +239,7 @@ identifier affyU95
 
 identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-    $hg.affyU133.qName dupeOk
+    $hg.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
     $hg.knownToU133.value
 
 identifier affyU74
@@ -255,7 +254,7 @@ identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
     $hg.nci60.expIds comma
-    $hg.nci60.expIds comma indexOf
+    $hg.nci60.expScores comma indexOf
 
 identifier rosettaChr22SampleId
 "Identifiers for samples used in Rosetta chromosome 22 public experiments"
@@ -409,8 +408,8 @@ identifier $hg.acAccessionVersion typeOf=bacAccession
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
-    $knownDb.kgProtAlias.alias
-    $knownDb.kgXref.protAcc
+    $kgDb.kgProtAlias.alias
+    $kgDb.kgXref.protAcc
     $gbd.refLink.protAcc 
 
 identifier estOrMrnaAccession typeOf=genbankAccession
@@ -463,9 +462,9 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.bioCycPathway.geneID
     $gbd.cgapAlias.alias
     $gbd.imageClone.acc
-    $knownDb.kgAlias.alias
-    $knownDb.kgXref.refseq
-    $knownDb.knownToRefSeq.value
+    $kgDb.kgAlias.alias
+    $kgDb.kgXref.refseq
+    $kgDb.knownToRefSeq.value
     $gbd.mrnaRefseq.refseq
     $gbd.refFlat.name
     $gbd.refGene.name
@@ -475,44 +474,44 @@ identifier refSeqId typeOf=mrnaAccession
 
 identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
-    $knownDb.knownGene.name dupeOk
-    $knownDb.bioCycPathway.kgID
-    $knownDb.ceBlastTab.query
-    $knownDb.dmBlastTab.query
-    $knownDb.drBlastTab.query
-    $knownDb.mmBlastTab.query
-    $knownDb.scBlastTab.query
-    $knownDb.dupSpMrna.mrnaID
-    $knownDb.foldUtr3.name
-    $knownDb.foldUtr5.name
-    $knownDb.gnfU95Distance.query
-    $knownDb.gnfU95Distance.target
-    $knownDb.affyGnfU74ADistance.query
-    $knownDb.affyGnfU74ADistance.target
-    $knownDb.affyGnfU74BDistance.query
-    $knownDb.affyGnfU74BDistance.target
-    $knownDb.affyGnfU74CDistance.query
-    $knownDb.affyGnfU74CDistance.target
-    $knownDb.keggPathway.kgID
-    $knownDb.kgAlias.kgID
-    $knownDb.kgProtAlias.kgID
-    $knownDb.kgXref.kgID
-    $knownDb.knownBlastTab.query
-    $knownDb.knownBlastTab.target
-    $knownDb.knownCanonical.transcript
-    $knownDb.knownGeneMrna.name
-    $knownDb.knownGenePep.name
-    $knownDb.knownGnfDistance.query
-    $knownDb.knownGnfDistance.target
-    $knownDb.knownIsoforms.transcript
-    $knownDb.knownToCdsSnp.name
-    $knownDb.knownToEnsembl.name
-    $knownDb.knownToLocusLink.name
-    $knownDb.knownToPfam.name
-    $knownDb.knownToRefSeq.name
-    $knownDb.knownToSuper.gene
-    $knownDb.knownToU133.name
-    $knownDb.knownToU95.name
+    $kgDb.knownGene.name dupeOk
+    $kgDb.bioCycPathway.kgID
+    $kgDb.ceBlastTab.query
+    $kgDb.dmBlastTab.query
+    $kgDb.drBlastTab.query
+    $kgDb.mmBlastTab.query
+    $kgDb.scBlastTab.query
+    $kgDb.dupSpMrna.mrnaID
+    $kgDb.foldUtr3.name
+    $kgDb.foldUtr5.name
+    $kgDb.gnfU95Distance.query
+    $kgDb.gnfU95Distance.target
+    $kgDb.affyGnfU74ADistance.query
+    $kgDb.affyGnfU74ADistance.target
+    $kgDb.affyGnfU74BDistance.query
+    $kgDb.affyGnfU74BDistance.target
+    $kgDb.affyGnfU74CDistance.query
+    $kgDb.affyGnfU74CDistance.target
+    $kgDb.keggPathway.kgID
+    $kgDb.kgAlias.kgID
+    $kgDb.kgProtAlias.kgID
+    $kgDb.kgXref.kgID
+    $kgDb.knownBlastTab.query
+    $kgDb.knownBlastTab.target
+    $kgDb.knownCanonical.transcript
+    $kgDb.knownGeneMrna.name
+    $kgDb.knownGenePep.name
+    $kgDb.knownGnfDistance.query
+    $kgDb.knownGnfDistance.target
+    $kgDb.knownIsoforms.transcript
+    $kgDb.knownToCdsSnp.name
+    $kgDb.knownToEnsembl.name
+    $kgDb.knownToLocusLink.name
+    $kgDb.knownToPfam.name
+    $kgDb.knownToRefSeq.name
+    $kgDb.knownToSuper.gene
+    $kgDb.knownToU133.name
+    $kgDb.knownToU95.name
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
@@ -665,7 +664,7 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId
     $gbd.keggPathway.mapID
-    $knownDb.knownToLocusLink.value
+    $kgDb.knownToLocusLink.value
     $dm.bdgpToLocusLink.value
 
 identifier omimId external=OMIM
@@ -674,22 +673,22 @@ identifier omimId external=OMIM
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    $knownDb.knownGene.alignID
+    $kgDb.knownGene.alignID
 
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
-    $knownDb.knownCanonical.clusterId
-    $knownDb.knownIsoforms.clusterId
+    $kgDb.knownCanonical.clusterId
+    $kgDb.knownIsoforms.clusterId
 
 identifier pfamId external=Pfam fuzzy
 "Pfam (Protein Family) ID"
-    $knownDb.knownToPfam.value
+    $kgDb.knownToPfam.value
     $dm.bdgpToPfam.value
 
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
     $gbd.sfDes.id
-    $knownDb.knownToSuper.superfamily
+    $kgDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
     hgFixed.scopDes.sunid    
 
@@ -850,7 +849,7 @@ identifier ensemblTranscriptId external=Ensembl
     $gbd.ensGtp.transcript chopAfter=.
     $gbd.ensPep.name
     $gbd.ensTranscript.transcript_name
-    $knownDb.knownToEnsembl.value
+    $kgDb.knownToEnsembl.value
     $gbd.sfDescription.name
     mm2,mm3.superfamily.name
 
@@ -876,7 +875,7 @@ identifier affySnp120KId external=Affymetrix
 
 identifier dbSnpId external=dbSNP fuzzy
 "NCBI dbSNP ID"
-    $knownDb.knownToCdsSnp.value
+    $kgDb.knownToCdsSnp.value
 
 identifier dbSnpHgId typeOf=dbSnpId 
 "Human dbSNP ID"
