@@ -9,6 +9,7 @@ shortLabel BDGP
 longLabel BDGP Gene ID
 visibility on
 itemUrl http://www.fruitfly.org/cgi-bin/annot/gene?%s
+colWidth 11
 
 name proteinName
 type lookup bdgpGene name proteinID
