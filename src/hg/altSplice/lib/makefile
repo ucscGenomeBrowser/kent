@@ -1,38 +1,34 @@
-#OPT= -ggdb 
-OPT = -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
-#OPT= -ggdb -pg
+include	../../../inc/common.mk
 
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-LIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ./$(MACHTYPE)/libSpliceGraph.a
+OPT = ${COPT} ${HG_WARN} ${HG_DEFS}
 
-#Optimized for performance
-.c.o:
-	gcc $(OPT) -Wformat -Wimplicit  -I../inc -I../../inc -I../../../inc -I$(MYSQLINC) -c $*.c
+MYLIBDIR = ../../../lib/${MACHTYPE}
+LIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ./${MACHTYPE}/libSpliceGraph.a
 
 %Test: %Test.c 
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc -I../../../inc -I$(MYSQLINC)  -o $@ $(addsuffix .c,$@) $(LIBS) 
+	${CC} ${OPT} -I../inc -I../../inc -I../../../inc -I${MYSQLINC}  -o $@ ${addsuffix .c,$@} ${LIBS} 
 
 #For debugging
 #.c.o:
-#	gcc -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+#	${CC} -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN}  -I../inc -I../../inc -I${MYSQLINC} -c $*.c
 
-L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
+L = -lm ${MYSQLLIBS}
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
 O = spliceGraph.o exonGraph.o heap.o altSpliceSite.o pfamDat.o
 
 TESTS = heapTest
 
-./$(MACHTYPE)/libSpliceGraph.a: $(O) 
-	@[ -d $(MACHTYPE) ] || mkdir -p $(MACHTYPE)	
-	ar rcu ./$(MACHTYPE)/libSpliceGraph.a $(O)
-	ranlib ./$(MACHTYPE)/libSpliceGraph.a
+./${MACHTYPE}/libSpliceGraph.a: ${O} 
+	@[ -d ${MACHTYPE} ] || ${MKDIR} ${MACHTYPE}	
+	ar rcu ./${MACHTYPE}/libSpliceGraph.a ${O}
+	ranlib ./${MACHTYPE}/libSpliceGraph.a
 
 clean:
-	rm -f $(O);
-	rm -f $(TESTS)
-	rm -f ./$(MACHTYPE)/libSpliceGraph.a
+	rm -f ${O};
+	rm -f ${TESTS}
+	rm -f ./${MACHTYPE}/libSpliceGraph.a
 
 ctags:
 	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
@@ -40,5 +36,5 @@ ctags:
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
-tests: 	$(TESTS) $(O)
+tests: 	${TESTS} ${O}
 
