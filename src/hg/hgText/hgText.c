@@ -32,7 +32,7 @@
 #include "tableDescriptions.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.111 2004/02/28 18:31:32 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.112 2004/03/10 17:33:50 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -666,9 +666,8 @@ puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n");
 
 puts("<center>");
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\"\">\n",
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
-cgiMakeHiddenVar("org", organism);
 puts(
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
