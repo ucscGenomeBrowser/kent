@@ -15,7 +15,7 @@ CREATE TABLE pushQ (
     dbs varchar(255) not null,	# Databases
     tbls longblob not null,	# Tables
     cgis varchar(255) not null,	# CGI(s)
-    files varchar(255) not null,	# File(s)
+    files longblob not null,	# File(s)
     sizeMB int unsigned not null,	# Size MB
     currLoc char(20) not null,	# Current Location
     makeDocYN char(1) not null,	# MakeDoc verified?
