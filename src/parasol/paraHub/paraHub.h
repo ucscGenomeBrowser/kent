@@ -58,4 +58,10 @@ void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *messag
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job);
 /* Send a job to machine through spoke. */
 
+void startHeartbeat();
+/* Start heartbeat deamon. */
+
+void endHeartbeat();
+/* Kill heartbeat deamon. */
+
 #endif /* PARAHUB_H */

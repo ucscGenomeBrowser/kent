@@ -135,7 +135,7 @@ if (job != NULL)
     }
 }
 
-void runNextJob()
+void runNextJobs()
 /* Assign next job in pending queue if any to a machine. */
 {
 }
@@ -162,7 +162,7 @@ command = line;
 job = jobNew(command, user, dir, in, out, err);
 job->submitTime = time(NULL);
 dlAddTail(pendingList, job->node);
-runNextJob();
+runNextJobs();
 }
 
 struct job *jobFind(struct dlList *list, int id)
@@ -207,7 +207,7 @@ struct machine *mach = job->machine;
 if (mach != NULL)
      recycleMachine(mach);
 recycleJob(job);
-runNextJob();
+runNextJobs();
 }
 
 void removeJob(struct job *job)
@@ -339,6 +339,12 @@ for (spoke = spokeList; spoke != NULL; spoke = next)
     }
 }
 
+void processHeartbeat()
+/* Check that system is ok.  See if we can do anything useful. */
+{
+runNextJobs();
+}
+
 void startHub()
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
@@ -363,6 +369,9 @@ if (bind(socketHandle, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %d", hostName, paraPort);
 res = listen(socketHandle, 100);
 
+/* Start heartbeat. */
+startHeartbeat();
+
 /* Main event loop. */
 for (;;)
     {
@@ -377,8 +386,10 @@ for (;;)
     line = buf = netGetLongString(connectionHandle);
     uglyf("hub: %s\n", buf);
     command = nextWord(&line);
-    if (sameWord(command, "quit"))
-         break;
+    if (sameWord(command, "jobDone"))
+         jobDone(line);
+    else if (sameWord(command, "heartbeat"))
+         processHeartbeat();
     else if (sameWord(command, "addJob"))
          addJob(line);
     else if (sameWord(command, "removeJob"))
@@ -387,8 +398,6 @@ for (;;)
          addMachine(line);
     else if (sameWord(command, "removeMachine"))
          removeMachine(line);
-    else if (sameWord(command, "jobDone"))
-         jobDone(line);
     else if (sameWord(command, "listJobs"))
          listJobs(connectionHandle);
     else if (sameWord(command, "listMachines"))
@@ -397,10 +406,12 @@ for (;;)
          status(connectionHandle);
     else if (sameWord(command, "addSpoke"))
          addSpoke(socketHandle, connectionHandle);
+    if (sameWord(command, "quit"))
+         break;
     close(connectionHandle);
     freez(&buf);
     }
-
+endHeartbeat();
 killSpokes();
 close(socketHandle);
 }
