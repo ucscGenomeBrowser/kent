@@ -20,6 +20,14 @@ static boolean haveCookiesHash = FALSE;
 static struct hash *cookieHash = NULL;
 static struct cgiVar *cookieList = NULL;
 
+/* should cheapcgi use temp files to store uploaded files */
+static boolean doUseTempFile = FALSE;
+
+/* tell cheapcgi to use temp files */
+void useTempFile() {
+doUseTempFile = TRUE;
+}
+
 boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
@@ -69,7 +77,7 @@ static void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar 
 {
 char* s;
 char* boundary;
-char *namePt, *nameEndPt, *dataPt, *dataEndPt;
+char *namePt, *nameEndPt, *dataPt, *dataEndPt, *filenamePt = 0, *filenameEndPt;
 struct hash *hash = newHash(6);
 struct cgiVar *list = NULL, *el;
 
@@ -129,11 +137,33 @@ while(namePt != 0)
 	    errAbort("Mangled CGI input (3) string %s", input);
 	*(dataEndPt - 1) = '\0';
 
+	// find the filename if there is one
+	if(*(nameEndPt + 1) == ';' && *(nameEndPt + 2) == ' ' && *(nameEndPt + 3) == 'f') {
+	    char varNameFilename[256];
+	    struct cgiVar *filenameEl;
 
-	AllocVar(el);
-	el->val = dataPt;
-	slAddHead(&list, el);
-	hashAddSaveName(hash, namePt, el, &el->name);
+	    filenamePt = nameEndPt + 13;
+	    filenameEndPt = strstr(filenamePt, "\"");
+	    if(filenameEndPt == 0)
+		errAbort("Mangled CGI input (4) string %s", input);
+	    *filenameEndPt = '\0';
+
+	    snprintf(varNameFilename, 256, "%s__filename", namePt);
+
+	    AllocVar(filenameEl);
+	    filenameEl->val = filenamePt;
+	    slAddHead(&list, filenameEl);
+	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
+	}
+
+	if(filenamePt != 0 && doUseTempFile) {
+
+	} else {
+	    AllocVar(el);
+	    el->val = dataPt;
+	    slAddHead(&list, el);
+	    hashAddSaveName(hash, namePt, el, &el->name);
+	}
 
 	namePt = dataEndPt;
 	}
