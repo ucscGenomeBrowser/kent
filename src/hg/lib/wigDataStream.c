@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.6 2004/08/09 22:48:27 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.7 2004/08/09 22:58:04 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -132,7 +132,7 @@ wDS->spanLimit = 0;
 wDS->setPositionConstraint(wDS, 0, 0);
 freez(&wDS->chrName);
 freez(&wDS->dataConstraint);
-wDS->wigCmpSwitch = wigNoOp;
+wDS->wigCmpSwitch = wigNoOp_e;
 wDS->limit_0 = wDS->limit_1 = 0.0;
 wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
 freez(&wDS->sqlConstraint);
@@ -218,19 +218,19 @@ if (!wDS->dataConstraint)
     return;
 
 if (sameWord(wDS->dataConstraint,"<"))
-    wDS->wigCmpSwitch = wigLessThan;
+    wDS->wigCmpSwitch = wigLessThan_e;
 else if (sameWord(wDS->dataConstraint,"<="))
-    wDS->wigCmpSwitch = wigLessEqual;
+    wDS->wigCmpSwitch = wigLessEqual_e;
 else if (sameWord(wDS->dataConstraint,"="))
-    wDS->wigCmpSwitch = wigEqual;
+    wDS->wigCmpSwitch = wigEqual_e;
 else if (sameWord(wDS->dataConstraint,"!="))
-    wDS->wigCmpSwitch = wigNotEqual;
+    wDS->wigCmpSwitch = wigNotEqual_e;
 else if (sameWord(wDS->dataConstraint,">="))
-    wDS->wigCmpSwitch = wigGreaterEqual;
+    wDS->wigCmpSwitch = wigGreaterEqual_e;
 else if (sameWord(wDS->dataConstraint,">"))
-    wDS->wigCmpSwitch = wigGreaterThan;
+    wDS->wigCmpSwitch = wigGreaterThan_e;
 else if (sameWord(wDS->dataConstraint,"in range"))
-    wDS->wigCmpSwitch = wigInRange;
+    wDS->wigCmpSwitch = wigInRange_e;
 else
     errAbort("wigSetCompareFunctions: unknown constraint: '%s'",
 	wDS->dataConstraint);
@@ -349,35 +349,35 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 		    errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
 			wDS->wigCmpSwitch);
 		    break;
-		case wigNoOp:
+		case wigNoOp_e:
 		    takeIt = TRUE;
 		    break;
-		case wigInRange:
+		case wigInRange_e:
 		    takeIt = (wiggle->lowerLimit <= wDS->limit_1) &&
 			((wiggle->lowerLimit + wiggle->dataRange) >=
 				wDS->limit_0);
 		    break;
-		case wigLessThan:
+		case wigLessThan_e:
 		    takeIt = wiggle->lowerLimit < wDS->limit_0;
 		    break;
-		case wigLessEqual:
+		case wigLessEqual_e:
 		    takeIt = wiggle->lowerLimit <= wDS->limit_0;
 		    break;
-		case wigEqual:
+		case wigEqual_e:
 		    takeIt = (wiggle->lowerLimit <= wDS->limit_0) &&
 			(wDS->limit_0 <=
 			    (wiggle->lowerLimit + wiggle->dataRange));
 		    break;
-		case wigNotEqual:
+		case wigNotEqual_e:
 		    takeIt = (wDS->limit_0 < wiggle->lowerLimit) ||
 			((wiggle->lowerLimit + wiggle->dataRange) <
 			    wDS->limit_0);
 		    break;
-		case wigGreaterEqual:
+		case wigGreaterEqual_e:
 		   takeIt = wDS->limit_0 <=
 			(wiggle->lowerLimit + wiggle->dataRange);
 		    break;
-		case wigGreaterThan:
+		case wigGreaterThan_e:
 		   takeIt = wDS->limit_0 <
 			(wiggle->lowerLimit + wiggle->dataRange);
 		    break;
@@ -430,29 +430,29 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 			errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
 			    wDS->wigCmpSwitch);
 			break;
-		    case wigNoOp:
+		    case wigNoOp_e:
 			takeIt = TRUE;
 			break;
-		    case wigInRange:
+		    case wigInRange_e:
 			takeIt = (*datum <= wDS->ucUpperLimit) &&
 			    (*datum >= wDS->ucLowerLimit);
 			break;
-		    case wigLessThan:
+		    case wigLessThan_e:
 			takeIt = *datum < wDS->ucLowerLimit;
 			break;
-		    case wigLessEqual:
+		    case wigLessEqual_e:
 			takeIt = *datum <= wDS->ucLowerLimit;
 			break;
-		    case wigEqual:
+		    case wigEqual_e:
 			takeIt = *datum == wDS->ucLowerLimit;
 			break;
-		    case wigNotEqual:
+		    case wigNotEqual_e:
 			takeIt = *datum != wDS->ucLowerLimit;
 			break;
-		    case wigGreaterEqual:
+		    case wigGreaterEqual_e:
 			takeIt = *datum >= wDS->ucLowerLimit;
 			break;
-		    case wigGreaterThan:
+		    case wigGreaterThan_e:
 			takeIt = *datum > wDS->ucLowerLimit;
 			break;
 		    }	/*	switch (wDS->wigCmpSwitch)	*/
@@ -639,7 +639,7 @@ wds->useDataConstraint = FALSE;
 wds->wibFH = -1;
 wds->limit_0 = -1 * INFINITY;
 wds->limit_1 = INFINITY;
-wds->wigCmpSwitch = wigNoOp;
+wds->wigCmpSwitch = wigNoOp_e;
 wds->freeConstraints = freeConstraints;
 wds->freeAscii = freeAscii;
 wds->freeBed = freeBed;
