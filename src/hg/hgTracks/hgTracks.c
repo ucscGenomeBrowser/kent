@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.735 2004/05/19 19:02:38 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.736 2004/05/19 20:27:50 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5972,15 +5972,16 @@ if (thisSeq == NULL)
     freeDnaSeq(&seq);
 }
 
-void drawComplementArrow( struct vGfx *vg, int leftLabel, 
-        int height, int width, int baseHeight, MgFont *font)
+void drawComplementArrow( struct vGfx *vg, int x, int y, 
+                                int width, int height, MgFont *font)
+/* Draw arrow and create clickbox for complementing ruler bases */
 {
-        if(cartUsualBoolean(cart, "complement", FALSE))
-	        vgTextRight(vg, leftLabel, height, width, baseHeight, 
-		        MG_GRAY, font, "<---");
-        else
-	        vgTextRight(vg, leftLabel, height, width, baseHeight, 
-		        MG_BLACK, font, "--->");
+if(cartUsualBoolean(cart, "complement", FALSE))
+    vgTextRight(vg, x, y, width, height, MG_GRAY, font, "<---");
+else
+    vgTextRight(vg, x, y, width, height, MG_BLACK, font, "--->");
+mapBoxToggleComplement(x, y, width, height, NULL, chromName, winStart, winEnd,
+                                "complement bases");
 }
 
 void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
@@ -6481,10 +6482,6 @@ if (rulerMode != RULER_MODE_OFF)
         seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
 		  baseColor, font, complementRulerBases, seq);
-        /*make a click on the bases complement them*/
-        mapBoxToggleComplement(insideX, y+rulerHeight, insideWidth,
-                            baseHeight, NULL, chromName, winStart, winEnd,
-                            "complement bases");
         if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
             {
             char codon[4];
