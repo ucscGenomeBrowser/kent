@@ -2,21 +2,22 @@
 #ifndef MAF_H
 #define MAF_H
 
-struct mafMaf
+struct mafFile
 /* A file full of multiple alignments. */
     {
-    struct mafMaf *next;
+    struct mafFile *next;
     int version;	/* Required */
     char *scoring;	/* Optional. Name of  scoring scheme. */
     struct mafAli *mafAli;	/** Possibly empty list of alignments. **/
     FILE *f;		/* Open file if any.  NULL after parsing. */
+    struct lineFile *lf; /* Open line file if any. NULL after parsing. */
     };
 
 struct mafAli
 /* A multiple alignment. */
     {
     struct mafAli *next;
-    double score;	/* Optional, depending on mafMaf->scoring. */
+    double score;	/* Optional, depending on mafFile->scoring. */
     struct mafS *mafS;	/* List of components of alignment */
     };
 
@@ -34,16 +35,16 @@ struct mafS
 
 /* Hand generated Routines. */
 
-struct mafMaf *mafOpen(char *fileName)
+struct mafFile *mafOpen(char *fileName);
 /* Open up a .maf file for reading.  Read header and
  * verify. Prepare for subsequent calls to mafNext().
  * Prints error message and aborts if there's a problem. */
 
-struct mafMaf *mafMayOpen(char *fileName)
+struct mafFile *mafMayOpen(char *fileName);
 /* Like above, but returns NULL rather than aborting on a
  * problem. */
 
-struct mafAli *mafRead(struct mafMaf *mafFile);
+struct mafAli *mafNext(struct mafFile *mafFile);
 /* Return next alignment in FILE or NULL if at end. */
 
 void mafWriteStart(FILE *f, char *scoring);
@@ -55,13 +56,18 @@ void mafWrite(FILE *f, struct mafAli *maf);
 void mafWriteEnd(FILE *f);
 /* Write end tag of maf file. */
 
+void mafWriteAll(struct mafFile *mf, char *fileName);
+/* Write out full mafFile. */
+
+struct mafFile *mafReadAll(char *fileName);
+/* Read all elements in a maf file */
 
 /* AutoXML Generated Routines - typically not called directly. */
-void mafMafSave(struct mafMaf *obj, int indent, FILE *f);
-/* Save mafMaf to file. */
+void mafMafSave(struct mafFile *obj, int indent, FILE *f);
+/* Save mafFile to file. */
 
-struct mafMaf *mafMafLoad(char *fileName);
-/* Load mafMaf from file. */
+struct mafFile *mafMafLoad(char *fileName);
+/* Load mafFile from file. */
 
 void mafAliSave(struct mafAli *obj, int indent, FILE *f);
 /* Save mafAli to file. */
