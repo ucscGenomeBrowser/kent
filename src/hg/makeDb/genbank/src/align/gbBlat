@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.28 2004/08/20 13:33:39 hartera Exp $
+# $Id: gbBlat,v 1.29 2004/10/10 21:47:38 heather Exp $
 #
 set -e
 
@@ -54,6 +54,7 @@ CANFAM_OOC=/iscratch/i/canFam1/11.ooc
 ANOGAM_OOC=/iscratch/i/anoGam1/11.ooc
 DP_OOC=/iscratch/i/dp2/11.ooc
 TETNIG_OOC=/iscratch/i/tetNig1/11.ooc
+BOSTAU_OOC=/iscratch/i/bosTau1/11.ooc
 
 # entry, parse arguments
 keepTmp="NO"
@@ -144,6 +145,7 @@ case "$database" in
     danRer*) oocOpt="-ooc=${DANRER_OOC}" ;;
     canFam*) oocOpt="-ooc=${CANFAM_OOC}" ;;
     tetNig*) oocOpt="-ooc=${TETNIG_OOC}" ;;
+    bosTau*) oocOpt="-ooc=${BOSTAU_OOC}" ;;
     zooHuman*) oocOpt="-ooc=${HG_OOC}" ;;
     zooMouse*) oocOpt="-ooc=${MM_OOC}" ;;
     zooRat*) oocOpt="-ooc=${RN_OOC}" ;;
