@@ -1,22 +1,22 @@
 include ../../inc/common.mk
 
-L = $(MYSQLLIBS) -lm 
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = ${MYSQLLIBS} -lm 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = pslPairs
 
 O = $A.o
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	gcc $O ${MYLIBS} ${L} 
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
-	cp $A $$HOME/bin/i386
+	cp $A ${HOME}/bin/${MACHTYPE}
 
 debug: $O
-	gcc $O $(MYLIBS) $(L) 
+	gcc $O ${MYLIBS} ${L} 
 	mv a.out $A
 
 lib:
