@@ -493,6 +493,15 @@ struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */
 
+struct dbDb *hGetLiftOverFromDatabases();
+/* Get list of databases for which there is at least one liftOver chain file
+ * Dispose of this with dbDbFreeList. */
+
+struct dbDb *hGetLiftOverToDatabases(char *fromDb);
+/* Get list of databases for which there are liftOver chain files 
+ * to convert from the fromDb assembly.
+ * Dispose of this with dbDbFreeList. */
+
 struct dbDb *hGetAxtInfoDbs();
 /* Get list of db's where we have axt files listed in axtInfo . 
  * The db's with the same organism as organism go last.
@@ -544,6 +553,9 @@ char *hFreezeDate(char *database);
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */
+
+char *hPreviousAssembly(char *database);
+/* Return previous assembly for the genome associated with database. */
 
 void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
 /* Add substitution variables associated with database to list. */
