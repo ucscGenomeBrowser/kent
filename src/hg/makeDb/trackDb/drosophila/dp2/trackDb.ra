@@ -7,6 +7,24 @@ visibility hide
 type bed 3 +
 chromosomes DO_NOT_DISPLAY
 
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
+
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility dense
+spectrum on
+type psl mrna
+
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
 longLabel $o_Organism ($o_date/$o_db) BDGP Genes Mapped to D.pseudoobscura
