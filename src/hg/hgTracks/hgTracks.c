@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.825 2004/10/21 04:45:29 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.826 2004/10/22 22:41:31 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -4177,37 +4177,30 @@ void freeGenomicSuperDups(struct track *tg)
 genomicSuperDupsFreeList((struct genomicSuperDups**)&tg->items);
 }
 
-Color dupPptColor(int ppt, struct vGfx *vg)
-/* Return color of duplication - orange for > 990, yellow for > 980 */
+Color genomicSuperDupsColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of duplication - orange for > .990, yellow for > .980,
+ * red for verdict == "BAD". */
 {
+struct genomicSuperDups *dup = (struct genomicSuperDups *)item;
 static bool gotColor = FALSE;
-static Color orange, yellow;
+static Color red, orange, yellow;
 int grayLevel;
+
 if (!gotColor)
     {
-    orange = vgFindColorIx(vg, 230, 130, 0);
-    yellow = vgFindColorIx(vg, 210, 200, 0);
+    red      = vgFindColorIx(vg, 255,  51, 51);
+    orange   = vgFindColorIx(vg, 230, 130,  0);
+    yellow   = vgFindColorIx(vg, 210, 200,  0);
     gotColor = TRUE;
     }
-if (ppt > 990)
+if (sameString(dup->verdict, "BAD"))
+    return red;
+if (dup->fracMatch > 0.990)
     return orange;
-else if (ppt > 980)
+else if (dup->fracMatch > 0.980)
     return yellow;
-grayLevel = grayInRange(ppt, 900, 1000);
+grayLevel = grayInRange((int)(dup->fracMatch * 1000), 900, 1000);
 return shadesOfGray[grayLevel];
-}
-
-Color genomicSuperDupsColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return name of gcPercent track item. */
-{
-struct genomicSuperDups *dup = item;
-int ppt = dup->score;
-char *verdict=dup->verdict;
-
-
-if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
-    return vgFindColorIx(vg, 255,51,51);
-return dupPptColor(ppt, vg);
 }
 
 char *genomicSuperDupsName(struct track *tg, void *item)
@@ -4255,6 +4248,26 @@ void freeGenomicDups(struct track *tg)
 /* Free up isochore items. */
 {
 genomicDupsFreeList((struct genomicDups**)&tg->items);
+}
+
+Color dupPptColor(int ppt, struct vGfx *vg)
+/* Return color of duplication - orange for > 990, yellow for > 980 */
+{
+static bool gotColor = FALSE;
+static Color orange, yellow;
+int grayLevel;
+if (!gotColor)
+    {
+    orange = vgFindColorIx(vg, 230, 130, 0);
+    yellow = vgFindColorIx(vg, 210, 200, 0);
+    gotColor = TRUE;
+    }
+if (ppt > 990)
+    return orange;
+else if (ppt > 980)
+    return yellow;
+grayLevel = grayInRange(ppt, 900, 1000);
+return shadesOfGray[grayLevel];
 }
 
 Color genomicDupsColor(struct track *tg, void *item, struct vGfx *vg)
