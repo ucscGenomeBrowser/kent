@@ -107,6 +107,32 @@ boolean checkGdb(char *name)
   return(startsWith("GDB", name));
 }
 
+boolean inArray(char *el, char **array, int size)
+/* Check if element is in array */
+{
+  int i;
+  
+  for (i = 0; i < size; i++)
+    if (sameString(el, array[i]))
+      return(TRUE);
+
+  return(FALSE);
+
+}
+
+boolean inArrayInt(unsigned el, unsigned *array, int size)
+/* Check if element is in array */
+{
+  int i;
+  
+  for (i = 0; i < size; i++)
+    if (el == array[i])
+      return(TRUE);
+
+  return(FALSE);
+
+}
+
 void addElement(char *el, char ***array, int *count)
 /* Add a new element to a array of elements */
 {
@@ -114,19 +140,23 @@ void addElement(char *el, char ***array, int *count)
   int sizeOne, size;
   char **cArray, **rArray=NULL, ***dArray;
 
-  size = *count;
-  arrayCurr = sqlStringArrayToString(*array, *count);
-  sprintf(arrayNew, "%s%s,", arrayCurr, el);
-  size++;
-  dArray = array;
-  /* if (*dArray) 
-     freeMem(dArray); */
-  sqlStringDynamicArray(arrayNew, &cArray, &sizeOne);
-  assert(sizeOne == size);
-  *count = size;
-  AllocArray(rArray, size);
-  CopyArray(cArray, rArray, size);
-  *array = rArray;
+  /* Check if already present in array */
+  if (!inArray(el, *array, *count))
+    {
+      size = *count;
+      arrayCurr = sqlStringArrayToString(*array, *count);
+      sprintf(arrayNew, "%s%s,", arrayCurr, el);
+      size++;
+      dArray = array;
+      /* if (*dArray) 
+	 freeMem(dArray); */
+      sqlStringDynamicArray(arrayNew, &cArray, &sizeOne);
+      assert(sizeOne == size);
+      *count = size;
+      AllocArray(rArray, size);
+      CopyArray(cArray, rArray, size);
+      *array = rArray;
+    }
 }
 
 void removeElement(char *el, char ***array, int *count)
@@ -168,17 +198,20 @@ void addElementInt(unsigned el, unsigned **array, int *count)
   int sizeOne, size;
   unsigned *uArray, **dArray;
 
-  size = *count;
-  arrayCurr = sqlUnsignedArrayToString(*array, *count);
-  sprintf(arrayNew, "%s%d,", arrayCurr, el);
-  size++;
-  dArray = array;
-  if (*count > 0)
-    freeMem(dArray);
-  sqlUnsignedDynamicArray(arrayNew, &uArray, &sizeOne);
-  assert(sizeOne == size);
-  *count = size;
-  *array = uArray;
+  if (!inArrayInt(el, *array, *count))
+    {
+      size = *count;
+      arrayCurr = sqlUnsignedArrayToString(*array, *count);
+      sprintf(arrayNew, "%s%d,", arrayCurr, el);
+      size++;
+      dArray = array;
+      if (*count > 0)
+	freeMem(dArray);
+      sqlUnsignedDynamicArray(arrayNew, &uArray, &sizeOne);
+      assert(sizeOne == size);
+      *count = size;
+      *array = uArray;
+    }
 }
 
 void addName(struct sts *s, char *name)
@@ -443,7 +476,7 @@ void readDbstsNames(struct lineFile *daf)
   struct sts *s, *s2;
   struct stsInfo2 *si;
   struct primer *p;
-  char *words[4], *names[32], prefix[0], name[16], *org;
+  char *words[4], *names[64], prefix[0], name[64], *org;
   int dbstsId, ucscId, nameCount, i;
 
   while (lineFileChopNext(daf, words, 2))
