@@ -1503,6 +1503,7 @@ int bin;
 double y1;
 bin = -whichSampleBin( where, min0, max0, binCount);
 y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
+printHtmlComment("drawWiggleHorizontalLine %d %f", bin, y1);
 vgBox( vg, 0, y1, vg->width, 1, lineColor );
 }
 
@@ -1535,7 +1536,7 @@ int ybase;
 int sampleX, sampleY; /* A sample in sample coordinates. 
                        * Sample X coordinate is chromosome coordinate.
 		       * Sample Y coordinate is usually 0-1000 */
-int binCount = 1000;   /* Maximum sample Y coordinate. */
+int binCount = 1.0/tg->scaleRange;   /* Maximum sample Y coordinate. */
 int bin;	      /* Sample Y coordinates are first converted to
                        * bin coordinates, and then to pixels.  I'm not
 		       * totally sure why.  */
@@ -1597,7 +1598,7 @@ lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 cartSetString( cart, "win", "F" );
 
 heightPer = tg->heightPer+1;
-hFactor = (double)heightPer/1000.0;
+hFactor = (double)heightPer*tg->scaleRange;
 
 //errAbort( "min=%g, max=%g\n", minRangeCutoff, maxRangeCutoff );
 
@@ -1608,7 +1609,8 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 
 if( sameString( tg->mapName, "humMusL" ) 
 	|| sameString( tg->mapName, "musHumL" )  
-	|| sameString( tg->mapName, "regPotential" ))
+	|| sameString( tg->mapName, "regPotential" )
+	|| sameString( tg->mapName, "olly25"))
     {
 
 
@@ -1617,6 +1619,7 @@ if( sameString( tg->mapName, "humMusL" )
 
     if( isFull )
 	{
+	printHtmlComment("doingWiggleLine horizontal on %s", tg->mapName);
 	for( i=1; i<=6; i++ )
 	    drawWiggleHorizontalLine( vg, (double)i, min0, max0,
 		binCount, y, hFactor, heightPer, gridColor );
@@ -8576,7 +8579,6 @@ int i;
 int ymin, ymax;
 int scaledHeightPer;
 double minRange, maxRange;
-int binCount = 1000;
 char minRangeStr[32];
 char maxRangeStr[32];
 struct slList *prev = NULL;
@@ -8704,6 +8706,7 @@ if (withLeftLabels)
 		 sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "regPotential" ) )
 	    {
+	    int binCount = round(1.0/track->scaleRange);
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
 	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
 	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
@@ -9393,21 +9396,19 @@ else if (sameWord(type, "sample"))
     {
     int fieldCount = 9;
 
+    track->scaleRange = 0.001;
+    track->minRange = 0.0;
+    track->maxRange = 1000.0;
     if (wordCount > 1)     /*sample minRange maxRange*/
-    {
         track->minRange = atof(words[1]);
+    if (wordCount > 2)
         track->maxRange = atof(words[2]);
-    }
-    else                    /*default range settings*/
-    {
-        track->minRange = 0.0;
-        track->maxRange = 1000.0;
-    }
-
+    if (wordCount > 3)
+        track->scaleRange = atof(words[3]);
     track->bedSize = 9;
-	track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
-	sampleLinkedFeaturesMethods(track);
-	track->loadItems = loadSampleIntoLinkedFeature;
+    track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
+    sampleLinkedFeaturesMethods(track);
+    track->loadItems = loadSampleIntoLinkedFeature;
     }
 else if (sameWord(type, "genePred"))
     {
