@@ -43,17 +43,6 @@ visibility pack
 type psl .
 url http://us.expasy.org/cgi-bin/niceprot.pl?$$
 
-track mrnaChain
-shortLabel coronavirus Chain 
-longLabel Chained $Organism Alignments
-group compGeno
-priority 134
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain seq
-
 track viralProtLoose
 shortLabel Coronavirus loose 
 longLabel Coronavirus proteins from Swissprot loose alignments using Blat
