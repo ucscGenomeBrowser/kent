@@ -4026,6 +4026,91 @@ end
         # 24 warnings
 
 
+# MAKE HG16-PANTRO1 MAF FOR MULTIZ/TBA (DONE 3/8/04 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg16/bed/blastz-blat.panTro1.lifted
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted
+    # use the combined blastz-blat reciprocal best human-pt0 chain, but 
+    # assign unique IDs:
+    chainSort /cluster/data/pt0/bed/blastz-blatHg16/human.best.2.chain stdout \
+    | chainMergeSort stdin \
+    | chainSplit pt0RBestChain stdin
+    # re-net with the new IDs:
+    mkdir pt0RBestNet
+    foreach f (pt0RBestChain/*.chain)
+      echo chaining $f
+      chainNet $f /cluster/data/hg16/chrom.sizes \
+        /cluster/data/pt0/scaffold.sizes pt0RBestNet/$f:t:r.net /dev/null
+    end
+    # Now lift chain to panTro1 coords:
+    mkdir chain
+    foreach f (pt0RBestChain/*.chain)
+      liftUp -chainQ rBestChain/$f:t \
+        /cluster/data/panTro1/jkStuff/scaffolds.lft warn $f
+    end
+    # re-net with panTro1 coords (liftUp -netQ doesn't like - strand lifting):
+    mkdir rBestNet
+    foreach f (rBestChain/*.chain)
+      echo chaining $f
+      chainNet $f /cluster/data/hg16/chrom.sizes \
+        /cluster/data/panTro1/chrom.sizes rBestNet/$f:t:r.net /dev/null
+    end
+    # make axt and maf from the hg16-panTro1 net:
+    mkdir axtRBestNet mafRBestNet
+    foreach f (rBestNet/chr*.net)
+      set chr = $f:t:r
+      netToAxt $f rBestChain/$chr.chain /cluster/data/hg16/nib \
+        /cluster/data/panTro1/nib stdout \
+      | axtSort stdin axtRBestNet/$chr.axt
+      axtToMaf axtRBestNet/$chr.axt /cluster/data/hg16/chrom.sizes \
+        /cluster/data/panTro1/chrom.sizes mafRBestNet/$chr.maf
+    end
+
+
+# EXPERIMENT: TBA WHOLE CHROM 5 SPECIES (DONE ENOUGH 3/8/04 angie)
+    # Put 2-ways in /cluster/bluearc
+    ssh eieio
+    mkdir /cluster/bluearc/hg16/tba
+    mkdir /cluster/bluearc/hg16/tba/{hp,hg}
+    cp /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/chr*.maf \
+      /cluster/bluearc/hg16/tba/hp
+    # hg16-mm3 already in /cluster/bluearc/hg16/bed/blastz.mm3/mafNet300
+    # hg16-rn3 already in /cluster/bluearc/hg16/bed/blastz.rn3/mafNet300
+    cp /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest/*.maf \
+      /cluster/bluearc/hg16/tba/hg
+
+    ssh kolossus
+    mkdir /cluster/data/hg16/bed/tbaExperiment
+    cd /cluster/data/hg16/bed/tbaExperiment
+    # tba needs to run multiz, so make sure they're in $PATH:
+    set path = (/cluster/bin/penn $path)
+    # Try just one chromosome:
+    set chr = chr16
+    # tba needs filenames to correspond to its tree input, so make links to 
+    # maf and fasta:
+    rm -f human.chimp.maf human.mouse.maf human.rat.maf human.chicken.maf \
+          human
+    mafSort /cluster/bluearc/hg16/tba/hp/$chr.z.mm3/mafNet300/$chr.mm3.maf > \
+      human.mouse.mafmaf > human.chimp.maf
+    mafSort /cluster/bluearc/hg16/bed/blastz.mm3/mafNet300/$chr.mm3.maf > \
+      human.mouse.maf
+    mafSort /cluster/bluearc/hg16/bed/blastz.rn3/mafNet300/$chr.rn3.maf > \
+      human.rat.maf
+    mafSort /cluster/bluearc/hg16/tba/hg/$chr.hg.maf > human.chicken.maf
+    ln -s /cluster/data/hg16/?{,rror that tba is dying with is this:
+    # ?}/$chr.fa human
+    tba "(((human chimp) (mouse rat)) chicken)" \
+      human.chimp.maf human.mouse.maf human.rat.maf human.chicken.maf
+    # Doh -- looks like tba wants *all* pairwise inputs, and how do we 
+    # tell which rat-chicrror that tba is dying with is this:
+    # ken alignments to include for a given human chr??
+    # The error that tba is dying with is this:
+    # pair2tb.v4: alignments of human out of order around 172596-175110
+    # ... even though inputs are sorted...?  Oh well, clean up:
+    rm human*
+    rm -r /cluster/bluearc/hg16/tba/
+
+
 # CREATING KNOWNtOsUPER (which enables superFamily stuff in hgNear/hgGene)
 # First see if need to update superfamily data from 
 # ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
@@ -7023,6 +7108,7 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
       chainNet $f /cluster/data/hg16/chrom.sizes \
         /cluster/data/pt0/scaffold.sizes net/$f:t:r.net /dev/null
     end
+    # Now get a single-cov subset as usual:
     mkdir subset
     foreach f (chain/*.chain)
       echo subsetting net/$f:t:r.net, $f to subset/$f:t
