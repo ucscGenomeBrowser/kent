@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.37 2004/10/19 20:20:47 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.38 2004/10/20 14:49:17 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -455,6 +455,9 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
             insertSize++;
         }
     }
+/* end unaligned sequence with indicator */
+if (text[0] == UNALIGNED_SEQ_BEFORE)
+    outLine[--outIx] = UNALIGNED_SEQ_AFTER;
 }
 
 static void drawScoreOverview(char *tableName, int height,
@@ -708,7 +711,7 @@ int alignLineLength = winBaseCount*2 * 1;
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 bool dots, chainBreaks;         /* configuration options */
 /* this line must be longer than the longest base-level display */
-char noAlignment[2000] = {'^'};
+char noAlignment[2000] = {UNALIGNED_SEQ_BEFORE};
 
 /* initialize "no alignment" string to "^--------------" */
 /* The ^ indicates a break in the alignment, to distinguish from
@@ -789,13 +792,14 @@ for (maf = mafList; maf != NULL; maf = maf->next)
             if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
                 {
                 char chainTable[64];
+                char *dbUpper;
 
                 /* no alignment for this species */
                 if (!chainBreaks)       /* user doesn't want to see this */
                     continue;
 
                 /* if chain spans this region, "extend" alignment */
-                char *dbUpper = cloneString(mi->db);
+                dbUpper = cloneString(mi->db);
                 dbUpper[0] = toupper(dbUpper[0]);
                 safef(chainTable, sizeof chainTable, "%s_chain%s", 
                                             chromName, dbUpper);
@@ -820,7 +824,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 /* draw inserts line */
 charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
-spreadString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
+spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
                 alignInsertsColor(), font, insertLine, winBaseCount);
 y += mi->height;
 
@@ -844,7 +848,8 @@ y += mi->height;
 /* draw base-level alignments */
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
-    char *line = lines[i];
+    char *line;
+    line  = lines[i];
     /* TODO: leave lower case in to indicate masking ?
        * NOTE: want to make sure that all sequences are soft-masked
        * if we do this */
