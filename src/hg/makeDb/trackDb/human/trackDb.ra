@@ -347,7 +347,7 @@ visibility hide
 type bed 4 .
 
 track perlegen
-shortLabel Haplotype Blocks
+shortLabel Perlegen Haplotypes
 longLabel Perlegen Common High-Resolution Haplotype Blocks
 group varRep
 priority 145.21
