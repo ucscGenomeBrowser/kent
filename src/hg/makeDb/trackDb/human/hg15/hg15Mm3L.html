@@ -3,7 +3,7 @@
    This track displays the conservation between the human (April 2003) and mouse (Feb. 2003) genomes for 
    50bp windows in the human genome that have at least 15 bp aligned to
    mouse. Unlike previous versions of this track, it is based on the netting alignment which
-   throws out some of the less well supported BLASTZ alignment pieces.
+   throws out some of the less well supported blastz alignment pieces.
    The score for a window reflects the probability that the
    level of observed conservation in that 50bp region would occur by
    chance under neutral evolution. It is given on a logarithmic scale,
@@ -19,7 +19,7 @@
 <H2>Methods</H2>
 <P>
    Genome-wide alignments between human and mouse were produced by
-   BLASTZ and filtered for pseudogenes and artifacts with Jim Kent's "netting". 
+   blastz and filtered for pseudogenes and artifacts with Jim Kent's "netting". 
    A set of 50bp windows in the human genome were determined
    by scanning the sequence, sliding 5 bases at a time, and only those
    windows with at least 15 aligned bases were kept. For each window,
@@ -97,7 +97,7 @@ When you have finished configuring the filter, click the <em>Submit</em> button.
 
 <H2>Credits</H2>
 <P>
-   Thanks to Jim Kent for creating the BLASTZ alignments and post-processing them to create the netted alignment.
+   Thanks to Jim Kent for creating the blastz alignments and post-processing them to create the netted alignment.
    Ryan Weber computed the windows s-scores, computed the CDF of these scores, and created the remaining track display
    functions. Mark Diekhans and Krishna Roskin created software used in this process.
    Mouse sequence data is provided by the Mouse Genome Sequencing Consortium.
