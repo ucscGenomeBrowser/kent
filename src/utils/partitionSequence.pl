@@ -6,8 +6,10 @@
 # Based on Scott Schwartz's tclsh script make-joblist;
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
+# Actual batch list creation can be done with gensub2 and a spec,
+# using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.2 2005/01/24 18:54:55 angie Exp $
+# $Id: partitionSequence.pl,v 1.3 2005/01/26 01:03:15 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -15,17 +17,42 @@ use strict;
 use vars qw/
     $opt_help
     $opt_oneBased
+    $opt_xdir
+    $opt_rawDir
+    $opt_lstDir
     /;
 
 sub usage {
-  die "\nusage: $0 chunk lap seqDir chromSizes\n" .
-      "    Divides large sequences up into chunk+lap-sized blocks at \n" .
-      "    steps of chunk (overlapping by lap).  For .2bit inputs, \n" .
-      "    may combine small sequences into .lst files in order to reduce \n" .
-      "    batch size.\n" .
-      "options:\n" .
-      "    -oneBased   output 1-based start coords (for blastz)\n" .
-      "\n";
+  my ($status) = @_;
+  my $base = $0;
+  $base =~ s/^(.*\/)?//;
+  print STDERR "
+usage: $base chunk lap seqDir seqSizeFile
+    Partitions a set of sequences by size and prints out a list of file 
+    specs suitable for creating a parasol job list with gensub2 and a job 
+    template.  
+    Divides large sequences up into chunk+lap-sized blocks at steps of chunk 
+    (overlapping by lap).  For .2bit inputs, may combine small sequences into 
+    .lst files in order to reduce batch size.  If small sequences are 
+    combined into .lst files, then the -lstDir option must be given to 
+    specify where to put the .lst files.  
+    seqDir can be a single sequence file (e.g. \$db.2bit) or a directory 
+    containing .fa(.gz) and/or .nib files or a .2bit file.  
+    seqSizeFile (usually /cluster/data/\$db/chrom.sizes) must have sequence 
+    names in its first column, and sequence sizes in its second column.  
+options:
+    -oneBased     Output 1-based start coords (for Scott's blastz-run)
+    -xdir script  Create a script with mkdir commands, one for each partition.
+                  This is useful when two lists of partitions will be crossed 
+                  in a cluster job, creating too many files for a single dir.
+    -rawDir dir   The root dir for directories created in xdir.  Default: raw.
+    -lstDir dir   When lumping small sequences together, put the lst files 
+                  in dir.  dir should be nonexistent or empty before running 
+                  this script (to avoid confusion caused by extranrous .lst's).
+                  This option is required when partitioning a .2bit that 
+                  contains sequences smaller than the chunk parameter!  
+\n";
+  exit $status;
 }
 
 sub loadSeqSizes {
@@ -43,8 +70,12 @@ sub loadSeqSizes {
 }
 
 sub listSeqFiles {
-  # Look for .fa(.gz)/.nib/.2bit files in the given dir.
+  # Look for .fa(.gz)/.nib/.2bit files in the given dir (can be a single file).
   my ($dir) = @_;
+  if (-f $dir) {
+    my @files = ($dir);
+    return \@files;
+  }
   opendir(SEQDIR, $dir) || die "Can't ls $dir: $!\n";
   my @files = grep { /\.(nib|fa|2bit)$/ } readdir(SEQDIR);
   if (scalar(grep { /\.2bit/ } @files) > 1) {
@@ -82,6 +113,39 @@ sub overlappingIntervals {
   return \@intervals;
 }
 
+sub checkLstDir {
+  # Make sure that we can start with an empty lstDir.
+  if (! defined $opt_lstDir) {
+    print STDERR "Error: -lstDir must be specified when small sequences " .
+      "will be lumped together.\n";
+    &usage(1);
+  }
+  system("mkdir -p $opt_lstDir");
+  die "Error from mkdir -p $opt_lstDir: $!\n" if ($?);
+  opendir(LSTDIR, $opt_lstDir) || die "Can't open lstDir $opt_lstDir: $!\n";
+  my @existingFiles = grep { /[^\.]+/ } readdir(LSTDIR);
+  closedir(LSTDIR);
+  if (scalar(@existingFiles) != 0) {
+    die "lstDir $opt_lstDir must be empty, but seems to have files " .
+      " ($existingFiles[0] ...)\n";
+  }
+}
+
+my $lstNum = 0;
+sub makeLst {
+  # Given a list of small sequence filespecs, create a .lst file containing 
+  # the filespecs.
+  my @specs = @_;
+  my $lstBase = sprintf "part%03d", $lstNum++;
+  my $lstFile = "$opt_lstDir/$lstBase.lst";
+  open(LST, ">$lstFile") || die "Couldn't open $lstFile for writing: $!\n";
+  foreach my $spec (@specs) {
+    print LST "$spec\n";
+  }
+  close(LST);
+  return ($lstBase, $lstFile);
+}
+
 sub partitionMonolith {
   # Given one seq file that contains *all* sequences for (target|query),
   # partition sequences into job specs using the hash of sequence sizes.  
@@ -90,7 +154,8 @@ sub partitionMonolith {
   my ($sizesRef, $file, $chunk, $lap) = @_;
   my @partitions = ();
   my $glomSize = 0;
-  my $gloms = "";
+  my @gloms = ();
+  my $checkedLstDir = 0;
   my ($chr, $size);
   foreach my $csRef (@{&reverseSizeHash($sizesRef)}) {
     ($size, $chr) = @{$csRef};
@@ -99,23 +164,27 @@ sub partitionMonolith {
       my $intervalsRef = &overlappingIntervals(0, $size, $chunk, $lap);
       foreach my $i (@{$intervalsRef}) {
 	my ($start, $end) = @{$i};
-	push @partitions, [$chr, $start, $end, "$file:$chr:$start-$end"];
+	push @partitions, ["$chr:$start-$end", "$file:$chr:$start-$end"];
       }
     } else {
+      if (! $checkedLstDir) {
+	&checkLstDir();
+	$checkedLstDir = 1;
+      }
       # glom it (but first see if it would make existing glom too big):
       if ($glomSize > 0 && ($glomSize + $size) > $chunk) {
-	$gloms =~ s/,$//;
-	push @partitions, [$chr, 0, 0, $gloms];
+	my ($lstBase, $lstFile) = &makeLst(@gloms);
+	push @partitions, [$lstBase, $lstFile];
 	$glomSize = 0;
-	$gloms = "";
+	@gloms = ();
       }
       $glomSize += $size;
-      $gloms .= "$file:$chr,";
+      push @gloms, "$file:$chr";
     }
   }
   if ($glomSize > 0) {
-    $gloms =~ s/,$//;
-    push @partitions, [$chr, 0, 0, $gloms];
+    my ($lstBase, $lstFile) = &makeLst(@gloms);
+    push @partitions, [$lstBase, $lstFile];
   }
   return \@partitions;
 }
@@ -135,11 +204,11 @@ sub partitionPerSeqFiles {
       my $intervalsRef = &overlappingIntervals(0, $size, $chunk, $lap);
       foreach my $i (@{$intervalsRef}) {
 	my ($start, $end) = @{$i};
-	push @partitions, [$chr, $start, $end, "$file:$chr:$start-$end"];
+	push @partitions, ["$chr:$start-$end", "$file:$chr:$start-$end"];
       }
     } else {
       # one partition for this seq
-      push @partitions, [$chr, 0, 0, $file];
+      push @partitions, [$chr, $file];
     }
   }
   return \@partitions;
@@ -162,7 +231,7 @@ sub partitionSeqs {
       my $root = $2;
       if (! exists $seqSizesRef->{$root}) {
 	# This is a chunk file -- trust that it was already well-partitioned:
-	push @partitions, [$root, 0, 0, "$file"];
+	push @partitions, [$root, "$file"];
       } else {
 	push @seqFiles, $file;
       }
@@ -185,17 +254,31 @@ sub partitionSeqs {
 # -- main --
 
 my $ok = GetOptions("oneBased",
+		    "xdir=s",
+		    "rawDir=s",
+		    "lstDir=s",
 		    "help");
-&usage() if (!$ok || $opt_help);
-&usage() if (scalar(@ARGV) != 4);
+&usage(1) if (!$ok);
+&usage(0) if ($opt_help);
+&usage(1) if (scalar(@ARGV) != 4);
 my ($chunk, $lap, $seqDir, $chromSizes) = @ARGV;
 
 my %sizes = %{&loadSeqSizes($chromSizes)};
 my @files = @{&listSeqFiles($seqDir)};
-my @chunks = @{&partitionSeqs(\%sizes, \@files, $chunk, $lap)};
+my @partRefs = @{&partitionSeqs(\%sizes, \@files, $chunk, $lap)};
 
-foreach my $chunk (@chunks) {
-  my ($seq, $start, $end, $file) = @{$chunk};
-  print "$file\n";
+$opt_rawDir = "raw" if (! defined $opt_rawDir);
+if ($opt_xdir) {
+  open(XDIR, ">$opt_xdir") || die "Couldn't open $opt_xdir for writing: $!\n";
+  print XDIR "mkdir $opt_rawDir\n";
 }
-
+foreach my $partRef (@partRefs) {
+  my ($part, $file) = @{$partRef};
+  print "$file\n";
+  if ($opt_xdir) {
+    print XDIR "mkdir $opt_rawDir/$part\n";
+  }
+}
+if ($opt_xdir) {
+  close XDIR;
+}
