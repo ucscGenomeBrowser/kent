@@ -1445,7 +1445,7 @@ PRODUCING GENSCAN PREDICTIONS (TODO - REDO)
     hgLoadBed mm3 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-TWINSCAN GENE PREDICTIONS (Done 2003-05-20)
+TWINSCAN GENE PREDICTIONS (Done 2003-05-20 RELOADED -gtf 2004-04-02 kate)
     mkdir -p ~/mm3/bed/twinscan
     cd ~/mm3/bed/twinscan
 
@@ -1464,7 +1464,8 @@ TWINSCAN GENE PREDICTIONS (Done 2003-05-20)
       cat chr$c.gtf | sed "s/^[0-9]*	//"  | sed "s/^/$f	/" > foo
       mv foo chr$c.gtf
     end
-    ldHgGene mm3 twinscan chr*.gtf -exon=CDS
+    ldHgGene mm3 twinscan chr*.gtf -gtf
+        # 24282 gene predictions
 
     cd ~/mm3/bed/twinscan/ptx
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
@@ -1846,7 +1847,7 @@ LOAD SOFTBERRY GENES (DONE 02/04/03)
      hgPepPred mm3 softberry *.protein
      hgSoftberryHom mm3 *.protein
 
-LOAD GENEID GENES (DONE 03/18/03)
+LOAD GENEID GENES (DONE 03/18/03 RELOADED -gtf 2004-04-02 kate)
     mkdir -p ~/mm3/bed/geneid/download
     cd ~/mm3/bed/geneid/download
     set webroot = \
@@ -1861,7 +1862,13 @@ LOAD GENEID GENES (DONE 03/18/03)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene mm3 geneid download/*.gtf -exon=CDS
+    ldHgGene mm3 geneid download/*.gtf -gtf
+    # 34050 gene predictions
+    runGeneCheck .
+     # 34 noStart
+     # 33 badFrame
+     # 13 noStop
+     # 11 gap
     hgPepPred mm3 generic geneidPep download/*-fixed.prot
 
 SGP GENE PREDICTIONS (4/17/03 KRR)
@@ -1880,6 +1887,8 @@ SGP GENE PREDICTIONS (4/17/03 KRR)
     end
     cd ..
     ldHgGene mm3 sgpGene download/*.gtf -exon=CDS
+    # NOTE: perhaps need to use -gtf instead of -exon=CDS
+    # check that stop codon is included (txEnd == last exonEnds)
     hgPepPred mm3 generic sgpPep download/*-fixed.prot
 
 
@@ -3585,3 +3594,17 @@ done
 #58794013 bases of 2505900260 (2.346%) in intersection
 
 
+# MAP ENCODE ORTHOLOG REGIONS (2004-07-09 kate)
+    ssh kkstore
+    cd /cluster/data/mm3/bed
+    mkdir encodeRegions
+    cd encodeRegions
+    # Of 44 regions:
+    # -minMatch=.20 -> 37 mapped
+    liftOver -minMatch=.20 \
+        /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
+        encodeRegions.bed encodeRegions.unmapped
+    ssh hgwdev
+    cd /cluster/data/mm3/bed/encodeRegions
+    hgLoadBed mm3 encodeRegions encodeRegions.bed -noBin
