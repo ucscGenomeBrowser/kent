@@ -85,7 +85,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.839 2004/11/28 17:50:10 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.840 2004/11/29 05:13:05 kate Exp $";
 
 boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6749,6 +6749,215 @@ if(ideoTrack != NULL)
     }
 }
 
+static int doLeftLabels(struct track *track, struct vGfx *vg, MgFont *font, 
+                                int y)
+/* Draw left labels.  Return y coord. */
+{
+struct slList *prev = NULL;
+
+/* for sample tracks */
+double minRangeCutoff, maxRangeCutoff;
+double minRange, maxRange;
+double min0, max0;
+char minRangeStr[32];
+char maxRangeStr[32];
+
+int ymin, ymax;
+int start;
+int newy;
+char o4[128];
+char o5[128];
+struct slList *item;
+enum trackVisibility vis = track->limitedVis;
+enum trackVisibility savedVis = vis;
+int tHeight;
+Color labelColor = (track->labelColor ? 
+                        track->labelColor : track->ixColor);
+int fontHeight = mgFontLineHeight(font);
+if (vis == tvHide)
+    return y;
+tHeight = track->height;
+if (withCenterLabels)
+    tHeight += fontHeight;
+/*	Wiggle tracks depend upon clipping.  They are reporting
+ *	totalHeight artifically high by 1 so this will leave a
+ *	blank area one pixel high below the track.
+ */
+if (sameString("wig",track->tdb->type))
+    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight-1);
+else
+    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+
+minRange = 0.0;
+safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, 
+                                track->minRange );
+maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
+                                track->maxRange);
+/*  if a track can do its own left labels, do them after drawItems */
+if (track->drawLeftLabels != NULL)
+    {
+    if (withCenterLabels)
+        y += fontHeight;
+    y += track->height;
+    vgUnclip(vg);
+    return y;
+    }
+if( sameString( track->mapName, "humMusL" ) ||
+    sameString( track->mapName, "musHumL" ) ||
+    sameString( track->mapName, "mm3Rn2L" ) ||		
+    sameString( track->mapName, "hg15Mm3L" ) ||		
+    sameString( track->mapName, "mm3Hg15L" ) ||
+    sameString( track->mapName, "regpotent" ) ||
+    sameString( track->mapName, "HMRConservation" )  )
+    {
+    int binCount = round(1.0/track->scaleRange);
+    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
+    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
+    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
+    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
+    sprintf( minRangeStr, " "  );
+    sprintf( maxRangeStr, " " );
+    if( vis == tvFull && track->heightPer >= 74  )
+        {
+        samplePrintYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
+        samplePrintYAxisLabel( vg, y+5, track, "2.0", min0, max0 );
+        samplePrintYAxisLabel( vg, y+5, track, "3.0", min0, max0 );
+        samplePrintYAxisLabel( vg, y+5, track, "4.0", min0, max0 );
+        samplePrintYAxisLabel( vg, y+5, track, "5.0", min0, max0 );
+        samplePrintYAxisLabel( vg, y+5, track, "6.0", min0, max0 );
+        }
+    }
+else
+    {
+    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
+    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
+    }
+/* special label handling for wigMaf type tracks -- they
+   display a left label in pack mode.  To use the full mode
+   labelling, temporarily set visibility to full.
+   Restore savedVis later */
+{
+if (sameString(track->tdb->type, "wigMaf"))
+    vis = tvFull;
+}
+switch (vis)
+    {
+    case tvHide:
+        break;	/* Do nothing; */
+    case tvPack:
+    case tvSquish:
+        if (withCenterLabels)
+            y += fontHeight;
+        y += track->height;
+        break;
+    case tvFull:
+        if (withCenterLabels)
+            y += fontHeight;
+        start = 1;
+
+        if( track->subType == lfSubSample && track->items == NULL )
+            y += track->height;
+
+        for (item = track->items; item != NULL; item = item->next)
+            {
+            char *rootName;
+            char *name = track->itemName(track, item);
+            int itemHeight = track->itemHeight(track, item);
+            newy = y;
+
+            if (track->itemLabelColor != NULL)
+                labelColor = track->itemLabelColor(track, item, vg);
+            
+            /* Do some fancy stuff for sample tracks. 
+             * Draw y-value limits for 'sample' tracks. */
+            if(track->subType == lfSubSample )
+                {
+                
+                if( prev == NULL )
+                    newy += itemHeight;
+                else
+                    newy += sampleUpdateY(name, 
+                            track->itemName(track, prev), itemHeight);
+                if( newy == y )
+                    continue;
+
+                if( track->heightPer > (3 * fontHeight ) )
+                    {
+                    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+                    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+                    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1,
+                                itemHeight, track->ixAltColor, 
+                                font, minRangeStr );
+                    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1,
+                                itemHeight, track->ixAltColor, 
+                                font, maxRangeStr );
+                    }
+                prev = item;
+
+                rootName = cloneString( name );
+                beforeFirstPeriod( rootName );
+                if( sameString( track->mapName, "humMusL" ) || 
+                         sameString( track->mapName, "hg15Mm3L" ))
+                    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1,
+                             itemHeight, track->ixColor, font, "Mouse Cons");
+                else if( sameString( track->mapName, "musHumL" ) ||
+                         sameString( track->mapName, "mm3Hg15L"))
+                    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+                                itemHeight, track->ixColor, font, "Human Cons");
+                else if( sameString( track->mapName, "mm3Rn2L" ))
+                    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+                                itemHeight, track->ixColor, font, "Rat Cons");
+                else
+                    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+                                itemHeight, track->ixColor, font, rootName );
+                freeMem( rootName );
+                start = 0;
+                y = newy;
+                }
+            else
+                {
+                /* standard item labeling */
+                vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+                        itemHeight, labelColor, font, name);
+                y += itemHeight;
+                }
+            }
+        break;
+    case tvDense:
+        
+        if (withCenterLabels)
+            y += fontHeight;
+        
+        /*draw y-value limits for 'sample' tracks. 
+         * (always puts 0-100% range)*/
+        if( track->subType == lfSubSample && 
+                track->heightPer > (3 * fontHeight ) )
+            {
+            ymax = y - (track->heightPer / 2) + (fontHeight / 2);
+            ymin = y + (track->heightPer / 2) - (fontHeight / 2);
+            vgTextRight(vg, leftLabelX, ymin, 
+                        leftLabelWidth-1, track->lineHeight, 
+                        track->ixAltColor, font, minRangeStr );
+            vgTextRight(vg, leftLabelX, ymax, 
+                        leftLabelWidth-1, track->lineHeight, 
+                        track->ixAltColor, font, maxRangeStr );
+            }
+        vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, 
+                    track->lineHeight, labelColor, font, 
+                    track->shortLabel);
+        y += track->height;
+        break;
+    }
+/* NOTE: might want to just restore savedVis here for all track types,
+   but I'm being cautious... */
+if (sameString(track->tdb->type, "wigMaf"))
+    vis = savedVis;
+vgUnclip(vg);
+return y;
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -6764,6 +6973,7 @@ int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
+int start, newy;
 int y;
 int rulerHeight = fontHeight;
 int baseHeight = fontHeight;
@@ -6773,12 +6983,6 @@ int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
-int ymin, ymax;
-double minRange, maxRange;
-char minRangeStr[32];
-char maxRangeStr[32];
-int start;
-int newy;
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
@@ -6903,7 +7107,6 @@ if (withLeftLabels && psOutput == NULL)
 
 if (withLeftLabels)
     {
-    double min0, max0;
     Color lightRed = vgFindColorIx(vg, 255, 180, 180);
 
     vgBox(vg, leftLabelX + leftLabelWidth, 0,
@@ -6924,189 +7127,15 @@ if (withLeftLabels)
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
-	struct slList *prev = NULL;
-	double minRangeCutoff, maxRangeCutoff;
-	char o4[128];
-	char o5[128];
-	struct slList *item;
-	enum trackVisibility vis = track->limitedVis;
-        enum trackVisibility savedVis = vis;
-	int tHeight;
-	Color labelColor = (track->labelColor ? 
-                                track->labelColor : track->ixColor);
-	if (vis == tvHide)
-	    continue;
-	tHeight = track->height;
-	if (withCenterLabels)
-	    tHeight += fontHeight;
-	/*	Wiggle tracks depend upon clipping.  They are reporting
- 	 *	totalHeight artifically high by 1 so this will leave a
- 	 *	blank area one pixel high below the track.
-	 */
-	if (sameString("wig",track->tdb->type))
-	    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight-1);
-	else
-	    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
-
-	minRange = 0.0;
-	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
-	safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
-        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, 
-                                        track->minRange );
-   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
-                                        track->maxRange);
-	/*  if a track can do its own left labels, do them after drawItems */
-	if (track->drawLeftLabels != NULL)
-	    {
-	    if (withCenterLabels)
-		y += fontHeight;
-	    y += track->height;
-	    vgUnclip(vg);
-	    continue;
-	    }
-    	if( sameString( track->mapName, "humMusL" ) ||
-	    sameString( track->mapName, "musHumL" ) ||
-	    sameString( track->mapName, "mm3Rn2L" ) ||		
-	    sameString( track->mapName, "hg15Mm3L" ) ||		
-	    sameString( track->mapName, "mm3Hg15L" ) ||
-	    sameString( track->mapName, "regpotent" ) ||
-	    sameString( track->mapName, "HMRConservation" )  )
-	    {
-	    int binCount = round(1.0/track->scaleRange);
-	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
-	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
-	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
-	    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
-	    sprintf( minRangeStr, " "  );
-	    sprintf( maxRangeStr, " " );
-	    if( vis == tvFull && track->heightPer >= 74  )
-		{
-		samplePrintYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
-		samplePrintYAxisLabel( vg, y+5, track, "2.0", min0, max0 );
-		samplePrintYAxisLabel( vg, y+5, track, "3.0", min0, max0 );
-		samplePrintYAxisLabel( vg, y+5, track, "4.0", min0, max0 );
-		samplePrintYAxisLabel( vg, y+5, track, "5.0", min0, max0 );
-		samplePrintYAxisLabel( vg, y+5, track, "6.0", min0, max0 );
-	    	}
-	    }
-	else
-	    {
-	    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
-	    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
-	    }
-        /* special label handling for wigMaf type tracks -- they
-           display a left label in pack mode.  To use the full mode
-           labelling, temporarily set visibility to full.
-           Restore savedVis later */
-        {
-        if (sameString(track->tdb->type, "wigMaf"))
-            vis = tvFull;
-        }
-	switch (vis)
-	    {
-	    case tvHide:
-		break;	/* Do nothing; */
-	    case tvPack:
-	    case tvSquish:
-		if (withCenterLabels)
- 		    y += fontHeight;
-	        y += track->height;
-		break;
-	    case tvFull:
-		if (withCenterLabels)
-		    y += fontHeight;
-		start = 1;
-
-		if( track->subType == lfSubSample && track->items == NULL )
-		    y += track->height;
-
-                for (item = track->items; item != NULL; item = item->next)
-		    {
-	            char *rootName;
-		    char *name = track->itemName(track, item);
-		    int itemHeight = track->itemHeight(track, item);
-		    newy = y;
-
-                    if (track->itemLabelColor != NULL)
-                        labelColor = track->itemLabelColor(track, item, vg);
-		    
-		    /* Do some fancy stuff for sample tracks. 
-		     * Draw y-value limits for 'sample' tracks. */
-		    if(track->subType == lfSubSample )
-			{
-			
-			if( prev == NULL )
-			    newy += itemHeight;
-			else
-			    newy += sampleUpdateY( name, track->itemName(track, prev), itemHeight );
-			if( newy == y )
-			    continue;
-
-			if( track->heightPer > (3 * fontHeight ) )
-			    {
-			    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
-			    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
-			    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, itemHeight,
-					track->ixAltColor, font, minRangeStr );
-			    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, itemHeight,
-					track->ixAltColor, font, maxRangeStr );
-			    }
-			prev = item;
-
-			rootName = cloneString( name );
-			beforeFirstPeriod( rootName );
-			if( sameString( track->mapName, "humMusL" ) || 
-				 sameString( track->mapName, "hg15Mm3L" ))
-			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, "Mouse Cons");
-			else if( sameString( track->mapName, "musHumL" ) ||
-				 sameString( track->mapName, "mm3Hg15L"))
-			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, "Human Cons");
-			else if( sameString( track->mapName, "mm3Rn2L" ))
-			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, "Rat Cons");
-			else
-			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, rootName );
-
-			freeMem( rootName );
-			start = 0;
-			y = newy;
-			}
-		    else
-			{
-			vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
-				itemHeight, labelColor, font, name);
-			y += itemHeight;
-			}
-		    }
-		break;
-	    case tvDense:
-		
-		if (withCenterLabels)
-		    y += fontHeight;
-		
-		/*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-		if( track->subType == lfSubSample && track->heightPer > (3 * fontHeight ) )
-		    {
-		    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
-		    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
-		    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, track->lineHeight, 
-				track->ixAltColor, font, minRangeStr );
-		    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, track->lineHeight, 
-				track->ixAltColor, font, maxRangeStr );
-		    }
-		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, 
-			    labelColor, font, track->shortLabel);
-		y += track->height;
-		break;
-	    }
-        /* NOTE: might want to just restore savedVis here for all track types,
-           but I'm being cautious... */
-        if (sameString(track->tdb->type, "wigMaf"))
-            vis = savedVis;
-	vgUnclip(vg);
+        struct track *subtrack;
+        if (track->subtracks && differentString(track->tdb->type, "wigMaf"))
+            {
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                y = doLeftLabels(subtrack, vg, font, y);
+            }
+        else
+            y = doLeftLabels(track, vg, font, y);
         }
     }
 else
@@ -7527,7 +7556,7 @@ return a->r == b->r && a->g == b->g && a->b == b->b;
 }
 
 void loadSimpleBed(struct track *tg)
-/* Load the items in one custom track - just move beds in
+/* Load the items in one track - just move beds in
  * window... */
 {
 struct bed *(*loader)(char **row);
@@ -8140,10 +8169,46 @@ else if (sameWord(type, "expRatio"))
     }
 }
 
-struct track *trackFromTrackDb(struct trackDb *tdb)
+static void compositeLoad(struct track *track)
+/* Load all subtracks */
+{
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    subtrack->loadItems(subtrack);
+}
+
+static void compositeDraw(struct track *track, int seqStart, int seqEnd,
+                        struct vGfx *vg, int xOff, int yOff, int width,
+                        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw subtracks */
+{
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    subtrack->drawItems(subtrack, seqStart, seqEnd, vg, xOff, yOff, width,
+                                font, color, vis);
+}
+
+static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
+/* Return total height of composite track */
+{
+struct track *subtrack;
+int height = 0;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    height += subtrack->totalHeight(subtrack, vis);
+track->height = height;
+return height;
+}
+
+static void compositeFree(struct track *track)
+/* Dummy function */
+{
+}
+
+struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
+struct trackDb *subTdb;
 char *iatName = NULL;
 char *exonArrows;
 
@@ -8190,6 +8255,42 @@ iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);
+
+if (!doSubtracks)
+    /* stop recursion */
+    return track;
+
+if (tdb->subtracks)
+    {
+    /* setup function handlers for composite track */
+    track->loadItems = compositeLoad;
+    track->drawItems = compositeDraw;
+    track->totalHeight = compositeTotalHeight;
+    }
+/* fill in subtracks of composite track */
+for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    {
+    /* initialize from composite track settings */
+    struct track *subtrack = trackFromTrackDb(tdb, FALSE);
+
+    /* add subtrack settings (table, colors, labels, vis & pri) */
+    subtrack->mapName = subTdb->tableName;
+    subtrack->shortLabel = subTdb->shortLabel;
+    subtrack->longLabel = subTdb->longLabel;
+    /* later 
+    subtrack->visibility = subTdb->visibility;
+    subtrack->priority = subTdb->priority;
+    subtrack->color.r = subTdb->colorR;
+    subtrack->color.g = subTdb->colorG;
+    subtrack->color.b = subTdb->colorB;
+    subtrack->altColor.r = subTdb->altColorR;
+    subtrack->altColor.g = subTdb->altColorG;
+    subtrack->altColor.b = subTdb->altColorB;
+    */
+
+    slAddHead(&track->subtracks, subtrack);
+    }
+slReverse(&track->subtracks);
 return track;
 }
 
@@ -8203,7 +8304,9 @@ TrackHandler handler;
 tdbList = hTrackDb(chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    track = trackFromTrackDb(tdb);
+    if (trackDbSetting(tdb, "compositeTrack"))
+        verbose(5, "composite");
+    track = trackFromTrackDb(tdb, TRUE);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
@@ -8213,8 +8316,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     else if (track->drawItems == NULL)
         warn("No draw handler for %s", tdb->tableName);
     else
-	{
-	slAddHead(pTrackList, track);
+        {
+        slAddHead(pTrackList, track);
 	}
     }
 }
@@ -8326,7 +8429,7 @@ struct track *newCustomTrack(struct customTrack *ct)
 {
 struct track *tg;
 boolean useItemRgb = FALSE;
-tg = trackFromTrackDb(ct->tdb);
+tg = trackFromTrackDb(ct->tdb, TRUE);
 
 useItemRgb = bedItemRgb(ct->tdb);
 

@@ -35,6 +35,8 @@ struct trackDb
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting
 				 * to access. */
+    /* additional data, not in database */
+    struct trackDb *subtracks;  /* not null if composite track */
     };
 
 struct trackDb *trackDbLoad(char **row);
@@ -104,6 +106,8 @@ char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 
 char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
+
+
 
 #endif /* TRACKDB_H */
 

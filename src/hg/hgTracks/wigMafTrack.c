@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.49 2004/11/10 22:33:36 hiram Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.50 2004/11/29 05:13:06 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -57,7 +57,6 @@ Color wigMafItemLabelColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a maf item based on the species group it is in */
 {
 return (((struct wigMafItem *)item)->group % 2 ? 
-                        //lighterColor(vg, tg->ixColor) : tg->ixColor);
                         tg->ixAltColor : tg->ixColor);
 }
 
@@ -1019,7 +1018,7 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
             }
         dyStringPrintf(wigType, "\n");
         tdb->type = cloneString(wigType->string);
-        wigTrack = trackFromTrackDb(tdb);
+        wigTrack = trackFromTrackDb(tdb, FALSE);
         tdb->type = savedType;
 
         // replace tablename with wiggle table from "wiggle" setting

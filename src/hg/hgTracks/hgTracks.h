@@ -680,7 +680,7 @@ void drawScaledBoxSample(struct vGfx *vg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
         
-struct track *trackFromTrackDb(struct trackDb *tdb);
+struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks);
 
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */

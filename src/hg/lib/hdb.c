@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.221 2004/11/25 01:22:39 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.222 2004/11/29 05:13:05 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2915,7 +2915,7 @@ freez(&trackDbLocal);
 return tdbList;
 }
 
-static struct trackDb* findTrackDb(struct trackDb** tdbList, char* table)
+static struct trackDb* findTrackDb(struct trackDb** tdbList, char *table)
 /* search a list of trackDb objects for a object associated with a particular
  * track, and remove from list.  Return NULL if not found  */
 {
@@ -2940,13 +2940,14 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
  * add it to the list, otherwise free it */
 {
 char splitTable[64];
+struct trackDb *compositeTdb;
 hLookupStringsInTdb(tdb, database);
 if ((!tdb->private || privateHost) && hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
 #ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-	&&
-	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
+	&& !sameString(splitTable, "mrna") /* Long ago we reused this name badly. */
 #endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
     )
+
     slAddHead(tdbRetList, tdb);
 else
     trackDbFree(&tdb);
@@ -2963,10 +2964,14 @@ struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
 struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
 boolean privateHost = hIsPrivateHost();
+struct hash *compositeHash = newHash(0);
+char *composite;
+struct trackDb *tdb, *compositeTdb;
+struct trackDb *nextTdb;
 
 while (tdbList != NULL)
     {
-    struct trackDb *tdb = slPopHead(&tdbList);
+    tdb = slPopHead(&tdbList);
     struct trackDb *tdbLoc = findTrackDb(&tdbLocalList, tdb->tableName);
     if (tdbLoc != NULL)
         {
@@ -2974,14 +2979,41 @@ while (tdbList != NULL)
         trackDbFree(&tdb);
         tdb = tdbLoc;
         }
-    processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+    if (trackDbSetting(tdb, "compositeTrack"))
+        {
+        slAddHead(&tdbRetList, tdb);
+        hashAdd(compositeHash, tdb->tableName, tdb);
+        }
+    else
+        processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
     }
 
 /* add remaing local trackDbs */
 while (tdbLocalList != NULL)
     {
-    struct trackDb *tdb = slPopHead(&tdbLocalList);
-    processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+    tdb = slPopHead(&tdbLocalList);
+    if (trackDbSetting(tdb, "compositeTrack"))
+        {
+        hashAdd(compositeHash, tdb->tableName, tdb);
+        slAddHead(&tdbRetList, tdb);
+        }
+    else
+        processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+    }
+
+/* move subtrack entries to subtracks field of composite tracks */
+nextTdb = tdbRetList;
+for (tdb = tdbRetList; nextTdb != NULL; tdb = nextTdb)
+    {
+    nextTdb = tdb->next;
+    composite = trackDbSetting(tdb, "subTrack");
+    if (composite != NULL)
+        {
+        slRemoveEl(&tdbRetList, tdb);
+        compositeTdb = (struct trackDb *)hashFindVal(compositeHash, composite);
+        if (compositeTdb != NULL)
+            slAddHead(&compositeTdb->subtracks, tdb);
+        }
     }
 hFreeConn(&conn);
 slReverse(&tdbRetList);
