@@ -8,6 +8,7 @@
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfToken.h"
+#include "pfParse.h"
 
 void usage()
 /* Explain command line and exit. */
@@ -22,73 +23,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-enum pfParseType
-/* Parse type */
-    {
-    pptNone = 0,
-    pptProgram,
-    pptScope,
-    pptInto,
-    pptModule,
-    pptNop,
-    pptCompound,
-    pptTuple,
-    pptDot,
-    pptKeyVal,
-    pptOf,
-    pptIf,
-    pptElse,
-    pptWhile,
-    pptFor,
-    pptForeach,
-    pptBreak,
-    pptContinue,
-    pptClass,
-    pptVarDec,
-    pptNameUse,
-    pptVarType,
-    pptConstUse,
-    pptToDec,
-    pptFlowDec,
-    pptParaDec,
-    pptReturn,
-    pptCall,
-    pptAssignment,
-    pptPlusEquals,
-    pptMinusEquals,
-    pptMulEquals,
-    pptDivEquals,
-    pptModEquals,
-    pptIndex,
-    pptPlus,
-    pptMinus,
-    pptMul,
-    pptDiv,
-    pptShiftLeft,
-    pptShiftRight,
-    pptMod,
-    pptComma,
-    pptSame,
-    pptNotSame,
-    pptGreater,
-    pptLess,
-    pptGreaterOrEquals,
-    pptLessOrEquals,
-    pptNegate,
-    pptNot,
-    pptFlipBits,
-    pptBitAnd,
-    pptBitOr,
-    pptBitXor,
-    pptLogAnd,
-    pptLogOr,
-    pptRoot,
-    pptParent,
-    pptSys,
-    pptUser,
-    pptSysOrUser,
-    };
 
 
 static char *pfParseTypeAsString(enum pfParseType type)
@@ -221,26 +155,6 @@ switch (type)
 	return NULL;
     }
 }
-
-struct paraSymbol
-/* A symbol table entry */
-    {
-    char *name;	/* Allocated in hash */
-    bool defined;	/* True if defined in this scope. */
-    bool written;	/* True if written to. */
-    struct paraType *type;	/* Symbol type */
-    };
-
-struct pfParse
-/* The para parse tree. */
-    {
-    struct pfParse *next;	/* Next in list */
-    enum pfParseType type;	/* Node type */
-    struct pfToken *tok;	/* Token associated with node. */
-    struct pfParse *parent;	/* Parent statement if any. */
-    struct pfParse *children;	/* subparts. */
-    struct pfVar *var;		/* Associated variable if any. */
-    };
 
 static void pfDumpConst(struct pfToken *tok, FILE *f)
 /* Dump out constant to file */
