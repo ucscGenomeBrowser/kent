@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.13 2003/08/13 04:39:09 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.14 2003/10/24 22:50:34 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -80,6 +80,11 @@ char *eqPtr = strchr(arg, '=');
 
 if (!((eqPtr != NULL) || (arg[0] == '-')))
     return FALSE;  /* not an option */
+
+/* A dash by itself is not an option.   It can mean
+ * negative strand for some of the DNA oriented utilities. */
+if (arg[0] == '-' && (arg[1] == 0 || isspace(arg[1])))
+    return FALSE;
 
 name = arg;
 if (name[0] == '-')
