@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.106 2003/10/18 16:34:37 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.107 2003/10/21 17:56:40 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -617,7 +617,6 @@ return list;
 void setupColumnAcc(struct column *col, char *parameters)
 /* Set up a column that displays the geneId (accession) */
 {
-columnDefaultMethods(col);
 col->cellVal = accVal;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = accAdvFilter;
