@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.14 2004/08/10 23:25:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.15 2004/08/11 18:56:25 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -21,14 +21,19 @@ static boolean silent = FALSE;	/*	no data points output */
 static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
+static char *db = NULL;			/* database specification	*/
 static char *chr = NULL;		/* work on this chromosome only */
 static char *chromLst = NULL;	/*	file with list of chroms to process */
+static char *position = NULL;	/*	to specify a range on a chrom */
+static unsigned winStart = 0;	/*	from the position specification */
+static unsigned winEnd = 0;	/*	from the position specification */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"chr", OPTION_STRING},
     {"chromLst", OPTION_STRING},
+    {"position", OPTION_STRING},
     {"dataConstraint", OPTION_STRING},
     {"noAscii", OPTION_BOOLEAN},
     {"doStats", OPTION_BOOLEAN},
@@ -53,6 +58,7 @@ errAbort(
   "options:\n"
   "   -db=<database> - use specified database\n"
   "   -chr=chrN - examine data only on chrN\n"
+  "   -position=start-end - examine data in window start-end (1-relative)\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
   "   -noAscii - do *not* perform the default ascii output\n"
   "   -doStats - perform stats measurement\n"
@@ -102,8 +108,8 @@ else if (chr)
     }
 else
     {
-    if (wDS->db)
-	chromList = hAllChromNamesDb(wDS->db);
+    if (db)
+	chromList = hAllChromNamesDb(db);
     else
 	verbose(2, "#\tno chrom specified for file read, do them all\n");
     }
@@ -134,7 +140,6 @@ for (i=0; i<trackCount; ++i)
 	    verbose(2,"#\tchrom: %s\n", chromPtr->name);
 	    }
 
-	wDS->openWigConn(wDS, tracks[i]);
 
 	if (noAscii)
 		whatToDo &= ~wigFetchAscii;
@@ -145,8 +150,8 @@ for (i=0; i<trackCount; ++i)
 	if (fetchNothing)
 		whatToDo |= wigFetchNoOp;
 
-	wDS->getData(wDS, whatToDo);
-	wDS->closeWigConn(wDS);
+	wDS->getData(wDS, db, tracks[i], whatToDo);
+
 	if (!silent)
 	    {
 	    if (doStats)
@@ -223,9 +228,10 @@ optionInit(&argc, argv, optionSpecs);
 
 wDS = newWigDataStream();
 
-wDS->db = optionVal("db", NULL);
+db = optionVal("db", NULL);
 chr = optionVal("chr", NULL);
 chromLst = optionVal("chromLst", NULL);
+position = optionVal("position", NULL);
 dataConstraint = optionVal("dataConstraint", NULL);
 noAscii = optionExists("noAscii");
 doStats = optionExists("doStats");
@@ -238,16 +244,11 @@ span = optionInt("span", 0);
 lowerLimit = optionFloat("ll", -1 * INFINITY);
 upperLimit = optionFloat("ul", INFINITY);
 
-if (wDS->db)
-    {
-    wDS->isFile = FALSE;
-    verbose(2, "#\tdatabase: %s\n", wDS->db);
-    }
+if (db)
+    verbose(2, "#\tdatabase: %s\n", db);
 else
-    {
-    wDS->isFile = TRUE;
     verbose(2, "#\tno database specified, using .wig files\n");
-    }
+
 if (chromLst && chr)
     {
     warn("ERROR: both specified: -chr=%s and -chromLst=%s", chr, chromLst);
@@ -256,7 +257,20 @@ if (chromLst && chr)
 if (chr)
     {
     wDS->setChromConstraint(wDS, chr);
-    verbose(2, "#\tchrom constraint: (%s)\n", wDS->sqlConstraint);
+    verbose(2, "#\tchrom constraint: %s\n", wDS->chrName);
+    }
+if (position)
+    {
+    char *startEnd[2];
+    char *stripped = stripCommas(position);
+    
+    if (2 != chopByChar(stripped, '-', startEnd, 2))
+	errAbort("can not parse position: '%s'", position);
+    winStart = sqlUnsigned(startEnd[0]) - 1;	/* !!! 1-relative coming in */
+    winEnd = sqlUnsigned(startEnd[1]);
+    freeMem(stripped);
+    wDS->setPositionConstraint(wDS, winStart, winEnd);
+    verbose(2, "#\tposition specified: %u-%u\n", wDS->winStart+1, wDS->winEnd);
     }
 if (noAscii)
     verbose(2, "#\tnoAscii option on, do not perform the default ascii output\n");
@@ -275,7 +289,7 @@ if (skipDataRead)
 if (span)
     {
     wDS->setSpanConstraint(wDS, span);
-    verbose(2, "#\tspan constraint: (%s)\n", wDS->sqlConstraint);
+    verbose(2, "#\tspan constraint: %u\n", wDS->spanLimit);
     }
 if (dataConstraint)
     {
