@@ -1,5 +1,8 @@
 /* histogram function for data array in memory	*/
 
+#if !defined(HISTOGRAM_H)
+#define HISTOGRAM_H
+
 #define	DEFAULT_BIN_COUNT	25
 /*	ARBITRARY default choice of # of bins	*/
 
@@ -20,3 +23,4 @@ struct histoResult *histoGram(float *values, size_t N, float binSize,
 	unsigned binCount, float minValue, float min, float max,
 	struct histoResult *accumHisto);
 /*	construct histogram of data in values[N] array.	*/
+#endif
