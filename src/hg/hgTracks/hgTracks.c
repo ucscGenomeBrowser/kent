@@ -9675,6 +9675,7 @@ registerTrackHandler("chimpBlat", longXenoPslMethods);
 registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
+registerTrackHandler("blastzTightMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse_0824", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
