@@ -9,8 +9,8 @@ type bed 4 +
 
 
 track slamHuman
-shortLabel SLAM Human
-longLabel SLAM Gene Predictions Using Human/Rat Homology
+shortLabel Slam Human
+longLabel Slam Gene Predictions Using Human/Rat Homology
 group genes
 priority 45.5
 visibility hide
@@ -40,8 +40,8 @@ altColor 230,170,40
 type bed 3 +
 
 track slamNonCodingHuman
-shortLabel SLAM Non Coding Human
-longLabel SLAM Predictions of Human/Rat Conserved Non-Coding Regions
+shortLabel Slam Non Coding Human
+longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
 priority 120
 visibility hide
@@ -79,8 +79,8 @@ altColor 128,128,255
 type bed 5 +
 
 track blatFugu
-shortLabel Fugu BLAT
-longLabel Takifugu rubripes Translated BLAT Alignments
+shortLabel Fugu Blat
+longLabel Takifugu rubripes Translated Blat Alignments
 group compGeno
 priority 113
 visibility dense
