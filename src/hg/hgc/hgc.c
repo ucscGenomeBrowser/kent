@@ -115,11 +115,13 @@
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
+#include "affy10KDetails.h"
 #include "encodeRegionInfo.h"
+#include "encodeErge.h"
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.532 2003/12/09 19:24:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.533 2003/12/11 22:06:34 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10193,6 +10195,83 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doAffy10KDetails(struct trackDb *tdb, char *name)
+/* print additional SNP details */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[1024];
+struct affy10KDetails *snp=NULL;
+
+snprintf(query, sizeof(query),
+         "select  affyId, rsId, tscId, baseA, baseB, sequenceA, sequenceB, enzyme "
+/*	 "        , minFreq, hetzyg, avHetSE "*/
+         "from    affy10KDetails "
+         "where   affyId = '%s'", name);
+snp = affy10KDetailsLoadByQuery(conn, query);
+if (snp!=NULL)
+    {
+    printf("<BR>\n");
+    printf("<B>Sample Prep Enzyme:      </B> <I>XbaI</I><BR>\n");
+/*  printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);*/
+/*  printf("<B>Heterozygosity:          </B> %.3f<BR>\n",snp->hetzyg);*/
+/*  printf("<B>Average Heterozygosity:  </B> %.3f<BR>\n",snp->avHetSE);*/
+    printf("<B>Base A:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
+    printf("<B>Base B:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
+    printf("<B>Sequence of Allele A:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+    if (snp->rsId>0)
+	{
+	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
+	}
+
+    printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
+    printf("%s\" TARGET=_blank>NetAffx link for %s</A></P>\n",snp->affyId, snp->affyId);
+
+    printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
+    printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",snp->tscId, snp->tscId);
+
+    doSnpLocusLink(tdb, name);
+    }
+else printf("<BR>Error in Query:\n%s<BR>\n",query);
+affy10KDetailsFree(&snp);
+sqlDisconnect(&conn);
+}
+
+void doAffy10K(struct trackDb *tdb, char *itemName)
+/* Put up info on an Affymetrix SNP. */
+{
+char *group = tdb->tableName;
+struct snp snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+int rsId = 0;
+
+cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   affy10K "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and  name = '%s'",
+               seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doAffy10KDetails(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
@@ -10262,6 +10341,46 @@ if ((descr = getEncodeRegionDescr(item)) != NULL)
     plus = buf;
     }
 genericClickHandlerPlus(tdb, item, NULL, plus);
+}
+
+void doEncodeErge(struct trackDb *tdb, char *item)
+/* Print region desription, along with generic info */
+{
+char *descr;
+char *plus = NULL;
+char buf[128];
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+struct encodeErge *ee=NULL;
+int start = cartInt(cart, "o");
+
+if ((descr = getEncodeRegionDescr(item)) != NULL)
+    {
+    safef(buf, sizeof(buf), "<B>Description:</B> %s<BR>\n", descr);
+    plus = buf;
+    }
+genericClickHandlerPlus(tdb, item, NULL, plus);
+
+snprintf(query, sizeof(query),
+         "select  chrom, chromStart, chromEnd, name, score, strand, "
+	 "        thickStart, thickEnd, reserved, blockCount, blockSizes, "
+	 "        chromStarts, Id, color "
+         "from    %s "
+         "where   name = '%s' and chromStart = %d", tdb->tableName, item, start);
+
+for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
+    {
+    printf("<BR>\n");
+    if (ee->Id>0)
+	{
+	printf("<BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
+	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", ee->Id, ee->name);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>\n");
+	}
+    }
+encodeErgeFree(&ee);
+hFreeConn(&conn);
 }
 
 void doGbProtAnn(struct trackDb *tdb, char *item)
@@ -12873,6 +12992,10 @@ else if (sameWord(track, "affyGeno"))
     {
     doAffyGeno(tdb, item);
     }
+else if (sameWord(track, "affy10K"))
+    {
+    doAffy10K(tdb, item);
+    }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item, tdb);
@@ -13093,6 +13216,14 @@ else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
 else if (sameWord(track, "encodeRegions"))
     {
     doEncodeRegion(tdb, item);
+    }
+else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVitroFoot")  || \
+	 sameWord(track, "encodeErgeDNAseI")  || sameWord(track, "encodeErgeMethProm")     || \
+	 sameWord(track, "encodeErgeExpProm") || sameWord(track, "encodeErgeStableTransf") || \
+	 sameWord(track, "encodeErgeBinding") || sameWord(track, "encodeErgeTransTransf")  || \
+	 sameWord(track, "encodeErgeSummary"))
+    {
+    doEncodeErge(tdb, item);
     }
 else if (sameWord(track, "sgdOther"))
     {
