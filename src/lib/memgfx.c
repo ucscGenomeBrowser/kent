@@ -645,15 +645,6 @@ minY = mg->clipMinY;
 maxY = mg->clipMaxY;
 homePt = pt = _mgPixAdr(mg,x,y);
 
-#ifdef NEVER
-if (minY <= y && y < maxY)
-    {
-    i = width;
-    while (--i >= 0)
-	*pt++ = color;
-    }
-#endif
-
 
 /* Draw barbs below */
 if (barbDir > 0)

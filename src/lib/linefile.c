@@ -57,6 +57,24 @@ void lineFileReuse(struct lineFile *lf)
 lf->reuse = TRUE;
 }
 
+int lineFileLongNetRead(int fd, char *buf, int size)
+/* Keep reading until either get no new characters or
+ * have read size */
+{
+int oneSize, totalRead = 0;
+
+while (size > 0)
+    {
+    oneSize = read(fd, buf, size);
+    if (oneSize <= 0)
+        break;
+    totalRead += oneSize;
+    buf += oneSize;
+    size -= oneSize;
+    }
+return totalRead;
+}
+
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize)
 /* Fetch next line from file. */
 {
@@ -94,7 +112,7 @@ if (!gotLf)
 
     memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
-    readSize = read(lf->fd, buf+sizeLeft, readSize);
+    readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
     if (readSize + sizeLeft <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;

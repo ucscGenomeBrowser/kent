@@ -334,7 +334,7 @@ else
 	}
     else
         {
-	char *s = strdup(line);
+	char *s = cloneString(line);
 	wordCount = chopLine(s, words);
 	if (wordCount < 21 || wordCount > 22 || (words[8][0] != '+' && words[8][0] != '-'))
 	    errAbort("%s is not a psLayout file", fileName);
