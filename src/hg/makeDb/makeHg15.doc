@@ -1632,6 +1632,64 @@ IN PROGRESS
     cd /cluster/store2/tmp
     hgLoadRna addSeq hg15 /gbdb/hg15/fuguSeq/fugu_v3_mask.fasta
 
+# PRODUCING C elegans ALIGNMENTS (Working on - 2003-06-02 - Hiram)
+    # Check C elegans masked fa files are already on iscratch,
+    #	They should be, if not, the instructions for creation
+    #	are in makeCe1.doc.  These trfFa/c*.fa are both RepeatMasker
+    #	masked and TRF simple masked  (Can not get blat to work
+    #	with the masked nibs I have for C. elegans ?)
+
+    ssh kk
+    ls -og /iscratch/i/worms/Celegans/trfFa/c*.fa
+    
+    mkdir ~/hg15/bed/blatCelegans
+    cd ~/hg15/bed/blatCelegans
+    mkdir psl
+    foreach f (~/hg15/?{,?}/NT_??????/NT_??????.fa)
+      set c=$f:t:r
+      mkdir -p psl/$c
+    end
+    ls -1S /iscratch/i/worms/Celegans/trfFa/c*.fa > worm.lst
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/home/kent/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 human.lst worm.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check
+    ... etc ...
+
+    # When cluster run is done, sort alignments:
+    ssh eieio
+    cd ~/hg15/bed/blatCelegans
+    pslCat -dir psl/NT_?????? | \
+      liftUp -type=.psl stdout ~/hg15/jkStuff/liftAll.lft warn stdin | \
+      pslSortAcc nohead chrom temp stdin
+
+    # Rename to correspond with tables as so and load into database:
+    ssh hgwdev
+    cd ~/hg15/bed/blatCelegans/chrom
+    rm -f chr*_blatCelegans.psl
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        mv $i ${r}_blatCelegans.psl
+    end
+    hgLoadPsl hg15 *.psl
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    mkdir /gbdb/hg15/celegansSeq
+    cd /gbdb/hg15/celegansSeq
+    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+    cd /cluster/store2/tmp
+    hgLoadRna addSeq hg15 /gbdb/hg15/fuguSeq/fugu_v3_mask.fasta
+
+
 
 TIGR GENE INDEX (TODO)
   o mkdir -p ~/hg15/bed/tigr    
