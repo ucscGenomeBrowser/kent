@@ -2507,9 +2507,7 @@ end
         # 463 warnings
         # 4604 rows loaded
     
-=======
-
-# BLASTZ Mm4 (WORKING - 2003-10-29 - Hiram)
+# BLASTZ Mm4 (DONE - 2003-11-03 - Hiram)
 
     ssh kk
     mkdir -p /cluster/data/rn3/bed/blastz.mm4.2003-10-29
@@ -2635,24 +2633,31 @@ SEQ2_LEN=$BASE/S2.len
     # about 75 minutes in the above jobs
 
     # translate sorted axt files into psl
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4
     mkdir -p pslChrom
     set tbl = "blastzMm4"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
-      echo "Processing chr $c"
+      if (-e pslChrom/${c}_${tbl}.psl) then
+      echo "Done  pslChrom/${c}_${tbl}.psl"
+      else
+      echo "Processing chr ${c}"
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+      endif
     end
-XXXX - running - 2003-11-03 - 08:37
     #	That takes about 20 minutes
     # Load database tables
     ssh hgwdev
-    set tbl = "blastzRn3"
-    cd /cluster/data/rn3/bed/blastz.rn3/pslChrom
+    set tbl = "blastzMm4"
+    cd /cluster/data/rn3/bed/blastz.mm4/pslChrom
     /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+    # real    162m7.520s
+    # user    32m40.530s
+    # sys     5m31.500s
 
-# CHAIN Mm4 BLASTZ (TBD)
+
+# CHAIN Mm4 BLASTZ (WORKING - 2003-11-03 - Hiram)
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kkr1u00
@@ -2682,16 +2687,16 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     para create jobList
     para try
     para push # ... etc ...
-XXXX - running - 2003-11-03 - 08:45
 # Completed: 44 of 44 jobs
-# CPU time in finished jobs:      27109s     451.82m     7.53h    0.31d  0.001 y
-# IO & Wait Time:                 29921s     498.68m     8.31h    0.35d  0.001 y
-# Average job time:                1296s      21.60m     0.36h    0.02d
-# Longest job:                    12356s     205.93m     3.43h    0.14d
-# Submission to last job:         12356s     205.93m     3.43h    0.14d
+# CPU time in finished jobs:      53019s     883.66m    14.73h    0.61d  0.002 y
+# IO & Wait Time:                 33812s     563.53m     9.39h    0.39d  0.001 y
+# Average job time:                1973s      32.89m     0.55h    0.02d
+# Longest job:                    22348s     372.47m     6.21h    0.26d
+# Submission to last job:         22348s     372.47m     6.21h    0.26d
 
+XXXX - ready to go 2003-11-03 16:50
     # now on the cluster server, sort chains
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4/axtChain
     time chainMergeSort run1/chain/*.chain > all.chain
     # real    8m55.100s
@@ -2717,7 +2722,7 @@ XXXX - running - 2003-11-03 - 08:45
 
 # NET Mm4 BLASTZ (TBD)
 
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4/axtChain
     mkdir preNet
     cd chain
@@ -2754,7 +2759,7 @@ XXXX - running - 2003-11-03 - 08:45
     # sys     1m33.360s
 
     # If things look good do
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4/axtChain
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
@@ -2769,7 +2774,7 @@ XXXX - running - 2003-11-03 - 08:45
     # Add entries for net and chain to rat/rn3 trackDb
 
     # make net
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4/axtChain
     mkdir mouseNet
     time netSplit mouse.net mouseNet
@@ -2804,7 +2809,7 @@ XXXX - running - 2003-11-03 - 08:45
     # add README.txt file to dir, if needed
 
     #  Convert those axt files to psl
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
@@ -2848,7 +2853,7 @@ XXXX - running - 2003-11-03 - 08:45
 
 # MAKING THE AXTTIGHT FROM AXTBEST (TBD)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
-    ssh kksilo
+    ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm4/axtNet
     mkdir -p ../axtTight
     tcsh
