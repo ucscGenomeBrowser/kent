@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.6 2004/03/04 07:46:18 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.7 2004/03/09 02:03:21 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -74,11 +74,6 @@ retDb[len] = 0;
 return TRUE;
 }
 
-static int wigHeight(struct track *wigTrack, enum trackVisibility vis)
-{
-return wigTotalHeight(wigTrack, vis);
-}
-
 static struct wigMafItem *scoreItem(scoreHeight)
 /* Make up (wiggle) item that will show the score */
 {
@@ -102,7 +97,8 @@ tolowers(myOrg);
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
-mi->name = cloneString("Hidden Gaps");
+safef(buf, sizeof(buf), "%s gaps", myOrg);
+mi->name = cloneString(buf);
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
@@ -156,7 +152,7 @@ slAddHead(&miList, mi);
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
-    mi = scoreItem(wigHeight(track->subtracks, track->visibility));
+    mi = scoreItem(wigTotalHeight(track->subtracks, track->visibility));
     slAddHead(&miList, mi);
     }
 slReverse(&miList);
@@ -164,9 +160,12 @@ return miList;
 }
 
 static int pairwiseWigHeight(struct track *wigTrack)
-/* Return the height of a pairwise wiggle for this track */
+/* Return the height of a pairwise wiggle for this track
+ * NOTE: set one pixel smaller than we actually want, to 
+ * leave a border at the bottom of the wiggle.
+ */
 {
-    return max(wigHeight(wigTrack, tvFull)/2, tl.fontHeight);
+    return max(wigTotalHeight(wigTrack, tvFull)/3 - 1, tl.fontHeight);
 }
 
 static struct wigMafItem *loadPairwiseItems(struct track *track)
@@ -184,7 +183,7 @@ int smallWigHeight = pairwiseWigHeight(wigTrack);
 
 if (wigTrack != NULL)
     {
-    mi = scoreItem(wigHeight(wigTrack, tvFull));
+    mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
     slAddHead(&miList, mi);
     }
 if (trackDbSetting(track->tdb, "pairwise") != NULL)
@@ -269,7 +268,7 @@ else if (track->visibility == tvFull || track->visibility == tvPack)
     }
 else if (track->visibility == tvSquish)
     {
-    miList = scoreItem(wigHeight(track->subtracks, tvFull));
+    miList = scoreItem(wigTotalHeight(track->subtracks, tvFull));
     }
 else 
     {
@@ -289,15 +288,7 @@ static void wigMafLoad(struct track *track)
 struct wigMafItem *miList = NULL;
 struct track *wigTrack = track->subtracks;
 
-if (zoomedToBaseLevel)
-    {
-    miList = loadWigMafItems(track, zoomedToBaseLevel);
-    }
-else
-    {
-    /* zoomed out */
-    miList = loadWigMafItems(track, FALSE);
-    }
+miList = loadWigMafItems(track, zoomedToBaseLevel);
 track->items = miList;
 
 if (wigTrack != NULL) 
@@ -482,11 +473,14 @@ for (mi = miList; mi != NULL; mi = mi->next)
         wigTrack->mapName = table;
         wigTrack->loadItems(wigTrack);
         wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
-                                                            wigTrackHeight;
+                                                            wigTrackHeight - 1;
+        /* clip, but leave 1 pixel border */
+        vgSetClip(vg, xOff, yOff, width, wigTrack->height);
         wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                              width, font, color, tvFull);
+        vgUnclip(vg);
         /* need to add extra space between wiggles (for now) */
-        //mi->height = wigHeight(wigTrack, tvFull);
+        //mi->height = wigTotalHeight(wigTrack, tvFull);
         mi->height = wigTrackHeight;
         ret = TRUE;
         }
@@ -640,16 +634,17 @@ struct track *wigTrack = track->subtracks;
 
 /* wiggle is displayed full for all wigMaf visibilities, except dense */
 enum trackVisibility wigVis = (vis == tvDense ? tvDense : tvFull);
-int y = 0;
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
+    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
-    y = wigHeight(wigTrack, wigVis);
+    vgUnclip(vg);
+    yOff += wigTotalHeight(wigTrack, wigVis);
     }
-return yOff + y;
+return yOff;
 }
 
 
@@ -737,6 +732,7 @@ track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
+track->canPack = TRUE;
 //track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
