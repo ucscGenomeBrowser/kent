@@ -7061,6 +7061,21 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain .
     gzip hg17ToCanFam1.chain
 
+# HG17 TO PANTRO1 LIFTOVER CHAIN (DONE 1/20/05 Andy)
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.panTro1/axtChain
+    mkdir over
+    for file in chain/*.chain; do
+       chrom=`basename $file .chain`
+       netChainSubset net/$chrom.net chain/$chrom.chain over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain
+    done
+    rm -rf over/
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cp /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain .
+    gzip hg17ToPanTro1.chain
+
 # ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
     ssh hgwdev
     cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/all.chain.gz \
