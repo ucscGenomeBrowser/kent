@@ -62,6 +62,9 @@
 #include "sample.h"
 #include "uPennClones.h"
 #include "altGraphX.h"
+#include "genomicSuperDups.h"
+#include "celeraDupPositive.h"
+#include "celeraCoverage.h"
 
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
@@ -3383,6 +3386,275 @@ tg->drawItems = isochoreDraw;
 tg->colorShades = shadesOfGray;
 tg->itemName = isochoreName;
 }
+
+/*Ewan's stuff */
+/******************************************************************/
+					/*Royden fun test code*/
+/******************************************************************/
+
+#ifdef OLD2
+struct celeraDupPositive *filterOldDupes(struct celeraDupPositive *oldList)
+/* Get rid of all but recent/artifact dupes. */
+{
+struct celeraDupPositive *newList = NULL, *dup, *next;
+for (dup = oldList; dup != NULL; dup = next)
+    {
+    next = dup->next;
+
+    /*if (dup->score > 980) */
+    /*    {  */
+    	slAddHead(&newList, dup);
+    /*	} */
+    /*else */
+    /*    { */
+    /*	celeraDupPositiveFree(&dup); */
+    /* } */
+
+
+    }
+slReverse(&newList);
+return newList;
+}
+
+#endif /* OLD2 */
+
+void loadCeleraDupPositive(struct trackGroup *tg)
+/* Load up simpleRepeats from database table to trackGroup items. */
+{
+bedLoadItem(tg, "celeraDupPositive", (ItemLoader)celeraDupPositiveLoad);
+if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
+    slSort(&tg->items, bedCmpScore);
+else
+    slSort(&tg->items, bedCmp);
+}
+
+void freeCeleraDupPositive(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+celeraDupPositiveFreeList((struct celeraDupPositive**)&tg->items);
+}
+
+Color celeraDupPositiveColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return name of gcPercent track item. */
+{
+struct celeraDupPositive *dup = item;
+/*int ppt = dup->score;*/
+int grayLevel;
+
+/*if (ppt > 990)*/
+    return tg->ixColor;
+/*else if (ppt > 980)*/
+/*    return tg->ixAltColor;*/
+/* grayLevel = grayInRange(ppt, 900, 1000); */
+grayLevel=grayInRange(990,900,1000);
+
+return shadesOfGray[grayLevel];
+}
+
+char *celeraDupPositiveName(struct trackGroup *tg, void *item)
+/* Return full genie name. */
+{
+struct celeraDupPositive *gd = item;
+char *full = gd->name;
+static char abbrev[64];
+
+strcpy(abbrev, skipChr(full));
+abbr(abbrev, "om");
+return abbrev;
+}
+
+
+void celeraDupPositiveMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->loadItems = loadCeleraDupPositive;
+tg->freeItems = freeCeleraDupPositive;
+tg->itemName = celeraDupPositiveName;
+tg->itemColor = celeraDupPositiveColor;
+}
+/******************************************************************/
+		/*end of Royden test Code celeraDupPositive */
+/******************************************************************/
+/******************************************************************/
+			/*Royden fun test code CeleraCoverage*/
+/******************************************************************/
+
+#ifdef OLD3
+
+
+
+struct celeraCoverage *filterOldCoverage(struct celeraCoverage *oldList)
+/* Get rid of all but recent/artifact dupes. */
+{
+struct celeraCoverage *newList = NULL, *dup, *next;
+for (dup = oldList; dup != NULL; dup = next)
+    {
+    next = dup->next;
+
+    /*if (dup->score > 980) */
+    /*    {  */
+    	slAddHead(&newList, dup);
+    /*	} */
+    /*else */
+    /*    { */
+    /*	celeraDupPositiveFree(&dup); */
+    /* } */
+
+
+    }
+slReverse(&newList);
+return newList;
+}
+
+#endif /* OLD3 */
+
+void loadCeleraCoverage(struct trackGroup *tg)
+/* Load up simpleRepeats from database table to trackGroup items. */
+{
+bedLoadItem(tg, "celeraCoverage", (ItemLoader)celeraCoverageLoad);
+if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
+    slSort(&tg->items, bedCmpScore);
+else
+    slSort(&tg->items, bedCmp);
+}
+
+void freeCeleraCoverage(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+celeraCoverageFreeList((struct celeraCoverage**)&tg->items);
+}
+
+Color celeraCoverageColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return name of gcPercent track item. */
+{
+struct celeraDupPositive *dup = item;
+/*int ppt = dup->score;*/
+int grayLevel;
+
+/*if (ppt > 990)*/
+    return tg->ixColor;
+/*else if (ppt > 980)*/
+/*    return tg->ixAltColor;*/
+/* grayLevel = grayInRange(ppt, 900, 1000); */
+grayLevel=grayInRange(990,900,1000);
+
+return shadesOfGray[grayLevel];
+}
+
+char *celeraCoverageName(struct trackGroup *tg, void *item)
+/* Return full genie name. */
+{
+struct celeraCoverage *gd = item;
+char *full = gd->name;
+static char abbrev[64];
+
+strcpy(abbrev, skipChr(full));
+abbr(abbrev, "om");
+return abbrev;
+}
+
+
+void celeraCoverageMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->loadItems = loadCeleraCoverage;
+tg->freeItems = freeCeleraCoverage;
+tg->itemName = celeraCoverageName;
+tg->itemColor = celeraCoverageColor;
+}
+/******************************************************************/
+		/*end of Royden test Code celeraCoverage */
+/******************************************************************/
+#ifdef OLD4
+
+
+struct genomicSuperDups *filterOldCoverage(struct genomicSuperDups *oldList)
+/* Get rid of all but recent/artifact dupes. */
+{
+struct genomicSuperDups *newList = NULL, *dup, *next;
+for (dup = oldList; dup != NULL; dup = next)
+    {
+    next = dup->next;
+
+    /*if (dup->score > 980) */
+    /*    {  */
+    	slAddHead(&newList, dup);
+    /*	} */
+    /*else */
+    /*    { */
+    /*	celeraDupPositiveFree(&dup); */
+    /* } */
+
+
+    }
+slReverse(&newList);
+return newList;
+}
+
+#endif /* OLD4 */
+
+void loadGenomicSuperDups(struct trackGroup *tg)
+/* Load up simpleRepeats from database table to trackGroup items. */
+{
+bedLoadItem(tg, "genomicSuperDups", (ItemLoader)genomicSuperDupsLoad);
+if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
+    slSort(&tg->items, bedCmpScore);
+else
+    slSort(&tg->items, bedCmp);
+}
+
+void freeGenomicSuperDups(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+genomicSuperDupsFreeList((struct genomicSuperDups**)&tg->items);
+}
+
+Color genomicSuperDupsColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return name of gcPercent track item. */
+{
+struct genomicSuperDups *dup = item;
+int ppt = dup->score;
+int grayLevel;
+char *verdict=dup->verdict;
+
+
+if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
+    return mgClosestColor(mg, 255,51,51);
+
+
+else if (ppt > 990)
+    return tg->ixColor;
+else if (ppt > 980)
+    return tg->ixAltColor;
+grayLevel = grayInRange(ppt, 900, 1000);
+return shadesOfGray[grayLevel];
+}
+
+char *genomicSuperDupsName(struct trackGroup *tg, void *item)
+/* Return full genie name. */
+{
+struct genomicSuperDups *gd = item;
+char *full = gd->name;
+static char abbrev[64];
+
+strcpy(abbrev, skipChr(full));
+abbr(abbrev, "om");
+return abbrev;
+}
+
+
+void genomicSuperDupsMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->loadItems = loadGenomicSuperDups;
+tg->freeItems = freeGenomicSuperDups;
+tg->itemName = genomicSuperDupsName;
+tg->itemColor = genomicSuperDupsColor;
+}
+/******************************************************************/
+		/*end of Royden test Code genomicSuperDups */
+/******************************************************************/
+/*end Ewan's*/
 
 char *simpleRepeatName(struct trackGroup *tg, void *item)
 /* Return name of simpleRepeats track item. */
@@ -8665,7 +8937,9 @@ registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
-
+registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
+registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
+registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
