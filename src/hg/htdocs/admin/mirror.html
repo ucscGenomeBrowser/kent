@@ -388,10 +388,41 @@ the files.
 <li>Create a hgcentral database <P>
    mysql> create database hgcentral
 <P>
-<li>Add the tables
-<li>Create a user/password with the ability to update and insert
-<li>Add that user to the hg.conf
-<li>test
+<li>Add the hgcentral tables <P>
+   mysql -youraccountoptions hgcentral < hgcentral.sql
+<li>Create a user/password with the ability to update and insert. Many folks
+ start out with the same user that they use for reading browser databases
+ and then later create a separate user with higher priviledge. However, to
+ get started, consider trying the same user.
+<li>Add that user to the hg.conf. A sample hg.conf is below:
+<PRE>
+# Config file for the UCSC Human Genome server
+#
+# the format is in the form of name/value pairs
+# written 'name=value' (note that there is no space between
+# the name and its value. Also, no blank lines should be in
+# this file
+###########################################################
+# db.host is the name of the MySQL host to connect to
+db.host=localhost
+# db.user is the username is use when connecting to the host
+db.user=myhguser
+# this is the password to use with the above hostname
+db.password=myhguserpassword
+db.trackDb=trackDb
+
+# central.host is the name of the host of the central MySQL
+# database where stuff common to all versions of the genome
+# and the user database is stored.
+central.db=hgcentral
+central.host=localhost
+#
+# Be sure this user has UPDATE AND INSERT privs for hgcentral
+#
+central.user=myhguser
+central.password=myhguserpassword
+central.domain=.ucsc.edu
+</PRE>
 </ol>
 
 <h4><a NAME="step7"></a>7. Create a "trash" directory </h4>
@@ -418,7 +449,7 @@ iii) Import the data in a similar fashion as listed above.
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
 <a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: Jan 8, 2002</i>
+<br><i>Last Modified: Sep 10, 2002</i>
 <br>
 	
 	</TD><TD WIDTH=15></TD></TR></TABLE>
