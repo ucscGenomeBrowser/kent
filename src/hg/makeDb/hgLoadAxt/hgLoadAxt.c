@@ -51,7 +51,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     int dbNameLen = strlen(database);
 
     printf("Indexing and tabulating %s\n", fileName);
-    while ((axt = axtRead(lf)) != NULL)
+    while ((axt = axtReadWithPos(lf, &offset)) != NULL)
         {
 	double maxScore = 100, minScore = -100;
 	++count;
@@ -70,7 +70,6 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
 	scoredRefTabOut(&mr, f);
 	axtFree(&axt);
-	offset = lineFileTell(lf);
 	}
     }
 printf("Loading %s into database\n", table);
