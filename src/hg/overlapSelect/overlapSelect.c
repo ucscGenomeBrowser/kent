@@ -27,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"dropped", OPTION_STRING},
     {"merge", OPTION_BOOLEAN},
     {"overlapThreshold", OPTION_FLOAT},
+    {"overlapSimilarity", OPTION_FLOAT},
     {"idOutput", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -49,6 +50,7 @@ boolean doMerge = FALSE;
 boolean nonOverlapping = FALSE;
 boolean idOutput = FALSE;
 float overlapThreshold = 0.0;
+float overlapSimilarity = 0.0;
 
 struct ioFiles
 /* object containing input files */
@@ -128,6 +130,7 @@ struct slRef *overlappedRecLines = NULL, *selectCaRef;
 boolean overlaps = FALSE;
 
 overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold,
+                              overlapSimilarity,
                               ((doMerge || idOutput) ? &overlappedRecLines : NULL));
 if ((nonOverlapping) ? !overlaps : overlaps)
     {
@@ -301,6 +304,10 @@ errAbort("%s:\n"
          "  -overlapThreshold=0.0 - minimun fraction of an inFile block that\n"
          "      must be overlapped by a single select record to be considered overlapping.\n"
          "      Note that this is only coverage by a single select record, not total coverage.\n"
+         "  -overlapSimilarity=0.0 - minimun fraction of inFile and select records that\n"
+         "      Note that this is only coverage by a single select record and this is;\n"
+         "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
+         "      will select identical records (or CDS if both CDS options are specified.\n"
          "  -dropped=file - output rows that were dropped to this file.\n",
          "  -merge - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
@@ -370,6 +377,10 @@ if (optionExists("strand"))
 if (optionExists("excludeSelf"))
     selectOpts |= selExcludeSelf;
 overlapThreshold = optionFloat("overlapThreshold", 0.0);
+overlapSimilarity = optionFloat("overlapSimilarity", 0.0);
+if ((overlapThreshold != 0.0) && (overlapSimilarity != 0.0))
+    errAbort("can't specify both -overlapThreshold and -overlapSimilarity");
+
 doMerge = optionExists("merge");
 idOutput = optionExists("idOutput");
 if (doMerge && idOutput)
