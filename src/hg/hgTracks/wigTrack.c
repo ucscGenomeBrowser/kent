@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.25 2004/01/09 22:11:50 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.26 2004/01/11 06:36:05 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -328,6 +328,9 @@ wigDebugPrint("wigFreeItems");
 #endif
 }
 
+/*	DrawItems has grown too large.  It has several distinct sections
+ *	in it that should now be broken out into their own routines.
+ */
 static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -608,24 +611,6 @@ for (x1 = 0; x1 < width; ++x1)
 	int y1;			/*	special y coordinate for points draw */
 	double dataValue;	/*	the data value in data space	*/
 
-	/*	here is the auto-scaling in operation.  The size of the viewing
-	 *	data window is (overallRange * 1.2) - 10% margin on top and
-	 *	bottom.  The bottom view limit is
-	 *	(overallLowerLimit - (overallRange * 0.1))
-	 *	is from (overallLowerLimit - (overallRange * 0.1)) to
-	 *	The upper limit, not needed here, would be
-	 *	(overallLowerLimit + (overallRange * 1.2))
-	 *
-	 *	See if the zero line is between the limits
-	 *	If it is, we need to decide which point to draw.
-	 *	We want to draw the one that is farther from zero
-	 *	(we could draw them both if there is more than one data
-	 *	value here, show the high and the low)
-	 *
-	 *	Assume .max is the data value to draw,  if the .min is
- 	 *	farther away from zero, then it is the one to draw
-	 */
-
 	/*	I don't like this section of code here.
 	 *	This is much too complicated for a simple matter
 	 *	of scaling.  This should be a lot easier here.
@@ -640,17 +625,16 @@ for (x1 = 0; x1 < width; ++x1)
 	if (dataValue < 0.0) drawColor = tg->ixAltColor;
 	boxHeight = h * ((dataValue - graphLowerLimit) / graphRange);
 	if (boxHeight > h) boxHeight = h;
-	if (boxHeight < 1) boxHeight = 1;
 	boxTop = h - boxHeight;
 	y1 = yOff+boxTop;
 	if ( (0.0 > graphLowerLimit) && (0.0 < graphUpperLimit) )
 	    {
 	    int maxBoxHeight;
-	    maxBoxHeight = h * (graphUpperLimit / graphRange);
+	    maxBoxHeight = h *
+		(max(fabs(graphUpperLimit),fabs(graphLowerLimit)) / graphRange);
 	    boxHeight = h * (fabs(dataValue) / graphRange);
 	    if (boxHeight > maxBoxHeight) boxHeight = maxBoxHeight;
 	    if (boxHeight > h) boxHeight = h;
-	    if (boxHeight < 1) boxHeight = 1;
 	    if (dataValue > 0.0)
 		{
 		boxTop = (h * (graphUpperLimit / graphRange));
@@ -667,13 +651,15 @@ for (x1 = 0; x1 < width; ++x1)
 	    {
 	    boxHeight= h * ((graphUpperLimit-dataValue) / graphRange);
 	    if (boxHeight > h) boxHeight = h;
-	    if (boxHeight < 1) boxHeight = 1;
 	    boxTop = 0;
 	    y1 = yOff+boxTop + boxHeight;
 	    }
 	if (boxTop > h-1) boxTop = h - 1;
 	if (boxTop < 0) boxTop = 0;
 
+	/*	boxHeight may be zero, this is OK.  It means there is
+ 	 *	nothing there to graph.  vgBox takes care of that.
+	 */
 	if (vis == tvFull)
 	    {
 	    if (lineBar == wiggleGraphBar)
@@ -850,8 +836,45 @@ char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
 int maxHeightPixels = atoi(trackDbSettingOrDefault(track->tdb,
 				"maxHeightPixels", DEFAULT_HEIGHT_PER));
+char * defaultViewLimits = 
+	trackDbSettingOrDefault(track->tdb, "defaultViewLimits", "NONE");
+double defaultViewMinY = 0.0;	/* optional default viewing window	*/
+double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
+boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
 
 AllocVar(wigCart);
+
+/*	See if a default viewing window is specified in the trackDb.ra file
+ *	Yes, it is true, this parsing is paranoid and verifies that the
+ *	input values are valid in order to be used.  If they are no
+ *	good, they are as good as not there and the result is a pair of
+ *	zeros.
+ */
+if (differentWord("NONE",defaultViewLimits))
+    {
+    char *words[2];
+    char sep = ':';
+    int wordCount = chopString(defaultViewLimits,&sep,words,2);
+    if (wordCount == 2)
+	{
+	defaultViewMinY = atof(words[0]);
+	defaultViewMaxY = atof(words[1]);
+	/*	make sure they are in order	*/
+	if (defaultViewMaxY < defaultViewMinY)
+	    {
+	    double d = defaultViewMinY;
+	    defaultViewMinY = defaultViewMaxY;
+	    defaultViewMaxY = d;
+	    }
+	/*	and they had better be different	*/
+	if ( ! ((defaultViewMaxY - defaultViewMinY) > 0.0) )
+	    {
+	    defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
+	    }
+	else
+	    optionalViewLimitsExist = TRUE;
+	}
+    }
 
 /*	Start with an arbitrary min,max when not given in the .ra file	*/
 minY = DEFAULT_MIN_Yv;
@@ -885,11 +908,24 @@ horizontalGrid = cartOptionalString(cart, o7);
 lineBar = cartOptionalString(cart, o8);
 autoScale = cartOptionalString(cart, o9);
 
-if (minY_str) minYc = atof(minY_str);
-else minYc = minY;
-
-if (maxY_str) maxYc = atof(maxY_str);
-else maxYc = maxY;
+if (minY_str && maxY_str)
+    {
+    minYc = atof(minY_str);
+    maxYc = atof(maxY_str);
+    }
+else
+    {
+    if (optionalViewLimitsExist)
+	{
+	minYc = defaultViewMinY;
+	maxYc = defaultViewMaxY;
+	}
+    else
+	{
+	minYc = minY;
+	maxYc = maxY;
+	}
+    }
 
 /*	Clip the cart value to range [tl.fontHeight + 1:maxHeightPixels] */
 if (heightPer) heightFromCart = min( maxHeightPixels, atoi(heightPer));
