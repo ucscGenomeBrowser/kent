@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.13 2004/04/07 19:03:30 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.14 2004/04/19 20:34:26 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -200,11 +200,143 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
+static struct bed *bedElement(char *chrom, unsigned start, unsigned end,
+	char *table, unsigned lineCount)
+{
+struct bed *bed;
+char name[128];
+
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+snprintf(name, sizeof(name), "%s.%u",
+    chrom, lineCount);
+bed->name = cloneString(name);
+return bed;
+}
+
+struct wigStatsAcc
+/* statistic accumulators */
+    {
+    unsigned span;	/* span of this data */
+    unsigned start;	/* beginning chrom position */
+    unsigned end;	/* end chrom position */
+    double lowerLimit;	/* lowest data value in this block */
+    double upperLimit;	/* highest data value in this block */
+    double sumData;	/* sum of data values in this block */
+    double sumSquares;	/* sum of data values squared */
+    unsigned count;	/* number of data values in this statistic */
+    unsigned bedElStart;	/*	bed element start coord	*/
+    unsigned bedElEnd;		/*	bed element end coord	*/
+    unsigned bedElCount;	/*	bed element count	*/
+    };
+
+static struct wigStatsAcc wigStatsAcc;
+
+static void resetStats(struct wigStatsAcc *wsa)
+{
+wsa->span = 0;
+wsa->start = BIGNUM;
+wsa->end = 0;
+wsa->lowerLimit = 1.0e+300;
+wsa->upperLimit = -1.0e+300;
+wsa->count = 0;
+wsa->sumData = 0.0;
+wsa->sumSquares = 0.0;
+wsa->bedElStart = 0;
+wsa->bedElEnd = 0;
+wsa->bedElCount = 0;
+}
+
+static void returnStats(struct wigStatsAcc *wsa, struct wiggleStats **wsList,
+    char *chrom, unsigned start, unsigned end, int span)
+{
+if (wsa->count)
+    {
+    struct wiggleStats *wsEl = (struct wiggleStats *) NULL;
+    double mean = wsa->sumData / (double)wsa->count;
+    double variance = 0.0;
+    double stddev = 0.0;
+    if (wsa->count > 1)
+	{
+	variance = (wsa->sumSquares -
+	    ((wsa->sumData*wsa->sumData)/(double)wsa->count)) /
+		((double)(wsa->count-1));
+	if (variance > 0.0)
+	    stddev = sqrt(variance);
+	}
+    AllocVar(wsEl);
+    wsEl->chrom = cloneString(chrom);
+    wsEl->chromStart = start;
+    wsEl->chromEnd = end;
+    wsEl->span = span;
+    wsEl->count = wsa->count;
+    wsEl->lowerLimit = wsa->lowerLimit;
+    wsEl->dataRange = wsa->upperLimit - wsa->lowerLimit;
+    wsEl->mean = mean;
+    wsEl->variance = variance;
+    wsEl->stddev = stddev;
+    slAddHead(wsList,wsEl);
+    }
+}
+
+
+static void accumStats(struct wigStatsAcc *ws, struct wiggleData *wdPtr,
+    struct bed **bedList, unsigned maxBedElements, char *table)
+{
+boolean createBedList = FALSE;
+
+if ((struct bed **)NULL != bedList)
+    createBedList = TRUE;
+
+ws->sumData += wdPtr->sumData;
+ws->sumSquares += wdPtr->sumSquares;
+ws->count += wdPtr->count;
+if (wdPtr->lowerLimit < ws->lowerLimit)
+    ws->lowerLimit = wdPtr->lowerLimit;
+if (wdPtr->lowerLimit+wdPtr->dataRange > ws->upperLimit)
+    ws->upperLimit = wdPtr->lowerLimit+wdPtr->dataRange;
+if (wdPtr->chromStart < ws->start)
+    ws->start = wdPtr->chromStart;
+if (wdPtr->chromEnd > ws->end)
+    ws->end = wdPtr->chromEnd;
+
+if (createBedList && wdPtr->data)
+    {
+    struct wiggleDatum *wd = wdPtr->data;
+    int i;
+    for (i = 0; (i < wdPtr->count); ++i, ++wd)
+	{
+	if (wd->chromStart == ws->bedElEnd)
+	    ws->bedElEnd += wdPtr->span;
+	else if (wd->chromStart < ws->bedElEnd) /* do not start */
+	    break;	/* over again (do not repeat for next span) */
+	else if (ws->bedElCount > maxBedElements)
+	    break;			/* too many */
+	else
+	    {
+	    if (ws->bedElEnd > ws->bedElStart)
+		{
+		struct bed *bedEl;
+		bedEl = bedElement(wdPtr->chrom, ws->bedElStart, ws->bedElEnd,
+		    table, ++ws->bedElCount);
+		slAddHead(bedList, bedEl);
+		}
+	    ws->bedElStart = wd->chromStart;
+	    ws->bedElEnd = ws->bedElStart + wdPtr->span;
+	    }
+	}
+    }
+
+}	/*	static void accumStats()	*/
+
+struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, boolean freeData,
 	int tableId, boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle),
-	    char *constraints)
+		char *constraints, struct bed **bedList,
+		    unsigned maxBedElements, struct wiggleStats **wsList)
 /*  return linked list of wiggle data between winStart, winEnd */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -221,12 +353,39 @@ struct hashEl *el;
 int leastSpan = BIGNUM;
 int mostSpan = 0;
 int spanCount = 0;
+int span = 0;
 struct hashCookie cookie;
 struct wiggleData *wigData = (struct wiggleData *) NULL;
 struct wiggleData *wdList = (struct wiggleData *) NULL;
 boolean bewareConstraints = FALSE;
+boolean createBedList = FALSE;
+boolean firstSpanDone = FALSE;
+unsigned dataLimit = 0;
+unsigned dataDone = 0;
+boolean reachedDataLimit = FALSE;
+
+/*	if we are not doing a summary (== return all data) and
+ *	we are not creating a bed list, then obey the limit requested
+ *	It will be zero if they really want everything.
+ */
+if (!summaryOnly && !createBedList)
+    dataLimit = maxBedElements;
+
+/*	make sure table exists before we try to talk to it
+ *	If it does not exist, we return a null result
+ */
+if (! sqlTableExists(conn, table))
+    {
+    hFreeConn(&conn);
+    return((struct wiggleData *)NULL);
+    }
+
+if ((struct bed **)NULL != bedList)
+    createBedList = TRUE;
 
 spans = newHash(0);	/*	a listing of all spans found here	*/
+
+resetStats(&wigStatsAcc);	/*	zero everything	*/
 
 /*	Are the constraints going to interfere with our span search ? */
 if (constraints)
@@ -240,20 +399,11 @@ if (constraints)
 if (bewareConstraints)
     snprintf(query, sizeof(query),
 	"SELECT span from %s where chrom = '%s' AND %s group by span",
-	tableName, chromName, constraints );
+	table, chromName, constraints );
 else
     snprintf(query, sizeof(query),
 	"SELECT span from %s where chrom = '%s' group by span",
-	tableName, chromName );
-
-/*	make sure table exists before we try to talk to it
- *	If it does not exist, we return a null result
- */
-if (! sqlTableExists(conn, tableName))
-    {
-    hFreeConn(&conn);
-    return((struct wiggleData *)NULL);
-    }
+	table, chromName );
 
 /*	Survey the spans to see what the story is here */
 
@@ -279,8 +429,13 @@ sqlFreeResult(&sr);
 
 /*	Now, using that span list, go through each span, fetching data	*/
 cookie = hashFirst(spans);
-while ((el = hashNext(&cookie)) != NULL)
+while ((! reachedDataLimit) && (el = hashNext(&cookie)) != NULL)
     {
+    if ((struct wiggleStats **)NULL != wsList)
+	returnStats(&wigStatsAcc,wsList,chromName,winStart,winEnd,span);
+
+    resetStats(&wigStatsAcc);
+
     if (bewareConstraints)
 	{
 	snprintf(whereSpan, sizeof(whereSpan), "((span = %s) AND %s)", el->name,
@@ -289,37 +444,67 @@ while ((el = hashNext(&cookie)) != NULL)
     else
 	snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
 
-    sr = hOrderedRangeQuery(conn, tableName, chromName, winStart, winEnd,
+    span = atoi(el->name);
+
+    sr = hOrderedRangeQuery(conn, table, chromName, winStart, winEnd,
         whereSpan, &rowOffset);
 
     rowCount = 0;
-    while ((row = sqlNextRow(sr)) != NULL)
+    while ((! reachedDataLimit) && (row = sqlNextRow(sr)) != NULL)
 	{
 	++rowCount;
 	wiggle = wiggleLoad(row + rowOffset);
-	if (wiggle->count > 0)
+	if (wiggle->count > 0 && (! reachedDataLimit))
 	    {
 	    wigData = wigReadDataRow(wiggle, winStart, winEnd,
 		    tableId, summaryOnly, wiggleCompare );
 	    if (wigData)
 		{
+		if (firstSpanDone)
+		    accumStats(&wigStatsAcc, wigData, (struct bed **)NULL,
+			maxBedElements, table);
+		else
+		    accumStats(&wigStatsAcc, wigData, bedList,
+			maxBedElements, table);
+		dataDone += wigData->count;
 		if (freeData)
 		    {
 		    freeMem(wigData->data); /* and mark it gone */
 		    wigData->data = (struct wiggleDatum *)NULL;
 		    }
 		slAddHead(&wdList,wigData);
+		if (!createBedList && dataLimit)
+		    if (dataLimit < dataDone)
+			reachedDataLimit = TRUE;
+		if (createBedList && (wigStatsAcc.bedElCount > maxBedElements))
+		    reachedDataLimit = TRUE;
 		}
 	    }
 	}
+	/*	perhaps last bed line	*/
+    if (!firstSpanDone && createBedList &&
+	(wigStatsAcc.bedElEnd > wigStatsAcc.bedElStart))
+	{
+	struct bed *bedEl;
+	bedEl = bedElement(wigData->chrom, wigStatsAcc.bedElStart,
+	    wigStatsAcc.bedElEnd, table, ++wigStatsAcc.bedElCount);
+	slAddHead(bedList, bedEl);
+	}
     sqlFreeResult(&sr);
+    firstSpanDone = TRUE;
     }
 closeWibFile();
+
+if (createBedList)
+    slReverse(bedList);
+
+/*	last stats calculation	*/
+if ((struct wiggleStats **)NULL != wsList)
+    returnStats(&wigStatsAcc,wsList,chromName,winStart,winEnd,span);
 
 hFreeConn(&conn);
 
 if (wdList != (struct wiggleData *)NULL)
 	slReverse(&wdList);
-
 return(wdList);
 }	/*	struct wiggleData *wigFetchData()	*/
