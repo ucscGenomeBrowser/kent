@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
-#include "memgfx.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -12,27 +11,28 @@ void usage()
 errAbort(
   "test - Test something\n"
   "usage:\n"
-  "   test in out\n"
+  "   test a b\n"
   "options:\n"
   );
 }
 
 
-void test(char *in)
+void test(char *a, char *b)
 /* test - Test something. */
 {
-MgFont *font = mgSmallFont();
-printf("small font height = %d\n", mgFontLineHeight(font));
-font = mgSmallishFont();
-printf("smallish font height = %d\n", mgFontLineHeight(font));
+char *match = memMatch(a, strlen(a), b, strlen(b));
+if (match == NULL)
+    printf("No match\n");
+else
+    printf("Match at char %d\n", match - b);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2)
+if (argc != 3)
    usage();
 dnaUtilOpen();
-test(argv[1]);
+test(argv[1], argv[2]);
 return 0;
 }
