@@ -689,7 +689,7 @@ fprintf(f, "%s\t%d\t%d\t%s\t%-8s\t%d\t%4.2f%%\t%s.%d\n",
 }
 
 void outputNGoodInHash(struct binElement *list, char *fileName, char *chromName,
-		       struct hash *hash, int maxPicks, int maxDistance)
+		       struct hash *hash, struct hash *pslHash, int maxPicks, int maxDistance)
 /* Ouput up to the "maxPicks" selections from each cluster in the "list" as 
    long as they are 1) in the hash, 2) less than "maxDistance" from the
    5' end of the cluster, and 3) "good" as defined by goodDa() */
@@ -697,8 +697,8 @@ void outputNGoodInHash(struct binElement *list, char *fileName, char *chromName,
 struct binElement *el = NULL;
 int clusterIx=0;
 FILE *f = mustOpen(fileName, "w");
-char *bedFile = addSuffix(fileName, ".bed");
-FILE *bedOut = mustOpen(bedFile, "w");
+char *pslFile = addSuffix(fileName, ".psl");
+FILE *pslOut = mustOpen(pslFile, "w");
 for (el = list; el != NULL; el = el->next)
     {
     struct ggMrnaCluster *cluster = el->val;
@@ -712,21 +712,25 @@ for (el = list; el != NULL; el = el->next)
     slSort(&aisList, fivePrimeDistCmp);
     for(ais=aisList, i=0; ais != NULL && findStrandDistance(ais->ai,cluster->strand[0], start, end) < maxDistance && i <maxPicks; ais = ais->next, i++)
 	{
+	struct psl *psl = hashFindVal(pslHash, ais->ai->ma->qName);
 	writeOutAccession(f, ais, cluster, chromName, clusterIx);
-	ggMrnaAliBed12Out(ais->ai->ma, bedOut);
+	if(psl == NULL)
+	    fprintf(pslOut, "clusterRna::outputNGoodInHash() - Couldn't find psl in hash with accession %s.\n",ais->ai->ma->qName);
+	else
+	    pslTabOut(psl, pslOut);
 	}
     clusterStrand = NULL;
     clusterStart = -1;
     clusterEnd = -1;
     slFreeList(&aisList);
     }
-freez(&bedFile);
-carefulClose(&bedOut);
+freez(&pslFile);
+carefulClose(&pslOut);
 carefulClose(&f);
 }
-void outputMgc(struct sqlConnection *conn, 
-	struct binKeeper *bins, char *chromName,
-	int chromSize, char *fileName)
+
+void outputMgc(struct hash *pslHash, struct sqlConnection *conn, struct binKeeper *bins, 
+	       char *chromName, int chromSize, char *fileName)
 /* Output info about clusters relevant to MGC */
 {
 struct hash *refSeqHash = hashRefSeq(conn);
@@ -768,10 +772,10 @@ sqlFreeResult(&sr);
 outputBestAndGoodMgc(list, fileName, chromName, mgcEstHash,
 		     mgcRnaHash, rnaHash, refSeqHash);
 mgcOutFile = addSuffix(fileName, ".ests");
-outputNGoodInHash(list, mgcOutFile, chromName, mgcEstHash, maxPicks, maxDistance);
+outputNGoodInHash(list, mgcOutFile, chromName, mgcEstHash, pslHash, maxPicks, maxDistance);
 freez(&mgcOutFile);
 mgcOutFile = addSuffix(fileName, ".rnas");
-outputNGoodInHash(list, mgcOutFile, chromName, mgcRnaHash, maxPicks, maxDistance);
+outputNGoodInHash(list, mgcOutFile, chromName, mgcRnaHash, pslHash, maxPicks, maxDistance);
 freez(&mgcOutFile);
 hashFree(&mgcEstHash);
 hashFree(&mgcRnaHash);
@@ -811,6 +815,15 @@ slReverse(&pslRet);
 return pslRet;
 }
     
+void hashAddSomePsls(struct hash *pslHash, struct psl *pslList)
+/* Add psls into hash using qName as key. */
+{
+struct psl *psl = NULL;
+for(psl = pslList; psl != NULL; psl = psl->next)
+    {
+    hashAdd(pslHash, psl->qName, psl);
+    }
+}
 
 void clusterChromRna(struct sqlConnection *conn, char *chromName,
 	char *rnaOut, char *estOut)
@@ -824,6 +837,7 @@ struct hash *splicedHash = newHash(20), *tailedHash = newHash(20),
             *otherHash = newHash(20);
 struct hash *splicedRnaHash = newHash(20), *tailedRnaHash = newHash(20),
             *otherRnaHash = newHash(20), *excludeRnaHash = newHash(20);
+struct hash *pslHash = newHash(20);
 struct estOrientInfo *eoiList = NULL;
 struct estOrientInfo *mRnaOiList = NULL;
 struct psl *estPslList = NULL, *mrnaPslList = NULL;
@@ -840,7 +854,7 @@ char *mRnaExclude = cgiOptionalString("mrnaExclude");
 chrom = hLoadChrom(chromName);
 printf("Loaded %d bases in %s\n", chrom->size, chromName);
 
-/* If we got an exclusion list load it. */
+/* If we got an exclusion list of accessions to avoid, filter them out. */
 if(mRnaExclude != NULL)
     fillInRnaExcludeHash(excludeRnaHash, mRnaExclude);
     
@@ -861,6 +875,7 @@ mrnaPslList = filterByExcludeHash(mrnaPslList, excludeRnaHash);
 splicedRnaMaList = maFromSomePsls(mrnaPslList, chromName,
 				  chrom, splicedRnaHash, FALSE, FALSE); 
 
+hashAddSomePsls(pslHash, mrnaPslList);
 /* Load RefGenes. */
 refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
 	chrom, TRUE, TRUE);
@@ -868,6 +883,8 @@ refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName,
 /* Load ESTs into three separate lists. */
 estPslList = loadPsls(conn, estTable, chromName);
 estPslList = filterByExcludeHash(estPslList, excludeRnaHash);
+hashAddSomePsls(pslHash, estPslList);
+
 splicedEstMaList = maFromSomePsls(estPslList, chromName, 
 	chrom, splicedHash, FALSE, FALSE);
 tailedEstMaList = maFromSomePsls(estPslList, chromName, 
@@ -896,7 +913,7 @@ outputClusters(bins, chromName, chrom->size, estOut);
 /* TODO: Merge clusters that share 3'/5' ESTs. */
 
 if (mgcOut != NULL)
-    outputMgc(conn, bins, chromName, chrom->size, mgcOut);
+    outputMgc(pslHash, conn, bins, chromName, chrom->size, mgcOut);
 if (group != NULL)
     outputGroup(conn, bins, chromName, chrom->size, 
     	refSeqMaList, mrnaMaList, splicedEstMaList, group);
