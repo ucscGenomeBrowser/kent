@@ -117,6 +117,8 @@ for (;;)
 
 	    if (sameString(name, "score"))
 	        fill->score = atof(words[i+1]);
+	    else if (sameString(name, "type"))
+	        fill->type = hashStoreName(net->nameHash, words[i+1]);
 	    else
 		{
 		/* Cope with integer values. */
@@ -185,6 +187,8 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " tTrf %d", fill->tTrf);
     if (fill->qTrf >= 0)
         fprintf(f, " qTrf %d", fill->qTrf);
+    if (fill->type != NULL)
+        fprintf(f, " type %s", fill->type);
     fputc('\n', f);
     if (fill->children)
         cnFillWrite(fill->children, f, depth+1);

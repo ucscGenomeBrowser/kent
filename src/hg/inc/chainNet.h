@@ -11,7 +11,7 @@ struct chainNet
     char *name;			/* Chromosome name. */
     int size;			/* Chromosome size. */
     struct cnFill *fillList;	/* Top level fills. */
-    struct hash *nameHash; 	/* Hash of all fill->qName names. */
+    struct hash *nameHash; 	/* Hash of all strings in fillList. */
     };
 
 struct cnFill
@@ -37,6 +37,7 @@ struct cnFill
     int qOldR;	   /* Count of ancient repeats (pre-split) in query */
     int qTrf;	   /* Count of simple repeats, period 12 or less. */
     int tTrf;	   /* Count of simple repeats, period 12 or less. */
+    char *type;    /* One word description.  Not allocated here. */
     };
 
 void chromNetFree(struct chainNet **pNet);
