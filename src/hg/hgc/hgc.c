@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.707 2004/07/28 21:08:37 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.708 2004/07/29 17:43:10 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13773,31 +13773,31 @@ cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
-    printf("Human Position:\n");
+    printf("<B>Human position:</B>\n");
     printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
 	hgTracksName(), pos, "hg16");
     printf("%s</A><BR>",pos);
     }
 if (acc != NULL)
     {
-    printf("Human mRNA: <A HREF=\"");
+    printf("<B>Human mRNA:</B> <A HREF=\"");
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
 if (prot != NULL)
     {
-    printf("SwissProt: ");
+    printf("<B>SwissProt:</B> ");
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
 		"TARGET=_blank>%s</A></B>\n",
 		prot, prot);
     }
-printf("<BR>protein length: %d<BR>\n",pslList->qSize);
+printf("<BR><B>Protein length:</B> %d<BR>\n",pslList->qSize);
 
 slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
     printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
 printf("<TT><PRE>");
-printf("                                   QUERY            TARGET\n");
+printf("                                     QUERY             TARGET\n");
 printf("ALIGNMENT PEPTIDE COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
 printf("--------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
@@ -13830,6 +13830,9 @@ for (same = 1; same >= 0; same -= 1)
 	    }
 	}
     }
+    printf("</PRE></TT>");
+    /* Add description */
+    printTrackHtml(tdb);
 }
 
 static void doSgdOther(struct trackDb *tdb, char *item)
