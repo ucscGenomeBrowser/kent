@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.651 2004/01/08 19:05:30 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.652 2004/01/08 19:37:39 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7793,6 +7793,7 @@ cart = theCart;
  * is more than 4k */
 /*state = cgiUrlString(); printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
+saveDbAndGenome(cart, database, organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");

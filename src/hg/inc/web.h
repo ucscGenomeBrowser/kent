@@ -97,4 +97,7 @@ If someone requests an organism we try to give them the same db as
 was in their cart, unless the organism doesn't match.
 */
 
+void saveDbAndGenome(struct cart *cart, char *db, char *genome);
+/* Save db and genome (as org) in cart. */
+
 #endif /* WEB_H */

@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.44 2003/11/13 16:13:46 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.45 2004/01/08 19:37:39 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -606,4 +606,11 @@ else
     }
 *retDb = cloneString(*retDb);
 *retGenome = cloneString(*retGenome);
+}
+
+void saveDbAndGenome(struct cart *cart, char *db, char *genome)
+/* Save db and genome (as org) in cart. */
+{
+cartSetString(cart, "db", db);
+cartSetString(cart, "org", genome);
 }
