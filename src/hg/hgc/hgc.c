@@ -3919,6 +3919,61 @@ webEnd();
 }
 
 
+void ancientRDetails(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+char *itemForUrl = item;
+int numSnpsReq = -1;
+if(tdb == NULL)
+    errAbort("TrackDb entry null for ancientR, item=%s\n", item);
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name;
+    /* set up for first time */
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 12);
+
+	name = bed->name;
+
+    /* get % identity from score */
+	numSnpsReq = bed->score;
+    
+    /* finish off report ... */
+    printf("<B>Block:</B> %s<BR>\n", name);
+    printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
+    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    bedPrintPos(bed);
+    }
+printTrackHtml(tdb);
+hFreeConn(&conn);
+webEnd();
+}
+
+
 void chuckHtmlStart(char *title) 
 /* Prints the header appropriate for the title
  * passed in. Links html to chucks stylesheet for 
@@ -5184,6 +5239,10 @@ else if (sameWord(track, "perlegen"))
 else if(sameWord(track, "rosetta"))
     {
     rosettaDetails(tdb, item);
+    }
+else if( sameWord(track, "ancientR"))
+    {
+    ancientRDetails(tdb, item);
     }
 else if (tdb != NULL)
    {
