@@ -2462,25 +2462,16 @@ Color estColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color to draw est in. */
 {
 struct linkedFeatures *lf = item;
-static int startIx = 0, endIx = 0;
 char query[512];
 char buf[64], *s;
 struct sqlConnection *conn = hAllocConn();
 int col = MG_BLACK;
 
-if (startIx == 0)
-    {
-    startIx = mgFindColor(mg, 0, 0, 180);
-    endIx = mgFindColor(mg, 160, 0, 0);
-    }
 sprintf(query, "select direction from mrna where acc='%s'", lf->name);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
-    if (s[0] == '5')
-        col = startIx;
-    else if (s[0] == '3')
+    if (s[0] == '3')
 	{
-        col = endIx;
 	lf->orientation = -lf->orientation;	/* Not the best place for this but... */
 	}
     }
