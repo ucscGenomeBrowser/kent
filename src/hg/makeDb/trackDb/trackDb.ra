@@ -311,7 +311,7 @@ url http://www.ensembl.org/perl/transview?transcript=$$
 
 track acembly
 shortLabel Acembly Genes
-longLabel Acembly mRNA/EST Genes With Alt-splicing
+longLabel Acembly Gene Predictions With Alt-splicing
 group genes
 priority 41
 visibility dense
@@ -354,6 +354,16 @@ visibility hide
 color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
+
+track ucscFromMouse
+shortLabel ucsc mm3
+longLabel UCSC gene predictions from known Mouse genes mapped to Human
+group genes
+priority 45
+visibility hide
+color 0,100,100
+altColor 0,50,50
+type genePred 
 
 track slam
 shortLabel Slam
@@ -685,16 +695,6 @@ visibility hide
 color 12,12,120
 type bed 6
 
-track promoterStanford
-longLabel Experimental and Predicted 500bp promoters by Myers' Lab at Stanford 
-shortLabel Promoter Stanford 
-group regulation
-priority 82
-spectrum on
-visibility hide
-color 30,130,210
-type bed 6 .
-
 track psuReg
 shortLabel Known Regulatory 
 longLabel Functional Regulatory Elements compiled by Penn State 
@@ -958,16 +958,7 @@ group compGeno
 priority 136
 visibility hide
 spectrum on
-type netAlign mm2 mouseChain
-
-track mouseSynNet2
-shortLabel Syntenic Net2
-longLabel Mouse/Human Syntenic Alignment Net2
-group compGeno
-priority 136
-visibility hide
-spectrum on
-type netAlign mm2 mouseChain2
+type netAlign mm2
 
 track mouseSyn
 shortLabel NCBI Synteny
@@ -1099,6 +1090,14 @@ visibility dense
 spectrum on
 type rmsk
 
+track reconRepeat
+shortLabel Recon Repeats
+longLabel Repeats determined with Recon
+group varRep
+priority 147.5
+visibility hide
+type bed 4 +
+
 track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
@@ -1126,7 +1125,7 @@ type sample 0 5 0.199
 
 track gpcr
 shortLabel Gpcr
-longLabel Gpcr from softberry and rachel's hmm
+longLabel Gpcr from softberry and Rachel Karchin's HMM
 group x
 priority 149
 visibility hide
@@ -1140,6 +1139,31 @@ priority 150
 visibility hide
 type genePred
 
+track gpcrUcsc
+shortLabel Gpcr Ucsc
+longLabel Gpcr predictions based on synteny
+group x
+priority 150
+visibility hide
+type genePred
+
+track gpcrTwinscan
+shortLabel Gpcr Twinscan
+longLabel Gpcr predictions based on Twinscan and Rachel Karchin's HMM
+group x
+priority 150
+visibility hide
+type genePred
+
+track borkPseudo
+shortLabel Bork Pseudo
+longLabel bork pseudogene predictions 
+group x
+priority 150
+visibility hide
+type genePred
+
+track loweProbes
 track loweProbes
 shortLabel Lowe's Probes
 longLabel Candidate oligos for Stanford microarray
