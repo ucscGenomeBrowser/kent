@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.453 2003/07/14 23:32:54 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.454 2003/07/15 17:10:12 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11975,18 +11975,18 @@ else if (sameWord(track, "hg15repeats") )
     {
     doBlatCompGeno(tdb, item, "Human");
     }
-else if (sameWord(track, "blatFish") ||
-         sameWord(track, "blatTetra") ||
-         sameWord(track, "blatFugu"))
+/* generic handling of blat tracks */ 
+else if (startsWith("blat", track))
     {
-    doBlatCompGeno(tdb, item, "Fish");
-    }
-/* generic handling of all blat tracks that include other database name 
- * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... 
- * Uses genome column from database table as display text */
-else if (startsWith("blat", track) && hDbExists(&track[4]))
-    {
-    doBlatCompGeno(tdb, item, hGenome(&track[4]));
+    char *blatLabel = &track[4];
+    if (hDbExists(blatLabel))
+        {
+        /* handle tracks that include other database name 
+         * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... 
+         * Uses genome column from database table as display text */
+        blatLabel = hGenome(blatLabel);
+        }
+    doBlatCompGeno(tdb, item, blatLabel);
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
