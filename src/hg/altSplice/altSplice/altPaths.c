@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.5 2004/07/19 23:53:11 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.6 2004/07/20 04:21:28 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -369,8 +369,8 @@ for(i = source; i <= sink; i++)
 	    AllocVar(path);
 	    path->maxVCount = endIx - startIx + 1;
 	    AllocArray(path->vertices, path->maxVCount);
-	    path->vertices[path->vCount++] = startIx;
 	    path->vertices[path->vCount++] = i;
+	    path->vertices[path->vCount++] = startIx;
 	    path->upV = -1;
 	    path->downV = -1;
 	    slAddHead(&pathList, path);
@@ -385,7 +385,9 @@ for(i = source; i <= sink; i++)
 	    for(sub = subPaths; sub != NULL; sub = subNext)
 		{
 		subNext = sub->next;
-		pathAddHead(sub, startIx);
+		/* Add to tail for now. Later reverse the 
+		   order. */
+		pathAddTail(sub, startIx); 
 		slAddHead(&pathList, sub);
 		}
 	    }
@@ -414,7 +416,7 @@ if (dif == 0)
 return dif;
 }
 
-struct bed *bedForPath(struct path *path, struct splice *splice,
+struct bed *bedForPath(struct path *path, struct splice *splice, int pathIx,
 		       struct altGraphX *ag, int source, int sink, boolean spoofEnds)
 /* Construct a bed for the path. If spoofEnds is TRUE,
    ensure that there is at least a 1bp exon at splice
@@ -477,7 +479,7 @@ if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
     }
 
 /* Fix up the name and adjust the chromStarts. */
-dyStringPrintf(buff, "%s.%d.", splice->name, slIxFromElement(splice->paths, path));
+dyStringPrintf(buff, "%s.%d.", splice->name, pathIx);
 for(i = 0; i < path->vCount; i++)
     {
     if(path->vertices[i] != sink && path->vertices[i] != source)
@@ -962,6 +964,26 @@ splice->name = cloneString(buff);
 return splice;
 }
 
+void reverseVertOrder(struct path *pathList)
+/* Reverse the order of the vertices in the path. */
+{
+int *vertArray = NULL;
+struct path *path = NULL;
+int i = 0;
+int vC = 0;
+for(path = pathList; path != NULL; path = path->next)
+    {
+    vC = path->vCount;
+    AllocArray(vertArray, vC);
+    for(i = vC - 1; i >= 0; i--)
+	{
+	vertArray[vC - i - 1] = path->vertices[i];
+	}
+    CopyArray(vertArray, path->vertices, vC);
+    freez(&vertArray);
+    }
+}
+
 void findAltSplicesFromVertice(struct altGraphX *ag, int source, int sink, bool **em, 
 			       int **distance, struct splice **spliceList, 
 			       int vertIx, int *endIx)
@@ -999,6 +1021,7 @@ for(i = vertIx + 1; i <= sink; )
 	*endIx = i;
 	splice->paths = pathsBetweenVerts(distance, source, sink, ag,
 					  em, vertIx, i);
+	reverseVertOrder(splice->paths);
 	splice->pathCount = slCount(splice->paths);
 	simplifyAndOrderPaths(splice, distance, ag, source, sink);
 	splice->type = typeForSplice(splice, ag, em, source, sink);
@@ -1167,10 +1190,11 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
     {
     for(path = splice->paths; path != NULL; path = path->next)
 	{
+	int pathCount = 0;
 	/* If writing beds, create the bed and write it out. */
 	if(pathBedFile != NULL)
 	    {	
-	    struct bed *bed = bedForPath(path, splice, agx, source, sink, TRUE);
+	    struct bed *bed = bedForPath(path, splice, pathCount++, agx, source, sink, TRUE);
 	    if(bed != NULL)
 		bedTabOutN(bed, 12, pathBedFile);
 	    bedFree(&bed);
