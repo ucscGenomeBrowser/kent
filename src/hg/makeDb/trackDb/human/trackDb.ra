@@ -522,5 +522,12 @@ altColor 255,128,0
 chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
 
-
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
 
