@@ -5,9 +5,10 @@
 #include "options.h"
 #include "localmem.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.2 2003/09/29 13:30:06 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.3 2003/09/29 19:41:47 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -134,6 +135,8 @@ struct spLitRef
     char *rp;		/* Somewhat complex 'Reference Position' line. */
     struct hashEl *rcList; /* TISSUE=XXX X; STRAIN=YYY; parsed out. */
     struct hashEl *rxList; /* Cross-references. */
+    char *pubMedId;	/* pubMed ID, may be NULL. */
+    char *medlineId;	/* Medline ID, may be NULL. */
     };
 
 static void spParseComment(struct lineFile *lf, char *line, 
@@ -275,8 +278,13 @@ while (lineFileNext(lf, &line, NULL))
 	}
     else if (startsWith("RT", line))
         {
+	char *s;
 	groupLine(lf, line, line+5, dy);
-	lit->title = lmCloneString(lm, dy->string);
+	s = dy->string;
+	stripLastChar(s);
+	if (s[0] == '"')
+	    parseQuotedString(s, s, NULL);
+	lit->title = lmCloneString(lm, s);
 	}
     else if (startsWith("RL", line))
         {
@@ -292,6 +300,11 @@ while (lineFileNext(lf, &line, NULL))
 slReverse(&lit->authorList);
 slReverse(&lit->rcList);
 slReverse(&lit->rxList);
+
+/* Look up medline/pubmed IDs. */
+lit->pubMedId = hashElFindVal(lit->rxList, "PubMed");
+lit->medlineId = hashElFindVal(lit->rxList, "MEDLINE");
+slAddHead(&spr->literatureList, lit);
 }
 
 static void spReadSeq(struct lineFile *lf, struct lm *lm, 
@@ -623,6 +636,42 @@ if (monthIx < 0)
 fprintf(f, "%s-%02d-%s", year, monthIx+1, day);
 }
 
+char *blankForNull(char *s)
+/* Return s, or "" if it is NULL */
+{
+if (s == NULL)
+    return "";
+else
+    return s;
+}
+
+char *nextGeneWord(char **pS)
+/* Return next gene, which can be "AND" or "OR" separated. */
+{
+char *start = skipLeadingSpaces(*pS);
+char *next;
+
+if (start == NULL || start[0] == 0)
+    return NULL;
+next = stringIn(" AND ", start);
+if (next != NULL)
+    {
+    *next = 0;
+    next += 5;
+    }
+if (next == NULL)
+    {
+    next = stringIn(" OR ", start);
+    if (next != NULL)
+        {
+	*next = 0;
+	next += 4;
+	}
+    }
+*pS = next;
+return start;
+}
+
 void spToDb(char *database, char *datFile)
 /* spToDb - Create a relational database out of SwissProt/trEMBL flat files. */
 {
@@ -656,6 +705,7 @@ FILE *feature = hgCreateTabFile(".", "feature");
 FILE *author = hgCreateTabFile(".", "author");
 FILE *reference = hgCreateTabFile(".", "reference");
 FILE *referenceAuthors = hgCreateTabFile(".", "referenceAuthors");
+FILE *citationRp = hgCreateTabFile(".", "citationRp");
 FILE *citation = hgCreateTabFile(".", "citation");
 FILE *rcType = hgCreateTabFile(".", "rcType");
 FILE *rcVal = hgCreateTabFile(".", "rcVal");
@@ -671,12 +721,13 @@ struct uniquer *featureClassUni = uniquerNew(featureClass, 10);
 struct uniquer *featureTypeUni = uniquerNew(featureType, 14);
 struct uniquer *authorUni = uniquerNew(author, 18);
 struct uniquer *referenceUni = uniquerNew(reference, 18);
-struct uniquer *citationUni = uniquerNew(citation, 19);
+struct uniquer *citationRpUni = uniquerNew(citationRp, 18);
 struct uniquer *rcTypeUni = uniquerNew(rcType, 14);
 struct uniquer *rcValUni = uniquerNew(rcVal, 18);
 
 /* Other unique helpers. */
 struct hash *taxonHash = newHash(18);
+int citationId = 0;
 
 for (;;)
     {
@@ -726,18 +777,13 @@ for (;;)
 	fprintf(geneLogic, "%s\t%s\n", acc, s);
 	stripChar(s, '(');
 	stripChar(s, ')');
-	word = nextWord(&s);
+	word = nextGeneWord(&s);
 	fprintf(gene, "%s\t%s\n", acc, word);
 	for (;;)
 	    {
-	    word = nextWord(&s);
+	    word = nextGeneWord(&s);
 	    if (word == NULL)
 	         break;
-	    if (!sameString(word, "OR") && !sameString(word, "AND"))
-		errAbort("Expecting AND/OR in between genes in %s", acc);
-	    word = nextWord(&s);
-	    if (word == NULL)
-	        errAbort("Expecting gene after AND/OR in %s", acc);
 	    fprintf(gene, "%s\t%s\n", acc, word);
 	    }
 	}
@@ -808,6 +854,54 @@ for (;;)
 	    int type = uniqueStore(featureTypeUni, feat->type);
 	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\n",
 	    	acc, feat->start, feat->end, class, type);
+	    }
+	}
+
+    /* citation, reference, author, and related tables. */
+        {
+	struct spLitRef *ref;
+	struct hashEl *hel;
+	int refId;
+	for (ref = spr->literatureList; ref != NULL; ref = ref->next)
+	    {
+	    /* Do get reference ID and if necessary output new reference and other
+	     * tables. */
+	    if ((hel = hashLookup(referenceUni->hash, ref->cite)) != NULL)
+		{
+		refId = (char *)hel->val - nullPt;
+		}
+	    else
+	        {
+		referenceUni->curId += 1;
+		refId = referenceUni->curId;
+		hashAddInt(referenceUni->hash, ref->cite, refId);
+		if (ref->title)
+		    subChar(ref->title, '\t', ' ');
+		fprintf(reference, "%d\t%s\t%s\t%s\t%s\n", 
+		    refId, blankForNull(ref->title), ref->cite, 
+		    blankForNull(ref->pubMedId), blankForNull(ref->medlineId));
+		for (n = ref->authorList; n != NULL; n = n->next)
+		    {
+		    int authorId = uniqueStore(authorUni, n->name);
+		    fprintf(referenceAuthors, "%d\t%d\n", refId, authorId);
+		    }
+		}
+
+            /* Do citation and related tables. */
+	        {
+		int rpId = uniqueStore(citationRpUni, ref->rp);
+		++citationId;
+		fprintf(citation, "%d\t%s\t%d\t%d\n",
+			citationId, acc, refId, rpId);
+
+		for (hel = ref->rcList; hel != NULL; hel = hel->next)
+		    {
+		    int rcTypeId = uniqueStore(rcTypeUni, hel->name);
+		    int rcValId = uniqueStore(rcValUni, hel->val);
+		    fprintf(citationRc, "%d\t%d\t%d\n", 
+		    	citationId, rcTypeId, rcValId);
+		    }
+		}
 	    }
 	}
 
