@@ -20,7 +20,7 @@ Contents:
 </UL>
 
 <HR>
-<A NAME="Intro" />
+<A NAME="Intro"></A>
 <H2>Introduction</H2>
 
 When a user types a search term into the position box in hgTracks or
@@ -56,10 +56,10 @@ which helps test the searches.
 </P>
 
 <HR>
-<A NAME="CreateSearch" />
+<A NAME="CreateSearch"></A>
 <H2>How to create a search</H2>
 
-<A NAME="searchTable" />
+<A NAME="searchTable"></A>
 <H3>1. Identify the table(s) and field(s) to search.</H3>
 
 Usually, you'll have just added a track, and you'll want to make a 
@@ -70,7 +70,7 @@ this:
 searchTable mySpiffyTrack
 </PRE></TT>
 
-<A NAME="xrefTable" />
+<A NAME="xrefTable"></A>
 <P>
 In more complicated cases, you might have nice names in a
 non-positional table (e.g. stsAlias) which you would like to make
@@ -82,7 +82,7 @@ identify the cross-referencing table:
 xrefTable mySpiffyAlias
 </PRE></TT>
 
-<A NAME="searchName" />
+<A NAME="searchName"></A>
 <P>
 If there is already a search defined for your table, but you want to
 add another, then you will have to make up a different searchName to
@@ -96,8 +96,8 @@ searchTable mySpiffyTrack
 </PRE></TT>
 
 
-<A NAME="searchType" />
-<A NAME="query" />
+<A NAME="searchType"></A>
+<A NAME="query"></A>
 <H3>2. What is the type (or query format) of the table(s)?</H3>
 
 If the main positional/track table for the search is a common type
@@ -125,12 +125,12 @@ If your table is not one of the common or special-code table types,
 then you'll have to write a SQL query to return the chrom, start, end
 and name of items matching a given search term like this:
 
-<A NAME="queryFormat" />
+<A NAME="queryFormat"></A>
 <TT><PRE>
 query select myChrom, myChromStart, myChromEnd, myName from %s where myName like '%s'
 </PRE></TT>
 
-<A NAME="searchMethod" />
+<A NAME="searchMethod"></A>
 <P>
 If you want your query format to end with <TT>'%s%%'</TT> (so that a search 
 term of "hox" will result in a query on <TT>'hox%'</TT>), then 
@@ -153,13 +153,13 @@ to pick an ending for the default query for searchType.
 If you write your own query and don't have an xrefTable/xrefQuery, 
 then your query must end with a pattern that's consistent with searchMethod.  
 
-<A NAME="xrefQuery" />
+<A NAME="xrefQuery"></A>
 <P>
 If you have defined an xrefTable above, then you will definitely have
 to define an xrefQuery for it.  Here's what that will look like:
 </P>
 
-<A NAME="xrefQueryFormat" />
+<A NAME="xrefQueryFormat"></A>
 <TT><PRE>
 xrefQuery select trackName, searchName from %s where searchName like '%s'
 </PRE></TT>
@@ -170,7 +170,7 @@ searchMethod applies to xrefQuery only, not query, and query has to be
 an exact search.  
 
 
-<A NAME="termRegex" />
+<A NAME="termRegex"></A>
 <H3>3. Define a regular expression for search terms</H3>
 
 Often, the names that you're searching will follow a pattern, and 
@@ -263,7 +263,7 @@ really covers all the names in a table:
 hgsql $db -N -e "select name from $table limit 10"
 </PRE></TT>
 
-<A NAME="egrep" />
+<A NAME="egrep"></A>
 <P>
 Eyeball the results and write a regex.  Then try out that regex in
 this command (substitute it in for <TT>__TERMREGEX__</TT>):
@@ -286,7 +286,7 @@ Do some extra testing to make sure that your termRegex encompasses all user
 search terms that should match.  
 
 
-<A NAME="shortCircuit" />
+<A NAME="shortCircuit"></A>
 <H3>4. When is a shortCircuit a good thing?</H3>
 
 Some search terms are easily identified as accessions.  Returning to
@@ -324,7 +324,7 @@ performs all other (additive/non-shortCircuit) searches.
 </P>
 
 
-<A NAME="searchPriority" />
+<A NAME="searchPriority"></A>
 <H3>5. Decide on a searchPriority</H3>
 
 hgFindSpec.searchPriority, like trackDb.priority, is a relative thing.  
@@ -382,11 +382,11 @@ tree, and do a "make alpha" in kent/src/hg/makeDb/trackDb/ .
 
 
 <HR>
-<A NAME="SpecialCase" />
+<A NAME="SpecialCase"></A>
 <H2>Some special cases</H2>
 
-<A NAME="termPrefix" />
-<A NAME="dontCheck" />
+<A NAME="termPrefix"></A>
+<A NAME="dontCheck"></A>
 <H3>User search terms not exactly the same as names in table</H3>
 <P>
 Sometimes the search terms that users type in are not quite the same as 
@@ -413,7 +413,7 @@ will cover the table values not covered by termRegex, so that
 dontCheck [[:alnum:]]+\.[0-9]+
 </PRE></TT>
 
-<A NAME="padding" />
+<A NAME="padding"></A>
 <H3>Adding padding</H3>
 For small features such as STS markers or SNPs, we often want to display 
 the larger genomic context of the requested feature.  If that is the case 
@@ -426,7 +426,7 @@ of search results (unless the user has entered multiple search terms
 separated by ";" in order to get the range between them).  
 
 
-<A NAME="searchBoth" />
+<A NAME="searchBoth"></A>
 <H3>xrefTable names may overlap searchTable names</H3>
 
 An xrefTable may relate totally distinct types of names/IDs, such as
@@ -442,7 +442,7 @@ search spec:
 searchBoth 1
 </PRE></TT>
 
-<A NAME="searchDescription" />
+<A NAME="searchDescription"></A>
 <H3>Alternate description for table/search in HTML for multiple results</H3>
 
 When there are multiple results for a search term, hgFind outputs HTML 
@@ -459,7 +459,7 @@ searchDescription Alias of STS Marker
 
 
 <HR>
-<A NAME="Fields" />
+<A NAME="Fields"></A>
 <H2>hgFindSpec (the table) fields and settings</H2>
 
 Both proper fields of hgFindSpec and optional settings appear in
@@ -514,7 +514,7 @@ Here is a description of currently supported settings:
 
 
 <HR>
-<A NAME="checkHgFindSpec" />
+<A NAME="checkHgFindSpec"></A>
 <H2><TT>checkHgFindSpec</TT> and how to use it</H2>
 
 <TT>checkHgFindSpec</TT> is a diagnostic program for examining the
@@ -557,7 +557,7 @@ checkHgFindSpec $db -checkTermRegex
 
 
 <HR>
-<A NAME="hgFindSpec" />
+<A NAME="hgFindSpec"></A>
 <H2><TT>hgFindSpec</TT> (the program)</H2>
 
 In general, you won't have to run hgFindSpec on the command line; 
