@@ -204,6 +204,7 @@ searchMethod exact
 searchType psl
 shortCircuit 1
 termRegex RAE230[A|B]:.+
+dontCheck [A|B]:.+
 searchPriority 15
 termPrefix RAE230
 
@@ -220,6 +221,7 @@ searchMethod exact
 searchType psl
 shortCircuit 1
 termRegex RG-U34A:.+
+dontCheck [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 16
 termPrefix RG-U34A:
 
@@ -229,6 +231,7 @@ searchMethod exact
 searchType psl
 shortCircuit 1
 termRegex A:.+
+dontCheck [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
 termPrefix A:
 
@@ -237,5 +240,5 @@ searchTable affyU34A
 searchMethod exact
 searchType psl
 shortCircuit 1
-termRegex [A-Z0-9]+[[:alnum:]_]*_at
+termRegex [A-Z0-9]+[[:alnum:]_]+.*_at
 searchPriority 15
