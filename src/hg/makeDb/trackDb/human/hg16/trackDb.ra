@@ -46,7 +46,7 @@ spectrum on
 type psl xeno
 
 track blastzMm3
-shortLabel Mouse Blastz
+shortLabel Mm3 Blastz
 longLabel Blastz All Mouse (mm3-Feb 03) Alignments
 group compGeno
 priority 126
@@ -58,7 +58,7 @@ type psl xeno mm3
 otherDb mm3
 
 track blastzBestMm3
-shortLabel Mouse Best
+shortLabel Mm3 Best
 longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best in Genome Alignments
 group compGeno
 priority 127
@@ -113,7 +113,7 @@ altColor 255,240,200
 type bed 4 .
 
 track syntenyNetMm3
-shortLabel Mouse Syntenic Net
+shortLabel Mm3 Syntenic Net
 longLabel Mouse (mm3-Feb 03) Syntenic Alignment Net
 group compGeno
 priority 130
