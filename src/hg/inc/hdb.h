@@ -100,11 +100,20 @@ char *hDefaultDb();
 char *hDefaultChrom();
 /* Return the first chrom in chromInfo from the current db. */
 
+char *hDefaultChromDb(char *db);
+/* Return the first chrom in chromInfo from the given db. */
+
 char *hGetDb();
-/* Return the current database name. */
+/* Return the current database name, setting to default if not defined. */
+
+char *hGetDbUsual(char *usual);
+/* Return the current database name, setting to usual if not defined. */
 
 char *hGetDb2();
-/* Return the secondary database name. */
+/* Return the secondary database name, setting to default if not defined. */
+
+char *hGetDb2Usual(char *usual);
+/* Return the secondary database name, setting to usual if not defined. */
 
 char *hGetDbHost();
 /* Return the current database host. */
@@ -125,13 +134,20 @@ struct sqlConnection *hAllocConn2();
 /* Get free connection if possible. If not allocate a new one. */
 
 struct sqlConnection *hAllocConnDb(char *db);
-/* Get free connection for a database if possible. If not allocate a new one. */
+/* Get free cached connection for a database if possible. If not allocate 
+ * a new one. */
+
+struct sqlConnection *hAllocOrConnect(char *db);
+/* Get available cached connection if possible. If not, just connect. */
 
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
 void hFreeConn2(struct sqlConnection **pConn);
 /* Put back secondary db connection for reuse. */
+
+void hFreeOrDisconnect(struct sqlConnection **pConn);
+/* Free cached or non-cached connection. */
 
 struct sqlConnection *hConnectCentral();
 /* Connect to central database where user info and other info

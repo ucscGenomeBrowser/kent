@@ -26,7 +26,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.147 2003/10/13 19:01:31 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.148 2003/10/15 04:09:50 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -200,16 +200,18 @@ return res;
 void hSetDb(char *dbName)
 /* Set the database name. */
 {
-if (hdbCc != NULL)
-    errAbort("Can't hgSetDb after an hgAllocConn(), sorry.");
+if ((hdbCc != NULL) && !sameString(hdbName, dbName))
+    errAbort("Can't hSetDb(%s) after an hAllocConn(%s), sorry.",
+	     dbName, hdbName);
 hdbName = dbName;
 }
 
 void hSetDb2(char *dbName)
 /* Set the database name. */
 {
-if (hdbCc2 != NULL)
-    errAbort("Can't hgSetDb2 after an hgAllocConn2(), sorry.");
+if ((hdbCc2 != NULL) && !sameString(hdbName2, dbName))
+    errAbort("Can't hSetDb2(%s) after an hAllocConn2(%s), sorry.",
+	     dbName, hdbName2);
 hdbName2 = dbName;
 }
 
@@ -272,19 +274,19 @@ char *hDefaultDb()
 return hDefaultDbForGenome(DEFAULT_GENOME);
 }
 
-char *hDefaultChrom()
+char *hDefaultChromDb(char *db)
 /* Return the first chrom in chromInfo from the current db. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocOrConnect(db);
 char *defaultChrom;
 char buf[128];
 
 defaultChrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
 			     buf, sizeof(buf));
-hFreeConn(&conn);
+hFreeOrDisconnect(&conn);
 if (defaultChrom == NULL)
     {
-    errAbort("Can't find first chromosome in %s.chromInfo", hdbName);
+    errAbort("Can't find first chromosome in %s.chromInfo", db);
     }
 else
     {
@@ -293,8 +295,14 @@ else
 return(defaultChrom);
 }
 
+char *hDefaultChrom()
+/* Return the first chrom in chromInfo from the current db. */
+{
+return hDefaultChromDb(hGetDb());
+}
+
 char *hGetDb()
-/* Return the current database name. */
+/* Return the current database name, setting to default if not defined. */
 {
 if (NULL == hdbName)
     {
@@ -304,12 +312,34 @@ if (NULL == hdbName)
 return hdbName;
 }
 
-char *hGetDb2()
-/* Return the current database name. */
+char *hGetDbUsual(char *usual)
+/* Return the current database name, setting to usual if not defined. */
 {
 if (NULL == hdbName)
     {
-    hdbName = hDefaultDbForGenome("Mouse");
+    hdbName = usual;
+    }
+
+return hdbName;
+}
+
+char *hGetDb2()
+/* Return the secondary database name, setting to default if not defined. */
+{
+if (NULL == hdbName2)
+    {
+    hdbName2 = hDefaultDbForGenome("Mouse");
+    }
+
+return hdbName2;
+}
+
+char *hGetDb2Usual(char *usual)
+/* Return the secondary database name, setting to usual if not defined. */
+{
+if (NULL == hdbName2)
+    {
+    hdbName2 = usual;
     }
 
 return hdbName2;
@@ -365,7 +395,7 @@ struct sqlConnection *hAllocConnDb(char *db)
 if (hdbHost == NULL)
     hDefaultConnect();
 if (hdbCc == NULL)
-    hdbCc = sqlNewRemoteConnCache(hdbName2, hdbHost, hdbUser, hdbPassword);
+    hdbCc = sqlNewRemoteConnCache(hdbName, hdbHost, hdbUser, hdbPassword);
 if ( sameString( db, connGetDatabase(hdbCc)))
     return sqlAllocConnection(hdbCc);
 if (hdbCc2 == NULL)
@@ -375,6 +405,21 @@ if (sameString(connGetDatabase(hdbCc2),db))
 else
     errAbort("cannot find a connection to %s\n",db);
 return NULL;
+}
+
+struct sqlConnection *hAllocOrConnect(char *db)
+/* Get available cached connection if possible. If not, just connect. */
+{
+struct sqlConnection *conn;
+if (sameString(db, hGetDbUsual(db)))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2Usual(db)))
+    conn = hAllocConn2();
+else
+    {
+    conn = sqlConnect(db);
+    }
+return conn;
 }
 
 void hFreeConn(struct sqlConnection **pConn)
@@ -387,6 +432,18 @@ void hFreeConn2(struct sqlConnection **pConn)
 /* Put back connection for reuse into second pool for second database connection */
 {
 sqlFreeConnection(hdbCc2, pConn);
+}
+
+void hFreeOrDisconnect(struct sqlConnection **pConn)
+/* Free cached or non-cached connection. */
+{
+char *db = sqlGetDatabase(*pConn);
+if (sameString(db, hGetDbUsual(db)))
+    hFreeConn(pConn);
+else if (sameString(db, hGetDb2Usual(db)))
+    hFreeConn2(pConn);
+else
+    sqlDisconnect(pConn);
 }
 
 struct sqlConnection *hConnectCentral()
@@ -417,23 +474,11 @@ sqlFreeConnection(centralCc, pConn);
 boolean hTableExistsDb(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocOrConnect(db);
 boolean exists;
 
-if (sameString(db, hGetDb()))
-    conn = hAllocConn();
-else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
-    conn = hAllocConn2();
-else
-    {
-    hSetDb2(db);
-    conn = hAllocConn2();
-    }
 exists = sqlTableExists(conn, table);
-if (sameString(db, hGetDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 return exists;
 }
 
@@ -452,22 +497,11 @@ return(hTableExistsDb(hGetDb2(), table));
 boolean hColExistsDb(char *db, char *table , char *column)
 /* Return TRUE if a column exists in a table in db. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocOrConnect(db);
 struct sqlResult *sr;
 boolean exists;
 char query[256];
 char *field;
-
-if (sameString(db, hGetDb()))
-    conn = hAllocConn();
-else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
-    conn = hAllocConn2();
-else
-    {
-    hSetDb2(db);
-    conn = hAllocConn2();
-    }
-
 
 snprintf(query, sizeof(query), "select * from %s ", table);
 sr = sqlGetResult(conn, query);
@@ -480,13 +514,10 @@ while (field = sqlFieldName(sr))
         }
     }
 sqlFreeResult(&sr);
-
-if (sameString(db, hGetDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 return exists;
 }
+
 boolean hColExists(char *table, char *column)
 /* Return TRUE if a column exists in a table. */
 {
@@ -501,7 +532,7 @@ char *ptr;
 
 /* It might not be a split table; provide defaults: */
 strncpy(trackName, table, 128);
-strcpy(chrom, "chr1");
+strcpy(chrom, hDefaultChrom());
 if (startsWith("chr", table))
     {
     if ((ptr = strstr(table, "_random_")) != NULL)
@@ -560,7 +591,6 @@ char **row;
 struct hash *hash = newHash(10);
 struct ctgPos *ctg;
 
-conn = hAllocConn();
 sr = sqlGetResult(conn, "select * from ctgPos");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -756,10 +786,7 @@ struct slName *hAllChromNamesDb(char *db)
 struct hashCookie cookie;
 struct hashEl *hel;
 struct slName *list = NULL, *el;
-struct sqlConnection *conn;
-
-// get connection to db
-conn = hAllocConn();
+struct sqlConnection *conn = hAllocOrConnect(db);
 
 cookie = hashFirst(hdbChromInfoHashConn(NULL, conn));
 while ((hel = hashNext(&cookie)) != NULL)
@@ -768,7 +795,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     slAddHead(&list, el);
     }
 
-hFreeConn(&conn);
+hFreeOrDisconnect(&conn);
 
 slReverse(&list);
 return list;
@@ -1118,7 +1145,7 @@ struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
    in the given range in table. */
 {
 struct dyString *query = newDyString(512);
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocOrConnect(db);
 struct sqlResult *sr;
 struct hTableInfo *hti;
 struct bed *bedList=NULL, *bedItem;
@@ -1146,15 +1173,6 @@ else
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 
-if (sameString(db, hGetDb()))
-    conn = hAllocConn();
-else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
-    conn = hAllocConn2();
-else
-    {
-    hSetDb2(db);
-    conn = hAllocConn2();
-    }
 dyStringClear(query);
 // row[0], row[1] -> start, end
 dyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
@@ -1329,10 +1347,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 dyStringFree(&query);
 sqlFreeResult(&sr);
-if (sameString(db, hGetDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 slReverse(&bedList);
 return(bedList);
 }
@@ -1522,14 +1537,14 @@ int hOrganismID(char *database)
 {
 char query[256];
 char buf[64];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocOrConnect(database);
 int organismID;
 int ret;
 
 sprintf(query, "select id from organism where name = '%s'",
 				    hScientificName(database));
 ret = sqlQuickNum(conn, query);
-hFreeConn(&conn);
+hFreeOrDisconnect(&conn);
 return ret;
 }
 
@@ -1769,21 +1784,11 @@ boolean hFindBed12FieldsAndBinDb(char *db, char *table,
  * will be set to "". */
 {
 char query[256];
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocOrConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
-
-if (sameString(db, hGetDb()))
-    conn = hAllocConn();
-else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
-    conn = hAllocConn2();
-else
-    {
-    hSetDb2(db);
-    conn = hAllocConn2();
-    }
 
 if (! sqlTableExists(conn, table))
     {
@@ -1872,10 +1877,7 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
 else
     gotIt = FALSE;
 freeHash(&hash);
-if (sameString(db, hGetDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 *retBinned = binned;
 return gotIt;
 }
@@ -2212,7 +2214,8 @@ static struct sqlResult *hExtendedRangeQuery(struct sqlConnection *conn,
 /* Construct and make a query to tables that may be split and/or
  * binned. */
 {
-struct hTableInfo *hti = hFindTableInfo(chrom, rootTable);
+char *db = sqlGetDatabase(conn);
+struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 char fullTable[64], *table = NULL;
@@ -2293,7 +2296,8 @@ struct sqlResult *hChromQuery(struct sqlConnection *conn,
  * that may be split and/or
  * binned. */
 {
-struct hTableInfo *hti = hFindTableInfo(chrom, rootTable);
+char *db = sqlGetDatabase(conn);
+struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 char fullTable[64], *table = NULL;
@@ -2673,7 +2677,7 @@ slReverse(&dbDbList);
 return(dbDbList);
 }
 
-struct axtInfo *hGetAxtAlignments(char *db)
+struct axtInfo *hGetAxtAlignments(char *otherDb)
 /* Get list of alignments where we have axt files listed in axtInfo . 
  * Dispose of this with axtInfoFreeList. */
 {
@@ -2683,7 +2687,8 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-sprintf(query, "select * from axtInfo where species = '%s' and chrom = 'chr1'",db);
+sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s'",
+	otherDb, hDefaultChrom());
 /* Scan through axtInfo table, loading into list */
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
