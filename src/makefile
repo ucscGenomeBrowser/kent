@@ -1,4 +1,4 @@
-all: cgi
+all: cgi intronerator
 
 alpha: clean cgi-alpha blat
 
