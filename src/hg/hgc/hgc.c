@@ -125,7 +125,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.552 2004/01/26 22:41:53 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.553 2004/01/30 22:29:03 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10497,16 +10497,23 @@ if ((descr = getEncodeRegionDescr(item)) != NULL)
 genericClickHandlerPlus(tdb, item, NULL, plus);
 }
 
-void separateIdAndName(char *item, char *encodeId, char *encodeName)
-/* return the id and name of an encode object */
-{
-/* the name is in the format 'ddddddd/nnn' where the first seven 'd' characters
+char *getEncodeName(char *item)
+/* the item is in the format 'ddddddd/nnn' where the first seven 'd' characters
    are the digits of the identifier, and the variable-length 'n' chatacters
-   are the name of the object 
-*/
-strncpy(encodeId,item,7);
-encodeId[7]='\0';
-encodeName = item+8;
+   are the name of the object.  Return the name. */
+{
+char *dupe=cloneString(item);
+return dupe+8;
+}
+
+char *getEncodeId(char *item)
+/* the item is in the format 'ddddddd/nnn' where the first seven 'd' characters
+   are the digits of the identifier, and the variable-length 'n' chatacters
+   are the name of the object.  Return the ID portion. */
+{
+char *id = cloneString(item);
+id[7]='\0';
+return id;
 }
 
 void doEncodeErge(struct trackDb *tdb, char *item)
@@ -10521,10 +10528,9 @@ char *dupe = cloneString(tdb->type);
 char *type, *words[16];
 int wordCount = chopLine(dupe, words);
 char *newLabel = tdb->longLabel + 7; /* removes 'ENCODE ' from label */
-char *encodeName = NULL;
-char encodeId[8];
+char *encodeName = getEncodeName(item);
+char *encodeId = getEncodeId(item);
 
-separateIdAndName(item, encodeName, encodeId);
 cartWebStart(cart, "ENCODE Region Data: %s", newLabel);
 printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", newLabel, encodeName);
 genericHeader(tdb, encodeName);
@@ -10542,10 +10548,11 @@ for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
     printf("<BR>\n");
     if (ee->Id>0)
 	{
-	printf("<BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
-	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("<BR>Additional information for <A HREF=\"http://dberge.cse.psu.edu/");
+	printf("cgi-bin/dberge_query?mode=Submit+query&disp=brow+data&pid=");
 	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
-	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>.\n");
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\" ");
+	printf("TARGET=_blank>dbERGEII</A>.\n");
 	}
     }
 printTrackHtml(tdb);
@@ -10563,10 +10570,12 @@ int start = cartInt(cart, "o");
 struct sqlResult *sr;
 char *dupe, *type, *words[16];
 int wordCount=0;
+char *encodeName = getEncodeName(item);
+char *encodeId = getEncodeId(item);
 int i;
 
 cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
-printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, item);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, encodeName);
 genericHeader(tdb, item);
 
 dupe = cloneString(tdb->type);
@@ -10591,10 +10600,11 @@ for (ee = encodeErgeHssCellLinesLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
 	    printf("%s, ", words[i]);
 	    }
 	printf("%s.\n",words[wordCount-1]);
-	printf("<BR><BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
-	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
-	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", ee->Id, ee->name);
-	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>\n");
+	printf("<BR><BR>Additional information for <A HREF=\"http://dberge.cse.psu.edu/");
+	printf("cgi-bin/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\" ");
+	printf("TARGET=_blank>dbERGEII</A>.\n");
 	}
     }
 printTrackHtml(tdb);
