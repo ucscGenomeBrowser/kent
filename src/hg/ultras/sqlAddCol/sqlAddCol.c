@@ -5,7 +5,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlAddCol.c,v 1.2 2004/10/02 07:00:16 kent Exp $";
+static char const rcsid[] = "$Id: sqlAddCol.c,v 1.3 2004/10/06 17:31:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,7 +39,7 @@ void addNewColumn(struct sqlConnection *conn, char *table, char *column, char *t
 /* Add a new column to the table. */
 {
 char sql[512];
-safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN %s %s", table, column, type);
+safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN %s %s not null", table, column, type);
 sqlUpdate(conn, sql);
 }
 
