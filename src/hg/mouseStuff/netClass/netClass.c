@@ -11,7 +11,7 @@
 #include "simpleRepeat.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.13 2003/07/30 17:15:40 kate Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.14 2003/10/15 04:10:59 angie Exp $";
 
 char *tNewR = NULL;
 char *qNewR = NULL;
@@ -148,10 +148,10 @@ struct rbTree *allTree = rbTreeNew(rangeCmp);
 struct rbTree *newTree = rbTreeNew(rangeCmp);
 char tableName[64];
 char query[256];
-boolean hasBin;
 
-if (!hFindSplitTable(chrom, "rmsk", tableName, &hasBin))
-    errAbort("Can't find rmsk table for %s\n", chrom);
+safef(tableName, sizeof(tableName), "%s_rmsk", chrom);
+if (! sqlTableExists(conn, tableName))
+    errAbort("Can't find rmsk table for %s (%s.%s)\n", chrom, db, tableName);
 sprintf(query, "select genoStart,genoEnd,repName,repClass,repFamily from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
