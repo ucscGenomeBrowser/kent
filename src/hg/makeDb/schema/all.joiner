@@ -232,7 +232,6 @@ joiner vegaPseudogeneName typeOf=vegaName
 joiner affyU95
 "Affymetrix Human U95 chip identifiers"
     $hg.affyRatio.name
-    $hg.affyRatioNew.name
     $hg.affyU95.qName
     $hg.knownToU95.value
 
@@ -443,7 +442,6 @@ joiner xenoMrnaAccession typeOf=mrnaAccession
 joiner nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName
-    $gbd.chr*_mrna.qName
     $gbd.dupSpMrna.mrnaID
     $gbd.dupSpMrna.dupMrnaID
     $gbd.mrnaOrientInfo.name
