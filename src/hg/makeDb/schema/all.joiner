@@ -1022,6 +1022,10 @@ identifier extFileId
 "External file ID"
     $gbd.extFile.id
     $gbd.seq.extFile
+    hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
+    hg15.multizMm3Rn2.extFile
+    rn3.multizHg15Mm3.extFile
+    $sacCer.multizYeast.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
@@ -1267,7 +1271,6 @@ tablesIgnored $gbd
     grp
     history
     miRNA
-    multiz%
     quality
     rnaCluster
     rnaGene
