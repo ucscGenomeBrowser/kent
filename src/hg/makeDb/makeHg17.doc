@@ -3493,17 +3493,19 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     cd ..
     para create blatSpec
     para push
-# Completed: 12222 of 12222 jobs
-# CPU time in finished jobs:   23286365s  388106.09m  6468.43h  269.52d  0.738 y
-# IO & Wait Time:                710342s   11839.03m   197.32h    8.22d  0.023 y
-# Average job time:                1963s      32.72m     0.55h    0.02d
-# Longest job:                   106239s    1770.65m    29.51h    1.23d
-# Submission to last job:        106248s    1770.80m    29.51h    1.23d
 
+# Completed: 133676 of 133676 jobs
+# CPU time in finished jobs:   29661130s  494352.16m  8239.20h  343.30d  0.941 y
+# IO & Wait Time:               2181179s   36352.99m   605.88h   25.25d  0.069 y
+# Average job time:                 238s       3.97m     0.07h    0.00d
+# Longest job:                   105972s    1766.20m    29.44h    1.23d
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blat.hg17KG
     pslSort dirs raw.psl /tmp psl/*
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
-    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-
+    pslUniq cooked.psl hg17KG.psl
+    pslxToFa hg17KG.psl hg17KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
 
 # BLASTZ MM4  (WORKING - 2004-06-21 - Hiram)
     ssh kk
