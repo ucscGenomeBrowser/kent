@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.30 2005/01/10 00:33:09 kent Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.31 2005/02/16 08:34:05 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -87,6 +87,19 @@ errAbort(
   "used in dir/chrN_something*.bed you'd do:\n"
   "   featureBits database dir/_something.bed\n"
   );
+}
+
+boolean isFileType(char *file, char *suffix)
+/* determine if file ends with .suffix, or .suffix.gz */
+{
+if (endsWith(file, suffix))
+    return TRUE;
+else
+    {
+    char sbuf[64];
+    safef(sbuf, sizeof(sbuf), "%s.gz", suffix);
+    return endsWith(file, sbuf);
+    }
 }
 
 bool inclChrom(struct slName *chrom)
@@ -317,18 +330,15 @@ if (s != NULL) *s = 0;
 void orFile(Bits *acc, char *track, char *chrom, int chromSize)
 /* Or some sort of file into bits. */
 {
-char *suffix = strrchr(track, '.');
-if (suffix == NULL)
-    errAbort("Unknown file type %s", track);
-if (sameString(suffix, ".psl"))
+if (isFileType(track, "psl"))
     {
     fbOrPsl(acc, track, chrom, chromSize);
     }
-else if (sameString(suffix, ".bed"))
+else if (isFileType(track, "bed"))
     {
     fbOrBed(acc, track, chrom, chromSize);
     }
-else if (sameString(suffix, ".chain"))
+else if (isFileType(track, "chain"))
     {
     fbOrChain(acc, track, chrom, chromSize);
     }
