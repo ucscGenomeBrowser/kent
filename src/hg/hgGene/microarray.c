@@ -128,7 +128,7 @@ return section->items != NULL;
 
 static void expLabelPrint(struct expColumn *col, char *subName,
 	int representativeCount, int *representatives,
-	char *expTable)
+	char *expTable, int nameIxStart)
 /* Print out labels. */
 {
 int skipName = 0;
@@ -137,9 +137,23 @@ if ((skips = hashFindVal(col->settings, "skipName")) != NULL)
     skipName = atoi(skips);
 hPrintf("<TR>\n");
 hgExpLabelPrint(col->name, subName, skipName, NULL,
-	representativeCount, representatives, expTable);
+	representativeCount, representatives, expTable, nameIxStart);
 hPrintf("<TD> </TD>\n");	/* Dummy entry for labels. */
 hPrintf("</TR>\n");
+}
+
+static int findEnd(int *reps, int repCount, int maxCount)
+/* Find first -1 before maxCount. */
+{
+int i;
+if (repCount <= maxCount)
+    return repCount;
+for (i=repCount; i>0; --i)
+    {
+    if (reps[i] == -1)
+        return i;
+    }
+return maxCount;
 }
 
 static void expRatioPrint(struct expColumn *col,
@@ -153,6 +167,7 @@ char *s = dupe;
 char *repString = cloneString(hashMustFindVal(col->settings, "representatives"));
 char *shortType, *lookupTable, *expTable, *ratioTable;
 int representativeCount, *representatives = NULL;
+int repSize, repStart, maxInRow=30;
 
 shortType = nextWord(&s);
 lookupTable = nextWord(&s);
@@ -162,15 +177,20 @@ if (expTable == NULL)
     errAbort("short type line in %s", col->name);
 sqlSignedDynamicArray(repString, &representatives, &representativeCount);
 
-hPrintf("<TABLE>\n");
-expLabelPrint(col, "", representativeCount, representatives, expTable);
-hPrintf("<TR>");
-hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
-	conn, ratioTable, representativeCount, representatives,
-	useBlue, FALSE, 1.0/ratioMax);
-hPrintf("<TD>Ratios</TD>\n");
-hPrintf("</TR>\n");
-hPrintf("</TABLE>\n");
+for (repStart=0; repStart<representativeCount; repStart += repSize+1)
+    {
+    repSize = findEnd(representatives+repStart, representativeCount-repStart, 
+	maxInRow);
+    hPrintf("<TABLE>\n");
+    expLabelPrint(col, "", repSize, representatives+repStart, expTable, repStart);
+    hPrintf("<TR>");
+    hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	    conn, ratioTable, repSize, representatives+repStart,
+	    useBlue, FALSE, 1.0/ratioMax);
+    hPrintf("<TD>Ratios</TD>\n");
+    hPrintf("</TR>\n");
+    hPrintf("</TABLE>\n");
+    }
 
 freeMem(representatives);
 freeMem(repString);
@@ -185,11 +205,12 @@ static void expMultiPrint(struct expColumn *col,
 {
 char *subName = "median";
 char *subType = hashFindVal(col->settings, subName);
-float ratioMax = atof(hashMustFindVal(col->settings, "ratioMax"));
-float absoluteMax = atof(hashMustFindVal(col->settings, "absoluteMax"));
+float ratioScale = 1.0/atof(hashMustFindVal(col->settings, "ratioMax"));
+float absoluteScale = 1.0/atof(hashMustFindVal(col->settings, "absoluteMax"));
 char *dupe = NULL, *s;
 char *expTable, *ratioTable, *absTable, *repString;
 int representativeCount, *representatives = NULL;
+int repStart, repSize, maxInRow=40;
 
 if (subType == NULL)
     {
@@ -209,21 +230,26 @@ if (repString == NULL)
     errAbort("short %s line in %s", subName, col->name);
 sqlSignedDynamicArray(repString, &representatives, &representativeCount);
 
-hPrintf("<TABLE>\n");
-expLabelPrint(col, subName, representativeCount, representatives, expTable);
-hPrintf("<TR>");
-hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
-	fConn, ratioTable, representativeCount, representatives,
-	useBlue, FALSE, 1.0/ratioMax);
-hPrintf("<TD>Ratios</TD>\n");
-hPrintf("</TR>\n");
-hPrintf("<TR>");
-hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
-	fConn, absTable, representativeCount, representatives,
-	useBlue, TRUE, 1.0/log(absoluteMax));
-hPrintf("<TD>Absolute</TD>\n");
-hPrintf("</TR>");
-hPrintf("</TABLE>\n");
+for (repStart = 0; repStart <representativeCount; repStart += repSize+1)
+    {
+    repSize = findEnd(representatives+repStart, representativeCount-repStart, 
+    	maxInRow);
+    hPrintf("<TABLE>\n");
+    expLabelPrint(col, subName, repSize, representatives+repStart, expTable, repStart);
+    hPrintf("<TR>");
+    hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	    fConn, ratioTable, repSize, representatives+repStart,
+	    useBlue, FALSE, ratioScale);
+    hPrintf("<TD>Ratios</TD>\n");
+    hPrintf("</TR>\n");
+    hPrintf("<TR>");
+    hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	    fConn, absTable, repSize, representatives+repStart,
+	    useBlue, TRUE, absoluteScale);
+    hPrintf("<TD>Absolute</TD>\n");
+    hPrintf("</TR>");
+    hPrintf("</TABLE>\n");
+    }
 
 freeMem(representatives);
 freeMem(dupe);
