@@ -125,7 +125,7 @@ while (fgets(line_in, 10000, inf) != NULL)
 	}
     else
 	{
-	// remember previous record as old only if it is not a duplicate
+	/* remember previous record as old only if it is not a duplicate */
 	if (!isDuplicate)
 	    {
 	    oldMrnaStr 	  = mrnaStr;
@@ -160,8 +160,6 @@ while (fgets(line_in, 10000, inf) != NULL)
     alignID = chp;
 
     /* get rid of "end-of-line" character at the end of the string */
-    //chp = strstr(alignID, "\n");
-    //*chp = '\0';
     alignStr = trimSpaces(alignID);
 
     if (isDuplicate)
