@@ -293,6 +293,34 @@ for (i=0; ; ++i)
     }
 }
 
+struct block *removeFrayedEnds(struct block *blockList)
+/* Remove zero length blocks at start and/or end to 
+ * work around blastz bug. */
+{
+struct block *block = blockList;
+struct block *lastBlock = NULL;
+if (block != NULL && block->qStart == block->qEnd)
+    {
+    blockList = blockList->next;
+    freeMem(block);
+    }
+for (block = blockList; block != NULL; block = block->next)
+    {
+    if (block->next == NULL)  /* Last block in list */
+        {
+	if (block->qStart == block->qEnd)
+	    {
+	    freeMem(block);
+	    if (lastBlock == NULL)  /* Only block on list. */
+		blockList = NULL;
+	    else
+	        lastBlock->next = NULL;
+	    }
+	}
+    lastBlock = block->next;
+    }
+return blockList;
+}
 
 void parseA(struct lineFile *lf, struct block **retBlockList, 
 	int *retScore)
@@ -339,6 +367,7 @@ if (!gotScore)
     	lf->lineIx, lf->fileName);
     }
 slReverse(&blockList);
+blockList = removeFrayedEnds(blockList);
 *retBlockList = blockList;
 *retScore = score;
 }
