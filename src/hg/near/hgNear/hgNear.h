@@ -233,6 +233,10 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 boolean gotAdvSearch();
 /* Return TRUE if advanced search variables are set. */
 
+boolean advSearchColAnySet(struct column *col);
+/* Return TRUE if any of the advanced search variables
+ * for this col are set. */
+
 /* ---- Create high level pages. ---- */
 void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);
 /* Display data in neighborhood of gene. */

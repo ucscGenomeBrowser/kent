@@ -6,14 +6,12 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-boolean gotAdvSearch()
+static boolean anyRealInCart(struct cart *cart, char *wild)
 /* Return TRUE if advanced search variables are set. */
 {
-char wild[64];
 struct hashEl *varList = NULL, *var;
 boolean ret = FALSE;
 
-safef(wild, sizeof(wild), "%s.*", advSearchPrefix);
 varList = cartFindLike(cart, wild);
 for (var = varList; var != NULL; var = var->next)
     {
@@ -28,7 +26,25 @@ for (var = varList; var != NULL; var = var->next)
 	    }
 	}
     }
+hashElFreeList(&varList);
 return ret;
+}
+
+boolean gotAdvSearch()
+/* Return TRUE if advanced search variables are set. */
+{
+char wild[64];
+safef(wild, sizeof(wild), "%s.*", advSearchPrefix);
+return anyRealInCart(cart, wild);
+}
+
+boolean advSearchColAnySet(struct column *col)
+/* Return TRUE if any of the advanced search variables
+ * for this col are set. */
+{
+char wild[128];
+safef(wild, sizeof(wild), "%s.%s.*", advSearchPrefix, col->name);
+return anyRealInCart(cart, wild);
 }
 
 char *advSearchName(struct column *col, char *varName)
@@ -84,8 +100,6 @@ cartSaveSession(cart);
 
 /* Put up little table with clear all/submit */
 bigButtons();
-htmlHorizontalLine();
-
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -103,7 +117,7 @@ for (onOff = 1; onOff >= 0; --onOff)
 	{
 	if (onOff == FALSE)
 	    hPrintf("<H2>Search Controls for Hidden Tracks</H2>");
-	hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
+	hPrintf("<TABLE BORDER=2 CELLSPACING=1 CELLPADDING=1>\n");
 	for (col = colList; col != NULL; col = col->next)
 	    {
 	    if (col->searchControls && col->on == onOff)
@@ -122,7 +136,6 @@ for (onOff = 1; onOff >= 0; --onOff)
 	hPrintf("</TABLE>\n");
 	}
     }
-htmlHorizontalLine();
 bigButtons();
 hPrintf("</FORM>\n");
 }

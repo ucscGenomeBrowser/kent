@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.8 2003/06/25 06:10:49 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.9 2003/06/26 00:06:48 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -362,6 +362,147 @@ hPrintf("<TD>");
 hPrintf("</TD>");
 }
 
+void expRatioSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+char lVarName[16];
+int i, numExpts = col->representativeCount;
+char **experiments = getExperimentNames("hgFixed", col->expTable, numExpts,
+	col->representatives);
+
+hPrintf("Note: expression ratio values are scaled from -1 to 1");
+hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TR><TH>Tissue</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n");
+
+for (i=0; i<numExpts; ++i)
+    {
+    int ix = col->representatives[i];
+    hPrintf("<TR>");
+    if (ix != -1)
+        {
+	hPrintf("<TD>%s</TD>", experiments[i]);
+	safef(lVarName, sizeof(lVarName), "min%d", ix);
+	hPrintf("<TD>");
+	advSearchRemakeTextVar(col, lVarName, 8);
+	hPrintf("</TD>");
+	safef(lVarName, sizeof(lVarName), "max%d", ix);
+	hPrintf("<TD>");
+	advSearchRemakeTextVar(col, lVarName, 8);
+	hPrintf("</TD>");
+	}
+    hPrintf("</TR>");
+    }
+hPrintf("</TABLE>\n");
+}
+
+static struct hash *expValHash(struct sqlConnection *conn, char *table)
+/* Load up all expresssion data into a hash keyed by table->name */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(16);
+
+safef(query, sizeof(query), "select name,expScores from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    if (!hashLookup(hash, name))
+        {
+	float *vals = NULL;
+	int valCount;
+	sqlFloatDynamicArray(row[1], &vals, &valCount);
+	hashAdd(hash, name, vals);
+	}
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+struct hash *getNameExpHash(struct sqlConnection *conn, 
+	char *table, char *keyField, char *valField, struct hash *expHash)
+/* For each key in table lookup val in expHash, and if there
+ * put key/exp in table. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(16);
+
+safef(query, sizeof(query), "select %s,%s from %s", keyField, valField,table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    float *val = hashFindVal(expHash, row[1]);
+    if (val != NULL)
+        hashAdd(hash, row[0], val);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+struct genePos *expRatioAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on position. */
+{
+if (advSearchColAnySet(col))
+    {
+    struct hash *expHash = expValHash(conn, col->posTable);
+    struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
+    char lVarName[16];
+    int i, numExpts = col->representativeCount;
+    for (i=0; i<numExpts; ++i)
+	{
+	int ix = col->representatives[i];
+	if (ix != -1)
+	    {
+	    static char *varType[2] = {"min", "max"};
+	    char *varValString;
+	    int isMax;
+	    for (isMax=0; isMax<2; ++isMax)
+	        {
+		safef(lVarName, sizeof(lVarName), "%s%d", varType[isMax], ix);
+		varValString = advSearchVal(col, lVarName);
+		if (varValString != NULL)
+		    {
+		    float varVal = atof(varValString)/col->expScale;
+		    float *vals = NULL;
+		    struct genePos *newList = NULL, *gp, *next;
+		    for (gp = list; gp != NULL; gp = next)
+			{
+			next = gp->next;
+			if ((vals = hashFindVal(nameExpHash, gp->name)) != NULL)
+			    {
+			    float val = vals[ix];
+			    if (isMax)
+			        {
+				if (val <= varVal)
+				    {
+				    slAddHead(&newList, gp);
+				    }
+				}
+			    else
+			        {
+				if (val >= varVal)
+				    {
+				    slAddHead(&newList, gp);
+				    }
+				}
+			    }
+			}
+		    slReverse(&newList);
+		    list = newList;
+		    }
+		}
+	    }
+	}
+    freeHash(&nameExpHash);
+    freeHashAndVals(&expHash);
+    }
+return list;
+}
+
 
 void setupColumnExpRatio(struct column *col, char *parameters)
 /* Set up expression ration type column. */
@@ -423,4 +564,6 @@ col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
 col->labelPrint = expRatioLabelPrint;
 col->configControls = expRatioConfigControls;
+col->searchControls = expRatioSearchControls;
+col->advancedSearch = expRatioAdvancedSearch;
 }
