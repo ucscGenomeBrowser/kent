@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.445 2003/06/24 13:14:50 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.446 2003/06/25 23:48:00 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4801,6 +4801,7 @@ if (seq == NULL)
 hgcStart("RefSeq mRNA");
 printf("<PRE><TT>");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
+printf("</TT></PRE>");
 dnaSeqFree(&seq);
 }
 
@@ -4812,7 +4813,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-hgcStart("RefSeq mRNA");
+hgcStart("Known Gene mRNA");
 sprintf(query, "select name,seq from knownGeneMrna where name = '%s'", geneName);
 sr = sqlGetResult(conn, query);
 printf("<PRE><TT>");
@@ -4821,6 +4822,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     faWriteNext(stdout, row[0], row[1], strlen(row[1]));
     }
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void cartContinueRadio(char *var, char *val, char *defaultVal)
