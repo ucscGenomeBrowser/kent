@@ -4083,8 +4083,8 @@ char **row;
 struct gcPercent *itemList = NULL, *item;
 char query[256];
 
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    "gcPercent", chromName, winEnd, winStart);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->mapName,
+    chromName, winEnd, winStart);
 
 /* Get the frags and load into tg->items. */
 sr = sqlGetResult(conn, query);
@@ -4109,6 +4109,7 @@ void freeGcPercent(struct trackGroup *tg)
 {
 gcPercentFreeList((struct gcPercent**)&tg->items);
 }
+
 
 char *gcPercentName(struct trackGroup *tg, void *item)
 /* Return name of gcPercent track item. */
@@ -4195,6 +4196,8 @@ tg->itemName = gcPercentName;
 tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
 }
+
+/* Make track group for simple repeats. */
 
 #ifdef OLD
 struct genomicDups *filterOldDupes(struct genomicDups *oldList)
@@ -9154,6 +9157,7 @@ registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
+registerTrackHandler("gcPercentSmall", gcPercentMethods);
 registerTrackHandler("swiss", swissMethods);
 registerTrackHandler("ctgPos", contigMethods);
 registerTrackHandler("gold", goldMethods);
@@ -9200,6 +9204,7 @@ registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("blastzMmHg", longXenoPslMethods);
 registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
+registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -9207,6 +9212,7 @@ registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
+registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
