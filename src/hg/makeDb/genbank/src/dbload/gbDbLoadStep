@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.21 2004/02/23 07:40:18 markd Exp $
+# $Id: gbDbLoadStep,v 1.22 2004/03/13 21:22:25 markd Exp $
 #
 use strict;
 use warnings;
@@ -303,6 +303,7 @@ if ($reload) {
 }
 
 beginTask("dbload/$hostName", "dbload");
+setupHgConf();
 
 # load the database
 foreach my $db (@databases) {

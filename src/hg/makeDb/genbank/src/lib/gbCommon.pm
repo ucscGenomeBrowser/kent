@@ -25,7 +25,7 @@ BEGIN {
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
-                           callMysql runMysqlDump);
+                           getHgConf setupHgConf callMysql runMysqlDump);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -451,13 +451,25 @@ sub getReleases($$) {
     return @rels;
 }
 
-# compare two release names to sort newest to oldest
+# compare two release names to sort newest to oldest.
 sub relCmp($$) {
     my($r1, $r2) = @_;
     my $rel1 = $r1;
     $rel1 =~ s/^[^.]+\.(.*)$/$1/;
     my $rel2 = $r2;
     $rel2 =~ s/^[^.]+\.(.*)$/$1/;
+    # special handling for migration from faked to real refseq releases
+    # fake release contains decimal number, real contains integer.
+    if ($r1 =~ /^refseq\./) {
+        my $real1 = ($rel1 =~ /^[0-9]+$/);
+        my $real2 = ($rel2 =~ /^[0-9]+$/);
+        if ($real1 && (!$real2)) {
+            return 1;
+        } elsif ((!$real1) && $real2) {
+            return -1;
+        }
+        # all real or all fake, do normal compare
+    }
     if ($rel1 > $rel2) {
         return 1;
     } elsif ($rel1 < $rel2) {
@@ -713,6 +725,29 @@ sub splitSpaceList($) {
     }
 }
 
+# locate .hg.conf file to use.  This first checks the HGDB_CONF environment
+# variable, then etc/.hg.conf, then ~/.hg.conf.  Error if not found or
+# readable.
+sub getHgConf() {
+    my $hgConf = $ENV{"HGDB_CONF"};
+    if (!defined($hgConf) || (! -r $hgConf)) {
+        $hgConf = "etc/.hg.conf";
+    }
+    if (! -r $hgConf) {
+        $hgConf = $ENV{"HOME"} . "/.hg.conf";
+    }
+    if (! -r $hgConf) {
+        gbError("can't find readable .hg.conf");
+    }
+    return $hgConf;
+}
+
+# find the .hg.conf file to use and set HGDB_CONF env var
+sub setupHgConf() {
+    my $hgConf = getHgConf();
+    $ENV{"HGDB_CONF"} = $hgConf;
+}
+
 # catch of .hg.conf users/password
 my $hgUser;
 my $hgPassword;
@@ -720,11 +755,11 @@ my $hgPassword;
 # get the db.user and db.password from ~/.hg.conf, caching the results.
 sub getMysqlUser() {
    if (!defined($hgUser)) {
-       my $conf = glob("~/.hg.conf");
-       open(HGCONF, "<$conf") || die("can't open $conf");
+       my $hgConf = getHgConf();
+       open(HGCONF, "<$hgConf") || die("can't open $hgConf");
        my $line;
        while (($line = <HGCONF>)) {
-           my($key,$val) = parseConfLine($conf, $line);
+           my($key,$val) = parseConfLine($hgConf, $line);
            if (defined($key)) {
                if ($key eq "db.user") {
                    $hgUser = $val;
@@ -736,10 +771,10 @@ sub getMysqlUser() {
        }
        close(HGCONF);
        if (!defined($hgUser)) {
-           die("$conf doesn't set db.user");
+           die("$hgConf doesn't set db.user");
        }
        if (!defined($hgPassword)) {
-           die("$conf doesn't set db.password");
+           die("$hgConf doesn't set db.password");
        }
    }
    return ($hgUser, $hgPassword);
