@@ -13,6 +13,7 @@
 #include "paraMessage.h"
 #include "jobDb.h"
 #include "jobResult.h"
+#include "verbose.h"
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,7 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-static boolean doHappytDots;   /* output activity dots? */
+static int numHappyDots;       /* number of happy dots written */
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +37,7 @@ errAbort(
   "Normal usage is to do a 'para create' followed by 'para push' until\n"
   "job is done.  Use 'para check' to check status\n"
   "usage:\n"
-  "   para command [command-specific arguments]\n"
+  "   para [options] command [command-specific arguments]\n"
   "The commands are:\n"
   "\n"
   "para create jobList\n"
@@ -86,6 +87,9 @@ errAbort(
   "para recover jobList newJobList\n"
   "   Generate a job list by selecting jobs from an existing list`where\n"
   "   the `check out' tests fail.\n"
+  "\n"
+  "Common options\n"
+  "   -verbose=1 - set verbosity level.\n"
   );
 }
 
@@ -105,6 +109,56 @@ char *tempName = "para.tmp";	/* Name for temp files. */
 char *resultsName = "para.results"; /* Name of results file. */
 char *statusCommand = "parasol pstat";
 char *killCommand = "parasol remove job";
+
+void beginHappy()
+/* Call before a loop where happy dots maybe written */
+{
+numHappyDots = 0;
+}
+
+void endHappy()
+/* Call after a loop where happy dots may have been written.  There maybe more
+ * than one call to endHappy() for a beginHappy(). It's a good idea to call
+ * this before outputing low-level error messages to keep messages readable
+ * if dots are being written.
+ */
+{
+if (numHappyDots > 0)
+    {
+    verbose(1, "\n");
+    fflush(stderr);
+    fflush(stdout);
+    numHappyDots = 0;
+    }
+}
+
+void vpprintf(FILE *f, char *format, va_list args)
+/* para printf; ensures happy dots are flushed */
+{
+endHappy();
+vfprintf(f, format, args);
+}
+
+void pprintf(FILE *f, char *format, ...)
+/* para printf; ensures happy dots are flushed */
+{
+va_list args;
+va_start(args, format);
+vpprintf(f, format, args);
+va_end(args);
+}
+
+void paraVaWarn(char *format, va_list args)
+/* warn handler, flushes happyDots if needed. */
+{
+endHappy();
+if (format != NULL) {
+    fflush(stdout);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);  /* forces to log files */
+    }
+}
 
 enum jaState 
 /* A job is in one of these states. */
@@ -271,7 +325,7 @@ if (!fi->reported)
     if (!fi->exists)
 	{
         if (f != NULL)
-            fprintf(f, "%s does not exist\n", file);
+            pprintf(f, "%s does not exist\n", file);
 	fi->reported = TRUE;
 	return 1;
 	}
@@ -280,7 +334,7 @@ if (!fi->reported)
 	if (!fi->hasData)
 	    {
             if (f != NULL)
-                fprintf(f, "%s is empty\n", file);
+                pprintf(f, "%s is empty\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -290,7 +344,7 @@ if (!fi->reported)
 	if (fi->hasData && !fi->completeLastLine)
 	    {
             if (f != NULL)
-                fprintf(f, "%s has an incomplete last line\n", file);
+                pprintf(f, "%s has an incomplete last line\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -300,14 +354,14 @@ if (!fi->reported)
 	if (!fi->hasData)
 	    {
             if (f != NULL)
-                fprintf(f, "%s is empty\n", file);
+                pprintf(f, "%s is empty\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
 	else if (!fi->completeLastLine)
 	    {
             if (f != NULL)
-                fprintf(f, "%s has an incomplete last line\n", file);
+                pprintf(f, "%s has an incomplete last line\n", file);
 	    fi->reported = TRUE;
 	    return 1;
 	    }
@@ -329,11 +383,11 @@ void occassionalDot()
 {
 static int dotMod = 20;
 static int dot = 20;
-if (doHappytDots && (--dot <= 0))
+if ((--dot <= 0) && verboseDotsEnabled())
     {
-    putc('.', stdout);
-    fflush(stdout);
+    verboseDot();
     dot = dotMod;
+    numHappyDots++;
     }
 }
 
@@ -377,13 +431,14 @@ int errCount = 0;
 struct job *job;
 struct hash *hash = newHash(19);
 
-printf("Checking %sput files", when);
+verbose(1, "Checking %sput files\n", when);
+beginHappy();
 for (job = db->jobList; job != NULL; job = job->next)
     errCount += checkOneJob(job, when, hash, stderr);
+endHappy();
 if (errCount > 0)
     errAbort("%d total errors in file check", errCount);
 freeHashAndVals(&hash);
-printf("\n");
 }
 
 void writeBatch(struct jobDb *db, char *fileName)
@@ -441,7 +496,7 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 slReverse(&db->jobList);
-printf("%d jobs in batch\n", db->jobCount);
+verbose(1, "%d jobs in batch\n", db->jobCount);
 return db;
 }
 
@@ -561,7 +616,7 @@ doChecks(db, "in");
 sprintf(backup, "%s.bak", batch);
 atomicWriteBatch(db, backup);
 atomicWriteBatch(db, batch);
-printf("%d jobs written to %s\n", db->jobCount, batch);
+verbose(1, "%d jobs written to %s\n", db->jobCount, batch);
 }
 
 void paraRecover(char *batch, char *jobList, char *newJobList)
@@ -574,11 +629,13 @@ struct hash *hash = newHash(19);
 FILE *newFh = mustOpen(newJobList, "w");
 db = parseJobList(jobList);
 
+beginHappy();
 for (job = db->jobList; job != NULL; job = job->next)
     {
     if (checkOneJob(job, "out", hash, NULL))
         fprintf(newFh, "%s\n", job->spec);
     }
+endHappy();
 if (ferror(newFh))
     errAbort("write failed: %s", newJobList);
 carefulClose(&newFh);
@@ -638,7 +695,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 
 /* Get job list from paraHub. */
 queueSize = slCount(lineList);
-printf("%d jobs (including everybody's) in Parasol queue.\n", queueSize);
+verbose(1, "%d jobs (including everybody's) in Parasol queue.\n", queueSize);
 
 /* Read status output. */
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
@@ -737,7 +794,8 @@ struct hash *resultsHash = hashResults(resultsName);
 char host[128];
 time_t now = time(NULL);
 
-printf("Checking finished jobs");
+verbose(1, "Checking finished jobs\n");
+beginHappy();
 for (job=db->jobList; job != NULL; job = job->next)
     {
     if ((sub = job->submissionList) != NULL)
@@ -770,8 +828,8 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
+endHappy();
 freeHash(&checkHash);
- printf("\n");
 return resultsHash;
 }
 
@@ -800,6 +858,7 @@ if (getcwd(curDir, sizeof(curDir)) == NULL)
 queueSize = markQueuedJobs(db);
 resultsHash = markRunJobStatus(db);
 
+beginHappy();
 for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
     {
     for (job = db->jobList; job != NULL; job = job->next)
@@ -835,14 +894,13 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	    }
 	}
     }
-if (pushCount > 0)
-    printf("\n");
+endHappy();
 atomicWriteBatch(db, batch);
-printf("updated job database on disk\n");
+verbose(1, "updated job database on disk\n");
 if (pushCount > 0)
-    printf("Pushed Jobs: %d\n", pushCount);
+    verbose(1, "Pushed Jobs: %d\n", pushCount);
 if (retryCount > 0)
-    printf("Retried jobs: %d\n", retryCount);
+    verbose(1, "Retried jobs: %d\n", retryCount);
 freeResults(&resultsHash);
 return db;
 }
@@ -894,9 +952,9 @@ for (;;)
     if (curSleep < maxSleep)
         curSleep += 15;
     now = time(NULL);
-    printf("Checking job status %d minutes after launch\n",  round((now-start)/60.0));
+    verbose(1, "Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
-printf("Successful batch!\n");
+verbose(1, "Successful batch!\n");
 }
 
 void paraMake(char *batch, char *spec)
@@ -1076,7 +1134,7 @@ else
     {
     time_t startTime = jr->startTime;
     printf("host: %s\n", jr->host);
-    printf("start time: %s", ctime(&startTime));
+    printf("start time: %s", ctime(&startTime)); /* ctime adds \n */
     printf("return: ");
     if (WIFEXITED(jr->status))
         printf("%d\n", WEXITSTATUS(jr->status));
@@ -1085,7 +1143,7 @@ else
     else if (WIFSTOPPED(jr->status))
         printf("stopped %d\n", WSTOPSIG(jr->status));
     else 
-        printf("unknow wait status %d", jr->status);
+        printf("unknow wait status %d\n", jr->status);
     for (check = job->checkList; check != NULL; check = check->next)
 	doOneCheck(check, hash, stdout);
     printErrFile(sub, jr);
@@ -1144,7 +1202,7 @@ int duration = time(NULL) - startTime;
 printf("command: %s\n", job->command);
 printf("jobId: %s\n", sub->id);
 printf("host: %s\n", sub->host);
-printf("start time: %s", ctime(&startTime));
+printf("start time: %s", ctime(&startTime)); /* ctime adds \n */
 printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
 	duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
 printf("\n");
@@ -1186,7 +1244,7 @@ dyStringFree(&dy);
 if (result == NULL || !sameString(result, "ok"))
     errAbort("Couldn't chill %s\n", curDir);
 freez(&result);
-printf("Told hub to chill out\n");
+verbose(1, "Told hub to chill out\n");
 }
 
 
@@ -1210,7 +1268,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
-printf("Chilled %d jobs\n", count);
+verbose(1, "Chilled %d jobs\n", count);
 return count;
 }
 
@@ -1280,7 +1338,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
-printf("%d running jobs stopped\n", killCount);
+verbose(1, "%d running jobs stopped\n", killCount);
 if (missCount > 0)
     printf("%d jobs not stopped - try another para stop in a little while\n",
     	missCount);
@@ -1464,11 +1522,6 @@ int main(int argc, char *argv[])
 {
 char *command;
 char *batch;
-char *term = getenv("TERM");
-
-/* only do happy dots if stdout is a tty and TERM is not dumb, which
- * probably indicates running in emacs shell mode. */
-doHappytDots = isatty(1) && ((term == NULL) || !sameString(term, "dumb"));
 
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
@@ -1482,6 +1535,9 @@ killTime = optionInt("killTime", killTime);
 delayTime = optionInt("delayTime", delayTime);
 command = argv[1];
 batch = "batch";
+
+pushWarnHandler(paraVaWarn);
+
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
 if (sameWord(command, "create") || sameWord(command, "creat"))
