@@ -1938,7 +1938,7 @@ cat > template << 'EOF'
     ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
     ls -1S /cluster/bluearc/sts.9/primers/primers_* > primers.lst
     mkdir -p /cluster/bluearc/hg17/sts/primers/out
-    # try with minPerfect=0
+    # first run used minPerfect=0
 cat > template << 'EOF'
 #LOOP
 /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=5 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
@@ -1946,7 +1946,8 @@ cat > template << 'EOF'
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
     para create jobList
-        # 9500 jobs
+        ## 9500 jobs
+        # 11020 jobs
     para try
     para check
     para push
@@ -4738,7 +4739,12 @@ rm $TMP/$root.pp
     para try ; para push ... etc.
     
     # now create tracks
+    # load wiggle table
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz/cons
+    cd run.cons
     mkdir -p PHASTCONS/wib
+    bash
     for dir in PHASTCONS/chr* ; do \
 	echo $dir ;\
 	chr=`basename $dir` ;\
@@ -4746,6 +4752,10 @@ rm $TMP/$root.pp
 	    wigAsciiToBinary -chrom=$chr \
 	    -wibFile=PHASTCONS/wib/${chr}_phastCons stdin ;\
     done
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz/cons
+    cd run.cons
     hgLoadWiggle hg17 phastCons PHASTCONS/wib/chr*_phastCons.wig
     mkdir -p /gbdb/hg17/wib
     rm -f /gbdb/hg17/wib/chr*phastCons.wib
@@ -4753,6 +4763,53 @@ rm $TMP/$root.pp
     chmod 775 . PHASTCONS PHASTCONS/wib
     chmod 664 PHASTCONS/wib/*.wib
     
+    # load multiz maf tables 
+    # TODO: move mafs to /cluster/data (need to free up space on store5)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz
+    mkdir -p /gbdb/hg17/multiz7way
+    ln -s /cluster/bluearc/hg17/multiz/7way/*.maf /gbdb/hg17/multiz7way
+    hgLoadMaf hg17 -warn multiz7way
+        # Indexing and tabulating /gbdb/hg17/multiz7way/chr14.maf
+        # 11489 warnings
+        # TODO: check this out
+
+    # load blastz maf tables
+    # TODO: change mafWiggle to use db names instead of species names
+    # in speciesOrder 
+    # TODO: move mafs to /cluster/data (need to free up space on store5)
+    cd /cluster/bluearc/hg17/multiz
+    ln -s panTro1 chimp
+    ln -s mm4 mouse
+    ln -s rn3 rat
+    ln -s galGal2 chicken
+    ln -s fr1 fugu
+    ln -s danRer1 zebrafish
+    #foreach s (chimp mouse rat chicken fugu zebrafish)
+    foreach s (mouse rat chicken fugu zebrafish)
+        mkdir -p /gbdb/hg17/${s}_netBlastz
+        ln -s /cluster/bluearc/hg17/multiz/$s/*.maf /gbdb/hg17/${s}_netBlastz
+        hgLoadMaf hg17 -warn ${s}_netBlastz
+    end
+
+    # trackDb entry:
+# track multiz7way
+# shortLabel Conservation
+# longLabel Human/Chimp/Mouse/Rat/Chicken/Fugu/Zebrafish Multiz Alignments & PhyloHMM Cons
+# group compGeno
+# priority 149
+# visibility pack
+#color 0, 10, 100
+# type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# wiggle phastCons
+# yLineOnOff Off
+# autoScaleDefault Off
+# pairwise netBlastz
+# speciesOrder chimp mouse rat chicken fugu zebrafish
+
+
+    # GOT HERE
     # tweak scores and names of predictions
     cat PREDICTIONS/*/*.bed | sed 's/id //' | \
 	awk '{printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
