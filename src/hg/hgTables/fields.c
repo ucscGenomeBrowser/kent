@@ -192,6 +192,8 @@ webNewSection("Linked Tables");
 hTableStart();
 for (out = outList; out != NULL; out = out->next)
     {
+    struct sqlConnection *conn = sqlConnect(out->db);
+    struct asObject *asObj = asForTable(conn, out->table);
     char *var = linkedTableVar(out->db, out->table);
     hPrintf("<TR>");
     hPrintf("<TD>");
@@ -199,7 +201,14 @@ for (out = outList; out != NULL; out = out->next)
     hPrintf("</TD>");
     hPrintf("<TD>%s</TD>", out->db);
     hPrintf("<TD>%s</TD>", out->table);
+    hPrintf("<TD>");
+    if (asObj != NULL)
+        hPrintf("%s", asObj->comment);
+    else
+        hPrintf("&nbsp;");
+    hPrintf("</TD>");
     hPrintf("</TR>");
+    sqlDisconnect(&conn);
     }
 hTableEnd();
 hPrintf("<BR>");
