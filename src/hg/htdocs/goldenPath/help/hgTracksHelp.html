@@ -24,7 +24,7 @@
 			Gene Sorter</A> &nbsp; - &nbsp; 
 		<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
 			Blat </A> &nbsp; - &nbsp; 
-		<A HREF="/cgi-bin/hgText?command=start" class="topbar">
+		<A HREF="/cgi-bin/hgTables?command=start" class="topbar">
 			Table Browser</A> &nbsp; - &nbsp; 
 		<A HREF="/FAQ/" class="topbar">
 			FAQ</A> &nbsp;&nbsp; 
@@ -135,7 +135,12 @@ Viewer</A> annotation.
 The browser data represents an immense 
 <A HREF="http://genome.ucsc.edu/goldenPath/credits.html">collaborative effort</A> 
 involving thousands of people from the international biomedical research community. 
-UCSC itself does no sequencing and creates only about half the tracks in-house. Its 
+The UCSC Bioinformatics Group itself does no sequencing. Although it creates 
+the majority of the annotation tracks in-house, the annotations are based on
+publicly available data contributed by many labs and research groups throughout
+the world. Several of the Genome Browser annotations are generated in 
+collaboration with outside individuals or are contributed wholly by external
+research groups. UCSC's
 other major roles include building genome assemblies, creating the Genome Browser work 
 environment, and serving it online. The majority of the sequence data, annotation tracks, and even 
 software are in the public domain and are available for anyone
@@ -146,9 +151,9 @@ several other tools for viewing and interpreting genome data:
 <UL>
 <LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT<A> - a 
 fast sequence-alignment tool similar to BLAST. <A HREF="#BLATAlign">Read more</A>.
-<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgText">Table Browser</A> - 
+<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A> - 
 convenient text-based access to the database underlying the Genome Browser. 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/hgTextHelp.html">Read
+<A HREF="http://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html">Read
 more</A>.
 <LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgNear">Gene Sorter</A> - 
 expression, homology, and other information on groups of genes that can
@@ -283,7 +288,7 @@ TARGET=_blank>Troubleshooting Annotation Display Problems</A>.
 <P>
 <B>Viewing genome data as text</B><BR> 
 The 
-<A HREF="http://genome.ucsc.edu/cgi-bin/hgText" TARGET=_blank>Table Browser</A>,
+<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table Browser</A>,
 a portal to the underlying open source <A
 HREF="http://www.MySQL.com" TARGET=_blank>MySQL</A> relational database driving the Genome
 Browser, displays genomic data as columns of text rather than as
@@ -818,7 +823,7 @@ Browser FAQ.
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 			<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
-The <A HREF="http://genome.ucsc.edu/cgi-bin/hgText" TARGET=_blank>Table
+The <A HREF="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table
 Browser</A> provides text-based access to the genome assemblies and annotation
 data stored in the Genome Browser database. As a flexible alternative to the 
 graphical-based Genome Browser, this tool offers an enhanced level of 
@@ -833,7 +838,7 @@ alternative to downloading and manipulating the entire genome and its massive da
 (See the <A
 HREF="#Download">Downloading Genome Data</A> section.) 
 <P>
-For information on using the Table Browser features, refer to the <A HREF="hgTextHelp.html">Table Browser User Guide</A>.
+For information on using the Table Browser features, refer to the <A HREF="hgTablesHelp.html">Table Browser User Guide</A>.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -5749,6 +5754,20 @@ significance for the gene.
 
 <A NAME="T_tracks"></A>
 
+<P><B>Tetraodon Chain </B><BR>
+This track shows Tetraodon genomic alignments to the selected 
+genome using blastz and axtChain. See the Human Chain track description for 
+more information.
+
+<P><B>Tetraodon Ecores</B><BR>
+This track shows Tetraodon evolutionary conserved regions (ecores) computed 
+against the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
+
+<P><B>Tetraodon Net </B><BR>
+This track shows the best Tetraodon chain for every part of the selected genome.
+See the Human Net track description for more information.
+
 <P><B>TFBS Conserved</B><BR>
 This tracks shows the location and score of transcription factor binding sites 
 (TFBSs) conserved in a multiple species alignment. A binding site is considered 
@@ -5777,11 +5796,6 @@ functional binding sites.
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#tfbsCons"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
-
-<P><B>Tetraodon Ecores</B><BR>
-This track shows Tetraodon evolutionary conserved regions (ecores) computed 
-against the selected assembly genome by the Exofish program at Genoscope. For 
-information on this track, see the Human Ecores track description.
 
 <P><B>Tight Mouse</B><BR>
 This track displays <I>Blastz</I> alignments of the specified mouse
