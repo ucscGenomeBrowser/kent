@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.94 2003/09/26 06:05:08 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.95 2003/09/26 21:23:39 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -265,6 +265,34 @@ freez(&buf);
 return list;
 }
 
+static struct hash *upcHashWordsInFile(char *fileName, int hashSize)
+/* Create a hash of space delimited uppercased words in file. */
+{
+struct hash *hash = newHash(hashSize);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+while (lineFileNext(lf, &line, NULL))
+    {
+    while ((word = nextWord(&line)) != NULL)
+	{
+	touppers(word);
+        hashAdd(hash, word, NULL);
+	}
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+
+static struct hashEl *upcHashLookup(struct hash *hash, char *name)
+/* Lookup upper cased name in hash. */
+{
+char s[128];
+safef(s, sizeof(s), "%s", name);
+touppers(s);
+return hashLookup(hash, s);
+}
+
 struct hash *keyFileHash(struct column *col)
 /* Make up a hash from key file for this column. 
  * Return NULL if no key file. */
@@ -272,7 +300,7 @@ struct hash *keyFileHash(struct column *col)
 char *fileName = keyFileName(col);
 if (fileName == NULL)
     return NULL;
-return hashWordsInFile(fileName, 16);
+return upcHashWordsInFile(fileName, 16);
 }
 
 char *cellLookupVal(struct column *col, struct genePos *gp, 
@@ -502,7 +530,7 @@ if (keyHash != NULL)
     for (gp = list; gp != NULL; gp = next)
         {
 	next = gp->next;
-	if (hashLookup(keyHash, gp->name))
+	if (upcHashLookup(keyHash, gp->name))
 	    {
 	    slAddHead(&newList, gp);
 	    }
@@ -654,7 +682,7 @@ if (wild != NULL || keyHash != NULL)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (keyHash == NULL || hashLookup(keyHash, row[1]))
+	if (keyHash == NULL || upcHashLookup(keyHash, row[1]))
 	    {
 	    if (wildList == NULL || wildMatchList(row[1], wildList, orLogic))
 		hashAdd(hash, row[0], NULL);
