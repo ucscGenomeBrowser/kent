@@ -2177,6 +2177,7 @@ cat > split.csh << 'EOF'
 # FILTERED SET (DONE, 2005-02-18, hartera)
 # UPDATE PSL ALIGNMENTS FOR D21S167 and D21S168 AND RELOAD INTO all_sts_seq
 # (DONE, 2005-02-23, hartera)
+# UPDATED stsAlias TABLE REMOVING OF FILTERED ALIGNMENTS (2005-02-24, hartera)
 
     # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
     # remove this after verifying the newer version
@@ -2872,7 +2873,41 @@ while (<FILE>) {
     mkdir old
     mv stsMap.bed stsInfo2.bed stsMarkers.lifted.psl ./old
     mv ./fix/stsMap.bed ./fix/stsInfo2.bed ./fix/stsMarkers.lifted.psl .
-    
+   
+    # Update of stsAlias table (DONE, 2005-02-24, hartera)
+    # stsAlias filtered IDs removed
+    # should have same IDs as in stsInfo2
+    ssh eieio
+    cd /cluster/data/hg17/bed/sts/fix
+    awk '{print $2;}' ../stsAlias.bed | sort -n | uniq > alias.ids
+    # 145985 alias.ids
+    awk '{print $6;}' ../stsMap.bed | sort -n | uniq > stsMap.new.ids.sort
+    awk '{print $1;}' ../stsInfo2.bed | sort -n | uniq > stsInfo.new.ids.sort
+    # 16678 ids in stsInfo2 that are not in stsMap
+    # 16717 ids in stsAlias that are not in stsMap
+    # 38 ids in stsAlias that are not in stsInfo2
+    cat stsMap.new.ids.sort stsInfo.new.ids.sort | sort -n | uniq \
+        > stsMapandInfo.ids.sort
+    diff stsMapandInfo.ids.sort alias.ids | grep '>' > idstoremoveAlias
+    # there are 38 of these IDs to remove
+    perl -pi.bak -e 's/> //' idstoremoveAlias
+    cp ../stsAlias.bed .
+    foreach i (`cat idstoremoveAlias`)
+      awk '{if ($2 != "'$i'") print;}' stsAlias.bed > stsAlias.tmp
+      mv stsAlias.tmp stsAlias.bed
+    end
+    # check that ids are removed from file and that they are the correct ones
+    # all looks good
+    cd /cluster/data/hg17/bed/sts
+    # save old stsAlias file and copy new one to sts dir and to ncbi sts dir
+    mv stsAlias.bed ./old
+    cp ./fix/stsAlias.bed .
+    cp stsAlias.bed /cluster/data/ncbi/sts.9/stsAlias.bed
+    ssh hgwdev
+    # remove old table data and reload
+    hgsql hg17 -e 'delete from stsAlias'
+    hgsql hg17 -e 'load data local infile "stsAlias.bed" into table stsAlias'
+ 
 # RECOMBINATION RATES (2004-07-13 Terry)
 #                       (2004-07-21 kate)
 
@@ -12294,13 +12329,16 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
                                                                                 
 # CLEANUP DANRER2 BLASTZ (DONE, 2004-12-14, hartera)
 # RE-DONE (DONE, 2004-12-22, hartera)
-    ssh kksilo
+# REMOVED RAW AND LAV DIRS (DONE, 2005-02-24, hartera)
+    ssh eieio
     cd /cluster/data/hg17/bed/blastz.danRer2
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
     nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
+    nice rm -rf raw &
+    nice rm -rf lav &
 
 # EXTRACT AXT'S AND MAF'S FROM TETRAODON (tetNig1) NET 
 # (DONE, 2004-12-15, hartera) 
