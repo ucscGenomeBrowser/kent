@@ -3,6 +3,7 @@
 #include "errabort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "hdb.h"
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -19,16 +20,11 @@ webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
 }
 
-void webStartWrapper(char *format, va_list args, boolean withHttpHeader, boolean withLogo)
-    /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
-	/* output a CGI and HTML header with the given title in printf format */
-{
-webStartWrapperGateway(format, args, withHttpHeader, withLogo, FALSE);
-}	
-
-void webStartWrapperGateway(char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
+void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
+char *db = NULL;
+
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
     return;
@@ -62,29 +58,44 @@ if (withLogo)
     "<TR><TH COLSPAN=1 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
     "" "\n"
     );
-puts(
 
-	"<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
-	"<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
-	"<table bgcolor=\"000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" height=\"27\">" "\n"
-	"<tr bgcolor=\"2636D1\"><td valign=\"middle\">" "\n"
-	"	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"2636D1\" height=\"24\">" "\n	"
- 	" 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
-    "       &nbsp;<A HREF=\"/index.html\" class=\"topbar\">" "\n"
-    "           Home</A> &nbsp; - &nbsp;" "\n"
-    "       <A HREF=\"/cgi-bin/hgGateway\" class=\"topbar\">" "\n"
-	"           Genome Browser</A> &nbsp; - &nbsp;" "\n"
-	"       <A HREF=\"/cgi-bin/hgBlat?command=start\" class=\"topbar\">" "\n"
-	"           Blat Search</A> &nbsp; - &nbsp;" "\n" 
-	"       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
-	"           FAQ</A> &nbsp; - &nbsp;" "\n" 
-	"       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
-	"           User Guide</A> &nbsp;</font></TD>" "\n"
-    "       </TR></TABLE>" "\n"
-	"</TD></TR></TABLE>" "\n"
-	"</TD></TR>	" "\n"	
-    "" "\n"
-);
+if (NULL != theCart)
+    {
+    db = cartUsualString(theCart, "db", hGetDb());
+    }
+
+puts(
+       "<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
+       "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
+       "<table bgcolor=\"000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
+       "<tr bgcolor=\"2636D1\"><td valign=\"middle\">" "\n"
+       "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"2636D1\" height=\"24\">" "\n	"
+       " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
+       );
+
+if (NULL != db)
+    {
+    printf("&nbsp;<A HREF=\"/index.html?db=%s\" class=\"topbar\">" "\n", db);
+    }
+else
+    {
+    puts("&nbsp;<A HREF=\"/index.html\" class=\"topbar\">" "\n");
+    }
+puts(
+     "           Home</A> &nbsp; - &nbsp;" "\n"
+     "       <A HREF=\"/cgi-bin/hgGateway\" class=\"topbar\">" "\n"
+     "           Genome Browser</A> &nbsp; - &nbsp;" "\n"
+     "       <A HREF=\"/cgi-bin/hgBlat?command=start\" class=\"topbar\">" "\n"
+     "           Blat Search</A> &nbsp; - &nbsp;" "\n" 
+     "       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+     "           FAQ</A> &nbsp; - &nbsp;" "\n" 
+     "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
+     "           User Guide</A> &nbsp;</font></TD>" "\n"
+     "       </TR></TABLE>" "\n"
+     "</TD></TR></TABLE>" "\n"
+     "</TD></TR>	" "\n"	
+     "" "\n"
+     );
 
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
@@ -114,17 +125,22 @@ pushWarnHandler(webVaWarn);
 webHeadAlreadyOutputed = TRUE;
 }
 
-void webStart(char *format, ...)
+void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
+    /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
+	/* output a CGI and HTML header with the given title in printf format */
+{
+webStartWrapperGateway(theCart, format, args, withHttpHeader, withLogo, FALSE);
+}	
+
+void webStart(struct cart *theCart, char *format, ...)
 /* Print out pretty wrapper around things when not
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(format, args, TRUE, TRUE);
+webStartWrapper(theCart, format, args, TRUE, TRUE);
 va_end(args);
 }
-
-
 
 void webNewSection(char* format, ...)
 /* create a new section on the web page */
@@ -197,7 +213,7 @@ va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-	webStart(title);
+	webStart(NULL, title);
 
 /* in text mode, have a different error */
 if(webInTextMode)

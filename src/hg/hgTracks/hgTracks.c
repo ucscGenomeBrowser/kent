@@ -8899,7 +8899,7 @@ struct dyString *uiVars = uiStateUrlPart(NULL);
 
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-printf("<TD ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+printf("<TD ALIGN=CENTER><A HREF=\"/index.html?db=%s\">%s</A></TD>", database, wrapWhiteFont("Home"));
 if (gotBlat)
     {
     fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));

@@ -28,6 +28,7 @@ boolean breakUp = FALSE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 char *position = NULL;
+struct cart *cart = NULL;
 
 static int blockIx = 0;	/* Index of block written. */
 
@@ -45,7 +46,7 @@ struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 char *assembly = NULL;
 
-webStart("Genome Table Browser");
+webStart(NULL, "Genome Table Browser");
 
 puts(
      "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
@@ -242,7 +243,7 @@ if ((pos = hgp->singlePos) != NULL)
     }
 else
     {
-    webStart("Genome Table Browser");
+    webStart(NULL,  "Genome Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
     webEnd();
@@ -1629,7 +1630,7 @@ if(table == NULL || existsAndEqual("phase", "table"))
 	    webAbort("Missing table selection", "Please choose a table and try again.");
 	else
 	    {
-		webStart("Genome Table Browser on %s Freeze", freezeName);
+		webStart(NULL, "Genome Table Browser on %s Freeze", freezeName);
 		getTable();
 		webEnd();
 	    }
@@ -1638,7 +1639,7 @@ else
 	{
 	if(table != 0 && existsAndEqual("phase", "Choose fields"))
 		{
-		webStart("Genome Table Browser on %s Freeze: Select Fields", freezeName);
+		webStart(NULL, "Genome Table Browser on %s Freeze: Select Fields", freezeName);
 		getChoosenFields();
 		webEnd();
 		}
@@ -1666,6 +1667,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char* database;
+struct hash *oldVars = hashNew(8);
+char *excludeVars[] = {NULL};
+char *cookieName = "hguid";
 
 if (!cgiIsOnWeb())
    {
@@ -1674,13 +1678,13 @@ if (!cgiIsOnWeb())
    cgiSpoof(&argc, argv);
    }
 
-/* select the database */
-database = cgiUsualString("db", hGetDb());
+cart = cartAndCookieWithHtml(cookieName, excludeVars, oldVars, FALSE);
 
+/* select the database */
+database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
-
 execute(); /* call the main function */
-
+cartCheckout(&cart);
 return 0;
 }

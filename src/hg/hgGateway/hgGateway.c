@@ -441,7 +441,7 @@ else
     organism = hOrganism(db);
     }
 
-cartWebStart("%s Genome Browser Gateway \n", organism);
+cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();
 }

@@ -3,13 +3,15 @@
 #ifndef WEB_H
 #define WEB_H
 
+#include "cart.h"
+
 void webStartText();
 /* output the head for a text page */
 
-void webStart(char* format,...);
+void webStart(struct cart *theCart, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapper(char *format, va_list args, boolean withHttpHeader,
+void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 

@@ -140,7 +140,7 @@ void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
-void cartWebStart(char *format, ...);
+void cartWebStart(struct cart *theCart, char *format, ...);
 /* Print out pretty wrapper around things when working
  * from cart. Balance this with cartWebEnd. */
 
@@ -157,6 +157,10 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
  * of things in the cart that were overwritten by cgi-variables. */
 
 struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars);
+/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
+ * HTTP preamble to web page.  Don't write any HTML though. */
+
+struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, struct hash *oldVars, boolean doContentType);
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 
