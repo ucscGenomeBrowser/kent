@@ -643,3 +643,9 @@
       kks00 with an index of the human genome in RAM, servicing
       requests for alignments quickly.
 392 - Modularized and improved genoFind.  Server is 'gfServer' now.
+393 - Made 'gfClient' which produces a (headless) .psl file.
+394 - Fairly well hacked fast sequence searching into genome browser.
+395 - Renamed fast sequence searcher 'BLAT' in UI, and generally
+      polished it in UI.
+396 - Fixed various small BLAT bugs.  Starting on translated protein
+      version.
