@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.917 2005/03/01 00:11:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.918 2005/03/01 19:11:50 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9289,6 +9289,14 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\" class=\"topbar\">%s</A></TD>",
+       database, chromName, winStart+1, winEnd, cartSessionVarName(),
+       cartSessionId(cart), "Tables");
+if (hgNearOk(database))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
+                 uiVars->string, "Gene Sorter");
+    }
 if (hgPcrOk(database))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
@@ -9296,15 +9304,6 @@ if (hgPcrOk(database))
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\" class=\"topbar\">%s</A></TD>",
-       database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       cartSessionId(cart), "Tables");
-
-if (hgNearOk(database))
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
-                 uiVars->string, "Gene Sorter");
-    }
 
 if (gotBlat)
     {
