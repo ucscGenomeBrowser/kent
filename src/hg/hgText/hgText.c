@@ -1643,6 +1643,11 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    {
 	    webAbort("Error", "Invalid value \"%s\" of CGI variable hgt.intersectOp", op);
 	    }
+	fprintf(stderr, "TBQuery:  p=%s:%d-%d  t1=%s  q1=%s  t2=%s  q2=%s  op=%s  mT=%d  lT=%d  iT=%d  iT2=%d\n",
+		chrom, winStart, winEnd,
+		table, constraints,
+		table2, constraints2,
+		op, moreThresh, lessThresh, invTable, invTable2);
 	getFullTableName(fullTableName2, chromPtr->name, table2);
 	checkTable2Exists(fullTableName2);
 	if (sameString(customTrackPseudoDb, db2))
@@ -2401,6 +2406,7 @@ void doBedOptions()
 struct hTableInfo *hti = getOutputHti();
 char *table = getTableName();
 char *table2 = getTable2Name();
+char *op = cgiOptionalString("hgt.intersectOp");
 char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
@@ -2420,10 +2426,12 @@ positionLookupSamePhase();
 printf("<H3> Select BED Options for Table %s: </H3>\n", hti->rootName);
 puts("<TABLE><TR><TD>");
 cgiMakeCheckBox("hgt.doCustomTrack", TRUE);
-puts("</TD><TD> <B> Print "
+puts("</TD><TD> <B> Include "
      "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
      "custom track</A> header: </B>");
 puts("</TD></TR><TR><TD></TD><TD>name=");
+if (op == NULL)
+    table2 = NULL;
 snprintf(buf, sizeof(buf), "tb_%s%s%s", hti->rootName,
 	 (table2 ? "_" : ""),
 	 (table2 ? table2 : ""));
@@ -2668,15 +2676,15 @@ printf("These combinations will maintain the gene/alignment structure (if any) o
 cgiMakeRadioButton("hgt.intersectOp", "any", TRUE);
 printf("All %s records that have any overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "none", TRUE);
+cgiMakeRadioButton("hgt.intersectOp", "none", FALSE);
 printf("All %s records that have no overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "more", TRUE);
+cgiMakeRadioButton("hgt.intersectOp", "more", FALSE);
 printf("All %s records that have at least ",
        table);
 cgiMakeIntVar("hgt.moreThresh", 80, 3);
 printf(" %% overlap with %s <P>\n", table2);
-cgiMakeRadioButton("hgt.intersectOp", "less", TRUE);
+cgiMakeRadioButton("hgt.intersectOp", "less", FALSE);
 printf("All %s records that have at most ",
        table);
 cgiMakeIntVar("hgt.lessThresh", 80, 3);
@@ -2686,10 +2694,10 @@ printf("These combinations will discard the gene/alignment structure (if any) of
        table);
 puts("To complement a table means to consider a position included if it \n"
      "is <I>not</I> included in the table. <P>");
-cgiMakeRadioButton("hgt.intersectOp", "and", TRUE);
+cgiMakeRadioButton("hgt.intersectOp", "and", FALSE);
 printf("Base-pair-wise intersection (AND) of %s and %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "or", TRUE);
+cgiMakeRadioButton("hgt.intersectOp", "or", FALSE);
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        table, table2);
 cgiMakeCheckBox("hgt.invertTable", FALSE);
