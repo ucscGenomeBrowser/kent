@@ -187,4 +187,16 @@ searchTable all_mrna
 searchType mrnaKeyword
 searchPriority 30
 
+searchTable uc16
+searchMethod exact
+searchType bed
+searchPriority 11
+termRegex uc\.[0-9]+
+
+searchTable uxf16
+searchMethod exact
+searchType bed
+searchPriority 12
+termRegex uxf\.[0-9]+
+
 
