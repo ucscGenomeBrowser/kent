@@ -6962,6 +6962,22 @@ cat > makeMaf.csh << '_EOF_'
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
+# HG17 TO MM5 LIFTOVER CHAIN (DONE 1/6/05 Andy)
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.mm5/axtChain
+    mkdir net
+    netSplit mouse.net.gz net
+    mkdir over
+    for file in chain/*.chain; do
+       chrom=`basename $file .chain`
+       netChainSubset mouseNet/$chrom.net chain/$chrom.chain over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain
+    done
+    rm -rf over/
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cp /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain .
+    gzip hg17ToMm5.chain
 
 # ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
     ssh hgwdev
