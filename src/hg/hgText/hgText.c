@@ -18,6 +18,7 @@
 #include "hash.h"
 #include "fa.h"
 #include "psl.h"
+#include "gff.h"
 #include "nib.h"
 #include "web.h"
 #include "dbDb.h"
@@ -31,7 +32,7 @@
 #include "tableDescriptions.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.108 2004/02/01 12:49:05 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.109 2004/02/14 17:31:00 markd Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
