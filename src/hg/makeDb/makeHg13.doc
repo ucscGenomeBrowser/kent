@@ -55,7 +55,7 @@ cp chrM.fa NT_999999/NT_999999.fa
 	
 	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build31.agp .
 
-*** 5.1) Create contig gl files
+5.1) Create contig gl files
 
         ~kent/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
 
@@ -825,7 +825,7 @@ o - Update all Makefiles with latest OOVERS and GSVERS, DATABASE, and locations 
 o - Create accession_info file
 	make accession_info.rdb
 
-UPDATE STS INFORMATION (DONE - TSF)
+UPDATE STS INFORMATION (DONE - TSF 12/2002)
 
 o - Download and unpack updated information from dbSTS:
 
@@ -854,7 +854,7 @@ o - Copy new files to cluster
 	cp /cluster/store1/sts.5/*.* /scratch/hg/STS
 	ask for propagation from sysadmin
 
-STS ALIGNMENTS (DONE - TSF)
+STS ALIGNMENTS (DONE - TSF 12/2002)
 (alignments done without RepeatMasking, so start ASAP!)
 
 o - Create full sequence alignments
@@ -909,7 +909,7 @@ o - Copy files to final destination and remove
 	make copy.assembly
 	make clean.assembly
 	
-CREATE AND LOAD STS MARKERS TRACK (TO DO)
+CREATE AND LOAD STS MARKERS TRACK (DONE - TSF 12/2002)
 
 o - Copy in current stsInfo2.bed and stsAlias.bed files
 	cd /projects/hg2/booch/psl/gs.14/build31
@@ -933,11 +933,11 @@ o - Create bed file
 o - Create database tables
 	ssh hgwdev
 	cd /projects/hg2/booch/psl/tables
-	mysql -uhgcat -pXXXXXXX < all_sts_primer.sql
-	mysql -uhgcat -pXXXXXXX < all_sts_seq.sql
-	mysql -uhgcat -pXXXXXXX < stsAlias.sql
-	mysql -uhgcat -pXXXXXXX < stsInfo2.sql
-	mysql -uhgcat -pXXXXXXX < stsMap.sql
+	mysql -uhgcat -pXXXXXXX hg13 < all_sts_primer.sql
+	mysql -uhgcat -pXXXXXXX hg13 < all_sts_seq.sql
+	mysql -uhgcat -pXXXXXXX hg13 < stsAlias.sql
+	mysql -uhgcat -pXXXXXXX hg13 < stsInfo2.sql
+	mysql -uhgcat -pXXXXXXX hg13 < stsMap.sql
 
 o - Load the tables
 	load /projects/hg2/booch/psl/gs.14/build31/sts/stsMarkers.psl.filter.lifted into all_sts_seq	
@@ -947,11 +947,11 @@ o - Load the tables
 	load /projects/hg2/booch/psl/gs.14/build31/stsMap.bed into stsMap
 
 o - Load the sequences (change sts.# to match correct location)
-	hgLoadRna addSeq hg13 /cluster/store1/sts.5/all.STS.fa
-	hgLoadRna addSeq hg13 /cluster/store1/sts.5/all.primers.fa
+	hgLoadRna addSeq hg13 /cluster/store1/sts.6/all.STS.fa
+	hgLoadRna addSeq hg13 /cluster/store1/sts.6/all.primers.fa
 
 
-UPDATE BACEND SEQUENCES (TO DO)
+UPDATE BACEND SEQUENCES (DONE TSF 12/2002)
 
 o - Download new files:
 
@@ -971,7 +971,7 @@ o - Copy file to cluster
 	ask for propagation from sysadmin
 
 
-BACEND SEQUENCE ALIGNMENTS (TO DO)
+BACEND SEQUENCE ALIGNMENTS (DONE - TSF 12/2002)
 (alignments done without RepeatMasking, so start ASAP!)
 
 o - Create full sequence alignments
@@ -989,7 +989,7 @@ o - Copy files to final destination and remove
 	make copy.assembly
 	make clean.assembly
 
-BACEND PAIRS TRACK (TO DO)
+BACEND PAIRS TRACK (DONE - TSF 12/2002)
 
 o - Update Makefile with location of pairs files, if necessary
 	cd /projects/hg2/booch/psl/gs.14/build31/bacends
@@ -1013,7 +1013,7 @@ o - Load the tables
 o - Load the sequences (change bacends.# to match correct location)
 	hgLoadRna addSeq hg13 /cluster/store1/bacends.2/BACends.fa
 		
-FOSEND SEQUENCE ALIGNMENTS (TO DO)
+FOSEND SEQUENCE ALIGNMENTS (DONE - TSF 12/2002)
 
 o - Create full sequence alignments
 	ssh kk
@@ -1030,7 +1030,7 @@ o - Copy files to final destination and remove
 	make copy.assembly
 	make clean.assembly
 
-FOSEND PAIRS TRACK (TO DO)
+FOSEND PAIRS TRACK (DONE - TSF 12/2002)
 
 o - Update Makefile with location of pairs files, if necessary
 	cd /projects/hg2/booch/psl/gs.14/build31/fosends
@@ -1053,7 +1053,7 @@ o - Load the tables
 o - Load the sequences (change bacends.# to match correct location)
 	hgLoadRna addSeq hg13 /cluster/store1/fosends.1/fosEnds.fa
 		
-UPDATE FISH CLONES INFORMATION (TO DO)
+UPDATE FISH CLONES INFORMATION (DONE - TSF 12/2002)
 
 o - Download the latest info from NCBI
 	point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
@@ -1114,7 +1114,34 @@ o - Load the table
 CREATE CHROMOSOME REPORTS (TO DO)
 
 
-CREATE STS MAP COMPARISON PLOTS (TO DO)
+CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (DONE - TSF 12/2002)
+
+o - Must wait until after the STS Map track has been finished
+
+o - Create sts plots
+	cd /projects/hg2/booch/psl/gs.14/build31/stsPlots
+	make stsplots
+
+o - Create genetic plots
+	cd /projects/hg2/booch/psl/gs.14/build31/geneticPlots
+	make all
+	matlab -nodesktop
+        >> allplot_ncbi('/cse/grads/booch/tracks/gs.14/build31/geneticPlots/','build31', 'jpg');
+        >> quit
+
+o - Set up directories where this will end up
+	ssh hgwdev
+	cd /usr/local/apache/htdocs/goldenPath/mapPlots
+	update Makefile with OOVERS, GSVERS, and FREEZE date
+	make new
+
+o - Copy over files
+	make sts
+	make genetic
+
+o - Update the index.html to include links to these new plots, and delete oldest set
+    Update the arch.html with the oldest set just removed from index.html
+	*** Make sure to check into CVS ***
 
 
 HUMAN/MOUSE BLAT ALIGNMENTS (TO DO)
