@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.487 2003/10/01 22:19:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.488 2003/10/02 05:17:32 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1994,7 +1994,7 @@ if (tbl[0] == 0)
     puts("<P>"
 	 "Note: if you would prefer to get DNA for features of a particular "
 	 "track or table, try the ");
-    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d\" TARGET=_BLANK>",
+    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&phase=table&tbPosOrKeys=pos\" TARGET=_BLANK>",
 	   hgTextName(), cartSidUrlString(cart), database,
 	   seqName, winStart+1, winEnd);
     puts("Table Browser</A>: select a positional table, "
@@ -2011,7 +2011,7 @@ else
     puts("<P>"
 	 "Note: if you would prefer to get DNA for more than one feature of "
 	 "this track at a time, try the ");
-    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table\" TARGET=_BLANK>",
+    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table&tbPosOrKeys=pos&tbTrack=\" TARGET=_BLANK>",
 	   hgTextName(), cartSidUrlString(cart), database,
 	   seqName, winStart+1, winEnd, hgTextTbl);
     puts("Table Browser</A>: "
@@ -5358,7 +5358,7 @@ else
 puts("<P>"
      "Note: if you would prefer to get DNA for more than one feature of "
      "this track at a time, try the ");
-printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table\" TARGET=_BLANK>",
+printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table&tbPosOrKeys=pos&tbTrack=\" TARGET=_BLANK>",
        hgTextName(), cartSidUrlString(cart), database,
        seqName, winStart+1, winEnd, hgTextTbl);
 puts("Table Browser</A>: "
