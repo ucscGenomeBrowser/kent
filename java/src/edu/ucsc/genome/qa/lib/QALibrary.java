@@ -148,4 +148,36 @@ public class QALibrary {
 	samples.add(full.get(random.nextInt(size)));
     return samples;
   }
+
+
+  static public HashSet getSetFromFile(String filename) {
+
+    FileReader fin;
+    BufferedReader br;
+    String thisline;
+    HashSet set;
+
+    set = new HashSet();
+
+    try {
+      fin = new FileReader(filename);
+      br = new BufferedReader(fin);
+
+      while ((thisline = br.readLine()) != null) {
+        set.add(thisline);
+      }
+
+      fin.close();
+      System.out.println(set.size() + " items found");
+
+    } catch (FileNotFoundException e) { 
+      System.out.println("HGLibrary:getSetFromFile:");
+      System.out.println("Can't open input file");
+    } catch (IOException e) {
+      System.out.println("HGLibrary:getSetFromFile:");
+      System.out.println("Error reading input file");
+    }
+
+    return (set);
+  }
 }
