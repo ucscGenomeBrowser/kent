@@ -210,7 +210,7 @@ else
     {
     if (yValue <= (avg[iTarget] - 2.0*stddev[iTarget]))
 	{
-	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_GREEN);
+	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
 	}
     else
 	{
@@ -280,7 +280,7 @@ else
     {
     if (yPlotValue <= -2.0)
   	{
-	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_GREEN);
+	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_RED);
 	}
     }
 }
