@@ -350,6 +350,7 @@ boolean anyIntersection();
 #define hgtaCtDesc "hgta_ctDesc"
 #define hgtaCtVis "hgta_ctVis"
 #define hgtaCtUrl "hgta_ctUrl"
+#define hgtaCtWigOutType "hgta_ctWigOutType"
 
    /* These intersection page vars come in pairs so we can cancel. */
 #define hgtaIntersectGroup "hgta_intersectGroup"
@@ -373,6 +374,8 @@ boolean anyIntersection();
 #define hgtaFilterPrefix "hgta_fil."
 /* Prefix for variables containing filters themselves. */
 #define hgtaFilterVarPrefix hgtaFilterPrefix "v."
+/* Prefix for temp name files created for custom tracks */
+#define hgtaCtTempNamePrefix "hgtct"
 
 /* Output types. */
 #define outPrimaryTable "primaryTable"
@@ -414,9 +417,24 @@ void floatStatRow(char *label, double x);
 void stringStatRow(char *label, char *val);
 /* Print label, string value. */
 
-/* ----------- Wiggle stuff. -------------------- */
+/* ----------- Wiggle business in wiggle.c -------------------- */
+
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
+
+struct bed *getWiggleAsBed(
+    char *db, char *table, 	/* Database and table. */
+    struct region *region,  /* Region to get data for. */
+    char *filter, 		/* Filter to add to SQL where clause if any. */
+    struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+    struct lm *lm,		/* Where to allocate memory. */
+    struct sqlConnection *conn);	/* SQL connection to work with */
+/* Return a bed list of all items in the given range in table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+
+struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
+	struct region *region, struct lm *lm);
+/*	return the wigAsciiData list	*/
 
 void doOutWigBed(struct trackDb *track, struct sqlConnection *conn);
 /* Return wiggle data in bed format. */
