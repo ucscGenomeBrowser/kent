@@ -33,7 +33,7 @@ name gnfU74a
 shortLabel GNF U74a
 longLabel GNF Expression Atlas Data from U74a Mouse Chip
 priority 2.8
-visibility on
+visibility off
 type expMulti knownToU74
 selected gnfMouseU74aMedianExps gnfMouseU74aMedianRatio gnfMouseU74aMedian 6,12,13,16,30,32,35,36,39,41,
 median gnfMouseU74aMedianExps gnfMouseU74aMedianRatio gnfMouseU74aMedian 0,1,2,3,4,5,6,7,-1,8,9,10,11,12,-1,13,14,15,16,-1,17,18,19,20,-1,21,22,23,24,-1,25,26,27,-1,28,29,30,31,-1,32,33,34,35,-1,36,37,38,39,40,-1,41,42,43,44,
