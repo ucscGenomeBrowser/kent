@@ -74,10 +74,10 @@ struct column
    	struct sqlConnection *conn, char *search);
    /* Return list of genes with descriptions that match search. */
 
-   void (*searchControls)(struct column *col);
+   void (*searchControls)(struct column *col, struct sqlConnection *conn);
    /* Print out controls for advanced search. */
 
-   struct genePos *(*advancedSearch)(struct column *col);
+   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn);
    /* Return list of positions for advanced search. */
 
    /* -- Data that may be track-specific. -- */
@@ -118,6 +118,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
+#define advSearchPrefix "near.as"       /* Prefix for advanced search variables. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -178,6 +179,13 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
+
+char *advSearchName(struct column *col, char *varName);
+/* Return variable name for advanced search. */
+
+char *advSearchVal(struct column *col, char *varName);
+/* Return value for advanced search variable.  Return NULL if it
+ * doesn't exist or if it is "" */
 
 /* ---- Column method setters. ---- */
 

@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.27 2003/06/25 15:58:39 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.28 2003/06/25 17:02:35 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -299,6 +299,21 @@ sqlFreeResult(&sr);
 return res;
 }
 
+void distanceSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+hPrintf("minimum: ");
+cgiMakeTextVar(advSearchName(col, "min"), "", 8);
+hPrintf(" maximum: ");
+cgiMakeTextVar(advSearchName(col, "max"), "", 8);
+}
+
+struct genePos *distanceAdvancedSearch(struct column *col, struct sqlConnection *conn)
+/* Do advanced search on distance type. */
+{
+uglyAbort("Not yet implemented");
+}
+
 void distanceTypeMethods(struct column *col, char *table, 
 	char *curGene, char *otherGene, char *valField)
 /* Set up a column that looks up a field in a distance matrix
@@ -310,6 +325,8 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
+col->searchControls = distanceSearchControls;
+col->advancedSearch = distanceAdvancedSearch;
 }
 
 void setupColumnDistance(struct column *col, char *parameters)
