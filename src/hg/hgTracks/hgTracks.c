@@ -38,6 +38,7 @@
 #include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
+#include "stsMap.h"
 #include "mouseSyn.h"
 #include "knownMore.h"
 #include "exprBed.h"
@@ -2727,32 +2728,19 @@ tg->itemName = rnaGeneName;
 tg->itemColor = rnaGeneColor;
 }
 
-void loadStsMarker(struct trackGroup *tg)
-/* Load up stsMarkers from database table to trackGroup items. */
-{
-bedLoadItem(tg, "stsMarker", (ItemLoader)stsMarkerLoad);
-}
 
-void freeStsMarker(struct trackGroup *tg)
-/* Free up stsMarker items. */
+Color stsColor(int altColor, char *genethonChrom, char *marshfieldChrom, 
+	char *fishChrom, int ppt)
+/* Return color given info about marker. */
 {
-stsMarkerFreeList((struct stsMarker**)&tg->items);
-}
-
-Color stsMarkerColor(struct trackGroup *tg, void *item, struct memGfx *mg)
-/* Return color of stsMarker track item. */
-{
-struct stsMarker *el = item;
-int ppt = el->score;
-
-if (el->genethonChrom[0] != '0' || el->marshfieldChrom[0] != '0')
+if (genethonChrom[0] != '0' || marshfieldChrom[0] != '0')
     {
     if (ppt >= 900)
        return MG_BLUE;
     else
-       return tg->ixAltColor;
+       return altColor;
     }
-else if (el->fishChrom[0] != '0')
+else if (fishChrom[0] != '0')
     {
     return MG_GREEN;
     }
@@ -2765,6 +2753,27 @@ else
     }
 }
 
+void loadStsMarker(struct trackGroup *tg)
+/* Load up stsMarkers from database table to trackGroup items. */
+{
+bedLoadItem(tg, "stsMarker", (ItemLoader)stsMarkerLoad);
+}
+
+
+void freeStsMarker(struct trackGroup *tg)
+/* Free up stsMarker items. */
+{
+stsMarkerFreeList((struct stsMarker**)&tg->items);
+}
+
+Color stsMarkerColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of stsMarker track item. */
+{
+struct stsMarker *el = item;
+return stsColor(tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+    el->fishChrom, el->score);
+}
+
 
 void stsMarkerMethods(struct trackGroup *tg)
 /* Make track group for sts markers. */
@@ -2772,6 +2781,36 @@ void stsMarkerMethods(struct trackGroup *tg)
 tg->loadItems = loadStsMarker;
 tg->freeItems = freeStsMarker;
 tg->itemColor = stsMarkerColor;
+}
+
+void loadStsMap(struct trackGroup *tg)
+/* Load up stsMarkers from database table to trackGroup items. */
+{
+bedLoadItem(tg, "stsMap", (ItemLoader)stsMapLoad);
+}
+
+
+void freeStsMap(struct trackGroup *tg)
+/* Free up stsMap items. */
+{
+stsMapFreeList((struct stsMap**)&tg->items);
+}
+
+Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of stsMap track item. */
+{
+struct stsMap *el = item;
+return stsColor(tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+    el->fishChrom, el->score);
+}
+
+
+void stsMapMethods(struct trackGroup *tg)
+/* Make track group for sts markers. */
+{
+tg->loadItems = loadStsMap;
+tg->freeItems = freeStsMap;
+tg->itemColor = stsMapColor;
 }
 
 void loadMouseSyn(struct trackGroup *tg)
@@ -4915,6 +4954,7 @@ if (calledSelf)
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
+registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);

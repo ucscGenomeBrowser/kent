@@ -33,6 +33,7 @@
 #include "est3.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
+#include "stsMap.h"
 #include "stsAlias.h"
 #include "mouseSyn.h"
 #include "cytoBand.h"
@@ -676,15 +677,15 @@ char *table;
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
 
-if (stringIn("est", track) || stringIn("Est", track))
-    {
-    type = "EST";
-    table = "all_est";
-    }
-else if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track))
     {
     type = "non-Human RNA";
     table = track;
+    }
+else if (stringIn("est", track) || stringIn("Est", track))
+    {
+    type = "EST";
+    table = "all_est";
     }
 else 
     {
@@ -2460,10 +2461,10 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doStsMarker(char *track, char *item)
+void doStsMarker(struct trackDb *tdb, char *item, boolean newStyle)
 /* Respond to click on an STS marker. */
 {
-struct stsMarker el;
+char *track = tdb->tableName;
 int start = cgiInt("o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -2475,6 +2476,7 @@ struct sqlResult *sr2;
 char **row2;
 char *alias;
 boolean doAlias = sqlTableExists(conn, "stsAlias");
+struct stsMap el;
 int rowOffset;
 
 hgcStart("STS Marker");
@@ -2489,15 +2491,14 @@ rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    stsMarkerStaticLoad(row+rowOffset, &el);
     if (firstTime)
 	{
 	boolean firstAlias = TRUE;
 	if (doAlias)
 	    {
-	    printf("<B>name:</B> %s<BR>\n", el.name);
+	    printf("<B>name:</B> %s<BR>\n", item);
 	    sprintf(query, "select alias from stsAlias where trueName = '%s'", 
-		    el.name);
+		    item);
 	    sr2 = sqlGetResult(conn2, query);
 	    while ((row2 = sqlNextRow(sr2)) != NULL)
 		 {
@@ -2510,6 +2511,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 		 }
 	    if (!firstAlias)
 		 printf("<BR>\n");
+	    }
+	if (newStyle)
+	    {
+	    stsMapStaticLoad(row+rowOffset, &el);
+	    }
+	else
+	    {
+	    struct stsMarker oldEl;
+	    stsMarkerStaticLoad(row+rowOffset, &oldEl);
+	    stsMapFromStsMarker(&oldEl, &el);
 	    }
 	printf("<B>STS id:</B> %d<BR>\n", el.identNo);
 	if (!sameString(el.ctgAcc, "-"))
@@ -2526,10 +2537,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    printf("<B>Stanford G3:</B> chr%s %f<BR>\n", el.shgcG3Chrom, el.shgcG3Pos);
 	if (!sameString(el.wiYacChrom, "0"))
 	    printf("<B>Whitehead YAC:</B> chr%s %f<BR>\n", el.wiYacChrom, el.wiYacPos);
-#ifdef SOON
+	if (!sameString(el.wiRhChrom, "0"))
+	    printf("<B>Whitehead RH:</B> chr%s %f<BR>\n", el.wiRhChrom, el.wiRhPos);
 	if (!sameString(el.shgcTngChrom, "0"))
 	    printf("<B>Stanford TNG:</B> chr%s %f<BR>\n", el.shgcTngChrom, el.shgcTngPos);
-#endif
         if (!sameString(el.fishChrom, "0"))
 	    {
 	    printf("<B>FISH:</B> %s.%s - %s.%s<BR>\n", el.fishChrom, 
@@ -2543,32 +2554,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printf("</BLOCKQUOTE>\n");
 htmlHorizontalLine();
-
-puts("<P>This track shows locations of STSs (Sequence Tagged Sites) "
-     "along the draft assembly.  Many of these STSs have been mapped "
-     "with genetic techiques (in the Genethon and Marshfield maps) or "
-     "using radiation hybrid (the Stanford, and GeneMap99 maps) and "
-     "YAC mapping (the Whitehead map) techniques.  This track also "
-     "shows the approximate position of FISH mapped clones. "
-     "Many thanks to the researchers who worked on these "
-     "maps, and to Greg Schuler, Arek Kasprzyk, Wonhee Jang, "
-     "Terry Furey and Sanja Rogic for helping "
-     "process the data. Additional data on the individual maps can be "
-     "found at the following links:</P>"
-     "<UL>"
-     "<LI><A HREF=http://www-shgc.stanford.edu/Mapping/Marker/STSindex.html>"
-          "Stanford G3 and TNG</A>"
-     "<LI><A HREF=http://www.ncbi.nlm.nih.gov/genemap/>"
-          "The GeneMap99 map.</A>"
-     "<LI><A HREF=http://carbon.wi.mit.edu:8000/ftp/distribution/human_STS_releases/july97/07-97.INTRO.html#RH>"
-          "The Whitehead YAC map</A>"
-     "<LI><A HREF=http://research.marshfieldclinic.org/genetics/>"
-          "The Marshfield map</A>"
-     "<LI><A HREF=ftp://ftp.genethon.fr/pub/Gmap/Nature-1995>"
-          "The Genethon map</A>"
-     "<LI><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/cyto/\">"
-          "The FISH map</A>"
-     "</UL>");
+puts(tdb->html);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -3353,7 +3339,11 @@ else if (sameWord(track, "rnaGene"))
     }
 else if (sameWord(track, "stsMarker"))
     {
-    doStsMarker(track, item);
+    doStsMarker(tdb, item, FALSE);
+    }
+else if (sameWord(track, "stsMap"))
+    {
+    doStsMarker(tdb, item, TRUE);
     }
 else if (sameWord(track, "mouseSyn"))
     {
