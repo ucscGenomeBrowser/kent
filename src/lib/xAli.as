@@ -1,9 +1,9 @@
 table xAli
 "An alignment - like psl but includes the sequence itself"
     (
-    uint matches;  "Number of bases that match that aren't repeats"
-    uint misMatches; "Number of bases that don't match"
-    uint repMatches; "Number of bases that match but are part of repeats"
+    uint match;  "Number of bases that match that aren't repeats"
+    uint misMatch; "Number of bases that don't match"
+    uint repMatch; "Number of bases that match but are part of repeats"
     uint nCount;  "Number of 'N' bases"
     uint qNumInsert; "Number of inserts in query"
     int qBaseInsert; "Number of bases inserted in query"

@@ -5,9 +5,9 @@
 
 #An alignment - like psl but includes the sequence itself
 CREATE TABLE xAli (
-    matches int unsigned not null,	# Number of bases that match that aren't repeats
-    misMatches int unsigned not null,	# Number of bases that don't match
-    repMatches int unsigned not null,	# Number of bases that match but are part of repeats
+    match int unsigned not null,	# Number of bases that match that aren't repeats
+    misMatch int unsigned not null,	# Number of bases that don't match
+    repMatch int unsigned not null,	# Number of bases that match but are part of repeats
     nCount int unsigned not null,	# Number of 'N' bases
     qNumInsert int unsigned not null,	# Number of inserts in query
     qBaseInsert int not null,	# Number of bases inserted in query
@@ -29,5 +29,5 @@ CREATE TABLE xAli (
     qSeq longblob not null,	# Query sequence for each block.
     tSeq longblob not null,	# Target sequence for each block.
               #Indices
-    PRIMARY KEY(matches)
+    PRIMARY KEY(match)
 );

@@ -9,9 +9,9 @@ struct xAli
 /* An alignment - like psl but includes the sequence itself */
     {
     struct xAli *next;  /* Next in singly linked list. */
-    unsigned matches;	/* Number of bases that match that aren't repeats */
-    unsigned misMatches;	/* Number of bases that don't match */
-    unsigned repMatches;	/* Number of bases that match but are part of repeats */
+    unsigned match;	/* Number of bases that match that aren't repeats */
+    unsigned misMatch;	/* Number of bases that don't match */
+    unsigned repMatch;	/* Number of bases that match but are part of repeats */
     unsigned nCount;	/* Number of 'N' bases */
     unsigned qNumInsert;	/* Number of inserts in query */
     int qBaseInsert;	/* Number of bases inserted in query */

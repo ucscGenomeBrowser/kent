@@ -19,9 +19,9 @@ char *s;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[17]);
-ret->matches = sqlUnsigned(row[0]);
-ret->misMatches = sqlUnsigned(row[1]);
-ret->repMatches = sqlUnsigned(row[2]);
+ret->match = sqlUnsigned(row[0]);
+ret->misMatch = sqlUnsigned(row[1]);
+ret->repMatch = sqlUnsigned(row[2]);
 ret->nCount = sqlUnsigned(row[3]);
 ret->qNumInsert = sqlUnsigned(row[4]);
 ret->qBaseInsert = sqlSigned(row[5]);
@@ -77,9 +77,9 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->matches = sqlUnsignedComma(&s);
-ret->misMatches = sqlUnsignedComma(&s);
-ret->repMatches = sqlUnsignedComma(&s);
+ret->match = sqlUnsignedComma(&s);
+ret->misMatch = sqlUnsignedComma(&s);
+ret->repMatch = sqlUnsignedComma(&s);
 ret->nCount = sqlUnsignedComma(&s);
 ret->qNumInsert = sqlUnsignedComma(&s);
 ret->qBaseInsert = sqlSignedComma(&s);
@@ -179,11 +179,11 @@ void xAliOutput(struct xAli *el, FILE *f, char sep, char lastSep)
 /* Print out xAli.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->matches);
+fprintf(f, "%u", el->match);
 fputc(sep,f);
-fprintf(f, "%u", el->misMatches);
+fprintf(f, "%u", el->misMatch);
 fputc(sep,f);
-fprintf(f, "%u", el->repMatches);
+fprintf(f, "%u", el->repMatch);
 fputc(sep,f);
 fprintf(f, "%u", el->nCount);
 fputc(sep,f);
