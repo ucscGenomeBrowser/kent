@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.815 2004/10/12 21:11:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.816 2004/10/13 17:46:44 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8694,8 +8694,8 @@ registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
-registerTrackHandler("mapMm2X",valAlMethods);
-registerTrackHandler("mapMm3X",valAlMethods);
+registerTrackHandler("scoreMm2X",valAlMethods);
+registerTrackHandler("scoreMm3X",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
 /* MGC related */
