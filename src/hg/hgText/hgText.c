@@ -9,6 +9,15 @@
 #include "hgFind.h"
 #include "hash.h"
 
+static boolean existsAndEqual(char* var, char* value)
+/* returns true is the given CGI var exists and equals value */
+{
+	if(cgiOptionalString(var) != 0 && sameString(cgiOptionalString(var), value))
+		return TRUE;
+	else
+		return FALSE;
+}
+
 static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
         char retChrom[32], char retStart[32], char retEnd[32])
 /* Return TRUE if chrom/start/end are in hash.
@@ -29,7 +38,7 @@ else
     return FALSE;
 }
 
-boolean hFindChromStartEndFields(char *table,
+static boolean hFindChromStartEndFields(char *table,
         char retChrom[32], char retStart[32], char retEnd[32])
 /* Given a table return the fields for selecting chromosome, start, and end.
  *  If no such fields returns FALSE. */
@@ -70,7 +79,7 @@ hFreeConn(&conn);
 return isPos;
 }
 
-boolean findGenomePos(char *spec, char **retChromName, 
+static boolean findGenomePos(char *spec, char **retChromName, 
 		    int *retWinStart, int *retWinEnd)
 /* process the position information given in spec and gives a chrom name
  * as well as a start and end values on that chrom */
@@ -103,7 +112,7 @@ else
 freeDyString(&ui);
 }
 
-boolean allLetters(char* s)
+static boolean allLetters(char* s)
 /* returns true if the string only has letters number and underscores */
 {
 int i;
@@ -114,7 +123,7 @@ for(i = 0; i < strlen(s); i++)
 return TRUE;
 }
 
-void printTables(struct hashEl *hel)
+static void printTables(struct hashEl *hel)
 /* this function iterates over a hash table and prints out the name in a input form */
 {
 	printf("<OPTION>%s\n", hel->name);
@@ -211,6 +220,7 @@ sqlDisconnect(&conn);
 
 /* get the list of tables */
 puts("<SELECT NAME=table SIZE=1>");
+puts("<OPTION>Choose table</OPTION>");
 hashTraverseEls(tableHash, printTables);
 puts("</SELECT>");
 
@@ -220,7 +230,7 @@ puts("<INPUT TYPE=\"submit\" VALUE=\"Get all fields\" NAME=\"phase\">");
 puts("</FORM>");
 
 /* some debuging information */
-puts("<TABLE>");
+/*pnts-uts("<TABLE>");
 while(current != 0)
 	{
 	puts("\t<TR>");
@@ -230,7 +240,7 @@ while(current != 0)
 	current = current->next;
 	}
 printf("%s from %d to %d\n", chromName, winStart, winEnd);
-puts("</TABLE>");
+puts("</TABLE>");*/
 
 puts("</CENTER>");
 }
@@ -268,10 +278,11 @@ struct sqlResult *sr;
 char **row;
 char* field;
 
+char chromFieldName[32];	/* the name of the chrom field */
 char startName[32];	/* the start and end names of the positional fields */
 char endName[32];	/* in the table */
 
-char *chromName;        /* Name of chromosome sequence . */
+char *choosenChromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
@@ -282,28 +293,38 @@ if(position == NULL)
 	position = "";
 if(position != NULL && position[0] != 0)
 	{
-	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+	if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
 		return;
 	}
-findGenomePos(position, &chromName, &winStart, &winEnd);
+findGenomePos(position, &choosenChromName, &winStart, &winEnd);
+
+/* if they haven't choosen a table tell them */
+if(existsAndEqual("table", "Choose table"))
+	{
+	printf("Content-type: text/plain\n\n");
+	printf("\n\nPlease choose a table.");
+	}
 
 /* get the real name of the table */
-parseTableName(table, chromName);
+parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
 	errAbort("Malformated table name.");
 	
 /* get the name of the start and end fields */
-hFindChromStartEndFields(table, query, startName, endName);
-sprintf(query, "SELECT * FROM %s WHERE %s >= %d AND %s <= %d", table, startName, winStart, endName, winEnd);
+hFindChromStartEndFields(table, chromFieldName, startName, endName);
+sprintf(query, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
 printf("Content-Type: text/plain\n\n");
+
 /* print the columns names */
+printf("#");
 while((field = sqlFieldName(sr)) != 0)
 	    printf("%s\t", field);
 
@@ -373,6 +394,10 @@ if(freezeName == NULL)
 	freezeName = "Unknown";
 printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
 
+/* if they haven't choosen a table tell them */
+if(existsAndEqual("table", "Choose table"))
+	errAbort("Please choose a table.");
+
 /* get the real name of the table */
 parseTableName(table, chromName);
 
@@ -418,10 +443,11 @@ struct sqlResult *sr;
 char **row;
 char* field;
 
+char chromFieldName[32];	/* the name of the chrom field name */
 char startName[32];	/* the start and end names of the positional fields */
 char endName[32];	/* in the table */
 
-char *chromName;        /* Name of chromosome sequence . */
+char *choosenChromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
@@ -432,22 +458,22 @@ if(position == NULL)
 	position = "";
 if(position != NULL && position[0] != 0)
 	{
-	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+	if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
 		return;
 	}
-findGenomePos(position, &chromName, &winStart, &winEnd);
+findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 
 /* get the real name of the table */
-parseTableName(table, chromName);
+parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
 	errAbort("Malformated table name.");
 
 /* get the name of the start and end fields */
-hFindChromStartEndFields(table, query, startName, endName);
+hFindChromStartEndFields(table, chromFieldName, startName, endName);
 
-strcpy(query, "SELECT ");
+strcpy(query, "SELECT");
 
 /* build the SQL command */
 
@@ -493,17 +519,21 @@ while(current != 0)
 	}
 
 /* build the rest of the query */
-sprintf(query, "%s FROM %s WHERE %s >= %d AND %s <= %d", query, table, startName, winStart, endName, winEnd);
+sprintf(query, "%s FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d", query, table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
 printf("Content-Type: text/plain\n\n");
+/*puts(query);*/
 /* print the field names */
+printf("#");
 while((field = sqlFieldName(sr)) != 0)
 	    printf("%s\t", field);
+
 printf("\n");
+
 /* print the data */
 while((row = sqlNextRow(sr)) != NULL)
 	{
@@ -513,15 +543,6 @@ while((row = sqlNextRow(sr)) != NULL)
 		}
 	printf("\n");
 	}
-}
-
-boolean existsAndEqual(char* var, char* value)
-/* returns true is the given CGI var exists and equals value */
-{
-	if(cgiOptionalString(var) != 0 && sameString(cgiOptionalString(var), value))
-		return TRUE;
-	else
-		return FALSE;
 }
 
 /* the main body of the program */
