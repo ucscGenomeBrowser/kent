@@ -4,7 +4,7 @@
 #include "common.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: verbose.c,v 1.2 2004/07/31 19:51:13 markd Exp $";
+static char const rcsid[] = "$Id: verbose.c,v 1.3 2004/08/09 01:41:35 baertsch Exp $";
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
 static FILE *logFile;	/* File to log to. */
@@ -80,6 +80,15 @@ int verboseLevel()
 /* Get verbosity level. */
 {
 return logVerbosity;
+}
+
+void verboseSetLogFile(char *name)
+/* Set logFile for verbose messages overrides stderr. */
+{
+if (sameString(name, "stdout"))
+    logFile = stdout;
+else
+    logFile = mustOpen(name, "w");
 }
 
 
