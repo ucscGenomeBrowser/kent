@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.132 2004/03/01 18:54:31 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.133 2004/03/01 20:55:02 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1201,7 +1201,6 @@ gp = slElementFromIx(geneList, maxCount-1);
 if (gp != NULL)
     gp->next = NULL;
 
-// for (gp = geneList; gp !=NULL; gp = gp->next) uglyf("%s %f<BR>\n", gp->name, gp->distance);
 return geneList;
 }
 
@@ -1457,7 +1456,6 @@ if (geneList == NULL)
 	}
     return;
     }
-// hPrintf("<TABLE BGCOLOR=\"#"HG_COL_BORDER"\">");
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_INSIDE"\">\n", 
 	totalHtmlColumns(colList));
 
@@ -1496,7 +1494,6 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         errAbort("Write error to stdout");
     }
 
-// hPrintf("</TABLE>");
 hPrintf("</TABLE>");
 }
 
