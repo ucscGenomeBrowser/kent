@@ -1,5 +1,6 @@
 /* hgFind.c - Find things in human genome annotations. */
 #include "common.h"
+#include "obscure.h"
 #include "hCommon.h"
 #include "portable.h"
 #include "dystring.h"
@@ -40,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.106 2003/09/08 20:51:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.107 2003/09/10 16:36:34 hiram Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
