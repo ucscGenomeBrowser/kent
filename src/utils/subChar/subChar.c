@@ -2,7 +2,7 @@
 #include "common.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: subChar.c,v 1.3 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: subChar.c,v 1.4 2004/04/06 02:18:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,7 +54,7 @@ void subCharsInFile(char old, char new, char *fileName)
 /* Substitute new for old throughout file. */
 {
 int subCount = 0;
-int fileSize;
+size_t fileSize;
 int i;
 char *buf;
 
