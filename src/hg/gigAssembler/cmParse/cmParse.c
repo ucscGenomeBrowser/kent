@@ -16,6 +16,8 @@
 /* Command line options. */
 boolean imreFormat = FALSE;
 char *checkImre = NULL;
+char *imreCheck = NULL;
+char *imreVsNa = NULL;
 
 void usage()
 /* Describe usage and exit. */
@@ -27,7 +29,10 @@ errAbort(
    "    cmParse input badclone.tab fin.lst gsDir ooDir\n"
    "options:\n"
    "    -imre - input is an Imre Vastrik@ebi format dir rather than WashU\n"
-   "    -checkImre=dir - Cross check Imre formatted dir vs WashU\n");
+   "    -checkImre=dir - Cross check Imre formatted dir vs WashU\n"
+   "    -imreCheck=dir - Cross check WashU formatted dir vs Imre\n"
+   "    -imreVsNa=dir - Cross check NA and UL vs Imre\n"
+   );
 }
 
 
@@ -43,8 +48,6 @@ char *finChroms[] =
 FILE *errLog;
 
 struct hash *badHash;   /* Hash for bad clones. */
-struct hash *ntHash;    /* A hash with contigs of finished clones. */
-
 
 struct cloneInfo
 /* Information about one clone. */
@@ -56,7 +59,7 @@ struct cloneInfo
     int pos;
     bool inMap;
     bool inFfa;
-    struct ntInfo *nt;
+//    struct ntInfo *nt;
     struct cmContig *contig;	/* Back pointer to contig. May be NULL. */
     };
 
@@ -175,7 +178,8 @@ return !(accLen < 6 || accLen > 8 || !isupper(acc[0]) || !isdigit(acc[accLen-1])
 
 void readContigList(struct lineFile *in, struct cmChrom *chrom,
 	struct cmContig **pContigList, bool isCommitChrom, bool isRandom,
-	struct hash *cloneHash, struct cloneInfo **pCloneList, struct hash *ctgHash)
+	struct hash *cloneHash, struct cloneInfo **pCloneList, 
+	struct hash *ctgHash, struct hash *ntHash)
 /* Read in contigs. */
 {
 boolean gotEnd = FALSE;
@@ -393,6 +397,7 @@ char lastChromName[32];
 boolean isOrdered;
 char *s;
 struct cmChrom *chromList = NULL, *chrom = NULL;
+struct hash *ntHash = newHash(0);
 
 strcpy(lastChromName, "");
 while (lineFileNext(in, &line, &lineSize))
@@ -429,9 +434,10 @@ while (lineFileNext(in, &line, &lineSize))
 	readNa(in, chrom, pContigList, cloneHash, pCloneList, ctgHash);
     else
 	readContigList(in, chrom, pContigList, sameString(chromName, "COMMIT"), 
-		!isOrdered, cloneHash, pCloneList, ctgHash);
+		!isOrdered, cloneHash, pCloneList, ctgHash, ntHash);
     }
 slReverse(&chromList);
+freeHash(&ntHash);
 return chromList;
 }
 
@@ -640,36 +646,99 @@ void readGsClones(char *gsDir, struct hash *cloneHash, struct cloneInfo **pClone
 /* Read in clones from freeze directory. */
 {
 static char *subDirs[3] = {"fin", "draft", "predraft"};
+static char path[3][512];
 int i;
-char *subDir, path[512];	
+char *subDir;	
 
 for (i=0; i<ArraySize(subDirs); ++i)
     {
     subDir = subDirs[i];
-    sprintf(path, "%s/%s/fa", gsDir, subDir);
-    printf("Reading %s ...\n", path);
-    faDirToCloneHash(path, cloneHash, pCloneList);
+    sprintf(path[i], "%s/%s/fa", gsDir, subDir);
+    printf("Reading %s ...\n", path[i]);
+    faDirToCloneHash(path[i], cloneHash, pCloneList);
     }
 }
 
-void ooDirsFromWuMap(char *inName, char *gsDir, char *outDir)
-/* Read in St. Louis format file and create corresponding dir full of 
- * goodies. */
+struct ntCtgClonePos
+/* Defines a clone's position in a NT contig. */
+    {
+    struct ntClonePos *next;	/* Next in list. */
+    char *cloneAcc;		/* Accession of clone.  Allocated in hash. */
+    char *nt;			/* NT name.  Allocated here. */
+    int start, end;		/* Start/end in contig. */
+    char strand;		/* + or - */
+    };
+
+struct hash *makeNtCloneHash(char *gsDir)
+/* Read gsDir/ffa/ctg_coords into a hash of ntClonePos keyed by
+ * clone accession. */
 {
-struct hash *cloneHash = newHash(0);
-struct hash *ctgHash = newHash(0);
-struct cloneInfo *cloneList = NULL;
-struct cmChrom *chromList = wuParse(inName, cloneHash, &cloneList, ctgHash);
-if (chromList == NULL)
-    errAbort("Nothing to do in %s\n", inName);
-readGsClones(gsDir, cloneHash, &cloneList);
-slReverse(&cloneList);
-makeCmDir(chromList, outDir);
-listMissing(cloneList, badHash);
+char fileName[512];
+struct lineFile *lf;
+char *row[7];
+struct hash *ntCloneHash = newHash(0);
+struct ntCtgClonePos *nccp;
+
+sprintf(fileName, "%s/ffa/ctg_coords", gsDir);
+lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    {
+    char *cloneName = row[6];
+    if (!startsWith("NT_", row[0]))
+        errAbort("Expecting line %d of %s to start with NT_", lf->lineIx, lf->fileName);
+    chopSuffix(cloneName);
+    AllocVar(nccp);
+    hashAddSaveName(ntCloneHash, cloneName, nccp, &nccp->cloneAcc);
+    nccp->nt = cloneString(row[0]);
+    nccp->start = lineFileNeedNum(lf, row, 3) - 1;
+    nccp->end = lineFileNeedNum(lf, row, 4);
+    nccp->strand = row[5][0];
+    }
+lineFileClose(&lf);
+return ntCloneHash;
 }
 
+struct cloneBasicInfo
+/* Just the basic info on a clone - what you can
+ * get from sequence.inf. */
+    {
+    struct cloneBasicInfo *next;	/* Next in list. */
+    int phase;				/* Clone phase. */
+    int size;				/* Clone size. */
+    };
+
+struct hash *makeBasicCloneHash(char *gsDir)
+/* Read gsDir/ffa/sequence.inf and construct hash that gives
+ * phase for each clone in that file. */
+{
+char fileName[512];
+struct lineFile *lf;
+char *row[4];
+struct hash *hash = newHash(0);
+struct cloneBasicInfo *cbi;
+
+sprintf(fileName, "%s/ffa/sequence.inf", gsDir);
+lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    {
+    char *clone = row[0];
+    int phase;
+    chopSuffix(clone);
+    AllocVar(cbi);
+    cbi->size = lineFileNeedNum(lf, row, 2);
+    cbi->phase = lineFileNeedNum(lf, row, 3);
+    if (cbi->phase < 0 || cbi->phase > 3)
+        errAbort("Phase out of range line %d of %s", lf->lineIx, lf->fileName);
+    hashAddUnique(hash, clone, cbi);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+
 struct cmChrom *imParseOne(char *imreFile, struct hash *cloneHash, 
-	struct cloneInfo **pCloneList, struct hash *ctgHash)
+	struct cloneInfo **pCloneList, struct hash *ctgHash, 
+	struct hash *basicHash, struct hash *ntCloneHash, struct hash *ntHash)
 /* Parse a single tpf.txt file (Imre style) */
 {
 struct cmChrom *chrom = NULL;
@@ -682,11 +751,20 @@ int wordCount, lineSize;
 struct slName *cName;
 struct cloneInfo *ci;
 static struct imreClone im;
+char sDir[256];
 char sFile[128];
 char *chromName = NULL;
+int len;
+int clonePos = 0;
+struct cloneBasicInfo *cbi;
+int missingFromFreeze = 0;
+struct ntCtgClonePos *nccp;
 
 uglyf("Reading %s\n", imreFile);
-splitPath(imreFile, NULL, sFile, NULL);
+splitPath(imreFile, sDir, NULL, NULL);
+len = strlen(sDir);
+if (sDir[len-1] == '/') sDir[len-1] = 0;
+splitPath(sDir, NULL, sFile, NULL);
 chromName = sFile;
 if (startsWith("Chr", chromName))
     chromName += 3;
@@ -703,7 +781,10 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount == 0)
         continue;
     if (sameWord(words[0], "gap"))
+	{
+	clonePos += 100;
         continue;
+	}
     if (wordCount < 5)
         errAbort("Expecting at least 5 words line %d of %s", 
 		lf->lineIx, lf->fileName);
@@ -715,26 +796,117 @@ while (lineFileNext(lf, &line, &lineSize))
 	hashAddSaveName(ctgHash, im.imreContig, contig, &contig->name);
 	contig->chrom = chrom;
 	}
-    cName = newSlName(line);
+    cName = newSlName(origLine);
     slAddTail(&contig->lineList, cName);
-    ci = storeCloneInHash(im.accession, cloneHash, pCloneList, contig);
-    ci->inMap = TRUE;
-    AllocVar(cl);
-    cl->clone = ci;
-    cl->line = cName->name;
-    slAddTail(&contig->cloneList, cl);
+    if (!sameString(im.accession, "?"))
+	{
+	ci = storeCloneInHash(im.accession, cloneHash, pCloneList, contig);
+	ci->inMap = TRUE;
+	ci->pos = clonePos;
+	if ((cbi = hashFindVal(basicHash, im.accession)) != NULL)
+	    ci->phase = cbi->phase;
+	else
+	    ++missingFromFreeze;
+	AllocVar(cl);
+	cl->clone = ci;
+	cl->line = cName->name;
+	slAddTail(&contig->cloneList, cl);
+	if ((nccp = hashFindVal(ntCloneHash, im.accession)) != NULL)
+	    {
+	    struct ntInfo *nt = NULL;
+	    struct ntClonePos *ntPos;
+	    if (cbi == NULL)
+	    	warn("%s is in ctg_coords but not sequence.inf", im.accession);
+	    else
+		{
+		if ((nt = hashFindVal(ntHash, nccp->nt)) == NULL)
+		    {
+		    AllocVar(nt);
+		    hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
+		    nt->ctg = contig->name;
+		    slAddTail(&contig->ntList, nt);
+		    }
+	       if (nt->ctg != contig->name)
+		    {
+		    warn("Nt contig %s split between %s and %s, ignoring %s",
+			 nt->name, nt->ctg, contig->name, contig->name);
+		    }
+		else
+		    {
+		    AllocVar(ntPos);
+		    ntPos->clone = ci;
+		    ntPos->ntPos = nccp->start;
+		    ntPos->size = cbi->size;
+		    ntPos->orientation = (nccp->strand == '+' ? 1 : -1);
+		    slAddTail(&nt->cloneList, ntPos);
+		    }
+		}
+	    }
+	}
+    if (sameString(im.source, "TPF"))
+        clonePos += 100;
     }
+printf("%d clones in Imre map missing from freeze\n", missingFromFreeze);
 slReverse(&chrom->orderedList);
 return chrom;
 }
 
-struct cmChrom *imParse(char *imreDir, struct hash *cloneHash, 
+
+int warnDupes(struct cmContig *contigList, struct hash *dupeHash)
+/* Check for dupes in contig list and report.  Return
+ * number of dupes. */
+{
+int dupeCount = 0;
+struct cmContig *contig, *dupeContig;
+struct cloneLine *cl;
+
+for (contig = contigList; contig != NULL; contig = contig->next)
+    {
+    for (cl = contig->cloneList; cl != NULL; cl = cl->next)
+        {
+	char *cloneName = cl->clone->acc;
+	if ((dupeContig = hashFindVal(dupeHash, cloneName)) == NULL)
+	    {
+	    hashAdd(dupeHash, cloneName, contig);
+	    }
+	else
+	    {
+	    fprintf(errLog, "clone %s duplicated in contigs %s and %s\n",
+	    	cloneName, dupeContig->name, contig->name);
+	    ++dupeCount;
+	    }
+	}
+    }
+return dupeCount;
+}
+
+void checkDupes(struct cmChrom *chromList)
+/* Make sure no clones are duplicated. */
+{
+struct hash *dupeHash = newHash(16);
+int dupeCount = 0;
+struct cmChrom *chrom;
+
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    dupeCount += warnDupes(chrom->orderedList, dupeHash);
+    dupeCount += warnDupes(chrom->randomList, dupeHash);
+    }
+freeHash(&dupeHash);
+if (dupeCount > 0)
+   errAbort("%d clones duplicated total, aborting", dupeCount);
+}
+
+struct cmChrom *imParse(char *gsDir, char *imreDir, struct hash *cloneHash, 
 	struct cloneInfo **pCloneList, struct hash *ctgHash)
 /* Parse tpf.txt files in imreDir. */
 {
 struct fileInfo *fiList1 = listDirX(imreDir, "*", TRUE), *fi1;
 struct fileInfo *fiList2 = NULL, *fi2;
 struct cmChrom *chromList = NULL, *chrom;
+struct hash *basicHash = makeBasicCloneHash(gsDir);
+struct hash *ntCloneHash = makeNtCloneHash(gsDir);
+struct hash *ntHash = newHash(0);
 
 for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
     {
@@ -743,7 +915,8 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 	struct fileInfo *fiList2 = listDirX(fi1->name, "t*.txt", TRUE);
 	for (fi2 = fiList2; fi2 != NULL; fi2 = fi2->next)
 	    {
-	    chrom = imParseOne(fi2->name, cloneHash, pCloneList, ctgHash);
+	    chrom = imParseOne(fi2->name, cloneHash, pCloneList, 
+	    	ctgHash, basicHash, ntCloneHash, ntHash);
 	    slAddHead(&chromList, chrom);
 	    }
 	slFreeList(&fiList2);
@@ -751,7 +924,32 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
     }
 slFreeList(&fiList1);
 slReverse(&chromList);
+hashFree(&basicHash);
+hashFree(&ntCloneHash);
+hashFree(&ntHash);
+checkDupes(chromList);
 return chromList;
+}
+
+void ooDirsFromMap(char *inName, char *gsDir, char *outDir, boolean imreMap)
+/* Read in St. Louis format file and create corresponding dir full of 
+ * goodies. */
+{
+struct hash *cloneHash = newHash(0);
+struct hash *ctgHash = newHash(0);
+struct cloneInfo *cloneList = NULL;
+struct cmChrom *chromList;
+
+if (imreMap)
+    chromList = imParse(gsDir, inName, cloneHash, &cloneList, ctgHash);
+else
+    chromList = wuParse(inName, cloneHash, &cloneList, ctgHash);
+if (chromList == NULL)
+    errAbort("Nothing to do in %s\n", inName);
+readGsClones(gsDir, cloneHash, &cloneList);
+slReverse(&cloneList);
+makeCmDir(chromList, outDir);
+listMissing(cloneList, badHash);
 }
 
 struct chromMiss
@@ -803,8 +1001,43 @@ for (miss = missList; miss != NULL; miss = miss->next)
 printf("Total: %d of %d missing\n", missCount, count);
 }
 
+void flagMissingRandom(struct hash *hash, struct cmChrom *chromList)
+/* Report clones that are on list but not in hash */
+{
+struct cmChrom *chrom;
+struct cloneInfo *clone;
+struct cmContig *contig;
+char chromName[64];
+struct hash *missHash = newHash(8);
+struct chromMiss *missList = NULL, *miss;
 
-void checkImreVsWu(char *gsDir, char *imreDir, char *wuFile)
+int missCount = 0, count = 0;
+printf("Missing clones in random sections\n");
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    int count = 0;
+    int hits = 0;
+    for (contig = chrom->randomList; contig != NULL; contig = contig->next)
+	{
+	struct cloneLine *cl;
+	for (cl = contig->cloneList; cl != NULL; cl = cl->next)
+	    {
+	    ++count;
+	    if (hashLookup(hash, cl->clone->acc) != NULL)
+		++hits;
+	    }
+	}
+    if (count > 0)
+        {
+	printf("%s (RANDOM)  %4.2f%% (%d/%d) in TPF\n", chrom->name,
+		100.0*hits/(double)count, hits, count);
+	}
+    }
+}
+
+
+void checkImreVsWu(char *gsDir, char *imreDir, char *wuFile, 
+	boolean imreReference, boolean checkNa)
 /* Check Imre Map vs. Wash U St. Louis Map. */
 {
 struct cmChrom *wuChromList = NULL, *imreChromList = NULL;
@@ -814,22 +1047,26 @@ struct hash *wuCtgHash = newHash(0), *imreCtgHash = newHash(0);
 
 wuChromList = wuParse(wuFile, wuCloneHash, &wuCloneList, wuCtgHash);
 slReverse(&wuCloneList);
-imreChromList = imParse(imreDir, imreCloneHash, &imreCloneList, imreCtgHash);
+imreChromList = imParse(gsDir, imreDir, imreCloneHash, &imreCloneList, imreCtgHash);
 slReverse(&imreCloneList);
-uglyf("Loaded %d imre chromosomes, %d wu chromosomes\n", 
-	slCount(imreChromList), slCount(wuChromList));
-uglyf("Loaded %d imre clones, %d wu clones\n",
-	slCount(imreCloneList), slCount(wuCloneList));
-flagMissing(imreCloneHash, wuCloneList);
+if (checkNa)
+    {
+    flagMissingRandom(imreCloneHash, wuChromList);
+    }
+else
+    {
+    if (imreReference)
+	flagMissing(wuCloneHash, imreCloneList);
+    else
+	flagMissing(imreCloneHash, wuCloneList);
+    }
 }
-
 
 void cmProcess(char *inName, char *badClones, char *finLst, char *gsDir, 
 	char *outDir)
 /* Read in file and create corresponding dir full of goodies. */
 {
 /* Load up hashes and lists from input files. */
-ntHash = newHash(0);
 badHash = newHash(11);
 readBad(badHash, badClones, 0);
 readBad(badHash, finLst, 0);
@@ -837,15 +1074,23 @@ readBad(badHash, finLst, 0);
 /* Pick routine to call based on command line parameters. */
 if (checkImre != NULL)
     {
-    checkImreVsWu(gsDir, checkImre, inName);
+    checkImreVsWu(gsDir, checkImre, inName, FALSE, FALSE);
+    }
+else if (imreCheck != NULL)
+    {
+    checkImreVsWu(gsDir, imreCheck, inName, TRUE, FALSE);
+    }
+else if (imreVsNa != NULL)
+    {
+    checkImreVsWu(gsDir, imreVsNa, inName, FALSE, TRUE);
     }
 else if (imreFormat)
     {
-    uglyAbort("Not implemented");
+    ooDirsFromMap(inName, gsDir, outDir, TRUE);
     }
 else
     {
-    ooDirsFromWuMap(inName, gsDir, outDir);
+    ooDirsFromMap(inName, gsDir, outDir, FALSE);
     }
 }
 
@@ -856,6 +1101,8 @@ struct cmChrom *chromList = NULL, *chrom;
 cgiSpoof(&argc, argv);
 imreFormat = cgiBoolean("imre");
 checkImre = cgiOptionalString("checkImre");
+imreCheck = cgiOptionalString("imreCheck");
+imreVsNa = cgiOptionalString("imreVsNa");
 if (argc != 6)
     usage();
 errLog = mustOpen("err.log", "w");
