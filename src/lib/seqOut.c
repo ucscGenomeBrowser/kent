@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "obscure.h"
+#include "dnautil.h"
 #include "fuzzyFind.h"
 #include "seqOut.h"
 #include "htmshell.h"
@@ -52,7 +53,7 @@ if (cfm->lineLen)
 	    pos += cfm->numOff;
 	    fprintf(cfm->out, " %ld", pos);
 	    }
-	fprintf(cfm->out, "<BR>\n");
+	fprintf(cfm->out, "\n");
 	cfm->inLine = 0;
 	}
     }
@@ -64,7 +65,17 @@ void cfmCleanup(struct cfm *cfm)
 fprintf(cfm->out, "</FONT>\n");
 }
 
-void bafInit(struct baf *baf, DNA *needle, int nNumOff, DNA *haystack, int hNumOff, boolean hCountDown, FILE *out)
+int seqOutColorLookup[3] = 
+    {
+    0x000000,
+    0x0033FF,
+    0xaa22FF,
+    };
+
+
+void bafInit(struct baf *baf, DNA *needle, int nNumOff, DNA *haystack, 
+	int hNumOff, boolean hCountDown, FILE *out, 
+	int lineSize, boolean isTrans )
 /* Initialize block alignment formatter. */
 {
 baf->cix = 0;
@@ -74,6 +85,10 @@ baf->nNumOff = nNumOff;
 baf->hNumOff = hNumOff;
 baf->hCountDown = hCountDown;
 baf->out = out;
+baf->lineSize = lineSize;
+baf->isTrans = isTrans;
+baf->nCurPos = baf->hCurPos = 0;
+baf->nLineStart = baf->hLineStart = 0;
 }
 
 void bafSetAli(struct baf *baf, struct ffAli *ali)
@@ -83,13 +98,21 @@ baf->nCurPos = ali->nStart - baf->needle;
 baf->hCurPos = ali->hStart - baf->haystack;
 }
 
+void bafSetPos(struct baf *baf, int nStart, int hStart)
+/* Set up block formatter starting at nStart/hStart. */
+{
+if (baf->isTrans)
+    nStart *= 3;
+baf->nCurPos = nStart;
+baf->hCurPos = hStart;
+}
+
 void bafStartLine(struct baf *baf)
 /* Set up block formatter to start new line at current position. */
 {
 baf->nLineStart = baf->nCurPos;
 baf->hLineStart = baf->hCurPos;
 }
-
 
 static int maxDigits(int x, int y)
 {
@@ -104,24 +127,54 @@ void bafWriteLine(struct baf *baf)
 {
 int i;
 int count = baf->cix;
-int startDigits = maxDigits(baf->nLineStart+1+baf->nNumOff, baf->hLineStart+1+baf->hNumOff);
-int endDigits = maxDigits(baf->nCurPos+baf->nNumOff, baf->hCurPos+baf->hNumOff);
+int div3 = (baf->isTrans ? 3 : 1);
+int nStart = baf->nLineStart/div3 + 1 + baf->nNumOff;
+int hStart = baf->hLineStart + 1 + baf->hNumOff;
+int nEnd = baf->nCurPos/div3 + baf->nNumOff;
+int hEnd = baf->hCurPos + baf->hNumOff;
+int startDigits = maxDigits(nStart, hStart);
+int endDigits = maxDigits(nEnd, hEnd);
 int hStartNum, hEndNum;
 
-fprintf(baf->out, "%0*d ", startDigits, 1+baf->nNumOff + baf->nLineStart);
+fprintf(baf->out, "%0*d ", startDigits, nStart);
 for (i=0; i<count; ++i)
     fputc(baf->nChars[i], baf->out);
-fprintf(baf->out, " %0*d<BR>\n", endDigits, baf->nNumOff + baf->nCurPos);
+fprintf(baf->out, " %0*d\n", endDigits, nEnd);
 
 for (i=0; i<startDigits; ++i)
     fputc('>', baf->out);
 fputc(' ', baf->out);
 for (i=0; i<count; ++i)
-    fputc( (toupper(baf->nChars[i]) == toupper(baf->hChars[i]) ? '|' : '.'), baf->out);
+    {
+    char n,h,c =  ' ';
+
+    n = baf->nChars[i];
+    h = baf->hChars[i];
+    if (baf->isTrans)
+        {
+	if (n != ' ')
+	    {
+	    DNA codon[4];
+	    codon[0] = baf->hChars[i-1];
+	    codon[1] = h;
+	    codon[2] = baf->hChars[i+1];
+	    codon[3] = 0;
+	    tolowers(codon);
+	    if (toupper(n) == lookupCodon(codon))
+	        c = '|';
+	    }
+	}
+    else 
+        {
+	if (toupper(n) == toupper(h))
+	     c = '|';
+	}
+    fputc(c, baf->out);
+    }
 fputc(' ', baf->out);
 for (i=0; i<endDigits; ++i)
     fputc('<', baf->out);
-fprintf(baf->out, "<BR>\n");
+fprintf(baf->out, "\n");
 
 if (baf->hCountDown)
     {
@@ -136,7 +189,7 @@ else
 fprintf(baf->out, "%0*d ", startDigits, hStartNum);
 for (i=0; i<count; ++i)
     fputc(baf->hChars[i], baf->out);
-fprintf(baf->out, " %0*d<BR>\n<BR>\n", endDigits, hEndNum);
+fprintf(baf->out, " %0*d\n\n", endDigits, hEndNum);
 }
 
 void bafOut(struct baf *baf, char n, char h)
@@ -146,7 +199,7 @@ baf->nChars[baf->cix] = n;
 baf->hChars[baf->cix] = h;
 baf->nCurPos += 1;
 baf->hCurPos += 1;
-if (++(baf->cix) >= sizeof(baf->nChars))
+if (++(baf->cix) >= baf->lineSize)
     {
     bafWriteLine(baf);
     baf->cix = 0;

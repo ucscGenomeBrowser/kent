@@ -11,20 +11,6 @@
 #include "cda.h"
 #include "seqOut.h"
 
-enum cfv
-    {
-    cfvBlack = 0,
-    cfvBlue = 1,
-    cfvBrightBlue = 2,
-    };
-
-int cfvLookup[3] = 
-    {
-    0x000000,
-    0x0033FF,
-    0xaa00FF,
-    };
-
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
@@ -63,7 +49,7 @@ fputs("Light blue bases indicate gaps in the alignment. ", f);
 fputs("</P></CENTER>", f);
 htmHorizontalLine(f);
 
-fprintf(f, "<TT>\n");
+fprintf(f, "<TT><PRE>\n");
 fprintf(f, "<H4><A NAME=cDNA></A>cDNA %s%s</H4>\n", needleName, (rcNeedle ? " (reverse complemented)" : ""));
 
 if (rcHaystack) 
@@ -90,12 +76,12 @@ if (showNeedle)
 	for (i=0; i<count; ++i)
 	    {
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
-		colorFlags[off+i] = ((i == 0 || i == count-1) ? cfvBrightBlue : cfvBlue);
+		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
 	    }
 	}
     for (i=0; i<needleSize; ++i)
 	{
-	cfmOut(&cfm, needle[i], cfvLookup[colorFlags[i]]);
+	cfmOut(&cfm, needle[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmCleanup(&cfm);
     htmHorizontalLine(f);
@@ -116,7 +102,7 @@ if (showHaystack)
 	for (i=0; i<count; ++i)
 	    {
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
-		colorFlags[off+i] = ((i == 0 || i == count-1) ? cfvBrightBlue : cfvBlue);
+		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
 	    }
 	}
     if (leftAli != NULL)
@@ -138,7 +124,7 @@ if (showHaystack)
 	    lastAli = ali;
 	    ali = ali->right;
 	    }
-	cfmOut(&cfm, haystack[i], cfvLookup[colorFlags[i]]);
+	cfmOut(&cfm, haystack[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmCleanup(&cfm);
     htmHorizontalLine(f);
@@ -149,7 +135,7 @@ if (showSideBySide)
     fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     lastAli = NULL;
     charsInLine = 0;
-    bafInit(&baf, needle, 0, haystack, hayNumOffset, rcHaystack, f);
+    bafInit(&baf, needle, 0, haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
     for (ali=leftAli; ali!=NULL; ali = ali->right)
 	{
 	boolean doBreak = TRUE;
@@ -202,7 +188,7 @@ if (showSideBySide)
     if (leftAli != NULL)
 	bafFlushLine(&baf);
     }
-fprintf(f, "</TT>\n");
+fprintf(f, "</TT></PRE>\n");
 if (rcNeedle)
     reverseComplement(needle, needleSize);
 return anchorCount;

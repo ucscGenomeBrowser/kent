@@ -25,11 +25,20 @@ void cfmOut(struct cfm *cfm, char c, int color);
 void cfmCleanup(struct cfm *cfm);
 /* Finish up cfm formatting job. */
 
+enum seqOutColor
+/* Symbolic color for sequence output. */
+    {
+    socBlack = 0,		/* Not aligning. */
+    socBlue = 1,		/* Aligning. */
+    socBrightBlue = 2,		/* End of an aligning block. */
+    };
+extern int seqOutColorLookup[];		/* Converts these to html format colors. */
+
 struct baf
 /* Block allignment formatter. */
     {
-    char nChars[50];
-    char hChars[50];
+    char nChars[256];
+    char hChars[256];
     int cix;
     int nLineStart;
     int hLineStart;
@@ -38,15 +47,21 @@ struct baf
     DNA *needle, *haystack;
     int nNumOff, hNumOff;
     FILE *out;
+    int lineSize;
     bool hCountDown;     /* True if want numbers counting down. */
+    bool isTrans;	 /* True if haystack is translated. */
     };
 
-void bafInit(struct baf *baf, DNA *needle, int nNumOff, DNA *haystack, int hNumOff, 
-	boolean hCountDown, FILE *out);
+void bafInit(struct baf *baf, DNA *needle, int nNumOff, 
+	DNA *haystack, int hNumOff, boolean hCountDown, 
+	FILE *out, int lineSize, boolean isTrans);
 /* Initialize block alignment formatter. */
 
 void bafSetAli(struct baf *baf, struct ffAli *ali);
 /* Set up block formatter around an ffAli block. */
+
+void bafSetPos(struct baf *baf, int nStart, int hStart);
+/* Set up block formatter starting at nStart/hStart. */
 
 void bafStartLine(struct baf *baf);
 /* Set up block formatter to start new line at current position. */
