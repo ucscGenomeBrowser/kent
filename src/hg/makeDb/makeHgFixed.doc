@@ -51,3 +51,14 @@ cd ~/kent/src/hg/makeDb/hgStanfordMicroarray
 hgStanfordMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps /projects/compbio/data/microarray/wormLifeCycle/spots -swap '-trimName=(green)' -suppress=green '-trimTissue=(repeat #?)'
 cd ../hgMedianMicroarray
 hgMedianMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps kimMed.ra kimWormLifeMedianRatio kimWormLifeMedianExps
+
+# D. melanogaster life cycle data from Arbeitman et al 2002 
+# via the Stanford Microarray Database.
+cd /projects/compbio/data/microarray/flyLifeCycle
+hgStanfordMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps spots
+cp ~kent/src/hg/makeDb/hgMedianMicroarray/kimMed.ra arbMed.ra
+TODO
+# edit arbMed.ra
+hgMedianMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps arbMed.ra \
+  arbFlyLifeMedianRatio arbFlyLifeMedianExps
+
