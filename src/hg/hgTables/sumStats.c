@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.5 2004/07/21 07:26:25 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.6 2004/07/21 09:35:33 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -275,9 +275,10 @@ static void twoStringRow(char *label, char *val)
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
-void doOutSummaryStats(struct trackDb *track, struct sqlConnection *conn)
+void doSummaryStats(struct sqlConnection *conn)
 /* Put up page showing summary stats for track. */
 {
+struct trackDb *track = curTrack;
 struct bed *bedList;
 struct region *regionList = getRegionsWithChromEnds();
 long long regionSize = basesInRegion(regionList);
@@ -289,7 +290,6 @@ struct hTableInfo *hti = getHti(database, track->tableName);
 
 
 htmlOpen("%s Summary Statistics", track->shortLabel);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 cartSaveSession(cart);
 startTime = clock1000();
 bedList = getAllIntersectedBeds(conn, track);
@@ -324,8 +324,6 @@ if (hti->hasBlocks)
     }
 calcTime = clock1000() - startTime;
 hTableEnd();
-hPrintf("<BR>");
-cgiMakeButton(hgtaDoMainPage, " OK ");
 
 webNewSection("Region and Timing Statistics");
 hTableStart();
@@ -341,10 +339,8 @@ numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load time", 0.001*loadTime);
 floatStatRow("calculation time", 0.001*calcTime);
 twoStringRow("filter", (anyFilter() ? "on" : "off"));
+twoStringRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
-hPrintf("<BR>");
-cgiMakeButton(hgtaDoMainPage, " OK ");
-hPrintf("</FORM>");
 
 htmlClose();
 }

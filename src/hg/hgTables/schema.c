@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.14 2004/07/19 15:58:45 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.15 2004/07/21 09:35:33 kent Exp $";
 
 
 void describeFields(char *db, char *table, 
@@ -176,7 +176,7 @@ if (jpList != NULL)
 	hPrintf("<A HREF=\"../cgi-bin/hgTables?");
 	hPrintf("%s&", cartSidUrlString(cart));
 	hPrintf("%s=%s&", hgtaDoSchemaDb, jp->b->database);
-	hPrintf("%s=%s", hgtaDoSchema, jp->b->table);
+	hPrintf("%s=%s", hgtaDoSchemaTable, jp->b->table);
 	hPrintf("\">");
 	hPrintf("%s", jp->b->table);
 	hPrintf("</A>");
@@ -225,9 +225,10 @@ showSchema(db, table);
 htmlClose();
 }
 
-void doTrackSchema(struct trackDb *track, struct sqlConnection *conn)
-/* Show schema around track. */
+void doSchema(struct sqlConnection *conn)
+/* Show schema around current track. */
 {
+struct trackDb *track = curTrack;
 char *table = connectingTableForTrack(track);
 htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
 showSchema(database, table);

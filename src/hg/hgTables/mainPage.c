@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.20 2004/07/21 08:38:50 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.21 2004/07/21 09:35:33 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -288,8 +288,8 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
         {outPrimaryTable, 
 	 outSelectedFields, 
 	 outSequence, 
-	 outSchema,
-	 outSummaryStats, 
+	 // outSchema,
+	 // outSummaryStats, 
 	 outGff, 
 	 outBed, 
 	 outCustomTrack ,
@@ -298,8 +298,8 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
         {"all fields from primary table", 
 	 "selected fields from related tables", 
 	 "sequence", 
-	 "schema (database organization)",
-	 "summary/statistics", 
+	 // "schema (database organization)",
+	 // "summary/statistics", 
 	 "GTF - gene transfer format", 
 	 "BED - browser extensible data", 
 	 "custom track",
@@ -321,7 +321,11 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output</I><BR>");
-    cgiMakeButton(hgtaDoTopSubmit, "Submit");
+    cgiMakeButton(hgtaDoTopSubmit, "Get Output");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
 #ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");

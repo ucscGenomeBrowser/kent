@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.3 2004/07/21 07:26:25 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.4 2004/07/21 09:35:33 kent Exp $";
 
 static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
 	struct trackDb *track, struct region *regionList)
@@ -27,7 +27,7 @@ struct bed *bedList = NULL;
 char *table = track->tableName;
 char *filter = filterClause(database, table);
 
-for (region = getRegions(); region != NULL; region = region->next)
+for (region = regionList; region != NULL; region = region->next)
     {
     int end = region->end;
     if (end == 0)

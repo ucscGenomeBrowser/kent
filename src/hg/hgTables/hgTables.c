@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.44 2004/07/21 08:15:50 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.45 2004/07/21 09:35:33 kent Exp $";
 
 
 void usage()
@@ -679,8 +679,6 @@ char *trackName = cartString(cart, hgtaTrack);
 struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(track, conn);
-else if (sameString(output, outSchema))
-    doTrackSchema(track, conn);
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(track, conn);
 else if (sameString(output, outSequence))
@@ -689,8 +687,6 @@ else if (sameString(output, outBed))
     doOutBed(track, conn);
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(track, conn);
-else if (sameString(output, outSummaryStats))
-    doOutSummaryStats(track, conn);
 else if (sameString(output, outGff))
     doOutGff(track, conn);
 else if (sameString(output, outHyperlinks))
@@ -708,6 +704,10 @@ if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoTopSubmit))
     doTopSubmit(conn);
+else if (cartVarExists(cart, hgtaDoSummaryStats))
+    doSummaryStats(conn);
+else if (cartVarExists(cart, hgtaDoSchema))
+    doSchema(conn);
 else if (cartVarExists(cart, hgtaDoIntersectPage))
     doIntersectPage(conn);
 else if (cartVarExists(cart, hgtaDoClearIntersect))
@@ -732,10 +732,10 @@ else if (cartVarExists(cart, hgtaDoFilterSubmit))
     doFilterSubmit(conn);
 else if (cartVarExists(cart, hgtaDoClearFilter))
      doClearFilter(conn);
-else if (cartVarExists(cart, hgtaDoSchema))
+else if (cartVarExists(cart, hgtaDoSchemaTable))
     {
     doTableSchema( cartString(cart, hgtaDoSchemaDb), 
-    	cartString(cart, hgtaDoSchema), conn);
+    	cartString(cart, hgtaDoSchemaTable), conn);
     }
 else if (cartVarExists(cart, hgtaDoValueHistogram))
     doValueHistogram(cartString(cart, hgtaDoValueHistogram));

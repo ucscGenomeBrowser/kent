@@ -240,6 +240,8 @@ boolean anyIntersection();
 	 		  * from cart. */
 #define hgtaDoMainPage "hgta_doMainPage"
 #define hgtaDoTopSubmit "hgta_doTopSubmit"
+#define hgtaDoSummaryStats "hgta_doSummaryStats"
+#define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoPasteIdentifiers "hgta_doPasteIdentifiers"
 #define hgtaDoPastedIdentifiers "hgta_doPastedIdentiers"
 #define hgtaDoUploadIdentifiers "hgta_doUploadIdentifiers"
@@ -253,7 +255,7 @@ boolean anyIntersection();
 #define hgtaDoIntersectMore "hgta_doIntersectMore"
 #define hgtaDoIntersectSubmit "hgta_doIntersectSubmit"
 #define hgtaDoTest "hgta_doTest"
-#define hgtaDoSchema "hgta_doSchema"
+#define hgtaDoSchemaTable "hgta_doSchemaTable"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
 #define hgtaDoValueHistogram "hgta_doValueHistogram"
 #define hgtaDoValueRange "hgta_doValueRange"
@@ -379,8 +381,8 @@ void doTest();
 void doTableSchema(char *db, char *table, struct sqlConnection *conn);
 /* Show schema around table. */
 
-void doTrackSchema(struct trackDb *track, struct sqlConnection *conn);
-/* Show schema around track. */
+void doSchema(struct sqlConnection *conn);
+/* Show schema around current track. */
 
 void doValueHistogram(char *field);
 /* Put up value histogram. */
@@ -430,7 +432,7 @@ void doOutGff(struct trackDb *track, struct sqlConnection *conn);
 void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
-void doOutSummaryStats(struct trackDb *track, struct sqlConnection *conn);
+void doSummaryStats(struct sqlConnection *conn);
 /* Put up page showing summary stats for track. */
 
 void doFilterPage(struct sqlConnection *conn);
