@@ -563,7 +563,9 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-hPrintf(" ALT=\"%s controls\">\n", tg->shortLabel);
+hPrintf("onMouseOver=\"javascript:void(popup('%s controls'));\">\n"
+/*hPrintf(" ALT=\"%s controls\">\n"*/
+    , tg->shortLabel);
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -588,10 +590,13 @@ hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 
 if (toggleGroup)
-    hPrintf(" ALT=\"Change between dense and full view of %s track\">\n", 
+    hPrintf("onMouseOver=\"javascript:void(popup('Change between dense and full view of %s track'));\">\n",
            toggleGroup->shortLabel);
+    /*hPrintf(" ALT=\"Change between dense and full view of %s track\">\n", 
+           toggleGroup->shortLabel);*/
 else
-    hPrintf(" ALT=\"jump to %s\">\n", message);
+    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\">\n",message);
+    /*hPrintf(" ALT=\"jump to %s\">\n", message);*/
 }
 
 
@@ -5032,7 +5037,7 @@ if (isFull)
             if (np.tTrf > 0 || np.qTrf > 0)
                 dyStringPrintf(bubble, " Trf Rep %d/%d",np.tTrf,np.qTrf);
             if (np.tN > 0 || np.qN > 0)
-                dyStringPrintf(bubble, " N's %d/%d",np.tN,np.qN);
+                dyStringPrintf(bubble, " Ns %d/%d",np.tN,np.qN);
             if (np.qFar > 0)
                 dyStringPrintf(bubble, " Far %d",np.qFar);
             if (np.qOver > 0)
