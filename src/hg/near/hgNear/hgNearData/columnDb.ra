@@ -157,7 +157,7 @@ priority 7.5
 visibility off
 type association knownToCdsSnp
 queryFull select name,value from knownToCdsSnp
-queryOne select value from knownToCdsSnp where name = '%s'
+queryOne select value,value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
@@ -208,10 +208,11 @@ priority 9
 visibility off
 type association proteins072003.pfamXref proteins072003.pfamDesc
 queryFull select swissDisplayID,description from proteins072003.pfamXref,proteins072003.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+queryOne select description,proteins072003.pfamDesc.pfamAC from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
 invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
+protDb proteins072003
 
 name go
 shortLabel Gene Ontology

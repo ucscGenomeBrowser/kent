@@ -127,6 +127,9 @@ struct column
    char *queryOne;	/* Query that returns value given key. */
    char *invQueryOne;	/* Query that returns key given value. */
    boolean protKey;	/* Use protein rather than geneId for key. */
+
+   /* Pfam uses this. */
+   char *pfamProtDb; /* Which protein database pfam tables are in. */
    };
 
 struct order

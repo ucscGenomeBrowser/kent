@@ -311,7 +311,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (col->itemUrl)
 	{
 	hPrintf("<A HREF=\"");
-	hPrintf(col->itemUrl, s);
+	hPrintf(col->itemUrl, row[1]);
 	hPrintf("\" TARGET=_blank>");
 	}
     hPrintNonBreak(s);
