@@ -1573,4 +1573,35 @@ type wig 0 100
     ln -s `pwd`/wigData/*.wib /gbdb/galGal1/wib
     hgLoadWiggle galGal1 quality wigData/*.wig
 
+    #	To speed up display for whole chrom views, need to make zoomed
+    #	data views.  Zoom to 1K points per pixel - Hiram 2004-02-17
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/qual/wigData1K
+    mkdir -p wigData1K
+    mkdir -p dataLimits1K
+
+    for c in `cat ../../chrom.lst`
+    do
+        if [ -f ../../${c}/chr${c}.agp ]; then
+            echo "chr${c} quality 1K zoom"
+            qacToWig chrom.qac -name=chr${c} stdout |
+                wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
+                -chrom=chr${c} -wibFile=wigData1K/qc1K_${c} \
+                -name=${c} stdin > dataLimits1K/chr${c}
+        fi
+        if [ -f ../../${c}/chr${c}_random.agp ]; then
+            echo "chr${c}_random quality 1K zoom"
+            qacToWig chrom.qac -name=chr${c}_random stdout |
+                wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
+                -chrom=chr${c}_random -wibFile=wigData1K/qc1K_${c}r \
+                -name=${c}_random stdin > dataLimits1K/chr${c}r
+        fi
+    done
+
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/qual/wigData1K
+    # load in addition to existing data
+    hgLoadWiggle -oldTable galGal1 quality *.wig
+    #	create symlinks for .wib files
+    ln -s `pwd`/*.wib /gbdb/galGal1/wib
 
