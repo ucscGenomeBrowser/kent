@@ -58,7 +58,7 @@ type netAlign dm1 chainDm1
 otherDb dm1
 
 track xenoMrna
-shortLabel Non-D. ana. mRNAs
+shortLabel Non-D. anan. mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
