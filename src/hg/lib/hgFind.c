@@ -1513,9 +1513,6 @@ if (startOffset != NULL)
 
 /* end MarkE offset code */
 
-
-
-
 if (hgIsChromRange(query))
     {
     hgParseChromRange(query, &chrom, &start, &end);

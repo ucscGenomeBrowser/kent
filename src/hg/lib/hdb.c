@@ -391,6 +391,23 @@ char *hDbFromFreeze(char *freeze)
 return hFreezeDbConversion(NULL, freeze);
 }
 
+char *hDefaultPos(char *database)
+/* Return organism associated with database.   use freeMem on
+ * this when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select defaultPos from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+else
+    errAbort("Can't find default position for %s", database);
+hDisconnectCentral(&conn);
+return res;
+}
+
 char *hOrganism(char *database)
 /* Return organism associated with database.   use freeMem on
  * this when done. */
