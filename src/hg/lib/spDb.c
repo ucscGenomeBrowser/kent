@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.1 2003/10/01 06:01:28 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.2 2003/10/02 07:19:10 kent Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -16,6 +16,26 @@ SpAcc temp;
 safef(query, sizeof(query), "select acc from displayId where acc = '%s'",
 	acc);
 return sqlQuickQuery(conn, query, temp, sizeof(temp)) != NULL;
+}
+
+char *spFindAcc(struct sqlConnection *conn, char *id)
+/* Return primary accession given either display ID,
+ * primary accession, or secondary accession.  Return
+ * NULL if not found. */
+{
+char *acc;
+if (spIsPrimaryAcc(conn, id))
+    return cloneString(id);
+acc = spIdToAcc(conn, id);
+if (acc != NULL)
+    return acc;
+else
+    {
+    char query[256];
+    safef(query, sizeof(query), 
+    	"select acc from otherAcc where val = '%s'", id);
+    return sqlQuickString(conn, query);
+    }
 }
 
 char *spAccToId(struct sqlConnection *conn, char *acc)
@@ -28,6 +48,7 @@ safef(query, sizeof(query), "select val from displayId where acc = '%s'",
 return sqlNeedQuickString(conn, query);
 }
 
+
 char *spIdToAcc(struct sqlConnection *conn, char *id)
 /* Convert SwissProt ID (things like HXA1_HUMAN) to
  * accession. Returns NULL if the conversion fails. 
@@ -38,6 +59,7 @@ safef(query, sizeof(query), "select acc from displayId where val = '%s'",
 	id);
 return sqlQuickString(conn, query);
 }
+
 
 char *spLookupPrimaryAcc(struct sqlConnection *conn, 
 	char *anyAcc) 	/* Primary or secondary accession. */

@@ -48,6 +48,11 @@ struct spCitation
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc);
 /* Return TRUE if this is a primary accession in database. */
 
+char *spFindAcc(struct sqlConnection *conn, char *id);
+/* Return primary accession given either display ID,
+ * primary accession, or secondary accession.  Return
+ * NULL if not found. */
+
 char *spAccToId(struct sqlConnection *conn, char *acc);
 /* Convert primary accession to SwissProt ID (which will
  * often look something like HXA1_HUMAN. */
