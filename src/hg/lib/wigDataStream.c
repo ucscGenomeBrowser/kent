@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.7 2004/08/09 22:58:04 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.8 2004/08/09 23:06:06 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -284,9 +284,9 @@ if (! (doAscii || doBed || doStats) )
 
 while (nextRow(wDS, row, WIGGLE_NUM_COLS))
     {
-    struct wigAsciiData *wigAscii;
+    struct wigAsciiData *wigAscii = NULL;
     struct wiggle *wiggle;
-    struct asciiDatum *asciiOut;	/* to address data[] in wigAsciiData */
+    struct asciiDatum *asciiOut = NULL;	/* to address data[] in wigAsciiData */
     unsigned chromPosition;
 
     ++rowCount;
