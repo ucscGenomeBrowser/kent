@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.816 2004/10/13 17:46:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.817 2004/10/18 20:04:01 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6474,10 +6474,12 @@ int spreadStringCharWidth(int width, int count)
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count)
+		       char *match, int count, bool dots)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color. 
+ * with the main color, mismatched letters will have alt color (or 
+ * matching letters with a dot, and mismatched bases with main color if this
+ * option is selected).
  * Draw a vertical bar in orange where sequence lacks gaps that
  * are in reference sequence (possible insertion) -- this is indicated
  * by an escaped insert count in the sequence.  The escape char is backslash.
@@ -6494,6 +6496,8 @@ int motifCount = 0;
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
 int textLength = strlen(text);
+bool selfLine = (match == text);
+char option[32];
 
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0)
@@ -6535,9 +6539,22 @@ for (i=0; i<count; i++, text++, textPos++)
         }
     c[0] = *text;
     clr = color;
-    if (match != NULL && match[i])
-        if (*text != match[i])
-            clr = noMatchColor;
+    if (dots)
+        {
+        /* display bases identical to reference as dots */
+        /* suppress for first line (self line) */
+        if (!selfLine && match != NULL && match[i])
+            if (*text == match[i])
+                c[0] = '.';
+        }
+    else
+        {
+        /* display bases identical to reference in main color, mismatches
+         * in alt color */
+        if (match != NULL && match[i])
+            if (*text != match[i])
+                clr = noMatchColor;
+        }
     if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
@@ -6553,7 +6570,7 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	                Color color, MgFont *font, char *s, int count)
 /* Draw evenly spaced letters in string. */
 {
-spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
+spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count, FALSE);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,

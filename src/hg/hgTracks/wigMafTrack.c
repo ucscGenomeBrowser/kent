@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.35 2004/10/18 19:33:17 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.36 2004/10/18 20:04:01 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -696,9 +696,14 @@ struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 char dbChrom[64];
 char buf[1024];
+char option[64];
 int alignLineLength = winBaseCount*2 * 1;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+bool dots;
+
+safef (option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
+dots = cartCgiUsualBoolean(cart, option, FALSE);
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -811,7 +816,7 @@ for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
         }
     /* draw sequence letters for alignment */
     spreadAlignString(vg, x, y, width, mi->height-1, color,
-                            font, line, selfLine, winBaseCount);
+                        font, line, selfLine, winBaseCount, dots);
     y += mi->height;
     }
 

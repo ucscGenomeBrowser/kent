@@ -479,13 +479,14 @@ void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, int width, i
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 
-                        char *match, int count);
+                        char *match, int count, bool dots);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color. 
  * Draw a vertical bar in light yellow where sequence lacks gaps that
  * are in reference sequence (possible insertion) -- this is indicated
- * by an escaped ('/') insert count in the sequence */
+ * by an escaped ('/') insert count in the sequence.
+ * If "dots" is set, matching bases are displayed as a dot. */
 
 void contigMethods(struct track *tg);
 /* Make track for contig */
