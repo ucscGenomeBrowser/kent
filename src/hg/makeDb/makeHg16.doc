@@ -560,6 +560,10 @@ exit; # don't actually run this like a script :)
 #	/dev/sda1             472G  416G   31G  93% /var/lib/mysql
     # Create the database.
     echo 'create database hg16' | hgsql hg15
+    # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
+    #	(I have not seen a use for this in any procedures ? -Hiram)
+    #		alias hg16 mysql -u hguser -phguserstuff -A hg16
+    #	(use 'hgsql hg16' instead)
     # Initialize the relational-mrna and external sequence info tables:
     hgLoadRna new hg16
     # Copy over grp table (for track grouping) from another database:
@@ -4072,6 +4076,23 @@ end
         /cluster/data/panTro1/chrom.sizes mafRBestNet/$chr.maf
     end
 
+    # load renumbered chains into database  (2003-03-14 kate)
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBestChain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg16 ${c}_rBestChainPanTro1 $i
+        echo done $c
+    end
+
+    # load net into database  (2003-03-14 kate)
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted
+    cat rBestNet/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    netClass noClass.net hg16 panTro1 human.net
+    netFilter -chimpSyn human.net > rBest.net
+    hgLoadNet -warn hg16 rBestNetPanTro1 rBest.net
+
 
 # EXPERIMENT: TBA WHOLE CHROM 5 SPECIES (DONE ENOUGH 3/8/04 angie)
     # Put 2-ways in /cluster/bluearc
@@ -6636,7 +6657,6 @@ axtFilter -notQ=chrUn $1 \
      hgPepPred hg16 softberry fgenesh_jul03/*.protein
      hgSoftberryHom hg16 fgenesh_jul03/*.protein
 
-<<<<<<< makeHg16.doc
 
 # CHIMP (panTro1) ALIGNMENTS (2004-02-12 kate)
 
@@ -7140,9 +7160,7 @@ hgLoadBlastTab hg16 dmBlastTab -maxPer=1 *.tab
 # Scanning through 7748 files
 # Loading database with 28645 rows
 #	row count went from 27173 to 28645
-<<<<<<< makeHg16.doc
->>>>>>> 1.112
-=======
+
 
 LOAD SNPS (Done.  Daryl Thomas; February 18, 2004)
     # SNP processing has been condensed into a single script,
@@ -7339,42 +7357,6 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
 
     set path = ($path /cluster/bin/woody)
 
-# Create "sufficient statistics" (SS) file from maf
-    ssh eieio
-    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
-    mkdir phyloHMM
-    cd phyloHMM
-    # create script to run msa_view.  Use whole chrom (1-chrom.size),
-    # except subtract 1 from end coord, as msa_view's check for length
-    # appears off-by-one
-        #set len = `awk "/$c\t/"'{print $2 - 1}' /cluster/data/hg16/chrom.sizes`
-cat > makeSS.csh << 'EOF'
-    set path = ($path /cluster/bin/woody)
-    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg
-    foreach f (chr*.maf)
-        set c = $f:r
-        echo "$c"
-        msa_view $f -i MAF -o SS -s 1 -r 1 -O hg16,mm3,rn3,galGal2 > \
-                                ../phyloHMM/$c.ss
-    end
-'EOF'
-    # NOTE: -s and -r options above are not necessary (from Adam).
-
-    csh makeSS.csh >&! makeSS.log &
-    tail -100f makeSS.log
-
-    head phyloHMM/chr1.ss
-        #NSEQS = 4
-        #LENGTH = 259637508
-        #TUPLE_SIZE = 1
-        #NTUPLES = 823
-        #NAMES = hg16,mm3,rn3,galGal2
-        #ALPHABET = ACGTN
-        #NCATS = -1
-        #0       CCC-    7599887
-        #1       TTT-    11532895
-
-
 # Obtain phylogenetic model (hmrc_rev_dg.mod)
 # from Adam (hand-tuned, instead of fit_model)
 # then, create New Hampshire tree for data (.nh file)
@@ -7398,15 +7380,6 @@ cat > makeSS.csh << 'EOF'
                                 hmrc_rev_dg.mod
 #((human:0.192598,(mouse:0.076303,rat:0.083043):0.192598):0.47,chicken:0.47);
 
-    echo "((1(2,3)),4)" > hmrg.nh
-
-# Compute posterior probabilies with phylo HMM algorithm, using woody/label
-# -L 0.9   sets lambda autocorrelation value
-# -A       automatically determine rate constants
-# -p 0     compute probabilities for state 0
-# -j 1     reference frame is first sequence (unnecessary ?)
-# -x       omit blocks with only the reference sequence
-
     ssh eieio
     set path = ($path /cluster/bin/woody)
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
@@ -7415,10 +7388,10 @@ cat > makeSS.csh << 'EOF'
     # now, break up the genome-wide MAFs into pieces; it's worth doing
     # this as a little cluster job
     # NOTE: using the hg16 chr fasta files stashed on bluearc for hg16 humor run
+    # NOTE: next time add "check out" lines to assure files are created
     ssh eieio
     mkdir -p /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3galGal2
     cp /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg/*.maf /cluster/bluearc/hg16/bed/multiz.hg16mm3rn3galGal2
-    ssh kk
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
     
     cat << 'EOF' > doSplit
@@ -7433,24 +7406,34 @@ c =`basename $maf .maf`
 echo $c
 mkdir -p /scratch/msa_split
 ${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg16,mm3,rn3,galGal2 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -d 1 -B 5000
+echo "Copying..."
 cd /scratch/msa_split
 for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
 rm -f /scratch/msa_split/$c.*.ss
+echo "Done copying"
 'EOF'
     chmod +x doSplit
     mkdir -p WINDOWS
     rm -f WINDOWS/* jobs.lst
-    foreach file (/cluster/bluearc/hg16/bed/humor/*.maf) 
-	echo "doSplit $$file" >> jobs.lst
+    foreach file (/cluster/bluearc/hg16/bed/multiz.hg16mm3rn3galGal2/*.maf) 
+	echo "doSplit $file" >> jobs.lst
     end
+
+    ssh kk
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
     para create jobs.lst  
+    # para try, para push, etc.
 
     # now setup and run the cluster job to compute the conservation scores
+    # NOTE: need to use gensub2, check out+ facilities to check for
+    # failures.  Will want to chunk msa_split output (above) into chr dirs.
+    # to make the gensub template reasonable.
+    
 cat << 'EOF' > doPostProbs
 #!/bin/sh
 
 WOODY=/cluster/bin/woody
-TMP=/scratch/phyloHMMcons
+TMP=/tmp/phyloHMMcons
 
 file=$1
 root=`basename $file .ss.gz`
@@ -7468,8 +7451,9 @@ rm $TMP/$root.postprob
     mkdir -p POSTPROBS
     rm -f jobs2.lst 
     foreach file (WINDOWS/chr*.ss.gz) 
-	echo "doPostProbs $file" >> jobs2.lst 
+       echo "doPostProbs $file" >> jobs2.lst 
     end
+    wc -l job2.lst
     para create jobs2.lst
     # etc ... (run cluster job)
 
@@ -7478,20 +7462,48 @@ rm $TMP/$root.postprob
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
     mkdir wibLimits
     mkdir wib
+cat > makeWig.csh << 'EOF'
     foreach dir (POSTPROBS/*)
 	set chrom = $dir:t
 	echo $chrom 
 	zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
-	    wigAsciiToBinary -chrom=$chrom -binsize=1024 \
+	    wigAsciiToBinary -chrom=$chrom \
 		-dataSpan=1 -wibFile=wib/${chrom}_hmrg_phyloHMM -name=hmrg \
 		stdin > wibLimits/${chrom}
     end
+'EOF'
+    csh makeWig.csh >&! makeWig.log &
+
     ssh hgwdev
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
-    hgLoadWiggle hg16 multizMm3Rn3GalGal_phyloHMM_wig wib/*_hmrg_phyloHMM.wig 
+    hgLoadWiggle hg16 multizMm3Rn3GalGal2_phyloHMM_wig wib/*_hmrg_phyloHMM.wig 
     ln -s `pwd`/wib/chr*_hmrg_phyloHMM.wib /gbdb/hg16/wib 
     chmod 775 . wib
     chmod 664 wib/*.wib
+
+    #	Add zoom records to table to speed display of large regions (>600Kbp)
+    # NOTE: this doesn't work -- the rows were dropped
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM
+    mkdir -p wib1K wibLimits1K
+cat > wigZoom1K.csh << 'EOF'
+    foreach dir (POSTPROBS/*)
+	set chrom = $dir:t
+	echo $chrom 
+	zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
+	    wigZoom stdin | wigAsciiToBinary -chrom=$chrom \
+                -dataSpan=1024 -wibFile=wib1K/${chrom}_hmrg_phyloHMM_1K \
+                -name=hmrg stdin > wibLimits1K/${chrom}
+    end
+'EOF'
+    csh wigZoom1K.csh >&! wigZoom1K.log &
+    tail -100f wigZoom1K.log
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/phyloHMM/wib1K
+    hgLoadWiggle -oldTable hg16 multizMm3Rn3GalGal2_phyloHMM_wig *.wig
+    #	create symlinks for .wib files
+    ln -s `pwd`/*.wib /gbdb/hg16/wib
+    # NOTE: this doesn't work -- the rows were dropped
 
     # setup external files for database reference
     # reuse mafs loaded in the maf track (just symlink the /gbdb dir before
@@ -7506,6 +7518,29 @@ rm $TMP/$root.postprob
     # type wigMaf 0.0 1.0
     # wiggle multizMm3Rn3GalGal2_phyloHMM_wig
     # etc.
+
+    # Load pairwise mafs
+    ssh hgwdev
+    cd /gbdb/hg16
+    mkdir -p mouse_hmrg rat_hmrg chicken_hmrg
+
+    foreach f (/cluster/data/hg16/bed/humor/maf/*.mm3.maf)
+        ln -s $f /gbdb/hg16/mouse_hmrg
+    end
+    cd /tmp
+    hgLoadMaf -WARN hg16 mouse_hmrg
+
+    foreach f (/cluster/data/hg16/bed/humor/maf/*.rn3.maf)
+        ln -s $f /gbdb/hg16/rat_hmrg
+    end
+    cd /tmp
+    hgLoadMaf -WARN hg16 mouse_hmrg
+
+    foreach f (/cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest/*.maf)
+        ln -s $f /gbdb/hg16/chicken_hmrg
+    end
+    cd /tmp
+    hgLoadMaf -WARN hg16 chicken_hmrg
 
 
 #  miRNA track (DONE - 2004-03-02 - Hiram)
@@ -7530,24 +7565,9 @@ color 255,64,64
 type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
     #	Note the useScore item.  This colors plus strand items in black
-    #	and minus strand items in gray (because of the assignment of
-    #	score to these two different items).  A rarely used option.
+    #	and minus strand items in gray.  A rarely used option.
     #	This same track is in Mm4 and Ce1 too.  Added
     #	findBedPos(query, hgp, "miRNA");
     #	to lib/hgFind.c to allow searching for these items.
 
 
-LOAD RNAGENES (WORKING - 2004-03-09 - Hiram)
-    ssh hgwdev
-    mkdir /cluster/data/hg16/bed/rnaGene
-    cd /cluster/data/hg16/bed/rnaGene
-    wget --timestamping \
-	ftp://ftp.genetics.wustl.edu/pub/eddy/annotation/human-hg16/*
-
-    grep -v '^#' ncrna-hg16-mito.gff | sed -e "s/^NT_999999/chrM/" > mito.gff
-    grep -v '^#' ncrna-hg16-chrom.gff > chrom.gff
-    cat chrom.gff mito.gff > all.gff
-
-    echo 'drop table hgRnaGene;' | hgsql hg16
-    hgsql hg16 < ~/kent/src/hg/lib/rnaGene.sql
-    hgRnaGenes hg16 all.gff
