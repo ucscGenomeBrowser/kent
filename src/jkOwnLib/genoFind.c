@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.16 2004/06/09 01:08:01 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.17 2004/06/17 01:43:16 kate Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -2066,11 +2066,16 @@ int fTileIx,rTileIx,fPosIx,rPosIx;
 bits32 *fPosList, fPos, *rPosList, rPos;
 int fPosListSize, rPosListSize;
 struct hash *targetHash = newHash(0);
+int tile;
 
 /* Build up array of all tiles in reverse primer. */
 AllocArray(rTiles, rTileCount);
 for (rTileIx = 0; rTileIx<rTileCount; ++rTileIx)
+    {
     rTiles[rTileIx] = gfDnaTile(rPrimer + rTileIx, tileSize);
+    if (rTiles[rTileIx] == -1)
+        errAbort("Bad char in reverse primer sequence: %s", rPrimer);
+    }
 
 /* Loop through all tiles in forward primer. */
 for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
