@@ -455,7 +455,7 @@ else
     fprintf(f, "fprintf(f, \"<%s\");\n", el->name);
     for (att = el->attributes; att != NULL; att = att->next)
         {
-	if (att->required)
+	if (att->required || sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
 	    fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
 	else
 	    {
