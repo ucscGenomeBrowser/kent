@@ -20,6 +20,25 @@ close(sd);
 return atoi(buf);
 }
 
+void botDelayMessage(char *ip, int millis)
+/* Print out message saying why you are stalled. */
+{
+printf("<BR>There is a very high volume of traffic coming from your "
+       "site (IP address %s).  So that other users get a fair share "
+       "of our bandwidth we are putting in a delay of %3.1f seconds "
+       "before we service your request.  This delay will slowly "
+       "decrease as activity returns to normal.  This high volume "
+       "of traffic is likely to be due to program-driven rather than "
+       "interactive access, or due to submitting queries on a large "
+       "number of sequences.  If you are making large batch queries "
+       "please write genome@cse.ucsc.edu and inquire to see if there are more "
+       "efficient ways to access our data.  If you are sharing an IP "
+       "address with someone else's large batches we apologize for the "
+       "inconvenience. Please contact genome-www@cse.ucsc.edu if "
+       "you think this delay is being imposed unfairly.<BR><HR>", 
+	    ip, 0.001*millis);
+}
+
 void botDelayCgi(char *host, int port)
 /* Connect with bottleneck server and sleep the
  * amount it suggests for IP address calling CGI script. */
@@ -33,19 +52,7 @@ if (ip != NULL)
 	{
 	if (millis > 10000)
 	    {
-	    printf("<BR>There is a very high volume of traffic coming from your "
-	           "site (IP address %s).  So that other users get a fair share "
-		   "of our bandwidth we are putting in a delay of %3.1f seconds "
-		   "before we service your request.  This delay will slowly "
-		   "decrease as activity returns to normal.  This high volume "
-		   "of traffic is likely to be due to program-driven rather than "
-		   "interactive access.  If it is your program please write "
-		   "genome@cse.ucsc.edu and inquire to see if there are more "
-		   "efficient ways to access our data.  If you are sharing an IP "
-		   "address with someone else's program we apologize for the "
-		   "inconvenience. Please contact genome-www@cse.ucsc.edu if "
-		   "you think this delay is being imposed unfairly.<BR><HR>", 
-		   	ip, 0.001*millis);
+	    botDelayMessage(ip, millis);
 	    }
 	sleep1000(millis);
 	}
@@ -62,3 +69,16 @@ int delay;
 if (host != NULL && port != NULL)
     botDelayCgi(host, atoi(port));
 }
+
+int hgBotDelayTime()
+/* Get suggested delay time from cgi. */
+{
+char *ip = getenv("REMOTE_ADDR");
+char *host = cfgOption("bottleneck.host");
+char *port = cfgOption("bottleneck.port");
+int delay = 0;
+if (host != NULL && port != NULL && ip != NULL)
+    delay =  botDelayTime(host, atoi(port), ip);
+return delay;
+}
+
