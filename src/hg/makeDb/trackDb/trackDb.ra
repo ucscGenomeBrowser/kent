@@ -927,7 +927,16 @@ group compGeno
 priority 136
 visibility hide
 spectrum on
-type netAlign mm2
+type netAlign mm2 mouseChain
+
+track mouseSynNet2
+shortLabel Syntenic Net2
+longLabel Mouse/Human Syntenic Alignment Net2
+group compGeno
+priority 136
+visibility hide
+spectrum on
+type netAlign mm2 mouseChain2
 
 track mouseSyn
 shortLabel NCBI Synteny
