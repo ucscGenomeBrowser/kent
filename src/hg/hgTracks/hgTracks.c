@@ -87,7 +87,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.688 2004/03/24 18:46:19 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.689 2004/03/24 18:55:17 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3671,7 +3671,7 @@ return (el->length < 300 ? tg->ixAltColor : tg->ixColor);
 void loadCpgIsland(struct track *tg)
 /* Load up simpleRepeats from database table to track items. */
 {
-bedLoadItem(tg, "cpgIsland", (ItemLoader)cpgIslandLoad);
+bedLoadItem(tg, tg->mapName, (ItemLoader)cpgIslandLoad);
 }
 
 void freeCpgIsland(struct track *tg)
@@ -7403,6 +7403,7 @@ registerTrackHandler("est", estMethods);
 registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
+registerTrackHandler("cpgIslandExt", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("pseudoMrna", xenoMrnaMethods);
 registerTrackHandler("pseudoMrna2", xenoMrnaMethods);
