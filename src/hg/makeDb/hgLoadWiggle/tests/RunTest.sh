@@ -1,6 +1,7 @@
 #!/bin/sh
 
 HGWIGGLE=hgWiggle
+WIGENCODE=wigEncode
 tests=0
 failures=0
 verbose=""
@@ -36,6 +37,20 @@ if [ "$?" -ne 0 ]; then
     exit 255
 fi
 
+type ${WIGENCODE} > /dev/null 2> /dev/null
+
+if [ "$?" -ne 0 ]; then
+    echo "ERROR: can not find wigEncode binary"
+    echo -e "\t'$WIGENCODE'"
+    exit 255
+fi
+
+TF=/tmp/wigEncode.$$.txt
+wget "http://hgwbeta.cse.ucsc.edu/encode/wiggleExample.txt" -O "${TF}" \
+	> /dev/null 2> /dev/null
+oneTest "${WIGENCODE} ${TF} stdout /dev/null 2> /dev/null" "04152     2"
+rm -f "${TF}"
+
 oneTest "$HGWIGGLE -lift=1 -chr=chrM -db=ce2 gc5Base" "26963    31"
 oneTest "$HGWIGGLE -chr=chrM -doBed -db=ce2 gc5Base" "37864     1"
 oneTest "$HGWIGGLE -chr=chrM -doStats -db=ce2 gc5Base" "40185     1"
@@ -61,7 +76,7 @@ echo -e "chr1\t2500\t2510\tname1" >> "${TF}"
 echo -e "chr10\t200000\t200010\tname2" >> "${TF}"
 echo -e "chr1\t1500\t1510\tname3" >> "${TF}"
 
-oneTest "$HGWIGGLE -bedFile=${TF} -db=hg17 phastCons" "38333     1"
+oneTest "$HGWIGGLE -bedFile=${TF} -db=hg16 phastCons" "38333     1"
 
 rm -f "${TF}"
 
