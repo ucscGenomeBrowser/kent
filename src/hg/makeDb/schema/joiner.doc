@@ -1,3 +1,5 @@
+INTRODUCTION
+
 The .joiner file describes relationships between tables.
 In particular it groups together fields in different tables
 that refer to the same identifier.  The first field in the group
@@ -27,6 +29,8 @@ are also significant.  Lines starting with # are treated as comments
 and ignored.  There are two primary types of record in a joiner file -
 a 'set' statement which creates a variable, and an identifier statement.
 
+THE SET STATEMENT
+
 The set statement is quite simple:
    set varName value
 Here varName should start with a letter, and can be followed by any
@@ -36,6 +40,8 @@ will be replaced with the value from the set line.  Variable can
 be defined in terms of other variables.  In some cases it may be
 necessary to usee ${varName} rather than $varName if doing a substitution
 in the middle of another word.
+
+THE IDENTIFIER STATEMENT
 
 The identifier statement defines an identifier shared across tables.
 The basic format is one line containing the identifier name and attributes,
@@ -107,7 +113,7 @@ Field Line Attributes:
      value: identifier to exclude.  The empty string may be excluded with
             a exclude= (that is following the equal immediately with a space).
 
-Identifier Macros.
+IDENTIFIER MACROS
 
 In some cases there may be multiple instances of a set of
 interrelated tables.  At UCSC an example of this is the 
@@ -138,11 +144,35 @@ identifier chainRn2Id
     $gbd.netRn2.chainId
 
 
-Coping with Multiple Parallel Databases.
+OTHER STATEMENTS
 
-There is one additional statement type, exclusiveSet, which is
-used to indicate that only one out of a group of set of databases
-should be considered at one time.  At UCSC this is used to group
-together all of the genome/assembly specific databases so that
-spurious links are not generated between them.
+There's a number of other statements that are typically used just
+once or twice in a joiner file.
+
+exclusiveSet - This is used to indicate that only one out of a group 
+    databases should be considered at one time.  At UCSC this is used 
+    to group together all of the genome/assembly specific databases so that
+    spurious links are not generated between them.  The syntax of
+    this is a line starting with the word 'exclusiveSet' and followed
+    by a comma-separated list of databases.
+
+databasesChecked - This keyword is followed by a comma-separated list of
+    all databases that should be checked by the joiner file.
+
+databasesIgnored - This is followed by a comma-separated list of databases
+    not checked by the joiner file.  The joinerCheck program will complain 
+    about any databases in the system that are not in either the 
+    databaseChecked or databaseIgnored list.  This is just to help keep
+    databases from slipping under the radar, since generally you will want
+    to add a new database to various places in the joiner file.
+
+tablesIgnored - This statement describes tables that are not checked.
+    The joinerCheck program will complain about tables in the system
+    that are not in any of the identifiers, and not in the tablesIgnored.
+    This is to keep new tables from falling through the cracks.
+    The syntax of this is a line starting with "tablesIgnored" and
+    followed by a comma separated list of databases, and then 
+    a line for each table.  The table names may include the
+    SQL wildcard '%' (which is equivalent to the '*' wildcard in
+    most file systems.)  The statement is terminated by a blank line.
 
