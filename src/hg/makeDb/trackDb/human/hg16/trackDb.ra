@@ -265,7 +265,7 @@ shortLabel Chimp Heterozygosity
 longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
 group compGeno
 priority 145.8
-visibility full
+visibility hide
 autoScaleDefault Off
 maxHeightPixels 128
 color 0,128,255
