@@ -14,7 +14,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.6 2003/07/29 04:44:49 markd Exp $
+# $Id: gbAlignFinish,v 1.7 2003/08/19 19:15:40 markd Exp $
 #
 use strict;
 use warnings;
@@ -140,7 +140,7 @@ sub combinePslSet($$$$$$$) {
     my $startOff = (-e $outPsl) ? getFileSize($outPsl) : 0;
 
     # sort by query for pslReps
-    my $cmd = "find $queryDir -name '*.psl.gz' | xargs zcat "
+    my $cmd = "find $queryDir -name '*.psl' | xargs cat "
         . "| sort -T $tmpDir -k 10,10 -k 12n,12n ";
     if (defined($liftFile)) {
         $cmd .= "| liftUp -nohead -type=.psl stdout $liftFile carry stdin ";
@@ -217,7 +217,7 @@ sub combineOISet($$$$$$) {
     if (($startOff == $endOff) && !define($outRawOI)) {
         return; # nothing to do
     }
-    my $cmd = "find $queryDir -name '*.oi.gz' | xargs zcat ";
+    my $cmd = "find $queryDir -name '*.oi' | xargs cat ";
     if (defined($liftFile)) {
         $cmd .= "| liftUp -type=.bed -nosort stdout $liftFile carry stdin ";
     }
@@ -272,7 +272,7 @@ sub combineIntronPslSet($$$$$) {
 
     # must determine if there are any intronPsl files, as liftUp will
     # complain about empty input
-    my @intronPsls = glob("$queryDir/*/*/*.intronPsl.gz");
+    my @intronPsls = glob("$queryDir/*/*/*.intronPsl");
     if ($#intronPsls < 0) {
         return;
     }
@@ -280,7 +280,7 @@ sub combineIntronPslSet($$$$$) {
     if ($startOff == $endOff) {
         return;  # will no PSLs saved
     }
-    my $cmd = "find $queryDir -name '*.intronPsl.gz' | xargs zcat ";
+    my $cmd = "find $queryDir -name '*.intronPsl' | xargs cat ";
     if (defined($liftFile)) {
         $cmd .= "| liftUp -nohead -type=.psl -nosort stdout $liftFile carry stdin ";
     }

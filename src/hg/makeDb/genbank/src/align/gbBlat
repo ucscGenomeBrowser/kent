@@ -2,7 +2,7 @@
 #
 # Run blat, polyInfo and pslIntronsOnly.
 #
-# gbBlat [options] database genomeFile rnaFa.gz out.psl.gz
+# gbBlat [options] database genomeFile rnaFa out.psl
 #
 # Options:
 #  -keep - keep temporary files.
@@ -11,15 +11,15 @@
 #
 #  - genomeFile - the contig fasta file or chromosome nib subseq spec.
 #
-#  - rnaFa.gz - the gzipped RNA/EST query fasta file.  The name of this file
+#  - rnaFa - the RNA/EST query fasta file.  The name of this file
 #    must be in the form type.orgCat.* (mrna.native, est.aa.xeno, etc).  This
 #    is used to determine various parameter settings.  File should be named
 #    in the form:
-#       ..../refseq.136.0/hg16/full/mrna.xeno.0.fa.gz
+#       ..../refseq.136.0/hg16/full/mrna.xeno.0.fa
 #    so refseq.ver or genbank.ver can be used to determine srcDb.
 #    
-#  - out.psl.gz - PSL output file  The other output filenames are derived
-#    by removing the .psl.gz from the name.  If no sequences align, an
+#  - out.psl - PSL output file  The other output filenames are derived
+#    by removing the .psl from the name.  If no sequences align, an
 #    empty psl is still created to server as a job-completed marker.
 #
 # PSL files are written to a local tmp directory and then copies to the output
@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.8 2003/08/15 04:48:18 markd Exp $
+# $Id: gbBlat,v 1.9 2003/08/19 19:15:40 markd Exp $
 #
 set -e
 
@@ -72,11 +72,11 @@ rnaBase=`basename $rnaFa .fa`
 outPsl="$4"
 
 outDir=`dirname $outPsl`
-outBase=`basename $outPsl .psl.gz`
+outBase=`basename $outPsl .psl`
 outPrefix=$outDir/$outBase
 
-outOi="$outPrefix.oi.gz"
-outIntronPsl="$outPrefix.intronPsl.gz"
+outOi="$outPrefix.oi"
+outIntronPsl="$outPrefix.intronPsl"
 
 # skip if output file already exists
 if [ -e $outPsl ] ; then
@@ -146,7 +146,9 @@ case "$orgCat" in
         case "$type" in
             mrna)
                 if [ "$srcDb" = "refseq" ] ; then
-                    blatParams="-q=rna -fine -trimHardA $oocOpt"
+                    # -trimHardA was recommended, however this results in
+                    # qSize being less than the sequence size.
+                    blatParams="-q=rna -fine $oocOpt"
                 else
                     blatParams="-q=rna -fine $oocOpt"
                 fi
@@ -181,20 +183,16 @@ else
     trap "rm -rf $tmpDir" EXIT
 fi
 
-# Uncompress rna, as BLAT doesn't read from a pipe
-rnaFaTmp=$tmpDir/$rnaBase.fa
-zcat $rnaFa >$rnaFaTmp
-
 # run blat, don't create header, so we can just cat together later
 localPsl="$tmpDir/$outBase.psl"
-$BLAT -noHead $blatParams $genomeFile $rnaFaTmp $localPsl
+$BLAT -noHead $blatParams $genomeFile $rnaFa $localPsl
 
 # orientation info info and ESTs w/intron selection is only done for
 # native and if the output file length is greater than zero
 if [ -s $localPsl -a $isNative == "YES" ] ; then
     # get orientation info
     localOi="$tmpDir/$outBase.oi"
-    $POLYINFO $localPsl $genomeFile $rnaFaTmp $localOi
+    $POLYINFO $localPsl $genomeFile $rnaFa $localOi
 
     # if these are native ESTs, select ones that have introns, saving only
     # if some actually exist.
@@ -202,7 +200,7 @@ if [ -s $localPsl -a $isNative == "YES" ] ; then
     if [ $type == "est" ] ; then
         $PSL_INTRONS_ONLY $localPsl $genomeFile $localIntronPsl
         if [ -s $localPsl ] ; then
-            gzip -1c $localIntronPsl > $outIntronPsl.tmp
+            cp $localIntronPsl $outIntronPsl.tmp
             mv -f $outIntronPsl.tmp $outIntronPsl
         else
             rm -f $localIntronPsl
@@ -211,10 +209,10 @@ if [ -s $localPsl -a $isNative == "YES" ] ; then
 
     # copy into place, oi first, since it's the derived data and useless
     # without the psl.
-    gzip -1c $localOi > $outOi.tmp
+    cp $localOi $outOi.tmp
     mv -f $outOi.tmp $outOi
 fi
 
-# always installed psl (and installed last) to indicate completion
-gzip -1c $localPsl > $outPsl.tmp
+# always install psl last, even if empty, to indicate completion
+cp $localPsl $outPsl.tmp
 mv -f $outPsl.tmp $outPsl

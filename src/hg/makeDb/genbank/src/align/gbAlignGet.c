@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.2 2003/06/10 17:51:57 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.3 2003/08/19 19:15:40 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,7 +77,7 @@ char ext[64];
 char path[PATH_LEN];
 assert(outFa->fa == NULL);
 
-safef(ext, sizeof(ext), "%d.fa.gz", outFa->nextPartNum++);
+safef(ext, sizeof(ext), "%d.fa", outFa->nextPartNum++);
 gbAlignedGetPath(&outFa->select, ext, workDir, path);
 outFa->fa = gbFaOpen(path, "w");
 }
