@@ -1273,7 +1273,7 @@ int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 
-int noZoom = 0;
+int noZoom = 1;
 enum wiggleOptEnum wiggleType;
 char *interpolate = NULL;
 char *aa = NULL; 
@@ -1351,13 +1351,13 @@ if( sameString( tg->mapName, "humMus" ) )
     max0 = whichNum( maxRange, 0.0, 8.0, 1000 );
 
 
+        //see if we are zoomed in 
+        noZoom = (humMusZoomLevel() == 0);
+
         if( isFull )
         {   
         
 
-            //see if we are zoomed in 
-            noZoom = (humMusZoomLevel() == 0);
-            
             
         tmp = -whichBin( 1.0, min0, max0, 999 );
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
