@@ -181,6 +181,7 @@ DIRS = \
 	qaGold \
 	qaToQac \
 	qacToQa \
+	ratStuff \
 	relPairs \
 	recycleDb \
 	reviewSanity \
