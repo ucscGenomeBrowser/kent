@@ -16,7 +16,7 @@
 #include "interaction.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.2 2005/02/14 08:12:31 galt Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.3 2005/02/14 23:08:25 galt Exp $";
 
 
 struct interaction *interactions = NULL;
@@ -227,9 +227,6 @@ char* sep = "where";
 char* ss = cloneString(geneString);
 char* s = ss;
 char* w = NULL;
-subChar(s, ',' ,' ');
-subChar(s, '\t',' ');
-subChar(s, '\n',' ');
 dyStringPrintf(query,"select * from %s",table);
 while(1)
     {
@@ -331,7 +328,7 @@ else
     }
 }
 
-void saveGeneList(boolean showAll)
+boolean saveGeneList(boolean showAll)
 /* Check for valid gene-list: parse and save.
    If list not ok, return to getGeneList page.
    Otherwise, show user's list and offer some links.
@@ -339,147 +336,156 @@ void saveGeneList(boolean showAll)
 {
 char *geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
 struct interaction* intr;
-if (sameWord(geneList,""))
+struct nodelist *nl;
+
+/* clean up unwanted characters */
+char *temp = NULL;
+subChar(geneList, ',' ,' ');
+subChar(geneList, '\t',' ');
+subChar(geneList, '\n',' ');
+subChar(geneList, '\r',' ');
+temp = replaceChars(geneList,"  "," ");
+freez(&geneList);
+geneList=temp;
+temp = NULL;
+cartSetString(cart, "ring_geneList", geneList);
+
+
+
+if (showAll)
     {
-    getGeneList();
+    puts(
+    "<center>"
+    "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+    "<tr><td>\n"
+    );
+    printf("geneList: %s<br>\n", 
+	geneList
+    );
+    puts(
+    "</td></tr><tr><td>"
+    "<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">back</a>\n"
+    "</td></tr><tr><td>"
+    "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
+    );
+    puts(
+    "</td></tr></table></center>\n"
+    );
+
     }
-else
+
+interactions = getGenesFromTable("intrP2P",geneList);  /* adds geneList elements to hash */
+
+if (showAll)
     {
+    uglyf("slCount = %d for result list for %s.<br><br>\n",slCount(interactions),geneList);
+    }
 
-    if (showAll)
-	{
-	puts(
-	"<center>"
-	"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
-	"<tr><td>\n"
-	);
-	printf("geneList: %s<br>\n", 
-	    geneList
-	);
-	puts(
-	"</td></tr><tr><td>"
-	"<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">back</a>\n"
-	"</td></tr><tr><td>"
-	"<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
-	);
-	puts(
-	"</td></tr></table></center>\n"
-	);
-
-	}
-    
-    interactions = getGenesFromTable("intrP2P",geneList);  /* adds geneList elements to hash */
-    
-    if (showAll)
-	{
-	uglyf("slCount = %d for result list for %s.<br><br>\n",slCount(interactions),geneList);
-	}
-    
-    /* this might get moved later */
-    /* add to hash the remaining interactions members */
-    for(intr=interactions;intr;intr=intr->next)
-	{
-	//uglyf("%s %s %f.<br>\n",intr->fromX,intr->toY,intr->score);
-	struct hashEl *helX = hashStore(nodeHash,intr->fromX);
-	struct hashEl *helY = hashStore(nodeHash,intr->toY);
-    	struct node *x, *y;
-	struct nodelist *nl;
-	if (!helX->val) /* add X to hash for 1st time */
-	    {
-	    AllocVar(x);
-	    AllocVar(nl);
-	    x->name = cloneString(intr->fromX);
-	    nl->node = x;
-	    slAddHead(&allNodes,nl);  /* add X to list of all nodes */
-	    helX->val = x;
-	    }
-	if (!helY->val) /* do same stuff for Y */
-	    {
-	    AllocVar(y);
-	    AllocVar(nl);
-	    y->name = cloneString(intr->toY);
-	    nl->node = y;
-	    slAddHead(&allNodes,nl);
-	    helY->val = y;
-	    }
-	x = helX->val;  /* get X,Y from hash */
-	y = helY->val;
-	if (x->ring) y->ringRank++;  /* increment ringRank counts */
-	if (y->ring) x->ringRank++;
-    	AllocVar(nl);
-    	nl->node = y;
-    	slAddHead(&x->xrays,nl);     /* add Y to X's list of x-rays  */
-    	AllocVar(nl);
-    	nl->node = x;
-    	slAddHead(&y->nrays,nl);     /* likewise */
-	}
-   
-    interactionFreeList(&interactions);
-
-    slReverse(&allNodes);
-
-    slSort(&allNodes, compareNodes);
-
-
+/* this might get moved later */
+/* add to hash the remaining interactions members */
+for(intr=interactions;intr;intr=intr->next)
     {
-    // displaying our structure 
+    //uglyf("%s %s %f.<br>\n",intr->fromX,intr->toY,intr->score);
+    struct hashEl *helX = hashStore(nodeHash,intr->fromX);
+    struct hashEl *helY = hashStore(nodeHash,intr->toY);
+    struct node *x, *y;
     struct nodelist *nl;
-    if (showAll)
+    if (!helX->val) /* add X to hash for 1st time */
 	{
-    	uglyf("<pre>\n");
-	uglyf("name        xrays nrays  ring? ringRank \n");
-    	uglyf("-------------------------------------- \n");
+	AllocVar(x);
+	AllocVar(nl);
+	x->name = cloneString(intr->fromX);
+	nl->node = x;
+	slAddHead(&allNodes,nl);  /* add X to list of all nodes */
+	helX->val = x;
 	}
-    for(nl=allNodes;nl;nl=nl->next)
+    if (!helY->val) /* do same stuff for Y */
 	{
+	AllocVar(y);
+	AllocVar(nl);
+	y->name = cloneString(intr->toY);
+	nl->node = y;
+	slAddHead(&allNodes,nl);
+	helY->val = y;
+	}
+    x = helX->val;  /* get X,Y from hash */
+    y = helY->val;
+    if (x->ring) y->ringRank++;  /* increment ringRank counts */
+    if (y->ring) x->ringRank++;
+    AllocVar(nl);
+    nl->node = y;
+    slAddHead(&x->xrays,nl);     /* add Y to X's list of x-rays  */
+    AllocVar(nl);
+    nl->node = x;
+    slAddHead(&y->nrays,nl);     /* likewise */
+    }
 
-        if (nl->node->ring)
+interactionFreeList(&interactions);
+
+slReverse(&allNodes);
+
+slSort(&allNodes, compareNodes);
+
+
+
+/* sum counts and if showAll, display our structure */
+if (showAll)
+    {
+    uglyf("<pre>\n");
+    uglyf("name        xrays nrays  ring? ringRank \n");
+    uglyf("-------------------------------------- \n");
+    }
+for(nl=allNodes;nl;nl=nl->next)
+    {
+
+    if (nl->node->ring)
+	{
+	ringCount++;
+	}
+    else
+	{
+	if (nl->node->ringRank > 1)
 	    {
-    	    ringCount++;
+	    insideCount++;
 	    }
 	else
 	    {
-	    if (nl->node->ringRank > 1)
-		{
-		insideCount++;
-		}
-	    else
-		{
-		outsideCount++;
-		}
-	    }
-	
-	if (showAll)
-	    {
-	    uglyf("%11s %4d %4d     %4s %3d \n",
-		nl->node->name,
-		slCount(nl->node->xrays),
-		slCount(nl->node->nrays),
-		nl->node->ring ? "ring":"not!",
-		nl->node->ringRank
-		);
+	    outsideCount++;
 	    }
 	}
     
     if (showAll)
 	{
-	uglyf("</pre>\n");
+	uglyf("%11s %4d %4d     %4s %3d \n",
+	    nl->node->name,
+	    slCount(nl->node->xrays),
+	    slCount(nl->node->nrays),
+	    nl->node->ring ? "ring":"not!",
+	    nl->node->ringRank
+	    );
 	}
-
     }
-    
-    // TODO: add some real code for freeing these things properly
-    //   e.g. for xrays and nrays lists, free up the nodelist list itself,
-    //     but not the *node values themselves, which are allocated
-    //     in the main nodelist/hash.  If the nodelist is freed up
-    //     properly then hash freeing should be easy enough.
-    //     Do we use valgrind or some other util to verify mem-release?
 
-   
-
+if (showAll)
+    {
+    uglyf("</pre>\n");
     }
+
+
+
+// TODO: add some real code for freeing these things properly
+//   e.g. for xrays and nrays lists, free up the nodelist list itself,
+//     but not the *node values themselves, which are allocated
+//     in the main nodelist/hash.  If the nodelist is freed up
+//     properly then hash freeing should be easy enough.
+//     Do we use valgrind or some other util to verify mem-release?
+
+
+
+
 
 freez(&geneList);
+return TRUE;
 }
 
 
@@ -630,7 +636,7 @@ for(i=0;i<ringCount;i++)
 		{
 		if (l->node->ring)
 		    { /* this ring-ring line gets draw twice but that's ok */
-		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, color);
+		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, MG_BLACK);
 		    }
 		else
 		    {
@@ -705,13 +711,17 @@ void hgGeneRing()
 /* hgGeneRing - Gene Network Browser. */
 {
 char *action = cartUsualString(cart, "ring_action", "");
+char *geneList = cartUsualString(cart, "ring_geneList", "");
 if (sameWord(action,""))
     {
     action = "getGeneList";
     cartSetString(cart, "ring_action", action);
     }
-
-if (sameWord(action,"getGeneList"))
+if (sameWord(geneList,""))
+    {
+    getGeneList();
+    }
+else if (sameWord(action,"getGeneList"))
     {
     getGeneList();
     }
@@ -733,26 +743,31 @@ else if (sameWord(action,"addToRing"))
     {
     char *gene = cartUsualString(cart, "ring_gene", "");
     char *geneList = cartUsualString(cart, "ring_geneList", "");
-    int l = strlen(geneList)+2+1;
+    int l = strlen(geneList)+2+1+1;  //debug remove +1 
     char *newGeneList = needMem(l);
     int lg = strlen(gene)+2+1;
     char *newGene = needMem(lg);
-    safef(newGeneList,l," %s ",geneList);
+    //printf("<pre>geneList(before adding %s)=[%s]</pre>\n",gene,geneList);
+    safef(newGeneList,l," %s  ",geneList);
     safef(newGene,lg," %s ",gene);
-    subChar(newGeneList, ',' ,' ');
-    subChar(newGeneList, '\t',' ');
-    subChar(newGeneList, '\n',' ');
-    if (memMatch(newGene, strlen(newGene), newGeneList, strlen(newGeneList)))
-	gene = NULL; /* if gene already in ring, ignore */
-    freez(&newGeneList);
-    l = strlen(geneList)+1+strlen(gene)+1;
-    newGeneList = needMem(l);
-    safef(newGeneList,l,"%s %s",geneList,gene);
-    cartSetString(cart, "ring_geneList", newGeneList);
-    saveGeneList(FALSE);
-    drawScreen();
+    //printf("<pre>newGene=[%s] newGeneList=[%s]</pre>\n",newGene,newGeneList);
+    char *junk=memMatch(newGene, strlen(newGene), newGeneList, strlen(newGeneList));
+    //printf("<pre>junk ptr returned by memMatch=[%d] </pre>\n",(int)junk);
+    if (!junk)
+       	/* if gene not already in ring, add it */
+	{
+	freez(&newGeneList);
+	l = strlen(geneList)+1+strlen(gene)+1;
+	newGeneList = needMem(l);
+	safef(newGeneList,l,"%s %s",geneList,gene);
+	cartSetString(cart, "ring_geneList", newGeneList);
+	geneList = cartUsualString(cart, "ring_geneList", "");
+	}
+    //printf("<pre>geneList(after adding %s)=[%s]</pre>\n",gene,geneList);
     freez(&newGeneList);
     freez(&newGene);
+    saveGeneList(FALSE);
+    drawScreen();
     }
 else if (sameWord(action,"removeFromRing"))
     {
@@ -764,16 +779,14 @@ else if (sameWord(action,"removeFromRing"))
     char *newGene = needMem(lg);
     safef(newGeneList,l," %s ",geneList);
     safef(newGene,lg," %s ",gene);
-    subChar(newGeneList, ',' ,' ');
-    subChar(newGeneList, '\t',' ');
-    subChar(newGeneList, '\n',' ');
     geneList = replaceChars(newGeneList, newGene, " ");
     cartSetString(cart, "ring_geneList", geneList);
-    saveGeneList(FALSE);
-    drawScreen();
+    //printf("<pre>geneList(after removal %s)=[%s]</pre>\n",gene,geneList);
     freez(&newGeneList);
     freez(&geneList);
     freez(&newGene);
+    saveGeneList(FALSE);
+    drawScreen();
     }
 else
     {
