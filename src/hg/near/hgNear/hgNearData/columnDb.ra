@@ -2,7 +2,7 @@
 #
 name debug
 shortLabel debug
-longLabel debugging column on hgwdev
+longLabel Debugging Column on Hgwdev
 priority 0.5
 visibility off
 type debug
@@ -25,7 +25,7 @@ searchLabel Known Gene Names
 
 name proteinName
 shortLabel Swiss-Prot
-longLabel Swiss-Prot protein display ID
+longLabel Swiss-Prot Protein Display ID
 priority 2.1
 visibility off
 type lookup kgXref kgID spDisplayID
