@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.21 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.22 2004/07/15 02:00:03 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -86,9 +86,9 @@ static char* refLinkCreate =
 "    mrnaAcc varchar(255) not null,     # mRNA accession\n"
 "    protAcc varchar(255) not null,     # protein accession\n"
 "    geneName int unsigned not null,    # pointer to geneName table\n"
-"    prodName int unsigned not null,    # pointer to product name table\n"
+"    prodName int unsigned not null,    # pointer to productName table\n"
 "    locusLinkId int unsigned not null, # Locus Link ID\n"
-"    omimId int unsigned not null,      # Locus Link ID\n"
+"    omimId int unsigned not null,      # OMIM ID\n"
 "              #Indices\n"
 "    PRIMARY KEY(mrnaAcc),\n"
 "    index(name(10)),\n"
