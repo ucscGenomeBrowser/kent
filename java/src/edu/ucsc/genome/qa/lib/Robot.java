@@ -32,8 +32,6 @@ public class Robot {
   * @param link  The link
   * @return      The response code    
   */
-  // copied from HgTracks.java 06-01-04.  
-  // need to refactor to get all programs to call this one.
 
   // link is known to be URL
   public static int getResponseCode(WebConversation wc, WebLink link) {
