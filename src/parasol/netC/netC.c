@@ -30,7 +30,7 @@ address->sin_family = AF_INET;
 address->sin_port = htons(port);
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
-    errnoAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
+    errnoAbort("Couldn't find host %s. herrno %d %s", hostName, h_errno, hstrerror(h_errno));
 memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
 }
 
