@@ -6130,6 +6130,7 @@ if (!hideControls)
     printf("</CENTER>\n");
 
     /* Do Extra parts of UI. */
+#ifdef FILTER_CODE
     htmlHorizontalLine();
     printf("<H2>Additional Track Options</H2>\n");
     for (group = tGroupList; group != NULL; group = group->next)
@@ -6142,6 +6143,7 @@ if (!hideControls)
 	    htmlHorizontalLine();
 	    }
 	}
+#endif
     }
 
 
