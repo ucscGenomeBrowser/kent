@@ -66,17 +66,17 @@ return 0;
 struct binKeeper *binKeeperNew(int minPos, int maxPos)
 /* Create new binKeeper that can cover range. */
 {
-int maxBin;
+int binCount;
 struct binKeeper *bk;
 if (minPos < 0 || maxPos < 0 || minPos > maxPos || maxPos > 512*1024*1024)
     errAbort("bad range %d,%d in binKeeperNew", minPos, maxPos);
 
-maxBin = binFromRange(maxPos-1, maxPos);
+binCount = binFromRange(maxPos-1, maxPos) + 1;
 AllocVar(bk);
 bk->minPos = minPos;
 bk->maxPos = maxPos;
-bk->binCount = maxBin;
-AllocArray(bk->binLists, maxBin);
+bk->binCount = binCount;
+AllocArray(bk->binLists, binCount);
 return bk;
 }
 
@@ -152,5 +152,27 @@ struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end)
 struct binElement *list = binKeeperFind(bk, start, end);
 slSort(&list, binElementCmpStart);
 return list;
+}
+
+
+void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val)
+/* Remove item from binKeeper. */ 
+{
+int bin = binFromRange(start, end);
+struct binElement **pList = &bk->binLists[bin], *newList = NULL, *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    if (el->val == val && el->start == start && el->end == end)
+        {
+	freeMem(el);
+	}
+    else
+        {
+	slAddHead(&newList, el);
+	}
+    }
+slReverse(&newList);
+*pList = newList;
 }
 
