@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.8 2003/06/23 19:50:34 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.9 2003/06/25 01:01:41 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -144,11 +144,9 @@ slSort(pColList, columnCmpPriority);
 savePriorities(*pColList);
 }
 
-void doConfigure(char *bumpVar)
+void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
 /* Generate configuration page. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct column *colList = getColumns(conn);
 if (bumpVar)
     bumpColList(bumpVar, &colList);
 makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
@@ -160,15 +158,14 @@ hPrintf(" ");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
-hFreeConn(&conn);
 }
 
-void doDefaultConfigure()
+void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
 /* Do configuration starting with defaults. */
 {
 cartRemoveLike(cart, "near.col.*");
 cartRemove(cart, colOrderVar);
-doConfigure(NULL);
+doConfigure(conn, colList, NULL);
 }
 
 

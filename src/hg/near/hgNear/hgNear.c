@@ -10,14 +10,12 @@
 #include "hui.h"
 #include "web.h"
 #include "ra.h"
-#include "kgAlias.h"
-#include "findKGAlias.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.19 2003/06/24 20:16:32 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.20 2003/06/25 01:01:41 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
-        idVarName, resetConfName, NULL }; 
+        resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -99,6 +97,15 @@ void labelSimplePrint(struct column *col)
 hPrintf("<TH VALIGN=BOTTOM><B>%s</B></TH>", col->shortLabel);
 }
 
+void selfAnchor(struct genePos *gp)
+/* Print self anchor to given position. */
+{
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s", 
+	cartSidUrlString(cart), idVarName, gp->name);
+if (gp->chrom != NULL)
+    hPrintf("&%s=%s:%d-%d", idPosVarName, gp->chrom, gp->start+1, gp->end);
+hPrintf("\">");
+}
 
 static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
@@ -107,8 +114,9 @@ static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 char *s = col->cellVal(col, gp, conn);
 if (s == NULL) 
     s = cloneString("n/a");
-hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&near.search=%s\">%s</A></TD>",
-	cartSidUrlString(cart), gp->name, s);
+hPrintf("<TD>");
+selfAnchor(gp);
+hPrintf("%s</A></TD>", s);
 freeMem(s);
 }
 
@@ -245,7 +253,7 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---- Page/Form Making stuff ---- */
 
-void controlPanel()
+void controlPanel(struct genePos *gp)
 /* Make control panel. */
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
@@ -258,7 +266,6 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     }
 
 /* Do sort by drop-down */
-groupOn = cartUsualString(cart, groupVarName, "expression");
     {
     static char *menu[] = {"expression", "homology", "position"};
     hPrintf("group by ");
@@ -276,7 +283,8 @@ groupOn = cartUsualString(cart, groupVarName, "expression");
 
 /* Do search box. */
     {
-    char *search = cartUsualString(cart, searchVarName, "");
+    char *search = "";
+    if (gp != NULL) search = gp->name;
     hPrintf(" search ");
     cgiMakeTextVar(searchVarName,  search, 25);
     }
@@ -288,40 +296,6 @@ groupOn = cartUsualString(cart, groupVarName, "expression");
     }
 
 hPrintf("</TD></TR></TABLE>");
-}
-
-struct genePos *findGeneId()
-/* Find out gene ID from search term. */
-{
-char *search = cartUsualString(cart, searchVarName, "");
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct genePos *gpList = NULL, *gp;
-
-search = trimSpaces(search);
-if (sameString(search, ""))
-    search = NULL;
-if (search != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn();
-    safef(query, sizeof(query), 
-    	"select name,chrom,txStart,txEnd from knownGene where name = '%s'", search);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	AllocVar(gp);
-	gp->name = cloneString(row[0]);
-	gp->chrom = cloneString(row[1]);
-	gp->start = sqlUnsigned(row[2]);
-	gp->end = sqlUnsigned(row[3]);
-	slAddHead(&gpList, gp);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-slReverse(&gpList);
-return gpList;
 }
 
 struct genePos *genePosSimple(char *name)
@@ -384,6 +358,7 @@ dyStringPrintf(query,
 dyStringPrintf(query, " order by distance limit %d", displayCount);
 list = neighborhoodList(conn, query->string, displayCount);
 dyStringFree(&query);
+warn("There is no expression data associated with %s.", curGeneId->name);
 return list;
 }
 
@@ -401,6 +376,9 @@ dyStringPrintf(query,
 dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
 list = neighborhoodList(conn, query->string, displayCount);
 dyStringFree(&query);
+if (list == NULL)
+    warn("There is no protein associated with %s. "
+            "Therefore group by homology is empty.", curGeneId->name);
 return list;
 }
 
@@ -620,13 +598,14 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
-void bigTable()
+void bigTable(struct sqlConnection *conn, struct column *colList)
 /* Put up great big table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct column *col;
 struct genePos *geneList = getNeighbors(conn), *gene;
-struct column *colList = getColumns(conn), *col;
 
+if (geneList == NULL)
+    return;
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 
 /* Print label row. */
@@ -663,30 +642,38 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     }
 
 hPrintf("</TABLE>");
-hFreeConn(&conn);
 }
 
-void doMain(struct genePos *gp)
-/* The main page. */
+void doMain(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
+/* The put up main page at given single position. */
 {
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
-controlPanel();
+controlPanel(gp);
 if (gp != NULL)
     {
     curGeneId = gp;
-    bigTable();
+    bigTable(conn, colList);
     }
 }
 
-void doSearch()
-/* Search.  If result is unambiguous call doMain, otherwise
- * put up a page of choices. */
+void doFixedId(struct sqlConnection *conn, struct column *colList)
+/* Put up the main page based on id/idPos. */
 {
-doMain(findGeneId());
+struct genePos *gp;
+AllocVar(gp);
+gp->name = cloneString(cartString(cart, idVarName));
+if (cartVarExists(cart, idPosVarName))
+    {
+    hgParseChromRange(cartString(cart, idPosVarName),
+    	&gp->chrom, &gp->start, &gp->end);
+    gp->chrom = cloneString(gp->chrom);
+    }
+doMain(conn, colList, gp);
 }
+
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
@@ -694,27 +681,31 @@ void doMiddle(struct cart *theCart)
  * dispatches to the appropriate page-maker. */
 {
 char *var = NULL;
+struct sqlConnection *conn;
+struct column *colList;
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
-if (cgiVarExists(confVarName))
-    doConfigure(NULL);
+conn = hAllocConn();
+groupOn = cartUsualString(cart, groupVarName, "expression");
+colList = getColumns(conn);
+if (cartVarExists(cart, confVarName))
+    doConfigure(conn, colList, NULL);
 else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
-    doConfigure(var);
+    doConfigure(conn, colList, var);
 else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
-    doConfigure(var);
-else if (cgiVarExists(defaultConfName))
-    {
-    doDefaultConfigure();
-    }
+    doConfigure(conn, colList, var);
+else if (cartVarExists(cart, defaultConfName))
+    doDefaultConfigure(conn, colList);
+else if (cartVarExists(cart, idVarName))
+    doFixedId(conn, colList);
 else
-    {
-    doSearch(cartOptionalString(cart, searchVarName));
-    }
+    doSearch(conn, colList, cartOptionalString(cart, searchVarName));
 cartRemoveLike(cart, "near.up.*");
 cartRemoveLike(cart, "near.down.*");
 cartSaveSession(cart);
 hPrintf("</FORM>");
+hFreeConn(&conn);
 }
 
 void usage()

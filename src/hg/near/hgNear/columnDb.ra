@@ -42,7 +42,7 @@ shortLabel Exp ID
 longLabel ID of Associated expression data
 priority 2.7
 visibility off
-type lookupKnown knownToAffyUcla name value
+type lookup knownToAffyUcla name value
 
 name acc
 shortLabel Accession

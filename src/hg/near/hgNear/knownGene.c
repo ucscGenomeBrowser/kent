@@ -9,8 +9,10 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hgNear.h"
+#include "kgAlias.h"
+#include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.3 2003/06/24 20:16:32 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.4 2003/06/25 01:01:41 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -147,10 +149,38 @@ else
     }
 }
 
+struct searchResult *knownGeneSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search)
+/* Look for matches to known genes. */
+{
+char description[512];
+char query[256];
+
+struct kgAlias *ka, *kaList;
+struct searchResult *srList = NULL, *sr;
+kaList = findKGAlias(database, search, "F");
+for (ka = kaList; ka != NULL; ka = ka->next)
+    {
+    AllocVar(sr);
+    sr->gp.name = cloneString(ka->kgID);
+    sr->shortLabel = cloneString(ka->alias);
+    safef(query, sizeof(query), 
+    	"select description from kgXref where kgID = '%s'", ka->kgID);
+    if (sqlQuickQuery(conn, query, description, sizeof(description)))
+        sr->longLabel = cloneString(description);
+    else
+	sr->longLabel = cloneString("");
+    slAddHead(&srList, sr);
+    }
+slSort(&srList, searchResultCmpShortLabel);
+return srList;
+}
+
 void setupColumnLookupKnown(struct column *col, char *parameters)
 /* Set up a column that links to details page for known genes. */
 {
 setupColumnLookup(col, parameters);
 col->cellPrint = printKnownDetailsLink;
+col->simpleSearch = knownGeneSimpleSearch;
 }
 
