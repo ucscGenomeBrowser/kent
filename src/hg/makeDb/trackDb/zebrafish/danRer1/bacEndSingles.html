@@ -24,7 +24,8 @@ names and the BAC clone name is the same in each case.
 <P>BAC end sequences are placed on the assembled sequence using
 Jim Kent's 
 <A HREF="http://www.genome.org/cgi/content/abstract/12/4/656" TARGET=_blank>blat</A> 
-program.</P>
+program followed by pslReps using parameters such that only alignments with
+least 85% identity, a minimum sequence coverage of 60% and a base identity levelwithin 2% of the bestwere kept and there was no penalty for not having introns (<em>-nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons</em>). </P>
 
 <H2>Credits</H2>
 <P> Information about the libraries may be found on the Sanger Institute 
