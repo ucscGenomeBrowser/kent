@@ -47,6 +47,10 @@ enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
  * equivalent enum. */
 
+enum trackVisibility hTvFromStringNoAbort(char *s);
+/* Given a string representation of track visibility, return as
+ * equivalent enum. */
+
 char *hStringFromTv(enum trackVisibility vis);
 /* Given enum representation convert to string. */
 

@@ -16,6 +16,7 @@
 #include "genePred.h"
 #include "net.h"
 #include "hdb.h"
+#include "hui.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -42,6 +43,7 @@ tdb->shortLabel = cloneString("User Track");
 sprintf(buf, "ct_%d", ++count);
 tdb->tableName = cloneString(buf);
 tdb->visibility = 1;
+tdb->grp = cloneString("user");
 return tdb;
 }
 
@@ -90,10 +92,19 @@ if ((val = hashFindVal(hash, "url")) != NULL)
     tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
-    tdb->visibility = needNum(val, lineIx, -1);
-    if (tdb->visibility > 2)
-        errAbort("line %d of custom input: Expecting visibility 0,1, or 2 got %s", lineIx, val);
+    if (isdigit(val[0]))
+	{
+	tdb->visibility = atoi(val);
+	if (tdb->visibility > 4)
+	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
+	}
+    else
+        {
+	tdb->visibility = hTvFromString(val);
+	}
     }
+if ((val = hashFindVal(hash, "group")) != NULL)
+    tdb->grp = cloneString(val);
 if ((val = hashFindVal(hash, "useScore")) != NULL)
     tdb->useScore = !sameString(val, "0");
 if ((val = hashFindVal(hash, "priority")) != NULL)
@@ -147,7 +158,8 @@ if (!isChromName(word))
     	lineIx, word, word[0]);
 }
 
-struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx)
+struct bed *customTrackBed(char *row[13], int wordCount, 
+	struct hash *chromHash, int lineIx)
 /* Convert a row of strings to a bed. */
 {
 struct bed * bed;
@@ -170,7 +182,7 @@ if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
-	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
+	  errAbort("line %d of custom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
      bed->thickStart = needNum(row[6], lineIx, 6);
@@ -246,12 +258,13 @@ if (wordCount > 11)
 return bed;
 }
 
-struct bed *customTrackPsl(char **row, int wordCount, struct hash *chromHash, int lineIx)
+struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
+	struct hash *chromHash, int lineIx)
 /* Convert a psl format row of strings to a bed. */
 {
 struct psl *psl = pslLoad(row);
 struct bed *bed;
-int i, blockCount, *chromStarts, chromStart;
+int i, blockCount, *chromStarts, chromStart, *blockSizes;
 
 /* A tiny bit of error checking on the psl. */
 if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize 
@@ -271,12 +284,20 @@ bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
 strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
 bed->blockCount = blockCount = psl->blockCount;
-bed->blockSizes = (int *)psl->blockSizes;
+bed->blockSizes = blockSizes = (int *)psl->blockSizes;
 psl->blockSizes = NULL;
 bed->chromStarts = chromStarts = (int *)psl->tStarts;
 psl->tStarts = NULL;
 bed->name = psl->qName;
 psl->qName = NULL;
+
+if (isProt)
+    {
+    for (i=0; i<blockCount; ++i)
+        {
+	blockSizes[i] *= 3;
+	}
+    }
 
 /* Switch minus target strand to plus strand. */
 if (psl->strand[1] == '-')
@@ -285,7 +306,9 @@ if (psl->strand[1] == '-')
     reverseInts(bed->blockSizes, blockCount);
     reverseInts(chromStarts, blockCount);
     for (i=0; i<blockCount; ++i)
-	chromStarts[i] = chromSize - chromStarts[i];
+	{
+	chromStarts[i] = chromSize - chromStarts[i] - blockSizes[i];
+	}
     }
 
 bed->thickStart = bed->chromStart;
@@ -570,6 +593,7 @@ struct bed *bed = NULL;
 struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
 float prio = 0.0;
+boolean pslIsProt = FALSE;
 
 customDefaultRows(row);
 if (isFile)
@@ -610,6 +634,7 @@ for (;;)
     if (startsWith("psLayout version", line))
         {
 	int i;
+	pslIsProt = (stringIn("protein", line) != NULL);
 	for (i=0; i<4; ++i)
 	    getNextLine(&lf, &line, &nextLine);
 	continue;
@@ -670,7 +695,7 @@ for (;;)
 	    }
 	/* Create bed data structure from row and hang on list in track. */
 	if (track->fromPsl)
-	    bed = customTrackPsl(row, wordCount, chromHash, lineIx);
+	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
 	else
 	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
 	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom))

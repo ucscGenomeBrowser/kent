@@ -2632,7 +2632,8 @@ tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
-tg->priority = 11;
+tg->priority = 100;
+tg->groupName = "map";
 return tg;
 }
 
@@ -9845,11 +9846,9 @@ return tg;
 }
 
 char *getPositionFromCustomTracks()
-/*
-  Parses custom track data to get the position variable
-return - The first chromosome position variable found in the 
- custom track data.
- */
+/* Parses custom track data to get the position variable
+ * return - The first chromosome position variable found in the 
+ * custom track data.  */
 {
 char *pos = NULL;
 struct slName *bl = NULL;
@@ -9873,7 +9872,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
             }
         }
     }
-
 return pos;
 }
 
@@ -9897,6 +9895,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	char *command = words[1];
 	if (sameString(command, "hide") 
             || sameString(command, "dense") 
+            || sameString(command, "pack") 
+            || sameString(command, "squish") 
             || sameString(command, "full"))
 	    {
 	    if (wordCount > 2)
@@ -9953,7 +9953,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
-
 }
 
 char *wrapWhiteFont(char *s)
@@ -10036,6 +10035,7 @@ struct group *group, *list = NULL;
 struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
+boolean gotUserTracks = FALSE;
 
 /* Get list of groups from database. */
 if (hTableExists("grp"))
@@ -10063,7 +10063,12 @@ if (hTableExists("grp"))
  * If necessary make up an unknown group. */
 for (track = *pTrackList; track != NULL; track = track->next)
     {
-    group = hashFindVal(hash, track->groupName);
+    if (track->groupName == NULL)
+        group = NULL;
+    else
+	{
+	group = hashFindVal(hash, track->groupName);
+	}
     if (group == NULL)
         {
 	if (unknown == NULL)

@@ -23,6 +23,7 @@ struct customTrack
     boolean fromPsl;		/* Track was derived from psl file. */
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
     int offset;			/* Base offset. */
+    char *groupName;		/* Group name if any. */
     };
 
 struct customTrack *customTracksFromText(char *text);

@@ -80,11 +80,18 @@ static char *hTvStrings[] =
     "squish"
     };
 
+enum trackVisibility hTvFromStringNoAbort(char *s)
+/* Given a string representation of track visibility, return as
+ * equivalent enum. */
+{
+return stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+}
+
 enum trackVisibility hTvFromString(char *s)
 /* Given a string representation of track visibility, return as
  * equivalent enum. */
 {
-enum trackVisibility vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+enum trackVisibility vis = hTvFromStringNoAbort(s);
 if (vis < 0)
    errAbort("Unknown visibility %s", s);
 return vis;
