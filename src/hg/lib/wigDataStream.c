@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.18 2004/08/17 19:36:14 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.19 2004/08/17 19:48:58 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -157,7 +157,8 @@ static void closeWibFile(struct wiggleDataStream *wDS)
 if (wDS->wibFH > 0)
     close(wDS->wibFH);
 wDS->wibFH = -1;
-freez(&wDS->wibFile);
+if (wDS->wibFile)
+    freez(&wDS->wibFile);
 }
 
 static void closeWigConn(struct wiggleDataStream *wDS)
@@ -169,7 +170,8 @@ if (wDS->conn)
     sqlFreeResult(&wDS->sr);
     sqlDisconnect(&wDS->conn);
     }
-freez(&wDS->sqlConstraint);	/*	always reconstructed at open time */
+if (wDS->sqlConstraint)
+    freez(&wDS->sqlConstraint);	/*	always reconstructed at open time */
 }
 
 static void openWigConn(struct wiggleDataStream *wDS)
@@ -422,12 +424,15 @@ static void freeConstraints(struct wiggleDataStream *wDS)
 {
 wDS->spanLimit = 0;
 wDS->setPositionConstraint(wDS, 0, 0);
-freez(&wDS->chrName);
-freez(&wDS->dataConstraint);
+if (wDS->chrName)
+    freez(&wDS->chrName);
+if (wDS->dataConstraint)
+    freez(&wDS->dataConstraint);
 wDS->wigCmpSwitch = wigNoOp_e;
 wDS->limit_0 = wDS->limit_1 = 0.0;
 wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
-freez(&wDS->sqlConstraint);
+if (wDS->sqlConstraint)
+    freez(&wDS->sqlConstraint);
 wDS->useDataConstraint = FALSE;
 wDS->bedConstrained = FALSE;
 }
@@ -1466,7 +1471,10 @@ if (bedList && *bedList)
     if (chromConstraint)
 	wDS->chrName = saveChrName;
     else
+	{
 	freeMem(wDS->chrName);
+	wDS->chrName = NULL;
+	}
     if (positionConstraints)
 	wDS->setPositionConstraint(wDS, saveWinStart, saveWinEnd);
     else
