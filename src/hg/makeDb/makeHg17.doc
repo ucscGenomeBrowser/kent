@@ -875,27 +875,25 @@ Submission to last job:          1057s      17.62m     0.29h    0.01d
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial hg17
     #	logFile: var/build/logs/2004.05.25-14:09:01.hg17.initalign.log
-XXXX - running 2004-05-25
-# Completed: 49591 of 49591 jobs
-# CPU time in finished jobs:    3853288s   64221.47m  1070.36h   44.60d  0.122 y
-# IO & Wait Time:                246323s    4105.38m    68.42h    2.85d  0.008 y
-# Average job time:                  83s       1.38m     0.02h    0.00d
-# Longest job:                    21265s     354.42m     5.91h    0.25d
-# Submission to last job:         22930s     382.17m     6.37h    0.27d
+# Completed: 29325 of 29325 jobs
+# CPU time in finished jobs:    5095155s   84919.26m  1415.32h   58.97d  0.162 y
+# IO & Wait Time:                136863s    2281.04m    38.02h    1.58d  0.004 y
+# Average job time:                 178s       2.97m     0.05h    0.00d
+# Longest job:                    17279s     287.98m     4.80h    0.20d
+# Submission to last job:         18142s     302.37m     5.04h    0.21d
 
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 hg17
-
-    # The iservers came back on-line, so use them for this run.
-    #  The batch file can be found in:
-    #	/cluster/data/genbank/work/initial.hg17/align
+    #	some kind of error happened here, had to remove a lock file to
+    #	get this to proceed
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
 
     ssh eieio
-    cd /cluster/bluearc/genbank/work
+    cd /cluster/data/genbank/work
     mv initial.hg17 initial.hg17.refseq.mrna
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial hg17
+XXXX - running - 2004-05-25
 
     ssh hgwdev
     cd /cluster/data/genbank
@@ -982,47 +980,25 @@ do
 done
 '_EOF_'
     chmod +x runArian.sh
+    time ./runArian.sh
+    #	real    41m0.374s
 
-    #  The following will mark each line for rat and mouse
-    #	Rat first will column 1, Mouse second will be column 2
-    foreach outfl ( *.out )
-	echo "$outfl"
-	/cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
-	${outfl} -query human -comp rat -comp mouse
-    end
     #	Now extract each one, 1 = Rat, 2 = Mouse
-    cd /cluster/bluearc/scratch/hg/gs.17/build34
-    mkdir linSpecRep.notInRat
-    mkdir linSpecRep.notInMouse
-    foreach f (rmsk/*.out_rat_mus)
+    cd /cluster/bluearc/scratch/hg/gs.18/build35
+    mkdir linSpecRep.notInRat linSpecRep.notInMouse
+    foreach f (rmsk.spec/*.out_rat_mus)
         set base = $f:t:r:r
-        echo $base.out.spec
+        echo "$f -> $base.out.spec"
+    end
+
         /cluster/bin/scripts/extractLinSpecReps 1 $f > \
                         linSpecRep.notInRat/$base.out.spec
         /cluster/bin/scripts/extractLinSpecReps 2 $f > \
                         linSpecRep.notInMouse/$base.out.spec
-    end
     #  That produced no difference at all between those two targets.
     #  Have requested confirmation from Arian
 
 # PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-10-21 - Hiram)
-
-    ssh kksilo
-    mkdir -p /cluster/bluearc/mm4/rmsk.spec
-    cd /cluster/bluearc/mm4/rmsk.spec
-    ln -s ../rmsk/*.out .
-    cat << '_EOF_' > runArian.sh
-#!/bin/sh
-for FN in *.out
-do
-    echo ${FN}
-    /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
-	${FN} -query mouse -comp human -comp rat
-done
-'_EOF_'
-    # << this line makes emacs coloring happy
-    chmod +x runArian.sh
-    ./runArian.sh
 
     cd /cluster/bluearc/mm4
     mkdir linSpecRep.notInHuman
@@ -1044,3 +1020,13 @@ done
     cp -Rp /cluster/bluearc/mm4/linSpecRep.notInRat /cluster/bluearc/scratch/mus/mm4
     #	Request rsync of /scratch to the KiloKluster
 
+# COPY DATA TO GOLDEN PATH LOCATIONS (WORKING - 2004-05-25 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
+    cd /cluster/data/hg17
+    foreach chrom ( `cat chrom.lst` )
+	cp -p ${chrom}/*.fa /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
+	echo "done ${chrom}"
+    end
+    cd /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
+    gzip *.fa
