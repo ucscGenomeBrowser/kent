@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.237 2005/02/14 21:01:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.238 2005/02/14 21:09:08 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3134,6 +3134,7 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
     }
 /* Prune composite tracks that have empty subtracks lists because their 
  * tables do not exist in the database. */
+slReverse(&tdbSubtrackedList);
 for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
     {
     nextTdb = tdb->next;
