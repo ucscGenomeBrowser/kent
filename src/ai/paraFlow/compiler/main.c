@@ -171,12 +171,18 @@ switch (pp->type)
     case pptFlowDec:
     case pptParaDec:
     case pptCompound:
+	{
+	char *name = pp->name;
+	if (name == NULL)
+	    name = "";
         spaceOut(stdout, 2*level);
-	printf("%s: types %d, vars %d\n", 
+	printf("%s %s: types %d, vars %d\n", 
 		pfParseTypeAsString(pp->type),
+		name,
 		pp->scope->types->elCount,
 		pp->scope->vars->elCount);
 	break;
+	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
     printScopeInfo(level+1, pp);
