@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.9 2003/06/10 17:09:59 kent Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.10 2003/10/26 08:13:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,19 +71,21 @@ char *findEnsTrans(struct lineFile *lf, char *line)
 {
 char *words[32];
 int wordCount, i;
+char *pat = "Translation:";
+int patSize = strlen(pat);
 
 wordCount = chopLine(line+1, words);
 for (i=0; i<wordCount; ++i)
     {
-    if (startsWith("trans:", words[i]))
-        return words[i] + 6;
+    if (startsWith(pat, words[i]))
+        return words[i] + patSize;
     }
-errAbort("Couldn't find 'trans:' key for transcript name line %d of %s",
-    lf->lineIx, lf->fileName);
+errAbort("Couldn't find '%s' key for transcript name line %d of %s",
+    pat, lf->lineIx, lf->fileName);
 return NULL;
 }
 
-void oneEnsFile(char *ensFile, struct hash *uniq, FILE *f)
+void oneEnsFile(char *ensFile, struct hash *uniq, struct hash *pToT, FILE *f)
 /* Process one ensemble peptide prediction file into tab delimited
  * output f, using uniq hash to make sure no dupes. */
 {
@@ -91,7 +93,7 @@ struct lineFile *lf = lineFileOpen(ensFile, TRUE);
 char *line;
 int lineSize;
 boolean firstTime = TRUE;
-char *trans;
+char *translation;
 
 /* Do cursory sanity check. */
 if (!lineFileNext(lf, &line, &lineSize))
@@ -104,16 +106,20 @@ while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '>')
         {
+	char *transcript;
 	/* End last line. */
 	if (firstTime)
 	    firstTime = FALSE;
 	else
 	    fputc('\n', f);
-	trans = findEnsTrans(lf, line);
-	if (hashLookup(uniq, trans) != NULL)
-	    errAbort("Duplicate %s line %d of %s", trans, lf->lineIx, lf->fileName);
-	hashAdd(uniq, trans, NULL);
-	fprintf(f, "%s\t", trans);
+	translation = findEnsTrans(lf, line);
+	if (hashLookup(uniq, translation) != NULL)
+	    errAbort("Duplicate %s line %d of %s", translation, lf->lineIx, lf->fileName);
+	hashAdd(uniq, translation, NULL);
+	transcript = hashFindVal(pToT, translation);
+	if (transcript == NULL)
+	    errAbort("Can't find transcript for %s", translation);
+	fprintf(f, "%s\t", transcript);
 	}
     else
         {
@@ -124,6 +130,31 @@ fputc('\n', f);
 lineFileClose(&lf);
 }
 
+struct hash *ensProtToTrans(char *database)
+/* Use ensGtp table to create hash keyed by protein and
+ * returning transcript values. */
+{
+char *table = "ensGtp";
+struct sqlConnection *conn = sqlConnect(database);
+char query[256], **row;
+struct sqlResult *sr;
+struct hash *hash = newHash(16);
+
+if (!sqlTableExists(conn, table))
+     errAbort("No %s table, need to build that first", table);
+safef(query, sizeof(query), "select protein,transcript from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    chopSuffix(row[0]);
+    chopSuffix(row[1]);
+    hashAdd(hash, row[0], cloneString(row[1]));
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return hash;
+}
+
 void ensPepPred(char *database, int fileCount, char *fileNames[])
 /* Load Ensembl peptide predictions into database. */
 {
@@ -132,13 +163,14 @@ char *fileName;
 char *tempName = "ensPep.tab";
 FILE *f = mustOpen(tempName, "w");
 struct hash *uniq = newHash(16);
+struct hash *pToT = ensProtToTrans(database);
 
 makeCustomTable(database, "ensPep", createString);
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
     printf("Processing %s\n", fileName);
-    oneEnsFile(fileName, uniq, f);
+    oneEnsFile(fileName, uniq, pToT, f);
     }
 carefulClose(&f);
 loadTableFromTabFile(database, "ensPep", tempName);
