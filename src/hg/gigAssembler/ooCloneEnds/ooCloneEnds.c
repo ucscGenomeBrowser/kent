@@ -171,7 +171,10 @@ while (lineFileRow(lf, words))
 	}
     clone->phase = atoi(words[3]);
     if (clone->phase <= 0 || clone->phase > 3)
-	errAbort("Bad phase %s line %d of %s", words[3], lf->lineIx, lf->fileName);
+	{
+	warn("Bad phase %s line %d of %s", words[3], lf->lineIx, lf->fileName);
+	continue;
+	}
     if (clone->phase == 3)
 	{
         if (!clone->isFin)
