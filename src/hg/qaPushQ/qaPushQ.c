@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.51 2004/06/08 17:50:04 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.52 2004/06/09 16:57:23 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3041,8 +3041,20 @@ sqlDisconnect(&betaconn);
 // is this necessary? are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
-/* Most Recent Updates */
-printf("<li><a CLASS=\"toc\" HREF=\"#recent\"> 10 Most Recent Changes (all assemblies) </a></li>");
+/* 10 Latest Changes */
+//printf("<li><a CLASS=\"toc\" HREF=\"#recent\" style=\"color:red\"> 10 Latest Changes (all assemblies) </a></li>");
+printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
+//printf("<li><a CLASS=\"leftbar\" HREF=\"#recent\" > 10 Latest Changes (all assemblies) </a></li>");
+
+/*
+printf("<li><a HREF=\"#recent\" " 
+"style=\""
+".link {color: #FF0000} "
+".visited {color: #00FF00} "
+".hover {color: #FF00FF} "
+".active {color: #0000FF} "
+"\"> 10 Most Recent Changes (all assemblies) </a></li>\n");
+*/
 
 /* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
@@ -3052,7 +3064,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	{
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
-    printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>",
+    printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>\n",
 	ki->name,tempName,ki->description,ki->name);
     }
 
@@ -3063,8 +3075,8 @@ printf(" For more information about the tracks and tables listed on this page, r
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
 printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
 
-/* 10 MOST RECENT CHANGES */
-webNewSection("<A NAME=recent></A> 10 Most Recent Changes (all assemblies)");
+/* 10 LATEST CHANGES */
+webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
     "<TR>\n"
     "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
