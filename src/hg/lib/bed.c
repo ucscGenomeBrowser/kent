@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.38 2004/11/23 19:22:39 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.39 2004/11/24 22:41:12 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -83,7 +83,6 @@ for (el = *pList; el != NULL; el = next)
 void bedOutput(struct bed *el, FILE *f, char sep, char lastSep) 
 /* Print out bed.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -286,8 +285,7 @@ struct bed *bedLoad12(char **row)
  * from database.  Dispose of this with bedFree(). */
 {
 struct bed *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlSigned(row[9]);
@@ -380,7 +378,7 @@ struct bed *bedLoadAll(char *fileName)
 /* Determines how many fields are in a bedFile and load all beds from
  * a tab-separated file.  Dispose of this with bedFreeList(). */
 {
-struct bed *list = NULL, *el;
+struct bed *list = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int numFields = 0;
 char *line = NULL;
@@ -438,8 +436,10 @@ if (wordCount > 14)
 return bed;
 }
 
-void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep)
-/* Write a bed of wordCount fields. */
+static void bedOutputN_Opt(struct bed *el, int wordCount, FILE *f,
+	char sep, char lastSep, boolean useItemRgb)
+/* Write a bed of wordCount fields, optionally interpreting field nine
+	as R,G,B values. */
 {
 int i;
 if (sep == ',') fputc('"',f);
@@ -494,7 +494,11 @@ if (wordCount <= 8)
     return;
     }
 fputc(sep,f);
-fprintf(f, "%u", el->itemRgb);
+if (useItemRgb)
+    fprintf(f, "%d,%d,%d", (el->itemRgb & 0xff0000) >> 16,
+        (el->itemRgb & 0xff00) >> 8, (el->itemRgb & 0xff));
+else
+    fprintf(f, "%u", el->itemRgb);
 if (wordCount <= 9)
     {
     fputc(lastSep, f);
@@ -568,6 +572,19 @@ if (sep == ',') fputc('}',f);
 
 
 fputc(lastSep,f);
+}
+
+void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep)
+/* Write a bed of wordCount fields. */
+{
+bedOutputN_Opt(el, wordCount, f, sep, lastSep, FALSE);
+}
+
+void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
+	char sep, char lastSep)
+/* Write a bed of wordCount fields, interpret column 9 as RGB. */
+{
+bedOutputN_Opt(el, wordCount, f, sep, lastSep, TRUE);
 }
 
 struct genePred *bedToGenePred(struct bed *bed)
@@ -1104,7 +1121,6 @@ struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordC
 /* read a list of beds and return results in hash of binKeeper structure for fast query*/
 {
 struct binKeeper *bk; 
-int size;
 struct bed *bed;
 struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);
 struct lineFile *bf = lineFileOpen(bedFileName , TRUE);
