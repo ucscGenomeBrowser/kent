@@ -296,7 +296,7 @@ exit; # don't actually run this like a script :)
   ssh kkr1u00
   mkdir -p /iscratch/i/bosTau1/splitFas
   cd /cluster/data/bosTau1
-  /cluster/bin/i386/faSplit sequence /cluster/data/bosTau1/bosTau1.softmask2.fa 5000 \
+  /cluster/bin/i386/faSplit sequence /cluster/data/bosTau1/bosTau1.softmask2.fa 350 \
     /iscratch/i/bosTau1/splitFas
   # slight problem with directory name
   cd /iscratch/i/bosTau1
@@ -377,7 +377,7 @@ exit; # don't actually run this like a script :)
   # add bosTau1 to list of databases to align in
   #  /cluster/data/genbank/etc/align-genbank
 
-  # GC PERCENT (DONE Oct. 17, 2004, Heather)
+# GC PERCENT (DONE Oct. 17, 2004, Heather)
   # use old-style (non-wiggle)
   # run on kolossus (serialized)
   # use default window size (20K); only applies to 25k scaffolds
@@ -395,3 +395,61 @@ exit; # don't actually run this like a script :)
   load data local infile 'gcPercent.bed' into table gcPercent
   # 54007 rows
 
+# ALIGN TO HUMAN (BLASTZ)
+# Later these notes will be moved to makeHg17.doc
+  ssh kk
+  cd /cluster/data/hg17/bed
+  mkdir blastz.bosTau1.2004-10-20
+  ln -s /cluster/data/hg17/bed/blastz.bosTau1.2004-10-20 blastz.bosTau1
+  # create DEF file 
+  # for now, not doing ABRIDGE_REPEATS
+  # this means I don't need to create lineage specific repeats
+  # This is because blastz-run wouldn't take advantage of these
+  # because my query is in scaffolds
+
+# human vs. cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow
+SEQ2_DIR=/iscratch/i/bosTau1/splitDir
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.bosTau1.2004-10-20
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  # create S2.len so make-joblist doesn't have to
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  # check how many lines in j
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para try, push check, para push, para check....
