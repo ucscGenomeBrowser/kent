@@ -1060,11 +1060,8 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
 double y1, y2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int s, e2, s2;
+int s;
 double e;
-int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
@@ -1073,8 +1070,6 @@ int prevEnd = -1;
 double prevY = -1;
 int ybase;
 int tmp;
-
-/*process cart options*/
 
 enum wiggleOptEnum wiggleType;
 char *interpolate;
@@ -1093,10 +1088,11 @@ shades = tg->colorShades;
 
 lf=tg->items;    
 if(lf==NULL) return;
+
+//take care of cart options
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
@@ -1117,77 +1113,59 @@ if( sameString( tg->mapName, "humMus" ) )
 
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer/1000.0;
-//errAbort( "(%s)", lf->name );
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	s = sf->start;
-	e = sf->end;
+	    {
+	    s = sf->start;
+	    e = sf->end;
 
         if( (sf->start - sf->end) == 0 ) /*ignore scores of 0*/
-	    {
+	        {
             prevEnd = -1;  /*set so no interpolation where no data*/
             continue;
-	    }
+	        }
 	
         tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
 
         if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
-	    {
-	    
+	        {
             prevEnd = -1;  /*set so no interpolation where no data*/
             continue;
-	    }
+	        }
 	
-        /*
-	  if( tmp != -(sf->end - sf->start) )
-	  {
-	  errAbort( "binning error:  s-e = %d, tmp=%d\n",
-	  sf->end - sf->start, tmp );
-	  }
-        */  
-        
-        //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         ybase = (int)((double)y+hFactor+(double)heightPer);
 	
         if (prevEnd > 0)
-	    {
+	        {
             y2 = prevY;
-	    x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
 	    
             if( (x2-x1) > 0)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-		    
-		    
                     if( sameString( aa, "on" )) /*use anti-aliasing*/
-                        mgConnectingLine( mg, x1, y1, x2, y2,
-					  shades, ybase, 1, fill );
+                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
                     else
-                        mgConnectingLine( mg, x1, y1, x2, y2,
-					  shades, ybase, 0, fill );
+                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
                     }
                 }
-	    }
+	        }
 	
         /*draw the points themselves*/
-        //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
-
-	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
         if( fill )
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2,
-			  ybase-y1-2, shades[3]);
+	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase-y1-2, shades[3]);
         prevEnd = s;
         prevY = y1;
 	
-	
-	}
-        if( isFull && lf->next != NULL )
-            y += updateY( lf->name, lf->next->name, lineHeight );
+	    }
+
+    if( isFull && lf->next != NULL )
+        y += updateY( lf->name, lf->next->name, lineHeight );
     }
 }
 
