@@ -3,9 +3,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: spTest.c,v 1.1 2003/10/01 03:41:20 kent Exp $";
+static char const rcsid[] = "$Id: spTest.c,v 1.2 2003/10/01 04:44:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -158,7 +159,7 @@ safef(query, sizeof(query),
 return sqlNeedQuickString(conn, query);
 }
 
-struct slName *spGeneToAccList(struct sqlConnection *conn, 
+struct slName *spGeneToAccs(struct sqlConnection *conn, 
 	char *gene, int taxon)
 /* Get list of accessions associated with this gene.  If
  * taxon is zero then this will return all accessions,  if
@@ -183,7 +184,7 @@ else
 return sqlQuickList(conn, query);
 }
 
-struct slName *spGeneList(struct sqlConnection *conn, char *acc)
+struct slName *spGenes(struct sqlConnection *conn, char *acc)
 /* Return list of genes associated with accession */
 {
 char query[256];
@@ -346,6 +347,136 @@ safef(query, sizeof(query), "select val from commentType");
 return sqlQuickList(conn, query);
 }
 
+struct slName *spExtDbAcc1List(struct sqlConnection *conn, char *acc,
+	char *db)
+/* Get list of accessions from database associated with this. */
+{
+char query[256];
+safef(query, sizeof(query), 
+    "select extDbRef.extAcc1 from extDbRef,extDb "
+    "where extDbRef.acc = '%s' "
+    "and extDbRef.extDb = extDb.id "
+    "and extDb.val = '%s'"
+    , acc, db);
+return sqlQuickList(conn, query);
+}
+
+struct slName *spEmblAccs(struct sqlConnection *conn, char *acc)
+/* Get list of EMBL/Genbank mRNAaccessions associated with this. */
+{
+return spExtDbAcc1List(conn, acc, "EMBL");
+}
+
+struct slName *spPdbAccs(struct sqlConnection *conn, char *acc)
+/* Get list of PDB associations associated with this. */
+{
+return spExtDbAcc1List(conn, acc, "PDB");
+}
+
+char *spAccFromEmbl(struct sqlConnection *conn, char *acc)
+/* Get SwissProt accession associated with EMBL mRNA. */
+{
+char query[256];
+int emblId;
+safef(query, sizeof(query), "select id from extDb where val = 'EMBL'");
+emblId = sqlNeedQuickNum(conn, query);
+safef(query, sizeof(query),
+    "select acc from extDbRef where extAcc1 = '%s' and extDb = %d"
+    , acc, emblId);
+return sqlQuickString(conn, query);
+}
+
+struct spFeature
+/* A swissProt feature. */
+    {
+    struct spFeature *next;
+    int start;	/* Start coordinate (zero-based) */
+    int end;	/* End coordinate (non-inclusive) */
+    int featureClass; /* ID of featureClass */
+    int featureType;  /* ID of featureType */
+    };
+
+struct spFeature *spFeatures(struct sqlConnection *conn, char *acc,
+	int classId, 	/* Feature class ID, 0 for all */
+	int typeId)	/* Feature type ID, 0 for all */
+/* Get feature list.  slFreeList this when done. */
+{
+struct dyString *dy = dyStringNew(0);
+struct spFeature *list = NULL, *el;
+char query[256], **row;
+struct sqlResult *sr;
+
+dyStringAppend(dy, 
+	"select start,end,featureClass,featureType from feature ");
+dyStringPrintf(dy, 
+        "where acc = '%s'", acc);
+if (classId != 0)
+    dyStringPrintf(dy, " and featureClass=%d", classId);
+if (typeId != 0)
+    dyStringPrintf(dy, " and featureType=%d", typeId);
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(el);
+    el->start = sqlUnsigned(row[0]);
+    el->end = sqlUnsigned(row[1]);
+    el->featureClass = sqlUnsigned(row[2]);
+    el->featureType = sqlUnsigned(row[3]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+dyStringFree(&dy);
+slReverse(&list);
+return list;
+}
+
+char *spFeatureTypeName(struct sqlConnection *conn, int featureType)
+/* Return name associated with featureType */
+{
+if (featureType == 0)
+   return cloneString("n/a");
+else
+    {
+    char query[256];
+    safef(query, sizeof(query),
+	    "select val from featureType where id=%d", featureType);
+    return sqlNeedQuickString(conn, query);
+    }
+}
+
+int spFeatureTypeId(struct sqlConnection *conn, char *name)
+/* Return feature type id associated with given name. */
+{
+if (sameString(name, "n/a"))
+    return 0;
+else
+    {
+    char query[256];
+    safef(query, sizeof(query),
+	    "select id from featureType where val='%s'", name);
+    return sqlNeedQuickNum(conn, query);
+    }
+}
+
+char *spFeatureClassName(struct sqlConnection *conn, int featureClass)
+/* Return name associated with featureClass. */
+{
+char query[256];
+safef(query, sizeof(query),
+	"select val from featureClass where id=%d", featureClass);
+return sqlNeedQuickString(conn, query);
+}
+
+int spFeatureClassId(struct sqlConnection *conn, char *name)
+/* Return feature class id associated with given name. */
+{
+char query[256];
+safef(query, sizeof(query),
+	"select id from featureClass where val='%s'", name);
+return sqlNeedQuickNum(conn, query);
+}
+
+
 
 void printPartialList(char *title1, char *title2, 
 	struct slName *list, int maxCount)
@@ -361,6 +492,17 @@ if (n != NULL)
 printf("\n");
 }
 
+void printFeat(struct sqlConnection *conn, struct spFeature *feat)
+/* Print out one feature looking up IDs. */
+{
+char *className = spFeatureClassName(conn, feat->featureClass);
+char *typeName = spFeatureTypeName(conn, feat->featureType);
+printf("%s\t%d\t%d\t%s\n", className, feat->start, feat->end, 
+    typeName);
+freez(&className);
+freez(&typeName);
+}
+
 void spTest(char *database, char *someAcc)
 /* spTest - Test out sp library.. */
 {
@@ -368,8 +510,10 @@ struct sqlConnection *conn = sqlConnect(database);
 char *acc, *id, *binomial, *common;
 struct slName *geneList, *gene, *accList, *n, *list;
 struct slName *nameList, *name, *keyList, *key, *typeList, *type;
+struct spFeature *featList, *feat;
 boolean ok;
 int taxon;
+int classId = 0, typeId = 0;
 
 printf("input: %s\n", someAcc);
 acc = spLookupPrimaryAcc(conn, someAcc);
@@ -399,20 +543,20 @@ for (name = nameList; name != NULL; name = name->next)
     printf(" %s,", name->name);
 printf("\n");
 printf("gene(s):");
-geneList = spGeneList(conn,acc);
+geneList = spGenes(conn,acc);
 for (gene=geneList; gene != NULL; gene = gene->next)
     printf(" %s,", gene->name);
 printf("\n");
 for (gene=geneList; gene != NULL; gene = gene->next)
     {
-    accList = spGeneToAccList(conn, gene->name, 0);
+    accList = spGeneToAccs(conn, gene->name, 0);
     printf(" any %s:", gene->name);
     for (n = accList; n != NULL; n = n->next)
         printf(" %s,", n->name);
     printf("\n");
     slFreeList(&accList);
     printf(" %s %s:", common, gene->name);
-    accList = spGeneToAccList(conn, gene->name, taxon);
+    accList = spGeneToAccs(conn, gene->name, taxon);
     for (n = accList; n != NULL; n = n->next)
         printf(" %s,", n->name);
     printf("\n");
@@ -429,6 +573,7 @@ for (key = keyList; key != NULL; key = key->next)
     accList = spKeywordSearch(conn, key->name, taxon);
     printPartialList(common, key->name, accList, 4);
     slFreeList(&accList);
+    break;	/* This is a little slow, once is enough. */
     }
 for (key = keyList; key != NULL; key = key->next)
     {
@@ -458,6 +603,55 @@ for (type = typeList; type != NULL; type = type->next)
     }
 slFreeList(&typeList);
 
+list = spEmblAccs(conn, acc);
+printf("GenBank/EMBL:");
+for (n = list; n != NULL; n = n->next)
+    printf(" %s,", n->name);
+printf("\n");
+if (list != NULL)
+    printf("acc from %s: %s\n", 
+    	list->name, spAccFromEmbl(conn, list->name));
+slFreeList(&list);
+
+list = spPdbAccs(conn, acc);
+printf("PDB:");
+for (n = list; n != NULL; n = n->next)
+    printf(" %s,", n->name);
+printf("\n");
+
+featList = spFeatures(conn, acc, 0, 0);
+printf("All features:\n");
+for (feat = featList; feat != NULL; feat = feat->next)
+    {
+    printFeat(conn, feat);
+    classId = feat->featureClass;
+    typeId = feat->featureType;
+    }
+slFreeList(&featList);
+if (classId != 0 && typeId != 0)
+    {
+    printf("%s class features:\n", spFeatureClassName(conn, classId));
+    featList = spFeatures(conn, acc, classId, 0);
+    for (feat = featList; feat != NULL; feat = feat->next)
+	printFeat(conn, feat);
+    slFreeList(&featList);
+    printf("%s type features:\n", spFeatureTypeName(conn, typeId));
+    featList = spFeatures(conn, acc, 0, typeId);
+    for (feat = featList; feat != NULL; feat = feat->next)
+	printFeat(conn, feat);
+    slFreeList(&featList);
+    printf("same class & type features:\n");
+    featList = spFeatures(conn, acc, classId, typeId);
+    for (feat = featList; feat != NULL; feat = feat->next)
+	printFeat(conn, feat);
+    slFreeList(&featList);
+    printf("class loop: %d->%s->%d\n", classId, 
+    	spFeatureClassName(conn, classId),
+	spFeatureClassId(conn, spFeatureClassName(conn, classId)));
+    printf("type loop: %d->%s->%d\n", typeId, 
+    	spFeatureTypeName(conn, typeId),
+	spFeatureTypeId(conn, spFeatureTypeName(conn, typeId)));
+    }
 
 sqlDisconnect(&conn);
 }

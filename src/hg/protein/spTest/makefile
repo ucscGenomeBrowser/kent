@@ -12,3 +12,4 @@ spTest: $O $(MYLIBS)
 
 test:
 	spTest sp092903 Q9FFH7
+	spTest sp092903 P29312
