@@ -1,6 +1,6 @@
 <H2>Description</H2>
 
-<P> This track shows predictions from
+<P>This track shows predictions from
 the <a href="http://rulai.cshl.org/tools/FirstEF/" TARGET=_blank>FirstEF</a>
 (<u>First</u> <u>E</u>xon <u>F</u>inder) program. <P>
 
@@ -8,18 +8,20 @@ the <a href="http://rulai.cshl.org/tools/FirstEF/" TARGET=_blank>FirstEF</a>
 If two consecutive predictions are separated by less than 1000 bp, 
 FirstEF treats them as one cluster of alternative first exons that may 
 belong to same gene. The cluster number is displayed in the parentheses 
-of each item. For example, "exon(405-)" 
+of each item. For example, &quot;exon(405-)&quot; 
 represents the exon prediction in cluster number 405 on the minus strand. 
 The exon, promoter and CpG-window are interconnected by this cluster number. 
-Alternative predictions within the same cluster are denoted by "#N", where 
-"N" is the serial number of an alternative prediction in the cluster.</P>
+Alternative predictions within the same cluster are denoted by &quot;#N&quot; 
+where &quot;N&quot; is the serial number of an alternative prediction in the 
+cluster.</P>
 
-<P>Each predicted exon is either CpG-related or Non-CpG-related based on
+<P>Each predicted exon is either CpG-related or non-CpG-related, based on
 a score of the frequency of CpG dinucleotides.
 An exon is classified as CpG-related if the CpG score is greater 
-than a threshhold value and Non-CpG-related otherwise. If an exon is CpG-related, 
-its associated CpG-window is displayed. In the browser display, higher
-CpG scores are shown in darker shades of gray/black.  </P>
+than a threshold value, and non-CpG-related if less than the threshold. If an 
+exon is CpG-related, 
+its associated CpG-window is displayed. The browser displays features with higher
+CpG scores in darker shades of gray/black.</P>
 
 <H2>Method</H2>
 
@@ -30,7 +32,7 @@ first donor sites and CpG-related and non-CpG-related promoter regions based on
 discriminant analysis. For every potential first donor site (GT) and an upstream
 promoter region, FirstEF decides whether or not the intermediate region can be
 a potential first exon, based on a set of quadratic discriminant functions.
-FirstEF calculates the <i>a posteriori</i> probabilities of exon, donor, and
+FirstEF calculates the <em>a posteriori</em> probabilities of exon, donor, and
 promoter for a given GT and an upstream window of length 570 bp.</P>
 
 <P>For a description of the FirstEF program and the underlying classification models,
