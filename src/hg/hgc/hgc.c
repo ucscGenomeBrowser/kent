@@ -4695,7 +4695,7 @@ else
     	    {
     	    printf("\n");
     	    printf("<B>AceView:</B> ");
-    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?");
+    	    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?");
 	    printf("db=human&l=%s\" TARGET=_blank>", rl->name);
     	    printf("%s</A><BR>\n", rl->name);
     	    }
@@ -5034,7 +5034,7 @@ if (startsWith("hg", hGetDb()))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=human&l=%s\" TARGET=_blank>",
+    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
