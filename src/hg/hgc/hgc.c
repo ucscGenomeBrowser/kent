@@ -44,6 +44,7 @@
 #include "stsMap.h"
 #include "recombRate.h"
 #include "stsInfo.h"
+#include "stsInfo2.h"
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
 #include "cytoBand.h"
@@ -4801,6 +4802,7 @@ char *table = tdb->tableName;
 char query[256];
 char title[256];
 struct sqlConnection *conn = hAllocConn();
+boolean stsInfo2Exists = sqlTableExists(conn, "stsInfo2");
 boolean stsInfoExists = sqlTableExists(conn, "stsInfo");
 boolean stsMapExists = sqlTableExists(conn, "stsMap");
 struct sqlConnection *conn1 = hAllocConn();
@@ -4810,6 +4812,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct stsMap stsRow;
 struct stsInfo *infoRow;
+struct stsInfo2 *info2Row;
 char band[32], stsid[20];
 int i;
 struct psl *pslList = NULL, *psl;
@@ -4839,7 +4842,20 @@ if (row != NULL)
 	stsMarkerStaticLoad(row, &oldStsRow);
 	stsMapFromStsMarker(&oldStsRow, &stsRow);
 	}
-    if (stsInfoExists)
+    if (stsInfo2Exists)
+        {
+	/* Find the instance of the object in the stsInfo2 table */ 
+	sqlFreeResult(&sr);
+	sprintf(query, "SELECT * FROM stsInfo2 WHERE identNo = '%d'", stsRow.identNo);
+	sr = sqlMustGetResult(conn, query);
+	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    info2Row = stsInfo2Load(row);
+	    infoRow = stsInfoLoad(row);	    
+	    }
+	}
+    else if (stsInfoExists)
         {
 	/* Find the instance of the object in the stsInfo table */ 
 	sqlFreeResult(&sr);
@@ -4849,211 +4865,220 @@ if (row != NULL)
 	if (row != NULL)
 	    {
 	    infoRow = stsInfoLoad(row);
-	    /* Print out general sequence positional information */
-            /* printf("<H2>STS Marker %s</H2>\n", infoRow->name);
-	       htmlHorizontalLine(); */
-	    printf("<TABLE>\n");
-	    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-	    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
-	    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-	    if (hChromBand(seqName, start, band))
-		printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
-	    printf("</TABLE>\n");
-	    htmlHorizontalLine();
-	    /* Print out marker name and links to UniSTS, Genebank, GDB */
-	    if (infoRow->nameCount > 0)
-	        {
-	        printf("<TABLE>\n");
-		printf("<TR><TH>Other names:</TH><TD>%s",infoRow->otherNames[0]);
-	        for (i = 1; i < infoRow->nameCount; i++) 
-		    {
-		    printf(", %s",infoRow->otherNames[i]);
-		    }
-		printf("</TR>\n</TABLE>\n");
-		htmlHorizontalLine();
-		}
-	    printf("<TABLE>\n");
-	    printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
-	    printf("<TR><TH ALIGN=left>UniSTS id:</TH><TD><A HREF=");
-	    printUnistsUrl(stdout, infoRow->dbSTSid);
-	    printf(">%d</A></TD></TR>\n", infoRow->dbSTSid);
-	    if (infoRow->otherDbstsCount > 0) 
-                {
-		printf("<TR><TH ALIGN=left>Related UniSTS ids:</TH>");
-	        for (i = 0; i < infoRow->otherDbstsCount; i++) 
-		    {
-		    printf("<TD><A HREF=");
-		    printUnistsUrl(stdout, infoRow->otherDbSTS[i]);
-		    printf(">%d</A></TD>", infoRow->otherDbSTS[i]);
-		    }
-		printf("</TR>\n");
-		} 
-	    if (infoRow->gbCount > 0) 
-                {
-		printf("<TR><TH ALIGN=left>Genbank:</TH>");
-	        for (i = 0; i < infoRow->gbCount; i++) 
-		    {
-		    printf("<TD><A HREF=");
-		    printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
-		    printf(">%s</A></TD>", infoRow->genbank[i]);
-		    }
-		printf("</TR>\n");
-		} 
-	    if (infoRow->gdbCount > 0) 
-                {
-		printf("<TR><TH ALIGN=left>GDB:</TH>");
-	        for (i = 0; i < infoRow->gdbCount; i++) 
-		    {
-		    printf("<TD><A HREF=");
-		    printGdbUrl(stdout, infoRow->gdb[i]);
-		    printf(">%s</A></TD>", infoRow->gdb[i]);
-		    }
-		printf("</TR>\n");
-		} 
-	    printf("<TR><TH ALIGN=left>Organism:</TH><TD>%s</TD></TR>\n",infoRow->organism);
-	    printf("</TABLE>\n");
-	    htmlHorizontalLine();
-	    /* Print out primer information */
-	    if (!sameString(infoRow->leftPrimer,""))
-	        {
-		  printf("<TABLE>\n");
-		  printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->leftPrimer);
-		  printf("<TR><TH ALIGN=left>Right Primer:</TH><TD>%s</TD></TR>\n",infoRow->rightPrimer);
-		  printf("<TR><TH ALIGN=left>Distance:</TH><TD>%s bps</TD></TR>\n",infoRow->distance);
-		  printf("</TABLE>\n");
-		  htmlHorizontalLine();
-		}
-	    /* Print out information from STS maps for this marker */
-	    if ((!sameString(infoRow->genethonName,"")) 
-		|| (!sameString(infoRow->marshfieldName,"")))
-	        {
-		  printf("<H3>Genetic Map Positions</H3>\n");  
-		  printf("<TABLE>\n");
-		  printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
-		  if (!sameString(infoRow->genethonName,"")) 
-		      {
-		      printf("<TH ALIGN=left>Genethon:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-			     infoRow->genethonName, infoRow->genethonChr, infoRow->genethonPos);
-		      }
-		  if (!sameString(infoRow->marshfieldName,""))
-		      {
-		      printf("<TH ALIGN=left>Marshfield:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-			     infoRow->marshfieldName, infoRow->marshfieldChr,
-			     infoRow->marshfieldPos);
-		      }
-		  printf("</TABLE><P>\n");
-		}
-	    if (!sameString(infoRow->wiyacName,"")) 
-	        {
-		  printf("<H3>Whitehead YAC Map Position</H3>\n");  
-		  printf("<TABLE>\n");
-		  printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
-		  printf("<TH ALIGN=left>WI YAC:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-			 infoRow->wiyacName, infoRow->wiyacChr, infoRow->wiyacPos);
-		  printf("</TABLE><P>\n");
-		}
-	    if ((!sameString(infoRow->wirhName,"")) 
-		|| (!sameString(infoRow->gm99gb4Name,""))
-		|| (!sameString(infoRow->gm99g3Name,""))
-		|| (!sameString(infoRow->tngName,"")))
-	        {
-		  printf("<H3>RH Map Positions</H3>\n");  
-		  printf("<TABLE>\n");
-		  if ((!sameString(infoRow->wirhName,"")) 
-		      || (!sameString(infoRow->gm99gb4Name,""))
-		      || (!sameString(infoRow->gm99g3Name,"")))
-		      {
-			printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position (LOD)</TH></TR>\n");
-		      }
-		  else
-		      {
-			printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
-		      }
-		  if (!sameString(infoRow->gm99gb4Name,""))
-		      {
-		      printf("<TH ALIGN=left>GM99 Gb4:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
-			     infoRow->gm99gb4Name, infoRow->gm99gb4Chr, infoRow->gm99gb4Pos,
-			     infoRow->gm99gb4LOD);
-		      }
-		  if (!sameString(infoRow->gm99g3Name,""))
-		      {
-		      printf("<TH ALIGN=left>GM99 G3:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
-			     infoRow->gm99g3Name, infoRow->gm99g3Chr, infoRow->gm99g3Pos,
-			     infoRow->gm99g3LOD);
-		      }
-		  if (!sameString(infoRow->wirhName,""))
-		      {
-		      printf("<TH ALIGN=left>WI RH:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
-			     infoRow->wirhName, infoRow->wirhChr, infoRow->wirhPos,
-			     infoRow->wirhLOD);
-		      }
-		  if (!sameString(infoRow->tngName,""))
-		      {
-		      printf("<TH ALIGN=left>Stanford TNG:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-			     infoRow->tngName, infoRow->tngChr, infoRow->tngPos);
-		      }
-		  printf("</TABLE><P>\n");
-		}
-	    /* Print out alignment information - full sequence */
-	    webNewSection("Genomic Alignments:");
-	    sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
-		    infoRow->identNo);  
-	    sr1 = sqlGetResult(conn1, query);
-	    i = 0;
-	    pslStart = 0;
-	    while ((row = sqlNextRow(sr1)) != NULL)
-	        {  
-		psl = pslLoad(row);
-		if ((sameString(psl->tName, seqName)) 
-		    && (abs(psl->tStart - start) < 1000))
-		    {
-		    pslStart = psl->tStart;
-		    }
-		slAddHead(&pslList, psl);
-		i++;
-		}
-	    slReverse(&pslList);
-	    if (i > 0) 
-	        {
-		printf("<H3>Full sequence:</H3>\n");
-		sprintf(stsid,"%d",infoRow->identNo);
-		printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_seq", stsid);
-		sqlFreeResult(&sr1);
-		htmlHorizontalLine();
-		}
-	    slFreeList(&pslList);
-	    /* Print out alignment information - primers */
-	    sprintf(stsid,"dbSTS_%d",infoRow->dbSTSid);
-	    sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", 
-		    stsid);  
-	    sr1 = sqlGetResult(conn1, query);
-	    i = 0;
-	    pslStart = 0;
-	    while ((row = sqlNextRow(sr1)) != NULL)
-	        {  
-		psl = pslLoad(row);
-		if ((sameString(psl->tName, seqName)) 
-		    && (abs(psl->tStart - start) < 1000))
-		    {
-		    pslStart = psl->tStart;
-		    }
-		slAddHead(&pslList, psl);
-		i++;
-		}
-	    slReverse(&pslList);
-	    if (i > 0) 
-	        {
-		printf("<H3>Primers:</H3>\n");
-		printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsid);
-		sqlFreeResult(&sr1);
-		}
-	    slFreeList(&pslList);
-
-	    stsInfoFree(&infoRow);
 	    }
 	}
+    if (((stsInfo2Exists) || (stsInfoExists)) && (row != NULL)) 
+	{
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+	if (hChromBand(seqName, start, band))
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+
+	/* Print out marker name and links to UniSTS, Genebank, GDB */
+	if (infoRow->nameCount > 0)
+	    {
+	    printf("<TABLE>\n");
+	    printf("<TR><TH>Other names:</TH><TD>%s",infoRow->otherNames[0]);
+	    for (i = 1; i < infoRow->nameCount; i++) 
+		{
+		printf(", %s",infoRow->otherNames[i]);
+		}
+	    printf("</TR>\n</TABLE>\n");
+	    htmlHorizontalLine();
+	    }
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
+	printf("<TR><TH ALIGN=left>UniSTS id:</TH><TD><A HREF=");
+	printUnistsUrl(stdout, infoRow->dbSTSid);
+	printf(">%d</A></TD></TR>\n", infoRow->dbSTSid);
+	if (infoRow->otherDbstsCount > 0) 
+	    {
+	    printf("<TR><TH ALIGN=left>Related UniSTS ids:</TH>");
+	    for (i = 0; i < infoRow->otherDbstsCount; i++) 
+		{
+		printf("<TD><A HREF=");
+		printUnistsUrl(stdout, infoRow->otherDbSTS[i]);
+		printf(">%d</A></TD>", infoRow->otherDbSTS[i]);
+		}
+	    printf("</TR>\n");
+	    } 
+	if (infoRow->gbCount > 0) 
+	    {
+	    printf("<TR><TH ALIGN=left>Genbank:</TH>");
+	    for (i = 0; i < infoRow->gbCount; i++) 
+		{
+		printf("<TD><A HREF=");
+		printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
+		printf(">%s</A></TD>", infoRow->genbank[i]);
+		}
+	    printf("</TR>\n");
+	    } 
+	if (infoRow->gdbCount > 0) 
+	    {
+	    printf("<TR><TH ALIGN=left>GDB:</TH>");
+	    for (i = 0; i < infoRow->gdbCount; i++) 
+		{
+		printf("<TD><A HREF=");
+		printGdbUrl(stdout, infoRow->gdb[i]);
+		printf(">%s</A></TD>", infoRow->gdb[i]);
+		}
+	    printf("</TR>\n");
+	    } 
+	printf("<TR><TH ALIGN=left>Organism:</TH><TD>%s</TD></TR>\n",infoRow->organism);
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	/* Print out primer information */
+	if (!sameString(infoRow->leftPrimer,""))
+	    {
+	    printf("<TABLE>\n");
+	    printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->leftPrimer);
+	    printf("<TR><TH ALIGN=left>Right Primer:</TH><TD>%s</TD></TR>\n",infoRow->rightPrimer);
+	    printf("<TR><TH ALIGN=left>Distance:</TH><TD>%s bps</TD></TR>\n",infoRow->distance);
+	    printf("</TABLE>\n");
+	    htmlHorizontalLine();
+	    }
+	/* Print out information from STS maps for this marker */
+	if ((!sameString(infoRow->genethonName,"")) 
+	    || (!sameString(infoRow->marshfieldName,""))
+	    || ((stsInfo2Exists) && (!sameString(info2Row->decodeName,""))))
+	    {
+	    printf("<H3>Genetic Map Positions</H3>\n");  
+	    printf("<TABLE>\n");
+	    printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+	    if (!sameString(infoRow->genethonName,"")) 
+		{
+		printf("<TH ALIGN=left>Genethon:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		       infoRow->genethonName, infoRow->genethonChr, infoRow->genethonPos);
+		}
+	    if (!sameString(infoRow->marshfieldName,""))
+		{
+		printf("<TH ALIGN=left>Marshfield:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		       infoRow->marshfieldName, infoRow->marshfieldChr,
+		       infoRow->marshfieldPos);
+		}
+	    if ((stsInfo2Exists) && (!sameString(info2Row->decodeName,"")))
+	    {
+	    printf("<TH ALIGN=left>deCODE:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		   info2Row->decodeName, info2Row->decodeChr,
+		   info2Row->decodePos);
+	    }
+	    printf("</TABLE><P>\n");
+	    }
+	if (!sameString(infoRow->wiyacName,"")) 
+	    {
+	    printf("<H3>Whitehead YAC Map Position</H3>\n");  
+	    printf("<TABLE>\n");
+	    printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+	    printf("<TH ALIGN=left>WI YAC:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		   infoRow->wiyacName, infoRow->wiyacChr, infoRow->wiyacPos);
+	    printf("</TABLE><P>\n");
+	    }
+	if ((!sameString(infoRow->wirhName,"")) 
+	    || (!sameString(infoRow->gm99gb4Name,""))
+	    || (!sameString(infoRow->gm99g3Name,""))
+	    || (!sameString(infoRow->tngName,"")))
+	    {
+	    printf("<H3>RH Map Positions</H3>\n");  
+	    printf("<TABLE>\n");
+	    if ((!sameString(infoRow->wirhName,"")) 
+		|| (!sameString(infoRow->gm99gb4Name,""))
+		|| (!sameString(infoRow->gm99g3Name,"")))
+		{
+		printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position (LOD)</TH></TR>\n");
+		}
+	    else
+		{
+		printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
+		}
+	    if (!sameString(infoRow->gm99gb4Name,""))
+		{
+		printf("<TH ALIGN=left>GM99 Gb4:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+		       infoRow->gm99gb4Name, infoRow->gm99gb4Chr, infoRow->gm99gb4Pos,
+		       infoRow->gm99gb4LOD);
+		}
+	    if (!sameString(infoRow->gm99g3Name,""))
+		{
+		printf("<TH ALIGN=left>GM99 G3:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+		       infoRow->gm99g3Name, infoRow->gm99g3Chr, infoRow->gm99g3Pos,
+		       infoRow->gm99g3LOD);
+		}
+	    if (!sameString(infoRow->wirhName,""))
+		{
+		printf("<TH ALIGN=left>WI RH:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+		       infoRow->wirhName, infoRow->wirhChr, infoRow->wirhPos,
+		       infoRow->wirhLOD);
+		}
+	    if (!sameString(infoRow->tngName,""))
+		{
+		printf("<TH ALIGN=left>Stanford TNG:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		       infoRow->tngName, infoRow->tngChr, infoRow->tngPos);
+		}
+	    printf("</TABLE><P>\n");
+	    }
+	/* Print out alignment information - full sequence */
+	webNewSection("Genomic Alignments:");
+	sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
+		infoRow->identNo);  
+	sr1 = sqlGetResult(conn1, query);
+	i = 0;
+	pslStart = 0;
+	while ((row = sqlNextRow(sr1)) != NULL)
+	    {  
+	    psl = pslLoad(row);
+	    if ((sameString(psl->tName, seqName)) 
+		&& (abs(psl->tStart - start) < 1000))
+		{
+		pslStart = psl->tStart;
+		}
+	    slAddHead(&pslList, psl);
+	    i++;
+	    }
+	slReverse(&pslList);
+	if (i > 0) 
+	    {
+	    printf("<H3>Full sequence:</H3>\n");
+	    sprintf(stsid,"%d",infoRow->identNo);
+	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_seq", stsid);
+	    sqlFreeResult(&sr1);
+	    htmlHorizontalLine();
+	    }
+	slFreeList(&pslList);
+	/* Print out alignment information - primers */
+	sprintf(stsid,"dbSTS_%d",infoRow->dbSTSid);
+	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", 
+		stsid);  
+	sr1 = sqlGetResult(conn1, query);
+	i = 0;
+	pslStart = 0;
+	while ((row = sqlNextRow(sr1)) != NULL)
+	    {  
+	    psl = pslLoad(row);
+	    if ((sameString(psl->tName, seqName)) 
+		&& (abs(psl->tStart - start) < 1000))
+		{
+		pslStart = psl->tStart;
+		}
+	    slAddHead(&pslList, psl);
+	    i++;
+	    }
+	slReverse(&pslList);
+	if (i > 0) 
+	    {
+	    printf("<H3>Primers:</H3>\n");
+	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsid);
+	    sqlFreeResult(&sr1);
+	    }
+	slFreeList(&pslList);
+	
+	stsInfoFree(&infoRow);
+	
+	}
     else
-        {
+	{
 	/* printf("<H2>STS Marker %s</H2>\n", marker);
 	   htmlHorizontalLine(); */
 	printf("<TABLE>\n");
@@ -5078,44 +5103,44 @@ if (row != NULL)
 	    printf("<TR><TH ALIGN=left>Whitehead RH:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.wiRhChrom, stsRow.wiRhPos);
 	if (!sameString(stsRow.shgcTngChrom, "0"))
 	    printf("<TR><TH ALIGN=left>Stanford TNG:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.shgcTngChrom, stsRow.shgcTngPos);
-        if (!sameString(stsRow.fishChrom, "0"))
+	if (!sameString(stsRow.fishChrom, "0"))
 	    {
 	    printf("<TR><TH ALIGN=left>FISH:</TH><TD>%s.%s - %s.%s</TD></TR>\n", stsRow.fishChrom, 
-	        stsRow.beginBand, stsRow.fishChrom, stsRow.endBand);
+		   stsRow.beginBand, stsRow.fishChrom, stsRow.endBand);
 	    }
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	if (stsRow.score == 1000)
 	    {
 	    printf("<H3>This is the only location found for %s</H3>\n",marker);
-            }
-        else
+	    }
+	else
 	    {
 	    sqlFreeResult(&sr);
-            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
-            printf("<TABLE>\n");
+	    printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+	    printf("<TABLE>\n");
 	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
                            AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
-	            table, marker, seqName, start, end); 
-            sr = sqlGetResult(conn,query);
-            while ((row = sqlNextRow(sr)) != NULL)
-                  {
-		  if (stsMapExists)
-		      {
-		      stsMapStaticLoad(row, &stsRow);
-		      }
-		  else
-		  /* Load and convert from original bed format */ 
-		      {
-		      struct stsMarker oldStsRow;
-		      stsMarkerStaticLoad(row, &oldStsRow);
-		      stsMapFromStsMarker(&oldStsRow, &stsRow);
-		      }
-		  printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
-			 stsRow.chrom, (stsRow.chromStart+stsRow.chromEnd)>>1);
-		  }
+		    table, marker, seqName, start, end); 
+	    sr = sqlGetResult(conn,query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		if (stsMapExists)
+		    {
+		    stsMapStaticLoad(row, &stsRow);
+		    }
+		else
+		    /* Load and convert from original bed format */ 
+		    {
+		    struct stsMarker oldStsRow;
+		    stsMarkerStaticLoad(row, &oldStsRow);
+		    stsMapFromStsMarker(&oldStsRow, &stsRow);
+		    }
+		printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
+		       stsRow.chrom, (stsRow.chromStart+stsRow.chromEnd)>>1);
+		}
 	    printf("</TABLE>\n"); 
-            }
+	    }
 	htmlHorizontalLine();
 	}
     }
