@@ -11,14 +11,13 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.29 2004/01/15 00:12:15 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.30 2004/01/20 19:44:36 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
  */
 struct wigCartOptions
     {
-    enum wiggleOptEnum wiggleType;
     boolean zoomCompression;	/*  true - do max() averaging over the bin
     				 *  false - simple pick one of the
 				 *  points in the bin.
@@ -28,7 +27,9 @@ struct wigCartOptions
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
-    int heightFromCart;	/*	requested height from cart	*/
+    int maxHeight;	/*	maximum pixels height from trackDb	*/
+    int defaultHeight;	/*	requested height from cart	*/
+    int minHeight;	/*	minimum pixels height from trackDb	*/
     };
 
 struct preDrawElement
@@ -94,34 +95,10 @@ for (el = *pList; el != NULL; el = next)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
-#if defined(DEBUG)
-/****           some simple debug output during development	*/
-static char dbgFile[] = "trash/wig.dbg";
-static boolean debugOpened = FALSE;
-static FILE * dF;
-
-static void wigDebugOpen(char * name) {
-if (debugOpened) return;
-dF = fopen( dbgFile, "w");
-fprintf( dF, "opened by %s\n", name);
-chmod(dbgFile, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP  | S_IROTH | S_IWOTH | S_IXOTH);
-debugOpened = TRUE;
-}
-
+#if ! defined(DEBUG)
 #define DBGMSGSZ	1023
-char dbgMsg[DBGMSGSZ+1];
-void wigDebugPrint(char * name) {
-wigDebugOpen(name);
-if (debugOpened)
-    {
-    if (dbgMsg[0])
-	fprintf( dF, "%s: %s\n", name, dbgMsg);
-    else
-	fprintf( dF, "%s:\n", name);
-    }
-    dbgMsg[0] = (char) NULL;
-    fflush(dF);
-}
+extern char dbgMsg[DBGMSGSZ+1];
+extern void wigDebugPrint(char * name);
 #endif
 
 /*	The item names have been massaged during the Load.  An
@@ -169,8 +146,7 @@ static int wigTotalHeight(struct track *tg, enum trackVisibility vis)
    as defined in the cart */
 {
 struct wigItem *item;
-char *heightPer;
-int heightFromCart;
+int defaultHeight;
 struct wigCartOptions *wigCart;
 int itemCount = 1;
 
@@ -185,7 +161,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
 else if (vis == tvFull)
-    tg->lineHeight = max(tl.fontHeight + 1, wigCart->heightFromCart);
+    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
 
 tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
@@ -341,7 +317,6 @@ FILE *f = (FILE *) NULL;		/*	file handle to binary file */
 struct hashEl *el, *elList;
 char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
-enum wiggleOptEnum wiggleType;
 enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
 enum wiggleScaleOptEnum autoScale;
@@ -372,7 +347,6 @@ vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfPrimary);
 vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfAlt);
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
-wiggleType = wigCart->wiggleType;
 horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
 autoScale = wigCart->autoScale;
@@ -393,7 +367,7 @@ itemCount = 0;
  */
 preDrawSize = width * 3;
 preDraw = (struct preDrawElement *) needMem ((size_t)
-		preDrawSize * sizeof(struct preDrawElement) );
+		preDrawSize * sizeof(struct preDrawElement));
 preDrawZero = width / 3;
 for (i = 0; i < preDrawSize; ++i) {
 	preDraw[i].count = 0;
@@ -494,7 +468,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    for (i = x1; i <= x2; ++i)
 			{
 			int xCoord = preDrawZero + i;
-			if ((xCoord >= 0) && (xCoord < preDrawSize) )
+			if ((xCoord >= 0) && (xCoord < preDrawSize))
 			    {
 			double dataValue =
 	wi->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wi->dataRange);
@@ -516,7 +490,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	     *	should always be true unless the data was
 	     *	prepared incorrectly.
 	     */
-	    if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize) )
+	    if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize))
 		{
 		double upperLimit;
 		preDraw[xCoord].count += wi->validCount;
@@ -710,7 +684,7 @@ if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
     x2 = x1 + width;
 
     /*	Let's see if the zero line can be drawn	*/
-    if ( (0.0 <= graphUpperLimit) && (0.0 >= graphLowerLimit) )
+    if ((0.0 <= graphUpperLimit) && (0.0 >= graphLowerLimit))
 	{
 	int zeroOffset;
 	drawColor = vgFindColorIx(vg, 0, 0, 0);
@@ -740,12 +714,12 @@ if (withCenterLabels)
 	centerOffset = fontHeight;
 
 /*	We only do Dense and Full	*/
-if( tg->visibility == tvDense)
+if (tg->visibility == tvDense)
     {
     vgTextRight(vg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
 	tg->ixColor, font, tg->shortLabel);
     }
-else if( tg->visibility == tvFull)
+else if (tg->visibility == tvFull)
     {
     int centerLabel = (height/2)-(fontHeight/2);
     int labelWidth = 0;
@@ -803,7 +777,7 @@ else if( tg->visibility == tvFull)
 	    drawColor, font, lower);
 	/*	Maybe zero can be displayed */
 	/*	It may overwrite the track label ...	*/
-	if ( zeroOK && (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit) )
+	if (zeroOK && (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit))
 	    {
 	    int zeroOffset;
 	    int zeroWidth;
@@ -813,7 +787,7 @@ else if( tg->visibility == tvFull)
 		(int)((graphUpperLimit * (height - centerOffset)) /
 			(graphUpperLimit - graphLowerLimit));
 	    /*	reusing the lower string here	*/
-	    snprintf(lower, 128, "0 -" );
+	    snprintf(lower, 128, "0 -");
 	    /*	only draw zero if it is far enough away from the
 	     *	upper and lower labels, and it won't overlap with
 	     *	the center label.
@@ -830,7 +804,7 @@ else if( tg->visibility == tvFull)
 	    	}
 	    }	/*	drawing a zero label	*/
 	}	/* if (height >= (3 * fontHeight))	*/
-    }	/*	if( tg->visibility == tvFull)	*/
+    }	/*	if (tg->visibility == tvFull)	*/
 }	/* wigLeftLabels */
 
 /* Make track group for wig multiple alignment.
@@ -842,224 +816,39 @@ else if( tg->visibility == tvFull)
 void wigMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
-char o1[MAX_OPT_STRLEN]; /* Option 1 - track pixel height:  .heightPer	*/
-char o2[MAX_OPT_STRLEN]; /* Option 2 - interpolate or samples only	*/
-char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
-char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
-char o7[MAX_OPT_STRLEN]; /* Option 7 - horizontal grid lines: horizGrid */
-char o8[MAX_OPT_STRLEN]; /* Option 8 - type of graph, lineBar */
-char o9[MAX_OPT_STRLEN]; /* Option 9 - type of graph, autoScale */
-char *interpolate = NULL;	/*	samples only, or interpolate */
-char *horizontalGrid = NULL;	/*	Grid lines, ON/OFF - off default */
-char *lineBar = NULL;	/*	Line or Bar chart - Bar by default */
-char *autoScale = NULL;	/*	autoScale on/off - On by default */
-char *minY_str = NULL;	/*	string from cart	*/
-char *maxY_str = NULL;	/*	string from cart	*/
-char *heightPer = NULL;	/*	string from cart	*/
-int heightFromCart;	/*	truncated by limits	*/
-double minYc;	/*	from cart */
-double maxYc;	/*	from cart */
-enum wiggleOptEnum wiggleType;
-enum wiggleGridOptEnum wiggleHorizGrid;
-enum wiggleGraphOptEnum wiggleLineBar;
-enum wiggleScaleOptEnum wiggleAutoScale;
-double minY;	/*	from trackDb.ra words, the absolute minimum */
-double maxY;	/*	from trackDb.ra words, the absolute maximum */
+int defaultHeight;	/*	truncated by limits	*/
+enum wiggleGraphOptEnum wiggleLineBar = wiggleGraphStringToEnum("Bar");
+double minY;	/*	from trackDb or cart, requested minimum */
+double maxY;	/*	from trackDb or cart, requested maximum */
+double tDbMinY;	/*	from trackDb type line, the absolute minimum */
+double tDbMaxY;	/*	from trackDb type line, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
-int maxHeightPixels = atoi(trackDbSettingOrDefault(track->tdb,
-				"maxHeightPixels", DEFAULT_HEIGHT_PER));
-char * defaultViewLimits = 
-	trackDbSettingOrDefault(track->tdb, "defaultViewLimits", "NONE");
-double defaultViewMinY = 0.0;	/* optional default viewing window	*/
-double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
-boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
+int maxHeight = atoi(DEFAULT_HEIGHT_PER);
+int defaultHeightPixels = maxHeight;
+int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
 
-/*	See if a default viewing window is specified in the trackDb.ra file
- *	Yes, it is true, this parsing is paranoid and verifies that the
- *	input values are valid in order to be used.  If they are no
- *	good, they are as good as not there and the result is a pair of
- *	zeros.
+/*	These Fetch functions look for variables in the cart bounded by
+ *	limits specified in trackDb or returning defaults
  */
-if (differentWord("NONE",defaultViewLimits))
-    {
-    char *words[2];
-    char sep = ':';
-    int wordCount = chopString(defaultViewLimits,&sep,words,2);
-    if (wordCount == 2)
-	{
-	defaultViewMinY = atof(words[0]);
-	defaultViewMaxY = atof(words[1]);
-	/*	make sure they are in order	*/
-	if (defaultViewMaxY < defaultViewMinY)
-	    {
-	    double d = defaultViewMinY;
-	    defaultViewMinY = defaultViewMaxY;
-	    defaultViewMaxY = d;
-	    }
-	/*	and they had better be different	*/
-	if ( ! ((defaultViewMaxY - defaultViewMinY) > 0.0) )
-	    {
-	    defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
-	    }
-	else
-	    optionalViewLimitsExist = TRUE;
-	}
-    }
+wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL, wordCount, words);
+wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL,
+	wordCount, words);
+wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL, wordCount, words);
 
-/*	Start with an arbitrary min,max when not given in the .ra file	*/
-minY = DEFAULT_MIN_Yv;
-maxY = DEFAULT_MAX_Yv;
+wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight,
+	wordCount, words);
+wigCart->maxHeight = maxHeight;
+wigCart->defaultHeight = defaultHeight;
+wigCart->minHeight = minHeight;
 
-/*	Possibly fetch values from the trackDb.ra file	*/
-if (wordCount > 1) minY = atof(words[1]);
-if (wordCount > 2) maxY = atof(words[2]);
-/*	Let's ensure their order is correct	*/
-if (maxY < minY)
-    {
-    double d;
-    d = maxY;
-    maxY = minY;
-    minY = d;
-    }
-
-/*	Possibly fetch values from the cart	*/
-snprintf( o1, sizeof(o1), "%s.heightPer", track->mapName);
-snprintf( o2, sizeof(o2), "%s.linear.interp", track->mapName);
-snprintf( o4, sizeof(o4), "%s.minY", track->mapName);
-snprintf( o5, sizeof(o5), "%s.maxY", track->mapName);
-snprintf( o7, sizeof(o7), "%s.horizGrid", track->mapName);
-snprintf( o8, sizeof(o8), "%s.lineBar", track->mapName);
-snprintf( o9, sizeof(o9), "%s.autoScale", track->mapName);
-heightPer = cartOptionalString(cart, o1);
-interpolate = cartOptionalString(cart, o2);
-minY_str = cartOptionalString(cart, o4);
-maxY_str = cartOptionalString(cart, o5);
-horizontalGrid = cartOptionalString(cart, o7);
-lineBar = cartOptionalString(cart, o8);
-autoScale = cartOptionalString(cart, o9);
-
-if (minY_str && maxY_str)
-    {
-    minYc = atof(minY_str);
-    maxYc = atof(maxY_str);
-    }
-else
-    {
-    if (optionalViewLimitsExist)
-	{
-	minYc = defaultViewMinY;
-	maxYc = defaultViewMaxY;
-	}
-    else
-	{
-	minYc = minY;
-	maxYc = maxY;
-	}
-    }
-
-/*	Clip the cart value to range [tl.fontHeight + 1:maxHeightPixels] */
-if (heightPer) heightFromCart = min( maxHeightPixels, atoi(heightPer));
-else heightFromCart = maxHeightPixels;
-heightFromCart = max(tl.fontHeight + 1, heightFromCart);
-
-wigCart->heightFromCart = heightFromCart;
-
-/*	Allow DrawItems to see these from wigCart in addition
- *	to the track minRange,maxRange which is set below
- */
-
-/*	The values from trackDb.ra are the absolute clipping boundaries, do
- *	not let cart settings go outside that range, and keep them
- *	in proper order.
- */
-track->minRange = max( minY, minYc);
-track->maxRange = min( maxY, maxYc);
+wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+track->minRange = minY;
+track->maxRange = maxY;
 wigCart->minY = track->minRange;
 wigCart->maxY = track->maxRange;
-
-if (track->maxRange < track->minRange)
-    {
-	double d;
-	d = track->maxRange;
-	track->maxRange = track->minRange;
-	track->minRange = d;
-    }
-
-/*	If interpolate is a string, it came from the cart, otherwise set
- *	the default for this option and stuff it into the cart
- */
-if (interpolate)
-    wiggleType = wiggleStringToEnum(interpolate);
-else 
-    {
-    wiggleType = wiggleStringToEnum("Linear Interpolation");
-    snprintf( cartStr, sizeof(cartStr), "%s", "Linear Interpolation");
-    cartSetString( cart, o2, cartStr);
-    }
-wigCart->wiggleType = wiggleType;
-
-/*	If horizontalGrid is a string, it came from the cart, otherwise set
- *	the default for this option and stuff it into the cart
- */
-if (horizontalGrid)
-    wiggleHorizGrid = wiggleGridStringToEnum(horizontalGrid);
-else 
-    {
-    wiggleHorizGrid = wiggleGridStringToEnum("OFF");
-    snprintf( cartStr, sizeof(cartStr), "%s", "OFF");
-    cartSetString( cart, o7, cartStr);
-    }
-wigCart->horizontalGrid = wiggleHorizGrid;
-
-/*	If lineBar is a string, it came from the cart, otherwise set
- *	the default for this option and stuff it into the cart
- */
-if (lineBar)
-    wiggleLineBar = wiggleGraphStringToEnum(lineBar);
-else 
-    {
-    wiggleLineBar = wiggleGraphStringToEnum("Bar");
-    snprintf( cartStr, sizeof(cartStr), "%s", "Bar");
-    cartSetString( cart, o8, cartStr);
-    }
-wigCart->lineBar = wiggleLineBar;
-
-/*	If autoScale is a string, it came from the cart, otherwise set
- *	the default for this option and stuff it into the cart.  The
- *	default is "Auto-Scale to data view"
- */
-if (autoScale)
-    wiggleAutoScale = wiggleScaleStringToEnum(autoScale);
-else 
-    {
-    char * autoScaleDefault = 
-	trackDbSettingOrDefault(track->tdb, "autoScaleDefault", "On");
-    if (differentWord("Off",autoScaleDefault)) {
-    wiggleAutoScale = wiggleScaleStringToEnum("Auto-Scale to data view");
-    snprintf( cartStr, sizeof(cartStr), "%s", "Auto-Scale to data view");
-    } else {
-    wiggleAutoScale =
-	wiggleScaleStringToEnum("Use Vertical Viewing Range Setting");
-    snprintf( cartStr, sizeof(cartStr), "%s",
-		"Use Vertical Viewing Range Setting");
-    }
-    cartSetString( cart, o9, cartStr);
-    }
-wigCart->autoScale = wiggleAutoScale;
-
-/*	And set the other values back into the cart for hgTrackUi	*/
-if( track->visibility == tvFull )
-    {		/*	no need to change this in the cart when dense */
-    snprintf( cartStr, sizeof(cartStr), "%d", heightFromCart );
-    cartSetString( cart, o1, cartStr );	/* possibly clipped from above */
-    }
-snprintf( cartStr, sizeof(cartStr), "%g", track->minRange);
-cartSetString( cart, o4, cartStr);
-snprintf( cartStr, sizeof(cartStr), "%g", track->maxRange);
-cartSetString( cart, o5, cartStr);
 
 track->loadItems = wigLoadItems;
 track->freeItems = wigFreeItems;
