@@ -4146,14 +4146,40 @@ csh split.csh >&! split.log &
 tail -100f split.log
 /cluster/bin/iSync
 
-# LIFTOVER CHAINS FROM HG15 (2004-04-14 kate)
+
+# LIFTOVER CHAINS TO HG16 (2004-04-14 kate)
 # doc'ed in hg16/bed/bedOver/liftOver.doc ?
 
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg15
     mkdir -p liftOver
     cp /cluster/data/hg16/bed/bedOver/over.chain liftOver/hg15ToHg16.over.chain
+    mkdir -p /cluster/data/hg15/liftOver
+    cp liftOver/hg15ToHg16.over.chain /cluster/data/hg15/liftOver
     gzip liftOver/hg15ToHg16.over.chain
+
+
+# RECIPROCAL BEST LIFTOVER CHAINS TO HG16 (WORKING 2004-11-18 kate, sugnet)
+
+    # Start with hg15Tohg16 liftover chains, which are best hg16 alignments to hg15
+    # Net these chains, and extract chains from the hg16-reference net to
+    # get reciprocal best
+
+    ssh kolossus
+    cd /cluster/data/hg15/bed/liftOver
+    grep chain hg15ToHg16.over.chain | wc -l
+        #   3938
+    chainPreNet hg15ToHg16.over.chain /cluster/data/hg15/chrom.sizes \
+                                            /cluster/data/hg16/chrom.sizes stdout | \
+        chainNet stdin -minSpace=1 /cluster/data/hg15/chrom.sizes \
+                                   /cluster/data/hg16/chrom.sizes \
+                                        /dev/null hg15ToHg16.rbest.net
+    chainSwap hg15ToHg16.over.chain stdout | \
+        chainSort -target stdin hg15ToHg16.swp.chain
+    netChainSubset hg15ToHg16.rbest.net hg16ToHg16.swp.chain stdout | \
+        chainSort -target stdin hg15ToHg16.best.chain
+    rm hg16ToHg16.rbest.net hg15ToHg16.swp.chain
+
 
 #### AFFYTRANSFRAG AND AFFYTRANCRIPTION TRACKS - (2004-07-21 sugnet)
 # tracks covering about 1/3 of genome with probes
