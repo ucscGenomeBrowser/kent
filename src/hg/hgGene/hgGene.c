@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.29 2004/06/01 20:05:41 angie Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.30 2004/06/18 14:55:47 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -565,9 +565,25 @@ void doKgMethod(struct sqlConnection *conn)
 	    }
     	}
 
+    /* default is knownGene */
     tdb = hTrackDbForTrack("knownGene");
-    hPrintf("%s", tdb->html);
     
+    /* deal with special genomes that do not have knownGene */
+    if (sameWord(genome, "D. melanogaster"))
+	{
+        tdb = hTrackDbForTrack("bdgpGene");
+	}
+    if (sameWord(genome, "C. elegans"))
+	{
+        tdb = hTrackDbForTrack("sangerGene");
+	}
+    if (sameWord(genome, "S. cerevisiae"))
+	{
+        tdb = hTrackDbForTrack("sgdGene");
+	}
+	
+    hPrintf("%s", tdb->html);
+
     cartWebEnd();
     }
 
