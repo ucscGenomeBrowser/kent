@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.678 2004/07/05 12:39:16 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.679 2004/07/07 06:32:10 acs Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5329,7 +5329,22 @@ char *getPredMRnaProtSeq(struct genePred *gp)
 struct dnaSeq *cdsDna = getCdsSeq(gp);
 int protBufSize = (cdsDna->size/3)+4;
 char *prot = needMem(protBufSize);
-dnaTranslateSome(cdsDna->dna, prot, protBufSize);
+int offset = 0;
+
+/* get frame offset, if available and needed */
+if (gp->exonFrames != NULL) 
+{
+    if (gp->strand[0] == '+' && gp->cdsStartStat != cdsComplete)
+        offset = (3 - gp->exonFrames[0]) % 3;
+    else if (gp->strand[0] == '-' && gp->cdsEndStat != cdsComplete)
+        offset = (3 - gp->exonFrames[gp->exonCount-1]) % 3;
+}
+/* NOTE: this fix will not handle the case in which frame is shifted
+ * internally or at multiple exons, as when frame-shift gaps occur in
+ * an alignment of an mRNA to the genome.  Going to have to come back
+ * and address that later... (acs) */
+
+dnaTranslateSome(cdsDna->dna+offset, prot, protBufSize);
 dnaSeqFree(&cdsDna);
 return prot;
 }
