@@ -1,4 +1,4 @@
-This file describes how we made the browser database on 
+bgThis file describes how we made the browser database on 
 NCBI build 31 (November, 2002 freeze)
 
 [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
@@ -404,7 +404,7 @@ o - Load refSeq alignments into database
       cd /cluster/store4/gs.14/build31/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg13 -tNameIx refSeqAli.psl
-DONE TO HERE FOR REFSEQ
+
 o - Load mRNA alignments into database. 
       ssh hgwdev
       cd /cluster/store4/gs.14/build31/bed/mrna/chrom
@@ -436,7 +436,7 @@ o - Create subset of ESTs with introns and load into database.
       - ssh hgwdev
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg13 *.psl
-
+DONE TO HERE
 o - Put orientation info on ESTs and mRNAs into database:
     Note: the cluster run requires /scratch/.../trfFa.1204/ to be in place,
     so this step should be run after "PREPARING SEQUENCE FOR CROSS SPECIES 
@@ -1288,7 +1288,7 @@ sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
        cd ~/oo/bed/xenoMrna
        mkdir psl
        ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
-       ls -1S /scratch/hg/mrna.132/xenoRna?*.fa > mrna.lst
+       ls -1S /scratch/hg/mrna.132/Homo_sapiens/xenoRna*.fa > mrna.lst
        cp ~/hg12/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
        para create spec
@@ -1297,6 +1297,7 @@ sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
        para try
        para check
        para push 
+DONE TO HERE 
 
 Do para check until the run is done, doing para push if
 necessary on occassion.
@@ -1314,8 +1315,11 @@ Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoMrna
        hgLoadPsl hg13 xenoMrna.psl -tNameIx
-       cd /cluster/store1/mrna.132
-       hgLoadRna add hg13 xenoRna.fa xenoRna.ra
+
+# Load the RNA and EST data
+       cd /gbdb/hg13/mrna.132
+       hgLoadRna add -type=xenoRna hg13 /gbdb/hg13/mrna.132/xenoRna.fa /gbdb/hg13/mrna.132/xenoRna.ra
+       hgLoadRna add -type=xenoEst hg13 /gbdb/hg13/mrna.132/xenoEst.fa /gbdb/hg13/mrna.132/xenoEst.ra
 
 Similarly do xenoEst aligments:
    Prepare the est data:
