@@ -20,7 +20,9 @@ struct genePos
     char *chrom;	/* Optional chromosome location. NULL ok. */
     int start;		/* Chromosome start. Disregarded if chrom == NULL. */
     int end;		/* End in chromosome. Disregarded if chrom == NULL. */
+    float distance;	/* Something to help sort on. */
     };
+#define genePosTooFar 1000000000	/* Definitely not in neighborhood. */
 
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
@@ -152,8 +154,15 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define showAllConfName "near.showAll"  /* Show all columns. */
 #define saveCurrentConfName "near.saveCurrent"  /* Save current columns. */
 #define useSavedConfName "near.useSaved"  /* Use saved columns. */
+
+#define nameSavedConfName  "near.nameSaved"  /* Name column settings var. */
+#define whichSavedConfName "near.whichSaved" /* Which saved column setting. */
+#define listSavedConfName "near.listSaved" /* List of saved column settings names. */
+#define submittedSavedConfName "near.submittedSaved" /* Submit button in saveCurrent. */
+#define savedColSettingsPrefix "near.savedColSettings." /* List of saved column settings. */
 #define savedColSettingsVarName "near.savedColSettings" 
 	/* Variable that stores saved column settings. */
+
 #define showAllSpliceVarName "near.showAllSplice" 
 	/* Show all splice varients. */
 #define expRatioColorVarName "near.expRatioColors" 
@@ -269,11 +278,18 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
 
+#ifdef OLD 
 struct hash *knownCannonicalHash(struct sqlConnection *conn);
 /* Get all cannonical gene names in hash. */
+#endif /* OLD */
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
+
+struct genePos *advancedSearchResults(struct column *colList, 
+	struct sqlConnection *conn);
+/* Get list of genes that pass all advanced search filters.  
+ * If no filters are on this returns all genes. */
 
 char *advSearchName(struct column *col, char *varName);
 /* Return variable name for advanced search. */
@@ -341,9 +357,11 @@ void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList,
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
 
+#ifdef OLD
 struct genePos *getSearchNeighbors(struct column *colList, 
 	struct sqlConnection *conn, struct hash *goodHash, int maxCount);
 /* Get neighbors by search. */
+#endif /* OLD */
 
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 	int height);

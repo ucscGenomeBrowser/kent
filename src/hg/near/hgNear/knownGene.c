@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.14 2003/09/03 20:10:31 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.15 2003/09/06 18:39:20 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -216,6 +216,7 @@ else
     	"select name,chrom,txStart,txEnd from knownGene");
 }
 
+#ifdef OLD
 struct hash *knownCannonicalHash(struct sqlConnection *conn)
 /* Get all cannonical gene names in hash. */
 {
@@ -230,6 +231,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 return hash;
 }
+#endif /* OLD */
 
 
 void setupColumnKnownPos(struct column *col, char *parameters)

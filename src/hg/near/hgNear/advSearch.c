@@ -10,21 +10,24 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.18 2003/08/30 05:57:46 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.19 2003/09/06 18:39:20 kent Exp $";
 
-static struct genePos *advancedSearchResults(struct column *colList, 
+struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
-/* Get list of genes that pass all advanced search filters. 
- * If goodHash is non-null then the genes must also be in goodHash. */
+/* Get list of genes that pass all advanced search filters.  
+ * If no filters are on this returns all genes. */
 {
 struct genePos *list = knownPosAll(conn);
 struct column *col;
 
+if (gotAdvSearch())
 /* Then go through and filter it down by column. */
-for (col = colList; col != NULL; col = col->next)
     {
-    if (col->advancedSearch)
-        list = col->advancedSearch(col, conn, list);
+    for (col = colList; col != NULL; col = col->next)
+	{
+	if (col->advancedSearch)
+	    list = col->advancedSearch(col, conn, list);
+	}
     }
 return list;
 }
@@ -249,10 +252,10 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-hPrintf("Advanced search form: ");
+hPrintf("Filter form: ");
 cgiMakeButton(advSearchClearVarName, "Clear All");
 hPrintf(" ");
-cgiMakeButton(advSearchListVarName, "List Matching Names");
+cgiMakeButton(advSearchListVarName, "List Names");
 hPrintf(" ");
 cgiMakeButton(advSearchBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
@@ -266,13 +269,13 @@ boolean passPresent[2];
 int onOff = 0;
 boolean anyForSecondPass = FALSE;
 
-makeTitle("Gene Family Advanced Search", "hgNearAdvSearch.html");
+makeTitle("Gene Family Filter", "hgNearAdvSearch.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
 /* Put up little table with clear all/submit */
 bigButtons();
-hPrintf("Hint: you can combine searches by copying the results of 'List Matching Names' "
+hPrintf("Hint: you can combine filters by copying the results of 'List Matching Names' "
         "and then doing a 'Paste List' in the Name controls.");
 
 /* See if have any to do in either first (displayed columns)
@@ -291,7 +294,7 @@ for (onOff = 1; onOff >= 0; --onOff)
     {
     if (passPresent[onOff])
 	{
-	hPrintf("<H2>Search Controls for %s Tracks:</H2>", 
+	hPrintf("<H2>Filter Controls for %s Tracks:</H2>", 
 		(onOff ? "Displayed" : "Hidden"));
 	hPrintf("<TABLE BORDER=2 CELLSPACING=1 CELLPADDING=1>\n");
 	for (col = colList; col != NULL; col = col->next)
@@ -331,8 +334,8 @@ void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList)
 {
 if (gotAdvSearch())
     {
-    groupOn = "advanced search";
-    cartSetString(cart, groupVarName, groupOn);
+    // groupOn = "advanced search";
+    // cartSetString(cart, groupVarName, groupOn);
     }
 doSearch(conn, colList);
 }
@@ -352,8 +355,7 @@ if (col == NULL)
 hPrintf("<TT><PRE>");
 if (gotAdvSearch())
     {
-    struct hash *goodHash = cannonicalHash(conn);
-    list = getSearchNeighbors(colList, conn, goodHash, BIGNUM);
+    list = advancedSearchResults(colList, conn);
     }
 else
     {
@@ -400,6 +402,7 @@ slReverse(&outList);
 return outList;
 }
 
+#ifdef OLD
 struct genePos *getSearchNeighbors(struct column *colList, 
 	struct sqlConnection *conn, struct hash *goodHash, int maxCount)
 /* Get neighbors by search. */
@@ -410,4 +413,5 @@ list = advancedSearchResults(colList, conn);
 list = firstBitsOfList(list, maxCount, &rejectList);
 return list;
 }
+#endif /* OLD */
 
