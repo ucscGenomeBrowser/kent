@@ -200,24 +200,42 @@ boolean hFindFieldsAndBin(char *table,
 /* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
 
-boolean hFindMoreFields(char *table, 
+boolean hFindBed6Fields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32]);
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand.  Name and strand may be "". */
 
-boolean hFindMoreFieldsDb(char *db, char *table, 
+boolean hFindBed6FieldsDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32]);
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand.  Name and strand may be "". */
 
-boolean hFindMoreFieldsAndBin(char *table, 
+boolean hFindBed6FieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32],
 	boolean *retBinned);
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand, and whether it's binned.  Name and strand may be "". */
+
+boolean hFindGenePredFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+        char retCdsStart[32], char retCdsEnd[32],
+	char retCount[32], char retStarts[32], char retEndsSizes[32]);
+/* Given a table return the fields corresponding to all the genePred 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
+
+boolean hFindGenePredFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+        char retCdsStart[32], char retCdsEnd[32],
+	char retCount[32], char retStarts[32], char retEndsSizes[32]);
+/* Given a table return the fields corresponding to all the genePred 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);

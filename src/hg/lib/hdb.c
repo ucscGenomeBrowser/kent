@@ -705,12 +705,15 @@ return binned;
 }
 
 
-boolean hFindMoreFieldsAndBinDb(char *db, char *table, 
+boolean hFindGenePredFieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32],
-	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand, and whether it's binned.  Name and strand may be "". */
+        char retCdsStart[32], char retCdsEnd[32],
+	char retCount[32], char retStarts[32], char retEndsSizes[32],
+        boolean *retBinned)
+/* Given a table return the fields corresponding to all the genePred 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
 {
 char query[256];
 struct sqlConnection *conn;
@@ -745,24 +748,45 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     {
     fitField(hash, "name", retName);
     fitField(hash, "strand", retStrand);
+    fitField(hash, "thickStart", retCdsStart);
+    fitField(hash, "thickEnd", retCdsEnd);
+    fitField(hash, "blockCount", retCount);
+    fitField(hash, "chromStarts", retStarts) ||
+	fitField(hash, "blockStarts", retStarts);
+    fitField(hash, "blockSizes", retEndsSizes);
     }
 /* Look for psl-style names. */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "qName", retName);
     fitField(hash, "strand", retStrand);
+    retCdsStart[0] = 0;
+    retCdsEnd[0] = 0;
+    fitField(hash, "blockCount", retCount);
+    fitField(hash, "tStarts", retStarts);
+    fitField(hash, "blockSizes", retEndsSizes);
     }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "name", retName);
     fitField(hash, "strand", retStrand);
+    fitField(hash, "cdsStart", retCdsStart);
+    fitField(hash, "cdsEnd", retCdsEnd);
+    fitField(hash, "exonCount", retCount);
+    fitField(hash, "exonStarts", retStarts);
+    fitField(hash, "exonEnds", retEndsSizes);
     }
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "repName", retName);
     fitField(hash, "strand", retStrand);
+    retCdsStart[0] = 0;
+    retCdsEnd[0] = 0;
+    retCount[0] = 0;
+    retStarts[0] = 0;
+    retEndsSizes[0] = 0;
     }
 else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
     {
@@ -771,6 +795,11 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
     strcpy(retEnd, "end");
     fitField(hash, "frag", retName);
     fitField(hash, "strand", retStrand);
+    retCdsStart[0] = 0;
+    retCdsEnd[0] = 0;
+    retCount[0] = 0;
+    retStarts[0] = 0;
+    retEndsSizes[0] = 0;
     }
 else
     gotIt = FALSE;
@@ -783,37 +812,93 @@ else
 return gotIt;
 }
 
-boolean hFindMoreFieldsAndBin(char *table, 
+boolean hFindGenePredFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+        char retCdsStart[32], char retCdsEnd[32],
+	char retCount[32], char retStarts[32], char retEndsSizes[32])
+/* Given a table return the fields corresponding to all the genePred 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
+{
+boolean isBinned;
+return hFindGenePredFieldsAndBinDb(db, table,
+				   retChrom, retStart, retEnd,
+				   retName, retStrand,
+				   retCdsStart, retCdsEnd,
+				   retCount, retStarts, retEndsSizes,
+				   &isBinned);
+}
+
+boolean hFindGenePredFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+        char retCdsStart[32], char retCdsEnd[32],
+	char retCount[32], char retStarts[32], char retEndsSizes[32])
+/* Given a table return the fields corresponding to all the genePred 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
+{
+boolean isBinned;
+return hFindGenePredFieldsAndBinDb(hGetDb(), table,
+				   retChrom, retStart, retEnd,
+				   retName, retStrand,
+				   retCdsStart, retCdsEnd,
+				   retCount, retStarts, retEndsSizes,
+				   &isBinned);
+}
+
+boolean hFindBed6FieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32],
 	boolean *retBinned)
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand, and whether it's binned.  Name and strand may be "". */
 {
-return hFindMoreFieldsAndBinDb(hGetDb(),
+char retCdsStart[32];
+char retCdsEnd[32];
+char retCount[32];
+char retStarts[32];
+char retEndsSizes[32];
+return hFindGenePredFieldsAndBinDb(db, table,
+				   retChrom, retStart, retEnd,
+				   retName, retStrand,
+				   retCdsStart, retCdsEnd,
+				   retCount, retStarts, retEndsSizes,
+				   retBinned);
+}
+
+boolean hFindBed6FieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
+{
+return hFindBed6FieldsAndBinDb(hGetDb(),
 			       table, retChrom, retStart, retEnd,
 			       retName, retStrand, retBinned);
 }
 
-boolean hFindMoreFields(char *table, 
+boolean hFindBed6Fields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32])
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand.  Name and strand may be "". */
 {
 boolean isBinned;
-return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
 			     retStrand, &isBinned);
 }
 
-boolean hFindMoreFieldsDb(char *db, char *table, 
+boolean hFindBed6FieldsDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32])
 /* Given a table return the fields for selecting chromosome, start, end,
  * name, strand.  Name and strand may be "". */
 {
 boolean isBinned;
-return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+return hFindBed6FieldsAndBinDb(db, table, retChrom, retStart, retEnd,
 			       retName, retStrand, &isBinned);
 }
 
@@ -824,7 +909,7 @@ boolean hFindFieldsAndBin(char *table,
  * and whether it's binned . */
 {
 char retName[32], retStrand[32];
-return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
 			     retStrand, retBinned);
 }
 
@@ -834,7 +919,7 @@ boolean hFindChromStartEndFields(char *table,
 {
 boolean isBinned;
 char retName[32], retStrand[32];
-return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
 			     retStrand, &isBinned);
 }
 
@@ -845,7 +930,7 @@ boolean hFindChromStartEndFieldsDb(char *db, char *table,
 {
 boolean isBinned;
 char retName[32], retStrand[32];
-return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+return hFindBed6FieldsAndBinDb(db, table, retChrom, retStart, retEnd,
 			       retName, retStrand, &isBinned);
 }
 
