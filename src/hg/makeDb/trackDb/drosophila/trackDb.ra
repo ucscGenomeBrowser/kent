@@ -17,7 +17,7 @@ type genePred genscanPep
 
 track mzDy1Dp2Ag1_phast
 shortLabel Conservation
-longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
+longLabel D.mel./D.yakuba/D.pseudo./A.gambiae Multiz Alignments & phastCons Scores
 group compGeno
 priority 100
 visibility pack
@@ -52,7 +52,7 @@ type chain dm1
 otherDb dm1
 
 track chainDp2
-shortLabel D. pseud. Chain
+shortLabel D. pseudo. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 138
@@ -64,7 +64,7 @@ type chain dp2
 otherDb dp2
 
 track netDp2
-shortLabel D. pseud. Net
+shortLabel D. pseudo. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 138.1
@@ -74,7 +74,7 @@ type netAlign dp2 chainDp2
 otherDb dp2
 
 track chainDp3
-shortLabel (dp3) D. pseud. Chain
+shortLabel (dp3) D. pseudo. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 138
@@ -86,7 +86,7 @@ type chain dp3
 otherDb dp3
 
 track netDp3
-shortLabel (dp3) D. pseud. Net
+shortLabel (dp3) D. pseudo. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 138.1
