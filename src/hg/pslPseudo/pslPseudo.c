@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.26 2004/08/16 01:56:43 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.27 2004/08/20 22:20:45 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -53,7 +53,6 @@ float intronRatio = 1.5;
 boolean ignoreSize = FALSE;
 boolean noIntrons = FALSE;
 boolean noHead = FALSE;
-boolean quiet = FALSE;
 boolean skipExciseRepeats = FALSE;
 double  wt[11];     /* weights on score function*/
 int minNearTopSize = 10;
@@ -1039,6 +1038,7 @@ outPsl->tEnd = psl->tEnd;
 
 int interpolateStart(struct psl *gene, struct psl *pseudo)
 /* estimate how much of the 5' end of the pseudogene was truncated */
+    /* not used */
 {
 int qs = pseudo->qStarts[0];
 int qe = pseudo->qStarts[0]+pseudo->blockSizes[0];
@@ -1630,10 +1630,9 @@ if (synHash != NULL)
     }
 if (pg->trfRatio > .5)
     {
-    if (!quiet)
-        verbose(1,"NO. %s trf overlap %f > .5 %s %d \n",
-                psl->qName, (float)trf/(float)(psl->match+psl->misMatch) ,
-                psl->tName, psl->tStart);
+    verbose(1,"NO. %s trf overlap %f > .5 %s %d \n",
+            psl->qName, (float)trf/(float)(psl->match+psl->misMatch) ,
+            psl->tName, psl->tStart);
     keepChecking = FALSE;
     }
 /* blat sometimes overlaps parts of the same mrna , filter these */
@@ -1667,8 +1666,7 @@ if (keepChecking && bkHash != NULL)
 pg->tReps = round((float)(rep*100)/(float)(psl->match+(psl->misMatch)));
 if ((float)rep/(float)(psl->match+(psl->misMatch)) > maxRep )
     {
-    if (!quiet)
-        verbose(1,"NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
+    verbose(1,"NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
     dyStringAppend(reason,"maxRep ");
     pg->label = NOTPSEUDO;
     keepChecking = FALSE;
@@ -1689,10 +1687,9 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
                 && maxOverlap > 50 ) 
             /* if overlap > 50 bases  and 50% overlap with pseudogene, then skip */
             {
-            if (!quiet)
-                verbose(1,"NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
-                        psl->tName, psl->tStart, psl->tEnd, psl->qName,mrnaOverlap, 
-                        maxOverlap, (float)maxOverlap/(float)psl->qSize);
+            verbose(1,"NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
+                    psl->tName, psl->tStart, psl->tEnd, psl->qName,mrnaOverlap, 
+                    maxOverlap, (float)maxOverlap/(float)psl->qSize);
             dyStringAppend(reason,"expressed ");
             pg->overName = cloneString(mPsl->qName); 
             pg->overStart = mPsl->tStart;
@@ -1706,9 +1703,8 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
 
         if (pg->overlapDiag>= 40 && bestPsl == NULL)
            {
-           if (!quiet)
-                verbose(1,"NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
-                        pg->overlapDiag, psl->tName, psl->tStart, bestChrom);
+            verbose(1,"NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
+                    pg->overlapDiag, psl->tName, psl->tStart, bestChrom);
            dyStringAppend(reason,"diagonal ");
            keepChecking = FALSE;
            }
@@ -1930,14 +1926,12 @@ int wordCount;
 struct psl *pslList = NULL, *psl;
 char lastName[256] = "nofile";
 int aliCount = 0;
-quiet = sameString(bestAliName, "stdout") || sameString(psuedoFileName, "stdout");
 bestFile = mustOpen(bestAliName, "w");
 pseudoFile = mustOpen(psuedoFileName, "w");
 linkFile = mustOpen(linkFileName, "w");
 axtFile = mustOpen(axtFileName, "w");
 
-if (!quiet)
-    verbose(1,"Processing %s to %s and %s\n", inName, bestAliName, psuedoFileName);
+verbose(1,"Processing %s to %s and %s\n", inName, bestAliName, psuedoFileName);
  if (!noHead)
      pslWriteHead(bestFile);
 safef(lastName, sizeof(lastName),"x");
