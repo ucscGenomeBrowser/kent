@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.72 2004/03/09 19:52:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.73 2004/04/13 17:09:46 angie Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -61,6 +61,8 @@ if ((oldDb && !containsStringNoCase(oldDb, db))
     position = defaultPosition;
     removeCustomTrackData();
     }
+if (sameString(position, "genome") || sameString(position, "hgBatch"))
+    position = defaultPosition;
 
 puts(
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
