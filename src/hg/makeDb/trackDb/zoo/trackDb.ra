@@ -228,7 +228,7 @@ altColor 0,128,0
 type sample 500 1000
 
 track zooNew
-shortLabel zooSeqNew 
+shortLabel ZooSeqNew 
 longLabel New Blastz Alignments
 group compGeno
 priority 25.5
@@ -502,7 +502,7 @@ color 0,160,0
 type bed 4 .
 
 track dhs
-shortLabel DHS
+shortLabel DNase HyperSens
 longLabel DNAase I hypersensitive sites
 group regulation
 priority 51
