@@ -11,9 +11,10 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "sample.h"
+#include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.76 2003/12/05 19:08:11 booch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.77 2004/01/06 08:49:25 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -184,6 +185,19 @@ cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
+
+void cdsColorOptions(char *tableName, int value)
+/*Codon coloring options*/
+{
+    char *drawOption;
+    char cdsColorVar[128];
+    printf("<p>Color track by codons:</b>");
+    snprintf(cdsColorVar, 128, "%s.cds.draw", tableName );
+    drawOption = cartUsualString(cart, cdsColorVar, CDS_DRAW_DEFAULT);
+    cdsColorDropDown(cdsColorVar, drawOption, value);
+}
+
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
@@ -193,6 +207,9 @@ radioButton("refGene.label", refGeneLabel, "gene");
 radioButton("refGene.label", refGeneLabel, "accession");
 radioButton("refGene.label", refGeneLabel, "both");
 radioButton("refGene.label", refGeneLabel, "none");
+
+cdsColorOptions(tdb->tableName, 2);
+
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
@@ -228,6 +245,10 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
+
+/*cdsColorOptions(tdb->tableName, -1);*/
+
+
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -656,6 +677,10 @@ else
     if (tdb->type != NULL)
         typeLine = cloneString(tdb->type);
         wordCount = chopLine(typeLine, words);
+
+        if (sameWord(words[0], "genePred"))
+                cdsColorOptions(tdb->tableName,2);
+
         if (wordCount == 3)
             {
             if (sameWord(words[0], "psl") && sameWord(words[1], "xeno"))
