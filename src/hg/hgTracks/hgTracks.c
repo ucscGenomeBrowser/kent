@@ -2682,6 +2682,45 @@ tg->itemName = exoMouseName;
 tg->itemColor = exoMouseColor;
 }
 
+char *xenoMrnaName(struct trackGroup *tg, void *item)
+/* Return what to display on left column of open track:
+ * In this case display 3 letters of organism name followed
+ * by mRNA accession. */
+{
+struct linkedFeatures *lf = item;
+char *name = lf->name;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+char organism[256], *org;
+sprintf(query, "select organism.name from mrna,organism where mrna.acc = '%s' and mrna.organism = organism.id", name);
+org = sqlQuickQuery(conn, query, organism, sizeof(organism));
+hFreeConn(&conn);
+if (org == NULL)
+    return name;
+else
+    {
+    static char compName[64];
+    char *s;
+    s = skipToSpaces(org);
+    if (s != NULL)
+      *s = 0;
+    strncpy(compName, org, 7);
+    compName[7] = 0;
+    strcat(compName, " ");
+    strcat(compName, name);
+    return compName;
+    }
+return name;
+}
+
+
+void xenoMrnaMethods(struct trackGroup *tg)
+/* Fill in custom parts of xeno mrna alignments. */
+{
+tg->itemName = xenoMrnaName;
+}
+
+
 void loadRnaGene(struct trackGroup *tg)
 /* Load up rnaGene from database table to trackGroup items. */
 {
@@ -4971,6 +5010,8 @@ registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
+registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
+registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
