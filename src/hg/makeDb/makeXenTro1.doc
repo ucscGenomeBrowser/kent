@@ -1588,6 +1588,41 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
   ln -s /cluster/data/xenTro1/bed/multiz/multiz5way.maf /gbdb/xenTro1/multiz5way
   hgLoadMaf xenTro1 multiz5way
 
+# Create pairwise maf files (no longer split across scaffolds)
+   ssh kksilo
+   cd /cluster/data/xenTro1/bed/multiz
+   mkdir -p pairwise
+   catDir galGal2 > pairwise/galGal2.maf
+   catDir hg17 > pairwise/hg17.maf
+   catDir mm5 > pairwise/mm5.maf
+   catDir danRer1 > pairwise/danRer1.maf
+
+# Load pairwise mafs into database
+   ssh  hgwdev
+   set h = /cluster/data/xenTro1/bed/multiz/pairwise
+   cd $h
+   foreach i (*.maf)
+      set o = $i:r
+      set t = ${o}_netBlastz
+      mkdir -p /gbdb/xenTro1/multiz5way/$t
+      ln -s $h/$i /gbdb/xenTro1/multiz5way/$t
+      hgLoadMaf xenTro1 $t -pathPrefix=/gbdb/xenTro1/multiz5way/$t
+   end
+
+   mkdir -p /gbdb/xenTro1/multiz5way/galGal2_netBlastz
+   ln -s galGal2.maf /gbdb/xenTro1/multiz5way/galGal2_netBlastz
+   hgLoadMaf xenTro1 galGal2_netBlastz -pathPrefix=/gbdb/xenTro1/multiz5way/galGal2_netBlastz
+   mkdir -p /gbdb/xenTro1/multiz5way/hg17_netBlastz
+   ln -s hg17.maf /gbdb/xenTro1/multiz5way/hg17_netBlastz
+   hgLoadMaf xenTro1 hg17_netBlastz -pathPrefix=/gbdb/xenTro1/multiz5way/hg17_netBlastz
+   mkdir -p /gbdb/xenTro1/multiz5way/mm5_netBlastz
+   ln -s mm5.maf /gbdb/xenTro1/multiz5way/mm5_netBlastz
+   hgLoadMaf xenTro1 mm5_netBlastz -pathPrefix=/gbdb/xenTro1/multiz5way/mm5_netBlastz
+   mkdir -p /gbdb/xenTro1/multiz5way/danRer1_netBlastz
+   ln -s danRer1.maf /gbdb/xenTro1/multiz5way/danRer1_netBlastz
+   hgLoadMaf xenTro1 danRer1_netBlastz -pathPrefix=/gbdb/xenTro1/multiz5way/danRer1_netBlastz
+
+
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS (DONE 10/25/04 JK)
 
 # Estimate phastCons parameters
