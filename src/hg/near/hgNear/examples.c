@@ -14,6 +14,7 @@ displayData(conn, colList, NULL);
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=9 BGCOLOR=\"#"HG_COL_INSIDE"\"><TR><TD>\n");
 hPrintf("%s",
+ "<H3>About the Gene Sorter</H3>"
  "<P>This program displays a sorted table of genes that are related to "
  "one another.  The relationship can be one of several types, including "
  "protein-level homology, similarity of gene expression profiles, or "
