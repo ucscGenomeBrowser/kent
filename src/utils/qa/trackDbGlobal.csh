@@ -54,20 +54,23 @@ foreach db ( $dbs testDummmy)
   set outfile="$dirPath/$today/$db.$machine.trackDbAll"
   compareTrackDbAll.csh $db hgwbeta $machine >& $outfile
   if ( $status ) then
-    echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
-  endif
-
-  set diffs=`cat $outfile | egrep "Diff|The diff" | wc -l` 
-  echo "$db $diffs" | gawk '{printf "%7s %2d", $1, $2}'
-  echo
-  if ( $diffs == 0 ) then
-    echo "$db number of diffs:" >> $summaryFile
-    # rm -f $outfile
+    echo "$db err" | gawk '{printf "%7s %3s", $1, $2}'
+    echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> error      \n\n     ' \
+        >> $summaryFile
+    # echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
   else
-    echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> number of diffs:' \
-      >> $summaryFile
+    set diffs=`cat $outfile | egrep "Diff|The diff" | wc -l` 
+    echo "$db $diffs" | gawk '{printf "%7s %2d", $1, $2}'
+    echo
+    if ( $diffs == 0 ) then
+      echo "$db number of diffs:" >> $summaryFile
+      # rm -f $outfile
+    else
+      echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> number of diffs:' \
+        >> $summaryFile
+    endif
+    echo "    $diffs\n<P>" >> $summaryFile
   endif
-  echo "    $diffs\n<P>" >> $summaryFile
   sleep 45
 end
 
