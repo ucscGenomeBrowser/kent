@@ -400,6 +400,86 @@ printf("%d jobs in batch\n", db->jobCount);
 return db;
 }
 
+char *hubSingleLineQuery(char *query)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+{
+int hubFd = netConnect("localhost", paraPort);
+char *result;
+
+if (hubFd < 0)
+    return NULL;
+if (!sendWithSig(hubFd, query))
+    {
+    close(hubFd);
+    return NULL;
+    }
+result = netRecieveLongString(hubFd);
+close(hubFd);
+return result;
+}
+
+struct slRef *hubMultilineQuery(char *query)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+struct slRef *list = NULL, *el;
+char *line;
+int hubFd = netConnect("localhost", paraPort);
+if (hubFd > 0)
+    {
+    if (sendWithSig(hubFd, query))
+        {
+	for (;;)
+	    {
+	    line = netRecieveLongString(hubFd);
+	    if (line == NULL || line[0] == 0)
+		break;
+	    refAdd(&list, line);
+	    }
+	}
+    close(hubFd);
+    }
+slReverse(&list);
+return list;
+}
+
+boolean batchRunning(char *batchName)
+/* Return TRUE if a batch is running. */
+{
+struct slRef *lineList = hubMultilineQuery("listBatches"), *lineEl;
+boolean ret = FALSE;
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+    {
+    int wordCount;
+    char *line = lineEl->val;
+    char *row[6];
+    if (line[0] != '#')
+	{
+	char *b;
+	wordCount = chopLine(line, row);
+	b = row[5];
+	if (wordCount < 6 || b[0] != '/')
+	    errAbort("paraHub and para out of sync on listBatches");
+	if (sameString(b, batchName))
+	    ret = TRUE;
+	}
+    freez(&lineEl->val);
+    }
+slFreeList(&lineList);
+return ret;
+}
+
+boolean thisBatchRunning()
+/* Return true if this batch is running */
+{
+char batchDir[512];
+
+if (getcwd(batchDir, sizeof(batchDir)) == NULL)
+    errAbort("Couldn't get current directory");
+strcat(batchDir, "/");
+return batchRunning(batchDir);
+}
 
 void paraCreate(char *batch, char *jobList)
 /* Create a batch database from a job list. */
@@ -411,6 +491,8 @@ struct jobDb *db;
 struct job *job;
 char backup[512];
 
+if (thisBatchRunning())
+    errAbort("This batch is currently running.  Please para stop first.");
 makeDir("err");
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
@@ -432,24 +514,6 @@ atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
-char *hubSingleLineQuery(char *query)
-/* Send message to hub and get single line response.
- * This should be freeMem'd when done. */
-{
-int hubFd = netConnect("localhost", paraPort);
-char *result;
-
-if (hubFd < 0)
-    return NULL;
-if (!sendWithSig(hubFd, query))
-    {
-    close(hubFd);
-    return NULL;
-    }
-result = netRecieveLongString(hubFd);
-close(hubFd);
-return result;
-}
 
 boolean submitJob(struct job *job, char *curDir)
 /* Attempt to submit job. */
@@ -479,31 +543,6 @@ void statusOutputChanged()
 {
 errAbort("\n%s output format changed, please update markQueuedJobs in para.c", 
 	statusCommand);
-}
-
-struct slRef *hubMultilineQuery(char *query)
-/* Send a command with a multiline response to hub,
- * and return response as a list of strings. */
-{
-struct slRef *list = NULL, *el;
-char *line;
-int hubFd = netConnect("localhost", paraPort);
-if (hubFd > 0)
-    {
-    if (sendWithSig(hubFd, query))
-        {
-	for (;;)
-	    {
-	    line = netRecieveLongString(hubFd);
-	    if (line == NULL || line[0] == 0)
-		break;
-	    refAdd(&list, line);
-	    }
-	}
-    close(hubFd);
-    }
-slReverse(&list);
-return list;
 }
 
 int markQueuedJobs(struct jobDb *db)
@@ -725,7 +764,7 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 if (pushCount > 0)
     printf("\n");
 atomicWriteBatch(db, batch);
-uglyf("(updated job database on disk)\n");
+printf("updated job database on disk\n");
 if (pushCount > 0)
     printf("Pushed Jobs: %d\n", pushCount);
 if (retryCount > 0)
