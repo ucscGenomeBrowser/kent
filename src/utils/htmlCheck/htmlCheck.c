@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.12 2004/02/29 17:31:11 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.13 2004/02/29 17:47:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -419,8 +419,8 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
     {
     if (sameWord(tag->name, "INPUT"))
         {
-	char *varName = tagAttributeNeeded(tag, "NAME");
 	char *type = tagAttributeNeeded(tag, "TYPE");
+	char *varName = tagAttributeNeeded(tag, "NAME");
 	char *value = tagAttributeVal(tag, "VALUE", NULL);
 	var = findOrMakeVar(varName, hash, tag, &varList); 
 	if (var->type != NULL && !sameWord(var->type, type))
@@ -925,44 +925,50 @@ for (c=0; c<256; ++c)
     if (isalnum(c))
         okChars[c] = 1;
 /* This list is a little more inclusive than W3's. */
-okChars[':'] = 1;
+okChars['='] = 1;
 okChars['-'] = 1;
 okChars['.'] = 1;
-okChars['?'] = 1;
 okChars[';'] = 1;
 okChars['_'] = 1;
 okChars['&'] = 1;
-okChars['/'] = 1;
 okChars['+'] = 1;
 return okChars;
 }
 
-void validateUrl(char *url)
+void validateCgiUrl(char *url)
 /* Make sure URL follows basic CGI encoding rules. */
 {
-static char *okChars = NULL;
-UBYTE c, *s = (UBYTE*)url;
-if (okChars == NULL)
-    okChars = urlOkChars();
-while ((c = *s++) != 0)
+if (startsWith("http:", url) || startsWith("https:", url))
     {
-    if (!okChars[c])
-        {
-        errAbort("Character %c not allowed in URL %s", c, url);
+    static char *okChars = NULL;
+    UBYTE c, *s;
+    if (okChars == NULL)
+	okChars = urlOkChars();
+    url = strchr(url, '?');
+    if (url != NULL)
+	{
+	s = (UBYTE*)url+1;
+	while ((c = *s++) != 0)
+	    {
+	    if (!okChars[c])
+		{
+		errAbort("Character %c not allowed in URL %s", c, url);
+		}
+	    }
 	}
     }
 }
 
-void validateUrls(struct htmlPage *page)
+void validateCgiUrls(struct htmlPage *page)
 /* Make sure URLs in page follow basic CGI encoding rules. */
 {
 struct htmlForm *form;
 struct slName *linkList = htmlPageLinks(page), *link;
 
 for (form = page->forms; form != NULL; form = form->next)
-    validateUrl(form->action);
+    validateCgiUrl(form->action);
 for (link = linkList; link != NULL; link = link->next)
-    validateUrl(link->name);
+    validateCgiUrl(link->name);
 slFreeList(&linkList);
 }
 
@@ -1003,7 +1009,7 @@ if (tag == NULL || !sameWord(tag->name, "BODY"))
 tag = validateBody(tag->next);
 if (tag == NULL || !sameWord(tag->name, "/HTML"))
     errAbort("Missing </HTML>");
-validateUrls(page);
+validateCgiUrls(page);
 verbose(1, "ok\n");
 }
 
