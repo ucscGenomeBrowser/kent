@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.27 2004/11/10 16:14:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.28 2004/11/10 16:18:56 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -484,7 +484,17 @@ if (outPage != NULL)
 htmlPageFree(&outPage);
 }
 	
-	
+boolean isObsolete(char *table)
+/* Some old table types we can't handle.  Just warn that
+ * they are there and skip. */
+{
+boolean obsolete = sameString(table, "wabaCbr");
+if (obsolete)
+    qaStatusSoftError(tablesTestList->status, 
+	"Skipping obsolete table %s", table);
+return obsolete;
+}
+
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table. */
@@ -496,14 +506,14 @@ if (uniqHash == NULL)
 safef(fullName, sizeof(fullName), "%s.%s", db, table);
 if (!hashLookup(uniqHash, fullName))
     {
-    struct htmlPage *tablePage 
+    struct htmlPage *tablePage;
     struct htmlForm *mainForm;
 
     hashAdd(uniqHash, fullName, NULL);
     verbose(1, "Testing %s %s %s %s %s\n", naForNull(org), db, group, track, table);
     tablePage = quickSubmit(trackPage, org, db, group, 
 	    track, table, "selectTable", hgtaTable, table);
-    if (tablePage != NULL)
+    if (!isObsolete(table) && tablePage != NULL)
 	{
 	if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
 	    {
