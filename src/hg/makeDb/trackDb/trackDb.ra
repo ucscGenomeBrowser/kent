@@ -1565,6 +1565,15 @@ dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
 padding 5000
 
+searchName snpShort
+searchTable snp
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (rs[0-9]*)
+searchPriority 12
+padding 5000
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
