@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.71 2003/09/25 14:01:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.72 2003/09/27 15:19:19 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -300,7 +300,7 @@ void wigUi(struct trackDb *tdb)
 char *typeLine = NULL;	/*	to clone the tdb->type string	*/
 char *words[8];		/*	chopping the typeLine	*/
 int wordCount = 0;	/*	number of words found in typeLine */
-char options[7][256];	/*	our option strings here	*/
+char options[8][256];	/*	our option strings here	*/
 char *heightPer;	/*	string from cart	*/
 char *minY_str;	/*	string from cart	*/
 char *maxY_str;	/*	string from cart	*/
@@ -310,6 +310,7 @@ double minY;	/*	from the typeLine	*/
 double maxY;	/*	from the typeLine	*/
 int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
 char *interpolate;	/*	points only, or interpolate	*/
+char *horizontalGrid;	/*	Grid lines, off by default */
 
 minY = DEFAULT_MIN_Yv;
 maxY = DEFAULT_MAX_Yv;
@@ -328,6 +329,7 @@ snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
 snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
 snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
+snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
 minY_str = cartOptionalString(cart, &options[4][0]);
 maxY_str = cartOptionalString(cart, &options[5][0]);
 
@@ -344,6 +346,12 @@ interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown(&options[1][0], interpolate );
+printf(" ");
+
+horizontalGrid = cartUsualString(cart, &options[7][0], "OFF");
+
+printf("<p><b>Horizontal Grid Lines: </b> ");
+wiggleGridDropDown(&options[7][0], horizontalGrid );
 printf(" ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
