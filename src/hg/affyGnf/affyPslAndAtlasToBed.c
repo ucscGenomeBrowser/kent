@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.8 2003/10/06 23:12:13 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.9 2004/02/07 02:13:45 hartera Exp $";
 
 
 #define DEBUG 0
@@ -570,7 +570,7 @@ void affyPslAndAtlasToBedNew(char *pslFile, char *atlasFile, char *bedOut,
 /** Main function that does all the work for new-style*/
 {
 struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
-char *line;
+char *line, *name;
 int i, wordCount, expCount;
 char **row;
 double *data, median;
@@ -603,6 +603,7 @@ AllocArray(row, expCount);
 while (lineFileNextReal(lf, &line))
     {
     affyId = nextWord(&line);
+
     wordCount = chopByWhite(line, row, expCount);
     if (wordCount != expCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
@@ -616,7 +617,7 @@ while (lineFileNextReal(lf, &line))
     for (i=0; i<expCount; ++i)
 	{
         data[i] = atof(row[i]);
-	if (data[i] < minExpVal)
+        if (data[i] < minExpVal)
 	    data[i] = minExpVal;
 	}
     median = findPositiveMedian(data, expCount, minExpVal);
@@ -633,7 +634,7 @@ while (lineFileNextReal(lf, &line))
 	    shortDataOut(f, affyId, expCount, data);
 	else
 	    hashAdd(hash, affyId, data);
-	}
+        }
     data = NULL;
     ++dataCount;
     }
@@ -647,10 +648,12 @@ if (!shortOut)
     while ((psl = pslNext(lf)) != NULL)
 	{
 	++pslCount;
-	data = hashFindVal(hash, psl->qName);
-	if (data != NULL)
+        /* get probe id from sequence name */
+        name=parseNameFromHgc(psl->qName);
+	data = hashFindVal(hash, name);
+        if (data != NULL)
 	    {
-	    struct bed *bed = bedFromPsl(psl);
+            struct bed *bed = bedFromPsl(psl);
 	    bed->expCount = expCount;
 	    AllocArray(bed->expIds, expCount);
 	    AllocArray(bed->expScores, expCount);
