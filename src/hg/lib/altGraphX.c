@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.9 2003/05/27 20:30:52 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.10 2003/06/18 17:04:45 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -1205,4 +1205,348 @@ int notSeen = altGraphTimesNotSeenEdge(ag, eIx);
 float conf = 0;
 conf = (float)(seen + notSeen + prior)/(float)(abs(seen - notSeen) + prior);
 return conf;
+}
+
+enum ggEdgeType getSpliceEdgeType(struct altGraphX *ag, int edge)
+/* Return edge type. */
+{
+if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardStart || ag->vTypes[ag->edgeStarts[edge]] == ggSoftStart)
+    && (ag->vTypes[ag->edgeEnds[edge]] == ggHardEnd || ag->vTypes[ag->edgeEnds[edge]] == ggSoftEnd))
+    return ggExon;
+else if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardEnd || ag->vTypes[ag->edgeStarts[edge]] == ggSoftEnd)
+	 && (ag->vTypes[ag->edgeEnds[edge]] == ggHardStart || ag->vTypes[ag->edgeEnds[edge]] == ggSoftStart))
+    return ggSJ;
+else
+    return ggIntron;
+}
+
+boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
+/* is the mrnaIx already in seen? */
+{
+int i=0;
+boolean result = FALSE;
+for(i=0; i<(*seenCount); i++)
+    {
+    if(ag->mrnaTissues[seen[i]] == ag->mrnaTissues[mrnaIx] ||
+       ag->mrnaLibs[seen[i]] == ag->mrnaLibs[mrnaIx])
+	{
+	result = TRUE;
+	break;
+	}
+    }
+if(!result)
+    {
+    seen[(*seenCount)] = mrnaIx;
+    (*seenCount)++;
+    }
+return result;
+}
+
+int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx)
+/* count how many unique libraries or tissues contain a given edge */
+{
+struct evidence *ev = slElementFromIx(ag->evidence, eIx);
+int *seen = NULL;
+int seenCount = 0,i;
+int conf = 0;
+AllocArray(seen, ev->evCount);
+for(i=0; i<ev->evCount; i++)
+    seen[i] = -1;
+for(i=0; i<ev->evCount; i++)
+    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
+	conf++;
+freez(&seen);
+return conf;
+}
+
+
+struct spliceEdge *altGraphXToEdges(struct altGraphX *ag)
+/* Return a list of splice edges based on data in altGraphX. */
+{
+int i;
+struct spliceEdge *e = NULL, *eList = NULL;
+int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
+for(i=0; i<ag->edgeCount; i++)
+    {
+    AllocVar(e);
+    e->type = getSpliceEdgeType(ag,i);
+    e->start = vPos[starts[i]];
+    e->end = vPos[ends[i]];
+    e->v1 = starts[i];
+    e->v2 = ends[i];
+//    e->conf = ag->evidence[i].evCount;
+    e->conf = altGraphConfidenceForEdge(ag, i);
+    slAddHead(&eList, e);
+    } 
+return eList;
+}
+
+int spliceEdgeTypeConfCmp(const void *va, const void *vb)
+/* Compare to sort based on type, confidence, and then start. */
+{
+const struct spliceEdge *a = *((struct spliceEdge **)va);
+const struct spliceEdge *b = *((struct spliceEdge **)vb);
+int diff = a->type - b->type;
+if(diff == 0)
+    diff = b->conf - a->conf;
+if(diff == 0)
+    diff = a->start - b->start;
+if(diff == 0)
+    diff = a->end - b->end;
+return diff;
+}
+
+
+void addSpliceNode(struct hash *spliceHash, int count, int position, int row, int maxRows)
+/* Add a 1 in the correct row to indicate that there is a
+   feature there. */
+{
+char key[128];
+int *levels = NULL;
+safef(key, sizeof(key), "%d-%d", count, position);
+if(row >= maxRows)
+    errAbort("addSpliceNode() - Row %d is greater than maxRows %d\n", row, maxRows);
+levels = hashFindVal(spliceHash, key);
+if(levels == NULL)
+    {
+    AllocArray(levels, maxRows);
+    levels[row] = 1;
+    hashAdd(spliceHash, key, levels);
+    }
+else
+    levels[row] = 1;
+}
+
+
+void drawExonAt(struct spliceEdge *se, int heightPer, int regionStart, int regionEnd,
+		struct vGfx *vg, int xOff, int y, 
+		double scale, MgFont *font, Color color, Color *shades)
+/* Draw an exon at. */
+{
+int x1 = round((double)((int)se->start-regionStart)*scale) + xOff;
+int x2 = round((double)((int)se->end-regionStart)*scale) + xOff;
+int w=0, textWidth=0;
+Color exonColor;
+char buff[256];
+int conf = 0;
+if(se->conf > 9) 
+    conf = 9;
+else if(se->conf < 2) 
+    conf = 2;
+else
+    conf = (int)se->conf;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+exonColor = shades[conf];
+vgBox(vg, x1, y, w, heightPer/2, exonColor);
+safef(buff, sizeof(buff), "%d-%d-%d", se->v1, se->v2, (int)se->conf);
+textWidth = mgFontStringWidth(font, buff);
+if(textWidth <= w)
+    vgTextCentered(vg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
+}
+
+struct spliceEdge *createFakeExon(int vertex, int position, int confidence)
+/* Return a spliceEdge of type exon that is a single base pair for
+   this splice site. */
+{
+struct spliceEdge *se = NULL;
+AllocVar(se);
+se->v1 = vertex;
+se->v2 = vertex;
+se->start = position;
+se->end = position+1;
+se->conf = confidence;
+return se;
+}
+
+void altGraphXLayout(struct altGraphX *agList, int regionStart, int regionEnd, 
+		     int regionWidth, double scale, int maxRows,
+		     struct spaceSaver **ssList, struct hash **heightHash, 
+		     int *rowCount)
+/** Layout a list of altGraphX's in a space width wide. Return a list
+    of one spaceSaver per altGraphX record, a hash with the row layout
+    offset of the exons, and the number of rows required to layout. */
+{
+struct altGraphX *ag = NULL;
+struct spaceSaver *ss = NULL;
+struct spliceEdge *egList = NULL, *eg = NULL, *egNext = NULL;
+struct spaceNode *sn = NULL;
+char keyBuff[1024];
+int start, end, height;
+int agCount = 0;
+*heightHash = newHash(8);
+/* For every item */
+for(ag = agList; ag != NULL; ag = ag->next)
+    {
+    bool *vSeen = NULL; /* Have we seen a given vertex yet? */
+    AllocArray(vSeen, ag->vertexCount);
+    ss = spaceSaverNew(0, regionWidth, maxRows);
+    egList = altGraphXToEdges(ag);
+    slSort(&egList, spliceEdgeTypeConfCmp);
+    /* For every edge in graph. */
+    for(eg = egList; eg != NULL; eg = egNext)	
+	{
+	egNext = eg->next;
+	eg->itemNumber = agCount;
+	if(eg->type != ggExon && eg->type != ggCassette)
+	    {
+
+	    if(vSeen[eg->v1] && vSeen[eg->v2])
+		continue;
+	    /* If we don't have an exon for a splice site we have to do a little futzing.
+	       to create a "fake" exon for the splice site so it will be drawn. */
+	    else 
+		{
+		struct spliceEdge *fake = NULL;
+		slAddHead(&egNext, eg);
+		if(!vSeen[eg->v2])
+		    {
+		    fake = createFakeExon(eg->v2, eg->end, eg->conf);
+		    slAddHead(&egNext, fake);
+		    }
+		if(!vSeen[eg->v1])
+		    {
+		    fake = createFakeExon(eg->v1, eg->start-1, eg->conf);
+		    slAddHead(&egNext, fake);
+		    }
+		}
+	    continue;
+	    }
+	vSeen[eg->v1] = 1;
+	vSeen[eg->v2] = 1;
+	start = round((double)(eg->start - regionStart)*scale);
+	end = round((double)(eg->end - regionStart)*scale);
+	if (start <= regionWidth && end >= 0)
+	    {
+	    if (start < 0) start = 0;
+	    if (end > regionWidth) end = regionWidth;
+	    if (spaceSaverAdd(ss, start, end, eg) == NULL)
+		break;
+	    }
+	}
+    spaceSaverFinish(ss);
+    slAddHead(ssList, ss);
+    (*rowCount) += ss->rowCount;
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+	{
+	struct spliceEdge *se = sn->val, *seTmp = NULL;
+	char key[128];
+	se->row = sn->row;
+	safef(key, sizeof(key), "%d", se->itemNumber);
+	seTmp = hashFindVal((*heightHash), key);
+	if(seTmp != NULL)
+	    {
+	    if(seTmp->row < se->row)
+		hashAdd((*heightHash), key, se);
+	    }
+	else
+	    hashAdd((*heightHash), key, se);
+	}
+    freez(&vSeen);
+    agCount++;
+    }
+slReverse(ssList);
+}
+
+void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
+		       int xOff, int yOff, int width,  int heightPer, int lineHeight,
+		       int regionStart, int regionEnd, double scale, int baseWidth, 
+		       struct vGfx *vg, MgFont *font, Color color, Color *shades, char *drawName,
+		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
+				       int x, int y, int width, int height))
+/** Draw a splicing graph for each altGraphX in the agList where the
+    exons don't overlap as they have been laid out in the spaceSaver
+    list. */
+{
+struct hash *spliceHash = newHash(8);
+char key[128];
+struct altGraphX *ag = NULL;
+struct spliceEdge *eg = NULL, *egList = NULL, *egNext = NULL;
+struct spaceSaver *ss = NULL;
+int count =0;
+int i=0,j=0, minRow=0;
+double y1=0, y2=0;
+int y=0;
+for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
+    {
+    struct spaceNode *sn = NULL;
+    int *sjStarts = NULL, *sjEnds = NULL;
+    int mapStart = round((ag->tStart - regionStart)*scale) + xOff;
+    int mapEnd = round((ag->tEnd - regionStart)*scale) + xOff;	
+    int mapHeight = 0;
+
+    /* Draw a clickable thing if we can. */
+    if(mapItem != NULL)
+	{
+	int mapWidth = mapEnd - mapStart;
+	if(mapWidth < 1) 
+	    mapStart = 1;
+	mapHeight = ((ss->rowCount+1) * lineHeight);
+	mapItem(drawName, ag, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight);
+	}
+    /* Draw all of the exons that have been stored in the spacesaver. */
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+	{
+	struct spliceEdge *se = sn->val;
+	int s = se->start;
+	int e = se->end;
+	int x1 = round((s - regionStart)*scale) + xOff;
+	int x2 = round((e - regionStart)*scale) + xOff;	
+	y = yOff + (lineHeight * sn->row) + (lineHeight/2);
+	drawExonAt(se, heightPer, regionStart, regionEnd,
+		   vg, xOff, y, scale, font, color, shades);
+	/* Record the row that this exon was drawn at. */
+	addSpliceNode(spliceHash, count, s, sn->row, ss->rowCount);
+	addSpliceNode(spliceHash, count, e, sn->row, ss->rowCount);
+	}
+    /* For every edge in item's graph. */
+    egList = altGraphXToEdges(ag);
+    slSort(&egList, spliceEdgeTypeConfCmp);
+    for(eg = egList; eg != NULL; eg = egNext)	
+	{
+	egNext = eg->next;
+	/* We are only drawing splice junctions now. */
+	if(eg->type != ggSJ)
+	    {
+	    freez(&eg);
+	    continue;
+	    }
+	/* Look up the rows that this splice junction starts and ends at. */
+	safef(key, sizeof(key), "%d-%d", count, eg->start);
+	sjStarts = hashFindVal(spliceHash, key);
+	safef(key, sizeof(key), "%d-%d", count, eg->end);
+	sjEnds = hashFindVal(spliceHash, key);
+	/* Draw and edge from each starting row to each ending column. */
+	for(i=0; i< ss->rowCount; i++)
+	    {
+	    if(sjStarts != NULL && sjStarts[i] == 1)
+		{
+		for(j=0; j< ss->rowCount; j++)
+		    {
+		    if(sjEnds != NULL && sjEnds[j] == 1)
+			{
+			int s = eg->start;
+			int e = eg->end;
+			int x1 = round((s - regionStart)*scale) + xOff;
+			int x2 = round((e - regionStart)*scale) + xOff;	
+			int midX = 0, midY =0;
+			Color c = MG_BLACK;
+			minRow = min(j, i);
+			midY = yOff + (lineHeight * minRow);
+			midX = (x1+x2)/2;
+			vgLine(vg, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c);
+			vgLine(vg, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c);
+			}
+		    }
+		}
+	    }
+	freez(&eg);
+	}
+    count++;
+    yOff += ss->rowCount *lineHeight;
+    }
+freeHashAndVals(&spliceHash);
 }

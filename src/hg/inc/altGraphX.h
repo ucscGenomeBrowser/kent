@@ -13,6 +13,18 @@
 #include "bed.h"
 #endif
 
+#ifndef GENEGRAPH_H
+#include "geneGraph.h"
+#endif
+
+#ifndef SPACESAVER_H
+#include "spaceSaver.h"
+#endif
+
+#ifndef VGFX_H
+#include "vGfx.h"
+#endif
+
 struct evidence
 /* List of mRNA/ests supporting a given edge */
     {
@@ -122,6 +134,27 @@ void altGraphXOutput(struct altGraphX *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct spliceEdge 
+/* Structure to hold information about one edge in 
+   a splicing graph. */
+{
+    struct spliceEdge *next;    /* Next in list. */
+    enum ggEdgeType type;       /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
+    int start;                  /* Chrom start. */
+    int end;                    /* End. */
+    int v1;                     /* Vertex 1 in graph. */
+    int v2;                     /* Vertex 2 in graph. */
+    int itemNumber;             /* Number of altGraphX record derived from in list. */
+    int row;                    /* Row that exon is stored in. */
+    double conf;                /* Confidence. */
+};
+
+int spliceEdgeTypeConfCmp(const void *va, const void *vb);
+/* Compare to sort based on type, confidence, and then start. */
+
+struct spliceEdge *altGraphXToEdges(struct altGraphX *ag);
+/* Return a list of splice edges based on data in altGraphX. */
+
 void altGraphXoffset(struct altGraphX *ag, int offset);
 /* Add offset to all coordinates of altGraphX. */
 
@@ -156,8 +189,33 @@ float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 struct bed *altGraphGetExonCassette(struct altGraphX *ag, int eIx);
 /* Get a bed which corresponds to the exons involved in a cassette exon. */
 
+int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx);
+/* count how many unique libraries or tissues contain a given edge */
+
 struct bed *altGraphXToBed(struct altGraphX *ag);
 /* Merge all overlapping exons to form bed datatype. Free with bedFree().*/
+
+void altGraphXLayout(struct altGraphX *agList, int regionStart, int regionEnd, 
+		     int regionWidth, double scale, int maxRows,
+		     struct spaceSaver **ssList, struct hash **heightHash, 
+		     int *rowCount);
+/** Layout a list of altGraphX's in a space width wide. Return a list
+    of one spaceSaver per altGraphX record, a hash with the row layout
+    offset of the exons, and the number of rows required to layout. */
+
+void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
+		       int xOff, int yOff, int width,  int heightPer, int lineHeight,
+		       int regionStart, int regionEnd,
+		       double scale, int baseWidth, 
+		       struct vGfx *vg, MgFont *font, Color color, Color *shades, char *drawName,
+		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end,
+				       int x, int y, int width, int height));
+/** Draw a splicing graph for each altGraphX in the agList where the
+    exons don't overlap as they have been laid out in the spaceSaver
+    list. */
+
+enum ggEdgeType getSpliceEdgeType(struct altGraphX *ag, int edge);
+/* Return edge type. */
 
 #endif /* ALTGRAPHX_H */
 
