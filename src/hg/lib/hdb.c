@@ -27,6 +27,7 @@ static char *hdbName = "hg10";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
+
 void hDefaultConnect()
 /* read in the connection options from config file */
 {
@@ -45,7 +46,7 @@ if(hdbTrackDb == NULL)
     hdbTrackDb = cfgOption("db.trackDb");
 if(hdbTrackDb == NULL)
     errAbort("Please set the db.trackDb field in the hg.conf config file.");
-return hdbTrackDb;
+return cloneString(hdbTrackDb);
 }
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
@@ -401,7 +402,8 @@ return hFreezeDbConversion(NULL, freeze);
 }
 
 char *hDefaultPos(char *database)
-/* Return organism associated with database.   use freeMem on
+/* Return default chromosome position for the 
+  organism associated with database.   use freeMem on
  * this when done. */
 {
 struct sqlConnection *conn = hConnectCentral();
