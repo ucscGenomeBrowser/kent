@@ -608,6 +608,14 @@ spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
+track anyMrnaCov
+shortLabel mRNA Coverage
+longLabel Blastz Alignments of GenBank mRNA including Pseudogenes
+priority 23.4
+visibility hide
+color 170,128,128
+type bed 3
+
 track blatHuman
 shortLabel Human Blat
 longLabel Human Translated Blat Alignments
