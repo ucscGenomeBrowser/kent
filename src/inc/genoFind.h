@@ -227,6 +227,13 @@ void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
+void gfAlignTransTrans(int conn, char *nibDir, struct dnaSeq *seq, boolean isRc,
+    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData);
+/* Search indexed translated genome on server with an dna sequence.  Translate
+ * this sequence in three frames. Load homologous bits of genome locally
+ * and do detailed alignment.  Call 'outFunction' with each alignment
+ * that is found. */
+
 int gfConnect(char *hostName, char *portName);
 /* Set up our network connection to server. */
 #endif /* GENOFIND_H */

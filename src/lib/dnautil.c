@@ -525,27 +525,33 @@ if (a == b) return 1;
 else return -1;
 }
 
-int dnaScoreMatch(DNA *a, DNA *b, int size)
-/* Compare two pieces of DNA base by base. Total mismatches are
- * subtracted from total matches and returned as score. 'N's 
- * neither hurt nor help score. */
+int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchScore, 
+	char ignore)
+/* Compare two sequences (without inserts or deletions) and score. */
 {
 int i;
 int score = 0;
 for (i=0; i<size; ++i)
     {
-    DNA aa = a[i];
-    DNA bb = b[i];
-    if (aa == 'n' || bb == 'n')
+    char aa = a[i];
+    char bb = b[i];
+    if (aa == ignore || bb == ignore)
         continue;
     if (aa == bb)
-        ++score;
+        score += matchScore;
     else
-        score -= 1;
+        score += mismatchScore;
     }
 return score;
 }
 
+int dnaScoreMatch(DNA *a, DNA *b, int size)
+/* Compare two pieces of DNA base by base. Total mismatches are
+ * subtracted from total matches and returned as score. 'N's 
+ * neither hurt nor help score. */
+{
+return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
+}
 
 int aaScore2(AA a, AA b)
 /* Score match between two bases (relatively crudely). */
@@ -558,20 +564,7 @@ else return -1;
 int aaScoreMatch(AA *a, AA *b, int size)
 /* Compare two peptides aa by aa. */
 {
-int i;
-int score = 0;
-for (i=0; i<size; ++i)
-    {
-    AA aa = a[i];
-    AA bb = b[i];
-    if (aa == 'X' || bb == 'X')
-        continue;
-    if (aa == bb)
-        score += 3;
-    else
-        score -= 1;
-    }
-return score;
+return dnaOrAaScoreMatch(a, b, size, 3, -1, 'X');
 }
 
 

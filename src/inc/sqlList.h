@@ -73,5 +73,5 @@ char *sqlEatChar(char *s, char c);
 /* Make sure next character is 'c'.  Return past next char */
 
 
-#endif SQLLIST_H
+#endif /* SQLLIST_H */
 

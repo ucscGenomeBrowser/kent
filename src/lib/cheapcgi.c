@@ -252,6 +252,19 @@ char *cgiString(char *varName)
 return mustFindVarData(varName);
 }
 
+char *cgiUsualString(char *varName, char *usual)
+/* Return value of string if it exists in cgi environment.  
+ * Otherwiser return 'usual' */
+{
+char *pt;
+pt = findVarData(varName);
+if (pt == NULL)
+    pt = usual;
+return pt;
+
+}
+
+
 int cgiInt(char *varName)
 /* Return int value of cgi variable. */
 {

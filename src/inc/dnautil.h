@@ -157,4 +157,8 @@ int aaScore2(AA a, AA b);
 int aaScoreMatch(AA *a, AA *b, int size);
 /* Compare two peptides aa by aa. */
 
+int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchScore, 
+	char ignore);
+/* Compare two sequences (without inserts or deletions) and score. */
+
 #endif /* DNAUTIL_H */

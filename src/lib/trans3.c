@@ -13,6 +13,7 @@ int frame;
 AllocVar(t3);
 t3->name = seq->name;
 t3->seq = seq;
+t3->end = seq->size;
 for (frame=0; frame<3; ++frame)
     t3->trans[frame] = translateSeq(seq, frame, FALSE);
 return t3;

@@ -15,7 +15,7 @@
 enum {qSizeMax = 20000};
 
 /* Variables that can be set from command line. */
-int tileSize = 10;
+int tileSize = 12;
 int minMatch = 3;
 int minBases = 20;
 int maxGap = 2;
@@ -23,7 +23,7 @@ int repMatch = 1024;
 boolean noHead = FALSE;
 char *ooc = NULL;
 enum gfType qType = gftDna;
-enum gfType dType = gftDna;
+enum gfType tType = gftDna;
 
 
 void usage()
@@ -39,7 +39,7 @@ errAbort(
   "   output.psl is where to put the output.\n"
   "options:\n"
   "   -tileSize=N sets the size of perfectly matches.  Usually between 8 and 12\n"
-  "               Default is 10\n"
+  "               Default is 12 for DNA and 4 for protein.\n"
   "   -minMatch=N sets the number of perfect tile matches.  Usually set from 2 to 4\n"
   "               Default is 3\n"
   "   -minBases=N sets minimum number of matching bases.  Default is 20\n"
@@ -51,7 +51,7 @@ errAbort(
   "               Default is 16384\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc\n"
-  "   -d=type     Database type.  Type is one of:\n"
+  "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
   "                 prot - protein sequence\n"
   "                 dnax - DNA sequence translated in six frames to protein\n"
@@ -65,18 +65,6 @@ errAbort(
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
   );
-}
-
-enum gfType gftFromString(char *string)
-/* Return blatType that corresponds to string. */
-{
-if (sameWord(string, "dna")) return gftDna;
-else if (sameWord(string, "rna")) return gftRna;
-else if (sameWord(string, "prot")) return gftProt;
-else if (sameWord(string, "dnax")) return gftDnaX;
-else if (sameWord(string, "rnax")) return gftRnaX;
-else 
-    errAbort("Unrecognized BLAT type '%s'", string);
 }
 
 boolean isNib(char *fileName)
@@ -399,22 +387,22 @@ struct dnaSeq *dbSeqList, *seq;
 struct hash *dbHash = newHash(16);
 struct genoFind *gf;
 
-boolean dbIsProt = (dType == gftProt);
+boolean dbIsProt = (tType == gftProt);
 getFileArray(dbFile, &dbFiles, &dbCount);
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt);
 
-if ((dType == gftDna && (qType == gftDna || qType == gftRna))
- || (dType == gftProt && qType == gftProt))
+if ((tType == gftDna && (qType == gftDna || qType == gftRna))
+ || (tType == gftProt && qType == gftProt))
     {
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, dbIsProt);
     searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
     }
-else if (dType == gftDnaX && qType == gftProt)
+else if (tType == gftDnaX && qType == gftProt)
     {
     bigBlat(dbSeqList, queryCount, queryFiles, pslOut, FALSE, TRUE);
     }
-else if (dType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
+else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     {
     bigBlat(dbSeqList, queryCount, queryFiles, pslOut, TRUE, qType == gftDnaX);
     }
@@ -437,10 +425,10 @@ if (argc != 4)
 /* Get database and query sequence types and make sure they are
  * legal and compatable. */
 if (cgiVarExists("prot"))
-    qType = dType = gftProt;
-if (cgiVarExists("d"))
-    dType = gftFromString(cgiString("d"));
-switch (dType)
+    qType = tType = gftProt;
+if (cgiVarExists("t"))
+    tType = gfTypeFromName(cgiString("t"));
+switch (tType)
     {
     case gftProt:
     case gftDnaX:
@@ -450,11 +438,11 @@ switch (dType)
         dIsProtLike = FALSE;
 	break;
     default:
-        errAbort("Illegal value for 'd' parameter");
+        errAbort("Illegal value for 't' parameter");
 	break;
     }
 if (cgiVarExists("q"))
-    qType = gftFromString(cgiString("q"));
+    qType = gfTypeFromName(cgiString("q"));
 switch (qType)
     {
     case gftProt:

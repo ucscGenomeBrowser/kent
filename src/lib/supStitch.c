@@ -154,10 +154,13 @@ static int bioScoreMatch(boolean isProt, char *a, char *b, int size)
 {
 if (isProt)
     {
-    return aaScoreMatch(a, b, size);
+    return dnaOrAaScoreMatch(a, b, size, 3, -1, 'X');
     }
 else
-    return dnaScoreMatch(a, b, size);
+    {
+    uglyf("size %d, score %d\n", size, dnaOrAaScoreMatch(a, b, size, 2, -1, 'n'));
+    return dnaOrAaScoreMatch(a, b, size, 2, -1, 'n');
+    }
 }
 
 static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap, boolean isProt)

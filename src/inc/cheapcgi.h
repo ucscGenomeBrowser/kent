@@ -19,9 +19,15 @@ boolean cgiBoolean(char *varName);
 char *cgiOptionalString(char *varName);
 /* Return value of string if it exists in cgi environment, else NULL */
 
+char *cgiUsualString(char *varName, char *usual);
+/* Return value of string if it exists in cgi environment.  
+ * Otherwiser return 'usual' */
+
 int cgiOptionalInt(char *varName, int defaultVal);
 /* This returns value of varName if it exists in cgi environment, 
  * otherwise it returns defaultVal. */
+
+#define cgiUsualInt cgiOptionalInt
 
 struct cgiChoice
 /* Choice table */
