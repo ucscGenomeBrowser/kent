@@ -8,8 +8,9 @@
 #include "fa.h"
 #include "dystring.h"
 #include "bits.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.13 2004/02/04 23:38:55 kent Exp $";
+static char const rcsid[] = "$Id: gsBig.c,v 1.14 2005/02/19 18:04:31 angie Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
@@ -17,6 +18,18 @@ char *tmpDir  = "/tmp";
 
 int winSize = 1200000;	/* Size of window to pass to genscan. */
 int stepSize;
+
+static struct optionSpec optionSpecs[] = {
+    {"subopt", OPTION_STRING},
+    {"trans",  OPTION_STRING},
+    {"prerun", OPTION_STRING},
+    {"window", OPTION_INT},
+    {"exe", OPTION_STRING},
+    {"par", OPTION_STRING},
+    {"tmp", OPTION_STRING},
+    {"noRemove", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -599,15 +612,9 @@ void gsBig(char *faName, char *gtfName,
 {
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(faName, TRUE);
-struct tempName tn1, tn2;
-char *tempFa, *tempGs;
-struct dyString *dy = newDyString(1024);
 FILE *gtfFile = mustOpen(gtfName, "w");
 FILE *subFile = NULL;
 FILE *transFile = NULL;
-
-char temp_str[500];
-char dir1[256], root1[128], ext1[64], file1[265];
 ZeroVar(&seq);
 
 if (suboptName != NULL)
@@ -630,29 +637,27 @@ if (optionExists("prerun"))
     }
 else
     {
-    //makeTempName(&tn1, "temp", ".fa");
-    //makeTempName(&tn2, "temp", ".genscan");
-    //tempFa = tn1.forCgi;
-    //tempGs = tn2.forCgi;
+    struct dyString *dy = newDyString(1024);
+    char tempFa[512], tempGs[512];
+    char dir1[256], root1[128], ext1[64], file1[265];
+    int myPid = (int)getpid();
 
     splitPath(faName, dir1, root1, ext1);
-    
-    sprintf(temp_str, "%s/temp_gsBig_%d_%s.fa", tmpDir, (int)getpid(), root1);
-    tempFa = cloneString(temp_str);		    
-    sprintf(temp_str,"%s/temp_gsBig_%d_%s.genscan", tmpDir, (int)getpid(),
-	    root1);
-    tempGs = cloneString(temp_str);	
-    
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	{
 	int offset, sizeOne;
 	struct segment *segList = NULL, *seg;
 	char *seqName = cloneString(seq.name);
+	int chunkNum = 0;
 
 	for (offset = 0; offset < seq.size; offset += stepSize)
 	    {
 	    boolean allN = TRUE;
 	    int i;
+	    safef(tempFa, sizeof(tempFa), "%s/temp_gsBig_%d_%s_%d.fa",
+		  tmpDir, myPid, seqName, chunkNum);
+	    safef(tempGs, sizeof(tempGs), "%s/temp_gsBig_%d_%s_%d.genscan",
+		  tmpDir, myPid, seqName, chunkNum);
 	    sizeOne = seq.size - offset;
 	    if (sizeOne > winSize) sizeOne = winSize;
 	    /* Genscan hangs forever if a chunk is all-N's... if so, 
@@ -668,7 +673,7 @@ else
 	    if (allN)
 		{
 		printf("\ngsBig: skipping %s[%d:%d] -- it's all N's.\n\n",
-		       root1, offset, (offset+sizeOne-1));
+		       seqName, offset, (offset+sizeOne-1));
 		}
 	    else
 		{
@@ -678,25 +683,30 @@ else
 		if (suboptName != NULL)
 		    dyStringPrintf(dy, " -subopt");
 		dyStringPrintf(dy, " > %s", tempGs);
+		verbose(3, "%s\n", dy->string);
 		system(dy->string);
 		seg = parseSegment(tempGs, offset, offset+sizeOne, NULL);
 		slAddHead(&segList, seg);
 		}
+	    chunkNum++;
 	    }
 	slReverse(&segList);
 	seg = mergeSegs(segList);
 	writeSeg(seqName, seg, gtfFile, subFile, transFile);
 	freez(&seqName);
 	}
-    remove(tempFa);
-    remove(tempGs);
+    if (! optionExists("noRemove"))
+	{
+	remove(tempFa);
+	remove(tempGs);
+	}
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 winSize = optionInt("window", winSize);
