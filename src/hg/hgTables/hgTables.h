@@ -391,6 +391,7 @@ boolean anyIntersection();
 #define hgtaIdentifierFile "hgta_identifierFile"
 #define hgtaIdentifierTable "hgta_identifierTable"
 #define hgtaFilterTable "hgta_filterTable"
+#define hgtaFieldSelectTable "hgta_fieldSelectTable"
 #define hgtaGeneSeqType "hgta_geneSeqType"
 #define hgtaPrintCustomTrackHeaders "hgta_printCustomTrackHeaders"
 #define hgtaCtName "hgta_ctName"
