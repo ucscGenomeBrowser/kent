@@ -968,6 +968,13 @@ if (!initted)
 return &tg;
 }
 
+boolean genieExists()
+/* Return TRUE if genie predictions are in database. */
+{
+char testFile[512];
+sprintf(testFile, "%sgenes.gdf", wormGenieDir());
+return fileExists(testFile);
+}
 
 struct trackGroup *getGenieGenesTg()
 /* Get track group for ACE genes. */
@@ -1449,6 +1456,7 @@ struct trackGroup *groupList = NULL, *group;
 int baseWidth;
 boolean doCompact;
 char strandString[2];
+boolean gotGenie = genieExists();
 
 wormChromNames(&chromNames, &chromCount);
 
@@ -1522,7 +1530,7 @@ if (ti.withCosmids)
     slAddTail(&groupList, getCosmidTg());
 if (ti.withGenes)
     slAddTail(&groupList, getAceGenesTg());
-if (ti.withGenie)
+if (gotGenie && ti.withGenie)
     slAddTail(&groupList, getGenieGenesTg());
 if (ti.withBriggsae)
     slAddTail(&groupList, getBriggsaeTg());
@@ -1613,8 +1621,11 @@ fputs(" Cosmids ", stdout);
 makeCheckBox("cosmids", ti.withCosmids);
 fputs(" AceDb Gene Predictions ", stdout);
 makeCheckBox("spliDi", ti.withGenes);
-fputs("Genie Gene Predictons ", stdout);
-makeCheckBox("genie", ti.withGenie);
+if (gotGenie)
+    {
+    fputs("Genie Gene Predictons ", stdout);
+    makeCheckBox("genie", ti.withGenie);
+    }
 fputs(" cDNA ", stdout);
 makeCheckBox("cDNA", ti.withCdna);
 fputs(" separate embryonic cDNA ", stdout);
