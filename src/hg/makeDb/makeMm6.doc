@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.18 2005/04/05 23:54:27 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.19 2005/04/06 22:43:24 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -838,6 +838,9 @@ mm6.mgcTables.mgc = all
     ssh hgwdev
     cd /cluster/data/genbank
     time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	many tables are loaded by this load:
+    #	refFlat, refGene, refLink, refSeqAli, refSeqStatus, refSeqSummary
+    #	mgcGenes mgcFullMrna mgcFullStatus
     #	var/dbload/hgwdev/logs/2005.03.28-13:38:13.dbload.log
     #	LOADING - 2005-03-28 - 13:35
     #	FINISHED - 2005-03-29 - 00:43
@@ -2160,7 +2163,14 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
 	-swap `pwd`/DEF > swap.run.out 2>&1 &
-
+    #	308 m = 5h 8m
+    #	failed on kolossus due to NFS problems
+    ssh kolossus
+    cd /cluster/data/bosTau1/bed/blastz.mm6.swap/axtChain
+    #	extract the unfinished portion of netChains.csh into
+    #	finiChains.csh and run it:
+    time ./finiChains.csh
+    #	STARTED - 2005-04-06
 
 # BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
     # The procedure for lineage spec business with self is to simply
@@ -2277,6 +2287,44 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/mm6/bed/blastzSelf
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-continue chainMerge -fileServer eieio `pwd`/DEF > merge.run.out 2>&1 &
+    #	385 min = 3h 25m
+    #	that finished OK, checking the measurements:
+    #	this self alignment only appears to be present on mm3 as mouseChain
+    time featureBits mm6 netSelf
+    # 2336281173 bases of 2597150411 (89.956%) in intersection
+    time featureBits mm6 chainSelf
+    #  2579948751 bases of 2597150411 (99.338%) in intersection
+    time featureBits mm3 mouseChain
+    # 889252994 bases of 2505900260 (35.486%) in intersection
+
+    #	the chainLink measurements need kolossus:
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainSelfLink
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm3 mouseChainLink
+    #	383345536 bases of 2505900260 (15.298%) in intersection
+
+    #	Gill likes to see the blastzSelf track:
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzSelf
+    #	cat the pslParts together, per-chrom, and in chromStart order:
+    ls pslParts | sed -e "s/.nib.*//" | sort -u | while read C
+    do
+	echo -n "working: ${C} ... "
+	zcat `ls pslParts/${C}.nib* | sort --field-separator=':' -k1,1 -k3,3n` \
+            | gzip > pslChrom/${C}_blastzSelf.psl.gz
+	echo "done"
+    done
+
+    # Load blastzSelf
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzSelf/pslChrom
+    for I in *.psl.gz
+    do
+	$HOME/bin/i386/hgLoadPsl -noTNameIx mm6 ${I}
+	echo "done: ${I}"
+    done
+    #	STARTED - 2005-04-06 15:24
+    #	This is an 80 minute job
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2487,6 +2535,25 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
 
     #	And measurments:
     ../../jkStuff/netChainCheck.sh mm6 mm5 monDom1 > measurements.out 2>&1 &
+    
+    featureBits mm6 netMonDom1
+    #   2082064216 bases of 2597150411 (80.167%) in intersection
+    featureBits mm5 netMonDom1
+    #   2094316044 bases of 2615483787 (80.074%) in intersection
+    featureBits mm6 chainMonDom1
+    #   2109438148 bases of 2597150411 (81.221%) in intersection
+    featureBits mm5 chainMonDom1
+    #   2121448151 bases of 2615483787 (81.111%) in intersection
+    featureBits mm6 chainMonDom1Link
+    #   249576105 bases of 2597150411 (9.610%) in intersection
+    featureBits mm5 chainMonDom1Link
+    #   248180346 bases of 2615483787 (9.489%) in intersection
+
+    # looks OK, so to the swap:
+    ssh eieio
+    cd  /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
 
 # BLASTZ FROG Xenopus tropicalis (WORKING - 2005-04-05 - Hiram)
     ssh eieio
@@ -2538,10 +2605,22 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
     #	STARTED 2005-04-05 10:30 - new machine serving this filesystem today
+    #	635 min = 10h 35m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
+    #	had a failure on many of the jobs here.  Clean up:
+    ssh kk9
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05/run.blastz
+    para time > time.0
+    para problems > probs.1
+    para recover jobList recoverJobList
+    ssh kk
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05/run.blastz
+    para create recoverJobList
+    para try
+    para push ... check ... etc ...
 
 # BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
     ssh eieio
@@ -2595,8 +2674,167 @@ SEQ2_LEN=$BASE/S2.len
     screen
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+    #	392 minutes = 3h 32m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
     #	STARTED - 2005-04-05 11:08
+# Completed: 155570 of 155570 jobs
+# CPU time in finished jobs:    1477020s   24617.00m   410.28h   17.10d  0.047 y
+# IO & Wait Time:                432887s    7214.78m   120.25h    5.01d  0.014 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              46s       0.77m     0.01h    0.00d
+# Submission to last job:         22433s     373.88m     6.23h    0.26d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:         49s       0.81m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                  1062s      17.71m     0.30h    0.01d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest job:                        7s       0.12m     0.00h    0.00d
+# Submission to last job:            82s       1.37m     0.02h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       4959s      82.65m     1.38h    0.06d  0.000 y
+# IO & Wait Time:                  1101s      18.35m     0.31h    0.01d  0.000 y
+# Average job time:                 152s       2.52m     0.04h    0.00d
+# Longest job:                      359s       5.98m     0.10h    0.00d
+# Submission to last job:           496s       8.27m     0.14h    0.01d
+
+    #	the netChains.csh script failed on kolossus due to missing
+    #	symlinks in /scratch - go to kolossus and make /scratch/chimp be
+    #	a symlink to /iscratch/chimp/, then extract the part of the
+    #	netChains.csh script that failed into its own script and finish
+    #	that process:
+    #	/cluster/data/mm6/bed/blastzPanTro1.2005_04_05/axtChain/finiChains.csh
+    #	7 minutes to finish
+    #	to continue:
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	-continue load -fileServer eieio `pwd`/DEF > load.run.out 2>&1 &
+    #	STARTED 2005-04-06 09:23
+    #	20 minutes
+
+# STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
+    ssh eieio
+    mkdir -p /cluster/data/mm6/bed/STSmarkers/downloads
+    cd /cluster/data/mm6/bed/STSmarkers/downloads
+    # these files appear to be new almost every day
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+
+    # these map files appear to be old, 2002 Data
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
+    #	These files used to be unchanging.  This time they seem to be
+    #	new files:
+    #	   396858 Jan 28 19:15 10090.MGI.txt
+    #	   173344 Mar 16 19:45 10090.WI-Genetic.txt
+    #	   240688 Mar 16 19:45 10090.WI-YAC.txt
+    #	   390139 Mar 16 20:16 10090.WI_MRC_RH.txt
+    #  Will have to watch below to see how these figure into the construction.
+
+    # these reports from jax.org appear to be changing daily
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Dump2.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Sequence.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
+
+    # compare these with previous version, just to see what is changing
+    # these newly picked up files:
+    sum -r 10090*.txt
+# 47574   388 10090.MGI.txt
+# 04660   170 10090.WI-Genetic.txt
+# 20137   236 10090.WI-YAC.txt
+# 62100   381 10090.WI_MRC_RH.txt
+    #	the previous ones:
+    sum -r /cluster/data/mm5/bed/STSmarkers/downloads/10090.*
+# 48882   338 10090.MGD.txt
+# 62367   170 10090.WI_Mouse_Genetic.txt
+# 50616   235 10090.WI_Mouse_YAC.txt
+# 24176   381 10090.Whitehead-MRC_RH.txt
+    sum -r *.rpt UniSTS*
+# 20859  4415 MRK_Dump2.rpt
+# 14078  3719 MRK_Sequence.rpt
+# 64976  2421 PRB_PrimerSeq.rpt
+# 16053 13278 UniSTS.aliases
+# 00014  3913 UniSTS_mouse.sts
+    # previous copies:
+# 21267  4442 /cluster/data/mm5/bed/STSmarkers/downloads/MRK_Dump2.rpt
+# 51274  3743 /cluster/data/mm5/bed/STSmarkers/downloads/MRK_Sequence.rpt
+# 35293  2315 /cluster/data/mm5/bed/STSmarkers/downloads/PRB_PrimerSeq.rpt
+# 40884 10502 /cluster/data/mm5/bed/STSmarkers/downloads/UniSTS.aliases
+# 14407  2931 /cluster/data/mm5/bed/STSmarkers/downloads/UniSTS_mouse.sts
+
+    # back to our work area, update the bed file
+    #	to do this we need a new UniSTS_mouse.alias file
+    # it is created by a combination of information from several
+    # of the above files ! AND ! the previous stsInfoMouse.bed file
+
+    cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.sh .
+    cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.pl .
+
+    #	This process has been captured in the script:
+    #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+    # which uses a couple of perl scripts in that same directory.
+    # briefly it is:
+    
+    # ./UniSTSParse.pl UniSTS_mouse.sts UniSTS.aliases > UniSTS_mouse_alias.0
+    # grep MGI: UniSTS.aliases > MGI.aliases
+    # ./stsInfoMouseParse.pl /cluster/store5/mouseMarker/stsInfoMouse.bed > \
+    #	stsInfoAliases.txt
+    # ./UniSTSParse.pl stsInfoAliases.txt UniSTS.aliases > stsInfo.aliases
+    # cat UniSTS_mouse_alias.0 MGI.aliases stsInfo.aliases | sort -u \
+    #    | sort -n > UniSTS_mouse.alias
+
+    /cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+
+    # with that, we can create a new stsInfoMouse.bed file:
+    bash
+    cd /cluster/data/mm5/bed/STSmarkers
+    /cluster/store5/mouseMarker/code/updateBed.pl \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
+	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
+	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
+
+    # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
+    /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
+	
+    # copy the stsInfoMouse.bed file from working dir to the marker info storage fold.
+    # added 2 new steps by Yontao	
+	mv /cluster/store5/mouseMarker/stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed_mm3
+	cp -p stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
+
+    # comparing to Mm4, this file was used there:
+    # /cluster/store6/mm4/bed/STSmarkers
+    # a wc of it shows:
+    # 56406  786036 6425721 stsInfoMouse.bed
+    # Now we have:
+    # 58488  790056 6602318 stsInfoMouse.bed
+
+    # and from that, create new primer fa, epcr, etc:
+    /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
+	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
+    # the mouseC.fa file will be empty
+    wc mouse?.*
+    #      0       0       0 mouseC.fa
+    # 286740  286686 6474893 mouseP.fa
+    # 32232  161234 2044810 mouseP.info
+    # 318972  447920 8519703 total
+
+    # the equivalent Mm4 versions:
+    #      0       0       0 mouseC.fa
+    # 258307  258245 5815248 mouseP.fa
+    # 29906  149545 1890926 mouseP.info
+
+    #	copy the primers over to the bluearc for the kluster run
+    cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm5
+    cp -p mouseP.info /cluster/bluearc/scratch/mus/mm5
+
