@@ -519,10 +519,18 @@ o - Add Jackson labs info
      echo "load data local infile '"`pwd`"/jaxOrtholog.tab' into table jaxOrtholog;" \
        | hgsql hg12
 
-REFFLAT
+REFFLAT and GENEBANDS
 
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql hg12
+
+o - Create precomputed geneBands table:
+      ssh hgwdev
+      hgGeneBands hg12 geneBands.txt
+      hgsql hg12
+          >mysql load data local infile 'geneBands.txt' into table geneBands;
+	  >mysqy quit
+      rm geneBands.txt
 
 SIMPLE REPEAT TRACK (DONE)
 
