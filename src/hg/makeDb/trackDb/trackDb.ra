@@ -1228,6 +1228,7 @@ shortLabel ENCODE TBA
 longLabel TBA Alignments of ENCODE Regions
 group encode
 priority 108.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 100,0,0
 altColor 100,0,0
@@ -1238,6 +1239,7 @@ shortLabel ENCODE phyloHMM
 longLabel phylo-HMM-based conservation for ENCODE targets
 group encode
 priority 108.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 175,150,128
 altColor 255,128,0
@@ -1414,6 +1416,7 @@ longLabel liftOver ENCODE Region Orthologs (Freeze 1)
 group encode
 priority 10
 color 150,100,30
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
@@ -1423,6 +1426,7 @@ longLabel liftOver ENCODE Region Orthologs (Freeze 2)
 group encode
 priority 170.1
 color 150,100,30
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
@@ -1432,6 +1436,7 @@ longLabel liftOver ENCODE Region Orthologs (Freeze 2) With Dups
 group encode
 priority 170.1
 color 150,100,30
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
@@ -1441,6 +1446,7 @@ longLabel Mercator ENCODE Region Orthologs (Freeze 1)
 group encode
 priority 170.2
 color 150,100,30
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
@@ -1459,6 +1465,7 @@ longLabel Consensus Orthology of ENCODE Regions from liftOver and Mercator
 group encode
 priority 170.4
 color 150,100,30
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
