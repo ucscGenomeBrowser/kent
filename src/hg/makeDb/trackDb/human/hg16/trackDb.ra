@@ -1687,6 +1687,7 @@ subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Pol2 32hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) PValue in ENCODE Regions
 priority 4
+visibility hide
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
@@ -1851,26 +1852,25 @@ type bed 3 .
 
 track encodeBuPromoters
 compositeTrack on
-shortLabel Promoters/BU
+shortLabel Promoter/BU
 longLabel Boston University Promoters in ENCODE Regions
 group encode
-color 130,10,10
-altColor 200,200,200
-priority 48.1
+itemRgb on
+priority 20.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bedGraph 13
+type bed 12 +
 
 track encodeBuPromCerebrum
 subTrack encodeBuPromoters
-shortLabel Cerebrum
-longLabel Boston University Promoters in Cerebrum
+shortLabel Cerebral Cortex
+longLabel Boston University Promoters in Cerebral Cortex
 priority 1
 
 track encodeBuPromColon
 subTrack encodeBuPromoters
-shortLabel Colon
 longLabel Boston University Promoters in Colon
+shortLabel Colon
 priority 2
 
 track encodeBuPromHeart
@@ -1881,8 +1881,8 @@ priority 3
 
 track encodeBuPromKidney
 subTrack encodeBuPromoters
-shortLabel Kidney
 longLabel Boston University Promoters in Kidney
+shortLabel Kidney
 priority 4
 
 track encodeBuPromLiver
@@ -1892,33 +1892,33 @@ longLabel Boston University Promoters in Liver
 priority 5
 
 track encodeBuPromLung
-subTrack encodeBuPromoters 
-shortLabel Lung
+subTrack encodeBuPromoters
 longLabel Boston University Promoters in Lung
+shortLabel Lung
 priority 6
 
 track encodeBuPromSkMuscle
-subTrack encodeBuPromoters 
+subTrack encodeBuPromoters
 shortLabel Skeletal Muscle
 longLabel Boston University Promoters in Skeletal Muscle
 priority 7
 
 track encodeBuPromSpleen
-subTrack encodeBuPromoters 
-shortLabel Spleen
+subTrack encodeBuPromoters
 longLabel Boston University Promoters in Spleen
+shortLabel Spleen
 priority 8
 
 track encodeBuPromStomach
-subTrack encodeBuPromoters 
+subTrack encodeBuPromoters
 shortLabel Stomach
 longLabel Boston University Promoters in Stomach
 priority 9
 
 track encodeBuPromTestis
-subTrack encodeBuPromoters 
-shortLabel Testis
+subTrack encodeBuPromoters
 longLabel Boston University Promoters in Testis
+shortLabel Testis
 priority 10
 
 searchTable encode_NHGRI_DNaseHS
@@ -1932,4 +1932,5 @@ searchType bed
 termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
 searchMethod exact
 searchPriority 50.2
+
 
