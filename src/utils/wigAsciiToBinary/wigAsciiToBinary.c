@@ -9,8 +9,8 @@
  *
  *	This first pass will assume the scores are specified for
  *	a single nucleotide base.  If the offset sequence has
- *	missing data in it, the missing data will be set to the "NO_DATA"
- *	indication.  (NO_DATA == 128)
+ *	missing data in it, the missing data will be set to the
+ *	"WIG_NO_DATA" indication.  (WIG_NO_DATA == 128)
  *
  *	The binary data file is simply one unsigned char value per byte.
  *	The suffix for this binary data file is: .wib - wiggle binary
@@ -38,10 +38,10 @@
 #include	"options.h"
 #include	"linefile.h"
 
-#define	NO_DATA	128
+#define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.15 2003/12/12 18:52:00 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.16 2003/12/13 01:12:51 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -176,7 +176,7 @@ if (bincount)
 			byteOutput = 0;
 		    }
 	    } else {
-		byteOutput = NO_DATA;
+		byteOutput = WIG_NO_DATA;
 	    }
 	fputc(byteOutput,binout);	/*	output a data byte */
 	if (byteOutput > maxScore )
