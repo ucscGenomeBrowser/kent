@@ -89,8 +89,10 @@ errAbort(
   "para recover jobList newJobList\n"
   "   Generate a job list by selecting jobs from an existing list`where\n"
   "   the `check out' tests fail.\n"
-  "para priority\n"
-  "   Set batch priority\n"
+  "para priority 999\n"
+  "   Set batch priority.\n"
+  "   1 is highest priority, 10 is normal, 100 for bottomfeeders.\n"
+  "   Setting priority to 1-9 will be logged.\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n"
@@ -1324,6 +1326,8 @@ struct dyString *dy = newDyString(1024);
 char curDir[512];
 char *result;
 int priority = atoi(val);
+if ((priority < 1) || (priority > 10000))
+    errAbort("Priority out of range = %d, should be 1 to 10000",priority);
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
 dyStringPrintf(dy, "setPriority %s %s/para.results %d", getUser(), curDir, priority);
