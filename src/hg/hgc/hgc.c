@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.844 2005/03/04 00:54:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.845 2005/03/04 21:13:24 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6669,7 +6669,7 @@ return ver;
 }
 
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
-                   char *sqlRnaName, struct refLink *rl)
+                   char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
 {
 struct sqlResult *sr;
@@ -6679,7 +6679,10 @@ int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
 char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
-printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
+if (isXeno)
+    printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
+else
+    printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
 printf("<B>RefSeq:</B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
 if (ver > 0)
@@ -6700,6 +6703,18 @@ if (hTableExists("refSeqStatus"))
     sqlFreeResult(&sr);
     }
 puts("<BR>");
+if (isXeno)
+    {
+    char *org;
+    safef(query, sizeof(query), "select organism.name from gbCdnaInfo,organism "
+          "where (gbCdnaInfo.acc = '%s') and (organism.id = gbCdnaInfo.organism)",
+          rl->mrnaAcc);
+    org = sqlQuickString(conn, query);
+    if (org == NULL)
+        org = cloneString("unknown");
+    printf("<B>Organism:</B> %s<BR>", org);
+    freeMem(org);
+    }
 cdsCmpl = refSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
     {
@@ -6818,6 +6833,7 @@ char **row;
 char query[256];
 char *sqlRnaName = rnaName;
 char *summary = NULL;
+boolean isXeno = sameString(tdb->tableName, "xenoRefGene");
 struct refLink *rl;
 int start = cartInt(cart, "o");
 
@@ -6835,9 +6851,12 @@ rl = refLinkLoad(row);
 sqlFreeResult(&sr);
 
 /* print the first section with info  */
-cartWebStart(cart, "RefSeq Gene");
+if (isXeno)
+    cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+else
+    cartWebStart(cart, "RefSeq Gene");
 printf("<table border=0>\n<tr>\n");
-prRefGeneInfo(conn, rnaName, sqlRnaName, rl);
+prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 printf("</tr>\n</table>\n");
 
