@@ -28,7 +28,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     hgMaf.o hgRelate.o hgSeq.o hui.o humanParalog.o \
     imageClone.o isochores.o itemAttr.o jaxOrtholog.o jaxQTL.o jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
-    lfs.o liftUp.o llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
+    lfs.o liftOver.o liftOverChain.o liftUp.o llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
@@ -42,7 +42,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
     trackTable.o vegaInfo.o wabAli.o web.o wiggle.o wiggleCart.o wiggleUtils.o \
-    splignAlign.o tfbsConsMap.o liftOverChain.o liftOver.o
+    splignAlign.o tfbsConsMap.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
