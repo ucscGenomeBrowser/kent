@@ -5,9 +5,11 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 test: output spDbTest hdbTest
-	${MKDIR} output
 	rm -r output
 	echo tested all
+
+output:
+	${MKDIR} output
 
 spDbTest: spDbTest.o $(MYLIBS)
 	gcc -ggdb -o bin/$(MACHTYPE)/spDbTest spDbTest.o $(MYLIBS) $L

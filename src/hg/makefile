@@ -70,13 +70,23 @@ install:
 		(cd $${D} && ${MAKE} install;) \
 	done
 
-clean: 
+clean::
 	cd lib && ${MAKE} clean
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} clean;) \
 	done
 	- find . -name \*.o -print | xargs --no-run-if-empty rm
 
+test::
+	cd lib && ${MAKE} test
+	cd blastToPsl && ${MAKE} test
+	cd embossToPsl && ${MAKE} test
+	cd geneBounds && ${MAKE} test
+	cd liftUp && ${MAKE} test
+	cd mrnaToGene && ${MAKE} test
+	cd overlapSelect && ${MAKE} test
+	cd pslMap && ${MAKE} test
+	cd spideyToPsl && ${MAKE} test
 
 UTIL_DIRS = \
 	affyTransciptome \
@@ -124,6 +134,7 @@ UTIL_DIRS = \
 	mouseStuff \
 	mrnaToGene \
 	nci60 \
+	overlapSelect \
 	patCount \
 	spideyToPsl \
 	pslCat \
