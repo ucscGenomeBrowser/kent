@@ -228,7 +228,7 @@ chromosomes chr22,chr21
 type sample
 
 track affyU133
-shortLabel Affymetrix U133
+shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
 group regulation
 priority 89
@@ -236,7 +236,7 @@ visibility hide
 type psl .
 
 track affyGnf1h
-shortLabel Affymetrix GNF1H
+shortLabel Affy GNF1H
 longLabel Alignments of Probes from Affymetrix GNF1H Chip
 group regulation
 priority 89.1
@@ -244,7 +244,7 @@ visibility hide
 type psl .
 
 track affyU95
-shortLabel Affymetrix U95
+shortLabel Affy U95
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U95
 group regulation
 priority 89.2

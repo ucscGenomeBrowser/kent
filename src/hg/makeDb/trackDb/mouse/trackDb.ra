@@ -134,7 +134,7 @@ chip U74
 canPack off
 
 track affyGnf1m
-shortLabel Affymetrix GNF1M
+shortLabel Affy GNF1M
 longLabel Alignments of Probes from Affymetrix GNF1M Chip
 group regulation
 priority 85
@@ -142,7 +142,7 @@ visibility hide
 type psl .
 
 track affyU74
-shortLabel Affymetrix U74
+shortLabel Affy U74
 longLabel Alignments of Affymetrix Consensus Sequences from MG-U74 v2 (A,B, and C)
 group regulation
 priority 86
@@ -204,7 +204,7 @@ altColor 128,128,255,
 type bed 5 +
 
 track affyMOE430
-shortLabel Affymetrix MOE430
+shortLabel Affy MOE430
 longLabel Alignments of Affymetrix Consensus Sequences from Mouse MOE430 (A and B)
 group regulation
 priority 87
