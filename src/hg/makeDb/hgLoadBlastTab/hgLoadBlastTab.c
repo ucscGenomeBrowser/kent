@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.4 2003/09/14 22:51:12 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.5 2004/02/16 02:17:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,7 +73,7 @@ if (!optionExists("createOnly"))
     int qHitCount = 0;
     char lastQ[512];
     lastQ[0] = 0;
-    printf("Scanning through %d files\n", inCount);
+    logPrintf(1, "Scanning through %d files\n", inCount);
 
     for (i=0; i<inCount; ++i)
 	{
@@ -99,7 +99,7 @@ if (!optionExists("createOnly"))
 	    }
 	lineFileClose(&lf);
 	}
-    printf("Loading database with %d rows\n", count);
+    logPrintf(1, "Loading database with %d rows\n", count);
     conn = sqlConnect(database);
     hgLoadTabFile(conn, ".", table, &f);
     hgRemoveTabFile(".", table);

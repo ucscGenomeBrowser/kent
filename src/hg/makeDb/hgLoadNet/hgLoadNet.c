@@ -10,7 +10,7 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.10 2003/12/08 09:42:51 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.11 2004/02/16 02:17:46 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -72,7 +72,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    printf("Creating table definition for %s\n", track);
+    logPrintf(1, "Creating table definition for %s\n", track);
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
 	dyStringAppend(dy, "  bin smallint unsigned not null,\n");
@@ -111,7 +111,7 @@ else if (!oldTable)
 
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
-printf("Loading %s into %s\n", track, database);
+logPrintf(1, "Loading %s into %s\n", track, database);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
@@ -197,7 +197,7 @@ for (i=0; i<netCount; ++i)
     lf = lineFileOpen(netFiles[i], TRUE);
     while ((net = chainNetRead(lf)) != NULL)
         {
-        printf("read %s\n",net->name);
+        logPrintf(1, "read %s\n",net->name);
         cnWriteTables(net->name,net->fillList, alignFile, 1);
 	chainNetFree(&net);
         }

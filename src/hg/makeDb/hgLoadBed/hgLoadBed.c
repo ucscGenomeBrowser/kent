@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.23 2004/02/04 04:49:28 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.24 2004/02/16 02:17:46 kent Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -87,9 +87,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
-boolean tab = 
 
-printf("Reading %s\n", fileName);
+logPrintf(1, "Reading %s\n", fileName);
 while (lineFileNext(lf, &line, NULL))
     {
     if (hasBin)
@@ -163,7 +162,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    printf("Creating table definition for \n");
+    logPrintf(1, "Creating table definition for \n");
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
@@ -205,10 +204,10 @@ else if (!oldTable)
     sqlRemakeTable(conn, track, dy->string);
     }
 
-printf("Saving %s\n", tab);
+logPrintf(1, "Saving %s\n", tab);
 writeBedTab(tab, bedList, bedSize);
 
-printf("Loading %s\n", database);
+logPrintf(1, "Loading %s\n", database);
 sqlLoadTabFile(conn, tab, track, loadOptions);
 
 /* add a comment to the history table and finish up connection */
@@ -227,15 +226,15 @@ if (hasBin)
     bedSize--;
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
-printf("Loaded %d elements of size %d\n", slCount(bedList), bedSize);
+logPrintf(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
 if (!noSort)
     {
     slSort(&bedList, bedStubCmp);
-    printf("Sorted\n");
+    logPrintf(1, "Sorted\n");
     }
 else
     {
-    printf("Not Sorting\n");
+    logPrintf(1, "Not Sorting\n");
     slReverse(&bedList);
     }
 

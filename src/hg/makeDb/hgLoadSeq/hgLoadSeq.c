@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.7 2004/01/07 07:22:16 genbank Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.8 2004/02/16 02:17:47 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -149,7 +149,7 @@ HGID extFileId = test ? 0 : hgAddToExtFile(faFile, conn);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
 
-printf("Adding %s\n", faFile);
+logPrintf(1, "Adding %s\n", faFile);
 
 /* Seek to first line starting with '>' in line file. */
 if (!faSeekNextRecord(faLf))
@@ -160,7 +160,7 @@ lineFileReuse(faLf);
 while (loadFaSeq(faLf, extFileId, seqTab, conn))
     count++;
 
-printf("%u sequences\n", count);
+logPrintf(1, "%u sequences\n", count);
 lineFileClose(&faLf);
 }
 
@@ -179,7 +179,7 @@ if (!test)
     sqlMaybeMakeTable(conn, "seq", seqTable);
     }
 
-printf("Creating .tab file\n");
+logPrintf(1, "Creating .tab file\n");
 seqTab = hgCreateTabFile(".", "seq");
 for (i=0; i<fileCount; ++i)
     {
@@ -187,10 +187,10 @@ for (i=0; i<fileCount; ++i)
     }
 if (!test)
     {
-    printf("Updating seq table\n");
+    logPrintf(1, "Updating seq table\n");
     hgLoadTabFile(conn, ".", "seq", &seqTab);
     hgEndUpdate(&conn, "Add sequences");
-    printf("All done\n");
+    logPrintf(1, "All done\n");
     }
 }
 

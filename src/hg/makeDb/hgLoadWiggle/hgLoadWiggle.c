@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.6 2004/01/13 21:39:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.7 2004/02/16 02:17:47 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -112,8 +112,7 @@ while (lineFileNext(lf, &line, NULL))
     slAddHead(pList, wiggle);
     }
 lineFileClose(&lf);
-if( verbose )
-    printf("Read %d lines from %s\n", lineCount, fileName);
+logPrintf(2, "Read %d lines from %s\n", lineCount, fileName);
 }
 
 void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
@@ -177,7 +176,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    printf("Creating table definition with %d columns in %s.%s\n",
+    logPrintf(1, "Creating table definition with %d columns in %s.%s\n",
 	    wiggleSize, database, track);
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
@@ -205,10 +204,10 @@ else if (!oldTable)
     sqlRemakeTable(conn, track, dy->string);
     }
 
-printf("Saving %s\n", tab);
+logPrintf(1, "Saving %s\n", tab);
 writeWiggleTab(tab, wiggleList, wiggleSize, database);
 
-printf("Loading %s\n", database);
+logPrintf(1, "Loading %s\n", database);
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
@@ -239,16 +238,12 @@ noBin = optionExists("noBin");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", NULL);
-verbose = optionExists("verbose");
-if( verbose )
-    {
-	printf("noBin: %s, tab: %s, oldTable: %s\n",
-		noBin ? "TRUE" : "FALSE",
-		strictTab ? "TRUE" : "FALSE",
-		oldTable ? "TRUE" : "FALSE");
-	if( sqlTable )
-	    printf("using sql definition file: %s\n", sqlTable);
-    }
+logPrintf(2, "noBin: %s, tab: %s, oldTable: %s\n",
+	noBin ? "TRUE" : "FALSE",
+	strictTab ? "TRUE" : "FALSE",
+	oldTable ? "TRUE" : "FALSE");
+if( sqlTable )
+    logPrintf(2, "using sql definition file: %s\n", sqlTable);
 hgLoadWiggle(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }

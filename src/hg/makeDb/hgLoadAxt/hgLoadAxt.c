@@ -50,7 +50,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     HGID extId = hgAddToExtFile(fileName, conn);
     int dbNameLen = strlen(database);
 
-    printf("Indexing and tabulating %s\n", fileName);
+    logPrintf(1, "Indexing and tabulating %s\n", fileName);
     while ((axt = axtReadWithPos(lf, &offset)) != NULL)
         {
 	double maxScore = 100, minScore = -100;
@@ -72,7 +72,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	axtFree(&axt);
 	}
     }
-printf("Loading %s into database\n", table);
+logPrintf(1, "Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
 hgEndUpdate(&conn, "Add %ld axts in %d files from %s", count, slCount(fileList), extFileDir);
 }

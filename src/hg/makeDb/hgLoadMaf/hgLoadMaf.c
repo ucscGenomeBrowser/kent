@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.12 2003/11/05 19:49:05 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.13 2004/02/16 02:17:46 kent Exp $";
 
 /* Command line options */
 
@@ -104,7 +104,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
         extId = hgAddToExtFile(fileName, conn);
 
     mf = mafOpen(fileName);
-    printf("Indexing and tabulating %s\n", fileName);
+    logPrintf(1, "Indexing and tabulating %s\n", fileName);
     while ((maf = mafNextWithPos(mf, &offset)) != NULL)
         {
 	double maxScore, minScore;
@@ -119,7 +119,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
                 {
                 warnCount++;
                 if (warnVerboseOption)
-                    printf(msg);
+                    logPrintf(1, msg);
                 mafAliFree(&maf);
                 continue;
                 }
@@ -173,7 +173,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
                 {
                 warnCount++;
                 if (warnVerboseOption)
-                    printf(msg);
+                    logPrintf(1, msg);
                 }
             else
                 errAbort(msg);
@@ -189,13 +189,13 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	}
     mafFileFree(&mf);
     if (warnCount)
-        printf("%d warnings\n", warnCount);
+        logPrintf(1, "%d warnings\n", warnCount);
     }
 if (test)
     return;
-printf("Loading %s into database\n", table);
+logPrintf(1, "Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
-printf("Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
+logPrintf(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
 hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
 }
 
