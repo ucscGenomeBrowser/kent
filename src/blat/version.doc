@@ -1,3 +1,4 @@
+19 - a) Made it so that it will find perfect 20-mers with tileSize=10.
 18 - a) Fixed bug where you had to do -oneOff=1 rather than -oneOff
      in command line of blat.  
      b) Clarified makeOoc usage message.
