@@ -16,7 +16,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     memalloc.o memgfx.o net.o nib.o nibTwo.o \
     nt4.o obscure.o oldGff.o options.o osunix.o pairHmm.o pipeline.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o \
-    pthreadWrap.o qa.o ra.o rbIntTree.o rbTree.o \
+    pthreadWrap.o qa.o ra.o rbTree.o \
     repMask.o rle.o rudp.o sailfnt.o scoreWindow.o \
     seqOut.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
