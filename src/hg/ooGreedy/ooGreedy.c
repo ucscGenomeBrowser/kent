@@ -18,7 +18,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 96;       /* Current version number. */
+int version = 98;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */
 int maxMapDeviation = 600000;   /* No map deviations further than this allowed. */
