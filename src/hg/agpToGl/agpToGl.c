@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: agpToGl.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: agpToGl.c,v 1.4 2004/06/21 17:33:03 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,8 +88,18 @@ FILE *f = mustOpen(fileName, "w");
 struct agpFrag *frag;
 
 for (frag = fragList; frag != NULL; frag = frag->next)
-    fprintf(f, "%s_%d %d %d %c\n", frag->clone->name, frag->id, 
-    	frag->start, frag->end, frag->strand);
+    {
+    if (strrchr(frag->clone->name,'_'))
+	{
+	fprintf(f, "%s %d %d %c\n", frag->clone->name,
+	    frag->start, frag->end, frag->strand);
+	}
+    else
+	{
+	fprintf(f, "%s_%d %d %d %c\n", frag->clone->name, frag->id, 
+	    frag->start, frag->end, frag->strand);
+	}
+    }
 carefulClose(&f);
 }
 
