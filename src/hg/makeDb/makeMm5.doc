@@ -6291,3 +6291,329 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     cp -p mm5GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 
+
+# BLASTZ ZEBRAFISH (danRer2) (DONE, 2004-12-12, hartera)
+
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific.
+    # this directory of mouse repeats exists already
+    mkdir -p /iscratch/i/mm5/linSpecRep.notInZebrafish
+    foreach f (/cluster/bluearc/scratch/mus/mm5/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/mm5/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+    
+    mkdir -p /iscratch/i/danRer2/linSpecRep.notInMouse
+    foreach f (/iscratch/i/danRer2/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/danRer2/linSpecRep.notInMouse/$f:t:r:r.out.spec
+    end
+    iSync
+
+    ssh kk
+    mkdir -p /cluster/data/mm5/bed/blastz.danRer2.2004-12-10
+    ln -s /cluster/data/mm5/bed/blastz.danRer2.2004-12-10 \
+          /cluster/data/mm5/bed/blastz.danRer2
+    cd /cluster/data/mm5/bed/blastz.danRer2
+ # use same parameters as for danRer[1|2]-hg17 and for hg16-fr1 and mm5-danRer1
+ # and similar to those originally used for hg17-galGal2
+    cat << '_EOF_' > DEF
+# mouse (mm5) vs zebrafish (danRer2)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse (mm5)
+SEQ1_DIR=/cluster/bluearc/scratch/mus/mm5/softNib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/mm5/linSpecRep.notInZebrafish
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer2)
+SEQ2_DIR=/iscratch/i/danRer2/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/danRer2/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm5/bed/blastz.danRer2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # Save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.mm5-danRer2.2004-12-10
+    # setup cluster run
+    # copy shell scripts for blastz runs if not there already
+    cp -p /cluster/data/danRer1/jkStuff/BlastZ* /cluster/data/mm5/jkStuff/
+    # edit BlastZ_run0.sh
+    # replace line 22: /cluster/home/angie/schwartzbin/ with /cluster/bin/penn/
+    # this is the directory for the latest version of blastz-run
+
+    # source the DEF file
+    bash
+    . ./DEF
+    /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+# Completed: 58993 of 58993 jobs
+# CPU time in finished jobs:   17513361s  291889.35m  4864.82h  202.70d  0.555 y
+# IO & Wait Time:               1506128s   25102.13m   418.37h   17.43d  0.048 y
+# Average job time:                 322s       5.37m     0.09h    0.00d
+# Longest job:                     2552s      42.53m     0.71h    0.03d
+# Submission to last job:         50001s     833.35m    13.89h    0.58d
+
+    # output is 864M
+    # second cluster run to convert the .out's to .lav's
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Checking finished jobs
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:        689s      11.48m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                  1305s      21.76m     0.36h    0.02d  0.000 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest job:                       14s       0.23m     0.00h    0.00d
+# Submission to last job:           250s       4.17m     0.07h    0.00d
+
+    #   Third cluster run to convert lav's to axt's
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /cluster/bluearc/scratch/mus/mm5/softNib \
+/iscratch/i/danRer2/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/mm5/bed/blastz.danRer2/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:         82s       1.37m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                  1429s      23.82m     0.40h    0.02d  0.000 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest job:                       91s       1.52m     0.03h    0.00d
+# Submission to last job:          1421s      23.68m     0.39h    0.02d
+
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer2"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.danRer2/pslChrom
+
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl mm5 $f
+    end
+# featureBits -chrom=chr1 mm5 refGene:cds blastzDanRer1 -enrichment
+#refGene:cds 0.763%,blastzDanRer1 2.918%,both 0.512%,cover 67.12%,enrich 23.00x
+# featureBits -chrom=chr1 mm5 refGene:cds blastzDanRer2 -enrichment
+# refGene:cds 0.780%, blastzDanRer2 2.816%, both 0.529%, cover 67.89%, 
+# enrich 24.11x
+ 
+# RESCORE DANRER2 BLASTZ ALIGNMENTS (DONE, 2004-12-12, hartera)
+
+    # Low scores can occur with repeats abridged and using the
+    # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
+    # with the default matrix instead of the BLASTZ_Q matrix.
+    # Rescore them here so the chainer sees the higher scores:
+    ssh kolossus
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+        axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.orig
+    mv axtChrom.rescore axtChrom
+
+#   psl files and blastz tables will be the same regardless of score so
+#   no need to reload
+
+# CHAIN ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+    # Make chains with rescored blastz danRer2
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.danRer2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/mm5/bed/blastz.danRer2/axtChrom/*.axt \
+        > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    # Make our own linear gap file with reduced gap penalties, 
+    # in hopes of getting longer chains:
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V 72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+tGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V  16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=../../chickenHumanTuned.gap $1 \
+    /cluster/bluearc/scratch/mus/mm5/softNib \
+    /iscratch/i/danRer1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       1797s      29.95m     0.50h    0.02d  0.000 y
+# IO & Wait Time:                   575s       9.59m     0.16h    0.01d  0.000 y
+# Average job time:                  55s       0.92m     0.02h    0.00d
+# Longest job:                      133s       2.22m     0.04h    0.00d
+# Submission to last job:           514s       8.57m     0.14h    0.01d
+
+   # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+# take a look at score distr's,try also with smaller bin size.
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # filter on minScore = 5000
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain.filt5k
+    # remove old chains
+    rm -r chain
+    chainSplit chain all.chain.filt5k
+    
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain mm5 ${c}_chainDanRer2 $i
+        echo done $c
+    end
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2 -enrichment
+# refGene:cds 0.780%, chainDanRer2 22.478%, both 0.604%, cover 77.48%, 
+# enrich 3.45x
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 0.780%, chainDanRer2Link 2.164%, both 0.526%, cover 67.43%, 
+# enrich 31.17x
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1 -enrichment
+# refGene:cds 0.780%, chainDanRer1 20.053%, both 0.593%, cover 75.99%, 
+# enrich 3.79x
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Link -enrichment
+# refGene:cds 0.780%, chainDanRer1Link 2.022%, both 0.512%, cover 65.64%, 
+# enrich 32.47x
+
+# NET ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 110891008, utime 692 s/100, stime 87
+
+# Add classification info using db tables:
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    mkdir -p /cluster/bluearc/danRer2/linSpecRep.notInMouse
+    cp /iscratch/i/mm5/linSpecRep.notInZebrafish/* \
+       /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    cp /iscratch/i/danRer2/linSpecRep.notInMouse/* \
+       /cluster/bluearc/danRer2/linSpecRep.notInMouse
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    time netClass noClass.net mm5 danRer2 danRer2.net \
+         -tNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish \
+         -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInMouse -noAr
+    # 88.050u 55.640s 3:49.74 62.5%   0+0k 0+0io 200pf+0w
+    netFilter -minGap=10 danRer2.net |  hgLoadNet mm5 netDanRer2 stdin
+# featureBits mm5 refGene:cds netDanRer2 -enrichment
+# refGene:cds 0.938%, netDanRer2 21.447%, both 0.714%, cover 76.17%, 
+# enrich 3.55x
+# featureBits mm5 refGene:cds netDanRer1 -enrichment
+# refGene:cds 0.938%, netDanRer1 19.993%, both 0.702%, cover 74.87%, 
+# enrich 3.74x
+# add trackDb.ra entries and html for details pages
