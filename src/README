@@ -60,6 +60,8 @@ INSTALL INSTRUCTIONS FOR BLAT
      setenv SOCKETLIB -lxnet
    on Solaris do
      setenv SOCKETLIB "-lsocket -lnsl"
+   on SunOS do
+     setenv SOCKETLIB "-lsocket -lnsl -lresolv"
    on Linux you can skip this step.
 3. Execute make in each of the following directories:
      jksrc/gfServer
