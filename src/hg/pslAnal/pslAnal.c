@@ -616,7 +616,7 @@ if (psl->strand[1] == '-')
 for (i = 0; i < psl->blockCount; i++) 
     {
     /* If the block contains the indel */   
-    if (((psl->tStarts[i] + psl->blockSizes[i]) >= gstart) && (psl->tStarts[i] <= gend))
+    if (((psl->tStarts[i] + psl->blockSizes[i]) >= gstart) && (psl->tStarts[i] < gend))
        {
        /* Determine the start position offset */
        if (gstart >= psl->tStarts[i])
