@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.103 2003/10/13 19:29:24 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.104 2003/10/14 07:16:57 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -550,8 +550,8 @@ void debugCellPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print value including favorite hyperlink in debug column. */
 {
-hPrintf("<TD><A HREF=\"../cgi-bin/hgGene?%s&%s=%s\">", 
-	cartSidUrlString(cart), "hgg_gene", gp->name);
+hPrintf("<TD><A HREF=\"../cgi-bin/hgc?%s&g=knownGene&i=%s&c=%s&l=%d&r=%d\">",
+	cartSidUrlString(cart), gp->name, gp->chrom, gp->start, gp->end);
 hPrintf("%f", gp->distance);
 hPrintf("</A></TD>");
 }
