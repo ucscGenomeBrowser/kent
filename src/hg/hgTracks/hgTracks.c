@@ -2914,14 +2914,17 @@ if (hTableExists("refLink"))
 hFreeConn(&conn);
 }
 
-void loadknownGene(struct track *tg)
+void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
+enum trackVisibility vis = tg->visibility;
 tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
-if ((limitVisibility(tg) == tvFull) ||  (limitVisibility(tg) == tvPack) )
+if (vis != tvDense)
     {
     lookupKnownGeneNames(tg->items);
+    slSort(&tg->items, linkedFeaturesCmpStart);
     }
+limitVisibility(tg);
 }
 
 Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -3015,7 +3018,7 @@ return(col);
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
-tg->loadItems 	= loadknownGene;
+tg->loadItems 	= loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
