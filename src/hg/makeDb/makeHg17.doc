@@ -5754,9 +5754,6 @@ EOF
     # (people sometimes want the raw scores)
     rm -r /cluster/bluearc/hg17/phastCons/ELEMENTS /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/wib
 
-    # (The steps below assume a wiggle track called multiz8wayCons, as
-    # originally used by Kate.)
-
     # set up full alignment/conservation track ("multiz8way")
     # load multiz maf tables 
     ssh hgwdev
@@ -5794,14 +5791,14 @@ EOF
     # trackDb entry:
 # track multiz8way
 # shortLabel Conservation
-# longLabel Chimp/Mouse/Rat/Dog/Chicken/Fugu/Zebrafish Multiz Alignments & PhyloHMM Cons
+# longLabel Chimp/Mouse/Rat/Dog/Chicken/Fugu/Zebrafish Multiz Alignments & Conservation
 # group compGeno
 # priority 149
 # visibility pack
 #color 0, 10, 100
 # type wigMaf 0.0 1.0
 # maxHeightPixels 100:40:11
-# wiggle multiz8wayCons
+# wiggle phastCons
 # yLineOnOff Off
 # autoScaleDefault Off
 # pairwise netBlastz
