@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.60 2004/03/20 03:30:36 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.61 2004/04/13 00:21:56 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -634,7 +634,7 @@ int val = -1;
 
 for (i=0; i<choiceSize; ++i)
     {
-    if (!differentWord(choices[i].name, key))
+    if (sameWord(choices[i].name, key))
         {
         val =  choices[i].value;
         return val;
@@ -653,7 +653,7 @@ cgiMakeButton("Submit", "Submit");
 void cgiMakeResetButton()
 /* Make 'reset' type button. */
 {
-printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\"Reset\">");
+printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\" Reset \">");
 }
 
 void cgiMakeButton(char *name, char *value)
@@ -820,7 +820,7 @@ if (checked == NULL) checked = menu[0];
 printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
 for (i=0; i<menuSize; ++i)
     {
-    if (!differentWord(menu[i], checked))
+    if (sameWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
@@ -840,7 +840,7 @@ if (checked == NULL) checked = menu[0];
 printf("<SELECT MULTIPLE SIZE=%d ALIGN=CENTER NAME=\"%s\">\n", length, name);
 for (i=0; i<menuSize; ++i)
     {
-    if (!differentWord(menu[i], checked))
+    if (sameWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
@@ -868,7 +868,7 @@ else
 
 for (i=0; i<menuSize; ++i)
     {
-    if (!differentWord(menu[i], checked))
+    if (sameWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
