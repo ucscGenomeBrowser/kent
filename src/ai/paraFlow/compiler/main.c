@@ -122,6 +122,16 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     expandInto(program, tkz, pp);
 }
 
+static void substituteType(struct pfParse *pp, enum pfParseType oldType,
+	enum pfParseType newType)
+/* Convert type of pp and any children that are of oldType to newType */
+{
+if (pp->type == oldType)
+    pp->type = newType;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    substituteType(pp, oldType, newType);
+}
+
 void initVars(struct pfParse *pp)
 /* Convert pptVarDec to pptVarInit. */
 {
@@ -145,6 +155,15 @@ else if (pp->type == pptAssignment)
 	pp->name = left->name;
 	slAddTail(&pp->children, right);
 	}
+    }
+if (pp->type == pptVarInit)
+    {
+    struct pfParse *type = pp->children;
+    struct pfParse *name = type->next;
+    substituteType(type, pptNameUse, pptTypeName);
+#ifdef SOON
+#endif /* SOON */
+    name->type = pptSymName;
     }
 }
 
@@ -179,7 +198,7 @@ switch (pp->type)
 	     }
 	break;
 	}
-    case pptNameUse:
+    case pptTypeName:
         {
 	struct pfBaseType *bt = pfScopeFindType(pp->scope, pp->name);
 	if (bt != NULL)
@@ -220,6 +239,26 @@ switch (pp->type)
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
     addDeclaredVarsToScopes(pp);
+}
+
+static void bindVars(struct pfParse *pp)
+/* Attach variable name to pfVar in appropriate scope.
+ * Complain and die if not found. */
+{
+switch (pp->type)
+    {
+    case pptNameUse:
+	{
+	struct pfVar *var = pfScopeFindVar(pp->scope, pp->name);
+	if (var == NULL)
+	    errAt(pp->tok, "Use of undefined variable %s", pp->name);
+	pp->var = var;
+	pp->type = pptVarUse;
+        break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    bindVars(pp);
 }
 
 static void rParseCount(int *pCount, struct pfParse *pp)
@@ -306,7 +345,7 @@ slReverse(&program->children);
 initVars(program);
 evalTypes(program);
 addDeclaredVarsToScopes(program);
-// bindVars(program);
+bindVars(program);
 
 pfParseDump(program, 0, stdout);
 

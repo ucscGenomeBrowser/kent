@@ -73,6 +73,8 @@ enum pfParseType
     pptUser,
     pptSysOrUser,
     pptVarInit,
+    pptSymName,
+    pptTypeName,
     };
 
 char *pfParseTypeAsString(enum pfParseType type);

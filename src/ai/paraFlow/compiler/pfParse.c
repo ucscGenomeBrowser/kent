@@ -140,6 +140,10 @@ switch (type)
 	return "pptSysOrUser";
     case pptVarInit:
         return "pptVarInit";
+    case pptSymName:
+	return "pptSymName";
+    case pptTypeName:
+	return "pptTypeName";
     default:
         internalErr();
 	return NULL;
