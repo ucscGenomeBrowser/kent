@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.1 2003/07/10 16:07:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.2 2003/07/13 06:16:15 sugnet Exp $";
 
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
@@ -18,8 +18,16 @@ static int altRetIntCount = 0;
 static int altIdentityCount = 0;
 static int altOtherCount = 0;
 static int altTotalCount = 0;
-FILE *RData = NULL;
-FILE *RDataCont = NULL;
+static int totalLoci = 0;
+static int totalSplices = 0;
+static int splicedLoci = 0;
+
+FILE *RData = NULL;         /* File for outputting summaries about alts, useful for R. */
+FILE *RDataCont = NULL;     /* File for outputting summaries about controls, useful for R. */
+FILE *upStream100 = NULL;   /* Bed file for 100bp upstream of 3' splice site. */
+FILE *downStream100 = NULL; /* Bed file for 100bp downstream of 5' splice site. */
+FILE *altRegion = NULL;     /* Bed file representing an alt-spliced region. */
+FILE *constRegion = NULL;   /* Bed file representing a constituative region. */
 static boolean doSScores = FALSE;
 
 void usage()
@@ -33,7 +41,7 @@ errAbort("altAnalysis - Analyze the altSplicing in a series of altGraphX's\n"
 void logSpliceType(enum altSpliceType type)
 /* Log the different types of splicing. */
 {
-altTotalCount++;
+
 switch (type) 
     {
     case alt5Prime:
@@ -65,6 +73,9 @@ fprintf(stderr, "alt Ret. Int. Count:\t%d\n", altRetIntCount);
 fprintf(stderr, "alt Ident. Count:\t%d\n", altIdentityCount);
 fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
 fprintf(stderr, "alt Total Count:\t%d\n", altTotalCount);
+fprintf(stderr, "totalSplices:\t%d\n", totalSplices);
+fprintf(stderr, "%d alt spliced loci out of %d total loci with %.2f alt splices per alt spliced loci\n",
+	splicedLoci, totalLoci, (float)totalSplices/splicedLoci);
 }
 
 char * nameForType(struct altSpliceSite *as)
@@ -72,7 +83,7 @@ char * nameForType(struct altSpliceSite *as)
 {
 enum altSpliceType type;
 if(as->altCount >2)
-    return "other";
+    return "altOther";
 else
     type = as->spliceTypes[1];
 switch (type) 
@@ -93,7 +104,7 @@ switch (type)
 	return "altOther";
 	break;
     default:
-	errAbort("logSpliceType() - Don't recognize type %d", type);
+	errAbort("nameForType() - Don't recognize type %d", type);
     }
 return "error";
 }
@@ -208,6 +219,48 @@ if(em[vs][ve1] && em[vs][ve2])
 	       rowSum(em[ve2],ag->vTypes,ag->vertexCount) == 1 && 
 	       edgesInArea(ag,em,i-1,vs+1) == numAltVerts)
 		{
+		int *vPos = ag->vPositions;
+		struct bed bedUp, bedDown, bedAlt, bedConst;
+                /* Initialize some beds for reporting. */
+		bedConst.chrom = bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
+		bedConst.name = bedUp.name = bedDown.name = bedAlt.name = ag->name;
+		if(sameString(ag->strand, "+"))
+		    bedConst.score = bedUp.score = bedDown.score = bedAlt.score = alt3Prime;
+		else
+		    bedConst.score = bedUp.score = bedDown.score = bedAlt.score = alt5Prime;
+		safef(bedConst.strand, sizeof(bedConst.strand), "%s", ag->strand);
+		safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
+		safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
+		safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
+
+                /* Alt spliced region. */
+		bedAlt.chromStart = vPos[ve1];
+		bedAlt.chromEnd = vPos[ve2];
+		bedConst.chromStart = vPos[ve2];
+		bedConst.chromEnd = vPos[i];
+
+                /* Upstream/down stream */
+		if(sameString(ag->strand, "+"))
+		    {
+		    bedDown.chromStart = vPos[i];
+		    bedDown.chromEnd = vPos[i]+100;
+		    bedUp.chromStart = vPos[ve1]-100;
+		    bedUp.chromEnd = vPos[ve1];
+		    }
+		else 
+		    {
+		    bedUp.chromStart = vPos[i];
+		    bedUp.chromEnd = vPos[i]+100;
+		    bedDown.chromStart = vPos[ve1]-100;
+		    bedDown.chromEnd = vPos[ve1];
+		    }
+		if(altRegion)
+		    {
+		    bedOutputN(&bedConst, 6, constRegion, '\t','\n');
+		    bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
+		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
+		    }		
 		*altBpStart = ag->vPositions[ve1];
 		*altBpEnd = ag->vPositions[ve2];
 		return TRUE;
@@ -255,6 +308,48 @@ if(em[vs][ve1] && em[vs][ve2])
 	       rowSum(em[ve2],ag->vTypes,ag->vertexCount) == 1 &&
 	       edgesInArea(ag,em,i-1,vs+1) == numAltVerts)
 		{
+		int *vPos = ag->vPositions;
+		struct bed bedUp, bedDown, bedAlt, bedConst;
+                /* Initialize some beds for reporting. */
+		bedConst.chrom = bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
+		bedConst.name = bedUp.name = bedDown.name = bedAlt.name = ag->name;
+		if(sameString(ag->strand, "+"))
+		    bedConst.score = bedUp.score = bedDown.score = bedAlt.score = alt5Prime;
+		else
+		    bedConst.score = bedUp.score = bedDown.score = bedAlt.score = alt3Prime;
+		safef(bedConst.strand, sizeof(bedConst.strand), "%s", ag->strand);
+		safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
+		safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
+		safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
+
+                /* Alt spliced region. */
+		bedAlt.chromStart = vPos[ve1];
+		bedAlt.chromEnd = vPos[ve2];
+		bedConst.chromStart = vPos[vs];
+		bedConst.chromEnd = vPos[ve1];
+
+                /* Upstream/down stream */
+		if(sameString(ag->strand, "+"))
+		    {
+		    bedDown.chromStart = vPos[ve2];
+		    bedDown.chromEnd = vPos[ve2]+100;
+		    bedUp.chromStart = vPos[vs]-100;
+		    bedUp.chromEnd = vPos[vs];
+		    }
+		else 
+		    {
+		    bedUp.chromStart = vPos[ve2];
+		    bedUp.chromEnd = vPos[ve2]+100;
+		    bedDown.chromStart = vPos[vs]-100;
+		    bedDown.chromEnd = vPos[vs];
+		    }
+		if(altRegion)
+		    {
+		    bedOutputN(&bedConst, 6, constRegion, '\t','\n');
+		    bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
+		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
+		    }		
 		*altBpStart = ag->vPositions[ve1];
 		*altBpEnd = ag->vPositions[ve2];
 		return TRUE;
@@ -288,6 +383,7 @@ boolean isCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
 unsigned char *vTypes = ag->vTypes;
 int i=0;
 int numAltVerts = 4;
+int *vPos = ag->vPositions;
 /* Quick check. */
 if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
     return FALSE;
@@ -306,6 +402,39 @@ if(em[vs][ve1] && em[vs][ve2])
 	       colSum(em, ag->vTypes, ag->vertexCount, ve1) == 1 &&
 	       edgesInArea(ag,em,ve2-1,vs+1) == numAltVerts)
 		{
+		struct bed bedUp, bedDown, bedAlt;
+		/* Initialize some beds for reporting. */
+		bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
+		bedUp.name = bedDown.name = bedAlt.name = ag->name;
+		bedUp.score = bedDown.score = bedAlt.score = altCassette;
+		safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
+		safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
+		safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
+		/* Alt spliced region. */
+		bedAlt.chromStart = vPos[ve1];
+		bedAlt.chromEnd = vPos[i];
+
+		/* Upstream/down stream */
+		if(sameString(ag->strand, "+"))
+		    {
+		    bedUp.chromStart = vPos[ve1] - 100;
+		    bedUp.chromEnd = vPos[ve1];
+		    bedDown.chromStart = vPos[i];
+		    bedDown.chromEnd = vPos[i] + 100;
+		    }
+		else 
+		    {
+		    bedDown.chromStart = vPos[ve1] - 100;
+		    bedDown.chromEnd = vPos[ve1];
+		    bedUp.chromStart = vPos[i];
+		    bedUp.chromEnd = vPos[i] + 100;
+		    }
+		if(altRegion != NULL)
+		    {
+		    bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
+		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
+		    }
 		*altBpStart = ag->vPositions[ve1];
 		*altBpEnd = ag->vPositions[i];
 		return TRUE;
@@ -351,6 +480,22 @@ if(em[vs][ve1] && em[vs][ve2])
 	if(vTypes[i] == ggHardStart && em[ve1][i] && em[i][ve2] &&
 	edgesInArea(ag,em,ve2-1,vs+1) == numAltVerts)
 	    {
+	    int *vPos = ag->vPositions;
+	    struct bed bedAlt;
+	    /* Initialize some beds for reporting. */
+	    bedAlt.chrom = ag->tName;
+	    bedAlt.name = ag->name;
+	    bedAlt.score = altRetInt;
+	    safef(bedAlt.strand, sizeof(bedAlt.strand), "%s", ag->strand);
+	    /* Alt spliced region. */
+	    bedAlt.chromStart = vPos[ve1];
+	    bedAlt.chromEnd = vPos[i];
+	    
+	    /* Upstream/down stream */
+	    if(altRegion != NULL)
+		{
+		bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+		}
 	    *altBpStart = ag->vPositions[ve1];
 	    *altBpEnd = ag->vPositions[i];
 	    return TRUE;
@@ -647,6 +792,41 @@ if(ag->vTypes[i] == ggSoftStart || ag->vTypes[i] == ggSoftEnd ||
 return TRUE;
 }
 
+void outputControlExonBeds(struct altGraphX *ag, int v1, int v2)
+{
+int *vPos = ag->vPositions;
+struct bed bedUp, bedDown, bedAlt;
+/* Initialize some beds for reporting. */
+bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
+bedUp.name = bedDown.name = bedAlt.name = ag->name;
+bedUp.score = bedDown.score = bedAlt.score = altControl;
+safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
+safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
+safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
+/* Alt spliced region. */
+bedAlt.chromStart = vPos[v1];
+bedAlt.chromEnd = vPos[v2];
+
+/* Upstream/down stream */
+if(sameString(ag->strand, "+"))
+    {
+    bedUp.chromStart = vPos[v1] - 100;
+    bedUp.chromEnd = vPos[v1];
+    bedDown.chromStart = vPos[v2];
+    bedDown.chromEnd = vPos[v2] + 100;
+    }
+else 
+    {
+    bedDown.chromStart = vPos[v1] - 100;
+    bedDown.chromEnd = vPos[v1];
+    bedUp.chromStart = vPos[v2];
+    bedUp.chromEnd = vPos[v2] + 100;
+    }
+
+bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
+bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
+}
 
 void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
@@ -660,8 +840,10 @@ unsigned char *vTypes = ag->vTypes;
 int *vPos = ag->vPositions;
 int altSpliceSitesOrig = *altSpliceSites;
 int i,j,k;
+int altCount = 0;
 boolean gotOne = FALSE;
 occassionalDot();
+totalLoci++;
 for(i=0; i<vCount; i++)
     {
     struct altSpliceSite *aSplice = NULL;
@@ -673,8 +855,10 @@ for(i=0; i<vCount; i++)
 		{
 		if(em[i][k] && areConsSplice(em, vCount, vTypes, i, k))
 		    {
+		    totalSplices++;
 		    if(aSplice == NULL)
 			{
+			splicedLoci++;
 			gotOne = TRUE;
 			aSplice = initASplice(ag, em, i, j, k);
 			(*altSpliceSites)++;
@@ -693,14 +877,20 @@ for(i=0; i<vCount; i++)
 	       areConstitutive(ag, em, i, j))
 		{
 		notAlt = initASplice(ag, em, i, j, j);
+		if(altRegion != NULL) 
+		    outputControlExonBeds(ag, i, j);
 		slAddHead(&notAltList, notAlt);
 		} 
 	    }
 	}
-    if(aSplice != NULL)
+    if(aSplice != NULL) 
+	{
 	slAddHead(aSpliceList, aSplice);
+	}
+    /* If we have a simple splice classfy it and log it. */
     if(aSplice != NULL && aSplice->altCount == 2)
 	{
+	altTotalCount++;	
 	logSpliceType(aSplice->spliceTypes[1]);
 	if(doSScores)
 	    fillInSscores(aSplice, 1);
@@ -708,6 +898,16 @@ for(i=0; i<vCount; i++)
 	    {
 	    fixOtherStrand(aSplice);
 	    outputForR(aSplice, 1, RData);
+	    }
+	}
+    /* Otherwise log it as altOther. Start at 1 as 0->1 is the first
+     * splice, 1->2 is the first alt spliced.*/
+    else if(aSplice != NULL)
+	{
+	for(altCount=1; altCount<aSplice->altCount; altCount++)
+	    {
+	    altTotalCount++;
+	    altOtherCount++;
 	    }
 	}
     }
@@ -760,12 +960,36 @@ fprintf(htmlOut, "<html><head><title>Human Alt Splicing Conserved in Mouse</titl
      "</html>\n", fileName, db);
 }
 
+void openBedFiles(char *prefix)
+/* Opend all of the bed files with the prefix. */
+{
+struct dyString *name = newDyString(strlen(prefix)+20);
+
+dyStringClear(name);
+dyStringPrintf(name, "%s.upstream.bed", prefix);
+upStream100 = mustOpen(name->string, "w");
+
+dyStringClear(name);
+dyStringPrintf(name, "%s.downstream.bed", prefix);
+downStream100 = mustOpen(name->string, "w");
+
+dyStringClear(name);
+dyStringPrintf(name, "%s.alt.bed", prefix);
+altRegion = mustOpen(name->string, "w");
+
+dyStringClear(name);
+dyStringPrintf(name, "%s.const.bed", prefix);
+constRegion = mustOpen(name->string, "w");
+dyStringFree(&name);
+}
+
 void altSummary(char *db, char *agxFileName, char *summaryOutName, char *htmlOutName, char *htmlFramesOutName)
 /* Look through a bunch of splice sites and output some statistics and links. */
 {
 struct altGraphX *agList = NULL, *ag = NULL;
 struct altSpliceSite *aSpliceList = NULL, *aSplice=NULL;
 char *RDataName = optionVal("RData", NULL);
+char *bedName = optionVal("bedName", NULL);
 FILE *htmlOut = NULL;
 FILE *htmlFramesOut = NULL;
 FILE *summaryOut = NULL;
@@ -786,6 +1010,11 @@ if(RDataName != NULL)
     RData = mustOpen(buff, "w");
     outputRHeader(RData);
     }
+if(bedName != NULL)
+    {
+    openBedFiles(bedName);
+    }
+
 writeOutFrames(htmlFramesOut, htmlOutName, db);
 carefulClose(&htmlFramesOut);
 warn("Examining splicing graphs.");
