@@ -12,7 +12,7 @@
 #include "agpGap.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.9 2004/10/06 17:17:08 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.10 2004/10/08 19:54:01 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -32,25 +32,22 @@ char *contigFile = NULL;
 void usage()
 /* Print usage instructions and exit. */
 {
-fprintf(stderr, "regionAgp - generate an AGP file for a region\n"
-     "\nusage:\n"
-     "    regionAgp region.bed chrom.agp out\n\n"
-     " region.bed describes the region with lines formatted:\n"
-     "          <chrom> <start> <end> <region> <seq no>\n"
-     " chrom.agp is the input AGP file\n"
-     " out is the output AGP file, or directory if -dir option used\n"
-     "\noptions:\n");
-fprintf(stderr, 
-    "    -%s   prefix for sequence name and AGP file (usually species_)\n",
-                        NAME_PREFIX_OPTION);
-fprintf(stderr,
-    "    -%s   file name for contig to accession map (dump contigAcc table)\n
-                    used if AGP contains contigs not accessioned.\n",
-                        CONTIG_FILE_OPTION);
-fprintf(stderr,
-    "    -%s   directory for output AGP files, to be named <region>.agp",
+errAbort(
+"regionAgp - generate an AGP file for a region\n\n\
+usage:\n\
+     regionAgp region.bed chrom.agp out\n\
+                region.bed describes the region with lines formatted:\n\
+                     <chrom> <start> <end> <region> <seq no>\n\
+                chrom.agp is the input AGP file\n\
+                out is the output AGP file, or directory if -dir option used\n\
+options:\n\
+     -%s  prefix for sequence name and AGP file (usually species_)\n\
+     -%s  file name for contig/accession map (dump of contigAcc table).\n\
+                      Used if AGP contains unaccessioned contigs.\n\
+     -%s	  directory for output AGP files, to be named <region>.agp",
+                        NAME_PREFIX_OPTION,
+                        CONTIG_FILE_OPTION,
                         DIR_OPTION);
-errAbort("");
 }
 
 struct hash *contigAccLoadToHash(char *contigFile)
