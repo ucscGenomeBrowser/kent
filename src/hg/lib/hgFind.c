@@ -1278,8 +1278,50 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
+boolean findGenomePos(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart)
+/* Search for positions in genome that match user query.   
+Return TRUE if the query results in a unique position.  
+Otherwise display list of positions and return FALSE. */
+
+{ 
+struct hgPositions *hgp;
+struct hgPos *pos;
+struct dyString *ui;
+
+
+if (strstr(spec,";") != NULL)
+    return handleTwoSites(spec, retChromName, retWinStart, retWinEnd, cart);
+
+
+hgp = hgPositionsFind(spec, "", TRUE, cart);
+if (hgp == NULL || hgp->posCount == 0)
+    {
+    hgPositionsFree(&hgp);
+    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
+    return TRUE;
+    }
+if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
+    {
+    *retChromName = pos->chrom;
+    *retWinStart = pos->chromStart;
+    *retWinEnd = pos->chromEnd;
+    hgPositionsFree(&hgp);
+    return TRUE;
+    }
+else
+    {
+    if (*retWinStart != 1)
+	hgPositionsHtml(hgp, stdout, TRUE, cart);
+    else
+	*retWinStart = hgp->posCount;
+    hgPositionsFree(&hgp);
+    return FALSE;
+    }
+}
+
 boolean handleTwoSites(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
+	int *retWinStart, int *retWinEnd, struct cart *cart)
 
 {
 struct hgPositions *hgp;
@@ -1306,14 +1348,14 @@ commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
 firststring[commaspot] = '\0';
 strncpy(secondstring,spec + commaspot + 1,strlen(spec));
-firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd);
-secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd); 
+firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart);
+secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart); 
 if (firstSuccess == FALSE && secondSuccess == FALSE)
     {
     errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
     return TRUE;
     }
-if (firstSuccess == FALSE)
+if (firstSuccess == FALSE) 
     {
     errAbort("%s not uniquely determined: %d locations.",firststring,firstWinStart);
     return TRUE;
