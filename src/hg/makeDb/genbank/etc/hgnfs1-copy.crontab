@@ -1,0 +1,9 @@
+#
+# update data files from the build server to hgnfs
+#
+
+SHELL=/bin/sh
+MAILTO=genbank@cse.ucsc.edu
+
+# poll every hour at 50 minutes after
+50 0-23 * * *	/home/genbank/genbank/etc/hgnfs1-copy
