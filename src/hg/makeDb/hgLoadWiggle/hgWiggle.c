@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.31 2004/09/15 17:55:13 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.32 2004/09/23 21:55:26 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -37,6 +37,7 @@ static unsigned hBinCount = 25;	/*	histoGram bin count	*/
 static float hMinVal = 0.0;	/*	histoGram minimum value	*/
 static float hRange = 0.0;	/*	hRange = hBinSize * hBinCount; */
 static float hMax = 0.0;	/*	hMax = hMinVal + hRange;	*/
+static int lift = 0;		/*	offset to lift ascii positions out */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -63,6 +64,7 @@ static struct optionSpec optionSpecs[] = {
     {"hBinSize", OPTION_STRING},
     {"hBinCount", OPTION_INT},
     {"hMinVal", OPTION_STRING},
+    {"lift", OPTION_INT},
     {NULL, 0}
 };
 
@@ -85,6 +87,7 @@ verbose(VERBOSE_ALWAYS_ON,
   "   -htmlOut - output stats or histogram in HTML instead of plain text\n"
   "   -doStats - perform stats measurement, default output text, see -htmlOut\n"
   "   -doBed - output bed format\n"
+  "   -lift=<D> - lift ascii output positions by D (0 default)\n"
   "   -bedFile=<file> - constrain output to ranges specified in bed <file>\n"
   "   -dataConstraint='DC' - where DC is one of < = >= <= == != 'in range'\n"
   "   -ll=<F> - lowerLimit compare data values to F (float) (all but 'in range')\n"
@@ -361,6 +364,7 @@ upperLimit = optionFloat("ul", INFINITY);
 hBinSize = optionFloat("hBinSize", 1.0);
 hMinVal = optionFloat("hMinVal", 0.0);
 hBinCount = optionInt("hBinCount", 25);
+lift = optionInt("lift", 0);
 
 if (help)
     usage(TRUE);
@@ -431,6 +435,9 @@ if (position)
     wds->setPositionConstraint(wds, winStart, winEnd);
     verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", wds->winStart+1, wds->winEnd);
     }
+wds->offset = lift;
+if (lift > 0)
+    verbose(VERBOSE_CHR_LEVEL, "#\tlifting ascii positions on output by %d\n", lift);
 if (doAscii)
     verbose(VERBOSE_CHR_LEVEL, "#\tdoAscii option on, perform the default ascii output\n");
 if (doHistogram)
