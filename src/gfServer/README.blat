@@ -15,8 +15,8 @@ There are seven directories:
                Web and links to UCSC browser.
 
 To get things going read how to get the code to compile
-in the general purpose README, and then run make in 
-the two lib directories and in gfServer and gfClient.
+in the general purpose README, following the general
+install and then the BLAT install instructions.
 Then ftp over to genome-ftp.cse.ucsc.edu, go to
 goldenPath/07oct2000/bigZips, and download chromNib.tar.Z.
 This contains the Oct 7th assembly in a format that

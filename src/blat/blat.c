@@ -13,7 +13,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-enum {qSizeMax = 20000};
+enum {qSizeMax = 100000};	/* Maximum size of single query sequence. */
 
 /* Variables that can be set from command line. */
 int tileSize = 11;
@@ -28,6 +28,7 @@ char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -202,7 +203,6 @@ if (dotEvery > 0)
 void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
 /* Search for seq on either strand in index. */
 {
-// uglyf("Searching for hits to %s\n", seq->name);
 dotOut();
 if (isProt)
     {
@@ -235,19 +235,17 @@ for (i=0; i<fileCount; ++i)
     if (isNib(fileName))
         {
 	FILE *f;
-	int size;
 	struct dnaSeq *seq;
 
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
-	nibOpenVerify(fileName, &f, &size);
-	seq = nibLdPart(fileName, f, size, 0, size);
+	seq = nibLoadAll(fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
 	carefulClose(&f);
 	searchOne(seq, gf, psl, isProt);
+	totalSize += seq->size;
 	freeDnaSeq(&seq);
-	totalSize += size;
 	count += 1;
 	}
     else
@@ -350,8 +348,6 @@ if (!noHead)
 
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
-    // uglyf("Searching %c strand of database\n", (isRc ? '-' : '+'));
-
     /* Initialize local pointer arrays to NULL to prevent surprises. */
     for (frame = 0; frame < 3; ++frame)
 	{
@@ -374,7 +370,6 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
 	    dotOut();
-	    // uglyf("%s %d %c\n", qSeq.name, qSeq.size, isRc ? '-' : '+');
 	    if (qSeq.size > qSizeMax)
 	        {
 		warn("Truncating %s first qSizeMax bases", qSeq.name);

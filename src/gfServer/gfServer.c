@@ -71,7 +71,7 @@ int hitCount = 0, clumpCount = 0, oneHit;
 if (doTrans)
     errAbort("Don't support translated direct stuff currently, sorry");
 
-gfIndexNibs(nibCount, nibFiles, minMatch, maxGap, tileSize, repMatch, FALSE,
+gf = gfIndexNibs(nibCount, nibFiles, minMatch, maxGap, tileSize, repMatch, FALSE,
 	allowOneMismatch);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
@@ -282,7 +282,7 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 char buf[256];
 char *line, *command;
-int fromLen, readSize;
+int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 
 logFile = mustOpen("gfServer.log", "w");
@@ -302,15 +302,15 @@ logIt("indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
-if (bind(socketHandle, &sai, sizeof(sai)) == -1)
+if (bind(socketHandle, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %s", hostName, portName);
-listen(socketHandle, 100);
+res = listen(socketHandle, 100);
 
 logIt("Server ready for queries!\n");
 printf("Server ready for queries!\n");
 for (;;)
     {
-    connectionHandle = accept(socketHandle, &sai, &fromLen);
+    connectionHandle = accept(socketHandle, NULL, &fromLen);
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     buf[readSize] = 0;
     logIt("%s\n", buf);
@@ -472,7 +472,7 @@ int sd = 0;
 
 /* Set up socket.  Get ready to listen to it. */
 sd = setupSocket(portName, hostName);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't connect to %s port %s", hostName, portName);
 
 /* Put together quit command. */
@@ -495,7 +495,7 @@ int i;
 
 /* Set up socket.  Get ready to listen to it. */
 sd = setupSocket(portName, hostName);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't connect to %s port %s", hostName, portName);
 
 /* Put together command. */
@@ -528,7 +528,7 @@ int matchCount = 0;
 
 /* Set up socket.  Get ready to listen to it. */
 sd = setupSocket(portName, hostName);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't connect to %s port %s", hostName, portName);
 
 /* Put together query command. */
@@ -584,7 +584,7 @@ int i;
 
 /* Set up socket.  Get ready to listen to it. */
 sd = setupSocket(portName, hostName);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't connect to %s port %s", hostName, portName);
 
 /* Put together command. */
