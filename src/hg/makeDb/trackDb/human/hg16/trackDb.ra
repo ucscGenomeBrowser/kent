@@ -109,7 +109,7 @@ spectrum on
 type psl xeno mm3
 
 track blastzTightMm3
-shortLabel Mouse Tight
+shortLabel Mm3 Tight
 longLabel Blastz Mouse (mm3-Feb 03), Tight Subset of Best Alignments
 group compGeno
 priority 127.5
@@ -121,7 +121,7 @@ type psl xeno mm3
 otherDb mm3
 
 track chainMm3
-shortLabel Mouse Chain 
+shortLabel Mm3 Chain 
 longLabel Chained Blastz Mouse (mm3-Feb 03)/$Organism Alignments
 group compGeno
 priority 128
@@ -133,7 +133,7 @@ type chain mm3
 otherDb mm3
 
 track netMm3
-shortLabel Mouse Net
+shortLabel Mm3 Net
 longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
 group compGeno
 priority 129
@@ -925,7 +925,7 @@ spectrum on
 type psl xeno mm4
 
 track blastzTightMm4
-shortLabel Mm4 Tight
+shortLabel Mouse Tight
 longLabel Blastz Mouse (Oct 03/Mm4), Tight Subset of Best Alignments
 group compGeno
 priority 127.6
@@ -937,7 +937,7 @@ type psl xeno mm4
 otherDb mm4
 
 track chainMm4
-shortLabel Mm4 Chain 
+shortLabel Mouse Chain 
 longLabel Chained Blastz Mouse (Oct 03/Mm4)/$Organism Alignments
 group compGeno
 priority 128.1
@@ -949,7 +949,7 @@ type chain mm4
 otherDb mm4
 
 track netMm4
-shortLabel Mm4 Net
+shortLabel Mouse Net
 longLabel Mouse (Oct 03/Mm4)/$Organism Alignment Net
 group compGeno
 priority 129.1
