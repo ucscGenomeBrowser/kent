@@ -53,6 +53,7 @@ DIRS = \
 	faSplit \
 	faToNib \
 	faTrans \
+	faTrimPolyA \
 	fixCr \
 	gffPeek \
 	htmlPics \
