@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.58.4.5 2005/01/07 22:22:31 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.58.4.6 2005/01/07 22:31:53 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -67,7 +67,7 @@ errAbort(
   "      -delayTime=N  Number of seconds to delay before submitting next job \n"
   "         to minimize i/o load at startup - default 0.\n"
   "      -eta  Show estimated time to completion with 'time' function.\n"
-  "         This is a rough estimated based on average job time and jobs left\n"
+  "         This is a rough estimated based on average job time and jobs left.\n"
   "      -priority=x  Set batch priority to high, medium, or low.\n"
   "         Default medium (use high only with approval).\n"
   "         If needed, use with make, push, create, shove, or try.\n"
