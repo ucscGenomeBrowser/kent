@@ -141,7 +141,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     cd /cluster/data/ci1/bed/gap
     findMotif -verbose=4 -motif=AACCAA /gbdb/ci1/nib |& grep -h GAP *.stderr | sed -e "s/#GAP //" > gap.bed   
     awk  "{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \"N\", \$5, \"fragment\", \"yes\"}" gap.bed > gap2.bed
-    hgLoadBed ci1 gap gap2.bed
+    hgLoadBed ci1 agpGap gap2.bed -sqlTable=$HOME/kent/src/hg/lib/agpGap.sql
 
 # SNAP GENE PREDICTIONS FROM COLIN DEWEY (DONE 4/23/04 angie)
     ssh hgwdev
@@ -237,4 +237,9 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     chainSwap chainCi1S.chain chainHg16S.chain
     hgLoadChain hg16 chainCi1ProtEx chainCi1S.chain
     hgLoadChain ci1 chainHg16ProtEx  chainHg16S.chain
+
+    grep ">" /cluster/data/hg16/bed/blat*7/known.fa | sed "s/>//" > kg.lst
+    kgName hg16 kg.lst kg.names
+    cat $HOME/kent/src/hg/lib/kgMapName.sql | hgsql ci1
+    echo "load data local infile 'kg.names' into table kgMapName;" | hgsql ci1
 
