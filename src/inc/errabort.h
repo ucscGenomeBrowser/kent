@@ -19,22 +19,18 @@
 #define ERRABORT_H
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
-#ifdef __GNUC__
-__attribute__ ((noreturn))
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-void vaErrAbort(char *format, va_list args)
+void vaErrAbort(char *format, va_list args);
 /* Abort function, with optional (vprintf formatted) error message. */
-#ifdef __GNUC__
-__attribute__ ((noreturn))
-#endif
-;
 
 void errnoAbort(char *format, ...)
 /* Prints error message from UNIX errno first, then does errAbort. */
-#ifdef __GNUC__
-__attribute__ ((noreturn))
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 1, 2)))
 #endif
 ;
 
@@ -47,12 +43,8 @@ void pushAbortHandler(AbortHandler handler);
 void popAbortHandler();
 /* Revert to old abort handler. */
 
-void noWarnAbort()
+void noWarnAbort();
 /* Abort without message. */
-#ifdef __GNUC__
-__attribute__ ((noreturn))
-#endif
-;
 
 void pushDebugAbort();
 /* Push abort handler that will invoke debugger. */
@@ -60,11 +52,19 @@ void pushDebugAbort();
 void vaWarn(char *format, va_list args);
 /* Call top of warning stack to issue warning. */
 
-void warn(char *format, ...);
+void warn(char *format, ...)
 /* Issue a warning message. */
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
-void errnoWarn(char *format, ...);
+void errnoWarn(char *format, ...)
 /* Prints error message from UNIX errno first, then does rest of warning. */
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 typedef void (*WarnHandler)(char *format, va_list args);
 /* Function that can warn. */
