@@ -269,6 +269,12 @@ int ffCalcCdnaGapPenalty(int hGap, int nGap)
 /* Return gap penalty for given h and n gaps. */
 {
 int acc = 2;
+if (hGap > 100000)	/* Discourage really long introns. */
+    {
+    acc += (hGap - 100000)/3000;
+    if (hGap > 500000)
+        acc += (hGap - 500000)/2000;
+    }
 if (hGap < 0)   /* Discourage jumping back in haystack. */
     {
     hGap = -8*hGap;
@@ -1399,11 +1405,6 @@ void lumpProtoGenes(struct protoGene **pList,
 {
 struct protoGene *a, *b;
 
-    {
-    int count = 0;
-    for (a = *pList; a != NULL; a = a->right)
-	++count;
-    }
 while (bestMerger(*pList, stringency, ns, hs, &a, &b))
     {
     mergeProtoGenes(pList, a, b);
@@ -1571,10 +1572,10 @@ static double rwFreq[4];
 static boolean rwIsCdna;
 static boolean rwCheckGoodEnough;
 
-static struct ffAli *rwFindTilesBetween(DNA *ns, DNA *ne, DNA *hs, DNA *he, double stringency)
+static struct ffAli *rwFindTilesBetween(DNA *ns, DNA *ne, DNA *hs, DNA *he, 
+    enum ffStringency stringency, double probMax)
 /* Search for more or less regularly spaced exact matches that are
- * in the right order. If rwCheckAbort is set and alignment is 
- * bad return NULL, otherwise return best alignment. */
+ * in the right order. */
 {
 int searchOffset;
 int endTileOffset;
@@ -1591,7 +1592,7 @@ double tileProbOne;
 
 possibleTiles = (haySize - nextPowerOfFour(needleSize));
 if (possibleTiles < 1) possibleTiles = 1;
-tileProbOne = stringency/possibleTiles;
+tileProbOne = probMax/possibleTiles;
 
 searchOffset = 0;
 endTileOffset = 0;
@@ -1649,13 +1650,13 @@ return bestAli;
 }
 
 static struct ffAli *recursiveWeave(DNA *ns, DNA *ne, DNA *hs, DNA *he, 
-    double stringency, int level)
+    enum ffStringency stringency, double probMax, int level)
 /* Find a set of tiles, then recurse to find set of tiles between the tiles
  * at somewhat lower stringency. */
 {
 struct ffAli *left = NULL, *right = NULL, *aliList;
 
-aliList = rwFindTilesBetween(ns, ne, hs, he, stringency);
+aliList = rwFindTilesBetween(ns, ne, hs, he, stringency, probMax);
 if (aliList != NULL)
     {
     DNA *lne, *rns, *lhe, *rhs;
@@ -1690,7 +1691,7 @@ if (aliList != NULL)
         if (ndif >= 5 && hdif >= 5)
             {
             struct ffAli *newLeft, *newRight;
-            newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency*2, level+1);
+            newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency, probMax*2, level+1);
             if (newLeft != NULL)
                 {
                 /* Insert new tiles between left and right. */
@@ -1742,7 +1743,7 @@ makeFreqTable(hs, haySize, rwFreq);
 rwIsCdna = (stringency == ffCdna);
 rwCheckGoodEnough = (stringency == ffTight || stringency == ffCdna);
 
-bestAli = recursiveWeave(ns, ne, hs, he, tileStrinProbMult[stringency], 1);
+bestAli = recursiveWeave(ns, ne, hs, he, stringency, tileStrinProbMult[stringency], 1);
 
 return bestAli;
 }

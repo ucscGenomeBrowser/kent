@@ -503,6 +503,51 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
 return TRUE;
 }
 
+struct ffAli *smallMiddleExons(struct ffAli *aliList, struct ssBundle *bundle, 
+	enum ffStringency stringency)
+/* Look for small exons in the middle. */
+{
+if (bundle->t3List != NULL)
+    return aliList;	/* Can't handle middle stuff. */
+else
+    {
+    struct dnaSeq *qSeq =  bundle->qSeq;
+    struct dnaSeq *genoSeq = bundle->genoSeq;
+    struct ffAli *right, *left = NULL, *newLeft, *newRight;
+
+    left = aliList;
+    for (right = aliList->right; right != NULL; right = right->right)
+        {
+	if (right->hStart - left->hEnd >= 10 && right->nStart - left->nEnd >= 10)
+	    {
+	    // uglyf("Searching for middle %d %d\n", right->hStart - left->hEnd, right->nStart - left->nEnd);
+	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
+	    if (newLeft != NULL)
+	        {
+		newRight = ffRightmost(newLeft);
+                if (left != NULL)
+                    {
+                    left->right = newLeft;
+                    newLeft->left = left;
+                    }
+                else
+                    {
+                    aliList = newLeft;
+                    }
+                if (right != NULL)
+                    {
+                    right->left = newRight;
+                    newRight->right = right;
+                    }
+		}
+	    }
+	left = right;
+	}
+    }
+return aliList;
+}
+
+
 int ssStitch(struct ssBundle *bundle, enum ffStringency stringency)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
@@ -558,6 +603,7 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+    bestPath = smallMiddleExons(bestPath, bundle, stringency);
     if (!bundle->isProt)
 	ffSlideIntrons(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
