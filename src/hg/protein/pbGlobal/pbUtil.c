@@ -873,7 +873,7 @@ while (row3 != NULL)
 
 	    /* display a protein */
 	    hPrintf(
-		"<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
+		"<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
 		displayID, gDatabase);
 	    if (sameWord(spID, displayID))
 		{
@@ -971,12 +971,12 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    {
 	    if (sameWord(protAcc, protDisp))
 		{
-		hPrintf("<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
 		hPrintf("%s</A> %s\n", protAcc, protDesc);
 		}
 	    else
 		{
-		hPrintf("<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
+		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
 		hPrintf("%s</A> (aka %s) %s\n", protAcc, protDisp, protDesc);
 		}
 	    }
