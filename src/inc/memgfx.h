@@ -188,27 +188,12 @@ void mgDrawRulerBumpText(struct memGfx *mg, int xOff, int yOff,
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  Bump text positions slightly. */
 
-void mgFilledSlopedLine( struct memGfx *mg,   Color *pt1,
-           Color *pt1Home, double slope, int mult, int w, double h, Color
-           *colors, int colRange, Color *pt1Base );
-    /*fills area below line for by Y and X sloping lines. Called from
-    mgConnectingLine if the 'wiggle.fill' option is on(1).*/
-
-
-void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1,
-        Color *pt1Home, double slope, int mult, int w, double h, Color
-        *colors, double colRange, Color *pt1Base, int aa, int fill );
-    /*draws a sloped line that is dominated by x-component movement
-     * with anti-aliasing in the sense that for the y-value 0.3 with a
-     * 1 pixel thick line the shading is 70% in the lower pixel and
-     * 30% in the top pixel. A value such as 2.0 would only occupy one
-     * pixel with 100% shading.*/
-
-void mgDrawYSlopedLineAntiAlias( struct memGfx *mg,  Color *pt1Home,
-        Color *pt1, double slope, int mult, int w, int h, Color
-        *colors, double colRange, Color *pt1Base, int aa, int fill );
-    /*draws a sloped line that is dominated by y-component movement
-     * with anti-aliasing. See mgDrawXSlopedLineAntiAlias above.*/
+void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+	int bottom, Color color);
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's top, a horizontal line at bottom at it's bottom,  and
+ * vertical lines from the bottom to y1 on the left and bottom to
+ * y2 on the right. */
 
 void mgConnectingLine( struct memGfx *mg, int x1, double y1, int x2,
                        double y2, Color *colors, int ybase, int aa,
