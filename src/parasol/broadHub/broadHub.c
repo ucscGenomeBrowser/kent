@@ -81,14 +81,17 @@ if (setReceiveTimeOut(sd, timeOut) < 0)
 return sd;
 }
 
-void setBroadcast(int sd, boolean on)
+void setBroadcast(int sd)
 /* Turn on/off broadcast on socket. */
 {
+int ttl = 1;
+int on = 1;
 /* Set socket to enable broadcast. */
 if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) != 0)
-    {
     errAbort("Can't set broadcast option on socket %s", strerror(errno));
-    }
+/* Packets shouldn't live outside of local network. */
+if (setsockopt(sd, IPPROTO_IP, IP_MULTICAST_TTL, &ttl, sizeof(ttl)) != 0)
+    errAbort("Can't set ttl option on socket %s", strerror(errno));
 }
 
 int openBroadcastSocket(int port)
@@ -105,7 +108,7 @@ assert(sizeof(struct bdMessage) == bdHeaderSize + bdMaxDataSize);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (sd < 0)
     errAbort("Can't open broadcast socket %s", strerror(sd));
-setBroadcast(sd, TRUE);
+setBroadcast(sd);
 
 return sd;
 }
@@ -125,6 +128,15 @@ if (!initted)
 return (tv.tv_sec - origSec)*1000000 + tv.tv_usec;
 }
 
+struct missingSection
+/* Keep track of missing sections.  This will give us
+ * a chance to fix them later when the effected machine
+ * may not be so tied up. */
+    {
+    struct missingSection *next;
+    int sectionIx;		/* The section that is missing. */
+    };
+
 struct machine
 /* Keep track of one machine. */
     {
@@ -137,6 +149,7 @@ struct machine
     boolean didOpen;   /* Did open ok. */
     boolean didClose;  /* Did close ok. */
     boolean gotCleanStatus;	/* Did status ok. */
+    struct missingSection *missingSections;  /* List of sections we missed. */
     };
 
 struct dlList *getMachines(char *fileName)
@@ -249,7 +262,7 @@ void sendFile(struct dlList *machineList, struct dlList *deadList, struct bdMess
 {
 struct dlNode *mNode, *nextNode;
 struct machine *machine;
-int tryIx, maxTry = 3, maxBroadTry = maxTry*10;
+int tryIx, maxTry = 4, maxBroadTry = maxTry*10;
 int fileIx = 0;
 int messageIx = 0, lastReceivedMessageIx = 0;
 int firstOpenMessage = messageIx + 1;
@@ -257,6 +270,7 @@ int firstCloseMessage;
 bits32 ip;
 char *fileDataArea = m->data + 3 * sizeof(bits32);
 int readSize;
+int firstCheckMessage, rescueCount = 0;
 int sectionIx, subIx, subBlockIx, blockIx, blockCount, subBlockCount = 0, lastBlockSize;
 int err;
 FILE *f;
@@ -267,6 +281,7 @@ int sendAhead = 0;
 int desiredSendAhead = 3;
 long t1,t2, openTime =0, closeTime = 0, sendTime = 0,
 	primaryTime = 0, checkTime = 0;
+struct missingSection *missingSection = NULL;
 
 /* Open up file. */
 f = mustOpen(fileName, "rb");
@@ -393,13 +408,13 @@ else
 	primaryTime += microTime() - t2;
 
 	/* Check nodes one at a time for this section. */
+	firstCheckMessage = messageIx + 1;
 	t2 = microTime();
 	for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
 	    {
 	    machine = mNode->val;
 	    machine->gotCleanStatus = FALSE;
 	    }
-	// setReceiveTimeOut(inSd, 1000000);
 	for (tryIx = 0; tryIx < maxBroadTry; ++tryIx)
 	    {
 	    for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
@@ -416,11 +431,17 @@ else
 			{
 			if ((err = bdReceive(inSd, m, &ip)) < 0)
 			    {
+			    uglyf(" %s timed out checking\n", machine->name);
 			    trackTimeOuts(err, machine, &totalTimeOuts);
 			    break;
 			    }
-			if (m->id == messageIx)
+			if (m->type == bdmMissingBlocks && m->machine == machine->ip && m->id >= firstCheckMessage)
 			    {
+			    if (m->id != messageIx)
+				{
+			        ++rescueCount;
+				uglyf(" rescued a missingBlockMessage on %s\n", machine->name);
+				}
 			    gotReply = TRUE;
 			    break;
 			    }
@@ -434,7 +455,7 @@ else
 			else
 			    {
 			    int i, ackPending = 0;
-			    struct bdMessage *m2;  /* Need 2nd message cause still using first. */
+			    struct bdMessage *m2;  /* Need 2nd message, still using first. */
 			    char *dataArea2;
 			    AllocVar(m2);
 			    dataArea2 = m2->data + 3 * sizeof(bits32);
@@ -473,15 +494,15 @@ else
 	    nextNode = mNode->next;
 	    machine = mNode->val;
 	    if (machine->gotCleanStatus)
-		 {
-		 }
-	     else
-		 {
-		 uglyf("%s is unclean\n", machine->name);
-		 machine->isDead = TRUE;
-		 dlRemove(mNode);
-		 dlAddTail(deadList, mNode);
-		 }
+		{
+		}
+	    else
+		{
+		uglyf("%s is unclean\n", machine->name);
+		machine->isDead = TRUE;
+		dlRemove(mNode);
+		dlAddTail(deadList, mNode);
+		}
 	    }
 	checkTime += microTime() - t2;
 	}
@@ -553,6 +574,7 @@ else
     uglyf("%d blocks, %d (%4.2f%%) resent, %d time outs\n", statBlocks, statResent, 100.0 * statResent/statBlocks, totalTimeOuts);
     uglyf("openTime %ld, sendTime %ld, closeTime %ld\n", openTime/1000, sendTime/1000, closeTime/1000);
     uglyf("\tprimaryTime %ld, checkTime %ld\n", primaryTime/1000, checkTime/1000);
+    uglyf("\trescued %d\n", rescueCount);
     }
 }
 
@@ -664,6 +686,10 @@ for (j=0; j<510; ++j)
     }
 uglyf("ErrCount %d\n", errCount);
 uglyf("bdBlockSize %d, bdSectionBytes %d\n", bdBlockSize, bdSectionBytes);
+bdInitMessage(m, 0, -1, bdmQuit, 0);	/* Send quit for the moment. */
+broadcast(outSd, m);
+broadcast(outSd, m);
+
 }
 
 void broadHub(char *machineFile, char *transferFile)
