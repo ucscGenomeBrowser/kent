@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.36 2004/03/01 18:13:02 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.37 2004/03/06 21:51:42 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -859,7 +859,7 @@ safef(sqlCmd, sizeof(sqlCmd), createSql, table,
 return cloneString(sqlCmd);
 }
 
-struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd, int *retOverlap)
+struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap)
 {
 /* read all genes from a table find the gene with the biggest overlap. 
    Cache the list of genes to so we only read it once */
@@ -873,6 +873,8 @@ char **row;
 struct genePred *el = NULL, *bestMatch = NULL, *gp = NULL;
 int overlap = 0 , bestOverlap = 0, i;
 struct psl *psl;
+int selfHit = 0;
+unsigned *eFrames;
 
 
 if (*list == NULL)
@@ -910,6 +912,12 @@ for (el = *list; el != NULL; el = el->next)
                 {
                 overlap += positiveRangeIntersection(cStart,cEnd, el->exonStarts[i], el->exonEnds[i]) ;
                 }
+            if (overlap > 20 && sameString(name, el->name))
+                {
+                bestMatch = el;
+                bestOverlap = overlap;
+                *retOverlap = bestOverlap;
+                }
             if (overlap > bestOverlap)
                 {
                 bestMatch = el;
@@ -940,6 +948,24 @@ if (bestMatch != NULL)
         gp->exonEnds[i] = bestMatch->exonEnds[i] ;
         }
     }
+    gp->optFields = bestMatch->optFields;
+    gp->id = bestMatch->id;
+
+    if (bestMatch->optFields & genePredName2Fld)
+        gp->name2 = cloneString(bestMatch->name2);
+    if (bestMatch->optFields & genePredCdsStatFld)
+        {
+        gp->cdsStartStat = bestMatch->cdsStartStat;
+        gp->cdsEndStat = bestMatch->cdsEndStat;
+        }
+    if (bestMatch->optFields & genePredExonFramesFld)
+        {
+        gp->exonFrames = AllocArray(eFrames, bestMatch->exonCount);
+        for (i = 0; i < bestMatch->exonCount; i++)
+            gp->exonFrames[i] = bestMatch->exonFrames[i];
+        }
+    eFrames = gp->exonFrames;
+
 return gp;
 }
 int genePredBases(struct genePred *gp)
