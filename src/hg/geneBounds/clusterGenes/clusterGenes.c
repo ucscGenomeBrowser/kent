@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.14 2004/03/31 18:07:17 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.15 2004/04/06 23:39:28 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -583,8 +583,8 @@ void prGene(FILE *f, struct cluster *cluster, struct clusterGene *cg)
 {
 fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%s\t%c\t%c", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd,
         cg->gp->strand,
-        ((cg->exonConflicts != NULL) ? 'y' : 'n'),
-        ((cg->cdsConflicts != NULL) ? 'y' : 'n'));
+        (cluster->hasExonConflicts ? 'y' : 'n'),
+        (cluster->hasCdsConflicts ? 'y' : 'n'));
 prConflicts(f, cg->exonConflicts);
 prConflicts(f, cg->cdsConflicts);
 fprintf(f, "\n");
