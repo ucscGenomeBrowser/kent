@@ -9,8 +9,12 @@ struct cartDb
 /* A simple id/contents pair for persistent storing of cart variables */
     {
     struct cartDb *next;  /* Next in singly linked list. */
-    char *id;	/* Cart ID */
+    unsigned int id;	/* Cart ID */
     char *contents;	/* Contents - encoded variables */
+    int reserved;	/* Reserved, currently always zero. */
+    char *firstUse;	/* First time this was used */
+    char *lastUse;	/* Last time this was used */
+    int useCount;	/* Number of times used */
     };
 
 void cartDbStaticLoad(char **row, struct cartDb *ret);
