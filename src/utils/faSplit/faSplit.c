@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.23 2005/01/06 10:49:43 jill Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.24 2005/03/24 23:26:30 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,10 +38,11 @@ errAbort(
   "This breaks up scaffolds.fa using sequence names as file names.\n"
   "   faSplit gap chrN.fa 20000 outRoot\n"
   "This breaks up chrN.fa into files of at most 20000 bases each, \n"
-  "at gap boundaries if possible.\n"
+  "at gap boundaries if possible.  If the sequence ends in N's, the last\n"
+  "piece, if larger than 20000, will be all one piece.\n"
   "\n"
   "Options:\n"
-  "    -verbose=2 - Write names of each file created\n"
+  "    -verbose=2 - Write names of each file created (=3 more details)\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
@@ -49,7 +50,8 @@ errAbort(
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
   "                   pieces in file.lft.  Only used with size and gap.\n"
   "    -minGapSize=X Consider a block of Ns to be a gap if block size >= X.\n"
-  "                  Only used with gap.\n"
+  "                  Default value 1000.  Only used with gap.\n"
+  "    -noGapDrops - include all N's when splitting by gap.\n"
   "    -outDirDepth=n Create n-levels of output directory under outRoot.\n"
   "                   This helps prevent NFS problems with a large number of\n"
   "                   file in a directory.  Using -outDirDepth=3 would\n"
@@ -68,12 +70,13 @@ static struct optionSpec optionSpecs[] = {
     {"out", OPTION_STRING},
     {"lift", OPTION_STRING},
     {"minGapSize", OPTION_INT},
+    {"noGapDrops", OPTION_BOOLEAN},
     {"outDirDepth", OPTION_INT},
     {"prefixLength", OPTION_INT},
     {NULL, 0}
 };
 
-int outDirDepth = 0;
+static int outDirDepth = 0;
 
 unsigned long estimateFaSize(char *fileName)
 /* Estimate number of bases from file size. */
@@ -536,6 +539,31 @@ if (nSize > 0)
 return(gotGap);
 }
 
+static void writeOneByGap(boolean oneFile, char *outRoot,
+    int digits, int pieceIx, FILE *f, char noPath[256], int pos, int thisSize,
+	struct dnaSeq *seq, FILE *lift, int *writeCount, char *outPath)
+{
+char numOut[128];
+if (!oneFile)
+    {
+    char fileName[512];
+    mkOutPath(fileName, outRoot, digits, pieceIx);
+    f = mustOpen(fileName, "w");
+    verbose(2, "writing %s\n", fileName);
+    }
+else
+    verbose(2, "writing %s\n", outPath);
+sprintf(numOut, "%s%0*d", noPath, digits, pieceIx);
+verbose(3,"#\twriting piece %s, at pos %d for size %d\n", numOut,pos,thisSize);
+faWriteNext(f, numOut, seq->dna + pos, thisSize);
+if (lift)
+    fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
+	pos, numOut, thisSize, seq->name, seq->size);
+*writeCount += 1;
+if (!oneFile)
+    carefulClose(&f);
+}
+
 void splitByGap(char *inName, int pieceSize, char *outRoot, int estSize)
 /* Split up file into pieces at most pieceSize bases long, at gap boundaries 
  * if possible. */
@@ -543,6 +571,7 @@ void splitByGap(char *inName, int pieceSize, char *outRoot, int estSize)
 unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
 int minGapSize = optionInt("minGapSize", 1000);
+boolean noGapDrops = optionExists("noGapDrops");
 int maxN = optionInt("maxN", pieceSize-1);
 boolean oneFile = optionExists("oneFile");
 char fileName[512];
@@ -558,12 +587,17 @@ char *liftFile = optionVal("lift", NULL);
 FILE *lift = NULL;
 ZeroVar(&seq);
 
+if (minGapSize < 1)
+    errAbort("ERROR: minGapSize must be > 0");
+
 splitPath(outRoot, dirOnly, noPath, NULL);
 if (oneFile)
     {
     sprintf(fileName, "%s.fa", outRoot);
     f = mustOpen(fileName, "w");
     }
+else
+    fileName[0] = (char) NULL;
 if (liftFile)
     lift = mustOpen(liftFile, "w");
 
@@ -581,41 +615,64 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     pos = 0;
     while (pos < seq.size)
         {
-	char numOut[128];
 	boolean gotGap = FALSE;
 	int gapStart = 0;
 	int gapSize  = 0;
 	int endSize  = seq.size - pos;
 	int thisSize = min(endSize, pieceSize);
+	int startGapLen = 0;
 
-	if (endSize>pieceSize) /* otherwise chops tiny piece at very end */
-	  {
-	    gotGap = findLastGap(&(seq.dna[pos]), thisSize, endSize,
-				 minGapSize, &gapStart, &gapSize);
-	    if (gotGap)
-	      thisSize = gapStart;
-	  }
-
-	if (thisSize > 0 && bitCountRange(bits, pos, thisSize) <= maxN)
+	if (seq.dna[pos] == 'n' || seq.dna[pos] == 'N')
 	    {
-	    if (!oneFile)
-	        {
-                mkOutPath(fileName, outRoot, digits, pieceIx);
-		f = mustOpen(fileName, "w");
-		}
-            sprintf(numOut, "%s%0*d", noPath, digits, pieceIx);
-	    faWriteNext(f, numOut, seq.dna + pos, thisSize);
-	    if (lift)
-	        fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
-		    pos, numOut, thisSize, seq.name, seq.size);
-	    ++writeCount;
-	    if (!oneFile)
-	        carefulClose(&f);
+	    startGapLen = bitFindClear(bits, pos, endSize);
+	    verbose(3,"#\tstarting gap at %d for length: %d\n", pos,
+		startGapLen );
+	    }
+	/*	if a block is all gap for longer than minGapSize, then
+ 	 *	keep it all together in one large piece
+	 */
+	if (startGapLen > minGapSize)
+	    {
+	    if (noGapDrops)
+		writeOneByGap(oneFile, outRoot, digits, pieceIx,
+		    f, noPath, pos, startGapLen, &seq, lift,
+			&writeCount, fileName);
+	    else
+		verbose(3,"#\tbeginning gap of %d size skipped\n", startGapLen);
+	    thisSize = startGapLen;
+	    }
+	else if (thisSize > 0 && bitCountRange(bits, pos, thisSize) <= maxN)
+	    {
+	    if (endSize>pieceSize) /* otherwise chops tiny piece at very end */
+	      {
+		gotGap = findLastGap(&(seq.dna[pos]), thisSize, endSize,
+				     minGapSize, &gapStart, &gapSize);
+		if (gotGap)
+		  thisSize = gapStart;
+	      }
+	    writeOneByGap(oneFile, outRoot, digits, pieceIx,
+		f, noPath, pos, thisSize, &seq, lift, &writeCount, fileName);
 	    }
         pieceIx++;
 	pos += thisSize;
 	if (gotGap)
+	    {
+	    /*	last block is all gap, write it all out	*/
+	    /*if ((pos + gapSize) >= seq.size)*/
+	    if (noGapDrops)
+		{
+		writeOneByGap(oneFile, outRoot, digits, pieceIx,
+		    f, noPath, pos, gapSize, &seq ,lift, &writeCount, fileName);
+		pieceIx++;
+		verbose(3,
+		    "#\tadding gapSize %d to pos %d -> %d and writing gap\n",
+			gapSize, pos, pos+gapSize);
+		}
+	    else
+		verbose(3,"#\tadding gapSize %d to pos %d -> %d\n",
+			gapSize, pos, pos+gapSize);
 	    pos += gapSize;
+	    }
 	}
     bitFree(&bits);
     }
