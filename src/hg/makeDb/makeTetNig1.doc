@@ -2457,3 +2457,33 @@ chainSome $(path1)
 # and created ecoresHg17.html.  Genoscope will not be maintaining this
 # newest data in their Exofish comparative browser display.
 
+
+# ACCESSIONS FOR CONTIGS (WORKING 2005-03-17 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/tetNig1/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    grep SCAF tetra.acc | wc -l
+    # 25773
+
+    # edit hg/encode/regionAgp/contigAccession.pl to recognize tetra format
+    # and install in /cluster/bin/scripts
+    contigAccession tetra.acc > contigAcc.tab
+    wc -l contigAcc.tab
+    # 25773
+    grep SCAF /cluster/data/tetNig1/chr.agp | wc -l
+    # 25773
+    hgsql tetNig1 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql tetNig1
+    hgsql tetNig1 -e "SELECT COUNT(*) FROM contigAcc"
+        # 25773
