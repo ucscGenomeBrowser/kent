@@ -62,8 +62,19 @@ alpha:
 	hgTrackDb drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
+	cp human/hg13/description.html /gbdb/hg13/html
+	cp human/hg15/description.html /gbdb/hg15/html
+	cp human/hg16/description.html /gbdb/hg16/html
+	cp mouse/mm2/description.html /gbdb/mm2/html
+	cp mouse/mm3/description.html /gbdb/mm3/html
 	cp mouse/mm4/description.html /gbdb/mm4/html
+	cp rat/rn2/description.html /gbdb/rn2/html
+	cp rat/rn3/description.html /gbdb/rn3/html
 	cp fugu/fr1/description.html /gbdb/fr1/html
+	cp drosophila/dm1/description.html /gbdb/dm1/html
+	cp worm/ce1/description.html /gbdb/ce1/html
+	cp worm/cb1/description.html /gbdb/cb1/html
+	cp sars/sc1/description.html /gbdb/sc1/html
 	cp zoo/description.html /gbdb/zoo3/html
 
 strict:
