@@ -13,12 +13,11 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.75 2004/10/12 21:00:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.76 2004/12/15 00:35:52 angie Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
-static char * const orgCgiName = "org";
-static char * const dbCgiName = "db";
+char *clade = NULL;
 char *organism = NULL;
 char *db = NULL;
 
@@ -37,14 +36,17 @@ void hgGateway()
 {
 char *oldDb = NULL;
 char *oldOrg = NULL;
+char *oldClade = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
+boolean gotClade = hGotClade();
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
 /* 
    If we are changing databases via explicit cgi request,
@@ -53,10 +55,12 @@ char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.o
    If databases were changed then use the new default position too.
 */
 
-oldDb = hashFindVal(oldVars, dbCgiName);
-oldOrg = hashFindVal(oldVars, orgCgiName);
-if ((oldDb && !containsStringNoCase(oldDb, db))
-|| (oldOrg && !containsStringNoCase(oldOrg, organism)))
+oldDb = hashFindVal(oldVars, "db");
+oldOrg = hashFindVal(oldVars, "org");
+oldClade = hashFindVal(oldVars, "clade");
+if ((oldDb    && differentWord(oldDb, db)) ||
+    (oldOrg   && differentWord(oldOrg, organism)) ||
+    (oldClade && differentWord(oldClade, clade)))
     {
     position = defaultPosition;
     removeCustomTrackData();
@@ -89,17 +93,30 @@ puts(
 "<table bgcolor=\"fffef3\" border=0>\n"
 "<tr>\n"
 "<td>\n"
-"<table><tr>\n"
+"<table><tr>");
+if (gotClade)
+    puts("<td align=center valign=baseline>clade</td>");
+puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
 "<td align=center valign=baseline>position</td>\n"
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
-"</tr>\n"
+"</tr>\n<tr>"
 );
 
-puts("<tr><td align=center>\n");
-printGenomeListHtml(db, onChangeOrg);
+if (gotClade)
+    {
+    puts("<td align=center>\n");
+    printCladeListHtml(organism, onChangeClade);
+    puts("</td>\n");
+    }
+
+puts("<td align=center>\n");
+if (gotClade)
+    printGenomeListForCladeHtml(db, onChangeOrg);
+else
+    printGenomeListHtml(db, onChangeOrg);
 puts("</td>\n");
 
 puts("<td align=center>\n");
@@ -124,9 +141,11 @@ printf("</td>\n");
 #endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
 
 
-cartSetString(cart, "position",position);
-cartSetString(cart, "db",db);
-cartSetString(cart, "org",organism);
+cartSetString(cart, "position", position);
+cartSetString(cart, "db", db);
+cartSetString(cart, "org", organism);
+if (gotClade)
+    cartSetString(cart, "clade", clade);
 
 freez(&defaultPosition);
 position = NULL;
@@ -159,7 +178,10 @@ hgPositionsHelpHtml(organism, db);
 puts("</FORM>\n"
 );
 
-printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+puts("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">");
+if (gotClade)
+    printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", clade);
+printf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 cartSaveSession(cart);
 puts("</FORM><BR>");
@@ -170,11 +192,12 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-getDbAndGenome(cart, &db, &organism);
+getDbGenomeClade(cart, &db, &organism, &clade);
 if (! hDbIsActive(db))
     {
     db = hDefaultDb();
     organism = hGenome(db);
+    clade = hClade(organism);
     }
 if (hIsMgcServer())
     cartWebStart(theCart, "MGC %s Genome Browser Gateway \n", organism);
