@@ -89,7 +89,7 @@ track blastzHuman
 shortLabel Blastz Human
 longLabel Merged Blastz Human(Self) Alignments
 group varRep
-priority 145
+priority 145.1
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -100,7 +100,7 @@ track blastzBestHuman_old
 shortLabel Best Human old
 longLabel old Blastz Human(Self) Best in Genome Alignments
 group varRep
-priority 144
+priority 145.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -111,7 +111,7 @@ track blastzBestHuman
 shortLabel Best Human 
 longLabel Blastz Human(Self) Best in Genome Alignments
 group varRep
-priority 144
+priority 145.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -122,7 +122,7 @@ track blastzTightHuman
 shortLabel Tight Human 
 longLabel Blastz Human(Self), Tight Subset of Best Alignments
 group varRep
-priority 143
+priority 145.4
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -148,7 +148,6 @@ priority 69
 visibility hide
 spectrum on
 type bed 12 
-
 
 track blatChimp
 shortLabel Chimp Blat

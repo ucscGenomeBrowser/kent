@@ -1049,7 +1049,7 @@ track perlegen
 shortLabel Haplotype Blocks
 longLabel Perlegen Common High-Resolution Haplotype Blocks.  
 group varRep
-priority 146
+priority 145.01
 visibility hide
 chromosomes chr21,
 color 0,0,0
@@ -1057,6 +1057,18 @@ altColor 0,0,0
 spectrum on
 type bed 12
 url http://www.perlegen.com/haplotype/blk/$$.html
+
+track haplotype
+shortLabel Haplotype Blocks
+longLabel Common Haplotype Blocks.  
+group varRep
+priority 145.02
+visibility hide
+chromosomes chr22,
+color 0,0,0
+altColor 0,0,0
+spectrum on
+type bed 12
 
 track rmsk
 shortLabel RepeatMasker
@@ -1240,17 +1252,4 @@ group x
 priority 160
 visibility hide
 type psl .
-
-track haplotype
-shortLabel Haplotype Blocks
-longLabel Common Haplotype Blocks.  
-group varRep
-priority 161
-visibility hide
-chromosomes chr22,
-color 0,0,0
-altColor 0,0,0
-spectrum on
-type bed 12
-
 
