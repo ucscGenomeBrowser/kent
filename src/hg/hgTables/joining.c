@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.19 2004/07/18 21:52:28 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.20 2004/07/18 23:51:25 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -36,6 +36,7 @@ struct joinedTables
     struct joinedRow *rowList;	/* Rows - allocated in lm. */
     int rowCount;	/* Number of rows. */
     int maxRowCount;	/* Max row count allowed (0 means no limit) */
+    struct dyString *filter;  /* Filter if any applied. */
     };
 
 void joinedTablesTabOut(struct joinedTables *joined)
@@ -44,6 +45,14 @@ void joinedTablesTabOut(struct joinedTables *joined)
 struct joinedRow *jr;
 struct joinerDtf *field;
 int outCount = 0;
+boolean suppressEmpty = FALSE;
+
+/* Print out field names. */
+if (joined->filter)
+    {
+    hPrintf("#filter: %s\n", joined->filter->string);
+    suppressEmpty = TRUE;
+    }
 hPrintf("#");
 for (field = joined->fieldList; field != NULL; field = field->next)
     {
@@ -56,18 +65,33 @@ for (field = joined->fieldList; field != NULL; field = field->next)
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     int i;
-    for (i=0; i<joined->fieldCount; ++i)
-	{
-	char *s;
-	if (i != 0)
-	    hPrintf("\t");
-	s = jr->fields[i];
-	if (s == NULL)
-	    s = "n/a";
-        hPrintf("%s", s);
+    boolean passRow = TRUE;
+    if (suppressEmpty)
+        {
+	for (i=0; i<joined->fieldCount; ++i)
+	    {
+	    if (jr->fields[i] == NULL)
+		{
+	        passRow = FALSE;
+		break;
+		}
+	    }
 	}
-    hPrintf("\n");
-    ++outCount;
+    if (passRow)
+	{
+	for (i=0; i<joined->fieldCount; ++i)
+	    {
+	    char *s;
+	    if (i != 0)
+		hPrintf("\t");
+	    s = jr->fields[i];
+	    if (s == NULL)
+		s = "n/a";
+	    hPrintf("%s", s);
+	    }
+	hPrintf("\n");
+	++outCount;
+	}
     }
 }
 
@@ -95,6 +119,7 @@ if (jt != NULL)
     lmCleanup(&jt->lm);
     joinerDtfFreeList(&jt->fieldList);
     joinerDtfFreeList(&jt->keyList);
+    dyStringFree(&jt->filter);
     freez(pJt);
     }
 }
@@ -427,6 +452,16 @@ struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = sqlConnect(tj->database);
+char *filter = filterClause(tj->database, tj->table);
+
+if (filter != NULL)
+    {
+    if (joined->filter == NULL)
+        joined->filter = dyStringNew(0);
+    else
+        dyStringAppend(joined->filter, " AND ");
+    dyStringAppend(joined->filter, filter);
+    }
 
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
@@ -458,7 +493,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     char **row;
     struct sqlResult *sr = regionQuery(conn, tj->table, 
-    	sqlFields->string, region, isPositional);
+    	sqlFields->string, region, isPositional, filter);
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (idFieldIx < 0)
@@ -500,6 +535,7 @@ for (region = regionList; region != NULL; region = region->next)
 if (isFirst)
     slReverse(&joined->rowList);
 tj->loaded = TRUE;
+freez(&filter);
 sqlDisconnect(&conn);
 }
 	

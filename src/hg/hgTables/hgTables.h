@@ -59,7 +59,8 @@ struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
-	char *fields, struct region *region, boolean isPositional);
+	char *fields, struct region *region, boolean isPositional,
+	char *extraWhere);
 /* Construct and execute query for table on region. */
 
 struct trackDb *findTrack(char *name, struct trackDb *trackList);

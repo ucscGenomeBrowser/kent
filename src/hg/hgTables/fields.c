@@ -649,11 +649,9 @@ boolean needAnd = FALSE;
 
 /* Get list of filter variables for this table.  Return
  * NULL if no filter on us. */
-uglyf("filterClause %s %s\n", db, table);
 if (!anyFilter())
     return NULL;
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", filterVarPrefix, db, table);
-uglyf("varPrefix %s\n", varPrefix);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
@@ -683,26 +681,37 @@ for (var = varList; var != NULL; var = var->next)
 	    {
 	    char *sqlPat = sqlLikeFromWild(pat);
 	    char *ddVal = cartString(cart, var->name);
+	    char *line = sqlPat, *word;
 	    boolean neg = sameString(ddVal, ddOpMenu[1]);
+	    boolean composite = hasWhiteSpace(line);
+	    boolean needOr = FALSE;
 	    if (needAnd) dyStringAppend(dy, " and ");
+	    if (composite) dyStringAppendC(dy, '(');
 	    needAnd = TRUE;
-	    dyStringPrintf(dy, "%s.%s.%s ", db, table, field);
-	    if (sqlWildcardIn(sqlPat))
-	        {
-		if (neg)
-		    dyStringAppend(dy, "not ");
-		dyStringAppend(dy, "like ");
-		}
-	    else
-	        {
-		if (neg)
-		    dyStringAppend(dy, "!= ");
+	    while ((word = nextWord(&line)) != NULL)
+		{
+		if (needOr)
+		    dyStringAppend(dy, " OR ");
+		needOr = TRUE;
+		dyStringPrintf(dy, "%s.%s.%s ", db, table, field);
+		if (sqlWildcardIn(sqlPat))
+		    {
+		    if (neg)
+			dyStringAppend(dy, "not ");
+		    dyStringAppend(dy, "like ");
+		    }
 		else
-		    dyStringAppend(dy, "= ");
+		    {
+		    if (neg)
+			dyStringAppend(dy, "!= ");
+		    else
+			dyStringAppend(dy, "= ");
+		    }
+		dyStringAppendC(dy, '\'');
+		dyStringAppend(dy, word);
+		dyStringAppendC(dy, '\'');
 		}
-	    dyStringAppendC(dy, '\'');
-	    dyStringAppend(dy, sqlPat);
-	    dyStringAppendC(dy, '\'');
+	    if (composite) dyStringAppendC(dy, ')');
 	    freez(&sqlPat);
 	    }
 	}
@@ -748,12 +757,18 @@ for (var = varList; var != NULL; var = var->next)
 		}
 	    }
 	}
-    uglyf("%s %s\n", field, type);
     }
 
 /* Clean up and return */
 hashElFreeList(&varList);
-return dyStringCannibalize(&dy);
+uglyf("filter: %s\n", dy->string);
+if (dy->stringSize == 0)
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+else
+    return dyStringCannibalize(&dy);
 }
 
 void doTest(struct sqlConnection *conn)

@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.30 2004/07/18 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.31 2004/07/18 23:51:24 kent Exp $";
 
 
 void usage()
@@ -212,7 +212,8 @@ return regionList;
 }
 
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
-	char *fields, struct region *region, boolean isPositional)
+	char *fields, struct region *region, boolean isPositional,
+	char *extraWhere)
 /* Construct and execute query for table on region. */
 {
 struct sqlResult *sr;
@@ -221,21 +222,26 @@ if (isPositional)
     if (region->end == 0) /* Full chromosome. */
 	{
 	sr = hExtendedChromQuery(conn, table, region->chrom, 
-		NULL, FALSE, fields, NULL);
+		extraWhere, FALSE, fields, NULL);
 	}
     else
 	{
 	sr = hExtendedRangeQuery(conn, table, region->chrom, 
-		region->start, region->end, NULL, 
-		FALSE, fields, NULL);
+		region->start, region->end, 
+		extraWhere, FALSE, fields, NULL);
 	}
     }
 else
     {
-    char query[256];
-    safef(query, sizeof(query), 
-	    "select %s from %s", fields, table);
-    sr = sqlGetResult(conn, query);
+    struct dyString *query = dyStringNew(0);
+    dyStringPrintf(query, "select %s from %s", fields, table);
+    if (extraWhere)
+         {
+	 dyStringAppend(query, " where ");
+	 dyStringAppend(query, extraWhere);
+	 }
+    sr = sqlGetResult(conn, query->string);
+    dyStringFree(&query);
     }
 return sr;
 }
@@ -511,7 +517,7 @@ return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 
 
 void doTabOutTable(
-	char *database, 
+	char *db, 
 	char *table, 
 	struct sqlConnection *conn, 
 	char *fields)
@@ -523,9 +529,10 @@ struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
+char *filter = filterClause(db, table);
 
 regionList = getRegions();
-hti = getHti(database, table);
+hti = getHti(db, table);
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
@@ -556,7 +563,8 @@ for (region = regionList; region != NULL; region = region->next)
     char chromTable[256];
     boolean gotWhere = FALSE;
 
-    sr = regionQuery(conn, table, fieldSpec->string, region, isPositional);
+    sr = regionQuery(conn, table, fieldSpec->string, 
+    	region, isPositional, filter);
     colCount = sqlCountColumns(sr);
     if (idHash != NULL)
         colCount -= 1;
@@ -565,6 +573,8 @@ for (region = regionList; region != NULL; region = region->next)
     /* First time through print column names. */
     if (region == regionList)
         {
+	if (filter != NULL)
+	    hPrintf("#filter: %s\n", filter);
 	hPrintf("#");
 	for (colIx = 0; colIx < lastCol; ++colIx)
 	    hPrintf("%s\t", sqlFieldName(sr));
@@ -601,6 +611,7 @@ if (outCount == 0)
 	hPrintf("No items in selected region");
 	}
     }
+freez(&filter);
 hashFree(&idHash);
 }
 
