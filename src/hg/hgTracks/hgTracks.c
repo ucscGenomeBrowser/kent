@@ -364,8 +364,8 @@ switch (vis)
 
     lines = 1;
     start = 0;
-	for (item = tg->items; item != NULL; item = item->next)
-    {
+    for (item = tg->items; item != NULL; item = item->next)
+	{
         if( !start && item->next != NULL )
             if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
                 lines++;
@@ -2002,7 +2002,6 @@ for (i=0; i<sampleCount; ++i)
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
-slReverse(&sfList);
 lf->components = sfList;
 finishLf(lf);
 return lf;
@@ -6521,6 +6520,7 @@ int resolution = 0;
 char tableName[256];
 int zoom1 = 23924, zoom2 = 2991; /* bp per data point */
 float pixPerBase = 0;
+
 if(tl.picWidth == 0)
     errAbort("hgTracks.c::loadAffyTranscriptome() - can't have pixel width of 0");
 pixPerBase = (winEnd - winStart)/ tl.picWidth;
@@ -6573,7 +6573,6 @@ slReverse(&lfList);
 /* sort to bring items with common names to the same line
 but only for tracks with a summary table (with name=shortLabel) in
 dense mode*/
-
 if( hasDense != NULL )
     {
     sortGroupList = tg; /* used to put track name at top of sorted list. */
@@ -6581,12 +6580,18 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
+
+/* Since we've taken care of loading too many things using the 
+   zoom tables, take care of limiting visibility here. */
+tg->limitedVis = tg->visibility;
+tg->limitedVisSet = TRUE;
 }
 
 
 void affyTranscriptomeMethods(struct trackGroup *tg)
 /* Overide the load function to look for zoomed out tracks. */
 {
+
 tg->loadItems = loadAffyTranscriptome;
 }
 
