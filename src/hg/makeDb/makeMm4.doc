@@ -2358,10 +2358,46 @@ XXXX
 	dummy primer/primers.initial.acc > stsMarkers_pos_all.rdb
 
 
-    # there doesn't seem to be any script by this name
-    /projects/compbio/usr/booch/booch/scripts/createStsBed \
+XXXX this createSTSbed is only for Human, does not work here
+    /projects/compbio/usr/booch/booch/scripts/createSTSbed \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed \
-	stsMarkers_pos.rdb 500 > stsMapMouse.bed
+	stsMarkers_pos.rdb > stsMapMouse.bed
+
+#  STS Markers plots
+    mkdir /cluster/data/mm4/bed/STSmarkers/html
+    cd /cluster/data/mm4/bed/STSmarkers/html
+    mkdir maps plots sts
+
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/wi_rh.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > rh.rdb
+    mv map.ranges rh.ranges
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/wi_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > wi_gen.rdb
+    mv map.ranges wi_gen.ranges
+    /projects/compbio/usr/booch/booch/scripts/mergeTPFsts -rat
+	../primer/accession_info.rdb ../stsMarkers_pos.rdb \
+	maps/mgd_gen.id.map 3.0 ../stsMarkers_pos_all.rdb \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed > mgd.rdb
+    mv map.ranges mgd.ranges
+
+    /projects/compbio/usr/booch/booch/scripts/combineTPFsts \
+	rh.rdb wi_gen.rdb mgd.rdb > sts.rdb
+
+    /projects/compbio/usr/booch/booch/scripts/TPFrdb2html \
+	-mouse maps/wi_rh.id.map -plain ASSEM sts sts.rdb mm4 sts
+	
+    mv *.rdb sts/
+    mv *.ranges sts/
+
+    cd plots
+    STSFLAGS="-dbl -top 0.3 -mouse -m mm4"
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+
 
 # SET defaultDb in hgcentraltest to move from mm3 to mm4
     hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
