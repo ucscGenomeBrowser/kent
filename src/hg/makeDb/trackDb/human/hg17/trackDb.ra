@@ -27,20 +27,6 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
-track acembly
-shortLabel Acembly Genes
-longLabel AceView Gene Models With Alt-Splicing
-group genes
-priority 41
-visibility dense
-color 220,0,100
-type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
-itemClassTbl acemblyClass
-geneClasses main putative
-gClass_main 200,0,0
-gClass_putative 0,0,200
-
 track ECgene
 shortLabel ECgene Genes
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
@@ -163,10 +149,10 @@ urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track multiz10way
-shortLabel 10-Way Conservation
-longLabel Hu/Chimp/Dog/Mouse/Rat/Chick/Frog/Fugu/Tetra/Zfish Multiz Aligns & Conservation 
+shortLabel Conservation
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
 group compGeno
-priority 109.1
+priority 109.11
 visibility pack
 #color 0, 10, 100
 #altColor 50,50,50
@@ -182,13 +168,24 @@ pairwise netBlastz
 speciesGroups mammal vertebrate
 sGroup_mammal panTro1 canFam1 mm5 rn3
 sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
-treeImage phylo/species10.jpg
+treeImage phylo/10way.jpg
+
+track phastConsElements10way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 10-Way Vertebrate Multiz Alignment
+group compGeno
+priority 109.12
+visibility hide
+exonArrows off
+showTopScorers 200
+scoreFilterCount 5000
+type bed 5 .
 
 track multiz8way
-shortLabel Conservation
+shortLabel 8-Way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
-priority 109
+priority 109.51
 visibility pack
 #color 0, 10, 100
 altColor 50,50,50
@@ -200,6 +197,16 @@ yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
 speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
+
+track phastConsElements
+shortLabel 8-Way Most Conserved
+longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+group compGeno
+priority 109.52
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel Conservation (Std.)
@@ -233,31 +240,11 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder panTro1 monkey 
 
-track phastConsElements
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
-group compGeno
-priority 109.2
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
-track phastConsElements10way
-shortLabel 10-Way Most Cons
-longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Frog/Fugu/Tetra/Zfish 
-group compGeno
-priority 109.3
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
 group compGeno
-priority 109.2
+priority 109.31
 visibility hide
 exonArrows off
 color 150,0,0
@@ -269,7 +256,7 @@ track ux16
 shortLabel Extended Ultras 
 longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
 group compGeno
-priority 109.3
+priority 109.32
 visibility hide
 exonArrows off
 color 100,0,100
@@ -298,7 +285,7 @@ type bed 4 .
 track cns
 shortLabel CNS
 longLabel Conserved Non-Coding (Most Conserved Minus Predicted Coding)
-priority 109.3
+priority 109.6
 group compGeno
 visibility hide
 spectrum on
@@ -1239,9 +1226,6 @@ altColor 255,240,200
 spectrum on
 type chain mm5
 otherDb mm5
-
-
-
 
 searchTable uc16
 searchMethod exact
