@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.52 2004/11/23 00:12:59 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.53 2004/11/23 22:32:23 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -345,7 +345,19 @@ else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
     {
-    bed->itemRgb = needNum(row[8], lineIx, 8);
+    char *comma;
+    /*	Allow comma separated list of rgb values here	*/
+    comma = strchr(row[8], ',');
+    if (comma)
+	{
+	int rgb = bedParseRgb(row[8]);
+	if (rgb < 0)
+	    errAbort("line %d of custom input, Expecting 3 comma separated numbers for r,g,b bed item color.", lineIx);
+	else
+	    bed->itemRgb = rgb;
+	}
+    else
+	bed->itemRgb = needNum(row[8], lineIx, 8);
     }
 if (wordCount > 9)
     bed->blockCount = needNum(row[9], lineIx, 9);
