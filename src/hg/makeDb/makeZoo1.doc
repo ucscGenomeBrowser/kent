@@ -22,7 +22,7 @@ browser track with 1 chromosome)
     mkdir bed
 
 IMPORTANT STEP - FAKE THE CHR1 CHROMOSOME IN THE FA FILEs
-o      NOTE: The name string CFTR_$ORG needs to be changed to chr1 in all the .fa files
+o      NOTE: The string CFTR_$ORG needs to be changed to chr1 in all the .fa files
       files in the zoo/$ORG/1 directory. For example zoo/zooMouse1/1/chr1.fa has the string 
       mouse_CFTR in it. This needs to be changed to chr1 globally in the file. I did this by hand in each
       .fa file (all 12) to get them to work. In vi, you can do a global search and replace by typing:
