@@ -1508,9 +1508,9 @@ expScale 999
 expStep 100
 chip x
 
-track encode_NHGRI_DNAseHS
-shortLabel DNAseI HS/NHGRI
-longLabel NHGRI DNAse I Hypersensitive Sites in ENCODE Regions
+track encode_NHGRI_DNaseHS
+shortLabel DNaseI-HS/NHGRI
+longLabel NHGRI DNaseI-Hypersensitive Sites in ENCODE Regions
 group encode
 priority 25.1
 color 0,0,255
@@ -1602,3 +1602,48 @@ color 12,125,12
 type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
+
+track encode_UVa_ORI_0_2
+shortLabel Ori/UVa 0-2
+longLabel Univ Virginia Replication Origins (0-2 hrs) in ENCODE Regions
+group encode
+priority 40.1
+visibility hide
+color 12,125,12
+type bed 3
+
+track encode_UVa_ORI_2_4
+shortLabel Ori/UVa 2-4
+longLabel Univ Virginia Replication Origins (2-4 hrs) in ENCODE Regions
+group encode
+priority 40.2
+visibility hide
+color 12,125,12
+type bed 3
+
+track encode_UVa_ORI_4_6
+shortLabel Ori/UVa 4-6
+longLabel Univ Virginia Replication Origins (4-6 hrs) in ENCODE Regions
+group encode
+priority 40.3
+visibility hide
+color 12,125,12
+type bed 3
+
+track encode_UVa_ORI_6_8
+shortLabel Ori/UVa 6-8
+longLabel Univ Virginia Replication Origins (6-8 hrs) in ENCODE Regions
+group encode
+priority 40.4
+visibility hide
+color 12,125,12
+type bed 3
+
+track encode_UVa_ORI_8_10
+shortLabel Ori/UVa 8-10
+longLabel Univ Virginia Replication Origins (8-10 hrs) in ENCODE Regions
+group encode
+priority 40.5
+visibility hide
+color 12,125,12
+type bed 3
