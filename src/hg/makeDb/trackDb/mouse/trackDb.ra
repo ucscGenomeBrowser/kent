@@ -105,7 +105,7 @@ priority 86
 visibility hide
 type psl .
 
-track affyGnf1h
+track affyGnf1m
 shortLabel Affymetrix GNF1M
 longLabel Alignments of Probes from Affymetrix GNF1M Chip
 group regulation
