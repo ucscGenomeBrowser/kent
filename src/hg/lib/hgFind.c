@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.108 2003/09/16 04:35:58 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.109 2003/09/19 05:35:23 kate Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2897,7 +2897,11 @@ else
     findFosEndPairs(query, hgp);
     findFosEndPairsBad(query, hgp);
     findStsPos(query, hgp);
-    findMrnaKeys(query, hgp, hgAppName, cart);
+    /* use original query, not range-stripped version,
+     * to suppress spurious matching in Rna tables
+     * RT 752: Jumping to chrY on rat gives strange things
+     */
+    findMrnaKeys(hgp->query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
     findSnpPos(query, hgp, "snpTsc");
