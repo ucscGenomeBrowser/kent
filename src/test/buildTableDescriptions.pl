@@ -15,15 +15,39 @@ use DBI;
 use Carp;
 use strict;
 
+#
+# Default behaviors, changeable by command line args:
+#
 my $kentSrc   = "/cluster/home/angie/kentclean/src";
 my $gbdDPath  = "/cluster/home/angie/browser/goldenPath/gbdDescriptions.html";
+my $noLoad    = 0;
+my $verbose   = 0;
+
+# Hard-coded behaviors:
+my $debug         = 0;
 my %autoSqlIgnore = ( "$kentSrc/hg/lib/bed.as" => "",
 		      "$kentSrc/hg/lib/ggDbRep.as" => "",
 		      "$kentSrc/hg/lib/rmskOut.as" => "",
 		      "$kentSrc/lib/pslWScore.as" => "",
 		    );
 
-#*** usage
+my $basename      = $0;  $basename =~ s@.*/@@;
+#
+# usage: Print help message and exit, happy or unhappy.
+#
+sub usage {
+    print STDERR "Usage:
+$basename  [-kentSrc dir]  [-gbdDPath f]  [-noLoad]  [-help]
+    -kentSrc dir:	Use dir as the kent/src checkout.  
+			Default: $kentSrc.
+    -gbdDPath f:	Use f as the gbdDescriptions.html.  
+			Default: $gbdDPath.
+    -noLoad:		Don't load the database, just create .sql files.
+    -help:		Print this message.
+";
+    exit(@_);
+} # end usage
+
 
 #
 # getActiveDbs: connect to central db, get list of active dbs
@@ -106,13 +130,13 @@ sub slurpAutoSql {
     my $fields = "";
     while (<F>) {
       $as .= $_;
-      if (/^\s*table\s+(\S+)/) {
+      if (/^\s*table\s+(\S+)[^\;]*$/) {
 	$table = $1;
 	$object = "";
       } elsif (/^\s*(object|simple)\s+(\S+)/) {
 	$object = $2;
 	$table = "";
-      } elsif (/^\s*\S+\s+(\S+);/) {
+      } elsif (/^[^\"]+\s+(\S+)\s*;/) {
 	$fields .= "$1,";
       } elsif (/^\s*\)/) {
 	if (($table eq "" && $object eq "") || $fields eq "") {
@@ -222,12 +246,32 @@ sub parseGbdDescriptions {
 }
 
 
-# cross-ref tables and .as -> hgFixed.autoSqlDefs table -> def; 
-#  complain about .as-less tables
+###########################################################################
+#
+# Parse & process command line args
+#
+# GetOptions will put command line args here:
+use vars qw/
+    $opt_kentSrc
+    $opt_gbdDPath
+    $opt_noLoad
+    $opt_help
+    $opt_verbose
+    /;
 
-# cross-ref tables and gbdD -> hgFixed.gbdAnchors table -> anchor ;
-#  suggest addition to gbdD of table&.as if not already in there;
-#  complain about gbdD tables not in any active db.  
+my $ok = GetOptions("kentSrc=s",
+		    "gbdDPath=s",
+		    "noLoad",
+		    "help",
+		    "verbose");
+&usage(1) if (! $ok);
+&usage(0) if ($opt_help);
+$kentSrc  = $opt_kentSrc if ($opt_kentSrc);
+$gbdDPath = $opt_gbdDPath if ($opt_gbdDPath);
+$noLoad   = 1 if (defined $opt_noLoad);
+$verbose  = $opt_verbose if (defined $opt_verbose);
+$verbose  = 1 if ($debug);
+
 
 ############################################################################
 # MAIN
@@ -238,10 +282,12 @@ my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new();
 my @dbs = &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
-  next if ($db !~ /^\w\w\d+$/);
-  open(SQL, ">tableDescriptions.sql") || die "Can't open .sql for writing";
+  next if ($db !~ /^\w\w\d+$/ && $db !~ /^zoo/);
+  my $sqlFile = "$db.tableDescriptions.sql";
+  open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";
-  open(F, "$kentSrc/hg/lib/tableDescriptions.sql") || die "Can't open tableDescriptions.sql";
+  open(F, "$kentSrc/hg/lib/tableDescriptions.sql")
+    || die "Can't open $kentSrc/hg/lib/tableDescriptions.sql";
   while (<F>) {
     print SQL;
   }
@@ -287,15 +333,19 @@ foreach my $db (@dbs) {
       print "$db.$table: No AutoSql.\n";
     }
     my $anchor = $tableAnchors{$table} || "";
+    #*** should suggest addition to gbdD of table&.as if not already in there;
+    #*** should complain about gbdD tables not in any active db.  
     my $asd = (defined $as) ? $as->{autoSql} : "";
     $asd =~ s/'/\\'/g;
     print SQL "INSERT INTO tableDescriptions (tableName, autoSqlDef, gbdAnchor)"
       . " values ('$table', '$asd', '$anchor');\n";
   }
   close(SQL);
-  system("echo drop table tableDescriptions | hgsql $db");
-  (! system("hgsql $db < tableDescriptions.sql"))
-    || die "hgsql error for $db tableDescriptions.sql";
-  print "Loaded $db.tableDescriptions.\n";
+  if (! $noLoad) {
+    system("echo drop table tableDescriptions | hgsql $db");
+    (! system("hgsql $db < $sqlFile")) || die "hgsql error for $sqlFile";
+    print "Loaded $db.tableDescriptions.\n";
+    unlink($sqlFile);
+  }
 }
 
