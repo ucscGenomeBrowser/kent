@@ -87,5 +87,8 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 /* Write out subset of axt that goes from newStart to newEnd
  * in target coordinates. */
 
+int axtTransPosToQ(struct axt *axt, int tPos);
+/* Convert from t to q coordinates */
+
 #endif /* AXT_H */
 

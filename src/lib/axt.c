@@ -216,6 +216,12 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 /* Write out subset of axt that goes from newStart to newEnd
  * in target coordinates. */
 {
+if (newStart < axt->tStart)
+    newStart = axt->tStart;
+if (newEnd > axt->tEnd)
+    newStart = axt->tEnd;
+if (newEnd <= newStart) 
+    return;
 if (newStart == axt->tStart && newEnd == axt->tEnd)
     {
     axt->score = axtScore(axt, ss);
@@ -238,6 +244,15 @@ else
     a.score = axtScore(&a, ss);
     axtWrite(&a, f);
     }
+}
+
+int axtTransPosToQ(struct axt *axt, int tPos)
+/* Convert from t to q coordinates */
+{
+char *tSym = skipIgnoringDash(axt->tSym, tPos - axt->tStart, TRUE);
+int symIx = tSym - axt->tSym;
+int qPos = countNonDash(axt->qSym, symIx);
+return qPos + axt->qStart;
 }
 
 static void shortScoreScheme(struct lineFile *lf)

@@ -6,10 +6,10 @@ struct mafFile
 /* A file full of multiple alignments. */
     {
     struct mafFile *next;
-    int version;		/* Required */
-    char *scoring;		/* Optional (may be NULL). Name of  scoring scheme. */
+    int version;	 /* Required */
+    char *scoring;	 /* Optional (may be NULL). Name of  scoring scheme. */
     struct mafAli *alignments;	/* Possibly empty list of alignments. */
-    struct lineFile *lf; 	/* Open line file if any. NULL except while parsing. */
+    struct lineFile *lf; /* Open line file if any. NULL except while parsing. */
     };
 
 void mafFileFree(struct mafFile **pObj);

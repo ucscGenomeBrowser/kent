@@ -63,6 +63,13 @@ void *hashMustFindVal(struct hash *hash, char *name);
 void *hashFindVal(struct hash *hash, char *name);
 /* Look up name in hash and return val or NULL if not found. */
 
+void hashAddInt(struct hash *hash, char *name, int val);
+/* Store integer value in hash */
+
+int hashIntVal(struct hash *hash, char *name);
+/* Return integer value associated with name in a simple 
+ * hash of ints. */
+
 void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 /* Apply func to every element of hash with hashEl as parameter. */
 

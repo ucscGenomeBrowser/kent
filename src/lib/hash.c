@@ -6,6 +6,7 @@
 #include "common.h"
 #include "localmem.h"
 #include "hash.h"
+#include "obscure.h"
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -140,6 +141,22 @@ struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
     errAbort("%s not found", name);
 return hel->name;
+}
+
+void hashAddInt(struct hash *hash, char *name, int val)
+/* Store integer value in hash */
+{
+char *pt = NULL;
+hashAdd(hash, name, pt + val);
+}
+
+int hashIntVal(struct hash *hash, char *name)
+/* Return integer value associated with name in a simple 
+ * hash of ints. */
+{
+char *n = NULL;
+char *pt = hashMustFindVal(hash, name);
+return pt - n;
 }
 
 struct hash *newHash(int powerOfTwoSize)
