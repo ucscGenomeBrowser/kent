@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.568 2004/02/20 05:02:47 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.569 2004/02/20 07:44:15 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -367,14 +367,6 @@ if (chromSize < 0)
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
-}
-
-int pslCmpScore(const void *va, const void *vb)
-/* Compare to sort based on query then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-return pslScore(b) - pslScore(a);
 }
 
 void printCappedSequence(int start, int end, int extra)
