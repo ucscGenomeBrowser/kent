@@ -134,6 +134,7 @@ param comment _ The comment to be printed
 */
 {
 printf("\n<!-- DEBUG: %s -->\n", comment);
+printf("\nDEBUG: %s\n", comment);
 //fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 }
 
@@ -9122,7 +9123,7 @@ if (!hideControls)
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
 	printf("  size %d, ", winEnd-winStart);
-	fputs(" pixel width ", stdout);
+	fputs(" image width ", stdout);
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
 	cgiMakeButton("submit", "jump");
@@ -9311,6 +9312,7 @@ void tracksDisplay()
  * scrolling. */
 {
 char newPos[256];
+struct hgPositions *hgp;
 
 position = getPositionFromCustomTracks();
 if (NULL == position) 
@@ -9320,9 +9322,24 @@ if (NULL == position)
     }
 
 if(sameString(position, ""))
+    {
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
-if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
+    }
+
+if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart, &hgp)) 
+    {
     return;
+    }
+
+if (NULL != hgp->tableList && NULL != hgp->tableList->name)
+    {
+    char buf[128];
+    sprintf(buf, "%s", hgp->tableList->name);
+    printHtmlComment(buf);
+    cartSetString(cart, hgp->tableList->name, "full");
+    }
+
+hgPositionsFree(&hgp);
 
 seqBaseCount = hChromSize(chromName);
 winBaseCount = winEnd - winStart;
