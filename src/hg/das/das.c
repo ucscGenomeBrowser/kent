@@ -10,17 +10,21 @@
 #include "chromInfo.h"
 #include "bed.h"
 #include "genePred.h"
+#include "trackTable.h"
 #include <regex.h>
 
-char *database = "hg7";
-char *version = "7.00";
+char *version = "1.00";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "das - Distributed Annotation System server.\n"
-  "Needs to be called from a Web server.\n"
+  "Needs to be called from a Web server generally.\n"
+  "You can spoof it from the command line by giving\n"
+  "it a command argument such as:\n"
+  "     das dsn\n"
+  "     das hg6/types segment=chr22\n"
   );
 }
 
@@ -195,6 +199,16 @@ slReverse(&tdList);
 return tdList;
 }
 
+struct hash *hashOfTracks()
+/* Get list of tracks and put into hash keyed by tableName*/
+{
+struct hash *trackHash = newHash(7);
+struct trackTable *ttList = hGetTracks(), *tt;
+for (tt = ttList; tt != NULL; tt = tt->next)
+    hashAdd(trackHash, tt->tableName, tt);
+return trackHash;
+}
+
 struct segment
 /* A subset of a sequence. */
     {
@@ -356,19 +370,26 @@ return TRUE;
 }
 
 
-void doDsn()
+void doDsn(struct slName *dbList)
 /* dsn - DSN Server for DAS. */
 {
+struct slName *db;
+
 normalHeader();
 printf(
 // " <!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
 " <DASDSN>\n");
-printf(
-"   <DSN>\n"
-"     <SOURCE id=\"%s\" version=\"%s\">Reference April 2001 Human Genome at UCSC</SOURCE>\n"
-"     <MAPMASTER>http://genome-test.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n"
-"     <DESCRIPTION>Reference April 2001 Human Genome at UCSC</DESCRIPTION>\n"
-"   </DSN>\n", database, version, database);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    char *freeze = hFreezeFromDb(db->name);
+    printf("   <DSN>\n");
+    printf("     <SOURCE id=\"%s\" version=\"%s\">%s Human Genome at UCSC</SOURCE>\n", 
+    	db->name, version, freeze);
+    printf("     <MAPMASTER>http://genome-test.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
+        db->name);
+    printf("     <DESCRIPTION>%s Human Genome at UCSC</DESCRIPTION>\n", freeze);
+    printf("   </DSN>\n");
+    }
 printf(" </DASDSN>\n");
 }
 
@@ -493,7 +514,14 @@ printf("</GFF>\n");
 printf("</DASTYPES>\n");
 }
 
-void dasOutGp(struct genePred *gp, struct tableDef *td)
+void dasPrintType(struct tableDef *td, struct trackTable *tt)
+/* Print out from <TYPE> to </TYPE> inside a feature. */
+{
+char *description = (tt != NULL ? tt->shortLabel : td->name);
+printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, description);
+}
+
+void dasOutGp(struct genePred *gp, struct tableDef *td, struct trackTable *tt)
 /* Write out DAS info on a gene prediction. */
 {
 int i;
@@ -503,7 +531,7 @@ for (i=0; i<gp->exonCount; ++i)
     int end =  gp->exonEnds[i];
     printf(
     "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", gp->name, gp->chrom, gp->txStart, i, gp->name);
-    printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+    dasPrintType(td, tt);
     if (td->method != NULL)
 	printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
     printf(" <START>%d</START>\n", start+1);
@@ -517,7 +545,7 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
-void dasOutPsl(struct psl *psl, struct tableDef *td)
+void dasOutPsl(struct psl *psl, struct tableDef *td, struct trackTable *tt)
 /* Write out DAS info on a psl alignment. */
 {
 int i;
@@ -538,7 +566,7 @@ for (i=0; i<psl->blockCount; ++i)
 	}
     printf(
     "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", psl->qName, psl->tName, psl->tStart, i, psl->qName);
-    printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+    dasPrintType(td, tt);
     if (td->method != NULL)
 	printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
     printf(" <START>%d</START>\n", start+1);
@@ -553,11 +581,11 @@ for (i=0; i<psl->blockCount; ++i)
     }
 }
 
-void dasOutBed(char *chrom, int start, int end, char *name, struct tableDef *td)
+void dasOutBed(char *chrom, int start, int end, char *name, struct tableDef *td, struct trackTable *tt)
 /* Write out a generic one. */
 {
 printf("<FEATURE id=\"%s.%s.%d\" label=\"%s\">\n", name, chrom, start, name);
-printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+dasPrintType(td, tt);
 if (td->method != NULL)
     printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
 printf(" <START>%d</START>\n", start+1);
@@ -573,6 +601,8 @@ void doFeatures()
 /* features - DAS Annotation Feature Server. */
 {
 struct segment *segmentList = dasSegmentList(TRUE), *segment;
+struct hash *trackHash = hashOfTracks();
+struct trackTable *tt;
 struct tableDef *tdList = getTables(), *td;
 struct slName *typeList = cgiStringList("type"), *typeEl;
 struct regExp *category = regExpFromCgiVar("category");
@@ -608,6 +638,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	{
 	if (catTypeFilter(category, td->category, type, td->name) )
 	    {
+	    tt = hashFindVal(trackHash, td->name);
 	    dyStringClear(table);
 	    dyStringClear(query);
 	    if (td->splitTables == NULL)
@@ -630,7 +661,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 		while ((row = sqlNextRow(sr)) != NULL)
 		    {
 		    struct psl *psl = pslLoad(row);
-		    dasOutPsl(psl, td);
+		    dasOutPsl(psl, td, tt);
 		    pslFree(&psl);
 		    }
 		}
@@ -639,14 +670,14 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 		while ((row = sqlNextRow(sr)) != NULL)
 		    {
 		    struct genePred *gp = genePredLoad(row);
-		    dasOutGp(gp, td);
+		    dasOutGp(gp, td, tt);
 		    genePredFree(&gp);
 		    }
 		}
 	    else if (sameString(td->startField, "chromStart"))
 	        {
 		while ((row = sqlNextRow(sr)) != NULL)
-		    dasOutBed(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]), row[3], td);
+		    dasOutBed(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]), row[3], td, tt);
 		}
 	    sqlFreeResult(&sr);
 	    }
@@ -660,6 +691,7 @@ printf("</GFF></DASGFF>\n");
 /* Clean up. */
 freeDyString(&table);
 freeDyString(&query);
+freeHash(&trackHash);
 hFreeConn(&conn);
 }
 
@@ -736,11 +768,10 @@ printf("</DASDNA>\n");
 void dispatch(char *dataSource, char *command)
 /* Dispatch a dase command. */
 {
-if (sameString(dataSource, "ensembl110"))
-    dataSource = "hg7";
+struct slName *dbList = hDbList();
 if (sameString(dataSource, "dsn"))
-    doDsn();
-else if (sameString(database, dataSource))
+    doDsn(dbList);
+else if (slNameFind(dbList, dataSource) != NULL)
     {
     hSetDb(dataSource);
     if (sameString(command, "entry_points"))
