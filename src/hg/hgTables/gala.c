@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.3 2004/09/23 21:30:37 giardine Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.4 2004/09/24 14:06:08 giardine Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -191,7 +191,7 @@ for (region = regionList; region != NULL; region = region->next)
             for (bed = bedList;  bed != NULL;  bed = bed->next)
                 {
                 struct bed *dupe = cloneBed(bed); 
-                char *ptr = strchr(bed->name, ' ');
+                char *ptr = strchr(dupe->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
                 slAddHead(&ctNew->bedList, dupe);
@@ -205,7 +205,7 @@ for (region = regionList; region != NULL; region = region->next)
             for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
                 {
                 struct bed *fbBed = fbToBedOne(fbPtr);
-                char *ptr = strchr(fbPtr->name, ' ');
+                char *ptr = strchr(fbBed->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
                 slAddHead(&ctNew->bedList, fbBed );
