@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.73 2004/02/25 21:51:12 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.74 2004/04/05 18:40:19 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -236,8 +236,8 @@ else
     {
     printf("<H2>BLAT Search Results</H2>");
     printf("<TT><PRE>");
-    printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END  \n");
-    printf("--------------------------------------------------------------------------------------------\n");
+    printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
 	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
@@ -248,10 +248,11 @@ else
 	    hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
-	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
+	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d %6d\n",
 	    psl->qName, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd);
+	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
+	    psl->tEnd - psl->tStart);
 	}
     }
 pslFreeList(&pslList);
