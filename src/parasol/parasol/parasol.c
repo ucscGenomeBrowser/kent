@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.29 2004/09/23 00:29:14 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.30 2005/02/25 21:50:16 galt Exp $";
 
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
@@ -31,7 +31,7 @@ errAbort(
   "is the primary command for users.\n"
   "Usage in brief:\n"
   "   parasol add machine machineName localTempDir  - Add new machine to pool.\n"
-  "   parasol remove machine machineName   - Remove machine from pool.\n"
+  "   parasol remove machine machineName \"reason why\"  - Remove machine from pool.\n"
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
@@ -152,11 +152,13 @@ mustBeRoot();
 commandHub("addSpoke");
 }
 
-void removeMachine(char *machine)
-/* Tell hub to get rid of machine. */
+void removeMachine(char *machine, char *reason)
+/* Tell hub to get rid of machine.
+   Log the user and reason.
+*/
 {
 char buf[512];
-sprintf(buf, "%s %s", "removeMachine", machine);
+sprintf(buf, "removeMachine %s %s %s", machine, getUser(), reason);
 commandHub(buf);
 }
 
@@ -333,7 +335,11 @@ else if (sameString(command, "remove"))
     if (argc < 2)
         usage();
     if (sameString(subType, "machine"))
-        removeMachine(argv[1]);
+	{
+	if (argc < 3)
+	    usage();
+        removeMachine(argv[1],argv[2]);
+	}
     else if (sameString(subType, "job"))
         removeJob(argv[1]);
     else if (sameString(subType, "jobs"))
