@@ -10,8 +10,9 @@
 #include "genePred.h"
 #include "hgMaf.h"
 #include "hui.h"
+#include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.16 2004/06/02 22:05:30 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.17 2004/08/26 17:32:53 hiram Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -111,7 +112,7 @@ static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize)
 {
 int srcChars = 0;
 struct mafComp *mc;
-int i, lineStart, lineEnd;
+int lineStart, lineEnd;
 char *summaryLine = needMem(lineSize+1);
 char *referenceText = maf->components->text;
         /* first sequence in the alignment */
@@ -194,15 +195,6 @@ if (rStart >= rEnd)
 *retStart = rStart;
 *retEnd = rEnd;
 return TRUE;
-}
-
-static void capAliRange(char *ali, int aliSize, int start, int end)
-/* Capitalize bases between start and end ignoring inserts. */
-{
-int s, e;
-
-if (findAliRange(ali, aliSize, start, end, &s, &e))
-    toUpperN(ali+s, e-s);
 }
 
 static void capAliTextOnTrack(struct mafAli *maf,
@@ -294,6 +286,7 @@ else
     int aliIx = 0, realCount = 0;
     char dbChrom[64];
     char *capTrack;
+    char *wigTable = trackDbSetting(tdb, "wiggle");
 
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
     	axtOtherDb);
@@ -303,7 +296,6 @@ else
 	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
 	if (subset != NULL)
 	    {
-	    struct mafComp *mc;
 	    /* Reformat MAF if needed so that sequence from current
 	     * database is the first component and on the
 	     * plus strand. */
@@ -322,6 +314,20 @@ else
 	char *codeVarName = "hgc.multiCapCoding";
 	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
 	boolean onlyCds = sameWord(codeVarVal, "coding");
+
+	if (wigTable)
+	    {
+	    char *chrom = cgiString("c");
+	    char other[128];
+	    char *pix = cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH );
+	    safef(other, ArraySize(other), "%d", winStart);
+	    printf("<P><B>See also: </B>");
+	    printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s&parentWigMaf=%s\" TARGET=\"_blank\">",
+		hgcPathAndSettings(), wigTable, wigTable, chrom, winStart,
+			winEnd, other, database, tdb->tableName);
+	    printf("Alignment score statistics</A></P>\n");
+	    }
+
 	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
