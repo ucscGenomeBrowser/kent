@@ -26,6 +26,7 @@
 #include "cgh.h"
 #include "ctgPos.h"
 #include "clonePos.h"
+#include "bactigPos.h"
 #include "genePred.h"
 #include "glDbRep.h"
 #include "rmskOut.h"
@@ -6449,6 +6450,100 @@ tg->itemStart = contigItemStart;
 tg->itemEnd = contigItemEnd;
 }
 
+void bactigLoad(struct trackGroup *tg)
+/* Load up bactigs from database table to trackGroup items. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct bactigPos *bactigList = NULL, *bactig;
+int rowOffset;
+
+/* Get the bactigs and load into tg->items. */
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bactig = bactigPosLoad(row+rowOffset);
+    slAddHead(&bactigList, bactig);
+    }
+slReverse(&bactigList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = bactigList;
+}
+
+void bactigFree(struct trackGroup *tg)
+/* Free up bactigTrackGroup items. */
+{
+bactigPosFreeList((struct bactigPos**)&tg->items);
+}
+
+char *abbreviateBactig(char *string, MgFont *font, int width)
+/* Return a string abbreviated enough to fit into space. */
+{
+int textWidth;
+
+/* There's no abbreviating to do for bactig names; just return the name 
+ * if it fits, NULL if it doesn't fit. */
+textWidth = mgFontStringWidth(font, string);
+if (textWidth <= width)
+    return string;
+return NULL;
+}
+
+static void bactigDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw bactig items. */
+{
+int baseWidth = seqEnd - seqStart;
+struct bactigPos *bactig;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+int midLineOff = heightPer/2;
+boolean isFull = (vis == tvFull);
+Color col;
+int ix = 0;
+char *s;
+double scale = width/(double)baseWidth;
+for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
+    {
+    x1 = round((double)((int)bactig->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)bactig->chromEnd-winStart)*scale) + xOff;
+    /* Clip here so that text will tend to be more visible... */
+    if (x1 < xOff)
+	x1 = xOff;
+    if (x2 > xOff + width)
+	x2 = xOff + width;
+    w = x2-x1;
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    s = abbreviateBactig(bactig->name, tl.font, w);
+    if (s != NULL)
+	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
+    if (isFull)
+	y += lineHeight;
+    else 
+	{
+	mapBoxHc(bactig->chromStart, bactig->chromEnd, x1,y,w,heightPer,
+		 tg->mapName, bactig->name, bactig->name);
+	}
+    ++ix;
+    }
+}
+
+void bactigMethods(struct trackGroup *tg)
+/* Make track group for bactigPos */
+{
+tg->loadItems = bactigLoad;
+tg->freeItems = bactigFree;
+tg->drawItems = bactigDraw;
+}
+
 struct cloneFrag
 /* A fragment of a clone. */
     {
@@ -10469,6 +10564,7 @@ registerTrackHandler("gcPercent", gcPercentMethods);
 registerTrackHandler("gcPercentSmall", gcPercentMethods);
 registerTrackHandler("swiss", swissMethods);
 registerTrackHandler("ctgPos", contigMethods);
+registerTrackHandler("bactigPos", bactigMethods);
 registerTrackHandler("gold", goldMethods);
 registerTrackHandler("gap", gapMethods);
 registerTrackHandler("genomicDups", genomicDupsMethods);
