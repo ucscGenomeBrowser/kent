@@ -67,7 +67,7 @@
 			        <LI>MySQL Table spaces: ~ 400 Gb
 			        <LI>Apache web pages area: ~ 1 Gb
 			        <LI>"/gbdb" area for the browser: ~ 400 Gb
-			        <LI>Genome database text dumps: ~ 200 Gb
+			        <LI>Genome database text dumps: ~ 100 Gb
 			    </UL></P><P>
 				These data requirements will increase
 				in the future as genomes are added to
@@ -97,14 +97,14 @@
 <LI><A HREF="#step1">Install Apache server and MySQL server</A>
 <LI><A HREF="#step2">Get all the html files and most of the text files</A>&nbsp;(1 Gb)
 <LI><A HREF="#step3">Get the data for each individual genome assembly and install
-databases </A>&nbsp;(120 Gb)
-<LI><A HREF="#step4">Obtain the /gbdb data file area</A>&nbsp;(300 Gb)
-<LI><A HREF="#step5">Set up database</A>&nbsp;(300 Gb MySQL data)
+databases </A>&nbsp;(100 Gb)
+<LI><A HREF="#step4">Obtain the /gbdb data file area</A>&nbsp;(400 Gb)
+<LI><A HREF="#step5">Set up database</A>&nbsp;(400 Gb MySQL data)
 <LI><A HREF="#step6">Get executable files</A>
 <LI><A HREF="#step7">Set up Hgcentral session preference table</A>
 <LI><A HREF="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</A>
 <LI><A HREF="#step9">Set up HgFixed database</A>&nbsp;(500 Mb)
-<LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(1 Gb)
+<LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(500 Mb)
 <LI><A HREF="#step11">Set up the swissProt database</A>&nbsp;(400 Mb)
 </OL>
 <BR><BR>
@@ -167,10 +167,11 @@ rsync -navz --progress rsync://hgdownload.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
-genome          UCSC Human Genome Web Site (111 Gb)
+genome          UCSC Human Genome Web Site (111 GB)
+goldenPath      UCSC Human Golden Path Downloads (170 GB)
 cgi-bin         UCSC Human Genome Web Site CGI Binaries
-gbdb            UCSC Human Genome Browser New Config Files (313 Gb)
-mysql           UCSC Human Genome Browser Raw Mysql Tables (268 Gb)
+gbdb            UCSC Human Genome Browser New Config Files (313 GB)
+mysql           UCSC Human Genome Raw Mysql Tables (356 GB)
 </PRE>
 <BR>
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy<BR>
@@ -213,11 +214,11 @@ rsync --progress --partial -avz \
 </OL>
 <P>
 <A NAME="step3"></A>
-<B>3. Get the data for each individual genome assembly and installing databases ( 120 Gb )</B>
+<B>3. Get the data for each individual genome assembly and installing databases ( 100 Gb )</B>
 
 <OL type="a">
 
-<LI>Get Human May, 2004 full data set (hg17: 15 Gb) by doing:
+<LI>Get Human May, 2004 full data set (hg17: 7.5 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -225,7 +226,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/hg17/
 </PRE>
 
-<LI>Get Human July, 2003 full data set (hg16: 15 Gb) by doing:
+<LI>Get Human July, 2003 full data set (hg16: 9.5 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz  \
@@ -233,7 +234,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/hg16/
 </PRE>
 
-<LI>Get Human April 10, 2003 full data set (hg15: 7.8 Gb) by doing:
+<LI>Get Human April 10, 2003 full data set (hg15: 4.4 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz  \
@@ -249,7 +250,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/panTro1/
 </PRE>
 
-<LI>Get Dog July, 2004 full data set (canFam1: 5.6 Gb) by doing:
+<LI>Get Dog July, 2004 full data set (canFam1: 2.3 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -257,7 +258,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/canFam1/
 </PRE>
 
-<LI>Get Mouse May, 2004 full data set (mm5: 14 Gb) by doing:
+<LI>Get Mouse May, 2004 full data set (mm5: 8.6 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -265,7 +266,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/mm5/
 </PRE>
 
-<LI>Get Mouse October, 2003 full data set (mm4: 12 Gb) by doing:
+<LI>Get Mouse October, 2003 full data set (mm4: 8.2 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz  \
@@ -273,7 +274,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/mm4/
 </PRE>
 
-<LI>Get Rat June, 2003 full data set (rn3: 14 Gb) by doing:
+<LI>Get Rat June, 2003 full data set (rn3: 3.7 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -281,7 +282,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/rnJun2003/
 </PRE>
 
-<LI>Get Rat January, 2003 full data set (rn2: 4.1 Gb) by doing:
+<LI>Get Rat January, 2003 full data set (rn2: 537 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz  \
@@ -289,7 +290,7 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/rnJan2003/
 </PRE>
 
-<LI>Get Chicken February, 2004 full data set (galGal2: 2.1 Gb) by doing:
+<LI>Get Chicken February, 2004 full data set (galGal2: 755 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -297,7 +298,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/galGal2/
 </PRE>
 
-<LI>Get Zebrafish November, 2003 full data set (danRer1: 2.1 Gb) by doing:
+<LI>Get Zebrafish November, 2003 full data set (danRer1: 1.2 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -305,7 +306,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/danRer1/
 </PRE>
 
-<LI>Get C. intestinalis December, 2002 full data set (ci1: 715 Mb) by doing:
+<LI>Get C. intestinalis December, 2002 full data set (ci1: 179 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -313,7 +314,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/ci1/
 </PRE>
 
-<LI>Get Fugu August, 2003 full data set (fr1: 800 Mb) by doing:
+<LI>Get Fugu August, 2003 full data set (fr1: 149 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -321,7 +322,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/fr1/
 </PRE>
 
-<LI>Get Fruitfly January, 2003 full data set (dm1: 400 Mb) by doing:
+<LI>Get Fruitfly January, 2003 full data set (dm1: 299 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -329,7 +330,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/dm1/
 </PRE>
 
-<LI>Get D. pseudoobscura August 2003 full data set (dp1: 178 Mb) by doing:
+<LI>Get D. pseudoobscura August 2003 full data set (dp1: 15 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -337,7 +338,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/dp1/
 </PRE>
 
-<LI>Get D. yakuba April 2004 full data set (droYak1: 439 Mb) by doing:
+<LI>Get D. yakuba April 2004 full data set (droYak1: 127 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -345,7 +346,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/droYak1/
 </PRE>
 
-<LI>Get A. gambiae Feb 2003 full data set (anoGam1: 731 Mb) by doing:
+<LI>Get A. gambiae Feb 2003 full data set (anoGam1: 127 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -353,7 +354,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/anoGam1/
 </PRE>
 
-<LI>Get C. elegans March, 2004 full data set (ce2: 1.0 Gb) by doing:
+<LI>Get C. elegans March, 2004 full data set (ce2: 562 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -361,7 +362,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/ce2/
 </PRE>
 
-<LI>Get C. elegans May, 2003 full data set (ce1: 2.1 Gb) by doing:
+<LI>Get C. elegans May, 2003 full data set (ce1: 1.2 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -369,7 +370,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/ceMay2003/
 </PRE>
 
-<LI>Get C. briggsae July, 2002 full data set (cb1: 315 Mb) by doing:
+<LI>Get C. briggsae July, 2002 full data set (cb1: 185 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -377,7 +378,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/cbJul2002/
 </PRE>
 
-<LI>Get Yeast (Saccharomyces cerevisiae) October, 2003 full data set (sacCer1: 91 Mb) by doing:
+<LI>Get Yeast (Saccharomyces cerevisiae) October, 2003 full data set (sacCer1: 58 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -385,7 +386,7 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/sacCer1/
 </PRE>
 
-<LI>Get SARS coronavirus April, 2003 full data set (sc1: 106 Mb) by doing:
+<LI>Get SARS coronavirus April, 2003 full data set (sc1: 12 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
@@ -399,11 +400,10 @@ rsync --progress --partial -avz \
 4. Obtain the /gbdb data file area</H4>
 
 <OL type="a">
-<LI>You will need the portions of /gbdb used by the browser (300 Gb):
+<LI>You will need the portions of /gbdb used by the browser (400 Gb):
 <BR>
 <PRE>
-rsync --progress --partial -avz \
-   rsync://hgdownload.cse.ucsc.edu/gbdb/ /
+rsync --progress --partial -avz rsync://hgdownload.cse.ucsc.edu/gbdb/ /
 </PRE>
 <BR>
 </OL>
@@ -599,14 +599,8 @@ mysql&gt; create database hgFixed
 10. Create the five protein databases</H4>
 
 <OL type="a">
-<LI>Download a copy of the dumped protein tables. (1.0 Gb)
+<LI>Download a copy of the dumped protein tables. (500 Mb)
 <PRE>
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins/ \
-    $WEBROOT/goldenPath/
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins0111/ \
-    $WEBROOT/goldenPath/
 rsync --progress --partial -avz  \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins092903/ \
     $WEBROOT/goldenPath/
@@ -616,14 +610,16 @@ rsync --progress --partial -avz  \
 rsync --progress --partial -avz  \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins040315/ \
     $WEBROOT/goldenPath/
+rsync --progress --partial -avz  \
+    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins040515/ \
+    $WEBROOT/goldenPath/
 </PRE>
 <LI>Create the protein databases
 <PRE>
-mysql&gt; create database proteins
-mysql&gt; create database proteins0111
 mysql&gt; create database proteins092903
 mysql&gt; create database proteins040115
 mysql&gt; create database proteins040315
+mysql&gt; create database proteins040515
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
 </OL>
