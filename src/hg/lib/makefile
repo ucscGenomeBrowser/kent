@@ -1,4 +1,4 @@
-OPT= -ggdb 
+OPT= -ggdb -O
 
 .c.o:
 	gcc $(OPT) -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
