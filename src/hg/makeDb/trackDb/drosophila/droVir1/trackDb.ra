@@ -64,6 +64,6 @@ searchPriority 16
 
 searchTable genscan
 searchType genePred
-termRegex Contig[[:alnum:]_]+(\.fa)?\.[0-9]+
+termRegex scaffold_[0-9]+\.[0-9]+
 searchPriority 50
 
