@@ -3720,3 +3720,91 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     hgLoadBed dm2 flyFeepAnova flyFeepAnova.bed
 
 
+# FLYBASE 4.1 ANNOTATIONS (DONE 2/23/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm2/bed/flybase4.1
+    cd /cluster/data/dm2/bed/flybase4.1
+    foreach c (2L 2R 3L 3R 4 X)
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r4.1_20050207/gff/dmel-$c-r4.1.gff.gz
+    end
+    zcat *.gff.gz > flybase.gff3
+    # What data sources are represented in this file?
+    grep -v '^#' flybase.gff3 | awk '{print $2 "\t" $3;}' | sort | uniq -c
+    # excerpt (many other sources, including blastx:... , sim4:... and 
+    # tblastx:...; also various other types for source "."):
+  18941 .       CDS
+  63033 .       exon
+  14066 .       gene
+  18941 .       mRNA
+    144 .       ncRNA
+     39 .       pseudogene
+     96 .       rRNA
+     29 .       snRNA
+     28 .       snoRNA
+    295 .       tRNA
+  36921 .       transcription_start_site
+   1571 .       transposable_element
+  16404 .       transposable_element_insertion_site
+    # What keywords are defined in the 9th field?
+    grep -v '^#' flybase.gff3 \
+    | awk '{print $9;}' | perl -wpe 's/=[^;]+;/\n/g; s/=.*$//;' \
+    | sort | uniq -c
+    # Once again, the previous round's parsing needed some updates to 
+    # handle the new data.
+    extractGenes.pl flybase.gff3
+
+    # Get predicted proteins (for main annotations only)
+    wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r4.1_20050207/fasta/dmel-all-translation-r4.1.fasta.gz
+    zcat dmel-all-translation-r4.1.fasta.gz \
+    | perl -wpe 's/^(>\w+)-P(\w)/$1-R$2/' > flybasePep.fa
+
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flybase4.1
+    # Protein-coding genes:
+    ldHgGene -gtf dm2 flyBaseGene flybase.gtf
+    hgPepPred dm2 generic flyBasePep flybasePep.fa
+    # Noncoding genes:
+    hgLoadBed dm2 flyBaseNoncoding flyBaseNoncoding.bed
+    # Cross-referencing info for both coding and noncoding:
+    hgsql dm2 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
+    hgsql dm2 -e 'load data local infile "flyBase2004Xref.tab" \
+      into table flyBase2004Xref'
+
+    # add upstream* downloadable files
+    cd /usr/local/apache/htdocs/goldenPath/dm2/bigZips
+    foreach size (1000 2000 5000)
+      echo upstream$size
+      nice featureBits dm2 flyBaseGene:upstream:$size -fa=stdout \
+      | nice gzip -c > upstream$size.fa.gz
+    end
+    md5sum upstream*.fa.gz >> md5sum.txt
+
+
+# FLYREG (DONE 2/23/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm2/bed/flyreg
+    cd /cluster/data/dm2/bed/flyreg
+    wget http://www.gen.cam.ac.uk/casey/data/Bergman2004/v2.0/Footprint.GFF
+    # This is not GTF; it should really be bed +.  The contributor, 
+    # Casey Bergman, says that coords are 0-based half-open, so 
+    # translation will be even easier.
+    grep -v '^#' Footprint.GFF \
+    | perl -wpe 'if (! s/^(\S+)\tBergman_data\tbinding_site\t(\d+)\t(\d+)\t.\t.\t.\tFactor \"([^\"]+)\"; Target \"([^\"]+)\"; PMID \"(\d+)\"; FPID \"(\d+)\"$/chr$1\t$2\t$3\t$4\t$5\t$6\t$7/) { die "Cant parse line $.:\n$_\n"; }' \
+      > flyreg2.bed
+    ssh hgwdev
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/flyreg2.sql \
+      dm2 flyreg2 /cluster/data/dm2/bed/flyreg/flyreg2.bed
+    # Add Dan Pollard's MEME motif data for the footprints:
+    ssh kksilo
+    cd /cluster/data/dm2/bed/flyreg
+    wget http://rana.lbl.gov/~dan/matrices/bergman2004/footprint_matrices.txt
+    /cluster/data/dm1/bed/flyreg/extractMatrices.pl \
+      footprint_matrices.txt > flyregMotif.tab
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flyreg
+    sed -e 's/dnaMotif/flyregMotif/' $HOME/kent/src/hg/lib/dnaMotif.sql \
+    > flyregMotif.sql
+    hgsql dm2 < flyregMotif.sql
+    hgsql dm2 -e 'load data local infile "flyregMotif.tab" into table flyregMotif'
+
+
