@@ -3465,3 +3465,52 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 # Loading database with 28645 rows
 #	row count went from 27173 to 28645
 
+####  Blat knownGene proteins to determine exons (braney 2004-06-20)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir blat.hg17KG.2004-06-20
+    rm blat.hg17KG
+    ln -s  blat.hg17KG.2004-06-20 blat.hg17KG
+    cd blat.hg17KG
+    pepPredToFa hg17 knownGenePep known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    kgName hg17 kgName.lst kg.mapNames
+    ssh kk
+    cd /cluster/data/hg17/bed/blat.hg17KG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    chmod +x blatSome
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs/*.nib > human.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 3000 kg
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../human.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+# Completed: 12222 of 12222 jobs
+# CPU time in finished jobs:   23286365s  388106.09m  6468.43h  269.52d  0.738 y
+# IO & Wait Time:                710342s   11839.03m   197.32h    8.22d  0.023 y
+# Average job time:                1963s      32.72m     0.55h    0.02d
+# Longest job:                   106239s    1770.65m    29.51h    1.23d
+# Submission to last job:        106248s    1770.80m    29.51h    1.23d
+
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+
+
