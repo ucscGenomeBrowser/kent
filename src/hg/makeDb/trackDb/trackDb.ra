@@ -1056,6 +1056,14 @@ priority 148
 visibility hide
 type bed 4 +
 
+track olly25
+shortLabel cross-hyb 25
+longLabel Cross-hybridization Counts for 25-mers 
+group x
+priority 148.5
+visibility hide
+type sample 0 5 0.2
+
 track gpcr
 shortLabel Gpcr
 longLabel Gpcr from softberry and rachel's hmm
@@ -1204,3 +1212,4 @@ group x
 priority 160
 visibility hide
 type psl .
+
