@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.122 2004/03/24 16:55:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.123 2004/03/24 17:40:19 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1405,10 +1405,9 @@ char *trackType = (char *) NULL;
 boolean typeWiggle = FALSE;
 
 tdb = hMaybeTrackInfo(conn, track);
-if (tdb)
+if (tdb && tdb->type)
     {
-    if (tdb->type)
-	wordCount = chopLine(tdb->type,words);
+    wordCount = chopLine(tdb->type,words);
     if (wordCount > 0)
 	trackType = words[0];
     }
@@ -3069,13 +3068,12 @@ tdb = hMaybeTrackInfo(conn, track);
  *	anything ?
  */
 
-if (tdb)
+if (tdb && tdb->type)
     {
-    if (tdb->type)
-	wordCount = chopLine(tdb->type,words);
+    wordCount = chopLine(tdb->type,words);
     if (wordCount > 0)
 	trackType = words[0];
-}
+    }
 if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
     typeWiggle = TRUE;
 
@@ -3164,7 +3162,8 @@ else
     if (tableIsPositional && sqlTableExists(conn, hTrackDbName()))
 	{
 	struct trackDb *tdb = hMaybeTrackInfo(conn, track);
-	showTdbInfo(tdb);
+	if (tdb)
+	    showTdbInfo(tdb);
 	}
     hFreeOrDisconnect(&conn);
     }
@@ -3980,7 +3979,7 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
     conn2 = hAllocOrConnect(db2);
     tdb2 = hMaybeTrackInfo(conn2, track2);
     hFreeOrDisconnect(&conn2);
-    if (tdb2->type)
+    if (tdb2 && tdb2->type)
 	{
 	typeLine2 = cloneString(tdb2->type);
 	wordCount = chopLine(typeLine2,words);
@@ -4560,7 +4559,7 @@ saveOutputOptionsState();
 saveIntersectOptionsState();
 
 tdb = hMaybeTrackInfo(conn, track);
-if (tdb->type)
+if (tdb && tdb->type)
     {
     typeLine = cloneString(tdb->type);
     wordCount = chopLine(typeLine,words);
@@ -4580,7 +4579,7 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
     conn2 = hAllocOrConnect(db2);
     tdb2 = hMaybeTrackInfo(conn2, track2);
     hFreeOrDisconnect(&conn2);
-    if (tdb2->type)
+    if (tdb2 && tdb2->type)
 	{
 	typeLine2 = cloneString(tdb2->type);
 	wordCount = chopLine(typeLine2,words);
@@ -5036,7 +5035,7 @@ char *visibilities[] = {
 };
 
 tdb = hMaybeTrackInfo(conn, track);
-if (tdb->type)
+if (tdb && tdb->type)
     {
     typeLine = cloneString(tdb->type);
     longLabel = cloneString(tdb->longLabel);
