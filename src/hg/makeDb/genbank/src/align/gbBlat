@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.26 2004/08/02 19:15:10 angie Exp $
+# $Id: gbBlat,v 1.27 2004/08/04 22:34:53 angie Exp $
 #
 set -e
 
@@ -52,6 +52,7 @@ CE_OOC=/iscratch/i/worms/Celegans2/11.ooc
 DANRER_OOC=/iscratch/i/danRer1/11.ooc
 CANFAM_OOC=/iscratch/i/canFam1/11.ooc
 ANOGAM_OOC=/iscratch/i/anoGam1/11.ooc
+DP_OOC=/iscratch/i/dp2/11.ooc
 
 # entry, parse arguments
 keepTmp="NO"
