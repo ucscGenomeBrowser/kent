@@ -1329,6 +1329,7 @@ identifier blastHg17KGPep01Id
 "hg17 proteins 01"
      $hg.blastKGPep01.name
      $monDom.blastHg17KG.qName
+     $danRer.blastHg17KG.qName
      $bosTau.blastHg17KG.qName
 
 identifier tfbsCons
