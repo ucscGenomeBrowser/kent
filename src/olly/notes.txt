@@ -1,3 +1,10 @@
+Number of close oligoes for 25-mers.
+#MaxDiff	closeCount
+0	1
+1	76
+2	5476
+3	378076
+
 Phase 1  - using normal hash function on 25-mers testing on chromosome 22 only.
 
 5	203M	28.9
