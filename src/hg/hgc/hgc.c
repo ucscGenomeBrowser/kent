@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.856 2005/03/22 02:33:13 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.857 2005/03/23 00:41:55 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1999,7 +1999,7 @@ printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&%s&position=%s%%3A%d-%d\">",
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&position=%s%%3A%d-%d\">",
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        hgTracksName(), otherDb, chrom, start+1, end);
 }
 
