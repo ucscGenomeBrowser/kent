@@ -5333,6 +5333,7 @@ sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, database);
     if (hTrackOnChrom(tdb, chrom))
 	hashAdd(trackHash, tdb->tableName, tdb);
     else

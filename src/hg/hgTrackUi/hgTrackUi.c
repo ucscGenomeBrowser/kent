@@ -308,6 +308,7 @@ chromosome = cartString(cart, "c");
 conn = hAllocConn();
 sprintf(where, "tableName = '%s'", track);
 tdb = trackDbLoadWhere(conn, "trackDb", where);
+hLookupStringsInTdb(tdb, database);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());

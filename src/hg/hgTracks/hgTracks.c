@@ -79,6 +79,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
  * next - living mostly in the cart. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
+char *organism;			/* Name of organism we're working on. */
 char *position; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
@@ -745,7 +746,7 @@ mgMakeColorGradient(mg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
 }
 
 void makeSeaShades(struct memGfx *mg)
-/* Make some shades of brown in display. */
+/* Make some shades of blue in display. */
 {
 mgMakeColorGradient(mg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
 }
@@ -6847,8 +6848,8 @@ struct trackGroup *group;
 AllocVar(group);
 group->mapName = cloneString(tdb->tableName);
 group->visibility = tdb->visibility;
-group->shortLabel = cloneString(tdb->shortLabel);
-group->longLabel = cloneString(tdb->longLabel);
+group->shortLabel = hLookupStringVars(tdb->shortLabel);
+group->longLabel = hLookupStringVars(tdb->longLabel);
 group->color.r = tdb->colorR;
 group->color.g = tdb->colorG;
 group->color.b = tdb->colorB;
@@ -7561,6 +7562,7 @@ if(sameString(debugTmp, "on"))
 if (database == NULL)
     database = hGetDb();
 hSetDb(database);
+organism = hOrganism(database);
 hDefaultConnect();
 initTl();
 
@@ -7608,12 +7610,11 @@ cgiVarExcludeExcept(except);
 
 int main(int argc, char *argv[])
 {
-
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Human Genome Browser v9", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("UCSC Genome Browser v10", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
 
