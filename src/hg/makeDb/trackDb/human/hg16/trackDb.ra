@@ -364,11 +364,35 @@ color 100,50,0
 altColor 0,0,255
 type sample
 
-track tbaCFTR_9way
+track tba9MammalCFTR
 shortLabel 9 Species CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
 group compGeno
 priority 147
+visibility full
+type maf
+
+track tba9MammalCFTR_fullScoring
+shortLabel 9 SpeciesF CFTR
+longLabel CFTR Region Full Scored TBA Alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
+group compGeno
+priority 147.3
+visibility full
+type maf
+
+track tbaFishBirdCFTR
+shortLabel Non-Mammal CFTR
+longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
+group compGeno
+priority 147.5
+visibility full
+type maf
+
+track tbaFishBirdCFTR_fullScoring
+shortLabel Non-MammalF CFTR
+longLabel CFTR Region TBA Full Scored Alignments (human,mouse,rat,dog,fugu,chicken)
+group compGeno
+priority 147.6
 visibility full
 type maf
 
