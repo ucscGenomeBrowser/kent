@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "chromInserts.h"
 
-static char const rcsid[] = "$Id: ooLiftSpec.c,v 1.10 2003/05/06 07:22:33 kate Exp $";
+static char const rcsid[] = "$Id: ooLiftSpec.c,v 1.11 2003/10/10 16:54:41 heather Exp $";
 
 /* Variables that can be overridden from command line. */
 char *goldName = NULL;
@@ -491,4 +491,5 @@ if (argc != 4)
     usage();
 goldName = cgiOptionalString("goldName");
 ooLiftSpec(argv[1], argv[2], argv[3]);
+return 0;
 }
