@@ -59,6 +59,9 @@ void hTableStart();
 void hTableEnd();
 /* Close out table started with hTableStart() */
 
+void explainWhyNoResults();
+/* Put up a little explanation to user of why they got nothing. */
+
 /* ---------- Javascript stuff. ----------------------*/
 
 void jsCreateHiddenForm(char **vars, int varCount);
@@ -317,6 +320,7 @@ boolean anyIntersection();
 #define outBed "bed"
 #define outGff "gff"
 #define outCustomTrack "customTrack"
+#define outHyperlinks "hyperlinks"
 
 /* Identifier list handling stuff. */
 
@@ -355,7 +359,8 @@ struct customTrack *newCt(char *ctName, char *ctDesc, int visNum, char *ctUrl,
 struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
-void doTabOutCustomTracks(char *name, char *fields);
+void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
+	char *fields);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 
@@ -415,6 +420,9 @@ void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
 
 void doOutBed(struct trackDb *track, struct sqlConnection *conn);
 /* Put up form to select BED output format. */
+
+void doOutHyperlinks(struct trackDb *track, struct sqlConnection *conn);
+/* Output as genome browser hyperlinks. */
 
 void doOutGff(struct trackDb *track, struct sqlConnection *conn);
 /* Save as GFF. */

@@ -11,13 +11,14 @@
 #include "hdb.h"
 #include "web.h"
 #include "hui.h"
+#include "hCommon.h"
 #include "hgColors.h"
 #include "trackDb.h"
 #include "grp.h"
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.43 2004/07/21 04:15:01 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.44 2004/07/21 08:15:50 kent Exp $";
 
 
 void usage()
@@ -105,6 +106,21 @@ void hTableEnd()
 {
 puts("</TABLE>");
 puts("</TR></TD></TABLE>");
+}
+
+void explainWhyNoResults()
+/* Put up a little explanation to user of why they got nothing. */
+{
+hPrintf("# No results");
+if (identifierFileName() != NULL)
+    hPrintf(" matching identifier list");
+if (anyFilter())
+    hPrintf(" passing filter");
+if (!fullGenomeRegion())
+    hPrintf(" in given region");
+if (anyIntersection())
+    hPrintf(" after intersection");
+hPrintf(".");
 }
 
 /* --------------- Text Mode Helpers ----------------- */
@@ -601,7 +617,8 @@ void doTabOutTable( char *db, char *table, struct sqlConnection *conn, char *fie
 {
 if (isCustomTrack(table))
     {
-    doTabOutCustomTracks(table, fields);
+    struct trackDb *track = findTrack(table, fullTrackList);
+    doTabOutCustomTracks(track, conn, fields);
     }
 else
     {
@@ -615,6 +632,42 @@ void doOutPrimaryTable(struct trackDb *track,
 {
 textOpen();
 doTabOutTable(database, track->tableName, conn, NULL);
+}
+
+void doOutHyperlinks(struct trackDb *track, struct sqlConnection *conn)
+/* Output as genome browser hyperlinks. */
+{
+struct bed *bedList, *bed;
+char *table = track->tableName;
+char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
+char posBuf[64];
+htmlOpen("Hyperlinks to Genome Browser");
+bedList = getAllIntersectedBeds(conn, track);
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    char *name;
+    safef(posBuf, sizeof(posBuf), "%s:%d-%d",
+    		bed->chrom, bed->chromStart+1, bed->chromEnd);
+    /* Construct browser anchor URL with tracks we're looking at open. */
+    hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
+    hPrintf("&db=%s", database);
+    hPrintf("&position=%s", posBuf);
+    hPrintf("&%s=%s", table, hTrackOpenVis(table));
+    if (table2 != NULL)
+	hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+    hPrintf("\" TARGET=_blank>");
+    name = bed->name;
+    if (bed->name == NULL)
+        name = posBuf;
+    if (sameString(name, posBuf))
+	hPrintf("%s", posBuf);
+    else
+        hPrintf("%s at %s", name, posBuf);
+    hPrintf("</A><BR>\n");
+    }
+if (bedList == NULL)
+    hPrintf("\n# No results returned from query.\n\n");
+htmlClose();
 }
 
 void doTopSubmit(struct sqlConnection *conn)
@@ -640,6 +693,8 @@ else if (sameString(output, outSummaryStats))
     doOutSummaryStats(track, conn);
 else if (sameString(output, outGff))
     doOutGff(track, conn);
+else if (sameString(output, outHyperlinks))
+    doOutHyperlinks(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

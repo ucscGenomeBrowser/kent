@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.18 2004/07/21 03:28:46 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.19 2004/07/21 08:15:50 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -289,12 +289,14 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
         {outPrimaryTable, outSequence, 
 	 outSelectedFields, outSchema,
 	 outSummaryStats, outBed, 
-	 outGff, outCustomTrack };
+	 outGff, outCustomTrack ,
+	 outHyperlinks};
     static char *labels[] =
         {"all fields from primary table", "sequence", 
 	 "selected fields from related tables", "schema (database organization)",
 	 "summary/statistics", "BED - browser extensible data", 
-	 "GTF - gene transfer format", "custom track"};
+	 "GTF - gene transfer format", "custom track",
+	 "hyperlinks to Genome Browser"};
     hPrintf("<TR><TD><B>output:</B>\n");
     hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
     for (i=0; i<ArraySize(symbols); ++i)

@@ -497,22 +497,21 @@ slReverse(&bedList);
 return bedList;
 }
 
-void doTabOutCustomTracks(char *name, char *fields)
+void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
+	char *fields)
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
-boolean gotFilter, gotIds;
-struct bed *bed, *bedList = NULL;
+struct bed *bed, *bedList = getAllIntersectedBeds(conn, track);
 struct slName *chosenFields, *field;
-boolean gotResults = FALSE;
-struct customTrack *ct = lookupCt(name);
-
 if (fields == NULL)
+    {
+    struct customTrack *ct = lookupCt(track->tableName);
     chosenFields = getBedFields(ct->fieldCount);
+    }
 else
     chosenFields = commaSepToSlNames(fields);
 
-bedList = customTrackGetFilteredBeds(name, getRegions(), &gotFilter, &gotIds);
 hPrintf("#");
 for (field = chosenFields; field != NULL; field = field->next)
     {
@@ -523,21 +522,9 @@ for (field = chosenFields; field != NULL; field = field->next)
 hPrintf("\n");
 
 for (bed = bedList; bed != NULL; bed = bed->next)
-    {
     tabBedRow(bed, chosenFields);
-    gotResults = TRUE;
-    }
-if (!gotResults)
-    {
-    hPrintf("# No results");
-    if (gotIds)
-	hPrintf(" matching identifier list");
-    if (gotFilter)
-        hPrintf(" passing filter");
-    if (!fullGenomeRegion())
-        hPrintf(" in given region");
-    hPrintf(".");
-    }
+if (bedList == NULL)
+    explainWhyNoResults();
 }
 
 
