@@ -3465,6 +3465,7 @@ Submission to last job:          1817s      30.28m     0.50h    0.02d
     end
     # load into database
     /cluster/bin/i386/hgLoadMaf -warn hg15 humor300
+    rm *.tab
 
 # Creating knownToSuper (which enables superFamily stuff in hgNear/hgGene)
 # First see if need to update superfamily data from 
@@ -4088,3 +4089,11 @@ hgLoadBed -noSort hg15 tfbsCons -sqlTable=$HOME/kent/src/hg/lib/tfbsCons.sql tfb
 set idmap=/cluster/data/hg15/bed/tfbsCons/tfbsConsMap
 hgsql hg15 < ~/kent/src/hg/lib/tfbsConsMap.sql
 echo "load data local infile '$idmap' into table tfbsConsMap;" | hgsql hg15
+
+# LOAD OVER.CHAIN INTO DATABASE FOR USE BY LIFTOVER (IN PROGRESS kate)
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/bedOver
+    hgLoadChain hg15 chainHg16 over.chain
+        # Loading 3938 chains into hg16.chainHg15
+

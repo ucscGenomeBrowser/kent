@@ -7849,10 +7849,3 @@ end
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
 
-# LOAD OVER.CHAIN INTO DATABASE FOR USE BY LIFTOVER (2004-03-22 kate)
-
-    ssh hgwdev
-    cd /cluster/data/hg16/bed/bedOver
-    hgLoadChain hg16 chainHg15 over.chain
-        # Loading 3938 chains into hg16.chainHg15
-
