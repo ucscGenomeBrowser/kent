@@ -5,9 +5,12 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# poll every hour at half-past
-30 0-23 * * *	/genbank/etc/hgwbeta-dbload
+# during the week only load mRNAs
+# poll hourly 1-7
+30 1-7 * * 1-5	/genbank/etc/hgwbeta-dbload
 
-
-
+# on weekends, both mRNAs and ESTS
+# poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
+30 0-23 * * 6	/genbank/etc/hgwbeta-dbload -inclEsts
+30 0-18 * * 0	/genbank/etc/hgwbeta-dbload -inclEsts
 

@@ -6,10 +6,10 @@ MAILTO=genbank@cse.ucsc.edu
 
 # during the week only load mRNAs
 # poll hourly 16:30 - 21:30
-30 16-21 * * 1-5	/export/genbank/etc/rr-dbload
+30 16-21 * * 1-5	/genbank/etc/rr-dbload
 
 # on weekends, both mRNAs and ESTS
 # poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 6	/export/genbank/etc/rr-dbload -inclEsts
-30 0-18 * * 0	/export/genbank/etc/rr-dbload -inclEsts
+30 0-23 * * 6	/genbank/etc/rr-dbload -inclEsts
+30 0-18 * * 0	/genbank/etc/rr-dbload -inclEsts
 

@@ -5,9 +5,12 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# poll every hour at half-past
-30 0-23 * * *	/genbank/etc/mgc-dbload
+# during the week only load mRNAs
+# poll hourly 16:30 - 21:30
+30 16-21 * * 1-5	/genbank/etc/mgc-dbload
 
-
-
+# on weekends, both mRNAs and ESTS
+# poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
+30 0-23 * * 6	/genbank/etc/mgc-dbload -inclEsts
+30 0-18 * * 0	/genbank/etc/mgc-dbload -inclEsts
 
