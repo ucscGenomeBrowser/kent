@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.22 2004/04/19 21:32:28 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.23 2004/04/20 00:00:50 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -729,18 +729,14 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     mafAliFree(&sub);
     }
 
-/* Draw lines with letters . */
-charifyInserts(insertLine, winBaseCount);
 /* Convert insert line from counts to characters. */
+charifyInserts(insertLine, winBaseCount);
 for (mi = miList, i=0; mi->next != NULL; mi = mi->next, ++i)
     {
     char *line = lines[i];
     int x = xOff;
     if (line == insertLine)
-        {
-	int x1, x2;
 	x -= (width/winBaseCount)/2;
-	}
     spreadString(vg, x, y, width, mi->height-1, color, font, 
     	line, winBaseCount);
     y += mi->height;
