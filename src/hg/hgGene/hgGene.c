@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.24 2003/12/03 03:41:10 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.25 2004/01/05 20:07:54 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -256,6 +256,15 @@ return name;
 }
 
 /* --------------- Page printers ----------------- */
+/* See this NCBI web doc for more info about entrezFormat:
+ * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
+char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
+
+static void printEntrezNucleotideUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, entrezFormat, "Nucleotide", accession, "GenBank");
+}
 
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
@@ -269,6 +278,15 @@ if (description != NULL)
 else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
+
+hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
+printEntrezNucleotideUrl(stdout, id);
+hPrintf("\" TARGET=_blank>%s</A>\n", id);
+hPrintf("&nbsp&nbsp&nbsp");
+hPrintf("<B>Protein: ");
+hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A></B>\n",
+       getSwissProtAcc(conn, spConn, id), getSwissProtAcc(conn, spConn, id));
+
 if (summaryTables != NULL)
     {
     if (sqlTablesExist(conn, summaryTables))
