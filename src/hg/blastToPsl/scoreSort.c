@@ -98,16 +98,15 @@ for(score = scoreList ; score != NULL ; score = score->next)
 		score->qName, score->tStart, score->tEnd, score->qStart,score->qEnd);
     psl = hashFindVal(pslHash, ds->string);
     if (psl == NULL)
-	printf("%s not found", ds->string);
+	; // printf("%s not found", ds->string);
     else if ((psl->tBaseInsert < maxIns) && (score->score > minScore))
 	{
 	if (!singleQ ||  (hashFindVal(qHash, psl->qName) == NULL) )
 	    {
 	    pslTabOut(psl, pslOutFile);
-	    fprintf(scoreOutFile, "%s\t%c\t%d\t%d\t%s\t%d\t%d\t%d\t%g\n", 
-		    score->tName, score->strand, score->tStart, score->tEnd,
-		    score->qName, score->qStart, score->qEnd,
-		    score->score, score->eValue);
+	    fprintf(scoreOutFile, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%g\n", 
+		    psl->strand,score->qName, score->qStart, score->qEnd,
+		    score->tName,  score->tStart, score->tEnd,score->score, score->eValue);
 	    if (singleQ)
 		hashAddUnique(qHash, psl->qName, psl);
 	    }
