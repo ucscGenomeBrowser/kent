@@ -2831,7 +2831,7 @@ char *refGeneName(struct trackGroup *tg, void *item)
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
     {
-    sprintf(cat,"%s %s",lf->name, (char *)lf->extra);
+    sprintf(cat,"%s",(char *)lf->extra);
     return cat;
     }
 else return lf->name;
