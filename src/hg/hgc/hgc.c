@@ -1343,7 +1343,6 @@ else
     printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
     }
-printTrackHtml(tdb);
 sqlFreeResult(&sr);
 }
 
