@@ -11,9 +11,9 @@ O = $A.o
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
-	strip $A
 	chmod a+rx $A
-	cp $A $$HOME/bin/i386
+	cp -f $A $$HOME/bin/i386/$A
+	#strip $$HOME/bin/i386/$A
 
 debug: $O
 	gcc $O $(MYLIBS) $(L) 

@@ -176,6 +176,20 @@ for (c = *cList; c != NULL; c = next)
 *cList = NULL;
 }
 
+char* accFmt(struct acc* acc)
+/* format acc with optional version */
+{
+static char accVer[64];
+
+if (acc->version == NULL)
+    return acc->name;
+else
+    {
+    safef(accVer, sizeof(accVer), "%s.%s", acc->name, acc->version);
+    return accVer;
+    }
+}
+
 void accFree(struct acc **acc)
 /* Free a dynamically allocated acc */
 {
@@ -494,7 +508,7 @@ if (wordCount = 1)
 else
      ret->version = accs[1];
 ret->organism = NULL;
-/* fprintf(stderr, "accession %s.%s created\n", ret->name, ret->version);*/
+/* fprintf(stderr, "accession %s created\n", accFmt(ret));*/
 
 return(ret);
 }
@@ -1430,30 +1444,30 @@ for (indel = iList; indel != NULL; indel=indel->next)
     indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
     indel->chrom, indel->chromStart, indel->chromEnd);*/
     if (type == INDEL)
-        fprintf(of, "Indel of size %d in %s.%s:%d-%d vs. %s:%d-%d\n",
-		indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
+        fprintf(of, "Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
+		indel->size, accFmt(indel->mrna), indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == UNALIGNED)
-      fprintf(of, "Unaligned bases of size %d in %s.%s:%d-%d vs. %s:%d-%d\n",
-	      indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
-	      indel->chrom, indel->chromStart, indel->chromEnd);
+        fprintf(of, "Unaligned bases of size %d in %s:%d-%d vs. %s:%d-%d\n",
+                indel->size, accFmt(indel->mrna), indel->mrnaStart, indel->mrnaEnd,
+                indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == MISMATCH)
       {
-	fprintf(of, "Mismatch at %s.%s:%d vs. %s:%d",
-		indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->chrom, indel->chromStart);
-       if (indel->knownSnp)
-	   fprintf(of, ", SNP\n");
-       else
-	   fprintf(of, "\n");	   
-       }
+      fprintf(of, "Mismatch at %s:%d vs. %s:%d",
+              accFmt(indel->mrna), indel->mrnaStart, indel->chrom, indel->chromStart);
+      if (indel->knownSnp)
+          fprintf(of, ", SNP\n");
+      else
+          fprintf(of, "\n");	   
+      }
     else if (type == CODONSUB)
        {
        char mrnaAA = lookupCodon(indel->mrnaCodon);
        char genAA = lookupCodon(indel->genCodon);
        bool isSyn = (mrnaAA == genAA);
-       fprintf(of, "%s codon substitution at %s.%s:%d vs. %s:%d,%d,%d, %s vs. %s, ",
+       fprintf(of, "%s codon substitution at %s:%d vs. %s:%d,%d,%d, %s vs. %s, ",
 	       (isSyn ? "synonymous" : "non-synonymous"),
-	       indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->chrom, indel->codonGenPos[0],
+	       accFmt(indel->mrna), indel->mrnaStart, indel->chrom, indel->codonGenPos[0],
 	       indel->codonGenPos[1], indel->codonGenPos[2],
 	       indel->mrnaCodon, indel->genCodon);
        if (mrnaAA == 0)
@@ -1475,70 +1489,70 @@ for (indel = iList; indel != NULL; indel=indel->next)
     fprintf(of, "\t%d human mRNAs support genomic: ", indel->hs->genMrna);
     slReverse(&(indel->hs->genMrnaAcc));
     for (acc = indel->hs->genMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
     fprintf(of, "\n\t%d human ESTs support genomic: ",indel->hs->genEst);
     slReverse(&(indel->hs->genEstAcc));
     for (acc = indel->hs->genEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
-    fprintf(of, "\n\t%d human mRNAs support %s.%s: ", indel->hs->mrnaMrna, indel->mrna->name, indel->mrna->version);
+	fprintf(of, "%s ", accFmt(acc));
+    fprintf(of, "\n\t%d human mRNAs support %s: ", indel->hs->mrnaMrna, accFmt(indel->mrna));
     slReverse(&(indel->hs->mrnaMrnaAcc));
     for (acc = indel->hs->mrnaMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
-    fprintf(of, "\n\t%d human ESTs support %s.%s: ",indel->hs->mrnaEst, indel->mrna->name, indel->mrna->version);
+	fprintf(of, "%s ", accFmt(acc));
+    fprintf(of, "\n\t%d human ESTs support %s: ",indel->hs->mrnaEst, accFmt(indel->mrna));
     slReverse(&(indel->hs->mrnaEstAcc));
     for (acc = indel->hs->mrnaEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
     fprintf(of, "\n\t%d human mRNAs support neither: ", indel->hs->noMrna);
     slReverse(&(indel->hs->noMrnaAcc));
     for (acc = indel->hs->noMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
     fprintf(of, "\n\t%d human ESTs support neither: ",indel->hs->noEst);
     slReverse(&(indel->hs->noEstAcc));
     for (acc = indel->hs->noEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
     fprintf(of, "\n\t%d human mRNAs do not align: ", indel->hs->unMrna);
     slReverse(&(indel->hs->unMrnaAcc));
     for (acc = indel->hs->unMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
     fprintf(of, "\n\t%d human ESTs do not align: ",indel->hs->unEst);
     slReverse(&(indel->hs->unEstAcc));
     for (acc = indel->hs->unEstAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s.%s ", acc->name, acc->version);
+	fprintf(of, "%s ", accFmt(acc));
 
     if (xeno)
         {
         fprintf(of, "\n\n\t%d xeno mRNAs support genomic: ", indel->xe->genMrna);
 	slReverse(&(indel->xe->genMrnaAcc));
 	for (acc = indel->xe->genMrnaAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	fprintf(of, "\n\t%d xeno ESTs support genomic: ",indel->xe->genEst);
 	slReverse(&(indel->xe->genEstAcc));
 	for (acc = indel->xe->genEstAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
-	fprintf(of, "\n\t%d xeno mRNAs support %s.%s: ", indel->xe->mrnaMrna, indel->mrna->name, indel->mrna->version);
+	    fprintf(of, "%s(%s) ", acc->name, accFmt(acc));
+	fprintf(of, "\n\t%d xeno mRNAs support %s: ", indel->xe->mrnaMrna, accFmt(indel->mrna));
 	slReverse(&(indel->xe->mrnaMrnaAcc));
 	for (acc = indel->xe->mrnaMrnaAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
-	fprintf(of, "\n\t%d xeno ESTs support %s.%s: ",indel->xe->mrnaEst, indel->mrna->name, indel->mrna->version);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
+	fprintf(of, "\n\t%d xeno ESTs support %s: ",indel->xe->mrnaEst, accFmt(indel->mrna));
 	slReverse(&(indel->xe->mrnaEstAcc));
 	for (acc = indel->xe->mrnaEstAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	fprintf(of, "\n\t%d xeno mRNAs support neither: ", indel->xe->noMrna);
 	slReverse(&(indel->xe->noMrnaAcc));
 	for (acc = indel->xe->noMrnaAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	fprintf(of, "\n\t%d xeno ESTs support neither: ",indel->xe->noEst);
 	slReverse(&(indel->xe->noEstAcc));
 	for (acc = indel->xe->noEstAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	fprintf(of, "\n\t%d xeno mRNAs do not align: ", indel->xe->unMrna);
 	slReverse(&(indel->xe->unMrnaAcc));
 	for (acc = indel->xe->unMrnaAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	fprintf(of, "\n\t%d xeno ESTs do not align: ",indel->xe->unEst);
 	slReverse(&(indel->xe->unEstAcc));
 	for (acc = indel->xe->unEstAcc; acc != NULL; acc = acc->next)
-	    fprintf(of, "%s.%s(%s) ", acc->name, acc->version, acc->organism);
+	    fprintf(of, "%s(%s) ", accFmt(acc), acc->organism);
 	}
     fprintf(of, "\n\n");
     }
@@ -1549,7 +1563,7 @@ void writeOut(FILE *of, FILE *in, FILE *mm, FILE* cs, FILE* un, struct pslInfo *
 {
 int i;
 
-fprintf(of, "%s.%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->mrna->name, pi->mrna->version, pi->psl->tName, pi->psl->tStart, 
+fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", accFmt(pi->mrna), pi->psl->tName, pi->psl->tStart, 
 	pi->psl->tEnd,pi->psl->qStart,pi->psl->qEnd,pi->psl->qSize,pi->loci);
 fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t", 
 	pi->coverage, pi->pctId, pi->cdsStart+1, 
