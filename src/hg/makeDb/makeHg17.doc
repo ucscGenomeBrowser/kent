@@ -6151,7 +6151,7 @@ rm $TMP/$root.pp
 '_EOF_'
     chmod u+x doPhastCons
 
-    # the --cut-params arguments are approximate maximum likelihood
+    # the --transitions arguments are approximate maximum likelihood
     # estimates obtained by running the program *without* --transitions
     # (causes estimation by EM) on five randomly selected 1M bp
     # windows.  All estimates were in the same ballpark (took a rough average)
@@ -8477,6 +8477,72 @@ for i in `cat chrom.lst` ; do mafFilter -minScore=1000 maf/$i.maf > mafFilter/$i
 cd mafFilter
 for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov ; echo done $i ; done   
 
+# 8-WAY phastConsElements (acs 8/18/04)
+# picking up under Kate's PHYLO-HMM CONSERVATION FOR 8-WAY MM5
+
+    cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
+    mkdir run.elements
+    cat << 'EOF' > doElements.sh
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+TMP=/tmp/phastCons
+
+file=$1
+root=`basename $file .ss.gz`
+
+mkdir -p ELEMENTS
+zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod --nrates 40 --no-post-probs --transitions 0.080,0.008 --quiet --viterbi ELEMENTS/$root.bed
+'EOF'
+
+    chmod u+x doElements.sh
+
+    # get version of .mod file with names rather than numbers (won't
+    # be necessary in the future)
+    tree_doctor ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1;6->galGal2;7->fr1;8->danRer1" > hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod
+
+    rm -fr ELEMENTS
+    rm -f jobList
+    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doElements.sh $f >> jobList ; done
+
+    # Scores are transformed as follows, for a reasonable-looking
+    # "spectrum".  Let x_max be the maximum score and let x_med be the
+    # median score.  The scores are transformed via the function f(x)
+    # = a * log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.
+    # Solving for a and b, you get b = (300 log x_max - 1000 log
+    # x_med) / (log x_max - log x_med), a = (1000 - b) / log x_max.
+
+    cat ELEMENTS/*.bed | awk '{print $5}' | sort -nr > sorted_scores
+    len=`wc -l sorted_scores | awk '{print $1}'`
+    export x_max=`head -1 sorted_scores`
+    mididx=`expr $len / 2`
+    export x_med=`head -$mididx sorted_scores | tail -1`
+
+    cat ELEMENTS/*.bed | \
+	awk 'BEGIN { b = (300 * log(ENVIRON["x_max"]) - 1000 * log(ENVIRON["x_med"])) / \
+	    (log(ENVIRON["x_max"] - log(ENVIRON["x_med"]))) ;\
+	    a = (1000 - b) / log(ENVIRON["x_max"]) ;\
+	    printf "a = %f; b = %f\n", a, b > "/dev/stderr" } \
+	    { printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
+	    $1, $2, $3, $5, a * log($5) + b, $6, $7, $8, $9, \
+	    $10, $11, $12}' > all.bed
+
+    # double check scores: max should be about 1000, median should be about 300
+    
+    hgLoadBed hg17 phastConsElements all.bed
+    rm all.bed sorted_scores
+
+    # trackDb.ra entry
+# track phastConsElements
+# shortLabel Cons Elements
+# longLabel phastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+# group compGeno
+# priority 109.1
+# visibility hide
+# spectrum on
+# exonArrows off
+# type bed 6 .
+
 
 #  Load firstEF track (DONE 2004-08-18 braney)
     ssh hgwdev
@@ -8497,5 +8563,4 @@ s/chr24/chrY/g
     rm firstEF.tab
     gzip *.bed
 #done firstEF
-
 

@@ -33,6 +33,16 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder chimp dog mouse rat chicken fugu zebrafish
 
+track phastConsElements
+shortLabel Cons Elements
+longLabel phastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+group compGeno
+priority 109.1
+visibility hide
+spectrum on
+exonArrows off
+type bed 6 .
+
 track multiz7way
 shortLabel 7Way Cons
 longLabel Hu/Chimp/Mouse/Rat/Chicken/Fugu/Zfish Multiz Alignments & PhyloHMM Cons 
