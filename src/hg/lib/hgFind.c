@@ -124,7 +124,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ok = TRUE;
 	AllocVar(table);
 	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->description = cloneString("Known Genes");
+	dyStringPrintf(query, "%s", tableName);
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
@@ -174,7 +175,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ok = TRUE;
 	AllocVar(table);
 	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->description = cloneString("Known Genes");
+	dyStringPrintf(query, "%s", tableName);
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
