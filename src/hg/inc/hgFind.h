@@ -67,7 +67,7 @@ void hgPositionsHtml(struct hgPositions *positions, FILE *f,
 	boolean useWeb, char *hgAppName, struct cart *cart);
 /* Write out positions table as HTML to file. */
 
-void hgPositionsHelpHtml(char *organism);
+void hgPositionsHelpHtml(char *organism, char *database);
 /* Explain the position box usage, give some organism-specific examples. */
 
 struct hgPosTable

@@ -462,6 +462,11 @@ char *hScientificName(char *database);
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
 
+char *hHtmlPath(char *database);
+/* Return /gbdb path name to html description for this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
+
 char *hFreezeDate(char *database);
 /* Return freeze date of database. Use freeMem when done. */
 

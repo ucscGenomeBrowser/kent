@@ -5,7 +5,7 @@
 #ifndef DBDB_H
 #define DBDB_H
 
-#define DBDB_NUM_COLS 9
+#define DBDB_NUM_COLS 10
 
 struct dbDb
 /* Description of annotation database */
@@ -20,6 +20,7 @@ struct dbDb
     int orderKey;	/* Int used to control display order within a genome */
     char *genome;	/* Unifying genome collection to which an assembly belongs */
     char *scientificName;	/* Genus and species of the organism; e.g. Homo sapiens */
+    char *htmlPath;	/* path in /gbdb for assembly description */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);
