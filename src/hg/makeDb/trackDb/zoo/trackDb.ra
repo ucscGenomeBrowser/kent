@@ -249,6 +249,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooHuman3
+otherDb zooHuman3
 
 track blastzStrictChainChimp
 shortLabel Blastz Chimp
@@ -260,6 +261,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooChimp3
+otherDb zooChimp3
 
 track blastzStrictChainBaboon
 shortLabel Blastz Baboon
@@ -271,6 +273,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooBaboon3
+otherDb zooBaboon3
 
 track blastzStrictChainCat
 shortLabel Blastz Cat
@@ -282,6 +285,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooCat3
+otherDb zooCat3
 
 track blastzStrictChainDog
 shortLabel Blastz Dog
@@ -293,6 +297,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooDog3
+otherDb zooDog3
 
 track blastzStrictChainCow
 shortLabel Blastz Cow
@@ -304,6 +309,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooCow3
+otherDb zooCow3
 
 track blastzStrictChainPig
 shortLabel Blastz Pig
@@ -315,6 +321,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooPig3
+otherDb zooPig3
 
 track blastzStrictChainRat
 shortLabel Blastz Rat
@@ -326,6 +333,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooRat3
+otherDb zooRat3
 
 track blastzStrictChainMouse
 shortLabel Blastz Mouse
@@ -337,6 +345,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooMouse3
+otherDb zooMouse3
 
 track blastzStrictChainChicken
 shortLabel Blastz Chicken
@@ -348,6 +357,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooChicken3
+otherDb zooChicken3
 
 track blastzStrictChainFugu
 shortLabel Blastz Fugu
@@ -359,6 +369,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooFugu3
+otherDb zooFugu3
 
 track blastzStrictChainTetra
 shortLabel Blastz Tetra
@@ -370,6 +381,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooTetra3
+otherDb zooTetra3
 
 track blastzStrictChainZebrafish
 shortLabel Blastz Zebrafish
@@ -381,6 +393,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno zooZebrafish3
+otherDb zooZebrafish3
 
 track rodentsGaps
 shortLabel rodentGaps 

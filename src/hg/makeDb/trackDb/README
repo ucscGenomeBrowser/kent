@@ -47,7 +47,11 @@ For psl types it's
         .  (just regular human mRNA)
         est    (human displays a little differently in dense mode)
         xeno (cross species)
-There's gene predictions
+   3) Optional extra parameter for xeno subtype: database associated
+      with other organism.  If present the display can be colored by
+      chromosome and the chromosome and position in kilobases is shown
+      as the item label.
+For gene predictions 
     1) genePred
     2) (optional) associated protein sequence table
     3) (optional) associated mRNA table.
@@ -77,4 +81,15 @@ variables, which will be substituted:
      $ORGANISM - all upper case organism, like 'MOUSE'
      $Organism - initial capped organism, like 'Mouse'
      $organism - all lower case organism, like 'mouse'
+     $db - database (like mm3, hg15, etc.)
+     $date - freeze date of underlying assembly
+     $blurb - If there is a blurb field in the .ra file this echos it.
+In addition if there is a $otherDb field set in the .ra file these
+variables are available
+     $o_ORGANISM - all upper case other organism, like 'MOUSE'
+     $o_Organism - initial capped other organism, like 'Mouse'
+     $o_organism - all lower case other organism, like 'mouse'
+     $o_db - other database (like mm3, hg15, etc.)
+     $o_date - freeze date of underlying other assembly
+
 
