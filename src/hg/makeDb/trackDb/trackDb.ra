@@ -263,6 +263,15 @@ priority 32
 visibility dense
 type bed 6 .
 
+track Nregion
+shortLabel N Regions
+longLabel N Regions
+group map
+priority 32.5
+color 150,100,30
+visibility hide
+type bed 4 .
+
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from Full-Length mRNAs)
