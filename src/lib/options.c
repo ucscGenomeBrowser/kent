@@ -10,7 +10,11 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.11 2003/05/22 15:20:53 markd Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.12 2003/07/08 05:58:41 kent Exp $";
+
+#ifdef MACHTYPE_alpha
+    #define strtoll strtol
+#endif
 
 /* mask for type in optionSpec.flags */
 #define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG)
