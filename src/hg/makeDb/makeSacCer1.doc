@@ -1147,3 +1147,50 @@ EOF
 #exonArrows off
 #showTopScorers 200
 #type bed 5 .
+
+
+# MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
+    # First, get ranges of target coverage:
+    ssh kksilo
+    mkdir /cluster/data/sacCer1/bed/otherYeast/align/coverage
+    cd /cluster/data/sacCer1/bed/otherYeast/align/coverage
+    cat /cluster/data/sacCer1/bed/otherYeast/align/mafOut/*.maf \
+    | nice mafRanges stdin sacCer1 sacCer1.mafRanges.bed
+    # Get pairwise coverage as well.
+    foreach other (sacBay sacCas sacKlu sacKud sacMik sacPar)
+      cat /cluster/data/sacCer1/bed/otherYeast/align/mafIn/chr*.$other \
+      | nice mafRanges stdin sacCer1 sacCer1.$other.mafRanges.bed
+    end
+
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/otherYeast/align/coverage
+    # To make subsequent intersections a bit quicker, output a bed with 
+    # duplicate/overlapping ranges collapsed:
+    nice featureBits sacCer1 sacCer1.mafRanges.bed \
+      -bed=sacCer1.mafRangesCollapsed.bed
+#11759182 bases of 12156302 (96.733%) in intersection
+    # mafCoverage barfs on chr15 currently, so pass on this for now:
+    #cat /cluster/data/sacCer1/bed/otherYeast/align/mafOut/*.maf \
+    #| nice mafCoverage -count=2 sacCer1 stdin > sacCer1.mafCoverage
+
+    # Intersect maf target coverage with gene regions:
+    nice featureBits sacCer1 -enrichment sgdGene:cds \
+      sacCer1.mafRangesCollapsed.bed \
+      -bed=sacCer1.mafCds.bed
+#sgdGene:cds 69.491%, sacCer1.mafRangesCollapsed.bed 96.733%, both 69.148%, cover 99.51%, enrich 1.03x
+    # No UTR info for yeast, so can't intersect.
+
+    # Intersect pairwise target coverages with gene regions:
+    foreach other (sacBay sacCas sacKlu sacKud sacMik sacPar)
+      nice featureBits sacCer1 -enrichment sgdGene:cds \
+        sacCer1.$other.mafRanges.bed -bed=sacCer1.${other}Cds.bed \
+      |& grep -v "table gap doesn't exist"
+    end
+#sgdGene:cds 69.491%, sacCer1.sacBay.mafRanges.bed 91.724%, both 67.029%, cover 96.46%, enrich 1.05x
+#sgdGene:cds 69.491%, sacCer1.sacCas.mafRanges.bed 67.673%, both 58.031%, cover 83.51%, enrich 1.23x
+#sgdGene:cds 69.491%, sacCer1.sacKlu.mafRanges.bed 59.210%, both 51.373%, cover 73.93%, enrich 1.25x
+#sgdGene:cds 69.491%, sacCer1.sacKud.mafRanges.bed 91.837%, both 65.318%, cover 94.00%, enrich 1.02x
+#sgdGene:cds 69.491%, sacCer1.sacMik.mafRanges.bed 94.821%, both 67.521%, cover 97.17%, enrich 1.02x
+#sgdGene:cds 69.491%, sacCer1.sacPar.mafRanges.bed 97.854%, both 68.702%, cover 98.87%, enrich 1.01x
+
+
