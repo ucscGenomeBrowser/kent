@@ -15,7 +15,7 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.19 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.20 2003/06/11 02:52:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1557,6 +1557,8 @@ fprintf(cFile, "#include \"linefile.h\"\n");
 fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
+fprintf(cFile, "\n");
+fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.20 2003/06/11 02:52:20 kent Exp $\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 
