@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.25 2004/11/20 19:45:23 baertsch Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.26 2004/12/07 02:01:02 kent Exp $";
 
 
 struct cartOptions
@@ -257,7 +257,6 @@ struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
 char optionChr[128]; /* Option -  chromosome filter */
-char optionScore[128]; /* Option -  score filter */
 char *optionChrStr;
 char extraWhere[128] ;
 struct cartOptions *chainCart;

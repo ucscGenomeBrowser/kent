@@ -58,8 +58,6 @@ return -1;
 void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end, 
 		    int x, int y, int width, int height)
 {
-struct linkedFeaturesSeries *lfs = tg->items;
-struct linkedFeaturesSeries *lfsItem = item;
 if(tg->visibility != tvDense && tg->visibility != tvHide)
     mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
@@ -194,7 +192,7 @@ struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *databa
  * numerical index of experiments, as hard to do in a list. 
  * If expIndex is -1, then use name instead of extras[expIndex] */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
+struct linkedFeaturesSeries *lfsList = NULL, **lfsArray;
 struct linkedFeatures *lf = NULL;
 struct sqlConnection *conn;
 struct hash *indexes;
@@ -315,15 +313,12 @@ static void lfsFromAffyBed(struct track *tg)
 into a linkedFeaturesSeries as determined by
 filter type */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
+struct bed *bedList = NULL;
 char varName[128];
 char *affyMap;
 enum affyOptEnum affyType;
-int i=0;
-bedList = tg->items;
 
+bedList = tg->items;
 safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
 affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
 affyType = affyStringToEnum(affyMap);
@@ -359,8 +354,7 @@ filter type */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs = NULL, *lfsNew = NULL;
 struct linkedFeatures *lf = NULL, *lfNext = NULL;
-struct bed *bed = NULL, *bedList= NULL;
-int i=0;
+struct bed *bedList= NULL;
 enum trackVisibility vis = tg->visibility;
 bedList = tg->items;
 
@@ -417,10 +411,8 @@ static void lfsFromAffyGenericBed(struct track *tg)
  * into a linkedFeaturesSeries as determined by
  * filter type */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
-int i=0;
+struct bed *bedList= NULL;
+
 bedList = tg->items;
 if (tg->limitedVis == tvDense)
     {
@@ -442,12 +434,9 @@ void lfsFromNci60Bed(struct track *tg)
 into a linkedFeaturesSeries as determined by
 filter type */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
+struct bed *bedList= NULL;
 char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
 enum nci60OptEnum nci60Type = nci60StringToEnum(nci60Map);
-int i=0;
 bedList = tg->items;
 
 if(tg->limitedVis == tvDense)
@@ -513,13 +502,10 @@ void lfsFromRosettaBed(struct track *tg)
 into a linkedFeaturesSeries as determined by
 filter type */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL, *tmp=NULL, *tmpList=NULL;
+struct linkedFeaturesSeries *lfsList = NULL;
+struct bed *bedList= NULL;
 char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
 enum rosettaOptEnum rosettaType = rosettaStringToEnum(rosettaMap);
-char *exonTypes = cartUsualString(cart, "rosetta.et", "Confirmed Only");
-int i=0, et=-1;
 bedList = tg->items;
 
 bedList = rosettaFilterByExonType(bedList);
@@ -552,15 +538,11 @@ bedFreeList(&bedList);
 
 void lfsFromCghNci60Bed(struct track *tg)
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
+struct bed *bedList= NULL;
 char *cghNci60Map = cartUsualString(cart, "cghNci60.type", cghoeEnumToString(0));
 enum cghNci60OptEnum cghNci60Type = cghoeStringToEnum(cghNci60Map);
-int i=0;
+
 bedList = tg->items;
-
-
 if(tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "CGH NCI 60");
@@ -755,7 +737,6 @@ return expressionColor(tg, item, vg, 1.0, 2.6);
 Color getColorForAffyExpssn(float val, float max)
 /* Return the correct color for a given score */
 {
-struct rgbColor color; 
 int colorIndex = 0;
 int offset = 0;   /* really there is no dynamic range below 64 (2^6) */
 
@@ -850,7 +831,6 @@ Color affyUclaNormColor(struct track *tg, void *item, struct vGfx *vg)
  * red/green display from expScores */
 {
 struct linkedFeatures *lf = item;
-float score = lf->score;
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
 if(tg->customInt != 1)
@@ -872,8 +852,8 @@ char **row;
 int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
-struct linkedFeatures *lfList = NULL, *lf;
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct linkedFeaturesSeries *lfs;
 enum trackVisibility vis = tg->visibility;
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);

@@ -60,7 +60,7 @@ static int sampleTotalHeight(struct track *tg,
 as defined in the cart */
 {
 struct slList *item;
-int start, lines = 0;
+int lines = 0;
 
 int heightFromCart;
 char o1[128];
@@ -90,6 +90,8 @@ switch (vis)
     case tvDense:
 	tg->height = tg->lineHeight;
 	break;
+    default:
+        break;
     }
 return tg->height;
 }
@@ -162,7 +164,6 @@ return( (thisMax - thisMin) / binCount * bin + thisMin );
 int basePositionToXAxis( int base, int seqStart, int seqEnd, int
                 width, int xOff  ) 
 {
-int baseWidth = seqEnd - seqStart;
 double scale = scaleForPixels(width);
 double x1 = round((double)((int)base-seqStart)*scale) + xOff; 
 return(x1);
@@ -208,7 +209,6 @@ static void wiggleLinkedFeaturesDraw(struct track *tg,
  * and use anti-aliasing.*/
 {
 int i;
-int baseWidth = seqEnd - seqStart;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
 int y = yOff;
@@ -236,9 +236,6 @@ int bin;	      /* Sample Y coordinates are first converted to
 int currentX, currentXEnd, currentWidth;
 
 int leftSide, rightSide;
-int trackTabWidth = 11;
-int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
-int trackPastTabWidth = tl.picWidth - trackPastTabX;
 
 int noZoom = 1;
 enum wiggleOptEnum wiggleType;
@@ -246,7 +243,6 @@ char *interpolate = NULL;
 char *aa = NULL; 
 boolean antiAlias = FALSE;
 int fill; 
-char *lineGapStr = NULL;
 int lineGapSize;
 double min0, max0;
 
@@ -259,7 +255,7 @@ char o6[128]; /* Option 6 - max gap where interpolation is still done */
 char cartStr[64];
 char *fillStr;
 
-double hFactor, hFactor2;
+double hFactor;
 double minRange, maxRange;
 double minRangeCutoff, maxRangeCutoff;
 
@@ -576,9 +572,6 @@ struct sample *sample;
 struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
-char query[256];
-unsigned int chromSize = hChromSize(chromName);
-int resolution = 0;
 char tableName[256];
 int z;
 float pixPerBase = 0;
@@ -865,8 +858,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
 char query[256];
-unsigned int chromSize = hChromSize(chromName);
-int resolution = 0;
 char tableName[256];
 int zoom1 = 23924, zoom2 = 2991; /* bp per data point */
 float pixPerBase = 0;
