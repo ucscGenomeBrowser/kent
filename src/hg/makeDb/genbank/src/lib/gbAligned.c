@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbAligned.c,v 1.1 2003/06/03 01:27:45 markd Exp $";
+static char const rcsid[] = "$Id: gbAligned.c,v 1.2 2003/08/02 02:40:09 genbank Exp $";
 
 /* column indices in alidx files */
 #define ALIDX_ACC_COL         0
@@ -106,7 +106,7 @@ struct gbProcessed* processed;
 char *acc = row[ALIDX_ACC_COL];
 int version = gbParseInt(lf, row[ALIDX_VERSION_COL]);
 
-/* There must be an entry from parsing the processed index. Can't create
+/* there must be an entry from parsing the processed index. Can't create
  * entry from just aligned, since we don't have organism.  If one doesn't
  * exist, it's either because it is ignored or there is corruption.
  */
@@ -150,6 +150,7 @@ if (gbAlignedGetIndex(select, idxPath))
     {
     struct lineFile* lf = lineFileOpen(idxPath, TRUE);
     char* row[ALIDX_NUM_COLS];
+
     while (lineFileNextRowTab(lf, row, ArraySize(row)))
         parseRow(select, row, lf);
     lineFileClose(&lf);

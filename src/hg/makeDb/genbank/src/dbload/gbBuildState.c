@@ -18,10 +18,19 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.6 2003/07/22 21:54:40 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.7 2003/08/02 02:40:09 genbank Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
+
+struct selectStatusData
+/* client data for select status */
+{
+    struct gbSelect* select;   /* select options */
+    struct hash* seqHash;      /* has of seq accession */
+    unsigned orgCatDelCnt;     /* count of deleted entries due to orgCat
+                                * no longer being selected */
+};
 
 static void traceSelect(char* which, struct gbStatus *status)
 /* output verbose information when a entry is selected */
@@ -62,7 +71,8 @@ return processed;
 }
 
 static void markDeleted(struct gbStatusTbl* statusTbl,
-                        struct gbStatus* tmpStatus)
+                        struct gbStatus* tmpStatus,
+                        struct selectStatusData* ssData)
 /* mark an entry as deleted */
 {
 struct gbStatus* status = gbStatusStore(statusTbl, tmpStatus);
@@ -70,8 +80,15 @@ struct gbStatus* status = gbStatusStore(statusTbl, tmpStatus);
 slAddHead(&statusTbl->deleteList, status);
 statusTbl->numDelete++;
 status->stateChg = GB_DELETED;
+if (!(status->orgCat & ssData->select->orgCats))
+    ssData->orgCatDelCnt++;
 if (verbose >= 4)
-    traceSelect("delete", status);
+    {
+    if (!(status->orgCat & ssData->select->orgCats))
+        traceSelect("delete, orgCat not selected", status);
+    else
+        traceSelect("delete", status);
+    }
 }
 
 static void markSeqChanged(struct gbStatusTbl* statusTbl,
@@ -203,13 +220,6 @@ if (verbose >= 4)
     traceSelect("new", status);
 }
 
-struct selectStatusData
-/* client data for select status */
-{
-    struct gbSelect* select;   /* select options */
-    struct hash* seqHash;      /* has of seq accession */
-};
-
 static void selectStatus(struct gbStatusTbl* statusTbl,
                          struct gbStatus* tmpStatus,
                          void* clientData)
@@ -240,7 +250,7 @@ if (entry != NULL)
     processed = getProcAligned(entry, &aligned);
 /* if no entry or not aligned, or if it shouldn't be included, delete */
 if ((entry == NULL) || (aligned == NULL))
-    markDeleted(statusTbl, tmpStatus);
+    markDeleted(statusTbl, tmpStatus, ssData);
 else
     {
     /* validate entries are not going backwards */
@@ -505,6 +515,7 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
 struct gbStatusTbl* statusTbl;
 struct selectStatusData ssData;
 unsigned selectFlags = (select->type | select->release->srcDb);
+ZeroVar(&ssData);
 
 gOptions = options;
 *maxShrinkageExceeded = FALSE;
@@ -521,6 +532,11 @@ statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
                                   selectStatus, &ssData,
                                   tmpDir, (verbose >= 2));
 findNewEntries(select, statusTbl);
+
+/* Don't allow deletes when select criteria has changed */
+if (ssData.orgCatDelCnt > 0)
+    errAbort("%u entries deleted due to organism category no longer being selected",
+             ssData.orgCatDelCnt);
 
 /* check shrinkage unless override */
 if ((gOptions->flags & DBLOAD_LARGE_DELETES) == 0)
