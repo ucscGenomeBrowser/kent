@@ -1,5 +1,4 @@
-/* hgc - Human Genome Click processor - gets called when user clicks
- * on something in human tracks display. */
+/* kgXref - create Known Gene cross reference table kgXref.tab file */
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -36,10 +35,10 @@ int main(int argc, char *argv[])
     char *ro_DB;
     char *refSeqName;
     char *hugoID;
-    char *protAcc;	// protein Accession number from NCBI
+    char *protAcc;	/* protein Accession number from NCBI */
     char *answer;
 
-    int leg;		// marker for debugging
+    int leg;		/* marker for debugging */
     char *mRNA, *spID, *spDisplayID, *geneSymbol, *refseqID, *desc;
 
     if (argc != 4) usage();
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
     conn2= hAllocConn();
     conn3= hAllocConn();
 
-    o1 = fopen("j.dat", "w");
+    o1 = mustOpen("j.dat", "w");
 	
     sprintf(query2,"select name, proteinID from %s.knownGene;", database);
     sr2 = sqlMustGetResult(conn2, query2);
@@ -69,7 +68,7 @@ int main(int argc, char *argv[])
         sprintf(cond_str, "displayID='%s'", spDisplayID);
         spID = sqlGetField(conn, proteinDB, "spXref3", "accession", cond_str);
         
-	// use description for the protein as default. Later replace it with HUGO desc if available.
+	/* use description for the protein as default, replace it with HUGO desc if available. */
 	sprintf(cond_str, "displayID='%s'", spDisplayID);
         desc  = sqlGetField(conn, proteinDB, "spXref3", "description", cond_str);
         
@@ -79,12 +78,11 @@ int main(int argc, char *argv[])
         if (seqType != NULL)
             {
 	    leg = 1;
-            // special processing for RefSeq DNA based genes
+            /* special processing for RefSeq DNA based genes */
             sprintf(cond_str, "mrnaAcc = '%s'", kgID);
             refSeqName = sqlGetField(conn3, ro_DB, "refLink", "name", cond_str);
             if (refSeqName != NULL)
                 {
-		//printf("leg 1\n");fflush(stdout);
                 geneSymbol = cloneString(refSeqName);
 		refseqID   = kgID;
             	sprintf(cond_str, "mrnaAcc = '%s'", kgID);
@@ -105,7 +103,6 @@ int main(int argc, char *argv[])
             if (!((hugoID == NULL) || (*hugoID == '\0')) )
                 {
 		leg = 21;
-		//printf("leg 3\n");fflush(stdout);
                 geneSymbol = cloneString(hugoID);
 
             	sprintf(cond_str, "displayID = '%s'", spDisplayID);
@@ -143,21 +140,21 @@ int main(int argc, char *argv[])
                 }
             }
 
-	// fix missing fields 
+	/* fix missing fields */
 	if (strlen(refseqID) == 0)
 		{
-		//printf("%3d %s reseqID is empty.\n", leg, kgID);fflush(stdout);
+		/* printf("%3d %s reseqID is empty.\n", leg, kgID);*/
 		}
 
 	if (strlen(geneSymbol) == 0)
 		{
-		//printf("%3d %s geneSymbol is empty.\n", leg, kgID);fflush(stdout);
+		/* printf("%3d %s geneSymbol is empty.\n", leg, kgID);fflush(stdout);*/
 		geneSymbol = strdup(kgID);
 		}
 
 	if (strlen(desc) == 0)
 		{
-		//printf("%3d %s desc is empty.\n", leg, kgID);fflush(stdout);
+		/* printf("%3d %s desc is empty.\n", leg, kgID);fflush(stdout);*/
 		desc = strdup("N/A");
 		}
 	
