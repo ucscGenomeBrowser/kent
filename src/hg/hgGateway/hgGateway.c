@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.47 2003/06/20 21:43:31 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.48 2003/06/21 02:41:14 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -34,9 +34,9 @@ cartRemove(cart, "ct");
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
-char *oldDb = NULL;
-char *defaultPosition = hDefaultPos(db);
-char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
+char *oldDb = hashFindVal(oldVars, dbCgiName);
+char *oldOrganism = hashFindVal(oldVars, orgCgiName);
+char *position = cloneString(cartOptionalString(cart, "position"));
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -44,20 +44,29 @@ This was done in order to be able to flexibly arrange the UI HTML
 char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
-/* 
-   If we are changing databases via explicit cgi request,
-   then remove custom track data which will 
-   be irrelevant in this new database .
-   If databases were changed then use the new default position too.
-*/
+/* If user has changed organisms then we forget their old database. */
+if (organism == NULL || (oldOrganism != NULL && !sameString(oldOrganism, organism)))
+    db = NULL;
 
-oldDb = hashFindVal(oldVars, dbCgiName);
-if (oldDb && !containsStringNoCase(oldDb, db))
+/* Get database if we don't know it */
+if (db == NULL)
+    db = hDefaultDbForGenome(organism);  /* This handles NULL organism ok. */
+
+/* If user has changed databases then we forget their old custom track and their
+ * old position. */
+if (oldDb != NULL && !sameString(oldDb, db))
     {
-    position = defaultPosition;
-    removeCustomTrackData();
+    cartRemove(cart, "ct");
+    freez(&position);
     }
 
+/* Figure out organism from database. */
+organism = hGenome(db);
+
+/* Update position if need be. */
+if (position == NULL)
+    position = hDefaultPos(db);
+    
 puts(
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
@@ -67,15 +76,15 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
-"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
-"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
-"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
-"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
+"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
+"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
+"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
 "<A HREF=\"mailto:hiram@soe.ucsc.edu\">Hiram Clawson</A>,\n"
 "<A HREF=\"mailto:kate@soe.ucsc.edu\">Kate Rosenbloom</A>,\n"
 "<A HREF=\"mailto:braney@soe.ucsc.edu\">Brian Raney</A>,\n"
+"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
 "and the Genome Bioinformatics Group of UC Santa Cruz.\n"
 "<BR>"
 "Copyright 2001 The Regents of the University of California.\n"
@@ -121,8 +130,6 @@ cartSetString(cart, "position",position);
 cartSetString(cart, "db",db);
 cartSetString(cart, "org",organism);
 
-freez(&defaultPosition);
-position = NULL;
 
 puts("<td align=center>\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
@@ -170,6 +177,7 @@ puts("</FORM>"
 "	</TD></TR></TABLE>\n"
 "			\n"
 "</TD></TR></TABLE>\n");
+freez(&position);
 }
 
 void doMiddle(struct cart *theCart)
