@@ -295,7 +295,7 @@ return cloneString(url);
 void outputBlatLink(char *link, char *db, struct dnaSeq *seq) 
 /** output a link to hgBlat a certain sequence */
 {
-printf("<a href=\"%stype=DNA&genome=%s&sort=query,score&output=hyperlink&userSeq=%s\">%s</a>",blatUrl, db,seq->dna, link);
+printf("<a href=\"%stype=DNA&db=%s&sort=query,score&output=hyperlink&userSeq=%s\">%s</a>",blatUrl, db,seq->dna, link);
 }
 
 void printWebWarnings() 
