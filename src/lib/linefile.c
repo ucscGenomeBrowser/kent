@@ -95,9 +95,15 @@ void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
 lf->reuse = FALSE;
-lf->lineStart = lf->lineEnd = lf->bytesInBuf;
-if (lseek(lf->fd, offset, whence) == -1)
-    errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
+if (whence == SEEK_SET && offset >= lf->bufOffsetInFile 
+	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
+    lf->lineStart = offset - lf->bufOffsetInFile;
+else
+    {
+    lf->lineStart = lf->lineEnd = lf->bytesInBuf;
+    if (lseek(lf->fd, offset, whence) == -1)
+	errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
+    }
 }
 
 int lineFileLongNetRead(int fd, char *buf, int size)
