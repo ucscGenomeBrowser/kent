@@ -5,10 +5,10 @@
 #include "options.h"
 #include "localmem.h"
 #include "dystring.h"
+#include "portable.h"
 #include "obscure.h"
-#include "hgRelate.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.3 2003/09/29 19:41:47 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.4 2003/09/29 20:37:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "spToDb - Create a relational database out of SwissProt/trEMBL flat files\n"
   "usage:\n"
-  "   spToDb db swissProt.dat\n"
+  "   spToDb swissProt.dat outDir\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -672,44 +672,53 @@ if (next == NULL)
 return start;
 }
 
-void spToDb(char *database, char *datFile)
+FILE *createAt(char *dir, char *file)
+/* Open file in dir. */
+{
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s.txt", dir, file);
+return mustOpen(path, "w");
+}
+
+void spToDb(char *datFile, char *tabDir)
 /* spToDb - Create a relational database out of SwissProt/trEMBL flat files. */
 {
 struct lineFile *lf = lineFileOpen(datFile, TRUE);
 struct spRecord *spr;
 struct dyString *dy = newDyString(4096);
+boolean isNewDir = makeDir(tabDir);
 
 /* We have 25 tables to make this fully relational and not
  * lose any info. Better start opening files. */
-FILE *displayId = hgCreateTabFile(".", "displayId");
-FILE *otherAcc = hgCreateTabFile(".", "otherAcc");
-FILE *organelle = hgCreateTabFile(".", "organelle");
-FILE *singles = hgCreateTabFile(".", "singles");
-FILE *description = hgCreateTabFile(".", "description");
-FILE *geneLogic = hgCreateTabFile(".", "geneLogic");
-FILE *gene = hgCreateTabFile(".", "gene");
-FILE *taxon = hgCreateTabFile(".", "taxon");
-FILE *accToTaxon = hgCreateTabFile(".", "accToTaxon");
-FILE *commonName = hgCreateTabFile(".", "commonName");
-FILE *keyword = hgCreateTabFile(".", "keyword");
-FILE *accToKeyword = hgCreateTabFile(".", "accToKeyword");
-FILE *commentType = hgCreateTabFile(".", "commentType");
-FILE *commentVal = hgCreateTabFile(".", "commentVal");
-FILE *comment = hgCreateTabFile(".", "comment");
-FILE *protein = hgCreateTabFile(".", "protein");
-FILE *extDb = hgCreateTabFile(".", "extDb");
-FILE *extDbRef = hgCreateTabFile(".", "extDbRef");
-FILE *featureClass = hgCreateTabFile(".", "featureClass");
-FILE *featureType = hgCreateTabFile(".", "featureType");
-FILE *feature = hgCreateTabFile(".", "feature");
-FILE *author = hgCreateTabFile(".", "author");
-FILE *reference = hgCreateTabFile(".", "reference");
-FILE *referenceAuthors = hgCreateTabFile(".", "referenceAuthors");
-FILE *citationRp = hgCreateTabFile(".", "citationRp");
-FILE *citation = hgCreateTabFile(".", "citation");
-FILE *rcType = hgCreateTabFile(".", "rcType");
-FILE *rcVal = hgCreateTabFile(".", "rcVal");
-FILE *citationRc = hgCreateTabFile(".", "citationRc");
+FILE *displayId = createAt(tabDir, "displayId");
+FILE *otherAcc = createAt(tabDir, "otherAcc");
+FILE *organelle = createAt(tabDir, "organelle");
+FILE *singles = createAt(tabDir, "singles");
+FILE *description = createAt(tabDir, "description");
+FILE *geneLogic = createAt(tabDir, "geneLogic");
+FILE *gene = createAt(tabDir, "gene");
+FILE *taxon = createAt(tabDir, "taxon");
+FILE *accToTaxon = createAt(tabDir, "accToTaxon");
+FILE *commonName = createAt(tabDir, "commonName");
+FILE *keyword = createAt(tabDir, "keyword");
+FILE *accToKeyword = createAt(tabDir, "accToKeyword");
+FILE *commentType = createAt(tabDir, "commentType");
+FILE *commentVal = createAt(tabDir, "commentVal");
+FILE *comment = createAt(tabDir, "comment");
+FILE *protein = createAt(tabDir, "protein");
+FILE *extDb = createAt(tabDir, "extDb");
+FILE *extDbRef = createAt(tabDir, "extDbRef");
+FILE *featureClass = createAt(tabDir, "featureClass");
+FILE *featureType = createAt(tabDir, "featureType");
+FILE *feature = createAt(tabDir, "feature");
+FILE *author = createAt(tabDir, "author");
+FILE *reference = createAt(tabDir, "reference");
+FILE *referenceAuthors = createAt(tabDir, "referenceAuthors");
+FILE *citationRp = createAt(tabDir, "citationRp");
+FILE *citation = createAt(tabDir, "citation");
+FILE *rcType = createAt(tabDir, "rcType");
+FILE *rcVal = createAt(tabDir, "rcVal");
+FILE *citationRc = createAt(tabDir, "citationRc");
 
 /* Some of the tables require unique IDs */
 struct uniquer *organelleUni = uniquerNew(organelle, 14);
@@ -908,8 +917,6 @@ for (;;)
     lmCleanup(&lm);
     }
 dyStringFree(&dy);
-
-
 }
 
 int main(int argc, char *argv[])
