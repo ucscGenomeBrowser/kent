@@ -1,3 +1,44 @@
+track slamMouse
+shortLabel Slam Mouse
+longLabel SLAM gene predictions using human/mouse homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
+
+track slamRat
+shortLabel Slam Rat
+longLabel SLAM gene predictions using human/rat homology
+group genes
+priority 45.6
+visibility hide
+color 100,50,0
+altColor 175,150,128
+
+track slamNonCodingMouse
+shortLabel Slam Non Coding Mouse
+longLabel SLAM predictions of human/mouse conserved non-coding regions
+group compGeno
+priority 120
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 
+
+track slamNonCodingRat
+shortLabel Slam Non Coding Rat
+longLabel SLAM predictions of human/rat conserved non-coding regions
+group compGeno
+priority 121
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5
+
 track blastzMm2
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse(Feb02) Alignments
