@@ -50,13 +50,13 @@ for (i=0; i < nibSize; i = endBuf)
         }
       } else {
         if (matchRegion) {
-          blockcount++;
-          strcpy(blockname, "");
-          sprintf(blockname, "N%d", blockcount);
           endpos = (block * bufSize) + pos;
           size = endpos - startpos;
           if (size >= 1000) 
           {
+              blockcount++;
+              strcpy(blockname, "");
+              sprintf(blockname, "N%d", blockcount);
               printf("%s\t%d\t%d\t%s\n", chromname, startpos, endpos, blockname);
           }
           matchRegion = FALSE;
