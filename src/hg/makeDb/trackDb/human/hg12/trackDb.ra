@@ -41,7 +41,7 @@ type bed 5
 
 track blastzMm2
 shortLabel Blastz Mouse
-longLabel Merged Blastz Mouse(Feb02) Alignments
+longLabel Merged Blastz Mouse (Feb. 02) Alignments
 group compGeno
 priority 130
 visibility hide
@@ -76,7 +76,7 @@ url http://www.eva.mpg.de/genetics/annotation_track_chimp/custom_track_chimp/Rik
 
 track aarMm2
 shortLabel Ancient Repeats
-longLabel Aligned Human/Mouse(Feb02) Ancient Repeats
+longLabel Aligned Human/Mouse (Feb. 02) Ancient Repeats
 group x
 priority 159
 visibility hide
@@ -108,7 +108,7 @@ type psl xeno hg12
 
 track blastzBestMouse
 shortLabel Best Mouse 
-longLabel Blastz Mouse(Feb02) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 02) Best in Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -130,7 +130,7 @@ type psl xeno hg12
 
 track blastzRecipBest
 shortLabel Reciprocal Best
-longLabel Blastz reciprocal best Human Mouse(Feb02)
+longLabel Blastz reciprocal best Human Mouse (Feb. 02)
 group compGeno
 priority 125
 visibility hide
@@ -141,7 +141,7 @@ type psl xeno mm2
 
 track blastzTightMouse
 shortLabel Tight Mouse 
-longLabel Blastz Mouse(Feb02), Tight Subset of Best Alignments
+longLabel Blastz Mouse (Feb. 02), Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
@@ -152,7 +152,7 @@ type psl xeno mm2
 
 track blatMus
 shortLabel Mouse Blat
-longLabel Mouse(Feb02) Translated Blat Alignments
+longLabel Mouse (Feb. 02) Translated Blat Alignments
 group compGeno
 priority 120
 visibility hide
