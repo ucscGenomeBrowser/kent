@@ -4073,7 +4073,8 @@ end
         /cluster/data/panTro1/nib stdout \
       | axtSort stdin axtRBestNet/$chr.axt
       axtToMaf axtRBestNet/$chr.axt /cluster/data/hg16/chrom.sizes \
-        /cluster/data/panTro1/chrom.sizes mafRBestNet/$chr.maf
+        /cluster/data/panTro1/chrom.sizes mafRBestNet/$chr.maf \
+        -tPrefix=hg16. -qPrefix=panTro1.
     end
 
     # load renumbered chains into database  (2003-03-14 kate)
@@ -6707,12 +6708,8 @@ axtFilter -notQ=chrUn $1 \
     #add a track entry to trackDb.ra 
     # in ~/kent/src/hg/makeDb/trackDb/human/hg16
 
-<<<<<<< makeHg16.doc
 
-#	FAMILY BROWSER UPDATE	(WORKING - 2004-02-17 - Hiram)
-=======
 #	FAMILY BROWSER UPDATE	(DONE - 2004-02-17 - Hiram)
->>>>>>> 1.119
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
