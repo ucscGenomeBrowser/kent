@@ -1,8 +1,0 @@
-test.bed8CTCBad has 1 records with chrom not described in chromInfo.
-test.bed8CTCBad item endLTStart chrFake:2-1: chromEnd < chromStart
-test.bed8CTCBad item endGTChrom chrFake:30-3000: chromEnd > chromSize 1000
-test.bed8CTCBad has 1 records with end < start.
-test.bed8CTCBad has 1 records with end > chromSize.
-test.bed8CTCBad item endLTStart chrFake:2-1: thickEnd (1) < thickStart (2)
-test.bed8CTCBad item cdsELTCS chrFake:20-200: thickEnd (21) < thickStart (25)
-test.bed8CTCBad has 2 records with cdsEnd < cdsStart.
