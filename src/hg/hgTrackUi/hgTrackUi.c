@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.116 2004/06/23 17:26:57 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.117 2004/06/28 16:57:41 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -279,14 +279,17 @@ void blastUi(struct trackDb *tdb)
 char geneName[64];
 char accName[64];
 char sprotName[64];
-boolean useGene, useAcc, useSprot;
+char posName[64];
+boolean useGene, useAcc, useSprot, usePos;
 
 safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
 safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
 safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
 useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 useSprot= cartUsualBoolean(cart, sprotName, FALSE);
+usePos= cartUsualBoolean(cart, posName, FALSE);
 
 printf("<P><B>Label elements by: </B> ");
 cgiMakeCheckBox(geneName, useGene);
@@ -295,6 +298,8 @@ cgiMakeCheckBox(accName, useAcc);
 printf("mRNA ");
 cgiMakeCheckBox(sprotName, useSprot);
 printf("SwissProt ");
+cgiMakeCheckBox(posName, usePos);
+printf("Human Position ");
 
 //cdsColorOptions(tdb, 2);
 }
