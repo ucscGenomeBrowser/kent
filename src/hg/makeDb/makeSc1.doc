@@ -172,9 +172,9 @@ ALIGNING VIRAL RNA (DONE 04/15/03)
     para create spec
     para push
     cd psl
-    mv chr1_viralProt.psl viralProt.psl
-    pslReps -minAli=0.67 viralProt.psl chr1_viralProt.psl    
-    hgLoadPsl sc1 chr1_viralProt.psl
+    mv chr1_viralProt.psl chr1_viralProtLoose.psl
+    pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
+    hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
 
     LOAD CPGISSLANDS (DONE 04/15/03)
     ssh eieio
