@@ -20,7 +20,8 @@ struct gfSeqSource
 /* Where a block of sequence comes from. */
     {
     struct gfSeqSource *next;
-    char *fileName;	/* Index of file. */
+    char *fileName;	/* Name of file. */
+    struct dnaSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
     bits32 start,end;	/* Position within merged sequence. */
     };
 
@@ -57,7 +58,7 @@ struct genoFind
  * genome. */
     {
     bits32 **lists;                      /* A list for each N-mer */
-    bits16 *listSizes;                    /* Size of list for each N-mer */
+    bits32 *listSizes;                    /* Size of list for each N-mer */
     bits32 *allocated;                   /* Storage space for all lists. */
     int maxPat;                          /* Max # of times pattern can occur
                                           * before it is ignored. */
@@ -74,8 +75,17 @@ struct genoFind
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
+struct genoFind *gfIndexSeq(struct dnaSeq *seqList,
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
+/* Make index for all seqs in list. 
+ *      minMatch - minimum number of matching tiles to trigger alignments
+ *      maxGap   - maximum deviation from diagonal of tiles
+ *      tileSize - size of tile in nucleotides
+ *      maxPat   - maximum use of tile to not be considered a repeat
+ *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. */
+
 struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat);
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
 /* Make index for all nib files. */
 
 struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
@@ -117,6 +127,13 @@ void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format.  */
+
+void gfAlignSeqClumps(struct gfClump *clumpList, struct dnaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    GfSaveAli outFunction, void *outData);
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
+ * a FILE as outData in this case.. */
 
 void gfAlignStrand(char *hostName, char *portName, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData);
