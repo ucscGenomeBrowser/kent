@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.627 2003/11/11 17:59:59 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.628 2003/11/11 22:11:14 jill Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -190,6 +190,13 @@ void hButton(char *name, char *label)
 {
 if (!suppressHtml)
     cgiMakeButton(name, label);
+}
+
+void hOnClickButton(char *command, char *label)
+/* Write out push button if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeOnClickButton(command, label);
 }
 
 void hTextVar(char *varName, char *initialVal, int charSize)
@@ -6704,8 +6711,9 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
+	hOnClickButton("document.TrackForm.position.value=''","clear");
 	hPrintf(" size %s ", buf);
-	hWrites(" bp. image width: ");
+	hWrites(" bp. &nbsp;image width: ");
 	hIntVar("pix", tl.picWidth, 4);
 	hWrites(" ");
 	hButton("submit", "jump");
