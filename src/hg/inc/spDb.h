@@ -145,6 +145,12 @@ struct slName *slComments(struct sqlConnection *conn,
 struct slName *slCommentTypes(struct sqlConnection *conn);
 /* Get list of comment types in database. */
 
+char *spCommentType(struct sqlConnection *conn, int typeId);
+/* Look up text associated with typeId. freeMem result when done. */
+
+char *spCommentVal(struct sqlConnection *conn, int valId);
+/* Look up text associated with valId. freeMem result when done. */
+
 struct slName *spExtDbAcc1List(struct sqlConnection *conn, char *acc,
 	char *db);
 /* Get list of accessions from external database associated with this

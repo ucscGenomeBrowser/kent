@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.2 2003/10/02 07:19:10 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.3 2003/10/12 19:35:44 kent Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -344,6 +344,23 @@ char query[256];
 safef(query, sizeof(query), "select val from commentType");
 return sqlQuickList(conn, query);
 }
+
+char *spCommentType(struct sqlConnection *conn, int typeId)
+/* Look up text associated with typeId. freeMem result when done. */
+{
+char query[256];
+safef(query, sizeof(query), "select val from commentType where id=%d", typeId);
+return sqlQuickString(conn, query);
+}
+
+char *spCommentVal(struct sqlConnection *conn, int valId)
+/* Look up text associated with valId. freeMem result when done. */
+{
+char query[256];
+safef(query, sizeof(query), "select val from commentVal where id=%d", valId);
+return sqlQuickString(conn, query);
+}
+
 
 struct slName *spExtDbAcc1List(struct sqlConnection *conn, char *acc,
 	char *db)
