@@ -70,11 +70,11 @@
 //#include "cheapcgi.h"
 #include "bed.h"
 #include "options.h"
-#include "chromKeeper.h"
+#include "binRange.h"
 
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.12 2004/05/06 18:05:33 hartera Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.13 2004/07/06 22:33:55 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -87,6 +87,12 @@ boolean useChromKeeper = FALSE; /* Load all of the info from the database once a
 int numDbTables =0;     /* Number of tables we're going to load psls from. */
 char **dbTables = NULL; /* Tables that psls will be loaded from. */
 struct hash *tissLibHash = NULL; /* Hash of slInts by accession where first slInt is lib, second is tissue. */
+int minPslStart = BIGNUM; /* Start of first psl on chromosome. */
+int maxPslEnd = -1;       /* End of the last psl on chromosome. */
+char *chromNib = NULL;    /* Nib file name if not using database. */
+FILE *chromNibFile = NULL; /* File handle for nib file access. */
+int chromNibSize = 0;      /* Size of the chromosome nib file. */
+struct binKeeper *chromPslBin = NULL; /* Bin keeper for chromosome. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -101,6 +107,8 @@ static struct optionSpec optionSpecs[] =
     {"skipTissues", OPTION_BOOLEAN},
     {"weightMrna", OPTION_BOOLEAN},
     {"localMem", OPTION_BOOLEAN},
+    {"chromNib", OPTION_STRING},
+    {"pslFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -117,7 +125,9 @@ static char *optionDescripts[] =
     "Minimum percent id of alignment to keep.",
     "Skip loading the tissues and libraries.",
     "Add more weight to mRNAs and RefGenes.",
-    "Load all of the psls and associated information once from from db and cache in memory."
+    "Load all of the psls and associated information once from from db and cache in memory.",
+    "Chromosome sequence in nib format.",
+    "Use psl alignments in file rather than database."
 };
 
 void usage()
@@ -134,6 +144,14 @@ printf(
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("");
+}
+
+void initializeChromNib(char *fileName)
+/** Setup things to use the local nib sequence file
+    instead of using the database. */
+{
+chromNib = fileName;
+nibOpenVerify(fileName, &chromNibFile, &chromNibSize);
 }
 
 boolean passFilters(struct psl *psl)
@@ -335,12 +353,12 @@ freeGeneGraph(&gg);
 return ag;
 }
 
-struct psl *getPslsFromCache(struct genePred *gp)
+struct psl *getPslsFromCache(char *chrom, int chromStart, int chromEnd)
 /** Get all of the psls for a given gp of interest. */
 {
 struct psl *pslList = NULL, *psl = NULL;
 struct binElement *beList = NULL, *be = NULL;
-beList = chromKeeperFind(gp->chrom, gp->txStart, gp->txEnd);
+beList = binKeeperFind(chromPslBin, chromStart, chromEnd);
 for(be = beList; be != NULL; be = be->next)
     {
     psl = be->val;
@@ -376,18 +394,14 @@ for(i = ArraySize(tablePrefixes); i < numDbTables; i++)
     }
 }
 
-
-struct psl *getPslsFromDatabase(struct genePred *gp, struct sqlConnection *conn)
+struct psl *getPslsFromDatabase(char *chrom, int chromStart, int chromEnd,
+				struct sqlConnection *conn)
 /** Load the psls for a given table directly from the database. */
 {
 int i,j,k,l;
 char buff[256];
 struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
-char *chrom = gp->chrom;
-int chromStart = gp->txStart;
-int chromEnd = gp->txEnd;
-/* load the psls */
-pslList = loadPslsFromDb(conn, numDbTables, dbTables, gp->chrom, chromStart, chromEnd);
+pslList = loadPslsFromDb(conn, numDbTables, dbTables, chrom, chromStart, chromEnd);
 return pslList;
 }
 
@@ -424,7 +438,29 @@ for(i = 0; i < numDbTables; i++)
 
 }
 
-void setupChromKeeper(struct sqlConnection *conn, char *db, char *chrom) 
+void loadPslsFromFile(char *pslFile, char *chrom, struct sqlConnection *conn)
+/** Load the psls from the directed file (instead of the database. */
+{
+struct psl *psl = NULL, *pslNext = NULL, *pslList = NULL;
+pslList = pslLoadAll(pslFile);
+for(psl = pslList; psl != NULL; psl = psl->next)
+    {
+    minPslStart = min(psl->tStart, minPslStart);
+    maxPslEnd = max(psl->tEnd, maxPslEnd);
+    }
+chromPslBin = binKeeperNew(minPslStart, maxPslEnd);
+
+for(psl = pslList; psl != NULL; psl = pslNext)
+    {
+    pslNext = psl->next;
+    if(sameString(psl->tName, chrom))
+	binKeeperAdd(chromPslBin, psl->tStart, psl->tEnd, psl);
+    else
+	pslFree(&psl);
+    }
+}
+
+void loadPslsFromDatabase(struct sqlConnection *conn, char *db, char *chrom) 
 /** Load all of the desired alignments into the chromkeeper structure
     from the desired pslTables. */
 {
@@ -434,26 +470,42 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
 struct psl *pslList = NULL, *psl = NULL;
-chromKeeperInit(db);
 for(i = 0; i < numDbTables; i++)
     {
     sr = hRangeQuery(conn, dbTables[i], chrom, 0, chromSize, NULL, &rowOffset);
     while((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row+rowOffset);
-	chromKeeperAdd(psl->tName, psl->tStart, psl->tEnd, psl);
+	slAddHead(&pslList, psl);
+	minPslStart = min(psl->tStart, minPslStart);
+	maxPslEnd = max(psl->tEnd, maxPslEnd);
 	/* This just adds the mrna twice to the list, cheat way to add more
 	   weight to certain tables. */
 	if(weightMrna && (stringIn("refSeqAli", dbTables[i]) || stringIn("mrna", dbTables[i])))
 	    {
 	    psl = clonePsl(psl);
-	    chromKeeperAdd(psl->tName, psl->tStart, psl->tEnd, psl);
+	    slAddHead(&pslList, psl);
 	    }
 	}
     sqlFreeResult(&sr);
     }
+
+chromPslBin = binKeeperNew(minPslStart, maxPslEnd);
+for(psl = pslList; psl != NULL; psl = psl->next)
+    {
+    binKeeperAdd(chromPslBin, psl->tStart, psl->tEnd, psl);
+    }
 }
 
+void setupChromKeeper(struct sqlConnection *conn, char *db, char *chrom) 
+/** Load all of the desired alignments into the chromkeeper structure
+    from the desired pslTables. */
+{
+if(optionVal("pslFile", NULL) != NULL)
+    loadPslsFromFile(optionVal("pslFile", NULL), chrom, conn);
+else
+    loadPslsFromDatabase(conn, db, chrom);
+}
 
 int pslCmpTargetQuery(const void *va, const void *vb)
 /* Compare to sort based on target start. */
@@ -470,18 +522,48 @@ if(dif == 0)
     dif = strcmp(a->qName, b->qName);
 return dif;
 }
+
+struct psl *getPslsInRange(char *chrom, int chromStart, int chromEnd, 
+			   struct sqlConnection *conn)
+/** Load all of the psls in a given range from the appropriate
+    cache or database. */
+{
+struct psl *pslList = NULL, *goodList = NULL, *psl = NULL;
+if(useChromKeeper)
+    pslList = getPslsFromCache(chrom, chromStart, chromEnd);
+else
+    pslList = getPslsFromDatabase(chrom, chromStart, chromEnd, conn);
+goodList = filterPsls(pslList, chromStart, chromEnd);
+for(psl = goodList; psl != NULL; psl = psl->next)
+    {
+    if(psl->tStart < minPslStart)
+	minPslStart = psl->tStart;
+    if(psl->tEnd > maxPslEnd)
+	maxPslEnd = psl->tEnd;
+    }
+slSort(&goodList, pslCmpTargetQuery);
+return goodList;
+}
+
 struct psl *getPsls(struct genePred *gp, struct sqlConnection *conn)
 /** Load psls from local chromKeeper structure or from database 
     depending on useChromKeeper flag. */
 {
-struct psl *pslList = NULL, *goodList = NULL;
-if(useChromKeeper)
-    pslList = getPslsFromCache(gp);
+return getPslsInRange(gp->chrom, gp->txStart, gp->txEnd, conn);
+}
+
+struct dnaSeq *dnaFromChrom(char *chrom, int chromStart, int chromEnd, enum dnaCase seqCase)
+/** Return the dna for the chromosome region specified. */
+{
+struct dnaSeq *seq = NULL;
+if(chromNib != NULL)
+    {
+    seq = (struct dnaSeq *)nibLdPart(chromNib, chromNibFile, chromNibSize, 
+				     chromStart, chromEnd - chromStart);
+    }
 else
-    pslList = getPslsFromDatabase(gp, conn);
-goodList = filterPsls(pslList, gp->txStart, gp->txEnd);
-slSort(&goodList, pslCmpTargetQuery);
-return goodList;
+    seq = hDnaFromSeq(chrom, chromStart, chromEnd, seqCase);
+return seq;
 }
 
 struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, 
@@ -496,15 +578,16 @@ char buff[256];
 struct ggMrnaAli *maList=NULL, *ma=NULL, *maNext=NULL, *maSameStrand=NULL;
 struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
 char *chrom = gp->chrom;
-int chromStart = gp->txStart;
-int chromEnd = gp->txEnd;
+int chromStart = BIGNUM;
+int chromEnd = -1;
 
 pslList = getPsls(gp, conn);
 /* expand to find the furthest boundaries of alignments */
 expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 
 /* get the sequence */
-genoSeq = hDnaFromSeq(gp->chrom, chromStart, chromEnd, dnaLower);
+/* genoSeq = hDnaFromSeq(gp->chrom, chromStart, chromEnd, dnaLower);*/
+genoSeq = dnaFromChrom(chrom, chromStart, chromEnd, dnaLower);
 
 for(psl = pslList; psl != NULL; psl = pslNext)
     {
@@ -699,6 +782,8 @@ hSetDb(db);
 outFile = optionVal("agxOut", NULL);
 if(outFile == NULL)
     errAbort("Must specify output file with -agxOut flag. Try -help for usage.");
+if(optionVal("chromNib", NULL) != NULL)
+    initializeChromNib(optionVal("chromNib", NULL));
 minAli = optionFloat("minAli", 0.0);
 minCover = optionFloat("minCover", 0.0);
 memTest = optionExists("memTest");
