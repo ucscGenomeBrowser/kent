@@ -75,7 +75,7 @@ clean:
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE} clean;) \
 	done
-	- find . -name \*.o -print | xargs rm 2> /dev/null
+	- find . -name \*.o -print | xargs --no-run-if-empty rm
 
 
 DIRS = \
