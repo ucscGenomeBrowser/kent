@@ -35,7 +35,7 @@
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "stsMap.h"
-/*#include "stsAlias.h"*/
+#include "stsInfo.h"
 #include "mouseSyn.h"
 #include "cytoBand.h"
 #include "knownMore.h"
@@ -63,6 +63,8 @@ char *database;		/* Name of mySQL database. */
 
 struct pslWScore *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
+char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
+char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 
 static void earlyWarning(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
@@ -94,6 +96,18 @@ void printEntrezProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
+}
+
+void printUnistsUrl(FILE *f, int id)
+/* Print URL for UniSTS record for an id. */
+{
+fprintf(f, "\"%s%d\"", unistsScript, id);
+}
+
+void printGdbUrl(FILE *f, char *id)
+/* Print URL for GDB browser for an id */
+{
+fprintf(f, "\"%s%s\"", gdbScript, id);
 }
 
 char *hgcPath()
@@ -2484,99 +2498,252 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doStsMarker(struct trackDb *tdb, char *item, boolean newStyle)
+void doStsMarker(struct trackDb *tdb, char *marker)
 /* Respond to click on an STS marker. */
 {
-char *track = tdb->tableName;
-int start = cgiInt("o");
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
+char *table = tdb->tableName;
 char query[256];
-boolean firstTime = TRUE;
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr2;
-char **row2;
-char *alias;
-/*boolean doAlias = sqlTableExists(conn, "stsAlias");*/
-struct stsMap el;
-int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL;
+char **row, **row1;
+int start = cgiInt("o");
+int end = cgiInt("t");
+boolean stsInfoExists = sqlTableExists(conn, "stsInfo");
+struct stsMap stsRow;
+struct stsInfo *infoRow;
+int i;
 
-hgcStart("STS Marker");
-printf("<H2>STS Marker %s</H2>\n", item);
+/* Print out non-sequence info */
+hgcStart(marker);
 
-if (sameString(item, "NONAME"))
-    sprintf(query, "select * from %s where name = '%s' and chromStart = %d", track, item, start);
-else
-    sprintf(query, "select * from %s where name = '%s'", track, item);
-
-rowOffset = hOffsetPastBin(seqName, track);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        table, marker, seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
     {
-    if (firstTime)
+    if (sameString(table, "stsMap"))
 	{
-	boolean firstAlias = TRUE;
-	/* if (doAlias)
-	    {
-	    printf("<B>name:</B> %s<BR>\n", item);
-	    sprintf(query, "select alias from stsAlias where trueName = '%s'", 
-		    item);
-	    sr2 = sqlGetResult(conn2, query);
-	    while ((row2 = sqlNextRow(sr2)) != NULL)
-		 {
-		 if (firstAlias)
-		     {
-		     printf("<B>alias:</B>");
-		     firstAlias = FALSE;
-		     }
-		 printf(" %s", row2[0]);
-		 }
-	    if (!firstAlias)
-		 printf("<BR>\n");
-		 } */
-	if (newStyle)
-	    {
-	    stsMapStaticLoad(row+rowOffset, &el);
-	    }
-	else
-	    {
-	    struct stsMarker oldEl;
-	    stsMarkerStaticLoad(row+rowOffset, &oldEl);
-	    stsMapFromStsMarker(&oldEl, &el);
-	    } 
-	printf("<B>STS id:</B> %d<BR>\n", el.identNo);
-	if (!sameString(el.ctgAcc, "-"))
-	    printf("<B>clone hit:</B> %s<BR>\n", el.ctgAcc);
-	if (!sameString(el.otherAcc, "-"))
-	    printf("<B>Other clones hit:</B> %s<BR>\n", el.otherAcc);
-	if (!sameString(el.genethonChrom, "0"))
-	    printf("<B>Genethon:</B> chr%s %f<BR>\n", el.genethonChrom, el.genethonPos);
-	if (!sameString(el.marshfieldChrom, "0"))
-	    printf("<B>Marshfield:</B> chr%s %f<BR>\n", el.marshfieldChrom, el.marshfieldPos);
-	if (!sameString(el.gm99Gb4Chrom, "0"))
-	    printf("<B>GeneMap99:</B> chr%s %f<BR>\n", el.gm99Gb4Chrom, el.gm99Gb4Pos);
-	if (!sameString(el.shgcG3Chrom, "0"))
-	    printf("<B>Stanford G3:</B> chr%s %f<BR>\n", el.shgcG3Chrom, el.shgcG3Pos);
-	if (!sameString(el.wiYacChrom, "0"))
-	    printf("<B>Whitehead YAC:</B> chr%s %f<BR>\n", el.wiYacChrom, el.wiYacPos);
-	if (!sameString(el.wiRhChrom, "0"))
-	    printf("<B>Whitehead RH:</B> chr%s %f<BR>\n", el.wiRhChrom, el.wiRhPos);
-	if (!sameString(el.shgcTngChrom, "0"))
-	    printf("<B>Stanford TNG:</B> chr%s %f<BR>\n", el.shgcTngChrom, el.shgcTngPos);
-        if (!sameString(el.fishChrom, "0"))
-	    {
-	    printf("<B>FISH:</B> %s.%s - %s.%s<BR>\n", el.fishChrom, 
-	        el.beginBand, el.fishChrom, el.endBand);
-	    }
-	firstTime = FALSE;
-	printf("<H3>This marker maps to the following positions on the draft assembly:</H3>\n");
-	printf("<BLOCKQUOTE>\n");
+	stsMapStaticLoad(row, &stsRow);
 	}
-    printf("%s\t%d<BR>\n", el.chrom, (el.chromStart+el.chromEnd)>>1);
+    else
+        /* Load and convert from original bed format */ 
+	{
+	struct stsMarker oldStsRow;
+	stsMarkerStaticLoad(row, &oldStsRow);
+	stsMapFromStsMarker(&oldStsRow, &stsRow);
+	}
+    if (stsInfoExists)
+        {
+	/* Find the instance of the object in the stsInfo table */ 
+	sqlFreeResult(&sr);
+	sprintf(query, "SELECT * FROM stsInfo WHERE identNo = '%d'", stsRow.identNo);
+	sr = sqlMustGetResult(conn, query);
+	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    infoRow = stsInfoLoad(row);
+            printf("<H2>STS Marker %s</H2>\n", infoRow->name);
+            htmlHorizontalLine();
+	    printf("<TABLE>\n");
+	    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+	    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+	    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+	    printf("</TABLE>\n");
+	    htmlHorizontalLine();
+	    if (infoRow->nameCount > 0)
+	        {
+	        printf("<TABLE>\n");
+		printf("<TR><TH>Other names:</TH><TD>%s",infoRow->otherNames[0]);
+	        for (i = 1; i < infoRow->nameCount; i++) 
+		    {
+		    printf(";%s",infoRow->otherNames[i]);
+		    }
+		printf("</TR>\n</TABLE>\n");
+		htmlHorizontalLine();
+		}
+	    printf("<TABLE>\n");
+	    printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
+	    printf("<TR><TH ALIGN=left>UniSTS id:</TH><TD><A HREF=");
+	    printUnistsUrl(stdout, infoRow->dbSTSid);
+	    printf(">%d</A></TD></TR>\n", infoRow->dbSTSid);
+	    if (infoRow->otherDbstsCount > 0) 
+                {
+		printf("<TR><TH ALIGN=left>Related UniSTS ids:</TH>");
+	        for (i = 0; i < infoRow->otherDbstsCount; i++) 
+		    {
+		    printf("<TD><A HREF=");
+		    printUnistsUrl(stdout, infoRow->otherDbSTS[i]);
+		    printf(">%d</A></TD>", infoRow->otherDbSTS[i]);
+		    }
+		printf("</TR>\n");
+		} 
+	    if (infoRow->gbCount > 0) 
+                {
+		printf("<TR><TH ALIGN=left>Genbank:</TH>");
+	        for (i = 0; i < infoRow->gbCount; i++) 
+		    {
+		    printf("<TD><A HREF=");
+		    printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
+		    printf(">%s</A></TD>", infoRow->genbank[i]);
+		    }
+		printf("</TR>\n");
+		} 
+	    if (infoRow->gdbCount > 0) 
+                {
+		printf("<TR><TH ALIGN=left>GDB:</TH>");
+	        for (i = 0; i < infoRow->gdbCount; i++) 
+		    {
+		    printf("<TD><A HREF=");
+		    printGdbUrl(stdout, infoRow->gdb[i]);
+		    printf(">%s</A></TD>", infoRow->gdb[i]);
+		    }
+		printf("</TR>\n");
+		} 
+	    printf("<TR><TH ALIGN=left>Organism:</TH><TD>%s</TD></TR>\n",infoRow->organism);
+	    printf("</TABLE>\n");
+	    htmlHorizontalLine();
+	    if (!sameString(infoRow->leftPrimer,""))
+	        {
+		  printf("<TABLE>\n");
+		  printf("<TR><TH ALIGN=left>Left Primer:</TH><TD>%s</TD></TR>\n",infoRow->leftPrimer);
+		  printf("<TR><TH ALIGN=left>Right Primer:</TH><TD>%s</TD></TR>\n",infoRow->rightPrimer);
+		  printf("<TR><TH ALIGN=left>Distance:</TH><TD>%s</TD></TR>\n",infoRow->distance);
+		  printf("</TABLE>\n");
+		  htmlHorizontalLine();
+		}
+	    if ((!sameString(infoRow->genethonName,"")) 
+		|| (!sameString(infoRow->marshfieldName,"")))
+	        {
+		  printf("<H3>Genetic Map Positions</H3>\n");  
+		  printf("<TABLE>\n");
+		  if (!sameString(infoRow->genethonName,""))
+		      {
+		      printf("<TH ALIGN=left>Genethon:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+			     infoRow->genethonName, infoRow->genethonChr, infoRow->genethonPos);
+		      }
+		  if (!sameString(infoRow->marshfieldName,""))
+		      {
+		      printf("<TH ALIGN=left>Marshfield:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+			     infoRow->marshfieldName, infoRow->marshfieldChr,
+			     infoRow->marshfieldPos);
+		      }
+		  printf("</TABLE><P>\n");
+		}
+	    if (!sameString(infoRow->wiyacName,"")) 
+	        {
+		  printf("<H3>Whitehead YAC Map Position</H3>\n");  
+		  printf("<TABLE>\n");
+		  printf("<TH ALIGN=left>WI YAC:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+			 infoRow->wiyacName, infoRow->wiyacChr, infoRow->wiyacPos);
+		  printf("</TABLE><P>\n");
+		}
+	    if ((!sameString(infoRow->wirhName,"")) 
+		|| (!sameString(infoRow->gm99gb4Name,""))
+		|| (!sameString(infoRow->gm99g3Name,""))
+		|| (!sameString(infoRow->tngName,"")))
+	        {
+		  printf("<H3>RH Map Positions</H3>\n");  
+		  printf("<TABLE>\n");
+		  if (!sameString(infoRow->gm99gb4Name,""))
+		      {
+		      printf("<TH ALIGN=left>GM99 Gb4:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+			     infoRow->gm99gb4Name, infoRow->gm99gb4Chr, infoRow->gm99gb4Pos,
+			     infoRow->gm99gb4LOD);
+		      }
+		  if (!sameString(infoRow->gm99g3Name,""))
+		      {
+		      printf("<TH ALIGN=left>GM99 G3:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+			     infoRow->gm99g3Name, infoRow->gm99g3Chr, infoRow->gm99g3Pos,
+			     infoRow->gm99g3LOD);
+		      }
+		  if (!sameString(infoRow->wirhName,""))
+		      {
+		      printf("<TH ALIGN=left>WI RH:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f (%.2f)</TD></TR>\n",
+			     infoRow->wirhName, infoRow->wirhChr, infoRow->wirhPos,
+			     infoRow->wirhLOD);
+		      }
+		  if (!sameString(infoRow->tngName,""))
+		      {
+		      printf("<TH ALIGN=left>Stanford TNG:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+			     infoRow->tngName, infoRow->tngChr, infoRow->tngPos);
+		      }
+		  printf("</TABLE><P>\n");
+		}
+	    htmlHorizontalLine();
+	    stsInfoFree(&infoRow);
+	    }
+	}
+    else
+        {
+	printf("<H2>STS Marker %s</H2>\n", marker);
+	htmlHorizontalLine();
+	printf("<TABLE>\n");
+	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+	printf("<TR><TH ALIGN=left>Position:</TH><TD>%d</TD></TR>\n", (stsRow.chromStart+stsRow.chromEnd)>>1);
+	printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
+	if (!sameString(stsRow.ctgAcc, "-"))
+	    printf("<TR><TH ALIGN=left>Clone placed on:</TH><TD>%s</TD></TR>\n", stsRow.ctgAcc);
+	if (!sameString(stsRow.otherAcc, "-"))
+	    printf("<TR><TH ALIGN=left>Other clones hit:</TH><TD>%s</TD></TR>\n", stsRow.otherAcc);
+	if (!sameString(stsRow.genethonChrom, "0"))
+	    printf("<TR><TH ALIGN=left>Genethon:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.genethonChrom, stsRow.genethonPos);
+	if (!sameString(stsRow.marshfieldChrom, "0"))
+	    printf("<TR><TH ALIGN=left>Marshfield:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.marshfieldChrom, stsRow.marshfieldPos);
+	if (!sameString(stsRow.gm99Gb4Chrom, "0"))
+	    printf("<TR><TH ALIGN=left>GeneMap99 GB4:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.gm99Gb4Chrom, stsRow.gm99Gb4Pos);
+	if (!sameString(stsRow.shgcG3Chrom, "0"))
+	    printf("<TR><TH ALIGN=left>GeneMap99 G3:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.shgcG3Chrom, stsRow.shgcG3Pos);
+	if (!sameString(stsRow.wiYacChrom, "0"))
+	    printf("<TR><TH ALIGN=left>Whitehead YAC:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.wiYacChrom, stsRow.wiYacPos);
+	if (!sameString(stsRow.wiRhChrom, "0"))
+	    printf("<TR><TH ALIGN=left>Whitehead RH:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.wiRhChrom, stsRow.wiRhPos);
+	if (!sameString(stsRow.shgcTngChrom, "0"))
+	    printf("<TR><TH ALIGN=left>Stanford TNG:</TH><TD>chr%s</TD><TD>%.2f</TD></TR>\n", stsRow.shgcTngChrom, stsRow.shgcTngPos);
+        if (!sameString(stsRow.fishChrom, "0"))
+	    {
+	    printf("<TR><TH ALIGN=left>FISH:</TH><TD>%s.%s - %s.%s</TD></TR>\n", stsRow.fishChrom, 
+	        stsRow.beginBand, stsRow.fishChrom, stsRow.endBand);
+	    }
+	printf("</TABLE>\n");
+	htmlHorizontalLine();
+	if (stsRow.score == 1000)
+	    {
+	    printf("<H3>This is the only location found for %s</H3>\n",marker);
+            }
+        else
+	    {
+	    sqlFreeResult(&sr);
+            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+            printf("<TABLE>\n");
+	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+	            table, marker, seqName, start, end); 
+            sr = sqlGetResult(conn,query);
+            while ((row = sqlNextRow(sr)) != NULL)
+                  {
+		  if (sameString(table, "stsMap"))
+		      {
+		      stsMapStaticLoad(row, &stsRow);
+		      }
+		  else
+		  /* Load and convert from original bed format */ 
+		      {
+		      struct stsMarker oldStsRow;
+		      stsMarkerStaticLoad(row, &oldStsRow);
+		      stsMapFromStsMarker(&oldStsRow, &stsRow);
+		      }
+		  printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
+			 stsRow.chrom, (stsRow.chromStart+stsRow.chromEnd)>>1);
+		  }
+	    printf("</TABLE>\n"); 
+            }
+	htmlHorizontalLine();
+	}
     }
-printf("</BLOCKQUOTE>\n");
-htmlHorizontalLine();
 puts(tdb->html);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -3654,11 +3821,11 @@ else if (sameWord(track, "rnaGene"))
     }
 else if (sameWord(track, "stsMarker"))
     {
-    doStsMarker(tdb, item, FALSE);
+    doStsMarker(tdb, item);
     }
 else if (sameWord(track, "stsMap"))
     {
-    doStsMarker(tdb, item, TRUE);
+    doStsMarker(tdb, item);
     }
 else if (sameWord(track, "mouseSyn"))
     {
