@@ -10,11 +10,11 @@
 struct wiggle
 /* Wiggle track values to display as y-values (first 6 fields are bed6) */
     {
-    struct wiggle *next;  /* Next in singly linked list. */
-    char *chrom;	/* Human chromosome or FPC contig */
+    struct wiggle *next;	/* Next in singly linked list. */
+    char *chrom;		/* Human chromosome or FPC contig */
     unsigned chromStart;	/* Start position in chromosome */
-    unsigned chromEnd;	/* End position in chromosome */
-    char *name;	/* Name of item */
+    unsigned chromEnd;		/* End position in chromosome */
+    char *name;			/* Name of item */
     unsigned span;	/* each value spans this many bases */
     unsigned count;	/* number of values in this block */
     unsigned offset;	/* offset in File to fetch data */
@@ -113,7 +113,7 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
     /*	set one of the variables in the wigCart	*/
 
 /*	in lib/wiggleUtils.c	*/
-struct wiggleData *fetchWigData(char *db, char *tableName, char *chromName,
+struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
     int winStart, int winEnd);
 /*  return linked list of wiggle data between winStart, winEnd */
 
