@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.45 2004/01/08 19:37:39 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.46 2004/04/13 14:54:25 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -323,16 +323,16 @@ if (validDatabases == NULL)
 return (hashLookup(validDatabases, db) != NULL);
 }
 
-void printGenomeListHtml(char *db, char *onChangeText)
+void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
- * param curGenome - The Genome to choose as selected. 
- * If NULL, no default selection.  param onChangeText - Optional 
- * (can be NULL) text to pass in any onChange javascript. */
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
 {
 char *orgList[128];
 int numGenomes = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *selGenome = hGenome(db);
@@ -355,15 +355,26 @@ cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChange
 hashFree(&hash);
 }
 
-void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
+void printGenomeListHtml(char *db, char *onChangeText)
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
 {
-/* Find all the assemblies that pertain to the selected genome and that have
-BLAT servers set up.
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-assemblies to choose from.
+printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
+}
 
-param curDb - The assembly (the database name) to choose as selected. 
-If NULL, no default selection.
+void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                        char *dbCgi, char *javascript)
+{
+/* Find all the assemblies from the list that are active.
+Prints to stdout the HTML to render a dropdown list containing the list 
+of the possible assemblies to choose from.
+
+param db - The default assembly (the database name) to choose as selected. 
+                If NULL, no default selection.
  */
 char *assemblyList[128];
 char *values[128];
@@ -400,6 +411,9 @@ void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
 {
 printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
 }
+/* Find all assemblies from the list that are active, and print
+ * HTML to render dropdown list 
+ * param db - default assembly.  If NULL, no default selection */
 
 void printAssemblyListHtml(char *db, char *javascript)
 /* Find all the assemblies that pertain to the selected genome 
