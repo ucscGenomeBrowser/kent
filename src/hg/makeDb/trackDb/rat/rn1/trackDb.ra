@@ -1,3 +1,12 @@
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Rat/Human Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
+
 track ensRatMusHom
 shortLabel PhusionBlast
 longLabel Ensembl PhusionBlast of Rat vs. Mouse
