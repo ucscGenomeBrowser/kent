@@ -3,14 +3,15 @@ exit; # don't actually run this like a script :)
 
 # This file describes how to make the browser database for the
 # worm C. briggsae
-# Currently 2003-05-20 this file is in a HIGH state of flux as it is being
+# Currently 2003-05-29 this file is in a HIGH state of flux as it is being
 # worked out.
 
 DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
 
+    # next machine
     ssh eieio
-    mkdir -p /cluster/store4/worm/cb1/sanger
-    cd /cluster/store4/worm/cb1/sanger
+    mkdir -p /cluster/store5/worm/cb1/sanger
+    cd /cluster/store5/worm/cb1/sanger
     wget -o cb1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/cbriggsae/cb25.agp8/
 #   Takes about eight minutes
@@ -26,8 +27,157 @@ DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
-    ln -s /cluster/store4/worm/cb1 ~/cb1
+    ln -s /cluster/store5/worm/cb1 ~/cb1
     cd ~/cb1
+    # unzip the small contigs and ultra contigs
+    #	Will need both of those later
+    zcat sanger/cb25.agp8.contigs.fasta.gz > contigs.fa
+    zcat sanger/cb25.agp8.fasta.gz > ultra.fa
+    # create an artifical chrUn agp file:  (does 1000 N gaps)
+    rm -f ultra.agp
+    scaffoldFaToAgp ultra.fa
+    #  Will put together the chrUn.fa later with the masked contigs
+
+#  Populate /iscratch/i for masking runs
+#	For some types of operations we want the smaller contigs
+#	For others we want the ultracontigs.  Since they are both
+#	relatively small (about 100 M bases) we can have them both
+#	exist out there
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Cbriggsae
+    mkdir -p /iscratch/i/worms/Cbriggsae/contigs
+    mkdir -p /iscratch/i/worms/Cbriggsae/ultras
+    cd ~/cb1
+    cp -p contigs.fa /iscratch/i/worms/Cbriggsae
+    cp -p ultra.fa /iscratch/i/worms/Cbriggsae
+    faSplit sequence contigs.fa 1000 /iscratch/i/worms/Cbriggsae/contigs/c
+    ~hiram/bin/i386/faSplit byname ultra.fa /iscratch/i/worms/Cbriggsae/ultras
+    # I don't see Brian's faSplit byname function in the
+    # /cluster/bin/i386/faSplit yet ?  (It's version is 19 July 2002)
+    ~kent/bin/iSync
+
+#  With /iscratch/i/worms/Cbriggsae populated, ready for RepeatMasker run
+    # next machine
+    ssh kk
+    cd ~/cb1
+    mkdir -p RMRun.ultras/out
+    cd RMRun.ultras
+    cat << '_EOF_' > RMWorm
+#!/bin/csh -fe
+#
+#   $1 is full pathname to a contig .fa file
+#   this directory . is the location to return results to
+
+set bname = `basename $1`
+/bin/mkdir -p /tmp/$bname
+/bin/cp $1 /tmp/$bname/
+pushd .
+cd /tmp/$bname
+/scratch/hg/RepeatMasker/RepeatMasker -ali -s -el $bname
+popd
+/bin/cp /tmp/$bname/$bname.out ./out
+if (-e /tmp/$bname/$bname.align) /bin/cp /tmp/$bname/$bname.align ./out
+# /bin/cp /tmp/$2*.masked ../masked/
+rm -f /tmp/$bname/$bname
+rm -f /tmp/$bname/$bname.*
+rmdir /tmp/$bname
+'_EOF_'
+
+    chmod +x RMWorm
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/store5/worm/cb1/RMRun.ultras/RMWorm {check in exists+ $(path1)}
+#ENDLOOP
+'_EOF_'
+
+    ls /iscratch/i/worms/Cbriggsae/ultras/*.fa > briggsae.lst
+    echo "" > dummy.lst
+    gensub2 briggsae.lst dummy.lst gsub spec
+    para create spec
+    para try
+    
+# SIMPLE REPEAT [TRF] TRACK (DONE 2003-05-29 - Hiram)
+    # Assuming ultra contings are already in
+    # /iscratch/i/worms/Cbriggsae/ultras from RepeatMasker setup above
+
+    # Create cluster parasol job:
+    # next machine
+    ssh kk
+    mkdir -p ~/cb1/bed/simpleRepeat
+    cd ~/cb1/bed/simpleRepeat
+    mkdir trf
+    ls -1S /iscratch/i/worms/Cbriggsae/ultras/*.fa > genome.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf {check in line+ $(path1)}  /dev/null -bedAt={check out line trf/$(root1).bed} -tempDir=/tmp
+#ENDLOOP
+'_EOF_'
+
+    echo "" > dummy.lst
+    gensub2 genome.lst dummy.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    ... etc ...
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-05-29 - Hiram)
+    # next machine
+    ssh eieio
+    cd ~/cb1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+	awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+    #  When cluster run is done, combine into one:
+#XXXX    cat trf/*.bed > simpleRepeat.bed
+    
+    # Load into the database:
+    # next machine
+#XXXX    ssh hgwdev
+#XXXX    cd ~/cb1/bed/simpleRepeat
+#XXXX    /cluster/bin/i386/hgLoadBed cb1 simpleRepeat simpleRepeat.bed \
+#XXXX      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+# Create Soft and Hard masks from RepeatMaster and TRF outputs:
+#  and rebuild the nib files
+    # next machine
+    ssh eieio
+    mkdir ~/cb1/ultras
+    mkdir ~/cb1/ultraNibs
+    cd ~/cb1/ultras
+    ~hiram/bin/i386/faSplit byname ../ultra.fa .
+    mkdir ~/cb1/softMask
+    cd ~/cb1/softMask
+    foreach c (../ultras/*.fa)
+        set b = $c:t
+        set r = $b:r
+        echo ${c} ${b} ${r}
+	/cluster/bin/i386/maskOutFa ${c} ../RMRun.ultras/out/${b}.out \
+		${b} -soft
+	/cluster/bin/i386/maskOutFa ${b} \
+		../bed/simpleRepeat/trfMask/${r}.bed \
+		${b} -softAdd
+	faToNib -softMask ${b} ../ultraNibs/${r}.nib
+    end
+    # combine them all to bee the query sequence for blastz runs
+    cat *.fa > ../allUltras.soft.fa
+
+    #  With masked nib files ready, prepare cluster for blastz runs
+    # next machine
+    ssh kkr1u00
+    cd ~/cb1
+    mkdir -p /iscratch/i/worms/Cbriggsae/trfFa
+    cp -p allUltras.soft.fa /iscratch/i/worms/Cbriggsae/trfFa
+    mkdir -p /iscratch/i/worms/Cbriggsae/rmsk
+    cd ~/cb1/RRun.ultras/out
+    cp -p *.out /iscratch/i/worms/Cbriggsae/rmsk
+    ~kent/bin/iSync
+
+# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  WORKING ON THIS 2003-05-29 XXX
 #   create chromosome subdirectory and populate it
     mkdir Un
     # unzip the ultra contig file
@@ -45,6 +195,7 @@ DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
 CREATING DATABASE (DONE 2003-05-20 - Hiram)
 
     # Create the database.
+    # next machine
     ssh hgwdev
     echo 'create database cb1' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING
@@ -54,6 +205,7 @@ CREATING DATABASE (DONE 2003-05-20 - Hiram)
     df -h /var/lib/mysql
 
 CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-20 - Hiram)
+    # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
     #   grp in the database rn1 to our new database cb1
@@ -66,9 +218,10 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-20 - Hiram)
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
 
     # Make symbolic links from /gbdb/cb1/nib to the real nibs.
+    # next machine
     ssh hgwdev
     mkdir -p /gbdb/cb1/nib
-    foreach f (/cluster/store4/worm/cb1/nib/*.nib)
+    foreach f (/cluster/store5/worm/cb1/nib/*.nib)
       ln -s $f /gbdb/cb1/nib
     end
     # Load /gbdb/cb1/nib paths into database and save size info.
@@ -100,9 +253,10 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
 
 
 MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
+    # next machine
      ssh hgwdev
-     mkdir -p /cluster/store4/worm/cb1/bed/gcPercent
-     cd /cluster/store4/worm/cb1/bed/gcPercent
+     mkdir -p /cluster/store5/worm/cb1/bed/gcPercent
+     cd /cluster/store5/worm/cb1/bed/gcPercent
      hgsql cb1  < ~/kent/src/hg/lib/gcPercent.sql
     #  If you need to delete that table created
         echo 'drop table gcPercent;' | hgsql cb1;
@@ -110,9 +264,9 @@ MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
 
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
+    # next machine
      ssh hgwdev
-    echo 'insert into defaultDb values("C. briggsae",
-"cb1");' \
+    echo 'insert into defaultDb values("C. briggsae", "cb1");' \
       | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
         echo 'delete from defaultDb where name="cb1";' \
@@ -137,13 +291,14 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
 SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
     # This TRF run takes about an hour on eieio
     # so instead of binrsyncing and para-running, just do this on eieio:
+    # next machine
     ssh eieio
     mkdir ~/cb1/bed/simpleRepeat
     cd ~/cb1/bed/simpleRepeat
     mkdir trf
     rm -f jobs.csh
     touch jobs.csh
-    foreach f (/cluster/store4/worm/cb1/Un/chrUn.fa)
+    foreach f (/cluster/store5/worm/cb1/Un/chrUn.fa)
       set fout = $f:t:r.bed
       echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf ${f} /dev/null -bedAt=trf/${fout} -tempDir=/tmp" \
         >> jobs.csh
@@ -155,6 +310,7 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
 
     # When jobs are done,
     # To Load this into the database as so
+    # next machine
     ssh hgwdev
     cd ~/cb1/bed/simpleRepeat
     cat trf/chr*.bed > simpleRepeat.bed
@@ -162,40 +318,86 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 Split into contigs for RepeatMasker, BLAT, and other cluster jobs
+    # next machine
     ssh eieio
-    cd ~cb1
-    # it is a little over 100,000,000 bases, thus 100,000 sized chunks
-    # produces about 1000 files  (1091 precisely)
-    faSplit size Un/chrUn.fa 100000 split/c -lift=split.lft
+    cd ~/cb1
+    # make about 1000 contig fa files, this is about 100,000 bases in each
+    mkdir split
+    faSplit sequence contigs/contigs.fa 1000 split/c
 
-    # copy those to scratch
-    ssh kk
-    mkdir -p /scratch/hiram/Cbriggsae
-    cd /scratch/hiram/Cbriggsae
+    # copy those to /iscratch/i
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Cbriggsae/contigs
+    cd /iscratch/i/worms/Cbriggsae/contigs
     cp -p ~/cb1/split/c*.fa .
-    # request push
+    ~kent/bin/iSync
+    
+# RepeatMasker run on the supercontigs
+    ssh kk
+    cd ~/cb1
+    mkdir -p RMRun.supers/out
+    cd RMRun.supers
+    rm -fr spec
+    touch spec
+    echo '#!/bin/csh -fe
+#
+#   $1 is full pathname to a contig .fa file
+#   this directory . is the location to return results to
+
+set bname = `basename $1`
+/bin/mkdir -p /tmp/$bname
+/bin/cp $1 /tmp/$bname/
+pushd .
+cd /tmp/$bname
+/scratch/hg/RepeatMasker/RepeatMasker -ali -s -el $bname
+popd
+/bin/cp /tmp/$bname/$bname.out ./out
+if (-e /tmp/$bname/$bname.align) /bin/cp /tmp/$bname/$bname.align ./out
+# /bin/cp /tmp/$2*.masked ../masked/
+rm -f /tmp/$bname/$bname
+rm -f /tmp/$bname/$bname.*
+rmdir /tmp/$bname' > RMWorm
+    chmod +x RMWorm
+
+    rm -f gsub
+    echo '#LOOP
+/cluster/store5/worm/cb1/RMRun.supers/RMWorm {check in exists+ $(path1)}
+#ENDLOOP' > gsub
+
+    ls -1S /iscratch/i/worms/Cbriggsae/supers/s*.fa > briggsae.lst
+    echo "" > dummy.lst
+    gensub2 briggsae.lst dummy.lst gsub spec
+    para create spec
+    para try
     
 RepeatMasker run
     ssh kk
     cd ~/cb1
     mkdir RMRun
     cd RMRun
-    rm -fr RMJobs
-    touch RMJobs
+    mkdir out
+    rm -fr spec
+    touch spec
     foreach d ( ../split/c*.fa )
       set bname = `basename $d`
       echo /cluster/bin/scripts/RMWorm $d \
-	'{'check out line+ $bname.out'}' >> RMJobs
+	'{'check out line+ out/$bname.out'}' >> spec
     end
-    para create RMJobs
+    para create spec
     para try
     para check
     para push
 
-#   STOP HERE - 2003-05-20
-
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CB1 (TODO)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CB1 (DONE - 2002-05-29 - Hiram)
     ssh hgwdev
-    echo 'insert into blatServers values("cb1", "blat10", "17778", "1"); \
-          insert into blatServers values("cb1", "blat10", "17779", "0");' \
+    # DNA port is "0", trans prot port is "1"
+    echo 'insert into blatServers values("cb1", "blat10", "17782", "0"); \
+          insert into blatServers values("cb1", "blat10", "17783", "1");' \
       | hgsql -h genome-testdb hgcentraltest
+        # if you need to delete those entries
+	echo 'delete from blatServers where db="cb1";' \
+        | hgsql -h genome-testdb hgcentraltest
+        # to check the entries:
+	echo 'select * from blatServers where db="cb1";' \
+        | hgsql -h genome-testdb hgcentraltest
