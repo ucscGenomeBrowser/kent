@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.6 2003/10/14 06:03:52 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.7 2004/01/18 17:46:30 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -102,6 +102,16 @@ if (last != NULL)
     }
 }
 
+static boolean isSpecialName(char* path)
+/* is this a special file name that shouldn't be renamed */
+{
+return sameString(path, "stdin")
+    || sameString(path, "stdout")
+    || sameString(path, "/dev/stdin")
+    || sameString(path, "/dev/stdout")
+    || sameString(path, "/dev/null");
+}
+
 void gbGetOutputTmp(char *path, char *tmpPath)
 /* generate the tmp path name, moving the compress extension if needed */
 {
@@ -110,11 +120,7 @@ int len;
 savedExt[0] = '\0';
 strcpy(tmpPath, path);
 /* don't add extension for special names */
-if (!(sameString(path, "stdin")
-      || sameString(path, "stdout")
-      || sameString(path, "/dev/stdin")
-      || sameString(path, "/dev/stdout")
-      || sameString(path, "/dev/null")))
+if (!isSpecialName(path))
     {
     if (gbGetCompressor(tmpPath, "r") != NULL)
         {
@@ -150,8 +156,11 @@ gbGetOutputTmp(path, tmpPath);
 
 if (fhPtr != NULL)
     gzClose(fhPtr);
-if (rename(tmpPath, path) < 0)
-    errnoAbort("renaming %s to %s", tmpPath, path);
+if (!sameString(path, tmpPath))
+    {
+    if (rename(tmpPath, path) < 0)
+        errnoAbort("renaming %s to %s", tmpPath, path);
+    }
 }
 
 void gbOutputRemove(char* path, FILE** fhPtr)

@@ -29,12 +29,14 @@ short version = gbSplitAccVer(psl->qName, acc);
 
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version == entry->selectVer))
+if ((entry != NULL) && (version == entry->selectVer)
+    && !entry->clientFlags)
     {
     /* selected */
     if (!gInclVersion)
         strcpy(psl->qName, acc);  /* remove version */
     pslTabOut(psl, gOutPsl);
+    entry->clientFlags = TRUE; /* flag so only gotten once */
     }
 /* trace if enabled */
 if (verbose >= 3)

@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.6 2003/07/19 21:26:33 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.7 2004/01/18 17:46:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
     {"native", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
     {"accFile", OPTION_STRING},
+    {"missing", OPTION_STRING},
     {"allowMissing", OPTION_BOOLEAN},
     {"inclVersion", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
@@ -38,6 +39,7 @@ static unsigned gType;
 static unsigned gOrgCats;
 static boolean gInclVersion;
 static boolean gAllowMissing;
+static FILE* gMissingFh = NULL;
 static char* gGetWhat;  /* "seq", "psl", "intronPsl" */
 static unsigned gGetState;  /* getting GB_PROCESSED | GB_ALIGNED */
 static char* gDatabase;
@@ -47,7 +49,7 @@ struct seqIdSelect
 {
     char acc[GB_ACC_BUFSZ];
     short version;
-    int count;
+    int selectCount;
 };
 
 /* hash table of ids to select, or NULL if all should be select */
@@ -83,49 +85,49 @@ while (lineFileNextRow(lf, words, 1))
 gzLineFileClose(&lf);
 }
 
-int idSelectedProcessed(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
-/* check a specified the sequence id is, if so return version, or 0
- * if not aligned */
+void selectExplicitProcessed(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
+/* selected for extraction from the processed index. */
 {
+struct gbProcessed *processed = NULL;
 if (seqIdSelect->version == 0)
     {
-    /* version not specifed, return latest */
-    return entry->processed->version;
+    /* version not specifed, use latest */
+    processed = entry->processed;
     }
 else
     {
     /* version specified */
-    struct gbProcessed* processed
-        = gbEntryFindProcessed(entry, seqIdSelect->version);
+    processed = gbEntryFindProcessed(entry, seqIdSelect->version);
     if (processed == NULL)
         {
-        fprintf(stderr, "Error: %s does not have version %d \n",
-                entry->acc, seqIdSelect->version);
+        if (gMissingFh == NULL)
+            fprintf(stderr, "Error: %s.%d is version %d in database\n",
+                    seqIdSelect->acc, seqIdSelect->version,
+                    entry->processed->version);
         gNumMissingVersions++;
-        return 0;
         }
-    else
-        return processed->version;
+    }
+if (processed != NULL)
+    {
+    entry->selectVer = processed->version;
+    processed->update->selectProc = TRUE;
+    seqIdSelect->selectCount++;
     }
 }
 
-int idSelectedAligned(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
-/* check a specified the sequence id is, if so return version, or 0
- * if not aligned */
+void selectExplicitAligned(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
+/* selected for extraction from the aligned index  */
 {
+struct gbAligned *aligned = NULL;
 if (seqIdSelect->version == 0)
     {
     /* version not specifed, return latest */
-    if (entry->aligned == NULL)
-        return 0;
-    else
-        return entry->aligned->version;
+    aligned = entry->aligned;
     }
 else
     {
     /* version specified */
-    struct gbAligned* aligned
-        = gbEntryFindAlignedVer(entry, seqIdSelect->version);
+    aligned = gbEntryFindAlignedVer(entry, seqIdSelect->version);
     if (aligned == NULL)
         {
         /* no aligned entry, generate error if no processed  */
@@ -141,36 +143,46 @@ else
             fprintf(stderr, "Warning: %s.%d is in update that is not aligned\n",
                     entry->acc, seqIdSelect->version);
             }
-        return 0;
         }
-    else
-        {
-        if (aligned->numAligns > 0)
-            return aligned->version;
-        else
-            return 0;
-        }
+    }
+if ((aligned != NULL) && (aligned->numAligns == 0))
+    {
+    entry->selectVer = aligned->version;
+    aligned->update->selectProc = TRUE;
+    seqIdSelect->selectCount++;
     }
 }
 
-int idSelectedVer(struct gbEntry* entry)
-/* check if the sequence id was specified, if so return version, or 0
- * if not specified */
+void selectExplict(struct gbEntry* entry)
+/* check if the sequence id was specified in the explict entry list, if so
+ * return version, or 0 if not specified */
 {
 struct seqIdSelect *seqIdSelect = hashFindVal(gIdHash, entry->acc);
-int selectVer = 0;
 if (seqIdSelect != NULL)
     {
     if (gGetState == GB_PROCESSED)
-        selectVer = idSelectedProcessed(entry, seqIdSelect);
+        selectExplicitProcessed(entry, seqIdSelect);
     else
-        selectVer = idSelectedAligned(entry, seqIdSelect);
-    if (selectVer != 0)
-        seqIdSelect->count++;
+        selectExplicitAligned(entry, seqIdSelect);
     }
-return selectVer;
 }
 
+void selectImplict(struct gbEntry* entry)
+/* select best entry when acc are not explicted specified */
+{
+if (gGetState == GB_PROCESSED)
+    {
+    struct gbProcessed *processed = entry->processed;
+    entry->selectVer = processed->version;
+    processed->update->selectProc = TRUE;
+    }
+else
+    {
+    struct gbAligned *aligned = entry->aligned;
+    entry->selectVer = aligned->version;
+    aligned->update->selectProc = TRUE;
+    }
+}
 
 boolean orgCatSelected(struct gbEntry* entry)
 /* check if the organism category is selected */
@@ -182,24 +194,21 @@ return ((entry->orgCat & gOrgCats) || (entry->orgCat == 0));
 void selectEntry(struct gbEntry* entry)
 /* Mark an entry if it passes criteria */
 {
+boolean alreadySelected = (entry->selectVer > 0);
 boolean orgCatOk = orgCatSelected(entry);
-if (orgCatOk)
+if (orgCatOk && !alreadySelected)
     {
-    int selectVer;
     if (gIdHash != NULL)
-        selectVer = idSelectedVer(entry);
+        selectExplict(entry);
     else 
-        selectVer = entry->processed->version;
-    if (selectVer != 0)
-        {
-        entry->selectVer = selectVer;
-        entry->processed->update->selectProc = TRUE;
-        }
+        selectImplict(entry);
     }
 if (verbose >= 3)
     {
-    if (!orgCatOk)
-        gbVerbPr(3, "select: skip %s: is %s", entry->acc, gbOrgCatName(entry->orgCat));
+    if (alreadySelected)
+        gbVerbPr(3, "select: skip %s, altready selected", entry->acc);
+    else if (!orgCatOk)
+            gbVerbPr(3, "select: skip %s: is %s", entry->acc, gbOrgCatName(entry->orgCat));
     else if (entry->selectVer <= 0)
         gbVerbPr(3, "select: skip %s", entry->acc);
     else
@@ -211,13 +220,40 @@ if (verbose >= 3)
 
 void selectEntries(struct gbSelect* select)
 /* Mark entires in the current partition of a release that match the selection
- * citeria.  Picking the newest version and mark the update it is in for
+ * citeria.  Picking the approraite version and mark the update it is in for
  * processing. */
 {
 struct hashCookie cookie = hashFirst(select->release->entryTbl);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     selectEntry((struct gbEntry*)hel->val);
+}
+
+void checkExtract(struct gbSelect* select)
+/* check that all selected entries were extracted */
+{
+struct gbUpdate *update;
+struct gbProcessed* processed;
+int notFoundCnt = 0;
+for (update = select->release->updates; update != NULL; update = update->next)
+    {
+    if (update->selectProc)
+        {
+        for (processed = update->processed; processed != NULL; processed = processed->updateLink)
+            {
+            struct gbEntry* entry = processed->entry;
+            if ((entry->selectVer > 0) && !entry->clientFlags)
+                {
+                fprintf(stderr, "Error: %s.%d selected in %s/%s not found in data\n",
+                        entry->acc,  entry->selectVer, update->release->name,
+                        update->name);
+                notFoundCnt++;
+                }
+            }
+        }
+    }
+if (notFoundCnt > 0)
+    errAbort("%d entries not found in data files", notFoundCnt);
 }
 
 void getPartitionData(struct gbSelect* select)
@@ -247,6 +283,8 @@ for (update = select->release->updates; update != NULL; update = update->next)
         gbVerbLeave(2, "process update: %s", update->name);
         }
     }
+checkExtract(select);
+
 gbReleaseUnload(select->release);
 gbVerbLeave(2, "process partition: %s", gbSelectDesc(select));
 }
@@ -260,13 +298,24 @@ int numNotFound = gNumMissingVersions;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct seqIdSelect *seqIdSelect = hel->val;
-    if (seqIdSelect->count == 0)
+    if (seqIdSelect->selectCount == 0)
         {
-        if (seqIdSelect->version > 0)
-            fprintf(stderr, "Error: %s.%d not found\n", seqIdSelect->acc,
-                    seqIdSelect->version);
+        if (gMissingFh != NULL)
+            {
+            if (seqIdSelect->version > 0)
+                fprintf(gMissingFh, "%s.%d\n", seqIdSelect->acc,
+                        seqIdSelect->version);
+            else
+                fprintf(gMissingFh, "%s\n", seqIdSelect->acc);
+            }
         else
-            fprintf(stderr, "Error: %s not found\n", seqIdSelect->acc);
+            {
+            if (seqIdSelect->version > 0)
+                fprintf(stderr, "Error: %s.%d not found\n", seqIdSelect->acc,
+                        seqIdSelect->version);
+            else
+                fprintf(stderr, "Error: %s not found\n", seqIdSelect->acc);
+            }
         numNotFound++;
         }
     }
@@ -335,7 +384,9 @@ errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "     Accession may optional include version number.\n"
          "    -allowMissing - It is not an error if explictly specified\n"
          "     accessions were not found.\n"
-         "    -version - include version number in sequence id\n"
+         "    -missing=file - write accessions of miss to this file, don't generated\n"
+         "     messages about missing individual files\n"
+         "    -inclVersion - include version number in sequence id\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
          "\n"
@@ -376,6 +427,8 @@ if (gOrgCats == 0)
     gOrgCats = GB_NATIVE|GB_XENO;
 gInclVersion = optionExists("inclVersion");
 gAllowMissing = optionExists("allowMissing");
+if (optionExists("missing"))
+    gMissingFh = mustOpen(optionVal("missing", NULL), "w");
 gGetWhat = optionVal("get", "seq");
 if (!(sameString(gGetWhat, "seq")
       || sameString(gGetWhat, "psl")
@@ -403,6 +456,7 @@ if (argc > 4)
         addIdSelect(argv[argi]);
     }
 gbGetSeqs(gbRoot, outFile);
+carefulClose(&gMissingFh);
 
 return 0;
 }
