@@ -1,61 +1,79 @@
 /* freen - My Pet Freen. */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <limits.h>
+#include <dirent.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "obscure.h"
-#include "md5.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen file");
+errAbort("usage: freen file/dir");
 }
 
-/*
- * those are the standard RFC 1321 test vectors
- */
+time_t now;
 
-static char *msg[] =
+int rFreen(int level, char *dirName, int dirNameSize, char *fileName)
+/* Recursively traverse directory tree. */
 {
-    "",
-    "a",
-    "abc",
-    "message digest",
-    "abcdefghijklmnopqrstuvwxyz",
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-    "12345678901234567890123456789012345678901234567890123456789012" \
-	"345678901234567890"
-};
+int err;
+static struct stat st;
+int newSize = strlen(fileName) + 1 + dirNameSize;
 
-static char *val[] =
-{
-    "d41d8cd98f00b204e9800998ecf8427e",
-    "0cc175b9c0f1b6a831c399e269772661",
-    "900150983cd24fb0d6963f7d28e17f72",
-    "f96b697d7cb7938d525a2f31aaf161d0",
-    "c3fcd3d76192e4007dfb496cca67e13b",
-    "d174ab98d277d9f5a5611c2c9f419d9f",
-    "57edf4a22be3c955ac49da2e2107b67a"
-};
-
-void freen( char *fileName )
-{
-char *buf;
-size_t size;
-int i, j;
-char output[33];
-struct md5_context ctx;
-unsigned char md5sum[16];
-
-readInGulp(fileName, &buf, &size);
-md5_starts(&ctx);
-md5_update(&ctx, (uint8 *)buf, size);
-md5_finish(&ctx, md5sum);
-for( j = 0; j < 16; j++ )
-    printf( "%02x", md5sum[j] );
-printf("\n");
+if (level > 0 && (sameString(fileName, ".") || sameString(fileName, "..")))
+    return 0;
+if (newSize > PATH_MAX)
+    return -1;
+if (dirName[0] == 0)
+    {
+    --newSize;
+    strcpy(dirName, fileName);
+    }
+else
+    {
+    dirName[dirNameSize] = '/';
+    strcpy(dirName + dirNameSize + 1, fileName);
+    }
+if ((err = stat(dirName, &st)) >= 0)
+    {
+    spaceOut(stdout, level);
+    printf("%s", fileName);
+    if (S_ISDIR(st.st_mode))
+	printf("/");
+    printf("\t%lld", st.st_size);
+    printf("\t%ld\n", now - st.st_mtime);
+    if (S_ISDIR(st.st_mode))
+	{
+	if (newSize <= PATH_MAX)
+	    {
+	    DIR *d;
+	    if ((d = opendir(dirName)) != NULL)
+		{
+		struct dirent *de;
+		while ((de = readdir(d)) != NULL)
+		    {
+		    rFreen(level+1, dirName, newSize, de->d_name);
+		    }
+		closedir(d);
+		}
+	    }
+	}
+    }
+dirName[dirNameSize] = 0;
+return err;
 }
 
+void freen(char *fileName)
+/* Print borf as fasta. */
+{
+char buf[PATH_MAX+1];
+buf[0] = 0;
+now = time(NULL);
+printf("%ld %s", now, ctime(&now));
+rFreen(0, buf, 0, fileName);
+}
 
 
 int main(int argc, char *argv[])
