@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.549 2003/07/03 18:20:22 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.550 2003/07/04 05:14:08 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9753,7 +9753,8 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg13") || sameString(database, "mm3"))
+if (sameString(database, "hg13") || sameString(database, "hg15")
+            || sameString(database, "mm3"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
