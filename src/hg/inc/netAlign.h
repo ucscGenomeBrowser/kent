@@ -9,17 +9,30 @@ struct netAlign
 /* alignment portion of net file */
     {
     struct netAlign *next;  /* Next in singly linked list. */
+    char *type;	/* fill or gap */
     char *tName;	/* Human Chrom */
     unsigned level;	/* level of alignment */
     unsigned tStart;	/* Start on Human */
     unsigned tEnd;	/* End on Human */
-    unsigned tSize;	/* size on human */
     char *qName;	/* Mouse Chromosome */
     char strand[2];	/* + direction matches - opposite */
     unsigned qStart;	/* Start on Mouse */
     unsigned qEnd;	/* End on Mouse */
-    unsigned qSize;	/* size on Mouse */
     unsigned score;	/* score */
+    unsigned chainId;	/* chain Id */
+    unsigned qOver;	/* overlap with parent gap on query side(inverts) */
+    unsigned qFar;	/* local or tandem */
+    unsigned qDup;	/* two or more copies in query region */
+    unsigned tN;	/* unsequenced bases on target */
+    unsigned qN;	/* unsequenced bases on query */
+    unsigned tR;	/* repeatMasker bases on target */
+    unsigned qR;	/* repeatMasker bases on query */
+    unsigned tNewR;	/* lineage specific repeats on target */
+    unsigned qNewR;	/* lineage specific repeats on query */
+    unsigned tOldR;	/* bases of ancient repeats on target */
+    unsigned qOldR;	/* bases of ancient repeats on query */
+    unsigned tTrf;	/* bases of Tandam repeats on target */
+    unsigned qTrf;	/* bases of Tandam repeats on query */
     };
 
 void netAlignStaticLoad(char **row, struct netAlign *ret);
