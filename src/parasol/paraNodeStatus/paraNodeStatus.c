@@ -118,7 +118,7 @@ while (lineFileRow(lf, row))
 		}
 	    else
 		{
-		printf("%s no status return. strerror(errno)\n", name);
+		printf("%s no status return: %s\n", name, strerror(errno));
 		}
 	    }
 	close(sd);
