@@ -1,5 +1,6 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
 #include <sys/wait.h>
+#include <signal.h>
 #include "common.h"
 #include "errabort.h"
 #include "linefile.h"
@@ -276,10 +277,10 @@ return 0;
 }
 
 void occassionalDot()
-/* Write out a dot every ten times this is called. */
+/* Write out a dot every 20 times this is called. */
 {
-static int dotMod = 10;
-static int dot = 10;
+static int dotMod = 20;
+static int dot = 20;
 if (--dot <= 0)
     {
     putc('.', stdout);
