@@ -31,7 +31,7 @@ if (!sendWithSig(fd, string))
     noWarnAbort();
 }
 
-char *getHost()
+char *getMachine()
 /* Return host name. */
 {
 static char *host = NULL;

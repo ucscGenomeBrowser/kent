@@ -139,8 +139,9 @@ void removeJobId(int id);
 /* Remove job with given ID. */
 
 void setupLists()
-/* Make up data structure to keep track of each machine. 
- * Try to get sockets on all of them. */
+/* Make up machine, spoke, user and job lists - all doubly linked
+ * so it is fast to remove items from one list and put them
+ * on another. */
 {
 freeMachines = newDlList();
 busyMachines = newDlList();
@@ -156,7 +157,8 @@ userHash = newHash(6);
 
 struct user *findUser(char *name)
 /* Find user.  If it's the first time we've seen this
- * user then make up a user object. */
+ * user then make up a user object and put it on the
+ * idle user list. */
 {
 struct user *user = hashFindVal(userHash, name);
 if (user == NULL)
@@ -203,7 +205,7 @@ if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     struct machine *machine;
     time_t now = time(NULL);
 
-    /* Get free resources from free list and move them to busy lists. */
+    /* Get free resources from free lists and move them to busy lists. */
     mNode = dlPopHead(freeMachines);
     dlAddTail(busyMachines, mNode);
     machine = mNode->val;
@@ -302,20 +304,6 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 return NULL;
 }
 
-struct machine *findMachineOnDlList(char *name, struct dlList *list)
-/* Find machine on list, or return NULL */
-{
-struct dlNode *node;
-struct machine *mach;
-for (node = list->head; !dlEnd(node); node = node->next)
-    {
-    mach = node->val;
-    if (sameString(mach->name, name))
-        return mach;
-    }
-return NULL;
-}
-
 struct machine *findMachineWithJob(char *name, int jobId)
 /* Find named machine that is running job.  If jobId is
  * 0, find it regardless of job it's running. */
@@ -335,7 +323,6 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 return NULL;
 }
 
-
 struct job *jobFind(struct dlList *list, int id)
 /* Find node of job with given id on list.  Return NULL if
  * not found. */
@@ -352,7 +339,7 @@ return NULL;
 }
 
 void removeMachine(char *name)
-/* Remove machine form pool. */
+/* Remove machine from pool. */
 {
 struct machine *mach;
 name = trimSpaces(name);
@@ -681,7 +668,7 @@ fflush(jobIdFile);
 
 void openJobId()
 /* Open file with jobID in it and read jobId.  Bump it
- * by 250000 in case we crashed to avoid reusing job
+ * by 100000 in case we crashed to avoid reusing job
  * id's, but do reuse every 2 billion. Let command line
  * overwrite this though . */
 {
@@ -689,7 +676,7 @@ jobIdFile = fopen(jobIdFileName, "r+");
 if (jobIdFile != NULL)
     {
     readOne(jobIdFile, nextJobId);
-    nextJobId += 250000;
+    nextJobId += 100000;
     }
 else
     jobIdFile = mustOpen(jobIdFileName, "w");
@@ -1246,7 +1233,7 @@ int sigLen = strlen(paraSig);
 char *buf = NULL;
 
 /* Find name and IP address of our machine. */
-hubHost = getHost();
+hubHost = getMachine();
 setupDaemonLog(optionVal("log", NULL));
 logIt("Starting paraHub on %s\n", hubHost);
 

@@ -482,7 +482,7 @@ char signature[20];
 int sigLen = strlen(paraSig);
 
 /* We have to know who we are... */
-hostName = getHost();
+hostName = getMachine();
 
 /* Precompute some signature stuff. */
 assert(sigLen < sizeof(signature));

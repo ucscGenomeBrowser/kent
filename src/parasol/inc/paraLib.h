@@ -14,8 +14,8 @@ void mustSendWithSig(int fd, char *string);
 /* Send a string with the signature prepended. 
  * Abort on failure. */
 
-char *getHost();
-/* Return host name. */
+char *getMachine();
+/* Return host machine name. */
 
 void vLogIt(char *format, va_list args);
 /* Variable args logit. */
