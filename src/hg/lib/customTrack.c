@@ -17,8 +17,10 @@
 #include "net.h"
 #include "hdb.h"
 #include "hui.h"
+#include "cheapcgi.h"
+#include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.42 2004/04/28 21:56:44 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.43 2004/05/05 22:44:31 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -46,6 +48,7 @@ sprintf(buf, "ct_%d", ++count);
 tdb->tableName = cloneString(buf);
 tdb->visibility = 1;
 tdb->grp = cloneString("user");
+tdb->type = (char *)NULL;
 return tdb;
 }
 
@@ -84,8 +87,11 @@ static char *wigOptions[] =
     "yLineOnOff",
     "windowingFunction",
     "smoothingWindow",
+    "wigFile",
+    "wibFile",
 };
 static int wigOptCount = sizeof(wigOptions) / sizeof(char *);
+/*	to explicitly reference two of the above names	*/
 
 static void parseWiggleSettings(struct trackDb *tdb, struct hash *hash)
 {
@@ -121,8 +127,55 @@ if ((val = hashFindVal(hash, "type")) != NULL)
     {
     if (sameString(val,"wiggle_0"))
 	{
+	char *wigFileNames;
+	static struct tempName tn;
+
+	/*	if these two names are not yet in settings, the file
+	 *	names (and files) need to be created and added to settings.
+	 *	To do this, add the new names to the hash, that will get them
+	 *	into the settings string.  Also, this means that we are
+	 *	parsing the input from the hgTracks "Add Custom Track"
+	 *	form and therefore we will need a wigAscii data file to
+	 *	keep the input in.
+	 */
+	if ((wigFileNames = hashFindVal(hash, "wigFile")) == NULL)
+	    {
+	    FILE *wigFH;
+	    makeTempName(&tn, "ct", ".wig");
+	    track->wigFile = cloneString(tn.forCgi);
+	    hashAdd(hash, "wigFile", cloneString(track->wigFile));
+	    wigFH= mustOpen(track->wigFile, "w");
+	    carefulClose(&wigFH);
+	    makeTempName(&tn, "ct", ".wia");
+	    track->wigAscii = cloneString(tn.forCgi);
+	    wigFH= mustOpen(track->wigAscii, "w");
+	    carefulClose(&wigFH);
+	    }
+	else
+	    {
+	    track->wigFile = cloneString(wigFileNames);
+	    track->wigAscii = (char *) NULL;
+	    }
+
+	if ((wigFileNames = hashFindVal(hash, "wibFile")) == NULL)
+	    {
+	    FILE *wigFH;
+	    makeTempName(&tn, "ct", ".wib");
+	    track->wibFile = cloneString(tn.forCgi);
+	    hashAdd(hash, "wibFile", cloneString(track->wibFile));
+	    wigFH= mustOpen(track->wibFile, "w");
+	    carefulClose(&wigFH);
+	    }
+	else
+	    {
+	    track->wibFile = cloneString(wigFileNames);
+	    track->wigAscii = (char *) NULL;
+	    }
+
 	parseWiggleSettings(tdb, hash);
 	track->wiggle = TRUE;
+	if ((val = hashFindVal(hash, "wigType")) != NULL)
+	    tdb->type = cloneString(val);
 	}
     }
 if ((val = hashFindVal(hash, "name")) != NULL)
@@ -656,6 +709,7 @@ float prio = 0.0;
 boolean pslIsProt = FALSE;
 boolean inWiggle = FALSE;	/* working on wiggle data */
 unsigned trackDataLineCount = 0;
+FILE *wigAsciiFH = (FILE *)NULL;
 
 customDefaultRows(row);
 if (isFile)
@@ -677,7 +731,7 @@ for (;;)
     ++lineIx;
     line = skipLeadingSpaces(line);
     if (line[0] == '#' || line[0] == 0)
-        continue;			/* !!! NOTE continue !!! */
+        continue;			/* !!! next line of data !!! */
 
     /* Move lines that start with 'browser' to retBrowserLines. */
     if (startsWith("browser", line))
@@ -687,7 +741,7 @@ for (;;)
 	    struct slName *s = newSlName(line);
 	    slAddHead(retBrowserLines, s);
 	    }
-	continue;			/* !!! NOTE continue !!! */
+	continue;			/* !!! next line of data !!! */
 	}
     /* Skip lines that are psl header. */
     if (startsWith("psLayout version", line))
@@ -696,7 +750,7 @@ for (;;)
 	pslIsProt = (stringIn("protein", line) != NULL);
 	for (i=0; i<4; ++i)
 	    getNextLine(&lf, &line, &nextLine);
-	continue;			/* !!! NOTE continue !!! */
+	continue;			/* !!! next line of data !!! */
 	}
 
     /* Deal with line that defines new track. */
@@ -705,31 +759,37 @@ for (;;)
 	if (track->wiggle)
 	    {
 	    slAddTail(&trackList, track);
+	    if (track->wigAscii != (char *)NULL)
+		{
+		if (inWiggle && (wigAsciiFH != (FILE *)NULL))
+		    carefulClose(&wigAsciiFH);
+		wigAsciiFH = mustOpen(track->wigAscii, "w");
+#if defined(DEBUG)	/*	dbg	*/
+		/* allow file readability for debug	*/
+		chmod(track->wigAscii, 0666);
+#endif
+		}
 	    inWiggle = TRUE;
-	    track->wigData = (char *)NULL;
 	    trackDataLineCount = 0;
 	    }
 	else
 	    {
+	    if (inWiggle && (wigAsciiFH != (FILE *)NULL))
+		carefulClose(&wigAsciiFH);
+
 	    slAddTail(&trackList, track);
 	    inWiggle = FALSE;
 	    trackDataLineCount = 0;
 	    }
-	continue;			/* !!! NOTE continue !!!  */
+	continue;			/* !!! next line of data !!!  */
 	}
 
     ++trackDataLineCount;
-    /*	Initial implemention is to simply carry along the wiggle data */
-    if (inWiggle)
+
+    if (inWiggle && (wigAsciiFH != (FILE *)NULL))
 	{
-	struct dyString *wigAscii = newDyString(0);
-	char *format0="%s\n";
-	if (track->wigData)
-		dyStringAppend(wigAscii,track->wigData);
-	dyStringPrintf(wigAscii,format0,line);
-	freeMem(track->wigData);
-	track->wigData = dyStringCannibalize(&wigAscii);
-	continue;
+	fprintf(wigAsciiFH, "%s\n", line);
+	continue;			/* !!! next line of data !!!	*/
 	}
 
     /* Deal with ordinary line.   First make track if one doesn't exist. */
@@ -794,6 +854,12 @@ printf(" wc:%d <BR>\n", wordCount);
 	    track->needsLift = TRUE;
 	slAddHead(&track->bedList, bed);
 	}
+    }	/* end of reading input */
+
+if (inWiggle && (wigAsciiFH != (FILE *)NULL))
+    {
+    carefulClose(&wigAsciiFH);
+    inWiggle = FALSE;
     }
 
 for (track = trackList; track != NULL; track = track->next)
@@ -817,8 +883,12 @@ for (track = trackList; track != NULL; track = track->next)
 	     bed->chromEnd += offset;
 	     }
 	 }
-     sprintf(buf, "bed %d .", track->fieldCount);
-     track->tdb->type = cloneString(buf);
+    if (!track->wiggle)
+	{
+	sprintf(buf, "bed %d .", track->fieldCount);
+	track->tdb->type = cloneString(buf);
+	}
+
      if (track->tdb->priority == 0)
          {
 	 prio += 0.001;
@@ -885,8 +955,23 @@ customText = skipLeadingSpaces(customText);
 
 if (customText != NULL && customText[0] != 0)
     {
+    struct customTrack *theCtList = NULL;
+    struct slName *browserLines = NULL;
     static struct tempName tn;
     makeTempName(&tn, "ct", ".bed");
+
+    if (cgiBooleanDefined("hgt.customAppend") && (fileName != (char *)NULL))
+	{
+	if (!fileExists(fileName))	/* Cope with expired tracks. */
+	    {
+	    fileName = NULL;
+	    cartRemove(cart, "ct");
+	    }
+	else
+	    {
+	    theCtList = customTracksParse(fileName, TRUE, &browserLines);
+	    }
+	}
 
     ctList = customTracksParse(customText, FALSE, retBrowserLines);
     ctFileName = tn.forCgi;
@@ -930,6 +1015,7 @@ if (customTrackNeedsLift(ctList))
 
 if (retCtFileName != NULL)
     *retCtFileName = ctFileName;
+
 return ctList;
 }
 
@@ -954,6 +1040,8 @@ if (tdb->useScore != def->useScore)
     fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
 if (tdb->priority != def->priority)
     fprintf(f, "\t%s='%f'", "priority", tdb->priority);
+if (startsWith("wig", tdb->type))
+    fprintf(f, "\t%s='%s'", "wigType", tdb->type);
 if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
@@ -1012,21 +1100,34 @@ void customTrackSave(struct customTrack *trackList, char *fileName)
 struct customTrack *track;
 struct bed *bed;
 FILE *f = mustOpen(fileName, "w");
+int count = 0;
 
-#if defined(DEBUG)
-    // allow file readability for debug
-    chmod(fileName, 0664);
+#if defined(DEBUG)	/*	dbg	*/
+    /* allow file readability for debug	*/
+    chmod(fileName, 0666);
 #endif
 
 for (track = trackList; track != NULL; track = track->next)
     {
-    saveTdbLine(f, fileName, track->tdb);
     if (track->wiggle)
 	{
-	if (track->wigData)
-	    fprintf(f, "%s", track->wigData);
+	if (track->wigAscii)
+	    {
+	    double upperLimit, lowerLimit;
+	    char buf[128];
+	    wigAsciiToBinary(track->wigAscii, track->wigFile, track->wibFile,
+		&upperLimit, &lowerLimit);
+	    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
+	    sprintf(buf, "wig %g %g", lowerLimit, upperLimit);
+	    freeMem(track->tdb->type);
+	    track->tdb->type = cloneString(buf);
+	    }
 	}
-    else
+
+    saveTdbLine(f, fileName, track->tdb);
+
+
+    if (!track->wiggle)
 	{
 	for (bed = track->bedList; bed != NULL; bed = bed->next)
 	     saveBedPart(f, fileName, bed, track->fieldCount);
