@@ -1,83 +1,161 @@
 join ECgeneName
+"Link together EC gene predicted gene structure and peptide"
     gbd.ECgene.name
     gbd.ECgenePep.name
 
 join geneidName
+"Link together geneid predicted gene structure and peptide"
     gbd.geneid.name
     gbd.geneidPep.name
 
 join genscanName
+"Link together genscan predicted gene structure and peptide"
     gbd.genscan.name
     gbd.genscan.pep
 
 join sgpGeneName
+"Link together sgp predicted gene structure and peptide"
     gbd.sgpGene.name
-    gbd.sgbPep.name
+    gbd.sgpPep.name
 
 join softberryGeneName
+"Link together Fshgene++ gene structure, pepdide, and homolog"
     gbd.softberryGene.name
     gbd.softberryPep.name
     gbd.softberryHom.name
 
+join twinscanName
+"Link together twinscan predicted gene structure and peptide"
+    gbd.twinscan.name
+    gbd.twinscanPep.name
+
+join vegaName
+"Link together various VEGA human curated gene annotation"
+    gbd.vegaInfo.transcriptId
+
+join vegaGeneName typeOf=vegaName
+"Link together VEGA predicted gene structure and peptide"
+    gbd.vegaGene.name
+    gbd.vegaPep.name
+
+join vegaPseudogeneName typeOf=vegaName
+"Link together VEGA pseudogene and other info. */
+    gbd.vegaPseudoGene.name
+
 join affyU95
+"Affymetrix Human U95 chip identifiers"
     human.affyRatio.name
     human.affyRatioNew.name
     human.affyU95.qName
     human.knownToU95.value
 
 join affyU133
+"Affymetrix Human U133 chip identifiers"
     human.knownToU133.value
-
-join affyU133
     human.affyU133.qName
 
 join chainPt0Id
+"Link together chimp pt0 chain info"
     hg16.allChainPt0.id
     hg16.chainPt0.id
     hg16.chainPt0Link.chainId
     hg16.netRxBestPt0.chainId
 
 join chainMm4Id
+"Link together mouse mm4 chain info"
+    gbd.chainMm4.id
+    gbd.chainMm4Link.chainId
     gbd.netMm4.chainId
     gbd.netMm4NonGap.chainId
 
-join chainRn3Id
+join chainRn3
+"Link together rat rn2 chain info"
+    gbd.chainRn3.id
+    gbd.chainRn3Link.chainId
     gbd.netRn3.chainId
 
+join chainSelf
+"Link together self chain info"
+    gbd.chainSelf.id
+    gbd.chainSelfLink.chainId
+
 join bacCloneName 
+"A Roswell Park, Cal Tech or other clone ID"
     gbd.fishClones.name
     gbd.bacEndPairs.name
 
+imageCloneId
+"An image cDNA clone ID"
+    gbd.mgcFullStatus.imageId
+    gbd.imageClone.imageId
+
 join genbankAccession external=genbank
+"Generic Genbank Accession.  More specific Genbank accessions follow"
     gbd.seq.acc
     gbd.gbSeq.acc
+    gbd.stsInfo2.genbank
 
 join bacEndAccession typeOf=genbankAccession
+"Genbank accession of a BAC end read."
     gbd.all_bacends.qName
     gbd.mrna.acc subset
     gbd.bacEndPairs.lfNames comma
     human.fishClones.beNames comma
 
-join stsNames
-    human.fishClones.stsNames comma
+join bacAccession typeOf=genbankAccession
+"Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
 
-imageCloneId
-    gbd.mgcFullStatus.imageId
-    gbd.imageClone.imageId
+join humanBacAccession typeOf=bacAccession
+"Genbank accession of a sequenced human BAC (~150kb of genomic sequence)."
+    human.certificate.accession1
+    human.certificate.accession2
+    human.gl.frag chopAfter=.
+    human.gold.frag chopAfter=.
+    human.clonePos.name chopAfter=.
+    human.fishClones.accNames chopAfter=. comma
+
+join humanBacAccessionVersion typeOf=bacAccession
+"Genbank accession.version of sequence human BAC"
+    human.gl.frag chopAfter=_
+    human.gold.frag
+    human.clonePos.name
+
+join proteinAcc typeOf=genbankAccession
+"Genbank protein accession."
+    gbd.kgProtAlias.alias 
+    gbd.kgXref.protAcc
+    gbd.refLink.protAcc 
 
 join estOrMrnaAccession typeOf=genbankAccession
+"Genbank EST or mRNA accession."
     gbd.mrna.acc subset
     gbd.gbSeq.acc subset
     gbd.gbStatus.acc subset
     gbd.imageClone.acc subset
 
 join estAccession typeOf=estOrMrnaAccession
+"Genbank EST accession"
+
+join nativeEstAccession typeOf=estAccession
+"Genbank Native (same organism as database) EST accession"
     gbd.all_est.qName
     gbd.est.qName
     gbd.intronEst.qName
     gbd.estOrientInfo.name
 
+join xenoEstAccession typeOf=estAccession
+"Genbank xeno (different organism from database) EST accession"
+    gbd.xenoEst.qName
+
 join mrnaAccession typeOf=estOrMrnaAccession
+"Genbank mRNA accession"
+
+join xenoMrnaAccession typeOf=mrnaAccession
+"Genbank xeno (different organism from database) mRNA accession"
+    gbd.xenoMrna.qName
+
+join nativeMrnaAccession typeOf=mrnaAccession
+"Genbank Native (same organism as database) mRNA accession"
     gbd.all_mrna.qName
     gbd.chr*_mrna.qName
     gbd.dupSpMrna.mrnaID
@@ -86,101 +164,14 @@ join mrnaAccession typeOf=estOrMrnaAccession
     gbd.mrnaRefseq.mrna
     gbd.spMrna.mrnaID
 
-join mgcAccession typeOf=mrnaAccession
+join mgcAccession typeOf=nativeMrnaAccession
+"Mammalian Gene Collection Genbank mRNA accession."
     gdb.mgcFullMrna.qName 
     gbd.mgcFullStatus.acc
     gbd.mgcGenes.name
 
-join proteinAcc typeOf=genbankAccession
-    gbd.kgProtAlias.alias 
-    gbd.kgXref.protAcc
-    gbd.refLink.protAcc 
-
-join humanFosmidId
-    human.fosEndPairs.name
-
-join humanFosmidReadId
-    human.all_fosend.qName
-    human.fosEndPairs.lfNames comma
-
-join dbStsId external=dbSts
-    gbd.all_sts_primer.qName prepend=dbSTS_
-    gbd.all_sts_seq.qName
-
-join hugoName external=HUGO
-    human.atlasOncoGene.locusSymbol
-    human.kgAlias.alias subset
-    human.kgXref.geneSymbol
-    human.refFlat.geneName
-    human.refLink.name
-
-join genBankAuthor
-    gbd.mrna.author
-    gbd.author.id
-
-join genBankCds
-    gbd.mrna.cds
-    gbd.cds.id
-
-join genBankCell
-    gbd.mrna.cell
-    gbd.cell.id
-
-join genBankDevelopment
-    gbd.mrna.development
-    gbd.development.id
-
-join genBankDescription
-    gbd.mrna.description
-    gbd.description.id
-    
-join genBankGeneName
-    gbd.mrna.geneName
-    gbd.geneName.id
-    gbd.refLink.geneName
-
-join genBankKeyword
-    gbd.mrna.keyword
-    gbd.keyword.id
-
-join genBankLibrary
-    gbd.mrna.library
-    gbd.library.id
-
-join genBankSource
-    gbd.mrna.source
-    gbd.source.id
-
-join genBankOrganism
-    gbd.mrna.organism
-    gbd.organism.id
-
-join genBankMrnaClone
-    gbd.mrna.mrnaClone
-    gbd.mrnaClone.id
-
-join genBankProductName
-    gbd.mrna.productName
-    gbd.productName.id
-    gbd.refLink.prodName
-
-join genBankSex
-    gbd.mrna.sex
-    sex.id
-
-join genBankTissue
-    gbd.mrna.tissue
-    tissue.id
-
-join bioCycMapId external=BioCyc
-    gbd.bioCycMapDesc.mapID
-    gbd.bioCycPathway.mapID
-
-join keggMapId external=KEGG
-    gbd.keggMapDesc.mapID
-    gbd.keggPathway.mapID
-
 join refSeqId typeOf=mrnaAccession
+"RefSeq mRNA accession"
     gbd.bioCycPathway.geneId
     gbd.cgapAlias.alias
     gbd.imageClone.acc subset
@@ -195,22 +186,8 @@ join refSeqId typeOf=mrnaAccession
     gbd.refSeqStatus.mrnaAcc
     gbd.refSeqSummarry.mrnaAcc
 
-join locusLinkId external=LocusLink
-    gbd.keggPathway.mapID
-    gbd.knownToLocusLink.value
-    gbd.refLink.locusLinkId
-
-join omimId external=OMIM
-    gbd.refLink.omimId
-
-join knownAlignId
-    gbd.knownGene.alignId
-
-join knownClusterId
-    gbd.knownCanonical.clusterId
-    gbd.knownIsoforms.clusterId
-
-join knownGeneId typeOf=mrnaAccession
+join knownGeneId typeOf=nativeMrnaAccession
+"Known Gene ID - the genbank accession of the representative mRNA"
     gbd.bioCycPathway.kgID
     human&mouse.ceBlastTab.query
     human&mouse.dmBlastTab.query
@@ -248,9 +225,152 @@ join knownGeneId typeOf=mrnaAccession
     human.mmBlastTab.query
 
 join mouseKnownGeneId typeOf=knownGeneId
+"A known gene in mouse."
     gbd.mmBlastTab.target
 
+join humanFosmidId
+"Human Fosmid (~50kb genomic sequence) clone"
+    human.fosEndPairs.name
+
+join humanFosmidEndId
+"Identifier of read from one end of human formid."
+    human.all_fosend.qName
+    human.fosEndPairs.lfNames comma
+
+join dbStsId external=dbSts
+"NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
+    gbd.all_sts_primer.qName chopBefore=dbSTS_
+    gbd.all_sts_seq.qName
+    gbd.stsInfo2.dbSTSid
+
+join ucscStsId
+"UCSC STS (Sequenced Tagged Site, aka mapping sequence) ID"
+    gbd.stsAlias.identNo
+    gbd.stsInfo2.identNo
+    gbd.stsMap.indentNo
+
+join stsName
+"STS (Sequenced Tagged Site, aka mapping sequence) Name"
+    human.fishClones.stsNames comma
+    gbd.stsInfo2.otherNames comma
+ 
+join stsTrueName typeOf stsName
+"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
+    gbd.stsAlias.trueName
+    gbd.stsInfo2.name
+    gbd.stsMap.name
+
+join hugoName external=HUGO
+"International Human Gene Identifier"
+    human.atlasOncoGene.locusSymbol
+    human.kgAlias.alias subset
+    human.kgXref.geneSymbol
+    human.refFlat.geneName
+    human.refLink.name
+
+join genBankAuthor
+"Connects genBank mRNA/EST and it's author"
+    gbd.mrna.author
+    gbd.author.id
+
+join genBankCds
+"Connects genBank mRNA/EST and it's coding region (CDS)"
+    gbd.mrna.cds
+    gbd.cds.id
+
+join genBankCell
+"Connects genBank mRNA/EST and the cell type it came from"
+    gbd.mrna.cell
+    gbd.cell.id
+
+join genBankDevelopment
+"Connects genBank mRNA/EST and development stage of the organism it came from"
+    gbd.mrna.development
+    gbd.development.id
+
+join genBankDescription
+"Connects genBank mRNA/EST and descriptive text"
+    gbd.mrna.description
+    gbd.description.id
+    
+join genBankGeneName
+"Connects genBank mRNA/EST and gene name"
+    gbd.mrna.geneName
+    gbd.geneName.id
+    gbd.refLink.geneName
+
+join genBankKeyword
+"Connects genBank mRNA/EST and keyword"
+    gbd.mrna.keyword
+    gbd.keyword.id
+
+join genBankLibrary
+"Connects genBank mRNA/EST and cDNA library"
+    gbd.mrna.library
+    gbd.library.id
+
+join genBankMrnaClone
+"Connects genBank mRNA/EST and cDNA clone name"
+    gbd.mrna.mrnaClone
+    gbd.mrnaClone.id
+
+join genBankOrganism
+"Connects genBank mRNA/EST and organism it came from"
+    gbd.mrna.organism
+    organism.id
+
+join genBankProductName
+"Connects genBank mRNA/EST and protein product name"
+    gbd.mrna.productName
+    gbd.productName.id
+    gbd.refLink.prodName
+
+join genBankSex
+"Connects genBank mRNA/EST and sex mRNA came from"
+    gbd.mrna.sex
+    sex.id
+
+join genBankSource
+"Connects genBank mRNA/EST and source of mRNA"
+    gbd.mrna.source
+    gbd.source.id
+
+join genBankTissue
+"Connects genBank mRNA/EST and tissue mRNA isolated from"
+    gbd.mrna.tissue
+    tissue.id
+
+join bioCycMapId external=BioCyc
+"BioCyc Pathway Map ID"
+    gbd.bioCycMapDesc.mapID
+    gbd.bioCycPathway.mapID
+
+join keggMapId external=KEGG
+"KEGG Pathway Map ID"
+    gbd.keggMapDesc.mapID
+    gbd.keggPathway.mapID
+
+join locusLinkId external=LocusLink
+"NCBI LocusLink ID"
+    gbd.keggPathway.mapID
+    gbd.knownToLocusLink.value
+    gbd.refLink.locusLinkId
+
+join omimId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) ID"
+    gbd.refLink.omimId
+
+join knownAlignId
+"Which (of sometimes multiple) mapping of a known gene"
+    gbd.knownGene.alignId
+
+join knownClusterId
+"ID of a cluster of overlapping known genes"
+    gbd.knownCanonical.clusterId
+    gbd.knownIsoforms.clusterId
+
 join swissProtId external=SwissProt
+"Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
     gbd.dupSpMrna.proteinID
     gbd.dupSpMrna.dupProteinID
     gbd.kgProtAlias.displayID
@@ -260,32 +380,49 @@ join swissProtId external=SwissProt
     gbd.spMrna.spID
 
 join swissProtAccession external=SwissProt
+"SwissProt Accession"
     gbd.kgProtAlias.alias part
     gbd.kgProtMap.qName
     gbd.kgXref.spID
     gbd.pepMwAa.accession
     gbd.pepPi.accession
 
-
 join pfamId external=Pfam
+"Pfam (Protein Family) ID"
     gbd.knownToPfam.value
 
 join superfamilyId external=Superfamily
+"Protein Superfamily ID"
     gbd.knownToSuper.value
     gbd.sfAssign.sfID
     gbd.sfDes.id
 
-
-join wormBaseId
+join wormBaseId external=WormBase
+"WormBase (C. elegans) ORF ID"
     gbd.ceBlastTab.target
 
-join flyBaseId
+join flyBaseId external=FlyBase
+"FlyBase (Drosophila) Gene ID"
     gbd.dmBlastTab.target
 
-join scdId
+join scdId external=SGD
+"Sacchromyces Genome Database ORF ID"
     gbd.scBlastTab.target
 
-join ensemblTranscriptId
+join ensemblGeneId external=Ensembl
+"Ensemble Gene ID"
+    gbd.ensGeneXref.gene_name
+    gbd.ensGtp.gene chopAfter=.
+    gbd.ensTranscript.gene_name
+
+join ensemblProteinId external=Ensembl
+"Ensemble Translated Protein ID"
+    gbd.ensGtp.protein chopAfter=.
+    gbd.ensTranscript.translation_name
+    gbd.sfDescription.proteinID
+
+join ensemblTranscriptId external=Ensembl
+"Ensembl Transcript ID"
     gbd.ensGene.name
     gbd.ensGeneXref.transcript_name
     gbd.ensGtp.transcript chopAfter=.
@@ -294,66 +431,30 @@ join ensemblTranscriptId
     gbd.knownToEnsembl.value
     gbd.sfDescription.name
 
-join ensemblGeneId
-    gbd.ensGeneXref.gene_name
-    gbd.ensGtp.gene chopAfter=.
-    gbd.ensTranscript.gene_name
-
-join ensemblProteinId
-    gbd.ensGtp.protein chopAfter=.
-    gbd.ensTranscript.translation_name
-    gbd.sfDescription.proteinID
-
-join ensemblDanioRerioTranslationId
-    gbd.drBlastTab.target
-
-join humanBacAccession
-    human.certificate.accession1
-    human.certificate.accession2
-    human.gl.frag chopAfter=.
-    human.gold.frag chopAfter=.
-    human.clonePos.name chopAfter=.
-    human.fishClones.accNames chopAfter=. comma
-
-join humanBacAccessionVersion
-    human.gl.frag chopAfter=_
-    human.gold.frag
-    human.clonePos.name
-
 join cgapId
+"NCI Cancer Genome Annotation Project Gene ID"
     gbd.cgapAlias.cgapID
     gbd.cgapBiocPathway.cgapID
 
 join cgapMapId
+"NCI Cancer Genome Annotation Project Map ID"
     gbd.cgapBioDesc.mapID
     gbd.cgapBiocPathway.mapID
 
-join chainMm4Id
-    gbd.chainMm4.id
-    gbd.chainMm4.chainId
-
-join chainRn3
-    gbd.chainRn3.id
-    gbd.chainRn3Link.chainId
-
-join chainSelf
-    gbd.chainSelf.id
-    gbd.chainSelfLink.chainId
-
 join dbSnpId external=dbSNP
+"NCBI dbSNP ID"
     gbd.knownToCdsSnp.value
     gbd.snpMap.name
     gbd.snpNih.name
     gbd.snpTsc.name
 
-join nci60Id
-    human.nci60.name
-
 join unigeneId
+"NCBI UniGene Cluster ID"
     gbd.sage.uni
-    gbd.unigene_2.name chopBefore=.
+    gbd.uniGene_2.name chopBefore=.
 
 join sageExpId
+"Sage experiment (tissue type etc) ID"
     gbd.sageExp.num
     gbd.sage.exps comma
 
