@@ -57,7 +57,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm3
 
-t@hgwdev:~/makeDb/trackDb/human/hg15> more ../hg13/trackDb.ra 
 track syntenyMouse
 shortLabel Mouse Synteny
 longLabel Human/Mouse Synteny using blastz single coverage (100k window)

@@ -480,6 +480,38 @@ slReverse(&list);
 return list;
 }
 
+char *hExtFileName(char *extFileTable, unsigned extFileId)
+/* Get external file name from table and ID.  Typically
+ * extFile table will be 'extFile' or 'gbExtFile'
+ * Abort if the id is not in the table or if the file
+ * fails size check.  Please freeMem the result when you 
+ * are done with it. */
+{
+struct sqlConnection *conn = hgAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+long long dbSize, diskSize;
+char *path;
+
+safef(query, sizeof(query), 
+	"select path,size from %s where id = %u", extFileTable, extFileId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Database inconsistency - no external file with id %lu", extFileId);
+path = cloneString(row[0]);
+dbSize = sqlLongLong(row[1]);
+diskSize = fileSize(path);
+if (dbSize != diskSize)
+    {
+    errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", 
+    	path, dbSize, diskSize);
+    }
+sqlFreeResult(&sr);
+hgFreeConn(&conn);
+return path;
+}
+
 /* Constants for selecting seq/extFile or gbSeq/gbExtFile */
 #define SEQ_TBL_SET   1
 #define GBSEQ_TBL_SET 2
@@ -498,11 +530,12 @@ struct largeSeqFile
 
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
-static struct largeSeqFile *largeFileHandle(HGID extId,
-                                            int seqTblSet)
+
+static struct largeSeqFile *largeFileHandle(HGID extId, int seqTblSet)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
+char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
 
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
@@ -514,33 +547,13 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
 /* Open file and put it on list. */
     {
     struct largeSeqFile *lsf;
-    struct sqlConnection *conn = hgAllocConn();
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    off_t size;
-    char *path;
-
-    /* Query database to find full path name and size file should be. */
-    sprintf(query, "select path,size from %s where id=%u", 
-            ((seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile"), extId);
-    sr = sqlGetResult(conn,query);
-    if ((row = sqlNextRow(sr)) == NULL)
-        errAbort("Database inconsistency - no external file with id %lu", extId);
-
-    /* Save info on list. Check that file size is what we think it should be. */
     AllocVar(lsf);
-    lsf->path = path = cloneString(row[0]);
-    size = sqlLongLong(row[1]);
-    if (fileSize(path) != size)
-        errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", path, size, fileSize(path));
+    lsf->path = hExtFileName(extTable, extId);
     lsf->seqTblSet = seqTblSet;
     lsf->id = extId;
-    if ((lsf->fd = open(path, O_RDONLY)) < 0)
-        errAbort("Couldn't open external file %s", path);
+    if ((lsf->fd = open(lsf->path, O_RDONLY)) < 0)
+        errAbort("Couldn't open external file %s", lsf->path);
     slAddHead(&largeFileList, lsf);
-    sqlFreeResult(&sr);
-    hgFreeConn(&conn);
     return lsf;
     }
 }

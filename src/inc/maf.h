@@ -2,6 +2,10 @@
 #ifndef MAF_H
 #define MAF_H
 
+#ifndef AXT_H
+#include "axt.h"
+#endif
+
 struct mafFile
 /* A file full of multiple alignments. */
     {

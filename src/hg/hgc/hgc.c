@@ -100,6 +100,7 @@
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
 #include "vegaInfo.h"
+#include "mafRef.h"
 #include "hgc.h"
 
 
@@ -10394,6 +10395,67 @@ hFreeConn(&conn);
 webEnd();
 }
 
+
+struct lineFile *openExtLineFile(unsigned int extFileId)
+/* Open line file corresponding to id in extFile table. */
+{
+char *path = hExtFileName("extFile", extFileId);
+struct lineFile *lf = lineFileOpen(path, TRUE);
+freeMem(path);
+return lf;
+}
+
+void doHmrConservation(struct trackDb *tdb, char *item)
+/* Details page for human/mouse/rat alignments. */
+{
+int winWidth = winEnd - winStart;
+
+cartWebStart(cart, "%s", tdb->longLabel);
+
+uglyf("This page shows human/mouse/rat alignments on %s:%d-%d in %s<BR>",
+   seqName, winStart, winEnd, database);
+if (winWidth > 100000)
+    {
+    printf("Zoom so that window is 100000 bases or less to see base-by-base alignments\n");
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn();
+    int rowOffset;
+    struct sqlResult *sr = hRangeQuery(conn, "multizMm3Rn2", seqName, 
+    	winStart, winEnd, NULL, &rowOffset);
+    char **row;
+    unsigned int extFileId = 0;
+    struct lineFile *lf = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct mafRef mr;
+	mafRefStaticLoad(row + rowOffset, &mr);
+	if (mr.extFile != extFileId)
+	    {
+	    lineFileClose(&lf);
+	    lf = openExtLineFile(mr.extFile);
+	    extFileId = mr.extFile;
+	    }
+	lineFileSeek(lf, mr.offset, SEEK_SET);
+	printf("<TT><PRE>");
+	for (;;)
+	    {
+	    char *line;
+	    if (!lineFileNext(lf, &line, NULL))
+	        break;
+	    printf("%s\n", line);
+	    if (line[0] == 0)
+	        break;
+	    }
+	printf("</PRE></TT>");
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+webEnd();
+}
+
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings.
  */
@@ -11188,9 +11250,12 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
+else if (sameWord(track, "HMRConservation"))
+    {
+    doHmrConservation(tdb, item);
+    }
 
-
-/*Ewan's stuff*/
+/*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
     {
     doGenomicSuperDups(tdb, item);

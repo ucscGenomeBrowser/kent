@@ -2577,3 +2577,22 @@ CREATING THE humMusL SAMPLE TRACK (a.k.a WIGGLE TRACK)
 o - refer to the script at src/hg/sampleTracks/makeHg13Mm2.doc
 
 
+#MAKING 
+        foreach d ( ?{,?}/NT_* )
+
+CREATING HUMAN/MOUSE/RAT ALIGNMENTS AND LOADING INTO DATABASE
+
+# Create /cluster/store5/multiz.hmr.2 by editing and running
+# the script src/hg/mouseStuff/stageMultiz/stage.csh on the file server.
+# Note, you may have to insert change the cat line near the end line to
+# include the flags
+        -tolerate -minScore=0
+# if Webb hasn't fixed multiz by the time you read this.
+# 
+# Next link the maf files into /gbdb as so
+     ssh hgwdev
+     cd /gbdb/hg13
+     mkdir multizMm3Rn2
+     ln -s /cluster/store5/multiz.hmr.2/hmr/*.maf multizMm3Rn2
+# Now load the database
+     hgLoadMaf hg13 multizMm3Rn2

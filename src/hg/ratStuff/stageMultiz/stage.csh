@@ -77,4 +77,16 @@ endGsub
 #Run parasol on the little cluster
  ssh kkr1u00 "cd $hmr/run1; para make spec"
  
+#Concatenate the output into one file per chromosome
+cd $hmr
+mkdir hmr
+foreach c (chr?{,?} chr*_random)
+    mafFilter $c/$c.?{,??????,???????,????????}/hmr.maf > hmr/$c.maf
+    echo done $c
+end
+
+#Clean up
+rm -r chr?{,?} chr*_random
+
+   
 

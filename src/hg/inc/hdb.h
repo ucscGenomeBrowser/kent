@@ -178,6 +178,13 @@ void hNibForChrom(char *chromName, char retNibName[512]);
 struct slName *hAllChromNames();
 /* Get list of all chromosomes. */
 
+char *hExtFileName(char *extFileTable, unsigned extFileId);
+/* Get external file name from table and ID.  Typically
+ * extFile table will be 'extFile' or 'gbExtFile'
+ * Abort if the id is not in the table or if the file
+ * fails size check.  Please freeMem the result when you 
+ * are done with it. */
+
 char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
 /* Return sequence as a fasta record in a string and it's database ID, or 
  * NULL if not found. */
