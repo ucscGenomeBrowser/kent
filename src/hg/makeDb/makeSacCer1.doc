@@ -49,12 +49,6 @@ exit; # don't actually run this like a script :)
     checkSgdSync download
     # This showed 5 of 5788 with no ATG.  I sent these to Mike Cherry.
 
-#Make dummy gap files
-#    cd /cluster/data/sacCer1
-#    foreach c (?{,?})
-#        echo -n "" > $c/chr$c.gap
-#    end
-
 # CREATING DATABASE, MAKE AND LOAD NIBS (DONE 2003-11-24 - Jim)
 # NOTE FOR YEAST WE DO NOT REPEAT MASK SEQUENCE.
     ssh hgwdev
@@ -157,7 +151,7 @@ exit; # don't actually run this like a script :)
           insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
       | hgsql -h genome-testdb hgcentraltest
 
-# CREATING SGD-BASED KNOWN GENES (DONE 2003-11-25 Jim)
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE 2003-12-02 Jim)
 # Note initially the s_cerevisiae.gff3 file ended up being out of
 # sync with the genome. Mike Cherry (cherry@genome.stanford.edu)
 # regenerated it.  The format may end up changing in the future though.
@@ -172,6 +166,16 @@ exit; # don't actually run this like a script :)
     zcat ../../download/orf_protein/*.fasta.gz \
         | hgSgdPep -restrict=genePred.tab stdin sgdPep.fa symbol.txt
     hgPepPred sacCer1 generic sgdPep sgdPep.fa
+    echo 'create table sgdToName ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));' | hgsql sacCer1
+    echo 'load data local infile "symbol.txt" \
+          into table sgdToName;' | hgsql sacCer1
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/sgdDescription.sql
+    echo 'load data local infile "notes.txt" \
+          into table sgdDescription;' | hgsql sacCer1
 
 # ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE 2003-11-25 Jim)
     ssh hgwdev
