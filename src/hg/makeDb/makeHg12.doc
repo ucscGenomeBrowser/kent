@@ -1,4 +1,4 @@
-eThis file describes how we made the browser database on 
+This file describes how we made the browser database on 
 NCBI build 30 (July, 2002 freeze)
 
 [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
@@ -505,19 +505,18 @@ TODO:
 o - Add RefSeq status info 
     hgRefSeqStatus hg12 loc2ref
 
-TODO:
 o - Add Jackson labs info
      cd ~/oo/bed
      mkdir jaxOrtholog
      cd jaxOrtholog
-     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
+     wget ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
      cp /cluster/store1/gs.12/build29/bed/jaxOrtholog/filter.awk .
      awk -f filter.awk *.rpt > jaxOrtholog.tab
-    Load this into mysql with something like:
+    Drop (just in case), create and load the table like this:
+     echo 'drop table jaxOrtholog;' | hgsql hg12
      hgsql hg12 < ~/src/hg/lib/jaxOrtholog.sql
-     hgsql -A hg12
-    and at the mysql> prompt
-     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+     echo "load data local infile '"`pwd`"/jaxOrtholog.tab' into table jaxOrtholog;" \
+       | hgsql hg12
 
 
 SIMPLE REPEAT TRACK (DONE)
@@ -1388,23 +1387,43 @@ LOAD SANGER22 GENES
       hgPepPred hg12 generic sanger22pep *.pep
 
 LOAD SANGER 20 GENES (todo)
-     First download files from James Gilbert's email to ~/oo/bed/sanger20 and
-     go to that directory while logged onto hgwdev.  Then:
+     # First download files from James Gilbert's email to ~/oo/bed/sanger20 and
+     # go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene hg12 sanger20 stdin
 	hgSanger20 hg12 *.gtf *.info
 
 
-LOAD RNAGENES (todo)
-      - login to hgwdev
-      - cd ~kent/src/hg/lib
-      - hg12 < rnaGene.sql
-      - cd /cluster/store1/gs.13/build30/bed
-      - mkdir rnaGene
-      - cd rnaGene
-      - download data from ftp.genetics.wustl.edu/pub/eddy/pickup/ncrna-oo27.gff.gz
-      - gunzip *.gz
-      - liftUp chrom.gff ../../jkStuff/liftAll.lft carry ncrna-oo27.gff
-      - hgRnaGenes hg12 chrom.gff
+LOAD RNAGENES (DONE 9/10/02)
+      ssh hgwdev
+      mkdir -p ~/hg12/bed/rnaGene
+      cd ~/hg12/bed/rnaGene
+      wget ftp://ftp.genetics.wustl.edu/pub/eddy/pickup/ncRNA-chr7-20020621.gff.gz
+      gunzip -c ncRNA-chr7-20020621.gff.gz \
+        | grep -v "^#" \
+        | perl -wpe 's/chrom(\d+)\.\w+\.fsa/chr$1/' \
+        > chr7_ncrna.gff
+
+      # NOTE: just for build30, chr7 NCBI coords differ slightly from 
+      # chr7 WUSTL coords.  LaDeana Hillier's instructions for translation:
+# ours                            ncbi  build30
+# ----                            -------------
+# 1->16379450             =       1->16379450
+# nothing                 =   16379451 to 16379650  (because ncbi bp 16379451 
+#                        to 16379650 are identical to ncbi 16379651  16379850)
+# 16379451->157432593     = 16379651 -> 157432793
+      # The following fix should not be required for future builds!
+      perl -we 'while (<>) { \
+                  @words = split("\t"); \
+                  if ($words[3] > 16379450) { $words[3] += 200; } \
+                  if ($words[4] > 16379450) { $words[4] += 200; } \
+                  print join("\t", @words); \
+                } \
+               ' chr7_ncrna.gff \
+        > chr7_ncrna-fixed.gff
+
+      echo 'drop table hgRnaGene;' | hgsql hg12
+      hgsql hg12 < ~/kent/src/hg/lib/rnaGene.sql
+      hgRnaGenes hg12 chr7_ncrna-fixed.gff
 
 LOAD EXOFISH (todo)
      - login to hgwdev
@@ -1799,6 +1818,7 @@ TWINSCAN GENE PREDICTIONS (DONE 8/22/02)
         chr$c.ptx > chr$c-fixed.fa
     end
     hgPepPred hg12 generic twinscanPep chr*-fixed.fa
+
 
 MAKING THE DOWNLOADABLE DATABASE FILES - TODO
 
