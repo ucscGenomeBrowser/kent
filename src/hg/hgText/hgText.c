@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.133 2004/04/06 19:08:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.134 2004/04/12 06:05:32 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -488,13 +488,13 @@ if (table0 != NULL && strcmp(table0, "Choose table") == 0)
 if (table1 != NULL && strcmp(table1, "Choose table") == 0)
     table1 = NULL;
 
-if (table != NULL)
+if (isNotEmpty(table))
     return table;
-else if (track != NULL)
+else if (isNotEmpty(track))
     return track;
-else if (ct != NULL)
+else if (isNotEmpty(ct))
     return ct;
-else if (table0 != NULL)
+else if (isNotEmpty(table0))
     return table0;
 else
     return table1;
@@ -548,9 +548,9 @@ if (ct != NULL && sameString(ct, "Choose table"))
     ct = NULL;
 if ((table2 != NULL) && sameString(table2, "Choose table"))
     table2 = NULL;
-if (track != NULL)
+if (isNotEmpty(track))
     return track;
-else if (ct != NULL)
+else if (isNotEmpty(ct))
     return ct;
 else
     return table2;
