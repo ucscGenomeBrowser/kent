@@ -31,16 +31,27 @@ struct blatServerTable
 };
 
 struct hTableInfo
-/* Some info to track table. */
+/* Some info on a track table, extracted from its field names. */
     {
     struct hTableInfo *next;	/* Next in list. */
     char *rootName;		/* Name without chrN_. */
     boolean isPos;		/* True if table is positional. */
     boolean isSplit;		/* True if table is split. */
     boolean hasBin;		/* True if table starts with field. */
-    char chromField[32];		/* Name of chromosome field. */
-    char startField[32];		/* Name of chromosome start field. */
+    char chromField[32];	/* Name of chromosome field. */
+    char startField[32];	/* Name of chromosome start field. */
     char endField[32];		/* Name of chromosome end field. */
+    char nameField[32];		/* Name of item name field. */
+    char scoreField[32];	/* Name of score field. */
+    char strandField[32];	/* Name of strand field. */
+    char cdsStartField[32];	/* Name of cds(thick)Start field. */
+    char cdsEndField[32];	/* Name of cds(thick)End field. */
+    char countField[32];	/* Name of exon(block)Count field. */
+    char startsField[32];	/* Name of exon(block)Starts field. */
+    char endsSizesField[32];	/* Name of exon(block)Ends(Sizes) field. */
+    boolean hasCDS;		/* True if it has cdsStart,cdsEnd fields. */
+    boolean hasBlocks;		/* True if it has count,starts,endsSizes. */
+    char *type;			/* A guess at the trackDb type for this. */
     };
 
 void hDefaultConnect();
@@ -105,6 +116,10 @@ boolean hTableExists(char *table);
 boolean hTableExists2(char *table);
 /* Return TRUE if a table exists in secondary database. */
 
+void hParseTableName(char *table, char trackName[128], char chrom[32]);
+/* Parse an actual table name like "chr17_random_blastzWhatever" into 
+ * the track name (blastzWhatever) and chrom (chr17_random). */
+
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
@@ -146,6 +161,16 @@ struct dnaSeq *hExtSeq(char *acc);
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */
 
+struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
+			 int chromEnd, char *sqlConstraints);
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
+   in the given range in table. */
+
+struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
+			   int chromEnd, char *sqlConstraints);
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
+   in the given range in table. */
+
 struct hash *hCtgPosHash();
 /* Return hash of ctgPos from current database keyed by contig name. */
 
@@ -183,6 +208,9 @@ struct trackDb *hTrackDb(char *chrom);
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 /* Find table information.  Return NULL if no table. */
 
+struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName);
+/* Find table information in specified db.  Return NULL if no table. */
+
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
@@ -199,43 +227,6 @@ boolean hFindFieldsAndBin(char *table,
 	boolean *retBinned);
 /* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
-
-boolean hFindBed6Fields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32]);
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand.  Name and strand may be "". */
-
-boolean hFindBed6FieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32]);
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand.  Name and strand may be "". */
-
-boolean hFindBed6FieldsAndBin(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
-	boolean *retBinned);
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand, and whether it's binned.  Name and strand may be "". */
-
-boolean hFindGenePredFields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32]);
-/* Given a table return the fields corresponding to all the genePred 
- * fields, if they exist.  Fields that don't exist in the given table 
- * will be set to "". */
-
-boolean hFindGenePredFieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32]);
-/* Given a table return the fields corresponding to all the genePred 
- * fields, if they exist.  Fields that don't exist in the given table 
- * will be set to "". */
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);

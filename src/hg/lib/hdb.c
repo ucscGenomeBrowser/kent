@@ -19,6 +19,7 @@
 #include "axtInfo.h"
 #include "subText.h"
 #include "blatServers.h"
+#include "bed.h"
 
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
@@ -205,6 +206,35 @@ struct sqlConnection *conn = hAllocConn2();
 boolean exists = sqlTableExists(conn, table);
 hFreeConn2(&conn);
 return exists;
+}
+
+
+void hParseTableName(char *table, char trackName[128], char chrom[32])
+/* Parse an actual table name like "chr17_random_blastzWhatever" into 
+ * the track name (blastzWhatever) and chrom (chr17_random). */
+{
+char *ptr;
+
+/* It might not be a split table; provide defaults: */
+strncpy(trackName, table, 128);
+strcpy(chrom, "chr1");
+if (startsWith("chr", table))
+    {
+    if ((ptr = strstr(table, "_random_")) != NULL)
+	{
+	strncpy(trackName, ptr+strlen("_random_"), 128);
+	strncpy(chrom, table, 32);
+	if ((ptr = strstr(chrom, "_random")) != NULL)
+	    *(ptr+strlen("_random")) = 0;
+	}
+    else if ((ptr = strchr(table, '_')) != NULL)
+	{
+	strncpy(trackName, ptr+1, 128);
+	strncpy(chrom, table, 32);
+	if ((ptr = strchr(chrom, '_')) != NULL)
+	    *ptr = 0;
+	}
+    }
 }
 
 
@@ -474,6 +504,188 @@ struct dnaSeq *hRnaSeq(char *acc)
 return hExtSeq(acc);
 }
 
+struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
+			   int chromEnd, char *sqlConstraints)
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
+   in the given range in table. */
+{
+struct dyString *query = newDyString(512);
+struct sqlConnection *conn;
+struct sqlResult *sr;
+struct hTableInfo *hti;
+struct bed *bedList=NULL, *bedItem;
+char **row;
+char itemName[128];
+char parsedChrom[32];
+char rootName[256];
+char fullTableName[256];
+char rangeStr[32];
+int count;
+boolean canDoUTR, canDoIntrons;
+boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
+int i;
+
+/* Caller can give us either a full table name or root table name. */
+hParseTableName(table, rootName, parsedChrom);
+hti = hFindTableInfoDb(db, chrom, rootName);
+if (hti == NULL)
+    errAbort("Error", "Could not find table info for table %s (%s)",
+	     rootName, table);
+if (hti->isSplit)
+    snprintf(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
+else
+    strncpy(fullTableName, rootName, sizeof(fullTableName));
+canDoUTR = hti->hasCDS;
+canDoIntrons = hti->hasBlocks;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
+dyStringClear(query);
+// row[0], row[1] -> start, end
+dyStringPrintf(query, "SELECT %s,%s", hti->startField, hti->endField);
+// row[2] -> name or placeholder
+if (hti->nameField[0] != 0)
+    dyStringPrintf(query, ",%s", hti->nameField);
+else
+    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+// row[3] -> score or placeholder
+if (hti->scoreField[0] != 0)
+    dyStringPrintf(query, ",%s", hti->scoreField);
+else
+    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+// row[4] -> strand or placeholder
+if (hti->strandField[0] != 0)
+    dyStringPrintf(query, ",%s", hti->strandField);
+else
+    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
+// row[5], row[6] -> cdsStart, cdsEnd or placeholders
+if (hti->cdsStartField[0] != 0)
+    {
+    dyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
+    }
+else
+    dyStringPrintf(query, ",%s,%s", hti->startField, hti->startField);  // keep the same #fields!
+// row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
+if (hti->countField[0] != 0)
+    {
+    dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField, hti->endsSizesField);
+    }
+dyStringPrintf(query, " FROM %s WHERE %s < %d AND %s > %d",
+	       fullTableName,
+	       hti->startField, chromEnd, hti->endField, chromStart);
+if (hti->chromField[0] != 0)
+    dyStringPrintf(query, " AND %s = '%s'", hti->chromField, chrom);
+if (useSqlConstraints)
+    dyStringPrintf(query, " AND %s", sqlConstraints);
+
+sr = sqlGetResult(conn, query->string);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(bedItem);
+    bedItem->chrom      = cloneString(chrom);
+    bedItem->chromStart = atoi(row[0]);
+    bedItem->chromEnd   = atoi(row[1]);
+    if (hti->nameField[0] != 0)
+	bedItem->name   = cloneString(row[2]);
+    else
+	{
+	snprintf(rangeStr, sizeof(rangeStr), "%s:%d-%d", chrom,
+		 bedItem->chromStart,  bedItem->chromEnd);
+	bedItem->name   = cloneString(rangeStr);
+	}
+    if (hti->scoreField[0] != 0)
+	bedItem->score  = atoi(row[3]);
+    else
+	bedItem->score  = 0;
+    if (hti->strandField[0] != 0)
+	strncpy(bedItem->strand, row[4], 2);
+    else
+	strcpy(bedItem->strand, "?");
+    if (canDoUTR)
+	{
+	bedItem->thickStart = atoi(row[5]);
+	bedItem->thickEnd   = atoi(row[6]);
+	/* thickStart, thickEnd fields are sometimes used for other-organism 
+	   coords (e.g. synteny100000, syntenyBuild30).  So if they look 
+	   completely wrong, fake them out to start/end.  */
+	if (bedItem->thickStart < bedItem->chromStart)
+	    bedItem->thickStart = bedItem->chromStart;
+	else if (bedItem->thickStart > bedItem->chromEnd)
+	    bedItem->thickStart = bedItem->chromStart;
+	if (bedItem->thickEnd < bedItem->chromStart)
+	    bedItem->thickEnd = bedItem->chromEnd;
+	else if (bedItem->thickEnd > bedItem->chromEnd)
+	    bedItem->thickEnd = bedItem->chromEnd;
+	}
+    else
+	{
+	bedItem->thickStart = bedItem->chromStart;
+	bedItem->thickEnd   = bedItem->chromEnd;
+	}
+    if (canDoIntrons)
+	{
+	bedItem->blockCount = atoi(row[7]);
+	sqlSignedDynamicArray(row[8], &bedItem->chromStarts, &count);
+	assert(count == bedItem->blockCount);
+	sqlSignedDynamicArray(row[9], &bedItem->blockSizes, &count);
+	assert(count == bedItem->blockCount);
+	if (sameString("exonEnds", hti->endsSizesField))
+	    {
+	    // genePred: translate ends to sizes
+	    for (i=0;  i < bedItem->blockCount;  i++)
+		{
+		bedItem->blockSizes[i] -= bedItem->chromStarts[i];
+		}
+	    }
+	if (! (sameString("chromStarts", hti->startsField) ||
+	       sameString("blockStarts", hti->startsField)) )
+	    {
+	    // non-bed: translate absolute starts to relative starts
+	    for (i=0;  i < bedItem->blockCount;  i++)
+		{
+		bedItem->chromStarts[i] -= bedItem->chromStart;
+		}
+	    }
+	}
+    else
+	{
+	bedItem->blockCount  = 0;
+	bedItem->chromStarts = NULL;
+	bedItem->blockSizes  = NULL;
+	}
+    if (hti->strandField[0] == 0)
+	strcpy(bedItem->strand, "?");
+    slAddHead(&bedList, bedItem);
+    }
+dyStringFree(&query);
+sqlFreeResult(&sr);
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+slReverse(&bedList);
+return(bedList);
+}
+
+
+struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
+			 int chromEnd, char *sqlConstraints)
+/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
+   in the given range in table. */
+{
+return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
+		      sqlConstraints));
+}
+
+
 static char *hFreezeDbConversion(char *database, char *freeze)
 /* Find freeze given database or vice versa.  Pass in NULL
  * for parameter that is unknown and it will be returned
@@ -705,13 +917,13 @@ return binned;
 }
 
 
-boolean hFindGenePredFieldsAndBinDb(char *db, char *table, 
+boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
+	char retName[32], char retScore[32], char retStrand[32],
         char retCdsStart[32], char retCdsEnd[32],
 	char retCount[32], char retStarts[32], char retEndsSizes[32],
         boolean *retBinned)
-/* Given a table return the fields corresponding to all the genePred 
+/* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
 {
@@ -747,6 +959,7 @@ sqlFreeResult(&sr);
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "name", retName);
+    fitField(hash, "score", retScore);
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
     fitField(hash, "thickEnd", retCdsEnd);
@@ -760,6 +973,7 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "qName", retName);
     fitField(hash, "strand", retStrand);
+    retScore[0] = 0;
     retCdsStart[0] = 0;
     retCdsEnd[0] = 0;
     fitField(hash, "blockCount", retCount);
@@ -769,8 +983,9 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "geneName", retName) ||
+    fitField(hash, "geneName", retName) ||  // tweak for refFlat type
 	fitField(hash, "name", retName);
+    fitField(hash, "score", retScore);      // some variants might have it...
     fitField(hash, "strand", retStrand);
     fitField(hash, "cdsStart", retCdsStart);
     fitField(hash, "cdsEnd", retCdsEnd);
@@ -782,6 +997,7 @@ else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "repName", retName);
+    fitField(hash, "swScore", retScore);
     fitField(hash, "strand", retStrand);
     retCdsStart[0] = 0;
     retCdsEnd[0] = 0;
@@ -796,6 +1012,7 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
     strcpy(retEnd, "end");
     fitField(hash, "frag", retName);
     fitField(hash, "strand", retStrand);
+    retScore[0] = 0;
     retCdsStart[0] = 0;
     retCdsEnd[0] = 0;
     retCount[0] = 0;
@@ -813,94 +1030,41 @@ else
 return gotIt;
 }
 
-boolean hFindGenePredFieldsDb(char *db, char *table, 
+
+boolean hFindBed12Fields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
+	char retName[32], char retScore[32], char retStrand[32],
         char retCdsStart[32], char retCdsEnd[32],
 	char retCount[32], char retStarts[32], char retEndsSizes[32])
-/* Given a table return the fields corresponding to all the genePred 
+/* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
 {
 boolean isBinned;
-return hFindGenePredFieldsAndBinDb(db, table,
-				   retChrom, retStart, retEnd,
-				   retName, retStrand,
-				   retCdsStart, retCdsEnd,
-				   retCount, retStarts, retEndsSizes,
-				   &isBinned);
+return hFindBed12FieldsAndBinDb(hGetDb(), table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				&isBinned);
 }
 
-boolean hFindGenePredFields(char *table, 
+boolean hFindBed12FieldsDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
+	char retName[32], char retScore[32], char retStrand[32],
         char retCdsStart[32], char retCdsEnd[32],
 	char retCount[32], char retStarts[32], char retEndsSizes[32])
-/* Given a table return the fields corresponding to all the genePred 
+/* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
 {
 boolean isBinned;
-return hFindGenePredFieldsAndBinDb(hGetDb(), table,
-				   retChrom, retStart, retEnd,
-				   retName, retStrand,
-				   retCdsStart, retCdsEnd,
-				   retCount, retStarts, retEndsSizes,
-				   &isBinned);
-}
-
-boolean hFindBed6FieldsAndBinDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
-	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand, and whether it's binned.  Name and strand may be "". */
-{
-char retCdsStart[32];
-char retCdsEnd[32];
-char retCount[32];
-char retStarts[32];
-char retEndsSizes[32];
-return hFindGenePredFieldsAndBinDb(db, table,
-				   retChrom, retStart, retEnd,
-				   retName, retStrand,
-				   retCdsStart, retCdsEnd,
-				   retCount, retStarts, retEndsSizes,
-				   retBinned);
-}
-
-boolean hFindBed6FieldsAndBin(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32],
-	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand, and whether it's binned.  Name and strand may be "". */
-{
-return hFindBed6FieldsAndBinDb(hGetDb(),
-			       table, retChrom, retStart, retEnd,
-			       retName, retStrand, retBinned);
-}
-
-boolean hFindBed6Fields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32])
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand.  Name and strand may be "". */
-{
-boolean isBinned;
-return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
-			     retStrand, &isBinned);
-}
-
-boolean hFindBed6FieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retStrand[32])
-/* Given a table return the fields for selecting chromosome, start, end,
- * name, strand.  Name and strand may be "". */
-{
-boolean isBinned;
-return hFindBed6FieldsAndBinDb(db, table, retChrom, retStart, retEnd,
-			       retName, retStrand, &isBinned);
+return hFindBed12FieldsAndBinDb(db, table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				&isBinned);
 }
 
 boolean hFindFieldsAndBin(char *table, 
@@ -909,19 +1073,41 @@ boolean hFindFieldsAndBin(char *table,
 /* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
 {
-char retName[32], retStrand[32];
-return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
-			     retStrand, retBinned);
+char retName[32];
+char retScore[32];
+char retStrand[32];
+char retCdsStart[32];
+char retCdsEnd[32];
+char retCount[32];
+char retStarts[32];
+char retEndsSizes[32];
+return hFindBed12FieldsAndBinDb(hGetDb(), table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				retBinned);
 }
 
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
+char retName[32];
+char retScore[32];
+char retStrand[32];
+char retCdsStart[32];
+char retCdsEnd[32];
+char retCount[32];
+char retStarts[32];
+char retEndsSizes[32];
 boolean isBinned;
-char retName[32], retStrand[32];
-return hFindBed6FieldsAndBin(table, retChrom, retStart, retEnd, retName,
-			     retStrand, &isBinned);
+return hFindBed12FieldsAndBinDb(hGetDb(), table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				&isBinned);
 }
 
 
@@ -929,14 +1115,25 @@ boolean hFindChromStartEndFieldsDb(char *db, char *table,
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
+char retName[32];
+char retScore[32];
+char retStrand[32];
+char retCdsStart[32];
+char retCdsEnd[32];
+char retCount[32];
+char retStarts[32];
+char retEndsSizes[32];
 boolean isBinned;
-char retName[32], retStrand[32];
-return hFindBed6FieldsAndBinDb(db, table, retChrom, retStart, retEnd,
-			       retName, retStrand, &isBinned);
+return hFindBed12FieldsAndBinDb(db, table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				&isBinned);
 }
 
 
-struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
+struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
 {
 static struct hash *hash;
@@ -945,7 +1142,7 @@ char fullName[64];
 boolean isSplit = FALSE;
 
 if (chrom == NULL)
-    chrom = "chr22";
+    chrom = "chr1";
 if (hash == NULL)
     hash = newHash(7);
 if ((hti = hashFindVal(hash, rootName)) == NULL)
@@ -962,10 +1159,45 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
     hti->isSplit = isSplit;
-    hti->isPos = hFindFieldsAndBin(fullName, hti->chromField,
-        hti->startField, hti->endField, &hti->hasBin);
+    hti->isPos = hFindBed12FieldsAndBinDb(db, fullName,
+	hti->chromField, hti->startField, hti->endField,
+	hti->nameField, hti->scoreField, hti->strandField,
+	hti->cdsStartField, hti->cdsEndField,
+	hti->countField, hti->startsField, hti->endsSizesField,
+	&hti->hasBin);
+    hti->hasCDS = (hti->cdsStartField[0] != 0);
+    hti->hasBlocks = (hti->startsField[0] != 0);
+    if (hti->isPos)
+	{
+	if (sameString(hti->startsField, "exonStarts"))
+	    hti->type = cloneString("genePred");
+	else if (sameString(hti->startsField, "chromStarts") ||
+		 sameString(hti->startsField, "blockStarts"))
+	    hti->type = cloneString("bed 12");
+	else if (sameString(hti->startsField, "tStarts"))
+	    hti->type = cloneString("psl");
+	else if (hti->cdsStartField[0] != 0)
+	    hti->type = cloneString("bed 8");
+	else if (hti->strandField[0] !=0  &&  hti->chromField[0] == 0)
+	    hti->type = cloneString("gl");
+	else if (hti->strandField[0] !=0)
+	    hti->type = cloneString("bed 6");
+	else if (hti->nameField[0] !=0)
+	    hti->type = cloneString("bed 4");
+	else
+	    hti->type = cloneString("bed 3");
+	}
+    else
+	hti->type = NULL;
     }
 return hti;
+}
+
+
+struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
+/* Find table information.  Return NULL if no table. */
+{
+return hFindTableInfoDb(hGetDb(), chrom, rootName);
 }
 
 
