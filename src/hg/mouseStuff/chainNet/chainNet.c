@@ -9,7 +9,7 @@
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
-int minScore = 2000;	/* Minimum chain score to look at. */
+double minScore = 2000;	/* Minimum chain score to look at. */
 boolean verbose = FALSE;/* Verbose output. */
 
 void usage()
