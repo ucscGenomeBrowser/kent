@@ -377,9 +377,13 @@ for (i=0; i<len; i++)
 if (markedIndex != len)
     {
     calxy(len, *yOffp, &xx, &yy);
-    vgBox(g_vg, xx-pbScale/2, yy-9*tb, 1, 9, MG_BLACK);
+    
+    // make the end tick a little taller than regular tick
+    vgBox(g_vg, xx-pbScale/2, yy-14*tb, 1, 14, MG_BLACK);
     sprintf(scale_str, "%d", len);
-    vgText(g_vg, xx-pbScale/2+4, yy+4-12*tb, MG_BLACK, g_font, scale_str);
+
+    // label the end tick with a vertical offset so that it won't overlap with regular ticks
+    vgText(g_vg, xx-pbScale/2+4, yy+12-28*tb, MG_BLACK, g_font, scale_str);
     }
 
 calxy0(0, *yOffp, &xx, &yy);
@@ -414,7 +418,6 @@ int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, ch
 {
 int xx, yy, xx0, xxSave;
 int i, j;
-char prevPosMessage[200];
 char exonNumStr[10];
 int mrnaLen;
 
@@ -537,7 +540,7 @@ void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, ch
 {
 int xx, yy, xx0, xxSave;
 int i, j;
-char prevPosMessage[200];
+char prevPosMessage[300];
 char exonNumStr[10];
 int mrnaLen;
 Color color;
@@ -675,6 +678,7 @@ if (jcnt > 0)
 
     mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
     sprintf(prevPosMessage, "Previous position in UCSC Genome Browser: %s", positionStr);
+    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
     vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
     }
 else
@@ -693,7 +697,8 @@ else
 
     mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
     
-    sprintf(prevPosMessage, "Previous position in UCSC Genome Browser: %s (not in a CDS)", positionStr);
+    sprintf(prevPosMessage,"Previous position in UCSC Genome Browser: %s (not in a CDS)",positionStr);
+    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
     calxy(0, *yOffp, &xx0, &yy);
     calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
     xxSave = xx - 6*strlen(prevPosMessage);
@@ -703,7 +708,6 @@ else
 	}
     else
 	{
-    	//vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
     	vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
     	}
     }
@@ -1392,8 +1396,7 @@ hPrintf("</MAP>\n");
 // put tracks image here
 
 hPrintf(
-"\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
-//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
+"\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
         gifTn.forCgi, pixWidth, pixHeight, mapName);
 
 hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
