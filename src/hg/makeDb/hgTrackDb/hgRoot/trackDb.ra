@@ -1010,6 +1010,14 @@ altColor 0,160,0
 visibility hide
 type sample 9
 
+track footPrinterHMR
+shortLabel FootPrinterHMR
+longlabel FootPrinter Conservation Score, Human/Mouse/Rat
+priority 41.0031
+altColor 0,160,0
+visibility hide
+type sample 9
+
 
 track zoo
 shortLabel ZooSeq
