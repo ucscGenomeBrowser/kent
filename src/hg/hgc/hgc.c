@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.775 2004/10/20 03:11:48 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.776 2004/10/22 21:14:33 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4458,12 +4458,14 @@ void doHgContig(struct trackDb *tdb, char *ctgName)
 {
 char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
-char query[256];
-struct sqlResult *sr;
+struct sqlConnection *conn2 = hAllocConn();
+char query[256], query2[256];
+struct sqlResult *sr, *sr2;
 char **row;
 struct ctgPos *ctg;
 struct ctgPos2 *ctg2 = NULL;
 int cloneCount;
+struct contigAcc contigAcc;
 
 genericHeader(tdb, ctgName);
 printf("<B>Name:</B> %s<BR>\n", ctgName);
@@ -4480,6 +4482,24 @@ else
     ctg = ctgPosLoad(row);
 
 sqlFreeResult(&sr);
+
+if (hTableExists("contigAcc"))
+    {
+    sprintf(query2, "select * from contigAcc where contig = '%s'", ctgName);
+    if (sr2 = sqlGetResult(conn2, query2))
+        {
+        row = sqlNextRow(sr2);
+        if (row)
+            {
+            contigAccStaticLoad(row, &contigAcc);
+            printf("<B>Genbank Accession: <A HREF=");
+            printEntrezNucleotideUrl(stdout, contigAcc.acc);
+            printf(" TARGET=_BLANK>%s</A></B><BR>\n", contigAcc.acc);
+            }
+        sqlFreeResult(&sr2);
+        }
+    }
+
 if (hTableExists("clonePos"))
     {
     sprintf(query, 
@@ -4492,6 +4512,7 @@ printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE, ctg->contig);
 printTrackHtml(tdb);
 
 hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 char *cloneStageName(char *stage)
