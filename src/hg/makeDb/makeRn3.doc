@@ -60,25 +60,44 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
 BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
 
     # Make chrom fa:
+    ssh kkstore
+    # The contig sequences are delivered with various upper and lower
+    # case.  We need them all in upper case to begin with.  The first
+    # line of the file is not a problem, it is already all upper case.
     foreach c (?{,?})
-      gunzip $c/chr$c.contig.fa.gz
-      agpToFa -simpleMulti $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
+	set f = $c/chr$c.contig.fa.gz
+	set g = $f:r
+	zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
+	ls -og ${g}
+    end
+    foreach c (?{,?})
+	set f = $c/chr${c}_random.contig.fa.gz
+	set g = $f:r
+	if (-e${f}) then
+	    zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
+	    ls -og ${g}
+	endif
+    end
+
+    foreach c (?{,?})
+      echo "Processing ${c}"
+      $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
       if (-e $c/chr${c}_random.agp) then
-        gunzip $c/chr${c}_random.contig.fa.gz
-        agpToFa -simpleMulti $c/chr${c}_random.agp chr${c}_random \
+        $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr${c}_random.agp chr${c}_random \
           $c/chr${c}_random.fa $c/chr${c}_random.contig.fa
       endif
+      echo "${c} - DONE"
     end
     # Check that the size of each chromosome .fa file is equal to the 
     # last coord of the .agp:
-    foreach f ( */*.agp )
+    foreach f ( ?{,?}/*.agp )
       set agpLen = `tail -1 $f | awk '{print $3;}'`
       set g = $f:r
       set faLen = `faSize $g.fa | awk '{print $1;}'`
       if ($agpLen == $faLen) then
-        echo $f length = $g length = $faLen
+        echo "   OK: $f length = $g length = $faLen"
       else
-        echo ERROR\!\!\!  $f length = $agpLen, but $g length = $faLen
+        echo "ERROR:  $f length = $agpLen, but $g length = $faLen"
       endif
     end
     # Check that our assembled chrom fa jive with the BCM chrom fa
@@ -89,18 +108,18 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
       set bcmLen  = `gunzip -c $c/chr$c.fa.bcm.gz | faSize stdin \
                        | awk '{print $1;}'`
       if ($ucscLen == $bcmLen) then
-        echo chr$c.fa length = chr$c.fa.bcm length = $bcmLen
+        echo "   OK: chr$c.fa length = chr$c.fa.bcm length = $bcmLen"
       else
-        echo ERROR\!\!\!  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen
+        echo "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen"
       endif
       if (-e $c/chr${c}_random.fa) then
         set ucscLen = `faSize $c/chr${c}_random.fa | awk '{print $1;}'`
         set bcmLen  = `gunzip -c $c/chr${c}_random.fa.bcm.gz | faSize stdin \
                         | awk '{print $1;}'`
         if ($ucscLen == $bcmLen) then
-          echo chr${c}_random.fa length = chr${c}_random.fa.bcm length = $bcmLen
+          echo "   OK: chr${c}_random.fa length = chr${c}_random.fa.bcm length = $bcmLen"
         else
-          echo ERROR\!\!\!  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen
+          echo "ERROR:  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen"
         endif
       endif
     end
@@ -116,12 +135,14 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
     ssh kkstore
     cd /cluster/store3/rn3
     foreach c (?{,?})
+      echo "Working ${c}"
       cp -p $c/chr$c.agp $c/chr$c.agp.bak
       cp -p $c/chr$c.fa $c/chr$c.fa.bak
       splitFaIntoContigs $c/chr$c.agp $c/chr$c.fa . -nSize=5000000
       if (-e $c/chr${c}_random.fa) then
         cp -p $c/chr${c}_random.agp $c/chr${c}_random.agp.bak
         cp -p $c/chr${c}_random.fa $c/chr${c}_random.fa.bak
+        rm -fr ${c}_random
         splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
           -nSize=5000000
         mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
@@ -129,9 +150,12 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
         mv ${c}_random/lift/ordered.lst $c/lift/random.lst
         rmdir ${c}_random/lift
         rm ${c}_random/chr${c}_random.{agp,fa}
+        rm -fr $c/chr${c}_random_1
+        rm -fr $c/chr${c}_random_2
         mv ${c}_random/* $c
         rmdir ${c}_random
       endif
+      echo "DONE ${c}"
     end
     # Make sure the reconstructed .fa jives with the original:
     #	four lines output for each chrom, long window required to be
@@ -147,17 +171,22 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
       set l1 = `wc -l $f | awk '{print $1;}'`
       set l2 = `wc -l $f:r | awk '{print $1;}'`
       if ($l1 == $l2) then
-        echo "$f and $f:r have the same #lines"
+        echo "   OK: $f and $f:r have the same #lines"
       else
-        echo ERROR\!\!\!  $f has $l1 lines, but $f:r has $l2
+        echo "ERROR:  $f has $l1 lines, but $f:r has $l2"
       endif
     end
-    # Save some space
-    foreach c (?{,?})
-      echo $c
-      gzip $c/chr*.contig.fa
-    end
-    rm */*.bak
+    # Save some space - NO - the *.contig.fa.gz files already existing
+    # here are the original downloads.  These non-zipped versions are
+    # the translated to upper case versions.
+#	foreach c (?{,?})
+#	echo $c
+#	gzip $c/chr*.contig.fa
+#	end
+    # This rm may be a good thing to do.  But later, after repeat
+    # masking is done and thus the soft masked results can be compared
+    # with the *.bak originals.
+#	rm */*.bak
 
 COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-23 - Hiram)
 
@@ -250,10 +279,12 @@ if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
     cd ~/rn3/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
-# CPU time in finished jobs:   37015257s  616920.95m 10282.02h  428.42d  1.174 y
-# IO & Wait Time:                103443s    1724.05m    28.73h    1.20d  0.003 y
-# Average job time:                5978s      99.64m     1.66h    0.07d
-# Longest job:                    16058s     267.63m     4.46h    0.19d
+# Completed: 6209 of 6209 jobs
+# CPU time in finished jobs:   37009055s  616817.58m 10280.29h  428.35d  1.174 y
+# IO & Wait Time:                 96849s    1614.15m    26.90h    1.12d  0.003 y
+# Average job time:                5976s      99.60m     1.66h    0.07d
+# Longest job:                    16048s     267.47m     4.46h    0.19d
+# Submission to last job:         49589s     826.48m    13.77h    0.57d
 
         #- Lift up the split-contig .out's to contig-level .out's
 	ssh kkstore
@@ -277,19 +308,16 @@ if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
             end
             echo done $i
         end
-        # From the above, I get some errors like:
-    #	invalid unsigned number: "-203"
-    #	invalid unsigned number: "-14"
-    #	done 1
-	# on most of the chromosomes.  I'm checking with Arian to see if
-	# this is a problem in the *.out files.
-
+	# You will see a few WARNING lines from maskOutFa.  This is a
+	# a good sign.  Much better than when maskOutFa used to exit.
+	# With the fix, everything is getting masked properly.
 
         #- Load the .out files into the database with:
         ssh hgwdev
         cd ~/rn3
         hgLoadOut rn3 ?{,?}/*.fa.out
 
+XXXXXXXXXX  STOP HERE 2003-06-26 in the second try ...
 
 MAKE LIFTALL.LFT (DONE - 2003-06-24 - Hiram)
 
@@ -546,15 +574,14 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
     ./jkStuff/makeFaMasked.sh
     #- Make hard-masked .fa.masked files as well:
     ./jkStuff/makeHardMasked.sh
-XXXX Running the above 2003-06-24 17:17 - Hiram
-
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
     # Copy the masked contig fa to /scratch:
     ssh kkstore
-    rm -rf /scratch/hg/rn3/trfFa
-    mkdir -p /scratch/hg/rn3/trfFa
-    cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/rn3/trfFa
+    rm -rf /cluster/bluearc/rat/rn3/trfFa
+    mkdir -p /cluster/bluearc/rat/rn3/trfFa
+    cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+	/cluster/bluearc/rat/rn3/trfFa
 
 
 MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
