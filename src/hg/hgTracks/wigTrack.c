@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.34 2004/02/02 19:53:34 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.35 2004/02/02 23:15:14 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -27,11 +27,13 @@ struct wigCartOptions
     enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
     enum wiggleWindowingEnum windowingFunction;	/*  max,mean,min */
     enum wiggleSmoothingEnum smoothingWindow;	/*  N: [0:16] */
+    enum wiggleYLineMarkEnum yLineOnOff;	/*  OFF/ON	*/
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
     int maxHeight;	/*	maximum pixels height from trackDb	*/
     int defaultHeight;	/*	requested height from cart	*/
     int minHeight;	/*	minimum pixels height from trackDb	*/
+    double yLineMark;	/*	user requested line at y = */
     };
 
 struct preDrawElement
@@ -41,7 +43,8 @@ struct preDrawElement
 	unsigned long long	count;	/* number of datum at this point */
 	double	sumData;	/*	sum of all values at this point	*/
 	double  sumSquares;	/* sum of (values squared) at this point */
-	double  smooth;	/*	smoothing value	*/
+	double  plotValue;	/*	raw data to plot	*/
+	double  smooth;	/*	smooth data values	*/
     };
 
 struct wigItem
@@ -318,6 +321,8 @@ enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
 enum wiggleScaleOptEnum autoScale;
 enum wiggleWindowingEnum windowingFunction;
+enum wiggleYLineMarkEnum yLineOnOff;
+double yLineMark;
 Color shadesOfPrimary[EXPR_DATA_SHADES];
 Color shadesOfAlt[EXPR_DATA_SHADES];
 Color black = vgFindColorIx(vg, 0, 0, 0);
@@ -345,6 +350,8 @@ horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
 autoScale = wigCart->autoScale;
 windowingFunction = wigCart->windowingFunction;
+yLineOnOff = wigCart->yLineOnOff;
+yLineMark = wigCart->yLineMark;
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -508,6 +515,65 @@ if (f != (FILE *) NULL)
 if (currentFile)
     freeMem(currentFile);
 
+/*	now we are ready to draw.  Each element in the preDraw[] array
+ *	cooresponds to a single pixel on the screen
+ */
+
+/*	Determine the raw plotting value	*/
+for (i = 0; i < preDrawSize; ++i)
+    {
+    double dataValue;
+    switch (windowingFunction)
+	{
+	case (wiggleWindowingMin):
+		if (fabs(preDraw[i].min)
+				< fabs(preDraw[i].max))
+		    dataValue = preDraw[i].min;
+		else 
+		    dataValue = preDraw[i].max;
+		break;
+	case (wiggleWindowingMean):
+		dataValue =
+		    preDraw[i].sumData / preDraw[i].count;
+		break;
+	default:
+	case (wiggleWindowingMax):
+		if (fabs(preDraw[i].min)
+			> fabs(preDraw[i].max))
+		    dataValue = preDraw[i].min;
+		else 
+		    dataValue = preDraw[i].max;
+		break;
+	}
+	preDraw[i].plotValue = dataValue;
+	preDraw[i].smooth = dataValue;
+    }
+
+/*	Are we perhaps doing smoothing ?	*/
+if (wigCart->smoothingWindow > 1)
+    {
+    int winBegin = 0;
+    int winEnd = -wigCart->smoothingWindow;
+    double sum = 0.0;
+    unsigned long long points = 0LL;
+
+    for (winBegin = 0; winBegin < preDrawSize; ++winBegin)
+	{
+	if (winEnd >=0)
+	    {
+	    points -= preDraw[winEnd].count;
+	    sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
+	    }
+	points += preDraw[winBegin].count;
+	sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
+	if (points && preDraw[winBegin].count)
+	    preDraw[winBegin].smooth = sum / points;
+	else
+	    preDraw[winBegin].smooth = 0.0;
+	++winEnd;
+	}
+    }
+
 for (i = preDrawZero; i < preDrawZero+width; ++i)
     {
     if (preDraw[i].max > overallUpperLimit)
@@ -516,10 +582,6 @@ for (i = preDrawZero; i < preDrawZero+width; ++i)
 	overallLowerLimit = preDraw[i].min;
     }
 overallRange = overallUpperLimit - overallLowerLimit;
-
-/*	now we are ready to draw.  Each element in the preDraw[] array
- *	cooresponds to a single pixel on the screen
- */
 
 if (autoScale == wiggleScaleAuto)
     {
@@ -595,33 +657,10 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	clipping will be taken care of by the vgBox() function.
 	 */
 
-	/*	use the data value farthest from zero.
-	 *	Future enhancment could be to graph both the positive
-	 *	and negative values if more than one data point is in
-	 *	this pixel.
+	/*	data value has been picked by previous scanning.
+	 *	Could be smoothed, maybe not.
 	 */
-	switch (windowingFunction)
-	    {
-	    case (wiggleWindowingMin):
-		if (fabs(preDraw[preDrawIndex].min)
-				< fabs(preDraw[preDrawIndex].max))
-		    dataValue = preDraw[preDrawIndex].min;
-		else 
-		    dataValue = preDraw[preDrawIndex].max;
-		break;
-	    case (wiggleWindowingMean):
-		dataValue =
-		    preDraw[preDrawIndex].sumData / preDraw[preDrawIndex].count;
-		break;
-	    default:
-	    case (wiggleWindowingMax):
-		if (fabs(preDraw[preDrawIndex].min)
-			> fabs(preDraw[preDrawIndex].max))
-		    dataValue = preDraw[preDrawIndex].min;
-		else 
-		    dataValue = preDraw[preDrawIndex].max;
-		break;
-	    }
+	dataValue = preDraw[preDrawIndex].smooth;
 
 	y1 = h * ((graphUpperLimit - dataValue)/graphRange);
 	yPointGraph = yOff + y1 - 1;
@@ -711,6 +750,29 @@ if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
 
     }	/*	drawing horizontalGrid	*/
 
+/*	Optionally, a user requested Y marker line at some value */
+if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
+    {
+    int x1, x2, y1, y2;
+    int gridLines = 2;
+
+    x1 = xOff;
+    x2 = x1 + width;
+
+    /*	Let's see if this marker line can be drawn	*/
+    if ((yLineMark <= graphUpperLimit) && (yLineMark >= graphLowerLimit))
+	{
+	int Offset;
+	drawColor = vgFindColorIx(vg, 0, 0, 0);
+	Offset = tg->lineHeight * ((graphUpperLimit - yLineMark)/graphRange);
+	y1 = yOff + Offset;
+	if (y1 >= (yOff + tg->lineHeight)) y1 = yOff + tg->lineHeight - 1;
+	y2 = y1;
+	vgLine(vg,x1,y1,x2,y2,black);
+	}
+
+    }	/*	drawing y= line marker	*/
+
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
 
@@ -722,6 +784,18 @@ static void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 struct wigItem *wi;
 int fontHeight = tl.fontHeight+1;
 int centerOffset = 0;
+enum wiggleYLineMarkEnum yLineOnOff;
+double yLineMark;
+double lines[2];	/*	lines to label	*/
+int numberOfLines = 1;	/*	at least one: 0.0	*/
+int i;			/*	loop counter	*/
+struct wigCartOptions *wigCart;
+
+wigCart = (struct wigCartOptions *) tg->extraUiData;
+lines[0] = 0.0;
+lines[1] = wigCart->yLineMark;
+if (wigCart->yLineOnOff == wiggleYLineMarkOn)
+    ++numberOfLines;
 
 if (withCenterLabels)
 	centerOffset = fontHeight;
@@ -788,34 +862,44 @@ else if (tg->visibility == tvFull)
 	if (graphLowerLimit < 0.0) drawColor = tg->ixAltColor;
 	vgTextRight(vg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
 	    drawColor, font, lower);
-	/*	Maybe zero can be displayed */
-	/*	It may overwrite the track label ...	*/
-	if (zeroOK && (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit))
-	    {
-	    int zeroOffset;
-	    int zeroWidth;
 
-	    drawColor = vgFindColorIx(vg, 0, 0, 0);
-	    zeroOffset = centerOffset +
-		(int)((graphUpperLimit * (height - centerOffset)) /
-			(graphUpperLimit - graphLowerLimit));
-	    /*	reusing the lower string here	*/
-	    snprintf(lower, 128, "0 -");
-	    /*	only draw zero if it is far enough away from the
-	     *	upper and lower labels, and it won't overlap with
-	     *	the center label.
-	     */
-	    zeroWidth = mgFontStringWidth(font,lower);
-	    if ( !( (zeroOffset < centerLabel+fontHeight) &&
-		    (zeroOffset > centerLabel-(fontHeight/2)) &&
-		    (zeroWidth+labelWidth >= width) ) &&
-		(zeroOffset > (fontHeight*2)) &&
-		(zeroOffset < height-(fontHeight*2)) )
+	for (i = 0; i < numberOfLines; ++i )
+	    {
+	    double lineValue = lines[i];
+	    /*	Maybe zero can be displayed */
+	    /*	It may overwrite the track label ...	*/
+	    if (zeroOK && (lineValue < graphUpperLimit) &&
+		(lineValue > graphLowerLimit))
 		{
-	    	vgTextRight(vg, xOff, yOff+zeroOffset-(fontHeight/2),
-		    width - 1, fontHeight, drawColor, font, lower);
-	    	}
-	    }	/*	drawing a zero label	*/
+		int offset;
+		int Width;
+
+		drawColor = vgFindColorIx(vg, 0, 0, 0);
+		offset = centerOffset +
+		    (int)(((graphUpperLimit - lineValue) *
+				(height - centerOffset)) /
+			(graphUpperLimit - graphLowerLimit));
+		/*	reusing the lower string here	*/
+		if (i == 0)
+		    snprintf(lower, 128, "0 -");
+		else
+		    snprintf(lower, 128, "%g", lineValue);
+		/*	only draw if it is far enough away from the
+		 *	upper and lower labels, and it won't overlap with
+		 *	the center label.
+		 */
+		Width = mgFontStringWidth(font,lower);
+		if ( !( (offset < centerLabel+fontHeight) &&
+		    (offset > centerLabel-(fontHeight/2)) &&
+		    (Width+labelWidth >= width) ) &&
+		    (offset > (fontHeight*2)) &&
+		    (offset < height-(fontHeight*2)) )
+		    {
+		    vgTextRight(vg, xOff, yOff+offset-(fontHeight/2),
+			width - 1, fontHeight, drawColor, font, lower);
+		    }
+		}	/*	drawing a zero label	*/
+	    }	/*	drawing 0.0 and perhaps yLineMark	*/
 	}	/* if (height >= (3 * fontHeight))	*/
     }	/*	if (tg->visibility == tvFull)	*/
 }	/* wigLeftLabels */
@@ -835,6 +919,7 @@ double minY;	/*	from trackDb or cart, requested minimum */
 double maxY;	/*	from trackDb or cart, requested maximum */
 double tDbMinY;	/*	from trackDb type line, the absolute minimum */
 double tDbMaxY;	/*	from trackDb type line, the absolute maximum */
+double yLineMark;	/*	from trackDb or cart */
 char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
 int maxHeight = atoi(DEFAULT_HEIGHT_PER);
@@ -854,7 +939,10 @@ wigCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
 wigCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
 
 wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
-	
+wigFetchYLineMarkValue(tdb, &yLineMark);
+wigCart->yLineMark = yLineMark;
+wigCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
+
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
