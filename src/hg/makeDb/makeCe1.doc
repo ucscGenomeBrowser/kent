@@ -206,6 +206,7 @@ PREPARE Split contigs into 1,000,000 bp chunks for cluster runs
 	mkdir split/$f
         faSplit size chr${f}.fa 1000000 split/$f/c -lift=split/chr${f}.lft
     end
+    cat split/*.lft > liftAll.lft
     # copy them to /scratch for cluster rsync
     ssh kk
     cd ~ce1/split
@@ -215,7 +216,57 @@ PREPARE Split contigs into 1,000,000 bp chunks for cluster runs
     end
     # request rsync this directory via email to cluster-admin
 
-Run RepeatMasker on the chromosomes
+PRODUCING FUGU FISH ALIGNMENTS  (NEED TO DO THIS ON Repeat Masked bits)
+    # Assumes split and rsync of ce1 has taken place above
+    # and Fugu pieces are also already on kluster.
+    ssh kk
+    mkdir -p ~/ce1/bed/blatFugu
+    cd ~/ce1/bed/blatFugu
+    mkdir psl
+    foreach f (~/ce1/split/?{,?,??})
+      set c=$f:t
+      mkdir -p psl/$c
+    end
+    ls -1S /iscratch/i/fugu/*.fa > fugu.lst
+    ls /scratch/hiram/Celegans/?{,?,??}/c*.fa > worm.lst
+    gensub2 worm.lst fugu.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check
+
+    #  When cluster run is done, sort alignments
+    ssh eieio
+    cd ~ce1/bed/blatFugu
+    foreach d (I II III IV V X M)
+        echo -n "${d} "
+	pslCat psl/${d}/c*.psl | \
+	liftUp -type=.psl stdout ../../split/chr${d}.lft warn stdin | \
+	pslSortAcc nohead chrom temp stdin
+    end
+
+    #  And rename to correspond with tables:
+    ssh hgwdev
+    cd ~ce1/bed/blatFugu/chrom
+    rm -f chr*_blatFugu.psl
+    foreach d (I II III IV V X M)
+	mv chr${d}.psl chr${d}_blatFugu.psl
+    end
+    hgLoadPsl ce1 chr*_blatFugu.psl
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    mkdir /gbdb/ce1/fuguSeq
+    cd /gbdb/ce1/fuguSeq
+    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+    cd /cluster/store2/tmp
+    hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
+
+
+Run RepeatMasker on the chromosomes (This needs to be done with split
+                                     pieces.  I ran this on the whole
+                                     chromosomes and the jobs
+                                     took 6 to 8 hours each.
     ssh kk
     cd ~/ce1
     mkdir RMRun
@@ -305,188 +356,3 @@ MAKING VIRAL mRNA FILES (DONE 04/15/03)
     mkdir -p /iscratch/i/mrna.134
     cp -p /cluster/store5/mrna.134/viralRna.fa  /iscratch/i/mrna.134
     ~kent/bin/iSync
-
-
-ALIGNING VIRAL RNA (DONE 04/16/03)
-    ssh kkr1u00
-    mkdir -p ~/sc1/bed/mrna
-    cd ~/sc1/bed/mrna
-    ls -1S /cluster/store5/SARS_Coronavirus_TOR2/*.fa > genome.lst
-    ls -1 /iscratch/i/mrna.134/viralRna.fa > mrna.lst
-    cp ~/lastRn/bed/mrna/gsub .
-    # edited gsub to remove -ooc and add query options for translated.
-    mkdir psl
-    gensub2 genome.lst mrna.lst gsub spec
-    para create spec
-    para try, para check, para push, para check....
-    para time > time
-      
-    # Process alignments into near best in genome.
-    ssh eieio
-    cd ~/sc1/bed/mrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    # Skip the pslReps -- need the sensitivity!
-    cat raw.psl \
-    | sed -e 's/TOR2_draft_genome_assembly_140403/chr1/' \
-    > all_mrna.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
-
-    # Load mRNA alignments into database.
-    ssh hgwdev
-    cd ~/sc1/bed/mrna/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_mrna.psl
-    end
-    hgLoadPsl sc1 *.psl
-    cd ..
-    hgLoadPsl sc1 all_mrna.psl -nobin
-
-
-LOAD SWISS PROT CORONAVIRUS PROTEINS
-    cd ~/sc1/bed/swissprot
-    download all ORGANISM=coronavirus proteins from SRS into file viralProt.fa
-    ssh kkr1u00
-    mkdir psl
-    para create spec
-    para push
-    cd psl
-    mv chr1_viralProt.psl chr1_viralProtLoose.psl
-    pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
-    hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
-
-
-LOAD CPGISSLANDS (DONE 04/15/03)
-    ssh eieio
-    mkdir -p ~/sc1/bed/cpgIsland
-    cd ~/sc1/bed/cpgIsland
-    # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
-    # copy the tar file to the current directory
-    cp ~/lastRn/bed/cpgIsland/cpg_dist.tar .
-    tar xvf cpg_dist.tar 
-    cd cpg_dist
-    gcc readseq.c cpg_lh.c -o cpglh.exe
-    cd ..
-    foreach f (../../*.fa)
-      set fout=$f:t:r:r.cpg
-      echo running cpglh on $f to $fout
-      ./cpg_dist/cpglh.exe $f > $fout.cpg
-    end
-    # copy filter.awk from a previous release
-    cp ~/lastRn/bed/cpgIsland/filter.awk .
-    awk -f filter.awk chr*.cpg > cpgIsland.bed
-# STOPPED HERE -- NO CPG ISLANDS FOUND
-    # load into database:
-    ssh hgwdev
-    cd ~/sc1/bed/cpgIsland
-    hgLoadBed sc1 cpgIsland -tab -noBin \
-      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
-
-
-LOAD SOFTBERRY GENES 
-     mkdir -p ~/sc1/bed/softberry
-     cd ~/sc1/bed/softberry
-  # Copy in email attachment Soft_genes_SARS_Tor2.tar.gz
-  # from Victor Solovyev
-     gtar -zxvf Soft_gene*.gz
-  # Substitute chr1 for subs in the gff file 
-     ldHgGene sc1 softberryGene SARS.gff
-     hgPepPred sc1 softberry *.protein
-     hgSoftberryHom sc1 *.protein
-
-
-LOAD GENBANK ANNOTATED PROTEINS (DONE 04/23/03)
-    mkdir -p ~/sc1/bed/gbProtAnn
-    cd ~/sc1/bed/gbProtAnn
-    # go to http://www.ncbi.nlm.nih.gov/ -- search Protein for NP_828849
-    # Save the displayed genbank record to NP_828849.gbff
-    #
-    # Used emacs macros (and judgment about what the short names should be) 
-    # to edit the mat_peptide elements to a bed 4 + tab file like this:
-    #  chrom	start	end	name	product	note	proteinId	giId
-    # called NP_828849.pbed -- pbed because it's in protein coordinates.  
-    #
-    # Now translate the protein coordinates into genomic coords:
-    #  /coded_by="join(NC_004718.1:250..13383, NC_004718.1:13383..21470)"
-    #  /note="putative -1 frameshift"
-    # and strip the "gi:" from genbank id numbers:
-    # OK, also use the proteinId as the name instead of my short names so 
-    # that others can link in more easily as Fan suggested:
-    perl -wpe '@w = split(/\t/); \
-               if ($w[1] < 4379) { \
-                 $w[1] = (($w[1] - 1) * 3) + 250 - 1; \
-                 $w[2] = (($w[2] - 1) * 3) + 250 + 2; \
-               } else { \
-                 $w[1] = (($w[1] - 4379) * 3) + 13383 - 1; \
-                 $w[2] = (($w[2] - 4379) * 3) + 13383 + 2; \
-               } \
-               $w[7] =~ s/gi://i; \
-               $w[3] = $w[6]; \
-               $_ = join("\t", @w); \
-              ' NP_828849.pbed \
-    > NP_828849.bed
-    # Make sure it looks right:
-    sdiff NP_828849.pbed NP_828849.bed
-    hgLoadBed sc1 gbProtAnn NP_828849.bed \
-      -tab -noBin -sqlTable=$HOME/src/hg/lib/gbProtAnn.sql
-
-
-PRODUCING GENSCAN PREDICTIONS (DONE 4/23/03)
-    ssh kkr1u00
-    mkdir -p ~/sc1/bed/genscan
-    cd ~/sc1/bed/genscan
-    # No cluster run (or liftUp) required -- just run it:
-    /cluster/home/kent/bin/i386/gsBig ~/sc1/chr1.fa genscan.gtf \
-      -trans=genscan.pep -subopt=genscanSubopt.bed \
-      -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan \
-      -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat \
-      -tmp=/tmp -window=2400000
-    # Load into the database as so:
-    ssh hgwdev
-    cd ~/sc1/bed/genscan
-    ldHgGene sc1 genscan genscan.gtf
-    hgPepPred sc1 generic genscanPep genscan.pep
-    hgLoadBed sc1 genscanSubopt genscanSubopt.bed
-
-
-BLATTING OTHER SARS WHOLE GENOMES AGAINST TOR2 (DONE 04/25/03)
-    ssh eieio
-    mkdir -p ~/sc1/bed/otherSARS
-    cd ~/sc1/bed/otherSARS
-    # Went to http://www.ncbi.nlm.nih.gov/ , did a search in Nucleotide 
-    # for SARS Coronavirus, viewed results as FASTA, and saved results to 
-    # <accession>.fa files:
-    # AY278554.2 (CUHK-W1)
-    # AY278741.1 (Urbani)
-    # AY278491.2 (HKU-39849)
-    # AY279354.1 (BJ04 partial)
-    # AY278490.1 (BJ03 partial)
-    # AY278489.1 (GZ01 partial)
-    # AY278488.1 (BJ01 partial)
-    # AY278487.1 (BJ02 partial)
-    # AY268049.1 (Taiwan partial cds)
-    # AY269391.1 (Vietnam partial)
-    cat A*.fa > otherSARS.fa
-    # Now blat (sensitive is OK because these are same organism):
-    /cluster/home/kent/bin/i386/blat -noHead ~/sc1/chr1.fa otherSARS.fa \
-      otherSARS.psl
-    # Now put the sequence in /gbdb and index it into extFile/seq:
-    ssh hgwdev
-    mkdir -p /gbdb/sc1/otherSARS/
-    ln -s `pwd`/otherSARS.fa /gbdb/sc1/otherSARS/
-    hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
-    # And load the alignments:
-    hgLoadPsl sc1 otherSARS.psl
-
-LOADING VIRAL mrna for blastz track (done 4/30/03)
-
-cd ~/sars/genbank
-gunzip -c /cluster/store5/genbank/data/download/genbank.135.0/gb{phg,vrl,vrt}*.seq.gz | gbToFaRa any.fil viralany.fa viralany.ra viralany.ta stdin
-gunzip -c /cluster/store5/genbank/data/download/refseq.135.0/cumulative/rscu.gbff.Z | gbToFaRa refseq.fil refseqviral.fa refseqviral.ra refseqviral.ta stdin
-cat viralany.fa refseqviral.fa > viral.fa
-cat viralany.ra refseqviral.ra > viral.ra
-mv viral.fa viralany.fa
-mv viral.ra viralany.ra
-hgLoadRna new sc1
-hgLoadRna add -type=mRNA sc1 /gbdb/sc1/mrnaViral/viralany.fa viralany.ra
-hgLoadRna addSeq -abbr=prot sc1 /gbdb/sc1/swissprot/viralProt.fa
-hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
