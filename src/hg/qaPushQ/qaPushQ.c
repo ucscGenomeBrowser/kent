@@ -20,7 +20,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.6 2004/05/05 19:03:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.7 2004/05/05 19:06:56 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1802,7 +1802,7 @@ char query[256];
 
 printf("<A href=qaPushQ?action=display>Current</A><br>\n");
 
-safef(query, sizeof(query), "select distinct substring(qadate,1,7) from pushQ order by qadate desc");
+safef(query, sizeof(query), "select distinct substring(qadate,1,7) from pushQ where priority='L' order by qadate desc");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
