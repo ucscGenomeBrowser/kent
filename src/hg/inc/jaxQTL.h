@@ -13,10 +13,12 @@ struct jaxQTL
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
-    float score;	/* cM position of marker associated with peak LOD score */
+    unsigned score;	/* Score from 0-1000 (bed6 compat.) */
+    char strand[2];	/* + or - (bed6 compat.) */
     char *marker;	/* MIT SSLP Marker w/highest correlation */
     char *mgiID;	/* MGI ID */
     char *description;	/* MGI description */
+    float cMscore;	/* cM position of marker associated with peak LOD score */
     };
 
 void jaxQTLStaticLoad(char **row, struct jaxQTL *ret);

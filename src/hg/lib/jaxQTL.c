@@ -19,10 +19,12 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->score = atof(row[4]);
-ret->marker = row[5];
-ret->mgiID = row[6];
-ret->description = row[7];
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->marker = row[6];
+ret->mgiID = row[7];
+ret->description = row[8];
+ret->cMscore = atof(row[9]);
 }
 
 struct jaxQTL *jaxQTLLoad(char **row)
@@ -38,10 +40,12 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->score = atof(row[4]);
-ret->marker = cloneString(row[5]);
-ret->mgiID = cloneString(row[6]);
-ret->description = cloneString(row[7]);
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->marker = cloneString(row[6]);
+ret->mgiID = cloneString(row[7]);
+ret->description = cloneString(row[8]);
+ret->cMscore = atof(row[9]);
 return ret;
 }
 
@@ -51,7 +55,7 @@ struct jaxQTL *jaxQTLLoadAll(char *fileName)
 {
 struct jaxQTL *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -102,10 +106,12 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->score = sqlFloatComma(&s);
+ret->score = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->marker = sqlStringComma(&s);
 ret->mgiID = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
+ret->cMscore = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -154,7 +160,11 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->score);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->marker);
@@ -167,6 +177,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%f", el->cMscore);
 fputc(lastSep,f);
 }
 
