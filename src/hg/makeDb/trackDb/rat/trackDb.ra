@@ -141,6 +141,17 @@ shortCircuit 1
 termRegex RNOR[0-9]{8}
 searchPriority 8
 
+searchName stsMapAlias
+searchTable stsMapRat
+searchType bed
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [^[:space:]]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
 searchTable bactigPos
 searchMethod exact
 searchType bed
