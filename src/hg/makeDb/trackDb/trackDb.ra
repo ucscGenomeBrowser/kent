@@ -335,7 +335,7 @@ url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track rgdQtl
 shortLabel RGD QTL
-longLabel Rat Genome Database Quantitative Trait Locus
+longLabel Quantitative Trait Locus (from RGD)
 group map
 priority 4.5
 visibility hide
