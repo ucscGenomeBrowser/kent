@@ -18,7 +18,7 @@ alpha: strip
 beta: strip
 	mv $A ${CGI_BIN}-beta/$A
 
-strip:  $A
+strip:  compile
 	strip $A
 
 compile: $O 
