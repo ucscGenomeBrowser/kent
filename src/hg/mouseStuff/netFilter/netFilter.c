@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.12 2003/08/12 20:50:11 kent Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.13 2003/12/04 21:15:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,6 +46,7 @@ struct optionSpec options[] = {
    {"minGap", OPTION_INT},
    {"minAli", OPTION_INT},
    {"syn", OPTION_BOOLEAN},
+   {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
    {"type", OPTION_STRING},
    {"fill", OPTION_BOOLEAN},
@@ -87,6 +88,7 @@ struct hash *tHash, *notTHash;	/* Target chromosomes. */
 struct hash *qHash, *notQHash;	/* Query chromosomes. */
 double minScore, maxScore;	/* Min/max score. */
 boolean doSyn;		/* Do synteny based filtering. */
+boolean doChimpSyn;	/* Do chimp synteny based filtering. */
 boolean doNonSyn;		/* Do synteny based filtering. */
 double minTopScore = 300000;  /* Minimum score for top level alignments. */
 /* changed to 300000 from 100000 to cut down on pseudogenes - Robert*/
@@ -107,7 +109,7 @@ char *type = NULL;		/* Only pass given type */
 boolean noRandom = FALSE;	/* Only pass non-random chromosomes. */
 
 boolean synFilter(struct cnFill *fill)
-/* Filter based on synteny */
+/* Filter based on synteny - tuned for human/mouse */
 {
 if (fill->type == NULL)
     errAbort("No type field, please run input net through netSyntenic");
@@ -121,6 +123,25 @@ if (fill->qFar > maxFar)
     return FALSE;
 return TRUE;
 }
+
+boolean chimpSynFilter(struct cnFill *fill)
+/* Filter based on synteny  - tuned for human/chimp. */
+{
+if (fill->type == NULL)
+    errAbort("No type field, please run input net through netSyntenic");
+if (fill->ali >= 50)
+    return TRUE;
+if (fill->ali < 15)
+    return FALSE;
+if (sameString(fill->type, "top"))
+    return FALSE;
+if (sameString(fill->type, "nonSyn"))
+    return FALSE;
+if (fill->qFar > 1000)
+    return FALSE;
+return TRUE;
+}
+
 
 boolean filterOne(struct cnFill *fill)
 /* Return TRUE if fill passes filter. */
@@ -153,6 +174,8 @@ if (fill->chainId)
 	return FALSE;
     if (doNonSyn && synFilter(fill))
 	return FALSE;
+    if (doChimpSyn && !chimpSynFilter(fill))
+        return FALSE;
     }
 else
     {
@@ -238,6 +261,7 @@ notQHash = hashCommaOption("notQ");
 minScore = optionInt("minScore", -BIGNUM);
 maxScore = optionFloat("maxScore", 9e99);
 doSyn = optionExists("syn");
+doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");
 minGap = optionInt("minGap", minGap);
 minAli = optionInt("minAli", minAli);
