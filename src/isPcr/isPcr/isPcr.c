@@ -60,6 +60,7 @@ errAbort(
   "   -out=XXX - Output format.  Either\n"
   "      fa - fasta with position, primers in header (default)\n"
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
+  "      psl - blat format.\n"
   , tileSize, stepSize, maxSize, minSize, minPerfect, minGood
   );
 }
@@ -89,7 +90,10 @@ struct dnaSeq lSeq;
 int fPrimerSize = strlen(fPrimer);
 int rPrimerSize = strlen(rPrimer);
 maxPrimerSize = max(fPrimerSize, rPrimerSize);
-clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxSize);
+if (strand == '-')
+    clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxSize);
+else
+    clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxSize);
 ZeroVar(&lSeq);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
@@ -104,15 +108,11 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     lSeq.name = seq->name;
     lSeq.dna = seq->dna + tStart;
     lSeq.size = tEnd - tStart;
-    if (strand == '-')
-        reverseComplement(lSeq.dna, lSeq.size);
-    gfPcrLocal(name, &lSeq, tStart, lSeq.name, maxSize, 
+    gfPcrLocal(name, &lSeq, tStart, lSeq.name, seq->size, maxSize, 
 	    fPrimer, fPrimerSize, rPrimer, rPrimerSize,
 	    minPerfect, minGood, strand, &gfoList);
     gfPcrOutputWriteList(gfoList, outFormat, NULL, f);
     gfPcrOutputFreeList(&gfoList);
-    if (strand == '-')
-        reverseComplement(lSeq.dna, lSeq.size);
     }
 gfClumpFreeList(&clumpList);
 }
@@ -148,7 +148,7 @@ while (lineFileRow(lf, row))
     struct gfPcrInput gpi;
     gfPcrInputStaticLoad(row, &gpi);
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '+', out, f);
-    pcrStrand(gf, gpi.name, gpi.rPrimer, gpi.fPrimer, 0, maxSize, '-', out, f);
+    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '-', out, f);
     }
 lineFileClose(&lf);
 carefulClose(&f);

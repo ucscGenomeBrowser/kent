@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.3 2004/06/07 23:04:45 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.4 2004/06/16 08:25:51 kent Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -203,7 +203,7 @@ return count;
 }
 
 static void outputBed(struct gfPcrOutput *out, FILE *f, char *url)
-/* Output match in fasta format. */
+/* Output match in BED format. */
 {
 int match;
 int size = out->rPos - out->fPos;
@@ -222,6 +222,41 @@ fprintf(f, "%d\t", round(1000.0 * match / (double)(fPrimerSize + rPrimerSize) ))
 fprintf(f, "%c\n", out->strand);
 }
 
+static void outputPsl(struct gfPcrOutput *out, FILE *f, char *url)
+/* Output match in PSL format. */
+{
+int match;
+int size = out->rPos - out->fPos;
+int fPrimerSize = strlen(out->fPrimer);
+int rPrimerSize = strlen(out->rPrimer);
+int bothSize = fPrimerSize + rPrimerSize;
+int gapSize = size - bothSize;
+char *name = out->name;
+if (name == NULL) name = "n/a";
+match = countMatch(out->dna, out->fPrimer, fPrimerSize);
+reverseComplement(out->rPrimer, rPrimerSize);
+assert(size > 0);
+match += countMatch(out->dna + size - rPrimerSize, out->rPrimer, rPrimerSize);
+reverseComplement(out->rPrimer, rPrimerSize);
+
+fprintf(f, "%d\t", match);
+fprintf(f, "%d\t", bothSize - match);
+fprintf(f, "0\t0\t");	/* repMatch, nCount. */
+fprintf(f, "1\t%d\t", gapSize);   /* qNumInsert, qBaseInsert */
+fprintf(f, "1\t%d\t", gapSize);   /* tNumInsert, tBaseInsert */
+fprintf(f, "%c\t", out->strand);
+fprintf(f, "%s\t", name);
+fprintf(f, "%d\t", size);
+fprintf(f, "0\t%d\t", size);	/* qStart, qEnd */
+fprintf(f, "%s\t%d\t", out->seqName, out->seqSize);
+fprintf(f, "%d\t%d\t", out->fPos, out->rPos);
+fprintf(f, "2\t");
+fprintf(f, "%d,%d,\t", fPrimerSize, rPrimerSize);
+fprintf(f, "%d,%d,\t", 0,size - rPrimerSize);
+fprintf(f, "%d,%d,\n", out->fPos, out->rPos - rPrimerSize);
+}
+
+
 void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
 	char *url, FILE *f)
 /* Write list of outputs in specified format (either "fa" or "bed") 
@@ -230,10 +265,12 @@ void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType,
 {
 struct gfPcrOutput *out;
 void (*output)(struct gfPcrOutput *out, FILE *f, char *url) = NULL;
-if (sameString(outType, "fa"))
+if (sameWord(outType, "fa"))
     output = outputFa;
-else if (sameString(outType, "bed"))
+else if (sameWord(outType, "bed"))
     output = outputBed;
+else if (sameWord(outType, "psl"))
+    output = outputPsl;
 else
     errAbort("Unrecognized pcr output type %s", outType);
 for (out = outList; out != NULL; out = out->next)
@@ -253,7 +290,7 @@ carefulClose(&f);
 
 
 static void pcrLocalStrand(char *pcrName, 
-	struct dnaSeq *seq,  int seqOffset, char *seqName, 
+	struct dnaSeq *seq,  int seqOffset, char *seqName, int seqSize,
 	int maxSize, char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minPerfect, int minGood,
 	char strand, struct gfPcrOutput **pOutList)
@@ -300,6 +337,7 @@ for (;;)
 		out->rPrimer = cloneString(rPrimer);
 		reverseComplement(out->rPrimer, rPrimerSize);
 		out->seqName = cloneString(seqName);
+		out->seqSize = seqSize;
 		out->fPos = fPos + seqOffset;
 		out->rPos = rPos + seqOffset;
 		out->strand = strand;
@@ -326,7 +364,7 @@ reverseComplement(rPrimer, rPrimerSize);
 }
 
 void gfPcrLocal(char *pcrName, 
-	struct dnaSeq *seq, int seqOffset, char *seqName, 
+	struct dnaSeq *seq, int seqOffset, char *seqName, int seqSize,
 	int maxSize, char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minPerfect, int minGood, char strand, struct gfPcrOutput **pOutList)
 /* Do detailed PCR scan on DNA already loaded into memory and put results
@@ -335,11 +373,11 @@ void gfPcrLocal(char *pcrName,
 /* For PCR primers reversing search strand just means switching
  * order of primers. */
 if (strand == '-')
-    pcrLocalStrand(pcrName, seq, seqOffset, seqName, maxSize, 
+    pcrLocalStrand(pcrName, seq, seqOffset, seqName, seqSize, maxSize, 
 	rPrimer, rPrimerSize, fPrimer, fPrimerSize, 
 	minPerfect, minGood, strand, pOutList);
 else
-    pcrLocalStrand(pcrName, seq, seqOffset, seqName, maxSize, 
+    pcrLocalStrand(pcrName, seq, seqOffset, seqName, seqSize, maxSize, 
 	fPrimer, fPrimerSize, rPrimer, rPrimerSize, 
 	minPerfect, minGood, strand, pOutList);
 }
@@ -417,7 +455,7 @@ for (range = rangeList; range != NULL; range = range->next)
     struct dnaSeq *seq = gfiExpandAndLoadCached(range,
 	tFileCache, seqDir,  0, &tSeqSize, FALSE, FALSE, maxPrimerSize);
     gfiGetSeqName(range->tName, seqName, NULL);
-    gfPcrLocal(pcrName, seq, range->tStart, seqName, maxSize, 
+    gfPcrLocal(pcrName, seq, range->tStart, seqName, tSeqSize, maxSize, 
 	    fPrimer, fPrimerSize, rPrimer, rPrimerSize, 
 	    minPerfect, minGood, range->tStrand, pOutList);
     dnaSeqFree(&seq);
