@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.20 2005/03/21 05:45:54 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.21 2005/03/26 17:16:17 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -796,7 +796,6 @@ errAbort(
   "      would require more memory.\n"
   "\n"
   "     -workdir=work/load - Temporary directory for load files.\n"
-  "      would require more memory.\n"
   "\n"
   "     -extFileUpdate - update the gbSeq table to link each sequence to\n"
   "      the latest release.  This allows removing fasta files for older\n"
@@ -813,7 +812,6 @@ errAbort(
   "              n >= 2 - more details\n"
   "              n >= 4 - information about each selected sequence\n"
   "              n >= 5 - SQL queries\n"
-  "      would require more memory.\n"
   "\n"
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
