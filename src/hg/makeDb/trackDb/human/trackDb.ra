@@ -405,7 +405,6 @@ color 0,0,0
 altColor 0,0,0
 spectrum on
 type bed 12 .
-url http://www.perlegen.com/haplotype/blk/$$.html
 
 track ld
 shortLabel HapMap LD
