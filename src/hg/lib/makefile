@@ -10,7 +10,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    dbDb.o est3.o estPair.o exoFish.o exprBed.o \
+    dbDb.o est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
     ggCluster.o altGraph.o ggDbIo.o \
@@ -18,15 +18,15 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     hgGene.o hgRelate.o hui.o isochores.o jaxOrtholog.o \
     jksql.o knownInfo.o knownMore.o lfs.o stsMap.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o \
-    ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o rmskOut.o \
+    ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o riken.o rmskOut.o \
     rnaGene.o roughAli.o sage.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o stsAlias.o stsInfo.o stsMarker.o \
     tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackDb.o trackTable.o wabAli.o refAlign.o \
+    trackDbCustom.o trackDb.o trackTable.o wabAli.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
     ancientRref.o ggMrnaAli.o \
-    glDbRep.o ggDump.o
+    glDbRep.o ggDump.o sample.o uPennClones.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
@@ -35,6 +35,9 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
 clean:
 	rm -f $(O);
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
+
+ctags:
+	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c

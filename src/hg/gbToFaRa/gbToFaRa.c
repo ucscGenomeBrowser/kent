@@ -14,6 +14,7 @@
  */
 
 #include "common.h"
+#include "portable.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dnautil.h"
@@ -21,6 +22,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "keys.h"
+#include "options.h"
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -106,6 +108,12 @@ struct gbField *devStageField;
 struct gbField *cloneField;
 struct gbField *chromosomeField;
 struct gbField *mapField;
+
+/* Flag indicating whether we are separating the output by organism */
+static boolean gByOrganism = FALSE;
+
+/* If the above flag is TRUE then this is our output dir */
+static char *gOutputDir = NULL;
 
 void makeGbStruct()
 /* Create a heirarchical structure for parsing genBank fields. */
@@ -988,8 +996,85 @@ else
 fclose(f);
 }
 
-void procOneGbFile(char *inName, FILE *faFile, char *faDir, FILE *raFile, 
-    struct hash *uniqueNameHash, struct hash *estAuthorHash, struct filter *filter)
+boolean isThreePrime(char *s)
+/* Return TRUE if s looks to have words three prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("3'", s) || stringIn("Three prime", s) 
+	|| stringIn("three prime", s) || stringIn("3 prime", s);
+}
+
+boolean isFivePrime(char *s)
+/* Return TRUE if s looks to have words five prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("5'", s) || stringIn("Five prime", s) 
+	|| stringIn("five prime", s) || stringIn("5 prime", s);
+}
+
+char *getEstDir(char *def, char *com)
+/* Return EST direction as deduced from definition and comment lines. */
+{
+char *three = "3'";
+char *five = "5'";
+char *dir = NULL;
+boolean gotThreePrime, gotFivePrime;
+
+gotThreePrime = isThreePrime(def);
+gotFivePrime = isFivePrime(def);
+if (gotThreePrime ^ gotFivePrime)
+    dir = (gotThreePrime ? three : five);
+if (dir == NULL)
+    {
+    gotThreePrime = isThreePrime(com);
+    gotFivePrime = isFivePrime(com);
+    dir = (gotThreePrime ? three : five);
+    }
+return dir;
+}
+
+static char * replaceChars(const char *src, char *origList, char *newList)
+/*
+Utility function to replace all occurrences of the 
+original chars with their respective new ones in a string.
+Each character at index X in the origList gets replaced by the
+corresponding one at the same index in newList.
+
+param src - The string to operate on.
+param origList - The set of chars in the string to replace.
+param newList - The replacement set of char to place in the string.
+
+return - A newly allocated string containing the 
+         chars that have been morphed.
+ */
+{
+char *retStr = NULL;
+int repCount = strlen(origList);
+int repIndex = 0;
+
+assert(repCount == strlen(newList));
+if (src == NULL) 
+    {
+    return NULL;
+    }
+
+retStr = cloneString(src);
+
+for (repIndex = 0; repIndex < repCount; ++repIndex) 
+    {
+    subChar(retStr, origList[repIndex], newList[repIndex]);
+    }
+return retStr;
+}
+
+void procOneGbFile(char *inName, 
+                   FILE *faFile, char *faDir, 
+                   FILE *raFile, char *raName, 
+                   struct hash *uniqueNameHash, struct hash *estAuthorHash,
+                   struct hash *orgHash, 
+                   struct filter *filter)
 /* Process one genBank file into fa and ra files. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -999,8 +1084,10 @@ static int gbCount = 0;
 DNA *dna;
 int dnaSize;
 char sizeString[16];
+char *oldOrg = NULL;
 struct dyString *ctgDs = newDyString(512);
-int modder = 1000;  /* How often to print an I'm still alive dot. */
+int modder = 100;  /* How often to print an I'm still alive dot. */
+char *origFaDir = faDir;
 
 if (formatType == ftBac)
     modder = 100;
@@ -1016,6 +1103,7 @@ while (readGbInfo(lf))
     char *org = organismField->val;
     struct keyVal *seqKey, *sizeKey;
     boolean doneSequence = FALSE;
+
     if (++gbCount % modder == 0)
         {
         printf(".");
@@ -1113,19 +1201,9 @@ while (readGbInfo(lf))
 	    wordCount >= 6 && sameString(words[5], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
-            char *def = definitionField->val;
-            char *threePrime = "3'";
-            char *fivePrime = "5'";
-            boolean gotThreePrime;
-            boolean gotFivePrime;
-            gotThreePrime =  ( (def != NULL && strstr(def, threePrime) ) ||
-                 (com != NULL && strstr(com, threePrime) ) );
-            gotFivePrime = ( (def != NULL && strstr(def, fivePrime) ) ||
-                 (com != NULL && strstr(com, fivePrime) ) );
-            if (gotThreePrime ^ gotFivePrime)
-                {
-                kvtAdd(kvt, "dir", (gotThreePrime ? threePrime : fivePrime));
-                }
+	    char *dir = getEstDir(definitionField->val, com);
+	    if (dir != NULL)
+                kvtAdd(kvt, "dir", dir);
             isEst = TRUE;
             }
 
@@ -1243,7 +1321,7 @@ while (readGbInfo(lf))
                     }
                 }
             }
-
+        
         /* Handle sequence part of read. */
         readSequence(lf, &dna, &dnaSize);
         doneSequence = TRUE;
@@ -1311,9 +1389,60 @@ while (readGbInfo(lf))
             seqKey->val = NULL; /* Don't write out sequence here. */
             if (commentKey != NULL)
                 commentKey->val = NULL;  /* Don't write out comment either. */
-            kvtWriteAll(kvt, raFile,filter->hideKeys);
+
+            if (gByOrganism) 
+                {
+                char *orgDir = NULL;
+                char fullOrgPath[PATH_LEN];
+                char raPath[PATH_LEN];
+                char faPath[PATH_LEN];
+                
+                /* If we are on a new organism, open a new file,
+                   otherwise just reuse our old file handles. */
+                if (NULL == oldOrg || !sameString(oldOrg, org)) 
+                    {
+                    freez(&oldOrg);
+                    oldOrg = cloneString(org);
+                    strcpy(oldOrg, org);
+                    fflush(raFile);
+                    fflush(faFile);
+                    carefulClose(&raFile);
+                    carefulClose(&faFile);
+                    
+                    if (NULL == org)
+                        {
+                        orgDir = "Unspecified";
+                        }
+                    else
+                        {
+                        /* Replace illegal directory chars */
+                        orgDir = replaceChars(org, " ()'/", ".###~");
+                        }
+            
+                    if (!hashLookup(orgHash, org))
+                        {
+                        sprintf(fullOrgPath, "%s/%s", gOutputDir, orgDir);
+                        makeDir(fullOrgPath);
+                        hashAdd(orgHash, org, orgDir);
+                        }
+
+                    sprintf(raPath, "%s/%s/%s", gOutputDir, orgDir, raName); 
+                    /*printf ("RA PATH: %s\n", raPath);*/
+                    raFile = mustOpen(raPath, "ab");
+
+                    sprintf(faPath, "%s/%s/%s", gOutputDir, orgDir, origFaDir); 
+                    /*printf("FA PATH: %s\n", path);*/
+                    faFile = mustOpen(faPath, "ab");
+
+                    faDir = faPath;
+                    freez(&orgDir);
+                    }
+                }
+
+            kvtWriteAll(kvt, raFile, filter->hideKeys);
             if (formatType == ftBac)
                 {
+                printf("bacWrite()\n");
                 bacWrite(faDir, accession, version, dna, dnaSize);
                 }
             else
@@ -1331,7 +1460,10 @@ while (readGbInfo(lf))
             if (startsWith("//", line))
                 break;
         }
-    }
+    } /* End of outermost while loop */
+    
+
+freez(&oldOrg);
 freeDyString(&ctgDs);
 lineFileClose(&lf);
 printf(" %d\n", gbCount);
@@ -1425,7 +1557,9 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "usage:\n"
          "   gbToFaRa filterFile faFile raFile taFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
-         "to use or the word null if you want no filtering.");
+         "to use or the word null if you want no filtering."
+	 "options:\n"
+	 "     byOrganism=outputDir - Make separate files for each organism\n");
 }
 
 struct filter *makeFilter(char *fileName)
@@ -1491,35 +1625,59 @@ int main(int argc, char *argv[])
 char *filterName;
 struct filter *filter;
 char *faName, *raName, *taName, *gbName;
-FILE *fa=NULL, *ra, *ta;
-int i;
-struct hash *uniqHash, *estAuthorHash;
+FILE *fa = NULL;
+FILE *ra = NULL;
+FILE *ta = NULL;
+int i = 0;
+int startIndex = 5;
+struct hash *uniqHash = NULL;
+struct hash *estAuthorHash = NULL;
+struct hash *orgHash = NULL;
+static char *byOrgOption = "-byOrganism=";
 
+optionHash(&argc, argv);
 if (argc < 6)
-    {
     usage();
-    }
+
+gOutputDir = optionVal("byOrganism", NULL);
+gByOrganism = (gOutputDir != NULL);
+
 filterName = argv[1];
 faName = argv[2];
 raName = argv[3];
 taName = argv[4];
 
 filter  = makeFilter(filterName);
-
-if (formatType != ftBac)
-    fa = mustOpen(faName, "wb");
-ra = mustOpen(raName, "wb");
-ta = mustOpen(taName, "wb");
 uniqHash = newHash(16);
 estAuthorHash = newHash(10);
 kvt = newKvt(128);
 makeGbStruct();
-for (i=5; i<argc; ++i)
+
+orgHash = newHash(20);
+ta = mustOpen(taName, "wb");
+
+if (gByOrganism) 
+    {
+    printf("Processing output by organism into directory: %s\n", gOutputDir);
+    makeDir(gOutputDir);
+    }
+else
+    {
+    ra = mustOpen(raName, "wb");
+    if (formatType != ftBac)
+        {
+        fa = mustOpen(faName, "wb");
+        }
+    }
+
+for (i = startIndex; i < argc; ++i)
     {
     gbName = argv[i];
     printf("Processing %s into %s and %s\n", gbName, faName, raName);
-    procOneGbFile(gbName, fa, faName, ra, uniqHash, estAuthorHash, filter);
+    procOneGbFile(gbName, fa, faName, ra, raName, 
+                  uniqHash, estAuthorHash, orgHash, filter);
     }
+
 printStats(ta, gbStruct);
 return 0;
 }

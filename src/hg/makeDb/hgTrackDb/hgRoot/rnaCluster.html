@@ -1,0 +1,25 @@
+<H2>Description</H2>
+This track shows the boundaries of genes and direction of
+transcription as deduced from clustering spliced ESTs and mRNAs
+against the genome.  When there are many spliced varient
+of the same gene, this track shows the varient which
+spans the greatest distance in the genome.  
+
+<H2>Method</H2>
+ESTs and mRNAs from Genbank are aligned against the genome
+with the BLAT program, and filtered to only keep alignments
+that are have at least 97.5% base identity within the 
+aligning blocks.  When multiple alignments occur, only the
+alignments with a percentage identity within 0.2% of the
+best alignment are kept.  ESTs which align without any
+introns are discarded.  Blocks that are less than 130 bases
+and not next to an intron are discarded.   Blocks smaller
+than 10 bases are discarded.   The orientation of the 
+ESTs and mRNAs are deduced from the GT/AG splice sites
+at the introns,  and ESTs and mRNAs with overlapping blocks
+on the same strand are merged into clusters.  Only the
+extent and orientation of the clusters are shown here.
+
+<H2>Credits</H2>
+This track was generated at UCSC by Jim Kent using data
+in submitted to Genbank by scientists worldwide.

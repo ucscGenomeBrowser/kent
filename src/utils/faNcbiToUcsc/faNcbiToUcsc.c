@@ -30,8 +30,6 @@ boolean ntLast = cgiBoolean("ntLast");
 struct dnaSeq seq;
 FILE *f = NULL;
 
-if (!ntLast)
-    errAbort("Currently only know how to do it with ntLast");
 if (split)
     makeDir(out);
 else
@@ -40,21 +38,43 @@ while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
 	{
-	char *nt = stringIn("NT_", line);
-	char *e;
-	if (nt == NULL)
-	    errAbort("Expecting NT_ in %s", line);
-	e = strchr(nt, '|');
-	if (e != NULL) *e = 0;
-	e = strchr(nt, ' ');
-	if (e != NULL) *e = 0;
-	if (split)
+	if (ntLast)
 	    {
-	    sprintf(outName, "%s/%s.fa", out, nt);
-	    carefulClose(&f);
-	    f = mustOpen(outName, "w");
+	    char *nt = stringIn("NT_", line);
+	    char *e;
+	    if (nt == NULL)
+		errAbort("Expecting NT_ in %s", line);
+	    e = strchr(nt, '|');
+	    if (e != NULL) *e = 0;
+	    e = strchr(nt, ' ');
+	    if (e != NULL) *e = 0;
+	    if (split)
+		{
+		sprintf(outName, "%s/%s.fa", out, nt);
+		carefulClose(&f);
+		f = mustOpen(outName, "w");
+		}
+	    fprintf(f, ">%s\n", nt);
 	    }
-	fprintf(f, ">%s\n", nt);
+	else
+	    {
+	    char *words[8];
+	    int wordCount, i;
+	    char *accession = NULL;
+	    wordCount = chopString(line+1, "|", words, ArraySize(words));
+	    for (i=0; i<wordCount-1; ++i)
+	        {
+		if (sameString(words[i], "gb"))
+		    {
+		    accession = words[i+1];
+		    break;
+		    }
+		}
+	    if (accession == NULL)
+	        errAbort("Couldn't find 'gb' line %d of %s", lf->lineIx, lf->fileName);
+	    chopSuffix(accession);
+	    fprintf(f, ">%s\n", accession);
+	    }
 	}
     else
         {

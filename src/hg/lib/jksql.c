@@ -529,6 +529,15 @@ if ((conn = *pConn) != NULL)
     }
 }
 
+
+char *sqlEscapeString(const char* from)
+{
+int size = (strlen(from)*2) +1;
+char *to = needMem(size * sizeof(char));
+mysql_escape_string(to, from, strlen(from));
+return to; 
+}
+
 struct hash *sqlHashOfDatabases()
 /* Get hash table with names of all databases that are online. */
 {
@@ -545,4 +554,5 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlDisconnect(&conn);
 return hash;
 }
+
 

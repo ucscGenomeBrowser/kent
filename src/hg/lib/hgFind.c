@@ -115,7 +115,7 @@ hgp->posCount = posCount;
 static boolean isContigName(char *contig)
 /* Return TRUE if a FPC contig name. */
 {
-return startsWith("ctg", contig);
+return startsWith("ctg", contig) || startsWith("NT_", contig);
 }
 
 static boolean isAncientRName(char *name)
@@ -123,6 +123,8 @@ static boolean isAncientRName(char *name)
 {
 return startsWith("ar", name);
 }
+
+
 
 static void findAncientRPos(char *name, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
@@ -151,9 +153,8 @@ hFreeConn(&conn);
 }
 
 
-void findContigPos(char *contig, char **retChromName, 
+boolean findContigPos(char *contig, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
-
 /* Find position in genome of contig.  Don't alter
  * return variables if some sort of error. */
 {
@@ -161,20 +162,26 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
 char **row;
-struct ctgPos *ctgPos;
+boolean foundIt;
+
 dyStringPrintf(query, "select * from ctgPos where contig = '%s'", contig);
 sr = sqlMustGetResult(conn, query->string);
 row = sqlNextRow(sr);
 if (row == NULL)
-    errAbort("Couldn't find contig %s", contig);
-ctgPos = ctgPosLoad(row);
-*retChromName = hgOfficialChromName(ctgPos->chrom);
-*retWinStart = ctgPos->chromStart;
-*retWinEnd = ctgPos->chromEnd;
-ctgPosFree(&ctgPos);
+    foundIt = FALSE;
+else
+    {
+    struct ctgPos *ctgPos = ctgPosLoad(row);
+    *retChromName = hgOfficialChromName(ctgPos->chrom);
+    *retWinStart = ctgPos->chromStart;
+    *retWinEnd = ctgPos->chromEnd;
+    ctgPosFree(&ctgPos);
+    foundIt = TRUE;
+    }
 freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+return foundIt;
 }
 
 static char *startsWithShortHumanChromName(char *chrom)
@@ -388,7 +395,7 @@ boolean hgFindClonePos(char *spec, char **retChromName,
 	int *retWinStart, int *retWinEnd)
 /* Return clone position. */
 {
-if (!isAccForm(spec))
+if (!isAccForm(spec) || !hTableExists("clonePos"))
     return FALSE;
 else
     {
@@ -1278,12 +1285,48 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
-boolean findGenomePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart)
-/* Search for positions in genome that match user query.   
-Return TRUE if the query results in a unique position.  
-Otherwise display list of positions and return FALSE. */
+static boolean isAffyProbeName(char *name)
+/* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
+{
+return startsWith("HG-U95Av2:", name);
+}
 
+static void findAffyProbePos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find affy probe start, end, and chrom
+ * from "name".  Don't alter
+ * return variables if some sort of error. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(256);
+char **row;
+struct bed *bed = NULL;
+char *temp = strstr(name, ":"); /* parse name out of something like "HG-U95Av2:probeName" */
+assert(temp);
+temp++;
+dyStringPrintf(query, "select * from affyRatio where name = '%s'", temp);
+if(!hTableExists("affyRatio"))
+    errAbort("Sorry GNF Ratio track not available yet in this version of the browser.");
+sr = sqlMustGetResult(conn, query->string);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Couldn't find affy probe: %s", name);
+bed = bedLoadN(row,15);
+*retChromName = hgOfficialChromName(bed->chrom);
+*retWinStart = bed->chromStart;
+*retWinEnd = bed->chromEnd;
+bedFree(&bed);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+static boolean genomePos(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias)
+/* Search for positions in genome that match user query.   
+ * Return TRUE if the query results in a unique position.  
+ * Otherwise display list of positions and return FALSE. */
 { 
 struct hgPositions *hgp;
 struct hgPos *pos;
@@ -1301,7 +1344,7 @@ if (hgp == NULL || hgp->posCount == 0)
     errAbort("Sorry, couldn't locate %s in genome database\n", spec);
     return TRUE;
     }
-if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
+if (((pos = hgp->singlePos) != NULL) && (!showAlias || !hgp->useAlias))
     {
     *retChromName = pos->chrom;
     *retWinStart = pos->chromStart;
@@ -1320,9 +1363,20 @@ else
     }
 }
 
+
+
+boolean findGenomePos(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart)
+/* Search for positions in genome that match user query.   
+ * Return TRUE if the query results in a unique position.  
+ * Otherwise display list of positions and return FALSE. */
+{
+return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE);
+}
+
 boolean handleTwoSites(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
-
+/* Deal with specifications that in form start;end. */
 {
 struct hgPositions *hgp;
 struct hgPos *pos;
@@ -1348,8 +1402,8 @@ commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
 firststring[commaspot] = '\0';
 strncpy(secondstring,spec + commaspot + 1,strlen(spec));
-firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart);
-secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart); 
+firstSuccess = genomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart, FALSE);
+secondSuccess = genomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart, FALSE); 
 if (firstSuccess == FALSE && secondSuccess == FALSE)
     {
     errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
@@ -1444,21 +1498,25 @@ if (hgIsChromRange(query))
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
     }
 
+else if (isAffyProbeName(query))
+    {
+    findAffyProbePos(query, &chrom, &start, &end);
+    singlePos(hgp, "GNF Ratio Expression data", NULL, query, chrom, start, end);
+    }
 else if (isAncientRName(query))
     {
     findAncientRPos( query, &chrom, &start, &end );
     singlePos( hgp, "Human/Mouse Ancient Repeats", NULL, query, chrom, start, end );
     }
 
-else if (isContigName(query))
+else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
     {
-    findContigPos(query, &chrom, &start, &end);
     if (relativeFlag == TRUE)
 	{
 	end = start + iEnd;
 	start = start + iStart;
 	}
-    singlePos(hgp, "FPC Contig", NULL, query, chrom, start, end);
+    singlePos(hgp, "Map Contig", NULL, query, chrom, start, end);
     }
 else if (hgFindCytoBand(query, &chrom, &start, &end))
     {

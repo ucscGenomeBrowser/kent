@@ -13,10 +13,6 @@
 #include "ggMrnaAli.h"
 #endif
 
-#ifndef HGRELATE_H
-#include "hgRelate.h"
-#endif 
-
 #ifndef ALTGRAPH_H
 #include "altGraph.h"
 #endif
@@ -44,6 +40,7 @@ struct ggAliInfo
     struct ggAliInfo *next;   /* Next in list. */
     struct ggVertex *vertices;   /* Splice sites or soft start/ends. */
     int vertexCount;             /* Vertex count. */
+    struct ggMrnaAli *ma;	/* Associated mrnaInfo. */
     };
 
 

@@ -747,8 +747,8 @@ for (;;)
 
 
 
-/* Replace trailing white space with zeroes. */
 void eraseTrailingSpaces(char *s)
+/* Replace trailing white space with zeroes. */
 {
 int len = strlen(s);
 int i;
@@ -785,10 +785,12 @@ for (;;)
 char *trimSpaces(char *s)
 /* Remove leading and trailing white space. */
 {
+if (s != NULL)
+    {
     s = skipLeadingSpaces(s);
     eraseTrailingSpaces(s);
-    if (s[0] == 0) return NULL;
-    return s;
+    }
+return s;
 }
 
 char *firstWordInLine(char *line)
@@ -1162,3 +1164,52 @@ buf[bufSize] = '\0';
 return buf;
 }
 
+boolean fileExists(char *fileName)
+/* Return TRUE if file exists (may replace this with non-
+ * portable faster way some day). */
+{
+int fd;
+/* To make piping easier stdin and stdout always exist. */
+if (sameString(fileName, "stdin")) return TRUE;
+if (sameString(fileName, "stdout")) return TRUE;
+
+/* Otherwise open file and close it to find out... */
+if ((fd = open(fileName, O_RDONLY)) < 0)
+    return FALSE;
+close(fd);
+return TRUE;
+}
+
+char *strstrNoCase(char *haystack, char *needle)
+/*
+  A case-insensitive strstr function
+
+param haystack - The string to be searched
+param needle - The string to llok for in the haystack string
+
+return - A pointer to the first occurence of the desired substring
+ */
+{
+char *haystackCopy = NULL;
+char *needleCopy = NULL;
+int index = 0;
+int haystackLen = strlen(haystack);
+int needleLen = strlen(needle);
+
+haystackCopy = (char*) needMem(haystackLen + 1);
+needleCopy = (char*) needMem(needleLen + 1);
+
+for(index = 0; index < haystackLen;  index++)
+    {
+    haystackCopy[index] = tolower(haystack[index]);
+    }
+haystackCopy[haystackLen] = 0; /* Null terminate */
+
+for(index = 0; index < needleLen;  index++)
+    {
+    needleCopy[index] = tolower(needle[index]);
+    }
+needleCopy[needleLen] = 0; /* Null terminate */
+
+return strstr(haystackCopy, needleCopy);
+}

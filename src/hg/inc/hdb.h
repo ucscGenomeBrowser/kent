@@ -19,6 +19,17 @@
 #include "trackDb.h"
 #endif
 
+struct blatServerTable
+/* Information about a BLAT server. */
+{
+    char *db;		/* Database name. */
+    char *genome;	/* Genome name. */
+    boolean isTrans;	/* Is tranlated to protein? */
+    char *host;		/* Name of machine hosting server. */
+    char *port;		/* Port that hosts server. */
+    char *nibDir;	/* Directory of sequence files. */
+};
+
 struct hTableInfo
 /* Some info to track table. */
     {
@@ -76,9 +87,12 @@ boolean hTableExists(char *table);
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
+struct dnaSeq *hChromSeq(char *chrom, int start, int end);
+/* Return lower case DNA from chromosome. */
+
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
-/* Fetch DNA */
+/* Fetch DNA in a variety of cases.  */
 
 struct dnaSeq *hLoadChrom(char *chromName);
 /* Fetch entire chromosome into memory. */
@@ -131,6 +145,9 @@ struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
+
+boolean hIsBinned(char *table);
+/* Return TRUE if a table is binned. */
 
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
@@ -193,16 +210,12 @@ boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
  * chromosome chrom and some N and M. */
 
-boolean hgParseContigRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd);
-/* Parse something of form contig:start-end into pieces. */
-
-boolean hgIsContigRange(char *spec);
-/* Returns TRUE if spec is contig:N-M for some human
- * chromosome contig and some N and M. */
-
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database. */
+
+struct dbDb *hGetIndexedDatabases();
+/* Get list of databases for which there is a nib dir. 
+ * Dispose of this with dbDbFreeList. */
 
 struct dbDb *hGetBlatIndexedDatabases();
 /* Get list of databases for which there is a BLAT index. 
@@ -211,5 +224,18 @@ struct dbDb *hGetBlatIndexedDatabases();
 boolean hIsBlatIndexedDatabase(char *db);
 /* Return TRUE if have a BLAT server on sequence corresponding 
  * to give database. */
+
+struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
+/* return the blat server information corresponding to the database */
+
+char *hOrganism(char *database);
+/* Return organism associated with database.   Use freeMem on
+ * return value when done. */
+
+char *hLookupStringVars(char *in, char *database);
+/* Expand $ORGANISM and other variables in input. */
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database);
+/* Lookup strings in track database. */
 
 #endif /* HDB_H */

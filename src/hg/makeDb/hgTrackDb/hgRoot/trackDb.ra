@@ -37,6 +37,14 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
+track stsMapMouse
+shortLabel STS Markers
+longLabel STS Markers on Genetic Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
 track mouseSyn
 shortLabel Mouse Synteny
 longLabel Corresponding Chromosome in Mouse
@@ -61,6 +69,14 @@ priority 6
 visibility hide
 spectrum on
 type bed 4 +
+
+track GCwiggle
+shortLabel GC Samples 
+longLabel GC Percent Sample Track (every 20,000 bases)
+priority 6.1
+visible hide
+chromosomes chr22,
+type sample 9
 
 track ctgPos
 shortLabel Map Contigs
@@ -98,6 +114,13 @@ longLabel BAC End Pairs
 priority 10
 visibility hide
 
+track uPennClones
+shortLabel U Penn Clones
+longLabel Univ of Penn Clones
+priority 10.1
+visibility hide
+type bed 6 +
+
 track genomicDups
 priority 10.5
 shortLabel Duplications
@@ -120,7 +143,6 @@ longLabel UCSF Comparative Genomic Hybridizations
 priority 11.5
 visibility hide
 type bed 4 +
-private on
 
 track mcnBreakpoints
 shortLabel MCN Breakpoints
@@ -128,7 +150,6 @@ longLabel MCN breakpoints
 priority 11.7
 visibility hide
 type bed 4 +
-private on
 
 track genieKnown
 shortLabel Known Genes
@@ -205,7 +226,7 @@ priority 14.5
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GPE&l=$$
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
 
 track aceTest
 shortLabel Acembly Test
@@ -215,7 +236,6 @@ visibility full
 color 195,50,165
 type genePred
 url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$
-private on
 
 track ensGene
 shortLabel Ensembl Genes
@@ -260,25 +280,49 @@ type bed 6
 chromosomes chr22,
 
 track mrna
-shortLabel Human mRNAs
-longLabel Human mRNAs from Genbank 
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
 priority 18
 visibility full
 spectrum on
 type psl .
 
+track tightMrna
+shortLabel Tight mRNAS
+longLabel Tightly Filtered $Organism mRNAs from Genbank
+priority 18.1
+visibility hide
+spectrum on
+type psl .
+
+track rnaCluster
+shortLabel Gene Bounds 
+longLabel Gene Boundaries as Defined by RNA and Spliced EST Clusters
+priority 18.2
+visibility hide
+color 200,0,50
+type bed 12
+
 track intronEst
 shortLabel Spliced ESTs
-longLabel Human ESTs That Have Been Spliced
+longLabel $Organism ESTs That Have Been Spliced
 priority 18.5
 visibility dense
 spectrum on
 type psl est
 
 track est
-shortLabel Human ESTs
-longLabel Human ESTs Including Unspliced
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
 priority 19
+visibility hide
+spectrum on
+type psl est
+
+track tightEst
+shortLabel Tight ESTs
+longLabel Tightly Filtered $Organism ESTs Including Unspliced
+priority 19.1
 visibility hide
 spectrum on
 type psl est
@@ -290,11 +334,10 @@ priority 20
 visibility hide
 color 0,0,180
 altColor 170,0,0
-private on
 
 track tigrGeneIndex
-shortLabel Tigr Gene Index
-longLabel Alignment of Tigr Gene Index TCs Against the Human Genome
+shortLabel TIGR Gene Index
+longLabel Alignment of TIGR Gene Index TCs Against the $Organism Genome
 priority 20.2
 visibility dense
 color 100,0,0
@@ -308,7 +351,6 @@ priority 20.5
 visibility dense
 type psl .
 
-
 track mgc_mrna
 shortLabel MGC mRNAs
 longLabel Mammalian Gene Collection mRNAs
@@ -316,11 +358,10 @@ priority 21
 visibility hide
 spectrum on
 type psl .
-private on
 
 track cpgIsland
 shortLabel CpG Islands
-longLabel CpG Islands. (Islands < 400 Bases are Light Green)
+longLabel CpG Islands (Islands < 400 Bases are Light Green)
 priority 22
 visibility hide
 color 0,100,0
@@ -342,7 +383,6 @@ priority 23.1
 visibility hide
 spectrum on
 type psl xeno
-private on
 
 track xenoEst
 shortLabel Nonhuman EST
@@ -353,11 +393,20 @@ spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
+track blatMus
+shortLabel Mouse Blat
+longLabel Mouse Translated Blat Alignments
+priority 24
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
 
 track blatMouse
 shortLabel Mouse Blat
 longLabel Mouse Translated Blat Alignments
-priority 24
+priority 24.01
 visibility dense
 color 100,50,0
 altColor 255,240,200
@@ -373,7 +422,6 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno
-private on
 
 track exoMouse
 shortLabel Exonerate Mouse
@@ -489,7 +537,6 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
-private on
 
 track tet_waba
 shortLabel Tetraodon
@@ -541,7 +588,6 @@ priority 33.5
 visibility hide
 spectrum on
 type bed 12
-private on
 
 track rmsk
 shortLabel RepeatMasker
@@ -572,6 +618,13 @@ priority 39
 visibility hide
 type bed 15 +
 
+track affyRatio
+shortLabel GNF Ratio
+longLabel GNF Gene Expression Atlas Ratios using Affymetrix GeneChips
+priority 39.1
+visibility hide
+type bed 15 +
+
 track cghNci60
 shortLabel CGH NCI60
 longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
@@ -593,8 +646,18 @@ longLabel Wiggle Test Track
 priority 41
 visibility hide
 chromosomes chr21,
-type bed 12
-private on
+type sample 9
+
+
+track chimp
+shortLabel Chimp
+longLabel Chimp Sample Track
+priority 41.1
+visible hide
+chromosomes chr7,
+color 100,50,0
+altColor 0,0,255
+type sample 9
 
 track altGraph
 shortLabel altGraph
@@ -602,3 +665,10 @@ longLabel altGraph
 priority 42
 visibility hide
 type psl
+
+track altGraphX
+shortLabel altGraphX
+longLabel altGraphX
+priority 42.1
+visibility hide
+type bed 3

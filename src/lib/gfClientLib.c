@@ -1,6 +1,7 @@
 /* gfClientLib - stuff to interface with a genoFind server running somewhere
  * on the web. */
 #include "common.h"
+#include "net.h"
 #include "linefile.h"
 #include "sqlNum.h"
 #include "fa.h"
@@ -120,7 +121,7 @@ startSeqQuery(conn, seq, "query");
 /* Read results line by line and save in list, and return. */
 for (;;)
     {
-    gfRecieveString(conn, buf);
+    netRecieveString(conn, buf);
     if (sameString(buf, "end"))
 	{
 	break;
@@ -169,7 +170,7 @@ struct gfHit *getHitsFromServer(int conn, struct lm *lm)
 {
 char *s, *line, *q, *t;
 struct gfHit *hitList = NULL, *hit;
-s = line = gfRecieveLongString(conn);
+s = line = netRecieveLongString(conn);
 for (;;)
     {
     if ((q = nextWord(&line)) == NULL)
@@ -205,14 +206,14 @@ for (isRc = 0; isRc <= 1; ++isRc)
 /* Send sequence to server. */
 startSeqQuery(conn, seq, "protQuery");
 
-line = gfRecieveString(conn, buf);
+line = netRecieveString(conn, buf);
 tileSize = findTileSize(line);
 
 /* Read results line by line and save in memory. */
 for (;;)
     {
     /* Read and parse first line that describes clump overall. */
-    gfRecieveString(conn, buf);
+    netRecieveString(conn, buf);
     if (sameString(buf, "end"))
 	{
 	break;
@@ -267,14 +268,14 @@ for (isRc = 0; isRc <= 1; ++isRc)
 /* Send sequence to server. */
 startSeqQuery(conn, seq, "transQuery");
 
-line = gfRecieveString(conn, buf);
+line = netRecieveString(conn, buf);
 tileSize = findTileSize(line);
 
 /* Read results line by line and save in memory. */
 for (;;)
     {
     /* Read and parse first line that describes clump overall. */
-    gfRecieveString(conn, buf);
+    netRecieveString(conn, buf);
     if (sameString(buf, "end"))
 	{
 	break;

@@ -12,6 +12,7 @@ struct dbDb
     char *name;	/* Short name of database.  'hg8' or the like */
     char *description;	/* Short description - 'Aug. 8, 2001' or the like */
     char *nibPath;	/* Path to packed sequence files */
+    char *organism;	/* Common name of organism - first letter capitalized */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);

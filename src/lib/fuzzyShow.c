@@ -43,7 +43,8 @@ if (showJumpTable)
     }
 fprintf(f, "Matching bases in cDNA and genomic sequences are colored blue%s. ", 
 	(upcMatch ? " and capitalized" : ""));
-fputs("Light blue bases indicate gaps in the alignment. ", f);
+fputs("Light blue bases mark the boundaries of gaps in either side of "
+      "the alignment (often splice sites). ", f);
 // if (showHaystack)
     // fputs("Predicted exons are in upper case.", f);
 fputs("</P></CENTER>", f);

@@ -13,7 +13,10 @@
 
 /* Some stuff to support large files in Linux. */
 #define _LARGEFILE_SOURCE 1
+
+#ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,6 +47,9 @@
 #define bits16 unsigned short /* Wants to be unsigned 16 bits. */
 
 #define BIGNUM 0x3fffffff	/* A really big number */
+
+/* Default size of directory path string buffers */
+#define PATH_LEN 512
 
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
@@ -519,5 +525,14 @@ int intExp(char *text);
 
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */
+
+long fileSize(char *fileName);
+/* The size of a file. */
+
+boolean fileExists(char *fileName);
+/* Does a file exist? */
+
+char *strstrNoCase(char *haystack, char *needle);
+/* A case-insensitive strstr */
 
 #endif /* COMMON_H */

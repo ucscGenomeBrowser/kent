@@ -135,6 +135,17 @@ struct psl *pslFromFakeFfAli(struct ffAli *ff,
 int pslOrientation(struct psl *psl);
 /* Translate psl strand + or - to orientation +1 or -1 */
 
+int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
+/* Return >0 if introns make it look like alignment is on + strand,
+ *        <0 if introns make it look like alignment is on - strand,
+ *        0 if can't tell.  The absolute value of the return indicates
+ * how many splice sites we've seen supporting the orientation. */
+
+int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
+/* Return 1 if introns make it look like alignment is on + strand,
+ *       -1 if introns make it look like alignment is on - strand,
+ *        0 if can't tell. */
+
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail);
 /* Find the length of "tails" (rather than extensions) implied by psl. */
 

@@ -38,53 +38,6 @@ void gfCatchPipes()
 signal(SIGPIPE, gfPipeHandler);
 }
 
-boolean gfSendString(int sd, char *s)
-/* Send a string down a socket - length byte first. */
-{
-int length = strlen(s);
-UBYTE len;
-
-pipeBroke = FALSE;
-if (length > 255)
-    errAbort("Trying to send a string longer than 255 bytes (%d bytes)", length);
-len = length;
-if (write(sd, &len, 1)<0)
-    {
-    warn("Couldn't send string to socket");
-    return FALSE;
-    }
-if (write(sd, s, length)<0)
-    {
-    warn("Couldn't send string to socket");
-    return FALSE;
-    }
-return TRUE;
-}
-
-boolean gfSendLongString(int sd, char *s)
-/* Send a long string down socket: two bytes for length. */
-{
-unsigned length = strlen(s);
-UBYTE b[2];
-
-pipeBroke = FALSE;
-if (length >= 64*1024)
-    errAbort("Trying to send a string longer than 64k bytes (%d bytes)", length);
-b[0] = (length>>8);
-b[1] = (length&0xff);
-if (write(sd, b, 2) < 0)
-    {
-    warn("Couldn't send long string to socket");
-    return FALSE;
-    }
-if (write(sd, s, length)<0)
-    {
-    warn("Couldn't send long string to socket");
-    return FALSE;
-    }
-return TRUE;
-}
-
 int gfReadMulti(int sd, void *vBuf, size_t size)
 /* Read in until all is read or there is an error. */
 {
@@ -104,76 +57,6 @@ while (totalRead < size)
     }
 return totalRead;
 }
-
-char *gfGetString(int sd, char buf[256])
-/* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. Print warning message
- * and return NULL if any problem. */
-{
-static char sbuf[256];
-UBYTE len;
-int length;
-if (buf == NULL) buf = sbuf;
-if (read(sd, &len, 1)<0)
-    {
-    warn("Couldn't sockRecieveString string from socket");
-    return NULL;
-    }
-length = len;
-if (length > 0)
-    if (gfReadMulti(sd, buf, length) < 0)
-	{
-	warn("Couldn't sockRecieveString string from socket");
-	return NULL;
-	}
-buf[length] = 0;
-return buf;
-}
-
-char *gfGetLongString(int sd)
-/* Read string and return it.  freeMem
- * the result when done. */
-{
-UBYTE b[2];
-char *s = NULL;
-int length = 0;
-if (gfReadMulti(sd, b, 2)<0)
-    {
-    warn("Couldn't read long string length");
-    return NULL;
-    }
-length = (b[0]<<8) + b[1];
-s = needMem(length+1);
-if (length > 0)
-    if (gfReadMulti(sd, s, length) < 0)
-	{
-	warn("Couldn't read long string");
-	return NULL;
-	}
-s[length] = 0;
-return s;
-}
-
-char *gfRecieveString(int sd, char buf[256])
-/* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. Abort if any problem. */
-{
-char *s = gfGetString(sd, buf);
-if (s == NULL)
-     noWarnAbort();   
-return s;
-}
-
-char *gfRecieveLongString(int sd)
-/* Read string and return it.  freeMem
- * the result when done. Abort if any problem*/
-{
-char *s = gfGetLongString(sd);
-if (s == NULL)
-     noWarnAbort();   
-return s;
-}
-
 
 void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */

@@ -699,34 +699,6 @@ if ((array = *pArray) != NULL)
     }
 }
 
-char *sqlEscapeString(const char* from)
-{
-char *to = needMem((strlen(from)*2 +1) * sizeof(char));
-int fromPos =0, toPos=0;
-for(fromPos =0; fromPos < strlen(from); fromPos++)
-    {
-
-    if(from[fromPos] == '\'')
-	{
-	to[toPos] = '\\';
-	toPos++; 
-	to[toPos] = '\'';
-	}
-    else if(from[fromPos] == '\"')
-	{
-	to[toPos] = '\\';
-	toPos++; 
-	to[toPos] = '\"';
-	}
-    else
-	to[toPos] = from[fromPos];
-    toPos++;
-    }
-toPos++;
-to[toPos] = '\0';
-return to; 
-}
-
 int sqlUnsignedComma(char **pS)
 /* Return signed number at *pS.  Advance *pS past comma at end */
 {
@@ -758,7 +730,7 @@ float sqlFloatComma(char **pS)
 {
 char *s = *pS;
 char *e = strchr(s, ',');
-unsigned ret;
+float ret;
 
 *e++ = 0;
 *pS = e;

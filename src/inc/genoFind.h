@@ -199,29 +199,6 @@ char *gfSignature();
 void gfCatchPipes();
 /* Set up to catch broken pipe signals. */
 
-boolean gfSendString(int sd, char *s);
-/* Send a string down a socket - length byte first. */
-
-boolean gfSendLongString(int sd, char *s);
-/* Send a string down a socket - up to 64k characters. */
-
-char *gfRecieveString(int sd, char buf[256]);
-/* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. Abort if any problem. */
-
-char *gfRecieveLongString(int sd);
-/* Read string and return it.  freeMem
- * the result when done. Abort if any problem*/
-
-char *gfGetString(int sd, char buf[256]);
-/* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. Print warning message
- * and return NULL if any problem. */
-
-char *gfGetLongString(int sd);
-/* Read string and return it.  freeMem
- * the result when done. */
-
 int gfReadMulti(int sd, void *vBuf, size_t size);
 /* Read in until all is read or there is an error. */
 

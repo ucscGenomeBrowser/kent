@@ -16,6 +16,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-cartHtmlShell("Cart Dump", doMiddle, "hguid", NULL);
+cartHtmlShell("Cart Dump", doMiddle, "hguid", NULL, NULL);
 return 0;
 }

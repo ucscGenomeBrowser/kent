@@ -1,13 +1,15 @@
 /* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
 #include "common.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "jksql.h"
-#include "psl.h"
 #include "dystring.h"
+#include "psl.h"
+#include "xAli.h"
 #include "hdb.h"
 
 boolean tNameIx = FALSE;
 boolean noBin = FALSE;
+boolean xaFormat = FALSE;
 char *clTableName = NULL;
 
 void usage()
@@ -22,12 +24,13 @@ errAbort(
   "options:\n"
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
   "   -tNameIx  add target name index\n"
+  "   -xa    Include sequence info\n"
   "   -nobin Repress binning");
 }
 
 char *createString = 
 "CREATE TABLE %s (\n"
-"%s"				/* Optional bin */
+    "%s"				/* Optional bin */
     "matches int unsigned not null,	# Number of bases that match that aren't repeats\n"
     "misMatches int unsigned not null,	# Number of bases that don't match\n"
     "repMatches int unsigned not null,	# Number of bases that match but are part of repeats\n"
@@ -48,9 +51,11 @@ char *createString =
     "blockCount int unsigned not null,	# Number of blocks in alignment\n"
     "blockSizes longblob not null,	# Size of each block\n"
     "qStarts longblob not null,	# Start of each block in query.\n"
-    "tStarts longblob not null,	# Start of each block in target.\n"
-              "#Indices\n"
-"%s"                            /* Optional bin. */
+    "tStarts longblob not null,	# Start of each block in target.\n";
+
+char *indexString = 
+	  "#Indices\n"
+    "%s"                            /* Optional bin. */
     "INDEX(%stStart),\n"
     "INDEX(qName(12)),\n"
     "INDEX(%stEnd)\n"
@@ -90,9 +95,13 @@ for (i = 0; i<pslCount; ++i)
 	}
     dyStringClear(ds);
     dyStringPrintf(ds, createString, table, 
-        (noBin ? "" : "bin smallint unsigned not null,\n"),
-	binIxString,
-    	extraIx, extraIx);
+        (noBin ? "" : "bin smallint unsigned not null,\n"));
+    if (xaFormat)
+	{
+        dyStringPrintf(ds, "qSeq longblob not null,\n");
+        dyStringPrintf(ds, "tSeq longblob not null,\n");
+	}
+    dyStringPrintf(ds, indexString, binIxString, extraIx, extraIx);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     if (noBin)
@@ -105,15 +114,32 @@ for (i = 0; i<pslCount; ++i)
         {
 	char *tab = "psl.tab";
 	FILE *f = mustOpen(tab, "w");
-	struct psl *psl;
-	struct lineFile *lf = pslFileOpen(pslName);
-	while ((psl = pslNext(lf)) != NULL)
+	struct lineFile *lf = NULL;
+	if (xaFormat)
 	    {
-	    fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
-	    pslTabOut(psl, f);
-	    pslFree(&psl);
+	    struct xAli *xa;
+	    char *row[23];
+	    lf = lineFileOpen(pslName, TRUE);
+	    while (lineFileRow(lf, row))
+	        {
+		xa = xAliLoad(row);
+		fprintf(f, "%u\t", hFindBin(xa->tStart, xa->tEnd));
+		xAliTabOut(xa, f);
+		xAliFree(&xa);
+		}
 	    }
-	lineFileClose(&lf);
+	else
+	    {
+	    struct psl *psl;
+	    lf = pslFileOpen(pslName);
+	    while ((psl = pslNext(lf)) != NULL)
+		{
+		fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
+		pslTabOut(psl, f);
+		pslFree(&psl);
+		}
+	    lineFileClose(&lf);
+	    }
 	carefulClose(&f);
 	dyStringPrintf(ds, 
 	   "LOAD data local infile '%s' into table %s", tab, table);
@@ -126,9 +152,10 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-tNameIx = cgiBoolean("tNameIx");
-clTableName = cgiOptionalString("table");
+optionHash(&argc, argv);
+tNameIx = optionExists("tNameIx");
+clTableName = optionVal("table", NULL);
+xaFormat = optionExists("xa");
 if (argc < 3)
     usage();
 hgLoadPsl(argv[1], argc-2, argv+2);

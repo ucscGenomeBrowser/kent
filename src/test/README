@@ -1,0 +1,37 @@
+test
+----
+This directory is for scripts to do basic sanity checks on the 
+databases (e.g. hg10) and/or CGI "scripts" (hgTracks, hgc, 
+hgTrackUi, hgBlat, hgConvCoords, hgText).  
+
+Contents
+--------
+perllib/:
+ - Contains Perl packages for test scripts: TrackDb.pm and WebTest.pm .
+
+hgTest.pl:
+ - parameterizable test script for hg* CGI tools.  
+   Run "hgTest.pl -help" for a description of command line args.
+
+getTracks.pl:
+ - prints out the trackName column from the trackDb table from 
+   several databases (hg7, hg8, hg10).  This is intended just as 
+   a simple test for perllib/TrackDb.pm.  
+
+
+
+
+
+Test Strategy
+-------------
+- connect to trackDb, get trackName column (list of trackNames)
+- exercise features on each trackName in each CGI "script".  
+
+Parameters
+----------
+Useful parameters for testing:
+- host: web server (database server??)
+- database (hg10, mm1 etc)  [doh -- mm1's trackDb has tableName not trackName!]
+- cookies & session id?
+- randomize?  how many queries?
+- sleep delay between requests?

@@ -25,8 +25,10 @@ boolean hgIsCytoBandName(char *spec, char **retChromName, char **retBandName);
 void hgFindChromBand(char *chromosome, char *band, int *retStart, int *retEnd);
 /* Return start/end of band in chromosome. */
 
-void findContigPos(char *contig, char **retChromName, 
+boolean findContigPos(char *contig, char **retChromName, 
 			  int *retWinStart, int *retWinEnd);
+/* Find position in genome of contig.  Don't alter
+ * return variables if some sort of error. */
 
 boolean hgFindClonePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd);

@@ -64,41 +64,44 @@ struct coordConvRep
     boolean good; /** TRUE if "to" coordConv is valid, i.e. conversion was successful */
 };
 
+void coordConvStaticLoad(char **row, struct coordConv *ret);
 /** Load a row from coordConv table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
-void coordConvStaticLoad(char **row, struct coordConv *ret);
 
+struct coordConv *coordConvLoad(char **row);
 /** Load a coordConv from row fetched with select * from coordConv
  * from database.  Dispose of this with coordConvFree(). */
-struct coordConv *coordConvLoad(char **row);
 
+struct coordConv *coordConvLoadAll(char *fileName);
 /** Load all coordConv from a tab-separated file.
  * Dispose of this with coordConvFreeList(). */
-struct coordConv *coordConvLoadAll(char *fileName);
 
+struct coordConv *coordConvCommaIn(char **pS, struct coordConv *ret);
 /** Create a coordConv out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
  * return a new coordConv */
-struct coordConv *coordConvCommaIn(char **pS, struct coordConv *ret);
 
+void coordConvFree(struct coordConv **pEl);
 /** Free a single dynamically allocated coordConv such as created
  * with coordConvLoad(). */
-void coordConvFree(struct coordConv **pEl);
 
-/** Free a list of dynamically allocated coordConv's */
 void coordConvFreeList(struct coordConv **pList);
+/** Free a list of dynamically allocated coordConv's */
 
-/** Print out coordConv.  Separate fields with sep. Follow last field with lastSep. */
 void coordConvOutput(struct coordConv *el, FILE *f, char sep, char lastSep);
+/** Print out coordConv.  Separate fields with sep. Follow last field with lastSep. */
 
-/** Print out coordConv as a line in a tab-separated file. */
 #define coordConvTabOut(el,f) coordConvOutput(el,f,'\t','\n');
+/** Print out coordConv as a line in a tab-separated file. */
 
-/** Print out coordConv as a comma separated list including final comma. */
 #define coordConvCommaOut(el,f) coordConvOutput(el,f,',',',');
+/** Print out coordConv as a comma separated list including final comma. */
 
 /*-------------End autoSql Generated Section------------------*/
 
+
+struct coordConvRep *coordConvConvertPos(char *chr, unsigned chromStart, unsigned chromEnd, char *oldDb, char *newDb,
+					 char *blatHost, char *port, char *nibDir);
 /**
   convert coordinates from old draft to new draft. If sucessful,
   coordConvRep->to returned will have new coordinates and
@@ -106,13 +109,12 @@ void coordConvOutput(struct coordConv *el, FILE *f, char sep, char lastSep);
   will have chromosome="unknown" and coordConvRep->good == FALSE, also
   optional will contain
   errormesg. Remember to free with coordConvReportFree().  */
-struct coordConvRep *coordConvConvertPos(char *chr, unsigned chromStart, unsigned chromEnd, char *oldDb, char *newDb,
-					 char *blatHost, char *port, char *nibDir);
 
-/** free a single dynamically allocated coordConvRep such as created by coordConvConvertPos(). */
 void coordConvRepFree(struct coordConvRep **pEl);
+/** free a single dynamically allocated coordConvRep such as created by coordConvConvertPos(). */
 
-/** free a list of  dynamically allocated coordConvRep */ 
 void coordConvRepFreeList(struct coordConvRep **pList);
+/** free a list of  dynamically allocated coordConvRep */ 
+
 #endif /* COORDCONV_H */
 

@@ -141,7 +141,7 @@ o - Go to the Entrez browser at http://www.ncbi.nlm.nih.gov/Entrez/
     and then put "Homo sapiens" [organism] in the search box and hit 
     go.  Tweak things so can save it to /projects/hg2/refseq.126/refseq.gb
     in GenBank flat file format.
-o - Download ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2acc and
+o - Download ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref and
     mim2loc to /projects/hg2/refseq.126
 o - Similarly download refSeq proteins in fasta format to refSeq.pep
 o - Align these by processes described under mRNA/EST alignments above.

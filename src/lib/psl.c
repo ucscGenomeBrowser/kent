@@ -600,6 +600,45 @@ else
     return 1;
 }
 
+int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
+/* Return >0 if introns make it look like alignment is on + strand,
+ *        <0 if introns make it look like alignment is on - strand,
+ *        0 if can't tell.  The absolute value of the return indicates
+ * how many splice sites we've seen supporting the orientation. */
+{
+int intronDir = 0;
+int oneDir;
+int i;
+DNA *dna = genoSeq->dna;
+
+for (i=1; i<psl->blockCount; ++i)
+    {
+    int iStart, iEnd, blockSize = psl->blockSizes[i-1];
+    if (psl->qStarts[i-1] + blockSize == psl->qStarts[i])
+	{
+	iStart = psl->tStarts[i-1] + psl->blockSizes[i-1] - offset;
+	iEnd = psl->tStarts[i] - offset;
+	oneDir = intronOrientation(dna+iStart, dna+iEnd);
+	intronDir += oneDir;
+	}
+    }
+return intronDir;
+}
+
+int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
+/* Return 1 if introns make it look like alignment is on + strand,
+ *       -1 if introns make it look like alignment is on - strand,
+ *        0 if can't tell. */
+{
+int intronDir = pslWeightedIntronOrientation(psl, genoSeq, offset);
+if (intronDir < 0)
+    intronDir = -1;
+else if (intronDir > 0)
+    intronDir = 1;
+return intronDir;
+}
+
+
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail)
 /* Find the length of "tails" (rather than extensions) implied by psl. */
 {

@@ -737,3 +737,5 @@
       handle lower-case masking of database in translated mode.
       Various minor bug fixes.  Start of several new browser
       features by other UCSC people.
+440 - Adapting browser to work with mouse.  Added Parasol job
+      control system.  Doing EST clustering on genome.

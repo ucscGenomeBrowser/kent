@@ -8,7 +8,7 @@ int gfConnect(char *hostName, char *portName)
 /* Start connection with server. */
 {
 /* Connect to server. */
-int sd = netConnect(hostName, portName);
+int sd = netConnect(hostName, atoi(portName));
 if (sd < 0)
     {
     errnoAbort("Sorry, the BLAT server seems to be down.  Please try "

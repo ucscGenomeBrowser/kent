@@ -250,7 +250,7 @@ else
 if (pslOut)
     {
     printf("<TT><PRE>");
-    if (!sameString(output, "psl no head"))
+    if (!sameString(output, "psl no header"))
 	pslWriteHead(stdout);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
@@ -471,16 +471,16 @@ void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = cartOptionalString(cart, "db");
+char *db = cartUsualString(cart, "db", defaultDatabase);
 struct serverTable *serve = findServer(db, FALSE);
 char **genomeList;
 int genomeCount;
 
-printf("%s", 
+printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-"<H1 ALIGN=CENTER>BLAT Search Human Genome</H1>\n"
+"<H1 ALIGN=CENTER>BLAT Search Genome</H1>\n"
 "<P>\n"
-"<TABLE BORDER=0 WIDTH=\"96%\">\n"
+"<TABLE BORDER=0 WIDTH=\"96%%\">\n"
 "<TR>\n");
 cartSaveSession(cart);
 
@@ -508,7 +508,7 @@ printf("%s", "<TD WIDTH=\"18%\">\n"
     "</TABLE>\n");
 
 puts("Please paste in a query sequence to see where it is located in the ");
-puts("UCSC assembly of the human genome.  Multiple sequences can be searched\n");
+printf("the genome.  Multiple sequences can be searched\n");
 puts("at once if separated by a line starting with > and the sequence name.\n");
 puts("<P>");
 
@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
 

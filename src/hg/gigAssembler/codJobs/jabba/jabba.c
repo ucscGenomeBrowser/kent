@@ -1268,6 +1268,8 @@ warnTime = cgiUsualInt("warnTime", warnTime);
 killTime = cgiUsualInt("killTime", killTime);
 command = argv[1];
 batch = argv[2];
+if (strchr(batch, '/') != NULL)
+    errAbort("Jabba has to be run in the same directory as %s", batch);
 if (sameString(command, "make"))
     {
     if (argc != 4)

@@ -126,7 +126,7 @@ int i;
 fiList = listDirX(ooDir, "*", FALSE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
-    if (fi->isDir && strlen(fi->name) <= 2)
+    if (fi->isDir && (strlen(fi->name) <= 2) || startsWith("NA_", fi->name))
         {
 	for (i=0; i<ArraySize(liftNames); ++i)
 	    {

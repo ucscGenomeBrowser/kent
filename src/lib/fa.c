@@ -124,53 +124,54 @@ dnaUtilOpen();
 if (text[0] == '>')
     {
     char *end;
-    s = strchr(text, '\n') + 1;
+    s = strchr(text, '\n');
+    if (s != NULL) ++s;
     name = skipLeadingSpaces(text+1);
     end = skipToSpaces(name);
+    if (end >= s || name >= s)
+        errAbort("No name in line starting with '>'");
     if (end != NULL)
         *end = 0;
     }
 else
-    s = text;
+    {
+    s = skipLeadingSpaces(text);
+    if (s == NULL || s[0] == 0)
+        return NULL;
+    }
 name = cloneString(name);
     
 d = text;
-for (;;)
+if (s != NULL)
     {
-    c = *s;
-    if (c == 0 || c == '>')
-        break;
-    ++s;
-    if (isspace(c) || isdigit(c))
-	continue;
-    if ((c = filter[c]) != 0) 
-        d[size++] = c;
-    else
+    for (;;)
 	{
-	if (isDna)
-	    d[size++] = 'n';
+	c = *s;
+	if (c == 0 || c == '>')
+	    break;
+	++s;
+	if (isspace(c) || isdigit(c))
+	    continue;
+	if ((c = filter[c]) != 0) 
+	    d[size++] = c;
 	else
-	    d[size++] = 'X';
+	    {
+	    if (isDna)
+		d[size++] = 'n';
+	    else
+		d[size++] = 'X';
+	    }
 	}
     }
 d[size] = 0;
 
 /* Put sequence into our little sequence structure. */
-if (size != 0)
-    {
-    AllocVar(seq);
-    seq->name = name;
-    seq->dna = text;
-    seq->size = size;
-    *pText = s;
-    return seq;
-    }
-else
-    {
-    freeMem(name);
-    *pText = NULL;
-    return NULL;
-    }
+AllocVar(seq);
+seq->name = name;
+seq->dna = text;
+seq->size = size;
+*pText = s;
+return seq;
 }
 
 bioSeq *faSeqListFromMemText(char *text, boolean isDna)

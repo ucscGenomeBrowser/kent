@@ -28,6 +28,18 @@ if ((ds = *pDs) != NULL)
     }
 }
 
+void freeDyStringList(struct dyString **pDs)
+/* free up a list of dyStrings */
+{
+struct dyString *ds, *next;
+for(ds = *pDs; ds != NULL; ds = next)
+    {
+    next = ds->next;
+    freeDyString(&ds);
+    }
+*pDs = NULL;
+}
+
 static void dyStringExpandBuf(struct dyString *ds, int newSize)
 /* Expand buffer to new size. */
 {
@@ -75,8 +87,8 @@ void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 char string[4*1024];	/* Sprintf buffer */
 int size;
 
-size = vsprintf(string, format, args);
-if (size >= sizeof(string))
+size = vsnprintf(string, sizeof(string), format, args);
+if (size >= sizeof(string)-1)
     errAbort("Sprintf size too long in dyStringVaPrintf");	/* If we're still alive... */
 dyStringAppendN(ds, string, size);
 }
