@@ -3078,3 +3078,107 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
    
     # Clean up    
     rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab psl.tab 
+
+#  gc5Base wiggle TRACK (DONE - 2004-04-07 - Hiram)
+    # Perform a gc count with a 5 base
+    # window.  Also compute a "zoomed" view for display efficiency.
+    mkdir /cluster/data/rn3/bed/gc5Base
+    cd /cluster/data/rn3/bed/gc5Base
+
+    #	in the script below, the 'grep -w GC' selects the lines of
+    #	output from hgGcPercent that are real data and not just some
+    #	information from hgGcPercent.  The awk computes the number
+    #	of bases that hgGcPercent claimed it measured, which is not
+    #	necessarily always 5 if it ran into gaps, and then the division
+    #	by 10.0 scales down the numbers from hgGcPercent to the range
+    #	[0-100].  Two columns come out of the awk print statement:
+    #	<position> and <value> which are fed into wigAsciiToBinary through
+    #	the pipe.  It is set at a dataSpan of 5 because each value
+    #	represents the measurement over five bases beginning with
+    #	<position>.  The result files end up in ./wigData5.
+    cat << '_EOF_' > runGcPercent.sh
+#!/bin/sh
+mkdir -p wigData5
+mkdir -p dataLimits5
+for n in ../../nib/*.nib
+do
+	c=`basename ${n} | sed -e "s/.nib//"`
+	C=`echo $c | sed -e "s/chr//"`
+	echo -n "working on ${c} - ${C} ... "
+	hgGcPercent -chr=${c} -doGaps \
+		-file=stdout -win=5 rn3 ../../nib | grep -w GC | \
+		awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+	wigAsciiToBinary \
+	-dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
+	-name=${C} stdin 2> dataLimits5/${c}
+echo "done"
+done
+'_EOF_'
+    chmod +x runGcPercent.sh
+    #	This is going to take perhaps two hours to run.  It is a lot of
+    #	data.  make sure you do it on the fileserver:
+    ssh eieio
+    cd /cluster/data/rn3/bed/gc5Base
+    ./runGcPercent.sh
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/rn3/wib/gc5Base rn3 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/rn3/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/rn3/wib/gc5Base
+
+    # to speed up display for whole chromosome views, compute a "zoomed"
+    # view and load that on top of the existing table.  The savings
+    # comes from the number of data table rows the browser needs to load
+    # for a full chromosome view.  Without the zoomed view there are
+    # over 43,000 data rows for chrom 1.  With the zoomed view there are
+    # only 222 rows needed for the display.  If your original data was
+    # at 1 value per base the savings would be even greater.
+    #	Pretty much the same data calculation
+    # situation as above, although this time note the use of the
+    # 'wigZoom -dataSpan=1000 stdin' in the pipeline.  This will average
+    # together the data points coming out of the awk print statment over
+    # a span of 1000 bases.  Thus each <position> coming out of wigZoom
+    # will represent the measurement of GC in the next 1000 bases.  Note
+    # the use of -dataSpan=1000 on the wigAsciiToBinary to account for
+    # this type of data.  You want your dataSpan here to be an exact
+    # multiple of your original dataSpan (5*200=1000) and on the order
+    # of at least 1000, doesn't need to go too high.  For data that is
+    # originally at 1 base per value, a convenient span is: -dataSpan=1024
+    # A new set of result files ends up in ./wigData5_1K/*.wi[gb]
+    cat << '_EOF_' > runZoom.sh
+#!/bin/sh
+
+mkdir -p wigData5_1K
+mkdir -p dataLimits5_1K
+
+for n in ../../nib/*.nib
+do
+        c=`basename ${n} | sed -e "s/.nib//"`
+        C=`echo $c | sed -e "s/chr//"`
+        echo -n "working on ${c} - ${C} ... "
+        hgGcPercent -chr=${c} -doGaps \
+                -file=stdout -win=5 rn3 ../../nib | grep -w GC | \
+                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0}' | \
+	wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
+        -dataSpan=1000 -chrom=${c} -wibFile=wigData5_1K/gc5Base_${C}_1K \
+        -name=${C} stdin 2> dataLimits5_1K/${c}
+echo "done"
+done
+'_EOF_'
+    chmod +x runZoom.sh
+    #	This is going to take even longer than above, certainly do this
+    #	on the fileserver
+    ssh eieio
+    time ./runZoom.sh
+real    232m3.265s
+user    302m37.050s
+sys     16m13.770s
+    #	Then load these .wig files into the same database as above
+    ssh hgwdev
+    hgLoadWiggle -pathPrefix=/gbdb/rn3/wib/gc5Base -oldTable rn3 gc5Base \
+	wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/rn3/wib/gc5Base
+
