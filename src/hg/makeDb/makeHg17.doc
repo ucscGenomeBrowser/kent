@@ -5188,7 +5188,7 @@ exit $status
     #| netSyntenic stdin noClass.net
 
     chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=10 ../S1.len ../S2.len human.net chimp.net
+    | chainNet stdin -minSpace=10 ../S1.len ../S2.len human.net  /dev/null
     netSyntenic human.net noClass.net
 
     # Add classification info using db tables:
@@ -5239,13 +5239,15 @@ foreach f (axtChain/net/*.net)
 
 
 # MAKE PANTRO1 DOWNLOADABLES (DONE 2004-09-14 kate)
+#  Redo panTro1.net.gz (it was truncated) 2004-10-07 kate
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.panTro1
     # gzip chains and nets
     mkdir gz
     cd gz
     nice gzip -c ../axtChain/all.chain  > panTro1.chain.gz
-    nice gzip -c ../axtChain/chimp.net > panTro1.net.gz
+    nice gzip -c ../axtChain/human.net > panTro1.net.gz
+    wc -l *.gz
     cd ../axtNet
     time nice gzip *.axt
         # 46 mins.
