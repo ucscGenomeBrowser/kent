@@ -52,6 +52,9 @@
 #include "mouseSynWhd.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
+#include "blastzNet.h"
+#include "netAlign.h"
+#include "netGap.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -3242,6 +3245,37 @@ tg->itemName = goldName;
 tg->mapItemName = goldName;
 }
 
+
+struct netItem
+/* A repeat track item. */
+    {
+    struct netItem *next;
+    int level;
+    char *className;
+    int yOffset;
+    };
+
+static char *netClassNames[] =  {
+    "Level 0", "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8", "Other",
+};
+
+struct netItem *makeNetItems()
+/* Make the levels for net alignment track. */
+{
+struct netItem *ni, *niList = NULL;
+int i;
+int numClasses = ArraySize(netClassNames);
+for (i=0; i<numClasses; ++i)
+    {
+    AllocVar(ni);
+    ni->level = i;
+    ni->className = netClassNames[i];
+    slAddHead(&niList, ni);
+    }
+slReverse(&niList);
+return niList;
+}
+
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
  * during repeatLoad, but rather query the database during the
@@ -4784,6 +4818,159 @@ Color getChromColor(char *name, struct memGfx *mg)
     return colorNum;
 }
 
+void netLoad(struct trackGroup *tg)
+/* Load up net tracks.  (Will query database during drawing for a change.) */
+{
+tg->items = makeNetItems();
+}
+
+void netFree(struct trackGroup *tg)
+/* Free up netGroup items. */
+{
+slFreeList(&tg->items);
+}
+
+char *netName(struct trackGroup *tg, void *item)
+/* Return name of net level track. */
+{
+struct netItem *ni = item;
+return ni->className;
+}
+
+Color netItemColor(struct netAlign *ms, struct memGfx *mg)
+/* Return color of track item based on chromsome. */
+{
+char chromStr[20];     
+if (strlen(ms->qName) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->qName+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->qName) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->qName+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    strncpy(chromStr,ms->qName+3,2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, mg));
+}
+
+static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+int baseWidth = seqEnd - seqStart;
+struct netItem *ni;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+Color col;
+int ix = 0;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+
+if (isFull)
+    {
+    /* Do gray scale representation spread out among tracks. */
+    struct hash *hash = newHash(8);
+    struct netAlign na;
+    int percId;
+    int grayLevel;
+    char statusLine[128];
+    char levelName[10];
+
+    for (ni = tg->items; ni != NULL; ni = ni->next)
+        {
+        ni->yOffset = y;
+        y += lineHeight;
+        sprintf(levelName,"%d", ni->level);
+        hashAdd(hash, levelName, ni);
+        }
+    sr = hRangeQuery(conn, "blastzNetAlign", chromName, winStart, winEnd, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	netAlignStaticLoad(row+rowOffset, &na);
+    sprintf(levelName,"%d", na.level);
+	ni = hashFindVal(hash, levelName);
+	if (ni == NULL)
+        printf("ni NULL\n");
+	percId = na.score;
+	grayLevel = grayInRange(percId, 500, 1000);
+	col = shadesOfGray[grayLevel];
+    col = netItemColor(&na, mg);
+	x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+	x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+	w = x2-x1;
+	if (w <= 0)
+	    w = 1;
+	mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
+	if (baseWidth <= 100000)
+	    {
+		sprintf(statusLine, "Level %d, Mchrom %s",
+		    na.level, na.tName);
+        sprintf(levelName,"%d", na.level);
+	    mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+	    	levelName, statusLine);
+	    }
+	}
+    freeHash(&hash);
+    }
+else
+    {
+    char table[64];
+    boolean hasBin;
+    struct dyString *query = newDyString(1024);
+    /* Do black and white on single track.  Fetch less than we need from database. */
+    if (!hFindSplitTable(chromName, "blastzNetAlign", table, &hasBin))
+        {
+	dyStringPrintf(query, "select tStart,tEnd from %s where ", table);
+	if (hasBin)
+	    hAddBinToQuery(winStart, winEnd, query);
+	dyStringPrintf(query, "tStart<%u and tEnd>%u", winEnd, winStart);
+	sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int start = sqlUnsigned(row[0]);
+	    int end = sqlUnsigned(row[1]);
+	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
+	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
+	    w = x2-x1;
+	    if (w <= 0)
+		w = 1;
+	    mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+	    }
+	}
+    dyStringFree(&query);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+void netMethods(struct trackGroup *tg)
+/* Make track group for chain/net alignment. */
+{
+tg->loadItems = netLoad;
+tg->freeItems = netFree;
+tg->drawItems = netDraw;
+/*tg->colorShades = shadesOfGray;*/
+/*tg->itemColor = netItemColor;*/
+tg->itemName = netName;
+tg->mapItemName = netName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = tgWeirdItemStart;
+tg->itemEnd = tgWeirdItemEnd;
+}
+
 Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of mouseOrtho track item. */
 {
@@ -5246,20 +5433,20 @@ Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of psl track item based on chromsome. */
 {
 char chromStr[20];     
-struct synteny100000 *ms = item;
-if (strlen(ms->mouseChrom) == 8)
+struct bed *ms = item;
+if (strlen(ms->name) == 8)
     {
-    strncpy(chromStr,(char *)(ms->mouseChrom+1),1);
+    strncpy(chromStr,(char *)(ms->name+1),1);
     chromStr[1] = '\0';
     }
-else if (strlen(ms->mouseChrom) == 9)
+else if (strlen(ms->name) == 9)
     {
-    strncpy(chromStr,(char *)(ms->mouseChrom+1),2);
+    strncpy(chromStr,(char *)(ms->name+1),2);
     chromStr[2] = '\0';
     }
 else
     {
-    strncpy(chromStr,ms->mouseChrom+3,2);
+    strncpy(chromStr,ms->name+3,2);
     chromStr[2] = '\0';
     }
 return ((Color)getChromColor(chromStr, mg));
@@ -5319,6 +5506,27 @@ void loadMouseSyn(struct trackGroup *tg)
 /* Load up mouseSyn from database table to trackGroup items. */
 {
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
+}
+
+void loadBlastzNet(struct trackGroup *tg)
+{
+bedLoadItem(tg, "blastzNet", (ItemLoader)blastzNetLoad);
+slSort(&tg->items, bedCmp);
+}
+
+void freeBlastzNet(struct trackGroup *tg)
+{
+blastzNetFreeList((struct blastzNet**)&tg->items);
+}
+
+void blastzNetMethods(struct trackGroup *tg)
+{
+tg->loadItems = loadBlastzNet;
+tg->freeItems = freeBlastzNet;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+
 }
 
 void synteny100000Methods(struct trackGroup *tg)
@@ -9770,6 +9978,10 @@ registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
+registerTrackHandler("blastzNet_25", blastzNetMethods);
+registerTrackHandler("blastzNet", blastzNetMethods);
+registerTrackHandler("blastzNetAlign", netMethods);
+registerTrackHandler("netAlign", netMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
