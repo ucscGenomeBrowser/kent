@@ -1,6 +1,7 @@
 /* maskOutFa - Produce a masked .fa file given an unmasked .fa and a RepeatMasker .out file. */
 #include "common.h"
 #include "linefile.h"
+#include "cheapcgi.h"
 #include "hash.h"
 #include "fa.h"
 #include "repMask.h"
@@ -11,10 +12,12 @@ void usage()
 errAbort(
   "maskOutFa - Produce a masked .fa file given an unmasked .fa and a RepeatMasker .out file\n"
   "usage:\n"
-  "   maskOutFa in.fa in.fa.out out.fa.masked\n");
+  "   maskOutFa in.fa in.fa.out out.fa.masked\n"
+  "options:\n"
+  "   -soft - puts masked parts in lower case other in upper.\n");
 }
 
-void maskOutFa(char *inFa, char *maskFile, char *outFa)
+void maskOutFa(char *inFa, char *maskFile, char *outFa, boolean soft)
 /* maskOutFa - Produce a masked .fa file given an unmasked .fa and a RepeatMasker .out file. */
 {
 struct lineFile *lf;
@@ -30,7 +33,11 @@ FILE *f;
 /* Read DNA and hash sequence names. */
 seqList = faReadAllDna(inFa);
 for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    if (soft)
+       toUpperN(seq->dna, seq->size);
     hashAdd(hash, seq->name, seq);
+    }
 
 /* Read RepeatMasker file and set masked sequence areas to N. */
 lf = lineFileOpen(maskFile, TRUE);
@@ -70,7 +77,12 @@ else
 		}
 	    repSize = rmo.qEnd - rmo.qStart + 1;
 	    if (repSize > 0)
-		memset(seq->dna + rmo.qStart - 1, 'N', repSize);
+		{
+		if (soft)
+		    toLowerN(seq->dna + rmo.qStart - 1, repSize);
+		else
+		    memset(seq->dna + rmo.qStart - 1, 'N', repSize);
+		}
 	    }
 	}
     }
@@ -80,7 +92,6 @@ lineFileClose(&lf);
 f = mustOpen(outFa, "w");
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
-    toUpperN(seq->dna, seq->size);
     faWriteNext(f, seq->name, seq->dna, seq->size);
     }
 carefulClose(&f);
@@ -89,8 +100,9 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
-maskOutFa(argv[1], argv[2], argv[3]);
+maskOutFa(argv[1], argv[2], argv[3], cgiBoolean("soft"));
 return 0;
 }

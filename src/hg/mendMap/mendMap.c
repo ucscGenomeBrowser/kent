@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 22;       /* Current version number. */
+int version = 23;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 boolean isPlaced;	/* TRUE if want to really follow map. */
 FILE *logFile;	/* File to write decision steps to. */
@@ -2874,6 +2874,74 @@ for (node = bargeList->head; !dlEnd(node); node = node->next)
 freeDlList(&bargeList);
 }
 
+boolean enclosedByFinished(struct mmClone *inner, struct overlappingClonePair *ocpList)
+/* Return TRUE if inner clone is completely enclosed by a finished clone. */
+{
+struct overlappingClonePair *ocp;
+for (ocp = ocpList; ocp != NULL; ocp = ocp->next)
+    {
+    if (ocp->a == inner && ocp->b->phase == htgFinished 
+    	&& (scoreEnclosingOverlap(ocp, inner, TRUE) >= 1 
+		|| scoreEnclosingOverlap(ocp, inner, FALSE) >= 1)
+	&& ocp->bHitS == 'N' && ocp->bHitT == 'N')
+	return TRUE;
+    if (ocp->b == inner && ocp->a->phase == htgFinished
+    	&& (scoreEnclosingOverlap(ocp, inner, TRUE) >= 1 
+		|| scoreEnclosingOverlap(ocp, inner, FALSE) >= 1)
+	&& ocp->aHitS == 'N' && ocp->aHitT == 'N')
+	return TRUE;
+    }
+return FALSE;
+}
+
+void removeCloneFromOcp(struct mmClone *clone, struct overlappingClonePair **pOcpList,
+	struct hash *ocpHash)
+/* Remove all overlaps involving clone. */
+{
+struct overlappingClonePair *ocpList = NULL, *ocp, *nextOcp;
+for (ocp = *pOcpList; ocp != NULL; ocp = nextOcp)
+    {
+    nextOcp = ocp->next;
+    if (ocp->a == clone || ocp->b == clone)
+        {
+	char *handle = ocpHashName(ocp->a->name, ocp->b->name);
+	hashRemove(ocpHash, handle);
+	}
+    else
+        {
+	slAddHead(&ocpList, ocp);
+	}
+    }
+slReverse(&ocpList);
+*pOcpList = ocpList;
+}
+
+void removeDraftInFinished(struct mmClone **pCloneList, struct hash *cloneHash, 
+	struct overlappingClonePair **pOcpList, struct hash *ocpHash)
+/* Remove draft clones that are completely enclosed inside finished
+ * clones/finished contigs. */
+{
+struct mmClone *cloneList = NULL, *clone, *nextClone;
+int rmCount = 0;
+for (clone = *pCloneList; clone != NULL; clone = nextClone)
+    {
+    nextClone = clone->next;
+    if (clone->phase != htgFinished && enclosedByFinished(clone, *pOcpList))
+	{
+	removeCloneFromOcp(clone, pOcpList, ocpHash);
+	hashRemove(cloneHash, clone->name);
+	++rmCount;
+	}
+    else
+        {
+	slAddHead(&cloneList, clone);
+	}
+    }
+uglyf("Removed %d draft clones completely enclosed by finished\n");
+slReverse(&cloneList);
+*pCloneList = cloneList;
+}
+
 void mm(char *contigDir)
 /* mm - Map mender. */
 {
@@ -2937,6 +3005,7 @@ status("Loaded %d bac end pairs from %s\n", slCount(bepList), fileName);
 sprintf(fileName, "%s/bacEnd.psl", contigDir);
 mmLoadBacEndPsl(fileName, bepHash, cloneHash);
 
+removeDraftInFinished(&cloneList, cloneHash, &ocpList, ocpHash);
 bargeList = mmBargeList(cloneList, cloneHash, ocpHash, &ocpList);
 status("Merged overlaps\n");
 

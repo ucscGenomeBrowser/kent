@@ -10,6 +10,7 @@
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
+boolean oldTable = FALSE;	/* Don't redo table. */
 
 
 void usage()
@@ -21,6 +22,7 @@ errAbort(
   "   hgLoadBed database track files(s).bed\n"
   "options:\n"
   "   -nobin   suppress bin field\n"
+  "   -oldTable add to existing table\n"
   );
 }
 
@@ -37,80 +39,122 @@ lineFileClose(&lf);
 return wordCount;
 }
 
-void loadOneBed(char *fileName, int bedSize, struct bed **pList)
+struct bedStub
+/* A line in a bed file with chromosome, start, end position parsed out. */
+    {
+    struct bedStub *next;	/* Next in list. */
+    char *chrom;                /* Chromosome . */
+    int chromStart;             /* Start position. */
+    int chromEnd;		/* End position. */
+    char *line;                 /* Line. */
+    };
+
+int bedStubCmp(const void *va, const void *vb)
+/* Compare to sort based on query. */
+{
+const struct bedStub *a = *((struct bedStub **)va);
+const struct bedStub *b = *((struct bedStub **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
+}
+
+
+void loadOneBed(char *fileName, int bedSize, struct bedStub **pList)
 /* Load one bed file.  Make sure all lines have bedSize fields.
  * Put results in *pList. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[32];
+char *words[64], *line, *dupe;
 int wordCount;
-struct bed *bed;
+struct bedStub *bed;
 
 printf("Reading %s\n", fileName);
-while ((wordCount = lineFileChop(lf, words)) != 0)
+while (lineFileNext(lf, &line, NULL))
     {
+    dupe = cloneString(line);
+    wordCount = chopLine(line, words);
     lineFileExpectWords(lf, bedSize, wordCount);
-    bed = bedLoadN(words, wordCount);
+    AllocVar(bed);
+    bed->chrom = cloneString(words[0]);
+    bed->chromStart = lineFileNeedNum(lf, words, 1);
+    bed->chromEnd = lineFileNeedNum(lf, words, 2);
+    bed->line = dupe;
     slAddHead(pList, bed);
     }
 lineFileClose(&lf);
 }
 
-void writeBedTab(char *fileName, struct bed *bedList, int bedSize)
+void writeBedTab(char *fileName, struct bedStub *bedList, int bedSize)
 /* Write out bed list to tab-separated file. */
 {
-struct bed *bed;
+struct bedStub *bed;
 FILE *f = mustOpen(fileName, "w");
+char *words[64];
+int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!noBin)
         fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
-    bedTabOutN(bed, bedSize, f);
+    wordCount = chopLine(bed->line, words);
+    for (i=0; i<wordCount; ++i)
+        {
+	fputs(words[i], f);
+	if (i == wordCount-1)
+	    fputc('\n', f);
+	else
+	    fputc('\t', f);
+	}
     }
 fclose(f);
 }
 
-void loadDatabase(char *database, char *track, int bedSize, struct bed *bedList)
+void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
 /* Load database from bedList. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
 
-printf("Creating table definition for \n");
-dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
-if (!noBin)
-   dyStringAppend(dy, "  bin smallint unsigned not null,\n");
-dyStringAppend(dy, "  chrom varchar(255) not null,\n");
-dyStringAppend(dy, "  chromStart int unsigned not null,\n");
-dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
-if (bedSize >= 4)
-   dyStringAppend(dy, "  name varchar(255) not null,\n");
-if (bedSize >= 5)
-   dyStringAppend(dy, "  score int unsigned not null,\n");
-if (bedSize >= 6)
-   dyStringAppend(dy, "  strand char(1) not null,\n");
-if (bedSize >= 7)
-   dyStringAppend(dy, "  thickStart int unsigned not null,\n");
-if (bedSize >= 8)
-   dyStringAppend(dy, "  thickEnd int unsigned not null,\n");
-if (bedSize >= 9)
-   dyStringAppend(dy, "  reserved int unsigned  not null,\n");
-if (bedSize >= 10)
-   dyStringAppend(dy, "  blockCount int unsigned not null,\n");
-if (bedSize >= 11)
-   dyStringAppend(dy, "  blockSizes longblob not null,\n");
-if (bedSize >= 12)
-   dyStringAppend(dy, "  chromStarts longblob not null,\n");
-dyStringAppend(dy, "#Indices\n");
-if (!noBin)
-   dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
-if (bedSize >= 4)
-   dyStringAppend(dy, "  INDEX(name(16)),\n");
-dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
-dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
-dyStringAppend(dy, ")\n");
-sqlRemakeTable(conn, track, dy->string);
+if (!oldTable)
+    {
+    printf("Creating table definition for \n");
+    dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
+    if (!noBin)
+       dyStringAppend(dy, "  bin smallint unsigned not null,\n");
+    dyStringAppend(dy, "  chrom varchar(255) not null,\n");
+    dyStringAppend(dy, "  chromStart int unsigned not null,\n");
+    dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
+    if (bedSize >= 4)
+       dyStringAppend(dy, "  name varchar(255) not null,\n");
+    if (bedSize >= 5)
+       dyStringAppend(dy, "  score int unsigned not null,\n");
+    if (bedSize >= 6)
+       dyStringAppend(dy, "  strand char(1) not null,\n");
+    if (bedSize >= 7)
+       dyStringAppend(dy, "  thickStart int unsigned not null,\n");
+    if (bedSize >= 8)
+       dyStringAppend(dy, "  thickEnd int unsigned not null,\n");
+    if (bedSize >= 9)
+       dyStringAppend(dy, "  reserved int unsigned  not null,\n");
+    if (bedSize >= 10)
+       dyStringAppend(dy, "  blockCount int unsigned not null,\n");
+    if (bedSize >= 11)
+       dyStringAppend(dy, "  blockSizes longblob not null,\n");
+    if (bedSize >= 12)
+       dyStringAppend(dy, "  chromStarts longblob not null,\n");
+    dyStringAppend(dy, "#Indices\n");
+    if (!noBin)
+       dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
+    if (bedSize >= 4)
+       dyStringAppend(dy, "  INDEX(name(16)),\n");
+    dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
+    dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+    dyStringAppend(dy, ")\n");
+    sqlRemakeTable(conn, track, dy->string);
+    }
 
 printf("Saving %s\n", tab);
 writeBedTab(tab, bedList, bedSize);
@@ -126,13 +170,13 @@ void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
 {
 int bedSize = findBedSize(bedFiles[0]);
-struct bed *bedList = NULL, *bed;
+struct bedStub *bedList = NULL, *bed;
 int i;
 
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
 printf("Loaded %d elements\n", slCount(bedList));
-slSort(&bedList, bedLineCmp);
+slSort(&bedList, bedStubCmp);
 loadDatabase(database, track, bedSize, bedList);
 }
 
@@ -142,6 +186,8 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc < 4)
     usage();
+noBin = cgiBoolean("noBin");
+oldTable = cgiBoolean("oldTable");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }

@@ -82,7 +82,7 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
     totalBases += clone->baseCount;
     }
 printf("%s bases %d, spans %d, density %4.2f%%\n",
-    fileName, totalBases, totalSpans,
+    fileName, totalBases, totalSpan,
     100.0 * (double)totalBases/(double)totalSpan);
 }
 

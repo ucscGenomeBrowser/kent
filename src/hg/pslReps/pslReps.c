@@ -290,7 +290,6 @@ minCover = cgiOptionalDouble("minCover", minCover);
 minNearTopSize = cgiOptionalInt("minNearTopSize", minNearTopSize);
 ignoreSize = cgiBoolean("ignoreSize");
 singleHit = cgiBoolean("singleHit");
-pushCarefulMemHandler(30000000);
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
 }

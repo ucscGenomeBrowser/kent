@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   hgPhMouse database track chromFile(s)\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -add - add data, don't overwrite old track\n"
   );
 }
 
@@ -42,9 +42,12 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 
 
-dyStringPrintf(dy, createString, track);
-sqlRemakeTable(conn, track, dy->string);
-dyStringClear(dy);
+if (!cgiBoolean("add"))
+    {
+    dyStringPrintf(dy, createString, track);
+    sqlRemakeTable(conn, track, dy->string);
+    dyStringClear(dy);
+    }
 dyStringPrintf(dy, "load data local infile '%s' into table %s",
 	tabName, track);
 sqlUpdate(conn, dy->string);

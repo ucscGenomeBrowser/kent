@@ -18,10 +18,10 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 100;       /* Current version number. */
+int version = 102;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */
-int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
+int maxMapDeviation = 600000;   /* No map deviations further than this allowed. */
 int freeMapDeviation = 250000;  /* Map deviations to this point free. */
 
 int maxTailSize = 2000;	/* Maximum non-aligning end. */
@@ -945,19 +945,9 @@ return raft;
 }
 
 struct oogFrag *fragForName(struct hash *fragHash, char *name)
-/* Return names fragment. */
+/* Return named fragment. */
 {
-struct oogFrag *frag;
-struct hashEl *hel;
-
-hel = hashLookup(fragHash, name);
-if (hel == NULL)
-    {
-    errAbort("Conflict between psl file and clone fragments. "
-	     "Can't find %s", name);
-    }
-frag = hel->val;
-return frag;
+return hashFindVal(fragHash, name);
 }
 
 int pslCenterInRaft(struct psl *psl, struct raftFrag *rf)
@@ -995,19 +985,22 @@ fprintf(logFile, "oneRnaLine (preCleaned):\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     pslOrient = pslOrientation(psl);
-    AllocVar(mc);
     frag = fragForName(fragHash, psl->tName);
-    raft = frag->raft;
-    rf = findRaftFrag(raft, frag);
-    mc->raft = raft;
-    mc->orientation = pslOrient * rf->orientation;
-    mc->position = pslCenterInRaft(psl, rf);
-    mc->score = scoreMrnaPsl(psl);
-    mc->name = mrnaName;
-    fprintf(logFile, " %d %c %d %s\n", raft->id,
-    	(mc->orientation > 0 ? '+' : '-'),
-	mc->score, psl->tName);
-    slAddHead(&mcList, mc);
+    if (frag != NULL)
+	{
+	AllocVar(mc);
+	raft = frag->raft;
+	rf = findRaftFrag(raft, frag);
+	mc->raft = raft;
+	mc->orientation = pslOrient * rf->orientation;
+	mc->position = pslCenterInRaft(psl, rf);
+	mc->score = scoreMrnaPsl(psl);
+	mc->name = mrnaName;
+	fprintf(logFile, " %d %c %d %s\n", raft->id,
+	    (mc->orientation > 0 ? '+' : '-'),
+	    mc->score, psl->tName);
+	slAddHead(&mcList, mc);
+	}
     }
 slReverse(&mcList);
 fprintf(logFile, "%s got %d initial connections\n", mrnaName, slCount(mcList));
@@ -1025,7 +1018,7 @@ if (mcList->next == NULL)
 AllocVar(ml);
 ml->cableType = cableType;
 ml->minDistance = 0;
-ml->maxDistance = 1000000;	/* Longest intron I've seen is less than half this. */
+ml->maxDistance = 500000;	/* Longest intron I've seen is about 600k.  Over 300k very rare. */
 
 /* Figure out composite score - average of average and min scores. */
 for (mc = mcList; mc != NULL; mc = mc->next)
@@ -1066,6 +1059,8 @@ boolean pslTargetFragFilter(struct psl *psl, struct hash *fragHash)
 /* See if target fragment passes filter. */
 {
 struct oogFrag *frag = fragForName(fragHash, psl->tName);
+if (frag == NULL)
+    return FALSE;
 return filterFrag(frag);
 }
 
@@ -1073,8 +1068,10 @@ boolean pslFragFilter(struct psl *psl, struct hash *fragHash)
 /* See if both sides of psl pass filter. */
 {
 struct oogFrag *frag = fragForName(fragHash, psl->tName);
+if (frag == NULL) return FALSE;
 if (!filterFrag(frag)) return FALSE;
 frag = fragForName(fragHash, psl->qName);
+if (frag == NULL) return FALSE;
 return filterFrag(frag);
 }
 
@@ -1237,13 +1234,6 @@ raft = frag->raft;
 return raft;
 }
 
-struct oogFrag *fragInHash(struct hash *fragHash, char *fragName)
-/* Find frag in hash. */
-{
-struct hashEl *hel = hashLookup(fragHash, fragName);
-return hel->val;
-}
-
 struct lineGraph *makeFragChains(char *fileName, struct hash *fragHash)
 /* Create a lineGraphs out of fragChains file */
 {
@@ -1266,38 +1256,41 @@ if ((lf = lineFileMayOpen(fileName, TRUE)) == NULL)
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     lineFileExpectWords(lf, 6, wordCount);
-    fragToCloneName(words[0], cloneName);
-    aFrag = fragInHash(fragHash, words[0]);
-    bFrag = fragInHash(fragHash, words[2]);
-    aRaft = aFrag->raft;
-    bRaft = bFrag->raft;
-    if (aRaft != bRaft)
-        {
-	AllocVar(ml);
-	slAddTail(&mlList, ml);
-	ml->cableType = ctChain;
-	ml->minDistance = lineFileNeedNum(lf, words, 3);
-	ml->maxDistance = lineFileNeedNum(lf, words, 4);
-	ml->score = lineFileNeedNum(lf, words, 5);
-	orientation = ((words[1][0] == '-') ? -1 : 1);
+    aFrag = fragForName(fragHash, words[0]);
+    bFrag = fragForName(fragHash, words[2]);
+    if (aFrag != NULL && bFrag != NULL)
+	{
+	fragToCloneName(words[0], cloneName);
+	aRaft = aFrag->raft;
+	bRaft = bFrag->raft;
+	if (aRaft != bRaft)
+	    {
+	    AllocVar(ml);
+	    slAddTail(&mlList, ml);
+	    ml->cableType = ctChain;
+	    ml->minDistance = lineFileNeedNum(lf, words, 3);
+	    ml->maxDistance = lineFileNeedNum(lf, words, 4);
+	    ml->score = lineFileNeedNum(lf, words, 5);
+	    orientation = ((words[1][0] == '-') ? -1 : 1);
 
-	AllocVar(mc);
-	mc->name = aFrag->name;
-	mc->raft = aRaft;
-	aRf = findRaftFrag(aRaft, aFrag);
-	mc->orientation = aRf->orientation;
-	mc->position = aRf->raftOffset + aFrag->size/2;
-	mc->score = ml->score;
-	slAddTail(&ml->mcList, mc);
+	    AllocVar(mc);
+	    mc->name = aFrag->name;
+	    mc->raft = aRaft;
+	    aRf = findRaftFrag(aRaft, aFrag);
+	    mc->orientation = aRf->orientation;
+	    mc->position = aRf->raftOffset + aFrag->size/2;
+	    mc->score = ml->score;
+	    slAddTail(&ml->mcList, mc);
 
-	AllocVar(mc);
-	mc->name = bFrag->name;
-	mc->raft = bRaft;
-	bRf = findRaftFrag(bRaft, bFrag);
-	mc->orientation = orientation * bRf->orientation;
-	mc->position = bRf->raftOffset + bFrag->size/2;
-	mc->score = ml->score;
-	slAddTail(&ml->mcList, mc);
+	    AllocVar(mc);
+	    mc->name = bFrag->name;
+	    mc->raft = bRaft;
+	    bRf = findRaftFrag(bRaft, bFrag);
+	    mc->orientation = orientation * bRf->orientation;
+	    mc->position = bRf->raftOffset + bFrag->size/2;
+	    mc->score = ml->score;
+	    slAddTail(&ml->mcList, mc);
+	    }
 	}
     }
 lineFileClose(&lf);
@@ -2641,20 +2634,26 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct overlappingClonePair *ocpList = NULL, *ocp;
 char *row[11];
 int overlap;
+struct oogClone *a, *b;
 
 while (lineFileRow(lf, row))
     {
-    AllocVar(ocp);
-    slAddHead(&ocpList, ocp);
-    ocp->a = hashMustFindVal(cloneHash, row[0]);
-    ocp->b = hashMustFindVal(cloneHash, row[4]);
-    hashAddUnique(ocpHash, ocpHashName(ocp->a->name, ocp->b->name), ocp);
+    a = hashFindVal(cloneHash, row[0]);
+    b = hashFindVal(cloneHash, row[4]);
+    if (a && b)
+	{
+	AllocVar(ocp);
+	slAddHead(&ocpList, ocp);
+	ocp->a = a;
+	ocp->b = b;
+	hashAddUnique(ocpHash, ocpHashName(a->name, b->name), ocp);
 
-    /* Use strict overlap unless it is empty. */
-    overlap = lineFileNeedNum(lf, row, 8);
-    if (overlap == 0)
-	overlap = lineFileNeedNum(lf, row, 9);
-    ocp->overlap = overlap;
+	/* Use strict overlap unless it is empty. */
+	overlap = lineFileNeedNum(lf, row, 8);
+	if (overlap == 0)
+	    overlap = lineFileNeedNum(lf, row, 9);
+	ocp->overlap = overlap;
+	}
     }
 lineFileClose(&lf);
 slReverse(&ocpList);
@@ -3831,45 +3830,11 @@ int genoCount;
 char *faFile;
 char *acc;
 int offset;
-struct hashEl *hel;
 struct oogClone *clone;
 struct oogFrag *frag;
 char *gBuf;
 int i;
 char dir[256], name[128],extension[64];
-struct slName *miaList = NULL, *mia;
-
-/* Process geno.lst file. */
-readAllWords(genoList, &genoFiles, &genoCount, &gBuf);
-if (genoCount <= 0)
-    errAbort("%s is empty\n", genoList);
-for (i=0; i<genoCount; ++i)
-    {
-    faFile = genoFiles[i];
-    splitPath(faFile, dir, name, extension);
-    acc = name;
-    if (fileExists(faFile))
-	{
-	if ((hel = hashLookup(cloneHash, acc)) != NULL)
-	    {
-	    warn("Duplicate %s in geno.lst, ignoring all but first", acc);
-	    }
-	else
-	    {
-	    AllocVar(clone);
-	    hel = hashAdd(cloneHash, acc, clone);
-	    clone->name = hel->name;
-	    loadClone(faFile, clone, fragHash, pFragList);
-	    slAddHead(pCloneList, clone);
-	    }
-	}
-    else
-	{
-	warn("No sequence for %s", acc);
-	mia = newSlName(acc);
-	slAddHead(&miaList, mia);
-	}
-    }
 
 /* Process info file. */
 lf = lineFileOpen(infoName, TRUE);
@@ -3885,26 +3850,56 @@ while (lineFileNext(lf, &line, &lineSize))
     if ((wordCount = chopLine(line, words)) < 4)
 	errAbort("Bad info file format line %d of %s\n", lf->lineIx, lf->fileName);
     acc = words[0];
-    if ((hel = hashLookup(cloneHash, acc)) == NULL)
+    if ((clone = hashFindVal(cloneHash, acc)) != NULL)
 	{
-	if (!slNameInList(miaList, acc))
-	    {
-	    logIt("Clone %s is in info but not geno.lst\n", acc);
-	    }
+	warn("Duplicate %s in %s, ignoring all but first", acc, lf->fileName);
 	}
     else
 	{
-	clone = hel->val;
-	clone->mapPos = lineFileNeedNum(lf, words, 1) * 1000;
-	clone->phase = lineFileNeedNum(lf, words, 2);
-	clone->flipTendency = lineFileNeedNum(lf, words, 3);
-	calcFragDefaultPositions(clone, clone->mapPos);
+	int phase = lineFileNeedNum(lf, words, 2);
+	if (phase > 0)
+	    {
+	    AllocVar(clone);
+	    slAddHead(pCloneList, clone);
+	    hashAddSaveName(cloneHash, acc, clone, &clone->name);
+	    clone->mapPos = lineFileNeedNum(lf, words, 1) * 1000;
+	    clone->phase = phase;
+	    clone->flipTendency = lineFileNeedNum(lf, words, 3);
+	    }
 	}
     }
 lineFileClose(&lf);
 
+/* Process geno.lst file. */
+readAllWords(genoList, &genoFiles, &genoCount, &gBuf);
+if (genoCount <= 0)
+    errAbort("%s is empty\n", genoList);
+for (i=0; i<genoCount; ++i)
+    {
+    faFile = genoFiles[i];
+    splitPath(faFile, dir, name, extension);
+    acc = name;
+    if (fileExists(faFile))
+	{
+	clone = hashFindVal(cloneHash, acc);
+	if (clone != NULL)
+	    {
+	    if (clone->fragList != NULL)
+		warn("Duplicate %s in geno.lst, ignoring all but first", acc);
+	    else
+		{
+		loadClone(faFile, clone, fragHash, pFragList);
+		calcFragDefaultPositions(clone, clone->mapPos);
+		}
+	    }
+	}
+    else
+	{
+	errAbort("No sequence for %s", acc);
+	}
+    }
+
 freeMem(gBuf);
-slFreeList(&miaList);
 slReverse(pFragList);
 }
 
@@ -4005,6 +4000,39 @@ for (rf = raft->fragList; rf != NULL; rf = rf->next)
     }
 return diffTotal;
 }
+
+#ifdef OLD
+int calcRaftFlipTendency(struct raft *raft)
+/* Return how badly raft would like to fit to better
+ * accomodate default coordinates. */
+{
+/* raft->fragList is sorted already, and needs to be for
+ * this to work. */
+int diffTotal = 0;
+int diffOne;
+struct raftFrag *rf, *rfNext;
+struct oogFrag *aFrag, *bFrag;
+int diffInMap;
+
+for (rf = raft->fragList; rf != NULL; rf = rf->next)
+    {
+    if ((rfNext = rf->next) != NULL)
+        {
+        diffInMap = rfNext->frag->defaultPos - rf->frag->defaultPos;
+        if (intAbs(diffInMap) < maxMapDeviation - rf->frag->size)
+            {
+            diffTotal += diffInMap;
+            }
+        else
+            {
+            logIt("  Unreasonable distance in map %d\n", diffInMap /* uglyf */);
+            }
+        }
+    }
+return diffTotal;
+}
+#endif /* OLD */
+
 
 void setRaftFlipTendencies(struct raft *raftList)
 /* Set flipTendencies for all rafts. */

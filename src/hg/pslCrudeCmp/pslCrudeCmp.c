@@ -22,7 +22,43 @@ errAbort(
 int scorePsl(struct psl *psl)
 /* Return a score for .psl */
 {
-return psl->match + psl->repMatch - psl->misMatch - psl->qNumInsert - psl->tNumInsert - log(psl->qBaseInsert + psl->tBaseInsert);
+int score = 1*psl->match + 1*psl->repMatch - 2*psl->misMatch;
+int tGap, qGap;
+int i, count = psl->blockCount;
+
+for (i=1; i<count; ++i)
+    {
+    qGap = psl->qStarts[i] - psl->qStarts[i-1] - psl->blockSizes[i-1];
+    tGap = psl->tStarts[i] - psl->tStarts[i-1] - psl->blockSizes[i-1];
+    if (qGap > 0 && tGap == 0)
+       score -= 3+2*log(qGap);
+    else if (tGap > 0 && qGap == 0)
+       score -= 1+log(tGap);
+    else if (qGap > 0 && tGap > 0)
+       score -= 3+2*log(max(qGap, tGap));
+    }
+return score;
+}
+
+boolean pslSame(struct psl *a, struct psl *b)
+/* Return TRUE if psls are the same. */
+{
+if (a->blockCount != b->blockCount)
+    return FALSE;
+else
+   {
+   int i;
+   for (i=0; i<a->blockCount; ++i)
+       {
+       if (a->blockSizes[i] != b->blockSizes[i] ||
+	 a->qStarts[i] != b->qStarts[i] ||
+	 a->tStarts[i] != b->tStarts[i])
+	    {
+	    return FALSE;
+	    }
+       }
+   }
+return TRUE;
 }
 
 struct queryList
@@ -31,6 +67,7 @@ struct queryList
     struct queryList *next;
     char *qName;	/* query name, not allocated here. */
     int score;		/* Score of best psl with this query. */
+    struct psl *psl;
     };
 
 void loadPsl(char *fileName, struct queryList **retList, struct hash **retHash)
@@ -47,12 +84,19 @@ while ((psl = pslNext(lf)) != NULL)
     if ((el = hashFindVal(hash, psl->qName)) == NULL)
         {
 	AllocVar(el);
+	el->score = -10000;
 	slAddHead(&list, el);
 	hashAddSaveName(hash, psl->qName, el, &el->qName);
 	}
     score = scorePsl(psl);
-    if (score > el->score) el->score = score;
-    pslFree(&psl);
+    if (score > el->score) 
+	{
+    	el->score = score;
+	pslFree(&el->psl);
+	el->psl = psl;
+	}
+    else
+	pslFree(&psl);
     }
 lineFileClose(&lf);
 slReverse(&list);
@@ -80,7 +124,7 @@ for (q = list; q != NULL; q = q->next)
 	if (verbose)
 	    printf(" %s only in %s\n", qName, listName);
 	}
-    else if (q->score > h->score)
+    else if (!pslSame(q->psl, h->psl) && q->score > h->score)
         {
 	++betterCount;
 	if (verbose)
@@ -90,6 +134,32 @@ for (q = list; q != NULL; q = q->next)
 printf("%d total in %s\n", count, listName);
 printf("%d only in %s (%f%%)\n", uniqCount, listName, 100.0*uniqCount/count);
 printf("%d better in %s (%f%%)\n", betterCount, listName, 100.0*betterCount/count);
+}
+
+void findIdentities(struct queryList *list, struct hash *aHash, struct hash *bHash)
+/* Count identical psls. */
+{
+int total=0, same=0;
+struct queryList *aEl, *bEl;
+struct psl *a, *b;
+struct queryList *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    char *name = el->qName;
+    aEl = hashFindVal(aHash,name);
+    bEl = hashFindVal(bHash,name);
+    if (aEl != NULL && bEl != NULL)
+        {
+	++total;
+	a = aEl->psl;
+	b = bEl->psl;
+	if (pslSame(a, b)) 
+	    ++same;
+	else if (verbose)
+	    printf(" %s is different in two files.\n", name);
+	}
+    }
+printf("%d of %d (%4.2f%%) are the same in both files\n", same, total, 100.0 * same / total);
 }
 
 void pslCrudeCmp(char *aFile, char *bFile)
@@ -103,6 +173,7 @@ loadPsl(bFile, &bList, &bHash);
 crossCompare(aList, aFile, bHash, bFile);
 printf("\n");
 crossCompare(bList, bFile, aHash, aFile);
+findIdentities(aList, aHash, bHash);
 }
 
 int main(int argc, char *argv[])

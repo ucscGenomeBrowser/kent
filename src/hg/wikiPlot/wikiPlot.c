@@ -24,6 +24,8 @@ struct clonePos
     struct clonePos *next;
     char *name;	/* Name of clone. */
     int pos;	/* Position in map. */
+    double totSize;	/* Total fragment size (just for gold) */
+    double weightedPos;	/* Total weighted position (just for gold) */
     };
 
 double scaleOne(double raw, double rangeStart, double rangeEnd, int pix,
@@ -83,20 +85,64 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     char *type = words[4];
     char *clone = words[5];
+    int fragStart, fragEnd;
+    double fragSize;
     if (type[0] == 'N')
         continue;
     lineFileExpectWords(lf, 9, wordCount);
     chopSuffix(clone);
+    fragStart = lineFileNeedNum(lf, words, 1)-1;
+    fragEnd = lineFileNeedNum(lf, words, 2);
+    fragSize = fragEnd - fragStart;
     if ((cp = hashFindVal(hash, clone)) == NULL)
         {
 	AllocVar(cp);
 	hashAddSaveName(hash, clone, cp, &cp->name);
-	cp->pos = lineFileNeedNum(lf, words, 1);
 	slAddHead(&cpList, cp);
 	}
+    cp->weightedPos += fragSize * fragStart;
+    cp->totSize += fragSize;
     }
 lineFileClose(&lf);
 slReverse(&cpList);
+for (cp = cpList; cp != NULL; cp = cp->next)
+    cp->pos = cp->weightedPos/cp->totSize;
+*retList = cpList;
+*retHash = hash;
+}
+
+
+void readGl(char *fileName, struct clonePos **retList, struct hash **retHash)
+/* Read gl formatted files. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *row[3];
+struct clonePos *cpList = NULL, *cp;
+struct hash *hash = newHash(0);
+int wordCount;
+
+while (lineFileRow(lf, row))
+    {
+    char *clone = row[0];
+    int fragStart, fragEnd;
+    double fragSize;
+    chopSuffix(clone);
+    fragStart = lineFileNeedNum(lf, row, 1);
+    fragEnd = lineFileNeedNum(lf, row, 2);
+    fragSize = fragEnd - fragStart;
+    if ((cp = hashFindVal(hash, clone)) == NULL)
+        {
+	AllocVar(cp);
+	hashAddSaveName(hash, clone, cp, &cp->name);
+	slAddHead(&cpList, cp);
+	}
+    cp->weightedPos += fragSize * fragStart;
+    cp->totSize += fragSize;
+    }
+lineFileClose(&lf);
+slReverse(&cpList);
+for (cp = cpList; cp != NULL; cp = cp->next)
+    cp->pos = cp->weightedPos/cp->totSize;
 *retList = cpList;
 *retHash = hash;
 }
@@ -180,6 +226,8 @@ else if (startsWith("mmBarge", file))
     return readMmBarge(fileName, retList, retHash);
 else if (startsWith("gold", file) || sameString(".agp", ext))
     return readGold(fileName, retList, retHash);
+else if (sameString(".gl", ext) || sameString("gl", file))
+    return readGl(fileName, retList, retHash);
 else
     errAbort("Unrecognized file type %s%s", file, ext);
 }
@@ -327,8 +375,11 @@ puts(
 "    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxDown\" VALUE=\" v \"></TD>\n"
 "    <TD WIDTH=\"34%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxDownRight\" VALUE=\" \\ \"></TD>\n"
 "  </TR>\n"
+"  <TR>\n"
+"  </TR>\n"
 "</TABLE>\n"
 "\n");
+cgiMakeButton("unzoom", "unzoom");
 }
 
 
@@ -385,15 +436,23 @@ else if (cgiVarExists("boxDownRight"))
     yOff += step;
     xOff += step;
     }
+else if (cgiVarExists("unzoom"))
+    {
+    xOff = yOff = -0.05;
+    zoom = 0.9;
+    }
 
 printf("<FORM ACTION=\"../cgi-bin/wikiPlot\" METHOD=\"GET\">\n");
 printf("<TABLE BORDER=0 WIDTH=\"100%%\">\n");
 printf("<TR>\n");
 printf("<TD WIDTH=\"78%%\">\n");
+printf("<B>Wiki Plotter</B><BR>\n");
 printf("<B>Contig: </B>");
 cgiMakeTextVar("contigDir", contigDir, 0);
 if (gotDir)
+    {
     cgiMakeButton("refresh", "refresh");
+    }
 else
     cgiMakeButton("submit", "submit");
 printf("<BR>\n");

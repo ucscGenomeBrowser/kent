@@ -521,10 +521,12 @@ void hgLoadRna(char *database, char *faPath, char *raFile)
 {
 char *type, *symName;
 hgSetDb(database);
-if (strstr(raFile, "est.ra"))
-    type = "EST";
-else if (strstr(raFile, "xenoRna.ra"))
+if (strstr(raFile, "xenoRna.ra"))
     type = "xenoRna";
+else if (strstr(raFile, "xenoEst"))
+    type = raFile;
+else if (strstr(raFile, "est.ra"))
+    type = "EST";
 else
     type = "mRNA";
 addRna(faPath, type, raFile, type);

@@ -39,6 +39,8 @@ errAbort(
   "   This checks on the progress of the jobs.\n"
   "jabba stop batch.hut\n"
   "   This stops all the jobs in the batch\n"
+  "jabba finished batch.hut\n"
+  "   List jobs that have finished\n"
   "jabba hung batch.hut\n"
   "   List hung jobs in the batch\n"
   "jabba crashed batch.hut\n"
@@ -57,9 +59,9 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 3;
-int maxQueue = 10000;
+int maxQueue = 20000;
 int minPush = 1;
-int maxPush = 10000;
+int maxPush = 20000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
 
@@ -70,7 +72,6 @@ char *statusCommand = "/cluster/gridware/bin/glinux/qstat";
 char *killCommand = "/cluster/gridware/bin/glinux/qdel";
 char *runJobCommand = "/cluster/bin/scripts/runJob";
 
-#ifdef SOON
 enum jaState 
 /* A job is in one of these states. */
  {
@@ -99,7 +100,6 @@ if (sub->ranOk)
 else
     return jaCrashed;
 }
-#endif /* SOON */
 
 /* Places that can be checked. */
 char *checkWhens[] = {"in", "out"};
@@ -876,7 +876,7 @@ reportOnJobs(db);
 writeBatch(db, batch);
 }
 
-void jabbaListFailed(char *batch, boolean showHung, boolean showCrashed)
+void jabbaListFailed(char *batch)
 /* List all jobs that failed. */
 {
 struct jobDb *db = readBatch(batch);
@@ -890,11 +890,24 @@ for (job = db->jobList; job != NULL; job = job->next)
     sub = job->submissionList;
     if (sub != NULL)
         {
-	if (showHung && sub->hung)
-	    printf("%s\n", job->spec);
-	else if (showCrashed && job->submissionCount >= retries && needsRerun(sub))
+	if (job->submissionCount >= retries && needsRerun(sub))
 	    printf("%s\n", job->spec);
 	}
+    }
+}
+
+void jabbaListState(char *batch, enum jaState targetState)
+/* List all jobs that match target state. */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+markQueuedJobs(db);
+markRunJobStatus(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    enum jaState state = figureState(job);
+    if (state == targetState)
+	printf("%s\n", job->spec);
     }
 }
 
@@ -924,6 +937,7 @@ struct hash *hash = newHash(0);
 struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
 
 printf("job: %s\n", job->command);
+printf("id: %s\n", sub->id);
 printf("host: %s\n", rjo->host);
 printf("failure type: %s\n", type);
 if (sub->trackingError)
@@ -949,6 +963,7 @@ void jabbaProblems(char *batch)
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
+int problemCount = 0;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
@@ -957,15 +972,28 @@ for (job = db->jobList; job != NULL; job = job->next)
     for (sub = job->submissionList; sub != NULL; sub = sub->next)
 	{
 	if (sub->hung)
+	    {
 	    problemReport(job, sub, "hung");
+	    ++problemCount;
+	    }
 	else if (sub->slow)
+	    {
 	    problemReport(job, sub, "slow");
+	    ++problemCount;
+	    }
 	else if (sub->trackingError)
+	    {
 	    problemReport(job, sub, "tracking error");
+	    ++problemCount;
+	    }
 	else if (needsRerun(sub))
+	    {
 	    problemReport(job, sub, "crash");
+	    ++problemCount;
+	    }
 	}
     }
+printf("%d problems total\n", problemCount);
 }
 
 void runningReport(struct job *job, struct submission *sub)
@@ -1030,13 +1058,13 @@ for (job = db->jobList; job != NULL; job = job->next)
 writeBatch(db, batch);
 }
 
-void printTimes(double seconds,  boolean showYears)
+void printTimes(char *title, double seconds,  boolean showYears)
 /* Print out times in seconds, hours, days, maybe years. */
 {
-printf("%d s %4.2f m %4.2f h %4.2f d", 
-   round(seconds), seconds/60, seconds/3600, seconds/(3600*24));
+printf("%-27s %9ds %10.2fm %8.2fh %7.2fd", 
+   title, round(seconds), seconds/60, seconds/3600, seconds/(3600*24));
 if (showYears)
-     printf(" %5.3f y", seconds/(3600*24*365));
+     printf(" %6.3f y", seconds/(3600*24*365));
 printf("\n");
 }
 
@@ -1096,6 +1124,7 @@ struct jobDb *db = readBatch(batch);
 double totalCpu = 0, totalWall = 0;
 double oneWall, longestWall = 0;
 struct job *job;
+char *longestWallId = NULL;
 struct submission *sub;
 int jobCount = 0;
 int runningCount = 0;
@@ -1147,7 +1176,11 @@ for (job = db->jobList; job != NULL; job = job->next)
 	           oneWall = totalCpu;	
 		   }
 	       totalWall += oneWall;
-	       if (oneWall > longestWall) longestWall = oneWall;
+	       if (oneWall > longestWall) 
+		   {
+	           longestWall = oneWall;
+		   longestWallId = sub->id;
+		   }
 	       }
 	   else
 	       {
@@ -1165,23 +1198,17 @@ if (otherCount > 0)
     printf("Other count: %d jobs\n", otherCount);
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
-printf("CPU time in finished jobs: ");
-printTimes(totalCpu, TRUE);
-printf("IO & Wait Time: ");
-printTimes(totalWall-totalCpu, TRUE);
+printTimes("CPU time in finished jobs:", totalCpu, TRUE);
+printTimes("IO & Wait Time:", totalWall-totalCpu, TRUE);
 if (runningCount > 0)
     {
-    printf("Time so far in running jobs: ");
-    printTimes(runTime, TRUE);
+    printTimes("Time in running jobs:", runTime, TRUE);
     }
 if (timedCount > 0)
     {
-    printf("Average job time: ");
-    printTimes(totalWall/timedCount, FALSE);
-    printf("Longest job time: ");
-    printTimes(longestWall, FALSE);
-    printf("Time from first submission to last job: ");
-    printTimes(calcFirstToLast(db), FALSE);
+    printTimes("Average job time:", totalWall/timedCount, FALSE);
+    printTimes("Longest job:", longestWall, FALSE);
+    printTimes("Submission to last job:", calcFirstToLast(db), FALSE);
     }
 }
 
@@ -1238,7 +1265,7 @@ else if (sameString(command, "push"))
     }
 else if (sameString(command, "try"))
     {
-    maxPush = 10;
+    maxPush = 20;
     jabbaPush(batch);
     }
 else if (sameString(command, "stop"))
@@ -1247,15 +1274,19 @@ else if (sameString(command, "stop"))
     }
 else if (sameString(command, "hung"))
     {
-    jabbaListFailed(batch, TRUE, FALSE);
+    jabbaListState(batch, jaHung);
     }
 else if (sameString(command, "crashed"))
     {
-    jabbaListFailed(batch, FALSE, TRUE);
+    jabbaListState(batch, jaCrashed);
     }
 else if (sameString(command, "failed"))
     {
-    jabbaListFailed(batch, TRUE, TRUE);
+    jabbaListFailed(batch);
+    }
+else if (sameString(command, "finished"))
+    {
+    jabbaListState(batch, jaFinished);
     }
 else if (sameString(command, "problems") || sameString(command, "problem"))
     {

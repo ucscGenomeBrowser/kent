@@ -146,7 +146,7 @@ type genePred refPep refMrna
 
 track sanger20
 shortLabel Sanger 20
-longLabel Sanger Center Chromosome 20 Genes
+longLabel Sanger Centre Chromosome 20 Genes
 priority 13
 visibility full
 chromosomes chr20,
@@ -155,7 +155,7 @@ type genePred
 
 track sanger22
 shortLabel Sanger 22
-longLabel Sanger Center Chromosome 22 Genes
+longLabel Sanger Centre Chromosome 22 Genes
 priority 13
 visibility full
 chromosomes chr22,

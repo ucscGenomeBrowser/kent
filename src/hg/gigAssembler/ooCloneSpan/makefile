@@ -9,4 +9,5 @@ O = ooCloneSpan.o
 
 ooCloneSpan: $O 
 	gcc -o $(HOME)/bin/$(MACHTYPE)/ooCloneSpan $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/ooCloneSpan
 

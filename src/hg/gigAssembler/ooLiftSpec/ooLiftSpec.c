@@ -13,7 +13,7 @@ char *goldName = NULL;
 
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
-    { "20", "21", "22", };
+    { "20", "21", "22", "Y"};
 
 void usage()
 /* Explain usage and exit. */

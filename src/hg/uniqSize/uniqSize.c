@@ -7,6 +7,8 @@
 #include "sqlNum.h"
 #include "hash.h"
 
+boolean stretch = FALSE;
+
 void usage()
 /* Print usage and exit. */
 {
@@ -15,7 +17,8 @@ errAbort(
   "usage:\n"
   "   uniqSize ooDir agpFile glFile\n"
   "options:\n"
-  "   altFile=other.agp  - if agpFile doesn't exist use altFile");
+  "   altFile=other.agp  - if agpFile doesn't exist use altFile\n"
+  "   -stretch - show stretch info as well");
 }
 
 void getSizes(char *fileName, int *retU, int *retN)
@@ -258,9 +261,12 @@ else
 void printChromInfo(struct chromInfo *ci, FILE *f)
 /* Print out chromosome info. */
 {
-fprintf(f, "%-5s %10u %8d %8d %6d %6d %6d %6d %10d %4.1f  %4.1f \n", 
-   ci->name, ci->baseCount, ci->c50, ci->s50, ci->openCloneGaps, ci->bridgedCloneGaps, ci->openFragGaps, ci->bridgedFragGaps, ci->totalStretch, 
-   percent(ci->stretchedClones, ci->cloneCount), percent(ci->wayStretchedClones, ci->cloneCount));
+fprintf(f, "%-5s %10u %8d %8d %6d %6d %6d %6d ",
+   ci->name, ci->baseCount, ci->c50, ci->s50, ci->openCloneGaps, ci->bridgedCloneGaps, ci->openFragGaps, ci->bridgedFragGaps);
+if (stretch)
+    fprintf(f, "%10d %4.1f  %4.1f", ci->totalStretch, 
+       percent(ci->stretchedClones, ci->cloneCount), percent(ci->wayStretchedClones, ci->cloneCount));
+fprintf(f, "\n");
 }
 
 void printHeader(FILE *f)
@@ -392,6 +398,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+stretch = cgiBoolean("stretch");
 if (argc != 4)
     usage();
 uniqSize(argv[1], argv[2], argv[3], cgiOptionalString("altFile"));

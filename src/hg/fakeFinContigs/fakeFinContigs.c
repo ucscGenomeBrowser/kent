@@ -14,11 +14,11 @@ void usage()
 errAbort(
   "fakeFinContigs - Fake up contigs for a finished chromosome\n"
   "usage:\n"
-  "   fakeFinContigs fin.agp fin.fa finDir rootName finFaDir\n"
+  "   fakeFinContigs fin.agp fin.fa finDir rootName finFaDir ooVer\n"
   "This will scan fin.agp for gaps, and create contigs in finDir\n"
   "for each section between gaps\n"
   "Example:\n"
-  "   fakeFinContigs chr20.agp chr20.fa . ctg20fin ~/gs/fin/fa\n"
+  "   fakeFinContigs chr20.agp chr20.fa . ctg20fin ~/gs/fin/fa 101\n"
   );
 }
 
@@ -32,7 +32,7 @@ struct contig
     struct agpFrag *agpList;	/* List of fragments that make it up. */
     };
 
-void fakeFinContigs(char *agpName, char *faName, char *finDir, char *rootName, char *finFaDir)
+void fakeFinContigs(char *agpName, char *faName, char *finDir, char *rootName, char *finFaDir, char *ooVer)
 /* fakeFinContigs - Fake up contigs for a finished chromosome. */
 {
 struct contig *contigList = NULL, *contig = NULL;
@@ -93,7 +93,7 @@ if (slCount(seq) != 1)
     errAbort("Got %d sequences in %s, can only handle one.", slCount(seq), faName);
 
 /* Fix up agp coordinates. Make a directory for each contig.  Fill it with 
- * .fa .agp barge.99 files for that contig. */
+ * .fa .agp barge.NN files for that contig. */
 printf("Writing contig dirs\n");
 for (contig = contigList; contig != NULL; contig = contig->next)
     {
@@ -118,15 +118,28 @@ for (contig = contigList; contig != NULL; contig = contig->next)
 	}
     carefulClose(&f);
 
+    /* Make ooGreedy.NN.gl file */
+    sprintf(path, "%s/%s.%s.gl", contigDir, "ooGreedy", ooVer);
+    f = mustOpen(path, "w");
+    for (agp = contig->agpList; agp != NULL; agp = agp->next)
+        {
+	if (agp->type[0] != 'N')
+	    {
+	    fprintf(f, "%s_1\t%d\t%d\t%s\n",  agp->frag, agp->chromStart, agp->chromEnd,
+	        agp->strand);
+	    }
+	}
+    carefulClose(&f);
+
     /* Make contig.fa file. */
     sprintf(path, "%s/%s.fa", contigDir, contig->name);
     faWrite(path, contig->name, seq->dna + contig->startOffset, 
     	contig->endOffset - contig->startOffset);
 
     /* Make contig/barge file. */
-    sprintf(path, "%s/barge.99", contigDir);
+    sprintf(path, "%s/barge.%s", contigDir, ooVer);
     f = mustOpen(path, "w");
-    fprintf(f, "Barge (Connected Clone) File ooGreedy Version 99\n");
+    fprintf(f, "Barge (Connected Clone) File ooGreedy Version %s\n", ooVer);
     fprintf(f, "\n");
     fprintf(f, "start  accession  size overlap maxClone maxOverlap\n");
     fprintf(f, "------------------------------------------------------------\n");
@@ -142,7 +155,7 @@ for (contig = contigList; contig != NULL; contig = contig->next)
     carefulClose(&f);
 
     /* Make contig/gold file. */
-    sprintf(path, "%s/gold.99", contigDir);
+    sprintf(path, "%s/gold.%s", contigDir, ooVer);
     f = mustOpen(path, "w");
     fragIx = 0;
     for (agp = contig->agpList; agp != NULL; agp = agp->next)
@@ -169,6 +182,13 @@ for (contig = contigList; contig != NULL; contig = contig->next)
     fprintf(f, "%s/%s.fa.out\n", contig->name, contig->name);
 carefulClose(&f);
 
+/* Create lift/ordered.lst file (just a list of contigs). */
+sprintf(path, "%s/ordered.lst", liftDir);
+f = mustOpen(path, "w");
+for (contig = contigList; contig != NULL; contig = contig->next)
+    fprintf(f, "%s\n", contig->name);
+carefulClose(&f);
+
 /* Create lift/ordered.lft file. */
 sprintf(path, "%s/ordered.lft", liftDir);
 f = mustOpen(path, "w");
@@ -185,8 +205,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 6)
+if (argc != 7)
     usage();
-fakeFinContigs(argv[1], argv[2], argv[3], argv[4], argv[5]);
+fakeFinContigs(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
