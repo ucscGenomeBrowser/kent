@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.21 2003/05/23 02:04:10 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.22 2003/12/24 04:19:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -254,7 +254,6 @@ int oneSize, sizeLeft = size;
 int i;
 char tStrand = (psl->strand[1] == '-' ? '-' : '+');
 
-printf("output %d\n",size);
 fprintf(f, ">%s:%d%c%d of %d %s:%d%c%d of %d\n", 
 	psl->qName, psl->qStart, psl->strand[0], psl->qEnd, psl->qSize,
 	psl->tName, psl->tStart, tStrand, psl->tEnd, psl->tSize);
@@ -344,14 +343,15 @@ else
 }
 
 
-void writeGap(struct dyString *aRes, int aGap, struct dyString *bRes, int bGap)
+void writeGap(struct dyString *aRes, int aGap, char *aSeq, struct dyString *bRes, int bGap, char *bSeq)
 /* Write double - gap.  Something like:
- *     ....123....
- *     ...4123.... */
+ *     ....123.... or --c
+ *     ...4123....    ag-  */
+
 {
 char abbrev[16];
 int minToAbbreviate = 16;
-if (doShort && aGap >= minToAbbreviate && bGap >= minToAbbreviate)
+if (doShort && (aGap >= minToAbbreviate || bGap >= minToAbbreviate))
     {
     fillShortGapString(abbrev, aGap, '.', 13);
     dyStringAppend(aRes, abbrev);
@@ -361,6 +361,8 @@ if (doShort && aGap >= minToAbbreviate && bGap >= minToAbbreviate)
 else
     {
     dyStringAppendMultiC(aRes, '-', aGap);
+    dyStringAppendN(bRes, bSeq, aGap);
+    dyStringAppendN(aRes, aSeq, bGap);
     dyStringAppendMultiC(bRes, '-', bGap);
     }
 }
@@ -594,9 +596,10 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	qGap = qs - lastQ;
 	tGap = ts - lastT;
 	minGap = min(qGap, tGap);
+	uglyf("block %d, minGap %d\n", blockIx, minGap);
 	if (minGap > 0)
 	    {
-	    writeGap(q, qGap, t, tGap);
+	    writeGap(q, qGap, qSeq->dna + lastQ, t, tGap, tSeq->dna + lastT);
 	    }
 	else if (qGap > 0)
 	    {
