@@ -134,3 +134,13 @@ while (--byteCount >= 0)
     *a++ = (*a | *b++);
 }
 
+void bitNot(Bits *a, int bitCount)
+/* Flip all bits in a. */
+{
+int byteCount = ((bitCount+7)>>3);
+while (--byteCount >= 0)
+    {
+    *a++ = ~*a;
+    }
+}
+

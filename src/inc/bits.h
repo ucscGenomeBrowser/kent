@@ -1,5 +1,8 @@
 /* bits - handle operations on arrays of bits. */
 
+#ifndef BITS_H
+#define BITS_H
+
 typedef unsigned char Bits;
 
 Bits *bitAlloc(int bitCount);
@@ -28,3 +31,9 @@ void bitAnd(Bits *a, Bits *b, int bitCount);
 
 void bitOr(Bits *a, Bits *b, int bitCount);
 /* Or two bitmaps.  Put result in a. */
+
+void bitNot(Bits *a, int bitCount);
+/* Flip all bits in a. */
+
+#endif /* BITS_H */
+
