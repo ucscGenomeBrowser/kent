@@ -7329,11 +7329,19 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     Band = substr($0,179)
     gsub(" *$","",Band)
     gsub("^ *","",Band)
+    mgiId = substr($0,1,31)
+    gsub(" ","",mgiId)
+    mouseSym = substr($0,63,26)
+    gsub(" ","",mouseSym)
+    mouseChr = substr($0,89,13)
+    gsub(" ","",mouseChr)
+    mouseCm = substr($0,102,9)
+    gsub(" ","",mouseCm)
     mouseBand = substr($0,111,11)
     gsub(" ","",mouseBand)
     if (length(mouseBand) < 1) { mouseBand = "N/A" }
     printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,Band,
-	$1,$3,$4,$5,mouseBand
+        mgiId,mouseSym,mouseChr,mouseCm,mouseBand
 }
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -8290,6 +8298,20 @@ cat > makeNet.csh << 'EOF'
     hgLoadBed hg16 webbNonExonic webbNonExonic.bed
 
 
+# phylo HMM data quintile calculation
+    ssh eieio
+    cat << '_EOF_' > /tmp/allpHMMdata.sh
+#!/bin/sh
+#       there is only an empty file in chr13_random, it causes all
+#       files following it on the xargs zcat line to be missed.
+#       Eliminate it from the processing
+find ./POSTPROBS -type f | grep -v chr13_random | sort -t\. -k2,2n | \
+        xargs zcat | awk '{print $2}' > /tmp/pHMM.data
+'_EOF_'
+    chmod +x /tmp/allpHMMdata.sh
+    cd  /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    time /tmp/allpHMMdata.sh
+
 # BLASTZ FUGU (FR1) (DONE 4/19/04 angie)
     ssh kk
     # space is awful tight on store4 -- use store7.  
@@ -8502,5 +8524,3 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
       echo axtBesting $chr
       axtBest $f $chr axtBest/$chr.axt -minScore=300
     end
-
-
