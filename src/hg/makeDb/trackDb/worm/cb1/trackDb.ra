@@ -67,6 +67,16 @@ visibility hide
 color 0,0,0
 type bed 6
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using C. briggsae/C. elegans WS98 Homology
+group genes
+priority 45
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
+
 track blastzCe2
 shortLabel Elegans Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz 
