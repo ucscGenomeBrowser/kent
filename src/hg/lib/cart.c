@@ -442,7 +442,7 @@ clearDbContents(conn, "sessionDb", hgsid);
 hDisconnectCentral(&conn);
 }
 
-static struct cart *cartAndCookie(char *cookieName, char **exclude)
+struct cart *cartAndCookie(char *cookieName, char **exclude)
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 {

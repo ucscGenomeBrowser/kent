@@ -1423,7 +1423,7 @@ if (startOffset != NULL)
 	    iStart = atoi(startOffset)-1;
 	    iEnd = atoi(endOffset);
 	    relativeFlag = TRUE;
-	    *(strchr(query,':')) = '\0';
+	    query = buf;
 	    }
 	}
     }

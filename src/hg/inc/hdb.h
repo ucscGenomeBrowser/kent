@@ -94,7 +94,13 @@ char *hDbFromFreeze(char *freeze);
 /* Return database version from freeze name. */
 
 struct slName *hDbList();
-/* List of all database versions. */
+/* List of all database versions that are online (database
+ * names only).  See also hDbDbList. */
+
+struct dbDb *hDbDbList();
+/* Return list of databases that are actually online. 
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
 
 boolean hIsPrivateHost();
 /* Return TRUE if this is running on private web-server. */
@@ -181,5 +187,13 @@ boolean hgIsContigRange(char *spec);
 
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database. */
+
+struct dbDb *hGetBlatIndexedDatabases();
+/* Get list of databases for which there is a BLAT index. 
+ * Dispose of this with dbDbFreeList. */
+
+boolean hIsBlatIndexedDatabase(char *db);
+/* Return TRUE if have a BLAT server on sequence corresponding 
+ * to give database. */
 
 #endif /* HDB_H */

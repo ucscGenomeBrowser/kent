@@ -7,10 +7,10 @@ L =
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = agpFrag.o agpGap.o bbRepMask.o bed.o cart.o cartDb.o \
-    chromInfo.o chromInserts.o cgh.o \
+O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
+    cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    est3.o estPair.o exoFish.o exprBed.o \
+    dbDb.o est3.o estPair.o exoFish.o exprBed.o \
     featureBits.o fishClones.o gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
     glDbRep.o ggCluster.o ggDbIo.o ggDbRep.o ggDump.o \

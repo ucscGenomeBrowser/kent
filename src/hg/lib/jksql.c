@@ -529,3 +529,20 @@ if ((conn = *pConn) != NULL)
     }
 }
 
+struct hash *sqlHashOfDatabases()
+/* Get hash table with names of all databases that are online. */
+{
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = sqlConnect("mysql");
+struct hash *hash = newHash(8);
+
+sr = sqlGetResult(conn, "show databases");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(hash, row[0], NULL);
+    }
+sqlDisconnect(&conn);
+return hash;
+}
+

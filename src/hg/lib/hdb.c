@@ -14,25 +14,11 @@
 #include "trackDb.h"
 #include "hCommon.h"
 #include "hgFind.h"
+#include "dbDb.h"
+#include "blatServers.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 static struct sqlConnCache *centralCc = NULL;
-struct dbConv
-/* Pair for converting database to assembly and vice-versa */
-{
-    char *db;        /* database name, i.e. "hg6" */
-    char *freeze;    /* assembly freeze, i.e. "Dec. 12, 2000" */
-};
-
-static struct dbConv dbTable[] = {
-    {"hg3","July 17, 2000"},
-    {"hg4","Sept. 5, 2000"},
-    {"hg5","Oct. 7, 2000"},
-    {"hg6","Dec. 12, 2000"},
-    {"hg7","April 1, 2001"},
-    {"hg8","Aug. 6, 2001"},
-    {"hg10","Dec. 22, 2001 (NCBI)"},
-};
 
 static char *hdbHost;
 static char *hdbName = "hg8";
@@ -354,39 +340,90 @@ struct dnaSeq *hRnaSeq(char *acc)
 return hExtSeq(acc);
 }
 
+static char *hFreezeDbConversion(char *database, char *freeze)
+/* Find freeze given database or vice versa.  Pass in NULL
+ * for parameter that is unknown and it will be returned
+ * as a result.  This result can be freeMem'd when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char *ret = NULL;
+struct dyString *dy = newDyString(128);
+
+if (database != NULL)
+    dyStringPrintf(dy, "select description from dbDb where name = '%s'", database);
+else if (freeze != NULL)
+    dyStringPrintf(dy, "select name from dbDb where description = '%s'", freeze);
+else
+    internalErr();
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+freeDyString(&dy);
+return ret;
+}
+
 
 char *hFreezeFromDb(char *database)
 /* return the freeze for the database version. 
    For example: "hg6" returns "Dec 12, 2000". If database
    not recognized returns NULL */
 {
-int i;
-for(i=0;i<ArraySize(dbTable);i++)
-    if(sameString(database,dbTable[i].db))
-	return cloneString(dbTable[i].freeze);
-return NULL;
+return hFreezeDbConversion(database, NULL);
 }
 
 char *hDbFromFreeze(char *freeze)
 /* Return database version from freeze name. */
 {
-int i;
-for(i=0;i<ArraySize(dbTable);i++)
-    if(sameString(freeze,dbTable[i].freeze))
-	return cloneString(dbTable[i].db);
-return NULL;
+return hFreezeDbConversion(NULL, freeze);
+}
+
+struct dbDb *hDbDbList()
+/* Return list of databases that are actually online. 
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+struct dbDb *dbList = NULL, *db;
+struct hash *hash = sqlHashOfDatabases();
+
+sr = sqlGetResult(conn, "select * from dbDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    if (hashLookup(hash, db->name))
+        {
+	slAddHead(&dbList, db);
+	}
+    else
+        dbDbFree(&db);
+    }
+sqlFreeResult(&sr);
+hashFree(&hash);
+hDisconnectCentral(&conn);
+slReverse(&dbList);
+return dbList;
 }
 
 struct slName *hDbList()
-/* List of all database versions. */
+/* List of all database versions that are online (database
+ * names only).  See also hDbDbList. */
 {
 struct slName *nList = NULL, *n;
-int i;
-for(i=3;i<ArraySize(dbTable);i++)
+struct dbDb *dbList, *db;
+
+dbList = hDbDbList();
+for (db = dbList; db != NULL; db = db->next)
     {
-    n = newSlName(dbTable[i].db);
+    n = newSlName(db->name);
     slAddTail(&nList, n);
     }
+dbDbFree(&dbList);
 return nList;
 }
 
@@ -931,3 +968,51 @@ sqlFreeResult(&sr);
 return tdb;
 }
 
+struct dbDb *hGetBlatIndexedDatabases()
+/* Get list of databases for which there is a BLAT index. 
+ * Dispose of this with dbDbFreeList. */
+{
+struct hash *hash=newHash(5);
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+struct dbDb *dbList = NULL, *db;
+
+/* Get hash of active blat servers. */
+sr = sqlGetResult(conn, "select db from blatServers");
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(hash, row[0], NULL);
+sqlFreeResult(&sr);
+
+/* Scan through dbDb table, keeping ones that are indexed. */
+sr = sqlGetResult(conn, "select * from dbDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    if (hashLookup(hash, db->name))
+        {
+	slAddHead(&dbList, db);
+	}
+    else
+        dbDbFree(&db);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+hashFree(&hash);
+slReverse(&dbList);
+return dbList;
+}
+
+boolean hIsBlatIndexedDatabase(char *db)
+/* Return TRUE if have a BLAT server on sequence corresponding 
+ * to give database. */
+{
+struct sqlConnection *conn = hConnectCentral();
+boolean gotIx;
+char query[256];
+
+sprintf(query, "select name from dbDb where name = '%s'", db);
+gotIx = sqlExists(conn, query);
+hDisconnectCentral(&conn);
+return gotIx;
+}

@@ -26,6 +26,9 @@
 #include "sqlList.h"
 #endif
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
 	
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
@@ -33,6 +36,9 @@ struct sqlConnection *sqlConnect(char *database);
 struct sqlConnection *sqlConnectRemote(char *host, 
 	char *user, char *password, char *database);
 /* Connect to database somewhere as somebody. */
+
+struct hash *sqlHashOfDatabases();
+/* Get hash table with names of all databases that are online. */
 
 void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
@@ -127,3 +133,4 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 
 void sqlCleanupAll();
 /* Cleanup all open connections and resources. */
+
