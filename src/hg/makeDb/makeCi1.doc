@@ -82,11 +82,23 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
 
 
 # GAP table
-    mkdir /cluster/data/ci1/bed/gap
-    cd /cluster/data/ci1/bed/gap
-    findMotif -verbose=4 -motif=AACCAA /gbdb/ci1/nib |& grep -h GAP *.stderr | sed -e "s/#GAP //" > gap.bed   
-    awk  "{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \"N\", \$5, \"fragment\", \"yes\"}" gap.bed > gap2.bed
-    hgLoadBed ci1 agpGap gap2.bed -sqlTable=$HOME/kent/src/hg/lib/agpGap.sql
+    ssh hgwdev
+    mkdir -p /cluster/data/ci1/bed/gapRmsk
+    cd /cluster/data/ci1/bed/gapRmsk
+    simpleGap /cluster/data/ci1/nib gap.bed rmsk.out
+    echo "drop table gap;" | hgsql ci1
+    hgsql ci1 < ~/kent/src/hg/lib/gap.sql   
+    hgLoadBed -oldTable ci1 gap gap.bed
+    echo "drop index bin on gap ;" | hgsql ci1
+    echo "create index chrom on gap (chrom, bin) ;" | hgsql ci1
+    echo "create index chrom_2 on gap  (chrom, chromStart);" | hgsql ci1
+    echo "create index chrom_3 on gap  (chrom, chromEnd);" | hgsql ci1
+    echo "drop table rmsk;" | hgsql ci1
+    hgsql ci1 < ~/kent/src/hg/lib/rmskOut.sql   
+    echo "rename table rmskOut to rmsk;" | hgsql ci1 
+    echo "load data local infile 'rmsk.out' into table rmsk;" | hgsql ci1 
+    echo "create index chrom_2 on rmsk  (genoName, genoStart);" | hgsql ci1
+    echo "create index chrom_3 on rmsk  (genoName, genoEnd);" | hgsql ci1
 
 # JGI ciona genes
     ssh hgwdev
