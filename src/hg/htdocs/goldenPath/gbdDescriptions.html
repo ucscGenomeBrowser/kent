@@ -732,6 +732,9 @@
     end sequences.  BAC end sequence information comes from the dbGSS 
     portion of GenBank </LI>
   <LI><A 
+  href="#LFS">bacEndSingles</A> 
+  - Locations of BAC clones where only one end is mapped (Zebrafish)
+  <LI><A 
   href="#BactigPos">bactigPos</A> 
   - Bactig positions in chromosome coordinates
   <LI><A 
@@ -859,6 +862,9 @@
   <LI><A 
   href="#ChimpSimpleDiff">chimpSimpleDiff</A> 
   - Simple differences between the chimp and human genome assemblies
+  <LI><A 
+  href="#ExpDistance">choExpDistance</A> 
+  - Distance between 2 genes in expression space (<em>S. cerevisiae</em>)
   <LI><A 
   href="#ChromInfo">chromInfo</A> 
   - Describes name and size of each chromosome as well as an external file 
@@ -1039,6 +1045,9 @@
   <LI><A 
   href="#FlyBaseSwissProt">flyBaseSwissProt</A> 
   - FlyBase acc to SwissProt acc, plus some other SwissProt info
+  <LI><A 
+  href="#FlyReg">flyreg</A> 
+  - FlyReg data
   <LI><A 
   href="#BED">firstEF</A> 
   - First Exon Finder (FirstEF) exon and promoter predictions</LI>
@@ -1387,6 +1396,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#KnownTo">knownToGnfAtlas2</A> 
   - Associates known gene and Atlas2 expression data
   <LI><A 
+  href="#KnownTo">knownToGnf1h</A> 
+  - Associates known gene and GNF1H expression data
+  <LI><A 
   href="#KnownTo">knownToHInv</A> 
   - Associates known gene and HInv transcripts
   <LI><A 
@@ -1407,6 +1419,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownToSuper">knownToSuper</A> 
   - Associates known gene and Superfamily ID
+  <LI><A 
+  href="#KnownTo">knownToU133</A> 
+  - Associates known gene and Affy U133 chip ID
+  <LI><A 
+  href="#KnownTo">knownToU133Plus2</A> 
+  - Associates known gene and Affy U133 Plus 2.0 chip ID
   <LI><A 
   href="#KnownTo">knownToU133</A> 
   - Associates known gene and Affy U133 chip ID
@@ -1738,6 +1756,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - "Wiggle track" display of evolutionary conservation based on a phylogentiec hidden 
   Markov model, using multiz alignments 
   <LI><A 
+  href="#BED">phastConsElements</A> 
+  - Predictions of conserved elements produced by phastCons program
+  <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
   <LI><A 
@@ -1763,6 +1784,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Genome quality scores</LI>
 
 <A NAME="R_GBD"></A>
+  <LI><A 
+  href="#RankProp">rankProp</A> 
+  - RankProp protein ranking for a pair of proteins
   <LI><A 
   href="#ScoredRef">rat_hmrg</A> 
   - Rat scored reference file for human/chimp/mouse/rat/chicken alignments
@@ -2004,6 +2028,9 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#SpOrganism">spOrganism</A> 
   - Associates SwissProt IDs with a taxonomy number
   <LI><A 
+  href="#SpPsiBlast">spPsiBlast</A> 
+  - PSI-BLAST E-value for 2 proteins
+  <LI><A 
   href="#SpSecondaryID">spSecondaryID</A> 
   - Associates SwissProt IDs with secondary accession IDs
   <LI><A 
@@ -2095,6 +2122,9 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#BED">uniGene_2</A> 
   - UniGene alignments and SAGE Info (new version)  </LI>
+  <LI><A 
+  href="#PslInfo">uniGene_dr</A> 
+  - Zebrafish UniGene alignments </LI>
   <LI><A 
   href="#PslInfo">uniGene_gg</A> 
   - Chicken UniGene alignments </LI>
@@ -2831,7 +2861,8 @@ the fields.<BR>
    uint   gcNum;        "Number of C and G in island"
    uint   perCpg;       "Percentage of island that is CpG"
    uint   perGc;        "Percentage of island that is C or G"
-   float  obsExp;	"Ratio of observed(cpgNum) to expected(numC*numG/length) CpG in island"
+   float  obsExp;	"Ratio of observed(cpgNum) to expected(numC*numG/length) 
+			 CpG in island"
    )
 </PRE>
 
@@ -3038,6 +3069,17 @@ Last used Apr. 2001.
    )
 </PRE>
 
+<H4><A name=ExpDistance></A>Expression Distance Between 2 Genes</H4>
+<P>
+<PRE>table expDistance
+"Distance between two genes in expression space"
+    (
+    string query;       "Name of one gene"
+    string target;      "Name of other gene"
+    float distance;     "Distance in expression space, always >= 0"
+    )
+</PRE>
+
 <H4><A name=FishClones></A>FISH Clones</H4>
 <PRE>table fishClones
 "Describes the positions of fishClones in the assembly"
@@ -3062,7 +3104,7 @@ Last used Apr. 2001.
    )
 </PRE>
 
-<H4><A name=FlyBaseSwissProt></A>FlyBase Accessions Linked to SwissProt Accesions</H4>
+<H4><A name=FlyBaseSwissProt></A>FlyBase Accessions Linked to SwissProt Accessions</H4>
 <PRE>table flyBaseSwissProt
 "FlyBase acc to SwissProt acc, plus some other SwissProt info"
     (
@@ -3149,6 +3191,19 @@ Last used Apr. 2001.
     int fbAllele;	"ID in fbAllele table or 0 if not allele-specific"
     int fbRef;		"ID in fbRef table"
     lstring text;	"Descriptive text"
+    )
+</PRE>
+
+<H4><A name=FlyReg></A>FlyReg Data</H4>
+<PRE>table flyreg
+"Flyreg data from Casey Bergman"
+    (
+    string chrom;      "Chromosome"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Factor"
+    string target;     "Target"
+    uint   pmid;       "PubMed ID"
     )
 </PRE>
 
@@ -3316,7 +3371,9 @@ information. In alternative splicing situations each transcript has a row in thi
 </PRE>
 
 <H4><A name=PepPredictions></A>Gene Predictions and RefSeq Genes Amino Acid Translations</H4>
-The following definition is used for tables that link a predicted peptide to a predicted gene: acemblyPep, ECgenePep, ensPep, genieAltPep, genieKnownPep, genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPep.
+The following definition is used for tables that link a predicted peptide to 
+a predicted gene: acemblyPep, ECgenePep, ensPep, genieAltPep, genieKnownPep, 
+genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPep.
 <PRE>table pepPred
 "A predicted peptide linked to a predicted gene."
     (
@@ -3615,17 +3672,6 @@ IDs and accessions.
 
 </PRE>
 
-<H4><A name=ExpDistance></A>Distance Between 2 Genes</H4>
-<P>
-<PRE>table distance
-"Abstract distance between two genes"
-    (
-    char query;  	"Query gene (indexed)"
-    char target; 	"Target gene (not indexed)"
-    float distance; 	"Distance between the two genes, possibly in some expression space"
-    )
-</PRE>
-
 <H4><A name=KnownIsoforms></A>Known Genes Isoforms</H4>
 <P>
 The following definition describes tables that link together various transcripts 
@@ -3911,7 +3957,9 @@ from one to the other:
 </PRE>
 
 <H4><A name="OrientInfo"></A>Orientation Info</H4>
-The following definition is used by the mrnaOrientInfo and estOrientInfo tables. It contains extra information on mRNAs/ESTs calculated by the polyInfo program.
+The following definition is used by the mrnaOrientInfo and estOrientInfo 
+tables. It contains extra information on mRNAs/ESTs calculated by the 
+polyInfo program.
 <PRE>table estOrientInfo
 "Extra information on mRNAs/ESTs calculated by polyInfo program"
    (
@@ -4173,6 +4221,16 @@ table pseudoGeneLink
     )
 </PRE>
 
+<H4><A name=RankProp></A>RankProp Score</H4>
+<PRE>table rankProp
+"RankProp protein ranking for a pair of proteins"
+    (
+    string query;       "Known Genes ID of query protein"
+    string target;      "Known Genes ID of target protein"
+    float score;        "Rankp score"
+    )
+</PRE>
+
 <H4><A name=SyntenyRat></A>Rat Synteny Alignments </H4>
 <PRE>table syntenyRat
 "Rat synteny alignnments from blastz single coverage"
@@ -4259,7 +4317,6 @@ First used Oct. 2003
     uint      score;      "Score from 0-1000"
     char[1]   strand;     "+ or -"
     varchar   gene;    	  "Gene name"
-
     )
 </PRE>
 
@@ -4657,6 +4714,7 @@ of finding simple tandem repeats than RepeatMasker does.
     string  func;       "The functional category of the SNP"
     string  locType;    "How the variant affects the reference sequence"
     string  source;     "Source of the data - dbSnp, Affymetrix, ..."
+    string  exception;  "List of exceptionIds for 'invariant' conditions"
     )
 </PRE>
 
@@ -4707,15 +4765,6 @@ The bacEndPairs table uses all fields.
 				 in genomic"
    string[lfCount] lfNames;     "Comma-separated list of names of linked features"
    )
-</PRE>
-
-<H4><A name=SpMrna></A>SpMrna</H4>
-<PRE>table spMrna
-"Associates SwissProt IDs with mRNA IDs"
-    (
-    string spID; 	"SwissProt ID"
-    string mrnaID;	"mRNA ID"
-    )
 </PRE>
 
 <H4><A name=STSsites></A>STS and FISH Clone Positions</H4>
@@ -5162,6 +5211,26 @@ The bacEndPairs table uses all fields.
    string accession;       "SWISS-PROT accession number"
    string accession2;      "SWISS-PROT secondary accession number"
    )
+</PRE>
+
+<H4><A name=SpMrna></A>Swiss-Prot mRNA</H4>
+<PRE>table spMrna
+"Associates SwissProt IDs with mRNA IDs"
+    (
+    string spID; 	"Swiss-Prot ID"
+    string mrnaID;	"mRNA ID"
+    )
+</PRE>
+
+<H4><A name=SpPsiBlast></A>Swiss-Prot PSI-BLAST E-value</H4>
+<PRE>table spPsiBlast
+"PSI-BLAST all-against-all of Swiss-Prot/TrEMBL proteins. Swiss-Prot accessions 
+are mapped to Known Genes IDs before being loaded into the table."
+    (
+    string kgId1;       "Known Gene ID of one protein"
+    string kgId2;       "Known Gene ID of other protein"
+    float eValue;       "Best bi-directional E-value"
+    )
 </PRE>
 
 <H4><A name=BlastRef></A>tBLASTn Protein Track Mappings</H4>
