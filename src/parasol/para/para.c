@@ -59,6 +59,8 @@ errAbort(
   "      -delayTime=N Number of seconds to delay before submitting next job to minimize i/o load at startup - default 0 \n"
   "      -priority=x  Set batch priority to high, medium, or low - default medium (use high only with approval)\n"
   "      -pri=N       Set batch priority to specific value - default %d \n"
+  "       Note: If needed, use the priority flags with make, push, create, shove, or try.\n"
+  "             Please keep low priority jobs short because they won't be pre-empted.\n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs\n"
   "para shove\n"
@@ -1661,10 +1663,11 @@ maxPush = optionInt("maxPush",  maxPush);
 warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
 delayTime = optionInt("delayTime", delayTime);
-if (thisBatchRunning())
-    checkPrioritySetting();
 command = argv[1];
 batch = "batch";
+
+if (!sameWord(command,"create") && !sameWord(command,"make"))
+    checkPrioritySetting();
 
 pushWarnHandler(paraVaWarn);
 
