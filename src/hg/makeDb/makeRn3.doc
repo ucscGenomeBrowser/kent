@@ -337,8 +337,9 @@ if (-e /tmp/rn3/$2/$2.cat) /bin/cp /tmp/rn3/$2/$2.cat ./
 	# With the fix, everything is getting masked properly.
 	# Fixing a temporary glitch in repeat masker.  This hasn't
 	# affected anything above, but it will change the result of
-#	/cluster/bluearc/RepeatMasker030619 
-	# the load below.
+	# the load below.  Since the repeat masker run above, the
+	# processrepeats script of RepeatMasker has been fixed.  This
+	# would not be necessary after that fix.
         foreach i (?{,?})
 	    /cluster/bluearc/RepeatMasker030619/MakeRMoutSane.pl ${i}/*.fa.out
 		foreach k ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa.out \
@@ -633,7 +634,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     ssh hgwdev
     cd ~/rn3/zip
     ../jkStuff/cpToWeb.sh
-    cd /usr/local/apache/htdocs/goldenPath/rnJan2003
+    cd /usr/local/apache/htdocs/goldenPath/rnJun2003
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
     # Then make the upstream sequence files.
@@ -700,7 +701,7 @@ AUTO UPDATE GENBANK MRNA RUN
     ssh eieio
     cd /cluster/store5/genbank
     set db = rn3
-    set nibGlob = '/cluster/bluearc/rat/rn3/softNib/chr*.nib'
+    set nibGlob = '/cluster/bluearc/rat/rn3/bothMaskedNibs/chr*.nib'
     set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
     nice bin/gbAlignStep -verbose=1 -initial -srcDb=genbank -type=mrna \
 	$db "$nibGlob" $liftFile &
