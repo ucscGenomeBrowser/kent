@@ -1,16 +1,16 @@
 /* hgLoadBed - Load a generic bed file into database. */
 #include "common.h"
+#include "options.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "hash.h"
-#include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
 #include "bed.h"
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.26 2004/09/10 20:18:36 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.27 2004/10/01 17:56:31 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -20,6 +20,18 @@ boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"noSort", OPTION_BOOLEAN},
+    {"noBin", OPTION_BOOLEAN},
+    {"nobin", OPTION_BOOLEAN},
+    {"oldTable", OPTION_BOOLEAN},
+    {"onServer", OPTION_BOOLEAN},
+    {"sqlTable", OPTION_STRING},
+    {"tab", OPTION_BOOLEAN},
+    {"hasBin", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -142,7 +154,7 @@ void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedL
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
-int loadOptions = (cgiBoolean("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
+int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 char comment[256];
 
 /* First make table definition. */
@@ -249,15 +261,15 @@ loadDatabase(database, track, bedSize, bedList);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
-noBin = cgiBoolean("noBin") || cgiBoolean("nobin");
-noSort = cgiBoolean("noSort");
-strictTab = cgiBoolean("tab");
-oldTable = cgiBoolean("oldTable");
-sqlTable = cgiOptionalString("sqlTable");
-hasBin = cgiBoolean("hasBin");
+noBin = optionExists("noBin") || optionExists("nobin");
+noSort = optionExists("noSort");
+strictTab = optionExists("tab");
+oldTable = optionExists("oldTable");
+sqlTable = optionVal("sqlTable", sqlTable);
+hasBin = optionExists("hasBin");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
