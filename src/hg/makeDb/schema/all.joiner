@@ -1713,6 +1713,7 @@ tablesIgnored $dm
     anophelesEcores
     fbRole
     flyreg
+    flyreg2
 
 tablesIgnored $fr
     chr%_gold
