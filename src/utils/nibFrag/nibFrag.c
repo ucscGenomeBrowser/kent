@@ -14,7 +14,7 @@ errAbort(
   "   nibFrag [options] file.nib start end strand out.fa\n"
   "options:\n"
   "   -masked - use lower case characters for masked-out bases\n"
-  "   -hardMasked - use 'N' characters for masked out bases\n"
+  "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"
   "   -upper - use uppper case characters for all bases\n"
   "   -name=name Use given name after '>' in output sequence\n"
   );
