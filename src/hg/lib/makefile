@@ -22,6 +22,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
     jaxOrtholog.o jaxQTL.o jksql.o \
     knownInfo.o knownMore.o lfs.o \
+    minGeneInfo.o tigrCmrGene.o llaInfo.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o pseudoGeneLink.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
