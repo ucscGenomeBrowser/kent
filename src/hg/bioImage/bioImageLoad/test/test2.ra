@@ -2,10 +2,8 @@ fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/wholeMount
 thumbDir /gbdb/bioImage/thumb/inSitu/Mouse/mahoney/wholeMount
 isDefault 1
 taxon 10090
-isEmbryo 1
-age 10.5
-bodyPart whole
-sliceType whole mount
+bodyPart brain
+sliceType horizontal
 imageType RNA in situ
 contributer Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q.
 publication Mouse brain organization revealed through direct genome-scale TF expression analysis. 
