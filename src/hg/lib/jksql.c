@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.47 2004/01/29 22:04:03 hartera Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.48 2004/01/29 22:55:17 hartera Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -342,16 +342,6 @@ printf("Advisory lock has been released\n");
                                                                                 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already.
- * Returns FALSE if didn't make table. */
-{
-if (sqlTableExists(sc, table))
-    return FALSE;
-sqlUpdate(sc, query);
-return TRUE;
-}
-
-boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
-/* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
 {
 if (sqlTableExists(sc, table))
