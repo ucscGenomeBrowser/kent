@@ -547,7 +547,9 @@ printf("</SELECT>");
 void cgiMakeHiddenVar(char *varName, char *string)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">", varName, string);
+char *enc = cgiEncode(string);
+printf("<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">", varName, enc);
+freeMem(enc);
 }
 
 void cgiContinueHiddenVar(char *varName)
