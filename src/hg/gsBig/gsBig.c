@@ -1,4 +1,5 @@
 /* gsBig - Run Genscan on big input and produce GTF files. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,6 +11,7 @@
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
+char *tmpDir  = "/tmp";
 
 int winSize = 1200000;	/* Size of window to pass to genscan. */
 int stepSize;
@@ -23,10 +25,13 @@ errAbort(
   "   gsBig file.fa output.gtf\n"
   "options:\n"
   "   -subopt=output.bed - Produce suboptimal exons.\n"
-  "   -trans=output.fa - where to put translated proteins.\n"
+  "   -trans=output.fa - where to put translated proteins.\n" 
   "   -prerun=input.genscan - Assume genscan run already with this output.\n"
   "   -window=size    Set window to pass to genscan specific size (default 1200000)\n"
-  "                   You want ~400 bytes memory for each base in window."
+  "                   You want ~400 bytes memory for each base in window.\n"
+  "   -exe=/bin/genscan-linux/genscan - where genscan executable is.\n"
+  "   -par=/bin/genscan-linux/HumanIso.smat - where parameter file is.\n"
+  "   -tmp=/tmp - where temporary files go to.\n"
   );
 }
 
@@ -540,7 +545,12 @@ slReverse(&merged->suboptList);
 return merged;
 }
 
-void gsBig(char *faName, char *gtfName, char *suboptName, char *transName)
+void gsBig(char *faName, char *gtfName, 
+	   char *suboptName, 
+	   char *transName,
+	   char *exeName, 
+	   char *parName,
+	   char *tmpDirName)
 /* gsBig - Run Genscan on big input and produce GTF files. */
 {
 struct dnaSeq seq;
@@ -552,11 +562,20 @@ FILE *gtfFile = mustOpen(gtfName, "w");
 FILE *subFile = NULL;
 FILE *transFile = NULL;
 
+char temp_str[500];
+char dir1[256], root1[128], ext1[64], file1[265];
+
 if (suboptName != NULL)
     subFile = mustOpen(suboptName, "w");
 if (transName != NULL)
     transFile = mustOpen(transName, "w");
-
+if (exeName != NULL)
+    exePath = strdup(exeName);
+if (parName != NULL)
+        parPath = strdup(parName);	
+if (tmpDirName != NULL)
+        tmpDir = strdup(tmpDirName);
+	
 if (cgiVarExists("prerun"))
     {
     char *preFileName = cgiString("prerun");
@@ -566,10 +585,18 @@ if (cgiVarExists("prerun"))
     }
 else
     {
-    makeTempName(&tn1, "temp", ".fa");
-    makeTempName(&tn2, "temp", ".genscan");
-    tempFa = tn1.forCgi;
-    tempGs = tn2.forCgi;
+    //makeTempName(&tn1, "temp", ".fa");
+    //makeTempName(&tn2, "temp", ".genscan");
+    //tempFa = tn1.forCgi;
+    //tempGs = tn2.forCgi;
+
+    splitPath(faName, dir1, root1, ext1);
+    
+    sprintf(temp_str, "%s/temp_gsBig_%d_%s.fa", tmpDir, getpid(), root1);
+    tempFa = strdup(temp_str);		    
+    sprintf(temp_str,"%s/temp_gsBig_%d_%s.genscan", tmpDir, getpid(), root1);
+    tempGs = strdup(temp_str);	
+    
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	{
 	int offset, sizeOne;
@@ -604,10 +631,16 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 3)
+if (argc < 3)
     usage();
 winSize = cgiUsualInt("window", winSize);
 stepSize = 2*winSize/3;
-gsBig(argv[1], argv[2], cgiOptionalString("subopt"), cgiOptionalString("trans"));
+gsBig(argv[1], argv[2], 
+	cgiOptionalString("subopt"),
+	cgiOptionalString("trans"),
+	cgiOptionalString("exe"), 
+	cgiOptionalString("par"),
+        cgiOptionalString("tmp")
+    );
 return 0;
 }
