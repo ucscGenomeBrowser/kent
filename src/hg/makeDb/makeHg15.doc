@@ -3271,7 +3271,6 @@ perl ./file_erase.pl ./tmp/list_file;
 rm ./tmp/list_file*;
 '_EOF_'
 cat <<  '_EOF_' > sedit.1
-/Predictions/d
 /^No/d
 /^$/d
 s/\.\./ /g
@@ -3291,9 +3290,9 @@ BEGIN { strand = "-"}
   else 
     extra=""
   if (strand == "+") 
-    printf "chrom %d %d promoter(%d+)%s %d +\nchrom %d %d exon(%d+)%s %d +\nchrom %d %d CpGIsland(%d+)%s %d +\n", $2-1, $3, $1, extra, $4 * 1000 , $5-1, $6, $1, extra, $7 * 1000 , $9-1, $10,  $1, extra, 1000
+    printf "chrom %d %d promoter(%d+)%s %d +\nchrom %d %d exon(%d+)%s %d +\nchrom %d %d CpGWindow(%d+)%s %d +\n", $2-1, $3, $1, extra, $4 * 1000 , $5-1, $6, $1, extra, $7 * 1000 , $9-1, $10,  $1, extra, 1000
   else
-    printf "chrom %d %d promoter(%d-)%s %d -\nchrom %d %d exon(%d-)%s %d -\nchrom %d %d CpGIsland(%d-)%s %d -\n", $3-1, $2, $1, extra, $4 * 1000 , $6-1, $5, $1, extra, $7  * 1000 , $10-1, $9,  $1, extra, 1000  
+    printf "chrom %d %d promoter(%d-)%s %d -\nchrom %d %d exon(%d-)%s %d -\nchrom %d %d CpGWindow(%d-)%s %d -\n", $3-1, $2, $1, extra, $4 * 1000 , $6-1, $5, $1, extra, $7  * 1000 , $10-1, $9,  $1, extra, 1000  
 }
 '_EOF_'
 cat <<  '_EOF_' > runProg
