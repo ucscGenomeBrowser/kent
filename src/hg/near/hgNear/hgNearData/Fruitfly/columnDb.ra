@@ -21,7 +21,7 @@ type lookup bdgpToRefSeq name value
 
 name arbLifeCycle
 shortLabel Expression
-longLabel Arbeitman et al. 2002 Life-Cycle Data Expression Data
+longLabel Arbeitman et al. 2002 Life-Cycle Expression Data
 priority 2.5
 visibility on
 type expMulti bdgpToCanonical
