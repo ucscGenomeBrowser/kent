@@ -166,7 +166,7 @@ es/xt3_JGI.lib $2
   
   ssh hgwdev
   cd /cluster/data/xenTro1/repeats
-  hgLoadOut xenTro1 repeats.out
+  hgLoadOut -nosplit xenTro1 repeats.out
   hgsql xenTro1
   rename table repeats_rmsk to rmsk
 
