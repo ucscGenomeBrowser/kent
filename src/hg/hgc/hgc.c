@@ -118,7 +118,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.529 2003/12/06 03:01:42 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.530 2003/12/08 10:15:44 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1678,6 +1678,11 @@ if (! sameWord(otherDb, "seq"))
     {
     otherOrg = hOrganism(otherDb);
     }
+if (otherOrg == NULL)
+    {
+    /* use first word of chain label (count on org name as first word) */
+    otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
+    }
 
 chain = chainDbLoad(conn, database, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
@@ -1687,7 +1692,7 @@ qChainRangePlusStrand(chain, &qs, &qe);
 if (sameWord(otherDb, "seq"))
     {
     printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
-	   chain->qName, chain->qName, qs, qe, chain->qEnd - chain->qStart);
+	   otherOrg, chain->qName, qs, qe, chain->qEnd - chain->qStart);
     }
 else
     {
@@ -1767,10 +1772,16 @@ char **row;
 struct netAlign *net;
 char *org = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
+char *otherOrgBrowser = otherOrg;
 int tSize, qSize;
 int netWinSize;
 struct chain *chain;
 
+if (otherOrg == NULL)
+    {
+    /* use first word in short track label */
+    otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
+    }
 hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
 	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
@@ -1810,7 +1821,7 @@ if (net->chainId != 0)
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
-	chainToOtherBrowser(chain, otherDb, otherOrg);
+	chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
 	chainFree(&chain);
 	}
     htmlHorizontalLine();
