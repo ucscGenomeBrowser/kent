@@ -16,8 +16,8 @@ color 170,100,0
 type genePred genscanPep
 
 track blatFugu
-shortLabel Fugu BLAT
-longLabel Fugu (fr1-Aug 02) Translated BLAT Alignments
+shortLabel Fugu Blat
+longLabel Fugu (fr1-Aug 02) Translated Blat Alignments
 group compGeno
 priority 113
 visibility dense
