@@ -49,6 +49,7 @@ blatSuite: topLibs
 	cd utils/faToNib && ${MAKE}
 	cd utils/faToTwoBit && ${MAKE}
 	cd utils/twoBitToFa && ${MAKE}
+	cd utils/twoBitInfo && ${MAKE}
 	cd isPcr && ${MAKE}
 
 clean:
