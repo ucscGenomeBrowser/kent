@@ -1,7 +1,9 @@
 /* faNoise - Add noise to .fa file. */
 #include "common.h"
 #include "dnautil.h"
+#include "options.h"
 #include "fa.h"
+#include "portable.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -9,8 +11,12 @@ void usage()
 errAbort(
   "faNoise - Add noise to .fa file\n"
   "usage:\n"
-  "   faNoise inName outName misPairPpt insertPpt deletePpt chimeraPpt\n");
+  "   faNoise inName outName transitionPpt transversionPpt insertPpt deletePpt chimeraPpt\n"
+  "options:\n"
+  "   -upper - output in upper case\n");
 }
+
+bool allUpper = FALSE;
 
 char randomBase()
 /* Return a random base. */
@@ -24,30 +30,38 @@ int randomPpt()
 return rand()%1001;
 }
 
-int linePos = 0;
-int lineMaxSize = 50;
-
-int charOut(FILE *f, char c)
-/* Put out a char, wrapping to new line if necessary. */
+DNA transition(DNA base)
+/* Swap a & g or c & t */
 {
-fputc(c, f);
-if (++linePos >= lineMaxSize)
+switch (base)
    {
-   fputc('\n', f);
-   linePos = 0;
+   case 'a':
+      return 'g';
+   case 'c':
+      return 't';
+   case 'g':
+      return 'a';
+   case 't':
+      return 'c';
    }
 }
 
-void finishCharOut(FILE *f)
-/* Write final newline and reset. */
+
+DNA transversion(DNA base)
+/* Swap a&g or c&t */
 {
-if (linePos != 0)
-    fputc('\n', f);
-linePos = 0;
+DNA newBase;
+for (;;)
+    {
+    newBase = randomBase();
+    if (newBase != base && newBase != transition(base))
+        return newBase;
+    }
 }
 
-void faNoise(char *inName, char *outName, int misPairPpt, int insertPpt,
-   int deletePpt, int chimeraPpt)
+void faNoise(char *inName, char *outName, int transitionPpt, 
+	int transversionPpt, int insertPpt,
+   	int deletePpt, int chimeraPpt)
 /* faNoise - Add noise to .fa file. */
 {
 FILE *in = mustOpen(inName, "r");
@@ -57,31 +71,70 @@ int i;
 DNA *dna;
 char *name;
 
+srand(time(NULL));
 while (faFastReadNext(in, &dna, &dnaSize, &name))
     {
-    fprintf(out, ">%s %4.1f mispair, %4.1f insert, %4.1f delete, %4.1f chimera\n",
-        name, 0.1*misPairPpt, 0.1*insertPpt, 0.1*deletePpt, 0.1*chimeraPpt);
-    if (randomPpt() < chimeraPpt)
+    int tsCount = transitionPpt * dnaSize / 1000;
+    int tvCount = transversionPpt * dnaSize / 1000;
+    int delCount = deletePpt * dnaSize / 1000;
+    int insCount = insertPpt * dnaSize / 1000;
+    int i, pos;
+    int newSize = dnaSize;
+    int maxSize = dnaSize*10;
+    DNA *newDna = needMem(maxSize+1);
+    bool *randHit = needMem(dnaSize);
+    memcpy(newDna, dna, dnaSize);
+
+    /* Do transitions. */
+    while (tsCount > 0)
         {
-	int size = rand()%dnaSize;
-	if (rand()&1)
-	    reverseComplement(dna, size);
-	else
-	    reverseComplement(dna+dnaSize-size, size);
-	}
-    for (i = 0; i<dnaSize; ++i)
-        {
-	if (randomPpt() < insertPpt)
-	    charOut(out, randomBase());
-	if (randomPpt() >= deletePpt)
+	pos = rand() % dnaSize;
+	if (!randHit[pos])
 	    {
-	    if (randomPpt() < misPairPpt)
-	        charOut(out, randomBase());
-	    else
-	        charOut(out, dna[i]);
+	    randHit[pos] = TRUE;
+	    newDna[pos] = transition(newDna[pos]);
+	    --tsCount;
 	    }
 	}
-    finishCharOut(out);
+
+    /* Do transversions */
+    while (tvCount > 0)
+        {
+	pos = rand() % dnaSize;
+	if (!randHit[pos])
+	    {
+	    randHit[pos] = TRUE;
+	    newDna[pos] = transversion(newDna[pos]);
+	    --tvCount;
+	    }
+	}
+
+
+    /* Do deletions */
+    while (--delCount >= 0)
+        {
+	pos = rand() % newSize;
+	memcpy(newDna+pos, newDna+pos+1, newSize - pos);
+	newSize -= 1;
+	}
+
+    /* Do insertions */
+    while (--insCount >= 0)
+        {
+	if (newSize + 1 < maxSize)
+	    {
+	    pos = rand() % newSize;
+	    memcpy(newDna+pos+1, newDna+pos, newSize - pos);
+	    newDna[pos] = randomBase();
+	    ++newSize;
+	    }
+	}
+    if (allUpper)
+        toUpperN(newDna, newSize);
+    faWriteNext(out, name, newDna, newSize);
+
+    freez(&newDna);
+    freez(&randHit);
     }
 }
 
@@ -102,10 +155,12 @@ return ppt;
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 7)
+optionHash(&argc, argv);
+if (argc != 8)
     usage();
+allUpper = optionExists("upper");
 dnaUtilOpen();
 faNoise(argv[1], argv[2], makePpt(argv[3]), makePpt(argv[4]),
-	makePpt(argv[5]), makePpt(argv[6]));
+	makePpt(argv[5]), makePpt(argv[6]), makePpt(argv[7]));
 return 0;
 }
