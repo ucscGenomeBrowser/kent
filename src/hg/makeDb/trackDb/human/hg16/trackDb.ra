@@ -1245,3 +1245,13 @@ visibility hide
 spectrum on
 type psl .
 
+track NISC
+shortLabel NISC TBA
+longLabel TBA Alignments of NISC Regions
+group compGeno
+priority 160
+visibility hide
+color 100,0,0
+altColor 100,0,0
+type maf
+
