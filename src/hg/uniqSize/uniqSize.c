@@ -3,6 +3,9 @@
 #include "portable.h"
 #include "linefile.h"
 #include "cheapcgi.h"
+#include "glDbRep.h"
+#include "sqlNum.h"
+#include "hash.h"
 
 void usage()
 /* Print usage and exit. */
@@ -10,7 +13,7 @@ void usage()
 errAbort(
   "Figure out size of unique parts of genome.\n"
   "usage:\n"
-  "   uniqSize ooDir agpFile\n"
+  "   uniqSize ooDir agpFile glFile\n"
   "options:\n"
   "   altFile=other.agp  - if agpFile doesn't exist use altFile");
 }
@@ -109,6 +112,10 @@ struct chromInfo
     int nCount;			/* Number of N bases. */
     struct intList *contigList;	/* List of contig sizes. */
     struct intList *scaffoldList;	/* List of fragment sizes. */
+    int cloneCount;		/* Total clones. */
+    int totalStretch;		/* Total amount of clone stretchage. */
+    int stretchedClones;	/* Number of clones stretched > 30% */
+    int wayStretchedClones;	/* Number of clones stretched > 100% */
     };
 
 struct chromInfo *oneContigInfo(char *fileName)
@@ -117,7 +124,7 @@ struct chromInfo *oneContigInfo(char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int lineSize, wordCount;
 char *line, *words[16];
-int start,end,size;
+int start=0,end=0,size;
 int u = 0, n = 0;
 struct chromInfo *ci;
 struct intList *il;
@@ -229,29 +236,98 @@ for (ci = ciList; ci != NULL; ci = ci->next)
 	addIntList(&tot->contigList, il->n);
     for (il = ci->scaffoldList; il != NULL; il = il->next)
 	addIntList(&tot->scaffoldList, il->n);
+    tot->cloneCount += ci->cloneCount;
+    tot->totalStretch += ci->totalStretch;
+    tot->stretchedClones += ci->stretchedClones;
+    tot->wayStretchedClones += ci->wayStretchedClones;
     }
 tot->c50 = calcN50(&tot->contigList);
 tot->s50 = calcN50(&tot->scaffoldList);
 return tot;
 }
 
+double percent(double a, double b)
+/* percentage of a/b */
+{
+if (b <= 0)
+    return 0.0;
+else
+    return 100.0*a/b;
+}
+
 void printChromInfo(struct chromInfo *ci, FILE *f)
 /* Print out chromosome info. */
 {
-fprintf(f, "%-5s %10u %8d %8d %6d %6d %6d %6d\n", 
-   ci->name, ci->baseCount, ci->c50, ci->s50, ci->openCloneGaps, ci->bridgedCloneGaps, ci->openFragGaps, ci->bridgedFragGaps);
+fprintf(f, "%-5s %10u %8d %8d %6d %6d %6d %6d %10d %4.1f  %4.1f \n", 
+   ci->name, ci->baseCount, ci->c50, ci->s50, ci->openCloneGaps, ci->bridgedCloneGaps, ci->openFragGaps, ci->bridgedFragGaps, ci->totalStretch, 
+   percent(ci->stretchedClones, ci->cloneCount), percent(ci->wayStretchedClones, ci->cloneCount));
 }
 
 void printHeader(FILE *f)
 {
-fprintf(f, "%-5s %10s %8s %8s %6s %6s %6s %6s\n", 
-   "chrom", "base", "N50", "N50", "open", "bridge", "open", "bridge");
-fprintf(f, "%-5s %10s %8s %8s %6s %6s %6s %6s\n", 
-   "name", "count", "contig", "scaffold", "clone", "clone", "contig", "contig");
-fprintf(f, "--------------------------------------------------------------\n");
+fprintf(f, "%-5s %10s %8s %8s %6s %6s %6s %6s %10s %5s %5s\n", 
+   "chrom", "base", "N50", "N50", "open", "bridge", "open", "bridge",
+   "stretch",  "+30%",  "+100%");
+fprintf(f, "%-5s %10s %8s %8s %6s %6s %6s %6s %10s %5s %5s\n", 
+   "name", "count", "contig", "scaffold", "clone", "clone", "contig", "contig", "total", "size", "size");
+fprintf(f, "-------------------------------------------------------------------------------------\n");
 }
 
-void uniqSize(char *ooDir, char *agpFile, char *altFile)
+struct clone
+/* Info on one clone. */
+   {
+   struct clone *next;
+   char *name;	/* Allocated in hash. */
+   int start, end;	/* Range of sequence covered. */
+   int totalSize;	/* Size of sequence without gaps. */
+   };
+
+void addStretchInfo(char *fileName, struct chromInfo *ctg)
+/* Add info about how much clones are stretched from gl file. */
+{
+struct hash *cloneHash = newHash(12);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[4];
+struct gl gl;
+struct clone *cloneList = NULL, *clone;
+
+while (lineFileRow(lf, row))
+    {
+    glStaticLoad(row, &gl);
+    chopSuffix(gl.frag);
+    if ((clone = hashFindVal(cloneHash, gl.frag)) == NULL)
+        {
+	AllocVar(clone);
+	slAddHead(&cloneList, clone);
+	hashAddSaveName(cloneHash, gl.frag, clone, &clone->name);
+	clone->start = gl.start;
+	clone->end = gl.end;
+	}
+    else
+        {
+	if (gl.start < clone->start) clone->start = gl.start;
+	if (gl.end > clone->end) clone->end = gl.end;
+	}
+    clone->totalSize += gl.end - gl.start;
+    }
+for (clone = cloneList; clone != NULL; clone = clone->next)
+    {
+    int stretchSize = clone->end - clone->start;
+    double stretchRatio;
+    ctg->cloneCount += 1;
+    ctg->totalStretch += stretchSize - clone->totalSize;
+    stretchRatio = stretchSize / clone->totalSize;
+    if (stretchRatio > 1.3)
+        ctg->stretchedClones += 1;
+    if (stretchRatio > 2.0)
+        ctg->wayStretchedClones += 1;
+    }
+lineFileClose(&lf);
+hashFree(&cloneHash);
+slFreeList(&cloneList);
+}
+
+void uniqSize(char *ooDir, char *agpFile, char *glFile, char *altFile)
 /* Figure out unique parts of genome from all the
  * gold.22 files in ooDir */
 {
@@ -287,6 +363,9 @@ for (chromEl = chromDirs; chromEl != NULL; chromEl = chromEl->next)
 		    ctg = oneContigInfo(fileName);
 		    slAddHead(&ctgList, ctg);
 		    getSizes(fileName, &uSize, &nSize);
+		    sprintf(fileName, "%s/%s/%s", subDir, contigName, glFile);
+		    if (fileExists(fileName))
+			addStretchInfo(fileName, ctg);
 		    }
 		else
 		    {
@@ -313,8 +392,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 3)
+if (argc != 4)
     usage();
-uniqSize(argv[1], argv[2], cgiOptionalString("altFile"));
+uniqSize(argv[1], argv[2], argv[3], cgiOptionalString("altFile"));
 return 0;
 }

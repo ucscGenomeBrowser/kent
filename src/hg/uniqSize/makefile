@@ -1,9 +1,13 @@
 .c.o:
-	gcc -O -I../../inc -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
+
+L = $(MYSQLLIBS) -lm 
+MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = uniqSize.o 
 
 uniqSize: $(O)
-	gcc -o uniqSize $O ../../lib/$(MACHTYPE)/jkweb.a
+	gcc -o uniqSize $O $(MYLIBS) $(L) 
 
 
