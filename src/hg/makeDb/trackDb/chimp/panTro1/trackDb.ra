@@ -85,3 +85,9 @@ group compGeno
 priority 147
 visibility hide
 type bed 4 .
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|PTB)[[:alnum:]]*)?(-[[:alnum:]_]+)+)
+searchPriority 8
