@@ -307,11 +307,10 @@ else
 }
 
 
-static void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, 
-				  unsigned *cdsEnd )
+static void getMrnaCds(char *acc, struct genbankCds* cds)
 
 /* Get cds start and stop from genbank, if available. Otherwise it
- * returns cdsStart == cdsEnd. */
+ * returns cds->start == cds->end. */
 {
 char query[256];
 struct sqlConnection *conn;
@@ -330,7 +329,7 @@ sr = sqlGetResult(conn, query);
 if((row = sqlNextRow(sr)) == NULL)
     errAbort(
     "cds.c: mushGetMrnaStartStop() - Cannot get cds for %s from table \"cds\"\n", acc);
-genbankParseCds(row[0], cdsStart, cdsEnd);
+genbankCdsParse(row[0], cds);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -361,35 +360,30 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
                                              int displayOption)
 {
 struct simpleFeature *sfList = NULL, *sf;
-struct genePred *gp = NULL;
 unsigned cdsStart, cdsEnd;
 unsigned *retGaps = NULL;
 boolean extraInfo = (displayOption != CDS_DRAW_GENOMIC_CODONS);
-
 struct genbankCds cds;
 
 /*get CDS from genBank*/
-mustGetMrnaStartStop(psl->qName, &cdsStart, &cdsEnd);
-cds.start = cdsStart;
-cds.end = cdsEnd;
-if(extraInfo)
-        gp = genePredFromPsl2(psl, 12, &cds, -1);
-else
-        gp = genePredFromPsl2(psl, 12, &cds, 0);
+getMrnaCds(psl->qName, &cds);
 
 /*cds not in genbank - revert to normal*/
-if (gp->cdsStartStat <= cdsUnknown || gp->cdsEndStat <= cdsUnknown)
-{
+if (!(cds.startComplete || cds.endComplete))
+    {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
-}
+    }
 else
     {
+    int insertMergeSize = extraInfo ? -1 : 0;
+    struct genePred *gp = genePredFromPsl2(psl, genePredCdsStatFld|genePredExonFramesFld,
+                                           &cds, insertMergeSize);
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo);
+    genePredFree(&gp);
     }
-
 return(sfList);
 }
 
