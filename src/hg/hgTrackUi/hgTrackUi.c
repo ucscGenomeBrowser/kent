@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.128 2004/08/04 17:46:35 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.130 2004/08/05 22:17:14 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -276,6 +276,32 @@ void cdsColorOptions(struct trackDb *tdb, int value)
         printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
 }
 
+void blastFBUi(struct trackDb *tdb)
+{
+char geneName[64];
+char accName[64];
+char sprotName[64];
+char posName[64];
+boolean useGene, useAcc, useSprot, usePos;
+
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+useGene= cartUsualBoolean(cart, geneName, TRUE);
+useAcc= cartUsualBoolean(cart, accName, FALSE);
+usePos= cartUsualBoolean(cart, posName, FALSE);
+
+printf("<P><B>Label elements by: </B> ");
+cgiMakeCheckBox(geneName, useGene);
+printf("FlyBase Gene ");
+cgiMakeCheckBox(accName, useAcc);
+printf("D. melanogaster mRNA ");
+cgiMakeCheckBox(posName, usePos);
+printf("D. melanogaster Position");
+
+cdsColorOptions(tdb, 2);
+}
 void blastUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -847,9 +873,6 @@ void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->tableName;
-char *typeLine = NULL;
-char *words[8];
-int wordCount = 0;
 
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
@@ -899,6 +922,8 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
+else if (sameString(track, "blastDm1FB"))
+        blastFBUi(tdb);
 else if (sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
@@ -943,28 +968,31 @@ else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
-else 
+else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
-    if (tdb->type != NULL)
-        typeLine = cloneString(tdb->type);
+    char *typeLine = cloneString(tdb->type);
+    char *words[8];
+    int wordCount = 0;
     wordCount = chopLine(typeLine, words);
-    
-    if (sameWord(words[0], "genePred"))
-	        cdsColorOptions(tdb, 2);
-    /* if bed has score then show optional filter based on score */
-    if (sameWord(words[0], "bed") && wordCount == 3)
-                {
-                if (atoi(words[1]) > 4)
-                    scoreUi(tdb);
-                }
-    else if (sameWord(words[0], "psl"))
-                {
-                if (wordCount == 3)
-                        if(sameWord(words[1], "xeno"))
-	                        crossSpeciesUi(tdb);
-                cdsColorOptions(tdb,-1);
-                }
+    if (wordCount > 0)
+	{
+	if (sameWord(words[0], "genePred"))
+	    cdsColorOptions(tdb, 2);
+	/* if bed has score then show optional filter based on score */
+	if (sameWord(words[0], "bed") && wordCount == 3)
+	    {
+	    if (atoi(words[1]) > 4)
+		scoreUi(tdb);
+	    }
+	else if (sameWord(words[0], "psl"))
+	    {
+	    if (wordCount == 3)
+		if (sameWord(words[1], "xeno"))
+		    crossSpeciesUi(tdb);
+	    cdsColorOptions(tdb, -1);
+	    }
+	}
     freeMem(typeLine);
     }
 }
