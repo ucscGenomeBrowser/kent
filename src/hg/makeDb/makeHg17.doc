@@ -9745,6 +9745,64 @@ line+ psl/$(root1)_$(root2).psl}
     rm *.tab
     nice gzip *.txt
 
+# LOAD ENSEMBL GENES (DONE, 2004-11-19, hartera)
+
+    mkdir /cluster/data/hg17/bed/ensembl
+    cd /cluster/data/hg17/bed/ensembl
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    gunzip -c ensemblGene.gtf.gz \
+    | grep -v ^6_DR51 \
+    | grep -v ^DR51 \
+    | grep -v ^DR52 \
+    | grep -v ^DR53 \
+    | grep -v _NT_ \
+    | perl -wpe 's/^([0-9]|X|Y|Un|MT)/chr$1/ \
+                 || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    | sed -e 's/chrMT_NC_001807/chrM/' \
+    > ensGene.gtf
+
+    ssh hgwdev
+    /cluster/data/hg17/bed/ensembl
+    /cluster/bin/i386/ldHgGene hg17 ensGene ensGene.gtf
+
+    # Read 33666 transcripts in 696579 lines in 1 files
+    # 33666 groups 25 seqs 1 sources 4 feature types
+    # 33666 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg17 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql -N hg17
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip ensemblPep.fa.gz
+    hgPepPred hg17 ensembl ensemblPep.fa
+
+
 
 
 
