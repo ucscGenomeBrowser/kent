@@ -2733,8 +2733,8 @@ if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
-printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
-printf("------------------------------------------------------------------------------\n");
+printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END            cDNA           START   END  TOTAL \n");
+printf("---------------------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -2743,7 +2743,7 @@ for (same = 1; same >= 0; same -= 1)
 	    {
 	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
-	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
+	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
