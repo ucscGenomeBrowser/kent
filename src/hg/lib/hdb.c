@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.151 2003/10/23 14:12:06 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.152 2003/10/25 08:21:33 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2859,41 +2859,6 @@ if (connIn == NULL) hFreeConn(&conn);
 return(answer);
 }
 
-struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end)
-/* Return list of alignments in region. */
-{
-char **row;
-unsigned int extFileId = 0;
-struct mafAli *maf, *mafList = NULL;
-struct mafFile *mf = NULL;
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
-    start, end, NULL, &rowOffset);
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct scoredRef ref;
-    scoredRefStaticLoad(row + rowOffset, &ref);
-    if (ref.extFile != extFileId)
-	{
-	char *path = hExtFileName("extFile", ref.extFile);
-	mafFileFree(&mf);
-	mf = mafOpen(path);
-	extFileId = ref.extFile;
-	}
-    lineFileSeek(mf->lf, ref.offset, SEEK_SET);
-    maf = mafNext(mf);
-    if (maf == NULL)
-        internalErr();
-    slAddHead(&mafList, maf);
-    }
-sqlFreeResult(&sr);
-mafFileFree(&mf);
-slReverse(&mafList);
-return mafList;
-}
-
 struct hash *hChromSizeHash(char *db)
 /* Get hash of chromosome sizes for database.  Just hashFree it when done. */
 {
@@ -2908,44 +2873,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 return hash;
-}
-
-struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end, 
-	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash)
-/* Return list of alignments in region from axt external file as a maf. */
-{
-char **row;
-unsigned int extFileId = 0;
-struct lineFile *lf = NULL;
-struct mafAli *maf, *mafList = NULL;
-struct axt *axt;
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
-    start, end, NULL, &rowOffset);
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct scoredRef ref;
-    scoredRefStaticLoad(row + rowOffset, &ref);
-    if (ref.extFile != extFileId)
-	{
-	char *path = hExtFileName("extFile", ref.extFile);
-	lf = lineFileOpen(path, TRUE);
-	extFileId = ref.extFile;
-	}
-    lineFileSeek(lf, ref.offset, SEEK_SET);
-    axt = axtRead(lf);
-    if (axt == NULL)
-        internalErr();
-    maf = mafFromAxt(axt, tSize, tPrefix, hashIntVal(qSizeHash, axt->qName), qPrefix);
-    axtFree(&axt);
-    slAddHead(&mafList, maf);
-    }
-sqlFreeResult(&sr);
-lineFileClose(&lf);
-slReverse(&mafList);
-return mafList;
 }
 
 char *hgDirForOrg(char *org)
