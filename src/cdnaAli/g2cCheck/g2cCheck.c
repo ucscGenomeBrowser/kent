@@ -281,7 +281,7 @@ void update(struct g2cFile *old, struct g2cFile *up)
 struct gene *oldGene, *upGene;
 struct cdnaHit *oldHit, *upHit;
 struct hash *geneHash;
-struct hashEl *hel;
+struct hashEl *hel = NULL;
 int sameHitCount = 0;
 int newHitCount = 0;
 int newGeneCount = 0;
