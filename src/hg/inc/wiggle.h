@@ -242,8 +242,8 @@ void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
 enum wigCompare 
 /*	type of comparison to be calculated	*/
     {
-    wigNoOp, wigInRange, wigLessThan, wigLessEqual, wigEqual,
-	wigNotEqual, wigGreaterEqual, wigGreaterThan,
+    wigNoOp_e, wigInRange_e, wigLessThan_e, wigLessEqual_e, wigEqual_e,
+	wigNotEqual_e, wigGreaterEqual_e, wigGreaterThan_e,
     };
 
 enum wigDataFetchType
