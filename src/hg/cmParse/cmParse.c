@@ -364,11 +364,16 @@ while (lineFileNext(in, &line, &lineSize))
     wordCount = chopLine(oline, words);
     if (words[0][0] == '@' || words[0][0] == '*')
 	continue;	
-    if (wordCount != 5  && wordCount != 4)
+    if (wordCount != 5  && wordCount != 4 && wordCount != 3)
 	errAbort("Expecting 5 word line %d of %s", in->lineIx, in->fileName);
     acc = words[0];
     if (!hashLookup(badHash, acc))
 	{
+	char *phase = words[wordCount-2];
+	char c = phase[0];
+	if (c != 0 && c != 1 && c != 2 && c != 3)
+	    errAbort("Expecting phase in second to last word line %d of %s",
+	        in->lineIx, in->fileName);
 	cName = newSlName(line);
 	slAddTail(&contig->lineList, cName);
 	ci = storeCloneInHash(acc, cloneHash, pCloneList, contig);
@@ -377,7 +382,7 @@ while (lineFileNext(in, &line, &lineSize))
 	    {
 	    ci->pos = pos;
 	    pos += 100;
-	    ci->phase = atoi(words[wordCount-2]);
+	    ci->phase = atoi(phase);
 	    AllocVar(cl);
 	    cl->clone = ci;
 	    cl->line = cName->name;
