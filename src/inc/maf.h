@@ -119,6 +119,11 @@ struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
  * in the returned maf will not be filled in (since
  * we don't know which scoring scheme to use). */
 
+boolean mafNeedSubset(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd);
+/* Return TRUE if maf only partially fits between newStart/newEnd
+ * in given component. */
+
 double mafScoreMultiz(struct mafAli *maf);
 /* Return score of a maf (calculated rather than what is
  * stored in the structure. */
@@ -135,6 +140,13 @@ double mafScoreRangeMultiz(struct mafAli *maf, int start, int size);
 
 double mafScoreMultizMaxCol(int species);
 /* Return maximum possible score for a column. */
+
+void mafColMinMaxScore(struct mafAli *maf, 
+	double *retMin, double *retMax);
+/* Get min/max maf scores for a column. */
+
+void mafFlipStrand(struct mafAli *maf);
+/* Reverse complement maf. */
 
 #endif /* MAF_H */
 

@@ -1,4 +1,4 @@
-static char const rcsid[] = "$Id: mafScore.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
+static char const rcsid[] = "$Id: mafScore.c,v 1.4 2003/05/05 07:26:12 kent Exp $";
 
 /* Score mafs and subsets of maf. 
  * This module is from Webb Miller at PSU. */
@@ -140,5 +140,13 @@ int i, count = 0;
 for (i=1; i<species; ++i)
     count += i;
 return 100.0*count; 
+}
+
+void mafColMinMaxScore(struct mafAli *maf, 
+	double *retMin, double *retMax)
+/* Get min/max maf scores for a column. */
+{
+*retMax = mafScoreMultizMaxCol(slCount(maf->components));
+*retMin = -*retMax;
 }
 

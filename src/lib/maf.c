@@ -1,4 +1,4 @@
-static char const rcsid[] = "$Id: maf.c,v 1.8 2003/05/05 06:45:34 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.9 2003/05/05 07:26:12 kent Exp $";
 
 /* maf.c - Read/write maf format. */
 #include "common.h"
@@ -421,5 +421,36 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 slReverse(&subset->components);
 return subset;
+}
+
+boolean mafNeedSubset(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd)
+/* Return TRUE if maf only partially fits between newStart/newEnd
+ * in given component. */
+{
+struct mafComp *mcMaster = mafFindComponent(maf, componentSource);
+
+/* Reverse complement input range if necessary. */
+if (mcMaster->strand == '-')
+    reverseIntRange(&newStart, &newEnd, mcMaster->srcSize);
+
+return newStart > mcMaster->start && newEnd < mcMaster->start + mcMaster->size;
+}
+
+void mafFlipStrand(struct mafAli *maf)
+/* Reverse complement maf. */
+{
+struct mafComp *mc;
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    int s = mc->start, e = mc->start + mc->size;
+    reverseIntRange(&s, &e, mc->srcSize);
+    mc->start = e;
+    reverseComplement(mc->text, maf->textSize);
+    if (mc->strand == '-')
+        mc->strand = '+';
+    else
+        mc->strand = '-';
+    }
 }
 
