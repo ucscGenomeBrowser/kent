@@ -436,3 +436,12 @@ longLabel UniGene Alignments and SAGE Info
 priority 38
 visibility dense
 type psl .
+
+track bacEndPairs
+shortLabel BAC Ends
+longLabel BAC End Pairs
+priority 39
+visibility hide
+color 67,57,206
+altColor 204,20,35
+private on
