@@ -220,6 +220,9 @@ struct trackDb *hTrackDb(char *chrom);
 /* Load tracks associated with current chromosome (which may
  * be NULL */
 
+void hFindDefaultChrom(char *db, char defaultChrom[64]);
+/* Find chromosome to use if none specified. */
+
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 /* Find table information.  Return NULL if no table. */
 

@@ -1351,6 +1351,13 @@ return hFindBed12FieldsAndBinDb(db, table,
 				&isBinned);
 }
 
+void hFindDefaultChrom(char *db, char defaultChrom[64])
+/* Find chromosome to use if none specified. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+sqlQuickQuery(conn, "select chrom from chromInfo", defaultChrom, 64);
+sqlDisconnect(&conn);
+}
 
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
@@ -1360,9 +1367,13 @@ struct hash *hash;
 struct hTableInfo *hti;
 char fullName[64];
 boolean isSplit = FALSE;
+char defaultChrom[64];
 
 if (chrom == NULL)
-    chrom = "chr1";
+    {
+    hFindDefaultChrom(db, defaultChrom);
+    chrom = defaultChrom;
+    }
 if (dbHash == NULL)
     dbHash = newHash(8);
 hash = hashFindVal(dbHash, db);
@@ -1515,7 +1526,9 @@ int hFindBin(int start, int end)
 {
 return binFromRange(start, end);
 }
-void hAddBinToQueryGeneral(char *binField, int start, int end, struct dyString *query)
+
+void hAddBinToQueryGeneral(char *binField, int start, int end, 
+	struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
 int bFirstShift = binFirstShift(), bNextShift = binNextShift();
@@ -1671,7 +1684,7 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
 {
 boolean chromOk = TRUE;
 char splitTable[64];
-if (tdb->restrictCount > 0)
+if (tdb->restrictCount > 0 && chrom != NULL)
     chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
 return (chromOk && 
 	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) &&
