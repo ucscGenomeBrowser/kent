@@ -107,9 +107,9 @@ static unsigned adjustWinStart(struct slidingWin *win,
  * overlaps.
  */
 {
-if ((winStart + win->winSize) < block->tEnd)
+if ((winStart + win->winSize) < block->tStart)
     {
-    int newStart = ((block->tStart/win->winSlide) * win->winSlide)
+    unsigned newStart = ((block->tStart/win->winSlide) * win->winSlide)
         - (win->winSlide * (win->numSubWins-1));
     if (newStart > winStart)
         winStart = newStart;
