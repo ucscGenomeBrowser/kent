@@ -88,6 +88,7 @@ test::
 	cd blastToPsl && ${MAKE} test
 	cd embossToPsl && ${MAKE} test
 	cd geneBounds && ${MAKE} test
+	cd hgGetAnn && ${MAKE} test
 	cd liftUp && ${MAKE} test
 	cd mrnaToGene && ${MAKE} test
 	cd overlapSelect && ${MAKE} test
@@ -131,6 +132,7 @@ UTIL_DIRS = \
 	gpcrParser \
 	gsBig \
 	hgChroms \
+	hgGetAnn \
 	hgsql \
 	hgsqldump \
 	intronEnds \
