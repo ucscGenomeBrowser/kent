@@ -18,6 +18,10 @@ struct sgdClone
     char *atccName;	/* ATCC clone name (optional) */
     };
 
+void sgdCloneStaticLoadWBin(char **row, struct sgdClone *ret);
+/* Load a row from sgdClone table into ret (ignoring bin).  The contents of ret will
+ * be replaced at the next call to this function. */
+
 void sgdCloneStaticLoad(char **row, struct sgdClone *ret);
 /* Load a row from sgdClone table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
