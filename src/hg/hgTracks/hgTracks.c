@@ -9743,6 +9743,7 @@ else
     }
 tg->customPt = ct;
 tg->mapItemName = ctMapItemName;
+tg->canPack = TRUE;
 return tg;
 }
 
