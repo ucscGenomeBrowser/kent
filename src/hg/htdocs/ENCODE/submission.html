@@ -488,11 +488,14 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 		    chrom, start, and step.
 		    </UL>
 		    <P><B>Example</B></P>
-		    Specifying 28 separate data points in three tracks on chr19 in the region 59,302,001 to 59,311,000
+		    Specifying 28 separate data points in three tracks on chr19 in the region 59,302,001 to 59,311,000<BR>
+		    (view this example as a custom track in the
+<A HREF="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=hg16&hgt.customText=http://genome-test.cse.ucsc.edu/ENCODE/wiggleExample.txt"
+TARGET=_blank>browser</A>)
 		    <FONT color="#0000FF"><PRE>
 browser position chr19:59302001-59311000
 browser hide all
-browser pack refGene
+browser pack refGene encodeRegions
 browser full altGraph
 #	300 base wide bar graph, autoScale is on by default == graphing
 #	limits will dynamically change to always show full range of data
@@ -509,7 +512,7 @@ chr19 59304101 59304400 0.75
 chr19 59304401 59304700 1.00
 #	150 base wide bar graph at arbitrarily spaced positions,
 #	threshold line drawn at y=11.76
-#	autoScale off viewing set to [0:25]
+#	autoScale off viewing range set to [0:25]
 #	priority = 10 positions this as the first graph
 track type=wiggle_0 name="variableStep" description="variableStep format" visibility=full autoScale=off viewLimits=0.0:25.0 color=255,200,0 yLineMark=11.76 yLineOnOff=on priority=10
 variableStep chrom=chr19 span=150
