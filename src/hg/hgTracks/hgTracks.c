@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.625 2003/11/05 19:49:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.626 2003/11/06 19:01:57 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7272,6 +7272,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v41", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v42", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
