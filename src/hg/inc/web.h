@@ -28,6 +28,12 @@ void webVaWarn(char *format, va_list args);
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
+void webPushErrHandlers();
+/* Push warn and abort handler for errAbort(). */
+
+void webPopErrHandlers();
+/* Pop warn and abort handler for errAbort(). */
+
 void printOrgListHtml(char *selOrganism, char *onChangeText);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
@@ -79,4 +85,5 @@ In the cart only, we use the same order of preference.
 If someone requests an organism we try to give them the same db as
 was in their cart, unless the organism doesn't match.
 */
+
 #endif /* WEB_H */
