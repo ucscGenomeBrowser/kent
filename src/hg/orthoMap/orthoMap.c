@@ -14,7 +14,7 @@
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.5 2003/08/05 19:54:13 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.6 2003/08/10 06:37:55 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
@@ -179,8 +179,100 @@ chainFree(&toFree);
 return good;
 }
 
+int chainBlockCoverage(struct chain *chain, int start, int end,
+		       int* blockStarts, int *blockSizes, int blockCount)
+/* Calculate how many of the blocks are in a chain. */
+{
+struct boxIn *boxIn = NULL, *boxInList=NULL;
+int blocksCovered = 0;
+int i=0;
+
+/* Find the part of the chain of interest to us. */
+for(boxIn = chain->blockList; boxIn != NULL; boxIn = boxIn->next)
+    {
+    if(boxIn->tEnd >= start)
+	{
+	boxInList = boxIn;
+	break;
+	}
+    }
+
+/* Check to see how many of our exons the boxInList contains covers. 
+   For each block check to see if the blockStart and blockEnd are 
+   found in the boxInList. */
+for(i=0; i<blockCount; i++)
+    {
+    boolean startFound = FALSE;
+    int blockStart = blockStarts[i];
+    int blockEnd = blockStarts[i] + blockSizes[i];
+    for(boxIn = boxInList; boxIn != NULL && boxIn->tStart < end; boxIn = boxIn->next)
+	{
+	if(boxIn->tStart < blockStart && boxIn->tEnd > blockStart)
+	    startFound = TRUE;
+	if(startFound && boxIn->tStart < blockEnd && boxIn->tEnd > blockEnd)
+	    {
+	    blocksCovered++;
+	    break;
+	    }
+	}
+    }
+return blocksCovered;
+}
+
+boolean betterChain(struct chain *chain, int start, int end,
+		    int* blockStarts, int *blockSizes, int blockCount,
+		    struct chain **bestChain, int *bestCover)
+/* Return TRUE if chain is a better fit than bestChain. If TRUE
+   fill in bestChain and bestCover. */
+{
+struct chain *subChain=NULL, *toFree=NULL;
+int blocksCovered = 0;
+boolean better = FALSE;
+/* Check for easy case. */
+if(chain == NULL || chain->tStart > end || chain->tStart + chain->tSize < start)
+    return FALSE;
+blocksCovered = chainBlockCoverage(chain, start, end, blockStarts, blockSizes, blockCount);
+if(blocksCovered > (*bestCover))
+    {
+    *bestChain = chain;
+    *bestCover = blocksCovered;
+    better = TRUE;
+    }
+return better;
+}
+
+void lookForBestChain(struct cnFill *list, int start, int end,
+		      int* blockStarts, int *blockSizes, int blockCount,
+		      struct chain **bestChain, int *bestCover)
+/* Recursively look for the best chain. Best is defined as the chain
+   that covers the most number of blocks found in starts and sizes. This
+   will be stored in bestChain and number of blocks that it covers will
+   be stored in bestCover. */
+{
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+
+struct chain *chain = NULL;
+for(fill = list; fill != NULL; fill = fill->next)
+    {
+    chain = chainFromId(fill->chainId);
+    betterChain(chain, start, end, blockStarts, blockSizes, blockCount, bestChain, bestCover);
+    for(gap = fill->children; gap != NULL; gap = gap->next)
+	{
+	chain = chainFromId(gap->chainId);
+	betterChain(chain, start, end, blockStarts, blockSizes, blockCount, bestChain, bestCover);
+	if(gap->children)
+	    {
+	    lookForBestChain(gap->children, start, end, 
+				       blockStarts, blockSizes, blockCount,
+				       bestChain, bestCover);
+	    }
+	}
+    }
+}
+
 struct chain *lookForChain(struct cnFill *list, int start, int end)
-/* Recursively look for a chain in this list containing the coordinates 
+/* Recursively look for a chain in this cnFill list containing the coordinates 
    desired. */
 {
 struct cnFill *fill=NULL;
@@ -200,13 +292,14 @@ for(fill = list; fill != NULL; fill = fill->next)
 	if(gap->children)
 	    {
 	    chain = lookForChain(gap->children, start, end);
-	    if(checkChain(chain, start,end))
+	    if(checkChain(chain, start, end))
 		return chain;
 	    }
 	}
     }
 return chain;
 }
+
 
 void chainNetGetRange(char *db, char *netTable, char *chrom,
 		      int start, int end, char *extraWhere, struct cnFill **fill,
@@ -246,6 +339,30 @@ else
     }
 }
 
+struct chain *chainForBlocks(struct sqlConnection *conn, char *db, char *netTable, 
+			     char *chrom, int start, int end,
+			     int *blockStarts, int *blockSizes, int blockCount)
+/** Load the chain in the database for this position from the net track. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+struct chain *subChain=NULL, *toFree=NULL;
+struct chain *chain = NULL;
+struct chainNet *net = NULL;
+int bestOverlap = 0;
+chainNetGetRange(db, netTable, chrom,
+		 start, end, NULL, &fill, &net);
+if(fill != NULL)
+    lookForBestChain(fill, start, end, 
+		     blockStarts, blockSizes, blockCount, 
+		     &chain, &bestOverlap);
+chainNetFreeList(&net);
+return chain;
+}
+
 struct chain *chainForPosition(struct sqlConnection *conn, char *db, char *netTable, 
 			       char *chrom, int start, int end)
 /** Load the chain in the database for this position from the net track. */
@@ -265,6 +382,8 @@ if(fill != NULL)
 chainNetFreeList(&net);
 return chain;
 }
+
+
 
 void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
 /* Return range of bases covered by chain on q side on the plus
@@ -333,7 +452,9 @@ struct bed *orthoBedFromPsl(struct sqlConnection *conn, char *db, char *orthoDb,
 {
 struct bed *bed = NULL;
 int i;
-struct chain *chain = chainForPosition(conn, db, netTable, psl->tName, psl->tStart, psl->tEnd);
+struct chain *chain = chainForBlocks(conn, db, netTable, 
+				     psl->tName, psl->tStart, psl->tEnd,
+				     psl->tStarts, psl->blockSizes, psl->blockCount);
 int diff = 0;
 if(chain == NULL)
     return NULL;
