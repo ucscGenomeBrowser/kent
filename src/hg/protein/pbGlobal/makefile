@@ -2,11 +2,11 @@ include ../../../inc/common.mk
 
 L = ${MYSQLLIBS} -lm 
 MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkpbap.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = pbGlobal
 
-O = $A.o doTracks.o doStamps.o pbUtil.o domains.o
+O = $A.o
 
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
