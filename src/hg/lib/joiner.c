@@ -953,7 +953,7 @@ slReverse(&joiner->dependencyList);
 return joiner;
 }
 
-static struct joinerDtf *joinerDtfNew(char *database, char *table, char *field)
+struct joinerDtf *joinerDtfNew(char *database, char *table, char *field)
 /* Create new joinerDtf. */
 {
 struct joinerDtf *dtf;
@@ -964,7 +964,33 @@ dtf->field = cloneString(field);
 return dtf;
 }
 
-static void joinerDtfFree(struct joinerDtf **pDtf)
+static void notTriple(char *s)
+/* Complain that s is not in dotted triple format. */
+{
+errAbort("%s not a dotted triple", s);
+}
+
+struct joinerDtf *joinerDtfFromDottedTriple(char *triple)
+/* Get joinerDtf from something in db.table.field format. */
+{
+char *s, *e;
+struct joinerDtf *dtf;
+AllocVar(dtf);
+s = triple;
+e = strchr(s, '.');
+if (e == NULL)
+   notTriple(triple);
+dtf->database = cloneStringZ(s, e-s);
+s = e+1;
+e = strchr(s, '.');
+if (e == NULL)
+   notTriple(triple);
+dtf->table = cloneStringZ(s, e-s);
+dtf->field = cloneString(e+1);
+return dtf;
+}
+
+void joinerDtfFree(struct joinerDtf **pDtf)
 /* Free up resources associated with joinerDtf. */
 {
 struct joinerDtf *dtf = *pDtf;
@@ -977,7 +1003,7 @@ if (dtf != NULL)
     }
 }
 
-static void joinerDtfFreeList(struct joinerDtf **pList)
+void joinerDtfFreeList(struct joinerDtf **pList)
 /* Free up memory associated with list of joinerDtfs. */
 {
 struct joinerDtf *el, *next;
@@ -1070,15 +1096,18 @@ return list;
 
 static struct joinerPair *joinerToField(
 	char *aDatabase, struct joinerField *aJf,
-	char *bDatabase, struct joinerField *bJf)
+	char *bDatabase, struct joinerField *bJf,
+	struct joinerSet *identifier)
 /* Construct joiner pair linking from a to b. */
 {
 struct joinerPair *jp;
 AllocVar(jp);
 jp->a = joinerDtfNew(aDatabase, aJf->table, aJf->field);
 jp->b = joinerDtfNew(bDatabase, bJf->table, bJf->field);
+jp->identifier = identifier;
 return jp;
 }
+
 
 boolean joinerExclusiveCheck(struct joiner *joiner, char *aDatabase, 
 	char *bDatabase)
@@ -1108,8 +1137,10 @@ struct joinerPair *jpList = NULL, *jp;
 struct slRef *chainList, *chainEl;
 /* Return list of self, children, and parents (but not siblings) */
 
+#ifdef SCREWS_UP_SPLITS
 if (!tableExists(database, table))
     errAbort("%s.%s - table doesn't exist", database, table);
+#endif
 
 for (js = joiner->jsList; js != NULL; js = js->next)
     {
@@ -1132,7 +1163,7 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 			    if (tableExists(db->name, jf->table))
 				{
 				jp = joinerToField(database, jfBase, 
-					db->name, jf);
+					db->name, jf, js);
 				slAddHead(&jpList, jp);
 				}
 			    }
@@ -1145,5 +1176,166 @@ for (js = joiner->jsList; js != NULL; js = js->next)
     }
 slReverse(&jpList);
 return jpList;
+}
+
+static struct joinerPair *joinerPairDupe(struct joinerPair *jp)
+/* Return duplicate (deep copy) of joinerPair. */
+{
+struct joinerPair *dupe;
+AllocVar(dupe);
+dupe->a = joinerDtfNew(jp->a->database, jp->a->table, jp->a->field);
+dupe->b = joinerDtfNew(jp->b->database, jp->b->table, jp->b->field);
+dupe->identifier = jp->identifier;
+return dupe;
+}
+
+static boolean joinerDtfSameTable(struct joinerDtf *a, struct joinerDtf *b)
+/* Return TRUE if they are in the same database and table. */
+{
+return sameString(a->database, b->database) && sameString(a->table, b->table);
+}
+
+static boolean identifierInArray(struct joinerSet *identifier, 
+	struct joinerSet **array, int count)
+/* Return TRUE if identifier is in array. */
+{
+int i;
+for (i=0; i<count; ++i)
+    {
+    if (identifier == array[i])
+	{
+        return TRUE;
+	}
+    }
+return FALSE;
+}
+
+static struct joinerSet *identifierStack[4];	/* Help keep search from looping. */
+
+static struct joinerPair *rFindRoute(struct joiner *joiner, 
+	struct joinerDtf *a,  struct joinerDtf *b, int level, int maxLevel)
+/* Find a path that connects the two fields if possible.  Do limited
+ * recursion. */
+{
+struct joinerPair *jpList, *jp;
+struct joinerPair *path = NULL;
+char buf[256];
+jpList = joinerRelate(joiner, a->database, a->table);
+for (jp = jpList; jp != NULL; jp = jp->next)
+    {
+    if (joinerDtfSameTable(jp->b, b))
+	{
+	path = joinerPairDupe(jp);
+	break;
+	}
+    }
+if (path == NULL && level < maxLevel)
+    {
+    for (jp = jpList; jp != NULL; jp = jp->next)
+        {
+	identifierStack[level] = jp->identifier;
+	if (!identifierInArray(jp->identifier, identifierStack, level))
+	    {
+	    identifierStack[level] = jp->identifier;
+	    path = rFindRoute(joiner, jp->b, b, level+1, maxLevel);
+	    if (path != NULL)
+		{
+		struct joinerPair *jpDupe = joinerPairDupe(jp);
+		slAddHead(&path, jpDupe);
+		break;
+		}
+	    }
+	}
+    }
+joinerPairFreeList(&jpList);
+return path;
+}
+
+struct joinerPair *joinerFindRoute(struct joiner *joiner, 
+	struct joinerDtf *a,  struct joinerDtf *b)
+/* Find route between a and b. */
+{
+int i;
+struct joinerPair *jpList = NULL;
+for (i=1; i<ArraySize(identifierStack); ++i)
+    {
+    jpList = rFindRoute(joiner, a, b, 0, i);
+    if (jpList != NULL)
+        break;
+    }
+return jpList;
+}
+
+
+boolean joinerDtfAllSameTable(struct joinerDtf *fieldList)
+/* Return TRUE if all joinerPairs refer to same table. */
+{
+struct joinerDtf *first = fieldList, *field;
+if (first == NULL)
+    return TRUE;
+for (field = first->next; field != NULL; field = field->next)
+    if (!joinerDtfSameTable(first, field))
+        return FALSE;
+return TRUE;
+}
+
+static boolean inRoute(struct joinerPair *routeList, struct joinerDtf *dtf)
+/* Return TRUE if table in dtf is already in route. */
+{
+struct joinerPair *jp;
+for (jp = routeList; jp != NULL; jp = jp->next)
+    {
+    if (joinerDtfSameTable(dtf, jp->a) || joinerDtfSameTable(dtf, jp->b))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static void joinerPairRemoveDupes(struct joinerPair **pRouteList)
+/* Remove duplicate entries in route list. */
+{
+struct hash *uniqHash = newHash(0);
+struct joinerPair *newList = NULL, *jp, *next;
+char buf[256];
+
+for (jp = *pRouteList; jp != NULL; jp = next)
+    {
+    next = jp->next;
+    safef(buf, sizeof(buf), "%s.%s->%s.%s", 
+    	jp->a->database, jp->a->table, 
+    	jp->b->database, jp->b->table);
+    if (hashLookup(uniqHash, buf))
+	{
+        joinerPairFree(&jp);
+	}
+    else
+        {
+	hashAdd(uniqHash, buf, NULL);
+	slAddHead(&newList, jp);
+	}
+    }
+slReverse(&newList);
+*pRouteList = newList;
+}
+
+struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner, 
+	struct joinerDtf *fieldList)
+/* Return route that gets to all tables in fieldList.  */
+{
+struct joinerPair *fullRoute = NULL, *pairRoute = NULL, *routeLink;
+struct joinerDtf *first = fieldList, *dtf;
+
+if (first->next == NULL)
+    return NULL;
+for (dtf = first->next; dtf != NULL; dtf = dtf->next)
+    {
+    if (!inRoute(fullRoute, dtf))
+	{
+	pairRoute = joinerFindRoute(joiner, first, dtf);
+	fullRoute = slCat(fullRoute, pairRoute);
+	}
+    }
+joinerPairRemoveDupes(&fullRoute);
+return fullRoute;
 }
 

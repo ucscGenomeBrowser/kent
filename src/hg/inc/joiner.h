@@ -120,12 +120,26 @@ struct joinerDtf
     char *field;		/* Field. */
     };
 
+struct joinerDtf *joinerDtfNew(char *database, char *table, char *field);
+/* Get new joinerDtf. */
+
+void joinerDtfFree(struct joinerDtf **pDtf);
+/* Free up memory associated with joinerDtf. */
+
+void joinerDtfFreeList(struct joinerDtf **pList);
+/* Free up memory associated with list of joinerDtfs. */
+
+struct joinerDtf *joinerDtfFromDottedTriple(char *triple);
+/* Get joinerDtf from something in db.table.field format. */
+
 struct joinerPair
 /* A pair of linked fields. */
     {
     struct joinerPair *next;	/* Next in list. */
     struct joinerDtf *a;	/* Typically contains field from input table */
     struct joinerDtf *b;	/* Field in another table */
+    struct joinerSet *identifier;	/* Identifier this is based on,
+                                         * not allocated here. */
     };
 
 void joinerPairFree(struct joinerPair **pJp);
@@ -139,5 +153,15 @@ struct joinerPair *joinerRelate(struct joiner *joiner, char *database,
 /* Get list of all ways to link table in given database to other tables,
  * possibly in other databases. */
 
+boolean joinerDtfAllSameTable(struct joinerDtf *fieldList);
+/* Return TRUE if all joinerPairs refer to same table. */
+
+struct joinerPair *joinerFindRoute(struct joiner *joiner, 
+	struct joinerDtf *a,  struct joinerDtf *b);
+/* Find route between a and b. */
+
+struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner, 
+	struct joinerDtf *fieldList);
+/* Return route that gets to all tables in fieldList.  */
 
 #endif /* JOINER_H */
