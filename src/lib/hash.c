@@ -53,6 +53,26 @@ hash->table[hashVal] = el;
 return el;
 }
 
+void *hashRemove(struct hash *hash, char *name)
+/* Remove item of the given name from hash table. 
+ * Returns value of removed item. */
+{
+struct hashEl *hel;
+void *ret;
+struct hashEl **pBucket = &hash->table[hashCrc(name)&hash->mask];
+for (hel = *pBucket; hel != NULL; hel = hel->next)
+    if (sameString(hel->name, name))
+        break;
+if (hel == NULL)
+    {
+    warn("Trying to remove non-existant %s from hash", name);
+    return NULL;
+    }
+ret = hel->val;
+slRemoveEl(pBucket, hel);
+return ret;
+}
+
 struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val)
 /* Add new element to hash table. Squawk and die if not unique */
 {
@@ -190,3 +210,4 @@ if ((hash = *pHash) != NULL)
     freeHash(pHash);
     }
 }
+
