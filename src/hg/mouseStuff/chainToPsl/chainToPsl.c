@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.5 2003/05/17 04:32:37 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.6 2003/05/23 09:12:20 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -331,11 +331,10 @@ boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int qOffset = 0;
 int tOffset = 0;
 boolean qIsNib = FALSE;
-boolean tIsNib = FALSE;
+static boolean tIsNib ;
 int blockCount = 1, blockIx=0;
 boolean qIsRc = FALSE;
-int i;
-//char q,t;
+int i,j;
 int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct boxIn *b, *nextB;
@@ -356,7 +355,7 @@ if (qName == NULL || !sameString(qName, qNameParm))
     if (qIsNib && strand == '-')
 	    qOffset = qSize - qEnd;
     }
-if (tName == NULL || !sameString(tName, tNameParm) || tIsNib)
+if (tIsNib || tName == NULL || !sameString(tName, tNameParm) )
     {
     freeDnaSeq(&tSeq);
     freez(&tName);
@@ -364,12 +363,8 @@ if (tName == NULL || !sameString(tName, tNameParm) || tIsNib)
     readCachedSeqPart(tName, tStart, tEnd-tStart, 
 	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
     }
-//if (tIsNib && psl->strand[1] == '-')
- //   tOffset = psl->tSize - psl->tEnd;
 if (strand == '-')
     reverseComplement(qSeq->dna, qSeq->size);
-//if (psl->strand[1] == '-')
-//    reverseComplement(tSeq->dna, tSeq->size);
 for (b = chain->blockList; b != NULL; b = nextB)
     {
     blockCount++;
@@ -377,32 +372,43 @@ for (b = chain->blockList; b != NULL; b = nextB)
     tbSize += b->tEnd - b->tStart + 1;
     nextB = b->next;
     }
-//printf("blockCount %d qbSize %d tbSize %d %d %s\n",blockCount, qbSize, tbSize, 0, chain->qName);
-/* Count up match/mismatch. */
+/* Allocate dynamic memory for block lists. */
+AllocArray(blocks, blockCount);
+AllocArray(qStarts, blockCount);
+AllocArray(tStarts, blockCount);
 
-for (i=0; i<aliSize; ++i)
+/* Figure block sizes and starts. */
+eitherInsert = FALSE;
+qs = qe = qStart;
+ts = te = tStart;
+nextB = NULL;
+for (b = chain->blockList; b != NULL; b = nextB)
     {
-    char qq = qSeq->dna[i];
-    char tt = tSeq->dna[i];
-    if (qq != '-' && tt != '-')
-	{
-	if (qq == tt)
-	    ++match;
-	else
-	    ++misMatch;
-	}
+	    qStarts[blockIx] = b->qStart;
+	    tStarts[blockIx] = b->tStart;
+	    blocks[blockIx] = b->tEnd - b->tStart;
+            j = b->tStart-tStart;
+            for (i = b->qStart ; i < b->qStart+(b->tEnd - b->tStart); i++)
+                {
+                char qq = qSeq->dna[i];
+                char tt = tSeq->dna[j++];
+                //printf("qs ts %d %d %c %c %d %d %s\n",i,j,qq,tt, match, misMatch, qName);
+                if (toupper(qq) == toupper(tt))
+                    ++match;
+                else 
+                    ++misMatch;
+                }
+	    ++blockIx;
+	    eitherInsert = TRUE;
+        nextB = b->next;
     }
 
-//match=chain->score * tbSize / 70;
-/* Deal with minus strand. */
+assert(blockIx == blockCount-1);
+
 /*
 qs = qStart;
 qe = qStart + match + misMatch + tBaseInsert;
 assert(qe == qEnd); 
-if (strand == '-')
-    {
-    reverseIntRange(&qs, &qe, qSize);
-    }
 assert(qs < qe);
 te = tStart + match + misMatch + qBaseInsert;
 assert(te == tEnd);
@@ -441,31 +447,6 @@ if (ferror(f))
     perror("Error writing psl file\n");
     errAbort("\n");
     }
-
-/* Allocate dynamic memory for block lists. */
-AllocArray(blocks, blockCount);
-AllocArray(qStarts, blockCount);
-AllocArray(tStarts, blockCount);
-
-/* Figure block sizes and starts. */
-eitherInsert = FALSE;
-qs = qe = qStart;
-ts = te = tStart;
-nextB = NULL;
-for (b = chain->blockList; b != NULL; b = nextB)
-    {
-	    qStarts[blockIx] = b->qStart;
-	    tStarts[blockIx] = b->tStart;
-	    blocks[blockIx] = b->tEnd - b->tStart;
-	    ++blockIx;
-	    eitherInsert = TRUE;
-        nextB = b->next;
-    }
-assert(blockIx == blockCount-1);
-/*qStarts[blockIx] = b->qStart;
-tStarts[blockIx] = b->tStart;
-blocks[blockIx] = b->tEnd - b->tStart;
-*/
 
 /* Output block sizes */
 for (i=0; i<blockCount-1; ++i)
@@ -518,7 +499,7 @@ while ((chain = chainRead(lf)) != NULL)
     q = findSize(qSizeHash, chain->qName);
     t = findSize(tSizeHash, chain->tName);
     aliStringToPsl(lf, chain->qName, chain->tName, chain->qSize, chain->tSize,
-	chain->tEnd-chain->tStart /* count */, chain->qStart, chain->qEnd, chain->tStart, chain->tEnd,
+	min(chain->tEnd-chain->tStart, chain->qEnd-chain->qStart), chain->qStart, chain->qEnd, chain->tStart, chain->tEnd,
         chain->qStrand, f, chain, tHash, qHash, fileCache);
     chainFree(&chain);
     }
@@ -532,7 +513,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 7)
     {
-    printf("argc %d\n",argc);
     usage();
     }
 chainToPsl(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
