@@ -43,8 +43,8 @@
 #include "refLink.h"
 #include "browserTable.h"
 
-#define CHUCK_CODE 1
-#define ROGIC_CODE 1
+#define CHUCK_CODE 0
+#define ROGIC_CODE 0
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -520,9 +520,11 @@ char **row;
 struct agpFrag frag;
 struct dnaSeq *seq;
 char dnaName[256];
+int start = cgiInt("o");
 
 htmlStart(fragName);
-sprintf(query, "select * from %s_gold where frag = '%s'", seqName, fragName);
+sprintf(query, "select * from %s_gold where frag = '%s' and chromStart = %d", 
+	seqName, fragName, start+1);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row, &frag);
