@@ -586,16 +586,22 @@ for (fill = gap->fillList; fill != NULL; fill = fill->next)
 --rOutDepth;
 }
 
+double subchainScore(struct chain *chain, int start, int end, boolean isQ)
+/* Return score of subchain. */
+{
+return chain->score;	//uglyf, not really implemented yet
+}
+
 void fillOut(FILE *f, struct fill *fill, char *oChrom, int depth)
 /* Output fill. */
 {
 struct chain *chain = fill->chain;
 spaceOut(f, depth);
-fprintf(f, "fill %d %d %s %c %d %d id %d\n", 
+fprintf(f, "fill %d %d %s %c %d %d id %d score %1.0f\n", 
 	fill->start, fill->end - fill->start,
 	oChrom, chain->qStrand, 
 	fill->oStart, fill->oEnd - fill->oStart,
-	chain->id);
+	chain->id, subchainScore(chain, fill->start, fill->end, rOutQ));
 }
 
 static void rOutputFill(struct fill *fill, FILE *f)
