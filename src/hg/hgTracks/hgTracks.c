@@ -4260,7 +4260,7 @@ return lfList;
 
 void loadUniGeneAli(struct trackGroup *tg)
 {
-tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALSE, 3.0);
+tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALSE, 1.0);
 }
 
 void uniGeneMethods(struct trackGroup *tg)
