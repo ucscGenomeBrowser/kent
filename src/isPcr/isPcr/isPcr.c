@@ -27,7 +27,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "isPcr - Standalone In-Situ PCR Program\n"
+  "isPcr - Standalone v %d In-Situ PCR Program\n"
   "usage:\n"
   "   isPcr database query output\n"
   "where database is a fasta, nib, or twoBit file or a text file containing\n"
@@ -61,7 +61,7 @@ errAbort(
   "      fa - fasta with position, primers in header (default)\n"
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
   "      psl - blat format.\n"
-  , tileSize, stepSize, maxSize, minSize, minPerfect, minGood
+  , gfVersion, tileSize, stepSize, maxSize, minSize, minPerfect, minGood
   );
 }
 
