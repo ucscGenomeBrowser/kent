@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.34 2005/03/06 09:27:42 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.35 2005/03/17 04:41:34 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -35,6 +35,8 @@ static struct optionSpec optionSpecs[] =
     {"bin", OPTION_STRING},
     {"binSize", OPTION_INT},
     {"binOverlap", OPTION_INT},
+    {"bedRegionIn", OPTION_STRING},
+    {"bedRegionOut", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -75,6 +77,10 @@ errAbort(
   "   -bin=output.bin   Put bin counts in output file\n"
   "   -binSize=N        Bin size for generating counts in bin file (default 500000)\n"
   "   -binOverlap=N     Bin overlap for generating counts in bin file (default 250000)\n"
+
+  "   -bedRegionIn=input.bed   Read in a bed file for bin counts in specific regions and write to bedRegionsOut\n"
+  "   -bedRegionOut=output.bed Write a bed file of bin counts in specific regions from bedRegionIn\n"
+
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
   "                     is reference gene track and second track something else\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
@@ -184,6 +190,24 @@ for (bin=0; bin+binSize<chromSize; bin=bin+binOverlap)
     }
 count = bitCountRange(bits, bin, chromSize-bin);
 fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, chromSize, count, chrom, bin/binOverlap+1);
+}
+
+void bitsToRegions(Bits *bits, char *chrom, int chromSize, struct bed *bedList, 
+		   FILE *bedOutFile)
+/* Write out counts of bits in regions defined by bed elements. */
+{
+struct bed *bl=NULL;
+int count, i=0;
+
+if (!bedOutFile)
+    return;
+for (bl=bedList; bl!=NULL; bl=bl->next)
+    {
+    if(differentString(bl->chrom,chrom))
+	continue;
+    count = bitCountRange(bits, bl->chromStart, bl->chromEnd-bl->chromStart);
+    fprintf(bedOutFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bl->chromStart, bl->chromEnd, count, chrom, ++i);
+    }
 }
 
 void check(struct sqlConnection *conn, char *table)
@@ -399,6 +423,7 @@ else
 void chromFeatureBits(struct sqlConnection *conn,
 	char *chrom, int tableCount, char *tables[],
 	FILE *bedFile, FILE *faFile, FILE *binFile,
+        struct bed *bedRegionList, FILE *bedOutFile,
 	int *retChromSize, int *retChromBits,
 	int *retFirstTableBits, int *retSecondTableBits)
 /* featureBits - Correlate tables via bitmap projections and booleans
@@ -458,6 +483,8 @@ if (binFile != NULL)
     binOverlap = optionInt("binOverlap", binOverlap);
     bitsToBins(acc, chrom, chromSize, binFile, binSize, binOverlap);
     }
+if (bedOutFile != NULL)
+    bitsToRegions(acc, chrom, chromSize, bedRegionList, bedOutFile);
 bitFree(&acc);
 bitFree(&bits);
 }
@@ -537,8 +564,12 @@ void featureBits(char *database, int tableCount, char *tables[])
 struct sqlConnection *conn = NULL;
 char *bedName = optionVal("bed", NULL), *faName = optionVal("fa", NULL);
 char *binName = optionVal("bin", NULL);
+char *bedRegionInName = optionVal("bedRegionIn", NULL);
+char *bedRegionOutName = optionVal("bedRegionOut", NULL);
 FILE *bedFile = NULL, *faFile = NULL, *binFile = NULL;
+FILE *bedRegionOutFile = NULL;
 struct slName *allChroms = NULL, *chrom = NULL;
+struct bed *bedRegionList = NULL;
 boolean faIndependent = FALSE;
 
 hSetDb(database);
@@ -546,6 +577,8 @@ if (bedName)
     bedFile = mustOpen(bedName, "w");
 if (binName)
     binFile = mustOpen(binName, "w");
+if ((bedRegionInName && !bedRegionOutName) || (!bedRegionInName && bedRegionOutName))
+    errAbort("bedRegionIn and bedRegionOut must both be specified");
 if (faName)
     {
     boolean faMerge = optionExists("faMerge");
@@ -576,14 +609,31 @@ if (!faIndependent)
 	pFirstTableBits = &firstTableBits;
 	pSecondTableBits = &secondTableBits;
 	}
+    if (bedRegionInName)
+    {
+    struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
+    struct bed *bed;
+    char *row[3];
+
+    bedRegionOutFile = mustOpen(bedRegionOutName, "w");
+    while (lineFileRow(lf, row))
+	{
+	if (startsWith(row[0],"#"))
+	    continue;
+	bed = bedLoad3(row);
+	slAddHead(&bedRegionList, bed);
+	}
+    lineFileClose(&lf);
+    slReverse(bedRegionList);
+    }
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
 	if (inclChrom(chrom))
 	    {
 	    int chromSize, chromBitSize;
 	    chromFeatureBits(conn, chrom->name, tableCount, tables,
-		bedFile, faFile, binFile, &chromSize, &chromBitSize,
-		pFirstTableBits, pSecondTableBits
+		bedFile, faFile, binFile, bedRegionList, bedRegionOutFile, 
+		&chromSize, &chromBitSize, pFirstTableBits, pSecondTableBits
 		);
 	    totalBases += countBases(conn, chrom->name, chromSize);
 	    totalBits += chromBitSize;
