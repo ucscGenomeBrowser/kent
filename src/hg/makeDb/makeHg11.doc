@@ -1,6 +1,105 @@
 This file describes how we made the browser database on 
 NCBI build 29 (April, 2002 freeze)
 
+(The numbered stuff was brought in from
+ /cluster/store1/gs.12/build29/build.ncbi.doc)
+
+HOW TO BUILD A ASSEMBLY FROM NCBI FILES
+---------------------------------------
+
+NOTE: It is best to run most of this stuff on kkstore since it
+is not adverse to handling files > 2Gb
+
+1) Download seq_contig.md, ncbi_buildXX.agp,
+	contig_overlaps.agp and contig fa file into directory.
+
+2) Unpack contig fa file into ../ffa/ncbi_buildXX.fa
+
+#2.1) Extract Hs to NT conversion from .fa files to convert .agp file (NOT NEEDED ANYMORE)
+#
+#	/cluster/bin/scripts/extractHs ncbi_buildXX.fa
+#
+#2.2) Create allcontig.agp.buildXX file (NOT NEEDED ANYMORE)#
+#
+#	/cluster/bin/scripts/convertHsAgp hs.to.nt <agp file> > allcontig.agp.buildXX
+	
+2.3) Sanity check things with
+        ~kent/bin/i386/checkYbr ncbi_buildXX.agp ../ffa/ncbi_buildXX.fa seq_contig.md
+     report any errors back to Richa and Greg at NCBI.
+
+3) Convert fa files into UCSC style fa files and place in "contigs" directory
+	mkdir contigs
+	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ncbi_buildXX.fa contigs
+
+4) Create lift files (this will create chromosome directory structure) and inserts file
+
+	/cluster/bin/scripts/createNcbiLifts seq_contig.md .
+
+5) Create contig agp files (will create contig directory structure)
+	
+	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_buildXX.agp .
+
+5.1) Create contig gl files
+
+        ~kent/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+
+6) Create chromsome agp files
+
+	/cluster/bin/scripts/createNcbiChrAgp .
+
+6.1) Copy over jkStuff
+	mkdir jkStuff
+        cp ../../gs.11/build28/jkStuff/*.sh jkStuff
+        cp ../../gs.11/build28/jkStuff/*.csh jkStuff
+        cp ../../gs.11/build28/jkStuff/*.gsub jkStuff        
+
+6.2) Patch in size of chromosome Y into Y/lift/ordered.lft
+     by grabbing it from the last line of Y/chrY.agp
+
+6.3) Create chromosome gl files
+  
+        jkStuff/liftGl.sh contig.gl
+
+7) Distribute contig .fa and .out files to appropriate directory (assumes all files
+   are in "contigs" directory).
+
+	/cluster/bin/scripts/distNcbiCtgFa contigs .
+
+8) Reverse complement NT contig fa files that are flipped in the assembly
+   (uses faRc program)
+
+	/cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
+	
+9) Generate RepeatMasked files for contigs (Patrick)
+   For the NCBI assembly we repeat mask on the sensitive mode setting.
+
+        cd ~/oo
+        /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
+        log into kk
+        cd ~/oo
+        para create RMJobs
+        para try
+        make sure jobs don't die right away
+        para push
+
+10) Lift up RepeatMask .out files to chromosome coordinates via
+       tcsh jkStuff/liftOut2.sh
+
+11) Generate contig and chromosome level masked and unmasked files via:
+       tcsh jkStuff/chrFa.sh
+       tcsh jkStuff/makeFaMasked.sh
+
+12) Copy all contig and chrom fa files to /scratch on kkstore to get ready for
+    cluster jobs, and ask to propagate to nodes
+
+	/cluster/bin/scripts/cpNcbiFaScratch . </scratch/hg/gs.X/>
+
+13) Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
+    Note: this ncbi.lift will not lift floating contigs to chr_random coords,
+    but it will show the strand orientation of the floating contigs 
+    (grep for '|').
+	mdToNcbiLift seq_contig_randoms.md jkStuff/ncbi.lft 
+
 
 CREATING DATABASE  (DONE)
 
@@ -26,6 +125,10 @@ o - Create the trackDb table as so
        make update
        cvs commit makefile
 
+
+LOAD REPEAT MASKS (DONE 7/10/02)
+    Load the RepeatMasker .out files into the database with:
+       hgLoadOut hg11 ?/*.fa.out ??/*.fa.out
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE)
 
@@ -168,30 +271,6 @@ o - Store the mRNA (non-alignment) info in database.
 
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
-
-
-
-REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
-
-For the NCBI assembly we repeat mask on the sensitive mode setting.
-Patrick Gavin did this, and perhaps will fill in the details later.
-
-        cd ~/oo
-        /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
-        log into kk
-        cd ~/oo
-        para create RMJobs
-        para try
-        make sure jobs don't die right away
-        para push
-
-Then lift these up to chromosome coordinates with
-    cd ~/oo
-    tcsh jkStuff/liftOut2.sh
-Then load the .out files into the database with:
-    ssh hgwdev
-    cd ~/oo
-    hgLoadOut hg11 ?/*.fa.out ??/*.fa.out DONE BY MATT
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE)
