@@ -87,8 +87,8 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
   /cluster/bin/i386/twoBitToFa bosTau1.2bit check.fa
   mv bosTau1.2bit ../..
-  # TO DO: 
-  # bdiff Btau20040927-freeze-assembly.fa check.fa
+  diff -q Btau20040927-freeze-assembly.fa check.fa
+  # could also use cmp
   # note: size match
   ssh hgwdev
   mkdir /gbdb/bosTau1
@@ -111,11 +111,26 @@ exit; # don't actually run this like a script :)
   cd kent/src/hg/lib
   # remove bin column for now
   hgsql bosTau1 < gap2.sql
-  cd /cluster/data/bosTau1/download/contigs
+  cd /cluster/data/bosTau1/downloads/contigs
   grep fragment Btau_v1.0_20040927.agp > fragment.txt
   hgsql bosTau1
   load data local infile 'fragment.txt' into table gap
   # create trackDb/cow/bosTau1/gap.html
+
+# CREATE CONTIG TABLE (DONE, Oct. 5, 2004, Heather)
+
+  ssh hgwdev
+  cd kent/src/hg/lib
+  # this doesn't include strand or contig start/end
+  hgsql bosTau1 < ctgPos2.sql
+  cd /cluster/data/bosTau1/downloads/contigs
+  grep Contig Btau_v1.0_20040927.agp > Contig.out
+  ssh kksilo
+  cd /cluster/data/bosTau1/downloads/contigs
+  getContig.pl < Contig.out > ctgPos2
+  ssh hgwdev
+  load data local infile 'ctgPos2' into table ctgPos2
+  # 9 skipped
 
 # CREATE CHROMINFO TABLE (DONE Oct. 5, 2004, Heather)
 # an improvement here would be to have getMaxCoord output the 2bit file name
