@@ -12,13 +12,12 @@
 #include "hdb.h"
 #include "web.h"
 #include "trackDb.h"
-#include "grp.h"
 #include "joiner.h"
 #include "tableDescriptions.h"
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.8 2004/07/14 07:31:02 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.9 2004/07/14 19:02:50 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -154,6 +153,18 @@ if (sqlTableExists(conn, "tableDescriptions"))
 return asObj;
 }
 
+static void explainCoordSystem()
+/* Our coord system is counter-intuitive to users.  Warn them in advance to 
+ * reduce the frequency with which they find this "bug" on their own and 
+ * we have to explain it on the genome list. */
+{
+puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
+     "1-based.  See explanation \n"
+     "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">"
+     "here</A>.</I></P>");
+}
+
+
 static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
 /* Put up sample values. */
 {
@@ -161,8 +172,6 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 int i, columnCount = 0;
-
-hPrintf("<I>Note: sample rows are not necessarily in selected region.</I><BR>");
 
 /* Make table with header row containing name of fields. */
 safef(query, sizeof(query), "describe %s", table);
@@ -190,6 +199,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hTableEnd();
+explainCoordSystem();
 }
 
 
