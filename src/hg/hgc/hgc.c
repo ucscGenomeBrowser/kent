@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.431 2003/06/17 03:16:36 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.432 2003/06/17 06:10:02 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7051,8 +7051,9 @@ printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
-void doBlatFish(struct trackDb *tdb, char *itemName)
-/* Handle click on blatFish track. */
+void doBlatCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
+    /* Handle click on blat track in a generic fashion */
+    /* otherGenome is the text to display for genome name on details page */
 {
 char *track = tdb->tableName;
 char query[256];
@@ -7066,12 +7067,12 @@ boolean hasBin;
 char table[64];
 
 cartWebStart(cart, itemName);
-printf("<H1>Information on Fish Sequence %s</H1>", itemName);
+printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
-printf("Fish DNA</A><BR>\n");
+               hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
@@ -7089,43 +7090,41 @@ printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
 }
 
-void doBlatCompGeno(char *db, struct trackDb *tdb, char *itemName)
-/* Handle click on blatCi1 track. */
+void doBlatCompGenoDb(struct trackDb *tdb, char *itemName, char *otherDb)
+/* Handle click on blat track generically, using name in dbDb genome column */
+ /* Use this when track name doesn't embed the database name */
 {
-char *org = hGenome(db);
-char *track = tdb->tableName;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int start = cartInt(cart, "o");
-struct psl *pslList = NULL, *psl;
-struct dnaSeq *seq;
-boolean hasBin;
-char table[64];
-
-cartWebStart(cart, itemName);
-printf("<H1>Information on %s Sequence %s</H1>", org, itemName);
-
-printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
-printf("%s DNA</A><BR>\n",org);
-
-/* Get alignment info and print. */
-printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+char *genome = hGenome(otherDb);
+if (genome != NULL) 
     {
-    psl = pslLoad(row+hasBin);
-    slAddHead(&pslList, psl);
+    doBlatCompGeno(tdb, itemName, genome);
+    freeMem(genome);
+    return;
     }
-sqlFreeResult(&sr);
-slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", track, itemName);
-printTrackHtml(tdb);
+/* fall-back if incorrectly used */
+doBlatCompGeno(tdb, itemName, "");
+}
+
+void doBlatCompGenoTrack(struct trackDb *tdb, char *itemName)
+/* Handle click on blat track generically when other db is in trackname */
+    /* track must be named "blat<database-name>" */
+    /* The organism name appearing on the details page is
+     * extracted from the "genome" column of the dbDb table. */
+{
+char *trackName = cloneString(tdb->tableName);
+
+tolowers(trackName);
+if (startsWith("blat", trackName))
+    {
+    /* extract database name from end of track name */
+    doBlatCompGenoDb(tdb, itemName, &trackName[4]);
+    }
+else
+    {
+    /* fall-back if incorrectly used */
+    doBlatCompGeno(tdb, itemName, "");
+    }
+freeMem(trackName);
 }
 
 void doTSS(struct trackDb *tdb, char *itemName)
@@ -11858,27 +11857,17 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
-else if (sameWord(track, "blatFish"))
+else if (sameWord(track, "blatFish") ||
+         sameWord(track, "blatTetra") ||
+         sameWord(track, "blatFugu"))
     {
-    doBlatFish(tdb, item);
+    doBlatCompGeno(tdb, item, "Fish");
     }
-else if (sameWord(track, "blatTetra"))
+/* generic handling of all blat tracks that include other database name 
+ * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... */
+else if (startsWith("blat", track) && hDbExists(&track[4]))
     {
-    doBlatFish(tdb, item);
-    }
-else if (sameWord(track, "blatFugu"))
-    {
-    doBlatFish(tdb, item);
-    }
-else if (sameWord(track, "blatCe1")
-    || sameWord(track, "blatCi1")
-    || sameWord(track, "blatCb1")
-    || sameWord(track, "blatHg15")
-    || sameWord(track, "blatMm3")
-    || sameWord(track, "blatRn2"))
-    {
-    char *db = &track[4];
-    doBlatCompGeno(db, tdb, item);
+    doBlatCompGenoTrack(tdb, item);
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
