@@ -364,32 +364,6 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 axtBundleFreeList(&aod->bundleList);
 }
 
-
-static int findBreak(char *a, char *b, int startPos, int size, int minBreakSize)
-/* Return index of break, which is defines as either minBreakSize
- * dashes in a row, or the end of s */
-{
-char ac, bc;
-int breakStart = startPos;
-int i;
-
-for (i=startPos; i<size; ++i)
-    {
-    ac = a[i];
-    bc = b[i];
-    if (ac == '-' || bc == '-')
-	{
-        if (i - breakStart >= minBreakSize)
-	     return i+1;
-	}
-    else
-        {
-	breakStart = i;
-	}
-    }
-return size;
-}
-
 static double axtIdRatio(struct axt *axt)
 /* Return matches/total. */
 {
