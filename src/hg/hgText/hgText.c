@@ -374,14 +374,29 @@ webStart(cart, "Table Browser: %s: Choose Organism &amp; Assembly",
 handleDbChange();
 
 puts(
-     "<P>This tool allows you to download portions of the database used 
-	by the genome browser in several output formats.
-	Please enter a position in the genome (or enter \"genome\" to 
-        search all chromosomes) and press the submit button:\n"
+"<CENTER>"
+"Web tool created by "
+"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>, "
+"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>, "
+"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
+"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
+"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
+"and the Genome Bioinformatics Group of UC Santa Cruz.</CENTER>\n"
+"<P><CENTER>Copyright 2001 The Regents of the University of California. "
+"All rights reserved.<P></CENTER><P>\n");
+
+puts(
+     "<P>This tool allows you to download portions of the Genome Browser 
+	database in several output formats.
+	Enter a genome position (or enter \"genome\" to 
+        search all chromosomes), then press the Submit button.\n"
      );
 
-printf("(Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
-        locate a particular sequence in the genome.)\n",
+printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
+        locate a particular sequence in the genome.<P>\n",
        database, cartSessionId(cart));
 cgiMakeHiddenVar("org", organism);
 
