@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.9 2005/03/08 00:28:15 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.10 2005/03/08 23:47:23 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1000,6 +1000,14 @@ parameters specifically set for this species pair:';
 }
 
 
+sub commafy {
+  # Assuming $num is a number, add commas where appropriate.
+  my ($num) = @_;
+  $num =~ s/(\d)(\d\d\d)$/$1,$2/;
+  $num =~ s/(\d)(\d\d\d),/$1,$2,/g;
+  return($num);
+}
+
 sub describeOverlapping {
   # Return some text describing how large sequences were split.
   my $lap;
@@ -1007,16 +1015,20 @@ sub describeOverlapping {
   my $chunkPlusLap2 = $defVars{'SEQ2_CHUNK'} + $defVars{'SEQ2_LAP'};
   if ($chunkPlusLap1 == $chunkPlusLap2) {
     $lap .= "Any sequences larger\n" .
-"than $chunkPlusLap1 bases were split into chunks of $chunkPlusLap1 bases
-overlapping by $defVars{SEQ1_LAP} bases for alignment.";
+"than " . &commafy($chunkPlusLap1) . " bases were split into chunks of " .
+&commafy($chunkPlusLap1) . " bases
+overlapping by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.";
   } else {
     $lap .= "Any $tDb sequences larger\n" .
-"than $chunkPlusLap1 bases were split into chunks of $chunkPlusLap1 bases
-overlapping by $defVars{SEQ1_LAP} bases for alignment.  (Similarly for $qDb,
-chunks of $chunkPlusLap2 overlapping by $defVars{SEQ2_LAP}.)";
+"than " . &commafy($chunkPlusLap1) . " bases were split into chunks of " .
+&commafy($chunkPlusLap1) . " bases overlapping
+by " . &commafy($defVars{SEQ1_LAP}) . " bases for alignment.  " .
+"A similar process was followed for $qDb,
+with chunks of " . &commafy($chunkPlusLap2) . " overlapping by " .
+&commafy($defVars{SEQ2_LAP}) . ".)";
   }
-  $lap .= "  Alignments of
-chunks had their coordinates corrected after alignment by the
+  $lap .= "  Following alignment, the
+coordinates of the chunk alignments were corrected by the
 blastz-normalizeLav script written by Scott Schwartz of Penn State.";
   return $lap;
 }
@@ -1032,12 +1044,26 @@ sub dumpDownloadReadme {
   my ($matrix, $o, $e, $k, $l, $h, $blastzOther) = &getBlastzParams();
   my $defaultMatrix = $defVars{'BLASTZ_Q'} ? '' : ' the default matrix';
   my $lap = &describeOverlapping();
-  my $abridging = $defVars{'BLASTZ_ABRIDGE_REPEATS'} ? "
+  my $abridging = "";
+  if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
+    if ($isSelf) {
+      $abridging = "
+All repetitive sequences identified by RepeatMasker were removed from the
+assembly before alignment using the fasta-subseq and strip_rpts programs
+from Penn State.  The abbreviated genome was aligned with blastz, and the
+transposons were then added back in (i.e. the alignment coordinates were
+adjusted) using the restore_rpts program from Penn State.";
+    } else {
+      $abridging = "
 Transposons that have been inserted since the $qGenome/$tGenome split were
-removed from the assemblies before alignment.  The abbreviated genomes were
-aligned with blastz, and the transposons were then added back in." :
-"";
-  my $netMeaning = $isSelf ? "duplications /
+removed from the assemblies before alignment using the fasta-subseq and
+strip_rpts programs from Penn State.  The abbreviated genomes were aligned
+with blastz, and the transposons were then added back in (i.e. the
+alignment coordinates were adjusted) using the restore_rpts program from
+Penn State.";
+    }
+  }
+  my $netMeaning = $isSelf ? "duplications/
     rearrangements and the best-in-genome match to any other part of
     the genome." :
 "rearrangements between 
@@ -1050,8 +1076,11 @@ aligned with blastz, and the transposons were then added back in." :
 "This directory contains alignments of $tGenome ($tDb, $tDate,
 $tSource) to itself." :
 "This directory contains alignments of the following assemblies:
-- target/reference: $tGenome ($tDb, $tDate, $tSource)
-- query: $qGenome ($qDb, $qDate, $qSource)";
+
+  - target/reference: $tGenome ($tDb, $tDate, $tSource)
+
+  - query: $qGenome ($qDb, $qDate, $qSource)";
+
   print R "$desc
 
 Files included in this directory:
@@ -1073,14 +1102,16 @@ $over
   if ($opt_swap) {
     my $TDb = ucfirst($tDb);
     print R
-"$qDb-referenced chained blastz alignments to $tDb were translated into
-$tDb-referenced chains to $qDb by the chainSwap program.  (See the download
-directory goldenPath/$qDb/vs$TDb/README.txt for more information about the
-$qDb-referenced blastz and chaining process.)
+"The chainSwap program was used to translate $qDb-referenced chained blastz
+alignments to $tDb into $tDb-referenced chains aligned to $qDb.  See
+the download directory goldenPath/$qDb/vs$TDb/README.txt for more
+information about the $qDb-referenced blastz and chaining process.
 ";
   } else {
-    print R
-"The $tDb and $qDb assemblies were aligned by the blastz alignment
+    print R ($isSelf ?
+"The $tDb assembly was aligned to itself" :
+"The $tDb and $qDb assemblies were aligned");
+    print R " by the blastz alignment
 program, which is available from Webb Miller's lab at Penn State
 University (http://www.bx.psu.edu/miller_lab/).  $lap $abridging
 
@@ -1099,40 +1130,39 @@ lavToPsl, then chained by the axtChain program.
 ";
   }
   print R "
-Chained alignments were processed into nets by the chainNet,
-netSyntenic, and netClass programs.  Best chains (.over.chain) were
-extracted from the nets and the set of all chained alignments by the
-netChainSubset program.  Best-chain alignments in axt format were
-extracted by the netToAxt program.  All programs run after blastz were
-written by Jim Kent at UCSC.
+Chained alignments were processed into nets by the chainNet, netSyntenic,
+and netClass programs. Best chains (.over.chain) were extracted from the
+nets and the set of all chained alignments by the netChainSubset program.
+Best-chain alignments in axt format were extracted by the netToAxt program.
+All programs run after blastz were written by Jim Kent at UCSC.
 
 ----------------------------------------------------------------
-If you plan to download a large file or multiple files from this
-directory, we recommend you use ftp rather than downloading the files
-via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then go to
-the directory goldenPath/$tDb/vs$QDb/. To download multiple
-files, use the \"mget\" command:
+If you plan to download a large file or multiple files from this directory,
+we recommend you use ftp rather than downloading the files via our website.
+To do so, ftp to hgdownload.cse.ucsc.edu, then go to the directory
+goldenPath/$tDb/vs$QDb/. To download multiple files, use the \"mget\"
+command:
 
     mget <filename1> <filename2> ...
     - or -
-    mget -a (to download all the files in the directory)
+    mget -a (to download all files in the current directory)
 
-All the files in this directory are freely available for public use.
+All files in this directory are freely available for public use.
 
 --------------------------------------------------------------------
 References
 
 Chiaromonte, F., Yap, V.B., and Miller, W.  Scoring pairwise genomic
-sequence alignments.  Pac Symp Biocomput 2002;115-26.
+sequence alignments.  Pac Symp Biocomput 2002, 115-26 (2002).
 
 Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
 Evolution's cauldron: Duplication, deletion, and rearrangement in the
-mouse and human genomes.  Proc Natl Acad Sci USA 100(20):11484-11489
-Sep 30 2003.
+mouse and human genomes. Proc Natl Acad Sci USA 100(20), 11484-11489
+(2003).
 
 Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R.,
 Haussler, D., and Miller, W.  Human-mouse alignments with BLASTZ</A>.
-Genome Res. 13(1):103-7 (2003).
+Genome Res. 13(1), 103-7 (2003).
 
 ";
   close(R);
