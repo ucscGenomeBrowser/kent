@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.15 2003/09/06 18:39:20 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.16 2003/09/06 18:41:10 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -94,20 +94,20 @@ static void genePredPosSearchControls(struct column *col, struct sqlConnection *
 /* Print out controls for advanced search. */
 {
 hPrintf("chromosome: ");
-advSearchRemakeTextVar(col, "chr", 8);
+advFilterRemakeTextVar(col, "chr", 8);
 hPrintf(" start: ");
-advSearchRemakeTextVar(col, "start", 8);
+advFilterRemakeTextVar(col, "start", 8);
 hPrintf(" end: ");
-advSearchRemakeTextVar(col, "end", 8);
+advFilterRemakeTextVar(col, "end", 8);
 }
 
 static struct genePos *genePredPosAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on position. */
 {
-char *chrom = advSearchVal(col, "chr");
-char *startString = advSearchVal(col, "start");
-char *endString = advSearchVal(col, "end");
+char *chrom = advFilterVal(col, "chr");
+char *startString = advFilterVal(col, "start");
+char *endString = advFilterVal(col, "end");
 if (chrom != NULL)
     {
     struct genePos *newList = NULL, *gp, *next;

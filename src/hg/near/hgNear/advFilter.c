@@ -1,4 +1,4 @@
-/* advSearch - stuff to put up advanced search controls and to build
+/* advFilter - stuff to put up advanced search controls and to build
  * gene lists based on advanced searches. */
 
 #include "common.h"
@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.19 2003/09/06 18:39:20 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.1 2003/09/06 18:41:10 kent Exp $";
 
 struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -20,7 +20,7 @@ struct genePos *advancedSearchResults(struct column *colList,
 struct genePos *list = knownPosAll(conn);
 struct column *col;
 
-if (gotAdvSearch())
+if (gotAdvFilter())
 /* Then go through and filter it down by column. */
     {
     for (col = colList; col != NULL; col = col->next)
@@ -56,70 +56,70 @@ hashElFreeList(&varList);
 return ret;
 }
 
-boolean gotAdvSearch()
+boolean gotAdvFilter()
 /* Return TRUE if advanced search variables are set. */
 {
 char wild[64];
-safef(wild, sizeof(wild), "%s*", advSearchPrefix);
+safef(wild, sizeof(wild), "%s*", advFilterPrefix);
 return anyRealInCart(cart, wild);
 }
 
-boolean advSearchColAnySet(struct column *col)
+boolean advFilterColAnySet(struct column *col)
 /* Return TRUE if any of the advanced search variables
  * for this col are set. */
 {
 char wild[128];
-safef(wild, sizeof(wild), "%s%s*", advSearchPrefix, col->name);
+safef(wild, sizeof(wild), "%s%s*", advFilterPrefix, col->name);
 return anyRealInCart(cart, wild);
 }
 
-char *advSearchName(struct column *col, char *varName)
+char *advFilterName(struct column *col, char *varName)
 /* Return variable name for advanced search. */
 {
 static char name[64];
-safef(name, sizeof(name), "%s%s.%s", advSearchPrefix, col->name, varName);
+safef(name, sizeof(name), "%s%s.%s", advFilterPrefix, col->name, varName);
 return name;
 }
 
-char *advSearchVal(struct column *col, char *varName)
+char *advFilterVal(struct column *col, char *varName)
 /* Return value for advanced search variable.  Return NULL if it
  * doesn't exist or if it is "" */
 {
-char *name = advSearchName(col, varName);
+char *name = advFilterName(col, varName);
 return cartNonemptyString(cart, name);
 }
 
-char *advSearchNameI(struct column *col, char *varName)
+char *advFilterNameI(struct column *col, char *varName)
 /* Return name for advanced search that doesn't force search. */
 {
 static char name[64];
-safef(name, sizeof(name), "%s%s.%s", advSearchPrefixI, col->name, varName);
+safef(name, sizeof(name), "%s%s.%s", advFilterPrefixI, col->name, varName);
 return name;
 }
 
-void advSearchRemakeTextVar(struct column *col, char *varName, int size)
+void advFilterRemakeTextVar(struct column *col, char *varName, int size)
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
 {
-char *var = advSearchName(col, varName);
+char *var = advFilterName(col, varName);
 char *val = cartOptionalString(cart, var);
 cgiMakeTextVar(var, val, 8);
 }
 
-void advSearchKeyUploadButton(struct column *col)
+void advFilterKeyUploadButton(struct column *col)
 /* Make a button for uploading keywords. */
 {
 colButton(col, keyWordUploadPrefix, "Upload List");
 }
 
-struct column *advSearchKeyUploadPressed(struct column *colList)
+struct column *advFilterKeyUploadPressed(struct column *colList)
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 {
 return colButtonPressed(colList, keyWordUploadPrefix);
 }
 
-void doAdvSearchKeyUpload(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyUpload(struct sqlConnection *conn, struct column *colList, 
     struct column *col)
 /* Handle upload keyword list button press in advanced search form. */
 {
@@ -138,20 +138,20 @@ cgiMakeButton("submit", "Submit");
 hPrintf("</FORM>");
 }
 
-void advSearchKeyPasteButton(struct column *col)
+void advFilterKeyPasteButton(struct column *col)
 /* Make a button for uploading keywords. */
 {
 colButton(col, keyWordPastePrefix, "Paste List");
 }
 
-struct column *advSearchKeyPastePressed(struct column *colList)
+struct column *advFilterKeyPastePressed(struct column *colList)
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 {
 return colButtonPressed(colList, keyWordPastePrefix);
 }
 
-void doAdvSearchKeyPaste(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPaste(struct sqlConnection *conn, struct column *colList, 
     struct column *col)
 /* Handle upload keyword list button press in advanced search form. */
 {
@@ -168,20 +168,20 @@ cgiMakeTextArea(varName, "", 10, 60);
 hPrintf("</FORM>");
 }
 
-struct column *advSearchKeyPastedPressed(struct column *colList)
+struct column *advFilterKeyPastedPressed(struct column *colList)
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 {
 return colButtonPressed(colList, keyWordPastedPrefix);
 }
 
-void doAdvSearchKeyPasted(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPasted(struct sqlConnection *conn, struct column *colList, 
     struct column *col)
 /* Handle submission in key-paste in form. */
 {
 char *pasteVarName = colVarName(col, keyWordPastedPrefix);
 char *pasteVal = trimSpaces(cartString(cart, pasteVarName));
-char *keyVarName = advSearchName(col, "keyFile");
+char *keyVarName = advFilterName(col, "keyFile");
 
 if (pasteVal == NULL || pasteVal[0] == 0)
     {
@@ -204,46 +204,46 @@ cartRemovePrefix(cart, keyWordPastedPrefix);
 doAdvancedSearch(conn, colList);
 }
 
-void advSearchKeyClearButton(struct column *col)
+void advFilterKeyClearButton(struct column *col)
 /* Make a button for uploading keywords. */
 {
 colButton(col, keyWordClearPrefix, "Clear List");
 }
 
-struct column *advSearchKeyClearPressed(struct column *colList)
+struct column *advFilterKeyClearPressed(struct column *colList)
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 {
 return colButtonPressed(colList, keyWordClearPrefix);
 }
 
-void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyClear(struct sqlConnection *conn, struct column *colList, 
     struct column *col)
 /* Handle upload keyword list button press in advanced search form. */
 {
 cartRemovePrefix(cart, keyWordClearPrefix);
-cartRemove(cart, advSearchName(col, "keyFile"));
+cartRemove(cart, advFilterName(col, "keyFile"));
 doAdvancedSearch(conn, colList);
 }
 
 
 static char *anyAllMenu[] = {"all", "any"};
 
-void advSearchAnyAllMenu(struct column *col, char *varName, 
+void advFilterAnyAllMenu(struct column *col, char *varName, 
 	boolean defaultAny)
 /* Make a drop-down menu with value all/any. */
 {
-char *var = advSearchNameI(col, varName);
+char *var = advFilterNameI(col, varName);
 char *val = cartUsualString(cart, var, anyAllMenu[defaultAny]);
 cgiMakeDropList(var, anyAllMenu, ArraySize(anyAllMenu), val);
 }
 
-boolean advSearchOrLogic(struct column *col, char *varName, 
+boolean advFilterOrLogic(struct column *col, char *varName, 
 	boolean defaultOr)
 /* Return TRUE if user has selected 'all' from any/all menu
  * of given name. */
 {
-char *var = advSearchNameI(col, varName);
+char *var = advFilterNameI(col, varName);
 char *val = cartUsualString(cart, var, anyAllMenu[defaultOr]);
 return sameWord(val, "any");
 }
@@ -253,11 +253,11 @@ static void bigButtons()
 {
 hPrintf("<TABLE><TR><TD>");
 hPrintf("Filter form: ");
-cgiMakeButton(advSearchClearVarName, "Clear All");
+cgiMakeButton(advFilterClearVarName, "Clear All");
 hPrintf(" ");
-cgiMakeButton(advSearchListVarName, "List Names");
+cgiMakeButton(advFilterListVarName, "List Names");
 hPrintf(" ");
-cgiMakeButton(advSearchBrowseVarName, "Browse Results");
+cgiMakeButton(advFilterBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
 }
 
@@ -269,7 +269,7 @@ boolean passPresent[2];
 int onOff = 0;
 boolean anyForSecondPass = FALSE;
 
-makeTitle("Gene Family Filter", "hgNearAdvSearch.html");
+makeTitle("Gene Family Filter", "hgNearAdvFilter.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
@@ -324,15 +324,15 @@ hPrintf("</FORM>\n");
 void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList)
 /* Clear variables in advanced search page. */
 {
-cartRemovePrefix(cart, advSearchPrefix);
-cartRemovePrefix(cart, advSearchPrefixI);
+cartRemovePrefix(cart, advFilterPrefix);
+cartRemovePrefix(cart, advFilterPrefixI);
 doAdvancedSearch(conn, colList);
 }
 
 void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList)
 /* List gene names matching advanced search. */
 {
-if (gotAdvSearch())
+if (gotAdvFilter())
     {
     // groupOn = "advanced search";
     // cartSetString(cart, groupVarName, groupOn);
@@ -353,7 +353,7 @@ if (col == NULL)
     internalErr();
     }
 hPrintf("<TT><PRE>");
-if (gotAdvSearch())
+if (gotAdvFilter())
     {
     list = advancedSearchResults(colList, conn);
     }

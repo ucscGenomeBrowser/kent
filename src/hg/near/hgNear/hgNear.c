@@ -16,14 +16,14 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.55 2003/09/06 18:39:20 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.56 2003/09/06 18:41:10 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName, 
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
-	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
-	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
+	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
+	advFilterListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -199,12 +199,12 @@ struct hash *keyFileHash(struct column *col)
 /* Make up a hash from key file for this column. 
  * Return NULL if no key file. */
 {
-char *fileName = advSearchVal(col, "keyFile");
+char *fileName = advFilterVal(col, "keyFile");
 if (fileName == NULL)
     return NULL;
 if (!fileExists(fileName))
     {
-    cartRemove(cart, advSearchName(col, "keyFile"));
+    cartRemove(cart, advFilterName(col, "keyFile"));
     return NULL;
     }
 return hashWordsInFile(fileName, 16);
@@ -388,7 +388,7 @@ struct genePos *accAdvancedSearch(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on accession. */
 {
-char *wild = advSearchVal(col, "wild");
+char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
 if (keyHash != NULL)
     {
@@ -406,7 +406,7 @@ if (keyHash != NULL)
     }
 if (wild != NULL)
     {
-    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
+    boolean orLogic = advFilterOrLogic(col, "logic", TRUE);
     struct genePos *newList = NULL, *next, *gp;
     struct slName *wildList = stringToSlNames(wild);
     for (gp = list; gp != NULL; gp = next)
@@ -491,32 +491,32 @@ return resList;
 void lookupSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
-char *fileName = advSearchVal(col, "keyFile");
+char *fileName = advFilterVal(col, "keyFile");
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
-advSearchRemakeTextVar(col, "wild", 18);
+advFilterRemakeTextVar(col, "wild", 18);
 hPrintf("<BR>\n");
 hPrintf("Include if ");
-advSearchAnyAllMenu(col, "logic", TRUE);
+advFilterAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.<BR>");
 if (!columnSetting(col, "noKeys", NULL))
     {
     hPrintf("Limit to items in list: ");
-    advSearchKeyPasteButton(col);
+    advFilterKeyPasteButton(col);
     hPrintf(" ");
-    advSearchKeyUploadButton(col);
+    advFilterKeyUploadButton(col);
     hPrintf(" ");
     if (fileName != NULL)
 	{
 	if (fileExists(fileName))
 	    {
-	    advSearchKeyClearButton(col);
+	    advFilterKeyClearButton(col);
 	    hPrintf("<BR>\n");
 	    hPrintf("(There are currently %d items in list.)",
 		    countWordsInFile(fileName));
 	    }
 	else
 	    {
-	    cartRemove(cart, advSearchName(col, "keyFile"));
+	    cartRemove(cart, advFilterName(col, "keyFile"));
 	    }
        }
     }
@@ -526,11 +526,11 @@ struct genePos *lookupAdvancedSearch(struct column *col,
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on position. */
 {
-char *wild = advSearchVal(col, "wild");
+char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
 if (wild != NULL || keyHash != NULL)
     {
-    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
+    boolean orLogic = advFilterOrLogic(col, "logic", TRUE);
     struct hash *hash = newHash(17);
     char query[256];
     struct sqlResult *sr;
@@ -604,17 +604,17 @@ void distanceSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
 hPrintf("minimum: ");
-advSearchRemakeTextVar(col, "min", 8);
+advFilterRemakeTextVar(col, "min", 8);
 hPrintf(" maximum: ");
-advSearchRemakeTextVar(col, "max", 8);
+advFilterRemakeTextVar(col, "max", 8);
 }
 
 struct genePos *distanceAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on distance type. */
 {
-char *minString = advSearchVal(col, "min");
-char *maxString = advSearchVal(col, "max");
+char *minString = advFilterVal(col, "min");
+char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
     struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
@@ -736,10 +736,10 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     hPrintf(" ");
     cgiMakeButton(getTextVarName, "as text");
     hPrintf(" ");
-    if (gotAdvSearch())
-	cgiMakeButton(advSearchVarName, "filter (now on)");
+    if (gotAdvFilter())
+	cgiMakeButton(advFilterVarName, "filter (now on)");
      else
-	cgiMakeButton(advSearchVarName, "filter (now off)");
+	cgiMakeButton(advFilterVarName, "filter (now off)");
     }
 
 
@@ -1020,7 +1020,7 @@ else
     getExpressionNeighbors(conn, geneList, geneHash, displayCount);
     }
 
-if (!gotAdvSearch())
+if (!gotAdvFilter())
     {
     trimFarGenes(&geneList);
     }
@@ -1494,26 +1494,26 @@ else if (cartVarExists(cart, saveCurrentConfName))
     doConfigSaveCurrent(conn, colList);
 else if (cartVarExists(cart, useSavedConfName))
     doConfigUseSaved(conn, colList);
-else if (cartVarExists(cart, advSearchVarName))
+else if (cartVarExists(cart, advFilterVarName))
     doAdvancedSearch(conn, colList);
-else if (cartVarExists(cart, advSearchClearVarName))
+else if (cartVarExists(cart, advFilterClearVarName))
     doAdvancedSearchClear(conn, colList);
-else if (cartVarExists(cart, advSearchBrowseVarName))
+else if (cartVarExists(cart, advFilterBrowseVarName))
     doAdvancedSearchBrowse(conn, colList);
-else if (cartVarExists(cart, advSearchListVarName))
+else if (cartVarExists(cart, advFilterListVarName))
     doAdvancedSearchList(conn, colList);
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
-else if ((col = advSearchKeyPastePressed(colList)) != NULL)
-    doAdvSearchKeyPaste(conn, colList, col);
-else if ((col = advSearchKeyPastedPressed(colList)) != NULL)
-    doAdvSearchKeyPasted(conn, colList, col);
-else if ((col = advSearchKeyUploadPressed(colList)) != NULL)
-    doAdvSearchKeyUpload(conn, colList, col);
-else if ((col = advSearchKeyClearPressed(colList)) != NULL)
-    doAdvSearchKeyClear(conn, colList, col);
+else if ((col = advFilterKeyPastePressed(colList)) != NULL)
+    doAdvFilterKeyPaste(conn, colList, col);
+else if ((col = advFilterKeyPastedPressed(colList)) != NULL)
+    doAdvFilterKeyPasted(conn, colList, col);
+else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
+    doAdvFilterKeyUpload(conn, colList, col);
+else if ((col = advFilterKeyClearPressed(colList)) != NULL)
+    doAdvFilterKeyClear(conn, colList, col);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
 else

@@ -141,12 +141,12 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
 	/* Include without 5' UTR? */
 #define getTextVarName "near.getText"	/* Button to get as text. */
-#define advSearchVarName "near.advSearch"      /* Advanced search */
-#define advSearchClearVarName "near.advSearchClear" 
+#define advFilterVarName "near.advFilter"      /* Advanced search */
+#define advFilterClearVarName "near.advFilterClear" 
 	/* Advanced search clear all button. */
-#define advSearchBrowseVarName "near.advSearchBrowse" 
+#define advFilterBrowseVarName "near.advFilterBrowse" 
 	/* Advanced search browse  button. */
-#define advSearchListVarName "near.advSearchList" 
+#define advFilterListVarName "near.advFilterList" 
 	/* Advanced search submit list. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
@@ -170,9 +170,9 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define resetConfName "near.reset"      /* Restore default column settings. */
 #define colConfigPrefix "near.col."     
 	/* Prefix for stuff set in configuration pages. */
-#define advSearchPrefix "near.as."      
+#define advFilterPrefix "near.as."      
 	/* Prefix for advanced search variables. */
-#define advSearchPrefixI "near.asi."    
+#define advFilterPrefixI "near.asi."    
 	/* Prefix for advanced search variables not forcing search. */
 #define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
@@ -291,66 +291,66 @@ struct genePos *advancedSearchResults(struct column *colList,
 /* Get list of genes that pass all advanced search filters.  
  * If no filters are on this returns all genes. */
 
-char *advSearchName(struct column *col, char *varName);
+char *advFilterName(struct column *col, char *varName);
 /* Return variable name for advanced search. */
 
-char *advSearchVal(struct column *col, char *varName);
+char *advFilterVal(struct column *col, char *varName);
 /* Return value for advanced search variable.  Return NULL if it
  * doesn't exist or if it is "" */
 
-char *advSearchNameI(struct column *col, char *varName);
+char *advFilterNameI(struct column *col, char *varName);
 /* Return name for advanced search that doesn't force search. */
 
-void advSearchRemakeTextVar(struct column *col, char *varName, int size);
+void advFilterRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
 
-void advSearchAnyAllMenu(struct column *col, char *varName, 
+void advFilterAnyAllMenu(struct column *col, char *varName, 
 	boolean defaultAny);
 /* Make a drop-down menu with value all/any. */
 
-boolean advSearchOrLogic(struct column *col, char *varName, 
+boolean advFilterOrLogic(struct column *col, char *varName, 
 	boolean defaultOr);
 /* Return TRUE if user has selected 'all' from any/all menu */
 
-void advSearchKeyUploadButton(struct column *col);
+void advFilterKeyUploadButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyUploadPressed(struct column *colList);
+struct column *advFilterKeyUploadPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyUpload(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyUpload(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
 /* Handle upload keyword list button press in advanced search form. */
 
-void advSearchKeyPasteButton(struct column *col);
+void advFilterKeyPasteButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyPastePressed(struct column *colList);
+struct column *advFilterKeyPastePressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyPaste(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPaste(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
 /* Handle search keyword list button press in advanced search form. */
 
-struct column *advSearchKeyPastedPressed(struct column *colList);
+struct column *advFilterKeyPastedPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyPasted(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPasted(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
 /* Handle search keyword list button press in advanced search form. */
 
-void advSearchKeyClearButton(struct column *col);
+void advFilterKeyClearButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyClearPressed(struct column *colList);
+struct column *advFilterKeyClearPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyClear(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
 /* Handle clear keyword list button press in advanced search form. */
 
@@ -406,10 +406,10 @@ void setupColumnSwissProt(struct column *col, char *parameters);
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
-boolean gotAdvSearch();
+boolean gotAdvFilter();
 /* Return TRUE if advanced search variables are set. */
 
-boolean advSearchColAnySet(struct column *col);
+boolean advFilterColAnySet(struct column *col);
 /* Return TRUE if any of the advanced search variables
  * for this col are set. */
 
