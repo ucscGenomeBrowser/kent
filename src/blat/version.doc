@@ -7,6 +7,10 @@
        standalone blat finds.  Gunnar at Decode found a case,
        AK090418 on 8p23.1 where this caused two good alignments to
        be dropped.
+     o The banded extension phase used when the -fine flag is set
+       now uses affine rather than fixed gap penalties.
+     o PolyA trimming now accommodates a small amount of sequencing
+       error.
 
 31:
      o Fixed a pretty bad memory leak when doing blast type output.
