@@ -11,3 +11,5 @@ O = ${PROG}.o
 ${PROG}: $(O)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/${PROG} $O ../../lib/$(MACHTYPE)/jkhgap.a ../../lib/$(MACHTYPE)/jkweb.a
 
+test: $(PROG)
+	cd test && csh runtest
