@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.23 2004/04/20 00:00:50 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.24 2004/08/30 18:21:33 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -486,7 +486,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (vis == tvFull)
 	{
 	y = ref.score * height1;
-	vgBox(vg, x1 + xOff, yOff + height1 - y, 1, y+1, color);
+	vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
 	}
     else
 	{
@@ -495,7 +495,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((shade < 0) || (shade >= maxShade))
 	    shade = 0;
 	c = shadesOfGray[shade];
-	vgBox(vg, x1 + xOff, yOff, 1, tg->heightPer, c);
+	vgBox(vg, x1 + xOff, yOff, w, tg->heightPer, c);
 	}
     }
 sqlFreeResult(&sr);
