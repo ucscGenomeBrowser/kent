@@ -23,16 +23,15 @@ errAbort(
 void getRna(char *table, char *chrom, char *faOut)
 /* getRna - Get RNA for gene predictions and write to file. */
 {
-struct sqlConnection *conn = hAllocConn();
 int rowOffset;
-struct sqlResult *sr = hChromQuery(conn, table, chrom, NULL, &rowOffset);
 char **row;
-struct genePred *gp;
-struct dyString *dna = dyStringNew(16*1024);
 int i, start, end, size;
-FILE *f = mustOpen(faOut, "w");
+struct genePred *gp;
 struct dnaSeq *seq;
-
+struct dyString *dna = dyStringNew(16*1024);
+FILE *f = mustOpen(faOut, "w");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = hChromQuery(conn, table, chrom, NULL, &rowOffset);
 /* Open file and verify it's in good nibble format. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -47,7 +46,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	end = gp->exonEnds[i];
 	size = end - start;
 	if (size < 0)
-	    warn("%d sized exon in %s\n", gp->name);
+	    warn("%d sized exon in %s\n", size, gp->name);
 	else
 	    {
 	    seq = hDnaFromSeq(chrom, start, end, dnaLower);
