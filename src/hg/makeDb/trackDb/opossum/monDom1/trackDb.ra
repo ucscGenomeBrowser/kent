@@ -20,8 +20,8 @@ searchType bed
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group compGeno
-priority 142
+group genes
+priority 30
 visibility pack
 colorChromDefault off
 type psl protein
