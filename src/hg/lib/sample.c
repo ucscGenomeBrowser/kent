@@ -8,24 +8,6 @@
 #include "jksql.h"
 #include "sample.h"
 
-void sampleStaticLoad(char **row, struct sample *ret)
-/* Load a row from sample table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-int sizeOne,i;
-char *s;
-
-ret->chrom = row[0];
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->name = row[3];
-ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
-ret->sampleCount = sqlUnsigned(row[6]);
-ret->samplePosition = row[7];
-ret->sampleHeight = row[8];
-}
-
 struct sample *sampleLoad(char **row)
 /* Load a sample from row fetched with select * from sample
  * from database.  Dispose of this with sampleFree(). */
@@ -35,15 +17,17 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
+ret->sampleCount = sqlUnsigned(row[6]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->sampleCount = sqlUnsigned(row[6]);
-ret->samplePosition = cloneString(row[7]);
-ret->sampleHeight = cloneString(row[8]);
+sqlUnsignedDynamicArray(row[7], &ret->samplePosition, &sizeOne);
+assert(sizeOne == ret->sampleCount);
+sqlUnsignedDynamicArray(row[8], &ret->sampleHeight, &sizeOne);
+assert(sizeOne == ret->sampleCount);
 return ret;
 }
 
@@ -107,8 +91,22 @@ ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->sampleCount = sqlUnsignedComma(&s);
-ret->samplePosition = sqlStringComma(&s);
-ret->sampleHeight = sqlStringComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->samplePosition, ret->sampleCount);
+for (i=0; i<ret->sampleCount; ++i)
+    {
+    ret->samplePosition[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->sampleHeight, ret->sampleCount);
+for (i=0; i<ret->sampleCount; ++i)
+    {
+    ret->sampleHeight[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 *pS = s;
 return ret;
 }
@@ -164,13 +162,21 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->sampleCount);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->samplePosition);
-if (sep == ',') fputc('"',f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->sampleCount; ++i)
+    {
+    fprintf(f, "%u", el->samplePosition[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->sampleHeight);
-if (sep == ',') fputc('"',f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->sampleCount; ++i)
+    {
+    fprintf(f, "%u", el->sampleHeight[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
 

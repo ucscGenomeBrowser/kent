@@ -13,7 +13,7 @@ CREATE TABLE sample (
     strand char(2) not null,	# # + or -
     sampleCount int unsigned not null,	# number of samples total
     samplePosition longblob not null,	# bases relative to chromStart (x-values)
-    sampleHeight longblob not null,	# the height each pixel is drawn to [0,1000] (y-values)
+    sampleHeight longblob not null,	# the height each pixel is drawn to [0,1000]
               #Indices
     PRIMARY KEY(chrom)
 );
