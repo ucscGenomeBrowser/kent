@@ -158,13 +158,45 @@ endControlGrid(&cg);
 }
 
 
+void GCwiggleUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
+{
+int GCwiggleHeightPer = atoi(cartUsualString(cart, "GCwiggle.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "GCwiggle.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "GCwiggle.anti.alias", "on");
+char *fill = cartUsualString(cart, "GCwiggle.fill", "1");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("GCwiggle.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("GCwiggle.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("GCwiggle.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("GCwiggle.fill", "1", sameString(fill, "1"));
+printf(" on ");
+cgiMakeRadioButton("GCwiggle.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("GCwiggle.heightPer", GCwiggleHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+
+
 void chimpUi(struct trackDb *tdb)
 /* put up UI for the chimp track (a sample track)*/
 {
-int chimpHeightPer = atoi(cartUsualString(cart, "chimp.heightPer", "10"));
+int chimpHeightPer = atoi(cartUsualString(cart, "chimp.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "chimp.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "chimp.anti.alias", "on");
-char *fill = cartUsualString(cart, "chimp.fill", "0");
+char *fill = cartUsualString(cart, "chimp.fill", "1");
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("chimp.linear.interp", interpolate );
@@ -192,10 +224,10 @@ printf("&nbsp;pixels");
 void wiggleUi(struct trackDb *tdb)
 /* put up UI for the wiggle track for representing curves inside * tracks */
 {
-int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
+int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "wiggle.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
-char *fill = cartUsualString(cart, "wiggle.fill", "0");
+char *fill = cartUsualString(cart, "wiggle.fill", "1");
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("wiggle.linear.interp", interpolate );
@@ -268,6 +300,8 @@ else if (sameString(track, "wiggle"))
     wiggleUi(tdb);
 else if (sameString(track, "chimp"))
     chimpUi(tdb);
+else if (sameString(track, "GCwiggle"))
+    GCwiggleUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 }
