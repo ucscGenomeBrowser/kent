@@ -1,7 +1,8 @@
 This file describes how we made the browser database on 
 NCBI build 30 (July, 2002 freeze)
 
-(The numbered stuff was brought in from build.ncbi.doc)
+(The numbered stuff was brought in from
+ /cluster/store3/gs.13/build30/build.ncbi.doc)
 
 HOW TO BUILD A ASSEMBLY FROM NCBI FILES
 ---------------------------------------
@@ -9,34 +10,35 @@ HOW TO BUILD A ASSEMBLY FROM NCBI FILES
 NOTE: It is best to run most of this stuff on kkstore since it
 is not adverse to handling files > 2Gb
 
-1) Download seq_contig.md, ncbi_buildXX.agp,
-        contig_overlaps.agp and contig fa file into directory.
+0) Make gs.XX directory, gs.XX/buildXX directory, and gs.XX/ffa directory. Copy this
+document into gs.XX/buildXX
 
-2) Unpack contig fa file into ../ffa/ncbi_buildXX.fa
+1) Download seq_contig.md, ncbi_buildXX.agp, contig_overlaps.agp and contig fa file 
+into gs.XX/buildXX/ directory. 
 
-#2.1) Extract Hs to NT conversion from .fa files to convert .agp file (NOT NEEDED ANYMORE)
-#
-#       /cluster/bin/scripts/extractHs ncbi_buildXX.fa
-#
-#2.2) Create allcontig.agp.buildXX file (NOT NEEDED ANYMORE)#
-#
-#       /cluster/bin/scripts/convertHsAgp hs.to.nt <agp file> > allcontig.agp.buildXX
+*** For build30, files split into reference.agp/reference.fa (main O&O), DR51.agp/DR51.fa,
+    and DR52.agp/DR52.fa. (alternate versions of MHC region).  These were concatenated 
+    to get the ncbi_build30.agp and ncbi_build30.fa
 
-2.3) Sanity check things with
+2) Move and unpack contig fa file into ../ffa/ncbi_buildXX.fa
+
+2.3) Sanity check things with (in this directory)
         ~kent/bin/i386/checkYbr ncbi_buildXX.agp ../ffa/ncbi_buildXX.fa seq_contig.md
      report any errors back to Richa and Greg at NCBI.
 
 3) Convert fa files into UCSC style fa files and place in "contigs" directory
-        mkdir contigs
-        /cluster/bin/i386/faNcbiToUcsc -split -ntLast ncbi_buildXX.fa contigs
+inside the gs.XX/buildXX directory 
+
+	mkdir contigs
+	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_buildXX.fa contigs
 
 4) Create lift files (this will create chromosome directory structure) and inserts file
 
-        /cluster/bin/scripts/createNcbiLifts seq_contig.md .
+	/cluster/bin/scripts/createNcbiLifts seq_contig.md .
 
 5) Create contig agp files (will create contig directory structure)
-
-        /cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_buildXX.agp .
+	
+	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_buildXX.agp .
 
 5.1) Create contig gl files
 
@@ -44,35 +46,37 @@ is not adverse to handling files > 2Gb
 
 6) Create chromsome agp files
 
-        /cluster/bin/scripts/createNcbiChrAgp .
+	/cluster/bin/scripts/createNcbiChrAgp .
 
 6.1) Copy over jkStuff
-        mkdir jkStuff
-        cp ../../gs.11/build28/jkStuff/*.sh jkStuff
-        cp ../../gs.11/build28/jkStuff/*.csh jkStuff
-        cp ../../gs.11/build28/jkStuff/*.gsub jkStuff
+	mkdir jkStuff
+        cp /cluster/store1/gs.12/build29/jkStuff/*.sh jkStuff
+        cp /cluster/store1/gs.12/build29/jkStuff/*.csh jkStuff
+        cp /cluster/store1/gs.12/build29/jkStuff/*.gsub jkStuff        
 
-6.2) Patch in size of chromosome Y into Y/lift/ordered.lft
-     by grabbing it from the last line of Y/chrY.agp
+6.2) Patch in size of chromosome Y into Y/lift/ordered.lft 
+     by grabbing it from the last line of Y/chrY.agp (not needed for build30)
 
 6.3) Create chromosome gl files
-
+  
         jkStuff/liftGl.sh contig.gl
 
-7) Distribute contig .fa and .out files to appropriate directory (assumes all files
+7) Distribute contig .fa to appropriate directory (assumes all files
    are in "contigs" directory).
 
-        /cluster/bin/scripts/distNcbiCtgFa contigs .
+	/cluster/bin/scripts/distNcbiCtgFa contigs .
 
 8) Reverse complement NT contig fa files that are flipped in the assembly
    (uses faRc program)
 
-        /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
+	/cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
-REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
+(NOTE: STS placements may be done at this point before repeat masking and 
+using the .fa's on NFS for QC analysis - all other placements should be 
+done after repeat masking and distributing to cluster nodes)
 
-For the NCBI assembly we repeat mask on the sensitive mode setting.
-Patrick Gavin did this, and perhaps will fill in the details later.
+9) Generate RepeatMasked files for contigs (Patrick)
+   For the NCBI assembly we repeat mask on the sensitive mode setting.
 
         cd ~/oo
         /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
@@ -83,31 +87,26 @@ Patrick Gavin did this, and perhaps will fill in the details later.
         make sure jobs don't die right away
         para push
 
-Then lift these up to chromosome coordinates with
-    cd ~/oo
-    tcsh jkStuff/liftOut2.sh
+10) Lift up RepeatMask .out files to chromosome coordinates via
+       cd ~/oo
+       tcsh jkStuff/liftOut2.sh
+    Then load the .out files into the database with:
+       hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
 
-Generate contig and chromosome level masked and unmasked files via:
-    tcsh jkStuff/chrFa.sh
-    tcsh jkStuff/makeFaMasked.sh
+11) Generate contig and chromosome level masked and unmasked files via:
+       tcsh jkStuff/chrFa.sh
+       tcsh jkStuff/makeFaMasked.sh
 
-*** Optional stuff from build.ncbi.doc ***
+12) Copy all contig and chrom fa files to /scratch on kkstore to get ready for
+    cluster jobs, and ask to propagate to nodes
 
-Copy all contig and chrom fa files to /scratch on kkstore to get ready for
-cluster jobs, and ask to propagate to nodes
+	/cluster/bin/scripts/cpNcbiFaScratch . </scratch/hg/gs.X/>
 
-    /cluster/bin/scripts/cpNcbiFaScratch . </scratch/hg/gs.X/>
-
-Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
-Note: this ncbi.lift will not lift floating contigs to chr_random coords, but it will show the strand orientation of the floating contigs (grep for '|').
-    mdToNcbiLift seq_contig_randoms.md jkStuff/ncbi.lft
-
-*** End optional stuff ***
-
-Then load the .out files into the database with:
-    ssh hgwdev
-    cd ~/oo
-    hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
+13) Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
+    Note: this ncbi.lift will not lift floating contigs to chr_random coords,
+    but it will show the strand orientation of the floating contigs 
+    (grep for '|').
+	mdToNcbiLift seq_contig_randoms.md jkStuff/ncbi.lft 
 
 
 CREATING DATABASE  (DONE)
@@ -226,7 +225,7 @@ o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
-      Make sure that /scratch/hg/gs.13/build30/contigs is loaded
+      Make sure that /scratch/hg/gs.13/build30/{?,??}/*/ are loaded
       with NT_*.fa and pushed to the cluster nodes.
 
           ssh kk
@@ -430,31 +429,42 @@ o - Load this into the database as so
 	hgLoadBed hg12 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (TODO)
-   
+PRODUCING GENSCAN PREDICTIONS (IN PROGRESS)
+	mkdir -p ~/oo/bed/genscan
+	cd ~/oo/bed/genscan
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
-        Load up the cluster with hard-masked contigs in
+        Put hard-masked contigs in
 		/cluster/store1/gs.13/build30/bed/genscan/mContigs
 	(For hg12, the .masked files were not saved during repeat masking.  
 	So the contig (.fa) files in /cluster/store1/gs.13/build30/? and ?? 
 	were processed to convert all lower case bases into N and named 
 	as *.fa.masked and placed under genscan/mContigs).
 
+		mkdir -p ~/oo/bed/genscan/mContigs
+		cd ~/oo/bed/genscan/mContigs
+		foreach f (/cluster/store1/gs.13/build30/?/*/*.fa \
+			   /cluster/store1/gs.13/build30/??/*/*.fa)
+		  set m = $f:t.masked
+		  tr 'abcdghkmnrstvwy' 'NNNNNNNNNNNNNNN' < $f > $m
+		end
+
         Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
         cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
         big cluster, due to limitation of memory and swap space on each
         processing node).
-                cd ~/oo
-                cd bed/genscan
+                cd ~/oo/bed/genscan
         Make 3 subdirectories for genscan to put their output files in
                 mkdir gtf pep subopt
         Generate a list file, genome.list, of all the contigs
-		ls -1S ./mContigs/*.masked > genome.list
-        
-	Edit genome.list to remove jobs on files of "*.fa.masked" which
-        have pure Ns due to heterochromatin (unsequencable stuff) and 
-	will cause genscan to run forever.
+	*that do not have pure Ns* (due to heterochromatin, unsequencable 
+        stuff) which would cause genscan to run forever.
+		rm -f genome.list
+		touch genome.list
+		foreach f (./mContigs/*.masked)
+		  egrep '[ACGT]' $f > /dev/null
+		  if ($status == 0) echo $f >> genome.list
+		end
         
 	Create template file, gsub, for gensub2.  For example (3 lines file):
                 #LOOP
@@ -482,7 +492,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
                 para check
 
 o - Convert these to chromosome level files as so:     
-     cd ~/mm
+     cd ~/oo
      cd bed/genscan
      liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
      liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
@@ -490,7 +500,7 @@ o - Convert these to chromosome level files as so:
 
 o - Load into the database as so:
      ssh hgwdev
-     cd ~/mm/bed/genscan
+     cd ~/oo/bed/genscan
      ldHgGene hg12 genscan genscan.gtf
      hgPepPred hg12 generic genscanPep genscan.pep
      hgLoadBed hg12 genscanSubopt genscanSubopt.bed
@@ -541,12 +551,12 @@ o - Create directory structure to hold information for these tracks
 	mkdir gs.13/build30/cytobands
 
 o - Copy in Makefiles from previous assembly
-	cp gs.11/build28/Makefile gs.13/build30
-	cp gs.11/build28/sts/Makefile gs.13/build30/sts
-	cp gs.11/build28/primers/Makefile gs.13/build30/primers
-	cp gs.11/build28/bacends/Makefile gs.13/build30/bacends
-	cp gs.11/build28/fish/Makefile gs.13/build30/fish
-	cp gs.11/build28/cytobands/Makefile gs.13/build30/cytobands
+	cp gs.12/build29/Makefile gs.13/build30
+	cp gs.12/build29/sts/Makefile gs.13/build30/sts
+	cp gs.12/build29/primers/Makefile gs.13/build30/primers
+	cp gs.12/build29/bacends/Makefile gs.13/build30/bacends
+	cp gs.12/build29/fish/Makefile gs.13/build30/fish
+	cp gs.12/build29/cytobands/Makefile gs.13/build30/cytobands
 
 o - Update all Makefiles with latest OOVERS and GSVERS
 
@@ -759,6 +769,38 @@ CREATE CHROMOSOME REPORTS
 CREATE STS MAP COMPARISON PLOTS
 
 
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (IN PROGRESS)
+
+Make sure that the NT*.fa files are lower-case repeat masked.
+Do something much like the simpleRepeat track, but only
+masking out stuff with a period of 12 or less as so:
+    ssh kk
+    mkdir -p ~/oo/bed/trfMask
+    cd ~/oo/bed/trfMask
+    cp ~/hg11/bed/trfMask/gsub .
+    mkdir trf
+    ls -1S /scratch/hg/gs.13/build30/{?,??}/*/*.fa > genome.lst
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+When that is done do:
+    ssh kkstore
+    mkdir /scratch/hg/gs.13/build30/trfFa
+    cd ~/oo
+NOTE:Below is a tcsh script
+    foreach i (? ??)
+	cd $i
+        foreach j (NT*)
+	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.13/build30/trfFa/$j.fa.trf
+	echo done $i/$j
+	end
+	cd ..
+    end
+Then ask admins to do a binrsync. TODO
+
+
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
 o - Start with the mouse assembly in 1 Mb chunks lower-case
@@ -805,7 +847,7 @@ cp -R /cluster/store2/gs.13/build30/bed/trfFa /scratch/hg/gs.13/build30/trfFa
     (The rm commands above indicate that splitFile needs a fix - they are zero length).
 
 Copy the old gsub here
-cp /cluster/store1/gs.11/build28/bed/blatMouse/gsub .
+cp /cluster/store1/gs.12/build29/bed/blatMouse/gsub .
     Finally generate the job list with
         gensub2 human.lst mouse.lst gsub spec
 
@@ -859,42 +901,6 @@ o - Load best in genome into database as so:
 	ssh hgwdev
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg12 *.psl
-
-
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TODO)
-
-Make sure that the NT*.fa files are lower-case repeat masked.
-Do something much like the simpleRepeat track, but only
-masking out stuff with a period of 12 or less as so:
-    ssh kk
-    cd ~/oo/bed
-    mkdir trfMask
-    cd trfMask
-
-# I couldn't find a valid gsub according to these instructions so I used the one
-#  from /cluster/store1/gs.13/build30.bad/bed/trfMask
-#  instead of doing ->  cp ~/lastOo/bed/trfMask/gsub ./gsub
-    mkdir trf
-    ls -1S /scratch/hg/gs.13/build30/contig/*.fa > genome.lst
-    gensub2 genome.lst single gsub spec
-    para create spec
-    para try
-    para check
-    para push
-When that is done do:
-    ssh kkstore
-    mkdir /scratch/hg/gs.13/build30/trfFa
-    cd ~/oo
-NOTE:Below is a tcsh script
-    foreach i (? ??)
-	cd $i
-        foreach j (NT*)
-	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.13/build30/trfFa/$j.fa.trf
-	echo done $i/$j
-	end
-	cd ..
-    end
-Then ask admins to do a binrsync. TODO
 
 
 PRODUCING CROSS_SPECIES mRNA ALIGNMENTS TODO
@@ -1154,7 +1160,7 @@ o - Load Ensembl peptides:
      wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
 
      gunzip Homo_sapiens.pep.fa.gz
-     
+
      Substitute ENST for ENSP in ensemble.pep with subs
      edit subs.in to read: ENSP|ENST
 
