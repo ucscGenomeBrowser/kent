@@ -642,7 +642,7 @@ if( abs(slope) < 1 )
         else
             pt1 = (mult * yLower) + pt1Home;
 
-        while( pt1 < pt1Base - mult )
+        while( pt1 < pt1Base - (sign(slope)*mult) )
             {
             pt1 += sign(slope)*mult;
             pt1[j] = colors[3];
@@ -662,14 +662,14 @@ else
         pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
         pLower = (int)colRange - pUpper;
 
-        while( pt1 < pt1Base - mult )
+        while( pt1 < pt1Base - (sign(slope)*mult) )
             {
             pt1 += sign(slope)*mult;
             pt1[yLower] = colors[3];
             }
 
         if( prevX != yUpper && yLower != yUpper  )
-            while( pt1 < pt1Base )
+            while( pt1 < pt1Base - (sign(slope)*mult) )
                 {
                 pt1 += sign(slope)*mult;
                 pt1[yUpper] = colors[3];
