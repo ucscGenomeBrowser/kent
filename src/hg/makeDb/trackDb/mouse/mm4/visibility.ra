@@ -1,0 +1,26 @@
+track           cpgIsland
+visibility      dense
+
+track           genscan
+visibility      dense
+
+track           gcPercent
+visibility      dense
+
+track           simpleRepeat
+visibility      dense
+
+track           mrna
+visibility      pack
+
+track           gold
+visibility      pack
+
+track           gap
+visibility      dense
+
+track           rmsk
+visibility      dense
+
+track           refGene
+visibility      pack
