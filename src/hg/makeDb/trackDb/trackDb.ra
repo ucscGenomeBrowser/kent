@@ -374,7 +374,7 @@ color 0,100,100
 type genePred twinscanPep
 
 track pseudoUcsc
-shortLabel Ucsc pseudo
+shortLabel UCSC Pseudo
 longLabel Processed Pseudogene Locus Based on Blastz Chains UCSC
 group genes
 priority 45
@@ -385,7 +385,7 @@ spectrum on
 type bed 5 .
 
 track ucscFromMouse
-shortLabel ucsc mm3
+shortLabel UCSC Mm3
 longLabel UCSC Gene Predictions from Known Mouse Genes Mapped to Human
 group genes
 priority 45
@@ -551,7 +551,7 @@ type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
-shortLabel mRNA/EST/pseud
+shortLabel mRNA/EST/Pseud
 longLabel Blastz Alignments of GenBank mRNA Including Pseudogenes and All ESTs
 group rna
 priority 66
@@ -560,7 +560,7 @@ color 170,128,128
 type bed 3
 
 track anyMrnaCov
-shortLabel mRNA/pseud
+shortLabel mRNA/Pseud
 longLabel Blastz Alignments of GenBank mRNA Including Pseudogenes
 group rna
 priority 67
@@ -614,16 +614,16 @@ color 178,34,34
 type bed 9
 
 track altGraph
-shortLabel altGraph
-longLabel altGraph
+shortLabel AltGraph
+longLabel AltGraph
 group rna
 priority 73
 visibility hide
 type psl
 
 track altGraphX
-shortLabel altGraphX
-longLabel altGraphX
+shortLabel AltGraphX
+longLabel AltGraphX
 group rna
 priority 74
 visibility hide
@@ -1072,7 +1072,7 @@ visibility hide
 type bed 4 +
 
 track olly25
-shortLabel cross-hyb3 25
+shortLabel Cross-hyb3 25
 longLabel Cross-hybridization Counts for Off-by-3 25-mers 
 group x
 priority 148.5
@@ -1080,7 +1080,7 @@ visibility hide
 type sample 0 5 0.199
 
 track olly2
-shortLabel cross-hyb2 25
+shortLabel Cross-hyb2 25
 longLabel Cross-hybridization for Off-by-2 25-mers 
 group x
 priority 148.6
@@ -1105,7 +1105,7 @@ visibility hide
 type genePred
 
 track gpcrUcsc
-shortLabel Gpcr Ucsc
+shortLabel Gpcr UCSC
 longLabel Gpcr Predictions Based on Synteny
 group x
 priority 150
