@@ -1625,3 +1625,132 @@ done
     featureBits mm5 blastzMonDom1
     # 486216407 bases of 2866216770 (16.964%) in intersection
 
+# MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
+    ssh eieio
+    mkdir -p /cluster/data/monDom1/blastDb
+    cd /cluster/data/monDom1/blastDb
+    faSplit sequence ../broad.mit.edu/scaffolds.fa.unmasked 500 x 
+    for i in x*
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/monDom1/blastDb
+    cp /cluster/data/monDom1/blastDb/* /iscratch/i/monDom1/blastDb
+    (iSync) > sync.out
+    exit # back to eieio
+
+    mkdir -p /cluster/data/monDom1/bed/tblastn.hg17KG
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/monDom1/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
+
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(350000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(350000/499) = 60.102411
+    mkdir -p /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa
+    split -l 65 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/monDom1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 323851 of 323851 jobs
+# CPU time in finished jobs:  113015986s 1883599.76m 31393.33h 1308.06d  3.584 y
+# IO & Wait Time:               2732896s   45548.27m   759.14h   31.63d  0.087 y
+# Average job time:                 357s       5.96m     0.10h    0.00d
+# Longest job:                     4911s      81.85m     1.36h    0.06d
+# Submission to last job:        274144s    4569.07m    76.15h    3.17d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 649 of 649 jobs
+# CPU time in finished jobs:       4726s      78.76m     1.31h    0.05d  0.000 y
+# IO & Wait Time:                 76824s    1280.41m    21.34h    0.89d  0.002 y
+# Average job time:                 126s       2.09m     0.03h    0.00d
+# Longest job:                      312s       5.20m     0.09h    0.00d
+# Submission to last job:          7487s     124.78m     2.08h    0.09d
+
+    exit
+    # back to eieio
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/monDom1/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/tblastn.hg17KG
+    hgLoadPsl monDom1 blastHg17KG.psl
+
+    # back to eieio
+    rm -rf blastOut
+# End tblastn
