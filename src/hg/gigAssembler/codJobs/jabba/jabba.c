@@ -44,6 +44,8 @@ errAbort(
   "   List jobs that crashed or failed output checks\n"
   "jabba failed batch.hut\n"
   "   List jobs that crashed or hung\n"
+  "jabba problems batch.hut\n"
+  "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
   "jabba time batch.hut\n"
   "   List timing information\n"
   );
@@ -179,76 +181,83 @@ if ((f = fopen(file, "rb")) != NULL)
 return fi;
 }
 
-int checkOne(struct job *job, char *when, struct hash *hash)
+int doOneCheck(struct check *check, struct hash *hash, FILE *f)
+/* Do one check.  Return error count from check. */
+{
+struct fileStatus *fi;
+char *file = check->file;
+char *what = check->what;
+
+if ((fi = hashFindVal(hash, file)) == NULL)
+    {
+    fi = getFileStatus(file);
+    hashAdd(hash, file, fi);
+    }
+if (!fi->reported)
+    {
+    if (!fi->exists)
+	{
+	fprintf(f, "%s does not exist\n", file);
+	fi->reported = TRUE;
+	return 1;
+	}
+    if (sameWord(what, "exists+"))
+	{
+	if (!fi->hasData)
+	    {
+	    fprintf(f, "%s is empty\n", file);
+	    fi->reported = TRUE;
+	    return 1;
+	    }
+	}
+    else if (sameWord(what, "line"))
+	{
+	if (fi->hasData && !fi->completeLastLine)
+	    {
+	    fprintf(f, "%s has an incomplete last line\n", file);
+	    fi->reported = TRUE;
+	    return 1;
+	    }
+	}
+    else if (sameWord(what, "line+"))
+	{
+	if (!fi->hasData)
+	    {
+	    fprintf(f, "%s is empty\n", file);
+	    fi->reported = TRUE;
+	    return 1;
+	    }
+	else if (!fi->completeLastLine)
+	    {
+	    fprintf(f, "%s has an incomplete last line\n", file);
+	    fi->reported = TRUE;
+	    return 1;
+	    }
+	}
+    else if (sameString(what, "exists"))
+	{
+	/* Check already made. */
+	}
+    else
+	{
+	warn("Unknown check '%s'", what);
+	}
+    }
+return 0;
+}
+
+int checkOneJob(struct job *job, char *when, struct hash *hash)
 /* Perform checks on one job if checks not already in hash. 
  * Returns number of errors. */
 {
 int errCount = 0;
 struct check *check;
-struct fileStatus *fi;
 
 for (check = job->checkList; check != NULL; check = check->next)
     {
     if (sameWord(when, check->when))
 	{
-	char *file = check->file;
-	char *what = check->what;
-	if ((fi = hashFindVal(hash, file)) == NULL)
-	    {
-	    fi = getFileStatus(file);
-	    hashAdd(hash, file, fi);
-	    }
-	if (!fi->reported)
-	    {
-	    if (!fi->exists)
-		{
-		warn("%s does not exist", file);
-		fi->reported = TRUE;
-		++errCount;
-		continue;
-		}
-	    if (sameWord(what, "exists+"))
-		{
-		if (!fi->hasData)
-		    {
-		    warn("%s is empty", file);
-		    fi->reported = TRUE;
-		    ++errCount;
-		    }
-		}
-	    else if (sameWord(what, "line"))
-		{
-		if (fi->hasData && !fi->completeLastLine)
-		    {
-		    warn("%s has an incomplete last line", file);
-		    fi->reported = TRUE;
-		    ++errCount;
-		    }
-		}
-	    else if (sameWord(what, "line+"))
-		{
-		if (!fi->hasData)
-		    {
-		    warn("%s is empty", file);
-		    fi->reported = TRUE;
-		    ++errCount;
-		    }
-		else if (!fi->completeLastLine)
-		    {
-		    warn("%s has an incomplete last line", file);
-		    fi->reported = TRUE;
-		    ++errCount;
-		    }
-		}
-	    else if (sameString(what, "exists"))
-		{
-		/* Check already made. */
-		}
-	    else
-		{
-		warn("Unknown check '%s'", what);
-		}
-	    }
+	errCount += doOneCheck(check, hash, stderr);
 	}
     }
 return errCount;
@@ -262,7 +271,7 @@ struct job *job;
 struct hash *hash = newHash(0);
 
 for (job = db->jobList; job != NULL; job = job->next)
-    errCount += checkOne(job, when, hash);
+    errCount += checkOneJob(job, when, hash);
 if (errCount > 0)
     errAbort("%d total errors in file check", errCount);
 freeHashAndVals(&hash);
@@ -529,7 +538,7 @@ return dateToSeconds(nowAsString());
 }
 
 void parseRunJobOutput(char *fileName, char **retStartTime, char **retEndTime, float *retCpuTime,
-	int *retRet, boolean *gotRet, boolean *retTrackingError)
+	int *retRet, boolean *gotRet, boolean *retTrackingError, char host[128])
 /* Parse a run job output file.  Might have trouble if the program output
  * is horribly complex. */
 {
@@ -539,6 +548,7 @@ int wordCount;
 char *startPattern = "Start time: ";
 char *endPattern = "Finish time: ";
 char *returnPattern = "Return value = ";
+char *hostPattern = "Executing host: ";
 boolean gotStart = FALSE, gotEnd = FALSE;
 boolean gotCpu = FALSE, gotReturn = FALSE;
 
@@ -566,6 +576,12 @@ while (lineFileNext(lf, &line, NULL))
 	*retEndTime = cloneString(trimSpaces(line));
 	gotEnd = TRUE;
 	break;
+	}
+    else if (startsWith(hostPattern, line))
+        {
+	line += strlen(hostPattern);
+	trimSpaces(line);
+	strcpy(host, line);
 	}
     else if (isdigit(line[0]) )
 	{
@@ -622,6 +638,7 @@ long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
 long duration;
 struct hash *checkHash = newHash(0);
+char host[128];
 
 for (job=db->jobList; job != NULL; job = job->next)
     {
@@ -633,7 +650,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    {
 	    char *startTime, *endTime;
 	    parseRunJobOutput(sub->outFile, &startTime, &endTime, 
-	        &sub->cpuTime, &sub->retVal, &gotRet, &trackingError);
+	        &sub->cpuTime, &sub->retVal, &gotRet, &trackingError, host);
 	    if (trackingError)
 	        {
 		long subTime, curTime;
@@ -652,7 +669,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 		sub->gotRetVal = gotRet;
 		if (gotRet)
 		    {
-		    if (sub->retVal == 0 && checkOne(job, "out", checkHash) == 0)
+		    if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
 			sub->ranOk = TRUE;
 		    else
 			sub->crashed = TRUE;
@@ -822,6 +839,57 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
+void problemReport(struct job *job, struct submission *sub, char *type)
+/* Print report on one problem. */
+{
+struct check *check;
+struct hash *hash = newHash(0);
+char *startTime, *endTime;
+float cpuTime;
+int retVal;
+boolean trackingError, gotRet;
+char host[128];
+
+printf("%s\n", job->command);
+printf("failure type: %s\n", type);
+parseRunJobOutput(sub->outFile, &startTime, &endTime, 
+    &cpuTime, &retVal, &gotRet, &trackingError, host);
+printf("host: %s\n", host);
+printf("start time: %s\n", startTime);
+if (gotRet)
+    printf("return: %d\n", retVal);
+for (check = job->checkList; check != NULL; check = check->next)
+    {
+    doOneCheck(check, hash, stdout);
+    }
+printf("\n");
+hashFree(&hash);
+}
+
+void jabbaProblems(char *batch)
+/*  List jobs that had problems (even if successfully rerun).  Includes host info */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+struct submission *sub;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    for (sub = job->submissionList; sub != NULL; sub = sub->next)
+	{
+	if (sub->hung)
+	    problemReport(job, sub, "hung");
+	else if (sub->slow)
+	    problemReport(job, sub, "slow");
+	else if (needsRerun(sub))
+	    problemReport(job, sub, "crash");
+	}
+    }
+}
+
+
 void jabbaStop(char *batch)
 /* Stop batch of jobs. */
 {
@@ -881,23 +949,22 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   float cpuTime;
 	   int retVal;
 	   boolean trackingError, gotRet;
+	   char host[128];
 	   parseRunJobOutput(sub->outFile, &startTime, &endTime, 
-	        &cpuTime, &retVal, &gotRet, &trackingError);
+	        &cpuTime, &retVal, &gotRet, &trackingError, host);
 	   if (gotRet && endTime != NULL)
 	       {
 	       ++timedCount;
 	       totalCpu += cpuTime;
 	       oneWall = dateToSeconds(endTime) - dateToSeconds(startTime);
-	       if (oneWall < cpuTime - 1.0) uglyf("%f vs %f in %s\n", oneWall, cpuTime, sub->id);
 	       totalWall += oneWall;
 	       if (oneWall > longestWall) longestWall = oneWall;
 	       }
 	   }
 	}
     }
-printf("Completed %d of %d jobs.  CPU %2.1fs IO %2.1fs longest %2.1fs\n",
-     timedCount, jobCount, totalCpu, totalWall-totalCpu, longestWall);
-printf("totalWall = %f\n", totalWall);
+printf("Completed %d of %d jobs. CPU %2.1f IO %2.1f ave %2.1f longest %2.1f\n",
+     timedCount, jobCount, totalCpu, totalWall-totalCpu, totalWall/timedCount, longestWall);
 }
 
 int main(int argc, char *argv[])
@@ -951,6 +1018,10 @@ else if (sameString(command, "crashed"))
 else if (sameString(command, "failed"))
     {
     jabbaListFailed(batch, TRUE, TRUE);
+    }
+else if (sameString(command, "problems"))
+    {
+    jabbaProblems(batch);
     }
 else if (sameString(command, "time"))
     {
