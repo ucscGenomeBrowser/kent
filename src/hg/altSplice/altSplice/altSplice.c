@@ -73,7 +73,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.18 2005/01/27 02:22:23 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.19 2005/01/27 18:26:25 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -316,11 +316,7 @@ if(mcList == NULL)
     freeGgMrnaInput(&ci);
     return NULL;
     }    
-/* Get the largest cluster, gene predictions come sorted
- * smallest first. By looking at only the largest cluster
- * we can thus avoid duplicates. */
-//slSort(&mcList, mcLargestFirstCmp);
-mc = mcList;
+
 clusterCount++;
 for(mc = mcList; mc != NULL; mc = mc->next)
     {
@@ -634,7 +630,6 @@ if(slCount(pslList) == 0)
 expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 
 /* get the sequence */
-/* genoSeq = hDnaFromSeq(gp->chrom, chromStart, chromEnd, dnaLower);*/
 genoSeq = dnaFromChrom(chrom, chromStart, chromEnd, dnaLower);
 
 for(psl = pslList; psl != NULL; psl = pslNext)
@@ -777,7 +772,6 @@ for(gp = gpList; gp != NULL & count < 5; )
     if (memTest != TRUE) 
 	gp = gp->next;
     }
-warn("%d gene loci led to %d clusters", slCount(gpList), clusterCount);
 genePredFreeList(&gpList);
 hFreeConn(&conn);
 /* uglyf("%d genePredictions with %d clusters, %d cassette exons, %d of are not mod 3.\n", */
