@@ -8,7 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = checkTableCoords
 O = $A.o 
 
-all: compile install
+all: compile install test
+
 compile: $A
 
 $A: $O $(MYLIBS)
@@ -17,3 +18,11 @@ $A: $O $(MYLIBS)
 install:
 	${STRIP} $A${EXE}
 	mv $A $(HOME)/bin/$(MACHTYPE)/$A
+
+test:
+	cd tests; make
+
+clean:
+	-rm -f $A *.o
+	cd tests; make clean
+
