@@ -823,45 +823,86 @@ color 150,100,30
 visibility hide
 type bed 4 .
 
-track encodeStableTransfection
-shortLabel Stable Transfect
-longLabel Encyclopedia of DNA Elements (ENCODE) Stable Transfection
+track encodeErgeSummary
+shortLabel Summary
+longLabel ENCODE Summary
 group encode
 priority 170.1
-color 100,50,0
-visibility hide
-type bed 12 .
-url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
+color 100,100,0
+visibility pack
+type bed 12+ .
 
-track encodeTransientTransfection
-shortLabel Trans Transfect
-longLabel Encyclopedia of DNA Elements (ENCODE) Transient Transfection
+track encodeErgeDNAseI
+shortLabel DNAse I 
+longLabel ENCODE DNAse I Hypersensitivity
 group encode
 priority 170.2
-color 100,50,0
-visibility hide
-type bed 12 .
-url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
+color 0,55,255
+visibility pack
+type bed 12+ .
 
-track encodeFootprint
-shortLabel in vitro Footprint
-longLabel Encyclopedia of DNA Elements (ENCODE) in vitro Footprint
+track encodeErgeBinding
+shortLabel DNA Binding
+longLabel ENCODE DNA Binding
 group encode
 priority 170.3
-color 100,50,0
-visibility hide
-type bed 11 .
-url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
+color 0,55,255
+visibility pack
+type bed 12+ .
 
-track encodeBinding
-shortLabel DNA Binding Assay
-longLabel Encyclopedia of DNA Elements (ENCODE) Binding Assay
+track encodeErgeInVitroFoot
+shortLabel In Vitro Foot
+longLabel ENCODE In Vitro Footprinting
 group encode
 priority 170.4
+color 0,55,255
+visibility pack
+type bed 12+ .
+
+track encodeErge5race
+shortLabel 5' RACE 
+longLabel ENCODE 5' RACE Promoters
+group encode
+priority 170.5
+color 0,55,255
+visibility pack
+type bed 12+ .
+
+track encodeErgeMethProm
+shortLabel Meth Promoter
+longLabel ENCODE Methylated Promoters
+group encode
+priority 170.6
+color 0,55,255
+visibility pack
+type bed 12+ .
+
+track encodeErgeExpProm
+shortLabel Experim Promoter
+longLabel ENCODE Experimental Promoters
+group encode
+priority 170.7
+color 0,55,255
+visibility pack
+type bed 12+ .
+
+track encodeErgeTransTransf
+shortLabel Trans Transfect
+longLabel ENCODE Transient Transfection
+group encode
+priority 170.8
 color 100,50,0
-visibility hide
-type bed 12 .
-url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
+visibility pack
+type bed 12+ .
+
+track encodeErgeStableTransf
+shortLabel Stable Transfect
+longLabel ENCODE Stable Transfection
+group encode
+priority 170.9
+color 100,50,0
+visibility pack
+type bed 12+ .
 
 track uniGene_2
 shortLabel UniGene

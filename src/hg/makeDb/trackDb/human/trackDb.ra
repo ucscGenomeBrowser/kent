@@ -184,3 +184,12 @@ group varRep
 priority 146
 visibility pack
 type bed 4 .
+
+track affy10K
+shortLabel Affy 10K SNPs
+longLabel Affymetrix Mapping 10K SNPs
+group varRep
+priority 146.1
+visibility pack
+type bed 4 .
+
