@@ -22,7 +22,7 @@ BEGIN {
                            makeFileDir removeDir renameFile getFileSize getFileModTime
                            runProg runProgNoAbort callProg runPipe md5Files
                            gbChmod getReleases getLastRelease getUpdates
-                           parseOptEq inList getTmpDir readFile makeAbs
+                           parseOptEq inList inListRef getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
@@ -534,6 +534,17 @@ sub parseOptEq($) {
 sub inList($@) {
     my($str, @list) = @_;
     foreach my $el (@list) {
+        if ($el eq $str) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+# check if string contained in a list by reference
+sub inListRef($$) {
+    my($str, $list) = @_;
+    foreach my $el (@{$list}) {
         if ($el eq $str) {
             return 1;
         }
