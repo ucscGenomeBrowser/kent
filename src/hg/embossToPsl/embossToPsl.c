@@ -1,4 +1,4 @@
-/* embossToPsl - Convert axt to psl format. 
+/* embossToPsl - Convert EMBOSS pair alignments to psl format. 
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 #include "common.h"
@@ -9,7 +9,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: embossToPsl.c,v 1.1 2004/01/04 10:30:10 markd Exp $";
+static char const rcsid[] = "$Id: embossToPsl.c,v 1.2 2004/01/15 18:55:59 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
