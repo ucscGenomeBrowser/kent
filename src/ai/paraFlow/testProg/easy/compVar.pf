@@ -1,0 +1,13 @@
+
+array of string names;
+
+list of string beaches;
+
+dir of int numVals;
+
+tree of int:string;
+
+pointer of int px;
+
+pointer to tree of float:string;
+

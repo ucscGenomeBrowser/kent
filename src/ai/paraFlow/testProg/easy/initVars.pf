@@ -13,3 +13,4 @@ long longA = 123456123456, longB = -0xABCDEF1234;
 var vString = "Hiya";
 var vFloat = 1.234;
 var vInt = 1234;
+bit isDirty = 1, isEmpty = 0;

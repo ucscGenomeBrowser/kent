@@ -11,3 +11,5 @@ byte b,c;
 byte flags;
 long longA, longB;
 var v;
+bit flag;
+bit isGood, isDirty;
