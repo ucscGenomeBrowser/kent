@@ -19,11 +19,21 @@ void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean w
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 
+void webStartWrapperDetailed(struct cart *theCart, char *headerText,
+	char *format, va_list args, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
+/* output a CGI and HTML header with the given title in printf format with
+ * quite a few options. */
+
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
 void webEnd();
 /* output the footer of the HTML page */
+
+void webEndSectionTables();
+/* Finish with section tables (but don't do /BODY /HTML lik
+ * webEnd does. */
 
 void webVaWarn(char *format, va_list args);
 /* Warning handler that closes off web page. */

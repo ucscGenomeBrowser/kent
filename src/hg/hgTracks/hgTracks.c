@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.888 2005/02/04 16:25:21 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.889 2005/02/04 20:43:21 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7827,7 +7827,7 @@ else
     end = winEnd;
     }
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
-hPrintf("<A HREF=\"%s\" TARGET=_blank>", ensUrl->string);
+hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: probably should free mem from dir and scientificName ?*/
 dyStringFree(&ensUrl);
 }
@@ -9164,29 +9164,29 @@ char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", orgEnc, wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
 
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\">%s</A></TD>", orgEnc, database, wrapWhiteFont("Genomes"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
 
 if (gotBlat)
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">BLAT</A></TD>", uiVars->string);
     }
 if (hgPcrOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("PCR"));
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
       " %s </A></TD>",  hgcNameAndSettings(),
-      winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\">%s</A></TD>",
+      winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\" class=\"topbar\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       cartSessionId(cart), wrapWhiteFont("Tables"));
+       cartSessionId(cart), "Tables");
 
 if (hgNearOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\">%s</A></TD>",
-                 uiVars->string, wrapWhiteFont("Gene Sorter"));
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
+                 uiVars->string, "Gene Sorter");
     }
 
 if (gotBlat)
@@ -9194,7 +9194,7 @@ if (gotBlat)
     /* the only zoo organism this currently works with is human.
      * blastz tables need to be generated for the other organisms. */
     if (!startsWith("zoo", database) || startsWith("zooHuman", database))
-        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\" class=\"topbar\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, "Convert");
     }
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
@@ -9205,32 +9205,32 @@ if (sameString(database, "hg17")
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
-    hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    hPrintf("%s</A></TD>", "Ensembl");
     }
 
 /* Print NCBI MapView anchor */
 if (sameString(database, "hg17"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    hPrintf("%s</A></TD>", "NCBI");
     }
 if (sameString(database, "mm5"))
     {
     hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    hPrintf("%s</A></TD>", "NCBI");
     }
 
 if (sameString(database, "ce2"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank>%s</A></TD>", 
-        skipChr(chromName), winStart+1, winEnd, wrapWhiteFont("WormBase"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>", 
+        skipChr(chromName), winStart+1, winEnd, "WormBase");
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
-       cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Help"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
+       cartSessionId(cart), "PDF/PS");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
@@ -10428,7 +10428,7 @@ char *position = cartUsualString(cart, "position", hDefaultPos(database));
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapper(cart, title->string, NULL, FALSE, FALSE);
+webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
 
@@ -10459,6 +10459,7 @@ hTableEnd();
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
+webEndSectionTables();
 }
 
 
@@ -10571,6 +10572,7 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

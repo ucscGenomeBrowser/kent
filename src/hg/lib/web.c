@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.71 2005/02/02 23:58:57 aamp Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.72 2005/02/04 20:43:22 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -57,9 +57,9 @@ webInTextMode = TRUE;
 webPushErrHandlers();
 }
 
-void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
+void webStartWrapperDetailed(struct cart *theCart, char *headerText,
 	char *format, va_list args, boolean withHttpHeader,
-	boolean withLogo, boolean skipSectionHeader)
+	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
@@ -92,24 +92,27 @@ dnaUtilOpen();
 if (withHttpHeader)
     puts("Content-type:text/html\n");
 
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+if (withHtmlHeader)
+    {
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+    puts(
+	"<HTML>" "\n"
+	"<HEAD>" "\n"
+	);
+    printf("\t%s\n", headerText);
+    puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
+	 "\t<TITLE>"
+	 );
+    htmlTextOut(textOutBuf);
+    puts(
+	"	</TITLE>" "\n"
+	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
+	"</HEAD>" "\n"
+	"<BODY BGCOLOR=\""HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" 
+	);
+    }
 puts(
-    "<HTML>" "\n"
-    "<HEAD>" "\n"
-    );
-printf("\t%s\n", headerText);
-puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
-     "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
-     "\t<TITLE>"
-     );
-
-htmlTextOut(textOutBuf);
-
-puts(
-    "	</TITLE>" "\n"
-    "	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
-    "</HEAD>" "\n"
-    "<BODY BGCOLOR=\""HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
@@ -249,6 +252,14 @@ webPushErrHandlers();
 webHeadAlreadyOutputed = TRUE;
 }
 
+void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
+    char *format, va_list args, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader)
+{
+webStartWrapperDetailed(theCart, headerText, format, args, withHttpHeader,
+	withLogo, skipSectionHeader, TRUE);
+}
+
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
@@ -285,19 +296,26 @@ webStartWrapperGatewayHeader(theCart, headerText, format, args, TRUE, TRUE,
 va_end(args);
 }
 
+void webEndSection()
+/* Close down a section */
+{
+puts(
+    "" "\n"
+    "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+    "	<br></TD></TR></TABLE>" "\n"
+    "	</TD></TR></TABLE>" "\n"
+    "	" );
+}
+
 void webNewSection(char* format, ...)
 /* create a new section on the web page */
 {
 va_list args;
 va_start(args, format);
 
+webEndSection();
+puts("<!--START SECOND SECTION ------------------------------------------------------->");
 puts(
-    "" "\n"
-    "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
-    "	<br></TD></TR></TABLE>" "\n"
-    "	</TD></TR></TABLE>" "\n"
-    "	" "\n"
-    "<!--START SECOND SECTION ------------------------------------------------------->" "\n"
     "<BR>" "\n"
     "" "\n"
     "  	<!--outer table is for border purposes-->" "\n"
@@ -319,24 +337,23 @@ puts(
 va_end(args);
 }
 
+void webEndSectionTables()
+/* Finish with section tables (but don't do /BODY /HTML lik
+ * webEnd does. */
+{
+webEndSection();
+puts("</TD></TR></TABLE>\n");
+}
 
 void webEnd()
 /* output the footer of the HTML page */
 {
 if(!webInTextMode)
-	{
-	puts(
-	    "" "\n"
-	    "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
-	    "	<br></TD></TR></TABLE>" "\n"
-	    "	</TD></TR></TABLE>" "\n"
-	    "<!-- END SECOND SECTION ---------------------------------------------------------->" "\n"
-	    "" "\n"
-	    "</TD></TR></TABLE>" "\n"
-	    "</BODY></HTML>" "\n"
-	);
-	webPopErrHandlers();
-	}
+    {
+    webEndSectionTables();
+    puts( "</BODY></HTML>");
+    webPopErrHandlers();
+    }
 }
 
 void webVaWarn(char *format, va_list args)

@@ -171,7 +171,7 @@ if (sameString(groupTarget, "none"))
 
 dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapper(cart, title->string, NULL, FALSE, FALSE);
+webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
 cartSaveSession(cart);
 
@@ -222,6 +222,7 @@ trackConfig(trackList, groupList, groupTarget, vis);
 hPrintf("</FORM>");
 dyStringFree(&title);
 freez(&groupTarget);
+webEndSectionTables();
 }
 
 
