@@ -403,7 +403,7 @@ if (span > 0)	/*	check that yes data was encountered */
 }	/*	static void wigProcessData()	*/
 
 void wigMakeBedList(char *database, char *table, char *chrom, 
-	int winStart, int winEnd, char *constraints, int tableId)
+	char *constraints, int tableId)
 {
 if ( ! wigStatsDone(tableId, chrom))
     {
@@ -416,7 +416,7 @@ if ( ! wigStatsDone(tableId, chrom))
 }
 
 void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd, int tableId, char *constraints)
+    int tableId, char *constraints)
 {
 struct slName *chromPtr;
 char *db = getTableDb();
@@ -425,6 +425,7 @@ struct sqlResult *sr = (struct sqlResult *)NULL;
 char query[256];
 char **row = (char **)NULL;
 char wigFullTableName[256];
+
 
 if (tableIsSplit)
     {
@@ -472,18 +473,14 @@ printf("<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
 for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
-    char *tbl = table;
     char wigFullTableName[256];
-    if (tableIsSplit)
-	{
-	getFullTableName(wigFullTableName, chrom, table);
-	tbl = wigFullTableName;
-	}
+
+    getFullTableName(wigFullTableName, chrom, table);
 
     if ( ! wigStatsDone(tableId, chrom))
 	{
-	wigData[tableId] = wigFetchData(database, tbl, chrom, winStart,
-	    winEnd, WIG_ALL_DATA, WIG_RETURN_DATA, tableId,
+	wigData[tableId] = wigFetchData(database, wigFullTableName, chrom,
+	    winStart, winEnd, WIG_ALL_DATA, WIG_RETURN_DATA, tableId,
 		wiggleCompare[tableId], constraints);
 	wigProcessData(wigData[tableId], table, tableId, chrom, FALSE);
 	wigFreeData(&wigData[tableId]);
@@ -652,6 +649,9 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
+    char wigFullTableName[256];
+
+    getFullTableName(wigFullTableName, chrom, table);
 
     wigData = wigFetchData(database, table, chrom, winStart, winEnd,
 	WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
