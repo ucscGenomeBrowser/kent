@@ -285,14 +285,14 @@ printf("<P>Here is the sequence around this feature: bases %d to %d of %s.  The 
        "that contain the feature itself are in upper case.</P>\n", s, e, seqName);
 seq = hDnaFromSeq(seqName, s, e, dnaLower);
 toUpperN(seq->dna + (start-s), end - start);
-printf("<TT><PRE>");
+printf("<PRE><TT>");
 cfm = cfmNew(10, 50, TRUE, FALSE, stdout, s);
 for (i=0; i<seq->size; ++i)
    {
    cfmOut(cfm, seq->dna[i], 0);
    }
 cfmFree(&cfm);
-printf("</PRE></TT>");
+printf("</TT></PRE>");
 }
 
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
@@ -1292,7 +1292,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct psl *psl = pslLoad(row+hasBin);
     pslTabOut(psl, stdout);
     }
-printf("</PRE></TT>\n");
+printf("</TT></PRE>\n");
 }
 
 void printTrackHtml(struct trackDb *tdb)
@@ -2067,7 +2067,7 @@ ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Output");
-printf("<TT><PRE>");
+printf("<PRE><TT>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
     	(isRc ? "(reverse complement)" : ""));
 seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
@@ -2528,7 +2528,7 @@ char otherString[512];
 if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
-printf("<TT><PRE>");
+printf("<PRE><TT>");
 printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
 printf("------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
@@ -2642,7 +2642,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct psl *psl = pslLoad(row+1);
     pslTabOut(psl, stdout);
     }
-printf("</PRE></TT>\n");
+printf("</TT></PRE>\n");
 sqlDisconnect(&conn);
 
 printTrackHtml(tdb);
@@ -2978,8 +2978,9 @@ dna = cloneString(dnaSeq->dna);
 
 if (qName == NULL) 
     qName = psl->qName;
+
+fprintf(f, "<PRE><TT>");
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
-fprintf(f, "<TT><PRE>");
 tolowers(oLetters);
 
 /* Display query sequence. */
@@ -3403,7 +3404,7 @@ if (wa->strand[0] == '-')
     }
 xenShowAli(wa->qSym, wa->tSym, wa->hSym, wa->symCount, stdout,
     qOffset, wa->chromStart, strand, '+', 60);
-printf("</PRE></TT>");
+printf("</TT></PRE>");
 
 wabAliFree(&wa);
 hFreeConn(&conn);
@@ -3843,10 +3844,10 @@ else
     sqlFreeResult(&sr);
     if (pp != NULL)
 	{
-	printf("<TT><PRE>");
+	printf("<PRE><TT>");
 	printf(">%s\n", geneName);
 	printLines(stdout, pp->seq, 50);
-	printf("</PRE></TT>");
+	printf("</TT></PRE>");
 	}
     else
         {
@@ -3985,7 +3986,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
         reverseComplement(seq->dna, seq->size);
 	}
-    printf("<TT><PRE>");
+    printf("<PRE><TT>");
     printf(">%s\n", geneName);
     faWriteNext(stdout, NULL, seq->dna, seq->size);
     printf("</TT></PRE>");
@@ -4644,7 +4645,7 @@ hgcStart(item);
 seq = hExtSeq(item);
 printf("<PRE><TT>");
 faWriteNext(stdout, item, seq->dna, seq->size);
-printf("</PRE></TT>");
+printf("</TT></PRE>");
 freeDnaSeq(&seq);
 }
 
@@ -5243,9 +5244,9 @@ if ((alignment == NULL) && (aiList != NULL))
     alignment = aiList->alignment;
     }
 
-puts("<TT><PRE>");
+puts("<PRE><TT>");
 axtGenePrettyHtml(gp, "axtInfo", nibFile, db2, alignment);
-puts("</PRE></TT>");
+puts("</TT></PRE>");
 axtInfoFreeList(&aiList);
 webEnd();
 }
