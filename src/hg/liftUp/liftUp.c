@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.33 2005/01/10 00:33:28 kent Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.34 2005/02/09 03:43:00 braney Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -225,6 +225,7 @@ for (i=0; i<sourceCount; ++i)
 	  begin, end, leftString,
 	  words[8], words[9], words[10], words[11], words[12], words[13], id);
 	}
+	lineFileClose(&lf);
     }
 if (ferror(dest))
     errAbort("error writing %s", destFile);
