@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.11 2004/11/01 18:46:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.12 2004/11/02 20:46:16 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -315,8 +315,13 @@ while (lineFileNext(lf, &line, NULL))
     if ((line == (char *)NULL) || (line[0] == (char)NULL) || (line[0] == '#'))
 	continue;		/*	!!! go to next line of input */
 
-    wordCount = chopByWhite(line, words, 10);
-    if (sameWord("variableStep",words[0]))
+    wordCount = chopByWhite(line, words, ArraySize(words));
+
+    if (sameWord("track",words[0]) || sameWord("browser",words[0]))
+	{
+	continue;	/* ignore track,browser lines if present	*/
+	}
+    else if (sameWord("variableStep",words[0]))
 	{
 	int i;
 	boolean foundChrom = FALSE;
