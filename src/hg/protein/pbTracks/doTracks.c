@@ -1321,14 +1321,6 @@ doAAScale(l, yOffp, -1);
 hPrintf("</MAP>\n");
 vgClose(&vg);
 
-hPrintf(
-"<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
-//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
-        gifTn.forCgi, pixWidth, pixHeight, mapName);
-
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
-hPrintf("Explanation of Tracks</A><br>");
-
 /* Put up horizontal scroll controls. */
 hWrites("Move ");
 hButton("hgt.left3", "<<<");
@@ -1342,14 +1334,24 @@ hPrintf(" &nbsp &nbsp &nbsp &nbsp ");
 
 /* Put up scaling controls. */
 hPrintf("Current scale: ");
-if (pbScale == 1) hPrintf("1/6 ");
-if (pbScale == 3) hPrintf("1/2 ");
-if (pbScale == 6) hPrintf("FULL ");
+if (pbScale == 1)  hPrintf("1/6 ");
+if (pbScale == 3)  hPrintf("1/2 ");
+if (pbScale == 6)  hPrintf("FULL ");
+if (pbScale == 22) hPrintf("DNA ");
 
 hPrintf("&nbsp&nbsp&nbsp Rescale to ");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
-hPrintf("<P>");
+hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
+
+// put tracks image here
+hPrintf(
+"<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
+        gifTn.forCgi, pixWidth, pixHeight, mapName);
+
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
+hPrintf("Explanation of Tracks</A><br>");
 }
