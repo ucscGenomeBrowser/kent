@@ -10,6 +10,8 @@ struct trans3
      struct dnaSeq *seq;		/* Untranslated sequence.  Not allocated here. */
      aaSeq *trans[3];			/* Translated sequences.  Allocated here*/
      int start,end;			/* Start/end of sequence in a larger context. */
+     int nibSize;			/* Size of nib file this is embedded in. */
+     boolean isRc;			/* Has been reverse complemented? */
      };
 
 struct trans3 *trans3New(struct dnaSeq *seq);
