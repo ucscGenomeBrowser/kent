@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.8 2003/06/06 17:08:42 heather Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.9 2003/06/10 17:09:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -124,7 +124,7 @@ fputc('\n', f);
 lineFileClose(&lf);
 }
 
-int ensPepPred(char *database, int fileCount, char *fileNames[])
+void ensPepPred(char *database, int fileCount, char *fileNames[])
 /* Load Ensembl peptide predictions into database. */
 {
 int i;
@@ -261,7 +261,7 @@ lineFileClose(&lf);
 }
 
 
-int genericPepPred(char *database, int fileCount, char *fileNames[], char *table)
+void genericPepPred(char *database, int fileCount, char *fileNames[], char *table)
 /* Load a generic (simple) peptide file. */
 {
 int i;
@@ -284,7 +284,7 @@ loadTableFromTabFile(database, table, tempName);
 freeHash(&uniq);
 }
 
-int softberryPepPred(char *database, int fileCount, char *fileNames[])
+void softberryPepPred(char *database, int fileCount, char *fileNames[])
 /* Load Softberry peptide predictions into database. */
 {
 genericPepPred(database, fileCount, fileNames, "softberryPep");
