@@ -2122,7 +2122,7 @@ chainSome $(path1)
     cd /iscratch/i/hg17
     mkdir knownRna
     cd knownRna
-    faSplit sequence /cluster/data/monDom1/bed/blatz.hg17KG known.fa 9 known
+    faSplit sequence /cluster/data/monDom1/bed/blatz.hg17KG/known.fa 9 known
     iSync
     rm /cluster/data/monDom1/bed/blatz.hg17KG/known.fa
 
