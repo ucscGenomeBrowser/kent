@@ -24,7 +24,9 @@ void logIt(char *format, ...);
 /* Print message to log file. */
 
 void flushLog();
-/* Flush log file */
+/* Flush log file. */
+
+extern boolean logFlush; /* Set this to true to flush log after every logIt */
 
 void setupDaemonLog(char *fileName);
 /* Setup log file, and warning handler that goes to this

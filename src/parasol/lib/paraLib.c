@@ -84,7 +84,7 @@ sprintf(errFile, "%s/para%d.err", tempDir, jobId);
 
 
 static FILE *logFile = NULL;  /* Log file - if NULL no logging. */
-static boolean logFlush;
+boolean logFlush;
 
 void vLogIt(char *format, va_list args)
 /* Variable args logit. */
@@ -109,6 +109,7 @@ if (logFile != NULL)
     va_end(args);
     }
 }
+
 
 static void warnToLog(char *format, va_list args)
 /* Warn handler that prints to log file. */
@@ -137,7 +138,8 @@ void setupDaemonLog(char *fileName)
 {
 if (fileName != NULL)
     logFile = mustOpen(fileName, "w");
-logFlush = optionExists("logFlush");
+if (!logFlush)
+    logFlush = optionExists("logFlush");
 pushWarnHandler(warnToLog);
 }
 
