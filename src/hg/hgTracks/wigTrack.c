@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.42 2004/02/12 18:47:25 kate Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.43 2004/02/20 18:20:51 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -997,4 +997,6 @@ track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
+/*	the lfSubSample type makes the image map function correctly */
+track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 }	/*	wigMethods()	*/
