@@ -438,6 +438,7 @@ boolean canDoUTR=FALSE, canDoIntrons=FALSE;
 char *name, *strand;
 int start, end, cdsStart, cdsEnd, blkCount;
 unsigned *blkStarts, *blkSizes;
+boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
 
 foundFields = hFindGenePredFieldsDb(db, table,
 				    fChrom, fStart, fEnd, fName,
@@ -484,7 +485,7 @@ dyStringPrintf(query, " from %s where %s < %d and %s > %d",
 	       table, fStart, chromEnd, fEnd, chromStart);
 if (fChrom[0] != 0)
     dyStringPrintf(query, " and %s = '%s'", fChrom, chrom);
-if (sqlConstraints != NULL && sqlConstraints[0] != 0)
+if (useSqlConstraints)
     dyStringPrintf(query, " and %s", sqlConstraints);
 
 // uglyf("# query: %s\n", query->string);
@@ -732,8 +733,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 if (rowCount == 0)
     printf("\n# No items in table %s in the range %s:%d-%d%s%s\n\n",
 	   table, chrom, chromStart+1, chromEnd,
-	   sqlConstraints ? " with SQL constraints " : "",
-	   sqlConstraints ? sqlConstraints : "");
+	   useSqlConstraints ? " with SQL constraints " : "",
+	   useSqlConstraints ? sqlConstraints : "");
 else if (totalCount == 0)
     printf("\n# No regions were selected.\n\n");
 sqlFreeResult(&sr);
