@@ -7670,8 +7670,8 @@ if (snp!=NULL)
 	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
 	}
     printf("<B>Validation Status:</B> %s<BR>\n",snp->valid);
-    printf("<B>Base1:</B> %s<BR>\n",snp->base1);
-    printf("<B>Base2:</B> %s<BR>\n",snp->base2);
+    printf("<B>Allele1:</B> %s<BR>\n",snp->allele1);
+    printf("<B>Allele2:</B> %s<BR>\n",snp->allele2);
     printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
     printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }

@@ -19,8 +19,8 @@ ret->rsId = sqlUnsigned(row[0]);
 ret->avHet = atof(row[1]);
 ret->avHetSE = atof(row[2]);
 ret->valid = row[3];
-strcpy(ret->base1, row[4]);
-strcpy(ret->base2, row[5]);
+strcpy(ret->allele1, row[4]);
+strcpy(ret->allele2, row[5]);
 ret->assembly = row[6];
 ret->alternate = row[7];
 }
@@ -38,8 +38,8 @@ ret->rsId = sqlUnsigned(row[0]);
 ret->avHet = atof(row[1]);
 ret->avHetSE = atof(row[2]);
 ret->valid = cloneString(row[3]);
-strcpy(ret->base1, row[4]);
-strcpy(ret->base2, row[5]);
+strcpy(ret->allele1, row[4]);
+strcpy(ret->allele2, row[5]);
 ret->assembly = cloneString(row[6]);
 ret->alternate = cloneString(row[7]);
 return ret;
@@ -96,7 +96,7 @@ void dbSnpRSSaveToDb(struct sqlConnection *conn, struct dbSnpRS *el, char *table
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %u,%f,%f,'%s','%s','%s','%s','%s')", 
-	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->base1,  el->base2,  el->assembly,  el->alternate);
+	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->allele1,  el->allele2,  el->assembly,  el->alternate);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -111,20 +111,20 @@ void dbSnpRSSaveToDbEscaped(struct sqlConnection *conn, struct dbSnpRS *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *valid, *base1, *base2, *assembly, *alternate;
+char  *valid, *allele1, *allele2, *assembly, *alternate;
 valid = sqlEscapeString(el->valid);
-base1 = sqlEscapeString(el->base1);
-base2 = sqlEscapeString(el->base2);
+allele1 = sqlEscapeString(el->allele1);
+allele2 = sqlEscapeString(el->allele2);
 assembly = sqlEscapeString(el->assembly);
 alternate = sqlEscapeString(el->alternate);
 
 dyStringPrintf(update, "insert into %s values ( %u,%f,%f,'%s','%s','%s','%s','%s')", 
-	tableName, el->rsId , el->avHet , el->avHetSE ,  valid,  base1,  base2,  assembly,  alternate);
+	tableName, el->rsId , el->avHet , el->avHetSE ,  valid,  allele1,  allele2,  assembly,  alternate);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&valid);
-freez(&base1);
-freez(&base2);
+freez(&allele1);
+freez(&allele2);
 freez(&assembly);
 freez(&alternate);
 }
@@ -143,8 +143,8 @@ ret->rsId = sqlUnsignedComma(&s);
 ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->valid = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->base1, sizeof(ret->base1));
-sqlFixedStringComma(&s, ret->base2, sizeof(ret->base2));
+sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
+sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
 ret->assembly = sqlStringComma(&s);
 ret->alternate = sqlStringComma(&s);
 *pS = s;
@@ -192,11 +192,11 @@ fprintf(f, "%s", el->valid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->base1);
+fprintf(f, "%s", el->allele1);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->base2);
+fprintf(f, "%s", el->allele2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
