@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.15 2005/04/02 00:39:53 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.16 2005/04/04 20:47:32 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -850,6 +850,13 @@ mm6.mgcTables.mgc = all
     featureBits mm6 refGene
     #	41752877 bases of 2597150411 (1.608%) in intersection
     #	MGC Genes
+    featureBits mm6 refFlat
+    #	41752877 bases of 2597150411 (1.608%) in intersection
+    featureBits mm6 refSeqAli
+    #	41738603 bases of 2597150411 (1.607%) in intersection
+    #	additionally created tables by the genbank process that can not
+    #	be measured with featureBits
+    #	refLink, refSeqStatus, refSeqSummary
     featureBits mm6 mgcGenes
     #	27174785 bases of 2597150411 (1.046%) in intersection
     #	Mouse mRNAs
@@ -1584,6 +1591,9 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
 	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
     #	STARTED - 2005-04-01 16:30
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
+	-continue cat -fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED - 2005-04-01 16:30
 
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
@@ -1975,6 +1985,9 @@ SEQ2_LEN=$BASE/S2.len
     #		need to regenerate the linSpec not in mouse for canFam1
     #	RESTARTED - 2005-03-30 16:25
     #	COMPLETELY RESTARTED 2005-04-01 11:40
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	-continue cat -fileServer eieio -chainMinScore 5000 \
+	`pwd`/DEF > cat.run.out 2>&1 &
 
 #########################################################################
 # BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
@@ -2089,6 +2102,22 @@ SEQ2_LEN=$BASE/S2.len
     #	recover the job by going to kk machine and
     #	directory /cluster/data/mm6/bed/blastzSelf
     #	to get it to complete with para recover etc...
+    #	One job seemed to take forever, it appears the section:
+    #	chrUn_random:50000000-60010000 with the same piece, 40 hours.
+# Completed: 8861 of 8861 jobs
+# CPU time in finished jobs:    3519718s   58661.97m   977.70h   40.74d  0.112 y
+# IO & Wait Time:                460422s    7673.70m   127.89h    5.33d  0.015 y
+# Average job time:                 449s       7.49m     0.12h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          145760s    2429.33m    40.49h    1.69d
+# Submission to last job:        263627s    4393.78m    73.23h    3.05d
+    #	After it was complete, create the run.time file:
+    ssh kk
+    cd /cluster/data/mm6/bed/blastzSelf/run.blastz
+    para time > run.time
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
+    # STARTED - 2005-04-04 11:40
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2164,6 +2193,28 @@ SEQ2_LEN=$BASE/S2.len
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
+    #	CRASHED due to kksilo problems, finished batch manually, then
+    #	continuing:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
+    #	measurements are looking good:
+    featureBits mm6 netGalGal2
+    #   1937053597 bases of 2597150411 (74.584%) in intersection
+    featureBits mm5 netGalGal2
+    #   1958796258 bases of 2615483787 (74.892%) in intersection
+    featureBits mm6 chainGalGal2
+    #   1969505681 bases of 2597150411 (75.833%) in intersection
+    featureBits mm5 chainGalGal2
+    #   1990102297 bases of 2615483787 (76.089%) in intersection
+    featureBits mm6 chainGalGal2Link
+    #   82018349 bases of 2597150411 (3.158%) in intersection
+    featureBits mm5 chainGalGal2Link
+    #   78951466 bases of 2615483787 (3.019%) in intersection
+
+    #	Since those are OK, now do the swap:
+    ssh eieio
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap -chainMinScore=5000 \
+	-fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
 
 # BLASTZ OPOSSUM (WORKING - 2005-04-01 - Hiram)
     ssh eieio
@@ -2219,3 +2270,9 @@ SEQ2_LEN=$BASE/S2.len
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
+    # CRASHED due to kksilo problems, finished batch manually and
+    #	created the run.time file
+    #	continuing
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
+    #	STARTED 2005-04-03 11:45
