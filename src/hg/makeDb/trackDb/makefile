@@ -16,7 +16,6 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
 	canFam1 \
 	mm2 mm3 mm4 mm5\
-	mm2X mm3X \
 	rn2 rn3 \
 	bosTau1 \
 	monDom1 \
