@@ -108,8 +108,8 @@ class LinkCheck {
       // System.out.println("has html ending");
       // Will take *.shtml
       // clean off html or shtml for output filename
-      file = file.replaceAll(".html", "");
       file = file.replaceAll(".shtml", "");
+      file = file.replaceAll(".html", "");
     }
     WebRequest req = new GetMethodWebRequest(baseURL);
 
