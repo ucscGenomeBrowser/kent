@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.187 2004/06/13 23:46:52 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.188 2004/06/15 23:44:14 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -764,6 +764,7 @@ char query[256];
 char buf[64];
 char *s;
 boolean ok = TRUE;
+boolean isDmel = startsWith("dm", hGetDb());
 
 sprintf(query, 
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
@@ -775,7 +776,7 @@ if (s == NULL)
    s = "";
    ok = FALSE;
    }
-sprintf(retBand, "%s%s", skipChr(chrom), buf);
+sprintf(retBand, "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
 return ok;
 }
 
