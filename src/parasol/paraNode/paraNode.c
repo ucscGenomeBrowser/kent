@@ -231,6 +231,7 @@ if ((grandChildId = fork()) == 0)
 	hashUpdate(hash, "JOB_ID", jobIdString);
 	hashUpdate(hash, "USER", user);
 	hashUpdate(hash, "HOME", homeDir);
+	hashUpdate(hash, "HOST", hostName);
 	hashUpdate(hash, "PARASOL", "1");
 	updatePath(hash, userPath, homeDir, sysPath);
 	environ = hashToEnviron(hash);
