@@ -112,7 +112,7 @@ puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\">\n");
 
 puts ("<TABLE ALIGN=CENTER COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
 
-printf ("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH><TR>\n",
+printf ("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH></TR>\n",
 	valueCount);
 puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
 puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
@@ -164,10 +164,12 @@ if (histoGramResult)
 		}
 
 	    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", cpd);
-	    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", 1.0 - cpd);
+	    printf ("    <TD ALIGN=RIGHT> %g </TD></TR>\n", 1.0 - cpd);
 	    someDisplayed = TRUE;
 	    }
 	}
+    if (!someDisplayed)
+	puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
     }
 else
     puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
