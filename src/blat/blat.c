@@ -50,6 +50,7 @@ char *qMask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
 char *outputFormat = "psl";
+boolean verbose = FALSE;
 
 
 void usage()
@@ -493,6 +494,7 @@ for (i=0; i<fileCount; ++i)
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
 	    Bits *qMaskBits = NULL;
+	    if (verbose) fprintf(stderr, "%s\n", seq.name);
 	    if (isProt)
 		faToProtein(seq.dna, seq.size);
 	    else
@@ -758,7 +760,7 @@ boolean dIsProtLike, qIsProtLike;
 char *cmd = "blat hCrea.geno hCrea.mrna foo.psl -t=dnax -q=rnax";
 char *words[16];
 
-uglyf("Debugging parameters\n");
+printf("Debugging parameters\n");
 cmd = cloneString(cmd);
 argc = chopLine(cmd, words);
 argv = words;
@@ -892,6 +894,7 @@ mask = optionVal("mask", NULL);
 qMask = optionVal("qMask", NULL);
 outputFormat = optionVal("out", outputFormat);
 dotEvery = optionInt("dots", 0);
+verbose = optionExists("verbose");
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
