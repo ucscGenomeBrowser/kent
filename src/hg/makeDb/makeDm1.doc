@@ -523,6 +523,31 @@ exit; # don't actually run this like a script :)
       delete from pscreen where name = "KG03740"; \
       delete from pscreen where name = "BG01196"; \
       delete from pscreen where name = "EY02003";'
+    # 9/16/04: Bob Levis emailed an update... a bunch of deletions, 
+    # 1 change and 2 additions:
+    # (see email text and UCSC_changes_091604v2.csv)
+    hgsql dm1 -e '\
+      delete from pscreen where name = "BG02404"; \
+      delete from pscreen where name = "EY03152"; \
+      delete from pscreen where name = "EY05239"; \
+      delete from pscreen where name = "EY05534"; \
+      delete from pscreen where name = "EY07100"; \
+      delete from pscreen where name = "EY09238"; \
+      delete from pscreen where name = "EY11132"; \
+      delete from pscreen where name = "EY11235"; \
+      delete from pscreen where name = "EY11805"; \
+      delete from pscreen where name = "EY12014"; \
+      delete from pscreen where name = "EY12019"; \
+      delete from pscreen where name = "EY12603"; \
+      delete from pscreen where name = "EY13113"; \
+      delete from pscreen where name = "EY13711"; \
+      delete from pscreen where name = "EY14401"; \
+      delete from pscreen where name = "KG03002"; \
+      delete from pscreen where name = "KG04889";'
+    hgsql dm1 -e 'update pscreen set geneIds = "CG33472," where name = "EY04063";'
+    hgsql dm1 -e 'update pscreen set chrom = "chr2L" where name = "EY11972";'
+    hgsql dm1 -e 'insert into pscreen values(672, "chrX", 11430596, 11430597, "EY12008", 0, "+", 0, 1, "CG1830,");'
+    hgsql dm1 -e 'insert into pscreen values(720, "chr2R", 17764291, 17764292, "EY12526", 0, "-", 0, 1, "CG30092,");'
 
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
@@ -2967,3 +2992,233 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# BLASTZ DM2 (FOR LIFTOVER EXPERIMENT) (DONE 9/15/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/blastz.dm2.2004-09-15
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15
+    cat << '_EOF_' > DEF
+# dm1 vs. dm2 (for liftOver)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=/cluster/bin/penn/blastz-run
+BLASTZ=/cluster/bin/penn/blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+SEQ1_DIR=/iscratch/i/dm1/nib
+SEQ1_SMSK=
+SEQ1_FLAG=-drosophila
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+SEQ2_DIR=/iscratch/i/dm2/nib
+SEQ2_SMSK=
+SEQ2_FLAG=-drosophila
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/dm1/bed/blastz.dm2.2004-09-15
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    # cluster run -- use rack 9 to avoid getting in the way of hg17.
+    ssh kk9
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15/run
+    para create j
+    para try, check, push, check, ....
+#Completed: 483 of 483 jobs
+#Average job time:                 119s       1.99m     0.03h    0.00d
+#Longest job:                     1238s      20.63m     0.34h    0.01d
+#Submission to last job:          1625s      27.08m     0.45h    0.02d
+
+    # back on kksilo...
+    mkdir /cluster/data/dm1/bed/blastz.dm2.2004-09-15/run.1
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > jobList
+    # small cluster run
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15/run.1
+    para create jobList
+    para try, check, push, check, ....
+#Completed: 21 of 21 jobs
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest job:                       23s       0.38m     0.01h    0.00d
+#Submission to last job:            35s       0.58m     0.01h    0.00d
+    cd ..
+    rm -r raw
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15
+    mkdir axtChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin \
+    /cluster/bluearc/drosophila/dm1/nib /iscratch/i/dm2/nib stdout \
+| axtSort stdin ../../axtChrom/$chr.axt 
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 11 of 11 jobs
+#Average job time:                  41s       0.68m     0.01h    0.00d
+#Longest job:                       62s       1.03m     0.02h    0.00d
+#Submission to last job:            62s       1.03m     0.02h    0.00d
+
+
+# CHAIN DM2 BLASTZ (FOR LIFTOVER EXPERIMENT) (DONE 9/15/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/dm1/bed/blastz.dm2.2004-09-15/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/dm2/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 11 of 11 jobs
+#Average job time:                  20s       0.33m     0.01h    0.00d
+#Longest job:                       62s       1.03m     0.02h    0.00d
+#Submission to last job:            62s       1.03m     0.02h    0.00d
+
+    # now on the file server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's [looks like could use some filtering,
+    # didn't abridge repeats]
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Don't load chains into database -- just doing this for liftOver.
+
+
+# NET DM2 BLASTZ (FOR LIFTOVER EXPERIMENT) (DONE 9/15/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dm2.2004-09-15/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Don't bother with classification and db-loading -- just make 
+    # liftOver-suitable (single-coverage from net) chains:
+    netSplit noClass.net net
+    mkdir subset
+    foreach f (chain/*.chain)
+      echo subsetting net/$f:t:r.net, $f to subset/$f:t
+      netChainSubset net/$f:t:r.net $f subset/$f:t
+    end
+    cat subset/*.chain > dm1ToDm2.over.chain
+
+    # clean up
+    rm -r net subset
+
+
+# MAKE AN 11.OOC FILE FOR BLAT (DONE 9/16/04 angie)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is 126527731 / 2866216770 = ~4.4% of human judging by 
+    # gapless genome size from featureBits -- we would use 45, but 
+    # bump that up a bit to be more conservative)
+    ssh kolossus
+    mkdir /cluster/data/dm1/bed/ooc
+    cd /cluster/data/dm1/bed/ooc
+    ls -1 /cluster/data/dm1/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/dm1/11.ooc -repMatch=100
+#Wrote 2917 overused 11-mers to /cluster/bluearc/dm1/11.ooc
+    ssh kkr1u00
+    cp -p /cluster/bluearc/dm1/*.ooc /iscratch/i/dm1/
+    iSync
+
+
+# BLAT DM2 TO GET LIFTOVER CHAINS (DONE 9/17/04 angie)
+    # Note: this process makes /cluster/data/dm1/bed/blat.dm2.2004-09-17/ .
+    # Previously I made a blat.dm2.2004-09-16/ using this process (mostly),
+    # except for the split and lift steps.  I used the dm2 2Mb chunks and 
+    # dm2/jkStuff/liftAll.lft.  Blat run was much slower... liftOver 
+    # performance was about the same, so use the quicker smaller chunks.
+    ssh kkr1u00
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
+      dm2 /iscratch/i/dm2/nib
+    # Do what its output says to do next:
+    ssh kk (or kk9)
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh \
+      dm1 /iscratch/i/dm1/nib dm2 /iscratch/i/dm2/split3k \
+      /iscratch/i/dm1/11.ooc
+    # Do what its output says to do next:
+    cd /cluster/data/dm1/bed/blat.dm2.2004-09-16/run
+    para try, check, push, check, ...
+#Completed: 143 of 143 jobs
+#Average job time:                  37s       0.62m     0.01h    0.00d
+#Longest job:                      282s       4.70m     0.08h    0.00d
+#Submission to last job:           283s       4.72m     0.08h    0.00d
+    ssh kksilo
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh dm1 dm2 \
+      /iscratch/i/dm2/split3k
+    # Do what its output says to do next:
+    ssh kki
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
+      dm1 /iscratch/i/dm1/nib dm2 /iscratch/i/dm2/nib
+    # Do what its output says to do next:
+    cd /cluster/data/dm1/bed/blat.dm2.2004-09-16/chainRun
+    para try, check, push, check, ...
+#Completed: 13 of 13 jobs
+#Average job time:                   7s       0.12m     0.00h    0.00d
+#Longest job:                       11s       0.18m     0.00h    0.00d
+#Submission to last job:            11s       0.18m     0.00h    0.00d
+    ssh kksilo
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh dm1 dm2
+    # Do what its output says to do next:
+    ssh hgwdev
+    ~/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh dm1 dm2
+
+
