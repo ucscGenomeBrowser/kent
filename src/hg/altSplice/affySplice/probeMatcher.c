@@ -253,7 +253,7 @@ for(i=0; i<ag->edgeCount; i++)
 			 conn, junctionTable, nonJunctionTable, 
 			 agp, &agp->alt1ProbeCount, agp->alt1ProbeSets);
 	    break;
-	case 3 :
+	case 2 :
 	    addProbeSets(ag, type, vPos[starts[i]], vPos[ends[i]],
 			 conn, junctionTable, nonJunctionTable, 
 			 agp, &agp->alt2ProbeCount, agp->alt2ProbeSets);

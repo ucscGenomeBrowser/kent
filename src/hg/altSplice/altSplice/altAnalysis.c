@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.6 2003/11/24 07:30:39 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.7 2003/11/25 07:17:50 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -705,12 +705,13 @@ void reportAlt5Prime(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2,
 event. Variable names are consistent with the rest of the program, but
 can be misleading. Specifically vs = start of alt splicing, ve1 =
 first end of alt splicing, etc. even though "vs" is really the end of
-an exon. For an alt5Prime splice the edges are:
+an exon. Note that we are cutting out the alt-spliced part of the exon as a separate exon.
+For an alt5Prime splice the edges are:
 
  Name       Vertexes         Class
  ------     ----------       -----
 exon1:      vs->ve1       constituative (0)
-exon2:      vs->ve2        alternative (1)
+exon2:      ve1->ve2        alternative (1)
 junction1:  ve1->termExonStart          alternative (2)
 junction2:  ve2->termExonStart          alternative (1)
 exon3:      termExonStart->termExonEnd        constituative(0)
@@ -739,7 +740,7 @@ agLoc->name = cloneString(ag->name);
 agLoc->tStart = vPos[vs];
 agLoc->tEnd = vPos[termExonEnd];
 agLoc->strand[0] = ag->strand[0];
-agLoc->vertexCount = vCLoc = 5;
+agLoc->vertexCount = vCLoc = 6;
 agLoc->edgeCount = eCLoc = 5;
 agLoc->id = alt5Prime;
 /* Allocate some arrays. */
@@ -751,14 +752,16 @@ AllocArray(eTLoc, eCLoc);
 
 /* Fill in the vertex positions. */
 vertexIx = 0;
-vPosLoc[vertexIx++] = vPos[vs]; /* 0 */
-vPosLoc[vertexIx++] = vPos[ve1];     /* 1 */
-vPosLoc[vertexIx++] = vPos[ve2];    /* 2 */
-vPosLoc[vertexIx++] = vPos[termExonStart];    /* 3 */
-vPosLoc[vertexIx++] = vPos[termExonEnd];   /* 4 */
+vPosLoc[vertexIx++] = vPos[vs];            /* 0 */
+vPosLoc[vertexIx++] = vPos[ve1];           /* 1 */
+vPosLoc[vertexIx++] = vPos[ve1];           /* 2 */
+vPosLoc[vertexIx++] = vPos[ve2];           /* 3 */
+vPosLoc[vertexIx++] = vPos[termExonStart]; /* 4 */
+vPosLoc[vertexIx++] = vPos[termExonEnd];   /* 5 */
 
 /* Fill in the vertex types. */
 vertexIx = 0;
+vTLoc[vertexIx++] = vT[vs];
 vTLoc[vertexIx++] = vT[vs];
 vTLoc[vertexIx++] = vT[ve1];
 vTLoc[vertexIx++] = vT[ve2];
@@ -777,8 +780,8 @@ slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
 /* Alternative second exon. */
-eStartsLoc[edgeIx] = 0;
-eEndsLoc[edgeIx] = 2;
+eStartsLoc[edgeIx] = 2;
+eEndsLoc[edgeIx] = 3;
 eTLoc[edgeIx] = 1;
 ev = evidenceForEdge(ag, vs, ve2);
 evLoc = CloneVar(ev);
@@ -788,7 +791,7 @@ edgeIx++;
 
 /* Alt2 junction (longer) */
 eStartsLoc[edgeIx] = 1;
-eEndsLoc[edgeIx] = 3;
+eEndsLoc[edgeIx] = 4;
 eTLoc[edgeIx] = 2;
 ev = evidenceForEdge(ag, ve1, termExonStart);
 evLoc = CloneVar(ev);
@@ -797,8 +800,8 @@ slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
 /* Alt1 junction (shorter) */
-eStartsLoc[edgeIx] = 2;
-eEndsLoc[edgeIx] = 3;
+eStartsLoc[edgeIx] = 3;
+eEndsLoc[edgeIx] = 4;
 eTLoc[edgeIx] = 1;
 ev = evidenceForEdge(ag, ve2, termExonStart);
 evLoc = CloneVar(ev);
@@ -807,8 +810,8 @@ slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
 /* Exon 3 constitutive (longer exon) */
-eStartsLoc[edgeIx] = 3;
-eEndsLoc[edgeIx] = 4;
+eStartsLoc[edgeIx] = 4;
+eEndsLoc[edgeIx] = 5;
 eTLoc[edgeIx] = 0;
 ev = evidenceForEdge(ag, termExonStart, termExonEnd);
 evLoc = CloneVar(ev);
@@ -848,7 +851,7 @@ an exon. For an alt5Prime splice the edges are:
 exon1:      startV->vs       constituative (0)
 junction1:  vs->ve1          alternative (1)
 junction2:  vs->ve2          alternative (2)
-exon2:      ve1->endV        alternative (1)
+exon2:      ve1->e2        alternative (1)
 exon3:      ve2->endV        constituative (0)
 */
 {
@@ -875,7 +878,7 @@ agLoc->name = cloneString(ag->name);
 agLoc->tStart = vPos[startV];
 agLoc->tEnd = vPos[endV];
 agLoc->strand[0] = ag->strand[0];
-agLoc->vertexCount = vCLoc = 5;
+agLoc->vertexCount = vCLoc = 6;
 agLoc->edgeCount = eCLoc = 5;
 agLoc->id = alt3Prime;
 /* Allocate some arrays. */
@@ -890,14 +893,16 @@ vertexIx = 0;
 vPosLoc[vertexIx++] = vPos[startV]; /* 0 */
 vPosLoc[vertexIx++] = vPos[vs];     /* 1 */
 vPosLoc[vertexIx++] = vPos[ve1];    /* 2 */
-vPosLoc[vertexIx++] = vPos[ve2];    /* 3 */
-vPosLoc[vertexIx++] = vPos[endV];   /* 4 */
+vPosLoc[vertexIx++] = vPos[ve1];    /* 3 */
+vPosLoc[vertexIx++] = vPos[ve2];    /* 4 */
+vPosLoc[vertexIx++] = vPos[endV];   /* 5 */
 
 /* Fill in the vertex types. */
 vertexIx = 0;
 vTLoc[vertexIx++] = vT[startV];
 vTLoc[vertexIx++] = vT[vs];
 vTLoc[vertexIx++] = vT[ve1];
+vTLoc[vertexIx++] = vT[vs]; /* Faking a separate exon for the alt spliced portion. */
 vTLoc[vertexIx++] = vT[ve2];
 vTLoc[vertexIx++] = vT[endV];
 
@@ -933,7 +938,7 @@ slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
 /* Alt1 exon. */
-eStartsLoc[edgeIx] = 2;
+eStartsLoc[edgeIx] = 3;
 eEndsLoc[edgeIx] = 4;
 eTLoc[edgeIx] = 1;
 ev = evidenceForEdge(ag, ve1, endV);
@@ -943,8 +948,8 @@ slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
 /* Exon 2 constitutive (shorter exon) */
-eStartsLoc[edgeIx] = 3;
-eEndsLoc[edgeIx] = 4;
+eStartsLoc[edgeIx] = 4;
+eEndsLoc[edgeIx] = 5;
 eTLoc[edgeIx] = 0;
 ev = evidenceForEdge(ag, ve2, endV);
 evLoc = CloneVar(ev);
@@ -982,7 +987,7 @@ void reportCassette(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2,
  exon2:     ve1->altBpEnd    alternative1 (alt1 1)
  junction2: altBpEnd->ve2    alternative1 (alt1 1)
  exon3:     ve2->endV        constitutive (cons 0)
- junction3: vs->ve2          alternative2 (alt2 3) why 3? What was I thinking?
+ junction3: vs->ve2          alternative2 (alt2 2)
 */
 {
 struct altGraphX *agLoc = NULL;  /* Local altGraphX. */
@@ -1053,7 +1058,7 @@ slAddHead(&agLoc->evidence, evLoc);
 /* Exon exclusion junction. */
 eStartsLoc[2] = 1;
 eEndsLoc[2] = 4;
-eTLoc[2] = 3;
+eTLoc[2] = 2;
 ev = evidenceForEdge(ag, vs, ve2);
 evLoc = CloneVar(ev);
 evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
