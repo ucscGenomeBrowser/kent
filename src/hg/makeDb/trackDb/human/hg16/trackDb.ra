@@ -519,7 +519,7 @@ group compGeno
 priority 112
 visibility hide
 color 0, 10, 100
-altColor 1,128,0
+altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle chr7_phyloHMMcons_CFTR
@@ -1496,14 +1496,14 @@ visibility hide
 color 20,0,50
 type bed 4
 
-track encodeStanfordPromoters
+track encode_Stanford_Promoters
 shortLabel Promoter/Stanford
 longLabel Stanford Promoter Activity in ENCODE Regions
 group encode
 priority 20.1
 visibility hide
 type expRatio
-expTable encodeStanfordPromotersExps
+expTable encode_Stanford_PromotersExps
 expScale 999
 expStep 100
 expColorDense On
@@ -1519,7 +1519,7 @@ visibility hide
 type bed 4
 
 track encode_UCSD_ChIP_RNAP_HELA
-shortLabel ChIP/LI PolII HeLa
+shortLabel ChIP/LI Pol2 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
 group encode
 priority 30.1
@@ -1529,7 +1529,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_THP1
-shortLabel ChIP/LI PolII THP1
+shortLabel ChIP/LI Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
 group encode
 priority 30.2
@@ -1540,7 +1540,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_IMR90
-shortLabel ChIP/LI PolII IMR90
+shortLabel ChIP/LI Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
 group encode
 priority 30.3
@@ -1551,7 +1551,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_HCT116
-shortLabel ChIP/LI POLII HCT116
+shortLabel ChIP/LI Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
 group encode
 priority 30.4
