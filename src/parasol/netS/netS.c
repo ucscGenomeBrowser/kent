@@ -33,7 +33,7 @@ char *command;
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
 sai.sin_addr.s_addr = INADDR_ANY;
-socketHandle = socket(AF_INET, SOCK_DGRAM, 0);
+socketHandle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (bind(socketHandle, (struct sockaddr *)&sai, sizeof(sai)) == -1)
     errAbort("Couldn't bind socket");
 {
