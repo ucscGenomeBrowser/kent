@@ -116,6 +116,16 @@ struct wiggleStats
     double stddev;	/* standard deviation of data points */
     };
 
+struct wigAsciiData
+/* linked list of wiggle data in ascii form */
+    {
+    struct wigAsciiData *next;	/*	next in singly linked list	*/
+    char *chrom;		/*	chrom name for this set of data */
+    unsigned span;		/*	span for this set of data	*/
+    unsigned count;		/*	number of values in this block */
+    struct wiggleDatum *data;	/*	individual data items here */
+    };
+
 /*	the object wiggleDataStream is implemented in lib/wigDataStream.c */
 struct wiggleDataStream
 /*	object definition to access wiggle data, in DB or from file	*/
@@ -124,7 +134,7 @@ struct wiggleDataStream
     char *tblName;		/*	the table or file name	*/
     boolean isFile;		/*	TRUE means it is a file, not DB */
     struct lineFile *lf;	/*	file handle in case of file	*/
-    struct wiggleData *data;	/*	linked list of wiggle data values */
+    struct wigAsciiData *ascii;	/*	linked list of wiggle data values */
     struct bed *bed;		/*	data in bed format	*/
     struct wiggleStats *stats;	/*	linked list of wiggle stats	*/
     boolean useDataConstraint;	/*	to simplify checking if it is on */
@@ -144,7 +154,7 @@ struct wiggleDataStream
     unsigned spanLimit;		/*	for span==spanLimit on file reads */
     int winStart;		/*	for fetches between winStart, winEnd */
     int winEnd;			/*	for fetches between winStart, winEnd */
-    void (*freeData)(struct wiggleDataStream *wDS);
+    void (*freeAscii)(struct wiggleDataStream *wDS);
     void (*freeBed)(struct wiggleDataStream *wDS);
     void (*freeStats)(struct wiggleDataStream *wDS);
     void (*freeConstraints)(struct wiggleDataStream *wDS);
@@ -264,7 +274,7 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
  *	the positive and negative values kept separately
  */
 
-#if defined(DEBUG)
+#if defined(DEBUG)	/*	dbg	*/
 extern void wigProfileEnter();
 extern long wigProfileLeave();
 #define DBGMSGSZ	1023
