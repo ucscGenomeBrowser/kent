@@ -1065,7 +1065,10 @@
   - FlyBase acc to SwissProt acc, plus some other SwissProt info
   <LI><A 
   href="#FlyReg">flyreg</A> 
-  - FlyReg data
+  - FlyReg data (<em>D. melanogaster</em>)
+  <LI><A 
+  href="#DnaMotif">flyregMotif</A> 
+  - FlyReg gapless motif (<em>D. melanogaster</em>)
   <LI><A 
   href="#BED">firstEF</A> 
   - First Exon Finder (FirstEF) exon and promoter predictions</LI>
@@ -2957,6 +2960,19 @@ the fields.<BR>
     char[1] base2;   	"Base of the second allele"
     string  assembly; 	"Sequence in the ucsc assembly"
     string  alternate; 	"Sequence of the alternate allele"
+    )
+</PRE>
+
+<H4><A name=DnaMotif></A>DNA Motif</H4>
+<PRE>table dnaMotif
+"A gapless DNA motif"
+    (
+    string name;                        "Motif name"
+    int columnCount;                    "Count of columns in motif"
+    float[columnCount] aProb;           "Probability of A's in each column"
+    float[columnCount] cProb;           "Probability of C's in each column"
+    float[columnCount] gProb;           "Probability of G's in each column"
+    float[columnCount] tProb;           "Probability of T's in each column"
     )
 </PRE>
 
