@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "fbName - builds association table between bdgpGenePep and gene common name\n"
   "usage:\n"
-  "   fbName database idList outAssoc\n"
+  "   fbName database referencePsl outAssoc\n"
   );
 }
 
@@ -62,20 +62,27 @@ sprintf(cond_str, "mrnaID='%s'", id);
 return sqlGetField(conn, database, "spMrna", "spID", cond_str);
 }
 
-void fbName(char *database, char *protDb,  char *inList, char *outPsl)
+void fbName(char *database, char *protDb,  char *refPsl, char *outAssoc)
 /* fbName - builds association table between knownPep and gene common name. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect("swissProt");
 char *words[1], **row;
-FILE *f = mustOpen(outPsl, "w");
-struct lineFile *lf = lineFileOpen(inList, TRUE);
+FILE *f = mustOpen(outAssoc, "w");
+struct lineFile *pslLf = pslFileOpen(refPsl);
 int count = 0, found = 0;
 char query[256];
+struct psl *psl;
+
+while ((psl = pslNext(pslLf)) != NULL)
+    fprintf(f,"%s\t%s\t%s:%d-%d\n",psl->qName, lookupName(conn,psl->qName), 
+	psl->tName, psl->tStart, psl->tEnd);
+/*
 while (lineFileRow(lf, words))
     {
     fprintf(f,"%s\t%s\n",words[0], lookupName(conn,words[0])); //, getSwiss(conn, words[0]));
     }
+    */
 hFreeConn(&conn);
 }
 
