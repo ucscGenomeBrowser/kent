@@ -10,7 +10,7 @@ type bed 6+
 
 track rgdGene
 shortLabel RGD Genes
-longLabel RGD Curated Gene
+longLabel RGD Curated Genes
 group genes
 priority 50
 visibility dense
