@@ -28,7 +28,7 @@
 #include "ra.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.172 2004/04/01 03:22:37 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.173 2004/04/06 21:15:33 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -583,7 +583,7 @@ if (! exists)
     {
     char split[256];
     safef(split, sizeof(split), "%s_%s", hDefaultChromDb(db), table);
-    exists = sqlTableExists(conn, table);
+    exists = sqlTableExists(conn, split);
     }
 hFreeOrDisconnect(&conn);
 return exists;
@@ -2055,7 +2055,7 @@ else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
 {
-static struct hash *dbHash;	/* Values are hashes of tables. */
+static struct hash *dbHash = NULL;	/* Values are hashes of tables. */
 struct hash *hash;
 struct hTableInfo *hti;
 char fullName[64];
