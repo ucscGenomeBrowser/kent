@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.790 2004/11/28 21:48:37 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.791 2004/11/29 11:49:09 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13935,7 +13935,7 @@ hFreeConn(&conn);
 void footPrinterClickHandler(struct trackDb *tdb, char *item )
 /* Put up generic track info. */
 {  
-char *type, *words[16], *dupe = cloneString(tdb->type);;
+char *type, *words[16], *dupe = cloneString(tdb->type);
 int num;
 int wordCount;
 int start = cartInt(cart, "o");
