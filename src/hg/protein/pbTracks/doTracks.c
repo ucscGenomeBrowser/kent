@@ -869,7 +869,137 @@ char superfam_name[MAX_SF][256];
 
 struct sqlConnection *conn, *conn2;
 
+int getSuperfamilies2(char *proteinID)
+/* getSuperfamilies2() superceed getSuperfamilies() starting from hg16, 
+   it gets Superfamily data of a protein 
+   from ensemblXref3, sfAssign, and sfDes from the proteinsXXXXXX database,
+   and placed them in arrays to be used by doSuperfamily().*/
+{
+char *before, *after = "", *s;
+char startString[64], endString[64];
+
+struct sqlConnection *conn, *conn2, *conn3;
+char query[MAXNAMELEN], query2[MAXNAMELEN];
+struct sqlResult *sr, *sr2;
+char **row, **row2;
+
+char cond_str[255];
+
+char *genomeID, *seqID, *modelID, *start, *end, *eValue, *sfID, *sfDesc;
+
+char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
+     *exonCount, *exonStarts, *exonEnds;
+char *region;
+int  done;
+
+char *gene_name;
+char *ensPep;
+char *transcriptName;
+
+char *chp, *chp2;
+int  i,l;
+int  sfCnt;
+int  int_start, int_end;
+   
+if (!hTableExistsDb(protDbName, "sfAssign")) return(0);
+if (!hTableExistsDb(protDbName, "ensemblXref3")) return(0);
+
+conn  = hAllocConn();
+conn2 = hAllocConn();
+conn3 = hAllocConn();
+
+safef(query2, sizeof(query), 
+      "select protein from %s.ensemblXref3 where swissAcc='%s'", 
+      protDbName, proteinID);
+sr2  = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+if (row2 == NULL) 
+    {
+    safef(query2, sizeof(query), 
+          "select protein from %s.ensemblXref3 where tremblAcc='%s';", 
+          protDbName, proteinID);
+    sr2  = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    if (row2 == NULL) return(0);
+    }
+
+sfCnt=0;    
+while (row2 != NULL)
+    {      
+    ensPep = row2[0];
+    if (sameWord(ensPep, "")) continue;
+
+    ensPepName = ensPep;
+
+    safef(query, sizeof(query), 
+    	  "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", protDbName, ensPep);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    
+    while (row != NULL)
+    	{      
+    	genomeID = row[0];
+    	seqID    = row[1];
+    	modelID  = row[2];
+    	region   = row[3];
+    	eValue   = row[4];
+    	sfID     = row[5];
+        /* sfDesc   = row[6]; */
+        /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
+    	safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
+    	sfDesc = sqlGetField(conn3, protDbName, "sfDes", "description", cond_str);
+
+    	/* !!! refine logic here later to be defensive against illegal syntax */
+    	chp = region;
+    	done = 0;
+    	while (!done)
+	    {
+	    chp2  = strstr(chp, "-");
+	    *chp2 = '\0';
+	    chp2++;
+
+	    sscanf(chp, "%d", &int_start);
+	
+	    chp = chp2;
+	    chp2  = strstr(chp, ",");
+	    if (chp2 != NULL) 
+	    	{
+	    	*chp2 = '\0';
+	    	}
+	    else
+	    	{
+	    	done = 1;
+		}
+	    chp2++;
+	    sscanf(chp, "%d", &int_end);
+
+ 	    sfId[sfCnt]    = atoi(sfID);
+	    sfStart[sfCnt] = int_start;
+	    sfEnd[sfCnt]   = int_end;
+	    strncpy(superfam_name[sfCnt], sfDesc, MAXNAMELEN-1);
+
+	    sfCnt++;
+	    chp = chp2;
+	    }
+
+    	row = sqlNextRow(sr);
+    	}
+
+    sqlFreeResult(&sr);
+    row2 = sqlNextRow(sr2);
+    }
+	
+hFreeConn(&conn);
+hFreeConn(&conn2);
+hFreeConn(&conn3);
+sqlFreeResult(&sr2);
+  
+return(sfCnt);
+}
+    
 int getSuperfamilies(char *proteinID)
+/* preserved here for previous older genomes.
+   Newer genomes should be using getSuperfamilies2(). 6/16/04 Fan*/
 {
 char *before, *after = "", *s;
 char startString[64], endString[64];
@@ -1367,7 +1497,11 @@ l=strlen(aa);
 /* initialize AA properties */
 aaPropertyInit(&hasResFreq);
 
-sfCount = getSuperfamilies(proteinID);
+sfCount = getSuperfamilies2(proteinID);
+if (sfCount == 0)
+    {
+    sfCount = getSuperfamilies(proteinID);
+    }
 
 if (mrnaID != NULL)
     {
