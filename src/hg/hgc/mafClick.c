@@ -9,7 +9,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.7 2003/09/23 20:28:06 kent Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.8 2003/10/17 06:25:43 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -141,11 +141,19 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         
     if (mc->strand == '-')
         reverseIntRange(&s, &e, mc->srcSize);
-    fprintf(f, "%s %s (%s) ", 
-    	hOrganism(dbOnly), hFreezeFromDb(dbOnly), dbOnly);
-    linkToOtherBrowser(dbOnly, chrom, s, e);
-    fprintf(f, "%s:%d-%d</A>, strand %c, size %d\n",
-    	chrom, s+1, e, mc->strand, mc->size);
+    if (hDbExists(dbOnly))
+        {
+        fprintf(f, "%s %s (%s) ", 
+    	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), dbOnly);
+        linkToOtherBrowser(dbOnly, chrom, s, e);
+        fprintf(f, "%s:%d-%d</A>", chrom, s+1, e);
+        }
+    else
+        {
+        fprintf(f, "%-20s%5c", dbOnly, ' ');
+        fprintf(f, "%s:%d-%d", chrom, s+1, e);
+        }
+    fprintf(f, ", strand %c, size %d\n", mc->strand, mc->size);
     }
 }
 
