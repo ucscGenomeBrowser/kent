@@ -248,11 +248,12 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN1 (DONE 11/26/02)
     cvs commit makefile
 
 
-COPY GENBANK MRNA DATA TO THE CLUSTER (TODO for mrna.132)
+COPY GENBANK MRNA DATA TO THE CLUSTER (DONE for mrna.132)
    ssh kkstore
    # Copy the rna data to the cluster if it isn't there already:
    mkdir /scratch/hg/mrna.132
-   cp -r /cluster/store2/mrna.132/org /scratch/hg/mrna.132
+   mkdir /scratch/hg/mrna.132/Rattus_norvegicus
+   cp /cluster/store2/mrna.132/org/Rattus_norvegicus/*.fa /scratch/hg/mrna.132/Rattus_norvegicus
    # Distribute this data to the local nodes: ask sysadmins, or run:
    sudo /cluster/install/utilities/updateLocal
 
@@ -267,15 +268,21 @@ CREATE RELATIONAL MRNA DATABASE (DONE)
     ssh hgwdev
     # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
     mkdir -p /gbdb/rn1/mrna.132
+
     cd /gbdb/rn1/mrna.132
     ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.fa
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra
     ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.fa
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra
     ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa
+    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra
+
     # Call hgLoadRna with the /gbdb locations:
     cd /cluster/store2/temp
     hgLoadRna new rn1
+    hgLoadRna add -type=mRNA rn1 /gbdb/rn1/mrna.132/mrna.fa /gbdb/rn1/mrna.132/mrna.ra
+    hgLoadRna add -type=EST rn1 /gbdb/rn1/mrna.132/est.fa /gbdb/rn1/mrna.132/est.ra
 
-    mkdir /cluster/store2/mrna.132
     cd /cluster/store2/mrna.132
 
 Make the anyRna.fil file using this text:
@@ -291,18 +298,6 @@ hide mol
         gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
         gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
 
-    mkdir -p /gbdb/rn1/mrna.132
-    cd /gbdb/rn1/mrna.132
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.fa /gbdb/rn1/mrna.132/mrna.fa
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra /gbdb/rn1/mrna.132/mrna.ra
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.fa /gbdb/rn1/mrna.132/est.fa
-    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra /gbdb/rn1/mrna.132/est.ra
-    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa /gbdb/rn1/mrna.132/refSeq.fa
-    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra /gbdb/rn1/mrna.132/refSeq.ra
-
-    cd /cluster/store2/temp
-    hgLoadRna add -type=mRNA rn1 /gbdb/rn1/mrna.132/mrna.fa /gbdb/rn1/mrna.132/mrna.ra
-    hgLoadRna add -type=EST rn1 /gbdb/rn1/mrna.132/est.fa /gbdb/rn1/mrna.132/est.ra
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (IN PROGRESS) DONE FOR ALL REFSEQ STEPS
 
@@ -983,9 +978,9 @@ Set up cluster run more or less as so:
       cd ~/rn1/bed
       mkdir xenoMrna
       cd xenoMrna
-      ls -1S /scratch/hg/rn1/mContigs/* > genome.lst
+      ls -1S /scratch/hg/rn1/contigs.1126/* > genome.lst
       ls -1S /scratch/hg/mrna.132/org/*/mrna.fa > allMrna
-Then edit allMrna removing the Mus.musculus line,  and writing
+Then edit allMrna removing the Mus.musculus Rattus_norvegicus,  and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
 Then
