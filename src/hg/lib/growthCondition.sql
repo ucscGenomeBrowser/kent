@@ -4,7 +4,7 @@
 # automatic way.
 
 #Conditions under which cells are grown
-CREATE TABLE growthConditions (
+CREATE TABLE growthCondition (
     name varchar(255) not null,	# Symbolic name of growth condition
     shortLabel varchar(255) not null,	# Short description of growth condition
     longLabel varchar(255) not null,	# Longer description of growth condition

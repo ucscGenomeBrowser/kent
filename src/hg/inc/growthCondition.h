@@ -5,57 +5,57 @@
 #ifndef GROWTHCONDITION_H
 #define GROWTHCONDITION_H
 
-#define GROWTHCONDITIONS_NUM_COLS 3
+#define GROWTHCONDITION_NUM_COLS 3
 
-struct growthConditions
+struct growthCondition
 /* Conditions under which cells are grown */
     {
-    struct growthConditions *next;  /* Next in singly linked list. */
+    struct growthCondition *next;  /* Next in singly linked list. */
     char *name;	/* Symbolic name of growth condition */
     char *shortLabel;	/* Short description of growth condition */
     char *longLabel;	/* Longer description of growth condition */
     };
 
-void growthConditionsStaticLoad(char **row, struct growthConditions *ret);
-/* Load a row from growthConditions table into ret.  The contents of ret will
+void growthConditionStaticLoad(char **row, struct growthCondition *ret);
+/* Load a row from growthCondition table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct growthConditions *growthConditionsLoad(char **row);
-/* Load a growthConditions from row fetched with select * from growthConditions
- * from database.  Dispose of this with growthConditionsFree(). */
+struct growthCondition *growthConditionLoad(char **row);
+/* Load a growthCondition from row fetched with select * from growthCondition
+ * from database.  Dispose of this with growthConditionFree(). */
 
-struct growthConditions *growthConditionsLoadAll(char *fileName);
-/* Load all growthConditions from whitespace-separated file.
- * Dispose of this with growthConditionsFreeList(). */
+struct growthCondition *growthConditionLoadAll(char *fileName);
+/* Load all growthCondition from whitespace-separated file.
+ * Dispose of this with growthConditionFreeList(). */
 
-struct growthConditions *growthConditionsLoadAllByChar(char *fileName, char chopper);
-/* Load all growthConditions from chopper separated file.
- * Dispose of this with growthConditionsFreeList(). */
+struct growthCondition *growthConditionLoadAllByChar(char *fileName, char chopper);
+/* Load all growthCondition from chopper separated file.
+ * Dispose of this with growthConditionFreeList(). */
 
-#define growthConditionsLoadAllByTab(a) growthConditionsLoadAllByChar(a, '\t');
-/* Load all growthConditions from tab separated file.
- * Dispose of this with growthConditionsFreeList(). */
+#define growthConditionLoadAllByTab(a) growthConditionLoadAllByChar(a, '\t');
+/* Load all growthCondition from tab separated file.
+ * Dispose of this with growthConditionFreeList(). */
 
-struct growthConditions *growthConditionsCommaIn(char **pS, struct growthConditions *ret);
-/* Create a growthConditions out of a comma separated string. 
+struct growthCondition *growthConditionCommaIn(char **pS, struct growthCondition *ret);
+/* Create a growthCondition out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new growthConditions */
+ * return a new growthCondition */
 
-void growthConditionsFree(struct growthConditions **pEl);
-/* Free a single dynamically allocated growthConditions such as created
- * with growthConditionsLoad(). */
+void growthConditionFree(struct growthCondition **pEl);
+/* Free a single dynamically allocated growthCondition such as created
+ * with growthConditionLoad(). */
 
-void growthConditionsFreeList(struct growthConditions **pList);
-/* Free a list of dynamically allocated growthConditions's */
+void growthConditionFreeList(struct growthCondition **pList);
+/* Free a list of dynamically allocated growthCondition's */
 
-void growthConditionsOutput(struct growthConditions *el, FILE *f, char sep, char lastSep);
-/* Print out growthConditions.  Separate fields with sep. Follow last field with lastSep. */
+void growthConditionOutput(struct growthCondition *el, FILE *f, char sep, char lastSep);
+/* Print out growthCondition.  Separate fields with sep. Follow last field with lastSep. */
 
-#define growthConditionsTabOut(el,f) growthConditionsOutput(el,f,'\t','\n');
-/* Print out growthConditions as a line in a tab-separated file. */
+#define growthConditionTabOut(el,f) growthConditionOutput(el,f,'\t','\n');
+/* Print out growthCondition as a line in a tab-separated file. */
 
-#define growthConditionsCommaOut(el,f) growthConditionsOutput(el,f,',',',');
-/* Print out growthConditions as a comma separated list including final comma. */
+#define growthConditionCommaOut(el,f) growthConditionOutput(el,f,',',',');
+/* Print out growthCondition as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

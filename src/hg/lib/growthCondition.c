@@ -8,10 +8,10 @@
 #include "jksql.h"
 #include "growthCondition.h"
 
-static char const rcsid[] = "$Id: growthCondition.c,v 1.1 2004/10/06 20:45:40 kent Exp $";
+static char const rcsid[] = "$Id: growthCondition.c,v 1.2 2004/10/06 20:54:09 kent Exp $";
 
-void growthConditionsStaticLoad(char **row, struct growthConditions *ret)
-/* Load a row from growthConditions table into ret.  The contents of ret will
+void growthConditionStaticLoad(char **row, struct growthCondition *ret)
+/* Load a row from growthCondition table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -20,11 +20,11 @@ ret->shortLabel = row[1];
 ret->longLabel = row[2];
 }
 
-struct growthConditions *growthConditionsLoad(char **row)
-/* Load a growthConditions from row fetched with select * from growthConditions
- * from database.  Dispose of this with growthConditionsFree(). */
+struct growthCondition *growthConditionLoad(char **row)
+/* Load a growthCondition from row fetched with select * from growthCondition
+ * from database.  Dispose of this with growthConditionFree(). */
 {
-struct growthConditions *ret;
+struct growthCondition *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -33,17 +33,17 @@ ret->longLabel = cloneString(row[2]);
 return ret;
 }
 
-struct growthConditions *growthConditionsLoadAll(char *fileName) 
-/* Load all growthConditions from a whitespace-separated file.
- * Dispose of this with growthConditionsFreeList(). */
+struct growthCondition *growthConditionLoadAll(char *fileName) 
+/* Load all growthCondition from a whitespace-separated file.
+ * Dispose of this with growthConditionFreeList(). */
 {
-struct growthConditions *list = NULL, *el;
+struct growthCondition *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileRow(lf, row))
     {
-    el = growthConditionsLoad(row);
+    el = growthConditionLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -51,17 +51,17 @@ slReverse(&list);
 return list;
 }
 
-struct growthConditions *growthConditionsLoadAllByChar(char *fileName, char chopper) 
-/* Load all growthConditions from a chopper separated file.
- * Dispose of this with growthConditionsFreeList(). */
+struct growthCondition *growthConditionLoadAllByChar(char *fileName, char chopper) 
+/* Load all growthCondition from a chopper separated file.
+ * Dispose of this with growthConditionFreeList(). */
 {
-struct growthConditions *list = NULL, *el;
+struct growthCondition *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = growthConditionsLoad(row);
+    el = growthConditionLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -69,10 +69,10 @@ slReverse(&list);
 return list;
 }
 
-struct growthConditions *growthConditionsCommaIn(char **pS, struct growthConditions *ret)
-/* Create a growthConditions out of a comma separated string. 
+struct growthCondition *growthConditionCommaIn(char **pS, struct growthCondition *ret)
+/* Create a growthCondition out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new growthConditions */
+ * return a new growthCondition */
 {
 char *s = *pS;
 
@@ -85,11 +85,11 @@ ret->longLabel = sqlStringComma(&s);
 return ret;
 }
 
-void growthConditionsFree(struct growthConditions **pEl)
-/* Free a single dynamically allocated growthConditions such as created
- * with growthConditionsLoad(). */
+void growthConditionFree(struct growthCondition **pEl)
+/* Free a single dynamically allocated growthCondition such as created
+ * with growthConditionLoad(). */
 {
-struct growthConditions *el;
+struct growthCondition *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
@@ -98,21 +98,21 @@ freeMem(el->longLabel);
 freez(pEl);
 }
 
-void growthConditionsFreeList(struct growthConditions **pList)
-/* Free a list of dynamically allocated growthConditions's */
+void growthConditionFreeList(struct growthCondition **pList)
+/* Free a list of dynamically allocated growthCondition's */
 {
-struct growthConditions *el, *next;
+struct growthCondition *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    growthConditionsFree(&el);
+    growthConditionFree(&el);
     }
 *pList = NULL;
 }
 
-void growthConditionsOutput(struct growthConditions *el, FILE *f, char sep, char lastSep) 
-/* Print out growthConditions.  Separate fields with sep. Follow last field with lastSep. */
+void growthConditionOutput(struct growthCondition *el, FILE *f, char sep, char lastSep) 
+/* Print out growthCondition.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
