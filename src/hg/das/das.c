@@ -129,6 +129,7 @@ hashAdd(skipHash, "simpleRepeat", NULL);
 hashAdd(skipHash, "ctgPos", NULL);
 hashAdd(skipHash, "gold", NULL);
 hashAdd(skipHash, "clonePos", NULL);
+hashAdd(skipHash, "gap", NULL);
 hashAdd(skipHash, "rmsk", NULL);
 hashAdd(skipHash, "estPair", NULL);
 
@@ -157,11 +158,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 		     td->category = "variation";
 		     }
 		else if (stringIn("est", root) || stringIn("Est", root) 
-		    || stringIn("mrna", root) || stringIn("Mrna", root)
-		    || sameString("txStart", startField) || stringIn("rnaGene", root))
+		    || stringIn("mrna", root) || stringIn("Mrna", root))
 		    {
 		    td->category = "transcription";
 		    td->method = "BLAT";
+		    }
+		else if (sameString("txStart", startField) || stringIn("rnaGene", root))
+		    {
+		    td->category = "transcription";
 		    }
 		else if (stringIn("mouse", root) || stringIn("Mouse", root) ||
 		    stringIn("fish", root) || stringIn("Fish", root))
@@ -630,8 +634,8 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
     start = segment->start;
     end = segment->end;
     printf(
-    "<SEGMENT id=\"seq\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
-	   start+1, end, version, seq);
+    "<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
+	   seq, start+1, end, version, seq);
 
     /* Query database and output features. */
     for (td = tdList; td != NULL; td = td->next)
