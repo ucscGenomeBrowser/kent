@@ -555,12 +555,12 @@ char *strstrNoCase(char *haystack, char *needle);
 /* A case-insensitive strstr */
 
 int vasafef(char* buffer, int bufSize, char *format, va_list args);
-/* format string to buffer, vsprintf style, but detect buffer overflow
- * and abort */
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
 
 int safef(char* buffer, int bufSize, char *format, ...)
-/* format string to buffer, sprintf style, but detect buffer overflow
- * and abort */
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
 #endif

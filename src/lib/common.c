@@ -1293,8 +1293,8 @@ return strstr(haystackCopy, needleCopy);
 }
 
 int vasafef(char* buffer, int bufSize, char *format, va_list args)
-/* format string to buffer, vsprintf style, but detect buffer overflow
- * and abort */
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
 {
 int sz = vsnprintf(buffer, bufSize, format, args);
 /* note that some version return -1 if too small */
@@ -1304,8 +1304,8 @@ return sz;
 }
 
 int safef(char* buffer, int bufSize, char *format, ...)
-/* format string to buffer, sprintf style, but detect buffer
- * to small and abort */
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. */
 {
 int sz;
 va_list args;
