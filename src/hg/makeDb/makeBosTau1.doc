@@ -123,7 +123,7 @@ exit; # don't actually run this like a script :)
   hgsql bosTau1 < coords.sql
   load data local infile 'scaffolds.coords' into table scaffoldCoords
   # calculate maximum coords; check that start coord is always 1
-  java -Xms256m -Xmx512m getMaxCoord > getMaxCoord.bosTau1
+  /cluster/home/heather/bin/i386/GetMaxCoord > getMaxCoord.bosTau1
   # edit chromInfo.sql; allow fileName to be null
   cp ~heather/kent/src/hg/lib/chromInfo.sql .
   hgsql bosTau1 < chromInfo.sql
