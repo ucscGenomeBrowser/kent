@@ -6,6 +6,9 @@ struct vGfx *vgHalfInit(int width, int height);
 /* Return a partially initialized vGfx structure. 
  * Generally not called by clients.*/
 
+void vgMgMethods(struct vGfx *vg);
+/* Fill in virtual graphics methods for memory based drawing. */
+
 /* A bunch of things to make the type-casting easier.
  * This is the price you pay for object oriented
  * polymorphism in C... */

@@ -9,6 +9,8 @@
 #include "memgfx.h"
 #include "gemfont.h"
 #include "localmem.h"
+#include "vGfx.h"
+#include "vGfxPrivate.h"
 
 #define colHashFunc(r,g,b) (r+g+g+b)
 
@@ -263,6 +265,18 @@ if (width > 0)
     }
 }
 
+void mgVerticalSmear(struct memGfx *mg,
+	int xOff, int yOff, int width, int height, 
+	unsigned char *dots, boolean zeroClear)
+/* Put a series of one 'pixel' width vertical lines. */
+{
+while (--height >= 0)
+    {
+    mgPutSegMaybeZeroClear(mg, xOff, yOff, width, dots, zeroClear);
+    ++yOff;
+    }
+}
+
 void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots)
 /* Put a series of dots starting at x, y and going to right width pixels. */
 {
@@ -335,7 +349,7 @@ else
     {
     incy = 1;
     }
-if ((delta_x) < 0) 
+if (delta_x < 0) 
     {
     delta_x = -delta_x;
     incy = -incy;
@@ -972,5 +986,25 @@ for (i=1; i<=barbHeight; ++i)
 	}
     offset -= barbDir;
     }
+}
+
+void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
+/* Draw a dot when a macro won't do. */
+{
+mgPutDot(mg, x, y, colorIx);
+}
+
+void vgMgMethods(struct vGfx *vg)
+/* Fill in virtual graphics methods for memory based drawing. */
+{
+vg->close = (vg_close)mgFree;
+vg->dot = (vg_dot)mgSlowDot;
+vg->box = (vg_box)mgDrawBox;
+vg->line = (vg_line)mgDrawLine;
+vg->text = (vg_text)mgText;
+vg->findColorIx = (vg_findColorIx)mgFindColor;
+vg->setClip = (vg_setClip)mgSetClip;
+vg->unclip = (vg_unclip)mgUnclip;
+vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 }
 

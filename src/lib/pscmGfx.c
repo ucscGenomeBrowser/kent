@@ -149,9 +149,8 @@ static void pscmSetFont(struct pscmGfx *pscm, MgFont *font)
 void *v = font;
 if (v != pscm->curFont)
     {
-    FILE *f = pscm->ps->f;
-    fprintf(f, "/Times-Roman findfont ");
-    fprintf(f, "%d scalefont setfont\n", font->frm_hgt);
+    psTimesFont(pscm->ps, font->frm_hgt);
+    pscm->curFont = v;
     }
 }
 

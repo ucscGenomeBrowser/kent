@@ -15,6 +15,7 @@ struct psGfx
     double ptWidth, ptHeight;   /* Size of image in points (1/72 of an inch) */
     double xScale, yScale;      /* Conversion from pixels to points. */
     double xOff, yOff;          /* Offset from pixels to points. */
+    double fontHeight;		/* Height of current font. */
     };
 
 struct psGfx *psOpen(char *fileName, 
@@ -38,17 +39,20 @@ void psXyOut(struct psGfx *ps, int x, int y);
  * Useful if you're mixing direct PostScript with psGfx
  * functions. */
 
+void psWhOut(struct psGfx *ps, int width, int height);
+/* Output width/height transformed into PostScript space. */
+
 void psMoveTo(struct psGfx *ps, int x, int y);
 /* Move PostScript position to given point. */
 
 void psTextAt(struct psGfx *ps, int x, int y, char *text);
 /* Output text in current font at given position. */
 
-void psWhOut(struct psGfx *ps, int width, int height);
-/* Output width/height transformed into PostScript space. */
-
 void psTextDown(struct psGfx *ps, int x, int y, char *text);
 /* Output text going downwards rather than across at position. */
+
+void psTimesFont(struct psGfx *ps, double size);
+/* Set font to times of a certain size. */
 
 void psSetColor(struct psGfx *ps, int r, int g, int b);
 /* Set current color. r/g/b values are between 0 and 255. */

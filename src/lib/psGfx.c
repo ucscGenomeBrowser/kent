@@ -65,6 +65,7 @@ else
    }
 ps->xOff = ptMargin;
 ps->yOff = ptMargin;
+ps->fontHeight = 10;
 
 /* Cope with fact y coordinates are bottom to top rather
  * than top to bottom. */
@@ -127,10 +128,24 @@ fprintf(ps->f, "lineto\n");
 fprintf(f, "stroke\n");
 }
 
+void psTimesFont(struct psGfx *ps, double size)
+/* Set font to times of a certain size. */
+{
+FILE *f = ps->f;
+fprintf(f, "/Times-Roman findfont ");
+
+/* Note the 1.2 and the 0.95 below seem to get it to 
+ * position about where the stuff developed for pixel
+ * based systems expects it.  It is all a kludge though! */
+fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
+ps->fontHeight = size*0.95;
+}
+
+
 void psTextAt(struct psGfx *ps, int x, int y, char *text)
 /* Output text in current font at given position. */
 {
-psMoveTo(ps, x, y);
+psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(%s) show\n", text);
 }
 
