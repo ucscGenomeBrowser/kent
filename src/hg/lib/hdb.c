@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.188 2004/06/15 23:44:14 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.189 2004/06/17 00:53:18 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -952,6 +952,7 @@ struct largeSeqFile
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
     unsigned seqTblSet;         /* extFile or gbExtFile */
+    char *db;                   /* database this is associated with */
     HGID id;                    /* Id in extFile table. */
     int fd;                     /* File handle. */
     };
@@ -959,7 +960,7 @@ struct largeSeqFile
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
 
-static struct largeSeqFile *largeFileHandle(HGID extId, int seqTblSet)
+static struct largeSeqFile *largeFileHandle(char *db, HGID extId, int seqTblSet)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
@@ -968,7 +969,7 @@ char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     {
-    if ((lsf->id == extId) && (lsf->seqTblSet == seqTblSet))
+    if ((lsf->id == extId) && (lsf->seqTblSet == seqTblSet) && sameString(lsf->db, db))
         return lsf;
     }
 
@@ -978,6 +979,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     AllocVar(lsf);
     lsf->path = hExtFileName(extTable, extId);
     lsf->seqTblSet = seqTblSet;
+    lsf->db = cloneString(db);
     lsf->id = extId;
     if ((lsf->fd = open(lsf->path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", lsf->path);
@@ -1054,7 +1056,7 @@ if (gbDate != NULL)
     strcpy(gbDate, row[4]);
     
 
-lsf = largeFileHandle(extId, seqTblSet);
+lsf = largeFileHandle(sqlGetDatabase(conn), extId, seqTblSet);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 sqlFreeResult(&sr);
 return buf; 
