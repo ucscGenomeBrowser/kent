@@ -1039,7 +1039,7 @@ priority 152
 visibility hide
 chromosomes chr7,
 color 100,50,0
-altColor 255,240,200
+altColor 0,50,100
 type maf
 
 track phyloHMM_leptin
@@ -1059,15 +1059,6 @@ shortLabel phyloHMMcons Leptin 90
 longLabel phylo-HMM-based conservation, Leptin, 90 percent
 group compGeno
 priority 152.2
-visibility hide
-chromosomes chr7,
-type bed 3
-
-track leptinHuman90MinusLeptinJTbaboon
-shortLabel lep90 minus baboon
-longLabel phylo-HMM-based conservation, Leptin, 90 percent minus leptinJTbaboon
-group compGeno
-priority 151.701
 visibility hide
 chromosomes chr7,
 type bed 3
