@@ -91,13 +91,13 @@ else
     }
 }
 
-struct dnaSeq *getSeqList(int fileCount, char *files[], struct hash *hash)
+bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
 int i;
 char *fileName;
-struct dnaSeq *seqList = NULL, *seq;
+bioSeq *seqList = NULL, *seq;
 int count = 0; 
 unsigned long totalSize = 0;
 
@@ -121,7 +121,7 @@ for (i=0; i<fileCount; ++i)
     else
         {
 	struct dnaSeq *list, *next;
-	list = faReadAllDna(fileName);
+	list = faReadAllSeq(fileName, !isProt);
 	for (seq = list; seq != NULL; seq = next)
 	    {
 	    next = seq->next;
@@ -132,7 +132,7 @@ for (i=0; i<fileCount; ++i)
 	    }
 	}
     }
-printf("Indexed %lu bases in %d sequences\n", totalSize, count);
+printf("Indexing %lu letters in %d sequences\n", totalSize, count);
 slReverse(&seqList);
 return seqList;
 }
@@ -145,27 +145,23 @@ gfAlignSeqClumps(clumpList, seq, isRc, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 }
 
-#ifdef SOON
 void searchOneProtStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for protein seq in index and write results to psl. */
 {
-struct gfClump *clump, *clumpList = gfPepFindClumps(gf, seq);
+struct gfClump *clump, *clumpList = gfFindClumps(gf, seq);
 uglyf("Found %d clumps in %s\n", slCount(clumpList), seq->name);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     gfClumpDump(gf, clump, uglyOut);
 }
-#endif
 
 void searchOne(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for seq on either strand in index. */
 {
-#ifdef SOON
 if (isProt)
     {
     searchOneProtStrand(seq, gf, psl);
     }
 else
-#endif
     {
     searchOneStrand(seq, gf, psl, FALSE);
     reverseComplement(seq->dna, seq->size);
@@ -195,6 +191,8 @@ for (i=0; i<fileCount; ++i)
 	int size;
 	struct dnaSeq *seq;
 
+	if (isProt)
+	    errAbort("%s: Can't use .nib files with -prot option\n", fileName);
 	nibOpenVerify(fileName, &f, &size);
 	seq = nibLdPart(fileName, f, size, 0, size);
 	freez(&seq->name);
@@ -235,12 +233,7 @@ struct genoFind *gf;
 getFileArray(dbFile, &dbFiles, &dbCount);
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash);
-#ifdef SOON
-if (isProt)
-    gf = gfPepIndexNibs(dbCount, dbFiles, 3, 0, 4, 4096);
-else
-#endif
-    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, FALSE);
+gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, isProt);
 searchIndex(queryCount, queryFiles, gf, pslOut);
 }
 
@@ -251,15 +244,29 @@ cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 tileSize = cgiOptionalInt("tileSize", tileSize);
-if (tileSize < 6 || tileSize > 15)
-    errAbort("tileSize must be between 6 and 15");
+if (cgiVarExists("prot"))
+    {
+    uglyf("is prot\n");
+    isProt = TRUE;
+    tileSize = 4;
+    minMatch = 3;
+    maxGap = 0;
+    }
+if (isProt)
+    {
+    if (tileSize < 2 || tileSize > 6)
+	errAbort("protein tileSize must be between 2 and 6");
+    }
+else
+    {
+    if (tileSize < 6 || tileSize > 15)
+	errAbort("DNA tileSize must be between 6 and 15");
+    }
 minMatch = cgiOptionalInt("minMatch", minMatch);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
 minBases = cgiOptionalInt("minBases", minBases);
 maxGap = cgiOptionalInt("maxGap", maxGap);
-if (cgiVarExists("prot"))
-    isProt = TRUE;
 if (maxGap > 100)
     errAbort("maxGap must be less than 100");
 if (cgiVarExists("repMatch"))

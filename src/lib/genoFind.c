@@ -117,11 +117,15 @@ struct genoFind *gf;
 int tileSpaceSize;
 
 if (isPep)
+    {
     if (tileSize < 3 || tileSize > 6)
 	errAbort("Seed size must be between 3 and 6");
+    }
 else
+    {
     if (tileSize < 8 || tileSize > 14)
 	errAbort("Seed size must be between 8 and 14");
+    }
 AllocVar(gf);
 gf->tileSize = tileSize;
 gf->isPep = isPep;
@@ -494,9 +498,11 @@ void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f)
 {
 struct gfHit *hit;
 struct gfSeqSource *ss = clump->target;
+char *name = ss->fileName;
 
+if (name == NULL) name = ss->seq->name;
 fprintf(f, "%u-%u %s %u-%u, hits %d\n", 
-	clump->qStart, clump->qEnd, ss->fileName,
+	clump->qStart, clump->qEnd, name,
 	clump->tStart - ss->start, clump->tEnd - ss->start,
 	clump->hitCount);
 #ifdef SOMETIMES
@@ -628,6 +634,7 @@ int tileSize = gf->tileSize;
 
 for (hit = hitList; ; hit = nextHit)
     {
+    // if (hit != NULL) uglyf(" %d %d (%d)\n", hit->qStart, hit->tStart, hit->diagonal);
     /* See if time to finish old clump/start new one. */
     if (lastHit == NULL || hit == NULL || hit->diagonal - lastHit->diagonal > maxGap)
         {
@@ -726,7 +733,7 @@ int tileSize = gf->tileSize;
 int lastStart = size - tileSize;
 int tileSizeMinusOne = tileSize - 1;
 int mask = gf->tileMask;
-AA *aa = seq->dna;
+AA *pep = seq->dna;
 int i, j;
 int tile;
 bits32 bVal;
@@ -736,15 +743,15 @@ int minMatch = gf->minMatch;
 
 for (i=0; i<=lastStart; ++i)
     {
-    tile = gfPepTile(aa+i, tileSize);
+    tile = gfPepTile(pep+i, tileSize);
     if (tile < 0)
         continue;
     listSize = gf->listSizes[tile];
+    qStart = i;
     tList = gf->lists[tile];
     for (j=0; j<listSize; ++j)
         {
 	AllocVar(hit);
-	// uglyf("hit %c%c%c%c %d %d\n", aa[i], aa[i+1], aa[i+2], aa[i+3], i, tList[j]);
 	hit->qStart = qStart;
 	hit->tStart = tList[j];
 	hit->diagonal = hit->tStart + seq->size - qStart;

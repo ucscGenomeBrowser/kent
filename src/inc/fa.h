@@ -18,6 +18,12 @@ struct dnaSeq *faReadDna(char *fileName);
 /* Open fa file and read a single sequence from it. */
 
 struct dnaSeq *faReadAllDna(char *fileName);
+/* Return list of all DNA sequences in FA file. */
+
+struct dnaSeq *faReadAllPep(char *fileName);
+/* Return list of all Peptide sequences in FA file. */
+
+struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna);
 /* Return list of all sequences in FA file. */
 
 struct dnaSeq *faReadOneDnaSeq(FILE *f, char *name, boolean mustStartWithSign);

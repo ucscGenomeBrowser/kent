@@ -377,7 +377,7 @@ boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **
 return faSomeSpeedReadNext(lf, retDna, retSize, retName, TRUE);
 }
 
-struct dnaSeq *faReadAllDna(char *fileName)
+struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna)
 /* Return list of all sequences in FA file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, FALSE);
@@ -386,7 +386,7 @@ DNA *dna;
 char *name;
 int size;
 
-while (faSpeedReadNext(lf, &dna, &size, &name))
+while (faSomeSpeedReadNext(lf, &dna, &size, &name, isDna))
     {
     AllocVar(seq);
     seq->name = cloneString(name);
@@ -398,5 +398,17 @@ lineFileClose(&lf);
 slReverse(&seqList);
 faFreeFastBuf();
 return seqList;
+}
+
+struct dnaSeq *faReadAllDna(char *fileName)
+/* Return list of all DNA sequences in FA file. */
+{
+return faReadAllSeq(fileName, TRUE);
+}
+
+struct dnaSeq *faReadAllPep(char *fileName)
+/* Return list of all peptide sequences in FA file. */
+{
+return faReadAllSeq(fileName, FALSE);
 }
 
