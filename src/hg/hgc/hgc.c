@@ -9317,7 +9317,7 @@ char buff[64];
 char *s=NULL;
 int sgCount=0;
 chuckHtmlStart("Sage Data Requested");
-printf("<h2>Sage Data for: %s %d-%d</h2>\n", seqName, winStart, winEnd);
+printf("<h2>Sage Data for: %s %d-%d</h2>\n", seqName, winStart+1, winEnd);
 puts("<table cellpadding=0 cellspacing=0><tr><td>\n");
 
 sgList = bedWScoreLoadByChrom(tableName, seqName, winStart, winEnd);
