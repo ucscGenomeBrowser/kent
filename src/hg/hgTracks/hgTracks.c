@@ -44,6 +44,7 @@
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
+#define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
 #define CONTROL_TABLE_WIDTH 600
 #ifdef CHUCK_CODE
@@ -1053,6 +1054,15 @@ char table[64];
 sprintf(table, "%s_mrna", chromName);
 tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, FALSE);
 }
+
+#ifdef FUREY_CODE
+void loadBacEnds(struct trackGroup *tg)
+/* Load up bac ends from table into trackGroup items. */
+{
+tg->items = lfFromPslsInRange("bacEnds", winStart, winEnd, NULL, FALSE);
+}
+#endif /* FUREY_CODE */
+
 #ifdef ROGIC_CODE
 struct linkedFeatures *lfFromPslsInRangeByChrom(char *table, char *chrom, int start, int end)
 /* Return linked features from range of table. */
@@ -1109,6 +1119,20 @@ tg->shortLabel = "Full mRNAs";
 tg->loadItems = loadMrnaAli;
 return tg;
 }
+
+#ifdef FUREY_CODE
+struct trackGroup *bacEndsTg()
+/* Make track group of BAC end pairs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "BACends";
+tg->visibility = tvHide;
+tg->longLabel = "BAC end pairs";
+tg->shortLabel = "BAC ends";
+tg->loadItems = loadBacEnds;
+return tg;
+}
+#endif /* FUREY_CODE */
 
 char *usrPslMapName(struct trackGroup *tg, void *item)
 /* Return name of item. */
@@ -4949,6 +4973,7 @@ if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
 if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
 if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
+if (hTableExists("bacEnds")) slSafeAddHead(&tGroupList, bacEndsTg());
 #ifdef CHUCK_CODE
 if (sameString(chromName, "chr22") && hTableExists("rosettaTe")) slSafeAddHead(&tGroupList,rosettaTeTg());   
 if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
