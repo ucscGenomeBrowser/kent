@@ -280,7 +280,7 @@ return color;
 }
 
 
-static int setColorByCds(DNA *dna, int codonEven, boolean *foundStart, 
+static int setColorByCds(DNA *dna, bool codonFirstColor, boolean *foundStart, 
 			                boolean reverse)
 {
 char codonChar;
@@ -298,10 +298,10 @@ else if (codonChar == 'M')
         *foundStart = TRUE;
     return(-1);     //start codon
     }
-else if (codonEven == 0)
-    return(codonChar - 'A' + 1);       //odd color
+else if (codonFirstColor)
+    return(codonChar - 'A' + 1);
 else
-    return(codonChar - 'A' + 1 + 26);  //even color
+    return(codonChar - 'A' + 1 + 26);
 }
 
 
@@ -501,15 +501,14 @@ static void updatePartialCodon(char *retStr, char *chrom, int start,
     strncpy( retStr, tmpStr, 4 );
 }
 
-struct simpleFeature *splitDnaByCodon(int frame, int chromStart, int chromEnd,
-                                            struct dnaSeq *seq, bool reverse)
+struct simpleFeature *splitDnaByCodon(int frame, int chromStart,
+                                 int chromEnd, struct dnaSeq *seq, bool reverse)
 /* Create list of codons from a DNA sequence.
    The DNA sequence passed in must include 3 bases extra at the
    start and the end to allow for creating partial codons */
 {
 struct simpleFeature *sfList = NULL, *sf = NULL;
 char codon[4];
-int codonCount = 0;
 int chromPos = chromStart+1;
 int i;
 DNA *start;
@@ -531,7 +530,6 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         continue;
 
     /* new codon */
-    codonCount++;
     AllocVar(sf);
     sf->start = chromPos - 3;
     sf->end = sf->start + 3;
@@ -540,7 +538,7 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         sf->start = winEnd - sf->start + winStart - 3;
         sf->end = sf->start + 3;
         }
-    sf->grayIx = setColorByCds(codon, codonCount % 2, NULL, FALSE);
+    sf->grayIx = setColorByCds(codon, sf->start % 6 < 3, NULL, FALSE);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }
