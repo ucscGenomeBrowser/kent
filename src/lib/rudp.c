@@ -1,21 +1,28 @@
-/* rudp - (semi) reliable UDP communication.  UDP is a packet based 
- * rather than stream based internet communication protocol.  
- * Messages sent by UDP are checked for integrety by the UDP layer, and 
- * discarded if transmission errors are detected.  However packets are
+/* rudp - (semi) reliable UDP communication.  This adds an
+ * acknowledgement and resend layer on top of UDP. 
+ *
+ * UDP is a packet based rather than stream based internet communication 
+ * protocol. Messages sent by UDP are checked for integrety by the UDP layer, 
+ * and discarded if transmission errors are detected.  However packets are
  * not necessarily received in the same order that they are sent,
- * and packets may be duplicated or lost. 
+ * and packets may be duplicated or lost.  
+ 
+ * Using rudp packets are only very rarely lost, and the sender is 
+ * notified if they are.  After rudp there are still duplicate
+ * packets that may arrive out of order.  Aside from the duplicates
+ * the packets are in order though.
  *
  * For many, perhaps most applications, TCP/IP is a saner choice
- * than UDP.  If the communication channel is between just two
- * computers you can pretty much just treat TCP/IP as a fairly
+ * than UDP or rudp.  If the communication channel is between just 
+ * two computers you can pretty much just treat TCP/IP as a fairly
  * reliable pipe.   However if the communication involves many
  * computers sometimes UDP can be a better choice.  It is possible to
  * do broadcast and multicast with UDP but not with TCP/IP.  Also
  * for systems like parasol, where a server may be making and breaking
  * connections rapidly to thousands of computers, TCP paradoxically
- * can end up less reliable than UDP.  Though TCP is relatively robust
- * when a connection is made,  it can it turns out relatively easily
- * fail to make a connection in the first place, and spend quite a long
+ * can end up less reliable than UDP.  Though TCP is relatively 
+ * robust when a connection is made,  it can relatively easily fail
+ * to make a connection in the first place, and spend quite a long
  * time figuring out that the connection can't be made.  Moreover at
  * the end of each connection TCP goes into a 'TIMED_WAIT' state,  which
  * prevents another connection from coming onto the same port for a
@@ -38,7 +45,7 @@
  *
  * Much of this code is based on the 'Adding Reliability to a UDP Application
  * section in volume I, chapter 20, section 5, of _UNIX Network Programming_
- * by W. Richard Stevens, may he rest in peace. */
+ * by W. Richard Stevens. */
 
 
 #include "common.h"
