@@ -410,10 +410,10 @@ makeTempName(&faTn, "hgSs", ".fa");
 faWriteAll(faTn.forCgi, seqList);
 
 /* Create a temporary .psl file with the alignments against genome. */
-gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
-serve = findServer(genome, isTx);
 makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
+gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
+serve = findServer(genome, isTx);
 if (isTx)
     {
     if (isTxTx)
@@ -453,6 +453,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	gvo->reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
+	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, gvo, !txTxBoth);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
@@ -475,7 +476,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
-
 showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db);
 }
 
@@ -605,6 +605,7 @@ else
     {
     blatSeq(skipLeadingSpaces(userSeq));
     }
+cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save
