@@ -55,6 +55,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = newHash(8);
 struct chrom *chrom;
 char *row[2];
+int chromCount = 0;
 
 while (lineFileRow(lf, row))
     {
@@ -62,6 +63,7 @@ while (lineFileRow(lf, row))
     hashAddSaveName(hash, row[0], chrom, &chrom->name);
     chrom->size = lineFileNeedNum(lf, row, 1);
     chrom->bits = bitAlloc(chrom->size);
+    ++chromCount;
     }
 lineFileClose(&lf);
 return hash;
@@ -121,7 +123,8 @@ struct hash *qHash = setupChroms(querySizes);
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct chain *chain;
-int score, lastScore = BIGNUM;
+double score, lastScore = 9e99;
+struct chrom *qChrom, *tChrom;
 
 while ((chain = chainRead(lf)) != NULL)
     {
@@ -131,13 +134,16 @@ while ((chain = chainRead(lf)) != NULL)
     /* Check to make sure it really is sorted by score. */
     score = chain->score;
     if (score > lastScore)
+       {
        errAbort("%s not sorted by score line %d of %s", 
        	lf->lineIx, lf->fileName);
+       }
     lastScore = score;
 
     /* Output chain if necessary and then free it. */
-    if (chainUsed(chain, hashMustFindVal(qHash, chain->qName), 
-	    hashMustFindVal(tHash, chain->tName)))
+    qChrom = hashMustFindVal(qHash, chain->qName);
+    tChrom = hashMustFindVal(tHash, chain->tName);
+    if (chainUsed(chain, qChrom, tChrom))
 	{
 	chainWrite(chain, f);
 	}
