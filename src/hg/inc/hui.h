@@ -189,6 +189,20 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+enum wiggleGridOptEnum {
+   wiggleHorizontalGridOn = 0,
+   wiggleHorizontalGridOff = 1,
+};
+
+enum wiggleGridOptEnum wiggleGridStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleGridDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 
 /*** Some Stuff for the wiggle track ***/
 
