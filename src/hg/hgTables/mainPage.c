@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.30 2004/09/02 18:07:20 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.31 2004/09/02 19:28:13 hiram Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -216,7 +216,6 @@ char *showTableField(struct trackDb *track)
 struct joinerPair *jpList, *jp;
 struct slName *name, *nameList = NULL;
 char *selTable;
-boolean gotSelTable = FALSE;
 struct hash *uniqHash = hashNew(8);
 
 /* Construct an alphabetical list of all joining tables, with
@@ -460,8 +459,18 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     if (isWig)
-	hPrintf("<I>Note: Only up to the first 100,000 data points in region will be "
-	        "output.</I><BR>");
+	{
+	char *name;
+	extern char *maxOutMenu[];
+	char *maxOutput = maxOutMenu[0];
+
+	name = filterFieldVarName(database, curTable, "", filterMaxOutputVar);
+	maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
+
+	hPrintf(
+	    "<I>Note: output is limited to %s lines returned.  Use the"
+	    " filter setting to change this limit.</I><BR>", maxOutput);
+	}
     else
 	{
 	if (anyIntersection())
