@@ -29,6 +29,9 @@ enum pfTokType
     pftMulEquals,
     pftModEquals,
     pftEqualsEquals,
+    pftNotEquals,
+    pftGreaterOrEquals,
+    pftLessOrEquals,
 
     /* - reserved words - */
     pftClass,
@@ -43,6 +46,9 @@ enum pfTokType
     pftIf,
     pftElse,
     };
+
+char *pfTokTypeAsString(enum pfTokType type);
+/* Return string corresponding to pfTokType */
 
 struct pfSource
 /* A paraFlow source file. */

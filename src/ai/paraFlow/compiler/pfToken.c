@@ -77,11 +77,11 @@ void expectingGot(char *expecting, struct pfToken *got)
 /* Complain about unexpected stuff and quit. */
 {
 char *s = cloneStringZ(got->text, got->textSize);
-errAt(got, "Expecting %s, got %s.", expecting, s);
+errAt(got, "Expecting %s got %s", expecting, s);
 }
 
 
-static char *pfTokTypeAsString(enum pfTokType type)
+char *pfTokTypeAsString(enum pfTokType type)
 /* Return string corresponding to pfTokType */
 {
 static char buf[2];
@@ -101,6 +101,9 @@ switch (type)
     case pftMulEquals: return "pftMulEquals";
     case pftModEquals: return "pftModEquals";
     case pftEqualsEquals: return "pftEqualsEquals";
+    case pftNotEquals: return "pftNotEquals";
+    case pftGreaterOrEquals: return "pftGreaterOrEquals";
+    case pftLessOrEquals: return "pftLessOrEquals";
     default:
         buf[0] = type;
 	return buf;
@@ -151,6 +154,7 @@ static void tokTwoChar(struct pfTokenizer *tkz, struct pfToken *tok,
 /* Create two character token of given type */
 {
 tok->type = type;
+tok->textSize = 2;
 tkz->pos += 2;
 }
   
@@ -633,6 +637,24 @@ switch (c)
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
+    case '!':
+        if (c2 == '=')
+	    tokTwoChar(tkz, tok, pftNotEquals);
+	else
+	    tokSingleChar(tkz, tok, c);
+        break;
+    case '>':
+        if (c2 == '=')
+	    tokTwoChar(tkz, tok, pftGreaterOrEquals);
+	else
+	    tokSingleChar(tkz, tok, c);
+        break;
+    case '<':
+        if (c2 == '=')
+	    tokTwoChar(tkz, tok, pftLessOrEquals);
+	else
+	    tokSingleChar(tkz, tok, c);
+        break;
 
     case '_':
     case 'A':

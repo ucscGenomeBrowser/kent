@@ -61,8 +61,11 @@ enum pfParseType
     pptComma,
     pptSame,
     pptNotSame,
+    pptGreater,
+    pptLess,
+    pptGreaterOrEquals,
+    pptLessOrEquals,
     pptNegate,
-    pptConstant,
     };
 
 
@@ -139,10 +142,16 @@ switch (type)
 	return "pptSame";
     case pptNotSame:
 	return "pptNotSame";
+    case pptGreater:
+	return "pptGreater";
+    case pptLess:
+	return "pptLess";
+    case pptGreaterOrEquals:
+	return "pptGreaterOrEquals";
+    case pptLessOrEquals:
+	return "pptLessOrEquals";
     case pptNegate:
 	return "pptNegate";
-    case pptConstant:
-	return "pptConstant";
     default:
         internalErr();
 	return NULL;
@@ -644,12 +653,56 @@ while (tok->type == '+' || tok->type == '-')
 return pp;
 }
 
+struct pfParse *parseCmp(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse == >=, <= > < and != part of expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = parseSum(parent, &tok, scope);
+while (tok->type == pftEqualsEquals || tok->type == pftNotEquals 
+	|| tok->type == pftGreaterOrEquals || tok->type == pftLessOrEquals
+	|| tok->type == '<' || tok->type == '>')
+    {
+    struct pfParse *left = pp, *right;
+    enum pfTokType tt = 0;
+    switch (tok->type)
+	{
+	case pftEqualsEquals:
+	    tt = pptSame;
+	    break;
+	case pftNotEquals:
+	    tt = pptNotSame;
+	    break;
+	case pftGreaterOrEquals:
+	    tt = pptGreaterOrEquals;
+	    break;
+	case pftLessOrEquals:
+	    tt = pptLessOrEquals;
+	    break;
+	case '>':
+	    tt = pptGreater;
+	    break;
+	case '<':
+	    tt = pptLess;
+	    break;
+	}
+    pp = pfParseNew(tt, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = parseSum(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+*pTokList = tok;
+return pp;
+}
+
 struct pfParse *parseAssign(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseSum(parent, &tok, scope);
+struct pfParse *pp = parseCmp(parent, &tok, scope);
 struct pfParse *assign = NULL;
 if (tok->type == '=')
     {
@@ -659,7 +712,7 @@ if (tok->type == '=')
     while (tok->type == '=')
 	{
 	tok = tok->next;
-	pp = parseSum(assign, &tok, scope);
+	pp = parseCmp(assign, &tok, scope);
 	slAddHead(&assign->children, pp);
 	}
     }
