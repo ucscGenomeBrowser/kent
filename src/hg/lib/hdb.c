@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.127 2003/08/08 13:22:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.128 2003/08/08 16:13:53 fanhsu Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1202,9 +1202,6 @@ return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 		      sqlConstraints));
 }
 
-
-// default protein database for older genome releases
-char DEFAULT_PROT_DB[20] = {"proteins070403"};
 char *hPdbFromGdb(char *genomeDb)
 /* Find proteome database name given genome database name */
 {
@@ -1217,14 +1214,29 @@ struct dyString *dy = newDyString(128);
 if (sqlTableExists(conn, "gdbPdb"))
     {
     if (genomeDb != NULL)
-	dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s'", genomeDb);
+	dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s';", genomeDb);
     else
 	internalErr();
     sr = sqlGetResult(conn, dy->string);
     if ((row = sqlNextRow(sr)) != NULL)
+	{
 	ret = cloneString(row[0]);
+	}
     else
-	ret = strdup(DEFAULT_PROT_DB);
+	{
+	// if a corresponding protein DB is not found, get the default one from the gdbPdb table
+        sqlFreeResult(&sr);
+    	sr = sqlGetResult(conn,  "select proteomeDb from gdbPdb where genomeDb = 'default';");
+    	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    ret = cloneString(row[0]);
+	    }
+	else
+	    {
+	    errAbort("No protein database defined for %s.", genomeDb);
+	    }
+	}
+	
     sqlFreeResult(&sr);
     }
 hDisconnectCentral(&conn);
