@@ -112,10 +112,10 @@ struct bed *bedLoadN(char *row[], int wordCount);
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
-#define bedTabOutN(el,wordCount, f) bedOutputN(el,wordCount,f,'\t','\n');
+#define bedTabOutN(el,wordCount, f) bedOutputN(el,wordCount,f,'\t','\n')
 /* Print out bed as a line in a tab-separated file. */
 
-#define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',');
+#define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',')
 /* Print out bed as a comma separated list including final comma. */
 
 struct bed *bedFromPsl(struct psl *psl);
