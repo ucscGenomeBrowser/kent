@@ -16,7 +16,7 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o isochores.o jaxOrtholog.o \
-    jksql.o knownInfo.o knownMore.o lfs.o stsMap.o \
+    jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o \
     ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o riken.o rmskOut.o \
     rnaGene.o roughAli.o sage.o sageExp.o sanger22extra.o \
