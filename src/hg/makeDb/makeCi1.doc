@@ -85,7 +85,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     ssh hgwdev
     mkdir -p /cluster/data/ci1/bed/gapRmsk
     cd /cluster/data/ci1/bed/gapRmsk
-    simpleGap /cluster/data/ci1/nib gap.bed rmsk.out
+    simpleGap /cluster/data/ci1/nib gap.bed repeats.bed
     echo "drop table gap;" | hgsql ci1
     hgsql ci1 < ~/kent/src/hg/lib/gap.sql   
     hgLoadBed -oldTable ci1 gap gap.bed
@@ -93,12 +93,14 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     echo "create index chrom on gap (chrom(13), bin) ;" | hgsql ci1
     echo "create index chrom_2 on gap  (chrom(13), chromStart);" | hgsql ci1
     echo "create index chrom_3 on gap  (chrom(13), chromEnd);" | hgsql ci1
-    echo "drop table rmsk;" | hgsql ci1
-    hgsql ci1 < ~/kent/src/hg/lib/rmskOut.sql   
-    echo "rename table rmskOut to rmsk;" | hgsql ci1 
-    echo "load data local infile 'rmsk.out' into table rmsk;" | hgsql ci1 
-    echo "create index chrom_2 on rmsk  (genoName(13), genoStart);" | hgsql ci1
-    echo "create index chrom_3 on rmsk  (genoName(13), genoEnd);" | hgsql ci1
+    echo "drop table repeats;" | hgsql ci1
+    hgLoadBed ci1 repeats repeats.bed
+    echo "drop index chrom on repeats;" | hgsql ci1
+    echo "drop index chrom_2 on repeats;" | hgsql ci1
+    echo "drop index chrom_3 on repeats;" | hgsql ci1
+    echo "create index chrom on repeats (chrom(13), bin) ;" | hgsql ci1
+    echo "create index chrom_2 on repeats  (chrom(13), chromStart);" | hgsql ci1
+    echo "create index chrom_3 on repeats  (chrom(13), chromEnd);" | hgsql ci1
 
 # JGI ciona genes
     ssh hgwdev
@@ -107,6 +109,9 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     wget "ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona_genes.gff.gz"
     zcat ciona_genes.gff.gz | sed "s/name \"//" | sed "s/\".*//" > jgiGene.gff
     ldHgGene -genePredExt  -gtf ci1 jgiGene jgiGene.gff
+    wget "ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.prot.fasta.gz" 
+    gunzip ciona.prot.fasta.gz
+    hgPepPred ci1 generic jgiGenePep /cluster/data/ci1/bed/jgiGene/ciona.prot.fasta
 
 # SNAP GENE PREDICTIONS FROM COLIN DEWEY (DONE 4/23/04 angie)
     ssh hgwdev
@@ -212,10 +217,4 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     chainSwap chainCi1S.chain chainHg16S.chain
     hgLoadChain hg16 chainCi1ProtEx chainCi1S.chain
     hgLoadChain ci1 chainHg16ProtEx  chainHg16S.chain
-
-    grep ">" /cluster/data/hg16/bed/blat*7/known.fa | sed "s/>//" > kg.lst
-    kgName hg16 kg.lst kg.names
-    cd /cluster/data/hg16/bed/blat.hg16KG
-    cat $HOME/kent/src/hg/lib/kgMapName.sql | hgsql ci1
-    echo "load data local infile 'kg.mapNames' into table kgMapName;" | hgsql ci1
 
