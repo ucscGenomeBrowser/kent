@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.15 2003/06/24 19:38:20 heather Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.16 2003/06/24 20:19:16 kent Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -321,7 +321,7 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 struct psl *psl;
-struct xAli *xa;
+struct xAli *xa = NULL;
 unsigned *starts;
 struct liftSpec *spec;
 int offset;
