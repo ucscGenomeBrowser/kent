@@ -9605,4 +9605,19 @@ line+ psl/$(root1)_$(root2).psl}
     hgsql hg17 < ~/kent/src/hg/lib/sageExp.sql 
     echo "load data local infile 'sageExp.tab' into table sageExp" | hgsql hg17
     # update ~/kent/src/hg/makeDb/trackDb/human/hg17/uniGene_2.html 
-    # with current uniGene date. 
+    # with current uniGene date.
+
+# CREATE kgSpAlias TABLE FOR PB (Done 10/20/04)
+
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+
