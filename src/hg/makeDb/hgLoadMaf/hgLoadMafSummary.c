@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.5 2005/03/14 23:37:07 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.6 2005/03/15 00:43:50 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -111,7 +111,7 @@ return mcMaster;
 }
 
 int processMaf(struct mafAli *maf, struct hash *componentHash, 
-            struct mafSummary **summaryList, struct mafFile *mf, char *fileName)
+                FILE *f, struct mafFile *mf, char *fileName)
 /* Compute scores for each pairwise component in the maf and output to .tab file */
 {
 struct mafComp *mc = NULL, *nextMc = NULL;
@@ -123,7 +123,6 @@ struct mafComp *oldMasterNext = mcMaster->next;
 
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
-    struct mafComp *oldMcNext = mc->next; 
     nextMc = mc->next;
     if (sameString(mcMaster->src, mc->src))
         continue;
@@ -146,6 +145,10 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     mc->next = NULL;
     ms->score = scorePairwise(&pairMaf);
 
+    /* restore component links to allow memory recovery */
+    mcMaster->next = oldMasterNext; 
+    mc->next = nextMc;
+
     /* output to .tab file, or save for merging with another block 
      * if this one is too small */
 
@@ -163,31 +166,32 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
             ms->chromStart = msPending->chromStart;
             }
         else
-            slAddHead(summaryList, msPending);
+            outputSummary(f, msPending);
         hashRemove(componentHash, msPending->src);
+        mafSummaryFree(&msPending);
         }
     /* handle current alignment block (possibly merged) */
     if (ms->chromEnd - ms->chromStart > minSize)
+        {
         /* current block is big enough to output */
-        slAddHead(summaryList, ms);
+        outputSummary(f, ms);
+        mafSummaryFree(&ms);
+        }
     else
         hashAdd(componentHash, ms->src, ms);
-    mc->next = oldMcNext; 
     componentCount++;
     }
-mcMaster->next = oldMasterNext; 
 return componentCount;
 }
 
-void flushSummaryBlocks(struct hash *componentHash, 
-                                struct mafSummary **summaryList)
+void flushSummaryBlocks(struct hash *componentHash, FILE *f)
 /* flush any pending summary blocks */
 {
 struct mafSummary *ms;
 struct hashCookie hc = hashFirst(componentHash);
 
 while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
-    slAddHead(summaryList, ms);
+    outputSummary(f, ms);
 }
 
 void hgLoadMafSummary(char *table, char *fileName)
@@ -201,7 +205,7 @@ struct sqlConnection *conn = sqlConnect(database);
 FILE *f = hgCreateTabFile(".", table);
 long componentCount = 0;
 struct hash *componentHash = newHash(0);
-struct mafSummary *summaryList = NULL, *ms;
+struct mafSummary *ms;
 
 hSetDb(database);
 if (!test)
@@ -221,7 +225,7 @@ while ((maf = mafNext(mf)) != NULL)
         verbose(3, "Splitting maf %s:%d len %d\n", mcMaster->src,
                                         mcMaster->start, mcMaster->size);
         componentCount += 
-            processMaf(subMaf, componentHash, &summaryList, mf, fileName);
+            processMaf(subMaf, componentHash, f, mf, fileName);
         mafAliFree(&subMaf);
         subMaf = mafSubset(maf, mcMaster->src, 
                                 end, end + (mcMaster->size - maxSize));
@@ -233,19 +237,13 @@ while ((maf = mafNext(mf)) != NULL)
         {
         /* remainder of maf after splitting off maxSize submafs */
         componentCount += 
-            processMaf(maf, componentHash, &summaryList, mf, fileName);
+            processMaf(maf, componentHash, f, mf, fileName);
         }
     mafAliFree(&maf);
     mafCount++;
     }
 mafFileFree(&mf);
-flushSummaryBlocks(componentHash, &summaryList);
-slSort(&summaryList, bedLineCmp);
-for (ms = summaryList; ms != NULL; ms = ms->next)
-    {
-    fprintf(f, "%u\t", hFindBin(ms->chromStart, ms->chromEnd));
-    mafSummaryTabOut(ms, f);
-    }
+flushSummaryBlocks(componentHash, f);
 verbose(1, "Processed %ld components in %ld mafs from %s\n", 
                 componentCount, mafCount, fileName);
 if (test)
