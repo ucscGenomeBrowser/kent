@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.14 2004/03/16 00:19:10 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.15 2004/03/16 07:06:23 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -209,6 +209,8 @@ char *suffix;
 if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
+    /* mark this as not a pairwise item */
+    mi->ix = -1;
     slAddHead(&miList, mi);
     }
 suffix = trackDbSetting(track->tdb, "pairwise");
@@ -220,12 +222,6 @@ if (suffix != NULL)
     char *species[200];
     int speciesCt = chopLine(speciesOrder, species);
     int i;
-
-    if (track->visibility == tvFull)
-        /* check for existence of a wiggle table for first item.
-         * if missing, revert to pack mode */
-        if (!hTableExists(getWigTablename(species[0], suffix)))
-            track->visibility = tvPack;
 
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
@@ -411,27 +407,26 @@ static int getIxMafAli(int *ixMafAli, int position, int maxPos)
     return *(ixMafAli + position);
 }
 
-static void drawDenseScore(char *tableName, int height,
+static void drawScoreOverview(char *tableName, int height,
                              int seqStart, int seqEnd, 
                             struct vGfx *vg, int xOff, int yOff,
                             int width, MgFont *font, 
-                            Color color, Color altColor)
-/* Draw density plot for overall maf scores rather than computing
+                            Color color, Color altColor,
+                            enum trackVisibility vis)
+/* Draw density plot or graph for overall maf scores rather than computing
  * by sections, for speed.  Don't actually load the mafs -- just
  * the scored refs from the table.
  * TODO: reuse code in mafTrack.c 
  */
 {
 char **row;
-unsigned int extFileId = 0;
 int rowOffset;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, 
-    seqStart, seqEnd, NULL, &rowOffset);
+                                        seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
-int x1,x2,w;
-Color c;
-int shade;
+int x1,x2,y,w;
+int height1 = height - 2;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -441,29 +436,37 @@ while ((row = sqlNextRow(sr)) != NULL)
     x2 = round((ref.chromEnd - seqStart)*scale);
     w = x2-x1;
     if (w < 1) w = 1;
-    shade = ref.score * maxShade;
-    if ((shade < 0) || (shade >= maxShade))
-        shade = 0;
-    c = shadesOfGray[shade];
-    vgBox(vg, x1 + xOff, yOff, 1, height-1, c);
+    if (vis == tvFull)
+        {
+        y = ref.score * height1;
+        vgBox(vg, x1 + xOff, yOff + height1 - y, 1, y+1, color);
+        }
+    else
+        {
+        int shade = ref.score * maxShade;
+        if ((shade < 0) || (shade >= maxShade))
+            shade = 0;
+        Color c = shadesOfGray[shade];
+        vgBox(vg, x1 + xOff, yOff, 1, height-1, c);
+        }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void drawDenseMaf(char *tableName, int height,
+static void drawMafScore(char *tableName, int height,
                             int seqStart, int seqEnd, 
                             struct vGfx *vg, int xOff, int yOff,
                             int width, MgFont *font, 
-                            Color color, Color altColor)
-/* display alignments in dense format (uses on-the-fly scoring) */
+                            Color color, enum trackVisibility vis)
+/* display alignments using on-the-fly scoring */
 {
 struct mafAli *mafList;
 struct sqlConnection *conn;
 
 if (seqEnd - seqStart > 1000000)
-    drawDenseScore(tableName, height, seqStart, seqEnd, vg, xOff, yOff, width,
-                            font, color, altColor);
+    drawScoreOverview(tableName, height, seqStart, seqEnd, vg, xOff, yOff,
+                          width, font, color, color, vis);
 else
     {
     /* load mafs */
@@ -472,7 +475,7 @@ else
                                     seqStart, seqEnd);
     drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
                              vg, xOff, yOff, width, font,
-                             color, altColor, tvDense, FALSE);
+                             color, color, vis, FALSE);
     hFreeConn(&conn);
     }
 }
@@ -490,7 +493,7 @@ char *suffix;
 char *tableName;
 Color newColor;
 struct track *wigTrack = track->subtracks;
-int wigTrackHeight = pairwiseWigHeight(wigTrack);
+int pairwiseHeight = pairwiseWigHeight(wigTrack);
 struct wigMafItem *miList = track->items, *mi = miList;
 int seqSize = seqEnd - seqStart;
 
@@ -502,6 +505,9 @@ suffix = trackDbSetting(track->tdb, "pairwise");
 if (suffix == NULL)
     return FALSE;
 
+/* we will display pairwise, either a graph (wiggle or on-the-fly),
+   or density plot */
+ret = TRUE;
 if (vis == tvFull)
     {
     if (wigTrack == NULL)
@@ -512,45 +518,58 @@ if (vis == tvFull)
     wigTrack->ixAltColor = newColor;
     }
 
-/* display all loaded pairwise items */
+/* display pairwise items */
 for (mi = miList; mi != NULL; mi = mi->next)
     {
+    if (mi->ix < 0)
+        /* ignore item for the score */
+        continue;
     if (vis == tvFull)
         {
         /* get wiggle table, of pairwise 
            for example, percent identity */
         tableName = getWigTablename(mi->name, suffix);
-        if (!hTableExists(tableName))
-            continue;
-        /* reuse the wigTrack for pairwise tables */
-        wigTrack->mapName = tableName;
-        wigTrack->loadItems(wigTrack);
-        wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
-                                                            wigTrackHeight - 1;
-        /* clip, but leave 1 pixel border */
-        vgSetClip(vg, xOff, yOff, width, wigTrack->height);
-        wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+        if (hTableExists(tableName))
+            {
+            /* reuse the wigTrack for pairwise tables */
+            wigTrack->mapName = tableName;
+            wigTrack->loadItems(wigTrack);
+            wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
+                                                    pairwiseHeight - 1;
+            /* clip, but leave 1 pixel border */
+            vgSetClip(vg, xOff, yOff, width, wigTrack->height);
+            wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                              width, font, color, tvFull);
-        vgUnclip(vg);
+            vgUnclip(vg);
+            }
+        else
+            {
+            /* no wiggle table for this -- compute a graph on-the-fly 
+               from mafs */
+            vgSetClip(vg, xOff, yOff, width, mi->height);
+            tableName = getMafTablename(mi->name, suffix);
+            if (hTableExists(tableName))
+                drawMafScore(tableName, mi->height, seqStart, seqEnd, 
+                                 vg, xOff, yOff, width, font,
+                                 track->ixAltColor, tvFull);
+            vgUnclip(vg);
+            }
         /* need to add extra space between wiggles (for now) */
         //mi->height = wigTotalHeight(wigTrack, tvFull);
-        mi->height = wigTrackHeight;
-        ret = TRUE;
+        mi->height = pairwiseHeight;
         }
     else 
         {
         /* pack */
         /* get maf table, containing pairwise alignments for this organism */
-        tableName = getMafTablename(mi->name, suffix);
-        if (!hTableExists(tableName))
-            continue;
         /* display pairwise alignments in this region in dense format */
         vgSetClip(vg, xOff, yOff, width, mi->height);
-        drawDenseMaf(tableName, mi->height, seqStart, seqEnd, 
+        tableName = getMafTablename(mi->name, suffix);
+        if (hTableExists(tableName))
+            drawMafScore(tableName, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
-                                 color, track->ixAltColor);
+                                 color, tvDense);
         vgUnclip(vg);
-        ret = TRUE;
         }
     yOff += mi->height;
     }
