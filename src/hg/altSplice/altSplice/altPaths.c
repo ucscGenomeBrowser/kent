@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.12 2005/01/27 18:26:25 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.13 2005/02/09 22:51:48 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -131,6 +131,32 @@ fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
 fprintf(stderr, "%d control paths.\n", altControlCount);
 fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
 	totalSplices, totalLoci, (float)totalSplices/altSpliceLoci);
+}
+
+int inDegree(bool **em, int vIx, int start, int end)
+/* Return the number of edges coming into a vertex. */
+{
+int i = 0;
+int count = 0;
+for(i = start; i < end; i++) 
+    {
+    if(em[i][vIx]) 
+	count++;
+    }
+return count;
+}
+
+int outDegree(bool **em, int vIx, int start, int end)
+/* Return the number of edges coming out of a vertex. */
+{
+int i = 0;
+int count = 0;
+for(i = start; i < end; i++) 
+    {
+    if(em[vIx][i]) 
+	count++;
+    }
+return count;
 }
 
 boolean connected(struct altGraphX *agx, bool **em, int *adjStartCounts, int *adjEndCounts, 
@@ -368,7 +394,7 @@ struct path *pathsBetweenVerts(int **distance, int source, int sink,
 struct path *pathList = NULL;
 struct path *path = NULL;
 int i = 0, j = 0;
-int maxDepth = 50;
+int maxDepth = 10;
 
 /* This amounts to a breadth first search of paths
    between startIx and endIx. */
@@ -503,8 +529,8 @@ if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
    altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
-    bed->chromStarts[bed->blockCount] = vPos[verts[vertIx+1]] - 1;
-    bed->chromStart = bed->thickStart = min(bed->chromStart, vPos[verts[vertIx]] - 1);
+    bed->chromStarts[bed->blockCount] = vPos[verts[vertIx+1]];
+    bed->chromStart = bed->thickStart = min(bed->chromStart, vPos[verts[vertIx+1]]);
     bed->chromEnd = bed->thickEnd = max(bed->chromEnd, vPos[verts[vertIx+1]]);
     bed->blockCount++;
     }
@@ -526,8 +552,8 @@ if(splice->type == altCassette && path->vCount == 4)
     skipEdge = altGraphXGetEdgeNum(ag, verts[0],verts[3]);
     incEdge1 = altGraphXGetEdgeNum(ag, verts[0],verts[1]);
     incEdge2 = altGraphXGetEdgeNum(ag, verts[2],verts[3]);
-    bed->thickStart = altGraphConfidenceForEdge(ag, skipEdge);
-    bed->thickEnd = max(altGraphConfidenceForEdge(ag, incEdge1), altGraphConfidenceForEdge(ag, incEdge2));
+/*     bed->thickStart = altGraphConfidenceForEdge(ag, skipEdge); */
+/*     bed->thickEnd = max(altGraphConfidenceForEdge(ag, incEdge1), altGraphConfidenceForEdge(ag, incEdge2)); */
     }
 /* If we don't have any blocks, quit now. */
 if(bed->blockCount == 0)
@@ -635,7 +661,7 @@ slSort(&splice->paths, pathBpCountCmp);
 
 boolean cassettePaths(struct splice *splice, struct altGraphX *ag, bool **em,
 		       int source, int sink)
-/* Return TRUE if paths are mutally exclusive and the longer
+/* Return TRUE if paths are mutually exclusive and the longer
    path forms a cassette exon. */
 {
 /* short and long refer to bpCount. */
@@ -643,7 +669,7 @@ struct path *shortPath = splice->paths;
 struct path *longPath = splice->paths->next;
 int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
-
+int vCount = ag->vertexCount;
 int endVert = longPath->vCount-1;
 int startVert = 0;
 int *verts = longPath->vertices;
@@ -658,11 +684,19 @@ if(endVert != 3 || verts[startVert] == source || verts[endVert] == sink)
 /* Check to see if the path is an exon inclusion and then
    that they are mutually exclusive. */
 if(shortPath->vCount == 2 && longPath->vCount == 4 && 
-   vTypes[verts[0]] == ggHardEnd && 
+   /* These are all internal exons. */
+   vTypes[verts[0]] == ggHardEnd &&  
    vTypes[verts[1]] == ggHardStart &&
    vTypes[verts[2]] == ggHardEnd &&
    vTypes[verts[3]] == ggHardStart &&
-   isMutallyExclusive(splice, ag, em, source,sink))
+   /* There aren't any other oddities coming in or out of this sub graph. */
+   outDegree(em, verts[0], 0, vCount) == 2 &&  /* first 5'  connects to skip and downstream. */
+   inDegree(em, verts[1], 0, vCount) == 1 &&   /* Skip 3' only connects to one incoming. */
+   outDegree(em, verts[1], 0, vCount) == 1 &&  /* Skip 3' only connects to one outgoing. */
+   inDegree(em, verts[2], 0, vCount) == 1 &&   /* Skip 5' only connects to one incoming. */
+   outDegree(em, verts[2], 0, vCount) == 1 &&  /* Skip 5' only connects to one outgoing. */
+   inDegree(em, verts[3], 0, vCount) == 2 &&   /* Downstream 3' connects to two upstream.*/
+   isMutuallyExclusive(splice, ag, em, source,sink))
     cassette = TRUE;
 return cassette;
 }
@@ -709,7 +743,7 @@ if(longPath->vCount != 2 || shortPath->vCount != 4 ||
     return FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[3] == longVerts[1]);
 
-/* If one path has an intron and the other doesn't and are mutally
+/* If one path has an intron and the other doesn't and are mutually
    exclusive they are retInt. */
 if(shortPath->vCount == 4 && longPath->vCount == 2 &&
    (vTypes[shortVerts[0]] == ggHardStart || vTypes[shortVerts[0]] == ggSoftStart) &&
@@ -718,7 +752,7 @@ if(shortPath->vCount == 4 && longPath->vCount == 2 &&
    (vTypes[shortVerts[3]] == ggHardEnd || vTypes[shortVerts[3]] == ggSoftEnd) &&
    vTypes[longVerts[0]] == ggHardStart &&
    vTypes[longVerts[1]] == ggHardEnd &&
-   isMutallyExclusive(splice, ag, em, source,sink))
+   isMutuallyExclusive(splice, ag, em, source,sink))
     retInt = TRUE;
 return retInt;
 }
@@ -758,6 +792,7 @@ struct path *shortPath = splice->paths;
 struct path *longPath = splice->paths->next;
 int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
+int vCount = ag->vertexCount;
 unsigned char *vTypes = ag->vTypes;
 boolean alt5 = FALSE;
 
@@ -769,14 +804,20 @@ if( shortPath->vCount != 3 || longPath->vCount != 3 ||
     return FALSE;
 
 
-/* If both paths form an exon end and are mutally
+/* If both paths form an exon end and are mutually
    exclusive they are alt5. */
 if(shortPath->vCount == 3 && longPath->vCount == 3 &&
+   /* These are internal exons. */
    (vTypes[shortVerts[0]] == ggHardStart || vTypes[shortVerts[0]] == ggSoftStart) &&
    vTypes[shortVerts[1]] == ggHardEnd &&
    vTypes[shortVerts[2]] == ggHardStart &&
    vTypes[longVerts[1]] == ggHardEnd &&
-   isMutallyExclusive(splice, ag, em, source,sink))
+   /* There aren't any other oddities coming in or out of this sub graph. */
+   outDegree(em, shortVerts[0], 0, vCount) == 2 && /* First 3' connects to 2 downstream 5' splice sites. */
+   inDegree(em, shortVerts[1], 0, vCount) == 1 &&  /* short 5' only connects to upstream 3' splice sites. */
+   inDegree(em, longVerts[1], 0, vCount) == 1 &&   /* long 5'only connects to upstream 3' splice sites. */
+   inDegree(em, longVerts[2], 0, vCount) == 2 &&   /* End of event connects to 2 upstream 5' splices sites. */
+   isMutuallyExclusive(splice, ag, em, source,sink))
     alt5 = TRUE;
 return alt5;
 }
@@ -818,6 +859,7 @@ struct path *longPath = splice->paths->next;
 int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
 unsigned char *vTypes = ag->vTypes;
+int vCount = ag->vertexCount;
 boolean alt3 = FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
 /* Alt3s have 3 vertices in both paths.
@@ -827,14 +869,20 @@ if( shortPath->vCount != 3 || longPath->vCount != 3 ||
     return FALSE;
 
 
-/* If both paths form an exon end and are mutally
+/* If both paths form an exon end and are mutually
    exclusive they are alt3. */
 if(shortPath->vCount == 3 && longPath->vCount == 3 &&
+   /* These are internal exons. */
    vTypes[shortVerts[0]] == ggHardEnd &&
    vTypes[shortVerts[1]] == ggHardStart &&
    (vTypes[shortVerts[2]] == ggHardEnd  || vTypes[shortVerts[2]] == ggSoftEnd) &&
    vTypes[longVerts[1]] == ggHardStart &&
-   isMutallyExclusive(splice, ag, em, source,sink))
+   /* There aren't any other oddities coming in or out of this sub graph. */
+   outDegree(em, shortVerts[0], 0, vCount) == 2 && /* First 5' connects to 2 downstream 3' splice sites. */
+   inDegree(em, shortVerts[1], 0, vCount) == 1 &&  /* short 3' only connects to upstream 5' splice sites. */
+   inDegree(em, longVerts[1], 0, vCount) == 1 &&   /* long 3'only connects to upstream 5' splice sites. */
+   inDegree(em, longVerts[2], 0, vCount) == 2 &&   /* End of event connects to 2 upstream 3' splices sites. */
+   isMutuallyExclusive(splice, ag, em, source,sink))
     alt3 = TRUE;
 return alt3;
 }
@@ -865,9 +913,9 @@ else
 return alt3;
 }
 
-boolean isMutallyExclusive(struct splice *splice, struct altGraphX *ag,
+boolean isMutuallyExclusive(struct splice *splice, struct altGraphX *ag,
 			   bool **em, int source, int sink)
-/* Return TRUE if the paths in splice are mutally exclusive, FALSE
+/* Return TRUE if the paths in splice are mutually exclusive, FALSE
    otherwise. */
 {
 bool *seen = NULL;
@@ -900,7 +948,7 @@ return mutExculsive;
 boolean isAltTxStart(struct splice *splice, struct altGraphX *ag, bool **em,
 		     int source, int sink)
 /* Return TRUE if starting vertex is source and paths
-   are mutally exclusive. */
+   are mutually exclusive. */
 {
 unsigned char *vTypes = ag->vTypes;
 int *verts = splice->paths->vertices;
@@ -913,7 +961,7 @@ for(path = splice->paths; path != NULL && path->vCount > 1; path = path->next)
 	softStartCount++;
 
 if(verts[0] == source && softStartCount > 1 &&
-   isMutallyExclusive(splice, ag, em, source, sink))
+   isMutuallyExclusive(splice, ag, em, source, sink))
     return TRUE;
 return FALSE;
 }
@@ -921,19 +969,19 @@ return FALSE;
 boolean isAltTxEnd(struct splice *splice, struct altGraphX *ag, bool **em,
 		     int source, int sink)
 /* Return TRUE if ending vertex is sink and paths
-   are mutally exclusive. */
+   are mutually exclusive. */
 {
 struct path *path = splice->paths;
 int endIx = path->vCount - 1;
 unsigned char *vTypes = ag->vTypes;
 int *verts = splice->paths->vertices;
 int softEndCount = 0;
-/* Count how many soft starts are attached to the source. */
+/* Count how many soft starts are attached to the sink. */
 for(path = splice->paths; path != NULL; path = path->next)
     if(vTypes[path->vertices[path->vCount - 2]] == ggSoftEnd)
 	softEndCount++;
 if(verts[endIx] == sink && softEndCount > 1 &&
-   isMutallyExclusive(splice, ag, em, source, sink))
+   isMutuallyExclusive(splice, ag, em, source, sink))
     return TRUE;
 return FALSE;
 }
@@ -957,7 +1005,7 @@ else if(isAlt3Path(splice, ag, em, source, sink))
     type = alt3Prime;
 else if(isRetIntPath(splice, ag, em, source, sink))
     type = altRetInt;
-else if(isMutallyExclusive(splice, ag, em, source, sink))
+else if(isMutuallyExclusive(splice, ag, em, source, sink))
     type = altMutExclusive;
 
 /* Fix the strand. */
@@ -1313,7 +1361,8 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
 	/* If writing beds, create the bed and write it out. */
 	if(pathBedFile != NULL)
 	    {	
-	    struct bed *bed = bedForPath(path, splice, pathCount++, agx, source, sink, spoofEnds);
+/* 	    struct bed *bed = bedForPath(path, splice, pathCount++, agx, source, sink, spoofEnds); */
+	    struct bed *bed = pathToBed(path, splice, source, sink, spoofEnds);
 	    if(bed != NULL)
 		bedTabOutN(bed, 12, pathBedFile);
 	    bedFree(&bed);
