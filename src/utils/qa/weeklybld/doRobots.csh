@@ -29,6 +29,14 @@ if ( $err ) then
  exit 1
 endif
 
+ssh hgwbeta $WEEKLYBLD/doHgTablesTestRobot.csh
+set err = $status
+if ( $err ) then
+ echo "error running doHgTablesTestRobot.csh: $err" 
+ ./unsymtrick.csh
+ exit 1
+endif
+
 ./doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then
