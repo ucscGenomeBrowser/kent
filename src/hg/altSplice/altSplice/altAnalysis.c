@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.8 2003/12/02 17:22:16 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.9 2004/01/29 01:25:13 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -32,6 +32,7 @@ FILE *upStream100 = NULL;   /* Bed file for 100bp upstream of 3' splice site. */
 FILE *downStream100 = NULL; /* Bed file for 100bp downstream of 5' splice site. */
 FILE *altRegion = NULL;     /* Bed file representing an alt-spliced region. */
 FILE *constRegion = NULL;   /* Bed file representing a constituative region. */
+FILE *alt3bpRegion = NULL;  /* Bed file representing 3bp alt3 prime splices. */
 FILE *altGraphXOut = NULL;  /* AltgraphX exon representing alt 3', alt 5' and cassette exons. */
 FILE *altLogFile = NULL;    /* File to output names of graphs that have alt splicing. */
 static boolean doSScores = FALSE;
@@ -1474,6 +1475,13 @@ struct evidence *ev = slElementFromIx(ag->evidence, edgeNum);
 return ev->evCount;
 }
 
+void reportThreeBpBed(struct altSpliceSite *as)
+/** Print out a bed for the wierd alt3 3bp sites. */
+{
+if(alt3bpRegion)
+    fprintf(alt3bpRegion, "%s\t%d\t%d\t%s\t%d\t%s\n", as->chrom, as->altBpStarts[1] - 10, as->altBpEnds[1] + 10,
+	    as->agName, as->altTypes[1], as->strand);
+}
 void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
@@ -1546,11 +1554,12 @@ for(i=0; i<vCount; i++)
 	altTotalCount++;	
 	fixOtherStrand(aSplice);
 	logSpliceType(aSplice->spliceTypes[1]);
+	if(aSplice->spliceTypes[1] == alt3Prime && (aSplice->altBpEnds[1] - aSplice->altBpStarts[1] == 3))
+	    reportThreeBpBed(aSplice);
 	if(doSScores)
 	    fillInSscores(aSplice, 1);
 	if(RData != NULL)
 	    {
-
 	    outputForR(aSplice, 1, RData);
 	    }
 	}
@@ -1656,6 +1665,10 @@ altRegion = mustOpen(name->string, "w");
 dyStringClear(name);
 dyStringPrintf(name, "%s.const.bed", prefix);
 constRegion = mustOpen(name->string, "w");
+
+dyStringClear(name);
+dyStringPrintf(name, "%s.alt3.3bp.bed", prefix);
+alt3bpRegion = mustOpen(name->string, "w");
 dyStringFree(&name);
 }
 
