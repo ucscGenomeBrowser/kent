@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.14 2003/06/21 05:54:42 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.15 2003/06/22 04:33:30 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -94,7 +94,7 @@ else
 void labelSimplePrint(struct column *col)
 /* This just prints cell->shortLabel. */
 {
-hPrintf("<B>%s</B>", col->shortLabel);
+hPrintf("<TH VALIGN=BOTTOM><B>%s</B></TH>", col->shortLabel);
 }
 
 
@@ -105,7 +105,7 @@ static void cellSelfLinkPrint(struct column *col, char *geneId,
 char *s = col->cellVal(col, geneId, conn);
 if (s == NULL) 
     s = cloneString("n/a");
-hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&near.search=%s\">%s</TD>",
+hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&near.search=%s\">%s</A></TD>",
 	cartSidUrlString(cart), geneId, s);
 freeMem(s);
 }
@@ -282,7 +282,7 @@ groupOn = cartUsualString(cart, groupVarName, "homology");
 /* Do go button. */
     {
     hPrintf(" ");
-    cgiMakeButton("submit", "go");
+    cgiMakeButton("submit", "Go!");
     }
 
 hPrintf("</TD></TR></TABLE>");
@@ -619,9 +619,7 @@ for (col = colList; col != NULL; col = col->next)
     char *colName = col->shortLabel;
     if (col->on)
 	{
-	hPrintf("<TD>");
 	col->labelPrint(col);
-	hPrintf("</TD>");
 	}
     }
 hPrintf("</TR>\n");

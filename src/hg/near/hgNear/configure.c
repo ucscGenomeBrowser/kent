@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.3 2003/06/20 22:28:17 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.4 2003/06/22 04:33:30 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -30,10 +30,10 @@ hPrintf("<TABLE BORDER=1>\n");
 
 /* Write out first row - labels. */
 hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
-hPrintf("<TD>Name</TD>");
-hPrintf("<TD>State</TD>");
-hPrintf("<TD>Position</TD>");
-hPrintf("<TD>Description</TD>");
+hPrintf("<TH>Name</TH>");
+hPrintf("<TH>State</TH>");
+hPrintf("<TH>Position</TH>");
+hPrintf("<TH>Description</TH>");
 hPrintf("</TR>");
 
 /* Write out other rows. */

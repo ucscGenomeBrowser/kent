@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.2 2003/06/21 16:52:16 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.3 2003/06/22 04:33:30 kent Exp $";
 
 
 static char *expRatioCellVal(struct column *col, char *geneId, 
@@ -33,6 +33,7 @@ static void hexOne(double val)
 /* Convert val 0.0-1.0 to hex 00 to FF */
 {
 int hex = val * 0xFF;
+if (hex > 0xFF) hex = 0xFF;
 hPrintf("%02X", hex);
 }
 
@@ -73,21 +74,44 @@ else
     }
 }
 
-boolean expRatioUseBlue = FALSE;
+static boolean expRatioUseBlue = TRUE;
+static int expSubcellWidth = 16;
 
 void expRatioCellPrint(struct column *col, char *geneId, 
 	struct sqlConnection *conn)
 /* Print out html for expRatio cell. */
 {
 int i;
-hPrintf("<TD><TT><PRE><TABLE BORDER=0 CELLSPACING=0><TR>");
+hPrintf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
 for (i=0; i<9; ++i)
     {
-    hPrintf("<TD BGCOLOR=\"#");
+    hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
     colorVal(i*0.1, FALSE);
     hPrintf("\">&nbsp;</TD>");
     }
-hPrintf("</PRE></TT></TR></TABLE></TD>");
+hPrintf("</TR></TABLE></TD>");
+}
+
+void expRatioLabelPrint(struct column *col)
+/* Print out labels of various experiments. */
+{
+static char *experiments[] = {"Soul", "Fortitude", "Anxiety", "Elbow", "Boots", "Wanderlust", "Reading", "Ok", "Bonkers", "Wild"};
+
+int i, numExpts = 9;
+hPrintf("<TH><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>\n");
+for (i=0; i<numExpts; ++i)
+    {
+    char *label = experiments[i], c;
+    hPrintf("<TD VALIGN=BOTTOM ALIGN=MIDDLE>");
+    hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
+    while ((c = *label++) != 0)
+        {
+	hPrintf(" <TR ><TT><TD ALIGN=MIDDLE WIDTH=%d>%c</TD></TT></TR>\n", 
+		expSubcellWidth, c);
+	}
+    hPrintf("</TABLE></TD>\n");
+    }
+hPrintf("</TR></TABLE></TH>\n");
 }
 
 void setupColumnExpRatio(struct column *col, char *parameters)
@@ -128,4 +152,5 @@ else
 col->exists = expRatioExists;
 col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
+col->labelPrint = expRatioLabelPrint;
 }
