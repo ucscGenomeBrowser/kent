@@ -53,42 +53,12 @@ lineFileClose(&lf);
 return bk;
 }
 
-void tempMafAliFromAxt(struct axt *axt, int tSize, int qSize,
-	struct mafAli *temp)
-/* Make a maf out of axt,  parasiting on the memory in axt.
- * Do *not* mafFree this temp.  The memory it has in pointers
- * is still owned by the axt.  Furthermore the next call to
- * this function will invalidate the previous temp value.
- * It's sort of a kludge, but quick to run and easy to implement. */
-{
-static struct mafComp qComp, tComp;
-ZeroVar(temp);
-ZeroVar(&qComp);
-ZeroVar(&tComp);
-temp->score = axt->score;
-temp->textSize = axt->symCount;
-qComp.src = axt->qName;
-qComp.srcSize = qSize;
-qComp.strand = axt->qStrand;
-qComp.start = axt->qStart;
-qComp.size = axt->qEnd - axt->qStart;
-qComp.text = axt->qSym;
-slAddHead(&temp->components, &qComp);
-tComp.src = axt->tName;
-tComp.srcSize = tSize;
-tComp.strand = axt->tStrand;
-tComp.start = axt->tStart;
-tComp.size = axt->tEnd - axt->tStart;
-tComp.text = axt->tSym;
-slAddHead(&temp->components, &tComp);
-}
-
 void outputAxtAsMaf(FILE *f, struct axt *axt, 
 	struct hash *tSizeHash, struct hash *qSizeHash)
 /* Write out an axt in maf format. */
 {
 struct mafAli temp;
-tempMafAliFromAxt(axt, hashIntVal(tSizeHash, axt->tName),
+mafFromAxtTemp(axt, hashIntVal(tSizeHash, axt->tName),
 	hashIntVal(qSizeHash, axt->qName), &temp);
 mafWrite(f, &temp);
 }
@@ -204,7 +174,7 @@ for (el = list; el != NULL; el = el->next)
 	hashAdd(dupeHash, aliName, NULL);
 	lineFileSeek(mcc->lf, pos, SEEK_SET);
 	axt = axtRead(mcc->lf);
-	tempMafAliFromAxt(axt, mouseChromSize, hashIntVal(rSizeHash, axt->qName),
+	mafFromAxtTemp(axt, mouseChromSize, hashIntVal(rSizeHash, axt->qName),
 	    &temp);
 	mafWrite(f, &temp);
 	axtFree(&axt);
