@@ -1493,6 +1493,121 @@ gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
     outForm->maskHash, outForm->minGood, outForm->qIsProt, outForm->tIsProt, outForm->saveSeq);
 }
 
+struct ffAli *ffNextBreak(struct ffAli *ff, int maxInsert)
+/* Return ffAli after first gap in either sequence longer than maxInsert,
+ * or after first gap in both sequences.  Return may legitimately
+ * be NULL. */
+{
+struct ffAli *rt = ff->right;
+int dh, dn;
+for (;;)
+    {
+    if (rt == NULL)
+        break;
+    dh = rt->hStart - ff->hEnd;
+    dn = rt->nStart - ff->nEnd;
+    if (dh != 0 && dn != 0)
+        break;
+    if (dh > maxInsert || dn > maxInsert)
+        break;
+    ff = rt;
+    rt = ff->right;
+    }
+return rt;
+}
+
+void gfAxtBundleFree(struct gfAxtBundle **pObj)
+/* Free a gfAxtBundle. */
+{
+struct gfAxtBundle *obj = *pObj;
+if (obj != NULL)
+    {
+    axtFreeList(&obj->axtList);
+    freez(pObj);
+    }
+}
+
+void gfAxtBundleFreeList(struct gfAxtBundle **pList)
+/* Free a list of gfAxtBundles. */
+{
+struct gfAxtBundle *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    gfAxtBundleFree(&el);
+    }
+*pList = NULL;
+}
+
+
+void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
+/* Save alignment to axtBundle. */
+{
+struct gfSaveAxtData *ad = outputData;
+struct ffAli *sAli, *eAli, *ff, *rt;
+char *he = NULL, *ne = NULL;
+struct axt *axt;
+struct dyString *q = newDyString(1024), *t = newDyString(1024);
+struct gfAxtBundle *gab;
+
+AllocVar(gab);
+gab->tSize = genoSeq->size;
+gab->qSize = otherSeq->size;
+for (sAli = ali; sAli != NULL; sAli = eAli)
+    {
+    eAli = ffNextBreak(sAli, 5);
+    dyStringClear(q);
+    dyStringClear(t);
+    for (ff = sAli; ff != eAli; ff = ff->right)
+        {
+	dyStringAppendN(q, ff->nStart, ff->nEnd - ff->nStart);
+	dyStringAppendN(t, ff->hStart, ff->hEnd - ff->hStart);
+	rt = ff->right;
+	if (rt != eAli)
+	    {
+	    int nGap = rt->nStart - ff->nEnd;
+	    int hGap = rt->hStart - ff->hEnd;
+	    int gap = max(nGap, hGap);
+	    if (nGap < 0 || hGap < 0)
+	        errAbort("Negative gap size in %s vs %s", genoSeq->name, otherSeq->name);
+	    if (nGap == gap)
+	        {
+		dyStringAppendN(q, ff->nEnd, gap);
+		dyStringAppendMultiC(t, '-', gap);
+		}
+	    else
+	        {
+		dyStringAppendN(t, ff->hEnd, gap);
+		dyStringAppendMultiC(q, '-', gap);
+		}
+	    }
+	ne = ff->nEnd;
+	he = ff->hEnd;
+	}
+    assert(t->stringSize == q->stringSize);
+    AllocVar(axt);
+    axt->qName = cloneString(otherSeq->name);
+    axt->qStart = sAli->nStart - otherSeq->dna;
+    axt->qEnd = ne - otherSeq->dna;
+    axt->qStrand = (isRc ? '-' : '+');
+    axt->tName = cloneString(genoSeq->name);
+    axt->tStart = sAli->hStart - genoSeq->dna;
+    axt->tEnd = he - genoSeq->dna;
+    axt->tStrand = '+';
+    axt->symCount = t->stringSize;
+    axt->qSym = cloneString(q->string);
+    axt->tSym = cloneString(t->string);
+    slAddHead(&gab->axtList, axt);
+    }
+slReverse(&gab->axtList);
+dyStringFree(&q);
+dyStringFree(&t);
+slAddHead(&ad->bundleList, gab);
+}
+
 static void addToBigBundleList(struct ssBundle **pOneList, struct hash *bunHash, 
 	struct ssBundle **pBigList, struct dnaSeq *query)
 /* Add bundles in one list to bigList, consolidating bundles that refer
