@@ -19,6 +19,7 @@ int maxGap = 2;
 int repMatch = 1024;
 boolean noHead = FALSE;
 char *ooc = NULL;
+boolean isProt = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +46,7 @@ errAbort(
   "               Default is 16384\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc\n"
+  "   -prot       Query sequence is protein\n"
   );
 }
 
@@ -143,13 +145,30 @@ gfAlignSeqClumps(clumpList, seq, isRc, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 }
 
+void searchOneProtStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
+/* Search for protein seq in index and write results to psl. */
+{
+struct gfClump *clump, *clumpList = gfPepFindClumps(gf, seq);
+uglyf("Found %d clumps in %s\n", slCount(clumpList), seq->name);
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    gfClumpDump(gf, clump, uglyOut);
+}
+
 void searchOne(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for seq on either strand in index. */
 {
-searchOneStrand(seq, gf, psl, FALSE);
-reverseComplement(seq->dna, seq->size);
-searchOneStrand(seq, gf, psl, TRUE);
-reverseComplement(seq->dna, seq->size);
+uglyf("searching for %s\n", seq->name);
+if (isProt)
+    {
+    searchOneProtStrand(seq, gf, psl);
+    }
+else
+    {
+    searchOneStrand(seq, gf, psl, FALSE);
+    reverseComplement(seq->dna, seq->size);
+    searchOneStrand(seq, gf, psl, TRUE);
+    reverseComplement(seq->dna, seq->size);
+    }
 }
 
 void searchIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut)
@@ -187,7 +206,7 @@ for (i=0; i<fileCount; ++i)
         {
 	static struct dnaSeq seq;
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
-	while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+	while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isProt))
 	    {
 	    searchOne(&seq, gf, psl);
 	    totalSize += seq.size;
@@ -213,7 +232,10 @@ struct genoFind *gf;
 getFileArray(dbFile, &dbFiles, &dbCount);
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash);
-gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc);
+if (isProt)
+    gf = gfPepIndexNibs(dbCount, dbFiles, 3, 0, 4, 4096);
+else
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc);
 searchIndex(queryCount, queryFiles, gf, pslOut);
 }
 
@@ -231,6 +253,8 @@ if (minMatch < 0)
     errAbort("minMatch must be at least 1");
 minBases = cgiOptionalInt("minBases", minBases);
 maxGap = cgiOptionalInt("maxGap", maxGap);
+if (cgiVarExists("prot"))
+    isProt = TRUE;
 if (maxGap > 100)
     errAbort("maxGap must be less than 100");
 if (cgiVarExists("repMatch"))
