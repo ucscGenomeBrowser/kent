@@ -30,6 +30,20 @@ if (el != NULL)
     }
 }
 
+void axtFreeList(struct axt **pList)
+/* Free a list of dynamically allocated axt's */
+{
+struct axt *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    axtFree(&el);
+    }
+*pList = NULL;
+}
+
+
 struct axt *axtRead(struct lineFile *lf)
 /* Read in next record from .axt file and return it.
  * Returns NULL at EOF. */
