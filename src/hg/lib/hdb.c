@@ -30,8 +30,9 @@
 #include "liftOverChain.h"
 #include "grp.h"
 #include "twoBit.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.214 2004/10/25 01:55:46 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.215 2004/11/04 23:29:51 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -64,165 +65,189 @@ if (val == NULL)
 return val;
 }
 
-static struct hash *chromInfoHash = NULL; /* chromInfo cache for db1 */
-static struct hash *chromInfoHash2 = NULL; /* chromInfo cache for db2 */
-static char *hdbDefaultChrom = NULL; /* default chromosome(table) db1 */
-static char *hdbDefaultChrom2 = NULL;/* default chromosome(table) db2 */
 
-struct chromInfoEntry 
-/* chromInfo hash table contents:  nib file size, nib file name */
+static struct chromInfo *rowToChromInfoHash(char **row, struct hash *hash)
+/* Convert row to chromInfo and add it to hash, with key being all
+ * upper case for speed of lookup. */
 {
-    unsigned size;
-    char *fileName;
-};
-
-
-struct hash *hdbChromInfoHashConn(char **defaultChrom, 
-		struct sqlConnection *conn)
-/* create a hash of chromInfo contents */
-{
-struct sqlResult *sr;
-char **row;
-struct chromInfoEntry *cEntry;
-struct hash *hash = newHash(6);
-
-sr = sqlGetResult(conn, "select chrom,size,fileName from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if(defaultChrom != NULL && *defaultChrom == NULL)
-    	*defaultChrom = cloneString(row[0]);
-
-    AllocVar(cEntry);
-    cEntry->size = sqlUnsigned(row[1]);
-    cEntry->fileName = cloneString(row[2]);
-    hashAdd(hash, row[0], cEntry);
-    }
-sqlFreeResult(&sr);
-
-return hash;
+char upcName[128];
+struct chromInfo *ci = chromInfoLoad(row);
+safef(upcName, sizeof(upcName), "%s", ci->chrom);
+touppers(upcName);
+hashAdd(hash, upcName, ci);
+return ci;
 }
 
-
-struct hash *hdbChromInfoHash()
+static struct hash *hdbChromInfoHash()
 /* return hash or make it if it doesn't exist for db 1*/
 {
-struct sqlConnection *conn;
+static struct hash *chromInfoHash = NULL; /* chromInfo cache for db1 */
 if (chromInfoHash == NULL)
-    {
-    conn = hAllocConn();
-    chromInfoHash = hdbChromInfoHashConn(&hdbDefaultChrom, conn);
-    hFreeConn(&conn);
-    }
-
+    chromInfoHash = hashNew(18);
 return chromInfoHash;
 }
 
-struct hash *hdbChromInfoHash2()
+static struct hash *hdbChromInfoHash2()
 /* return hash or make it if it doesn't exist for db 2*/
 {
-struct sqlConnection *conn;
+static struct hash *chromInfoHash2 = NULL; /* chromInfo cache for db2 */
 if (chromInfoHash2 == NULL)
-    {
-    conn = hAllocConn2();
-    chromInfoHash2 = hdbChromInfoHashConn(&hdbDefaultChrom2, conn);
-    hFreeConn2(&conn);
-    }
-
+    chromInfoHash2 = hashNew(18);
 return chromInfoHash2;
 }
+
+static char *defaultChrom(struct sqlConnection *conn, struct hash *hash)
+/* Look up default chrom and put it in hash if it isn't already. */
+{
+struct chromInfo *ci = NULL;
+struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo limit 1");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hashEl *hel = hashLookupUpperCase(hash, row[0]);
+    if (hel == NULL)
+        ci = rowToChromInfoHash(row, hash);
+    else
+        ci = hel->val;
+    }
+sqlFreeResult(&sr);
+if (ci == NULL)
+    errAbort("Can't find default chromosome");
+return ci->chrom;
+}
+
+static struct chromInfo *getChromInfoFromConn(struct sqlConnection *conn, 
+     struct hash *hash, char *name)
+/* Return chromInfo structure if it's in database, using hash as cache. */
+{
+struct chromInfo *ci = NULL;
+struct hashEl *hel;
+hel = hashLookupUpperCase(hash, name);
+if (hel == NULL)
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), 
+    	"select * from chromInfo where chrom = '%s'", name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        ci = rowToChromInfoHash(row, hash);
+    sqlFreeResult(&sr);
+    }
+else
+    ci = hel->val;
+return ci;
+}
+
+static struct chromInfo *getChromInfo(char *chrom)
+/* Get chromInfo for named chromosome from primary database.  
+ * Return NULL if no such chrom. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct hash *hash = hdbChromInfoHash();
+struct chromInfo *ci = getChromInfoFromConn(conn, hash, chrom);
+hFreeConn(&conn);
+return ci;
+}
+
+static struct chromInfo *getChromInfo2(char *chrom)
+/* Get chromInfo for named chromosome from secondary database.
+ * Return NULL if no such chrom. */
+{
+struct sqlConnection *conn = hAllocConn2();
+struct hash *hash = hdbChromInfoHash2();
+struct chromInfo *ci = getChromInfoFromConn(conn, hash, chrom);
+hFreeConn2(&conn);
+return ci;
+}
+
+static struct chromInfo *mustGetChromInfo(char *chrom)
+/* Get chromInfo for named chrom from primary database or
+ * die trying. */
+{
+struct chromInfo *ci = getChromInfo(chrom);
+if (ci == NULL)
+    errAbort("Couldn't find chromosome/scaffold %s in database", chrom);
+return ci;
+}
+
+static struct chromInfo *mustGetChromInfo2(char *chrom)
+/* Get chromInfo for named chrom from secondary database or
+ * die trying. */
+{
+struct chromInfo *ci = getChromInfo2(chrom);
+if (ci == NULL)
+    errAbort("Couldn't find chromosome/scaffold %s in secondary database", chrom);
+return ci;
+}
+
+
 
 char *getDefaultChrom2()
 /* get default chromosome (table) for db2 */
 {
-    hdbChromInfoHash2();
-    return hdbDefaultChrom2;
+struct sqlConnection *conn = hAllocConn2();
+char *chrom = defaultChrom(conn, hdbChromInfoHash2());
+hFreeConn2(&conn);
+return chrom;
 }
 
 char *getDefaultChrom()
 /* get default chromosome (table) for db1 */
 {
-    hdbChromInfoHash();
-    return hdbDefaultChrom;
+struct sqlConnection *conn = hAllocConn();
+char *chrom = defaultChrom(conn, hdbChromInfoHash());
+hFreeConn(&conn);
+return chrom;
 }
 
 char *hgOfficialChromName(char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-struct hashCookie cookie;
-struct hashEl *hashEl;
-
-cookie = hashFirst(hdbChromInfoHash());
-while ((hashEl = hashNext(&cookie)) != NULL)
-    {
-    if (sameWord(name, hashEl->name))
-	return hashEl->name;
-    }
-return NULL;
+struct chromInfo *ci = getChromInfo(name);
+if (ci != NULL)
+    return ci->chrom;
+else
+    return NULL;
 }
 
 int hGetMinIndexLength()
-/* get the minimum index size for the current database that won't smoosh together chromNames
- * such that any group of smooshed entries has a cumulative size greater than the
- * the largest chromosome.  Allow one exception cuz we're nice
- */
+/* get the minimum index size for the current database that won't smoosh 
+ * together chromNames. */
 {
-struct hash *hash = hdbChromInfoHash();
-struct hashEl *pList = hashElListHash(hash);
-struct hashEl *pel, *prevPel;
-struct chromInfoEntry *cent;
-int min, maxVal, error, sum, maxLen;
-
-slSort(&pList, hashElCmp);
-slReverse(&pList);
-
-/* find the largest chromosome */
-maxVal = maxLen = 0;
-for(pel = pList->next; pel ; prevPel = pel, pel=pel->next)
+static boolean minLen = 0;
+if (minLen <= 0)
     {
-    int len;
-
-    cent = (struct chromInfoEntry *)pel->val;
-    if ((len = strlen(pel->name)) > maxLen)
-	maxLen = len;
-    if (cent->size > maxVal)
-	maxVal = cent->size;
-    }
-
-/* try smaller and smaller index sizes */
-for(min = maxLen; min; min--)
-    {
-    prevPel = pList;
-    cent = (struct chromInfoEntry *)prevPel->val;
-    sum = cent->size;
-    error = 0;
-    for(pel = pList->next; pel ; prevPel = pel, pel=pel->next)
-	{
-	cent = (struct chromInfoEntry *)pel->val;
-
-	if (strncmp(pel->name, prevPel->name, min) == 0)
-	    {
-	    sum += cent->size;
-	    if (sum > maxVal)
-		{
-		/* let one error go by */
-		if (error)
-		    goto out;
-		error++;
-		}
-	    }
-	else
-	    sum = cent->size;
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    struct slName *nameList = NULL, *name, *last;
+    int len = 4;
+    sr = sqlGetResult(conn, "select name from chromInfo");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	name = slNameNew(row[0]);
+	slAddHead(&nameList, name);
 	}
+    sqlFreeResult(&sr);
+    slSort(&nameList, slNameCmp);
+    last = nameList;
+    if (last != NULL)
+        {
+	for (name = nameList->next; name != NULL; name = name->next)
+	    {
+	    while (strncmp(name->name, last->name, len) == 0)
+	        ++len;
+	    last = name;
+	    }
+	}
+    slFreeList(&nameList);
+    minLen = len;
     }
-
-out:
-slFreeList(&pList);
-min++;
-
-return (min < 8) ? 8 : min;
+return minLen;
 }
-
 
 void hDefaultConnect()
 /* read in the connection options from config file */
@@ -736,41 +761,29 @@ if (startsWith("chr", table))
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
-struct hashEl *hashEl;
-if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))!= NULL)
-    return ((struct chromInfoEntry *)hashEl->val)->size;
-errAbort("There is no chromosome %s in database %s.",chromName,hdbName);
-return 0;
+struct chromInfo *ci = mustGetChromInfo(chromName);
+return ci->size;
 }
 
 int hChromSize2(char *chromName)
 /* Return size of chromosome on db2. */
 {
-struct hashEl *hashEl;
-if ((hashEl = hashLookup(hdbChromInfoHash2(),chromName))!= NULL)
-    return ((struct chromInfoEntry *)hashEl->val)->size;
-errAbort("There is no chromosome %s in database %s.",chromName,hdbName2);
-return 0;
+struct chromInfo *ci = mustGetChromInfo2(chromName);
+return ci->size;
 }
 
 void hNibForChrom(char *chromName, char retNibName[512])
 /* Get .nib file associated with chromosome. */
 {
-struct hashEl *hashEl;
-if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))== NULL)
-    errAbort("Sequence %s isn't in database", chromName);
-strncpy(retNibName,((struct chromInfoEntry *)hashEl->val)->fileName,
-		512);
+struct chromInfo *ci = mustGetChromInfo(chromName);
+strncpy(retNibName,ci->fileName, 512);
 }
 
 static void hNibForChrom2(char *chromName, char retNibName[512])
 /* Get .nib file associated with chromosome on db2. */
 {
-struct hashEl *hashEl;
-if ((hashEl = hashLookup(hdbChromInfoHash2(),chromName))== NULL)
-    errAbort("Sequence %s isn't in database", chromName);
-strncpy(retNibName,((struct chromInfoEntry *)hashEl->val)->fileName,
-		512);
+struct chromInfo *ci = mustGetChromInfo2(chromName);
+strncpy(retNibName,ci->fileName, 512);
 }
 
 struct hash *hCtgPosHash()
@@ -985,7 +998,7 @@ struct hashCookie cookie;
 struct hashEl *hel;
 struct slName *list = NULL, *el;
 
-cookie = hashFirst(hdbChromInfoHash());
+cookie = hashFirst(hdbChromInfoHash(0));
 while ((hel = hashNext(&cookie)) != NULL)
     {
     el = newSlName(hel->name);
@@ -1003,17 +1016,17 @@ struct hashCookie cookie;
 struct hashEl *hel;
 struct slName *list = NULL, *el;
 struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr;
+char **row;
 
-cookie = hashFirst(hdbChromInfoHashConn(NULL, conn));
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    el = newSlName(hel->name);
-    slAddHead(&list, el);
-    }
-
+sr = sqlGetResult(conn, "select chrom from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+   {
+   el = slNameNew(row[0]);
+   slAddHead(&list, el);
+   }
+sqlFreeResult(&sr);
 hFreeOrDisconnect(&conn);
-
-slSort(&list, slNameCmp);
 return list;
 }
 
