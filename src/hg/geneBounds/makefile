@@ -12,6 +12,7 @@ all:
 USE_DIRS = $(DIRS)
 
 DIRS = \
+	assessLibs \
 	averagExp \
 	axtForEst \
 	bedCons \
@@ -21,6 +22,8 @@ DIRS = \
 	eisenInput \
 	emblMatrixToMotif \
 	expToRna \
+	iriToControlTable \
+	iriToDnaMotif 
 	lib \
 	liftPromoHits \
 	motifLogo \
@@ -39,7 +42,4 @@ DIRS = \
 	twinOrfStats3 
 
 BADDIRS = \
-	assessLibs \
 	estLibStats \
-	iriToControlTable \
-	iriToDnaMotif 
