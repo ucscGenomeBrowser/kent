@@ -10,7 +10,7 @@
 
 if ($#argv < 1 || $#argv > 4) then
  echo ""
-  ech "  checks all fields (except html) in trackDb"
+ echo "  checks all fields (except html) in trackDb"
  echo "  this will break when hgText is replaced by hgTables."
  echo
  echo "    usage: database, machine1, machine2"
