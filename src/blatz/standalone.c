@@ -53,7 +53,8 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
         maskTailPolyA(query->dna, query->size);
     chainList = blatzAlign(bzp, indexList, query);
     if (chainList != NULL) bestScore = chainList->score;
-    verbose(1, "%s (%d bases) score %2.0f\n", query->name, query->size, bestScore);
+    verbose(1, "%s (%d bases) score %2.0f\n", 
+    	query->name, query->size, bestScore);
     blatzWriteChains(bzp, chainList, query, indexList, f);
     chainFreeList(&chainList);
     dnaSeqFree(&query);
@@ -61,7 +62,8 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 carefulClose(&f);
 }
 
-static void loadAndAlignAll(struct bzp *bzp, char *target, char *query, char *output)
+static void loadAndAlignAll(struct bzp *bzp, 
+	char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
 struct dnaSeq *targetList = dnaLoadAll(target);

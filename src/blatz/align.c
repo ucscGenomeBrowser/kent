@@ -23,7 +23,8 @@
 #include "bzp.h"
 #include "blatz.h"
 
-static struct chain *chainsCreate(struct gapCalc *gapCalc, struct axtScoreScheme *ss,
+static struct chain *chainsCreate(struct gapCalc *gapCalc, 
+	struct axtScoreScheme *ss,
 	struct dnaSeq *query, char strand, 
 	 struct dnaSeq *target, struct cBlock **pBlockList)
 /* Call chainer on blocks and clean things up a bit. */
@@ -50,7 +51,8 @@ for (block = *pBlockList; block != NULL; block = block->next)
 /* Call the fancy KD-tree based chainer. */
 chainList = chainBlocks(query->name, query->size, strand, 
 			target->name, target->size, pBlockList, 
-			(ConnectCost)chainConnectCost, (GapCost)chainConnectGapCost, 
+			(ConnectCost)chainConnectCost, 
+			(GapCost)chainConnectGapCost, 
 			&cc, NULL);
 
 /* Clean up overlaps */
@@ -63,7 +65,8 @@ return chainList;
 }
 
 
-static void insertNewBlocks(struct cBlock *blockList, struct cBlock **pInsertPoint)
+static void insertNewBlocks(struct cBlock *blockList, 
+	struct cBlock **pInsertPoint)
 /* Insert new block list at insertion point. */
 {
 if (blockList != NULL)
@@ -74,7 +77,8 @@ if (blockList != NULL)
     }
 }
 
-static struct cBlock *symToBlocks(int symCount, char *qSym, char *tSym, int qs, int ts)
+static struct cBlock *symToBlocks(int symCount, char *qSym, char *tSym, 
+	int qs, int ts)
 /* Convert from insert-symbol type representation to blocks. */
 {
 struct cBlock *blockList = NULL, *block = NULL;
@@ -161,7 +165,8 @@ qSym = needMem(symAlloc);
 tSym = needMem(symAlloc);
 
 #ifdef DEBUG
-uglyf("chainBandExtend t:%d-%d, q:%d-%d\n", chain->tStart, chain->tEnd, chain->qStart, chain->qEnd);
+uglyf("chainBandExtend t:%d-%d, q:%d-%d\n", chain->tStart, chain->tEnd, 
+	chain->qStart, chain->qEnd);
 chainWrite(chain, uglyOut);
 #endif /* DEBUG */
 
@@ -225,8 +230,8 @@ freez(&qSym);
 freez(&tSym);
 }
 
-static void shrinkBlocks(struct chain *chain, struct dnaSeq *query, struct dnaSeq *target,
-	int matrix[256][256])
+static void shrinkBlocks(struct chain *chain, struct dnaSeq *query, 
+	struct dnaSeq *target, int matrix[256][256])
 /* Trim away up to 50 bp from each end of each block in
  * so that band extension can correct problems introduced
  * by over-aggressive unbanded extension. */
@@ -282,7 +287,8 @@ for (block = *toAdd; block != NULL; block = next)
 *toAdd = NULL;
 }
 	
-static void chainsToBlocks(struct chain **pChainList, struct cBlock **pBlockList)
+static void chainsToBlocks(struct chain **pChainList, 
+	struct cBlock **pBlockList)
 /* Convert chains to just a list of blocks.  Free chains. */
 {
 struct cBlock *block, *nextBlock;
@@ -381,8 +387,8 @@ for (chain = chainList; chain != NULL; chain = next)
 chainList = NULL;
 }
 
-static struct chain *blatzChainAgainstIndex(struct bzp *bzp, struct blatzIndex *index,
-	struct dnaSeq *query, char strand)
+static struct chain *blatzChainAgainstIndex(struct bzp *bzp, 
+	struct blatzIndex *index, struct dnaSeq *query, char strand)
 /* Align query sequences against indexed target. */
 {
 struct cBlock *blockList = NULL;
@@ -418,7 +424,8 @@ int uglyCount, uglyTotalQ, uglyTotalT;
 double uglyArea;
 
 static void expandInRegion(struct bzp *bzp,
-			     struct dnaSeq *query, int qStart, int qEnd, char strand,
+			     struct dnaSeq *query, int qStart, int qEnd, 
+			     char strand,
 			     struct dnaSeq *target, int tStart, int tEnd,
 			     struct cBlock **pBlockList)
 /* Do alignment on a region inside of query/target governed by bzp parameters. */
@@ -488,7 +495,9 @@ bzpNew.bestChainOnly = TRUE;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
 #ifdef DEBUG
-    uglyf("---- focusing on clump t:%d-%d (%d) q:%d-%d (%d) ----\n", clump->tStart, clump->tEnd, clump->tEnd - clump->tStart, clump->qStart, clump->qEnd, clump->qEnd - clump->qStart);
+    uglyf("---- focusing on clump t:%d-%d (%d) q:%d-%d (%d) ----\n", 
+    	clump->tStart, clump->tEnd, clump->tEnd - clump->tStart, 
+	clump->qStart, clump->qEnd, clump->qEnd - clump->qStart);
 #endif /* DEBUG */
     expandInRegion(&bzpNew, query, clump->qStart, clump->qEnd, strand,
                    target, clump->tStart, clump->tEnd, &blockList);
@@ -543,7 +552,8 @@ if (qSize >= minSize && tSize >= minSize)
     }
 }
 
-static struct boxClump *clumpGapsAndEnds(struct bzp *bzp, struct chain *chainList)
+static struct boxClump *clumpGapsAndEnds(struct bzp *bzp, 
+	struct chain *chainList)
 /* Given a list of chains (all on same target and query) create a list of
  * regions where we'll want redo with smaller seeds.  Clump these regions
  * together. */
@@ -570,7 +580,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	b1 = chain->blockList;
 	for (b2 = b1->next; b2 != NULL; b2 = b2->next)
 	    {
-	    addClippedBox(&boxList, minSize, winSize, b1->qEnd, b2->qStart, b1->tEnd, b2->tStart);
+	    addClippedBox(&boxList, minSize, winSize, 
+	    	b1->qEnd, b2->qStart, b1->tEnd, b2->tStart);
 	    b1 = b2;
 	    }
 	qs = chain->qEnd;
@@ -620,7 +631,8 @@ slReverse(&newList);
 *pBlockList = newList;
 }
 
-static void findBestGapPos(struct axtScoreScheme *ss,  DNA *qStart, int qGap, int qSize,
+static void findBestGapPos(struct axtScoreScheme *ss,  
+	       DNA *qStart, int qGap, int qSize,
 	       DNA *tStart, int tGap, int tSize,
 	       int *retBestPos, int *retBestScore)
 /* Figure out where to position gap for maximal score. */
@@ -635,7 +647,8 @@ int score;
 for (pos=0; pos<matchSize; ++pos)
     {
     score = axtScoreUngapped(ss, qStart+pos, tStart+pos, pos);
-    score += axtScoreUngapped(ss, qStart+pos+qGap, tStart+pos+tGap, matchSize - pos);
+    score += axtScoreUngapped(ss, qStart+pos+qGap, tStart+pos+tGap, 
+        		      matchSize - pos);
     if (score > bestScore)
         {
 	bestScore = score;
@@ -644,9 +657,6 @@ for (pos=0; pos<matchSize; ++pos)
     }
 *retBestPos = bestPos;
 *retBestScore = bestScore;
-#ifdef DEBUG
-uglyf("findBestGapPos orig dt %d dq %d, new dt %d dq %d, score %d, pos %d\n", tSize, qSize, tGap, qGap, bestScore, bestPos);
-#endif /* DEBUG */
 }
 
 
@@ -670,8 +680,8 @@ return score;
 }
 #endif /* DEBUG */
 
-static void reduceGaps(struct bzp *bzp, struct dnaSeq *query, struct dnaSeq *target,
-	struct chain *chain)
+static void reduceGaps(struct bzp *bzp, 
+	struct dnaSeq *query, struct dnaSeq *target, struct chain *chain)
 /* Go through chain looking for small double-sided gaps that
  * might be turned into single-sided gaps (or even eliminated)
  * in a way that would improve the score. */
@@ -742,7 +752,8 @@ uglyf("score %f vs %f after reduce gaps\n", chain->score,
 #endif /* DEBUG */
 }
 
-struct ffAli *chainToFfAli(struct chain *chain, struct dnaSeq *query, struct dnaSeq *target)
+struct ffAli *chainToFfAli(struct chain *chain, 
+	struct dnaSeq *query, struct dnaSeq *target)
 /* Construct ffAli's from chain's blocks. */
 {
 struct ffAli *ff, *ffList = NULL;
@@ -763,10 +774,11 @@ ffList = ffMakeRightLinks(ffList);
 return ffList;
 }
 
-static void slideIntronsInChain(struct chain *chain, struct dnaSeq *query, struct dnaSeq *target)
+static void slideIntronsInChain(struct chain *chain, 
+	struct dnaSeq *query, struct dnaSeq *target)
 /* Slide around gaps to maximize gt/ag-ness of ends. */
 {
-if (chain->blockList->next != NULL)	/* Don't waste time on single-exon things */
+if (chain->blockList->next != NULL)	/* Don't waste time on single-exons */
     {
     /* Call existing code that works on ffAli's. */
     struct ffAli *ff, *ffList = chainToFfAli(chain, query, target);
@@ -812,7 +824,8 @@ if (bzp->expandWindow > 0)
     uglyf("focus stats:  count %d, area %f, tTotal %d, qTotal %d\n",
 	       uglyCount, uglyArea, uglyTotalT, uglyTotalQ);
 #endif /* DEBUG */
-    bzpTime("expand chains from finer seeds - got %d new blocks", slCount(blockList));
+    bzpTime("expand chains from finer seeds - got %d new blocks", 
+    	slCount(blockList));
     }
 
 /* Add blocks from original chains to the mix. */
@@ -836,7 +849,8 @@ bzpTime("reduced double to single gaps");
 return chainList;
 }
 
-static struct chain *blatzAlignStrand(struct bzp *bzp, struct blatzIndex *indexList,
+static struct chain *blatzAlignStrand(struct bzp *bzp, 
+	struct blatzIndex *indexList,
 	struct dnaSeq *query, char strand)
 /* Align query sequence against list of indexed target sequences. 
  * The order of chains returned is close to random. */
