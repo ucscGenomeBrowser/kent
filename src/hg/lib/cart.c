@@ -49,6 +49,12 @@ while (namePt != NULL && namePt[0] != 0)
     }
 }
 
+struct sqlConnection *cartSqlConnect()
+/* Return sqlConnection to cart database. 
+ * Free this with sqlDisconnect(). */
+{
+return sqlConnect("hgcentral");
+}
 
 struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, int id)
 /* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
@@ -98,7 +104,7 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 {
 struct cgiVar *cv, *cvList = cgiVarList();
 struct cart *cart;
-struct sqlConnection *conn = sqlConnect("hgcentral");
+struct sqlConnection *conn = cartSqlConnect();
 char *ex;
 char *booShadow = cgiBooleanShadowPrefix();
 int booSize = strlen(booShadow);
@@ -377,14 +383,47 @@ static char *cookieDate()
 return "Thu, 31-Dec-2037 23:59:59 GMT";
 }
 
+static int getCookieId(char *cookieName)
+/* Get id value from cookie. */
+{
+char *hguidString = findCookieData("hguid");
+return (hguidString == NULL ? 0 : atoi(hguidString));
+}
+
+static int getSessionId()
+/* Get session id if any from CGI. */
+{
+return cgiUsualInt("hgsid", 0);
+}
+
+static void clearDbContents(struct sqlConnection *conn, char *table, unsigned id)
+/* Clear out contents field of row in table that matches id. */
+{
+char query[256];
+if (id == 0)
+   return;
+sprintf(query, "update %s set contents='' where id=%u", table, id);
+sqlUpdate(conn, query);
+}
+
+void cartResetInDb(char *cookieName)
+/* Clear cart in database. */
+{
+int hguid = getCookieId(cookieName);
+int hgsid = getSessionId();
+struct sqlConnection *conn = cartSqlConnect();
+clearDbContents(conn, "userDb", hguid);
+clearDbContents(conn, "sessionDb", hgsid);
+sqlDisconnect(&conn);
+}
+
 static struct cart *cartAndCookie(char *cookieName, char **exclude)
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 {
 /* Get the current cart from cookie and cgi session variable. */
-char *hguidString = findCookieData("hguid");
-int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
-int hgsid = cgiUsualInt("hgsid", 0);
+int hguid = getCookieId(cookieName);
+int hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude);
 
 /* Remove some internal variables from cart permanent storage. */
