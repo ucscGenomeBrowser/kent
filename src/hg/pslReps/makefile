@@ -12,4 +12,4 @@ pslReps: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslReps $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

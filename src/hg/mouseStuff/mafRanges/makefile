@@ -14,5 +14,5 @@ ${A}: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 test:
-	cd tests; make
+	cd tests && ${MAKE}
 

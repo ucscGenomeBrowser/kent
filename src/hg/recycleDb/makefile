@@ -1,3 +1,3 @@
 all:
-	cd bedUp;make
-	cd bedDown;make
+	cd bedUp && ${MAKE}
+	cd bedDown && ${MAKE}
