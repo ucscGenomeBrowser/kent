@@ -4181,23 +4181,31 @@ struct rgbColor getColorForAffyBed(float val, float max)
 {
 struct rgbColor color; 
 int colorIndex = 0;
+int offset = 0;
 val = fabs(val);
+/* if log score is -10000 data is missing */
+if(val == -10000) 
+    {
+    color.g = color.r = color.b = 128;
+    return(color);
+    }
+
 /* take the log for visualization */
 if(val > 0)
     val = logBase2(val);
 else
     val = 0;
 
-/* scale 4 down to 0 */
-if(val > 4) 
-    val -= 4;
+/* scale offset down to 0 */
+if(val > offset) 
+    val -= offset;
 else
     val = 0;
 
 if (max <= 0) 
     errAbort("ERROR: hgc::getColorForAffyBed() maxDeviation can't be zero\n"); 
 max = logBase2(max);
-max -= 4;
+max -= offset;
 if(max < 0)
     errAbort("hgc::getColorForAffyBed() - Max val should be greater than 0 but it is: %g", max);
     
@@ -4365,8 +4373,11 @@ float currentVal = -1 * maxVal;
 int square = 15;
 int numColumns;
 
-assert(maxVal && minVal);
-numColumns = logBase2(maxVal) - logBase2(minVal);
+assert(maxVal != 0);
+if(minVal != 0)
+    numColumns = logBase2(maxVal) - logBase2(minVal);
+else 
+    numColumns = logBase2(maxVal);
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n<tr>");
 printf("<th colspan=%d>False Color Key</th></tr>\n<tr>",numColumns);
@@ -4780,6 +4791,7 @@ void printAffyLinks(char *name)
 {
 char *netaffx = "https://www.netaffx.com/LinkServlet?array=U95&probeset=";
 char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
+char *gnf = "http://expression.gnf.org/promoter/tissue/images/";
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
@@ -4790,6 +4802,8 @@ if(name != NULL)
     printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
+    printf("<p>A <a href=\"%s%s.png\">histogram</a> of the data for the probe selected (%s) over all",gnf, name, name);
+    printf("tissues is available at <a href=\"http://www.gnf.org\">Novartis</a>.\n");
     }
 }
 
@@ -4803,8 +4817,8 @@ int stepSize = 1;
 struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
-float maxScore = 262144; /* 2^18 */
-float minScore = 16; /* 2^4 */
+float maxScore = 262144/16; /* 2^18/2^4 */
+float minScore = 2;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 printf("<h2></h2><p>\n");
@@ -4831,10 +4845,6 @@ else
     }
 webEnd();
 }
-
-
-void oligoSelectionDetails(struct trackDb *tdb, char *oligoName)
-{}
 
 struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
