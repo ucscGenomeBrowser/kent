@@ -4979,7 +4979,138 @@ o - Load genomic dupes
     rm cftr25_humanref.maf cftr*.ss         # easy to regenerate
 
 # HMR PHYLOHMM CONSERVATION
-# (in progress, acs, 2003-11-19)
+# (started, acs, 2003-11-11, finished 11-19)
+
+    ssh hgwdev
+    # (update woody binaries, if necessary -- see above)
+    # (also, make sure /cluster/bin/woody in path)
+    mkdir /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    cd /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+
+    # estimate a phylog. model using the entire genome-wide alignments
+    # first extract sufficient statistics by chromosome
+    ssh eieio
+    cd /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    foreach file (/cluster/data/hg16/bed/humor/hmr/*.maf)
+	set prefix = $file:t:r
+	msa_view -i MAF $file -o SS -z -O hg16,mm3,rn3 > $prefix.ss 
+    end
+    logout
+    # NOTE: may be worth doing the above as a small cluster job instead
+    # (put the mafs on bluearc -- end up doing this below anyway)
+
+    # now combine suff stats across chromosomes
+    # (back on hgwdev)
+    ls chr*.ss > files
+    msa_view -i SS -o SS -A hg16,mm3,rn3 '*files' > all.ss
+    # estimate the model (very fast, now that suff stats are avail)
+    echo "(1,(2,3));" > tree.nh
+    fit_tree_model -i SS -m all.ss -t tree.nh -s REV -k 10 -o rev_dg
+    cat rev_dg.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 4.428803
+#TRAINING_LNL: -448054115.568696
+#BACKGROUND: 0.286083 0.213573 0.213691 0.286652
+#RATE_MAT:
+#  -0.891523    0.166770    0.574850    0.149902
+#   0.223389   -1.146311    0.153784    0.769137
+#   0.769591    0.153699   -1.147159    0.223869
+#   0.149605    0.573055    0.166888   -0.889548
+#TREE: (1:0.192598,(2:0.076303,3:0.083043):0.192598);
+
+    # now, break up the genome-wide MAFs into pieces; it's worth doing
+    # this as a little cluster job
+    ssh eieio
+    mkdir -p /cluster/bluearc/hg16/bed/humor
+    cp /cluster/data/hg16/bed/humor/hmr/*.maf /cluster/data/hg16/?{,?}/chr*.fa /cluster/bluearc/hg16/bed/humor
+    logout
+    ssh kk
+    cd /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    cat << EOF > doSplit
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+FA_SRC=/cluster/bluearc/hg16/bed/humor
+WINDOWS=/cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11/WINDOWS
+
+maf=$1
+prefix=`echo $maf | awk -F\/ '{print $NF}' | awk -F\. '{print $1}'` 
+mkdir -p /scratch/msa_split
+${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$prefix.fa -O hg16,mm3,rn3 -w 1000000,0 -r /scratch/msa_split/$prefix -o SS -I 1000 -d 1 -B 5000
+cd /scratch/msa_split
+for file in ${prefix}.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+rm -f /scratch/msa_split/${prefix}.*.ss
+EOF
+    chmod +x doSplit
+    mkdir -p WINDOWS
+    rm -f WINDOWS/* jobs.lst
+    foreach file (/cluster/bluearc/hg16/bed/humor/*.maf) 
+	echo "doSplit $$file" >> jobs.lst
+    end
+    para create jobs.lst  
+    # etc ...   (run cluster job)
+
+    # now setup and run the cluster job to compute the conservation scores
+cat << EOF > doPostProbs
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+TMP=/scratch/phyloHMMcons
+
+file=$1
+root=`echo $file | awk -F\/ '{print $NF}' | sed 's/\.ss\.gz//'`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p $TMP
+zcat $file | $WOODY/label -m - -d rev_dg.mod -i SS -o $TMP/$root -k 10 -L 0.9 -A -p 0 -j 1 -s $chrom -x
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.postprob > POSTPROBS/$chrom/$root.postprob.gz
+rm $TMP/$root.postprob
+EOF
+    chmod +x doPostProbs
+
+    mkdir -p POSTPROBS
+    rm -f jobs2.lst 
+    foreach file (WINDOWS/chr*.ss.gz) 
+	echo "doPostProbs $file" >> jobs2.lst 
+    end
+    para create jobs2.lst
+    # etc ... (run cluster job)
+    logout
+
+    # finally, make track (note: now should be back on hgwdev, in
+    # phyloHMMcons.hg16mm3rn3.2003-11-11 dir)
+    mkdir wib
+    foreach dir (POSTPROBS/*)
+	chrom=$dir:t
+	echo $chrom 
+	zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | /cluster/bin/i386/wigAsciiToBinary -chrom=$chrom -binsize=1024 -dataSpan=1 -wibFile=${chrom}_phyloHMMcons -name=hmr stdin 
+	mv ${chrom}_phyloHMMcons.wib wib
+	rm -f /gbdb/hg16/wib/${chrom}_phyloHMMcons.wib 
+	ln -s /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11/wib/${chrom}_phyloHMMcons.wib /gbdb/hg16/wib 
+	/cluster/bin/i386/hgLoadWiggle hg16 ${chrom}_phyloHMMcons_HMR ${chrom}_phyloHMMcons.wig 
+	rm ${chrom}_phyloHMMcons.wig 
+    done
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+    # add entry to trackDb.ra
+#track phyloHMMcons_HMR
+#shortLabel phyloHMMcons HMR
+#longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
+#group compGeno
+#priority 150
+#visibility hide
+#color 175,150,128
+#altColor 255,128,0
+#type wig 0.0 1.0
+#autoScaleDefault Off
+
+    # cleanup (only when you're pretty sure you're done!)
+    rm -r chr*.ss WINDOWS wiggle.tab para.results batch*
+
 
 # CHICKEN BLAT (translated)
 # (done, acs, 2003-11-19)
