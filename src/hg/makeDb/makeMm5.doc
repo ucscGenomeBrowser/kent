@@ -1743,6 +1743,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
             $maf -tPrefix=mm5. -qPrefix=galGal2.
     end
 
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.mm5
+# The results of this are also symlinked under mm5/bed
 
 # MAKE VSGALGAL2 DOWNLOADABLES (DONE 7/19/04 angie)
     ssh kksilo

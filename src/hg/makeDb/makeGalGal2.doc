@@ -1099,6 +1099,9 @@ gLoadNet galGal2 netSyntenyHg17 stdin
             $maf -tPrefix=galGal2. -qPrefix=hg17.
     end
 
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.galGal2
+# The results of this are also symlinked under galGal2/bed
 
 # MAKE VSHG17 DOWNLOADABLES (TODO 8/20/04 angie)
     ssh kksilo

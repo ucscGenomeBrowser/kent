@@ -1246,6 +1246,11 @@ danRer1.downloadDir = danRer1
     cd /cluster/data/genbank/work
     mv initial.danRer1 initial.danRer1.genbank.est
 
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.danRer1
+# The results of this are also symlinked under danRer1/bed
+
+
 # ENSEMBL GENES (DONE, 2004-06-22, hartera)
 
    mkdir /cluster/data/danRer1/bed/ensembl

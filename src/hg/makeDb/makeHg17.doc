@@ -5425,6 +5425,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Add entries for chainGalGal2, netGalGal2, syntenyGalGal2 to 
     # human/hg17 trackDb
 
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.hg17
+# The results of this are also symlinked under hg17/bed
 
 # GENERATE GALGAL2 MAF FOR MULTIZ FROM NET (DONE 6/23/04 angie)
     ssh eieio
