@@ -65,6 +65,19 @@ if (pslTbl != NULL)
     }
 }
 
+void pslTblFreeList(struct pslTbl **pslTblList)
+/* free list of pslTbls */
+{
+struct pslTbl *pslTbl = *pslTblList;
+while (pslTbl != NULL)
+    {
+    struct pslTbl *pslTblDel = pslTbl;
+    pslTbl = pslTbl->next;
+    pslTblFree(&pslTblDel);
+    }
+*pslTblList = NULL;
+}
+
 /*
  * Local Variables:
  * c-file-style: "jkent-c"

@@ -16,6 +16,7 @@ struct pslQuery
 struct pslTbl
 /* table of psl alignments */
 {
+    struct pslTbl *next;               /* next psl table in a list */
     char *setName;                     /* name identifying the set of psl.
                                         * maybe file name, or  other name */
     struct hash *queryHash;            /* hash of pslQuery objects */
@@ -27,6 +28,9 @@ struct pslTbl *pslTblNew(char *pslFile, char *setName);
 
 void pslTblFree(struct pslTbl **pslTblPtr);
 /* free object */
+
+void pslTblFreeList(struct pslTbl **pslTblList);
+/* free list of pslTbls */
 
 #endif
 
