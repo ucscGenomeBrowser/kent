@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.462 2003/08/01 15:12:13 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.463 2003/08/01 19:01:51 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2919,8 +2919,14 @@ char **row;
 char query[128];
 char *desc = NULL;
 
-safef(query, sizeof(query),
-      "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
+/* mgcFullStatus is used on browsers with only the full-length (mgc genes)
+ * track */
+if (sqlTableExists(conn, "mgcStatus"))
+    safef(query, sizeof(query),
+          "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
+else
+    safef(query, sizeof(query),
+          "SELECT status FROM mgcFullStatus WHERE (imageId = %d)", imageId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
