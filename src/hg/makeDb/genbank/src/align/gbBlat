@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.44.4.1 2005/02/15 17:15:40 markd Exp $
+# $Id: gbBlat,v 1.44.4.2 2005/04/04 16:20:33 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -341,7 +341,7 @@ proc alignToGenome {genomeFile rnaFa blatParams orgCat cdnaType {subInfo {}}} {
     file delete $localPsl $localOi $localIntronPsl
     
     # align
-    eval doExec blat -noHead $blatParams [list $genomeFile $rnaFa] $localPsl 2>@stderr
+    eval doExec blat -noHead -repeats=lower $blatParams [list $genomeFile $rnaFa] $localPsl 2>@stderr
     liftOrCat psl $localPsl $outPslFh $subInfo
 
     # orientation info info and ESTs w/intron selection is only done for

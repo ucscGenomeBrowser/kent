@@ -53,7 +53,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.12.8.1 2004/12/23 21:58:23 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.2 2005/04/04 16:20:33 markd Exp $
 #
 use strict;
 use warnings;
@@ -694,8 +694,7 @@ sub writeBlatJob($$$$$$$) {
         return;  # exists
     }
     # make mrna fa relative to workdir (make . not wild in RE)
-    my $qWorkDir = $workDir;
-    $qWorkDir =~ s/\./\\./g;
+    my $qWorkDir = quotemeta($workDir);
     my $qWorkDirRE = "^(\.\/)?$qWorkDir\/";
     $mrnaFa =~ s/$qWorkDirRE//;
         
