@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.713 2004/08/05 21:21:36 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.714 2004/08/05 21:33:23 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -693,7 +693,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 if (bedSize >= 5 && showTopScorers != NULL)
     {
-    int maxScorers = atoi(showTopScorers);
+    int maxScorers = sqlUnsigned(showTopScorers);
     showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
