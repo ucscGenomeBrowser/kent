@@ -1673,6 +1673,8 @@ else
     job->id = atoi(rjm->jobIdString);
     ++batch->runningCount;
     ++user->runningCount;
+    dlRemove(batch->node);
+    dlAddTail(user->oldBatches, batch->node);
     mach->job = job;
     job->machine = mach;
     dlAddTail(runningJobs, job->node);
