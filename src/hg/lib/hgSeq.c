@@ -3,16 +3,12 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "cheapcgi.h"
-#include "cart.h"
 #include "hdb.h"
 #include "web.h"
 #include "rmskOut.h"
 #include "fa.h"
 #include "genePred.h"
 #include "bed.h"
-
-/* Both hgc and hgText define this as a global: */
-extern struct cart *cart;
 
 void hgSeqFeatureRegionOptions(boolean canDoUTR, boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
@@ -102,7 +98,8 @@ puts("<P>\n");
 }
 
 
-void hgSeqDisplayOptions(boolean canDoUTR, boolean canDoIntrons)
+void hgSeqDisplayOptions(boolean canDoUTR, boolean canDoIntrons,
+			 boolean offerRevComp)
 /* Print out HTML FORM entries for sequence display options. */
 {
 puts("\n<H3> Sequence Formatting Options: </H3>\n");
@@ -131,6 +128,11 @@ cgiMakeRadioButton("hgSeq.repMasking", "lower", TRUE);
 puts(" to lower case \n");
 cgiMakeRadioButton("hgSeq.repMasking", "N", FALSE);
 puts(" to N <BR>\n");
+if (offerRevComp)
+    {
+    cgiMakeCheckBox("hgSeq.revComp", FALSE);
+    puts("Reverse complement (get \'-\' strand sequence)");
+    }
 }
 
 void hgSeqOptionsDb(char *db, char *table)
@@ -139,11 +141,12 @@ void hgSeqOptionsDb(char *db, char *table)
 struct hTableInfo *hti;
 char chrom[32];
 char rootName[256];
-boolean canDoUTR, canDoIntrons;
+boolean canDoUTR, canDoIntrons, offerRevComp;
 
 if ((table == NULL) || (table[0] == 0))
     {
     canDoUTR = canDoIntrons = FALSE;
+    offerRevComp = TRUE;
     }
 else
     {
@@ -154,9 +157,10 @@ else
 		 rootName, table);
     canDoUTR = hti->hasCDS;
     canDoIntrons = hti->hasBlocks;
+    offerRevComp = FALSE;
     }
 hgSeqFeatureRegionOptions(canDoUTR, canDoIntrons);
-hgSeqDisplayOptions(canDoUTR, canDoIntrons);
+hgSeqDisplayOptions(canDoUTR, canDoIntrons, offerRevComp);
 }
 
 
@@ -205,12 +209,12 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-boolean isRc     = (strand == '-');
-boolean maskRep  = cartBoolean(cart, "hgSeq.maskRepeats");
-int padding5     = cartInt(cart, "hgSeq.padding5");
-int padding3     = cartInt(cart, "hgSeq.padding3");
-char *casing     = cartString(cart, "hgSeq.casing");
-char *repMasking = cartString(cart, "hgSeq.repMasking");
+boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
+boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
+int padding5     = cgiInt("hgSeq.padding5");
+int padding3     = cgiInt("hgSeq.padding3");
+char *casing     = cgiString("hgSeq.casing");
+char *repMasking = cgiString("hgSeq.repMasking");
 
 if (rCount < 1)
     return;
