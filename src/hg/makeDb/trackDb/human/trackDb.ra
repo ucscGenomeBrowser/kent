@@ -622,3 +622,9 @@ searchMethod exact
 searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
+
+searchTable ecoresTetNig1
+searchType genePred
+shortcircuit 1
+termRegex EG3HTT[0-9]+
+searchPriority 50
