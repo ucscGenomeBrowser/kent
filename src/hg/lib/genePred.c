@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.19 2003/08/28 04:27:51 kent Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.20 2003/12/31 01:32:19 weber Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -373,7 +373,7 @@ gp->exonCount= i;
 return gp;
 }
 
-static void findCdsStartEndInGenome(struct psl *psl,
+void findCdsStartEndInGenome(struct psl *psl,
                                     int rnaCdsStart, int rnaCdsEnd,
                                     int *retCdsStart, int *retCdsEnd)
 /* Convert cdsStart/End from mrna to genomic coordinates. */
@@ -482,7 +482,7 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
+    if ((iExon < 0) || ((int)(tStart - gene->exonEnds[iExon]) > insertMergeSize))
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
