@@ -21,7 +21,7 @@
 #include "genePredReader.h"
 #include "dystring.h"
 #include "pseudoGeneLink.h"
-//#include "scoreWindow.h"
+//#include "scoreWindow.h" TODO fix this
 #include "verbose.h"
 
 #define ScoreNorm 3
@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.23 2004/08/09 10:01:07 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.24 2004/08/15 23:11:50 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -973,7 +973,7 @@ assert(region > 0);
 assert(end != 0);
 *polyAstart = 0 , *polyAend = 0;
 safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, chrom);
-printf("polyA file %s size %d start %d\n",sfp->file, seqSize, seqStart);
+printf("polyA file %s size %d start %d tSize %d\n",sfp->file, seqSize, seqStart, tSize);
 assert (seqSize == tSize);
 if (seqStart < 0) seqStart = 0;
 if (seqStart + region > seqSize) region = seqSize - seqStart;
@@ -1829,8 +1829,9 @@ if (pslList != NULL)
                                     psl->tEnd , psl->qName, &geneOverlap);
                 maxOverlap = overlapSplicedMrna(psl, mrnaHash, &exonCount, &mPsl);
                 pg->maxOverlap = maxOverlap;
-                if ((float)maxOverlap/(float)psl->qSize > splicedOverlapRatio && maxOverlap > 50 ) 
-                    /* if overlap > 50 bases , then skip */
+                if ((float)maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch) > splicedOverlapRatio 
+                        && maxOverlap > 50 ) 
+                    /* if overlap > 50 bases  and 50% overlap with pseudogene, then skip */
                     {
                     if (!quiet)
                         printf("NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
