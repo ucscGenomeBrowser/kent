@@ -161,6 +161,22 @@ for (i=0; i<sampleCount; ++i)
 	scoreArea(yGaps, s, totalGaps),
 	scoreArea(bothGaps, s, totalGaps));
     }
+printf("int pos[%d] = {\n", sampleCount);
+for (i=0; i<sampleCount; ++i)
+    printf("%d,", samples[i]);
+printf("};\n");
+printf("int xGap[%d] = {\n", sampleCount);
+for (i=0; i<sampleCount; ++i)
+    printf("%d,", scoreArea(xGaps, samples[i], totalGaps));
+printf("};\n");
+printf("int yGap[%d] = {\n", sampleCount);
+for (i=0; i<sampleCount; ++i)
+    printf("%d,", scoreArea(yGaps, samples[i], totalGaps));
+printf("};\n");
+printf("int bothGap[%d] = {\n", sampleCount);
+for (i=0; i<sampleCount; ++i)
+    printf("%d,", scoreArea(bothGaps, samples[i], totalGaps));
+printf("};\n");
 }
 
 int main(int argc, char *argv[])
