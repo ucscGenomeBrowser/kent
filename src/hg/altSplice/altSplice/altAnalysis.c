@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.7 2003/11/25 07:17:50 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.8 2003/12/02 17:22:16 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -762,14 +762,14 @@ vPosLoc[vertexIx++] = vPos[termExonEnd];   /* 5 */
 /* Fill in the vertex types. */
 vertexIx = 0;
 vTLoc[vertexIx++] = vT[vs];
-vTLoc[vertexIx++] = vT[vs];
 vTLoc[vertexIx++] = vT[ve1];
+vTLoc[vertexIx++] = vT[vs];
 vTLoc[vertexIx++] = vT[ve2];
 vTLoc[vertexIx++] = vT[termExonStart];
 vTLoc[vertexIx++] = vT[termExonEnd];
 
 edgeIx = 0;
-/* Constitutive first exon. */
+/* Constitutive portion of first exon. */
 eStartsLoc[edgeIx] = 0;
 eEndsLoc[edgeIx] = 1;
 eTLoc[edgeIx] = 0;
@@ -779,7 +779,7 @@ evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
 slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
-/* Alternative second exon. */
+/* Alternative portion of first exon. */
 eStartsLoc[edgeIx] = 2;
 eEndsLoc[edgeIx] = 3;
 eTLoc[edgeIx] = 1;
@@ -893,7 +893,7 @@ vertexIx = 0;
 vPosLoc[vertexIx++] = vPos[startV]; /* 0 */
 vPosLoc[vertexIx++] = vPos[vs];     /* 1 */
 vPosLoc[vertexIx++] = vPos[ve1];    /* 2 */
-vPosLoc[vertexIx++] = vPos[ve1];    /* 3 */
+vPosLoc[vertexIx++] = vPos[ve2];    /* 3 */
 vPosLoc[vertexIx++] = vPos[ve2];    /* 4 */
 vPosLoc[vertexIx++] = vPos[endV];   /* 5 */
 
@@ -907,6 +907,7 @@ vTLoc[vertexIx++] = vT[ve2];
 vTLoc[vertexIx++] = vT[endV];
 
 edgeIx = 0;
+
 /* Constitutive first exon. */
 eStartsLoc[edgeIx] = 0;
 eEndsLoc[edgeIx] = 1;
@@ -929,7 +930,7 @@ edgeIx++;
 
 /* Alt2 junction (longer). */
 eStartsLoc[edgeIx] = 1;
-eEndsLoc[edgeIx] = 3;
+eEndsLoc[edgeIx] = 4;
 eTLoc[edgeIx] = 2;
 ev = evidenceForEdge(ag, vs, ve2);
 evLoc = CloneVar(ev);
@@ -937,9 +938,9 @@ evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
 slAddHead(&agLoc->evidence, evLoc);
 edgeIx++;
 
-/* Alt1 exon. */
-eStartsLoc[edgeIx] = 3;
-eEndsLoc[edgeIx] = 4;
+/* Alt1 portion of second exon. */
+eStartsLoc[edgeIx] = 2;
+eEndsLoc[edgeIx] = 3;
 eTLoc[edgeIx] = 1;
 ev = evidenceForEdge(ag, ve1, endV);
 evLoc = CloneVar(ev);
