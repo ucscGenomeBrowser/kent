@@ -1,8 +1,57 @@
-/** orthoPickIntron.c - Pick an intron for RACE PCR based off of the orthoEvaluate
-    records loaded.
-    - Coding potenttial (Using Victor Solovyev's bestorf repeatedly.)
-    - Overlap with native mRNAs/ESTs
-    NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!
+/** \page orthoPickIntron.c Pick an intron for RACE PCR based off of the mapped mouse mRNAs records loaded.
+
+<h2>Overview:</h2>
+<p>Mouse mRNAs were mapped orthologous locations in the human
+genome using blastz nets and chains created by Jim
+Kent. Individual introns and flanking exons were chosen as
+candidates for RACE PCR by the size of the coding region in the
+mapped mRNA and the number of human transcripts that exactly
+overlap the mapped mRNA from mouse. Thus introns are selected based
+on the amount of transcript evidence present in the human genome and
+have a confirmed orthologous transcribed intron in mouse.
+
+<h2>Details:</h2> 
+<p><b>Objective:</b> To use full length mouse mRNAs and orthology
+as well as human transcripts to help select high confidence
+introns and flanking exons for directed RACE PCR.
+
+<h2>Algorithm:</h2>
+<ul>
+<li>Mouse mRNAs were aligned to the mouse draft genome (build30)
+and were mapped via Jim Kent's <a
+href="http://mgc.cse.ucsc.edu/cgi-bin/hgTrackUi?&c=chr14&g=mouseNet">
+net/chain mapping</a> of the mouse and human genomes to the human
+genome. By using the net/chain mapping we can take into account
+more sequence than just the individual mRNA.</li>
+<li>Mapped mouse mRNAs are evaluated for coding potential in human
+using Victor Solovyev's bestorf program.</li>
+
+<li>Each intron and flanking exons were compared with human
+transcripts to find the number of human transcripts that overlap
+the intron and flanking exons with the exact same splice
+sites.</li>
+
+<li>Individual introns are scored for consensus splice sites,
+coding potential of mapped mRNA, and number of supporting native
+transcripts.</li>
+
+<li>Individual introns are selected and the loci are remembered so
+that only one intron is chosen from each loci. Also introns are
+skipped if they overlap with a current MGC pick or MGC A List pick.
+Introns are also examined to see if they overlap with a RefSeq gene
+or if they overlap a MGC incomplete mRNA or an MGC failed EST.</li>
+</ul>
+
+<h2>Results:</h2>
+1577 total introns and flanking exons were found and scored. They 
+are classified as follows:
+<table border=1>
+<tr><th>Overlaps</th><th>Number</th><th>Ave. Score</th></tr>
+<tr><td>Overlapped by both RefSeq and MGC Incomplete/Failed.</td><td>459</td><td>188</td></tr>
+<tr><td>Overlapped by RefSeq but not MGC Incomplete/Failed.</td><td>572</td><td>159</td></tr>
+<tr><td>Overlapped by MGC Incomplete/Failed but not RefSeq.</td><td>248</td><td>144</td></tr>
+<tr><td>Overlapped by Neither</td><td>298</td><td>90</td></tr>
+</table>
 */
 #include "common.h"
 #include "hdb.h"
@@ -21,28 +70,28 @@
 #include "dnautil.h"
 #include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.3 2003/06/25 01:12:29 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.4 2003/06/25 06:21:12 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
 {
-    struct intronEv *next; /* Next in list. */
-    struct orthoEval *ev;  /* Parent orthoEval structure. */
-    char *chrom;           /* Chromosome. */
-    unsigned int           /* Exon starts and stops on chromsome. */
+    struct intronEv *next; /**< Next in list. */
+    struct orthoEval *ev;  /**< Parent orthoEval structure. */
+    char *chrom;           /**< Chromosome. */
+    unsigned int           /** Exon starts and stops on chromsome. */
         e1S, e1E, 
 	e2S, e2E;
-    char *agxName;         /* Name of best fitting native agx record. Memory not owned here. */
-    int support;           /* Number of mRNAs supporting this list. */
-    int orientation;       /* Orientation of intron. */
-    boolean inCodInt;         /* TRUE if in coding region, FALSE otherwise. */
-    float borfScore;       /* Score for ev from borf program. */
+    char *agxName;         /**< Name of best fitting native agx record. Memory not owned here. */
+    int support;           /**< Number of mRNAs supporting this list. */
+    int orientation;       /**< Orientation of intron. */
+    boolean inCodInt;      /**< TRUE if in coding region, FALSE otherwise. */
+    float borfScore;       /**< Score for ev from borf program. */
 };
 
 static boolean doHappyDots;   /* output activity dots? */
 
 static struct optionSpec optionSpecs[] = 
-/* Our acceptable options to be called with. */
+/** Our acceptable options to be called with. */
 {
     {"help", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
@@ -58,7 +107,7 @@ static struct optionSpec optionSpecs[] =
 };
 
 static char *optionDescripts[] = 
-/* Description of our options for usage summary. */
+/** Description of our options for usage summary. */
 {
     "Display this message.",
     "Database (i.e. hg15) that bedFile corresponds to.",
@@ -89,12 +138,11 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"
 	 "orthoPickIntron -db=hg15 -orthoEvalFile=orthoEval.tab -bedOutFile=tmp.bed -orthoBedOut=tmp.ortho.bed \\\n"
-	 "  -htmlFile=tmp.html -htmlFrameFile=opi.html\n"
-	 "  NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!\n");
+	 "  -htmlFile=tmp.html -htmlFrameFile=opi.html\n");
 }
 
 void occassionalDot()
-/* Write out a dot every 20 times this is called. */
+/** Write out a dot every 20 times this is called. */
 {
 static int dotMod = 100;
 static int dot = 100;
@@ -107,7 +155,7 @@ if (doHappyDots && (--dot <= 0))
 }
 
 struct intronEv *intronIvForEv(struct orthoEval *ev, int intron)
-/* Return an intronEv record for a particular intron. */
+/** Return an intronEv record for a particular intron. */
 {
 struct intronEv *iv = NULL;
 struct bed *bed = NULL;
@@ -133,7 +181,7 @@ return iv;
 }
 
 int scoreForIntronEv(const struct intronEv *iv)
-/* Score function based on native support, orientation, and coding. */
+/** Score function based on native support, orientation, and coding. */
 {
 static FILE *out = NULL;
 int score = 0;
@@ -152,7 +200,7 @@ return score;
 }
 
 boolean checkMgcPicks(struct intronEv *iv)
-/* Try to look up an mgc pick in this area. */
+/** Try to look up an mgc pick in this area. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -187,7 +235,7 @@ return foundSome;
 
 
 boolean isOverlappedByTable(struct intronEv *iv, char *table)
-/* Return TRUE if there is a refSeq overlapping. */
+/** Return TRUE if there is a refSeq overlapping. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -213,7 +261,7 @@ return isOverlappedByTable(iv, "chuckMgcBad");
 }
 
 int intronEvalCmp(const void *va, const void *vb)
-/* Compare to sort based score function. */
+/** Compare to sort based score function. */
 {
 const struct intronEv *a = *((struct intronEv **)va);
 const struct intronEv *b = *((struct intronEv **)vb);
@@ -223,7 +271,7 @@ return bScore - aScore; /* reverse to get largest values first. */
 }
 
 boolean isUniqueCoordAndAgx(struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
-/* Return TRUE if iv isn't in posHash and agxHash.
+/** Return TRUE if iv isn't in posHash and agxHash.
    Return FALSE otherwise. */
 {
 static char key[1024];
@@ -257,7 +305,7 @@ return unique;
 }
 
 struct bed *bedForIv(struct intronEv *iv)
-/* Make a bed to represent a intronEv structure. */
+/** Make a bed to represent a intronEv structure. */
 {
 struct bed *bed = NULL;
 AllocVar(bed);
@@ -283,6 +331,7 @@ return bed;
 }
 
 void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
+/** Write out frame for htmls. */
 {
 fprintf(htmlOut, "<html><head><title>Introns and flanking exons for RACE PCR</title></head>\n"
 	"<frameset cols=\"18%,82%\">\n"
@@ -294,6 +343,7 @@ fprintf(htmlOut, "<html><head><title>Introns and flanking exons for RACE PCR</ti
 }
 
 void pickIntrons()
+/** Top level routine, actually picks the introns. */
 {
 char *htmlFileName=NULL, *htmlFrameFileName=NULL;
 char *bedFileName=NULL, *orthoBedFileName=NULL;
@@ -373,6 +423,7 @@ hashFree(&agxHash);
 }
 
 int main(int argc, char *argv[])
+/** Main, everybodies favorite function. */
 {
 doHappyDots = isatty(1);
 if(argc == 1)
