@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.57 2004/07/21 16:56:41 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.58 2004/07/26 21:31:56 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -146,7 +146,7 @@ if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	   uiState);
     puts("           Genome Browser</A> &nbsp; - &nbsp;");
     }
-if (db == NULL || hgNearOk(db))
+if (db != NULL && hgNearOk(db))
     {
     printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	   uiState);
@@ -418,7 +418,6 @@ char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *genome = hGenome(db);
 char *selAssembly = NULL;
 
@@ -516,8 +515,6 @@ char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-char *db = hGetDb();
-char *organism = hOrganism(db);
 char *assembly = cgiOptionalString(dbCgi);
 char orgAssembly[256];
 
