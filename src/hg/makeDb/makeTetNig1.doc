@@ -1751,6 +1751,11 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # loaded chr1 only into rahseq first to check then load all chroms
     nice ldHgGene -genePredExt tetNig1 gaze chr*.gff
 
+    # GALT 09-15-04 index on name(10) going to name(17) as all have long prefix
+    echo "drop index name on gaze ;" | hgsql tetNig1
+    echo "create index name on gaze (name(17)) ;" | hgsql tetNig1
+	
+
 # Read 91905 transcripts in 265439 lines in 27 files
 # 91905 groups 27 seqs 1 sources 4 feature types
 # 27918 gene predictions
