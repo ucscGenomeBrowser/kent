@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: axtToMaf.c,v 1.4 2003/05/09 15:21:42 kent Exp $";
+static char const rcsid[] = "$Id: axtToMaf.c,v 1.5 2004/03/25 00:58:42 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,11 +22,15 @@ errAbort(
   "Options:\n"
   "    -qPrefix=XX. - add XX. to start of query sequence name in maf\n"
   "    -tPrefex=YY. - add YY. to start of target sequence name in maf\n"
+  "    -score       - recalculate score \n"
+  "    -scoreZero   - recalculate score if zero \n"
   );
 }
 
 char *qPrefix = "";
 char *tPrefix = "";
+boolean score = FALSE;
+boolean scoreZero = FALSE;
 
 struct hash *loadIntHash(char *fileName)
 /* Read in a file full of name/number lines into a hash keyed
@@ -67,6 +71,8 @@ while ((axt = axtRead(lf)) != NULL)
     char srcName[128];
     AllocVar(ali);
     ali->score = axt->score;
+    if ((ali->score == 0 && scoreZero) || score)
+        ali->score = axtScoreDnaDefault(axt);
     AllocVar(comp);
     safef(srcName, sizeof(srcName), "%s%s", qPrefix, axt->qName);
     comp->src = cloneString(srcName);
@@ -100,6 +106,8 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 qPrefix = optionVal("qPrefix", qPrefix);
 tPrefix = optionVal("tPrefix", tPrefix);
+score = optionExists("score");
+scoreZero = optionExists("scoreZero");
 if (argc != 5)
     usage();
 axtToMaf(argv[1],argv[2],argv[3],argv[4]);
