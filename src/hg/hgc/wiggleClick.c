@@ -73,19 +73,42 @@ statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
  */
 wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
 
-/*	convert the ascii data listings to one giant float array 	*/
-valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
+{
+    char *words[16];
+    int wordCount = 0;
+    char *dupe = cloneString(tdb->type);
+    double minY, maxY, tDbMinY, tDbMaxY;
+    float hMin, hMax, hRange;
 
-/*	histoGram() may return NULL if it doesn't work	*/
+    wordCount = chopLine(dupe, words);
 
-histoGramResult = histoGram(valuesArray, valueCount,
+    wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+    hMin = min(minY,tDbMinY);
+    hMax = max(maxY,tDbMaxY);
+    hRange = hMax - hMin;
+
+    /*	convert the ascii data listings to one giant float array 	*/
+    valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
+
+    /*	If we have a valid range, use a specified 20 bin histogram */
+    if (hRange > 0.0)
+	histoGramResult = histoGram(valuesArray, valueCount, (hRange/20.0),
+	    (unsigned) 20, hMin, hMin, hMax, (struct histoResult *)NULL);
+    else
+	histoGramResult = histoGram(valuesArray, valueCount,
 	    NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
 		(float) (wds->stats->lowerLimit + wds->stats->dataRange),
-		(struct histoResult *)NULL);
+		    (struct histoResult *)NULL);
 
-printHistoGram(histoGramResult);
+    /*	histoGram() may return NULL if it doesn't work, that's OK, the
+     *	print out will indicate no results
+     */
+    printHistoGram(histoGramResult);
 
-freeHistoGram(&histoGramResult);
-freeMem(valuesArray);
+    freeHistoGram(&histoGramResult);
+    freeMem(valuesArray);
+}
+
 wiggleDataStreamFree(&wds);
+
 }
