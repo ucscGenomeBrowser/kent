@@ -586,22 +586,90 @@ for (fill = gap->fillList; fill != NULL; fill = fill->next)
 --rOutDepth;
 }
 
-double subchainScore(struct chain *chain, int start, int end, boolean isQ)
+int chainBaseCount(struct chain *chain)
+/* Return number of bases in gap free alignments in chain. */
+{
+struct boxIn *b;
+int total = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    total += b->qEnd - b->qStart;
+return total;
+}
+
+int chainBaseCountSubT(struct chain *chain, int tMin, int tMax)
+/* Return number of bases in gap free alignments in chain between 
+ * tMin and tMax. */
+{
+struct boxIn *b;
+int total = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    total += positiveRangeIntersection(b->tStart, b->tEnd, tMin, tMax);
+return total;
+}
+
+int chainBaseCountSubQ(struct chain *chain, int qMin, int qMax)
+/* Return number of bases in gap free alignments in chain between 
+ * tMin and tMax. */
+{
+struct boxIn *b;
+int total = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    total += positiveRangeIntersection(b->qStart, b->qEnd, qMin, qMax);
+return total;
+}
+
+void subchainInfo(struct chain *chain, int start, int end, boolean isQ,
+	int *retSize, double *retScore)
 /* Return score of subchain. */
 {
-return chain->score;	//uglyf, not really implemented yet
+int fullSize = chainBaseCount(chain);
+if (isQ)
+    {
+    if (chain->qStrand == '-')
+        reverseIntRange(&start, &end, chain->qSize);
+    if (start <= chain->qStart && end >= chain->qStart)
+        {
+	*retScore = chain->score;
+	*retSize = fullSize;
+	}
+    else
+        {
+	int subSize = chainBaseCountSubQ(chain, start, end);
+	*retScore = chain->score * subSize / fullSize;
+	*retSize = subSize;
+	// uglyf("subchainInfo Q%c %d,%d %d,%d ali %d, subSize %d, score %f, subScore %f\n", chain->qStrand, start, end, chain->qStart, chain->qEnd, fullSize, subSize, chain->score, *retScore);
+	}
+    }
+else
+    {
+    if (start <= chain->tStart && end >= chain->tStart)
+        {
+	*retScore = chain->score;
+	*retSize = fullSize;
+	}
+    else
+        {
+	int subSize = chainBaseCountSubT(chain, start, end);
+	*retScore = chain->score * subSize / fullSize;
+	*retSize = subSize;
+	// uglyf("subchainInfo T %d,%d %d,%d ali %d, subSize %d, score %f, subScore %f\n", start, end, chain->tStart, chain->tEnd, fullSize, subSize, chain->score, *retScore);
+	}
+    }
 }
 
 void fillOut(FILE *f, struct fill *fill, char *oChrom, int depth)
 /* Output fill. */
 {
 struct chain *chain = fill->chain;
+int subSize;
+double subScore;
+subchainInfo(chain, fill->start, fill->end, rOutQ, &subSize, &subScore);
 spaceOut(f, depth);
-fprintf(f, "fill %d %d %s %c %d %d id %d score %1.0f\n", 
+fprintf(f, "fill %d %d %s %c %d %d id %d score %1.0f ali %d\n", 
 	fill->start, fill->end - fill->start,
 	oChrom, chain->qStrand, 
-	fill->oStart, fill->oEnd - fill->oStart,
-	chain->id, subchainScore(chain, fill->start, fill->end, rOutQ));
+	fill->oStart, fill->oEnd - fill->oStart, chain->id,
+	subScore, subSize);
 }
 
 static void rOutputFill(struct fill *fill, FILE *f)
