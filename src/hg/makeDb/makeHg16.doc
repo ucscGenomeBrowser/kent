@@ -5520,7 +5520,7 @@ EOF
       /cluster/data/hg16/bed/bedOver/rnaGene/rnaGeneLiftGene.bed
 
 
-# rmMm3Rn3 3-way Regulatory Potential Score track (WORKING - 2004-01-08 - Hiram)
+# rmMm3Rn3 3-way Regulatory Potential Score track (DONE - 2004-01-14 - Hiram)
 #	Data from: James Taylor james@bx.psu.edu
 #	Track description from: Francesca Chiaromonte chiaro@stat.psu.edu
     ssh eieio
@@ -5557,7 +5557,7 @@ EOF
     hgLoadWiggle hg16 regPotential3X chr*_rpMm3Rn3_Data.wig
     ln -s `pwd`/chr*_rpMm3Rn3_Data.wib /gbdb/hg16/wib
 
-# rmMm4 2-way Regulatory Potential Score track (WORKING - 2004-01-08 - Hiram)
+# rmMm4 2-way Regulatory Potential Score track (DONE - 2004-01-14 - Hiram)
 #	Data from: James Taylor james@bx.psu.edu
 #	Track description from: Francesca Chiaromonte chiaro@stat.psu.edu
     ssh eieio
@@ -5635,6 +5635,83 @@ EOF
     	chimpSimpleDiff.sql
     hgLoadBed -sqlTable=simpleNucDiff.sql hg166 chimpSimpleDiff.bed
     
+#  gc5Base wiggle TRACK (WORKING - 2004-01-15 - Hiram)
+    # a demonstration wiggle track.  Perform a gc count with a 5 base
+    # window
+    mkdir /cluster/data/hg16/bed/gc5Base
+    cd /cluster/data/hg16/bed/gc5Base
+    # this is too verbose, going to have to add an argument to
+    # hgGcPercent to get it to output to stdout and can then run its
+    # output through a filter to produce the two column files we need
+    hgGcPercent -noLoad -win=5 hg16 ../../nib
+
+
+# KNOWN GENES TRACK (WORKING - 2004-01-15-11-20 - Hiram)
+
+    # you will probably need to make the programs in kent/src/hg/protein
+    cd ~/kent/src/hg/protein
+    make
+    # The scripts run below will check for programs and let you know
+    # which ones are missing
+
+    # obtain new SwissProt database (should be done about once a month)
+    # the swiss prot data is currently living on store5, first step is
+    # on the fileserver.  This script was used once as it was created,
+    # it may need to be verified and improved as it is used again.  See
+    # comments at the top of the script.
+    ssh eieio
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # that obtains the data and unpacks it, second step is on hgwdev
+    # to create the database
+    ssh hgwdev
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # Now the proteins database can be created from that.  Must be on hgwdev
+    # Again, a script that has been used once upon creation, see
+    # comments in it.  For example currently it is assumed these two
+    # scripts have been run on the same day.  In this case 03112
+    ssh hgwdev
+    cd /cluster/data/proteins
+    ~/kent/src/hg/protein/mkProteinsDB.sh
+    # with those two databases existing, read for the actual known genes
+    # track build.  Must be on hgwdev since it is all mostly database
+    # operations.  The {Date} argument is the date stamp created by the
+    # above two scripts.  Something of the form YYMMDD, e.g.: 031112
+    # Again, a script that has been used only once at creation, see
+    # comments at top of script.
+    ssh hgwdev
+    mkdir /cluster/data/hg16/bed/knownGenes
+    cd /cluster/data/hg16/bed/knownGenes
+    DateStamp=040115
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that runs to a point where it prepares data and jobList for a
+    # cluster run.  Continue with a cluster run on kk
+    ssh kk
+    cd /cluster/data/hg16/bed/knownGenes/kgBestMrna
+    para create jobList
+    para try
+    para check
+    para push
+    # this is a quick cluster job.  Less than five minutes. e.g.:
+# Completed: 43580 of 43580 jobs
+# CPU time in finished jobs:     114636s    1910.60m    31.84h    1.33d  0.004 y
+# IO & Wait Time:                111889s    1864.82m    31.08h    1.30d  0.004 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           282s       4.70m     0.08h    0.00d
+
+    # Continuing back on hgwdev, run the same script again
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/knownGenes
+    DateStamp=031112
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that should run to completion and the known genes track is ready
+
+    # Add the proteins link into gdbPdb.hgcentral:
+    hgsql -e 'INSERT INTO gdbPdb (genomeDb, proteomeDb) \
+	VALUES ("hg16","proteins040115");' \
+	-h genome-testdb hgcentraltest
 
 # LOAD VEGA GENES AND PSEUDOGENES (reloaded 2004/01/15 markd)
     # reloaded due to bug in creating bogus CDS
