@@ -8705,17 +8705,11 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMouse(tdb, item);
     }
-else if (sameWord(track, "blatMus"))
-    {
-    doBlatMus(tdb, item);
-    }
-else if (sameWord("blastzMm2", track)
-         || (sameWord("aarMm2", track))
-         || (sameWord("blastzMm2_0824", track))
-	 || startsWith("blastzBestMouse", track)
-	 || startsWith("blastzBestMouse_0824", track)
-	 || sameWord("aarMm2", track)
-         )
+else if (sameWord(track, "blatMus")
+	 || (startsWith("blastz", track) &&
+	     (stringIn("Mm", track) || stringIn("Mouse", track)))
+         || sameWord("aarMm2", track)
+	 )
     {
     doBlatMus(tdb, item);
     }
