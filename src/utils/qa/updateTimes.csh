@@ -37,7 +37,7 @@ foreach table (`cat $tablelist`)
   set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
     | awk '{print $13, $14}'`
   set beta=`hgsql -h hgwbeta -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
-    | awk '{print $13, $14}'`
+    | awk '{print $14, $15}'`
   echo "."$dev
   echo "."$beta
   echo
