@@ -30,5 +30,10 @@
 10 - Added priorities to batches. Added para status command.
      Changed paraNode to only do SU when running as root,
      so that stand-alone single user testing works.
+     Also changed happy dots so it only outputs them if going
+     to a terminal, not a file or emacs shell buffer.
+     Added host as penultimate column in paraJobStatus display.
+
+     
 
 
