@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.1 2005/03/08 21:50:45 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.2 2005/03/09 18:07:22 jsp Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define INTRON 10 
@@ -156,8 +156,9 @@ void defineMafSubstColors(int **p2mafColors)
 /* Defines the colors used for maf coloring. Must corrspsond to the
  * markCompensatoryMutations function.*/
 {
+int * mafColors;
 AllocArray(*p2mafColors, 6);
-int * mafColors = *p2mafColors;
+mafColors = *p2mafColors;
 mafColors[0]    = LTGRAY;   /* not pairing */
 mafColors[1]    = LTPURPLE; /* not pairing, substitution */
 mafColors[2]    = BLACK;    /* compatible with pairing */
