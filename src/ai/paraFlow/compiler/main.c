@@ -430,7 +430,7 @@ compoundToChildren(pp, &tok, scope);
 slAddHead(&parent->children, pp);
 }
 
-static void varDeclareOne(struct pfParse *parent,
+static struct pfParse *varDeclareOne(struct pfParse *parent,
 	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
 {
 struct pfToken *tok = *pTokList;
@@ -440,6 +440,7 @@ if (tok->type != pftName)
 pp->var = pfScopeAddVar(scope, tok->val.s, type);
 slAddHead(&parent->children, pp);
 *pTokList = tok->next;
+return pp;
 }
 
 static struct pfCollectedType *
@@ -475,6 +476,19 @@ slReverse(&ctList);
 return ctList;
 }
 
+static void parseAssign(struct pfParse *parent, char *varName,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse assignment statement. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptAssignment, tok, parent);
+pp->var = pfScopeFindOrCreateVar(scope, varName);
+tok = tok->next;	/* Skip over '=' */
+pp->children = pfParseExpression(pp, &tok, scope);
+slAddHead(&parent->children, pp);
+*pTokList = tok;
+}
+
 
 static void parseVarDeclaration(struct pfParse *parent, 
 	struct pfBaseType *baseType, struct pfToken **pTokList, struct pfScope *scope)
@@ -485,9 +499,15 @@ struct pfCollectedType *ct = parseType(baseType, pTokList, scope);
 struct pfToken *tok = *pTokList;
 for (;;)
     {
-    varDeclareOne(parent, ct, &tok, scope);
-    if (tok == NULL)
+    char *varName = tok->val.s;
+    struct pfParse *pp = varDeclareOne(parent, ct, &tok, scope);
+    if (tok->type == pftEnd)
         break;
+    if (tok->type == '=')
+	{
+	tok = tok->next;
+	pp->children = pfParseExpression(pp, &tok, scope);
+	}
     if (tok->type != ',')
         break;
     tok = tok->next;
@@ -519,20 +539,6 @@ switch (tok->type)
 return pp;
 }
 
-static void parseAssign(struct pfParse *parent, char *varName,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse assignment statement. */
-{
-struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptAssignment, tok, parent);
-tok = tok->next;	/* Skip over var name */
-pp->var = pfScopeFindOrCreateVar(scope, varName);
-tok = tok->next;	/* Skip over '=' */
-pp->children = pfParseExpression(pp, &tok, scope);
-slAddHead(&parent->children, pp);
-*pTokList = tok;
-}
-
 
 static void parseAssignOrCall(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -544,13 +550,14 @@ int op;
 tok = tok->next;
 op = tok->type;
 if (op == '=')
-    parseAssign(parent, varName, pTokList, scope);
+    parseAssign(parent, varName, &tok, scope);
 #ifdef SOON
 else if (op == '(')
-    parseCall(parent, varName, pTokList, scope);
+    parseCall(parent, varName, &tok, scope);
 #endif /* SOON */
 else
     syntaxError(tok);
+*pTokList = tok;
 }
 
 void pfParseStatement(struct pfParse *parent, 
