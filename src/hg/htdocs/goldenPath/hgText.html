@@ -41,7 +41,7 @@
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR><TR><TD WIDTH=10></TD><TD>
 
-	<P>This tool allows you to download portions of the database used by the human
+	<P>This tool allows you to download portions of the database used by the
 	genome browser in a simple tab-delimited text format.
 	Please enter a position in the genome and press the submit button:
 	(Use <A HREF="../cgi-bin/hgBlat?db=hg6">BLAT Search</A> to locate a particular sequence in the genome.)
@@ -59,8 +59,12 @@
 	<INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Submit">
 	<INPUT TYPE="HIDDEN" NAME="phase" VALUE="table">
 
-	<P>A genome position can be specified by the accession number of a sequenced human genomic clone, an mRNA or EST or STS marker, or
-a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help.
+	<P>A genome position can be specified by the accession number of a
+	sequenced genomic clone, an mRNA or EST or STS marker, or
+a cytological band, a chromosomal coordinate range, or keywords from the Genbank
+description of an mRNA. The following list provides examples of various types of
+position queries for the human genome. Analogous queries can be made for many of
+these in the mouse genome. See the <A HREF="/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help.
 <P>
 <TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
 <TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
@@ -68,18 +72,12 @@ a cytological band, a chromosomal coordinate range, or keywords from the Genbank
 	
 <TR><TD VALIGN=Top><br></TD></TR>
 	
-<TR><TD VALIGN=Top NOWRAP>chr19</TD>
+<TR><TD VALIGN=Top NOWRAP>chr7</TD>
 	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays all of chromosome 19</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>genome</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Fetch from the whole genome</TD></TR>
+	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>
 <TR><TD VALIGN=Top NOWRAP>20p13</TD>
 	<TD WIDTH=14></TD>
 	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>4q28</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays band q28 on chr 4, gene region determining red hair color</TD></TR>
 <TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
 	<TD WIDTH=14></TD>
 	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>
@@ -90,27 +88,28 @@ a cytological band, a chromosomal coordinate range, or keywords from the Genbank
 	<TD WIDTH=14></TD>
 	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
 	(open "STS Markers" track by clicking to see this marker)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>D22S586;D22S43</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region between STS markers D22S586 and D22S43.
+	Includes 250,000 bases to either side as well.
 <TR><TD VALIGN=Top NOWRAP>AA205474</TD>
 	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of EST with GenBank acc. AA205474 in BRCA1 cancer gene on chr 17
+	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17
 	(open "spliced ESTs" track by clicking to see this EST)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>ctg13698</TD>
+<TR><TD VALIGN=Top NOWRAP>AC008101</TD>
 	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of the fingerprint clone contig ctg13698 from the Wash. U. map
-	(set "FPC contigs" track to "dense" and refresh to see FPC contigs)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>AP001670</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of clone with GenBank accession AP001670
+	<TD VALIGN=Top>Displays region of clone with GenBank accession number AC008101
 	(open "coverage" track by clicking to see this clone)</TD></TR>
 
 <TR><TD VALIGN=Top><br></TD></TR>
 
 <TR><TD VALIGN=Top NOWRAP>AF083811</TD>
 	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Offers 2 coordinate choices on chr 7 and chr 22 for this mitotic checkpoint mRNA</TD></TR>
+	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number
+	AF083811</TD></TR>
 <TR><TD VALIGN=Top NOWRAP>PRNP</TD>
 	<TD WIDTH=14></TD>
-	<TD>Offers coordinates choices for nested mRNAs for prion gene, chr 20p</TD></TR>
+	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>
 
 <TR><TD VALIGN=Top><br></TD></TR>
 
@@ -120,9 +119,6 @@ a cytological band, a chromosomal coordinate range, or keywords from the Genbank
 <TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
 	<TD WIDTH=14></TD>
 	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>valyl-tRNA</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs for valyl tRNA synthetases but not unsubmitted tRNA</TD></TR>
 <TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
 	<TD WIDTH=14></TD>
 	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
