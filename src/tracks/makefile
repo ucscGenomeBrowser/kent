@@ -5,7 +5,7 @@ L = $(MYSQLLIBS)
 MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
-A = tracks.exe
+A = tracksWS120.exe
 
 O = tracks.o 
 
