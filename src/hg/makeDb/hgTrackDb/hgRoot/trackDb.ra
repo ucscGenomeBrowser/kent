@@ -578,7 +578,6 @@ longLabel Human/Mouse Ancient Repeats
 priority 41
 visibility dense
 spectrum on
-chromosomes chr1,
 type bed 12
 private on
 
