@@ -624,6 +624,23 @@ else
     return pp;
 }
 
+struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok)
+/* Return empty tuple. */
+{
+struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
+return tuple;
+}
+
+struct pfParse *singleTuple(struct pfParse *parent, struct pfToken *tok, struct pfParse *single)
+/* Wrap tuple around single. */
+{
+struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
+tuple->children = single;
+single->parent = tuple;
+single->next = NULL;
+return tuple;
+}
+
 struct pfParse *pfParseExpression(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression. */
@@ -656,6 +673,82 @@ if (op == '=')
 slAddHead(&parent->children, pp);
 }
 
+static void parseFunction(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope, enum pfParseType type)
+/* Parse something (...) [into (...)] */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(type, tok, parent);
+struct pfParse *name, *input, *output = NULL, *body;
+tok = tok->next;	/* Skip something (implicit in type) */
+uglyf("parseFunction\n");
+name = parseNameUse(parent, &tok, scope);
+scope = pfScopeNew(scope, 0);
+
+if (tok->type != '(')
+    expectingGot("(", tok);
+tok = tok->next;
+if (tok->type == ')')
+    {
+    input = emptyTuple(pp, tok);
+    tok = tok->next;
+    }
+else
+    {
+    input = pfParseExpression(pp, &tok, scope);
+    if (input->type != pptTuple)
+	input = singleTuple(pp, tok, input);
+    if (tok->type != ')')
+	expectingGot(")", tok);
+    tok = tok->next;
+    }
+if (tok->type == pftInto)
+    {
+    tok = tok->next;
+    if (tok->type != '(')
+	expectingGot("(", tok);
+    tok = tok->next;
+    output = pfParseExpression(pp, &tok, scope);
+    if (output->type != pptTuple)
+	output = singleTuple(pp, tok, output);
+    if (tok->type != ')')
+	expectingGot(")", tok);
+    tok = tok->next;
+    }
+else
+    output = emptyTuple(pp, tok);
+parseCompound(pp, &tok, scope); /* This puts on body */
+slAddHead(&pp->children, output);
+slAddHead(&pp->children, input);
+slAddHead(&pp->children, name);
+slAddHead(&parent->children, pp);
+*pTokList = tok;
+}
+
+static void parseTo(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse to (...) [into (...)] */
+{
+parseFunction(parent, pTokList, scope, pptToDec);
+}
+
+static void parsePara(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse para (...) [into (...)] */
+{
+parseFunction(parent, pTokList, scope, pptParaDec);
+}
+
+
+static void parseFlow(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse flow (...) [into (...)] */
+{
+parseFunction(parent, pTokList, scope, pptFlowDec);
+}
+
+
+
 void pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement, and add results to (head) of
@@ -671,6 +764,12 @@ else if (tok->type == pftForeach)
     parseForeach(parent, pTokList, scope);
 else if (tok->type == pftClass)
     parseClass(parent, pTokList, scope);
+else if (tok->type == pftTo)
+    parseTo(parent, pTokList, scope);
+else if (tok->type == pftPara)
+    parsePara(parent, pTokList, scope);
+else if (tok->type == pftFlow)
+    parseFlow(parent, pTokList, scope);
 else if (tok->type == pftName || tok->type == '(')
     {
     char *s = tok->val.s;
@@ -715,6 +814,9 @@ static struct hash *createReservedWords()
 struct hash *hash = hashNew(7);
 hashAddInt(hash, "class", pftClass);
 hashAddInt(hash, "to", pftTo);
+hashAddInt(hash, "para", pftPara);
+hashAddInt(hash, "flow", pftFlow);
+hashAddInt(hash, "into", pftInto);
 hashAddInt(hash, "for", pftFor);
 hashAddInt(hash, "foreach", pftForeach);
 hashAddInt(hash, "while", pftWhile);

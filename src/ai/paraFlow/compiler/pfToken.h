@@ -33,6 +33,9 @@ enum pfTokType
     /* - reserved words - */
     pftClass,
     pftTo,
+    pftPara,
+    pftFlow,
+    pftInto,
     pftFor,
     pftForeach,
     pftWhile,
