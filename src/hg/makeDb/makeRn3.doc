@@ -2904,3 +2904,16 @@ XXXX - ready to go 2003-11-03 16:50
     cd /usr/local/apache/htdocs/goldenPath/rn3/vsMm4/axtTight
     gzip *.axt
     # add README.txt file to dir, if needed
+
+# LOAD ECgene tables
+    cd /cluster/data/rn3/bed
+    rm -f ECgene
+    mkdir ECgene.2003-12-19
+    ln -s ECgene.2003-12-19 ECgene
+    cd ECgene
+    wget "http://genome.ewha.ac.kr/ECgene/download/ECgene_rn3_v1.1_25oct2003_genes.txt.gz"
+    wget "http://genome.ewha.ac.kr/ECgene/download/ECgene_rn3_v1.1_25oct2003_genepep.txt.gz"
+    gunzip *.gz
+    ldHgGene -predTab rn3 ECgene ECgene_rn3_v1.1_25oct2003_genes.txt
+    hgPepPred rn3 tab ECgenePep ECgene_rn3_v1.1_25oct2003_genepep.txt
+    gzip *
