@@ -758,7 +758,7 @@ type psl xeno
 
 track blastzMouse
 shortLabel Blastz Mouse
-longLabel Merged Blastz Mouse Alignments
+longLabel All Blastz Mouse Alignments
 priority 25.8
 visibility hide
 color 100,50,0
@@ -768,9 +768,9 @@ type bed 5 +
 
 track blastzMm2
 shortLabel Blastz Mouse
-longLabel Merged Blastz Mouse Alignments
+longLabel All Blastz Mouse Alignments
 priority 25.8
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -780,16 +780,24 @@ track blastzBestMouse
 shortLabel Best Mouse 
 longLabel Blastz Mouse Best in Genome Alignments
 priority 25.81
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blastzNet
-shortLabel Net Align
-longLabel Blastz Mouse Best in Genome Alignments with chaining and netting version 2.0
-priority 25.81
+track mouseNet
+shortLabel Mouse Net
+longLabel Mouse/Human Alignment Net
+priority 25.811
+visibility full
+spectrum on
+type netAlign
+
+track mouseSynNet
+shortLabel Syntenic Net
+longLabel Mouse/Human Syntenic Alignment Net
+priority 25.812
 visibility full
 spectrum on
 type netAlign
@@ -797,7 +805,7 @@ type netAlign
 track blastzNetOld
 shortLabel Net Align old
 longLabel Blastz Mouse Best in Genome Alignments with chaining and netting old version 1.0
-priority 25.81
+priority 25.813
 visibility full
 spectrum on
 type netAlign
@@ -805,7 +813,7 @@ type netAlign
 track blastzChain
 shortLabel blastz Chain 
 longLabel Blastz chained alignments
-priority 25.81
+priority 25.814
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -815,7 +823,7 @@ type chain
 track blastzTightMouse
 shortLabel Tight Mouse 
 longLabel Blastz Mouse, Tight Subset of Best Alignments
-priority 25.81
+priority 25.815
 visibility hide
 color 100,50,0
 altColor 255,240,200
