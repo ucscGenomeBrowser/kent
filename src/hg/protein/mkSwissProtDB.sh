@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkSwissProtDB.sh,v 1.4 2004/03/23 21:50:57 fanhsu Exp $"
+#	"$Id: mkSwissProtDB.sh,v 1.5 2004/09/24 23:13:48 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -26,8 +26,8 @@ fi
 
 MACHINE=`uname -n`
 
-if [ ${MACHINE} != "eieio" -a ${MACHINE} != "hgwdev" ]; then
-    echo "ERROR: must run this script on eieio or hgwdev.  This is: ${MACHINE}"
+if [ ${MACHINE} != "kksilo" -a ${MACHINE} != "hgwdev" ]; then
+    echo "ERROR: must run this script on kksilo or hgwdev.  This is: ${MACHINE}"
     exit 255
 fi
 
@@ -38,7 +38,7 @@ export SP SPDB
 
 echo "Creating Db: ${SP}"
 
-if [ ${MACHINE} = "eieio" ]; then
+if [ ${MACHINE} = "kksilo" ]; then
 
     if [ -d "${SP}" ]; then
 	echo "WARNING: ${SP} already exists."
@@ -75,7 +75,7 @@ if [ ${MACHINE} = "eieio" ]; then
 else
     if [ ! -d ${TOP}/${DATE}/tabFiles ]; then
 	echo "ERROR: ${TOP}/tabFiles does not exist."
-	echo -e "\tRun this first on eieio to fetch the data."
+	echo -e "\tRun this first on kksilo to fetch the data."
 	exit 255
     fi
 
@@ -92,7 +92,7 @@ else
 	echo -e "\t to drop: hgsql -e 'drop database ${SPDB};' ${SPDB}"
 	exit 255
     fi
-    hgsql -e "create database ${SPDB}" proteins072003
+    hgsql -e "create database ${SPDB}" proteins040515
     hgsql ${SPDB} < ~/kent/src/hg/protein/spToDb/spDb.sql
     cd ${TOP}/${DATE}/tabFiles
     for i in *.txt
