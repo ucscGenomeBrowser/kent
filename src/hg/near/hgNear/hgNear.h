@@ -45,7 +45,7 @@ struct column
    char *curGeneField;		/* curGeneId field in associated table. */
    char *expTable;		/* Experiment table in hgFixed if any. */
    char *posTable;		/* Positional table (bed12) for expression experiments. */
-   double expMax;		/* Maximum expression value. */
+   double expScale;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
    };
