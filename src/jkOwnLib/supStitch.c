@@ -14,7 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.19 2004/01/22 22:31:59 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.20 2004/02/01 12:50:51 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -726,9 +726,9 @@ while (ffList != NULL)
 	 * this might regenerate most of the first alignment... */
 	bestPath = smallMiddleExons(bestPath, bundle, stringency);
 	}
+    bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     if (!bundle->isProt)
 	ffSlideIntrons(bestPath);
-    bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     if (score >= minScore)
 	{
