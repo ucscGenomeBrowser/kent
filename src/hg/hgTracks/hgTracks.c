@@ -8635,6 +8635,8 @@ registerTrackHandler("blastzBestMouse", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
+registerTrackHandler("blastzMmHg", longXenoPslMethods);
+registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);

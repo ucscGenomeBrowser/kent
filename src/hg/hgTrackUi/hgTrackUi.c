@@ -240,6 +240,33 @@ printf("<br><br>");
 
 }
 
+void blastzMmHgUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzMmHg.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzMmHg.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzMmHg.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+}
+void blastzMmHgRefUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzMmHgRef.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzMmHgRef.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzMmHgRef.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+}
+
 void blastzHgUi(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
@@ -251,6 +278,19 @@ printf(" on ");
 cgiMakeRadioButton("blastzHg.color", "off", sameString(aa, "off"));
 printf(" off ");
 
+printf("<br><br>");
+
+}
+void blastzBestMouseUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzBestMouse.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzBestMouse.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzBestMouse.color", "off", sameString(aa, "off"));
+printf(" off ");
 printf("<br><br>");
 
 }
@@ -556,6 +596,12 @@ else if (sameString(track, "blastzHgRef"))
     blastzHgRefUi(tdb);
 else if (sameString(track, "blastzHg"))
     blastzHgUi(tdb);
+else if (sameString(track, "blastzBestMouse"))
+    blastzBestMouseUi(tdb);
+else if (sameString(track, "blastzMmHg"))
+    blastzMmHgUi(tdb);
+else if (sameString(track, "blastzMmHgRef"))
+    blastzMmHgRefUi(tdb);
 else if (sameString(track, "aarMm2"))
     aarMm2Ui(tdb);
 else if (sameString(track, "mouseOrtho"))
