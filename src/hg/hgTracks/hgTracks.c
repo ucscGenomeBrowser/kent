@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.913 2005/02/22 22:30:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.914 2005/02/23 18:49:40 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10467,6 +10467,7 @@ void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
+char *defaultChrom = hDefaultChrom();
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
@@ -10491,7 +10492,7 @@ puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-if (startsWith("chr", hDefaultChrom()))
+if (startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom))
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
