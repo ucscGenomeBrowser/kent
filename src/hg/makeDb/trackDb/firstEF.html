@@ -2,7 +2,23 @@
 
 <P> This track shows predictions from
 the <a href="http://rulai.cshl.org/tools/FirstEF/" TARGET=_blank>FirstEF</a>
-(<u>First</u> <u>E</u>xon <u>F</u>inder) program. </P>
+(<u>First</u> <u>E</u>xon <u>F</u>inder) program. <P>
+
+<P>Three types of predictions are displayed:  exon, promoter and CpG window.  
+If two consecutive predictions are separated by less than 1000 bp, 
+FirstEF treats them as one cluster of alternative first exons that may 
+belong to same gene. The cluster number is displayed in the parentheses 
+of each item. For example, "exon(405-)" 
+represents the exon prediction in cluster number 405 on the minus strand. 
+The exon, promoter and CpG-window are interconnected by this cluster number. 
+Alternative predictions within the same cluster are denoted by "#N", where 
+"N" is the serial number of an alternative prediction in the cluster.</P>
+
+<P>Each predicted exon is either CpG-related or Non-CpG-related based on
+a CpG score determined by the frequency of CpG dinucleotides.
+As exon is classified as CpG-related if the corresponding CpG score is greater 
+than a threshhold value and Non-CpG-related otherwise. If an exon is CpG-related, 
+its associated CpG-window is displayed. </P>
 
 <H2>Method</H2>
 
