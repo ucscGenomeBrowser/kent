@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.32 2004/01/20 20:39:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.33 2004/01/29 00:47:20 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -333,10 +333,6 @@ double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 
-/*
-vgMakeColorGradient(vg, &blackColor, &tg->color, 4, shadesOfPrimary);
-vgMakeColorGradient(vg, &blackColor, &tg->altColor, 4, shadesOfAlt);
-*/
 vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfPrimary);
 vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfAlt);
 
@@ -853,11 +849,6 @@ track->totalHeight = wigTotalHeight;
 track->itemHeight = tgFixedItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
-/*	using subType in an attempt to piggyback on the sample tracks
- *	this will cause the scale to be printed in the left column
- *	Although it has a lower limit of 0, which is arbitrary.
- */
-track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
