@@ -19,6 +19,8 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->mouseChrom = row[3];
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
 }
 
 struct synteny100000 *synteny100000Load(char **row)
@@ -34,6 +36,8 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->mouseChrom = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
 return ret;
 }
 
@@ -43,7 +47,7 @@ struct synteny100000 *synteny100000LoadAll(char *fileName)
 {
 struct synteny100000 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -94,6 +98,8 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->mouseChrom = sqlStringComma(&s);
+ret->score = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 *pS = s;
 return ret;
 }
@@ -137,6 +143,12 @@ fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mouseChrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

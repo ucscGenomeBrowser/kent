@@ -13,6 +13,8 @@ struct synteny100000
     unsigned chromStart;	/* Start on Human */
     unsigned chromEnd;	/* End on Human */
     char *mouseChrom;	/* Mouse Chromosome */
+    unsigned score;	/* score always zero */
+    char strand[2];	/* + direction matches - opposite */
     };
 
 void synteny100000StaticLoad(char **row, struct synteny100000 *ret);

@@ -9,6 +9,8 @@ CREATE TABLE synteny100000 (
     chromStart int unsigned not null,	# Start on Human
     chromEnd int unsigned not null,	# End on Human
     mouseChrom varchar(255) not null,	# Mouse Chromosome
+    score int unsigned not null,	# score always zero
+    strand char(1) not null,	# + direction matches - opposite
               #Indices
     PRIMARY KEY(chrom)
 );
