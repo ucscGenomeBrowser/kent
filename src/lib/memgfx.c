@@ -629,26 +629,61 @@ int j;
 int yUpper, yLower;
 int pUpper, pLower;
 double sum = 0.0;
+int prevX = -1;
 
-for (j=0; j<w; j += 1)
+if( abs(slope) < 1 )
     {
-    sum += slope;
-    yUpper = min(abs((int)sum)+1,(int)h);
-    yLower = min(abs((int)sum),(int)h);
-    pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
-    pLower = (int)colRange - pUpper;
-
-    if( pLower != colRange ) 
-        pt1 = (mult * yUpper) + pt1Home;
-    else
-        pt1 = (mult * yLower) + pt1Home;
-
-    while( pt1 < pt1Base )
+    for (j=0; j<w; j += 1)
         {
-        pt1 += sign(slope)*mult;
-        pt1[j] = colors[3];
+        sum += slope;
+        yUpper = min(abs((int)sum)+1,(int)h);
+        yLower = min(abs((int)sum),(int)h);
+        pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
+        pLower = (int)colRange - pUpper;
+
+        if( pLower != colRange ) 
+            pt1 = (mult * yUpper) + pt1Home;
+        else
+            pt1 = (mult * yUpper) + pt1Home;
+
+        while( pt1 < pt1Base )
+            {
+            pt1 += sign(slope)*mult;
+            pt1[j] = colors[3];
+            }
         }
     }
+else
+    {
+    for (j=1; j<=h; j += 1)
+        {
+        sum += 1.0 / slope;
+        pt1 = (mult * j) + pt1Home;
+
+        yLower = min(abs((int)sum),w);
+        yUpper = min(abs((int)sum)+1,w);
+        pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
+        pLower = (int)colRange - pUpper;
+
+        while( pt1 < pt1Base )
+            {
+            pt1 += sign(slope)*mult;
+            pt1[yLower] = colors[3];
+            }
+
+        if( prevX != yUpper && yLower != yUpper  )
+            while( pt1 < pt1Base )
+                {
+                pt1 += sign(slope)*mult;
+                pt1[yUpper] = colors[3];
+                }
+
+        prevX = yUpper;
+       }
+
+
+    }
+
 }
 
 
