@@ -7,6 +7,10 @@
 #ifndef PSGFX_H
 #define PSGFX_H
 
+#ifndef GFXPOLY_H
+#include "gfxPoly.h"
+#endif
+
 struct psGfx 
 /* A postScript output file. */
     {

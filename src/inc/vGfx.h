@@ -165,6 +165,5 @@ void vgClose(struct vGfx **pVg);
 
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)
-    /* Draw a triangle pointing right with straight edge along x from y1 
-     * to y2 */
+    /* Draw a polygon in color, optionally filled. */
 #endif /* VGFX_H */

@@ -11,6 +11,10 @@
 #ifndef MEMGFX_H
 #define MEMGFX_H
 
+#ifndef GFXPOLY_H
+#include "gfxPoly.h"
+#endif
+
 #define MG_WHITE 0
 #define MG_BLACK 1
 #define MG_RED 2
@@ -196,20 +200,6 @@ void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad,
 	Color color, boolean filled);
 /* Draw a circle using a stepping algorithm.  Doesn't correct
  * for non-square pixels. */
-
-struct gfxPoint;  /* A 2-d point. */
-struct gfxPoly;	  /* A 2-d polygon. */
-
-struct gfxPoly *gfxPolyNew();
-/* Create new (empty) polygon */
-
-void gfxPolyFree(struct gfxPoly **pPoly);
-/* Free up resources associated with polygon */
-
-void gfxPolyAddPoint(struct gfxPoly *poly, int x, int y);
-/* Add point to polygon. */
-
-struct gfxPoly;	/* Keep gcc from complaining about anonymous structure. */
 
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled);
