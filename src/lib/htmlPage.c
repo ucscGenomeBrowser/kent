@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.16 2004/12/08 02:11:03 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.17 2005/02/04 21:05:43 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1503,6 +1503,26 @@ for (link = linkList; link != NULL; link = link->next)
 slFreeList(&linkList);
 }
 
+static int countTagsOfType(struct htmlTag *tagList, char *type)
+/* Count number of tags of given type. */
+{
+struct htmlTag *tag;
+int count = 0;
+for (tag = tagList; tag != NULL; tag = tag->next)
+    if (sameString(tag->name, type))
+        ++count;
+return count;
+}
+
+static void checkExactlyOne(struct htmlTag *tagList, char *type)
+/* Check there is exactly one of tag in list. */
+{
+int count = countTagsOfType(tagList, type);
+if (count != 1)
+    errAbort("Expecting exactly 1 <%s>, got %d", type, count);
+}
+
+
 void htmlPageValidateOrAbort(struct htmlPage *page)
 /* Do some basic validations.  Aborts if there is a problem. */
 {
@@ -1519,6 +1539,8 @@ if (contentType == NULL || startsWith("text/html", contentType))
     /* To simplify things upper case all tag names. */
     for (tag = page->tags; tag != NULL; tag = tag->next)
 	touppers(tag->name);
+
+    checkExactlyOne(page->tags, "BODY");
 
     /* Validate header, and make a suggestion or two */
     if ((tag = page->tags) == NULL)
