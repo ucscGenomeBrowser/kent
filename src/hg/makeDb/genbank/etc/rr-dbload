@@ -6,7 +6,7 @@
 opts="$*"
 
 # databases to update
-databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 ci1 canFam1 anoGam1 tetNig1 dp2"
+databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 ci1 canFam1 anoGam1 tetNig1 dp2 xenTro1"
 
 # other options to include
 otherOpts=""
