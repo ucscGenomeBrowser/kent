@@ -14,41 +14,8 @@
 #include "portable.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.5 2003/09/04 23:51:33 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.6 2003/09/08 17:56:54 braney Exp $";
 
-static char blosumText[] = {
-"#  Matrix made by matblas from blosum62.iij\n"
-"#  * column uses minimum score\n"
-"#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units\n"
-"#  Blocks Database = /data/blocks_5.0/blocks.dat\n"
-"#  Cluster Percentage: >= 62\n"
-"#  Entropy =   0.6979, Expected =  -0.5209\n"
-"   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  X  *\n"
-"A  4 -1 -2 -2  0 -1 -1  0 -2 -1 -1 -1 -1 -2 -1  1  0 -3 -2  0 -2 -1  0 -4 \n"
-"R -1  5  0 -2 -3  1  0 -2  0 -3 -2  2 -1 -3 -2 -1 -1 -3 -2 -3 -1  0 -1 -4 \n"
-"N -2  0  6  1 -3  0  0  0  1 -3 -3  0 -2 -3 -2  1  0 -4 -2 -3  3  0 -1 -4 \n"
-"D -2 -2  1  6 -3  0  2 -1 -1 -3 -4 -1 -3 -3 -1  0 -1 -4 -3 -3  4  1 -1 -4 \n"
-"C  0 -3 -3 -3  9 -3 -4 -3 -3 -1 -1 -3 -1 -2 -3 -1 -1 -2 -2 -1 -3 -3 -2 -4 \n"
-"Q -1  1  0  0 -3  5  2 -2  0 -3 -2  1  0 -3 -1  0 -1 -2 -1 -2  0  3 -1 -4 \n"
-"E -1  0  0  2 -4  2  5 -2  0 -3 -3  1 -2 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 \n"
-"G  0 -2  0 -1 -3 -2 -2  6 -2 -4 -4 -2 -3 -3 -2  0 -2 -2 -3 -3 -1 -2 -1 -4 \n"
-"H -2  0  1 -1 -3  0  0 -2  8 -3 -3 -1 -2 -1 -2 -1 -2 -2  2 -3  0  0 -1 -4 \n"
-"I -1 -3 -3 -3 -1 -3 -3 -4 -3  4  2 -3  1  0 -3 -2 -1 -3 -1  3 -3 -3 -1 -4 \n"
-"L -1 -2 -3 -4 -1 -2 -3 -4 -3  2  4 -2  2  0 -3 -2 -1 -2 -1  1 -4 -3 -1 -4 \n"
-"K -1  2  0 -1 -3  1  1 -2 -1 -3 -2  5 -1 -3 -1  0 -1 -3 -2 -2  0  1 -1 -4 \n"
-"M -1 -1 -2 -3 -1  0 -2 -3 -2  1  2 -1  5  0 -2 -1 -1 -1 -1  1 -3 -1 -1 -4 \n"
-"F -2 -3 -3 -3 -2 -3 -3 -3 -1  0  0 -3  0  6 -4 -2 -2  1  3 -1 -3 -3 -1 -4 \n"
-"P -1 -2 -2 -1 -3 -1 -1 -2 -2 -3 -3 -1 -2 -4  7 -1 -1 -4 -3 -2 -2 -1 -2 -4 \n"
-"S  1 -1  1  0 -1  0  0  0 -1 -2 -2  0 -1 -2 -1  4  1 -3 -2 -2  0  0  0 -4 \n"
-"T  0 -1  0 -1 -1 -1 -1 -2 -2 -1 -1 -1 -1 -2 -1  1  5 -2 -2  0 -1 -1  0 -4 \n"
-"W -3 -3 -4 -4 -2 -2 -3 -2 -2 -3 -2 -3 -1  1 -4 -3 -2 11  2 -3 -4 -3 -2 -4 \n"
-"Y -2 -2 -2 -3 -2 -1 -2 -3  2 -1 -1 -2 -1  3 -3 -2 -2  2  7 -1 -3 -2 -1 -4 \n"
-"V  0 -3 -3 -3 -1 -2 -2 -3 -3  3  1 -2  1 -1 -2 -2  0 -3 -1  4 -3 -2 -1 -4 \n"
-"B -2 -1  3  4 -3  0  1 -1  0 -3 -4  0 -3 -3 -2  0 -1 -4 -3 -3  4  1 -1 -4 \n"
-"Z -1  0  0  1 -3  3  4 -2  0 -3 -3  1 -1 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 \n"
-"X  0 -1 -1 -1 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -2  0  0 -2 -1 -1 -1 -1 -1 -4 \n"
-"* -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4  1 \n"
-};
 
 int minScore = -1000000;
 char *detailsName = NULL;
@@ -62,7 +29,6 @@ errAbort(
   "usage:\n"
   "   blastToPsl in.tab tNibDir qNibDir scoreMatrix out.psl\n"
   "options:\n"
-  "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   "   -linearGap=filename Read piecewise linear gap from tab delimited file\n"
@@ -104,69 +70,6 @@ if (dif == 0)
 return dif;
 }
 
-void addAxtBlocks(struct boxIn **pList, struct axt *axt)
-/* Add blocks (gapless subalignments) from axt to block list. */
-{
-boolean thisIn, lastIn = FALSE;
-int qPos = axt->qStart, tPos = axt->tStart;
-int qStart = 0, tStart = 0;
-int i;
-
-for (i=0; i<=axt->symCount; ++i)
-    {
-    int advanceQ = (isalpha(axt->qSym[i]) ? 1 : 0);
-    int advanceT = (isalpha(axt->tSym[i]) ? 1 : 0);
-    thisIn = (advanceQ && advanceT);
-    if (thisIn)
-        {
-	if (!lastIn)
-	    {
-	    qStart = qPos;
-	    tStart = tPos;
-	    }
-	}
-    else
-        {
-	if (lastIn)
-	    {
-	    int size = qPos - qStart;
-	    assert(size == tPos - tStart);
-	    if (size > 0)
-	        {
-		struct boxIn *b;
-		AllocVar(b);
-		b->qStart = qStart;
-		b->qEnd = qPos;
-		b->tStart = tStart;
-		b->tEnd = tPos;
-		slAddHead(pList, b);
-		}
-	    }
-	}
-    lastIn = thisIn;
-    qPos += advanceQ;
-    tPos += advanceT;
-    }
-}
-
-void addPslBlocks(struct boxIn **pList, struct psl *psl)
-/* Add blocks (gapless subalignments) from psl to block list. */
-{
-int i;
-for (i=0; i<psl->blockCount; ++i)
-    {
-    struct boxIn *b;
-    int size;
-    AllocVar(b);
-    size = psl->blockSizes[i];
-    b->qStart = b->qEnd = psl->qStarts[i];
-    b->qEnd += size;
-    b->tStart = b->tEnd = psl->tStarts[i];
-    b->tEnd += size;
-    slAddHead(pList, b);
-    }
-}
-
 void loadIfNewSeq(char *nibDir, char *newName, char strand, 
 	char **pName, struct dnaSeq **pSeq, char *pStrand)
 /* Load sequence unless it is already loaded.  Reverse complement
@@ -196,31 +99,16 @@ else
     }
 }
 
-void loadFaSeq(struct hash *faHash, char *newName, char strand, 
-	char **pName, struct dnaSeq **pSeq, char *pStrand)
+void loadFaSeq(struct hash *faHash, char *newName, int size,
+	char **pName, struct dnaSeq **pSeq)
 /* retrieve sequence from hash.  Reverse complement
  * if necessary. */
 {
 struct dnaSeq *seq;
-if (sameString(newName, *pName))
+if (!sameString(newName, *pName))
     {
-    if (strand != *pStrand)
-        {
-	seq = *pSeq;
-	reverseComplement(seq->dna, seq->size);
-	*pStrand = strand;
-	}
-    }
-else
-    {
-    char fileName[512];
-    if (pSeq != NULL)
-        freeDnaSeq(pSeq);
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
-    *pStrand = strand;
-    if (strand == '-')
-       reverseComplement(seq->dna, seq->size);
     uglyf("Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
@@ -290,17 +178,11 @@ int i;
 double score, bestScore, rScore, lScore;
 struct dnaSeq *aaSeq1;
 struct dnaSeq *aaSeq2;
-char *mem1 = needMem(overlap + 10);
-char *mem2 = needMem(overlap + 10);
 
-aaSeq1 = translateSeq(tSeq,  left->tEnd - overlap * 3 - 3 , FALSE);
-memcpy(mem1, aaSeq1->dna, overlap+10);
-freeDnaSeq(&aaSeq1);
-aaSeq2 = translateSeq(tSeq,  right->tStart , FALSE);
-memcpy(mem2, aaSeq2->dna, overlap+10);
-freeDnaSeq(&aaSeq2);
-rtStart = mem2;
-ltStart = mem1;
+aaSeq1 = translateSeqN(tSeq,  left->tEnd - overlap * 3 - 3 , 3*overlap + 10, FALSE);
+aaSeq2 = translateSeqN(tSeq,  right->tStart ,  3*overlap + 10, FALSE);
+rtStart = aaSeq2->dna;
+ltStart = aaSeq1->dna;
 score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
 lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
 for (i=0; i<overlap; ++i)
@@ -315,6 +197,8 @@ for (i=0; i<overlap; ++i)
     }
 *retPos = bestPos;
 *retScoreAdjustment = rScore + lScore - bestScore;
+freeDnaSeq(&aaSeq1);
+freeDnaSeq(&aaSeq2);
 }
 
 struct scoreData
@@ -604,6 +488,9 @@ void calcChainBounds(struct chain *chain)
 /* Recalculate chain boundaries. */
 {
 struct boxIn *b = chain->blockList;
+if (b == NULL)
+    return;
+
 chain->qStart = b->qStart;
 chain->tStart = b->tStart;
 b = slLastEl(chain->blockList);
@@ -755,7 +642,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
 //    if (chain->qStrand == '-')
 //	aaSeq = translateSeq(tSeq,  tSeq->size - b->tEnd , FALSE);
  //   else
-	aaSeq = translateSeq(tSeq,  b->tStart , FALSE);
+	aaSeq = translateSeqN(tSeq,  b->tStart , size * 3, FALSE);
     score += scoreBlock(qSeq->dna + b->qStart , aaSeq->dna, 
     	size, matrix);
     freeDnaSeq(&aaSeq);
@@ -763,7 +650,6 @@ for (b = chain->blockList; b != NULL; b = b->next)
 	score -= gapCost(b->tStart - a->tEnd, b->qStart - a->qEnd);
     a = b;
     }
-printf("chainscore %g\n", score);
 return score;
 }
 
@@ -795,7 +681,7 @@ for (b = sp->blockList; b != NULL; b = b->next)
 //    if (sp->qStrand == '-')
 //	aaSeq = translateSeq(tSeq,  tSeq->size - b->tEnd , FALSE);
  //   else
-	aaSeq = translateSeq(tSeq,  b->tStart , FALSE);
+	aaSeq = translateSeqN(tSeq,  b->tStart , size * 3, FALSE);
     b->score = axtScoreUngapped(scoreData.ss, 
     	qSeq->dna + b->qStart , aaSeq->dna, size);
     freeDnaSeq(&aaSeq);
@@ -829,37 +715,6 @@ for (chain = chainList; chain != NULL; chain = next)
     }
 }
 
-struct seqPair *readAxtBlocks(char *fileName, struct hash *pairHash)
-/* Read in axt file and parse blocks into pairHash */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct dyString *dy = newDyString(512);
-struct axt *axt;
-struct seqPair *spList = NULL, *sp;
-while ((axt = axtRead(lf)) != NULL)
-    {
-    dyStringClear(dy);
-    dyStringPrintf(dy, "%s%c%s", axt->qName, axt->qStrand, axt->tName);
-    sp = hashFindVal(pairHash, dy->string);
-    if (sp == NULL)
-        {
-	AllocVar(sp);
-	slAddHead(&spList, sp);
-	hashAddSaveName(pairHash, dy->string, sp, &sp->name);
-	sp->qName = cloneString(axt->qName);
-	sp->tName = cloneString(axt->tName);
-	sp->qStrand = axt->qStrand;
-	}
-    addAxtBlocks(&sp->blockList, axt);
-    sp->axtCount += 1;
-    axtFree(&axt);
-    }
-lineFileClose(&lf);
-dyStringFree(&dy);
-slSort(&spList, seqPairCmp);
-return spList;
-}
-
 struct seqPair *readBlastBlocks(char *fileName, struct hash *pairHash)
 /* Read in blast tab file and parse blocks into pairHash */
 {
@@ -889,16 +744,8 @@ while ((bt = blastTabNext(lf)) != NULL)
     b->score = bt->bitScore;
     b->qStart = bt->qStart - 1;
     b->qEnd = bt->qEnd - 1;
-//    if (strand == '-')
-//	{
-//	b->tStart = bt->tEnd - 1;
-//	b->tEnd = bt->tStart;
-//	}
- //   else
-	{
-	b->tStart = bt->tStart - 1;
-	b->tEnd = bt->tEnd;
-	}
+    b->tStart = bt->tStart - 1;
+    b->tEnd = bt->tEnd;
     slAddHead(&sp->blockList, b);
 
     sp->axtCount += 1;
@@ -907,37 +754,7 @@ while ((bt = blastTabNext(lf)) != NULL)
 
 lineFileClose(&lf);
 dyStringFree(&dy);
-return spList;
-}
-struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash)
-/* Read in psl file and parse blocks into pairHash */
-{
-struct seqPair *spList = NULL, *sp;
-struct lineFile *lf = pslFileOpen(fileName);
-struct dyString *dy = newDyString(512);
-struct psl *psl;
-
-while ((psl = pslNext(lf)) != NULL)
-    {
-    dyStringClear(dy);
-    dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
-    sp = hashFindVal(pairHash, dy->string);
-    if (sp == NULL)
-        {
-	AllocVar(sp);
-	slAddHead(&spList, sp);
-	hashAddSaveName(pairHash, dy->string, sp, &sp->name);
-	sp->qName = cloneString(psl->qName);
-	sp->tName = cloneString(psl->tName);
-	sp->qStrand = psl->strand[0];
-	}
-    addPslBlocks(&sp->blockList, psl);
-    sp->axtCount += 1;
-    pslFree(&psl);
-    }
-
-lineFileClose(&lf);
-dyStringFree(&dy);
+slSort(&spList, seqPairCmp);
 return spList;
 }
 
@@ -962,44 +779,35 @@ struct hash *faHash = newHash(0);
 char comment[1024];
 struct lineFile *faF;
 struct axtScoreScheme *ss;  /* Scoring scheme. */
+int size;
+char *name;
+DNA *dna;
 
 if (detailsName != NULL)
     details = mustOpen(detailsName, "w");
 /* Read input file and divide alignments into various parts. */
 spList = readBlastBlocks(tabIn, pairHash);
 
-if (optionExists("faQ"))
+faF = lineFileOpen(qNibDir, 0);
+while ( faMixedSpeedReadNext(faF, &dna, &size, &name))
     {
-	int size;
-	char *name;
-	DNA *dna;
-    //faF = mustOpen(qNibDir, "r");
-    faF = lineFileOpen(qNibDir, 0);
-    //AllocVar(seq);
- //   while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
-    while ( faMixedSpeedReadNext(faF, &dna, &size, &name))
-        {
-	seq = newDnaSeq(dna, size, name);
-        hashAdd(faHash, name, seq);
-        slAddHead(&seqList, seq);
-        //AllocVar(seq);
-        }
-    lineFileClose(&faF);
+    seq = newDnaSeq(dna, size, name);
+    hashAdd(faHash, name, seq);
+    slAddHead(&seqList, seq);
     }
+lineFileClose(&faF);
+
 ss = axtScoreSchemeProteinRead(matrixName);
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
     removeExactOverlaps(&sp->blockList);
     uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
-    if (optionExists("faQ"))
-        {
-        assert (faHash != NULL);
-        loadFaSeq(faHash, sp->qName, '+', &qName, &qSeq, &qStrand);
-        }
-    else
-        loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+    assert (faHash != NULL);
     loadIfNewSeq(tNibDir, sp->tName, sp->qStrand, &tName, &tSeq, &tStrand);
+    loadFaSeq(faHash, sp->qName, tSeq->size, &qName, &qSeq);
+
+    /* since we don't have the target segment size at read in */
     if (sp->qStrand == '-')
 	{
 	struct boxIn *b;
@@ -1013,7 +821,7 @@ for (sp = spList; sp != NULL; sp = sp->next)
     chainPair(sp, qSeq, tSeq, &chainList, details, ss);
     }
 slSort(&chainList, chainCmpScore);
-pslxWriteHead( f, gftProt, gftDnaX);
+// pslxWriteHead( f, gftProt, gftDnaX);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct psl psl;
@@ -1025,7 +833,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     memset(&psl, 0, sizeof(psl));
     psl.match = 0;	/* Number of bases that match that aren't repeats */
     psl.misMatch = 0;	/* Number of bases that don't match */
-    psl.repMatch = 0;	/* Number of bases that match but are part of repeats */
+    psl.repMatch = chain->score;	/* Number of bases that match but are part of repeats */
     psl.nCount = 0;	/* Number of 'N' bases */
     psl.qNumInsert = 0;	/* Number of inserts in query */
     psl.qBaseInsert = 0;	/* Number of bases inserted in query */
@@ -1066,8 +874,6 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	}
 
     pslTabOut(&psl, f);
-
-   // chainWrite(chain, f);
     }
 
 carefulClose(&f);
