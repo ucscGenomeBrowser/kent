@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.86 2003/09/25 00:29:13 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.87 2003/09/25 01:06:04 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -896,9 +896,9 @@ makeGenomeAssemblyControls();
 /* Make getDna, getText, advFilter, configure buttons */
     {
     hPrintf(" ");
-    cgiMakeButton(getSeqPageVarName, "as sequence");
+    cgiMakeOptionalButton(getSeqPageVarName, "as sequence", gp == NULL);
     hPrintf(" ");
-    cgiMakeButton(getTextVarName, "as text");
+    cgiMakeOptionalButton(getTextVarName, "as text", gp == NULL);
     hPrintf(" ");
     if (gotAdvFilter())
 	cgiMakeButton(advFilterVarName, "filter (now on)");

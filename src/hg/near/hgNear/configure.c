@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.29 2003/09/24 11:21:32 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.30 2003/09/25 01:06:04 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -225,11 +225,7 @@ hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
 cgiMakeButton(saveCurrentConfName, "Save Settings");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", useSavedConfName, 
-	"Load Settings");
-if (!userSettingsAnySaved(us))
-    hPrintf(" DISABLED");
-hPrintf(">");
+cgiMakeOptionalButton(useSavedConfName, "Load Settings", !userSettingsAnySaved(us));
 hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.11 2003/09/17 17:16:22 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.12 2003/09/25 01:06:04 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -268,29 +268,13 @@ cgiMakeButton(advFilterClearVarName, "Clear Filter");
 hPrintf("</TD><TD>");
 cgiMakeButton(filSaveCurrentVarName, "Save Filter");
 hPrintf("</TD><TD>");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", filUseSavedVarName, 
-	"Load Filter");
-if (!userSettingsAnySaved(filUserSettings()))
-    hPrintf(" DISABLED");
-hPrintf(">");
+cgiMakeOptionalButton(filUseSavedVarName, "Load Filter", 
+	!userSettingsAnySaved(filUserSettings()));
 hPrintf("</TD></TR></TABLE>");
 hPrintf("Submit will take you back to the main page "
  "with the current filter.<BR>To quickly get a list of gene "
  "names that pass the filter push ");
 cgiMakeButton(advFilterListVarName, "List Names");
-#ifdef OLD
-"Hint: you can combine filters by copying the results of 'List Names'<BR>\n"
-"and then doing a 'Paste List' in the Name controls.<BR>");
-hPrintf("</TD></TR><TR><TD>");
-hPrintf("Quick Text:");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListVarName, "List Names");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListProtVarName, "List Proteins");
-hPrintf("</TD><TD>");
-cgiMakeButton(advFilterListAccVarName, "List Accessions");
-hPrintf("</TD></TR></TABLE>\n");
-#endif /* OLD */
 }
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
