@@ -53,7 +53,9 @@ webInTextMode = TRUE;
 webPushErrHandlers();
 }
 
-void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
+void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
+	char *format, va_list args, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
@@ -72,9 +74,11 @@ puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts(
     "<HTML>" "\n"
     "<HEAD>" "\n"
-    "	<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
-    "	<TITLE>"
-);
+    );
+printf("\t%s\n", headerText);
+puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+     "\t<TITLE>"
+     );
 
 vprintf(format, args);
 
@@ -142,36 +146,44 @@ puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
 
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
-{
-	puts(
-        "<!--Content Tables------------------------------------------------------->" "\n"
-        "<TR><TD COLSPAN=3>	" "\n"
-        "  	<!--outer table is for border purposes-->" "\n"
-        "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-        "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-        "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
-        "		<FONT SIZE=\"4\"><b>&nbsp;"
-	);
-	vprintf(format, args);
+    {
+    puts(
+	 "<!--Content Tables------------------------------------------------------->" "\n"
+	 "<TR><TD COLSPAN=3>	" "\n"
+	 "  	<!--outer table is for border purposes-->" "\n"
+	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
+	 "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+	 "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+	 "		<FONT SIZE=\"4\"><b>&nbsp;"
+	 );
+    vprintf(format, args);
 
-	puts(
-        "</b></FONT></TD></TR></TABLE>" "\n"
-        "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
-        "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
-        "	" "\n"
-    );
-};
+    puts(
+	 "</b></FONT></TD></TR></TABLE>" "\n"
+	 "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+	 "	" "\n"
+	 );
+    };
 
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
 }
 
+void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
+/* output a CGI and HTML header with the given title in printf format */
+{
+webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+			     withLogo, skipSectionHeader);
+}
+
 void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
     /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
 	/* output a CGI and HTML header with the given title in printf format */
 {
-webStartWrapperGateway(theCart, format, args, withHttpHeader, withLogo, FALSE);
+webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+			     withLogo, FALSE);
 }	
 
 void webStart(struct cart *theCart, char *format, ...)
@@ -181,6 +193,17 @@ void webStart(struct cart *theCart, char *format, ...)
 va_list args;
 va_start(args, format);
 webStartWrapper(theCart, format, args, TRUE, TRUE);
+va_end(args);
+}
+
+void webStartHeader(struct cart *theCart, char *headerText, char *format, ...)
+/* Print out pretty wrapper around things when not from cart. 
+ * Include headerText in the html header. */
+{
+va_list args;
+va_start(args, format);
+webStartWrapperGatewayHeader(theCart, headerText, format, args, TRUE, TRUE,
+			     FALSE);
 va_end(args);
 }
 
