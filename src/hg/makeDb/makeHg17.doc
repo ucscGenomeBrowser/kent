@@ -234,11 +234,13 @@ done >> seq_contig.md
     cd /cluster/data/hg17
     mkdir jkStuff
 
-    # Create contig gl files - XXX - NCBI doesn't deliver
-    # contig_overlaps.agp
-    XXXX /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+    # Create the contig.gl files - XXX - NCBI doesn't deliver
+    # contig_overlaps.agp - 2004-06-18 - this is beginning to come
+    # together and there is now a contig_overlaps.agp file
+
+    /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
     # Create chromosome gl files
-    XXXX jkStuff/liftGl.csh contig.gl
+    jkStuff/liftGl.csh contig.gl
 
 # CREATING DATABASE  (DONE - 2004-05-20 - Hiram)
     #	RE-DONE for new NIBS - 2004-06-03
@@ -857,6 +859,27 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     hgGoldGapGl -noGl -chromLst=chrom.lst hg17 /cluster/data/hg17 .
     #	Disappointing to see this create so many tables ...
     #	_gap and _gold for each chrom
+
+    # Create the contig.gl files - XXX - NCBI doesn't deliver
+    # contig_overlaps.agp - 2004-06-18 - this is beginning to come
+    # together and there is now a contig_overlaps.agp file
+
+    /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+    # Create chromosome gl files
+    jkStuff/liftGl.csh contig.gl
+
+#  After contig.gl files have been made from contig_overlaps.agp
+    cd /cluster/data/hg17
+    sed -e "s/\tW\t/\t3\t/" \
+	-e "/^AACC010000.*/d" \
+	-e "s/AC018743.27\t31791062\t466818\t1\tD\tUn\t-\tBCM\tRP11-289M22\tSIZE:2big/AC018743.27\t31791062\t466818\t1\t-\t(12)\t-\tBCM\tRP11-289M22\tfor_assembly/" \
+	/cluster/store5/gs.18/ncbi/sequence.inf \
+	> sequence.inf
+    cd /cluster/store5/gs.18/build35
+    hgGoldGapGl -chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
+    cd /cluster/data/hg17
+    $HOME/bin/i386/hgClonePos -chromLst=chrom.lst hg17 \
+	/cluster/data/hg17 ./sequence.inf /cluster/store5/gs.18 -maxErr=3
 
 # LOAD ctgPos table - Contig position track (DONE - 2004-06-08 - Hiram)
     #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
@@ -2668,8 +2691,13 @@ cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
 #	user    0m23.120s
 #	sys     0m5.010s
 
-hgLoadBed hg17 syntenyRn3 ucsc100k.bed
-
+#	Used to load this in syntenyRn3, but that type is misleading to
+#	the table browser and fails the checkTableCoords check.
+#	Better to use this ensRatMusHom type:
+sed -e 's/ensPhusionBlast/ensRatMusHom/g' \
+      $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
+      > ensRatMusHom.sql
+hgLoadBed hg17 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
 
 # MAKING RAT AXTTIGHT FROM AXTBEST (DONE - 2004-06-15 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
@@ -2846,6 +2874,8 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa /iscratch/i/affy
     iSync
 
+XXXX use affyU133 directory here, not affyUcla
+
     ssh kk
     cd /cluster/data/hg17/bed/affyUcla.2004-02-04/
     ls -1 /iscratch/i/affy/HG-U133AB_all.fa > affy.lst
@@ -2873,6 +2903,8 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
     pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
     liftUp affyU133.psl ../../jkStuff/liftAll.lft warn contig.psl
+
+XXX ready to load this here, done
 
     # Merge with spot data and load into database.
     ssh hgwdev
@@ -3083,6 +3115,7 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 #	row count dropped from 30467 in Hg16 to 29725
 
 XXXX - 2004-06-15 - gnfAtlas2 table does not exist
+
 # Create table to map between known genes and GNF Atlas2
 # expression data.
     hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
