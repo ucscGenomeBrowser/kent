@@ -19,6 +19,7 @@
 #include "knownInfo.h"
 #include "hgFind.h"
 #include "refLink.h"
+#include "cheapcgi.h"
 
 void hgPositionsFree(struct hgPositions **pEl)
 /* Free up hgPositions. */
@@ -44,6 +45,23 @@ for (el = *pList; el != NULL; el = next)
     hgPositionsFree(&el);
     }
 *pList = NULL;
+}
+
+
+static char *getUiUrl()
+/* Get rest of UI from browser. */
+{
+static struct dyString *dy = NULL;
+static char *s = NULL;
+if (dy == NULL)
+    {
+    cgiVarExclude("position");
+    dy = cgiUrlString();
+    s = dy->string;
+    if (s[0] == 0)
+       s = NULL;
+    }
+return s;
 }
 
 
@@ -437,8 +455,8 @@ static boolean findMrnaPos(char *acc,  struct hgPositions *hgp)
  * TRUE if it is, otherwise return FALSE. */
 {
 char *type;
-char *browserUrl = hgTracksName();
 char *extraCgi = hgp->extraCgi;
+char *ui = getUiUrl();
 
 if ((type = mrnaType(acc)) == NULL)
     return FALSE;
@@ -462,6 +480,7 @@ else
     else
         {
 	struct dyString *dy = newDyString(1024);
+	char *browserUrl = hgTracksName();
 	AllocVar(table);
 	table->htmlStart = mrnaHtmlStart;
 	table->htmlEnd = mrnaHtmlEnd;
@@ -478,8 +497,12 @@ else
 	    pos->chromStart = psl->tStart;
 	    pos->chromEnd = psl->tEnd;
 	    pos->name = cloneString(psl->qName);
-	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s%s\">",
-	        browserUrl, hgPosBrowserRange(pos, NULL), extraCgi);
+	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s",
+	        browserUrl, hgPosBrowserRange(pos, NULL) );
+	    if (ui != NULL)
+	        dyStringPrintf(dy, "&%s", ui);
+	    dyStringPrintf(dy, "%s\">",
+		extraCgi);
 	    dyStringPrintf(dy, "%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -768,14 +791,19 @@ table->htmlOnePos = mrnaKeysHtmlOnePos;
     char **row;
     char query[256];
     char description[512];
+    char *ui = getUiUrl();
     for (el = allKeysList; el != NULL; el = el->next)
 	{
 	AllocVar(pos);
 	slAddHead(&table->posList, pos);
 	pos->name = cloneString(el->name);
 	dyStringClear(dy);
-	dyStringPrintf(dy, "<A HREF=\"%s?position=%s%s\">", 
-		hgTracksName(), el->name, hgp->extraCgi);
+	dyStringPrintf(dy, "<A HREF=\"%s?position=%s",
+		hgTracksName(), el->name);
+	if (ui != NULL)
+	    dyStringPrintf(dy, "&%s", ui);
+	dyStringPrintf(dy, "%s\">", 
+		hgp->extraCgi);
 	dyStringPrintf(dy, "%s </A>", el->name);
 	sprintf(query, 
 		"select description.name from mrna,description"
@@ -1053,6 +1081,7 @@ struct hgPos *pos;
 char *desc;
 char range[64];
 char *browserUrl = hgTracksName();
+char *ui = getUiUrl();
 char *extraCgi = hgp->extraCgi;
 
 for (table = hgp->tableList; table != NULL; table = table->next)
@@ -1070,8 +1099,12 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	        table->htmlOnePos(table, pos, f);
 	    else
 		{
-		fprintf(f, "<A HREF=\"%s?position=%s%s\">%s at %s</A>",
-		    browserUrl, range, extraCgi, pos->name, range);
+		fprintf(f, "<A HREF=\"%s?position=%s",
+		    browserUrl, range);
+		if (ui != NULL)
+		    fprintf(f, "&%s", ui);
+		fprintf(f, "%s\">%s at %s</A>",
+		    extraCgi, pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);

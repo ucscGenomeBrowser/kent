@@ -290,37 +290,27 @@ if(thisFrame != NULL)
 cgiContinueHiddenVar("ss");
 }
 
-void mapBoxReinvoke(int x, int y, int width, int height, 
-	struct trackGroup *toggleGroup, char *chrom,
-	int start, int end, char *message)
-/* Print out image map rectangle that would invoke this program again.
- * If toggleGroup is non-NULL then toggle that track between full and dense.
- * If chrom is non-null then jump to chrom:start-end. */
+static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
+/* Return a string that contains all the UI state in CGI var
+ * format.  If toggleGroup is non-null the visibility of that
+ * group will be toggled in the string. */
 {
+struct dyString *dy = newDyString(512);
 struct trackGroup *tg;
 
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-if (chrom == NULL)
-    {
-    chrom = chromName;
-    start = winStart;
-    end = winEnd;
-    }
-printf("HREF=\"%s?seqName=%s&db=%s&old=%s&winStart=%d&winEnd=%d&pix=%d", 
-	hgTracksName(), chrom, database, chrom, start, end, tl.picWidth);
+dyStringPrintf(dy, "&db=%s&pix=%d", database, tl.picWidth);
 if (eUserSeqString != NULL)
-    printf("&ss=%s", eUserSeqString);
- 
+    dyStringPrintf(dy, "&ss=%s", eUserSeqString);
 if (withLeftLabels)
-    printf("&leftLabels=on");
+    dyStringPrintf(dy, "&leftLabels=on");
 if (withCenterLabels)
-    printf("&centerLabels=on");
+    dyStringPrintf(dy, "&centerLabels=on");
 if (withGuidelines)
-    printf("&guidelines=on");
+    dyStringPrintf(dy, "&guidelines=on");
 if (withRuler)
-    printf("&ruler=on");
+    dyStringPrintf(dy, "&ruler=on");
 else
-    printf("&ruler=off");
+    dyStringPrintf(dy, "&ruler=off");
 for (tg = tGroupList; tg != NULL; tg = tg->next)
     {
     int vis = tg->visibility;
@@ -331,18 +321,59 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 	else if (vis == tvFull)
 	    vis = tvDense;
 	}
-    printf("&%s=%s", tg->mapName, tvStrings[vis]);
+    dyStringPrintf(dy, "&%s=%s", tg->mapName, tvStrings[vis]);
     }
 /* Chuck code to sync with frames */
 if(otherFrame)
-    printf("&of=%s",otherFrame);
+    dyStringPrintf(dy, "&of=%s",otherFrame);
 if(thisFrame)
-    printf("&th=%s",thisFrame);
+    dyStringPrintf(dy, "&th=%s",thisFrame);
+return dy;
+}
+
+char *hgTracksDefUrl()
+/* Return URL of browser plus options that keep the UI state
+ * intact. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    struct dyString *ui = uiStateUrlPart(NULL);
+    dy = newDyString(0);
+    dyStringPrintf(dy, "%s%s", hgTracksName(), ui->string);
+    freeDyString(&ui);
+    }
+return dy->string;
+}
+
+
+
+void mapBoxReinvoke(int x, int y, int width, int height, 
+	struct trackGroup *toggleGroup, char *chrom,
+	int start, int end, char *message)
+/* Print out image map rectangle that would invoke this program again.
+ * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If chrom is non-null then jump to chrom:start-end. */
+{
+struct dyString *ui = uiStateUrlPart(toggleGroup);
+
+printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+if (chrom == NULL)
+    {
+    chrom = chromName;
+    start = winStart;
+    end = winEnd;
+    }
+printf("HREF=\"%s?seqName=%s&old=%s&winStart=%d&winEnd=%d", 
+	hgTracksName(), chrom, chrom, start, end);
+printf("%s\"", ui->string);
+freeDyString(&ui);
 
 if (toggleGroup)
-    printf("\" ALT= \"Change between dense and full view of %s track\">\n", toggleGroup->shortLabel);
+    printf(" ALT= \"Change between dense and full view of %s track\">\n", 
+           toggleGroup->shortLabel);
 else
-    printf("\" ALT= \"jump to %s\">\n", message);
+    printf(" ALT= \"jump to %s\">\n", message);
 }
 
 
@@ -1328,7 +1359,7 @@ tg->color.b = brownColor.b;
 return tg;
 }
 
-void loadMusPairOf5(struct trackGroup *tg)
+void loadMusPairOf4(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
 tg->items = lfFromPslsInRange("musPairOf4", winStart, winEnd, NULL, TRUE);
@@ -1342,7 +1373,7 @@ tg->mapName = "hgMusPairOf4";
 tg->visibility = tvDense;
 tg->longLabel = "Clipped Mouse Translated Blat Alignments, Pair of 4 Seed";
 tg->shortLabel = "Mouse Pair of 4";
-tg->loadItems = loadMus7of8;
+tg->loadItems = loadMusPairOf4;
 tg->subType = lfSubXeno;
 tg->colorShades = shadesOfBrown;
 tg->color.r = brownColor.r;
@@ -4964,6 +4995,7 @@ else
     }
 }
 
+
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -5298,10 +5330,9 @@ boolean findGenomePos(char *spec, char **retChromName,
 {
 struct hgPositions *hgp;
 struct hgPos *pos;
-char extraCgi[512];
+struct dyString *ui;
 
-sprintf(extraCgi, "&db=%s&pix=%d", database, tl.picWidth);	/* ~~~ expand this. */
-hgp = hgPositionsFind(spec, extraCgi);
+hgp = hgPositionsFind(spec, "");
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
@@ -5322,6 +5353,7 @@ else
     hgPositionsFree(&hgp);
     return FALSE;
     }
+freeDyString(&ui);
 }
 
 
