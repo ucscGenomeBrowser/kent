@@ -10,7 +10,7 @@ wiggle mzDy1Dp2Ag1_phast_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise mypa
-speciesOrder d_yakuba d_pseudoobscura a_gambiae
+speciesOrder droYak1 dp2 anoGam1
 
 track bdgpLiftGene
 shortLabel BDGP 3.2 Genes

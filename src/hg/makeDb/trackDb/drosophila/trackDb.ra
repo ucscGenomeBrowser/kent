@@ -27,7 +27,7 @@ wiggle mzDy1Dp2Ag1_phast_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise myp2a
-speciesOrder d_yakuba d_pseudoobscura a_gambiae
+speciesOrder droYak1 dp2 anoGam1
 
 track phastConsElements
 shortLabel Most Conserved

@@ -159,7 +159,7 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder c_briggsae
+speciesOrder cb1
 
 track phastConsElements
 shortLabel Most Conserved

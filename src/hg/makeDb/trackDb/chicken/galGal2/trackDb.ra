@@ -28,7 +28,7 @@ wiggle mzHg17Mm5_phast_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise ghm
-speciesOrder human mouse
+speciesOrder hg17 mm5
 
 track chainHg17
 shortLabel Human Chain 
