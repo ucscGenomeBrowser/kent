@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.50 2004/06/07 23:41:11 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.51 2004/06/08 17:50:04 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3068,7 +3068,7 @@ webNewSection("<A NAME=recent></A> 10 Most Recent Changes (all assemblies)");
 printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
     "<TR>\n"
     "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
-    "<TD nowrap><FONT color=\"#006666\"><B>Assemblies</B></FONT></TD>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Assembly</B></FONT></TD>\n"
     "<TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT></TD>\n"
     "</TR>\n"
     );
