@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.24 2004/06/13 06:20:38 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.25 2004/07/06 22:36:41 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -131,7 +131,7 @@ static struct optionSpec optionSpecs[] =
     {"edgeFile", OPTION_STRING},
     {"trumpNum", OPTION_INT},
     {"minEdgeNum", OPTION_INT},
-    {"speciesSpecific", OPTION_BOOLEAN},
+    {"speciesSpecific", OPTION_STRING},
     {"orthoAgxFile", OPTION_STRING},
     {"mappingFile", OPTION_STRING},
     {"chromSize" , OPTION_INT},
@@ -1795,6 +1795,7 @@ char **row = NULL;
 int rowCount = 0;
 char *line = NULL;
 struct altGraphX *ag = NULL, *agOrtho = NULL;
+char *speciesSpecificRoot = optionVal("speciesSpecific", NULL);
 char *netTable = optionVal("netTable", NULL);
 char *chainFile = optionVal("chainFile", NULL);
 char *commonFileName = optionVal("commonFile", NULL);
@@ -1826,11 +1827,18 @@ workingChrom = chrom;
 
 if((minEdgeNum = optionInt("minEdgeNum", 0)) > 0) 
     warn("minEdgeNum is: %d", minEdgeNum);
-if(speciesSpecific = optionExists("speciesSpecific")) 
+if(speciesSpecificRoot != NULL)
     {
+    struct dyString *toOpen = newDyString(strlen(speciesSpecificRoot) + 10);
     warn("Doing species specific splicing.");
-    speciesSpecificExons = mustOpen("speciesSpecificExon.tab", "w");
-    speciesSpecificGraphs = mustOpen("speciesSpecificGraphs.tab", "w");
+    speciesSpecific = TRUE;
+    dyStringClear(toOpen);
+    dyStringPrintf(toOpen, "%s.exon.tab", speciesSpecificRoot);
+    speciesSpecificExons = mustOpen(toOpen->string, "w");
+    dyStringClear(toOpen);
+    dyStringPrintf(toOpen, "%s.graphs.tab", speciesSpecificRoot);
+    speciesSpecificGraphs = mustOpen(toOpen->string, "w");
+    dyStringFree(&toOpen);
     }
 if(optionExists("exonFile"))
     initPossibleExons(optionVal("exonFile", NULL));
