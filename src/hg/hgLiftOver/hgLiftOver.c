@@ -1,4 +1,4 @@
-/* hgSeqSearch - CGI-script to manage fast human genome sequence searching. */
+/* hgLiftOver - CGI-script to convert coordinates using chain files */
 #include "common.h"
 #include "errabort.h"
 #include "hCommon.h"
@@ -7,21 +7,17 @@
 #include "linefile.h"
 #include "dnautil.h"
 #include "fa.h"
-#include "psl.h"
-#include "genoFind.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
 #include "hui.h"
 #include "cart.h"
 #include "dbDb.h"
-#include "blatServers.h"
 #include "web.h"
 #include "hash.h"
-#include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.19 2004/04/15 19:37:35 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.20 2004/04/20 19:23:53 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -29,7 +25,7 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.19 2004/04/15 19:37:35 kate E
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
 #define HGLFT_FROMDB_VAR "fromDb"               /* FROM assembly */
 #define HGLFT_TODB_VAR "toDb"                   /* TO assembly */
-#define ERROR_HELP      "errorhelp"
+#define ERROR_HELP      "errorHelp"
 
 
 /* Global Variables */
@@ -218,6 +214,10 @@ puts("<LI>");
 puts( "<A HREF=\"/goldenPath/hg12/liftOver\" TARGET=_blank>" 
     "June 2002 UCSC hg12 [ARCHIVED] (NCBI Build 30) </A>\n");
 puts("</LI>");
+puts("<LI>");
+puts( "<A HREF=\"/goldenPath/hg10/liftOver\" TARGET=_blank>" 
+    "Dec. 2001 UCSC hg10 [ARCHIVED] (NCBI Build 28) </A>\n");
+puts("</LI>");
 puts("</UL>");
 }
 
@@ -237,6 +237,7 @@ if (cgiOptionalString(ERROR_HELP))
     {
     puts("<PRE>");
     puts(liftOverErrHelp());
+    //system("/usr/bin/cal");
     puts("</PRE>");
     return;
     }
