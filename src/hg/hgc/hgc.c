@@ -75,6 +75,10 @@
 #include "stsInfoMouse.h"
 #include "dnaMotif.h"
 #include "dbSnpRS.h"
+#include "genomicSuperDups.h"
+#include "celeraDupPositive.h"
+#include "celeraCoverage.h"
+#include "plasPairs.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -4803,6 +4807,222 @@ while (row = sqlNextRow(sr))
 sqlFreeResult(&sr);
 }
 
+
+
+/*Ewan's stuff */
+
+void doCeleraDupPositive(struct trackDb *tdb, char *dupName)
+/* Handle click on celeraDupPositive track. */
+{
+char *track = tdb->tableName;
+struct celeraDupPositive dup;
+char query[512];
+char title[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+sprintf(title, "Segmental Duplication Database");
+cartWebStart(title);
+
+printf("<H2>Segmental Duplication Database (SDD)</H2>\n");
+
+
+if (cgiVarExists("o"))
+    {
+    int start = cgiInt("o");
+    int rowOffset = hOffsetPastBin(seqName, track);
+
+
+
+    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
+		   track, seqName, start ,dupName);
+    sr = sqlGetResult(conn, query);
+    while (row = sqlNextRow(sr))
+	{
+	celeraDupPositiveStaticLoad(row+rowOffset, &dup);
+	printf("<B>Duplication Name:</B> %s<BR>\n",dup.name);
+	printf("<B>Position:</B> %s:%d-%d<BR>\n",
+	dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("<B>Full Descriptive Name:</B> %s<BR>\n", dup.fullName);
+
+	printf("<B>Fraction BP Match:</B> %3.4f<BR>\n", dup.fracMatch);
+	printf("<B>Alignment Length:</B> %3.0f<BR>\n", dup.bpAlign);
+
+
+	htmlHorizontalLine();
+	printf("<A HREF=\"http://humanparalogy.cwru.edu/eichler/celera3/cgi-bin/celera3.pl?search=%s&type=pdf \" Target=%s_PDF><B>Clone Read Depth PDF:</B></A><BR>",dup.name,dup.name);
+	printf("<A HREF=\"http://humanparalogy.cwru.edu/eichler/celera3/cgi-bin/celera3.pl?search=%s&type=jpg \" Target=%s_JPG><B>Clone Read Depth JPG:</B></A><BR>",dup.name,dup.name);
+	htmlHorizontalLine();
+	}
+    }
+else
+    {
+    puts("<P>Click directly on a repeat for specific information on that repeat</P>");
+    }
+
+puts("This region shows similarity > 90\% and >250 bp of repeatmasked sequence to sequences"
+     "in the Segmental Duplication Database (SDD).");
+hFreeConn(&conn);
+webEnd();
+}
+
+void doCeleraCoverage()
+/* Handle click on celeraCoverage track. */
+{
+//char *track = tdb->tableName;
+//struct celeraDupPositive dup;
+//char query[512];
+//struct sqlConnection *conn = hAllocConn();
+//struct sqlResult *sr;
+//char **row;
+char title[256];
+sprintf(title, "CoverageSDD");
+cartWebStart(title);
+
+printf("<H2>Coverage SDD</H2>\n");
+
+puts("This track represents coverage of clones that were assayed for "
+     "duplications with Celera reads. Absent regions were not assessed "
+     "by this version of the SDD. ");
+webEnd();
+}
+
+
+
+void parseSuperDupsChromPointPos(char *pos, char *retChrom, int *retPos, int *retID)
+/* Parse out NNNN.chrN:123 into NNNN and chrN and 123. */
+{
+char *idStr, *periodPlaceHolder, *colonPlaceHolder,*chromStr, *posStr;
+
+int idLen;
+int chrLen;
+periodPlaceHolder = strchr(pos, '.');
+if (periodPlaceHolder == NULL)
+   errAbort("No . in chromosome point position %s", pos);
+idLen = periodPlaceHolder - pos;
+idStr=malloc(idLen+1);
+memcpy(idStr, pos, idLen);
+idStr[idLen] = 0;
+*retID=atoi(idStr);
+free(idStr);
+
+
+
+chromStr=periodPlaceHolder+1;
+
+colonPlaceHolder=strchr(pos,':');
+if (colonPlaceHolder == NULL)
+   errAbort("No : in chromosome point position %s", pos);
+chrLen=colonPlaceHolder-chromStr;
+
+
+
+memcpy(retChrom,chromStr,chrLen);
+retChrom[chrLen]=0;
+posStr=colonPlaceHolder+1;
+*retPos= atoi(posStr);
+
+}
+
+
+void doGenomicSuperDups(char *track, char *dupName)
+/* Handle click on genomic dup track. */
+{
+
+struct genomicSuperDups dup;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char oChrom[64];
+
+int oStart;
+int dupId; /*Holds the duplication id*/
+int rowOffset;
+char title[256];
+sprintf(title, "Genome Assembly Comparision");
+cartWebStart(title);
+
+printf("<H2>Genome Assembly Comparision</H2>\n");
+if (cgiVarExists("o"))
+    {
+    int start = cgiInt("o");
+    rowOffset = hOffsetPastBin(seqName, track);
+
+    parseSuperDupsChromPointPos(dupName,oChrom,&oStart,&dupId);
+
+
+    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
+		   "and uid = %d and otherStart = %d",
+		   track, seqName, start, dupId, oStart);
+      sr = sqlGetResult(conn, query);
+    while (row = sqlNextRow(sr))
+	{
+
+	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
+	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
+	   dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s\">"
+			  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.chromStart,
+		  dup.chrom, dup.chromStart, dup.chromEnd, database);
+
+
+	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
+	   dup.otherChrom, dup.otherStart, dup.otherEnd);
+	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s\">"
+				  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.otherStart,
+			  dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand, database);
+
+	//printf("<B>Name:</B>%s<BR>\n",dup.name);
+	//printf("<B>Score:</B>%d<BR>\n",dup.score);
+	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",dup.strand);
+	//printf("<B>Uid:</B>%d<BR>\n",dup.uid);
+	printf("<B>Filter Verdict:</B>%s<BR>\n",dup.verdict);
+	printf("&nbsp;&nbsp;&nbsp;<B>testResult:</B>%s<BR>\n",dup.testResult);
+	printf("&nbsp;&nbsp;&nbsp;<B>chits:</B>%s<BR>\n",dup.chits);
+	printf("&nbsp;&nbsp;&nbsp;<B>ccov:</B>%s<BR>\n",dup.ccov);
+	printf("&nbsp;&nbsp;&nbsp;<B>posBasesHit:</B>%d<BR>\n",dup.posBasesHit);
+	/*printf("<A HREF=/jab/der_oo33/%s TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",dup.alignfile,dup.chrom, dup.chromStart, dup.chromEnd);*/
+	printf("<A HREF=http://humanparalogy.cwru.edu/jab/der_oo33/%s TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",dup.alignfile,dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("<B>Alignment Length:</B>%d<BR>\n",dup.alignL);
+	printf("&nbsp;&nbsp;&nbsp;<B>Indels #:</B>%d<BR>\n",dup.indelN);
+	printf("&nbsp;&nbsp;&nbsp;<B>Indels bp:</B>%d<BR>\n",dup.indelS);
+	printf("&nbsp;&nbsp;&nbsp;<B>Aligned Bases:</B>%d<BR>\n",dup.alignB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Matching bases:</B>%d<BR>\n",dup.matchB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Mismatched bases:</B>%d<BR>\n",dup.mismatchB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transitions:</B>%d<BR>\n",dup.transitionsB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transverions:</B>%d<BR>\n",dup.transversionsB);
+	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching:</B>%3.4f<BR>\n",dup.fracMatch);
+	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching with Indels:</B>%3.4f<BR>\n",dup.fracMatchIndel);
+	printf("&nbsp;&nbsp;&nbsp;<B>Jukes Cantor:</B>%3.4f<BR>\n",dup.jcK);
+	htmlHorizontalLine();
+
+	}
+    }
+else
+    {
+    puts("<P>Click directly on a repeat for specific information on that repeat</P>");
+    }
+
+
+puts("This region was detected as a putative genomic duplication within the golden path. "
+     "Orange, yellow, dark-light gray represent similarities of >99\%, 99-98\% and 98-90% "
+     "respectively. Duplications greater than 98% similarity that lack sufficient SDD "
+     "evidence (likely missed overlaps) are shown as red.Cut off values were at least "
+     "1 kb of total sequence aligned (containing at least 500 bp non-RepeatMasked sequence) "
+     "and at least 90% sequence identity. For a description of the 'fuguization' detection "
+     "method see <a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11381028&dopt=Abstract\">Bailey, <i>et al</i> (2001) Genome Res 11:1005-17</a>. "
+     "The data was provided by <A HREF=\"mailto:jab@po.cwru.edu\">Jeff Bailey</A> "
+	 "and <A HREF=\"mailto:eee@po.cwru.edu\">Evan Eichler</A>. ");
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+webEnd();
+}
+/*Ewan's end*/
+
+
+
 void doCgh(char *track, char *tissue, struct trackDb *tdb)
 /* Create detail page for comparative genomic hybridization track */ 
 {
@@ -7072,6 +7292,22 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
+
+
+/*Ewan's stuff*/
+else if (sameWord(track, "genomicSuperDups"))
+    {
+    doGenomicSuperDups(track, item);
+    }
+else if (sameWord(track, "celeraCoverage"))
+    {
+    doCeleraCoverage(track, item);
+    }
+else if (sameWord(track, "celeraDupPositive"))
+    {
+    doCeleraDupPositive(tdb, item);
+    }
+
 else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameWord(track, "transfacHit"))
     {
     doTriangle(tdb, item);
