@@ -1,5 +1,7 @@
 # Build all directories in utils
 
+include ../inc/common.mk
+
 BIN_DIR = $(HOME)/bin
 
 all:    scripts
@@ -11,10 +13,10 @@ all:    scripts
 	done
 
 scripts:
-	@for F in $(SCRIPTS); do \
+	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-	    echo cp $$F $(BIN_DIR); \
-	    cp $$F $(BIN_DIR); \
+	    echo cp $$F ${SCRIPTS}; \
+	    cp $$F ${SCRIPTS}; \
 	 done
 
 test:
@@ -26,7 +28,8 @@ clean:
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 
-SCRIPTS = \
+SCRIPT_FILES = \
+	blastz-make-joblist \
         iSync \
         lodToBedScore
 
