@@ -290,6 +290,24 @@ while (lineFileNext(lf, &line, &lineSize))
 return 0;
 }
 
+int lineFileChopCharNext(struct lineFile *lf, char sep, char *words[], int maxWords)
+/* Return next non-blank line that doesn't start with '#' chopped into
+   words delimited by sep. */
+{
+int lineSize, wordCount;
+char *line;
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '#')
+        continue;
+    wordCount = chopByChar(line, sep, words, maxWords);
+    if (wordCount != 0)
+        return wordCount;
+    }
+return 0;
+}
+
 int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords)
 /* Return next non-blank line that doesn't start with '#' chopped into words
  * on tabs */
@@ -306,6 +324,19 @@ while (lineFileNext(lf, &line, &lineSize))
         return wordCount;
     }
 return 0;
+}
+
+boolean lineFileNextCharRow(struct lineFile *lf, char sep, char *words[], int wordCount)
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * delimited by sep. Returns FALSE at EOF.  Aborts on error. */
+{
+int wordsRead;
+wordsRead = lineFileChopCharNext(lf, sep, words, wordCount);
+if (wordsRead == 0)
+    return FALSE;
+if (wordsRead < wordCount)
+    lineFileExpectWords(lf, wordCount, wordsRead);
+return TRUE;
 }
 
 boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount)

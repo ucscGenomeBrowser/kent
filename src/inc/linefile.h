@@ -83,6 +83,10 @@ boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
 #define lineFileRow(lf, words) lineFileNextRow(lf, words, ArraySize(words))
 /* Read in line chopped into fixed size word array. */
 
+boolean lineFileNextCharRow(struct lineFile *lf, char sep, char *words[], int wordCount);
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * delimited by sep. Returns FALSE at EOF.  Aborts on error. */
+
 boolean lineFileNextRowTab(struct lineFile *lf, char *words[], int wordCount);
 /* Return next non-blank line that doesn't start with '#' chopped into words
  * at tabs. Returns FALSE at EOF.  Aborts on error. */
