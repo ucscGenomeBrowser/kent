@@ -87,11 +87,15 @@ boolean sqlExists(struct sqlConnection *conn, char *query);
                                          * rather than abort */
 #define SQL_TAB_FILE_WARN_ON_ERROR 0x04 /* warn on errors and warnings being
                                            returned rather than abort */
+#define SQL_TAB_FILE_CONCURRENT    0x10  /* optimize for allowing concurrent
+                                          * access to the table. */
 
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);
-/* Load a tab-seperated file into a database table, checking for errors */
+/* Load a tab-seperated file into a database table, checking for errors. 
+ * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
+ * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
