@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: subsetAxt.c,v 1.7 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: subsetAxt.c,v 1.8 2003/07/21 19:02:22 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,17 +20,6 @@ errAbort(
   "options:\n"
   "   -xxx=XXX\n"
   );
-}
-
-int countNonDash(char *a, int size)
-/* Count number of non-dash characters. */
-{
-int count = 0;
-int i;
-for (i=0; i<size; ++i)
-    if (a[i] != '-') 
-        ++count;
-return count;
 }
 
 boolean findHsp(char *as, char *bs, int size, 
