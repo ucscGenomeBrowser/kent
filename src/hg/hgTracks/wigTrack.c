@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.44 2004/03/02 19:15:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.45 2004/03/08 23:27:28 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -157,10 +157,16 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
  *	height as chosen by the user from TrackUi, or it is the dense
  *	mode.
  */
+/*	Wiggle tracks depend upon clipping.  They are reporting
+ *	totalHeight artifically high by 1 so this will leave a
+ *	blank area one pixel high below the track.  hgTracks will set
+ *	our clipping rectangle one less than what we report here to get
+ *	this accomplished.
+ */
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
 else if (vis == tvFull)
-    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
+    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight) + 1;
 
 tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
