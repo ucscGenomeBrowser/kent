@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.778 2004/08/13 19:11:30 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.779 2004/08/13 23:24:04 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6136,7 +6136,7 @@ if(motifString != NULL)
     motifCount = chopString(motifString, ",", NULL, 0);
     AllocArray(motifs, motifCount);
     chopString(motifString, ",", motifs, motifCount);
-    AllocArray(inMotif, count);
+    AllocArray(inMotif, strlen(text));
     for(i = 0; i < motifCount; i++)
 	{
 	char *mark = text;
@@ -6153,7 +6153,7 @@ if(motifString != NULL)
     freez(&motifString);
     }
 
-for (i=0; i<count; i++, text++, textPos++)
+for (i=0; i<count; i++, text++)
     {
     x1 = i * width / count;
     x2 = (i+1) * width/count;
@@ -6171,7 +6171,7 @@ for (i=0; i<count; i++, text++, textPos++)
     if (match != NULL && match[i])
         if (*text != match[i])
             clr = noMatchColor;
-    if(inMotif != NULL && inMotif[textPos])
+    if(inMotif != NULL && inMotif[i])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
 	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
