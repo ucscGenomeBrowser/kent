@@ -3,6 +3,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "htmshell.h"
+#include "hgColors.h"
 #include "hgNear.h"
 
 void doExamples(struct sqlConnection *conn, struct column *colList)
@@ -10,7 +11,8 @@ void doExamples(struct sqlConnection *conn, struct column *colList)
  * Called when search box is empty. */
 {
 displayData(conn, colList, NULL);
-htmlHorizontalLine();
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=9 BGCOLOR=\"#"HG_COL_INSIDE"\"><TR><TD>\n");
 hPrintf("%s",
  "<P>This program displays a table of genes that are related to "
  "one another.  The relationship can be one of several types, including "
@@ -65,5 +67,7 @@ hPrintf("%s",
  "Group. This work is supported by a grant from the National Human Genome "
  "Research Institute and by the Howard Hughes Medical Institute.</P>"
  );
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
 }
 

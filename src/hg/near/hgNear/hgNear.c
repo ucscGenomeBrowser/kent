@@ -15,9 +15,10 @@
 #include "hui.h"
 #include "web.h"
 #include "ra.h"
+#include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.112 2003/10/29 06:37:05 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.113 2003/10/30 07:54:05 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -188,9 +189,9 @@ while (c = *s++)
 void makeTitle(char *title, char *helpName)
 /* Make title bar. */
 {
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=5>%s</FONT></TD>", title);
+hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
 hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>", 
 	helpName, wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
@@ -929,12 +930,30 @@ hashFree(&orgHash);
 dbDbFree(&dbList);
 }
 
+void controlPanelStart()
+/* Put up start of tables around a control panel. */
+{
+hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=0 CELLPADDING=4><TR><TD ALIGN=CENTER>");
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
+hPrintf("<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\""HG_COL_INSIDE"\"><TR><TD>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1><TR><TD>");
+}
 
-void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordList)
+void controlPanelEnd()
+/* Put up end of tables around a control panel. */
+{
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+hPrintf("</TD></TR></TABLE>");
+}
+
+static void mainControlPanel(struct genePos *gp, 
+	struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
-hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
-hPrintf("<TR><TD ALIGN=CENTER>");
+controlPanelStart();
+// hPrintf("<TR><TD ALIGN=CENTER>");
 
 makeGenomeAssemblyControls();
 
@@ -949,10 +968,10 @@ makeGenomeAssemblyControls();
 /* Do go button. */
     {
     hPrintf(" ");
-    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" TABINDEX=0>", "submit", "Go!");
+    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", "submit", "Go!");
     }
 
-hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
+hPrintf("</TD></TR>\n<TR><TD>");
 
 
 /* Do sort by drop-down */
@@ -997,9 +1016,7 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     hPrintf(" ");
     cgiMakeOptionalButton(getTextVarName, "text", gp == NULL);
     }
-
-
-hPrintf("</TD></TR></TABLE>");
+controlPanelEnd();
 }
 
 static void trimFarGenes(struct genePos **pList)
@@ -1204,6 +1221,7 @@ safef(query, sizeof(query), "select name from %s where proteinId='%s'",
 return sqlQuickString(conn, query);
 }
 
+
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
@@ -1295,11 +1313,12 @@ if (geneList == NULL)
 	}
     return;
     }
-hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1 COLS=%d>\n", 
+// hPrintf("<TABLE BGCOLOR=\"#"HG_COL_BORDER"\">");
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_INSIDE"\">\n", 
 	totalHtmlColumns(colList));
 
 /* Print label row. */
-hPrintf("<TR BGCOLOR=\"#E0E0FF\">");
+hPrintf("<TR BGCOLOR=\"#"HG_COL_HEADER"\">");
 for (col = colList; col != NULL; col = col->next)
     {
     char *colName = col->shortLabel;
@@ -1333,6 +1352,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         errAbort("Write error to stdout");
     }
 
+// hPrintf("</TABLE>");
 hPrintf("</TABLE>");
 }
 
@@ -1395,13 +1415,13 @@ void doMainDisplay(struct sqlConnection *conn,
 {
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", genome);
-makeTitle(buf, "hgNearHelp.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
+makeTitle(buf, "hgNearHelp.html");
 cartSaveSession(cart);
-controlPanel(curGeneId, ord, ordList);
-hPrintf("</FORM>\n");
+mainControlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
+hPrintf("</FORM>\n");
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
 hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
@@ -1697,6 +1717,8 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
+htmlSetBgColor(HG_CL_OUTSIDE);
+// htmlSetBgColor(HG_CL_INSIDE);
 oldCart = hashNew(10);
 cartHtmlShell("Gene Family v5", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;

@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.32 2003/10/24 17:39:22 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.33 2003/10/30 07:54:05 kent Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -131,7 +131,7 @@ char *experimentType = cloneString(columnSetting(col, "experimentType",
 char **experiments = hgExpGetNames("hgFixed", experimentTable, 
 	representativeCount, representatives, skipName);
 
-hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0>\n");
 toUpperN(experimentType, 1);
 hPrintf("<TR><TH>%s</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n",
 	experimentType);
@@ -141,7 +141,7 @@ for (i=0; i<representativeCount; ++i)
     hPrintf("<TR>");
     if (ix != -1)
         {
-	hPrintf("<TD>%s</TD>", experiments[i]);
+	hPrintf("<TD>&nbsp;%s</TD>", experiments[i]);
 	safef(lVarName, sizeof(lVarName), "%smin%d", subName, ix);
 	hPrintf("<TD>");
 	advFilterRemakeTextVar(col, lVarName, 8);

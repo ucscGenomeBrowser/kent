@@ -315,6 +315,12 @@ void hPrintNonBreak(char *s);
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 
+void controlPanelStart();
+/* Put up start of tables around a control panel. */
+
+void controlPanelEnd();
+/* Put up end of tables around a control panel. */
+
 void selfAnchorId(struct genePos *gp);
 /* Print self anchor to given id. */
 

@@ -8,9 +8,10 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
+#include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.17 2003/10/08 18:37:48 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.18 2003/10/30 07:54:04 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -255,7 +256,7 @@ makeTitle("Gene Family Filter", "hgNearAdvFilter.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
-hPrintf("<BR>");
+controlPanelStart();
 hPrintf("With this page you can restrict which genes appear in the main table<BR>");
 hPrintf("based on the values in any column. Submit will take you back to the<BR>");
 hPrintf("main page with the current filter.");
@@ -263,6 +264,7 @@ bigButtons();
 hPrintf("To quickly get a list of gene "
  "names that pass the filter push ");
 cgiMakeButton(advFilterListVarName, "List Names");
+controlPanelEnd();
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -282,7 +284,7 @@ for (onOff = 1; onOff >= 0; --onOff)
 	{
 	hPrintf("<H2>Filter Controls for %s Columns:</H2>", 
 		(onOff ? "Displayed" : "Hidden"));
-	hPrintf("<TABLE BORDER=2 CELLSPACING=1 CELLPADDING=1>\n");
+	hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=2 BGCOLOR=\"#"HG_COL_INSIDE"\">\n");
 	for (col = colList; col != NULL; col = col->next)
 	    {
 	    if (col->filterControls && col->on == onOff)

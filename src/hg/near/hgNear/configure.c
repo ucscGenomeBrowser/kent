@@ -11,9 +11,10 @@
 #include "cart.h"
 #include "web.h"
 #include "hgExp.h"
+#include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.38 2003/10/13 23:53:26 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.39 2003/10/30 07:54:05 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -45,10 +46,10 @@ struct column *col;
 char varName[128];
 boolean isVis;
 
-hPrintf("<TABLE BORDER=1>\n");
+hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 BGCOLOR=\"#"HG_COL_INSIDE"\">\n");
 
 /* Write out first row - labels. */
-hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
+hPrintf("<TR BGCOLOR=\"#"HG_COL_HEADER"\">");
 hPrintf("<TH ALIGN=left>Name</TH>");
 hPrintf("<TH ALIGN=left>On</TH>");
 hPrintf("<TH ALIGN=left>Position</TH>");
@@ -187,16 +188,11 @@ userSettingsCaptureVar(us, colOrderVar);
 return us;
 }
 
-void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
-/* Generate configuration page. */
+static void configControlPanel()
+/* Put up configuration control panel. */
 {
 struct userSettings *us = colUserSettings();
-if (bumpVar)
-    bumpColList(bumpVar, &colList);
-makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
-cartSaveSession(cart);
-
+controlPanelStart();
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton("submit", "Submit");
@@ -218,8 +214,6 @@ hPrintf("</TD><TD>");
 cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
 hPrintf("</TD></TR></TABLE>");
 
-// hPrintf("<HR>");
-// hPrintf("<H2>Column Configuration</H2>\n");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 hPrintf("Expression ratio colors: ");
@@ -230,6 +224,19 @@ cgiMakeCheckBox(showAllSpliceVarName,
 	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
 hPrintf(" ");
 hPrintf("</TD></TR></TABLE>");
+controlPanelEnd();
+}
+
+void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
+/* Generate configuration page. */
+{
+if (bumpVar)
+    bumpColList(bumpVar, &colList);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
+makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
+configControlPanel();
+cartSaveSession(cart);
+
 configTable(colList, conn);
 hPrintf("</FORM>");
 }
