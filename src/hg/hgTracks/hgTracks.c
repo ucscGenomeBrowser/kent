@@ -7280,7 +7280,7 @@ else if(z == 3)
 else
     snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
 
-printf("(%s)", tableName );
+//printf("(%s)", tableName );
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
     where, &rowOffset);
