@@ -4827,10 +4827,11 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
-int y1, y2;
+double y1, y2;
 int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
-int s, e, e2, s2;
+int s, e2, s2;
+double e;
 int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
@@ -4842,34 +4843,38 @@ int midY = y + midLineOff;
 int compCount = 0;
 int w;
 int prevEnd = -1;
-int prevY = -1;
+double prevY = -1;
 
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     
     for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	heightPer = tg->heightPer;
-	s = sf->start;
-	e = sf->end;
-	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+10, 1, blackIndex());
+	    {
+	    heightPer = tg->heightPer;
+	    s = sf->start;
+	    e = sf->end;
+
+        x1 = round((double)((int)s+1-winStart)*scale) + xOff;
+        y1 = (int)((double)y+((double)s-e)/10.0+10.0);
+
+        if (prevEnd > 0)
+	        {
+            y2 = prevY;
+	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+
+            if( (x2-x1) > 0 )
+                mgConnectingLine( mg, x1, y1, x2, y2, shadesOfGray );
+
+	        }
 
 
-    if (prevEnd > 0)
-	{
-	x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-	x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-    y1 = y-e+s+10;
-    y2 = prevY;
-
-    if( (x2-x1) > 0 )
-    mgConnectingLine( mg, x1, y1, x2, y2, shadesOfSea[3]);
-
-	}
+    //mgConnectingLine( mg, x1, y1, x1+1, y1, shadesOfGray );
+    //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
+	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, blackIndex());
 
     prevEnd = s;
-    prevY = y-e+s+10;
+    prevY = y1;
 
 
 	}
