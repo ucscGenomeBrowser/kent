@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTables
 
-O = $A.o schema.o
+O = $A.o ranges.o schema.o
 
 include ../../inc/cgi_build_rules.mk
 

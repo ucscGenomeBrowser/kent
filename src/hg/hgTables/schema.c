@@ -18,7 +18,7 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.5 2004/07/14 06:27:37 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.6 2004/07/14 06:33:26 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -46,9 +46,8 @@ if (asObj!= NULL)
 return asCol;
 }
 
-void describeTable(char *db, char *table, 
-	struct asObject *asObj, struct sqlConnection *conn,
-	boolean histButtons)
+void describeFields(char *db, char *table, 
+	struct asObject *asObj, struct sqlConnection *conn)
 /* Print out an HTML table showing table fields and types, and optionally 
  * offering histograms for the text/enum fields. */
 {
@@ -68,8 +67,7 @@ puts("<!--outer table is for border purposes-->" "\n"
      "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
 hPrintf("<TR> <TH>field</TH> <TH>SQL type</TH> ");
-histButtons = (histButtons && ! tooBig);
-if (histButtons)
+if (!tooBig)
     hPrintf("<TH>info</TH> ");
 if (asObj != NULL)
     hPrintf("<TH>description</TH> ");
@@ -77,7 +75,7 @@ puts("</TR>\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<TR> <TD><TT>%s</TT></TD> <TD><TT>%s</TT></TD>", row[0], row[1]);
-    if (histButtons)
+    if (!tooBig)
 	{
 	hPrintf(" <TD>");
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
@@ -162,15 +160,12 @@ static void showSchema(char *db, char *table)
 struct sqlConnection *conn = sqlConnect(db);
 struct joiner *joiner = joinerRead("all.joiner");
 struct joinerPair *jpList, *jp;
-struct asObject *asObj = NULL;
+struct asObject *asObj = asForTable(conn, table);
 char *splitTable = chromTable(conn, table);
 
 hPrintf("<B>Database:</B> %s ", db);
 hPrintf("<B>Primary Table:</B> %s<BR>", table);
-
-
-asObj = asForTable(conn, table);
-describeTable(db, splitTable, asObj, conn, TRUE);
+describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
 if (jpList != NULL)
@@ -210,78 +205,4 @@ htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
 showSchema(database, table);
 htmlClose();
 }
-
-static void printValueHistogram(char *db, char *table, char *field)
-/* Print very simple-minded text histogram. */
-{
-double maxHist = 60;
-double scale = -1.0;
-boolean firstTime = TRUE;
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-safef(query, sizeof(query),
-   "select %s, count(*) as count from %s group by %s order by count desc",
-   field, table, field);
-sr = sqlGetResult(conn, query);
-hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *name = row[0];
-    int count = atoi(row[1]);
-    if (scale < 0)
-	scale = (maxHist)/count;
-    hPrintf("<TR><TD>%s</TD><TD>", name);
-    starOut(stdout, scale*count);
-    hPrintf("</TD></TR>\n");
-    }
-hPrintf("</TABLE>");
-sqlDisconnect(&conn);
-}
-
-void doValueHistogram(char *field)
-/* Put up value histogram. */
-{
-char *db = cartString(cart, hgtaDatabase);
-char *table = cartString(cart, hgtaTable);
-htmlOpen("Value histogram for %s.%s.%s", db, table, field);
-printValueHistogram(db, table, field);
-htmlClose();
-}
-
-static void printValueRange(char *db, char *table, char *field)
-/* Print min/max/mean. */
-{
-double maxHist = 60;
-double scale = -1.0;
-boolean firstTime = TRUE;
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-safef(query, sizeof(query),
-   "select min(%s), max(%s), avg(%s) from %s", field, field, field, table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hPrintf("<B>min:</B> %s <B>max:</B> %s <B>average:</B> %s\n",
-    	row[0], row[1], row[2]);
-    }
-sqlDisconnect(&conn);
-}
-
-
-void doValueRange(char *field)
-/* Put up value histogram. */
-{
-char *db = cartString(cart, hgtaDatabase);
-char *table = cartString(cart, hgtaTable);
-htmlOpen("Value range for %s.%s.%s", db, table, field);
-printValueRange(db, table, field);
-htmlClose();
-}
-
 
