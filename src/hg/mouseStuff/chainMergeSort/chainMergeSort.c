@@ -6,6 +6,8 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
+boolean saveId = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -15,7 +17,7 @@ errAbort(
   "   chainMergeSort file(s)\n"
   "Output goes to standard output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -saveId - keep the existing chain ids.\n"
   );
 }
 
@@ -60,7 +62,8 @@ while (!dlEmpty(list))
 	    }
 	}
     cf = bestNode->val;
-    cf->chain->id = ++id;		/* We reset id's here. */
+    if (!saveId)
+	cf->chain->id = ++id;		/* We reset id's here. */
     chainWrite(cf->chain, stdout);
     chainFree(&cf->chain);
     if ((cf->chain = chainRead(cf->lf)) == NULL)
@@ -74,6 +77,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
+saveId = optionExists("saveId");
 chainMergeSort(argc-1, argv+1);
 return 0;
 }
