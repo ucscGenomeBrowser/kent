@@ -623,15 +623,16 @@ LOAD SNPS (todo)
 	hgLoadBed hg10 snpTsc snpTsc.bed
 	hgLoadBed hg10 snpNih snpNih.bed
 
-LOAD CPGISSLANDS (todo)
+LOAD CPGISLANDS (done)
      - login to hgwdev
      - cd /cluster/store1/gs.11/build28/bed
      - mkdir cpgIsland
      - cd cpgIsland
      - hg10 < ~kent/src/hg/lib/cpgIsland.sql
-     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/cpg_aug.oo33.tar
+     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_dec2001.tar.gz
      - tar -xf cpg*.tar
-     - awk -f filter.awk */ctg*/*.cpg > contig.bed
+     - copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland
+     - awk -f filter.awk */*/NT_*/*.cpg > contig.bed
      - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
      - Enter database with "hg10" command.
      - At mysql> prompt type in:
