@@ -662,6 +662,8 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
   far.  For backwards compatibility if it's an issue we can make
   xeno a synonym for medium.
 
+  - allow multiple categories end up in a single track 
+
 - riken CDS is getting lost.
 
 - looks like xenoRef* doesnt get delete with -deleteList.  
@@ -706,10 +708,4 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 - for scafold-based genomes (ci1), the tName index is not big enough.
   - maybe put some sanity checks of indices when loading
 
-- hg17 dbload reports maybe warnings like:
-    Warning: NM_001001484: malformed RefSeq CDS: 
-
-        var/dbload/hgwdev/logs/2004.06.07-10:49:39.dbload.log
-
-   - looks likke it's an NCBI bug, donwload file is missing CDS, but 
-     online has it.
+- would be nice to check for stop file in script rather than after starting load
