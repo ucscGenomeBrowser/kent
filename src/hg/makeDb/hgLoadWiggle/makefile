@@ -26,9 +26,16 @@ hgWiggle:	hgWiggle.o ${MYLIBS}
 
 hgWiggle.o:	../../inc/wiggle.h hgWiggle.c
 
-compile:	${O} hgWiggle.o ${MYLIBS}
+wigEncode:	wigEncode.o ${MYLIBS}
+	${CC} -o ${HOME}/bin/${MACHTYPE}/wigEncode wigEncode.o ${MYLIBS} $L
+	${STRIP} ${HOME}/bin/${MACHTYPE}/wigEncode${EXE}
+
+wigEncode.o:	../../inc/wiggle.h wigEncode.c
+
+compile:	${O} hgWiggle.o wigEncode.o ${MYLIBS}
 	${CC} -o ${A} $O ${MYLIBS} $L
 	${CC} -o hgWiggle hgWiggle.o ${MYLIBS} $L
+	${CC} -o wigEncode wigEncode.o ${MYLIBS} $L
 
 test:
 	cd tests && ./RunTest.sh
@@ -46,4 +53,4 @@ clean:
 	test_data/chr1_begin.ascii test_data/chr1_end.ascii \
 	test_data/chr1_middle.ascii test_data/chrM.ascii test_data/chrM.wib \
 	test_data/chrM.wig test_data/wiggle.tab \
-	${O} hgDumpWiggle.o hgWiggle.o hgWiggle ${A}
+	${O} hgDumpWiggle.o hgWiggle.o hgWiggle wigEncode.o wigEncode ${A}
