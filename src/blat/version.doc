@@ -5,6 +5,8 @@
        rather than the chromosome nib/2bit file name and subsequence.
      o Adding -stepSize to gfServer and blat, so that can have
        tiles overlap.
+     o Adding PCR handling to gfServer.  (Still need a separate
+       pcr client.)
 
 28:
      o Blat, gfClient, and gfServer now work with .2bit files.
