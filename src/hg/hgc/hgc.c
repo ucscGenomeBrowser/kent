@@ -121,7 +121,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.534 2003/12/12 16:51:51 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.535 2003/12/12 21:59:57 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7053,9 +7053,9 @@ printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
             "hgg_start", pg->gStart,
             "hgg_end", pg->gEnd);
 printf(">%s</A>  ",pg->gene);
-char *description;
 if (hTableExists("knownGene"))
     {
+    char *description;
     safef(query, sizeof(query), 
             "select proteinId from knownGene where name = '%s'", pg->gene);
     description = sqlQuickString(conn, query);
@@ -7076,7 +7076,7 @@ if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        description = row[0];
+        char *description = row[0];
         if (description == NULL)
             description = cloneString("n/a");
         printf("<B>Pfam Domain:</B> %s <p>", description);
@@ -7161,6 +7161,7 @@ int winEnd = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl = NULL;
 char *tbl = cgiUsualString("table", cgiString("g"));
+struct dyString *query = newDyString(1024);
 
 /* Get alignment info. */
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
@@ -7191,8 +7192,6 @@ cartWebStart(cart, acc);
 
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
-
-struct dyString *query = newDyString(1024);
 
 dyStringPrintf(query, "select * from pseudoGeneLink where ");
 hAddBinToQuery(start, start+10, query);
