@@ -450,7 +450,7 @@ hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 printf("<PRE><TT>\n");
-printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
+printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+hasBin);
@@ -1288,6 +1288,31 @@ printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
 }
+
+void doRikenRna(struct trackDb *tdb, char *item)
+/* Put up Riken RNA stuff. */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = sqlConnect("mgsc");
+
+genericHeader(tdb, item);
+sprintf(query, "select * from rikenMrna where qName = '%s'", item);
+sr = sqlGetResult(conn, query);
+printf("<PRE><TT>\n");
+printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct psl *psl = pslLoad(row+1);
+    pslTabOut(psl, stdout);
+    }
+printf("</PRE></TT>\n");
+sqlDisconnect(&conn);
+
+printTrackHtml(tdb);
+}
+
 
 void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
 /* Parse space separated 'ss' item. */
@@ -2373,7 +2398,7 @@ char **row;
 struct bed *hit = NULL;
 struct dnaMotif *motif;
 
-cartWebStart("Regulatory Triangle Info");
+cartWebStart("Regulatory Motif Info");
 genericBedClick(conn, tdb, item, start, 6);
 
 webNewSection("Motif:");
@@ -6472,6 +6497,10 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
+else if (sameWord(track, "rikenMrna"))
+    {
+    doRikenRna(tdb, item);
+    }
 #ifdef ROGIC_CODE
 else if (sameWord(track, "estPair"))
     {
@@ -6733,7 +6762,7 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
-else if (sameWord(track, "triangle"))
+else if (sameWord(track, "triangle") || sameWord(track, "transfacHit"))
     {
     doTriangle(tdb, item);
     }

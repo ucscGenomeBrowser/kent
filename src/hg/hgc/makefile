@@ -12,6 +12,9 @@ O = $A.o
 my: compile
 	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
 
+mgsc: compile
+	mv $A /usr/local/apache/cgi-bin-mgsc/$A
+
 alpha: compile
 	mv $A /usr/local/apache/cgi-bin/$A
 
