@@ -2,7 +2,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/lodToBedScore instead.
 
-# $Id: lodToBedScore,v 1.2 2004/10/11 00:07:59 acs Exp $
+# $Id: lodToBedScore,v 1.3 2004/10/11 00:16:57 acs Exp $
 
 use strict;
 
@@ -70,8 +70,13 @@ my $a = (1000 - $b) / log($max);
 # Do the transform on the score column of saved input:
 foreach my $wRef (@lines) {
   my @words = @{$wRef};
-  if ($words[4] <= 0) { $words[4] = 0; }
-  else { $words[4] = int(($a * log($words[4])) + $b); }
+  if ($words[4] > 0) { 
+    $words[4] = int(($a * log($words[4])) + $b); 
+  }
+  if ($words[4] < 0) $words[4] = 0; # applies either if $words[4] was
+                                    # originally negative or if it is
+                                    # made negative by the
+                                    # transformation
   print join("\t", @words) . "\n";
 }
 
