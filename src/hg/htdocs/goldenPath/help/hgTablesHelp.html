@@ -361,7 +361,7 @@
 		  <UL>
 		  <LI>
 		  To restrict the data to a specific position
-		  range, type the position into the <TT><B>range</B></TT> box. Some
+		  range, type the position into the <TT><B>position</B></TT> box. Some
 		  examples of specific positions include a chromosome name 
 		  (<em>chrX</em>), a coordinate range within a chromosome
 		  (<em>chrX:100000-400000</em>), or a scaffold name.
@@ -369,13 +369,18 @@
 		  To view data only in those regions covered by the ENCODE 
 		  project, click the button preceding the <TT><B>ENCODE</B></TT> option.
 		  <LI>
+		  To look up the position range of a genomic element -- such
+		  as a gene name, an accession ID, an STS marker, etc. -- or 
+		  keywords from the GenBank description of an mRNA,
+		  type the string into the <TT><B>position</B></TT> box, then 
+		  click the <TT><B>Lookup</B></TT> button.
+		  <LI>
 		  The data in non-positional tables are not tied to genomic
 		  coordinates; therefore, the <TT><B>region</B></TT> option is
 		  unavailable when a non-positional table is selected. A basic 
 		  query on a non-positional table will show all the data in the 
 		  table.
 		  </UL>
-	          <!--FIXME - add LookUp button -->
 		<P>
 		<B>Step 5. Display the output</B><BR>
 		Click the <TT><B>Get Output</B></TT> button to display the 
@@ -401,8 +406,9 @@
 		Select the <em>RefSeq Genes</em> option in the
 		<TT><B>track</B></TT> list.
 		<LI>
-		Type <em>chr7:26906938-26940301</em> in the range box (the Table 
-		Browser will automatically select the range option button).
+		Type <em>chr7:26906938-26940301</em> in the 
+		<TT><B>position</B></TT> box (the Table Browser will 
+		automatically select the <TT><B>position</B></TT> option button).
 		<LI>
 		Click the <TT><B>Get Output</B></TT> button.
 		</OL>
@@ -758,7 +764,8 @@
 	      <P>
 	      <B>Step 5. (optional) Select the complement options</B><BR>
 	      Check the box in front of one or both tables to complement the
-	      feature data in the The complement options allow you to invert the set of positions
+	      feature data in the The complement options allow you to invert the 
+	      set of positions
 	      covered by one or both tables. For example, if you choose to 
 	      complement the primary track, any position covered by the that
 	      track's features will be considered <em>not</em> covered, and vice 
@@ -1048,24 +1055,26 @@
 	      To display the query results as text on the screen, click the 
 	      <TT><B>Get Custom Track File</B></TT> button. 
 	      <LI>
-	      To view the query results as a custom track in the Genome 
-	      Browser, click the <TT><B>Get Custom Track</B></TT> button. Your 
-	      browser display will be redirected automatically to the Genome 
-	      Browser, with your custom track positioned near the top of the 
-	      annotation tracks window. 
-	      <LI>
 	      To save the query results to a file on your local disk for future 
 	      use, specify a file name in the <TT><B>output file</B></TT> box
 	      before executing the query, then click the <TT><B>Get Custom Track 
 	      File</B></TT> button. 
 	      <LI>
+	      To load the query results into a table accessible from the 
+	      Table Browser <TT><B>table</B></TT> list, click the 
+	      <TT><B>Get Custom Track in Table Browser</B></TT> button. 
+	      <LI>
+	      To view the query results as a custom track in the Genome 
+	      Browser, click the <TT><B>Get Custom Track in Genome 
+	      Browser</B></TT> button. Your 
+	      browser display will be redirected automatically to the Genome 
+	      Browser, with your custom track positioned near the top of the 
+	      annotation tracks window. 
+	      <LI>
 	      To access your custom track data in a subsequent query in the same
 	      Table Browser session, select the <em>Custom Tracks</em> option
 	      from the <TT><B>group</B></TT> list to display the custom tracks
-	      available. <B>Note: </B>In the current implementation of the Table
-	      Browser, custom track data is not accessible from the 
-	      <TT><B>group</B></TT> list when the <TT><B>Get Custom Track 
-	      File</B></TT> option is used.
+	      available. 
 	      </UL>
 	      <P>
 
@@ -1102,7 +1111,7 @@
 
 <!------Table Schema------------------------>
 <!--FIXME - ADD
-<A NAME="OutputFormats"></A>
+<A NAME="TableSchema"></A>
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
       <TR><TD>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
