@@ -2401,7 +2401,7 @@ cd /var/tmp
 mkdir hg13-dump
 chmod 777 hg13-dump      # (since you aren't root this is quickest)
 cd hg13-dump
-mysqldump --user=root --password=mysql4cc --all --tab=. hg13
+mysqldump --user=hguser --password=hguserstuff --all --tab=. hg11
 
 Then, that directory will quickly fill with .sql and .txt files
 When it is done do:
