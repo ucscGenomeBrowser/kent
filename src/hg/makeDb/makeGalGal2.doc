@@ -3139,3 +3139,142 @@ chainSome $(path1)
     rm -f ggg.jpg redfowl_image.jpg
     cp -p Gallus_gallus.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
+
+# MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/galGal2/blastDb
+    cd /cluster/data/galGal2/blastDb
+    for i in `cat ../chrom.lst`; do ls -1 ../$i/*/*.fa  ; done > list
+    for i in `cat list`
+    do
+	ln -s $i .
+	formatdb -i `basename $i` -p F
+    done
+    rm *.log *.fa list
+    # cd ..
+    # for i in `cat chrom.lst`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/galGal2/blastDb
+    cd /cluster/data/galGal2/blastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/galGal2/blastDb     ; echo $i; done
+
+    cd
+    iSync > sync.out
+
+    mkdir -p /cluster/data/galGal2/bed/tblastn.hg17KG
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG
+    echo  /iscratch/i/galGal2/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
+    # back to kksilo
+    exit
+
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG
+    mkdir -p /cluster/bluearc/galGal2/bed/tblastn.hg17KG/kgfa
+    split -l 65 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/galGal2/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/galGal2/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/galGal2/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/galGal2/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/liftAll.lft carry $f.2       
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.3       
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 $f.3
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 168091 of 168091 jobs
+# CPU time in finished jobs:   42705613s  711760.22m 11862.67h  494.28d  1.354 y
+# IO & Wait Time:               2300980s   38349.66m   639.16h   26.63d  0.073 y
+# Average job time:                 268s       4.46m     0.07h    0.00d
+# Longest job:                    56699s     944.98m    15.75h    0.66d
+# Submission to last job:        171648s    2860.80m    47.68h    1.99d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=200000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 649 of 649 jobs
+# CPU time in finished jobs:     243653s    4060.88m    67.68h    2.82d  0.008 y
+# IO & Wait Time:                 50013s     833.55m    13.89h    0.58d  0.002 y
+# Average job time:                 452s       7.54m     0.13h    0.01d
+# Longest job:                     3831s      63.85m     1.06h    0.04d
+# Submission to last job:         24525s     408.75m     6.81h    0.28d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > cs60.$i.psl
+	sort -rn cs60.$i.psl | pslUniq stdin us.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" cs60.$i.psl > ms60.$i.psl
+	echo $i
+    done
+
+    cat us.*.psl ms60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/galGal2/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/tblastn.hg17KG
+    hgLoadPsl galGal2 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn
+
