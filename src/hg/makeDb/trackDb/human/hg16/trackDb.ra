@@ -1388,6 +1388,16 @@ priority 158
 visibility hide
 type psl xeno
 
+track unAnnotated
+shortLabel unAnnotated
+longLabel Regions not annotated as genes/mRNAs/ESTs/CpG/repeats/gaps
+group x
+priority 161
+visibility hide
+color 20,0,50
+type bed 4
+
+
 
 searchTable HInvGeneMrna
 searchMethod exact
