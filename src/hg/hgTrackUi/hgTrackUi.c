@@ -335,7 +335,7 @@ else if (sameString(track, "blastzMm2Ref"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHgRef"))
     colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "recipBest"))
+else if (sameString(track, "blastzRecipBest"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHg"))
     colorCrossSpeciesUi(tdb, FALSE);
