@@ -94,8 +94,13 @@ format description of their fields.</P>
   - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
     of Feb. 2003 mouse (mm3) vs. human.  (Dec 2001 and later)
   <LI><A 
-  href="#PslInfo">chrN_blastzTightMouse</A> 
+  href="#PslInfo">chrN_blastzTightMm3</A> 
   - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
+    of mouse (mm3) vs. human, filtered to retain only the best match for a given 
+    region of the human genome, and further filtered to high-scoring matches.
+  <LI><A 
+  href="#PslInfo">chrN_blastzTightMouse</A> 
+  - Blastz alignments 
     of mouse vs. human, filtered to retain only the best match for a given 
     region of the human genome, and further filtered to high-scoring matches.
     (June 2002)
@@ -195,6 +200,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PslInfo">blatChimp</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
   <LI><A 
+  href="#ChainLink">chainLink</A> 
+  - Alignment block in chain </LI>
+  <LI><A 
   href="#PslInfo">chimpBac</A> 
   - Blat alignments of Pan troglodytes BACs against the draft human genome
   <LI><A 
@@ -293,6 +301,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#LFS">genscanSubopt</A> 
   - Genscan byproducts: good individual exons out of frame with main predictions (Last used Apr. 2001) </LI>
   <LI><A 
+  href="#BED">haplotype</A> 
+  - Common Haplotype Blocks - U. of Oxford and Sanger Institute (chr22 only) </LI>
+  <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
   <LI><A 
@@ -332,9 +343,15 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#MGIid">MGI ID</A> 
   - Links MGI ID to Locus Link ID (Mouse)
   <LI><A 
+  href="#Chain">mouseChain</A> 
+  - Summary info about chain of mouse alignments </LI>
+  <LI><A 
   href="#ChromInfo">mouseChrom</A> 
   - Describes name and size of each mouse chromosome as well as an external file 
   containing the chromosome 
+  <LI><A 
+  href="#NetAlign">mouseNet</A> 
+  - Database representation of a net of alignments with mouse </LI>
   <LI><A 
   href="#MouseSyn">mouseSyn</A> 
   - Synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
@@ -348,11 +365,14 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#MrnaRefSeq">mrnaRefseq</A> 
   - Associates mRNA IDs with RefSeq IDs
   <LI><A 
+  href="#MultizAlign">multizMm3Rn2</A> 
+  - <em>Multiz</em> multiple alignments between mouse (mm3) and rat (rn2) </LI>
+  <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
   <LI><A 
   href="#BED">perlegen</A> 
-  - Perlegen Common High-Resolution Haplotype Blocks </LI>
+  - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
   <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
@@ -676,12 +696,13 @@ This section describes the format of each table field by field in
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
-- nci60 uses the first 15 fields of this table. <BR>
-- perlegen uses the first 12 fields of this table. <BR>
-- rosetta uses the first 15 fields of this table. <BR>
-- slamNonCoding* use the first 5 fields of this table. <BR>
-- superfamily uses the first 4 fields of this table. <BR>
-- uniGene_2 uses the first 12 fields of this table. <BR>
+- haplotype - first 12 fields <BR>
+- nci60 - first 15 fields <BR>
+- perlegen - first 12 fields <BR>
+- rosetta - first 15 fields <BR>
+- slamNonCoding* - first 5 fields <BR>
+- superfamily - first 4 fields  <BR>
+- uniGene_2 - first 12 fields <BR>
 <PRE>table bed
 "Browser extensible data"
     (
@@ -704,19 +725,34 @@ The following definition is used for several tables as follows:<BR>
 </PRE>
 
 
-<H4><A name=Certificate></A>Non-standard Join Certificates</H4>
-<PRE>table certificate
-"Non-standard Join Certificates"
+
+<H4><A name=Chain></A>Chain Alignments</H4>
+<PRE>table chain
+"Summary info about a chain of alignments"
    (
-   string accession1; 	"First accession number"
-   string accession2; 	"Second accession number"
-   string spanner; 	"Spanner"
-   string evaluation; 	"Evaluation"
-   string variation; 	"Variation"
-   string varEvidence; 	"Variation evidence"
-   string contact; 	"Contact info"
-   string remark; 	"Remarks"
-   string comment; 	"Comments"
+   double score; 	"Score of chain"
+   string tName; 	"Target sequence name"
+   uint tSize; 		"Target sequence size"
+   uint tStart; 	"Alignment start position in target"
+   uint tEnd; 		"Alignment end position in target"
+   string qName; 	"Query sequence name"
+   uint qSize; 		"Query sequence size"
+   char qStrand; 	"Query strand"
+   uint qStart; 	"Alignment start position in query"
+   uint qEnd; 		"Alignment end position in query"
+   uint id; 		"Chain ID"
+   }
+</PRE>
+
+<H4><A name=ChainLink></A>Chain Link</H4>
+<PRE>table chainLink
+"Alignment block in chain"
+   (
+   string tName; 	"Target sequence name"
+   uint tStart; 	"Alignment start position in target"
+   uint tEnd; 		"Alignment end position in target"
+   uint qStart; 	"Start in query"
+   uint chainId; 	"Chain ID in chain table"
    )
 </PRE>
 
@@ -1294,7 +1330,7 @@ xenoMrna tables.<BR><BR>
 <PRE>table psl  
 "Summary info about a patSpace alignment" 
     ( 
-    ushort  bin;          	  "A field to speed indexing added to many
+    ushort  bin;          	  "A field to speed indexing" 
     uint    matches;      	  "Number of bases that match that aren't repeats"
     uint    misMatches;   	  "Number of bases that don't match"  
     uint    repMatches;   	  "Number of bases that match but are part of repeats" 
@@ -1347,6 +1383,72 @@ from one to the other:
 <PRE>
      qStart = qSize - revQEnd
      qEnd = qSize - revQStart
+</PRE>
+
+<H4><A name=MultizAlign></A>Multiz Alignments</H4>
+The following definition is used for the multizMm3Rn2 table.<BR><BR>
+<PRE>
+"Multiz alignments" 
+   {
+   int bin;          "Field used to speed indexing"  
+   string chrom;     "Target chromosome"
+   int chromStart;   "Start on target"
+   int chromEnd;     "End on target"
+   int extFile;	     "ID of file in extFile table"
+   int offset;       "Offset in file"
+   float score;      "Value between 0.0 and 1.0 that loosely reflects % identity ratio. 
+                      Derived from multiz score by dividing it by the number of pairwise 
+                      comparisons in the multiple alignment and by the number of bases 
+                      in the alignment."
+   }
+</PRE>
+
+<H4><A name=NetAlign></A>Net Alignments</H4>
+<PRE>table netAlign
+"Database representation of a net of alignments"
+   (
+   uint level;       "Level of alignment"
+   string tName;     "Target chromosome"
+   uint tStart;      "Start on target"
+   uint tEnd;        "End on target"
+   char[1] strand;   "Orientation of query (+ or -)"
+   string qName;     "Query chromosome"
+   uint qStart;      "Start on query"
+   uint qEnd;        "End on query"
+   uint chainId;     "Associated chain ID with alignment details"
+   uint ali;         "Bases in gap-free alignments"
+   double score;     "Score - a number proportional to 100x matching bases"
+   int qOver;        "Overlap with parent gap on query side (-1 for undefined)"
+   int qFar;         "Distance from parent gap on query side ( -1 for undefined)"
+   int qDup;         "Bases with two or more copies in query ( -1 for undefined)"
+   string type;      "Syntenic type: gap/top/syn/nonsyn/inv"
+   int tN;           "Unsequenced bases on target (-1 for undefined)"
+   int qN;           "Unsequenced bases on query (-1 for undefined)"
+   int tR;           "RepeatMasker bases on target (-1 for undefined)"
+   int qR;           "RepeatMasker bases on query (-1 for undefined)"
+   int tNewR;        "Lineage specific repeats on target (-1 for undefined)"
+   int qNewR;        "Lineage specific repeats on query (-1 for undefined)"
+   int tOldR;        "Bases of ancient repeats on target (-1 for undefined)"
+   int qOldR;        "Bases of ancient repeats on query (-1 for undefined)"
+   int tTrf;         "Bases of tandam repeats on target (-1 for undefined)"
+   int qTrf;         "Bases of tandam repeats on query (-1 for undefined)"
+   )
+</PRE>
+
+<H4><A name=Certificate></A>Non-standard Join Certificates</H4>
+<PRE>table certificate
+"Non-standard Join Certificates"
+   (
+   string accession1; 	"First accession number"
+   string accession2; 	"Second accession number"
+   string spanner; 	"Spanner"
+   string evaluation; 	"Evaluation"
+   string variation; 	"Variation"
+   string varEvidence; 	"Variation evidence"
+   string contact; 	"Contact info"
+   string remark; 	"Remarks"
+   string comment; 	"Comments"
+   )
 </PRE>
 
 <H4><A name="OrientInfo"></A>Orientation Info</H4>
