@@ -100,14 +100,6 @@ spectrum on
 type chain hg16
 otherDb hg16
 
-track repeats
-shortLabel Repeats
-longLabel Repeats from JGI
-group varRep
-priority 149.1
-visibility dense
-type bed 3
-
 searchTable blastHg16KG
 searchType bed
 searchMethod fuzzy
