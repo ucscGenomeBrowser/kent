@@ -14,7 +14,8 @@
 
 enum pfTokType
     {
-    pftWhitespace = 256,
+    pftEnd = 256,
+    pftWhitespace,
     pftComment,
     pftName,
     pftString,
@@ -28,8 +29,6 @@ enum pfTokType
     pftMulEquals,
     pftModEquals,
     pftEqualsEquals,
-    pftEof,
-    ptfEnd,
     };
 
 struct pfSource

@@ -156,6 +156,14 @@ struct pfScope
      struct hash *vars;		/* Variables defined in this scope (including functions) */
      };
 
+struct pfVar
+/* A variable at a certain scope; */
+     {
+     char *name;			/* Name (not allocated here) */
+     struct pfScope *scope;		/* Scope we're declared in. */
+     struct pfCollectedType *type;	/* Variable type. */
+     };
+
 struct pfScope *pfScopeNew(struct pfScope *parent, int size)
 /* Create new scope with given parent.  Size is just a hint
  * of what to make the size of the symbol table as a power of
@@ -177,26 +185,37 @@ scope->parent = parent;
 return scope;
 }
 
-static void pfScopeAddType(struct pfScope *scope, char *name, struct pfType *type)
+static void pfScopeAddType(struct pfScope *scope, char *name, boolean isCollection,
+	struct pfBaseType *parentType)
 /* Add type to scope. */
 {
-hashAdd(scope->types, name, type);
+struct pfBaseType *type;
+AllocVar(type);
+type->scope = scope;
+type->parentType = parentType;
+type->isCollection = isCollection;
+hashAddSaveName(scope->types, name, type, &type->name);
 }
 
-static void pfScopeAddVar(struct pfScope *scope, char *name, struct pfType *type)
+static struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollectedType *ct)
 /* Add type to scope. */
 {
-hashAdd(scope->vars, name, type);
+struct pfVar *var;
+AllocVar(var);
+var->scope = scope;
+var->type = ct;
+hashAddSaveName(scope->vars, name, var, &var->name);
+return var;
 }
 
-struct hashEl *pfScopeFindType(struct pfScope *scope, char *name)
+struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name)
 /* Find type associated with name in scope and it's parents. */
 {
 while (scope != NULL)
     {
-    struct hashEl *hel = hashLookup(scope->types, name);
-    if (hel != NULL)
-        return hel;
+    struct pfBaseType *baseType = hashFindVal(scope->types, name);
+    if (baseType != NULL)
+        return baseType;
     scope = scope->parent;
     }
 return NULL;
@@ -218,7 +237,22 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f)
 {
 struct pfParse *child;
 spaceOut(f, level*3);
-fprintf(f, "%s\n", pfParseTypeAsString(pp->type));
+fprintf(f, "%s", pfParseTypeAsString(pp->type));
+if (pp->var != NULL)
+    {
+    struct pfVar *var = pp->var;
+    struct pfCollectedType *ct = var->type;
+    while (ct != NULL)
+        {
+	if (ct->base != NULL)
+	    fprintf(f, " %s", ct->base->name);
+	if (ct->next != NULL)
+	    fprintf(f, " of");
+	ct = ct->next;
+	}
+    fprintf(f, " %s", var->name);
+    }
+fprintf(f, "\n");
 for (child = pp->children; child != NULL; child = child->next)
     pfParseDump(child, level+1, f);
 }
@@ -351,27 +385,61 @@ slAddHead(&parent->children, pp);
 }
 
 static void varDeclareOne(struct pfParse *parent,
-	struct pfType *type, struct pfToken **pTokList, struct pfScope *scope)
+	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
 if (tok->type != pftName)
     errAbort("Expecting variable name line %d of %s", tok->startLine, tok->source->name);
-pfScopeAddVar(scope, tok->val.s, type);
+pp->var = pfScopeAddVar(scope, tok->val.s, type);
 slAddHead(&parent->children, pp);
 *pTokList = tok->next;
 }
 
-static void parseVarDeclaration(struct pfParse *parent, char *typeName,
-	struct pfType *type, struct pfToken **pTokList, struct pfScope *scope)
+static struct pfCollectedType *
+parseType(struct pfBaseType *baseType, struct pfToken **pTokList, struct pfScope *scope)
+/* Deal with tree of list of array of baseType */
+{
+struct pfToken *tok = *pTokList;
+struct pfCollectedType *ctList = NULL, *ct;
+
+for (;;)
+    {
+    AllocVar(ct);
+    slAddHead(&ctList, ct);
+    ct->base = baseType;
+    tok = tok->next;
+    if (tok == NULL)
+	break;
+    if (tok->type == pftName && sameString(tok->val.s, "of"))
+	{
+	if (!baseType->isCollection)
+	    errAbort("%s is not a collection line %d of %s",
+		baseType->name, tok->startLine, tok->source->name);
+	tok = tok->next;
+	}
+    else
+        break;
+    if (tok->type != pftName || ((baseType = pfScopeFindType(scope, tok->val.s)) == NULL))
+        errAbort("Expecting type, got %s line %d of %s",
+		tok->val.s, tok->startLine, tok->source->name);
+    }
+*pTokList = tok;
+slReverse(&ctList);
+return ctList;
+}
+
+
+static void parseVarDeclaration(struct pfParse *parent, 
+	struct pfBaseType *baseType, struct pfToken **pTokList, struct pfScope *scope)
 /* Parse variable declaration - something of form:
  *    typeName varName,varName, ... varName */
 {
+struct pfCollectedType *ct = parseType(baseType, pTokList, scope);
 struct pfToken *tok = *pTokList;
-tok = tok->next;	/* Skip over type. */
 for (;;)
     {
-    varDeclareOne(parent, type, &tok, scope);
+    varDeclareOne(parent, ct, &tok, scope);
     if (tok == NULL)
         break;
     if (tok->type != ',')
@@ -380,6 +448,7 @@ for (;;)
     }
 *pTokList = tok;
 }
+
 
 void pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -395,16 +464,15 @@ else if (tok->type == ';')
 else if (tok->type == pftName)
     {
     char *s = tok->val.s;
-    struct hashEl *typeHel = pfScopeFindType(scope, s);
-    if (typeHel != NULL)
-	{
-	struct pfType *type = typeHel->val;
-        parseVarDeclaration(parent, typeHel->name, type, pTokList, scope);
-	}
-    else if (sameString(s, "foreach"))
+    struct pfBaseType *baseType = pfScopeFindType(scope, s);
+    if (sameString(s, "foreach"))
         parseForeach(parent, pTokList, scope);
     else if (sameString(s, "class"))
         parseClass(parent, pTokList, scope);
+    else if (baseType != NULL)
+	{
+        parseVarDeclaration(parent, baseType, pTokList, scope);
+	}
 #ifdef SOON
     else if (sameString(s, "to"))
         parseTo(parent, pTokList, scope);
@@ -436,7 +504,7 @@ struct pfParse *pfParseProgram(struct pfToken *tokList, struct pfScope *scope)
 struct pfToken *tok = tokList;
 struct pfParse *program = pfParseNew(pptProgram, tokList, NULL);
 
-while (tok != NULL)
+while (tok->type != pftEnd)
     {
     pfParseStatement(program, &tok, scope);
     }
@@ -450,6 +518,7 @@ void paraFlowOnFile(char *fileName, struct pfScope *scope)
 struct pfTokenizer *pfTkz = pfTokenizerNew(fileName);
 struct pfToken *tokList = NULL, *tok;
 struct pfParse *program;
+int endCount = 3;
 
 scope = pfScopeNew(scope, 12);
 while ((tok = pfTokenizerNext(pfTkz)) != NULL)
@@ -459,7 +528,17 @@ while ((tok = pfTokenizerNext(pfTkz)) != NULL)
 	slAddHead(&tokList, tok);
 	}
     }
+
+/* Add enough ends to satisfy all look-aheads */
+while (--endCount >= 0)
+    {
+    AllocVar(tok);
+    tok->type = pftEnd;
+    slAddHead(&tokList, tok);
+    }
+
 slReverse(&tokList);
+
 program = pfParseProgram(tokList, scope);
 pfParseDump(program, 0, stdout);
 }
@@ -467,11 +546,13 @@ pfParseDump(program, 0, stdout);
 static void addBuiltInTypes(struct pfScope *scope)
 /* Add built in types . */
 {
-static char *t[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
+static char *basic[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
+static char *collections[] = { "array", "list", "tree", "dir" };
 int i;
-for (i=0; i<ArraySize(t); ++i)
-    pfScopeAddType(scope, t[i], NULL);
-
+for (i=0; i<ArraySize(basic); ++i)
+    pfScopeAddType(scope, basic[i], FALSE, NULL);
+for (i=0; i<ArraySize(collections); ++i)
+    pfScopeAddType(scope, collections[i], TRUE, NULL);
 }
 
 int main(int argc, char *argv[])

@@ -81,4 +81,8 @@ baseType: 'var' | 'string' | 'bit' | 'byte' | 'short' | 'int' | 'long'
 
 composition: 'array' : 'list' : 'tree' : 'dir'
 
-composedTypes: baseType
+composedType: baseType
+	| composition 'of' composedType
+
+typedef: 'typedef' composedType 
+
