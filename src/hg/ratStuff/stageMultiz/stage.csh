@@ -17,21 +17,21 @@
     exit
 
 #Set the human rat and mouse genome directories
-     set h = /cluster/store4/gs.14/build31
-     set m = /cluster/store2/mm.2002.02/mm2
-     set r = /cluster/store4/rn1
+     set h = /cluster/store5/gs.16/build33
+     set m = /cluster/store2/mm.2003.02/mm3
+     set r = /cluster/store4/rn2
 
 #Set short symbolic names for the various genomes
-     set hg = hg13
-     set mm = mm2
-     set rn = rn1
+     set hg = hg15
+     set mm = mm3
+     set rn = rn2
 
 #Set the pairwise alignment directories
-     set hm = $h/bed/blastz.mm2.2002-12-5-ASH/axtBest
-     set mr = $m/bed/blastz.rn1.2003-01-09-ASH/axtBest
+     set hm = $h/bed/blastz.mm3.2003-04-12-03-MS/axtNet
+     set mr = $m/bed/blastz.rn2.2003-03-07-ASH/axtNet
 
 #Set the output directory
-     set hmr = /cluster/store2/multiz.hmr.1
+     set hmr = /cluster/store5/multiz.hmr.3
      mkdir $hmr
 
 #Create indexes for the mouse/rat axtBest files as so:
