@@ -366,6 +366,23 @@ if ((mach = findMachine(name)) != NULL)
     }
 }
 
+void requeueJob(struct job *job)
+/* Move job from running queue back to a user pending
+ * queue.  This happens when a node is down or when
+ * it missed the message about a job. */
+{
+struct user *user = job->user;
+struct machine *mach = job->machine;
+if (mach != NULL)
+    mach->job = NULL;
+job->machine = NULL;
+dlRemove(job->node);
+dlAddHead(user->jobQueue, job->node);
+dlRemove(user->node);
+user->runningCount -= 1;
+dlAddTail(queuedUsers, user->node);
+}
+
 void nodeDown(char *line)
 /* Deal with a node going down - move it to dead list and
  * put job back on head of job list. */
@@ -382,16 +399,7 @@ jobId = atoi(jobIdString);
 if ((mach = findMachineWithJob(machName, jobId)) != NULL)
     {
     if ((job = mach->job) != NULL)
-        {
-	struct user *user = job->user;
-	mach->job = NULL;
-	job->machine = NULL;
-	dlRemove(job->node);
-	dlAddHead(user->jobQueue, job->node);
-	dlRemove(user->node);
-	user->runningCount -= 1;
-	dlAddTail(queuedUsers, user->node);
-	}
+	requeueJob(job);
     dlRemove(mach->node);
     mach->lastChecked = time(NULL);
     mach->isDead = TRUE;
@@ -458,6 +466,7 @@ struct job *job = *pJob;
 if (job != NULL)
     {
     freeMem(job->node);
+    freeMem(job->exe);
     freeMem(job->cmd);
     freeMem(job->dir);
     freeMem(job->in);
@@ -752,19 +761,20 @@ char *machine = nextWord(&line);
 char *jobIdString = nextWord(&line);
 char *status = nextWord(&line);
 int jobId = atoi(jobIdString);
-if (status != NULL && sameString(status, "free"))
+if (status != NULL)
     {
-    struct job *job = jobFind(runningJobs, jobId);
-    struct user *user = job->user;
-    if (job != NULL)
-         {
-	 struct machine *mach = job->machine;
-	 if (mach != NULL)
-	     recycleMachine(mach);
-	 recycleJob(job);
-	 user->runningCount -= 1;
-	 logIt("hub:  >>>RECYCLING MACHINE IN NODE CHECK IN<<<<\n");
-	 }
+    /* Node thinks it's free, we think it has a job.  Node
+     * must have missed our job assignment... */
+    if (sameString(status, "free"))
+	{
+	struct job *job = jobFind(runningJobs, jobId);
+	struct user *user = job->user;
+	if (job != NULL)
+	    {
+	    requeueJob(job);
+	    logIt("hub:  requeueing job in nodeCheckIn\n");
+	    }
+	}
     }
 }
 
@@ -792,9 +802,7 @@ for (node = busySpokes->head; !dlEnd(node); node = node->next)
 	break;
 	}
     }
-sendOk(foundSpoke, connectionHandle);	/* Do we really need this handshake?
-                                         * Other end in spoke.c would need 
-					 * to be deleted too. */
+sendOk(foundSpoke, connectionHandle);
 if (!foundSpoke)
     warn("Couldn't free spoke %s", spokeName);
 else

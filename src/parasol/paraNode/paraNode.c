@@ -12,6 +12,7 @@
 #include "dystring.h"
 #include "dlist.h"
 #include "hash.h"
+#include "localmem.h"
 #include "options.h"
 #include "subText.h"
 #include "paraLib.h"
@@ -46,6 +47,7 @@ in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
 int socketHandle;		/* Main message queue socket. */
 int connectionHandle;		/* A connection accepted. */
+struct hash *finHash;		/* Hash of finished jobs.  Value is job return code. */
 
 struct job
 /* Info on one job in this node. */
@@ -310,8 +312,6 @@ char *jobIdString = nextWord(&line);
 clearZombies();
 if (jobIdString != NULL && line != NULL && line[0] != 0)
     {
-    int sd;
-
     /* Remove job from list. */
     struct job *job = findJob(atoi(jobIdString));
     if (job != NULL)
@@ -320,6 +320,9 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 	freez(&job);
 	--busyProcs;
 	}
+
+    /* Save job time and status in hash. */
+    hashAdd(finHash, jobIdString, cloneString(line));
 
     /* Tell managing host that job is done. */
     if (fork() == 0)
@@ -331,7 +334,8 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 }
 
 void doCheck(char *line)
-/* Send back check result */
+/* Send back check result - either a check in message or
+ * jobDone. */
 {
 char *managingHost = nextWord(&line);
 char *jobIdString = nextWord(&line);
@@ -342,9 +346,17 @@ if (jobIdString != NULL)
     int sd = netConnect(managingHost, paraPort);
     if (sd >= 0)
 	{
-	char *status = (job != NULL  ? "busy" : "free");
 	char buf[256];
-	snprintf(buf, sizeof(buf), "checkIn %s %s %s", hostName, jobIdString, status);
+	if (job != NULL)
+	    snprintf(buf, sizeof(buf), "checkIn %s %s running", hostName, jobIdString);
+	else
+	    {
+	    char *jobInfo = hashFindVal(finHash, jobIdString);
+	    if (jobInfo == NULL)
+		snprintf(buf, sizeof(buf), "checkIn %s %s free", hostName, jobIdString);
+	    else
+		snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, jobInfo);
+	    }
 	sendWithSig(sd, buf);
 	close(sd);
 	}
@@ -473,6 +485,9 @@ hostName = getHost();
 
 /* Precompute some signature stuff. */
 assert(sigLen < sizeof(signature));
+
+/* Make hash of finished jobs. */
+finHash = newHash(0);
 
 /* Set up socket and self to listen to it. */
 socketHandle = netAcceptingSocket(paraPort, 10);
