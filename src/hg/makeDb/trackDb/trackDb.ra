@@ -1261,7 +1261,7 @@ url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
 track ECgene
 shortLabel ECgene Genes
-longLabel ECgene Annotations 
+longLabel ECgene Gene Predictions with Alt-Splicing
 group genes
 priority 41.5
 visibility hide
