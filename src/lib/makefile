@@ -19,7 +19,7 @@ O = aliType.o axt.o bits.o binRange.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o \
-    vGfx.o vGif.o wildcmp.o wormdna.o \
+    twoBit.o vGfx.o vGif.o wildcmp.o wormdna.o \
     xa.o xAli.o xap.o xenshow.o xp.o
 
 
