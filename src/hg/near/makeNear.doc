@@ -86,6 +86,9 @@ cd $dbDir/bed/near/run/out
 hgLoadBlastTab $db knownBlastTab *.tab
 #### DONE TO HERE FOR HG16 ####
 
+# Create table that maps between known genes and RefSeq
+hgMapToGene $db refGene knownGene knownToRefSeq
+
 # Create a table that maps between known genes and 
 # the nice affyUcla expression data.
 hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToAffyUcla
