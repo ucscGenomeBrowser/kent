@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.27 2005/01/12 17:36:01 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.28 2005/01/13 18:58:03 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -768,7 +768,7 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    forceMonotonic(bestPath, qSeq, genoSeq, stringency,
+    bestPath = forceMonotonic(bestPath, qSeq, genoSeq, stringency,
     	bundle->isProt, bundle->t3List);
 
     if (firstTime && stringency == ffCdna && bundle->avoidFuzzyFindKludge == FALSE)
