@@ -33,6 +33,9 @@ static char *customTrackPseudoDb = "customTrack";
 /* getCustomTracks() initializes this only once: */
 struct customTrack *theCtList = NULL;
 
+/* can change this to "GET" for debugging, "POST" for production */
+char *httpFormMethod = "POST";
+
 /* doMiddle() sets these: */
 struct cart *cart = NULL;
 char *database = NULL;
@@ -426,8 +429,8 @@ puts(
 "<tr>\n"
 "<td>\n"
 );
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"GET\"\">\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\"\">\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 puts(
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
@@ -460,7 +463,8 @@ puts(
 "</center>\n"
 );
 
-printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">\n", hgTextName());
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"orgForm\">\n", hgTextName(),
+       httpFormMethod);
 cgiMakeHiddenVar("org", organism);
 cartSaveSession(cart);
 puts("</FORM>");
@@ -838,8 +842,8 @@ struct hashEl *nonposTableList;
 webStart(cart, "Table Browser: %s %s: Choose a table", hOrganism(database),freezeName);
 handleDbChange();
 
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 puts("<TABLE CELLPADDING=\"8\">");
@@ -1094,8 +1098,8 @@ saveChooseTableState();
 
 webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -2588,8 +2592,8 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s %s: Choose Fields of %s", hOrganism(database),freezeName, table);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -2636,8 +2640,8 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -2908,8 +2912,8 @@ saveIntersectOptionsState();
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database), freezeName,
 	 phase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3009,29 +3013,14 @@ char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
 char *ctFileName = NULL;
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
-char browserUrl[128];
 int fields;
 boolean gotResults = FALSE;
-int redirDelay = 5;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
 saveBedCtOptionsState();
 
-safef(browserUrl, sizeof(browserUrl),
-      "/cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
-      database, chrom, winStart, winEnd);
-if (doCt)
-    {
-    char headerText[256];
-    safef(headerText, sizeof(headerText),
-	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
-	  redirDelay, browserUrl);
-    webStartHeader(cart, headerText,
-		   "Table Browser: %s %s: %s", hOrganism(database), 
-	     freezeName, getCtPhase);
-    }
-else
+if (! doCt)
     {
     printf("Content-Type: text/plain\n\n");
     webStartText();
@@ -3119,17 +3108,22 @@ if ((ctNew != NULL) && (ctNew->bedList != NULL))
 
 if (! gotResults)
     {
-    if (doCt)
-	{
-	puts("No results returned from query -- so no custom track has been added to your session.");
-	}
-    else
-	{
-	printf("\n# No results returned from query.\n\n");
-	}
+    printf("\n# No results returned from query.\n\n");
     }
 else if (doCt)
     {
+    char browserUrl[128];
+    char headerText[256];
+    int redirDelay = 5;
+    safef(browserUrl, sizeof(browserUrl),
+	  "/cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
+	  database, chrom, winStart, winEnd);
+    safef(headerText, sizeof(headerText),
+	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+	  redirDelay, browserUrl);
+    webStartHeader(cart, headerText,
+		   "Table Browser: %s %s: %s", hOrganism(database), 
+		   freezeName, getCtPhase);
     printf("You will be automatically redirected to the genome browser in\n"
 	   "%d seconds, or you can <BR>\n"
 	   "<A HREF=\"%s\">click here to continue</A>.\n",
@@ -3226,8 +3220,8 @@ if (! sameString(outputType, seqOptionsPhase) &&
 	     "(FASTA, BED, HyperLinks, GTF or Summary/Statistics) for "
 	     "intersection of tables.");
 
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3317,8 +3311,8 @@ if (sameString(database, db))
 else
     conn = hAllocConn2();
 sr = sqlGetResult(conn, query->string);
-printf("<FORM ACTION=\"%s\" NAME=\"descForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"descForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3362,8 +3356,8 @@ saveOutputOptionsState();
 
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, statsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3643,8 +3637,8 @@ blockSizeStats = needMem((numChroms+1) * sizeof(struct intStats));
 webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, statsPhase);
 checkTableExists(fullTableName);
 
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
-       hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
