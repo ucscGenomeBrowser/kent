@@ -38,7 +38,8 @@ identityBugTest: mkdirs
 # Database: comes before Query= and there are multiple queries for each
 # Database:.
 megaBlastTest: mkdirs
-	../blastToPsl input/970.txt output/megaBlastTest.psl
+	awk -f ../mega.awk input/970.txt > output/megaBlastTest.blast
+	../blastToPsl output/megaBlastTest.blast output/megaBlastTest.psl
 	pslCheck output/megaBlastTest.psl
 	diff -u expected/megaBlastTest.psl output/megaBlastTest.psl
 
