@@ -1,0 +1,9 @@
+track blastHg16KG
+shortLabel Human Proteins
+longLabel Human Proteins
+group compGeno
+priority 142
+visibility pack
+colorChromDefault off
+type psl protein
+
