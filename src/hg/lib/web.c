@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.58 2004/07/26 21:31:56 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.59 2004/07/26 23:08:41 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -63,7 +63,10 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
-char *db = cartOptionalString(theCart, "db");
+char *db = NULL;
+
+if (theCart)
+    db = cartOptionalString(theCart, "db");
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -146,7 +149,7 @@ if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	   uiState);
     puts("           Genome Browser</A> &nbsp; - &nbsp;");
     }
-if (db != NULL && hgNearOk(db))
+/*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
     {
     printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	   uiState);
