@@ -67,6 +67,50 @@ busySpokes = newDlList();
 deadSpokes = newDlList();
 }
 
+boolean runNextJob()
+/* Assign next job in pending queue if any to a machine. */
+{
+if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
+    {
+    struct dlNode *mNode, *jNode, *sNode;
+    struct spoke *spoke;
+    struct job *job;
+    struct machine *machine;
+    time_t now = time(NULL);
+
+    /* Get free resources from free list and move them to busy lists. */
+    mNode = dlPopHead(freeMachines);
+    dlAddTail(busyMachines, mNode);
+    machine = mNode->val;
+    machine->lastChecked = now;
+    jNode = dlPopHead(pendingJobs);
+    dlAddTail(runningJobs, jNode);
+    job = jNode->val;
+    sNode = dlPopHead(freeSpokes);
+    dlAddTail(busySpokes, sNode);
+    spoke = sNode->val;
+    spoke->lastPinged = now;
+    spoke->pingCount = 0;
+
+    /* Tell machine, job, and spoke about each other. */
+    machine->job = job;
+    job->machine = machine;
+    job->startTime = now;
+    spokeSendJob(spoke, machine, job);
+    return TRUE;
+    }
+else
+    return FALSE;
+}
+
+void runner(int count)
+/* Try to run a couple of jobs. */
+{
+while (--count >= 0)
+    if (!runNextJob())
+        break;
+}
+
 struct machine *machineNew(char *name)
 /* Create a new machine structure. */
 {
@@ -99,6 +143,7 @@ name = trimSpaces(name);
 mach = machineNew(name);
 dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
+runner(1);
 }
 
 struct machine *findMachine(char *name)
@@ -272,49 +317,6 @@ if (job != NULL)
     freeMem(job->err);
     freez(pJob);
     }
-}
-
-boolean runNextJob()
-/* Assign next job in pending queue if any to a machine. */
-{
-if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
-    {
-    struct dlNode *mNode, *jNode, *sNode;
-    struct spoke *spoke;
-    struct job *job;
-    struct machine *machine;
-    time_t now = time(NULL);
-
-    /* Get free resources from free list and move them to busy lists. */
-    mNode = dlPopHead(freeMachines);
-    dlAddTail(busyMachines, mNode);
-    machine = mNode->val;
-    jNode = dlPopHead(pendingJobs);
-    dlAddTail(runningJobs, jNode);
-    job = jNode->val;
-    sNode = dlPopHead(freeSpokes);
-    dlAddTail(busySpokes, sNode);
-    spoke = sNode->val;
-    spoke->lastPinged = now;
-    spoke->pingCount = 0;
-
-    /* Tell machine, job, and spoke about each other. */
-    machine->job = job;
-    job->machine = machine;
-    job->startTime = now;
-    spokeSendJob(spoke, machine, job);
-    return TRUE;
-    }
-else
-    return FALSE;
-}
-
-void runner(int count)
-/* Try to run a couple of jobs. */
-{
-while (--count >= 0)
-    if (!runNextJob())
-        break;
 }
 
 boolean sendViaSpoke(struct machine *machine, char *message)
@@ -531,9 +533,8 @@ else
     runner(1);
 }
 
-int addJob(char *line)
-/* Add job.  Line format is <user> <dir> <stdin> <stdout> <stderr> <command> 
- * Returns job ID or 0 if a problem. */
+int runOrAddJob(char *line, boolean runJobExtra)
+/* Do either run or add job. */
 {
 char *user, *dir, *in, *out, *err, *command;
 struct job *job;
@@ -553,15 +554,18 @@ if (line == NULL || line[0] == 0)
 command = line;
 job = jobNew(command, user, dir, in, out, err);
 job->submitTime = time(NULL);
+job->runJobExtra = runJobExtra;
 dlAddTail(pendingJobs, job->node);
 runner(1);
 return job->id;
 }
 
-void addJobAcknowledge(char *line, int connectionHandle)
-/* Add job and send 'ok' or 'err' back to client. */
+
+void addJobAcknowledge(char *line, int connectionHandle, boolean runJobExtra)
+/* Add job.  Line format is <user> <dir> <stdin> <stdout> <stderr> <command> 
+ * Returns job ID or 0 if a problem.  Send 'ok' or 'err' back to client. */
 {
-int id = addJob(line);
+int id = runOrAddJob(line, runJobExtra);
 char jobIdString[16];
 sprintf(jobIdString, "%d", id);
 netSendLongString(connectionHandle, jobIdString);
@@ -911,7 +915,9 @@ for (;;)
     else if (sameWord(command, "heartbeat"))
          processHeartbeat();
     else if (sameWord(command, "addJob"))
-         addJobAcknowledge(line, connectionHandle);
+         addJobAcknowledge(line, connectionHandle, FALSE);
+    else if (sameWord(command, "runJob"))
+         addJobAcknowledge(line, connectionHandle, TRUE);
     else if (sameWord(command, "nodeDown"))
          nodeDown(line);
     else if (sameWord(command, "alive"))

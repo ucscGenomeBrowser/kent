@@ -106,7 +106,8 @@ sprintf(buf, "%s %s", "addMachine", machine);
 commandHub(buf);
 }
 
-int pushJob(int argc, char *argv[], boolean report)
+#ifdef OLD
+int pushJob(int argc, char *argv[])
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
@@ -115,8 +116,9 @@ char *in = optionVal("in", "/dev/null"),
      *out = optionVal("out", "/dev/null"), 
      *err = optionVal("err", "/dev/null"), 
      *dir = optionVal("dir", dirBuf);
-int i;
+int jobId, i;
 char *jobIdString;
+
 
 getcwd(dirBuf, sizeof(dirBuf));
 dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
@@ -131,19 +133,57 @@ if (report)
 	 printf(" %s", argv[i]);
     printf("\") has been submitted\n");
     }
-return atoi(jobIdString);
+jobId = atoi(jobIdString);
+freez(&jobIdString);
+return jobId
 }
+#endif /* OLD */
 
-int addJob(int argc, char *argv[])
+void addJob(int argc, char *argv[])
 /* Tell hub about a new job. */
 {
-return pushJob(argc, argv, FALSE);
+struct dyString *dy = newDyString(1024);
+char dirBuf[512] ;
+char *in = optionVal("in", "/dev/null"), 
+     *out = optionVal("out", "/dev/null"), 
+     *err = optionVal("err", "/dev/null"), 
+     *dir = optionVal("dir", dirBuf);
+int i;
+
+getcwd(dirBuf, sizeof(dirBuf));
+dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
+for (i=0; i<argc; ++i)
+    dyStringPrintf(dy, " %s", argv[i]);
+freeMem(hubCommandGetReciept(dy->string));
+dyStringFree(&dy);
 }
 
-void qsub(int argc, char *argv[])
-/* Tell hub about new job,  print job id. */
+void runJob(int argc, char *argv[])
+/* Tell hub about new job,  print job id in qsub format. 
+ * Set output to approximate 'runJob' output.  Eventually
+ * we might replace this with something cleaner.  I hope so
+ * anyway.... */
 {
-pushJob(argc, argv, TRUE);
+struct dyString *dy = newDyString(1024);
+char dirBuf[512] ;
+char *in = optionVal("in", "/dev/null"), 
+     *out = "out/runJob.o$JOB_ID",
+     *err = "err/runJob.e$JOB_ID",
+     *dir = optionVal("dir", dirBuf);
+int i;
+char *jobIdString;
+
+getcwd(dirBuf, sizeof(dirBuf));
+dyStringPrintf(dy, "runJob %s %s %s %s %s", getlogin(), dir, in, out, err);
+for (i=0; i<argc; ++i)
+    dyStringPrintf(dy, " %s", argv[i]);
+jobIdString = hubCommandGetReciept(dy->string);
+dyStringFree(&dy);
+printf("your job %s (\"%s", jobIdString, argv[0]);
+for (i=1; i<argc; ++i)
+     printf(" %s", argv[i]);
+printf("\") has been submitted\n");
+freez(&jobIdString);
 }
 
 void addSpoke()
@@ -330,11 +370,11 @@ void parasol(char *command, int argc, char *argv[])
 char *subType = argv[0];
 atexit(closeHubFd);
 reopenHub();
-if (sameString(command, "qsub"))
+if (sameString(command, "runJob"))
     {
     if (argc < 1)
 	usage;
-    qsub(argc, argv);
+    runJob(argc, argv);
     }
 else if (sameString(command, "add"))
     {

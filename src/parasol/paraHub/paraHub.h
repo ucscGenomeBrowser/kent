@@ -16,6 +16,8 @@ struct job
     time_t submitTime;          /* Time job submitted. */
     time_t startTime;           /* Start job run time in seconds past 1972 */
     struct machine *machine;	/* Machine it's running on if any. */
+    bool runJobExtra;		/* Put a little wrapper around it's output
+                                 * in format like Patrick's runJob? */
     };
 
 struct machine

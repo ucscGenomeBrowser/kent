@@ -70,7 +70,7 @@ int sleepTime = 20*60;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
-char *submitCommand = "parasol -err=err/$I -out=out/$I qsub";
+char *submitCommand = "parasol -err=err/runJob.e\\$JOB_ID -out=out/runJob.o\\$JOB_ID runJob";
 char *statusCommand = "parasol qstat";
 char *killCommand = "parasol remove job";
 char *runJobCommand = "runJob";
@@ -416,6 +416,8 @@ dyStringAppend(cmd, " ");
 dyStringAppend(cmd, job->command);
 dyStringPrintf(cmd, " > %s", tempName);
 
+uglyf("%s\n", cmd->string);
+#ifdef SOON
 err = system(cmd->string);
 AllocVar(sub);
 slAddHead(&job->submissionList, sub);
@@ -434,6 +436,7 @@ else
     {
     fillInSub(tempName, sub);
     }
+#endif /* SOON */
 dyStringFree(&cmd);
 }
 

@@ -63,7 +63,6 @@ else
     {
     char *command = nextWord(&message);
     char *job = NULL;
-    uglyf("%s: problems with %s %s\n", spokeName, command, message);
     if (sameString(runCmd, command))
 	{
 	char *hub = nextWord(&message);
@@ -282,6 +281,7 @@ if (sd > 0)
     dyStringPrintf(dy, "%s %s", machine->name, runCmd);
     dyStringPrintf(dy, " %s", hubHost);
     dyStringPrintf(dy, " %d", job->id);
+    dyStringPrintf(dy, " %d", job->runJobExtra);
     dyStringPrintf(dy, " %s", job->user);
     dyStringPrintf(dy, " %s", job->dir);
     dyStringPrintf(dy, " %s", job->in);
