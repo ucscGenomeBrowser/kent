@@ -1805,7 +1805,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     #	6 minutes
     mkdir ../axtNet
     netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
-	/scratch/mus/mm5/softNib ../axtNet/all.axt
+	/scratch/mus/mm5/softNib ../axtNet/all.axt
     #	9 minutes
 
     # Classify net and load into database
@@ -2028,15 +2028,12 @@ SEQ2_LEN=$BASE/S2.len
 
     cd run.0
     para try, push check, para push, para check....
-XXX - RUNNING - 2004-12-17
-# Completed: 112871 of 112871 jobs
-# CPU time in finished jobs:   36169619s  602826.99m 10047.12h  418.63d  1.147 y
-# IO & Wait Time:                452242s    7537.36m   125.62h    5.23d  0.014 y
-# Average job time:                 324s       5.41m     0.09h    0.00d
-# Longest job:                     2755s      45.92m     0.77h    0.03d
-# Submission to last job:        153519s    2558.65m    42.64h    1.78d
-    #	extra delay in this run due to disk problems in the middle and
-    #	thus being interrupted
+# Completed: 57263 of 57263 jobs
+# CPU time in finished jobs:   20015224s  333587.07m  5559.78h  231.66d  0.635 y
+# IO & Wait Time:                364057s    6067.61m   101.13h    4.21d  0.012 y
+# Average job time:                 356s       5.93m     0.10h    0.00d
+# Longest job:                     2681s      44.68m     0.74h    0.03d
+# Submission to last job:        117505s    1958.42m    32.64h    1.36d
 
     #	Second cluster run to convert the .out's to .lav's
     #	You do NOT want to run this on the big cluster.  It brings
@@ -2047,12 +2044,12 @@ XXX - RUNNING - 2004-12-17
     /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
-# Completed: 341 of 341 jobs
-# CPU time in finished jobs:       3131s      52.19m     0.87h    0.04d  0.000 y
-# IO & Wait Time:                  9815s     163.58m     2.73h    0.11d  0.000 y
-# Average job time:                  38s       0.63m     0.01h    0.00d
-# Longest job:                      223s       3.72m     0.06h    0.00d
-# Submission to last job:          1267s      21.12m     0.35h    0.01d
+Completed: 173 of 173 jobs
+CPU time in finished jobs:       1228s      20.47m     0.34h    0.01d  0.000 y
+IO & Wait Time:                  4828s      80.46m     1.34h    0.06d  0.000 y
+Average job time:                  35s       0.58m     0.01h    0.00d
+Longest job:                       49s       0.82m     0.01h    0.00d
+Submission to last job:           393s       6.55m     0.11h    0.00d
 
     # third run: lav -> axt (an I/O bound process, run only on fileserver)
     #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
@@ -2070,7 +2067,7 @@ do
     echo -n "${L} -> ${chr}.axt working ... "
     cat `ls -1 *.lav | sort -g` \
 	| lavToAxt stdin \
-	/scratch/mus/danRer2/softNib \
+	/iscratch/i/danRer2/nib \
 	/iscratch/i/monDom1/chunks.2bit stdout \
 	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
 	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
@@ -2084,7 +2081,7 @@ done
 
     chmod +x lav2axt.sh
     ./lav2axt.sh
-    #	38 minutes
+    #	6 minutes
 
     #	load this blast result just to see how it looks
     #	It is not needed in the browser after the chains and nets are
@@ -2099,9 +2096,203 @@ done
 		-noTNameIx danRer2 ${I}
         echo "done: ${I}"
     done
-    #	12 minutes
+    #	2 minutes
     exit		#	back to csh if you are csh normally
     #	Let's see what featureBits has to say about this data
     featureBits danRer2 blastzMonDom1
-    263272041 bases of 2615483787 (10.066%) in intersection
+    #	56615212 bases of 1560497282 (3.628%) in intersection
 
+# CHAIN ZEBRAFISH BLASTZ  (DONE - 2004-12-19 - Hiram))
+    # Run axtChain on file server, job is mostly I/O, cluster does not help
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+
+    ls -1S /cluster/data/monDom1/bed/zb.danRer2/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > doChain.sh
+#!/bin/sh
+for chrAxtFile in `cat input.lst`
+do
+    chr=`basename ${chrAxtFile}`
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+	-linearGap=../../opossumZFishTuned.gap \
+	-minScore=5000 ${chrAxtFile} \
+	/iscratch/i/danRer2/nib \
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # Reuse gap penalties from mouse run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumZFishTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x doChain.sh
+    time ./doChain.sh
+    #	57 minutes
+
+    # On the file server weed the chains for repeats
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    mkdir chain
+    cd run1/chainRaw
+    bash			# if you are normally csh
+    for i in *.chain
+    do
+        chainAntiRepeat /iscratch/i/danRer2/nib \
+		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
+	echo "$i done"
+    done
+    #	4 minutes
+    exit			# exit bash if you are normally csh
+
+    # now on the file server, sort chains. 
+    # chainSplit steps each take less than a minute
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    chainMergeSort chain/*.chain > all.chain
+    #	1 minute
+    mv chain chainBeforeMerge
+    chainSplit chain all.chain
+    #	1 minute
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain/chain
+    bash		#	if you are csh normally
+    for i in *.chain
+    do
+	c=${i/.chain/}
+	echo "loading ${c}"
+	hgLoadChain danRer2 ${c}_chainMonDom1 $i
+    done
+    #	3 minutes
+    exit		#	exit bash if you are csh normally
+
+    #	Compare to some other organisms
+    featureBits danRer2 chainMonDom1
+    #	267969653 bases of 1560497282 (17.172%) in intersection
+    featureBits danRer2 chainHg17
+    #	510842993 bases of 1560497282 (32.736%) in intersection
+    featureBits danRer2 chainMm5
+    #	507912858 bases of 1560497282 (32.548%) in intersection
+    featureBits danRer2 chainFr1
+    #	309784483 bases of 1560497282 (19.852%) in intersection
+
+# NET OPOSSUM TO ZEBRAFISH BLASTZ (TBD)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+	| chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	1 minute
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    #	1 minute
+    cd noClass
+    mkdir ../../axtNet
+    bash		#	if you are csh normally
+    for i in *.net
+    do
+	r=${i/.net/}
+	netToAxt $i ../chain/${r}.chain /iscratch/i/danRer2/nib \
+		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
+    done
+    #	4 minutes
+    exit		#	back to csh if you are csh normally
+
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    netClass -noAr noClass.net danRer2 monDom1 zfish.net
+    #	39 minutes
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    netFilter -minGap=10 zfish.net |  hgLoadNet danRer2 netMonDom1 stdin
+    #	1 minute
+    #	compare featureBits with some other assemblies
+    featureBits danRer2 netMonDom1
+    #	251706312 bases of 1560497282 (16.130%) in intersection
+    featureBits danRer2 netRn3
+XXX - TBD - 2004-12-19 20:15
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+    featureBits -countgaps danRer2 netRn3
+    #	2638255333 bases of 3164952073 (83.358%) in intersection
+    featureBits danRer2 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+    featureBits danRer2 netCanFam1
+    #	2456773441 bases of 2615483787 (93.932%) in intersection
+    featureBits danRer2 netGalGal2
+    #	1958796258 bases of 2615483787 (74.892%) in intersection
+    featureBits danRer2 netXenTro1
+    #	1042210258 bases of 2615483787 (39.848%) in intersection
+    featureBits danRer2 netTetNig1
+    #	618111072 bases of 2615483787 (23.633%) in intersection
+    featureBits danRer2 netDanRer2
+    #	560950601 bases of 2615483787 (21.447%) in intersection
+
+# SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create ZEBRAFISH TO OPOSSUM chain, net
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir -p bz.danRer2/axtChain
+    chainSwap zb.danRer2/axtChain/all.chain bz.danRer2/axtChain/all.chain
+    #	1 minutes
+
+    cd bz.danRer2/axtChain
+    chainPreNet all.chain ../../zb.danRer2/S2.len \
+		../../zb.danRer2/S1.len stdout \
+	| chainNet stdin -minSpace=1 ../../zb.danRer2/S2.len \
+		../../zb.danRer2/S1.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	6 minutes
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
+	/iscratch/i/danRer2/nib ../axtNet/all.axt
+    #	5 minutes
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/bz.danRer2/axtChain
+    netClass -noAr noClass.net monDom1 danRer2 ZFish.net
+    #	12 minutes
+    rm noClass.net
+    netFilter -minGap=10 ZFish.net | hgLoadNet monDom1 netDanRer2 stdin
+    #	1 minute
+
+    # Load chains into database
+    hgLoadChain -tIndex monDom1 chainDanRer2 all.chain
+    #	10 minutes
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainDanRer2;"
+    hgsql monDom1 -e "analyze table chainDanRer2Link;"
+
+    featureBits monDom1 chainDanRer2Link
+XXX - TBD - 2004-12-20 15:32
+    #	249594220 bases of 3492108230 (7.147%) in intersection
+    featureBits monDom1 chainDanRer2
+    #	2913812625 bases of 3492108230 (83.440%) in intersection
+    featureBits monDom1 netMm5
+    #	2889580530 bases of 3492108230 (82.746%) in intersection
+
+# BLASTZ ZEBRAFISH CLEAN UP (TBD)
+    rm chain.tab link.tab
