@@ -10,10 +10,7 @@
 #include "obscure.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.5 2004/09/26 04:45:51 kent Exp $";
-
-char *tmpDir = ".";
-char *tableName = "transRegCode";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.6 2004/10/07 15:52:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +19,7 @@ errAbort(
   "hgYeastRegCode - Load files from the regulatory code paper (large scale \n"
   "CHIP-CHIP on yeast) into database\n"
   "usage:\n"
-  "   hgYeastRegCode motifGffDir Final_InTableS2_v24.motifs probe.gff outputMotif.bed output.motifs outputProbe.bed\n"
+  "   hgYeastRegCode motifGffDir Final_InTableS2_v24.motifs probe.gff Conditions_Summary.txt outputMotif.bed output.motifs outputProbe.bed outputConditions.tab\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -326,14 +323,42 @@ carefulClose(&f);
 return hash;
 }
 
-void hgYeastRegCode(char *motifGffDir, char *inMotifs, char *probeGff, 
-	char *outMotifBed, char *outMotifs, char *outProbe)
+void makeConditions(char *input, char *output)
+/* Parse input in form:
+ *    transcriptionFactor   list, of, conditions
+ * into
+ *    transcriptionFactor<tab>list
+ *    transcriptionFactor<tab>of
+ *    transcriptionFactor<tab>conditions
+ */    
+{
+struct lineFile *lf = lineFileOpen(input, TRUE);
+FILE *f = mustOpen(output, "w");
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    char *tf, *cond;
+    tf = nextWord(&line);
+    while ((cond = nextWord(&line)) != NULL)
+        {
+	stripChar(cond, ',');
+	fprintf(f, "%s\t%s\n", tf, cond);
+	}
+    }
+carefulClose(&f);
+lineFileClose(&lf);
+}
+
+void hgYeastRegCode(
+	char *motifGffDir, char *inMotifs, char *probeGff, char *inConditions,
+	char *outMotifBed, char *outMotifs, char *outProbe, char *outConditions)
 /* hgYeastRegCode - Load files from the regulatory code paper 
  * (large scale CHIP-CHIP on yeast) into database. */
 {
 struct hash *probeHash = makeProbeBed(probeGff, outProbe);
 struct hash *tfHash = makeMotifBed(motifGffDir, outMotifBed);
 makeMotifs(inMotifs, tfHash, outMotifs);
+makeConditions(inConditions, outConditions);
 }
 
 
@@ -341,8 +366,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 7)
+if (argc != 9)
     usage();
-hgYeastRegCode(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+hgYeastRegCode(argv[1], argv[2], argv[3], argv[4], 
+	argv[5], argv[6], argv[7], argv[8]);
 return 0;
 }
