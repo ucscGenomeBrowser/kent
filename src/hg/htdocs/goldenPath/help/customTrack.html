@@ -211,7 +211,12 @@ attribute. Browser lines consist of the format:
 position chr22:1-20000</tt> is included in the annotation file, the Genome
 Browser window will initially display the first 20000 bases of chr 22. 
 
-<P>The following browser line attribute name/value options are available: 
+<P>The following browser line attribute name/value options are available. 
+The value <em>track_name</em> must be set to the name of the primary table 
+on which the the track is based. To identify this table, open up the 
+<A HREF="../../../cgi-bin/hgTables" TARGET=_blank>Table Browser</A>, 
+select the correct genome assembly, then select the track name from the 
+<em>track</em> list. The <em>table</em> list will show the primary table.
 <UL>
    <LI><B>position <<I>position</I>></B> - Determines the part of the genome
    that the Genome Browser will initially open to, in chromosome:start-end format.  
@@ -219,8 +224,7 @@ Browser window will initially display the first 20000 bases of chr 22.
 	specified width in pixels.
    <LI><B>hide all</B> - Hides all annotation tracks except for custom ones.
    <LI><B>hide <<I>track_name(s)</I>></B> - Hides the listed tracks.
-   Tracks must be referenced by their <A HREF="../symNames.html". 
-   TARGET=_blank>symbolic names</A>. Multiple track names should be space-separated. 
+   Multiple track names should be space-separated. 
    <LI><B>dense all</B> - Displays all tracks in dense mode.
    <LI><B>dense <<I>track_name(s)</I>></B> - Displays the specified tracks in
    dense mode. Symbolic names must be used. Multiple track names should be
