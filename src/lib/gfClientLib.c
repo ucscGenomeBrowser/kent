@@ -129,9 +129,8 @@ int rowSize;
 int sd = setupSocket(hostName, portName);
 if (connect(sd, &sai, sizeof(sai)) == -1)
     {
-    errnoAbort("Sorry, the BLAT server seems to be down.  It's a very "
-               "new piece of software.  Please try again in a day or "
-	       "two.  Thanks for bearing with us as we debug it.");
+    errnoAbort("Sorry, the BLAT server seems to be down.  Please try "
+               "again in a day or so.");
     errnoAbort("Couldn't connect to socket in oneStrand");
     }
 
