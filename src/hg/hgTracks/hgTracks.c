@@ -982,53 +982,55 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	color = mgFindColor(mg,color3prime.r,color3prime.g,color3prime.b);
 	bColor = color;
       } 
-      
-      if (tg->itemColor && shades == NULL)
-	color = tg->itemColor(tg, lf, mg);
-      tallStart = lf->tallStart;
-      tallEnd = lf->tallEnd;
-      if (lf->components != NULL && !hideLine)
-	{
-	  x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	  x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	  w = x2-x1;
-	  if (isFull)
-	    {
-	      if (shades) bColor =  shades[(lf->grayIx>>1)];
-	      mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-				     lf->orientation, bColor);
-	    }
-	  if (shades) color =  shades[lf->grayIx+isXeno];
-	  mgDrawBox(mg, x1, midY, w, 1, color);
-	}
-      for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	  if (shades) color =  shades[lf->grayIx+isXeno];
-	  s = sf->start;
-	  e = sf->end;
-	  if (s < tallStart)
-	    {
-	      e2 = e;
-	      if (e2 > tallStart) e2 = tallStart;
-	      drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
-	      s = e2;
-	    }
-	  if (e > tallEnd)
-	    {
-	      s2 = s;
-	      if (s2 < tallEnd) s2 = tallEnd;
-	      drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
-	      e = s2;
-	    }
-	  if (e > s)
-	    {
-	      drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
-	      ++compCount;
-	    }
-	}
+      if(lf != NULL) 
+	  {
+	  if (tg->itemColor && shades == NULL)
+	      color = tg->itemColor(tg, lf, mg);
+	  tallStart = lf->tallStart;
+	  tallEnd = lf->tallEnd;
+	  if (lf->components != NULL && !hideLine)
+	      {
+	      x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	      x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	      w = x2-x1;
+	      if (isFull)
+		  {
+		  if (shades) bColor =  shades[(lf->grayIx>>1)];
+		  mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+					 lf->orientation, bColor);
+		  }
+	      if (shades) color =  shades[lf->grayIx+isXeno];
+	      mgDrawBox(mg, x1, midY, w, 1, color);
+	      }
+	  for (sf = lf->components; sf != NULL; sf = sf->next)
+	      {
+	      if (shades) color =  shades[lf->grayIx+isXeno];
+	      s = sf->start;
+	      e = sf->end;
+	      if (s < tallStart)
+		  {
+		  e2 = e;
+		  if (e2 > tallStart) e2 = tallStart;
+		  drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
+		  s = e2;
+		  }
+	      if (e > tallEnd)
+		  {
+		  s2 = s;
+		  if (s2 < tallEnd) s2 = tallEnd;
+		  drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
+		  e = s2;
+		  }
+	      if (e > s)
+		  {
+		  drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
+		  ++compCount;
+		  }
+	      }
+	  }
     }
     if (isFull)
-      y += lineHeight;
+	y += lineHeight;
     }
 }
 static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, int seqStart, int seqEnd,
@@ -1058,28 +1060,31 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	  else{
 	    lf = lfPair->lf3prime;
 	  }
-	  for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	      x1 = roundingScale(sf->start-winStart, width, baseWidth);
-	      if (x1 < 0)
-		x1 = 0;
-	      x2 = roundingScale(sf->end-winStart, width, baseWidth);
-	      if (x2 >= width)
-		x2 = width-1;
-	      w = x2-x1;
-	      if (w >= 0)
-		{
-		  if (w == 0)
-		    w = 1;
-		  incRange(useCounts+x1, w); 
-		}
-	    }
+	  if(lf != NULL) 
+	      {
+	      for (sf = lf->components; sf != NULL; sf = sf->next)
+		  {
+		  x1 = roundingScale(sf->start-winStart, width, baseWidth);
+		  if (x1 < 0)
+		      x1 = 0;
+		  x2 = roundingScale(sf->end-winStart, width, baseWidth);
+		  if (x2 >= width)
+		      x2 = width-1;
+		  w = x2-x1;
+		  if (w >= 0)
+		      {
+		      if (w == 0)
+			  w = 1;
+		      incRange(useCounts+x1, w); 
+		      }
+		  }
+	      }
 	}
     }
- grayThreshold(useCounts, width);
- for (i=0; i<lineHeight; ++i)
-	mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
- freeMem(useCounts);
+grayThreshold(useCounts, width);
+for (i=0; i<lineHeight; ++i)
+    mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
+freeMem(useCounts);
 }
 static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -1388,7 +1393,7 @@ void freeLinkedFeaturesPair(struct linkedFeaturesPair **pList)
 void estFreePair(struct trackGroup *tg)
 /* Free up linkedFeaturesPairTrack items. */
 {
-  freeLinkedFeaturesPair((struct linkedFeaturesPair**)(&tg->items)); 
+//  freeLinkedFeaturesPair((struct linkedFeaturesPair**)(&tg->items)); 
 }
 
 char *getEstPairName(struct trackGroup *tg, void *item)
@@ -2069,7 +2074,7 @@ struct trackGroup *sanger22Tg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgSanger22";
-tg->visibility = tvFull;
+tg->visibility = tvDense;
 tg->longLabel = "Sanger Centre Chromosome 22 Annotations";
 tg->shortLabel = "Sanger 22";
 tg->loadItems = loadSanger22Gene;
