@@ -31,6 +31,11 @@ char *hgcFullName();
 char *hgTracksFullName();
 /* Absolute URL to browser. */
 
+char *hgTextName();
+/* Relative URL to text browser. */
+
+char *hgTracksFullName();
+/* Absolute URL to text browser. */
 
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */

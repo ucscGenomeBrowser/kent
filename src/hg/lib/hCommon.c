@@ -161,7 +161,7 @@ return _hgTracksFullName;
 }
 
 char *hgTextName()
-/* Relative URL to browser. */
+/* Text broswer relative URL to browser. */
 {
 return _hgTextName;
 }
