@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.50 2004/09/27 18:15:39 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.51 2004/10/01 03:47:04 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -32,7 +32,6 @@ static struct dyString *onChangeStart()
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
-jsDropDownCarryOver(dy, hgtaTable);
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
@@ -47,6 +46,7 @@ static char *onChangeOrg()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
+jsDropDownCarryOver(dy, hgtaTable);
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return jsOnChangeEnd(&dy);
 }
@@ -56,6 +56,7 @@ static char *onChangeDb()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
+jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
@@ -65,6 +66,17 @@ static char *onChangeGroupOrTrack()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
+dyStringPrintf(dy, " document.hiddenForm.%s.value=0;", hgtaTable);
+return jsOnChangeEnd(&dy);
+}
+
+static char *onChangeTable()
+/* Return javascript executed when they change group. */
+{
+struct dyString *dy = onChangeStart();
+jsDropDownCarryOver(dy, "db");
+jsDropDownCarryOver(dy, "org");
+jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
@@ -249,7 +261,7 @@ if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeGroupOrTrack());
+hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeTable());
 for (name = nameList; name != NULL; name = name->next)
     {
     hPrintf("<OPTION VALUE=%s", name->name);
