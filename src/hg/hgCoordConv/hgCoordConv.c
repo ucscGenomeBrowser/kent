@@ -26,7 +26,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.23 2003/05/17 02:49:01 sugnet Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.23.18.1 2003/08/01 20:10:53 heather Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -78,7 +78,7 @@ for(db = dbList; db != NULL; db = db->next)
     {
     
     /*  Make sure zoo Combo isn't included and that the species are zoo */
-    if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo")  &&strstrNoCase(db->name,"2"))
+    if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo"))
 	count++;
     }
 return count;
@@ -161,7 +161,7 @@ i = 0;
 for (db=dbList; db != NULL; db=db->next)
     {
     /* Get the proper Zoo species omitting combo */
-     if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo") && strstrNoCase(db->name,"2")){
+     if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo")){
     array[i++] = cloneString(db->description);
     }
     }
@@ -726,7 +726,7 @@ int genomeCount = 0;
 char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
-cartWebStart(cart, "Converting Coordinates Between Drafts");
+cartWebStart(cart, "Converting Coordinates Between Species");
 puts( 
      "<p>This page attempts to convert coordinates from one Zoo species' CFTR region\n"
      "to another. The mechanism for doing this is to use the blastz alignments which have been\n"
@@ -747,7 +747,7 @@ dbChoice = chooseDb(origDb, genomeList[0]);
 printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
 printf("<br><br>\n");
 printf("<table><tr>\n");
-printf("<b><td><table><tr><td>Original Draft: </b>\n");
+printf("<b><td><table><tr><td>Original Species: </b>\n");
 cgiMakeDropList("origGenome", genomeList, genomeCount, dbChoice);
 printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
@@ -758,7 +758,7 @@ if(position == NULL)
 else
     cgiMakeTextVar("position",position, 30);
 printf("</td></tr></table></td>\n");
-printf("<b><td><table><tr><td>New Draft: </b>\n");
+printf("<b><td><table><tr><td>New Species: </b>\n");
 
 freez(&genomeList);
 genomeCount =0;
