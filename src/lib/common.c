@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.56 2004/03/12 06:58:58 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.57 2004/03/12 09:38:42 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -693,6 +693,19 @@ for (i=0; ;i += 1)
     if (string[i] != c)
         return FALSE;
     }
+}
+
+char *rStringIn(char *needle, char *haystack)
+/* Return last position of needle in haystack, or NULL if it's not there. */
+{
+int nSize = strlen(needle);
+char *pos;
+for (pos = haystack + strlen(haystack) - nSize; pos >= haystack; pos -= 1)
+    {
+    if (memcmp(needle, pos, nSize) == 0)
+        return pos;
+    }
+return NULL;
 }
 
 boolean endsWith(char *string, char *end)

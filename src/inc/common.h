@@ -463,6 +463,9 @@ boolean startsWith(char *start,char *string);
 /* Returns position of needle in haystack or NULL if it's not there. */
 /*        char *stringIn(char *needle, char *haystack);      */
 
+char *rStringIn(char *needle, char *haystack);
+/* Return last position of needle in haystack, or NULL if it's not there. */
+
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */
 
