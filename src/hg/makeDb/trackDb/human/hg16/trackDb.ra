@@ -1637,7 +1637,6 @@ color 12,125,12
 type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
-type bed 3
 
 track encode_Affy_ChIP_RNAP_RA_HL60_0
 shortLabel ChIP/Affy Pol2 0hr
