@@ -24,8 +24,16 @@ public class CheckUrl {
       htmlStatus  = page.getResponseCode();
       if (htmlStatus == 200) {// Might be a error still that program catches
 	  String text = page.getText();
-	  if (text.indexOf("<!-- HGERROR -->") >= 0)
-	      errorReport = "Some error occurred";
+	  String errStartMsg = "<!-- HGERROR-START -->";
+	  String errEndMsg = "<!-- HGERROR-END -->";
+	  int errStartIx = text.indexOf(errStartMsg);
+	  if (errStartIx >= 0) {
+	      errStartIx += errStartMsg.length();
+	      int errEndIx = text.indexOf(errEndMsg);
+	      if (errEndIx < errStartIx)
+	          errEndIx = errStartIx + 100;
+	      errorReport = text.substring(errStartIx, errEndIx);
+	  }
       }
       long endTime = System.currentTimeMillis();
       runTime = (endTime - startTime) * 0.001;
