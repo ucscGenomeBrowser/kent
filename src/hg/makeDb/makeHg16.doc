@@ -5345,4 +5345,17 @@ EOF
     drop table ensPep_old;  
 
     # Create knownToEnsembl column
-   hgMapToGene hg16 ensGene knownGene knownToEnsembl
+    hgMapToGene hg16 ensGene knownGene knownToEnsembl
+
+# LOAD ECgene tables
+    cd /cluster/data/hg16/bed
+    rm -f ECgene
+    mkdir ECgene.2003-12-18
+    ln -s ECgene.2003-12-18 ECgene
+    cd ECgene
+    wget "http://genome.ewha.ac.kr/ECgene/download/ECgene_hg16_v1.1_25oct2003_genes.txt.gz"
+    wget "http://genome.ewha.ac.kr/ECgene/download/ECgene_hg16_v1.1_25oct2003_genepep.txt.gz"
+    gunzip *.gz
+    ldHgGene -predTab hg16 ECgene ECgene_hg16_v1.1_25oct2003_genes.txt 
+    hgPepPred hg16 tab ECgenePep ECgene_hg16_v1.1_25oct2003_genepep.txt
+    gzip *
