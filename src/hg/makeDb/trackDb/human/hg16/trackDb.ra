@@ -570,7 +570,7 @@ shortLabel Microsatellites
 longLabel Perfect Microsatellites - VNTR
 priority 148
 group varRep
-visibility dense
+visibility hide
 type bed 4 +
 
 track blastzSelfUnmasked
