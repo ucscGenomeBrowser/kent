@@ -192,7 +192,7 @@ done after repeat masking and distributing to cluster nodes)
         mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
 
 
-CREATING DATABASE  (TO DO)
+CREATING DATABASE  (DONE 12/03/02 - MATT)
 
 o - ln -s /cluster/store4/gs.14/build31 ~/oo
 o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
@@ -208,7 +208,7 @@ o - Tell the hgCentral database about it.  Log onto genome-centdb
     and enter mysql via
         mysql -u root -pbigSecret hgCentral
     At the mysql prompt type:
-       insert into dbDb values("hg13", "Human Nov. 2002", "/cluster/store4/gs.14/build31/nib", "Human", "USP18", 1);
+       insert into dbDb values("hg13", "Human Nov. 2002", "/cluster/store4/gs.14/build31/nib", "Human", "USP18", "Human", 70. 1);
 o - Create the trackDb table as so
        cd ~/src/hg/makeDb/hgTrackDb
     Edit that makefile to add hg13 after hg12 and do
@@ -284,22 +284,22 @@ Make and load GC percent table
      hgsql hg13  < ~/src/hg/lib/gcPercent.sql
      hgGcPercent hg13 ../../nib
 
-GETTING FRESH mRNA, EST, REFSEQ SEQUENCE FROM GENBANK. (TO DO)
+GETTING FRESH mRNA, EST, REFSEQ SEQUENCE FROM GENBANK. (DONE 12/03/02 - MATT)
 
-This will create a genbank.130 directory containing compressed
-GenBank flat files and a mrna.130 containing unpacked sequence
+This will create a genbank.132 directory containing compressed
+GenBank flat files and a mrna.132 containing unpacked sequence
 info and auxiliary info in a relatively easy to parse (.ra) 
 format.
 
   o - Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
       look at the README.genbank.  Figure out the current release number
-      (which is 130).
+      (which is 132).
   o - Consider deleting one of the older genbank releases.  It's
       good to at least keep one previous release though.
   o - Where there is space make a new genbank directory.  Create a
       symbolic link to it:
-          mkdir /cluster/store1/genbank.130
-          ln -s /cluster/store1/genbank.130 ~/genbank
+          mkdir /cluster/store1/genbank.132
+          ln -s /cluster/store1/genbank.132 ~/genbank
       cd ~/genbank
   o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
       following commands inside ftp:
@@ -308,43 +308,56 @@ format.
            mget gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv*
       This will take at least 2 hours.
   o - Make the refSeq subdir and download files:
-       mkdir -p /cluster/store1/mrna.130/refSeq
-       cd /cluster/store1/mrna.130/refSeq
+       mkdir -p /cluster/store1/mrna.132/refSeq
+       cd /cluster/store1/mrna.132/refSeq
   o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
       following commands inside ftp:
            cd refseq/H_sapiens/mRNA_Prot
            prompt
            mget hs.*.gz
   o - Unpack this into fa files and get extra info with:
-      cd /cluster/store1/mrna.130/refSeq
+      cd /cluster/store1/mrna.132/refSeq
       gunzip -c hs.gbff.gz  | \
         gbToFaRa ~kent/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta \
         stdin
   o - Log onto server and change to yo 
 gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
-        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.130/xenoRna.fa \
-        ../mrna.130/xenoRna.ra ../mrna.130/xenoRna.ta stdiur genbank directory.
-      mkdir -p /cluster/store1/mrna.130
-      cd /cluster/store1/mrna.130
-      gunzip -c /cluster/store1/genbank.130/gbpri*.gz | \
+        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.132/xenoRna.fa \
+        ../mrna.132/xenoRna.ra ../mrna.132/xenoRna.ta stdiur genbank directory.
+      mkdir -p /cluster/store1/mrna.132
+      cd /cluster/store1/mrna.132
+      gunzip -c /cluster/store1/genbank.132/gbpri*.gz | \
         gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-      gunzip -c /cluster/store1/genbank.130/gbest*.gz | \
+      gunzip -c /cluster/store1/genbank.132/gbest*.gz | \
         gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
-      gunzip -c /cluster/store1/genbank.130/gbest*.gz | \
+      gunzip -c /cluster/store1/genbank.132/gbest*.gz | \
         gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
-      cd /cluster/store1/genbank.130
+      cd /cluster/store1/genbank.132
       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
-        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.130/xenoRna.fa \
-        ../mrna.130/xenoRna.ra ../mrna.130/xenoRna.ta stdin
+        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.132/xenoRna.fa \
+        ../mrna.132/xenoRna.ra ../mrna.132/xenoRna.ta stdin
 
 
-STORING mRNA/EST SEQUENCE AND AUXILIARY INFO (TO DO)
+STORING mRNA/EST SEQUENCE AND AUXILIARY INFO (IN PROGRESS)
+
+o - Make /gbdb symlinks
+     cd /gbdb
+     mkdir hg13
+     cd hg13
+     mkdir mrna.132
+     cd mrna.132
+     ln -s /cluster/store2/mrna.132/org/Homo_sapiens/mrna.fa mrna.fa
+     ln -s /cluster/store2/mrna.132/org/Homo_sapiens/mrna.ra mrna.ra
+     ln -s /cluster/store2/mrna.132/org/Homo_sapiens/est.fa est.fa
+     ln -s /cluster/store2/mrna.132/org/Homo_sapiens/est.ra est.ra
+     
+MAKE REFSEQ
 
 o - Store the mRNA (non-alignment) info in database.
      hgLoadRna new hg13
-     hgLoadRna add hg13 /cluster/store1/mrna.130/mrna.fa /cluster/store1/mrna.130/mrna.ra
-     hgLoadRna add hg13 /cluster/store1/mrna.130/est.fa /cluster/store1/mrna.130/est.ra
-     hgLoadRna add -type=refSeq hg13 /cluster/store1/mrna.130/refSeq.fa /cluster/store1/mrna.130/refSeq.ra
+     hgLoadRna add hg13 /gbdb/hg13/mrna.132/mrna.fa /gbdb/hg13/mrna.132/mrna.ra
+     hgLoadRna add hg13 /gbdb/hg13/mrna.132/est.fa /gbdb/hg13/mrna.132/est.ra
+     hgLoadRna add -type=refSeq hg13 /gbdb/hg13/mrna.132/refSeq.fa /gbdb/hg13/mrna.132/refSeq.ra
 
     The est line will take quite some time to complete.
 
@@ -352,8 +365,8 @@ o - Store the mRNA (non-alignment) info in database.
 MAKING AND STORING mRNA AND EST ALIGNMENTS (TO DO)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    Copy the above 3 files from /cluster/store1/mrna.130 into 
-    kkstore:/scratch/hg/mrna.130
+    Copy the above 3 files from /cluster/store1/mrna.132 into 
+    kkstore:/scratch/hg/mrna.132
     Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
@@ -372,7 +385,7 @@ Using the bash shell do:
               cd $i
               cp ~kent/lastOo/bed/$i/gsub .
               ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
-              ls -1 /scratch/hg/mrna.130/$i/$i.fa > mrna.lst
+              ls -1 /scratch/hg/mrna.132/$i/$i.fa > mrna.lst
               mkdir -p psl
               # Note: build31/bed/refSeq directory not writeable, so I had to 
               # create a bed/refSeq/psl and change the gsub
@@ -523,7 +536,7 @@ o - RefSeq should have already been aligned to the genome by processes
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
-       ln -s /cluster/store1/mrna.130 mrna
+       ln -s /cluster/store1/mrna.132 mrna
 #
 # NOTE: If hgRefSeqMrna is losing refLink's protAcc field, I think it's due to 
 # a format-change issue with .-suffixes in mrna acc's
@@ -1246,28 +1259,28 @@ Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from 
-    Genbank into /cluster/store1/genbank.130 (in GETTING FRESH mRNA AND 
+    Genbank into /cluster/store1/genbank.132 (in GETTING FRESH mRNA AND 
     EST SEQUENCE FROM GENBANK step)
 
 o - Process these out of genbank flat files as so:
        ssh kkstore
-       cd /cluster/store1/mrna.130
+       cd /cluster/store1/mrna.132
        faSplit sequence xenoRna.fa 2 xenoRna
-       mkdir -p /scratch/hg/mrna.130
-       cp /cluster/store1/mrna.130/xenoRna*.* /scratch/hg/mrna.130
-    Request binrysnc of /scratch/hg/mrna.130 from the admins
+       mkdir -p /scratch/hg/mrna.132
+       cp /cluster/store1/mrna.132/xenoRna*.* /scratch/hg/mrna.132
+    Request binrysnc of /scratch/hg/mrna.132 from the admins
 
 Set up cluster run.  First make sure genome is in
 kkstore:/scratch/hg/gs.14/build31/trfFa.0730 in RepeatMasked + trf form.
 (This is probably done already in mouse alignment stage).  Also make
-sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
+sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
 
        ssh kkstore
        mkdir -p ~/oo/bed/xenoMrna
        cd ~/oo/bed/xenoMrna
        mkdir psl
        ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
-       ls -1S /scratch/hg/mrna.130/xenoRna?*.fa > mrna.lst
+       ls -1S /scratch/hg/mrna.132/xenoRna?*.fa > mrna.lst
        cp ~/hg12/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
        para create spec
@@ -1293,12 +1306,12 @@ Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoMrna
        hgLoadPsl hg13 xenoMrna.psl -tNameIx
-       cd /cluster/store1/mrna.130
+       cd /cluster/store1/mrna.132
        hgLoadRna add hg13 xenoRna.fa xenoRna.ra
 
 Similarly do xenoEst aligments:
    Prepare the est data:
-        cd /cluster/store1/mrna.130
+        cd /cluster/store1/mrna.132
         faSplit sequence xenoEst.fa 16 xenoEst    
 
        ssh kkstore
@@ -1307,11 +1320,11 @@ Similarly do xenoEst aligments:
        cd xenoEst
        mkdir psl
        ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
-       cp /cluster/store1/mrna.130/xenoEst?*.fa /scratch/hg/mrna.130
-       ls -1S /scratch/hg/mrna.130/xenoEst?*.fa > mrna.lst
+       cp /cluster/store1/mrna.132/xenoEst?*.fa /scratch/hg/mrna.132
+       ls -1S /scratch/hg/mrna.132/xenoEst?*.fa > mrna.lst
        cp ~/hg12/bed/xenoEst/gsub .
 
-Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.130
+Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.132
 When done, do:
        gensub2 human.lst mrna.lst gsub spec
        para create spec
@@ -1331,7 +1344,7 @@ Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoEst
        hgLoadPsl hg13 xenoEst.psl -tNameIx
-       cd /cluster/store1/mrna.130
+       cd /cluster/store1/mrna.132
        hgLoadRna add hg13 xenoEst.fa xenoEst.ra
     
 PRODUCING FISH ALIGNMENTS (TO DO)
@@ -1943,11 +1956,11 @@ MAKING THE AXTTIGHT FROM AXTBEST (TO DO)
 MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
 
 Download the fasta file from http://www.gen.emory.edu/MITOMAP/mitomapRCRS.fasta
-Put it in /cluster/store1/mrna.130
+Put it in /cluster/store1/mrna.132
 ssh hgwdev
 cd ~/oo
 mkdir M
-cp /cluster/store1/mrna.130/mitomapRCRS.fasta M/chrM.fa
+cp /cluster/store1/mrna.132/mitomapRCRS.fasta M/chrM.fa
 Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file list
 tcsh jkStuff/makeNib.sh
 hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?/chr*.fa ??/chr*.fa
@@ -2041,7 +2054,7 @@ zip contigAgp.zip ?{,?}/NT_??????/NT_??????.agp
 zip contigFa.zip ?{,?}/NT_??????/NT_??????.fa
 zip contigOut.zip ?{,?}/NT_??????/NT_??????.fa.out
 zip liftAll.zip jkStuff/liftAll.lft
-zip mrna.zip /cluster/store1/mrna.130/mrna.fa
+zip mrna.zip /cluster/store1/mrna.132/mrna.fa
 
 ssh hgwdev
 cd ~/oo
