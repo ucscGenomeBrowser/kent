@@ -3879,6 +3879,7 @@ if(dp != NULL)
 */
     
 genericBedClick(conn, tdb, item, start, 1);
+printf("<hr>");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
