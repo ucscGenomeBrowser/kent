@@ -537,6 +537,8 @@ cd ../..
     gunzip ensGtp.txt.gz
     hgsql anoGam1 < ~/kent/src/hg/lib/ensGtp.sql
     hgsql anoGam1 -e 'load data local infile "ensGtp.txt" into table ensGtp'
+    # delete header line to avoid joinerCheck error
+    hgsql anoGam1 -e 'delete from ensGtp where gene = "Ensembl Gene ID"'
 
     # Load Ensembl peptides:
     # Get them from ensembl as above in the gene section except for
