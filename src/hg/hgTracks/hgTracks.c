@@ -8051,6 +8051,8 @@ registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("blatHuman", longXenoPslMethods);
 registerTrackHandler("blatMus", longXenoPslMethods);
+registerTrackHandler("aarMm2", longXenoPslMethods);
+registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
