@@ -944,11 +944,22 @@ if (codonSubReport)
         printf("Writing out codon substitutions\n");
     for (indel = pi->codonSubList; indel != NULL; indel=indel->next)
         {
-        bool isSyn = (lookupCodon(indel->mrnaCodon) == lookupCodon(indel->genCodon));
-	fprintf(cs, "%s codon substitution at %s:%d vs. %s:%d,%d,%d\n",
+        char mrnaAA = lookupCodon(indel->mrnaCodon);
+        char genAA = lookupCodon(indel->genCodon);
+        bool isSyn = (mrnaAA == genAA);
+	fprintf(cs, "%s codon substitution at %s:%d vs. %s:%d,%d,%d, %s vs. %s, ",
                 (isSyn ? "synonymous" : "non-synonymous"),
                 indel->mrna, indel->mrnaStart, indel->chrom, indel->codonGenPos[0],
-                indel->codonGenPos[1], indel->codonGenPos[2]);
+                indel->codonGenPos[1], indel->codonGenPos[2],
+                indel->genCodon, indel->mrnaCodon);
+        if (mrnaAA == 0)
+            fprintf(cs, "STOP vs. ");
+        else
+            fprintf(cs, "%c vs. ", mrnaAA);
+        if (genAA == 0)
+            fprintf(cs, "STOP\n");
+        else
+            fprintf(cs, "%c\n", genAA);
 	fprintf(cs, "\tpsl %s %d %d\t%s %d %d\n",
                 pi->psl->qName, pi->psl->qStart, pi->psl->qEnd,
                 pi->psl->tName, pi->psl->tStart, pi->psl->tEnd);
