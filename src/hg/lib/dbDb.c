@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: dbDb.c,v 1.10 2003/09/03 21:57:10 hiram Exp $";
+static char const rcsid[] = "$Id: dbDb.c,v 1.11 2003/09/17 17:09:58 kent Exp $";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
@@ -27,6 +27,7 @@ ret->orderKey = sqlSigned(row[6]);
 ret->genome = row[7];
 ret->scientificName = row[8];
 ret->htmlPath = row[9];
+ret->hgNearOk = sqlUnsigned(row[10]);
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -48,6 +49,7 @@ ret->orderKey = sqlSigned(row[6]);
 ret->genome = cloneString(row[7]);
 ret->scientificName = cloneString(row[8]);
 ret->htmlPath = cloneString(row[9]);
+ret->hgNearOk = sqlUnsigned(row[10]);
 return ret;
 }
 
@@ -107,6 +109,7 @@ ret->orderKey = sqlSignedComma(&s);
 ret->genome = sqlStringComma(&s);
 ret->scientificName = sqlStringComma(&s);
 ret->htmlPath = sqlStringComma(&s);
+ret->hgNearOk = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -181,6 +184,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->htmlPath);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->active);
 fputc(lastSep,f);
 }
 

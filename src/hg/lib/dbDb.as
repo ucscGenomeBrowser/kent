@@ -11,4 +11,5 @@ table dbDb
     string genome;    "Unifying genome collection to which an assembly belongs"
     string scientificName;  "Genus and species of the organism; e.g. Homo sapiens"
     string htmlPath;  "path in /gbdb for assembly description"
+    tinyint hgNearOk; "Have hgNear for this?"
     )

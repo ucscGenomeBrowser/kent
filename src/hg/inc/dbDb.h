@@ -21,6 +21,7 @@ struct dbDb
     char *genome;	/* Unifying genome collection to which an assembly belongs */
     char *scientificName;	/* Genus and species of the organism; e.g. Homo sapiens */
     char *htmlPath;	/* path in /gbdb for assembly description */
+    boolean hgNearOk;	/* Have hgNear for this? */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);
