@@ -32,6 +32,7 @@ set validMach2=`echo $machine2 | grep "hgw" | wc -l`
 if ($validMach1 == 0 || $validMach2 == 0) then
   echo
   echo "    These are not valid machine names: $machine1 $machine2"
+  echo "    usage: database, machine1, machine2"
   echo
   exit 1
 endif

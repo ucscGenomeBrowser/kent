@@ -24,6 +24,7 @@ set validMach2=`echo $machine2 | grep "hgw" | wc -l`
 if ($validMach1 == 0 || $validMach2 == 0) then
   echo
   echo "    These are not valid machine names: $machine1 $machine2"
+  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
   echo
   exit 1
 endif
@@ -70,8 +71,8 @@ if ( $status ) then
  echo "\nDifferences are found in $table.$field"
  echo "between $machine1 and $machine2\n"
 else
-  echo
   echo " No differences in $table.$field."
+  echo
 endif
 
 # clean up
