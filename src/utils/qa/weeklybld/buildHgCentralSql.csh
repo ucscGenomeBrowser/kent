@@ -30,7 +30,8 @@ if ( "$1" != "real" ) then
 endif 
 
 cp -p /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
-cd /usr/local/apache/htdocs/admin/
+cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
+cd hiding/hgcent
 set CVSROOT=/projects/hg/cvsroot 
 set temp = '"'"v${BRANCHNN}"'"'
 cvs commit -m $temp  hgcentral.sql
