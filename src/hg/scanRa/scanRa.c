@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "keys.h"
+#include "hdb.h"
 
 enum commandType
     {
