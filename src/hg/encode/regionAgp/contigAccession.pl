@@ -10,7 +10,7 @@
 # The format of the summaries and the contig naming convention
 # differs for each project
 
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.1 2004/10/06 17:07:17 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.2 2005/03/16 23:20:04 kate Exp $
 
 sub usage() {
     print "usage: contigAccession <summaryfile>\n";
@@ -72,7 +72,15 @@ while (<SUMMARY>) {
         $_ = <SUMMARY>;
         ($gi, $num, $gb, $acc) = split /\|/;
         print "$contig\t$acc\n";
+    } elsif (/^Monodelphis/) {
+        # contig name is cont*, in the 2nd line in the Genbank summary
+        # and contig_* in the AGP files from the assembly
+        ($contig) = /(cont.*),/;
+        $contig =~ s/cont/contig_/;
+        $_ = <SUMMARY>;
+        ($gi, $num, $gb, $acc) = split /\|/;
+        print "$contig\t$acc\n";
     } else {
-        die "Unknown WGS project: only know rat, chicken, chimp, dog";
+        die "Unknown WGS project: only know rat, chicken, chimp, dog, opossum";
     }
 }
