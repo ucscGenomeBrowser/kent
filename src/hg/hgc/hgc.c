@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.442 2003/06/21 06:06:06 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.443 2003/06/23 00:24:25 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2861,6 +2861,7 @@ static char *mgcStatusDesc[][2] =
     {"notBack", "not back"},
     {"noDecision", "no decision yet"},
     {"fullLength", "full length"},
+    {"fullLengthShort", "full length (short isoform)"},
     {"incomplete", "incomplete"},
     {"chimeric", "chimeric"},
     {"frameShift", "frame shifted"},
@@ -2872,7 +2873,7 @@ static char *mgcStatusDesc[][2] =
     {"no5est", "no 5' EST match"},
     {"microDel", "no cloning site / microdeletion"},
     {"artifact", "library artifacts"},
-    {"noPloyATail", "no polyA-tail"},
+    {"noPolyATail", "no polyA-tail"},
     {"cantSequence", "unable to sequence"},
     {NULL, NULL}
 };
