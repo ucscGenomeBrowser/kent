@@ -11,7 +11,7 @@ blat: $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat${EXE}
 
 all:
-	cd ../lib; make
+	cd ../lib && ${MAKE}
 	make
 tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h
@@ -27,7 +27,7 @@ test::
 	cmp testRnaX.psl refRnaX.psl
 	blat -verbose=0 -fine hCrea.geno hCrea.mrna testFine.psl
 	cmp testFine.psl refFine.psl
-	cd test; ${MAKE}
+	cd test && ${MAKE}
 
 clean::
 	rm -f testRna.psl testProt.psl testProtX.psl testRnaX.psl \
