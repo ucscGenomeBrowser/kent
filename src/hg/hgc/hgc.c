@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.458 2003/07/23 16:32:26 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.459 2003/07/25 22:43:00 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3119,7 +3119,7 @@ boolean hasBin;
 char splitTable[64];
 char query[256];
 hFindSplitTable(seqName, table, splitTable, &hasBin);
-safef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
+safef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3144,7 +3144,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track)|| sameWord("mrnaBlastz", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track))
     {
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
@@ -3166,6 +3166,11 @@ else if (sameWord("xenoBlastzMrna", track) )
     {
     type = "Blastz to foreign mRNA";
     table = "xenoBlastzMrna";
+    }
+else if (sameWord("mrnaBlastz", track))
+    {
+    type = "mRNA";
+    table = "mrnaBlastz";
     }
 else 
     {
