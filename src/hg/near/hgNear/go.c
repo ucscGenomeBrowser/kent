@@ -11,7 +11,7 @@
 #include "goa.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.3 2003/09/09 07:33:46 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.4 2003/09/09 08:11:11 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goa table exists. */
@@ -55,6 +55,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    dyStringAppend(dy, name);
 	    }
 	}
+    sqlFreeResult(&sr);
     }
 if (gotOne)
     result = cloneString(dy->string);
@@ -62,24 +63,48 @@ dyStringFree(&dy);
 return result;
 }
 
-struct dyString *nonBreakingString(char *s)
-/* Return dynamic string that has converted spaces in s
- * to &nbsp; */
+static void goCellPrint(struct column *col, struct genePos *gp, 
+   	struct sqlConnection *conn)
+/* Get go terms as comma separated string. */
 {
-struct dyString *dy = dyStringNew(0);
-char c;
+struct sqlResult *sr;
+char **row;
+char query[256];
+boolean gotOne = FALSE;
+struct hash *hash = newHash(6);
 
-while ((c = *s++) != 0)
+hPrintf("<TD>");
+if (gp->protein != NULL && gp->protein[0] != 0)
     {
-    if (c == ' ')
-       dyStringAppend(dy, "&nbsp;");
-    else
-       dyStringAppendC(dy, c);
+    safef(query, sizeof(query), 
+	    "select term.name,term.acc from goa,term "
+	    "where goa.dbObjectSymbol = '%s' "
+	    "and goa.goId = term.acc", 
+	    gp->protein);
+    sr = sqlGetResult(col->goConn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *name = row[0];
+	if (!hashLookup(hash, name))
+	    {
+	    hashAdd(hash, name, NULL);
+	    if (!gotOne)
+		gotOne = TRUE;
+	    else
+		hPrintNonBreak(", ");
+	    hPrintf("<A HREF=\"http://www.godatabase.org/cgi-bin/go.cgi?query=%s&view=details\" TARGET=_blank>", row[1]);
+	    hPrintNonBreak(row[0]);
+	    hPrintf("</A>");
+	    }
+	}
+    sqlFreeResult(&sr);
     }
-return dy;
+if (!gotOne)
+    hPrintf("n/a");
+hPrintf("</TD>");
 }
 
-struct genePos *goAdvFilter(struct column *col, 
+static struct genePos *goAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on position. */
 {
@@ -151,7 +176,8 @@ return list;
 static void goFilterControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
-hPrintf("Gene ontology search.  Please enclose term in quotes if it "
+hPrintf("<A HREF=\"%s\">", "http://www.geneontology.org");
+hPrintf("Gene Ontology</A> search.  Please enclose term in quotes if it "
         "contains multiple words.<BR>You can search with ID's (such as "
 	"GO:0005884) as well as terms (such as 'actin filament').<BR>");
 hPrintf("Term(s): ");
@@ -166,6 +192,7 @@ void setupColumnGo(struct column *col, char *parameters)
 {
 col->exists = goExists;
 col->cellVal = goCellVal;
+col->cellPrint = goCellPrint;
 col->filterControls = goFilterControls;
 col->advFilter = goAdvFilter;
 }
