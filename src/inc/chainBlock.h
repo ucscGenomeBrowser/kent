@@ -10,6 +10,10 @@
 #include "boxClump.h"	/* Include so can share boxIn structure */
 #endif
 
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif
+
 struct chain
 /* A chain of blocks.  Used for output of chainBlocks. */
     {
