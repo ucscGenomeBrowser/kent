@@ -22,10 +22,10 @@ validateSeqs( seq1, seq2 );
 
 /*print the sequences with lines connecting identical residues
  *in columns of size columnNum*/
-for( i=0; i<strlen(seq1)-columnNum; i += columnNum )
-    htmlPrintJointAlignmentLine( seq1, seq2, i, i+columnNum );
+for( i=0; i<strlen(seq1); i += columnNum )
+    htmlPrintJointAlignmentLine(seq1, seq2, i, min(i+columnNum, strlen(seq1)));
 
-printf( "<tt><hr><br>%s<br>%s<br><hr></tt>", seq1, seq2 );
+printf( "<tt><hr><br>%s<br>%s<br></tt>", seq1, seq2 );
 
 }
 
