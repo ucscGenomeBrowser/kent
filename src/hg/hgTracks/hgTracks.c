@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.641 2003/12/17 20:40:57 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.642 2003/12/18 00:25:11 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5248,6 +5248,24 @@ tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
 
+char *encodeErgeName(struct track *tg, void *item)
+/* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
+{
+char * name;
+struct linkedFeatures *lf = item;
+name = strstr(lf->name, "/");
+name ++;
+if(name != NULL)
+    return name;
+return "unknown";
+}
+  
+void encodeErgeMethods(struct track *tg)
+/* setup special methods for ENCODE dbERGE II tracks */
+{
+tg->itemName = encodeErgeName;
+}
+
 struct linkedFeatures *bedFilterMinLength(struct bed *bedList, int minLength ) 
 {
 struct linkedFeatures *lf = NULL, *lfList=NULL;
@@ -6971,6 +6989,15 @@ registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("haplotype",haplotypeMethods);
+registerTrackHandler("encodeErge5race",encodeErgeMethods);
+registerTrackHandler("encodeErgeBinding",encodeErgeMethods);
+registerTrackHandler("encodeErgeExpProm",encodeErgeMethods);
+registerTrackHandler("encodeErgeHssCellLines",encodeErgeMethods);
+registerTrackHandler("encodeErgeInVitroFoot",encodeErgeMethods);
+registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
+registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
+registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
+registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
