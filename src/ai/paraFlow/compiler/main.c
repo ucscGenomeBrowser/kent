@@ -415,6 +415,76 @@ pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
 return pp;
 }
 
+static struct pfParse *varDeclareOne(struct pfParse *parent,
+	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
+if (tok->type != pftName)
+    expectingGot("variable name", tok);
+pp->var = pfScopeAddVar(scope, tok->val.s, type);
+*pTokList = tok->next;
+return pp;
+}
+
+static struct pfCollectedType *
+parseType(struct pfBaseType *baseType, struct pfToken **pTokList, struct pfScope *scope)
+/* Deal with tree of list of array of baseType */
+{
+struct pfToken *tok = *pTokList;
+struct pfCollectedType *ctList = NULL, *ct;
+
+for (;;)
+    {
+    AllocVar(ct);
+    slAddHead(&ctList, ct);
+    ct->base = baseType;
+    tok = tok->next;
+    if (tok == NULL)
+	break;
+    if (tok->type == pftName && sameString(tok->val.s, "of"))
+	{
+	if (!baseType->isCollection)
+	    errAt(tok, "%s is not a collection", baseType->name);
+	tok = tok->next;
+	}
+    else
+        break;
+    if (tok->type != pftName || ((baseType = pfScopeFindType(scope, tok->val.s)) == NULL))
+	expectingGot("type", tok);
+    }
+*pTokList = tok;
+slReverse(&ctList);
+return ctList;
+}
+
+struct pfParse *varUseOrDeclare(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+/* Make sure have a name, and create a varUse type node
+ * based on it. */
+{
+struct pfToken *tok = *pTokList;
+struct pfBaseType *baseType = pfScopeFindType(scope, tok->val.s);
+
+if (baseType != NULL)
+    {
+    struct pfCollectedType *ct = parseType(baseType, &tok, scope);
+    if (tok->type == pftName)
+        {
+	struct pfParse *pp;
+	pp = varDeclareOne(parent, ct, &tok, scope);
+	*pTokList = tok;
+	return pp;
+	}
+    else
+        {
+	if (ct->next != NULL)
+	    expectingGot("variable name", tok);
+	}
+    }
+return varUse(parent, pTokList, scope);
+}
+
+
 struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Create constant use */
 {
@@ -459,50 +529,6 @@ tok = tok->next;
 compoundToChildren(pp, &tok, scope);
 *pTokList = tok;
 slAddHead(&parent->children, pp);
-}
-
-static struct pfParse *varDeclareOne(struct pfParse *parent,
-	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
-{
-struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
-if (tok->type != pftName)
-    expectingGot("variable name", tok);
-pp->var = pfScopeAddVar(scope, tok->val.s, type);
-slAddHead(&parent->children, pp);
-*pTokList = tok->next;
-return pp;
-}
-
-static struct pfCollectedType *
-parseType(struct pfBaseType *baseType, struct pfToken **pTokList, struct pfScope *scope)
-/* Deal with tree of list of array of baseType */
-{
-struct pfToken *tok = *pTokList;
-struct pfCollectedType *ctList = NULL, *ct;
-
-for (;;)
-    {
-    AllocVar(ct);
-    slAddHead(&ctList, ct);
-    ct->base = baseType;
-    tok = tok->next;
-    if (tok == NULL)
-	break;
-    if (tok->type == pftName && sameString(tok->val.s, "of"))
-	{
-	if (!baseType->isCollection)
-	    errAt(tok, "%s is not a collection", baseType->name);
-	tok = tok->next;
-	}
-    else
-        break;
-    if (tok->type != pftName || ((baseType = pfScopeFindType(scope, tok->val.s)) == NULL))
-	expectingGot("type", tok);
-    }
-*pTokList = tok;
-slReverse(&ctList);
-return ctList;
 }
 
 #ifdef OLD
@@ -555,7 +581,7 @@ struct pfParse *pp = NULL;
 switch (tok->type)
     {
     case pftName:
-	pp = varUse(parent, &tok, scope);
+	pp = varUseOrDeclare(parent, &tok, scope);
 	break;
     case pftString:
     case pftInt:
@@ -725,8 +751,10 @@ else if (tok->type == pftName)
         parseForeach(parent, pTokList, scope);
     else if (sameString(s, "class"))
         parseClass(parent, pTokList, scope);
+#ifdef OLD
     else if (baseType != NULL)
         parseVarDeclaration(parent, baseType, pTokList, scope);
+#endif /* OLD */
     else
         parseAssignOrExpression(parent, pTokList, scope);
 #ifdef SOON
