@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.92 2003/09/03 21:59:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.93 2003/09/16 18:45:30 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -908,9 +908,24 @@ void getFullTableName(char *dest, char *newChrom, char *table)
 /* given a chrom return the table name of the table selected by the user */
 {
 char post[64];
+char buf[128];
 
 if (newChrom == NULL)
-    newChrom = "chr1";
+    {
+    struct sqlConnection *conn = hAllocConn();
+    newChrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			     buf, sizeof(buf));
+    hFreeConn(&conn);
+    if (newChrom == NULL)
+	{
+	webAbort("Database Error",
+		 "Can't find first chromosome in %s.chromInfo", database);
+	}
+    else
+	{
+	newChrom = cloneString(newChrom);
+	}
+    }
 chrom = newChrom;
 if (allGenome)
     {
@@ -4201,7 +4216,7 @@ else
 	webAbort("Missing table selection", "Please choose a table.");
 
     if (allGenome)
-	getFullTableName(fullTableName, "chr1", table);
+	getFullTableName(fullTableName, NULL, table);
     else
 	getFullTableName(fullTableName, chrom, table);
 
