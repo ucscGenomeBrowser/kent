@@ -16,13 +16,9 @@ struct sample
     unsigned score;	/* Score from 0-1000 */
     char strand[3];	/* # + or - */
     unsigned sampleCount;	/* number of samples total */
-    int *samplePosition;	/* bases relative to chromStart (x-values) */
-    int *sampleHeight;	/* the height each pixel is drawn to [0,1000] */
+    unsigned *samplePosition;	/* bases relative to chromStart (x-values) */
+    unsigned *sampleHeight;	/* the height each pixel is drawn to [0,1000] */
     };
-
-void sampleStaticLoad(char **row, struct sample *ret);
-/* Load a row from sample table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
 
 struct sample *sampleLoad(char **row);
 /* Load a sample from row fetched with select * from sample
