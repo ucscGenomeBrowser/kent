@@ -52,6 +52,9 @@ void hgcAnchor(char *group, char *item, char *other);
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 /* Make anchor tag to open another browser window. */
 
+void printEntrezPubMedUidUrl(FILE *f, int pmid);
+/* Print URL for Entrez browser on a PubMed search. */
+
 boolean clipToChrom(int *pStart, int *pEnd);
 /* Clip start/end coordinates to fit in chromosome. */
 
@@ -150,4 +153,7 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 	char *codeTable, char *motifTable, 
 	char *tfToConditionTable, char *conditionTable);
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
+
+void doFlyreg(struct trackDb *tdb, char *item);
+/* flyreg.org: Drosophila DNase I Footprint db. */
 

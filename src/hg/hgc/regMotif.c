@@ -17,6 +17,7 @@
 #include "growthCondition.h"
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
+#include "flyreg.h"
 
 static void printSpacedDna(char *dna, int size)
 /* Print string with spaces between each letter. */
@@ -147,6 +148,55 @@ if (hit != NULL)
 motifHitSection(seq, motif);
 printTrackHtml(tdb);
 }
+
+void doFlyreg(struct trackDb *tdb, char *item)
+/* flyreg.org: Drosophila DNase I Footprint db. */
+{
+struct dyString *query = newDyString(256);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end   = cartInt(cart, "t");
+char fullTable[64];
+boolean hasBin = FALSE;
+char *motifTable = "flyregMotif";
+struct dnaMotif *motif = NULL;
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       fullTable, seqName);
+hAddBinToQuery(start, end, query);
+dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
+sr = sqlGetResult(conn, query->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct flyreg fr;
+    flyregStaticLoad(row+hasBin, &fr);
+    printf("<B>Factor:</B> %s<BR>\n", fr.name);
+    printf("<B>Target:</B> %s<BR>\n", fr.target);
+    printf("<B>PubMed ID:</B> <A HREF=\"");
+    printEntrezPubMedUidUrl(stdout, fr.pmid);
+    printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
+    bedPrintPos((struct bed *)(&fr), 3);
+    if (hTableExists(motifTable))
+	{
+	motif = loadDnaMotif(item, motifTable);
+	if (motif != NULL)
+	    motifHitSection(NULL, motif);
+	}
+    }
+else
+    errAbort("query returned no results: \"%s\"", query);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (motif != NULL)
+    webNewSection(tdb->longLabel);
+printTrackHtml(tdb);
+}
+
 
 static void wrapHgGeneLink(struct sqlConnection *conn, char *name, 
 	char *label, char *geneTable)
