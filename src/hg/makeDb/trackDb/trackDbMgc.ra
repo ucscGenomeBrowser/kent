@@ -1,90 +1,28 @@
-track mgcAListGene
-shortLabel MGC A-List
-longLabel MGC A-List RefSeq Genes
-group genes
-priority 35.9
-visibility pack
-color 200,0,50
-type genePred
-
 track mgcGenes
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-priority 36
+group mgc
+priority 10
 visibility pack
 color 34,139,34
 type genePred
-
-track baylorRtPcrGeneA
-shortLabel Baylor GeneA
-longLabel Baylor RT-PCR GeneA for MGC
-group genes
-priority 36.1
-visibility hide
-color 10,100,15
-type psl .
-
-track baylorRtPcr
-shortLabel Baylor RT-PCR
-longLabel Baylor RT-PCR for MGC
-group genes
-priority 36.2
-visibility hide
-color 10,100,150
-type psl .
-
-track mgcTSExpPcr
-shortLabel TWINSCAN Exp PCR
-longLabel TWINSCAN predictions proposed for exploratory PCR confirmation
-group genes
-priority 36.5
-visibility pack
-color 125,0,150
-type genePred
-
-track mgcTSFullOrfPcr
-shortLabel TWINSCAN Full ORF PCR
-longLabel TWINSCAN predictions proposed for full-ORF PCR confirmation
-group genes
-priority 36.6
-visibility pack
-color 155,0,125
-type genePred
-
-# Vancouver tracks
-track bcGscMatch
-shortLabel BC GSC Matching
-longLabel  BC GSC RT-PCR for MGC: RefSeq matching
-group genes
-priority 36.7
-visibility hide
-color 155,0,125
-type psl .
-
-track bcGscDiscrep
-shortLabel BC GSC Discrepancy
-longLabel  BC GSC RT-PCR for MGC: Validated discrepancies
-group genes
-priority 36.8
-visibility hide
-color 200,0,150
-type psl .
+exonArrows on
 
 track mgcIncompleteMrna
 shortLabel MGC Incomplete
 longLabel Mammalian Gene Collection Incomplete mRNAs
-group rna
-priority 75
+group mgc
+priority 11
 visibility pack
 color 120,12,12
 type psl .
+exonArrows on
 
 track mgcPickedEst
 shortLabel MGC In-progress
 longLabel Mammalian Gene Collection ESTs in Sequencing Pipeline
-group rna
-priority 75.1
+group mgc
+priority 12
 visibility pack
 color 12,100,120
 type psl est
@@ -92,26 +30,129 @@ type psl est
 track mgcFailedEst
 shortLabel MGC Failed
 longLabel Mammalian Gene Collection Failed ESTs
-group rna
-priority 75.2
+group mgc
+priority 13
 visibility pack
 color 120,12,0
 type psl est
+exonArrows on
 
 track mgcUnpickedEst
 shortLabel MGC ESTs
 longLabel Mammalian Gene Collection EST Libraries
-group rna
-priority 75.3
+group mgc
+priority 14
 visibility pack
 color 120,120,220
 type psl est
+exonArrows on
+
+track mgcAListGene
+shortLabel MGC A-List
+longLabel MGC A-List Genes
+group mgc
+priority 15
+visibility pack
+color 200,0,50
+type genePred
+exonArrows on
+
+track mgcBListGene
+shortLabel MGC B-List
+longLabel MGC B-List Genes
+group mgc
+priority 15.1
+visibility pack
+color 200,50,0
+type genePred
+exonArrows on
+
+track baylorRtPcrGeneA
+shortLabel Baylor GeneA
+longLabel Baylor RT-PCR GeneA for MGC
+group mgc
+priority 16
+visibility hide
+color 10,100,15
+type psl .
+
+track baylorRtPcr
+shortLabel Baylor RT-PCR
+longLabel Baylor RT-PCR for MGC
+group mgc
+priority 17
+visibility hide
+color 10,100,150
+type psl .
+exonArrows on
+
+track mgcTSExpPcr
+shortLabel TWINSCAN Exp PCR
+longLabel TWINSCAN predictions proposed for exploratory PCR confirmation
+group mgc
+priority 18
+visibility hide
+color 125,0,150
+type genePred
+exonArrows on
+
+track mgcTSFullOrfPcr
+shortLabel TWINSCAN Full ORF PCR
+longLabel TWINSCAN predictions proposed for full-ORF PCR confirmation
+group mgc
+priority 19
+visibility hide
+color 155,0,125
+type genePred
+exonArrows on
+
+# Vancouver GSC
+track gscMgcClones
+shortLabel GSC MGCs
+longLabel  GSC RT-PCR clones for MGC
+group mgc
+priority 20
+visibility pack
+color 155,0,125
+type psl .
+exonArrows on
 
 track twinscanMgc
 shortLabel TwinScan MGC
 longLabel TwinScan MGC Candidates
-group gene
-priority 159
+group mgc
+priority 22
 visibility hide
 type genepred
+exonArrows on
+
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 35
+visibility pack
+color 12,12,120
+type genePred refPep refMrna
+exonArrows on
+
+track refGeneDead
+shortLabel Dead RefSeq Genes
+longLabel Dead RefSeq Genes in use by MGC
+group mgc
+priority 15.9
+visibility pack
+color 12,12,120
+type genePred
+exonArrows on
+
+track genomicDups
+shortLabel Duplications
+longLabel Duplications of >1000 Bases Sequence
+group map
+priority 31
+visibility dense
+type bed 6 +
+color 170,0,0
+altColor 160,150,0
 
