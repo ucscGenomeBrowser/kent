@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.14 2004/06/01 21:29:53 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.15 2004/06/01 22:19:20 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -202,8 +202,9 @@ void initSummaryLine(char *summaryLine, int size)
 int i;
 for (i = 0; i < size; i++)
     summaryLine[i] = '*';
-summaryLine[i+1] = 0;
+summaryLine[i] = 0;
 }
+
 void updateSummaryLine(char *summaryLine, char *referenceText,
                                         char *alignText, int size)
 /* Blank out columns in the summary line where this alignment
@@ -244,10 +245,10 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     initSummaryLine(summaryLine, size);
     for (mc = maf->components; mc != NULL; mc = mc->next)
         {
-        char *text = mc->text + lineStart;
 	fprintf(f, "%-*s ", srcChars, mc->src);
-	blueCapWrite(f, text, size);
-        updateSummaryLine(summaryLine, referenceText, text, size);
+        updateSummaryLine(summaryLine, referenceText + lineStart, 
+                                mc->text + lineStart, size);
+	blueCapWrite(f, mc->text + lineStart, size);
 	fprintf(f, "\n");
 	}
     fprintf(f, "%-*s %s\n\n", srcChars, "", summaryLine);
