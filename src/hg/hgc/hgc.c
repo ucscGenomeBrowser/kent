@@ -133,7 +133,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.587 2004/03/23 00:14:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.588 2004/03/23 16:57:29 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10687,7 +10687,7 @@ if (snp!=NULL)
     if (snp->rsId>0)
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=rs%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n",
+	printf("type=rs&rs=rs%s\" TARGET=_blank>dbSNP link for %s</A></P>\n",
 	       snp->rsId, snp->rsId);
 	}
     doSnpLocusLink(tdb, name);
