@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDbTest.c,v 1.1 2004/01/30 07:23:00 kent Exp $";
+static char const rcsid[] = "$Id: spDbTest.c,v 1.1 2004/02/14 10:36:59 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

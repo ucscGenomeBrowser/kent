@@ -5,16 +5,42 @@
 #ifndef GENEPRED_H
 #define GENEPRED_H
 
-#ifndef GFF_H
-#include "gff.h"
-#endif
+struct gff;
+struct gffFile;
+struct gffGroup;
 struct psl;
+struct genbankCds;
+
+enum cdsStatus
+/* value to indicate status of CDS annotation at either start or end */
+{
+    cdsNone,        /* "none" - No CDS (non-coding)  */
+    cdsUnknown,     /* "unk" - CDS is unknown (coding, but not known)  */
+    cdsIncomplete,  /* "incmpl" - CDS is not complete at this end  */
+    cdsComplete,    /* "cmpl" - CDS is complete at this end  */
+};
+
+enum genePredCreateOpts
+/* bit set of options for genePredGetCreateSql */
+{
+    genePredWithBin = 0x01  /* create bin column */
+};
+
+
+enum genePredFields
+/* bit set to indicate which optional fields are used */
+{
+    genePredIdFld         = 0x01,  /* id field */
+    genePredName2Fld      = 0x02,  /* name2 field */
+    genePredCdsStatFld    = 0x04,  /* cdsStart/EndStat fields */
+    genePredExonFramesFld = 0x08   /* exonFrames field */
+};
 
 struct genePred
-/* A gene prediction. */
-    {
+/* A gene prediction, with optional fields. */
+{
     struct genePred *next;  /* Next in singly linked list. */
-    char *name;	/* Name of gene */
+    char *name;	/* Name of loci, transcript, mRNA, etc */
     char *chrom;	/* Chromosome name */
     char strand[2];	/* + or - for strand */
     unsigned txStart;	/* Transcription start position */
@@ -24,13 +50,39 @@ struct genePred
     unsigned exonCount;	/* Number of exons */
     unsigned *exonStarts;	/* Exon start positions */
     unsigned *exonEnds;	/* Exon end positions */
-    };
+
+    /* optional fields */
+    unsigned optFields;           /* which optional fields are used (not in
+                                   * database) */
+    unsigned id;                  /* Numeric id of gene annotation,
+                                   * zero if not available. */
+    char *name2;                  /* Secondary name. (e.g. name of gene),
+                                   * or NULL if not available */
+    enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
+    enum cdsStatus cdsEndStat;    /* Status of cdsStart annotation */
+    int *exonFrames;              /* List of frame for each exon, or -1
+                                   * if no frame or not known. NULL if not
+                                   * available. */
+};
 
 #define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
+#define GENEPREDX_NUM_COLS 15  /* number of columns in extended genePred */
 
 struct genePred *genePredLoad(char **row);
 /* Load a genePred from row fetched with select * from genePred
  * from database.  Dispose of this with genePredFree(). */
+
+struct genePred *genePredLoadAll(char *fileName);
+/* Load all genePred from whitespace-separated file.
+ * Dispose of this with genePredFreeList(). */
+
+struct genePred *genePredLoadAllByChar(char *fileName, char chopper);
+/* Load all genePred from chopper separated file.
+ * Dispose of this with genePredFreeList(). */
+
+#define genePredLoadAllByTab(a) genePredLoadAllByChar(a, '\t');
+/* Load all genePred from tab separated file.
+ * Dispose of this with genePredFreeList(). */
 
 struct genePred *genePredCommaIn(char **pS, struct genePred *ret);
 /* Create a genePred out of a comma separated string. 
@@ -55,9 +107,13 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 
 /* ---------  Start of hand generated code. ---------------------------- */
 
-struct genePred *genePredLoadAll(char *fileName);
-/* Load all genePred from a tab-separated file.
- * Dispose of this with genePredFreeList(). */
+struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields);
+/* Load a genePred with from a row, specifying the list of optional fields.
+ * Present columns must be in the same order as the struct and there must be a
+ * sufficient number of columns. Dispose of this with genePredFree(). */
+
+char *genePredCdsStatStr(enum cdsStatus stat);
+/* get string value of a cdsStatus */
 
 int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
@@ -73,16 +129,27 @@ struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *gr
  * gffGroup is sorted in assending coords, with overlaping starts sorted by
  * end coords, which is true if it was created by gffGroupLines(). */
 
+struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
+                                  struct genbankCds* cds, int insertMergeSize);
+/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
+ * specification string to genomic coordinates. Small inserts, no more than
+ * insertMergeSize, will be dropped and the blocks merged.  optFields are a
+ * set from genePredFields, indicated what fields to create.  Zero-length CDS,
+ * or null cds, creates without CDS annotation.  If cds is null, it will set
+ * status fields to cdsNone. */
+
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
-/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates. Small inserts, no more
- * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
- * end of -1 creates without CDS annotation*/
+/* Compatibility function, genePredFromPsl2 is prefered. Convert a PSL of an
+ * RNA alignment to a genePred, converting a genbank CDS specification string
+ * to genomic coordinates. Small inserts, no more than insertMergeSize, will
+ * be dropped and the blocks merged.  CDS start or end of -1 creates without
+ * CDS annotation*/
 
-char* genePredGetCreateSql(char* table, unsigned options);
-/* Get SQL required to create a genePred table.  No options defined yet,
- * specify 0. */
+char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options);
+/* Get SQL required to create a genePred table. extFields is a bit set
+ * consisting of the genePredFields values. Options are beit set of
+ * genePredCreateOpts. Returned string should be freed. */
 
 struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, int *retOverlap);
 /* read all genes from a table find the gene with the biggest overlap. 

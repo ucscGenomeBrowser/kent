@@ -3,18 +3,20 @@
  * representation of objects. */
 
 #include "common.h"
-#include "jksql.h"
 #include "gff.h"
+#include "jksql.h"
 #include "psl.h"
 #include "linefile.h"
 #include "genePred.h"
+#include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.26 2004/02/04 23:11:16 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.27 2004/02/14 10:36:57 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
 "CREATE TABLE %s ("
+"   %s"                                 /* bin column goes here */
 "   name varchar(255) not null,"	/* mrna accession of gene */
 "   chrom varchar(255) not null,"	/* Chromosome name */
 "   strand char(1) not null,"		/* + or - for strand */
@@ -25,11 +27,30 @@ static char *createSql =
 "   exonCount int unsigned not null,"	/* Number of exons */
 "   exonStarts longblob not null,"	/* Exon start positions */
 "   exonEnds longblob not null,"	/* Exon end positions */
+"   %s %s %s %s"                        /* Optional fields */
 "   INDEX(name(10)),"
 "   INDEX(chrom(12),txStart),"
 "   INDEX(chrom(12),txEnd)"
 ")";
 
+static char *binFieldSql = 
+"    bin smallint unsigned not null,"
+"    INDEX(tName(8),bin),";
+
+static char *idFieldSql = 
+"    id int unsigned not null,"    /* Numeric id of gene annotation. */
+"    UNIQUE INDEX id,";
+
+static char *name2FieldSql = 
+"   name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
+"   INDEX(name2(10)),";
+
+static char *cdsStatFieldSql = 
+"   cdsStartStat enum(none, incmpl, cmpl) not, null,"    /* Status of cdsStart annotation */
+"   cdsEndStat enum(none, incmpl, cmpl) not, null,";     /* Status of cdsEnd annotation */
+
+static char *exonFramesFieldSql = 
+"    exonFrames longblob not null,";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
 
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
@@ -53,6 +74,42 @@ assert(sizeOne == ret->exonCount);
 sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
 assert(sizeOne == ret->exonCount);
 return ret;
+}
+
+struct genePred *genePredLoadAll(char *fileName) 
+/* Load all genePred from a whitespace-separated file.
+ * Dispose of this with genePredFreeList(). */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileRow(lf, row))
+    {
+    el = genePredLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct genePred *genePredLoadAllByChar(char *fileName, char chopper) 
+/* Load all genePred from a chopper separated file.
+ * Dispose of this with genePredFreeList(). */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[10];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = genePredLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct genePred *genePredCommaIn(char **pS, struct genePred *ret)
@@ -104,6 +161,8 @@ freeMem(el->name);
 freeMem(el->chrom);
 freeMem(el->exonStarts);
 freeMem(el->exonEnds);
+freeMem(el->name2);
+freeMem(&el->exonFrames);
 freez(pEl);
 }
 
@@ -161,27 +220,136 @@ for (i=0; i<el->exonCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+
+/* optional fields */
+if (el->optFields & genePredIdFld)
+    {
+    fputc(sep,f);
+    fprintf(f, "%u", el->id);
+    }
+if (el->optFields & genePredName2Fld)
+    {
+    fputc(sep,f);
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->name2);
+    if (sep == ',') fputc('"',f);
+    }
+if (el->optFields & genePredCdsStatFld)
+    {
+    fputc(sep,f);
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", genePredCdsStatStr(el->cdsStartStat));
+    if (sep == ',') fputc('"',f);
+    fputc(sep,f);
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", genePredCdsStatStr(el->cdsEndStat));
+    if (sep == ',') fputc('"',f);
+    }
+if (el->optFields & genePredExonFramesFld)
+    {
+    fputc(sep,f);
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->exonCount; ++i)
+        {
+        fprintf(f, "%d", el->exonFrames[i]);
+        fputc(',', f);
+        }
+    if (sep == ',') fputc('}',f);
+    }
 fputc(lastSep,f);
 }
 
 /* ---------  Start of hand generated code. ---------------------------- */
 
-struct genePred *genePredLoadAll(char *fileName) 
-/* Load all genePred from a tab-separated file.
- * Dispose of this with genePredFreeList(). */
+char *genePredCdsStatStr(enum cdsStatus stat)
+/* get string value of a cdsStatus */
 {
-struct genePred *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+switch (stat) {
+case cdsNone:
+    return "none";
+case cdsUnknown:
+    return "unk";
+case cdsIncomplete:
+    return "incmpl";
+case cdsComplete:
+    return "cmpl";
+default:
+    errAbort("invalid cdsStatus enum value: %d", stat);
+    return NULL;  /* make compiler happy */
+}
+}
 
-while (lineFileRow(lf, row))
+static enum cdsStatus parseCdsStat(char *statStr)
+/* parse a cdsStatus string */
+{
+if ((statStr == NULL) || sameString(statStr, "none"))
+    return cdsNone;
+if (sameString(statStr, "unk"))
+    return cdsUnknown;
+if (sameString(statStr, "incmpl"))
+    return cdsIncomplete;
+if (sameString(statStr, "cmpl"))
+    return cdsComplete;
+
+errAbort("invalid genePred cdsStatus: \"%s\"", statStr);
+return cdsNone;  /* make compiler happy */
+}
+
+struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields)
+/* Load a genePred with from a row, specifying the list of optional fields.
+ * Present columns must be in the same order as the struct and there must be a
+ * sufficient number of columns. Dispose of this with genePredFree(). */
+{
+struct genePred *ret;
+int sizeOne,i, iCol;
+char *s;
+
+/* verify that there are enough columns */
+iCol = 10;
+if (fields & genePredIdFld)
+    iCol++;
+if (fields & genePredName2Fld)
+    iCol++;
+if (fields & genePredCdsStatFld)
+    iCol += 2;
+if (fields & genePredExonFramesFld)
+    iCol++;
+if (iCol > numCols)
+    errAbort("not enough columns for genePred; needed %d, got %d",
+             iCol, numCols);
+
+AllocVar(ret);
+ret->exonCount = sqlUnsigned(row[7]);
+ret->name = cloneString(row[0]);
+ret->chrom = cloneString(row[1]);
+strcpy(ret->strand, row[2]);
+ret->txStart = sqlUnsigned(row[3]);
+ret->txEnd = sqlUnsigned(row[4]);
+ret->cdsStart = sqlUnsigned(row[5]);
+ret->cdsEnd = sqlUnsigned(row[6]);
+sqlUnsignedDynamicArray(row[8], &ret->exonStarts, &sizeOne);
+assert(sizeOne == ret->exonCount);
+sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
+assert(sizeOne == ret->exonCount);
+
+ret->optFields = fields;
+
+iCol=10;
+if (fields & genePredIdFld)
+    ret->id = sqlUnsigned(row[iCol++]);
+if (fields & genePredName2Fld)
+    ret->name2 = cloneString(row[iCol++]);
+if (fields & genePredCdsStatFld)
     {
-    el = genePredLoad(row);
-    slAddHead(&list, el);
+    ret->cdsStartStat = parseCdsStat(row[iCol++]);
+    ret->cdsEndStat = parseCdsStat(row[iCol++]);
     }
-lineFileClose(&lf);
-slReverse(&list);
-return list;
+if (fields & genePredExonFramesFld)
+    {
+    sqlSignedDynamicArray(row[iCol++], &ret->exonFrames, &sizeOne);
+    assert(sizeOne == ret->exonCount);
+    }
+return ret;
 }
 
 int genePredCmp(const void *va, const void *vb)
@@ -195,7 +363,6 @@ if (dif == 0)
     dif = a->txStart - b->txStart;
 return dif;
 }
-
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
 	char *exonSelectWord)
@@ -384,11 +551,11 @@ gp->exonCount= i;
 return gp;
 }
 
-static void findCdsStartEndInGenome(struct psl *psl,
-                                    int rnaCdsStart, int rnaCdsEnd,
-                                    int *retCdsStart, int *retCdsEnd)
-/* Convert cdsStart/End from mrna to genomic coordinates. */
+static void mapCdsToGenome(struct psl *psl, struct genbankCds* cds,
+                           struct genePred* gene)
+/* Convert set cdsStart/end from mrna to genomic coordinates. */
 {
+int rnaCdsStart = cds->start,  rnaCdsEnd = cds->end;
 int cdsStart = -1, cdsEnd = -1;
 int iBlk;
 
@@ -440,20 +607,74 @@ if (psl->strand[1] == '-')
     reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
 
 assert(cdsStart <= cdsEnd);
-*retCdsStart = cdsStart;
-*retCdsEnd = cdsEnd;
+gene->cdsStart = cdsStart;
+gene->cdsEnd = cdsEnd;
+}
+
+static void annotateCds(struct psl *psl, struct genbankCds* cds,
+                        struct genePred* gene)
+/* Convert cdsStart/End from mrna to genomic coordinates. */
+{
+if ((cds == NULL) || (cds->start < 0) || (cds->end <= 0))
+    {
+    /* no CDS, set to end */
+    gene->cdsStart = psl->tEnd;
+    gene->cdsEnd = psl->tEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        if (cds == NULL)
+            {
+            gene->cdsStartStat = cdsNone;
+            gene->cdsEndStat = cdsNone;
+            }
+        else
+            {
+            gene->cdsStartStat = cdsUnknown;
+            gene->cdsEndStat = cdsUnknown;
+            }
+        }
+    }
+else 
+    {
+    /* have CDS annotation */
+    mapCdsToGenome(psl, cds, gene);
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
+        gene->cdsEndStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
+        }
+    }
+}
+
+static int getFrame(struct psl *psl, int mrnaStart, int mrnaEnd,
+                    struct genbankCds* cds)
+/* get the starting frame for a range of mRNA.  This handles strand stuff.
+ * a range is allowed due to block merging  */
+{
+int frame = -1;
+if ((cds != NULL) && cds->startComplete)
+    {
+    if (psl->strand[0] == '-')
+        reverseIntRange(&mrnaStart, &mrnaEnd, psl->qSize);
+    frame = mrnaStart % 3;
+    }
+return frame;
 }
 
 static void pslToExons(struct psl *psl, struct genePred *gene,
-                       int insertMergeSize)
+                       struct genbankCds* cds, int insertMergeSize)
 /* Convert psl alignment blocks to genePred exons, merging together blocks
- * separated by small inserts as necessary. */
+ * separated by small inserts as necessary.  Optionally add frame
+ * information. */
 {
 int iBlk, iExon = -1;
 int startIdx, stopIdx, idxIncr;
+int mrnaStart = 0;
 
 gene->exonStarts = needMem(psl->blockCount*sizeof(unsigned));
 gene->exonEnds = needMem(psl->blockCount*sizeof(unsigned));
+if (gene->optFields & genePredExonFramesFld)
+    gene->exonFrames = needMem(psl->blockCount*sizeof(unsigned));
 
 if (psl->strand[1] == '-')
     {
@@ -478,18 +699,23 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
+        mrnaStart = psl->qStarts[iBlk];
 	}
     gene->exonEnds[iExon] = tEnd;
+    if (gene->optFields & genePredExonFramesFld)
+        gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+psl->blockSizes[iBlk], cds);
     }
 gene->exonCount = iExon+1;
 }
 
-struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
-                                 int insertMergeSize)
+struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
+                                  struct genbankCds* cds, int insertMergeSize)
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates. Small inserts, no more
- * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
- * end of -1 creates without CDS annotation*/
+ * specification string to genomic coordinates. Small inserts, no more than
+ * insertMergeSize, will be dropped and the blocks merged.  optFields are a
+ * set from genePredFields, indicated what fields to create.  Zero-length CDS,
+ * or null cds, creates without CDS annotation.  If cds is null, it will set
+ * status fields to cdsNone. */
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -497,6 +723,7 @@ gene->name = cloneString(psl->qName);
 gene->chrom = cloneString(psl->tName);
 gene->txStart = psl->tStart;
 gene->txEnd = psl->tEnd;
+gene->optFields = optFields;
 
 /* get strand in genome that the positive version mRNA aligns to */
 if (psl->strand[1] == '\0')
@@ -510,28 +737,46 @@ else
     gene->strand[0] = ((psl->strand[0] != psl->strand[1]) ? '-' : '+');
     }
 
-if ((cdsStart == -1) || (cdsEnd == -1))
-    {
-    gene->cdsStart = psl->tEnd;
-    gene->cdsEnd = psl->tEnd;
-    }
-else
-    findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
-                            &gene->cdsStart, &gene->cdsEnd);
-pslToExons(psl, gene, insertMergeSize);
+annotateCds(psl, cds, gene);
+pslToExons(psl, gene, cds, insertMergeSize);
 return gene;
 }
 
-char* genePredGetCreateSql(char* table, unsigned options)
-/* Get SQL required to create a genePred table.  No options defined yet,
- * specify 0. */
+struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
+                                 int insertMergeSize)
+/* Compatibility function, genePredFromPsl2 is prefered. Convert a PSL of an
+ * RNA alignment to a genePred, converting a genbank CDS specification string
+ * to genomic coordinates. Small inserts, no more than insertMergeSize, will
+ * be dropped and the blocks merged.  CDS start or end of -1 creates without
+ * CDS annotation*/
+{
+struct genbankCds cds;
+ZeroVar(&cds);
+cds.start = cdsStart;
+cds.end = cdsEnd;
+return genePredFromPsl2(psl, 0, &cds, insertMergeSize);
+
+}
+
+
+char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options)
+/* Get SQL required to create a genePred table. extFields is a bit set
+ * consisting of the genePredFields values. Options are beit set of
+ * genePredCreateOpts. Returned string should be freed. */
 {
 char sqlCmd[1024];
+char *binFld = (options & genePredWithBin) ? binFieldSql : "";
+char *idFld = (extFields & genePredIdFld) ? idFieldSql : "";
+char *name2Fld = (extFields & genePredName2Fld) ? name2FieldSql : "";
+char *cdsStatFld = (extFields & genePredCdsStatFld) ? cdsStatFieldSql : "";
+char *exonFramesFld = (extFields & genePredExonFramesFld) ? exonFramesFieldSql : "";
 
-safef(sqlCmd, sizeof(sqlCmd), createSql, table);
+safef(sqlCmd, sizeof(sqlCmd), createSql, table,
+      binFld, idFld, name2Fld, cdsStatFld, exonFramesFieldSql);
 
 return cloneString(sqlCmd);
 }
+
 struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd, int *retOverlap)
 {
 /* read all genes from a table find the gene with the biggest overlap. 
@@ -564,7 +809,7 @@ if (*list == NULL)
         else
             {
             psl = pslLoad(row);
-            el = genePredFromPsl(psl, psl->tStart, psl->tEnd, 10);
+            el = genePredFromPsl2(psl, 0, NULL, 10);
             }
         slAddHead(list, el);
         }

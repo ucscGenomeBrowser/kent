@@ -1,8 +1,9 @@
 /* genbank.c - Various functions for dealing with genbank data */
 #include "common.h"
 #include "genbank.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.5 2004/02/14 10:36:57 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -15,26 +16,28 @@ char *endPtr;
 return ((*numStr != '\0') && (*endPtr == '\0'));
 }
 
-static boolean parseStartCds(char *startBuf, unsigned *cdsStart)
+static boolean parseStartCds(char *startBuf, struct genbankCds* cds)
 /* parse a starting CDS coordinate */
 {
-if (startBuf[0] == '<')
+cds->startComplete = (startBuf[0] != '<');
+if (!cds->startComplete)
     startBuf++;
-if (!convertCoord(startBuf, cdsStart))
+if (!convertCoord(startBuf, &cds->start))
     return FALSE;
-(*cdsStart)--;  /* convert to zero-based */
+cds->start--;  /* convert to zero-based */
 return TRUE;
 }
 
-static boolean parseEndCds(char *endBuf, unsigned *cdsEnd)
+static boolean parseEndCds(char *endBuf, struct genbankCds* cds)
 /* parse an ending CDS coordinate */
 {
-if (endBuf[0] == '>')
+cds->endComplete = (endBuf[0] != '>');
+if (!cds->endComplete)
     endBuf++;
-return convertCoord(endBuf, cdsEnd);
+return convertCoord(endBuf, &cds->end);
 }
 
-static boolean parseRange(char *cdsBuf, unsigned *cdsStart, unsigned *cdsEnd)
+static boolean parseRange(char *cdsBuf, struct genbankCds* cds)
 /* parse a cds range in the for 221..617 */
 {
 char *p1;
@@ -46,12 +49,12 @@ if ((p1 == NULL) || (p1[1] != '.'))
 
 *p1 = '\0';
 p1 += 2;
-if (!parseStartCds(cdsBuf, cdsStart))
+if (!parseStartCds(cdsBuf, cds))
     return FALSE;
-return parseEndCds(p1, cdsEnd);
+return parseEndCds(p1, cds);
 }
 
-static boolean parseJoin(char *cdsBuf, unsigned *cdsStart, unsigned *cdsEnd)
+static boolean parseJoin(char *cdsBuf, struct genbankCds* cds)
 /* parse a join cds, taking the first and last coordinates in range */
 {
 int len = strlen(cdsBuf);
@@ -73,13 +76,12 @@ if (p == NULL)
     return FALSE; /* no dot after number */
 *p = '\0';
 
-if (!parseStartCds(startPtr, cdsStart))
+if (!parseStartCds(startPtr, cds))
     return FALSE;  /* invalid start */
-return parseEndCds(endPtr, cdsEnd);
+return parseEndCds(endPtr, cds);
 }
 
-static boolean parseComplement(char *cdsBuf, unsigned *cdsStart,
-                               unsigned *cdsEnd)
+static boolean parseComplement(char *cdsBuf, struct genbankCds* cds)
 /* parse a complement cds, perhaps recursively parsing a join */
 {
 int len = strlen(cdsBuf);
@@ -89,31 +91,55 @@ if (cdsBuf[len-1] != ')')
     return FALSE;  /* no closing paren */
 cdsBuf[len-1] = '\0';
 
+cds->complement = TRUE;
 if (startsWith(JOIN_PREFIX, p1))
-    return parseJoin(p1, cdsStart, cdsEnd);
+    return parseJoin(p1, cds);
 else
-    return parseRange(p1, cdsStart, cdsEnd);
+    return parseRange(p1, cds);
 }
 
-boolean genbankParseCds(char *cdsStr, unsigned *cdsStart, unsigned *cdsEnd)
-/* Parse a genbank CDS, returning TRUE if it can be successfuly parsed,
- * FALSE if there are problems.  If a join() is specified, the first and last
+boolean genbankCdsParse(char *cdsStr, struct genbankCds* cds)
+/* Parse a genbank CDS, returning TRUE if it can be successfuly parsed, FALSE
+ * if there are problems.  If a join() is specified, the first and last
  * coordinates are used for the CDS.  Incomplete CDS specifications will still
- * return the start or end.  cdsStart and cdsEnd are set to -1 on error.
- */
+ * return the start or end.  start/end are set to 0 on error. */
 {
+static struct dyString* cdsBuf = NULL;   /* buffer for CDS strings */
 boolean isOk;
-char *cdsBuf = alloca(strlen(cdsStr)+1);
-strcpy(cdsBuf, cdsStr); /* copy that can be modified */
+if (cdsBuf == NULL)
+    cdsBuf = dyStringNew(512);
+/* copy so that string can be modified without changing input */
+dyStringClear(cdsBuf);
+dyStringAppend(cdsBuf, cdsStr);
+ZeroVar(cds);
 
-if (startsWith(JOIN_PREFIX, cdsBuf))
-    isOk = parseJoin(cdsBuf, cdsStart, cdsEnd);
-else if (startsWith(COMPLEMENT_PREFIX, cdsBuf))
-    isOk = parseComplement(cdsBuf, cdsStart, cdsEnd);
+/*  FIXME: complement handling is wrong here, but it should only occur in DNA*/
+
+if (startsWith(JOIN_PREFIX, cdsBuf->string))
+    isOk = parseJoin(cdsBuf->string, cds);
+else if (startsWith(COMPLEMENT_PREFIX, cdsBuf->string))
+    isOk = parseComplement(cdsBuf->string, cds);
 else
-    isOk = parseRange(cdsBuf, cdsStart, cdsEnd);
+    isOk = parseRange(cdsBuf->string, cds);
+
 if (!isOk)
-    *cdsStart = *cdsEnd = -1;
+    cds->start = cds->end = 0;
 return isOk;
 }
 
+boolean genbankParseCds(char *cdsStr, unsigned *cdsStart, unsigned *cdsEnd)
+/* Compatiblity function, genbankCdsParse is prefered. Parse a genbank CDS,
+ * returning TRUE if it can be successfuly parsed, FALSE if there are
+ * problems.  If a join() is specified, the first and last coordinates are
+ * used for the CDS.  Incomplete CDS specifications will still return the
+ * start or end.  cdsStart and cdsEnd are set to -1 on error.
+ */
+{
+struct genbankCds cds;
+boolean isOk = genbankCdsParse(cdsStr, &cds);
+if (!isOk)
+    cds.start = cds.end = -1;
+*cdsStart = cds.start;
+*cdsEnd = cds.end;
+return isOk;
+}

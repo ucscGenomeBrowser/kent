@@ -20,7 +20,7 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBaseSwissProt.o gbProtAnn.o gcPercent.o genMapDb.o genbank.o \
-    geneBands.o geneGraph.o genePred.o genomicDups.o genomicSuperDups.o \
+    geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o genomicSuperDups.o \
     ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o grp.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgGene.o \
@@ -56,11 +56,5 @@ ctags:
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
-test:	force
-	cd test && ${MAKE} test
-
-force:
-
-tests: 	
-#	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_ggMrnaAli test_ggMrnaAli.c  $(MYLIBS) $L
-	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_geneGraph test_geneGraph.c  $(MYLIBS) $L
+test:
+	cd tests && ${MAKE} test

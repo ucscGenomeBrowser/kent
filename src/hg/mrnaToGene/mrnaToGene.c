@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.7 2003/06/15 06:48:43 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.8 2004/02/14 10:37:00 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,6 +18,7 @@ static struct optionSpec optionSpecs[] = {
     {"cdsFile", OPTION_STRING},
     {"requireUtr", OPTION_BOOLEAN},
     {"smallInsertSize", OPTION_INT},
+    {"saveFrame", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
@@ -27,6 +28,7 @@ static struct optionSpec optionSpecs[] = {
 static int gSmallInsertSize = 0;
 static boolean gRequireUtr = FALSE;
 static boolean gKeepInvalid = FALSE;
+static boolean gSaveFrame = FALSE;
 static boolean gQuiet = FALSE;
 
 /* hash table of accession to CDS */
@@ -57,6 +59,7 @@ errAbort(
   "   CDS the second\n"
   "  -smallInsertSize=5 - Merge inserts smaller than this many bases (default 5)\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
+  "  -saveFrame - create a PSL with frame information.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
   "\n");
@@ -133,7 +136,9 @@ struct genePred* pslToGenePred(struct psl *psl, char *cdsStr)
 /* Convert a psl to genePred with specified CDS string; return NULL
  * if should be skipped.  cdsStr maybe NULL if not available. */
 {
+struct genbankCds cds;
 unsigned cdsStart = -1, cdsEnd = -1;
+unsigned optFields = gSaveFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
 
 if (cdsStr == NULL)
     {
@@ -144,7 +149,7 @@ if (cdsStr == NULL)
     }
 else
     {
-    if (!genbankParseCds(cdsStr, &cdsStart, &cdsEnd))
+    if (!genbankCdsParse(cdsStr, &cds))
         {
         if (!gQuiet)
             fprintf(stderr, "Warning: invalid CDS for %s: %s\n",
@@ -154,24 +159,24 @@ else
         }
     else
         {
-        if ((cdsEnd-cdsStart) > psl->qSize)
+        if ((cds.end-cds.start) > psl->qSize)
             {
             if (!gQuiet)
                 fprintf(stderr, "Warning: CDS for %s (%u..%u) longer than qSize (%u)\n",
-                        psl->qName, cdsStart, cdsEnd, psl->qSize);
+                        psl->qName, cds.start, cds.end, psl->qSize);
             if (!gKeepInvalid)
                 return NULL;
-            cdsStart = -1;
-            cdsEnd = -1;
+            cds.start = -1;
+            cds.end = -1;
             }
-        if (gRequireUtr && ((cdsStart == 0) || (cdsEnd == psl->qSize)))
+        if (gRequireUtr && ((cds.start == 0) || (cds.end == psl->qSize)))
             {
             fprintf(stderr, "Warning: no 5' or 3' UTR for %s\n", psl->qName);
             return NULL;
             }
         }
     }
-return genePredFromPsl(psl, cdsStart, cdsEnd, gSmallInsertSize);
+return genePredFromPsl2(psl, optFields, &cds, gSmallInsertSize);
 }
 
 void convertPslRow(char* cdsStr, char **row, FILE *genePredFh)
@@ -269,6 +274,7 @@ cdsDb = optionVal("cdsDb", NULL);
 cdsFile = optionVal("cdsFile", NULL);
 gRequireUtr = optionExists("requireUtr");
 gSmallInsertSize = optionInt("smallInsertSize", 5);
+gSaveFrame = optionExists("saveFrame");
 gKeepInvalid = optionExists("keepInvalid");
 gQuiet = optionExists("quiet");
 
