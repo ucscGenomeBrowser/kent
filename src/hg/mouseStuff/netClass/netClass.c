@@ -12,7 +12,7 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.16 2003/12/04 01:00:19 angie Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.17 2004/08/04 16:24:30 angie Exp $";
 
 char *tNewR = NULL;
 char *qNewR = NULL;
@@ -155,11 +155,26 @@ struct rbTree *allTree = rbTreeNew(rangeCmp);
 struct rbTree *newTree = rbTreeNew(rangeCmp);
 char tableName[64];
 char query[256];
+boolean splitRmsk = TRUE;
 
 safef(tableName, sizeof(tableName), "%s_rmsk", chrom);
 if (! sqlTableExists(conn, tableName))
-    errAbort("Can't find rmsk table for %s (%s.%s)\n", chrom, db, tableName);
-sprintf(query, "select genoStart,genoEnd,repName,repClass,repFamily from %s", tableName);
+    {
+    safef(tableName, sizeof(tableName), "rmsk");
+    if (! sqlTableExists(conn, tableName))
+	errAbort("Can't find rmsk table for %s (%s.%s_rmsk or %s.rmsk)\n",
+		 chrom, db, chrom, db);
+    splitRmsk = FALSE;
+    }
+if (splitRmsk)
+    sprintf(query,
+	    "select genoStart,genoEnd,repName,repClass,repFamily from %s",
+	    tableName);
+else
+    sprintf(query,
+	    "select genoStart,genoEnd,repName,repClass,repFamily from %s "
+	    "where genoName = \"%s\"",
+	    tableName, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
