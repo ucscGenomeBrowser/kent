@@ -31,6 +31,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 enum lowTypes
 /* Different low level types (not including lists and objects) */
    {
+   t_double,   /* double precision floating point. */
    t_float,    /* single precision floating point. */
    t_char,     /* character or fixed size character array. */
    t_int,      /* signed 32 bit integer */
@@ -57,6 +58,7 @@ struct lowTypeInfo
     };
 
 struct lowTypeInfo lowTypes[] = {
+    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double"},
     {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float"},
     {t_char,    "char",    FALSE, FALSE, "char",             "char",          "Char"},
     {t_int,     "int",     FALSE, FALSE, "int",              "int",           "Signed"},
@@ -539,6 +541,8 @@ else if (lt->isUnsigned)
     fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_float)
     fprintf(f, "%sret->%s%s = sqlFloatComma(&s);\n", indent, col->name, arrayRef);
+else if (lt->type == t_double)
+    fprintf(f, "%sret->%s%s = sqlDoubleComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_char)
     {
     if (col->fixedSize > 0)
@@ -997,6 +1001,9 @@ for (col = table->columnList; col != NULL; col = col->next)
 	case t_float:
 	    outString = "%f";
 	    break;
+	case t_double:
+	    outString = "%f";
+	    break;
 	case t_int:
 	case t_short:
 	case t_byte:
@@ -1161,6 +1168,10 @@ for (col = table->columnList; col != NULL; col = col->next)
 		}
 	    break;
 	case t_float:
+	    outString = "%f";
+	    sprintf(colInsertBuff, "el->%s ", colName);
+	    break;
+	case t_double:
 	    outString = "%f";
 	    sprintf(colInsertBuff, "el->%s ", colName);
 	    break;
@@ -1376,6 +1387,9 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    mightNeedQuotes = TRUE;
 	    break;
 	case t_float:
+	    outChar = 'f';
+	    break;
+	case t_double:
 	    outChar = 'f';
 	    break;
 	case t_int:
