@@ -407,3 +407,13 @@ visibility hide
 spectrum on
 type bed 6 +
 
+track tfbsCons
+shortLabel conserved_tfbs
+longLabel Transcription factor binding sites conserved in the human/mouse/rat alignment
+priority 1000
+group other
+visibility hide
+type bed 6
+spectrum on
+scoreMin 850
+scoreMax 1000
