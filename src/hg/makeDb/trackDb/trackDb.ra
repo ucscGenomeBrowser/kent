@@ -537,6 +537,15 @@ color 150,0,0
 type bed 4 +
 url http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/gene.cgi?genome=
 
+track exonWalk
+shortLabel ExonWalk
+longLabel ExonWalk Alt-Splicing Transcripts
+color 23,58,58
+group genes
+priority 72
+visibility hide
+type genePred
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
