@@ -30,6 +30,8 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/galGal1
     # Contig sequences have been stable for a while:
     wget ftp://genome.wustl.edu/private/chicken_040105/Fasta/chicken_040105.contigs.tar.gz
+    # Official location (password-protected):
+    # http://genome.wustl.edu/projects/chicken/chicken_analysis/chicken_040105.contigs.tar.gz
     mkdir contigs
     cd contigs
     tar xvfz ../chicken_040105.contigs.tar.gz
@@ -45,15 +47,26 @@ exit; # don't actually run this like a script :)
     cat ../contigs/*.fa > /cluster/bluearc/galGal1/allContigs.fa
     # Get qual scores too
     wget ftp://genome.wustl.edu/private/chicken_040105/Qual/chicken_040105.contigs.qual.tar.gz
+    # Official location (password-protected):
+    # http://genome.wustl.edu/projects/chicken/chicken_analysis/chicken_040105.contigs.qual.tar.gz
     
 
-# BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE 1/29/04 angie)
+# BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE 1/30/04 angie)
+    # 1/30/04: ZW_random has been made a part of Z.
+    # on hgwdev, "hgsql galGal1" and get rid of any chrZW_random tables
     ssh kolossus
     cd /cluster/data/galGal1
-    # PRELIMINARY -- COMPARE VERY CAREFULLY TO RELEASED AGPS!!!!
     wget ftp://genome.wustl.edu/private/lhillier/old/chicken_agp.040129.tar.gz
-    tar xvzf chicken_agp.040129.tar.gz
+    # Note: this January 30th tarfile is labeled January 29 -- rename it 
+    # to avoid confusion with several Jan. 29 agp downloads.
+    mv chicken_agp.040129.tar.gz chicken_agp.040130.tar.gz
+    # Official location (password-protected):
+    # http://genome.wustl.edu/projects/chicken/chicken_analysis/chicken_agp.040129.tar.gz
+    # I downloaded that and cmp'd to chicken_agp.040130.tar.gz -- same.
+    tar xvzf chicken_agp.040130.tar.gz
     cd chicken_agp
+    # confirmed that the only AGP changes from chicken_agp_29_third were 
+    # that ZW_random went away and Z got some new stuff at the beginning.
     cp /dev/null ../chrom.lst
     foreach f (*.agp)
       set chr = `echo $f:r | sed -e 's/^chr//'`
@@ -62,11 +75,11 @@ exit; # don't actually run this like a script :)
       cp -p $f ../$base
       if ("$chr" == "$base") echo $chr >> ../chrom.lst
     end
-    # There is a ZW_random but not a ZW... well, pretend there is a ZW.
-    echo ZW >> ../chrom.lst
     # OK, tack chrM on there too:
     echo M >> ../chrom.lst
     cd /cluster/data/galGal1
+    # get rid of the ZW_random and make a clean slate for Z (not Z_random)
+    rm -r ZW Z/chrZ.fa* Z/chrZ_? nib/chrZW_random.nib
     foreach c (`cat chrom.lst`)
       foreach agp ($c/chr$c{,_random}.agp)
         if (-e $agp) then
@@ -88,12 +101,36 @@ exit; # don't actually run this like a script :)
       end
     end
     faSize */chr*.fa
-#1172150385 bases (118060345 N's 1054090040 real) in 48 sequences in 48 files
-#Total size: mean 24419799.7 sd 47367971.2 min 2535 (chrE50C23) max 229650211 (chrUn) median 7900282
-#N count: mean 2459590.5 sd 12312257.6
+#1172160385 bases (118070345 N's 1054090040 real) in 47 sequences in 47 files
+#Total size: mean 24939582.7 sd 47753836.2 min 2535 (chrE50C23) max 229650211 (chrUn) median 7900282
+#N count: mean 2512135.0 sd 12440150.2
 
 
-# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 1/29/04 angie)
+# COMPARE BASE COUNTS WITH WUSTL'S (DONE 2/1/04 angie)
+    # Compare LaDeana's size summary file with our chrom faSize output:
+    cd /cluster/data/galGal1
+    # Download from password-protected location:
+    # http://genome.wustl.edu/projects/chicken/chicken_analysis/chicken.localized_per_chromosome
+    # Actually, we can only compare total bases with faSize because faSize 
+    # doesn't differentiate between an N from a gap and an N base.  
+    tail +4 chicken.localized_per_chromosome \
+    | perl -wpe 'next if (/^\s*$/); \
+                 if (s/^(\w+)\s+(\d+)\s+(\d+)\s*$//) { \
+                   ($c, $noGapBP, $totalBP) = ($1, $2, $3); \
+                   $c =~ s/Unlocalized/Un/; \
+                   $chr = "chr$c"; \
+                   $c =~ s/_random//; \
+                   $faSize = "faSize $c/$chr.fa"; \
+                   $faSize = `$faSize`; \
+                   if ($faSize =~ /^(\d+) bases \((\d+) N.s (\d+) real/) { \
+                     if ($totalBP != $1) { \
+                       print "$chr totalBP: WUSTL $totalBP, us $1!\n"; \
+                     } \
+                   } else { print "parsed faSize wrong:\n$faSize\n"; } \
+                 } else { print "what is this?\n$_\n"; }'
+
+
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 1/30/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1
     foreach c (`cat chrom.lst`)
@@ -150,7 +187,7 @@ exit; # don't actually run this like a script :)
       | hgsql galGal1
 
 
-# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 1/29/04 angie)
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 1/30/04 angie)
     # Make nib/, unmasked until RepeatMasker and TRF steps are done.
     # Do this now so we can load up RepeatMasker and run featureBits; 
     # can also load up other tables that don't depend on masking.  
@@ -177,11 +214,11 @@ exit; # don't actually run this like a script :)
     hgsql galGal1  < $HOME/kent/src/hg/lib/chromInfo.sql
     hgNibSeq -preMadeNib galGal1 /gbdb/galGal1/nib */chr*.fa
     echo "select chrom,size from chromInfo" | hgsql -N galGal1 > chrom.sizes
-    # take a look at chrom.sizes, should be 48 lines
+    # take a look at chrom.sizes, should be 47 lines
     wc chrom.sizes
 
 
-# REPEAT MASKING (IN PROGRESS 1/29/04 angie)
+# REPEAT MASKING (DONE 1/31/04 angie)
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kksilo
     cd /cluster/data/galGal1
@@ -234,12 +271,15 @@ if (-e /tmp/galGal1/$2/$2.cat) /bin/cp /tmp/galGal1/$2/$2.cat ./
       end
     end
 
-TODO
     #- Do the run
     ssh kk
     cd /cluster/data/galGal1/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
+#Completed: 2783 of 2783 jobs
+#Average job time:                1448s      24.13m     0.40h    0.02d
+#Longest job:                     3201s      53.35m     0.89h    0.04d
+#Submission to last job:          5738s      95.63m     1.59h    0.07d
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kksilo
@@ -272,22 +312,23 @@ TODO
     hgLoadOut galGal1 */chr*.fa.out
 
 
-# VERIFY REPEATMASKER RESULTS (TODO)
+# VERIFY REPEATMASKER RESULTS (DONE 1/30/04 angie)
     # Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on galGal1 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits galGal1 rmsk
+#103553237 bases of 1054197620 (9.823%) in intersection
     # No comparable species -- in conf call 01/21/04, Arian said about 
     # 8-10% should be covered.
 
 
-# MAKE LIFTALL.LFT (DONE 1/29/04 angie)
+# MAKE LIFTALL.LFT (DONE 1/30/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
-# PUT UNMASKED CHUNKS ON BLUEARC (DONE 1/29/04 angie)
+# PUT UNMASKED CHUNKS ON BLUEARC (DONE 1/30/04 angie)
     # Some of Terry's staging scripts require a flat dir containing 
     # all contigs; also, doesn't hurt to set aside unmasked seq.
     ssh kksilo
@@ -298,7 +339,7 @@ TODO
     end
 
 
-# MAKE STS MARKERS TRACK (IN PROGRESS 1/29/04 angie)
+# MAKE STS MARKERS TRACK (IN PROGRESS 1/30/04 angie -- need more info from Terry)
     # Doing a dry run to see if I can duplicate Terry's mapping of 
     # markers to the prelim release.
     set base = /cluster/data/galGal1/bed/markers
@@ -338,9 +379,9 @@ TODO
     para create jobList
     para try, check, push, check, ...
 #Completed: 251 of 251 jobs
-#Average job time:                  11s       0.19m     0.00h    0.00d
-#Longest job:                       19s       0.32m     0.01h    0.00d
-#Submission to last job:            73s       1.22m     0.02h    0.00d
+#Average job time:                  30s       0.50m     0.01h    0.00d
+#Longest job:                       45s       0.75m     0.01h    0.00d
+#Submission to last job:            46s       0.77m     0.01h    0.00d
     cat `ls -1 epcr.out/* | sort -g` > all.epcr
 
     # blat primers -- with old blat.2 !
@@ -361,10 +402,10 @@ TODO
     cd $base/primers/blat
     para create jobList
     para try, check, push, check, ...
-#Completed: 262 of 262 jobs
-#Average job time:                  19s       0.32m     0.01h    0.00d
-#Longest job:                       33s       0.55m     0.01h    0.00d
-#Submission to last job:            65s       1.08m     0.02h    0.00d
+#Completed: 261 of 261 jobs
+#Average job time:                  18s       0.30m     0.00h    0.00d
+#Longest job:                       27s       0.45m     0.01h    0.00d
+#Submission to last job:            28s       0.47m     0.01h    0.00d
     /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
     rm -r temp
 
@@ -394,10 +435,10 @@ TODO
     cd $base/sts/blat
     para create jobList
     para try, check, push, check, ...
-#Completed: 262 of 262 jobs
-#Average job time:                 108s       1.79m     0.03h    0.00d
-#Longest job:                      207s       3.45m     0.06h    0.00d
-#Submission to last job:           276s       4.60m     0.08h    0.00d
+#Completed: 261 of 261 jobs
+#Average job time:                  96s       1.59m     0.03h    0.00d
+#Longest job:                      199s       3.32m     0.06h    0.00d
+#Submission to last job:           199s       3.32m     0.06h    0.00d
     /cluster/bin/i386/pslSort dirs raw.psl temp stsMarkers.out
     /cluster/bin/i386/pslReps -nearTop=0.01 -minCover=0.6 -minAli=0.8 \
       -noIntrons raw.psl stsMarkers.psl /dev/null
@@ -429,13 +470,172 @@ TODO
 
     ssh hgwdev
     cd /cluster/data/galGal1/bed/markers
+    # Make an stsMarkersTmp so we can at least see the locations
     awk '{printf "%s\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5 * 1000};' \
       sts/stsMarkers.final.orig \
     | liftUp -type=.bed stsMarkersTmp.bed ../../jkStuff/liftAll.lft warn stdin
     hgLoadBed galGal1 stsMarkerTmp stsMarkersTmp.bed 
+    # lift & load all_sts_primer
+    liftUp primers.filter.lifted.psl ../../jkStuff/liftAll.lft warn \
+      primers/primers.psl.filter
+    hgLoadPsl -table=all_sts_primer -fastLoad \
+      galGal1 primers.filter.lifted.psl
+    # lift & load all_sts_seq
+    liftUp stsMarkers.filter.lifted.psl ../../jkStuff/liftAll.lft warn \
+      sts/stsMarkers.psl.filter
+    hgLoadPsl -table=all_sts_seq -fastLoad \
+      galGal1 stsMarkers.filter.lifted.psl
 
 
-# SIMPLE REPEATS (TRF) (IN PROGRESS 1/29/04 angie)
+# BACENDS (DONE 1/31/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/bacends
+    cd /cluster/data/galGal1/bed/bacends
+    # download
+    wget ftp://ftp.ncbi.nih.gov/genomes/BACENDS/gallus_gallus/AllBACends.mfa.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/BACENDS/gallus_gallus/cl_acc_gi_len.gz
+    gunzip *.gz
+    /cluster/bin/scripts/convertBacEndPairInfo cl_acc_gi_len >& pairInfo.log
+    # Next time around, don't keep the version number, so that the 
+    # bacends.fa accs will match the cl_acc_gi_len accs.  Use this 
+    # replacement instead: 's/^>gi\|\d+\|gb\|(\w+)\.\d+\|.*/>$1/'
+    perl -wpe 's/^>gi\|\d+\|gb\|(\w+\.\d+)\|.*/>$1/' AllBACends.mfa \
+      > bacends.fa
+    faSize bacends.fa
+#146921771 bases (2724913 N's 144196858 real) in 135555 sequences in 1 files
+#Total size: mean 1083.9 sd 184.7 min 64 (CC322877.1) max 2431 (CC263290.1) median 1095
+#N count: mean 20.1 sd 73.1
+    mkdir /cluster/bluearc/galGal1/bacends
+    faSplit sequence bacends.fa 20 /cluster/bluearc/galGal1/bacends/bacends
+    ls -1S /cluster/bluearc/galGal1/bacends/*.fa > bacends.lst
+    ls -1S /cluster/bluearc/galGal1/unmaskedChunks/*.fa > contigs.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -tileSize=10 -ooc=../markers/10.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    mkdir psl
+    gensub2 contigs.lst bacends.lst template jobList
+    ssh kk
+    cd /cluster/data/galGal1/bed/bacends
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 5220 of 5220 jobs
+#Average job time:                 105s       1.75m     0.03h    0.00d
+#Longest job:                     2431s      40.52m     0.68h    0.03d
+#Submission to last job:          2608s      43.47m     0.72h    0.03d
+    # back on kksilo, filter and lift results:
+    pslSort dirs raw.psl temp psl
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl \
+      bacEnds.psl /dev/null
+    liftUp bacEnds.lifted.psl ../../jkStuff/liftAll.lft warn bacEnds.psl
+    # pslSort ??
+    rm -r temp
+    rm raw.psl
+
+    extractUniqPsl bacEnds.lifted.psl bacEnds.psl.filter
+    pslReps bacEnds.psl.filter.dup.psl bacEnds.psl.filter.1 /dev/null \
+      -noIntrons -minCover=0.80 -minAli=0.90 -nearTop=0.05
+    extractUniqPsl bacEnds.psl.filter.1 bacEnds.psl.filter.1
+    rm bacEnds.psl.filter.1
+    pslReps bacEnds.psl.filter.1.dup.psl bacEnds.psl.filter.2 /dev/null \
+      -noIntrons -minCover=0.90 -minAli=0.95 -nearTop=0.01
+    extractUniqPsl bacEnds.psl.filter.2 bacEnds.psl.filter.2
+    rm bacEnds.psl.filter.2
+    pslReps bacEnds.psl.filter.2.dup.psl bacEnds.psl.filter.3 /dev/null \
+      -noIntrons -minCover=0.95 -minAli=0.98 -nearTop=0.01
+    cat bacEnds.psl.filter.3 \
+        bacEnds.psl.filter.uniq.psl \
+        bacEnds.psl.filter.1.uniq.psl \
+        bacEnds.psl.filter.2.uniq.psl \
+    > bacEnds.psl.filter.lifted
+    rm *.names bacEnds.psl.filter.3 bacEnds.psl.filter.uniq.psl \
+       bacEnds.psl.filter.1.uniq.psl bacEnds.psl.filter.2.uniq.psl
+
+    extractPslInfo -h -be bacEnds.psl.filter.lifted
+    mv bacEnds.psl.filter.lifted.initial bacEnds.initial
+    # Oops, should have stripped the version from bacends.fa acc's so 
+    # they would match cl_acc_gi_len accs!
+    perl -wpe 's/^(\w+\s+\d+\s+\d+\s+\w+)\.\d+/$1/' bacEnds.initial \
+      > bacEndsNoVers.initial
+    mv bacEndsNoVers.initial bacEnds.initial
+    findAccession -agp -chicken bacEnds.initial /cluster/data/galGal1
+    # rm bacEnds.initial
+    sort -k 4 bacEnds.initial.acc > bacEnds.sort
+    compileBacEnds bacEnds.sort bacEndPairs.txt bacEndSingles.txt \
+      > bacEnds.temp
+    sorttbl chrom chromStart < bacEnds.temp > bacEnds.rdb
+    rm bacEnds.initial.acc bacEnds.sort bacEnds.temp
+
+    createBACpairs bacEnds.rdb bacEndPairs.txt > temp.rdb
+    sorttbl chrom1 -r ord1 chromStart1 < temp.rdb > bacEnds.pairs.rdb
+    rm temp.rdb
+    createBACpairs -bed bacEnds.rdb bacEndPairs.txt > bacEndPairs.rdb
+    sorttbl chrom chromStart < bacEndPairs.rdb \
+    | headchg -del > bacEndPairs.bed    
+    rm bacEndPairs.rdb
+    createBacPairsBad -bed bacEnds.rdb bacEndPairs.txt > bacEndPairsBad.rdb
+    sorttbl chrom chromStart < bacEndPairsBad.rdb \
+    | headchg -del > bacEndPairsBad.bed    
+    rm bacEndPairsBad.rdb
+    sorttbl chrom chromStart < bacEndPairsLong.rdb \
+    | headchg -del > bacEndPairsLong.bed
+    rm bacEndPairsLong.rdb
+    # This made something 0-length, but I'm not going to pursue for now:
+    findMissingEnd -max 500000 singleBac.txt bacEnds.psl.filter.2.dup.psl \
+      bacEnds.psl.filter.1.dup.psl bacEnds.psl.filter.dup.psl > bacEndsMiss.psl
+    mv bacEnds.psl.filter.lifted bacEnds.psl.filter.lifted.orig
+    cat bacEnds.psl.filter.lifted.orig bacEndsMiss.psl \
+      > bacEnds.psl.filter.lifted
+    rm bacEnds.psl.filter.2.dup.psl bacEnds.psl.filter.1.dup.psl \
+       bacEnds.psl.filter.dup.psl
+    # Doh... again, having to strip those damn version numbers:
+    perl -wpe \
+      '@w=split(/\t/); if (defined $w[9]){ $w[9] =~ s/(\w+)\.\d+/$1/; } \
+       $_=join("\t",@w)' \
+      bacEnds.psl.filter.lifted > tmp
+    mv tmp bacEnds.psl.filter.lifted
+    extractPslLoad bacEnds.psl.filter.lifted bacEndPairs.bed \
+      bacEndPairsBad.bed bacEndPairsLong.bed > bacEnds.psl.rdb
+    sorttbl tname tstart < bacEnds.psl.rdb | headchg -del > bacEnds.load.psl
+    rm bacEnds.psl.rdb
+    # OK, now before loading sequences, we really have to fix bacends.fa:
+    perl -wpe 's/^>(\w+)\.\d+/>$1/' bacends.fa \
+      > tmp
+    mv tmp bacends.fa
+
+    # Load seq's and alignments
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/bacends
+    mkdir /gbdb/galGal1/bacends
+    ln -s /cluster/data/galGal1/bed/bacends/bacends.fa /gbdb/galGal1/bacends
+    hgLoadSeq galGal1 /gbdb/galGal1/bacends/bacends.fa
+    hgLoadPsl -table=all_bacends -fastLoad \
+      galGal1 /cluster/data/galGal1/bed/bacends/bacEnds.load.psl
+    # Don't know which two rows prompted this... but all seem to have loaded.
+#load of all_bacends did not go as planned: 76325 record(s), 0 row(s) skipped, 2 warning(s) loading psl.tab
+    ~/bin/i386/hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql \
+      -hasBin galGal1 bacEndPairs bacEndPairs.bed
+
+    sed -e 's/bacEndPairs/bacEndPairsBad/g' \
+      $HOME/kent/src/hg/lib/bacEndPairs.sql > bacEndPairsBad.sql
+    ~/bin/i386/hgLoadBed -sqlTable=bacEndPairsBad.sql \
+      -hasBin galGal1 bacEndPairsBad bacEndPairsBad.bed
+    # Doh!  12 lines of that have negative starts.  Well, trim those 
+    # for now and load the rest, then go back and find the neg-start 
+    # cause...
+    egrep -v '	-[0-9]+' bacEndPairsBad.bed > bacEndPairsBadFudge.bed
+    ~/bin/i386/hgLoadBed -sqlTable=bacEndPairsBad.sql \
+      -hasBin galGal1 bacEndPairsBad bacEndPairsBadFudge.bed
+
+    sed -e 's/bacEndPairs/bacEndPairsLong/g' \
+      $HOME/kent/src/hg/lib/bacEndPairs.sql > bacEndPairsLong.sql
+    ~/bin/i386/hgLoadBed -sqlTable=bacEndPairsLong.sql \
+      -hasBin galGal1 bacEndPairsLong bacEndPairsLong.bed
+
+
+# SIMPLE REPEATS (TRF) (DONE 1/30/04 angie)
     # TRF runs pretty quickly now... it takes a few hours total runtime, 
     # so instead of binrsyncing and para-running, just do this on the
     # local fileserver
@@ -474,7 +674,6 @@ TODO
 
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 1/30/04/ angie)
-
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh kksilo
@@ -500,9 +699,15 @@ TODO
           jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
       endif
     end
+    # Here's the coverage for the filtered TRF:
+    ssh hgwdev
+    cat /cluster/data/galGal1/bed/simpleRepeat/trfMaskChrom/*.bed \
+      > /tmp/filtTrf.bed
+    featureBits galGal1 /tmp/filtTrf.bed
+    # 4512560 bases of 1054197620 (0.428%) in intersection
 
 
-# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO)
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 1/31/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1
     # Soft-mask (lower-case) the contig and chr .fa's, 
@@ -510,39 +715,31 @@ TODO
     set trfCtg=bed/simpleRepeat/trfMask
     set trfChr=bed/simpleRepeat/trfMaskChrom
     foreach f (*/chr*.fa)
-      echo "repeat- and trf-masking f"
-      /cluster/bin/i386/maskOutFa -soft $f $f.out $f
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
       set chr = $f:t:r
-      /cluster/bin/i386/maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
       echo "hard-masking $f"
-      /cluster/bin/i386/maskOutFa $f hard $f.masked
+      maskOutFa $f hard $f.masked
     end
     foreach c (`cat chrom.lst`)
       echo "repeat- and trf-masking contigs of chr$c, chr${c}_random"
       foreach d ($c/chr*_?{,?})
         set ctg=$d:t
         set f=$d/$ctg.fa
-        /cluster/bin/i386/maskOutFa -soft $f $f.out $f
-        /cluster/bin/i386/maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
-        /cluster/bin/i386/maskOutFa $f hard $f.masked
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
       end
     end
     #- Rebuild the nib files, using the soft masking in the fa:
     mkdir nib
     foreach f (*/chr*.fa)
-      /cluster/bin/i386/faToNib -softMask $f nib/$f:t:r.nib
-    end
-    # Copy the masked contig fa to /cluster/bluearc:
-    ssh kksilo
-    rm -rf /cluster/bluearc/galGal1/trfFa
-    mkdir -p /cluster/bluearc/galGal1/trfFa
-    foreach d (/cluster/data/galGal1/*/chr*_?{,?})
-      set ctg = $d:t
-      cp -p $d/$ctg.fa /cluster/bluearc/galGal1/trfFa
+      faToNib -softMask $f nib/$f:t:r.nib
     end
 
 
-# GOLD AND GAP TRACKS (DONE 1/29/04 angie)
+# GOLD AND GAP TRACKS (DONE 1/30/04 angie)
     ssh hgwdev
     cd /cluster/data/galGal1
     hgGoldGapGl -noGl -chromLst=chrom.lst galGal1 /cluster/data/galGal1 .
@@ -553,7 +750,7 @@ TODO
     | hgsql galGal1
 
 
-# MAKE GCPERCENT (DONE 1/29/04 angie)
+# MAKE GCPERCENT (DONE 1/30/04 angie -- DROPPED 2/4/04, replaced by gc20kBase)
      ssh hgwdev
      mkdir /cluster/data/galGal1/bed/gcPercent
      cd /cluster/data/galGal1/bed/gcPercent
@@ -568,7 +765,7 @@ TODO
           defaultPos, active, orderKey, genome, scientificName,  \
           htmlPath, hgNearOk)  \
           values("galGal1", "Jan. 2004", \
-          "/gbdb/galGal1/nib", "Chicken", "chr2:1000000-1100000", 1, \
+          "/gbdb/galGal1/nib", "Chicken", "chr13:13124250-13128200", 1, \
           35, "Chicken", "Gallus gallus", \
           "/gbdb/galGal1/html/description.html", 0);' \
     | hgsql -h genome-testdb hgcentraltest
@@ -650,19 +847,25 @@ zip -j mrna.zip mrna.fa
     # Maybe ensGene when we get that.
 
 
-# PREPARE CLUSTER FOR BLASTZ RUN (TODO)
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 1/31/04 angie)
+    ssh kksilo
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
-    ssh kkr1u00
     rm -rf /cluster/bluearc/galGal1/nib
-    mkdir -p /cluster/bluearc/galGal1/nib
+    mkdir /cluster/bluearc/galGal1/nib
     cp -p nib/chr*.nib /cluster/bluearc/galGal1/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /cluster/bluearc/galGal1/trfFa
+    mkdir /cluster/bluearc/galGal1/trfFa
+    foreach d (*/chr*_?{,?})
+      cp $d/$d:t.fa /cluster/bluearc/galGal1/trfFa
+    end
 
 
-# SWAP BLASTZ HUMAN-CHICKEN TO CHICKEN-HUMAN (HG16) (TODO)
+# SWAP BLASTZ HUMAN-CHICKEN TO CHICKEN-HUMAN (HG16) (DONE 2/3/04 angie)
     ssh kolossus
     mkdir /cluster/data/galGal1/bed/blastz.hg16.swap
     cd /cluster/data/galGal1/bed/blastz.hg16.swap
-    set aliDir = /cluster/bluearc/hg16/bed/blastz.galGal1.2004-01-DD
+    set aliDir = /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
     cp $aliDir/S1.len S2.len
     cp $aliDir/S2.len S1.len
     mkdir unsorted axtChrom
@@ -675,22 +878,21 @@ zip -j mrna.zip mrna.fa
       axtSort $f axtChrom/$f:t
     end
     du -sh $aliDir/axtChrom unsorted axtChrom
+#8.3G    /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChrom
+#8.3G    unsorted
+#8.3G    axtChrom
     rm -r unsorted
 
 
-# CHAIN HUMAN BLASTZ (TODO)
-    ssh kksilo
-    cd /cluster/data/galGal1/bed/blastz.hg16.swap
-    mkdir -p axtChain/run1
-    cd axtChain/run1
-    mkdir out chain
-
+# CHAIN HUMAN BLASTZ (DONE 2/3/04 angie)
     # Run axtChain on little cluster
     ssh kkr1u00
     cd /cluster/data/galGal1/bed/blastz.hg16.swap
     mkdir -p axtChain/run1
-    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/run1
-    ls -1S /cluster/data/galGal1/bed/blastz.hg16.swap/axtChrom/*.axt > input.lst
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/galGal1/bed/blastz.hg16.swap/axtChrom/*.axt \
+      > input.lst
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
@@ -700,27 +902,28 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-axtFilter -notQ=chrUn_random $1 \
-| axtChain stdin /cluster/bluearc/galGal1/nib /iscratch/i/hg16/nib $2 > $3
+axtFilter -notQ=chrUn $1 \
+| axtChain stdin /cluster/bluearc/galGal1/nib \
+  /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
-    mkdir out chain
     gensub2 input.lst single gsub jobList
     para create jobList
-    para try
-    para push # ... etc ...
+    para try, check, push, check...
+#Completed: 47 of 47 jobs
+#Average job time:                 478s       7.97m     0.13h    0.01d
+#Longest job:                     2319s      38.65m     0.64h    0.03d
+#Submission to last job:          2319s      38.65m     0.64h    0.03d
 
     # now on the cluster server, sort chains
     ssh kksilo
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
-    # these steps take ~20 minutes
-    # optionally: rm run1/chain/*.chain
+    rm run1/chain/*.chain
 
     # Load chains into database
-    # next machine
     ssh hgwdev
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/chain
     foreach i (*.chain)
@@ -730,7 +933,7 @@ axtFilter -notQ=chrUn_random $1 \
     end
 
 
-# NET HUMAN BLASTZ (TODO)
+# NET HUMAN BLASTZ (DONE 2/3/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     mkdir preNet
@@ -741,8 +944,6 @@ axtFilter -notQ=chrUn_random $1 \
                         /cluster/data/hg16/chrom.sizes ../preNet/$i
     end
     cd ..
-    # This foreach loop will take about 15 min to execute.
-
     mkdir n1 
     cd preNet
     foreach i (*.chain)
@@ -752,7 +953,7 @@ axtFilter -notQ=chrUn_random $1 \
                             /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
     end
     cd ..
-    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    cat n1/*.net | netSyntenic stdin hNoClass.net
 
     ssh hgwdev
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
@@ -769,9 +970,25 @@ axtFilter -notQ=chrUn_random $1 \
     ssh hgwdev
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet galGal1 netHg16 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet galGal1 syntenyHg16 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet galGal1 netSyntenyHg16 stdin
 
-    # Add entries for net and chain to chicken/galGal1 trackDb
+    # Add entries for chaing16, netHg16, syntenyHg16 to chicken/galGal1 trackDb
+
+
+# RUN AXTBEST (DONE 2/3/04 angie)
+    # chain/net seem kinda sparse, let's try axtBest...
+    ssh kolossus
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap
+    mkdir axtBest pslBest
+    foreach f (axtChrom/chr*.axt)
+      set chr=$f:t:r
+      echo axtBesting $chr
+      axtBest $f $chr axtBest/$chr.axt -minScore=300
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/$chr.psl
+    end
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap
+    cat pslBest/chr*.psl | hgLoadPsl -table=blastzBestHg16 galGal1 stdin
 
 
 # BLASTZ Self (TODO)
@@ -956,36 +1173,60 @@ SEQ2_LEN=$BASE/S2.len
     cp -p /cluster/data/galGal1/bed/blastz.galGal1/axtChrom/*.axt.gz .
         
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO)
-    ssh eieio
-    cd /cluster/data/genbank
-    # Edit /cluster/data/genbank/etc/genbank.conf and add these lines:
-# galGal1
+# MAKE 11.OOC FILE FOR BLAT (DONE 2/1/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/ooc
+    cd /cluster/data/galGal1/bed/ooc
+    ls -1 /cluster/bluearc/galGal1/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/galGal1/11.ooc -repMatch=1024
+#Wrote 1053 overused 11-mers to /cluster/bluearc/galGal1/11.ooc
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 2/1/04 angie)
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+    # See if /cluster/data/genbank/etc/genbank.conf has had any un-checked-in
+    # edits, check them in if necessary:
+    diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
+
+    # Edit etc/genbank.conf and add these lines:
+# galGal1 (chicken)
 galGal1.genome = /cluster/bluearc/galGal1/nib/chr*.nib
 galGal1.lift = /cluster/data/galGal1/jkStuff/liftAll.lft
 galGal1.refseq.mrna.native.load = no
-galGal1.genbank.mrna.native.load = yes
 galGal1.genbank.mrna.xeno.load = yes
 galGal1.genbank.est.xeno.load = no
 galGal1.downloadDir = galGal1
+
+    cvs ci etc/genbank.conf
+    # Since chicken is a new species for us, edit src/lib/gbGenome.c.  
+    # Pick some other browser species, & monkey-see monkey-do.  
+    cvs diff src/lib/gbGenome.c
+    make
+    cvs ci src/lib/gbGenome.c
+    # Edit src/align/gbBlat to add /cluster/bluearc/galGal1/11.ooc
+    cvs diff src/align/gbBlat
+    make
+    cvs ci src/align/gbBlat
+    # Install to /cluster/data/genbank:
+    make install-server
 
     ssh eieio
     cd /cluster/data/genbank
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
       -srcDb=genbank -type=mrna -verbose=1 -initial galGal1
-
-    # Load the results from the above
+    # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad galGal1
-
-    # -initial for ESTs:
-    ssh eieio
-    # To get this next one started, the work directory of the initial run 
-    # needs to be moved out of the way.  
+    # Clean up:
     rm -r /cluster/bluearc/genbank/work/initial.galGal1
-    # Now align ESTs:
+
+    ssh eieio
+    # -initial for ESTs:
     nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
       -srcDb=genbank -type=est -verbose=1 -initial galGal1
     # Load results:
@@ -996,11 +1237,14 @@ galGal1.downloadDir = galGal1
     rm -r /cluster/bluearc/genbank/work/initial.galGal1
 
 
-# PRODUCING GENSCAN PREDICTIONS (TODO)
+# PRODUCING GENSCAN PREDICTIONS (DONE 2/3/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal1/bed/genscan
+    cd /cluster/data/galGal1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
     # Run on small cluster (more mem than big cluster).
     ssh kkr1u00
-    mkdir -p /cluster/data/galGal1/bed/genscan
-    cd /cluster/data/galGal1/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
     # Generate a list file, genome.list, of all the hard-masked contigs that 
@@ -1015,19 +1259,23 @@ galGal1.downloadDir = galGal1
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
-    para try
-    para check
-    para push
-
+    para try, check, push, check, ...
+#Completed: 259 of 261 jobs
+#Crashed: 2 jobs
+#Average job time:                2920s      48.67m     0.81h    0.03d
+#Longest job:                   141367s    2356.12m    39.27h    1.64d
+#Submission to last job:        144447s    2407.45m    40.12h    1.67d
     # If there are crashes, diagnose with "para problems".  
     # If a job crashes due to genscan running out of memory, re-run it 
     # manually with "-window=1200000" instead of "-window=2400000".
+    /cluster/bin/i386/gsBig /cluster/data/galGal1/5/chr5_5/chr5_5.fa.masked gtf/chr5_5.fa.gtf -trans=pep/chr5_5.fa.pep -subopt=subopt/chr5_5.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+    /cluster/bin/i386/gsBig /cluster/data/galGal1/20/chr20_1/chr20_1.fa.masked gtf/chr20_1.fa.gtf -trans=pep/chr20_1.fa.pep -subopt=subopt/chr20_1.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
     
     # Convert these to chromosome level files as so:
     ssh kksilo
@@ -1080,7 +1328,7 @@ galGal1.downloadDir = galGal1
     hgLoadSeq galGal1 /gbdb/galGal1/fuguSeq/fugu_v3_mask.fasta
 
 
-# LOAD CPGISSLANDS (TODO)
+# LOAD CPGISSLANDS (DONE 2/1/04 angie)
     ssh hgwdev
     mkdir -p /cluster/data/galGal1/bed/cpgIsland
     cd /cluster/data/galGal1/bed/cpgIsland
