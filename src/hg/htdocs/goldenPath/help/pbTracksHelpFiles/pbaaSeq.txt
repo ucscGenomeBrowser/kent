@@ -1,4 +1,0 @@
-<!------------Description----------->
-This track shows the amino acid sequence comprising the protein. The data were
-obtained from the <A HREF="http://us.expasy.org/sprot/"
-TARGET=_blank>SwissProt</A>, TrEMBBL, and TrEMBL-NEW databases.
