@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.3 2004/02/23 06:49:10 kent Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.4 2004/02/24 22:12:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,11 +34,11 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void outputOne(struct twoBitHeader *tbh, char *seqName, FILE *f, 
+void outputOne(struct twoBitFile *tbf, char *seqName, FILE *f, 
 	int start, int end)
 /* Output sequence. */
 {
-struct dnaSeq *seq = twoBitReadSeqFrag(tbh, seqName, start, end);
+struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqName, start, end);
 faWriteNext(f, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
@@ -46,23 +46,22 @@ dnaSeqFree(&seq);
 void twoBitToFa(char *inName, char *outName)
 /* twoBitToFa - Convert all or part of twoBit file to fasta. */
 {
-FILE *inFile = mustOpen(inName, "rb");
 FILE *outFile = mustOpen(outName, "w");
-struct twoBitHeader *tbh = twoBitHeaderRead(inName, inFile);
+struct twoBitFile *tbf = twoBitOpen(inName);
 struct twoBitIndex *index;
 
 if (clSeq == NULL)
     {
-    for (index = tbh->indexList; index != NULL; index = index->next)
+    for (index = tbf->indexList; index != NULL; index = index->next)
         {
-	outputOne(tbh, index->name, outFile, clStart, clEnd);
+	outputOne(tbf, index->name, outFile, clStart, clEnd);
 	}
     }
 else
     {
-    outputOne(tbh, clSeq, outFile, clStart, clEnd);
+    outputOne(tbf, clSeq, outFile, clStart, clEnd);
     }
-twoBitHeaderFree(&tbh);
+twoBitClose(&tbf);
 }
 
 int main(int argc, char *argv[])

@@ -29,10 +29,10 @@ struct twoBitIndex
     bits32 offset;		/* Offset in file. */
     };
 
-struct twoBitHeader
+struct twoBitFile
 /* Holds header and index info from .2bit file. */
     {
-    struct twoBitHeader *next;
+    struct twoBitFile *next;
     char *fileName;	/* Name of this file, for error reporting. */
     FILE *f;		/* Open file. */
     boolean isSwapped;	/* Is byte-swapping needed. */
@@ -43,14 +43,14 @@ struct twoBitHeader
     struct hash *hash;	/* Hash of sequences. */
     };
 
-struct twoBitHeader *twoBitHeaderRead(char *fileName, FILE *f);
-/* Read in header and index from already opened file.  
+struct twoBitFile *twoBitOpen(char *fileName);
+/* Open file, read in header and index.  
  * Squawk and die if there is a problem. */
 
-void twoBitHeaderFree(struct twoBitHeader **pTbh);
-/* Free up resources associated with twoBitHeader. */
+void twoBitClose(struct twoBitFile **pTbf);
+/* Free up resources associated with twoBitFile. */
 
-struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
+struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd);
 /* Read part of sequence from .2bit file.  To read full
  * sequence call with start=end=0.  Note that sequence will

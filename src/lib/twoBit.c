@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.3 2004/02/24 22:04:14 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.4 2004/02/24 22:12:09 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -250,17 +250,17 @@ for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     }
 }
 
-void twoBitHeaderFree(struct twoBitHeader **pTbh)
-/* Free up resources associated with twoBitHeader. */
+void twoBitClose(struct twoBitFile **pTbf)
+/* Free up resources associated with twoBitFile. */
 {
-struct twoBitHeader *tbh = *pTbh;
-if (tbh != NULL)
+struct twoBitFile *tbf = *pTbf;
+if (tbf != NULL)
     {
-    freez(&tbh->fileName);
-    carefulClose(&tbh->f);
-    hashFree(&tbh->hash);
+    freez(&tbf->fileName);
+    carefulClose(&tbf->f);
+    hashFree(&tbf->hash);
     /* The indexList is allocated out of the hash's memory pool. */
-    freez(pTbh);
+    freez(pTbf);
     }
 }
 
@@ -274,39 +274,40 @@ if (isSwapped)
 return val;
 }
 
-struct twoBitHeader *twoBitHeaderRead(char *fileName, FILE *f)
-/* Read in header and index from already opened file.  
+struct twoBitFile *twoBitOpen(char *fileName)
+/* Open file, read in header and index.  
  * Squawk and die if there is a problem. */
 {
 bits32 sig;
-struct twoBitHeader *tbh;
+struct twoBitFile *tbf;
 struct twoBitIndex *index;
 boolean isSwapped = FALSE;
 int i;
 struct hash *hash;
+FILE *f = mustOpen(fileName, "rb");
 
 /* Allocate header verify signature, and read in
  * the constant-length bits. */
-AllocVar(tbh);
+AllocVar(tbf);
 mustReadOne(f, sig);
 if (sig == twoBitSwapSig)
-    isSwapped = tbh->isSwapped = TRUE;
+    isSwapped = tbf->isSwapped = TRUE;
 else if (sig != twoBitSig)
     errAbort("%s doesn't have a valid twoBitSig", fileName);
-tbh->fileName = cloneString(fileName);
-tbh->f = f;
-tbh->version = readBits32(f, isSwapped);
-if (tbh->version != 0)
+tbf->fileName = cloneString(fileName);
+tbf->f = f;
+tbf->version = readBits32(f, isSwapped);
+if (tbf->version != 0)
     {
     errAbort("Can only handle version 0 of this file. This is version %d",
-    	(int)tbh->version);
+    	(int)tbf->version);
     }
-tbh->seqCount = readBits32(f, isSwapped);
-tbh->reserved = readBits32(f, isSwapped);
+tbf->seqCount = readBits32(f, isSwapped);
+tbf->reserved = readBits32(f, isSwapped);
 
 /* Read in index. */
-hash = tbh->hash = hashNew(digitsBaseTwo(tbh->seqCount));
-for (i=0; i<tbh->seqCount; ++i)
+hash = tbf->hash = hashNew(digitsBaseTwo(tbf->seqCount));
+for (i=0; i<tbf->seqCount; ++i)
     {
     char name[256];
     if (!fastReadString(f, name))
@@ -314,10 +315,10 @@ for (i=0; i<tbh->seqCount; ++i)
     lmAllocVar(hash->lm, index);
     index->offset = readBits32(f, isSwapped);
     hashAddSaveName(hash, name, index, &index->name);
-    slAddHead(&tbh->indexList, index);
+    slAddHead(&tbf->indexList, index);
     }
-slReverse(&tbh->indexList);
-return tbh;
+slReverse(&tbf->indexList);
+return tbf;
 }
 
 
@@ -349,7 +350,7 @@ for (;;)
 }
 
 
-struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
+struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd)
 /* Read part of sequence from .2bit file.  To read full
  * sequence call with start=end=0.  Note that sequence will
@@ -361,8 +362,8 @@ bits32 seqSize;
 bits32 nBlockCount, maskBlockCount;
 bits32 *nStarts = NULL, *nSizes = NULL;
 bits32 *maskStarts = NULL, *maskSizes = NULL;
-boolean isSwapped = tbh->isSwapped;
-FILE *f = tbh->f;
+boolean isSwapped = tbf->isSwapped;
+FILE *f = tbf->f;
 struct twoBitIndex *index;
 int i;
 int packByteCount, packedStart, packedEnd, remainder, midStart, midEnd;
@@ -372,9 +373,9 @@ DNA *dna;
 
 /* Find offset in index and seek to it */
 dnaUtilOpen();
-index = hashFindVal(tbh->hash, name);
+index = hashFindVal(tbf->hash, name);
 if (index == NULL)
-     errAbort("%s is not in %s", name, tbh->fileName);
+     errAbort("%s is not in %s", name, tbf->fileName);
 fseek(f, index->offset, SEEK_SET);
 
 /* Read in seqSize. */
@@ -559,7 +560,7 @@ struct dnaSeq *twoBitLoadAll(char *spec)
  *    file/path/name:seqName */
 {
 struct dnaSeq *list = NULL, *seq;
-struct twoBitHeader *tbh = NULL;
+struct twoBitFile *tbf = NULL;
 FILE *f = NULL;
 if (twoBitIsRange(spec))
     {
@@ -567,24 +568,22 @@ if (twoBitIsRange(spec))
     char *file, *seqName;
     int start, end;
     twoBitParseRange(dupe, &file, &seqName, &start, &end);
-    f = mustOpen(file, "rb");
-    tbh = twoBitHeaderRead(file, f);
-    list = twoBitReadSeqFrag(tbh, seqName, start, end);
+    tbf = twoBitOpen(file);
+    list = twoBitReadSeqFrag(tbf, seqName, start, end);
     freez(&dupe);
     }
 else
     {
     struct twoBitIndex *index;
-    f = mustOpen(spec, "rb");
-    tbh = twoBitHeaderRead(spec, f);
-    for (index = tbh->indexList; index != NULL; index = index->next)
+    tbf = twoBitOpen(spec);
+    for (index = tbf->indexList; index != NULL; index = index->next)
 	{
-	seq = twoBitReadSeqFrag(tbh, index->name, 0, 0);
+	seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
 	slAddHead(&list, seq);
 	}
     slReverse(&list);
     }
-twoBitHeaderFree(&tbh);
+twoBitClose(&tbf);
 return list;
 }
 
