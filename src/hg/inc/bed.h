@@ -99,8 +99,14 @@ struct bed *bedLoad12(char **row);
 struct bed *bedLoadN(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
 
-void fullBedOutput(struct bed *el, FILE *f, char sep, char lastSep);
-/* Print out all 12 fields of bed.   */
+void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
+/* Write a bed of wordCount fields. */
+
+#define bedTabOutN(el,wordCount, f) bedOutputN(el,wordCount,f,'\t','\n');
+/* Print out bed as a line in a tab-separated file. */
+
+#define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',');
+/* Print out bed as a comma separated list including final comma. */
 
 #endif /* BED_H */
 
