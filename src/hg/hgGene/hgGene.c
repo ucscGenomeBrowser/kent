@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.47 2005/03/07 19:16:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.48 2005/04/06 22:25:08 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -266,6 +266,14 @@ fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
     cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
     curGeneEnd, database);
 }
+static void printOurRefseqUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, "../cgi-bin/hgc?%s&g=refGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
+//30701456&t=30741756&g=refGene&i=NM_031998&c=chr6&l=30651725&r=30798502&db=mm6&pix=620
+    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
+    curGeneEnd, database);
+}
 
 static void printOurCcdsGeneUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -281,6 +289,15 @@ boolean idInAllMrna(char *id, struct sqlConnection *conn)
 char query[256];
 safef(query, sizeof(query), 
 	"select count(*) from all_mrna where qName = '%s'", id);
+return sqlQuickNum(conn, query) > 0;
+}
+
+boolean idInRefseq(char *id, struct sqlConnection *conn)
+/* Return TRUE if id is in refGene table */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select count(*) from refGene where name = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
 }
 
@@ -348,6 +365,7 @@ char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
 boolean gotRnaAli = idInAllMrna(id, conn);
+boolean gotRefseqAli = idInRefseq(id, conn);
 char *oldDisplayId;
 
 if (sameWord(curGeneType, "ccdsGene"))
@@ -371,12 +389,22 @@ if (sqlTablesExist(conn, "kgAlias"))
     printAlias(id, conn);
     }
     
-if (gotRnaAli)
+if (gotRefseqAli)
     {
-    hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
-    printOurMrnaUrl(stdout, id);
+    hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
+    printOurRefseqUrl(stdout, id);
     hPrintf("\">%s</A>\n", id);
     hPrintf("&nbsp&nbsp&nbsp");
+    }
+else
+    {
+    if (gotRnaAli)
+    	{
+    	hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
+    	printOurMrnaUrl(stdout, id);
+    	hPrintf("\">%s</A>\n", id);
+    	hPrintf("&nbsp&nbsp&nbsp");
+    	}
     }
 if (protAcc != NULL)
     {
