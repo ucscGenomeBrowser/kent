@@ -70,10 +70,10 @@
 #include "bed.h"
 #include "options.h"
 #include "binRange.h"
-
+#include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.17 2005/01/06 23:24:43 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.18 2005/01/27 02:22:23 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -92,6 +92,8 @@ char *chromNib = NULL;    /* Nib file name if not using database. */
 FILE *chromNibFile = NULL; /* File handle for nib file access. */
 int chromNibSize = 0;      /* Size of the chromosome nib file. */
 struct binKeeper *chromPslBin = NULL; /* Bin keeper for chromosome. */
+struct hash *killHash = NULL; /* Hash of psl qNames that we want to avoid, 
+				 hashed with an int value of 1. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -108,6 +110,7 @@ static struct optionSpec optionSpecs[] =
     {"localMem", OPTION_BOOLEAN},
     {"chromNib", OPTION_STRING},
     {"pslFile", OPTION_STRING},
+    {"killList", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -126,7 +129,8 @@ static char *optionDescripts[] =
     "Add more weight to mRNAs and RefGenes.",
     "Load all of the psls and associated information once from from db and cache in memory.",
     "Chromosome sequence in nib format.",
-    "Use psl alignments in file rather than database."
+    "Use psl alignments in file rather than database.",
+    "File of accessions to avoid."
 };
 
 void usage()
@@ -326,7 +330,6 @@ for(mc = mcList; mc != NULL; mc = mc->next)
 	}
     else
 	gg = ggGraphCluster(mc,ci);
-       //gg = ggGraphCluster(mc, ci);
     assert(checkEvidenceMatrix(gg));
     ag = ggToAltGraphX(gg);
     if(ag != NULL)
@@ -368,10 +371,11 @@ return pslList;
 }
 
 void setupTables(char *chrom)
+/* What tables are we using for constructing graphs. */
 {
 #ifdef AFFYSPLICE
-char *tablePrefixes[] = {}; //{"_mrna", "_intronEst"};
-char *wholeTables[] = {"splicesTmp"}; // {"refSeqAli"};
+char *tablePrefixes[] = {}; 
+char *wholeTables[] = {"splicesTmp"}; 
 #endif
 #ifdef USUAL
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
@@ -541,6 +545,26 @@ if(dif == 0)
 return dif;
 }
 
+struct psl *removeKillList(struct psl* pslList)
+/* Remove all of the psls that are in the kill hash. */
+{
+struct psl *psl = NULL, *pslNext = NULL,  *pslNewList = NULL;
+if(killHash == NULL)
+    return pslList;
+for(psl = pslList; psl != NULL; psl = pslNext)
+    {
+    pslNext = psl->next;
+    /* If the accession is in the kill list with value 1
+       don't add it. */
+    if(hashIntValDefault(killHash, psl->qName, 0) == 0)
+	{
+	slAddHead(&pslNewList, psl);
+	}
+    }
+slReverse(&pslNewList);
+return pslNewList;
+}
+
 struct psl *getPslsInRange(char *chrom, int chromStart, int chromEnd, 
 			   struct sqlConnection *conn)
 /** Load all of the psls in a given range from the appropriate
@@ -552,6 +576,7 @@ if(useChromKeeper)
 else
     pslList = getPslsFromDatabase(chrom, chromStart, chromEnd, conn);
 goodList = filterPsls(pslList, chromStart, chromEnd);
+goodList = removeKillList(goodList);
 for(psl = goodList; psl != NULL; psl = psl->next)
     {
     if(psl->tStart < minPslStart)
@@ -657,46 +682,6 @@ if(!useChromKeeper)
 return ag;
 }
 
-struct genePred *loadSanger22Annotations(struct sqlConnection *conn)
-/* load all of the sanger 22 gene annotations for chr22 */
-{
-char buff[256];
-struct sqlResult *sr = NULL;
-struct genePred *gp=NULL, *gpList = NULL;
-char **row;
-int rowOffset;
-sr = hRangeQuery(conn, "sanger22", "chr22", 0, 47748585, NULL, &rowOffset);
-while((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row+rowOffset);
-    slAddHead(&gpList, gp);
-    }
-slReverse(&gpList);
-sqlFreeResult(&sr);
-return gpList;
-}
-
-struct genePred *loadRefGene22Annotations(struct sqlConnection *conn)
-/* load all of the refSeq gene annotations for chr22 */
-{
-char buff[256];
-struct sqlResult *sr = NULL;
-struct genePred *gp=NULL, *gpList = NULL;
-char **row;
-int rowOffset = 0;
-//sr = hRangeQuery(conn, "refGene", "%", 0, BIGNUM, NULL, &rowOffset);
-snprintf(buff, sizeof(buff), "select * from refGene");
-sr = sqlGetResult(conn, buff);
-while((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row+rowOffset);
-    slAddHead(&gpList, gp);
-    }
-slReverse(&gpList);
-sqlFreeResult(&sr);
-return gpList;
-}
-
 struct genePred *convertBedsToGps(char *bedFile)
 /* Load beds from a file and convert to bare bones genePredictions. */
 {
@@ -755,7 +740,7 @@ else if(gpFile != NULL)
     gpList = genePredLoadAll(gpFile);
 else 
     {
-    warn("Must specify either a bed file or a genePred file");
+    warn("Must specify target loci as either a bed file or a genePred file");
     usage();
     }
 
@@ -781,11 +766,11 @@ if(optionExists("localMem"))
 	}
     warn("Done setting up local caches.");
     }
-
+dotForUserInit(max(slCount(gpList)/10, 1));
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {
-    warn("Starting loci %s:", gp->name);
+    dotForUser();
     fflush(stderr);
     ag = agFromGp(gp, conn, 5, out);
     altGraphXFree(&ag);
@@ -797,6 +782,22 @@ genePredFreeList(&gpList);
 hFreeConn(&conn);
 /* uglyf("%d genePredictions with %d clusters, %d cassette exons, %d of are not mod 3.\n", */
 /*       slCount(gpList), clusterCount, cassetteCount, misSense); */
+}
+
+void initKillList()
+/* Load up a hash of the accessions to avoid. */
+{
+struct lineFile *lf = NULL;
+char *killFile = optionVal("killList", NULL);
+char *words[1];
+assert(killFile);
+killHash = newHash(10);
+lf = lineFileOpen(killFile, TRUE);
+while(lineFileNextRow(lf, words, ArraySize(words)))
+    {
+    hashAddInt(killHash, words[0], 1);
+    }
+lineFileClose(&lf);
 }
 
 int main(int argc, char *argv[])
@@ -816,6 +817,8 @@ db = optionVal("db", NULL);
 if(db == NULL)
     errAbort("Must set -db flag. Try -help for usage.");
 hSetDb(db);
+if(optionExists("killList"))
+    initKillList();
 outFile = optionVal("agxOut", NULL);
 if(outFile == NULL)
     errAbort("Must specify output file with -agxOut flag. Try -help for usage.");
