@@ -330,3 +330,93 @@ cvs commit etc/genbank.conf
     mkdir /gbdb/xenTro1/wib
     ln -s `pwd`/gc5Base.wib /gbdb/xenTro1/wib
     hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
+
+# PRODUCING GENSCAN PREDICTIONS (DONE 10/27/04 Fan)
+  
+    ssh hgwdev
+    mkdir /cluster/data/xenTro1/bed/genscan
+    cd /cluster/data/xenTro1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # create hard masked .fa files
+    ssh kksilo
+    cd /cluster/store8/xenTro1
+    maskOutFa xenTro1.softmask2.fa hard xenTro1.hardmask2.fa
+    /cluster/bin/i386/faSplit about xenTro1.hardmask2.fa 2000000 hardMasked2/
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/xenTro1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f genome.list
+    touch genome.list
+
+    foreach f ( `ls -1S /cluster/data/xenTro1/hardMasked2/*` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end     
+    wc -l genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out 
+line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -
+par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 645 of 648 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:      43701s     728.35m    12.14h    0.51d  0.001 y
+# IO & Wait Time:                  4362s      72.70m     1.21h    0.05d  0.000 y
+# Average job time:                  75s       1.24m     0.02h    0.00d
+# Longest job:                      435s       7.25m     0.12h    0.01d
+# Submission to last job:          3641s      60.68m     1.01h    0.04d
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    ssh kkr7u00
+    cd /cluster/data/xenTro1/bed/Genscan
+
+/cluster/bin/x86_64/gsBig /cluster/data/xenTro1/hardMasked2/05.fa gtf/05.gtf -trans=pep/05.pep -
+subopt=subopt/05.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -
+tmp=/tmp -window=1200000
+
+/cluster/bin/x86_64/gsBig /cluster/data/xenTro1/hardMasked2/76.fa gtf/76.gtf -trans=pep/76.pep -
+subopt=subopt/76.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -
+tmp=/tmp -window=1200000
+
+/cluster/bin/x86_64/gsBig /cluster/data/xenTro1/hardMasked2/116.fa gtf/116.gtf -trans=pep/116.pep -
+subopt=subopt/116.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -
+tmp=/tmp -window=1200000
+
+    ls -1 gtf | wc -l
+#    648
+    endsInLf gtf/*
+
+    # Convert these to chromosome level files as so:
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/genscan
+
+    cat gtf/*.gtf >genscan.gtf
+    cat pep/*.pep > genscan.pep
+    cat subopt/*.bed >genscanSubopt.bed
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/genscan
+    ldHgGene -gtf -genePredExt xenTro1 genscan genscan.gtf
+    hgPepPred xenTro1 generic genscanPep genscan.pep
+    hgLoadBed xenTro1 genscanSubopt genscanSubopt.bed
+
+    nice featureBits xenTro1 genscan
+    # 63766483 bases of 1381238994 (4.617%) in intersection
+
