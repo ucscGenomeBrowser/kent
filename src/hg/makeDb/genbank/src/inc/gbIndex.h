@@ -68,7 +68,7 @@ struct gbSelect* gbIndexGetPartitions(struct gbIndex* index,
  * or GB_ALIGNED. srcDbs selects source database.  If limitRelName is not
  * null, only this release is used, otherwise the latest release is used.
  * types select mRNAs and/or ESTs.  If limitAccPrefix is not null, only that
- * partation is returned.  List can be freed with slFree.  Entries will be
+ * partition is returned.  List can be freed with slFree.  Entries will be
  * grouped by release.
  */
 

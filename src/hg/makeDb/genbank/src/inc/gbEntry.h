@@ -25,14 +25,13 @@ struct gbEntry
                                       * current task. NULL_VERSION if not
                                       * set. */
     UBYTE type;                      /* mRNA or, EST */
-    UBYTE orgCat;                    /* GB_NATIVE orGB_XENO */
-    char* organism;                  /* organism name */
+    UBYTE orgCat;                    /* GB_NATIVE or GB_XENO */
     struct gbProcessed* processed;   /* entry processed/, newest first */
     struct gbAligned* aligned;       /* aligned object, newest first */
 };
 
 struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc,
-                           char* organism, unsigned type);
+                           unsigned type);
 /* allocate a new gbEntry object and add it to the release */
 
 struct gbProcessed* gbEntryFindProcessed(struct gbEntry* entry,
@@ -47,7 +46,8 @@ struct gbProcessed* gbEntryFindUpdateProcessed(struct gbEntry* entry,
 
 struct gbProcessed* gbEntryAddProcessed(struct gbEntry* entry,
                                         struct gbUpdate* update,
-                                        int version, time_t modDate);
+                                        int version, time_t modDate,
+                                        char* organism);
 /* Create a new processed object in the entry and link with it's update */
 
 struct gbAligned* gbEntryFindAligned(struct gbEntry* entry,

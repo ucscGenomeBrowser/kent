@@ -8,15 +8,13 @@
 #include "localmem.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbEntry.c,v 1.2 2003/06/20 04:37:04 markd Exp $";
+static char const rcsid[] = "$Id: gbEntry.c,v 1.3 2003/07/12 23:32:24 markd Exp $";
 
-struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc,
-                           char* organism, unsigned type)
+struct gbEntry* gbEntryNew(struct gbRelease* release, char* acc, unsigned type)
 /* allocate a new gbEntry object and add it to the release*/
 {
 struct gbEntry* entry;
 struct hashEl* hashEl;
-assert(organism != NULL);
     
 gbReleaseAllocEntryVar(release, entry);
     
@@ -24,11 +22,9 @@ gbReleaseAllocEntryVar(release, entry);
  * then save that key */
 hashEl = hashAdd(release->entryTbl, acc, entry);
 entry->acc = hashEl->name;
-/* don't let organism flag slip in */
+/* don't let others flags slip in */
 entry->type = type & GB_TYPE_MASK;
 entry->selectVer = NULL_VERSION;
-entry->organism = gbReleaseAllocEntryStr(release, organism);
-entry->orgCat = gbGenomeOrgCat(release->genome, entry->organism);
 if (type == GB_MRNA)
     release->numMRnas++;
 else if (type == GB_EST)
@@ -88,7 +84,8 @@ return cmp;
 
 struct gbProcessed* gbEntryAddProcessed(struct gbEntry* entry,
                                         struct gbUpdate* update,
-                                        int version, time_t modDate)
+                                        int version, time_t modDate,
+                                        char* organism)
 /* Create a new processed object in the entry and link with it's update */
 {
 struct gbProcessed* cur = entry->processed;
@@ -110,7 +107,8 @@ if (cmp == 0)
 else
     {
     struct gbProcessed* processed = gbProcessedNew(entry, update,
-                                                   version, modDate);
+                                                   version, modDate,
+                                                   organism);
     if (prev == NULL)
         {
         /* add to head */
@@ -126,6 +124,12 @@ else
     /* link in with it's update */
     processed->updateLink = processed->update->processed;
     processed->update->processed = processed;
+
+    /* set organism category from organism if we have a genome */
+    if (update->release->genome != NULL)
+        {
+        entry->orgCat = gbGenomeOrgCat(update->release->genome, organism);
+        }
     return processed;
     }
 }
@@ -202,12 +206,12 @@ void gbEntryDump(struct gbEntry* entry, FILE* out, int indent)
 struct gbProcessed* prNext;
 struct gbAligned* alNext;
 
-fprintf(out, "%*s%s: %s \"%s\"\n", indent, "", entry->acc,
-        ((entry->type == GB_MRNA) ? "mRNA" : "EST"), entry->organism);
+fprintf(out, "%*s%s: %s\n", indent, "", entry->acc,
+        ((entry->type == GB_MRNA) ? "mRNA" : "EST"));
 for (prNext = entry->processed; prNext != NULL; prNext = prNext->next)
-    fprintf(out, "%*spr: %s: %d %s\n", indent+2, "",
+    fprintf(out, "%*spr: %s: %d %s \"%s\"\n", indent+2, "",
             prNext->update->name, prNext->version,
-            gbFormatDate(prNext->modDate));
+            gbFormatDate(prNext->modDate), prNext->organism);
 
 for (alNext = entry->aligned; alNext != NULL; alNext = alNext->next)
     fprintf(out, "%*sal: %s: %d\n", indent+2, "",

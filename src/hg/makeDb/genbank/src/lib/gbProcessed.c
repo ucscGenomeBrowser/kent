@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.2 2003/07/12 23:32:24 markd Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
@@ -48,7 +48,8 @@ if (ext != NULL)
 
 struct gbProcessed* gbProcessedNew(struct gbEntry* entry,
                                    struct gbUpdate* update,
-                                   int version, time_t modDate)
+                                   int version, time_t modDate,
+                                   char* organism)
 /* Create a new gbProcessed object */
 {
 struct gbProcessed* processed;
@@ -57,6 +58,7 @@ processed->entry = entry;
 processed->update = update;
 processed->version = version;
 processed->modDate = modDate;
+processed->organism = gbReleaseAllocEntryStr(update->release, organism);
 return processed;
 }
 
@@ -81,39 +83,52 @@ if (ferror(fh))
     errnoAbort("writing genbank processed index file");
 }
 
+static void checkRowEntry(struct gbSelect* select, struct lineFile* lf,
+                          struct gbEntry* entry, char* organism, time_t modDate)
+/* check data parsed from a row against an existing entry. */
+{
+/* Verify type and organism.  Type change will normally not be
+ * detected due to loading one partation at a time.  Organism change
+ * is only an error if category changed. */
+if (entry->type != select->type)
+    {
+    errAbort("entry %s.%s %s type previously specified as \"%s\", is specfied as \"%s\" in %s",
+             entry->acc, gbFormatDate(modDate), gbFmtSelect(entry->type),
+             gbFmtSelect(select->type), lf->fileName);
+    }
+if (select->release->genome != NULL)
+    {
+    unsigned newOrgCat = gbGenomeOrgCat(select->release->genome, organism);
+    if (newOrgCat != entry->orgCat)
+        {
+        /* change orgCat, this is bad */
+        errAbort("entry %s %s organism previously specified as \"%s\" (%s), is specfied as \"%s\" (%s) in %s, add one to ignored.idx",
+                 entry->acc, gbFormatDate(modDate), organism,
+                 gbFmtSelect(entry->orgCat), select->release->genome->organism,
+                 gbFmtSelect(newOrgCat), lf->fileName);
+        }
+    }
+}
+
 static void parseRow(struct gbSelect* select, char **row, struct lineFile* lf)
 /* read and parse a gbidx file record */
 {
 char *acc = row[GBIDX_ACC_COL];
 char *organism = row[GBIDX_ORGANISM_COL];
 time_t modDate = gbParseDate(lf, row[GBIDX_MODDATE_COL]);
-unsigned newOrgCat;
 
 if (gbIgnoreGet(select->release->ignore, acc, modDate) == NULL)
     {
     struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
     if (entry == NULL)
-        entry = gbEntryNew(select->release, acc, organism, select->type);
+        entry = gbEntryNew(select->release, acc, select->type);
     else
         {
-        /* verify organism and type; organism is just a warning unless
-         * category changed. */
-        if (entry->type != select->type)
-            errAbort("entry %s.%s %s type previously specified as \"%s\", is specfied as \"%s\" in %s",
-                     acc, gbFormatDate(modDate), gbFmtSelect(entry->type),
-                     gbFmtSelect(select->type), lf->fileName);
-        newOrgCat = gbGenomeOrgCat(select->release->genome, organism);
-        if (newOrgCat != entry->orgCat)
-            {
-            /* change orgCat, this is bad */
-            errAbort("entry %s %s organism previously specified as \"%s\" (%s), is specfied as \"%s\" (%s) in %s, add one to ignored.idx",
-                     acc, gbFormatDate(modDate), entry->organism,
-                     gbFmtSelect(entry->orgCat), organism,
-                     gbFmtSelect(newOrgCat), lf->fileName);
-            }
+        checkRowEntry(select, lf, entry, organism, modDate);
         }
     gbEntryAddProcessed(entry, select->update,
-                        gbParseInt(lf, row[GBIDX_VERSION_COL]), modDate);
+                        gbParseInt(lf, row[GBIDX_VERSION_COL]), modDate,
+                        organism);
     }
 }
 

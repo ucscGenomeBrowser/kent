@@ -10,7 +10,9 @@ struct gbRelease;
 struct gbSelect;
 
 struct gbProcessed
-/* Object associated with an accession that has been processed. */
+/* Object associated with an accession that has been processed.
+ * Organism name is kept here to allow for better error checking
+ * on name changes. */
 {
     struct gbProcessed* next;       /* next (older) file */
     struct gbEntry* entry;          /* entry we are associated with */
@@ -18,6 +20,7 @@ struct gbProcessed
     struct gbProcessed* updateLink; /* update list */
     short version;                  /* version number */
     time_t modDate;                 /* GenBank modification date */
+    char* organism;                 /* organism name */
 };
 
 /* extension for processed index */
@@ -25,8 +28,9 @@ extern char* GBIDX_EXT;
 
 struct gbProcessed* gbProcessedNew(struct gbEntry* entry,
                                    struct gbUpdate* update,
-                                   int version, time_t modDate);
-/* Create a new gbProcessed object*/
+                                   int version, time_t modDate,
+                                   char* organism);
+/* Create a new gbProcessed object */
 
 void gbProcessedWriteIdxRec(FILE* fh, char* acc, int version,
                             char* modDate, char* organism);

@@ -3,13 +3,14 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.2 2003/07/12 23:32:24 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens") */
 {
     char *dbPrefix;           /* prefix of database (e.g. hg) */
-    char **names;              /* list of species name, terminate by null */
+    char **names;             /* list of species name, terminate by null.
+                               * first name is prefered. */
     char *subSpeciesPrefix;   /* if not null, used to check for subspecies;
                                * should end in a blank */
 };
@@ -45,9 +46,48 @@ if (dbMap->dbPrefix == NULL)
 
 AllocVar(genome);
 genome->database = cloneString(database);
-genome->organism = cloneString(dbMap->names[0]);
+genome->organism = dbMap->names[0];
 genome->dbMap = dbMap;
 return genome;
+}
+
+char* gbGenomePreferedOrgName(char* organism)
+/* determine the prefered organism name, if this organism is known,
+ * otherwise NULL.  Used for sanity checks. Names are in static table,
+ * so ptrs can be compared. */
+{
+/* caching last found helps speed search, since entries tend to be groups,
+ * especially ESTs.  NULL is a valid cache entry, so need flag */
+static boolean cacheEmpty = TRUE;
+static struct dbToSpecies* dbMapCache = NULL;
+static char organismCache[256];
+
+if (cacheEmpty || !sameString(organism, organismCache))
+    {
+    struct dbToSpecies* foundDbMap = NULL;
+    int i, j;
+    for (i = 0; (dbToSpeciesMap[i].dbPrefix != NULL) && (foundDbMap == NULL);
+         i++)
+        {
+        struct dbToSpecies* dbMap = &(dbToSpeciesMap[i]);
+        for (j = 0; dbMap->names[j] != NULL; j++)
+            {
+            if (sameString (dbMap->names[j], organism))
+                foundDbMap = dbMap;
+            }
+        if ((dbMap->subSpeciesPrefix != NULL)
+            && startsWith(dbMap->subSpeciesPrefix, organism))
+            foundDbMap = dbMap;
+        }
+    strcpy(organismCache, organism);
+    dbMapCache = foundDbMap;
+    cacheEmpty = FALSE;
+    }
+
+if (dbMapCache == NULL)
+    return NULL;
+else
+    return dbMapCache->names[0];
 }
 
 unsigned gbGenomeOrgCat(struct gbGenome* genome, char* organism)
@@ -75,7 +115,6 @@ struct gbGenome* genome = *genomePtr;
 if (genome != NULL)
     {
     free(genome->database);
-    free(genome->organism);
     *genomePtr = NULL;
     }
 }

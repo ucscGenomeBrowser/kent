@@ -522,13 +522,12 @@
 - index string tables as full text
 
 - options for using /bluearc
-
 - gbExtFile table includes a . in path:
   /gbdb/genbank/./data/processed/genbank.136.0/full/mrna.fa
 
-- trying to use bluearc didn't generate jobs with correct paths.
-
 - move species names to conf.
+
+- move blat parms to conf
 
 - have scripts print full usage message.
 
@@ -577,3 +576,8 @@ without refseq:
 
  
 - version remains on refseq pep sequences in seq table: NP_787018.1
+
+- if type changes on initial load, it's not detected.  A verification
+  program run after gbProcess would be good.
+
+- NCBI index has species wrong for AB107958

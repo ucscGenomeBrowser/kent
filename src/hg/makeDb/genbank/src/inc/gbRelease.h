@@ -80,8 +80,8 @@ struct slName* gbReleaseGetAccPrefixes(struct gbRelease* release,
  * on state). */
 
 void gbReleaseLoadIgnore(struct gbRelease* release);
-/* Load the gbIgnore object if not already loaded.  Also loaded by 
- * by gbReleaseLoadProcessed/Aligned, this allows access before one of those
+/* Load the gbIgnore object if not already loaded.  Also loaded by by
+ * gbReleaseLoadProcessed/Aligned, this allows access before one of those
  * methods is called.
  */
 

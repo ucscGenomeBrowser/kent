@@ -260,5 +260,8 @@ foreach $rel (@rsReleases) {
     processRefSeqRel($rel);
 }
 
+# do some validations to catch things now rather than when loading the database
+runProg("gbProcessedCheck");
+
 endTask();
 
