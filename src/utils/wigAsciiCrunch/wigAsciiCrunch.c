@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: wigAsciiCrunch.c,v 1.3 2004/10/28 07:58:59 kent Exp $";
+static char const rcsid[] = "$Id: wigAsciiCrunch.c,v 1.4 2004/10/29 20:05:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +21,7 @@ errAbort(
   "           All files in subdir sorted numerically by name and concatenated\n"
   "           into single sequence.  This removes overlaps (first file to cover a\n"
   "           position wins). This is usually used with phastCons output.\n"
+  "   -oneToThree - Use one to three column format\n"
   "Note the flags single, dir, and dirDir are mutually exclusive, and one\n"
   "must be set\n"
   "Options:\n"
@@ -33,6 +34,7 @@ static struct optionSpec options[] = {
    {"dir", OPTION_BOOLEAN},
    {"dirDir", OPTION_BOOLEAN},
    {"fixOverlap", OPTION_BOOLEAN},
+   {"oneToThree", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -40,6 +42,7 @@ char *clSingle = NULL;
 boolean clDir = FALSE;
 boolean clDirDir = FALSE;
 boolean clFixOverlap = FALSE;
+boolean clOneToThree = FALSE;
 
 int crunchOne(char *input, FILE *f, char *initialSeq, int minPos)
 /* Transform output to crunched format and append to file. */
@@ -113,13 +116,23 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
      * If not, print it. */
     if (offset >= minPos)
 	{
-	if (newSeq)
+	if (clOneToThree)
 	    {
-	    fprintf(f, "%s\t", seq);
-	    fprintf(f, "%ld\t", offset);
+	    if (newSeq)
+		{
+		fprintf(f, "%s\t", seq);
+		fprintf(f, "%ld\t", offset);
+		}
+	    else if (lastOffset + 1 != offset)
+		fprintf(f, "%ld\t", offset);
 	    }
-	else if (lastOffset + 1 != offset)
-	    fprintf(f, "%ld\t", offset);
+	else
+	    {
+	    if (newSeq || lastOffset + 1 != offset)
+	        {
+		fprintf(f, "fixedStep chrom=%s start=%ld step=1\n", seq, offset);
+		}
+	    }
 	fprintf(f, "%s\n", data);
 	}
 
@@ -252,6 +265,7 @@ clSingle = optionVal("single", NULL);
 clDir = optionExists("dir");
 clDirDir = optionExists("dirDir");
 clFixOverlap = optionExists("fixOverlap");
+clOneToThree = optionExists("oneToThree");
 wigAsciiCrunch(argv[1], argv[2]);
 return 0;
 }
