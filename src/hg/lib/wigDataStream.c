@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.8 2004/08/09 23:06:06 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.9 2004/08/10 21:00:20 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -86,6 +86,51 @@ else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
 verbose(3, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
+}
+
+static void resetStats(float *lowerLimit, float *upperLimit, float *sumData,
+	float *sumSquares, unsigned *statsCount, long int *chromStart,
+	long int *chromEnd)
+{
+*lowerLimit = INFINITY;
+*upperLimit = -1.0 * INFINITY;
+*sumData = 0.0;
+*sumSquares = 0.0;
+*statsCount = 0;
+*chromStart = -1;
+*chromEnd = 0;
+}
+
+static void accumStats(struct wiggleDataStream *wDS, float lowerLimit,
+	float upperLimit, float sumData, float sumSquares,
+	unsigned statsCount, long int chromStart,
+	long int chromEnd)
+{
+if (statsCount > 0)
+    {
+    struct wiggleStats *ws;
+
+    AllocVar(ws);
+    ws->chrom = cloneString(wDS->currentChrom);
+    ws->chromStart = chromStart;
+    ws->chromEnd = chromEnd;
+    ws->span = wDS->currentSpan;
+    ws->count = statsCount;
+    ws->lowerLimit = lowerLimit;
+    ws->dataRange = upperLimit - lowerLimit;
+    ws->mean = sumData / (double) statsCount;
+    ws->variance = 0.0;
+    ws->stddev = 0.0;
+    if (statsCount > 1)
+	{
+	ws->variance = (sumSquares -
+	    ((sumData * sumData)/(double) statsCount)) /
+		(double) (statsCount - 1);
+	if (ws->variance > 0.0)
+	    ws->stddev = sqrt(ws->variance);
+	}
+    slAddHead(&wDS->stats, ws);
+    }
 }
 
 /*	PUBLIC	METHODS   **************************************************/
@@ -258,7 +303,7 @@ wigSetCompareFunctions(wDS);
 wDS->useDataConstraint = TRUE;
 }
 
-static void getData(struct wiggleDataStream *wDS, enum wigDataFetchType type)
+static void getData(struct wiggleDataStream *wDS, int operations)
 /* getData - read and return wiggle data	*/
 {
 char *row[WIGGLE_NUM_COLS];
@@ -270,13 +315,28 @@ unsigned long long bytesSkipped = 0;
 boolean doStats = FALSE;
 boolean doBed = FALSE;
 boolean doAscii = FALSE;
+boolean doNoOp = FALSE;
 boolean skipDataRead = FALSE;	/*	may need this later	*/
+float lowerLimit = INFINITY;
+float upperLimit = -1.0 * INFINITY;
+float sumData = 0.0;
+float sumSquares = 0.0;
+unsigned statsCount = 0;
+long int chromStart = -1;
+long int chromEnd = 0;
 
-doAscii = type & wigFetchAscii;
-doBed = type & wigFetchBed;
-doStats = type & wigFetchStats;
+doAscii = operations & wigFetchAscii;
+doBed = operations & wigFetchBed;
+doStats = operations & wigFetchStats;
+doNoOp = operations & wigFetchNoOp;
 
-if (! (doAscii || doBed || doStats) )
+/*	for timing purposes, allow the wigFetchNoOp to go through */
+if (doNoOp)
+    {
+    doBed = doStats = doAscii = FALSE;
+    }
+
+if (! (doNoOp || doAscii || doBed || doStats) )
     {
 	verbose(2, "wigGetData: no type of data fetch requested ?\n");
 	return;	/*	NOTHING ASKED FOR	*/
@@ -313,12 +373,21 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    (wDS->currentChrom &&
 		differentString(wDS->currentChrom, wiggle->chrom)))
 	{
+	/*	if we have been working on one, then doStats	*/
+	if (doStats && wDS->currentChrom)
+	    {
+	    accumStats(wDS, lowerLimit, upperLimit, sumData, sumSquares,
+		statsCount, chromStart, chromEnd);
+	    resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
+		&statsCount, &chromStart, &chromEnd);
+	    }
 	freeMem(wDS->currentChrom);
 	wDS->currentChrom = cloneString(wiggle->chrom);
 	wDS->currentSpan = wiggle->span;
+verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan );
 	}
 
-    /*	it is a bit inefficient to make one of these for each SQL row,
+    /*	it may seem inefficient to make one of these for each SQL row,
      *	but the alternative would require expanding the data area for
      *	each row and thus a re-alloc - probably more expensive than
      *	just making one of these for each row.
@@ -333,6 +402,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
 	slAddHead(&wDS->ascii,wigAscii);
+verbose(2, "#\tnew ascii element chrom, span: %s, %u\n", wigAscii->chrom, wigAscii->span );
 	}
 
     verbose(3, "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
@@ -458,14 +528,32 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 		    }	/*	switch (wDS->wigCmpSwitch)	*/
 		if (takeIt)
 		    {
+		    float value = 0.0;
 		    ++valuesMatched;
+		    if (doAscii || doStats)
+			value =
+		BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
 		    if (doAscii)
 			{
-			asciiOut->value =
-		BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
+			asciiOut->value = value;
 			asciiOut->chromStart = chromPosition;
 			++asciiOut;
 			++wigAscii->count;
+			}
+		    if (doStats)
+			{
+			if (value < lowerLimit)
+			    lowerLimit = value;
+			if (value > upperLimit)
+			    upperLimit = value;
+			sumData += value;
+			sumSquares += value * value;
+			/*	positions are being seen in reverse 	*/
+			if ((chromStart < 0)||(chromStart > chromPosition))
+			    chromStart = chromPosition;
+			if (chromEnd < (chromPosition + wiggle->span))
+			    chromEnd = chromPosition + wiggle->span;
+			++statsCount;
 			}
 		    }
 		}	/*	if (*datum != WIG_NO_DATA)	*/
@@ -481,8 +569,22 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
     wiggleFree(&wiggle);
     }		/*	while (nextRow())	*/
 
+/*	there are accumulated stats to complete	*/
+if (doStats)
+    {
+    accumStats(wDS, lowerLimit, upperLimit, sumData, sumSquares,
+	statsCount, chromStart, chromEnd);
+    resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
+	&statsCount, &chromStart, &chromEnd);
+    }
+
+/*	The proper inverse ordering was already done by the original SQL
+ *	select statement.  All ordering situations were taken care of by
+ *	that.  * HOWEVER * allowing MySQL to order business appears to
+ *	slow it down dramatically !  Will have to investigate.
 if (doAscii)
     slReverse(&wDS->ascii);
+ */
 
 wDS->rowsRead += rowCount;
 wDS->validPoints += validData;
@@ -492,6 +594,55 @@ wDS->bytesSkipped += bytesSkipped;
 
 }	/*	void getData()	*/
 
+static void statsOut(struct wiggleDataStream *wDS, char *fileName)
+/*	print to fileName the statistics */
+{
+FILE * fh;
+fh = mustOpen(fileName, "w");
+if (wDS->stats)
+    {
+    struct wiggleStats *stats, *next;
+    int rowsDisplayed = 0;
+
+    fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
+    fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
+    fprintf(fh,"<TH> Data <BR> end </TH>");
+    fprintf(fh,"<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
+    fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
+    fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
+    fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
+
+    for (stats = wDS->stats; stats; stats = next )
+	{
+	fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
+                                        	/* display closed coords */
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %d </TD>\n", stats->span);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count*stats->span);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->mean);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->variance);
+	fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->stddev);
+	fprintf(fh,"<TR>\n");
+
+	++rowsDisplayed;
+	next = stats->next;
+	}
+    if (!rowsDisplayed)
+	fprintf(fh,"<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>");
+    fprintf(fh,"</TABLE>\n");
+    }
+else
+    {
+    fprintf(fh, "#\tno data points found\n");
+    }
+carefulClose(&fh);
+}
+
 static void asciiOut(struct wiggleDataStream *wDS, char *fileName)
 /*	print to fileName the ascii data values	*/
 {
@@ -499,8 +650,7 @@ FILE * fh;
 fh = mustOpen(fileName, "w");
 if (wDS->ascii)
     {
-    struct wigAsciiData *asciiData;
-    struct wigAsciiData *next;
+    struct wigAsciiData *asciiData, *next;
     char *chrom = NULL;
     unsigned span = 0;
 
@@ -595,8 +745,14 @@ else
 	dyStringFree(&dyTmp);
 	}
     if (wDS->sqlConstraint)
-	dyStringPrintf(query, " where (%s) order by chromStart",
+	dyStringPrintf(query, " where (%s)",
 	    wDS->sqlConstraint);
+    dyStringPrintf(query, " order by ");
+    if (!wDS->chrName)
+	dyStringPrintf(query, " chrom DESC,");
+    if (!wDS->spanLimit)
+	dyStringPrintf(query, " span DESC,");
+    dyStringPrintf(query, " chromStart DESC");
     verbose(2, "#\t%s\n", query->string);
     if (!wDS->conn)
 	wDS->conn = sqlConnect(wDS->db);
@@ -629,6 +785,7 @@ if (wDS)
 struct wiggleDataStream *newWigDataStream()
 {
 struct wiggleDataStream *wds;
+
 AllocVar(wds);
 /*	everything is zero which is good since that is NULL for all the
  *	strings and lists.  A few items should have some initial values
@@ -648,6 +805,7 @@ wds->setPositionConstraint = setPositionConstraint;
 wds->setChromConstraint = setChromConstraint;
 wds->setSpanConstraint = setSpanConstraint;
 wds->setDataConstraint = setDataConstraint;
+wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
 wds->getData = getData;
 wds->closeWigConn = closeWigConn;
