@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.591 2004/03/24 18:56:33 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.592 2004/03/24 19:38:09 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7271,9 +7271,9 @@ printf("<B>Start:</B> %d \n",pg->polyAstart);
 printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
 printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
+printf("<p><B>Axt Score:</B> %d \n",pg->axtScore);
 htmlHorizontalLine();
 printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
-//printf("<p>");
 
 
 if (!sameString(pg->refSeq,"noRefSeq"))
@@ -7431,15 +7431,17 @@ struct sqlResult *sr = NULL;
 char **row;
 char *type;
 char table[256];
+char where[256];
 boolean hasBin;
 struct pseudoGeneLink *pg;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 int winStart = cartInt(cart, "l");
 int winEnd = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl = NULL;
 char *tbl = cgiUsualString("table", cgiString("g"));
-struct dyString *query = newDyString(1024);
+int rowOffset = 0;
 
 /* Get alignment info. */
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
@@ -7470,13 +7472,11 @@ cartWebStart(cart, acc);
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-dyStringPrintf(query, "select * from pseudoGeneLink where ");
-hAddBinToQuery(start, start+10, query);
-dyStringPrintf(query, "name = '%s' and chrom = '%s' and chromStart = %d ", acc, chrom, start);
-sr = sqlGetResult(conn, query->string);
+safef(where, sizeof(where), "name = '%s'", acc);
+sr = hRangeQuery(conn, "pseudoGeneLink", chrom, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    pg = pseudoGeneLinkLoad(row);
+    pg = pseudoGeneLinkLoad(row+rowOffset);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
         pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg, table);
@@ -7484,7 +7484,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printTrackHtml(tdb);
 
-dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
