@@ -145,6 +145,13 @@ queryOne select value,value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
+name exonCount
+shortLabel Exon Count
+longLabel Number of Exons (Including Non-Coding)
+priority 7.8
+visibility off
+type lookup knownGene name exonCount
+
 name humanOrthologs
 shortLabel Human
 longLabel Human Ortholog (Best Blastp Hit to UCSC Known hg16)
