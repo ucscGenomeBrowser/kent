@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include "portable.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
@@ -13,13 +14,14 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 6;
+int version = 8;
 int maxSeqSize = 20000;
 int maxAaSize = 6000;
 
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
 boolean doTrans = FALSE;	/* Do translation? */
+int repMatch = 1024;
 
 void usage()
 /* Explain usage and exit. */
@@ -60,17 +62,20 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
+int hitCount = 0, clumpCount = 0, oneHit;
 
 if (doTrans)
     errAbort("Don't support translated direct stuff currently, sorry");
 
-gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, gfMaxTileUse, FALSE);
+gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, repMatch, FALSE);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
-    struct gfClump *clumpList = gfFindClumps(gf, &seq), *clump;
+    struct gfClump *clumpList = gfFindClumps(gf, &seq, &oneHit), *clump;
+    hitCount += oneHit;
     for (clump = clumpList; clump != NULL; clump = clump->next)
 	{
+	++clumpCount;
 	printf("%s ", seq.name);
 	gfClumpDump(gf, clump, stdout);
 	}
@@ -78,6 +83,7 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     }
 lineFileClose(&lf);
 genoFindFree(&gf);
+uglyf("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
 int getPortIx(char *portName)
@@ -106,11 +112,15 @@ memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr
 return socket(AF_INET, SOCK_STREAM, 0);
 }
 
+FILE *logFile = NULL;
 
-void logIt(FILE *logFile, char *format, ...)
+void logIt(char *format, ...)
 /* Print message to log file. */
 {
 va_list args;
+if (logFile == NULL)
+    logFile = stdout;
+fprintf(logFile, "%lu ", clock1000());
 va_start(args, format);
 vfprintf(logFile, format, args);
 va_end(args);
@@ -130,9 +140,9 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, FILE *logFile,
 {
 struct gfClump *clumpList = NULL, *clump;
 int limit = 100;
+int clumpCount = 0, hitCount;
 
-clumpList = gfFindClumps(gf, seq);
-logIt(logFile, "%d hits\n", slCount(clumpList));
+clumpList = gfFindClumps(gf, seq, &hitCount);
 if (clumpList == NULL)
     ++missCount;
 for (clump = clumpList; clump != NULL; clump = clump->next)
@@ -142,10 +152,12 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
     gfSendString(connectionHandle, buf);
+    ++clumpCount;
     if (--limit < 0)
 	break;
     }
 gfClumpFreeList(&clumpList);
+logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
 void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, FILE *logFile,
@@ -154,10 +166,10 @@ void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, FILE *logFile,
 {
 struct gfClump *clumps[3], *clump;
 int isRc, frame;
-int hitCount = 0;
 char strand;
 struct dyString *dy  = newDyString(1024);
 struct gfHit *hit;
+int clumpCount = 0, hitCount = 0, oneHit;
 
 sprintf(buf, "tileSize %d", tileSize);
 gfSendString(connectionHandle, buf);
@@ -166,14 +178,14 @@ for (frame = 0; frame < 3; ++frame)
 for (isRc = 0; isRc <= 1; ++isRc)
     {
     strand = (isRc ? '-' : '+');
-    gfTransFindClumps(transGf[isRc], seq, clumps);
+    gfTransFindClumps(transGf[isRc], seq, clumps, &oneHit);
+    hitCount += oneHit;
     for (frame = 0; frame < 3; ++frame)
         {
 	int limit = 200;
 	for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfSeqSource *ss = clump->target;
-	    ++hitCount;
 	    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d", 
 		clump->qStart, clump->qEnd, ss->fileName,
 		clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
@@ -183,15 +195,17 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    for (hit = clump->hitList; hit != NULL; hit = hit->next)
 	        dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
 	    gfSendLongString(connectionHandle, dy->string);
+	    ++clumpCount;
 	    if (--limit < 0)
 		break;
 	    }
 	gfClumpFreeList(&clumps[frame]);
 	}
     }
-if (hitCount == 0)
+if (clumpCount == 0)
     ++missCount;
 freeDyString(&dy);
+logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
 void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, FILE *logFile,
@@ -200,11 +214,11 @@ void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, FILE *l
 {
 struct gfClump *clumps[3][3], *clump;
 int isRc, qFrame, tFrame;
-int hitCount = 0;
 char strand;
 struct trans3 *t3 = trans3New(seq);
 struct dyString *dy  = newDyString(1024);
 struct gfHit *hit;
+int clumpCount = 0, hitCount = 0, oneCount;
 
 sprintf(buf, "tileSize %d", tileSize);
 gfSendString(connectionHandle, buf);
@@ -214,7 +228,8 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 for (isRc = 0; isRc <= 1; ++isRc)
     {
     strand = (isRc ? '-' : '+');
-    gfTransTransFindClumps(transGf[isRc], t3->trans, clumps);
+    gfTransTransFindClumps(transGf[isRc], t3->trans, clumps, &oneCount);
+    hitCount += oneCount;
     for (qFrame = 0; qFrame<3; ++qFrame)
 	{
 	for (tFrame=0; tFrame<3; ++tFrame)
@@ -223,7 +238,6 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 		{
 		struct gfSeqSource *ss = clump->target;
-		++hitCount;
 		sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d\t%d", 
 		    clump->qStart, clump->qEnd, ss->fileName,
 		    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
@@ -235,6 +249,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		    dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
 		    }
 		gfSendLongString(connectionHandle, dy->string);
+		++clumpCount;
 		if (--limit < 0)
 		    break;
 		}
@@ -243,8 +258,9 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	}
     }
 trans3Free(&t3);
-if (hitCount == 0)
+if (clumpCount == 0)
     ++missCount;
+logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
 void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
@@ -256,21 +272,21 @@ char buf[256];
 char *line, *command;
 int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
-FILE *logFile = mustOpen("gfServer.log", "w");
 
-logIt(logFile, "gfServer version %d on host %s, port %s\n", version, hostName, portName);
+logFile = mustOpen("gfServer.log", "w");
+logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
 if (doTrans)
     {
-    logIt(logFile, "setting up translated index\n");
+    logIt("setting up translated index\n");
     gfIndexTransNibs(transGf, nibCount, nibFiles, 
-    	minMatch, gfMaxGap, tileSize, gfMaxTileUse, NULL);
+    	minMatch, gfMaxGap, tileSize, repMatch, NULL);
     }
 else
     {
     gf = gfIndexNibs(nibCount, nibFiles, minMatch, 
-    	gfMaxGap, tileSize, gfMaxTileUse, NULL);
+    	gfMaxGap, tileSize, repMatch, NULL);
     }
-logIt(logFile, "indexing complete\n");
+logIt("indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
@@ -278,14 +294,14 @@ if (bind(socketHandle, &sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %s", hostName, portName);
 listen(socketHandle, 100);
 
-logIt(logFile, "Server ready for queries!\n");
+logIt("Server ready for queries!\n");
 printf("Server ready for queries!\n");
 for (;;)
     {
     connectionHandle = accept(socketHandle, &sai, &fromLen);
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     buf[readSize] = 0;
-    logIt(logFile, "%s\n", buf);
+    logIt("%s\n", buf);
     if (!startsWith(gfSignature(), buf))
         {
 	++noSigCount;
@@ -380,9 +396,9 @@ for (;;)
 			seq.dna[maxSize] = 0;
 			}
 		    if (queryIsProt)
-			baseCount += seq.size;
-		    else
 		        aaCount += seq.size;
+		    else
+			baseCount += seq.size;
 #ifdef DEBUG
 #endif /* DEBUG */
 		    faWriteNext(logFile, "query", seq.dna, seq.size);
@@ -577,12 +593,16 @@ if (cgiBoolean("trans"))
     {
     uglyf("Do trans\n");
     doTrans = TRUE;
+#ifdef SOMETIMES
+    tileSize = 5;
+    repMatch = 2048;
+#endif /* SOMETIMES */
     tileSize = 4;
+    repMatch = 30000;
     }
-if (cgiVarExists("tileSize"))
-    tileSize = cgiInt("tileSize");
-if (cgiVarExists("minMatch"))
-    minMatch = cgiInt("minMatch");
+tileSize = cgiOptionalInt("tileSize", tileSize);
+minMatch = cgiOptionalInt("minMatch", minMatch);
+repMatch = cgiOptionalInt("repMatch", repMatch);
 if (argc < 2)
     usage();
 if (sameWord(command, "direct"))
