@@ -47,6 +47,7 @@ shortLabel GO Similarity
 longLabel Number of Shared Gene Ontology Terms
 type goSimilarity
 priority 6
+goaIdColumn dbObjectSymbol
 
 name abc
 shortLabel Name

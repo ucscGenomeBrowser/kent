@@ -14,3 +14,7 @@ type nameSimilarity bdgpSwissProt bdgpName symbol
 
 name abc
 type abc bdgpSwissProt bdgpName symbol
+
+name goSimilarity
+goaIdColumn dbObjectId
+

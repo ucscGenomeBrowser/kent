@@ -71,6 +71,14 @@ queryFull select acc,pdb from  proteins092903.pdbSP,swissProt.displayId where va
 queryOne select pdb,pdb from proteins092903.pdbSP,swissProt.displayId where val=sp and acc='%s'
 invQueryOne select acc from proteins092903.pdbSP,swissProt.displayId where val=sp and pdb='%s'
 
+name pfamDomains
+queryFull select swissAC,description from proteins092903.pfamXref,proteins092903.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description,proteins092903.pfamDesc.pfamAC from proteins092903.pfamXref,proteins092903.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissAC from proteins092903.pfamXref,proteins092903.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+
+name go
+goaIdColumn dbObjectId
+
 name description
 type knownDetails bdgpSwissProt bdgpName spGeneName
 

@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.10 2003/10/02 06:01:58 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.11 2003/11/07 22:27:49 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -39,7 +39,7 @@ struct hash *hash = newHash(6);
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
     safef(query, sizeof(query), 
-	    "select term.name from goaPart,term where goaPart.dbObjectSymbol = '%s' and goaPart.goId = term.acc", gp->protein);
+	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, gp->protein);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -77,9 +77,9 @@ if (gp->protein != NULL && gp->protein[0] != 0)
     {
     safef(query, sizeof(query), 
 	    "select term.name,term.acc from goaPart,term "
-	    "where goaPart.dbObjectSymbol = '%s' "
+	    "where goaPart.%s = '%s' "
 	    "and goaPart.goId = term.acc", 
-	    gp->protein);
+	    col->goaIdColumn, gp->protein);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -130,15 +130,15 @@ if (searchString != NULL )
 	if (startsWith("GO:", term->name))
 	    {
 	    safef(query, sizeof(query),
-		"select dbObjectSymbol from goaPart "
-		"where goId = '%s'", term->name);
+		"select %s from goaPart "
+		"where goId = '%s'", col->goaIdColumn, term->name);
 	    }
 	else
 	    {
 	    safef(query, sizeof(query), 
-		    "select goaPart.dbObjectSymbol from goaPart,term "
+		    "select goaPart.%s from goaPart,term "
 		    "where term.name = '%s' and term.acc = goaPart.goId"
-		    , term->name);
+		    , col->goaIdColumn, term->name);
 	    }
 	sr = sqlGetResult(col->goConn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -199,6 +199,7 @@ col->cellVal = goCellVal;
 col->cellPrint = goCellPrint;
 col->filterControls = goFilterControls;
 col->advFilter = goAdvFilter;
+col->goaIdColumn = columnRequiredSetting(col, "goaIdColumn");
 }
 
 static boolean goOrderExists(struct order *ord, struct sqlConnection *ignore)
@@ -240,7 +241,8 @@ for (gp = *pGeneList; gp != NULL; gp = gp->next)
 if (curGeneId->protein != NULL)
     {
     safef(query, sizeof(query), 
-	    "select goId from goaPart where dbObjectSymbol = '%s'", curGeneId->protein);
+	    "select goId from goaPart where %s = '%s'", ord->keyField,
+	    	curGeneId->protein);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -250,7 +252,8 @@ if (curGeneId->protein != NULL)
     }
 
 /* Stream through association table counting matches. */
-sr = sqlGetResult(conn, "select dbObjectSymbol,goId from goaPart");
+safef(query, sizeof(query), "select %s,goId from goaPart", ord->keyField);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (hashLookup(curTerms, row[1]))
@@ -288,5 +291,8 @@ void goSimilarityMethods(struct order *ord, char *parameters)
 {
 ord->exists = goOrderExists;
 ord->calcDistances = goCalcDistances;
+ord->keyField = hashFindVal(ord->settings, "goaIdColumn");
+if (ord->keyField == NULL)
+    errAbort("Missing goaIdColumn field in order.ra for go");
 }
 

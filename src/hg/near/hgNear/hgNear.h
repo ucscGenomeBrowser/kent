@@ -130,6 +130,7 @@ struct column
 
       /* The GO column uses this. */
    struct sqlConnection *goConn;  /* Connection to go database. */
+   char *goaIdColumn;		  /* Column to use in go.goaPart. */
 
    /* Association tables use this. */
    char *tablesUsed;	/* Space delimited list of tables. */
@@ -355,6 +356,9 @@ struct column *findNamedColumn(struct column *colList, char *name);
 
 char *columnSetting(struct column *col, char *name, char *defaultVal);
 /* Return value of named setting in column, or default if it doesn't exist. */
+
+char *columnRequiredSetting(struct column *col, char *name);
+/* Return value of named setting.  Abort if it doesn't exist. */
 
 int columnIntSetting(struct column *col, char *name, int defaultVal);
 /* Return value of named integer setting or default if it doesn't exist. */

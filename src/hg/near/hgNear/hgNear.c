@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.115 2003/11/06 19:02:28 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.116 2003/11/07 22:27:49 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -206,6 +206,16 @@ char *columnSetting(struct column *col, char *name, char *defaultVal)
 char *result = hashFindVal(col->settings, name);
 if (result == NULL)
     result = defaultVal;
+return result;
+}
+
+char *columnRequiredSetting(struct column *col, char *name)
+/* Return value of named setting.  Abort if it doesn't exist. */
+{
+char *result = hashFindVal(col->settings, name);
+if (result == NULL)
+    errAbort("Missing required %s field in %s record of columnDb.ra",
+    	name, col->name);
 return result;
 }
 

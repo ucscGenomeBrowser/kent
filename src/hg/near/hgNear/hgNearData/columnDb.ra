@@ -188,6 +188,7 @@ priority 10
 visibility off
 type go
 colWidth 50
+goaIdColumn dbObjectSymbol
 
 name description
 shortLabel Description
