@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.7 2003/12/20 18:06:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.8 2003/12/24 19:17:29 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -61,8 +61,9 @@ char aa[100000];
 
 struct vGfx *g_vg;
 MgFont *g_font;
-int currentYoffset;
-int pbScale = {6};
+int  currentYoffset;
+int  pbScale = {6};
+char pbScaleStr[5];
 
 double tx[100000], ty[100000];
 
@@ -85,6 +86,7 @@ int blockEnd[500],   blockEndPositive[500];
 int blockGenomeStart[500], blockGenomeStartPositive[500];
 int blockGenomeEnd[500], blockGenomeEndPositive[500];
 
+int trackOrigOffset = 0;	//current track display origin offset
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
 {
@@ -147,6 +149,22 @@ freez(&pdfTmpName);
 return pdfName;
 }
 
+
+void hWrites(char *string)
+/* Write string with no '\n' if not suppressed. */
+{
+if (!suppressHtml)
+    fputs(string, stdout);
+}
+
+void hButton(char *name, char *label)
+/* Write out button if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButton(name, label);
+}
+
+
 void makeActiveImagePB(char *psOutput)
 /* Make image and image map. */
 {
@@ -183,18 +201,32 @@ if (protSeq == NULL)
     }
 protSeqLen = strlen(protSeq);
  
+if (cgiOptionalString("trackOffset") != NULL)
+	{
+	//printf("<br>trackOffset=%s\n", cgiOptionalString("trackOffset") );
+	trackOrigOffset = atoi(cgiOptionalString("trackOffset")); 
+	}
+
+if (cgiOptionalString("pbScaleStr") != NULL)
+	{
+	pbScale  = atoi(cgiOptionalString("pbScaleStr")); 
+	}
+
 if (cgiOptionalString("pbScale") != NULL)
 	{
 	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
 	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
 	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
 	if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
+	sprintf(pbScaleStr, "%d", pbScale);
+	cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
+	trackOrigOffset = 0;
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
-if (pixWidth > 30000)
+if (pixWidth > MAX_PB_PIXWIDTH)
    {
-   pixWidth = 30000;
+   pixWidth = MAX_PB_PIXWIDTH;
    }
 //printf("<br>pixWidth=%d\n", pixWidth);fflush(stdout);
 
@@ -228,28 +260,42 @@ doTracks(proteinID, mrnaID, protSeq, vg, &iypos);
 /* Finish map. */
 hPrintf("</MAP>\n");
 
+//#include "j.c"
+
 /* Save out picture and tell html file about it. */
 vgClose(&vg);
 
-if (cgiOptionalString("exonNum") == NULL)
-    {
-    hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
-    //hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
-            gifTn.forCgi, pixWidth, pixHeight, mapName);
+hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
+        gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-    hPrintf("Current scale: ");
-    if (pbScale == 1) hPrintf("1/6 ");
-    if (pbScale == 3) hPrintf("1/2 ");
-    if (pbScale == 6) hPrintf("FULL ");
-    hPrintf("&nbsp&nbsp&nbsp Rescale to ");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
+hPrintf("Explanation of Tracks</A><br>");
+
+if ((pbScale*protSeqLen + 150) > MAX_PB_PIXWIDTH)
+    {
+    /* Put up scroll controls. */
+    hWrites("Move ");
+    hButton("hgt.left3", "<<<");
+    hButton("hgt.left2", " <<");
+    hButton("hgt.left1", " < ");
+    hButton("hgt.right1", " > ");
+    hButton("hgt.right2", ">> ");
+    hButton("hgt.right3", ">>>");
+
     hPrintf("&nbsp&nbsp&nbsp&nbsp");
-    hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
-    hPrintf("Explanation of Tracks</A>");
     }
+    
+hPrintf("Current scale: ");
+if (pbScale == 1) hPrintf("1/6 ");
+if (pbScale == 3) hPrintf("1/2 ");
+if (pbScale == 6) hPrintf("FULL ");
+    
+hPrintf("&nbsp&nbsp&nbsp Rescale to ");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
 hPrintf("<P>");
 
 if (!hTableExists("pbStamp")) goto histDone; 

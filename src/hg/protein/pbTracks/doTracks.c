@@ -18,9 +18,43 @@ void calxy(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
    drawing coordinate with scaling and minor adjustments */
 {
-*outxp = xin*pbScale + 120;
 //*outxp = xin*pbScale + 120;
+*outxp = xin*pbScale + 120 - trackOrigOffset;
 *outyp = yin         + currentYoffset;
+}
+
+// original calxy without trackOrigOffset, may be useful if track names needed at the left
+void calxy0(int xin, int yin, int *outxp, int *outyp)
+/* calxy() converts a logical drawing coordinate into an actual
+   drawing coordinate with scaling and minor adjustments */
+{
+*outxp = xin*pbScale + 120;
+*outyp = yin         + currentYoffset;
+}
+
+void relativeScroll(double amount)
+/* Scroll percentage of visible window. */
+{
+int offset;
+int newStart, newEnd;
+char trackOffset[20];
+
+//printf("<br>old offset=%d\n", trackOrigOffset);fflush(stdout);
+trackOrigOffset = trackOrigOffset + (int)(amount*MAX_PB_PIXWIDTH);
+
+/* Make sure don't scroll of ends. */
+if (trackOrigOffset > ((pbScale* protSeqLen) - MAX_PB_PIXWIDTH))
+    trackOrigOffset = pbScale*protSeqLen - MAX_PB_PIXWIDTH + 150;
+if (trackOrigOffset < 0) trackOrigOffset = 0;
+//printf("<br>pbScale=%d\n", pbScale);
+//printf("<br>amount=%f offset=%d\n", amount, trackOrigOffset);fflush(stdout);
+//printf("<br>protSeqLen=%d\n", protSeqLen*pbScale);fflush(stdout);
+
+sprintf(trackOffset, "%d", trackOrigOffset);
+cgiMakeHiddenVar("trackOffset", trackOffset);
+
+sprintf(pbScaleStr, "%d", pbScale);
+cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
 }
 
 void doAnomalies(char *aa, int len, int *yOffp)
@@ -313,6 +347,9 @@ for (i=0; i<len; i++)
 	}
     }
 
+//calxy0(0, *yOffp, &xx, &yy);
+//vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
+   
 *yOffp = *yOffp + 12;
 }
 
@@ -338,7 +375,7 @@ hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // draw the previous Genome Browser position range
 {
-int xx, yy;
+int xx, yy, xx0, xxSave;
 int i, j;
 char prevPosMessage[200];
 char exonNumStr[10];
@@ -354,6 +391,8 @@ int currentPos;
 int currentPBPos;
 int jPrevStart, jPrevEnd;
 int jcnt = 0;
+int iPrevExon = -1;
+int jPrevExonPos = 0;
 
 int defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
@@ -375,7 +414,57 @@ exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
 exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
-    
+
+//printf("<br>%d %d<br><br>\n",prevGBStartPos, prevGBEndPos);
+if (strand == '-')
+    {
+    for (i=0; i<(exonCount-2); i++)
+    	{
+    	if ((prevGBStartPos < blockGenomeStartPositive[i]) &&
+            (prevGBStartPos > blockGenomeEndPositive[i+1]) )
+	    {
+	    iPrevExon = i;
+	    jPrevExonPos = blockStartPositive[i+1];
+    	    //printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], 
+	    //prevGBStartPos, blockGenomeStartPositive[i]);fflush(stdout);
+	    }
+    	//printf("<br>%d %d %d",i,blockGenomeStartPositive[i],
+	//	blockGenomeEndPositive[i]);fflush(stdout);
+    	}
+
+    // handle special cases at both ends when previous GB position is outside CDS
+    if (prevGBStartPos < blockGenomeStartPositive[exonCount-1]) 
+    	jPrevExonPos = blockEndPositive[exonCount-1] + 3;
+    if (prevGBEndPos > blockGenomeStartPositive[0]) 
+    	jPrevExonPos = blockStartPositive[0];
+
+    //printf("<br>jPrevExonPos = %d\n", jPrevExonPos);fflush(stdout);
+    }
+else
+    {
+    for (i=0; i<(exonCount-1); i++)
+    	{
+    	if ((prevGBStartPos > blockGenomeEndPositive[i]) &&
+            (prevGBStartPos < blockGenomeStartPositive[i+1]) )
+	    {
+	    iPrevExon = i;
+	    jPrevExonPos = blockEndPositive[i];
+    	    //printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], 
+	    //prevGBStartPos, blockGenomeStartPositive[i+1]);fflush(stdout);
+	    }
+    	//printf("<br>%d %d %d",i,blockGenomeStartPositive[i],
+	//	blockGenomeEndPositive[i]);fflush(stdout);
+    	}
+
+    // handle special cases at both ends when previous GB position is outside CDS
+    if (prevGBStartPos < blockGenomeStartPositive[0]) 
+    	jPrevExonPos = blockStartPositive[0];
+    if (prevGBEndPos > blockGenomeEndPositive[exonCount-1]) 
+    	jPrevExonPos = blockEndPositive[exonCount-1];
+    //printf("<br>jPrevExonPos = %d\n", jPrevExonPos);fflush(stdout);
+    }
+
+
 for (j = 0; j < mrnaLen; j++)
     {
     color = defaultColor;
@@ -450,10 +539,22 @@ if (jcnt > 0)
     }
 else
     {
-    sprintf(prevPosMessage, "You were at: %s (inside an intron)", positionStr);
-    calxy(0, *yOffp, &xx, &yy);
-    //vgText(g_vg, xx, yy-8, MG_BLACK, g_font, prevPosMessage);
-    vgTextRight(g_vg, xx+6*strlen(prevPosMessage)-10, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
+    vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+    mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
+    
+    sprintf(prevPosMessage, "You were at: %s (not in a CDS)", positionStr);
+    calxy(0, *yOffp, &xx0, &yy);
+    calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
+    xxSave = xx - 6*strlen(prevPosMessage);
+    if (xxSave < xx0) 
+	{
+    	vgText(g_vg, xx0, yy-8, MG_BLACK, g_font, prevPosMessage);
+	}
+    else
+	{
+    	vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    	}
     }
 calxy(0, *yOffp, &xx, &yy);
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, "Genome Browser");
@@ -932,6 +1033,19 @@ aaPropertyInit(&hasResFreq);
 
 g_vg = vg;
 g_font = mgSmallFont();
+
+if (cgiVarExists("hgt.left3"))
+    relativeScroll(-0.95);
+else if (cgiVarExists("hgt.left2"))
+    relativeScroll(-0.475);
+else if (cgiVarExists("hgt.left1"))
+    relativeScroll(-0.1);
+else if (cgiVarExists("hgt.right1"))
+    relativeScroll(0.1);
+else if (cgiVarExists("hgt.right2"))
+    relativeScroll(0.475);
+else if (cgiVarExists("hgt.right3"))
+    relativeScroll(0.95);
 
 dnaUtilOpen();
 
