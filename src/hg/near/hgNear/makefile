@@ -22,11 +22,13 @@ alpha::
 	rm -fr ${CGI_BIN}/hgNearData
 	rsync -ar --delete hgNearData ${CGI_BIN}/
 	find ${CGI_BIN} -type d -name CVS | xargs rm -fr
+	chmod -R g+w ${CGI_BIN}/hgNearData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgNearData
 	rsync -ar --delete hgNearData ${CGI_BIN}-beta/
 	find ${CGI_BIN}-beta -type d -name CVS | xargs rm -fr
+	chmod -R g+w ${CGI_BIN}-beta/hgNearData
 
 compile: $O $(MYLIBS)
 	${CC} ${COPT} -o $A $O $(MYLIBS) $L

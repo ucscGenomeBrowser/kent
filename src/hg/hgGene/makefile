@@ -22,11 +22,13 @@ alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
 	rsync -ar --delete hgGeneData ${CGI_BIN}/
 	find ${CGI_BIN}/hgGeneData -type d -name CVS | xargs rm -fr
+	chmod -R g+w ${CGI_BIN}/hgGeneData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgGeneData
 	rsync -ar --delete hgGeneData ${CGI_BIN}-beta/
 	find ${CGI_BIN}-beta/hgGeneData -type d -name CVS | xargs rm -fr
+	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
@@ -36,4 +38,3 @@ compile: $O
 test:
 	${CGI_BIN}-${USER}/$A hgg_gene=D43968 hgg_chrom=chr21 hgg_start=35080500 hgg_end=35181383 db=hg16 hgsid=68172
 
-	
