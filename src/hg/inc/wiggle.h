@@ -279,12 +279,12 @@ struct wiggleDataStream
     void (*setDataConstraint)(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit);
 			/*	setting data compare limits 	*/
-    void (*bedOut)(struct wiggleDataStream *wDS, char *fileName, boolean sort);
+    int (*bedOut)(struct wiggleDataStream *wDS, char *fileName, boolean sort);
 			/*	output the bed list results 	*/
     void (*statsOut)(struct wiggleDataStream *wDS,char *fileName,
 	boolean sort, boolean htmlOut);
 			/*	output the stats list results 	*/
-    void (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort,
+    int (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort,
 	boolean rawDataOut);
 			/*	output the ascii list results 	*/
     void (*sortResults)(struct wiggleDataStream *wDS);
