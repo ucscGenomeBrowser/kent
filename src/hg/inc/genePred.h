@@ -67,6 +67,12 @@ struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *gr
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
 
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name);
+/* Convert gff->groupList to genePred list, using GTF feature conventions;
+ * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
+ * gffGroup is sorted in assending coords, with overlaping starts sorted by
+ * end coords, which is true if it was created by gffGroupLines(). */
+
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
