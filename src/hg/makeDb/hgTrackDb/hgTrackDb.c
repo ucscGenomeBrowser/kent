@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.12 2003/09/09 23:55:37 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.13 2003/09/26 02:04:43 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,39 +42,47 @@ void addVersion(char *tableExist, char *database, char *dirName, char *raName,
 /* Read in tracks from raName and add them to list/database if new. */
 {
 struct trackDb *tdList = NULL, *td, *tdNext;
+struct slName *allChroms = hAllChromNames();
+struct slName *chromPtr;
 char fileName[512];
 char longname[512];
+boolean longnameMatch = FALSE;
 
 tdList = trackDbFromRa(raName);
 
 
-if (tableExist != NULL) {
-  for (td = tdList; td != NULL; td = tdNext)
-      {
-      tdNext = td->next;
-      // printf("%s\n", td->tableName);
-      // won't work for worms and zoo
-      strcpy(longname, "");
-      strcat(longname, "chr1_");
-      strcat(longname, td->tableName);
-      // printf("%s\n", longname);
-  
-      if (hTableExistsDb(database, td->tableName))
+if (tableExist != NULL) 
+    {
+    for (td = tdList; td != NULL; td = tdNext)
         {
-        // printf("%s\n", td->tableName);
-        continue;
-        }
+        tdNext = td->next;
+        if (hTableExists(td->tableName))
+            {
+            continue;
+            }
+    
+        // check for split tables
+        longnameMatch = FALSE;
+        for (chromPtr = allChroms; chromPtr != NULL; chromPtr = chromPtr->next)
+	    {
+            strcpy(longname, "");
+	    strcat(longname, chromPtr->name);
+	    strcat(longname, "_");
+	    strcat(longname, td->tableName);
   
-      if (hTableExistsDb(database, longname)) 
-        {
-        // printf("%s\n", td->tableName);
-        continue;
+	    if (hTableExists(longname))
+                {
+	        longnameMatch = TRUE;
+	        break;
+	        }
+            }
+        if (!longnameMatch)
+            {
+            printf("%s missing\n", td->tableName);
+            slRemoveEl(tdList, td);
+            }
         }
-  
-        printf("%s missing\n", td->tableName);
-        slRemoveEl(tdList, td);
-      }
-}
+    }
    
 
 for (td = tdList; td != NULL; td = tdNext)
@@ -214,6 +222,7 @@ snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
 sprintf(rootDir, "%s", hgRoot);
 sprintf(orgDir, "%s/%s", hgRoot, org);
 sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
+hSetDb(database);
 layerOn(tableExist, database, asmDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(tableExist, database, orgDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(tableExist, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);
