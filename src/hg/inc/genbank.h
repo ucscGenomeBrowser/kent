@@ -2,6 +2,9 @@
 #ifndef GENBANK_H
 #define GENBANK_H
 
+/* buffer size for a genbank or refseq accession, with version */
+#define GENBANK_ACC_BUFSZ 24
+
 struct genbankCds
 /* structure return information about parsed CDS */
 {
@@ -25,5 +28,13 @@ boolean genbankParseCds(char *cdsStr, unsigned *cdsStart, unsigned *cdsEnd);
  * used for the CDS.  Incomplete CDS specifications will still return the
  * start or end.  cdsStart and cdsEnd are set to -1 on error.
  */
+
+boolean genbankIsRefSeqAcc(char *acc);
+/* determine if a accession appears to be from RefSeq */
+
+char* genbankDropVer(char *outAcc, char *inAcc);
+/* strip the version from a genbank id.  Input and output
+ * strings maybe the same. acc length is checked against
+ * GENBANK_ACC_BUFSZ. */
 
 #endif

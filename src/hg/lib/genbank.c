@@ -3,7 +3,7 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.5 2004/02/14 10:36:57 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.6 2005/04/04 23:53:00 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -142,4 +142,30 @@ if (!isOk)
 *cdsStart = cds.start;
 *cdsEnd = cds.end;
 return isOk;
+}
+
+static void checkAccLen(char *acc)
+/* check the length of an accession string */
+{
+if (strlen(acc) > GENBANK_ACC_BUFSZ-1)
+    errAbort("invalid Genbank/RefSeq accession (too long): \"%s\"", acc);
+}
+
+boolean genbankIsRefSeqAcc(char *acc)
+/* determine if a accession appears to be from RefSeq */
+{
+/* NM_012345, NP_012345, etc */
+return (strlen(acc) > 4) && (acc[0] == 'N') && (acc[2] == '_');
+}
+
+char* genbankDropVer(char *outAcc, char *inAcc)
+/* strip the version from a genbank id.  Input and output
+ * strings maybe the same. Length is checked against
+ * GENBANK_ACC_BUFSZ. */
+{
+checkAccLen(inAcc);
+if (outAcc != inAcc)
+    strcpy(outAcc, inAcc);
+chopPrefix(outAcc);
+return outAcc;
 }
