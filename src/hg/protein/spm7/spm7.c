@@ -79,8 +79,8 @@ if (argc != 3) usage();
 proteinDataDate = argv[1];
 genomeDBname    = argv[2];
   
-sprintf(spDB, "sp%s", proteinDataDate);
-sprintf(proteinsDB, "proteins%s", proteinDataDate);
+safef(spDB, sizeof(spDB), "sp%s", proteinDataDate);
+safef(proteinsDB, sizeof(proteinsDB), "proteins%s", proteinDataDate);
  
 o3 = fopen("j.dat", "w");
 o7 = fopen("jj.dat", "w");
@@ -92,17 +92,17 @@ inf  = mustOpen("sorted.lis", "r");
 
 strcpy(oldInfo, "");
 
-skippedKgId   = strdup("");
-lastValidKgId = strdup("");
+skippedKgId   = cloneString("");
+lastValidKgId = cloneString("");
 
 isDuplicate   = 0;
-oldMrnaStr    = strdup("");
-oldAlignStr   = strdup("");
-oldProteinStr = strdup("");
+oldMrnaStr    = cloneString("");
+oldAlignStr   = cloneString("");
+oldProteinStr = cloneString("");
 
-mrnaStr       = strdup("");
-proteinStr    = strdup("");
-alignStr      = strdup("");
+mrnaStr       = cloneString("");
+proteinStr    = cloneString("");
+alignStr      = cloneString("");
 
 while (fgets(line_in, 10000, inf) != NULL)
     {
@@ -119,7 +119,7 @@ while (fgets(line_in, 10000, inf) != NULL)
     chp++;
     strcpy(newInfo, line);
 
-    if (strcmp(oldInfo, newInfo) == 0)
+    if (sameString(oldInfo, newInfo))
 	{
 	isDuplicate = 1;
 	}
@@ -149,32 +149,32 @@ while (fgets(line_in, 10000, inf) != NULL)
     chp = strstr(chp, "\t");	/* mRNA ID */
     *chp = '\0';
     chp ++;
-    mrnaStr = strdup(mrnaStr);
+    mrnaStr = cloneString(mrnaStr);
 
     proteinStr = chp;	
     chp = strstr(chp, "\t");	/* protein ID */
     *chp = '\0';
     chp ++;
-    proteinStr = strdup(proteinStr);
+    proteinStr = cloneString(proteinStr);
 
     alignID = chp;
 
     /* get rid of "end-of-line" character at the end of the string */
-    chp = strstr(alignID, "\n");
-    *chp = '\0';
-    alignStr = strdup(alignID);
+    //chp = strstr(alignID, "\n");
+    //*chp = '\0';
+    alignStr = trimSpaces(alignID);
 
     if (isDuplicate)
 	{
 	/* only put out records for valid KG entries */
-	if ((strcmp(oldMrnaStr, skippedKgId) != 0) || (strcmp(oldMrnaStr, lastValidKgId) == 0))
+	if (!sameString(oldMrnaStr, skippedKgId) || sameString(oldMrnaStr, lastValidKgId))
 	    {
 	    fprintf(o7, "%s\t%s\t%s\t%s\n", oldMrnaStr, oldProteinStr, mrnaStr, proteinStr);
 	    }
 	}
     else
 	{
-	sprintf(query2, "select * from %sTemp.knownGene0 where alignID='%s';",genomeDBname, alignID);
+	safef(query2, sizeof(query2), "select * from %sTemp.knownGene0 where alignID='%s';", genomeDBname, alignID);
 	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);
     	while (row2 != NULL)
@@ -194,8 +194,8 @@ while (fgets(line_in, 10000, inf) != NULL)
 	    alignID   = row2[11];
 
 	    sscanf(exonCount, "%d", &exCount);
-	    sp = strdup(exonStarts);
-	    ep = strdup(exonEnds);
+	    sp = cloneString(exonStarts);
+	    ep = cloneString(exonEnds);
 	
             sscanf(cdsStart, "%d", &cdsS);
             sscanf(cdsEnd, "%d", &cdsE);
@@ -245,10 +245,10 @@ while (fgets(line_in, 10000, inf) != NULL)
 		
 	    cdsLen = aalen;
 
-            sprintf(cond_str, "val='%s'", proteinID);
+            safef(cond_str, sizeof(cond_str), "val='%s'", proteinID);
             acc = sqlGetField(conn3, spDB, "displayId", "acc", cond_str);
 
-            sprintf(cond_str, "acc='%s'", acc);
+            safef(cond_str, sizeof(cond_str), "acc='%s'", acc);
             aaStr=sqlGetField(conn3, spDB, "protein", "val", cond_str);
     	    aaLen = strlen(aaStr);
 
@@ -268,12 +268,12 @@ while (fgets(line_in, 10000, inf) != NULL)
 			
 			proteinID,
 			alignID);
-		lastValidKgId = strdup(name);
+		lastValidKgId = cloneString(name);
 		}
 	    else
 		{
 		printf("skipping %s %d \n", name, cdsLen);
-		skippedKgId = strdup(name);
+		skippedKgId = cloneString(name);
 		} 
 	    row2 = sqlNextRow(sr2);
 	    }
