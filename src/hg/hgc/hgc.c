@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.524 2003/12/04 05:05:04 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.525 2003/12/04 08:03:33 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7010,12 +7010,13 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
-printf("<B>Align Score:</B> %d \n",pg->score);
+printf("<B>Bases syntenic with mouse:</B> %d \n",pg->overlapDiag);
 printf("<B>PolyA tail length:</B> %d \n",pg->polyA);
 printf("<B>PolyA Start:</B> %d \n",pg->polyAstart);
-printf("<B>Exons Covered:</B> %d \n",pg->exonCover);
+printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
+printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
-printf("<B>Introns in Gene:</B> %d \n",pg->score2);
+printf("<B>Align Score:</B> %d \n",pg->score);
 htmlHorizontalLine();
 printf("<p>");
 printf("<B>%s Gene:</B> %s %s in %s\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
@@ -7023,6 +7024,46 @@ linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
 printf("</A>");
 
+printf("<B>Gene Details: </B> " );
+printf("<A TARGET=\"_blank\" ");
+printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+            cartSidUrlString(cart),
+            "db", database,
+            "hgg_gene", pg->gene,
+            "hgg_chrom", pg->gChrom,
+            "hgg_start", pg->gStart,
+            "hgg_end", pg->gEnd);
+printf(">%s</A>  ",pg->gene);
+char *description;
+if (hTableExists("knownGene"))
+    {
+    safef(query, sizeof(query), 
+            "select proteinId from knownGene where name = '%s'", pg->gene);
+    description = sqlQuickString(conn, query);
+    if (description != NULL)
+    printf("<B>SwissProt ID: </B> " );
+    printf("<A TARGET=\"_blank\" HREF=");
+    printSwissProtProteinUrl(stdout, description);
+    printf(">%s</A>",description);
+    freez(&description);
+    }
+/* display pfam domains */
+printf("<p>");
+if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
+    {
+    safef(query, sizeof(query), 
+            "select description from knownToPfam kp, proteins031112.pfamDesc p where pfamAC = value and kp.name = '%s'", 
+            pg->gene);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        description = row[0];
+        if (description == NULL)
+            description = cloneString("n/a");
+        printf("<B>Pfam Domain:</B> %s <p>", description);
+        }
+    sqlFreeResult(&sr);
+    }
 
 if (hTableExists(alignTable))
     {
