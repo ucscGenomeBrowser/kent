@@ -66,6 +66,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
+type ctgPos
 
 track gold
 shortLabel Assembly 
@@ -110,6 +111,7 @@ longLabel Clone Coverage/Fragment Position
 group map
 visibility hide
 altColor 180,180,180 
+typoe clonePos
 
 track bacEndPairs
 shortLabel BAC End Pairs
