@@ -41,7 +41,7 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 joiner goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
-     $dm.bdgpInfo.go comma
+     $dm.bdgpGeneInfo.go comma
      $dm.bdgpNonCodingInfo.go comma
      go.goaPart.goId
      go.term.acc
@@ -65,7 +65,7 @@ joiner swissProtId external=SwissProt
      $knownDb.kgProtAlias.displayID
      $knownDb.kgXref.spDisplayID
      $knownDb.knownCanonical.protein
-     $knownDb.knownGene.proteinId
+     $knownDb.knownGene.proteinID
      $gbd.spMrna.spID
      $dm.bdgpSwissProt.spSymbol
      $dm.flyBaseSwissProt.spSymbol
@@ -83,7 +83,7 @@ joiner swissProtAccession external=SwissProt
      $ce.sangerGene.proteinID
      $ce.sangerLinks.protName
      $dm.bdgpCanonical.protein
-     $dm.bdgpGene.proteinId
+     $dm.bdgpGene.proteinID
      $dm.bdgpSwissProt.swissProtId
      $dm.flyBaseSwissProt.swissProtId
      $sacCer.sgdGene.proteinID
@@ -132,7 +132,7 @@ joiner swissProtRcType
 
 joiner swissProtRcVal
 "Reference Comment Text in SwissProt (just inside UCSC Relationalized)"
-    swissProt.citationRc.rcVal;
+    swissProt.citationRc.rcVal
     swissProt.rcVal.id
 
 joiner swissProtCommentType
@@ -196,7 +196,7 @@ joiner geneidName
 joiner genscanName
 "Link together genscan predicted gene structure and peptide"
     $gbd.genscan.name
-    $gbd.genscan.pep
+    $gbd.genscanPep.name
 
 joiner sgpGeneName
 "Link together sgp predicted gene structure and peptide"
@@ -269,14 +269,14 @@ joiner gnfU95SampleIdV0
 joiner gnfU95SampleIdV1
 "Identifiers of RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95AllExps.id
-     hgFixed.gnfHumanU95All.expIds comma indexOf
-     hgFixed.gnfHumanU95AllRatio.expIds comma indexOf
+     hgFixed.gnfHumanU95All.expScores comma indexOf
+     hgFixed.gnfHumanU95AllRatio.expScores comma indexOf
 
 joiner gnfU95MedianSampleIdV1
 "Identifiers of pooled RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95MedianExps.id
-     hgFixed.gnfHumanU95Median.expIds comma indexOf
-     hgFixed.gnfHumanU95MedianRatio.expIds comma indexOf
+     hgFixed.gnfHumanU95Median.expScores comma indexOf
+     hgFixed.gnfHumanU95MedianRatio.expScores comma indexOf
 
 joiner gnfU74aSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
@@ -335,13 +335,11 @@ joiner arbFlyLifeMedianSampleId
 joiner kimWormLifeAllSampleId
 "Identifiers of RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeAllExps.id
-     hgFixed.kimWormLifeAll.expScores comma indexOf
      hgFixed.kimWormLifeAllRatio.expScores comma indexOf
 
 joiner kimWormLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeMedianExps.id
-     hgFixed.kimWormLifeMedian.expScores comma indexOf
      hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
 
 joiner yeastChoCellCycleSampleId
@@ -454,13 +452,13 @@ joiner nativeMrnaAccession typeOf=mrnaAccession
 
 joiner mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
-    gdb.mgcFullMrna.qName 
+    $gbd.mgcFullMrna.qName 
     $gbd.mgcFullStatus.acc
     $gbd.mgcGenes.name
 
 joiner refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    $gbd.bioCycPathway.geneId
+    $gbd.bioCycPathway.geneID
     $gbd.cgapAlias.alias
     $gbd.imageClone.acc
     $knownDb.kgAlias.alias
@@ -470,9 +468,9 @@ joiner refSeqId typeOf=mrnaAccession
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refLink.mrnaAcc
-    $gbd.refSeqId.qName
+    $gbd.refSeqAli.qName
     $gbd.refSeqStatus.mrnaAcc
-    $gbd.refSeqSummarry.mrnaAcc
+    $gbd.refSeqSummary.mrnaAcc
     $dm.bdgpToRefSeq.value
 
 joiner knownGeneId typeOf=nativeMrnaAccession
@@ -490,12 +488,12 @@ joiner knownGeneId typeOf=nativeMrnaAccession
     $gbd.foldUtr5.name
     $hg.gnfU95Distance.query
     $hg.gnfU95Distance.target
-    $mm.gnfU74ADistance.query
-    $mm.gnfU74ADistance.target
-    $mm.gnfU74BDistance.query
-    $mm.gnfU74BDistance.target
-    $mm.gnfU74CDistance.query
-    $mm.gnfU74CDistance.target
+    $mm.affyGnfU74ADistance.query
+    $mm.affyGnfU74ADistance.target
+    $mm.affyGnfU74BDistance.query
+    $mm.affyGnfU74BDistance.target
+    $mm.affyGnfU74CDistance.query
+    $mm.affyGnfU74CDistance.target
     $gbd.keggPathway.kgID
     $knownDb.kgAlias.kgID
     $knownDb.kgProtAlias.kgID
@@ -679,7 +677,7 @@ joiner omimId external=OMIM
 
 joiner knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    $knownDb.knownGene.alignId
+    $knownDb.knownGene.alignID
 
 joiner knownIsoformCluster
 "ID of a cluster of overlapping known genes"
@@ -866,7 +864,7 @@ joiner cgapId
 
 joiner cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
-    $gbd.cgapBioDesc.mapID
+    $gbd.cgapBiocDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
 joiner affySnp10KId external=Affymetrix
@@ -876,7 +874,7 @@ joiner affySnp10KId external=Affymetrix
 
 joiner affySnp120KId external=Affymetrix
 "Affymetrix 120K SNP Identifier"
-    hgFixed.affyGeno.affyId
+    hgFixed.affyGenoDetails.affyId
     $hg.affyGeno.name
 
 joiner dbSnpId external=dbSNP
