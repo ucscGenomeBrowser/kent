@@ -216,8 +216,9 @@ exit; # don't actually run this like a script :)
   grep SCAFFOLD repeats.all > repeats.clean
   cat repeats.header repeats.clean > repeats.final
   grep "There were no repetitive sequences found" repeats.final > repeats.notfound
-  grep -v "There were no repetitive sequences found" repeats.final > repeats.final.final
-  hgLoadOut bosTau1 repeats.final.final
+  grep -v "There were no repetitive sequences found" repeats.final > repeats.out
+  ssh hgwdev
+  hgLoadOut bosTau1 repeats.out
   # Strange perc. fields:
   # -2.3 line 925441
   # -18.2 line 1644720
