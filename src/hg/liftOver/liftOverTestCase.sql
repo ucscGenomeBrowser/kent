@@ -139,12 +139,8 @@ insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom,
                          values ("test12.2", "SMN1 condensed", "hg16", "hg17", "chr5", 70422996, 70451066, "SUCCESS", "", "chr5", 70256523, 70284593);
 insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message, newChrom, newStart, newEnd) 
                          values ("test12.3", "BIRC1 retained", "hg16", "hg17", "chr5", 70466538, 70522752, "SUCCESS", "", "chr5", 70300065, 70356279);
-insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message, newChrom, newStart, newEnd) 
-                         values ("test12.4", "BIRC1 removed", "hg16", "hg17", "chr5", 69000000, 69010000, "SUCCESS", "", "chr5", 68928919, 68938903);
-insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message, newChrom, newStart, newEnd) 
-                         values ("test12.5", "BIRC1 removed", "hg16", "hg17", "chr5", 69010000, 69020000, "SUCCESS", "", "chr5", 68938903, 68943905);
-insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message, newChrom, newStart, newEnd) 
-                         values ("test12.6", "BIRC1 removed", "hg16", "hg17", "chr5", 69016000, 69017000, "SUCCESS", "", "chr5", 70345124, 70346135);
+insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message ) 
+                         values ("test12.4", "BIRC1 removed", "hg16", "hg17", "chr5", 69005857, 69062049, "FAILURE", "Split in new");
 
 insert into liftOverTestCase (id, comment, origAssembly, newAssembly, origChrom, origStart, origEnd, status, message, newChrom, newStart, newEnd) 
                          values ("test13.1", "move chroms", "hg16", "hg17", "chr1", 140358487, 140358535, "SUCCESS", "", "chr12", 53498115, 53498163);
