@@ -18,8 +18,9 @@
 #include "ra.h"
 #include "hgColors.h"
 #include "hgNear.h"
+#include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.146 2004/04/24 00:39:29 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.147 2004/04/26 17:20:49 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1926,6 +1927,6 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v26", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Family v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
