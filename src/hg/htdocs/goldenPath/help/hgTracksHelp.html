@@ -238,7 +238,7 @@ view one of the alignments in the Genome Browser, click the <I>browser</I> link 
 match. The <I>details</I> link can be used to preview the alignment to determine if
 it is of sufficient match quality to merit viewing in the Genome Browser. If too many BLAT hits 
 occur, try narrowing the search by filtering the sequence in slow mode with
-<A HREF="http://http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>, then rerunning the BLAT search. 
+<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>, then rerunning the BLAT search. 
 <P>
 For more information
 on conducting and fine-tuning BLAT searches, refer to the <A HREF="#BLATAlign">
@@ -1567,6 +1567,54 @@ the selection of probes on the Affymetrix Mouse MOE430 set of chips (A and B).
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Affymetrix RAE230</B><BR>
+This track shows the location of the sequences used for the selection of probes 
+on Affymetrix RAE230 chips. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyRAE230</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Affymetrix RG-U34A</B><BR>
+This track shows the location of the sequences used for the selection of probes 
+on Affymetrix RG-U34A chips. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows display conventions similar to mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissues. In full display mode, all tissues are displayed. Click on an 
+	individual tissue entry to show a gene expression map for all tissues in 
+	the experiment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyU34A</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Affymetrix U74</B><BR>
 This track shows the location of sequences used for 
 the selection of probes on the Affymetrix MG-U74v2 set of chips (A, B, and C).
@@ -1589,9 +1637,6 @@ the selection of probes on the Affymetrix MG-U74v2 set of chips (A, B, and C).
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Affymetrix U95</B><BR>
-This track shows the location of the consensus and exemplar sequences used for 
-the selection of probes on the Affymetrix HG-U95Av2 chip.
 <P><B>Affymetrix U95</B><BR>
 This track shows the location of the consensus and exemplar sequences used for 
 the selection of probes on the Affymetrix HG-U95Av2 chip.
@@ -1639,6 +1684,11 @@ This track summarizes the alternative splicing shown in the mRNA and EST tracks.
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#AltGraphX"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
+<P><B>Anopheles Ecores</B><BR>
+This track shows Anopheles evolutionary conserved regions (ecores) computed 
+against the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
 
 <P><B>Assembly</B><BR>
 This track shows the draft assembly of the human genome. This assembly merges
@@ -1740,6 +1790,72 @@ selects them under more stringent criteria than is used for the BAC submissions.
 	<I>bactigPos</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BactigPos"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>BDGP Genes</B><BR>
+This track shows protein-coding genes annotated by the Berkeley Drosophila 
+Genome Project (<A HREF="http://www.fruitfly.org/" TARGET=_blank>BDGP</A>). 
+For a description of the methods used to generate the 
+data, see the BDGP <A HREF="http://www.fruitfly.org/about/methods/index.html" 
+TARGET=_blank>Methods</A> web page.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks.
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display provides links to the 
+	corresponding protein, mRNA, and genomic sequences, and related links to 
+	outside databases. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn
+	on codon coloring for the track. Click the &quot;Codon coloring 
+	help&quot; link on the page for more information about this feature.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>bdgpGene</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>BDGP Non-Coding Genes</B><BR>
+This track shows non-coding genes annotated by the Berkeley Drosophila 
+Genome Project (<A HREF="http://www.fruitfly.org/" TARGET=_blank>BDGP</A>). 
+For a description of the methods used to generate the 
+data, see the BDGP <A HREF="http://www.fruitfly.org/about/methods/index.html" 
+TARGET=_blank>Methods</A> web page.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks.
+	</TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display provides links to the 
+	corresponding protein, mRNA, and genomic sequences, and related links to 
+	outside databases. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn
+	on codon coloring for the track. Click the &quot;Codon coloring 
+	help&quot; link on the page for more information about this feature.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>bdgpNonCoding</I> positional table in the Table Browser. To view 
+	the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1870,7 +1986,7 @@ rates at 4-fold degenerate positions.
 
 <P><B>Blastz Mouse</B><BR>
 This track displays <EM>blastz</EM> alignments of the specified mouse draft
-assembly to the human genome.
+assembly to the selected genome.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -1879,8 +1995,9 @@ assembly to the human genome.
 	tracks.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show human and 
-	mouse position information, alignment details, and a link to a detailed
+	Clicking on an entry in full display mode will position information 
+	for the mouse and the selected genome, alignment details, and a link 
+	to a detailed
 	view of parts of the alignment.  </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track configuration:</I></B> 
@@ -1890,59 +2007,83 @@ assembly to the human genome.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
-	<I>blastzMm2</I> positional table in the Table Browser. To view the table
-	definition, click <A
+	<I>blastzX</I> positional table in the Table Browser, where X represents
+	the assembly version in which you are interested, e.g. Mm4). To view the
+	table definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Chicken Chain </B><BR>
-This track shows chicken genomic alignment to the selected genome using blastz and
-axtChain. 
+<P><B>Briggsae Aligns </B><BR>
+This track shows best-in-genome <em>C. elegans/C. briggsae</em> alignments 
+based on the <em>C. elegans/C. briggsae</em> alignment net, i.e. the best 
+chain for every part of the <em>C. elegans</em> genome. See the D. pseud Aligns 
+track description for more information.
+
+<P><B>Briggsae Blastz </B><BR>
+This track displays Blastz alignments of the <em>C. briggsae</em> assembly to 
+selected assembly. See the Blastz Mouse track description for more information.
+
+<P><B>Briggsae Chain </B><BR>
+This track shows <em>C. briggsae</em> genomic alignment to the selected genome 
+using blastz and axtChain. See the Human Chain track description for more 
+information.
+
+<P><B>Briggsae Net </B><BR>
+This track shows the best <em>C. briggsae</em> chain for every part of the 
+selected genome. 
+See the Human Chain track description for more information.
+
+<P><B>Briggsae Waba </B><BR>
+This track shows alignments of <em>C. briggsae</em> to <em>C. elegans</em> 
+using the Wobble Aware Bulk Aligner (WABA), an alignment tool developed by 
+Jim Kent for doing large-scale alignments between genomic DNA of different 
+species.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for chain tracks.</TD></TR>
+	<B><I>Display conventions:</I></B> 
+	Aligning regions are represented by blocks. The shading indicates the
+	hidden Markov model (HMM) states of the bases.</TD></TR>	
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode shows position information
-	in the chicken and selected genome, the chain ID and score, and provides 
-	links to view details of parts of the chain or to open the chicken 
-	browser to the corresponding position. </TD></TR>
+	Clicking on an item in full display mode will show alignment details
+	and the HMM state for each alignment pair`. Markov model . 
+	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
-	<I>chrN_chainGalGalX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
+	<I>wabaCbr</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="../gbdDescriptions.html#Chain"
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WabaChromeCreate"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
+<P><B>C. briggsae ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>C. briggsae mRNAs</B><BR>
+See the description for Human mRNAs.
+
+<P><B>C. elegans ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>C. elegans mRNAs</B><BR>
+See the description for Human mRNAs.
+
+<P><B>Chicken Chain </B><BR>
+This track shows chicken genomic alignment to the selected genome using blastz 
+and axtChain. See the Human Chain track description for more information.
+
+<P><B>Chicken ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>Chicken mRNAs</B><BR>
+See the description for Human mRNAs.
 
 <P><B>Chicken Net </B><BR>
-This track shows the best chicken chain for every part of the selected genome.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	In full display mode, clicking on a box shows details information about 
-	the chain as a whole, while clicking on a line shows information
-	about the gap. The detailed information is useful in determining the 
-	cause of the gap or, for lower level chains, the genomic 
-	rearrangement.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>netGalGalX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#NetAlign"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+This track shows the best chicken chain for every part of the selected genome. 
+See the Human Chain track description for more information.
 
 <P><B>Chimp BAC Ends </B><BR>
 This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on BLAT alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
@@ -1986,24 +2127,7 @@ This track displays alignments of the chimp genome (Pan troglodytes) to human, b
 
 <P><B>Chimp Chain </B><BR>
 This track shows chimp genomic alignment to the selected genome using blastz and
-axtChain. 
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	In full display mode, clicking on a box shows details information about 
-	the chain as a whole, while clicking on a line shows information
-	about the gap. The detailed information is useful in determining the 
-	cause of the gap or, for lower level chains, the genomic 
-	rearrangement.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>rBestNetPanTro1</I> positional table in the Table Browser. 
-	To view the table definition, click <A
-	HREF="../gbdDescriptions.html#NetAlign"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+axtChain. See the Human Chain track description for more information.
 
 <P><B>Chimp Deletions</B><BR>
 This track displays regions of the human assembly that are deleted in the 
@@ -2063,6 +2187,65 @@ strategy).
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Chimp ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>Chimp mRNAs</B><BR>
+See the description for Human mRNAs.
+
+<P><B>Chimp Recip Chain </B><BR>
+This track displays &quot;reciprocal best&quot; human/chimpanzee genomic 
+alignment chains. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for chain tracks.</TD></TR>
+	<B><I>Track details:</I></B> 
+	In full display mode, clicking on a box shows details information about 
+	the chain as a whole, while clicking on a line shows information
+	about the gap. The detailed information is useful in determining the 
+	cause of the gap or, for lower level chains, the genomic 
+	rearrangement.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rBestChainPanTro1</I> positional table in the Table Browser. 
+	To view the table definition, click <A
+	HREF="../gbdDescriptions.html#Chain"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Chimp Recip Net </B><BR>
+This track shows the reciprocal best alignment net between the chimpanzee and the
+selected genome assembly. Due to the draft nature of the
+initial chimp assembly, this track uses a "reciprocal best" strategy that
+attempts to minimize paralog fill-in for missing orthologous chimp sequence by
+filtering out of the human net all sequences not in the chimp side of the net.
+See the track description page for more information about the methods used to
+generate this track.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for net tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In full display mode, clicking on a box shows details information about 
+	the chain as a whole, while clicking on a line shows information
+	about the gap. The detailed information is useful in determining the 
+	cause of the gap or, for lower level chains, the genomic 
+	rearrangement.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rBestNetPanTro1</I> positional table in the Table Browser, where <I>X</I>
+	is the assembly version in which you're interested. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#NetAlign"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Chromosome Band</B><BR>
 The light and dark blocks indicate the approximate location of
 traditional cytological bands seen on Giemsa-stained chromosomes at an 850
@@ -2114,7 +2297,7 @@ alignments of the various assemblies were used to generate the annotation.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show detailed alignment 
-	information for each of the 4 organisms. </TD></TR>
+	information for each of the organisms. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -2156,7 +2339,7 @@ Shows the coverage level and positions of all clones in the genome.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an item in full display mode will show the clone hyperlink to 
-	Genbank record and the fasta format sequence (one per fragment).</TD></TR>
+	GenBank record and the fasta format sequence (one per fragment).</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -2225,6 +2408,12 @@ to construct this track, refer to the track's description page.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>D. melanogaster ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>D. melanogaster mRNAs</B><BR>
+See the description for Human mRNAs.
+
 <P><B>DNAse HyperSens</B> (Zoo)<BR>
 This track depicts DNAse I hypersensitive sites (DHS) mapped to the human genome 
 sequence. Each track element represents the surrounding 500 bp from the position 
@@ -2250,6 +2439,42 @@ Potential Intragenic Regulatory Elements in the CFTR Gene&quot;, <em>Genomics</e
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>D. pseud. Aligns </B><BR>
+This track shows blastz scores from the 
+<em>D. pseudoobscura/D. melanogaster</em> alignment Net track, i.e. the best 
+<em>D. pseudoobscura/D. melanogaster</em> chain for every part of the 
+<em>D. melanogaster</em> genome. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	In dense display mode, darker shading indicates those best chained and
+	netted alignments that have the higher scores. In full display mode, 
+	the height of the vertical line corresponds to the score.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show position information
+	and -- when zoomed in to the base level -- the base composition of the 
+	alignments. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>axtNetX</I> positional table in the Table Browser, where <em>X</em>
+	represents the assembly that is being aligned, e.g. Dp1. To view the 
+	table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#ScoredRef"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>D. pseud. Chain </B><BR>
+This track shows <em>D. pseudoobscura</em> genomic alignment to the selected 
+genome using blastz and axtChain. See the Human Chain track description for 
+more information.
+
+<P><B>D. pseud. Net </B><BR>
+This track shows the best <em>D. pseudoobscura</em> chain for every part of 
+the selected genome. See the Human Net track description for more information.
 
 <P><B>Duplications </B><BR>
 This track shows genomic 
@@ -2300,6 +2525,40 @@ Seoul, Korea. For more information, see the
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
+
+<P><B>Elegans Blastz</B><BR>
+This track displays <I>Blastz</I> alignments of the <em>C. elegans</em> assembly
+to the <em>C. briggsae</em> assembly 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show human and 
+	mouse position information, alignment details, and a link to a detailed
+	view of parts of the alignment.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzX</I> positional table in the Table Browser, where <em>X</em>
+	represents the <em>C. elegans</em> assembly, e.g. Ce2. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Elegans Chain</B><BR>
+This track shows <em>C. elegans</em> genomic alignment to the selected 
+genome using blastz and axtChain. See the Human Chain track description for 
+more information.
 
 <P><B>ENCODE Regions</B><BR>
 This track depicts target regions for the NHGRI ENCODE project, which is 
@@ -2410,30 +2669,15 @@ used</A> to estimate the number of human genes.
 </TABLE></P>
 
 <P><B>Fugu Ecores</B><BR>
-This track shows human/Fugu evolutionary conserved regions (ecores) computed by 
-the Exofish program at Genoscope. 
+This track shows Fugu evolutionary conserved regions (ecores) computed against 
+the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
 
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses display conventions similar to mRNA tracks. Each 
-	singleton block corresponds to an ecore. Blocks connected by a 
-	line correspond to an "ecotig", a set of colinear ecores in a 
-	syntenic region.  </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show positional 
-	information, 
-	a link to the Exofish browser, and a link to display the DNA sequence.
-	</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>ecoresFr1</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+<P><B>Fugu ESTs</B><BR>
+See the description for Human ESTs.
+
+<P><B>Fugu mRNAs</B><BR>
+See the description for Human mRNAs.
 
 <P><B>Fgenesh++ Genes</B><BR>
 This tracks shows Fgenesh++ gene predictions based on <A
@@ -2625,30 +2869,8 @@ axtChain.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-
 <P><B>Fugu Net </B><BR>
 This track shows the best Fugu chain for every part of the selected genome.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	In full display mode, clicking on a box shows details information about 
-	the chain as a whole, while clicking on a line shows information
-	about the gap. The detailed information is useful in determining the 
-	cause of the gap or, for lower level chains, the genomic 
-	rearrangement.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>netFrX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#NetAlign"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
 
 <P><B>Gap</B><BR>
 This track depicts gaps in the assembly. These gaps - with the
@@ -3169,9 +3391,9 @@ axtChain.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
-	<I>chrN_chainHgX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
+	<I>chrN_chainX</I> positional table in the Table Browser, where <I>X</I>
+	is the assembly version in which you're interested, e.g. Hg16. To view 
+	the table definition, click <A
 	HREF="../gbdDescriptions.html#Chain"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
@@ -3242,13 +3464,41 @@ human assembly, appears in the human Genome Browser.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Human Ecores</B><BR>
+This track shows human evolutionary conserved regions (ecores) computed against 
+the selected assembly by the Exofish program at Genoscope. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses display conventions similar to mRNA tracks. Each 
+	singleton block corresponds to an ecore. Blocks connected by a 
+	line correspond to an "ecotig", a set of colinear ecores in a 
+	syntenic region.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show positional 
+	information, 
+	a link to the Exofish browser, and a link to display the DNA sequence.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>ecores<X></I> positional table in the Table Browser, where 
+	<em>X</em> is the assembly version in which you're interested (e.g. 
+	hg16). 
+	To view the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Human ESTs </B><BR>
 This track shows alignments between Expressed Sequence Tags (ESTs) -
-spliced and unspliced - in Genbank and the genome. ESTs are single read 
+spliced and unspliced - in GenBank and the genome. ESTs are single read 
 (typically approximately 500 base) sequences 
 that usually represent fragments of transcribed genes. 
 To view only spliced ESTs, see the Spliced EST track.
-This track was generated by aligning human ESTs from Genbank against the
+This track was generated by aligning human ESTs from GenBank against the
 genome using the BLAT program. Note that the maximum intron length
 allowed by BLAT is 500,000 bases, which may eliminate some ESTs with
 very long introns that might otherwise align. When a single EST aligns
@@ -3263,7 +3513,7 @@ kept.
 	introns indicate the direction of transcription. In the December 2001 
 	assembly and later, this direction is taken by looking at the splice sites. 
 	In previous assemblies, the direction of transcription was taken from the
-	Genbank annotations, which frequently were inaccurate; these should be 
+	GenBank annotations, which frequently were inaccurate; these should be 
 	verified in the details page alignment on the basis of the GT-AG splice 
 	donor/acceptor rule.  As with otherEST tracks, it may be necessary to zoom 
 	in to display entries in full display mode due to the 300 line display 
@@ -3288,8 +3538,8 @@ kept.
 </TABLE></P>
 
 <P><B>Human mRNAs</B><BR>
-The Human mRNA track shows alignments between human mRNAs in Genbank and the 
-genome.  Genbank human mRNAs are aligned against the genome using the BLAT 
+This track shows alignments between mRNAs from the current assembly in GenBank 
+and the genome.  The mRNAs are aligned against the genome using the BLAT 
 program. When a single mRNA aligns 
 in multiple places, the alignment having the highest base identity is found. 
 Only alignments that have a base identity level within 1% of the best
@@ -3307,7 +3557,7 @@ to be kept.
 	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show a summary of the Genbank 
+	Clicking on an entry in full display mode will show a summary of the GenBank 
 	entry on that mRNA, convenient hyperlinks to major databases, and base-by-base 
 	mRNA/genomic alignments. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3336,9 +3586,9 @@ This track shows the best human chain for every part of the selected genome.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
-	<I>netHgX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
+	<I>netX</I> positional table in the Table Browser, where <I>X</I>
+	is the assembly version in which you're interested, e.g. Hg16. To view 
+	the table definition, click <A
 	HREF="../gbdDescriptions.html#NetAlign"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
@@ -3372,9 +3622,40 @@ The syntenic block was extended to include these areas.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Human Tight</B><BR>
+This track displays <I>Blastz</I> alignments of the human
+assembly to the current genome, filtered by <I>axtBest</I> and
+<I>subsetAxt</I> with very stringent constraints. See the track's description
+page for more details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show position information
+	for the human and the current genome, alignment details, and a link to 
+	a detailed view of parts of the alignment.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzTightHg<X></I> positional table in the Table Browser, where
+	<em>X</em> is the number of the assembly. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Known Genes </B><BR>
 The Known Genes track shows known protein coding genes based on proteins from 
-SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from Genbank. 
+SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from GenBank. 
 Features are colored according to origin and review status:
 <UL>
 <LI>
@@ -3407,7 +3688,7 @@ derived from DNA sequences instead of mRNA sequences are added.
 	</TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display provides provides links to the 
+	Clicking on an entry in full display provides links to the 
 	corresponding protein, mRNA, and genomic sequences, and related links to 
 	several outside databases. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3618,7 +3899,7 @@ DNA is from the Arachne assembly of mouse whole genome shotgun reads available
 at the <A HREF="http://www.ncbi.nlm.nih.gov/Traces/" TARGET=_blank>Trace Repository</A>. 
 The alignments were done with BLAT in translated protein mode requiring 2 nearby 
 4-mer matches to trigger a detailed alignment. The human genome was masked with 
-<A HREF="http://http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A> 
+<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A> 
 and <A HREF="http://tandem.bu.edu/trf/trf.html" TARGET=_blank>Tandem Repeats Finder</A> 
 prior to running BLAT. Regions with more than 300 aligned reads were assumed novel 
 repeat elements and filtered out. Alignments of greater than 97% identity may represent 
@@ -3643,27 +3924,7 @@ mouse contamination of human or vice versa.
 
 <P><B>Mouse Chain </B><BR>
 This track shows mouse genomic alignment to the selected genome using blastz and
-axtChain. 
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for chain tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode shows position information
-	in the mouse and the selected genome, the chain ID and score, and 
-	provides links to view details of parts of the chain or to open the 
-	mouse browser to the corresponding position. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chrN_chainMmX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#Chain"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+axtChain. See the Human Chain track description for more information.
 
 <P><B>Mouse Cons </B><BR>
 This track displays the conservation between the human and mouse genomes for 
@@ -3706,10 +3967,15 @@ L-score of 3 means a 1/1000 probability, etc. The L-scores display as
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Mouse Ecores</B><BR>
+This track shows Mouse evolutionary conserved regions (ecores) computed against 
+the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
+
 <P><B>Mouse ESTs </B><BR>
 This track shows alignments between mouse Expressed Sequence Tags (ESTs) -
-spliced and unspliced - in Genbank and the genome. This track was generated by 
-aligning mouse ESTs from Genbank against the
+spliced and unspliced - in GenBank and the genome. This track was generated by 
+aligning mouse ESTs from GenBank against the
 genome using the BLAT program. Note that the maximum intron length
 allowed by BLAT is 500,000 bases, which may eliminate some ESTs with
 very long introns that might otherwise align. When a single EST aligns
@@ -3739,57 +4005,11 @@ kept.
 </TABLE></P>
 
 <P><B>Mouse mRNAs</B><BR>
-This track displays translated BLAT alignments of mouse mRNA 
-from Genbank against the genome. The alignments were passed through a 
-near-best-in-genome filter.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for mRNA tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track configuration:</I></B> 
-	The track description page contains a filter to restrict the display to 
-	only those entries that match certain keywords and to change the color 
-	of the selected entries.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show a summary of the Genbank 
-	entry on that mRNA, convenient hyperlinks to major databases, and base-by-base 
-	mRNA/genomic alignments. Some mRNAs align to multiple places but only the 
-	near-best are retained. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>xenoMrna</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+See the description for Human mRNAs.
 
 <P><B>Mouse Net </B><BR>
 This track shows the best mouse chain for every part of the selected genome.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	In full display mode, clicking on a box shows details information about 
-	the chain as a whole, while clicking on a line shows information
-	about the gap. The detailed information is useful in determining the 
-	cause of the gap or, for lower level chains, the genomic 
-	rearrangement.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>netMmX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#NetAlign"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+See the Human Chain track description for more information.
 
 <P><B>Mouse Synteny (hg13+)</B><BR>
 This track shows syntenous (corresponding) regions between human and mouse 
@@ -3840,8 +4060,42 @@ This track shows orthologous (syntenic) regions between mouse and human chromoso
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Multiz Yeast</B><BR>
+This track displays multiz multiple alignments of seven species of the genus 
+<em>Saccharomyces</em>. The graphic display shows the alignment projected onto 
+<em>S. cerevisiae</em>. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	In full display mode, the track displays pairwise alignments of several
+	species aligned to the <em>S. cerevisiae</em> genome. The pairwise 
+	alignments 
+	are displayed in standard UCSC browser "dense" mode using a grey-scale 
+	density gradient.  When zoomed-in to the base-display level, the track 
+	shows the base composition of each alignment. The numbers and symbols on 
+	the "hidden gap" line indicate the lengths of gaps in the <em>S. 
+	cerevisiae</em> sequence 
+	at those alignment positions. If the gap size is greater than 9, the 
+	"+" symbol is displayed. The track must be zoomed-in to 30,000
+	or fewer bases to access detailed information about the 
+	alignments at a specific position.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show detailed alignment 
+	information for each of the organisms. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>multizYeast</I> positional table in the Table Browser. To view the 
+	table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#multizYeast"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>NCI60</B><BR>
- This track displays cDNA expression data for a micro-array of 8,000 genes for 
+This track displays cDNA expression data for a micro-array of 8,000 genes for 
 60 cell lines used in an <A HREF="http://genome-www.stanford.edu/nci60/" TARGET=_blank>NCI 
 cancer drug screen</A>.  
 
@@ -3874,9 +4128,15 @@ cancer drug screen</A>.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Nonhuman EST </B><BR>
+<P><B>Nonchimp mRNAs </B><BR>
+See the description for Nonhuman mRNAs.
+
+<P><B>NonD. melanogaster mRNAs </B><BR>
+See the description for Nonhuman mRNAs.
+
+<P><B>Nonhuman ESTs </B><BR>
 This track displays translated BLAT alignments of non-human vertebrate
-ESTs from Genbank. The alignments were passed through a piecewise
+ESTs from GenBank. The alignments were passed through a piecewise
 near-best-in-genome filter. In cases where ESTs align to multiple places in the 
 genome, only the near-best are retained. Matches help validate human exon 
 identification.
@@ -3890,7 +4150,7 @@ identification.
 	limit.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an item in full display will show a summary of the Genbank 
+	Clicking on an item in full display will show a summary of the GenBank 
 	entry, a hyperlink to the full record, PubMed links by gene name, 
 	product, and author, and mRNA/genomic alignment information. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3902,9 +4162,10 @@ identification.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Nonhuman mRNA </B><BR>
-This track displays translated BLAT alignments of non-human vertebrate mRNA 
-from Genbank. The alignments were passed through a near-best-in-genome
+<P><B>Nonhuman mRNAs </B><BR>
+This track displays translated BLAT alignments of vertebrate and invertebrate 
+mRNA (other than that from the selected genome) from GenBank. The alignments 
+were passed through a near-best-in-genome
 filter. Some mRNAs align to multiple places but only the near-best are retained. 
 For a distant vertebrate, alignment requires a fairly slowly evolving gene. 
 Matches are often plausible ortholog candidates.
@@ -3920,7 +4181,7 @@ Matches are often plausible ortholog candidates.
 	of the selected entries.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show a summary of the Genbank 
+	Clicking on an entry in full display mode will show a summary of the GenBank 
 	entry on that mRNA, convenient hyperlinks to major databases, and 
 	base-by-base mRNA/genomic alignments. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3932,61 +4193,17 @@ Matches are often plausible ortholog candidates.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Nonmouse mRNA </B><BR>
-This track displays translated BLAT alignments of non-mouse vertebrate mRNA 
-from Genbank. The alignments were passed through a near-best-in-genome
-filter. Some mRNAs align to multiple places but only the near-best are retained. 
+<P><B>Nonmouse ESTs </B><BR>
+See the description for Nonhuman ESTs.
 
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for mRNA tracks. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track configuration:</I></B> 
-	The track description page contains a filter to restrict the display to 
-	only those entries that match certain keywords and to change the color 
-	of the selected entries.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show a summary of the Genbank 
-	entry on that mRNA, convenient hyperlinks to major databases, and base-by-base 
-	mRNA/genomic alignments. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>xenoMrna</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+<P><B>Nonmouse mRNAs </B><BR>
+See the description for Nonhuman mRNAs.
 
-<P><B>Nonrat mRNA </B><BR>
-This track displays translated BLAT alignments of non-Rattus norvegicus vertebrate mRNA 
-from Genbank. The alignments were passed through a near-best-in-genome
-filter. Some mRNAs align to multiple places but only the near-best are retained. 
+<P><B>Nonrat ESTs </B><BR>
+See the description for Nonhuman ESTs.
 
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for mRNA tracks. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track configuration:</I></B> 
-	The track description page contains a filter to restrict the display to 
-	only those entries that match certain keywords and to change the color 
-	of the selected entries.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show a summary of the Genbank 
-	entry on that mRNA, convenient hyperlinks to major databases, and base-by-base 
-	mRNA/genomic alignments. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>xenoMrna</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+<P><B>Nonrat mRNAs </B><BR>
+See the description for Nonhuman mRNAs.
 
 <P><B>Overlap SNPs</B> (older archived versions only)<BR>
 This track shows single nucleotide polymorphisms found on overlapping contigs. 
@@ -4104,8 +4321,8 @@ reported peak LOD scores taken from Jackson Lab's
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Quality</B><BR>
-The Quality Scores track shows the sequencing quality score (between 0 and 100) 
+<P><B>Quality Scores</B><BR>
+This track shows the sequencing quality score (between 0 and 100) 
 of each base in the assembly. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -4125,19 +4342,6 @@ of each base in the assembly.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Chimp Recip Net </B><BR>
-This track shows the reciprocal best alignment net between the chimpanzee and the
-selected genome assembly. Due to the draft nature of the
-initial chimp assembly, this track uses a "reciprocal best" strategy that
-attempts to minimize paralog fill-in for missing orthologous chimp sequence by
-filtering out of the human net all sequences not in the chimp side of the net.
-See the track description page for more information about the methods used to
-generate this track.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
 
 <P><B>Random SNPs</B> (older archived versions only)<BR> 
 This track displays single nucleotide polymorphisms (SNPs)found by random 
@@ -4165,51 +4369,22 @@ Consortium</A>.
 
 <P><B>Rat Chain </B><BR>
 This track shows rat genomic alignment to the selected genome using blastz and
-axtChain. 
+axtChain. See the Human Chain track description for more information.
 
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for chain tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an item in full display mode shows position information
-	in the rat and selected genome, the chain ID and score, and provides 
-	links to view details of parts of the chain or to open the rat browser 
-	to the corresponding position. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>chrN_chainRnX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#Chain"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+<P><B>Rat Ecores</B><BR>
+This track shows rat evolutionary conserved regions (ecores) computed against 
+the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
+
+<P><B>Rat ESTs </B><BR>
+See the description for the Human ESTs track.
+
+<P><B>Rat mRNAs</B><BR>
+See the description for the Human mRNAs track.
 
 <P><B>Rat Net </B><BR>
-This track shows the best rat chain for every part of the selected genome.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for net tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	In full display mode, clicking on a box shows details information about 
-	the chain as a whole, while clicking on a line shows information
-	about the gap. The detailed information is useful in determining the 
-	cause of the gap or, for lower level chains, the genomic 
-	rearrangement.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>netRnX</I> positional table in the Table Browser, where <I>X</I>
-	is the assembly version in which you're interested. To view the table
-	definition, click <A
-	HREF="../gbdDescriptions.html#NetAlign"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+This track shows the best rat chain for every part of the selected genome. See 
+the Human Chain track description for more information.
 
 <P><B>Rat Synteny </B><BR>
 This track shows syntenous (corresponding) regions between human and rat 
@@ -4240,7 +4415,6 @@ The syntenic block was extended to include these areas.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-
 <P><B>Recomb Rate</B><BR> 
 This track shows calculated sex-averaged rates of recombination based on either 
 the deCODE, Marshfield, or Genethon genetic maps. The deCODE map rates are 
@@ -4270,7 +4444,6 @@ displayed by default.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-
 <P><B>RefSeq Genes </B><BR>
 The RefSeq Gene track shows known protein coding genes taken from mRNA
 reference sequences compiled at LocusLink. Refseq mRNAs are aligned against the 
@@ -4288,7 +4461,7 @@ identity to be kept.
 	reviewed (dark). </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display provides provides links to the 
+	Clicking on an entry in full display provides links to the 
 	corresponding protein, mRNA, and genomic sequences, and related links to 
 	outside databases. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -4308,7 +4481,7 @@ identity to be kept.
 
 <P><B>RepeatMasker</B><BR>
 The track shows dispersed repeats as determined by 
-<A HREF="http://http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>
+<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>
 using the
 <A HREF="http://www.girinst.org/Repbase_Update.html"TARGET=_blank>Repbase Update</A>
 library of repetitive sequences from the Genetic Information Research 
@@ -4330,6 +4503,30 @@ micro-satellite, tRNA, and other repeat families.
 	<I>chrN_rmsk</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#RepeatInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>RGD ESTs </B><BR>
+This track shows alignments expressed sequence tags (ESTs) from the Rat Genome
+Database (RGD).
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for EST tracks. As with other
+	EST tracks, it may be necessary to zoom in to display entries in full
+	display mode due to the 300 line display limit.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an individual EST entry will show basic track information,
+	the accession number, GenBank highlights, links to EST/genomic
+	alignments, and an external link to the RGD EST report.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rgdEst</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -4358,6 +4555,50 @@ This track shows RefSeq genes curated by the Rat Genome Database (RGD).
 	<I>rgdGene</I> positional table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>RGD QTL</B><BR>
+This track shows quantitative trait loci (QTLs) curated by the Rat Genome 
+Database (RGD). 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	Loci positions are represented by blocks.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will display genomic 
+	information and a link to the corresponding entry in the RGD. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rgdQtl</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>RGD SSLP</B><BR>
+This track shows simple sequence length polymorphisms (SSLPs), also known as
+microsatellite DNA, from the Rat Genome Database (RGD). SSLPs consist of 
+1 - 6 simple nucleotide repeat sequences, highly polymorphic in repeat length 
+among strains. They are often used as genetic markers for genotyping.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	SSLP positions are represented by thin blocks.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will display genomic 
+	information and a link to the corresponding entry in the RGD. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rgdSslp</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -4450,6 +4691,12 @@ These tracks contain the Sanger Centre annotations of chromosome 22.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>S. cerevisiae ESTs</B><BR>
+See the Human ESTs track description.
+
+<P><B>S. cerevisiae mRNAs</B><BR>
+See the Human mRNAs track description.
+
 <P><B>Segmental Duplications</B><BR>
 This track shows regions detected as putative genomic duplications within the 
 golden path. 
@@ -4501,6 +4748,54 @@ axtChain.
 	<I>chrN_chainSelf</I> positional table in the Table Browser. To view the 
 	table definition, click <A
 	HREF="../gbdDescriptions.html#Chain"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>SGD Genes </B><BR>
+This track shows annotated genes and open reading frames (ORFs) of 
+<em>Saccharomyces cerevisiae</em> obtained from the Saccharomyces Genome 
+Database (<A HREF="http://www.yeastgenome.org/" TARGET=_blank>SGD</A>).
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks.  </TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode provides a wealth of 
+	genomic, mRNA, and protein information about the gene as well as 
+	links to several associated external sites. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sgdGene</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>SGD Other </B><BR>
+This track shows a variety of features in the <em>Saccharomyces cerevisiae</em>
+genome, including tRNAs, transposons, centromeres, and open reading frames (ORFs) classified as dubious. 
+The data was downloaded from the Saccharomyces Genome Database 
+(<A HREF="http://www.yeastgenome.org/" TARGET=_blank>SGD</A>). 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks.  </TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode provides genomic information 
+	and a link to view the DNA underlying the track.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sgdOther</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -4630,7 +4925,7 @@ Consortium</A>.
 
 <P><B>Spliced ESTs</B><BR>
 The Spliced EST track displays the subset of Expressed Sequence Tags (ESTs)
-from Genbank that show signs of splicing when aligned against
+from GenBank that show signs of splicing when aligned against
 the genome. ESTs are single read (typically approximately 500 base) sequences 
 that usually represent fragments of transcribed genes. By requiring splicing, 
 the level of contamination in the EST databases is drastically reduced at the 
@@ -4638,7 +4933,7 @@ expense of eliminating many genuine 3' ESTs. This track may also suggest
 alternate splices. The GT-AG splice donor/acceptor rule has not been applied.  
 For a display of all ESTs (including unspliced), see the Human EST 
 track.
-This track was generated by aligning human ESTs from Genbank against the
+This track was generated by aligning human ESTs from GenBank against the
 genome using the BLAT program. Note that the maximum intron length
 allowed by BLAT is 500,000 bases, which may eliminate some ESTs with
 very long introns that might otherwise align. When a single EST aligns
@@ -4803,60 +5098,9 @@ functional binding sites.
 </TABLE></P>
 
 <P><B>Tetraodon Ecores</B><BR>
-This track shows human/Tetraodon evolutionary conserved regions (ecores) computed 
-by the Exofish program at Genoscope. 
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses display conventions similar to mRNA tracks. Each 
-	singleton block corresponds to an ecore. Blocks connected by a 
-	line correspond to an "ecotig", a set of colinear ecores in a 
-	syntenic region.  </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show positional 
-	information, 
-	a link to the Exofish browser, and a link to display the DNA sequence.
-	</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>ecoresTetraodon</I> positional table in the Table Browser. To view the 
-	table definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Tight Human</B><BR>
-This track displays <I>Blastz</I> alignments of the Nov. 2002 human
-draft assembly to the mouse genome, filtered by <I>axtBest</I> and
-<I>subsetAxt</I> with very stringent constraints. See the track's description
-page for more details. 
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for cross-species synteny 
-	tracks.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show mouse and 
-	human position information, alignment details, and a link to a detailed
-	view of parts of the alignment.  </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track configuration:</I></B> 
-	The track description page contains a filter that can be used to turn 
-	on the chromosome color track or to filter the display output by 
-	chromosome.</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>blastzTightHuman</I> positional table in the Table Browser. To view the table
-	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
+This track shows Tetraodon evolutionary conserved regions (ecores) computed 
+against the selected assembly genome by the Exofish program at Genoscope. For 
+information on this track, see the Human Ecores track description.
 
 <P><B>Tight Mouse</B><BR>
 This track displays <I>Blastz</I> alignments of the specified mouse
@@ -5084,6 +5328,94 @@ This track shows annotated pseudogenes and immunoglobulin segments from the <A H
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>WashU Clones</B><BR> 
+This track displays the location of clones (mostly lambda and cosmid clones) 
+from Washington University in St. Louis using the names assigned by that group. 
+The data was downloaded from the Saccharomyces Genome Database 
+(<A HREF="http://www.yeastgenome.org/" TARGET=_blank>SGD</A>). 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	The clone positions are shown in black. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode brings up genomic 
+	information and a link to the American Type Culture Collection (ATCC) 
+	website.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sgdClone</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#SgdClone"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>WormBase Genes</B><BR> 
+This track shows Sanger Gene predictions from the Wormbase files 
+downloaded from the Sanger Institute FTP site. The data shown is the subset
+annotated with "curated", "DNA", or "RNA" followed by one of these strings: 
+"intron", "exon", "cds", "sequence", or "transcri". 
+ 
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for gene prediction tracks. 
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show a wealth of 
+	information about the gene and its associated mRNA and protein, as
+	well as links to many related external sites.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn
+	on codon coloring for the track. Click the &quot;Codon coloring 
+	help&quot; link on the page for more information about this feature.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sangerGene</I> positional table in the Table Browser. To view 
+	the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>WormBase Genefinder </B><BR> 
+This track shows Sanger Gene predictions from the Wormbase files 
+downloaded from the Sanger Institute FTP site. The data shown is the subset
+annotated with the string "Genefinder" and found by the gene prediction 
+program, Genefinder
+ 
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for gene prediction tracks. 
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show genomic
+	information  and links to the 
+	translated protein, predicted mRNA, genomic sequence.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track configuration:</I></B> 
+	The track description page contains a filter that can be used to turn
+	on codon coloring for the track. Click the &quot;Codon coloring 
+	help&quot; link on the page for more information about this feature.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sangerGenefinder</I> positional table in the Table Browser. To view 
+	the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>ZooSeq </B>(Zoo)<BR> 
 This track displays the level of conservation for each zoo species based on 
 blastz pair-wise alignments.
@@ -5116,8 +5448,7 @@ blastz pair-wise alignments.
 </TABLE></P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
-    <br></TD></TR></TABLE>
-</TD></TR></TABLE>
+    <br></TD></TR></TABLE> </TD></TR></TABLE>
 
 </TD></TR></TABLE>
 
