@@ -10,102 +10,106 @@
 #include "linefile.h"
 
 
-int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai)
-/* Set up a socket.  Warn and return error code if there's a problem. */
+static int netStreamSocket()
+/* Create a TCP/IP streaming socket.  Complain and return something
+ * negative if can't */
 {
-int sd;
-struct hostent *hostent;
+int sd = socket(AF_INET, SOCK_STREAM, 0);
+if (sd < 0)
+    warn("Couldn't make AF_INET socket.");
+return sd;
+}
 
-hostent = gethostbyname(hostName);
+static boolean netFillInAddress(char *hostName, int port, struct sockaddr_in *address)
+/* Fill in address. Return FALSE if can't.  */
+{
+struct hostent *hostent = gethostbyname(hostName);
+ZeroVar(address);
+address->sin_family = AF_INET;
+address->sin_port = htons(port);
 if (hostent == NULL)
     {
     warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    return -1;
+    return FALSE;
     }
-sai->sin_family = AF_INET;
-sai->sin_port = htons(port);
-memcpy(&sai->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai->sin_addr.s_addr));
-sd = socket(AF_INET, SOCK_STREAM, 0);
-if (sd < 0)
-    warn("Could't open INET socket code %d", sd);
-return sd;
+memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
+return TRUE;
 }
 
-int netMustSetupSocket(char *hostName, int port, struct sockaddr_in *sai)
-/* Set up our socket. Abort if a problem. */
-{
-int sd = netSetupSocket(hostName, port, sai);
-if (sd < 0)
-    noWarnAbort();
-return sd;
-}
-
-int netConnPort(char *hostName, int port)
+int netConnect(char *hostName, int port)
 /* Start connection with a server. */
 {
 int sd, err;
 struct sockaddr_in sai;		/* Some system socket info. */
 
-/* Connect to server. */
-ZeroVar(&sai);
-sd = netSetupSocket(hostName, port, &sai);
-if (sd < 0)
-    {
+if (!netFillInAddress(hostName, port, &sai))
+    return -1;
+if ((sd = netStreamSocket()) < 0)
     return sd;
-    }
 if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
    {
    warn("Couldn't connect to %s %d", hostName, port);
+   close(sd);
    return err;
    }
 return sd;
 }
 
-int netConnect(char *hostName, char *portName)
-/* Start connection with server. */
-{
-/* Convert port to number. */
-if (!isdigit(portName[0]))
-    errAbort("Expecting a port number got %s", portName);
-return netConnPort(hostName, atoi(portName));
-}
-
-int netMustConnect(char *hostName, char *portName)
+int netMustConnect(char *hostName, int port)
 /* Start connection with server or die. */
 {
-int sd = netConnect(hostName, portName);
+int sd = netConnect(hostName, port);
 if (sd < 0)
    noWarnAbort();
 return sd;
 }
 
-volatile boolean netPipeFlag = FALSE;	/* Flag broken pipes here. */
-static boolean plumberInstalled = FALSE;	/* True if have installed pipe handler. */
-
-static void netPipeHandler(int sigNum)
-/* Set broken pipe flag. */
+int netMustConnectTo(char *hostName, char *portName)
+/* Start connection with a server and a port that needs to be converted to integer */
 {
-netPipeFlag = TRUE;
+if (!isdigit(portName[0]))
+    errAbort("netConnectTo: ports must be numerical, not %s", portName);
+return netMustConnect(hostName, atoi(portName));
 }
 
-boolean netPipeIsBroken()
-/* Return TRUE if pipe is broken */
+int netAcceptingSocket(int port, int queueSize)
+/* Create a socket that can accept connections. */
 {
-return netPipeFlag;
+struct sockaddr_in sai;
+int sd;
+
+netBlockBrokenPipes();
+if ((sd = netStreamSocket()) < 0)
+    return sd;
+ZeroVar(&sai);
+sai.sin_family = AF_INET;
+sai.sin_port = htons(port);
+sai.sin_addr.s_addr = INADDR_ANY;
+if (bind(sd, &sai, sizeof(sai)) == -1)
+    {
+    warn("Couldn't bind socket to %d", port);
+    close(sd);
+    return -1;
+    }
+listen(sd, queueSize);
+return sd;
 }
 
-void  netClearPipeFlag()
-/* Clear broken pipe flag. */
+int netAccept(int sd)
+/* Accept incoming connection from socket descriptor. */
 {
-netPipeFlag = FALSE;
+int fromLen;
+return accept(sd, NULL, &fromLen);
 }
 
-void netCatchPipes()
-/* Set up to catch broken pipe signals. */
+static boolean plumberInstalled = FALSE;
+
+void netBlockBrokenPipes()
+/* Make it so a broken pipe doesn't kill us. */
 {
 if (!plumberInstalled)
     {
-    signal(SIGPIPE, netPipeHandler);
+    signal(SIGPIPE, SIG_IGN);       /* Block broken pipe signals. */
     plumberInstalled = TRUE;
     }
 }
@@ -119,8 +123,7 @@ size_t totalRead = 0;
 int oneRead;
 
 if (!plumberInstalled)
-    netCatchPipes();
-netPipeFlag = FALSE;
+    netBlockBrokenPipes();
 while (totalRead < size)
     {
     oneRead = read(sd, buf + totalRead, size - totalRead);
@@ -214,7 +217,7 @@ int sd;
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "http"))
     errAbort("Sorry, can only slurp http's currently");
-sd = netMustConnect(npu.host, npu.port);
+sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "GET %s HTTP/1.0\r\n\r\n", npu.file);

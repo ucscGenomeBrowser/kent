@@ -11,20 +11,23 @@
 #include "dystring.h"
 #endif /* DYSTRING_H */
 
-int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
-/* Set up a socket.  Warn and return error code if there's a problem. */
+int netConnect(char *hostName, int port);
+/* Start connection with a server having resolved port. */
 
-int netMustSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
-/* Set up our socket. Abort if a problem. */
-
-int netConnect(char *hostName, char *portName);
-/* Start connection with server. */
-
-int netConnPort(char *hostName, int port);
-/* Start connection with a server. */
-
-int netMustConnect(char *hostName, char *portName);
+int netMustConnect(char *hostName, int port);
 /* Start connection with server or die. */
+
+int netMustConnectTo(char *hostName, char *portName);
+/* Start connection with a server and a port that needs to be converted to integer */
+
+int netAcceptingSocket(int port, int queueSize);
+/* Create a socket for to accept connections. */
+
+int netAccept(int sd);
+/* Accept incoming connection from socket descriptor. */
+
+void netBlockBrokenPipes();
+/* Make it so a broken pipe doesn't kill us. */
 
 int netReadAll(int sd, void *vBuf, size_t size);
 /* Read given number of bytes into buffer.
