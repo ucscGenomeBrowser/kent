@@ -12,42 +12,48 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.4 2003/05/25 06:28:39 sugnet Exp $";
-
-struct orthoAgReport
-/* Some summary information on comparison of splice graphs. */
-{
-    struct orthoAgReport *next;  /**< Next in list. */
-    int exonCount;               /**< Total number of exons in ag. */
-    int exonsFound;              /**< Exons found in orthologous genome. */
-    int exonsMissing;            /**< Exons not found on orthologous genome. */
-    int ssFound;                 /**< Number of splice sites in ag that are splice sites in orhtoAg. */
-    int ssMissing;               /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
-    int ssDoubles;               /**< Number of splice sites in ag that map to two places in orhtoAg (hopefully rare). */
-    int ssVeryClose;             /**< How many times were we off by one. */
-    char agName[16];             /**< AltGraphX from first genome name. Allocated at run time to length of name. */
-    char orthoAgName[16];        /**< Orthologous altGraphX name. Allocated at run time to length of name. */
-};
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.5 2003/05/25 23:57:42 sugnet Exp $";
 
 struct spliceEdge 
 /* Structure to hold information about one edge in 
    a splicing graph. */
 {
     struct spliceEdge *next;    /* Next in list. */
+    char *chrom;                /* Chromsome. Memory not owned here.*/
+    int chromStart;             /* Chrom start. */
+    int chromEnd;               /* End. */
+    char *agName;               /* Name of altGraphX that edge is from. Memory not owned here. */
+    int conf;                   /* Confidence. Generally number of mRNA's supporting edge. */
+    char strand[2];             /* Strand. */
     enum ggEdgeType type;       /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
-    int start;                  /* Chrom start. */
-    int end;                    /* End. */
     int v1;                     /* Vertex 1 in graph. */
     int v2;                     /* Vertex 2 in graph. */
-    int itemNumber;             /* Number of altGraphX record derived from in list. */
-    int row;                    /* Row that exon is stored in. */
-    double conf;                /* Confidence. */
+    int alt;                    /* Possible alt splice? 1=TRUE 0=FALSE */
+    int conserved;              /* Conserved in ortholgous genome? 1=TRUE 0=FALSE */    
+};
+
+struct orthoAgReport
+/* Some summary information on comparison of splice graphs. */
+{
+    struct orthoAgReport *next;  /**< Next in list. */
+    struct spliceEdge *seList;   /**< List of edges and their attributes. */
+    char *agName;             /**< AltGraphX from first genome name. */
+    char *orthoAgName;        /**< Orthologous altGraphX name. */
+    char *chrom;                 /**< Chrom name. */
+    int ssFound;                 /**< Number of splice sites in ag that are splice sites in orhtoAg. */
+    int ssMissing;               /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
+    int ssDoubles;               /**< Number of splice sites in ag that map to two places in orhtoAg (hopefully rare). */
+    int ssVeryClose;             /**< How many times were we off by one. */
+    int alt;                     /**< Number of alternative splices in graph. */
+    int altFound;                /**< Number of alternative splices that are conserved. */
+
 };
 
 static boolean doHappyDots;   /* output activity dots? */
 static char *altTable = "altGraphX";  /* Name of table to load splice graphs from. */
 static struct orthoAgReport *agReportList = NULL; /* List of reports. */
 FILE *rFile = NULL; /* report file. */
+FILE *edgeFile = NULL; /* edge report file. */
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -60,6 +66,7 @@ static struct optionSpec optionSpecs[] =
     {"chainTable", OPTION_STRING},
     {"reportFile", OPTION_STRING},
     {"commonFile", OPTION_STRING},
+    {"edgeFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -73,7 +80,8 @@ static char *optionDescripts[] =
     "Datbase table containing net records, i.e. mouseNet.",
     "Prefix of datbase table containing chain records, i.e. mouseChain.",
     "File name to print individual reports to.",
-    "File name to print common altGraphX records to."
+    "File name to print common altGraphX records to.",
+    "File name to print individual edge reports to."
 };
 
 void usage()
@@ -85,48 +93,131 @@ warn("orthoSplice - program to compare splicing in different organisms\n"
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n   "
-	 "orthoSplice -altInFile=ranbp1.tab -db=hg15 -orthoDb=mm3 \\\n"
-	 "\t   -netTable=mouseNet -chainTable=mouseChain -commonFile=out.agx -reportFile=out.report\n");
+	 "orthoSplice -altInFile=ranbp1.tab -db=hg15 -orthoDb=mm3 -netTable=mouseNet \\\n"
+	 "\t   -chainTable=mouseChain -commonFile=out.agx -reportFile=out.report -edgeFile=out.edge.report\n");
 }
 
-struct orthoAgReport *newOrthoAgReport(char *agName, char *orthoAgName)
-/* Allocate an orthoAgReport as one big lump of memory and set the names. */
+boolean isUnique(struct altGraphX *ag)
+/* return true if we have seen and altGraphX with same chrom, chromStart, chromEnd, strand before. */
 {
-struct orthoAgReport *agRep = NULL;
-AllocVar(agRep);
-snprintf(agRep->agName, sizeof(agRep->agName), "%s",  agName);
-agRep->agName[sizeof(agRep->agName) -1] = '\0';
-snprintf(agRep->orthoAgName, sizeof(agRep->orthoAgName), "%s",  orthoAgName);
-agRep->orthoAgName[sizeof(agRep->orthoAgName) -1] = '\0';
-return agRep;
+static struct hash *agHash = NULL;
+char* something = "s";
+char key[256];
+if(agHash == NULL)
+    agHash = newHash(8);
+safef(key, sizeof(key), "%s:%d-%d_%s", ag->tName, ag->tStart, ag->tEnd, ag->strand);
+if(hashFindVal(agHash, key) == NULL)
+    {
+    hashAdd(agHash, key, something);
+    return TRUE;
+    }
+return FALSE;
 }
+
+void orthoAgReportFree(struct orthoAgReport **pEl)
+/* Free a single dynamically allocated orthoAgReport such as created
+ * with orthoAgReportLoad(). */
+{
+struct orthoAgReport *el;
+
+if ((el = *pEl) == NULL) return;
+slFreeList(&el->seList);
+freeMem(el->chrom);
+freeMem(el->agName);
+freeMem(el->orthoAgName);
+freez(pEl);
+}
+
+void orthoAgReportFreeList(struct orthoAgReport **pList)
+/* Free a list of dynamically allocated orthoAgReport's */
+{
+struct orthoAgReport *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    orthoAgReportFree(&el);
+    }
+*pList = NULL;
+}
+
+/* struct orthoAgReport *newOrthoAgReport(char *agName, char *orthoAgName) */
+/* /\* Allocate an orthoAgReport as one big lump of memory and set the names. *\/ */
+/* { */
+/* struct orthoAgReport *agRep = NULL; */
+/* AllocVar(agRep); */
+/* snprintf(agRep->agName, sizeof(agRep->agName), "%s",  agName); */
+/* agRep->agName[sizeof(agRep->agName) -1] = '\0'; */
+/* snprintf(agRep->orthoAgName, sizeof(agRep->orthoAgName), "%s",  orthoAgName); */
+/* agRep->orthoAgName[sizeof(agRep->orthoAgName) -1] = '\0'; */
+/* return agRep; */
+/* } */
 
 void orthoAgReportHeader(FILE *out)
 /** Output a header for the orthoAgReport fields. */
 {
-fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", "exonCount",
-	"exonsFound", "exonsMissing", "ssFound", "ssMissing", "ssDoubles", "ssVeryClose");
+fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", "altEdges", "altEdgesFound", "ssFound", "ssMissing", "ssDoubles", "ssVeryClose");
 }
 
 void orthoAgReportTabOut(struct orthoAgReport *r, FILE *out)
 /** Write out a one line summary of a report. */
 {
-fprintf(out, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", r->agName, r->orthoAgName, r->exonCount,
-	r->exonsFound, r->exonsMissing, r->ssFound, r->ssMissing, r->ssDoubles, r->ssVeryClose);
+fprintf(out, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", r->agName, r->orthoAgName, r->alt, r->altFound, r->ssFound, r->ssMissing, r->ssDoubles, r->ssVeryClose);
 }
 
+void spliceEdgeHeader(FILE *out)
+{
+fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#chrom", "chromStart", "chromEnd", 
+	"agName", "conf", "strand",
+	"type", "v1", "v2", "alt", "conserved");
+}
+
+void spliceEdgeTabOut(struct spliceEdge *se, FILE *out)
+{
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
+	se->agName, se->conf, se->strand,
+	se->type, se->v1, se->v2, se->alt, se->conserved);
+}
+
+void outputReport(struct orthoAgReport *rep)
+{
+static boolean repHeader = FALSE;
+static boolean edgeHeader = FALSE;
+struct spliceEdge *se = NULL;
+if(!repHeader)
+    {
+    orthoAgReportHeader(rFile);
+    repHeader = TRUE;
+    }
+orthoAgReportTabOut(rep, rFile);
+if(!edgeHeader)
+    {
+    spliceEdgeHeader(edgeFile);
+    edgeHeader = TRUE;
+    }
+for(se = rep->seList; se != NULL; se = se->next)
+    {
+    spliceEdgeTabOut(se, edgeFile);
+    }
+}
+
+enum ggEdgeType getEdgeType(struct altGraphX *ag, int v1, int v2)
+/* Return edge type. */
+{
+if( (ag->vTypes[v1] == ggHardStart || ag->vTypes[v1] == ggSoftStart)  
+    && (ag->vTypes[v2] == ggHardEnd || ag->vTypes[v2] == ggSoftEnd)) 
+    return ggExon;
+else if( (ag->vTypes[v1] == ggHardEnd || ag->vTypes[v1] == ggSoftEnd)  
+	 && (ag->vTypes[v2] == ggHardStart || ag->vTypes[v2] == ggSoftStart)) 
+    return ggSJ;
+else
+    return ggIntron;
+}
 
 enum ggEdgeType getSpliceEdgeType(struct altGraphX *ag, int edge)
 /* Return edge type. */
 {
-if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardStart || ag->vTypes[ag->edgeStarts[edge]] == ggSoftStart)  
-    && (ag->vTypes[ag->edgeEnds[edge]] == ggHardEnd || ag->vTypes[ag->edgeEnds[edge]] == ggSoftEnd)) 
-    return ggExon;
-else if( (ag->vTypes[ag->edgeStarts[edge]] == ggHardEnd || ag->vTypes[ag->edgeStarts[edge]] == ggSoftEnd)  
-	 && (ag->vTypes[ag->edgeEnds[edge]] == ggHardStart || ag->vTypes[ag->edgeEnds[edge]] == ggSoftStart)) 
-    return ggSJ;
-else
-    return ggIntron;
+return getEdgeType(ag, ag->edgeStarts[edge], ag->edgeEnds[edge]);
 }
 
 struct spliceEdge *altGraphXToEdges(struct altGraphX *ag)
@@ -141,8 +232,8 @@ for(i=0; i<ag->edgeCount; i++)
     {
     AllocVar(e);
     e->type = getSpliceEdgeType(ag,i);
-    e->start = vPos[starts[i]];
-    e->end = vPos[ends[i]];
+    e->chromStart = vPos[starts[i]];
+    e->chromEnd = vPos[ends[i]];
     e->v1 = starts[i];
     e->v2 = ends[i];
 //    e->conf = ag->evidence[i].evCount;
@@ -275,11 +366,7 @@ for(i=0;i<vCount; i++)
 seList = altGraphXToEdges(ag);
 for(se = seList; se != NULL; se = se->next)
     {
-    if(se->type == ggExon || se->type == ggCassette)
-	agRep->exonCount++;
-    else
-	agRep->exonCount += 0;
-    chainSubsetOnT(chain, se->start, se->end, &subChain, &toFree);    
+    chainSubsetOnT(chain, se->chromStart, se->chromEnd, &subChain, &toFree);    
     if(subChain != NULL)
 	{
 	int v1 =-1, v2 = -1;
@@ -295,8 +382,6 @@ for(se = seList; se != NULL; se = se->next)
 	else
 	    assignVertex(*vertexMap, vCount, se->v2, v2, agRep);
 	}
-    else
-	agRep->exonsMissing++;
     chainFreeList(&toFree);
     }
 fprintf(stdout, "track name=\"ss\" description=\"splice sites\"\n");
@@ -308,7 +393,6 @@ for(i=0; i<vCount; i++)
 		orthoAg->vPositions[(*vertexMap)[i]] +1, i, (*vertexMap)[i]);
 	}
     }
-warn("%d exons: %d found, %d missing.", agRep->exonCount, agRep->exonsFound, agRep->exonsMissing);
 warn("%d splice sites: %d found, %d missing, %d doubles, %d very close (+/- 1)",
      vCount, agRep->ssFound, agRep->ssMissing, agRep->ssDoubles, agRep->ssVeryClose);
 slFreeList(&seList);
@@ -451,6 +535,21 @@ AllocArray(ret->edgeTypes, eC);
 return ret;
 }
 
+int getEdgeNum(struct altGraphX *ag, int v1, int v2)
+{
+int eC = ag->edgeCount;
+int i=0;
+for(i=0;i<eC; i++)
+    {
+    if(ag->edgeStarts[i] == v1 && ag->edgeEnds[i] == v2)
+	{
+	return i;
+	}
+    }
+errAbort("orthoSplice::getEdgeNum() - Didn't find edge with vertices %d-%d in %s.", v1, v2, ag->name);
+return -1;
+}
+
 bool isExon(struct altGraphX *ag, int v1, int v2)
 {
 int i = 0;
@@ -479,6 +578,8 @@ for(i=0; i<vCount; i++)
     }
 return TRUE;
 }
+
+
 
 void findSoftStartsEnds(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
 			struct chain *chain, int *vMap, int vertexCount, 
@@ -531,6 +632,98 @@ freeMem(el);
 *ag = NULL;
 }
 
+void fillInEdge(struct spliceEdge *se, struct orthoAgReport *agRep , 
+		struct altGraphX *ag, bool **agEm, int v1, int v2, int *edgeSeen)
+/** Fill in one edge with information from ag. */
+{
+struct evidence *e = NULL;
+int edgeNum = 0;
+int eCount = 0;
+int k =0;
+int vCount = ag->vertexCount;
+se->type = getEdgeType(ag, v1, v2);
+se->chrom = agRep->chrom; /* Memory not owned in se. Free'd with agRep. */
+se->agName = agRep->agName; /* Memory not owned in se. Free'd with agRep. */
+se->strand[0] = ag->strand[0];
+se->chromStart = ag->vPositions[v1];
+se->chromEnd = ag->vPositions[v2];
+se->v1 = v1;
+se->v2 = v2;
+edgeNum = getEdgeNum(ag, v1, v2);
+e = slElementFromIx(ag->evidence, edgeNum);
+se->conf = e->evCount;
+/* Check to se if this edge has been connected to any other vertices. */
+if(edgeSeen[v1] > 1)
+    se->alt = TRUE;
+/* If not search through to see if any are comming. */
+else 
+    {
+    eCount =0;
+    for(k=v2; k<vCount; k++)
+	{
+	if(agEm[v1][k])
+	    eCount++;
+	}
+    if(eCount > 1)
+	se->alt = TRUE;
+    }
+}
+
+void fillInReport(struct orthoAgReport *agRep, struct altGraphX *ag, bool **agEm,
+		  struct altGraphX *orthoAg, bool **orthoEm,
+		  struct altGraphX *commonAg, bool **commonEm,
+		  int *vMap)
+/** Look at the three graphs and output some of the interesting
+    statistics including:
+    - Splice sites found and missing.
+    - exons, introns, and splice juctions found and missing.
+    - Alt-splicing found and missing.
+*/
+{
+int i=0,j=0, k=0, vCount = ag->vertexCount;
+int eCount = 0;
+int *edgeSeen = NULL, *cEdgeSeen = NULL; /* Used to keep track of alt splicing. */
+struct spliceEdge *seList = NULL, *se = NULL;
+AllocArray(edgeSeen, vCount);
+AllocArray(cEdgeSeen, vCount);
+agRep->ssMissing = agRep->ssFound = 0;
+for(i=0; i<vCount; i++)
+    if(vMap[i] != -1)
+	agRep->ssFound++;
+    else 
+	agRep->ssMissing++;
+
+for(i=0; i<vCount; i++)
+    for(j=0;j<vCount; j++)
+	{
+	if(agEm[i][j])
+	    {
+	    AllocVar(se);
+	    edgeSeen[i]++;
+	    fillInEdge(se, agRep, ag, agEm, i,j, edgeSeen);
+	    if(commonEm[i][j])
+		{
+		se->conserved = TRUE;
+		cEdgeSeen[i]++;
+		}
+	    slAddHead(&agRep->seList, se);
+	    }
+	}
+slReverse(&agRep->seList);
+/* Count up alt splicing, that is when one vertex connects to 
+   more than one down stream. Should catch most kinds of alt splicing
+   except alternative promoters. */
+for(i=0; i<vCount; i++)
+    {
+    if(edgeSeen[i] > 1)
+	agRep->alt++;
+    if(cEdgeSeen[i] > 1)
+	agRep->altFound++;
+    }
+freez(&edgeSeen);
+freez(&cEdgeSeen);
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -566,7 +759,10 @@ if(orthoAg == NULL)
     return NULL;
 
 /* Got an orhtologous graph. Do some analysis. */
-agRep = newOrthoAgReport(ag->name, orthoAg->name);
+AllocVar(agRep);
+agRep->agName = cloneString(ag->name);
+agRep->orthoAgName = cloneString(orthoAg->name);
+agRep->chrom = cloneString(ag->tName);
 makeVertexMap(ag, orthoAg, chain, &vertexMap, &vCount, agRep, reverse);
 em = altGraphXCreateEdgeMatrix(ag);
 orthoEm = altGraphXCreateEdgeMatrix(orthoAg);
@@ -598,7 +794,9 @@ for(i=0;i<vCount; i++)
 	}
     }
 commonEm = altGraphXCreateEdgeMatrix(commonAg);
-//fillInReport(agRep, ag, em, orthoAg, orthoEm, commonAg, commonEm, vertexMap)
+fillInReport(agRep, ag, em, orthoAg, orthoEm, commonAg, commonEm, vertexMap);
+outputReport(agRep);
+orthoAgReportFree(&agRep);
 altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
 altGraphXFreeEdgeMatrix(&commonEm, commonAg->vertexCount);
 altGraphXFreeEdgeMatrix(&orthoEm, orthoAg->vertexCount);
@@ -609,8 +807,6 @@ if(commonAg->edgeCount > 0)
 else
     freeCommonAg(&commonAg);
 freez(&vertexMap);
-orthoAgReportTabOut(agRep, rFile);
-slAddTail(&agReportList, agRep);
 altGraphXFreeList(&orthoAg);
 return commonAg;
 }
@@ -635,7 +831,7 @@ for(se = seList; se != NULL; se = se->next)
     {
     if(se->type != ggExon)
 	continue;
-    chainSubsetOnT(chain, se->start, se->end, &subChain, &toFree);    
+    chainSubsetOnT(chain, se->chromStart, se->chromEnd, &subChain, &toFree);    
 
     if(subChain != NULL)
 	{
@@ -645,7 +841,7 @@ for(se = seList; se != NULL; se = se->next)
 		subChain->qName, qs, qe, se->v1, se->v2);
 	}
     else
-	warn("Yikes got a NULL for %s:%d-%d", ag->tName, se->start, se->end);
+	warn("Yikes got a NULL for %s:%d-%d", ag->tName, se->chromStart, se->chromEnd);
     chainFree(&toFree);
     }
 hFreeConn(&conn);
@@ -669,6 +865,7 @@ char *netTable = optionVal("netTable", NULL);
 char *chainTable = optionVal("chainTable", NULL);
 char *commonFileName = optionVal("commonFile", NULL);
 char *reportFileName = optionVal("reportFile", NULL);
+char *edgeFileName = optionVal("edgeFile", NULL);
 FILE *cFile = NULL;
 
 int foundOrtho=0, noOrtho=0;
@@ -682,6 +879,8 @@ if(commonFileName == NULL)
     errAbort("orthoSplice - must specify commonFile.");
 if(reportFileName == NULL)
     errAbort("orthoSplice - must specify reportFile.");
+if(edgeFileName == NULL)
+    errAbort("orthoSplice - must specify edgeFile.");
 /* Want to read in and process each altGraphX record individually
    to save memory, so figure out how many columns in each row we have currently and
    load them one by one. */
@@ -693,20 +892,24 @@ AllocArray(row, rowCount);
 warn("Reading records from %s", altIn);
 cFile = mustOpen(commonFileName, "w");
 rFile = mustOpen(reportFileName, "w");
-orthoAgReportHeader(rFile);
+edgeFile = mustOpen(edgeFileName, "w");
 while(lineFileNextCharRow(lf, '\t', row, rowCount))
     {
     ag = altGraphXLoad(row);
-    agOrtho = findOrthoAltGraphX(ag, db,  netTable, chainTable);
     occassionalDot();
-    if(agOrtho != NULL)
+    if(isUnique(ag))
 	{
-	foundOrtho++;
-	altGraphXTabOut(agOrtho,cFile);
-	freeCommonAg(&agOrtho);
+	agOrtho = findOrthoAltGraphX(ag, db,  netTable, chainTable);
+
+	if(agOrtho != NULL)
+	    {
+	    foundOrtho++;
+	    altGraphXTabOut(agOrtho,cFile);
+	    freeCommonAg(&agOrtho);
+	    }
+	else
+	    noOrtho++;
 	}
-    else
-	noOrtho++;
     altGraphXFree(&ag);
     }
 warn("%d graphs, %d orthos found %d no ortho splice graph",
