@@ -727,7 +727,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
     /cluster/bin/scripts/iSync
 
 
-# BLASTZ MOUSE MM3 (IN PROGRESS 2003-07-17 kate) 
+# BLASTZ MOUSE MM3 (DONE 2003-07-28 kate) 
 # NOTE: This uses mm3.RM030619, which is MM3 masked with new RepeatMasker
 
     ssh kkstore
