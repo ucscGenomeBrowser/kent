@@ -773,6 +773,17 @@ end
     hgLoadEranModules sacCer1 module_assignments.tab motif_modules.tab \
     	modules_motifs.gxm modules_motif_positions.tab gene_position.tab
 
+# LOADING REGULATORY CODE STUFF
+    cd /cluster/data/sacCer1/bed
+    mkdir fraenkelYoung
+    cd fraenkelYoung
+    # Get GFF files and motif file from downloads section of 
+    # http://jura.wi.mit.edu/fraenkel/regulatory_map
+    hgYeastRegCode gff Final_InTableS2_v24.motifs transRegCode.bed transRegCodeMotif.tab
+    hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
+    hgsql sacCer1 -e 'load data local infile "transRegCodeMotif.tab" into table transRegCodeMotif'
+
 #CREATING DOWNLOADS DIRECTORY
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath
