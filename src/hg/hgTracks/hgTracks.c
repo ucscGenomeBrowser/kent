@@ -6583,6 +6583,11 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
+
+/* Since we've taken care of loading too many things using the 
+   zoom tables, take care of limiting visibility here. */
+tg->limitedVis = tg->visibility;
+tg->limitedVisSet = TRUE;
 }
 
 
