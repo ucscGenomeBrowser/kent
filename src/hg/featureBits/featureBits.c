@@ -32,7 +32,10 @@ errAbort(
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N  Break into exons and add N to each end of each exon\n"
+  "    :cds     Break into coding exons\n"
+  "    :intron:N Break into introns, remove N from each end\n"
   "    :upstream:N  Consider the region of N bases before region\n"
+  "    :end:N  Consider the region of N bases after region\n"
   );
 }
 
@@ -107,7 +110,7 @@ else
     {
     char dir[256], root[128], ext[65];
     splitPath(track, dir, root, ext);
-    sprintf(fileName, "%s%s_%s%s", dir, chrom, track, fileName);
+    sprintf(fileName, "%s%s/%s%s", dir, root, chrom, ext);
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
@@ -220,7 +223,7 @@ char t[512], *s;
 char table[512];
 boolean isSplit;
 isolateTrackPartOfSpec(track, t);
-s = strchr(t, '.');
+s = strrchr(t, '.');
 if (s != NULL)
     {
     if (sameString(s, ".psl"))
