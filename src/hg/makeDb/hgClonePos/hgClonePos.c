@@ -57,7 +57,6 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount != 4)
         errAbort("Expecting %d words line %d of %s", 4, lf->lineIx, lf->fileName);
     glStaticLoad(words, &gl);
-    if (startsWith("AB019440", gl.frag)) uglyf("GOt yo8u %s\n", gl.frag);
     fragToCloneVerName(gl.frag, cloneVerName);
     fragToCloneName(gl.frag, cloneName);
     if ((clone = hashFindVal(cloneHash, cloneName)) == NULL)
@@ -107,7 +106,6 @@ struct fileInfo *chrFiList = NULL, *chrFi;
 struct fileInfo *glFiList = NULL, *glFi;
 char pathName[512];
 
-uglyf("readClonesFromOoDir %s\n", ooDir);
 chrFiList = listDirX(ooDir, "*", FALSE);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
@@ -150,7 +148,7 @@ for (i=0; i<numStages; ++i)
    sprintf(pathName, "%s/%s", gsDir, subDir);
    printf("Processing %s\n", pathName);
    dirList = listDir(pathName, "*.fa");
-   uglyf("Got %d fa files in %s\n", slCount(dirList), pathName);
+   printf("Got %d fa files in %s\n", slCount(dirList), pathName);
    for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
        {
        strcpy(cloneName, dirEl->name);
@@ -277,7 +275,6 @@ struct clonePos *cloneList = NULL;
 
 cloneList = readClonesFromOoDir(ooDir, cloneHash);
 addStageInfo(gsDir, cloneHash);
-uglyAbort("All for now");
 addSeqInfo(seqInfoName, cloneHash);
 checkClonePos(cloneList);
 saveClonePos(cloneList, database);
