@@ -727,9 +727,9 @@ in_addr_t lookupIp(char *host)
 struct hostent *hostent = gethostbyname(host);
 struct sockaddr_in address;	
 if (hostent == NULL)
-errAbort("Couldn't find hub %s", host);
+    errAbort("Couldn't find hub %s", host);
 memcpy(&address.sin_addr.s_addr, hostent->h_addr_list[0], 
-sizeof(address.sin_addr.s_addr));
+	sizeof(address.sin_addr.s_addr));
 return address.sin_addr.s_addr;
 }
 
