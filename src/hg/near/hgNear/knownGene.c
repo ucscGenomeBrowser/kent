@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.26 2004/09/10 21:26:34 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.27 2004/11/22 22:48:04 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -253,8 +253,9 @@ else
     {
     hPrintf("<TD>");
     fillInKnownPos(gp, conn);
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\">", 
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\">", 
 	cartSidUrlString(cart), 
+	"db", database,
 	"hgg_gene", gp->name,
 	"hgg_chrom", gp->chrom,
 	"hgg_start", gp->start,
