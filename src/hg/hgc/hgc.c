@@ -3244,11 +3244,15 @@ printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+
 sprintf(otherString, "%d", psl->tStart);
-hgcAnchorSomewhere("htcBlatMus", cgiItem, otherString, psl->tName);
-freez(&cgiItem);
-printf("View details of parts of alignment within browser window.</A><BR>\n");
+if (trimPsl(psl, winStart, winEnd) != NULL)
+    {
+    hgcAnchorSomewhere("htcBlatMus", cgiItem, otherString, psl->tName);
+    printf("View details of parts of alignment within browser window.</A><BR>\n");
+    }
 printTrackHtml(tdb);
+freez(&cgiItem);
 }
 
 void htcBlatMus(char *htcCommand, char *item)
