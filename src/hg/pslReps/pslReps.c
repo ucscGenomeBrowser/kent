@@ -50,13 +50,40 @@ int calcMilliScore(struct psl *psl)
 return 1000-pslCalcMilliBad(psl, TRUE);
 }
 
+int intronFactor(struct psl *psl)
+/* Figure bonus for having introns.  An intron is worth 3 bases... 
+ * An intron in this case is just a gap of 0 bases in query and
+ * 30 or more in target. */
+{
+int i, blockCount = psl->blockCount;
+int ts, qs, te, qe, sz;
+int bonus = 0;
+if (blockCount <= 1)
+    return 0;
+sz = psl->blockSizes[0];
+qe = psl->qStarts[0] + sz;
+te = psl->tStarts[0] + sz;
+for (i=1; i<blockCount; ++i)
+    {
+    qs = psl->qStarts[i];
+    ts = psl->tStarts[i];
+    if (qs == qe && ts - te >= 30)
+        bonus += 3;
+    sz = psl->blockSizes[i];
+    qe = qs + sz;
+    te = ts + sz;
+    }
+return bonus;
+}
+
 int sizeFactor(struct psl *psl)
 /* Return a factor that will favor longer alignments. */
 {
 int score;
 if (ignoreSize) return 0;
 score = 4*round(sqrt(psl->match + psl->repMatch/4));
-if ((psl->tNumInsert == 0) && (!noIntrons)) score -= 20;
+if (!noIntrons)
+    score += intronFactor(psl);
 return score;
 }
 
