@@ -9,7 +9,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslShow.c,v 1.1 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: pslShow.c,v 1.2 2004/06/16 22:05:06 braney Exp $";
 
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -227,6 +227,7 @@ fprintf(f, "<PRE><TT>");
 		}
 	    bafFlushLine(&baf);
 	    }
+	fprintf( f, "<I>*when aa is different, BLOSUM positives are in green, BLOSUM negatives in red</I>\n");
 	}
     else
 	{
