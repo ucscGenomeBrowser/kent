@@ -178,28 +178,28 @@ if (ideoTrack != NULL)
     hPrintf("<TR><TD>");
     hCheckBox("ideogram", cartUsualBoolean(cart, "ideogram", TRUE));
     hPrintf("</TD><TD>");
-    hPrintf("Display chromosome ideogram above main graphic.");
+    hPrintf("Display chromosome ideogram above main graphic");
     hPrintf("</TD></TR>");
     }
 hPrintf("<TR><TD>");
 hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Show light blue vertical guidelines.");
+hPrintf("Show light blue vertical guidelines");
 hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("leftLabels", cartUsualBoolean(cart, "leftLabels", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Display labels to the left of items in tracks.");
+hPrintf("Display labels to the left of items in tracks");
 hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Display track description above each track.");
+hPrintf("Display track description above each track");
 hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Show track controls under main graphic.");
+hPrintf("Show track controls under main graphic");
 hPrintf("</TD></TR>");
 hTableEnd();
 
