@@ -21,5 +21,8 @@ struct dnaSeq *nibLoadAll(char *fileName);
 
 void nibWrite(struct dnaSeq *seq, char *fileName);
 /* Write out file in format of four bits per nucleotide. */
+
+boolean isNib(char *fileName);
+/* Return TRUE if file is a nib file. */
 #endif /* NIB_H */
 
