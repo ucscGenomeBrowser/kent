@@ -11,8 +11,8 @@
  * reliable pipe.   However if the communication involves many
  * computers sometimes UDP can be a better choice.  It is possible to
  * do broadcast and multicast with UDP but not with TCP/IP.  Also
- * for systems like parasol, where thousand of computers may be
- * rapidly making and breaking connections a server,  TCP paradoxically
+ * for systems like parasol, where a server may be making and breaking
+ * connections rapidly to thousands of computers, TCP paradoxically
  * can end up less reliable than UDP.  Though TCP is relatively robust
  * when a connection is made,  it can it turns out relatively easily
  * fail to make a connection in the first place, and spend quite a long
