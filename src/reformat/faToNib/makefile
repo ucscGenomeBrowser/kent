@@ -1,5 +1,5 @@
 .c.o:
-	gcc -I../../inc -c $*.c
+	gcc -g -I../../inc -c $*.c
 
 O = faToNib.o 
 
