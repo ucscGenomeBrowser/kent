@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: dnaLoad.c,v 1.3 2005/01/14 09:58:40 kent Exp $";
+static char const rcsid[] = "$Id: dnaLoad.c,v 1.4 2005/01/15 02:10:22 kent Exp $";
 
 struct dnaLoadStack
 /* Keep track of a single DNA containing file. */
@@ -138,7 +138,6 @@ else if (twoBitIsRange(fileName))
     char *file, *seqName;
     twoBitParseRange(rangeSpec, &file, &seqName, &start, &end);
     offset = start;
-    freez(&rangeSpec);
 
     /* Load sequence. */
         {
@@ -147,6 +146,7 @@ else if (twoBitIsRange(fileName))
 	seq = twoBitReadSeqFrag(tbf, seqName, start, end);
 	twoBitClose(&tbf);
 	}
+    freez(&rangeSpec);
     }
 if (retOffset != NULL)
     *retOffset = offset;
