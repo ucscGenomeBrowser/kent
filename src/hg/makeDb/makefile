@@ -20,6 +20,7 @@ DIRS = \
 	hgDeleteChrom \
 	hgExonerate \
 	hgFiberglass \
+	hgFindSpec \
 	hgGcPercent \
 	hgGeneBands \
 	hgGoldGapGl \
