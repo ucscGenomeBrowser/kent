@@ -533,6 +533,8 @@ else if (lt->stringy)
     fprintf(f, "%sret->%s%s = sqlStringComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->isUnsigned)
     fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
+else if (lt->type == t_float)
+    fprintf(f, "%sret->%s%s = sqlFloatComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_char)
     {
     fprintf(f, "%ssqlFixedStringComma(&s, ret->%s%s, sizeof(ret->%s%s));\n",
