@@ -64,7 +64,7 @@ set joinerFile=`echo ${joinerPath}/all.joiner | sed -e "s/\/\//\//"`
 # get identifiers
 tac $joinerPath/all.joiner \
   | sed "/\.$table\./,/^identifier /\!d" | \
-  grep "identifier" | gawk '{print $2}' > xxIDxx
+  grep "^identifier" | gawk '{print $2}' > xxIDxx
 
 if (-e xxIDxx) then
   set idVal=`wc -l xxIDxx | gawk '{print $1}'`
