@@ -1,10 +1,10 @@
 #!/usr/bin/perl -W
 
-# mkOrthologFrame - generate ENCODE region frame page including orthologs, from regions file
-#       and description file
-# positions file: <chrN:x-y>\t<region>
+# mkOrthologFrame.pl - generate ENCODE region frame page, 
+#       including orthologs, from regions file and description file
+# positions file:   <chrN:x-y>\t<region>
 # description file: <region>|<description>
-# header file: HTML header for file
+# header file:      HTML header for file
 
 #use strict;
 
@@ -30,19 +30,31 @@ sub countBases {
 }
 # MAIN
 
-@ARGV == 8 or die "$#ARGV\tusage: mkOrthologFrame <description-file> <position-file> <header-file> <fromDb> <toDb> <consensus-bed-file> <liftOver-bed-file> <Mercator-bed-file>\n";
-my ($descriptionFile, $positionFile, $headerFile, $fromDb, $toDb, $consensusFile, $liftOverFile, $MercatorFile) = @ARGV;
+@ARGV == 8 or die "$#ARGV\tusage: mkOrthologFrame <description-file> <position-file> <header-file> <fromDb> <toDb> <consensus-table> <liftOver-table> <mercator-table>\n";
+my ($descriptionFile, $positionFile, $headerFile, $fromDb, $toDb, $consensusTable, $liftOverTable, $mercatorTable) = @ARGV;
 my $fromDbUpper = "\u$fromDb";
 my $toDbUpper   = "\u$toDb";
 my $baseTracks  = "&amp;net${fromDbUpper}=full&amp;refGene=pack&amp;encodeRegionsConsensus=pack";
    $baseTracks .= "&amp;encodeRegionsMercatorMerged=pack&amp;encodeRegionsLiftOver=pack&amp;encodeRegionsMercator=pack";
 my $netHide     = "&amp;netCanFam1=hide&amp;netGalGal2=hide&amp;netMm5=hide&amp;netPanTro1=hide&amp;netRn3=hide";
 
+my $consensusFile = "${toDb}.${consensusTable}.bed";
+my $liftOverFile  = "${toDb}.${liftOverTable}.bed";
+my $mercatorFile  = "${toDb}.${mercatorTable}.bed";
+
+unlink "${consensusFile}";
+unlink "${liftOverFile}";
+unlink "${mercatorFile}";
+
+system ("hgsql ${toDb} -e \"select chrom, chromStart, chromEnd, name from ${toDb}.${consensusTable}\" | tail +2 > ${consensusFile}" );
+system ("hgsql ${toDb} -e \"select chrom, chromStart, chromEnd, name from ${toDb}.${liftOverTable}\"  | tail +2 > ${liftOverFile}" );
+system ("hgsql ${toDb} -e \"select chrom, chromStart, chromEnd, name from ${toDb}.${mercatorTable}\"  | tail +2 > ${mercatorFile}" );
+
 open(POSITIONS, $positionFile)    or die "ERROR: can't open $positionFile\n";
 open(DESCRS,    $descriptionFile) or die "ERROR: can't open $descriptionFile\n";
 open(CONSENSUS, $consensusFile)   or die "ERROR: can't open $consensusFile\n";
 open(LIFTOVER,  $liftOverFile)    or die "ERROR: can't open $liftOverFile\n";
-open(MERCATOR,  $MercatorFile)    or die "ERROR: can't open $MercatorFile\n";
+open(MERCATOR,  $mercatorFile)    or die "ERROR: can't open $mercatorFile\n";
 
 # print header
 system("cat $headerFile");
@@ -67,17 +79,17 @@ while (<DESCRS>) {
 close(DESCRS);
 
 # read in consensus ortholog regions file
-my %orthoRegionParts = ();
-my %orthoRegionPartPosition = ();
+my %consensusRegionParts = ();
+my %consensusRegionPartPosition = ();
 
 while (<CONSENSUS>) {
     chomp;
     my ($chr, $start, $end, $regionPart)  = split /\s/;
-    $orthoRegionPartPosition{$regionPart} = sprintf "%s:%d-%d", $chr, $start, $end;
+    $consensusRegionPartPosition{$regionPart} = "${chr}:${start}-${end}";
     $regionPart =~ /(EN.\d\d\d)/;
     my $region = $1;
-    if (defined $orthoRegionParts{$region}) { $orthoRegionParts{$region} = join (",", $orthoRegionParts{$region}, $regionPart); }
-    else { $orthoRegionParts{$region} = $regionPart; }
+    if (defined $consensusRegionParts{$region}) { $consensusRegionParts{$region} = join (",", $consensusRegionParts{$region}, $regionPart); }
+    else { $consensusRegionParts{$region} = $regionPart; }
 }
 close(CONSENSUS);
 
@@ -87,7 +99,7 @@ my %LORegionPartPosition = ();
 while (<LIFTOVER>) {
     chomp;
     my ($chr, $start, $end, $regionPart) = split /\s/;
-    $LORegionPartPosition{$regionPart}   = sprintf "%s:%d-%d", $chr, $start, $end;
+    $LORegionPartPosition{$regionPart}   = "${chr}:${start}-${end}";
     $regionPart =~ /(EN.*)[_.][0-9]+$/;
     my $region = $1;
     if (defined $LORegionParts{$region}) {
@@ -105,7 +117,7 @@ while (<MERCATOR>) {
     if (/MEN/) {next;} # ignore spurious Mercator ENCODE regions.
     chomp;
     my ($chr, $start, $end, $regionPart, @foo) = split /\s/;
-    $MCRegionPartPosition{$regionPart} = sprintf "%s:%d-%d", $chr, $start, $end;
+    $MCRegionPartPosition{$regionPart}         = "${chr}:${start}-${end}";
     $regionPart =~ /(EN.\d\d\d).\d+_of_\d+_[+-]$/;
     my $region = $1;
     if (defined $MCRegionParts{$region}) { $MCRegionParts{$region} = join (",", $MCRegionParts{$region}, $regionPart); }
@@ -133,17 +145,17 @@ foreach $region (sort keys %descriptions) {
     # consensus regions in ortholog browser -  region links, size, and size ratio
     $length = 0;
     printf "<TD>";
-    if ( defined $orthoRegionParts{$region} ) { 
-	@parts = split (/,/, $orthoRegionParts{$region});  ### 9 errors
+    if ( defined $consensusRegionParts{$region} ) { 
+	@parts = split (/,/, $consensusRegionParts{$region});
 	if ($#parts == -1) {printf "-";}
 	foreach $part (@parts) {
-	    my ($chr, $range) = split (/:/, $orthoRegionPartPosition{$part});
+	    my ($chr, $range) = split (/:/, $consensusRegionPartPosition{$part});
 	    my ($start, $end) = split (/-/, $range);
 	    $length = $length + ($end - $start + 1);
 	    printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>\n", 
-		   $toDb, $orthoRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+		   $toDb, $consensusRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
 	}
-    } else { printf "<font color=red>no predictions</font>"; } # "$toDb $region $orthoRegionParts{$region}\n"; }
+    } else { printf "<font color=red>no predictions</font>"; }
     my $ratio = $length * 100 / $regionLength;
     $length /= (1000*1000); #MB
     printf "</TD><TD>%.1f</TD>\n", $length;
@@ -204,5 +216,7 @@ foreach $region (sort keys %descriptions) {
 # end table
 
 print "</table>\n";
+print "</body>\n";
+print "</html>\n";
 
 
