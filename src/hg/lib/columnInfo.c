@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "columnInfo.h"
 
-static char const rcsid[] = "$Id: columnInfo.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: columnInfo.c,v 1.3 2003/09/14 23:09:07 sugnet Exp $";
 
 void columnInfoStaticLoad(char **row, struct columnInfo *ret)
 /* Load a row from columnInfo table into ret.  The contents of ret will
@@ -71,10 +71,21 @@ struct columnInfo *columnInfoLoadByQuery(struct sqlConnection *conn, char *query
 struct columnInfo *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
-
+int i = 0;
+int colCount = 0; 
 sr = sqlGetResult(conn, query);
+colCount = sqlCountColumns(sr);
+touppers(query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    /* The colCount check makes sure that we are compatible
+       with mysql 4.x where they have added a collation field. Would 
+       like to write a query that specifies the colums. Really should
+       write the query to be column specific but the describe and show columns
+       commands appear to be all there is. */
+    if(colCount > 6 && stringIn("DESCRIBE", query))
+	for(i=2; i<colCount-1; i++)
+	    row[i] = row[i+1];
     el = columnInfoLoad(row);
     slAddHead(&list, el);
     }
