@@ -10068,6 +10068,7 @@ registerTrackHandler("blastzTightRat", longXenoPslMethods);
 registerTrackHandler("blastzMm", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm3", longXenoPslMethods);
+registerTrackHandler("blastzTightMm3", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("blastzRecipBest", longXenoPslMethods);
