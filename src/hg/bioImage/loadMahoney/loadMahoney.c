@@ -67,7 +67,7 @@ fprintf(f, "%s",
 "thumbDir ../bioImage/200/inSitu/Mouse/mahoney/slices\n"
 "priority 100\n"
 "bodyPart brain\n"
-"sliceType horizontal\n"
+"sliceType transverse\n"
 );
 
 raCommon(f);
@@ -122,7 +122,7 @@ carefulClose(&f);
 }
 
 void processWholeMounts(struct hash *mahoneyHash, 
-	char *inFull, char *inThumb, char *outDir)
+	char *inFull, char *outDir)
 /* Output database files for whole mounts. */
 {
 struct slName *imageFileList = NULL, *imageFile;
@@ -183,7 +183,7 @@ carefulClose(&f);
 
 
 void processSlices(struct hash *mahoneyHash, 
-	char *inFull, char *inThumb, char *outDir)
+	char *inFull, char *outDir)
 /* Output database files for slices. */
 {
 struct slName *imageFileList = NULL, *imageFile;
@@ -233,19 +233,15 @@ void loadMahoney(char *bioImageDir, char *inTab, char *outDir)
 {
 struct mahoney *mahoneyList = loadMahoneyList(inTab);
 struct hash *hash = hashMahoneys(mahoneyList);
-char inFull[PATH_LEN], inThumb[PATH_LEN];
+char inFull[PATH_LEN];
 char *mahoneyPath = "inSitu/Mouse/mahoney";
 char inWholeFull[PATH_LEN], inSlicesFull[PATH_LEN];
-char inWholeThumb[PATH_LEN], inSlicesThumb[PATH_LEN];
 safef(inFull, sizeof(inFull), "%s/full", bioImageDir);
-safef(inThumb, sizeof(inThumb), "%s/thumb", bioImageDir);
 safef(inWholeFull, sizeof(inWholeFull), "%s/%s/%s", inFull, mahoneyPath, "wholeMount");
 safef(inSlicesFull, sizeof(inSlicesFull), "%s/%s/%s", inFull, mahoneyPath, "slices");
-safef(inWholeThumb, sizeof(inWholeThumb), "%s/%s/%s", inThumb, mahoneyPath, "wholeMount");
-safef(inSlicesThumb, sizeof(inSlicesThumb), "%s/%s/%s", inThumb, mahoneyPath, "slices");
 makeDir(outDir);
-processWholeMounts(hash, inWholeFull, inWholeThumb, outDir);
-processSlices(hash, inSlicesFull, inSlicesThumb, outDir);
+processWholeMounts(hash, inWholeFull, outDir);
+processSlices(hash, inSlicesFull, outDir);
 }
 
 int main(int argc, char *argv[])
