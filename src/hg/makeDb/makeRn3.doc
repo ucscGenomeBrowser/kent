@@ -426,9 +426,11 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-07-02 - Hiram)
     #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (DONE - 2003-07-02 - Hiram)
+GOLD AND GAP TRACKS (DONE - 2003-07-02 - Hiram)(Re-load 2004-10-19 - Hiram)
+    #	since these were first loaded, the hgGoldGapGl has changed to
+    #	fixup the fragStart position to be 0 relative, hence the re-load
     ssh hgwdev
-    cd ~/rn3
+    cd /cluster/data/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
@@ -4805,3 +4807,17 @@ mkdir -p $3:h
     mkdir maf
     cp $workingDir/maf/*.maf maf
 
+# CREATE kgSpAlias TABLE FOR PB (Done 10/20/04)
+
+    hgsql rn3 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql rn3 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >rn3.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql rn3 -e 'drop table kgSpAlias';
+    hgsql rn3 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql rn3 -e 'load data local infile "rn3.kgSpAlias.tab" into table kgSpAlias'
+	 

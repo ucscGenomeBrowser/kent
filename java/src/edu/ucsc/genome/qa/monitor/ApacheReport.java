@@ -3,6 +3,7 @@ import edu.ucsc.genome.qa.lib.*;
 import java.io.*;
 import java.sql.*;
 
+import java.text.*;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Calendar;
@@ -131,7 +132,7 @@ public class ApacheReport {
   */
   static void usage() {
     System.out.println(
-      "ApacheReport - read logs from mod_log_sql\n" +
+      "\nApacheReport - read logs from mod_log_sql\n" +
       "Generate reports.\n" +
       
       "usage:\n" +
@@ -140,7 +141,7 @@ public class ApacheReport {
       "targetMachine, errorCodes, minutes.\n" +
       "and where path defaults to /usr/local/apache/htdocs/qa/test-results/apache " +
       "\n(use \"local\" for local directory).\n" +
-      "   java ApacheReport default\n" +
+      "\n   java ApacheReport default\n" +
       "This will use the default properties.\n"
       );
       System.exit(-1);
@@ -235,6 +236,9 @@ public class ApacheReport {
       printHeader(pw, yearYesterday, monthYesterday, dayYesterday);
       // try to trap some output.
       // pw.close();  that worked to trap header.
+
+      // set percent output to two decimals
+      DecimalFormat df = new DecimalFormat("#,##0.00");
   
       // iterate through 24 hours
       int secondsInHour = 60 * 60;
@@ -298,14 +302,15 @@ public class ApacheReport {
         pw.print("<TD>" + cnt + "</TD>\n");
 	totalError = totalError + cnt;
 
-        // need to convert numerator and denominator to float first?
+        // need to convert numerator and denominator to float first (yes)?
 	float percent;
-        if (nullcnt != 0) {
-          percent = cnt / nullcnt;
-        } else {
+        if (nullcnt == 0) {
           percent = 0;
+        } else {
+          percent = (float) cnt / (float) nullcnt;
         }
-        pw.print("<TD>" + percent + "</TD>\n");
+        String printPercent = df.format(percent);
+        pw.print("<TD>" + printPercent + "</TD>\n");
         pw.print("</TR>\n");
       }
       // print totals
@@ -314,7 +319,8 @@ public class ApacheReport {
       pw.print("<TD>" + totalAccess + "</TD>\n");
       pw.print("<TD>" + totalError + "</TD>\n");
       float totalPercent = totalError / totalAccess;
-      pw.print("<TD>" + totalPercent + "</TD>\n");
+      String printTotPercent = df.format(totalPercent);
+      pw.print("<TD>" + printTotPercent + "</TD>\n");
       pw.print("</TR>\n");
       printFooter(pw);
       pw.close();

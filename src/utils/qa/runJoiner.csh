@@ -19,6 +19,7 @@ if ($#argv < 2) then
   echo
   echo "  runs joiner check, -keys, finding all identifiers for a table."
   echo '  set database to "all" for global.'
+  echo '  for chains/nets, use tablename format: chainDb#.'
   echo
   echo "    usage:  database, table, [path to all.joiner]"
   echo "           (defaults to tip of the tree)"
@@ -57,14 +58,33 @@ endif
 # set joinerFile and eliminate double "/" where present
 set joinerFile=`echo ${joinerPath}/all.joiner | sed -e "s/\/\//\//"`
 
-# echo "joinerFile = $joinerFile"
-
 # --------------------------------------------
 
 # get identifiers
-tac $joinerPath/all.joiner \
-  | sed "/\.$table\./,/^identifier /\!d" | \
-  grep "^identifier" | gawk '{print $2}' > xxIDxx
+
+# check for chain identifiers
+echo $table | grep "chain" >& /dev/null
+
+if ( $status == 0 ) then
+  echo ${table}Id > xxIDxx
+else
+  # set non-chain identifiers
+  tac $joinerPath/all.joiner \
+    | sed "/\.$table\./,/^identifier /\!d" | \
+    grep "^identifier" | gawk '{print $2}' > xxIDxx
+  if ( $status ) then
+    # if no identifier, look for whether table is ignored
+    echo
+    tac $joinerPath/all.joiner \
+      | sed "/$table/,/^tablesIgnored/\!d" | \
+      grep "^tablesIgnored"
+    rm -f xxIDxx
+    rm -fr xxJoinDirxx 
+    echo
+    exit 1
+  endif
+endif
+
 
 if (-e xxIDxx) then
   set idVal=`wc -l xxIDxx | gawk '{print $1}'`
@@ -80,8 +100,8 @@ if (-e xxIDxx) then
 endif
 
 foreach identifier (`cat xxIDxx`)
-  joinerCheck $range -identifier=$identifier -keys $joinerFile 
+  nice joinerCheck $range -identifier=$identifier -keys $joinerFile 
 end
 
 rm -f xxIDxx
-rm -r xxJoinDirxx 
+rm -fr xxJoinDirxx 

@@ -20,17 +20,6 @@ static char * const dbCgiName = "db";
 char *organism = NULL;
 char *db = NULL;
 
-/*
-  Remove any custom track data from the cart.
-*/
-/*void removeCustomTrackData()
-{
-cartRemove(cart, "hgt.customText");
-cartRemove(cart, "hgt.customFile");
-cartRemove(cart, "ct");
-}
-*/
-
 void pbGateway()
 /* pbGateway - Human Proteome Browser Gateway. */
 {
@@ -58,7 +47,6 @@ if ((oldDb && !containsStringNoCase(oldDb, db))
 || (oldOrg && !containsStringNoCase(oldOrg, organism)))
     {
     position = defaultPosition;
-    //removeCustomTrackData();
     }
 if (sameString(position, "proteome") || sameString(position, "hgBatch"))
     position = defaultPosition;
@@ -106,6 +94,10 @@ if (hIsMgcServer())
     cartWebStart(theCart, "MGC Proteome Browser Gateway \n");
 else
     cartWebStart(theCart, "UCSC Proteome Browser Gateway \n");
+
+/* start with a clean slate */
+cartResetInDb(hUserCookie());
+
 pbGateway();
 cartWebEnd();
 }

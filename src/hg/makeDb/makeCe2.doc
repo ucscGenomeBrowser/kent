@@ -2544,12 +2544,12 @@ chainSome $(path1)
 # End tblastn
 
 
-# MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
+# MAF COVERAGE FIGURES FOR ADAM (DONE 10/18/04 angie)
     # First, get ranges of target coverage:
     ssh eieio
     mkdir /cluster/data/ce2/bed/pHMM/coverage
     cd /cluster/data/ce2/bed/pHMM/maf.new.axtNet
-    cat *.maf | nice mafRanges stdin ce2 \
+    cat *.maf | nice mafRanges -notAllOGap stdin ce2 \
       /cluster/data/ce2/bed/pHMM/coverage/ce2.mafRanges.bed
 
     ssh hgwdev
@@ -2558,7 +2558,7 @@ chainSome $(path1)
     # duplicate/overlapping ranges collapsed:
     nice featureBits ce2 ce2.mafRanges.bed \
       -bed=ce2.mafRangesCollapsed.bed
-#48939573 bases of 100291761 (48.797%) in intersection
+#43967098 bases of 100291761 (43.839%) in intersection
 
     # mafCoverage barfs currently, so pass on this for now:
     #cat ../maf.new.axtNet/*.maf \
@@ -2570,16 +2570,16 @@ chainSome $(path1)
       /cluster/data/hg17/bed/var_multiz.2004-08-12/phastCons/stats2/wormCds.bed \
       ce2.mafRangesCollapsed.bed \
       -bed=ce2.mafCds.bed
-#wormCds.bed 25.701%, ce2.mafRangesCollapsed.bed 48.797%, both 21.114%, cover 82.15%, enrich 1.68x
+#wormCds.bed 25.701%, ce2.mafRangesCollapsed.bed 43.839%, both 20.701%, cover 80.55%, enrich 1.84x
     nice featureBits ce2 -enrichment \
       /cluster/data/hg17/bed/var_multiz.2004-08-12/phastCons/stats2/wormUtr3.bed \
       ce2.mafRangesCollapsed.bed \
       -bed=ce2.mafUtr3.bed
-#wormUtr3.bed 0.323%, ce2.mafRangesCollapsed.bed 48.797%, both 0.249%, cover 77.06%, enrich 1.58x
+#wormUtr3.bed 0.323%, ce2.mafRangesCollapsed.bed 43.839%, both 0.216%, cover 66.86%, enrich 1.53x
     nice featureBits ce2 -enrichment \
       /cluster/data/hg17/bed/var_multiz.2004-08-12/phastCons/stats2/wormUtr5.bed \
       ce2.mafRangesCollapsed.bed \
       -bed=ce2.mafUtr5.bed
-#wormUtr5.bed 0.057%, ce2.mafRangesCollapsed.bed 48.797%, both 0.046%, cover 79.98%, enrich 1.64x
+#wormUtr5.bed 0.057%, ce2.mafRangesCollapsed.bed 43.839%, both 0.041%, cover 72.37%, enrich 1.65x
 
 

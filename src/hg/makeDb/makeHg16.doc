@@ -9791,7 +9791,7 @@ for i in `awk '{print $1}' S1.len`; do hgLoadPsl -noTNameIx hg16 -table=${i}_mrn
 
 ## end of blastz Mrna track
 
-#### BUILD retroGene track Robert 6/15/2004
+#### BUILD RETROGENE TRACK ( done Robert 6/15/2004)
 cp  /cluster/data/genbank/data/aligned/genbank.137.0/hg16/full/mrna.native.rawPsl.gz .
 gunzip mrna.native.rawPsl.gz
 awk  '{OFS="\t";print $1,$2,$3,$4,$5,$6,$7,$8,$9,substr($10,1,index($10,".")-1),$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23}' mrna.native.rawPsl  > mrnaBlat.psl

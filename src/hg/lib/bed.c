@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.33 2004/09/29 17:39:46 kate Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.34 2004/10/19 22:54:19 angie Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -707,17 +707,17 @@ newBed->blockCount = bed->blockCount;
 if (bed->blockCount > 0)
     {
     newBed->blockSizes = lmCloneMem(lm, bed->blockSizes, 
-    	bed->blockSizes[0] * bed->blockCount);
+    	sizeof(bed->blockSizes[0]) * bed->blockCount);
     newBed->chromStarts = lmCloneMem(lm, bed->chromStarts, 
-    	bed->chromStarts[0] * bed->blockCount);
+    	sizeof(bed->chromStarts[0]) * bed->blockCount);
     }
 newBed->expCount = bed->expCount;
 if (bed->expCount > 0)
     {
     newBed->expIds = lmCloneMem(lm, bed->expIds, 
-    	bed->expIds[0] * bed->expCount);
+    	sizeof(bed->expIds[0]) * bed->expCount);
     newBed->expScores = lmCloneMem(lm, bed->expScores, 
-    	bed->expScores[0] * bed->expCount);
+    	sizeof(bed->expScores[0]) * bed->expCount);
     }
 return(newBed);
 }

@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.2 2004/10/14 00:02:51 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.3 2004/10/18 23:08:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -146,7 +146,10 @@ void layerOn(boolean strict, char *database, char *dir, struct hash *uniqHash,
  * and layer them on top of whatever is in hfsList. */
 {
 char raFile[512];
-safef(raFile, sizeof(raFile), "%s/%s", dir, raName);
+if (raName[0] != '/') 
+    safef(raFile, sizeof(raFile), "%s/%s", dir, raName);
+else
+    safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
     addVersion(strict, database, dir, raFile, uniqHash, htmlHash, hfsList);

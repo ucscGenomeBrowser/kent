@@ -5,7 +5,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.13 2004/08/30 23:53:28 daryl Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.14 2004/10/19 20:22:12 kate Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"masked", OPTION_BOOLEAN},
@@ -23,6 +23,7 @@ errAbort(
   "nibFrag - Extract part of a nib file as .fa (all bases/gaps lower case by default)\n"
   "usage:\n"
   "   nibFrag [options] file.nib start end strand out.fa\n"
+  "where strand is + (plus) or m (minus)\n"
   "options:\n"
   "   -masked - use lower case characters for bases meant to be masked out\n"
   "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"

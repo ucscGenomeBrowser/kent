@@ -328,6 +328,11 @@ identifier affyU133
     $hg.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
     $hg.knownToU133.value
 
+identifier affyU133Plus2
+"Affymetrix Human U133 chip identifiers"
+    $hg.affyU133Plus2.qName dupeOk
+    $hg.knownToU133Plus2.value
+
 identifier affyU74
 "Affymetrix Mouse U74 chip identifiers"
     $mm.affyU74.qName dupeOk
@@ -743,6 +748,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToSuper.gene
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
+    $kgDb.knownToU133Plus2.name
     $kgDb.blastKGPep00.name minCheck=0.95
 
 identifier knownAlignId
@@ -1392,6 +1398,7 @@ type pepPred
 type psl
     $hg.affyU95
     $hg.affyU133
+    $hg.affyU133Plus2
     $hg.HInvGeneMrna
     $mm.affyU74
     $gbd.all_bacends
@@ -1501,6 +1508,7 @@ type knownTo
     $gbd.knownToRefSeq
     $hg.knownToU95
     $hg.knownToU133
+    $hg.knownToU133Plus2
     $hg.knownToHInv
     $mm.knownToU74
     $ce.sangerToKim

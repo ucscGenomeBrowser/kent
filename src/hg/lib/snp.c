@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp.h"
 
-static char const rcsid[] = "$Id: snp.c,v 1.7 2004/08/29 04:37:14 daryl Exp $";
+static char const rcsid[] = "$Id: snp.c,v 1.8 2004/10/18 21:21:35 daryl Exp $";
 
 void snpStaticLoad(char **row, struct snp *ret)
 /* Load a row from snp table into ret.  The contents of ret will
@@ -19,15 +19,21 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->score = atof(row[4]);
+ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->alleles = row[6];
-ret->source = row[7];
+ret->observed = row[6];
+ret->molType = row[7];
 ret->class = row[8];
 ret->valid = row[9];
 ret->avHet = atof(row[10]);
 ret->avHetSE = atof(row[11]);
 ret->func = row[12];
+ret->locType = row[13];
+ret->hitQuality = row[14];
+ret->mapWeight = sqlUnsigned(row[15]);
+ret->chromHits = sqlUnsigned(row[16]);
+ret->contigHits = sqlUnsigned(row[17]);
+ret->seqHits = sqlUnsigned(row[18]);
 }
 
 struct snp *snpLoad(char **row)
@@ -41,15 +47,21 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->score = atof(row[4]);
+ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->alleles = cloneString(row[6]);
-ret->source = cloneString(row[7]);
+ret->observed = cloneString(row[6]);
+ret->molType = cloneString(row[7]);
 ret->class = cloneString(row[8]);
 ret->valid = cloneString(row[9]);
 ret->avHet = atof(row[10]);
 ret->avHetSE = atof(row[11]);
 ret->func = cloneString(row[12]);
+ret->locType = cloneString(row[13]);
+ret->hitQuality = cloneString(row[14]);
+ret->mapWeight = sqlUnsigned(row[15]);
+ret->chromHits = sqlUnsigned(row[16]);
+ret->contigHits = sqlUnsigned(row[17]);
+ret->seqHits = sqlUnsigned(row[18]);
 return ret;
 }
 
@@ -59,7 +71,7 @@ struct snp *snpLoadAll(char *fileName)
 {
 struct snp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[19];
 
 while (lineFileRow(lf, row))
     {
@@ -77,7 +89,7 @@ struct snp *snpLoadAllByChar(char *fileName, char chopper)
 {
 struct snp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -121,8 +133,8 @@ void snpSaveToDb(struct sqlConnection *conn, struct snp *el, char *tableName, in
  * If worried about this use snpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s',%f,%f,'%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->alleles,  el->source,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s',%u,%u,%u,%u)", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->observed,  el->molType,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func,  el->locType,  el->hitQuality,  el->mapWeight,  el->chromHits,  el->contigHits,  el->seqHits);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -137,28 +149,32 @@ void snpSaveToDbEscaped(struct sqlConnection *conn, struct snp *el, char *tableN
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *alleles, *source, *class, *valid, *func;
+char  *chrom, *name, *strand, *observed, *molType, *class, *valid, *func, *locType, *hitQuality;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
-alleles = sqlEscapeString(el->alleles);
-source = sqlEscapeString(el->source);
+observed = sqlEscapeString(el->observed);
+molType = sqlEscapeString(el->molType);
 class = sqlEscapeString(el->class);
 valid = sqlEscapeString(el->valid);
 func = sqlEscapeString(el->func);
+locType = sqlEscapeString(el->locType);
+hitQuality = sqlEscapeString(el->hitQuality);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s',%f,%f,'%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  alleles,  source,  class,  valid, el->avHet , el->avHetSE ,  func);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%g,%g,'%s','%s','%s',%u,%u,%u,%u)", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  observed,  molType,  class,  valid, el->avHet , el->avHetSE ,  func,  locType,  hitQuality, el->mapWeight , el->chromHits , el->contigHits , el->seqHits );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
 freez(&strand);
-freez(&alleles);
-freez(&source);
+freez(&observed);
+freez(&molType);
 freez(&class);
 freez(&valid);
 freez(&func);
+freez(&locType);
+freez(&hitQuality);
 }
 
 struct snp *snpCommaIn(char **pS, struct snp *ret)
@@ -174,15 +190,21 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->score = sqlFloatComma(&s);
+ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
-ret->alleles = sqlStringComma(&s);
-ret->source = sqlStringComma(&s);
+ret->observed = sqlStringComma(&s);
+ret->molType = sqlStringComma(&s);
 ret->class = sqlStringComma(&s);
 ret->valid = sqlStringComma(&s);
 ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
+ret->locType = sqlStringComma(&s);
+ret->hitQuality = sqlStringComma(&s);
+ret->mapWeight = sqlUnsignedComma(&s);
+ret->chromHits = sqlUnsignedComma(&s);
+ret->contigHits = sqlUnsignedComma(&s);
+ret->seqHits = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -196,11 +218,13 @@ struct snp *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->alleles);
-freeMem(el->source);
+freeMem(el->observed);
+freeMem(el->molType);
 freeMem(el->class);
 freeMem(el->valid);
 freeMem(el->func);
+freeMem(el->locType);
+freeMem(el->hitQuality);
 freez(pEl);
 }
 
@@ -232,18 +256,18 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->score);
+fprintf(f, "%u", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->alleles);
+fprintf(f, "%s", el->observed);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->source);
+fprintf(f, "%s", el->molType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -254,13 +278,29 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->valid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->avHet);
+fprintf(f, "%g", el->avHet);
 fputc(sep,f);
-fprintf(f, "%f", el->avHetSE);
+fprintf(f, "%g", el->avHetSE);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->func);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->locType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->hitQuality);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->mapWeight);
+fputc(sep,f);
+fprintf(f, "%u", el->chromHits);
+fputc(sep,f);
+fprintf(f, "%u", el->contigHits);
+fputc(sep,f);
+fprintf(f, "%u", el->seqHits);
 fputc(lastSep,f);
 }
 

@@ -3998,6 +3998,7 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     # rm human* *bed.gz
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
+# Added knownToU133Plus2 track (2004-10-14)
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -4174,6 +4175,10 @@ hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
 	-lookup=knownToGnf1h
 # Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
 # Got 9756 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+# create table mapping knownGenes to affyU133Plus2 table (2004-10-14, hartera)
+cd /cluster/data/hg17/bed/geneSorter
+hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
@@ -8432,7 +8437,7 @@ hgLoadSeq -prefix=bz hg17 /gbdb/hg17/mrnaBlastz/hg17Mrna.fa
 
 ## end of blastz Mrna track
 
-#### BUILD retroGene track Robert 8/26/2004
+#### BUILD RETROGENE TRACK (done Robert 8/26/2004)
 
 mkdir /cluster/data/hg17/bed/pseudo
 cd /cluster/data/hg17/bed/pseudo
@@ -9370,26 +9375,27 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     
     # clean up
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
+# Added knownToU133Plus2 track (2004-10-14) - see GeneSorter section
 
 
-# MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
+# MAF COVERAGE FIGURES FOR ADAM (DONE 10/18/04 angie)
     # First, get ranges of target coverage:
     ssh eieio
     mkdir /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
     cat /cluster/data/hg17/bed/var_multiz.2004-08-12/maf.09-12-04/*.maf \
-    | nice mafRanges stdin hg17 hg17.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.mafRanges.bed
     # Get pairwise coverage as well.
     ssh kolossus
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
     cat /cluster/bluearc/hg17/multiz8way/rn3/*.maf \
-    | nice mafRanges stdin hg17 hg17.rn3.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.rn3.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/mm5/*.maf \
-    | nice mafRanges stdin hg17 hg17.mm5.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.mm5.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/galGal2/*.maf \
-    | nice mafRanges stdin hg17 hg17.galGal2.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.galGal2.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/fr1/*.maf \
-    | nice mafRanges stdin hg17 hg17.fr1.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.fr1.mafRanges.bed
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
@@ -9397,15 +9403,15 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     # duplicate/overlapping ranges collapsed:
     nice featureBits hg17 hg17.mafRanges.bed \
       -bed=hg17.mafRangesCollapsed.bed
-#1269322379 bases of 2866216770 (44.286%) in intersection
+#1147548420 bases of 2866216770 (40.037%) in intersection
     foreach other (mm5 rn3 galGal2 fr1)
       nice featureBits hg17 hg17.$other.mafRanges.bed \
       -bed=hg17.${other}.mafRangesCollapsed.bed
     end
-#1136313433 bases of 2866216770 (39.645%) in intersection
-#1097183733 bases of 2866216770 (38.280%) in intersection
-#108042503 bases of 2866216770 (3.770%) in intersection
-#49394089 bases of 2866216770 (1.723%) in intersection
+#1013348528 bases of 2866216770 (35.355%) in intersection
+#975533772 bases of 2866216770 (34.036%) in intersection
+#101623034 bases of 2866216770 (3.546%) in intersection
+#46737824 bases of 2866216770 (1.631%) in intersection
 
     # mafCoverage barfs currently, so pass on this for now:
     #cat ../maf.09-12-04/*.maf \
@@ -9417,18 +9423,18 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
       ../phastCons/stats2/knownGenesCds.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafCds.bed
-#knownGenesCds.bed 1.166%, hg17.mafRangesCollapsed.bed 44.286%, both 1.123%, cover 96.39%, enrich 2.18x
+#knownGenesCds.bed 1.166%, hg17.mafRangesCollapsed.bed 40.037%, both 1.111%, cover 95.36%, enrich 2.38x
 
     nice featureBits hg17 -enrichment \
       ../phastCons/stats2/knownGenesUtr3.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafUtr3.bed
-#knownGenesUtr3.bed 0.918%, hg17.mafRangesCollapsed.bed 44.286%, both 0.724%, cover 78.95%, enrich 1.78x
+#knownGenesUtr3.bed 0.918%, hg17.mafRangesCollapsed.bed 40.037%, both 0.662%, cover 72.18%, enrich 1.80x
     nice featureBits hg17 -enrichment \
       ../phastCons/stats2/knownGenesUtr5.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafUtr5.bed
-#knownGenesUtr5.bed 0.266%, hg17.mafRangesCollapsed.bed 44.286%, both 0.215%, cover 80.76%, enrich 1.82x
+#knownGenesUtr5.bed 0.266%, hg17.mafRangesCollapsed.bed 40.037%, both 0.198%, cover 74.42%, enrich 1.86x
 
     # Intersect pairwise target coverages with gene regions:
     foreach other (mm5 rn3 galGal2 fr1)
@@ -9442,17 +9448,238 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
         ../phastCons/stats2/knownGenesUtr5.bed \
         hg17.$other.mafRangesCollapsed.bed -bed=hg17.${other}Utr5.bed
     end
-#knownGenesCds.bed 1.166%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 1.109%, cover 95.17%, enrich 2.40x
-#knownGenesUtr3.bed 0.918%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.691%, cover 75.35%, enrich 1.90x
-#knownGenesUtr5.bed 0.266%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.205%, cover 76.90%, enrich 1.94x
-#knownGenesCds.bed 1.166%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 1.087%, cover 93.26%, enrich 2.44x
-#knownGenesUtr3.bed 0.918%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.670%, cover 72.97%, enrich 1.91x
-#knownGenesUtr5.bed 0.266%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.198%, cover 74.22%, enrich 1.94x
-#knownGenesCds.bed 1.166%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.791%, cover 67.91%, enrich 18.01x
-#knownGenesUtr3.bed 0.918%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.208%, cover 22.67%, enrich 6.02x
-#knownGenesUtr5.bed 0.266%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.060%, cover 22.37%, enrich 5.94x
-#knownGenesCds.bed 1.166%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.731%, cover 62.69%, enrich 36.38x
-#knownGenesUtr3.bed 0.918%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.077%, cover 8.43%, enrich 4.89x
-#knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.041%, cover 15.59%, enrich 9.05x
+#knownGenesCds.bed 1.166%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 1.093%, cover 93.74%, enrich 2.65x
+#knownGenesUtr3.bed 0.918%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 0.618%, cover 67.37%, enrich 1.91x
+#knownGenesUtr5.bed 0.266%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 0.186%, cover 69.81%, enrich 1.97x
+#knownGenesCds.bed 1.166%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 1.071%, cover 91.85%, enrich 2.70x
+#knownGenesUtr3.bed 0.918%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 0.597%, cover 65.09%, enrich 1.91x
+#knownGenesUtr5.bed 0.266%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 0.179%, cover 67.33%, enrich 1.98x
+#knownGenesCds.bed 1.166%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.779%, cover 66.84%, enrich 18.85x
+#knownGenesUtr3.bed 0.918%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.194%, cover 21.12%, enrich 5.96x
+#knownGenesUtr5.bed 0.266%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.056%, cover 21.03%, enrich 5.93x
+#knownGenesCds.bed 1.166%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.714%, cover 61.26%, enrich 37.57x
+#knownGenesUtr3.bed 0.918%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.073%, cover 7.92%, enrich 4.86x
+#knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.039%, cover 14.82%, enrich 9.09x
+
+
+# ALTERNATIVE CPG ISLANDS (IN PROGRESS 10/14/04 angie)
+    ssh eieio
+    nice tcsh
+    mkdir /cluster/data/hg17/bed/cpgIslandAlt
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    # Try cpg_ash (WUSTL program modified to not chop islands in half before 
+    # scoring) with default params:
+    cp /dev/null cpg_ash.default.cpg
+    foreach f (../../?{,?}/chr*.fa.masked)
+      echo running on $f:t:r:r
+      ~angie/cb/hg3rdParty/cpgIslands/cpg_ash.exe $f >> cpg_ash.default.cpg
+    end
+    awk -f ../cpgIsland/filter.awk cpg_ash.default.cpg > cpgIslandAlt.bed
+    # Run Andy Law's script on masked seq:
+    cp /dev/null cpgIslandGgfAndyMasked.bed
+    foreach f (../../?{,?}/chr*.fa.masked)
+      set chr = $f:t:r:r
+      echo running on $chr
+      /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy $f \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyMasked.bed
+    end
+    # Compare enrichment for knownGene upstream -- an uphill battle for 
+    # programs closer to meeting the stated length, GC, O/E params!
+    ssh hgwdev
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIsland/cpgIsland.bed
+#knownGene:upstream:1000 0.857%, cpgIsland.bed 0.741%, both 0.166%, cover 19.37%, enrich 26.13x
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIslandAlt/cpgIslandAlt.bed
+#knownGene:upstream:1000 0.857%, cpgIslandAlt.bed 1.075%, both 0.200%, cover 23.38%, enrich 21.76x
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIslandAlt/cpgIslandGgfAndyMasked.bed
+#knownGene:upstream:1000 0.857%, cpgIslandGgfAndyMasked.bed 1.964%, both 0.292%, cover 34.06%, enrich 17.34x
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    sed -e 's/cpgIslandExt/cpgIslandAlt/g' \
+      ~/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandAlt.sql
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandAlt.sql \
+      hg17 cpgIslandAlt cpgIslandAlt.bed
+#Loaded 29998 elements of size 10
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      ~/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandGgfAndyMasked.sql \
+      hg17 cpgIslandGgfAndyMasked cpgIslandGgfAndyMasked.bed
+#Loaded 80555 elements of size 10
+    # Quick length stats:
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandExt'
+#|         201 |    764.1913 |       40058 |
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandAlt'
+#|         200 |   1026.9194 |       32440 |
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandGgfAndyMasked'
+#|         200 |    698.8257 |      100308 |
+
+
+# MAKE UNIGENE/SAGE TRACK (DONE - 2004-10-15 Fan)
+
+# First get SAGE data and determine which version of UniGene to use first
+    ssh hgwdev
+    cd ~/kent/src/hg/sage
+    make
+    # XXX = uniGene build for which SAGE was built -- not necessarily current!
+    # Figure out the build number by peeking at this file:
+    wget -O - ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt 2> /dev/null
+
+# UniGene Build #44  Arabidopsis thaliana
+# UniGene Build #61  Bos taurus
+# UniGene Build #16  Caenorhabditis elegans
+# UniGene Build #171  Homo sapiens
+# UniGene Build #19  Medicago truncatula
+# UniGene Build #138  Mus musculus
+# UniGene Build #52  Oryza sativa
+# UniGene Build #14  Pinus taeda
+# UniGene Build #132  Rattus norvegicus
+# UniGene Build #27  Sus scrofa
+# UniGene Build #38  Triticum aestivum
+# UniGene Build #11  Vitis vinifera
+# UniGene Build #41  Zea mays
+
+# From above info, set Version 171 for hg17
+    ls /projects/cc/hg/sugnet/uniGene
+#   set Version = XXX
+    set Version=171
+    mkdir /projects/cc/hg/sugnet/sage/sage.$Version
+    cd /projects/cc/hg/sugnet/sage/sage.$Version
+
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/Hs
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/readme.txt
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/extr
+    wget -r -nH --cut-dirs=2 --timestamp ftp://ftp.ncbi.nih.gov/pub/sage/info
+
+#  That downloaded about 1 GB of data
+
+    cd map/Hs/NlaIII
+    unzip -j SAGEmap_tag_ug-rel.zip
+    cd ../../../extr/
+    ../../scripts/summarizeCounts.pl expCounts.tab ./SAGE_*
+    ../../scripts/countGenesPerTag.pl expCounts.tab allTags.count.tab
+    ../../scripts/createArraysForTags.pl allTags.count.tab tagExpArrays.tab \
+      ./SAGE_*
+    ../../scripts/countsPerExp.pl expCounts.tab expList.tab
+
+    cd ../map/Hs/NlaIII/ 
+    cat << '_EOF_' > /tmp/t.pl
+#!/usr/local/bin/perl
+
+while (<>) {
+ chomp($_);
+ @p = split(/\t/, $_);
+ print "$p[2]\t$p[3]\t$p[0]\n";
+}
+'_EOF_'
+    chmod +x /tmp/t.pl
+
+    cat SAGEmap_tag_ug-rel | /tmp/t.pl | sort | sed -e 's/ /_/g' \
+      > SAGEmap_ug_tag-rel_Hs
+    cd ../../../extr
+    createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
+      tagExpArrays.tab sageSummary.sage
+
+# Create the uniGene alignments 
+# /cluster/data/hg17/uniGene/hg17.uniGene.lifted.pslReps.psl
+
+    # Download of the latest UniGene version is now automated by a 
+    # cron job -- see /cluster/home/angie/crontab , 
+    # /cluster/home/angie/unigeneVers/unigene.csh .  
+    # If hgwdev gets rebooted, that needs to be restarted... maybe there's 
+    # a more stable place to set up that cron job.  
+
+    # substitute XXX -> the uniGene version used by SAGE.
+    # set Version = XXX
+    set Version = 171			(bash: export Version=171)
+    cd /projects/cc/hg/sugnet/uniGene/uniGene.$Version
+    gunzip Hs.seq.uniq.gz Hs.data.gz
+    ../countSeqsInCluster.pl Hs.data counts.tab
+    ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
+    # Distribute UniGene sequence to /iscratch/i/ (kkstore can see /projects)
+    ssh kkstore
+    set Version = 171 # same as above
+    mkdir -p /iscratch/i/uniGene.$Version
+    cp -p \
+  /projects/cc/hg/sugnet/uniGene/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
+      /iscratch/i/uniGene.$Version
+    ssh kkr1u00
+    iSync
+    ssh kk
+    set Version = 171 # same as above
+    mkdir -p /cluster/data/hg17/bed/uniGene.$Version
+    cd /cluster/data/hg17/bed/uniGene.$Version
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > allctg.lst
+    ls -1S /iscratch/i/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) $(path2)  {check out 
+line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 allctg.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      35994s     599.91m    10.00h    0.42d  0.001 y
+# IO & Wait Time:                  1812s      30.19m     0.50h    0.02d  0.000 y
+# Average job time:                  99s       1.66m     0.03h    0.00d
+# Longest job:                     1497s      24.95m     0.42h    0.02d
+# Submission to last job:          1551s      25.85m     0.43h    0.02d
+
+    ssh eieio
+    set Version = 171 # same as above
+    cd /cluster/data/hg17/bed/uniGene.$Version
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
+    | pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg17.uniGene.lifted.pslReps.psl /dev/null
+# Processed 141416 alignments
+
+# use hg17.uniGene.lifted.pslReps.psl for building UNIGENE/SAGE track.
+
+    ssh hgwdev
+    set Version = 171
+    cd /projects/cc/hg/sugnet/sage/sage.$Version/extr
+    addAveMedScoreToPsls \
+      /cluster/data/hg17/bed/uniGene.$Version/hg17.uniGene.lifted.pslReps.psl \
+      sageSummary.sage  uniGene.wscores.bed
+    hgLoadBed hg17 uniGene_2 uniGene.wscores.bed
+    hgsql hg17 < ~kent/src/hg/lib/sage.sql 
+    echo "load data local infile 'sageSummary.sage' into table sage" \
+        | hgsql hg17
+    cd ../info
+    ../../scripts/parseRecords.pl ../extr/expList.tab  > sageExp.tab
+    hgsql hg17 < ~/kent/src/hg/lib/sageExp.sql 
+    echo "load data local infile 'sageExp.tab' into table sageExp" | hgsql hg17
+    # update ~/kent/src/hg/makeDb/trackDb/human/hg17/uniGene_2.html 
+    # with current uniGene date.
+
+
+# CREATE kgSpAlias TABLE FOR PB (Done 10/20/04)
+
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
 
 

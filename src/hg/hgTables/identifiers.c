@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.3 2004/10/12 00:59:02 kent Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.4 2004/10/14 19:52:17 kent Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -22,7 +22,6 @@ htmlOpen("Paste In Identifiers for %s", curTableLabel());
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.<BR>\n");
-uglyf("or whatever...<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");
 cgiMakeButton(hgtaDoPastedIdentifiers, "Submit");

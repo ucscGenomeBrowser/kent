@@ -33,6 +33,12 @@ char *wrapWhiteFont(char *s);
 /* Configuration variable to cause ruler zoom to zoom to base level */
 #define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
 
+/* Maf track display variables and their values */
+#define MAF_GENEPRED_VAR  "mafGenePred"
+#define MAF_FRAMING_VAR   "mafFrame"
+#define MAF_DOT_VAR       "mafDot"
+#define MAF_CHAIN_VAR     "mafChain"
+
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 
@@ -42,6 +48,7 @@ struct controlGrid
     int columns;	/* How many columns in grid. */
     int columnIx;	/* Index (0 based) of current column. */
     char *align;	/* Which way to align. */
+    boolean rowOpen;	/* True if have opened a row. */
     };
 
 struct controlGrid *startControlGrid(int columns, char *align);
@@ -146,7 +153,7 @@ void smroeDropDown(char *var, char *curVal);
 /****** Some stuff for snpType related controls *******/
 
 /* SingleNP, indel, segnemtal */
-#define snpTypeCount 3
+#define snpTypeCount 2
 
 enum snpTypeEnum {
     snpTypeInclude = 0,
@@ -186,7 +193,7 @@ char *snpTypeDataEnumToString(enum snpTypeEnum x);
 /****** Some stuff for snpSource related controls *******/
 
 /* Random, Bac, Mixed, Other, Affy10K, Affy120K */
-#define snpSourceCount 6
+#define snpSourceCount 5
 
 enum snpSourceEnum {
     snpSourceRed      = 0,

@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.34 2004/09/01 00:17:30 sugnet Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.44 2004/10/21 04:45:30 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -74,6 +74,30 @@ retDb[len] = 0;
 return TRUE;
 }
 
+static struct wigMafItem *newMafItem(char *s)
+/* Allocate and initialize a maf item. Param can be a db or name */
+{
+struct wigMafItem *mi;
+char *val;
+
+AllocVar(mi);
+if ((val = hGenome(s)) != NULL)
+    {
+    /* it's a database name */
+    mi->db = cloneString(s);
+    mi->name = val;
+    }
+else
+    {
+    mi->db = cloneString(s);
+    mi->name = cloneString(s);
+    }
+mi->name = hgDirForOrg(mi->name);
+*mi->name = tolower(*mi->name);
+mi->height = tl.fontHeight;
+return mi;
+}
+
 static struct wigMafItem *scoreItem(scoreHeight)
 /* Make up (wiggle) item that will show the score */
 {
@@ -89,75 +113,40 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 /* Make up base-by-base track items. */
 {
 struct wigMafItem *miList = NULL, *mi;
-struct mafAli *maf; 
-char buf[64];
-char *otherOrganism;
-char *myOrg = hgDirForOrg(hOrganism(database));
 struct sqlConnection *conn = hAllocConn();
-*myOrg = tolower(*myOrg);
+char *species[100];
+char option[64];
+int i;
+char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
+int speciesCt = chopLine(speciesOrder, species);
 
 /* load up mafs */
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
                                         chromName, winStart, winEnd);
 hFreeConn(&conn);
 
-/* Make up item that will show inserts in this organism. */
+/* Make up item that will show gaps in this organism. */
 AllocVar(mi);
-//safef(buf, sizeof(buf), "%s gaps", myOrg);
-//mi->name = cloneString(buf);
 mi->name = "Gaps";
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
 /* Make up item for this organism. */
-AllocVar(mi);
-mi->name = myOrg;
-mi->height = tl.fontHeight;
-mi->db = cloneString(database);
+mi = newMafItem(database);
 slAddHead(&miList, mi);
 
-
-/* Make up items for other organisms by scanning through
- * all mafs and looking at database prefix to source. */
+/* Make up items for other organisms by scanning through species 
+   track setting */
+for (i = 0; i < speciesCt; i++)
     {
-    /* get species order from trackDb setting */
-    char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
-    char *species[100];
-    int speciesCt = chopLine(speciesOrder, species);
-    struct hash *hash = newHash(8);	/* keyed by database. */
-    struct hashEl *el;
-    int i;
-
-    hashAdd(hash, mi->name, mi);	/* Add in current organism. */
-    for (maf = track->customPt; maf != NULL; maf = maf->next)
-        {
-	struct mafComp *mc;
-	for (mc = maf->components; mc != NULL; mc = mc->next)
-	    {
-	    dbPartOfName(mc->src, buf, sizeof(buf));
-	    if (hashLookup(hash, buf) == NULL)
-	        {
-		AllocVar(mi);
-		mi->db = cloneString(buf);
-                otherOrganism = hOrganism(mi->db);
-                mi->name = 
-                    (otherOrganism == NULL ? cloneString(buf) :
-		                             hgDirForOrg(otherOrganism));
-                *mi->name = tolower(*mi->name);
-		mi->height = tl.fontHeight;
-		hashAdd(hash, mi->name, mi);
-		}
-	    }
-	}
-    /* build item list in species order */
-    for (i = 0; i < speciesCt; i++)
-        {
-        *species[i] = tolower(*species[i]);
-        if ((el = hashLookup(hash, species[i])) != NULL)
-            slAddHead(&miList, (struct wigMafItem *)el->val);
-        }
-    hashFree(&hash);
+    /* skip this species if UI checkbox was unchecked */
+    safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+    if (!cartUsualBoolean(cart, option, TRUE))
+        continue;
+    mi = newMafItem(species[i]);
+    slAddHead(&miList, mi);
     }
+
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
@@ -269,8 +258,7 @@ if (suffix != NULL)
         /* skip this species if UI checkbox was unchecked */
         if (!cartUsualBoolean(cart, option, TRUE))
             continue;
-        AllocVar(mi);
-        mi->name = species[i];
+        mi = newMafItem(species[i]);
         if (track->visibility == tvFull)
             mi->height = pairwiseWigHeight(track);
         else
@@ -399,13 +387,16 @@ for (i=0; i<size; ++i)
        c = ' ';
     else if (b <= 9)
        c = b + '0';
-    else
+    else if (b % 3)
+        /* multiple of 3 gap */
        c = '+';
+    else
+       c = '*';
     insertLine[i] = c;
     }
 }
 
-static void processOtherSeq(char *text, char *masterText, int textSize,
+static void processSeq(char *text, char *masterText, int textSize,
                             char *outLine, int offset, int outSize)
 /* Add text to outLine, suppressing copy where there are dashes
  * in masterText.  This effectively projects the alignment onto
@@ -432,7 +423,7 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
         {
         if (insertSize != 0)
             {
-            outLine[outIx++] = '|';     // escape to indicate following is count
+            outLine[outIx++] = '|';// escape to indicate following is count
             outLine[outIx++] = (unsigned char) max(255, insertSize);
             insertSize = 0;
             }
@@ -445,6 +436,15 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
         if (text[i] != '-')
             insertSize++;
         }
+    }
+if (text[0] == UNALIGNED_SEQ_BEFORE)
+    {
+    /* end unaligned sequence with indicator */
+    char unalignedChar;
+    unalignedChar = (outLine[--outIx] == UNALIGNED_SEQ_BEFORE ?
+                                                UNALIGNED_SEQ_BOTH :
+                                                UNALIGNED_SEQ_AFTER);
+    outLine[outIx] = unalignedChar;
     }
 }
 
@@ -575,6 +575,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* get wiggle table, of pairwise 
            for example, percent identity */
         tableName = getWigTablename(mi->name, suffix);
+        if (!hTableExists(tableName))
+            tableName = getWigTablename(mi->db, suffix);
         if (hTableExists(tableName))
             {
             /* reuse the wigTrack for pairwise tables */
@@ -594,6 +596,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
                from mafs */
             vgSetClip(vg, xOff, yOff, width, mi->height);
             tableName = getMafTablename(mi->name, suffix);
+            if (!hTableExists(tableName))
+                tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(tableName))
                 drawMafScore(tableName, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
@@ -684,18 +688,35 @@ static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
 /* Draw base-by-base view, return new Y offset. */
 {
 struct wigMafItem *miList = track->items, *mi;
-struct mafAli *mafList, *maf, *sub;
+struct mafAli *mafList, *maf, *sub, *infoMaf;
+struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
 int *insertCounts;
 int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
+struct hash *srcHash = newHash(0);
 char dbChrom[64];
 char buf[1024];
+char option[64];
 int alignLineLength = winBaseCount*2 * 1;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+bool dots, chainBreaks;         /* configuration options */
+/* this line must be longer than the longest base-level display */
+char noAlignment[2000] = {UNALIGNED_SEQ_BEFORE};
+
+/* initialize "no alignment" string to "^--------------" */
+/* The ^ indicates a break in the alignment, to distinguish from
+ * a gapped alignment */
+for (i = 1; i < sizeof noAlignment - 1; i++)
+    noAlignment[i] = '-';
+
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
+dots = cartCgiUsualBoolean(cart, option, FALSE);
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+chainBreaks = cartCgiUsualBoolean(cart, option, FALSE);
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -731,18 +752,26 @@ for (mi = miList; mi != NULL; mi = mi->next)
 /* Go through the mafs saving relevant info in lines. */
 mafList = track->customPt;
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
-i = 0;
+
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
+    /* get info about sequences from full alignment,
+       for use later, when determining if sequence is unaligned or missing */
+    for (mc = maf->components; mc != NULL; mc = mc->next)
+        if (!hashFindVal(srcHash, mc->src))
+            hashAdd(srcHash, mc->src, maf);
+
+    /* get portion of maf in this window */
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
     if (sub != NULL)
         {
-	struct mafComp *mc, *mcMaster;
 	char db[64];
 	int subStart,subEnd;
 	int lineOffset, subSize;
+        struct sqlConnection *conn;
+        char query[128];
 
-        i++;
+        /* process alignment for reference ("master") species */
 	mcMaster = mafFindComponent(sub, dbChrom);
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(sub);
@@ -750,20 +779,74 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	subEnd = subStart + mcMaster->size;
 	subSize = subEnd - subStart;
 	lineOffset = subStart - seqStart;
-	for (mc = sub->components; mc != NULL; mc = mc->next)
-	    {
-            dbPartOfName(mc->src, db, sizeof(db));
-	    if (mc == mcMaster)
-		{
-		processInserts(mc->text, sub->textSize, 
-			&insertCounts[lineOffset], subSize);
-		}
-	    else
-	        {
-                mi = hashMustFindVal(miHash, db);
-                processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
-                                lines[mi->ix], lineOffset, subSize);
-		}
+        processInserts(mcMaster->text, sub->textSize, 
+                                &insertCounts[lineOffset], subSize);
+
+        /* fill in bases for each species */
+        for (mi = miList; mi != NULL; mi = mi->next)
+            {
+            if (mi->db == NULL)
+                /* not a species line -- it's the gaps line, or... */
+                continue;
+            if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
+                {
+                char chainTable[64];
+                char *dbUpper;
+
+                /* no alignment for this species */
+                if (chainBreaks)
+                    {
+                    /* if user has requested this option, see if a 
+                     * chain spans this region; use it to "extend" alignment */
+                    dbUpper = cloneString(mi->db);
+                    dbUpper[0] = toupper(dbUpper[0]);
+                    safef(chainTable, sizeof chainTable, "%s_chain%s", 
+                                                chromName, dbUpper);
+                    if (hTableExistsDb(database, chainTable))
+                        {
+                        conn = hAllocConn();
+                        safef(query, sizeof query,
+                            "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
+                                        chainTable, subStart, subEnd);
+                        if (sqlQuickNum(conn, query) > 0)
+                            processSeq(noAlignment, mcMaster->text, 
+                                        sub->textSize, lines[mi->ix],
+                                        lineOffset, subSize);
+                        hFreeConn(&conn);
+                        continue;
+                        }
+                    }
+                /* try extending coordinates from another part of alignment */
+#ifdef BIGEXTEND
+                if ((infoMaf = 
+                        (struct mafAli *)hashFindVal(srcHash, mi->db)) != NULL)
+                    {
+                    struct mafComp *master, *src;
+                    int masterOffset, srcStart;
+                    char extendAlignment[2000] = {'^'};
+                    int i;
+                    master = mafFindComponent(infoMaf, dbChrom);
+                    src = mafFindComponent(infoMaf, mi->db);
+                    if (master->strand == '-')
+                        mafFlipStrand(infoMaf);
+                    masterOffset = mcMaster->start - master->start;
+                    srcStart = src->start + masterOffset;
+                    if (srcStart < src->srcSize)
+                        {
+                        /* can extend */
+                        for (i = 1; i < subSize && srcStart+i < src->srcSize;
+                                                 i++)
+                            extendAlignment[i] = '-';
+                        processSeq(extendAlignment, mcMaster->text, 
+                                        sub->textSize, lines[mi->ix],
+                                        lineOffset, subSize);
+                        }
+                    }
+#endif
+                }
+            else
+                processSeq(mc->text, mcMaster->text, sub->textSize, 
+                                    lines[mi->ix], lineOffset, subSize);
 	    }
 	}
     mafAliFree(&sub);
@@ -771,7 +854,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 /* draw inserts line */
 charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
-spreadString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
+spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
                 alignInsertsColor(), font, insertLine, winBaseCount);
 y += mi->height;
 
@@ -795,7 +878,8 @@ y += mi->height;
 /* draw base-level alignments */
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
-    char *line = lines[i];
+    char *line;
+    line  = lines[i];
     /* TODO: leave lower case in to indicate masking ?
        * NOTE: want to make sure that all sequences are soft-masked
        * if we do this */
@@ -808,7 +892,7 @@ for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
         }
     /* draw sequence letters for alignment */
     spreadAlignString(vg, x, y, width, mi->height-1, color,
-                            font, line, selfLine, winBaseCount);
+                        font, line, selfLine, winBaseCount, dots);
     y += mi->height;
     }
 
@@ -848,7 +932,7 @@ if (wigTrack != NULL)
         vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
         }
     else
-    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);

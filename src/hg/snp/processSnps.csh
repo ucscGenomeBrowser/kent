@@ -2,8 +2,8 @@
 
 # check usage
 if ($# != 3) then
-    echo "Usage:   processSnpDetails.csh Database Organism dbSnpBuild"
-    echo "Example: processSnpDetails.csh hg16     human    119"
+    echo "Usage:   processSnps.csh Database Organism dbSnpBuild"
+    echo "Example: processSnps.csh hg16     human    121"
     exit
 endif
 
@@ -11,18 +11,18 @@ endif
 set database  = $1
 set organism  = $2
 set snpBuild  = $3
-set oo        = /cluster/data/$database
+set details   = /cluster/data/$database/bed/snp/build$snpBuild/details
 set fileBase  = dbSnpRS${database}Build$snpBuild
 set nice      = "nice "
 
-# Run from directory $oo/bed/snp/build$snpBuild/details
-mkdir -p $oo/bed/snp/build$snpBuild/details
-cd       $oo/bed/snp/build$snpBuild/details
+# Run from directory $details
+mkdir -p $details
+cd       $details
 # remove existing files that might get in the way.
 rm -rf snp* $organism* bed.tab seq_contig.md liftAll.lft Done Observed |& grep -v "No match."
-mkdir -p $oo/bed/snp/build$snpBuild/details/Done
-mkdir -p $oo/bed/snp/build$snpBuild/details/Observed
+mkdir -p $details/Done $details/Observed
 
+echo `date` Working Directory: `pwd`
 echo `date` Start command: processSnpDetails.csh $argv
 echo `date` Files: ftp://ftp.ncbi.nlm.nih.gov/snp/${organism}/XML/ds_chXX.xml.gz
 
@@ -43,15 +43,8 @@ foreach chrom ( $chroms )
     $nice wget ftp://ftp.ncbi.nlm.nih.gov/snp/$organism/XML/ds_ch$chrom.xml.gz \
 	|& grep ds_ch | grep -v "=" | grep -v XML
     
-#    echo `date` Unzipping XML file `pwd`/ds_ch$chrom.xml.gz
-#    $nice gunzip ds_ch$chrom.xml.gz 
-
     echo `date` Getting details from ds_ch$chrom.xml
     $nice zcat ds_ch$chrom.xml | parseDbSnpXML > Observed/ch$chrom.obs
-
-#    echo `date` Zipping ds_ch$chrom.xml
-#    $nice gzip ds_ch$chrom.xml
-#    mv   ds_ch*.xml.gz Done
 
     echo `date` Collecting details
     $nice cat  Observed/ch$chrom.obs >> $fileBase.obs
@@ -59,14 +52,6 @@ foreach chrom ( $chroms )
     echo `date` Zipping ch$chrom.obs
     $nice gzip Observed/ch$chrom.obs
 end
-
-#echo
-#echo `date` Starting dbSnp
-#echo
-#$nice $DBSNPDIR/dbSnp $database $fileBase
-#echo
-#echo `date` Finished dbSnp
-#echo
 
 echo `date` Finished.
 echo

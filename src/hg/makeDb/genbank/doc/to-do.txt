@@ -52,8 +52,6 @@
 
 - add checks of refFlat, refGene, refAlign
 
-- figure out how to pipe lift in gbAlignFinish
-
 - gbGetTest creates empty .seq files, and not gziped ones
 
 - AJ431705 - a EST in gbest28.seq.gz,
@@ -187,7 +185,6 @@
 
 - need to make sure we have new version of programs:
    - pslReps
-   - liftUp
    - hgLoadPsl
    - pslIntronsOnly
 
@@ -689,9 +686,6 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 - add refseq summary to refseq details.
 - refseq details only allows access to seq for first alignment.
 
-- change blat subseq spec to offset psl by start of subsequence and not
-  require lift.
-
 - refseq proteins out-of-sync in gbSeq (joiner check).
 
     Error: 4882 of 21588295 elements of key gbSeq.acc are not in 'full' 
@@ -749,3 +743,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - refseq protein version can be different than mrna version; not sure
   we track this.
+
+- lower number of retries on para make, or have and a smarter option that
+  doesn't retry if a certain threshold of jobs has crashed.

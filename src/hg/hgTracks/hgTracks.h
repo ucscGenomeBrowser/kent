@@ -264,6 +264,10 @@ extern int maxRGBShade;
 void makeRedGreenShades(struct vGfx *vg);
 /* Allocate the  shades of Red, Green and Blue */
 
+/* used in MAF display */
+#define UNALIGNED_SEQ_BEFORE '^'
+#define UNALIGNED_SEQ_AFTER 'V'
+#define UNALIGNED_SEQ_BOTH 'X'
 
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
@@ -468,24 +472,25 @@ char *lfMapNameFromExtra(struct track *tg, void *item);
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
-/* Draw evenly spaced letters in string. */
+/* Draw evenly spaced base letters in string. */
 
-void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, char *s, int count, Color backA, Color backB, 
-	int stripeWidth);
-/* Draw evenly spaced letters in string. */
+void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, 
+        int width, int height, Color color, MgFont *font, char *s, 
+        int count, Color backA, Color backB, int stripeWidth);
+/* Draw evenly spaced base letters in string. */
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 
-                        char *match, int count);
+                        char *match, int count, bool dots);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color. 
  * Draw a vertical bar in light yellow where sequence lacks gaps that
  * are in reference sequence (possible insertion) -- this is indicated
- * by an escaped ('/') insert count in the sequence */
+ * by an escaped ('/') insert count in the sequence.
+ * If "dots" is set, matching bases are displayed as a dot. */
 
 void contigMethods(struct track *tg);
 /* Make track for contig */

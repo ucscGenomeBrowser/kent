@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.55 2004/10/05 23:42:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.56 2004/10/20 17:41:08 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -23,6 +23,9 @@ wds->sqlConstraint = cloneString(constrain->string);
 dyStringFree(&constrain);
 }
 
+/*	*row[] is artifically one too big to allow for a potential bin
+ *	column when reading files that may have it.
+ */
 static boolean nextRow(struct wiggleDataStream *wds, char *row[], int maxRow)
 /*	read next wig row from sql query or lineFile
  *	FALSE return on no more data	*/
@@ -31,8 +34,15 @@ int numCols;
 
 if (wds->isFile)
     {
-    numCols = lineFileChopNextTab(wds->lf, row, maxRow);
-    if (numCols != maxRow) return FALSE;
+    /*	the file may have a bin column, detect automatically and eliminate */
+    numCols = lineFileChopNextTab(wds->lf, row, maxRow+1);
+    if (numCols == maxRow+1)
+	{
+	int i;
+	for (i = 1; i < (maxRow+1); ++i)
+	    row[i-1] = row[i];
+	}
+    if (numCols < maxRow) return FALSE;
     verbose(VERBOSE_PER_VALUE_LEVEL, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
 	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
     }
@@ -628,7 +638,7 @@ static unsigned long long getData(struct wiggleDataStream *wds, char *db,
 	char *table, int operations)
 /* getData - read and return wiggle data	*/
 {
-char *row[WIGGLE_NUM_COLS];
+char *row[WIGGLE_NUM_COLS+1];	/*	potentially a bin column too */
 unsigned long long rowCount = 0;
 unsigned long long validData = 0;
 unsigned long long valuesMatched = 0;

@@ -255,6 +255,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+if (argc != 3) 
+    usage();
 verboseSetLogFile("stdout");
 hasBin = optionExists("hasBin");
 overlapPercent = optionFloat("minOverlap", overlapPercent);

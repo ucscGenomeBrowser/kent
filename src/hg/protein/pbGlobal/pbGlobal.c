@@ -559,17 +559,18 @@ else
     if (proteinInSupportedGenome)
         {
         spConn = sqlConnect(database);
-        safef(cond_str, sizeof(cond_str), 
-	      "spDisplayID='%s' or spID='%s' or geneSymbol='%s' or kgID='%s'",
-    	      queryID, queryID, queryID, queryID);
-        proteinID = sqlGetField(spConn, database, "kgXref", "spDisplayID", cond_str);
+        safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
+        proteinID = sqlGetField(spConn, database, "kgSpAlias", "spID", cond_str);
     	
-	safef(cond_str, sizeof(cond_str), "proteinID='%s'", proteinID);
+        safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
+        answer = sqlGetField(spConn, database, "kgXref", "spDisplayID", cond_str);
+    	
+	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
     	chromStr    = sqlGetField(spConn, database, "knownGene", "chrom", cond_str);
     	cdsStartStr = sqlGetField(spConn, database, "knownGene", "cdsStart", cond_str);
     	cdsEndStr   = sqlGetField(spConn, database, "knownGene", "cdsEnd", cond_str);
     	safef(posStr, sizeof(posStr), "%s:%s-%s", chromStr, cdsStartStr, cdsEndStr);
-    	positionStr = strdup(posStr);
+	positionStr = strdup(posStr);
 	cartSetString(cart, "position", positionStr);
     	cartSetString(cart, "organism", organism);
 	}

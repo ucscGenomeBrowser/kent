@@ -1,4 +1,31 @@
-/* altProbes.c - Match probes to splicing events and do anaylysis. */
+/* altProbes.c - Match probes to splicing events and do anaylysis. 
+
+   This program origianlly was written to calculate which probe
+   sets were being expressed and matching up the probe sets with
+   the correct splice junctions. Since then it has expanded to fill
+   a number of roles as it is one of the few times where the probe
+   sets, data, and splicing information are all accesible at the
+   same time. Now the program is almost run in an iterative fashion,
+   the first time it generates a number of matrices that are used
+   in R to do calculations. The pvalues and scores that come out
+   of R can then be fed back in to be used as pre-calculated 
+   p-vals and scores for outputting new stats.
+
+   Currently altProbes actually:
+   - Matches probe sets to splicing paths.
+   - Calculates average intensities and pvalues for a given path. 
+   - Looks for known binding sites of splicing factors.
+   - Lifts splicing factors to current assembly and looks for overlaps
+     with conserved elements.
+   - Compiles and outputs matrices for R.
+   - Outputs a number of cassette exon specific sequence files.
+*/
+
+
+ 
+
+
+
 #include "common.h"
 #include "bed.h"
 #include "hash.h"
@@ -271,6 +298,8 @@ FILE *brainSpBedUpOut = NULL;  /* File for paths (in bed format) that
 			      * are brain specific. */
 FILE *brainSpBedDownOut = NULL;
 FILE *brainSpPathBedOut = NULL;
+FILE *brainSpPathBedExonUpOut = NULL;
+FILE *brainSpPathBedExonDownOut = NULL;
 FILE *brainSpTableHtmlOut = NULL; /* Html table for visualizing brain specific events. */
 FILE *brainSpFrameHtmlOut = NULL; /* Html frame for visualizing brain specific events. */
 
@@ -2185,23 +2214,24 @@ fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:
 	splice->name, refSeqForPSet(event->altPathList->beds[0]->name), 
 	nameForType(splice->type), event->altPathList->beds[0]->name,
 	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-makeJunctMdbGenericLink(splice, buff, "[p]");
-fprintf(brainSpTableHtmlOut, "%s", buff->string);
+/* makeJunctMdbGenericLink(splice, buff, "[p]"); */
+/* fprintf(brainSpTableHtmlOut, "%s", buff->string); */
 fprintf(brainSpTableHtmlOut, "(%5.2f%%, %5.5f) ", 100.0 * event->percentUltra, event->pVal);
-if(splice->type == altCassette)
-    {
-    int i = 0;
-    int *u = event->altPathList->next->motifUpCounts;
-    int *d = event->altPathList->next->motifDownCounts;
-    for(i = 0; i < bindSiteCount; i++)
-	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]);
-    }
+/* if(splice->type == altCassette) */
+/*     { */
+/*     int i = 0; */
+/*     int *u = event->altPathList->next->motifUpCounts; */
+/*     int *d = event->altPathList->next->motifDownCounts; */
+/*     for(i = 0; i < bindSiteCount; i++) */
+/* 	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]); */
+/*     } */
 fprintf(brainSpTableHtmlOut, " </td>");
+fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); 
 // fprintf(brainSpTableHtmlOut,"<td>%s</td>", nameForType(splice->type));
-if(optionExists("flipScoreSort"))
-    fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore);
-else
-    fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff);
+/* if(optionExists("flipScoreSort")) */
+/*     fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); */
+/* else */
+/*     fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff); */
 dyStringFree(&buff);
 }
 
@@ -2361,6 +2391,7 @@ struct dnaSeq *downSeq = NULL;
 struct bed *pathBed = NULL;
 struct bed *upSeqBed = NULL;
 struct bed *downSeqBed = NULL;
+
 struct slRef *brainEvent = NULL;
 boolean lifted = FALSE;
 int i = 0;
@@ -2607,6 +2638,8 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
        event->flipScore <= optionFloat("maxFlip", 200000) &&
        event->percentUltra >= optionFloat("minIntCons", 0.0))
 	{
+	struct bed *endsBed = NULL;
+	struct bed *upExonBed = NULL, *downExonBed = NULL;
 	struct dyString *dna = newDyString(2*upSeq->size+5);
 	dyStringPrintf(dna, "%sNNN%s", upSeq->dna, downSeq->dna);
 	if(lifted)
@@ -2623,7 +2656,38 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 	bedTabOutN(downSeqBed, 6, brainSpBedDownOut);
 	faWriteNext(brainSpDnaMergedOut, upSeqBed->name, dna->string, dna->stringSize);
 	bedTabOutN(pathBed, 6, brainSpPathBedOut);
+
+	/* Find the ends of the intron and make beds for the 
+	   portions of the upstream and downstream exons that connect
+	   to this exon bed. */
+	endsBed = pathToBed(altPath->path, event->splice, -1, -1, TRUE);
+	assert(endsBed);
+	AllocVar(upExonBed);
+	AllocVar(downExonBed);
+	upExonBed->strand[0] = downExonBed->strand[0] = endsBed->strand[0];
+	upExonBed->score = downExonBed->score = pathBed->score;
+	upExonBed->chrom = cloneString(endsBed->chrom);
+	downExonBed->chrom = cloneString(endsBed->chrom);
+	upExonBed->name = cloneString(endsBed->name);
+	downExonBed->name = cloneString(endsBed->name);
+
+	downExonBed->chromStart = endsBed->chromEnd;
+	downExonBed->chromEnd = downExonBed->chromStart + 10;
+	upExonBed->chromEnd = endsBed->chromStart;
+	upExonBed->chromStart = upExonBed->chromEnd - 10;
+	if(endsBed->strand[0] == '-') 
+	    {
+	    struct bed *tmp = upExonBed;
+	    upExonBed = downExonBed;
+	    downExonBed = tmp;
+	    }
+	bedTabOutN(upExonBed, 6, brainSpPathBedExonUpOut);
+	bedTabOutN(downExonBed, 6, brainSpPathBedExonDownOut);
+	bedFree(&upExonBed);
+	bedFree(&downExonBed);
+	bedFree(&endsBed);
 	}
+    
     bedFree(&upSeqBed);
     bedFree(&downSeqBed);
     dnaSeqFree(&upSeq);
@@ -2740,56 +2804,56 @@ ratio = skipExp / incExp;
 return ratio;
 }
 
-void outputRatioStats(struct altEvent *event, struct dMatrix *probM, 
-		      struct dMatrix *intenM)
-/* Calculate the ratio of skip to include for tissues that are
-   considered expressed. For tissues where event isn't expressed
-   output -1 as all ratios will be positive this makes a good empty
-   data place holder. */
+struct altPath *altPathStubForGeneSet(struct altEvent *event, int geneIx)
+/* Create a "fake" path from data for gene probe set. Return NULL if no
+ probeSets for a given event. */
+{
+struct altPath *ap = NULL;
+if(event->geneProbeCount < 1)
+    return NULL;
+AllocVar(ap);
+ap->probeCount = 1;
+ap->expVals = &event->geneExpVals[geneIx];
+ap->pVals = &event->genePVals[geneIx];
+ap->avgExpVals = event->geneExpVals[geneIx];
+return ap;
+}
+
+char *nameForSplice(struct splice *splice, struct altPath *namePath)
+/* Return a unique name for this splicing event. Memory is owned by
+ this function and will be overwritten each time this function is
+ called. */
+{
+static char buff[256];
+safef(buff, sizeof(buff), "%s:%s:%s:%s:%s:%s:%d:%d", 
+      splice->name, refSeqForPSet(namePath->beds[0]->name), nameForType(splice->type), namePath->beds[0]->name,
+      splice->strand, splice->tName, splice->tStart, splice->tEnd);
+return buff;
+}
+
+void outputRatioStatsForPaths(struct altEvent *event, struct altPath *incPath,
+			      struct altPath *skipPath, struct altPath *namePath,
+			      struct dMatrix *probM, struct dMatrix *intenM)
+/* Write the stats for a pair of particular paths. */
 {
 struct splice *splice = event->splice;
-struct altPath *skipPath = NULL, *incPath = NULL;
 int tissueIx = 0;
+char *eventName = nameForSplice(splice, namePath);
 
-double tmpThresh = presThresh;
-
-/* Few sanity checks. */
-assert(slCount(event->altPathList) == 2);
 assert(ratioStatOut != NULL);
 assert(intenM->colCount = probM->colCount);
-
-skipPath = event->altPathList;
-incPath = event->altPathList->next;
 
 /* If there is no data don't output anything. */
 if(skipPath->probeCount == 0 || incPath->probeCount == 0)
     return;
 
-/* Going to include everything that we think might
-   have a chance of being expressed. */
-presThresh = absThresh;
-fprintf(ratioStatOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(ratioSkipIntenOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(ratioIncIntenOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(ratioGeneIntenOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(ratioProbOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(incProbOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-fprintf(skipProbOut, "%s:%s:%s:%s:%s:%s:%d:%d", 
-	splice->name, refSeqForPSet(skipPath->beds[0]->name), nameForType(splice->type), skipPath->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-
+fprintf(ratioStatOut, "%s", eventName);
+fprintf(ratioSkipIntenOut, "%s", eventName);
+fprintf(ratioIncIntenOut, "%s", eventName);
+fprintf(ratioGeneIntenOut, "%s", eventName);
+fprintf(ratioProbOut, "%s", eventName);
+fprintf(incProbOut, "%s", eventName);
+fprintf(skipProbOut, "%s", eventName);
 /* Loop through tissues caclulating ratio. */
 for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     {
@@ -2809,7 +2873,54 @@ fprintf(ratioGeneIntenOut, "\n");
 fprintf(ratioProbOut, "\n");
 fprintf(incProbOut, "\n");
 fprintf(skipProbOut, "\n");
-presThresh = tmpThresh;
+}
+
+void outputRatioStats(struct altEvent *event, struct dMatrix *probM, 
+		      struct dMatrix *intenM, boolean doVsGeneSets)
+/* Calculate the ratio of skip to include for tissues that are
+   considered expressed. For tissues where event isn't expressed
+   output -1 as all ratios will be positive this makes a good empty
+   data place holder. */
+{
+struct altPath *skipPath = NULL, *incPath = NULL, *namePath = NULL;
+double tmpThresh = presThresh;
+
+/* Few sanity checks. */
+assert(ratioStatOut != NULL);
+assert(intenM->colCount = probM->colCount);
+
+/* Going to include everything that we think might
+   have a chance of being expressed. */
+
+if(!doVsGeneSets) 
+    {
+    assert(slCount(event->altPathList) == 2);
+    skipPath = event->altPathList;
+    incPath = event->altPathList->next;
+    namePath = skipPath;
+    /* If there is no data don't output anything. */
+    if(skipPath->probeCount == 0 || incPath->probeCount == 0)
+	return;
+    presThresh = absThresh;
+    outputRatioStatsForPaths(event, incPath, skipPath, namePath, probM, intenM);
+    presThresh = tmpThresh;
+    }
+else if(event->geneProbeCount > 0)
+    {
+    struct altPath *gene1Path = NULL, *gene2Path = NULL;
+    presThresh = absThresh;
+    gene1Path = altPathStubForGeneSet(event, 0);
+    for(incPath = event->altPathList; incPath != NULL; incPath = incPath->next) 
+	{
+	if(incPath->probeCount == 0)
+	    continue;
+	skipPath = gene1Path;
+	namePath = incPath;
+	outputRatioStatsForPaths(event, incPath, skipPath, namePath, probM, intenM);
+	}
+    freez(&gene1Path);
+    presThresh = tmpThresh;
+    }
 }
 
 void doEventAnalysis(struct altEvent *event, struct dMatrix *intenM,
@@ -2817,6 +2928,7 @@ void doEventAnalysis(struct altEvent *event, struct dMatrix *intenM,
 /* Analyze a given event. */
 {
 int i = 0;
+struct splice *splice = event->splice;
 int **expressed = NULL;
 int **notExpressed = NULL;
 double **expression = NULL;
@@ -2877,12 +2989,17 @@ if(altCassetteBedOut && event->splice->type == altCassette && event->altPathProb
 /* If we are outputting a ratio statistic do it now. */
 if(onlyTwoPaths(event) && ratioStatOut)
     {
-    outputRatioStats(event, probM, intenM);
+    outputRatioStats(event, probM, intenM, FALSE);
+    }
+else if(( splice->type == altMutExclusive ||
+	  splice->type == alt3PrimeSoft ||
+	  splice->type == alt5PrimeSoft) &&
+	ratioStatOut)
+    {
+    outputRatioStats(event, probM, intenM, TRUE);
     }
 
 /* Get a background count of motifs in the cassettes. */
-
-
 if(brainSpBedUpOut != NULL)
     outputBrainSpecificEvents(event, expressed, notExpressed, pathCount, probM);
 
@@ -3420,6 +3537,14 @@ dyStringPrintf(file, "%s.path.bed", prefix);
 brainSpPathBedOut = mustOpen(file->string, "w");
 
 dyStringClear(file);
+dyStringPrintf(file, "%s.path.exonUp.bed", prefix);
+brainSpPathBedExonUpOut = mustOpen(file->string, "w");
+
+dyStringClear(file);
+dyStringPrintf(file, "%s.path.exonDown.bed", prefix);
+brainSpPathBedExonDownOut = mustOpen(file->string, "w");
+
+dyStringClear(file);
 dyStringPrintf(file, "%s.up.fa", prefix);
 brainSpDnaUpOut = mustOpen(file->string, "w");
 
@@ -3456,7 +3581,7 @@ dyStringPrintf(file, "%s.table.html", prefix);
 brainSpTableHtmlOut = mustOpen(file->string, "w");
 fprintf(brainSpTableHtmlOut, "<html>\n<body bgcolor=\"#FFF9D2\"><b>Alt-Splice List</b>\n"
 	"<br>Motif Counts: Nova-1, Fox-1, PTB/nPTB, hnRNP-H/F<br>"
-	"<table border=1><tr><th>Name</th><th>Size</th></tr>\n");
+	"<table border=1><tr><th>Name</th><th>Sep</th></tr>\n");
 
 dyStringClear(file);
 dyStringPrintf(file, "%s.frame.html", prefix);
@@ -3903,9 +4028,6 @@ presThresh = absThresh;
 
 current = sameDouble(expressionRatio(event, skipPath, incPath, 0), 1);
 result &= unitTestFunct(test, current, error, "Averaging");
-
-current = sameDouble(expressionRatio(event, skipPath, incPath, 1), -1);
-result &= unitTestFunct(test, current, error, "Not expressed");
 
 current = sameDouble(expressionRatio(event, skipPath, incPath, 2), 2);
 result &= unitTestFunct(test, current, error, "Low expressed");

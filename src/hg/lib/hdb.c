@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.211 2004/10/14 00:00:18 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.213 2004/10/20 21:05:18 sugnet Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -793,7 +793,7 @@ hFreeConn(&conn);
 return hash;
 }
 
-struct dnaSeq *fetchSeq(char *fileName, char *seqName, int start, int end)
+struct dnaSeq *hFetchSeq(char *fileName, char *seqName, int start, int end)
 /* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
    If it is .nib then just ignore seqName. */
 {
@@ -814,7 +814,7 @@ struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom(chrom, fileName);
-return fetchSeq(fileName, chrom, start, end);
+return hFetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
@@ -822,7 +822,7 @@ struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom2(chrom, fileName);
-return fetchSeq(fileName, chrom, start, end);
+return hFetchSeq(fileName, chrom, start, end);
 }
 
 struct dnaSeq *hSeqForBed(struct bed *bed)
@@ -847,7 +847,8 @@ else
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
-	block = fetchSeq(fileName, bed->chrom, offSet+bed->chromStarts[i], bed->blockSizes[i]);
+	block = hFetchSeq(fileName, bed->chrom,
+			  offSet+bed->chromStarts[i], bed->blockSizes[i]);
 	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}
@@ -2867,16 +2868,9 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
 /* Return TRUE if track exists on this chromosome. */
 {
 boolean chromOk = TRUE;
-char splitTable[64];
 if (tdb->restrictCount > 0 && chrom != NULL)
-    chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
-return (chromOk && 
-	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-	&&
-	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
-	);
+    chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount)) >= 0;
+return chromOk;
 }
 
 static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where)
@@ -2923,8 +2917,14 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
+char splitTable[64];
 hLookupStringsInTdb(tdb, database);
-if ((!tdb->private || privateHost) && hTrackOnChrom(tdb, chrom))
+if ((!tdb->private || privateHost) && hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+	&&
+	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+    )
     slAddHead(tdbRetList, tdb);
 else
     trackDbFree(&tdb);

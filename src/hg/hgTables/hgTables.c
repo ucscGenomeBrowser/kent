@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.78 2004/10/12 00:59:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.82 2004/10/20 23:13:29 angie Exp $";
 
 
 void usage()
@@ -263,9 +263,9 @@ sqlDisconnect(&conn);
 return list;
 }
 
-void searchPosition(char *range, struct region *region)
+boolean searchPosition(char *range, struct region *region)
 /* Try and fill in region via call to hgFind. Return FALSE
- * if it has to put up a multiple line selection. */
+ * if it can't find a single position. */
 {
 struct hgPositions *hgp = NULL;
 char retAddr[512];
@@ -273,29 +273,40 @@ char position[512];
 safef(retAddr, sizeof(retAddr), "%s", "../cgi-bin/hgTables");
 hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
 	cart, TRUE, retAddr);
-if (hgp == NULL || hgp->singlePos == NULL)
+if (hgp != NULL && hgp->singlePos != NULL)
     {
-    errAbort("Please go back and try another position");
+    safef(position, sizeof(position),
+	    "%s:%d-%d", region->chrom, region->start+1, region->end);
+    cartSetString(cart, hgtaRange, position);
+    return TRUE;
     }
-safef(position, sizeof(position),
-	"%s:%d-%d", region->chrom, region->start+1, region->end);
-cartSetString(cart, hgtaRange, position);
+else if (region->start == 0)	/* Confusing way findGenomePosWeb says pos not found. */
+    {
+    cartSetString(cart, hgtaRange, hDefaultPos(database));
+    return FALSE;
+    }
+else
+    return FALSE;
 }
 
-void lookupPosition()
-/* Look up position (aka range) if need be. */
+boolean lookupPosition()
+/* Look up position (aka range) if need be.  Return FALSE if it puts
+ * up multiple positions. */
 {
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
-if (sameString(regionType, "range"))
+char *range = cartUsualString(cart, hgtaRange, "");
+boolean isSingle = TRUE;
+range = trimSpaces(range);
+if (range[0] != 0)
     {
-    char *range = cartUsualString(cart, hgtaRange, "");
-    range = trimSpaces(range);
-    if (range[0] != 0)
-	{
-	struct region r;
-	searchPosition(range, &r);
-	}
+    struct region r;
+    isSingle = searchPosition(range, &r);
     }
+else
+    {
+    cartSetString(cart, hgtaRange, hDefaultPos(database));
+    }
+return isSingle;
 }
 
 struct region *getRegions()
@@ -364,11 +375,25 @@ return regionList;
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere)
-/* Construct and execute query for table on region. */
+/* Construct and execute query for table on region. Returns NULL if 
+ * table doesn't exist (e.g. missing split table for region->chrom). */
 {
 struct sqlResult *sr;
 if (isPositional)
     {
+    /* Check for missing split tables before querying: */
+    char *db = sqlGetDatabase(conn);
+    struct hTableInfo *hti = hFindTableInfoDb(db, region->chrom, table);
+    if (hti == NULL)
+	return NULL;
+    else if (hti->isSplit)
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName),
+	      "%s_%s", region->chrom, table);
+	if (!sqlTableExists(conn, fullTableName))
+	    return NULL;
+	}
     if (region->end == 0) /* Full chromosome. */
 	{
 	sr = hExtendedChromQuery(conn, table, region->chrom, 
@@ -401,12 +426,7 @@ char *trackTable(char *rawTable)
  * for mRNA if need be. */
 {
 char *table = rawTable;
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-if (sameString(table, "mrna"))
-    return "all_mrna";
-else
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
-    return table;
+return table;
 }
 
 char *connectingTableForTrack(char *rawTable)
@@ -601,7 +621,7 @@ struct grp *makeGroupList(struct sqlConnection *conn,
 {
 struct sqlResult *sr;
 char **row;
-struct grp *groupList = NULL, *group;
+struct grp *groupsAll, *groupList = NULL, *group;
 struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
 struct trackDb *track;
@@ -614,11 +634,9 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-sr = sqlGetResult(conn,
-    "select * from grp order by priority");
-while ((row = sqlNextRow(sr)) != NULL)
+groupsAll = hLoadGrps();
+for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
-    group = grpLoad(row);
     if (hashLookup(groupsInTrackList, group->name))
 	{
 	slAddTail(&groupList, group);
@@ -627,7 +645,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         grpFree(&group);
     }
-sqlFreeResult(&sr);
 
 /* Do some error checking for tracks with group names that are
  * not in database.  Just warn about them. */
@@ -893,6 +910,8 @@ for (region = regionList; region != NULL; region = region->next)
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
+    if (sr == NULL)
+	continue;
 
     /* First time through print column names. */
     if (region == regionList)
@@ -1103,10 +1122,14 @@ else if (cartVarExists(cart, hgtaDoGenomicDna))
     doGenomicDna(conn);
 else if (cartVarExists(cart, hgtaDoGetBed))
     doGetBed(conn);
-else if (cartVarExists(cart, hgtaDoGetCustomTrack))
-    doGetCustomTrack(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrackTb))
+    doGetCustomTrackTb(conn);
+else if (cartVarExists(cart, hgtaDoGetCustomTrackGb))
+    doGetCustomTrackGb(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
     doGetCustomTrackFile(conn);
+else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
+    doRemoveCustomTrack(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else if (cartVarExists(cart, hgtaDoAllGalaQuery))
@@ -1121,6 +1144,19 @@ cartRemovePrefix(cart, hgtaDo);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
+
+void initGroupsTracksTables(struct sqlConnection *conn)
+/* Get list of groups that actually have something in them. */
+{
+fullTrackList = getFullTrackList();
+curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
+fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
+curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+if (sameString(curGroup->name, "allTables"))
+    curTrack = NULL;
+curTable = findSelectedTable(conn, curTrack, hgtaTable);
+}
+
 
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks. 
@@ -1141,19 +1177,12 @@ freezeName = hFreezeFromDb(database);
 hSetDb(database);
 conn = hAllocConn();
 
-lookupPosition();
-
-/* Get list of groups that actually have something in them. */
-fullTrackList = getFullTrackList();
-curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
-curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
-if (sameString(curGroup->name, "allTables"))
-    curTrack = NULL;
-curTable = findSelectedTable(conn, curTrack, hgtaTable);
-
-/* Go figure out what page to put up. */
-dispatch(conn);
+if (lookupPosition())
+    {
+    /* Init track and group lists and figure out what page to put up. */
+    initGroupsTracksTables(conn);
+    dispatch(conn);
+    }
 
 /* Save variables. */
 cartCheckout(&cart);

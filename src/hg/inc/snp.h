@@ -9,25 +9,31 @@
 #include "jksql.h"
 #endif
 
-#define SNP_NUM_COLS 13
+#define SNP_NUM_COLS 19
 
 struct snp
-/* SNP positions from various sources */
+/* Polymorphism data from dbSnp XML or genotyping arrays */
     {
     struct snp *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Name of SNP: rsId or Affy name */
-    float score;	/* Certainty of variation */
+    char *name;	/* Reference SNP identifier or Affy SNP name */
+    unsigned score;	/* Source of SNP data: dbSnp or genotyping array */
     char strand[2];	/* Which DNA strand contains the observed alleles */
-    char *alleles;	/* The sequence of the observed alleles */
-    char *source;	/* How the variant was discovered */
+    char *observed;	/* The sequences of the observed alleles */
+    char *molType;	/* Sample type from exemplar ss */
     char *class;	/* The class of variant */
     char *valid;	/* The validation status of the SNP */
     float avHet;	/* The average heterozygosity from all observations */
     float avHetSE;	/* The Standard Error for the average heterozygosity */
-    char *func;	/* The functional category of the SNP, if any */
+    char *func;	/* The functional category of the SNP */
+    char *locType;	/* Location type and quality */
+    char *hitQuality;	/* Location type and quality */
+    unsigned mapWeight;	/* Location quality score for NCBI map display */
+    unsigned chromHits;	/* Number of distinct chromosomes with a hit */
+    unsigned contigHits;	/* Number of distinct contigs with a hit */
+    unsigned seqHits;	/* Total number of hits to genome */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

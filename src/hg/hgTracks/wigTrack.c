@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.59 2004/08/30 23:57:02 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.60 2004/10/18 20:34:49 kate Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -291,7 +291,8 @@ if ((previousFileName == (char *)NULL) ||
 	differentString(previousFileName,wiggle->file))
     {
     if (! fileExists(wiggle->file))
-	errAbort("wigSetItemData: file '%s' missing", wiggle->file);
+	errAbort("wigSetItemData: can't open file '%s' (%s)",
+                         wiggle->file, strerror(errno));
     freez(&previousFileName);
     previousFileName = cloneString(wiggle->file);
     }
@@ -369,6 +370,7 @@ while (lineFileChopNextTab(lf, row, ArraySize(row)))
     }	/*	while reading lines	*/
 slReverse(&wiList);
 tg->items = wiList;
+tg->mapsSelf = TRUE;
 
 lineFileClose(&lf);
 }

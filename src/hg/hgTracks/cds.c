@@ -48,10 +48,10 @@ if (zoomed)
         w = 1;
 
     if (chromEnd - chromStart == 3)
-        spreadString(vg,x1,y,w,height,whiteIndex(),
+        spreadBasesString(vg,x1,y,w,height,whiteIndex(),
 		     font,text,strlen(text));
     else if (chromEnd - chromStart < 3)
-        spreadString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
+        spreadBasesString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
 		     text,strlen(text));
     else
         {

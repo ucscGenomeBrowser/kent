@@ -94,6 +94,7 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   mkdir /gbdb/bosTau1
   mkdir /gbdb/bosTau1/nib
+  # could get rid of the nib in this path, 2bit isn't a nib (4bit)
   ln -s /cluster/data/bosTau1/bosTau1.2bit /gbdb/bosTau1/nib
 
 # CREATE DATABASE
@@ -281,6 +282,7 @@ exit; # don't actually run this like a script :)
   # note: size match
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, Oct. 10, 2004, Heather)
+  # could get rid of the nib in this path, 2bit isn't a nib (4bit)
   ssh kkr1u00
   mkdir -p /iscratch/i/bosTau1/nib
   cp -p /cluster/data/bosTau1/bosTau1.2bit /iscratch/i/bosTau1/nib
@@ -289,6 +291,22 @@ exit; # don't actually run this like a script :)
   ssh kksilo
   mkdir -p /cluster/bluearc/bosTau1/nib
   cp -p /cluster/data/bosTau1/nib/bosTau1.2bit /cluster/bluearc/bosTau1/nib
+
+# GENERATE split masked fas for blastz (DONE, Oct. 19, 2004, Heather)
+  ssh kkr1u00
+  mkdir -p /iscratch/i/bosTau1/splitFas
+  cd /cluster/data/bosTau1
+  /cluster/bin/i386/faSplit sequence /cluster/data/bosTau1/bosTau1.softmask2.fa 350 \
+    /iscratch/i/bosTau1/splitFas
+  # slight problem with directory name
+  cd /iscratch/i/bosTau1
+  mkdir splitDir
+  mv splitFas* splitDir
+  rmdir splitFas
+  # check that I got all scaffolds
+  grep SCAFFOLD *.fa > SCAFFOLD.list
+  # sync
+  /cluster/bin/scripts/iSync
 
 # MAKE 11.OOC FILE FOR BLAT (DONE, Oct. 10, 2004, Heather)
   ssh kkr1u00
@@ -342,3 +360,96 @@ exit; # don't actually run this like a script :)
   cd /cluster/data/genbank
   nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad bosTau1
   # logged to /cluster/data/genbank/var/dbload/hgwdev/logs/YYMMDDHHMMSS.dbload.log
+
+  # ESTs required modification to the build process to deal with the huge
+  # number of scaffolds.  Once completed, the following line was
+  # added to genbank.conf to enable it's uses:
+    bosTau1.mondoTwoBitParts = 5000
+  ssh eieio
+  cd /cluster/data/genbank
+  bin/gbAlignStep -initial -srcDb=genbank -type=est bosTau1
+  
+  # load the ESTs, reloading mRNAs as well
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -drop -initialLoad bosTau1
+
+  # add bosTau1 to list of databases to align in
+  #  /cluster/data/genbank/etc/align-genbank
+
+# GC PERCENT (DONE Oct. 17, 2004, Heather)
+  # use old-style (non-wiggle)
+  # run on kolossus (serialized)
+  # use default window size (20K); only applies to 25k scaffolds
+  # ran from Friday night 4pm to Sunday morning 7am
+  # dominated one CPU
+  ssh kolossus
+  mkdir /cluster/data/bosTau1/bed/gcPercent
+  cd /cluster/data/bosTau1/bed/gcPercent
+  # gcPercent modified to recognize 2bit file
+  /cluster/bin/x86_64/gcPercent -noLoad bosTau1 /gbdb/bosTau1/nib
+  ssh hgwdev
+  cd /cluster/home/heather/kent/src/hg/lib
+  # change index from 12 to 14 characters
+  hgsql bosTau1 < gcPercent.sql
+  load data local infile 'gcPercent.bed' into table gcPercent
+  # 54007 rows
+
+# ALIGN TO HUMAN (BLASTZ)
+# Later these notes will be moved to makeHg17.doc
+  ssh kk
+  cd /cluster/data/hg17/bed
+  mkdir blastz.bosTau1.2004-10-20
+  ln -s /cluster/data/hg17/bed/blastz.bosTau1.2004-10-20 blastz.bosTau1
+  # create DEF file 
+  # for now, not doing ABRIDGE_REPEATS
+  # this means I don't need to create lineage specific repeats
+  # This is because blastz-run wouldn't take advantage of these
+  # because my query is in scaffolds
+
+# human vs. cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow
+SEQ2_DIR=/iscratch/i/bosTau1/splitDir
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.bosTau1.2004-10-20
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  # create S2.len so make-joblist doesn't have to
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  # check how many lines in j
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para try, push check, para push, para check....

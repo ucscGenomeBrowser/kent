@@ -15,8 +15,9 @@ all:    scripts
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-	    echo cp $$F ${SCRIPTS}; \
-	    cp $$F ${SCRIPTS}; \
+	    rm -f ${SCRIPTS}/$${F}; \
+	    echo cp -p $$F ${SCRIPTS}; \
+	    cp -p $$F ${SCRIPTS}; \
 	 done
 
 test:
@@ -50,6 +51,7 @@ DIRS = \
 	convolve \
 	detab \
 	endsInLf \
+	faAlign \
 	faCmp \
 	faCount \
 	faFilterN \

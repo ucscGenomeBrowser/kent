@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.141 2004/09/26 07:59:12 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.145 2004/10/19 22:02:32 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -444,7 +444,7 @@ radioButton(logicTypeVar, logicTypeVal, "or");
 printf("<BR>\n");
 
 /* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
 cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
@@ -471,7 +471,7 @@ radioButton(logicTypeVar, logicTypeVal, "or");
 printf("<BR>\n");
 
 /* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
 cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
@@ -771,11 +771,12 @@ char *species[100];
 int speciesCt = chopLine(speciesOrder, species);
 int i;
 char option[64];
+
 //#define CODON_HIGHLIGHT
 #ifdef CODON_HIGHLIGHT
 char *currentCodonMode;
 #endif
-puts("<p><b>Pairwise alignments:</b><br>" );
+puts("<P><B>Pairwise alignments:</B><BR>" );
 puts("<TABLE><TR>");
 for (i = 0; i < speciesCt; i++)
     {
@@ -784,15 +785,22 @@ for (i = 0; i < speciesCt; i++)
     puts("<TD>");
     safef(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
     cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-    printf ("%s<br>", species[i]);
+    printf ("%s<BR>", species[i]);
     puts("</TD>");
     }
 puts("</TR></TABLE><BR>");
 
+puts("<P><B>Multiple alignment base-level:</B><BR>" );
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
+puts("Display bases identical to reference as dots<BR>" );
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
+puts("Display unaligned bases with spanning chain as gaps with break indicator" );
 
-puts("<p><b>Base-level codon highlighting:</b></p>" );
+puts("<P><B>Codon highlighting:</B></P>" );
 
-#ifdef CODON_HIGHLIGHT
+#ifdef GENE_FRAMING
 
 safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
 currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
@@ -813,15 +821,16 @@ genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
 puts ("&nbsp; Alternate colors every");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<br>");
+puts ("bases<BR>");
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
                         BASE_COLORS_OFFSET_VAR);
 puts ("&nbsp; Offset alternate colors by");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<br>");
+puts ("bases<BR>");
 #endif
 
-puts("<p><b>Multiple alignment:</b>" );
+
+puts("<P><B>Conservation graph:</B>" );
 wigUi(tdb);
 }
 

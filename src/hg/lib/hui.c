@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.47 2004/08/30 19:34:01 daryl Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.49 2004/10/19 18:55:00 kent Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -40,13 +40,15 @@ struct controlGrid *cg;
 AllocVar(cg);
 cg->columns = columns;
 cg->align = cloneString(align);
+cg->rowOpen = FALSE;
 return cg;
 }
 
 void controlGridEndRow(struct controlGrid *cg)
 /* Force end of row. */
 {
-printf("</tr>\n<tr>");
+printf("</tr>");
+cg->rowOpen = FALSE;
 cg->columnIx = 0;
 }
 
@@ -55,6 +57,11 @@ void controlGridStartCell(struct controlGrid *cg)
 {
 if (cg->columnIx == cg->columns)
     controlGridEndRow(cg);
+if (!cg->rowOpen)
+    {
+    printf("<tr>");
+    cg->rowOpen = TRUE;
+    }
 if (cg->align)
     printf("<td align=%s>", cg->align);
 else
@@ -78,7 +85,9 @@ if (cg != NULL)
     if (cg->columnIx != 0 && cg->columnIx < cg->columns)
 	for( i = cg->columnIx; i <= cg->columns; i++)
 	    printf("<td>&nbsp</td>\n");
-    printf("</tr>\n</table>\n");
+    if (cg->rowOpen)
+	printf("</tr>\n");
+    printf("</table>\n");
     freeMem(cg->align);
     freez(pCg);
     }
@@ -273,15 +282,15 @@ static char *snpTypeStates[] = {
     "exclude",
 };
 
-static char *snpTypeValue[] = {
-    "include",
-    "exclude",
-};
-
 static char *snpTypeDefaults[] = {
     "include",
     "include",
     "include",
+};
+
+static char *snpTypeValue[] = {
+    "include",
+    "exclude",
 };
 
 enum snpTypeEnum snpTypeStringToEnum(char *string)
@@ -388,14 +397,6 @@ static char *snpSourceDataName[] = {
     "Affy120K",
 };
 
-static char *snpSourceValue[] = {
-    "red",
-    "green",
-    "blue",
-    "black",
-    "exclude",
-};
-
 static char *snpSourceDefault[] = {
     "blue",
     "blue",
@@ -403,6 +404,14 @@ static char *snpSourceDefault[] = {
     "black",
     "green",
     "green",
+};
+
+static char *snpSourceValue[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+    "exclude",
 };
 
 enum snpSourceEnum snpSourceStringToEnum(char *string)

@@ -28,7 +28,7 @@ wiggle mzDy1Dp1Ag1_phast_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise mypa
-speciesOrder d_yakuba d_pseudoobscura a_gambiae
+speciesOrder droYak1 dp1 anoGam1
 
 track chainDp1
 shortLabel (dp1) D. pseud. Chain

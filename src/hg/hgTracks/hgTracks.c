@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.816 2004/10/13 17:46:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.825 2004/10/21 04:45:29 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -102,6 +102,7 @@ Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 Color orangeColor = 0;
+Color brickColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -807,7 +808,7 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
     for (i = x1 ; i < x1+w; i++)
         {
         assert(i<MAXPIXELS);
-        z = colorBin[i][color] ;  /*pick color of highest scoreing alignment  for this pixel */
+        z = colorBin[i][color] ;  /*pick color of highest scoring alignment  for this pixel */
         colorBin[i][color] = (z > score)? z : score;
         }
     }
@@ -1075,6 +1076,11 @@ exprBedColorsMade = TRUE;
 Color  makeOrangeColor(struct vGfx *vg)
 {
 return vgFindColorIx(vg, 230, 130, 0);
+}
+
+Color  makeBrickColor(struct vGfx *vg)
+{
+return vgFindColorIx(vg, 230, 50, 110);
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -6467,6 +6473,12 @@ Color alignInsertsColor()
     return orangeColor;
 }
 
+Color alignBreakColor()
+/* Return color used for alignment break indicators in multiple alignments */
+{
+    return brickColor;
+}
+
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
@@ -6474,10 +6486,12 @@ int spreadStringCharWidth(int width, int count)
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count)
+		       char *match, int count, bool dots)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color. 
+ * with the main color, mismatched letters will have alt color (or 
+ * matching letters with a dot, and mismatched bases with main color if this
+ * option is selected).
  * Draw a vertical bar in orange where sequence lacks gaps that
  * are in reference sequence (possible insertion) -- this is indicated
  * by an escaped insert count in the sequence.  The escape char is backslash.
@@ -6494,6 +6508,8 @@ int motifCount = 0;
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
 int textLength = strlen(text);
+bool selfLine = (match == text);
+char option[32];
 
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0)
@@ -6522,22 +6538,58 @@ if(motifString != NULL && strlen(motifString) != 0)
 
 for (i=0; i<count; i++, text++, textPos++)
     {
-    x1 = i * width / count;
-    x2 = (i+1) * width/count;
-    if (*text == '|')
+    char printChar;
+    x1 = i * width/count;
+    x2 = (i+1) * width/count - 1;
+    if (match != NULL && *text == '|')
         {
         /* insert count follows -- replace with a colored vertical bar */
         text++;
 	textPos++;
         i--;
-        vgBox(vg, x1+x, y, 1, height, alignInsertsColor());
+        vgBox(vg, x+x1, y, 1, height, alignInsertsColor());
         continue;
         }
-    c[0] = *text;
+    printChar = *text;
+    if (match != NULL && (*text == UNALIGNED_SEQ_BEFORE ||
+                         *text == UNALIGNED_SEQ_AFTER ||
+                         *text == UNALIGNED_SEQ_BOTH))
+        {
+        /* process unaligned region indicators - display as gaps
+         * delimited by vertical red bars, suppressing redundant ones:
+         * X, ^ -> left bar, unless preceded by V or X
+         * X, V -> right bar, unless preceded by ^ or X
+         */ 
+        if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
+            if (i==0 || (text[-1] != UNALIGNED_SEQ_AFTER && 
+                         text[-1] != UNALIGNED_SEQ_BOTH))
+                /* vertical bar to the left of the gap */
+                vgBox(vg, x+x1, y, 1, height, alignBreakColor());
+        if (*text == UNALIGNED_SEQ_AFTER || *text == UNALIGNED_SEQ_BOTH)
+            if (i==count-1 || (text[1] != UNALIGNED_SEQ_BEFORE && 
+                               text[1] != UNALIGNED_SEQ_BOTH))
+                /* vertical bar to the right of the gap */
+                vgBox(vg, x+x2, y, 1, height, alignBreakColor());
+        printChar = '-';
+        }
+    c[0] = printChar;
     clr = color;
-    if (match != NULL && match[i])
-        if (*text != match[i])
-            clr = noMatchColor;
+    if (dots)
+        {
+        /* display bases identical to reference as dots */
+        /* suppress for first line (self line) */
+        if (!selfLine && match != NULL && match[i])
+            if (*text == match[i])
+                c[0] = '.';
+        }
+    else
+        {
+        /* display bases identical to reference in main color, mismatches
+         * in alt color */
+        if (match != NULL && match[i])
+            if (*text != match[i])
+                clr = noMatchColor;
+        }
     if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
@@ -6549,11 +6601,13 @@ for (i=0; i<count; i++, text++, textPos++)
 freez(&inMotif);
 }
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
-	                Color color, MgFont *font, char *s, int count)
+void spreadBasesString(struct vGfx *vg, int x, int y, int width, 
+                        int height, Color color, MgFont *font, 
+                        char *s, int count)
 /* Draw evenly spaced letters in string. */
 {
-spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
+spreadAlignString(vg, x, y, width, height, color, font, s, 
+                        NULL, count, FALSE);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
@@ -6570,7 +6624,8 @@ else
 
 if (complementSeq)
     complement(seq->dna, seq->size);
-spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
+spreadBasesString(vg, x, y, width, height, color, font, 
+                                seq->dna, seq->size);
 
 if (thisSeq == NULL)
     freeDnaSeq(&seq);
@@ -6611,7 +6666,7 @@ for(track = *pTrackList; track != NULL; track = track->next)
 	}
     }
 /* If no ideogram don't draw. */
-if(ideoTrack == NULL)
+if(ideoTrack == NULL || !hTableExists(track->mapName))
     doIdeo = FALSE;
 else
     {
@@ -6763,6 +6818,7 @@ makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
+brickColor = makeBrickColor(vg);
 
 if (rulerMode == RULER_MODE_FULL &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
@@ -8758,7 +8814,12 @@ if(hideAll)
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->visibility != tvHide)
+    if(!hTrackOnChrom(track->tdb, chromName)) 
+	{
+	track->limitedVis = tvHide;
+	track->limitedVisSet = TRUE;
+	}
+    else if (track->visibility != tvHide)
 	{
 	track->loadItems(track); 
 	}
@@ -8933,7 +8994,6 @@ if (!hideControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    hPrintf("<TR>");
     for (group = groupList; group != NULL; group = group->next)
         {
 	struct trackRef *tr;
@@ -8942,6 +9002,8 @@ if (!hideControls)
 	    continue;
 
 	/* Print group label on left. */
+	hPrintf("<TR>");
+	cg->rowOpen = TRUE;
 	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
 		MAX_CONTROL_COLUMNS);
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
@@ -8958,7 +9020,6 @@ if (!hideControls)
 		    chromName, RULER_TRACK_NAME);
 	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
             hPrintf("</A>");
-            // TODO: perhaps replace with standard vis menu, below */
 	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
                                                         rulerMenu[rulerMode]);
 	    controlGridEndCell(cg);
@@ -8975,9 +9036,15 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDownClass(track->mapName, track->visibility, track->canPack,
+
+	    /* If track is not on this chrom print an informational
+	       message for the user. */
+	    if(hTrackOnChrom(track->tdb, chromName)) 
+		hTvDropDownClass(track->mapName, track->visibility, track->canPack,
                                  (track->visibility == tvHide) ? 
-                                        "hiddenText" : "normalText" );
+				 "hiddenText" : "normalText" );
+	    else 
+		hPrintf("[No data-%s]", chromName);
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */

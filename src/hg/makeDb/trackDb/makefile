@@ -44,6 +44,14 @@ MGC_DBS = \
 	danRer1
 
 update:
+	@for D in *; do \
+            if [ -d "$$D" ]; then \
+                if [ -e "$$D/makefile" ]; then \
+                    ( cd $$D && echo $$D && $(MAKE) ) ;\
+                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+                fi; \
+            fi; \
+	done
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
@@ -67,6 +75,14 @@ update:
 
 alpha:
 	cvs up -d -P .
+	@for D in *; do \
+            if [ -d "$$D" ]; then \
+                if [ -e "$$D/makefile" ]; then \
+                    ( cd $$D && echo $$D && $(MAKE) ) ;\
+                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+                fi; \
+            fi; \
+	done
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
@@ -92,6 +108,14 @@ alpha:
 
 strict:
 	cvs up -d -P .
+	@for D in *; do \
+            if [ -d "$$D" ]; then \
+                if [ -e "$$D/makefile" ]; then \
+                    ( cd $$D && echo $$D && $(MAKE) ) ;\
+                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+                fi; \
+            fi; \
+	done
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
@@ -121,6 +145,14 @@ beta: checkbeta strict
 # This target adds trackDbLocal to the mgc-specific server.  Also
 # loads the grpMgc table.
 mgc:
+	@for D in *; do \
+            if [ -d "$$D" ]; then \
+                if [ -e "$$D/makefile" ]; then \
+                    ( cd $$D && echo $$D && $(MAKE) ) ;\
+                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+                fi; \
+            fi; \
+	done
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \

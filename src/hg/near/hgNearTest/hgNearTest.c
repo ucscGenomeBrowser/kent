@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.15 2004/05/03 19:33:49 galt Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.17 2004/10/19 22:55:02 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -271,7 +271,7 @@ struct sqlConnection *conn = sqlConnect(db);
 char query[256], **row;
 struct sqlResult *sr;
 struct slName *list = NULL, *el;
-safef(query, sizeof(query), "select %s from %s order by rand() limit %d", 
+safef(query, sizeof(query), "select distinct %s from %s order by rand() limit %d", 
 	field, table, count);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -440,7 +440,7 @@ struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
-htmlPageSetVar(emptyConfig, NULL, orderVarName, "geneDistance");
+htmlPageSetVar(emptyConfig, NULL, orderVarName, "nameSimilarity");
 htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 
 printPage = quickSubmit(emptyConfig, NULL, org, db, col, gene, "colPrint", "Submit", "on");

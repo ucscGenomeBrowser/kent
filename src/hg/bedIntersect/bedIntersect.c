@@ -5,11 +5,19 @@
 #include "options.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedIntersect.c,v 1.5 2004/03/05 15:09:05 baertsch Exp $";
+static char const rcsid[] = "$Id: bedIntersect.c,v 1.6 2004/10/19 15:51:58 hiram Exp $";
 
-boolean aHitAny = FALSE;
-boolean bScore = FALSE;
-float aCoverage = 0.00001;
+static boolean aHitAny = FALSE;
+static boolean bScore = FALSE;
+static float aCoverage = 0.00001;
+
+static struct optionSpec optionSpecs[] = {
+    {"aHitAny", OPTION_BOOLEAN},
+    {"bScore", OPTION_BOOLEAN},
+    {"aCoverage", OPTION_FLOAT},
+    {NULL, 0}
+};
+
 
 void usage()
 /* Explain usage and exit. */
@@ -20,7 +28,7 @@ errAbort(
   "   bedIntersect a.bed b.bed output.bed\n"
   "options:\n"
   "   -aHitAny output all of a if any of it is hit by b\n"
-  "   -bMinCoverage=0.N min coverage of b to output match.  Default .00001\n"
+  "   -aCoverage=0.N min coverage of b to output match.  Default .00001\n"
   "   -bScore output score from b.bed (must be at least 5 field bed)\n"
   );
 }
@@ -200,7 +208,8 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
+
 aHitAny = optionExists("aHitAny");
 bScore = optionExists("bScore");
 aCoverage = optionFloat("aCoverage", aCoverage);

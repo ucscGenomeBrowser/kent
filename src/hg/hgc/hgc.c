@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.773 2004/10/13 17:49:30 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.775 2004/10/20 03:11:48 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -431,18 +431,59 @@ cfmFree(&cfm);
 printf("</TT></PRE>");
 }
 
+void printBand(char *chrom, int start, int end, boolean tableFormat)
+/* Print all matching chromosome bands.  */
+/* Ignore end if it is zero. */
+{
+char sband[32], eband[32];
+boolean gotS = FALSE;
+boolean gotE = FALSE;
+
+if (start < 0)
+    return;
+gotS = hChromBand(chrom, start, sband);
+// if the start lookup fails, don't bother with the end lookup
+if (!gotS)
+    return;
+// if no end chrom, print start band and exit
+if (end == 0)
+    {
+    if (tableFormat)
+        printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+    else
+        printf("<B>Band:</B> %s<BR>\n", sband);
+    return;
+}
+gotE = hChromBand(chrom, end, eband);
+// if eband equals sband, just use sband
+if (gotE && sameString(sband,eband))
+   gotE = FALSE;
+if (!gotE)
+    { 
+    if (tableFormat)
+        printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+    else
+        printf("<B>Band:</B> %s<BR>\n", sband);
+    return;
+    }
+if (tableFormat)
+    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+else
+    printf("<B>Bands:</B> %s - %s<BR>\n", sband, eband);
+
+}
+
 
 void printPosOnChrom(char *chrom, int start, int end, char *strand,
 		     boolean featDna, char *item)
 /* Print position lines referenced to chromosome. Strand argument may be NULL */
 {
-char band[64];
 
 printf("<B>Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
 	   hGetDb(), chrom, start+1, end);
 printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
-if (hChromBand(chrom, (start + end)/2, band))
-    printf("<B>Band:</B> %s<BR>\n", band);
+// printBand(chrom, (start + end)/2, 0, FALSE);
+printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
 if (strand != NULL)
     printf("<B>Strand:</B> %s<BR>\n", strand);
@@ -2001,7 +2042,7 @@ struct dnaSeq *loadGenomePart(char *db,
 {
 char nibFile[512];
 findNib(db, chrom, nibFile);
-return fetchSeq(nibFile, chrom, start, end);
+return hFetchSeq(nibFile, chrom, start, end);
 }
 
 void printLabeledNumber(char *org, char *label, long long number)
@@ -9533,7 +9574,7 @@ int end = cartInt(cart, "t");
 struct stsMap stsRow;
 struct stsInfo *infoRow = NULL;
 struct stsInfo2 *info2Row = NULL;
-char band[32], stsid[20];
+char stsid[20];
 int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
@@ -9602,8 +9643,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
 	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
 	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-	if (hChromBand(seqName, start, band))
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
+	printBand(seqName, start, end, TRUE);
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 
@@ -10422,7 +10462,6 @@ char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct fishClones *fc;
-char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
@@ -10438,7 +10477,6 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    boolean gotS, gotB;
     fc = fishClonesLoad(row);
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
@@ -10449,19 +10487,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("</TABLE>\n");
     htmlHorizontalLine();
 
@@ -10539,7 +10565,6 @@ char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct recombRate *rr;
-char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
@@ -10555,26 +10580,13 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    boolean gotS, gotB;
     rr = recombRateLoad(row);
     /* Print out general sequence positional information */
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("<TR><TH ALIGN=left>deCODE Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->decodeAvg);
     printf("<TR><TH ALIGN=left>deCODE Female Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->decodeFemale);
     printf("<TR><TH ALIGN=left>deCODE Male Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->decodeMale);
@@ -10619,26 +10631,13 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    boolean gotS, gotB;
     rr = recombRateRatLoad(row);
     /* Print out general sequence positional information */
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("<TR><TH ALIGN=left>SHRSPxBN Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->shrspAvg);
     printf("<TR><TH ALIGN=left>FHHxACI Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->fhhAvg);
     printf("</TABLE>\n");
@@ -10660,7 +10659,6 @@ char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct recombRateMouse *rr;
-char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
@@ -10676,26 +10674,13 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    boolean gotS, gotB;
     rr = recombRateMouseLoad(row);
     /* Print out general sequence positional information */
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("<TR><TH ALIGN=left>WI Genetic Map Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->wiAvg);
     printf("<TR><TH ALIGN=left>MGD Genetic Map Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->mgdAvg);
     printf("</TABLE>\n");
@@ -10717,7 +10702,6 @@ char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct genMapDb *upc;
-char sband[32], eband[32];
 int i,size;
 
 /* Print out non-sequence info */
@@ -10732,7 +10716,6 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    boolean gotS, gotB;
     upc = genMapDbLoad(row);
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
@@ -10745,19 +10728,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     size = end - start + 1;
     printf("<TR><TH ALIGN=left>Size:</TH><TD>%d</TD></TR>\n",size);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("</TABLE>\n");
     htmlHorizontalLine();
     
@@ -11445,7 +11416,6 @@ char query[256];
 char **row;
 int start = cartInt(cart, "o");
 struct jaxQTL *jaxQTL;
-char band[64];
 
 genericHeader(tdb, item);
 sprintf(query, "select * from jaxQTL where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -11461,8 +11431,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
 	   jaxQTL->marker);
     printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
-    if (hChromBand(seqName, start, band))
-	printf("<B>Band:</B> %s<BR>\n", band);
+    printBand(seqName, start, 0, FALSE);
     printf("<B>Start of marker in chromosome:</B> %d<BR>\n", start+1);
     }
 printTrackHtml(tdb);
@@ -11701,8 +11670,6 @@ int length = end - start;
 int i;
 struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
-char sband[32], eband[32];
-boolean gotS, gotB;
 boolean hasBin = hOffsetPastBin(seqName, track);
 
 /* Determine type */
@@ -11817,19 +11784,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     printf("<TR><TH ALIGN=left>Score:</TH><TD>%d</TD></TR>\n", lfs->score);
-    gotS = hChromBand(seqName, start, sband);
-    gotB = hChromBand(seqName, end, eband);
-    if (gotS && gotB)
-	{
-	if (sameString(sband,eband)) 
-	    {
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	    }
-	else
-	    {
-	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
-	    }
-	}
+    printBand(seqName, start, end, TRUE);
     printf("</TABLE>\n");
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     if (lfs->score == 1000)
@@ -12229,8 +12184,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-char startBand[32]; 
-char endBand[32]; 
 char **row;
 int rowOffset;
 struct mcnBreakpoints *mcnRecord;
@@ -12246,9 +12199,7 @@ printf("<TABLE>\n");
 printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
 printf("<TR><TH ALIGN=left>Begin in Chromosome:</TH><TD>%d</TD></TR>\n",start);
 printf("<TR><TH ALIGN=left>End in Chromosome:</TH><TD>%d</TD></TR>\n",end);
-if (hChromBand(seqName, start, startBand) && hChromBand(seqName, end - 1, endBand))
-    printf("<TR><TH Align=left>Chromosome Band Range:</TH><TD>%s - %s<TD></TR>\n",
-	   startBand, endBand);	
+printBand(seqName, start, end, TRUE);
 printf("</TABLE>\n");
 
 /* Find all of the breakpoints in this range for this name*/
