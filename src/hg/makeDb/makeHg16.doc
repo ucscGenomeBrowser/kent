@@ -9974,9 +9974,9 @@ axtChain $1 \
 # Ensembl handles random chromosomes differently than us.  They give the
 # contig name.  We can lift these up to our chrN_random chromosomes
     gunzip ensEst.gff.gz
-    grep "^[0-9XY]_" ensEst.gff | sed "s/[0-9XY]_//" > random.gff
+    sed "/^[0-9XY]*\t/d" ensEst.gff | sed "s/^.*_NT/NT/" > random.gff 
     liftUp -type=".gff" liftRandom.gff /cluster/data/hg16/jkStuff/liftAll.lft warn random.gff
-    grep -v "^[0-9XY]_" *.gff | grep -v "Un_NT" | sed "s/^/chr/" > unrandom.gff
+    sed "/_NT_/d" ensEst.gff | sed "s/^/chr/" > unrandom.gff 
     cat liftRandom.gff unrandom.gff > fixed.gff
     ldHgGene hg16 ensESTGene fixed.gff
 
