@@ -1319,7 +1319,7 @@ for (oneBun = *pOneList; oneBun != NULL; oneBun = oneBun->next)
 ssBundleFreeList(pOneList);
 }
 
-static void jiggleSmallExons(struct ffAli *ali, struct dnaSeq *nSeq, struct dnaSeq *hSeq)
+static boolean jiggleSmallExons(struct ffAli *ali, struct dnaSeq *nSeq, struct dnaSeq *hSeq)
 /* See if can jiggle small exons to match splice sites a little
  * better. */
 {
@@ -1328,7 +1328,7 @@ int orient;
 boolean creeped = FALSE;
 
 if (ffAliCount(ali) < 3)
-    return;
+    return FALSE;
 orient = ffIntronOrientation(ali);
 left = ali;
 mid = left->right;
@@ -1387,6 +1387,7 @@ while (right != NULL)
     }
 if (creeped)
     ffSlideIntrons(ali);
+return creeped;
 }
 
 static struct ffAli *refineSmallExons(struct ffAli *ff, 
@@ -1395,7 +1396,8 @@ static struct ffAli *refineSmallExons(struct ffAli *ff,
  * sites if possible and looking a little harder for small first
  * and last exons. */
 {
-jiggleSmallExons(ff, nSeq, hSeq);
+if (jiggleSmallExons(ff, nSeq, hSeq))
+    ff = ffRemoveEmptyAlis(ff, TRUE);
 return ff;
 }
 
