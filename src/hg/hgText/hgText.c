@@ -671,8 +671,21 @@ int compareTable(const void *elem1,  const void *elem2)
 {
 struct hashEl* a = *((struct hashEl **)elem1);
 struct hashEl* b = *((struct hashEl **)elem2);
-	
-return strcmp(a->name, b->name);
+char *na, *nb;
+if ((na = strchr(a->name, '.')) == NULL)
+    na = a->name;
+if ((nb = strchr(b->name, '.')) == NULL)
+    nb = b->name;
+return strcmp(na, nb);
+}
+
+boolean excludeTable(char *tbl)
+/* Exclude these large tables. I think we should use a better algo. than 
+ * hardcoding -- a count(*) cutoff?  And should alert the user that the 
+ * tables exist, but are being excluded due to size. */
+{
+return(sameString(tbl, "all_est") ||
+       sameString(tbl, "all_mrna"));
 }
 
 void getTableNames(char *db, struct sqlConnection *conn,
@@ -697,7 +710,7 @@ strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    if (strcmp(row[0], "all_est") == 0 || strcmp(row[0], "all_mrna") == 0)
+    if (excludeTable(row[0]))
 	continue;
 
     /* if table name is of the form, chr*_random_* or chr*_*: */
@@ -776,8 +789,10 @@ sqlDisconnect(&conn);
 ctPosTableList = getCustomTrackNames();
 /* prepend ct, append hgFixed db lists onto default db lists and return */
 posTableList = slCat(posTableList, fixedPosTableList);
+slSort(&posTableList, compareTable);
 *retPosTableList = slCat(ctPosTableList, posTableList);
 *retNonposTableList = slCat(nonposTableList, fixedNonposTableList);
+slSort(retNonposTableList, compareTable);
 }
 
 void doChooseTable()
@@ -795,7 +810,8 @@ cgiMakeHiddenVar("db", database);
 cartSetString(cart, "db", database);
 puts("<TABLE CELLPADDING=\"8\">");
 puts("<TR><TD>");
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\"><B>Help</B></A>");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
+     "<B>Help</B></A>");
 puts("</TD></TR>");
 puts("<TR><TD>");
 
