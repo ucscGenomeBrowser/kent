@@ -10,6 +10,8 @@
 #include "nib.h"
 #include "axt.h"
 
+boolean qChain = FALSE;  /* Do chain from query side. */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -18,8 +20,52 @@ errAbort(
   "usage:\n"
   "   netToAxt in.net in.chain tNibDir qNibDir out.axt\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -qChain - net is with respect to the q side of chains.\n"
   );
+}
+
+void chainSwap(struct chain *chain)
+/* Swap target and query side of chain. */
+{
+struct chain old = *chain;
+struct boxIn *b;
+
+/* Copy basic stuff swapping t and q. */
+chain->qName = old.tName;
+chain->tName = old.qName;
+chain->qStart = old.tStart;
+chain->qEnd = old.tEnd;
+chain->tStart = old.qStart;
+chain->tEnd = old.qEnd;
+chain->qSize = old.tSize;
+chain->tSize = old.qSize;
+
+/* Swap t and q in blocks. */
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    struct boxIn old = *b;
+    b->qStart = old.tStart;
+    b->qEnd = old.tEnd;
+    b->tStart = old.qStart;
+    b->tEnd = old.qEnd;
+    }
+
+/* Cope with the minus strand. */
+if (chain->qStrand == '-')
+    {
+    /* chain's are really set up so that the target is on the
+     * + strand and the query is on the minus strand.
+     * Therefore we need to reverse complement both 
+     * strands while swapping to preserve this. */
+    for (b = chain->blockList; b != NULL; b = b->next)
+        {
+	reverseIntRange(&b->tStart, &b->tEnd, chain->tSize);
+	reverseIntRange(&b->qStart, &b->qEnd, chain->qSize);
+	}
+    reverseIntRange(&chain->tStart, &chain->tEnd, chain->tSize);
+    reverseIntRange(&chain->qStart, &chain->qEnd, chain->qSize);
+    slReverse(&chain->blockList);
+    }
 }
 
 struct hash *chainReadAll(char *fileName)
@@ -37,6 +83,8 @@ while ((chain = chainRead(lf)) != NULL)
     if (hashLookup(hash, nameBuf))
         errAbort("Duplicate chain %d ending line %d of %s", 
 		chain->id, lf->lineIx, lf->fileName);
+    if (qChain)
+        chainSwap(chain);
     hashAdd(hash, nameBuf, chain);
     ++count;
     }
@@ -133,6 +181,7 @@ if (bList != NULL)
 *retSubChain = *retChainToFree = sub;
 }
 
+
 struct axt *axtFromBlocks(
 	struct chain *chain,
 	struct boxIn *startB, struct boxIn *endB,
@@ -209,7 +258,7 @@ assert(symIx == symCount);
 axt->score = axtScoreDnaDefault(axt);
 return axt;
 }
-	
+
 struct axt *axtListFromChain(struct chain *chain, 
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset)
@@ -338,6 +387,7 @@ int main(int argc, char *argv[])
 {
 dnaUtilOpen();
 optionHash(&argc, argv);
+qChain = optionExists("qChain");
 if (argc != 6)
     usage();
 netToAxt(argv[1], argv[2], argv[3], argv[4], argv[5]);
