@@ -6,10 +6,10 @@
 #include "fa.h"
 #include "genoFind.h"
 #include "psl.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.26 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.27 2003/10/13 18:22:37 kent Exp $";
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -87,7 +87,7 @@ char databaseName[256];
 snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
-	cgiVarExists("nohead"), databaseName, 23, 3.0e9, out);
+	optionExists("nohead"), databaseName, 23, 3.0e9, out);
 gfOutputHead(gvo, out);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
@@ -139,21 +139,21 @@ if (out != stdout)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiFromCommandLine(&argc, argv, FALSE);
+optionHash(&argc, argv);
 if (argc != 6)
     usage();
-if (cgiVarExists("prot"))
+if (optionExists("prot"))
     qType = tType = "prot";
-qType = cgiUsualString("q", qType);
-tType = cgiUsualString("t", tType);
+qType = optionVal("q", qType);
+tType = optionVal("t", tType);
 if (sameWord(tType, "prot") || sameWord(tType, "dnax") || sameWord(tType, "rnax"))
     minIdentity = 25;
-minIdentity = cgiUsualDouble("minIdentity", minIdentity);
-minScore = cgiOptionalInt("minScore", minScore);
-dots = cgiOptionalInt("dots", 0);
-outputFormat = cgiUsualString("out", outputFormat);
+minIdentity = optionFloat("minIdentity", minIdentity);
+minScore = optionInt("minScore", minScore);
+dots = optionInt("dots", 0);
+outputFormat = optionVal("out", outputFormat);
 /* set global for fuzzy find functions */
-setFfIntronMax(cgiOptionalInt("maxIntron", ffIntronMaxDefault));
+setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);
 return 0;
 }
