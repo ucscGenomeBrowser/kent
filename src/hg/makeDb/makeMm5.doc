@@ -5981,3 +5981,17 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgPepPred mm5 generic sgpPep sgpPep.fa
 
 
+# MAKE mm5-hg17 OVER.CHAIN FOR LIFTOVER  (DONE 2004-09-24 braney)
+    ssh kolossus
+    mkdir -p /cluster/data/mm5/bed/bedOver/mm5Tohg17
+    cd /cluster/data/mm5/bed/bedOver/mm5Tohg17
+    set chainDir = /cluster/data/mm5/bed/blastz.hg17/axtChain
+    netSplit $chainDir/human.net net
+    mkdir subset
+    foreach f ($chainDir/chain/*.chain)
+      echo subsetting $f:t:r
+      netChainSubset net/$f:t:r.net $f subset/$f:t
+    end
+    cat subset/*.chain > /cluster/data/mm5/bed/bedOver/mm5Tohg17.chain
+
+
