@@ -6,7 +6,7 @@ shortLabel Human
 tables hgBlastTab 
 idSql select target from hgBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 otherName GenBank
 priority 10
@@ -16,7 +16,7 @@ shortLabel Mouse
 tables mmBlastTab 
 idSql select target from mmBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 otherName GenBank
 priority 20
@@ -26,7 +26,7 @@ shortLabel Rat
 tables rnBlastTab 
 idSql select target from rnBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 otherName GenBank
 priority 25
@@ -45,7 +45,7 @@ shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
-sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&db=0&near_search=%s
 otherName FlyBase
 otherUrl http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
 priority 40
@@ -55,7 +55,7 @@ shortLabel C. elegans
 tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=C.+elegans&position=%s
-sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&db=0&near_search=%s
 otherName WormBase
 otherUrl http://www.wormbase.org/db/gene/gene?name=%s
 priority 50
@@ -65,7 +65,7 @@ shortLabel S. cerevisiae
 tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
 genomeUrl ../cgi-bin/hgTracks?org=S.+cerevisiae&position=%s
-sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&db=0&near_search=%s
 otherName SGD
 otherUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 priority 60
