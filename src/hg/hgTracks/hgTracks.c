@@ -6954,6 +6954,16 @@ else				/* try to make the button look as if
 }
 
 
+void beforeFirstPeriod( char *str )
+{
+char *t = rindex( str, '.' );
+
+if( t == NULL )
+    return;
+else
+    str[strlen(str) - strlen(t)] = '\0';
+}
+
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
 {
@@ -7083,6 +7093,7 @@ if (withLeftLabels)
 		start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
+            char *rootName;
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
 		    newy = y;
@@ -7125,7 +7136,12 @@ if (withLeftLabels)
 				}
 			    }
 			prev = item;
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+
+            rootName = cloneString( name );
+            beforeFirstPeriod( rootName );
+			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, rootName);
+            freeMem( rootName );
+
 			/* Reset the clipping rectangle to its original proportions */
 			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			start = 0;
