@@ -1,20 +1,22 @@
+string escapey = "This is a string.\nIt has some escaped\ttabs\n";
 
-string a = "Hello this must be on one line"
+string a = "Hello this must be on one line";
 
-string s = 'Inside of here things aren't interpreted or escaped';
+string s = 'Inside of here things aren\'t interpreted.';
 
 string b = "
 This can span
 multiple lines ok.
-It is terminated by <quote><newline>"
+It is terminated by a line that starts with a quote.
+";
 
 string c = 
 "
 This is a simple line oriented
 quote of two lines, including lf.
-"
+";
 
-string d = quote m@rker
+string d = quote to m@rker
 Any old thing that isn't the marker.  (And
 the marker can include any characters such
 as @#&A^*(@#, but not a space.  The end of the
@@ -23,4 +25,3 @@ between quote marker and end marker are included.
 in the quote.
 m@rker;
 
-string escapey = "This is a string.\nIt has some escaped\ttabs\n";
