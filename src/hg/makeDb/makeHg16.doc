@@ -9535,6 +9535,7 @@ para push
 #post process and load track
 ./buildSort.sh
 
+
 ### PHASTCONS HUMAN/CHIMP/MOUSE/RAT/CHICKEN (6/20/04, acs)
 
     # this is an addendum to Katie's '5-WAY MULTIZ & PHYLO-HMM' (see above)
@@ -9639,3 +9640,67 @@ rm $TMP/$root.pp
 # TWINSCAN 1.3 GENE PREDICTIONS (2004-07-13 baertsch)
 ## reloaded twinscan to add frame info, no change to data
     ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf -genePredExt
+
+
+#### AFFYTRANSFRAG AND AFFYTRANCRIPTION TRACKS - (2004-07-21 sugnet)
+# tracks covering about 1/3 of genome with probes
+# every 5bp and hybridized to RNA from SK-N-AS cell line.
+# Lifted from genome version hg15.
+
+# affyTransfrag track: lift tranfrags to hg16
+   cd /cluster/store6/weber/affy/transfrags/transfragsLabeled/
+   mkdir hg16
+   cd hg16
+   liftOver ../SK_phase2_tfgs_final /cluster/store4/gs.17/build34/bed/bedOver/33to34.chain \ 
+      SK_phase2_tfgs_final.hg16.bed SK_phase2_tfgs_final.err.bed
+   # check to make sure that most lifted...
+   wc *.bed
+   #  12      49     346 SK_phase2_tfgs_final.err.bed
+   #  170749  853745 6936780 SK_phase2_tfgs_final.hg16.bed
+   #  170761  853794 6937126 total
+   hgLoadBed hg16 affyTransfrags SK_phase2_tfgs_final.hg16.bed 
+   # Reading SK_phase2_tfgs_final.hg16.bed
+   # Loaded 170749 elements of size 5
+   # Sorted
+   # Creating table definition for 
+   # Saving bed.tab
+   # Loading hg16
+
+# affyTranscription track: 
+   cd /cluster/store6/weber/affy/graph/hg15/gz
+   gunzip *.gz
+   mkdir hg16
+   cd hg16
+   ln -s ../*.signal ./
+   # remapGraphs.pl just makes a quick bed file for each signal file with 1bp spans
+   # and then lifts via liftOver to new genome.
+   remapGraphs.pl -liftChain /cluster/store4/gs.17/build34/bed/bedOver/33to34.chain \
+      -oldGenome hg15 -newGenome hg16 *.signal
+   # Lifting chr13.hg16.signal.
+   # Lifting chr13.sk.signal.
+   # Lifting chr14.sk.signal.
+   # Lifting chr19.sk.signal.
+   # Lifting chr20.sk.signal.
+   # Lifting chr21.sk.signal.
+   # Lifting chr22.hg16.signal.
+   # Lifting chr22.sk.signal.
+   # Lifting chr6.sk.signal.
+   # Lifting chr7.sk.signal.
+   # Lifting chrX.sk.signal.
+   # Lifting chrY.sk.signal.
+   # runWiggles.sh just calls wigAsciiToBinary for each signal file.
+   cat ../runWiggles.sh | sed -e 's/hg15/hg16/g' | sed -e 's/sk/hg16/g' > runWiggles.sh
+   ./runWiggles.sh 
+   hgLoadWiggle -pathPrefix=/gbdb/hg16/wib/affyTranscription hg16 affyTranscription *.wig
+   Connected to database hg16 for track affyTranscription
+   Creating table definition with 13 columns in hg16.affyTranscription
+   Saving wiggle.tab
+   Loading hg16
+   cp *.wib /cluster/data/hg16/bed/affyTranscription/wib/
+   cd  /gbdb/hg15/wib/affyTranscription/
+   ln -s /cluster/data/hg16/bed/affyTranscription/wib/*.wib ./
+   cd /cluster/data/hg16/bed/affyTranscription/wib/*.wib
+   chmod 664 *.wib
+   cd /cluster/store6/weber/affy/graph/hg15/gz/hg16
+   rm *.wib *.wig *.bed
+   gzip *hg16.signal &

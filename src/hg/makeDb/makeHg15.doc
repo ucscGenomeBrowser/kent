@@ -4154,3 +4154,40 @@ tail -100f split.log
     mkdir -p liftOver
     cp /cluster/data/hg16/bed/bedOver/over.chain liftOver/hg15ToHg16.over.chain
     gzip liftOver/hg15ToHg16.over.chain
+
+#### AFFYTRANSFRAG AND AFFYTRANCRIPTION TRACKS - (2004-07-21 sugnet)
+# tracks covering about 1/3 of genome with probes
+# every 5bp and hybridized to RNA from SK-N-AS cell line.
+
+# affyTranfrag track: SK_phase2_tfgs_final file emailed from 
+# Hari at Affymetrix.
+    cd /cluster/store6/weber/affy/transfrags/transfragsLabeled
+    hgLoadBed hg15 affyTransfrags SK_phase2_tfgs_final 
+
+# affyTranscription track: Wiggle track of hybridization levels
+# for every 5bp in genome. Quite a lot of data.
+    cd /cluster/store6/weber/affy/graph/hg15/gz
+    # Run wigAsciiToBinary for each chrom. I used small shell script "runWiggles.sh"
+    wigAsciiToBinary -chrom=chr6 -wibFile=chr6.affyTranscription -minVal=0 chr6.sk.signal 
+    wigAsciiToBinary -chrom=chr7 -wibFile=chr7.affyTranscription -minVal=0 chr7.sk.signal 
+    wigAsciiToBinary -chrom=chr13 -wibFile=chr13.affyTranscription -minVal=0 chr13.sk.signal 
+    wigAsciiToBinary -chrom=chr14 -wibFile=chr14.affyTranscription -minVal=0 chr14.sk.signal 
+    wigAsciiToBinary -chrom=chr19 -wibFile=chr19.affyTranscription -minVal=0 chr19.sk.signal 
+    wigAsciiToBinary -chrom=chr20 -wibFile=chr20.affyTranscription -minVal=0 chr20.sk.signal 
+    wigAsciiToBinary -chrom=chr21 -wibFile=chr21.affyTranscription -minVal=0 chr21.sk.signal 
+    wigAsciiToBinary -chrom=chr22 -wibFile=chr22.affyTranscription -minVal=0 chr22.sk.signal 
+    wigAsciiToBinary -chrom=chrX -wibFile=chrX.affyTranscription -minVal=0 chrX.sk.signal 
+    wigAsciiToBinary -chrom=chrY -wibFile=chrY.affyTranscription -minVal=0 chrY.sk.signal 
+    hgLoadWiggle -pathPrefix=/gbdb/hg15/wib/affyTranscription hg15 affyTranscription *.wig
+    # Connected to database hg15 for track affyTranscription
+    # Creating table definition with 13 columns in hg15.affyTranscription
+    # Saving wiggle.tab
+    # Loading hg15
+    cp *.wib /cluster/data/hg15/bed/affyTranscription/wib/
+    cd  /gbdb/hg15/wib/affyTranscription/
+    ln -s /cluster/data/hg15/bed/affyTranscription/wib/*.wib ./
+    cd /cluster/data/hg15/bed/affyTranscription/wib/
+    chmod 664 *.wib
+    cd /cluster/store6/weber/affy/graph/hg15/gz
+    rm *.tab *.wib *.wig
+    gzip *.signal
