@@ -6,18 +6,10 @@
 #include "localmem.h"
 #include "boxClump.h"
 
-static char const rcsid[] = "$Id: boxClump.c,v 1.4 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: boxClump.c,v 1.5 2005/01/10 00:11:34 kent Exp $";
 
 /** Some simple utility function on globally declared 
  ** data structures. **/
-
-int boxInCmpTarget(const void *va, const void *vb)
-/* Compare to sort based on target start. */
-{
-const struct boxIn *a = *((struct boxIn **)va);
-const struct boxIn *b = *((struct boxIn **)vb);
-return a->tStart - b->tStart;
-}
 
 
 void boxClumpFree(struct boxClump **pClump)
@@ -26,7 +18,7 @@ void boxClumpFree(struct boxClump **pClump)
 struct boxClump *clump = *pClump;
 if (clump != NULL)
     {
-    slFreeList(clump->boxList);
+    slFreeList(&clump->boxList);
     freez(pClump);
     }
 }
@@ -290,13 +282,12 @@ for (node = clusterList.head; !dlEnd(node); node = node->next)
     int boxCount = 0;
     int qStart = BIGNUM, qEnd = -BIGNUM;
     int tStart = BIGNUM, tEnd = -BIGNUM;
+    struct boxIn *boxList = NULL;
     cluster = node->val;
-    AllocVar(clump);
-    slAddHead(&clumpList, clump);
     for (box = cluster->boxList; box != NULL; box = box->next)
 	{
 	in = box->in;
-	slAddHead(&clump->boxList, in);
+	slAddHead(&boxList, in);
 	if (in->qStart < qStart) qStart = in->qStart;
 	if (in->qEnd > qEnd) qEnd = in->qEnd;
 	if (in->tStart < tStart) tStart = in->tStart;
@@ -305,6 +296,9 @@ for (node = clusterList.head; !dlEnd(node); node = node->next)
 	}
     if (boxCount > 0)
         {
+	AllocVar(clump);
+	slAddHead(&clumpList, clump);
+	clump->boxList = boxList;
 	clump->boxCount = boxCount;
 	clump->qStart = qStart;
 	clump->qEnd = qEnd;
@@ -312,8 +306,8 @@ for (node = clusterList.head; !dlEnd(node); node = node->next)
 	clump->tEnd = tEnd;
 	}
     }
-lmCleanup(&lm);
 *pBoxList = NULL;
+lmCleanup(&lm);
 return clumpList;
 }
 

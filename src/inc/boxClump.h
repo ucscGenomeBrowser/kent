@@ -11,11 +11,7 @@ struct boxIn
     void *data;			 /* Some user-associated data. */
     int qStart, qEnd;		 /* Range covered in query. */
     int tStart, tEnd;		 /* Range covered in target. */
-    int score;			 /* Score associated with box */
     };
-
-int boxInCmpTarget(const void *va, const void *vb);
-/* Compare to sort based on target start. */
 
 struct boxClump
 /* Output of box clumper. */
