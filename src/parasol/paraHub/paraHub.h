@@ -53,7 +53,6 @@ struct user
     struct dlList *curBatches;	/* Current active batches. */
     struct dlList *oldBatches;	/* Inactive batches. */
     int runningCount;		/* Count of jobs currently running. */
-    int doneCount;		/* Count of jobs finished. */
     };
 
 struct spoke
