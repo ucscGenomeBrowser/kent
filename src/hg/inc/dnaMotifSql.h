@@ -2,6 +2,17 @@
  * generated dnaMotifSql.c and dnaMotifSql.sql.  This header links the database and
  * the RAM representation of objects. */
 
+#include "jksql.h"
+#ifndef JKSQL_H
+#define JKSQL_H
+#endif /* JKSQL_H */
+
+#ifndef DNAMOTIF_H
+#define DNAMOTIF_H
+
+#include "dnaMotif.h"
+#endif /* DNAMOTIF_H */
+
 #ifndef DNAMOTIFSQL_H
 #define DNAMOTIFSQL_H
 
