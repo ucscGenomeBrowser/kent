@@ -110,7 +110,7 @@ longLabel DNAase I hypersensitive sites
 priority 200
 visibility hide
 color 120,0,120
-type bed 3 .
+type bed 4 .
 
 track rmsk
 shortLabel RepeatMasker
@@ -205,6 +205,14 @@ track transfacRatios
 shortLabel Transfac LikeRatios
 longLabel Transfac Likelihood Ratios
 priority 450
+visibility hide
+color 12,12,120
+type bed 6
+
+track transfacRatios2
+shortLabel Transfac LikeRatios2
+longLabel Transfac Likelihood Ratios2
+priority 451
 visibility hide
 color 12,12,120
 type bed 6
