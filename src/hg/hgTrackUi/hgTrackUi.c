@@ -358,6 +358,20 @@ printf("<br><br>");
 
 }
 
+void blatHumanUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blatHuman.color", "off");
+
+printf("<p><b>Color track based on human chromosome</b>: ");
+cgiMakeRadioButton("blatHuman.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blatHuman.color", "off", sameString(aa, "off"));
+printf(" off ");
+printf("<br><br>");
+
+}
+
 void zooUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
 {
@@ -550,6 +564,8 @@ else if (sameString(track, "mouseSyn"))
     mouseSynUi(tdb);
 else if (sameString(track, "blatMus"))
     blatMusUi(tdb);
+else if (sameString(track, "blatHuman"))
+    blatHumanUi(tdb);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
 }

@@ -48,6 +48,7 @@
 #include "synteny100000.h"
 #include "mouseSyn.h"
 #include "syntenyBerk.h"
+#include "syntenySanger.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -3908,7 +3909,7 @@ char *optionStr;
 tg->loadItems = loadXenoPslWithPos;
 tg->mapItemName = mapNameFromLfExtra;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
+optionStr = cartUsualString(cart, option, "off");
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = pslItemColor;
 else
@@ -4224,6 +4225,17 @@ void freeSyntenyBerk(struct trackGroup *tg)
 syntenyBerkFreeList((struct syntenyBerk**)&tg->items);
 }
 
+void loadSyntenySanger(struct trackGroup *tg)
+{
+bedLoadItem(tg, "syntenySanger", (ItemLoader)syntenySangerLoad);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSyntenySanger(struct trackGroup *tg)
+{
+syntenySangerFreeList((struct syntenySanger**)&tg->items);
+}
+
 void loadSynteny100000(struct trackGroup *tg)
 {
 bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
@@ -4344,6 +4356,31 @@ else
 return ((Color)getChromColor(chromStr, mg));
 }
 
+Color syntenySangerItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+char *chptr;
+struct syntenySanger *ms = item;
+if (strlen(ms->name) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->name) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    chptr = strstr(ms->name,"chr");
+    strncpy(chromStr,(char *)(chptr+3),2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, mg));
+}
+
 void loadMouseSyn(struct trackGroup *tg)
 /* Load up mouseSyn from database table to trackGroup items. */
 {
@@ -4357,12 +4394,21 @@ tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
+
 }
 void syntenyBerkMethods(struct trackGroup *tg)
 {
 tg->loadItems = loadSyntenyBerk;
 tg->freeItems = freeSyntenyBerk;
 tg->itemColor = syntenyBerkItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+void syntenySangerMethods(struct trackGroup *tg)
+{
+tg->loadItems = loadSyntenySanger;
+tg->freeItems = freeSyntenySanger;
+tg->itemColor = syntenySangerItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
@@ -8480,6 +8526,7 @@ registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
+registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
