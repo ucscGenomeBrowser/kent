@@ -142,9 +142,33 @@ char **row;
 char *chp;
 int i,len;
 char *seq;
-    
+char *protDbDate;
+
 conn= hAllocConn();
-safef(query, sizeof(query), "select val  from swissProt.protein where acc='%s';", pepAccession);
+
+/* Figure out which is the appropriate DB to use, 
+   either spXXXXXX (for PB supported GB) so that we can handle TrEMBL-NEW entries
+   or swissProt (to support global proteome 
+
+   The following convention needs to be followed when building protein DBs:
+   
+       spXXXXXX ---> proteinsXXXXXX
+
+       swissProt points to the latest spXXXXXX
+       proteins  points to the latest proteinsXXXXXX
+       
+*/
+
+protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
+if (sameWord(protDbDate, ""))
+    {
+    safef(query, sizeof(query), "select val from swissProt.protein where acc='%s';", pepAccession);
+    }
+else
+    {
+    safef(query, sizeof(query), 
+    "select val from sp%s.protein where acc='%s';", protDbDate, pepAccession);
+    }
 
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
