@@ -374,20 +374,6 @@ spectrum on
 type chain hg16
 otherDb hg16
 
-track tfbsCons
-shortLabel TFBS Conserved
-longLabel HMR Conserved Transcription Factor Binding Sites
-priority 1000
-group regulation
-visibility hide
-type bed 6+
-spectrum on
-scoreMin 830
-scoreMax 1000
-urlLabel Transfac matrix link:
-url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
-
-
 searchTable affyGnf
 searchMethod exact
 searchType bed
