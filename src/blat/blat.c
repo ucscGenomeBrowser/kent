@@ -19,7 +19,7 @@
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
-int version = 14;	/* Blat version number. */
+int version = 15;	/* Blat version number. */
 char *databaseName;		/* File name of database. */
 int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetterCount = 0;	/* Number of bases in database. */
@@ -104,6 +104,7 @@ errAbort(
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-like axt format (only for nucleotides)\n"
   "                   wu-blast - similar to wu-blast format\n"
+  "                   blast - similar to NCBI blast format\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
@@ -410,7 +411,7 @@ void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f,
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	boolean isWu, char *ourId);
 
-void wublastQueryOut(FILE *f, void *data)
+void anyBlastQueryOut(FILE *f, void *data, boolean isWu)
 /* Output wublast on query. */
 {
 char blatName[16];
@@ -419,8 +420,20 @@ struct gfSaveAxtData *aod = data;
 sprintf(blatName, "blat %d", version);
 axtBlastOut(aod->bundleList, aod->queryIx, aod->qIsProt, f,
 	databaseName, databaseSeqCount, databaseLetterCount,
-	TRUE, blatName);
+	isWu, blatName);
 axtBundleFreeList(&aod->bundleList);
+}
+
+void wuBlastQueryOut(FILE *f, void *data)
+/* Output wublast on query. */
+{
+anyBlastQueryOut(f, data, TRUE);
+}
+
+void ncbiBlastQueryOut(FILE *f, void *data)
+/* Output NCBI blast on query. */
+{
+anyBlastQueryOut(f, data, FALSE);
 }
 
 
@@ -442,23 +455,22 @@ if (sameWord(format, "psl") || sameWord(format, "pslx"))
     pslxOutData.qIsProt = qIsProt;
     pslxOutData.tIsProt = tIsProt;
     }
-else if (sameWord(format, "wu-blast") || sameWord(format, "axt"))
+else if (sameWord(format, "blast") || 
+	sameWord(format, "wu-blast") || sameWord(format, "axt"))
     {
     gvo.out = gfSaveAxtBundle;
     gvo.data = &axtOutData;
     axtOutData.minGood = goodPpt;
     axtOutData.qIsProt = qIsProt;
     axtOutData.tIsProt = tIsProt;
-    if (qIsProt || tIsProt)
-        errAbort("Sorry, at the moment %s output doesn't support protein alignments", format);
+    if (qIsProt ^ tIsProt)
+        errAbort("Sorry, at the moment %s output doesn't support dna/protein alignments", format);
     if (sameWord(format, "wu-blast"))
-        {
-	gvo.queryOut = wublastQueryOut;
-	}
+	gvo.queryOut = wuBlastQueryOut;
+    else if (sameWord(format, "blast"))
+	gvo.queryOut = ncbiBlastQueryOut;
     else if (sameWord(format, "axt"))
-        {
 	gvo.queryOut = axtQueryOut;
-	}
     }
 else
     errAbort("Unrecognized output format '%s'", format);
@@ -486,7 +498,6 @@ void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *f)
 int hitCount;
 struct lm *lm = lmInit(0);
 struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-initBasicOutput(outputFormat, f, minIdentity, TRUE, TRUE);
 gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gvo.out, gvo.data);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
@@ -518,7 +529,6 @@ if (isProt)
     }
 else
     {
-    initBasicOutput(outputFormat, f, minIdentity, FALSE, FALSE);
     pslxOutData.maskHash = maskHash;
     searchOneStrand(seq, gf, f, FALSE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
@@ -573,7 +583,7 @@ if (trimA)
 }
 
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
-	boolean isProt, struct hash *maskHash)
+	boolean isProt, struct hash *maskHash, FILE *outFile)
 /* Search all sequences in all files against single genoFind index. */
 {
 int i;
@@ -581,7 +591,6 @@ char *fileName;
 bioSeq *seqList = NULL, *targetSeq;
 int count = 0; 
 unsigned long totalSize = 0;
-FILE *outFile = mustOpen(outName, "w");
 boolean maskQuery = (qMask != NULL);
 boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
 struct dnaSeq trimmedSeq;
@@ -675,7 +684,6 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-initBasicOutput(outputFormat, f, minIdentity, TRUE, FALSE);
 pslxOutData.t3Hash = t3Hash;
 pslxOutData.targetRc = dbIsRc;
 pslxOutData.reportTargetStrand = TRUE;
@@ -687,7 +695,6 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-initBasicOutput(outputFormat, f, minIdentity, FALSE, FALSE);
 pslxOutData.t3Hash = NULL;
 pslxOutData.reportTargetStrand = TRUE;
 pslxOutData.targetRc = dbIsRc;
@@ -702,7 +709,7 @@ for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     }
 }
 
-void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna)
+void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna, FILE *out)
 /* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
@@ -711,7 +718,6 @@ struct genoFind *gfs[3];
 aaSeq *dbSeqLists[3];
 struct trans3 *t3List = NULL, *t3;
 int isRc;
-FILE *out = mustOpen(outFile, "w");
 struct lineFile *lf = NULL;
 struct hash *t3Hash = NULL;
 boolean forceUpper = FALSE;
@@ -816,8 +822,10 @@ int dbCount, queryCount;
 struct dnaSeq *dbSeqList, *seq;
 struct hash *dbHash = newHash(16);
 struct genoFind *gf;
-boolean dbIsProt = (tType == gftProt);
+boolean tIsProt = (tType == gftProt);
+boolean qIsProt = (qType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
+FILE *f = mustOpen(outName, "w");
 
 databaseName = dbFile;
 getFileArray(dbFile, &dbFiles, &dbCount);
@@ -828,17 +836,19 @@ if (makeOoc != NULL)
     exit(0);
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, tType == gftDnaX, mask);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetterCount += seq->size;
 
-if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
+initBasicOutput(outputFormat, f, minIdentity, qIsProt, tIsProt);
+
+if (bothSimpleNuc || (tIsProt && qIsProt))
     {
     struct hash *maskHash = NULL;
     /* Build index, possibly upper-case masked. */
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	dbIsProt, oneOff, mask != NULL);
+    	tIsProt, oneOff, mask != NULL);
     if (mask != NULL)
 	{
 	int i;
@@ -849,16 +859,16 @@ if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
 		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
         unmaskNucSeqList(dbSeqList);
 	}
-    searchOneIndex(queryCount, queryFiles, gf, outName, dbIsProt, maskHash);
+    searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f);
     freeHash(&maskHash);
     }
 else if (tType == gftDnaX && qType == gftProt)
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE, f);
     }
 else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX, f);
     }
 else
     {

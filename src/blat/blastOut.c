@@ -6,13 +6,28 @@
 #include "obscure.h"
 #include "genoFind.h"
 
+struct axtRef
+/* A reference to an axt. */
+    {
+    struct axtRef *next;
+    struct axt *axt;
+    };
+
+int axtRefCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score. */
+{
+const struct axtRef *a = *((struct axtRef **)va);
+const struct axtRef *b = *((struct axtRef **)vb);
+return b->axt->score - a->axt->score;
+}
+
 struct targetHits
 /* Collection of hits to a single target. */
     {
     struct targetHits *next;
     char *name;	    	    /* Target name */
     int size;		    /* Target size */
-    struct axt *axtList;    /* List of axts, sorted by score. */
+    struct axtRef *axtList; /* List of axts, sorted by score. */
     int score;		    /* Score of best element */
     };
 
@@ -23,7 +38,7 @@ struct targetHits *obj = *pObj;
 if (obj != NULL)
     {
     freeMem(obj->name);
-    axtFreeList(&obj->axtList);
+    slFreeList(&obj->axtList);
     freez(pObj);
     }
 }
@@ -58,14 +73,18 @@ static int blastzToWublastScore(int bzScore)
 return bzScore/19;
 }
 
-static double blastzScoreToWuBits(int bzScore)
+static double blastzScoreToWuBits(int bzScore, boolean isProt)
 /* Convert from blastz score to bit score.  The magic number
  * 32.1948 was derived from the wu-blast bit to score ratio.
  * I'm not sure I agree with this, but am doing it to be compatible.   
  * I'd tend to give 2 bits for each matching base more or less. 
  * This is much less. */
 {
-return blastzToWublastScore(bzScore) * 0.1553;
+int wuScore = blastzToWublastScore(bzScore);
+if (isProt)
+    return wuScore * 0.355;
+else
+    return wuScore * 0.1553;
 }
 
 static double blastzScoreToWuExpectation(int bzScore, double databaseSize)
@@ -76,6 +95,20 @@ static double blastzScoreToWuExpectation(int bzScore, double databaseSize)
 {
 double logProbOne = -log(2) * bzScore / 32.1948;
 return databaseSize * exp(logProbOne);
+}
+
+int blastzScoreToNcbiBits(int bzScore)
+/* Convert blastz score to bit score in NCBI sense. */
+{
+return round(bzScore * 0.0205);
+}
+
+double blastzScoreToNcbiExpectation(int bzScore)
+/* Convert blastz score to expectation in NCBI sense. */
+{
+double bits = bzScore * 0.0205;
+double logProb = -bits*log(2);
+return 3.0e9 * exp(logProb);
 }
 
 static double expectationToProbability(double e)
@@ -161,52 +194,20 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     }
 }
 
-static void wuBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
-	FILE *f, 
-	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	char *ourId)
-/* Do wublast-like output at end of processing query. */
+static struct targetHits *bundleIntoTargets(struct axtBundle *abList)
+/* BLAST typically outputs everything on the same query and target
+ * in one clump.  This routine rearranges axts in abList to do this. */
 {
-char asciiNum[32];
-struct hash *targetHash = newHash(10);
 struct targetHits *targetList = NULL, *target;
+struct hash *targetHash = newHash(10);
 struct axtBundle *ab;
-char *queryName;
-int isRc;
-int querySize = 0;
-
-/* Print out stuff that doesn't depend on query or database. */
-if (ourId == NULL)
-    ourId = "axtBlastOut";
-fprintf(f, "BLASTN 2.0MP-WashU [%s]\n", ourId);
-fprintf(f, "\n");
-fprintf(f, "Copyright (C) 2000-2002 Jim Kent\n");
-fprintf(f, "All Rights Reserved\n");
-fprintf(f, "\n");
-fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
-fprintf(f, "\n");
-fprintf(f, "Notice:  this program and its default parameter settings are optimized to find\n");
-fprintf(f, "nearly identical sequences very rapidly.  For slower but more sensitive\n");
-fprintf(f, "alignments please use other methods.\n");
-fprintf(f, "\n");
-
-/* Print query and database info. */
-queryName = abList->axtList->qName;
-fprintf(f, "Query=  %s\n", queryName);
-fprintf(f, "        (%d letters; record %d)\n", abList->qSize, queryIx);
-fprintf(f, "\n");
-fprintf(f, "Database:  %s\n",  databaseName);
-sprintLongWithCommas(asciiNum, databaseLetterCount);
-fprintf(f, "           %d sequences; %s total letters\n",  databaseSeqCount, asciiNum);
-fprintf(f, "Searching....10....20....30....40....50....60....70....80....90....100%% done\n");
-fprintf(f, "\n");
+struct axtRef *ref;
 
 /* Build up a list of targets in database hit by query sorted by
  * score of hits. */
 for (ab = abList; ab != NULL; ab = ab->next)
     {
     struct axt *axt, *next;
-    querySize = ab->qSize;
     for (axt = ab->axtList; axt != NULL; axt = next)
 	{
 	next = axt->next;
@@ -221,14 +222,72 @@ for (ab = abList; ab != NULL; ab = ab->next)
 	    }
 	if (axt->score > target->score)
 	    target->score = axt->score;
-	slAddHead(&target->axtList, axt);
+	AllocVar(ref);
+	ref->axt = axt;
+	slAddHead(&target->axtList, ref);
 	}
     ab->axtList = NULL;
     }
 slSort(&targetList, targetHitsCmpScore);
 for (target = targetList; target != NULL; target = target->next)
-    slSort(&target->axtList, axtCmpScore);
+    slSort(&target->axtList, axtRefCmpScore);
 
+hashFree(&targetHash);
+return targetList;
+}
+
+static char *nameForStrand(char strand)
+/* Return Plus/Minus for +/- */
+{
+if (strand == '-')
+    return "Minus";
+else
+    return "Plus";
+}
+
+static void wuBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	char *ourId)
+/* Do wublast-like output at end of processing query. */
+{
+char asciiNum[32];
+struct targetHits *targetList = NULL, *target;
+struct axtBundle *ab;
+char *queryName;
+int isRc;
+int querySize = abList->qSize;
+
+/* Print out stuff that doesn't depend on query or database. */
+if (ourId == NULL)
+    ourId = "axtBlastOut";
+fprintf(f, "BLAST%c 2.0MP-WashU [%s]\n", (isProt ? 'P' : 'N'), ourId);
+fprintf(f, "\n");
+fprintf(f, "Copyright (C) 2000-2002 Jim Kent\n");
+fprintf(f, "All Rights Reserved\n");
+fprintf(f, "\n");
+fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
+fprintf(f, "\n");
+if (!isProt)
+    {
+    fprintf(f, "Notice:  this program and its default parameter settings are optimized to find\n");
+    fprintf(f, "nearly identical sequences very rapidly.  For slower but more sensitive\n");
+    fprintf(f, "alignments please use other methods.\n");
+    fprintf(f, "\n");
+    }
+
+/* Print query and database info. */
+queryName = abList->axtList->qName;
+fprintf(f, "Query=  %s\n", queryName);
+fprintf(f, "        (%d letters; record %d)\n", abList->qSize, queryIx);
+fprintf(f, "\n");
+fprintf(f, "Database:  %s\n",  databaseName);
+sprintLongWithCommas(asciiNum, databaseLetterCount);
+fprintf(f, "           %d sequences; %s total letters\n",  databaseSeqCount, asciiNum);
+fprintf(f, "Searching....10....20....30....40....50....60....70....80....90....100%% done\n");
+fprintf(f, "\n");
+
+targetList = bundleIntoTargets(abList);
 
 /* Print out summary of hits. */
 fprintf(f, "                                                                     Smallest\n");
@@ -254,23 +313,25 @@ for (target = targetList; target != NULL; target = target->next)
 	{
 	boolean saidStrand = FALSE;
 	char strand = (isRc ? '-' : '+');
-	char *strandName = (isRc ? "Minus" : "Plus");
+	char *strandName = nameForStrand(strand);
+	struct axtRef *ref;
 	struct axt *axt;
-	for (axt = target->axtList; axt != NULL; axt = axt->next)
+	for (ref = target->axtList; ref != NULL; ref = ref->next)
 	    {
+	    axt = ref->axt;
 	    if (axt->qStrand == strand)
 		{
 		int matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
 		if (!saidStrand)
 		    {
 		    saidStrand = TRUE;
-		    fprintf(f, "  %s Strand HSPs:\n\n", strandName);
+		    if (!isProt)
+			fprintf(f, "  %s Strand HSPs:\n\n", strandName);
 		    }
-		fprintf(f, " Score = %d (%2.1f bits), Expect = %5.1e, Sum P(%d) = %5.1e\n",
+		fprintf(f, " Score = %d (%2.1f bits), Expect = %5.1e, P = %5.1e\n",
 		     blastzToWublastScore(axt->score), 
-		     blastzScoreToWuBits(axt->score),
+		     blastzScoreToWuBits(axt->score, isProt),
 		     blastzScoreToWuExpectation(axt->score, databaseLetterCount),
-		     4, 
 		     blastzScoreToWuExpectation(axt->score, databaseLetterCount));
 		fprintf(f, " Identities = %d/%d (%d%%), Positives = %d/%d (%d%%), Strand = %s / Plus\n",
 		     matches, axt->symCount, round(100.0 * matches / axt->symCount),
@@ -284,7 +345,105 @@ for (target = targetList; target != NULL; target = target->next)
     }
 
 /* Cleanup time. */
-hashFree(&targetHash);
+targetHitsFreeList(&targetList);
+}
+
+void ncbiPrintE(FILE *f, double e)
+/* Print a small number NCBI style. */
+{
+if (e <= 0.0)
+    fprintf(f, "0.0");
+else if (e <= 1.0e-100)
+    {
+    char buf[256], *s;
+    sprintf(buf, "%e", e);
+    s = strchr(buf, 'e');
+    if (s == NULL)
+	fprintf(f, "0.0");
+    else
+        fprintf(f, "%s", s);
+    }
+else
+    fprintf(f, "%1.0e", e);
+}
+
+
+static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	char *ourId)
+/* Do ncbiblast-like output at end of processing query. */
+{
+char asciiNum[32];
+struct targetHits *targetList = NULL, *target;
+struct axtBundle *ab;
+char *queryName;
+int isRc;
+int querySize = abList->qSize;
+
+/* Print out stuff that doesn't depend on query or database. */
+if (ourId == NULL)
+    ourId = "axtBlastOut";
+fprintf(f, "BLAST%c 2.2.4 [%s]\n", (isProt ? 'P' : 'N'), ourId);
+fprintf(f, "\n");
+fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
+fprintf(f, "\n");
+
+/* Print query and database info. */
+queryName = abList->axtList->qName;
+fprintf(f, "Query=  %s\n", queryName);
+fprintf(f, "        (%d letters)\n", abList->qSize);
+fprintf(f, "\n");
+fprintf(f, "Database:  %s\n",  databaseName);
+sprintLongWithCommas(asciiNum, databaseLetterCount);
+fprintf(f, "           %d sequences; %s total letters\n",  databaseSeqCount, asciiNum);
+fprintf(f, "\n");
+
+targetList = bundleIntoTargets(abList);
+
+/* Print out summary of hits. */
+fprintf(f, "                                                                 Score    E\n");
+fprintf(f, "Sequences producing significant alignments:                      (bits) Value\n");
+fprintf(f, "\n");
+for (target = targetList; target != NULL; target = target->next)
+    {
+    int bit = blastzScoreToNcbiBits(target->score);
+    double expectation = blastzScoreToNcbiExpectation(target->score);
+    fprintf(f, "%-67s  %4d   ", target->name, bit);
+    ncbiPrintE(f, expectation);
+    fprintf(f, "\n");
+    }
+fprintf(f, "\n");
+fprintf(f, "ALIGNMENTS\n");
+
+/* Print out details on each target. */
+for (target = targetList; target != NULL; target = target->next)
+    {
+    struct axtRef *ref;
+    struct axt *axt;
+    int matches;
+    fprintf(f, "\n\n>%s\n", target->name);
+    fprintf(f, "          Length = %d\n", target->size);
+    for (ref = target->axtList; ref != NULL; ref = ref->next)
+	{
+	axt = ref->axt;
+	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	fprintf(f, "\n");
+	fprintf(f, " Score = %d bits, Expect = ",
+	     blastzScoreToNcbiBits(axt->score));
+	ncbiPrintE(f, blastzScoreToNcbiExpectation(axt->score));
+	fprintf(f, "\n");
+	fprintf(f, " Identities = %d/%d (%d%%)\n",
+	     matches, axt->symCount, round(100.0 * matches / axt->symCount));
+	fprintf(f, " Strand = %s / %s\n", nameForStrand(axt->qStrand),
+	    nameForStrand(axt->tStrand));
+	fprintf(f, "\n");
+	fprintf(f, "\n");
+	blastiodAxtOutput(f, axt, target->size, querySize, 60);
+	}
+    }
+
+/* Cleanup time. */
 targetHitsFreeList(&targetList);
 }
 
@@ -302,12 +461,11 @@ void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f,
  *   ourId - optional (may be NULL) thing to put in header
  */
 {
-if (isProt)
-   errAbort("Sorry, currently can only output nucleotides in BLAST format");
 if (isWu)
-    wuBlastOut(abList, isProt, queryIx, f, databaseName,
+    wuBlastOut(abList, queryIx, isProt, f, databaseName,
    	databaseSeqCount, databaseLetterCount, ourId);
 else
-    errAbort("Currently only handle wu-blast output.");
+    ncbiBlastOut(abList, queryIx, isProt, f, databaseName,
+        databaseSeqCount, databaseLetterCount, ourId);
 }
 

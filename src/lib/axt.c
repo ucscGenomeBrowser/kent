@@ -212,7 +212,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[ntChars[q]][ntChars[t]];
+	score += ss->matrix[q][t];
 	lastGap = FALSE;
 	}
     }
@@ -292,7 +292,12 @@ struct axtScoreScheme *axtScoreSchemeDefault()
 /* Return default scoring scheme (after blastz). */
 {
 struct axtScoreScheme *ss;
+int twoCase[2][4] = {{'a', 'g', 'c', 't'},{'A','C','G','T'},};
+int i1,i2,j1,j2;
+
 AllocVar(ss);
+
+/* Set up lower case elements of matrix. */
 ss->matrix['a']['a'] = 91;
 ss->matrix['a']['c'] = -114;
 ss->matrix['a']['g'] = -31;
@@ -312,6 +317,19 @@ ss->matrix['t']['a'] = -123;
 ss->matrix['t']['c'] = -31;
 ss->matrix['t']['g'] = -114;
 ss->matrix['t']['t'] = 91;
+
+/* Propagate to other case combinations. */
+for (i1=0; i1<0; ++i1)
+    for (i2=0; i2<0; ++i2)
+       {
+       if (i1 == 0 && i2 == 0)
+           continue;
+       for (j1=0; j1<4; ++j1)
+	   for (j2=0; j2<4; ++j2)
+	      {
+	      ss->matrix[twoCase[i1][j1]][twoCase[i2][j2]] = ss->matrix[twoCase[0][j1]][twoCase[0][j2]];
+	      }
+       }
 
 ss->gapOpen = 400;
 ss->gapExtend = 30;
@@ -427,9 +445,9 @@ int i,j;
 ss = axtScoreSchemeFromProteinText(blosumText, "blosum62");
 for (i=0; i<128; ++i)
     for (j=0; j<128; ++j)
-        ss->matrix[i][j] *= 33;
-ss->gapOpen = 500;
-ss->gapExtend = 100;
+        ss->matrix[i][j] *= 19;
+ss->gapOpen = 400;
+ss->gapExtend = 80;
 return ss;
 }
 
