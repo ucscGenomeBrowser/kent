@@ -74,7 +74,7 @@ struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end)
 
 
 struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end);
-/* Find the lowest overlapping range. Quick even in search range large */
+/* Find the lowest overlapping range. Quick even if search range large */
 
 void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val);
 /* Remove item from binKeeper. */ 

@@ -156,7 +156,7 @@ return list;
 }
 
 struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end)
-/* Find the lowest overlapping range. Quick even in search range large */
+/* Find the lowest overlapping range. Quick even if search range large */
 {
 struct binElement *first = NULL, *el;
 int startBin = (start>>_binFirstShift), endBin = ((end-1)>>_binFirstShift);
