@@ -316,3 +316,19 @@ for i in haloSp1 pyrHor1 sulTok1 theAci1 aerPer1 metMar1 metKan1; do
 done
 touch archaea/trackDb.ra
 cvs add archaea/trackDb.ra
+
+# 04-08-2004: need to add Synecoccus
+
+cd ~/kent/src/hg/makeDb/trackDb
+~/kent/src/hg/makeDb/bme230.sh synSp1 "Synechococcus sp. WH 8102" Bacteria ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Synechococcus_sp_WH8102/NC_005070.fna "Synechococcus sp. WH 8102"
+mkdir -p bacteria/synSp1
+cvs add bacteria/synSp1
+touch bacteria/synSp1/trackDb.ra
+cd /cluster/data/synSp1
+mkdir html
+ln -s /cluster/data/synSp1/html /gbdb/synSp1/html
+cd html
+echo '<H3>About the <em>Synechococcus sp. WH 8102</em> Sequence</H3>
+<P>
+chr1 is the main chromosome (<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NC_005070">NC_005070</a>).' > description.html
+echo update dbDb set htmlPath=\"/gbdb/synSp1/html/description.html\" where name=\"synSp1\" | hgsql -h genome-testdb hgcentraltest
