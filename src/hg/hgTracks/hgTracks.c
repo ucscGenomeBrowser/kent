@@ -4697,7 +4697,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	y += lineHeight;
     }
 }
-struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList)
+struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name)
 {
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lf;
@@ -4705,7 +4705,10 @@ struct bed *bed = NULL;
 /* create one linkedFeatureSeries with average score for each lf
    in bed->score */
 AllocVar(lfs);
-snprintf(lfs->name, sizeof(lfs->name), "%s", bedList->name);
+if(name != NULL)
+    snprintf(lfs->name, sizeof(lfs->name), "%s", name);
+else
+    snprintf(lfs->name, sizeof(lfs->name), "%s", "unknown");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     lf = lfFromBed(bed);
@@ -4717,7 +4720,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 return lfs;
 }
 
-void expRecordMapTypes(struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index)
+void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index)
 {
 struct expRecord *er = NULL;
 struct slRef *srList=NULL, *sr=NULL, *val=NULL;
@@ -4733,6 +4736,7 @@ for(er = erList; er != NULL; er = er->next)
         save the index for this type */
 	AllocVar(sr);
 	snprintf(buff, sizeof(buff), "%d", unique);
+	hashAdd(expIndexesToNames, buff, er->extras[index]);
 	sr->val = buff;
 	hashAdd(seen, er->extras[index], sr);
 
@@ -4771,6 +4775,7 @@ struct linkedFeatures *lf = NULL;
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *indexes = newHash(2);
 struct hash *expTypes = newHash(2);
+struct hash *expIndexesToNames = newHash(2);
 int numIndexes = 0, currentIndex, i;
 struct expRecord *erList = NULL, *er=NULL;
 struct slRef *srList = NULL, *sr=NULL;
@@ -4793,13 +4798,18 @@ for(er = erList; er != NULL; er = er->next)
 
 /* get the number of indexes and the experiment values associated
    with each index */
-expRecordMapTypes(indexes, &numIndexes, erList, expIndex);
+expRecordMapTypes(expIndexesToNames, indexes, &numIndexes, erList, expIndex);
 lfsArray = needMem(sizeof(struct linkedFeaturesSeries*) * numIndexes);
 
 /* initialize our different tissue linkedFeatureSeries) */
 for(i=0;i<numIndexes;i++)
+    {    
+    char *name=NULL;
     AllocVar(lfsArray[i]);
-
+    snprintf(buff, sizeof(buff), "%d", i);
+    name = hashMustFindVal(expIndexesToNames, buff);	
+    snprintf(lfsArray[i]->name, sizeof(lf->name), "%s", name);
+    }
 /* for every bed we need to group together the tissue specific
  scores in that bed */
 for(bed = bedList; bed != NULL; bed = bed->next)
@@ -4809,7 +4819,6 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	{
 	float aveScores = 0;
 	int aveCount =0;
-	char *name;
 
 	/* get the indexes of experiments that we want to average 
 	 in form of a slRef list */
@@ -4821,12 +4830,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	lf = lfFromBed(bed);
 	lf->tallStart = bed->chromStart;
 	lf->tallEnd = bed->chromEnd;
-	if(bed == bedList) 
-	    {
-	    snprintf(buff, sizeof(buff), "%d", bed->expIds[currentIndex]);
-	    name = hashMustFindVal(expTypes, buff);	
-	    snprintf(lfsArray[i]->name, sizeof(lf->name), "%s", name);
-	    }
+
 	/* average the scores together to get the ave score for this
 	   tissue type */
 	for(sr = srList; sr != NULL; sr = sr->next)
@@ -4874,7 +4878,7 @@ bedList = tg->items;
 
 if(tg->visibility == tvDense)
     {
-    tg->items = lfsFromMsBedSimple(bedList);
+    tg->items = lfsFromMsBedSimple(bedList, "NCI 60");
     }
 else if(sameString(grouping,"Tissue"))
     {
@@ -4896,7 +4900,7 @@ struct bed *bed = NULL;
 int i=0;
 if(tg->visibility == tvDense)
     {
-    lfsList = lfsFromMsBedSimple(bedList);
+    lfsList = lfsFromMsBedSimple(bedList, tg->shortLabel);
     }
 else 
     {
@@ -4904,7 +4908,10 @@ else
     for(i = 0; i < bedList->expCount; i++) 
 	{
 	AllocVar(lfs);
-	snprintf(lfs->name, sizeof(lfs->name), "%d", bedList->expIds[i]);
+	if(bedList != NULL)
+	    snprintf(lfs->name, sizeof(lfs->name), "%d", bedList->expIds[i]);
+	else
+	    snprintf(lfs->name, sizeof(lfs->name), "%s", tg->shortLabel);
 	for(bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    lf = lfFromBed(bed);
