@@ -7,6 +7,7 @@
 #  Prints diffs
 #  Run this script on hgwdev
 # 
+#  29 April 2004 M. Chalup Added sort to dump files
 ###############################################
 
 set db_new=""
@@ -38,9 +39,8 @@ echo
 echo "                               hgwdev:hgwbeta"
 echo "   Name                Label         Priority"
 echo
-hgsql -h hgwbeta -N  -e "select * from $table_a" $db_old > $db_old.beta.$table_a.txt
-hgsql -N  -e "select * from $table_a" $db_new > $db_new.dev.$table_a.txt
+hgsql -h hgwbeta -N  -e "select * from $table_a" $db_old | sort  > $db_old.beta.$table_a.txt
+hgsql -N  -e "select * from $table_a" $db_new | sort > $db_new.dev.$table_a.txt
 diff $db_new.dev.$table_a.txt $db_old.beta.$table_a.txt
-# rm -f $db.beta.$table.desc $db.dev.$table.desc
 echo
 
