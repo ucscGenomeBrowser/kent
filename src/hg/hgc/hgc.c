@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.709 2004/07/29 21:50:49 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.710 2004/07/29 22:03:34 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8424,8 +8424,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
 	printf("<B>Indel Confidence</B>: %c<BR>\n", snp.questionM[0]);
-    if (snp.extra[0] != 0)
-	printf("<B>Comment:</B> %s<BR>\n", snp.extra);
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
