@@ -47,7 +47,6 @@ if (changeVis != -2)
 #endif /* BOB_DOESNT_LIKE */
 
 cgiMakeHiddenVar(configGroupTarget, "none");
-hTableStart();
 for (group = groupList; group != NULL; group = group->next)
     {
     struct trackRef *tr;
@@ -55,6 +54,7 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList == NULL)
 	continue;
 
+    hTableStart();
     if (changeVis != -2 && (groupTarget == NULL || sameString(group->name,groupTarget)))
         {
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
@@ -132,8 +132,9 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("</TD>");
 	hPrintf("</TR>");
 	}
+    hTableEnd();
+    hPrintf("<BR>");
     }
-hTableEnd();
 }
 
 void configPageSetTrackVis(int vis)
@@ -212,7 +213,7 @@ cgiMakeButton(configShowAll, "Show All");
 hPrintf(" ");
 cgiMakeButton(configDefaultAll, "Default");
 hPrintf(" ");
-hPrintf("or control tracks visibility more selectively below.<BR>");
+hPrintf("or control tracks visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 hPrintf("</FORM>");
