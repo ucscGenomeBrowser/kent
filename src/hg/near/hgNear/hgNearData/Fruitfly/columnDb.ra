@@ -66,6 +66,11 @@ type distance bdgpBlastTab query target eValue
 name percentId
 type distance bdgpBlastTab query target identity
 
+name pdb
+queryFull select acc,pdb from  proteins092903.pdbSP,swissProt.displayId where val=sp 
+queryOne select pdb,pdb from proteins092903.pdbSP,swissProt.displayId where val=sp and acc='%s'
+invQueryOne select acc from proteins092903.pdbSP,swissProt.displayId where val=sp and pdb='%s'
+
 name description
 type knownDetails bdgpSwissProt bdgpName spGeneName
 

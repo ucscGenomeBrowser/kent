@@ -148,13 +148,13 @@ shortLabel Pfam Domains
 longLabel Protein Family Domain Structure
 priority 9
 visibility off
-type pfam proteins072003.pfamXref proteins072003.pfamDesc
-queryFull select swissDisplayID,description from proteins072003.pfamXref,proteins072003.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteins072003.pfamDesc.pfamAC from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+type pfam proteins092903.pfamXref proteins092903.pfamDesc
+queryFull select swissDisplayID,description from proteins092903.pfamXref,proteins092903.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description,proteins092903.pfamDesc.pfamAC from proteins092903.pfamXref,proteins092903.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissDisplayID from proteins092903.pfamXref,proteins092903.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
-protDb proteins072003
+protDb proteins092903
 
 name superfamily
 shortLabel Superfamily
@@ -173,11 +173,11 @@ shortLabel PDB
 longLabel Protein Data Bank
 priority 9.5
 visibility off
-type association proteins072003.pdbSP
+type association proteins092903.pdbSP
 protKey on
-queryFull select sp,pdb from proteins072003.pdbSP
-queryOne select pdb,pdb from proteins072003.pdbSP where sp = '%s'
-invQueryOne select sp from proteins072003.pdbSP where pdb = '%s'
+queryFull select sp,pdb from proteins092903.pdbSP
+queryOne select pdb,pdb from proteins092903.pdbSP where sp = '%s'
+invQueryOne select sp from proteins092903.pdbSP where pdb = '%s'
 itemUrl http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s
 search exact
 
