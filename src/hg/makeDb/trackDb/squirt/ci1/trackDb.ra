@@ -112,6 +112,15 @@ altColor 255,240,200
 type netAlign cioSav1 chainCioSav1
 otherDb cioSav1
 
+track tblastOikDio0
+shortLabel tblastn OikDio0
+longLabel  tblastn OikDio0
+group x
+spectrum on
+priority 128
+visibility hide
+type psl xeno
+
 track tblastHg16
 shortLabel tblastHg16
 longLabel  tblastHg16 (Hg16 Known Genes tblastn ci1)
@@ -133,6 +142,29 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+track blastzBraFlo0
+shortLabel Branchiostoma Blastz
+longLabel   Branchiostoma floridae Blastz
+group compGeno
+priority 173
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzOikDio0
+shortLabel Oikopleura Blastz
+longLabel  Oikopleura Dioca Blastz
+group compGeno
+priority 173
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzCioSav1
 track blastzOikDio0
 shortLabel Oikopleura Blastz
 longLabel  Oikopleura Dioca Blastz
@@ -156,7 +188,7 @@ spectrum on
 type psl xeno cioSav1
 otherDb cioSav1
 
-searchTable blastHg16KG
+searchTable blastHg17KG
 searchType bed
 searchMethod fuzzy
 shortCircuit 1
