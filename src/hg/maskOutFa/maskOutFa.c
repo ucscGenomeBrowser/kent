@@ -77,7 +77,7 @@ if (!extraHard)
 	ok = lineFileNext(lf, &line, &lineSize);
 	if (!ok)
 	    errAbort("Empty mask file %s\n", maskFile);
-	if (!startsWith("there were no", line))
+	if (!startsWith("There were no", line) && !startsWith("there were no", line))
 	    {
 	    if (!startsWith("   SW", line))
 		errAbort("%s isn't a RepeatMasker .out file.", maskFile);
