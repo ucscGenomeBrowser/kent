@@ -18,8 +18,8 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o \
     ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o rmskOut.o \
     rnaGene.o roughAli.o sage.o sageExp.o simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o stsAlias.o stsMap.o stsMarker.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackTable.o wabAli.o 
-    
+    trackDbCustom.o trackTable.o wabAli.o refAlign.o 
+
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
