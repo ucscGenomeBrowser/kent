@@ -706,3 +706,27 @@
 424 - AutoXml is done.  Fixed an off-by-one problem in blat target
       insert calculations.  Browser tracks now are taken from
       trackDb table in database.  Other odds and ends.
+425 - Mostly tinkering to fix some TPF related problems in GigAssembler.
+426 - Working on mouse conservation stuff mostly.
+427 - More TPF adaptation of GigAssembler.  BLAT handles longer
+      query sequences now.
+428 - A little tinkering on browser and some stats code.
+429 - Made hg/convCoord compile again.  Added fancy DNA fetching options
+      to browser.
+430 - More fancy DNA fancy fetching.  Recompiled from scratch to make sure
+      code is complete.
+431 - Made jabba job control system to sit on top of Codine.  Fixed (I hope)
+      a blat bug that Steve Roels noticed that led to slow, buggy results in
+      some instances where there were matches to the query spread out all over
+      very large regions in the genome.
+432 - Polishing Jabba.  Added Chuck's hgCoordConv program to source.
+      Minor tweaks to browser and blat.
+433 - Polishing browser a little.  Some small BLAT improvements and
+      bug fixes.
+434 - Adding a few tracks to browser.   About to make a big change to 
+      browser.
+435 - Putting in individual track UI for browser.  (Currently ifdefed out)
+436 - Individual track UI back in.  Put 'cart' persistent state into
+      browser.  This version is EXPERIMENTAL.   MIRRORS SHOULD NOT BUILD
+      BROWSERS FROM THIS SOURCE.
+
