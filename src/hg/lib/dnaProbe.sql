@@ -20,5 +20,5 @@ CREATE TABLE dnaProbe (
     blatScore int not null,	# blat score of the second greatest region of homology
     comparison float not null,	# weighted average of other scores used for comparison
               #Indices
-    PRIMARY KEY(chrom(12),start,end)
+    PRIMARY KEY(name)
 );
