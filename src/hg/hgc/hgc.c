@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.565 2004/02/17 03:31:21 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.566 2004/02/17 20:29:46 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -367,6 +367,14 @@ if (chromSize < 0)
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
+}
+
+int pslCmpScore(const void *va, const void *vb)
+/* Compare to sort based on query then score. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+return pslScore(b) - pslScore(a);
 }
 
 void printCappedSequence(int start, int end, int extra)
@@ -3492,6 +3500,11 @@ else if (startsWith(track,"pseudoMrna"))
     type = "mRNA";
     table = "mrnaBlastz";
     }
+else if (startsWith(track,"celeraMrna"))
+    {
+    type = "mRNA";
+    table = "celeraMrna";
+    }
 else 
     {
     type = "mRNA";
@@ -3507,6 +3520,9 @@ printRnaSpecs(tdb, acc);
 pslList = getAlignments(conn, table, acc);
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
+if (sameString(tdb->tableName, "mrnaBlastz"))
+    slSort(&pslList, pslCmpScore);
+
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
@@ -4629,6 +4645,7 @@ void htcCdnaAli(char *acc)
 {
 char query[256];
 char table[64];
+char accTmp[64];
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
@@ -4676,7 +4693,15 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
-rnaSeq = hRnaSeq(acc);
+/* get bz rna snapshot for blastz alignments */
+if (sameString("mrnaBlastz", type))
+    {
+    sprintf(accTmp,"bz-%s",acc);
+    rnaSeq = hRnaSeq(accTmp);
+    }
+else
+    rnaSeq = hRnaSeq(acc);
+
 if (startsWith("xeno", type))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 else
@@ -4734,6 +4759,7 @@ else
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
+
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
@@ -7312,11 +7338,10 @@ struct dyString *query = newDyString(1024);
 
 /* Get alignment info. */
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
+slSort(&pslList, pslCmpScore);
 
 /* print header */
 genericHeader(tdb, acc);
-//printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  psl->tName, psl->tStart, psl->tEnd, psl->tEnd-psl->tStart);
-//printf("Strand: %c",psl->strand[0]);
 if (startsWith(track,"pseudoMrna"))
     {
     type = "mRNA";
@@ -12908,9 +12933,10 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 sameWord(track, "all_mrna") ||
+	 sameWord(track, "celeraMrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         startsWith(track, "mrnaBlastz") || 
+         startsWith(track, "mrnaBlastz") || startsWith(track, "mrnaBad") || 
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
