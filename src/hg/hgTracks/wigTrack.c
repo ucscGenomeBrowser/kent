@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.15 2003/10/14 22:21:41 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.16 2003/10/15 20:33:19 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -27,6 +27,7 @@ struct wigCartOptions
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
+    int heightFromCart;	/*	requested height from cart	*/
     };
 
 struct wigItem
@@ -155,20 +156,24 @@ static int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 struct wigItem *item;
 char *heightPer;
 int heightFromCart;
+struct wigCartOptions *wigCart;
 char o1[128];
 int itemCount = 1;
 
-/*	heightPer was already set in wigMethods	since it may have come
- *	from the cart and all cart stuff is there.  A track is just one
+wigCart = (struct wigCartOptions *) tg->extraUiData;
+
+/*
+ *	A track is just one
  *	item, so there is nothing to do here, either it is the tvFull
  *	height as chosen by the user from TrackUi, or it is the dense
- *	mode.  All of this was already taken care of in wigMethods
+ *	mode.
  */
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
 else if (vis == tvFull)
-    tg->lineHeight = max(tl.fontHeight + 1, tg->heightPer);
+    tg->lineHeight = max(tl.fontHeight + 1, wigCart->heightFromCart);
 
+tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
 
 return tg->height;
@@ -748,7 +753,12 @@ if (f != (FILE *) NULL)
     }
 }	/*	wigDrawItems()	*/
 
-/* Make track group for wig multiple alignment. */
+/* Make track group for wig multiple alignment.
+ *	WARNING ! - track->visibility is merely the default value
+ *	from the trackDb entry at this time.  It will be set after this
+ *	 by hgTracks from its cart UI setting.  When called in
+ *	 TotalHeight it will then be the requested visibility.
+ */
 void wigMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
@@ -820,15 +830,12 @@ else minYc = minY;
 if (maxY_str) maxYc = atof(maxY_str);
 else maxYc = maxY;
 
-/*	Clip the cart value to range [MIN_HEIGHT_PER:DEFAULT_HEIGHT_PER] */
+/*	Clip the cart value to range [tl.fontHeight + 1:DEFAULT_HEIGHT_PER] */
 if (heightPer) heightFromCart = min( DEFAULT_HEIGHT_PER, atoi(heightPer));
 else heightFromCart = DEFAULT_HEIGHT_PER;
+heightFromCart = max(tl.fontHeight + 1, heightFromCart);
 
-if (track->visibility == tvDense) {
-    track->heightPer = tl.fontHeight + 1;
-} else {
-    track->heightPer = max( MIN_HEIGHT_PER, heightFromCart);
-}
+wigCart->heightFromCart = heightFromCart;
 
 /*	The values from trackDb.ra are the clipping boundaries, do
  *	not let cart settings go outside that range, and keep them
@@ -884,10 +891,10 @@ else
 wigCart->lineBar = wiggleLineBar;
 
 /*	And set the other values back into the cart for hgTrackUi	*/
-if (track->visibility == tvFull)
+if( track->visibility == tvFull )
     {		/*	no need to change this in the cart when dense */
-    snprintf( cartStr, sizeof(cartStr), "%d", track->heightPer);
-    cartSetString( cart, o1, cartStr);
+    snprintf( cartStr, sizeof(cartStr), "%d", heightFromCart );
+    cartSetString( cart, o1, cartStr );	/* possibly clipped from above */
     }
 snprintf( cartStr, sizeof(cartStr), "%g", track->minRange);
 cartSetString( cart, o4, cartStr);
