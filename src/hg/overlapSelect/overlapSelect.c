@@ -37,9 +37,9 @@ unsigned parseFormatSpec(char *fmt)
 {
 if (sameString(fmt, "psl"))
     return PSL_FMT;
-if (sameString(fmt, ".genePred"))
+if (sameString(fmt, "genePred"))
     return GENEPRED_FMT;
-if (sameString(fmt, ".bed"))
+if (sameString(fmt, "bed"))
     return BED_FMT;
 errAbort("invalid file format: %s", fmt);
 return UNKNOWN_FMT;
