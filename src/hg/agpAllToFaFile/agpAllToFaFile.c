@@ -2,12 +2,12 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "fa.h"
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.1 2003/11/13 18:49:52 kate Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.2 2003/11/20 22:02:35 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,14 +16,19 @@ errAbort(
   "agpAllToFaFile - Convert all sequences in an .agp file to a .fa file \n"
   "usage:\n"
   "   agpAllToFaFile in.agp in.fa out.fa\n"
+  "   options:\n"
+  "   -sizes=out.sizes - save chrom sizes in named file\n"
   );
 }
+
+char *chromSizeFile = NULL;        /* file for chrom sizes */
 
 void agpAllToFaFile(char *agpFile, char *faIn, char *faOut)
 /* agpAllToFaFile - Convert a .agp file to a .fa file. */
 {
 struct lineFile *lf = lineFileOpen(agpFile, TRUE); /* input AGP file */
 FILE *fIn, *fOut;                     /* input and output fasta file */
+FILE *fSizes = NULL;                  /* output file w/ chrom sizes */
 char *line, *words[16];
 int lineSize, wordCount;
 int lastPos = 0;
@@ -87,9 +92,14 @@ fIn = mustOpen(faIn, "r");
 while (faReadMixedNext(fIn, TRUE, "bogus", TRUE, NULL, &seq))
     hashAdd(fragHash, seq->name, seq);
 
-/* set up output file */
+/* set up output files */
 fprintf(stderr, "Writing %s\n", faOut);
 fOut = mustOpen(faOut, "w");
+if (chromSizeFile != NULL)
+    {
+    fprintf(stderr, "Writing %s\n", chromSizeFile);
+    fSizes = mustOpen(chromSizeFile, "w");
+    }
 
 /* traverse hash, writing out sequence records */
 cookie = hashFirst(chromHash); 
@@ -100,6 +110,8 @@ while ((hel = hashNext(&cookie)) != NULL)
     lastPos = hashIntVal(chromSizeHash, seqName);
     if (lastPos == 0)
         errAbort("%s not found\n", seqName);
+    if (fSizes != NULL)
+        fprintf(fSizes, "%s\t%d\n", seqName, lastPos);
     dna = needLargeMem(lastPos+1);
     memset(dna, 'n', lastPos);
     dna[lastPos] = 0;
@@ -111,19 +123,21 @@ while ((hel = hashNext(&cookie)) != NULL)
         if (seq == NULL)
             errAbort("Couldn't find %s in %s", agp->frag, faIn);
         size = agp->fragEnd - agp->fragStart;
-        if (agp->strand[0] == '-')
-            reverseComplement(seq->dna + agp->fragStart, size);
         memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
+        if (agp->strand[0] == '-')
+            reverseComplement(dna + agp->chromStart, size);
         }
     printf("Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
     faWriteNext(fOut, seqName, dna, lastPos);
+    freeMem(dna);
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
+chromSizeFile = optionVal("sizes", chromSizeFile);
 if (argc != 4)
     usage();
 agpAllToFaFile(argv[1], argv[2], argv[3]);
