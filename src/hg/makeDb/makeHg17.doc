@@ -2501,7 +2501,7 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-# PRODUCE FUGU BLAT ALIGNMENT (WORKING - 2004-07-07 - Hiram)
+# PRODUCE FUGU BLAT ALIGNMENT (DONE - 2004-07-07 - Hiram)
 
     # Use masked scaffolds from fr1 assembly (same sequence as
     # previous BlatFugu, however it's repeat and TRF-masked).
@@ -2535,14 +2535,19 @@ cat << 'EOF' > gsub
     para check
     para push -maxQueue=300000 -maxPush=220000
     para check
-XXXX - running 2004-07-07 14:30
+# Completed: 219640 of 219640 jobs
+# CPU time in finished jobs:    5206945s   86782.41m  1446.37h   60.27d  0.165 y
+# IO & Wait Time:                797791s   13296.52m   221.61h    9.23d  0.025 y
+# Average job time:                  27s       0.46m     0.01h    0.00d
+# Longest job:                      951s      15.85m     0.26h    0.01d
+# Submission to last job:          7553s     125.88m     2.10h    0.09d
         # cd psl
         # count files with aligments
         # find . -not -size 427c | wc -l
-        # 89878
+        # 44558
         # count files with no aligments
         # find . -size 427c | wc -l
-        # 195265
+        # 175463
 
    # When cluster run is done, sort alignments
    # into chrom directory
@@ -2552,40 +2557,32 @@ XXXX - running 2004-07-07 14:30
       liftUp -type=.psl stdout \
         /cluster/data/hg17/jkStuff/liftAll.lft warn stdin | \
       pslSortAcc nohead chrom temp stdin
-        # 15 minutes ?
-        # Processed 855648 lines into 4 temp files
+        # 65 minutes ?
+        # Processed 216595 lines into 1 temp files
 
     # Rename to correspond with tables and load into database:
     ssh hgwdev
     cd /cluster/data/hg17/bed/blatFr1/chrom
-    rm -f chr*_blatFr1.psl
-    foreach i (chr?{,?}{,_random}.psl)
+    foreach i (chr*.psl)
         set r = $i:r
-        echo $r
+        echo mv $i ${r}_blatFr1.psl
         mv $i ${r}_blatFr1.psl
     end
 
-    # Next assembly, lift fugu scaffolds to Fugu browser chrUn,
+    # lift fugu scaffolds to Fugu browser chrUn,
     # so you can link to other browser.  And don't need to load sequence
-    # liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+    cd /cluster/data/hg17/bed/blatFr1
+    liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
 
-    hgLoadPsl hg17 *.psl
-        # $ featureBits hg17 blatFr1 refGene:CDS
-        # 12787423 bases of 2865248791 (0.446%) in intersection
-        # $ featureBits hg15 blatFugu refGene:CDS
-        # 12427544 bases of 2866466359 (0.434%) in intersection
-
-    # Edit trackDb.ra to include blatFr1
-    # NOTE: already in top-level trackDb.ra
-
-    # Make fugu /gbdb/ symlink and load Fugu sequence data.
-    # NOTE: don't need to do this in next assembly
-    mkdir /gbdb/hg17/fuguSeq
-    cd /gbdb/hg17/fuguSeq
-    ln -s /cluster/data/fr1/fugu_v3.masked.fa
-    # hide .tab file
-    cd /cluster/store2/tmp
-    hgLoadSeq hg17 /gbdb/hg17/fuguSeq/fugu_v3.masked.fa
+    hgLoadPsl -table=blatFr1 hg17 all.psl
+    #	load of blatFr1 did not go as planned: 216595 record(s),
+    #	0 row(s) skipped, 3 warning(s) loading psl.tab
+    #	featureBits hg17 blatFr1 refGene:CDS
+    #	13476002 bases of 2866216770 (0.470%) in intersectio
+    #	featureBits hg16 blatFr1 refGene:CDS
+    #	13547219 bases of 2865248791 (0.473%) in intersection
+    #	featureBits hg15 blatFugu refGene:CDS
+    #	12427544 bases of 2866466359 (0.434%) in intersection
 
 #  BLASTZ RAT RN3 (DONE - 2004-06-14 - Hiram)
 
@@ -5095,7 +5092,7 @@ rm $TMP/$root.pp
 #type bed 12 .
 
 
-# PRODUCING GENSCAN PREDICTIONS (DONE - 2004-07-01 - Hiram)
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2004-07-08 - Hiram)
 #	Needed to download a new binary for this run.  Our Linux systems
 #  XXX - I thought a new binary was needed.  Turned out it was already
 #  here in our hg3rdParty CVS project.  All of this discussed here can
@@ -5126,8 +5123,12 @@ rm $TMP/$root.pp
 #  These instructions should simple check it out right here in
 #  bed/genscan and make the gsub command refer to these copies.
 
-    ssh eieio
+    ssh hgwdev
     mkdir /cluster/data/hg17/bed/genscan
+    cd /cluster/data/hg17/bed/genscan
+    cvs co hg3rdParty/genscanlinux
+
+    ssh eieio
     cd /cluster/data/hg17/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
@@ -5156,7 +5157,7 @@ rm $TMP/$root.pp
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/home/hiram/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/hiram/GENSCAN/genscan -par=/cluster/home/hiram/GENSCAN/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -5164,35 +5165,25 @@ rm $TMP/$root.pp
     para create jobList
     para try
     para check
-    para push
-XXX - running - 2004-07-07 12:40
-# Completed: 370 of 380 jobs
-# Crashed: 10 jobs
-# CPU time in finished jobs:      69632s    1160.53m    19.34h    0.81d  0.002 y
-# IO & Wait Time:                  1547s      25.78m     0.43h    0.02d  0.000 y
-# Average job time:                 192s       3.21m     0.05h    0.00d
-# Longest job:                     2846s      47.43m     0.79h    0.03d
-# Submission to last job:          6350s     105.83m     1.76h    0.07d
-    #	Ten of these jobs failed due to out of memory.
+    para push ... etc ...
+# Completed: 379 of 380 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      79998s    1333.30m    22.22h    0.93d  0.003 y
+# IO & Wait Time:                  2989s      49.82m     0.83h    0.03d  0.000 y
+# Average job time:                 219s       3.65m     0.06h    0.00d
+# Longest job:                     2999s      49.98m     0.83h    0.03d
+# Submission to last job:          8324s     138.73m     2.31h    0.10d
+
+    #	Running the single failed job on kolossus with a smaller window:
+/cluster/bin/x86_64/gsBig /cluster/data/hg17/5/NT_006576/NT_006576.fa.masked \
+        gtf/NT_006576.fa.gtf -trans=pep/NT_006576.fa.pep \
+        -subopt=subopt/NT_006576.fa.bed -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
 
     # If there were out-of-memory problems (run "para problems"), then 
     # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.  In build33, this was 22/NT_011519.
+    # something lower.  In build33, this was 22/NT_011519
     #  In build34 there were NO failures !
-
-    #	Evidently this new version of genscan is quite different than
-    #	was used in Hg16 - in fact the results below indicate a vast
-    #	difference.
-
-    #	One works OK with no change in window on kolossus: NT_005403
-    #	Trying the last 9 with a window of 2000000.  Four worked at that size:
-    #	NT_022184 NT_026437 NT_010783 NT_008583
-    #	Trying the remaining 5 at 1800000
-    #	done: NT_010194 NT_005612 NT_008470 NT_024524
-    #	Only one failed at that setting: NT_011520
-    #	Run it with a window of 1600000 - that worked
-    #	It doesn't make any difference to run these on kolossus or not,
-    #	the memory limitation is in the genscan program itself.
 
     # Convert these to chromosome level files as so:     
     ssh eieio
@@ -5206,35 +5197,34 @@ XXX - running - 2004-07-07 12:40
     ssh hgwdev
     cd /cluster/data/hg17/bed/genscan
     ldHgGene hg17 genscan genscan.gtf
-    #	This command is taking a very long time to run ...
-    #	It finished, but it took many hours.
-    #	Read 100444 transcripts in 496249 lines in 1 files
-    #	100444 groups 46 seqs 1 sources 1 feature types
+    #	35 minute job
+    #	Read 42807 transcripts in 325994 lines in 1 files
+    #	  42807 groups 46 seqs 1 sources 1 feature types
 
-    #	Note the difference from Hg16 which used to be:
-    #	Reading genscan.gtf
-    #	Read 42974 transcripts in 326300 lines in 1 files
-    #	  42974 groups 41 seqs 1 sources 1 feature types
-    #	42974 gene predictions
     hgPepPred hg17 generic genscanPep genscan.pep
     #	Processing genscan.pep
     hgLoadBed hg17 genscanSubopt genscanSubopt.bed
     #	Reading genscanSubopt.bed
-    #	Loaded 231850 elements of size 6
+    #	Loaded 517157 elements of size 6
     #	Sorted
     #	Creating table definition for 
     #	Saving bed.tab
     #	Loading hg17
 
     #	featureBits hg17 genscan
-    #	102287267 bases of 2866216770 (3.569%) in intersection
+    #	55323340 bases of 2866216770 (1.930%) in intersection
+
     #	featureBits hg16 genscan
     #	55333689 bases of 2865248791 (1.931%) in intersection
 
     #	featureBits hg17 genscanSubopt
-    #	28718435 bases of 2866216770 (1.002%) in intersection
+    #	55986178 bases of 2866216770 (1.953%) in intersection
     #	featureBits hg16 genscanSubopt
     #	56082952 bases of 2865248791 (1.957%) in intersection
+
+    #	Should be zero intersection with rmsk
+    #	featureBits -chrom=chr1 hg17 genscan rmsk
+    #	794 bases of 222827847 (0.000%) in intersection
 
 # BLASTZ MM5 (DONE - 2004-06-22 - Hiram)
     ssh kk
@@ -6140,12 +6130,12 @@ cat `ls -1 *.lav.axt | sort -g` > $BASE/$OUT
     #	Check results
     #	featureBits hg17 blastzSelf
     #	252256266 bases of 2866216770 (8.801%) in intersection
-
     #	real    40m49.573s
     #	user    21m14.200s
     #	sys     2m10.420s
-XXX - need to do hg16 2004-07-07 16:40
+
     #	featureBits hg16 blastzSelf
+    #	254410837 bases of 2865248791 (8.879%) in intersection
 
 
 # CHAIN SELF BLASTZ (WORKING - 2004-07-07 - Hiram)
@@ -6178,28 +6168,40 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try
-XXXX - running 2004-07-07 15:40
     para push # ... etc ...
-# Completed: 46 of 46 jobs
-# CPU time in finished jobs:       4856s      80.94m     1.35h    0.06d  0.000 y
-# IO & Wait Time:                 20083s     334.71m     5.58h    0.23d  0.001 y
-# Average job time:                 542s       9.04m     0.15h    0.01d
-# Longest job:                     2929s      48.82m     0.81h    0.03d
-# Submission to last job:          2929s      48.82m     0.81h    0.03d
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:       8519s     141.98m     2.37h    0.10d  0.000 y
+# IO & Wait Time:                  4795s      79.92m     1.33h    0.06d  0.000 y
+# Average job time:                 296s       4.93m     0.08h    0.00d
+# Longest job:                     2407s      40.12m     0.67h    0.03d
+# Submission to last job:          3540s      59.00m     0.98h    0.04d
 
+    #	chr19 did fail, on kolossus, try:
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain/run1
+    time axtChain /cluster/data/hg17/bed/blastzSelf/axtChrom/chr19.axt \
+	/cluster/data/hg17/nib \
+	/cluster/data/hg17/nib \
+	chain/chr19.chain > out/chr19.out
+    #	80 minute job, 1.5 Gb result:
+    #	-rw-rw-r--    1 1588795432 Jul  7 21:54 chr19.chain
 
     # now on the file server, sort chains
     ssh eieio
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
     time chainMergeSort run1/chain/*.chain > all.chain
-    #	real    8m42.853s
-    #	user    5m59.100s
-    #	sys     0m40.320s
+    #	real    27m38.935s
+    #	user    23m18.540s
+    #	sys     2m39.300s
+    #	A 5 Gb file:
+    #	-rw-rw-r--    1 5267202936 Jul  7 22:23 all.chain
+
 
     time chainSplit chain all.chain
-    #	real    10m52.224s
-    #	user    5m52.360s
-    #	sys     0m34.870s
+    #	real    29m27.062s
+    #	user    22m48.250s
+    #	sys     1m57.910s
 
     # optionally: rm run1/chain/*.chain
 
@@ -6214,8 +6216,8 @@ XXXX - running 2004-07-07 15:40
         hgLoadChain hg17 ${c}_chainSelf $i
         echo done $c
     done
+XXXX - running 2004-07-08 08:56
     # exit bash if you are tcsh
     #	This is a 50 minute job
 
     #	featureBits hg17 chainSelf
-
