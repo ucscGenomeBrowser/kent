@@ -8709,10 +8709,6 @@ if (withLeftLabels)
 
 	//errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
 
-
-	    sprintf( minRangeStr, " "  );
-	    sprintf( maxRangeStr, " " );
-
 	    if( vis == tvFull && track->heightPer >= 74  )
 		{
 		printYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
@@ -8721,13 +8717,20 @@ if (withLeftLabels)
 		printYAxisLabel( vg, y+5, track, "4.0", min0, max0 );
 		printYAxisLabel( vg, y+5, track, "5.0", min0, max0 );
 		printYAxisLabel( vg, y+5, track, "6.0", min0, max0 );
-		}
 
+	        sprintf( minRangeStr, " "  );
+	        sprintf( maxRangeStr, " " );
+		}
+            else
+		{
+            	sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
+            	sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
+		}
 	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", (int)minRangeCutoff);
-	    sprintf( maxRangeStr, "%d", (int)maxRangeCutoff);
+	    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
+	    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
 	    }
 
 	
