@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.16 2004/05/11 19:58:43 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.17 2004/05/11 22:31:58 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1621,11 +1621,6 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
 	safef(month,sizeof(month),tempVal);
 	}
 
-    // debug
-    //safef(msg,sizeof(msg),"tempVar=%s<br>\n tempVarName=%s<br>\n tempVal=%s<br>\n showColumns=%s<br>\n",tempVar,tempVarName,tempVal,showColumns);
-    //htmShell(TITLE, doMsg, NULL);
-    //exit(0);
-
     i++;
     }
 }
@@ -1635,20 +1630,13 @@ void saveMyUser()
 /* read data for my user */
 {
 char *tbl = "users";
-char query[256];
-struct dyString * newcontents = newDyString(2048);  /* need room */
-
-dyStringPrintf(newcontents, "?showColumns=%s", showColumns);
-dyStringPrintf(newcontents, "?org=%s"        , pushQtbl   );
-dyStringPrintf(newcontents, "?month=%s"      , month      );
-
-freeMem(&myUser.contents);
-myUser.contents = newcontents->string;
-safef(query, sizeof(query), 
-    "update %s set contents = '%s' where user = '%s' ", 
-    tbl, myUser.contents, myUser.user);
-sqlUpdate(conn, query);
-freeDyString(&newcontents);
+struct dyString * query = newDyString(2048);
+dyStringPrintf(query,  
+    "update %s set contents = '?showColumns=%s?org=%s?month=%s' where user = '%s'",
+    tbl, showColumns, pushQtbl, month, myUser.user);
+sqlUpdate(conn, query->string);
+freeDyString(&query);
+readMyUser();  /* refresh myUser */
 }
 
 
