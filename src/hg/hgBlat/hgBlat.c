@@ -301,6 +301,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	        abbrv = words[0];
 		if (abbrv[0] == 0) abbrv = words[1];
 		}
+	    else if (sameString(words[1], "dbSNP"))
+	        {
+		if (wordCount > 2)
+		    abbrv = words[2];
+		else
+		    abbrv = nameClone;
+		}
 	    else
 		{
 		abbrv = words[wordCount-1];
@@ -392,7 +399,7 @@ if (seqList != NULL && seqList->name[0] == 0)
 trimUniq(seqList);
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 5000 : 20000);
+maxSingleSize = (isTx ? 5000 : 25000);
 maxTotalSize = maxSingleSize * 2.5;
 
 /* Create temporary file to store sequence. */
