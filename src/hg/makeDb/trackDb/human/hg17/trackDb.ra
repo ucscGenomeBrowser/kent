@@ -887,16 +887,16 @@ type netAlign tetNig1 chainTetNig1
 otherDb tetNig1
 
 track indelible
-shortLabel Human Insertions
-longLabel Insertions in Human Relative to Chimp and Mouse
+shortLabel Human Inserts
+longLabel Insertions in Human Relative to Other Species
 group compGeno
 priority 202.8
 visibility hide
 type bed 4 .
 
 track chimpDels
-shortLabel Chimp Deletions
-longLabel Deletions in Chimp (lifted from Nov. 2003/panTro1) Relative to Human
+shortLabel Chimp/Human Indels
+longLabel Indels Relative Chimp and Human (lifted from Nov. 2003/panTro1)
 group compGeno
 priority 203
 visibility hide
@@ -929,20 +929,3 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
-
-track indelible
-shortLabel Indelible Inserts
-longLabel Insertions into the human genome found by indelible
-priority 11
-group x
-visibility dense
-type bed 4 +
-
-track tarjeiUnverify
-shortLabel Unverified Tarjei
-longLabel Insertions found by Tarjei and unverified by Indelible
-priority 11
-group x
-visibility dense
-type bed 3 +
-
