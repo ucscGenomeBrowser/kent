@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.24 2004/03/17 00:43:01 angie Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.25 2004/04/04 04:03:45 sugnet Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -687,16 +687,48 @@ fbOrBits(bits, chromSize, fbList, 0);
 featureBitsFreeList(&fbList);
 }
 
+void fbOrTableBitsQueryMinSize(Bits *bits, char *trackQualifier, char *chrom, 
+	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR, int minSize)
+/* Ors in features matching sqlConstraints in track on chromosome into bits. 
+   Skips featureBits that are less than minSize. minSize is useful for introns where
+   things less than a given threshold are alignment gaps rather than introns. */
+{
+struct featureBits *goodList = NULL, *badList = NULL, *fb = NULL, *fbNext = NULL;
+struct featureBits *fbList = fbGetRangeQuery(trackQualifier, chrom, 0,
+					     chromSize, sqlConstraints,
+					     clipToWindow, filterOutNoUTR);
+if(minSize > 0) 
+    {
+    for(fb = fbList; fb != NULL; fb = fbNext)
+	{
+	fbNext = fb->next;
+	if(fb->end - fb->start > minSize) 
+	    {
+	    slAddHead(&goodList, fb);
+	    }
+	else
+	    {
+	    slAddHead(&badList, fb);
+	    }
+	}
+    }
+else
+    {
+    goodList = fbList;
+    }
+fbOrBits(bits, chromSize, goodList, 0);
+featureBitsFreeList(&goodList);
+featureBitsFreeList(&badList);
+}
+
 void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
 	boolean clipToWindow, boolean filterOutNoUTR)
 /* Ors in features matching sqlConstraints in track on chromosome into bits. */
 {
-struct featureBits *fbList = fbGetRangeQuery(trackQualifier, chrom, 0,
-					     chromSize, sqlConstraints,
-					     clipToWindow, filterOutNoUTR);
-fbOrBits(bits, chromSize, fbList, 0);
-featureBitsFreeList(&fbList);
+fbOrTableBitsQueryMinSize(bits, trackQualifier, chrom, chromSize, conn,
+			  sqlConstraints, clipToWindow, filterOutNoUTR, 0);
 }
 
 struct bed *fbToBed(struct featureBits *fbList)

@@ -53,10 +53,19 @@ void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom,
 	int chromSize, struct sqlConnection *conn);
 /* Ors in features in track on chromosome into bits.  */
 
+void fbOrTableBitsQueryMinSize(Bits *bits, char *trackQualifier, char *chrom, 
+        int chromSize, struct sqlConnection *conn, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR, int minSize);
+/* Ors in features matching sqlConstraints in track on chromosome into bits. 
+   Skips featureBits that are less than minSize. minSize is useful for introns where
+   things less than a given threshold are alignment gaps rather than introns. */
+
 void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
 	boolean clipToWindow, boolean filterOutNoUTR);
 /* Ors in features matching sqlConstraints in track on chromosome into bits. */
+
+
 
 void fbOptions(char *track);
 /* Print out an HTML table with radio buttons for featureBits options. */
