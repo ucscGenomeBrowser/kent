@@ -737,6 +737,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#MGIid">MGI ID</A> 
   - Links MGI ID to Locus Link ID (Mouse)
   <LI><A 
+  href="#BED">miRNA</A> 
+  - MicroRNAs from the miRNA Registry at the WellCome Trust Sanger Institute.
+  <LI><A 
   href="#BlastTab">mmBlastTab</A> 
   - Blastp results of known genes vs. one another (mouse)
   <LI><A 
@@ -764,6 +767,10 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#MultizAlign">multizMm3Rn2</A> 
   - <em>Multiz</em> multiple alignments between mouse (mm3) and rat (rn2) </LI>
+  <LI><A 
+  href="#MultizAlign">multizMm3Rn3GalGal2_phyloHMM</A> 
+  - Evolutionary conservation in human, mouse, rat, and chicken 
+  based on a phylogentiec hidden Markov model, using multiz alignments. 
   <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
@@ -1448,6 +1455,7 @@ The following definition is used for several tables as follows:<BR>
 - intersectingMergedMCS - first 4 fields <BR>
 - mcs_b - first 4 fields <BR>
 - mcs_p - first 4 fields <BR>
+- miRNA - first 8 fields <BR>
 - nci60 - all 15 fields <BR>
 - perlegen - first 12 fields <BR>
 - pjt_gene - first 12 fields <BR>
@@ -2436,7 +2444,8 @@ from one to the other:
 </PRE>
 
 <H4><A name=MultizAlign></A>Multiz Alignments</H4>
-The following definition is used for the multizMm3Rn2 table.<BR><BR>
+The following definition is used for the multizMm3Rn2 and 
+multizMm3Rn3GalGal2_phyloHMM tables.<BR><BR>
 <PRE>
 "Multiz alignments" 
    {
