@@ -1665,7 +1665,6 @@ else
     }
 cmpQuerySize = seq->size;
 clumpList = clumpHits(gf, hitList, gf->minMatch);
-// uglyf("hitCount = %d, clumpCount = %d\n", *retHitCount, slCount(clumpList));
 return clumpList;
 }
 
@@ -1717,7 +1716,7 @@ bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize;
 bioSeq *seq, *seqList;
 bits32 sig = oocSig, psz = tileSize;
-int i;
+bits32 i;
 int oocCount = 0;
 char *inName;
 FILE *f = mustOpen(outName, "w");
@@ -1773,7 +1772,7 @@ for (i=0; i<tileSpaceSize; ++i)
     {
     if (sizes[i] >= maxPat)
 	{
-	writeOne(f, sizes[i]);
+	writeOne(f, i);
 	++oocCount;
 	}
     }

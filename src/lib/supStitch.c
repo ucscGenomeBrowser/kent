@@ -557,7 +557,7 @@ struct ssGraph *graph;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
-int trimCount = qSeq->size/200 + 2000;
+int trimCount = qSeq->size/200 + genoSeq->size/1000 + 2000;
 boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
@@ -573,7 +573,7 @@ if (trimCount > 8000)	/* This is all the memory we can spare, sorry. */
     trimCount = 8000;
 if (totalFfCount > trimCount)
     {
-    if (totalFfCount > 6*trimCount)
+    if (totalFfCount > trimCount)
 	warn("In %s vs. %s trimming from %d to %d blocks", qSeq->name, genoSeq->name, totalFfCount, trimCount);
     if (!trimBundle(bundle, trimCount, stringency))
 	{

@@ -697,7 +697,8 @@ if (tSeq == NULL)
  * We want to output something either when the next hit can't be
  * merged into the previous, or at the end of the list.  To avoid
  * duplicating the output code we're forced to complicate the loop
- * termination logic. */
+ * termination logic.  Hence the check for hit == NULL to break
+ * the loop is not until near the end of the loop. */
 for (hit = clump->hitList; ; hit = hit->next)
     {
     if (hit != NULL)
@@ -709,6 +710,9 @@ for (hit = clump->hitList; ; hit = hit->next)
     /* See if it's time to output merged (diagonally adjacent) hits. */
     if (!outOfIt)	/* Not first time through. */
         {
+	/* As a micro-optimization handle strings of adjacent hits
+	 * specially.  Don't do the extensions until we've merged
+	 * all adjacent hits. */
 	if (hit == NULL || newQ != qEnd || newT != tEnd)
 	    {
 	    qs = qSeq->dna + qStart;
@@ -1552,6 +1556,13 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     saveEnd = *endPos;
     *endPos = 0;
     clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, subOffset, lm, &hitCount);
+#ifdef DEBUG
+        {
+	struct gfClump *clump;
+	for (clump = clumpList; clump != NULL; clump = clump->next)
+	    gfClumpDump(gf, clump, uglyOut);
+	}
+#endif /* DEBUG */
     oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, &rangeList);
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     gfClumpFreeList(&clumpList);

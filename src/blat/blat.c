@@ -15,7 +15,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-int version = 5;	/* Blat version number. */
+int version = 7;	/* Blat version number. */
 
 enum constants {
 	qWarnSize = 5000000,	/* Warn if more than this many bases in one query. */
@@ -58,9 +58,9 @@ errAbort(
   "options:\n"
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
-  "               Default is 11 for DNA and 8 for protein.\n"
+  "               Default is 11 for DNA and 5 for protein.\n"
   "   -oneOff=N   If set to 1 this allows one mismatch in tile and still\n"
-  "               triggers an alignments.  Default is 1 for protein, 0 for DNA.\n"
+  "               triggers an alignments.  Default is 0.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
@@ -68,28 +68,15 @@ errAbort(
   "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is 90 for\n"
   "               nucleotide searches, 25 for protein or translated protein searches.\n"
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
-  "               from 0 to 3.  Default is 2.\n"
-  "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
-  "               it is masked.  Typically this is 256 for tileSize 12,\n"
-  "               1024 for tile size 11, 4096 for tile size 10.\n"
-  "               Default is 1024\n"
+  "               from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
   "               the tileSize\n"
   "   -makeOoc=N.ooc Make overused tile file\n"
-  "   -t=type     Database type.  Type is one of:\n"
-  "                 dna - DNA sequence\n"
-  "                 prot - protein sequence\n"
-  "                 dnax - DNA sequence translated in six frames to protein\n"
-  "               The default is dna\n"
-  "   -q=type     Query type.  Type is one of:\n"
-  "                 dna - DNA sequence\n"
-  "                 rna - RNA sequence\n"
-  "                 prot - protein sequence\n"
-  "                 dnax - DNA sequence translated in six frames to protein\n"
-  "                 rnax - DNA sequence translated in three frames to protein\n"
-  "               The default is dna\n"
-  "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
+  "               it is marked as overused.  Typically this is 256 for tileSize 12,\n"
+  "               1024 for tile size 11, 4096 for tile size 10.\n"
+  "               Default is 1024.  Typically only comes into play with makeOoc\n"
   "   -mask=type  Mask out repeats.  Alignments won't be started in masked region but\n"
   "               may extend through it.  Masking only works for nucleotides. Mask types are:\n"
   "                 lower - mask out lower cased sequence\n"
@@ -107,6 +94,19 @@ errAbort(
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
+  "   -t=type     Database type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "               The default is dna\n"
+  "   -q=type     Query type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 rna - RNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "                 rnax - DNA sequence translated in three frames to protein\n"
+  "               The default is dna\n"
+  "   -prot       Synonymous with -d=prot -q=prot\n"
   , version
   );
 }
@@ -758,9 +758,9 @@ if ((dIsProtLike ^ qIsProtLike) != 0)
 /* Set default tile size for protein-based comparisons. */
 if (dIsProtLike)
     {
-    tileSize = 8;
+    tileSize = 5;
     minMatch = 1;
-    oneOff = TRUE;
+    oneOff = FALSE;
     maxGap = 0;
     }
 
