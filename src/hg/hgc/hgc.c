@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.825 2005/01/27 00:40:38 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.826 2005/01/27 00:43:30 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10670,6 +10670,7 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+/*
 if (stringIn("nonsynon",snp.func)!=NULL)
     {
     printf("<P><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
@@ -10678,6 +10679,7 @@ if (stringIn("nonsynon",snp.func)!=NULL)
     printf("PropertySelect=Protein_structure&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Structure</A>\n", snp.name);
     printf("<BR><a href=\"#LSSNP\" >LS-SNP description</A></P>\n");
     }
+*/
 printf("<P>\n");
 }
 
