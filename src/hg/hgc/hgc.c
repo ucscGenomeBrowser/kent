@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.649 2004/06/01 19:52:37 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.650 2004/06/01 20:18:40 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6813,6 +6813,7 @@ if (hasMedical)
 void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print Ensembl Gene URL. */
 {
+struct trackDb *tdbSf;
 char *shortItemName;
 char *url = tdb->url;
 char *chp;
@@ -6896,7 +6897,7 @@ if (url != NULL && url[0] != 0)
             printf("%s</A><BR>\n", proteinID);
 	    }
 
-    	// get genomeStr to be used in Superfamily URL */ 
+    	/* get genomeStr to be used in Superfamily URL */ 
     	if (sameWord(organism, "human"))
 	    {
 	    genomeStr = "hs";
@@ -6925,9 +6926,9 @@ if (url != NULL && url[0] != 0)
     	if (ans != NULL)
 	    {
             printf("<B>Superfamily Link: </B>");
+	    tdbSf = hashFindVal(trackHash, "superfamily");;
             safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
-	            "http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?genome=", 
-	    	    genomeStr, proteinID);
+	    	  tdbSf->url, genomeStr, proteinID);
             printf("%s", supfamURL);
             printf("%s</A><BR><BR>\n", proteinID);
             }
