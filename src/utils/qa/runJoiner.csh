@@ -33,14 +33,18 @@ if ($#argv == 3) then
   set joinerPath=$argv[3]
 else
   # checkout tip of the tree
-  # cvs -d hgwdev-10: 
   if (! -d xxJoinDirxx) then
     mkdir xxJoinDirxx
   endif
-  cvs co -d xxJoinDirxx kent/src/hg/makeDb/schema/all.joiner >& /dev/null
   set joinerPath="xxJoinDirxx"
+  setenv CVS_RSH ssh
+  cvs -d hgwdev:/projects/compbio/cvsroot co -d xxJoinDirxx \
+    kent/src/hg/makeDb/schema/all.joiner >& /dev/null
+
   if ( $status ) then
-    echo "cvs check-out failed for versionInfo.h on $HOST"
+    echo
+    echo "  cvs check-out failed for all.joiner on $HOST"
+    echo
     exit 1
   endif
 
