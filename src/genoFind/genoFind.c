@@ -91,8 +91,8 @@ AllocVar(ps);
 ps->tileSize = tileSize;
 tileSpaceSize = ps->tileSpaceSize = (1<<seedBitSize);
 ps->tileMask = tileSpaceSize-1;
-ps->lists = needLargeZeroedMem(tileSpaceSize * sizeof(ps->lists[0]));
-ps->listSizes = needLargeZeroedMem(tileSpaceSize * sizeof(ps->listSizes[0]));
+ps->lists = needHugeZeroedMem(tileSpaceSize * sizeof(ps->lists[0]));
+ps->listSizes = needHugeZeroedMem(tileSpaceSize * sizeof(ps->listSizes[0]));
 ps->minMatch = minMatch;
 ps->maxGap = maxGap;
 ps->maxPat = maxPat;
@@ -181,7 +181,7 @@ for (i=0; i<tileSpaceSize; ++i)
         overusedCount += 1;
         }
     }
-ps->allocated = allocated = needLargeMem(count*sizeof(allocated[0]));
+ps->allocated = allocated = needHugeMem(count*sizeof(allocated[0]));
 for (i=0; i<tileSpaceSize; ++i)
     {
     if ((size = listSizes[i]) < maxPat)
@@ -512,7 +512,7 @@ return clumpHits(ps, hitList);
 void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
 /* genoFind - Quickly find where DNA occurs in genome.. */
 {
-struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 10, 4*1024);
+struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 12, 1024);
 struct dnaSeq *seq = faReadDna(probeName);
 struct gfClump *clumpList = gfFindClumps(ps, seq), *clump;
 
@@ -551,7 +551,7 @@ return socket(AF_INET, SOCK_STREAM, 0);
 void startServer(char *portName, int nibCount, char *nibFiles[])
 /* Load up index and hang out in RAM. */
 {
-struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 10, 4*1024);
+struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 12, 1024);
 char buf[256];
 char *line, *command;
 int fromLen, readSize;
