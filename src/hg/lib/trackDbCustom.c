@@ -6,6 +6,7 @@
 #include "jksql.h"
 #include "trackDb.h"
 #include "hdb.h"
+#include "hui.h"
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
