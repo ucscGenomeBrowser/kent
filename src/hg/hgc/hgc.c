@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.666 2004/06/15 20:30:58 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.667 2004/06/15 21:18:16 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7468,8 +7468,8 @@ if (hTableExists(chainTable_chrom) )
         puts("<ul><LI>\n");
         hgcAnchorPseudoGene(pg->kgName, "knownGene", pseudoList->tName, "startcodon", pseudoList->tStart, pseudoList->tEnd, 
                 pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
-        printf("Annotated alignment using chainId: %d </A> \n", chainId);
-        printf("score: %d \n", score);
+        printf("Annotated alignment</a> using self chain.\n");
+        printf("Score: %d \n", score);
         puts("</LI>\n");
         printf("<ul>Raw alignment: ");
         hgcAnchorTranslatedChain(chainId, chainTable, pseudoList->tName, pg->gStart, pg->gEnd);
