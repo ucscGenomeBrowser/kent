@@ -1,7 +1,6 @@
 .c.o:
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
 
-MYSQLLIBS = /usr/local/mysql/lib/mysql/libmysqlclient.a
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
