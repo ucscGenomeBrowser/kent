@@ -2765,6 +2765,7 @@ tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
 }
 
+#ifdef OLD
 struct genomicDups *filterOldDupes(struct genomicDups *oldList)
 /* Get rid of all but recent/artifact dupes. */
 {
@@ -2784,13 +2785,16 @@ for (dup = oldList; dup != NULL; dup = next)
 slReverse(&newList);
 return newList;
 }
+#endif /* OLD */
 
 void loadGenomicDups(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
-if (!hIsPrivateHost())
-    tg->items = filterOldDupes(tg->items);
+if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
+    slSort(&tg->items, bedCmpScore);
+else
+    slSort(&tg->items, bedCmp);
 }
 
 void freeGenomicDups(struct trackGroup *tg)
