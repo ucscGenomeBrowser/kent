@@ -9,6 +9,11 @@ priority 1
 name blastp
 type pair bdgpBlastTab query target bitScore -1 
 
+name pfamSimilarity
+type association bdgpToPfam
+queryOne select value from bdgpToPfam where name='%s'
+queryAll select name,value from bdgpToPfam
+
 name nameSimilarity
 type nameSimilarity bdgpSwissProt bdgpName symbol
 
@@ -16,5 +21,6 @@ name abc
 type abc bdgpSwissProt bdgpName symbol
 
 name goSimilarity
-goaIdColumn dbObjectId
+queryOne select goId from go.goaPart where dbObjectId='%s'
+queryAll select dbObjectId,goId from go.goaPart
 

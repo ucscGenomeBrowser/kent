@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.116 2003/11/07 22:27:49 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.117 2003/11/12 18:51:48 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -197,6 +197,42 @@ hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
 hPrintf("</TR></TABLE>");
 }
 
+/* ---- Some helper routines for order methods. ---- */
+
+
+char *orderSetting(struct order *ord, char *name, char *defaultVal)
+/* Return value of named setting in order, or default if it doesn't exist. */
+{
+char *result = hashFindVal(ord->settings, name);
+if (result == NULL)
+    result = defaultVal;
+return result;
+}
+
+char *orderRequiredSetting(struct order *ord, char *name)
+/* Return value of named setting.  Abort if it doesn't exist. */
+{
+char *result = hashFindVal(ord->settings, name);
+if (result == NULL)
+    errAbort("Missing required %s field in %s record of orderDb.ra",
+    	name, ord->name);
+return result;
+}
+
+int orderIntSetting(struct order *ord, char *name, int defaultVal)
+/* Return value of named integer setting or default if it doesn't exist. */
+{
+char *result = hashFindVal(ord->settings, name);
+if (result == NULL)
+    return defaultVal;
+return atoi(result);
+}
+
+boolean orderSettingExists(struct order *ord, char *name)
+/* Return TRUE if setting exists in column. */
+{
+return hashFindVal(ord->settings, name) != NULL;
+}
 
 /* ---- Some helper routines for column methods. ---- */
 

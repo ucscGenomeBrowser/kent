@@ -30,6 +30,14 @@ longLabel Blastp E-value with Selected Gene
 type pair knownBlastTab query target bitScore -1 
 priority 3
 
+name pfamSimilarity
+shortLabel Pfam Similarity
+longLabel Number of Pfam Domains Shared with Selected Gene
+type association knownToPfam
+priority 3.1
+queryOne select value from knownToPfam where name='%s'
+queryAll select name,value from knownToPfam
+
 name geneDistance
 shortLabel Gene Distance
 longLabel Distance in Base Pairs from Selected Gene
@@ -42,12 +50,21 @@ longLabel Number of Leading Characters in Name that Match Selected Gene Name
 type nameSimilarity kgXref kgID geneSymbol
 priority 5
 
+#name goSimilarity
+#shortLabel GO Similarity
+#longLabel Number of Shared Gene Ontology Terms
+#type goSimilarity
+#priority 6
+#goaIdColumn dbObjectSymbol
+
 name goSimilarity
 shortLabel GO Similarity
 longLabel Number of Shared Gene Ontology Terms
-type goSimilarity
-priority 6
-goaIdColumn dbObjectSymbol
+type association go.goaPart
+priority 6.1
+protKey on
+queryOne select goId from go.goaPart where dbObjectSymbol='%s'
+queryAll select dbObjectSymbol,goId from go.goaPart
 
 name abc
 shortLabel Name

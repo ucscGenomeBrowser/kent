@@ -284,8 +284,8 @@ else if (sameString(type, "nameSimilarity"))
      nameSimilarityMethods(ord, s);
 else if (sameString(type, "geneDistance"))
      geneDistanceMethods(ord, s);
-else if (sameString(type, "goSimilarity"))
-     goSimilarityMethods(ord, s);
+else if (sameString(type, "association"))
+     associationSimilarityMethods(ord, s);
 else if (sameString(type, "abc"))
      abcMethods(ord, s);
 else if (sameString(type, "genomePos"))

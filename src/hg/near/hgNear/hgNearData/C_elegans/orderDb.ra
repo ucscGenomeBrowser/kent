@@ -9,6 +9,11 @@ priority 1
 name blastp
 type pair sangerBlastTab query target bitScore -1 
 
+name pfamSimilarity
+type association sangerToPfam
+queryOne select value from sangerToPfam where name='%s'
+queryAll select name,value from sangerToPfam
+
 name nameSimilarity
 type nameSimilarity orfToGene name value
 

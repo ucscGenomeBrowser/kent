@@ -184,6 +184,12 @@ struct order
     char *valField;		/* Value field in associated table. */
     char *curGeneField;		/* curGeneId field in associated table. */
     float distanceMultiplier;	/* What to multiply valField by for distance. */
+
+    /* Association tables. */
+    char *tables;		/* List of all tables. */
+    char *queryOne;		/* SQL to query on one gene. */
+    char *queryAll;		/* SQL to query on all genes. */
+    boolean protKey;		/* Use protein rather than mRNA ids. */
     };
 
 struct order *orderGetAll(struct sqlConnection *conn);
@@ -351,6 +357,19 @@ struct hash *hashColumns(struct column *colList);
 
 struct column *findNamedColumn(struct column *colList, char *name);
 /* Return column of given name from list or NULL if none. */
+
+/* ---- Some helper routines for order methods. ---- */
+char *orderSetting(struct order *ord, char *name, char *defaultVal);
+/* Return value of named setting in order, or default if it doesn't exist. */
+
+char *orderRequiredSetting(struct order *ord, char *name);
+/* Return value of named setting.  Abort if it doesn't exist. */
+
+int orderIntSetting(struct order *ord, char *name, int defaultVal);
+/* Return value of named integer setting or default if it doesn't exist. */
+
+boolean orderSettingExists(struct order *ord, char *name);
+/* Return TRUE if setting exists in column. */
 
 /* ---- Some helper routines for column methods. ---- */
 
@@ -578,8 +597,8 @@ void setupColumnPfam(struct column *col, char *parameters);
 void setupColumnFlyBdgp(struct column *col, char *parameters);
 /* Set up Bdgp gene column. */
 
-void goSimilarityMethods(struct order *ord, char *parameters);
-/* Set up go similarity ordering. */
+void associationSimilarityMethods(struct order *ord, char *parameters);
+/* Fill in associationSimilarity methods. */
 
 /* ---- Get config options ---- */
 boolean showOnlyCanonical();
