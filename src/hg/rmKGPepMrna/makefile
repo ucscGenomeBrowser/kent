@@ -16,7 +16,7 @@ A = rmKGPepMrna
 O = $A.o
 
 my: compile
-	mv $A /projects/cc/hg/fanhsu/kent/bin/i386/$A
+	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
 
 mgsc: compile
 	mv $A /usr/local/apache/cgi-bin-mgsc/$A
