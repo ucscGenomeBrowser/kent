@@ -299,6 +299,22 @@ void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 
+/*** Some Stuff for the cdsColor track ***/
+
+enum cdsColorOptEnum {
+   cdsColorNoInterpolation = 0,
+   cdsColorLinearInterpolation = 1,
+};
+
+enum cdsColorOptEnum cdsColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *cdsColorEnumToString(enum cdsColorOptEnum x);
+/* Convert from enum to string representation. */
+
+void cdsColorDropDown(char *var, char *curVal, int size);
+/* Make drop down of options.*/
+
 /*** Some Stuff for the wiggle track ***/
 
 enum wiggleOptEnum {
