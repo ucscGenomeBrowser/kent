@@ -7,10 +7,9 @@
 #include "fa.h"
 #include "nib.h"
 #include "twoBit.h"
-#include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.12 2004/10/13 06:48:48 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.13 2004/12/04 17:03:51 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
