@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.68 2004/11/05 06:11:14 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.69 2004/11/07 00:53:34 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1500,4 +1500,25 @@ for (i = 0; enumDef[i] != NULL; i++)
 sqlFreeResult(&sr);
 return enumDef;
 }
+
+struct slName *sqlRandomSample(char *db, char *table, char *field, int count)
+/* Get random sample from database. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+char query[256], **row;
+struct sqlResult *sr;
+struct slName *list = NULL, *el;
+safef(query, sizeof(query), "select distinct %s from %s order by rand() limit %d", 
+	field, table, count);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return list;
+}
+
 

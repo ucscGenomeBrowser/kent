@@ -307,4 +307,7 @@ char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
 /* Get the definitions of a enum column in a table, returning a
  * null-terminated array of enum values.  Free array when finished.  */
 
+struct slName *sqlRandomSample(char *db, char *table, char *field, int count);
+/* Get random sample from database. */
+
 #endif /* JKSQL_H */
