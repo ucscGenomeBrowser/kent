@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.10 2003/09/29 00:46:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.11 2003/09/29 22:49:03 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -23,8 +23,10 @@ struct wigCartOptions
     				 *  false - simple pick one of the
 				 *  points in the bin.
 				 */
-    enum wiggleGridOptEnum horizontalGrid;
-    				/*  true - display grid lines, else not */
+    enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
+    enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
+    double minY;	/*	from trackDb.ra words, the absolute minimum */
+    double maxY;	/*	from trackDb.ra words, the absolute maximum */
     };
 
 struct wigItem
@@ -93,16 +95,16 @@ debugOpened = TRUE;
 char dbgMsg[DBGMSGSZ+1];
 static void debugPrint(char * name) {
 debugOpen(name);
-if( debugOpened ) {
+if( debugOpened )
+    {
     if( dbgMsg[0] )
-    fprintf( dF, "%s: %s\n", name, dbgMsg);
+	fprintf( dF, "%s: %s\n", name, dbgMsg);
     else
-    fprintf( dF, "%s:\n", name);
+	fprintf( dF, "%s:\n", name);
     }
     dbgMsg[0] = (char) NULL;
     fflush(dF);
 }
-
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -252,7 +254,9 @@ if( itemsLoaded )
     {
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 	spanOver1K, &rowOffset);
-    } else {
+    }
+else
+    {
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 	whereNULL, &rowOffset);
     }
@@ -337,10 +341,13 @@ char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
 enum wiggleOptEnum wiggleType;
 enum wiggleGridOptEnum horizontalGrid;
+enum wiggleGraphOptEnum lineBar;
+Color black = vgFindColorIx(vg, 0, 0, 0);
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 wiggleType = wigCart->wiggleType;
 horizontalGrid = wigCart->horizontalGrid;
+lineBar = wigCart->lineBar;
 
 if( pixelsPerBase > 0.0 )
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -404,7 +411,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		f = mustOpen(currentFile, "r");
 		}
 	    }
-	    else
+	else
 	    {
 	    currentFile = cloneString(wi->File);
 	    f = mustOpen(currentFile, "r");
@@ -466,6 +473,10 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    else
 		dataValue = *(dataStarts + skipDataPoints);
 
+	    /*	Right now, this is a debugging test to see when zooming
+	     *	takes place.  In the future this business will always be
+	     *	done if dataValuesPerPixel is > 1
+	     */
 	    if( ((int) dataValuesPerPixel > 1) &&
 			(wiggleType == wiggleLinearInterpolation) )
 		{		/* skipping data points, find maximum */
@@ -504,17 +515,92 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    if( pixelToDraw >= (w - pixelsPerDataValue) )
 			lastPixel = 1;
 
+/*	drawing region here is from upper left (x1,yOff)
+ *	with width of pixelsPerDataValue (+ kludge lastPixel)
+ *	and height of h  (! Y axis is 0 at top ! -> h is at bottom )
+ *	So, within those constraints, lets figure out where we want to
+ *	draw a box, given a 'dataValue' score in range [0:MAX_WIG_VALUE]
+ *	and our data scale of range [tg->minRange:tg->maxRange]
+ *	with upper data scale limit of wigCart->maxY
+ *	and lower data scale limit of wigCart->minY
+ */
 		if( vis == tvFull )
 		    {
-		    boxHeight = (h * dataValue) / MAX_WIG_VALUE;
-		    if( boxHeight < 1 ) boxHeight = 1;
-		    if( boxHeight > h ) boxHeight = h;
+		    double dataScale = (wigCart->maxY - wigCart->minY) /
+				(double) MAX_WIG_VALUE;
+		    double viewRange = tg->maxRange - tg->minRange;
+		    double dY = (double) dataValue * dataScale;
+		    double dataPoint = wigCart->minY + dY;
+		    double dataZeroOffset;
+		    double viewZero = 0.0;
+		    int zeroLine = h;	/*	often at the bottom	*/
+		    int boxTop = 0;	/*	will be adjusted below	*/
 
-		    vgBox(vg, x1, yOff+(h-boxHeight),
+		    /*	graph only if data point is in viewing window */
+		    if( (dataPoint >= tg->minRange) &&
+			    (dataPoint <= tg->maxRange) )
+			{
+
+			viewZero = 0.0;
+			if( tg->minRange > 0.0 ) {
+			    viewZero = tg->minRange;
+			    zeroLine = h-1;	/*	under the bottom */
+			} else if( tg->maxRange < 0.0 ) {
+			    viewZero = tg->maxRange;
+			    zeroLine = 0;	/*	over the top	*/
+			} else {
+			    zeroLine = (int) ((double) h *
+				((tg->maxRange - 0.0) / viewRange) );
+			}
+			dataZeroOffset = fabs(dataPoint - viewZero);
+			boxHeight = (int) ((double) h *
+				(dataZeroOffset / viewRange));
+
+		    /* we are going to draw a box of boxHeight starting
+		     * at Y = yOff + boxTop
+		     */
+			if( zeroLine < 0 ) zeroLine = 0;
+			if( zeroLine > h ) zeroLine = h;
+
+		    if( dataPoint < 0.0 )
+			{
+			boxTop = zeroLine;
+			drawColor = tg->ixAltColor;
+			}
+		    else if( dataPoint > 0.0 )
+			{
+			boxTop = zeroLine - boxHeight;
+			drawColor = tg->ixColor;
+			}
+		    else
+		        {
+			boxHeight = 1;
+			boxTop = zeroLine;
+		        }
+
+		    if( boxTop > h-1 ) boxTop = h - 1;
+		    if( boxTop < 0 ) boxTop = 0;
+
+		    if( boxHeight + boxTop > h ) boxHeight = h - boxTop;
+		    if( boxHeight < 1 ) boxHeight = 1;
+
+		    if( lineBar == wiggleGraphBar )
+			{
+			vgBox(vg, x1, yOff+boxTop,
 			    pixelsPerDataValue + lastPixel,
 			    boxHeight, drawColor );
-		    }
-		    else if( vis == tvDense )
+			}
+		    else
+			{
+			int y1 = yOff+boxTop+boxHeight;
+			if( dataPoint > viewZero ) y1 = yOff+boxTop;
+			vgBox(vg, x1, y1,
+			    pixelsPerDataValue + lastPixel,
+			    1, black );
+			}
+			}	/*	if data point in view	*/
+		    }	/*	vis == tvFull	*/
+		else if( vis == tvDense )
 		    {
 		    if( tg->colorShades )
 			drawColor =
@@ -539,7 +625,6 @@ tg->colorShades[grayInRange(dataValue, tg->maxRange, tg->minRange)];
 	int x1, x2, y1, y2;
 	int gridLines = 2;
 	int drewLines = 0;
-	Color black = vgFindColorIx(vg, 0, 0, 0);
 
 	yRange = tg->maxRange - tg->minRange;
 	x1 = xOff;
@@ -572,9 +657,11 @@ char o1[128];	/*	Option 1 - track pixel height:  .heightPer	*/
 char o2[128];	/*	Option 2 - interpolate or samples only	*/
 char o4[128];	/*	Option 4 - minimum Y axis value: .minY	*/
 char o5[128];	/*	Option 5 - maximum Y axis value: .minY	*/
-char o7[128];	/*	Option 5 - draw horizontal grid lines: horizGrid */
+char o7[128];	/*	Option 7 - horizontal grid lines: horizGrid */
+char o8[128];	/*	Option 8 - type of graph, lineBar */
 char *interpolate = NULL;	/*	samples only, or interpolate */
-char *horizontalGrid = NULL;	/*	Grid lines, off by default */
+char *horizontalGrid = NULL;	/*	Grid lines, ON/OFF - off default */
+char *lineBar = NULL;	/*	Line or Bar chart - Bar by default */
 char *minY_str = NULL;	/*	string from cart	*/
 char *maxY_str = NULL;	/*	string from cart	*/
 char *heightPer = NULL;	/*	string from cart	*/
@@ -583,6 +670,7 @@ double minYc;	/*	from cart */
 double maxYc;	/*	from cart */
 enum wiggleOptEnum wiggleType;
 enum wiggleGridOptEnum wiggleHorizGrid;
+enum wiggleGraphOptEnum wiggleLineBar;
 double minY;	/*	from trackDb.ra words, the absolute minimum */
 double maxY;	/*	from trackDb.ra words, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
@@ -598,6 +686,20 @@ maxY = DEFAULT_MAX_Yv;
 /*	Possibly fetch values from the trackDb.ra file	*/
 if( wordCount > 1 ) minY = atof(words[1]);
 if( wordCount > 2 ) maxY = atof(words[2]);
+/*	Let's ensure their order is correct	*/
+if( maxY < minY )
+    {
+    double d;
+    d = maxY;
+    maxY = minY;
+    minY = d;
+    }
+/*	Allow DrawItems to see these from wigCart in addition
+ *	to the track minRange,maxRange which is set below
+ */
+
+wigCart->minY = minY;
+wigCart->maxY = maxY;
 
 /*	Possibly fetch values from the cart	*/
 snprintf( o1, sizeof(o1), "%s.heightPer", track->mapName);
@@ -605,11 +707,13 @@ snprintf( o2, sizeof(o2), "%s.linear.interp", track->mapName);
 snprintf( o4, sizeof(o4), "%s.minY", track->mapName);
 snprintf( o5, sizeof(o5), "%s.maxY", track->mapName);
 snprintf( o7, sizeof(o7), "%s.horizGrid", track->mapName);
+snprintf( o8, sizeof(o8), "%s.lineBar", track->mapName);
 heightPer = cartOptionalString(cart, o1);
 interpolate = cartOptionalString(cart, o2);
 minY_str = cartOptionalString(cart, o4);
 maxY_str = cartOptionalString(cart, o5);
 horizontalGrid = cartOptionalString(cart, o7);
+lineBar = cartOptionalString(cart, o8);
 
 if( minY_str ) minYc = atof(minY_str);
 else minYc = minY;
@@ -645,7 +749,7 @@ if( track->maxRange < track->minRange )
  */
 if( interpolate )
     wiggleType = wiggleStringToEnum(interpolate);
-    else 
+else 
     {
     wiggleType = wiggleStringToEnum("Linear Interpolation");
     snprintf( cartStr, sizeof(cartStr), "%s", "Linear Interpolation" );
@@ -658,7 +762,7 @@ wigCart->wiggleType = wiggleType;
  */
 if( horizontalGrid )
     wiggleHorizGrid = wiggleGridStringToEnum(horizontalGrid);
-    else 
+else 
     {
     wiggleHorizGrid = wiggleGridStringToEnum("OFF");
     snprintf( cartStr, sizeof(cartStr), "%s", "OFF" );
@@ -666,6 +770,18 @@ if( horizontalGrid )
     }
 wigCart->horizontalGrid = wiggleHorizGrid;
 
+/*	If lineBar is a string, it came from the cart, otherwise set
+ *	the default for this option and stuff it into the cart
+ */
+if( lineBar )
+    wiggleLineBar = wiggleGraphStringToEnum(lineBar);
+else 
+    {
+    wiggleLineBar = wiggleGraphStringToEnum("Bar");
+    snprintf( cartStr, sizeof(cartStr), "%s", "Bar" );
+    cartSetString( cart, o8, cartStr );
+    }
+wigCart->lineBar = wiggleLineBar;
 
 /*	And set the other values back into the cart for hgTrackUi	*/
 if( track->visibility == tvFull )
