@@ -14,8 +14,9 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.23 2003/11/26 18:14:57 angie Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.24 2003/12/01 22:39:28 braney Exp $";
 
+boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */
@@ -260,6 +261,7 @@ char *line, *words[32];
 struct psl *psl;
 struct xAli *xa = NULL;
 unsigned *starts;
+unsigned *blockSizes;
 struct liftSpec *spec;
 int offset;
 int blockCount;
@@ -308,10 +310,34 @@ for (i=0; i<sourceCount; ++i)
 	else
 	    {
 	    offset = spec->offset;
+	    blockSizes = psl->blockSizes;
 	    if (querySide)
 	        {
-		psl->qStart += offset;
-		psl->qEnd += offset;
+		if (!isPtoG)
+		    {
+		    psl->qStart += offset;
+		    psl->qEnd += offset;
+		    }
+		else
+		    {
+		    psl->match *= 3;
+		    psl->misMatch *= 3;
+		    if (spec->strand == '-')
+			{
+			int tmp = psl->qEnd;
+			psl->qEnd = psl->qStart;
+			psl->qStart = tmp;
+			psl->qStart *= -3;
+			psl->qStart += offset;
+			psl->qEnd += offset;
+			}
+		    else
+			{
+			psl->qStart += offset;
+			psl->qEnd *= 3;
+			psl->qEnd += offset;
+			}
+		    }
 		starts = psl->qStarts;
 		seqSize = psl->qSize;
 		}
@@ -323,7 +349,17 @@ for (i=0; i<sourceCount; ++i)
 		seqSize = psl->tSize;
 		}
 	    blockCount = psl->blockCount;
-	    if (psl->strand[strandChar] == '-')
+	    if (isPtoG && (spec->strand == '-'))
+	        {
+		psl->strand[strandChar] = spec->strand;
+		for (j=0; j<blockCount; ++j)
+		    {
+		    int tr = seqSize - (starts[j] + blockSizes[j]);
+		    tr += offset;
+		    starts[j] = spec->newSize - tr;
+		    }
+		}
+	    else if (psl->strand[strandChar] == '-')
 	        {
 		for (j=0; j<blockCount; ++j)
 		    {
@@ -337,6 +373,9 @@ for (i=0; i<sourceCount; ++i)
 		for (j=0; j<blockCount; ++j)
 		    starts[j] += offset;
 		}
+	    if (isPtoG)
+		for (j=0; j<blockCount; ++j)
+		    blockSizes[j] *= 3;
 	    if (querySide)
 	        {
 		psl->qSize = spec->newSize;
@@ -1036,9 +1075,9 @@ if (endsWith(destType, ".out"))
 else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts, FALSE);
+    liftHash = hashLift(lifts, TRUE);
     liftPsl(destFile, liftHash, sourceCount, sources, 
-    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl"));
+    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl") );
     }
 else if (endsWith(destType, ".agp"))
     {
@@ -1121,6 +1160,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
 nosort = cgiBoolean("nosort");
+isPtoG = cgiBoolean("isPtoG");
 dots = cgiUsualInt("dots", dots);
 gapsize = cgiOptionalInt("gapsize", 0);
 if (gapsize !=0)
