@@ -24,6 +24,9 @@ char *getMachine();
 char *getUser();
 /* Get user name */
 
+int forkOrDie();
+/* Fork, aborting if it fails. */
+
 void vLogDebug(char *format, va_list args);
 /* Variable args logDebug. */
 

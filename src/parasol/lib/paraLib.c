@@ -54,6 +54,15 @@ if (pw == NULL)
 return pw->pw_name;
 }
 
+int forkOrDie()
+/* Fork, aborting if it fails. */
+{
+int childId = fork();
+if (childId == -1)
+    errnoAbort("Unable to fork");
+return childId;
+}
+
 boolean parseRunJobMessage(char *line, struct runJobMessage *rjm)
 /* Parse runJobMessage as paraNodes sees it. */
 {
