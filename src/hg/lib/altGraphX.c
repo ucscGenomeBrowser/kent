@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.17 2003/11/15 18:07:17 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.18 2003/12/02 17:23:26 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1349,13 +1349,13 @@ return diff;
 }
 
 
-void addSpliceNode(struct hash *spliceHash, int count, int position, int row, int maxRows)
+void addSpliceNode(struct hash *spliceHash, int count, int vertex, int position, int row, int maxRows)
 /* Add a 1 in the correct row to indicate that there is a
    feature there. */
 {
 char key[128];
 int *levels = NULL;
-safef(key, sizeof(key), "%d-%d", count, position);
+safef(key, sizeof(key), "%d-%d", count, vertex);
 if(row >= maxRows)
     errAbort("addSpliceNode() - Row %d is greater than maxRows %d\n", row, maxRows);
 levels = hashFindVal(spliceHash, key);
@@ -1515,8 +1515,8 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
     struct spliceEdge *se = sn->val;
     int s = se->start;
     int e = se->end;
-    addSpliceNode(spliceHash, agIx, s, sn->row, ss->rowCount);
-    addSpliceNode(spliceHash, agIx, e, sn->row, ss->rowCount);
+    addSpliceNode(spliceHash, agIx, se->v1, s, sn->row, ss->rowCount);
+    addSpliceNode(spliceHash, agIx, se->v2, e, sn->row, ss->rowCount);
     }
 /* Now roll through and place the splice junctions. */
 for(eg = egList; eg != NULL; eg = egNext)	
@@ -1527,9 +1527,9 @@ for(eg = egList; eg != NULL; eg = egNext)
     /* We are only laying out splice junctions here. */
     if(eg->type != ggSJ)
 	continue;
-    safef(key, sizeof(key), "%d-%d", agIx, eg->start);
+    safef(key, sizeof(key), "%d-%d", agIx, eg->v1);
     sjStarts = hashFindVal(spliceHash, key);
-    safef(key, sizeof(key), "%d-%d", agIx, eg->end);
+    safef(key, sizeof(key), "%d-%d", agIx, eg->v2);
     sjEnds = hashFindVal(spliceHash, key);
     if(sjStarts != NULL)
 	eg->rowStarts = CloneArray(sjStarts, ss->rowCount);
@@ -1855,4 +1855,68 @@ for(i=0;i<eC; i++)
     }
 errAbort("altGraphX::getEdgeNum() - Didn't find edge with vertices %d-%d in %s.", v1, v2, ag->name);
 return -1;
+}
+
+void altGraphXEnlargeExons(struct altGraphX *ag)
+/* Scale the exons up in size such that the smallest one
+   is no smaller than minIntronFact the largest intron. Method is
+   to extend the ends of exons, this makes the exons appear larger
+   but the coordinates will no longer be meaningful with respect to the
+   genome coordinates. */
+{
+bool **em = altGraphXCreateEdgeMatrix(ag);
+int i,j,k;
+int maxIntron=0;
+char *vTypes = ag->vTypes;
+int *vPos = ag->vPositions;
+int minExon =BIGNUM;
+int increment = 0;
+double multFact = 1.2;
+double minIntronFact = .03;
+int vC = ag->vertexCount;
+int last = 0;
+/* Find largest intron and smallest exon. */
+for(i=0; i<vC; i++)
+    {
+    for(j=0; j<vC; j++)
+	{
+	if(em[i][j])
+	    {
+	    if(altGraphXEdgeVertexType(ag, i, j) == ggExon)
+		minExon = min(minExon, abs(vPos[i] - vPos[j]));
+	    else
+		maxIntron = max(maxIntron, abs(vPos[i] - vPos[j]));
+	    }
+	}
+    }
+
+multFact = (minIntronFact*maxIntron)/minExon;
+last = -1;
+
+/* Enlarge each exon by stretching one end. */
+for(i=0; i<vC; i++)
+    {
+    for(j=0; j<vC; j++)
+	{
+	if(em[i][j])
+	    {
+	    /* If it is an exon and has a different end than the last
+	       exon stretch the end. */
+	    if((altGraphXEdgeVertexType(ag, i, j) == ggExon) && (last < vPos[i]))
+		{
+		int mark = vPos[j];
+		int size = abs(vPos[i] - vPos[j]);
+		increment = multFact*size - size;
+		last = vPos[j];
+		ag->tEnd += increment;
+		for(k=0; k<vC; k++)
+		    {
+		    if(vPos[k] >= mark)
+			vPos[k] += increment;
+		    }
+		}
+	    }
+	}
+    }
+altGraphXFreeEdgeMatrix(&em, vC);
 }
