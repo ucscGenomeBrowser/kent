@@ -7,6 +7,9 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
+/* Variables that can be overridden by command line. */
+int dots = 0;
+
 void gfClient(char *hostName, char *portName, char *nibDir, char *inName, 
 	char *outName, char *tTypeName, char *qTypeName)
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
@@ -17,12 +20,22 @@ struct ssBundle *bundleList;
 FILE *out = mustOpen(outName, "w");
 enum gfType qType = gfTypeFromName(qTypeName);
 enum gfType tType = gfTypeFromName(tTypeName);
+int dotMod = 0;
 
 if (!cgiVarExists("nohead"))
     pslWriteHead(out);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
     int conn = gfConnect(hostName, portName);
+    if (dots != 0)
+        {
+	if (++dotMod >= dots)
+	    {
+	    dotMod = 0;
+	    fputc('.', stdout);
+	    fflush(stdout);
+	    }
+	}
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	static struct gfSavePslxData data;
@@ -89,6 +102,7 @@ errAbort(
   "                 prot - protein sequence\n"
   "                 dnax - DNA sequence translated in six frames to protein\n"
   "                 rnax - DNA sequence translated in three frames to protein\n"
+  "   -dots=N   Output a dot every N query sequences\n"
   "   -nohead   Suppresses psl five line header");
 }
 
@@ -98,6 +112,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc != 6)
     usage();
+dots = cgiOptionalInt("dots", 0);
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], cgiUsualString("t", "dna"), cgiUsualString("q", "dna"));
 return 0;
 }
