@@ -1811,6 +1811,35 @@ cat > split.csh << 'EOF'
     cp /cluster/data/ncbi/sts.8/all.STS.fa.new all.STS.fa
     checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
                         dbSTS.FASTA.dailydump all.STS.fa
+
+    # primers
+    ssh eieio
+    cd /cluster/data/ncbi/sts.9
+    mkdir -p /cluster/bluearc/sts.9/split
+    faSplit about all.primers.fa 700000 /cluster/bluearc/sts.9/split/primers
+a
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/primers
+    cd bed/primers
+    mkdir run out
+    cd run
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/split/primers*.fa > primers.lst
+cat > template << 'EOF'
+#LOOP
+blat -extendThroughN -tileSize=10 -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=1 -minIdentity=75 $(path1) $(path2) {check out line+ /cluster/data/hg17/bed/primers/out/$(root1).$(root2).psl}
+blat -extendThroughN -tileSize=10 -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=1 -minIdentity=75 -fine $(path1) $(path2) {check out line+ /cluster/data/hg17/primers/out/$(root1).$(root2).fine.psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst primers.lst template jobList
+    para create jobList
+        #  31160 jobs
+    para try
+    para check
+    para push
+
+    # GOT HERE
     
     # run alignment
     ssh kk
