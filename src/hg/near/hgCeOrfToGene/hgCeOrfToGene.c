@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgCeOrfToGene.c,v 1.1 2003/09/24 06:47:23 kent Exp $";
+static char const rcsid[] = "$Id: hgCeOrfToGene.c,v 1.2 2003/09/24 11:26:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "hgCeOrfToGene - Make orfToGene table for C.elegans from GENE_DUMPS/gene_names.txt\n"
   "usage:\n"
-  "   hgCeOrfToGene database gene_names.txt orfToGene\n"
+  "   hgCeOrfToGene database gene_names.txt sangerGene orfToGene\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -45,21 +45,27 @@ dyStringFree(&dy);
 }
 
 
-void hgCeOrfToGene(char *database, char *geneNames, char *table)
+void hgCeOrfToGene(char *database, char *geneNames, 
+	char *geneTable, char *table)
 /* hgCeOrfToGene - Make orfToGene table for C.elegans from 
  * GENE_DUMPS/gene_names.txt. */
 {
 struct lineFile *lf = lineFileOpen(geneNames, TRUE);
 struct sqlConnection *conn;
+struct sqlResult *sr;
+char query[256];
+char **row;
 char *tempDir = ".";
 FILE *f = hgCreateTabFile(tempDir, table);
-char *row[4];
+char *words[4];
+struct hash *orfHash = newHash(17);
 
-while (lineFileNextRowTab(lf, row, ArraySize(row)))
+/* Make hash to look up gene names. */
+while (lineFileNextRowTab(lf, words, ArraySize(words)))
     {
-    char *gene = row[0];
-    char *orfs = row[3];
-    char *type = row[2];
+    char *gene = words[0];
+    char *orfs = words[3];
+    char *type = words[2];
     char *orf[128];
     int i, orfCount;
 
@@ -69,12 +75,26 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
 	if (orfCount >= ArraySize(orf))
 	     errAbort("Too many ORFs line %d of %s", lf->lineIx, lf->fileName);
 	for (i=0; i<orfCount; ++i)
-	    {
-	    fprintf(f, "%s\t%s\n", orf[i], gene);
-	    }
+	    hashAdd(orfHash, orf[i], cloneString(gene));
 	}
     }
+lineFileClose(&lf);
+
+/* For each orf in gene table write out gene name if possible,
+ * otherwise orf name. */
 conn = sqlConnect(database);
+safef(query, sizeof(query), "select name from %s", geneTable);
+sr = sqlGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *orf = row[0];
+    char *gene = hashFindVal(orfHash, orf);
+    if (gene == NULL)
+        gene = orf;
+    fprintf(f, "%s\t%s\n", orf, gene);
+    }
+sqlFreeResult(&sr);
+
 createTable(conn, table, unique);
 hgLoadTabFile(conn, tempDir, table, &f);
 hgRemoveTabFile(tempDir, table);
@@ -84,8 +104,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-hgCeOrfToGene(argv[1], argv[2], argv[3]);
+hgCeOrfToGene(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
