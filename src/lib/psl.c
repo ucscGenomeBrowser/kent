@@ -455,6 +455,14 @@ milliBad = (1000 * (psl->misMatch + insertFactor + round(3*log(1+sizeDif)))) / (
 return milliBad;
 }
 
+int pslScore(const struct psl *psl)
+/* Return score for psl. */
+{
+return psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
+  - psl->tNumInsert;
+}
+
+
 struct ffAli *pslToFakeFfAli(struct psl *psl, DNA *needle, DNA *haystack)
 /* Convert from psl to ffAli format.  In some cases you can pass NULL
  * for needle and haystack - depending what the post-processing is going

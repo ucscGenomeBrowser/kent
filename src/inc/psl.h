@@ -113,6 +113,9 @@ int pslCmpTarget(const void *va, const void *vb);
 int pslCalcMilliBad(struct psl *psl, boolean isMrna);
 /* Calculate badness in parts per thousand. */
 
+int pslScore(const struct psl *psl);
+/* Return score for psl. */
+
 struct ffAli *pslToFfAli(struct psl *psl, struct dnaSeq *query, struct dnaSeq *target,
 	int targetOffset);
 /* Convert from psl to ffAli format. */
