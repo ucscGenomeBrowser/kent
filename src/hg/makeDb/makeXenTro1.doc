@@ -1411,7 +1411,7 @@ SEQ2_LEN=$BASE/S2.len
     end
 
 
-# CHAIN CHICKEN BLASTZ 
+# CHAIN ZEBRAFISH BLASTZ 
     # Run axtChain on little cluster
     # Note, for this one might as well do it serially on file server too.
     # The longest job (chr19) takes up 90% of the time.
@@ -1487,7 +1487,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     featureBits danRer1 chainXenTro1Link
 
-# NET XENOPUS BLASTZ
+# NET XENOPUS/ZEBRAFISH BLASTZ
     ssh kksilo
     cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -1535,13 +1535,13 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     rm noClass.net
     netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netDanRer1 stdin
 
-    # Load chains into database (takes about 3 hours).  These are so large
+    # Load chains into database (takes about 8 hours).  These are so large
     # we have to split them first.  
     ssh kksilo
     cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain
     chainSplit -lump=10 lumps all.chain
 
-    ssh hgwdev (TODO - loaded up to 005.chain overnight)
+    ssh hgwdev
     cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain/lumps
     hgLoadChain -tIndex xenTro1 chainDanRer1 000.chain
     rm 000.chain
