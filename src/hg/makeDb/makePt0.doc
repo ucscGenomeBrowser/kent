@@ -4,6 +4,7 @@
 
 #ftp-genome.wi.mit.edu
 #Dir: Assembly.Nov1.2003
+# NOTE: for browser, use Nov13 assembly (same sequence, different AGP)
 
 #unzip
 #The scaffold count is 37927.
@@ -27,6 +28,7 @@
     end
 
 # Create RM script and cluster job
+# NOTE for browser, remask with -s option, and chimp-specific repeats
     cd /cluster/data/pt0
     mkdir -p jkStuff
     mkdir -p RMRun
@@ -684,9 +686,9 @@ SEQ2_LEN=$BASE/S2.len
 # BLAT UNPLACED UNMASKED CHIMP VS. UNMASKED HUMAN 
 
     ssh kksilo
-    #mkdir -p /cluster/bluearc/pt0/unplacedScaffolds300
-    #faSplit sequence /cluster/data/pt0/bed/blastz.hg16.nomask/unplaced.fa \
-                #300 /cluster/bluearc/pt0/unplacedScaffolds300/
+    mkdir -p /cluster/bluearc/pt0/unplacedScaffolds300
+    faSplit sequence /cluster/data/pt0/bed/blastz.hg16.nomask/unplaced.fa \
+                300 /cluster/bluearc/pt0/unplacedScaffolds300/
     mkdir /cluster/data/pt0/bed/blatHg16.scaffolds
     cd /cluster/data/pt0/bed/blatHg16.scaffolds
     mkdir psl
@@ -833,8 +835,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     # NOTE: didn't preNet
 
-
-    # REVERSE NET FILE FOR LaDeana
+    # Net from merged chains
     ssh kolossus
     cd /cluster/data/pt0/bed
     /cluster/home/kate/bin/x86_64/chainNet all.chain -minSpace=10 /cluster/data/hg16/chrom.sizes /cluster/data/pt0/Assembly.Nov13.2003/scaffold.sizes chimpGap10.net humanGap10.net
@@ -892,6 +893,11 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
                 /usr/local/apache/htdocs/kate/chimp/chimpHumanChainAll.gz
 
 
+    # statistics
+    netStats chimp.net.stats chimpGap10.filtered.net
+    netStats human.net.stats humanGap10.filtered.net
+    netStats chimp.net.unfiltered.stats chimpGap10.net
+    netStats human.net.unfiltered.stats humanGap10.net
 
 # REFINE BLAT ALIGNMENTS -- RUN BLASTZ ON UNPLACED SCAFFOLDS VS.
 #        ONLY HUMAN CONTIGS IDENTIFIED BY BLAT ALIGNMENTS
@@ -902,3 +908,40 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
       pslSortAcc nohead contig temp stdin
         # Processed 4644940 lines into 19 temp files
       # sorted by target contig
+
+
+# RECIPROCAL BEST -- FINAL ALIGNMENTS (2003-12-03 kate)
+#   Use unfiltered chimp-reference chains, net them, and pull human side
+
+    ssh kksilo
+    cd /cluster/data/pt0
+    cd bed/blastz-blatHg16
+    netChainSubset humanGap10.net all.swap.chain humanGap10.chain
+    chainSort humanGap10.chain humanGap10Sorted.chain
+    # note: jim ran these, and switched conventions
+    chainNet humanGap10Sorted.chain /cluster/data/pt0/scaffold.sizes \
+        /cluster/data/hg16/chrom.sizes chimp.jk.net human.jk.net \
+                 -minScore=0 -minSpace=1
+
+    netStats chimp.jk.stats chimp.jk.net
+    netStats human.jk.stats human.jk.net
+    netChainSubset chimp.jk.net all.swap.chain chimp.jk.chain
+    netChainSubset human.jk.net all.chain human.jk.chain
+        # read 9254050 of 9254050 chains in all.chain
+    # NOTE: post both chains for download by chimp-analysis group
+    #featureBits hg16 human.jk.chain > coverage.human.txt
+    #featureBits hg16 chimp.jk.chain > coverage.chimp.txt
+
+    ssh hgwdev
+    cd /cluster/data/pt0
+    cd bed/blastz-blatHg16
+    hgLoadChain hg16 chainAllPt0 all.chain
+    chainSwap humanGap10Sorted.chain humanGap10Sorted.swap.chain
+    hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
+    #netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
+    /cluster/bin/i386/netSyntenic human.jk.net human.best.net
+    ~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
+
+    # NOTE: need to remake scaffolds.msk.fa for Nov13 assembly
+    # and reload seq table
+    #hgLoadSeq hg16 /cluster/data/pt0/scaffolds.msk.fa
