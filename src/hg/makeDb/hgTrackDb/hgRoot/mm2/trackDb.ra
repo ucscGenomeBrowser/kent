@@ -1,3 +1,12 @@
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl Gene Predictions
+priority 15
+visibility dense
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
+
 track rikenMrna
 shortLabel Riken mRNA
 longLabel Riken Full Length Mouse mRNAs
@@ -16,3 +25,12 @@ visibility dense
 color 0,100,0
 type genePred softberryPep
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+priority 30
+visibility dense
+color 0,100,100
+altColor 0,50,50
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12
+type genePred twinscanPep
