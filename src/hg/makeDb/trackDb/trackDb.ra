@@ -1521,4 +1521,8 @@ searchType bed
 termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
+searchTable blastHg16KG
+searchType bed
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 50
 
