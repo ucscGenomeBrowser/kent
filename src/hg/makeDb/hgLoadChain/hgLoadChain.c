@@ -10,7 +10,7 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.11 2004/07/23 23:42:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.12 2004/08/31 16:06:21 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -43,7 +43,7 @@ errAbort(
   "   -oldTable add to existing table, default: create new table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -normScore add normalized score column to table, default: not added\n"
-  "   -qPrefix=xxx   prepend \"xxx-\" to query name\n"
+  "   -qPrefix=xxx   prepend \"xxx\" to query name\n"
   "   -test    suppress loading to database\n"
   );
 }
@@ -66,10 +66,7 @@ if (!noBin)
     fprintf(f,"%u\t", hFindBin(a->tStart, a->tEnd));
 qName[0] = 0;
 if (qPrefix != NULL)
-    {
     strcat(qName, qPrefix);
-    strcat(qName, "-");
-    }
 strcat(qName, a->qName);
 if (normScore)
     fprintf(f, "%f\t%s\t%d\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\t%.1f\n",
