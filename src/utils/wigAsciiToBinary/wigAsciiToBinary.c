@@ -41,7 +41,7 @@
 #define	NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.14 2003/11/18 18:30:45 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.15 2003/12/12 18:52:00 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -417,6 +417,12 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
 	{
 	output_row();
 	}
+    if (verbose)
+	printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
+	    argv[i], lineCount, rowCount, fileOffset );
+    printf("%s: data limits: [%g:%g], range: %g\n", chromName,
+	overallLowerLimit, overallUpperLimit,
+	overallUpperLimit - overallLowerLimit);
     lineFileClose(&lf);
     fclose(binout);
     fclose(wigout);
@@ -426,11 +432,6 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
     binfile = (char *) NULL;
     wigfile = (char *) NULL;
     chromName = (char *) NULL;
-    if (verbose)
-	printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
-	    argv[i], lineCount, rowCount, fileOffset );
-    printf("data limits: [%g:%g], range: %g\n", overallLowerLimit,
-    		overallUpperLimit, overallUpperLimit - overallLowerLimit);
     }
 return;
 }
