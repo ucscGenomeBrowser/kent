@@ -720,6 +720,7 @@ useScore 1
 color 255,64,64
 type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
+urlLabel miRNA Registry: 
 
 track cpgIsland
 shortLabel CpG Islands
