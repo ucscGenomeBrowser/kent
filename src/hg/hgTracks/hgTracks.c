@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.787 2004/08/27 04:47:18 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.788 2004/08/27 04:50:00 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3763,19 +3763,12 @@ struct track *oligoMatchTg()
 struct track *tg = trackNew();
 char *oligo = oligoMatchSeq();
 int oligoSize = strlen(oligo);
-char *shortOligo = cloneString(oligo);
 char *medOligo = cloneString(oligo);
 static char shortLabel[17];
 static char longLabel[80];
 struct trackDb *tdb;
 
 /* Generate abbreviated strings. */
-if (oligoSize >= 15)
-    {
-    memset(shortOligo + 15-3, '.', 3);
-    shortOligo[15] = 0;
-    }
-touppers(shortOligo);
 if (oligoSize >= 30)
     {
     memset(medOligo + 30-3, '.', 3);
@@ -3789,8 +3782,7 @@ tg->mapName = "oligoMatch";
 tg->canPack = TRUE;
 tg->visibility = tvHide;
 tg->hasUi = TRUE;
-safef(shortLabel, sizeof(shortLabel), "%ss", shortOligo);
-tg->shortLabel = shortLabel;
+tg->shortLabel = cloneString(OLIGO_MATCH_TRACK_LABEL);
 safef(longLabel, sizeof(longLabel), 
 	"Perfect Matches to Short Sequence (%s)", medOligo);
 tg->longLabel = longLabel;
