@@ -240,7 +240,7 @@ type bed 3+
 
 
 track affyGeno
-shortLabel Affymetrix 120K SNP
+shortLabel Affy 120K SNPs
 longLabel Affymetrix 120K SNP Release Oct 2003
 group varRep
 priority 146
