@@ -863,13 +863,13 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 qClass=INTRON;
                 }*/
             }
-        endLineStr(dyT);
+        setClassStr(dyT,INTERGENIC);
         if (posStrand)
             dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d nEnd=%d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex,nextEnd);
         else
             dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d nEnd=%d",tPtr, gp->exonStarts[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ]+1, gp->exonEnds[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ],(nextEndIndex == 0) ? 1 : nextEndIndex,nextEnd);
         dyStringAppendC(dyT,'\n');
-        endLineStr(dyQ);
+        setClassStr(dyQ,INTERGENIC);
         if (posStrand)
             dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex+1);
         else
