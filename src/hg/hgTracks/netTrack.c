@@ -176,7 +176,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         {
 	if (gap->children)
 	    {
-	    rNetDraw(gap->children, level+1, y + rNextLine);
+	    rNetDraw(gap->children, level+2, y + rNextLine);
 	    }
 	}
     }
@@ -225,5 +225,6 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
+tg->mapsSelf = TRUE;
 }
 

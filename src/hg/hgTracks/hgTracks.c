@@ -550,17 +550,24 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
-char *encodedItem = cgiEncode(item);
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, group, encodedItem, 
-    chromName, winStart, winEnd, 
-    database, tl.picWidth);
-/*if (start !=-1)*/
-if( withPopUps ) 
-    hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",statusLine);
-hPrintf(">\n");
-freeMem(encodedItem);
+int xEnd = x+width;
+int yEnd = y+height;
+if (x < 0) x = 0;
+if (xEnd > tl.picWidth) xEnd = tl.picWidth;
+if (x < xEnd)
+    {
+    char *encodedItem = cgiEncode(item);
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
+    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	hgcNameAndSettings(), start, end, group, encodedItem, 
+	chromName, winStart, winEnd, 
+	database, tl.picWidth);
+    /*if (start !=-1)*/
+    if( withPopUps ) 
+	hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",statusLine);
+    hPrintf(">\n");
+    freeMem(encodedItem);
+    }
 }
 
 boolean chromTableExists(char *tabSuffix)
