@@ -63,6 +63,7 @@ puts(
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
+"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>, "
 "and the Genome Bioinformatics Group of UC Santa Cruz.</CENTER>\n"
 "<P><CENTER>Copyright 2001 The Regents of the University of California. "
 "All rights reserved.<P></CENTER><P>\n");
