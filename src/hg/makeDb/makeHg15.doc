@@ -1579,7 +1579,7 @@ IN PROGRESS
     # Sequence info should have already been loaded into database (PRELOAD)
 
 # PRODUCING SQUIRT ALIGNMENTS  (DONE 06/04/03)
-    ssh kk
+    ssh kkstore
     mkdir -p ~/hg15/bed/blatCi1
     cd ~/hg15/bed/blatCi1
     mkdir psl
@@ -1590,6 +1590,8 @@ IN PROGRESS
     ls -1S /iscratch/i/squirt/ci1/queryFa/*.fa > squirt.lst
     ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
     gensub2 human.lst squirt.lst gsub2D spec
+
+    ssh kk
     para create spec
     ....
     # When cluster run is done, sort alignments:
