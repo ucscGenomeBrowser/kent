@@ -501,6 +501,7 @@ int size = end-start;
 int halfSize = (size>>1);
 int res;
 res =  (maxShade * score + halfSize)/size;
+if (res < 1) res = 1;
 return res;
 }
 
@@ -1004,7 +1005,7 @@ faFileName = ssWords[1];
 
 
 pslxFileOpen(pslFileName, &qt, &tt, &f);
-if (qt != gftDna && qt != gftRna)
+if (qt == gftProt)
     {
     setTgDarkLightColors(tg, 0, 80, 150);
     tg->ignoresColor = FALSE;
