@@ -235,7 +235,7 @@ row = sqlNextRow(sr);
 if (row == NULL)
     {
     //errAbort("%s does not have Exon info\n", proteinID);
-    errAbort("<BLOCKQUOTE>Sorry, cannot display Proeteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>", 
+    errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>", 
 	     proteinID);
     }
 
