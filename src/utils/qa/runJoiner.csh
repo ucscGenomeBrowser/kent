@@ -62,11 +62,10 @@ set joinerFile=`echo ${joinerPath}/all.joiner | sed -e "s/\/\//\//"`
 # --------------------------------------------
 
 # get identifiers
-tac ~/schema/all.joiner \
+tac $joinerPath/all.joiner \
   | sed "/\.$table\./,/^identifier /\!d" | \
   grep "identifier" | gawk '{print $2}' > xxIDxx
 
-# if (-e xxIDxx) then
 if (-e xxIDxx) then
   set idVal=`wc -l xxIDxx | gawk '{print $1}'`
   echo
@@ -85,4 +84,4 @@ foreach identifier (`cat xxIDxx`)
 end
 
 rm -f xxIDxx
-rm -r $joinerPath 
+rm -r xxJoinDirxx 
