@@ -3808,8 +3808,10 @@ if (cgiVarExists("o"))
 	printf("<B>Percentage CpG:</B> %1.1f%%<BR>\n", island->perCpg);
 	printf("<B>Percentage C or G:</B> %1.1f%%<BR>\n", island->perGc);
 	printf("<BR>\n");
+#ifdef OLD
 	htmlHorizontalLine();
 	printCappedSequence(island->chromStart, island->chromEnd, 100);
+#endif /* OLD */
 	cpgIslandFree(&island);
 	}
     hFreeConn(&conn);
