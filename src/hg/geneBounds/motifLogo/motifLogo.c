@@ -7,8 +7,9 @@
 #include "portable.h"
 #include "dystring.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: motifLogo.c,v 1.5 2004/09/13 15:01:54 kent Exp $";
+static char const rcsid[] = "$Id: motifLogo.c,v 1.6 2005/01/27 21:01:45 baertsch Exp $";
 
 char *tempDir = ".";
 char *gsExe = "gs";

@@ -10,8 +10,9 @@
 #include "jksql.h"
 #include "dnaMarkov.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.5 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.6 2005/01/27 21:01:39 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

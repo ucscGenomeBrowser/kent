@@ -3,10 +3,12 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "jksql.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: emblMatrixToMotif.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: emblMatrixToMotif.c,v 1.5 2005/01/27 21:01:42 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
