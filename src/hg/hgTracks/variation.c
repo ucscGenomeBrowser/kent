@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.23 2005/03/03 08:46:09 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.24 2005/03/06 09:37:46 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -521,7 +521,8 @@ tg->itemNameColor = snpColor;
 }
 
 char *perlegenName(struct track *tg, void *item)
-/* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
+/* return the actual perlegen name, in form xx/yyyy:
+      cut off xx/ and return yyyy */
 {
 char *name;
 struct linkedFeatures *lf = item;
@@ -652,23 +653,26 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems. 
  * Must set height, lineHeight, heightPer */ 
 {
-tg->lineHeight = 0;
-tg->heightPer  = 0;
-if (winEnd-winStart<500000)
+tg->lineHeight = tl.fontHeight+1;
+tg->heightPer  = tg->lineHeight - 1;
+if (vis==tvDense)
+    tg->height = tg->lineHeight;
+else if (winEnd-winStart<500000)
     tg->height = insideWidth/2;
 else
     tg->height = 2+(int)((insideWidth/2)*(500000.0/(winEnd-winStart)));
 return tg->height;
 }
 
-Color ldDiamondColor(struct track *tg, struct vGfx *vg, double score, double lodScore, 
-		     boolean isLod)
+Color ldDiamondColor(struct track *tg, struct vGfx *vg, double score, 
+		     double lodScore, boolean isLod)
 {
 Color *posShades = tg->colorShades;
 Color *negShades = tg->altColorShades;
 
 if (abs(score)>1)
-    errAbort("Score must be between -1 and 1, inclusive. (score=%.3f)",score);
+    errAbort("Score must be between -1 and 1, inclusive. (score=%.3f)",
+	     score);
 if (isLod)
     {
     if (lodScore>2)             /* high LOD */
@@ -692,8 +696,8 @@ return negShades[(int)(-score * LD_DATA_SHADES)];
 }
 
 void drawDiamond(struct vGfx *vg, 
-		 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
-		 Color fillColor, boolean drawOutline, Color outlineColor)
+	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
+	 Color fillColor, boolean drawOutline, Color outlineColor)
 /* Draw diamond shape. */
 {
 struct gfxPoly *poly = gfxPolyNew();
@@ -707,10 +711,11 @@ if (drawOutline)
 gfxPolyFree(&poly);
 }
 
-void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
-		   int i, int j, int k, int l, double score, double lodScore, char *name, 
-		   char *shortLabel, boolean drawOutline, Color outlineColor, double scale,
-		   boolean isLod)
+void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, 
+		   int xOff, int yOff, int i, int j, int k, int l, 
+		   double score, double lodScore, char *name, 
+		   char *shortLabel, boolean drawOutline, 
+		   Color outlineColor, double scale, boolean isLod)
 /* Draw and map a single pairwise LD box */
 {
 Color  color = ldDiamondColor(tg, vg, score, lodScore, isLod);
@@ -725,7 +730,8 @@ int    yb    = round((double)(scale*(k-j)/2)) + yOff;
 
 if (yb<=0)
     yb=1;
-drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, color, drawOutline, outlineColor);
+drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, color, drawOutline, 
+	    outlineColor);
 mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
 }
 
@@ -744,9 +750,10 @@ if (!isLod)
     lodValues = values;
 if (!trim || (chromStarts[0] <= winEnd        /* clip right to triangle */
 	      && ld->chromStart >= winStart)) /* clip left to triangle */
-    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart,  chromStarts[0], 
-		  ld->chromStart, chromStarts[0], values[0], lodValues[0], ld->name, 
-		  tg->shortLabel, drawOutline, outlineColor, scale, isLod);
+    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0], 
+		  ld->chromStart, chromStarts[0], values[0], lodValues[0], 
+		  ld->name, tg->shortLabel, drawOutline, outlineColor, scale,
+		  isLod);
 for (n=0; n < ld->ldCount-1; n++)
     {
     if ((chromStarts[n]+ld->chromStart)/2 > winEnd) /* left is outside window */
@@ -759,9 +766,10 @@ for (n=0; n < ld->ldCount-1; n++)
 	return;
     if ((chromStarts[0]+chromStarts[n+1])/2 < winStart) /* right is outside window */
 	continue;
-    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0], 
-		  chromStarts[n], chromStarts[n+1], values[n], lodValues[n], ld->name, 
-		  tg->shortLabel, drawOutline, outlineColor, scale, isLod);
+    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0],
+		  chromStarts[n], chromStarts[n+1], values[n], lodValues[n],
+		  ld->name, tg->shortLabel, drawOutline, outlineColor, scale,
+		  isLod);
     }
 }
 
@@ -798,8 +806,8 @@ else
 }
 
 void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
-		  struct vGfx *vg, int xOff, int yOff, int width, 
-		  MgFont *font, Color color, enum trackVisibility vis)
+		 struct vGfx *vg, int xOff, int yOff, int width,
+		 MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
 int        arraySize    = 0;
@@ -816,7 +824,15 @@ boolean    isLod        = FALSE;
 boolean    isRsquared   = FALSE;
 boolean    isDprime     = FALSE;
 double     scale        = scaleForPixels(insideWidth);
+int        itemCount    = 0;
+int        i            = 0;
+Color      denseColor;
+int        heightPer = tg->heightPer;
+int        x;
+int        w = 3;
 
+for (el=tg->items; el!=NULL; el=el->next)
+    itemCount++;
 makeLdShades(vg);
 if (drawOutline) 
     outlineColor = ldOutlineColor(outColor);
@@ -832,21 +848,74 @@ else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; "
 	      "'%s' is not known", valArray);
 
-for (el=tg->items; el!=NULL; el=el->next)
-    {
-    sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-    if (isRsquared)
-	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
-    else if (isDprime)
-	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
-    else if (isLod)
+if (vis == tvFull) 
+    for (el=tg->items; el!=NULL; el=el->next)
 	{
-	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
-	sqlDoubleDynamicArray(el->lod, &lodValues, &arraySize);
+	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+	if (isRsquared)
+	    sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
+	else if (isDprime)
+	    sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+	else if (isLod)
+	    {
+	    sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+	    sqlDoubleDynamicArray(el->lod, &lodValues, &arraySize);
+	    }
+	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
+		     chromStarts, values, lodValues, arraySize, 
+		     drawOutline, scale, trim, isLod);
 	}
-    drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, chromStarts, 
-		 values, lodValues, arraySize, drawOutline, scale, trim, isLod);
+else if (vis == tvDense)
+    {
+    struct ldStats lds[itemCount+1], *ldsStartPtr=lds, *ldsEndPtr=lds;
+
+    for (i=0, el=tg->items; i<itemCount; i++, el=el->next)
+	{
+	lds[i].chromStart = el->chromStart;
+	lds[i].n = 0;
+	lds[i].sumValues = 0;
+	lds[i].sumSquares = 0;
+	lds[i].sumLodValues = 0;
+	lds[i].sumLodSquares = 0;
+	}
+    for (el=tg->items; el!=NULL; el=el->next)
+	{
+	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+	lds[itemCount].chromStart=chromStarts[0];
+	if (isRsquared)
+	    sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
+	else 
+	    sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+	sqlDoubleDynamicArray(el->lod, &lodValues, &arraySize);
+
+	ldsStartPtr=lds;
+	while (ldsStartPtr->chromStart != el->chromStart)
+	    ldsStartPtr++;
+	ldsEndPtr=ldsStartPtr+1;
+	for (i=0; i<arraySize; i++)
+	    {
+	    while (chromStarts[i] != ldsEndPtr->chromStart
+		   && ldsEndPtr!=&(lds[itemCount]))
+		ldsEndPtr++;
+	    ldsStartPtr->n++;
+	    ldsStartPtr->sumValues += values[i];
+	    ldsStartPtr->sumSquares += values[i]*values[i];
+	    ldsStartPtr->sumLodValues += lodValues[i];
+	    ldsStartPtr->sumLodSquares += lodValues[i]*lodValues[i];
+	    }
+	}
+    for (i=0; i<itemCount; i++)
+	{
+	if (lds[i].chromStart<winStart || lds[i].chromStart>winEnd)
+	    continue;
+	denseColor = ldDiamondColor(tg, vg, lds[i].sumValues/lds[i].n, 
+				    lds[i].sumLodValues/lds[i].n, isLod);
+	x = round((lds[i].chromStart-winStart)*scale) + xOff - w/2;
+	vgBox(vg, x, yOff, w, heightPer, denseColor);
+	}
     }
+else
+    errAbort("visibility '%s' not supported yet.", hStringFromTv(vis));
 }
 
 void ldFreeItems(struct track *tg)
@@ -859,7 +928,7 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,
 	Color color, enum trackVisibility vis)
-/* Draw Left Labels - don't do anything. */
+/* Draw left labels. */
 {
 char  label[16];
 char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
@@ -874,8 +943,8 @@ else
     errAbort("%s values are not recognized", valueString);
 safef(label, sizeof(label), "LD: %s; %s", tg->mapName+2, valueString);
 toUpperN(label, sizeof(label));
-vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, tl.fontHeight, 
-	    color, font, label);
+vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, 
+	    tl.fontHeight, color, font, label);
 }
 
 void ldMethods(struct track *tg)
@@ -887,6 +956,8 @@ tg->drawItems      = ldDrawItems;
 tg->freeItems      = ldFreeItems;
 tg->drawLeftLabels = ldDrawLeftLabels;
 tg->canPack        = FALSE;
-tg->colorShades    = ldFillColors(cartUsualString(cart, "ldPos", ldPosDefault));
-tg->altColorShades = ldFillColors(cartUsualString(cart, "ldNeg", ldNegDefault));
+tg->colorShades    = ldFillColors(cartUsualString(cart, 
+						  "ldPos", ldPosDefault));
+tg->altColorShades = ldFillColors(cartUsualString(cart, 
+						  "ldNeg", ldNegDefault));
 }

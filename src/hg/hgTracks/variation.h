@@ -93,6 +93,15 @@ extern Color ldHighDprimeLowLod;
 extern boolean ldColorsMade; /* Have the shades of Red, Green, and Blue been allocated? */
 extern int maxLdRgbShade;
 
+struct ldStats 
+{
+    unsigned chromStart;
+    unsigned n;
+    double sumValues;
+    double sumSquares;
+    double sumLodValues;
+    double sumLodSquares;
+};
 
 void makeLdShades(struct vGfx *vg);
 /* Allocate the LD shades of Red, Green and Blue */
