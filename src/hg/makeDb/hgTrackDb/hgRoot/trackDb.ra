@@ -1113,12 +1113,12 @@ color 12,12,120
 type genePred refPep refMrna
 
 track transfacRatios
-shortLabel Transfac Likelihood Ratios
+shortLabel Transfac LikeRatios
 longLabel Transfac Likelihood Ratios
 priority 41.0034
 visibility full
 color 12,12,120
-type bed 15 +
+type bed 12
 
 track footPrinterHMR
 shortLabel FootPrinterHMR
