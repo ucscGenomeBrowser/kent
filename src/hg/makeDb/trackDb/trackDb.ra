@@ -1098,6 +1098,15 @@ priority 147.5
 visibility hide
 type bed 4 +
 
+track blastzSelfUnmasked
+shortLabel Self Unmasked
+longLabel blastz self join without repeats masked (tandem repeats masked)
+group x
+priority 159
+visibility hide
+spectrum on
+type psl xeno
+
 track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
