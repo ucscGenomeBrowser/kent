@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtToPsl.c,v 1.7 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtToPsl.c,v 1.8 2003/08/07 22:46:37 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -117,7 +117,12 @@ for (i=len-1; i>=0; --i)
     }
 return count;
 }
-
+boolean isUpperCase(char c)
+{
+if ((int)c >= (int)'A' && (int)c <= (int)'Z')
+   return TRUE;
+return FALSE;
+}
 
 void aliStringToPsl(struct lineFile *lf, char *qName, char *tName, 
 	char *qString, char *tString, 
@@ -128,6 +133,8 @@ void aliStringToPsl(struct lineFile *lf, char *qName, char *tName,
 {
 unsigned match = 0;	/* Number of bases that match */
 unsigned misMatch = 0;	/* Number of bases that don't match */
+unsigned repMatch = 0;	/* Number of bases that match and are repeats */
+unsigned nCount = 0;	/* Number of bases that are gaps */
 unsigned qNumInsert = 0;	/* Number of inserts in query */
 int qBaseInsert = 0;	/* Number of bases inserted in query */
 unsigned tNumInsert = 0;	/* Number of inserts in target */
@@ -182,38 +189,48 @@ countInserts(qString, aliSize, &qNumInsert, &qBaseInsert);
 countInserts(tString, aliSize, &tNumInsert, &tBaseInsert);
 blockCount = 1 + qNumInsert + tNumInsert;
 
-/* Count up match/mismatch. */
+/* Count up match/mismatch/repMatch. */
 for (i=0; i<aliSize; ++i)
     {
     q = qString[i];
     t = tString[i];
     if (q != '-' && t != '-')
 	{
-	if (q == t)
+	if (q == 'N' || t == 'N' )
+            ++nCount;
+        else if (q == t && isUpperCase(q) && isUpperCase(t))
 	    ++match;
-	else
+	else if (toupper(q) == toupper(t))
+            ++repMatch;
+        else
 	    ++misMatch;
 	}
     }
 
 /* Deal with minus strand. */
 qs = qStart;
-qe = qStart + match + misMatch + tBaseInsert;
+qe = qStart + match + misMatch + repMatch + tBaseInsert + nCount;
+if (qe != qEnd)
+   {
+    printf("mismatch qe %d qEnd %d %s qStart %d match %d misMatch %d repmatch %d gaps %d tBaseIns %d \n",
+            qe, qEnd,qName ,qStart , match , misMatch, repMatch , nCount, tBaseInsert);
+    printf("%s\n%s\n",qString, tString);
+   }
 assert(qe == qEnd); 
 if (strand == '-')
     {
     reverseIntRange(&qs, &qe, qSize);
     }
 assert(qs < qe);
-te = tStart + match + misMatch + qBaseInsert;
+te = tStart + match + misMatch + repMatch + qBaseInsert + nCount;
 assert(te == tEnd);
 assert(tStart < te);
 
 /* Output header */
 fprintf(f, "%d\t", match);
 fprintf(f, "%d\t", misMatch);
-fprintf(f, "0\t");
-fprintf(f, "0\t");
+fprintf(f, "%d\t", repMatch);
+fprintf(f, "%d\t" ,nCount);
 fprintf(f, "%d\t", qNumInsert);
 fprintf(f, "%d\t", qBaseInsert);
 fprintf(f, "%d\t", tNumInsert);
