@@ -15,3 +15,5 @@
 8 - Made paraHub just warn rather than abort on failure to close
     a results file cleanly.  Also changed auto-close time to
     1 minute rather than 5.
+9 - Added good/bad count to machine struct. Added syslog.
+10 - Added priorities to batches. Added para status command.
