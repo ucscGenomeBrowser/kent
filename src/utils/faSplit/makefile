@@ -1,11 +1,12 @@
 include ../../inc/common.mk
 HG_WARN = -Wall
 
+CFLAGS=-ggdb
 
 O = faSplit.o 
 
 faSplit: ${O}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faSplit $O \
+	${CC} ${COPT} -ggdb -o ${HOME}/bin/${MACHTYPE}/faSplit $O \
 	../../lib/${MACHTYPE}/jkweb.a
 	${STRIP} ${HOME}/bin/${MACHTYPE}/faSplit${EXE}
 
