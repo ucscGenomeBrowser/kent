@@ -445,6 +445,7 @@ hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 grep Region $downloadDir/$db.packing.list | wc -l
 
+
 ########################################################################
 # CHICKEN
 #!/bin/csh -fe
@@ -623,6 +624,24 @@ end
 'EOF'
 # << for emacs
 
+# RAT
+cd /cluster/data/encode/ortho3/agp/tests
+mkdir -p $db.test $db.nibTest
+# note: tab required in grep (retype when pasting)
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+# note: this doesn't handle errors well -- better to extract from 
+#  build dir contig fasta files
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
+# verify all contigs were transferred
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+./accHeader.pl $db.contig.fa $db >>& $db.log
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+# TESTED OK 3/10/05
+
 # chicken
 set db = galGal2
 set org = chicken
@@ -698,19 +717,48 @@ EOF
 #
 chmod ug+x accHeader.pl
 
-# rat
-set db  = rn3
-set org = rat
-set fa  = $db.contig.fa
+# chicken
+cd /cluster/data/encode/ortho3/agp/tests
+set db  = galGal2
+set org = chicken
 mkdir -p $db.test $db.nibTest
-
-cat ../$db/${org}_EN*.agp | grep W | cut -f6 > $db.accessions
-./getSeqFromAcc.pl $db < $db.accessions >& $db.log
+# note: tab required in grep (retype when pasting)
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+# note: this doesn't handle errors well -- better to extract from 
+#  build dir contig fasta files
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+./getSeqFromAcc.pl $db ortho3 < $db.redo.acc >& $db.redo.log
+ls -l $db.contig.fa | grep ' 0 ' 
+# verify no 0-length files left
 ./accHeader.pl $db.contig.fa $db >>& $db.log
-
-agpAllToFaFile $db.contig.agp $fa $db.fa
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
 faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org >&! testFa.$org.log &
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+
+# chicken
+cd /cluster/data/encode/ortho3/agp/tests
+set db  = galGal2
+set org = chicken
+mkdir -p $db.test $db.nibTest
+# note: tab required in grep (retype when pasting)
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+# note: this doesn't handle errors well -- better to extract from 
+#  build dir contig fasta files
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+./getSeqFromAcc.pl $db ortho3 < $db.redo.acc >& $db.redo.log
+ls -l $db.contig.fa | grep ' 0 ' 
+# verify no 0-length files left
+./accHeader.pl $db.contig.fa $db >>& $db.log
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+
 
 # mouse
 set db  = mm5
@@ -718,11 +766,13 @@ set org = mouse
 set fa  = $db.contig.fa
 mkdir -p $db.test $db.nibTest
 
-cat ../$db/${org}_EN*.agp | grep W | cut -f6 > $db.accessions
+# note: tab required in grep (retype when pasting)
+# watch out for hard-coded freeze names in scripts
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
 ./getSeqFromAcc.pl $db < $db.accessions >& $db.log
 ./accHeader.pl $db.contig.fa $db >>& $db.log
-
-agpAllToFaFile $db.contig.agp $fa $db.fa
-faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org >&! testFa.$org.log &
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa faSplit byname $db.fa $db.test/
+csh testFa.csh $db $org ortho3 >&! testFa.$org.log &
 
