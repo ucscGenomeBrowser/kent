@@ -517,8 +517,6 @@ int seqOffset;
 
 if (frame < 0 || frame > 2 || seq == NULL)
     return NULL;
-if (reverse)
-    reverseComplement(seq->dna, seq->size);
 
 /* pick up bases for partial codon */
 seqOffset = frame;

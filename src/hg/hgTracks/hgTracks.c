@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.739 2004/05/19 22:44:46 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.740 2004/05/19 23:18:34 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6554,6 +6554,8 @@ if (rulerMode != RULER_MODE_OFF)
             double scale = scaleForWindow(insideWidth, winStart, winEnd);
 
             y = yAfterBases;
+            if (complementRulerBases)
+                reverseComplement(extraSeq->dna, extraSeq->size);
             for (frame = 0; frame < 3; frame++, y += codonHeight)
                 {
                 sfList = splitDnaByCodon(frame, winStart, winEnd, extraSeq, 
