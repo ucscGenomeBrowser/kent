@@ -7,10 +7,11 @@ message in your Apache error log:
 
 [Fri Mar 25 11:02:40 2005] [error] Premature end of script headers: hgTracks
 
-This is typically a simple configuration problem.  Items to verify:
+This is usually a simple configuration problem.  Items to verify:
 
 1.  the hg.conf file in the cgi-bin directory specifies the correct
 	user names and passwords for MySQL database access.
+	See also: README.mysql.setup
 2.  The cgi-bin directory is set to permissions 755 and not 775 or 777
 	When permissions are too permissive for this directory, Apache
 	errors out with suexec permission violations.
@@ -47,8 +48,14 @@ that a CGI binary would normally see.
 
 To prepare the binaries for operation under a debugger, go to
 the src/inc directory and edit the common.mk configuration file.
-Change "COPT=-O" to read: "COPT=-O -g" and eliminate
-the -Wuninitialized option from the HG_WARN definition.
+Change "COPT=-O" to read: "COPT=-g"
+GNU gcc will allow "-O" with "-g", and some bugs will only exhibit
+themselves with -O on.  However the optimizations with -O can
+sometimes confuse the debugger's sense of location due to
+optimization rearrangement of code.
+Also eliminate the -Wuninitialized option from the HG_WARN definition
+to avoid constant warnings about that being incompatible with -g.
+
 Rebuild the source tree:
 
 $ cd kent/src
@@ -58,7 +65,7 @@ $ cd hg/hgTracks
 $ make compile
 
 The hgTracks binary will now have all symbol information in it and
-it can be operated under a debugger such as ddd (or gdb).
+it can be operated under a debugger such as ddd (or gdb, etc...).
 
 For the case of specific options or tracks causing problems,
 to find the full set of options in effect for the failure case,
@@ -97,4 +104,4 @@ of the specialized structures, hash lists, etc.  Your stack backtrace
 will usually highlight these situations.
 
 ====================================================================
-This file last updated: $Date: 2005/03/28 19:10:42 $
+This file last updated: $Date: 2005/03/28 19:49:59 $
