@@ -7927,6 +7927,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     gbProtAnn = gbProtAnnLoad(row);
+    printCustomUrl(tdb, item, TRUE);
     printf("<B>Product:</B> %s<BR>\n", gbProtAnn->product);
     if (gbProtAnn->note[0] != 0)
 	printf("<B>Note:</B> %s <BR>\n", gbProtAnn->note);
