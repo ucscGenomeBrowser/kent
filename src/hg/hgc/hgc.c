@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.776 2004/10/22 21:14:33 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.777 2004/10/22 23:03:13 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -283,10 +283,16 @@ static void printBDGPUrl(FILE *f, char *bdgpName)
 fprintf(f, "\"http://www.fruitfly.org/cgi-bin/annot/gene?%s\"", bdgpName);
 }
 
-char *hgcPath()
-/* Return path of this CGI script. */
+char *hgTracksPathAndSettings()
+/* Return path with hgTracks CGI path and session state variable. */
 {
-return "../cgi-bin/hgc";
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    dy = newDyString(128);
+    dyStringPrintf(dy, "%s?%s", hgTracksName(), cartSidUrlString(cart));
+    }
+return dy->string;
 }
 
 char *hgcPathAndSettings()
@@ -296,7 +302,7 @@ static struct dyString *dy = NULL;
 if (dy == NULL)
     {
     dy = newDyString(128);
-    dyStringPrintf(dy, "%s?%s", hgcPath(), cartSidUrlString(cart));
+    dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart));
     }
 return dy->string;
 }
@@ -346,7 +352,7 @@ void hgcAnchorJalview(char *item, char *fa)
 {
 struct dyString *dy = cgiUrlString();
     printf("<A HREF=\"%s?%s&jalview=YES\">",
-	    hgcPath(), dy->string);
+	    hgcName(), dy->string);
     dyStringFree(&dy);
 }
 
@@ -479,8 +485,9 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 /* Print position lines referenced to chromosome. Strand argument may be NULL */
 {
 
-printf("<B>Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-	   hGetDb(), chrom, start+1, end);
+printf("<B>Position:</B> "
+       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+       hgTracksPathAndSettings(), database, chrom, start+1, end);
 printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 // printBand(chrom, (start + end)/2, 0, FALSE);
 printBand(chrom, start, end, FALSE);
@@ -1887,15 +1894,15 @@ return chain;
 void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&%s&position=%s%%3A%d-%d\">",
-   otherDb, extra, chrom, start+1, end);
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&%s&position=%s%%3A%d-%d\">",
+       hgTracksName(), otherDb, extra, chrom, start+1, end);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-   otherDb, chrom, start+1, end);
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&position=%s%%3A%d-%d\">",
+       hgTracksName(), otherDb, chrom, start+1, end);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
@@ -1958,8 +1965,8 @@ if (sameWord(otherDb, "seq"))
     }
 else
     {
-    printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
-	   otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
+    printf("<B>%s position:</B> <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
+	   otherOrg, hgTracksName(), otherDb, chain->qName, qs, qe, chain->qName,
 	   qs, qe, chain->qEnd - chain->qStart);
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
@@ -2499,7 +2506,7 @@ hParseTableName(tbl, rootName, parsedChrom);
 hti = hFindTableInfo(seqName, rootName);
 cartWebStart(cart, "Get DNA in Window");
 printf("<H2>Get DNA for </H2>\n");
-printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
@@ -2737,7 +2744,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -5739,7 +5746,7 @@ puts("<P>"
 printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
 puts("Table Browser</A> using the output format sequence.");
 
-printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcDnaNearGene");
 cgiContinueHiddenVar("i");
@@ -5767,7 +5774,7 @@ void htcGeneAlignment(char *geneName)
 {
 cartWebStart(cart, "Aligned Annotated Genomic Sequence ");
 printf("<H2>Align a gene prediction to another species or the same species and view codons and translated proteins.</H2>");
-printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcDnaNearGene");
 cgiContinueHiddenVar("i");
@@ -8411,8 +8418,8 @@ if (bgi != NULL)
 	    if ((row = sqlNextRow(sr2)) != NULL)
 		{
 		bgiSnpStaticLoad(row+rowOffset, &snp);
-		printf("&nbsp;&nbsp;&nbsp;<A HREF=%s?%s&g=bgiSnp&i=%s&db=%s&c=%s&o=%d&t=%d>%s</A>: %s",
-		       hgcName(), cartSidUrlString(cart), gs.snpName, database,
+		printf("&nbsp;&nbsp;&nbsp;<A HREF=%s&g=bgiSnp&i=%s&db=%s&c=%s&o=%d&t=%d>%s</A>: %s",
+		       hgcPathAndSettings(), gs.snpName, database,
 		       seqName, snp.chromStart, snp.chromEnd, gs.snpName,
 		       gs.geneAssoc);
 		if (gs.effect[0] != 0)
@@ -8512,8 +8519,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    while ((row = sqlNextRow(sr3)) != NULL)
 		{
 		bg = genePredLoad(row);
-		printf("<B>Associated gene:</B> <A HREF=%s?%s&g=bgiGene&i=%s&c=%s&db=%s&o=%d&t=%d&l=%d&r=%d>%s</A>: %s",
-		       hgcName(), cartSidUrlString(cart), gs.geneName,
+		printf("<B>Associated gene:</B> <A HREF=%s&g=bgiGene&i=%s&c=%s&db=%s&o=%d&t=%d&l=%d&r=%d>%s</A>: %s",
+		       hgcPathAndSettings(), gs.geneName,
 		       seqName, database, bg->txStart, bg->txEnd,
 		       bg->txStart, bg->txEnd, gs.geneName, gs.geneAssoc);
 		if (gs.effect[0] != 0)
@@ -8585,10 +8592,12 @@ if (cgiVarExists("o"))
     while (row = sqlNextRow(sr))
 	{
 	genomicDupsStaticLoad(row+rowOffset, &dup);
-	printf("<B>Region Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	printf("<B>Region Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	       hgTracksPathAndSettings(),
 	       hGetDb(), dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<B>Other Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
+	printf("<B>Other Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
+	       hgTracksName(),
 	       hGetDb(), dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("<B>Relative orientation:</B> %s<BR>\n", dup.strand);
@@ -8785,8 +8794,8 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 
 
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-       otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
        psl->qName, psl->qStart+1, psl->qEnd);
 
 /*superceded by above code*/
@@ -8833,8 +8842,8 @@ char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-       otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
        psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
@@ -8858,7 +8867,8 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
 
 if (containsStringNoCase(otherDb, "zoo"))
     {
-    printf("<P><A HREF='/cgi-bin/hgTracks?db=%s'>Go to the browser view of the %s</A><BR>\n", otherDb, otherOrg);
+    printf("<P><A HREF='%s&db=%s'>Go to the browser view of the %s</A><BR>\n",
+	   hgTracksPathAndSettings(), otherDb, otherOrg);
     }
 
 printTrackHtml(tdb);
@@ -8932,8 +8942,8 @@ printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 
 sprintf(anotherString, "%s",otherOrg);
 toUpperN(anotherString,1);
-printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",anotherString,psl->qStart,psl->qEnd,otherOrg);
-
+printf("Link to <a href=\"http://hgwdev-tcbruen.cse.ucsc.edu/cgi-bin/hgTracks?db=zoo%s1&position=chr1:%d-%d\">%s database</a><BR>\n",
+       anotherString, psl->qStart, psl->qEnd, otherOrg);
 
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable);
@@ -10954,8 +10964,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	   (el.chromEnd - el.chromStart), org);
     if (xenoDb != NULL)
 	{
-	printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s Genome Browser</A> at %s:%d-%d <BR>\n",
-	       hgTracksName(), cartSidUrlString(cart),
+	printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s Genome Browser</A> at %s:%d-%d <BR>\n",
+	       hgTracksName(), 
 	       xenoDb, xenoChrom, el.xenoStart, el.xenoEnd,
 	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
 
@@ -11938,7 +11948,7 @@ sqlFreeResult(&sr);
 
 
 
-/*Ewan's stuff */
+/* Evan Eichler's stuff */
 
 void doCeleraDupPositive(struct trackDb *tdb, char *dupName)
 /* Handle click on celeraDupPositive track. */
@@ -11946,190 +11956,171 @@ void doCeleraDupPositive(struct trackDb *tdb, char *dupName)
 char *track = tdb->tableName;
 struct celeraDupPositive dup;
 char query[512];
-char title[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-sprintf(title, "Segmental Duplication Database");
-cartWebStart(cart, title);
+int celeraVersion = 0;
+int i = 0;
+cartWebStart(cart, tdb->longLabel);
 
-printf("<H2>Segmental Duplication Database (SDD)</H2>\n");
-
+if (sameString(database, "hg15"))
+    celeraVersion = 3;
+else
+    celeraVersion = 4;
 
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
     int rowOffset = hOffsetPastBin(seqName, track);
 
-
-
-    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
-	    track, seqName, start ,dupName);
+    safef(query, sizeof(query),
+	  "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
+	  track, seqName, start, dupName);
     sr = sqlGetResult(conn, query);
+    i = 0;
     while (row = sqlNextRow(sr))
 	{
+	if (i > 0)
+	    htmlHorizontalLine();
 	celeraDupPositiveStaticLoad(row+rowOffset, &dup);
-	printf("<B>Duplication Name:</B> %s<BR>\n",dup.name);
-	printf("<B>Position:</B> %s:%d-%d<BR>\n",
-	       dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<B>Full Descriptive Name:</B> %s<BR>\n", dup.fullName);
-
-	printf("<B>Fraction BP Match:</B> %3.4f<BR>\n", dup.fracMatch);
-	printf("<B>Alignment Length:</B> %3.0f<BR>\n", dup.bpAlign);
-
-
-	htmlHorizontalLine();
-	printf("<A HREF=\"http://humanparalogy.cwru.edu/eichler/celera3/cgi-bin/celera3.pl?search=%s&type=pdf \" Target=%s_PDF><B>Clone Read Depth PDF:</B></A><BR>",dup.name,dup.name);
-	printf("<A HREF=\"http://humanparalogy.cwru.edu/eichler/celera3/cgi-bin/celera3.pl?search=%s&type=jpg \" Target=%s_JPG><B>Clone Read Depth JPG:</B></A><BR>",dup.name,dup.name);
-	htmlHorizontalLine();
+	printf("<B>Duplication Name:</B> %s<BR>\n", dup.name);
+	bedPrintPos((struct bed *)(&dup), 3);
+	if (!sameString(dup.name, dup.fullName))
+	    printf("<B>Full Descriptive Name:</B> %s<BR>\n", dup.fullName);
+	if (dup.bpAlign > 0)
+	    {
+	    printf("<B>Fraction BP Match:</B> %3.4f<BR>\n", dup.fracMatch);
+	    printf("<B>Alignment Length:</B> %3.0f<BR>\n", dup.bpAlign);
+	    }
+	if (!startsWith("WSSD No.", dup.name))
+	    {
+	    printf("<A HREF=\"http://humanparalogy.gs.washington.edu"
+		   "/eichler/celera%d/cgi-bin/celera%d.pl"
+		   "?search=%s&type=pdf \" Target=%s_PDF>"
+		   "<B>Clone Read Depth Graph (PDF)</B></A><BR>",
+		   celeraVersion, celeraVersion, dup.name, dup.name);
+	    printf("<A HREF=\"http://humanparalogy.gs.washington.edu"
+		   "/eichler/celera%d/cgi-bin/celera%d.pl"
+		   "?search=%s&type=jpg \" Target=%s_JPG>"
+		   "<B>Clone Read Depth Graph (JPG)</B></A><BR>",
+		   celeraVersion, celeraVersion, dup.name, dup.name);
+	    }
+	i++;
 	}
     }
 else
     {
-    puts("<P>Click directly on a repeat for specific information on that repeat</P>");
+    puts("<P>Click directly on a duplication for information on that "
+	 "duplication.</P>");
     }
 
-puts("This region shows similarity > 90\% and >250 bp of repeatmasked sequence to sequences"
-     "in the Segmental Duplication Database (SDD).");
+printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
 }
 
-void doCeleraCoverage()
-/* Handle click on celeraCoverage track. */
+void parseSuperDupsChromPointPos(char *pos, char *retChrom, int *retPos,
+				 int *retID)
+/* Parse out (No.)?NNNN[.,]chrN:123 into NNNN and chrN and 123. */
 {
-//char *track = tdb->tableName;
-//struct celeraDupPositive dup;
-//char query[512];
-//struct sqlConnection *conn = hAllocConn();
-//struct sqlResult *sr;
-//char **row;
-char title[256];
-sprintf(title, "CoverageSDD");
-cartWebStart(cart, title);
-
-printf("<H2>Coverage SDD</H2>\n");
-
-puts("This track represents coverage of clones that were assayed for "
-     "duplications with Celera reads. Absent regions were not assessed "
-     "by this version of the SDD. ");
-webEnd();
-}
-
-
-
-void parseSuperDupsChromPointPos(char *pos, char *retChrom, int *retPos, int *retID)
-/* Parse out NNNN.chrN:123 into NNNN and chrN and 123. */
-{
-char *idStr, *periodPlaceHolder, *colonPlaceHolder,*chromStr, *posStr;
-
-int idLen;
-int chrLen;
-periodPlaceHolder = strchr(pos, '.');
-if (periodPlaceHolder == NULL)
-    errAbort("No . in chromosome point position %s", pos);
-idLen = periodPlaceHolder - pos;
-idStr=malloc(idLen+1);
-memcpy(idStr, pos, idLen);
-idStr[idLen] = 0;
-*retID=atoi(idStr);
-free(idStr);
-
-
-
-chromStr=periodPlaceHolder+1;
-
-colonPlaceHolder=strchr(pos,':');
-if (colonPlaceHolder == NULL)
-    errAbort("No : in chromosome point position %s", pos);
-chrLen=colonPlaceHolder-chromStr;
-
-
-
-memcpy(retChrom,chromStr,chrLen);
-retChrom[chrLen]=0;
-posStr=colonPlaceHolder+1;
-*retPos= atoi(posStr);
-
+char *words[16];
+int wordCount = 0;
+char *sep = ",.:";
+char *origPos = pos;
+if (startsWith("No.", pos))
+    pos += strlen("No.");
+pos = cloneString(pos);
+wordCount = chopString(pos, sep, words, ArraySize(words));
+if (wordCount != 3)
+    errAbort("parseSuperDupsChromPointPos: Expected something like "
+	     "(No\\.)?[0-9]+[.,][a-zA-Z0-9_]+:[0-9]+ but got %s", origPos);
+*retID = sqlUnsigned(words[0]);
+safef(retChrom, 64, words[1]);
+*retPos = sqlUnsigned(words[2]);
 }
 
 
 void doGenomicSuperDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
-char *track = tdb->tableName;
-struct genomicSuperDups dup;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char oChrom[64];
+cartWebStart(cart, tdb->longLabel);
 
-int oStart;
-int dupId; /*Holds the duplication id*/
-int rowOffset;
-char title[256];
-char *tbl = cgiUsualString("table", cgiString("g"));
-sprintf(title, "Genome Duplications");
-cartWebStart(cart, title);
-
-printf("<H2>Genome Duplications</H2>\n");
 if (cgiVarExists("o"))
     {
+    char *track = tdb->tableName;
+    struct genomicSuperDups dup;
+    struct dyString *query = newDyString(512);
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char oChrom[64];
+    int oStart;
+    int dupId;
+    int rowOffset;
     int start = cgiInt("o");
+    int end   = cgiInt("t");
+    char *alignUrl = "http://humanparalogy.gs.washington.edu";
+    if (sameString("hg15", database) || sameString("hg16", database))
+	alignUrl = "http://humanparalogy.gs.washington.edu/jab/der_oo33";
     rowOffset = hOffsetPastBin(seqName, track);
-
-    parseSuperDupsChromPointPos(dupName,oChrom,&oStart,&dupId);
-
-
-    safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart = %d "
-	    "and uid = %d and otherStart = %d",
-	    track, seqName, start, dupId, oStart);
-    sr = sqlGetResult(conn, query);
+    parseSuperDupsChromPointPos(dupName, oChrom, &oStart, &dupId);
+    dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+		   track, seqName);
+    if (rowOffset > 0)
+	hAddBinToQuery(start, end, query);
+    dyStringPrintf(query, "chromStart = %d and uid = %d and otherStart = %d",
+		   start, dupId, oStart);
+    sr = sqlGetResult(conn, query->string);
     while (row = sqlNextRow(sr))
 	{
-
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
-	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
-	       dup.chrom, dup.chromStart+1, dup.chromEnd);
-	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
-	       "View DNA for this feature</A><BR>\n",
-	       hgcPathAndSettings(), dup.chromStart, dup.chromEnd, dup.name,
-	       dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
-
-
-	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
+	bedPrintPos((struct bed *)(&dup), 6);
+	printf("<B>Other Position:</B> "
+	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">"
+	       "%s:%d-%d</A> &nbsp;&nbsp;&nbsp;\n",
+	       hgTracksPathAndSettings(), database, 
+	       dup.otherChrom, dup.otherStart+1, dup.otherEnd,
 	       dup.otherChrom, dup.otherStart+1, dup.otherEnd);
 	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
-	       "View DNA for this feature</A><BR>\n",
+	       "View DNA for other position</A><BR>\n",
 	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd, "",
 	       dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand,
-	       database, tbl);
+	       database, track);
 
-	//printf("<B>Name:</B>%s<BR>\n",dup.name);
-	//printf("<B>Score:</B>%d<BR>\n",dup.score);
-	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",dup.strand);
+	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",
+	       dup.strand);
 	//printf("<B>Uid:</B>%d<BR>\n",dup.uid);
-	printf("<B>Filter Verdict:</B>%s<BR>\n",dup.verdict);
-	printf("&nbsp;&nbsp;&nbsp;<B>testResult:</B>%s<BR>\n",dup.testResult);
-	printf("&nbsp;&nbsp;&nbsp;<B>chits:</B>%s<BR>\n",dup.chits);
-	printf("&nbsp;&nbsp;&nbsp;<B>ccov:</B>%s<BR>\n",dup.ccov);
-	printf("&nbsp;&nbsp;&nbsp;<B>posBasesHit:</B>%d<BR>\n",dup.posBasesHit);
-	/*printf("<A HREF=/jab/der_oo33/%s TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",dup.alignfile,dup.chrom, dup.chromStart, dup.chromEnd);*/
-	printf("<A HREF=http://humanparalogy.cwru.edu/jab/der_oo33/%s TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",dup.alignfile,dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<B>Alignment Length:</B>%d<BR>\n",dup.alignL);
-	printf("&nbsp;&nbsp;&nbsp;<B>Indels #:</B>%d<BR>\n",dup.indelN);
-	printf("&nbsp;&nbsp;&nbsp;<B>Indels bp:</B>%d<BR>\n",dup.indelS);
-	printf("&nbsp;&nbsp;&nbsp;<B>Aligned Bases:</B>%d<BR>\n",dup.alignB);
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Matching bases:</B>%d<BR>\n",dup.matchB);
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Mismatched bases:</B>%d<BR>\n",dup.mismatchB);
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transitions:</B>%d<BR>\n",dup.transitionsB);
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transverions:</B>%d<BR>\n",dup.transversionsB);
-	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching:</B>%3.4f<BR>\n",dup.fracMatch);
-	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching with Indels:</B>%3.4f<BR>\n",dup.fracMatchIndel);
-	printf("&nbsp;&nbsp;&nbsp;<B>Jukes Cantor:</B>%3.4f<BR>\n",dup.jcK);
+	printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
+	printf("&nbsp;&nbsp;&nbsp;<B> testResult:</B>%s<BR>\n", dup.testResult);
+	printf("&nbsp;&nbsp;&nbsp;<B> chits:</B>%s<BR>\n", dup.chits);
+	printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
+	printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
+	       dup.posBasesHit);
+	printf("<A HREF=%s/%s "
+	       "TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",
+	       alignUrl, dup.alignfile, dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("<B>Alignment Length:</B> %d<BR>\n", dup.alignL);
+	printf("&nbsp;&nbsp;&nbsp;<B>Indels #:</B> %d<BR>\n", dup.indelN);
+	printf("&nbsp;&nbsp;&nbsp;<B>Indels bp:</B> %d<BR>\n", dup.indelS);
+	printf("&nbsp;&nbsp;&nbsp;<B>Aligned Bases:</B> %d<BR>\n", dup.alignB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Matching bases:</B> %d<BR>\n", 
+	       dup.matchB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Mismatched bases:</B> %d<BR>\n",
+	       dup.mismatchB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transitions:</B> %d<BR>\n",
+	       dup.transitionsB);
+	printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>Transverions:</B> %d<BR>\n",
+	       dup.transversionsB);
+	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching:</B> %3.4f<BR>\n",
+	       dup.fracMatch);
+	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching with Indels:</B> %3.4f<BR>\n",
+	       dup.fracMatchIndel);
+	printf("&nbsp;&nbsp;&nbsp;<B>Jukes Cantor:</B> %3.4f<BR>\n", dup.jcK);
 
 	}
+    dyStringFree(&query);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
 else
     {
@@ -12137,11 +12128,9 @@ else
     }
 
 printTrackHtml(tdb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 webEnd();
 }
-/*Ewan's end*/
+/* end of Evan Eichler's stuff */
 
 
 
@@ -13787,8 +13776,8 @@ for(i=0; i<ag->edgeCount; i++)
     {
     struct evidence *e =  slElementFromIx(ag->evidence, i);
     printf("<tr><td>%d</td><td>%d</td>", 	   ag->edgeStarts[i], ag->edgeEnds[i]);
-    printf("<td><a href=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
-	   hgTracksName(), 
+    printf("<td><a href=\"%s&position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\">%s</a></td><td>", 
+	   hgTracksPathAndSettings(), 
 	   ag->tName, 
 	   ag->vPositions[ag->edgeStarts[i]], 
 	   ag->vPositions[ag->edgeEnds[i]],
@@ -13869,15 +13858,16 @@ else
 	}
     else 
 	puts("<br>Mouse\n");
-    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
-	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
+    printf("<a HREF=\"%s&db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full\"",
+	   hgTracksName(),
+	   "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
     printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
     printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
 	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
     altGraphXMakeImage(tdb,orthoAg);
     }
-printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
-       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
+printf("<br><a HREF=\"%s&position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full\"",
+       hgTracksPathAndSettings(), ag->tName, ag->tStart, ag->tEnd);
 printf(" ALT=\"Zoom to browser coordinates of Alt-Splice\">");
 printf("Jump to browser for %s</a><font size=-1> [%s:%d-%d] </font><br><br>\n", ag->name, ag->tName, ag->tStart, ag->tEnd);
 if(cgiVarExists("agxPrintEdges"))
@@ -13895,19 +13885,6 @@ char *path = hExtFileName("extFile", extFileId);
 struct lineFile *lf = lineFileOpen(path, TRUE);
 freeMem(path);
 return lf;
-}
-
-char *hgcNameAndSettings()
-/* Return path to hgc with variables to store UI settings.
- */
-{
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    {
-    dy = newDyString(128);
-    dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart)); 
-    } 
-return dy->string; 
 }
 
 void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
@@ -14303,7 +14280,6 @@ struct dnaSeq *seq;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
-char uiState[64];
 struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
 char *useName = itemName;
 char *acc = NULL, *prot = NULL;
@@ -14352,7 +14328,6 @@ else if (isSacCer == TRUE)
     cartWebStart(cart, "Yeast Protein %s", useName);
 else
     cartWebStart(cart, "Human Protein %s", useName);
-sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
     if (isDm == TRUE)
@@ -14415,22 +14390,23 @@ for (same = 1; same >= 0; same -= 1)
 	{
 	if (same ^ (psl->tStart != start))
 	    {
-	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s&pred=%s\">", 
-		hgcName(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName, uiState,pred);
+	    printf("<A HREF=\"%s&o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&pred=%s\">", 
+		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
+		psl->tStart, psl->tEnd, database,tdb->tableName, pred);
 	    printf("alignment</A> ");
-	    printf("<A HREF=\"%s?o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
-		hgcName(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
+	    printf("<A HREF=\"%s&o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s\">", 
+		hgcPathAndSettings(), psl->tStart, psl->qName,  psl->tName,
+		psl->tStart, psl->tEnd, database,tdb->tableName);
 	    printf("peptide</A> ");
 	    printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
 		100.0 * (psl->match + psl->repMatch + psl->misMatch) / psl->qSize,
 		100.0 * (psl->match + psl->repMatch) / (psl->match + psl->repMatch + psl->misMatch),
 		psl->qStart+1, psl->qEnd, 
 		100.0 * (psl->qEnd - psl->qStart) / psl->qSize, psl->strand[1]);
-	    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
-		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, database, 
-		tdb->tableName, itemName, uiState);
+	    printf("<A HREF=\"%s&position=%s:%d-%d&db=%s&ss=%s+%s\">",
+		   hgTracksPathAndSettings(), 
+		   psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		   tdb->tableName, itemName);
 	    sprintLongWithCommas(startBuf, psl->tStart + 1);
 	    sprintLongWithCommas(endBuf, psl->tEnd);
 	    printf("%s:%s-%s</A> <BR>",psl->tName,startBuf, endBuf);
@@ -15450,10 +15426,6 @@ else if (sameWord(track,"easyGene"))
 else if (sameWord(track, "genomicSuperDups"))
     {
     doGenomicSuperDups(tdb, item);
-    }
-else if (sameWord(track, "celeraCoverage"))
-    {
-    doCeleraCoverage();
     }
 else if (sameWord(track, "celeraDupPositive"))
     {
