@@ -24,12 +24,12 @@ DNA *dna = seq->dna, base;
 int i, size = seq->size;
 for (i=0; i<size; ++i)
     {
-    base = dna[size];
+    base = dna[i];
     if (isupper(base))
 	base = tolower(base);
     else
         base = 'n';
-    dna[size] = base;
+    dna[i] = base;
     }
 }
 
@@ -38,9 +38,7 @@ void faToNib(int options, char *in, char *out)
 {
 struct dnaSeq *seq = faReadAllMixed(in);
 if (optionExists("hardMask"))
-    {
     maskLower(seq);
-    }
 nibWriteMasked(options, seq, out);
 }
 
