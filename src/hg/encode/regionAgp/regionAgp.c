@@ -12,7 +12,7 @@
 #include "agpGap.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.12 2004/10/19 20:07:13 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.13 2004/10/20 17:40:53 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -170,6 +170,10 @@ for (pos = posList; pos != NULL; pos = pos->next)
             else
                 frag.frag = agpFrag->frag;
             frag.strand[0] = agpFrag->strand[0];
+            /* NCBI AGP format requires strand to be + or - 
+               (internally we sometimes use '.' to indicate we don't know) */
+            if (frag.strand[0] = '.')
+                frag.strand[0] = '+';
             frag.strand[1] = 0;
             agpFragOutput(&frag, fout, '\t', '\n');
             }
