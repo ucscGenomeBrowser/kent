@@ -8,11 +8,12 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.24 2004/04/24 19:45:37 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.25 2004/07/28 17:56:14 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"tNameIx", OPTION_BOOLEAN},
+    {"noTNameIx", OPTION_BOOLEAN},
+    {"tNameIx", OPTION_BOOLEAN},  /* default now, but allow for backw.compat.*/
     {"nobin", OPTION_BOOLEAN},
     {"xa", OPTION_BOOLEAN},
     {"fastLoad", OPTION_BOOLEAN},
@@ -40,7 +41,7 @@ errAbort(
   "It will create a table for each psl file.\n"
   "options:\n"
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
-  "   -tNameIx    add target name index\n"
+  "   -noTNameIx  Don't add target name index\n"
   "   -xa         Include sequence info\n"
   "   -fastLoad   Browser will lock up if someone opens this table during loading\n"
   "   -onServer   This will speed things up if you're running in a directory that\n"
@@ -156,7 +157,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (optionExists("tNameIx"))
+if (! optionExists("noTNameIx"))
     pslCreateOpts |= PSL_TNAMEIX;
 if (!optionExists("nobin"))
     pslCreateOpts |= PSL_WITH_BIN;
