@@ -2604,6 +2604,35 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
     ldHgGene mm4 geneid download/*.gtf -exon=CDS
     hgPepPred mm4 generic geneidPep download/*-fixed.prot
 
+# SGP GENE PREDICTIONS (DONE - 2003-12-30 - Hiram)
+    mkdir -p /cluster/data/mm4/bed/sgp/download
+    cd /cluster/data/mm4/bed/sgp/download
+#http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307
+
+    foreach f (/cluster/data/mm4/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget --timestamping \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/$chr.gtf
+      wget --timestamping \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/$chr.prot
+    end
+    wget --timestamping \
+http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/readme
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene mm4 sgpGene download/*.gtf -exon=CDS
+#	Read 43988 transcripts in 320332 lines in 21 files
+#	  43988 groups 21 seqs 1 sources 3 feature types
+#	43988 gene predictions
+    hgPepPred mm4 generic sgpPep download/*-fixed.prot
+#  featureBits mm4 sgpGene
+#  40100330 bases of 2627444668 (1.526%) in intersection
+#  featureBits mm3 sgpGene
+#  38897454 bases of 2505900260 (1.552%) in intersection
+
 # TWINSCAN 1.3 GENE PREDICTIONS (2003-12-15 braney)
 
     cd /cluster/data/mm4/bed
@@ -2627,3 +2656,4 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
     end
     ldHgGene mm4 twinscan chr_gtf/chr*.gtf -gtf
     hgPepPred mm4 generic twinscanPep chr_ptx/chr*-fixed.fa
+
