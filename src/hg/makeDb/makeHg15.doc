@@ -1877,18 +1877,20 @@ LOAD GENIE (todo)
     ldHgGene hg15 geneid download/*.gtf -exon=CDS
     hgPepPred hg15 generic geneidPep download/*-fixed.prot
 
-LOAD ACEMBLY (TODO)
+LOAD ACEMBLY (5/30/03 KRR)
     mkdir -p ~/hg15/bed/acembly
     cd ~/hg15/bed/acembly
     # Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
-    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_31.human.genes/acembly.ncbi_31.genes.proteins.fasta.tar.gz
-    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_31.human.genes/acembly.ncbi_31.genes.gff.tar.gz
-    gunzip -c acembly.ncbi_31.genes.gff.tar.gz | tar xvf -
-    gunzip -c acembly.ncbi_31.genes.proteins.fasta.tar.gz | tar xvf -
-    cd acembly.ncbi_31.genes.gff
+    set build = ncbi_33
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.proteins.fasta.tar.gz
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.gff.tar.gz
+    gunzip -c acembly.$build.genes.gff.tar.gz | tar xvf -
+    gunzip -c acembly.$build.genes.proteins.fasta.tar.gz | tar xvf -
+    cd acembly.$build.genes.gff
     # Save just the floating-contig features to different files for lifting 
     # and lift up the floating-contig features to chr*_random coords:
-    foreach f (acemblygenes.*.gff)
+    # NOTE: file prefix (x1) has been added since build 31
+    foreach f (x1.acemblygenes.*.gff)
       set c=$f:r:e
       egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
         perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
@@ -1901,17 +1903,18 @@ LOAD ACEMBLY (TODO)
       grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' > chr$c.gff
     end
 
-    cd ../acembly.ncbi_31.genes.proteins.fasta
+    cd ../acembly.$build.genes.proteins.fasta
     #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
-    foreach f (acemblyproteins.*.fasta)
+    foreach f (x1.acemblyproteins.*.fasta)
       perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > chr$f:r:e.fa
     end
 
     #- Load into database:
     cd ..
-    ldHgGene hg15 acembly acembly.ncbi_31.genes.gff/chr*.gff
+    ldHgGene hg15 acembly acembly.$build.genes.gff/chr*.gff
     hgPepPred hg15 generic acemblyPep \
-      acembly.ncbi_31.genes.proteins.fasta/chr*.fa
+      acembly.$build.genes.proteins.fasta/chr*.fa
+    unset build
 
 LOAD GENOMIC DUPES (todo)
 o - Load genomic dupes
