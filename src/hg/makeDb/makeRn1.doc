@@ -1,4 +1,4 @@
- This file describes how we made the browser database on the Rattus 
+This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, November 2002 build.
 
 CREATING DATABASE (DONE 11/25/02)
@@ -274,6 +274,23 @@ GOLD AND GAP TRACKS (DONE 11/26/02)
 
 CREATE RELATIONAL MRNA DATABASE (DONE 11/27/02)
     ssh hgwdev
+
+cd /cluster/store2/mrna.132
+
+Make the anyRna.fil file using this text:
+
+restrict mol=mRNA
+hide mol
+
+# Make the RNAs
+        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
+
+# Make the ESTs
+        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
+
+
     # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
     mkdir -p /gbdb/rn1/mrna.132
 
@@ -290,22 +307,6 @@ CREATE RELATIONAL MRNA DATABASE (DONE 11/27/02)
     hgLoadRna new rn1
     hgLoadRna add -type=mRNA rn1 /gbdb/rn1/mrna.132/mrna.fa /gbdb/rn1/mrna.132/mrna.ra
     hgLoadRna add -type=EST rn1 /gbdb/rn1/mrna.132/est.fa /gbdb/rn1/mrna.132/est.ra
-
-    cd /cluster/store2/mrna.132
-
-Make the anyRna.fil file using this text:
-
-restrict mol=mRNA
-hide mol
-
-# Make the RNAs
-        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
-        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
-
-# Make the ESTs
-        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
-        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
-
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE 11/28/02)
 
@@ -580,6 +581,29 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/27/02)
     cd /usr/local/apache/htdocs/goldenPath/rnNov2002
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
+# For the first database table dump
+do:
+
+ssh hgwbeta
+mkdir /usr/local/apache/htdocs/goldenPath/rnNov2002/database
+
+cd /var/tmp
+mkdir rn1-dump
+chmod 777 rn1-dump      (since you aren't root this is quickest)
+cd rn1-dump
+mysqldump --user=root --password=mysql4cc --all --tab=. rn1
+
+Then, that directory will quickly fill with .sql and .txt files
+When it is done do:
+
+cd /var/tmp/rn1-dump
+gzip *.txt
+mv * /usr/local/apache/htdocs/goldenPath/rnNov2002/database
+
+ - Make database.zip
+ssh hgwbeta
+cd /usr/local/apache/htdocs/goldenPath/rnNov2002/database
+zip ../bigZips/database.zip *
 
 PRODUCING GENSCAN PREDICTIONS (DONE 12/3/02)
     
@@ -911,13 +935,13 @@ Load into database as so:
 Make the xenoRna file
         cd /cluster/store2/mrna.132
         gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
-        | gbToFaRa -byOrganism=org mouseXenoRna.fil mouseXenoRna.fa mouseXenoRna.ra mouseXenoRna.ta stdin
+        | gbToFaRa ratXenoRna.fil ratXenoRna.fa ratXenoRna.ra ratXenoRna.ta stdin
 
        Make a /gbdb symlink
        cd /gbdb/rn1/mrna.132
-       ln -s /cluster/store2/mrna.132/mouseXenoRna.fa mouseXenoRna.fa
-       ln -s /cluster/store2/mrna.132/mouseXenoRna.ra mouseXenoRna.ra
-       hgLoadRna add rn1 /gbdb/rn1/mrna.132/mouseXenoRna.fa  /gbdb/rn1/mrna.132/mouseXenoRna.ra
+       ln -s /cluster/store2/mrna.132/ratXenoRna.fa ratXenoRna.fa
+       ln -s /cluster/store2/mrna.132/ratXenoRna.ra ratXenoRna.ra
+       hgLoadRna add -type=xenoRna rn1 /gbdb/rn1/mrna.132/ratXenoRna.fa  /gbdb/rn1/mrna.132/ratXenoRna.ra
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
