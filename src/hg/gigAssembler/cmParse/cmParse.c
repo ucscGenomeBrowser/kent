@@ -759,6 +759,7 @@ int clonePos = 0;
 struct cloneBasicInfo *cbi;
 int missingFromFreeze = 0;
 struct ntCtgClonePos *nccp;
+char contigName[256];
 
 uglyf("Reading %s\n", imreFile);
 splitPath(imreFile, sDir, NULL, NULL);
@@ -789,11 +790,18 @@ while (lineFileNext(lf, &line, &lineSize))
         errAbort("Expecting at least 5 words line %d of %s", 
 		lf->lineIx, lf->fileName);
     imreCloneStaticLoad(words, &im);
-    if (contig == NULL || !sameString(contig->name, im.imreContig))
+    if (hashLookup(badHash, im.accession))
+        continue;
+    eraseWhiteSpace(im.imreContig);
+    if (startsWith("ctg", im.imreContig))
+	strcpy(contigName, im.imreContig);
+    else
+	sprintf(contigName, "ctg%s", im.imreContig);
+    if (contig == NULL || !sameString(contig->name, contigName))
         {
 	AllocVar(contig);
 	slAddHead(&chrom->orderedList, contig);
-	hashAddSaveName(ctgHash, im.imreContig, contig, &contig->name);
+	hashAddSaveName(ctgHash, contigName, contig, &contig->name);
 	contig->chrom = chrom;
 	clonePos = 0;
 	}
