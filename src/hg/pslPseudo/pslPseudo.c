@@ -31,7 +31,7 @@
 #define NOTPSEUDO -1
 #define BETTER -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.15 2004/04/24 17:33:44 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.16 2004/04/28 02:10:34 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -40,7 +40,7 @@ float minAli = 0.98;
 float maxRep = 0.50;
 float minAliPseudo = 0.60;
 float nearTop = 0.005;
-float repsPerIntron = 0.6;
+float repsPerIntron = 0.8;
 float splicedOverlapRatio = 0.5;
 float minCover = 0.50;
 float minCoverPseudo = 0.01;
@@ -157,7 +157,6 @@ void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
 {
 struct lineFile *lf = lineFileOpen(file, TRUE);
 char *line, *name;
-char root[128];
 char *rFile = hashStoreName(fileHash, file);
 
 while (lineFileNext(lf, &line, NULL))
@@ -307,7 +306,6 @@ struct hash *readBedCoordToBinKeeper(char *sizeFileName, char *bedFileName, int 
 /* free bed in binKeeper to save memory only start/end coord */
 {
 struct binKeeper *bk; 
-int size;
 struct bed *bed;
 struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);
 struct lineFile *bf = lineFileOpen(bedFileName , TRUE);
@@ -344,8 +342,6 @@ return hash;
 struct axt *axtCreate(char *q, char *t, int size, struct psl *psl)
 /* create axt */
 {
-int i;
-static int ix = 0;
 int qs = psl->qStart, qe = psl->qEnd;
 int ts = psl->tStart, te = psl->tEnd;
 int symCount = 0;
@@ -423,8 +419,8 @@ static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL, *mrna;
 struct dyString *q = newDyString(16*1024);
 struct dyString *t = newDyString(16*1024);
-int blockIx, diff;
-int qs, ts , symCount;
+int blockIx;
+int qs, ts ;
 int lastQ = 0, lastT = 0, size;
 int qOffset = 0;
 int tOffset = 0;
@@ -673,7 +669,6 @@ int i, blockCount = psl->blockCount;
 int ts, qs, te, qe, sz, tsRegion, teRegion;
 struct binKeeper *bk;
 int intronCount = 0, tGap;
-int maxQGap = 2; /* max size of gap on q size to be considered not an intron */
 
 assert (psl != NULL);
 if (blockCount <= 1)
@@ -687,7 +682,6 @@ for (i=1; i<blockCount; ++i)
     int trf = 0;
     int reps = 0, regionReps = 0;
     struct binElement *el, *elist;
-    struct bed *bed;
     qs = psl->qStarts[i];
     ts = psl->tStarts[i];
     teRegion = psl->tStarts[i] + psl->blockSizes[i];
@@ -884,7 +878,7 @@ int seqSize;
 struct dnaSeq *seq = NULL;
 int count = 0;
 int seqStart = strand[0] == '+' ? end : start - region;
-int score[POLYAREGION+1], pStart = 0, pEnd = 0; 
+int score[POLYAREGION+1], pStart = 0; 
 struct seqFilePos *sfp = hashMustFindVal(tHash, chrom);
 FILE *f = openFromCache(fileCache, sfp->file);
 seqSize = sfp->pos;
@@ -947,7 +941,6 @@ outPsl->blockSizes = needMem(psl->blockCount*sizeof(unsigned));
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
-    unsigned tEnd = tStart+psl->blockSizes[iBlk];
     unsigned qStart = psl->qStarts[iBlk];
     unsigned size = psl->blockSizes[iBlk];
 //    if (psl->strand[1] == '-')
@@ -1030,7 +1023,6 @@ bool isRepeat(char *chrom, int is, int ie, struct hash *bkHash)
 {
 struct binKeeper *bk = NULL;
 struct binElement *elist = NULL, *el = NULL;
-int i, j;
 
 if (bkHash != NULL)
     {
@@ -1049,7 +1041,10 @@ if (bkHash != NULL)
         warn("Warning: too many reps %d in st %d in end %d\n",reps, is, ie);
         }
     if ((float)reps/(float)(ie-is) > repsPerIntron)
+        {
+        printf("rep is intron ration = %f \n",(float)reps/(float)(ie-is));
         return TRUE;
+        }
     }
 return FALSE;
 }
@@ -1065,7 +1060,7 @@ if (psl->strand[0] == '-')
     {
     i = psl->blockCount - i -1;
     *qStart = psl->qStarts[i-1] + psl->blockSizes[i-1];
-    *tEnd = psl->tStarts[i];
+    *tEnd = psl->tStarts[i]-2;
     *tStart = psl->tStarts[i-1] + psl->blockSizes[i-1];
     *qEnd = psl->qStarts[i];
 //    *tStart = psl->tEnd - *tStart;
@@ -1094,7 +1089,7 @@ void exciseRepeats(struct psl *psl, struct hash *bkHash)
 {
 struct binKeeper *bk = NULL;
 struct binElement *elist = NULL, *el = NULL;
-int i, j;
+int i;
 unsigned *outReps = needMem(psl->blockCount*sizeof(unsigned));
 
 for (i = 0 ; i < psl->blockCount-1 ; i++)
@@ -1164,6 +1159,10 @@ tName = cloneString(psl->tName);
 readCachedSeqPart(tName, start, 2, tHash, fileCache, &tSeq, &tOffset, &isNib);
 assert (tOffset == start);
 site = cloneStringZ(tSeq->dna, 2);
+if (psl->strand[0] == '-')
+    {
+    reverseComplement(site, 2);
+    }
 freeDnaSeq(&tSeq);
 freez(&tName);
 return site;
@@ -1192,6 +1191,7 @@ pslMergeBlocks(pseudoPsl, pseudo, maxBlockGap);
 //    exciseRepeats(pseudo, bkHash );
 //    }
 //offset = interpolateStart(gene, pseudo);
+printf("pslCountIntrons gene cnt %d pseudocnt %d\n",gene->blockCount, pseudo->blockCount);
 for (i = 0 ; i < gene->blockCount ; i++)
     {
     int intronG = 0;
@@ -1201,24 +1201,44 @@ for (i = 0 ; i < gene->blockCount ; i++)
     for (j = 0 ; j < pseudo->blockCount ; j++)
         {
         if (!getNextIntron(pseudo, j, &pts, &pte, &pqs, &pqe, bkHash))
+            {
+            printf("NO gt %d-%d %d pt %d-%d %d  gq %d-%d pq %d-%d offset %d\n",
+                    gts,gte,gte-gts,pts,pte,pte-pts,gqs,gqe,pqs,pqe, offset);
             break;
+            }
         if (abs(gqs-pqs) < slop && abs(gqe-pqe) < slop)
             {
             char *gd = NULL, *ga = NULL, *pd = NULL, *pa = NULL;
             intronG = gte-gts;
             intronP = pte-pts;
-            gd = getSpliceSite(genePsl, gts); /* donor */
-            ga = getSpliceSite(genePsl, gte); /* acceptor */
-            pd = getSpliceSite(pseudoPsl, pts); /* donor */
-            pa = getSpliceSite(pseudoPsl, pte); /* acceptor */
-            if (sameString(gd,pd) && sameString(ga,pa))
+            if (genePsl->strand[0] == '+')
+                {
+                gd = getSpliceSite(genePsl, gts); /* donor */
+                ga = getSpliceSite(genePsl, gte); /* acceptor */
+                }
+            else
+                {
+                gd = getSpliceSite(genePsl, gte); /* donor */
+                ga = getSpliceSite(genePsl, gts); /* acceptor */
+                }
+            if (pseudoPsl->strand[0] == '+')
+                {
+                pd = getSpliceSite(pseudoPsl, pts); /* donor */
+                pa = getSpliceSite(pseudoPsl, pte); /* acceptor */
+                }
+            else
+                {
+                pd = getSpliceSite(pseudoPsl, pte); /* donor */
+                pa = getSpliceSite(pseudoPsl, pts); /* acceptor */
+                }
+            if (sameString(gd,pd) && sameString(ga,pa) && sameString(gd,"GT") && sameString(ga,"AG"))
                 {
                 *conservedIntron++;
-                printf("conserved %s %s %s %s\n",gd,pd,ga,pa);
+                printf("conserved don %s %s acc %s %s\n",gd,pd,ga,pa);
                 }
             printf("part1 gt %d-%d %d pt %d-%d %d  gq %d-%d pq %d-%d diff %d ratio %f gd %s ga %s pd %s pa %s\n"
                     ,gts,gte,intronG,pts,pte,intronP,gqs,gqe,pqs,pqe, abs(gts-(pts+offset)),
-                    ((float)intronG/(float)intronP), pd, ga, pd, pa );
+                    ((float)intronG/(float)intronP), gd, ga, pd, pa );
             if (intronP > 500 || ((float)intronG/(float)intronP) < intronRatio)
                 {
                 count++;
@@ -1244,7 +1264,7 @@ int pslCountExonSpan(struct psl *target, struct psl *query, int maxBlockGap, str
 /* count the number of blocks in the query that overlap the target */
 /* merge blocks that are closer than maxBlockGap */
 {
-int i, j, start = 0, qs, qqstart = 0 , qqs;
+int i, j, start = 0, qs, qqs;
 int count = 0;
 struct binKeeper *bk = NULL;
 struct binElement *elist = NULL, *el = NULL;
@@ -1341,7 +1361,6 @@ return count;
 }
 float calcTrf(struct psl *psl, struct hash *trfHash)
 {
-float trfRatio = 0.0;
 int trf = 0;
 if (trfHash != NULL)
     {
@@ -1367,7 +1386,6 @@ int overlapSplicedMrna(struct psl *psl, struct hash *mrnaHash, int *exonCount, s
 /* count bases that spliced mrna overlaps with pseudogenes. If self match then don't filter it.*/
 /* exonCount has number of exons in matched mRna */
 {
-bool noOverlap = TRUE ;
 int maxOverlap = 0;
 safef(mrnaOverlap,255,"NONE");
 if (mrnaHash != NULL)
@@ -1447,7 +1465,6 @@ struct binElement *el, *elist;
 struct binKeeper *bk;
 int trf = 0, rep = 0;
 char *bestChrom = NULL, *bestSEChrom = NULL;
-struct bed *bed;
 int tReps , qReps;
 int i ;
 int bestScore = 0, bestSEScore = 0;
@@ -1509,8 +1526,6 @@ bestScore = 0;
 bestSEScore = 0;
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    int intronCount = 0;
-    int oldIntronCount = 0;
     struct psl *pslMerge;
     int score = calcSizedScore(psl, bkHash, trfHash);
     
@@ -1645,7 +1660,7 @@ if (pslList != NULL)
 
         if (keepChecking && (intronCount == 0 /*|| (exonCover - intronCount > INTRONMAGIC)*/) && 
             maxExons > 1 && bestAliCount > 0 && bestChrom != NULL &&
-            (calcMilliScore(psl) >= milliMinPseudo && 
+            (calcMilliScore(psl) >= milliMinPseudo && (trfRatio < .5) &&
             psl->match + psl->misMatch + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
             {
                 struct psl *mPsl;
@@ -1713,6 +1728,8 @@ if (pslList != NULL)
                     dyStringAppend(reason,"noBest ");
                 if (bestAliCount < 1)
                     dyStringAppend(reason,"noAli ");
+                if (trfRatio > .5)
+                    dyStringAppend(reason,"trf ");
                 if (intronCount > 0)
                     dyStringAppend(reason,"introns ");
                 if (exonCover < 2)
@@ -1883,7 +1900,7 @@ struct hash *bkHash = NULL, *trfHash = NULL, *synHash = NULL, *mrnaHash = NULL;
 //struct lineFile *lf = NULL;
 //struct bed *syntenicList = NULL, *bed;
 //char  *row[3];
-struct genePredReader *gprKg;
+//struct genePredReader *gprKg;
 optionHash(&argc, argv);
 if (argc != 17)
     usage();
