@@ -11,7 +11,12 @@ information produced in this way, overlapping clones were linked into
 FingerPrinted Contigs (FPCs). Next, clones from a tiling path through the FPC 
 contigs are being selected for high quality sequencing and the resulting 
 sequence is submitted to EMBL/Genbank. The supercontigs tied to the FPC map 
-create the assembly shown in this track.
+create the assembly shown in this track.  The finished clone sequence is then 
+analyzed via a pipeline that includes repeatmasking, ab initio gene prediction
+ and blast searches against all protein, EST and cDNA sequences that are 
+available. Results from this analysis are used to manually annotate clones with
+gene structures, descriptions and poly-A features. At this point, the clone is 
+submitted to EMBL/Genbank again and can be browsed in <A HREF="http://vega.sanger.ac.uk/Danio_rerio/" TARGET=_blank>Vega</A>.
 </P>
 <P>In dense mode, this track depicts the path through the draft and
 finished clones (aka the golden path) used to create the assembled sequence.
