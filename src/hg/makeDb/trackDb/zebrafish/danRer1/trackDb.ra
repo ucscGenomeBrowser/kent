@@ -48,6 +48,16 @@ spectrum on
 type chain hg17
 otherDb hg17
 
+track netHg17
+shortLabel Human Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 124.3
+visibility hide
+spectrum on
+type netAlign hg17 chainHg17
+otherDb hg17
+
 track blastzFr1
 shortLabel Fugu Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
@@ -98,6 +108,42 @@ priority 58
 visibility hide
 spectrum on
 type psl est
+
+track tblastnHg16KGPep
+shortLabel Hg17 knownGenePep tBLASTn
+longLabel Human (hg17) knownGenePep tBLASTn
+group compGeno
+priority 142
+visibility hide
+colorChromDefault off
+type psl protein
+
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndSingles
+shortLabel BAC End Singles
+longLabel BAC End Singles
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
+track bacEndPairsBad
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Short, Long and Incorrectly Oriented BAC End Pairs
+group map
+priority 17
+visibility hide
+type bed 6 +
+exonArrows off
 
 searchTable ensGene
 searchType genePred
