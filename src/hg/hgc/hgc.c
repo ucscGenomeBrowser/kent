@@ -13,7 +13,7 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "jksql.h"
-#include "dnautil.h"
+#include "dnautil.h" 
 #include "dnaseq.h"
 #include "fa.h"
 #include "fuzzyFind.h"
@@ -24,7 +24,7 @@
 #include "hgRelate.h"
 #include "psl.h"
 #include "bed.h"
-#include "cgh.h"
+#include "cgh.h" 
 #include "agpFrag.h"
 #include "agpGap.h"
 #include "ctgPos.h"
@@ -8446,7 +8446,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     smp = sampleLoad(row+hasBin);
 
     sscanf(smp->name,"footPrinter.%d.%d",&offset,&motifid);
-    sprintf(filename,"../zoo_blanchem/raw_no_chimp_offset%d.fa.main.html?motifID=%d",offset,motifid);
+    sprintf(filename,"../zoo_blanchem/raw_new2_offset%d.fa.main.html?motifID=%d",offset,motifid);
    
  
   //printf("<HEAD><META HTTP-EQUIV=\"REFRESH\"\nCONTENT=\"2;URL=%s\"><TITLE>Reset Cart</TITLE>\n</HEAD>",filename);
