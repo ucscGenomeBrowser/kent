@@ -10,7 +10,6 @@ set mm mm3,mm4
 set rn rn2,rn3
 set fr fr1
 set ce ce1
-set ci ci1
 set cb cb1
 set dm dm1
 set dp dp1
@@ -18,11 +17,9 @@ set sc sc1
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
-set pyrFur pyrFur2
-set plaFac falciparum
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$plaFac
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
@@ -39,8 +36,8 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
-databasesChecked $gbd,otherDb
-databasesIgnored $proteinDb,$zooDb
+databasesChecked $gbd,$otherDb
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,hgcentraltest,hgcentralbeta
 
 # Define various non-self chains
 set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
@@ -75,6 +72,13 @@ identifier goId external=GO
      go.term_dbxref.term_id
      go.term_definition.term_id
      go.term_synonym.term_id
+     go.graph_path.term1_id
+     go.graph_path.term2_id
+
+identifier goDbXrefId external=GO
+"Gene ontology database cross-reference"
+     go.dbxref.id
+     go.term_dbxref.dbxref_id
 
 # SwissProt Related Stuff
 
@@ -369,11 +373,11 @@ identifier yeastChoCellCycleSampleId
 
 # Stuff to link together alignment chains and nets
 
-identifier mouseChainId 
-"Link together chain/net on hg13,hg15 for mouse"
-    hg13,hg15.mouseChain.id $split
-    hg13,hg15.mouseChainLink.chainId $split
-    hg13,hg15.mouseNet.chainId exclude=0
+identifier chainSelf
+"Link together self chain info"
+    $gbd.chainSelf.id $split
+    $gbd.chainSelfLink.chainId $split
+    $gbd.netSelf.chainId exclude=0
 
 identifier chain[${chainDest}]Id
 "Link together chain info"
@@ -385,14 +389,31 @@ identifier chain[${chainDest}]Id
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
 
-identifier chainSelf
-"Link together self chain info"
-    $gbd.chainSelf.id $split
-    $gbd.chainSelfLink.chainId $split
-    $gbd.netSelf.chainId exclude=0
+identifier mouseChainId 
+"Link together chain/net on hg13,hg15 for mouse"
+    hg13,hg15.mouseChain.id $split
+    hg13,hg15.mouseChainLink.chainId $split
+    hg13,hg15.mouseNet.chainId exclude=0
+
+identifier humanChainId 
+"Link together chain/net on mm3 for human"
+    mm3.humanChain.id $split
+    mm3.humanChainLink.chainId $split
+    mm3.humanNet.chainId exclude=0
+
+identifier cb1ChainId 
+"Link together chain/net on ce1 for cb1"
+    ce1.cb1Chain.id $split
+    ce1.cb1ChainLink.chainId $split
+    ce1.cb1Net.chainId exclude=0
+
+identifier ce1ChainId 
+"Link together chain/net on cb1 for ce1"
+    cb1.ce1Chain.id $split
+    cb1.ce1ChainLink.chainId $split
+    cb1.ce1Net.chainId exclude=0
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
-
 identifier genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
     $gbd.seq.acc
@@ -457,8 +478,9 @@ identifier xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
     $gbd.xenoEst.qName dupeOk
 
-identifier mrnaAccession typeOf=estOrMrnaAccession
+identifier mrnaAccession typeOf=estOrMrnaAccession fuzzy
 "Genbank mRNA accession"
+    $gbd.altGraphX.mrnaRefs comma
 
 identifier xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
@@ -468,7 +490,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession fuzzy
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName 
     $gbd.mrnaOrientInfo.name dupeOk
-    $gbd.dupSpMrna.mrnaID minCheck=0.95
+    $gbd.dupSpMrna.mrnaID minCheck=0.80
     $gbd.dupSpMrna.dupMrnaID minCheck=0.95
     $gbd.mrnaRefseq.mrna
     $gbd.spMrna.mrnaID
@@ -489,15 +511,25 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.mrnaRefseq.refseq minCheck=0.10
     $gbd.refFlat.name
     $gbd.refGene.name
+    $gbd.refPep.name
+    $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     $dm.bdgpToRefSeq.value minCheck=0.99
+    hg13,hg15.geneBands.mrnaAcc
+
+identifier xenoRefSeqId typeOf=xenoMrnaAccession
+"Other Species RefSeq mRNA accession"
+    $gbd.xenoRefGene.name
+    $gbd.xenoRefSeqAli.name
+    $gbd.xenoRefFlat.name
 
 identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
     $kgDb.bioCycPathway.kgID
     $kgDb.ceBlastTab.query
+    $kgDb.hgBlastTab.query
     $kgDb.dmBlastTab.query
     $kgDb.drBlastTab.query
     $kgDb.mmBlastTab.query
@@ -522,6 +554,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $kgDb.knownCanonical.transcript
     $kgDb.knownGeneMrna.name
     $kgDb.knownGenePep.name
+    $kgDb.knownGeneLink.name
     $kgDb.knownGnfDistance.query
     $kgDb.knownGnfDistance.target
     $kgDb.knownIsoforms.transcript
@@ -576,6 +609,7 @@ identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.library.id
     $gbd.mrna.library
+    $gbd.altGraphX.mrnaLibs comma
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
@@ -607,6 +641,7 @@ identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
     $gbd.mrna.tissue
+    $gbd.altGraphX.mrnaTissues comma
 
 
 # Some misc clone-oriented identifiers
@@ -615,6 +650,7 @@ identifier bacCloneName fuzzy
 "A Roswell Park, Cal Tech or other clone ID"
     $gbd.fishClones.name
     $gbd.bacEndPairs.name
+    hg13.genMapDb.name
 
 identifier imageCloneId external=IMAGEConsortium fuzzy
 "An image cDNA clone ID"
@@ -668,6 +704,22 @@ identifier mouseStsTrueName typeOf=stsName
     $mm.all_sts_primer.qName chopBefore=_ minCheck=0.99
     $mm.stsMapMouseNew.name
 
+identifier ratStsTrueName typeOf=stsName
+"Rat STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
+    $rn.stsInfoRat.name
+    $rn.stsMapRat.name
+
+# Other Identifiers
+identifier extFileId
+"External file ID"
+    $gbd.extFile.id
+    $gbd.seq.extFile
+
+identifier gbExtFileId
+"External file ID for GenBank incremental update system"
+    $gbd.gbExtFile.id
+    $gbd.gbSeq.extFile
+
 identifier hugoName external=HUGO fuzzy
 "International Human Gene Identifier"
     $hg.refLink.name
@@ -676,6 +728,7 @@ identifier hugoName external=HUGO fuzzy
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
+    hg13,hg15.geneBands.name
 
 identifier bioCycMapId external=BioCyc
 "BioCyc Pathway Map ID"
@@ -754,6 +807,7 @@ identifier wormBaseId external=WormBase
     $ce.hgBlastTab.query
     $ce.mmBlastTab.query
     $ce.scBlastTab.query
+    $ce.hgBlastTab.query
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
@@ -812,6 +866,7 @@ identifier bdgpTranscriptId external=BDGP
     $dm.mmBlastTab.query
     $dm.scBlastTab.query
     $dm.fbTranscript.transcriptId
+    $dm.hgBlastTab.query
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
@@ -846,6 +901,9 @@ identifier sgdCodingId typeOf=sgdId
     $sacCer.sgdLocalization.name minCheck=0.95
     $sacCer.sgdPep.name
     $sacCer.sgdToSwissProt.name minCheck=0.85
+    $sacCer.sgdToSgd.name
+    $sacCer.sgdToSgd.value
+    $sacCer.sgdToName.name
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -870,6 +928,7 @@ identifier ensemblProteinId external=Ensembl
 identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
     $gbd.ensGene.name chopAfter=.
+    $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.20
     mm3,hg13.ensemblXref.transcript_name chopAfter=. minCheck=0.20
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
@@ -909,17 +968,20 @@ identifier dbSnpHgId typeOf=dbSnpId
     hgFixed.dbSnpRsHg.rsId
     $hg.snpNih.name
     $hg.snpTsc.name
+    $hg.snpMap.name
     hgFixed.affy10KDetails.rsId
 
 identifier dbSnpMmId typeOf=dbSnpId 
 "Mouse dbSNP ID"
     hgFixed.dbSnpRsMm.rsId
     $mm.snpNih.name
+    $mm.snpMap.name
 
 identifier dbSnpRnId typeOf=dbSnpId 
 "Rat dbSNP ID"
     hgFixed.dbSnpRsRn.rsId
     $rn.snpNih.name
+    $rn.snpMap.name
 
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
@@ -944,3 +1006,136 @@ identifier sageExpId
     $gbd.sageExp.num 
     $gbd.sage.exps comma
 
+# Ignored tables - no linkage here that we check at least.
+
+tablesIgnored go
+    instance_data
+    source_audit
+
+tablesIgnored $gbd
+    ancientRepeat
+    axtInfo
+    chromInfo
+    cpgIsland
+    cytoBand
+    firstEF
+    gbLoaded
+    gbDelete_tmp
+    gc5Base
+    gcPercent
+    genscanSubopt
+    grp
+    history
+    miRNA
+    multiz%
+    quality
+    rnaCluster
+    rnaGene
+    regPotential%
+    simpleRepeat
+    tableDescriptions
+    tigrGeneIndex
+    trackDb%
+    chr%_mrna
+    chr%_blastz%
+    chr%_blat%
+    chr%_gap
+    chr%_rmsk
+    axtNet%
+    blat%
+
+tablesIgnored $kgDb
+    pbAaDist_
+    pbAnomLimit
+    pbResAvgStd
+    pbStamp
+    pep%Dist
+
+tablesIgnored $cb
+    chr%_gold
+
+tablesIgnored $ce
+    chr%_gold
+    chr%_wabaCbr
+    wabaCbr
+
+tablesIgnored $dm
+    anophelesEcores
+    fbRole
+
+tablesIgnored $fr
+    chr%_gold
+
+tablesIgnored $galGal
+    chr%_gold
+    supercontig
+    uniGene_gg
+
+tablesIgnored $hg
+    affyTranscriptome
+    zoom1_affyTranscriptome
+    zoom2_affyTranscriptome
+    chimpDels
+    chimpSimpleDiff
+    ctgPos
+    genomicSuperDups
+    haplotype
+    perlegen
+    promoterStanford
+    recombRate
+    slamMouse
+    slamNonCodingMouse
+    slamRat
+    slamNonCodingRat
+    syntenyMouse
+    syntenyRat
+
+tablesIgnored $mm
+    chr%_gold
+    syntenyRat
+    syntenyHuman
+    ctgPos
+
+tablesIgnored $panTro
+    chr%_gold
+    humanDels
+
+tablesIgnored $rn
+    chr%_gold
+    all_sts_primer
+    bactigPos
+    recombRateRat
+    syntenyMouse
+    syntenyHuman
+
+tablesIgnored $sacCer
+    sgdClone
+
+tablesIgnored $sc
+    chr1_viralProt
+    gbProtAnn
+    otherSARS
+    protHomolog
+    protPredFile
+    pslTable
+    xenoBlastzMrna
+
+tablesIgnored mm3
+    chr%_mm3Hg15L
+    ensEst
+    recombRateMouse
+
+tablesIgnored hg13
+    chr%_humMusL
+    mrnaGene
+
+tablesIgnored hg15
+    chr%_hg15Mm3L
+
+tablesIgnored hg16
+    humorMm3Rn3
+    chicken_hmrg
+    rat_hmrg
+    mouse_hmrg
+    syntenyMm3
+    syntenyMm4
