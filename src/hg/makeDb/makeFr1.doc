@@ -402,7 +402,7 @@ exit; # don't actually run this like a script :)
     mv chrUn.psl chrUn_mrna.psl
 
     # load alignments
-    hgLoadPsl fr1 chrUn_mrna.psl
+    hgLoadPsl -noTNameIx fr1 chrUn_mrna.psl
     cd ..
     hgLoadPsl fr1 all_mrna.psl -nobin
 
@@ -476,7 +476,7 @@ exit; # don't actually run this like a script :)
     mv chrUn.psl chrUn_est.psl
 
     # load alignments
-    hgLoadPsl fr1 chrUn_est.psl
+    hgLoadPsl -noTNameIx fr1 chrUn_est.psl
     cd ..
     hgLoadPsl fr1 all_est.psl -nobin
 
@@ -583,7 +583,7 @@ hide mol
     ssh hgwdev
     cd ~/fr1/bed/xenoMrna
     rm *.tab
-    hgLoadPsl fr1 xenoMrna.psl -tNameIx
+    hgLoadPsl fr1 xenoMrna.psl
 
     # load xeno rna into database
     set mrnadir = mrna.134
@@ -635,7 +635,7 @@ hide mol
     
     # load into database
     cd $fr1dir/chrom
-    hgLoadPsl fr1 chrUn_blatHg15.psl
+    hgLoadPsl -noTNameIx fr1 chrUn_blatHg15.psl
 
 
 # TETRAODON BLAT ALIGNMENT (IN PROGRESS 2003-09-11 kate)
@@ -684,7 +684,7 @@ hide mol
     ssh hgwdev
     cd /cluster/data/fr1/bed/blatTetra/chrom
     mv chrUn.psl chrUn_blatTetra.psl
-    hgLoadPsl fr1 chrUn_blatTetra.psl
+    hgLoadPsl -noTNameIx fr1 chrUn_blatTetra.psl
 
     # Add entry to trackDb.ra
 
@@ -728,7 +728,7 @@ hide mol
     # load into database
     ssh hgwdev
     cd /cluster/data/fr1/bed/blatHg16.swp/chrom
-    hgLoadPsl fr1 chrUn_blatHg16.psl
+    hgLoadPsl -noTNameIx fr1 chrUn_blatHg16.psl
 
     # Add entry to trackDb.ra
 
@@ -974,7 +974,7 @@ SEQ2_LEN=$BASE/S2.len
     # load these blastz results
     ssh hgwdev
     cd ~/fr1/bed/blastzTetra/pslChrom
-    /cluster/bin/i386/hgLoadPsl fr1 chr*_*.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx fr1 chr*_*.psl
 
     # STOPPED HERE -- due to empty output data
 

@@ -1735,7 +1735,7 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     # load into database:
     ssh hgwdev
     cd /cluster/data/panTro1/bed/blatFr1
-    hgLoadPsl -fastLoad -tNameIx -table=blatFr1 panTro1 all.psl
+    hgLoadPsl -fastLoad -table=blatFr1 panTro1 all.psl
         # load problem with 2 rows -- qBaseInsert values were negative,
         # and were set to 0 when loaded.  Blat problem ?
     # add to trackDb as type xeno psl fr1, with colorChromDefault off

@@ -670,7 +670,7 @@ dm1.downloadDir = dm1
     # Load alignments
     ssh hgwdev
     cd /cluster/data/dm1/bed/blatFugu/chrom
-    hgLoadPsl dm1 chr*_blatFugu.psl
+    hgLoadPsl -noTNameIx dm1 chr*_blatFugu.psl
 
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
     mkdir /gbdb/dm1/fuguSeq
@@ -1614,7 +1614,7 @@ end
     # Load into database as so:
     ssh hgwdev
     cd /cluster/data/dm1/bed/xenoMrnaMasked
-    hgLoadPsl dm1 xenoMrnaMasked.psl -tNameIx
+    hgLoadPsl dm1 xenoMrnaMasked.psl
     # Looks like no need to hgLoadSeq -- seqs are already loaded by Mark's 
     # stuff.
 

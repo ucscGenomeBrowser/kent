@@ -163,7 +163,7 @@ ALIGNING VIRAL RNA (DONE 04/16/03)
     foreach i (chr?{,?}{,_random}.psl)
         mv $i $i:r_mrna.psl
     end
-    hgLoadPsl sc1 *.psl
+    hgLoadPsl -noTNameIx sc1 *.psl
     cd ..
     hgLoadPsl sc1 all_mrna.psl -nobin
 
@@ -178,7 +178,7 @@ LOAD SWISS PROT CORONAVIRUS PROTEINS
     cd psl
     mv chr1_viralProt.psl chr1_viralProtLoose.psl
     pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
-    hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
+    hgLoadPsl -noTNameIx sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
 
 
 LOAD CPGISSLANDS (DONE 04/15/03)
@@ -301,7 +301,7 @@ BLATTING OTHER SARS WHOLE GENOMES AGAINST TOR2 (DONE 04/25/03)
     ln -s `pwd`/otherSARS.fa /gbdb/sc1/otherSARS/
     hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
     # And load the alignments:
-    hgLoadPsl sc1 otherSARS.psl
+    hgLoadPsl -noTNameIx sc1 otherSARS.psl
 
 LOADING VIRAL mrna for blastz track (done 4/30/03)
 

@@ -917,7 +917,7 @@ cat `ls -1 *.lav | sort -g` \
     cd /cluster/data/danRer1/bed/blastz.hg17/pslChrom
                                                                                 
     foreach f (./*.psl)
-      /cluster/bin/i386/hgLoadPsl danRer1 $f
+      /cluster/bin/i386/hgLoadPsl -noTNameIx danRer1 $f
       echo "$f Done"
     end
 # To tune Blastz parameters: these parameters above where used but it was 

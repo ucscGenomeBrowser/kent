@@ -1160,7 +1160,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     cd /cluster/data/ce2/bed/blastz.cb1/pslChrom
     foreach d (I II III IV V X M)
-        /cluster/bin/i386/hgLoadPsl ce2 chr${d}_blastzCb1.psl
+        /cluster/bin/i386/hgLoadPsl -noTNameIx ce2 chr${d}_blastzCb1.psl
     end
 
 # CHAIN Cb1 BLASTZ (DONE, 2004-04-30, hartera)

@@ -3224,7 +3224,7 @@ cat << 'EOF' > gsub
     cd /cluster/data/hg17/bed/blatFr1
     liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
 
-    hgLoadPsl -tNameIx -table=blatFr1 hg17 all.psl
+    hgLoadPsl -table=blatFr1 hg17 all.psl
     #	load of blatFr1 did not go as planned: 216595 record(s),
     #	0 row(s) skipped, 3 warning(s) loading psl.tab
     #	featureBits hg17 blatFr1 refGene:CDS
@@ -3348,7 +3348,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     cd /cluster/data/hg17/bed/blastz.rn3/pslChrom
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done: ${I}"
     done
     # this is a 55 minute job
@@ -3566,7 +3566,7 @@ cat << 'EOF' > makeMaf.csh
     cd /cluster/data/hg17/bed/blastz.rn3/pslBest
     for I in chr*BestRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -3653,7 +3653,7 @@ hgLoadBed hg17 ensRn3MusHom ucsc100k.bed -sqlTable=ensRn3MusHom.sql
     cd /cluster/data/hg17/bed/blastz.rn3/pslTight
     for I in chr*TightRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -3798,7 +3798,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     bash
     for I in *.psl
     do
-        /cluster/bin/i386/hgLoadPsl hg17 ${I}
+        /cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
         echo "done: ${I}"
     done   
 
@@ -4617,7 +4617,7 @@ SEQ2_LEN=$BASE/S2.len
     bash
     for F in chr*_blastzMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${F}
 	echo "${F} done"
     done
     # this is a 55 minute job
@@ -4831,7 +4831,7 @@ cat > makeMaf.csh << '_EOF_'
     cd /cluster/data/hg17/bed/blastz.mm4/pslBest
     for I in chr*BestMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -4914,7 +4914,7 @@ hgLoadBed hg17 ensRatMm4Hom ucsc100k.bed -sqlTable=ensRatMm4Hom.sql
     cd /cluster/data/hg17/bed/blastz.mm4/pslTight
     for I in chr*TightMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -5069,7 +5069,7 @@ cat > load.csh << 'EOF'
     foreach f (chr*.psl)
 	set table = $f:r_blastzPanTro1
 	echo "loading ${table}"
-	/cluster/bin/i386/hgLoadPsl hg17 -table=$f:r_${table} $f
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 -table=$f:r_${table} $f
     end
 'EOF'
 # << for emacs
@@ -6797,7 +6797,7 @@ SEQ2_LEN=$BASE/S2.len
     bash		#	for tcsh users
     for F in chr*_blastzMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${F}
 	echo "${F} done"
     done
     # this is a 40 minute job
@@ -7029,7 +7029,7 @@ cat > makeMaf.csh << '_EOF_'
     cd /cluster/data/hg17/bed/blastz.mm5/pslBest
     for I in chr*BestMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -7371,7 +7371,7 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd /cluster/data/hg17/bed/blastz.mm5/pslTight
     for I in chr*TightMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -7622,7 +7622,7 @@ cat `ls -1 *.lav.axt | sort -g` > $BASE/$OUT
     bash # if a csh/tcsh user
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done: ${I}"
     done
     # exit bash if you are tcsh
@@ -7869,7 +7869,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     bash # if a csh/tcsh user
     for I in chr*BestSelf.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
     # exit bash if you are tcsh
