@@ -3,11 +3,11 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#List of aliases for STS files
+#STS marker aliases and associated identification numbers
 CREATE TABLE stsAlias (
-    alias varchar(255) not null,	# This specific alias
-    trueName varchar(255) not null,	# True in our stsMarker table
+    alias varchar(255) not null,	# STS marker name
+    identNo int unsigned not null,	# Identification number of STS marker
+    name varchar(255) not null,	# Official UCSC name for marker
               #Indices
-    INDEX(alias(12)),
-    INDEX(trueName(12))
+    PRIMARY KEY(alias)
 );
