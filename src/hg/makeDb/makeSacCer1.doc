@@ -1193,4 +1193,57 @@ EOF
 #sgdGene:cds 69.491%, sacCer1.sacMik.mafRanges.bed 92.989%, both 67.178%, cover 96.67%, enrich 1.04x
 #sgdGene:cds 69.491%, sacCer1.sacPar.mafRanges.bed 96.550%, both 68.464%, cover 98.52%, enrich 1.02x
 
+# CREATE TABLES TO SUPPORT SHOWING SAM-T02 RESULTS (DONE 1/4/05, Fan)
+    
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir sam
+    cd sam
 
+# create script to process 1 SAM subdirectory
+    cat << '_EOF_' >do1Subdir
+ls /projects/compbio/experiments/protein-predict/yeast/$1/*/summary.html >j1.tmp
+cat j1.tmp |sed -e 's/yeast\// /g' |sed -e 's/\/summary/ /g' >j2.tmp
+cat j2.tmp | awk '{print $2}' |sed -e 's/\// /g ' | awk '{print "do1 " $1 " " $2}' >> doall
+'_EOF_'
+
+# create high level script to parse all SAM results
+    ls -l /projects/compbio/experiments/protein-predict/yeast | grep drw >j1
+    cp j1 j2
+
+#edit j2 to remove non SAM result subdirectories
+    vi j2
+    
+    cat j2 |awk '{print "do1Subdir " $9}' >doAllSubdir
+    chmod +x doAllSubdir
+    rm j1 j2
+    
+    rm doall
+    doAllSubdir
+    rm j1.tmp j2.tmp
+
+# create data needed for the samSubdir table and load them
+    cat doall |awk '{print $3"\t"$2}' >samSubdir.lis
+    hgsql sacCer1 -e 'load data local infile "samSubdir.lis" into table samSubdir'
+
+# create script to parse SAM output results in one subdirectory
+    cat << '_EOF_' >do1
+echo processing $2
+samHit $2 /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.best-scores.rdb >$2.tab
+'_EOF_'
+
+    chmod +x do1
+    chmod +x doall
+
+# run the top level script to parse all SAM output results
+    rm *.tab
+    doall
+# collect all results    
+    cat *.tab |sort -u >protHomolog.tab
+    
+# load the results into the protHomolog table
+    hgsql sacCer1 -e "drop table protHomolog"
+    hgsql sacCer1 < ~/src/hg/lib/protHomolog.sql
+    hgsql sacCer1 -e 'load data local infile "protHomolog.tab" into table protHomolog'
+	
+    
