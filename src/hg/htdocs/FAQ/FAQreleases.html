@@ -1,0 +1,639 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+        <META name="description" content="UCSC Genome Browser FAQ">
+        <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
+	<TITLE>UCSC Genome Bioinformatics: FAQ</TITLE>
+	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+
+<!--Hotlinks bar---------------------------------------------------->
+<TR><TD COLSPAN=2 HEIGHT=40>
+    <TABLE bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><TR bgcolor="2636D1"><TD valign="middle">
+        <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
+            <TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp;
+                &nbsp;<A HREF="/index.html" class="topbar">
+                        Home</a> &nbsp; - &nbsp;
+                <A HREF="/cgi-bin/hgGateway" class="topbar">
+                        Genome Browser</a> &nbsp; - &nbsp;
+                <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
+                        Blat Search</a> &nbsp; - &nbsp;
+                <A HREF="/cgi-bin/hgText?command=start" class="topbar">
+                        Table Browser</a> &nbsp; - &nbsp;
+                <A HREF="goldenPath/help/hgTracksHelp.html" class="topbar">
+                        User Guide</a> &nbsp;</font></TD>
+        </TR></TABLE>
+    </TD></TR></TABLE>
+</TD></TR>
+
+<!--Content Tables------------------------------------------------------->
+<TR><TD COLSPAN=2 CELLPADDING=10>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Releases</b></FONT>
+                </TD></TR></TABLE>
+            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+                <TR><TD>&nbsp;</TD><TD>
+		<UL>
+                <LI><A HREF="#release1">List of UCSC releases</A>
+                <LI><A HREF="#release2">Assembly release dates</A>
+                <LI><A HREF="#release3">UCSC assemblies</A>
+                <LI><A HREF="#release4">Comparison of UCSC and NCBI human assemblies</A>
+                <LI><A HREF="#release12">Differences between UCSC and NCBI mouse assemblies</A>
+                <LI><A HREF="#release5">Accessing older assembly versions</A>
+                <LI><A HREF="#release6">Frequency of GenBank data updates</A>
+                <LI><A HREF="#release7">Coordinate changes between assemblies</A>
+                <LI><A HREF="#release8">Converting positions between assembly versions</A>
+                <LI><A HREF="#release9">Missing annotation tracks</A>
+                <LI><A HREF="#release10">What next with the human genome?</A>
+                <LI><A HREF="#release11">Mouse strain used for mouse genome sequence</A>
+		</UL>
+		<A HREF="index.html">Return to FAQ Table of Contents</A>
+		<BR>
+            </TD><TD WIDTH=15></TD></TR></TABLE><BR>
+        </TD></TR></TABLE>
+    </TD></TR></TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release1"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; List of UCSC Releases</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"How do UCSC's release numbers correspond to those of other organizations, such as NCBI?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+<!--
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>        
+	<TR><TD WIDTH=10></TD><TD>
+-->
+        <!--track table-->
+            <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4 WIDTH="100%">            
+		<TR>
+		<TD nowrap><FONT color="#006666"><B>Species</B></FONT></TD>
+                <TD nowrap><FONT color="#006666"><B>UCSC Release</B></FONT></TD>
+                <TD nowrap><FONT color="#006666"><B>Date</B></FONT></TD>
+                <TD nowrap><FONT color="#006666"><B>Release Name</B></FONT></TD>
+                <TD nowrap><FONT color="#006666"><B>Status</B></FONT></TD>
+            </TR>
+  			<TR><TD>Human</TD><TD>hg16</TD><TD>Jul 2003</TD><TD>NCBI Build 34</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg15</TD><TD>Apr 2003</TD><TD>NCBI Build 33</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg13</TD><TD>Nov 2002</TD><TD>NCBI Build 31</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg12</TD><TD>Jun 2002</TD><TD>NCBI Build 30</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg11</TD><TD>Apr 2002</TD><TD>NCBI Build 29</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg10</TD><TD>Dec 2001</TD><TD>NCBI Build 28</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg8</TD><TD>Aug 2001</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg7</TD><TD>Apr 2001</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg6</TD><TD>Dec 2000</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg5</TD><TD>Oct 2000</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg4</TD><TD>Sep 2000</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg3</TD><TD>Jul 2000</TD><TD>UCSC-assembled</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg2</TD><TD>Jun 2000</TD><TD>UCSC-assembled</TD><TD>Archived (no browser - dataset only)</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>hg1</TD><TD>May 2000</TD><TD>UCSC-assembled</TD><TD>Archived (no browser - dataset only)</TD>
+  			</TR>
+  			<TR><TD>Mouse</TD><TD>mm3</TD><TD>Feb 2003</TD><TD>NCBI Build 30</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>mm2</TD><TD>Feb 2002</TD><TD>MGSCv3</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>mm1</TD><TD>Nov 2001</TD><TD>MGSCv2</TD><TD>Archived</TD>
+  			</TR>
+  			<TR><TD>Rat</TD><TD>rn3</TD><TD>Jun 2003</TD><TD>Baylor HGSC v.3.1</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>rn2</TD><TD>Jan 2003</TD><TD>Baylor HGSC v.2.1</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>&nbsp;</TD><TD>rn1</TD><TD>Nov 2002</TD><TD>Baylor HGSC v.1.0</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>Zoo</TD><TD>zoo</TD><TD>Jun 2002</TD><TD>NISC Comp. Seq. Target 1</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>C. elegans</TD><TD>ce1</TD><TD>May 2003</TD><TD>WormBase v. WS100</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>C. briggsae</TD><TD>cb1</TD><TD>Jul 2002</TD><TD>WormBase v. cb25.agp8</TD><TD>Available</TD>
+  			</TR>
+  			<TR><TD>SARS</TD><TD>sc1</TD><TD>Apr 2003</TD><TD>GenBank sequence as of 14 Apr 2003</TD><TD>Available</TD>
+  			</TR>
+			</TABLE>
+<!--
+		    </TD></TR>
+    	   	    </TABLE>
+-->
+
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+        </TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release2"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Assembly release dates</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"When will the next assembly be out?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			UCSC does not produce its own genome assemblies, but instead obtains them from 
+			standard sources. For example, the human assembly is obtained
+			from NCBI. Because of this, you can expect us to release a new version of a 
+			genome soon after the assembling organization has released the version. 
+			A new assembly release initially consists of the genome sequence and a
+			small set of aligned annotation tracks. Additional annotation tracks are added 
+			as they are obtained or generated. Bulk downloads of the data are typically
+			available in the first week after the assembly is released in the browser.</P> 
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release3"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; UCSC assemblies</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Why doesn't UCSC produce its own human genome assemblies?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Prior to Dec. 2001, UCSC provided its own assembly of the human
+			genome. The Dec. 2001 release (NCBI Build 28) marked the first time that UCSC provided a
+			human genome assembly that was produced at NCBI. UCSC decided to switch to the the NCBI 
+			assembly because of steady improvements in its quality. NCBI can generate an assembly 
+			in significantly less time than UCSC can. With the human genome
+			sequencing in the end game, we felt that it would be more productive to focus 
+			worldwide annotation efforts on a single assembly rather than to continue 
+			producing competing assemblies. 
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release4"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Comparison of UCSC and NCBI human assemblies</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"How do the UCSC and NCBI human assemblies compare?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Recent UCSC and NCBI human assemblies (hg10 and higher) are identical.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release12"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Differences between UCSC and NCBI mouse assemblies</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Is the UCSC mouse genome assembly the same as the one on the NCBI website?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			The Feb 2003 mouse genome on the UCSC Genome Browser is the same as 
+			NCBI's mouse build 30 (and MGSCv3) with one difference: the UCSC 
+			version contains 
+			only the reference strain (C57BL/6J). NCBI has made contigs from 
+			several other strains available as well in Build 30.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release5"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Accessing older assembly versions</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I need to access an older version of a genome assembly that's no
+			longer listed in the Genome Browser menu. What should I do?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			In addition to the assembly versions currently available in the Genome Browser, 
+			you can access older versions of the browser through our archives. To view an
+			older version, click the <A
+			HREF="http://genome-archive.cse.ucsc.edu/" TARGET=_blank>Archives</A> link on the Genome Browser home page.</P>
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release6"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Frequency of GenBank data updates</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Why doesn't UCSC have the latest data from GenBank?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			For most assemblies, we have only a snapshot of the data deposited into 
+			GenBank on that specific day. We are working on an automated nightly 
+			update utility, although it is not yet available for most genomes.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release7"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Coordinate changes between assemblies </b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I noticed that the chromosomal coordinates for a particular gene that I'm
+			looking at have changed since the last time I used your browser. What happened?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			A common source of confusion for users arises from 
+			mixing up different assemblies. It is very 
+			important to be aware of which assembly you are looking at. Within the Genome
+			Browser display, assemblies are labeled by organism and date. To look up the 
+			corresponding UCSC database name or NCBI build number, use the <A HREF="#release1">
+			release table</A>.
+			<P>
+			UCSC database labels are of the form hg<em>n</em>, mm<em>n</em>, etc. The first two
+			letters designate the organism, e.g. <em>hg</em> for human genome or <em>mm</em> for
+			<em>Mus musculus</em>. The number denotes the UCSC assembly version for that organism.
+			For example, ce1 refers to the first UCSC assembly of the <em>C. elegans</em> genome.
+			<P>
+			The coordinates of your favorite gene in one assembly may not be the 
+			same as those in the next release of the assembly unless the gene happens to lie 
+			on a completely 
+			sequenced and unrevised chromosome. For information on integrating data from 
+			one assembly into another, see the <A HREF="#release8">Converting positions between
+			assembly versions</A> section. 
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release8"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Converting positions between assembly versions</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I've been researching a specific area of the human genome on the current assembly, 
+			and now you've just released a new version. Is there an easy way to locate 
+			my area of interest on the new assembly?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			You can integrate data from one assembly into another by using the 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">blat</A> alignment tool 
+			or by
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">converting the coordinates</A>. 
+			The coordinate conversion tool may be used only on human assembly coordinates.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release9"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Missing annotation tracks</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Why is my favorite annotation track missing from your latest release?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			The initial release of a new genome assembly typically contains a small subset
+			of core annotation tracks. New tracks are added as they are generated. In many
+			cases, our annotation tracks are contributed by scientists not affiliated with
+			UCSC who must first obtain the sequence, repeatmasked data, etc. before they
+			can produce their tracks. If you have need of an annotation that has not appeared
+			on an assembly within a month or so of its release, feel free to send an inquiry
+			to <A HREF="mailto:genome@cse.ucsc.edu">genome@soe.ucsc.edu</A>.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="release10"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; What next with the human genome?</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Now that the human genome is &quot;finished&quot;, will there be any more releases?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Rest assured that work will continue. There will be updates to the assembly over the next 
+			several years. This has been the case for all other finished (i.e. essentially complete) genome
+			assemblies as gaps are closed. For example, the <em>C. elegans</em> genome has been 
+			&quot;finished&quot; for five years now, but small bits of sequence are still being 
+			added and corrections are being made. NCBI will continue to coordinate the human
+			genome assemblies in collaboration with the individual chromosome coordinators, and 
+			UCSC will continue to QC the assembly in conjunction with NCBI (and, to a small extent,
+			Ensembl). UCSC, NCBI, Ensembl, and others will display the new releases on their
+			sites as they become available.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+	
+<!--Content Table------------------------------------------------------------>
+<A NAME="release11"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Mouse strain used for  mouse genome sequence</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"What strain of mouse was used for the Mus musculus genome?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			C57BL/6J.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+    </TD><TD WIDTH=15></TD></TR>
+</TABLE>
+</BODY></HTML>
+
