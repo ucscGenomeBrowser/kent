@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.11 2004/02/29 00:47:31 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.12 2004/02/29 17:31:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -473,14 +473,19 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 		}
 	    }
 	}
+    else if (sameWord(tag->name, "TEXTAREA"))
+        {
+	char *varName = tagAttributeNeeded(tag, "NAME");
+	char *e = strchr(tag->end, '<');
+	var = findOrMakeVar(varName, hash, tag, &varList); 
+	if (e != NULL)
+	    var->curVal = cloneStringZ(tag->end, e - tag->end);
+	}
     }
 slReverse(&varList);
 for (var = varList; var != NULL; var = var->next)
     slReverse(&var->tags);
 return varList;
-    char *curVal;		/* Current value if any. */
-    struct slName *values;	/* List of available values.  Null if textBox. */
-    struct slRef *tags;	        /* List of references associated tags. */
 }
 
 struct htmlForm *htmlParseForms(struct htmlTag *startTag, struct htmlTag *endTag)
@@ -908,6 +913,59 @@ validateNestingTags(startTag, endTag, bodyNesters, ArraySize(bodyNesters));
 return endTag->next;
 }
 
+char *urlOkChars()
+/* Return array character indexed array that has
+ * 1 for characters that are ok in URLs and 0
+ * elsewhere. */
+{
+char *okChars;
+int c;
+AllocArray(okChars, 256);
+for (c=0; c<256; ++c)
+    if (isalnum(c))
+        okChars[c] = 1;
+/* This list is a little more inclusive than W3's. */
+okChars[':'] = 1;
+okChars['-'] = 1;
+okChars['.'] = 1;
+okChars['?'] = 1;
+okChars[';'] = 1;
+okChars['_'] = 1;
+okChars['&'] = 1;
+okChars['/'] = 1;
+okChars['+'] = 1;
+return okChars;
+}
+
+void validateUrl(char *url)
+/* Make sure URL follows basic CGI encoding rules. */
+{
+static char *okChars = NULL;
+UBYTE c, *s = (UBYTE*)url;
+if (okChars == NULL)
+    okChars = urlOkChars();
+while ((c = *s++) != 0)
+    {
+    if (!okChars[c])
+        {
+        errAbort("Character %c not allowed in URL %s", c, url);
+	}
+    }
+}
+
+void validateUrls(struct htmlPage *page)
+/* Make sure URLs in page follow basic CGI encoding rules. */
+{
+struct htmlForm *form;
+struct slName *linkList = htmlPageLinks(page), *link;
+
+for (form = page->forms; form != NULL; form = form->next)
+    validateUrl(form->action);
+for (link = linkList; link != NULL; link = link->next)
+    validateUrl(link->name);
+slFreeList(&linkList);
+}
+
 void validate(struct htmlPage *page)
 /* Do some basic validations. */
 {
@@ -945,6 +1003,7 @@ if (tag == NULL || !sameWord(tag->name, "BODY"))
 tag = validateBody(tag->next);
 if (tag == NULL || !sameWord(tag->name, "/HTML"))
     errAbort("Missing </HTML>");
+validateUrls(page);
 verbose(1, "ok\n");
 }
 
