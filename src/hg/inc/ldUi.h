@@ -12,6 +12,7 @@ extern boolean ldCeu;
 extern boolean ldHcb;
 extern boolean ldJpt;
 extern boolean ldYri;
+extern boolean ldTrim;
 extern int     ldCov;
 extern int     ldHeight;
 

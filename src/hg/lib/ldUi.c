@@ -10,5 +10,6 @@ boolean ldCeu;
 boolean ldHcb;
 boolean ldJpt;
 boolean ldYri;
+boolean ldTrim;
 int     ldCov;
 int     ldHeight;
