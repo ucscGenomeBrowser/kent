@@ -21,6 +21,7 @@
 #include "kxTok.h"
 #include "hgSeq.h"
 #include "featureBits.h"
+#include "bed.h"
 
 static char *hgFixed = "hgFixed";
 
@@ -34,7 +35,7 @@ char *database = NULL;
 char *freezeName;
 boolean tableIsPositional;
 boolean tableIsSplit;
-char parsedTableName[256];
+char fullTableName[256];
 char *position;
 char *chrom;
 int winStart;
@@ -647,7 +648,7 @@ coordinates." "\n"
      );
 }
 
-void parseTableName(char *dest, char *chrom)
+void getFullTableName(char *dest, char *newChrom)
 /* given a chrom return the table name of the table selected by the user */
 {
 char *table;
@@ -655,8 +656,14 @@ char post[64];
 
 table = getTableName();
 
-if (chrom == NULL)
-    chrom = "chr1";
+if (newChrom == NULL)
+    newChrom = "chr1";
+chrom = newChrom;
+if (allGenome)
+    {
+    winStart = 0;
+    winEnd   = hChromSize(chrom);
+    }
 if (sscanf(table, "chrN_%64s", post) == 1)
     snprintf(dest, 256, "%s_%s", chrom, post);
 else
@@ -680,9 +687,7 @@ else
     conn = hAllocConn2();
 
 webStart(cart, "Table Browser: %s", freezeName);
-
-checkTableExists(parsedTableName);
-
+checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -699,7 +704,7 @@ cgiMakeButton("submit", "Submit");
 
 puts("<H3> (Optional) Filter Table Records by Field Values </H3>");
 
-snprintf(query, 256, "DESCRIBE %s", parsedTableName);
+snprintf(query, 256, "DESCRIBE %s", fullTableName);
 sr = sqlGetResult(conn, query);
 
 puts("<TABLE><TR><TD>\n");
@@ -937,6 +942,7 @@ void constrainFreeForm(char *rawQuery, struct dyString *clause)
 struct kxTok *tokList, *tokPtr;
 struct slName *fnPtr;
 char *ptr;
+int numLeftParen, numRightParen;
 
 if ((rawQuery == NULL) || (rawQuery[0] == 0))
     return;
@@ -947,6 +953,7 @@ tokList = kxTokenize(rawQuery, TRUE);
 
 /* to be extra conservative, wrap the whole expression in parens. */
 dyStringAppend(clause, "(");
+numLeftParen = numRightParen = 0;
 for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
     {
     if ((tokPtr->type == kxtEquals) ||
@@ -957,13 +964,21 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
 	(tokPtr->type == kxtAnd) ||
 	(tokPtr->type == kxtOr) ||
 	(tokPtr->type == kxtNot) ||
-	(tokPtr->type == kxtOpenParen) ||
-	(tokPtr->type == kxtCloseParen) ||
 	(tokPtr->type == kxtAdd) ||
 	(tokPtr->type == kxtSub) ||
 	(tokPtr->type == kxtDiv))
 	{
 	dyStringAppend(clause, tokPtr->string);
+	}
+    else if (tokPtr->type == kxtOpenParen)
+	{
+	dyStringAppend(clause, tokPtr->string);
+	numLeftParen++;
+	}
+    else if (tokPtr->type == kxtCloseParen)
+	{
+	dyStringAppend(clause, tokPtr->string);
+	numRightParen++;
 	}
     else if ((tokPtr->type == kxtWildString) ||
 	     (tokPtr->type == kxtString))
@@ -1034,6 +1049,10 @@ for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
     }
 dyStringAppend(clause, ")");
 
+if (numLeftParen != numRightParen)
+    webAbort("Error", "Unequal number of left parentheses (%d) and right parentheses (%d) in free-form query expression",
+	     numLeftParen, numRightParen);
+
 slFreeList(&tokList);
 }
 
@@ -1089,7 +1108,7 @@ if (andClause->stringSize > 0)
 dyStringClear(freeClause);
 constrainFreeForm(rawQuery, freeClause);
 // force rQLogOp to a legit value:
-if (! sameString("AND", rQLogOp))
+if ((rQLogOp != NULL) && (! sameString("AND", rQLogOp)))
     rQLogOp = "OR";
 
 if (freeClause->stringSize > 0 && andClause->stringSize > 0)
@@ -1141,8 +1160,6 @@ if (row == NULL)
 
 if (! initialized)
     {
-    printf("Content-Type: text/plain\n\n");
-    webStartText();
     initialized = TRUE;
     }
 
@@ -1172,15 +1189,12 @@ struct sqlResult *sr;
 struct dyString *query = newDyString(512);
 struct dyString *fieldSpec = newDyString(256);
 struct cgiVar* varPtr;
-int numberColumns;
-char chromFieldName[32];
-char startName[32];
-char endName[32];
-char *constraints = constrainFields();
+char chromField[32];
+char startField[32];
+char endField[32];
+char *constraints;
 boolean gotResults;
 boolean gotFirst = FALSE;
-
-checkTableExists(parsedTableName);
 
 if (allGenome)
     chromList = hAllChromNames();
@@ -1191,6 +1205,11 @@ if (sameString(database, getTableDb()))
     conn = hAllocConn();
 else
     conn = hAllocConn2();
+
+printf("Content-Type: text/plain\n\n");
+webStartText();
+checkTableExists(fullTableName);
+constraints = constrainFields();
 
 dyStringClear(fieldSpec);
 if (allFields)
@@ -1210,21 +1229,21 @@ else
 	    }
 	}
 
+hFindChromStartEndFieldsDb(getTableDb(), fullTableName, chromField,
+			   startField, endField);
 gotResults = FALSE;
 if (tableIsSplit)
     {
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
-	parseTableName(parsedTableName, chromPtr->name);
+	getFullTableName(fullTableName, chromPtr->name);
 	dyStringClear(query);
 	dyStringPrintf(query, "SELECT %s FROM %s",
-		       fieldSpec->string, parsedTableName);
-	if ((! allGenome) &&
-	    hFindChromStartEndFieldsDb(getTableDb(), parsedTableName,
-				       chromFieldName, startName, endName))
+		       fieldSpec->string, fullTableName);
+	if ((! allGenome) && tableIsPositional)
 	    {
 	    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-			   startName, winEnd, endName, winStart);
+			   startField, winEnd, endField, winStart);
 	    if ((constraints != NULL) && (constraints[0] != 0))
 		dyStringPrintf(query, " AND %s", constraints);
 	    }
@@ -1238,16 +1257,14 @@ else
     {
     dyStringClear(query);
     dyStringPrintf(query, "SELECT %s FROM %s",
-		   fieldSpec->string, parsedTableName);
-    if ((! allGenome) &&
-	hFindChromStartEndFieldsDb(getTableDb(), parsedTableName,
-				   chromFieldName, startName, endName))
+		   fieldSpec->string, fullTableName);
+    if ((! allGenome) && tableIsPositional)
 	{
 	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-		       startName, winEnd, endName, winStart);
-	if (! sameString("", chromFieldName))
+		       startField, winEnd, endField, winStart);
+	if (! sameString("", chromField))
 	    dyStringPrintf(query, " AND %s = \'%s\'",
-			   chromFieldName, chrom);
+			   chromField, chrom);
 	if ((constraints != NULL) && (constraints[0] != 0))
 	    dyStringPrintf(query, " AND %s", constraints);
 	}
@@ -1257,7 +1274,7 @@ else
     gotResults = printTabbedResults(sr, gotResults);
     }
 if (! gotResults)
-    webAbort("Empty Result", "Your query produced no results.");
+    printf("\n# No results returned from query.\n\n");
 
 dyStringFree(&query);
 if (sameString(database, getTableDb()))
@@ -1283,16 +1300,15 @@ if (sameString(database, getTableDb()))
 else
     conn = hAllocConn2();
 
-checkTableExists(parsedTableName);
-
 webStart(cart, "Table Browser: %s", freezeName);
+checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
 preserveConstraints();
 
-snprintf(query, sizeof(query), "DESCRIBE %s", parsedTableName);
+snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName);
 sr = sqlGetResult(conn, query);
 
 
@@ -1329,13 +1345,14 @@ webEnd();
 void doSequenceOptions()
 {
 webStart(cart, "Table Browser: %s", freezeName);
+checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints();
 positionLookupSamePhase();
 printf("<H3>Table: %s</H3>\n", getTableName());
-hgSeqOptionsDb(getTableDb(), parsedTableName);
+hgSeqOptionsDb(getTableDb(), fullTableName);
 cgiMakeButton("phase", getSequencePhase);
 puts("</FORM>");
 webEnd();
@@ -1345,7 +1362,7 @@ webEnd();
 void doGetSequence()
 {
 struct slName *chromList, *chromPtr;
-char *constraints = constrainFields();
+char *constraints;
 int itemCount;
 
 if (allGenome)
@@ -1355,16 +1372,13 @@ else
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
+checkTableExists(fullTableName);
+constraints = constrainFields();
 itemCount = 0;
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
-    parseTableName(parsedTableName, chromPtr->name);
-    if (allGenome)
-	{
-	winStart = 0;
-	winEnd   = hChromSize(chromPtr->name);
-	}
-    itemCount += hgSeqItemsInRangeDb(getTableDb(), parsedTableName,
+    getFullTableName(fullTableName, chromPtr->name);
+    itemCount += hgSeqItemsInRangeDb(getTableDb(), fullTableName,
 				     chromPtr->name, winStart, winEnd,
 				     constraints);
     }
@@ -1375,8 +1389,10 @@ if (itemCount == 0)
 
 void doGetGFF()
 {
-char *constraints = constrainFields();
+char *constraints;
 webStart(cart, "Table Browser: %s", freezeName);
+checkTableExists(fullTableName);
+constraints = constrainFields();
 puts("<H3> Not implemented yet </H3>");
 webEnd();
 }
@@ -1387,12 +1403,7 @@ void doBedOptions()
 char *table = getTableName();
 char *track = getTrackName();
 webStart(cart, "Table Browser: %s", freezeName);
-
-if (! fbUnderstandTrack(track))
-    webAbort("Not yet supported",
-	     "Sorry, BED output not supported yet for table %s.",
-	     table);
-
+checkTableExists(fullTableName);
 puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -1412,7 +1423,7 @@ puts("</TD></TR><TR><TD></TD><TD>url=");
 cgiMakeTextVar("hgt.ctUrl", "", 50);
 puts("</TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
-fbOptions(track);
+fbOptionsDb(getTableDb(), track);
 cgiMakeButton("phase", getBedPhase);
 puts("</FORM>");
 webEnd();
@@ -1421,11 +1432,15 @@ webEnd();
 
 void doGetBed()
 {
-struct featureBits *fbList = NULL, *fbPtr;
 struct slName *chromList, *chromPtr;
-char *constraints = constrainFields();
+struct bed *bedList, *bedPtr;
+struct featureBits *fbList = NULL, *fbPtr;
+struct dyString *bedLine = newDyString(512);
+struct hTableInfo *hti;
+char *constraints;
 char *table = getTableName();
 char *track = getTrackName();
+char *db = getTableDb();
 boolean doCT = cgiBoolean("hgt.doCustomTrack");
 char *ctName = cgiUsualString("hgt.ctName", table);
 char *ctDesc = cgiUsualString("hgt.ctDesc", table);
@@ -1433,20 +1448,7 @@ char *ctVis  = cgiUsualString("hgt.ctVis", "dense");
 char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
-int totalCount;
-
-if ((fbQual == NULL) || (fbQual[0] == 0))
-    strncpy(fbTQ, track, sizeof(fbTQ));
-else
-    snprintf(fbTQ, sizeof(fbTQ), "%s:%s", track, fbQual);
-
-if (! fbUnderstandTrack(track))
-    {
-    webStart(cart, "Table Browser: %s", freezeName);
-    webAbort("Not yet supported",
-	     "Sorry, BED output not supported yet for table %s.",
-	     table);
-    }
+int i, totalCount;
 
 if (allGenome)
     chromList = hAllChromNames();
@@ -1455,10 +1457,13 @@ else
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
+checkTableExists(fullTableName);
+constraints = constrainFields();
 
-//#*** HACK in constraints!!!
-if ((constraints != NULL) && (constraints[0] != 0))
-    printf("# Note: filtering on fields not yet supported for BED output!\n");
+hti = hFindTableInfoDb(getTableDb(), chrom, track);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s",
+	     track);
 
 if (doCT)
     {
@@ -1469,64 +1474,94 @@ if (doCT)
     }
 
 totalCount = 0;
-for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
+if ((fbQual == NULL) || (fbQual[0] == 0))
     {
-    parseTableName(parsedTableName, chromPtr->name);
-    if (allGenome)
+    for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
-	winStart = 0;
-	winEnd   = hChromSize(chromPtr->name);
+	getFullTableName(fullTableName, chromPtr->name);
+	bedList = hGetBedRangeDb(db, fullTableName, chrom, winStart, winEnd,
+				 constraints);
+	for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
+	    {
+	    char *ptr = strchr(bedPtr->name, ' ');
+	    if (ptr != NULL)
+		*ptr = 0;
+	    dyStringClear(bedLine);
+	    dyStringPrintf(bedLine, "%s\t%d\t%d\t%s", bedPtr->chrom,
+			   bedPtr->chromStart, bedPtr->chromEnd, bedPtr->name);
+	    if (hti->scoreField[0] != 0)
+		dyStringPrintf(bedLine, "\t%d", bedPtr->score);
+	    else if (hti->strandField[0] != 0)
+		dyStringPrintf(bedLine, "\t%d", 0); // placeholder
+	    if (hti->strandField[0] != 0)
+		dyStringPrintf(bedLine, "\t%c", bedPtr->strand[0]);
+	    if (hti->hasCDS)
+		dyStringPrintf(bedLine, "\t%d\t%d", bedPtr->thickStart,
+			       bedPtr->thickEnd);
+	    else if (hti->hasBlocks)
+		dyStringPrintf(bedLine, "\t%d\t%d", bedPtr->chromStart,
+			       bedPtr->chromEnd);  // placeholder
+	    if (hti->hasBlocks)
+		{
+		dyStringPrintf(bedLine, "\t%d\t%d", 0, bedPtr->blockCount);
+		for (i=0;  i < bedPtr->blockCount;  i++)
+		    {
+		    if (i == 0)
+			dyStringAppend(bedLine, "\t");
+		    else
+			dyStringAppend(bedLine, ",");
+		    dyStringPrintf(bedLine, "%d", bedPtr->blockSizes[i]);
+		    }
+		for (i=0;  i < bedPtr->blockCount;  i++)
+		    {
+		    if (i == 0)
+			dyStringAppend(bedLine, "\t");
+		    else
+			dyStringAppend(bedLine, ",");
+		    dyStringPrintf(bedLine, "%d", bedPtr->chromStarts[i]);
+		    }
+		}
+	    puts(bedLine->string);
+	    totalCount++;
+	    }
+	bedFreeList(&bedList);
 	}
-    fbList = fbGetRange(fbTQ, chromPtr->name, winStart, winEnd);
-    for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
+    }
+else
+    {
+    snprintf(fbTQ, sizeof(fbTQ), "%s:%s", track, fbQual);
+    fbSetClip(FALSE);
+    for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
-	char *ptr = strchr(fbPtr->name, ' ');
-	if (ptr != NULL)
-	    *ptr = 0;
-	printf("%s\t%d\t%d\t%s\t%d\t%c\n",
-	       fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
-	       0, fbPtr->strand);
-	totalCount++;
+	getFullTableName(fullTableName, chromPtr->name);
+	fbList = fbGetRangeQueryDb(db, fbTQ, chrom, winStart, winEnd,
+				   constraints);
+	for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
+	    {
+	    char *ptr = strchr(fbPtr->name, ' ');
+	    if (ptr != NULL)
+		*ptr = 0;
+	    printf("%s\t%d\t%d\t%s\t%d\t%c\n",
+		   fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
+		   0, fbPtr->strand);
+	    totalCount++;
+	    }
+	featureBitsFreeList(&fbList);
 	}
-    featureBitsFreeList(&fbList);
     }
 if (totalCount == 0)
     printf("\n# No results returned from query.\n\n");
 }
 
 
-int printLinkResults(struct sqlResult *sr, char *trackName, char *chromName,
-		      char *chromField, char *nameField)
-{
-char **row;
-char *chrom, *name, *strand;
-int start, end;
-int rowCount = 0;
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    start  = atoi(row[0]) + 1;
-    end    = atoi(row[1]);
-    chrom  = chromField[0] ? row[2] : chromName;
-    name   = nameField[0] ? row[3] : "";
-    strand = row[4];
-    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&%s=full\"",
-	   hgTracksName(), hGetDb(), chrom, start, end, trackName);
-    printf(" TARGET=_blank> %s %s:%d-%d <BR>\n", name, chrom, start, end);
-    rowCount++;
-    }
-return(rowCount);
-}
-
-
 void doGetBrowserLinks()
 {
-struct dyString *fieldSpec = newDyString(256);
-struct dyString *query = newDyString(512);
 struct slName *chromList, *chromPtr;
+struct bed *bedList, *bedPtr;
 struct sqlConnection *conn;
 struct sqlResult *sr;
-char *constraints = constrainFields();
+struct hTableInfo *hti;
+char *constraints;
 char *trackName;
 char chromField[32], startField[32], endField[32], nameField[32],
     strandField[32];
@@ -1535,7 +1570,8 @@ int rowCount;
 trackName = getTrackName();
 
 webStart(cart, "Table Browser: %s", freezeName);
-checkTableExists(parsedTableName);
+checkTableExists(fullTableName);
+constraints = constrainFields();
 if (sameString(database, getTableDb()))
     conn = hAllocConn();
 else
@@ -1547,72 +1583,32 @@ else
 
 
 printf("<H3> Links to Genome Browser from Table %s </H3>\n", getTableName());
-hFindBed6FieldsDb(getTableDb(), parsedTableName, chromField, startField,
-		  endField, nameField, strandField);
-
-dyStringClear(fieldSpec);
-dyStringPrintf(fieldSpec, "%s,%s", startField, endField);
-if (chromField[0] != 0)
-    dyStringPrintf(fieldSpec, ",%s", chromField);
-else
-    dyStringPrintf(fieldSpec, ",%s", startField);  // keep same #fields!
-if (nameField[0] != 0)
-    dyStringPrintf(fieldSpec, ",%s", nameField);
-else
-    dyStringPrintf(fieldSpec, ",%s", startField);  // keep same #fields!
-if (strandField[0] != 0)
-    dyStringPrintf(fieldSpec, ",%s", strandField);
+hti = hFindTableInfoDb(getTableDb(), chrom, trackName);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s",
+	     trackName);
 
 rowCount = 0;
-if (tableIsSplit)
+for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
-    for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
+    getFullTableName(fullTableName, chromPtr->name);
+    bedList = hGetBedRangeDb(getTableDb(), fullTableName, chrom, winStart,
+			     winEnd, constraints);
+    for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
 	{
-	parseTableName(parsedTableName, chromPtr->name);
-	dyStringClear(query);
-	dyStringPrintf(query, "SELECT %s FROM %s",
-		       fieldSpec->string, parsedTableName);
-	if (! allGenome)
-	    {
-	    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-			   startField, winEnd, endField, winStart);
-	    if ((constraints != NULL) && (constraints[0] != 0))
-		dyStringPrintf(query, " AND %s", constraints);
-	    }
-	else if ((constraints != NULL) && (constraints[0] != 0))
-	    dyStringPrintf(query, " WHERE %s", constraints);
-	sr = sqlGetResult(conn, query->string);
-	rowCount += printLinkResults(sr, trackName, chromPtr->name,
-				     chromField, nameField);
+	printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&%s=full\"",
+	       hgTracksName(), hGetDb(), chrom, bedPtr->chromStart,
+	       bedPtr->chromEnd, trackName);
+	printf(" TARGET=_blank> %s %s:%d-%d <BR>\n", bedPtr->name, chrom,
+	       bedPtr->chromStart+1, bedPtr->chromEnd);
+	rowCount++;
 	}
+    bedFreeList(&bedList);
     }
-else
-    {
-    dyStringClear(query);
-    dyStringPrintf(query, "SELECT %s FROM %s",
-		   fieldSpec->string, parsedTableName);
-    if (! allGenome)
-	{
-	dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
-		       startField, winEnd, endField, winStart);
-	if (! sameString("", chromField))
-	    dyStringPrintf(query, " AND %s = \'%s\'",
-			   chromField, chrom);
-	if ((constraints != NULL) && (constraints[0] != 0))
-	    dyStringPrintf(query, " AND %s", constraints);
-	}
-    else if ((constraints != NULL) && (constraints[0] != 0))
-	dyStringPrintf(query, " WHERE %s", constraints);
-    sr = sqlGetResult(conn, query->string);
-    rowCount += printLinkResults(sr, trackName, chrom, chromField, nameField);
-    }
-
 if (rowCount == 0)
     puts("No results returned from query.");
 webEnd();
 
-dyStringFree(&fieldSpec);
-dyStringFree(&query);
 if (sameString(database, getTableDb()))
     hFreeConn(&conn);
 else
@@ -1632,7 +1628,7 @@ if (freezeName == NULL)
 
 tableIsPositional = FALSE;
 tableIsSplit = FALSE;
-parsedTableName[0] = 0;
+fullTableName[0] = 0;
 chrom = NULL;
 winStart = winEnd = 0;
 position = getPosition(&chrom, &winStart, &winEnd);
@@ -1665,14 +1661,14 @@ else
 	webAbort("Missing table selection", "Please choose a table.");
 
     if (allGenome)
-	parseTableName(parsedTableName, "chr1");
+	getFullTableName(fullTableName, "chr1");
     else
-	parseTableName(parsedTableName, chrom);
+	getFullTableName(fullTableName, chrom);
     /* make sure that the table name doesn't have anything "weird" in it */
-    checkIsAlpha("table name", parsedTableName);
+    checkIsAlpha("table name", fullTableName);
 
     tableIsPositional = hFindChromStartEndFieldsDb(getTableDb(),
-						   parsedTableName,
+						   fullTableName,
 						   trash, trash, trash);
     if (strstr(table, "chrN_") == table)
 	tableIsSplit = TRUE;
