@@ -42,6 +42,11 @@
     <TR HEIGHT="100%" VALIGN="top">
 <!--Content Tables-->  
     <TD VALIGN="top">
+    <TABLE CELLPADDING=5 BORDER=0 WIDTH="100%"><TR><TD><B>
+    For general information on custom tracks, please see our </B><A
+    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">custom
+    tracks</A><B> page.</B>  This page describes data formats that are used for ENCODE data.
+    </TD></TD></TABLE>
     <TABLE CELLPADDING=5 BORDER=0 WIDTH="100%"><TR><TD>
         <!--outer table is for border purposes-->
         <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -60,9 +65,7 @@
                     WIDTH=10></TD><TD> We are looking forward to the
                     submission of ENCODE-related data, and are ready
                     to help throughout the process.  We recommend the
-                    following steps: 
-		    <UL>
-
+                    following steps: <UL>
 		    <LI>Choose an appropriate format (<A
 		    HREF="#BED">BED</A>, <A HREF="#MAF">MAF</A>, or <A
 		    HREF="#WIG">WIG</A>) for your data from the
@@ -360,18 +363,152 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD><TD>
+
 		    The wiggle (WIG) format allows display of
 		    continuous valued data in track format.  This is
 		    useful for GC percent, probability scores, and
 		    transcriptome data.
-		    <P>
-		    Forthcoming ...
+
+		    <P><B>General Structure</B><P> The .wig format is
+		    line-oriented.  The first section begins with <A
+		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#BROWSER">browser
+		    lines</A> that configure the overall display of
+		    the Genome Browser window when your annotation
+		    file is uploaded. Each line defines one display
+		    attribute. 
+
+		    <P> The browser lines are followed by a <A
+		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK">
+		    track definition line</A>.  The wiggle track
+		    definition adds a number of options for
+		    controlling the default display of this track.
+
+		    <P> Following the track definition line is the
+		    track data, which can be entered in several
+		    different formats described below.  Three
+		    formats were developed to allow the file to be
+		    written most compactly, depending on the density of
+		    the data:
+		    <UL>
+
+		    <LI> <B>BED</B> format with no declaration line and four columns of data:
+<FONT color="#0000FF"><PRE>  <I>chromA</I>  <I>chromStartA</I>  <I>chromEndA</I>  <I>dataValueA</I>
+  <I>chromB</I>  <I>chromStartB</I>  <I>chromEndB</I>  <I>dataValueB</I></PRE></FONT>
+
+		    <LI> <B>variableStep</B> two column data; started by a
+		    declaration line and followed with chromosome positions and data values:
+<FONT color="#0000FF"><PRE>  <B>variableStep</B>  <B>chrom=</B><I>chrN</I>  <B>[span=</B><I>binLength</I><B>}</B>
+  <I>chromStartA</I>  <I>dataValueA</I>
+  <I>chromStartB</I>  <I>dataValueB</I></PRE></FONT>
+
+		    <LI> <B>fixedStep</B> single column data; started by a
+		    declaration line and followed with data values:
+<FONT color="#0000FF"><PRE>  <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>binLength</I><B>]</B>
+  <I>dataValue1</I>
+  <I>dataValue2</I></PRE></FONT>
+		    </UL>
+
+		    <P><B>Parameters for wiggle track definition lines</B></P>
+		    All options are placed in a single line separated by spaces:
+<FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I> \
+<B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I> \
+<B>        priority=</B><I>priority</I> <B>offset=</B><I>offset</I> <B>autoScale=</B><I>on|off</I> \
+<B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I> \
+<B>        graphType=</B><I>bar|points</I> <B>viewLimits=</B><I>lower:upper</I> \
+<B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I> \
+<B>        windowingFunction=</B><I>maximum|mean|minimum</I> <B>smoothingWindow=</B>off|2-16
+</I></PRE></FONT>
+		    The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
+		    <FONT color="#0000FF"><PRE>  <B>type wiggle_0</B></PRE></FONT>
+		    The remaining values are OPTIONAL:
+		    <FONT color="#0000FF"><PRE>  <B>name</B>              <I>trackLabel</I>           # default is "User Track"
+  <B>description       </B><I>centerlabel         </I> # default is "User Supplied Track"
+  <B>visibility        </B><I>full|dense|hide     </I> # default is hide
+  <B>color             </B><I>RRR,GGG,BBB         </I> # default is 255,255,255
+  <B>altColor          </B><I>RRR,GGG,BBB         </I> # default is 128,128,128
+  <B>priority          </B><I>N                   </I> # default is 100
+  <B>offset            </B><I>N                   </I> # default is 0 (added to each position)
+  <B>autoScale         </B><I>on|off              </I> # default is off
+  <B>gridDefault       </B><I>on|off              </I> # default is off
+  <B>maxHeightPixels   </B><I>max:default:min     </I> # default is 128:128:11
+  <B>graphType         </B><I>bar|points          </I> # default is bar
+  <B>viewLimits        </B><I>lower:upper         </I> # default is range found in data
+  <B>yLineMark         </B><I>real-value          </I> # default is 0.0
+  <B>yLineOnOff        </B><I>on|off              </I> # default is off
+  <B>windowingFunction </B><I>maximum|mean|minimum</I> # default is maximum
+  <B>smoothingWindow   </B><I>off|[2-16]          </I> # default is off</PRE></FONT>
+
+		    A functional description of these options can be
+		    seen in the <A target=_blank
+		    HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=panTro1&org=Chimp&c=chr6&g=quality">Quality
+		    Scores track</A>.
+
+		    <P><B>Data Values</B></P>
+
+		    Wiggle track data values can be integer or real,
+		    positive or negative values. Chromosome positions
+		    are specified as 1-relative.  The first chromosome
+		    position is 1.  The last position in a chromosome
+		    of length N would be N.  Only positions specified
+		    have data.  Positions not specified do not have
+		    data and will not be graphed.
+
+		    <UL><LI>The BED format is a subset of the previous description, with four columns of data:
+<FONT color="#0000FF"><PRE> <I>chrom chromStart chromEnd dataValue</I></PRE></FONT> 
+		    In many cases this format will be too verbose to
+		    conveniently specify a large number of data
+		    values.  Two other two methods of specifying
+		    data were developed to be more space efficient.</LI>
+<P>
+		    <LI>The <B>variableStep</B> two column data format is the most commonly used
+		    data format.  It begins with a declaration line:
+<FONT color="#0000FF"><PRE>  <B>variableStep chrom=</B><I>chrN</I> <B>[span=</B><I>binLength</I><B>]</B></PRE></FONT>
+		    and is followed with two column data representing
+		    chromosome position and data value.  The declaration line starts with the word
+		    <B>variableStep</B>, is followed by a
+		    specification for chromosome, and optionally the
+		    <B>span</B> of each data point.  The span allows
+		    more efficient encoding of binned data, where the
+		    same value applies to a contiguous set of bases
+		    beginning at the specified position.
+<P>
+		    <LI>The <B>fixedStep</B> format takes a single
+		    column data, and is used when there is a constant
+		    interval between data values.  This is used for
+		    bin data with constant bin widths.  The fixedStep
+		    single column data format begins with the
+		    declaration line: 
+<FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I></I>]</PRE></FONT>
+		    and is followed by a single column of data values.
+		    The declaration line starts with the word
+		    fixedStep, and it must include specifications for
+		    chrom, start, and step.
+		    </UL>
+		    <P><B>Example</B></P>
+		    Specifying 14 separate data points on chr19 covering a range of 1157713 to 1160650
+		    <FONT color="#0000FF"><PRE>  browser position chr19:1157713-1160650
+  browser hide all
+  track type=wiggle_0 name=STK11 description="STK11 exon 1" visibility=full
+  chr19 1157713 1157981 35.0
+  chr19 1177982 1158269 68.3
+  chr19 1158306 1158970 0.0
+  variableStep chrom=chr19 span=5
+  1159001 45.3
+  1159006 47.8
+  1159011 48.9
+  1159101 36.0
+  fixedStep chrom=chr19 start=1160001 step=100 span=50
+  -1.0
+  -0.5
+  -0.25
+  0.0
+  0.5
+  1.0
+  1.5</PRE></FONT>
 	            </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
         </TD></TR></TABLE>
     </TD></TR></TABLE>
 </TD></TR></TABLE>
-
 </BODY></HTML>
-
