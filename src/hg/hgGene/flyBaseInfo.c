@@ -34,10 +34,12 @@ int roleCount;
 
 if (flyBaseId == NULL)
     return FALSE;
-if (!checkTables("fbAllele fbGene fbPhenotype fbRef fbRole", conn) )
+if (!sqlTableExists(conn, section->flyBaseTable) )
     return FALSE;
-safef(query, sizeof(query), "select count(*) from fbRole where geneId = '%s'", 
-	flyBaseId);
+if (!checkTables("fbAllele fbGene fbRef", conn) )
+    return FALSE;
+safef(query, sizeof(query), "select count(*) from %s where geneId = '%s'", 
+	section->flyBaseTable, flyBaseId);
 roleCount = sqlQuickNum(conn, query);
 freeMem(flyBaseId);
 return roleCount != 0;
@@ -49,7 +51,6 @@ struct fbAlleleInfo
     struct fbAlleleInfo *next;
     int id;	
     struct fbRole *roleList;
-    struct fbPhenotype *phenotypeList;
     };
 
 static int fbAlleleInfoCmp(const void *va, const void *vb)
@@ -62,7 +63,7 @@ return a->id - b->id;
 
 static void addToAllele(struct hash *alleleHash, 
 	struct fbAlleleInfo **pAlleleList,
-	int alleleId, struct fbRole *role, struct fbPhenotype *phenotype)
+	int alleleId, struct fbRole *role)
 /* Look up alleleId in hash, and if it isn't there create
  * a new allele and add it to hash and list.  Add role and phenotype
  * to allele. */
@@ -81,10 +82,6 @@ if (allele == NULL)
 if (role != NULL)
    {
    slAddTail(&allele->roleList, role);
-   }
-if (phenotype != NULL)
-   {
-   slAddTail(&allele->phenotypeList, phenotype);
    }
 }
 
@@ -142,26 +139,15 @@ struct sqlResult *sr;
 struct fbAlleleInfo *alleleList = NULL, *allele;
 struct hash *alleleHash = newHash(10);
 struct fbRole *roleList = NULL, *role;
-struct fbPhenotype *phenotypeList = NULL, *phenotype;
 char numName[16];
 
-#ifdef NEVER
-/* Print out name, long name, etc. */
 safef(query, sizeof(query),
-	"select geneSym,geneName from fbGene where geneId='%s'", flyBaseId);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    hPrintf("<B>%s - %s (%s)</B><BR>", row[0], row[1], flyBaseId);
-sqlFreeResult(&sr);
-#endif /* NEVER */
-
-safef(query, sizeof(query),
-	"select * from fbRole where geneId='%s'", flyBaseId);
+	"select * from %s where geneId='%s'", section->flyBaseTable, flyBaseId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     role = fbRoleLoad(row);
-    addToAllele(alleleHash, &alleleList, role->fbAllele, role, NULL);
+    addToAllele(alleleHash, &alleleList, role->fbAllele, role);
     }
 sqlFreeResult(&sr);
 
@@ -174,8 +160,9 @@ for (allele = alleleList; allele != NULL; allele = allele->next)
 	safef(query, sizeof(query), 
 		"select name from fbAllele where id=%d", allele->id);
 	alleleName = sqlQuickString(conn, query);
+	if (alleleName != NULL)
+	    hPrintf("<B>Allele %s:</B><BR>\n", alleleName);
 	}
-    if (alleleName == NULL) alleleName = "";
     if (allele->roleList != NULL)
         {
 	hPrintf("<UL>");
@@ -189,17 +176,118 @@ for (allele = alleleList; allele != NULL; allele = allele->next)
 	hPrintf("</UL>");
 	}
     }
+freeHash(&alleleHash);
 }
 
 struct section *flyBaseInfoSection(struct sqlConnection *conn,
-	struct hash *sectionRa)
+	struct hash *sectionRa, char *sectionName, char *table)
 /* Create FlyBase info section. */
 {
-struct section *section = sectionNew(sectionRa, "flyBaseInfo");
+struct section *section = sectionNew(sectionRa, sectionName);
 if (section != NULL)
     {
     section->exists = flyBaseInfoExists;
     section->print = flyBaseInfoPrint;
+    section->flyBaseTable = table;
     }
 return section;
 }
+
+struct section *flyBaseRolesSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create FlyBase roles section. */
+{
+return flyBaseInfoSection(conn, sectionRa, "flyBaseRoles", "fbRole");
+}
+
+struct section *flyBasePhenotypesSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create FlyBase phenotype section. */
+{
+return flyBaseInfoSection(conn, sectionRa, "flyBasePhenotypes", "fbPhenotype");
+}
+
+static void flyBaseSynonymsPrint(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Print out flyBase synonyms. */
+{
+char *flyBaseId = getFlyBaseId(conn, geneId);
+char *geneSym = NULL, *geneName = NULL;
+char query[256], **row;
+struct sqlResult *sr;
+
+if (flyBaseId != NULL)
+    {
+    safef(query, sizeof(query), 
+	    "select geneSym,geneName from fbGene where geneId = '%s'", 
+	    flyBaseId);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (row[0][0] != 0 && !sameString(row[0], "n/a"))
+	    {
+	    geneSym = cloneString(row[0]);
+	    hPrintf("<B>Symbol:</B> %s ", row[0]);
+	    }
+	if (row[1][0] != 0 && !sameString(row[0], "n/a"))
+	    {
+	    geneName = cloneString(row[1]);
+	    hPrintf("<B>Name:</B> %s ", geneName);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+hPrintf("<B>BDGP:</B> %s ", geneId);
+if (flyBaseId != NULL)
+    hPrintf("<B>FlyBase:</B> %s ", flyBaseId);
+hPrintf("<BR>\n");
+
+if (flyBaseId != NULL)
+    {
+    struct slName *synList = NULL, *syn;
+    safef(query, sizeof(query), 
+	    "select name from fbSynonym where geneId = '%s'", 
+	    flyBaseId);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *s = row[0];
+	if (!sameString(s, geneSym) && !sameString(s, geneName))
+	    {
+	    syn = slNameNew(s);
+	    slAddHead(&synList, syn);
+	    }
+	}
+    sqlFreeResult(&sr);
+    if (synList != NULL)
+        {
+	slSort(&synList, slNameCmp);
+	hPrintf("<B>Synonyms:</B> ");
+	for (syn = synList; syn != NULL; syn = syn->next)
+	    {
+	    if (syn != synList)
+	        hPrintf(", ");
+	    hPrintf("%s", syn->name);
+	    }
+	slFreeList(&synList);
+	}
+    }
+}
+
+
+struct section *flyBaseSynonymsSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create FlyBase synonyms section. */
+{
+struct section *section = sectionNew(sectionRa, "flyBaseSynonyms");
+if (section != NULL)
+    {
+    section->print = flyBaseSynonymsPrint;
+    }
+return section;
+}
+
+
+
+

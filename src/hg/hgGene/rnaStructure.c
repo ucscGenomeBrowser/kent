@@ -82,7 +82,7 @@ for (side = 0; side < ArraySize(names); ++side)
 
 	/* Print link to png image. */
 	hPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\">",
+	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
 	    hggMrnaFoldRegion, table,
 	    hggMrnaFoldPs, psName,
@@ -100,7 +100,7 @@ for (side = 0; side < ArraySize(names); ++side)
 
 	/* Print link to text. */
 	hPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s\" class=\"toc\">",
+	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
 	    hggMrnaFoldRegion, table,
 	    hggDoRnaFoldDisplay, "text");

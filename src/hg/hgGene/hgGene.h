@@ -36,6 +36,8 @@ struct section
     char *raFile;	/* Ra file to load additional info from. */
     void *items;	/* Some list of items. */
 
+    /* Some FlyBase specific stuff. */
+    char *flyBaseTable;	/* Which table to use. */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -58,9 +60,17 @@ struct section *swissProtCommentsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create SwissProt comments section. */
 
-struct section *flyBaseInfoSection(struct sqlConnection *conn,
+struct section *flyBaseRolesSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
-/* Create FlyBase info section. */
+/* Create FlyBase roles section. */
+
+struct section *flyBasePhenotypesSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create FlyBase Phenotypesroles section. */
+
+struct section *flyBaseSynonymsSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create FlyBase synonyms section. */
 
 struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);

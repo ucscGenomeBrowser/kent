@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.19 2003/10/27 09:49:45 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.20 2003/10/28 20:19:57 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -392,7 +392,9 @@ addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(flyBaseInfoSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(flyBaseRolesSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(flyBaseSynonymsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);

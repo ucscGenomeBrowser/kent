@@ -1,7 +1,17 @@
 # Drosophila-specific sections.
 
-name flyBaseInfo
+name flyBaseRoles
 shortLabel FlyBase Roles
 longLabel FlyBase Biological Roles 
-priority 25
+priority 101
+
+name flyBasePhenotypes
+shortLabel FlyBase Phenotypes
+longLabel FlyBase Phenotypes of Various Alleles of Gene 
+priority 102
+
+name flyBaseSynonyms
+shortLabel FlyBase Synonyms
+longLabel FlyBase Synonyms for Gene and Its Alleles
+priority 103
 
