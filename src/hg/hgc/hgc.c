@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.834 2005/02/11 23:08:15 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.835 2005/02/11 23:35:34 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -667,7 +667,7 @@ if (url != NULL && url[0] != 0)
 	}
     else
     	{
-    	printf("%s</A><BR>\n", uUrl->string);
+    	printf("%s</A><BR>\n", itemName);
 	}
     freeMem(eItem);
     freeDyString(&uUrl);
@@ -1714,7 +1714,8 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     classTable = addSuffix(track, class);
     if (hTableExists(classTable)) 
        {
-       sprintf(query, "select class from %s where name = '%s'", classTable, name);
+       safef(query, sizeof(query),
+            "select class from %s where name = \"%s\"", classTable, name);
        sr = sqlGetResult(conn, query);
        /* print class */
        if ((row = sqlNextRow(sr)) != NULL)
@@ -5854,7 +5855,7 @@ int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(seqName, table);
 
 hgcStart("Predicted mRNA from genome");
-safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
+safef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
