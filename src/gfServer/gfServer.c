@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.46 2004/08/24 18:46:44 markd Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.47 2004/10/28 19:02:38 galt Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
@@ -716,7 +716,7 @@ close(sd);
 printf("sent stop message to server\n");
 }
 
-void statusServer(char *hostName, char *portName)
+int statusServer(char *hostName, char *portName)
 /* Send status message to server arnd report result. */
 {
 char buf[256];
@@ -725,6 +725,7 @@ int fromLen, readSize;
 int sd = 0;
 int fileCount;
 int i;
+int ret = 0;
 
 /* Put together command. */
 sd = netMustConnectTo(hostName, portName);
@@ -734,13 +735,18 @@ write(sd, buf, strlen(buf));
 for (;;)
     {
     if (netGetString(sd, buf) == NULL)
+	{
+	warn("Error reading status information from %s:%s",hostName,portName);
+	ret = -1;
         break;
+	}
     if (sameString(buf, "end"))
         break;
     else
         printf("%s\n", buf);
     }
 close(sd);
+return(ret); 
 }
 
 void queryServer(char *type, 
@@ -949,7 +955,10 @@ else if (sameWord(command, "status"))
     {
     if (argc != 4)
 	usage();
-    statusServer(argv[2], argv[3]);
+    if (statusServer(argv[2], argv[3]))
+	{
+	exit(-1);
+	}
     }
 else if (sameWord(command, "files"))
     {
