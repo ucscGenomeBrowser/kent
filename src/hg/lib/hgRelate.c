@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.14 2003/09/24 02:28:30 kent Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.15 2004/01/29 21:26:04 hartera Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -37,8 +37,8 @@ static char historyCreate[] =
   "endId int unsigned not null,"                /* First id for next session. */
   "who varchar(255) not null,"         /* User who updated. */
   "what varchar(255) not null,"        /* What they did. */
-  "modTime timestamp not null)";        /* Modification time. */
-
+  "modTime timestamp not null,"        /* Modification time. */
+  "errata varchar(255) )";            /* Deleted data */
 
 void hgSetDb(char *dbName)
 /* Set the database name. */
@@ -120,6 +120,40 @@ HGID hgNextId()
 return endUpdateId++;
 }
 
+void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
+/* Add comment to history table.  Does not lock the process. */
+/* WARNING: hgStartUpdate implements an advisory lock on the process so */
+/* a program can add a history comment using this function after */
+/* hgStartUpdate has been implemented as long as the same conn is used, */
+/* otherwise the writing of the comment to the history table may be blocked */
+{
+struct dyString *query = newDyString(256);
+va_list args;
+va_start(args, comment);
+static boolean initialized = FALSE;
+
+/* create history table if it does not exist already */
+if (!initialized)
+    {
+    if (sqlMaybeMakeTable(conn, "history", historyCreate))
+	{
+        char query[256];
+	safef(query, sizeof(query),
+		"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,10,'%s','New',NOW(), NULL)",
+		getUser());
+        sqlUpdate(conn, query);
+	}
+    initialized = TRUE;
+    }
+/* add comment with startId and endId as 0 */
+dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"",
+         0, 0, getUser());
+dyStringVaPrintf(query, comment, args);
+dyStringAppend(query, "\",NOW(), NULL)");
+sqlUpdate(conn,query->string);
+dyStringFree(&query); 
+}
+
 struct sqlConnection *hgStartUpdate()
 /* Open and connection and get next global id from the history table */
 {
@@ -130,18 +164,20 @@ if (!initialized)
     {
     if (sqlMaybeMakeTable(conn, "history", historyCreate))
 	{
-	char query[256];
+        char query[256];
 	safef(query, sizeof(query),
-		"INSERT into history VALUES(NULL,0,10,'%s','New',NOW())",
+		"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,10,'%s','New',NOW(), NULL)",
 		getUser());
         sqlUpdate(conn, query);
 	}
     initialized = TRUE;
     }
+/* put advisory lock on process while adding Ids to tables */
+sqlGetLock(conn, "history");
+startUpdateId = endUpdateId = hgIdQuery(conn, "SELECT MAX(endId) from history");
 
-startUpdateId = endUpdateId = hgIdQuery(conn, 
-    "SELECT MAX(endId) from history");
 return conn;
+
 }
 
 void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...)
@@ -152,11 +188,12 @@ struct dyString *query = newDyString(256);
 va_list args;
 va_start(args, comment);
 
-dyStringPrintf(query, "INSERT into history VALUES(NULL,%d,%d,'%s',\"", 
+dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"", 
 	startUpdateId, endUpdateId, getUser());
 dyStringVaPrintf(query, comment, args);
-dyStringAppend(query, "\",NOW())");
+dyStringAppend(query, "\",NOW(), NULL)");
 sqlUpdate(conn,query->string);
+sqlReleaseLock(conn, "history");
 sqlDisconnect(pConn);
 }
 
@@ -221,8 +258,8 @@ sqlUpdate(conn, dy->string);
 
 /* Add it to table. */
 dyStringClear(dy);
-dyStringPrintf(dy, "INSERT into extFile VALUES(%u,'%s','%s',%lld)",
-    id, name, path, size);
+dyStringPrintf(dy, "INSERT into extFile (id, name, path, size) 
+    VALUES(%u,'%s','%s',%lld)", id, name, path, size);
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
