@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.14 2004/10/02 00:13:09 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.15 2004/10/29 22:53:44 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -348,8 +348,10 @@ dbOverrideFromTable(parseBuf, &db, &table);
 htmlOpen("Select Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
+#ifdef PROBLEMATIC
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
+#endif
 
 showTableFields(db, table);
 dtList = extraTableList(selFieldLinkedTablePrefix());
@@ -465,7 +467,9 @@ boolean anyFilter()
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
 char *db = database, *table = curTable, buf[256];
+#ifdef PROBLEMATIC
 dbOverrideFromTable(buf, &db, &table);
+#endif /* PROBLEMATIC */
 return (filterTable != NULL && sameString(filterTable, table));
 }
 
@@ -757,8 +761,10 @@ struct dbTable *dtList, *dt;
 htmlOpen("Filter on Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
+#ifdef PROBLEMATIC
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
+#endif
 
 filterControlsForTable(db, table);
 dtList = extraTableList(filterLinkedTablePrefix);
