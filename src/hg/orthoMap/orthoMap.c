@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.1 2003/06/10 18:44:39 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.2 2003/06/23 06:38:13 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -38,9 +38,9 @@ static char *optionDescripts[] =
     "Chromosme in db that we are working on.",
     "File containing psl alignments.",
     "Table containing psl alignments.",
-    "File to output beds to.",
     "Datbase table containing net records, i.e. mouseNet.",
-    "File containing the chains. Usually I do this on a chromosome basis."
+    "File containing the chains. Usually I do this on a chromosome basis.",
+    "File to output beds to."
 };
 
 void usage()
@@ -218,7 +218,7 @@ if(subChain == NULL)
     return;
     }
 qChainRangePlusStrand(subChain, &qs, &qe);
-bed->chrom = cloneString(psl->tName);
+bed->chrom = cloneString(subChain->qName);
 bed->name = cloneString(psl->qName);
 bed->chromStart = bed->thickStart = qs;
 bed->chromEnd = bed->thickEnd = qe;
