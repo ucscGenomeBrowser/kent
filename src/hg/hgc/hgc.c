@@ -97,6 +97,7 @@
 #include "axt.h"
 #include "axtInfo.h"
 #include "jaxQTL.h"
+#include "jaxQTL3.h"
 #include "gbProtAnn.h"
 #include "hgSeq.h"
 #include "chain.h"
@@ -149,7 +150,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.781 2004/11/12 16:28:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.782 2004/11/18 01:03:36 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11548,6 +11549,41 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doJaxQTL3(struct trackDb *tdb, char *item)
+/* Put up info on Quantitative Trait Locus from Jackson Labs. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256];
+char **row;
+int start = cartInt(cart, "o");
+struct jaxQTL3 *jaxQTL;
+
+genericHeader(tdb, item);
+sprintf(query, "select * from jaxQTL3 where name = '%s' and chrom = '%s' and chromStart = %d",
+        item, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    jaxQTL = jaxQTL3Load(row);
+    printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
+    printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
+    if (!sameWord("", jaxQTL->marker)) printf("<B>Peak Marker:</B> %s <BR>\n", jaxQTL->marker);
+    if (!sameWord("", jaxQTL->flank1)) printf("<B>Flank Marker 1:</B> %s <BR>\n", jaxQTL->flank1);
+    if (!sameWord("", jaxQTL->flank2)) printf("<B>Flank Marker 2:</B> %s <BR>\n", jaxQTL->flank2);
+    /* no cMscore for current release*/
+    /*printf("<B>cM position of marker associated with peak LOD score:</B> %3.1f<BR>\n", 
+      jaxQTL->cMscore);
+    */
+    printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
+    printBand(seqName, start, 0, FALSE);
+    printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doEncodeRegion(struct trackDb *tdb, char *item)
 /* Print region desription, along with generic info */
 {
@@ -15560,6 +15596,10 @@ else if( sameWord( track, "footPrinter" ))
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
+    }
+else if (sameWord(track, "jaxQTL3"))
+    {
+    doJaxQTL3(tdb, item);
     }
 else if (sameWord(track, "gbProtAnn"))
     {
