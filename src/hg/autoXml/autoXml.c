@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "obscure.h"
-#include <expat.h>
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -28,7 +27,7 @@ errAbort(
   "   -picky  Generate parser that rejects stuff it doesn't understand\n"
   "   -main   Put in a main routine that's a test harness\n"
   "   -prefix=xxx Prefix to add to structure names. By default same as root\n"
-  "   -positive Don't write out attributes with negative values\n"
+  "   -positive Don't write out optional attributes with negative values\n"
   );
 }
 
@@ -435,8 +434,6 @@ boolean optionalChildren(struct element *el)
 {
 struct elChild *ec;
 boolean required = FALSE, optional = FALSE;
-if (el->textType != NULL)
-    optional = TRUE;
 for (ec = el->children; ec != NULL; ec = ec->next)
     {
     if (ec->copyCode == '*' || ec->copyCode == '?')
@@ -447,12 +444,19 @@ for (ec = el->children; ec != NULL; ec = ec->next)
 return !required && optional;
 }
 
+boolean isAtomic(struct element *el)
+/* Return TRUE if by definition no children. */
+{
+return el->textType == NULL && el->children == NULL;
+}
+
 void saveFunctionBody(struct element *el, FILE *f)
 /* Write out save function body. */
 {
 struct elChild *ec;
 struct attribute *att;
 boolean optKids = optionalChildren(el);
+boolean isAtom = isAtomic(el);
 
 fprintf(f, "{\n");
 
@@ -471,7 +475,12 @@ if (optKids)
 fprintf(f, "if (obj == NULL) return;\n");
 fprintf(f, "xapIndent(indent, f);\n");
 if (el->attributes == NULL)
-    fprintf(f, "fprintf(f, \"<%s>\");\n", el->name);
+    {
+    if (isAtom)
+	fprintf(f, "fprintf(f, \" ->\\n\");\n");
+    else
+	fprintf(f, "fprintf(f, \"<%s>\");\n", el->name);
+    }
 else 
     {
     fprintf(f, "fprintf(f, \"<%s\");\n", el->name);
@@ -496,17 +505,19 @@ else
 		}
 	    }
 	}
-    fprintf(f, "fprintf(f, \">\");\n");
+    if (isAtom)
+	fprintf(f, "fprintf(f, \"->\\n\");\n");
+    else
+	fprintf(f, "fprintf(f, \">\");\n");
     }
 if (el->textType != NULL)
     {
-    fprintf(f, "if (obj->%s != NULL && obj->%s[0] != 0)\n", textField, textField);
-    fprintf(f, "    {\n");
-    fprintf(f, "    fprintf(f, \"%%s\", obj->%s);\n", textField);
-    fprintf(f, "    isNode = FALSE;\n");
-    fprintf(f, "    }\n");
+    fprintf(f, "fprintf(f, \"%%s\", obj->%s);\n", textField);
     }
-if (el->children == NULL)
+if (isAtom)
+    {
+    }
+else if (el->children == NULL)
     {
     fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
     }
@@ -552,19 +563,14 @@ else
 	}
     if (optKids)
         {
-	fprintf(f, "if (isNode)\n");
-	fprintf(f, "    fprintf(f, \"</%s>\\n\");\n", el->name);
-	fprintf(f, "else\n");
-	fprintf(f, "    {\n");
+	fprintf(f, "if (!isNode)\n");
 	fprintf(f, "    xapIndent(indent, f);\n");
-	fprintf(f, "    fprintf(f, \"</%s>\\n\");\n", el->name);
-	fprintf(f, "    }\n");
 	}
     else
 	{
 	fprintf(f, "xapIndent(indent, f);\n");
-	fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
 	}
+    fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
     }
 fprintf(f, "}\n");
 fprintf(f, "\n");
