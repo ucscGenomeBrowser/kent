@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.239 2005/02/23 18:48:48 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.240 2005/02/23 19:23:25 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -458,6 +458,21 @@ char *hDefaultChrom()
 /* Return the first chrom in chromInfo from the current db. */
 {
 return hDefaultChromDb(hGetDb());
+}
+
+int hChromCountDb(char *db)
+/* Return the number of chromosomes (scaffolds etc.) in the given db. */
+{
+struct sqlConnection *conn = hAllocOrConnect(db);
+int count = sqlQuickNum(conn, "select count(*) from chromInfo");
+hFreeOrDisconnect(&conn);
+return count;
+}
+
+int hChromCount()
+/* Return the number of chromosomes (scaffolds etc.) in the current db. */
+{
+return hChromCountDb(hGetDb());
 }
 
 char *hGetDb()

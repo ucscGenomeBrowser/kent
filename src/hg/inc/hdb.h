@@ -114,6 +114,12 @@ char *hDefaultChrom();
 char *hDefaultChromDb(char *db);
 /* Return the first chrom in chromInfo from the given db. */
 
+int hChromCount();
+/* Return the number of chromosomes (scaffolds etc.) in the current db. */
+
+int hChromCountDb(char *db);
+/* Return the number of chromosomes (scaffolds etc.) in the given db. */
+
 char *hGetDb();
 /* Return the current database name, setting to default if not defined. */
 
