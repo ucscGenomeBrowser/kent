@@ -9455,6 +9455,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 
-cartHtmlShell("UCSC Genome Browser v13", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v14", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
