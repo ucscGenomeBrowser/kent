@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.8 2004/07/20 16:18:48 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.9 2004/12/02 10:00:32 genbank Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -322,9 +322,9 @@ strftime(bufs[iBuf], 11, "%Y-%m-%d", tm);
 return bufs[iBuf];
 }
 
-time_t gbParseTimeStamp(char *col)
-/* Parse a time stamp, in YYYYMMDDHHMMSS format, converting it to a unix time
- * (as returned by time()). */
+static time_t gbParseNumTimeStamp(char *col, boolean *isOkRet)
+/* Parse a time stamp, in "YYYYMMDDHHMMSS" format, as returned
+ * by mysql timestamp columns before 4.1. */
 {
 boolean isOk = TRUE;
 struct tm tm;
@@ -342,8 +342,62 @@ tm.tm_sec = parseUnsigned(col, 12, 2, &isOk);
 /* convert */
 if ((numTime = mktime(&tm)) == -1)
     isOk = FALSE;
+
+*isOkRet = isOk;
+return numTime;
+}
+
+static time_t gbParseHumanTimeStamp(char *col, boolean *isOkRet)
+/* Parse a time stamp, in  "2004-11-01 01:06:18" format, as returned
+ * by mysql timestamp columns 4.1 or later. */
+{
+boolean isOk = TRUE;
+struct tm tm;
+time_t numTime;
+ZeroVar(&tm);
+
+if (strlen(col) != 19)
+    isOk = FALSE;
+tm.tm_year = parseUnsigned(col, 0, 4, &isOk)-1900;
+if (col[4] != '-')
+    isOk = FALSE;
+tm.tm_mon = parseUnsigned(col, 5, 2, &isOk);
+if (col[7] != '-')
+    isOk = FALSE;
+tm.tm_mday = parseUnsigned(col, 8, 2, &isOk);
+if (col[10] != ' ')
+    isOk = FALSE;
+tm.tm_hour = parseUnsigned(col, 11, 2, &isOk);
+if (col[13] != ':')
+    isOk = FALSE;
+tm.tm_min = parseUnsigned(col, 14, 2, &isOk);
+if (col[16] != ':')
+    isOk = FALSE;
+tm.tm_sec = parseUnsigned(col, 17, 2, &isOk);
+/* convert */
+if ((numTime = mktime(&tm)) == -1)
+    isOk = FALSE;
+
+*isOkRet = isOk;
+return numTime;
+}
+
+time_t gbParseTimeStamp(char *col)
+/* Parse a time stamp, in "YYYYMMDDHHMMSS" or "2004-11-01 01:06:18" formats,
+ * converting it to a unix time (as returned by time()). */
+{
+boolean isOk = TRUE;
+time_t numTime;
+
+/* look for one of the non-numeric character for human-readable format */
+if (strchr(col, '-') != NULL)
+    numTime = gbParseHumanTimeStamp(col, &isOk);
+else
+    numTime = gbParseNumTimeStamp(col, &isOk);
+
+
 if (!isOk)
-    errAbort("invalid timestamp \"%s\", must be YYYYMMDDHHMMSS", col);
+    errAbort("invalid timestamp \"%s\", must be \"YYYYMMDDHHMMSS\" or \"2004-11-01 01:06:18\"", col);
 
 return numTime;
 }
