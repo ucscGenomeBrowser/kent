@@ -127,7 +127,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.560 2004/02/07 18:42:34 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.561 2004/02/07 20:23:10 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13127,7 +13127,7 @@ else if (sameWord(track, "chesChordataBlat"))
     {
     chesProtein(tdb, item);
     }
-else if ( sameWord(track, "blastHg15KG") )
+else if ( sameWord(track, "blastHg15KG") || sameWord(track, "blastHg16KG") )
     {
     chesProtein(tdb, item);
     }
