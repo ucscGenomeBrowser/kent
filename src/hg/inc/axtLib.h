@@ -19,4 +19,9 @@ void axtFillGap(struct axt **aList, char *nib);
 char *getAxtFileName(char *chrom, char *toDb, char *alignment, char *fromDb);
 /* return file name for a axt alignment */
 
+struct axt *axtListFromChain(struct chain *chain, 
+	struct dnaSeq *qSeq, int qOffset,
+	struct dnaSeq *tSeq, int tOffset, int maxGap);
+/* Convert a chain to a list of axt's. */
+
 #endif

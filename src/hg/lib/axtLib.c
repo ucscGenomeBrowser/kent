@@ -13,9 +13,6 @@
 #include "hdb.h"
 
 
-boolean qChain = FALSE;  /* Do chain from query side. */
-int maxGap = 200;
-
 struct hash *chainReadAll(char *fileName)
 /* Read chains into a hash keyed by id. */
 {
@@ -24,6 +21,7 @@ struct hash *hash = hashNew(18);
 struct chain *chain;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int count = 0;
+boolean qChain = FALSE;  /* Do chain from query side. */
 
 while ((chain = chainRead(lf)) != NULL)
     {
@@ -140,7 +138,7 @@ return axt;
 
 struct axt *axtListFromChain(struct chain *chain, 
 	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset)
+	struct dnaSeq *tSeq, int tOffset, int maxGap)
 /* Convert a chain to a list of axt's. */
 {
 struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
@@ -179,17 +177,6 @@ for (b = a->next; b != NULL; b = b->next)
     }
 }
 
-struct axt *getAxtListFromChain(struct chain *chain, struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset, FILE *gapFile)
-/* Write out axt's that correspond to chain. */
-{
-struct axt *axt, *axtList;
-
-if (gapFile != NULL)
-    writeGaps(chain, gapFile);
-return axtListFromChain(chain, qSeq, qOffset, tSeq, tOffset);
-}
-
 struct axt *convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
 	struct hash *qChromHash, char *nibDir,
 	struct chain *chain, FILE *gapFile)
@@ -225,13 +212,9 @@ struct axt *axtList ;
     }
 chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize, 
 	&subChain, &chainToFree);
-//assert(subChain != NULL);
 if (subChain == NULL)
     subChain = chain;
-axtList = getAxtListFromChain(subChain, qSeq, qOffset, tChrom, fill->tStart, gapFile);
-/*for (axt = axtList; axt != NULL; axt = axt->next)
-    axtWrite(axt, f);
-axtFreeList(&axtList);*/
+axtList = axtListFromChain(subChain, qSeq, qOffset, tChrom, fill->tStart, 200);
 chainFree(&chainToFree);
 freeDnaSeq(&qSeq);
 return axtList;
