@@ -144,8 +144,9 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 #include "pscreen.h"
+#include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.747 2004/09/12 23:44:04 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.748 2004/09/13 05:44:58 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5336,46 +5337,22 @@ for (i=0; i<size; ++i)
     }
 }
 
-void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
-/* Display detailed info on a regulatory triangle item. */
+void motifHitSection(struct dnaSeq *seq, char *motifName, char *motifTable)
+/* Print out section about motif. */
 {
 struct sqlConnection *conn = hAllocConn();
-int start = cartInt(cart, "o");
 char query[256];
-struct dnaSeq *seq = NULL;
-char *table = tdb->tableName;
-int rowOffset = hOffsetPastBin(seqName, table);
-struct sqlResult *sr;
-char **row;
-struct bed *hit = NULL;
 struct dnaMotif *motif;
 
-cartWebStart(cart, "Regulatory Motif Info");
-genericBedClick(conn, tdb, item, start, 6);
-
 webNewSection("Motif:");
-sprintf(query, 
-	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
-	table, item, seqName, start);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    hit = bedLoadN(row + rowOffset, 6);
-sqlFreeResult(&sr);
-
 printf("<PRE>");
-if (hit != NULL)
+if (seq != NULL)
     {
-    int i;
-    seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
-    if (hit->strand[0] == '-')
-	reverseComplement(seq->dna, seq->size);
     touppers(seq->dna);
     printSpacedDna(seq->dna, seq->size);
     printf("sequence here\n");
     }
-
-sprintf(query, "name = '%s'", item);
+sprintf(query, "name = '%s'", motifName);
 motif = dnaMotifLoadWhere(conn, motifTable, query);
 if (motif != NULL)
     {
@@ -5395,8 +5372,79 @@ if (motif != NULL)
     printf("<BR>\n");
     }
 printf("</PRE>");
-
+hFreeConn(&conn);
 }
+
+void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
+/* Display detailed info on a regulatory triangle item. */
+{
+int start = cartInt(cart, "o");
+struct dnaSeq *seq = NULL;
+char *table = tdb->tableName;
+int rowOffset = hOffsetPastBin(seqName, table);
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct bed *hit = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+cartWebStart(cart, "Regulatory Motif Info");
+genericBedClick(conn, tdb, item, start, 6);
+
+sprintf(query, 
+	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    hit = bedLoadN(row + rowOffset, 6);
+sqlFreeResult(&sr);
+
+if (hit != NULL)
+    {
+    int i;
+    seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
+    if (hit->strand[0] == '-')
+	reverseComplement(seq->dna, seq->size);
+    }
+
+motifHitSection(seq, item, motifTable);
+}
+
+void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable)
+/* Display detailed info on a transcriptional regulatory code item. */
+{
+int start = cartInt(cart, "o");
+struct dnaSeq *seq = NULL;
+char *table = tdb->tableName;
+int rowOffset = hOffsetPastBin(seqName, table);
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct bed *hit = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct transRegCode *trc = NULL;
+
+cartWebStart(cart, "Regulatory Code Info");
+sprintf(query, 
+	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    trc = transRegCodeLoad(row+rowOffset);
+sqlFreeResult(&sr);
+
+if (trc != NULL)
+    {
+    printf("<B>Name:</B> %s<BR>\n", trc->name);
+    printf("<B>CHIP/CHIP Evidence:</B> %s<BR>\n", trc->chipEvidence);
+    printf("<B>Species conserved in:</B> %d<BR>\n", trc->consSpecies);
+    printPosOnChrom(trc->chrom, trc->chromStart, trc->chromEnd, NULL, TRUE, trc->name);
+    }
+motifHitSection(NULL, item, motifTable);
+}
+
 
 void printLines(FILE *f, char *s, int lineSize)
 /* Print s, lineSize characters (or less) per line. */
@@ -15320,6 +15368,11 @@ else if (sameWord(track, "esRegGeneToMotif"))
     {
     doTriangle(tdb, item, "esRegMotif");
     }
+else if (sameWord(track, "transRegCode"))
+    {
+    doTransRegCode(tdb, item, "transRegCodeMotif");
+    }
+
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
     {
     humMusClickHandler( tdb, item, "Mouse", "mm2", "blastzBestMouse", 0);
