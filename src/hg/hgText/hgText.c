@@ -284,12 +284,19 @@ storeStringIfSet("hgt.moreThresh");
 storeStringIfSet("hgt.lessThresh");
 }
 
+boolean isGenome(char *pos)
+/* Return TRUE if pos is genome. */
+{
+pos = trimSpaces(pos);
+return(sameWord(pos, "genome"));
+}
+
 void positionLookup(char *phase)
 /* print the location and a jump button */
 {
 char pos[64];
 
-if (! sameString(position, "genome"))
+if (! isGenome(position))
     {
     snprintf(pos, sizeof(pos), "%s:%d-%d", chrom, winStart+1, winEnd);
     position = cloneString(pos);
@@ -315,6 +322,22 @@ else
 }
 
 
+char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
+/* Use hgFind if necessary; return NULL 
+ * if we had to display the gateway page or hgFind's selection page. */
+{
+if (! isGenome(pos))
+    {
+    struct hgPositions *hgp = findGenomePosWeb(pos, retChrom, retStart, retEnd,
+					       cart, TRUE, hgTextName());
+
+    if ((hgp == NULL) || (hgp->singlePos == NULL))
+	return NULL;
+    }
+return(pos);
+}
+
+
 void handleDbChange()
 /* 
    Copied from hgGateway:
@@ -324,10 +347,14 @@ void handleDbChange()
    If databases were changed then use the new default position too.
 */
 {
-char *oldDb = hashFindVal(oldVars, "db");
-if (! strstrNoCase(oldDb, database))
+char *oldDb  = hashFindVal(oldVars, "db");
+char *oldPos = hashFindVal(oldVars, "position");
+if ((oldDb != NULL) && (! sameWord(oldDb, database)))
     {
-    position = hDefaultPos(database);
+    if ((! isGenome(position)) &&
+	(oldPos != NULL) && sameWord(position, oldPos))
+	position = searchPosition(hDefaultPos(database),
+				  &chrom, &winStart, &winEnd);
     cartRemove(cart, "hgt.customText");
     cartRemove(cart, "hgt.customFile");
     cartRemove(cart, "ct");
@@ -454,6 +481,7 @@ return(strstr(type, "char") ||
        strstr(type, "blob"));
 }
 
+
 char *getPosition(char **retChrom, int *retStart, int *retEnd)
 /* Get position from cgi (not cart); use hgFind if necessary; return NULL 
  * if we had to display the gateway page or hgFind's selection page. */
@@ -467,14 +495,7 @@ if (pos[0] == '\0')
     doGateway();
     return NULL;
     }
-if (! sameString(pos, "genome"))
-    {
-    struct hgPositions *hgp = findGenomePosWeb(pos, retChrom, retStart, retEnd,
-					       cart, TRUE, hgTextName());
-    if ((hgp == NULL) || (hgp->singlePos == NULL))
-	return NULL;
-    }
-return(pos);
+return(searchPosition(pos, retChrom, retStart, retEnd));
 }
 
 
@@ -807,7 +828,6 @@ handleDbChange();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
-cartSetString(cart, "db", database);
 puts("<TABLE CELLPADDING=\"8\">");
 puts("<TR><TD>");
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#ChooseTable\">"
@@ -4002,7 +4022,7 @@ fullTableName[0] = 0;
 position = getPosition(&chrom, &winStart, &winEnd);
 if (position == NULL)
     return;
-allGenome = sameString("genome", position);
+allGenome = isGenome(position);
 
 if (existsAndEqual("submit", "Look up") ||
     (cgiOptionalString("phase") == NULL))
@@ -4102,6 +4122,7 @@ else
 		 "Error: unrecognized value of CGI var phase: %s",
 		 cgiUsualString("phase", "(Undefined)"));
     }
+cartSetString(cart, "db", database);
 cartSetString(cart, "position", position);
 }
 
