@@ -5,29 +5,36 @@
 #include <stdio.h>
 struct pipeline;
 
-enum pipelineFd
-/* pipeline default */
+enum pipelineOpts
+/* pipeline options bitset */
     {
-    pipelineInheritFd = -1, /* use current stdio file */
-    pipelineDevNull = -2,   /* use /dev/null for file */
+    pipelineInheritFd = 0x01, /* use current stdin as input of read pipeline
+                               * or stdout as output of write pipeline.  */
+    pipelineDevNull =   0x02, /* use /dev/null input or output file */
     };
 
-struct pipeline *pipelineCreateRead(char ***cmds, char *stdinFile);
+struct pipeline *pipelineCreateRead(char ***cmds, unsigned opts,
+                                    char *stdinFile);
 /* create a read pipeline from an array of commands.  Each command is
  * an array of arguments.  Shell expansion is not done on the arguments.
- * If stdinFile is not NULL, it will be opened as the input to the pipe.
+ * If stdinFile is not NULL, it will be opened as the input to the pipe,
+ * otherwise pipelineOpts is used to determine the input file.
  */
 
-struct pipeline *pipelineCreateRead1(char **cmd, char *stdinFile);
+struct pipeline *pipelineCreateRead1(char **cmd, unsigned opts,
+                                     char *stdinFile);
 /* like pipelineCreateRead(), only takes a single command */
 
-struct pipeline *pipelineCreateWrite(char ***cmds, char *stdoutFile);
+struct pipeline *pipelineCreateWrite(char ***cmds, unsigned opts,
+                                     char *stdoutFile);
 /* create a write pipeline from an array of commands.  Each command is
  * an array of arguments.  Shell expansion is not done on the arguments.
  * If stdoutFile is not NULL, it will be opened as the output from the pipe.
+ * otherwise pipelineOpts is used to determine the output file.
  */
 
-struct pipeline *pipelineCreateWrite1(char **cmd, char *stdoutFile);
+struct pipeline *pipelineCreateWrite1(char **cmd, unsigned opts,
+                                      char *stdoutFile);
 /* like pipelineCreateWrite(), only takes a single command */
 
 char *pipelineDesc(struct pipeline *pl);
