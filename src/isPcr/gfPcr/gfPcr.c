@@ -7,7 +7,7 @@
 #include "genoFind.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcr.c,v 1.4 2004/06/16 08:25:50 kent Exp $";
+static char const rcsid[] = "$Id: gfPcr.c,v 1.5 2004/10/27 21:32:39 kent Exp $";
 
 /* Command line overridable variables. */
 int maxSize = 4000; /* corresponds to maxSize= parameter. */
@@ -80,8 +80,8 @@ else if (argc == 7) /* One primer pair */
     {
     AllocVar(inList);
     inList->name = clName;
-    inList->fPrimer = argv[4];
-    inList->rPrimer = argv[5];
+    inList->fPrimer = cloneString(argv[4]);
+    inList->rPrimer = cloneString(argv[5]);
     outFile = argv[6];
     }
 else
