@@ -81,11 +81,9 @@
 #include "itemAttr.h"
 #include "encode.h"
 #include "variation.h"
+#include "estOrientInfo.h"
 
-
-
-
-static char const rcsid[] = "$Id: hgTracks.c,v 1.713 2004/04/20 23:05:00 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.714 2004/04/21 02:15:45 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2920,46 +2918,100 @@ void ensGeneMethods(struct track *tg)
 tg->itemName = ensGeneName;
 }
 
-Color estColorAndOrient(struct track *tg, void *item, struct vGfx *vg)
-/* Always returns MG_BLACK, attempts to orient ests using data in estOrientInfo table. */
+int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
+/* Return the direction field from the mrna table for accession
+   acc. Return -1 if not in table.*/
 {
-struct linkedFeatures *lf = item;
+int direction = -1;
 char query[512];
 char buf[64], *s = NULL;
+sprintf(query, "select direction from mrna where acc='%s'", acc);
+if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
+    {
+    direction = atoi(s);
+    }
+return direction;
+}
+
+void orientEsts(struct track *tg)
+/* Orient ESTs from the estOrientInfo table.  */
+{
+struct linkedFeatures *lf = NULL, *lfList = NULL;
 struct sqlConnection *conn = hAllocConn();
-int col = MG_BLACK;
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = 0;
+struct estOrientInfo ei;
 int estOrient = 0;
+struct hash *orientHash = NULL;
+lfList = tg->items;
+
+if(slCount(lfList) == 0)
+    return; /* Nothing to orient. */
 
 if(hTableExists("estOrientInfo"))
     {
-    safef(query, sizeof(query), 
-	     "select intronOrientation from estOrientInfo where name='%s' and chromStart=%d and chromEnd=%d and chrom='%s'", 
-	     lf->name, lf->start, lf->end, chromName);
-    estOrient = sqlQuickNum(conn, query);
-    }
-/* estOrient should still be zero if estOrientInfo table doesn't exist. */
-if(estOrient != 0)
-    {
-    if(estOrient < 0)
-	lf->orientation = -1 * lf->orientation;
-    }
-else /* if can't find in estOrientInfo table */
-    {
-    sprintf(query, "select direction from mrna where acc='%s'", lf->name);
-    if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
+    /* First load up a hash with the orientations. That
+       way we only query the database once rather than
+       hundreds or thousands of times. */
+    int hashSize = (log(slCount(lfList))/log(2)) + 1;
+    orientHash = newHash(hashSize);
+    sr = hRangeQuery(conn, "estOrientInfo", chromName, 
+		     winStart, winEnd, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if (s[0] == '3')
-	    lf->orientation = -1 * lf->orientation;	/* Not the best place for this but... */
+	estOrientInfoStaticLoad(row + rowOffset, &ei);
+	hashAddInt(orientHash, ei.name, ei.intronOrientation);
+	}
+    sqlFreeResult(&sr);
+
+    /* Now lookup orientation of each est. If not in hash
+       lookup read direction in mrna table. */
+    for(lf = lfList; lf != NULL; lf = lf->next)
+	{
+	estOrient = hashIntValDefault(orientHash, lf->name, BIGNUM); 
+	if(estOrient < 0) 
+	    lf->orientation = -1 * lf->orientation;
+	else if(estOrient == BIGNUM)
+	    {
+	    int dir = cDnaReadDirectionForMrna(conn, lf->name);
+	    if(dir == 3) /* Est sequenced from 3' end. */
+		lf->orientation = -1 * lf->orientation;
+	    }
+	}
+    hashFree(&orientHash);
+    }
+else /* if can't find estOrientInfo table */
+    {
+    for(lf = lfList; lf != NULL; lf = lf->next)
+	{
+	int dir = cDnaReadDirectionForMrna(conn, lf->name);
+	if(dir == 3) /* Est sequenced from 3' end. */
+	    lf->orientation = -1 * lf->orientation;
 	}
     }
 hFreeConn(&conn);
-return col;
+}
+
+void linkedFeaturesAverageDenseOrientEst(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw dense linked features items. */
+{
+if(vis == tvSquish || vis == tvPack || vis == tvFull)
+    orientEsts(tg);
+
+if (vis == tvDense)
+    linkedFeaturesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+else
+    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
 void estMethods(struct track *tg)
 /* Make track of EST methods - overrides color handler. */
 {
-tg->itemColor = estColorAndOrient;
+tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 }
 
@@ -7556,7 +7608,7 @@ registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
 /* registerTrackHandler("altGraphXCon2", altGraphXMethods ); */
-/* registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); */
+registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
