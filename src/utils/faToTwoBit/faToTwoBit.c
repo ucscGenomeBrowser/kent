@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.4 2004/06/30 22:12:57 braney Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.5 2004/09/27 05:07:32 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,14 +18,17 @@ errAbort(
   "usage:\n"
   "   faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit\n"
   "options:\n"
-  "   -noMask - Ignore lower-case masking in fa file.\n"
+  "   -noMask       - Ignore lower-case masking in fa file.\n"
+  "   -stripVersion - Strip off version number after . for genbank accessions.\n"
   );
 }
 
 boolean noMask = FALSE;
+boolean stripVersion = FALSE;
 
 static struct optionSpec options[] = {
    {"noMask", OPTION_BOOLEAN},
+   {"stripVersion", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -65,7 +68,16 @@ for (i=0; i<inFileCount; ++i)
     ZeroVar(&seq);
     while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
-	if (hashLookup(uniqHash, seq.name))
+        /* strip off version number */
+        if (stripVersion)
+            {
+            char *sp = NULL;
+            sp = strchr(seq.name,'.');
+            if (sp != NULL)
+                *sp = '\0';
+            }
+
+        if (hashLookup(uniqHash, seq.name))
 	    errAbort("Duplicate sequence name %s", seq.name);
 	hashAdd(uniqHash, seq.name, NULL);
 	if (noMask)
@@ -94,6 +106,7 @@ optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
 noMask = optionExists("noMask");
+stripVersion = optionExists("stripVersion");
 dnaUtilOpen();
 faToTwoBit(argv+1, argc-2, argv[argc-1]);
 return 0;

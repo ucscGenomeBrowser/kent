@@ -21,4 +21,7 @@ test:
 	faToTwoBit tests/input/testMask.fa tests/output/testMask.2bit
 	twoBitToFa tests/output/testMask.2bit tests/output/testMask.fa
 	diff tests/input/testMask.fa tests/output/testMask.fa
+	faToTwoBit -stripVersion tests/input/genbank.fa tests/output/genbank.2bit
+	twoBitToFa tests/output/genbank.2bit tests/output/genbank.strip.fa
+	diff tests/expected/genbank.fa tests/output/genbank.strip.fa
 #	rm -r tests/output
