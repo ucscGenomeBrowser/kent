@@ -37,7 +37,7 @@ public class TrackCheck {
       "   java TrackCheck default\n" +
       "This will use the default properties\n"
       );
-    System.exit(1);
+    System.exit(-1);
  }
 
  /** 

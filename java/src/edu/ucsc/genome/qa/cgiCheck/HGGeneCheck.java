@@ -25,11 +25,11 @@ public class HGGeneCheck {
       "HGGeneCheck - do some basic automatic tests on hgGene cgi\n" +
       "usage:\n" +
       "   java HGGeneCheck propertiesFile\n" +
-      "where properties files may contain database, table." +
+      "where properties files may contain machine, database, quick." +
       "   java HGGeneCheck default\n" +
       "This will use the default properties\n"
       );
-    System.exit(1);
+    System.exit(-1);
  }
 
  /**

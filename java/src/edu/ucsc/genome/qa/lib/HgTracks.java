@@ -128,54 +128,20 @@ public class HgTracks {
   }
 
   /**
-   * Checks each record in table to see if hgGene will
-   *   give a good page (200 code)
-   *
-   * @param dbinfo   the host, assembly, user and password object
-   * @param machine  the machine on which to run the check
-   * @param assembly the genome to check
-   * @param table    the table to check
-   * @param track    the track to check (same as table)
+   * Get random list of genes. 
    */
-   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,
-                            String track, String table, boolean quickOn) {
-
-    WebConversation wc = new WebConversation();
-
-    int count = 0;
-    boolean pb = false;
-    ArrayList kglist = QADBLibrary.getGenes(dbinfo, table, pb);
-
-    Iterator kgiter = kglist.iterator();
-    while (kgiter.hasNext()) {
-      count++;
-      if (quickOn && count > 10) return;
-      // not using all of the elements
-      KnownGene kg = (KnownGene) kgiter.next();
-      String name = kg.name;
-      String chrom = kg.chrom;
-      int txStart = kg.txStart;
-      int txEnd = kg.txEnd;
-      String url = "http://" + machine + "/cgi-bin/hgGene?db=" + assembly;
-      url = url + "&hgg_gene=" + kg.name;
-      url = url + "&hgg_chrom=" + kg.chrom;
-      url = url + "&hgg_start=" + kg.txStart;
-      url = url + "&hgg_end=" + kg.txEnd;
-      System.out.println(url);
-
-      WebRequest req = new GetMethodWebRequest(url);
-
-      try {
-        WebResponse page = wc.getResponse(req);
-        int code = page.getResponseCode();
-        if (code != 200) {
-          System.out.println("Unexpected response code " + code);
-        }
-      } catch (Exception e) {
-        System.out.println("Unexpected error");
-      }
-    }
+  public static ArrayList randomGenes(HGDBInfo dbinfo, String track, 
+  	boolean isPb, boolean isShort) {
+    Random random = new Random();
+    ArrayList genes = QADBLibrary.getGenes(dbinfo, track, isPb);
+    if (isShort)
+       genes = QALibrary.randomSubArray(genes, random, 5, true);
+    else
+       genes = QALibrary.randomSubArray(genes, random, 1000, true);
+    return genes;
   }
+ 
+
 
   /**
    * Checks each record in a table to see if browser will
@@ -194,13 +160,7 @@ public class HgTracks {
     WebConversation wc = new WebConversation();
     Random random = new Random();
 
-    boolean pb = false;
-    ArrayList kglist = QADBLibrary.getGenes(dbinfo, table, pb);
-    if (quickOn)
-       kglist = QALibrary.randomSubArray(kglist, random, 5, true);
-    else
-       kglist = QALibrary.randomSubArray(kglist, random, 1000, true);
-
+    ArrayList kglist = randomGenes(dbinfo, table, false, quickOn);
     Iterator kgiter  = kglist.iterator();
 
     // open outfiles to separate OK from errors
@@ -279,13 +239,12 @@ public class HgTracks {
    * @param assembly The genome to check
    * @param table    The table to check
    */
-   public static void pbgene(HGDBInfo dbinfo, String machine, String assembly,                            String table) {
+   public static void pbgene(HGDBInfo dbinfo, String machine, String assembly,                            String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
+    Random random = new Random();
 
-    boolean pb = true;
-    ArrayList kglist = QADBLibrary.getGenes(dbinfo, table, pb);
-
+    ArrayList kglist = randomGenes(dbinfo, table, true, quickOn);
     Iterator kgiter  = kglist.iterator();
 
     // open outfiles to separate OK from errors

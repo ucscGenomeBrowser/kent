@@ -61,6 +61,10 @@
                classpath="${build.classes}">
            <arg value="${test.quickProps}"/>
         </java>
+        <java classname="edu.ucsc.genome.qa.cgiCheck.PBGeneCheck"
+               classpath="${build.classes}">
+           <arg value="${test.quickProps}"/>
+        </java>
     </target>
 
     <target name="fullTest" depends="init"
@@ -70,6 +74,10 @@
            <arg value="${test.fullProps}"/>
         </java>
         <java classname="edu.ucsc.genome.qa.cgiCheck.HGGeneCheck"
+               classpath="${build.classes}">
+           <arg value="${test.fullProps}"/>
+        </java>
+        <java classname="edu.ucsc.genome.qa.cgiCheck.PBGeneCheck"
                classpath="${build.classes}">
            <arg value="${test.fullProps}"/>
         </java>

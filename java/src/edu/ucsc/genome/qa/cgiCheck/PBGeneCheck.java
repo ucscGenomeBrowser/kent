@@ -23,6 +23,21 @@ import java.util.Properties;
  */
 public class PBGeneCheck {
 
+ /**
+  * Print usage info and exit
+  */
+ static void usage() {
+    System.out.println(
+      "PBGeneCheck - do some basic automatic tests on pbTracks cgi\n" +
+      "usage:\n" +
+      "   java HGGeneCheck propertiesFile\n" +
+      "where properties files may contain machine, database, quick." +
+      "   java HGGeneCheck default\n" +
+      "This will use the default properties\n"
+      );
+    System.exit(-1);
+ }
+
  /** 
   * Checks all Known Genes for successful links in Proteome Browser.
   *
@@ -30,12 +45,11 @@ public class PBGeneCheck {
   public static void main(String[] args) {
 
     boolean debug = false;
+    if (args.length != 1)
+        usage();
+    TestTarget target = new TestTarget(args[0]);
 
-    String machine  = "hgwdev.cse.ucsc.edu";
-    String assembly = "hg16";
     String table    = "knownGene";
-    String errMsg   = "Sorry, cannot display";  // not used yet.  
-                                         // want to pass to QAWebLibraray.pbgene
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -44,7 +58,7 @@ public class PBGeneCheck {
     HGDBInfo metadbinfo, dbinfo; 
     try {
       metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
-      dbinfo = new HGDBInfo("localhost", assembly);
+      dbinfo = new HGDBInfo(target.machine, target.dbSpec);
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
@@ -52,40 +66,10 @@ public class PBGeneCheck {
     if (!metadbinfo.validate()) return;
 
     if (!dbinfo.validate()) {
-      System.out.println("Cannot connect to database for " + assembly);
+      System.out.println("Cannot connect to database for " + target.dbSpec);
       return;
     }
 
-    HgTracks.pbgene(dbinfo, machine, assembly, table);
-
-/*
-    try {
-      // get tracks for this assembly (read track controls from web)
-      String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
-      hgtracksURL = hgtracksURL + assembly;
-      String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
-      ArrayList trackList = 
-        HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
-      if (debug) {
-        int count2 = trackList.size();
-        System.out.println("Count of tracks found = " + count2);
-      }
-      // iterate through tracks
-      Iterator trackIter = trackList.iterator();
-      while (trackIter.hasNext()) {
-        String track = (String) trackIter.next();
-        if (debug) {
-          System.out.println("track = " + track);
-          System.out.println("table = " + table + "\n");
-        }
-        if (!track.equals(table)) continue;
-        System.out.println();
-      }
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
- */
-
-
+    HgTracks.pbgene(dbinfo, target.machine, target.dbSpec, table, target.quickOn);
   }
 }
