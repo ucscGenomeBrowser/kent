@@ -16,7 +16,7 @@ gbdb=/gbdb
 
 # location of the genbank root and files on the remote build server
 gbBuildServer=kkstore
-rsyncPort="rsh"
+rsyncPort="ssh"
 gbBuildRoot=/cluster/store5/genbank
 
 # Checking for an existing lock file, Silently exits if lock file exists
