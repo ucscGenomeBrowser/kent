@@ -1,5 +1,6 @@
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -7,6 +8,7 @@
 #include "jksql.h"
 #include "ntContig.h"
 #include "glDbRep.h"
+
 
 void usage()
 /* Explain usage and exit. */
@@ -232,6 +234,7 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 hgGoldGapGl(argv[1], argv[2], argv[3]);
