@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "obscure.h"
+#include "ra.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,12 +16,20 @@ errAbort(
   );
 }
 
+char *testRa = 
+"a alpha\n"
+"b beta\n"
+"c gamma\n"
+"abc alpha beta gamma\n"
+;
+
 void test(char *s)
 /* test - Test something. */
 {
-struct slName *list = stringToSlNames(s), *el;
-for (el = list; el != NULL; el = el->next)
-    printf("%s\n", el->name);
+struct hash *ra = raFromString(testRa);
+struct hashEl *elList = hashElListHash(ra), *el;
+for (el = elList; el != NULL; el = el->next)
+    printf("%s '%s'\n", el->name, (char*)el->val);
 }
 
 int main(int argc, char *argv[])
