@@ -949,9 +949,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 			rf = maxFlank;
 			flank->rightFlank[rf]=0;
 			}
-		    /* at Daryl's request, lower case */
-		    toLowerN(flank->leftFlank , lf);
-		    toLowerN(flank->rightFlank, rf);
+		    /* at Daryl's request, upper case */
+		    toUpperN(flank->leftFlank , lf);
+		    toUpperN(flank->rightFlank, rf);
 		    
 		    flankSize = lf+1+rf;
 		    seq = needMem(flankSize+1);
