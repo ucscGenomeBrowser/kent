@@ -15,7 +15,6 @@ type lookup sangerLinks orfName protName
 search fuzzy
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
-
 name refSeq
 type lookup sangerToRefSeq name value
 
