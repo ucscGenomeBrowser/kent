@@ -133,6 +133,16 @@ struct wigAsciiData
     struct asciiDatum *data;	/*	individual data items here */
     };
 
+struct wiggleArray
+/*	one big in-memory linear array of data	*/
+    {
+    struct wiggleArray *next;	/*	might be more than one chrom	*/
+    char *chrom;		/*	chrom name for this set of data */
+    unsigned winStart;		/*	winEnd - winStart	*/
+    unsigned winEnd;		/*	will be the length of data	*/
+    float *data;		/*	all data winStart to winEnd	*/
+    };
+
 #include "hdb.h"
 
 #define HTI_IS_WIGGLE (hti->spanField[0] !=0)
@@ -250,6 +260,7 @@ enum wigDataFetchType
 /*	bit masks to specify type of data to fetch via getData()	*/
     {
     wigFetchNoOp = 1, wigFetchAscii = 2, wigFetchBed = 4, wigFetchStats = 8,
+	wigFetchDataArray = 16,
     };
 
 struct wiggleDataStream
@@ -263,6 +274,8 @@ struct wiggleDataStream
 			/*	free the bed list results 	*/
     void (*freeStats)(struct wiggleDataStream *wDS);
 			/*	free the stats list results 	*/
+    void (*freeArray)(struct wiggleDataStream *wDS);
+			/*	free the data array results 	*/
     void (*freeConstraints)(struct wiggleDataStream *wDS);
 			/*	unset all the constraints	*/
     void (*setPositionConstraint)(struct wiggleDataStream *wDS,
@@ -279,23 +292,30 @@ struct wiggleDataStream
 			/*	output the bed list results 	*/
     void (*statsOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort);
 			/*	output the stats list results 	*/
-    void (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort);
+    void (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort,
+	boolean rawDataOut);
 			/*	output the ascii list results 	*/
     void (*sortResults)(struct wiggleDataStream *wDS);
 			/*	sort if you want to, the Outs do this too */
-    void (*getDataViaBed)(struct wiggleDataStream *wDS, char *db, char *table,
-	int operations, struct bed **bedList);
-			/*	fetch data constrained by bedList */
-    void (*getData)(struct wiggleDataStream *wDS, char *db, char *table,
-	int operations);
-			/*	fetch data from db.table */
+    unsigned long long (*getDataViaBed)(struct wiggleDataStream *wDS,
+	char *db, char *table, int operations, struct bed **bedList);
+			/*	fetch data constrained by bedList,
+ 			 *	return is number of data values found */
+    unsigned long long (*getData)(struct wiggleDataStream *wDS, char *db,
+	char *table, int operations);
+			/*	fetch data from db.table or file table,
+ 			 *	return is number of data values found */
+
     /***** PRIVATE attributes, for internal use only, look, don't touch	*/
     char *db;			/*	database name	*/
     char *tblName;		/*	the table or file name	*/
     struct lineFile *lf;	/*	file handle in case of file	*/
+    /*  data return structures	*/
     struct wigAsciiData *ascii;	/*	list of wiggle data values */
     struct bed *bed;		/*	data in bed format	*/
     struct wiggleStats *stats;	/*	list of wiggle stats	*/
+    struct wiggleArray *array;	/*	one big in-memory array of data	*/
+
     boolean isFile;		/*	TRUE == it is a file, FALSE == DB */
     boolean bedConstrained;	/*	signal to output routines */
     boolean useDataConstraint;	/*	to simplify checking if it is on */
@@ -327,5 +347,11 @@ struct wiggleDataStream
 /*	in lib/wigDataStream.c	*/
 struct wiggleDataStream *newWigDataStream();
 void destroyWigDataStream(struct wiggleDataStream **wDS);
+
+/*	verbose level guidelines	*/
+#define	VERBOSE_ALWAYS_ON	1
+#define VERBOSE_CHR_LEVEL	2
+#define VERBOSE_SQL_ROW_LEVEL	3
+#define VERBOSE_PER_VALUE_LEVEL	4
 
 #endif /* WIGGLE_H */
