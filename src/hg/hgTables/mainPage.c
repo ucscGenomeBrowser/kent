@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.1 2004/07/14 19:02:50 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.2 2004/07/14 21:07:28 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -254,7 +254,7 @@ hPrintf("<TABLE BORDER=0>\n");
 
 /* Select identifiers line. */
     {
-    hPrintf("<TR><TD><B>select identifiers:</B>\n");
+    hPrintf("<TR><TD><B>select identifiers</B> (names/accessions):\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
     hPrintf(" ");
     cgiMakeButton(hgtaDoUploadIdentifiers, "Upload List");
