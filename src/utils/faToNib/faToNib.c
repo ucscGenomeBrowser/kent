@@ -4,7 +4,7 @@
 #include "nib.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faToNib.c,v 1.5 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faToNib.c,v 1.6 2004/02/05 18:39:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,6 +39,8 @@ void faToNib(int options, char *in, char *out)
 /* faToNib - Convert from .fa to .nib format. */
 {
 struct dnaSeq *seq = faReadAllMixed(in);
+if (slCount(seq) > 1)
+    errAbort("faToNib only works on fa files containing a single sequence.");
 if (optionExists("hardMask"))
     maskLower(seq);
 nibWriteMasked(options, seq, out);
