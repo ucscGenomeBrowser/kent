@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.5 2004/03/24 02:37:33 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.6 2004/03/24 03:18:23 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -112,7 +112,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
 cgiSimpleTableFieldStart();
-cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 15, 80);
+cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 10, 80);
 cgiTableFieldEnd();
 
 /* right element of table is a nested table
@@ -146,15 +146,22 @@ printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
 printf("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
-
 printf("</FORM>\n");
 
+cgiParagraph("Results will appear below.");
+}
+
+void webDataFormats()
+{
 webNewSection("Data Formats");
 printf("<UL>");
 printf("<LI>");
 printf("For <B>Position</B> format, enter the <I>chromosome</I>, <I>start</I>, and <I>end</I> positions, in the format <B>chrN:S-E</B>\n");
 printf("<LI>");
-printf("<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\">Browser Extensible Data (BED)</A>\n");
+printf(
+    "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
+    //"<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
+    "Browser Extensible Data (BED)</A>\n");
 printf("</UL>");
 }
 
@@ -180,12 +187,13 @@ if (cartOptionalString(cart, "SubmitFile"))
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
 showPage = cartOptionalString(cart, "showPage");
+cartWebStart(cart, "Lift Genome Annotations");
+webMain(conn, err);
 
 if (showPage || userData == NULL || userData[0] == '\0')
     {
     /* display main form to enter input annotation data */
-    cartWebStart(cart, "Lift Genome Annotations");
-    webMain(conn, err);
+    webDataFormats();
     }
 else 
     {
@@ -220,30 +228,35 @@ else
     ct = liftOverBed(
                 oldTn.forCgi, chainHash, LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
                                  mapped, unmapped, &errCt);
-    cartWebStart(cart, "Lift Results");
+    webNewSection("Results");
     if (ct)
         {
         /* some records succesfully converted */
         cgiParagraph("");
-        printf("Successfully converted %d record(s):", ct);
-        printf("<A HREF=%s>Mapped File</A>\n", mappedTn.forCgi);
+        printf("Successfully converted %d record", ct);
+        printf("%s: ", ct > 1 ? "s" : "");
+        printf("<A HREF=%s TARGET=_blank>View File</A>\n", mappedTn.forCgi);
         }
     if (errCt)
         {
         /* some records not converted */
         cgiParagraph("");
-        printf("Conversion failed on %d record(s): ", errCt);
-        printf("<A HREF=%s>Unmapped File</A>\n", unmappedTn.forCgi);
+        printf("Conversion failed on %d record", errCt);
+        printf("%s: ", errCt > 1 ? "s" : "");
+        printf("<A HREF=%s TARGET=_blank>View File</A>\n",
+                         unmappedTn.forCgi);
         fclose(unmapped);
         errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
-        printf("<PRE>");
+        printf("<BLOCKQUOTE>\n");
+        printf("<PRE>\n");
         while (lineFileNext(errFile, &line, &lineSize))
             {
             puts(line);
             }
-        printf("</PRE>");
+        printf("</PRE>\n");
+        printf("</BLOCKQUOTE>\n");
         }
-
+    webDataFormats();
     /* remove temp files */
     //remove(oldTn.forCgi);
     cartRemove(cart, HGLFT_USERDATA_VAR);
