@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.637 2004/05/20 23:17:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.638 2004/05/21 00:03:43 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12651,6 +12651,7 @@ void chuckHtmlStart(char *title)
  * easier maintaince 
  */
 {
+printf("<HTML>\n<HEAD>\n");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
