@@ -12,8 +12,8 @@ endif
 cd $WEEKLYBLD
 
 echo "BRANCHNN=$BRANCHNN"
-echo "TODAY=$TODAY"
-echo "LASTWEEK=$LASTWEEK"
+echo "TODAY=$TODAY       (last tag for review)"
+echo "LASTWEEK=$LASTWEEK   (last tag for push)"
 
 if ( "$TODAY" == "" ) then
  echo "TODAY undefined."
