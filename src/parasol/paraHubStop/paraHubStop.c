@@ -2,7 +2,9 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
+#include "net.h"
+#include "paraLib.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -10,21 +12,21 @@ void usage()
 errAbort(
   "paraHubStop - Shut down paraHub daemon\n"
   "usage:\n"
-  "   paraHubStop XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
-  );
+  "   paraHubStop now\n");
 }
 
-void paraHubStop(char *XXX)
+void paraHubStop(char *now)
 /* paraHubStop - Shut down paraHub daemon. */
 {
+int hubFd = netMustConnect(getHost(), paraPort);
+sendWithSig(hubFd, "quit");
+close(hubFd);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 2)
     usage();
 paraHubStop(argv[1]);

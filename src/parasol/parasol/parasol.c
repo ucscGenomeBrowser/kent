@@ -27,33 +27,30 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "parasol - Parasol program - for launching programs in parallel on a computer cluster\n"
-  "usage:\n"
-  "   parasol add machine machineName localTempDir\n"
-  "   parasol remove machine machineName\n"
-  "   parasol [options] add job command-line\n"
-  "         options: -out=out -in=in -dir=dir -results=file\n"
-  "   parasol [options] qsub command-line\n"
-  "         options: -out=out -in=in -dir=dir -results=file\n"
-  "   parasol remove job id\n"
-  "   parasol close (close down system - kill paraHub, but not paraNodes on remote machines)\n"
-  "   parasol ping [count]\n"
-  "   parasol remove user name [jobPattern]\n"
-  "   parasol list machines\n"
-  "   parasol list jobs\n"
-  "   parasol add spoke\n"
-  "   parasol qstat\n"
-  "   parasol status\n"
+  "Parasol is the name given to the overall system for managing jobs on\n"
+  "a computer cluster and to this specific command.  This command is\n"
+  "intended primarily for system administrators.  The 'para' command\n"
+  "is the primary command for users.\n"
+  "usage in brief:\n"
+  "   parasol add machine machineName localTempDir  - add new machine to pool\n"
+  "   parasol remove machine machineName   - remove machine from pool\n"
+  "   parasol add spoke - add a new spoke daemon\n"
+  "   parasol [options] add job command-line  - add job to list\n"
+  "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
+  "   parasol remove job id - remove job of given ID\n"
+  "   parasol ping [count] - ping hub server to make sure it's alive.\n"
+  "   parasol remove jobs userName [jobPattern] - remove jobs submitted by user that\n"
+  "         match jobPattern (which may include ? and * escaped for shell)\n"
+  "   parasol list machines - list machines in pool\n"
+  "   parasol list jobs - list jobs one per line\n"
+  "   parasol status - summarize status of machines, jobs, and spoke daemons\n"
   );
 }
 
 void commandHub(char *command)
 /* Send a command to hub. */
 {
-int sigSize = strlen(paraSig);
-if (write(hubFd, paraSig, sigSize) < sigSize)
-    errnoAbort("Couldn't write signature to hub");
-netSendLongString(hubFd, command);
+mustSendWithSig(hubFd, command);
 }
 
 char *hubCommandGetReciept(char *command)
@@ -98,7 +95,6 @@ for (ref = list; ref != NULL; ref = ref->next)
     puts(line);
     }
 }
-
 
 void addMachine(char *machine, char *tempDir)
 /* Tell hub about a new machine. */
@@ -160,12 +156,6 @@ if (!isdigit(job[0]))
     errAbort("remove job requires a numerical job id");
 sprintf(buf, "%s %s", "removeJob", job);
 commandHub(buf);
-}
-
-void dehub()
-/* Tell hub to die. */
-{
-commandHub("quit");
 }
 
 struct jobInfo
@@ -296,18 +286,6 @@ void status()
 hubCommandAndPrint("status");
 }
 
-void qstat()
-/* Send qstat to hub and print result. */
-{
-hubCommandAndPrint("qstat");
-}
-
-void pstat()
-/* Send pstat to hub and print result. */
-{
-hubCommandAndPrint("pstat");
-}
-
 void ping(int count)
 /* Ping hub server given number of times. */
 {
@@ -328,13 +306,7 @@ void parasol(char *command, int argc, char *argv[])
 char *subType = argv[0];
 atexit(closeHubFd);
 reopenHub();
-if (sameString(command, "qsub"))
-    {
-    if (argc < 1)
-	usage();
-    addJob(argc, argv, TRUE);
-    }
-else if (sameString(command, "add"))
+if (sameString(command, "add"))
     {
     if (argc < 1)
         usage();
@@ -348,7 +320,7 @@ else if (sameString(command, "add"))
 	{
 	if (argc < 2)
 	    usage();
-        addJob(argc-1, argv+1, FALSE);
+        addJob(argc-1, argv+1, optionExists("verbose"));
 	}
     else if (sameString(subType, "spoke"))
         addSpoke();
@@ -363,7 +335,7 @@ else if (sameString(command, "remove"))
         removeMachine(argv[1]);
     else if (sameString(subType, "job"))
         removeJob(argv[1]);
-    else if (sameString(subType, "user"))
+    else if (sameString(subType, "jobs"))
         removeUserJobs(argv[1], argc-2, argv+2);
     else
         usage();
@@ -392,12 +364,6 @@ else if (sameString(command, "ping"))
     }
 else if (sameString(command, "status"))
     status();
-else if (sameString(command, "qstat"))
-    qstat();
-else if (sameString(command, "pstat"))
-    pstat();
-else if (sameString(command, "close"))
-    dehub();
 else
     usage();
 closeHubFd();

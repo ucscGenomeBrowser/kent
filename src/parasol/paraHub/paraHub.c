@@ -1,7 +1,7 @@
 /* paraHub - Parasol hub server.  This is the heart of the parasol system.
  * The hub daemon spawns a heartbeat daemon and a number of spoke deamons
- * on startup,  and then falls into a loop processing messages it recieves
- * on it's TCP/IP socket.  The hub daemon does not do anything time consuming
+ * on startup,  and then goes into a loop processing messages it recieves
+ * on the hub TCP/IP socket.  The hub daemon does not do anything time consuming
  * in this loop.   The main thing the hub daemon does is put jobs on the
  * job list,  move machines from the busy list to the free list,  and call
  * the 'runner' routine.
@@ -12,10 +12,9 @@
  * to the 'running' list,  the spoke from the freeSpoke to the busySpoke list, 
  * and the machine from the freeMachine to the busyMachine list.   This
  * indirection of starting jobs via a separate spoke process avoids the
- * hub daemon itself having to wait to find out if a machine is really
- * there.
+ * hub daemon itself having to wait to find out if a machine is down.
  *
- * When a spoke is done assigning a job, the spoke sense a 'recycleSpoke'
+ * When a spoke is done assigning a job, the spoke sends a 'recycleSpoke'
  * message to the hub, which puts the spoke back on the freeSpoke list.
  * Likewise when a job is done the machine running the jobs sends a 
  * 'job done' message to the hub, which puts the machine back on the
@@ -32,13 +31,12 @@
  * the rest of the time.   When the hub gets a heartbeat message it
  * does a few things:
  *     o - It calls runner to try and start some more jobs.  (Runner
- *         is also called at the end of processing a spokeFree, 
- *         jobDone, addJob or addMachine message.  Typically because
- *         of this runner won't find anything new to run, but this
+ *         is also called at the end of processing a recycleSpoke, 
+ *         jobDone, addJob or addMachine message.  Typically runner
+ *         won't find anything new to run in the heartbeat, but this
  *         is put here mostly just in case of unforseen issues.)
- *    o -  It calls graveDigger, a routine which sees if a machine
- *         on the dead list has been checked recently.  If not it
- *         dispatches a spoke to see if it's come back to life.
+ *    o -  It calls graveDigger, a routine which sees if machines
+ *         on the dead list have come back to life.
  *    o -  It calls hangman, a routine which sees if jobs the system
  *         thinks have been running for a long time are still 
  *         running on the machine they have been assigned to.
@@ -46,9 +44,9 @@
  *         and the job is reassigned. 
  *
  * This whole system depends on the hub daemon being able to finish
- * processing messages fast enough to keep the connection queue on
- * it's socket from overflowing.  Each job involves 3 messages to the
- * main socket:
+ * processing messages fast enough to keep the connection queue on the
+ * hub socket from overflowing.  Each job involves 3 messages to the
+ * hub socket:
  *     addJob - from a client to add the job to the system
  *     recycleSpoke - from the spoke after it's dispatched the job
  *     jobDone - from the compute node when the job is finished
@@ -79,7 +77,7 @@
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
 int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
-int initialSpokes = 50;		/* Number of spokes to start with. */
+int initialSpokes = 30;		/* Number of spokes to start with. */
 
 void usage()
 /* Explain usage and exit. */
@@ -588,7 +586,7 @@ void processHeartbeat()
 {
 int spokesToUse;
 time_t now = time(NULL);
-runner(50);
+runner(30);
 straightenSpokes(now);
 spokesToUse = dlCount(freeSpokes);
 if (spokesToUse > 0)

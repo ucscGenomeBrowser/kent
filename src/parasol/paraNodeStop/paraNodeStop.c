@@ -2,7 +2,6 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
 #include "net.h"
 #include "paraLib.h"
 

@@ -1,11 +1,34 @@
 #include <sys/utsname.h>
 #include "common.h"
 #include "errabort.h"
+#include "net.h"
 #include "paraLib.h"
 
 
-char paraSig[] = "0d2f070562685f29";  /* Mild security measure. */
+char paraSig[16] = "0d2f070562685f29";  /* Mild security measure. */
+int paraSigSize = ArraySize(paraSig);
 int paraPort = 0x46DC;		      /* Our port */
+
+boolean sendWithSig(int fd, char *string)
+/* Send a string with the signature prepended.  Warn 
+ * but don't abort if there's a problem.  Return TRUE
+ * on success. */
+{
+if (write(fd, paraSig, paraSigSize) < paraSigSize)
+    {
+    warn("Couldn't write signature to socket");
+    return FALSE;
+    }
+return netSendLongString(fd, string);
+}
+
+void mustSendWithSig(int fd, char *string)
+/* Send a string with the signature prepended. 
+ * Abort on failure. */
+{
+if (!sendWithSig(fd, string))
+    noWarnAbort();
+}
 
 char *getHost()
 /* Return host name. */

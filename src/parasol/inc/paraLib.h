@@ -3,6 +3,15 @@
 extern char paraSig[];  /* Mild security measure. */
 extern int paraPort;		      /* Our port */
 
+boolean sendWithSig(int fd, char *string);
+/* Send a string with the signature prepended.  Warn 
+ * but don't abort if there's a problem.  Return TRUE
+ * on success. */
+
+void mustSendWithSig(int fd, char *string);
+/* Send a string with the signature prepended. 
+ * Abort on failure. */
+
 char *getHost();
 /* Return host name. */
 

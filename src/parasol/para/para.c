@@ -7,6 +7,8 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
+#include "net.h"
+#include "paraLib.h"
 #include "jobDb.h"
 #include "jobResult.h"
 
@@ -368,6 +370,7 @@ writeBatch(db, backup);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
+#ifdef OLD
 void fillInSub(char *fileName, struct submission *sub)
 /* Fill in submission from output file produced by qsub. */
 {
@@ -384,7 +387,54 @@ if (wordCount < 3 || !sameString("your", words[0]) || !isdigit(words[2][0]))
 sub->id = cloneString(words[2]);
 lineFileClose(&lf);
 }
+#endif /* OLD */
 
+char *submitJobToHub(char *jobMessage)
+/* Submit job to hub.  Return jobId, or NULL on failure. */
+{
+int hubFd = netConnect(getHost(), paraPort);
+char *jobIdString;
+
+if (hubFd < 0)
+    return NULL;
+if (!sendWithSig(hubFd, jobMessage))
+    {
+    close(hubFd);
+    return NULL;
+    }
+jobIdString = netRecieveLongString(hubFd);
+close(hubFd);
+return jobIdString;
+}
+
+void submitJob(struct job *job, char *curDir)
+/* Attempt to submit job. */
+{
+struct dyString *cmd = dyStringNew(1024);
+struct submission *sub;
+char *jobId = NULL;
+
+dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", getlogin(), curDir, curDir, job->command);
+jobId = submitJobToHub(cmd->string);
+AllocVar(sub);
+slAddHead(&job->submissionList, sub);
+job->submissionCount += 1;
+sub->submitTime = time(NULL);
+sub->host = cloneString("n/a");
+if (jobId == NULL)
+    {
+    sub->submitError = TRUE;
+    sub->id = cloneString("n/a");
+    }
+else
+    {
+    sub->id = jobId;
+    sub->inQueue = TRUE;
+    }
+dyStringFree(&cmd);
+}
+
+#ifdef OLD
 void submitJob(struct job *job)
 /* Attempt to submit job. */
 {
@@ -395,7 +445,7 @@ char dirBuf[512];
 
 if (getcwd(dirBuf, sizeof(dirBuf)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(cmd, "parasol results=%s/para.results qsub %s > %s", 
+dyStringPrintf(cmd, "parasol results=%s/para.results -verbose add job %s > %s", 
 	dirBuf, job->command, tempName);
 err = system(cmd->string);
 AllocVar(sub);
@@ -415,6 +465,7 @@ else
     }
 dyStringFree(&cmd);
 }
+#endif /* OLD */
 
 void statusOutputChanged()
 /* Complain about status output format change and die. */
@@ -423,27 +474,39 @@ errAbort("\n%s output format changed, please update markQueuedJobs in para.c",
 	statusCommand);
 }
 
+struct slRef *hubMultilineQuery(char *query)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+struct slRef *list = NULL, *el;
+char *line;
+int hubFd = netConnect(getHost(), paraPort);
+if (hubFd > 0)
+    {
+    if (sendWithSig(hubFd, query))
+        {
+	for (;;)
+	    {
+	    line = netRecieveLongString(hubFd);
+	    if (line == NULL || line[0] == 0)
+		break;
+	    refAdd(&list, line);
+	    }
+	}
+    close(hubFd);
+    }
+slReverse(&list);
+return list;
+}
+
 int markQueuedJobs(struct jobDb *db)
 /* Mark jobs that are queued up. Return total number of jobs in queue. */
 {
-struct dyString *cmd = dyStringNew(1024);
-int err;
-struct lineFile *lf;
 struct hash *hash = newHash(0);
 struct job *job;
 struct submission *sub;
-char *line, *row[6];
-int wordCount;
 int queueSize = 0;
-
-/* Execute pstat system call. */
-printf("jobs (everybody's) in Parasol queue: ");
-fflush(stdout);
-dyStringAppend(cmd, statusCommand);
-dyStringPrintf(cmd, " > %s", tempName);
-err = system(cmd->string);
-if (err != 0)
-    errAbort("\nCouldn't execute '%s'", cmd->string);
+struct slRef *lineList = hubMultilineQuery("pstat"), *lineEl;
 
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
@@ -456,32 +519,42 @@ for (job = db->jobList; job != NULL; job = job->next)
 	}
     }
 
+/* Get job list from paraHub. */
+queueSize = slCount(lineList);
+printf("%d jobs (including everybody's) in Parasol queue.\n", queueSize);
+
 /* Read status output. */
-lf = lineFileOpen(tempName, TRUE);
-while (lineFileRow(lf, row))
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
-    char *state = row[0], *jobId = row[1], *user = row[2],
-         *exe = row[3], *ticks = row[4], *host = row[5];
-    time_t t = atol(ticks);
-    ++queueSize;
-    if ((sub = hashFindVal(hash, jobId)) != NULL)
+    int wordCount;
+    char *line = lineEl->val;
+    char *row[6];
+    wordCount = chopLine(line, row);
+    if (wordCount < 6)
+	errAbort("Expecting at least 6 words in pstat output. paraHub and para out of sync");
+    else
 	{
-	if (sameString(state, "r"))
+	char *state = row[0], *jobId = row[1], *user = row[2],
+	     *exe = row[3], *ticks = row[4], *host = row[5];
+	time_t t = atol(ticks);
+	if ((sub = hashFindVal(hash, jobId)) != NULL)
 	    {
-	    sub->running = TRUE;
-	    sub->startTime = t;
-	    sub->host = cloneString(host);
-	    }
-	else
-	    {
-	    sub->inQueue = TRUE;
+	    if (sameString(state, "r"))
+		{
+		sub->running = TRUE;
+		sub->startTime = t;
+		sub->host = cloneString(host);
+		}
+	    else
+		{
+		sub->inQueue = TRUE;
+		}
 	    }
 	}
+    freez(&lineEl->val);
     }
-lineFileClose(&lf);
+slFreeList(&lineList);
 freeHash(&hash);
-dyStringFree(&cmd);
-printf("%d\n", queueSize);
 return queueSize;
 }
 
@@ -516,6 +589,7 @@ if ((hash = *pHash) != NULL)
     hashFree(pHash);
     }
 }
+
 
 void killSubmission(struct submission *sub)
 /* Kill a submission. */
@@ -620,7 +694,10 @@ int pushCount = 0, retryCount = 0;
 int tryCount;
 boolean finished = FALSE;
 struct hash *resultsHash;
+char curDir[512];
 
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
 queueSize = markQueuedJobs(db);
 resultsHash = markRunJobStatus(db);
 
@@ -631,7 +708,7 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	if (job->submissionCount < tryCount && 
 	   (job->submissionList == NULL || needsRerun(job->submissionList)))
 	    {
-	    submitJob(job);    
+	    submitJob(job, curDir);    
 	    printf(".");
 	    fflush(stdout);
 	    ++pushCount;
