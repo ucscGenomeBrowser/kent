@@ -388,62 +388,64 @@ for (;;)
 		queryIsProt = FALSE;
 		}
 	    buf[0] = 'Y';
-	    write(connectionHandle, buf, 1);
-	    seq.size = atoi(s);
-	    seq.name = NULL;
-	    if (seq.size > 0)
+	    if (write(connectionHandle, buf, 1) == 1)
 		{
-		++queryCount;
-		seq.dna = needLargeMem(seq.size+1);
-		if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
+		seq.size = atoi(s);
+		seq.name = NULL;
+		if (seq.size > 0)
 		    {
-		    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
-		    ++warnCount;
-		    }
-		else
-		    {
-		    int maxSize = (doTrans ? maxAaSize : maxSeqSize);
+		    ++queryCount;
+		    seq.dna = needLargeMem(seq.size+1);
+		    if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
+			{
+			warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
+			++warnCount;
+			}
+		    else
+			{
+			int maxSize = (doTrans ? maxAaSize : maxSeqSize);
 
-		    seq.dna[seq.size] = 0;
-		    if (queryIsProt)
-		        {
-			seq.size = aaFilteredSize(seq.dna);
-			aaFilter(seq.dna, seq.dna);
+			seq.dna[seq.size] = 0;
+			if (queryIsProt)
+			    {
+			    seq.size = aaFilteredSize(seq.dna);
+			    aaFilter(seq.dna, seq.dna);
+			    }
+			else
+			    {
+			    seq.size = dnaFilteredSize(seq.dna);
+			    dnaFilter(seq.dna, seq.dna);
+			    }
+			if (seq.size > maxSize)
+			    {
+			    ++trimCount;
+			    seq.size = maxSize;
+			    seq.dna[maxSize] = 0;
+			    }
+			if (queryIsProt)
+			    aaCount += seq.size;
+			else
+			    baseCount += seq.size;
+			if (seqLog && logFile != NULL)
+			    {
+			    faWriteNext(logFile, "query", seq.dna, seq.size);
+			    fflush(logFile);
+			    }
+			if (doTrans)
+			   {
+			   if (queryIsProt)
+				transQuery(transGf, &seq, connectionHandle, buf);
+			   else
+				transTransQuery(transGf, &seq, 
+				    connectionHandle, buf);
+			   }
+			else
+			    dnaQuery(gf, &seq, connectionHandle, buf);
 			}
-		    else
-			{
-			seq.size = dnaFilteredSize(seq.dna);
-			dnaFilter(seq.dna, seq.dna);
-			}
-		    if (seq.size > maxSize)
-			{
-			++trimCount;
-			seq.size = maxSize;
-			seq.dna[maxSize] = 0;
-			}
-		    if (queryIsProt)
-		        aaCount += seq.size;
-		    else
-			baseCount += seq.size;
-		    if (seqLog && logFile != NULL)
-			{
-			faWriteNext(logFile, "query", seq.dna, seq.size);
-			fflush(logFile);
-			}
-		    if (doTrans)
-		       {
-		       if (queryIsProt)
-		            transQuery(transGf, &seq, connectionHandle, buf);
-		       else
-		            transTransQuery(transGf, &seq, 
-			    	connectionHandle, buf);
-		       }
-		    else
-			dnaQuery(gf, &seq, connectionHandle, buf);
+		    freez(&seq.dna);
 		    }
-		freez(&seq.dna);
+		gfSendString(connectionHandle, "end");
 		}
-	    gfSendString(connectionHandle, "end");
 	    }
 	}
     else if (sameString("files", command))

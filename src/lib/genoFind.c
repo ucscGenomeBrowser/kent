@@ -1,5 +1,6 @@
 /* genoFind - Quickly find where DNA occurs in genome.. */
 #include "common.h"
+#include <signal.h>
 #include "obscure.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -23,35 +24,65 @@ static char signature[] = "0ddf270562684f29";
 return signature;
 }
 
-void gfSendString(int sd, char *s)
+volatile boolean pipeBroke = FALSE;	/* Flag broken pipes here. */
+
+static void gfPipeHandler(int sigNum)
+/* Set broken pipe flag. */
+{
+pipeBroke = TRUE;
+}
+
+void gfCatchPipes()
+/* Set up to catch broken pipe signals. */
+{
+signal(SIGPIPE, gfPipeHandler);
+}
+
+boolean gfSendString(int sd, char *s)
 /* Send a string down a socket - length byte first. */
 {
 int length = strlen(s);
 UBYTE len;
 
+pipeBroke = FALSE;
 if (length > 255)
     errAbort("Trying to send a string longer than 255 bytes (%d bytes)", length);
 len = length;
 if (write(sd, &len, 1)<0)
-    errnoAbort("Couldn't send string to socket");
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
 if (write(sd, s, length)<0)
-    errnoAbort("Couldn't send string to socket");
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
+return TRUE;
 }
 
-void gfSendLongString(int sd, char *s)
+boolean gfSendLongString(int sd, char *s)
 /* Send a long string down socket: two bytes for length. */
 {
 unsigned length = strlen(s);
 UBYTE b[2];
 
+pipeBroke = FALSE;
 if (length >= 64*1024)
     errAbort("Trying to send a string longer than 64k bytes (%d bytes)", length);
 b[0] = (length>>8);
 b[1] = (length&0xff);
 if (write(sd, b, 2) < 0)
-    errnoAbort("Couldn't send long string to socket");
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
 if (write(sd, s, length)<0)
-    errnoAbort("Couldn't send long string to socket");
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
+return TRUE;
 }
 
 int gfReadMulti(int sd, void *vBuf, size_t size)
