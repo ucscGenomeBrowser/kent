@@ -18,7 +18,7 @@ type bed 3 +
 
 track gaze
 shortLabel Genoscope GAZE 
-longLabel Genoscope Annotatiosn Using GAZE
+longLabel Genoscope Annotations Using GAZE
 group genes
 priority 48
 visibility dense
@@ -36,7 +36,7 @@ type genePred
 
 track hoxGenes
 shortLabel HOX Genes
-longLabel HOX Genes Annotatiosns (Human Curated)
+longLabel HOX Genes Annotations (Human Curated)
 group genes
 priority 51
 visibility hide
