@@ -5142,21 +5142,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 }
-void netMethods(struct trackGroup *tg)
-/* Make track group for chain/net alignment. */
-{
-tg->loadItems = netLoad;
-tg->freeItems = netFree;
-tg->drawItems = netDraw;
-/*tg->colorShades = shadesOfGray;*/
-/*tg->itemColor = netItemColor;*/
-tg->itemName = netName;
-tg->mapItemName = netName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
-}
 
 Color pslItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
 /* Return color of mouseOrtho track item. */
@@ -9871,6 +9856,19 @@ linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
 }
 
+void netMethods(struct trackGroup *tg)
+/* Make track group for chain/net alignment. */
+{
+tg->loadItems = netLoad;
+tg->freeItems = netFree;
+tg->drawItems = netDraw;
+tg->itemName = netName;
+tg->mapItemName = netName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = tgWeirdItemStart;
+tg->itemEnd = tgWeirdItemEnd;
+}
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
 /* Fill in various function pointers in group from type field of tdb. */
@@ -9951,6 +9949,10 @@ else if (sameWord(type, "chain"))
     linkedFeaturesMethods(group);
     if (!tdb->useScore)
         group->colorShades = NULL;
+    }
+else if (sameWord(type, "netAlign"))
+    {
+    netMethods(group);
     }
 }
 
@@ -10388,10 +10390,6 @@ registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
-registerTrackHandler("blastzNetAlign", netMethods);
-registerTrackHandler("blastzNet", netMethods);
-registerTrackHandler("blastzNetOld", netMethods);
-registerTrackHandler("netAlign", netMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
