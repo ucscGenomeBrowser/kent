@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.31 2004/08/30 23:52:42 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.32 2004/08/31 18:34:47 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1672,7 +1672,7 @@ if (wDS->stats)
 
 	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
 	fprintf(fh,"<TH> Data <BR> end </TH>");
-	fprintf(fh,"<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
+	fprintf(fh,"<TH> #&nbsp;of&nbsp;Data <BR> values </TH><TH> Each&nbsp;data <BR> value&nbsp;spans <BR> #&nbsp;bases </TH>");
 	fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
 	fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
 	fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
@@ -1745,7 +1745,7 @@ if (wDS->stats)
 	}
 
     if (htmlOut)
-	fprintf(fh,"</TABLE></TD></TR></TABLE>\n");
+	fprintf(fh,"</TABLE></TD></TR></TABLE></P>\n");
     }
 else
     {
