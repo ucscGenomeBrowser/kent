@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.5 2004/03/11 21:34:25 baertsch Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.6 2004/03/11 23:35:54 kent Exp $";
 
 boolean parseOnly; 
 
@@ -352,6 +352,113 @@ slReverse(&jsList);
 return jsList;
 }
 
+struct slName *slNameCloneList(struct slName *list)
+/* Return clone of list. */
+{
+struct slName *el, *newEl, *newList = NULL;
+for (el = list; el != NULL; el = el->next)
+    {
+    newEl = slNameNew(el->name);
+    slAddHead(&newList, newEl);
+    }
+slReverse(&newList);
+return newList;
+}
+
+struct joinerSet *joinerExpand(struct joinerSet *jsList)
+/* Expand joiners that have [] in them. */
+{
+struct joinerSet *js, *nextJs, *newJs, *newList = NULL;
+
+for (js=jsList; js != NULL; js = nextJs)
+    {
+    char *startBracket, *endBracket;
+    nextJs = js->next;
+    if ((startBracket = strchr(js->name, '[')) != NULL)
+        {
+	char *dbStart,*dbEnd;
+	char *dbCommaList;
+	struct joinerField *jf, *newJf;
+	struct dyString *dy = dyStringNew(0);
+	endBracket = strchr(startBracket, ']');
+	if (endBracket == NULL)
+	    errAbort("[ without ] line %s of %s", js->lineIx, js->fileName);
+	dbCommaList = cloneStringZ(startBracket+1, endBracket - startBracket - 1);
+	dbStart = dbCommaList;
+	while (dbStart != NULL)
+	    {
+	    /* Parse out comma-separated list. */
+	    dbEnd = strchr(dbStart, ',');
+	    if (dbEnd != NULL)
+	       {
+	       *dbEnd++ = 0;
+	       if (dbEnd[0] == 0)
+	           dbEnd = NULL;
+	       }
+	    if (dbStart[0] == 0)
+	       errAbort("Empty element in comma separated list line %d of %s",
+	       	   js->lineIx, js->fileName);
+
+	    /* Make up name for new joiner. */
+	    dyStringClear(dy);
+	    dyStringAppendN(dy, js->name, startBracket-js->name);
+	    dyStringAppend(dy, dbStart);
+	    dyStringAppend(dy, endBracket+1);
+
+	    /* Allocate new joiner and fill in most data elements. */
+	    AllocVar(newJs);
+	    newJs->name = cloneString(dy->string);
+	    newJs->typeOf = cloneString(js->typeOf);
+	    newJs->external = cloneString(js->external);
+	    newJs->description = cloneString(js->description);
+	    newJs->fileName = cloneString(js->fileName);
+	    newJs->lineIx = js->lineIx;
+
+	    /* Fill in new joiner fieldList */
+	    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	        {
+		char *bs = NULL, *be = NULL;
+		/* Allocate vars and do basic fields. */
+		AllocVar(newJf);
+		newJf->dbList = slNameCloneList(jf->dbList);
+		newJf->field = cloneString(jf->field);
+		newJf->chopBefore = cloneString(jf->chopBefore);
+		newJf->chopAfter = cloneString(jf->chopAfter);
+		newJf->separator = cloneString(jf->separator);
+		newJf->indexOf = jf->indexOf;
+
+		/* Do substituted table field. */
+		if ((bs = strchr(jf->table, '[')) != NULL)
+		    be = strchr(bs, ']');
+		if (bs == NULL || be == NULL)
+		    errAbort("Missing [] in field '%s' after line %d of %s",
+		    	jf->table, js->lineIx, js->fileName);
+		dyStringClear(dy);
+		dyStringAppendN(dy, jf->table, bs - jf->table);
+		dyStringAppend(dy, dbStart);
+		dyStringAppend(dy, be+1);
+		newJf->table = cloneString(dy->string);
+
+		slAddHead(&newJs->fieldList, newJf);
+		}
+	    slReverse(&newJs->fieldList);
+	    slAddHead(&newList, newJs);
+
+	    dbStart = dbEnd;
+	    }
+	dyStringFree(&dy);
+	freez(&dbCommaList);
+	}
+    else
+        {
+	slAddHead(&newList, js);
+	}
+    }
+
+slReverse(&newList);
+return newList;
+}
+
 void joinerParsePassTwo(struct joinerSet *jsList)
 /* Go through and link together parents and children. */
 {
@@ -412,7 +519,6 @@ char fullName[512];
 int count = 0;
 
 dbList = hashElListHash(dbHash);
-uglyf("%d databases\n", slCount(dbList));
 for (db = dbList; db != NULL; db = db->next)
     {
     struct sqlConnection *conn = sqlConnect(db->name);
@@ -420,7 +526,6 @@ for (db = dbList; db != NULL; db = db->next)
     struct sqlResult *sr;
     char query[256];
     char **row;
-    uglyf("%s %d tables\n", db->name, slCount(tableList));
     for (table = tableList; table != NULL; table = table->next)
         {
 	safef(query, sizeof(query), "describe %s", table->name);
@@ -439,7 +544,6 @@ for (db = dbList; db != NULL; db = db->next)
     }
 slFreeList(&dbList);
 hashFree(&dbHash);
-uglyf("%d total fields\n", count);
 return fullHash;
 }
 
@@ -553,8 +657,8 @@ void joinerCheck(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct joinerSet *js, *jsList = joinerParsePassOne(lf);
+jsList = joinerExpand(jsList);
 joinerParsePassTwo(jsList);
-uglyf("Got %d joiners in %s\n", slCount(jsList), fileName);
 if (!parseOnly)
     joinerValidateOnDbs(jsList);
 }
