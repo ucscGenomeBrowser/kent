@@ -213,17 +213,10 @@ if (wordCount < 1)
 *retExtra = words[2];
 }
 
-void fbOptionsDb(char *db, char *track)
+void fbOptionsHti(struct hTableInfo *hti)
 /* Print out an HTML table with radio buttons for featureBits options. */
 {
-struct sqlConnection *conn;
-struct trackDb *tdb;
-struct hTableInfo *hti;
 boolean isGene;
-
-hti = hFindTableInfoDb(db, NULL, track);
-if (hti == NULL)
-    errAbort("Could not find table info for table %s", track);
 
 if (sameString("psl", hti->type))
     isGene = FALSE;
@@ -288,6 +281,16 @@ cgiMakeTextVar("fbDownBases", "200", 8);
 puts(" bases </TD></TR></TABLE>");
 }
 
+void fbOptionsDb(char *db, char *track)
+/* Print out an HTML table with radio buttons for featureBits options. */
+{
+struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s in database %s",
+	     track, db);
+fbOptionsHti(hti);
+}
+
 void fbOptions(char *track)
 /* Print out an HTML table with radio buttons for featureBits options. */
 {
@@ -323,13 +326,12 @@ else
 return(cloneString(qual));
 }
 
-struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
+	struct bed *bedList, int chromStart, int chromEnd,
 	boolean clipToWindow, boolean filterOutNoUTR)
-/* Get features in range that match sqlConstraints. */
+/* Translate a list of bed items into featureBits. */
 {
-struct hTableInfo *hti;
-struct bed *bedList = NULL, *bed;
+struct bed *bed;
 struct featureBits *fbList = NULL, *fbItem;
 char itemName[128];
 char nameBuf[512];
@@ -348,9 +350,6 @@ clipToWin = clipToWindow;
 
 trackQualifier = cloneString(trackQualifier);
 parseTrackQualifier(trackQualifier, &track, &qualifier, &extra);
-hti = hFindTableInfoDb(db, chrom, track);
-if (hti == NULL)
-    errAbort("Could not find table info for table %s", track);
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 canDoScore = (hti->scoreField[0] != 0);
@@ -402,8 +401,6 @@ else if ((doUtr5 = utr5Qualifier(qualifier, extra, &extraSize)) != FALSE)
 if (doUpAll || doEndAll)
     filterOutNoUTR = FALSE;
 
-bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
-			 sqlConstraints);
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
     if (doUp || doUpAll)
@@ -586,10 +583,34 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	}
     }
 clipToWin = oldClipToWin;
-bedFreeList(&bedList);
 freeMem(trackQualifier);
 slReverse(&fbList);
 return fbList;
+}
+
+
+struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
+/* Get features in range that match sqlConstraints. */
+{
+struct hTableInfo *hti;
+struct bed *bedList;
+struct featureBits *fbList;
+char *tQ, *track, *qualifier, *extra;
+
+tQ = cloneString(trackQualifier);
+parseTrackQualifier(tQ, &track, &qualifier, &extra);
+hti = hFindTableInfoDb(db, NULL, track);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s in database %s",
+	     track, db);
+bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
+			 sqlConstraints);
+fbList = fbFromBed(trackQualifier, hti, bedList, chromStart, chromEnd,
+		   clipToWindow, filterOutNoUTR);
+bedFreeList(&bedList);
+return(fbList);
 }
 
 
@@ -633,8 +654,21 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 
 void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
+/* Ors in features in track on chromosome into bits.  */
 {
 struct featureBits *fbList = fbGetRange(trackQualifier, chrom, 0, chromSize);
+fbOrBits(bits, chromSize, fbList, 0);
+featureBitsFreeList(&fbList);
+}
+
+void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
+	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
+/* Ors in features matching sqlConstraints in track on chromosome into bits. */
+{
+struct featureBits *fbList = fbGetRangeQuery(trackQualifier, chrom, 0,
+					     chromSize, sqlConstraints,
+					     clipToWindow, filterOutNoUTR);
 fbOrBits(bits, chromSize, fbList, 0);
 featureBitsFreeList(&fbList);
 }

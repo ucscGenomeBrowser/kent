@@ -42,9 +42,18 @@ boolean fbUnderstandTrack(char *track);
 boolean fbUnderstandTrackDb(char *db, char *track);
 /* Return TRUE if can turn track into a set of ranges or bits. */
 
+void fbOrBits(Bits *bits, int bitSize, struct featureBits *fbList,
+	int bitOffset);
+/* Or in bits.   Bits should have bitSize bits.  */
+
 void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn);
 /* Ors in features in track on chromosome into bits.  */
+
+void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
+	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR);
+/* Ors in features matching sqlConstraints in track on chromosome into bits. */
 
 void fbOptions(char *track);
 /* Print out an HTML table with radio buttons for featureBits options. */
@@ -52,8 +61,16 @@ void fbOptions(char *track);
 void fbOptionsDb(char *db, char *track);
 /* Print out an HTML table with radio buttons for featureBits options. */
 
+void fbOptionsHti(struct hTableInfo *hti);
+/* Print out an HTML table with radio buttons for featureBits options. */
+
 char *fbOptionsToQualifier();
 /* Translate CGI variable created by fbOptions() to a featureBits qualifier. */
+
+struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
+	struct bed *bedList, int chromStart, int chromEnd,
+	boolean clipToWindow, boolean filterOutNoUTR);
+/* Translate a list of bed items into featureBits. */
 
 #endif /* FEATUREBITS_H */
 
