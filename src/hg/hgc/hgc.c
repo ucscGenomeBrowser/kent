@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.658 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.659 2004/06/09 19:04:34 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4809,12 +4809,15 @@ struct dnaSeq *seq;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
+char buffer[256];
+int addp = 0;
 
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
+addp = cartUsualInt(cart, "addp",0);
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -4825,7 +4828,13 @@ if ((row = sqlNextRow(sr)) == NULL)
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-seq = hPepSeq(readName);
+if (addp == 1)
+    {
+    sprintf(buffer, "%sp",readName);
+    seq = hPepSeq(buffer);
+    }
+else
+    seq = hPepSeq(readName);
 showSomeAlignment(psl, seq, qt, 0, seq->size, NULL, 0, 0);
 }
 
@@ -13623,8 +13632,10 @@ bedPrintPos(bed, ct->fieldCount);
 void chesProtein(struct trackDb *tdb, char *itemName)
 /* Show protein to translated dna alignment for accession. */
 {
+int start = cartInt(cart, "o");
+boolean same;
 struct lineFile *lf;
-struct psl *psl;
+struct psl *psl = 0;
 enum gfType tt = gftDnaX, qt = gftProt;
 boolean isProt = 1;
 struct sqlResult *sr;
@@ -13633,34 +13644,71 @@ struct dnaSeq *seq;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
-int start;
+char buffer[256];
+char uiState[64];
+struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
+char *useName = itemName;
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
-
-start = cartInt(cart, "o");
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
-sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
-	fullTable, itemName, seqName, start);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find alignment for %s", itemName);
-psl = pslLoad(row+hasBin);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (itemName[strlen(itemName) -1 ] != 'p')
+if (hTableExists("kgMapName"))
     {
-    char buffer[256];
-    sprintf(buffer, "%sp",itemName);
-    seq = hPepSeq(buffer);
+    struct sqlResult *sr;
+    char **row;
+    sprintf(query, "select geneName from kgMapName where kgPepId = '%s'", itemName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	useName = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
     }
-else
-    seq = hPepSeq(itemName);
-showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
-//showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
-//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, psl->qName, 0, 0);
+
+cartWebStart(cart, "Human Protein %s", useName);
+sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+if (hTableExists("hg16KG"))
+    {
+    sprintf(query, "select * from hg16KG where qName = '%s'", itemName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	psl = pslLoad(row+1);
+	printf("Human Position:\n");
+	printf("<A TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s\">",
+		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, "hg16");
+	printf("%s:%d-%d</A><BR>",psl->tName,psl->tStart + 1, psl->tEnd);
+	printf("protein length: %d<BR>\n",psl->qSize);
+	}
+    sqlFreeResult(&sr);
+    }
+printf("supporting human mRNA : %s<BR>\n",itemName);
+
+slSort(&pslList, pslCmpScore);
+if (slCount(pslList) > 1)
+    printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
+printf("<TT><PRE>");
+printf("ALIGNMENT  SCORE START  END IDENTITY    LINK TO BROWSER \n");
+printf("---------------------------------------------------------------------\n");
+for (same = 1; same >= 0; same -= 1)
+    {
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	{
+	if (same ^ (psl->tStart != start))
+	    {
+	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&addp=1&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
+		hgcName(), psl->tStart, psl->qName,  psl->tName,
+		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
+	    printf("alignment</A> ");
+	    printf("%5d %5d %5d %5.1f%%      ",
+		pslScore(psl), psl->qStart+1, psl->qEnd, 
+		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1);
+	    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
+		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, database, 
+		tdb->tableName, itemName, uiState);
+	    printf("%s:%d-%d</A> <BR>",psl->tName,psl->tStart + 1, psl->tEnd);
+	    if (same)
+		printf("\n");
+	    }
+	}
+    }
 }
 
 static void doSgdOther(struct trackDb *tdb, char *item)
