@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.21 2004/02/23 18:10:36 kent Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.22 2004/03/10 20:01:05 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -76,21 +76,21 @@ static void usage()
 {
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
-    "usage: wigAsciiToBinary [-offset=N] [-binsize=N] [-dataSpan=N] \\\n"
-    "\t[-chrom=chrN] [-wibFile=<file name>] [-name=<feature name>] \\\n"
-    "\t[-verbose=2] <two column ascii data file names>\n"
+    "usage: wigAsciiToBinary [options] <file names>\n"
+    "\toptions:\n"
+    "\t<file names> - list of files to process, (use: stdin for data from pipe)\n"
     "\t-offset=N - add N to all coordinates, default 0\n"
     "\t-binsize=N - # of points per database row entry, default 1024\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
     "\t-chrom=chrN - this data is for chrN\n"
     "\t-wibFile=chrN - to name the .wib output file\n"
-    "\t-name=<feature name> - to name the feature, default chrN or\n\t\t-chrom specified\n"
-    "\t-verbose=2 - display process while underway\n"
-    "\t<file names> - list of files to process\n"
+    "\t-name=<feature name> - to name the feature, default chrN or\n"
+    "\t\t-chrom= specified\n"
+    "\t-verbose=N - display process while underway (only N=2 does something)\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
-    "Each ascii file is a two column file.  Whitespace separator\n"
-    "First column of data is a chromosome location (IN NUMERICAL ORDER !).\n"
+    "Each ascii file is a two column file.  Whitespace separated.\n"
+    "First column of data is a chromosome location, 1-relative (IN NUMERICAL ORDER).\n"
     "Second column is data value for that location, any real data value allowed."
 );
 }
