@@ -46,6 +46,7 @@
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
                 <LI><A HREF="#download1">Downloading sequence and annotation data</A>
+                <LI><A HREF="#download23">Downloading data from the UCSC DAS server</A>
                 <LI><A HREF="#download2">Download restrictions</A>
                 <LI><A HREF="#download3">Opening .fa files</A>
                 <LI><A HREF="#download4">Data differences between downloaded data and browser display</A>
@@ -113,8 +114,73 @@
 			particularly if you plan to download multiple files or files of large size. 
 			You can also download data from our 
 			<A HREF="http://genome.ucsc.edu/downloads.html">Downloads</A>
-			page. To download a specific subset of the data or to configure the output
-			format of the data, use the Table Browser.
+			page or our <A HREF="http://genome.ucsc.edu/cgi-bin/das/dsn" TARGET=_blank>DAS 
+		 	server</A>. To download a specific subset of the data or to configure the output
+			format of the data, use the <A HREF="http://genome.ucsc.edu/cgi-bin/hgText">Table 
+			Browser</A>.
+			<P>
+			For more information on using the UCSC DAS server, see 
+			<A HREF="#downloads23">Downloading data from the UCSC DAS server</A>.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download23"></A>
+<TABLE BORDER=0 WIDTH="100%">
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Downloading data from the UCSC DAS server</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"How do I download data using the UCSC DAS server?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			The UCSC DAS server provides access to genome annotation data for all current assemblies
+			featured in the Genome Browser. To view a list of the assemblies available from the
+			DAS server and their base URLs, see 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/das/dsn">http://genome.ucsc.edu/cgi-bin/das/dsn</A>.
+			<P>
+			To construct a DAS query, combine an assembly's base URL with the 
+			sequence entry point and type specifiers available for that assembly. The entry point 
+			specifies chromosome position, and the type indicates the annotation table 
+			requested. You can view the lists of entry points and types available for an assembly 
+			with requests of the form:
+<PRE>
+	http://genome.ucsc.edu/cgi-bin/das/[db_name]/entry_points
+	http://genome.ucsc.edu/cgi-bin/das/[db_name]/types
+</PRE>
+			where [db_name] is the UCSC name for the assembly, e.g. hg16, mm4.
+			<P>
+			For example, here is a query that returns all the records in the refGene table for the
+			chromosome position chr1:1-100000 on the hg16 assembly:
+<PRE>
+	<A HREF="http://genome.ucsc.edu/cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene">http://genome.ucsc.edu/cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene</A>
+</PRE>
+			For more information on DAS, see the 
+			<A HREF="http://www.biodas.org" TARGET=_blank>Biodas website</A> and the
+			<A HREF="http://www.biodas.org/documents/spec.html" TARGET=_blank>DAS specification</A>.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
