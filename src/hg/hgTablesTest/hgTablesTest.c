@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.26 2004/11/10 15:15:32 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.27 2004/11/10 16:14:24 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -496,11 +496,13 @@ if (uniqHash == NULL)
 safef(fullName, sizeof(fullName), "%s.%s", db, table);
 if (!hashLookup(uniqHash, fullName))
     {
-    struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group, 
-	    track, table, "selectTable", hgtaTable, table);
+    struct htmlPage *tablePage 
     struct htmlForm *mainForm;
 
     hashAdd(uniqHash, fullName, NULL);
+    verbose(1, "Testing %s %s %s %s %s\n", naForNull(org), db, group, track, table);
+    tablePage = quickSubmit(trackPage, org, db, group, 
+	    track, table, "selectTable", hgtaTable, table);
     if (tablePage != NULL)
 	{
 	if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
@@ -536,7 +538,6 @@ if (!hashLookup(uniqHash, fullName))
 		    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
 		    }
 		}
-	    verbose(1, "Tested %s %s %s %s %s\n", naForNull(org), db, group, track, table);
 	    }
 	htmlPageFree(&tablePage);
 	}
