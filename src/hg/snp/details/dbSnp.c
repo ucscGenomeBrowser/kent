@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.12 2004/02/22 01:05:18 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.13 2004/03/10 16:10:33 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -54,6 +54,7 @@ struct fileInfo
     char   allele2[ALLELE+1];   /* Second allele */ 
     char   seq5[FLANK+1];       /* 5' flanking sequence */
     char   seq3[FLANK+1];       /* 3' flanking sequence */
+    char   func[256];           /* functional classificaton */
     /* reconstructed observed and alternate alleles with reverse complements */
     char   observed[REGION+1];  /* Observed sequence in browser */
     char   alternate[REGION+1]; /* Alternate sequence in browser */
@@ -88,6 +89,7 @@ struct slName *el = NULL;
 char  *queryString = "select   chrom "
                      "from     chromInfo "
                      "where    chrom not like '%random' "
+/*                     "where    chrom = 'chrY' " */
                      "order by size desc";
 sr = sqlGetResult(conn, queryString);
 while ((row=sqlNextRow(sr)))
@@ -175,7 +177,7 @@ printf("Total SNPs loaded: %ld from snpMap.\n", snpMapCumul);
 return snpHash;
 }
 
-void parseInputLine(char *row[8], struct fileInfo *fi, FILE *e)
+void parseInputLine(char *row[9], struct fileInfo *fi, FILE *e)
 /* parse the observed SNP data from dbSnp*/
 {
 strcpy(fi->rsId,    row[0]);
@@ -186,6 +188,7 @@ strcpy(fi->allele1, row[4]);
 strcpy(fi->allele2, row[5]);
 strcpy(fi->seq5,    row[6]);
 strcpy(fi->seq3,    row[7]);
+strcpy(fi->func,    row[8]);
 
 /* post warnings if alleles are too long */
 if (strlen(row[4])>ALLELE) 
@@ -235,7 +238,6 @@ char iupac[]="nxbdhryumwskv";
 int  offset = strcspn(dna, iupac);
 
 strncpy(wobble, dna+offset, 1);
-
 }
 
 int getGapLen(char *allele)
@@ -395,10 +397,10 @@ void printOut(FILE *f, struct fileInfo *fi)
 /* print details of successful alignment */
 {
 addGaps(fi);
-fprintf(f,"%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",
+fprintf(f,"%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\t%s\n",
 	fi->rsId, fi->avgHet, fi->avgHetSE,
 	fi->valid, fi->allele1, fi->allele2,
-	fi->observed, fi->alternate);
+	fi->observed, fi->alternate, fi->func);
 }
 
 void getSnpDetails(char *database, char *input, char *output, char *errors)
@@ -407,7 +409,7 @@ void getSnpDetails(char *database, char *input, char *output, char *errors)
 struct lineFile  *lf = lineFileOpen(input, TRUE); /* input file */
 FILE             *f  = mustOpen(output, "w");     /* output file */
 FILE             *e  = mustOpen(errors, "w");     /* error file */
-char             *row[8]; /* number of fields in input file */
+char             *row[9]; /* number of fields in input file */
 struct hash      *snpHash = NULL; /* stores all SNPs from the database */
 unsigned long int inputSnpCount    = 0; /* snp and error counters */
 unsigned long int notFoundInDb     = 0;
@@ -431,14 +433,13 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	{
 	matchType = findMatch(fi, db->region);
 	resetGaps(fi);
-	if (matchType > smtNoMatch) /* match was found between database and file */
-	    printOut(f, fi);
-	else if (matchType == smtAlleleError)
+	printOut(f, fi);
+	if (matchType == smtAlleleError)
 	    {
 	    largeAlleles++;
 	    fprintf(e, "%s has an oversized allele (length > %d)",fi->rsId, ALLELE);
 	    }
-	else /* failed to find a match */
+	else if (matchType == smtNoMatch) /* failed to find a match */
 	    {
 	    sequenceMismatch++;
 	    printErr(fi, db->region+FLANK-(strlen(fi->seq5)), e, database);
