@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.924 2005/03/08 21:50:00 jsp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.925 2005/03/14 18:17:13 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9477,6 +9477,7 @@ registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
 registerTrackHandler("ld", ldMethods);
+registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);
