@@ -11,7 +11,7 @@ CREATE TABLE stsInfoMouseNew (
     MGIIdName varchar(255) not null,	# Marker's MGI name
     UiStsId int unsigned not null,	# Marker's UiStsId
     nameCount int unsigned not null,	# Number of alias
-    alias varchar(255) not null,	# alias, or N/A
+    alias longblob not null,		# alias, or N/A
     primer1 varchar(255) not null,	# primer1 sequence
     primer2 varchar(255) not null,	# primer2 sequence
     distance varchar(255) not null,	# Length of STS sequence
