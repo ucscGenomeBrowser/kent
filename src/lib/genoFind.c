@@ -1531,6 +1531,10 @@ struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq,
 {
 struct gfHit *hitList = NULL;
 struct gfClump *clumpList = NULL;
+int minMatch = gf->minMatch;
+
+if (seq->size < gf->tileSize * (gf->minMatch+1))
+     minMatch = 1;
 
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
@@ -1552,7 +1556,7 @@ else
 	}
     }
 cmpQuerySize = seq->size;
-clumpList = clumpHits(gf, hitList, gf->minMatch);
+clumpList = clumpHits(gf, hitList, minMatch);
 return clumpList;
 }
 
