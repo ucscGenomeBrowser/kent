@@ -15,6 +15,8 @@ int dots = 0;
 int minScore = 30;
 double minIdentity = 90;
 char *outputFormat = "psl";
+char *qType = "dna";
+char *tType = "dna";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,8 +44,14 @@ printf(
   "                 prot - protein sequence\n"
   "                 dnax - DNA sequence translated in six frames to protein\n"
   "                 rnax - DNA sequence translated in three frames to protein\n"
+  "   -prot       Synonymous with -d=prot -q=prot\n"
   "   -dots=N   Output a dot every N query sequences\n"
   "   -nohead   Suppresses psl five line header\n"
+  "   -minScore=N sets minimum score.  This is twice the matches minus the \n"
+  "               mismatches minus some sort of gap penalty.  Default is 30\n"
+  "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is\n"
+  "               90 for nucleotide searches, 25 for protein or translated\n"
+  "               protein searches.\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
@@ -51,6 +59,7 @@ printf(
   "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n", version);
+exit(-1);
 }
 
 
@@ -127,10 +136,16 @@ int main(int argc, char *argv[])
 cgiFromCommandLine(&argc, argv, FALSE);
 if (argc != 6)
     usage();
+if (cgiVarExists("prot"))
+    qType = tType = "prot";
+qType = cgiUsualString("q", qType);
+tType = cgiUsualString("t", tType);
+if (sameWord(tType, "prot") || sameWord(tType, "dnax") || sameWord(tType, "rnax"))
+    minIdentity = 25;
 minIdentity = cgiUsualDouble("minIdentity", minIdentity);
 minScore = cgiOptionalInt("minScore", minScore);
 dots = cgiOptionalInt("dots", 0);
 outputFormat = cgiUsualString("out", outputFormat);
-gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], cgiUsualString("t", "dna"), cgiUsualString("q", "dna"));
+gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);
 return 0;
 }
