@@ -6023,6 +6023,12 @@ if (sameString("fosEndPairsBad", track))
     lfLabel = "Fosmid ends";
     table = track;
     }
+if (sameString("fosEndPairsLong", track)) 
+    {
+    sprintf(title, "Location of %s using fosmid end sequences", clone);
+    lfLabel = "Fosmid ends";
+    table = track;
+    }
 
 /* Print out non-sequence info */
 cartWebStart(cart, title);
@@ -9020,11 +9026,7 @@ else if (sameWord(track, "tigrGeneIndex"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
- else if (sameWord(track, "fosEndPairs"))
-   {
-     doLinkedFeaturesSeries(track, item, tdb);
-   }
- else if (sameWord(track, "fosEndPairsBad"))
+else if ((sameWord(track, "fosEndPairs")) || (sameWord(track, "fosEndPairsBad")) || (sameWord(track, "fosEndPairsLong")))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
