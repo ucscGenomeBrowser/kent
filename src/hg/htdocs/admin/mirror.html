@@ -47,7 +47,7 @@ The following procedure provides you step-by-step instructions
 to create a mirror browser incrementally. You may choose to set up either 
 a full mirror browser or a partial one depending on your disk space and 
 needs. You are also welcome to try our <a href="#script">script</a> which 
-can help you to create a mirror site on Linux system automatically.
+can help you to create a mirror site on a Linux system automatically.
 
 <p><b> Prerequisites:</b>
 <p> To set up a full mirror browser, we recommend at a MINIMUM the following
@@ -65,7 +65,7 @@ disk partitions and sizes:
 <br><p><a NAME="script"></a><b>Sample Automated Script:</b>
 <p> We have created a script, <a href="GENOME-MIRROR.sh">GENOME-MIRROR.sh</a>,
 which should automate the following steps but remains a work in progress. 
-It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
+It has been tested only on Redhat Linux 7.2 systems, but you may find it useful.
 <br>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -84,14 +84,14 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 <UL>
 <LI><a href="#step1">Install Apache server and MySQL server</a>
 <LI><a href="#step2">Get all the html files and most of the text files</a> (1 GB)
-<LI><a href="#step3">Get the data for each individual genome assembly and installing databases </a>(70 GB)&nbsp;<B>NEW ITEMS!</B>
-<LI><a href="#step4">Obtain the /gbdb data file area</a>(165 GB)&nbsp;<B>NEW ITEMS!</B>
+<LI><a href="#step3">Get the data for each individual genome assembly and install databases </a> (70 GB)&nbsp;<B>NEW ITEMS!</B>
+<LI><a href="#step4">Obtain the /gbdb data file area</a> (165 GB)&nbsp;<B>NEW ITEMS!</B>
 <LI><a href="#step5">Set up database</a>&nbsp;<B>NEW ITEMS!</B>
 <LI><a href="#step6">Get executable files</a>
-<li><a href="#step7">Setup Hgcentral session preference table</a>&nbsp;<B>NEW ITEMS!</B>
-<li><a href="#step8">Create a $WEBROOT/trash apache user writable directory for temp files.</a>
-<li><a href="#step9">Setup HgFixed database.</a>
-<li><a href="#step10">Setup Three Protein databases.</a>&nbsp;<B>NEW ITEMS!</B>
+<li><a href="#step7">Set up Hgcentral session preference table</a>&nbsp;<B>NEW ITEMS!</B>
+<li><a href="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</a>
+<li><a href="#step9">Set up HgFixed database</a>
+<li><a href="#step10">Set up three protein databases</a>&nbsp;<B>NEW ITEMS!</B>
 </UL>
 <br><br>
 <hr>
@@ -101,11 +101,11 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 	of Apache or MySQL. If you are not familiar with the setup of Apache or MySQL, 
 	you will have to find someone at your site that is. We use a reference platform 
 	of Redhat 7.2 for all the steps described here. <br>
-<li> Find where your web pages are located. For example on a Redhat Linux
+<li> Find where your web pages are located. For example, on a Redhat Linux
 	system using a stock apache RPM, the web pages are stored in /var/www/html. 
 	We will refer to this directory as WEBROOT in this document and you should 
-	substitute your real path for WEBROOT where you see that in our writeup. But before
-	do this, you <b>MUST</b> be aware of the following: <br>
+	substitute your real path for WEBROOT whenever you see that in our write-up. But, before
+	doing this, you <b>MUST</b> be aware of the following: <br>
       <ul type="DISC"><b>
       <li> THE FOLLOWING ASSUMES YOU ARE NOT ALREADY SERVING UP DATA USING YOUR 
 	   APACHE SERVER. BEAR IN MIND THE SELECTION OF THE WEBROOT WILL OVERWRITE ANY 
@@ -113,25 +113,25 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
       </ul></b>
 
 <li> Find where your cgi-bin directory is located. It should be under
-	the parent directory of the WEBROOT directory. For example on a Redhat Linux 
+	the parent directory of the WEBROOT directory. For example, on a Redhat Linux 
 	system using a stock apache RPM, the path of the cgi-bin directory is 
 	/var/www/cgi-bin. We will refer to this directory as CGIBIN in this document 
-	and you should substitute your real path for CGIBIN where you see that.<br>
+	and you should substitute your real path for CGIBIN whenever you see that.<br>
 <li> Also find where your MySQL data is located. For example on a Redhat 
 	Linux system using stock RPM's, this is located in /var/lib/mysql. We will 
 	refer to this directory as MYSQLDATA in this document and you should substitute 
-	your real path for MYSQLDATA where you see that.<br>
+	your real path for MYSQLDATA whenever you see that.<br>
 <br></ol>
 
 <p><a NAME="step2"></a><b>2. Get all the html files and most of the
 text files (1.0 GB)</b>
 <ol type="a">
-<li> Obtain the software package rsync, which if it isn't already installed on 
-	your system, obtain from <a href="http://rsync.samba.org">http://rsync.samba.org</a>
+<li> Obtain the software package rsync. If it isn't already installed on 
+	your system, obtain it from <a href="http://rsync.samba.org">http://rsync.samba.org</a>
 <br>
-<li> We are running a rsync server but you must email us first with the hostname 
-	you will be rsyncing from so that we can allow it access. Email to 
-	<a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a>
+<li> We are running a rsync server, but you must email us first with the hostname 
+	from which you will be rsyncing so that we can allow it access. Email to 
+	<a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a>.
 <br>
 <li>After we respond to your request, do a test connection: <br> 
 <PRE>
@@ -334,7 +334,7 @@ rsync --progress -avz \
 </ol>
 
 <h4><a NAME="step5"></a>5. Set up database</h4>
-<B>Existing Mirror Sites. There are numerous changes to tables
+<B>Existing Mirror Sites: There are numerous changes to tables
 and data within these tables to support the /gbdb file storage method.
 You are advised to consider dropping and rebuilding the databases.
 If that presents a problem, contact us and we can provide detailed
