@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.117 2003/10/31 18:05:04 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.118 2003/11/22 06:11:28 daryl Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1799,6 +1799,56 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findEncodeRegions(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in encodeRegions table. */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr = NULL;
+struct dyString *query = NULL;
+char **row = NULL;
+boolean ok = FALSE;
+char *chrom = NULL;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset = 0;
+
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "ENCODE REGION %s Position", spec);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
+	slAddHead(&hgp->tableList, table);
+	}
+    if ((chrom = hgOfficialChromName(row[0])) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		 row[0], tableName); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = sqlUnsigned(row[1]) - 5000;
+    pos->chromEnd = sqlUnsigned(row[2]) + 5000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
 static boolean findOldStsPos(char *table, char *spec,
                              char **retChromName, int *retWinStart, 
                              int *retWinEnd)
@@ -3180,6 +3230,7 @@ else
     findMrnaKeys(hgp->query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
+    findEncodeRegions(query, hgp, "encodeRegions");
     findSnpPos(query, hgp, "snpTsc");
     findSnpPos(query, hgp, "snpNih");
     findAffySnpPos(query, hgp, "affyGeno");
