@@ -53,6 +53,16 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
+void printAssemblyListHtmlExtra(char *curDb, char *javascript);
+/*
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+param javascript - The javascript text for the select box
+ */
+
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */

@@ -363,6 +363,19 @@ struct dbDb *dbList = hGetIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList);
 }
 
+void printAssemblyListHtmlExtra(char *db, char *javascript)
+{
+/* Find all the assemblies that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+struct dbDb *dbList = hGetIndexedDatabases();
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+}
+
 void printBlatAssemblyListHtml(char *db)
 {
 /* Find all the assemblies that pertain to the selected genome 
