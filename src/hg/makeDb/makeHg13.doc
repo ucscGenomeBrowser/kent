@@ -217,6 +217,12 @@ LOAD REPEAT MASKS (DONE 12/4/02)
        hgLoadOut hg13 ?/*.fa.out ??/*.fa.out
 
 
+MAKE LIFTALL.LFT (DONE 12/4/02)
+
+    cd ~/oo
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
+
+
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (IN PROGRESS 12/5/02 - MATT)
 
 Create packed chromosome sequence files 
@@ -238,15 +244,6 @@ Note: for build31, Terry specially requested these files from NCBI:
   draft.finf
   predraft.finf
   extras.finf
-
-  finished.ffa.gz
-  draft.ffa.gz
-  predraft.ffa.gz
-  extras.ffa.gz
-For future builds, we should try to modify hgClonePos to just use *.finf 
-and not the *.ffa files.
-Terry unpacked the *.ffa.gz into gs.14/ffa/{fin,draft,predraft,extras}/fa/*
-using /cluster/bin/scripts/unPackffa .
      cd /cluster/store4/gs.14/build31
      jkStuff/liftGl.sh contig.gl
 DONE BELOW HERE - ABOVE IS TODO
@@ -441,7 +438,7 @@ o - Create subset of ESTs with introns and load into database.
       hgLoadPsl hg13 *.psl
 
 o - Put orientation info on ESTs and mRNAs into database:
-    Note: the cluster run requires /scratch/.../trfFa.0730/ to be in place,
+    Note: the cluster run requires /scratch/.../trfFa.1204/ to be in place,
     so this step should be run after "PREPARING SEQUENCE FOR CROSS SPECIES 
     ALIGNMENTS" below.
      ssh kk
@@ -563,54 +560,58 @@ o - Create precomputed geneBands table:
 	  >mysqy quit
       rm geneBands.txt
 
-SIMPLE REPEAT TRACK (IN PROGRESS)
+SIMPLE REPEAT TRACK (DONE 12/4/02)
 
-	# Create cluster parasol job like so:
-        ssh kk
-	mkdir -p ~/oo/bed/simpleRepeat
-	cd ~/oo/bed/simpleRepeat
-	cp ~/lastOo/bed/simpleRepeat/gsub .
-	mkdir trf
+    # Create cluster parasol job like so:
+    ssh kk
+    mkdir -p ~/oo/bed/simpleRepeat
+    cd ~/oo/bed/simpleRepeat
+    cp ~/lastOo/bed/simpleRepeat/gsub .
+    mkdir trf
 
-	# Ask the admins to push /scratch/hg/gs.14/build31/ to the cluster
-	ls -1S /scratch/hg/gs.14/build31/contig/*.fa > genome.lst
-	echo "" > dummy.list
-	gensub2 genome.lst dummy.list gsub spec
-	para create spec
-TODO	para try
-	para check
-	para push
-        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
+    # Ask the admins to push /scratch/hg/gs.14/build31/ to the cluster
+    ls -1S /scratch/hg/gs.14/build31/contig/*.fa > genome.lst
+    echo "" > dummy.list
+    gensub2 genome.lst dummy.list gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
 
-o - Load this into the database as so
-        ssh hgwdev
-	cd ~/oo/bed/simpleRepeat
-	hgLoadBed hg13 simpleRepeat simpleRepeat.bed \
-          -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Load into the database:
+    ssh hgwdev
+    cd ~/oo/bed/simpleRepeat
+    hgLoadBed hg13 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TO DO)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 12/4/02)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
     cd ~/hg13/bed/simpleRepeat
     mkdir -p trfMask
-    foreach f (trf/chr*.bed)
+    foreach f (trf/NT_*.bed)
       awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
     end
     # Lift up filtered trf output to chrom coords as well:
     cd ~/hg13
     mkdir -p bed/simpleRepeat/trfMaskChrom
     foreach c (?{,?})
-      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-        $c/lift/ordered.lst > $c/lift/oTrf.lst
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+      endif
       if (-e $c/lift/random.lst) then
         perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
            $c/lift/random.lst > $c/lift/rTrf.lst
       endif
-      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
-        jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      if (-e $c/lift/oTrf.lst) then
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
       if (-e $c/lift/rTrf.lst) then
         liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
           jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
@@ -619,16 +620,16 @@ PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TO DO)
     # Make a trfMasked version of the contigs:
     cd ~/hg13
     mkdir trfFa
-    foreach f (?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa)
+    foreach f (?{,?}/NT_*/NT_??????.fa)
       set c = $f:t:r
       maskOutFa -softAdd $f bed/simpleRepeat/trfMask/$c.bed trfFa/$c.fa.trf
     end
     # Then make sure there is enough space available on /scratch and do
     ssh kkstore
-    cp -Rp ~/hg13/trfFa /scratch/hg/hg13/trfFa.1204
+    cp -Rp ~/hg13/trfFa /scratch/hg/gs.14/build31/trfFa.1204
     # ask for binrsync, or sudo /cluster/install/utilities/updateLocal
 
-MAKE DOWNLOADABLE SEQUENCE FILES (TODO)
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE 12/4/02)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PREPARING SEQUENCE" step above.
@@ -658,7 +659,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (TODO)
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
-PREPARE CLUSTER FOR BLASTZ RUN (TODO)
+PREPARE CLUSTER FOR BLASTZ RUN (DONE 12/4/02)
 
     # This needs to be done after trf-masking and nib generation.
     ssh eieio
@@ -691,85 +692,86 @@ PREPARE CLUSTER FOR BLASTZ RUN (TODO)
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
-PRODUCING GENSCAN PREDICTIONS (TO DO)
-	mkdir -p ~/oo/bed/genscan
-	cd ~/oo/bed/genscan
-o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
+PRODUCING GENSCAN PREDICTIONS (DONE 12/5/02)
 
-        Put hard-masked contigs in
-		/cluster/store4/gs.14/build31/bed/genscan/mContigs
-	(For hg13, the .masked files were not saved during repeat masking.  
-	So the contig (.fa) files in /cluster/store4/gs.14/build31/? and ?? 
-	were processed to convert all lower case bases into N and named 
-	as *.fa.masked and placed under genscan/mContigs).
-
-                mkdir -p ~/oo/bed/genscan/mContigs
-                cd ~/oo/bed/genscan/mContigs
-                foreach f (/cluster/store3/gs.14/build31/?/*/NT_??????.fa \
-                           /cluster/store3/gs.14/build31/??/*/NT_??????.fa)
-                  set m = $f:t.masked
-                  tr 'abcdghkmnrstvwy' 'NNNNNNNNNNNNNNN' < $f > $m
-                end
-
-        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-        cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
-        big cluster, due to limitation of memory and swap space on each
-        processing node).
-                cd ~/oo/bed/genscan
-        Make 3 subdirectories for genscan to put their output files in
-                mkdir -p gtf pep subopt
-        Generate a list file, genome.list, of all the contigs
-	*that do not have pure Ns* (due to heterochromatin, unsequencable 
-        stuff) which would cause genscan to run forever.
-                rm -f genome.list
-                touch genome.list
-                foreach f ( `ls -1S ./mContigs/*.masked` )
-                  egrep '[ACGT]' $f > /dev/null
-                  if ($status == 0) echo $f >> genome.list
-                end
+    ssh eieio
+    mkdir -p ~/oo/bed/genscan
+    cd ~/oo/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir -p gtf pep subopt
+    # Generate a list file, genome.list, of all the contigs
+    # *that do not have pure Ns* (due to heterochromatin, unsequencable 
+    # stuff) which would cause genscan to run forever.
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/store4/gs.14/build31/?{,?}/NT_*/NT_??????.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
         
-	Create template file, gsub, for gensub2.  For example (3 lines file):
-                #LOOP
-                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
-                #ENDLOOP
-        Create a file containing a single line.
-                echo single > single
-        Generate job list file, jobList, for Parasol
-                gensub2 genome.list single gsub jobList
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kkr1u00
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+#LOOP    rm -f genome.list
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+    para check
+    # If there were out-of-memory problems (run "para problems"), then 
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.  In build31, these were 22/NT_011519 and 19/NT_011109.
 
-        First issue the following Parasol command:
-                para create jobList
-        Run the following command, which will try first 10 jobs from jobList
-                para try
-        Check if these 10 jobs run OK by
-                para check
-        If they have problems, debug and fix your program, template file,
-        commands, etc. and try again.  If they are OK, then issue the following
-        command, which will ask Parasol to start all the remaining jobs.  For
-	hg13, there were 1396 jobs in total.
-                para push
-        Issue either one of the following two commands to check the
-        status of the cluster and your jobs, until they are done.
-                parasol status
-                para check
-        If there were out-of-memory problems (run "para problems"), then 
-        re-run those jobs by hand but change the -window arg from 2400000
-        to 1200000.  In gs.14/build31, this was the job for 
-        mContigs/NT_011519.fa.masked .
+    # Convert these to chromosome level files as so:     
+    ssh eieio
+    cd ~/oo/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/NT*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/NT*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
 
-o - Convert these to chromosome level files as so:     
-     cd ~/oo/bed/genscan
-     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/NT*.gtf
-     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/NT*.bed > \
-       /dev/null
-     cat pep/*.pep > genscan.pep
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/oo/bed/genscan
+    ldHgGene hg13 genscan genscan.gtf
+    hgPepPred hg13 generic genscanPep genscan.pep
+    hgLoadBed hg13 genscanSubopt genscanSubopt.bed > /dev/null
 
-o - Load into the database as so:
+
+LOAD CPGISLANDS (DONE 12/4/02)
+     ssh eieio
+     mkdir -p ~/oo/bed/cpgIsland
+     cd ~/oo/bed/cpgIsland
+     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
+     # copy the tar file to the current directory
+     tar xvf cpg_dist.tar 
+     cd cpg_dist
+     gcc readseq.c cpg_lh.c -o cpglh.exe
+     cd ..
+     # cpglh.exe requires hard-masked (N) .fa's.  
+     # There may be warnings about "bad character" for IUPAC ambiguous 
+     # characters like R, S, etc.  Ignore the warnings.  
+     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
+       set fout=$f:t:r:r.cpg
+       ./cpg_dist/cpglh.exe $f > $fout
+       echo Done with $fout
+     end
+     cp ~/lastOo/bed/cpgIsland/filter.awk .
+     awk -f filter.awk chr*.cpg > cpgIsland.bed
      ssh hgwdev
-     cd ~/oo/bed/genscan
-     ldHgGene hg13 genscan genscan.gtf
-     hgPepPred hg13 generic genscanPep genscan.pep
-     hgLoadBed hg13 genscanSubopt genscanSubopt.bed > /dev/null
+     cd ~/oo/bed/cpgIsland
+     hgLoadBed hg13 cpgIsland -tab -noBin \
+       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
 
 CREATE GOLDEN TRIANGLE (todo)
@@ -1188,7 +1190,7 @@ HUMAN/MOUSE BLAT ALIGNMENTS (TO DO)
     ls -1 /scratch/hg/mm2/splitContigChunks/chunk_*.fa > mouse.lst
     # Then bundle up the human into pieces of less than 12 meg mostly:
     rm -f bigH smallH
-    foreach f (/scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf)
+    foreach f (/scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf)
       set size = `ls -l $f | awk '{print $5;}'`
       if ($size < 13000000) then
         echo $f >> smallH
@@ -1277,7 +1279,7 @@ o - Process these out of genbank flat files as so:
     Request binrysnc of /scratch/hg/mrna.132 from the admins
 
 Set up cluster run.  First make sure genome is in
-kkstore:/scratch/hg/gs.14/build31/trfFa.0730 in RepeatMasked + trf form.
+kkstore:/scratch/hg/gs.14/build31/trfFa.1204 in RepeatMasked + trf form.
 (This is probably done already in mouse alignment stage).  Also make
 sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
 
@@ -1285,7 +1287,7 @@ sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
        mkdir -p ~/oo/bed/xenoMrna
        cd ~/oo/bed/xenoMrna
        mkdir psl
-       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
        ls -1S /scratch/hg/mrna.132/xenoRna?*.fa > mrna.lst
        cp ~/hg12/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
@@ -1325,7 +1327,7 @@ Similarly do xenoEst aligments:
        mkdir xenoEst
        cd xenoEst
        mkdir psl
-       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
        cp /cluster/store1/mrna.132/xenoEst?*.fa /scratch/hg/mrna.132
        ls -1S /scratch/hg/mrna.132/xenoEst?*.fa > mrna.lst
        cp ~/hg12/bed/xenoEst/gsub .
@@ -1361,7 +1363,7 @@ o - Do fish/human alignments.
        cd blatFish
        mkdir psl
        ls -1S /scratch/hg/fish/*.fa > fish.lst
-       ls -1S /scratch/hg/gs.14/build31/trfFa.0730/*.fa.trf > human.lst
+       ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
        # Copy over gsub from previous version.
        gensub2 human.lst fish.lst gsub spec
        para create spec 
@@ -1473,35 +1475,9 @@ LOAD SNPS (TODO)
       liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
       hgLoadBed hg13 snpTsc snpTsc.bed
       hgLoadBed hg13 snpNih snpNih.bed
-     -gzip all of the big files
+     -gzip all of the big files     cp ~/lastOo/bed/cpgIsland/filter.awk .
 
-LOAD CPGISLANDS (TODO)
-     ssh eieio
-     mkdir -p ~/oo/bed/cpgIsland
-     cd ~/oo/bed/cpgIsland
-     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
-     # copy the tar file to the current directory
-     tar xvf cpg_dist.tar 
-     cd cpg_dist
-     gcc readseq.c cpg_lh.c -o cpglh.exe
-     cd ..
-     # cpglh.exe requires hard-masked (N) .fa's.  
-     # execute the following loop in tcsh to hard-mask chr*.fa and run cpglh:
-     foreach f (../../?{,?}/chr?{,?}{,_random}.fa)
-       set fout=$f:t
-       tr '[a-z]' 'N' < $f | sed -e 's/^>NNN/>chr/' > $fout
-       echo masked $fout
-       ./cpg_dist/cpglh.exe $fout > $fout.cpg
-       echo Done with $fout
-     end
-     rm chr*.fa
-     -copy filter.awk from a previous release
-     cp ~/hg12/bed/cpgIsland/filter.awk .
-     awk -f filter.awk chr*.cpg > cpgIsland.bed
-     ssh hgwdev
-     cd ~/oo/bed/cpgIsland
-     hgLoadBed hg13 cpgIsland -tab -noBin \
-       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
+     cp ~/lastOo/bed/cpgIsland/filter.awk .
 
 LOAD ENSEMBL GENES (TODO)
      cd ~/oo/bed
@@ -1692,8 +1668,8 @@ o - # ssh hgwdev
     stanToBedAndExpRecs  hg13.image.good.psl hg13.nci60.exp hg13.nci60.bed `cat epo.txt`
     hg13S -A < ../../scripts/nci60.sql
     echo "load data local infile 'hg13.nci60.bed' into table nci60" | hg13S -A
-    mkdir /cluster/store3/gs.14/build31/bed/nci60
-    mv hg13.nci60.bed /cluster/store3/gs.14/build31/bed/nci60
+    mkdir /cluster/store4/gs.14/build31/bed/nci60
+    mv hg13.nci60.bed /cluster/store4/gs.14/build31/bed/nci60
     rm *.psl 
 
 LOAD AFFYRATIO [GNF] (TO DO)
@@ -1704,9 +1680,9 @@ o - # ssh hgwdev
     mkdi20r gs.14/build31/affyGnf
     cd gs.14/build31/affyGnf
     cp /projects/compbiodata/microarray/affyGnf/sequences/HG-U95Av2_target ./
-    ls -1 /cluster/store3/gs.14/build31/trfFa.0730/ > allctg.lst
+    ls -1 /cluster/store4/gs.14/build31/trfFa.1204/ > allctg.lst
     echo "/cluster/store1/sugnet/gs.14/build31/affyGnf/HG-U95Av2_target" > affy.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.14/build31/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.14/build31/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store4/gs.14/build31/jkStuff/post.refCheck.old/11.ooc /cluster/store4/gs.14/build31/trfFa.1204/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
     # ssh kkr1u00
     para create para.spec
@@ -1715,12 +1691,12 @@ o - # ssh hgwdev
     para push
     # exit kkr1u00
     pslSort dirs hg13.affy.psl tmp psl >& pslSort.log
-    liftUp hg13.affy.lifted.psl /cluster/store3/gs.14/build31/jkStuff/liftAll.lft warn hg13.affy.psl
+    liftUp hg13.affy.lifted.psl /cluster/store4/gs.14/build31/jkStuff/liftAll.lft warn hg13.affy.psl
     pslAffySelect seqIdent=.95 basePct=.95 in=hg13.affy.lifted.psl out=hg13.affy.pAffySelect.95.95.psl
     affyPslAndAtlasToBed hg13.affy.pAffySelect.95.95.psl  /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hg13S -A </projects/compbiodata/microarray/affyGnf/browserFiles/affyRatio.sql 
     echo "load data local infile 'affyRatio.bed' into table affyRatio" | hg13S -A
-    mkdir /cluster/store3/gs.14/build31/bed/affyGnf
+    mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
 LOAD SAGE DATA (TO DO)
@@ -1778,9 +1754,9 @@ o - cd /projects/cc/hg/sugnet/uniGene
     cd  /cluster/store1/sugnet/gs.14/build31
     mkdir uniGene
     cd uniGene
-    ls -1 /cluster/store3/gs.14/build31/trfFa.0730/ > allctg.lst
+    ls -1 /cluster/store4/gs.14/build31/trfFa.1204/ > allctg.lst
     echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store3/gs.14/build31/trfFa.0730/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store4/gs.14/build31/trfFa.1204/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
     # ssh kk
     para create para.spec
@@ -1789,7 +1765,7 @@ o - cd /projects/cc/hg/sugnet/uniGene
     para check
     para push
     pslSort dirs hg13.uniGene.psl tmp psl >& pslSort.log
-    liftUp hg13.uniGene.lifted.psl /cluster/store3/gs.14/build31/jkStuff/liftAll.lft carry hg13.uniGene.psl
+    liftUp hg13.uniGene.lifted.psl /cluster/store4/gs.14/build31/jkStuff/liftAll.lft carry hg13.uniGene.psl
     pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 hg13.uniGene.lifted hg13.uniGene.lifted.pslReps.psl /dev/null
     # exit kk and use hg13.uniGene.lifted.pslReps.psl for building SAGE track.
 
@@ -1825,7 +1801,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
 
     # create psl files for each per-contig lav file
        ssh eieio
-       set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
+       set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
        cd $base
        set tbl="blastzMm2"
        foreach chrdir ($base/lav/chr*)
@@ -1856,7 +1832,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
 
     # Load tables
         ssh hgwdev
-        set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
+        set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
         cd $base/lav-xa
         hgLoadPsl hg13 *_${tbl}.psl
 
@@ -1875,7 +1851,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
+    set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
     cd $base
     mkdir -p axtChrom axtBest pslBest
     foreach chrdir (lav/chr*)
@@ -1906,7 +1882,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store3/gs.14/build31/blastz.mm2.2002-08-24"
+     set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
      cd $base/pslBest
      hgLoadPsl hg13 *.psl
     # Make /gbdb links and add them to the axtInfo table:
