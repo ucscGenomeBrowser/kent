@@ -787,8 +787,8 @@ type sample 9
 
 
 track humMusL
-shortLabel Mouse CDF
-longLabel Human/Mouse Evolutionary Mutual Information CDF (L-score)
+shortLabel Mouse EvoCons
+longLabel Human/mouse Evolutionary Conservation Score
 altColor 0,0,255
 priority 25.7
 visibility hide
