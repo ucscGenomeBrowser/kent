@@ -13,5 +13,8 @@ CREATE TABLE celeraDupPositive (
     fracMatch float not null,	# fraction of matching bases
     bpalign float not null,	# base pair alignment score
               #Indices
-    PRIMARY KEY(chrom)
+    index(chrom),
+    index(chromStart),
+    index(chromEnd)
+
 );

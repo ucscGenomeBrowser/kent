@@ -10,5 +10,7 @@ CREATE TABLE celeraCoverage (
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Source of Information
               #Indices
-    PRIMARY KEY(chrom)
+    index(chrom),
+    index(chromStart),
+    index(chromEnd)
 );
