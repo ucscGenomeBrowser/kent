@@ -232,11 +232,11 @@ if (answer != NULL)
     }
 if (sciName != NULL)
     {
-    printf("%s", sciName);
+    hPrintf("%s", sciName);
     }
 if (commonName != NULL)
     {
-    printf(" (%s)", commonName);
+    hPrintf(" (%s)", commonName);
     }
 hPrintf("<br>");
 
