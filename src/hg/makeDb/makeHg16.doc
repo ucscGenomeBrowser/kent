@@ -8107,10 +8107,11 @@ end
 
 # EXONIPHY HMR
 # (started, acs, 2004-03-23)
-
+# (redone 2004-07-01, with new version of software; have revised 
+# docs accordingly)
+# Warning: some commands here require bash shell
     ssh hgwdev
-    # (update woody binaries, if necessary -- see above)
-    # (also, make sure /cluster/bin/woody in path)
+    # (make sure /cluster/bin/phast is in path)
     mkdir /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
     cd /cluster/data/hg16/bed
     ln -s /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
@@ -8124,22 +8125,22 @@ end
     logout
     ssh kk
     cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
-    cat << EOF > doSplit
+    cat << '_EOF_' > doSplit
 #!/bin/sh
 
-WOODY=/cluster/bin/woody
+PHAST=/cluster/bin/phast
 FA_SRC=/cluster/bluearc/hg16/bed/humor
 WINDOWS=/cluster/data/hg16/bed/exoniphy.hg16mm3rn3/WINDOWS
 
 maf=$1
-prefix=`echo $maf | awk -F\/ '{print $NF}' | awk -F\. '{print $1}'` 
+prefix=`basename $maf .hmr.maf`
 chr=`echo $prefix | sed 's/chr//g ; s/_random//g'`
 mkdir -p /scratch/msa_split
-${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$prefix.fa -O hg16,mm3,rn3 -w 50000,2000 -r /scratch/msa_split/$prefix -o SS -I 1000 -d 1 -B 1000 -T 3
+${PHAST}/msa_split $maf --in-format MAF --refseq ${FA_SRC}/$prefix.fa --order hg16,mm3,rn3 --windows 50000,2000 --out-root /scratch/msa_split/$prefix --out-format SS --min-informative 1000 --between-blocks 1000 --tuple-size 3
 mkdir -p ${WINDOWS}/$chr
 cd /scratch/msa_split
 for file in `ls | egrep -w ${prefix}` ; do gzip -c $file > ${WINDOWS}/$chr/$file.gz ; rm $file ; done
-EOF
+_EOF_
     # << this line makes emacs coloring happy
 
     chmod +x doSplit
@@ -8151,47 +8152,49 @@ EOF
     # etc ...   (run cluster job)
 
 
-    # now set up cluster job for exoniphy.  Use phylo-HMMs estimated
-    # for RECOMB '04 paper.  (below requires bash shell)
-    TRAIN=/cluster/home/acs/RECOMB2004/TRAIN
-    TEST=/cluster/home/acs/RECOMB2004/TEST-NEW
-    OPTIONS="${TEST}/models-icnc-physpldg-gc1,${TEST}/models-icnc-physpldg-gc2,${TEST}/models-icnc-physpldg-gc3,${TEST}/models-icnc-physpldg-gc4,${TEST}/models-icnc-physpldg-gc5 -c ${TRAIN}/exons-newsplice.cm -H ${TRAIN}/exons-hmr-indel-spl_tweak.hmm -f -q -U -W 10,11,20,21,27,28,29,30,start,stop -b cds -V icnc -I cds,background,icnc,5\'splice,3\'splice,prestart -i SS -D 0.4,0.45,0.5,0.55 -X 0.036"
-    # FIXME: next time add -S  (log odds scores)
-    cat << EOF > doLabel
+    # now set up cluster job for exoniphy.  
+    cat << '_EOF_' > doExoniphy
 #!/bin/bash
-zcat \$1 | /cluster/bin/woody/label -m - -d $OPTIONS \${*:2}
-EOF
+zcat $1 | /cluster/bin/phast/exoniphy - ${*:3} > $2
+_EOF_
     # << this line makes emacs coloring happy
-    chmod +x doLabel
+    chmod +x doExoniphy
+
     rm -f jobs.lst
     for dir in WINDOWS/* ; do
-	chr=`echo $dir | awk -F\/ '{print $NF}'`
-	mkdir -p OUTPUT/$chr
-	find OUTPUT/$chr -name "*.bed" -exec rm {} \; 
-	find OUTPUT/$chr -name "*.gff" -exec rm {} \;
-	for file in `ls $dir | sort -n -t\. +1`; do 
+	chrNo=`basename $dir`
+	mkdir -p OUTPUT/$chrNo
+	for file in $dir/* ; do 
 	    base=`basename $file .ss.gz`
-	    prefix=`echo $base | awk -F\. '{print $1}'`
-	    echo "doLabel WINDOWS/$chr/$file -o OUTPUT/$chr/$base -s $prefix " >> jobs.lst 
+	    chrStr=`echo $base | awk -F\. '{print $1}'`
+	    echo "doExoniphy $file OUTPUT/$chrNo/$base.gff --seqname $chrStr --idpref $base --score --indels --quiet " >> jobs.lst 
 	done 
     done
+
+#[acs@kk exoniphy.hg16mm3rn3]$ wc jobs.lst
+#  59175  591750 7179445 jobs.lst
     
     para create jobs.lst
     # etc... (run cluster job)
     logout
 
+#
+#
+#
+
     # create track
     ssh hgwdev
     cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
-    rm -f all.bed
     for dir in OUTPUT/* ; do 
-	    echo "cleaning up $dir..."
-	    find $dir -name "*.bed" -size 0 -exec rm {} \; 
-	    echo "getting predictions from $dir..."
-	    for file in `ls $dir | grep bed | sort -t\. -k1,1 -k2,2n`; do cat $dir/$file >> all.bed ; done 
+	    chrNo=`basename $dir`
+	    echo $chrNo
+	    find $dir -name "*.gff" | grep -v random > files
+	    if [ -s files ] ; then cat `cat files` | refeature - --unique --sort --include-only CDS,start_codon,stop_codon > chr$chrNo.gff ; fi
+	    find $dir -name "*.gff" | grep random > files
+	    if [ -s files ] ; then cat `cat files` | refeature - --unique --sort --include-only CDS,start_codon,stop_codon > chr${chrNo}_random.gff ; fi
     done
 
-    hgLoadBed hg16 exoniphy all.bed 
+    ldHgGene -gtf -frame hg16 exoniphy chr*.gff
 #track exoniphy
 #shortLabel Exoniphy 
 #longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
@@ -8199,8 +8202,7 @@ EOF
 #priority 50.9
 #visibility hide
 #color 173,17,162
-#exonArrows on
-#type bed 12
+#type genePred
 
 #
 # Load tfbsCons track DONE 2004-03-31 braney
