@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.5 2004/07/17 05:25:58 kate Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.6 2004/11/16 15:51:34 kent Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -159,8 +159,6 @@ struct dyString *faLabel = newDyString(0);
 char *name = out->name;
 
 /* Create fasta header with position, possibly empty name, and upper cased primers with position optionally hyperlinked. */
-if (name == NULL)
-    name = "";
 touppers(rrPrimer);
 touppers(ffPrimer);
 if (url != NULL)
@@ -173,8 +171,10 @@ dyStringPrintf(faLabel, "%s:%d%c%d",
 	out->seqName, out->fPos+1, out->strand, out->rPos);
 if (url != NULL)
     dyStringAppend(faLabel, "</A>");
-dyStringPrintf(faLabel, " %s %s %s",
-	name, ffPrimer, rrPrimer);
+if (name != NULL)
+    dyStringPrintf(faLabel, " %s", name);
+dyStringPrintf(faLabel, " %dbp %s %s",
+	out->rPos - out->fPos, ffPrimer, rrPrimer);
 
 /* Flip reverse primer to be in same direction and case as sequence. */
 reverseComplement(rrPrimer, rPrimerSize);
