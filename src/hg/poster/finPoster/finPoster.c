@@ -27,8 +27,9 @@
 #include "netAlign.h"
 #include "hCommon.h"
 #include "axt.h"
+#include "bits.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.12 2003/12/16 17:20:22 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.13 2003/12/21 06:35:23 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -1411,6 +1412,30 @@ freeMem(winSnpBases);
 }
 #endif /* OLD */
 
+Bits *gapBits(char *chrom, int chromSize, struct sqlConnection *conn)
+/* Load up bit field with 1's where there are gaps. */
+{
+Bits *bits = bitAlloc(chromSize);
+char query[256], **row;
+struct sqlResult *sr;
+
+safef(query, sizeof(query), "select chromStart,chromEnd from %s_gap", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int s = sqlUnsigned(row[0]);
+    int e = sqlUnsigned(row[1]);
+    int size;
+    if (e > chromSize) 
+        e = chromSize;
+    size = e - s;
+    if (size > 0)
+        bitSetRange(bits, s, size);
+    }
+sqlFreeResult(&sr);
+return bits;
+}
+
 void getSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
 /* Put out SNP density info. */
 {
@@ -1421,7 +1446,8 @@ double scale = 1.0/spanVal;
 char query[512], **row;
 struct sqlResult *sr;
 double p,q,val;
-int start,end;
+int start,end, size;
+Bits *gaps = gapBits(chrom, chromSize, conn);
 
 safef(query, sizeof(query),
     "select binStart,binEnd,snpCount,NQSbases from snpHet "
@@ -1430,19 +1456,26 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlUnsigned(row[0])+450000;
-    end = sqlUnsigned(row[1]);
-    p = atof(row[2]);
-    q = atof(row[3]);
-    if (q > 0)
-       {
-       val = ((p/q) - minVal) * scale;
-       if (val < 0) val = 0;
-       if (val > 1) val = 1;
-       printTabNum(f, cg, chrom, start, start+100000, 
-		    "SNP", "wiggle", 128, 0, 128, val);
-       }
+    end = start + 100000;
+    if (end > chromSize)
+        end = chromSize;
+    size = end - start;
+    if (size > 0 && bitCountRange(gaps, start, size) < size*0.5)
+	{
+	p = atof(row[2]);
+	q = atof(row[3]);
+	if (q > 10000)
+	   {
+	   val = ((p/q) - minVal) * scale;
+	   if (val < 0) val = 0;
+	   if (val > 1) val = 1;
+	   printTabNum(f, cg, chrom, start, end, 
+			"SNP", "wiggle", 128, 0, 128, val);
+	   }
+	}
     }
 sqlFreeResult(&sr);
+bitFree(&gaps);
 }
 
 struct wigglePos
