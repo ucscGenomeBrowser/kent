@@ -1999,8 +1999,8 @@ void chuckHtmlStart(char *title)
  */
 {
 printf("Content-Type: text/html\n\n<HTML><HEAD>\n");
-printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://www.cse.ucsc.edu/~sugnet/sugnetStyle.css\" title=\"Chuck Style\">\n");
-printf("<title>%s</title>\n</head><body>",title);
+printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
+printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
 
 struct rgbColor getColorForExprBed(float val, float max, boolean RG_COLOR_SCHEME)
@@ -2087,6 +2087,24 @@ for(i = 0; i < length; i++)
 printf("</table>\n");
 }
 
+void printRosettaReference() 
+{
+puts(
+     "<table border=0 width=600><tr><td>\n"
+     "<p>Expression data from <a href=\"http://www.rii.com\">Rosetta Inpharmatics</a>. "
+     "See the paper \"<a href=\"http://www.rii.com/tech/pubs/nature_shoemaker.htm\"> "
+     "Experimental Annotation of the Human Henome Using Microarray Technology</a>\" "
+     "[<a href=\"http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract\">medline</a>] "
+     "<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for "
+     "each exon as described by the Sanger center for the October 2000 draft of the genome. "
+     "Exons are labeled according whether they are predicted (pe) or true (te) exons, the "
+     "relative position in the genome, and the contig name. Please note that as sometimes "
+     "the predicted exons overlap experimentally verified exons there may appear to be more " 
+     "features here than on the browser page, but this is not case. </p><br>\n"
+     "</td></tr></table>\n"
+     );
+}
+
 void exprBedPrintTable(struct exprBed *expList)
 /* prints out a table from the data present in the exprBed */
 {
@@ -2138,9 +2156,13 @@ char **row;
 char query[256];
 struct exprBed *expList=NULL, *exp=NULL;
 char *table = "exprBed";
-chuckHtmlStart("Expression Data Requested");
-printf("<h2>Expression Data Requested</h2>\n");
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+chuckHtmlStart("Rosetta Expression Data Requested");
+
+     
+printf("<h2>Rosetta Expression Data Requested</h2>\n");
+printRosettaReference();
+sprintf(query, 
+	"select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u order by chromStart",
 	table, seqName, winEnd, winStart);
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
