@@ -5,9 +5,10 @@
 #ifndef SAMPLE_H
 #define SAMPLE_H
 
-#ifndef JKSQL_H
+#ifndef JKSQL_H 
 #include "jksql.h"
 #endif 
+
 
 struct sample
 /* Any track that has samples to display as y-values (first 6 fields are bed6) */
@@ -21,7 +22,7 @@ struct sample
     char strand[3];	/* # + or - */
     unsigned sampleCount;	/* number of samples total */
     unsigned *samplePosition;	/* bases relative to chromStart (x-values) */
-    unsigned *sampleHeight;	/* the height each pixel is drawn to [0,1000] */
+    int *sampleHeight;	/* the height each pixel is drawn to [0,1000] */
     };
 
 struct sample *sampleLoad(char **row);
@@ -57,6 +58,8 @@ void sampleOutput(struct sample *el, FILE *f, char sep, char lastSep);
 
 #define sampleCommaOut(el,f) sampleOutput(el,f,',',',');
 /* Print out sample as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* SAMPLE_H */
 
