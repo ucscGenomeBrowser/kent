@@ -310,4 +310,22 @@ char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
 struct slName *sqlRandomSample(char *db, char *table, char *field, int count);
 /* Get random sample from database. */
 
+struct sqlFieldInfo
+/* information about fields of a table; free with sqlFieldInfoFreeList */
+{
+    struct sqlFieldInfo *next;
+    char *field;          /* name of field */
+    char *type;           /* type of field */
+    boolean allowsNull;   /* can the field be NULL? */
+    char *key;            /* key information */
+    char *defaultVal;     /* default value */
+    char *extra;          /* extra info */
+};
+
+struct sqlFieldInfo *sqlFieldInfoGet(struct sqlConnection *conn, char *table);
+/* get a list of objects describing the fields of a table */
+
+void sqlFieldInfoFreeList(struct sqlFieldInfo **fiListPtr);
+/* Free a list of sqlFieldInfo objects */
+
 #endif /* JKSQL_H */
