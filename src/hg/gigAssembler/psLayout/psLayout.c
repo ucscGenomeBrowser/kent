@@ -19,7 +19,7 @@
 #include "cheapcgi.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: psLayout.c,v 1.9 2003/07/22 16:31:25 kent Exp $";
+static char const rcsid[] = "$Id: psLayout.c,v 1.10 2005/02/23 05:29:22 jill Exp $";
 
 /* Variables that can be set by command line options. */
 int minMatch = 4;
@@ -70,9 +70,9 @@ errAbort("psLayout - generate alignments for contig layout programs.\n"
 	 "        sequence in them should be no more than about 3 megabases.\n"
 	 "    type - either the word 'mRNA' 'genomic' 'g2g' or 'asm'.\n"
 	 "        mRNA - allows introns\n"
-	 "        genomic - no introns. Finds matches of about 94% or better\n"
-	 "        g2g - no introns. Finds matches of about 98% or better\n"
-	 "        asm - no introns. Matches 98% or better. Skips self alignments\n"
+	 "        genomic - no introns. Finds matches of about 94%% or better\n"
+	 "        g2g - no introns. Finds matches of about 98%% or better\n"
+	 "        asm - no introns. Matches 98%% or better. Skips self alignments\n"
 	 "    ignore.ooc - A list of overused tiles, typically 10.ooc. Can be 'none'.\n"
 	 "    outputFile - Where to put the alignments\n"
 	 "    noHead - if the word 'noHead' is present, this will suppress the header\n"
