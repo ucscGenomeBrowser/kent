@@ -5,7 +5,7 @@ O = geneStarts.o
 
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = /cse/guests/kent/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 
 geneStarts: $(O)

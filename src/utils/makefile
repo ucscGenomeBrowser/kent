@@ -43,7 +43,6 @@ DIRS = \
 	countChars \
 	convolve \
 	detab \
-	dnsInfo \
 	endsInLf \
 	faCmp \
 	faCount \
@@ -99,4 +98,5 @@ BAD_DIRS= \
 	geneStarts \
 	jimgrep \
 	jkShell \
+	dnsInfo \
 	cCp

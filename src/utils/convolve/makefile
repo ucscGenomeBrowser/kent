@@ -1,8 +1,8 @@
 include ../../inc/common.mk
 
-L = -lm ${MYSQLLIBS}
+L = -lm 
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 all::	convolve
 
