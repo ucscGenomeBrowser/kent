@@ -1489,6 +1489,15 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
+track phastConsTopPaper
+shortLabel phastCons Top
+longLabel Top-Scoring PhastCons Elements (for paper)
+group compGeno
+priority 191.2
+visibility hide
+color 0,100,0
+type bed 5 .
+
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
@@ -1870,3 +1879,9 @@ searchPriority 25
 searchTable ECgene
 searchType genePred
 searchPriority 50
+
+searchTable phastConsTopPaper
+searchType bed
+searchPriority 50
+termRegex pc[a-z][a-z].[[:alnum:]]+
+
