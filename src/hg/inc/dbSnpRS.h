@@ -17,10 +17,10 @@ struct dbSnpRS
     float avHet;	/* the average heterozygosity from all observations */
     float avHetSE;	/* the Standard Error for the average heterozygosity from all observations */
     char *valid;	/* the validation status of the SNP */
-    char  allele1[2];	/* the base of the first allele */
-    char  allele2[2];	/* the base of the second allele */
-    char *assembly;	/* the sequence in the ucsc assembly */
-    char *alternate;	/* the sequence of the alternate allele */
+    char *allele1;	/* the assembly allele */
+    char *allele2;	/* the alternate allele */
+    char *assembly;	/* the sequence in the ucsc assembly (incl. flank) */
+    char *alternate;	/* the sequence of the alternate allele (incl. flank) */
     };
 
 void dbSnpRSStaticLoad(char **row, struct dbSnpRS *ret);
