@@ -14,14 +14,16 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 11;
+int version = 13;
 int maxSeqSize = 20000;
 int maxAaSize = 6000;
 
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
 boolean doTrans = FALSE;	/* Do translation? */
+boolean allowOneMismatch = FALSE; 
 int repMatch = 1024;
+int maxGap = gfMaxGap;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,10 +47,12 @@ errAbort(
   "To get input file list\n"
   "   gfServer files host port\n"
   "Options:\n"
-  "   -tileSize=N size of n-mers to index.  Default is 12 for nucleotides, 4 for\n"
+  "   -tileSize=N size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "               proteins (or translated nucleotides).\n"
   "   -minMatch=N Number of n-mer matches that trigger detailed alignment\n"
-  "               Default is 3.\n"
+  "               Default is 2 for nucleotides, 3 for protiens.\n"
+  "   -maxGap=N   Number of insertions or deletions allowed between n-mers.\n"
+  "               Default is 2 for nucleotides, 0 for protiens.\n"
   "   -trans  Translate database to protein in 6 frames.  Note: it is best\n"
   "           to run this on RepeatMasked data in this case."
   );
@@ -67,7 +71,8 @@ int hitCount = 0, clumpCount = 0, oneHit;
 if (doTrans)
     errAbort("Don't support translated direct stuff currently, sorry");
 
-gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, repMatch, FALSE);
+gfIndexNibs(nibCount, nibFiles, minMatch, maxGap, tileSize, repMatch, FALSE,
+	allowOneMismatch);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
@@ -142,7 +147,7 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, FILE *logFile,
 {
 struct gfClump *clumpList = NULL, *clump;
 int limit = 100;
-int clumpCount = 0, hitCount;
+int clumpCount = 0, hitCount = -1;
 struct lm *lm = lmInit(0);
 
 clumpList = gfFindClumps(gf, seq, lm, &hitCount);
@@ -287,12 +292,12 @@ if (doTrans)
     {
     logIt("setting up translated index\n");
     gfIndexTransNibs(transGf, nibCount, nibFiles, 
-    	minMatch, gfMaxGap, tileSize, repMatch, NULL);
+    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch);
     }
 else
     {
     gf = gfIndexNibs(nibCount, nibFiles, minMatch, 
-    	gfMaxGap, tileSize, repMatch, NULL);
+    	maxGap, tileSize, repMatch, NULL, allowOneMismatch);
     }
 logIt("indexing complete\n");
 
@@ -327,6 +332,14 @@ for (;;)
 	sprintf(buf, "version %d", version);
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "host %s", hostName);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "port %s", portName);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "tileSize %d", tileSize);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "minMatch %d", minMatch);
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "requests %ld", queryCount);
 	gfSendString(connectionHandle, buf);
@@ -384,7 +397,7 @@ for (;;)
 		    }
 		else
 		    {
-		    int maxSize = (queryIsProt ? maxAaSize : maxSeqSize);
+		    int maxSize = (doTrans ? maxAaSize : maxSeqSize);
 
 		    seq.dna[seq.size] = 0;
 		    if (queryIsProt)
@@ -601,12 +614,10 @@ if (cgiBoolean("trans"))
     {
     uglyf("Do trans\n");
     doTrans = TRUE;
-#ifdef SOMETIMES
-    tileSize = 5;
-    repMatch = 2048;
-#endif /* SOMETIMES */
     tileSize = 4;
-    repMatch = 30000;
+    minMatch = 3;
+    maxGap = 0;
+    repMatch = gfPepMaxTileUse;
     }
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
