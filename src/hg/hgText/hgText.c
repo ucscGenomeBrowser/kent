@@ -145,7 +145,7 @@ int outputTypeNonPosMenuSize = 3;
 #define getSequencePhase    "Get sequence"
 #define getBedPhase         "Get BED"
 #define intersectOptionsPhase "Intersect Results..."
-#define histPhase           "Get Histogram"
+#define histPhase           "Get histogram"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
 
@@ -627,6 +627,15 @@ static boolean existsAndEqual(char *var, char *value)
 /* returns true is the given CGI var exists and equals value */
 {
 if (cgiOptionalString(var) != 0 && sameString(cgiOptionalString(var), value))
+    return TRUE;
+else
+    return FALSE;
+}
+
+static boolean existsAndStartsWith(char *var, char *value)
+/* returns true is the given CGI var exists and starts with value */
+{
+if (cgiOptionalString(var) != 0 && startsWith(value, cgiOptionalString(var)))
     return TRUE;
 else
     return FALSE;
@@ -3151,7 +3160,6 @@ cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
-cgiMakeHiddenVar("phase", histPhase);
 printf("<H4> Fields of %s: </H4>\n", table);
 puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH>&nbsp;</TH> </TR>");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3160,8 +3168,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	! sameString(row[1], "longblob"))
 	{
-	snprintf(button, sizeof(button), "Get histogram for %s", row[0]);
-	cgiMakeButton("outputType", button);
+	snprintf(button, sizeof(button), "%s for %s", histPhase, row[0]);
+	cgiMakeButton("phase", button);
 	}
     puts("</TD> </TR>\n");
     }
@@ -3846,7 +3854,7 @@ char *constraints;
 char *table = getTableName();
 char *db = getTableDb();
 struct hTableInfo *hti = getHti(db, table);
-char *outputType = cgiString("outputType");
+char *phase = cgiString("phase");
 char *field;
 int count;
 int maxFreq, freq;
@@ -3855,9 +3863,9 @@ double scale;
 
 webStart(cart, "Table Browser: %s: %s", freezeName, histPhase);
 checkTableExists(fullTableName);
-count = chopLine(outputType, words);
+count = chopLine(phase, words);
 if (count < 4)
-    errAbort("doGetHistogram: CGI var outputType should be of the form \"Get histogram for XXXX\" where XXXX is a valid field name");
+    errAbort("doGetHistogram: CGI var phase should be of the form \"%s for XXXX\" where XXXX is a valid field name", histPhase);
 field = words[3];
 if (sameString(customTrackPseudoDb, db))
     {
@@ -4070,7 +4078,7 @@ else
 	doGetStats();
     else if (existsAndEqual("phase", intersectOptionsPhase))
 	doIntersectOptions();
-    else if (existsAndEqual("phase", histPhase))
+    else if (existsAndStartsWith("phase", histPhase))
 	doGetHistogram();
     else
 	webAbort("Table Browser: CGI option error",
