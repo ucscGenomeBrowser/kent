@@ -667,12 +667,12 @@ static void ssFindBest(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 int count = ffAliCount(ffList);
 if (count >= 10)
     {
-    return ssFindBestBig(ffList, qSeq, tSeq, stringency, isProt, t3List,
+    ssFindBestBig(ffList, qSeq, tSeq, stringency, isProt, t3List,
     	retBestAli, retScore, retLeftovers);
     }
 else
     {
-    return ssFindBestSmall(ffList, qSeq, tSeq, stringency, isProt, t3List,
+    ssFindBestSmall(ffList, qSeq, tSeq, stringency, isProt, t3List,
     	retBestAli, retScore, retLeftovers);
     }
 }
