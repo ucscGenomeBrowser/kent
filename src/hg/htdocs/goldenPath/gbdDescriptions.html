@@ -93,6 +93,9 @@ format description of their fields.</P>
   href="#PslInfo">chrN_blastzCe1</A> 
   - Blastz alignments of Jul 2002 C. briggsae (cb1) vs. May 2003 C. elegans (ce1)
   <LI><A 
+  href="#PslInfo">chrN_blastzCe2</A> 
+  - Blastz alignments of C. briggsae (cb1) vs. C. elegans (ce2)
+  <LI><A 
   href="#PslInfo">chrN_blastzMm2</A> 
   - Blastz alignments of Feb. 2002 mouse (mm2) vs. human
   <LI><A 
@@ -126,7 +129,10 @@ format description of their fields.</P>
   - Translated BLAT alignments of <em>Takifugu rubripes</em> assembly fr1 against the current genome</LI>
   <LI><A 
   href="#PslInfo">chrN_blatFugu</A> 
-  - Translated BLAT alignments of <em>Takifugu rubripes</em> against the human or mouse draft genome</LI>
+  - Translated BLAT alignments of <em>Takifugu rubripes</em> against the current genome</LI>
+  <LI><A 
+  href="#PslInfo">chrN_blatHg16</A> 
+  - Translated BLAT alignments of human genome (hg16) vs. current genome</LI>
   <LI><A 
   href="#PslInfo">chrN_blatHuman</A> 
   - Translated BLAT alignments of human genome vs. mouse genome</LI>
@@ -138,16 +144,34 @@ format description of their fields.</P>
   - Translated BLAT mouse alignments.  (Dec 2001 and later)
   <LI><A 
   href="#Chain">chrN_cb1Chain</A> 
-  - Summary info about chain of C. briggsae alignments </LI>
+  - Summary info about chain of C. briggsae (cb1) alignments </LI>
   <LI><A 
   href="#ChainGap">chrN_cb1ChainLink</A> 
-  - Alignment block in C. briggsae chain </LI>
+  - Alignment block in C. briggsae (cb1) chain </LI>
   <LI><A 
   href="#Chain">chrN_ce1Chain</A> 
-  - Summary info about chain of C. elegans alignments </LI>
+  - Summary info about chain of C. elegans (ce1 assembly) alignments </LI>
   <LI><A 
   href="#ChainGap">chrN_ce1ChainLink</A> 
-  - Alignment block in C. elegans chain </LI>
+  - Alignment block in C. elegans (ce1 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_ce2Chain</A> 
+  - Summary info about chain of C. elegans (ce2 assembly) alignments </LI>
+  <LI><A 
+  href="#Chain">chrN_chainCe2Link</A> 
+  - Alignment block in C. elegans (ce2 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainCb1</A> 
+  - Summary info about chain of C. briggsae (cb1 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainCb1Link</A> 
+  - Alignment block in C. briggsae (cb1 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainDp1</A> 
+  - Summary info about chain of D. pseudoobscura (dp1 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainDp1Link</A> 
+  - Alignment block in D. pseudoobscura (dp1 assembly) chain </LI>
   <LI><A 
   href="#Chain">chrN_chainFr1</A> 
   - Summary info about chain of Fugu (fr1 assembly) alignments</LI>
@@ -155,14 +179,20 @@ format description of their fields.</P>
   href="#Chain">chrN_chainGalGal2</A> 
   - Summary info about chain of chicken (galGal2 assembly) alignments</LI>
   <LI><A 
+  href="#Chain">chrN_chainHg16</A> 
+  - Summary info about chain of human (hg16 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainHg16Link</A> 
+  - Alignment block in human (hg16 assembly) chain </LI>
+  <LI><A 
   href="#Chain">chrN_chainMm3</A> 
   - Summary info about chain of mouse (mm3 assembly) alignments</LI>
   <LI><A 
-  href="#Chain">chrN_chainMm4</A> 
-  - Summary info about chain of mouse (mm4 assembly) alignments</LI>
-  <LI><A 
   href="#ChainGap">chrN_chainMm3Link</A> 
   - Alignment block in mouse (mm3 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainMm4</A> 
+  - Summary info about chain of mouse (mm4 assembly) alignments</LI>
   <LI><A 
   href="#ChainGap">chrN_chainMm4Link</A> 
   - Alignment block in mouse (mm4 assembly) chain </LI>
@@ -215,6 +245,9 @@ format description of their fields.</P>
   href="#Chain">chrN_rBestChainPanTro1</A> 
   - Reciprocal best chain alignments of the panTro1 chimp assembly to the human genome</LI>
   <LI><A 
+  href="#PslInfo">chrN_viralProt</A> 
+  - Alignments between SwissProt viral proteins and the SARS assembly </LI>
+  <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
   - Repeating elements created using RepeatMasker </LI>
   <LI><A 
@@ -260,6 +293,30 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PslInfo">affyGn1h</A> 
   - Sequences used for probe selection on Affy GNF1H chips</LI>
   <LI><A 
+  href="#PslInfo">affyGnf1m</A> 
+  - Sequences used for probe selection on Affy GNF1M chips</LI>
+  <LI><A 
+  href="#PslInfo">affyGnfU74A</A> 
+  - Sequences used for probe selection on Affy GNFU74A chips</LI>
+  <LI><A 
+  href="#PslInfo">affyGnfU74B</A> 
+  - Sequences used for probe selection on Affy GNFU74B chips</LI>
+  <LI><A 
+  href="#PslInfo">affyGnfU74C</A> 
+  - Sequences used for probe selection on Affy GNFU74C chips</LI>
+  <LI><A 
+  href="#PslInfo">affyMOE430</A> 
+  - Sequences used for probe selection on Affy MOE430 chips</LI>
+  <LI><A 
+  href="#PslInfo">affyRAE230</A> 
+  - Sequences used for probe selection on Affy RAE230 chips</LI>
+  <LI><A 
+  href="#PslInfo">affyU34A</A> 
+  - Sequences used for probe selection on Affy U34A chips</LI>
+  <LI><A 
+  href="#PslInfo">affyU74</A> 
+  - Sequences used for probe selection on Affy U74 chips</LI>
+  <LI><A 
   href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
@@ -296,6 +353,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#AltGraphX">altGraphX</A> 
   - Summary of alt-splicing in EST and mRNA tracks
   <LI><A 
+  href="#BED">anophelesEcores</A> 
+  - D. melanogaster (dm1)/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
   href="#ExpData">arbFlyLifeAll</A> 
   - Expression data</LI>
   <LI><A 
@@ -317,6 +377,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#atlasOncoGene">atlasOncoGene</A> 
   - Link to Atlas Oncology site</LI>
   <LI><A 
+  href="#ScoredRef">axtNetDp1</A> 
+  - Scored reference file for D. melanogaster/D. pseudoobscura alignments
+  <LI><A 
+  href="#ScoredRef">axtNetHg16</A> 
+  - Scored reference file for human/chimp alignments
+  <LI><A 
   href="#LFS">bacEndPairs</A> 
   - Locations of BAC clones using placements of its 5' and 3' 
     end sequences.  BAC end sequence information comes from the dbGSS 
@@ -326,10 +392,16 @@ stored in a single table rather than one table per chromosome:</P>
   - Bactig positions in chromosome coordinates
   <LI><A 
   href="#BlastTab">bgdbBlastTab</A> 
-  - Blastp results of known genes vs. one another (Drosophila)
+  - Blastp results of known genes vs. one another (D. melanogaster)
   <LI><A 
   href="#KnownCanonical">bdgbCanonical</A> 
   - Describes the canonical splice variant of a gene (Drosophila)
+  <LI><A 
+  href="#GenePredictions">bgdbGene</A> 
+  - Berkeley Drosophila Genome Project genes (D. melanogaster)
+  <LI><A 
+  href="#GenePredictions">bgdbNonCoding</A> 
+  - Berkeley Drosophila Genome Project non-coding genes (D. melanogaster)
   <LI><A 
   href="#KnownIsoforms">bdgbIsoforms</A> 
   - Links together various transcripts of a gene into a cluster (Drosophila)
@@ -448,6 +520,15 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BED">ecoresFr1</A> 
   - Human/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
   <LI><A 
+  href="#BED">ecoresHg16</A> 
+  - Human (hg16)/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
+  href="#BED">ecoresMm3</A> 
+  - Mouse (mm3)/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
+  href="#BED">ecoresRn3</A> 
+  - Rat (rn3)/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
   href="#BED">ecoresTetraodon</A> 
   - Human/Tetraodon evolutionary conserved regions (ecores) computed by Exofish</LI>
   <LI><A 
@@ -507,6 +588,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#FosEndPairs">fosEndPairs</A> 
   - Positions of end pairs for fosmids
+  <LI><A 
+  href="#GbProtAnn">gbProtAnn</A> 
+  - GenBank protein annotations
   <LI><A 
   href="#WiggleTrack2">gc5Base</A> 
   - Percentage of G or C bases in a 5-base window
@@ -645,8 +729,14 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BED">haplotype</A> 
   - Common Haplotype Blocks - U. of Oxford and Sanger Institute (chr22 only) </LI>
   <LI><A 
+  href="#HgFindSpec">hgFindSpec</A> 
+  - Information that defines a search performed by hgFind binary</LI>
+  <LI><A 
   href="#Chain">humanChain</A> 
   - Summary info about chain of human alignments </LI>
+  <LI><A 
+  href="#BED">humanDels</A> 
+  - Human deletions in chimp genome</LI>
   <LI><A 
   href="#NetAlign">humanNet</A> 
   - Database representation of a net of alignments with human </LI>
@@ -746,6 +836,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#KnownTo">knownToLocusLink</A> 
   - Associates known gene and LocusLink ID
   <LI><A 
+  href="#KnownTo">knownToMOE430</A> 
+  - Associates known gene and Affy MOE430 expression data
+  <LI><A 
+  href="#KnownTo">knownToMOE430A</A> 
+  - Associates known gene and Affy MOE430A expression data
+  <LI><A 
   href="#KnownTo">knownToPfam</A> 
   - Associates known gene and Pfam ID
   <LI><A 
@@ -801,6 +897,24 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#NetAlign">mouseNet</A> 
   - Database representation of a net of alignments with mouse </LI>
   <LI><A 
+  href="#ExpData">mouseRinnSex</A> 
+  - Rinn et al. sex gene expression data on MOE430A chip
+  <LI><A 
+  href="#ExpRecord">mouseRinnSexExps</A> 
+  - Rinn et al. sex gene experiment descriptive data on MOE430A chip
+  <LI><A 
+  href="#ExpData">mouseRinnSexMedian</A> 
+  - Rinn et al. sex gene expression data on MOE430A chip
+  <LI><A 
+  href="#ExpRecord">mouseRinnSexMedianExps</A> 
+  - Rinn et al. sex gene experiment descriptive data on MOE430A chip
+  <LI><A 
+  href="#ExpData">mouseRinnSexMedianRatio</A> 
+  - Rinn et al. sex gene expression data on MOE430A chip
+  <LI><A 
+  href="#ExpData">mouseRinnSexRatio</A> 
+  - Rinn et al. sex gene expression data on MOE430A chip
+  <LI><A 
   href="#MouseSyn">mouseSyn</A> 
   - Synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
   <LI><A 
@@ -821,8 +935,14 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - "Wiggle track" display of evolutionary conservation in human, chimp, mouse, rat, and chicken 
   based on a phylogentiec hidden Markov model, using multiz alignments 
   <LI><A 
+  href="#MultizAlign">multizHg15Mm3</A> 
+  - <em>Multiz</em> multiple alignments between human (hg15) and mouse (mm3) </LI>
+  <LI><A 
   href="#MultizAlign">multizMm3Rn2</A> 
   - <em>Multiz</em> multiple alignments between mouse (mm3) and rat (rn2) </LI>
+  <LI><A 
+  href="#MultizAlign">multizYeast</A> 
+  - <em>Multiz</em> multiple alignments of 7 yeast species against S. cerevisiae (sc1) </LI>
   <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
@@ -830,23 +950,38 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#ExpRecord">nci60Exps</A> 
   - Experiment descriptive data</LI>
   <LI><A 
+  href="#NetAlign">netDp1</A> 
+  - Database representation of a net of alignments with D. pseudoobscura assembly dp1 </LI>
+  <LI><A 
   href="#NetAlign">netFr1</A> 
   - Database representation of a net of alignments with Fugu assembly fr1 </LI>
   <LI><A 
-  href="#NetAlign">galGal2</A> 
+  href="#NetAlign">netHg15</A> 
+  - Database representation of a net of alignments with Huamn assembly hg15 </LI>
+  <LI><A 
+  href="#NetAlign">netHg16</A> 
+  - Database representation of a net of alignments with Huamn assembly hg16 </LI>
+  <LI><A 
+  href="#NetAlign">netGalGal2</A> 
   - Database representation of a net of alignments with chicken assembly galGal2 </LI>
   <LI><A 
   href="#NetAlign">netMm3</A> 
-  - Database representation of a net of alignments with mouse assembly Mm3 </LI>
+  - Database representation of a net of alignments with mouse assembly mm3 </LI>
   <LI><A 
   href="#NetAlign">netMm4</A> 
-  - Database representation of a net of alignments with mouse assembly Mm4 </LI>
+  - Database representation of a net of alignments with mouse assembly mm4 </LI>
   <LI><A 
   href="#NetAlign">netRn3</A> 
-  - Database representation of a net of alignments with rat assembly Rn3 </LI>
+  - Database representation of a net of alignments with rat assembly rn3 </LI>
   <LI><A 
   href="#NetAlign">netRxBestPt0</A> 
-  - Database representation of a net of alignments with chimp assembly Pt0 </LI>
+  - Database representation of a net of alignments with chimp assembly pt0 </LI>
+  <LI><A 
+  href="#NetAlign">netSyntenyHg16</A> 
+  - Database representation of a net of alignments with human assembly hg16 </LI>
+  <LI><A 
+  href="#PslInfo">otherSARS</A> 
+  - Other SARS sequences from NCBI aligned to the SARS assembly
   <LI><A 
   href="#PbAaDistX">pbAaDistX</A> 
   - Proteome Browser distribution for a specific amino acid X
@@ -905,6 +1040,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#BED">pjt_genscan</A> 
   - Genscan gene predictions for Zoo</LI>
   <LI><A 
+  href="#WiggleTrack2">quality</A> 
+  - Genome quality scores</LI>
+  <LI><A 
   href="#ScoredRef">rat_hmrg</A> 
   - Rat scored reference file for human/chimp/mouse/rat/chicken alignments
   <LI><A 
@@ -913,6 +1051,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#RecombRate">recombRate</A> 
   - Describes the recombination rate in 1Mb intervals based on deCODE, Genethon and Marshfield maps</LI>
+  <LI><A 
+  href="#BED">recombRateRat</A> 
+  - Describes rat recombination rate  based on SHRSPxBN F2 intercross or FHHxACI F2 intercross genetic maps.</LI>
   <LI><A 
   href="#RefFlat">refFlat</A> 
   - RefSeq Genes, with additional name (as it appears in genome browser) field  </LI>
@@ -947,6 +1088,18 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#WiggleTrack2">regPotential3X</A> 
   - 3-way regulatory potential score computed from human/mouse/rat alignments
+  <LI><A 
+  href="#PslInfo">rgdEst</A> 
+  - Rat Genome Database ESTs </LI>
+  <LI><A 
+  href="#GenePredictions">rgdGene</A> 
+  - Rat Genome Database genes </LI>
+  <LI><A 
+  href="#BED">rgdQtl</A> 
+  - Rat Genome Database QTLs </LI>
+  <LI><A 
+  href="#BED">rgdSslp</A> 
+  - Rat Genome Database simple sequence length polymorphisms (SSLPs) </LI>
   <LI><A 
   href="#RikenAltid">rikenaltid</A> 
   - Riken altid table (Mouse Feb. 2002 and later)</LI>
@@ -1042,8 +1195,20 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#SfDescription">sfDescription</A> 
   - Stores domain descriptions for the Superfamily track</LI> 
   <LI><A 
+  href="#KnownCanonical">sgdCanonical</A> 
+  - Describes the canonical splice variant of a gene (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#SgdClone">sgdClone</A> 
+  - Clone information from the Saccharomyces Genome Database
+  <LI><A 
+  href="#GenePredictions">sgdGene</A> 
+  - Saccharomyces Genome Database gene predictions
+  <LI><A 
+  href="#SgdOther">sgdOther</A> 
+  - Other features from Saccharomyces Genome Database 
+  <LI><A 
   href="#GenePredictions">sgpGene</A> 
-  - SGP Gene Predictions (GRIB)
+  - SGP gene predictions (GRIB)
   <LI><A 
   href="#PepPredictions">sgpPep</A> 
   - Translations of SGP gene predictions into corresponding amino acid sequences 
@@ -1128,6 +1293,9 @@ cover the same region </LI>
   href="#BED">superfamily</A> 
   - Superfamily proteins</LI>
   <LI><A 
+  href="#BED">syntenyHg16</A> 
+  - Human synteny alignnments (hg16)</LI>
+  <LI><A 
   href="#SyntenyHuman">syntenyHuman</A> 
   - Human synteny alignnments from blastz single coverage </LI>
   <LI><A 
@@ -1143,6 +1311,9 @@ cover the same region </LI>
   href="#tfbsCons">tfbsCons</A> 
   - Transcription factor binding sites conserved in a multiple species alignment</LI>
   <LI><A 
+  href="#tfbsConsMap">tfbsConsMap</A> 
+  - Transcription factor binding sites conservation map data</LI>
+  <LI><A 
   href="#GenePredictions">tigrGeneIndex</A> 
   - Fgenesh++ Gene Predictions </LI>
   <LI><A 
@@ -1156,10 +1327,13 @@ cover the same region </LI>
   - Translations of Twinscan gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
   href="#PslInfo">uniGene</A> 
-  - UniGene Alignments and SAGE Info (Last used Apr. 2001)  </LI>
+  - UniGene alignments and SAGE Info (Last used Apr. 2001)  </LI>
   <LI><A 
   href="#BED">uniGene_2</A> 
-  - UniGene Alignments and SAGE Info (new version)  </LI>
+  - UniGene alignments and SAGE Info (new version)  </LI>
+  <LI><A 
+  href="#PslInfo">uniGene_gg</A> 
+  - Chicken UniGene alignments </LI>
   <LI><A 
   href="#GenePredictions">vegaGene</A> 
   - Annotated genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A> (Human chr14, 20, 22 only) </LI>
@@ -1518,33 +1692,8 @@ for various organisms.
 
 
 <H4><A name=BED></A>Browser Extensible Data (BED)</H4>
-The following definition is used for several tables as follows:<BR>
-- affy10K -first 5 fields <BR>
-- affyGeno -first 4 fields <BR>
-- affyRatio -all 15 fields <BR>
-- chimpDels -first 4 fields <BR>
-- dhs - first 4 fields <BR>
-- ecoresFr1 - first 12 fields <BR>
-- ecoresTetraodon - first 12 fields <BR>
-- encodeRegions - first 4 fields <BR>
-- firstEF - first 6 fields <BR>
-- gnfAtlas2 - all 15 fields <BR>
-- haplotype - first 12 fields <BR>
-- intersectingMCS - first 4 fields <BR>
-- intersectingMergedMCS - first 4 fields <BR>
-- mcs_b - first 4 fields <BR>
-- mcs_p - first 4 fields <BR>
-- miRNA - first 8 fields <BR>
-- nci60 - all 15 fields <BR>
-- perlegen - first 12 fields <BR>
-- pjt_gene - first 12 fields <BR>
-- pjt_genscan - first 12 fields <BR>
-- rosetta - all 15 fields <BR>
-- slamNonCoding* - first 5 fields <BR>
-- superfamily - first 4 fields  <BR>
-- syntenyMm3 - first 8 fields  <BR>
-- syntenyMouse - first 8 fields  <BR>
-- uniGene_2 - first 12 fields <BR>
+The following definition is used for several tables, which may use 4 or more of 
+the fields.<BR>
 <PRE>table bed
 "Browser extensible data"
     (
@@ -1992,6 +2141,21 @@ Last used Apr. 2001.
    )                                                                            
 </PRE>
 
+<H4><A name=GbProtAnn></A>GenBank Protein Annotations</H4>
+<PRE>table gbProtAnn
+"Protein Annotations from GenPept mat_peptide fields"
+    (
+    string chrom;      	"Chromosome"
+    uint   chromStart; 	"Start position in chromosome"
+    uint   chromEnd;   	"End position in chromosome"
+    string name;       	"Name of item"
+    string product;    	"Protein product name"
+    string note;       	"Note (may be empty)"
+    string proteinId; 	"GenBank protein accession(.version)"
+    uint giId;        	"GenBank db_xref number"
+    )
+</PRE>
+
 <H4><A name=GeneBands></A>Gene Bands</H4>
 <PRE>table geneBands
 "Band locations of known genes"
@@ -2125,6 +2289,31 @@ The following definition is used for tables that link a predicted peptide to a p
     string clusterId;	"Gene cluster ID"
     string mrnaAcc; 	"GenBank mRNA accession"
     )
+</PRE>
+
+<H4><A name=HgFindSpec></A>HgFind Search Information</H4>
+<PRE>table hgFindSpec
+"Defines a search to be performed by hgFind"
+    (
+    string searchName;          "Unique name for this search. Defaults to searchTable if not 
+				 specified in .ra"
+    string searchTable;         "(Non-unique!) Table to be searched. (Like trackDb.tableName: 
+				 if split, omit chr*_ prefix)"
+    string searchMethod;        "Type of search (exact, prefix, fuzzy)"
+    string searchType;          "Type of search (bed, genePred, knownGene etc)"
+    ubyte shortCircuit;         "If nonzero and there is a result from this search, jump to 
+				 the result instead of performing other searches"
+    string termRegex;           "Regular expression (see man 7 regex) to eval on search term: 
+				 if it matches, perform search query"
+    string query;               "sprintf format string for SQL query on a given table and value"
+    string xrefTable;           "If search is xref, perform xrefQuery on search term, then 
+				 query with that result"
+    string xrefQuery;           "sprintf format string for SQL query on a given (xref) table 
+				 and value"
+    float searchPriority;       "0-1000 - relative order/importance of this search.  0 is top"
+    string searchDescription;   "Description of table/search (default: trackDb {longLabel,tableName})"
+    lstring searchSettings;     "Name/value pairs for searchType-specific stuff"
+)
 </PRE>
 
 <H4><A name=SyntenyHuman></A>Human Synteny Alignments</H4>
@@ -2984,6 +3173,32 @@ Last used Apr. 2001.
     )                                                                           
 </PRE>
 
+<H4><A name=SgdClone></A>Saccharomyces Genome Database Clone Information</H4>
+<PRE>table sgdClone
+"Clone info from yeast genome database"
+    (
+    string chrom;       "Chromosome in chrN format"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Washington University name"
+    string atccName;    "ATCC clone name (optional)"
+    )
+</PRE>
+
+<H4><A name=SgdOther></A>Saccharomyces Genome Database Other Features</H4>
+<PRE>table sgdOther
+"Features other than coding genes from yeast genome database"
+    (
+    string chrom;       "Chromosome in chrNN format"
+    int chromStart;     "Start (zero based)"
+    int chromEnd;       "End (non-inclusive)"
+    string name;        "Feature name"
+    int score;          "Always 0"
+    char[1] strand;     "Strand: +, - or ."
+    string type;        "Feature type"
+    )
+</PRE>
+
 <H4><A name=Sage></A>Sage</H4>
 <PRE>table sage
 "Stores SAGE data in terms of UniGene identifiers"
@@ -3696,6 +3911,15 @@ The bacEndPairs table uses all fields.
     char[6] species;  	"Common name, scientific name"
     char[64] factor;  	"Factor"
     char[10] id;  	"ID"
+    )
+</PRE>
+
+<H4><A name=tfbsConsMap></A>Transcription Factor Binding Sites Conservation Map Data</H4>
+<PRE>table tfbsConsMap
+"tfbsConsMap Data"
+    (
+    string id;   "TRANSFAC id"
+    string ac;   "gene-regulation.com AC"
     )
 </PRE>
 
