@@ -554,11 +554,12 @@ exit; # don't actually run this like a script :)
     hgNibSeq -preMadeNib hg15 /gbdb/hg15/nib ?{,?}/chr?{,?}{,_random}.fa
     echo "select chrom,size from chromInfo" | hgsql -N hg15 > chrom.sizes
 
-# MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
+# MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
     ssh eieio
     cd ~/hg15
     #- Build the .zip files
     ./jkStuff/zipAll.sh |& tee zipAll.log
+>>>DONE TO HERE -JK
     #- Look at zipAll.log to make sure all file lists look reasonable.  
     #- Check zip file integrity:
     mkdir zip
@@ -695,19 +696,20 @@ mrna is done against unmasked 041203
     para try
     # In each dir (~/hg15/bed/mrna, ~/hg15/bed/est):
     para check, para push, para check....
->>> DONE TO HERE -jk
     # para time > time
       
     # Process mRNA and EST alignments into near best in genome.
     cd ~/hg15/bed/mrna
     pslSort dirs raw.psl /tmp psl
+>>> DONE TO HERE (left sorting overnight) -jk
     pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
       /dev/null
     liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
     pslSortAcc nohead chrom /tmp all_mrna.psl
 
+    ssh eieio
     cd ~/hg15/bed/est
-    pslSort dirs raw.psl /cluster/store2/tmp psl/est*
+    pslSort dirs raw.psl /tmp/psl psl
     pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
       /dev/null
     liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
