@@ -34,6 +34,14 @@
      to a terminal, not a file or emacs shell buffer.
      Added host as penultimate column in paraJobStatus display.
 
+     Fixed bug in paraNode err msg when fetching a file not found.
+     Fixed bug in paraNode during hub startup which corrupted para.results.
+     Fixed bug in paraHub causing crash when using priorities.
+     Made paraHub into a proper daemon which is better for normal usage.
+     Added -log=path/logfile to paraHub and paraNode so that users
+     debugging without admin priveleges can see output.
+     Added -debug option to paraHub so it won't demonize for debugging.
+
      
 
 
