@@ -349,7 +349,7 @@ private on
 
 track cpgIsland
 shortLabel CpG Islands
-longLabel CpG Islands. (Islands < 400 Bases are Light Green)
+longLabel CpG Islands (Islands < 400 Bases are Light Green)
 priority 22
 visibility hide
 color 0,100,0
