@@ -433,6 +433,7 @@ if (!pslSequenceBases && tg->tdb)
 	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
 		PSL_SEQUENCE_BASES));
 
+
 if(tg == NULL) return(ret);
 if (pslSequenceBases)
     {
@@ -462,6 +463,7 @@ else
     safef(optionStr, 128,"%s.cds.draw", tg->mapName);
     cdEnum = cdsColorStringToEnum(cartUsualString(cart, optionStr,
 					    defaultDrawOption));
+    ret = cdEnum;
     }
 return(ret);
 }

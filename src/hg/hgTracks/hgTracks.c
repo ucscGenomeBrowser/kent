@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.909 2005/02/16 09:54:17 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.910 2005/02/16 21:23:20 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6997,7 +6997,7 @@ else
     }
 /* special label handling for wigMaf type tracks -- they
    display a left label in pack mode.  To use the full mode
-   labelling, temporarily set visibility to full.
+   labeling, temporarily set visibility to full.
    Restore savedVis later */
 {
 if (sameString(track->tdb->type, "wigMaf"))
