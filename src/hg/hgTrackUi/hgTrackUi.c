@@ -187,6 +187,43 @@ cgiMakeIntVar("GCwiggle.heightPer", GCwiggleHeightPer, 5 );
 printf("&nbsp;pixels");
 
 }
+void humMusLUi(struct trackDb *tdb)
+/* put up UI for the human/mouse mutual information (a sample track)*/
+{
+int humMusLHeightPer = atoi(cartUsualString(cart, "humMusL.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "humMusL.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "humMusL.anti.alias", "on");
+char *fill = cartUsualString(cart, "humMusL.fill", "1");
+int humMusLLineGap = atoi(cartUsualString(cart, "humMusL.interp.gap", "200"));
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("humMusL.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("humMusL.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("humMusL.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("humMusL.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("humMusL.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("humMusL.heightPer", humMusLHeightPer, 5 );
+printf("&nbsp;pixels");
+
+printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("humMusL.interp.gap", humMusLLineGap, 10 );
+printf("&nbsp;bases");
+
+
+}
+
 
 
 void humMusUi(struct trackDb *tdb)
@@ -625,6 +662,8 @@ else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
     humMusUi(tdb);
+else if (sameString(track, "humMusL"))
+    humMusLUi(tdb);
 else if (sameString(track, "zooCons"))
     zooConsUi(tdb);
 else if (sameString(track, "blastzMm2"))
