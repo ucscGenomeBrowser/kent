@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.222 2004/11/29 05:13:05 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.223 2004/11/29 11:48:25 daryl Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2971,8 +2971,9 @@ struct trackDb *nextTdb;
 
 while (tdbList != NULL)
     {
+    struct trackDb *tdbLoc;
     tdb = slPopHead(&tdbList);
-    struct trackDb *tdbLoc = findTrackDb(&tdbLocalList, tdb->tableName);
+    tdbLoc = findTrackDb(&tdbLocalList, tdb->tableName);
     if (tdbLoc != NULL)
         {
         /* use local */
