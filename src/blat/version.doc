@@ -1,3 +1,8 @@
+27:
+     o Made it so that gfClient does not abort when gfServer runs out
+       of memory on a request.  Instead it just prints a warning
+       message.
+
 26:
      o fixed pslPretty to allow '--' strands in axt output format
      o fixed bug that was causing blat to drop an exon in around
