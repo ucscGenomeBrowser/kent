@@ -54,13 +54,13 @@ type lookup knownToRefSeq name value
 search exact
 itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 
-name locusLink
-shortLabel LocusLink
-longLabel NCBI LocusLink ID
+name entrezGene
+shortLabel Entrez Gene
+longLabel NCBI Entrez Gene/LocusLink ID
 priority 2.25
 visibility off
 type lookup knownToLocusLink name value
-itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
+itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 
 name acc
 shortLabel GenBank
