@@ -2290,43 +2290,44 @@ o ssh to kkstore
 
  Download the sequence: wget ftp://blue3.ims.u-tokyo.ac.jp/pub/db/hgc/dbtss/ref-full.fa.gz
 
+ mv ref-full.fa.gz dbtss.fa.gz
  gunzip it and split the ref-rull.fa file into about 200 pieces
- gunzip ref-full.fa.gz
- faSplit sequence ref-full.fa 50 splitRefFull
+ gunzip dbtss.fa.gz
+ faSplit sequence dbtss.fa 50 splitDbtss
  mkdir /scratch/hg/refFull
- splitRefFull* /scratch/hg/refFull/
+ splitdbtss* /scratch/hg/dbtss/
  ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
- ls -1S /scratch/hg/refFull/split*.fa > refFull.lst
+ ls -1S /scratch/hg/dbtss/split*.fa > refFull.lst
 
-o - Request the admins to do a binrsync to the cluster of /scratch/hg/refFull
+o - Request the admins to do a binrsync to the cluster of /scratch/hg/dbtss
 
-o - Use BLAT to generate refFull alignments as so:
+o - Use BLAT to generate dbtss alignments as so:
       Make sure that /scratch/hg/gs.13/build30/contig/ is loaded
       with NT_*.fa and pushed to the cluster nodes.
 
           ssh kk
-          cd /cluster/store1/gs.13/build30/bed/refFull
+          cd /cluster/store1/gs.13/build30/bed/dbtss
           mkdir -p psl
 #          run mkdirs.sh script to create sudirs in the psl directory
 #               in order to modularize the blat job.
-          gensub2 genome.lst refFull.lst gsub spec
+          gensub2 genome.lst dbtss.lst gsub spec
           para create spec
           
     Now run a para try/push and para check in each one.
 
-o - Process refFull alignments into near best in genome.
+o - Process dbtss alignments into near best in genome.
       cd ~/oo/bed
-      cd refFull
+      cd dbtss
       pslSort dirs raw.psl /tmp psl/*
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
-      liftUp -nohead all_refFull.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /tmp all_refFull.psl
+      liftUp -nohead all_dbtss.psl ../../jkStuff/liftAll.lft carry contig.psl
+      pslSortAcc nohead chrom /tmp all_dbtss.psl
 
-o - Load refFull alignments into database
+o - Load dbtss alignments into database
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/refFull
-      pslCat -dir chrom > refFullAli.psl
-      hgLoadPsl hg12 -tNameIx refFullAli.psl
+      cd /cluster/store1/gs.13/build30/bed/dbtss
+      pslCat -dir chrom > dbtssAli.psl
+      hgLoadPsl hg12 -tNameIx dbtssAli.psl
 
 LOAD SLAM GENES 
      ln -s /cluster/store1/gs.13/build30/ ~/oo
