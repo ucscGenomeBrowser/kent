@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.2 2004/03/11 07:39:57 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.3 2004/03/11 08:21:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -186,17 +186,28 @@ struct hash *varHash;
 char *parts[3];
 int partCount;
 
-/* Parse through first line. */
+/* Parse through first line - first word is name. */
 word = nextWord(&line);
 if (word == NULL || strchr(word, '=') != NULL)
     errAbort("joiner without name line %d of %s\n", lf->lineIx, lf->fileName);
 AllocVar(js);
 js->name = cloneString(word);
-varHash = hashVarLine(line, lf->lineIx);
-if ((word = hashFindVal(varHash, "typeOf")) != NULL)
-    js->typeOf = cloneString(word);
-if ((word = hashFindVal(varHash, "external")) != NULL)
-    js->external = cloneString(word);
+
+while ((word = nextWord(&line)) != NULL)
+    {
+    char *e = strchr(word, '=');
+    if (e == NULL)
+        errAbort("Expecting name=value pair line %d of %s", 
+		lf->lineIx, lf->fileName);
+    *e++ = 0;
+    if (sameString(word, "typeOf"))
+	js->typeOf = cloneString(e);
+    else if (sameString(word, "external"))
+	js->external = cloneString(e);
+    else
+        errAbort("Unknown attribute %s line %d of %s", word, 
+		lf->lineIx, lf->fileName);
+    }
 
 /* Parse second line, make sure it is quoted, and save as description. */
 line = nextSubbedLine(lf, symHash, dyBuf);
@@ -303,7 +314,6 @@ struct joinerSet *jsList = NULL, *js;
 
 while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
     {
-    // uglyf("%d: %s\n", lf->lineIx, line);
     if ((word = nextWord(&line)) != NULL)
         {
 	if (sameString("set", word))
