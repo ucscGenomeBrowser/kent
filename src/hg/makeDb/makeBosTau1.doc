@@ -1074,3 +1074,43 @@ chainSome $(path1)
   end
   gzip bosTau1.net.syn
   gzip bosTau1.net
+
+
+# MAKE 11.OOC FILE FOR BLAT (REDONE, Jan. 18, 2004, Heather)
+  ssh kkr1u00
+  mkdir /cluster/data/bosTau1/bed/ooc
+  cd /cluster/data/bosTau1/bed/ooc
+  ls -1 /cluster/data/bosTau1/bosTau1.2bit > nib.lst
+  /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+    -makeOoc=/cluster/bluearc/bosTau1/11.ooc -repMatch=800
+  # Wrote 1327650 overused 11-mers to /cluster/bluearc/bosTau1/11.ooc
+  cp -p /cluster/bluearc/bosTau1/11.ooc /iscratch/i/bosTau1/
+  iSync
+
+# GENBANK
+  # gbAlign for mrna
+  ssh eieio
+  cd /cluster/data/genbank
+  nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial -verbose=1 bosTau1 &
+  # logged to 
+  # /cluster/data/genbank/var/build/logs/YYMMDDHHMMSS.bosTau1.initalign.log
+
+  # load mrna
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad bosTau1
+  # logged to /cluster/data/genbank/var/dbload/hgwdev/logs/YYMMDDHHMMSS.dbload.log
+
+  # gbAlign for est
+  ssh eieio
+  cd /cluster/data/genbank
+  nice bin/gbAlignStep -initial -srcDb=genbank -type=est bosTau1
+  
+  # load the ESTs, reloading mRNAs as well
+  ssh hgwdev
+  cd /cluster/data/genbank
+  nice bin/gbDbLoadStep -drop -initialLoad bosTau1
+
+  # add bosTau1 to list of databases to align in
+  #  /cluster/data/genbank/etc/align-genbank
+
