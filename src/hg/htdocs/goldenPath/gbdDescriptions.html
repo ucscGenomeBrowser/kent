@@ -509,6 +509,9 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#STSmapMouseNew">stsMapMouseNew</A> 
   - STS markers and postions on mouse assembly (NCBI)
   <LI><A 
+  href="#STSmapRat">stsMapRat</A> 
+  - STS markers and postions on rat assembly
+  <LI><A 
   href="#STSsites">stsMarker</A> 
   - STS marker mappings from various maps and FISH clone mappings from the BAC 
   Resource Consortium (obsolete as of Apr. 2001, replaced by stsMap)</LI>
@@ -1818,6 +1821,27 @@ The bacEndPairs table uses all fields.
     )
 </PRE>
 
+<H4><A name=STSmapRat></A>STS Clone Positions (Rat)</H4>
+<PRE>table stsMapRat
+"STS marker and its position on rat assembly"
+    (
+    string chrom;       "Chromosome or 'unknown'"
+    int chromStart;     "Start position in chromosome (-1 if unpositioned)"
+    uint chromEnd;      "End position in chromosome"
+    string name;        "Name of STS marker"
+    uint score;         "Score of a marker = 1000/(# of placements)"
+    uint identNo;       "Identification number of STS"
+    string ctgAcc;      "Contig accession number"
+    string otherAcc;    "Accession number of other contigs that the marker hits"
+    string rhChrom;     "Chromosome (no chr) from RH map or 0 if none"
+    float rhPos;        "Position on RH map"
+    float rhLod;        "LOD score of RH map"
+    string fhhChr;      "Chromosome (no chr) from FHHxACI genetic or 0 if none"
+    float fhhPos;       "Position on FHHxACI map"
+    string shrspChrom;  "Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none"
+    float shrspPos;     "Position on SHRSPxBN genetic map"
+    )
+</PRE>
 
 <H4><A name=STSalias></A>STS Marker Aliases and Associated Identification Numbers</H4>
 <PRE>table stsAlias
