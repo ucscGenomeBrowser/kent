@@ -28,6 +28,9 @@ FILE *f = mustOpen(progPath, "w");
 /* Make the usage routine. */
 fprintf(f, "/* %s - %s. */\n", name, description);
 fprintf(f, "#include \"common.h\"\n");
+fprintf(f, "#include \"linefile.h\"\n");
+fprintf(f, "#include \"hash.h\"\n");
+fprintf(f, "#include \"cheapcgi.h\"\n");
 fprintf(f, "\n");
 fprintf(f, "void usage()\n");
 fprintf(f, "/* Explain usage and exit. */\n");
@@ -35,7 +38,9 @@ fprintf(f, "{\n");
 fprintf(f, "errAbort(\n");
 fprintf(f, "  \"%s - %s\\n\"\n", name, description);
 fprintf(f, "  \"usage:\\n\"\n");
-fprintf(f, "  \"   %s XXX\\n\");\n", name);
+fprintf(f, "  \"   %s XXX\\n\"\n", name);
+fprintf(f, "  \"options:\\n\"\n");
+fprintf(f, "  \"   -xxx=XXX\\n\");\n", name);
 fprintf(f, "}\n");
 fprintf(f, "\n");
 
@@ -50,6 +55,7 @@ fprintf(f, "\n");
 fprintf(f, "int main(int argc, char *argv[])\n");
 fprintf(f, "/* Process command line. */\n");
 fprintf(f, "{\n");
+fprintf(f, "cgiSpoof(&argc, argv);\n");
 fprintf(f, "if (argc != 2)\n");
 fprintf(f, "    usage();\n");
 fprintf(f, "%s(argv[1]);\n", name);
