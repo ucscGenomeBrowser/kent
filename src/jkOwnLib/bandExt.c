@@ -6,7 +6,7 @@
  * gaps and mismatches. */
 
 #include "common.h"
-#include "dnaSeq.h"
+#include "dnaseq.h"
 #include "axt.h"
 #include "fuzzyFind.h"
 #include "localmem.h"
