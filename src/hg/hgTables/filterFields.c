@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.12 2004/10/01 21:26:43 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.13 2004/10/01 23:44:13 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -938,8 +938,10 @@ int varPrefixSize, fieldNameSize;
 struct hashEl *varList, *var;
 struct dyString *dy = NULL;
 boolean needAnd = FALSE;
+char dbTableBuf[256];
 char splitTable[256];
 
+dbOverrideFromTable(dbTableBuf, &db, &table);
 /* Cope with split table. */
     {
     struct sqlConnection *conn = sqlConnect(db);
