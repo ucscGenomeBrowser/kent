@@ -1269,17 +1269,19 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 300.0;
     maxRange = 1000.0;
 
+    min0 = whichNum( minRange, -7.98567, 6.53263, 1000 );
+    max0 = whichNum( maxRange, -7.98567, 6.53263, 1000 );
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    tmp = -whichBin( 0.0, -1.535, 9.49389, 1000 );
+    tmp = -whichBin( 0.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 2.0, -1.535, 9.49389, 1000 );
+    tmp = -whichBin( 2.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 5.0, -1.535, 9.49389, 1000 );
+    tmp = -whichBin( 5.0, min0, max0, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
     
@@ -7830,8 +7832,9 @@ if (withLeftLabels)
 
 	if( sameString( group->mapName, "humMus" ) )
 	    {
-	    sprintf( minRangeStr, "%0.2g",  -1.535 );
-	    sprintf( maxRangeStr, "%0.2g",  9.49389 );
+
+	    sprintf( minRangeStr, "%0.2g", whichNum( 300.0, -7.98567, 6.53263, 1000 )  );
+	    sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -7.98567, 6.53263, 1000 )  );
 
         printYAxisLabel( mg, y, group, "0.0" );
         printYAxisLabel( mg, y, group, "2.0" );
