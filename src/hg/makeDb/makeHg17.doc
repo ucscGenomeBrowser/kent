@@ -3998,6 +3998,7 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     # rm human* *bed.gz
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
+# Added knownToU133Plus2 track (2004-10-14)
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -4174,6 +4175,10 @@ hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
 	-lookup=knownToGnf1h
 # Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
 # Got 9756 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+# create table mapping knownGenes to affyU133Plus2 table (2004-10-14, hartera)
+cd /cluster/data/hg17/bed/geneSorter
+hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
@@ -9370,7 +9375,7 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     
     # clean up
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
-
+# Added knownToU133Plus2 track (2004-10-14) - see GeneSorter section
 
 # MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
     # First, get ranges of target coverage:
