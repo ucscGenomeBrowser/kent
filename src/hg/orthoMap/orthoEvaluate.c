@@ -1,6 +1,7 @@
 /** orthoEvaluate - Program to evaluate beds for:
     - Coding potenttial (Using Victor Solovyev's bestorf repeatedly.)
     - Overlap with native mRNAs/ESTs
+    NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!
 */
 #include "common.h"
 #include "hdb.h"
@@ -18,7 +19,7 @@
 #include "bits.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.2 2003/06/20 20:21:36 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.3 2003/06/20 20:23:32 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -75,7 +76,8 @@ warn("orthoEvaluate - Evaluate the coding potential of a bed.\n"
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"
-	 "  not sure just yet...");
+	 "  not sure just yet..."
+	 "NOTE: THIS PROGRAM UNDER DEVLOPMENT. NOT FOR PRODUCTION USE!\n");
 }
 
 
@@ -285,7 +287,6 @@ ev->orientation = orientation;
 ev->support = support;
 dnaSeqFree(&genoSeq);
 }
-
 
 char *mustFindLine(struct lineFile *lf, char *pat)
 /* Find line that starts (after skipping white space)
