@@ -6,7 +6,7 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.4 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.5 2003/06/21 18:42:23 baertsch Exp $";
 
 char *type = NULL;
 
@@ -23,6 +23,7 @@ errAbort(
   );
 }
 
+#ifdef DUPE
 struct hash *chainReadAll(char *fileName)
 /* Read chains into a hash keyed by id. */
 {
@@ -53,7 +54,7 @@ char nameBuf[16];
 sprintf(nameBuf, "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
-
+#endif
 void gapWrite(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
 {
