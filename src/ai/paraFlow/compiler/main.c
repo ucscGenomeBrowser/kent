@@ -615,10 +615,22 @@ struct pfParse *pfParseProduct(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNegation(parent, &tok, scope);
-while (tok->type == '*' || tok->type == '/')
+while (tok->type == '*' || tok->type == '/' || tok->type == '%')
     {
     struct pfParse *left = pp, *right;
-    enum pfTokType tt = (tok->type == '*' ? pptTimes : pptDiv);
+    enum pfTokType tt = pptTimes;
+    switch (tok->type)
+        {
+	case '*':
+	   tt = pptTimes;
+	   break;
+	case '/':
+	   tt = pptDiv;
+	   break;
+	case '%':
+	   tt = pptMod;
+	   break;
+	}
     pp = pfParseNew(tt, tok, parent);
     left->parent = pp;
     tok = tok->next;
