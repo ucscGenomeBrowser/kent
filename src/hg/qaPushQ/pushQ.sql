@@ -28,8 +28,7 @@ CREATE TABLE pushQ (
     extSource char(50) not null,	# External Source
     openIssues longblob not null,	# Open issues
     notes longblob not null,	# Notes
-    pushdate char(10) not null,	# Push-done Date
-    pushedYN char(1) not null,	# Push requested?
+    pushState char(1) not null,	# Push State = NYD = No, Yes, Done
     initdate char(10) not null,	# Initial Submission Date
     bounces int unsigned not null,	# Bounce-count (num times bounced back to developer)
     lockUser char(8) not null,	# User who has locked record, or empty string
@@ -43,7 +42,6 @@ CREATE TABLE users (
     user char(8) not null,	# User
     password char(34) not null,	# Password
     role char(8) not null,	# Role=admin,dev,qa
-    cacheDefeat char(20) not null,	# Random string to defeat caches
     contents longblob not null,	# pushq-cart contents
               #Indices
     PRIMARY KEY(user)

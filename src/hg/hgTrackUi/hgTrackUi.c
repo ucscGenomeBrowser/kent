@@ -19,7 +19,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.103 2004/05/19 21:51:55 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.104 2004/05/23 00:18:16 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -868,7 +868,8 @@ tdb->shortLabel = RULER_TRACK_LABEL;
 tdb->longLabel = RULER_TRACK_LONGLABEL;
 tdb->visibility = tvDense;
 tdb->priority = 1.0;
-safef(htmlFile, 256, "/gbdb/browser/%s.html", RULER_TRACK_NAME);
+safef(htmlFile, 256, "/usr/local/apache/htdocs/goldenPath/help/%s.html", 
+                                RULER_TRACK_NAME);
 readInGulp(htmlFile, &buf, &size);
 tdb->html = buf;
 tdb->type = "none";

@@ -24,8 +24,7 @@ table pushQ
     char [50] extSource;  "External Source"
     lstring   openIssues; "Open issues"
     lstring   notes;      "Notes"
-    char [10] pushdate;   "Push-done Date"
-    char [1]  pushedYN;   "Push requested?"
+    char [1]  pushState;  "Push State = NYD = No, Yes, Done"
     char [10] initdate;   "Initial Submission Date"
     uint      bounces;    "Bounce-count (num times bounced back to developer)"
     char[8]   lockUser;   "User who has locked record, or empty string"
@@ -38,6 +37,5 @@ table users
     char[8]  user;        "User"
     char[34] password;    "Password" 
     char[8]  role;        "Role=admin,dev,qa"
-	char[20] cacheDefeat; "Random string to defeat caches"
-	lstring  contents;    "pushq-cart contents"
+    lstring  contents;    "pushq-cart contents"
     )

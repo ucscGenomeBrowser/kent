@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.30 2004/05/19 22:57:57 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.37 2004/05/21 19:42:47 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -45,9 +45,9 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 29
+#define MAXCOLS 28
 
-#define TITLE "Push Queue v"VERSION
+#define TITLE "Push Queue v"CGI_VERSION
 
 time_t curtime;
 struct tm *loctime;
@@ -67,7 +67,7 @@ char *oldRandState = NULL;
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
-"pushdate,pushYN,initdate,bounces";
+pushState,initdate,bounces,lockUser,lockDateTime";
 */
 
 /* structural improvements suggested by MarkD:
@@ -112,8 +112,7 @@ static char const *colName[] = {
  "extSource" ,
  "openIssues",
  "notes"     ,
- "pushdate"  ,
- "pushYN"    ,
+ "pushState" ,
  "initdate"  ,  
  "bounces"   , 
  "lockUser"  , 
@@ -145,8 +144,7 @@ e_reviewer  ,
 e_extSource ,
 e_openIssues,
 e_notes     ,
-e_pushdate  ,
-e_pushedYN  ,
+e_pushState ,
 e_initdate  ,
 e_bounces   ,
 e_lockUser  ,
@@ -177,8 +175,7 @@ char *colHdr[] = {
 "External Source or Collaborator",
 "Open Issues",
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-"&nbsp;Date&nbsp;Pushed&nbsp;",
-"Pushed?",
+"PushState",
 "Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
 "Bounce Count",
 "Lock User",
@@ -719,7 +716,7 @@ switch(col)
     case e_qid:
 	printf("<td><A href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">%s</A>%s",
 	    ki->qid, newRandState, ki->qid, sameString(ki->lockUser,"") ? "":"*" );
-	if ((sameString(ki->pushdate,"")) && (ki->pushedYN[0]=='Y'))
+	if (ki->pushState[0]=='Y')
 	    {
 	    printf("<BR><A href=\"/cgi-bin/qaPushQ?action=pushDone&qid=%s&cb=%s\">Done!</A>",
 		ki->qid, newRandState );
@@ -733,7 +730,7 @@ switch(col)
 	
 	
     case e_priority:
-	printf("<td>%s",ki->priority);
+	printf("<td>%s", ki->priority);
 	if (ki->priority[0] != 'L')
 	{
 	printf("&nbsp;&nbsp;"
@@ -832,12 +829,8 @@ switch(col)
 	printf("<td>%s</td>\n", ki->notes     );
 	break;
 	
-    case e_pushdate:
-	printf("<td>%s</td>\n", ki->pushdate   );
-	break;
-	
-    case e_pushedYN:
-	printf("<td>%s</td>\n", ki->pushedYN);
+    case e_pushState:
+	printf("<td>%s</td>\n", ki->pushState);
 	break;
 
     case e_initdate:
@@ -890,7 +883,7 @@ if (!sameString(month,""))
 safef(query, sizeof(query), "select * from %s%s%s", 
     pushQtbl,
     monthsql,
-    " order by priority,rank, pushdate desc, qid desc limit 100"
+    " order by priority, rank, qadate desc, qid desc limit 100"
     );
 
 // debug printf("query=%s",query); 
@@ -1038,7 +1031,7 @@ return TRUE;
 
 
 void doPushDone()
-/* Mark record pushedYN=Y, move priority to L for Log, and set rank=0  */
+/* Mark record pushState=D, move priority to L for Log, and set rank=0  */
 {
 
 struct pushQ q; /* just so we get the size of q.qid */
@@ -1047,14 +1040,14 @@ char query[256];
 safef(q.qid, sizeof(q.qid), cgiString("qid"));
 
 loadPushQ(q.qid, &q, FALSE);
-if (sameString(q.lockUser,""))
-    { /* not already locked */
+if (sameString(q.lockUser,"") && sameString(q.pushState,"Y"))
+    { /* not already locked and pushState=Y */
 
-    strftime (q.pushdate, sizeof(q.pushdate), "%Y-%m-%d", loctime); /* today's date */
+    strftime (q.qadate  , sizeof(q.qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
     safef(query, sizeof(query), 
-	"update %s set rank = 0, priority ='L', pushedYN='Y', pushdate='%s' where qid = '%s' ", 
-	pushQtbl, q.pushdate, q.qid);
+	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s' where qid = '%s' ", 
+	pushQtbl, q.qadate, q.qid);
     sqlUpdate(conn, query);
 
 
@@ -1066,7 +1059,14 @@ if (sameString(q.lockUser,""))
     }
 else
     {
-    safef(msg, sizeof(msg), "Unable to mark record %s done. Record is locked by %s.",q.qid,q.lockUser);
+    if (sameString(q.lockUser,""))
+	{
+    	safef(msg, sizeof(msg), "Unable to mark record %s done. Record is locked by %s.",q.qid,q.lockUser);
+	}
+    else
+	{
+    	safef(msg, sizeof(msg), "Invalid operation for qid %s, pushState is not Y, = %s.",q.qid,q.pushState);
+	}
     }
 
 doDisplay();
@@ -1190,7 +1190,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushdate, *pushedYN, *initdate, *lockUser, *lockDateTime;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1212,8 +1212,7 @@ reviewer = sqlEscapeString(el->reviewer);
 extSource = sqlEscapeString(el->extSource);
 openIssues = sqlEscapeString(el->openIssues);
 notes = sqlEscapeString(el->notes);
-pushdate = sqlEscapeString(el->pushdate);
-pushedYN = sqlEscapeString(el->pushedYN);
+pushState = sqlEscapeString(el->pushState);
 initdate = sqlEscapeString(el->initdate);
 lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
@@ -1224,14 +1223,14 @@ dyStringPrintf(update,
 "track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
 "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
 "sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',pushdate='%s',pushedYN='%s',initdate='%s',bounces='%u',lockUser='%s',lockDateTime='%s' "
+"openIssues='%s',notes='%s',pushState='%s',initdate='%s',bounces='%u',lockUser='%s',lockDateTime='%s' "
 "where qid='%s'", 
 	tableName,  
 	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
 	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
 	onlineHelp,  ndxYN,  joinerYN,  stat,  
 	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  pushdate,  pushedYN, initdate, el->bounces, lockUser, lockDateTime, 
+	openIssues,  notes,  pushState, initdate, el->bounces, lockUser, lockDateTime, 
 	qid
 	);
 
@@ -1258,8 +1257,7 @@ freez(&reviewer);
 freez(&extSource);
 freez(&openIssues);
 freez(&notes);
-freez(&pushdate);
-freez(&pushedYN);
+freez(&pushState);
 freez(&initdate);
 freez(&lockUser);
 freez(&lockDateTime);
@@ -1421,8 +1419,7 @@ if (isNew)
     {
     newqid = getNextAvailQid();
     safef(q.pqid, sizeof(q.pqid), "");
-    strcpy(q.pushdate  ,"" ); 
-    strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
+    safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     }
 
 
@@ -1599,9 +1596,8 @@ if (q.priority[0]=='L')
 
 if (sameString(pushbutton,"push requested")) 
     {
-    /* reset pushedYN in case was prev. a log already */
-    strcpy(q.pushdate  ,"" ); 
-    safef(q.pushedYN,sizeof(q.pushedYN),"Y");
+    /* reset pushState in case was prev. a log already */
+    safef(q.pushState,sizeof(q.pushState),"Y");
     }
 
 if (sameString(delbutton,"delete")) 
@@ -1646,8 +1642,7 @@ if (sameString(clonebutton,"clone"))
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
     q.rank = getNextAvailRank(q.priority);
-    strcpy(q.pushdate  ,"" ); 
-    strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
+    safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
     }
 
@@ -1841,9 +1836,7 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
    
     if (sameString(tempVarName,"showColumns"))
 	{
-	freeMem(showColumns);
-	showColumns = needMem(strlen(tempVal)+1);
-	safef(showColumns, strlen(tempVal)+1, tempVal);
+	showColumns = cloneString(tempVal);
 	}
 
     if (sameString(tempVarName,"org"))
@@ -1937,6 +1930,8 @@ if (loginOK)
     {
     htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
     qaUser=u.user;
+    oldRandState="";
+    showColumns=cloneString(defaultColumns);
     readMyUser();
     oldRandState="";
     saveMyUser();
@@ -1968,7 +1963,6 @@ dyStringPrintf(query,
     tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
 freeDyString(&query);
-//probably not needed anymore:  readMyUser();  /* refresh myUser */
 }
 
 
@@ -2218,6 +2212,10 @@ if (size > 0)
     {
     safef(temp,slength,s);
     safef(s,slength,"%3d%s%s",(int)size,sep,temp);
+    }
+if (sameString(temp,""))
+    {
+    safef(temp,slength,"0");  /* special case zero*/
     }
 freez(&temp);
 }
@@ -2884,8 +2882,7 @@ conn = sqlConnectRemote(host, user, password, database);
 setLock();
 
 /* default columns */
-showColumns = needMem(2048);
-safef(showColumns, 2048, defaultColumns);
+showColumns = cloneString(defaultColumns);
     
 readMyUser();
 

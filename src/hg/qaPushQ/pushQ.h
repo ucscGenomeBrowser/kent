@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define PUSHQ_NUM_COLS 29
+#define PUSHQ_NUM_COLS 28
 
 struct pushQ
 /* Push Queue */
@@ -38,8 +38,7 @@ struct pushQ
     char extSource[51];	/* External Source */
     char *openIssues;	/* Open issues */
     char *notes;	/* Notes */
-    char pushdate[11];	/* Push-done Date */
-    char pushedYN[2];	/* Push requested? */
+    char pushState[2];	/* Push State = NYD = No, Yes, Done */
     char initdate[11];	/* Initial Submission Date */
     unsigned bounces;	/* Bounce-count (num times bounced back to developer) */
     char lockUser[9];	/* User who has locked record, or empty string */
@@ -112,7 +111,7 @@ void pushQOutput(struct pushQ *el, FILE *f, char sep, char lastSep);
 #define pushQCommaOut(el,f) pushQOutput(el,f,',',',');
 /* Print out pushQ as a comma separated list including final comma. */
 
-#define USERS_NUM_COLS 5
+#define USERS_NUM_COLS 4
 
 struct users
 /* PushQ Users */
@@ -121,7 +120,6 @@ struct users
     char user[9];	/* User */
     char password[35];	/* Password */
     char role[9];	/* Role=admin,dev,qa */
-    char cacheDefeat[21];	/* Random string to defeat caches */
     char *contents;	/* pushq-cart contents */
     };
 

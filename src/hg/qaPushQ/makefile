@@ -26,7 +26,7 @@ formPushQ.h: formPushQ.html
 	echo ";" >> formPushQ.h
 	
 
-$(EXE).o: formPushQ.h versionInfo.h
+$(EXE).o: formPushQ.h ../inc/versionInfo.h
 
 O = $(EXE).o
 

@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.634 2004/05/19 21:36:33 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.635 2004/05/20 18:51:07 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12436,7 +12436,7 @@ if(tdb == NULL)
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb, item, TRUE);
+printCustomUrl(tdb, item, FALSE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
