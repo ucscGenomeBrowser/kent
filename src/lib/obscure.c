@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.18 2003/08/21 01:56:45 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.19 2003/08/29 22:16:52 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -252,7 +252,8 @@ struct hash *hashVarLine(char *line, int lineIx)
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
 {
-char *s = line, c;
+char *dupe = cloneString(line);
+char *s = dupe, c;
 char *var, *val;
 struct hash *hash = newHash(8);
 
@@ -284,6 +285,7 @@ for (;;)
 	}
     hashAdd(hash, var, cloneString(val));
     }
+freez(&dupe);
 return hash;
 }
 
