@@ -344,7 +344,7 @@ for (;;)
     for (i=0; i<lineSize; ++i)
         {
 	c = line[i];
-	if (isalpha(c))
+	if (isalpha(c) || c == '-')
 	    {
 	    c = ntChars[c];
 	    if (c == 0) c = 'n';

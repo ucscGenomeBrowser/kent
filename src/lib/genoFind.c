@@ -31,24 +31,59 @@ if (write(sd, s, length)<0)
     errnoAbort("Couldn't send string to socket");
 }
 
-char *gfRecieveString(int sd, char buf[256])
+int gfReadMulti(int sd, void *vBuf, size_t size)
+/* Read in until all is read or there is an error. */
+{
+char *buf = vBuf;
+size_t totalRead = 0;
+size_t oneRead;
+
+while (totalRead < size)
+    {
+    oneRead = read(sd, buf + totalRead, size - totalRead);
+    if (oneRead < 0)
+        {
+	perror("Couldn't finish large read");
+	return oneRead;
+	}
+    totalRead += oneRead;
+    }
+return totalRead;
+}
+
+char *gfGetString(int sd, char buf[256])
 /* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. */
+ * an internal buffer will be used. Print warning message
+ * and return NULL if any problem. */
 {
 static char sbuf[256];
 UBYTE len;
 int length;
 if (buf == NULL) buf = sbuf;
 if (read(sd, &len, 1)<0)
-    errnoAbort("Couldn't sockRecieveString string from socket");
+    {
+    warn("Couldn't sockRecieveString string from socket");
+    return NULL;
+    }
 length = len;
 if (length > 0)
-    if (read(sd, buf, length) < 0)
-	errnoAbort("Couldn't sockRecieveString string from socket");
+    if (gfReadMulti(sd, buf, length) < 0)
+	{
+	warn("Couldn't sockRecieveString string from socket");
+	return NULL;
+	}
 buf[length] = 0;
 return buf;
 }
 
+char *gfRecieveString(int sd, char buf[256])
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Abort if any problem. */
+{
+char *s = gfGetString(sd, buf);
+if (s == NULL)
+     noWarnAbort();   
+}
 
 void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */
