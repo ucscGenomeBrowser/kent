@@ -76,7 +76,7 @@ echo -e "chr1\t2500\t2510\tname1" >> "${TF}"
 echo -e "chr10\t200000\t200010\tname2" >> "${TF}"
 echo -e "chr1\t1500\t1510\tname3" >> "${TF}"
 
-oneTest "$HGWIGGLE -bedFile=${TF} -db=hg16 phastCons" "38333     1"
+oneTest "$HGWIGGLE -bedFile=${TF} -db=hg17 phastCons" "38333     1"
 
 rm -f "${TF}"
 
