@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.18 2003/12/24 11:39:18 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.19 2003/12/24 12:14:16 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -49,12 +49,26 @@ if (err != 200)
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
 }
 
+void dasHelp(char *s)
+/* Put up some hopefully helpful information. */
+{
+dasHead(200);
+puts(s);
+exit(0);
+}
+
 void dasAbout()
 /* Print a little info when they just hit cgi-bin/das. */
 {
 dasHead(200);
-puts("UCSC DAS Server.\n");
-puts("See http://www.biodas.org for more info on DAS.");
+dasHelp("UCSC DAS Server.\n"
+    "See http://www.biodas.org for more info on DAS.\n"
+    "Try http://genome.ucsc.edu/cgi-bin/das/dns for a list of databases.\n"
+    "Note that DAS is an inefficient protocol which does not support\n"
+    "all types of annotation in our database.  We recommend you\n"
+    "access the UCSC database by downloading the tab-separated files in\n"
+    "the downloads section or by using the table browser instead of using\n"
+    "DAS in most circumstances.");
 exit(0);
 }
 
@@ -828,8 +842,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf(" <SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" orientation=\"+\" subparts=\"no\">%s</SEGMENT>\n", ci->chrom, 1, ci->size, ci->chrom);
     chromInfoFree(&ci);
     }
-#ifdef SOON
-#endif /* SOON */
 
 printf("</ENTRY_POINTS>\n");
 printf("</DASEP>\n");
@@ -913,6 +925,12 @@ pathInfo = cloneString(pathInfo);
 partCount = chopString(pathInfo, "/", parts, ArraySize(parts));
 if (partCount < 1)
     dasAbout();
+if (partCount == 1 && !sameString(parts[0], "dsn"))
+    {
+    dasHelp("Expecting dsn or database/command in the URL after das.\n"
+            "Try das/dsn for a list of databases.\n"
+	    "Try das/database/types for a list of available annotations.\n");
+    }
 dispatch(parts[0], parts[1]);
 }
 
