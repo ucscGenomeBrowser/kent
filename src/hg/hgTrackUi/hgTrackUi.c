@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.84 2004/02/02 19:53:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.85 2004/02/03 00:11:37 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -404,7 +404,7 @@ void wigUi(struct trackDb *tdb)
 char *typeLine = NULL;	/*	to parse the trackDb type line	*/
 char *words[8];		/*	to parse the trackDb type line	*/
 int wordCount = 0;	/*	to parse the trackDb type line	*/
-char options[12][256];	/*	our option strings here	*/
+char options[14][256];	/*	our option strings here	*/
 double minY;		/*	from trackDb or cart	*/
 double maxY;		/*	from trackDb or cart	*/
 double tDbMinY;		/*	data range limits from trackDb type line */
@@ -415,20 +415,24 @@ char *lineBar;	/*	Line or Bar graph */
 char *autoScale;	/*	Auto scaling on or off */
 char *windowingFunction;	/*	Maximum, Mean, or Minimum */
 char *smoothingWindow;	/*	OFF or [2:16] */
+char *yLineMarkOnOff;	/*	user defined Y marker line to draw */
+double yLineMark;		/*	from trackDb or cart	*/
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
-snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
-snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
-snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
-snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
-snprintf( &options[10][0], 256, "%s.windowingFunction", tdb->tableName );
-snprintf( &options[11][0], 256, "%s.smoothingWindow", tdb->tableName );
+snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, HEIGHTPER );
+snprintf( &options[4][0], 256, "%s.%s", tdb->tableName, MIN_Y );
+snprintf( &options[5][0], 256, "%s.%s", tdb->tableName, MAX_Y );
+snprintf( &options[7][0], 256, "%s.%s", tdb->tableName, HORIZGRID );
+snprintf( &options[8][0], 256, "%s.%s", tdb->tableName, LINEBAR );
+snprintf( &options[9][0], 256, "%s.%s", tdb->tableName, AUTOSCALE );
+snprintf( &options[10][0], 256, "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
+snprintf( &options[11][0], 256, "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
+snprintf( &options[12][0], 256, "%s.%s", tdb->tableName, YLINEMARK );
+snprintf( &options[13][0], 256, "%s.%s", tdb->tableName, YLINEONOFF );
 
 wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
@@ -437,6 +441,8 @@ wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchGraphType(tdb, &lineBar);
 (void) wigFetchWindowingFunction(tdb, &windowingFunction);
 (void) wigFetchSmoothingWindow(tdb, &smoothingWindow);
+(void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
+wigFetchYLineMarkValue(tdb, &yLineMark);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
@@ -467,6 +473,10 @@ wiggleWindowingDropDown(&options[10][0], windowingFunction);
 printf("<BR>\n<b>Smoothing window:&nbsp;</b>");
 wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
 printf("&nbsp;pixels");
+printf("<BR>\n<b>Draw indicator line at y=</b>&nbsp;\n");
+cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
+printf("&nbsp;&nbsp;");
+wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
 printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
