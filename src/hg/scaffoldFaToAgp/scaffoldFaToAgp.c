@@ -1,5 +1,15 @@
 /* scaffoldFaToAgp - read a file containing FA scaffold records and generate */
-/*                   an AGP file, with gaps introduced between scaffolds */
+/*                   an AGP file, gap file and a lift file */
+/* This utility is used when working with genomes that consist
+ * of scaffolds with no chromosome mapping (e.g. Fugu).
+/* The AGP file contains scaffolds and inter-scaffold gaps.
+ * This file is used to generate the assembly ("gold") track.
+ * The "gap" file contains gaps within scaffolds as well
+ * as inter-scaffold gaps.  This file is used to generate the "gap" track.
+ * It is formatted similarly to an AGP, but only contains gap entries.
+ * The lift file is associated with the AGP file.  It is used to
+ * lift scaffold coordinates to chromosome coordinates.
+ */
 
 #include "common.h"
 #include "fa.h"
@@ -7,123 +17,176 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.3 2003/06/30 20:34:50 kate Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.4 2003/09/27 02:03:47 kate Exp $";
 
-#define GAP_SIZE 1000
+#define SCAFFOLD_GAP_SIZE 1000
 /* TODO: optionize this */
 
-#define GAP_TYPE "contig"        /* or perhaps "clone" ? */
+#define SCAFFOLD_GAP_TYPE "contig"   
+#define FRAGMENT_GAP_TYPE "frag"        /* within scaffolds (bridged) */
+#define MIN_FRAGMENT_GAP_SIZE  5        /* TODO - optionize */
 #define CHROM_NAME "chrUn"
 
 void usage()
 /* Print usage instructions and exit. */
 {
-errAbort("scaffoldFaToAgp - generate an AGP file and lift file from a scaffold FA file.\n"
-	 "usage:\n"
-	 "    scaffoldFaToAgp source.fa\n"
-	 "The resulting file will be source.agp\n"
-         "Note: gaps of 1000 bases are inserted between scaffold records\n");
+errAbort("scaffoldFaToAgp - generate an AGP file, gap file, and lift file from a scaffold FA file.\n"
+     "usage:\n"
+     "    scaffoldFaToAgp source.fa\n"
+     "The resulting files will be source.{agp,gap,lft}\n"
+     "Note: gaps of 1000 bases are inserted between scaffold records\n"
+     "   as contig gaps in the .agp file.\n"
+     "  N's within scaffolds are represented as\n"
+     "   frag gaps in the .gap file only\n");
+}
+
+boolean seqGetGap(DNA *seq, int *retSize, int *retGapSize)
+/* determine size of ungapped sequence, and size of gap following it */
+{
+int seqSize = 0, gapSize = 0;
+
+for (; *seq && (*seq != 'n' && *seq != 'N'); seq++, seqSize++);
+if (retSize)
+    *retSize = seqSize;
+for (; *seq && (*seq == 'n' || *seq == 'N'); seq++, gapSize++);
+if (retGapSize)
+    *retGapSize = gapSize;
+return (seqSize ? TRUE : FALSE);
 }
 
 void scaffoldFaToAgp(char *scaffoldFile)
-/* scaffoldFaToAgp - create AGP file and lift file from scaffold FA file */
+/* scaffoldFaToAgp - create AGP file, gap file and lift file 
+* from scaffold FA file */
 {
 struct dnaSeq scaffold, *scaffoldList, *pScaffold;
-DNA *dna;
+DNA *scaffoldSeq;
 char *name;
 int size;
-struct agpFrag frag, *pFrag = &frag;
-struct agpGap gap, *pGap = &gap;
-int gapSize = GAP_SIZE;
+struct agpFrag frag;
+struct agpGap scaffoldGap, fragGap;
+
+/* TODO: make settable by command-line option */
+int scaffoldGapSize = SCAFFOLD_GAP_SIZE;
+
 struct lineFile *lf = lineFileOpen(scaffoldFile, TRUE);
 char outDir[256], outFile[128], ext[64], outPath[512];
-FILE *agpFile = NULL;
-FILE *liftFile = NULL;
+FILE *agpFile = NULL, *gapFile = NULL, *liftFile = NULL;
 
-int fileNumber = 1;
-int start = 0;
-int end = 0;
+int fileNumber = 1;      /* sequence number in AGP file */
+int start = 0, end = 0;
 int chromSize = 0;
 int scaffoldCount = 0;
 
-/* Read in scaffold info */
-while (faMixedSpeedReadNext(lf, &dna, &size, &name))
+int fragSize = 0, gapSize = 0;
+char *seq;
+int seqStart = 0;
+
+/* determine size of "unordered chromosome" that will be constructed.
+ * This is needed for the lift file. */
+while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     {
-    AllocVar(pScaffold);
-    pScaffold->name = cloneString(name);
-    pScaffold->size = size;
-    printf("%s size=%d\n", pScaffold->name, pScaffold->size);
-    slAddTail(&scaffoldList, pScaffold);
-    chromSize += pScaffold->size;
-    chromSize += GAP_SIZE;
+    chromSize += size;
+    chromSize += SCAFFOLD_GAP_SIZE;
     scaffoldCount++;
     }
-printf("gap size is %d, total gaps: %d\n", GAP_SIZE, scaffoldCount);
+printf("scaffold gap size is %d, total scaffolds: %d\n",
+         SCAFFOLD_GAP_SIZE, scaffoldCount);
 printf("chrom size is %d\n", chromSize);
 
-/* Munge file paths */
+/* initialize fixed fields in AGP frag */
+ZeroVar(&frag);
+frag.chrom = CHROM_NAME;
+frag.type[0] = 'D';   /* draft */
+frag.fragStart = 0;   /* always start at beginning of scaffold */
+frag.strand[0] = '+';
+
+/* initialize fixed fields in scaffold gap */
+ZeroVar(&scaffoldGap);
+scaffoldGap.chrom = CHROM_NAME;
+scaffoldGap.n[0] = 'N';
+scaffoldGap.size = scaffoldGapSize;
+scaffoldGap.type = SCAFFOLD_GAP_TYPE;
+scaffoldGap.bridge = "no";
+
+/* initialize fixed fields in frag gap */
+ZeroVar(&fragGap);
+fragGap.chrom = CHROM_NAME;
+fragGap.n[0] = 'N';
+fragGap.type = FRAGMENT_GAP_TYPE;
+fragGap.bridge = "yes";
+
+/* munge file paths */
 splitPath(scaffoldFile, outDir, outFile, ext);
 
 sprintf(outPath, "%s%s.agp", outDir, outFile);
 agpFile = mustOpen(outPath, "w");
 printf("writing %s\n", outPath);
 
+sprintf(outPath, "%s%s.gap", outDir, outFile);
+gapFile = mustOpen(outPath, "w");
+printf("writing %s\n", outPath);
+
 sprintf(outPath, "%s%s.lft", outDir, outFile);
 liftFile = mustOpen(outPath, "w");
 printf("writing %s\n", outPath);
 
-ZeroVar(pFrag);
-ZeroVar(pGap);
-
-/* Initialize AGP gap that will be used throughout */
-pGap->chrom = CHROM_NAME;
-pGap->n[0] = 'N';
-pGap->size = gapSize;
-pGap->type = GAP_TYPE;
-pGap->bridge = "no";
-
-/* Initialize AGP fragment */
-pFrag->chrom = CHROM_NAME;
-pFrag->type[0] = 'D';   /* draft */
-pFrag->fragStart = 0;   /* always start at beginning of scaffold */
-pFrag->strand[0] = '+';
-
-/* Generate AGP and lift files */
-for (pScaffold = scaffoldList; 
-                pScaffold != NULL; pScaffold = pScaffold->next) 
+/* read in scaffolds from fasta file, and generate
+ * the three files */
+lineFileSeek(lf, 0, SEEK_SET);
+while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     {
-    end = start + pScaffold->size;
+    end = start + size;
 
-    /* Create AGP fragment for the scaffold */
-    pFrag->frag = pScaffold->name;
-    pFrag->ix = fileNumber++;
-    pFrag->chromStart = start;
-    pFrag->chromEnd = end;
-    pFrag->fragEnd = pScaffold->size;
-    agpFragOutput(pFrag, agpFile, '\t', '\n');
+    /* setup AGP frag for the scaffold and write to AGP file */
+    frag.frag = name;
+    frag.ix = fileNumber++;
+    frag.chromStart = start;
+    frag.chromEnd = end;
+    frag.fragEnd = size;
+    agpFragOutput(&frag, agpFile, '\t', '\n');
 
-    /* Write lift file for this fragment */
+    /* write lift file entry for this scaffold */
     fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\n",
-            start, pScaffold->name, pScaffold->size, CHROM_NAME, chromSize);
+            start, name, size, CHROM_NAME, chromSize);
 
-    /* Create AGP gap to separate scaffolds */
+    /* write gap file entries for this scaffold */
+    seq = scaffoldSeq;
+    seqStart = start;
+    while (seqGetGap(seq, &fragSize, &gapSize))
+        {
+        if (gapSize > MIN_FRAGMENT_GAP_SIZE)
+            {
+            fragGap.size = gapSize;
+            fragGap.chromStart = seqStart + fragSize + 1;
+            fragGap.chromEnd = fragGap.chromStart + gapSize - 1;
+            agpGapOutput(&fragGap, gapFile, '\t', '\n');
+            }
+        seqStart = seqStart + fragSize + gapSize;
+        seq = seq + fragSize + gapSize;
+        }
+
+    /* setup AGP gap to separate scaffolds and write to AGP and gap files */
     /* Note: may want to suppress final gap -- not needed as separator */
     start = end + 1;
-    end = start + gapSize - 1;
+    end = start + scaffoldGapSize - 1;
 
-    pGap->ix = fileNumber++;
-    pGap->chromStart = start;
-    pGap->chromEnd = end;
-    agpGapOutput(pGap, agpFile, '\t', '\n');
+    scaffoldGap.ix = fileNumber++;
+    scaffoldGap.chromStart = start;
+    scaffoldGap.chromEnd = end;
+    agpGapOutput(&scaffoldGap, agpFile, '\t', '\n');
+    agpGapOutput(&scaffoldGap, gapFile, '\t', '\n');
 
-    /* Write lift file for this gap */
+    /* write lift file entry for this gap */
     fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\n",
-            start-1, "gap", GAP_SIZE, CHROM_NAME, chromSize);
+            start-1, "gap", SCAFFOLD_GAP_SIZE, CHROM_NAME, chromSize);
 
     start = end;
+
+    //freeMem(seq);
     }
 carefulClose(&agpFile);
 carefulClose(&liftFile);
+carefulClose(&gapFile);
 lineFileClose(&lf);
 }
 
