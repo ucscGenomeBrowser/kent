@@ -827,6 +827,19 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track blatFr1
+shortLabel Fugu Blat
+longLabel Fugu (fr1-Aug 02) Translated Blat Alignments
+group compGeno
+priority 113
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno fr1
+otherDb fr1
+colorChromDefault off
+
 track blatCi1
 shortLabel Squirt Blat
 longLabel Ciona intestinalis Translated Blat Alignments
@@ -1403,4 +1416,11 @@ xrefTable tigrCmrORFsInfo
 xrefQuery select name,tigrSubRole from %s where tigrSubRole like '%%%s%%'
 searchDescription SubRole of TIGR Locus
 searchPriority 63
+
+searchTable rnaCluster
+searchMethod exact
+searchType bed
+termRegex chr[0-9A-Z]+[.][0-9]+
+searchPriority 50
+
 

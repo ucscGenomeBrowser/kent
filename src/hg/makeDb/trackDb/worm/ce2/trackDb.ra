@@ -1,3 +1,13 @@
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
 track gap
 shortLabel Gap
 longLabel Gap Locations
@@ -136,7 +146,114 @@ color 100,50,0
 altColor 128,120,100
 type axt cb1
 
+track sangerIntrons
+shortLabel WormBase Introns
+longLabel Introns from WormBase Genes track
+group genes
+priority 31.0
+useScore 1
+visibility hide
+type bed 6
 
+track gcatg_bedP
+shortLabel GCATG Plus
+longLabel locations of pentamer GCATG on plus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gcatg_bedM
+shortLabel GCATG Minus
+longLabel locations of pentamer GCATG on minus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gtgtgt_bedP
+shortLabel GTGTGT Plus
+longLabel locations of hexamer GTGTGT on plus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gtgtgt_bedM
+shortLabel GTGTGT Minus
+longLabel locations of hexamer GTGTGT on minus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gtgttg_bedP
+shortLabel GTGTTG Plus
+longLabel locations of hexamer GTGTTG on plus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gtgttg_bedM
+shortLabel GTGTTG Minus
+longLabel locations of hexamer GTGTTG on minus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gttgtg_bedP
+shortLabel GTTGTG Plus
+longLabel locations of hexamer GTTGTG on plus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track gttgtg_bedM
+shortLabel GTTGTG Minus
+longLabel locations of hexamer GTTGTG on minus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track tgtgtg_bedP
+shortLabel TGTGTG Plus
+longLabel locations of hexamer TGTGTG on plus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
+
+track tgtgtg_bedM
+shortLabel TGTGTG Minus
+longLabel locations of hexamer TGTGTG on minus strand
+group map
+priority 23.9
+visibility hide
+color 0,0,0
+altColor 255,128,128
+type bed 6
 
 searchTable softberryGene
 searchType genePred
