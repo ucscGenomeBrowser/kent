@@ -4,6 +4,7 @@
 name global
 examples Some examples of search terms are 'FOXA1' 'HOXA9' and 'MAP kinase.'
 geneTable knownGene
-cannonicalTable knownCannonical
+canonicalTable knownCanonical
+isoformTable knownIsoforms
 allTranscriptQuery select name,chrom,txStart,txEnd,proteinId from knownGene
-allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from knownCannonical
+allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from knownCanonical
