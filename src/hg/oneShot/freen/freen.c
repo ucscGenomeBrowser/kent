@@ -3,9 +3,11 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <dirent.h>
+#include <netdb.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "portable.h"
 
 void usage()
 /* Print usage and exit. */
@@ -13,66 +15,25 @@ void usage()
 errAbort("usage: freen file/dir");
 }
 
-time_t now;
-
-int rFreen(int level, char *dirName, int dirNameSize, char *fileName)
-/* Recursively traverse directory tree. */
+void freen(char *host)
+/* Test some hair-brained thing. */
 {
-int err;
-static struct stat st;
-int newSize = strlen(fileName) + 1 + dirNameSize;
-
-if (level > 0 && (sameString(fileName, ".") || sameString(fileName, "..")))
-    return 0;
-if (newSize > PATH_MAX)
-    return -1;
-if (dirName[0] == 0)
-    {
-    --newSize;
-    strcpy(dirName, fileName);
-    }
-else
-    {
-    dirName[dirNameSize] = '/';
-    strcpy(dirName + dirNameSize + 1, fileName);
-    }
-if ((err = stat(dirName, &st)) >= 0)
-    {
-    spaceOut(stdout, level);
-    printf("%s", fileName);
-    if (S_ISDIR(st.st_mode))
-	printf("/");
-    printf("\t%lld", st.st_size);
-    printf("\t%ld\n", now - st.st_mtime);
-    if (S_ISDIR(st.st_mode))
-	{
-	if (newSize <= PATH_MAX)
-	    {
-	    DIR *d;
-	    if ((d = opendir(dirName)) != NULL)
-		{
-		struct dirent *de;
-		while ((de = readdir(d)) != NULL)
-		    {
-		    rFreen(level+1, dirName, newSize, de->d_name);
-		    }
-		closedir(d);
-		}
-	    }
-	}
-    }
-dirName[dirNameSize] = 0;
-return err;
-}
-
-void freen(char *fileName)
-/* Print borf as fasta. */
-{
-char buf[PATH_MAX+1];
-buf[0] = 0;
-now = time(NULL);
-printf("%ld %s", now, ctime(&now));
-rFreen(0, buf, 0, fileName);
+long start, end;
+int i;
+start = clock1000();
+gethostbyname(host); 
+end = clock1000(); 
+printf("time 1 = %ld\n", end - start); 
+start = clock1000();
+for (i=0; i<10; ++i)
+    gethostbyname(host);
+end = clock1000();
+printf("time 10 = %ld\n", end - start);
+start = clock1000();
+for (i=0; i<100; ++i)
+    gethostbyname(host);
+end = clock1000();
+printf("time 100 = %ld\n", end - start);
 }
 
 
