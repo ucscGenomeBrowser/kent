@@ -100,11 +100,13 @@ struct mafComp *mafMayFindComponent(struct mafAli *maf, char *src);
 struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
 /* Find component of given source or die trying. */
 
-struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *src);
-/* Find component of given source. Return NULL if not found. */
+struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *pre, char *sep);
+/* Find component of given source that starts with pre followed by sep.
+   Return NULL if not found. */
 
-struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *src);
-/* Find component of given source or die trying. */
+struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *pre, char *sep);
+/* Find component of given source that starts with pre followed by sep
+   or die trying. */
 
 void mafMoveComponentToTop(struct mafAli *maf, char *componentSource);
 /* Move given component to head of component list. */

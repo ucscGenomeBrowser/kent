@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.14 2004/08/04 01:07:28 krish Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.15 2004/08/05 22:27:00 krish Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -361,10 +361,17 @@ if (mc == NULL)
 return mc;
 }
 
-struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *prefix)
-/* Find component with source name with given prefix. Return NULL if not found. */
+struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *pre, char *sep)
+/* Find component of given source that starts with pre followed by sep.
+   Return NULL if not found. */
 {
 struct mafComp *mc;
+char prefix[256];
+
+if (sep == NULL)
+    sep = '\0';
+snprintf(prefix, 256, "%s%s", pre, sep);
+
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     if (startsWith(prefix, mc->src))
@@ -373,12 +380,13 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 return NULL;
 }
 
-struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *prefix)
-/* Find component with source name with given prefix or die trying. */
+struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *pre, char *sep)
+/* Find component of given source that starts with pre followed by sep
+   or die trying. */
 {
-struct mafComp *mc = mafMayFindCompPrefix(maf, prefix);
+struct mafComp *mc = mafMayFindCompPrefix(maf, pre, sep);
 if (mc == NULL)
-    errAbort("Couldn't find %s in maf", prefix);
+    errAbort("Couldn't find %s%s... in maf", pre,sep);
 return mc;
 }
 
