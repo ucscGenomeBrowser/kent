@@ -1197,6 +1197,19 @@ identifier unigeneId fuzzy
     $gbd.sage.uni
 
 
+# BGI SNP Identifiers
+
+identifier bgiSnpId external=BGI
+"BGI SNP ID"
+    $galGal.bgiSnp.name
+    $galGal.bgiGeneSnp.snpName
+
+identifier bgiGeneId external=BGI
+"BGI Gene ID"
+    $galGal.bgiGene.name
+    $galGal.bgiGeneSnp.geneName
+
+
 # Other Identifiers
 
 identifier extFileId
