@@ -40,8 +40,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
-    rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
+    rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o tfbsConsFactors.o \
+    roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o tfbsConsSites.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snpMap.o snpUi.o softPromoter.o softberryHom.o \
