@@ -308,7 +308,7 @@ errAbort("%s:\n"
          "      Note that this is only coverage by a single select record and this is;\n"
          "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
          "      will select identical records (or CDS if both CDS options are specified.\n"
-         "  -dropped=file - output rows that were dropped to this file.\n",
+         "  -dropped=file - output rows that were dropped to this file.\n"
          "  -merge - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
          "         inRec<tab>selectRec.\n"
