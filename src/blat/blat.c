@@ -90,7 +90,7 @@ printf(
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 5 for protein.\n"
   "   -oneOff=N   If set to 1 this allows one mismatch in tile and still\n"
-  "               triggers an alignments.  Default is 0.\n"
+  "               triggers an alignments.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the \n"
