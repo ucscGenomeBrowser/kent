@@ -82,19 +82,19 @@ if (psl)
     fprintf(f, "%d\t%d\t0\t0\t", match, mismatch);
     fprintf(f, "%d\t%d\t%d\t%d\t", qNumInsert, qBaseInsert, tNumInsert, tBaseInsert);
     fprintf(f, "%c%s\t", (isRc ? '-' : '+'), targetStrand);
-    fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
+    /* if query is - strand, convert start/end to genomic */
+    if (isRc)
+        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize,
+                (qSize - qTotalEnd), (qSize - qTotalStart));
+    else
+        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
     fprintf(f, "%s\t%d\t%d\t%d\t", tName, tSize, tTotalStart, tTotalEnd);
     fprintf(f, "%d\t", blockCount);
     for (block = blockList; block != NULL; block = block->next)
         fprintf(f, "%d,", block->tEnd - block->tStart);
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
-        {
-        if (isRc)
-            fprintf(f, "%d,", (qSize - block->qEnd));
-        else
-            fprintf(f, "%d,", block->qStart);
-        }
+        fprintf(f, "%d,", block->qStart);
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tStart);
