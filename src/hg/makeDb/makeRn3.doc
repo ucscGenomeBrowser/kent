@@ -1,17 +1,23 @@
 # This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, January 2003 update.
 
-DOWNLOAD SEQUENCE (TO DO)
+DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
 
     ssh kkstore
     mkdir /cluster/store3/rn3
     cd /cluster/store3/rn3
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/conditions_for_use
+    #  Three extra files that were not in Rn2:
+    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bac.clones
+    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.bacs
+    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.contigs
 
     # Get BCM's chrom assemblies -- we will assemble our own chr*.fa from 
     # contig fa + agp, and cross-check against this.  
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
+    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
+    #  But there now is a 21 ?
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
       mkdir $c
       wget -O $c/chr$c.fa.bcm.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.fa.gz
@@ -21,9 +27,15 @@ DOWNLOAD SEQUENCE (TO DO)
 
     # Get BCM's contig fa + agp.  We will split into our own conveniently-sized
     # pseudo-contigs, and assemble chrom fa.  
-    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/bacfile2-1.gz
-    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/record.dat.gz
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
+    # These two files are not available in this rat June 2003
+    #  But they don't seem to be used anywhere else here anyway
+    # wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/bacfile2-1.gz
+    # wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/record.dat.gz
+    #  Perhaps the extra three files bac.clones, bactigs.bacs and
+    #  bactigs.contigs can be used ?
+    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
+    #  But there now is a 21 ?
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
       wget -O $c/chr$c.agp.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp.gz
       wget -O $c/chr$c.contig.fa.gz \
@@ -36,7 +48,7 @@ DOWNLOAD SEQUENCE (TO DO)
       gunzip $c/chr${c}_random.agp.gz
     end
 
-BUILD AND CHECK CHROM-LEVEL SEQUENCE (TO DO)
+BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
 
     # Make chrom fa:
     foreach c (?{,?})
@@ -57,7 +69,7 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (TO DO)
       if ($agpLen == $faLen) then
         echo $f length = $g length = $faLen
       else
-        echo Error\!\!\!  $f length = $agpLen, but $g length = $faLen
+        echo ERROR\!\!\!  $f length = $agpLen, but $g length = $faLen
       endif
     end
     # Check that our assembled chrom fa jive with the BCM chrom fa
@@ -68,7 +80,7 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (TO DO)
       if ($ucscLen == $bcmLen) then
         echo chr$c.fa length = chr$c.fa.bcm length = $bcmLen
       else
-        echo Error\!\!\!  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen
+        echo ERROR\!\!\!  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen
       endif
       if (-e $c/chr${c}_random.fa) then
         set ucscLen = `faSize $c/chr${c}_random.fa | awk '{print $1;}'`
@@ -77,16 +89,13 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (TO DO)
         if ($ucscLen == $bcmLen) then
           echo chr${c}_random.fa length = chr${c}_random.fa.bcm length = $bcmLen
         else
-          echo Error\!\!\!  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen
+          echo ERROR\!\!\!  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen
         endif
       endif
     end
 
-BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (TO DO)
-
-    ssh hgwdev
-    cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
-    make
+BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
+					(DONE - 2003-06-22 - Hiram)
 
     # This will split the rat sequence into approx. 5 Mbase
     # supercontigs between non-bridged clone contigs and drop the
@@ -126,7 +135,7 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (TO DO)
       if ($l1 == $l2) then
         echo "$f and $f:r have the same #lines"
       else
-        echo Error\!\!\!  $f has $l1 lines, but $f:r has $l2
+        echo ERROR\!\!\!  $f has $l1 lines, but $f:r has $l2
       endif
     end
     # Save some space
@@ -1385,5 +1394,3 @@ o - Rescuing STS track:
      - liftUp chrom.psl ../../../jkStuff/liftAll.lft carry contig.psl
      - rm contig.psl
      - mv chrom.psl ../convert.psl
-
-
