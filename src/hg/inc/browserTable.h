@@ -11,7 +11,7 @@ struct browserTable
     struct browserTable *next;  /* Next in singly linked list. */
     char tableName[65];	/* Name of table in database to be queried. */
     char longLabel[129];	/* Long name to be displayed in center browser window. */
-    char shortLabel[33];	/* Short name to be displaed on left of browser window. */
+    char shortLabel[33];	/* Short name to be displayed on left of browser window. */
     char mapName[33];	/* Return name to associate on map. */
     char *version;	/* Versioning information about table. */
     char trackType[33];	/* Initially just 'bed' and 'psl' supported. */

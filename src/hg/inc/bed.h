@@ -21,8 +21,8 @@ struct bed
     unsigned reserved2; /* End in other sequence if it's homology based. */
     unsigned reserved3; /* Total size of other sequence. */
     unsigned blockCount; /* Number of blocks. */
-    int *blockSizes;     /* Comma separated list of block sizes.  Relative to chromStart*/
-    int *chromStarts;    /* Start positions inside chromosome.  Relative to chromEnd*/
+    int *blockSizes;     /* Comma separated list of block sizes.  */
+    int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
     };
 
 void bedStaticLoad(char **row, struct bed *ret);
