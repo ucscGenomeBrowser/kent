@@ -18,11 +18,11 @@
 #include "nib.h"
 
 /* Variables used by getFeatDna code */
-char *database = NULL;		/* Which database? */
+char *database = "hg6";		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
-boolean breakUp = FALSE;	/* Break up things? */
+boolean breakUp = TRUE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 
@@ -118,8 +118,11 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-struct hash *tableHash = newHash(7);
-struct hashEl *tableList;
+struct hash *posTableHash = newHash(7);
+struct hashEl *posTableList;
+struct hash *nonposTableHash = newHash(7);
+struct hashEl *nonposTableList;
+
 struct hashEl *currentListEl;
 
 position = cgiOptionalString("position");
@@ -184,10 +187,14 @@ while((row = sqlNextRow(sr)) != NULL)
 			/* parse the name into chrN_* */
 			snprintf(key, 32, "chrN_%s", post);
 			/* and insert it into the hash table if it is not already there */
-			hashStoreName(tableHash, key);
+			hashStoreName(posTableHash, key);
 			}
 		else
-			hashStoreName(tableHash, row[0]);
+			hashStoreName(posTableHash, row[0]);
+		}
+	else
+		{
+		hashStoreName(nonposTableHash, row[0]);
 		}
 	}
 sqlFreeResult(&sr);
@@ -196,17 +203,32 @@ sqlDisconnect(&conn);
 /* get the list of tables */
 puts("<SELECT NAME=table SIZE=1>");
 puts("<OPTION>Choose table</OPTION>");
+printf("<OPTION VALUE=\"Choose table\">----Positional tables----</OPTION>\n");
 
-tableList = hashElListHash(tableHash);
-slSort(&tableList, compareTable);
+posTableList = hashElListHash(posTableHash);
+slSort(&posTableList, compareTable);
 
-currentListEl = tableList;
+nonposTableList = hashElListHash(nonposTableHash);
+slSort(&nonposTableList, compareTable);
+
+currentListEl = posTableList;
 while(currentListEl != 0)
 	{
 	printf("<OPTION>%s\n", currentListEl->name);
 
 	currentListEl = currentListEl->next;
 	}
+
+printf("<OPTION VALUE=\"Choose table\">--Non-positional tables--</OPTION>\n");
+
+currentListEl = nonposTableList;
+while(currentListEl != 0)
+	{
+	printf("<OPTION>%s\n", currentListEl->name);
+
+	currentListEl = currentListEl->next;
+	}
+
 puts("</SELECT>");
 
 puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
@@ -215,7 +237,7 @@ puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
 
 puts("</FORM>");
 
-hashElFreeList(&tableList);
+hashElFreeList(&posTableList);
 
 puts("</CENTER>");
 }
@@ -290,9 +312,13 @@ if(!allLetters(table))
 	errAbort("Malformated table name.");
 	
 /* get the name of the start and end fields */
-hFindChromStartEndFields(table, chromFieldName, startName, endName);
-snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
+	{
+	snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
 		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+	}
+else
+	snprintf(query, 256, "SELECT * FROM %s ", table);
 
 conn = hAllocConn();
 //puts(query);
@@ -397,16 +423,21 @@ else	/* if all the genome */
 		table[3] = '1';
 	}
 
-puts(table);
-
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
 	errAbort("Malformated table name.");
 
-/* print the location and a jump button */
-fputs("position ", stdout);
-cgiMakeTextVar("position", position, 30);
-cgiMakeButton("submit", "jump");
+/* print the location and a jump button if the table is positional */
+if(hFindChromStartEndFields(table, query, query, query))
+	{
+	fputs("position ", stdout);
+	cgiMakeTextVar("position", position, 30);
+	cgiMakeButton("submit", "jump");
+	}
+else
+	{
+	cgiMakeHiddenVar("position", position);
+	}
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("phase", "Choose fields");
 
@@ -473,10 +504,6 @@ parseTableName(table, choosenChromName);
 if(!allLetters(table))
 	errAbort("Malformated table name.");
 
-/* get the name of the start and end fields */
-hFindChromStartEndFields(table, chromFieldName, startName, endName);
-
-/* build the SQL command */
 strcpy(query, "SELECT");
 
 /* the first field selected is special */
@@ -520,9 +547,16 @@ while(current != 0)
 	current = current->next;
 	}
 
-/* build the rest of the query */
-sprintf(query, "%s FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d", query, table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+sprintf(query, "%s FROM %s", query, table);
 
+/* get the name of the start and end fields */
+if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
+	{
+	/* build the rest of the query */
+	sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+			table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+	}
+	
 conn = hAllocConn();
 //puts(query);
 sr = sqlGetResult(conn, query);
@@ -821,8 +855,6 @@ else
 	}
 }	
 			
-
-
 
 void getAllGenomeWideNonSplit()
 {
@@ -1188,11 +1220,17 @@ if (!toStdout)
 }
 
 
-
-
 void getDNA()
 /* get the DNA for the given position */
 {
+char* table = cgiString("table");
+char* position = cgiString("position");
+char *choosenChromName;        /* Name of chromosome sequence . */
+int winStart;           /* Start of window in sequence. */
+int winEnd;         /* End of window in sequence. */
+char parsedTableName[256];
+int c;
+
 /* if they haven't choosen a table, tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
@@ -1200,51 +1238,81 @@ if(existsAndEqual("table", "Choose table"))
 	exit(0);
 	}
 	
-if(existsAndEqual("position", "genome"))
-	{
-	puts("getting DNA from genome");
-	}
-else
-	{
-	char* table = cgiString("table");
-	char parsedTableName[256];
-	char command[256];
-	char start[64];
-	char end[64];
-	char *choosenChromName;        /* Name of chromosome sequence . */
-	int winStart;           /* Start of window in sequence. */
-	int winEnd;         /* End of window in sequence. */
-	char* position;
+/* select the database */
+database = cgiOptionalString("db");
+if (database == NULL)
+	database = "hg6";
 
-	/* select the database */
-	database = cgiOptionalString("db");
-	if (database == NULL)
-	    database = "hg6";
-	
-	/* if the position information is not given, get it */
-	position = cgiOptionalString("position");
-	if(position == NULL)
-		position = "";
+/* if the position information is not given, get it */
+if(position == NULL)
+	position = "";
+if(strcmp(position, "genome"))
+	{
 	if(position != NULL && position[0] != 0)
 		{
 		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
 			return;
 		}
 	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
+	}
 
+/* make sure that the table name doesn't have anything "weird" in it */
+if(!allLetters(table))
+	errAbort("Malformated table name.");
+
+if(existsAndEqual("position", "genome"))
+	{
+	char post[64];
+
+	chromStart = 0;		/* Start of range to select from. */
+	chromEnd = BIGNUM;          /* End of range. */
+		
+	if(sscanf(table, "chrN_%64s", post) == 1)
+		{
+		for(c  = 1; c <= 22; c++)
+			{
+			snprintf(parsedTableName, 256, "chr%d_%s", c, post); 
+			getFeatDna(parsedTableName, "all", "stdout");
+			snprintf(parsedTableName, 256, "chr%d_random_%s", c, post); 
+			getFeatDna(parsedTableName, "all", "stdout");
+			}
+
+		snprintf(parsedTableName, 256, "chr_%s_%s", "X", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+		snprintf(parsedTableName, 256, "chr%s_random_%s", "X", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+
+		snprintf(parsedTableName, 256, "chr%s_%s", "Y", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+		snprintf(parsedTableName, 256, "chr%s_random_%s", "Y", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+
+		snprintf(parsedTableName, 256, "chr%s_%s", "NA", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+		snprintf(parsedTableName, 256, "chr%s_random_%s", "NA", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+
+		snprintf(parsedTableName, 256, "chr%s_%s", "UL", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+		snprintf(parsedTableName, 256, "chr%s_random_%s", "UL", post);
+		getFeatDna(parsedTableName, "all", "stdout");
+		}
+	else
+		getFeatDna(table, "all", "stdout");
+	}
+else
+	{
 	/* get the real name of the table */
 	parseTableName(parsedTableName, choosenChromName);
-
-	/* make sure that the table name doesn't have anything "weird" in it */
-	if(!allLetters(table))
-		errAbort("Malformated table name.");
-
+	
 	chromStart = winStart;
 	chromEnd = winEnd;
+	
 	puts("<PRE>");
 	getFeatDna(parsedTableName, choosenChromName, "stdout");
-	puts("</PRE>");
 	}
+
+puts("</PRE>");
 }
 
 
@@ -1290,8 +1358,6 @@ else
 		}
 	}
 }
-
-
 
 
 int main(int argc, char *argv[])
