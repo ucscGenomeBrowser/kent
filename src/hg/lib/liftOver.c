@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.13 2004/09/08 01:42:06 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.14 2004/09/15 18:30:06 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -121,7 +121,7 @@ return ok;
 }
 
 static char *remapRange(struct hash *chainHash, double minRatio, 
-                        int minSizeT, int minSizeQ, 
+                        int minChainSizeT, int minChainSizeQ, 
                         char *chrom, int s, int e, char strand, double minMatch,
                         char *regionName, struct bed **bedRet)
 /* Remap a range through chain hash.  If all is well return NULL
@@ -132,12 +132,15 @@ struct binElement *list = findRange(chainHash, chrom, s, e), *el;
 struct chain *chainsHit = NULL, 
                 *chainsPartial = NULL, 
                 *chainsMissed = NULL, *chain;
-struct bed *bedList = NULL;
+struct bed *bedList = NULL, *bed = NULL, *prevBed = NULL;
 /* initialize for single region case */
 int start = s, end = e;
 double minMatchSize = minMatch * (end - start);
 int intersectSize;
 bool multiple = (regionName != NULL);
+/* set minimum region size to minimum chain in query size -- later may
+   * make this a distinct parameter */
+int minSizeQ = minChainSizeQ;
 
 verbose(2, "%s:%d-%d\n", chrom, s, e);
 for (el = list; el != NULL; el = el->next)
@@ -145,8 +148,8 @@ for (el = list; el != NULL; el = el->next)
     chain = el->val;
     if (multiple)
         {
-        if (chain->qEnd - chain->qStart < minSizeQ ||
-            chain->tEnd - chain->tStart < minSizeT)
+        if (chain->qEnd - chain->qStart < minChainSizeQ ||
+            chain->tEnd - chain->tStart < minChainSizeT)
                 continue;
         /* limit required match to chain range on target */
         end = min(e, chain->tEnd);
@@ -155,9 +158,7 @@ for (el = list; el != NULL; el = el->next)
         }
     intersectSize = aliIntersectSize(chain, start, end);
     if (intersectSize >= minMatchSize)
-	{
 	slAddHead(&chainsHit, chain);
-	}
     else if (intersectSize > 0)
 	{
 	slAddHead(&chainsPartial, chain);
@@ -183,18 +184,27 @@ else if (chainsHit->next != NULL && !multiple)
     {
     return "Duplicated in new";
     }
+/* sort chains by position in query  so that we can merge overlaps */
 for (chain = chainsHit; chain != NULL; chain = chain->next)
     {
-    struct bed *bed;
     int start=s, end=e;
     if (multiple)
         /* no real need to veriy ratio again (it would require
          * adjusting coords again). */
         minRatio = 0;
+    verbose(3,"sorted hit chain %s:%d %s:%d-%d %c\n",
+        chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
+        chain->qStrand);
     if (!mapThroughChain(chain, minRatio, &start, &end))
-        errAbort("Chain mapping error: %s:%d-%d\n", chrom, start, end);
+        errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
+    verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
+    if (end - start < minSizeQ)
+        {
+        verbose(2,"dropping %s:%d-%d (too small)\n", chain->qName, start, end);
+        continue;
+        }
     AllocVar(bed);
     bed->chrom = cloneString(chain->qName);
     bed->chromStart = start;
@@ -205,7 +215,27 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     bed->strand[1] = 0;
     slAddHead(&bedList, bed);
     }
-slReverse(&bedList);
+slSort(&bedList, bedCmpExtendedChr);
+
+/* merge overlapping regions
+   * NOTE: should make this configurable */
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    if (prevBed && sameString(bed->chrom, prevBed->chrom) && 
+                bed->chromStart <= prevBed->chromEnd)
+        {
+        /* this region overlaps the previous, so extend
+           * the previous to include this one
+           * TODO: make the merge optional -- might want to see dups */
+        verbose(2,"merging %s:%d-%d, %s:%d-%d\n",
+                    prevBed->chrom, prevBed->chromStart, prevBed->chromEnd,
+                    bed->chrom, bed->chromStart, bed->chromEnd);
+        prevBed->chromEnd = max(prevBed->chromEnd, bed->chromEnd);
+        slRemoveEl(&bedList, bed);
+        continue;
+        }
+    prevBed = bed;
+    }
 *bedRet = bedList;
 return NULL;
 }
