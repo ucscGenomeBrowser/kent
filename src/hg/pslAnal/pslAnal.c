@@ -71,6 +71,10 @@ struct indel
   struct acc *noMrnaAcc;
   int noEst;
   struct acc *noEstAcc;
+  int unMrna;
+  struct acc *unMrnaAcc;
+  int unEst;
+  struct acc *unEstAcc;
 
   /* fields used if this is tracking codon substitutions*/
   int codonGenPos[3];  /* position of the codon bases */
@@ -398,7 +402,18 @@ else
 /*printf("Comparing %s:%d-%d(%d) bases %s with genomic %s\n",psl->qName, start, end, seq->size, seq->dna, gseq->dna);*/
 AllocVar(acc);
 strcpy(acc->name,seq->name);
-if (sameString(gseq->dna, dna)) 
+if ((start == 0) && (end == 0))
+    if (sameString(table, "mrna"))
+        {
+        ni->unMrna++;
+        slAddHead(&ni->unMrnaAcc, acc);
+        } 
+    else 
+        {
+        ni->unEst++;
+        slAddHead(&ni->unEstAcc, acc);
+        }
+else if (sameString(gseq->dna, dna)) 
     if (sameString(table, "mrna"))
         {
         ni->genMrna++;
@@ -409,29 +424,27 @@ if (sameString(gseq->dna, dna))
         ni->genEst++;
         slAddHead(&ni->genEstAcc, acc);
         }
-else  
-    if (sameString(mdna, dna)) 
-        if (sameString(table, "mrna"))
-            {
-            ni->mrnaMrna++;
-            slAddHead(&ni->mrnaMrnaAcc, acc);
-            } 
-        else 
-            {
-            ni->mrnaEst++;
-            slAddHead(&ni->mrnaEstAcc, acc);
-            }
-    else
-        if (sameString(table, "mrna"))
-            {
-            ni->noMrna++;
-            slAddHead(&ni->noMrnaAcc, acc);
-            } 
-        else 
-            {
-            ni->noEst++;
-            slAddHead(&ni->noEstAcc, acc);
-            }
+else if (sameString(mdna, dna)) 
+    if (sameString(table, "mrna"))
+        {
+        ni->mrnaMrna++;
+        slAddHead(&ni->mrnaMrnaAcc, acc);
+        } 
+    else 
+        {
+        ni->mrnaEst++;
+        slAddHead(&ni->mrnaEstAcc, acc);
+        }
+else if (sameString(table, "mrna"))
+        {
+        ni->noMrna++;
+        slAddHead(&ni->noMrnaAcc, acc);
+        } 
+    else 
+        {
+        ni->noEst++;
+        slAddHead(&ni->noEstAcc, acc);
+        }
 freez(&dna);
 dnaSeqFree(&seq);
 dnaSeqFree(&gseq);
@@ -904,6 +917,12 @@ if (indelReport)
 	fprintf(in, "\n\t%d ESTs support neither: ",indel->noEst);
 	for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
 	    fprintf(in, "%s ", acc->name);
+	fprintf(in, "\n\t%d mRNAs do not align: ", indel->unMrna);
+	for (acc = indel->unMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(in, "%s ", acc->name);
+	fprintf(in, "\n\t%d ESTs do not align: ",indel->unEst);
+	for (acc = indel->unEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(in, "%s ", acc->name);
 	fprintf(in, "\n\n");
 	}
     }
@@ -937,6 +956,12 @@ if (mismatchReport)
 	    fprintf(mm, "%s ", acc->name);
 	fprintf(mm, "\n\t%d ESTs support neither: ",indel->noEst);
 	for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(mm, "%s ", acc->name);
+	fprintf(mm, "\n\t%d mRNAs do not align: ", indel->unMrna);
+	for (acc = indel->unMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(mm, "%s ", acc->name);
+	fprintf(mm, "\n\t%d ESTs do not align: ",indel->unEst);
+	for (acc = indel->unEstAcc; acc != NULL; acc = acc->next)
 	    fprintf(mm, "%s ", acc->name);
 	fprintf(mm, "\n\n");
 	}
@@ -984,6 +1009,12 @@ if (codonSubReport)
 	    fprintf(cs, "%s ", acc->name);
 	fprintf(cs, "\n\t%d ESTs support neither: ",indel->noEst);
 	for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d mRNAs do not align: ", indel->unMrna);
+	for (acc = indel->unMrnaAcc; acc != NULL; acc = acc->next)
+	    fprintf(cs, "%s ", acc->name);
+	fprintf(cs, "\n\t%d ESTs do not align: ",indel->unEst);
+	for (acc = indel->unEstAcc; acc != NULL; acc = acc->next)
 	    fprintf(cs, "%s ", acc->name);
 	fprintf(cs, "\n\n");
 	}
