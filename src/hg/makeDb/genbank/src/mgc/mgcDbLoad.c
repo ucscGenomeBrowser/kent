@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.8 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.9 2004/07/16 06:37:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -85,7 +85,7 @@ errAbort(
   "    -allMgcTables - create all mgc, not just full length. \n"
   "    -workdir=work/load/mgc - Temporary directory for load files.\n"
   "    -verbose=n - enable verbose output\n"
-  "              n >= 1 - basic information abourt each step\n"
+  "              n >= 1 - basic information abort each step\n"
   "              n >= 2 - more details\n"
   "              n >= 5 - SQL queries\n"
   "\n"
@@ -180,41 +180,38 @@ freez(&sqlCmd);
 }
 
 char *loadMgcStatus(struct sqlConnection *conn, char *mgcStatusTab)
-/* load the mgcStatus or mgcFullStatus tables */
+/* load the mgcStatus or mgcFullStatus tables, return name loaded */
 {
-struct lineFile* inFh;
+struct lineFile* inLf;
 FILE *outFh;
 char tmpFile[PATH_LEN];
 char sql[1024];
-char *line;
-int lineSize;
-char *statusTbl = allMgcTables ? MGC_STATUS_TMP : MGC_FULL_STATUS_TMP;
-gbVerbEnter(2, "loading %s", statusTbl);
+char *statusTblName = allMgcTables ? MGC_STATUS_TMP : MGC_FULL_STATUS_TMP;
+gbVerbEnter(2, "loading %s", statusTblName);
 
 /* uncompress to tmp file */
 safef(tmpFile, sizeof(tmpFile), "%s/mgcStatus.%s.%d.tmp", workDir,
       getHost(), getpid());
-inFh = gzLineFileOpen(mgcStatusTab);
+inLf = gzLineFileOpen(mgcStatusTab);
 outFh = gzMustOpen(tmpFile, "w");
-while (lineFileNext(inFh, &line, &lineSize))
-    {
-    fputs(line, outFh);
-    fputc('\n', outFh);
-    }
+
+while (mgcStatusTblCopyRow(inLf, outFh))
+    continue;
+
 gzClose(&outFh);
-gzLineFileClose(&inFh);
+gzLineFileClose(&inLf);
 
-safef(sql, sizeof(sql), mgcStatusCreateSql, statusTbl);
-sqlRemakeTable(conn, statusTbl, sql);
+safef(sql, sizeof(sql), mgcStatusCreateSql, statusTblName);
+sqlRemakeTable(conn, statusTblName, sql);
 
-sqlLoadTabFile(conn, tmpFile, statusTbl, SQL_TAB_FILE_ON_SERVER);
+sqlLoadTabFile(conn, tmpFile, statusTblName, SQL_TAB_FILE_ON_SERVER);
 unlink(tmpFile);
 
-gbVerbLeave(2, "loading %s", statusTbl);
-return statusTbl;
+gbVerbLeave(2, "loading %s", statusTblName);
+return statusTblName;
 }
 
-void createMgcFullMrna(struct sqlConnection *conn, char *statusTbl)
+void createMgcFullMrna(struct sqlConnection *conn, char *statusTblName)
 /* create the mgcFullMrna table */
 {
 char sql[1024];
@@ -229,8 +226,8 @@ safef(sql, sizeof(sql),
       "  SELECT all_mrna.* FROM all_mrna, %s"
       "    WHERE (all_mrna.qName = %s.acc)"
       "      AND (%s.state = %d)",
-      MGC_FULL_MRNA_TMP, statusTbl, statusTbl,
-      statusTbl, MGC_STATE_FULL_LENGTH);
+      MGC_FULL_MRNA_TMP, statusTblName, statusTblName,
+      statusTblName, MGC_STATE_FULL_LENGTH);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
 }
@@ -238,20 +235,23 @@ gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
 struct genePred* pslRowToGene(char **row)
 /* Read CDS and PSL and convert to genePred with specified CDS string */
 {
+struct genbankCds cds;
 struct genePred *genePred;
-unsigned cdsStart, cdsEnd;
-struct psl *psl;
+struct psl *psl = pslLoad(row+1);
 
 /* this sets cds start/end to -1 on error, which results in no CDS */
-genbankParseCds(row[0], &cdsStart, &cdsEnd);
+if (!genbankCdsParse(row[0], &cds))
+    {
+    if (sameString(row[0], "n/a"))
+        fprintf(stderr, "Warning: no CDS annotation for MGC mRNA %s\n",
+                psl->qName);
+    else 
+        fprintf(stderr, "Warning: invalid CDS annotation for MGC mRNA %s: %s\n",
+                psl->qName, row[0]);
 
-psl = pslLoad(row+1);
+    }
 
-if (sameString(row[0], "n/a"))
-    fprintf(stderr, "Warning: no cds annotation for MGC mRNA %s\n",
-            psl->qName);
-
-genePred = genePredFromPsl(psl, cdsStart, cdsEnd, SMALL_INSERT_SIZE);
+genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, SMALL_INSERT_SIZE);
 pslFree(&psl);
 return genePred;
 }
@@ -268,7 +268,7 @@ FILE *tabFh;
 gbVerbEnter(2, "loading %s", MGC_GENES_TMP);
 
 /* create the tmp table */
-sql = genePredGetCreateSql(MGC_GENES_TMP, 0, 0);
+sql = genePredGetCreateSql(MGC_GENES_TMP, genePredAllFlds, 0);
 sqlRemakeTable(conn, MGC_GENES_TMP, sql);
 freez(&sql);
 
@@ -401,19 +401,21 @@ if (sqlTableExists(conn, table))
 dyStringPrintf(sql, "%s_tmp TO %s", table, table);
 }
 
-void mgcDbLoad(char *database, char *mgcStatusTab)
+void mgcDbLoad(char *database, char *mgcStatusTabFile)
 /* Load the database with the MGC tables. */
 {
 struct sqlConnection *conn;
 struct dyString* sql = dyStringNew(1024);
-char *statusTbl;
+char *statusTblName;
 
 gbVerbEnter(1, "Loading MGC tables");
 hSetDb(database);
 conn = hAllocConn();
 
-statusTbl = loadMgcStatus(conn, mgcStatusTab);
-createMgcFullMrna(conn, statusTbl);
+/* laod status table into database, and full entries into memory */
+statusTblName = loadMgcStatus(conn, mgcStatusTabFile);
+
+createMgcFullMrna(conn, statusTblName);
 createMgcGenes(conn);
 if (allMgcTables) 
     {
@@ -487,7 +489,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *database;
-char* mgcStatusTab;
+char* mgcStatusTabFile;
 boolean drop;
 
 setlinebuf(stdout);
@@ -512,9 +514,9 @@ else
     allMgcTables = optionExists("allMgcTables");
     
     database = argv[1];
-    mgcStatusTab = argv[2];
+    mgcStatusTabFile = argv[2];
 
-    mgcDbLoad(database, mgcStatusTab);
+    mgcDbLoad(database, mgcStatusTabFile);
     }
 return 0;
 }

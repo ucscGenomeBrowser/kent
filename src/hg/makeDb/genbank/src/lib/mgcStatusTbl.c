@@ -3,8 +3,9 @@
 #include "localmem.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.9 2004/03/29 02:25:38 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.10 2004/07/16 06:37:10 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -111,7 +112,9 @@ static char *organismNameMap[][2] =
     {NULL, NULL}
 };
 
-#define MGCSTATUS_NUM_COLS 5
+/* geneName was added later and is optional */
+#define MGCSTATUS_MIN_NUM_COLS 5
+#define MGCSTATUS_NUM_COLS 6
 
 /* SQL to create status table. Should have table name sprinted into it.  The
  * values of the status enum are order such that values less than fullLength
@@ -152,6 +155,7 @@ char *mgcStatusCreateSql =
 "   ) NOT NULL,"
 "   acc CHAR(12) NOT NULL,"       /* genbank accession */
 "   organism CHAR(2) NOT NULL,"   /* two letter MGC organism */
+"   geneName CHAR(16) NOT NULL,"  /* RefSeq acc for gene, if available */
 "   INDEX(imageId),"
 "   INDEX(status),"
 "   INDEX(state),"
@@ -229,16 +233,22 @@ return hashFindVal(statusHash, statusName);
 }
 
 
-struct mgcStatusTbl *mgcStatusTblNew()
+struct mgcStatusTbl *mgcStatusTblNew(unsigned opts)
 /* Create an mgcStatusTbl object */
 {
 struct mgcStatusTbl *mst;
 AllocVar(mst);
-mst->imageIdHash = hashNew(22);  /* 4mb */
+mst->opts = opts;
+mst->lm = lmInit(1024*1024);
+if (opts & mgcStatusImageIdHash)
+    mst->imageIdHash = hashNew(22);  /* 4mb */
+if (opts & mgcStatusAccHash)
+    mst->accHash = hashNew(22);     /* 4mb */
 return mst;
 }
 
-static void loadRow(struct mgcStatusTbl *mst, struct lineFile *lf, char **row)
+static void loadRow(struct mgcStatusTbl *mst, struct lineFile *lf, char **row, 
+                    int numCols)
 /* Load an mgcStatus row from a tab file */
 {
 int imageId =  lineFileNeedNum(lf, row, 0);
@@ -254,18 +264,28 @@ if (state == MGC_STATE_NULL)
 if (state != status->state)
     errAbort("%s:%d: state value \"%s\" dosn't match status value \"%s\"",
              lf->fileName, lf->lineIx, row[2], row[1]);
-mgcStatusTblAdd(mst,  imageId, status, row[3], row[4]);
+
+if ((state == MGC_STATE_FULL_LENGTH) || !(mst->opts & mgcStatusFullOnly))
+    {
+    char *geneName = (numCols > MGCSTATUS_MIN_NUM_COLS) ? row[5] : NULL;
+    mgcStatusTblAdd(mst, imageId, status, row[3], row[4], geneName);
+    }
 }
 
-struct mgcStatusTbl *mgcStatusTblLoad(char *mgcStatusTab)
+struct mgcStatusTbl *mgcStatusTblLoad(char *mgcStatusTab, unsigned opts)
 /* Load a mgcStatusTbl object from a tab file */
 {
-struct mgcStatusTbl *mst = mgcStatusTblNew();
+struct mgcStatusTbl *mst = mgcStatusTblNew(opts);
 struct lineFile *lf = lineFileOpen(mgcStatusTab, TRUE);
+char *line;
 char *row[MGCSTATUS_NUM_COLS];
 
-while (lineFileNextRowTab(lf, row, MGCSTATUS_NUM_COLS))
-    loadRow(mst, lf, row);
+while (lineFileNextReal(lf, &line))
+    {
+    int numCols = chopTabs(line, row);
+    lineFileExpectAtLeast(lf, MGCSTATUS_MIN_NUM_COLS, numCols);
+    loadRow(mst, lf, row, numCols);
+    }
 lineFileClose(&lf);
 return mst;
 }
@@ -276,7 +296,9 @@ void mgcStatusTblFree(struct mgcStatusTbl **mstPtr)
 struct mgcStatusTbl *mst = *mstPtr;
 if (mst != NULL)
     {
+    lmCleanup(&mst->lm);
     hashFree(&mst->imageIdHash);
+    hashFree(&mst->accHash);
     free(mst);
     *mstPtr = NULL;
     }
@@ -284,28 +306,38 @@ if (mst != NULL)
 
 void mgcStatusTblAdd(struct mgcStatusTbl *mst, unsigned imageId,
                      struct mgcStatusType *status, char *acc,
-                     char *organism)
+                     char *organism, char* geneName)
 /* Add an entry to the table. acc maybe NULL */
 {
 struct mgcStatus *ms;
-char key[64];
-lmAllocVar(mst->imageIdHash->lm, ms);
+lmAllocVar(mst->lm, ms);
 ms->imageId = imageId;
 ms->status = status;
 if ((acc != NULL) && (acc[0] != '\0'))
-    ms->acc = lmCloneString(mst->imageIdHash->lm, acc);
+    ms->acc = lmCloneString(mst->lm, acc);
 else
     ms->acc = NULL;
 safef(ms->organism, sizeof(ms->organism), "%s", organism);
-makeKey(imageId, key);
-hashAdd(mst->imageIdHash, key, ms);
+if ((geneName != NULL) && (geneName[0] != '\0'))
+    ms->geneName = lmCloneString(mst->lm, geneName);
+else
+    ms->geneName = NULL;
+if (mst->imageIdHash != NULL)
+    {
+    char key[64];
+    makeKey(imageId, key);
+    hashAdd(mst->imageIdHash, key, ms);
+    }
+if ((mst->accHash != NULL) && (acc != NULL))
+    hashAdd(mst->accHash, ms->acc, ms);
+
 }
 
 void mgcStatusSetAcc(struct mgcStatusTbl *mst, struct mgcStatus *ms, char *acc)
 /* Change the accession on entry to the table. acc maybe NULL */
 {
 if ((acc != NULL) && (acc[0] != '\0'))
-    ms->acc = lmCloneString(mst->imageIdHash->lm, acc);
+    ms->acc = lmCloneString(mst->lm, acc);
 else
     ms->acc = NULL;
 }
@@ -331,11 +363,12 @@ return mgcStatus;
 static void mgcStatusTabOut(struct mgcStatus *mgcStatus, FILE *f)
 /* Write the mgcStatus object to a tab file */
 {
-fprintf(f, "%u\t%s\t%s\t%s\t%s\n", mgcStatus->imageId,
+fprintf(f, "%u\t%s\t%s\t%s\t%s\t%s\n", mgcStatus->imageId,
         mgcStatus->status->dbValue,
         mgcStateFormat(mgcStatus->status->state),
-        ((mgcStatus->acc != NULL) ? mgcStatus->acc : ""),
-        mgcStatus->organism);
+        gbValueOrEmpty(mgcStatus->acc),
+        mgcStatus->organism,
+        gbValueOrEmpty(mgcStatus->geneName));
 }
 
 static int imageIdCmp(const void *va, const void *vb)
@@ -376,6 +409,33 @@ for (mgcStatus = sortTable(mst); mgcStatus != NULL;
      mgcStatus = mgcStatus->next)
     if (mgcStatus->status == &MGC_FULL_LENGTH)
         mgcStatusTabOut(mgcStatus, f);
+}
+
+boolean mgcStatusTblCopyRow(struct lineFile *inLf, FILE *outFh)
+/* read a copy one row of a status table tab file without
+ * fully parsing.  Expand if optional fields are missing  */
+{
+char *line;
+int numCols, i;
+char *row[MGCSTATUS_NUM_COLS];
+if (!lineFileNextReal(inLf, &line))
+    return FALSE;
+numCols = chopTabs(line, row);
+numCols = min(numCols, MGCSTATUS_NUM_COLS);
+lineFileExpectAtLeast(inLf, MGCSTATUS_MIN_NUM_COLS, numCols);
+for (i = 0; i < numCols; i++)
+    {
+    if (i > 0)
+        fputc('\t', outFh);
+    fputs(row[i], outFh);
+    }
+
+/* pad */
+for (; i < MGCSTATUS_NUM_COLS; i++)
+    fputc('\t', outFh);
+fputc('\n', outFh);
+
+return TRUE;
 }
 
 /*

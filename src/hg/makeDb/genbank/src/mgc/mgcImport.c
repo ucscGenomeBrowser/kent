@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.5 2004/03/29 02:24:38 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.6 2004/07/16 06:37:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -134,7 +134,8 @@ if ((mgcStatus == NULL) || (strlen(fullength.gb_acc) > 0)
     mgcStatusTblAdd(mgcStatusTbl, fullength.id_parent, status,
                     fullength.gb_acc,
                     mgcOrganismNameToCode(fullength.organism,
-                                          "fullength table"));
+                                          "fullength table"),
+                    fullength.genesymbol);
 }
 
 void processFullength(struct mgcStatusTbl *mgcStatusTbl, char *tabFile)
@@ -176,7 +177,8 @@ if ((stage1.suppress == 1) && (stage1.live == 2)
         status = &MGC_PICKED;
     mgcStatusTblAdd(mgcStatusTbl, stage1.id_clone, status, NULL,
                     mgcOrganismNameToCode(stage1.organism,
-                                          "stage1 table"));
+                                          "stage1 table"),
+                    NULL);
     }
 }
 
@@ -209,7 +211,8 @@ if (mgcStatusTblFind(mgcStatusTbl, clone.id_clone) == NULL)
     mgcStatusTblAdd(mgcStatusTbl, clone.id_clone,
                     &MGC_UNPICKED, NULL,
                     mgcOrganismNameToCode(library->organism,
-                                          "library table"));
+                                          "library table"),
+                    NULL);
     }
 }
 
@@ -231,7 +234,7 @@ void mgcImport(char *libraryTab, char *fullengthTab, char *stage1Tab,
 /* Convert MGC table dumps into a mgcStatus table tab file. */
 {
 FILE *outFh;
-struct mgcStatusTbl *mgcStatusTbl = mgcStatusTblNew();
+struct mgcStatusTbl *mgcStatusTbl = mgcStatusTblNew(mgcStatusImageIdHash);
 struct mgcLibraryTbl *mgcLibraryTbl = mgcLibraryTblLoad(libraryTab);
 
 /* must parse in this order */

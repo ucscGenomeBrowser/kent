@@ -3,6 +3,7 @@
 #define MGCSTATUSTBL_H
 #include "common.h"
 struct sqlConnection;
+struct lineFile;
 
 enum mgcState
 /* MGC state type.  The detailed status extracted from the NCBI tables map to
@@ -77,13 +78,24 @@ struct mgcStatus
     struct mgcStatusType *status;     /* current status information */
     char *acc;                        /* accession, or null if not available */
     char organism[3];                 /* two-letter organism code */
+    char *geneName;                   /* target gene (RefSeq acc) */
+};
+
+enum mgcStatusOpts
+/* options for loading table */
+{
+    mgcStatusImageIdHash = 0x1, /* create image id hash table */
+    mgcStatusAccHash     = 0x2, /* create acc hash table */
+    mgcStatusFullOnly    = 0x4, /* load only full entries */
 };
 
 struct mgcStatusTbl
 /* Object for creating and accessing mgc table. */
 {
-    struct hash *imageIdHash;    /* hash of id to mgcStatus.  Status objects
-                                  * also stored in localmem */
+    unsigned opts;               /* options associated with table */
+    struct lm *lm;               /* local mem for status objects */
+    struct hash *imageIdHash;    /* optional hash of id to mgcStatus. */
+    struct hash *accHash;        /* optional hash of acc to mgcStatus. */
 };
 
 /* SQL to create status table. Should have table name sprinted into it. */
@@ -93,10 +105,10 @@ char *mgcOrganismNameToCode(char *organism, char *whereFound);
 /* convert a MGC organism name to a two-letter code.  An error with
  * whereFound is generated if it can't be mapped */
 
-struct mgcStatusTbl *mgcStatusTblNew();
+struct mgcStatusTbl *mgcStatusTblNew(unsigned opts);
 /* Create an mgcStatusTbl object */
 
-struct mgcStatusTbl *mgcStatusTblLoad(char *mgcStatusTab);
+struct mgcStatusTbl *mgcStatusTblLoad(char *mgcStatusTab, unsigned opts);
 /* Load a mgcStatusTbl object from a tab file */
 
 void mgcStatusTblFree(struct mgcStatusTbl **mstPtr);
@@ -104,7 +116,7 @@ void mgcStatusTblFree(struct mgcStatusTbl **mstPtr);
 
 void mgcStatusTblAdd(struct mgcStatusTbl *mst, unsigned imageId,
                      struct mgcStatusType *status, char *acc,
-                     char *organism);
+                     char *organism, char* geneName);
 /* Add an entry to the table. acc maybe NULL */
 
 void mgcStatusSetAcc(struct mgcStatusTbl *mst, struct mgcStatus *ms, char *acc);
@@ -120,6 +132,9 @@ void mgcStatusTblTabOut(struct mgcStatusTbl *mst, FILE *f);
 void mgcStatusTblFullTabOut(struct mgcStatusTbl *mst, FILE *f);
 /* Write the full-length clones in the table to a tab file */
 
+boolean mgcStatusTblCopyRow(struct lineFile *inLf, FILE *outFh);
+/* read a copy one row of a status table tab file without
+ * fully parsing.  Expand if optional fields are missing  */
 
 #endif
 /*

@@ -101,6 +101,10 @@ void gzClose(FILE** fhPtr);
 off_t gbTell(FILE* fh);
 /* get offset in file, or abort on error */
 
+/* macro to return the supplied value if not NULL or an empty string if
+ * NULL */
+#define gbValueOrEmpty(val) ((val == NULL) ? "" : val)
+
 #endif
 /*
  * Local Variables:
