@@ -354,8 +354,8 @@ spectrum on
 type bed 6
 
 track triangleSelf
-shortLabel Golden Triangle Possible Transcription Factor Binding Sites
-longLabel Golden Triangle  
+shortLabel Golden Triangle  
+longLabel Golden Triangle Possible Transcription Factor Binding Sites
 priority 18.29
 visibility dense
 spectrum on
