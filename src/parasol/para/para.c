@@ -754,7 +754,7 @@ struct jobDb *db;
 struct job *job;
 struct submission *sub;
 int maxSleep = 5*60;
-int curSleep = 60;
+int curSleep = 30;
 time_t start = time(NULL), now;
 
 for (;;)
@@ -782,7 +782,7 @@ for (;;)
         break;
     sleep(curSleep);
     if (curSleep < maxSleep)
-        curSleep += 60;
+        curSleep += 30;
     now = time(NULL);
     printf("Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
