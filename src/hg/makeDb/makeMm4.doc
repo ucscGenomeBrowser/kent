@@ -639,26 +639,27 @@ BLASTZ=blastz
 BLASTZ_H=2000
 BLASTZ_ABRIDGE_REPEATS=1
 
+
 # TARGET
-# Human
-SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# Mouse
+SEQ1_DIR=/scratch/mus/mm4/softNib
 # RMSK not currently used
-SEQ1_RMSK=/iscratch/i/gs.17/build34/rmsk
+SEQ1_RMSK=/scratch/mus/mm4/rmsk
 # FLAG not currently used
-SEQ1_FLAG=-primate
-SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/scratch/mus/mm4/linSpecRep.notInHuman
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY
-# Mouse
-SEQ2_DIR=/iscratch/i/mm4/softNib
+# Human
+SEQ2_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
 # RMSK not currently used
-SEQ2_RMSK=/iscratch/i/mm4/rmsk
+SEQ2_RMSK=/iscratch/i/gs.17/build34/rmsk
 # FLAG not currently used
-SEQ2_FLAG=-rodent
-SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInHuman
+SEQ2_FLAG=-primate
+SEQ2_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
@@ -686,20 +687,21 @@ if [ "$M" != "kk" ]; then
     exit 255
 fi
 source DEF
-mkdir run
+mkdir ${RAW}
+mkdir run.0
 echo "running 'make-joblist'"
-~angie/hummus/make-joblist $DEF > $BASE/run/j
+~angie/hummus/make-joblist $DEF > $BASE/run.0/j
 if [ ! -f ./xdir.sh ]; then
     echo "ERROR: no ./xdir.sh file present.  Should have been made by make-joblist."
     exit 255
 fi
 echo "running 'xdir.sh'"
 sh ./xdir.sh
-cd run
-sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
-mv j2 j
+cd run.0
+sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > jobList
+rm j
 echo "running 'para create'"
-para create j
+para create jobList
 echo "Ready for cluster run.  para try, check, push, etc ..."
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -707,7 +709,9 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     chmod +x ../../jkStuff/BlastZ_run0.sh
     # prepare first cluster run
     ../../jkStuff/BlastZ_run0.sh
+    cd run.0
     para try, check, push, check, ....
+XXXXX - running 2003-10-24 14:06
 # CPU time in finished jobs:   15818152s  263635.86m  4393.93h  183.08d  0.502 y
 # IO & Wait Time:               6171331s  102855.52m  1714.26h   71.43d  0.196 y
 # Average job time:                 507s       8.45m     0.14h    0.01d
@@ -801,6 +805,137 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     #	| $HOME/bin/ia64/lavToAxt stdin $seq1Dir $seq2Dir stdout \
     #	| $HOME/bin/ia64/axtSort stdin $axtFile
     # those are built on a source tree you build on snort
+    #	on the Itanium:
+    #	real    153m42.207s
+    #	user    7m47.921s
+    #	sys     0m42.938s
+
+
+    #	Remove the empty axtChrom/chr19_random.axt file to avoid future
+    #	processing errors
+
+    # translate sorted axt files into psl
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16
+    mkdir -p pslChrom
+    set tbl = "blastzHg16"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 30 minutes
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzHg16"
+    cd /cluster/data/mm4/bed/blastz.hg16/pslChrom
+    /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
+    # this is a 55 minute job
+
+# CHAIN HG16 BLASTZ (WORKING - 2003-10-24 - Hiram)
+
+# Run axtChain on the '9' cluster
+    ssh kk9
+    mkdir -p /cluster/data/mm4/bed/blastz.hg16/axtChain/run1
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/mm4/bed/blastz.hg16/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ_random $1 | axtChain stdin \
+	/cluster/store4/gs.17/build34/nib \
+	/scratch/mus/mm4/softNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    mkdir out chain
+
+    # 41 jobs
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:       9805s     163.41m     2.72h    0.11d  0.000 y
+# IO & Wait Time:                 13115s     218.59m     3.64h    0.15d  0.000 y
+# Average job time:                 559s       9.32m     0.16h    0.01d
+# Longest job:                     8543s     142.38m     2.37h    0.10d
+# Submission to last job:          8562s     142.70m     2.38h    0.10d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain mm4 ${c}_chainMm3 $i
+        echo done $c
+    end
+
+# NET HUMAN BLASTZ (TBD)
+
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/mm4/chrom.sizes \
+                        /cluster/data/hg16/chrom.sizes ../preNet/$i
+    end
+    # This foreach loop will take about 15 min to execute.
+
+    cd ..
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/mm4/chrom.sizes \
+                            /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 2490523648, utime 15421 s/100, stime 3665
+
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
+    ~/bin/i386/netClass hNoClass.net mm4 hg16 mouse.net \
+	-tNewR=/scratch/mus/mm4/linSpecRep.notInHuman \
+	-qNewR=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/mm4/bed/blastz.mm3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.mm3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet mm4 netMm3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet mm4 syntenyNetMm3 stdin
+
+    # Add entries for net and chain to mouse/mm4 trackDb
 
 # BLASTZ Rat	(IN PROGRESS - 2003-10-21 - Hiram)
 
@@ -820,25 +955,25 @@ BLASTZ_H=2000
 BLASTZ_ABRIDGE_REPEATS=1
 
 # TARGET
-# Rat
-SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs
+# Mouse
+SEQ1_DIR=/scratch/mus/mm4/softNib
 # RMSK not currently used
-SEQ1_RMSK=/cluster/bluearc/rat/rn3/rmsk
+SEQ1_RMSK=/scratch/mus/mm4/rmsk
 # FLAG not currently used
 SEQ1_FLAG=-rodent
-SEQ1_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ1_SMSK=/scratch/mus/mm4/linSpecRep.notInRat
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY
-# Mouse
-SEQ2_DIR=/iscratch/i/mm4/softNib
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
 # RMSK not currently used
-SEQ2_RMSK=/iscratch/i/mm4/rmsk
+SEQ2_RMSK=/cluster/bluearc/rat/rn3/rmsk
 # FLAG not currently used
 SEQ2_FLAG=-rodent
-SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInRat
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
@@ -855,7 +990,9 @@ SEQ2_LEN=$BASE/S2.len
 
     # prepare first cluster run
     ../../jkStuff/BlastZ_run0.sh
+    cd run.0
     para try, check, push, check, ....
+XXXXX - running 2003-10-4 14:10
 # Completed: 39936 of 39936 jobs
 # CPU time in finished jobs:   16181528s  269692.14m  4494.87h  187.29d  0.513 y
 # IO & Wait Time:               8090355s  134839.24m  2247.32h   93.64d  0.257 y
@@ -892,7 +1029,94 @@ SEQ2_LEN=$BASE/S2.len
 # Longest job:                    24347s     405.78m     6.76h    0.28d
 # Submission to last job:         24385s     406.42m     6.77h    0.28d
     # the failure appears to be on chr1.
+    # run it on kolossus
+    ssh kolossus
+    #	build the kent source tree on kolossus so you have binaries in
+    #	your $HOME/bin/x86_64/ directory - you will need only lavToAxt
+    #	and axtSort
+    cd /cluster/data/mm4/bed/blastz.rn3
+    mkdir axtChrom.x86_64
+    cd run.2
+    time ../../../jkStuff/x86_64-chromlav2axt /cluster/data/mm4/bed/blastz.rn3/lav/chr1 /cluster/data/mm4/bed/blastz.rn3/axtChrom.x86_64/chr1.axt /cluster/store3/rn3/softNib /cluster/store6/mm4/mixedNib
+    #	real    22m44.899s
+    #	user    4m42.770s
+    #	sys     0m59.690s
 
+    # where ../../../jkStuff/x86_64-chromlav2axt is the regular
+    # chromlab2axt script with the last lines changed to specify the
+    # x86_64 binaries:
+    #	cat `ls -1 *.lav | sort -g` \
+    #		| $HOME/bin/x86_64/lavToAxt stdin $seq1Dir $seq2Dir stdout \
+    #		| $HOME/bin/x86_64/axtSort stdin $axtFile
+
+    # translate sorted axt files into psl
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.rn3
+    mkdir -p pslChrom
+    set tbl = "blastzRn3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 20 minutes
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzRn3"
+    cd /cluster/data/mm4/bed/blastz.rn3/pslChrom
+    /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
+
+
+# CHAIN Rn3 BLASTZ (WORKING - 2003-10-24 - Hiram)
+
+# Run axtChain on the '9' cluster
+    ssh kk9
+    mkdir -p /cluster/data/mm4/bed/blastz.rn3/axtChain/run1
+    cd /cluster/data/mm4/bed/blastz.rn3/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/mm4/bed/blastz.rn3/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ_random $1 | axtChain stdin \
+	/cluster/store3/rn3/softNib \
+	/scratch/mus/mm4/softNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    mkdir out chain
+
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    # 44 jobs written to batch
+    para try
+    para push # ... etc ...
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.rn3/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.rn3/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain mm4 ${c}_chainMm3 $i
+        echo done $c
+    end
 
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
 
@@ -989,7 +1213,7 @@ SEQ2_LEN=$BASE/S2.len
 
 # PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-10-22 - Hiram)
     
-    #	Must run this on the small cluster (or rack 9) since this
+    #	Must run this on the small cluster since this
     #	process requires more memory than is found in the KK nodes
     ssh kkr1u00
     mkdir -p /cluster/data/mm4/bed/genscan
@@ -1011,7 +1235,9 @@ SEQ2_LEN=$BASE/S2.len
     para try
     para check
     para push
-XXXX - running 2003-10-22 10:40
+XXXX - running 2003-10-24 14:30
+    # with only 6 CPUs available:
+
     # Issue either one of the following two commands to check the
     # status of the cluster and your jobs, until they are done.
     parasol status
@@ -1022,7 +1248,7 @@ XXXX - running 2003-10-22 10:40
     # chr7_15
 
     # Convert these to chromosome level files as so:
-    ssh eieio
+    ssh kksilo
     cd ~/mm4/bed/genscan
     liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
     liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
