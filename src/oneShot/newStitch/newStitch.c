@@ -238,7 +238,7 @@ struct seqPair
     {
     struct seqPair *next;
     char *name;	/* Allocated in hash */
-    struct asBlock *blockList; /* List of alignment blocks. */
+    struct axt *axtList; /* List of alignments. */
     };
 
 static struct asNode *asDynamicProgram(struct asGraph *graph)
@@ -280,6 +280,91 @@ return veryBestNode;
 }
 
 
+void chainPair(struct seqPair *sp, FILE *f)
+/* Make chains for all alignments in sp. */
+{
+struct asGraph *graph = NULL;
+time_t startTime, dt;
+int fullSize; 
+struct asNode *n, *nList = NULL;
+struct axt *axt, *first, *last;
+struct dlList *axtList = newDlList();
+struct dlNode *axtNode;
+
+/* Make initial list containing all axt's. */
+uglyf("ChainPair - %d axt's initially\n", slCount(sp->axtList));
+for (axt = sp->axtList; axt != NULL; axt = axt->next)
+    {
+    axtNode = dlAddValTail(axtList, axt);
+    }
+
+/* Call chainer as long as there are axt's left unchained. */
+while (!dlEmpty(axtList))
+    {
+    struct asBlock *blockList = NULL, *block;
+    struct dlList *axtChain = newDlList();
+
+    /* Make block list */
+    for (axtNode = axtList->head; !dlEnd(axtNode); axtNode = axtNode->next)
+        {
+	axt = axtNode->val;
+	AllocVar(block);
+	block->qStart = axt->qStart;
+	block->qEnd = axt->qEnd;
+	block->tStart = axt->tStart;
+	block->tEnd = axt->tEnd;
+	block->score = axt->score;
+	block->ali = axtNode;
+	slAddHead(&blockList, block);
+	}
+    slReverse(&blockList);
+
+    /* Make up graph and time and dump it for debugging. */
+    startTime = time(NULL);
+    graph = asGraphMake(blockList, defaultGapPenalty);
+    dt = time(NULL) - startTime;
+    fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
+    uglyf("%d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
+	graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, dt);
+    fprintf(f, 
+	"%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
+	sp->name, graph->edgeCount, fullSize, 
+	100.0*graph->edgeCount/fullSize, dt);
+    // asGraphDump(graph, f);
+    // fprintf(f, "\n");
+
+    /* Run dynamic program on graph and move chain to axtChain. */
+    nList = asDynamicProgram(graph);
+    for (n = nList; n->block->ali != NULL; n = n->bestWayIn->nodeIn)
+	{
+	axtNode = n->block->ali;
+	dlRemove(axtNode);
+	dlAddHead(axtChain, axtNode);
+	}
+
+    /* Print out axtChain. */
+    first = axtChain->head->val;
+    last = axtChain->tail->val;
+    fprintf(f, "%s Chain %d, score %d, %d %d, %d %d:\n", 
+    	sp->name, dlCount(axtChain), nList->cumScore,
+	first->qStart, last->qEnd, first->tStart, last->tEnd);
+    for (axtNode = axtChain->head; !dlEnd(axtNode); axtNode = axtNode->next)
+        {
+	axt = axtNode->val;
+	fprintf(f, " %s%c%s %d %d, %d %d, %d\n",
+		axt->qName, axt->qStrand, axt->tName, 
+		axt->qStart, axt->qEnd, axt->tStart, axt->tEnd,
+		axt->score);
+	}
+    fprintf(f, "\n");
+    asGraphFree(&graph);
+    freeDlList(&axtChain);
+    slFreeList(&blockList);
+    }
+fprintf(f, "\n");
+freeDlList(&axtList);
+}
+
 void newStitch(char *axtFile, char *output)
 /* newStitch - Experiments with new ways of stitching together alignments. */
 {
@@ -288,13 +373,16 @@ struct dyString *dy = newDyString(512);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;
-struct asBlock *block;
-struct asGraph *graph = NULL;
 FILE *f = mustOpen(output, "w");
 
 /* Read input file and divide alignments into various parts. */
 while ((axt = axtRead(lf)) != NULL)
     {
+    if (axt->score < 500)
+        {
+	axtFree(&axt);
+	continue;
+	}
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", axt->qName, axt->qStrand, axt->tName);
     sp = hashFindVal(pairHash, dy->string);
@@ -304,65 +392,14 @@ while ((axt = axtRead(lf)) != NULL)
 	slAddHead(&spList, sp);
 	hashAddSaveName(pairHash, dy->string, sp, &sp->name);
 	}
-    AllocVar(block);
-    block->qStart = axt->qStart;
-    block->qEnd = axt->qEnd;
-    block->tStart = axt->tStart;
-    block->tEnd = axt->tEnd;
-    block->score = axt->score;
-    block->ali = axt;
-    slAddHead(&sp->blockList, block);
+    slAddHead(&sp->axtList, axt);
     }
 for (sp = spList; sp != NULL; sp = sp->next)
     {
-    time_t startTime, dt;
-    int fullSize; 
-    struct asNode *n, *nList = NULL;
-    slReverse(&sp->blockList);
-    uglyf("%s\t%d blocks\n", sp->name, slCount(sp->blockList));
-    startTime = time(NULL);
-    graph = asGraphMake(sp->blockList, defaultGapPenalty);
-    dt = time(NULL) - startTime;
-    fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
-    uglyf("%d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
-	graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, dt);
-    fprintf(f, 
-    	"%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
-	sp->name, graph->edgeCount, fullSize, 
-	100.0*graph->edgeCount/fullSize, dt);
-    asGraphDump(graph, f);
-    fprintf(f, "\n");
-    fprintf(f, "Best subset:");
-    nList = asDynamicProgram(graph);
-    for (n = nList; n != NULL; )
-        {
-	struct asEdge *e = n->bestWayIn;
-	fprintf(f, " %d", n - graph->nodes);
-	if (e != NULL)
-	    n = e->nodeIn;
-	else
-	    break;
-	}
-    fprintf(f, "\n\n");
-    fprintf(f, "Ordered\n");
-    for (n = nList; n != NULL; )
-        {
-	struct asEdge *e = n->bestWayIn;
-	int nodeIx = n - graph->nodes;
-	if (nodeIx != 0)
-	    {
-	    struct asBlock *block = n->block;
-	    fprintf(f, "  %d@( %d %d , %d %d) $core %d ( %d)\n", nodeIx, block->qStart, block->qEnd, block->tStart, block->tEnd, block->score, e->score);
-	    }
-	if (e != NULL)
-	    n = e->nodeIn;
-	else
-	    break;
-	}
-    fprintf(f, "\n");
-
-    asGraphFree(&graph);
+    slReverse(&sp->axtList);
+    chainPair(sp, f);
     }
+dyStringFree(&dy);
 }
 
 int main(int argc, char *argv[])
