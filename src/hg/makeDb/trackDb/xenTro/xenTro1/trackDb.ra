@@ -1,3 +1,12 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
+track partMrnas
 track blastHg17KG
 shortLabel Mapped Human
 longLabel Human (hg17) proteins mapped by chained tBLASTn
