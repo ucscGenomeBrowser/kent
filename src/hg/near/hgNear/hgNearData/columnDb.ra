@@ -1,3 +1,10 @@
+name debug
+shortLabel debug
+longLabel debugging column on hgwdev
+priority 0.5
+visibility off
+type debug
+
 name num
 shortLabel #
 longLabel item number in displayed list/select gene
@@ -94,7 +101,7 @@ longLabel Selected GNF expression data from normal tissues on U95 chip.
 priority 3.0
 visibility off
 type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 4.0
+max 5.0
 representatives 30,6,29,10,53,35,11,12,13,4,
 skipName 7
 
@@ -104,7 +111,7 @@ longLabel All GNF expression data from normal tissues on U95 chip.
 priority 3.1
 visibility off
 type expRatio knownToU95 affyRatio hgFixed.affyExps
-max 4.0
+max 5.0
 representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
 skipName 7
 
@@ -153,6 +160,47 @@ queryFull select name,value from knownToCdsSnp
 queryOne select value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+
+name mouseOrthologs
+shortLabel Mouse
+longLabel Mouse ortholog (best blastp hit to UCSC Known MM3)
+priority 8.0
+visibility off
+type lookup mmBlastTab query target
+itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=mouse&position=%s
+
+name zebrafishOrthologs
+shortLabel Zebrafish
+longLabel Danio rario ortholog (best blastp hit to Ensembl)
+priority 8.1
+visibility off
+type lookup drBlastTab query target
+itemUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
+
+name flyOrthologs
+shortLabel Drosophila
+longLabel D. melanogaster ortholog (best blastp hit to SwissProt Drosophila)
+priority 8.3
+visibility off
+type lookup dmBlastTab query target
+itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+
+name wormOrthologs
+shortLabel C. elegans
+longLabel C. elegans ortholog (best blastp hit to wormpep)
+priority 8.4
+visibility off
+type lookup ceBlastTab query target
+itemUrl http://www.wormbase.org/db/gene/gene?name=%s
+
+name yeastOrthologs
+shortLabel Yeast
+longLabel Saccharomyces cerevisiae ortholog (best blastp hit to RefSeq)
+priority 8.5
+visibility off
+type lookup scBlastTab query target
+itemUrl http://www.wormbase.org/db/gene/gene?name=%s
+itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 
 name pfamDomains
 shortLabel Pfam Domains

@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.74 2003/09/13 16:39:52 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.75 2003/09/15 05:42:08 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -83,7 +83,9 @@ if (diff > 0)
 else if (diff < 0)
     return -1;
 else
-    return 0;
+    {
+    return strcmp(a->protein, b->protein);
+    }
 }
 
 boolean wildMatchAny(char *word, struct slName *wildList)
@@ -437,6 +439,32 @@ col->labelPrint = labelSimplePrint;
 col->tableColumns = oneColumn;
 }
 
+/* ---- Debugging column ---- */
+
+static boolean debugExists(struct column *col, struct sqlConnection *conn)
+/* Return TRUE if we are on hgwdev. */
+{
+char *host = getHost();
+return startsWith("hgwdev", host);
+}
+
+static char *debugCellVal(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn)
+/* Return value for debugging column. */
+{
+char buf[16];
+safef(buf, sizeof(buf), "%f", gp->distance);
+return cloneString(buf);
+}
+
+void setupColumnDebug(struct column *col, char *parameters)
+/* Set up a column that displays the geneId (accession) */
+{
+col->exists = debugExists;
+col->cellVal = debugCellVal;
+}
+
+
 /* ---- Accession column ---- */
 
 static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection *conn)
@@ -511,7 +539,6 @@ return cloneString(buf);
 void setupColumnNum(struct column *col, char *parameters)
 /* Set up column that displays index in displayed list. */
 {
-columnDefaultMethods(col);
 col->cellVal = numberVal;
 col->cellPrint = cellSelfLinkPrint;
 }
@@ -929,6 +956,8 @@ if (type == NULL)
     warn("Missing type value for column %s", col->name);
 if (sameString(type, "num"))
     setupColumnNum(col, s);
+else if (sameString(type, "debug"))
+    setupColumnDebug(col, s);
 else if (sameString(type, "lookup"))
     setupColumnLookup(col, s);
 else if (sameString(type, "association"))
