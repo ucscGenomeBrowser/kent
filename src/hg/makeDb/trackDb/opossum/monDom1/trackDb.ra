@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track ultra
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements 100%id >=200bp to hg17 (inc. contam, uncorrelated names)
