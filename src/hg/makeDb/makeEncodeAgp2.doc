@@ -111,6 +111,25 @@ hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
 # errors here: missing /cluster/data/galGal2/chr*_random.agp and chrM.agp files
 csh genomeAgps.csh $chicken chicken $chicken
 
+# Test a region
+# takes 10 minutes ?
+ssh kksilo
+cd /cluster/data/encode/ortho2/agp
+mkdir test
+cd test
+/cluster/data/encode/bin/scripts/agpAccToContig.pl galGal2 \
+        ../$chicken/chicken_ENm001_1.agp > test.agp
+gunzip -c  /cluster/data/galGal2/chicken_contigs.tar.gz > \
+                test.chicken.contigs.fa
+agpToFa test.agp chicken_ENm001_1 test.fa -simpleMulti test.contigs.fa
+set coords = `awk '$4 == "ENm001_1" {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho2/consensus/galGal2.bed`
+set chr = $coords:r:r
+nibFrag -upper /cluster/data/galGal2/nib/${chr}.nib \
+        $coords:r:e $coords:e + nibtest.fa
+faCmp nibtest.fa test.fa
+    # test.fa and nibtest.fa are the same
+rm test.agp test.contigs.fa test.fa nibtest.fa
+
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
     $consensusDir/$chicken.bed5 $chicken chicken "Gallus gallus" \
@@ -123,6 +142,7 @@ tar cvfz $downloadDir/$chicken.agp.tar.gz $chicken/*.agp
 hgsql -e "select count(*) from $chicken.encodeRegionConsensus"
 tar tvfz $downloadDir/$chicken.agp.tar.gz | wc -l
 grep Region $downloadDir/$chicken.packing.list | wc -l
+
 
 ########################################################################
 # DOG
