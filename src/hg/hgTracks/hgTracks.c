@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567 2003/07/31 15:08:05 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.568 2003/07/31 19:24:15 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9878,7 +9878,10 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&ph
 
 if (gotBlat)
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+    /* the only zoo organism this currently works with is human.
+     * blastz tables need to be generated for the other organisms. */
+    if (!startsWith("zoo", database) || startsWith("zooHuman", database))
+        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
 if (sameString(database, "hg15")
             || sameString(database, "mm3"))
