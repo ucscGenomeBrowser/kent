@@ -252,7 +252,7 @@ printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ",
 printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
        makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
 printTroubleShooting(ccr);
-cartHtmlEnd();
+cartWebEnd();
 }
 
 void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
@@ -265,7 +265,7 @@ printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
        ccr->from->date);
 printTroubleShooting(ccr);
-cartHtmlEnd();
+cartWebEnd();
 }
 
 
@@ -335,7 +335,6 @@ char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
 cartWebStart("Converting Coordinates Between Drafts");
-#ifdef SOON
 puts( 
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"
@@ -375,8 +374,7 @@ cgiMakeButton("Submit","submit");
 printf("</center></td></tr></table>\n");
 cgiMakeHiddenVar("calledSelf", "on");
 printf("</form>\n");
-#endif /* SOON */
-cartHtmlEnd();
+cartWebEnd();
 }
 
 /* from here until main() is for testing */
