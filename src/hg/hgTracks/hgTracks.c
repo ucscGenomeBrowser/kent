@@ -23,7 +23,6 @@
 #include "wormdna.h"
 #include "aliType.h"
 #include "psl.h"
-#include "agpFrag.h"
 #include "agpGap.h"
 #include "cgh.h"
 #include "ctgPos.h"
@@ -31,7 +30,6 @@
 #include "bactigPos.h"
 #include "genePred.h"
 #include "glDbRep.h"
-#include "rmskOut.h"
 #include "bed.h"
 #include "isochores.h"
 #include "simpleRepeat.h"
@@ -76,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.569 2003/08/01 05:23:20 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.570 2003/08/02 21:34:23 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1368,7 +1366,7 @@ int e = tg->itemEnd(tg, item);
 *retX2 = round((e - winStart)*scale) + xOff;
 }
 
-static void genericDrawItems(struct track *tg, 
+void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -3248,178 +3246,6 @@ void vegaMethods(struct track *tg)
 tg->itemColor = vegaColor;
 }
 
-/* Repeat items.  Since there are so many of these, to avoid 
- * memory problems we don't query the database and store the results
- * during repeatLoad, but rather query the database during the
- * actual drawing. */
-
-struct repeatItem
-/* A repeat track item. */
-    {
-    struct repeatItem *next;
-    char *class;
-    char *className;
-    int yOffset;
-    };
-
-static struct repeatItem *otherRepeatItem = NULL;
-static char *repeatClassNames[] =  {
-    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "tRNA", "Other",
-};
-static char *repeatClasses[] = {
-    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "tRNA", "Other",
-};
-
-struct repeatItem *makeRepeatItems()
-/* Make the stereotypical repeat masker tracks. */
-{
-struct repeatItem *ri, *riList = NULL;
-int i;
-int numClasses = ArraySize(repeatClasses);
-for (i=0; i<numClasses; ++i)
-    {
-    AllocVar(ri);
-    ri->class = repeatClasses[i];
-    ri->className = repeatClassNames[i];
-    slAddHead(&riList, ri);
-    }
-otherRepeatItem = riList;
-slReverse(&riList);
-return riList;
-}
-
-void repeatLoad(struct track *tg)
-/* Load up repeat tracks.  (Will query database during drawing for a change.) */
-{
-tg->items = makeRepeatItems();
-}
-
-void repeatFree(struct track *tg)
-/* Free up goldTrackGroup items. */
-{
-slFreeList(&tg->items);
-}
-
-char *repeatName(struct track *tg, void *item)
-/* Return name of repeat item track. */
-{
-struct repeatItem *ri = item;
-return ri->className;
-}
-
-static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-{
-int baseWidth = seqEnd - seqStart;
-struct repeatItem *ri;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-Color col;
-int ix = 0;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int rowOffset;
-
-if (isFull)
-    {
-    /* Do gray scale representation spread out among tracks. */
-    struct hash *hash = newHash(6);
-    struct rmskOut ro;
-    int percId;
-    int grayLevel;
-    char statusLine[128];
-
-    for (ri = tg->items; ri != NULL; ri = ri->next)
-        {
-	ri->yOffset = y;
-	y += lineHeight;
-	hashAdd(hash, ri->class, ri);
-	}
-    sr = hRangeQuery(conn, "rmsk", chromName, winStart, winEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	rmskOutStaticLoad(row+rowOffset, &ro);
-	ri = hashFindVal(hash, ro.repClass);
-	if (ri == NULL)
-	   ri = otherRepeatItem;
-	percId = 1000 - ro.milliDiv - ro.milliDel - ro.milliIns;
-	grayLevel = grayInRange(percId, 500, 1000);
-	col = shadesOfGray[grayLevel];
-	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
-	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
-	w = x2-x1;
-	if (w <= 0)
-	    w = 1;
-	vgBox(vg, x1, ri->yOffset, w, heightPer, col);
-	if (baseWidth <= 100000)
-	    {
-	    if (ri == otherRepeatItem)
-		{
-		sprintf(statusLine, "Repeat %s, family %s, class %s",
-		    ro.repName, ro.repFamily, ro.repClass);
-		}
-	    else
-		{
-		sprintf(statusLine, "Repeat %s, family %s",
-		    ro.repName, ro.repFamily);
-		}
-	    mapBoxHc(ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
-	    	ro.repName, statusLine);
-	    }
-	}
-    freeHash(&hash);
-    }
-else
-    {
-    char table[64];
-    boolean hasBin;
-    struct dyString *query = newDyString(1024);
-    /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(chromName, "rmsk", table, &hasBin))
-        {
-	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
-	if (hasBin)
-	    hAddBinToQuery(winStart, winEnd, query);
-	dyStringPrintf(query, "genoStart<%u and genoEnd>%u", winEnd, winStart);
-	sr = sqlGetResult(conn, query->string);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    int start = sqlUnsigned(row[0]);
-	    int end = sqlUnsigned(row[1]);
-	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
-	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
-	    w = x2-x1;
-	    if (w <= 0)
-		w = 1;
-	    vgBox(vg, x1, yOff, w, heightPer, MG_BLACK);
-	    }
-	}
-    dyStringFree(&query);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
-void repeatMethods(struct track *tg)
-/* Make track for repeats. */
-{
-tg->loadItems = repeatLoad;
-tg->freeItems = repeatFree;
-tg->drawItems = repeatDraw;
-tg->colorShades = shadesOfGray;
-tg->itemName = repeatName;
-tg->mapItemName = repeatName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgItemNoStart;
-tg->itemEnd = tgItemNoEnd;
-}
-
 typedef struct slList *(*ItemLoader)(char **row);
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
@@ -3455,7 +3281,7 @@ else
     return MG_WHITE;
 }
 
-static void bedDrawSimpleAt(struct track *tg, void *item, 
+void bedDrawSimpleAt(struct track *tg, void *item, 
 	struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
@@ -3555,162 +3381,6 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
-}
-
-int cmpAgpFrag(const void *va, const void *vb)
-/* Compare two agpFrags by chromStart. */
-{
-const struct agpFrag *a = *((struct agpFrag **)va);
-const struct agpFrag *b = *((struct agpFrag **)vb);
-return a->chromStart - b->chromStart;
-}
-
-
-void goldLoad(struct track *tg)
-/* Load up golden path from database table to track items. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct agpFrag *fragList = NULL, *frag;
-struct agpGap *gapList = NULL, *gap;
-int rowOffset;
-
-/* Get the frags and load into tg->items. */
-sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    frag = agpFragLoad(row+rowOffset);
-    slAddHead(&fragList, frag);
-    }
-slSort(&fragList, cmpAgpFrag);
-sqlFreeResult(&sr);
-tg->items = fragList;
-
-/* Get the gaps into tg->customPt. */
-sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gap = agpGapLoad(row+rowOffset);
-    slAddHead(&gapList, gap);
-    }
-slReverse(&gapList);
-sqlFreeResult(&sr);
-tg->customPt = gapList;
-hFreeConn(&conn);
-}
-
-void goldFree(struct track *tg)
-/* Free up goldTrackGroup items. */
-{
-agpFragFreeList((struct agpFrag**)&tg->items);
-agpGapFreeList((struct agpGap**)&tg->customPt);
-}
-
-char *goldName(struct track *tg, void *item)
-/* Return name of gold track item. */
-{
-struct agpFrag *frag = item;
-return frag->frag;
-}
-
-static void goldDrawDense(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw golden path items. */
-{
-int baseWidth = seqEnd - seqStart;
-struct agpFrag *frag;
-struct agpGap *gap;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
-Color brown = color;
-Color gold = tg->ixAltColor;
-Color col;
-Color pink = 0;
-Color pink1 = vgFindColorIx(vg, 240, 140, 140);
-Color pink2 = vgFindColorIx(vg, 240, 100, 100);
-int ix = 0;
-double scale = scaleForPixels(width);
-
-/* Draw gaps if any. */
-if (!isFull)
-    {
-    int midY = y + midLineOff;
-    for (gap = tg->customPt; gap != NULL; gap = gap->next)
-	{
-	if (!sameWord(gap->bridge, "no"))
-	    {
-	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
-	    }
-	}
-    }
-
-for (frag = tg->items; frag != NULL; frag = frag->next)
-    {
-    x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    color =  ((ix&1) ? gold : brown);
-    pink = ((ix&1) ? pink1 : pink2);
-    if (w < 1)
-	w = 1;
-    if (sameString(frag->type, "A")) color = pink;
-    vgBox(vg, x1, y, w, heightPer, color);
-    if (isFull)
-	y += lineHeight;
-    else if (baseWidth < 10000000)
-	{
-	char status[256];
-	sprintf(status, "%s:%d-%d %s %s:%d-%d", 
-	    frag->frag, frag->fragStart, frag->fragEnd,
-	    frag->strand,
-	    frag->chrom, frag->chromStart, frag->chromEnd);
-
-	mapBoxHc(frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	    frag->frag, status);
-	}
-    ++ix;
-    }
-}
-
-static void goldDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw golden path items. */
-{
-if (vis == tvDense)
-    goldDrawDense(tg, seqStart, seqEnd, vg, xOff, yOff, width,
-    	font, color, vis);
-else
-    genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width,
-    	font, color, vis);
-}
-
-Color goldColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return color to draw known gene in. */
-{
-struct agpFrag *frag = item;
-Color pink = vgFindColorIx(vg, 240, 140, 140);
-Color color = (sameString(frag->type, "A") ? pink : tg->ixColor);
-
-return color;
-}
-
-void goldMethods(struct track *tg)
-/* Make track for golden path */
-{
-tg->loadItems = goldLoad;
-tg->freeItems = goldFree;
-tg->drawItems = goldDraw;
-tg->drawItemAt = bedDrawSimpleAt;
-tg->itemName = goldName;
-tg->mapItemName = goldName;
-tg->itemColor = goldColor;
 }
 
 
@@ -5399,8 +5069,6 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-struct agpFrag *fragList = NULL, *frag;
-struct agpGap *gapList = NULL, *gap;
 struct wabaChromHit *wch, *wchList = NULL;
 
 /* Get the frags and load into tg->items. */
@@ -8080,12 +7748,10 @@ hFreeConn(&conn);
 void cghMethods(struct track *tg)
 /* Make track for CGH experiments. */
 {
+repeatMethods(tg);
 tg->loadItems = cghLoadTrack;
-tg->freeItems = repeatFree;
 tg->drawItems = cghDraw;
 tg->colorShades = shadesOfGray;
-tg->itemName = repeatName;
-tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;

@@ -6,8 +6,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgTracks
 
-O = $A.o altGraphXTrack.o chainTrack.o loweLabTracks.o \
-	mafTrack.o netTrack.o pslTrack.o 
+O = $A.o altGraphXTrack.o chainTrack.o goldTrack.o loweLabTracks.o \
+	mafTrack.o netTrack.o pslTrack.o rmskTrack.o
 
 my: compile
 	mv $A /usr/local/apache/cgi-bin-$(USER)/$A

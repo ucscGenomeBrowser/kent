@@ -315,6 +315,18 @@ int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
+void genericDrawItems(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw generic item list.  Features must be fixed height
+ * and tg->drawItemAt has to be filled in. */
+
+void bedDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a single simple bed item at position. */
+
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
 
@@ -354,6 +366,9 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
 /* Draw evenly spaced letters in string. */
 
+void goldMethods(struct track *tg);
+/* Make track for golden path (assembly track). */
+
 void chainMethods(struct track *tg);
 /* Return name of item from extra field. */
 
@@ -368,6 +383,18 @@ void altGraphXMethods(struct track *tg);
 
 void axtMethods(struct track *tg, char *otherDb);
 /* Make track group for axt alignments. */
+
+void repeatMethods(struct track *tg);
+/* Make track for repeats. */
+
+struct repeatItem
+/* A repeat track item. */
+    {
+    struct repeatItem *next;
+    char *class;
+    char *className;
+    int yOffset;
+    };
 
 void pslMethods(struct track *track, struct trackDb *tdb, 
 	int argc, char *argv[]);
