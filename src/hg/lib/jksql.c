@@ -10,6 +10,7 @@
 #include <mysql.h>
 #include "dlist.h"
 #include "jksql.h"
+#include "hgConfig.h"
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
@@ -140,7 +141,14 @@ return sc;
 struct sqlConnection *sqlConnect(char *database)
 /* Connect to database on default host as default user. */
 {
-return sqlConnectRemote(mysqlHost(), "hguser", "hguserstuff", database);
+char* host = cfgOption("db.host");
+char* user = cfgOption("db.user");
+char* password = cfgOption("db.password");
+
+if(host == 0 || user == 0 || password == 0)
+	errAbort("Could not read hostname, user, or password to the database from configuration file.");
+	
+return sqlConnectRemote(host, user, password, database);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)

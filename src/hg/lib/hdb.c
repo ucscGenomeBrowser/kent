@@ -8,6 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 #include "fa.h"
+#include "hgConfig.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 
@@ -26,7 +27,30 @@ struct dbConv dbTable[] = {
     {"hg7","April 1, 2001"},
 };
 
-char *hdbName = "hg6";
+static char *hdbHost;
+static char *hdbName;
+static char *hdbUser;
+static char *hdbPassword;
+
+void hDefaultConnect()
+/* read in the connection options from config file */
+{
+hdbHost 	= cfgOption("db.host");
+hdbUser 	= cfgOption("db.user");
+hdbPassword	= cfgOption("db.password");
+
+if(hdbHost == 0 || hdbUser == 0 || hdbPassword == 0)
+	errAbort("cannot read in connection setting from configuration file.");
+}
+
+void hSetDbConnect(char* host, char *db, char *user, char *password)
+/* set the connection information for the database */
+{
+	hdbHost = host;
+	hdbName = db;
+	hdbUser = user;
+	hdbPassword = password;
+}
 
 void hSetDb(char *dbName)
 /* Set the database name. */
@@ -40,6 +64,30 @@ char *hGetDb()
 /* Return the current database name. */
 {
 return hdbName;
+}
+
+char *hGetDbHost()
+/* Return the current database host. */
+{
+return hdbHost;
+}
+
+char *hGetDbName()
+/* Return the current database name. */
+{
+return hdbName;
+}
+
+char *hGetDbUser()
+/* Return the current database user. */
+{
+return hdbUser;
+}
+
+char *hGetDbPassword()
+/* Return the current database password. */
+{
+return hdbPassword;
 }
 
 struct sqlConnection *hAllocConn()
