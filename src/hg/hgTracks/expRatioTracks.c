@@ -65,7 +65,7 @@ if(tg->visibility != tvDense && tg->visibility != tvHide)
 }
 
 
-struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name)
+struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char *name)
 /* create a lfs containing all beds on a single line */
 {
 struct linkedFeaturesSeries *lfs = NULL, *lfsList = NULL;
@@ -82,7 +82,11 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     lf = lfFromBed(bed);
     /* lf->tallStart = bed->chromStart;
        lf->tallEnd = bed->chromEnd; */
+
+    /* get overall score from bed15 */
+    lfs->grayIx = bed->score;
     lf->score = bed->score;
+
     lfs->start = lf->start;
     lfs->end = lf->end;
     slAddHead(&lfs->features, lf);  
@@ -676,12 +680,11 @@ else
 
 
 
-Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
+Color expressionScoreColor(struct track *tg, float val, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
+/* NOTE: item is a linkedFeatures struct */
 {
-struct linkedFeatures *lf = item;
-float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
@@ -710,6 +713,7 @@ if(!exprBedColorsMade)
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
+
     maxDeviation = fullMax;
 else 
     maxDeviation = denseMax;
@@ -732,6 +736,14 @@ else
     else 
 	return shadesOfBlue[colorIndex];
     }
+}
+
+Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
+		 float denseMax, float fullMax) 
+/* Does the score->color conversion for various microarray tracks */
+{
+struct linkedFeatures *lf = item;
+return expressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
 }
 
 Color nci60Color(struct track *tg, void *item, struct vGfx *vg)
@@ -809,20 +821,25 @@ else
 }
 
 Color expRatioColor(struct track *tg, void *item, struct vGfx *vg)
-/* Does the score->color conversion for affymetrix arrays using ratios,
- * if dense do an intensity color in blue based on score value otherwise do
- * red/green display from expScores */
+/* Does the score->color conversion  */
 {
-struct linkedFeatures *lf = item;
-float score = lf->score;
+struct linkedFeatures *lf;
+struct linkedFeaturesSeries *lfs;
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
 if(tg->visibility == tvDense)
     {
-    return MG_BLACK;
+    lfs = item;
+    if (trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
+        /* scaled by 1000.  Brighten up just a bit... */
+        return expressionScoreColor(tg, lfs->grayIx * 1100, vg, tg->expScale, 
+                                                        tg->expScale);
+    else
+        return MG_BLACK;
     }
 else
     {
+    lf = item;
     return expressionColor(tg, item, vg, tg->expScale, tg->expScale);
     }
 }

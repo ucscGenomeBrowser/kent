@@ -18,6 +18,9 @@
 struct itemAttr;
 struct itemAttrTbl;
 
+/* trackDb setting for expRatio tracks */
+#define EXP_COLOR_DENSE "expColorDense"
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -698,6 +701,7 @@ void linkedFeaturesDrawAt(struct track *tg, void *item,
 /* Draw a single simple bed item at position. */
 
 char *dnaInWindow();
+
 /* This returns the DNA in the window, all in lower case. */
 
 #endif /* HGTRACKS_H */

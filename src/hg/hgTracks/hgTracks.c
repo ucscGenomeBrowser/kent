@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.826 2004/10/22 22:41:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.827 2004/10/23 05:27:11 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1279,6 +1279,7 @@ boolean foundStart = FALSE;
 boolean *foundStartPtr = &foundStart;
 int drawOptionNum = 0; //off
 boolean errorColor = FALSE;
+Color saveColor = color;
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
@@ -1295,6 +1296,8 @@ if (chainLines && (vis == tvSquish))
     midY2 = y + heightPer - 1;
     }
 lfColors(tg, lf, vg, &color, &bColor);
+if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
+    color = saveColor;
 
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
@@ -1452,10 +1455,13 @@ struct linkedFeatures *lf;
 Color bColor;
 int midY = y + (tg->heightPer>>1);
 int prevEnd = lfs->start;
+int saveColor = color;
 
 if ((lf = lfs->features) == NULL)
     return;
 lfColors(tg, lf, vg, &color, &bColor);
+if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
+    color = saveColor;
 for (lf = lfs->features; lf != NULL; lf = lf->next)
     {
     lfSeriesDrawConnecter(lfs, vg, prevEnd, lf->start, scale, xOff, midY,
