@@ -56,11 +56,24 @@ for( my $i = 0; $i < $totColors; ++$i ) {
 	my $xNext = $x + $width - 1;
 	my $totalValue = $Red + $Green + $Blue;
 # printf STDERR "RGB: %d %d %d = %d at $names[$i]\n", $Red, $Green, $Blue, $totalValue;
-	printf "\t-fill '%s' -draw 'rectangle %d,0 %d,%d reset' \\\n",
+	printf "\t-fill '%s' -draw 'rectangle %d,0 %d,%d' \\\n",
 		$palette[$i], $x, $xNext, $height-1;
-	my $xText = $x + 5;
+#	It is somewhat ad-hoc to space the numerals within their boxes.
+#	We do not have a lot of pixels to spare in these boxes and one
+#	pixel here or there seems to make a lot of difference.  These
+#	spacings also depend upon they type of font chosen.  Tuning is
+#	required.
+	my $xText = $x + 6;	#	single digit spacing
 	if( length($names[$i]) == 2 ) {
-	$xText = $x + 2;
+		if( $names[$i] ne "Un" ) {	# Un is a bit wide
+			if( $names[$i] =~ m/^2[0-2]/ ) {
+			$xText = $x + 2;	# The 20's need another pixel
+			} else {
+			$xText = $x + 1;	# 10 - 19 spacing
+			}
+		} else {
+			$xText = $x;		# finally Un is the widest
+		}
 	}
         #	color the digits based on the the lightness of the block
 	my $fontColor = "#ffffff";
@@ -68,7 +81,10 @@ for( my $i = 0; $i < $totColors; ++$i ) {
 	if( ($i == 11) || ($totalValue >= (256 * 3) / 2 )) {
 		$fontColor = "#000000";
 	}
-	printf "\t-font x:9x15bold -fill '%s' -draw 'text %d,%d \"%s\"' \\\n",
+#	fonts were experimented with.  trying to get good digits that
+#	fill the boxes properly.  Any X font can be named here, see also
+#	xfontsel and xlsfonts
+	printf "\t-font x:'-adobe-helvetica-*-r-*-*-17-*-*-*-*-*-*-*' -fill '%s' -draw 'text %d,%d \"%s\"' \\\n",
 		$fontColor, $xText, ($width / 2) + 1, $names[$i];
 	$x += $width + $border;
 }
