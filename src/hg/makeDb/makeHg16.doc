@@ -7539,6 +7539,35 @@ cat > wigZoom1K.csh << 'EOF'
     cd /tmp
     hgLoadMaf -WARN hg16 chicken_hmrg
 
+    # copy files to download area 
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/multizMm3Rn3GalGal2
+    mkdir $dir
+    ln -s $dir multiz
+    cp -p /gbdb/hg16/multizMm3Rn3GalGal2_phyloHMM/*.maf $dir
+    cd $dir
+    gzip *
+
+    # edit downloads page to add linke to humorMm3Rn3
+    # add pairwise mafs to downloads page 
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
+    mkdir $dir/{rn3,mm3}
+    cd /cluster/data/hg16/bed/humor/maf
+    cp *.mm3.maf $dir/mm3
+    cp *.rn3.maf $dir/rn3
+    gzip $dir/mm3/*
+    gzip $dir/rn3/*
+
+    # Create upstream files
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
+    echo hg16 mm3 rn3 > org.txt
+    foreach i (1000 2000 5000)
+    featureBits hg16 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+    awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+    rm up.bad
+    mafFrags hg16 humorMm3Rn3 up.bed upstream$i.maf -orgs=org.txt
+    rm up.bed
+    end
 
 #  miRNA track (DONE - 2004-03-02 - Hiram)
     #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
@@ -7819,3 +7848,11 @@ end
 
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
+
+# LOAD OVER.CHAIN INTO DATABASE FOR USE BY LIFTOVER (2004-03-22 kate)
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/bedOver
+    hgLoadChain hg16 chainHg15 over.chain
+        # Loading 3938 chains into hg16.chainHg15
+
