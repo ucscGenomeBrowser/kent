@@ -166,6 +166,39 @@ color 10,100,150
 exonArrows on
 cdsDrawOptions enabled
 
+track mgcWUPcrHit
+shortLabel RT-PCR Success
+longLabel WUSTL Sucessful RT-PCR for MGC
+group mgc
+priority 25
+visibility pack
+type psl
+color 10,100,150
+exonArrows on
+pslSequenceBases all
+
+track mgcWUPcrFail
+shortLabel RT-PCR Fail
+longLabel WUSTL Failed RT-PCR for MGC
+group mgc
+priority 25.1
+visibility pack
+type psl
+color 10,150,100
+exonArrows on
+pslSequenceBases all
+
+track mgcWUPcrInProgress
+shortLabel RT-PCR Pending
+longLabel WUSTL In-progress RT-PCR for MGC
+group mgc
+priority 25.2
+visibility pack
+type psl
+color 10,100,150
+exonArrows on
+pslSequenceBases all
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
