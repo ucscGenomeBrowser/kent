@@ -3,11 +3,13 @@
  * but more suitable to cross species genomic comparisons. */
 #include "common.h"
 #include "linefile.h"
+#include "hash.h"
+#include "dnaseq.h"
 #include "dnautil.h"
 #include "chain.h"
 #include <stdint.h>
 
-static char const rcsid[] = "$Id: chain.c,v 1.7 2003/05/25 16:21:25 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.8 2003/06/16 21:09:07 baertsch Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -260,6 +262,45 @@ if (chain->qStrand == '-')
     }
 }
 
+struct hash *chainReadAllSwap(char *fileName, boolean qChain)
+/* Read chains into a hash keyed by id. */
+{
+char nameBuf[16];
+struct hash *hash = hashNew(18);
+struct chain *chain;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+int count = 0;
+
+while ((chain = chainRead(lf)) != NULL)
+    {
+    sprintf(nameBuf, "%x", chain->id);
+    if (hashLookup(hash, nameBuf))
+        errAbort("Duplicate chain %d ending line %d of %s", 
+		chain->id, lf->lineIx, lf->fileName);
+    if (qChain)
+        chainSwap(chain);
+    hashAdd(hash, nameBuf, chain);
+    ++count;
+    }
+lineFileClose(&lf);
+fprintf(stderr, "read %d chains in %s\n", count, fileName);
+return hash;
+}
+
+struct hash *chainReadAll(char *fileName)
+/* Read chains into a hash keyed by id. */
+{
+return chainReadAllSwap(fileName, FALSE);
+}
+
+struct chain *chainLookup(struct hash *hash, int id)
+/* Find chain in hash. */
+{
+char nameBuf[16];
+sprintf(nameBuf, "%x", id);
+return hashMustFindVal(hash, nameBuf);
+}
+
 void chainSubsetOnT(struct chain *chain, int subStart, int subEnd, 
     struct chain **retSubChain,  struct chain **retChainToFree)
 /* Get subchain of chain bounded by subStart-subEnd on 
@@ -308,6 +349,77 @@ for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
         tStart = b->tStart;
     if (tEnd < b->tEnd)
         tEnd = b->tEnd;
+    }
+slReverse(&bList);
+
+/* Make new chain based on old. */
+if (bList != NULL)
+    {
+    AllocVar(sub);
+    sub->blockList = bList;
+    sub->qName = cloneString(chain->qName);
+    sub->qSize = chain->qSize;
+    sub->qStrand = chain->qStrand;
+    sub->qStart = qStart;
+    sub->qEnd = qEnd;
+    sub->tName = cloneString(chain->tName);
+    sub->tSize = chain->tSize;
+    sub->tStart = tStart;
+    sub->tEnd = tEnd;
+    sub->id = chain->id;
+    }
+*retSubChain = *retChainToFree = sub;
+}
+
+
+void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd, 
+    struct chain **retSubChain,  struct chain **retChainToFree)
+/* Get subchain of chain bounded by subStart-subEnd on 
+ * query side.  Return result in *retSubChain.  In some
+ * cases this may be the original chain, in which case
+ * *retChainToFree is NULL.  When done call chainFree on
+ * *retChainToFree.  The score and id fields are not really
+ * properly filled in. */
+{
+struct chain *sub = NULL;
+struct boxIn *oldB, *b, *bList = NULL;
+int qStart = BIGNUM, qEnd = -BIGNUM;
+int tStart = BIGNUM, tEnd = -BIGNUM;
+
+/* Check for easy case. */
+if (subStart <= chain->qStart && subEnd >= chain->qEnd)
+    {
+    *retSubChain = chain;
+    *retChainToFree = NULL;
+    return;
+    }
+/* Build new block list and calculate bounds. */
+for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
+    {
+    if (oldB->tEnd <= subStart)
+        continue;
+    if (oldB->tStart >= subEnd)
+        break;
+    b = CloneVar(oldB);
+    if (b->qStart < subStart)
+        {
+	b->tStart += subStart - b->qStart;
+	b->qStart = subStart;
+	}
+    if (b->qEnd > subEnd)
+        {
+	b->tEnd -= b->qEnd - subEnd;
+	b->qEnd = subEnd;
+	}
+    slAddHead(&bList, b);
+    if (tStart > b->tStart)
+        tStart = b->tStart;
+    if (tEnd < b->tEnd)
+        tEnd = b->tEnd;
+    if (qStart > b->qStart)
+        qStart = b->qStart;
+    if (qEnd < b->qEnd)
+        qEnd = b->qEnd;
     }
 slReverse(&bList);
 

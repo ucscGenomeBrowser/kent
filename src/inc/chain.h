@@ -68,10 +68,29 @@ void chainIdNext(struct chain *chain);
 void chainSwap(struct chain *chain);
 /* Swap target and query side of chain. */
 
+struct hash *chainReadAllSwap(char *fileName, boolean qChain);
+/* Read chains into a hash keyed by id. 
+ * Set qChain to True to read chain by query. */
+    
+struct hash *chainReadAll(char *fileName);
+/* Read chains into a hash keyed by id. */
+    
+struct chain *chainLookup(struct hash *hash, int id);
+/* Find chain in hash. */
+
 void chainSubsetOnT(struct chain *chain, int subStart, int subEnd, 
     struct chain **retSubChain,  struct chain **retChainToFree);
 /* Get subchain of chain bounded by subStart-subEnd on 
  * target side.  Return result in *retSubChain.  In some
+ * cases this may be the original chain, in which case
+ * *retChainToFree is NULL.  When done call chainFree on
+ * *retChainToFree.  The score and id fields are not really
+ * properly filled in. */
+
+void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd, 
+    struct chain **retSubChain,  struct chain **retChainToFree);
+/* Get subchain of chain bounded by subStart-subEnd on 
+ * query side.  Return result in *retSubChain.  In some
  * cases this may be the original chain, in which case
  * *retChainToFree is NULL.  When done call chainFree on
  * *retChainToFree.  The score and id fields are not really
