@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.13 2004/08/11 21:54:12 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.14 2004/08/12 18:34:22 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -255,13 +255,17 @@ wDS->tblName = cloneString(table);
 
 static void showConstraints(struct wiggleDataStream *wDS, FILE *fh)
 {
+if (wDS->chrName)
+    fprintf (fh, "#\tchrom specified: %s\n", wDS->chrName);
+if (wDS->spanLimit)
+    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
 if (wDS->winEnd)
     fprintf (fh, "#\tposition specified: %d-%d\n",
 	wDS->winStart+1, wDS->winEnd);
-if (wDS->bedConstrained)
+if (wDS->bedConstrained && !wDS->chrName)
+    fprintf (fh, "#\tconstrained by chr names and coordinates in bed list\n");
+else if (wDS->bedConstrained)
     fprintf (fh, "#\tconstrained by coordinates in bed list\n");
-if (wDS->spanLimit)
-    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
 if (wDS->useDataConstraint)
     {
     if ((wDS->dataConstraint) &&
@@ -272,6 +276,38 @@ if (wDS->useDataConstraint)
 	    fprintf (fh, "#\tdata values %s %g\n",
 		    wDS->dataConstraint, wDS->limit_0);
     }
+}
+
+static int asciiDataCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,span,chromStart. */
+{
+const struct wigAsciiData *a = *((struct wigAsciiData **)va);
+const struct wigAsciiData *b = *((struct wigAsciiData **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    {
+    dif = a->span - b->span;
+    if (dif == 0)
+	dif = a->data->chromStart - b->data->chromStart;
+    }
+return dif;
+}
+
+static int statsDataCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,span,chromStart. */
+{
+const struct wiggleStats *a = *((struct wiggleStats **)va);
+const struct wiggleStats *b = *((struct wiggleStats **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    {
+    dif = a->span - b->span;
+    if (dif == 0)
+	dif = a->chromStart - b->chromStart;
+    }
+return dif;
 }
 
 /*	PUBLIC	METHODS   **************************************************/
@@ -485,7 +521,7 @@ if (doNoOp)
 
 if (! (doNoOp || doAscii || doBed || doStats) )
     {
-	verbose(2, "wigGetData: no type of data fetch requested ?\n");
+	verbose(2, "getData: no type of data fetch requested ?\n");
 	return;	/*	NOTHING ASKED FOR ?	*/
     }
 
@@ -820,17 +856,29 @@ if (doStats)
 	&statsCount, &chromStart, &chromEnd);
     }
 
-/*	The proper inverse ordering was already done by the original SQL
- *	select statement.  All ordering situations were taken care of by
- *	that.  * HOWEVER * allowing MySQL to order business appears to
- *	slow it down dramatically !  Will have to investigate.
- *	PLUS - it makes it difficult, if not impossible, to create the bed list
- *	we will need a sort routine here to sort the ascii list
+/*	The proper in chrom ordering was already done by the original SQL
+ *	select statement.  To finish off, all results need to be reversed
+ *	since they went in via AddHead which is an inverse insertion.
+ *	More properly, we need a real sort routine on these specialized
+ *	lists to make sure they really get into order.  The special
+ *	thing on bedConstrained is a one-time test since getData is
+ *	being called multiple times before it is finished and there is
+ *	no need to try and reverse all accumulating results before they
+ *	are done.  In fact it gets them all mixed up.  Thus again, a
+ *	real need for an actual sort routine that would do everything
+ *	properly no matter what happened during the result assembly.
+if (!wDS->bedConstrained)
+    {
+    if (doAscii)
+	slReverse(&wDS->ascii);
+    if (doBed)
+	slReverse(&wDS->bed);
+    if (doStats)
+	slReverse(&wDS->stats);
+    }
+	A sortResults method has been added.  It can be used by the caller,
+ *	or the *Out() methods will sort results before output.
  */
-if (doAscii)
-    slReverse(&wDS->ascii);
-if (doBed)
-    slReverse(&wDS->bed);
 
 wDS->rowsRead += rowCount;
 wDS->validPoints += validData;
@@ -845,23 +893,100 @@ static void getDataViaBed(struct wiggleDataStream *wDS, char *db, char *table,
 	 int operations, struct bed **bedList)
 /* getDataViaBed - constrained by the bedList	*/
 {
-struct bed *el, *next;
+struct bed *el;
 
 if (bedList && *bedList)
     {
-    slReverse(bedList);
-    wDS->bedConstrained = TRUE;
-    for (el = *bedList; el; el = next)
+    boolean chromConstraint = ((char *)NULL != wDS->chrName);
+    boolean positionConstraints = (0 != wDS->winEnd);
+    boolean doStats = FALSE;
+    boolean doBed = FALSE;
+    boolean doAscii = FALSE;
+    boolean doNoOp = FALSE;
+    int saveWinStart = 0;
+    int saveWinEnd = 0;
+
+    if (positionConstraints)
 	{
-	wDS->setPositionConstraint(wDS, el->chromStart, el->chromEnd);
-	wDS->getData(wDS, db, table, operations);
-	next = el->next;
+	saveWinStart = wDS->winStart;
+	saveWinEnd = wDS->winEnd;
 	}
-    wDS->setPositionConstraint(wDS, 0, 0);
+    doAscii = operations & wigFetchAscii;
+    doBed = operations & wigFetchBed;
+    doStats = operations & wigFetchStats;
+    doNoOp = operations & wigFetchNoOp;
+
+    /*	for timing purposes, allow the wigFetchNoOp to go through */
+    if (doNoOp)
+	{
+	doBed = doStats = doAscii = FALSE;
+	}
+    if (! (doNoOp || doAscii || doBed || doStats) )
+	{
+	    verbose(2, "getDataViaBed: no type of data fetch requested ?\n");
+	    return;	/*	NOTHING ASKED FOR ?	*/
+	}
+
+    wDS->bedConstrained = TRUE;	/* to signal the *Out() displays */
+    for (el = *bedList; el; el = el->next)
+	{
+	/*	if chrom constraint is in effect, allow it to filter the
+	 *	bed file.  Otherwise the bed file is the filter.
+	 */
+	if (chromConstraint)
+	    {
+	    if (differentString(wDS->chrName,el->chrom))
+		continue;
+	    }
+	else
+	    wDS->setChromConstraint(wDS, el->chrom);
+	/*	if position constraints are in effect, allow them to
+	 *	filter the bed file.  Otherwise the bed file is the filter.
+	 */
+	if (positionConstraints)
+	    {
+	    int winStart;
+	    int winEnd;
+	    if ( (el->chromStart >= saveWinEnd) ||
+		(el->chromEnd < saveWinStart))
+		continue;
+	    winStart = max(saveWinStart, el->chromStart);
+	    winEnd = min(saveWinEnd, el->chromEnd);
+	    wDS->setPositionConstraint(wDS, winStart, winEnd);
+	    }
+	else
+	    wDS->setPositionConstraint(wDS, el->chromStart, el->chromEnd);
+	wDS->getData(wDS, db, table, operations);
+	}
+    /*	restore these constraints we used here
+     *	The bedConstrained flag will provide a printout indication of
+     *	what happened to the *Out() routines.
+     */
+    if (!chromConstraint)
+	freeMem(wDS->chrName);
+    if (positionConstraints)
+	wDS->setPositionConstraint(wDS, saveWinStart, saveWinEnd);
+    else
+	wDS->setPositionConstraint(wDS, 0, 0);
+    /*	sorting is definately needed after this business, the caller can
+     *	call the sortResults() method, or allow the *Out() methods to do
+     *	that.
+     */
     }
 }
 
-static void bedOut(struct wiggleDataStream *wDS, char *fileName)
+static void sortResults(struct wiggleDataStream *wDS)
+/*	sort any results that exist	*/
+{
+if (wDS->bed)
+    slSort(&wDS->bed, bedCmp);
+if (wDS->ascii)
+    slSort(wDS->ascii, asciiDataCmp);
+if (wDS->stats)
+    slSort(wDS->stats, statsDataCmp);
+}
+
+static void bedOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
 /*	print to fileName the bed list */
 {
 FILE * fh;
@@ -869,6 +994,8 @@ fh = mustOpen(fileName, "w");
 if (wDS->bed)
     {
     struct bed *bedEl, *next;
+
+    slSort(&wDS->bed, bedCmp);
 
     for (bedEl = wDS->bed; bedEl; bedEl = next )
 	{
@@ -885,7 +1012,7 @@ else
 carefulClose(&fh);
 }
 
-static void statsOut(struct wiggleDataStream *wDS, char *fileName)
+static void statsOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
 /*	print to fileName the statistics */
 {
 FILE * fh;
@@ -894,6 +1021,8 @@ if (wDS->stats)
     {
     struct wiggleStats *stats, *next;
     int itemsDisplayed = 0;
+
+    slSort(wDS->stats, statsDataCmp);
 
     fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
     fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
@@ -929,12 +1058,13 @@ if (wDS->stats)
     }
 else
     {
+    showConstraints(wDS, fh);
     fprintf(fh, "#\tno data points found\n");
     }
 carefulClose(&fh);
 }	/*	static void statsOut()	*/
 
-static void asciiOut(struct wiggleDataStream *wDS, char *fileName)
+static void asciiOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
 /*	print to fileName the ascii data values	*/
 {
 FILE * fh;
@@ -944,6 +1074,8 @@ if (wDS->ascii)
     struct wigAsciiData *asciiData, *next;
     char *chrom = NULL;
     unsigned span = 0;
+
+    slSort(wDS->ascii, asciiDataCmp);
 
     for (asciiData = wDS->ascii; asciiData; asciiData = next )
 	{
@@ -1028,6 +1160,7 @@ wds->setDataConstraint = setDataConstraint;
 wds->bedOut = bedOut;
 wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
+wds->sortResults = sortResults;
 wds->getDataViaBed = getDataViaBed;
 wds->getData = getData;
 return wds;
