@@ -376,8 +376,8 @@ spectrum on
 type psl est
 
 track mgcEstCluster
-shortLabel MGC Cluster
-longLabel Mammalian Gene Collection Clustered ESTs
+shortLabel UCSC MGC Picks
+longLabel UCSC Clone Picks for the Mammalian Gene Collection
 priority 21.3
 visibility hide
 spectrum on
