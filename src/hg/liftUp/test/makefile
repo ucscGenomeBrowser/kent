@@ -2,7 +2,8 @@ include ../../../inc/common.mk
 
 all: test
 
-test: chainQ chainT netQ netT genePred pslRc
+test: chainQ chainT netQ netT genePred pslRc \
+	 missingWarn missingCarry missingDrop  missingError
 
 chainQ: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp -chainQ output/testOutQ.chain \
@@ -53,6 +54,29 @@ chainRcQ: output
 	    input/rcTest.lft warn input/rcRcContigSwap.chain -chainQ
 	diff expected/rcRcSwapLifted.chain output/rcRcSwapLifted.chain
 
+missingWarn: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/missingWarn.psl \
+	    input/rcTestMissing.lft warn input/rcContig.psl >output/missingWarn.err 2>&1
+	diff expected/missingWarn.err output/missingWarn.err
+	diff expected/missingWarn.psl output/missingWarn.psl
+
+missingCarry: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/missingCarry.psl \
+	    input/rcTestMissing.lft carry input/rcContig.psl >output/missingCarry.err 2>&1
+	diff expected/missingCarry.err output/missingCarry.err
+	diff expected/missingCarry.psl output/missingCarry.psl
+
+missingDrop: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/missingDrop.psl \
+	    input/rcTestMissing.lft drop input/rcContig.psl >output/missingDrop.err 2>&1
+	diff expected/missingDrop.err output/missingDrop.err
+	diff expected/missingDrop.psl output/missingDrop.psl
+
+missingError: output
+	if $(HOME)/bin/$(MACHTYPE)/liftUp output/missingError.psl \
+	    input/rcTestMissing.lft error input/rcContig.psl >output/missingError.err 2>&1; then false; else true; fi
+	diff expected/missingError.err output/missingError.err
+	diff expected/missingError.psl output/missingError.psl
 
 output:
 	${MKDIR} output

@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.34 2005/02/09 03:43:00 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.35 2005/03/25 02:39:25 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -45,6 +45,7 @@ errAbort(
  "   carry - Items not in liftSpec are carried to dest without translation\n"
  "   drop  - Items not in liftSpec are silently dropped from dest\n"
  "   warn  - Items not in liftSpec are dropped.  A warning is issued\n"
+ "   error - Items not in liftSpec generate an error\n"
  "If the destination is a .agp file then a 'large inserts' file\n"
  "also needs to be included in the command line:\n"
  "   liftUp dest.agp liftSpec how inserts sourceFile(s)\n"
@@ -63,9 +64,18 @@ errAbort(
  );
 }
 
-boolean silentDrop;	/* True if should silently drop items not in liftSpec. */
-boolean carryMissing;   /* True if should carry missing items untranslated. */
+enum how
+/* how to handle items missing from liftSpec */
+{
+    warnMissing,  /* warn if items are missing */
+    silentDrop,   /* silently drop items. */
+    carryMissing, /* carry missing items untranslated. */
+    errorMissing  /* error if items are missing */
+};
+enum how how = warnMissing;
+
 boolean pipeOut;	/* True if main output is stdout. */
+
 
 char *rmChromPrefix(char *s)
 /* Remove chromosome prefix if any. */
@@ -95,7 +105,7 @@ static int warnLeft = 10;	/* Only issue 10 warnings. */
 
 if ((hel = hashLookup(liftHash, oldName)) == NULL)
     {
-    if (!silentDrop && !carryMissing)
+    if (how == warnMissing)
 	{
 	if (warnLeft > 0)
 	    {
@@ -106,6 +116,13 @@ if ((hel = hashLookup(liftHash, oldName)) == NULL)
 		warn("%s isn't in liftSpec", oldName);
 	    }
 	}
+    else if (how == errorMissing)
+        {
+        if (lf != NULL)
+            errAbort("%s isn't in liftSpec file line %d of %s", oldName, lf->lineIx, lf->fileName);
+        else
+            errAbort("%s isn't in liftSpec", oldName);
+        }
     return NULL;
     }
 return hel->val;
@@ -206,7 +223,7 @@ for (i=0; i<sourceCount; ++i)
 	spec = findLift(liftHash, words[4], lf);
 	if (spec == NULL) 
 	    {
-	    if (carryMissing)
+	    if (how == carryMissing)
 	        newName = words[4];
 	    else
 		continue;
@@ -311,7 +328,7 @@ for (i=0; i<sourceCount; ++i)
 	spec = findLift(liftHash, seqName, lf);
 	if (spec == NULL)
 	    {
-	    if (!carryMissing)
+	    if (how != carryMissing)
 	        {
 		freePslOrXa(psl, isExtended);
 		continue;
@@ -485,7 +502,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	spec = findLift(liftHash, seqName, lf);
 	if (spec == NULL)
 	    {
-	    if (!carryMissing)
+	    if (how != carryMissing)
 	        {
 		axtFree(&axt);
 		continue;
@@ -546,7 +563,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	spec = findLift(liftHash, seqName, lf);
 	if (spec == NULL)
 	    {
-	    if (!carryMissing)
+	    if (how != carryMissing)
 		{
 		chainFree(&chain);
 		continue;
@@ -667,7 +684,7 @@ void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
         struct liftSpec *spec = findLift(liftHash, fill->qName, lf);
         if (spec == NULL)
             {
-            if (!carryMissing)
+            if (how != carryMissing)
                 {
                 errAbort("Can't lift fill->qName %s and don't support dropping lifts",
                         fill->qName);
@@ -718,7 +735,7 @@ void liftNet(char *destFile, struct hash *liftHash,
                 struct liftSpec *spec = findLift(liftHash, net->name, lf);
                 if (spec == NULL)
                     {
-                    if (!carryMissing)
+                    if (how != carryMissing)
                         {
                         chainNetFree(&net);
                         continue;
@@ -773,7 +790,7 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     if (sourceCount < 2)
         usage();
 
-    if (carryMissing)
+    if (how == carryMissing)
         warn("'carry' doesn't work for .agp files, ignoring");
 
     splitPath(destFile, newDir, newName, newExt);
@@ -876,7 +893,7 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     int lastEnd = 0;
     int fragStart, fragEnd;
 
-    if (carryMissing)
+    if (how == carryMissing)
         warn("'carry' doesn't work for .gap files, ignoring");
 
     splitPath(destFile, newDir, newName, newExt);
@@ -1066,7 +1083,7 @@ for (i=0; i<sourceCount; ++i)
 	spec = findLift(liftHash, contig, lf);
 	if (spec == NULL)
 	    {
-	    if (carryMissing)
+	    if (how == carryMissing)
 		chrom = cloneString(contig);
 	    else
 		continue;
@@ -1099,7 +1116,7 @@ for (i=0; i<sourceCount; ++i)
 	    spec = findLift(liftHash, contig, lf);
 	    if (spec == NULL)
 		{
-		if (carryMissing)
+		if (how == carryMissing)
 		    chrom2 = cloneString(contig);
 		else
 		    errAbort("Couldn't find second contig in lift file at line %d of %s\n", lf->lineIx, lf->fileName);
@@ -1239,7 +1256,7 @@ char *line, *words[32];
 struct liftSpec *spec;
 int offset;
 
-if (carryMissing)
+if (how == carryMissing)
     warn("'carry' doesn't work for .gl files, ignoring");
 for (i=0; i<sourceCount; ++i)
     {
@@ -1277,7 +1294,7 @@ for (i=0; i<sourceCount; ++i)
     }
 }
 
-void liftUp(char *destFile, char *liftFile, char *how, int sourceCount, char *sources[])
+void liftUp(char *destFile, char *liftFile, char *howSpec, int sourceCount, char *sources[])
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 {
@@ -1286,12 +1303,14 @@ struct hash *liftHash;
 char *source = sources[0];
 char *destType = cgiUsualString("type", destFile);
 
-if (sameWord(how, "carry"))
-    carryMissing = TRUE;
-else if (sameWord(how, "warn"))
-    ;
-else if (sameWord(how, "drop"))
-    silentDrop = TRUE;
+if (sameWord(howSpec, "carry"))
+    how = carryMissing;
+else if (sameWord(howSpec, "warn"))
+    how = warnMissing;
+else if (sameWord(howSpec, "drop"))
+    how = silentDrop;
+else if (sameWord(howSpec, "error"))
+    how = errorMissing;
 else
     usage();
 pipeOut = sameString(destFile, "stdout");
