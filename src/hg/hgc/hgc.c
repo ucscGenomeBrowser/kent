@@ -1371,6 +1371,8 @@ void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
 /* Return range of bases covered by chain on q side on the plus
  * strand. */
 {
+if (chain == NULL)
+    errAbort("Can't find range in null query chain.");
 if (chain->qStrand == '-')
     {
     *retQs = chain->qSize - chain->qEnd+1;
@@ -1415,10 +1417,13 @@ void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
 struct chain *subChain = NULL, *toFree = NULL;
 int qs,qe;
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
-qChainRangePlusStrand(subChain, &qs, &qe);
-printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-       otherDb, subChain->qName, qs, qe);
-printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+if (subChain != NULL)
+    {
+    qChainRangePlusStrand(subChain, &qs, &qe);
+    printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	   otherDb, subChain->qName, qs, qe);
+    printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+    }
 chainFree(&toFree);
 }
 
@@ -1438,7 +1443,7 @@ printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
-if (sameWord(otherDb, database))
+if (sameWord(otherDb, "seq"))
     {
     printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
 	   chain->qName, chain->qName, qs, qe, chain->qEnd - chain->qStart);
@@ -3850,7 +3855,7 @@ chainFree(&chain);
 psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
 pslFree(&fatPsl);
 
-if (sameWord(otherDb, database))
+if (sameWord(otherDb, "seq"))
     {
     qSeq = hExtSeq(psl->qName);
     sprintf(name, "%s", psl->qName);
@@ -4916,72 +4921,7 @@ pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
 printf("<H3>Protein Alignments</H3>");
 printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
-
-if (hTableExists("knownMore"))
-    {
-    knownMoreExists = TRUE;
-    knownTable = "knownMore";
-    }
-    
-if (knownMoreExists)
-    {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    struct sqlConnection *conn = hAllocConn();
-
-    upgraded = TRUE;
-    sprintf(query, "select * from knownMore where transId = '%s'", transName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	km = knownMoreLoad(row);
-	}
-    sqlFreeResult(&sr);
-
-    hFreeConn(&conn);
-    }
-
-if (km != NULL)
-    {
-    geneName = km->name;
-    if (km->hugoName != NULL && km->hugoName[0] != 0)
-	medlineLinkedLine("Name", km->hugoName, km->hugoName);
-    if (km->aliases[0] != 0)
-	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
-    if (km->omimId != 0)
-	{
-	printf("<B>OMIM:</B> <A HREF=\"");
-	printEntrezOMIMUrl(stdout, km->omimId);
-	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
-	}
-    if (km->locusLinkId != 0)
-        {
-	printf("<B>LocusLink:</B> ");
-	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	       km->locusLinkId);
-	printf("%d</A><BR>\n", km->locusLinkId);
-	}
-    anyMore = TRUE;
-    }
-/*
-  if (geneName != NULL) 
-  {
-  medlineLinkedLine("Symbol", geneName, geneName);
-  printGeneLynxName(geneName);
-  printf("<B>GeneCards:</B> ");
-  printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-  geneName);
-  printf("%s</A><BR>\n", geneName);
-  anyMore = TRUE;
-  }
-*/
-if (anyMore)
-    htmlHorizontalLine();
-
-/*
-  geneShowCommon(transName, tdb, "genieKnownPep");
-*/
+printTrackHtml(tdb);
 }
 
 void doPslDetailed(struct trackDb *tdb, char *item)
