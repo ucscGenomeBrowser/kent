@@ -1013,10 +1013,10 @@ for(js = jsList; js != NULL; js = js->next)
 	    fprintf(out, "%s|%s\t", jPSets[i], jPSets[j]);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
-		assert(mat[denomIx][expIx] != 0);
-		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		assert(pow(2,mat[denomIx][expIx]) != 0);
+		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 		}
-	    fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+	    fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 	    }
 	/* Calc ratios for the dup probe sets. */
 	for(j = 0; j < dCount; j++)
@@ -1027,10 +1027,10 @@ for(js = jsList; js != NULL; js = js->next)
 	    fprintf(out, "%s|%s\t", jPSets[i], djPSets[j]);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
-		assert(mat[denomIx][expIx] != 0);
-		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		assert(pow(2,mat[denomIx][expIx]) != 0);
+		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 		}
-		fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+		fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 	    }
 	}
     
@@ -1050,10 +1050,10 @@ for(js = jsList; js != NULL; js = js->next)
 	    fprintf(out, "%s|%s\t", djPSets[i], djPSets[j]);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
-		assert(mat[denomIx][expIx] != 0);
-		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		assert(pow(2,mat[denomIx][expIx]) != 0);
+		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 		}
-	    fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+	    fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
 	    }
 	}
     }
