@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.703 2004/07/26 19:26:53 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.704 2004/07/26 20:04:35 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3922,7 +3922,6 @@ int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
 dupe = cloneString(tdb->type);
-genericHeader(tdb, itemName);
 wordCount = chopLine(dupe, words);
 
 strcpy(buffer, itemName);
@@ -3939,8 +3938,6 @@ if ((ext = strchr(item, '.')) != NULL)
             *id++ = 0;
             }
     }
-/* Print non-sequence info */
-cartWebStart(cart, title);
 
 if (item != NULL) 
     {
@@ -3950,6 +3947,8 @@ else
     {
     genericHeader(tdb, itemName);
     }
+/* Print non-sequence info */
+cartWebStart(cart, title);
 
 if (id != NULL)
     {
@@ -11698,7 +11697,7 @@ if (row != NULL)
 	}
     printf("</TABLE>\n");
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-    if (lfs->score == 1000)
+    if (lfs->score == 1000 && sameString("bacEndSingles", track))
         {
 	printf("<H4>This is the only location found for %s</H4>\n",clone);
 	}
