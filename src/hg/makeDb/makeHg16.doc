@@ -3795,7 +3795,6 @@ end
     # load into database
     cd /cluster/data/hg16/bed/nisc/cftr
     /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
-    /cluster/bin/i386/hgLoadMaf -WARN -full hg16 ${table}_fullScoring
 
 # TBA with Non-mammalian species included (Fugu & Chicken)  2003-10-20 kate
     ssh hgwdev
@@ -3809,7 +3808,6 @@ end
     /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
         # 1072 warnings (mostly score=0's, a few minus scores)
         # 4377 rows
-    /cluster/bin/i386/hgLoadMaf -WARN -full hg16 ${table}_fullScoring
 
 # TBA 25-species CFTR region  (DONE 2003-10-28 kate)
 # run in /cluster/data/nisc/targets/cftr/25way, using makefile
@@ -3825,7 +3823,7 @@ end
     /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
         # 22267 rows
         # 24 warnings
-    
+
 
 # CREATING KNOWNtOsUPER (which enables superFamily stuff in hgNear/hgGene)
 # First see if need to update superfamily data from 
@@ -4605,6 +4603,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gzip *.axt
     # add README.txt file to dir, if needed
 
+
 # MAKING MOUSE MM4 SYNTENY (TBD)
 
     ssh hgwdev
@@ -4636,7 +4635,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # hgTracks.c needed to be updated to recognize syntenyMm4 so it
     # would color properly.
 
-# TIGR GENE INDEX (DONE 2003-10-31 kate)
+# TIGR GENE INDEX (DONE 2003-11-10 kate)
     mkdir -p /cluster/data/hg16/bed/tigr    
     cd /cluster/data/hg16/bed/tigr  
     wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_build34.tgz
@@ -4646,13 +4645,16 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
       mv $f $f1
     end
     foreach o (mouse cow human pig rat)
+      echo $o
       setenv O $o
       foreach f (chr*_$o*s)
         tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/tigr
     ldHgGene -exon=TC hg16 tigrGeneIndex *.gff
-        #245154 gene predictions
+        #Read 280734 transcripts in 1218611 lines in 120 files
     gzip *.gff *TCs
 
 # LOAD VEGA GENES AND PSEUDOGENES (DONE except peptides   2003-11-03 braney )
@@ -4706,6 +4708,11 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 	hgLoadBed hg16 firstEF firstEF.txt
 
 
+# Load chicken sequence loaded & processed by booch & acs (2003-11-4 kate)
+    hgLoadSeq hg16 /gbdb/gg0/chicken.fa
+        # 73234 sequences
+
+
 # LOAD ENSEMBL GENES (DONE 2003-11-07 angie)
     mkdir /cluster/data/hg16/bed/ensembl
     cd /cluster/data/hg16/bed/ensembl
@@ -4753,6 +4760,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gunzip ensemblPep.fa.gz
     hgPepPred hg16 ensembl ensemblPep.fa
 
+
 LOAD GENOMIC DUPES (DONE - 2003-11-11 - Hiram)
 o - Load genomic dupes
     ssh hgwdev
@@ -4773,3 +4781,4 @@ o - Load genomic dupes
     hgsql -e \
 	'update genomicDups set name = concat(otherChrom,":",otherStart);' \
 	hg16
+>>>>>>> 1.74
