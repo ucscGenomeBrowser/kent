@@ -11,6 +11,7 @@
 #include "spaceSaver.h"
 #include "hgTracks.h"
 #include "ld.h"
+#include "gfxPoly.h"
 
 void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
 /* Filter out items from track->itemList. */

@@ -637,8 +637,8 @@ static void mapDiamondUi(int xl, int yl, int xr, int yr,
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
-	xl, yl, xr, yr, xt, yt, xb, yb);
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
+	xl, yl, xt, yt, xr, yr, xb, yb);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=ld&i=%s\"", hgTrackUiName(), cartSessionVarName(),
                          cartSessionId(cart), chromName, name);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
@@ -650,10 +650,7 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 tg->lineHeight          = 0;
 tg->heightPer           = 0;
-if (cartUsualInt(cart, "ld", 2) == 2)
-    tg->height = min(cartUsualInt(cart, "ldHeight", 200), 400);
-else 
-    tg->height = min(cartUsualInt(cart, "ldHeight",  50), 400);
+tg->height = min(cartUsualInt(cart, "ldHeight", 200), 400);
 return tg->height;
 }
 
@@ -678,7 +675,21 @@ if (score>=0)
 return negShades[(int)(-score * LD_DATA_SHADES)];
 }
 
-void drawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
+void drawDiamond(struct vGfx *vg, int xl, int yl, int xr, int yr,
+        int xt, int yt, int xb, int yb, Color fillColor, Color outlineColor)
+/* Draw diamond shape. */
+{
+struct gfxPoly *poly = gfxPolyNew();
+gfxPolyAddPoint(poly, xl, yl);
+gfxPolyAddPoint(poly, xt, yt);
+gfxPolyAddPoint(poly, xr, yr);
+gfxPolyAddPoint(poly, xb, yb);
+vgDrawPoly(vg, poly, fillColor, TRUE);
+vgDrawPoly(vg, poly, outlineColor, FALSE);
+gfxPolyFree(&poly);
+}
+
+void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
 		 int i, int j, int k, int l, double score, char *name, 
 		 char *shortLabel, boolean drawOutline, Color outlineColor)
 /* Draw a single pairwise LD box */
@@ -710,8 +721,8 @@ yt = round((double)(scale*m*(l-i))) + yOff;
 
 if (xr>=xOff && xl<width+xOff)
     {
-    vgDiamond(vg, xl, yl, xr, yr, xt, yt, xb, yb, 
-	      color, drawOutline, outlineColor);
+    drawDiamond(vg, xl, yl, xr, yr, xt, yt, xb, yb, 
+	      color, outlineColor);
     /* this section should be corrected by the slope for the 
      * non-zeroed coordinate,  which would make a polygon 
      * instead of a diamond.  It's a non-trivial problem, 
@@ -726,13 +737,14 @@ if (xr>=xOff && xl<width+xOff)
     if (yt<yOff) yt=yOff; if (yt>height) yt=height;
     if (yb<yOff) yb=yOff; if (yb>height) yb=height; 
 */
-    mapDiamondUi(xl, yl, xr, yr, xt, yt, xb, yb, name, shortLabel);
+    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
     }
 }
 
 void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
 		  void *item, struct vGfx *vg, Color outlineColor,
-		  int *chromStarts, double *values, int arraySize)
+		  int *chromStarts, double *values, int arraySize,
+		  boolean drawOutline)
 /* Draw a string of diamonds that represent the pairwise LD
  * values for the current marker */
 {
@@ -740,18 +752,18 @@ struct ld *ld       = item;
 int        n        = 0;
 int        coverage = ldCoverage();
 
-for (n=1; n < ld->ldCount-1; n++)
+for (n=0; n < ld->ldCount-1; n++)
     {
-
-    if ((chromStarts[n-1]-ld->chromStart)/2 > winEnd) /* left is outside window */
+    if (n>0&&chromStarts[n-1]>winEnd) /* clip to triangle */
 	return;
-    if ((chromStarts[n-1]-chromStarts[0]) > coverage) /* bottom is outside window */
+    if ((chromStarts[n]-ld->chromStart)/2 > winEnd) /* left is outside window */
 	return;
-//    if ((chromStarts[n]-chromStarts[0])/2 < winStart) /* right is outside window */
-//	continue;
-    drawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
-		chromStarts[0], chromStarts[n], chromStarts[n+1], 
-		values[n], ld->name, tg->shortLabel, TRUE, outlineColor);
+    if ((chromStarts[n]-chromStarts[0]) > coverage) /* bottom is outside window */
+	return;
+//    if ((chromStarts[n+1]-chromStarts[0])/2 >= winStart)
+    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
+		  chromStarts[0], chromStarts[n], chromStarts[n+1], 
+		  values[n], ld->name, tg->shortLabel, drawOutline, outlineColor);
     }
 }
 
@@ -774,11 +786,12 @@ int       *chromStarts  = NULL;
 double    *values       = NULL;
 char      *posColor     = cartUsualString(cart, "ldPos",    "red");
 char      *negColor     = cartUsualString(cart, "ldNeg",    "blue");
-char      *outColor     = cartUsualString(cart, "ldOut",    "yellow");
-char      *valArray     = cartUsualString(cart, "ldValues", "rsquared");
-Color      outlineColor;
+char      *outColor     = cartUsualString(cart, "ldOut",    "white");
+char      *valArray     = cartUsualString(cart, "ldValues", "dprime");
+Color      outlineColor = MG_BLUE;
+boolean    drawOutline  = differentString(outColor,"none");
 
-makeLdShades(vg);   // for testing: vgDiamond(vg, xOff, yOff+100, xOff+width, yOff+300, xOff+width/4,yOff+400, xOff+3*width/4, yOff, MG_GREEN, TRUE, MG_BLACK);
+makeLdShades(vg);
 
 /* get positive color from cart */
 if (sameString(posColor,"red"))
@@ -797,16 +810,21 @@ else
     tg->altColorShades = ldShadesOfRed;
 
 /* get outline color from cart */
-if (sameString(outColor,"yellow"))
-    outlineColor = MG_YELLOW;
-else if (sameString(outColor,"red"))
-    outlineColor = MG_RED;
-else if (sameString(outColor,"black"))
-    outlineColor = MG_BLACK;
-else if (sameString(outColor,"green"))
-    outlineColor = MG_GREEN;
-else
-    outlineColor = MG_BLUE;
+if (drawOutline)
+    {
+    if (sameString(outColor,"yellow"))
+	outlineColor = MG_YELLOW;
+    else if (sameString(outColor,"red"))
+	outlineColor = MG_RED;
+    else if (sameString(outColor,"black"))
+	outlineColor = MG_BLACK;
+    else if (sameString(outColor,"green"))
+	outlineColor = MG_GREEN;
+    else if (sameString(outColor,"white"))
+	outlineColor = MG_WHITE;
+    else
+	outlineColor = MG_BLUE;
+    }
 
 /* choose values from different arrays based on cart settings */
 if (sameString(valArray,"rsquared"))
@@ -817,13 +835,15 @@ if (sameString(valArray,"rsquared"))
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
 		      "el->ldCount=%d<BR>el->ldStarts: %s",
 		      el->name,arraySize,el->ldCount,el->ldStarts);
+	if (chromStarts[0] < winStart) /* clip to triangle */
+	    continue;
 	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
 	if(arraySize != el->ldCount) 
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
 		      "el->ldCount=%d<BR>el->rsquared: %s",
 		      el->name,arraySize,el->ldCount,el->rsquared);
 	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize);
+		     chromStarts, values, arraySize, drawOutline);
 	}
 else if (sameString(valArray, "dprime"))
     for (el=tg->items; el!=NULL; el=el->next)
@@ -833,13 +853,15 @@ else if (sameString(valArray, "dprime"))
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
 		      "el->ldCount=%d<BR>el->ldStarts: %s",
 		      el->name,arraySize,el->ldCount,el->ldStarts);
+	if (chromStarts[0] < winStart) /* clip to triangle */
+	    continue;
 	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
 	if(arraySize != el->ldCount) 
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
 		      "el->ldCount=%d<BR>el->dprime: %s",
 		      el->name,arraySize,el->ldCount,el->dprime);
 	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize);
+		     chromStarts, values, arraySize, drawOutline);
 	}
 else if (sameString(valArray, "lod"))
     for (el=tg->items; el!=NULL; el=el->next)
@@ -849,6 +871,8 @@ else if (sameString(valArray, "lod"))
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
 		      "el->ldCount=%d<BR>el->ldStarts: %s",
 		      el->name,arraySize,el->ldCount,el->ldStarts);
+	if (chromStarts[0] < winStart) /* clip to triangle */
+	    continue;
 	sqlDoubleDynamicArray(el->lod, &values, &arraySize);
 	if(arraySize != el->ldCount) 
 	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
@@ -857,7 +881,7 @@ else if (sameString(valArray, "lod"))
 	/* transform lod values to [0,1] */
 	ldTransformLods(arraySize, values);
 	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize);
+		     chromStarts, values, arraySize, drawOutline);
 	}
 else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'.  "
