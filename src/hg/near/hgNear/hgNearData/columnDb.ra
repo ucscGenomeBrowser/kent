@@ -86,6 +86,15 @@ visibility off
 type lookup knownToHInv name value
 search prefix
 
+name bioImage
+shortLabel BioImage
+longLabel UCSC Bio Image Database
+priority 2.61
+visibility off
+type lookup knownToBioImage name value
+search exact
+itemUrl ../cgi-bin/hgBioImage?hgbi_id=%s
+hgsid on
 
 name esRegModule
 shortLabel Module
