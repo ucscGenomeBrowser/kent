@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.17 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.18 2003/11/19 04:31:58 kent Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -202,15 +202,17 @@ hgSeqDisplayOptions(cart, canDoUTR, canDoIntrons, offerRevComp);
 }
 
 
+#ifdef NEVER
 void hgSeqOptionsHti(struct hTableInfo *hti)
 /* Print out HTML FORM entries for gene region and sequence display options.
  * Use defaults from CGI. */
 {
 hgSeqOptionsHtiCart(hti, NULL);
 }
+#endif /* NEVER */
 
 
-void hgSeqOptionsDb(char *db, char *table)
+static void hgSeqOptionsDb(struct cart *cart, char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
 struct hTableInfo *hti;
@@ -229,14 +231,14 @@ else
 	webAbort("Error", "Could not find table info for table %s (%s)",
 		 rootName, table);
     }
-hgSeqOptionsHti(hti);
+hgSeqOptionsHtiCart(hti, cart);
 }
 
 
-void hgSeqOptions(char *table)
+void hgSeqOptions(struct cart *cart, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
-hgSeqOptionsDb(hGetDb(), table);
+hgSeqOptionsDb(cart, hGetDb(), table);
 }
 
 
