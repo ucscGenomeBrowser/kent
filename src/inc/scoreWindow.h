@@ -1,4 +1,4 @@
-/* calculate score array with score at each position in s, match to char c adds 1 to score, mismatch adds -1 */
-/* index of max score is returned , size is size of s */
-/* used for scoring polyA tails */
+/* simple dynamic program to find max scoring window representing string of char c in a string s of size size */
+/* index of max score is returned , match and misMatch are the scores to assign, suggested defaults are match=1 and misMatch=1*/
+/* when used for scoring polyA tails, set c='A' for positive strand  or c='T' for neg strand */
 int scoreWindow(char c, char *s, int size, int *score, int *start, int *end, int match, int misMatch);
