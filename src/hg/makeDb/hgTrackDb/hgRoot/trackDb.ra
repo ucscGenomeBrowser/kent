@@ -359,30 +359,6 @@ visibility hide
 spectrum on
 type psl .
 
-track mgcFullClones
-shortLabel MGC ESTs
-longLabel Mammalian Gene Collection CDS Complete ESTs
-priority 21.1
-visibility hide
-spectrum on
-type psl est
-
-track mgcSplicedFullClones
-shortLabel MGC Spliced ESTs
-longLabel Mammalian Gene Collection CDS Complete ESTs That Have Been Spliced
-priority 21.2
-visibility hide
-spectrum on
-type psl est
-
-track mgcEstCluster
-shortLabel UCSC MGC Picks
-longLabel UCSC Clone Picks for the Mammalian Gene Collection
-priority 21.3
-visibility hide
-spectrum on
-type psl est
-
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 400 Bases are Light Green)
@@ -714,4 +690,30 @@ shortLabel altGraphX
 longLabel altGraphX
 priority 42.1
 visibility hide
+private 1
 type bed 3
+
+track mgcNcbiPicks
+shortLabel NCBI MGC Picks
+longLabel NCBI Clone Picks for the Mammalian Gene Collection
+priority 45
+visibility hide
+spectrum on
+type psl est
+
+track mgcNcbiSplicedPicks
+shortLabel NCBI Spliced Picks
+longLabel NCBI Clone Picks for the Mammalian Gene Collection That Have Been Spliced
+priority 45.2
+visibility hide
+spectrum on
+type psl est
+
+track mgcUcscPicks
+shortLabel UCSC MGC Picks
+longLabel UCSC Clone Picks for the Mammalian Gene Collection
+priority 45.3
+visibility hide
+spectrum on
+type psl est
+
