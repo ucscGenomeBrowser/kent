@@ -1,4 +1,4 @@
-/* hgNear - Similarity neighborhood gene browser. */
+/* hgNear - gene family browser. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,16 +11,11 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.2 2003/06/18 03:26:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.3 2003/06/18 07:15:02 kent Exp $";
 
-/* ---- Cart Variables ---- */
-#define confVarName "near.configure"	/* Configuration button */
-#define countVarName "near.count"	/* How many items to display. */
-#define searchVarName "near.search"	/* Search term. */
-#define geneIdVarName "near.geneId"     /* Purely cart, not cgi. Last valid geneId */
-#define sortVarName "near.sort"		/* Sort scheme. */
 
-char *excludeVars[] = { "submit", "Submit", confVarName, NULL }; 
+char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
+	resetConfName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -32,7 +27,7 @@ char *sortOn;		/* Current sort strategy. */
 int displayCount;	/* Number of items to display. */
 
 
-/* ---- Some general purpose helper routines. ---- */
+/* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args)
 /* Print out some html. */
@@ -49,6 +44,18 @@ hvPrintf(format, args);
 va_end(args);
 }
 
+void makeTitle(char *title, char *helpName)
+/* Make title bar. */
+{
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=5>%s</FONT></TD>", title);
+hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>", 
+	helpName, wrapWhiteFont("Help"));
+hPrintf("</TR></TABLE>");
+}
+
+
 /* ---- Some helper routines for column methods. ---- */
 
 char *cellSimpleVal(struct column *col, char *geneId, struct sqlConnection *conn)
@@ -57,15 +64,12 @@ char *cellSimpleVal(struct column *col, char *geneId, struct sqlConnection *conn
 char query[512];
 struct sqlResult *sr;
 char **row;
-char *res = "n/a";
+char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where %s = '%s'",
 	col->valField, col->table, col->keyField, geneId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-    {
-    res = row[0];
-    }
-res = cloneString(res);
+    res = cloneString(row[0]);
 sqlFreeResult(&sr);
 return res;
 }
@@ -74,23 +78,50 @@ void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *con
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, geneId, conn);
+if (s == NULL) s = "n/a";
 hPrintf("<TD>%s</TD>", s);
 freeMem(s);
+}
+
+static boolean alwaysExists(struct column *col, struct sqlConnection *conn)
+/* We don't exist ever. */
+{
+return TRUE;
+}
+
+boolean simpleTableExists(struct column *col, struct sqlConnection *conn)
+/* This returns true if col->table exists. */
+{
+return sqlTableExists(conn, col->table);
+}
+
+static char *noVal(struct column *col, char *geneId, struct sqlConnection *conn)
+/* Return not-available value. */
+{
+return cloneString("n/a");
+}
+
+void columnDefaultMethods(struct column *col)
+/* Set up default methods. */
+{
+col->exists = alwaysExists;
+col->cellVal = noVal;
+col->cellPrint = cellSimplePrint;
 }
 
 void simpleMethods(struct column *col, char *table, char *key, char *val)
 /* Set up the simplest type of methods for column. */
 {
+columnDefaultMethods(col);
 col->table = table;
 col->keyField = key;
 col->valField = val;
 col->cellVal = cellSimpleVal;
-col->cellPrint = cellSimplePrint;
 }
 
 /* ---- Accession column ---- */
 
-char *accVal(struct column *col, char *geneId, struct sqlConnection *conn)
+static char *accVal(struct column *col, char *geneId, struct sqlConnection *conn)
 /* Return clone of geneId */
 {
 return cloneString(geneId);
@@ -99,31 +130,43 @@ return cloneString(geneId);
 void accMethods(struct column *col)
 /* Set up methods for accession column. */
 {
+columnDefaultMethods(col);
 col->cellVal = accVal;
-col->cellPrint = cellSimplePrint;
 }
+
+/* ---- Number column ---- */
+
+static char *numberVal(struct column *col, char *geneId, struct sqlConnection *conn)
+/* Return incrementing number. */
+{
+static int ix = 0;
+char buf[15];
+++ix;
+safef(buf, sizeof(buf), "%d", ix);
+return cloneString(buf);
+}
+
+void numberMethods(struct column *col)
+/* Set up methods for accession column. */
+{
+columnDefaultMethods(col);
+col->cellVal = numberVal;
+}
+
 
 /* ---- Page/Form Making stuff ---- */
-
-
-void makeTitle()
-/* Make title bar. */
-{
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TR>");
-hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=5>UCSC %s %s</FONT></TD>", 
-	organism, "Gene Similarity Browser");
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/hgNearHelp.html\">%s</A></TD>", 
-	wrapWhiteFont("Help"));
-hPrintf("</TR></TABLE>");
-}
 
 void controlPanel()
 /* Make control panel. */
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=CENTER>");
+
+/* Do configure button. */
+    {
+    cgiMakeButton(confVarName, "configure");
+    hPrintf(" ");
+    }
 
 /* Do sort by drop-down */
 sortOn = cartUsualString(cart, sortVarName, "homology");
@@ -140,12 +183,6 @@ sortOn = cartUsualString(cart, sortVarName, "homology");
     hPrintf(" display ");
     cgiMakeDropList(countVarName, menu, ArraySize(menu), count);
     displayCount = atoi(count);
-    }
-
-/* Do configure button. */
-    {
-    hPrintf(" ");
-    cgiMakeButton(confVarName, "configure");
     }
 
 /* Do search box. */
@@ -222,28 +259,52 @@ else
     }
 }
 
-struct column *getColumns()
+struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
 struct column *list = NULL, *col;
 
 AllocVar(col);
+col->name = "num";
+col->label = "#";
+numberMethods(col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
+
+AllocVar(col);
 col->name = "acc";
 col->label = "Accession";
 accMethods(col);
-slAddHead(&list, col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
+
+AllocVar(col);
+col->name = "bitScore";
+col->label = "Bit Score";
+bitScoreMethods(col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
 
 AllocVar(col);
 col->name = "eVal";
 col->label = "E Value";
 eValMethods(col);
-slAddHead(&list, col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
 
 AllocVar(col);
 col->name = "percentId";
 col->label = "%ID";
 percentIdMethods(col);
-slAddHead(&list, col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
+
+AllocVar(col);
+col->name = "knownPos";
+col->label = "Genome Position";
+knownPosMethods(col);
+if (col->exists(col, conn))
+    slAddHead(&list, col);
 
 slReverse(&list);
 return list;
@@ -254,7 +315,7 @@ void bigTable()
 {
 struct sqlConnection *conn = hAllocConn();
 struct slName *geneList = getNeighbors(conn), *gene;
-struct column *colList = getColumns(), *col;
+struct column *colList = getColumns(conn), *col;
 
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 
@@ -293,7 +354,10 @@ hFreeConn(&conn);
 void doMain()
 /* The main page. */
 {
-makeTitle();
+char buf[128];
+safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
+makeTitle(buf, "hgNear.html");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 controlPanel();
 curGeneId = findGeneId();
 if (curGeneId != NULL)
@@ -302,26 +366,31 @@ if (curGeneId != NULL)
     }
 }
 
-void doConfigure()
-/* Configuration page. */
-{
-hPrintf("<H2>Configuration Coming Someday</H2>");
-}
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
+char *var = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
-cartSaveSession(cart);
 if (cgiVarExists(confVarName))
-    doConfigure();
+    doConfigure(NULL);
+else if ((var = cartFindLike(cart, "near.up.*")) != NULL)
+    doConfigure(var);
+else if ((var = cartFindLike(cart, "near.down.*")) != NULL)
+    doConfigure(var);
+else if (cgiVarExists(defaultConfName))
+    {
+    doDefaultConfigure();
+    }
 else
     doMain();
+cartRemoveLike(cart, "near.up.*");
+cartRemoveLike(cart, "near.down.*");
+cartSaveSession(cart);
 hPrintf("</FORM>");
 }
 
@@ -329,7 +398,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgNear - Similarity neighborhood gene browser - a cgi script\n"
+  "hgNear - gene family browser - a cgi script\n"
   "usage:\n"
   "   hgNear\n"
   );
@@ -339,6 +408,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-cartHtmlShell("Gene Similarity v1", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

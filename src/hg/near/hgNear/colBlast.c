@@ -15,15 +15,12 @@ static char *blastVal(struct column *col, char *geneId, struct sqlConnection *co
 char query[512];
 struct sqlResult *sr;
 char **row;
-char *res = "n/a";
+char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where target = '%s' and query = '%s'",
 	col->valField, col->table, curGeneId, geneId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-    {
-    res = row[0];
-    }
-res = cloneString(res);
+    res = cloneString(row[0]);
 sqlFreeResult(&sr);
 return res;
 }
@@ -31,8 +28,10 @@ return res;
 static void blastMethods(struct column *col, char *valField)
 /* Specify methods for blast columns. */
 {
+columnDefaultMethods(col);
 col->table = "knownBlastTab";
 col->valField = valField;
+col->exists = simpleTableExists;
 col->cellVal = blastVal;
 col->cellPrint = cellSimplePrint;
 }

@@ -5,7 +5,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 X = hgNear
 
-O = $X.o colBlast.o
+O = $X.o colBlast.o colGenePred.o configure.o
 
 my: compile
 	mv $X /usr/local/apache/cgi-bin-$(USER)/$X
