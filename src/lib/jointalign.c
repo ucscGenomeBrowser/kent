@@ -25,7 +25,7 @@ validateSeqs( seq1, seq2 );
 for( i=0; i<strlen(seq1); i += columnNum )
     htmlPrintJointAlignmentLine(seq1, seq2, i, min(i+columnNum, strlen(seq1)));
 
-printf( "<tt><hr><br>%s<br>%s<br></tt>", seq1, seq2 );
+/*printf( "<tt><hr><br>%s<br>%s<br></tt>", seq1, seq2 );*/
 
 }
 
