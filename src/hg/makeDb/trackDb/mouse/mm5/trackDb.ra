@@ -1,3 +1,17 @@
+track multiz5way
+shortLabel Conservation
+longLabel Rat/Human/Dog/Chicken Multiz Alignments & PhyloHMM Cons
+group compGeno
+priority 180
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle multiz5wayCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder rat human dog chicken
+
 track chainGalGal2
 shortLabel Chicken Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
