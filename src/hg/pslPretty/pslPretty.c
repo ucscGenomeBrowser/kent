@@ -343,6 +343,7 @@ dyStringAppend(bRes, abbrev);
 }
 
 int smallSize = 8;	/* What our definition of 'small' is */
+int tinySize = 3;
 
 int boolify(int i)
 /* Convert 0 to 0 and nonzero to 1 */
@@ -362,6 +363,23 @@ int total_weirdSplice = 0;
 int total_doubleGap = 0;
 int total_jumpBack = 0;
 
+boolean isIntron(char strand, char *start, char *end)
+/* See if it look like an intron. */
+{
+if (strand == '+')
+    {
+    if (start[0] != 'g' || end[-2] != 'a' || end[-1] != 'g')
+	return FALSE;
+    return (start[1] == 't' || start[1] == 'c');
+    }
+else
+    {
+    if (start[0] != 'c' || start[1] != 't' || end[-1] != 'c')
+	return FALSE;
+    return (end[-2] == 'a' || end[-2] == 'g');
+    }
+}
+
 void outputCheck(struct psl *psl, struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset, FILE *f)
 /* Output quality check info to file */
@@ -380,12 +398,13 @@ int doubleGap = 0;
 int jumpBack = 0;
 int diff;
 int totalProblems = 0;
+char strand = psl->strand[0];
 
-if (psl->strand[0] == '+')
+if (strand == '+')
     {
     for (i=1; i<=qSize; ++i)
 	{
-	if (qSeq->dna[qOffset + qSize - i] == 'a')
+	if (qSeq->dna[qSize - i - qOffset] == 'a')
 	    ++sizePolyA;
 	else
 	    break;
@@ -395,13 +414,13 @@ else
     {
     for (i=0; i<qSize; ++i)
 	{
-	if (qSeq->dna[qOffset + i] == 't')
+	if (qSeq->dna[i - qOffset] == 't')
 	    ++sizePolyA;
 	else
 	    break;
 	}
     }
-if (psl->qStart != 0)
+if (psl->qStart > tinySize)
     {
     if (psl->qStart <= smallSize)
 	{
@@ -415,7 +434,7 @@ if (psl->qStart != 0)
 	}
     }
 diff = psl->qSize - psl->qEnd - sizePolyA;
-if (diff > 0)
+if (diff > tinySize)
     {
     if (diff <= smallSize)
 	{
@@ -449,7 +468,7 @@ for (i=0; i<psl->blockCount-1; ++i)
 	    ++doubleGap;
 	    ++totalProblems;
 	    }
-	if (dq > 0)
+	if (dq > tinySize)
 	    {
 	    if (dq > smallSize)
 		{
@@ -462,19 +481,27 @@ for (i=0; i<psl->blockCount-1; ++i)
 		++totalProblems;
 		}
 	    }
+	if (dq == 0 && dt >=30)
+	    {
+	    char *dna = tSeq->dna - tOffset;
+	    if (!isIntron(strand, dna + t, dna + nextT))
+		{
+		++weirdSplice;
+		++totalProblems;
+		}
+	    }
 	}
     }
 fprintf(f, "%2d %9s %s ", totalProblems, psl->qName, psl->strand);
-fprintf(f, "%2d ", missLargeStart);
-fprintf(f, "%2d ", missSmallStart);
-fprintf(f, "%2d ", missLargeEnd);
-fprintf(f, "%2d ", missSmallEnd);
-fprintf(f, "%2d ", missLargeMiddle);
-fprintf(f, "%2d ", missSmallMiddle);
-fprintf(f, "%2d ", weirdSplice);
-fprintf(f, "%2d ", doubleGap);
-fprintf(f, "%2d ", jumpBack);
-fprintf(f, "%2d ", sizePolyA);
+fprintf(f, "%2dS ", missLargeStart);
+fprintf(f, "%2ds ", missSmallStart);
+fprintf(f, "%2dE ", missLargeEnd);
+fprintf(f, "%2de ", missSmallEnd);
+fprintf(f, "%2dM ", missLargeMiddle);
+fprintf(f, "%2dm ", missSmallMiddle);
+fprintf(f, "%2dW ", weirdSplice);
+fprintf(f, "%2dG ", doubleGap);
+fprintf(f, "%2dJ ", jumpBack);
 fprintf(f, "\n");
 
 total_missSmallStart = boolify(missSmallStart);
@@ -486,6 +513,9 @@ total_missLargeMiddle = boolify(missLargeMiddle);
 total_weirdSplice = boolify(weirdSplice);
 total_doubleGap = boolify(doubleGap);
 total_jumpBack = boolify(jumpBack);
+++total_rnaCount;
+if (totalProblems == 0)
+    ++total_rnaPerfect;
 }
 
 void prettyOne(struct psl *psl, struct hash *qHash, struct hash *tHash,
@@ -617,6 +647,20 @@ while ((psl = pslNext(lf)) != NULL)
 	}
     prettyOne(psl, qHash, tHash, fileCache, f, axt, checkFile);
     pslFree(&psl);
+    }
+if (checkFile != NULL)
+    {
+    printf("missLargeStart: %d\n", total_missLargeStart);
+    printf("missSmallStart: %d\n", total_missSmallStart);
+    printf("missLargeEnd: %d\n", total_missLargeEnd);
+    printf("missSmallEnd: %d\n", total_missSmallEnd);
+    printf("missLargeMiddle: %d\n", total_missLargeMiddle);
+    printf("missSmallMiddle: %d\n", total_missSmallMiddle);
+    printf("weirdSplice: %d\n", total_weirdSplice);
+    printf("doubleGap: %d\n", total_doubleGap);
+    printf("jumpBack: %d\n", total_jumpBack);
+    printf("perfect: %d\n", total_rnaPerfect);
+    printf("total: %d\n", total_rnaCount);
     }
 lineFileClose(&lf);
 carefulClose(&f);
