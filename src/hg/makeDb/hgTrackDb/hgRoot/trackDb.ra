@@ -313,6 +313,14 @@ color 180,90,0
 type bed 6
 chromosomes chr22,
 
+track npredGene
+shortLabel NCBI Prediction
+longLabel NCBI Gene Predictions
+priority 17.8
+visibility full
+color 170,100,0
+type genePred refPep refMrna
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from Genbank 
