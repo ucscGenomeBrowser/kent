@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.49 2004/02/02 01:34:15 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.50 2004/03/12 06:39:32 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -230,6 +230,61 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 return databases;
 }
+
+struct slName *sqlListTables(struct sqlConnection *conn)
+/* Return list of tables in database associated with conn. */
+{
+struct sqlResult *sr = sqlGetResult(conn, "show tables");
+char **row;
+struct slName *list = NULL, *el;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct hash *sqlAllFields()
+/* Get hash of all database.table.field. */
+{
+struct hash *fullHash = hashNew(18);
+struct hash *dbHash = sqlHashOfDatabases();
+struct hashEl *dbList, *db;
+char fullName[512];
+int count = 0;
+
+dbList = hashElListHash(dbHash);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    struct sqlConnection *conn = sqlConnect(db->name);
+    struct slName *table, *tableList = sqlListTables(conn);
+    struct sqlResult *sr;
+    char query[256];
+    char **row;
+    for (table = tableList; table != NULL; table = table->next)
+        {
+	safef(query, sizeof(query), "describe %s", table->name);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    safef(fullName, sizeof(fullName), "%s.%s.%s", 
+	    	db->name, table->name, row[0]);
+	    hashAdd(fullHash, fullName, NULL);
+	    ++count;
+	    }
+	sqlFreeResult(&sr);
+	}
+    slFreeList(&tableList);
+    sqlDisconnect(&conn);
+    }
+slFreeList(&dbList);
+hashFree(&dbHash);
+return fullHash;
+}
+
 
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */

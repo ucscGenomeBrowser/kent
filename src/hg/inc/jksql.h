@@ -57,6 +57,12 @@ char* sqlGetDatabase(struct sqlConnection *sc);
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
 /* Get a list of all database on the server */
 
+struct slName *sqlListTables(struct sqlConnection *conn);
+/* Return list of tables in database associated with conn. */
+
+struct hash *sqlAllFields();
+/* Get hash of all database.table.field on default host. */
+
 struct sqlConnCache *sqlNewConnCache(char *database);
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines
