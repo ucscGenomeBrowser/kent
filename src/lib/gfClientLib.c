@@ -1,5 +1,6 @@
 /* gfClientLib - stuff to interface with a genoFind server running somewhere
  * on the web. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "net.h"
 #include "linefile.h"
@@ -24,7 +25,7 @@ struct gfRange
     struct gfRange *next;  /* Next in singly linked list. */
     int qStart;	/* Start in query */
     int qEnd;	/* End in query */
-    char *tName;	/* Target name */
+    char *tName;	/* Target name. Not allocated here. */
     struct dnaSeq *tSeq;	/* Target sequence. (May be NULL if in .nib.  Not allocated here.) */
     int tStart;	/* Start in target */
     int tEnd;	/* End in target */
@@ -65,8 +66,8 @@ for (el = *pList; el != NULL; el = next)
 }
 
 static struct gfRange *gfRangeLoad(char **row)
-/* Load a gfRange from row fetched with select * from gfRange
- * from database.  Dispose of this with gfRangeFree(). */
+/* Load a gfRange from array of strings parsed from
+ * server. Dispose of this with gfRangeFree(). */
 {
 struct gfRange *ret;
 int sizeOne,i;
@@ -83,7 +84,7 @@ return ret;
 }
 
 static int gfRangeCmpTarget(const void *va, const void *vb)
-/* Compare to sort based on hit count. */
+/* Compare to sort based on target position. */
 {
 const struct gfRange *a = *((struct gfRange **)va);
 const struct gfRange *b = *((struct gfRange **)vb);
@@ -91,7 +92,7 @@ int diff;
 
 diff = strcmp(a->tName, b->tName);
 if (diff == 0)
-    diff = a->t3 - b->t3;
+    diff = (int)(a->t3) - (int)(b->t3);	/* Casts needed for Solaris.  Thanks Darren Platt! */
 if (diff == 0)
     diff = a->tStart - b->tStart;
 return diff;
