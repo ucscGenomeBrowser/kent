@@ -142,7 +142,6 @@ int tileSize = 4;
 char *line, *var, *val, *word;
 char *s = NULL;
 char buf[256], *row[12];
-struct hash *ssHash = newHash(0);
 struct gfSeqSource *ssList = NULL, *ss;
 
 for (isRc = 0; isRc <= 1; ++isRc)
@@ -195,12 +194,9 @@ for (;;)
     AllocVar(clump);
     clump->qStart = sqlUnsigned(row[0]);
     clump->qEnd = sqlUnsigned(row[1]);
-    if ((ss = hashFindVal(ssHash, row[2])) == NULL)
-	{
-	AllocVar(ss);
-	slAddHead(&ssList, ss);
-	hashAddSaveName(ssHash, row[2], ss, &ss->fileName);
-	}
+    AllocVar(ss);
+    ss->fileName = cloneString(row[2]);
+    slAddHead(&ssList, ss);
     clump->target = ss;
     clump->tStart = sqlUnsigned(row[3]);
     clump->tEnd = sqlUnsigned(row[4]);
@@ -277,6 +273,16 @@ slReverse(&geneList);
 return geneList;
 }
 
+static int extendRespect(int oldX, int newX)
+/* Return newX modified slightly so as to be in same frame as oldX. */
+{
+int frame = oldX % 3;
+uglyf("  Respecting frame %d, oldX x %d, newX %d\n", frame, oldX, newX);
+newX = newX - (newX % 3) + frame;
+uglyf("  new newX %d\n", newX);
+return newX;
+}
+
 static void expandRange(struct gfRange *range, int qSize, int tSize, boolean respectFrame)
 /* Expand range to cover an additional 500 bases on either side. */
 {
@@ -295,19 +301,22 @@ x = range->tStart - extra;
 if (x < 0) x = 0;
 if (respectFrame) 
     {
-    int frame = range->tStart % 3;
-    uglyf("  Respecting frame %d, range->tStart %d, old x %d\n", frame, range->tStart, x);
-    x = x - (x % 3) + frame;
-    uglyf("  new x %d\n", x);
+    x = extendRespect(range->tStart, x);
     }
 range->tStart = x;
 
 x = range->tEnd + extra;
 if (x > tSize) x = tSize;
+if (respectFrame)
+    {
+    x = extendRespect(range->tEnd, x);
+    if (x > tSize)
+        x -= 3;
+    }
 range->tEnd = x;
 }
 
-static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, int querySize, int *retNibSize, boolean respectFrame)
+static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, int querySize, int *retNibSize, boolean respectFrame, boolean isRc)
 /* Expand range to cover an additional 500 bases on either side.
  * Load up target sequence and return. (Done together because don't
  * know target size before loading.) */
@@ -316,11 +325,33 @@ struct dnaSeq *target = NULL;
 char nibFileName[512];
 FILE *f = NULL;
 int nibSize;
+int s, e;
 
 sprintf(nibFileName, "%s/%s", nibDir, range->tName);
 nibOpenVerify(nibFileName, &f, &nibSize);
+if (isRc)
+    {
+    s = nibSize - range->tEnd;
+    e = nibSize - range->tStart;
+    range->tStart = s;
+    range->tEnd = e;
+    }
+uglyf("range before : qStart %d, qEnd %d, tStart %d, tEnd %d\n",
+	range->qStart, range->qEnd, range->tStart, range->tEnd);
 expandRange(range, querySize, nibSize, respectFrame);
+uglyf("range after : qStart %d, qEnd %d, tStart %d, tEnd %d\n",
+	range->qStart, range->qEnd, range->tStart, range->tEnd);
 target = nibLdPart(nibFileName, f, nibSize, range->tStart, range->tEnd - range->tStart);
+if (isRc)
+    {
+    reverseComplement(target->dna, target->size);
+    s = nibSize - range->tEnd;
+    e = nibSize - range->tStart;
+    range->tStart =  s;
+    range->tEnd = e;
+    uglyf("range rc : qStart %d, qEnd %d, tStart %d, tEnd %d\n",
+	    range->qStart, range->qEnd, range->tStart, range->tEnd);
+    }
 fclose(f);
 *retNibSize = nibSize;
 return target;
@@ -413,7 +444,7 @@ rangeList = gfRangesBundle(rangeList, 500000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     splitPath(range->tName, dir, chromName, ext);
-    targetSeq = expandAndLoad(range, nibDir, seq->size, &chromSize, FALSE);
+    targetSeq = expandAndLoad(range, nibDir, seq->size, &chromSize, FALSE, FALSE);
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
@@ -599,8 +630,9 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    {
 	    qs = qSeq->dna + qStart;
 	    ts = tSeq->dna + tStart;
-	    uglyf("  qs = %c%c%c%c\n", qs[0], qs[1], qs[2], qs[3]);
-	    uglyf("  ts = %c%c%c%c\n", ts[0], ts[1], ts[2], ts[3]);
+	    uglyf("  qs@%d = %c%c%c%c\n", qStart, qs[0], qs[1], qs[2], qs[3]);
+	    uglyf("  ts@%d = %c%c%c%c\n", tStart, ts[0], ts[1], ts[2], ts[3]);
+	    uglyf("      target->start = %d\n", target->start);
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
@@ -794,10 +826,11 @@ struct trans3 *t3;
 /* Get clumps from server. */
 gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 
-// for (isRc = 0; isRc <= 1;  ++isRc)
+for (isRc = 0; isRc <= 1;  ++isRc)
     {
     uglyf("Looking at %c strand of database\n", (isRc ? '-' : '+'));
     t3Hash = newHash(10);
+
     /* Figure out which parts of sequence we need to load. */
     for (frame = 0; frame < 3; ++frame)
 	{
@@ -811,12 +844,13 @@ gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 	range->qEnd *= 3;
 	range->tStart *= 3;
 	range->tEnd *= 3;
+	uglyf("  range: qStart %d, qEnd %d, tStart %d, tEnd %d\n",
+	    range->qStart, range->qEnd, range->tStart, range->tEnd);
 	}
     slSort(&rangeList, gfRangeCmpTarget);
     uglyf("%d ranges\n", slCount(rangeList));
     rangeList = gfRangesBundle(rangeList, 500000);
     uglyf("%d bundles\n", slCount(rangeList));
-
 
     /* Construct t3Hash and load sequence into it (but don't expand to
      * all translated reading frames yet.) */
@@ -825,7 +859,11 @@ gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 	int chromSize;
 	struct trans3 *oldT3;
 
-	targetSeq = expandAndLoad(range, nibDir, seq->size*3, &chromSize, TRUE);
+	uglyf("range before exp: qStart %d, qEnd %d, tStart %d, qEnd %d\n",
+		range->qStart, range->qEnd, range->tStart, range->tEnd);
+	targetSeq = expandAndLoad(range, nibDir, seq->size*3, &chromSize, TRUE, isRc);
+	uglyf("range after exp: qStart %d, qEnd %d, tStart %d, qEnd %d\n",
+		range->qStart, range->qEnd, range->tStart, range->tEnd);
 	slAddHead(&tSeqList, targetSeq);
 	freez(&targetSeq->name);
 	targetSeq->name = cloneString(range->tName);
@@ -833,6 +871,8 @@ gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 	refAdd(&t3RefList, t3);
 	t3->start = range->tStart;
 	t3->end = range->tEnd;
+	t3->nibSize = chromSize;
+	t3->isRc = isRc;
 	if ((oldT3 = hashFindVal(t3Hash, range->tName)) != NULL)
 	    {
 	    slAddTail(&oldT3->next, t3);
@@ -850,20 +890,20 @@ gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 
     /* Patch up clump list and associated sequence source to refer
      * to bits of genome loaded into memory. */
-    uglyf("I should be extending the hits now, but I'm not\n");
     for (frame = 0; frame < 3; ++frame)
 	{
 	uglyf("frame %d\n", frame);
 	for (clump = clumps[isRc][frame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfSeqSource *ss = clump->target;
-	    t3 = findTrans3(t3Hash, clumpTargetName(clump), clump->tStart*3, clump->tStart*3);
+	    t3 = findTrans3(t3Hash, clumpTargetName(clump), clump->tStart*3, clump->tEnd*3);
 	    uglyf("clump %s, start %d, end %d, t3->start %d, t3->end %d\n",
-	    	clumpTargetName(clump), clump->tStart, clump->tStart, t3->start, t3->end);
+	    	clumpTargetName(clump), clump->tStart, clump->tEnd, t3->start, t3->end);
 	    ss->seq = t3->trans[frame];
 	    ss->start = t3->start/3;
 	    ss->end = t3->end/3;
 	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList);
+	    /* ~~~ */
 	    }
 	}
     slReverse(&rangeList);
@@ -885,14 +925,15 @@ gfQuerySeqTrans(conn, seq, clumps, &ssList, &tileSize);
 	outData->targetRc = isRc;
 	outData->t3Hash = t3Hash;
 	uglyf("Should be writing alignment\n");
-	saveAlignments(targetSeq->name, targetSeq->size, 0, 
+	saveAlignments(targetSeq->name, t3->nibSize/3, 0, 
 	    bun, outData, FALSE, ffCdna, minMatch, outFunction);
-#ifdef SOON
-#endif /* SOON */
 	ssBundleFree(&bun);
 	}
+#ifdef SOON
+#endif
 
     /* Cleanup for this strand of database. */
+    gfRangeFreeList(&rangeList);
     freeHash(&t3Hash);
     for (ref = t3RefList; ref != NULL; ref = ref->next)
         {
@@ -1096,10 +1137,9 @@ if (matchCount >= minMatch)
     if (targetIsRc)
         {
 	int temp;
-	int oSize = genoSeq->size;
 	temp = hStart;
-	hStart = oSize - hEnd;
-	hEnd = oSize - temp;
+	hStart = chromSize - hEnd;
+	hEnd = chromSize - temp;
 	}
     fprintf(out, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
 	matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,

@@ -209,14 +209,11 @@ int frame;
 aaSeq *seq;
 int startOff;
 
-uglyf("trans3Offsets(startP %x)\n", startP);
 for (t3 = t3List; t3 != NULL; t3 = t3->next)
     {
-    uglyf(" t3:\n");
     for (frame = 0; frame < 3; ++frame)
         {
 	seq = t3->trans[frame];
-	uglyf(" seq %x to %x\n", seq->dna, seq->dna + seq->size);
 	if (seq->dna <= startP && startP < seq->dna + seq->size)
 	    {
 	    *retStart = startP - seq->dna + t3->start;
@@ -278,8 +275,6 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
 	{
 	if (t3List)
 	    {
-	    uglyf(" mid->hStart %p, mid->hEnd %p\n", mid->hStart, mid->hEnd);
-	    uglyf(" ff->hStart %p, ff->hEnd %p\n", ff->hStart, ff->hEnd);
 	    canFollow = tripleCanFollow(ff, mid, qSeq, t3List);
 	    }
 	else 
