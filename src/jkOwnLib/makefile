@@ -1,7 +1,7 @@
 include ../inc/common.mk
 
 O = crudeali.o bandExt.o ffAliHelp.o ffSeedExtend.o fuzzyFind.o \
-    genoFind.o gfBlatLib.o gfClientLib.o gfInternal.o gfOut.o gfPcrLib.o ooc.o \
+    genoFind.o gfBlatLib.o gfClientLib.o gfInternal.o gfOut.o gfPcrLib.o gfWebLib.o ooc.o \
     patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 
 
 T = ../lib/$(MACHTYPE)/jkOwnLib.a

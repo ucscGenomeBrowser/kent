@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.95 2004/06/01 16:49:02 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.96 2004/06/03 21:14:34 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -666,7 +666,6 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = optionInt("tileSize", tileSize);
 stepSize = optionInt("stepSize", stepSize);
-uglyf("stepSize in commandLine = %d\n", stepSize);
 minMatch = optionInt("minMatch", minMatch);
 oneOff = optionExists("oneOff");
 fastMap = optionExists("fastMap");

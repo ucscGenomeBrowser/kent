@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.23 2004/03/03 16:22:20 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.24 2004/06/03 21:14:35 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -96,6 +96,36 @@ void htmlMemDeath()
 {
 errAbort("Out of memory.");
 }
+
+static void earlyWarningHandler(char *format, va_list args)
+/* Write an error message so user can see it before page is really started. */
+{
+static boolean initted = FALSE;
+if (!initted)
+    {
+    htmlStart("Very Early Error");
+    initted = TRUE;
+    }
+printf("%s", htmlWarnStartPattern());
+htmlVaParagraph(format,args);
+printf("%s", htmlWarnEndPattern());
+}
+
+static void earlyAbortHandler()
+/* Exit close web page during early abort. */
+{
+printf("</BODY></HTML>");
+exit(0);
+}
+
+void htmlPushEarlyHandlers()
+/* Push stuff to close out web page to make sensible error
+ * message during initialization. */
+{
+pushWarnHandler(earlyWarningHandler);
+pushAbortHandler(earlyAbortHandler);
+}
+
 
 static char *htmlStyle = 
     "<STYLE TYPE=\"text/css\">"

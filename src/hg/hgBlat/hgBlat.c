@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.74 2004/04/05 18:40:19 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.75 2004/06/03 21:14:34 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -91,45 +91,15 @@ errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
 }
 
-int pslCmpScore(const void *va, const void *vb)
-/* Compare to sort based on query then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-return pslScore(b) - pslScore(a);
-}
-
-
-int pslCmpQueryScore(const void *va, const void *vb)
-/* Compare to sort based on query then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->qName, b->qName);
-if (diff == 0)
-    diff = pslScore(b) - pslScore(a);
-return diff;
-}
-
-int pslCmpQueryStart(const void *va, const void *vb)
-/* Compare to sort based on query start. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->qName, b->qName);
-if (diff == 0)
-    diff = a->qStart - b->qStart;
-return diff;
-}
-
 int cmpChrom(char *a, char *b)
 /* Compare two chromosomes. */
 {
 char cA, cB;
+int cSame = countSame(a, b);
 int diff;
 
-if (startsWith("chr", a)) a += 3;
-if (startsWith("chr", b)) b += 3;
+a += cSame;
+b += cSame;
 cA = *a;
 cB = *b;
 if (isdigit(cA))
@@ -144,6 +114,7 @@ else if (isdigit(cB))
 else
     return strcmp(a, b);
 }
+
 
 int pslCmpTargetScore(const void *va, const void *vb)
 /* Compare to sort based on target then score. */
@@ -202,7 +173,7 @@ if (pslList == NULL)
 
 if (sameString(sort, "query,start"))
     {
-    slSort(&pslList, pslCmpQueryStart);
+    slSort(&pslList, pslCmpQuery);
     }
 else if (sameString(sort, "query,score"))
     {

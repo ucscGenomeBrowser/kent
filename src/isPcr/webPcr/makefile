@@ -16,3 +16,4 @@ webPcr: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
