@@ -118,6 +118,14 @@ visibility hide
 spectrum on
 type bed 4 +
 
+track gcPercentSmall
+shortLabel GC % 100b
+longLabel Percentage GC in 100 Base Windows
+priority 6
+visibility hide
+spectrum on
+type bed 4 +
+
 track GCwiggle
 shortLabel GC Samples 
 longLabel GC Percent Sample Track (every 20,000 bases)
