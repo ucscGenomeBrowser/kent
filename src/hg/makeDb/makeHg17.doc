@@ -1,0 +1,34 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how we made the browser database on 
+# NCBI build 34 (July 18, 2003 freeze)
+
+# HOW TO BUILD A ASSEMBLY FROM NCBI FILES 
+# ---------------------------------------
+
+# Make gs.18 directory, gs.18/build35 directory, and gs.18/ffa directory.
+    ssh eieio
+    mkdir /cluster/store5/gs.18
+    mkdir /cluster/store5/gs.18/build35
+    mkdir /cluster/store5/gs.18/agp
+    mkdir /cluster/store5/gs.18/ffa
+
+#    Make a symbolic link from /cluster/store1 to this location
+	
+    cd /cluster/store1
+    ln -s /cluster/store5/gs.18 ./gs.18
+    ln -s /cluster/store5/gs.18/build35 /cluster/data/hg17
+
+#    Make a symbolic link from your home directory to the build dir:
+
+    ln -s /cluster/store5/gs.18/build35 ~/oo
+
+# NCBI download site:
+
+    #	with the machine and password in your $HOME/.netrc file, this
+    #	wget command will require no login.  Your $HOME/.netrc file
+    #	is set to 'chmod 600 .netrc' to prevent anyone from finding
+    #	the data.
+    cd /cluster/store5/gs.18/agp
+    wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/build_35/*
