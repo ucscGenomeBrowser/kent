@@ -26,7 +26,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.4 2003/08/13 19:16:12 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.5 2003/08/18 17:00:20 kent Exp $";
 
 /* Which database to use */
 char *database = "hg15";
@@ -45,6 +45,9 @@ char *syntenyFile = "/cluster/store2/mm.2002.02/mm2/bed/synteny/synteny.bed";
 
 /* File with stuff to remove. */
 char *weedFile = "chimera.txt";
+
+/* Mutations file. */
+char *mutFile = "t_res_quad_gc_precent.txt";
 
 /* Resolved duplications file. */
 char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
@@ -280,10 +283,10 @@ char **row;
 char query[256];
 struct genePred *gpList = NULL, *gp;
 char geneName[64];
-static struct rgbColor red = {255, 0, 0};
-static struct rgbColor lightRed = {255, 100, 100};
-static struct rgbColor blue = {0, 0, 220};
-static struct rgbColor lightBlue = {100, 100, 220};
+static struct rgbColor red = {200, 0, 0};
+static struct rgbColor lightRed = {255, 115, 115};
+static struct rgbColor blue = {0, 0, 180};
+static struct rgbColor lightBlue = {115, 115, 220};
 struct rgbColor *col;
 boolean keepGene;
 struct dlList *geneList = newDlList();
@@ -1021,7 +1024,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     int end = atoi(row[1]);
     char *type = row[2];
     printTab(f, cg, chrom, start, end, 
-		"gap", "box", 150, 0, 0, type);
+		"gap", "box", 180, 30, 30, type);
     }
 sqlFreeResult(&sr);
 }
@@ -1153,6 +1156,74 @@ for (i=0; i<chromSize; i += 25000)
     }
 }
 
+struct wigglePos
+/* A position in a wiggle track. */
+    {
+    struct wigglePos *next;
+    int start, end;
+    double val;
+    };
+
+struct wiggleChrom
+/* A wiggle track in a chromosome. */
+    {
+    struct wiggleChrom *next;
+    char *chrom;		/* Chromosome name - not allocated here. */
+    double minVal, maxVal;	/* Min/max val in pos list. */
+    struct wigglePos *posList;
+    };
+
+void getMutationRate(struct chromGaps *cg, char *chrom, struct hash *muteHash, FILE *f)
+/* Get mutation rate out of hash and print it to file. */
+{
+struct wigglePos *wig;
+struct wiggleChrom *wc = hashMustFindVal(muteHash, chrom);
+double minVal = wc->minVal;
+double scale = 1.0/(wc->maxVal-minVal);
+
+slReverse(&wc->posList);
+for (wig = wc->posList; wig != NULL; wig = wig->next)
+    {
+    double val = (wig->val - minVal) * scale;
+    printTabNum(f, cg, chrom, wig->start, wig->end, 
+	    "mutation", "wiggle", 0, 128, 0, val);
+    }
+}
+
+struct hash *makeMuteHash(char *fileName)
+/* Read mutation rate file, calculate min/max, and store it in 
+ * hash one per chromosome. */
+{
+struct hash *muteHash = newHash(8);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+struct wiggleChrom *wc;
+struct wigglePos *wig;
+double val;
+char *chrom;
+
+while (lineFileRow(lf, row))
+    {
+    chrom = row[0];
+    val = atof(row[3]);
+    wc = hashFindVal(muteHash, chrom);
+    if (wc == NULL)
+        {
+	AllocVar(wc);
+	hashAddSaveName(muteHash, chrom, wc, &wc->chrom);
+	wc->minVal = wc->maxVal = val;
+	}
+    if (val < wc->minVal) wc->minVal = val;
+    if (val > wc->maxVal) wc->maxVal = val;
+    AllocVar(wig);
+    wig->start = atoi(row[1]);
+    wig->end = atoi(row[2]);
+    wig->val = val;
+    slAddHead(&wc->posList, wig);
+    }
+lineFileClose(&lf);
+return muteHash;
+}
 
 void getBands(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get chromosome bands stuff. */
@@ -1204,6 +1275,7 @@ sqlFreeResult(&sr);
 
 
 void oneChrom(char *chrom, struct sqlConnection *conn, 
+	struct hash *muteHash,
 	struct hash *dupHash, struct hash *resolvedDupHash, 
 	struct hash *diseaseHash, struct hash *orthoHash,
 	struct hash *weedHash,
@@ -1225,7 +1297,7 @@ getGaps(cg, chrom, conn, f);
 /* Get centromere and telomere repeats. */
 getSynteny(cg, chrom, conn, f);
 getSnpDensity(cg, chrom, chromSize, conn, f);
-fakeMutationRate(cg, chrom, chromSize, conn, f);
+getMutationRate(cg, chrom, muteHash, f);
 getMouseAli(cg, chrom, chromSize, axtFile, conn, f, 
 	"HS_ALI", 50000, 1.0/0.85, 0, 0, 255);
 getMouseId(cg, chrom, chromSize, axtFile, conn, f,
@@ -1289,6 +1361,7 @@ struct resolvedDup *rdList = NULL;
 struct hash *diseaseHash = makeSecondColumnHash(diseaseFile);
 struct hash *orthoHash = makeFirstColumnHash(orthoFile);
 struct hash *weedHash = makeFirstColumnHash(weedFile);
+struct hash *muteHash = makeMuteHash(mutFile);
 
 dupeFile = mustOpen(dupeFileName, "w");
 hSetDb(database);
@@ -1299,7 +1372,7 @@ for (i=0; i<chromCount; ++i)
     FILE *f;
     sprintf(fileName, "%s.tab", chromNames[i]);
     f = mustOpen(fileName, "w");
-    oneChrom(chromNames[i], conn, dupHash, resolvedDupHash, 
+    oneChrom(chromNames[i], conn, muteHash, dupHash, resolvedDupHash, 
     	diseaseHash, orthoHash, weedHash, f);
     fclose(f);
     }
