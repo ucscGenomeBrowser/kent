@@ -33,7 +33,9 @@ Here varName should start with a letter, and can be followed by any
 number of letters and numbers.  The value extends to the end of the
 line.  Once a variable is defined this way, $varName afterwards
 will be replaced with the value from the set line.  Variable can
-be defined in terms of other variables.
+be defined in terms of other variables.  In some cases it may be
+necessary to usee ${varName} rather than $varName if doing a substitution
+in the middle of another word.
 
 The identifier statement defines an identifier shared across tables.
 The basic format is one line containing the identifier name and attributes,
@@ -104,3 +106,34 @@ Field Line Attributes:
             primary key.  There may be multiple exclude attributes for a field.
      value: identifier to exclude.  The empty string may be excluded with
             a exclude= (that is following the equal immediately with a space).
+
+Identifier Macros.
+
+In some cases there may be multiple instances of a set of
+interrelated tables.  At UCSC an example of this is the 
+chains and nets that describe a pairwise alignment.  To
+avoid having to have a separate identifier for each pair
+of species there is a small macro expansion facility built
+in. Here's an example:
+
+identifier chain[Mm3,Rn2]Id
+"Link together chain info"
+    $gbd.chain[].id 
+    $gbd.chain[]Link.chainId 
+    $gbd.net[].chainId
+
+This is expanded to one identifier for each item in the
+comma-separated list inside of square brackets as so:
+
+identifier chainMm3Id
+"Link together chain info"
+    $gbd.chainMm3.id 
+    $gbd.chainMm3Link.chainId 
+    $gbd.netMm3.chainId
+
+identifier chainRn2Id
+"Link together chain info"
+    $gbd.chainRn2.id 
+    $gbd.chainRn2Link.chainId 
+    $gbd.netRn2.chainId
+
