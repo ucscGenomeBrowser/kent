@@ -6,8 +6,9 @@
 #include "localmem.h"
 #include "obscure.h"
 #include "twoBit.h"
+#include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.10 2004/09/04 15:49:27 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.11 2004/09/14 05:21:12 baertsch Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -222,6 +223,7 @@ bits32 seqCount = slCount(twoBitList);
 bits32 reserved = 0;
 bits32 offset = 0;
 struct twoBit *twoBit;
+long long counter = 0; /* check for 32 bit overflow */
 
 /* Write out fixed parts of header. */
 writeOne(f, sig);
@@ -244,9 +246,16 @@ for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
 /* Write out index. */
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
+    int size = twoBitSizeInFile(twoBit);
     writeString(f, twoBit->name);
     writeOne(f, offset);
-    offset += twoBitSizeInFile(twoBit);
+    offset += size;
+    counter += (long long)size;
+    if (counter > UINT_MAX )
+        errAbort("Error in faToTwoBit, index overflow at %s. The 2bit format "
+                "does not support indexes larger than %dGb, \n"
+                "please split up into smaller files.\n", 
+                twoBit->name, UINT_MAX/1000000000);
     }
 }
 
@@ -394,6 +403,7 @@ if (outSize < 1)
 
 /* Read in blocks of N. */
 nBlockCount = readBits32(f, isSwapped);
+
 if (nBlockCount > 0)
     {
     AllocArray(nStarts, nBlockCount);
