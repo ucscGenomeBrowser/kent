@@ -92,20 +92,6 @@ strcpy(nameBuf, groupName);
 return nameBuf;
 }
 
-static int countChars(char *s, char c)
-/* Count number of times c occurs in s. */
-{
-int count = 0;
-char a;
-
-while ((a = *s++) != 0)
-    {
-    if (a == c)
-        ++count;
-    }
-return count;
-}
-
 static boolean isGtfGroup(char *group)
 /* Return TRUE if group field looks like GTF */
 {
