@@ -158,3 +158,9 @@ if (size & 1)
     }
 }
 
+boolean isNib(char *fileName)
+/* Return TRUE if file is a nib file. */
+{
+return endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
+}
+
