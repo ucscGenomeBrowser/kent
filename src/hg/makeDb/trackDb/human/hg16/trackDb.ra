@@ -264,7 +264,7 @@ type netAlign rn3 chainRn3
 otherDb rn3
 
 track chainPanTro1
-shortLabel Chimp All Chain
+shortLabel Chimp Chain
 longLabel Chimp (panTro1-Nov 03) Chained Alignments
 group compGeno
 priority 200
@@ -288,13 +288,13 @@ type chain panTro1
 otherDb panTro1
 
 track rBestNetPanTro1
-shortLabel Chimp Best Net
+shortLabel Chimp Net
 longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
 group compGeno
 priority 202
 visibility hide
 spectrum on
-type netAlign panTro1 rBestChainPanTro1
+type netAlign panTro1 chainPanTro1
 
 track chimpDels
 shortLabel Chimp Deletions
