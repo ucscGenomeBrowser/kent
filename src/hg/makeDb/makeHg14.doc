@@ -1716,7 +1716,7 @@ o - # ssh hgwdev
     mkdir /cluster/store5/gs.15/build32/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (TODO)
+# LOAD SAGE DATA (IN PROGRESS)
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
@@ -1747,6 +1747,7 @@ LOAD SAGE DATA (TODO)
     cd -
     createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
       tagExpArrays.tab sageSummary.sage
+DONE TO HERE
     # Create the uniGene alignments 
     # ~/hg14/uniGene/hg14.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
@@ -1765,7 +1766,7 @@ LOAD SAGE DATA (TODO)
     # with current uniGene date. 
 
     
-MAKE UNIGENE ALIGNMENTS (TODO)
+# MAKE UNIGENE ALIGNMENTS (IN PROGRESS)
     # Download of the latest UniGene version is now automated by a 
     # cron job -- see /cluster/home/angie/crontab , 
     # /cluster/home/angie/unigeneVers/unigene.csh .  
@@ -1780,21 +1781,25 @@ MAKE UNIGENE ALIGNMENTS (TODO)
     gunzip Hs.seq.uniq.gz 
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
-    # ssh kkstore
-    mkdir -p /scratch/hg/gs.15/build32/uniGene
+    # Distribute UniGene sequence to /iscratch/i/ (kkstore can see /projects)
+    ssh kkstore
     set version = XXX # same as above
+    mkdir -p /iscratch/i/uniGene.$version
     cp -p \
   /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
-      /scratch/hg/gs.15/build32/uniGene
-    # email cluster-admin to push /scratch/hg/gs.15/build32/uniGene to cluster
+      /iscratch/i/uniGene.$version
+    ssh kkr1u00
+    ~kent/bin/iSync
+DONE TO HERE
+    ssh kk
+    set version = XXX # same as above
     mkdir -p ~/hg14/bed/uniGene
     cd ~/hg14/bed/uniGene
     ls -1S /cluster/store5/gs.15/build32/trfFa/ > allctg.lst
-    echo "/scratch/hg/gs.15/build32/uniGene/Hs.seq.uniq.simpleHeader.fa" \
+    ls -1  /iscratch/i/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
     echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store5/gs.15/build32/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
-    # ssh kk
     para create para.spec
     mkdir psl
     para try
@@ -2351,5 +2356,3 @@ MAKING PROMOTER FILES
     zip upstream5000.zip upstream5000.fa
     rm upstream*.fa
     
-    
-    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
