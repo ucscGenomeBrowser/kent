@@ -829,6 +829,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-02, hartera)
+# MOVE danRer2.2bit out of gbdb nib directory (2004-12-15, hartera)
     # Make symbolic links from /gbdb/danRer2/nib to the real nibs.
     ssh hgwdev
     cd /cluster/data/danRer2
@@ -847,7 +848,10 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     # /gbdb/danRer2/nib because hgBlat looks there:
     faToTwoBit */chr*.fa danRer2.2bit
     ln -s /cluster/data/danRer2/danRer2.2bit /gbdb/danRer2/nib/
-
+    # Move this link out of nib directory (2004-12-15, hartera)
+    rm /gbdb/danRer2/nib/danRer2.2bit
+    ln -s /cluster/data/danRer2/danRer2.2bit /gbdb/danRer2/
+    
 # MAKE GOLD AND GAP TRACKS (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-03, hartera)
     ssh hgwdev
@@ -867,6 +871,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER2
 # (DONE, 2004-11-22, hartera)
+# Correct nibPath for danRer2 in dbDb table (2004-12-15, hartera)
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
     mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer2
@@ -891,6 +896,11 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     echo 'update defaultDb set name = "danRer2" \
           where genome = "Zebrafish";' \
           | hgsql -h genome-testdb hgcentraltest
+    # dbDb table has danRer1 instead of danRer2 in nib path. However, this
+    # should point to the position of the danRer2.2bit file
+    # (2004-12-15, hartera)
+    echo 'update dbDb set nibPath="/gbdb/danRer2" \
+         where name = "danRer2";' | hgsql hgcentraltest
 
 # MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-11-22, hartera)
     ssh hgwdev
@@ -1982,4 +1992,97 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # featureBits danRer1 refGene:cds netFr1 -enrichment
 # refGene:cds 0.461%, netFr1 17.530%, both 0.391%, cover 84.78%, enrich 4.84x
 
+# MAKE VSFR1 DOWNLOADABLES (DONE, 2004-12-15, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer2
+    mkdir -p $gp/vsFr1/axtChrom
+    cp -p *.axt $gp/vsFr1/axtChrom
+    cd $gp/vsFr1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+    
+    # copy chains and nets to downloads area
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
+    gzip -c all.chainFilt5k > /cluster/data/danRer2/zip/fugu.chain.gz
+    gzip -c fuguFr1.net > /cluster/data/danRer2/zip/fugu.net.gz
+    cd $gp/vsFr1
+    mv /cluster/data/danRer2/zip/fugu*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# BLASTZ FR1 CLEANUP (DONE, 2004-12-15, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.fr1
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered xtChain/*.net &
+
+# BLASTZ FOR TETRAODON (tetNig1) (in progress, 2004-12-14, hartera)
+    # blastz requires lineage-specific repeats but there are none
+    # available between these two fish species 
+    ssh kk
+    mkdir -p /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-14
+    ln -s /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-14 \
+          /cluster/data/danRer2/bed/blastz.tetNig1
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+cat << '_EOF_' > DEF
+# zebrafish (danRer2) vs. Fugu (fr1)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+                                                                                
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+#BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
+BLASTZ_ABRIDGE_REPEATS=0
+                                                                                
+# TARGET - zebrafish (danRer2)
+SEQ1_DIR=/iscratch/i/danRer2/nib
+SEQ1_RMSK=
+# lineage-specific repeats
+# we don't have that information for these species
+SEQ1_SMSK=
+SEQ1_FLAG=
+SEQ1_IN_CONTIGS=0
+# 10 MB chunk for target
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+                                                                                
+# QUERY - Tetraodon (tetNig1)
+# soft-masked chrom nib
+SEQ2_DIR=/iscratch/i/tetNig1/nib
+SEQ2_RMSK=
+SEQ2_SMSK=
+SEQ2_FLAG=
+SEQ2_IN_CONTIGS=0
+# 10 Mbase for query
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+                                                                                
+BASE=/cluster/data/danRer2/bed/blastz.tetNig1
+                                                                                
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+                                                                                
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+                                                                                
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.danRer2-tetNig1.2004-12-14
+
+    # setup cluster run
+    # source the DEF file
+    bash
+    . ./DEF
+    /cluster/data/danRer2/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+ 
 
