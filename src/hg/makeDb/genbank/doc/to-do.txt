@@ -650,3 +650,6 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 - gbGetSeqs -gbRoot=/cluster/data/genbank -accFile=tmp/accs.tmp -get=seq -inclVersion refseq mrna stdout
   where accs.tmp contains NM_005504.2 corrupts header. Doesn't happen if
   sent to a file.
+
+- *** gbGetSets on psls reports sequences that didn't align as missing and
+  *** only returns the fist one
