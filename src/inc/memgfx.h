@@ -109,6 +109,13 @@ void mgSaveGif(struct memGfx *mg, char *name);
 boolean mgSaveToGif(FILE *gif_file, struct memGfx *screen);
 /* Save GIF to an already open file. */
 
+struct memGfx *mgLoadGif(char *name);
+/* Create memory image based on gif file. 
+ * Note this is based on a very old gif reader
+ * that only handles the GIF87a version. 
+ * This is the same that mgSaveGif creates at
+ * least.  This version of gif was always
+ * color mapped. */
 
 typedef void (*TextBlit)(int bitWidth, int bitHeight, int bitX, int bitY,
 	unsigned char *bitData, int bitDataRowBytes, 
