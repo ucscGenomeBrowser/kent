@@ -106,3 +106,114 @@ exit; # don't actually run this like a script :)
 1 pieces of 1 written
 
    cat split/*.lft > liftAll.lft
+
+# RUN Waba alignment with briggsae  (WORKING - 2004-04-06 - Hiram)
+    # prepare contigs from C. briggsae
+    #   Assumes C. briggsae data has been downloaded according to
+    #   makeCb1.doc
+    # using briggsae contigs from previous work:
+	/iscratch/i/worms/Cbriggsae/contigs
+    
+    # next machine
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/waba/out
+    cd /cluster/data/ce2/bed/waba
+    ls -1S /iscratch/i/worms/Cbriggsae/contigs/c*.fa > briggsae.lst
+    ls -1S /iscratch/i/worms/Celegans2/unmaskedFa/chr*.fa > elegans.lst
+    cat elegans.lst | while read FN
+    do
+	b=`basename ${FN}`
+	mkdir out/${b%%.fa}
+    done
+    # create scripts to be used here
+    cat << '_EOF_' > wabaRun
+#!/bin/csh -fe
+#
+#	$1 - full pathname to a briggsae contig
+#	$2 - file path to an elegans chrom.fa
+#	$3 - result file full pathname
+#
+set f = $1:t
+set chr = $2:t
+set d = $chr:r
+mkdir -p /tmp/$d/$f
+cp $1 /tmp/$d/$f
+pushd .
+cd /tmp/$d/$f
+set t = $f:r
+/cluster/home/hiram/bin/i386/waba 1 $f $2 $t.1
+/cluster/home/hiram/bin/i386/waba 2 $t.1 $t.2
+/cluster/home/hiram/bin/i386/waba 3 $t.2 $t.wab
+cp $t.wab $3
+popd
+rm -f /tmp/$d/$f/$t.*
+rmdir --ignore-fail-on-non-empty /tmp/$d/$f
+rmdir --ignore-fail-on-non-empty /tmp/$d
+'_EOF_'
+    chmod +x wabaRun
+
+    cat << '_EOF_' > jobTemplate
+#LOOP
+/cluster/store5/worm/ce2/bed/waba/wabaRun {check in exists+ $(path1)} {check in exists+ $(path2)} {check out exists /cluster/store5/worm/ce2/bed/waba/out/$(root2)/$(root1).wab}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 briggsae.lst elegans.lst jobTemplate jobList
+    para create jobList
+    para try
+    para check
+    para push
+XXXX - running 2004-04-06
+    ... etc ...
+    # one of the jobs takes quite a while.  Most of the others are OK:
+# Average job time:                2308s      38.46m     0.64h    0.03d
+# Longest job:                    47442s     790.70m    13.18h    0.55d
+
+    # next machine
+    ssh hgwdev
+    # you may need to build hgWaba
+    cd ~/kent/src/hg/makeDb/hgWaba
+    make
+    # hgWaba.c has been adjusted to avoid the squeezed assert by
+    #  ignoring them.  That may want to be looked at some day.
+    #  (The waba cluster run has a number of errors too.  waba is not
+    #	perfect, but it is as good as the Intronerator was...)
+
+    cd ~/ce2/bed/waba
+    # one of the outputs produces a result that won't process properly
+    # with hgWaba.  Move it out of the way
+    mv out/chrII/c0911.wab out/chrII_c0911.wab.broken
+ 
+    mkdir Load
+    cd Load
+    #  The cat through the pipe to hgWaba will avoid making large files
+    # 	that are not needed.
+    cat << '_EOF_' > loadEm.sh
+#!/bin/sh
+#
+for c in I II III IV V X M
+do
+	echo -n "${c} "
+        cat /cluster/store5/worm/ce2/bed/waba/out/chr${c}/c*.wab |
+        ~/bin/i386/hgWaba ce2 Cbr chr${c} 0 stdin > proc${c}.out 2>&1
+done
+
+exit 0
+'_EOF_'
+
+    # run it to load the waba track:
+    ./loadEm.sh
+    # remove garbage temp file:
+    rm full_waba.tab
+    rm chrom_waba.tab
+
+    # worm/ce2/trackDb.ra entry:
+#   track cbrWaba
+#   shortLabel Briggsae Waba
+#   longLabel C. briggsae Waba Alignments
+#   group genes
+#   priority 50
+#   visibility dense
+#   color 140,0,200
+#   altColor 210,140,250
+
