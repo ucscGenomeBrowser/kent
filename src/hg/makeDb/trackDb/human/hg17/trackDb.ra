@@ -192,7 +192,7 @@ priority 109.12
 visibility hide
 exonArrows off
 showTopScorers 200
-scoreFilterCount 5000
+filterTopScorers off 5000 phastConsElements10wayTop100K
 type bed 5 .
 
 track multiz8way
