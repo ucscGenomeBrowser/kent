@@ -779,9 +779,9 @@ end
     cd fraenkelYoung
     # Get GFF files and motif file from downloads section of 
     # http://jura.wi.mit.edu/fraenkel/regulatory_map
-    # Also get v24_probes.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
+    # Also get v24_probes_040923.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
 
-    sort v24_probes.GFF | uniq > probes.GFF
+    sort v24_probes_040923.GFF | uniq > probes.GFF
     hgYeastRegCode motifGff Final_InTableS2_v24.motifs probes.GFF \
     	transRegCode.bed transRegCodeMotif.tab transRegCodeProbe.bed
     hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
