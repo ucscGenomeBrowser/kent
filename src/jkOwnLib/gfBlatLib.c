@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.7 2004/11/29 05:27:06 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.8 2005/01/26 16:57:45 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1522,6 +1522,17 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     ssStitch(bun, ffCdna, minScore, ssAliCount);
     if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
+#ifdef DEBUG
+    /* uglyf debugging */
+	{
+	struct ssFfItem *item;
+	for (item = bun->ffList; item != NULL; item = item->next)
+	    {
+	    void checkMonotonic(struct dnaSeq *genoSeq, struct ffAli *l, char *label);
+	    checkMonotonic(bun->genoSeq, item->ff, "shortly beffore saveAlignments");
+	    }
+	}
+#endif /* DEBUG */
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, isRc, FALSE, ffCdna, minScore, out);
     }

@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.28 2005/01/13 18:58:03 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.29 2005/01/26 16:57:45 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -208,6 +208,30 @@ while ((right = left->right) != NULL)
 return TRUE;
 }
 
+static struct ffAli *cleanupOverlaps(struct ffAli *ff)
+/* Do some clean up of partially or entirely overlapping sequences. */
+{
+ff = ffMergeNeedleAlis(ff, TRUE);
+ff = ffRemoveEmptyAlis(ff, TRUE);
+ff = ffMergeHayOverlaps(ff);
+ff = ffRemoveEmptyAlis(ff, TRUE);
+return ff;
+}
+
+#ifdef DEBUG
+void checkMonotonic(struct dnaSeq *genoSeq, struct ffAli *l, char *label)
+/* For debuggin check monotonicity. */
+{
+if (!isMonotonic(l))
+    {
+    struct ffAli *r = ffRightmost(l);
+    DNA *geno = genoSeq->dna;
+    uglyf("throwback %s %s:%d-%d\n", label, genoSeq->name,
+	    l->hStart - geno, r->hEnd - geno);
+    }
+}
+#endif /* DEBUG */
+
 static struct ffAli *forceMonotonic(struct ffAli *aliList,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, enum ffStringency stringency,
 	boolean isProt, struct trans3 *t3List)
@@ -216,19 +240,20 @@ static struct ffAli *forceMonotonic(struct ffAli *aliList,
 {
 if (!isProt)
     {
-    if (!isMonotonic(aliList))
+    while (!isMonotonic(aliList))
 	{
 	struct ffAli *leftovers = NULL;
 	int score;
 	ssFindBestBig(aliList, qSeq, tSeq, stringency, isProt, t3List, &aliList, &score,
 	   &leftovers);
+	cleanupOverlaps(aliList);
 	ffFreeAli(&leftovers);
 	}
     }
 return aliList;
 }
 
-struct ffAli *smallMiddleExons(struct ffAli *aliList, 
+static struct ffAli *smallMiddleExons(struct ffAli *aliList, 
 	struct ssBundle *bundle, 
 	enum ffStringency stringency)
 /* Look for small exons in the middle. */
@@ -764,10 +789,7 @@ while (ffList != NULL)
     	bundle->isProt, bundle->t3List,
     	&bestPath, &score, &ffList);
 
-    bestPath = ffMergeNeedleAlis(bestPath, TRUE);
-    bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    bestPath = ffMergeHayOverlaps(bestPath);
-    bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+    bestPath = cleanupOverlaps(bestPath);
     bestPath = forceMonotonic(bestPath, qSeq, genoSeq, stringency,
     	bundle->isProt, bundle->t3List);
 
@@ -777,10 +799,11 @@ while (ffList != NULL)
 	 * this might regenerate most of the first alignment... */
 	bestPath = smallMiddleExons(bestPath, bundle, stringency);
 	}
-    bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     if (!bundle->isProt)
-	ffSlideIntrons(bestPath);
-    bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+	{
+	if (ffSlideIntrons(bestPath))
+	    cleanupOverlaps(bestPath);
+	}
     if (score >= minScore)
 	{
 	AllocVar(ffl);
