@@ -7,15 +7,6 @@ visibility hide
 url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=$$
 type bed 4 .
  
-track rnaGenes
-shortLabel All RNAs
-longLabel Lowe tRNA & Lowe snoRNA & GenBank rRNA
-group genes
-priority 2.51
-visibility dense
-color 160,40,40
-type bed 6 .
-
 track primAORF
 shortLabel AORFs
 longLabel Alternative ORFs noted by Sorel Fitz-Gibbon

@@ -62,6 +62,15 @@ color 0,0,0
 altColor 255,128,0
 type bed 6 +
 
+track rnaGenes
+shortLabel All RNAs
+longLabel Lowe tRNA & Lowe snoRNA & GenBank rRNA
+group genes
+priority 2.51
+visibility dense
+color 160,40,40
+type bed 6 .
+
 track igenics
 shortLabel Intergenics
 longLabel Intergenics on microarray
