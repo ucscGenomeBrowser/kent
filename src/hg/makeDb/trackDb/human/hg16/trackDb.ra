@@ -192,7 +192,7 @@ track chainRn3
 shortLabel Rat Chain 
 longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
 group compGeno
-priority 142
+priority 141.6
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -204,7 +204,7 @@ track netRn3
 shortLabel Rat Net
 longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
 group compGeno
-priority 143
+priority 141.7
 visibility hide 
 spectrum on
 type netAlign rn3 chainRn3
@@ -214,7 +214,7 @@ track syntenyRn3
 shortLabel Rat Synteny
 longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
-priority 144
+priority 141.8
 visibility hide
 color 0,100,0
 altColor 255,240,200
@@ -224,7 +224,7 @@ track syntenyNetRn3
 shortLabel Rat Syntenic Net
 longLabel Rat (rn3-Jun 03) Syntenic Alignment Net
 group compGeno
-priority 145
+priority 141.9
 visibility hide
 spectrum on
 type netAlign rn3 chainRn3
