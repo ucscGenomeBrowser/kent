@@ -10,9 +10,12 @@
 #include "dystring.h"
 #endif 
 
+
+/* Get the string associated with varName from the cookie string. */
+char *findCookieData(char *varName);
+
 /* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
-
 
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */

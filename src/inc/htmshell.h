@@ -17,6 +17,9 @@
  * then terminate your CGI program, so this works fine.
  */
 
+/* create a cookie with the given stats */
+void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
+
 /* Print a line in it's own paragraph. */
 void htmlParagraph(char *line, ...);
 

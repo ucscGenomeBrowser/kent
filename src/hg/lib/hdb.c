@@ -9,8 +9,22 @@
 #include "hgRelate.h"
 #include "fa.h"
 
-
 static struct sqlConnCache *hdbCc = NULL;
+
+struct dbConv
+/* Pair for converting database to assembly and vice-versa */
+{
+    char *db;        /* database name, i.e. "hg6" */
+    char *freeze;    /* assembly freeze, i.e. "Dec. 12, 2000" */
+};
+
+struct dbConv dbTable[] = {
+    {"hg3","July 17, 2000"},
+    {"hg4","Sept. 5, 2000"},
+    {"hg5","Oct. 7, 2000"},
+    {"hg6","Dec. 12, 2000"},
+    {"hg7","April 1, 2001"},
+};
 
 char *hdbName = "hg6";
 
@@ -122,7 +136,7 @@ struct largeSeqFile
 /* Manages our large external sequence files.  Typically there will
  * be around four of these.  This basically caches the file handle
  * so don't have to keep opening and closing them. */
-    {
+{
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
     HGID id;                    /* Id in extFile table. */
@@ -232,10 +246,25 @@ hRnaSeqAndId(acc, &seq, &id);
 return seq;
 }
 
-
 struct dnaSeq *hRnaSeq(char *acc)
 /* Return sequence for RNA. */
 {
 return hExtSeq(acc);
 }
+
+
+char *hFreezeFromDb(char *database)
+/* return the freeze for the database version. 
+   For example: "hg6" returns "Dec 12, 2000". If database
+   not recognized returns NULL */
+{
+int i;
+for(i=0;i<ArraySize(dbTable);i++)
+    {
+    if(sameString(database,dbTable[i].db))
+	return cloneString(dbTable[i].freeze);
+    }
+return NULL;
+}
+
 

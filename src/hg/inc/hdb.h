@@ -43,4 +43,9 @@ struct dnaSeq *hExtSeq(char *acc);
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */
 
+char *hFreezeFromDb(char *database);
+/* return the freeze for the database version. 
+   For example: "db6" returns "Dec 12, 2000". If database
+   not recognized returns NULL */
+
 #endif /* HDB_H */
