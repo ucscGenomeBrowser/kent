@@ -92,11 +92,12 @@ document.location = theUrl + 'db=' + theDb;
 			<TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%"> 
 				<FORM NAME="dbForm">
 			<table cellpadding="" cellspacing="0" margins="0" border="0"><tr><td valign="top">
-				<FONT CLASS="leftbar">Organism</FONT>
+				<FONT CLASS="leftbar">Genome</FONT>
 			</td></tr><tr valign="bottom"><td valign="bottom">
 					<SELECT NAME="genome" onChange="setDb();">
 						<OPTION VALUE="hg12">Human
 						<OPTION VALUE="mm2">Mouse 
+						<OPTION VALUE="zooHuman3">Zoo
 					</SELECT>
 			</td></tr></table><hr>
 			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
