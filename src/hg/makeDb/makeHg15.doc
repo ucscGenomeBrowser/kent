@@ -1169,8 +1169,7 @@ Locate motifs on all promoters with
 	cd /cluster/store2/tmp
 	hgLoadRna addSeq hg15 /gbdb/hg15/bacends.4/BACends.fa
                 
-IN PROGRESS - MATT
-# BACEND SEQUENCE ALIGNMENTS (TO DO)
+# BACEND SEQUENCE ALIGNMENTS (DONE 041703 - TERRY)
 # (alignments done without RepeatMasking)
 
 # Create full sequence alignments
@@ -1186,13 +1185,12 @@ IN PROGRESS - MATT
 # Compile alignments and lift the files (takes a while)
 	ssh eieio
 	make bacEnds.psl.lifted
-DONE TO HERE - MATT FINISHING FOR TERRY
 # Copy files to final destination and remove
-        make copy.assembly - This step failed, I do not have write perms to Terry's dir
+        make copy.assembly
         make clean # DONT'T DO THIS (may want to wait until sure they're OK)
 
 
-# BACEND PAIRS TRACK (TO DO)
+# BACEND PAIRS TRACK (DONE 041703 - TERRY)
 
 # Add /projects/compbiousr/booch/booch/scripts to your path
 
@@ -1234,6 +1232,7 @@ DONE TO HERE - MATT FINISHING FOR TERRY
         echo 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' | hgsql hg15
 
 
+IN PROGRESS
 # FOSEND SEQUENCE ALIGNMENTS (TO DO)
 
 # Create full sequence alignments
@@ -1245,7 +1244,7 @@ DONE TO HERE - MATT FINISHING FOR TERRY
         make jobList
 	para create jobList
         para push
-
+DONE TO HERE - RUNNING...
 # Compile alignments and lift the files (takes a while)
 	ssh eieio
 	make fosEnds.psl.lifted
@@ -2497,7 +2496,7 @@ MAKING PROMOTER FILES
     zip upstream5000.zip upstream5000.fa
     rm upstream*.fa
     
-#MAKING MOUSE AND RAT SYNTENY (IN PROGRESS)
+# MAKING MOUSE AND RAT SYNTENY (MOUSE DONE 041403)
 
 cd ~/hg15
 mkdir syntenyMouse
@@ -2510,7 +2509,6 @@ mkdir syntenyMouse
 ./synteny2bed.pl
 hgLoadBed hg15 syntenyMouse ucsc100k.bed
 DONE TO HERE - MATT
-
 syntenicBest.pl -db=hg15 -table=blastzBestRn2
 smooth.pl
 joinsmallgaps.pl
