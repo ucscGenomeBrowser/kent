@@ -233,7 +233,7 @@ otherDb danRer1
 
 track netDanRer1
 shortLabel Zebrafish Net
-longLabel Human ($o_date/$o_db) Alignment Net
+longLabel Zebrafish ($o_date/$o_db) Alignment Net
 group compGeno
 priority 185.2
 visibility hide
