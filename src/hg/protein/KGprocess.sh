@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.2 2004/01/22 22:57:38 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.3 2004/01/23 23:39:27 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -205,6 +205,7 @@ if [ ! -d ll ]; then
     hgsql -e "drop database ${DB}Temp;" ${DB} 2> /dev/null
     hgsql -e "create database ${DB}Temp;" ${DB}
     hgsql ${DB}Temp < ~/kent/src/hg/protein/Temp.sql
+#	drop history table so that hgKgMrna will work properly
     hgsql -e "drop table history;" ${DB}Temp 2> /dev/null
 
     echo "`date` loading loc2acc and loc2ref into ${DB}Temp"
@@ -220,6 +221,8 @@ fi
 #	${DB}Temp.locus2Ref0 and ${DB}Temp.locus2Acc0 to cross reference:
 #	GenBank Accession number	RefSeq Accession number
 #	e.g.:	AA001432        NM_000227
+#	hgMrnaRefseq reads from ${DB}Temp.locus2Ref0 and ${DB}Temp.locus2Acc0
+#	to create the mrnaRefseq.tab
 if [ ! -f mrnaRefseq.tab ]; then
     echo "`date` running hgMrnaRefseq ${DB}"
     hgMrnaRefseq ${DB}
@@ -238,6 +241,8 @@ fi
 #	kgGetPep reads the mrna.lis (mrna accession numbers) to
 #	extract from DBs proteins${DATE} and sp{DATE} the fasta records
 #	for each mrna
+#	reads from proteins${DATE}.spXref2 and sp${DATE}.protein
+#	to create mrnaPep.tab and mrna.lis
 if [ ! -f mrnaPep.fa ]; then
     echo "`date` running: kgGetPep ${DATE}"
     kgGetPep ${DATE} > mrnaPep.fa
@@ -252,15 +257,17 @@ if [ ! -f tight_mrna.psl ]; then
     rm -f ${DB}KgMrna.out
 fi
 
-#	Load tables refLink, refPep, refGene, and refMrna tables
-#	into DB ${DB}Temp
+#	Load tables productName, geneName, refLink, refPep,
+#	refGene, and refMrna tables, creates a history table too
+#	into ${DB}Temp
 if [ ! -f ${DB}KgMrna.out ]; then
     echo "`date` running: hgKgMrna ${DB}Temp ... ${PDB}"
+    hgsql -e "delete from productName;" ${DB}Temp
+    hgsql -e "delete from geneName;" ${DB}Temp
     hgsql -e "delete from refLink;" ${DB}Temp
     hgsql -e "delete from refPep;" ${DB}Temp
     hgsql -e "delete from refGene;" ${DB}Temp
     hgsql -e "delete from refMrna;" ${DB}Temp
-    hgsql -e "delete from refMrna;" ${DB} > /dev/null 2> /dev/null
     hgsql -e "delete from mrnaGene;" ${DB}Temp
     hgKgMrna ${DB}Temp mrna.fa mrna.ra tight_mrna.psl ll/loc2ref \
 	mrnaPep.fa ll/mim2loc ${PDB} > ${DB}KgMrna.out 2> ${DB}KgMrna.err
@@ -270,7 +277,7 @@ fi
 
 for T in refGene refMrna refPep refLink
 do
-    if [ ! -f ${T}.tab ]; then
+    if [ ! -s ${T}.tab ]; then
 	echo "ERROR: can not find file: ${T}.tab"
 	echo -e "\tShould have been created by hgKgMrna"
 	exit 255
@@ -550,38 +557,80 @@ TablePopulated "kgXref" ${DB} || { \
     'LOAD DATA local INFILE "kgXref.tab" into table kgXref;' ${DB}; \
 }
 
+#	kgAliasM reads from ${PDB}.hugo.symbol, ${PDB}.hugo.aliases
+#	${PDB}.hugo.withdraws, ${DB}.kgXref.kgID
+#	to create kgAliasM.tab and geneAlias.tab
+#	by picking out those kgID items from kgXref where
+#	kgXref.geneSymbol == hugo.symbol
 if [ ! -s kgAliasM.tab ]; then
     echo "`date` running kgAliasM ${DB} ${PDB}"
     kgAliasM ${DB} ${PDB}
     rm -f kgAlias.tab
 fi
 
+#	kgAliasKgXref reads from ${DB}.knownGene.proteinID,
+#	${DB}.knownGene.name, ${DB}.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
 if [ ! -s kgAliasKgXref.tab ]; then
     echo "`date` running kgAliasKgXref ${DB}"
     kgAliasKgXref ${DB}
     rm -f kgAlias.tab
 fi
 
+#	kgAliasRefseq reads from ${DB}.knownGene.name,
+#	${DB}.knownGene.proteinID, ${DB}.kgXref.refseq
+#	to create kgAliasRefseq.tab
 if [ ! -s kgAliasRefseq.tab ]; then
     echo "`date` running kgAliasRefseq ${DB}"
     kgAliasRefseq ${DB}
     rm -f kgAlias.tab
 fi
 
+#	kgAliasP reads the first file and from ${DB}.knownGene.name
+#	to create the second .lis file
 if [ ! -s kgAliasP.tab ]; then
     echo "`date` running kgAliasP ${DB} ... sp.lis"
-    kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/sprot.dat sp.lis
+    if [ -f /cluster/data/swissprot/${DATE}/build/sprot.dat ]; then
+	kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/sprot.dat sp.lis
+    elif [ -f /cluster/data/swissprot/${DATE}/build/sprot.dat.gz ]; then
+	zcat /cluster/data/swissprot/${DATE}/build/sprot.dat.gz | \
+	    kgAliasP ${DB} stdin sp.lis
+    else
+	echo \
+"ERROR: Can not find /cluster/data/swissprot/${DATE}/build/sprot.dat[.gz]"
+	exit 255
+    fi
     echo "`date` running kgAliasP ${DB} ... tr.lis"
-    kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/trembl.dat tr.lis
+    if [ -f /cluster/data/swissprot/${DATE}/build/trembl.dat ]; then
+	kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/trembl.dat tr.lis
+    elif [ -f /cluster/data/swissprot/${DATE}/build/trembl.dat.gz ]; then
+	zcat /cluster/data/swissprot/${DATE}/build/trembl.dat.gz | \
+	    kgAliasP ${DB} stdin tr.lis
+    else
+	echo \
+"ERROR: Can not find /cluster/data/swissprot/${DATE}/build/trembl.dat[.gz]"
+	exit 255
+    fi
     echo "`date` running kgAliasP ${DB} ... new.lis"
-    kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/trembl_new.dat new.lis
+    if [ -f /cluster/data/swissprot/${DATE}/build/trembl_new.dat ]; then
+	kgAliasP ${DB} \
+	    /cluster/data/swissprot/${DATE}/build/trembl_new.dat new.lis
+    elif [ -f /cluster/data/swissprot/${DATE}/build/trembl_new.dat.gz ]; then
+	zcat /cluster/data/swissprot/${DATE}/build/trembl_new.dat.gz | \
+	    kgAliasP ${DB} stdin new.lis
+    else
+	echo \
+"ERROR: Can not find /cluster/data/swissprot/${DATE}/build/trembl_new.dat[.gz]"
+	exit 255
+    fi
     cat sp.lis tr.lis new.lis | sort | uniq > kgAliasP.tab
     rm -f kgAlias.tab
 fi
 
 if [ ! -s kgAlias.tab ]; then
-    cat kgAliasM.tab kgAliasRefseq.tab  kgAliasKgXref.tab \
-	kgAliasP.tab | sort |uniq > kgAlias.tab
+    cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab | \
+	sort |uniq > kgAlias.tab
+    hgsql -e "drop table kgAlias;" ${DB} 2> /dev/null
 fi
 
 TablePopulated "kgAlias" ${DB} || { \
@@ -592,6 +641,15 @@ TablePopulated "kgAlias" ${DB} || { \
     'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias;' ${DB}; \
 }
 
+#	kgProtAlias reads from ${DB}.knownGene.name,
+#	${DB}.knownGene.proteinID, ${DB}.knownGene.alignID,
+#	${PDB}.spXref3.accession, ${PDB}.spSecondaryID, ${PDB}.pdbSP.pdb
+#	to create kgProtAlias.tab
+#
+#	kgProtAliasNCBI reads from ${DB}.knownGene.name,
+#	${DB}.knownGene.proteinID, ${DB}.kgXref.protAcc,
+#	${DB}.refLink.protAcc, ${DB}Temp.locus2Acc0.proteinAC
+#	to create kgProtAliasNCBI.tab
 if [ ! -s kgProtAliasBoth.tab ]; then
     echo "`date` running kgProtAlias ${DB} ${PDB}"
     kgProtAlias ${DB} ${PDB}
@@ -614,12 +672,26 @@ TablePopulated "kgProtAlias" ${DB} || { \
 #	It requires SOAP and XML modules to be installed
 #	I see they are in /usr/lib/perl5/site_perl/5.6.1
 #	But our perl in /usr/local/bin is 5.8.0
-#	This requires a PERL5LIB environment setting of:
-#	PERL5LIB=/usr/lib/perl5/site_perl/5.6.1
-if [ ! -f mmu.lis ]; then
-    wget --timestamping -O mmu.lis "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=mmu&mode=bfind&max_hit=1000&.cgifields=max_hit"
-    PERL5LIB=/usr/lib/perl5/site_perl/5.6.1 \
-	$HOME/kent/src/hg/protein/getKeggList.pl mmu
+#	The location has been set in the script with the -I argument
+#	This script uses the .lis file extracted from the html WEB page
+#	to fetch via SOAP the data from the kegg site.
+#
+#	This business here is species specific:
+#	mmu == mouse, rno == rat, hsa = human
+SPECIES=hsa
+case ${RO_DB} in
+    mm*) SPECIES=mmu
+	;;
+    rn*) SPECIES=rno
+	;;
+    hg*) SPECIES=hsa
+	;;
+esac
+
+if [ ! -f ${SPECIES}.lis ]; then
+    wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
+    grep HREF hsa.html | perl -wpe "s/<[^>]+>//g" > hsa.lis
+    $HOME/kent/src/hg/protein/getKeggList.pl ${SPECIES} > keggList.tab
 fi
 
 if [ ! -f keggList.tab ]; then
@@ -702,3 +774,4 @@ TablePopulated "cgapAlias" ${DB} || { \
     'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias;' ${DB}; \
 }
 
+echo "`date` DONE ========================="
