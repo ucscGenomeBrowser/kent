@@ -725,6 +725,16 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
+track blastzTightMouse
+shortLabel Tight Mouse 
+longLabel Blastz Mouse, Tight Subset of Best Alignments
+priority 25.81
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
 track blastzBestMouse_0824
 shortLabel Blastz Mus Best 0824
 longLabel Blastz Mouse Best in Genome Alignments  0824
