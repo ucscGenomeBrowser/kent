@@ -13493,7 +13493,7 @@ SEQ2_LEN=$BASE/S2.len
     hg17.refseq.mrna.xeno.load  = yes
     hg17.refseq.mrna.xeno.loadDesc = yes
 
-# BUILD refSeqKg TABLE TO SUPPORT CCDS GENES (DONE, Fan 2/25/05)
+# BUILD refSeqKg TABLE TO SUPPORT CCDS GENES (RE-DONE, Fan 2/26/05)
 
     hgsql hg17 -N -e "select * from knownGene" >kg.gp
     hgsql hg17 -N -e "select * from refGene"   >ref.gp
