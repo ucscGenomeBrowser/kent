@@ -23,7 +23,7 @@ speciesOrder chimp mouse rat chicken fugu zebrafish
 
 track chainFr1
 shortLabel Fugu Chain 
-longLabel Chained $o_Organism ($o_date - $o_db) Blastz Alignments
+longLabel Chained $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 150.1
 visibility hide
@@ -35,7 +35,7 @@ otherDb fr1
 
 track netFr1
 shortLabel Fugu Net
-longLabel $o_Organism ($o_date - $o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
 group compGeno
 priority 150.2
 visibility hide
@@ -45,7 +45,7 @@ otherDb fr1
 
 track chainDanRer1
 shortLabel Zebrafish Chain 
-longLabel Chained $o_Organism ($o_date - $o_db) Blastz Alignments
+longLabel Chained $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 155
 visibility hide
@@ -57,7 +57,7 @@ otherDb danRer1
 
 track netDanRer1
 shortLabel Fugu Net
-longLabel $o_Organism ($o_date - $o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
 group compGeno
 priority 156
 visibility hide
@@ -67,7 +67,7 @@ otherDb danRer1
 
 track chainGalGal2
 shortLabel Chicken Chain 
-longLabel Chained (Feb. 2004 - galGal2) Chicken/$Organism Alignments
+longLabel Chained ($o_date/$o_db) Chicken/$Organism Alignments
 group compGeno
 priority 160
 visibility hide
@@ -79,7 +79,7 @@ otherDb galGal2
 
 track netGalGal2
 shortLabel Chicken Net
-longLabel (Feb. 2004 - galGal2) Chicken/$Organism Alignment Net
+longLabel ($o_date/$o_db) Chicken/$Organism Alignment Net
 group compGeno
 priority 161
 visibility hide
@@ -89,7 +89,7 @@ otherDb galGal2
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel Blastz Rat (rn3-Jun 03) Alignments
+longLabel Blastz Rat ($o_date/$o_db) Alignments
 group compGeno
 priority 173
 visibility hide
@@ -101,7 +101,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (rn3-Jun 03)/$Organism Best-in-Genome Alignments
+longLabel Blastz Rat ($o_date/$o_db)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 174
 visibility hide
@@ -113,7 +113,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel Rat Blastz (rn3-Jun 03), Tight Subset of Best Alignments
+longLabel Rat Blastz ($o_date/$o_db), Tight Subset of Best Alignments
 group compGeno
 priority 175
 visibility hide
@@ -125,7 +125,7 @@ otherDb rn3
 
 track chainRn3
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
+longLabel Chained Blastz Rat ($o_date/$o_db)/$Organism Alignments
 group compGeno
 priority 176
 visibility hide
@@ -137,7 +137,7 @@ otherDb rn3
 
 track netRn3
 shortLabel Rat Net
-longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
+longLabel Rat ($o_date/$o_db)/$Organism Alignment Net
 group compGeno
 priority 177
 visibility hide 
@@ -147,17 +147,18 @@ otherDb rn3
 
 track ensRn3MusHom
 shortLabel Rat Synteny
-longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Rat ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 priority 178
 group compGeno
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 6+
+otherDb rn3
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel Rat (rn3-Jun 03) Syntenic Alignment Net
+longLabel Rat ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 179
 visibility hide
@@ -167,7 +168,7 @@ otherDb rn3
 
 track blastzMm4
 shortLabel Mm4 Blastz
-longLabel Blastz Mm4 (mm4-Oct 03) Alignments
+longLabel Blastz Mm4 ($o_date/$o_db) Alignments
 group compGeno
 priority 182
 visibility hide
@@ -179,7 +180,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel Mm4 Best
-longLabel Blastz Mm4 (mm4-Oct 03)/$Organism Best-in-Genome Alignments
+longLabel Blastz Mm4 ($o_date/$o_db)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 183
 visibility hide
@@ -187,10 +188,11 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno mm4
+otherDb mm4
 
 track blastzTightMm4
 shortLabel Mm4 Tight
-longLabel Mm4 Blastz (mm4-Oct 03), Tight Subset of Best Alignments
+longLabel Mm4 Blastz ($o_date/$o_db), Tight Subset of Best Alignments
 group compGeno
 priority 184
 visibility hide
@@ -202,7 +204,7 @@ otherDb mm4
 
 track chainMm4
 shortLabel Mm4 Chain 
-longLabel Chained Blastz Mm4 (mm4-Oct 03)/$Organism Alignments
+longLabel Chained Blastz Mm4 ($o_date/$o_db)/$Organism Alignments
 group compGeno
 priority 185
 visibility hide
@@ -214,7 +216,7 @@ otherDb mm4
 
 track netMm4
 shortLabel Mm4 Net
-longLabel Mm4 (mm4-Oct 03)/$Organism Alignment Net
+longLabel Mm4 ($o_date/$o_db)/$Organism Alignment Net
 group compGeno
 priority 186
 visibility hide
@@ -224,17 +226,18 @@ otherDb mm4
 
 track ensRatMm4Hom
 shortLabel Mm4 Synteny
-longLabel $Organism/Mm4 (mm4-Oct 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Mm4 ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 priority 187
 group compGeno
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 6+
+otherDb mm4
 
 track syntenyNetMm4
 shortLabel Mm4 Syntenic Net
-longLabel Mm4 (mm4-Oct 03) Syntenic Alignment Net
+longLabel Mm4 ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188
 visibility hide
@@ -244,7 +247,7 @@ otherDb mm4
 
 track blastzPanTro1
 shortLabel Chimp Blastz
-longLabel Blastz Chimp (panTro1-Nov 03) Alignments
+longLabel Blastz Chimp ($o_date/$o_db) Alignments
 group compGeno
 priority 180
 visibility hide
@@ -256,7 +259,7 @@ otherDb panTro1
 
 track chainPanTro1
 shortLabel Chimp Chain 
-longLabel Chained $o_Organism ($o_date - $o_db) Blastz Alignments
+longLabel Chained $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 180.3
 visibility hide
@@ -268,7 +271,7 @@ otherDb panTro1
 
 track netPanTro1
 shortLabel Chimp Net
-longLabel $o_Organism ($o_date - $o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
 group compGeno
 priority 180.4
 visibility hide
@@ -278,7 +281,7 @@ otherDb panTro1
 
 track blastzMm5
 shortLabel Mouse Blastz
-longLabel Blastz Mouse (mm5-June 04) Alignments
+longLabel Blastz Mouse ($o_date/$o_db) Alignments
 group compGeno
 priority 182.5
 visibility hide
@@ -290,7 +293,7 @@ otherDb mm5
 
 track blastzBestMm5
 shortLabel Mouse Best
-longLabel Blastz Mouse (mm5-June 04)/$Organism Best-in-Genome Alignments
+longLabel Blastz Mouse ($o_date/$o_db)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 183.5
 visibility hide
@@ -298,10 +301,11 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno mm5
+otherDb mm5
 
 track blastzTightMm5
 shortLabel Mouse Tight
-longLabel Mouse Blastz (mm5-June 04), Tight Subset of Best Alignments
+longLabel Mouse Blastz ($o_date/$o_db), Tight Subset of Best Alignments
 group compGeno
 priority 184.5
 visibility hide
@@ -313,7 +317,7 @@ otherDb mm5
 
 track chainMm5
 shortLabel Mouse Chain 
-longLabel Chained Blastz Mouse (mm5-June 04)/$Organism Alignments
+longLabel Chained Blastz Mouse ($o_date/$o_db)/$Organism Alignments
 group compGeno
 priority 185.5
 visibility hide
@@ -325,7 +329,7 @@ otherDb mm5
 
 track netMm5
 shortLabel Mouse Net
-longLabel Mouse (mm5-June 04)/$Organism Alignment Net
+longLabel Mouse ($o_date/$o_db)/$Organism Alignment Net
 group compGeno
 priority 186.5
 visibility hide
@@ -335,17 +339,18 @@ otherDb mm5
 
 track ensRatMm5Hom
 shortLabel Mouse Synteny
-longLabel $Organism/Mouse (mm5-June 04) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Mouse ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 priority 187.5
 group compGeno
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 6+
+otherDb mm5
 
 track syntenyNetMm5
 shortLabel Mouse Syntenic Net
-longLabel Mouse (mm5-June 04) Syntenic Alignment Net
+longLabel Mouse ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188.5
 visibility hide
@@ -355,7 +360,7 @@ otherDb mm5
 
 track blastzDanRer1
 shortLabel Zebrafish Blastz
-longLabel Blastz $o_Organism ($o_date - $o_db) Alignments
+longLabel Blastz $o_Organism ($o_date/$o_db) Alignments
 group compGeno
 priority 155.1
 visibility hide
@@ -367,7 +372,7 @@ otherDb danRer1
 
 track chainDanRer1
 shortLabel Zebrafish Chain 
-longLabel Chained $o_Organism ($o_date - $o_db) Blastz Alignments
+longLabel Chained $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 155.2
 visibility hide
@@ -379,7 +384,7 @@ otherDb danRer1
 
 track netDanRer1
 shortLabel Zebrafish Net
-longLabel $o_Organism ($o_date - $o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
 group compGeno
 priority 155.3
 visibility hide

@@ -129,7 +129,7 @@ type bed 12
 
 track blastzMm3
 shortLabel Mm3 Blastz
-longLabel Blastz All Mouse (mm3-Feb 03) Alignments
+longLabel Blastz All Mouse (Feb 03/mm3) Alignments
 group compGeno
 priority 189.1
 visibility hide
@@ -141,7 +141,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best-in-Genome Alignments
+longLabel Blastz Mouse (Feb 03/mm3)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 189.2
 visibility hide
@@ -152,7 +152,7 @@ type psl xeno mm3
 
 track blastzTightMm3
 shortLabel Mm3 Tight
-longLabel Blastz Mouse (mm3-Feb 03), Tight Subset of Best Alignments
+longLabel Blastz Mouse (Feb 03/mm3), Tight Subset of Best Alignments
 group compGeno
 priority 189.3
 visibility hide
@@ -164,7 +164,7 @@ otherDb mm3
 
 track chainMm3
 shortLabel Mm3 Chain 
-longLabel Chained Blastz Mouse (mm3-Feb 03)/$Organism Alignments
+longLabel Chained Blastz Mouse (Feb 03/mm3)/$Organism Alignments
 group compGeno
 priority 189.4
 visibility hide
@@ -176,7 +176,7 @@ otherDb mm3
 
 track netMm3
 shortLabel Mm3 Net
-longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
+longLabel Mouse (Feb 03/mm3)/$Organism Alignment Net
 group compGeno
 priority 189.5
 visibility hide
@@ -186,7 +186,7 @@ otherDb mm3
 
 track syntenyNetMm3
 shortLabel Mm3 Syntenic Net
-longLabel Mouse (mm3-Feb 03) Syntenic Alignment Net
+longLabel Mouse (Feb 03/mm3) Syntenic Alignment Net
 group compGeno
 priority 189.6
 visibility hide
@@ -196,7 +196,7 @@ otherDb mm3
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel Blastz Rat (rn3-Jun 03) Alignments
+longLabel Blastz Rat (Jun 03/rn3) Alignments
 group compGeno
 priority 173
 visibility hide
@@ -208,7 +208,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (rn3-Jun 03)/$Organism Best-in-Genome Alignments
+longLabel Blastz Rat (Jun 03/rn3)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 174
 visibility hide
@@ -220,7 +220,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel Rat Blastz (rn3-Jun 03), Tight Subset of Best Alignments
+longLabel Rat Blastz (Jun 03/rn3), Tight Subset of Best Alignments
 group compGeno
 priority 175
 visibility hide
@@ -232,7 +232,7 @@ otherDb rn3
 
 track chainRn3
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
+longLabel Chained Blastz Rat (Jun 03/rn3)/$Organism Alignments
 group compGeno
 priority 176
 visibility hide
@@ -244,7 +244,7 @@ otherDb rn3
 
 track netRn3
 shortLabel Rat Net
-longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
+longLabel Rat (Jun 03/rn3)/$Organism Alignment Net
 group compGeno
 priority 177
 visibility hide 
@@ -254,7 +254,7 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Rat (Jun 03/rn3) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 178
 visibility hide
@@ -264,7 +264,7 @@ type bed 4 +
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel Rat (rn3-Jun 03) Syntenic Alignment Net
+longLabel Rat (Jun 03/rn3) Syntenic Alignment Net
 group compGeno
 priority 179
 visibility hide
@@ -290,7 +290,7 @@ type maf
 
 track chainPanTro1
 shortLabel Chimp Chain
-longLabel Chimp (panTro1-Nov 03) Chained Alignments
+longLabel Chimp (Nov 03/panTro1) Chained Alignments
 group compGeno
 priority 200
 visibility hide
@@ -302,7 +302,7 @@ otherDb panTro1
 
 track rBestChainPanTro1
 shortLabel Chimp Recip Chain 
-longLabel Chimp (panTro1-Nov 03) Reciprocal Best Chained Alignments
+longLabel Chimp (Nov 03/panTro1) Reciprocal Best Chained Alignments
 group compGeno
 priority 201
 visibility hide
@@ -314,7 +314,7 @@ otherDb panTro1
 
 track rBestNetPanTro1
 shortLabel Chimp Recip Net
-longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
+longLabel Chimp (Nov 03/panTro1) Reciprocal Best Net
 group compGeno
 priority 202
 visibility hide
@@ -323,7 +323,7 @@ type netAlign panTro1 rBestChainPanTro1
 
 track chimpDels
 shortLabel Chimp Deletions
-longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
+longLabel Deletions in Chimp (Nov 03/panTro1) Relative to Human
 group compGeno
 priority 203
 visibility hide
@@ -331,7 +331,7 @@ type bed 4 .
 
 track chainPt0
 shortLabel Pt0 Chain
-longLabel Chimp (pt0-Nov 03) Scaffold Chained Alignments
+longLabel Chimp (Nov 03/panTro1) Scaffold Chained Alignments
 group compGeno
 priority 208
 visibility hide
@@ -342,7 +342,7 @@ type chain seq
 
 track netRxBestPt0
 shortLabel Pt0 Net
-longLabel Chimp (pt0-Nov 03) Reciprocal Best Net (Colored by Scaffold)
+longLabel Chimp (Nov 03/panTro1) Reciprocal Best Net (Colored by Scaffold)
 group compGeno
 priority 209
 visibility hide
@@ -351,7 +351,7 @@ type netAlign seq chainPt0
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
-longLabel Human/Mouse/Rat Humor Alignments (mm3-Feb03, rn3-Jun 03)
+longLabel Human/Mouse/Rat Humor Alignments (Feb03/mm3, Jun 03/rn3)
 group compGeno
 priority 104
 visibility hide
@@ -361,7 +361,7 @@ type maf
 
 track multizMm3Rn3GalGal2
 shortLabel HMRG
-longLabel Human/Mouse/Rat/Chicken Multiz Al. (mm3-Feb03, rn3-Jun03, galGal2-Feb04)
+longLabel Human/Mouse/Rat/Chicken Multiz Al. (Feb03/mm3, Jun03/rn3, Feb04/galGal2)
 group compGeno
 priority 102
 visibility hide
@@ -369,7 +369,7 @@ type maf
 
 track multizMm3Rn3Pt0
 shortLabel HMRP
-longLabel Human/Mouse/Rat/Chimp Multiz Alignments (mm3-Feb03, rn3-Jun03, pt0-Nov03)
+longLabel Human/Mouse/Rat/Chimp Multiz Alignments (Feb03/mm3, Jun03/rn3, Nov03/pt0)
 group compGeno
 priority 103
 visibility hide
@@ -722,7 +722,7 @@ otherDb hg16
 
 track blastzBestSelf
 shortLabel Self Best
-longLabel Blastz Self (hg16-Jul 03)/$Organism Best-in-Genome Alignments
+longLabel Blastz Self $Organism Best-in-Genome Alignments
 group varRep
 priority 161
 visibility hide
@@ -733,7 +733,7 @@ type psl xeno hg16
 
 track blastzTightSelf
 shortLabel Tight Self
-longLabel Blastz Self (hg16-Jul 03), Tight Subset of Best Alignments
+longLabel Blastz Self Tight Subset of Best Alignments
 group varRep
 priority 162
 visibility hide
@@ -767,7 +767,7 @@ otherDb hg16
 
 track syntenySelf
 shortLabel Self Synteny
-longLabel Human/Human (hg16-Jul 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel Human/Human Synteny Using Blastz Single Coverage (100k window)
 group varRep
 priority 165
 visibility hide
@@ -1041,7 +1041,7 @@ type wig -0.0732 0.153
 
 track chainGalGal2
 shortLabel Chicken Chain 
-longLabel Chained (Feb. 2004 - galGal2) Chicken/$Organism Alignments
+longLabel Chained (Feb 04/galGal2) Chicken/$Organism Alignments
 group compGeno
 priority 160
 visibility hide
@@ -1053,7 +1053,7 @@ otherDb galGal2
 
 track netGalGal2
 shortLabel Chicken Net
-longLabel (Feb. 2004 - galGal2) Chicken/$Organism Alignment Net
+longLabel (Feb 04/galGal2) Chicken/$Organism Alignment Net
 group compGeno
 priority 161
 visibility dense
@@ -1063,7 +1063,7 @@ otherDb galGal2
 
 track netSyntenyGalGal2
 shortLabel Chicken Synteny
-longLabel (Feb. 2004 - galGal2) Chicken/$Organism Synteny Using Chained/Netted Blastz
+longLabel (Feb 04/galGal2) Chicken/$Organism Synteny Using Chained/Netted Blastz
 group compGeno
 priority 162
 visibility hide
@@ -1073,7 +1073,7 @@ type netAlign galGal2 chainGalGal2
 
 track blastzBestGalGal2
 shortLabel Chicken Best
-longLabel Blastz Chicken (galGal2) Best in Genome
+longLabel Blastz Chicken (Feb 04/galGal2) Best in Genome
 group compGeno
 priority 163
 visibility hide
@@ -1084,7 +1084,7 @@ type psl xeno galGal2
 
 track chainFr1
 shortLabel Fugu Chain 
-longLabel Chained (Aug. 2002 - fr1) Fugu/$Organism Blastz Alignments
+longLabel Chained (Aug 02/fr1) Fugu/$Organism Blastz Alignments
 group compGeno
 priority 150.1
 visibility hide
@@ -1096,7 +1096,7 @@ otherDb fr1
 
 track netFr1
 shortLabel Fugu Net
-longLabel (Aug. 2002 - fr1) Fugu/$Organism Blastz Alignment Net
+longLabel (Aug 02/fr1) Fugu/$Organism Blastz Alignment Net
 group compGeno
 priority 150.2
 visibility hide
@@ -1106,7 +1106,7 @@ otherDb fr1
 
 track netSyntenyFr1
 shortLabel Fugu Synteny
-longLabel (Aug. 2002 - fr1) Fugu/$Organism Synteny Using Chained/Netted Blastz
+longLabel (Aug 02/fr1) Fugu/$Organism Synteny Using Chained/Netted Blastz
 group compGeno
 priority 150.3
 visibility hide
