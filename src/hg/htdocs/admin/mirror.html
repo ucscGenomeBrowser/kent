@@ -419,12 +419,6 @@ rsync -avzP --delete --max-delete=20 \
 
 <H4><A NAME="step5"></A>
 5. Set up database</H4>
-<B>Existing Mirror Sites: There are numerous changes to tables
-and data within these tables to support the /gbdb file storage method.
-You are advised to consider dropping and rebuilding the databases.
-If that presents a problem, contact us and we can provide detailed
-updates to be made, but that is not directly documented.
-</B>
 
 <UL>
 <P><A NAME="table"></A> Use the following table to identify the freeze
@@ -529,9 +523,7 @@ The source tree can also be obtained via <A HREF="cvs.html"> CVS </A>
 
 <P>
 
-<H4><A NAME="step7"></A>
-7. Set up the "hgcentral" tables </H4>
-
+<A NAME="step7"></A>
 <B>Existing Mirror Sites: Please note the change history for the
 hgcentral database.  Table structure changes have corresponding
 structure changes in the source code.  The browser version can
@@ -547,6 +539,9 @@ since v62.
 <LI> 2004-08-02 table blatServers has canPcr field added
 	(browser version v74)
 </UL>
+
+<H4>
+7. Set up the "hgcentral" tables </H4>
 
 <OL type="a">
 <LI>Download the schema for the hgcentral database <A HREF="http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql"> here</A>.
