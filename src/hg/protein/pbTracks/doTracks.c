@@ -777,7 +777,7 @@ Color exonColor[2];
 Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-// The imaginary mRNA length is 3 times of aaLen
+// The hypothetical mRNA length is 3 times of aaLen
 mrnaLen = aaLen * 3;
 
 exonColor[0] = pbBlue;
@@ -1366,11 +1366,21 @@ if (mrnaID != NULL)
     	}
     }
 
-//printf("<br>%d %d %d %d\n", prevGBStartPos, prevGBEndPos, 
+//printf("<br>%d %d<br>%d %d\n", prevGBStartPos, prevGBEndPos, 
 //	blockGenomeStartPositive[exCount-1], blockGenomeStartPositive[0]); fflush(stdout);
-if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
+if (strand == '-')
     {
-    showPrevGBPos = FALSE;
+    if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
+    	{
+    	showPrevGBPos = FALSE;
+    	}
+    }
+else
+    {
+    if ((prevGBStartPos <= blockGenomeStartPositive[0]) && (prevGBEndPos >= blockGenomeStartPositive[exCount-1]))
+    	{
+    	showPrevGBPos = FALSE;
+    	}
     }
 
 if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
