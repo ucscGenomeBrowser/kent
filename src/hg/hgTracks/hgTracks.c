@@ -81,7 +81,6 @@
 #include "web.h"
 
 #define MAX_CONTROL_COLUMNS 5
-#define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
 #define CHROMOSOME_SHADES 4
 #define LOW 1
@@ -666,7 +665,8 @@ if (w < 1)
 vgBox(vg, x1, y, w, height, color);
 }
 
-void drawScaledBoxSample(struct vGfx *vg, int chromStart, int chromEnd, double scale, 
+void drawScaledBoxSample(struct vGfx *vg, 
+	int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
@@ -766,26 +766,28 @@ enum {lfSubSample = 2};
 enum {lfWithBarbs = 3}; /* turn on barbs to show direction based on strand field */
 
 struct linkedFeatures
-{
+/* A linked set of features - drawn as a bunch of boxes (often exons)
+ * connected by horizontal lines (often introns). */
+    {
     struct linkedFeatures *next;
     int start, end;			/* Start/end in browser coordinates. */
     int tallStart, tallEnd;		/* Start/end of fat display. */
     int grayIx;				/* Average of components. */
     int filterColor;			/* Filter color (-1 for none) */
     float score;                        /* score for this feature */
-    char name[NAME_LEN];		/* Accession of query seq. */
+    char name[64];			/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
-    char popUp[NAME_LEN];		/* text for popup */
+    char popUp[128];			/* text for popup */
     };
 
 struct linkedFeaturesPair
     {
-      struct linkedFeaturesPair *next;
-      char *cloneName;                /*clone name for est pair */
-      struct linkedFeatures *lf5prime;   /*linked features for 5 prime est */
-      struct linkedFeatures *lf3prime;   /*linked features for 5 prime est */
+    struct linkedFeaturesPair *next;
+    char *cloneName;                /*clone name for est pair */
+    struct linkedFeatures *lf5prime;   /*linked features for 5 prime est */
+    struct linkedFeatures *lf3prime;   /*linked features for 5 prime est */
     };
 
 int linkedFeaturesCmp(const void *va, const void *vb)
@@ -1237,7 +1239,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    innerLine(vg, x1, midY, w, color);
         prevEnd = lf->end;
       
-        if (lf->components != NULL && !hideLine)
+        if (!hideLine)
             {
             x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
             x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
@@ -1893,7 +1895,7 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	      color = tg->itemColor(tg, lf, vg);
 	  tallStart = lf->tallStart;
 	  tallEnd = lf->tallEnd;
-	  if (lf->components != NULL && !hideLine)
+	  if (!hideLine)
 	      {
 	      x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	      x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
@@ -3804,7 +3806,7 @@ tg->colorShades = shadesOfGray;
 tg->itemName = isochoreName;
 }
 
-/*Ewan's stuff */
+/* Ewan's stuff */
 /******************************************************************/
 					/*Royden fun test code*/
 /******************************************************************/
@@ -5253,197 +5255,133 @@ else
 tg->loadItems = loadXenoPslWithPos;
 }
 
-struct linkedFeatures *lfFromChainx(struct chain *chain, int sizeMul, boolean isXeno, boolean nameGetsPos)
-/* Create a linked feature item from chainx.  Pass in sizeMul=1 for DNA, 
- * sizeMul=3 for protein. */
-{
-/*unsigned *starts = chain->tStarts;
-/*unsigned *sizes = chain->blockSizes;
-/*int i, blockCount = chain->blockCount;*/
-int grayIx = 1;
-struct simpleFeature *sfList = NULL, *sf;
-struct linkedFeatures *lf;
-struct boxIn *bl, *next = NULL;
-boolean rcTarget = (chain->qStrand == '-');
-
-AllocVar(lf);
-lf->score = chain->score;
-lf->grayIx = grayIx;
-if (nameGetsPos)
-    {
-    char buf[256];
-    snprintf(buf, sizeof(buf), "%d", chain->id);
-#ifdef OLD
-    snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", chain->qName, chain->qStart, chain->qEnd,
-    	chain->tName, chain->tStart, chain->tEnd);
-#endif /* OLD */
-    lf->extra = cloneString(buf);
-    snprintf(lf->name, sizeof(lf->name), "%s %c %dk", chain->qName, 
-    	chain->qStrand, chain->qStart/1000);
-    }
-else
-    strncpy(lf->name, chain->qName, sizeof(lf->name));
-lf->orientation = 1;
-if (rcTarget)
-    lf->orientation = -lf->orientation;
-for (bl = chain->blockList; bl != NULL; bl = bl->next)
-    {
-    AllocVar(sf);
-    sf->start = sf->end = bl->tStart;
-    sf->end = bl->tEnd;
-    sf->grayIx = grayIx;
-    slAddHead(&sfList, sf);
-    }
-slReverse(&sfList);
-lf->components = sfList;
-finishLf(lf);
-lf->start = chain->tStart;	/* Correct for rounding errors... */
-lf->end = chain->tEnd;
-return lf;
-}
-
-void connectedLfFromChainsInRange(struct sqlConnection *conn, 
-    struct sqlConnection *conn2,
-    struct trackGroup *tg, int start, int end, char *chromName,
-    boolean isXeno, boolean nameGetsPos)
-/* Return linked features from range of table after have
- * already connected to database.. */
+void chainLoadItems(struct trackGroup *tg)
+/* Load up all of the chains from correct table into tg->items 
+ * item list.  At this stage to conserve memory for other tracks
+ * we don't load the links into the components list until draw time. */
 {
 char *track = tg->mapName;
-char trackLink[128];
-char trackChain[128];
-char **row, **rowLink;
+struct chain chain;
 int rowOffset;
-char *optionChrStr;
-struct linkedFeatures *lfList = NULL, *lf;
-struct boxIn *bList = NULL;
-char optionChr[128]; /* Option -  chromosome filter */
-char extraWhere[128] ;
-struct dyString *query;
-int minGap = (winEnd - winStart ) / 30000;
-int prevChainId = 0 ;
-static struct chain *chainArr[MAXCHAINS];
-struct sqlResult *sr = NULL, *srLink = NULL;
-struct chain *chain ;
+char **row;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = hRangeQuery(conn, track, chromName, winStart, winEnd,
+	NULL, &rowOffset);
+struct linkedFeatures *list = NULL, *lf;
+int qs;
 
-snprintf( trackLink, sizeof(trackLink), "%s_%sLink", chromName, track);
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
-snprintf( trackChain, sizeof(trackChain), "%s_%s", chromName, track);
-optionChrStr = cartUsualString(cart, optionChr, "All");
-if (startsWith("chr",optionChrStr)) 
-    {
-    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-    sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
-    }
-else
-    {
-    snprintf(extraWhere, sizeof(extraWhere), " ");
-    sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
-    }
-
-if (sqlCountColumns(sr) < 11+rowOffset)
-    errAbort("trackDb has incorrect table type for table \"%s\"",
-	     tg->mapName);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chain = chainLoad(row+rowOffset);
-    assert (chain->id < MAXCHAINS);
-    chainArr[chain->id] = chain;
-    }
-
-query = newDyString(1024);
-dyStringPrintf(query, 
-	"select c.bin, c.score, c.tName, c.tSize, c.tStart, c.tEnd"
-	", c.qName, c.qSize, c.qStrand, c.qStart, c.qEnd, c.id"
-	", g.tName, g.tStart, g.tEnd, g.qStart from %s c , %s g "
-	"where g.tStart < c.tEnd and g.tEnd > c.tStart "
-	"and g.tStart >= %d and g.tEnd <= %d and g.chainId = c.id "
-	"and ",
-         trackChain, trackLink, start, end, winStart, winEnd, winStart, winEnd);
-hAddBinToQueryGeneral("c.bin", winStart, winEnd, query);
-    hAddBinToQueryGeneral("g.bin", winStart, winEnd, query);
-dyStringPrintf(query, "(g.tEnd - g.tStart) > %d ",minGap);
- 
-//    sprintf(query, "SELECT tName, tStart, tEnd, qStart from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
-//               trackLink, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
-//    printf(" %s <p>\n",query->string);
-srLink = sqlGetResult(conn2, query->string);
-while ((rowLink = sqlNextRow(srLink)) != NULL)
-    {
-    struct chainView *chainView = chainViewLoad(rowLink+rowOffset);
-
-    struct boxIn *b;
-    AllocVar(b);
-    b->tStart = chainView->gtStart;
-    b->tEnd = chainView->gtEnd;
-    b->qStart = chainView->qStart;
-    b->qEnd = chainView->qStart + chainView->gtEnd - chainView->gtStart;
-    if (prevChainId == chainView->id)
+    chainStaticLoad(row + rowOffset, &chain);
+    AllocVar(lf);
+    lf->start = lf->tallStart = chain.tStart;
+    lf->end = lf->tallEnd = chain.tEnd;
+    lf->grayIx = maxShade;
+    lf->filterColor = -1;
+    lf->score = chain.score;
+    if (chain.qStrand == '-')
 	{
-	slAddHead(&bList, b);
+	lf->orientation = -1;
+        qs = chain.qSize - chain.qEnd;
 	}
     else
-	{
-	if (prevChainId != 0)
-	    {
-	    chain = chainArr[prevChainId];
-	    slReverse(&bList);
-	    chain->blockList = bList;
-	    lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
-	    slAddHead(&lfList, lf);
-	    }
-	bList = NULL;
-	slAddHead(&bList, b);
+        {
+	lf->orientation = 1;
+	qs = chain.qStart;
 	}
-    prevChainId = chainView->id;
-    // Chain View Free??
+    snprintf(lf->name, sizeof(lf->name), "%s %c %dk", 
+    	chain.qName, chain.qStrand, qs/1000);
+    snprintf(lf->popUp, sizeof(lf->name), "%s %c start %d size %d",
+    	chain.qName, chain.qStrand, qs, chain.qEnd - chain.qStart);
+    lf->extra = intToPt(chain.id);
+    slAddHead(&list, lf);
     }
-freeDyString(&query);
-
-slReverse(&lfList);
-if (limitVisibility(tg, lfList) == tvFull)
-    slSort(&lfList, linkedFeaturesCmpStart);
-if (tg->extraUiData)
-    filterMrna(tg, &lfList);
+slReverse(&list);
+tg->items = list;
 sqlFreeResult(&sr);
-sqlFreeResult(&srLink);
-tg->items = lfList;
-}
-
-void lfFromChainsInRange(struct trackGroup *tg, int start, int end, 
-	char *chromName, boolean isXeno, boolean nameGetsPos)
-/* Return linked features from range of table. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-connectedLfFromChainsInRange(conn, conn2, tg, start, end, chromName, 
-	isXeno, nameGetsPos);
 hFreeConn(&conn);
-hFreeConn(&conn2);
 }
 
-void loadChainWithPos(struct trackGroup *tg)
-/* load up all of the chains from correct table into tg->items item list*/
+static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chained features. This loads up the simple features from 
+ * the chainLink table, calls linkedFeaturesDraw, and then
+ * frees the simple features again. */
 {
-lfFromChainsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
+char buf[16];
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+struct hash *hash = newHash(0);	/* Hash of chain ids. */
+struct dyString *query = newDyString(1024);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct lm *lm = lmInit(1024*4);
+char **row;
+
+/* Make sure this is sorted if in full mode. */
+if (vis == tvFull)
+    slSort(&tg->items, linkedFeaturesCmpStart);
+
+/* Make up a hash of all linked features keyed by
+ * id, which is held in the extras field. */
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    sprintf(buf, "%d", ptToInt(lf->extra));
+    hashAdd(hash, buf, lf);
+    }
+
+/* Make up range query. */
+dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
+	chromName, tg->mapName);
+hAddBinToQuery(seqStart, seqEnd, query);
+dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
+sr = sqlGetResult(conn, query->string);
+
+/* Loop through making up simple features and adding them
+ * to the corresponding linkedFeature. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    lf = hashMustFindVal(hash, row[0]);
+    lmAllocVar(lm, sf);
+    sf->start = sqlUnsigned(row[1]);
+    sf->end = sqlUnsigned(row[2]);
+    sf->grayIx = maxShade;
+    slAddHead(&lf->components, sf);
+    }
+
+/* Someday we may need to put in a sort on the simple features
+ * here.  For now though nobody cares. */
+
+linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	font, color, vis);
+
+/* Cleanup time. */
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    lf->components = NULL;
+lmCleanup(&lm);
+freeHash(&hash);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void chainMethods(struct trackGroup *tg)
-/* Fill in custom parts of alignment chains */
+/* Fill in custom parts of alignment chains. */
 {
 char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
 linkedFeaturesMethods(tg);
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+snprintf(option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
-tg->mapItemName = mapNameFromLfExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = pslItemColor;
 else
     tg->itemColor = NULL;
-tg->loadItems = loadChainWithPos;
+tg->loadItems = chainLoadItems;
+tg->drawItems = chainDraw;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -7341,10 +7279,13 @@ return lfList;
 
 void loadUniGeneAli(struct trackGroup *tg)
 {
-tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALSE, 1.0);
+tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, 
+	chromName,FALSE, 1.0);
 }
 
 void uniGeneMethods(struct trackGroup *tg)
+/* Load up uniGene methods - a slight specialization of
+ * linked features. */
 {
 linkedFeaturesMethods(tg);
 tg->loadItems = loadUniGeneAli;
