@@ -192,6 +192,8 @@ done >> seq_contig.md
     foreach c ( `cat chrom.lst` )
 	sed -e "/^#.*/d" ../agp/chr${c}.agp > ./${c}/chr${c}.agp
     end
+    #	chrM needs a name fixup
+    sed -e "s#NC_001807#chrM#" ../agp/chrM.agp > M/chrM.agp
 
     # Distribute contig .fa to appropriate directory (assumes all files
     # are in "contigs" directory).
