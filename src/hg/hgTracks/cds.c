@@ -744,17 +744,16 @@ int mrnaS;
 int startI = -1;
 int size, i;
 char retStr[4];
-unsigned *ends;
+unsigned *ends = needMem(sizeof(unsigned)*psl->blockCount);
 static char saveStr[4];
 char tempStr[4];
 char codon[4];
 char mrnaCodon[4]; 
 int genomicColor;
 Color textColor = whiteIndex();
-ends = needMem(sizeof(unsigned)*psl->blockCount);
-
 boolean isDiff = (displayOption == CDS_DRAW_DIFF_CODONS ||
                   displayOption == CDS_DRAW_DIFF_BASES );
+
 if (isDiff)
         dyStringAppend( ds, (char*)hDnaFromSeq(chromName,s,e,dnaUpper)->dna);
 mrnaS = convertCoordUsingPsl( s, psl ); 
