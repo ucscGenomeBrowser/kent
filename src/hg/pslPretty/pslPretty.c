@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.22 2003/12/24 04:19:45 kent Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.23 2004/01/08 00:18:24 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -225,15 +225,17 @@ void axtOutString(char *q, char *t, int size, int lineSize,
     int i;
 static int ix = 0;
 int qs = psl->qStart, qe = psl->qEnd;
+int ts = psl->tStart, te = psl->tEnd;
 
 if (psl->strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
 
 if (psl->strand[1] == '-')
-    errAbort("axt option can't handle two character strands in psl");
+    reverseIntRange(&ts, &te, psl->tSize);
+
 if (psl->strand[1] != 0)
-    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, psl->tStart+1, 
-            psl->tEnd, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
+    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, ts+1, 
+            te, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
 else
     fprintf(f, "%d %s %d %d %s %d %d %c 0\n", ++ix, psl->tName, psl->tStart+1, 
             psl->tEnd, psl->qName, qs+1, qe, psl->strand[0]);
