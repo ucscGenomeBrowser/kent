@@ -1025,21 +1025,13 @@ Color *shadesFromBaseColor( struct rgbColor *rgb )
         return( shadesOfGray );
 }
 
+
 int whichBin( double tmp, double thisMin, double thisMax, int n )
 {
-    int i;
-    double inc = (thisMax - thisMin)/(double)n;
-    double val = thisMin + inc;
-    for( i=0; i<n; i++ )
-    {
-        if( tmp >= (val - inc) && tmp < val )
-            return(i+1);
-        val += inc;
-        
-        if( i == n - 1 )
-            return(n);
-    }
-    return(n);
+    double atmp = tmp - thisMin;
+    double amax = thisMax - thisMin;
+    double ret = (double)atmp * 1000.0 / (double)amax;
+    return( ret );
 }
 
 /*gets range nums. from bin values*/
