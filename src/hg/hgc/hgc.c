@@ -42,6 +42,7 @@
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "recombRate.h"
 #include "stsInfo.h"
 #include "mouseSyn.h"
 #include "cytoBand.h"
@@ -5417,6 +5418,62 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doRecombRate(struct trackDb *tdb)
+/* Handle click on the Recombination Rate track */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct recombRate *rr;
+char sband[32], eband[32];
+int i;
+
+/* Print out non-sequence info */
+cartWebStart(cart, "Recombination Rate based on deCODE Genetic Map");
+
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM recombRate WHERE 
+                chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    boolean gotS, gotB;
+    rr = recombRateLoad(row);
+    /* Print out general sequence positional information */
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
+	}
+    printf("<TR><TH ALIGN=left>Recombination Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->recombRate);
+    printf("</TABLE>\n");
+    freeMem(rr);
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doGenMapDb(struct trackDb *tdb, char *clone)
 /* Handle click on the GenMapDb clones track */
 {
@@ -8554,6 +8611,10 @@ else if (sameWord(track, "stsMapMouse"))
 else if (sameWord(track, "stsMap"))
     {
     doStsMarker(tdb, item);
+    }
+else if (sameWord(track, "recombRate"))
+    {
+    doRecombRate(tdb);
     }
 else if (sameWord(track, "genMapDb"))
     {
