@@ -1,4 +1,4 @@
-#!/bin/csh -ef
+#!/bin/csh -efv
 
 # This script will create chains and nets on a blastz
 # cross species alignment run and load them into the
@@ -20,7 +20,7 @@ set parasolServer = kkr1u00
 mkdir chainNet.tmp
 cd chainNet.tmp
 cat >chainRun.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
 
     # Do small cluster run on kkr1u00
     # The little cluster run will probably take about 1 hours.
@@ -44,7 +44,7 @@ endCat
 
 
 cat > sortChains.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
     # Do some sorting on the little cluster job on the file server
     # This will take about 20 minutes.  This also ends up assigning
     # a unique id to each member of the chain.
@@ -56,7 +56,7 @@ cat > sortChains.csh <<endCat
 endCat
 
 cat > loadChains.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
     # Load the chains into the database as so.  This will take about
     # 45 minutes.
     # ssh $dbServer
@@ -65,12 +65,11 @@ cat > loadChains.csh <<endCat
     foreach i (*.chain)
 	set c = \$i:r
 	hgLoadChain $tDbName \${c}_${qOrt}Chain \$i
-	echo done \$c
     end
 endCat
 
 cat > makeNet.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
     # Create the nets.  You can do this while the database is loading
     # This is fastest done on the file server.  All told it takes about
     # 40 minutes.
@@ -81,7 +80,6 @@ cat > makeNet.csh <<endCat
     mkdir preNet
     cd chain
     foreach i (*.chain)
-      echo preNetting \$i
       chainPreNet \$i $tSeqDir/chrom.sizes $qSeqDir/chrom.sizes ../preNet/\$i
     end
     cd ..
@@ -91,7 +89,6 @@ cat > makeNet.csh <<endCat
     cd preNet
     foreach i (*.chain)
       set n = \$i:r.net
-      echo primary netting \$i
       chainNet \$i -minSpace=1 $tSeqDir/chrom.sizes $qSeqDir/chrom.sizes ../n1/\$n /dev/null
     end
     cd ..
@@ -100,35 +97,34 @@ cat > makeNet.csh <<endCat
 endCat
 
 cat > finishLoadNet.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
     # The final step of net creation needs the database.
     # Best to wait for the database load to finish if it
     # hasn't already.
     # ssh $dbServer
     cd $chainDir
-    netClass hNoClass.net $tDbName hg13 mouse.net -tNewR=\$HOME/mm/bed/linSpecRep -qNewR=\$HOME/oo/bed/linSpecRep
+    netClass hNoClass.net $tDbName hg13 $tOrg.net -tNewR=\$HOME/mm/bed/linSpecRep -qNewR=\$HOME/oo/bed/linSpecRep
     rm -r n1 hNoClass.net
 
     # Load the net into the database as so:
-    netFilter -minGap=10 mouse.net |  hgLoadNet $tDbName ${qOrt}Net stdin
+    netFilter -minGap=10 $tOrg.net |  hgLoadNet $tDbName ${qOrt}Net stdin
 endCat
 
 cat > makeAxtNet.csh <<endCat
-#!/bin/csh -ef
+#!/bin/csh -efv
     # Move back to the file server to create axt files corresponding
     # to the net.
     # ssh $fileServer
     cd $chainDir
     mkdir ../axtNet
-    netSplit mouse.net mouseNet
-    cd mouseNet
+    netSplit $tOrg.net ${tOrg}Net
+    cd ${tOrg}Net
     foreach i (*.net)
         set c = \$i:r
 	netToAxt \$i ../chain/\$c.chain $tSeqDir/mixedNib $qSeqDir/mixedNib ../../axtNet/\$c.axt
-	echo done ../axt/\$c.axt
     end
     cd ..
-    rm -r mouseNet
+    rm -r ${tOrg}Net
 endCat
 
     # At this point there is a blastz..../axtNet directory that should
