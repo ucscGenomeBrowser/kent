@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.15 2004/09/05 18:27:06 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.16 2004/10/18 18:10:09 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -555,9 +555,13 @@ gXenoMrnaUpd = NULL;
 gXenoEstUpd = NULL;
 gMrnaOIUpd = NULL;
 gEstOIUpd = NULL;
+gIntronEstUpd = NULL;
 gRefSeqAliUpd = NULL;
 gRefGeneUpd = NULL;
 gRefFlatUpd = NULL;
+gXenoRefSeqAliUpd = NULL;
+gXenoRefGeneUpd = NULL;
+gXenoRefFlatUpd = NULL;
 }
 
 static void deleteGenBankAligns(struct sqlConnection *conn,
