@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.130 2004/02/26 19:11:08 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.131 2004/02/28 10:48:45 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1047,7 +1047,6 @@ static void mainControlPanel(struct genePos *gp,
 /* Make control panel. */
 {
 controlPanelStart();
-// hPrintf("<TR><TD ALIGN=CENTER>");
 
 makeGenomeAssemblyControls();
 
