@@ -11,6 +11,44 @@
 #include "axt.h"
 #include "htmshell.h"
 
+/* Command line overridable variables. */
+char *clRegion = "genome";
+int bigWinSize = 500000;
+int bigStepSize = 100000;
+int smallWinSize = 125;
+double threshold = 0.8;
+int picksPer = 6;
+char *htmlOutput = NULL;
+char *avoidFile = NULL;
+int randSeed = 12345;
+boolean printWin = FALSE;
+
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "regionPicker - Code to pick regions to annotate deeply.\n"
+  "Stratifies genome based on mouse non-transcribed homology\n"
+  "and spliced EST density.\n"
+  "usage:\n"
+  "   regionPicker database axtBestDir output\n"
+  "options:\n"
+  "   -html=output.html - where to write hyperlinks for region\n"
+  "   -region=chrN - restrict to a single chromosome\n"
+  "   -region=file - File has chrN:start-end on each line\n"
+  "   -printWin - Print stats on each window\n"
+  "   -avoid=file - File of regions to avoid\n"
+  "   -randSeed=N - Seed for random number generator\n"
+  "   -bigWinSize=N -default %d\n"
+  "   -bigStepSize=N - default %d\n"
+  "   -smallWinSize=N - default %d\n"
+  "   -theshold=0.N - minimum base identity in small window. default %2.1f\n"
+  "   -picksPer=N - number of picks per strata, default %d\n",
+       bigWinSize, bigStepSize, smallWinSize, threshold, picksPer
+  );
+}
+
 struct region
 /* Part of the genome. */
     {
@@ -30,37 +68,6 @@ struct scoredWindow
     double consRatio;   /* Conserved not transcribed density. */
     };
 
-/* Command line overridable variables. */
-char *clRegion = "genome";
-int bigWinSize = 500000;
-int bigStepSize = 100000;
-int smallWinSize = 125;
-double threshold = 0.8;
-int picksPer = 5;
-char *htmlOutput = NULL;
-
-
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "regionPicker - Code to pick regions to annotate deeply.\n"
-  "Stratifies genome based on mouse non-transcribed homology\n"
-  "and spliced EST density.\n"
-  "usage:\n"
-  "   regionPicker database axtBestDir output\n"
-  "options:\n"
-  "   -html=output.html - where to write hyperlinks for region\n"
-  "   -region=chrN - restrict to a single chromosome\n"
-  "   -region=file - File has chrN:start-end on each line\n"
-  "   -bigWinSize=N -default %d\n"
-  "   -bigStepSize=N - default %d\n"
-  "   -smallWinSize=N - default %d\n"
-  "   -theshold=0.N - minimum base identity in small window. default %2.1f\n"
-  "   -picksPer=N - number of picks per strata, default %d\n",
-       bigWinSize, bigStepSize, smallWinSize, threshold, picksPer
-  );
-}
 
 /* This is the ratio of genome on which we make cuts. */
 #define strataCount 3
@@ -68,6 +75,27 @@ double genoCuts[strataCount] = {0.5, 0.8, 1.0};
 
 #define histSize 1000
 #define geneScale 5  /* Spread gene density from 0-20% instead of 0-100% */
+
+
+struct region *loadRegionFile(char *fileName)
+/* Load up list of regions from a file. */
+{
+struct region *regionList = NULL, *region;
+char *row[2];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    {
+    AllocVar(region);
+    region->name = cloneString(row[0]);
+    if (!hgParseChromRange(row[1], &region->chrom, 
+    		&region->start, &region->end))
+	errAbort("Bad range %s\n", row[1]);
+    slAddHead(&regionList, region);
+    }
+lineFileClose(&lf);
+slReverse(&regionList);
+return regionList;
+}
 
 struct stats
 /* Keep stats. */
@@ -115,7 +143,8 @@ if (chromEnd < chromStart)
      errAbort("Out of range %s:%d-%d (%s)", 
      	chrom, chromStart, chromEnd, r->name);
 
-fprintf(f, "%s\n", r->name);
+if (printWin)
+    fprintf(f, "%s\n", r->name);
 for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
     {
     int smallPassing = 0;  /* Count of small windows passing %ID threshold */
@@ -182,8 +211,12 @@ for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
      * add it to two-dimensional histogram */
     if (geneIx >= 0 && consIx >= 0)
         {
-	fprintf(f, "    %s:%d-%d ", chrom, bigStart+1, bigEnd);
-	fprintf(f, "gene %4.1f%% consNotTx %4.1f%%\n", 100*geneRatio, 100*consRatio);
+	if (printWin)
+	    {
+	    fprintf(f, "    %s:%d-%d ", chrom, bigStart+1, bigEnd);
+	    fprintf(f, "gene %4.1f%% consNotTx %4.1f%%\n", 
+	    	100*geneRatio, 100*consRatio);
+	    }
 	stats->totalBothCount += bigWeight;
 	stats->bothCounts[consIx][geneIx] += bigWeight;
 
@@ -373,6 +406,62 @@ for (i=0; i<cutCount; ++i)
 return ix;
 }
 
+boolean hitsRegions(char *chrom, int start, int end, struct region *regionList)
+/* Return TRUE if position intersects any region on list. */
+{
+struct region *r;
+for (r = regionList; r != NULL; r = r->next)
+    {
+    if (sameString(chrom, r->chrom) 
+    	&& rangeIntersection(start, end, r->start, r->end) > 0)
+	return TRUE;
+    }
+return FALSE;
+}
+
+
+struct chromCounts
+/* Help count up things in a chromosome. */
+    {
+    struct chromCounts *next;
+    char *name;	/* Chromosome name - allocated in hash. */
+    int chromSize;	/* Size of chromosome */
+    int count;		/* Count for this chromosome. */
+    };
+
+void countChromWindows(struct scoredWindow *winList, FILE *f)
+/* Go through winList and count up how many hit each chromosome. */
+{
+struct chromCounts *ccList = NULL, *cc;
+struct hash *hash = newHash(8);
+struct scoredWindow *win;
+
+for (win = winList; win != NULL; win = win->next)
+    {
+    char *chrom = win->chrom;
+    cc = hashFindVal(hash, chrom);
+    if (cc == NULL)
+        {
+	AllocVar(cc);
+	slAddHead(&ccList, cc);
+	hashAddSaveName(hash, chrom, cc, &cc->name);
+	cc->chromSize = hChromSize(chrom);
+	}
+    cc->count += 1;
+    }
+
+fprintf(f, "Finished window count per chromosome:\n");
+for (cc = ccList; cc != NULL; cc = cc->next)
+    {
+    fprintf(f, "%s\t%d\t%5.2f%%\n", cc->name, cc->count,
+    	100.0 * cc->count * bigStepSize / cc->chromSize);
+    }
+fprintf(f, "\n");
+
+slFreeList(&ccList);
+hashFree(&hash);
+}
+
 void outputPicks(struct scoredWindow *winList,  char *database,
 	struct stats *stats, FILE *f)
 /* Output picked regions. */
@@ -382,6 +471,11 @@ double geneCuts[strataCount], consCuts[strataCount];
 struct scoredWindow *win, *next;
 int geneIx, consIx, pickIx;
 FILE *html = NULL;
+struct region *avoidList = NULL, *avoid;
+
+/* Get list of regions to avoid */
+if (avoidFile != NULL)
+    avoidList = loadRegionFile(avoidFile);
 
 if (htmlOutput != NULL)
     {
@@ -395,10 +489,12 @@ calcCuts(stats->geneCounts, histSize,
 	stats->totalGeneCount, 1.0/geneScale, geneCuts, strataCount);
 uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
 
+
 /* Move winList to strata. */
 zeroBytes(strata, sizeof(strata));
 for (win = winList; win != NULL; win = next)
     {
+    /* Calculate appropriate strata and move. */
     next = win->next;
     consIx = cutIx(consCuts, strataCount, win->consRatio);
     geneIx = cutIx(geneCuts, strataCount, win->geneRatio);
@@ -406,6 +502,7 @@ for (win = winList; win != NULL; win = next)
     }
 
 /* Shuffle strata and output first picks in each. */
+srand(randSeed);
 for (consIx=0; consIx<strataCount; ++consIx)
     {
     for (geneIx=0; geneIx<strataCount; ++geneIx)
@@ -424,25 +521,35 @@ for (consIx=0; consIx<strataCount; ++consIx)
 		cs, round(100*genoCuts[consIx]),
 		gs, round(100*genoCuts[geneIx]));
 	    }
-	shuffleList(&strata[consIx][geneIx]);
-	win = strata[consIx][geneIx];
-	for (pickIx=0; pickIx < picksPer && win != NULL; 
-		++pickIx, win = win->next)
+	shuffleList(&strata[consIx][geneIx], 20);
+	pickIx = 0;
+	for (win = strata[consIx][geneIx]; win != NULL; win = win->next)
 	    {
 	    int end = win->start + bigWinSize;
-	    fprintf(f, "%s:%d-%d\t", win->chrom, win->start+1, end);
-	    fprintf(f, "consNonTx %4.1f%%, gene %4.1f%%\n",
-		    100*win->consRatio, 100*win->geneRatio);
-	    if (html)
+	    if (!hitsRegions(win->chrom, win->start, end, avoidList))
 		{
-		fprintf(html, "<A HREF=\"http://genome.ucsc.edu/cgi-bin/");
-		fprintf(html, "hgTracks?db=%s&position=%s:%d-%d\">",
-			database, win->chrom, win->start+1, end);
-		fprintf(html, "%s:%d-%d</A>", win->chrom, win->start+1, end);
-		fprintf(html, "\tconsNonTx %4.1f%%, gene %4.1f%%<BR>\n",
+		AllocVar(avoid);
+		avoid->chrom = cloneString(win->chrom);
+		avoid->start = win->start;
+		avoid->end = end;
+		slAddHead(&avoidList, avoid);
+		fprintf(f, "%s:%d-%d\t", win->chrom, win->start+1, end);
+		fprintf(f, "consNonTx %4.1f%%, gene %4.1f%%\n",
 			100*win->consRatio, 100*win->geneRatio);
+		if (html)
+		    {
+		    fprintf(html, "<A HREF=\"http://genome.ucsc.edu/cgi-bin/");
+		    fprintf(html, "hgTracks?db=%s&position=%s:%d-%d\">",
+			    database, win->chrom, win->start+1, end);
+		    fprintf(html, "%s:%d-%d</A>", win->chrom, win->start+1, end);
+		    fprintf(html, "\tconsNonTx %4.1f%%, gene %4.1f%%<BR>\n",
+			    100*win->consRatio, 100*win->geneRatio);
+		    }
+		if (++pickIx >= picksPer)
+		    break;
 		}
 	    }
+	fprintf(f, "\n");
 	}
     }
 if (html)
@@ -467,7 +574,6 @@ hSetDb(database);
 
 /* Figure out which regions to process from command line.
  * By default will do whole genome. */
-clRegion = optionVal("region", clRegion);
 if (sameWord(clRegion, "genome"))
     {
     allChroms = hAllChromNames();
@@ -483,6 +589,7 @@ if (sameWord(clRegion, "genome"))
 	    slAddHead(&regionList, region);
 	    }
 	}
+    slReverse(&regionList);
     }
 else if (startsWith("chr", clRegion) && strchr(clRegion, ':') == NULL)
     {
@@ -495,18 +602,8 @@ else if (startsWith("chr", clRegion) && strchr(clRegion, ':') == NULL)
     }
 else 
     {
-    char *row[2];
-    struct lineFile *lf = lineFileOpen(clRegion, TRUE);
-    while (lineFileRow(lf, row))
-	{
-	AllocVar(region);
-	region->name = cloneString(row[0]);
-	if (!hgParseChromRange(row[1], &region->chrom, &region->start, &region->end))
-	    errAbort("Bad range %s\n", row[1]);
-	slAddHead(&regionList, region);
-	}
+    regionList = loadRegionFile(clRegion);
     }
-slReverse(&regionList);
 
 
 /* Gather statistics one region at a time and then
@@ -520,8 +617,10 @@ for (region = regionList; region != NULL; region = region->next)
      }
 fprintf(f, "\n");
 reportStats(stats, f);
+fprintf(f, "\n");
 
 uglyf("Got %d windows with no gaps\n", slCount(winList));
+countChromWindows(winList, f);
 outputPicks(winList, database, stats, f);
 }
 
@@ -530,12 +629,16 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+clRegion = optionVal("region", clRegion);
 bigWinSize = optionInt("bigWinSize", bigWinSize);
 bigStepSize = optionInt("bigStepSize", bigStepSize);
 smallWinSize = optionInt("smallWinSize", smallWinSize);
 threshold = optionFloat("threshold", threshold);
 picksPer = optionInt("picksPer", picksPer);
 htmlOutput = optionVal("html", htmlOutput);
+avoidFile = optionVal("avoid", avoidFile);
+randSeed = optionInt("randSeed", randSeed);
+printWin = optionExists("printWin");
 dnaUtilOpen();
 if (argc != 4)
     usage();
