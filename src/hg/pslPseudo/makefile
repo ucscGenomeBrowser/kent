@@ -3,31 +3,57 @@ include ../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-OPTIONS = -sizeMatters -minAli=0.98 -nearTop=0.005 
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
+DEBUGOPTIONS = -skipExciseRepeats -minAli=0.98 -nearTop=0.005 
+OPTIONS = -minAli=0.98 -nearTop=0.005 -verbose=3
+#MARKDEBUG = /cse/grads/markd/compbio/dbgmalloc/debug-malloc.o
+MARKDEBUG =
 DB = hg16
 DBDIR = /cluster/data/$(DB)
 BED = $(DBDIR)/bed
+PSEUDO = $(DBDIR)/bed/pseudo
 BUILD=gs.17/build34
-TESTCMD = $(DBDIR)/chrom.sizes /cluster/bluearc/hg/${BUILD}/rmsk $(BED)/pseudo/mouseSyn.bed $(BED)/simpleRepeat/simpleRepeat.bed $(BED)/pseudo/all_mrna.psl 
-GENES = $(BED)/pseudo/refGene.tab $(BED)/pseudo/mgcGene.tab
+VALCMD = chr13.sizes ${PSEUDO}/rmsk.bed $(PSEUDO)/chr13mouseSyn.bed $(PSEUDO)/chr13simple.bed $(PSEUDO)/chr13_mrna.psl 
+TESTCMD = $(DBDIR)/chrom.sizes ${PSEUDO}/rmsk.bed $(PSEUDO)/mouseSyn.bed $(BED)/simpleRepeat/simpleRepeat.bed $(PSEUDO)/all_mrna.psl 
+#TESTCMD = $(DBDIR)/chrom.sizes mtRmsk mtSyn.bed mtSimple.bed input/test48.psl
+GENES = $(PSEUDO)/refGene.tab $(PSEUDO)/mgcGene.tab $(PSEUDO)/sortedKnownGene.tab
+
 
 O = pslPseudo.o 
 
 pslPseudo: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MYLIBS) $L
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
 	#strip $(HOME)/bin/$(MACHTYPE)/pslPseudo
 
 lib:
-	cd ../../lib; make
+	cd ../../lib; make ; cd ../hg/lib ; make
 
-test: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test11 test13 test14 test15 test16 test17 test18 test19 testRp131 test26
+test: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test13 test14 test15 test16 test17 test18 test19 testRp131 test26 test38
 %:	input/%.psl
 	${MKDIR} output
-	pslPseudo $(OPTIONS) $(DB) input/$@.psl $(TESTCMD)  output/$@g.psl output/$@p.psl output/$@l.txt /cluster/data/$(DB)/nib $(GENES)  
+	MALLOC_LOG=malloc.log MALLOC_LOG_OPTS=SAD pslPseudo $(OPTIONS) $(DB) input/$@.psl $(TESTCMD)  output/$@g.psl output/$@p.psl output/$@l.txt output/$@.axt S1.lst mrnaHg16.fa $(GENES) > $@.log 2> $@.err
+	diff expected/$@g.psl output/$@g.psl 
+	diff expected/$@p.psl output/$@p.psl | awk '{print $$15":"$$17"-"$$18}'
+	diff expected/$@p.psl output/$@p.psl
+#	rm output/$@g.psl output/$@p.psl
+test1:	input/test1.psl
+	${MKDIR} output
+	pslPseudo $(OPTIONS) $(DB) input/$@.psl $(TESTCMD)  output/$@g.psl output/$@p.psl output/$@l.txt output/$@.axt S1.lst AK45.fa $(GENES)  
 	diff expected/$@g.psl output/$@g.psl 
 	diff expected/$@p.psl output/$@p.psl
 #	rm output/$@g.psl output/$@p.psl
+#test48:	input/test1.psl
+#	${MKDIR} output
+#	pslPseudo $(OPTIONS) $(DB) input/$@.psl $(TESTCMD)  output/$@g.psl output/$@p.psl output/$@l.txt output/$@.axt S1.lst AF387618.fa $(GENES)  
+#	diff expected/$@g.psl output/$@g.psl 
+#	diff expected/$@p.psl output/$@p.psl
+##	rm output/$@g.psl output/$@p.psl
+#jtest59:	input/test59.psl
+#j	${MKDIR} output
+#j	MALLOC_LOG=malloc.log MALLOC_LOG_OPTS=SAD  pslPseudo $(OPTIONS) $(DB) input/$@.psl $(VALCMD)  output/$@g.psl output/$@p.psl output/$@l.txt output/$@.axt S1.lst mrnaHg16.fa $(GENES) 2> valgrind.out > test59.log
+#valgrind -v --leak-resolution=high --leak-check=yes --num-callers=25 --show-reachable=yes pslPseudo $(OPTIONS) $(DB) input/$@.psl $(VALCMD)  output/$@g.psl output/$@p.psl output/$@l.txt output/$@.axt S1.lst mrnaHg16.fa $(GENES) 2> valgrind.out
+	diff expected/$@g.psl output/$@g.psl 
+	diff expected/$@p.psl output/$@p.psl
 
-clean::
+clean:
 	rm -fr ${O} output
