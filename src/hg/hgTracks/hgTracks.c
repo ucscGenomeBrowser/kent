@@ -1044,6 +1044,8 @@ char o3[128];
 double hFactor;
 double minRange, maxRange;
 
+char *prevName = NULL;
+
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
 
@@ -1076,7 +1078,9 @@ hFactor = (double)heightPer/1000.0;
 //errAbort( "(%s)", lf->name );
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-    
+
+
+
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 
@@ -1146,7 +1150,18 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
 
 	    }
-    if (isFull) y += lineHeight; /*not true: CURRENTLY NO FULL MODE*/
+
+        /*only increment height when name is different from previous one.
+         *This assumes that the entries are sorted by name as they would
+         *be if loaded by hgLoadSample*/
+        if( isFull )
+        {
+            if( lf->next != NULL && !sameString( lf->name, lf->next->name )) 
+                y += lineHeight; 
+        }
+
+
+
     }
 }
 
