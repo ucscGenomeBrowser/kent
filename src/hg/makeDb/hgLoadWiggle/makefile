@@ -9,7 +9,7 @@ O = hgLoadWiggle.o
 A = hgLoadWiggle
 
 hgLoadWiggle: $O ${MYLIBS}
-	gcc -ggdb -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
+	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/${A}
 
 test:
