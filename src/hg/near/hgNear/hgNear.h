@@ -25,6 +25,10 @@ struct genePos
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
+void genePosFillFrom4(struct genePos *gp, char **row);
+/* Fill in genePos from row containing ascii version of
+ * name/chrom/start/end. */
+
 struct searchResult
 /* A result from simple search - includes short and long names as well
  * as genePos. */
@@ -379,6 +383,9 @@ boolean advSearchColAnySet(struct column *col);
 /* ---- Get config options ---- */
 boolean showOnlyCannonical();
 /* Return TRUE if we only show cannonical splicing varients. */
+
+struct hash *cannonicalHash();
+/* Get cannonicalHash if necessary, otherwise return NULL. */
 
 boolean expRatioUseBlue();
 /* Return TRUE if should use blue instead of red

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.11 2003/08/29 21:33:37 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.12 2003/08/29 22:14:28 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -198,10 +198,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(gp);
-    gp->name = cloneString(row[0]);
-    gp->chrom = cloneString(row[1]);
-    gp->start = sqlUnsigned(row[2]);
-    gp->end = sqlUnsigned(row[3]);
+    genePosFillFrom4(gp, row);
     slAddHead(&gpList, gp);
     }
 sqlFreeResult(&sr);

@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.5 2003/08/26 18:49:42 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.6 2003/08/29 22:14:28 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -53,6 +53,50 @@ struct columnSearchResults
     struct searchResult *results; /* List of results. */
     };
 
+static void transformToCannonical(struct searchResult *list,
+	struct sqlConnection *conn)
+/* Transform search results to cannonical versions.  */
+{
+char buf[64];
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct searchResult *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    safef(query, sizeof(query),
+    	"select knownCannonical.transcript,knownCannonical.chrom,"
+	          "knownCannonical.chromStart,knownCannonical.chromEnd "
+	"from knownIsoforms,knownCannonical "
+	"where knownIsoforms.transcript = '%s' "
+	"and knownIsoforms.clusterId = knownCannonical.clusterId"
+	, el->gp.name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	genePosFillFrom4(&el->gp, row);
+    sqlFreeResult(&sr);
+    }
+}
+
+static struct searchResult *removeDupes(struct searchResult *list)
+/* Remove duplicates from list.  Return weeded list. */
+{
+struct searchResult *el, *next, *newList = NULL;
+struct hash *dupHash = newHash(0);
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (!hashLookup(dupHash, el->gp.name))
+        {
+	hashAdd(dupHash, el->gp.name, NULL);
+	slAddHead(&newList, el);
+	}
+    }
+hashFree(&dupHash);
+slReverse(&newList);
+return newList;
+}
+
 static void searchAllColumns(struct sqlConnection *conn, 
 	struct column *colList, char *search)
 /* Call search on each column. */
@@ -68,6 +112,11 @@ for (col = colList; col != NULL; col = col->next)
     if (col->simpleSearch)
 	 {
          srList = col->simpleSearch(col, conn, search);
+	 if (showOnlyCannonical() && srList != NULL)
+	     {
+	     transformToCannonical(srList, conn);
+	     srList = removeDupes(srList);
+	     }
 	 if (srList != NULL)
 	     {
 	     srOne = srList;

@@ -15,7 +15,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.48 2003/08/29 21:33:37 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.49 2003/08/29 22:14:28 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -42,6 +42,16 @@ int genePosCmpName(const void *va, const void *vb)
 const struct genePos *a = *((struct genePos **)va);
 const struct genePos *b = *((struct genePos **)vb);
 return strcmp(a->name, b->name);
+}
+
+void genePosFillFrom4(struct genePos *gp, char **row)
+/* Fill in genePos from row containing ascii version of
+ * name/chrom/start/end. */
+{
+gp->name = cloneString(row[0]);
+gp->chrom = cloneString(row[1]);
+gp->start = sqlUnsigned(row[2]);
+gp->end = sqlUnsigned(row[3]);
 }
 
 boolean wildMatchAny(char *word, struct slName *wildList)
@@ -819,12 +829,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (goodHash == NULL || hashLookup(goodHash, row[0]))
 	{
 	slAddHead(&gpList, gp);
+	if (curGp->start == gp->start && curGp->end == gp->end 
+	    && sameString(curGp->name, gp->name) )
+	    chosenIx = ix;
+	++ix;
+	++geneCount;
 	}
-    if (curGp->start == gp->start && curGp->end == gp->end 
-    	&& sameString(curGp->name, gp->name) )
-        chosenIx = ix;
-    ++ix;
-    ++geneCount;
     }
 sqlFreeResult(&sr);
 slReverse(&gpList);
@@ -960,13 +970,19 @@ else
     }
 }
 
+struct hash *cannonicalHash(struct sqlConnection *conn)
+/* Get cannonicalHash if necessary, otherwise return NULL. */
+{
+if (showOnlyCannonical())
+    return knownCannonicalHash(conn);
+else
+    return NULL;
+}
 
 struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
-struct hash *goodHash = NULL;
-if (showOnlyCannonical())
-    goodHash = knownCannonicalHash(conn);
+struct hash *goodHash = cannonicalHash(conn);
 if (sameString(groupOn, "expression"))
     return getExpressionNeighbors(conn, goodHash, displayCount);
 else if (sameString(groupOn, "homology"))

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.16 2003/08/29 21:33:37 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.17 2003/08/29 22:14:28 kent Exp $";
 
 static struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -350,9 +350,7 @@ if (col == NULL)
 hPrintf("<TT><PRE>");
 if (gotAdvSearch())
     {
-    struct hash *goodHash = NULL;
-    if (showOnlyCannonical())
-	goodHash = knownCannonicalHash(conn);
+    struct hash *goodHash = cannonicalHash(conn);
     list = getSearchNeighbors(colList, conn, goodHash, BIGNUM);
     }
 else
