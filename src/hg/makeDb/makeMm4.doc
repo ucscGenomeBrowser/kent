@@ -4707,8 +4707,6 @@ o Download data files from Ensembl and create ensGeneXref and ensTranscript tabl
      hgsql mm4 -e 'load data local infile "transcript.txt.table" into table mm4.ensTranscript;'
 
 
-!!! Need to add an index on id of the des table of superfam040321.
-
 
 o Download Superfamily data files and build the Superfamily DB
 
@@ -4719,34 +4717,20 @@ o Download Superfamily data files and build the Superfamily DB
 
 	ass_28-Mar-2004.tab.gz
 	supfam_21-Mar-2004.sql.gz
+
+     hgsql mm4 -e "create database superfam040321"
+     hgsql superfam040321 < supfam_21-Mar-2004.sql
+
+  Make sure to add an index on id of the des table of superfam040321.
 		
-   	hgsql superfam040321 < ~/src/hg/lib/sfAssign.sql
-   	hgsql superfam040321 -e 'load data local infile "ass_28-Mar-2004.tab" into table superfam040321.sfAssign;'
+     hgsql superfam040321 < ~/src/hg/lib/sfAssign.sql
+     hgsql superfam040321 -e 'load data local infile "ass_28-Mar-2004.tab" into table superfam040321.sfAssign;'
 
 o Build or rebuild Superfamily track and create sf tables needed for PB 
 
-  If mm4.superfamily already exists
-
-	alter table mm4.superfamily rename as kgMm4Sav3.superfamily;
-
-     hgSuperfam mm4 superfam040321 > sf.log
-   
-  It is normal that many proteins does not have corresponding Superfamily entries.
-
-      hgLoadBed mm4 superfamily sf.tab -tab
-
-   If mm4.sfDescription exists,
-
-   	alter table mm4.sfDescription rename as kgMm4Sav3.sfDescription;
-
-   hgsql mm4 < ~/src/hg/lib/sfDescription.sql
-
-   hgsql mm4 -e \
-	"LOAD DATA local INFILE 'sfDesc.tab'  into table mm4.sfDescription;"
-
    hgsql mm4 < ~/src/hg/lib/sfAssign.sql
 
-   cd /cluster/store1/superFamily/040331
+   cd /cluster/store1/superFamily/040321
    
    hgsql mm4 -e 'load data local infile "ass_28-Mar-2004.tab" into table mm4.sfAssign;'
 
@@ -4754,11 +4738,31 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
 
    	alter table mm4.sfDes rename as kgMm4Sav3.sfDes;
 
-   hgsql superfam040321 -e "select * from des" >des.tab
+   hgsql superfam040321 -e "select * from des" >sfDes.tab
 
    hgsql mm4 < ~/src/hg/lib/sfDes.sql
 
-   hgsql mm4 -e 'load data local infile "des.tab" into table mm4.sfDes;'
+   hgsql mm4 -e 'load data local infile "sfDes.tab" into table mm4.sfDes ignore 1 lines;'
+
+  If mm4.superfamily already exists
+
+	alter table mm4.superfamily rename as kgMm4Sav3.superfamily;
+
+     hgSuperfam mm4 > sf.log
+   
+   It is normal that many proteins does not have corresponding Superfamily entries.
+   
+   If mm4.sfDescription exists,
+
+   	alter table mm4.sfDescription rename as kgMm4Sav3.sfDescription;
+
+   hgsql mm4 < ~/src/hg/lib/sfDescription.sql
+   hgsql mm4 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table mm4.sfDescription;'
+
+  Finally, load the superfamily table.
+
+      hgLoadBed mm4 superfamily superfamily.tab -tab
+
 
 o Create pbStamp table for PB
    
