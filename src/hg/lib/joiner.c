@@ -1095,7 +1095,7 @@ for (childRef = js->children; childRef != NULL; childRef = childRef->next)
     }
 }
 
-static struct slRef *joinerSetInheritanceChain(struct joinerSet *js)
+struct slRef *joinerSetInheritanceChain(struct joinerSet *js)
 /* Return list of self, children, and parents (but not siblings).
  * slFreeList result when done. */
 {

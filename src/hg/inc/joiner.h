@@ -159,6 +159,10 @@ struct joinerPair *joinerRelate(struct joiner *joiner, char *database,
 /* Get list of all ways to link table in given database to other tables,
  * possibly in other databases. */
 
+struct slRef *joinerSetInheritanceChain(struct joinerSet *js);
+/* Return list of self, children, and parents (but not siblings).
+ * slFreeList result when done. */
+
 boolean joinerDtfAllSameTable(struct joinerDtf *fieldList);
 /* Return TRUE if all joinerPairs refer to same table. */
 
