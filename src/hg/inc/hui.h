@@ -153,11 +153,10 @@ void smroeDropDown(char *var, char *curVal);
 /****** Some stuff for snpType related controls *******/
 
 /* SingleNP, indel, segnemtal */
-#define snpTypeCount 2
-
 enum snpTypeEnum {
-    snpTypeInclude = 0,
-    snpTypeExclude = 1,
+    snpTypeInclude,
+    snpTypeExclude,
+    snpTypeCount
 };
 
 enum snpTypeEnum snpTypeStringToEnum(char *string);
@@ -193,14 +192,13 @@ char *snpTypeDataEnumToString(enum snpTypeEnum x);
 /****** Some stuff for snpSource related controls *******/
 
 /* Random, Bac, Mixed, Other, Affy10K, Affy120K */
-#define snpSourceCount 5
-
 enum snpSourceEnum {
-    snpSourceRed      = 0,
-    snpSourceGreen    = 1,
-    snpSourceBlue     = 2,
-    snpSourceBlack    = 3,
-    snpSourceExclude  = 4,
+    snpSourceRed,
+    snpSourceGreen,
+    snpSourceBlue,
+    snpSourceBlack,
+    snpSourceExclude,
+    snpSourceCount
 };
 
 enum snpSourceEnum snpSourceStringToEnum(char *string);
