@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.22 2004/03/19 20:06:41 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.23 2004/05/06 23:08:46 kent Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -546,9 +546,9 @@ if (conn != NULL)
 		, keyField->table, keyField->field
 		, jf->lineIx, joiner->fileName, miss);
 	    }
+	if (jf->unique || jf->full)
+	    checkUniqueAndFull(joiner, js, db, jf, keyField, khiList);
 	}
-    if (jf->unique || jf->full)
-	checkUniqueAndFull(joiner, js, db, jf, keyField, khiList);
     freez(&miss);
     slFreeList(&tableList);
     sqlDisconnect(&conn);
