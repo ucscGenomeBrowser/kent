@@ -46,23 +46,28 @@ Then load the .out files into the database with:
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (done)
 
-o - Create packed chromosome sequence files and put in database
+Create packed chromosome sequence files 
+     ssh kkstore
+     cd ~/oo
+     tcsh jkStuff/makeNib.sh
+
+Load chromosome sequence info into database
+     ssh hgwdev
      mysql -A -u hgcat -pbigsecret hg10  < ~/src/hg/lib/chromInfo.sql
-     cd /cluster/store1/gs.11/build28
-     hgNibSeq hg10 /cluster/store1/gs.11/build28/nib ?/chr*.fa ??/chr*.fa
+     cd ~/oo
+     hgNibSeq -preMadeNib hg10 /cluster/store1/gs.11/build28/nib ?/chr*.fa ??/chr*.fa
 
-
-o - Store o+o info in database.
+Store o+o info in database.
      cd /cluster/store1/gs.11/build28
      jkStuff/liftGl.sh contig.gl
      hgGoldGapGl hg10 /cluster/store1/gs.11 build28 
      cd /cluster/store1/gs.11
      hgClonePos hg10 build28 ffa/sequence.inf /cluster/store1/gs.11
-   (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
+(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      # hgCtgPos hg10 build28  - NCBI has no physical map.
 
-o - Make and load GC percent table
-     - login to hgwdev
+Make and load GC percent table
+     ssh hgwdev
      cd /cluster/store1/gs.11/build28/bed
      mkdir gcPercent
      cd gcPercent
@@ -414,7 +419,6 @@ Load into database as so:
        cd /cluster/store1/mrna.127
        hgLoadRna add hg10 /cluster/store1/mrna.127/xenoRna.fa xenoRna.ra
 
-
 Similarly do xenoEst aligments:
        ssh kkstore
        cd /cluster/store1/gs.8/build28/oo/bed
@@ -437,6 +441,16 @@ Sort xenoEst alignments:
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoEst.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
+
+Load into database as so:
+       ssh hgwdev
+       cd ~/oo/bed/xenoEst
+       hgLoadPsl hg10 xenoEst.psl -tNameIx
+       cd /cluster/store1/mrna.127
+       foreach i (xenoEst*.fa)
+	   echo processing $i
+	   hgLoadRna add hg10 /cluster/store1/mrna.127/$i $i:r.ra
+       end
 
 
 PRODUCING FISH ALIGNMENTS (todo)
