@@ -56,6 +56,8 @@ switch (type)
 	return "pptVarDec";
     case pptNameUse:
 	return "pptNameUse";
+    case pptVarUse:
+	return "pptVarUse";
     case pptConstUse:
 	return "pptConstUse";
     case pptToDec:

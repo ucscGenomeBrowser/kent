@@ -162,7 +162,6 @@ switch (pp->type)
 	break;
     case pptVarInit:
 	{
-	uglyf("evalType pptVarInit\n");
 	struct pfParse *type = pp->children;
 	pp->ct = type->ct;
 	break;
@@ -170,22 +169,19 @@ switch (pp->type)
     case pptOf:
         {
 	struct pfParse *type = pp->children;
-	uglyf("evalType pptOf\n");
-#ifdef SOON
 	pp->ct = type->ct;
 	while (type != NULL)
 	     {
 	     struct pfParse *nextType = type->next;
 	     if (nextType != NULL)
 	          type->ct->next = nextType->ct;
+	     type = nextType;
 	     }
-#endif /* SOON */
 	break;
 	}
     case pptNameUse:
         {
 	struct pfBaseType *bt = pfScopeFindType(pp->scope, pp->name);
-	uglyf("nameUse pptOf\n");
 	if (bt != NULL)
 	    {
 	    struct pfCollectedType *ct;
@@ -310,6 +306,7 @@ slReverse(&program->children);
 initVars(program);
 evalTypes(program);
 addDeclaredVarsToScopes(program);
+// bindVars(program);
 
 pfParseDump(program, 0, stdout);
 
