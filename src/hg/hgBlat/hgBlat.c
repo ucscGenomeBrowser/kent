@@ -24,7 +24,7 @@ struct serverTable
    };
 
 char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000"};
-char *typeList[] = {"auto", "DNA", "protein", "tx forward", "tx both"};
+char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 
 struct serverTable serverTable[] =  {
 {"hg5", "Oct. 7, 2000", TRUE, "kks00.cse.ucsc.edu", "17776", "/projects/cc/hg/oo.23/nib"},
@@ -128,12 +128,12 @@ if (sameWord(type, "DNA"))
     seq = faSeqFromMemText(seqLetters, TRUE);
     isTx = FALSE;
     }
-else if (sameWord(type, "tx forward") || sameWord(type, "tx both"))
+else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     {
     seq = faSeqFromMemText(seqLetters, TRUE);
     isTx = TRUE;
     isTxTx = TRUE;
-    txTxBoth = sameWord(type, "tx both");
+    txTxBoth = sameWord(type, "translated DNA");
     }
 else if (sameWord(type, "protein"))
     {
@@ -219,26 +219,29 @@ printf("%s",
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=POST>\n"
 "<H1 ALIGN=CENTER>BLAT Search Human Genome</H1>\n"
 "<P>\n"
-"<TABLE BORDER=0 WIDTH=\"94%\">\n"
+"<TABLE BORDER=0 WIDTH=\"96%\">\n"
 "<TR>\n"
-"<TD WIDTH=\"74%\">Please paste in a sequence to see where it is located in the ");
+"<TD WIDTH=\"50%\">Please paste in a query sequence to see where it is located in the ");
 printf("%s", "UCSC assembly\n"
 "of the human genome.</TD>\n");
-
-printf("%s", "<TD WIDTH=\"15%\"<CENTER>\n");
+printf("%s", "<TD WIDTH=\"4%\"</TD>\n");
+printf("%s", "<TD WIDTH=\"16%\"<CENTER>\n");
+printf("Freeze:<BR>");
 cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
+printf("%s", "</TD><TD WIDTH=\"20%\"<CENTER>\n");
+printf("Query type<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
 printf("%s", "</TD>\n");
 
 printf("%s",
-"<TD WIDTH=\"11%\">\n"
+"<TD WIDTH=\"10%\">\n"
 "<CENTER>\n"
 "<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
 "</CENTER>\n"
 "</TD>\n"
 "</TR>\n"
 "</TABLE>\n"
-"<TEXTAREA NAME=userSeq ROWS=14 COLS=72></TEXTAREA>\n");
+"<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
 
 
 cgiMakeHiddenVar("db", serve->db);
