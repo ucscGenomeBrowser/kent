@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.132 2004/04/06 07:04:33 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.133 2004/04/14 22:47:07 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2152,6 +2152,8 @@ static boolean doQuery(struct hgFindSpec *hfs, char *xrefTerm, char *term,
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
+struct slName *tableList = hSplitTableNames(hfs->searchTable);
+struct slName *tPtr = NULL;
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 struct sqlConnection *conn = hAllocConn();
@@ -2172,57 +2174,63 @@ if (hgp->tableList != NULL &&
     sameString(hgp->tableList->name, hfs->searchTable))
     table = hgp->tableList;
 
-safef(buf, sizeof(buf), hfs->query, hfs->searchTable, term);
-sr = sqlGetResult(conn, buf);
-while ((row = sqlNextRow(sr)) != NULL)
+for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     {
-    if(table == NULL)
+    safef(buf, sizeof(buf), hfs->query, tPtr->name, term);
+    sr = sqlGetResult(conn, buf);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	AllocVar(table);
-	if (isNotEmpty(hfs->searchDescription))
-	    safef(buf, sizeof(buf), "%s", hfs->searchDescription);
+	if(table == NULL)
+	    {
+	    AllocVar(table);
+	    if (isNotEmpty(hfs->searchDescription))
+		safef(buf, sizeof(buf), "%s", hfs->searchDescription);
+	    else
+		safef(buf, sizeof(buf), "%s", hfs->searchTable);
+	    table->description = cloneString(buf);
+	    table->name = cloneString(hfs->searchTable);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	found = TRUE;
+	AllocVar(pos);
+	pos->chrom = cloneString(row[0]);
+	pos->chromStart = atoi(row[1]);
+	pos->chromEnd = atoi(row[2]);
+	if (isNotEmpty(xrefTerm))
+	    safef(buf, sizeof(buf), "%s", xrefTerm);
 	else
-	    safef(buf, sizeof(buf), "%s", hfs->searchTable);
-	table->description = cloneString(buf);
-	table->name = cloneString(hfs->searchTable);
-	slAddHead(&hgp->tableList, table);
+	    safef(buf, sizeof(buf), "%s%s",
+		  termPrefix ? termPrefix : "", row[3]);
+	pos->name = cloneString(buf);
+	if (isNotEmpty(xrefTerm))
+	    {
+	    safef(buf, sizeof(buf), "(%s%s)",
+		  termPrefix ? termPrefix : "", row[3]);
+	    pos->description = cloneString(buf);
+	    }
+	if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
+	    {
+	    pos->chromEnd   = pos->chromStart + relEnd;
+	    pos->chromStart = pos->chromStart + relStart;
+	    }
+	else if (padding > 0)
+	    {
+	    int chromSize = hChromSize(pos->chrom);
+	    pos->chromStart -= padding;
+	    pos->chromEnd   += padding;
+	    if (pos->chromStart < 0)
+		pos->chromStart = 0;
+	    if (pos->chromEnd > chromSize)
+		pos->chromEnd = chromSize;
+	    }
+	slAddHead(&table->posList, pos);
 	}
-    found = TRUE;
-    AllocVar(pos);
-    pos->chrom = cloneString(row[0]);
-    pos->chromStart = atoi(row[1]);
-    pos->chromEnd = atoi(row[2]);
-    if (isNotEmpty(xrefTerm))
-	safef(buf, sizeof(buf), "%s", xrefTerm);
-    else
-	safef(buf, sizeof(buf), "%s%s", termPrefix ? termPrefix : "", row[3]);
-    pos->name = cloneString(buf);
-    if (isNotEmpty(xrefTerm))
-	{
-	safef(buf, sizeof(buf), "(%s%s)", termPrefix ? termPrefix : "", row[3]);
-	pos->description = cloneString(buf);
-	}
-    if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
-	{
-	pos->chromEnd   = pos->chromStart + relEnd;
-	pos->chromStart = pos->chromStart + relStart;
-	}
-    else if (padding > 0)
-	{
-	int chromSize = hChromSize(pos->chrom);
-	pos->chromStart -= padding;
-	pos->chromEnd   += padding;
-	if (pos->chromStart < 0)
-	    pos->chromStart = 0;
-	if (pos->chromEnd > chromSize)
-	    pos->chromEnd = chromSize;
-	}
-    slAddHead(&table->posList, pos);
     }
 if (table != NULL)
     slReverse(&table->posList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+slFreeList(&tableList);
 return(found);
 }
 
@@ -2268,11 +2276,34 @@ return(found);
 }
 
 
+/* Support these formats for range specifiers.  Note the ()'s around chrom,
+ * start and end portions for substring retrieval: */
+char *canonicalRangeExp = 
+		     "^([[:alnum:]._\\-]+)"
+		     "[[:space:]]*:[[:space:]]*"
+		     "([0-9,]+)"
+		     "[[:space:]]*-[[:space:]]*"
+		     "([0-9,]+)$";
+char *bedRangeExp = 
+		     "^([[:alnum:]._\\-]+)"
+		     "[[:space:]]+"
+		     "([0-9,]+)"
+		     "[[:space:]]+"
+		     "([0-9,]+)$";
+char *sqlRangeExp = 
+		     "^([[:alnum:]._\\-]+)"
+		     "[[:space:]]*\\|[[:space:]]*"
+		     "([0-9,]+)"
+		     "[[:space:]]*\\|[[:space:]]*"
+		     "([0-9,]+)$";
+
 struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart)
 /* Return table of positions that match term or NULL if none such. */
 {
-struct hgPositions *hgp;
+struct hgPositions *hgp = NULL;
+regmatch_t substrs[4];
+boolean canonical = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
@@ -2290,21 +2321,22 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-/* Allow any search term to end with a :Start-End range.  If found, 
- * strip it off and remember the start and end. */
-if (matchRegex(term, ".*:[0-9, \t]+-[0-9, \t]+$"))
+/* Allow any search term to end with a :Start-End range -- also support stuff 
+ * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
+ * If found, strip it off and remember the start and end. */
+if ((canonical = matchRegexSubstr(term, canonicalRangeExp,
+				  substrs, ArraySize(substrs))) ||
+    matchRegexSubstr(term, bedRangeExp, substrs, ArraySize(substrs)) ||
+    matchRegexSubstr(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
-    char buf[256];
-    char *startOffset, *endOffset;
-    safef(buf, sizeof(buf), "%s", term);
-    startOffset = strchr(buf, ':');
-    *startOffset++ = 0;
-    endOffset = strchr(startOffset, '-');
-    *endOffset++ = 0;
-    startOffset = trimSpaces(startOffset);
-    endOffset = trimSpaces(endOffset);
-    relStart = atoi(stripCommas(startOffset)) - 1;
-    relEnd = atoi(stripCommas(endOffset));
+    /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart, 
+     * [3] is relEnd. ([0] is all.) */
+    term[substrs[1].rm_eo] = 0;
+    eraseTrailingSpaces(term);
+    term[substrs[2].rm_eo] = 0;
+    relStart = atoi(stripCommas(term+substrs[2].rm_so));
+    term[substrs[3].rm_eo] = 0;
+    relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
     if (relStart > relEnd)
 	{
 	int tmp  = relStart;
@@ -2312,7 +2344,8 @@ if (matchRegex(term, ".*:[0-9, \t]+-[0-9, \t]+$"))
 	relEnd   = tmp;
 	}
     relativeFlag = TRUE;
-    term = buf;
+    if (canonical)
+	relStart--;
     }
 
 if (hgOfficialChromName(term) != NULL)
@@ -2330,7 +2363,8 @@ if (hgOfficialChromName(term) != NULL)
 	if (start < 0)
 	    start = 0;
 	}
-    singlePos(hgp, "Chromosome Range", NULL, NULL, term, chrom, start, end);
+    singlePos(hgp, "Chromosome Range", NULL, "chromInfo", term,
+	      chrom, start, end);
     }
 else
     {
