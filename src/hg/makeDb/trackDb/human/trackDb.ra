@@ -246,7 +246,7 @@ otherDb hg16
 
 track tfbsCons
 shortLabel TFBS_Conserved
-longLabel Transcription factor binding sites conserved in the Human/Mouse/Rat alignment
+longLabel HMR Conserved Transcription Factor Binding Sites
 priority 1000
 group regulation
 visibility hide
@@ -264,8 +264,8 @@ visibility hide
 type bed 6
 
 track promoterStanfordGene
-shortLabel Stanford gene model
-longLabel Stanford encode region gene model track. Version allmrfl_qc20sr95L_tblk_c_enbed
+shortLabel Gene Model
+longLabel Stanford ENCODE Gene Models
 group regulation
 priority 89.01
 visibility hide
