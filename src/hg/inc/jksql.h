@@ -218,6 +218,10 @@ char* sqlFieldName(struct sqlResult *sr);
 /* repeated calls to this function returns the names of the fields 
  * the given result */
 
+int sqlFieldColumn(struct sqlResult *sr, char *colName);
+/* get the column number of the specified field in the result, or
+ * -1 if the result doesn't contailed the field.*/
+
 int sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */
 

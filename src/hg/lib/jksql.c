@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.61 2004/07/27 11:15:30 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.62 2004/08/06 03:05:05 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -838,6 +838,21 @@ field = mysql_fetch_field(sr->result);
 if(field == NULL)
     return NULL;
 return field->name;
+}
+
+int sqlFieldColumn(struct sqlResult *sr, char *colName)
+/* get the column number of the specified field in the result, or
+ * -1 if the result doesn't contailed the field.*/
+{
+int numFields = mysql_num_fields(sr->result);
+int i;
+for (i = 0; i < numFields; i++)
+    {
+    MYSQL_FIELD *field = mysql_fetch_field_direct(sr->result, i);
+    if (sameString(field->name, colName))
+        return i;
+    }
+return -1;
 }
 
 int sqlCountColumns(struct sqlResult *sr)
