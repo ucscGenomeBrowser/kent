@@ -27,6 +27,8 @@ struct improbRunInfo
     float *controlScores;	/* Scores of controls. */
     };
 
+#define improbRunInfoRowSize 16  /* Number of stored fields, not including next */
+
 struct improbRunInfo *improbRunInfoLoad(char **row);
 /* Load a improbRunInfo from row fetched with select * from improbRunInfo
  * from database.  Dispose of this with improbRunInfoFree(). */
