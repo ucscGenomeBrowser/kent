@@ -177,17 +177,6 @@ freeHash(&redoHash);
 }
 #endif
 
-int countChars(char *s, char match)
-/* Count number of occurrences of char match in string s. */
-{
-char c;
-int count = 0;
-while ((c = *s++) != 0)
-    if (match == c)
-        ++count;
-return count;
-}
-
 boolean anyCdnaSeq(char *name, struct dnaSeq **retDna, struct wormCdnaInfo *retInfo)
 /* Get a single  cDNA sequence. Optionally (if retInfo is non-null) get additional
  * info about the sequence. */
