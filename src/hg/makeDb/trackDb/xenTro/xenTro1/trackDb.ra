@@ -62,6 +62,30 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track uc16
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+group compGeno
+priority 112
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+track uxf16
+shortLabel Extended Ultras
+longLabel Ultraconserved Elements Extended in Frog
+group compGeno
+priority 112.1
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
 track chainDanRer1
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
