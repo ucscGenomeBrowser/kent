@@ -9,8 +9,9 @@
 #include "hdb.h"
 #include "hgRelate.h"
 #include "obscure.h"
+#include "genePred.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.17 2004/01/12 17:43:48 weber Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.18 2004/01/15 21:51:42 weber Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -562,6 +563,7 @@ lf = pslFileOpen(pslFile);
 dotMod = 0;
 while ((psl = pslNext(lf)) != NULL)
     {
+    struct genePred *gp;
     if (clDots > 0 && ++dotMod == clDots )
         {
 	dotMod = 0;
@@ -569,10 +571,14 @@ while ((psl = pslNext(lf)) != NULL)
 	}
     exonList = pslToExonList(psl);
     rsi = hashMustFindVal(rsiHash, psl->qName);
-    findCdsStartEndInGenome(rsi, psl, &cdsStart, &cdsEnd);
+
+    gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, -1);
+    if(!gp) 
+        errAbort("Cannot convert psl (%s) to genePred.\n", psl->qName);
+
     fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
-    fprintf(kgTab, "%d\t%d\t", cdsStart, cdsEnd);
+    fprintf(kgTab, "%d\t%d\t", gp->cdsStart, gp->cdsEnd);
     fprintf(kgTab, "%d\t", slCount(exonList));
     for (exon = exonList; exon != NULL; exon = exon->next)
         fprintf(kgTab, "%d,", exon->start);
