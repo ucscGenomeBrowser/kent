@@ -242,6 +242,7 @@ fbOrTableBits(maskBits, "gap", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "refGene:exon:12", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "mrna:exon:12", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "ensGene:exon:12", chrom, chromSize, conn);
+fbOrTableBits(maskBits, "softberryGene:exon:12", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "twinscan:exon:12", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "xenoMrna:exon:12", chrom, chromSize, conn);
 fbOrTableBits(maskBits, "intronEst:exon:12", chrom, chromSize, conn);
