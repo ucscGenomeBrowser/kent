@@ -68,6 +68,7 @@ enum pfParseType
     pptSys,
     pptUser,
     pptSysOrUser,
+    pptVarInit,
     };
 
 struct pfParse

@@ -122,6 +122,26 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     expandInto(program, tkz, pp);
 }
 
+void initVars(struct pfParse *pp)
+/* Convert pptVarDec to pptVarInit. */
+{
+if (pp->type == pptVarDec)
+    pp->type = pptVarInit;
+else if (pp->type == pptAssignment)
+    {
+    struct pfParse *left = pp->children;
+    if (left->type == pptVarDec)
+        {
+	struct pfParse *right = left->next;
+	pp->type = pptVarInit;
+	pp->children = left->children;
+	slAddTail(&pp->children, right);
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    initVars(pp);
+}
+
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
@@ -134,6 +154,8 @@ struct pfParse *pp = pfParseFile(fileName, tkz, program);
 expandInto(program, tkz, pp);
 slAddHead(&program->children, pp);
 slReverse(&program->children);
+
+initVars(program);
 
 pfParseDump(program, 0, stdout);
 }

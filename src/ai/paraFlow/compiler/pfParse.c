@@ -136,6 +136,8 @@ switch (type)
 	return "pptUser";
     case pptSysOrUser:
 	return "pptSysOrUser";
+    case pptVarInit:
+        return "pptVarInit";
     default:
         internalErr();
 	return NULL;
