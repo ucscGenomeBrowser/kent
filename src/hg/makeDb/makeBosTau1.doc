@@ -387,7 +387,7 @@ exit; # don't actually run this like a script :)
   mkdir /cluster/data/bosTau1/bed/gcPercent
   cd /cluster/data/bosTau1/bed/gcPercent
   # gcPercent modified to recognize 2bit file
-  /cluster/bin/x86_64/gcPercent -noLoad bosTau1 /gbdb/bosTau1/nib
+  /cluster/bin/x86_64/hgGcPercent -noLoad bosTau1 /gbdb/bosTau1/nib
   ssh hgwdev
   cd /cluster/home/heather/kent/src/hg/lib
   # change index from 12 to 14 characters
@@ -450,13 +450,31 @@ SEQ2_LEN=$BASE/S2.len
   source DEF
   mkdir $RAW run.0
   # create S2.len so make-joblist doesn't have to
-  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run.0/j
   sh ./xdir.sh
   cd run.0
   # check how many lines in j
   sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
   para create jobList
   para try, push check, para push, para check....
+
+  # convert out to lav
+  ssh kki
+  cd /cluster/data/hg17/bed/blastz.bosTau1
+  # run bash shell if not running it already
+  source DEF
+  mkdir -p $BASE/run.1
+  mkdir -p $BASE/lav
+  # create a new job list to convert out files to lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > run.1/jobList
+  cd run.1
+  # make sure the job list is OK
+  wc -l jobList
+  head jobList
+  para create jobList
+  para try
+  para check
+  para push
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
