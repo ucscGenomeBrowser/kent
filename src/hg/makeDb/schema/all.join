@@ -1,4 +1,4 @@
-# So far have looked through hg16,mm4,rn3,ce1,dm1 databases
+# So far have looked through hg16,mm4,rn3,ce1,dm1,sacCer1 databases
 
 # Define databases used for various organisms
 set hg hg11,hg12,hg13,hg15,hg16
@@ -296,7 +296,7 @@ identifier stsName
     $gbd.stsInfo2.otherNames comma
     $mm.stsInfoMouseNew.alias separator=;
  
-identifier stsTrueName typeOf stsName
+identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $gbd.stsAlias.trueName
     $gbd.stsInfo2.name
@@ -441,6 +441,9 @@ identifier swissProtAccession external=SwissProt
     $dm.bdgpGene.proteinId
     $dm.bdgpSwissProt.swissProtId
     $dm.flyBaseSwissProt.swissProtId
+    $sacCer.sgdGene.proteinID
+    $sacCer.sgdCanonical.protein
+    $sacCer.sgdToSwissProt.value
 
 identifier pfamId external=Pfam
 "Pfam (Protein Family) ID"
@@ -543,9 +546,39 @@ identifier bdgpNonCodingId external=BDGP
     $dm.bdgpNonCoding.name chopAfter=-
     $dm.bdgpNonCodingInfo.bdgpName
 
-identifier scdId external=SGD
-"Sacchromyces Genome Database ORF ID"
+identifier sgdIsoformCluster
+"Overlapping (after splicing) SGD (Yeast) transcripts"
+    $sacCer.sgdCanonical.clusterId
+    $sacCer.sgdIsoforms.clusterId
+
+identifier sgdId external=SGD
+"Sacchromyces Genome Database ID - Coding or other"
+
+identifier sgdCodingId typeOf=sgdId
+"Sacchromyces Genome Database ID"
     $gbd.scBlastTab.target
+    $sacCer.sgdGene.name
+    $sacCer.sgdBlastTab.query
+    $sacCer.sgdBlastTab.target
+    $sacCer.ceBlastTab.query
+    $sacCer.dmBlastTab.query
+    $sacCer.drBlastTab.query
+    $sacCer.hgBlastTab.query
+    $sacCer.mmBlastTab.query
+    $sacCer.choExpDistance.target
+    $sacCer.choExpDistance.query
+    $sacCer.sgdCanonical.transcript
+    $sacCer.sgdDescription.name
+    $sacCer.sgdIsoforms.transcript
+    $sacCer.sgdAbundance.name
+    $sacCer.sgdLocalization.name
+    $sacCer.sgdPep.name
+    $sacCer.sgdToSwissProt.name
+
+identifier sgdNoncodingId typeOf=sgdId
+"Sacchromyces Genome Database Noncoding/Dubious feature ID"
+    $sacCer.sgdOther.name
+    $sacCer.sgdOtherDescription.name
 
 identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
