@@ -13,9 +13,17 @@ struct bed
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
+
     /* The following items are not loaded by   the bedLoad routines. */
     int score; /* Score - 0-1000 */
-    char strand[2];  /* + or - */
+    char strand[3];  /* + or -.  Second char may or may not exist and be + or - for other strand. */
+    unsigned otherStart; /* Start in other sequence if it's homology based. */
+    unsigned otherEnd;   /* End in other sequence if it's homology based. */
+    unsigned otherSize;  /* Total size of other sequence. */
+    unsigned blockCount; /* Number of blocks. */
+    int *blockSizes;     /* Comma separated list of block sizes. */
+    int *chromStarts;    /* Start positions inside chromosome. */
+    int *otherStarts;    /* Start positions inside other sequence. */
     };
 
 void bedStaticLoad(char **row, struct bed *ret);
