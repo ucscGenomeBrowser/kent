@@ -138,7 +138,7 @@ FILE *jobIdFile = NULL;			/* Handle to jobId file. */
 
 char *hubHost;	/* Name of machine running this. */
 
-void removeJobId(int id);
+boolean removeJobId(int id);
 /* Remove job with given ID. */
 
 void setupLists()
@@ -850,21 +850,18 @@ netSendLongString(connectionHandle, "ok");
 processHeartbeat();
 }
 
-void sendKillJobMessage(struct machine *machine, struct job *job)
+boolean sendKillJobMessage(struct machine *machine, struct job *job)
 /* Send message to compute node to kill job there. */
 {
 char message[64];
 sprintf(message, "kill %d", job->id);
 logIt("  %s %s\n", machine->name, message);
-sendViaSpoke(machine, message);
-     /* There's a race condition here that can cause jobs not
-      * to be killed if there are no spokes free to handle
-      * this message.  I'm trying to think of a simple solution
-      * to this. The damage isn't too serious though,
-      * since the jobs will at least stay on the main job list.
-      * if they are not killed.  User can curse us and try to
-      * kill jobs again.  At least the node won't end up 
-      * double-booked.  */
+if (!sendViaSpoke(machine, message))
+    {
+    logIt("  out of spokes!\n");
+    return FALSE;
+    }
+return TRUE;
 }
 
 void finishJob(struct job *job)
@@ -880,19 +877,20 @@ if (mach != NULL)
 recycleJob(job);
 }
 
-void removeJob(struct job *job)
+boolean removeJob(struct job *job)
 /* Remove job - if it's running kill it,  remove from job list. */
 {
 if (job->machine != NULL)
-    sendKillJobMessage(job->machine, job);
+    if (!sendKillJobMessage(job->machine, job))
+        return FALSE;
 finishJob(job);
+return TRUE;
 }
 
-void removeJobId(int id)
+boolean removeJobId(int id)
 /* Remove job of a given id. */
 {
 struct job *job = jobFind(runningJobs, id);
-logIt("Running job %x\n", job);
 if (job == NULL)
     {
     /* If it's not running look in user job queues. */
@@ -905,16 +903,32 @@ if (job == NULL)
     logIt("Pending job %x\n", job);
     }
 if (job != NULL)
-    removeJob(job);
+    {
+    logIt("Removing %s's %s\n", job->user, job->cmd);
+    if (!removeJob(job))
+        return FALSE;
+    }
+return TRUE;
 }
 
 void removeJobAcknowledge(char *names, int connectionHandle)
 /* Remove job of a given name(s). */
 {
 char *name;
+char *retVal = "ok";
+
 while ((name = nextWord(&names)) != NULL)
-    removeJobId(atoi(name));
-netSendLongString(connectionHandle, "ok");
+    {
+    /* It is possible for this remove to fail if we
+     * run out of spokes at the wrong time.  Currently
+     * the para client will just report the problem. */
+    if (!removeJobId(atoi(name)))
+        {
+	retVal = "err";
+	break;
+	}
+    }
+netSendLongString(connectionHandle, retVal);
 }
 
 

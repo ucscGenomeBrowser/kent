@@ -1087,53 +1087,18 @@ sendChillMessage();
 removeChilledSubmissions(batch);
 }
 
-/* Death row is where jobs to be killed get
- * bundled together to send to server in 
- * batches of 256 or so. */
-
-static struct dyString *deathRow = NULL;
-static int deathRowSize = 0;
-static int deathRowMaxSize = 10;
-
-void deathRowStart()
-/* Start up death row */
+boolean killJob(char *jobId)
+/* Tell hub to kill a job.  Return TRUE on
+ * success. */
 {
-deathRow = newDyString(16*1024);
-deathRowSize = 0;
-dyStringAppend(deathRow, "removeJob");
-}
-
-
-void deathRowExecute()
-/* Send list of jobs to kill to server. */
-{
-int hubFd = netConnect("localhost", paraPort);
-char *ok;
-mustSendWithSig(hubFd, deathRow->string);
-ok = netRecieveLongString(hubFd);
-if (ok == NULL || !sameString(ok, "ok"))
-    errAbort("No reciept in deathRowExecute");
-freez(&ok);
-close(hubFd);
-dyStringClear(deathRow);
-dyStringAppend(deathRow, "removeJob");
-deathRowSize = 0;
-}
-
-void deathRowEnd()
-/* Close out death row. */
-{
-deathRowExecute();
-dyStringFree(&deathRow);
-}
-
-void deathRowAdd(char *jobId)
-/* Add job to death row. */
-{
-dyStringPrintf(deathRow, " %s", jobId);
-++deathRowSize;
-if (deathRowSize >= deathRowMaxSize)
-    deathRowExecute();
+char buf[256];
+char *result = NULL;
+boolean ok;
+snprintf(buf, sizeof(buf), "removeJob %s", jobId);
+result = hubSingleLineQuery(buf);
+ok = (result != NULL && sameString(result, "ok"));
+freez(&result);
+return ok;
 }
 
 void paraStopAll(char *batch)
@@ -1142,12 +1107,11 @@ void paraStopAll(char *batch)
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
-int killCount = 0;
+int killCount = 0, missCount = 0;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
 cleanTrackingErrors(db);
-deathRowStart();
 for (job = db->jobList; job != NULL; job = job->next)
     {
     sub = job->submissionList;
@@ -1155,15 +1119,23 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->inQueue || sub->running)
 	    {
-	    deathRowAdd(sub->id);
-	    job->submissionCount -= 1;
-	    job->submissionList = sub->next;
-	    killCount += 1;
+	    if (killJob(sub->id))
+		{
+		job->submissionCount -= 1;
+		job->submissionList = sub->next;
+		killCount += 1;
+		}
+	    else
+	        {
+		missCount += 1;
+		}
 	    }
 	}
     }
-deathRowEnd();
 printf("%d running jobs stopped\n", killCount);
+if (missCount > 0)
+    printf("%d jobs not stopped - try another para stop in a little while\n",
+    	missCount);
 atomicWriteBatch(db, batch);
 }
 
