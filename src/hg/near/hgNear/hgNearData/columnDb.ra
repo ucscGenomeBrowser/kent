@@ -101,7 +101,7 @@ longLabel Human Ortholog (Best Blastp Hit to UCSC Known hg16)
 priority 7.9
 visibility off
 type lookup hgBlastTab query target
-itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
+itemUrl ../cgi-bin/hgTracks?org=human&position=%s
 
 name mouseOrthologs
 shortLabel Mouse
@@ -109,7 +109,7 @@ longLabel Mouse Ortholog (Best Blastp Hit to UCSC Known mm3)
 priority 8.0
 visibility off
 type lookup mmBlastTab query target
-itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=mouse&position=%s
+itemUrl ../cgi-bin/hgTracks?org=mouse&position=%s
 
 name zebrafishOrthologs
 shortLabel Zebrafish

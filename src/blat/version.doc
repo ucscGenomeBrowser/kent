@@ -1,5 +1,6 @@
 25:
      o Fixed crash when aligning translated sequences of less than 3 bases.
+     o Added extendThroughN flag.
 
 24:
      o Tweaked gap penalty in trimFlakyEnds, which should make it so

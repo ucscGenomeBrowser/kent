@@ -13,8 +13,9 @@
 #include "web.h"
 #include "hui.h"
 #include "hgFind.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: hgBatch.c,v 1.11 2003/09/23 19:10:58 angie Exp $";
+static char const rcsid[] = "$Id: hgBatch.c,v 1.12 2003/10/20 23:31:27 braney Exp $";
 
 #define hgTextPhase  "Advanced query..."
 char *db;	/* Current database. */
@@ -145,7 +146,7 @@ cgiContinueHiddenVar("org");
 cgiContinueHiddenVar("db");
 cgiMakeHiddenVar("table", tbl);
 cgiMakeHiddenVar("phase", hgTextPhase);
-cgiMakeTextVar("position", position, 30);
+cgiMakeTextVar("position", addCommasToPos(position), 30);
 cgiMakeButton("submit", "Submit");
 printf("</FORM>\n");
 

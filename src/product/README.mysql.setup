@@ -91,7 +91,7 @@ do
 done
 
 The cgi-bin binaries obtain their MySQL identities from
-the hg.conf fle in the cgi-bin directory.  The following
+the hg.conf file in the cgi-bin directory.  The following
 example uses the "readonly" user for genome database
 access and the "readwrite" user for hgcentral database access:
 

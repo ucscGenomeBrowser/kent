@@ -1,14 +1,14 @@
 
 # For performance
 #.c.o:
-#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
 
 #For debugging:
 .c.o:
-	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgKegg
@@ -16,7 +16,7 @@ A = hgKegg
 O = $A.o
 
 my: compile
-	mv $A /projects/cc/hg/fanhsu/kent/bin/i386/$A
+	mv $A ${HOME}/bin/i386/$A
 
 mgsc: compile
 	mv $A /usr/local/apache/cgi-bin-mgsc/$A
@@ -35,8 +35,8 @@ compile: $O
 	chmod a+rx $A
 
 lib:
-	cd ../../lib; make
+	cd ../../../lib; make
 
 tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h
 

@@ -85,15 +85,11 @@ DIRS = \
 	agpToGl \
 	autoSql \
 	autoXml \
-	barger \
 	bedIntersect \
 	bedSort \
-	blastToPsl \
 	borfBig \
 	cartDump \
 	cartReset \
-	cmParse \
-	cmpMap \
 	ctgFaToFa \
 	ctgToChromFa \
 	das \
@@ -104,8 +100,6 @@ DIRS = \
 	fqToQa \
 	fqToQac \
 	fragPart \
-	g2gOverlap \
-	g2gSeqOverlap \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
@@ -137,7 +131,6 @@ DIRS = \
 	mouseStuff \
 	mrnaToGene \
 	nci60 \
-	ooSplitFins \
 	patCount \
 	pslCat \
 	pslCheck \

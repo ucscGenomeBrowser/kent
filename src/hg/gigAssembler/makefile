@@ -46,4 +46,10 @@ DIRS = \
 	ooWeedZero \
 	pairedReads \
 	psLayout \
-	qaGold
+	qaGold \
+	g2gOverlap \
+	g2gSeqOverlap \
+	ooSplitFins \
+	cmParse \
+	cmpMap \
+	barger

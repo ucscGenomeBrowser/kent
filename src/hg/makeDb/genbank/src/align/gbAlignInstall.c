@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.7 2003/10/12 21:26:21 genbank Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.8 2003/10/17 17:45:10 markd Exp $";
 
 /*
  * Notes:
@@ -131,10 +131,11 @@ char **sortCmd, **cmds[3];
 int nSort, iSort = 0, i;
 
 /* sort cmd, nSort includes cmd and NULL */
-for (nSort = 2; sortSpec[nSort] != NULL; nSort++)
+for (nSort = 0; sortSpec[nSort] != NULL; nSort++)
     continue;
 if (gSortTmp != NULL)
     nSort += 2;
+nSort += 2; /* for "sort" and  NULL */
 sortCmd = alloca(nSort*sizeof(char*));
 sortCmd[iSort++] = "sort";
 if (gSortTmp != NULL)
@@ -145,6 +146,7 @@ if (gSortTmp != NULL)
 for (i = 0; sortSpec[i] != NULL; i++)
     sortCmd[iSort++] = sortSpec[i];
 sortCmd[iSort] = NULL;
+assert(iSort < nSort);
 cmds[0] = sortCmd;
 cmds[1] = NULL;
 

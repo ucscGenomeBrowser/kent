@@ -23,6 +23,29 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+void myblastTabTabOut(struct blastTab *bt, FILE *out)
+{
+static double lastScore = 0.0;
+static char *lastName = NULL;
+static int count = 0;
+char *saveString;
+char buffer[200];
+
+    if ((lastScore != bt->bitScore ) || ((lastName != NULL) && !sameString(bt->query, lastName)  ))
+	count = 0;
+    lastName = bt->query;
+    lastScore = bt->bitScore;
+    if (count) 
+    sprintf(buffer, "%s*", lastName);
+    else
+    sprintf(buffer, "%s", lastName);
+    bt->query = buffer;
+    blastTabTabOut(bt, out);
+    bt->query = lastName;
+    count++;
+
+}
+
 void
 myErr(char *string)
 {
@@ -80,7 +103,7 @@ while(wordCount = lineFileChopNext(in, words, 50))
 			bt.qEnd = qStart - 1;
 			bt.tEnd = tStart;// - tIncr;
 			bt.aliLength = bt.qEnd - bt.qStart + 1;
-		blastTabTabOut(&bt, out);
+		myblastTabTabOut(&bt, out);
 	    }
 	    state = GOT_SCORE;
 	    bt.bitScore = atof(words[2]);
@@ -124,19 +147,25 @@ while(wordCount = lineFileChopNext(in, words, 50))
 	    bt.query = cloneString(words[1]);
 	  //  printf("query %s\n",bt.query);
 	    state = GOT_QUERY;
+	    pending = FALSE;
 	}
 	else if ((wordCount == 1) && startsWith(">",words[0] ))
 	{
-	    if (state != GOT_QUERY)
+	    if (!((state == GOT_QUERY) || (state == SAFE_OUT)))
 		myErr("no query at '>'");
+	    if ((state == SAFE_OUT) && pending)
+		pending=FALSE,myblastTabTabOut(&bt, out);
+
 	    bt.target = cloneString(&words[0][1]);
 	   // printf("target %s\n",bt.target);
 	   state = GOT_TARGET;
 	}
 	else if ((wordCount ==4) && sameString(words[0], "Query:"))
 	{
+
 	    if (!((state == GOT_IDENT) || (state == SAFE_OUT)))
-		myErr("got second query");
+	    {printf("state %d\n",state);
+		myErr("got second query");}
 	    qStart = atoi(words[1]);
 	    if (state == SAFE_OUT)
 	    {
@@ -151,8 +180,19 @@ while(wordCount = lineFileChopNext(in, words, 50))
 	    qString = cloneString(words[2]);
 	    qEnd = atoi(words[3]);
 	}
-	else if ((wordCount ==4) && sameString(words[0], "Sbjct:"))
+	else if (((wordCount ==4)|| (wordCount ==3)) && sameString(words[0], "Sbjct:"))
 	{
+	    char *seq, *end; 
+	    end = words[3];
+	    seq = words[2];
+	    if (wordCount == 3)
+	    {
+		end = words[2];
+		seq = words[1];
+		while(isdigit(*seq))
+		    seq++;
+	    }
+
 	    if (!((state == NEED_TARGET) || (state == NEED_TARGET_CONT)))
 		myErr("don't need target");
 	    if (state == NEED_TARGET_CONT)
@@ -165,20 +205,20 @@ while(wordCount = lineFileChopNext(in, words, 50))
 		{printf("%d %d\n",tStart,atoi(words[1]));
 		    myErr("cont target not right");
 		}
-		tEnd = atoi(words[3]);
+		tEnd = atoi(end);
 	    }
 	    else
 	    {
 	    tStart = atoi(words[1]);
-	    tEnd = atoi(words[3]);
+	    tEnd = atoi(end);
 		bt.qStart = qStart;
 		bt.qEnd = qEnd;
 		bt.tStart = tStart;
 		bt.tEnd = tEnd;
 	    }
 	    qPtr = qString;
-	    tPtr = words[2];
-	    if (strlen(qString) != strlen(words[2]))
+	    tPtr = seq;
+	    if (strlen(qString) != strlen(seq))
 		myErr("q and t string not same length");
 
 	    while(*qPtr)
@@ -190,7 +230,7 @@ while(wordCount = lineFileChopNext(in, words, 50))
 			bt.qEnd = qStart - 1;
 			bt.tEnd = tStart;// - tIncr;
 			bt.aliLength = bt.qEnd - bt.qStart+1;
-			blastTabTabOut(&bt, out);
+			myblastTabTabOut(&bt, out);
 		    //bt.qStart = qStart;
 		    //bt.tStart = tStart;
 		    }
@@ -216,7 +256,7 @@ while(wordCount = lineFileChopNext(in, words, 50))
 	}
     }
 if (pending)
-		blastTabTabOut(&bt, out);
+		myblastTabTabOut(&bt, out);
 	/*
 	    {
 	    qPos = queryStart;

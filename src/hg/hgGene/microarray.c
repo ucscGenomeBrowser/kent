@@ -275,7 +275,7 @@ static void expMultiPrint(struct expColumn *col,
 {
 char *subType, *subName;
 float ratioScale = 1.0/atof(hashMustFindVal(col->settings, "ratioMax"));
-float absoluteScale = 1.0/atof(hashMustFindVal(col->settings, "absoluteMax"));
+float absoluteScale = 1.0/log(atof(hashMustFindVal(col->settings, "absoluteMax")));
 char *dupe = NULL, *s;
 char *expTable, *ratioTable, *absTable, *repString;
 int representativeCount, *representatives = NULL;

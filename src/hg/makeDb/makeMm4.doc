@@ -1,13 +1,13 @@
 # This file describes how we made the browser database on the mouse
-# genome, June 2003 build. - Mm4
+# genome, October 2003 build. - Mm4
 #
-#	Things to watch out for mm4 build:
-#	the usual location of /cluster/store2 has changed to /cluster/store5
-#	Thus, the usual NFS server machine was kkstore is now eieio
-#	Therefore, for I/O intensive operations, work on eieio
-#	Due to the global replace of mm3 with mm4, some comment
-#	references may not be correct.
-
+#
+#	NOTE:  There is a new chrMT sequence in the build 32
+#	>gi|34538597|ref|NC_005089.1| Mus musculus mitochondrion
+#
+#   Will have to beware of this NC_ contig in the processing since
+#	all previous builds had only NT_ contigs
+#
 # NOTE: The README_PREBUILD file for this assembly mentions several
 # differences from the previous release (build 30):
 # 1. seq_contig.md - new first line is a comment containing column name
@@ -17,98 +17,86 @@
 # 2. contig.idmap - has an additional column "contig label"
 # This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
 #
-# NOTE: Y chrom was left out of original release at NCBI, and so was
-# added in later, and database reloads were performed to include Y. 7/8/03 KRR
-
-# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-06-17 - Hiram)
-    ssh eieio
-    mkdir -p /cluster/store5/mm.2003.06/ncbi
-    cd /cluster/store5/mm.2003.06/ncbi
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2003-10-16 - Hiram)
+    ssh kksilo
+    mkdir -p /cluster/store6/mm4/ncbi
+    ln -s /cluster/store6/mm4 /cluster/data
+    cd /cluster/data/mm4/ncbi
     mkdir chrfasta contigfasta
     ftp ftp.ncbi.nih.gov
       # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_31
+      cd mouse_32
       prompt
       bin
       mget *
       quit
     gunzip *.agp.gz
 
-# Check chromosome files
+# Check chromosome files  (DONE - 2003-10-19 - Hiram)
     cd chrfasta
-    cp /dev/null faSize.out
-    foreach f (*.fa)
-        echo $f >> faSize.out
-        /cluster/bin/i386/faSize $f >> faSize.out
+    foreach f (*.fa.gz)
+        echo $f:r >> faSize.out
+	gunzip $f
+        /cluster/bin/i386/faSize $f:r >> faSize.out
+	echo $f:r done
     end
    /cluster/bin/i386/faSize *.fa >> faSize.out
+   grep "^>" *.fa > ../chrfasta.all.fa.headers
+   gzip *.fa
+   cd ../contigfasta
+   gunzip *.fa.gz
+   grep "^>" *.fa > ../contigfasta.all.fa.headers
    gzip *.fa
 
 
-# GET MISSING FILES FROM NCBI (DONE 2003-07-01 - Kate)
-    # These were left out of the original release,
-    # and were provided on 6/30/03.
-    cd /cluster/store5/mm.2003.06/ncbi
-    ftp ftp.ncbi.nih.gov
-      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd mouse_31
-      prompt
-      bin
-      mget contig_overlaps.agp.gz  ctg_coords.gz seq_contig.md.gz README_PREBUILD
-      quit    
-      gunzip contig_overlaps.agp.gz ctg_coords.gz seq_contig.md.gz
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
+#					(DONE - 2003-10-16 - Hiram)
 
-# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
-
-    # This version of the mouse sequence data is in 
-    # /cluster/store5/mm.2003.06/mm4/assembly
-    # This will split the mouse sequence into approx. 5 Mbase supercontigs 
-    # between non-bridged clone contigs and drop the resulting dir structure 
-    # in /cluster/store5/mm.2003.06/mm4.
-    # The resulting dir structure will include 1 dir for each chromosome, 
-    # each of which has a set of subdirectories, one subdir per supercontig. 
-
-    ssh eieio
-    mkdir /cluster/store5/mm.2003.06/mm4
-    ln -s /cluster/store5/mm.2003.06/mm4 /cluster/data/mm4
-    cd /cluster/store5/mm.2003.06/mm4
+    ssh kksilo
+    cd /cluster/data/mm4
+    gunzip ncbi/allrefcontig.chr.agp.gz
     # splitFaIntoContigs doesn't do right with agp lines arriving in a 
     # different order than fasta chrom sequences.  so split up the agp 
     # into one per chrom.
-    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y MT Un)
       mkdir $c
-      if (! -e /cluster/store5/mm.2003.06/ncbi/chrfasta/chr$c.fa.gz) then
-        continue
-      endif
       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
-        ../ncbi/allrefcontig.chr.agp \
+        ./ncbi/allrefcontig.chr.agp \
         > $c/chr$c.agp
-      gunzip -c /cluster/store5/mm.2003.06/ncbi/chrfasta/chr$c.fa.gz \
+      gunzip -c ./ncbi/chrfasta/chr$c.fa.gz \
         | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
         | splitFaIntoContigs $c/chr$c.agp \
-          stdin /cluster/store5/mm.2003.06/mm4 -nSize=5000000
+          stdin /cluster/data/mm4 -nSize=5000000
     end
-    # NOTE: no chrUn (only random)
+    gzip ncbi/chrfasta/chr*.fa
 
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2003-10-17 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm4/ncbi
 
-# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (2003-07-02 Kate)
-    ssh eieio
-    cd /cluster/store5/mm.2003.06/ncbi
+    gunzip seq_contig.md.gz
 
     # reorder random contigs in allrefcontig agp file to match seq_contig.md
     # this is required by the ncbiToRandomAgps scripts
-    ../mm4/jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
+    # had to fixup ncbiToRandomAgps from previous use to match the
+    #	lines better, and to do the MT/NC_ mitochondrion thing
+    ../jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
                         allrefcontig.chr.ordered.agp
-    ../mm4/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
-                        contig.idmap ../mm4
+    ../jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
+                        contig.idmap ..
         # creating ../mm4/1/chr1_random.agp...
         # ... creating ../mm4/Un/chrUn_random.agp...
+    #  The chrUn_random.agp created by this is too large with the 5000
+    #  gaps.  it will work with 1000 gaps, so fixup the chrUn_random agp:
+    ../jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
+      seq_contig.md allrefcontig.chr.ordered.agp contig.idmap ..
 
-    cd /cluster/store5/mm.2003.06/mm4
+    ssh kksilo
+    cd /cluster/data/mm4
     foreach c (?{,?})
       if (-e $c/chr${c}_random.ctg.agp) then
         echo building $c/chr${c}_random.fa
-        gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
+        gunzip -c ./ncbi/contigfasta/chr$c.fa.gz \
           | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
           > ./tmp.fa
         agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
@@ -116,44 +104,24 @@
         rm tmp.fa
       endif
     end
-        # building 1/chr1_random.fa
-        # Writing 8573794 bases to 1/chr1_random.fa ...
-        # building 19/chr19_random.fa
-        # Writing 2953240 bases to 19/chr19_random.fa
-        # building Un/chrUn_random.fa
-        # Program error: trying to allocate 1444837753 bytes in needLargeMem
-        # agpToFa: memalloc.c:82: needLargeMem: Assertion `0' failed.
-        # 20 minutes or so
-
-    # Rebuild chrUn
-    # With 50000-long gaps in between, chrUn is just 
-    # too damn big to fit in memory on any of our machines!!  So use a 
-    # gap size of 1000 (OK with Jim and Terry) just for chrUn.  
-    cd /cluster/store5/mm.2003.06/ncbi
-    ../mm4/jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
-      seq_contig.md allrefcontig.chr.ordered.agp contig.idmap ../mm4
-    cd /cluster/store5/mm.2003.06/mm4
-    set c=Un
-    echo building $c/chr${c}_random.fa
-    gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
-      | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
-      > ./tmp.fa
-    agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
-      $c/chr${c}_random.fa ./tmp.fa
-    rm tmp.fa
-        # Writing 85430752 bases to Un/chrUn_random.fa
-
-    # Clean these up to avoid confusion later... they're easily rebuilt.
-    rm ?{,?}/*.ctg.agp
+    # building 1/chr1_random.fa
+    # ... etc ...
+    # building Un/chrUn_random.fa
+    # Writing 85112544 bases to Un/chrUn_random.fa
 
 
-# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
-    ssh eieio
-    cd /cluster/store5/mm.2003.06/mm4
+    # Clean these up to avoid confusion later... they're easily rebuilt
+    #	with the ncbiToRandomAgps script above
+    rm ?/*.ctg.agp ??/*.ctg.agp
+
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-10-20 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm4
     foreach c (?{,?})
       if (-e $c/chr${c}_random.agp) then
         splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
           -nSize=5000000
+        mkdir -p $c/lift
         mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
         mv ${c}_random/lift/ordered.lft $c/lift/random.lft
         mv ${c}_random/lift/ordered.lst $c/lift/random.lst
@@ -163,42 +131,53 @@
         rmdir ${c}_random
       endif
     end
+    #  This has a lot of output.  It is difficult to see if anything
+    #	goes wrong.
 
-
-# MAKE LIFTALL.LFT (DONE 2003-07-04 kate)
-
-    # remove spurious files for chrUn (should only be chrUn_random)
+#  Fixup chrMT name to be chrM (DONE - 2003-10-21 - Hiram)
+    ssh kksilo
     cd /cluster/data/mm4
-    rm Un/lift/o*
-    cat ?{,?}/lift/{ordered,random}.lft > liftAll.lft
+    mv MT MT.ncbi
+    mkdir M
+    mkdir M/chrM_1
+    mkdir M/lift
+    cd MT.ncbi
+    find . -type f | while read FN
+    do
+	NF=`echo $FN | sed -e "s/MT/M/g"`
+	sed -e "s/chrMT/chrM/g" $FN > ../M/$NF
+    done
+#	The RepeatMasker for this was re-run separately since RM was
+#	already done by the time this was renamed.
+
+# MAKE LIFTALL.LFT (DONE - 2003-10-20 - Hiram)
+
+    cd /cluster/data/mm4
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
-# CREATING DATABASE (DONE - 2003-06-18 - Hiram)
+# CREATING DATABASE (DONE - 2003-10-20 - Hiram)
 
 o - Create the database.
     ssh hgwdev
-    echo 'create database mm4' | hgsql ''
+    hgsql -e 'create database mm4;' ''
     # if you need to delete this database:  !!! WILL DELETE EVERYTHING !!!
-    #	echo 'drop database mm4' | hgsql ce1
-        alias mm4 "mysql -u hguser -phguserstuff -A mm4"
+    #	hgsql -e "drop database mm4;" mm4
 o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # [hiram@hgwdev /] df -h /var/lib/mysql
-    # Filesystem            Size  Used Avail Use% Mounted on
-    # /dev/sda1             472G  378G   69G  85% /var/lib/mysql
+    #	Filesystem            Size  Used Avail Use% Mounted on
+    #	/dev/sda1             472G  414G   34G  93% /var/lib/mysql
 
-
-# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-18 - Hiram)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-10-20 - Hiram)
+    #	Use any of the newest databases to ensure that the organization
+    #	of the grp table is up to date
     ssh hgwdev
-    echo "create table grp (PRIMARY KEY(NAME)) select * from mm3.grp" \
-      | hgsql mm4
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" mm4
 
 
-# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
-# (RANDOMS ADDED, except chrUn 2003-07-01 - Kate)
-# (chrUn random added  2003-07-02 - Kate)
-
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-10-20 - Hiram)
     # Create (unmasked) nib files 
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm4
     mkdir -p unmaskedNib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
@@ -206,47 +185,777 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
       faToNib $f unmaskedNib/$f:t:r.nib
     end
     # Create symbolic links from /gbdb/mm4/nib to real nib files
+    #	These unmasked Nib files are temporary just to get the browser
+    #	up an running immediately.  After the masking is done and masked
+    #	sequence is created, these nibs will be replaced with the masked
+    #	nibs
     ssh hgwdev
     mkdir -p /gbdb/mm4/nib
-    foreach f (/cluster/store5/mm.2003.06/mm4/unmaskedNib/chr*.nib)
-      ln -s $f /gbdb/mm4/nib
-    end
+    cd /gbdb/mm4/nib
+    ln -s /cluster/data/mm4/unmaskedNib/chr*.nib .
 
     # Load /gbdb nib paths into database and save size info.
     ssh hgwdev
-    hgsql mm4  < ~/src/hg/lib/chromInfo.sql
     cd /cluster/data/mm4
+    hgsql mm4  < ~/kent/src/hg/lib/chromInfo.sql
     hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?{,?}/chr?{,?}{,_random}.fa
-    # 2988739106 total bases
-    # NOTE: mm3 was 2708220133, an increase of 280 Mb (~10%)
-    echo "select chrom,size from chromInfo" | hgsql -N mm4 > chrom.sizes
+    #	2952612207 total bases
+    # NOTE: mm3 was 2708220133, an increase of 244 Mb (~9%)
+    hgsql -N -e "select chrom,size from chromInfo;" mm4 > chrom.sizes
     # check the resulting file chrom.sizes
 
-    # Store o+o info in database.  # (REDO with fully gapped random chrom AGP's  2003-07-14 kate)
-     cd /cluster/data/mm4
-     # remove so as not to confuse hgGoldGap -- they are easily regenerated
-     rm */chr*.ctg.agp
-     # to undo/redo: 
-     #     jkStuff/dropSplitTable.csh gap
-     #     jkStuff/dropSplitTable.csh gold
-     /cluster/bin/i386/hgGoldGapGl mm4 /cluster/store5/mm.2003.06 mm4 -noGl
-     featureBits mm4 gold
-        # 2819804865 bases of 2819804865 (100.000%) in intersection
-     featureBits mm3 gold
-       # 2505900260 bases of 2505900260 (100.000%) in intersection
+    # Store o+o info in database.
+    cd /cluster/data/mm4/ncbi
+    gunzip sequence.inf
+    cd /cluster/data/mm4
+    ln -s ncbi fft
+    # remove so as not to confuse hgGoldGap -- they are easily regenerated
+    rm */chr*.ctg.agp
+    # to undo/redo: 
+    #     jkStuff/dropSplitTable.csh gap
+    #     jkStuff/dropSplitTable.csh gold
+    /cluster/bin/i386/hgGoldGapGl mm4 /cluster/data/mm4 .
+    featureBits mm4 gold
+    # 2627444668 bases of 2627444668 (100.000%) in intersection
+    featureBits mm3 gold
+    # 2505900260 bases of 2505900260 (100.000%) in intersection
 
-     featureBits mm4 gap
-        # 168934241 bases of 2819804865 (5.991%) in intersection
-     featureBits mm3 gap
-        # 202319873 bases of 2505900260 (8.074%) in intersection
+    featureBits mm4 gap
+    # 325167539 bases of 2627444668 (12.376%) in intersection
+    featureBits mm3 gap
+    # 202319873 bases of 2505900260 (8.074%) in intersection
 
 
-# Make and load GC percent table
+# Make and load GC percent table	(DONE - 2003-10-20 - Hiram)
      ssh hgwdev
      mkdir -p /cluster/data/mm4/bed/gcPercent
      cd /cluster/data/mm4/bed/gcPercent
-     hgsql mm4  < ~/src/hg/lib/gcPercent.sql
+     hgsql mm4  < ~/kent/src/hg/lib/gcPercent.sql
      hgGcPercent mm4 ../../unmaskedNib
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE - 2003-10-20 - Hiram)
+    # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, defaultPos, \
+         active, orderKey, genome, scientificName, htmlPath, hgNearOK) \
+      VALUES(
+        "mm4", "Oct. 2003", "/gbdb/mm4/nib", "Mouse", \
+	"chr6:135181700-135238301", \
+         1, 20, "Mouse", "Mus musculus", "/gbdb/mm4/html/description.html",
+	0);' \
+	-h genome-testdb hgcentraltest
+    #	If you need to delete that entry:
+    	hgsql -e 'delete from dbDb where name="mm4";' \
+	-h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add mm4 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM4 (DONE - 2003-07-13 kate)
+    ssh hgwdev
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans) \
+	    VALUES ("mm4", "blat10", "17778", "1"); \
+	INSERT INTO blatServers (db, host, port, isTrans) \
+	    VALUES ("mm4", "blat10", "17779", "0");' \
+	-h genome-testdb hgcentraltest
+
+# REPEAT MASKING (DONE 2003-10-21 Hiram)  
+    #	TRF simpleRepeat below can be run at the same time
+    # Split contigs, run RepeatMasker, lift results
+    # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+    #   RepeatMasker runs manageable on the cluster ==> results need lifting.
+    # * For the NCBI assembly we repeat mask on the sensitive mode setting
+    #  (RepeatMasker -m -s -ali)
+
+    #- Split contigs into 500kb chunks:
+    ssh kksilo
+    cd /cluster/data/mm4
+    foreach d ( */chr?{,?}{,_random}_?{,?} )
+	cd $d
+	set contig = $d:t
+	faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+	    -maxN=500000
+	cd ../..
+    end
+    #	...
+    #	11 pieces of 11 written
+    #	1 pieces of 1 written
+    #	...
+
+    #- Make the run directory and job list:
+
+    cd /cluster/data/mm4
+    cat << '_EOF_' > jkStuff/RMMouse
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/mm4/$2
+/bin/cp $2 /tmp/mm4/$2
+cd /tmp/mm4/$2
+/scratch/hg/RepeatMasker/RepeatMasker -ali -s -species mus $2   
+popd
+/bin/cp /tmp/mm4/$2/$2.out ./
+if (-e /tmp/mm4/$2/$2.align) /bin/cp /tmp/mm4/$2/$2.align ./
+if (-e /tmp/mm4/$2/$2.tbl) /bin/cp /tmp/mm4/$2/$2.tbl ./
+if (-e /tmp/mm4/$2/$2.cat) /bin/cp /tmp/mm4/$2/$2.cat ./
+/bin/rm -fr /tmp/mm4/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm4/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm4
+'_EOF_'
+    chmod +x jkStuff/RMMouse
+
+    mkdir -p RMRun
+    rm -f RMRun/RMJobs
+    foreach d ( ?{,?}/chr*_?{,?} )
+	foreach f ( $d/chr*_?{,?}_?{,?}.fa )
+	    set f = $f:t
+	    echo /cluster/data/mm4/jkStuff/RMMouse \
+		/cluster/data/mm4/$d $f \
+		'{'check out line+ /cluster/data/mm4/$d/$f.out'}' \
+		>> RMRun/RMJobs
+	end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/mm4/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# Completed: 6429 of 6429 jobs
+# CPU time in finished jobs:   39351255s  655854.25m 10930.90h  455.45d  1.248 y
+# IO & Wait Time:                185895s    3098.25m    51.64h    2.15d  0.006 y
+# Average job time:                6150s     102.50m     1.71h    0.07d
+# Longest job:                    18075s     301.25m     5.02h    0.21d
+# Submission to last job:         56648s     944.13m    15.74h    0.66d
+
+    #- Lift up the split-contig .out's to contig-level .out's
+    ssh kksilo
+    cd /cluster/data/mm4
+    foreach d ( ?{,?}/chr*_?{,?} )
+      cd $d
+      set contig = $d:t
+      liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+      cd ../..
+    end
+
+    #- Lift up the contig-level .out's to chr-level
+    ssh kksilo
+    cd /cluster/data/mm4
+    ./jkStuff/liftOut5.csh
+    #	This one error is OK
+    #	Can not find Un/lift/ordered.lft .
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/mm4
+    # to redo:
+    #    ./jkStuff/dropSplitTable.csh rmsk  
+    # make sure there's no chrUn -- rm Un/chrUn.fa.out
+    hgLoadOut mm4 ?/*.fa.out ??/*.fa.out
+
+# VERIFY REPEATMASKER RESULTS (DONE - 2003-10-21 Hiram)
+
+    # Run featureBits on mm4 and on a comparable genome build, and compare:
+    ssh hgwdev
+    featureBits mm4 rmsk
+    # 1130883581 bases of 2627444668 (43.041%) in intersection
+    featureBits mm3 rmsk
+    # 1080265553 bases of 2505900260 (43.109%) in intersection
+
+
+# SIMPLE REPEAT TRACK (DONE - 2003-10-20 Hiram)
+    # TRF can be run in parallel with RepeatMasker on the file server
+    #	since it doesn't require masked input sequence.
+    ssh kksilo
+    mkdir /cluster/data/mm4/bed/simpleRepeat
+    cd /cluster/data/mm4/bed/simpleRepeat
+    mkdir trf
+    rm -f jobs.csh
+    echo '#\!/bin/csh -fe' > jobs.csh
+    # create job list of 5MB chunks
+    foreach f \
+       (/cluster/data/mm4/?{,?}/chr?{,?}_[0-9]*/chr?{,?}_?{,?}.fa \
+       /cluster/data/mm4/?{,?}/chr*_random_?{,?}/chr*_random_?{,?}.fa)
+      set fout = $f:t:r.bed
+      echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    chmod +x jobs.csh
+    wc jobs.csh
+    #	600    3596   90543 jobs.csh
+
+    ./jobs.csh >&! jobs.log &
+    # in bash:  ./jobs.csh > jobs.log 2>&1 &
+    tail -f jobs.log
+
+    # When job is done lift output files
+    liftUp simpleRepeat.bed /cluster/data/mm4/jkStuff/liftAll.lft warn trf/*.bed
+
+    # Load into the database
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/simpleRepeat
+    hgLoadBed mm4 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 1164675 elements of size 16
+    featureBits mm4 simpleRepeat
+    # 82600648 bases of 2627444668 (3.144%) in intersection
+    featureBits mm3 simpleRepeat
+    # 75457193 bases of 2505900260 (3.011%) in intersection
+
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-10-21 - Hiram)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/mm4/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+    # Lift up filtered trf output to chrom coords
+    cd /cluster/data/mm4
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      if (-e $c/lift/ordered.lst) then
+	perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+	  $c/lift/ordered.lst > $c/lift/oTrf.lst
+	liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+	  jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      else
+	echo "WARNING NO FILE:  $c/lift/ordered.lst"
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+    # NOTE: ignore warning about non-existent Un/Lift/ordered.lift
+    # since there is no chrUn
+
+# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+#				(DONE - 2003-10-21 Hiram)
+    ssh kksilo
+    cd /cluster/data/mm4
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    ./jkStuff/makeFaMasked.csh >&! maskFa.out &
+    #	bash:	./jkStuff/makeFaMasked.csh > maskFa.out 2>&1 &
+    tail -100f maskFa.out
+
+    #- Make hard-masked .fa.masked files as well:
+    ./jkStuff/makeHardMasked.csh
+
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    ./jkStuff/makeNib.csh
+    # ignore complaints about missing chrUn
+
+    # Redo symbolic links from /gbdb/mm4/nib to 
+    #   mixed (RM and TRF) soft-masked nib files
+    ssh hgwdev
+    rm -fr /gbdb/mm4/nib/*
+    ln -s /cluster/data/mm4/mixedNib/chr*.nib /gbdb/mm4/nib
+
+    # Copy data to /cluster/bluearc for cluster runs
+    ssh kksilo
+
+    # masked contigs
+    rm -fr /cluster/bluearc/mm4/trfFa
+    mkdir -p /cluster/bluearc/mm4/trfFa
+    cp -p /cluster/data/mm4/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+	/cluster/bluearc/mm4/trfFa
+
+    # masked chrom nibs
+    cd /cluster/data/mm4
+    rm -fr /cluster/bluearc/mm4/softNib
+    mkdir -p /cluster/bluearc/mm4/softNib
+    cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/softNib
+    rm -fr /cluster/bluearc/mm4/hardNib
+    mkdir -p /cluster/bluearc/mm4/hardNib
+    cp -p maskedNib/chr*.nib /cluster/bluearc/mm4/hardNib
+
+    # fasta files
+    rm -fr /cluster/bluearc/mm4/fasta
+    mkdir -p /cluster/bluearc/mm4/fasta
+    cp -p ?/*.fa ??/*.fa /cluster/bluearc/mm4/fasta
+
+    # RepeatMasker *.out files
+    rm -rf /cluster/bluearc/mm4/rmsk
+    mkdir -p /cluster/bluearc/mm4/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/mm4/rmsk
+
+    # lift file, for mrna processing
+    cp -p jkStuff/liftAll.lft /cluster/bluearc/mm4
+
+    # also copy to /scratch
+    ssh kksilo
+    mkdir -p /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/fasta /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/hardNib /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/softNib /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/rmsk /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/trfFa /cluster/bluearc/scratch/mus/mm4
+    mkdir -p /cluster/bluearc/scratch/mus/mm4/rmsk.spec
+    cp -Rp /cluster/bluearc/mm4/rmsk.spec/* /cluster/bluearc/scratch/mus/mm4/rmsk.spec
+
+    # also copy to iservers
+    ssh kkr1u00
+    cd ~/mm4
+    cp -p liftAll.lft /iscratch/i/mm4
+    mkdir -p /iscratch/i/mm4/softNib
+    cp -p /cluster/bluearc/mm4/softNib/chr*.nib /iscratch/i/softNib
+    mkdir -p /iscratch/i/mm4/trfFa
+    cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
+    /cluster/bin/scripts/iSync
+
+
+# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-10-21 - Hiram)
+
+    ssh kksilo
+    mkdir -p /cluster/bluearc/mm4/rmsk.spec
+    cd /cluster/bluearc/mm4/rmsk.spec
+    ln -s ../rmsk/*.out .
+    cat << '_EOF_' > runArian.sh
+#!/bin/sh
+for FN in *.out
+do
+    echo ${FN}
+    /cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
+	${FN} -query mouse -comp human -comp rat
+done
+'_EOF_'
+    chmod +x runArian.sh
+    ./runArian.sh
+
+    cd /cluster/bluearc/mm4
+    mkdir linSpecRep.notInHuman
+    mkdir linSpecRep.notInRat
+    foreach f (rmsk.spec/*.out_hum_rat)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInHuman/$base.out.spec
+    end
+    foreach f (rmsk.spec/*.out_hum_rat)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 2 $f > \
+                        linSpecRep.notInRat/$base.out.spec
+    end
+
+    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInHuman /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInRat /cluster/bluearc/scratch/mus/mm4
+    #	Request rsync of /scratch to the KiloKluster
+
+# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2003-10-21 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/genbank/etc
+    #	edit genbank.conf to specify
+    #	# mm4
+    #	mm4.genome = /scratch/mus/mm4/softNib/*.nib
+    #	mm4.lift = /cluster/data/mm4/jkStuff/liftAll.lft
+    #	mm4.downloadDir = mm4
+    #	mm4.genbank.est.xeno.load = yes
+    #	mm4.mgcTables.default = full
+    #	mm4.mgcTables.mgc = all
+    cd /cluster/data/genbank
+
+    nice ./bin/gbAlignStep -initial -type=mrna -verbose=1 \
+	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+    # this failed in the alignment step due to /scratch problems, to continue:
+    ssh kk
+    cd /cluster/bluearc/genbank/work/initial.mm4/align
+    para recover align.jobs recover_align.jobs
+    para create recover_align.jobs
+    para try, push, check, etc ...
+    # then
+    ssh eieio
+    cd /cluster/data/genbank
+    nice ./bin/gbAlignStep -initial -continue=finish -type=mrna -verbose=1 \
+	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+
+    nice ./bin/gbAlignStep -initial -type=est -verbose=1 \
+	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+
+# LOAD CPGISSLANDS (DONE 2003-10-21 Hiram)
+     ssh kksilo
+     mkdir -p /cluster/data/mm4/bed/cpgIsland
+     cd /cluster/data/mm4/bed/cpgIsland
+     # cpglh requires hard-masked (N) .fa's.  
+     # There may be warnings about "bad character" for IUPAC ambiguous 
+     # characters like R, S, etc.  Ignore the warnings.  
+     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
+       set fout=$f:t:r:r.cpg
+       /cluster/bin/cpglh $f > $fout
+       echo Done with $fout
+     end
+
+    cat << '_EOF_' > filter.awk
+/* chr1  1325    3865    754     CpG: 183        64.9    0.7 */
+/* Transforms to: */
+/* chr1  1325    3865    CpG: 183  754  183 489  64.9  0.7 */
+{
+width = $3-$2;
+printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
+  $1,$2,$3,$5,$6,width,$6,width*$7*0.01,100.0*2*$6/($3-$2),$7);}
+'_EOF_'
+
+     awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+     # Load into db
+     ssh hgwdev
+     cd /cluster/data/mm4/bed/cpgIsland
+     /cluster/bin/i386/hgLoadBed mm4 cpgIsland -tab -noBin \
+       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
+
+# BLASTZ Human	(IN PROGRESS - 2003-10-21 - Hiram)
+
+    cat << '_EOF_' > DEF
+# mouse vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# RMSK not currently used
+SEQ1_RMSK=/iscratch/i/gs.17/build34/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-primate
+SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm4/bed/blastz.hg16
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/mm4/bed/blastz.hg16/run
+    para create j
+    para try, check, push, check, ....
+
+
+# BLASTZ Rat	(IN PROGRESS - 2003-10-21 - Hiram)
+
+    ssh kk
+    mkdir -p /cluster/data/mm4/bed/blastz.rn3.2003-10-21
+    cd /cluster/data/mm4/bed
+    ln -s blastz.rn3.2003-10-21 blastz.rn3
+    cd blastz.rn3
+
+    cat << '_EOF_' > DEF
+# mouse vs. rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Rat
+SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs
+# RMSK not currently used
+SEQ1_RMSK=/cluster/bluearc/rat/rn3/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInRat
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm4/bed/blastz.rn3
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # run bash shell if you don't already:
+    bash
+    source DEF
+    mkdir run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    sh ./xdir.sh
+    cd run
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+    mv j2 j
+    # cluster run
+    ssh kk
+    cd /cluster/data/mm4/bed/blastz.hg16/run
+    para create j
+    para try, check, push, check, ....
+
+
+# BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
+
+    ssh kk
+    #	Create artifical linSpecRep.notInMouse
+    # The procedure for lineage spec business with self is to simply
+    # use the actual repeat masker output for this mouse assembly as
+    # the lineage specific repeats for itself.  Thus, merely make
+    # symlinks to the repeat masker out files and name them as expected
+    # for blastz.  In this case they are called notInMouse but they
+    # really mean InMouse.  When asked what to use for this,
+    #	Scott Schwartz says:
+    #	It depends on what you want to do with the results.
+    #	If you don't mind never having any RepeatMasker stuff
+    #	align, then it should be fine.   But one could imagine
+    #	other cases.  
+
+    cd /cluster/bluearc/scratch/mus/mm4
+    mkdir linSpecRep.notInMouse
+    cd linSpecRep.notInMouse
+
+    foreach f (../rmsk/*.fa.out)
+	set base = $f:t:r:r
+	echo $base.out.spec
+	ln -s $f $base.out.spec
+    end
+
+
+    mkdir -p /cluster/data/mm4/bed/blastzSelf
+    cd /cluster/data/mm4/bed/blastzSelf
+
+    cat << '_EOF_' > DEF
+# mouse vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Mouse
+SEQ1_DIR=/scratch/mus/mm4/softNib
+# RMSK not currently used
+SEQ1_RMSK=/scratch/mus/mm4/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm4/bed/blastzSelf
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    #	Setup first cluster run
+    ../../jkStuff/BlastZ.run0.sh
+
+# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-10-22 - Hiram)
+    
+    #	Must run this on the small cluster (or rack 9) since this
+    #	process requires more memory than is found in the KK nodes
+    ssh kkr1u00
+    mkdir -p /cluster/data/mm4/bed/genscan
+    cd /cluster/data/mm4/bed/genscan
+    # Make subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+       
+    ls -1S /cluster/data/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
+      > genome.list
+    # Create template file, gsub, for gensub2.
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+XXXX - running 2003-10-22 10:40
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+    para check
+    # If there were out-of-memory problems (run "para problems"), then
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.
+    # chr7_15
+
+    # Convert these to chromosome level files as so:
+    ssh eieio
+    cd ~/mm4/bed/genscan
+    liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
+    liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/mm4/bed/genscan
+    ldHgGene mm4 genscan genscan.gtf
+        # Read 50447 transcripts in 357519 lines in 1 files
+          # 50447 groups 43 seqs 1 sources 1 feature types
+        # 50447 gene predictions
+    hgPepPred mm4 generic genscanPep genscan.pep
+    hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-10-21 Hiram)
+    ssh kksilo
+    cd /cluster/data/mm4
+
+    # Build the .zip files
+    jkStuff/zipAll.sh >&! zipAll.log &
+    #	bash:	./jkStuff/zipAll.sh > zipAll.log 2>&1 &
+    tail -f zipAll.log
+    mkdir zip
+    mv *.zip zip
+    cd zip
+    # Look at zipAll.log to make sure all file lists look reasonable.
+    # Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+    #  47 chromAgp.zip.test
+    #  46 chromFa.zip.test
+    #  46 chromFaMasked.zip.test
+    #  46 chromOut.zip.test
+    #  46 chromTrf.zip.test
+    # 601 contigAgp.zip.test
+    # 601 contigFa.zip.test
+    # 601 contigFaMasked.zip.test
+    # 601 contigOut.zip.test
+    # 601 contigTrf.zip.test
+    #3236 total
+
+    ssh hgwdev
+    cd /cluster/data/mm4/jkStuff
+    # create generic copy program
+    cat << '_EOF_' > cpToWeb.sh
+#!/bin/sh
+if [ $# -ne 1 ]; then
+	echo "usage: cpToWeb.sh <goldenPath download directory>"
+	echo -e "\texample: cpToWeb.sh mm4"
+	exit 255
+fi
+GP=/usr/local/apache/htdocs/goldenPath/$1
+mkdir -p ${GP}
+mkdir -p ${GP}/chromosomes
+for f in ../?/*.fa ../??/*.fa
+do
+    BN=`basename ${f}`
+    zip -j ${GP}/chromosomes/${BN}.zip ${f}
+    echo "zipped: ${BN}"
+done
+mkdir -p ${GP}/bigZips
+for Z in *.zip
+do
+	cp -p ${Z} ${GP}/bigZips
+	echo "copied: ${Z}"
+done
+'_EOF_'
+    chmod +x cpToWeb.sh
+    cd /cluster/data/mm4/zip
+    ../jkStuff/cpToWeb.sh mm4
+    cd /usr/local/apache/htdocs/goldenPath/mm4
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+XXX - waiting here for these refGene sequences to become available
+    # Make the upstream sequence files.
+    # NOTE: must be redone due to bad gap track
+    cd bigZips
+    featureBits mm4 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    rm upstream1000.fa
+    featureBits mm4 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    rm upstream2000.fa
+    featureBits mm4 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+    rm upstream5000.fa
+    # mrna zips -- auto dump process takes care of this
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXX  -----   all below is old data for reference only  XXXXXXXXXX
+XXXX	The sections below will be deleted as they are performed above
 
 
 # ADD MAP CONTIGS TRACK (2003-07-03 Kate)
@@ -271,258 +980,6 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # Note: the info is there in seq_contig.md to also do the _random's, 
     # but we'd have to do some more work: duplicate the gaps of 50000 between 
     # contigs for all _random's except chrUn_random (1000 between).  
-
-
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE by Hiram)
-    # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
-    echo 'INSERT INTO dbDb \
-        (name, description, nibPath, organism, defaultPos, \
-         active, orderKey, genome, scientificName) \
-      VALUES(
-        "mm4", "June 2003", "/gbdb/mm4/nib", "Mouse", "USP18", \
-         1, 30, "Mouse", "Mus musculus");' \
-      | hgsql -h genome-testdb hgcentraltest
-    #	If you need to delete that entry:
-    	echo 'delete from dbDb where name="mm4";' \
-    		 hgsql -h genome-testdb hgcentraltest
-
-    # Make trackDb table so browser knows what tracks to expect:
-    ssh hgwdev
-    cd ~/src/hg/makeDb/trackDb
-    cvs up -d -P
-    # Edit that makefile to add mm4 in all the right places and do
-    make update
-    make alpha
-    cvs commit makefile
-
-
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM4 (DONE 2003-07-13 kate)
-    ssh hgwdev
-    echo 'INSERT INTO blatServers (db, host, port, isTrans) \
-                VALUES ("mm4", "blat10", "17778", "1"); \
-          INSERT INTO blatServers (db, host, port, isTrans) \
-                VALUES ("mm4", "blat", "17779", "0");' \
-      | hgsql -h genome-testdb hgcentraltest
-
-
-# REPEAT MASKING (DONE 2003-07-04 kate)
-   # Split contigs, run RepeatMasker, lift results
-   # Notes: 
-   # * If there is a new version of RepeatMasker, build it and ask the admins 
-   #   to binrsync it (kkstore:/scratch/hg/RepeatMasker/*).
-   # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
-   #   RepeatMasker runs manageable on the cluster ==> results need lifting.
-   # * For the NCBI assembly we repeat mask on the sensitive mode setting
-   #  (RepeatMasker -m -s -ali)
-
-      #- Split contigs into 500kb chunks:
-        ssh eieio
-        cd ~/mm4
-        foreach d ( */chr?{,?}{,_random}_?{,?} )
-          cd $d
-          set contig = $d:t
-          faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
-            -maxN=500000
-          cd ../..
-        end
-
-        #- Make the run directory and job list:
-
-        cd ~/mm4
-    cat << '_EOF_' > jkStuff/RMMouse
-#!/bin/csh -fe
-
-cd $1
-pushd .
-/bin/mkdir -p /tmp/$USER/$2
-/bin/cp $2 /tmp/$USER/$2/
-cd /tmp/$USER/$2
-/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -m $2   
-popd
-/bin/cp /tmp/$USER/$2/$2.out ./
-if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
-# /bin/cp /tmp/$2*.masked ../masked/
-/bin/rm -r /tmp/$USER
-'_EOF_'
-        chmod +x jkStuff/RMMouse
-
-        mkdir -p RMRun
-        rm -f RMRun/RMJobs
-        touch RMRun/RMJobs
-        foreach d ( ?{,?}/chr*_?{,?} )
-          foreach f ( $d/chr*_?{,?}_?{,?}.fa )
-            set f = $f:t
-            echo /cluster/store5/mm.2003.06/mm4/jkStuff/RMMouse \
-                 /cluster/store5/mm.2003.06/mm4/$d $f \
-               '{'check out line+ /cluster/store5/mm.2003.06/mm4/$d/$f.out'}' \
-              >> RMRun/RMJobs
-          end
-        end
-
-        #- Do the run
-        ssh kk
-        cd ~/mm4/RMRun
-        para create RMJobs
-        para try, para check, para check, para push, para check,...
-        # total elapsed time ~16 hours
-        # longest job ~5 hours
-
-        #- Lift up the split-contig .out's to contig-level .out's
-	ssh eieio
-        cd ~/mm4
-        foreach d ( ?{,?}/chr*_?{,?} )
-          cd $d
-          set contig = $d:t
-          liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
-          cd ../..
-        end
-
-        #- Lift up the contig-level .out's to chr-level
-        cd ~/mm4
-        ./jkStuff/liftOut5.sh
-
-        #- Load the .out files into the database with:
-        ssh hgwdev
-        cd ~/mm4
-        # to redo:
-        #    ./jkStuff/dropSplitTable.csh rmsk  
-        # make sure there's no chrUn -- rm Un/chrUn.fa.out
-        hgLoadOut mm4 ?/*.fa.out ??/*.fa.out
-
-
-
-# VERIFY REPEATMASKER RESULTS (DONE 2003-7-04 kate)
-
-    # Run featureBits on mm4 and on a comparable genome build, and compare:
-    ssh hgwdev
-    featureBits mm4 rmsk
-        # 1218703233 bases of 2819804865 (43.219%) in intersection
-
-    featureBits mm3 rmsk
-        # 1080265553 bases of 2505900260 (43.109%) in intersection
-
-
-# SIMPLE REPEAT TRACK (DONE 200-07-06 kate)
-    # Instructions below are for run on fileserver.
-    # TRF can be run on fileserver
-    # in parallel with RepeatMasker on cluster, since it
-    # doesn't require masked input sequence.
-    ssh eieio
-    mkdir ~/mm4/bed/simpleRepeat
-    cd ~/mm4/bed/simpleRepeat
-    mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    # create job list of 5MB chunks
-    foreach f \
-       (/cluster/store5/mm.2003.06/mm4/?{,?}/chr?{,?}_[0-9]*/chr?{,?}_?{,?}.fa \
-       /cluster/store5/mm.2003.06/mm4/?{,?}/chr*_random_?{,?}/chr*_random_?{,?}.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    wc -l jobs.csh
-        #   598 jobs.csh
-
-    tcsh jobs.csh >&! jobs.log &
-    tail -f jobs.log
-    #OR tcsh jobs.csh |& tee jobs.log
-
-    ls -1 trf | wc -l
-        #    598
-        #    602 after adding Y chrom
-
-    # When job is done lift output files
-    liftUp simpleRepeat.bed ~/mm4/liftAll.lft warn trf/*.bed
-
-    # Load into the database
-    ssh hgwdev
-    cd ~/mm4/bed/simpleRepeat
-    hgLoadBed mm4 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-        # Loaded 1219874 elements
-
-
-# PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-07-06 kate)
-
-    # After the simpleRepeats track has been built, make a filtered version 
-    # of the trf output: keep trf's with period <= 12:
-    ssh eieio
-    cd ~/mm4/bed/simpleRepeat
-    mkdir -p trfMask
-    foreach f (trf/chr*.bed)
-      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
-    end
-
-    # Lift up filtered trf output to chrom coords
-    cd ~/mm4
-    mkdir -p bed/simpleRepeat/trfMaskChrom
-    foreach c (?{,?})
-      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-        $c/lift/ordered.lst > $c/lift/oTrf.lst
-      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
-        liftAll.lft warn `cat $c/lift/oTrf.lst`
-      if (-e $c/lift/random.lst) then
-        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-           $c/lift/random.lst > $c/lift/rTrf.lst
-        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
-          liftAll.lft warn `cat $c/lift/rTrf.lst`
-      endif
-    end
-    # NOTE: ignore warning about non-existent Un/Lift/ordered.lift
-    # since there is no chrUn
-    
-
-# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 2003-07-08 kate)
-    ssh eieio
-    cd ~/mm4
-    #- Soft-mask (lower-case) the contig and chr .fa's
-    tcsh jkStuff/makeFaMasked.sh >&! maskFa.out &
-    tail -100f maskFa.out
-
-    #- Make hard-masked .fa.masked files as well:
-    tcsh jkStuff/makeHardMasked.sh
-
-    #- Rebuild the nib, mixedNib, maskedNib files:
-    tcsh jkStuff/makeNib.sh
-    # ignore complaints about missing chrUn
-
-    # Redo symbolic links from /gbdb/mm4/nib to 
-    #   mixed (RM and TRF) soft-masked nib files
-    ssh hgwdev
-    rm -fr /gbdb/mm4/nib/*
-    foreach f (/cluster/store5/mm.2003.06/mm4/mixedNib/chr*.nib)
-      ln -s $f /gbdb/mm4/nib
-    end
-
-    # Copy data to /cluster/bluearc for cluster runs
-    ssh eieio
-
-    # masked contigs
-    rm -fr /cluster/bluearc/mm4/trfFa
-    mkdir -p /cluster/bluearc/mm4/trfFa
-    # cp -p ~/mm4/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
-    cp ~/mm4/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
-
-    # masked chrom nibs
-    cd ~/mm4
-    rm -fr /cluster/bluearc/mm4/mixedNib
-    mkdir -p /cluster/bluearc/mm4/mixedNib
-    cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/mixedNib
-
-    # lift file, for mrna processing
-    cp -p liftAll.lft /cluster/bluearc/mm4
-
-    # also copy to iservers
-    ssh kkr1u00
-    cd ~/mm4
-    cp -p liftAll.lft /iscratch/i/mm4
-    mkdir -p /iscratch/i/mm4/mixedNib
-    cp -p /cluster/bluearc/mm4/mixedNib/chr*.nib /iscratch/i/mixedNib
-    mkdir -p /iscratch/i/mm4/trfFa
-    cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
-    /cluster/bin/scripts/iSync
-
 
 # AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2003-07-07 - kate)
 
@@ -619,172 +1076,3 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     para check
     para push
     etc.
-
-
-# MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-07-08 kate)
-    ssh eieio
-    cd /cluster/data/mm4
-
-    # Build the .zip files
-    jkStuff/zipAll.sh >&! zipAll.log &
-    tail -f zipAll.log
-    mkdir zip
-    mv *.zip zip
-    cd zip
-    # Look at zipAll.log to make sure all file lists look reasonable.
-    # Check zip file integrity:
-    foreach f (*.zip)
-      unzip -t $f > $f.test
-      tail -1 $f.test
-    end
-    wc -l *.zip.test
-     # 46 chromAgp.zip.test
-     # 45 chromFaMasked.zip.test
-     # 45 chromFa.zip.test
-     # 45 chromOut.zip.test
-     # 45 chromTrf.zip.test
-     # 604 contigAgp.zip.test
-     # 604 contigFaMasked.zip.test
-     # 604 contigFa.zip.test
-     # 604 contigOut.zip.test
-     # 604 contigTrf.zip.test
-     # 3246 total
-
-    # Copy the .zip files to hgwdev:/usr/local/apache/...
-    ssh hgwdev
-    cd ~/mm4/zip
-    # edit copy program for mouse
-    # TODO: make this generic
-    ../jkStuff/cpToWeb.sh
-    cd /usr/local/apache/htdocs/goldenPath/mmJun2003
-    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
-
-    # Make the upstream sequence files.
-    # NOTE: must be redone due to bad gap track
-    cd bigZips
-    featureBits mm4 refGene:upstream:1000 -fa=upstream1000.fa
-    zip upstream1000.zip upstream1000.fa
-    rm upstream1000.fa
-    featureBits mm4 refGene:upstream:2000 -fa=upstream2000.fa
-    zip upstream2000.zip upstream2000.fa
-    rm upstream2000.fa
-    featureBits mm4 refGene:upstream:5000 -fa=upstream5000.fa
-    zip upstream5000.zip upstream5000.fa
-    rm upstream5000.fa
-    # mrna zips -- how ?
-
-
-# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-07-09 - kate)
-    
-    ssh eieio
-    mkdir -p ~/mm4/bed/genscan
-    cd ~/mm4/bed/genscan
-    # NOTE: next time, make a "run" subdir for para job
-    # Make 3 subdirectories for genscan to put their output files in
-    mkdir -p gtf pep subopt
-       
-    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
-    # big cluster, due to limitation of memory and swap space on each
-    # processing node).
-    # NOTE: running on rack 9
-    ssh kkr9u01
-    cd ~/mm4/bed/genscan
-    ls -1S /cluster/store5/mm.2003.06/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
-      > genome.list
-    # Create template file, gsub, for gensub2.  For example (3-line file):
-    # Note: I changed this to 1800000 in this build because some jobs were
-    # taking so long I thought they had crashed.
-#LOOP
-/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=1800000
-#ENDLOOP
-    echo "" > dummy.list
-    gensub2 genome.list dummy.list gsub jobList
-    para create jobList
-    para try
-    para check
-    para push
-    # Issue either one of the following two commands to check the
-    # status of the cluster and your jobs, until they are done.
-    parasol status
-    para check
-    # If there were out-of-memory problems (run "para problems"), then
-    # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.
-    # chr7_15
-
-    # Convert these to chromosome level files as so:
-    ssh eieio
-    cd ~/mm4/bed/genscan
-    liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
-    liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
-      /dev/null
-    cat pep/*.pep > genscan.pep
-
-    # Load into the database as so:
-    ssh hgwdev
-    cd ~/mm4/bed/genscan
-    ldHgGene mm4 genscan genscan.gtf
-        # Read 50447 transcripts in 357519 lines in 1 files
-          # 50447 groups 43 seqs 1 sources 1 feature types
-        # 50447 gene predictions
-    hgPepPred mm4 generic genscanPep genscan.pep
-    hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
-
-
-# PREPARE CLUSTER FOR BLASTZ RUN (IN PROGRESS 2003-07-10 kate)
-
-    # This needs to be done after trf-masking and nib generation.
-    
-    # NOTE: generated lineage-specific .out files
-    # using "old" script, for use vs. human 
-    # Will need species-specific version for mouse 
-    # 2003-07-09 kate
-    ssh eieio
-    # Extract lineage-specific repeats using Arian Smit's script:
-    mkdir -p ~/mm4/bed/linSpecRep
-    cd ~/mm4/bed/linSpecRep
-    # foreach f (~/mm4/*/chr*.out)
-        # ln -sf $f .
-    # end
-    # don't step on existing .out's
-    foreach f (~/mm4/*/chr*.out)
-        cp $f .
-    end
-
-    /cluster/bin/scripts/rodentSpecificRepeats.pl *.out 
-    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
-    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
-    rm *.out
-    cd ~/mm4/bed
-    rm -rf /cluster/bluearc/mm4/linSpecRep
-    #  This dir already exists from above
-    cp -Rp linSpecRep /cluster/bluearc/mm4
-    # RepeatMasker .out:
-    cd ~/mm4
-    rm -rf /cluster/bluearc/mm4/rmsk
-    mkdir -p /cluster/bluearc/mm4/rmsk
-    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/mm4/rmsk
-
-
-# LOAD CPGISSLANDS (DONE 2003-07-13 kate)
-     ssh eieio
-     mkdir -p /cluster/data/mm4/bed/cpgIsland
-     cd /cluster/data/mm4/bed/cpgIsland
-     # cpglh requires hard-masked (N) .fa's.  
-     # There may be warnings about "bad character" for IUPAC ambiguous 
-     # characters like R, S, etc.  Ignore the warnings.  
-     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
-       set fout=$f:t:r:r.cpg
-       /cluster/bin/cpglh $f > $fout
-       echo Done with $fout
-     end
-     ln -s /cluster/data/mm3 /cluster/data/lastMm
-     cp /cluster/data/lastMm/bed/cpgIsland/filter.awk .
-     awk -f filter.awk chr*.cpg > cpgIsland.bed
-
-     # Load into db
-     ssh hgwdev
-     cd /cluster/data/mm4/bed/cpgIsland
-     /cluster/bin/i386/hgLoadBed mm4 cpgIsland -tab -noBin \
-       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed

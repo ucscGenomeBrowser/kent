@@ -26,6 +26,7 @@ color 0,0,200
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred sangerPep
 url http://www.wormbase.org/db/gene/gene?name=$$
+hgGene on
 
 track est
 shortLabel $Organism ESTs

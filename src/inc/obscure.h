@@ -85,3 +85,7 @@ void shuffleList(void *pList, int shuffleCount);
  *     randomizeList(&list)
  * where list is a pointer to a structure that
  * begins with a next field. */
+
+char *stripCommas(char *position);
+/* make a new string with commas stripped out */
+

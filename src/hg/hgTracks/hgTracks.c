@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.616 2003/10/16 17:57:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.619 2003/10/23 15:39:44 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -569,9 +569,9 @@ if (dy == NULL)
 return dy->string;
 }
 
-void mapBoxHc(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine)
-/* Print out image map rectangle that would invoke the htc (human track click)
+void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
+	char *track, char *item, char *statusLine, boolean doHgGene)
+/* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
 int xEnd = x+width;
@@ -582,16 +582,35 @@ if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-	hgcNameAndSettings(), start, end, track, encodedItem, 
-	chromName, winStart, winEnd, 
-	database, tl.picWidth);
-    /*if (start !=-1)*/
+    if (doHgGene)
+        {
+	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+		cartSidUrlString(cart),
+		"hgg_gene", item,
+		"hgg_chrom", chromName,
+		"hgg_start", start,
+		"hgg_end", end);
+	}
+    else
+	{
+	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+	    hgcNameAndSettings(), start, end, track, encodedItem, 
+	    chromName, winStart, winEnd, 
+	    database, tl.picWidth);
+	}
     if (statusLine != NULL)
 	mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
     freeMem(encodedItem);
     }
+}
+
+void mapBoxHc(int start, int end, int x, int y, int width, int height, 
+	char *track, char *item, char *statusLine)
+/* Print out image map rectangle that would invoke the hgc (human genome click)
+ * program. */
+{
+mapBoxHgcOrHgGene(start, end, x, y, width, height, track, item, statusLine, FALSE);
 }
 
 boolean chromTableExists(char *tabSuffix)
@@ -1267,6 +1286,7 @@ int heightPer = tg->heightPer;
 int s, e;
 int y, x1, x2, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+boolean doNear = (trackDbSetting(tg->tdb, "hgGene") != NULL);
 
 if (vis == tvPack || vis == tvSquish)
     {
@@ -1309,8 +1329,8 @@ if (vis == tvPack || vis == tvSquish)
 	    int w = x2-textX;
 	    if (w > 0)
 		{
-		mapBoxHc(s, e, textX, y, w, heightPer, tg->mapName, 
-			tg->mapItemName(tg, item), name);
+		mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+			tg->mapItemName(tg, item), name, doNear);
 		}
 	    }
 	}
@@ -4574,52 +4594,6 @@ if (textWidth <= width)
 return NULL;
 }
 
-#ifdef OLD
-static void bactigDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw bactig items. */
-{
-int baseWidth = seqEnd - seqStart;
-struct bactigPos *bactig;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
-Color col;
-int ix = 0;
-char *s;
-double scale = scaleForPixels(width);
-for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
-    {
-    x1 = round((double)((int)bactig->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)bactig->chromEnd-winStart)*scale) + xOff;
-    /* Clip here so that text will tend to be more visible... */
-    if (x1 < xOff)
-	x1 = xOff;
-    if (x2 > xOff + width)
-	x2 = xOff + width;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
-    s = abbreviateBactig(bactig->name, tl.font, w);
-    if (s != NULL)
-	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
-    if (isFull)
-	y += lineHeight;
-    else 
-	{
-	mapBoxHc(bactig->chromStart, bactig->chromEnd, x1,y,w,heightPer,
-		 tg->mapName, bactig->name, bactig->name);
-	}
-    ++ix;
-    }
-}
-#endif /* OLD */
-
 void bactigMethods(struct track *tg)
 /* Make track for bactigPos */
 {
@@ -4965,6 +4939,7 @@ else
     }
 }
 
+#ifdef OLD
 void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
 	char *track, char *item, char *statusLine, boolean target, char *otherFrame)
 /* Print out image map rectangle that would invoke the htc (human track click)
@@ -4982,6 +4957,7 @@ if(target)
 hPrintf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
 freeMem(encodedItem);
 }
+#endif /* OLD */
 
 
 /* Use the RepeatMasker style code to generate the
@@ -5658,6 +5634,7 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     struct slList *item;
+    boolean doNear = FALSE;
     switch (track->limitedVis)
 	{
 	case tvHide:
@@ -5669,6 +5646,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    y += track->height;
 	    break;
 	case tvFull:
+	    doNear = (trackDbSetting(track->tdb, "hgGene") != NULL);
 	    if (withCenterLabels)
 		y += fontHeight;
 	    start = 1;
@@ -5700,10 +5678,10 @@ for (track = trackList; track != NULL; track = track->next)
 		    {
 		    if (!track->mapsSelf)
 			{
-                        mapBoxHc(track->itemStart(track, item), track->itemEnd(track, item),
+                        mapBoxHgcOrHgGene(track->itemStart(track, item), track->itemEnd(track, item),
 				 trackPastTabX,y,trackPastTabWidth,height, track->mapName,
 				 track->mapItemName(track, item),
-				 track->itemName(track, item));
+				 track->itemName(track, item), doNear);
 			}
 		    y += height;
 		    }
@@ -6426,6 +6404,7 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -6684,7 +6663,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 	hWrites("position ");
-	hTextVar("position", position, 30);
+	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" size %s ", buf);
 	hWrites(" image width ");
@@ -7013,6 +6992,7 @@ if (! isGenome(pos))
 return(pos);
 }
 
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
@@ -7029,6 +7009,9 @@ if (NULL == position)
 
 if((position == NULL) || sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+
+/* doesn't free old position */
+position = stripCommas(position);
 
 chromName = NULL;
 winStart = 0;
@@ -7250,6 +7233,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v39", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v40", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

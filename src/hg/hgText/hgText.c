@@ -1,5 +1,6 @@
 /* hgText - a.k.a. Table Browser. */
 #include "common.h"
+#include "obscure.h"
 #include "hCommon.h"
 #include "linefile.h"
 #include "cheapcgi.h"
@@ -27,7 +28,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.99 2003/10/15 03:58:28 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.102 2003/10/22 23:11:14 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -329,7 +330,7 @@ void positionLookup(char *phase)
 if (position == NULL || position[0] == 0)
     position = cloneString("genome");
 
-cgiMakeTextVar("position", position, 30);
+cgiMakeTextVar("position", addCommasToPos(position), 30);
 cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
@@ -387,7 +388,7 @@ if (tableIsPositional)
 	puts("</TT>)<P>");
 	}
     else
-	printf("position: %s<P>\n", position);
+	printf("position: %s<P>\n", addCommasToPos(position));
     }
 printf("<A HREF=\"%s?hgsid=%d&phase=table&tbPosOrKeys=pos\">New query</A><P>",
        hgTextName(), cartSessionId(cart));
@@ -616,6 +617,11 @@ char *oldDb;
 
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
+if (! hDbIsActive(database))
+    {
+    database = hDefaultDb();
+    organism = hGenome(database);
+    }
 handleDbChange();
 
 puts(
@@ -742,7 +748,7 @@ char *getPosition(char **retChrom, int *retStart, int *retEnd)
 /* Get position from cgi (not cart); use hgFind if necessary; return NULL 
  * if we had to display the gateway page or hgFind's selection page. */
 {
-char *pos = cloneString(cgiOptionalString("position"));
+char *pos = stripCommas(cgiOptionalString("position"));
 char rawPos[64];
 
 if ((pos != NULL) && (pos[0] != 0))
@@ -3276,7 +3282,10 @@ struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
-boolean doCtHdr = cgiBoolean("tbDoCustomTrack") || doCt;
+char *phase = (existsAndEqual("phase", getOutputPhase) ?
+	       cgiString("outputType") : cgiString("phase"));
+boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt ||
+		   sameString(phase, getCtBedPhase));
 char *ctName = cgiUsualString("tbCtName", table);
 char *ctDesc = cgiUsualString("tbCtDesc", table);
 char *ctVis  = cgiUsualString("tbCtVis", "dense");

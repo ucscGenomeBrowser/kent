@@ -53,20 +53,6 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 60
 
-name geneLynx
-shortLabel GeneLynx
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1
-priority 70
-
-name geneCards
-shortLabel GeneCards
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s
-priority 80
-
 name cgap
 shortLabel CGAP
 tables cgapAlias kgXref
@@ -85,10 +71,4 @@ shortLabel Ensembl
 tables knownToEnsembl
 idSql select value from knownToEnsembl where name = '%s'
 priority 100
-
-name aceView
-shortLabel AceView
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-priority 110
 

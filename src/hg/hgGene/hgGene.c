@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.16 2003/10/15 08:49:04 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.18 2003/10/21 22:11:06 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -278,7 +278,7 @@ void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
 char *description = NULL;
-char *summaryTables = genomeSetting("summaryTables");
+char *summaryTables = genomeOptionalSetting("summaryTables");
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -286,13 +286,16 @@ if (description != NULL)
 else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
-if (checkTables(summaryTables, conn))
+if (summaryTables != NULL)
     {
-    char *summary = genoQuery(id, "summarySql", conn);
-    if (summary != NULL)
-        {
-	hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
-	freez(&summary);
+    if (checkTables(summaryTables, conn))
+	{
+	char *summary = genoQuery(id, "summarySql", conn);
+	if (summary != NULL)
+	    {
+	    hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
+	    freez(&summary);
+	    }
 	}
     }
 }
@@ -384,14 +387,13 @@ addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(proteinStructureSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 

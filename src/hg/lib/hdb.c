@@ -1,5 +1,6 @@
 /* hdb - human genome browser database. */
 #include "common.h"
+#include "obscure.h"
 #include "hash.h"
 #include "portable.h"
 #include "linefile.h"
@@ -26,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.149 2003/10/21 21:21:07 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.151 2003/10/23 14:12:06 braney Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2397,9 +2398,10 @@ slReverse(&tdbList);
 return tdbList;
 }
 
-boolean hgParseChromRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Parse something of form chrom:start-end into pieces. */
+boolean hgParseChromRangeDb(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, boolean haveDb)
+/* Parse something of form chrom:start-end into pieces. 
+ * if haveDb then check with chromInfo for names */
 {
 char *chrom, *start, *end;
 char buf[256];
@@ -2412,7 +2414,7 @@ start = strchr(chrom, ':');
 if (start == NULL)
     {
     /* If just chromosome name cover all of it. */
-    if ((chrom = hgOfficialChromName(chrom)) == NULL)
+    if (!haveDb || ((chrom = hgOfficialChromName(chrom)) == NULL))
 	return FALSE;
     else
        {
@@ -2436,19 +2438,27 @@ else
 	return FALSE;
     if (!isdigit(end[0]))
 	return FALSE;
-    if ((chrom = hgOfficialChromName(chrom)) == NULL)
+    if (haveDb && ((chrom = hgOfficialChromName(chrom)) == NULL))
 	return FALSE;
     iStart = atoi(start)-1;
     iEnd = atoi(end);
     }
 if (retChromName != NULL)
-    *retChromName = chrom;
+    *retChromName = (haveDb)? chrom : cloneString(chrom);
 if (retWinStart != NULL)
     *retWinStart = iStart;
 if (retWinEnd != NULL)
     *retWinEnd = iEnd;
 return TRUE;
 }
+
+boolean hgParseChromRange(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Parse something of form chrom:start-end into pieces. */
+{
+return hgParseChromRangeDb(spec, retChromName, retWinStart, retWinEnd, TRUE);
+}
+
 
 boolean hgIsChromRange(char *spec)
 /* Returns TRUE if spec is chrom:N-M for some human
@@ -2987,3 +2997,27 @@ else
 return raList;
 }
 
+char *addCommasToPos(char *position)
+/* add commas to the numbers in a position 
+ * returns pointer to static */
+{
+static char buffer[256];
+int winStart, winEnd;
+char *chromName;
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+
+if (position == NULL)
+    return NULL;
+
+buffer[sizeof(buffer) - 1] = 0;
+if (!hgParseChromRangeDb(position, &chromName, &winStart, &winEnd, FALSE))
+    strncpy(buffer, position, sizeof(buffer) - 1);
+else
+    {
+    sprintLongWithCommas(num1Buf, winStart);
+    sprintLongWithCommas(num2Buf, winEnd);
+    safef(buffer, sizeof(buffer) - 1, "%s:%s-%s",chromName, num1Buf,  num2Buf);
+    }
+
+return buffer;
+}

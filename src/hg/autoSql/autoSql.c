@@ -15,7 +15,7 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.21 2003/06/13 00:19:01 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.22 2003/10/17 14:28:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -287,6 +287,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	return col;
     }
 errAbort("Couldn't find column %s", colName);
+return NULL;
 }
 
 struct dbObject *findObType(struct dbObject *objList, char *obName)
@@ -1557,7 +1558,7 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.21 2003/06/13 00:19:01 kent Exp $\";\n");
+fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.22 2003/10/17 14:28:12 kent Exp $\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 

@@ -10,13 +10,15 @@
 #include "dnautil.h"
 #include "dbDb.h"
 #include "axtInfo.h"
+#include "obscure.h"
+#include "hCommon.h"
 #include "hgGene.h"
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */
 {
-hPrintf("<A HREF=\"http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgc?%s",
+hPrintf("<A HREF=\"%s?%s", hgcName(),
    cartSidUrlString(cart));
 hPrintf("&g=htcGeneInGenome&i=%s", itemName);
 hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
@@ -24,17 +26,23 @@ hPrintf("&o=%s&table=%s", table, table);
 hPrintf("\" class=\"toc\">");
 }
 
-static void genomicLink(struct sqlConnection *conn, char *geneId)
+static void genomicLink(struct sqlConnection *conn, char *geneId,
+	char *chrom, int start, int end)
 /* Figure out known genes table, position of gene, link it. */
 {
 char *table = genomeSetting("knownGene");
 hPrintLinkCellStart();
-printGenomicAnchor(table, geneId, curGeneChrom, curGeneStart, curGeneEnd);
-hPrintf("Genomic</A>");
+printGenomicAnchor(table, geneId, chrom, start, end);
+hPrintf("Genomic (%s:", chrom);
+printLongWithCommas(stdout, start);
+hPrintf("-");
+printLongWithCommas(stdout, end);
+hPrintf(")</A>");
 hPrintLinkCellEnd();
 }
 
-static void comparativeLink(struct sqlConnection *conn, char *geneId)
+static void comparativeLink(struct sqlConnection *conn, char *geneId,
+	char *chrom, int start, int end)
 /* Print comparative genomic link. */
 {
 char *table = genomeSetting("knownGene");
@@ -46,9 +54,9 @@ if (sqlTableExists(conn, "axtInfo"))
 	char *db2 = dbList->name;
 	struct axtInfo *aiList = hGetAxtAlignments(db2);
 	hPrintLinkCellStart();
-	hPrintf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart) );
+	hPrintf("<A HREF=\"%s?%s", hgcName(), cartSidUrlString(cart) );
 	hPrintf("&g=htcGenePsl&i=%s&c=%s&l=%d&r=%d", 
-		geneId, curGeneChrom, curGeneStart, curGeneEnd);
+		geneId, chrom, start, end);
 	hPrintf("&o=%s&alignment=%s&db2=%s\"",
 		table, cgiEncode(aiList->alignment), db2);
 	hPrintf(" class=\"toc\">");
@@ -57,7 +65,6 @@ if (sqlTableExists(conn, "axtInfo"))
 	dbDbFreeList(&dbList);
 	}
     }
-http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgc?hgsid=61332&g=htcGenePsl&i=D26481&c=chr1&l=46764895&r=46777037&o=knownGene&alignment=Blastz+Best+in+Genome&db2=mm3&xyzzy=xyzzy#startcodon
 }
 
 static void printSeqLink(struct sqlConnection *conn, char *geneId,
@@ -85,8 +92,14 @@ if (sqlTableExists(conn, table))
 static void printMrnaLink(struct sqlConnection *conn, char *geneId)
 /* Print out link to fetch mRNA. */
 {
-printSeqLink(conn, geneId, "knownGeneMrna", hggDoGetMrnaSeq,
-	"mRNA (may differ from genome)");
+char *title = "mRNA";
+char *tableId = "knownGene";
+if (genomeOptionalSetting("knownGeneMrna") != NULL)
+    {
+    title = "mRNA (may differ from genome)";
+    tableId = "knownGeneMrna";
+    }
+printSeqLink(conn, geneId, tableId, hggDoGetMrnaSeq, title);
 }
 
 static void printProteinLink(struct sqlConnection *conn, char *geneId)
@@ -101,12 +114,42 @@ static void sequencePrint(struct section *section, struct sqlConnection *conn,
 	char *geneId)
 /* Print the sequence section. */
 {
+char *table = genomeSetting("knownGene");
+struct dyString *query = newDyString(0);
+char **row;
+struct sqlResult *sr;
+char *chrom;
+int start,end;
+
+/* Print the current position. */
 hPrintLinkTableStart();
-genomicLink(conn, geneId);
-comparativeLink(conn, geneId);
+genomicLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
+comparativeLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
 printMrnaLink(conn,geneId);
 printProteinLink(conn,geneId);
 hPrintLinkTableEnd();
+
+/* Print out any additional positions. */
+dyStringPrintf(query, "select chrom,txStart,txEnd from %s", table);
+dyStringPrintf(query, " where name = '%s'", curGeneId);
+dyStringPrintf(query, " and (chrom != '%s'", curGeneChrom);
+dyStringPrintf(query, " or txStart != %d", curGeneStart);
+dyStringPrintf(query, " or txEnd != %d)", curGeneEnd);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct sqlConnection *conn2 = hAllocConn();
+    chrom = row[0];
+    start = atoi(row[1]);
+    end = atoi(row[2]);
+    hPrintLinkTableStart();
+    genomicLink(conn2, geneId, chrom, start, end);
+    comparativeLink(conn2, geneId, chrom, start, end);
+    hPrintLinkTableEnd();
+    hFreeConn(&conn2);
+    }
+sqlFreeResult(&sr);
+freeDyString(&query);
 }
 
 struct section *sequenceSection(struct sqlConnection *conn,
@@ -141,10 +184,47 @@ sqlFreeResult(&sr);
 hPrintf("</PRE></TT>");
 }
 
+static void showMrnaFromGenePred(struct sqlConnection *conn, 
+	char *geneId, char *geneName)
+/* Get mRNA sequence for gene from gene prediction. */
+{
+char *table = genomeSetting("knownGene");
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct genePos *gp;
+
+hPrintf("<TT><PRE>");
+safef(query, sizeof(query), 
+    "select * from %s where name='%s'"
+    " and chrom='%s' and txStart=%d and txEnd=%d", 
+    table, geneId, curGeneChrom, curGeneStart, curGeneEnd);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gene = genePredLoad(row);
+    struct bed *bed = bedFromGenePred(gene);
+    struct dnaSeq *seq = hSeqForBed(bed);
+    hPrintf(">%s (%s predicted mRNA)\n", geneId, geneName);
+    writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
+    dnaSeqFree(&seq);
+    bedFree(&bed);
+    genePredFree(&gene);
+    }
+else
+    errAbort("Couldn't find %s at %s:%d-%d", geneId, 
+    	curGeneChrom, curGeneStart, curGeneEnd);
+sqlFreeResult(&sr);
+hPrintf("</TT></PRE>");
+}
+
 void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName)
 /* Get mRNA sequence in a simple page. */
 {
-showSeq(conn, geneId, geneName, "knownGeneMrna");
+if (genomeOptionalSetting("knownGeneMrna") != NULL)
+    showSeq(conn, geneId, geneName, "knownGeneMrna");
+else
+    showMrnaFromGenePred(conn, geneId, geneName);
 }
 
 void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName)

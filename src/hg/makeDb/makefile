@@ -56,4 +56,8 @@ DIRS = \
 	ldHgGene \
 	sanger22gtf \
 	tailLines \
-	toBb 
+	toBb \
+	hgBioCyc \
+	hgKegg \
+	hgMrnaRefseq \
+	hgCGAP

@@ -34,5 +34,6 @@ compile: $O
 	chmod a+rx $A
 
 test:
-	${CGI_BIN}-${USER}/$A hgg_gene=D26481
+	${CGI_BIN}-${USER}/$A hgg_gene=BC010023 hgg_chrom=chr7 hgg_start=26944329 hgg_end=26947401 db=hg16 hgsid=10023
+
 	

@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.3 2003/10/09 09:41:41 kent Exp $";
+static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.4 2003/10/17 19:52:52 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +50,7 @@ static struct optionSpec options[] = {
    {"trimTissue", OPTION_STRING,},
    {"suppress", OPTION_STRING,},
    {"dataField", OPTION_STRING,},
+   {"geneField", OPTION_STRING,},
    {"url", OPTION_STRING,},
    {"credit", OPTION_STRING,},
    {"ref", OPTION_STRING,},

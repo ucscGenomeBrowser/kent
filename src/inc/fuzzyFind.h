@@ -67,6 +67,7 @@ struct ffAli
 extern int ffIntronMax;
 
 void setFfIntronMax(int value);         /* change max intron size */
+void setFfExtendThroughN(boolean val);	/* Set whether or not can extend through N's. */
 
 /************* lib/ffAli.c routines - using alignments ************/
 

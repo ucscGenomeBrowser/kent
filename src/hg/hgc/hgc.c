@@ -2,6 +2,7 @@
  * on something in human tracks display. */
 
 #include "common.h"
+#include "obscure.h"
 #include "hCommon.h"
 #include "hash.h"
 #include "bits.h"
@@ -114,7 +115,7 @@
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.502 2003/10/16 23:17:36 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.505 2003/10/24 15:59:18 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1988,8 +1989,10 @@ void savePosInTextBox(char *chrom, int start, int end)
    Positions becomes chrom:start-end*/
 {
 char position[128];
+char *newPos;
 snprintf(position, 128, "%s:%d-%d", chrom, start, end);
-cgiMakeTextVar("getDnaPos", position, strlen(position) + 2);
+newPos = addCommasToPos(position);
+cgiMakeTextVar("getDnaPos", newPos, strlen(newPos) + 2);
 cgiContinueHiddenVar("db");
 }
 
@@ -2229,7 +2232,7 @@ tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Case/Color");
 
-if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     hgParseChromRange(pos, &seqName, &winStart, &winEnd);
 if (winEnd - winStart > 1000000)
     {
@@ -2280,7 +2283,7 @@ printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
-if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     {
     hgParseChromRange(pos, &seqName, &winStart, &winEnd);
     }
@@ -2432,7 +2435,7 @@ if (tbl[0] == 0)
     int end = 0;
 
     itemCount = 1;
-    if ( NULL != (pos = cartOptionalString(cart, "getDnaPos")) &&
+    if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
          hgParseChromRange(pos, &chrom, &start, &end))
         {
         hgSeqRange(chrom, start, end, '?', "dna");
@@ -2686,7 +2689,7 @@ Bits *uBits;	/* Underline bits. */
 Bits *iBits;    /* Italic bits. */
 Bits *bBits;    /* Bold bits. */
 
-if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     hgParseChromRange(pos, &seqName, &winStart, &winEnd);
 
 winSize = winEnd - winStart;
@@ -5771,6 +5774,8 @@ if (proteinID == NULL)
     }
 
 sprintf(cond_str, "displayID='%s'", proteinID);
+proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+sprintf(cond_str, "displayID='%s'", proteinID);
 proteinDesc = sqlGetField(conn, protDbName, "spXref3", "description", cond_str);
 if (proteinDesc != NULL) printf("%s\n", proteinDesc);
 sprintf(cond_str, "sp='%s'", proteinID);
@@ -5796,7 +5801,7 @@ if (pdbID != NULL)
 
 printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
 printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-       proteinID, proteinID);
+       proteinAC, proteinID);
 
 // print more protein links if there are other proteins correspond to this mRNA
 sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
@@ -6486,12 +6491,6 @@ if (url != NULL && url[0] != 0)
 void doSuperfamily(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
-char *dupe, *type, *words[16];
-char title[256];
-int wordCount;
-int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-
 if (itemForUrl == NULL)
     itemForUrl = item;
 
@@ -6500,9 +6499,6 @@ genericHeader(tdb, item);
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
 printTrackHtml(tdb);
-
-freez(&dupe);
-hFreeConn(&conn);
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)

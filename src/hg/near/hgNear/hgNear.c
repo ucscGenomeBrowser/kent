@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.106 2003/10/18 16:34:37 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.109 2003/10/23 15:41:43 heather Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -617,7 +617,6 @@ return list;
 void setupColumnAcc(struct column *col, char *parameters)
 /* Set up a column that displays the geneId (accession) */
 {
-columnDefaultMethods(col);
 col->cellVal = accVal;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = accAdvFilter;
@@ -892,7 +891,7 @@ hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
-  "document.orgForm.near_search.value='';"
+  // "document.orgForm.near_search.value='';"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
@@ -1577,10 +1576,14 @@ void doMiddle(struct cart *theCart)
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
+char *oldOrg;
 cart = theCart;
 
 getDbAndGenome(cart, &database, &genome);
 makeSureDbHasHgNear();
+oldOrg = cartOptionalString(cart, oldOrgVarName);
+if (oldOrg != NULL && !sameString(oldOrg, genome))
+   cartRemove(cart, searchVarName);
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
@@ -1652,6 +1655,7 @@ else if (cartNonemptyString(cart, searchVarName))
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
+cartSetString(cart, oldOrgVarName, genome);
 }
 
 void usage()
@@ -1670,6 +1674,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v4", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Family v5", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }

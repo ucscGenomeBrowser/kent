@@ -7,9 +7,28 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = blastToPsl
 O = $A.o 
 
-my: compile scoreSort
+my: compile scoreSort blast0To8 smashTab 
 	mv $A $(HOME)/bin/$(MACHTYPE)
 	mv scoreSort $(HOME)/bin/$(MACHTYPE)
+	mv blast0To8 $(HOME)/bin/$(MACHTYPE)
+#	mv smashTab $(HOME)/bin/$(MACHTYPE)
+#	mv blast0ToPsl $(HOME)/bin/$(MACHTYPE)
+
+blast0ToPsl: blast0ToPsl.o
+	${CC} blast0ToPsl.o ${F64} ${MYLIBS} ${L} 
+	mv a.out blast0ToPsl
+tryToPsl: tryToPsl.o
+	${CC} tryToPsl.o ${F64} ${MYLIBS} ${L} 
+	mv a.out tryToPsl
+blastLink: blastLink.o
+	${CC} blastLink.o ${F64} ${MYLIBS} ${L} 
+	mv a.out blastLink
+smashTab: smashTab.o
+	${CC} smashTab.o ${F64} ${MYLIBS} ${L} 
+	mv a.out smashTab
+blast0To8: blast0To8.o
+	${CC} blast0To8.o ${F64} ${MYLIBS} ${L} 
+	mv a.out blast0To8
 
 scoreSort: scoreSort.o
 	${CC} scoreSort.o ${F64} ${MYLIBS} ${L} 

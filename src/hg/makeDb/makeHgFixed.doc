@@ -54,11 +54,24 @@ hgMedianMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps kimMed.ra kimW
 
 # D. melanogaster life cycle data from Arbeitman et al 2002 
 # via the Stanford Microarray Database.
-cd /projects/compbio/data/microarray/flyLifeCycle
-hgStanfordMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps spots
-cp ~kent/src/hg/makeDb/hgMedianMicroarray/kimMed.ra arbMed.ra
-TODO
-# edit arbMed.ra
+cd ~/kent/src/hg/makeDb/hgStanfordMicroarray
+# absolute:
+hgStanfordMicroarray -geneField="Systematic name" -dataField=CH2I_MEDIAN \
+  hgFixed arbFlyLifeAll arbFlyLifeAllExps \
+  /projects/compbio/data/microarray/flyLifeCycle/spots
+# ratios:
+hgStanfordMicroarray -geneField="Systematic name" \
+  hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps \
+  /projects/compbio/data/microarray/flyLifeCycle/spots
+cd ../hgMedianMicroarray
+echo "select name,id from arbFlyLifeAllExps" | hgsql -N hgFixed  \
+  | sort > arbMed.ra
+# edit arbMed.ra to collapse the N=1, N=2 lines.
+# median absolute:
+hgMedianMicroarray hgFixed arbFlyLifeAll arbFlyLifeAllExps arbMed.ra \
+  arbFlyLifeMedian arbFlyLifeMedianExps
+# median ratios:
 hgMedianMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps arbMed.ra \
   arbFlyLifeMedianRatio arbFlyLifeMedianExps
+# cvs add and check in arbMed.ra
 

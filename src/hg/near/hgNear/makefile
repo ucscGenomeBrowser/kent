@@ -31,3 +31,7 @@ beta::
 compile: $O $(MYLIBS)
 	${CC} ${COPT} -o $A $O $(MYLIBS) $L
 	chmod a+rx $A
+
+test:
+	$(CGI_BIN)-$(USER)/hgNear
+

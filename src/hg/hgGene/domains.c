@@ -12,44 +12,25 @@ static boolean domainsExists(struct section *section,
 /* Return TRUE if there's some pfam domains in swissProt on this one. 
  * on this one. */
 {
-if (swissProtAcc != NULL)
-    {
-    section->pfamDomains = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
-    section->interproDomains = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
-    }
-return section->items != NULL || section->interproDomains != NULL;
+return swissProtAcc != NULL;
+}
+
+void modBaseAnchor(char *swissProtAcc)
+/* Print out anchor to modBase. */
+{
+hPrintf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
 }
 
 static void domainsPrint(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Print out protein domains. */
 {
-struct slName *el;
-
-if (section->pfamDomains != NULL)
-    {
-    char *pfamDescSql = genomeSetting("pfamDescSql");
-    hPrintf("<B>Pfam Domains</B><BR>");
-    for (el = section->pfamDomains; el != NULL; el = el->next)
-	{
-	char query[256];
-	char *description;
-	safef(query, sizeof(query), pfamDescSql, el->name);
-	description = sqlQuickString(conn, query);
-	if (description == NULL)
-	    description = cloneString("n/a");
-	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
-	    el->name);
-	hPrintf("%s</A> - %s<BR>\n", el->name, description);
-	freez(&description);
-	}
-    }
-if (section->interproDomains != NULL)
+struct slName *el, *list;
+list = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
+if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    if (section->pfamDomains != NULL)
-        hPrintf("<BR>\n");
     hPrintf("<B>Interpro Domains</B> - ");
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
@@ -65,9 +46,72 @@ if (section->interproDomains != NULL)
 	hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
+    hPrintf("<BR>\n");
+    slFreeList(&list);
     }
-slFreeList(&section->pfamDomains);
-slFreeList(&section->interproDomains);
+
+list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
+if (list != NULL)
+    {
+    char *pfamDescSql = genomeSetting("pfamDescSql");
+    hPrintf("<B>Pfam Domains</B><BR>");
+    for (el = list; el != NULL; el = el->next)
+	{
+	char query[256];
+	char *description;
+	safef(query, sizeof(query), pfamDescSql, el->name);
+	description = sqlQuickString(conn, query);
+	if (description == NULL)
+	    description = cloneString("n/a");
+	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    el->name);
+	hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	freez(&description);
+	}
+    slFreeList(&list);
+    hPrintf("<BR>\n");
+    }
+
+list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
+if (list != NULL)
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
+    safef(query, sizeof(query),
+    	"select extAcc1,extAcc2 from extDbRef,extDb"
+	" where extDbRef.acc = '%s'"
+	" and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"
+	, swissProtAcc);
+    sr = sqlGetResult(spConn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
+	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+	}
+    hPrintf("<BR>\n");
+    slFreeList(&list);
+    }
+
+/* Do modBase link. */
+    {
+    hPrintf("<B>ModBase Predicted Comparative 3D Structure on");
+    modBaseAnchor(swissProtAcc);
+    hPrintf(" %s", swissProtAcc);
+    hPrintf("</A></B><BR>\n");
+    hPrintf("<TABLE><TR>");
+    hPrintf("<TD>");
+    modBaseAnchor(swissProtAcc);
+    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
+    hPrintf("<TD>");
+    modBaseAnchor(swissProtAcc);
+    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("<TD>");
+    modBaseAnchor(swissProtAcc);
+    hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("</TR></TABLE>");
+    }
+
 }
 
 struct section *domainsSection(struct sqlConnection *conn, 

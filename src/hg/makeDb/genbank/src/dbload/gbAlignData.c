@@ -27,7 +27,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.7 2003/07/11 04:13:40 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.8 2003/10/22 03:37:48 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -127,6 +127,26 @@ if (*tabFileVar == NULL)
 return sqlUpdaterGetFh(*tabFileVar, 1);
 }
 
+static void createPerChromPslTables(char* rootTable, struct sqlConnection* conn)
+/* create per-chromosome PSL tables if they don't exist.  This creates tables
+ * for all chromosomes, as this makes various queries easier (table browser
+ * depends on this). */
+{
+struct slName* chrom;
+char table[64];
+for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
+    {
+    safef(table, sizeof(table), "%s_%s", chrom->name, rootTable);
+    if (!sqlTableExists(conn, table))
+        {
+        /* create with bin */
+        char *sqlCmd = pslGetCreateSql(table, PSL_WITH_BIN);
+        sqlRemakeTable(conn, table, sqlCmd);
+        freez(&sqlCmd);
+        }
+    }
+}
+
 static FILE* getChromPslTabFile(char* rootTable, char* chrom,
                                 struct hash ** chromHashPtr,
                                 struct sqlConnection* conn)
@@ -134,7 +154,10 @@ static FILE* getChromPslTabFile(char* rootTable, char* chrom,
 {
 struct hashEl* hel;
 if (*chromHashPtr == NULL)
+    {
     *chromHashPtr = hashNew(8);
+    createPerChromPslTables(rootTable, conn);
+    }
 hel = hashLookup(*chromHashPtr, chrom);
 if (hel == NULL)
     {
@@ -143,13 +166,6 @@ if (hel == NULL)
     safef(table, sizeof(table), "%s_%s", chrom, rootTable);
     tabFile = sqlUpdaterNew(table, gTmpDir, (verbose >= 2), &gAllUpdaters);
     hel = hashAdd(*chromHashPtr, chrom, tabFile);
-    if (!sqlTableExists(conn, table))
-        {
-        /* create with bin */
-        char *sqlCmd = pslGetCreateSql(table, PSL_WITH_BIN);
-        sqlRemakeTable(conn, table, sqlCmd);
-        freez(&sqlCmd);
-        }
     }
 return sqlUpdaterGetFh((struct sqlUpdater*)hel->val, 1);
 }

@@ -3439,6 +3439,22 @@ hgLoadBed hg16 syntenySelf ucsc100k.bed
 #  featureBits hg15 sgpGene
 #  40395614 bases of 2866466359 (1.409%) in intersection
 
+LOAD NCI60 (DONE: Fan 10/20/2003)
+o - # ssh hgwdev
+    cd /projects/cc/hg/mapplots/data/NCI60/dross_arrays_nci60/
+    mkdir hg16
+    cd hg16
+    findStanAlignments hg16 ../BC2.txt.ns ../../image/cumulative_plates.011204.list.human hg16.image.psl >& hg16.image.log
+    cp ../experimentOrder.txt ./
+    sed -e 's/ / \.\.\//g' < experimentOrder.txt > epo.txt
+    egrep -v unknown hg16.image.psl > hg16.image.good.psl
+    stanToBedAndExpRecs  hg16.image.good.psl hg16.nci60.exp hg16.nci60.bed `cat epo.txt`
+    hgsql hg16 < ../../scripts/nci60.sql
+    echo "load data local infile 'hg16.nci60.bed' into table nci60" | hgsql hg16
+    mkdir /cluster/store4/gs.17/build34/bed/nci60
+    mv hg16.nci60.bed /cluster/store4/gs.17/build34/bed/nci60
+    rm *.psl
+
 LOAD AFFYRATIO [GNF done jk Sept 18, 2003] 
 
     # Set up cluster job to align targets to hg16

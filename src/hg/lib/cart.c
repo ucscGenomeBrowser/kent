@@ -1,4 +1,5 @@
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "errabort.h"
 #include "hash.h"
@@ -11,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.28 2003/09/06 23:15:04 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.30 2003/10/21 17:33:42 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -778,6 +779,8 @@ pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org);
 pos = cgiOptionalString(positionCgiName);
+if (pos != NULL)
+    pos = addCommasToPos(pos);
 if (pos == NULL && org != NULL) 
     safef(titlePlus,sizeof(titlePlus), "%s - %s",org, title );
 else if (pos != NULL && org == NULL)

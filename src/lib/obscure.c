@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.22 2003/10/01 23:12:32 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.26 2003/10/22 18:41:48 braney Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -451,4 +451,19 @@ if (count > 1)
     slReverse(&list);
     *pL = list;       
     }
+}
+
+char *stripCommas(char *position)
+/* make a new string with commas stripped out */
+{
+char *newPos = cloneString(position);
+char *nPtr = newPos;
+
+if (position == NULL)
+    return NULL;
+while(*nPtr = *position++) 
+    if (*nPtr != ',')
+	nPtr++;
+
+return newPos;
 }

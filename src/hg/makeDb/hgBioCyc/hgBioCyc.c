@@ -89,5 +89,6 @@ again:
 fclose(o1);
 system("cat j.dat|sort|uniq >bioCycPathway.tab");
 system("rm j.dat");
+return 0;
 }
 
