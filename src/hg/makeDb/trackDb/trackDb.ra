@@ -1417,3 +1417,10 @@ xrefQuery select name,tigrSubRole from %s where tigrSubRole like '%%%s%%'
 searchDescription SubRole of TIGR Locus
 searchPriority 63
 
+searchTable rnaCluster
+searchMethod exact
+searchType bed
+termRegex chr[0-9A-Z]+[.][0-9]+
+searchPriority 50
+
+
