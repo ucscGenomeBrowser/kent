@@ -2,11 +2,12 @@
 #include "common.h"
 #include "linefile.h"
 #include "obscure.h"
+#include "portable.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen count");
+errAbort("usage: freen power");
 }
 
 struct numList
@@ -16,28 +17,27 @@ struct numList
     int num;
     };
 
-void freen(char *countString)
+void freen(char *s)
 /* Print status code. */
 {
-int count = atoi(countString);
+double power = 1.0/atof(s);
 int i;
-struct numList *list = NULL, *num;
-
-for (i=0; i<count; ++i)
-    {
-    AllocVar(num);
-    num->num = i;
-    slAddHead(&list, num);
-    }
-shuffleList(&list);
-for (num=list; num != NULL; num = num->next)
-    printf("%d\n", num->num);
+for (i=1; i<=10; ++i)
+    printf("%d %f\n", i, pow(i, power));
+for (i=10; i<1000000; i *= 10)
+    printf("%d %f\n", i, pow(i, power));
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long t1, t2;
+t1 = clock1000();
 if (argc != 2)
    usage();
 freen(argv[1]);
+sleep(2);
+t2 = clock1000();
+printf("time %ld %ld %ld\n", t2-t1, t1, t2);
 }
