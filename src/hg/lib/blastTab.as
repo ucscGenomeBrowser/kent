@@ -10,7 +10,7 @@ table blastTab
     uint qStart;	"Start in query (0 based)"
     uint qEnd;		"End in query (non-inclusive)"
     uint tStart;	"Start in target (0 based)"
-    uint tEnd;		"Start in query (non-inclusive)"
+    uint tEnd;		"End in target (non-inclusive)"
     double eValue;	"Expectation value"
     double bitScore;	"Bit score"
     )
