@@ -91,8 +91,8 @@ struct sqlResult *sr, *sr2, *sr3;
 char **row, **row2, **row3;
 char *r1, *r2, *r3, *r4;
 char cond_str[255];
-char *proteinDatabaseName;	// example: sp031112
-char *protDbName;		// example: proteins031112
+char *proteinDatabaseName;	/* example: sp031112 */
+char *protDbName;		/* example: proteins031112 */
 char emptyStr[1] = {""};
 FILE *o1, *o2, *o3, *o4, *o5;
 char *accession;
@@ -133,7 +133,7 @@ if (argc != 5) usage();
 
 strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
-//Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500
+/* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
 aa_hydro['R'] = -4.500;
 aa_hydro['N'] = -3.500;
@@ -141,7 +141,7 @@ aa_hydro['D'] = -3.500;
 aa_hydro['C'] =  2.500;
 aa_hydro['Q'] = -3.500;
 
-//Glu: -3.500  Gly: -0.400  His: -3.200  Ile:  4.500  Leu:  3.800  Lys: -3.900
+/* Glu: -3.500  Gly: -0.400  His: -3.200  Ile:  4.500  Leu:  3.800  Lys: -3.900 */
 aa_hydro['E'] = -3.500;
 aa_hydro['G'] = -0.400;
 aa_hydro['H'] = -3.200;
@@ -149,7 +149,7 @@ aa_hydro['I'] =  4.500;
 aa_hydro['L'] =  3.800;
 aa_hydro['K'] = -3.900;
 
-//Met:  1.900  Phe:  2.800  Pro: -1.600  Ser: -0.800  Thr: -0.700  Trp: -0.900
+/* Met:  1.900  Phe:  2.800  Pro: -1.600  Ser: -0.800  Thr: -0.700  Trp: -0.900 */ 
 aa_hydro['M'] =  1.900;
 aa_hydro['F'] =  2.800;
 aa_hydro['P'] = -1.600;
@@ -157,7 +157,7 @@ aa_hydro['S'] = -0.800;
 aa_hydro['T'] = -0.700;
 aa_hydro['W'] = -0.900;
 
-//Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490
+/* Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490 */
 aa_hydro['Y'] = -1.300;
 aa_hydro['V'] =  4.200;
 
@@ -180,7 +180,7 @@ icnt = jExon = pcnt = 0;
 pIcnt = 0;
 molWtCnt = 0;
 
-sprintf(query2,"select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
+safef(query2, sizeof(query2), "select acc from %s.accToTaxon where taxon=%s;", proteinDatabaseName, taxon);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 
@@ -188,16 +188,16 @@ while (row2 != NULL)
     {
     accession = row2[0];   
 
-    sprintf(cond_str, "acc='%s'", accession);
+    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
     protDisplayId = sqlGetField(conn, proteinDatabaseName, "displayId", "val", cond_str);
     
-    sprintf(cond_str, "proteinID='%s'", protDisplayId);
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayId);
     answer = sqlGetField(conn, database, "knownGene", "name", cond_str);
 
-    // count InterPro domains
+    /* count InterPro domains */
     if (answer != NULL)
 	{
-    	sprintf(cond_str, "accession='%s'", accession);
+    	safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
     	answer2 = sqlGetField(conn, protDbName, "swInterPro", "count(*)", cond_str);
 	if (answer2 != NULL)
 	    {
@@ -211,8 +211,8 @@ while (row2 != NULL)
 	    }
 	}
     
-    // count exons, using coding exons from kgProtMap table
-    sprintf(cond_str, "qName='%s'", accession);
+    /* count exons, using coding exons from kgProtMap table */
+    safef(cond_str, sizeof(cond_str), "qName='%s'", accession);
     answer2 = sqlGetField(conn, database, "kgProtMap", "blockCount", cond_str);
 
     if (answer2 != NULL)
@@ -230,8 +230,8 @@ while (row2 != NULL)
 	exonCnt = emptyStr;
 	}
     
-    // process Mol Wt
-    sprintf(cond_str, "accession='%s'", accession);
+    /* process Mol Wt */
+    safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
     answer2 = sqlGetField(conn, database, "pepMwAa", "molWeight", cond_str);
     if (answer2 != NULL)
 	{
@@ -239,8 +239,8 @@ while (row2 != NULL)
 	molWtCnt++;
 	}
     
-    // process pI
-    sprintf(cond_str, "accession='%s'", accession);
+    /* process pI */
+    safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
     answer2 = sqlGetField(conn, database, "pepPi", "pI", cond_str);
     if (answer2 != NULL)
 	{
@@ -248,7 +248,7 @@ while (row2 != NULL)
 	pIcnt++;
 	}
      
-    sprintf(cond_str, "acc='%s'", accession);
+    safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
     aaSeq = sqlGetField(conn, proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{
@@ -277,7 +277,7 @@ while (row2 != NULL)
 	chp++;
 	}
     
-    // calculate hydrophobicity
+    /* calculate hydrophobicity */
     chp  = aaSeq;
     cCnt = 0;
     hydroSum = 0;
@@ -285,7 +285,7 @@ while (row2 != NULL)
 	{
         hydroSum = hydroSum + aa_hydro[(int)(*chp)];
 
-	// count Cysteines
+	/* count Cysteines */
 	if ((*chp == 'C') || (*chp == 'c'))
 	    {
 	    cCnt ++;
@@ -307,7 +307,7 @@ for (i=0; i<23; i++)
     totalResCnt = totalResCnt + aaResCnt[i];
     }
 
-// write out residue count distribution
+/* write out residue count distribution */
 for (i=0; i<20; i++)
     {
     aaResCntDouble[i] = ((double)aaResCnt[i])/((double)totalResCnt);
@@ -316,7 +316,7 @@ for (i=0; i<20; i++)
 fprintf(o2, "%d\t%f\n", i+1, 0.0);
 carefulClose(&o2);
 
-// calculate and write out various distributions
+/* calculate and write out various distributions */
 calDist(molWt,  	 molWtCnt, 21, 0.0, 10000.0,"pepMolWtDist.tab");
 calDist(pI,  	         pIcnt,    61,     3.0, 0.2, 	"pepPiDist.tab");
 calDist(avgHydro,     	  icnt,    41,    -2.0, 0.1, 	"pepHydroDist.tab");
