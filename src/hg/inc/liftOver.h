@@ -5,8 +5,6 @@
 
 #define LIFTOVER_MINMATCH        0.95
 #define LIFTOVER_MINBLOCKS       1.00
-#define LIFTOVER_MINSIZE_QUERY   20000
-#define LIFTOVER_MINSIZE_TARGET   4000
 
 struct liftOverChain *liftOverChainList();
 /* Get list of all liftOver chains in the central database */

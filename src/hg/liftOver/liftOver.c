@@ -10,12 +10,12 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.14 2004/09/08 01:42:06 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.15 2004/09/30 00:08:36 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
-double minSizeT = LIFTOVER_MINSIZE_TARGET;
-double minSizeQ = LIFTOVER_MINSIZE_QUERY;
+double minSizeT = 0;
+double minSizeQ = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
@@ -38,18 +38,17 @@ errAbort(
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
   "   -pslT - File is in psl format, map target side only\n"
-  "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map.\n"
-  "                  Default %3.2f\n"
+  "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
+  "                  (default %3.2f)\n"
   "   -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
   "                  mapped base.  Recommended if using -minBlocks.\n"
-  "   -multiple               Allow multiple output regions.\n"
+  "   -multiple               Allow multiple output regions\n"
   "   -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
   "                             when mapping to multiple output regions\n"
-  "                                     (default 4K, 20K).\n"
-  "   -multiple               Allow multiple output regions.\n"
-  "   -errorHelp              Explain error messages.\n",
+  "                                     (default 0, 0)\n"
+  "   -multiple               Allow multiple output regions\n"
+  "   -errorHelp              Explain error messages\n",
     LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
-    //LIFTOVER_MINSIZE_TARGET, LIFTOVER_MINSIZE_QUERY
   );
 }
 
