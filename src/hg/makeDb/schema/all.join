@@ -104,29 +104,65 @@ identifier affyU74
     $mm.affyU74.qName
     $mm.knownToU74.value
 
-identifier gnfU95SampleId
-"Identifiers of RNA samples used in GNF Human Expression Atlas 1"
+identifier gnfU95SampleIdV0
+"Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
      hgFixed.affyExps.id
      $hg.affyRatio.expIds comma
      $hg.affyRatio.expScores comma indexOf
 
-identifier gnfU74ASampleId
+identifier gnfU95SampleIdV1
+"Identifiers of RNA samples used in GNF Human Expression Atlas 1"
+     hgFixed.gnfHumanU95AllExps.id
+     hgFixed.gnfHumanU95All.expIds comma indexOf
+     hgFixed.gnfHumanU95AllRatio.expIds comma indexOf
+
+identifier gnfU95MedianSampleIdV1
+"Identifiers of pooled RNA samples used in GNF Human Expression Atlas 1"
+     hgFixed.gnfHumanU95MedianExps.id
+     hgFixed.gnfHumanU95Median.expIds comma indexOf
+     hgFixed.gnfHumanU95MedianRatio.expIds comma indexOf
+
+identifier gnfU74aSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
-     hgFixed.affyGnfU74AExps.id
+     hgFixed.gnfMouseU74aAllExps.id
+     hgFixed.gnfMouseU74aAll.expScores comma indexOf
+     hgFixed.gnfMouseU74aAllRatio.expScores comma indexOf
      $mm.affyGnfU74A.expIds comma
      $mm.affyGnfU74A.expScores comma indexOf
 
-identifier gnfU74BSampleId
+identifier gnfU74aMedianSampleId
+"Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
+     hgFixed.gnfMouseU74aMedianExps.id
+     hgFixed.gnfMouseU74aMedian.expScores comma indexOf
+     hgFixed.gnfMouseU74aMedianRatio.expScores comma indexOf
+
+identifier gnfU74bSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
-     hgFixed.affyGnfU74BExps.id
+     hgFixed.gnfMouseU74bAllExps.id
+     hgFixed.gnfMouseU74bAll.expScores comma indexOf
+     hgFixed.gnfMouseU74bAllRatio.expScores comma indexOf
      $mm.affyGnfU74B.expIds comma
      $mm.affyGnfU74B.expScores comma indexOf
 
-identifier gnfU74CSampleId
+identifier gnfU74bMedianSampleId
+"Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
+     hgFixed.gnfMouseU74bMedianExps.id
+     hgFixed.gnfMouseU74bMedian.expScores comma indexOf
+     hgFixed.gnfMouseU74bMedianRatio.expScores comma indexOf
+
+identifier gnfU74cSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
-     hgFixed.affyGnfU74CExps.id
+     hgFixed.gnfMouseU74cAllExps.id
+     hgFixed.gnfMouseU74cAll.expScores comma indexOf
+     hgFixed.gnfMouseU74cAllRatio.expScores comma indexOf
      $mm.affyGnfU74C.expIds comma
      $mm.affyGnfU74C.expScores comma indexOf
+
+identifier gnfU74cMedianSampleId
+"Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
+     hgFixed.gnfMouseU74cMedianExps.id
+     hgFixed.gnfMouseU74cMedian.expScores comma indexOf
+     hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf
 
 identifier arbFlyLifeAllSampleId
 "Identifiers of RNA samples used in Arbeitman Fly Life Cycle experiments"
@@ -694,6 +730,14 @@ identifier dbSnpId external=dbSNP
     $gbd.snpNih.name
     $gbd.snpTsc.name
     hgFixed.affy10KDetails.rsId
+    hgFixed.dbSnpRsHg.rsId
+    hgFixed.dbSnpRsMm.rsId
+    hgFixed.dbSnpRsRn.rsId
+
+identifier encodeRegion
+"ENCODE (extensive analysis of 1% of genome) Region"
+    $hg.encodeRegions.name
+    $hgFixed.encodeRegionInfo.name
 
 identifier unigeneId
 "NCBI UniGene Cluster ID"
