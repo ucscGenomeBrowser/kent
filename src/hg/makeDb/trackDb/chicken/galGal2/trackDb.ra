@@ -342,6 +342,16 @@ visibility hide
 color 170,0,50
 type bed 4 +
 
+track blatzHg17KG
+shortLabel Human mRNAs
+longLabel Human(hg17) Known Gene mRNAs Mapped by BLATZ
+group rna
+priority 54.5
+visibility pack
+type psl xeno
+spectrum on
+blastRef hg17.blastKGRef01
+
 track ecoresTetraodon
 shortLabel Tetraodon Ecores
 longLabel Tetraodon Evolutionary Conserved Regions
