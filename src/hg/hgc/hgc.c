@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.471 2003/08/29 17:49:23 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.472 2003/09/12 01:43:39 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -155,6 +155,11 @@ char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearc
 
 /* initialized by getCtList() if necessary: */
 struct customTrack *theCtList = NULL;
+
+/* forwards */
+struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
+void printAlignments(struct psl *pslList, 
+		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 
 void hgcStart(char *title)
 /* Print out header of web page with title.  Set
@@ -1513,22 +1518,29 @@ void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, char *subType)
 /* Handle click in generic psl track. */
 {
-char table[64];
-boolean hasBin;
-char query[512];
-struct sqlResult *sr;
-char **row;
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, item);
-sr = sqlGetResult(conn, query);
-printf("<PRE><TT>\n");
-printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
-while ((row = sqlNextRow(sr)) != NULL)
+struct psl* pslList = getAlignments(conn, tdb->tableName, item);
+struct psl* psl;
+
+/* check if there is an alignment available for this sequence.  This checks
+ * both genbank sequences and other sequences in the seq table.  If so,
+ * set it up so they can click through to the alignment. */
+if (hGenBankHaveSeq(item, NULL))
     {
-    struct psl *psl = pslLoad(row+hasBin);
-    pslTabOut(psl, stdout);
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
     }
-printf("</TT></PRE>\n");
+else
+    {
+    /* just dump the psls */
+    printf("<PRE><TT>\n");
+    printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
+    for (psl = pslList; psl != NULL; psl = psl->next)
+        {
+        pslTabOut(psl, stdout);
+        }
+    printf("</TT></PRE>\n");
+    }
+pslFreeList(&pslList);
 }
 
 void printTrackHtml(struct trackDb *tdb)
