@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.29 2004/02/27 19:59:06 angie Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.30 2004/03/19 20:10:44 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -577,6 +577,34 @@ for (range = combined->components; range != NULL; range = range->next)
 return gotAny;
 }
 
+static int scoreAli(struct ffAli *ali, boolean isProt, 
+	enum ffStringency stringency, 
+	struct dnaSeq *tSeq, struct trans3 *t3List)
+/* Score alignment. */
+{
+int (*scoreFunc)(char *a, char *b, int size);
+struct ffAli *ff, *nextFf;
+int score = 0;
+if (isProt) 
+    scoreFunc = aaScoreMatch;
+else
+    scoreFunc = dnaScoreMatch;
+for (ff = ali; ff != NULL; ff = nextFf)
+    {
+    nextFf = ff->right;
+    score += scoreFunc(ff->nStart, ff->hStart, ff->nEnd-ff->nStart);
+    if (nextFf != NULL)
+        {
+	int nhStart = trans3GenoPos(nextFf->hStart, tSeq, t3List, FALSE);
+	int ohEnd = trans3GenoPos(ff->hEnd, tSeq, t3List, TRUE);
+	int hGap = nhStart - ohEnd;
+	int nGap = nextFf->nStart - ff->nEnd;
+	score -= ffCalcGapPenalty(hGap, nGap, stringency);
+	}
+    }
+return score;
+}
+
 static void saveAlignments(char *chromName, int chromSize, int chromOffset, 
 	struct ssBundle *bun, struct hash *t3Hash, 
 	boolean qIsRc, boolean tIsRc,
@@ -590,8 +618,14 @@ if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
-    out->out(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
-    	qIsRc, tIsRc, stringency, minMatch, out);
+    struct trans3 *t3List = NULL;
+    int score;
+    if (t3Hash != NULL)
+	t3List = hashMustFindVal(t3Hash, tSeq->name);
+    score = scoreAli(ff, bun->isProt, stringency, tSeq, t3List);
+    if (score >= minMatch)
+	out->out(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
+	    qIsRc, tIsRc, stringency, minMatch, out);
     }
 }
 

@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.7 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.8 2004/03/19 20:10:44 kent Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -66,12 +66,7 @@ struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
 int score = 0;
 Bits *maskBits = NULL;
-int (*scoreFunc)(char *a, char *b, int size);
 
-if (qIsProt || tIsProt) 
-    scoreFunc = aaScoreMatch;
-else
-    scoreFunc = dnaScoreMatch;
 if (maskHash != NULL)
     maskBits = hashMustFindVal(maskHash, tSeq->name);
 if (t3Hash != NULL)
@@ -87,7 +82,6 @@ for (ff = ali; ff != NULL; ff = nextFf)
     blockSize = ff->nEnd - ff->nStart;
     np = ff->nStart;
     hp = ff->hStart;
-    score += scoreFunc(np, hp, blockSize);
     for (i=0; i<blockSize; ++i)
 	{
 	n = np[i];
@@ -130,12 +124,12 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	    ++hInsertCount;
 	    hInsertBaseCount += hGap;
 	    }
-	score -= ffCalcGapPenalty(hGap, nGap, stringency);
 	}
     }
 
+
 /* See if it looks good enough to output, and output. */
-if (score >= minMatch)
+/* if (score >= minMatch) Moved to higher level */
     {
     int gaps = nInsertCount + (stringency == ffCdna ? 0: hInsertCount);
     int id = roundingScale(1000, matchCount + repMatch - 2*gaps, matchCount + repMatch + mismatchCount);
