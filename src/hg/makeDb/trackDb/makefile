@@ -21,7 +21,7 @@ DBS = 	hg13 hg15 hg16 \
 	dm1 \
 	dp1 \
 	ci1 \
-	ce1 \
+	ce1 ce2 \
 	cb1 \
 	falciparum \
 	sacCer1 \
