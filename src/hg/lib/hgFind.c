@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.156 2005/01/14 20:09:38 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.157 2005/02/15 23:57:34 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1420,7 +1420,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static boolean findRefGenes(char *spec, struct hgPositions *hgp)
+static boolean findRefGenes(char *refGene, char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -1470,15 +1470,13 @@ if (gotRefLink)
 if (rlList != NULL)
     {
     struct hash *hash = newHash(8);
-    char *refGene = "refGene";
-    char *xenoRefGene = "xenoRefGene";
+    char desc[256];
     AllocVar(table);
-
-    table->description = cloneString("RefSeq Genes");
-    if (!sqlTableExists(conn, refGene))
-	if (sqlTableExists(conn, xenoRefGene))
-	    refGene = xenoRefGene;
-
+    if (startsWith("xeno", refGene))
+	safef(desc, sizeof(desc), "Non-%s RefSeq Genes", hOrganism(hGetDb()));
+    else
+	safef(desc, sizeof(desc), "RefSeq Genes");
+    table->description = cloneString(desc);
     slAddHead(&hgp->tableList, table);
     table->name = cloneString(refGene);
     for (rl = rlList; rl != NULL; rl = rl->next)
@@ -1767,8 +1765,6 @@ hFreeConn(&conn);
 return(found);
 }
 
-static char *excludeTables = "knownGene,refGene";
-
 void hgPositionsHtml(struct hgPositions *hgp, FILE *f,
 		     boolean useWeb, char *hgAppName, struct cart *cart)
 /* Write out hgp table as HTML to file. */
@@ -1788,7 +1784,6 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
 	{
-/* 	boolean excludeTable = (stringIn(table->name, excludeTables) != NULL); highlight change */
 	boolean excludeTable = FALSE;
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
@@ -1954,7 +1949,7 @@ if (sameString(hfs->searchType, "knownGene"))
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
-    found = findRefGenes(term, hgp);
+    found = findRefGenes(hfs->searchTable, term, hgp);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {
@@ -2317,8 +2312,6 @@ else
 	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
 	    {
 	    struct hgPos *pos = NULL;
-/* 	    if(stringIn(hpTable->name, excludeTables)) */
-/* 		continue; */
 	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
 		{
 		dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
