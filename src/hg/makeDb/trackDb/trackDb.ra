@@ -977,36 +977,28 @@ priority 144
 visibility hide
 type bed 4 .
 
-track perlegen
-shortLabel Haplotype Blocks
-longLabel Perlegen Common High-Resolution Haplotype Blocks
+track genomicSuperDups
+shortLabel Segmental Dups
+longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
-priority 145.21
+priority 146
 visibility hide
-chromosomes chr21,
-color 0,0,0
-altColor 0,0,0
-spectrum on
-type bed 12
-url http://www.perlegen.com/haplotype/blk/$$.html
+type bed 6 
 
-track haplotype
-shortLabel Haplotype Blocks
-longLabel Common Haplotype Blocks
+track lineageMutations
+shortLabel LineageMutations
+longLabel Lineage Specific Mutations
 group varRep
-priority 145.22
+priority 147
+altColor 0,160,0
 visibility hide
-chromosomes chr22,
-color 0,0,0
-altColor 0,0,0
-spectrum on
-type bed 12
+type sample
 
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-priority 146.1
+priority 149.1
 visibility dense
 spectrum on
 type rmsk
@@ -1016,7 +1008,7 @@ track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
 group varRep
-priority 146.2
+priority 149.2
 visibility hide
 type bed 4 +
 
@@ -1024,26 +1016,9 @@ track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
 group varRep
-priority 146.3
+priority 149.3
 visibility hide
 type bed 4 +
-
-track genomicSuperDups
-shortLabel Segmental Dups
-longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group varRep
-priority 147
-visibility hide
-type bed 6 
-
-track lineageMutations
-shortLabel LineageMutations
-longLabel Lineage Specific Mutations
-group varRep
-priority 148
-altColor 0,160,0
-visibility hide
-type sample
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
@@ -1358,12 +1333,6 @@ searchType bed
 termRegex rs[0-9]+
 searchPriority 16
 padding 5000
-
-searchTable affyGeno
-searchMethod exact
-searchType bed
-termRegex [0-9]+
-searchPriority 18
 
 searchTable ensGene
 searchType genePred
