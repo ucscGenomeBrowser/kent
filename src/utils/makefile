@@ -3,7 +3,6 @@
 include ../inc/common.mk
 
 BIN_DIR = $(HOME)/bin
-
 all:    
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
@@ -19,6 +18,7 @@ scripts:
 	    echo cp -p $$F ${SCRIPTS}; \
 	    cp -p $$F ${SCRIPTS}; \
 	 done
+	cd cvsTools && ${MAKE} scripts
 
 alpha: scripts all
 
@@ -53,6 +53,7 @@ DIRS = \
 	chopFaLines \
 	countChars \
 	convolve \
+	cvsTools \
 	detab \
 	endsInLf \
 	faAlign \
