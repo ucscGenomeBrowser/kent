@@ -1,5 +1,6 @@
 include ../../inc/common.mk
 
 install:
-	cp -p updateTimes.csh ${SCRIPTS}
+	cp -p updateTimes.csh     ${SCRIPTS}
+	cp -p compareTrackDbs.csh ${SCRIPTS}
 
