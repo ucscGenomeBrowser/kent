@@ -15,8 +15,8 @@ struct transRegCodeProbe
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of probe */
-    unsigned tfCount;	/* Count of bound transcription factors */
-    char **tfList;	/* List of bound transcription factors */
+    unsigned tfCount;	/* Count of bound transcription factors_conditions */
+    char **tfList;	/* List of bound transcription factors_conditions */
     };
 
 struct transRegCodeProbe *transRegCodeProbeLoad(char **row);

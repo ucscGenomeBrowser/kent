@@ -5,6 +5,6 @@ table transRegCodeProbe
     uint chromStart;    "Start position in chromosome"
     uint chromEnd;      "End position in chromosome"
     string name;        "Name of probe"
-    uint tfCount;	"Count of bound transcription factors"
-    string[tfCount] tfList;    "List of bound transcription factors"
+    uint tfCount;	"Count of bound transcription factors_conditions"
+    string[tfCount] tfList;    "List of bound transcription factors_conditions"
     )
