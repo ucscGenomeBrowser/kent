@@ -752,6 +752,16 @@ color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
+track cpgIslandGgfAndy
+shortLabel CpG Islands (AL)
+longLabel CpG Islands - Andy Law (Islands < 300 Bases are Light Green)
+group regulation
+priority 90.01
+visibility hide
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+
 track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
