@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.59 2004/02/10 20:28:31 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.60 2004/03/20 03:30:36 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -644,6 +644,18 @@ errAbort("Unknown key %s for variable %s\n", key, varName);
 return val;
 }
 
+void cgiMakeSubmitButton()
+/* Make 'submit' type button. */
+{
+cgiMakeButton("Submit", "Submit");
+}
+
+void cgiMakeResetButton()
+/* Make 'reset' type button. */
+{
+printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\"Reset\">");
+}
+
 void cgiMakeButton(char *name, char *value)
 /* Make 'submit' type button. */
 {
@@ -665,6 +677,54 @@ if (disabled)
 printf(">"); 
 }
 
+void cgiSimpleTableStart()
+/* start HTML table  -- no customization. Leaves room
+ * for a fancier implementation */
+{
+printf("<TABLE>\n");
+}
+
+void cgiTableEnd()
+/* end HTML table */
+{
+printf("</TABLE>\n");
+}
+
+void cgiSimpleTableRowStart()
+/* Start table row */
+{
+printf("<TR>\n");
+}
+
+void cgiTableRowEnd()
+/* End table row */
+{
+printf("</TR>\n");
+}
+
+void cgiSimpleTableFieldStart()
+/* Start table field */
+{
+printf("<TD>");
+}
+
+void cgiTableFieldEnd()
+/* End table field */
+{
+printf("</TD>\n");
+}
+
+void cgiTableField(char *text)
+/* Make table field entry */
+{
+printf("<TD> %s </TD>\n", text);
+}
+
+void cgiParagraph(char *text)
+/* Make text paragraph */
+{
+printf("<P> %s\n", text);
+}
 
 void cgiMakeRadioButton(char *name, char *value, boolean checked)
 /* Make radio type button.  A group of radio buttons should have the

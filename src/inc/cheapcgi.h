@@ -214,3 +214,34 @@ boolean cgiParseInput(char *input, struct hash **retHash,
  * the input data.  The hash table will contain references back 
  * into input, so please don't free input until you're done with 
  * the hash. Prints message and returns FALSE if there's an error.*/
+
+void cgiSimpleTableStart();
+/* start HTML table  -- no customization. Leaves room
+ * for a fancier implementation */
+
+void cgiTableEnd();
+/* end HTML table */
+
+void cgiMakeSubmitButton();
+/* Make 'submit' type button. */
+
+void cgiMakeResetButton();
+/* Make 'reset' type button. */
+
+void cgiSimpleTableRowStart();
+/* Start table row */
+
+void cgiTableRowEnd();
+/* End table row */
+
+void cgiSimpleTableFieldStart();
+/* Start table field */
+
+void cgiTableFieldEnd();
+/* End table field */
+
+void cgiTableField(char *text);
+/* Make table field entry */
+
+void cgiParagraph(char *text);
+/* Make text paragraph */
