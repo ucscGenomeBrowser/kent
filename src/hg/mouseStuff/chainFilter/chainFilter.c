@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.8 2003/06/14 06:15:57 kent Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.9 2003/08/12 20:48:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +34,7 @@ errAbort(
   "   -tMinGap=N     - pass those with minimum gap size of at least N\n"
   "   -qMinSize=N    - minimum size of spanned query region\n"
   "   -tMinSize=N    - minimum size of spanned target region\n"
+  "   -noRandom      - suppress chains involving 'random' chromosomes\n"
   );
 }
 
@@ -56,6 +57,7 @@ struct optionSpec options[] = {
    {"qMinGap", OPTION_INT},
    {"qMinSize", OPTION_INT},
    {"tMinSize", OPTION_INT},
+   {"noRandom", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -180,6 +182,7 @@ char *strand = optionVal("strand", NULL);
 boolean zeroGap = optionExists("zeroGap");
 int id = optionInt("id", -1);
 boolean doLong = optionExists("long");
+boolean noRandom = optionExists("noRandom");
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -213,12 +216,26 @@ for (i=0; i<inCount; ++i)
 	if (id >= 0 && id != chain->id)
 	    writeIt = FALSE;
 	if (minGapless != 0)
-	    writeIt = (calcMaxGapless(chain) >= minGapless);
+	    {
+	    if (!(calcMaxGapless(chain) >= minGapless))
+	        writeIt = FALSE;
+	    }
 	if (qMinGap != 0)
-	    writeIt = (qCalcMaxGap(chain) >= qMinGap);
+	    {
+	    if (!(qCalcMaxGap(chain) >= qMinGap))
+	        writeIt = FALSE;
+	    }
 	if (tMinGap != 0)
-	    writeIt = (tCalcMaxGap(chain) >= tMinGap);
-	
+	    {
+	    if (!(tCalcMaxGap(chain) >= tMinGap))
+	        writeIt = FALSE;
+	    }
+	if (noRandom)
+	    {
+	    if (endsWith(chain->tName, "_random") 
+	    	|| endsWith(chain->qName, "_random"))
+	        writeIt = FALSE;
+	    }
 	if (writeIt)
 	    {
 	    if (doLong)
