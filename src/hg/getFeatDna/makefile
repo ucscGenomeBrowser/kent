@@ -1,8 +1,8 @@
 .c.o:
 	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -I../../../inc -c $*.c
 
-L = -lm $(MYSQLLIBS)
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+L = $(MYSQLLIBS) -lm
+MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = getFeatDna.o
