@@ -3422,6 +3422,21 @@ hgLoadBed -noBin hg15 syntenyCow in.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
+# COW BACENDS (In progress, Heather, Mar. 8, 2005)
+
+ssh hgwdev
+cd /cluster/data/hg15/bed
+mkdir bacendsCow
+cd bacendsCow
+
+# Obtain bed4 file from
+#http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=chr1&hgt.customText=http://cagst.animal.uiuc.edu/BACcontig/map_and_bac_ends
+# Save as in.bed
+
+hgLoadBed -noBin hg15 bacendsCow in.bed
+
+# add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
+
 # RUN 3-WAY ALIGNMENTS HUMAN/RAT/MOUSE USING MULTIZ (DONE kate)
 
     set multizDir = /cluster/data/hg15/bed/multiz.rn3-mm3.2003-07-26-KRR
