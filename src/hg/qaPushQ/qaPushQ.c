@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.42 2004/05/26 19:21:46 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.43 2004/05/26 19:36:13 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -503,6 +503,7 @@ void replacePushQFields(struct pushQ *ki, bool isNew)
 {
 char tempLink[256];
 char tempSizeMB[256];
+char tempMsg[256];
 bool myLock = FALSE;
 
 if (sameString(ki->lockUser,qaUser))
@@ -637,18 +638,16 @@ else
 	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink ); 
 	
 	replaceInStr(html, sizeof(html), "<!sizesbutton>", "");
-	if (sameString(msg,""))
+	if (sameString(ki->lockUser,""))
 	    {
-	    if (sameString(ki->lockUser,""))
-		{
-		safef(msg,sizeof(msg),"%s","READONLY. Press Lock to edit.");
-		}
-	    else
-		{
-		safef(msg,sizeof(msg),"User %s currently has lock on Queue Id %s since %s.",
-		    ki->lockUser,ki->qid,ki->lockDateTime);
-		}
+	    safef(tempMsg,sizeof(tempMsg),"%s %s", msg, "READONLY view. Press Lock to edit. Click RETURN for the main queue.");
 	    }
+	else
+	    {
+	    safef(tempMsg,sizeof(tempMsg),"%s User %s currently has lock on Queue Id %s since %s.",
+		msg, ki->lockUser, ki->qid,ki->lockDateTime );
+	    }
+	safef(msg,sizeof(msg), "%s", tempMsg);
 	}   
     }   
     
@@ -1701,6 +1700,7 @@ if (sameString(showSizes,"Show Sizes"))
 
 if (sameString(submitbutton,"Submit")) 
     { /* if submit button, saved data, now return to readonly view.  */
+    safef(msg, sizeof(msg), "Data saved.");
     cgiVarSet("qid", q.qid); /* for new rec */
     doEdit();
     return;
