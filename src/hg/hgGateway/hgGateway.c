@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.78 2005/02/01 23:33:56 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.79 2005/02/09 19:06:00 jill Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -99,7 +99,10 @@ if (gotClade)
 puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position</td>\n"
+"<td align=center valign=baseline>position &nbsp;&nbsp;&nbsp;");
+cgiMakeOnClickButton("document.mainForm.position.value=''","clear");
+puts(
+" </td>\n"
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
@@ -133,13 +136,6 @@ puts("</td>\n");
 puts("<td align=center>\n");
 cgiMakeTextVar("position", addCommasToPos(position), 30);
 printf("</td>\n");
-
-#ifdef SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES
-puts("<td align=center>\n");
-cgiMakeOnClickButton("document.mainForm.position.value=''","clear");
-printf("</td>\n");
-#endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
-
 
 cartSetString(cart, "position", position);
 cartSetString(cart, "db", db);
