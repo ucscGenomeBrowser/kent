@@ -3,7 +3,25 @@
 #include "common.h"
 #include "internet.h"
 
-static char const rcsid[] = "$Id: internet.c,v 1.7 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: internet.c,v 1.8 2004/01/31 21:22:50 kent Exp $";
+
+boolean internetIsDottedQuad(char *s)
+/* Returns TRUE if it looks like s is a dotted quad. */
+{
+int i;
+if (!isdigit(s[0]))
+    return FALSE;
+for (i=0; i<3; ++i)
+    {
+    s = strchr(s, '.');
+    if (s == NULL)
+        return FALSE;
+    s += 1;
+    if (!isdigit(s[0]))
+        return FALSE;
+    }
+return TRUE;
+}
 
 bits32 internetHostIp(char *hostName)
 /* Get IP v4 address (in host byte order) for hostName.
@@ -11,14 +29,21 @@ bits32 internetHostIp(char *hostName)
 {
 struct hostent *hostent;
 bits32 ret;
-hostent = gethostbyname(hostName);
-if (hostent == NULL)
+if (internetIsDottedQuad(hostName))
+   {
+   internetDottedQuadToIp(hostName, &ret);
+   }
+else
     {
-    warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    return 0;
+    hostent = gethostbyname(hostName);
+    if (hostent == NULL)
+	{
+	warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+	return 0;
+	}
+    memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
+    ret = ntohl(ret);
     }
-memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
-ret = ntohl(ret);
 return ret;
 }
 
@@ -70,3 +95,45 @@ if (inet_pton(AF_INET, dottedQuad, &ia) < 0)
 *retIp = ntohl(ia.s_addr);
 return TRUE;
 }
+
+void internetParseDottedQuad(char *dottedQuad, unsigned char quad[4])
+/* Parse dotted quads into quad */
+{
+char *s = dottedQuad;
+int i;
+if (!internetIsDottedQuad(s))
+    errAbort("%s is not a dotted quad", s);
+for (i=0; i<4; ++i)
+    {
+    quad[i] = atoi(s);
+    s = strchr(s, '.') + 1;
+    }
+}
+
+void internetUnpackIp(bits32 packed, unsigned char unpacked[4])
+/* Convert from 32 bit to 4-byte format with most significant
+ * byte first. */
+{
+int i;
+for (i=3; i>=0; --i)
+    {
+    unpacked[i] = (packed&0xff);
+    packed >>= 8;
+    }
+}
+
+boolean internetIpInSubnet(unsigned char unpackedIp[4], unsigned char subnet[4])
+/* Return true if unpacked IP address is in subnet. */
+{
+int i;
+for (i=0; i<4; ++i)
+    {
+    unsigned char c = subnet[i];
+    if (c == 255)
+        return TRUE;
+    if (c != unpackedIp[i])
+        return FALSE;
+    }
+return TRUE;
+}
+

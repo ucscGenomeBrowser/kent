@@ -12,7 +12,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.26 2003/05/16 19:44:34 sugnet Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.27 2004/01/31 21:22:50 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -71,8 +71,9 @@ return netMustConnect(hostName, atoi(portName));
 }
 
 int netAcceptingSocketFrom(int port, int queueSize, char *host)
-/* Create a socket that can accept connections from a particular
- * host.  If host is NULL then accept from anyone. */
+/* Create a socket that can accept connections from a 
+ * IP address on the current machine if the current machine
+ * has multiple IP addresses. */
 {
 struct sockaddr_in sai;
 int sd;
@@ -110,6 +111,41 @@ int netAccept(int sd)
 {
 int fromLen;
 return accept(sd, NULL, &fromLen);
+}
+
+int netAcceptFrom(int acceptor, unsigned char subnet[4])
+/* Wait for incoming connection from socket descriptor
+ * from IP address in subnet.  Subnet is something
+ * returned from netParseDottedQuad. Subnet may be NULL. */
+{
+struct sockaddr_in sai;		/* Some system socket info. */
+int len;
+ZeroVar(&sai);
+sai.sin_family = AF_INET;
+for (;;)
+    {
+    int addrSize = sizeof(sai);
+    int sd = accept(acceptor, &sai, &addrSize);
+    if (sd >= 0)
+	{
+	if (subnet == NULL)
+	    return sd;
+	else
+	    {
+	    unsigned char unpacked[4]; 
+	    bits32 ip =  ntohl(sai.sin_addr.s_addr);
+	    internetUnpackIp(ntohl(sai.sin_addr.s_addr), unpacked);
+	    if (internetIpInSubnet(unpacked, subnet))
+		{
+		return sd;
+		}
+	    else
+		{
+		close(sd);
+		}
+	    }
+	}
+    }
 }
 
 static boolean plumberInstalled = FALSE;

@@ -6,14 +6,16 @@
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
+#include "internet.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: bottleneck.c,v 1.1 2004/01/31 01:53:07 kent Exp $";
+static char const rcsid[] = "$Id: bottleneck.c,v 1.2 2004/01/31 21:22:50 kent Exp $";
 
 int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */
 int penalty = 150;	    /* Penalty in milliseconds per access. */
 int recovery = 10;	    /* Recovery in milliseconds per second. */
+char *subnet = NULL;        /* Subnet as dotted quads. */
 
 void usage()
 /* Explain usage and exit. */
@@ -23,13 +25,14 @@ errAbort(
   "usage:\n"
   "   bottleneck start\n"
   "Start up bottleneck server\n"
-  "   bottleneck query ip-address\n"
+  "   bottleneck query ip-address [count]\n"
   "Ask bottleneck server how long to wait to service ip-address\n"
   "   bottleneck list\n"
   "List accessing sites\n"
   "options:\n"
   "   -port=XXXX - Use specific tcp/ip port. Default %d.\n"
   "   -host=XXXXX - Use specific host.  Default %s.\n"
+  "   -subnet=WWW.XXX.YYY.ZZZ Restrict access to subnet (example 192.168.255.255)\n"
   "   -penalty=N - Penalty (in milliseconds) for each access, default %d\n"
   "   -recovery=N - Amount to recover (in milliseconds) for each second\n"
   "                 between accesses.  Default %d\n"
@@ -45,6 +48,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"post", OPTION_INT},
    {"host", OPTION_STRING},
+   {"subnet", OPTION_STRING},
    {"penalty", OPTION_INT},
    {"recovery", OPTION_INT},
    {NULL, 0},
@@ -124,16 +128,22 @@ void startServer()
 /* Start up bottleneck server. */
 {
 int acceptor;
+unsigned char parsedSubnetBuf[4];	/* Buffer for holding parsed subnet. */
+unsigned char *parsedSubnet = NULL;	/* Parsed subnet. */
+if (subnet != NULL)
+    {
+    internetParseDottedQuad(subnet, parsedSubnetBuf);
+    parsedSubnet = parsedSubnetBuf;
+    }
 trackerHash = newHash(18);
 acceptor = netAcceptingSocket(port, 64);
-netBlockBrokenPipes();
 for (;;)
     {
-    int socket = netAccept(acceptor);
+    int socket = netAcceptFrom(acceptor, parsedSubnet);
     char buf[256], *s;
     s = netGetString(socket, buf);
     if (s != NULL)
-        {
+	{
 	if (s[0] == '?')
 	    forkOutList(socket);
 	else
@@ -174,16 +184,22 @@ if (fork() == 0)
     }
 }
 
-void queryServer(char *ip)
+void queryServer(char *ip, int count)
 /* Query bottleneck server - just for testing.
  * Main query is over ip port. */
 {
-int socket = netMustConnect(host, port);
-char buf[256], *s;
-netSendString(socket, ip);
-s = netGetString(socket, buf);
-printf("%s millisecond delay recommended\n", s);
-close(socket);
+int i;
+for (i=0; i<count; ++i)
+    {
+    int socket = netMustConnect(host, port);
+    char buf[256], *s;
+    netSendString(socket, ip);
+    s = netGetString(socket, buf);
+    if (s == NULL)
+        errAbort("Shut out by bottleneck server %s:%d", host, port);
+    printf("%s millisecond delay recommended\n", s);
+    close(socket);
+    }
 }
 
 void listAll()
@@ -207,12 +223,13 @@ int main(int argc, char *argv[])
 {
 char *command;
 optionInit(&argc, argv, options);
+if (argc < 2)
+    usage();
 port = optionInt("port", port);
 host = optionVal("host", host);
 penalty = optionInt("penalty", penalty);
 recovery = optionInt("recovery", recovery);
-if (argc < 2)
-    usage();
+subnet = optionVal("subnet", subnet);
 command = argv[1];
 if (sameString(command, "start"))
     {
@@ -222,9 +239,10 @@ if (sameString(command, "start"))
     }
 else if (sameString(command, "query"))
     {
-    if (argc != 3)
-        usage();
-    queryServer(argv[2]);
+    int count = 1;
+    if (argc > 3)
+	count = atoi(argv[3]);
+    queryServer(argv[2], count);
     }
 else if (sameString(command, "list"))
     {
