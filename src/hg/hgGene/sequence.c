@@ -14,7 +14,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.10 2004/04/01 22:57:44 baertsch Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.11 2004/07/13 18:21:42 baertsch Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -59,7 +59,7 @@ if (sqlTableExists(conn, "axtInfo"))
 	hPrintf("<A HREF=\"%s?%s", hgcName(), cartSidUrlString(cart) );
 	hPrintf("&g=htcGenePsl&i=%s&c=%s&l=%d&r=%d", 
 		geneId, chrom, start, end);
-	hPrintf("&o=%s&alignment=%s&db2=%s\"#startcodon",
+	hPrintf("&o=%s&alignment=%s&db2=%s#startcodon\"",
 		table, cgiEncode(aiList->alignment), db2);
 	hPrintf(" class=\"toc\">");
 	hPrintf("Comparative</A>");
