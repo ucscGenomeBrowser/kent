@@ -312,14 +312,21 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 
     if ( ! wigStatsDone(tableId, chrom))
 	{
+	boolean dataFetchType = WIG_SUMMARY_ONLY;
+
+	if (numChroms == 1)
+		dataFetchType = WIG_ALL_DATA;
+	if (wiggleCompare[tableId])
+		dataFetchType = WIG_ALL_DATA;
+
 	if (numChroms > 1)
 	wigData[tableId] = wigFetchData(database, wigFullTableName, chrom,
-	    winStart, winEnd, WIG_SUMMARY_ONLY, WIG_DATA_NOT_RETURNED, tableId,
+	    winStart, winEnd, dataFetchType, WIG_DATA_NOT_RETURNED, tableId,
 		wiggleCompare[tableId], constraints, (struct bed **)NULL,
 		    maxLinesOut, &wigStatsList[tableId]);
 	else
 	wigData[tableId] = wigFetchData(database, wigFullTableName, chrom,
-	    winStart, winEnd, WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, tableId,
+	    winStart, winEnd, dataFetchType, WIG_DATA_NOT_RETURNED, tableId,
 		wiggleCompare[tableId], constraints, (struct bed **)NULL,
 		    0, &wigStatsList[tableId]);
 	wigMarkDone(tableId, chrom);
