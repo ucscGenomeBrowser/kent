@@ -1,0 +1,10 @@
+query/alignment counts:
+             total:	4	13
+              kept:	4	10
+      drop invalid:	0	0
+        drop weird:	2	7
+      drop overlap:	2	3
+     drop minIdent:	0	0
+    drop idNearTop:	0	0
+     drop minCover:	0	0
+ drop coverNearTop:	0	0
