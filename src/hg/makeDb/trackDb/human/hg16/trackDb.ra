@@ -1667,21 +1667,25 @@ track encodeAffyChIpRnapHl60PvalHr00
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Pol2 0hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 0hrs) PValue in ENCODE Regions
+priority 1
 
 track encodeAffyChIpRnapHl60PvalHr02
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Pol2 2hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 2hrs) PValue in ENCODE Regions
+priority 2
 
 track encodeAffyChIpRnapHl60PvalHr08
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Pol2 8hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 8hrs) PValue in ENCODE Regions
+priority 3
 
 track encodeAffyChIpRnapHl60PvalHr32
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Pol2 32hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) PValue in ENCODE Regions
+priority 4
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
@@ -1699,21 +1703,25 @@ track encodeAffyChIpRnapHl60SitesHr00
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Pol2 0hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 0hrs) Sites in ENCODE Regions
+priority 1
 
 track encodeAffyChIpRnapHl60SitesHr02
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Pol2 2hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 2hrs) Sites in ENCODE Regions
+priority 2
 
 track encodeAffyChIpRnapHl60SitesHr08
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Pol2 8hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 8hrs) Sites in ENCODE Regions
+priority 3
 
 track encodeAffyChIpRnapHl60SitesHr32
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Pol2 32hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Regions
+priority 4
 
 track encodeAffyRnaHl60Sig
 compositeTrack on
@@ -1734,21 +1742,25 @@ track encodeAffyRnaHl60SigHr00
 subTrack encodeAffyRnaHl60Sig
 shortLabel RNA 0hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Signal in ENCODE Regions
+priority 1
 
 track encodeAffyRnaHl60SigHr02
 subTrack encodeAffyRnaHl60Sig
 shortLabel RNA 2hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Signal in ENCODE Regions
+priority 2
 
 track encodeAffyRnaHl60SigHr08
 subTrack encodeAffyRnaHl60Sig
 shortLabel RNA 8hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Signal in ENCODE Regions
+priority 3
 
 track encodeAffyRnaHl60SigHr32
 subTrack encodeAffyRnaHl60Sig
 shortLabel RNA 32hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Signal in ENCODE Regions
+priority 4
 
 track encodeAffyRnaHl60Sites
 compositeTrack on
@@ -1766,21 +1778,25 @@ track encodeAffyRnaHl60SitesHr00
 subTrack encodeAffyRnaHl60Sites
 shortLabel RNA 0hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Sites in ENCODE Regions
+priority 1
 
 track encodeAffyRnaHl60SitesHr02
 subTrack encodeAffyRnaHl60Sites
 shortLabel RNA 2hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Sites in ENCODE Regions
+priority 2
 
 track encodeAffyRnaHl60SitesHr08
 subTrack encodeAffyRnaHl60Sites
 shortLabel RNA 8hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Sites in ENCODE Regions
+priority 3
 
 track encodeAffyRnaHl60SitesHr32
 subTrack encodeAffyRnaHl60Sites
 shortLabel RNA 32hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
+priority 4
 
 track encode_UVA_DNARep_0_2
 shortLabel DNA Rep/UVA 0-2hr
