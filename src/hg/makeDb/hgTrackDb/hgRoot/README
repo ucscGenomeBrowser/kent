@@ -25,3 +25,31 @@ each version of the database.
 After editing a track definition here
 don't forget to run hgTrackDb to bring
 it into the MySQL database.
+
+Most of the fields in the track.ra file should 
+be reasonably self explanitory.  A notable exception
+is the type field.  Currently there are three types:
+bed, psl, and genePred.  Here is the format of these
+type fields:
+For bed types it's always three words as follows:
+   1) bed (always)
+   2) fieldCount - the number of standard fields
+   3) extraInfo - either '.' meaning no non-standard fields
+       or '+' if there are additional non-standard fields.
+For psl types it's
+   1) psl
+   2) subtype, which is either
+        .  (just regular human mRNA)
+        est    (human displays a little differently in dense mode)
+        xeno (cross species)
+There's gene predictions
+    1) genePred
+    2) (optional) associated protein sequence table
+    3) (optional) associated mRNA table.
+If something lacks a type field it needs to have custom
+display routines.   You can remove a track from the
+browser by removing it from the .ra file and doing
+a make update.
+
+
+

@@ -232,7 +232,7 @@ private on
 
 track xenoEst
 shortLabel Other ESTs
-longLabel Non-Human ESTs from Genbank in Genome Alignments
+longLabel Non-Human ESTs from Genbank Near Best in Genome Alignments
 priority 23.2
 visibility dense
 color 0,60,120
