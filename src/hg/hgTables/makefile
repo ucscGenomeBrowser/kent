@@ -24,7 +24,8 @@ alpha::
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
 	chmod a+r ${CGI_BIN}/all.joiner
 	chmod g+w ${CGI_BIN}/all.joiner
-	wget -O ${CGI_BIN}/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
+	wget --quiet -O ${CGI_BIN}/galaAvail.tab \
+	  http://gala.cse.psu.edu/cgi-bin/live_versions
 	cp ${CGI_BIN}/galaAvail.tab ${CGI_BIN}-${USER}
 
 beta::
@@ -32,7 +33,8 @@ beta::
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-beta
 	chmod a+r ${CGI_BIN}-beta/all.joiner
 	chmod g+w ${CGI_BIN}-beta/all.joiner
-	wget -O ${CGI_BIN}-beta/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
+	wget --quiet -O ${CGI_BIN}-beta/galaAvail.tab \
+	  http://gala.cse.psu.edu/cgi-bin/live_versions
 
 
 compile: $O 
