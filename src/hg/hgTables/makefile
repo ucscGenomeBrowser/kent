@@ -24,8 +24,8 @@ alpha::
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
 	chmod a+r ${CGI_BIN}/all.joiner
 	chmod g+w ${CGI_BIN}/all.joiner
-	wget -O ${CGI_BIN}-${USER}/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
 	wget -O ${CGI_BIN}/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
+	cp ${CGI_BIN}/galaAvail.tab ${CGI_BIN}-${USER}
 
 beta::
 	rm -f ${CGI_BIN}-beta/all.joiner
