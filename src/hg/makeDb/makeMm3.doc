@@ -1427,13 +1427,15 @@ LOAD GENEID GENES (DONE 03/18/03)
     ldHgGene mm3 geneid download/*.gtf -exon=CDS
     hgPepPred mm3 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (TODO)
+SGP GENE PREDICTIONS (4/17/03 KRR)
     mkdir -p ~/mm3/bed/sgp/download
     cd ~/mm3/bed/sgp/download
-    foreach f (~/mm3/?{,?}/chr?{,?}{,_random}.fa)
+    #foreach f (~/mm3/?{,?}/chr?{,?}{,_random}.fa)
+    # Doesn't have chr_random entries KRR
+    foreach f (~/mm3/?{,?}/chr?{,?}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/humangp20021114/$chr.gtf
-      wget http://genome.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/humangp20021114/$chr.prot
+      wget http://genome.imim.es/genepredictions/M.musculus/mmFeb2003/SGP/humangp20021114/$chr.gtf
+      wget http://genome.imim.es/genepredictions/M.musculus/mmFeb2003/SGP/humangp20021114/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)
@@ -1658,15 +1660,6 @@ LOAD JACKSON LABS QTL (TODO)
     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL2.sql \
       mm3 jaxQTL2 jaxQTL2.bed
 
-LOAD SOFTBERRY GENES (TODO)
-     - ln -s /cluster/store2/mm.2003.02/mm3 ~/mm
-     - cd ~/mm/bed
-     - mkdir softberry
-     - cd softberry
-     - get ftp://www.softberry.com/pub/SC_MOU_NOV01/softb_mou_genes_nov01.tar.gz
-     ldHgGene mm3 softberryGene chr*.gff
-     hgPepPred mm3 softberry *.protein
-     hgSoftberryHom mm3 *.protein
 
 MAKING MOUSE AND RAT SYNTENY
 #
