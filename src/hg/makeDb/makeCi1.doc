@@ -15,14 +15,11 @@ DOWNLOAD SEQUENCE
     ln -s /cluster/store5/squirt/ci1 ~/ci1
     cd ~/ci1
     mkdir scaffolds
-    cd scaffolds
 
-    # spoof faSplit into making one file per scaffold
-    # assumes # of scaffolds is less than 9999
-    faSplit sequence ../ciona.rm.fasta 9999 Scaffold_
-    cd ..
+    faSplit byname ciona.rm.fasta scaffolds/
 
     mkdir nib
+    cd nib
     foreach i (../scaffolds/*.fa)
         faToNib $i `basename $i .fa`.nib
     end
@@ -58,6 +55,25 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     hgsql ci1  < ~/kent/src/hg/lib/gcPercent.sql
     hgGcPercent ci1 ../../nib
 
+    # Human Blat
+    ssh kk                                          
+    mkdir ~/ci1/bed/blatHuman                        
+    cd ~/ci1/bed/blatHuman                           
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    ls -1S /scratch/hg/ci1/nib/* > squirt.lst        
+    mkdir psl                                       
+    cd psl
+    foreach i (../../../nib/*.nib)
+	mkdir `basename $i .nib`
+    end
+    gensub2 squirt.lst human.lst gsub spec              
+
+    <para procedure>
+
+    ssh eieio                                       
+    cd ~/ci1/bed/blatFugu                           
+    pslCat -dir psl/* | pslSortAcc nohead chrom /tmp stdin
+
     # FUGU Blat
     ssh kk                                          
     mkdir ~/ci1/bed/blatFugu                        
@@ -65,13 +81,14 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     ls -1S /iscratch/i/fugu/* > fugu.lst            
     ls -1S /scratch/hg/ci1/nib/* > squirt.lst        
     mkdir psl                                       
+    cd psl
     foreach i (../../../nib/*.nib)
 	mkdir `basename $i .nib`
     end
     gensub2 squirt.lst fugu.lst gsub spec              
 
     <para procedure>
-    # Sort alignments:                              
+
     ssh eieio                                       
     cd ~/ci1/bed/blatFugu                           
     pslCat -dir psl/* | pslSortAcc nohead chrom /tmp stdin
