@@ -311,7 +311,7 @@ url http://www.ensembl.org/perl/transview?transcript=$$
 
 track acembly
 shortLabel Acembly Genes
-longLabel Acembly Gene Predictions With Alt-splicing
+longLabel Acembly mRNA/EST Genes With Alt-splicing
 group genes
 priority 41
 visibility dense
