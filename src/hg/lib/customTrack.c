@@ -13,6 +13,7 @@
 #include "psl.h"
 #include "gff.h"
 #include "genePred.h"
+#include "net.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -339,10 +340,11 @@ return isGff;
 }
 
 
-static boolean getNextLine(struct lineFile *lf, char **pLine, char **pNextLine)
+static boolean getNextFlatLine(struct lineFile **pLf, char **pLine, char **pNextLine)
 /* Helper routine to get next line of input from lf if non-null, or
- * from memory using pLine/pNextLine to aide parsing. */
+ * from memory using pLine/pNextLine to aide parsing.  */
 {
+struct lineFile *lf = *pLf;
 char *nextLine;
 if (lf != NULL)
     return lineFileNext(lf, pLine, NULL);
@@ -355,6 +357,39 @@ if ((nextLine = strchr(nextLine, '\n')) != NULL)
 *pNextLine = nextLine;
 return TRUE;
 } 
+
+static boolean getNextLine(struct lineFile **pLf, char **pLine, char **pNextLine)
+/* Get next line of input.  Logic is to grab it from lineFile if a line file is
+ * open, otherwise grab it from text in pNextLine.  This routine also handles
+ * inclusion of lines that start with a URL. */
+{
+for (;;)
+    {
+    boolean gotLine = getNextFlatLine(pLf, pLine, pNextLine);
+    if (gotLine)
+        {
+	if (startsWith("http://", *pLine))
+	    {
+	    struct lineFile *lf = netLineFileOpen(*pLine);
+	    slAddHead(pLf, lf);
+	    }
+	else
+	    return TRUE;
+	}
+    else
+        {
+	struct lineFile *lf = *pLf;
+	if (lf == NULL)
+	    return FALSE;
+	else
+	    {
+	    lf = lf->next;
+	    lineFileClose(pLf);
+	    *pLf = lf;
+	    }
+	}
+    }
+}
 
 static char *niceGeneName(char *name)
 /* Return a nice version of name. */
@@ -431,12 +466,19 @@ float prio = 0.0;
 
 customDefaultRows(row);
 if (isFile)
-    lf = lineFileOpen(text, TRUE);
+    {
+    if (stringIn("://", text))
+        lf = netLineFileOpen(text);
+    else
+	lf = lineFileOpen(text, TRUE);
+    }
 else
+    {
     nextLine = text;
+    }
 for (;;)
     {
-    if (!getNextLine(lf, &line, &nextLine))
+    if (!getNextLine(&lf, &line, &nextLine))
         break;
 
     /* Skip lines that start with '#' or are blank*/
@@ -460,7 +502,7 @@ for (;;)
         {
 	int i;
 	for (i=0; i<4; ++i)
-	    getNextLine(lf, &line, &nextLine);
+	    getNextLine(&lf, &line, &nextLine);
 	continue;
 	}
 
@@ -626,7 +668,7 @@ if (tdb->useScore != def->useScore)
     fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
 if (tdb->priority != def->priority)
     fprintf(f, "\t%s='%f'", "priority", tdb->priority);
-if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != tdb->colorB)
+if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
 	|| tdb->altColorB != tdb->altColorB)
