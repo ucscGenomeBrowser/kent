@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.13 2004/11/18 03:08:53 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.14 2004/12/06 22:33:46 hiram Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -239,7 +239,11 @@ struct sqlConnection *conn = NULL;
 int i;
 
 if (tabFile == NULL)
-    conn = sqlConnect(database);
+    {
+    hSetDb(database);
+    conn = hAllocConn();
+    verbose(2,"#\thgLoadOut: connected to database: %s\n", database);
+    }
 for (i=0; i<rmskCount; ++i)
     {
     loadOneOut(conn, rmskFileNames[i], suffix);
