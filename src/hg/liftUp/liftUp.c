@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.28 2004/02/08 02:00:47 kent Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.29 2004/02/08 02:38:03 kent Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -528,68 +528,105 @@ void liftChain(char *destFile, struct hash *liftHash,
         int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .chain file. */
 {
-    FILE *f = mustOpen(destFile, "w");
-    int sourceIx;
-    int dotMod = dots;
+FILE *f = mustOpen(destFile, "w");
+int sourceIx;
+int dotMod = dots;
 
-    for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
-        {
-        char *source = sources[sourceIx];
-        struct lineFile *lf = lineFileOpen(source, TRUE);
-        struct chain *chain;
-        if (!pipeOut) printf("Lifting %s\n", source);
-        while ((chain = chainRead(lf)) != NULL)
-            {
-            struct liftSpec *spec;
-            char *seqName = querySide ? chain->qName : chain->tName;
-            spec = findLift(liftHash, seqName, lf);
-            if (spec == NULL)
-                {
-                if (!carryMissing)
-                    {
-                    chainFree(&chain);
-                    continue;
-                    }
-                }
-            else
-                {
-                struct boxIn *b = NULL;
-                int offset = spec->offset;
-                if (querySide)
-                    {
-                    if (chain->qStrand == '-')
-                        offset = spec->newSize - (spec->offset + spec->oldSize);
-                    freeMem(chain->qName);
-                    chain->qName = cloneString(spec->newName);
-                    chain->qSize = spec->newSize;
-                    chain->qStart += offset;
-                    chain->qEnd   += offset;
-                    for (b=chain->blockList;  b != NULL;  b=b->next)
-                        {
-                        b->qStart += offset;
-                        b->qEnd   += offset;
-                        }
-                    }
-                else
-                    {
-                    freeMem(chain->tName);
-                    chain->tName = cloneString(spec->newName);
-                    chain->tSize = spec->newSize;
-                    chain->tStart += offset;
-                    chain->tEnd   += offset;
-                    for (b=chain->blockList;  b != NULL;  b=b->next)
-                        {
-                        b->tStart += offset;
-                        b->tEnd   += offset;
-                        }
-                    }
-                }
-            chainWrite(chain, f);
-            chainFree(&chain);
-            doDots(&dotMod);
-            }
-        lineFileClose(&lf);
-        }
+for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
+    {
+    char *source = sources[sourceIx];
+    struct lineFile *lf = lineFileOpen(source, TRUE);
+    struct chain *chain;
+    if (!pipeOut) printf("Lifting %s\n", source);
+    while ((chain = chainRead(lf)) != NULL)
+	{
+	struct liftSpec *spec;
+	char *seqName = querySide ? chain->qName : chain->tName;
+	spec = findLift(liftHash, seqName, lf);
+	if (spec == NULL)
+	    {
+	    if (!carryMissing)
+		{
+		chainFree(&chain);
+		continue;
+		}
+	    }
+	else
+	    {
+	    struct boxIn *b = NULL;
+	    int offset = spec->offset;
+	    if (spec->strand == '-')
+		{
+		if (querySide)
+		    {
+		    errAbort("Can't yet handle query side lifts "
+		             "when there are '-' in spec file.");
+	            }
+		else
+		    {
+		    /* We try and keep the target strand positive, so we end up
+		     * flipping in both target and query and flipping the target
+		     * strand. */
+		    freeMem(chain->tName);
+		    reverseIntRange(&chain->qStart, &chain->qEnd, chain->qSize);
+		    reverseIntRange(&chain->tStart, &chain->tEnd, chain->tSize);
+		    chain->qStrand = flipStrand(chain->qStrand);
+
+		    /* Flip around blocks and add offset. */
+		    for (b=chain->blockList;  b != NULL;  b=b->next)
+			{
+			reverseIntRange(&b->qStart, &b->qEnd, chain->qSize);
+			reverseIntRange(&b->tStart, &b->tEnd, chain->tSize);
+			b->tStart += offset;
+			b->tEnd   += offset;
+			}
+		    slReverse(&chain->blockList);
+
+		    /* On target side add offset as well and update name and size. */
+		    chain->tStart += offset;
+		    chain->tEnd   += offset;
+		    chain->tName = cloneString(spec->newName);
+		    chain->tSize = spec->newSize;
+		    }
+		}
+	    else
+		{
+		if (querySide)
+		    {
+		    if (chain->qStrand == '-')
+			offset = spec->newSize - (spec->offset + spec->oldSize);
+		    freeMem(chain->qName);
+		    chain->qName = cloneString(spec->newName);
+		    chain->qSize = spec->newSize;
+		    chain->qStart += offset;
+		    chain->qEnd   += offset;
+		    for (b=chain->blockList;  b != NULL;  b=b->next)
+			{
+			b->qStart += offset;
+			b->qEnd   += offset;
+			}
+		    }
+		else
+		    {
+		    freeMem(chain->tName);
+		    chain->tName = cloneString(spec->newName);
+		    chain->tSize = spec->newSize;
+		    chain->tStart += offset;
+		    chain->tEnd   += offset;
+		    for (b=chain->blockList;  b != NULL;  b=b->next)
+			{
+			b->tStart += offset;
+			b->tEnd   += offset;
+			}
+		    }
+		}
+	    }
+	chainWrite(chain, f);
+	chainFree(&chain);
+	doDots(&dotMod);
+	}
+    lineFileClose(&lf);
+    }
 }
 
 void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
@@ -1326,7 +1363,7 @@ else if (strstr(destType, ".axt"))
 else if (strstr(destType, ".chain"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts, FALSE);
+    liftHash = hashLift(lifts, TRUE);
     liftChain(destFile, liftHash, sourceCount, sources, 	
     	cgiBoolean("chainQ") || cgiBoolean("chainq"));
     }

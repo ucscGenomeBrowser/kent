@@ -37,6 +37,14 @@ pslRc: output
 	    input/rcTest.lft warn input/rcRcContig.psl
 	diff expected/rcRcLifted.psl output/rcRcLifted.psl
 
+chainRcT: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcLifted.chain \
+	    input/rcTest.lft warn input/rcContig.chain
+	diff expected/rcLifted.chain output/rcLifted.chain
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcRcLifted.chain \
+	    input/rcTest.lft warn input/rcRcContig.chain
+	diff expected/rcRcLifted.chain output/rcRcLifted.chain
+
 output:
 	${MKDIR} output
 
