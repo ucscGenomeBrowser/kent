@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.628 2004/05/13 23:42:28 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.629 2004/05/17 18:18:15 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3383,8 +3383,11 @@ void printRnaSpecs(struct trackDb *tdb, char *acc)
 {
 struct dyString *dy = newDyString(1024);
 struct sqlConnection *conn = hgAllocConn();
+struct sqlConnection *conn2= hgAllocConn();
 struct sqlResult *sr;
 char **row;
+char rgdEstId[512];
+char query[256];
 char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
     *date,*productName;
@@ -3397,7 +3400,6 @@ boolean hasVersion = hHasField("mrna", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
-
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -3502,6 +3504,21 @@ if (row != NULL)
 	{
 	printGeneLynxAcc(acc);
 	}
+    /* print RGD EST Report link if it is Rat genome and it has a link to RGD */
+    if (sameWord(organism, "Rat"))
+	{
+	if (hTableExists("rgdEstLink"))
+	    {
+	    snprintf(query, sizeof(query),
+            	"select id from %s.rgdEstLink where name = '%s';",  database, acc);
+	    if (sqlQuickQuery(conn2, query, rgdEstId, sizeof(rgdEstId)) != NULL)
+		{
+        	printf("<B>RGD EST Report: ");
+	        printf("<A HREF=\"%s%s\" target=_blank>", tdb->url, rgdEstId);
+        	printf("RGD:%s</B></A><BR>\n", rgdEstId);
+		}
+	    }
+	}
     printStanSource(acc, type);
     if (hGenBankHaveSeq(acc, NULL))
         {
@@ -3518,6 +3535,7 @@ else
 sqlFreeResult(&sr);
 freeDyString(&dy);
 hgFreeConn(&conn);
+hgFreeConn(&conn2);
 }
 
 void printAlignments(struct psl *pslList, 
@@ -7001,6 +7019,99 @@ printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
 printTrackHtml(tdb);
 }
 
+void printRgdQtlCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print RGD QTL URL. */
+{
+char *url = tdb->url;
+char *qtlId;
+
+if (url != NULL && url[0] != 0)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+
+
+    printf("<H3>Rat QTL %s: ", itemName);
+    sprintf(query, "select description from rgdQtlLink where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        printf("%s", row[0]);
+        }
+    sqlFreeResult(&sr);
+    printf("</H3>\n");
+ 
+    sprintf(query, "select id from rgdQtlLink where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+	qtlId = row[0];
+        printf("<B>RGD QTL Report: ");
+        printf("<A HREF=\"%s%s\" target=_blank>", url, qtlId);
+        printf("RGD:%s</B></A>\n", qtlId);
+        } 
+    sqlFreeResult(&sr);
+    
+    hFreeConn(&conn);
+    }
+}
+
+void doRgdQtl(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up Superfamily track info. */
+{
+if (itemForUrl == NULL)
+    itemForUrl = item;
+
+genericHeader(tdb, item);
+printRgdQtlCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printTrackHtml(tdb);
+}
+
+void printRgdSslpCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print RGD QTL URL. */
+{
+char *url = tdb->url;
+char *sslpId;
+
+if (url != NULL && url[0] != 0)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+
+    sprintf(query, "select id from rgdSslpLink where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+	sslpId = row[0];
+        printf("<H2>Rat SSLP: %s</H2>", itemName);
+        printf("<B>RGD SSLP Report: ");
+        printf("<A HREF=\"%s%s\" target=_blank>", url, sslpId);
+        printf("RGD:%s</B></A>\n", sslpId);
+        } 
+    sqlFreeResult(&sr);
+    
+    hFreeConn(&conn);
+    }
+}
+
+void doRgdSslp(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up Superfamily track info. */
+{
+if (itemForUrl == NULL)
+    itemForUrl = item;
+
+genericHeader(tdb, item);
+printRgdSslpCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printTrackHtml(tdb);
+}
+
 static boolean isBDGPName(char *name)
 /* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
 {
@@ -7029,6 +7140,187 @@ if (startsWith("CG", name) || startsWith("TE", name) || startsWith("CR", name))
 return(isBDGP);
 }
 
+void doRgdGene(struct trackDb *tdb, char *rnaName)
+/* Process click on a RGD gene. */
+{
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *mgiID;
+char *sqlRnaName = rnaName;
+struct refLink *rl;
+char *rgdId;
+struct genePred *gp;
+int start = cartInt(cart, "o");
+
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
+
+cartWebStart(cart, tdb->longLabel);
+
+sprintf(query, "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
+rl = refLinkLoad(row);
+sqlFreeResult(&sr);
+printf("<H2>Gene %s</H2>\n", rl->name);
+    
+sprintf(query, "select id from rgdGeneLink where refSeq = '%s'", sqlRnaName);
+
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in rgdGeneLink table - database inconsistency.", rnaName);
+rgdId = cloneString(row[0]);
+sqlFreeResult(&sr);
+
+printf("<B>RGD Gene Report: </B> <A HREF=\"");
+printf("%s%s", tdb->url, rgdId);
+printf("\" TARGET=_blank>RGD:%s</A><BR>", rgdId);
+
+printf("<B>NCBI RefSeq: </B> <A HREF=\"");
+printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
+printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+
+/* If refSeqStatus is available, report it: */
+if (hTableExists("refSeqStatus"))
+    {
+    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+	    sqlRnaName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+puts("<BR>");
+
+if (rl->omimId != 0)
+    {
+    printf("<B>OMIM:</B> <A HREF=\"");
+    printEntrezOMIMUrl(stdout, rl->omimId);
+    printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
+    }
+if (rl->locusLinkId != 0)
+    {
+    printf("<B>LocusLink:</B> ");
+    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
+	   rl->locusLinkId);
+    printf("%d</A><BR>\n", rl->locusLinkId);
+
+    if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
+    	{
+	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
+		rl->locusLinkId);
+
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    printf("<B>Mouse Genome Informatics:</B> ");
+	    mgiID = strdup(row[0]);
+		
+	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    }
+	else
+	    {
+	    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
+	    // with Locuslink on seq to gene association.
+	    // Thus, not finding a MGIid even if a LocusLink ID
+	    // exists is always a possibility.
+	    }
+	sqlFreeResult(&sr);
+	}
+    } 
+if (!startsWith("Worm", organism))
+    {
+    if (startsWith("dm", database))
+	{
+	// PubMed never seems to have BDGP gene IDs... so if that's all 
+	// that's given for a name/product, ignore name / truncate product.
+	char *cgp = strstr(rl->product, "CG");
+	if (cgp != NULL)
+	    {
+	    char *cgWord = firstWordInLine(cloneString(cgp));
+	    char *dashp = strchr(cgWord, '-');
+	    if (dashp != NULL)
+		*dashp = 0;
+	    if (isBDGPName(cgWord))
+		*cgp = 0;
+	    }
+	if (! isBDGPName(rl->name))
+	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+	if (rl->product[0] != 0)
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
+	}
+    else
+	{
+	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+	if (rl->product[0] != 0)
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
+	}
+    printf("\n");
+    if (startsWith("Human", organism)) 
+        {
+        printGeneLynxName(rl->name);
+	printf("\n");
+        }
+    printGeneCards(rl->name);
+    }
+if (hTableExists("jaxOrtholog"))
+    {
+    struct jaxOrtholog jo;
+    char * sqlRlName = rl->name;
+
+    /* Make sure to escape single quotes for DB parseability */
+    if (strchr(rl->name, '\''))
+        {
+        sqlRlName = replaceChars(rl->name, "'", "''");
+        }
+    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	jaxOrthologStaticLoad(row, &jo);
+	printf("<B>MGI Mouse Ortholog:</B> ");
+	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
+	printf("%s</A><BR>\n", jo.mouseSymbol);
+	}
+    sqlFreeResult(&sr);
+    }
+if (startsWith("hg", hGetDb()))
+    {
+    printf("\n");
+    printf("<B>AceView:</B> ");
+    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
+	   rl->name);
+    printf("%s</A><BR>\n", rl->name);
+    }
+printStanSource(rl->mrnaAcc, "mrna");
+
+htmlHorizontalLine();
+
+/* print alignments that track was based on */
+{
+char *aliTbl = (sameString(track, "rgdGene") ? "refSeqAli" : "xenoRGDAli");
+struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+printf("<H3>mRNA/Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+}
+
+htmlHorizontalLine();
+
+geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
@@ -14008,6 +14300,22 @@ else if (startsWith("cpgIsland", track))
 else if (sameWord(track, "knownGene"))
     {
     doSPGene(tdb, item);
+    }
+else if (sameWord(track, "rgdGene"))
+    {
+    doRgdGene(tdb, item);
+    }
+else if (sameWord(track, "rgdEst"))
+    {
+    doHgRna(tdb, item);
+    }
+else if (sameWord(track, "rgdSslp"))
+    {
+    doRgdSslp(tdb, item, NULL);
+    }
+else if (sameWord(track, "rgdQtl"))
+    {
+    doRgdQtl(tdb, item, NULL);
     }
 else if (sameWord(track, "superfamily"))
     {
