@@ -630,6 +630,18 @@ visibility hide
 chromosomes chr21,
 type sample 9
 
+
+track chimp
+shortLabel Chimp
+longLabel Chimp Sample Track
+priority 41.1
+visible hide
+chromosomes chr7,
+color 100,50,0
+altColor 0,0,255
+type sample 9
+
+
 track altGraph
 shortLabel altGraph
 longLabel altGraph
