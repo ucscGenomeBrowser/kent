@@ -11,11 +11,12 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.16 2003/06/24 20:19:16 kent Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.17 2003/06/27 06:01:19 kate Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 int dots=0;	/* Put out I'm alive dot now and then? */
+int gapsize = 0;        /* optional non-default gap size */
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +42,7 @@ errAbort(
  "also needs to be included in the command line:\n"
  "   liftUp dest.agp liftSpec how inserts sourceFile(s)\n"
  "This file describes where large inserts due to heterochromitin\n"
- "should be added.\n"
+ "should be added. Use /dev/null and set -gapsize if there's not inserts file.\n"
  "\n"
  "options:\n"
  "   -nohead  No header written for .psl files\n"
@@ -49,6 +50,7 @@ errAbort(
  "   -pslQ  Lift query (rather than target) side of psl\n"
  "   -axtQ  Lift query (rather than target) side of axt\n"
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
+ "   -gapsize change contig gapsize from default\n"
  );
 }
 
@@ -977,6 +979,9 @@ cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
 nosort = cgiBoolean("nosort");
 dots = cgiUsualInt("dots", dots);
+gapsize = cgiOptionalInt("gapsize", 0);
+if (gapsize !=0)
+    chromInsertsSetDefaultGapSize(gapsize);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
