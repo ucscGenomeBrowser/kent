@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.1 2003/11/04 00:00:00 braney Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.2 2003/11/05 05:04:42 braney Exp $";
 
 struct score
 {
@@ -819,7 +819,8 @@ while (lineFileRow(lf, words))
 
     dyStringPrintf(ds, "%s%c%s-%d-%d-%d-%d",score->tName, score->strand,
 	    score->qName, score->tStart, score->tEnd, score->qStart, score->qEnd);
-    hashAddUnique(scoreHash, ds->string, score);
+    hashAdd(scoreHash, ds->string, score);
+    // hashAddUnique(scoreHash, ds->string, score);
     }
 
 return scoreHash;
@@ -864,8 +865,16 @@ while ((psl = pslNext(lf)) != NULL)
     b->score = score->score;
     b->qStart = psl->qStart;
     b->qEnd = psl->qEnd;
-    b->tStart = psl->tStart;
-    b->tEnd = psl->tEnd;
+    if (psl->strand[1] == '-')
+	{
+	b->tStart = psl->tSize - psl->tStart;
+	b->tEnd = psl->tSize - psl->tEnd;
+	}
+    else
+	{
+	b->tStart = psl->tStart;
+	b->tEnd = psl->tEnd;
+	}
     b->data = psl;
     slAddHead(&sp->blockList, b);
 
@@ -917,8 +926,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     psl.tSize = chain->tSize;	/* Target sequence size */
     if (chain->qStrand == '-')
 	{
-	psl.tEnd = chain->tSize - chain->tStart;	/* Alignment start position in target */
 	psl.tStart = chain->tSize - chain->tEnd;	/* Alignment end position in target */
+	psl.tEnd = chain->tSize - chain->tStart;	/* Alignment start position in target */
 	}
     else
 	{
@@ -933,7 +942,11 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     for (b = chain->blockList, count = 0; b != NULL; count++,b = b->next)
 	{
 	blockSizes[count]= b->qEnd - b->qStart;
-	tStarts[count]=  b->tStart;
+	if (chain->qStrand == '-')
+	    tStarts[count]=  b->tEnd;
+	else
+	    tStarts[count]=  b->tStart;
+
 	qStarts[count]=  b->qStart;
 	totalSize += blockSizes[count];
 	if (a != NULL)
@@ -955,6 +968,11 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 
     psl.blockCount = count;	/* Number of blocks in alignment */
     psl.match = totalSize - psl.misMatch;	/* Number of bases that match that aren't repeats */
+    if (chain->qStrand == '-')
+	{
+	psl.tEnd = psl.tSize - psl.tStarts[0];	/* Alignment end position in target */
+	psl.tStart = psl.tSize - (psl.tStarts[psl.blockCount - 1] + 3 * psl.blockSizes[psl.blockCount - 1]);
+	}
     pslTabOut(&psl, f);
     fprintf(scores, "%s\t%c\t%d\t%d\t%s\t%d\t%d\t%g\n", psl.tName,
 	    psl.strand[1], psl.tStart, psl.tEnd,
