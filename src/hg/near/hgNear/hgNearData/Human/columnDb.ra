@@ -25,6 +25,7 @@ visibility off
 type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 9,37,24,17,34,12,19,21,22,35,
+hgGeneHide on
 
 name expAll
 shortLabel Long Expression
