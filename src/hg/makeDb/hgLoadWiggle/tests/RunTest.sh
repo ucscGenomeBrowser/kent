@@ -2,21 +2,33 @@
 
 HGWIGGLE=hgWiggle
 WIGENCODE=wigEncode
+HGLOADWIGGLE=hgLoadWiggle
 tests=0
 failures=0
 verbose=""
+export HGWIGGLE WIGENCODE verbose tests failures
+
+usage() {
+    echo "usage: `basename $0` [-verbose] [-home] [-help]"
+    echo -e "\tTesting the binary $HGWIGGLE and $WIGENCODE\n"
+    echo -e "\t-verbose - show all test command lines and results"
+    echo -e "\t-home - use binary $HOME/bin/$MACHTYPE/..."
+    echo -e "\t\t (default uses your PATH to find the binaries)"
+    echo -e "\t-help - print this usage message"
+    exit 255
+}
 
 oneTest() {
     tests=`expr $tests + 1`
     cmd=$1
-    result=$2
+    expected=$2
 
     C=`echo $tests | awk '{printf "%4d", $1}'`
     T=`eval $cmd | grep -v "^#.output date:" | sed -e "s/, output date:.*//" | sum -r`
 
-    if [ "${T}" != "$result" ]; then
+    if [ "${T}" != "$expected" ]; then
 	echo "${C} FAIL: $cmd"
-	echo "expected: '$result' got: '$T'"
+	echo "expected: '$expected' got: '$T'"
 	failures=`expr $failures + 1`
     else
 	if [ -n "${verbose}" ]; then
@@ -30,11 +42,14 @@ export failedArgCheck
 
 while [ "$#" -gt 0 ]
 do
-    if [ "$1" = "-verbose" ]; then
+    if [ "$1" = "-help" -o "$1" = "--help" ]; then
+	usage
+    elif [ "$1" = "-verbose" ]; then
 	verbose="verbose"
     elif [ "$1" = "-home" ]; then
 	HGWIGGLE="$HOME/bin/$MACHTYPE/$HGWIGGLE"
 	WIGENCODE="$HOME/bin/$MACHTYPE/$WIGENCODE"
+	HGLOADWIGGLE="$HOME/bin/$MACHTYPE/$HGLOADWIGGLE"
     else
 	echo "unknown argument: $1"
 	failedArgCheck=1
@@ -65,18 +80,44 @@ if [ "$?" -ne 0 ]; then
 fi
 
 TF=/tmp/wigEncode.$$.txt
+TF_WIG=/tmp/wigEncode.$$.wig
 wget "http://genome.ucsc.edu/encode/wiggleExample.txt" -O "${TF}" \
 	> /dev/null 2> /dev/null
+#  TEST 1 - wigEncode testing
 oneTest "${WIGENCODE} ${TF} stdout /dev/null 2> /dev/null" "04152     2"
-rm -f "${TF}"
 
-oneTest "$HGWIGGLE -lift=1 -chr=chrM -db=ce2 gc5Base" "26963    31"
+${WIGENCODE} ${TF} ${TF_WIG} /dev/null 2> /dev/null
+
+
+#  TEST 2 - hgLoadWiggle testing - can not use oneTest for this
+rm -f wiggle.tab
+cmd="${HGLOADWIGGLE} -noLoad hg16 testTrack ${TF_WIG}"
+${HGLOADWIGGLE} -noLoad hg16 testTrack "${TF_WIG}" 2> /dev/null
+T=`sum -r wiggle.tab`
+expected="44905     2"
+tests=`expr $tests + 1`
+C=`echo $tests | awk '{printf "%4d", $1}'`
+
+if [ "${T}" != "$expected" ]; then
+    echo "${C} FAIL: $cmd"
+    echo "expected: '$expected' got: '$T'"
+    failures=`expr $failures + 1`
+else
+    if [ -n "${verbose}" ]; then
+	echo "${C}   OK: $cmd"
+    fi
+fi
+#  clean up test 1 and 2 garbage
+rm -f "${TF}" "${TF_WIG}" wiggle.tab
+
+#  TEST 3 - hgWiggle testing
+oneTest "$HGWIGGLE -lift=1 -chr=chrM -db=ce2 gc5Base" "45724    31"
 oneTest "$HGWIGGLE -chr=chrM -doBed -db=ce2 gc5Base" "37864     1"
 oneTest "$HGWIGGLE -chr=chrM -doStats -db=ce2 gc5Base" "40185     1"
-oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -db=ce2 gc5Base" "15554    14"
-oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "22894     2"
-oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"<=\" -ll=50 -db=ce2 gc5Base" "01708    12"
-oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "40914     5"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -db=ce2 gc5Base" "52320    14"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "22598     3"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"<=\" -ll=50 -db=ce2 gc5Base" "58301    12"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "28698     5"
 oneTest "$HGWIGGLE -doBed -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "15056     3"
 oneTest "$HGWIGGLE -doStats -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "38601     1"
 oneTest "$HGWIGGLE -doBed -doStats -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "14143     4"
@@ -95,7 +136,7 @@ echo -e "chr1\t2500\t2510\tname1" >> "${TF}"
 echo -e "chr10\t200000\t200010\tname2" >> "${TF}"
 echo -e "chr1\t1500\t1510\tname3" >> "${TF}"
 
-oneTest "$HGWIGGLE -bedFile=${TF} -db=hg17 phastCons" "38333     1"
+oneTest "$HGWIGGLE -bedFile=${TF} -db=hg17 phastCons" "17020     2"
 
 rm -f "${TF}"
 
