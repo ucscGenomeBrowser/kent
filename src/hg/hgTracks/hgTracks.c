@@ -65,17 +65,17 @@
 #include "mcnBreakpoints.h"
 #include "expRecord.h"
 #include "altGraph.h"
+#include "altGraphX.h"
 #include "geneGraph.h"
 #include "sample.h"
 #include "genMapDb.h"
-#include "altGraphX.h"
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.534 2003/06/18 19:04:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.535 2003/06/18 20:23:16 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -6885,249 +6885,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 }
 
 
-void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
-		    int x, int y, int width, int height)
-/* create a link for each altGraphX that centers it on browser with 
-   known genes, human mrnas, and intron est tracks open */
-{
-struct altGraphX *ag = item;
-char buff[32];
-snprintf(buff, sizeof(buff), "%d", ag->id);
-mapBoxHc(start, end, x, y, width, height, tg->mapName, buff, "altGraphX Details");
-}
-
-boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
-/* is the mrnaIx already in seen? */
-{
-int i=0;
-boolean result = FALSE;
-for(i=0; i<*seenCount; i++)
-    {
-    if(ag->mrnaTissues[seen[i]] == ag->mrnaTissues[mrnaIx] ||
-       ag->mrnaLibs[seen[i]] == ag->mrnaLibs[mrnaIx])
-	{
-	result = TRUE;
-	break;
-	}
-    }
-if(!result)
-    {
-    seen[*seenCount++] = mrnaIx;
-    }
-return result;
-}
-
-int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx)
-/* count how many unique libraries or tissues contain a given edge */
-{
-struct evidence *ev = slElementFromIx(ag->evidence, eIx);
-int *seen = NULL;
-int seenCount = 0,i;
-int conf = 0;
-AllocArray(seen, ag->edgeCount);
-for(i=0; i<ag->edgeCount; i++)
-    seen[i] = -1;
-for(i=0; i<ev->evCount; i++)
-    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
-	conf++;
-freez(&seen);
-return conf;
-}
-
-boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
-/* Return TRUE if a v1-v2 edge is in the list FALSE otherwise. */
-{
-struct ggEdge *e = NULL;
-for(e = edges; e != NULL; e = e->next)
-    {
-    if(e->vertex1 == v1 && e->vertex2 == v2)
-	return TRUE;
-    }
-return FALSE;
-}
-
-Color altGraphXColorForEdge(struct vGfx *vg, struct altGraphX *ag, int eIx)
-/* Return the color of an edge given by confidence */
-{
-int confidence = altGraphConfidenceForEdge(ag, eIx);
-Color c = shadesOfGray[maxShade/4];
-struct geneGraph *gg = NULL;
-struct ggEdge *edges = NULL;
-
-if(ag->edgeTypes[eIx] == ggCassette)
-    {
-    if(!exprBedColorsMade)
-	makeRedGreenShades(vg);
-    if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0];
-    else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0];
-    else if(confidence >= 3) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 1: 0];
-    }
-else
-    {
-    if(confidence == 1) c = shadesOfGray[maxShade/3];
-    else if(confidence == 2) c = shadesOfGray[2*maxShade/3];
-    else if(confidence >= 3) c = shadesOfGray[maxShade];
-    }
-return c;
-}
-
-static void altGraphXDraw(struct track *tg, int seqStart, int seqEnd,         
-			 struct vGfx *vg, int xOff, int yOff, int width, 
-			 MgFont *font, Color color, enum trackVisibility vis)
-/* Draws the blocks for an alt-spliced gene and the connections */
-{
-int baseWidth = seqEnd - seqStart;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-boolean isFull = (vis == tvFull);
-double scale = scaleForPixels(width);
-int i;
-double y1, y2;
-int midLineOff = heightPer/2;
-struct altGraphX *ag=NULL, *agList = NULL;
-int s =0, e=0;
-agList = tg->items;
-for(ag = agList; ag != NULL; ag = ag->next)
-    {	   
-    x1 = round((double)((int)ag->tStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)ag->tEnd-winStart)*scale) + xOff;
-    if(tg->mapsSelf && tg->mapItem)
-	{
-	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
-	}
-    if(!isFull && (x2-x1 > 0))
-	{
-	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
-	}
-    for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
-	{
-	char buff[16];
-	int textWidth;
-	int sx1 = 0;
-	int sx2 = 0;
-	int sw = 0;
-	s = ag->vPositions[ag->edgeStarts[i]];
-	e = ag->vPositions[ag->edgeEnds[i]];
-	sx1 = roundingScale(s-winStart, width, baseWidth)+xOff;
-	sx2 = roundingScale(e-winStart, width, baseWidth)+xOff;
-	sw = sx2 - sx1;
-	snprintf(buff, sizeof(buff), "%d-%d", ag->edgeStarts[i], ag->edgeEnds[i]);        /* draw exons as boxes */
-	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
-	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
-	    {
-	    Color color2 = altGraphXColorForEdge(vg, ag, i);
-	    if(isFull)
-		{
-		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, color2);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw + 2 && hgDebug )
-		    vgTextCentered(vg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
-		}
-	    else
-		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color2);
-
-	    }
-	if(isFull)
-	    {
-	    /* draw introns as arcs */
-
-	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
-		{
-		Color color2 = altGraphXColorForEdge(vg, ag, i);
-		int x1, x2;
-		int midX;   
-		int midY = y + heightPer/2;
-		s = ag->vPositions[ag->edgeStarts[i]];
-		e = ag->vPositions[ag->edgeEnds[i]];
-		x1 = round((double)((int) s - winStart)*scale) + xOff;
-		x2 = round((double)((int) e - winStart)*scale) + xOff;
-		midX = (x1+x2)/2;
-		vgLine(vg, x1, midY, midX, y, color2);
-		vgLine(vg, midX, y, x2, midY, color2);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw && hgDebug )
-		    vgTextCentered(vg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
-		}
-	    }
-	}
-    if(isFull)
-	y += lineHeight;
-    }
-}
-
-
-void altGraphXLoadItems(struct track *tg)
-/* load the altGraphX data to a track */
-{
-struct sqlConnection *conn = hAllocConn();
-int rowOffSet;
-char **row;
-struct altGraphX *ag=NULL, *agList=NULL;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
-				   winStart, winEnd, NULL, &rowOffSet);
-while((row = sqlNextRow(sr)) != NULL)
-    {
-    ag = altGraphXLoad(row + rowOffSet);
-    slAddHead(&agList, ag);
-    }
-slReverse(&agList);
-sqlFreeResult(&sr);
-tg->items = agList;
-}
-
-void altGraphXFreeItems(struct track *tg)
-/* free up tha altGraphX items in tg->items */
-{
-altGraphXFreeList((struct altGraphX**)(&tg->items));
-}
-
-static int altGraphXFixedTotalHeight(struct track *tg, enum trackVisibility vis)
-/* set track height to 2 * font size if full , 1 * if dense
-*/
-{
-switch (vis)
-    {
-    case tvFull:
-	tg->lineHeight  = 2 * tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = slCount(tg->items) * tg->lineHeight;
-	break;
-    case tvDense:
-	tg->lineHeight  = tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = tg->lineHeight;
-	break;
-    }
-return tg->height;
-}
-
-char *altGraphXItemName(struct track *tg, void *item)
-/* returns the number of alternative splice paths as a string name */
-{
-char buff[32];
-struct altGraphX *ag = item;
-int count =0, i=0;
-for(i=0; i<ag->edgeCount; i++)
-    if(ag->edgeTypes[i] == ggCassette)
-	count++;
-snprintf(buff, sizeof(buff), "%d", count );
-return (cloneString(buff));
-}
-
-void altGraphXMethods(struct track *tg)
-/* setup special methods for altGraphX track */
-{
-tg->drawItems = altGraphXDraw;
-tg->loadItems = altGraphXLoadItems;
-tg->freeItems = altGraphXFreeItems;
-tg->totalHeight = altGraphXFixedTotalHeight;
-tg->itemName = altGraphXItemName;
-tg->mapsSelf = TRUE;
-tg->mapItem = altGraphXMapItem;
-}
 
 struct track *sortGroupList = NULL; /* Used temporarily for sample sorting. */
 
@@ -7720,6 +7477,28 @@ else
 bedFreeList(&bedList);
 }
 
+void lfsFromAffyUclaBed(struct track *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL;
+int i=0;
+bedList = tg->items;
+if(tg->limitedVis == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
+    }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyUclaExps", 0, NULL, -1);
+    slSort(&tg->items,lfsSortByName);
+    }
+bedFreeList(&bedList);
+}
+
 void lfsFromNci60Bed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
@@ -8108,6 +7887,25 @@ else
     }
 }
 
+Color affyUclaColor(struct track *tg, void *item, struct vGfx *vg)
+/* Does the score->color conversion for affymetrix arrays using ratios,
+ * if dense do an intensity color in blue based on score value otherwise do
+ * red/green display from expScores */
+{
+struct linkedFeatures *lf = item;
+float score = lf->score;
+if(!exprBedColorsMade)
+    makeRedGreenShades(vg);
+if(tg->visibility == tvDense)
+    {
+    return MG_BLACK;
+    }
+else
+    {
+    return expressionColor(tg, item, vg, 1.0, 1.0);
+    }
+}
+
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -8252,6 +8050,8 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
+
+
 void affyRatioMethods(struct track *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
@@ -8260,6 +8060,18 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = affyRatioColor;
 tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
+void affyUclaMethods(struct track *tg)
+/* set up special methods for affyUcla track and tracks with multiple
+   scores in general */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = affyUclaColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyUclaBed;
 tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
@@ -8771,7 +8583,7 @@ if (withLeftLabels)
     if (withRuler)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
-	    MG_BLACK, font, "Base Position");
+		    MG_BLACK, font, "Base Position");
 	y += basePositionHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
@@ -8779,7 +8591,6 @@ if (withLeftLabels)
 	double minRangeCutoff, maxRangeCutoff;
 	char o4[128];
 	char o5[128];
-	
 	struct slList *item;
 	enum trackVisibility vis = track->limitedVis;
 	int tHeight;
@@ -8795,7 +8606,6 @@ if (withLeftLabels)
 	snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
         minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
-	    
 	
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
@@ -8809,13 +8619,11 @@ if (withLeftLabels)
 	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
 	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
 	    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
-
-	//errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
-
+	    
+	    //errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
+	    
 	    sprintf( minRangeStr, " "  );
 	    sprintf( maxRangeStr, " " );
-		
-
 	    if( vis == tvFull && track->heightPer >= 74  )
 		{
 		printYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
@@ -8824,7 +8632,6 @@ if (withLeftLabels)
 		printYAxisLabel( vg, y+5, track, "4.0", min0, max0 );
 		printYAxisLabel( vg, y+5, track, "5.0", min0, max0 );
 		printYAxisLabel( vg, y+5, track, "6.0", min0, max0 );
-
 	    	}
 	    }
 	else
@@ -8832,8 +8639,6 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
 	    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
 	    }
-
-	
 	switch (vis)
 	    {
 	    case tvHide:
@@ -8841,7 +8646,7 @@ if (withLeftLabels)
 	    case tvPack:
 	    case tvSquish:
 		if (withCenterLabels)
-		    y += fontHeight;
+ 		    y += fontHeight;
 	        y += track->height;
 		break;
 	    case tvFull:
@@ -8859,12 +8664,11 @@ if (withLeftLabels)
 		    int itemHeight = track->itemHeight(track, item);
 		    newy = y;
 		    
-		    
 		    /* Do some fancy stuff for sample tracks. 
 		     * Draw y-value limits for 'sample' tracks. */
 		    if(track->subType == lfSubSample )
 			{
-
+			
 			if( prev == NULL )
 			    newy += itemHeight;
 			else
@@ -10201,8 +10005,10 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
+registerTrackHandler("affyUcla", affyUclaMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
+registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
@@ -10747,9 +10553,12 @@ void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 char *debugTmp = NULL;
+struct dyString *state = NULL;
 /* Initialize layout and database. */
 cart = theCart;
-
+state = cgiUrlString();
+/* Uncomment this to see parameters for debugging. */
+/* printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);

@@ -6,7 +6,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgTracks
 
-O = $A.o chainTrack.o netTrack.o mafTrack.o
+O = $A.o chainTrack.o netTrack.o mafTrack.o altGraphXTrack.o
 
 my: compile
 	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
@@ -21,7 +21,7 @@ mgsc: compile
 	mv $A /usr/local/apache/cgi-bin-mgsc/$A
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	gcc $O $(MYLIBS) $(L)
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
