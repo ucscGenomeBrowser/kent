@@ -124,7 +124,7 @@ track blastHg16KG
 shortLabel hg16 protein blast
 longLabel hg16 protein blast
 group x
-priority 1101
+priority 129
 visibility hide
 type psl protein
 
@@ -133,7 +133,7 @@ shortLabel tblastHg16
 longLabel  tblastHg16 (Hg16 Known Genes tblastn galGal2)
 group x
 spectrum on
-priority 158
+priority 128
 visibility hide
 type psl xeno
 
@@ -228,6 +228,17 @@ priority 21
 visibility hide
 color 50,50,50
 type bed 4 +
+
+track webbNonExonic
+shortLabel NonExonic
+longLabel Putative Non-Exonic Regions Conserved with Human
+group x
+priority 130
+visibility hide
+color 0,60,120
+altColor 255,220,100
+spectrum on
+type bed 6
 
 
 

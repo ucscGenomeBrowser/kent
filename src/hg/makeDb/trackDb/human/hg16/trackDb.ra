@@ -1318,3 +1318,15 @@ priority 144.3
 visibility pack
 useScore 1
 type bed6
+
+track webbNonExonic
+shortLabel NonExonic
+longLabel Putative Non-Exonic Regions Conserved with Chicken
+group x
+priority 130
+visibility hide
+color 0,60,120
+altColor 255,220,100
+spectrum on
+type bed 6
+
