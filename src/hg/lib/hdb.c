@@ -1781,7 +1781,7 @@ if (strstrNoCase(organism, "mouse"))
     }
 else if (strstrNoCase(organism, "zoo"))
     {
-    result = "zooChimp2";
+    result = "zooHuman3";
     }
 else if (strstrNoCase(organism, "human"))
     {

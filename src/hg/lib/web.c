@@ -310,9 +310,10 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         values[numAssemblies] = cur->name;
         numAssemblies++;
         }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->name, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, db)))
+    else if (strstrNoCase(organism, cur->organism)
+             && !strstrNoCase(cur->name, "zoo")
+             && !strstrNoCase(db, "zoo")
+             && (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
