@@ -150,6 +150,12 @@ format description of their fields.</P>
   href="#ChainGap">chrN_chainMm3Link</A> 
   - Alignment block in mouse (mm3 assembly) chain </LI>
   <LI><A 
+  href="#Chain">chrN_chainPt0</A> 
+  - Summary info about chain of chimp (13 Nov 2003 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainGap">chrN_chainPt0Link</A> 
+  - Alignment block in chimp (13 Nov 2003 assembly) chain </LI>
+  <LI><A 
   href="#Chain">chrN_chainRn3</A> 
   - Summary info about chain of rat (rn3 assembly) alignments</LI>
   <LI><A 
@@ -212,6 +218,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PepPredictions">acemblyPep</A> 
   - Translations of Acembly gene predictions into corresponding amino acid
     sequences </LI>
+  <LI><A 
+  href="#BED">affyGeno</A> 
+  - SNPs on the Affymetrix 120K SNP Genotyping Array</LI>
   <LI><A 
   href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
@@ -277,6 +286,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ChainLink">chainLink</A> 
   - Alignment block in chain </LI>
+  <LI><A 
+  href="#Chain">chainRxBestPt0</A> 
+  - Summary info about a chain of chimp alignments
+  <LI><A 
+  href="#ChainGap">chainRxBestPt0Link</A> 
+  - Alignment block in chimp chain </LI>
   <LI><A 
   href="#PslInfo">chimpBac</A> 
   - Blat alignments of Pan troglodytes BACs against the draft human genome
@@ -564,6 +579,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#NetAlign">netRn3</A> 
   - Database representation of a net of alignments with rat assembly Rn3 </LI>
+  <LI><A 
+  href="#NetAlign">netRxBestPt0</A> 
+  - Database representation of a net of alignments with chimp assembly Pt0 </LI>
   <LI><A 
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
@@ -968,6 +986,7 @@ for various organisms.
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
+- affyGeno -first 4 fields <BR>
 - affyRatio -all 15 fields <BR>
 - dhs - first 4 fields <BR>
 - encodeRegions - first 4 fields <BR>
@@ -1008,7 +1027,7 @@ The following definition is used for several tables as follows:<BR>
 
 
 
-<H4><A name=Chain></A>Chain Alignments</H4>
+<H4><A name= Chain></A>Chain Alignments</H4>
 <PRE>table chain
 "Summary info about a chain of alignments"
    (
