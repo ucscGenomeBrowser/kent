@@ -1,6 +1,7 @@
 /* program to fit affy data into multiple score bed format and associated
    expRecord file from the affy file and the pslFile */
 #include "common.h"
+#include "options.h"
 #include "affyAtlas.h"
 #include "psl.h"
 #include "hash.h"
@@ -8,22 +9,36 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.3 2003/09/20 21:10:25 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.4 2003/09/21 04:34:21 kent Exp $";
 
 
 #define DEBUG 0
-FILE *scores = NULL;      /* output all scores here, used to generate a histogram of all results */
-int missingExpsCount = 0; /* how many missing data points are there */
-int noExpCount = 0;       /* how many points contain no experimental data */
-int missingVal = -10000;  /* use this value for missing data */
 
 void usage() 
 {
 errAbort("affyPslAndAtlasToBed - Takes an alignment of affy probe target\n"
 	 "sequences and the human atlas results file to create an msBed file.\n"
 	 "usage:\n"
-	 "\taffyPslAndAtlasToBed pslFile atlasFile out.bed out.expRecord\n");
+	 "    affyPslAndAtlasToBed pslFile atlasFile out.bed out.expRecord\n"
+	 "options:\n"
+	 "    -newType Use for newer type including mouse\n"
+	 "    -chip=XXXX (default HG-U95Av2)\n");
 }
+
+boolean newType = FALSE;
+char *chip = "HG-U95Av2";
+
+FILE *scores = NULL;      /* output all scores here, used to generate a histogram of all results */
+int missingExpsCount = 0; /* how many missing data points are there */
+int noExpCount = 0;       /* how many points contain no experimental data */
+int missingVal = -10000;  /* use this value for missing data */
+
+static struct optionSpec options[] = {
+   {"newType", OPTION_BOOLEAN},
+   {"suffix", OPTION_STRING},
+   {NULL, 0},
+};
+
 
 struct idVal
 /* generic structure with float val */
@@ -100,24 +115,32 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-char * parseNameFromHgc(char *string)
+char *parseNameFromHgc(char *string)
 /** parses out the name of the probe set. free returned string
 with freez() */
 {
-char *toRet = strstr(string, "HG-U95Av2:");
-/* char *toRet = strstr(string, ":"); */
+char startPat[64];
+char *toRet = NULL;
 char *tmp = NULL;
+
+safef(startPat, sizeof(startPat), "%s:", chip);
+toRet = strstr(string, startPat);
 if(toRet == NULL)
-    errAbort("Can't parse target name from %s.", string);
-toRet++;
-toRet = strstr(toRet, ":");
-if(toRet == NULL)
-    errAbort("Can't parse target name from %s.", string);
-toRet++;
-tmp = strstr(toRet, ";");
-if(tmp == NULL)
-    errAbort("Can't parse target name from %s.", string);
-*tmp = '\0';
+    {
+    toRet = string;
+    }
+else
+    {
+    toRet++;
+    toRet = strstr(toRet, ":");
+    if(toRet == NULL)
+	errAbort("Can't parse target name from %s.", string);
+    toRet++;
+    tmp = strstr(toRet, ";");
+    if(tmp == NULL)
+	errAbort("Can't parse target name from %s.", string);
+    *tmp = '\0';
+    }
 toRet = cloneString(toRet);
 return toRet;
 }
@@ -181,6 +204,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 return bedHash;
 }
 
+
 struct expRecord *expRecordFromAffyAtlas(struct affyAtlas *aa)
 /** constructs a simple experiment record from information in an affyAtlas record */
 {
@@ -192,12 +216,12 @@ sprintf(name, "%s_%s", aa->annName, aa->tissue);
 er->id = id++;
 er->name = cloneString(name);
 er->description = cloneString(aa->tissue);
-er->url = cloneString("https://www.netaffx.com/index2.jsp");
+er->url = cloneString("http://www.affymetrix.com/analysis/index.affx");
 er->ref = cloneString("http://www.gnf.org/");
 er->credit = cloneString("http://www.gnf.org/");
 er->numExtras = 3;
 er->extras = needMem(sizeof(char*) * er->numExtras);
-er->extras[0] = cloneString("HG-U95");
+er->extras[0] = cloneString(chip);
 er->extras[1] = cloneString(aa->annName);
 er->extras[2] = cloneString(aa->tissue);
 return er;
@@ -412,8 +436,8 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     }
 }
 
-void affyPslAndAtlasToBed(char *pslFile, char *atlasFile, char *bedOut, char *expRecOut)
-/** Main function that does all the work */
+void affyPslAndAtlasToBedOld(char *pslFile, char *atlasFile, char *bedOut, char *expRecOut)
+/** Main function that does all the work for old-style*/
 {
 struct hash *bedHash = NULL;
 struct affyAtlas *aaList=NULL, *aa=NULL;
@@ -457,12 +481,191 @@ bedFreeList(&bedList);
 warn("Done.");
 }
 
+struct expCounter
+/* Keep track when have multiple experiments on same tissue. */
+    {
+    char *name;	/* Not allocated here. */
+    int count;	/* Count of times seen. */
+    };
+
+int lineToExp(char *line, char *fileName)
+/* Convert line to an expression record file. 
+ * Return number of expression records. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct hash *hash = newHash(10);	/* Integer valued hash */
+char *word;
+int wordCount = 0;
+struct expCounter *ec;
+char *spaced;
+char name[128];
+
+while ((word = nextWord(&line)) != NULL)
+    {
+    if ((ec = hashFindVal(hash, word)) == NULL)
+        {
+	AllocVar(ec);
+	hashAddSaveName(hash, word, ec, &ec->name);
+	}
+    spaced = cloneString(word);
+    subChar(spaced, '_', ' ');
+    ec->count += 1;
+    if (ec->count > 1)
+        safef(name, sizeof(name), "%s %d", spaced, ec->count);
+    else
+        safef(name, sizeof(name), "%s", spaced);
+    fprintf(f, "%d\t", wordCount);
+    fprintf(f, "%s\t", name);
+    fprintf(f, "%s\t", name);
+    fprintf(f, "%s\t", "http://www.affymetrix.com/analysis/index.affx");
+    fprintf(f, "%s\t", "http://expression.gnf.org");
+    fprintf(f, "%s\t", "http://www.gnf.org");
+    fprintf(f, "3\t");
+    fprintf(f, "%s,%s,%s,\n", chip, "n/a", spaced);
+    ++wordCount;
+    }
+carefulClose(&f);
+return wordCount;
+}
+
+int intCmp(const void *va, const void *vb)
+/* Compare two ints. */
+{
+int *a = (int *)va;
+int *b = (int *)vb;
+return *a - *b;
+}
+
+int findPositiveMedian(int *data, int count)
+/* Find median of positive numbers in data. */
+{
+int *sorted;
+int i, realCount = 0;
+int median = -1;
+AllocArray(sorted, count);
+for (i=0; i<count; ++i)
+    {
+    if (data[i] >= 0)
+        {
+	sorted[realCount] = data[i];
+	++realCount;
+	}
+    }
+if (realCount > 0)
+    {
+    int halfReal = (realCount>>1);
+    qsort(sorted, realCount, sizeof(sorted[0]), intCmp);
+    if (realCount&1)
+	median = sorted[halfReal];
+    else
+        median = ((sorted[halfReal-1] + sorted[halfReal]) >> 1);
+    }
+freez(&sorted);
+return median;
+}
+
+void affyPslAndAtlasToBedNew(char *pslFile, char *atlasFile, char *bedOut, 
+	char *expRecOut)
+/** Main function that does all the work for new-style*/
+{
+struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
+char *line;
+int i, wordCount, expCount;
+char **row;
+int *data, median;
+double invMedian, ratio, logRatio;
+char *affyId;
+struct hash *hash = newHash(17);
+struct psl *psl;
+struct bed *bed;
+FILE *f = NULL;
+int dataCount = 0, pslCount = 0, bedCount = 0;
+
+/* Open Atlas file and use first line to create experiment table. */
+if (!lineFileNext(lf, &line, NULL))
+    errAbort("%s is empty", lf->fileName);
+if (line[0] != '\t')
+    errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
+expCount = lineToExp(line, expRecOut);
+if (expCount <= 0)
+    errAbort("No experiments in %s it seems", lf->fileName);
+warn("%d experiments\n", expCount);
+
+/* Build up a hash keyed by affyID with an int array of data
+ * for value. */
+AllocArray(row, expCount);
+while (lineFileNextReal(lf, &line))
+    {
+    affyId = nextWord(&line);
+    wordCount = chopByWhite(line, row, expCount);
+    if (wordCount != expCount)
+        errAbort("Expecting %d data points, got %d line %d of %s", 
+		expCount, wordCount, lf->lineIx, lf->fileName);
+    if (hashLookup(hash, affyId))
+	{
+        warn("Duplicate %s, skipping all but first.", affyId);
+	continue;
+	}
+    AllocArray(data, expCount);
+    for (i=0; i<expCount; ++i)
+        data[i] = atoi(row[i]);
+    hashAdd(hash, affyId, data);
+    data = NULL;
+    ++dataCount;
+    }
+lineFileClose(&lf);
+warn("%d rows of expression data\n", dataCount);
+
+/* Stream through psl file, converting it to bed with expression data. */
+lf = pslFileOpen(pslFile);
+f = mustOpen(bedOut, "w");
+while ((psl = pslNext(lf)) != NULL)
+    {
+    ++pslCount;
+    data = hashFindVal(hash, psl->qName);
+    if (data != NULL)
+        {
+	struct bed *bed = bedFromPsl(psl);
+	bed->expCount = expCount;
+	AllocArray(bed->expIds, expCount);
+	AllocArray(bed->expScores, expCount);
+	median = findPositiveMedian(data, expCount);
+	if (median >= 0)
+	    {
+	    invMedian = 1.0/median;
+	    for (i=0; i<expCount; ++i)
+		{
+		int val = data[i];
+		if (val > 0)
+		    bed->expScores[i] = safeLog2(invMedian*val);
+		else
+		    bed->expScores[i] = missingVal;
+		bed->expIds[i] = i;
+		}
+	    bedTabOutN(bed, 15, f);
+	    ++bedCount;
+	    }
+	bedFree(&bed);
+	}
+    pslFree(&psl);
+    }
+warn("%d records in %s", pslCount, pslFile);
+warn("%d records written to %s", bedCount, bedOut);
+lineFileClose(&lf);
+carefulClose(&f);
+}
 
 int main(int argc, char *argv[])
 {
+optionInit(&argc, argv, options);
+newType = optionExists("newType");
+chip = optionVal("chip", chip);
 if(argc != 5)
     usage();
 scores = mustOpen("scores.tab", "w");
-affyPslAndAtlasToBed(argv[1], argv[2], argv[3], argv[4]);
+if (newType)
+    affyPslAndAtlasToBedNew(argv[1], argv[2], argv[3], argv[4]);
+else
+    affyPslAndAtlasToBedOld(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
