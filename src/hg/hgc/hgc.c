@@ -4882,7 +4882,7 @@ if (row != NULL)
 	{
 	printf("<TABLE>\n");
 	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
 	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
 	if (hChromBand(seqName, start, band))
 	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
@@ -5206,7 +5206,7 @@ if (row != NULL)
 	infoRow = stsInfoMouseLoad(row);
 	printf("<TABLE>\n");
 	printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+	printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
 	printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
@@ -5330,7 +5330,7 @@ if (row != NULL)
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     gotS = hChromBand(seqName, start, sband);
     gotB = hChromBand(seqName, end, eband);
@@ -5443,7 +5443,7 @@ if (row != NULL)
     /* Print out general sequence positional information */
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     gotS = hChromBand(seqName, start, sband);
     gotB = hChromBand(seqName, end, eband);
@@ -5510,7 +5510,7 @@ if (row != NULL)
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
-    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     size = end - start + 1;
     printf("<TR><TH ALIGN=left>Size:</TH><TD>%d</TD></TR>\n",size);
@@ -5891,7 +5891,7 @@ if (row != NULL)
     /*printf("<H2>%s - %s</H2>\n", type, clone);*/
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
-    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     gotS = hChromBand(seqName, start, sband);
@@ -6344,7 +6344,7 @@ if(dp != NULL)
     printf("[<a href=\"hgBlat?type=DNA&genome=hg8&sort=&query,score&output=hyperlink&userSeq=%s\">blat (blast like alignment)</a>]<br>", dp->dna);
     printf("<b>Size:</b> %d<br>", dp->size );
     printf("<b>Chrom:</b> %s<br>", dp->chrom );
-    printf("<b>ChromStart:</b> %d<br>", dp->start );
+    printf("<b>ChromStart:</b> %d<br>", dp->start+1 );
     printf("<b>ChromEnd:</b> %d<br>", dp->end );
     printf("<b>Strand:</b> %s<br>", dp->strand );
     printf("<b>3' Dist:</b> %d<br>", dp->tpDist );
