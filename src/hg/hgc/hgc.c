@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.450 2003/07/01 22:44:37 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.451 2003/07/03 00:18:25 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5422,6 +5422,7 @@ sqlFreeResult(&sr);
 void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print Ensembl Gene URL. */
 {
+char *shortItemName;
 char *url = tdb->url;
 if (url != NULL && url[0] != 0)
     {
@@ -5435,6 +5436,13 @@ if (url != NULL && url[0] != 0)
     char *geneID;
     char *ans;
 
+    char *chp;
+
+    // shortItemName is the name without the "." + version 
+    shortItemName = strdup(itemName);
+    chp = strstr(shortItemName, ".");
+    if (chp != NULL) *chp = '\0';
+
     genomeStrEnsembl = ensOrgName(organism);
     if (genomeStrEnsembl == NULL)
 	{
@@ -5444,14 +5452,23 @@ if (url != NULL && url[0] != 0)
 
     printf("<B>Ensembl Gene Link: </B>");
     printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" target=_blank>", 
-	   genomeStrEnsembl,itemName);
+	   genomeStrEnsembl,shortItemName);
     printf("%s</A><br>", itemName);
 
     if (hTableExists("superfamily"))
 	{
-    	sprintf(cond_str, "transcript_name='%s'", itemName);    
-    	proteinID = sqlGetField(conn, database, "ensemblXref", "translation_name", cond_str);
-  
+    	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
+	
+        // this is necessary because Ensembl is changine their xref table definition
+    	if (hTableExists("ensemblXref2"))
+	    {
+	    proteinID = sqlGetField(conn, database, "ensemblXref2", "translation_name", cond_str);
+  	    }
+	else
+	    {
+	    proteinID = sqlGetField(conn, database, "ensemblXref", "translation_name", cond_str);
+  	    }
+
 	if (proteinID != NULL)
 	    { 
             printf("<B>Ensembl Protein: </B>");
@@ -5489,6 +5506,7 @@ if (url != NULL && url[0] != 0)
             printf("%s</A><BR><BR>\n", proteinID);
             }
     	}
+    free(shortItemName);
     }
 }
 
@@ -5529,6 +5547,7 @@ void printSuperfamilyCustomUrl(struct trackDb *tdb, char *itemName, boolean enco
 /* Print Superfamily URL. */
 {
 char *url = tdb->url;
+
 if (url != NULL && url[0] != 0)
     {
     char supfamURL[1024];
