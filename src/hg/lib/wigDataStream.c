@@ -4,8 +4,10 @@
 #include "common.h"
 #include "memalloc.h"
 #include "wiggle.h"
+#include "portable.h"
+#include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.24 2004/08/18 20:08:05 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.25 2004/08/24 20:41:16 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -343,7 +345,8 @@ return dif;
 /*	currently this dataArrayOut is private, but it may become public */
 static void dataArrayOut(struct wiggleDataStream *wDS, char *fileName,
 	boolean rawDataOut, boolean sort)
-/*	print to fileName the ascii data values	*/
+/*	print to fileName ascii data values from the first list element
+ *	of the data "array" results	*/
 {
 FILE * fh;
 fh = mustOpen(fileName, "w");
@@ -636,6 +639,7 @@ if (! (doNoOp || doAscii || doDataArray || doBed || doStats) )
 /*	not going to do this without a range specified and a chr name */
 if (doDataArray && wDS->winEnd && wDS->chrName)
     {
+    long startTime = 0;
     struct wiggleArray *wa;
     size_t inx, size; 
     size_t winSize;
@@ -648,18 +652,23 @@ if (doDataArray && wDS->winEnd && wDS->chrName)
     size = sizeof(float) * winSize;
     /*	good enough for 500,000,000 bases	*/
     setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
+    if (verboseLevel() >= VERBOSE_CHR_LEVEL)
+	startTime = clock1000();
     wa->data = (float *)needLargeMem(size);
     dataArrayPtr = wa->data;
-    /*  something like this could best be done by a step wise memcpy */
-    /*	this takes 30 seconds for 500,000,000 winSize on hgwdev */
+    /*	this init loop turns out to be quite fast, even for huge arrays */
     for (inx = 0; inx < winSize; ++inx)
 	*dataArrayPtr++ = NAN;
     dataArrayPtr = wa->data;
     dataArrayPosition = wa->winStart;
     slAddHead(&wDS->array, wa);
-    verbose(VERBOSE_CHR_LEVEL,
-	"#\tgetData: created data array for %d values (%u b)\n",
-	winSize, size);
+    if (verboseLevel() >= VERBOSE_CHR_LEVEL)
+	{
+	long et = clock1000() - startTime;
+	verbose(VERBOSE_CHR_LEVEL,
+	    "#\tgetData: created data array for %d values (%u b) in %ld ms\n",
+		winSize, size, et);
+	}
     }
 else if (doDataArray && !(doNoOp || doAscii || doBed || doStats))
     {
@@ -1161,6 +1170,7 @@ if (bedList && *bedList)
      */
     for (chr = chromList; chr; chr = chr->next)
 	{
+	long startTime = 0;
 	float *fptr;
 	boolean doAscii = FALSE;
 	boolean doBed = FALSE;
@@ -1278,10 +1288,19 @@ if (bedList && *bedList)
 
 	/*	good enough for 2,000,000,000 bases (bedArray elem 1 byte) */
 	setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
+	if (verboseLevel() >= VERBOSE_CHR_LEVEL)
+	    startTime = clock1000();
 	bedArray = (char *)needLargeMem(bedArraySize);
 
 	/*	set them all to FALSE to begin with	*/
 	memset((void *)bedArray, FALSE, bedArraySize);
+	if (verboseLevel() >= VERBOSE_CHR_LEVEL)
+	    {
+	    long et = clock1000() - startTime;
+	    verbose(VERBOSE_CHR_LEVEL,
+    "#\tgetDataViaBed: created data array for %u bed indicators in %ld ms\n",
+		bedArraySize, et);
+	    }
 
 	/*	use the bed definition to fill this marker array */
 	/*	start at the lesser of the two start positions	*/
@@ -1565,13 +1584,12 @@ if (wDS->stats)
 
     if (htmlOut)
 	{
-	fprintf (fh, "<TABLE COLS=12 ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=CENTER> ");
+	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR><TH COLSPAN=6 ALIGN=LEFT> ");
 	if (wDS->db)
-	    fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->db, wDS->tblName);
+	    fprintf(fh, "Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->db, wDS->tblName);
 	if (wDS->isFile)
-	    fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=CENTER> Table: %s </TH></TR></TABLE>\n", wDS->tblName);
+	    fprintf(fh, "from file </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->tblName);
 
-	fprintf(fh,"<TABLE COLS=12 ALIGN=CENTER HSPACE=0>\n");
 	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
 	fprintf(fh,"<TH> Data <BR> end </TH>");
 	fprintf(fh,"<TH> # of Data <BR> values </TH><TH> Data <BR> span </TH>");
