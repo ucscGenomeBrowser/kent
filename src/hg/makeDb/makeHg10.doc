@@ -638,21 +638,34 @@ LOAD CPGISLANDS (done)
      - At mysql> prompt type in:
           load data local infile 'cpgIsland.bed' into table cpgIsland
 
-LOAD ENSEMBLE GENES (todo)
+LOAD ENSEMBL GENES (done)
      cd ~/oo/bed
      mkdir ensembl
      cd ensembl
-     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz
-     gunzip all*.gz
-     liftUp ensembl110.gtf ~/oo/jkStuff/liftAll.lft warn all*.gtf
-     ldHgGene hg10 ensGene en*.gtf
+     Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
+     predictions) here. (e.g. wget
+     http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
+     gunzip xxx.gtf.gtz
+     Starting from Hg10, ensembl seems to have done their own lifting,
+     so just collect all chromosome .gtf files.
+     cat ?.gtf ??.gtf >all.gtf
+
+     Add "chr" to front of each line to make it compatible with ldHgGene 
+     addchr all.gtf > ensembl.gtf
+     rm all.gtf
+     ldHgGene hg10 ensGene ensembl.gtf
 o - Load Ensembl peptides:
      (poke around ensembl to get their peptide files as ensembl.pep)
-     (substitute ENST for ENSP in ensemble.pep with subs)
-     wget ftp://ftp.ensembl.org/pub/current/data/fasta/pep/ensembl.pep.gz
-     gunzip ensembl.pep.gz
-   edit subs.in to read: ENSP|ENST
-     subs -e ensembl.pep
+     
+     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
+
+     gunzip Homo_sapiens.pep.fa.gz
+     
+     Substitute ENST for ENSP in ensemble.pep with subs
+     edit subs.in to read: ENSP|ENST
+
+     subs -e Homo_sapiens.pep.fa >/dev/null
+
      hgPepPred hg10 generic ensPep ensembl.pep
 
 LOAD SANGER22 GENES (todo)
