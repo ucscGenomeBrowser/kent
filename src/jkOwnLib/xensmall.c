@@ -6,8 +6,9 @@
 #include "cheapcgi.h"
 #include "dnautil.h"
 #include "xenalign.h"
+#include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.3 2004/06/29 22:04:57 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.4 2004/06/30 16:03:23 kent Exp $";
 
 /* Mommy coding scheme - this is how one cell in the dynamic programming table
  * points to it's parent (mommy) cell.  Since these tables are really big,
@@ -25,14 +26,14 @@ static char const rcsid[] = "$Id: xensmall.c,v 1.3 2004/06/29 22:04:57 kent Exp 
  * no mommy. */
 
 /* Compress state, query, and target offset into one byte. */
-#define packMommy(stateIx, qOff, tOff) ((UBYTE)((stateIx) + ((-(qOff))<<5) + ((-(tOff))<<6)))
+#define phmmPackMommy(stateIx, qOff, tOff) ((UBYTE)((stateIx) + ((-(qOff))<<5) + ((-(tOff))<<6)))
 
 /* Traceback sets this, really just for debugging. */
-#define mommyTraceBit (1<<7)
+#define phmmMommyTraceBit (1<<7)
 
 static UBYTE nullMommy = 0; /* mommy value for orphans.... */
 
-static void unpackMommy(UBYTE mommy, int *retStateIx, int *retQoff, int *retToff)
+void phmmUnpackMommy(UBYTE mommy, int *retStateIx, int *retQoff, int *retToff)
 /* Unpack state, query, and target offset. */
 {
 *retStateIx = (mommy&31);
@@ -40,49 +41,48 @@ static void unpackMommy(UBYTE mommy, int *retStateIx, int *retQoff, int *retToff
 *retToff = -((mommy&64)>>6);
 }
 
-struct aliCell
-/* This is a single cell in a single state of the matrix. */
+struct phmmMommy
+/* This contains the parent info for a single state of the matrix. */
     {
     UBYTE mommy; /* Unlike a parent, you can only have one mommy! */
     };
 
-struct aliState
+struct phmmState
 /* This corresponds to a hidden Markov state.  Each one of
  * these has a two dimensional array[targetSize+1][querySize+1]
  * of cells. */
     {
-    struct aliCell *cells;
-    struct aliCell *endCells;
-    int *scores;
-    int *lastScores;
-    int stateIx;
-    char *name;
-    char emitLetter;
+    struct phmmMommy *cells;	/* The 2-D array containing traceback info. */
+    int *scores;		/* Scores for the current row. */
+    int *lastScores;		/* Scores for the previous row. */
+    int stateIx;		/* Numerical handle on state. */
+    char *name;			/* Name of state. */
+    char emitLetter;		/* Single letter representing state. */
     };
 
-struct aliMatrix
+struct phmmMatrix
 /* The alignment matrix - has an array of states. */
     {
-    char *query;
-    char *target;    
-    int querySize;
-    int targetSize;
-    int qDim;
-    int tDim;
-    int stateCount;
-    int stateSize;
-    int stateByteSize;
-    struct aliState *states;
-    struct aliCell *allCells;
-    int *allScores;
+    char *query;	/* One sequence to align- all lower case. */
+    char *target;    	/* Other sequence to align. */
+    int querySize;	/* Size of query. */
+    int targetSize;	/* Size of target. */
+    int qDim;		/* One plus size of query - dimension of matrix. */
+    int tDim;		/* One plus size of target - dimension of matrix. */
+    int stateCount;	/* Number of hidden states in HMM. */
+    int stateSize;	/* Number of cells in each state's matrix. */
+    int stateByteSize;	/* Number of bytes used by each state's matrix. */
+    struct phmmState *states;  /* Array of states. */
+    struct phmmMommy *allCells; /* Memory for all matrices. */
+    int *allScores;	      /* Memory for two rows of scores. */
     };
 
-static void initAliMatrix(struct aliMatrix *am, int stateCount, 
+static void phmmMatrixInit(struct phmmMatrix *am, int stateCount, 
     char *query, int querySize, char *target, int targetSize)
-/* Allocate all memory required for an aliMatrix. Set up dimensions. */
+/* Allocate all memory required for an phmmMatrix. Set up dimensions. */
 {
 int i;
-struct aliCell *allCells;
+struct phmmMommy *allCells;
 int allCellSize;
 int rowSize;
 int *allScores;
@@ -96,8 +96,8 @@ am->qDim = rowSize = am->querySize + 1;
 am->tDim = am->targetSize + 1;
 am->stateCount = stateCount;
 am->stateSize = rowSize * am->tDim;
-am->stateByteSize = am->stateSize * sizeof(struct aliCell);
-am->states = needMem(stateCount * sizeof(struct aliState));
+am->stateByteSize = am->stateSize * sizeof(struct phmmMommy);
+am->states = needMem(stateCount * sizeof(struct phmmState));
 
 /* Initialize matrix of cells for each state. */
 allCellSize = stateCount * am->stateByteSize;
@@ -107,7 +107,6 @@ for (i=0; i<stateCount; ++i)
     {
     am->states[i].cells = allCells;
     allCells += am->stateSize;
-    am->states[i].endCells = allCells;
     am->states[i].stateIx = i;
     }
 
@@ -122,8 +121,8 @@ for (i=0; i<stateCount; ++i)
     }
 }
 
-static void cleanupAliMatrix(struct aliMatrix *am)
-/* Free up memory required for an aliMatrix and make sure
+static void phmmMatrixCleanup(struct phmmMatrix *am)
+/* Free up memory required for an phmmMatrix and make sure
  * nobody reuses it. */
 {
 freeMem(am->states);
@@ -132,10 +131,10 @@ freeMem(am->allScores);
 zeroBytes(am, sizeof(*am));
 }
 
-static struct aliState *nameState(struct aliMatrix *am, int stateIx, char *name, char emitLetter)
+static struct phmmState *nameState(struct phmmMatrix *am, int stateIx, char *name, char emitLetter)
 /* Give a name to a state and return a pointer to it. */
 {
-struct aliState *state;
+struct phmmState *state;
 assert(stateIx < am->stateCount);
 state = &am->states[stateIx];
 state->name = name;
@@ -143,7 +142,7 @@ state->emitLetter = emitLetter;
 return state;
 }
 
-static void findMatrixIx(struct aliMatrix *am, struct aliCell *cell, int *retStateIx, int *retQix, int *retTix)
+static void findMatrixIx(struct phmmMatrix *am, struct phmmMommy *cell, int *retStateIx, int *retQix, int *retTix)
 /* Given a cell in matrix return state, query, and target index. */
 {
 int cellIx = cell - am->allCells;
@@ -153,7 +152,7 @@ cellIx %= am->stateSize;
 *retQix = cellIx % am->qDim;
 }
 
-static struct aliCell *findMommy(struct aliMatrix *am, struct aliCell *baby)
+static struct phmmMommy *findMommy(struct phmmMatrix *am, struct phmmMommy *baby)
 /* Find baby's mommy and return it. */
 {
 int momStateIx, qOff, tOff;
@@ -162,7 +161,7 @@ UBYTE mommy;
 
 if ((mommy = baby->mommy) == nullMommy)
     return NULL;
-unpackMommy(mommy, &momStateIx, &qOff, &tOff);
+phmmUnpackMommy(mommy, &momStateIx, &qOff, &tOff);
 findMatrixIx(am, baby, &babyStateIx, &qIx, &tIx);
 return am->states[momStateIx].cells + (tOff + tIx) * am->qDim + (qOff + qIx);
 }
@@ -179,12 +178,12 @@ struct aliPair
     char hiddenSym;
     };
 
-static struct aliPair *traceBack(struct aliMatrix *am, struct aliCell *end)
+static struct aliPair *traceBack(struct phmmMatrix *am, struct phmmMommy *end)
 /* Create list of alignment pair by tracing back through matrix from end
  * state back to a start.*/
 {
 struct aliPair *pairList = NULL, *pair;
-struct aliCell *cell, *parent = end;
+struct phmmMommy *cell, *parent = end;
 int parentSix, parentTix, parentQix;
 int sIx, tIx, qIx;
 
@@ -200,7 +199,7 @@ for (;;)
         break;
     findMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
     
-    cell->mommy != mommyTraceBit;
+    cell->mommy != phmmMommyTraceBit;
 
     AllocVar(pair);
     pair->hiddenIx = (UBYTE)sIx;
@@ -232,7 +231,7 @@ for (;;)
 return pairList;
 }
 
-static void printTrace(struct aliMatrix *am, struct aliPair *pairList, boolean showStates, 
+static void printTrace(struct phmmMatrix *am, struct aliPair *pairList, boolean showStates, 
     FILE *f, boolean extraAtEnds)
 /* Print out trace to file. */
 {
@@ -557,14 +556,14 @@ int xenAlignSmall(DNA *query, int querySize, DNA *target, int targetSize, FILE *
 /* Use dynamic programming to do small scale (querySize * targetSize < 10,000,000)
  * alignment of DNA. */
 {
-struct aliMatrix a;
-struct aliState *hf, *lf, *iq, *it, *c1, *c2, *c3;
+struct phmmMatrix a;
+struct phmmState *hf, *lf, *iq, *it, *c1, *c2, *c3;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
 struct aliPair *pairList;
 int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
-struct aliCell *bestCell = NULL;
+struct phmmMommy *bestCell = NULL;
 int badScore = -0x3fffffff;
 int c1c2PairScore, c3PairScore, loFiPairScore, hiFiPairScore;
 int matchTableOffset;
@@ -579,7 +578,7 @@ gcRatio = calcGcRatio(query, querySize, target, targetSize);
 calcCostBenefit(gcRatio);
 
 /* Initialize 7 state matrix. */
-initAliMatrix(&a, 7, query, querySize, target, targetSize);
+phmmMatrixInit(&a, 7, query, querySize, target, targetSize);
 hf = nameState(&a, hiFiIx, "highFi", 'H');
 lf = nameState(&a, loFiIx, "lowFi", 'L');
 iq = nameState(&a, qSlipIx, "qSlip", 'Q');
@@ -613,7 +612,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->matchScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, -1, -1); \
+        mommy = phmmPackMommy(state->stateIx, -1, -1); \
         score = tempScore; \
         } \
    } 
@@ -624,7 +623,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->qSlipScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, 0, -1); \
+        mommy = phmmPackMommy(state->stateIx, 0, -1); \
         score = tempScore; \
         } \
    }
@@ -635,7 +634,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->tSlipScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, -1, 0); \
+        mommy = phmmPackMommy(state->stateIx, -1, 0); \
         score = tempScore; \
         } \
    }
@@ -643,7 +642,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
 /* End a block of transitions into state. */
 #define endState(state) \
     { \
-    struct aliCell *newCell = state->cells + newCellOffset; \
+    struct phmmMommy *newCell = state->cells + newCellOffset; \
     if (score <= 0) \
         { \
         mommy = nullMommy; \
@@ -662,7 +661,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
  * final score. */
 #define shortEndState(state) \
     { \
-    struct aliCell *newCell = state->cells + newCellOffset; \
+    struct phmmMommy *newCell = state->cells + newCellOffset; \
     if (score <= 0) \
         { \
         mommy = nullMommy; \
@@ -786,7 +785,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
      * reused. */
     for (sIx = 0; sIx < a.stateCount; ++sIx)
         {
-        struct aliState *as = &a.states[sIx];
+        struct phmmState *as = &a.states[sIx];
         int *swapTemp = as->lastScores;
         as->lastScores = as->scores;
         as->scores = swapTemp;
@@ -798,7 +797,7 @@ pairList = traceBack(&a, bestCell);
 printTrace(&a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
-cleanupAliMatrix(&a);
+phmmMatrixCleanup(&a);
 return bestScore;
 #undef matchScore
 #undef qSlipScore
@@ -827,14 +826,14 @@ int xenAlignAffine(char *query, int querySize, char *target, int targetSize,
 	FILE *f, boolean printExtraAtEnds)
 /* Use dynamic programming to do protein/protein alignment. */
 {
-struct aliMatrix a;
-struct aliState *hf, *iq, *it;
+struct phmmMatrix a;
+struct phmmState *hf, *iq, *it;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
 struct aliPair *pairList;
 int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
-struct aliCell *bestCell = NULL;
+struct phmmMommy *bestCell = NULL;
 int badScore = -0x3fffffff;
 int matchPair;
 int matchTableOffset;
@@ -850,7 +849,7 @@ halfGapStart = gapStart/2;
 gapExt = -20;
 
 /* Initialize 3 state matrix (match, query insert, target insert). */
-initAliMatrix(&a, 3, query, querySize, target, targetSize);
+phmmMatrixInit(&a, 3, query, querySize, target, targetSize);
 hf = nameState(&a, hiFiIx, "match", 'M');
 iq = nameState(&a, qSlipIx, "qSlip", 'Q');
 it = nameState(&a, tSlipIx, "tSlip", 'T');
@@ -880,7 +879,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->matchScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, -1, -1); \
+        mommy = phmmPackMommy(state->stateIx, -1, -1); \
         score = tempScore; \
         } \
    } 
@@ -891,7 +890,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->qSlipScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, 0, -1); \
+        mommy = phmmPackMommy(state->stateIx, 0, -1); \
         score = tempScore; \
         } \
    }
@@ -902,7 +901,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
    { \
    if ((tempScore = state->tSlipScore + addScore) > score) \
         { \
-        mommy = packMommy(state->stateIx, -1, 0); \
+        mommy = phmmPackMommy(state->stateIx, -1, 0); \
         score = tempScore; \
         } \
    }
@@ -910,7 +909,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
 /* End a block of transitions into state. */
 #define endState(state) \
     { \
-    struct aliCell *newCell = state->cells + newCellOffset; \
+    struct phmmMommy *newCell = state->cells + newCellOffset; \
     if (score <= 0) \
         { \
         mommy = nullMommy; \
@@ -929,7 +928,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
  * final score. */
 #define shortEndState(state) \
     { \
-    struct aliCell *newCell = state->cells + newCellOffset; \
+    struct phmmMommy *newCell = state->cells + newCellOffset; \
     if (score <= 0) \
         { \
         mommy = nullMommy; \
@@ -982,7 +981,7 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
      * reused. */
     for (sIx = 0; sIx < a.stateCount; ++sIx)
         {
-        struct aliState *as = &a.states[sIx];
+        struct phmmState *as = &a.states[sIx];
         int *swapTemp = as->lastScores;
         as->lastScores = as->scores;
         as->scores = swapTemp;
@@ -994,7 +993,7 @@ pairList = traceBack(&a, bestCell);
 printTrace(&a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
-cleanupAliMatrix(&a);
+phmmMatrixCleanup(&a);
 return bestScore;
 #undef matchScore
 #undef qSlipScore
