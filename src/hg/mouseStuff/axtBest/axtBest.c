@@ -258,7 +258,7 @@ for (i=0; i<=rangeSize; ++i)
         {
 	if (lastAxt != NULL)
 	    {
-	    int tBaseCount = lastAxt->tEnd - lastAxt->tStart;
+	    int tBaseCount = i - s;
 	    if (tBaseCount >= minOutSize)
 		{
 		axtSubsetOnT(lastAxt, s+chromStart, i+chromStart, ss, f);
