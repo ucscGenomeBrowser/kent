@@ -159,6 +159,7 @@ struct pslInfo
 struct hash *cdsStarts = NULL;
 struct hash *cdsEnds = NULL;
 struct hash *loci = NULL;
+int nextFakeLoci = 1;
 struct hash *rnaSeqs = NULL;
 struct hash *version = NULL;
 struct hash *derived = NULL;
@@ -340,6 +341,7 @@ int lineSize, wordCount;
 char *words[4];
 char *name;
 int thisLoci;
+int numLoci = 0;
 
 loci = newHash(16);
 
@@ -348,7 +350,12 @@ while (lineFileChopNext(lf, words, 2))
     name = cloneString(words[0]);
     thisLoci = sqlUnsigned(words[1]);
     hashAddInt(loci, name, thisLoci);
+    numLoci++;
     }
+
+/* if loci files was empty, no loci will be used */
+if (numLoci == 0)
+    hashFree(&loci);
 }
 
 void readVersion(struct lineFile *lf)
@@ -1487,7 +1494,10 @@ else
     pi->cdsEnd = hashIntVal(cdsEnds, pi->mrna->name);
 pi->cdsSize = pi->cdsEnd - pi->cdsStart;
 pi->introns = countIntrons(psl->blockCount, psl->blockSizes, psl->tStarts);
-pi->loci = hashIntVal(loci, pi->mrna->name);
+if (loci != NULL)
+    pi->loci = hashIntVal(loci, pi->mrna->name);
+else
+    pi->loci = nextFakeLoci++;
 pi->indelCount = 0;
 pi->totalIndel = 0;
 pi->mrnaCloneId = getMrnaCloneId(conn, pi->mrna->name);
@@ -1497,7 +1507,7 @@ else
   pi->refseq = NULL;
 
 /* Get the corresponding sequences */
-rnaSeq = hashFindVal(rnaSeqs, pi->mrna->name);
+rnaSeq = hashMustFindVal(rnaSeqs, pi->mrna->name);
 dnaSeq = hDnaFromSeq(psl->tName, psl->tStart, psl->tEnd, dnaLower);
 pi->stdSplice = countStdSplice(psl, dnaSeq->dna, pi);
 
