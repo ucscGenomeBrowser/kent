@@ -6,13 +6,15 @@ program.  They are based on a phylogenetic hidden Markov model
 of DNA substitution at each site in a genome and the way this process
 changes from one site to the next. </P>
 
-<H2>Methods</H2> <P> Best-in-genome pairwise alignments were generated for
+<H2>Methods</H2>
+<P>
+Best-in-genome pairwise alignments were generated for
 each species using blastz, followed by chaining and netting.  A multiple
 alignment was then constructed from these pairwise alignments using multiz.
 Predictions of conserved elements were then obtained by running phastCons
 on the multiple alignments with the --viterbi option.</P>
-
-<P>PhastCons constructs a two-state phylo-HMM with a state for conserved
+<P>
+PhastCons constructs a two-state phylo-HMM with a state for conserved
 regions and a state for non-conserved regions.  The two states share a
 single phylogenetic model, except that the branch lengths of the tree
 associated with the conserved state are multiplied by a constant scaling
@@ -33,8 +35,8 @@ same parameters everywhere.  The predicted elements are segments of the
 alignment that are likely to have been "generated" by the conserved state
 of the phylo-HMM--i.e., maximal segments in which the maximum-likelihood
 (Viterbi) path completely resides in the conserved state.  </P>
-
-<P>Each predicted conserved element is assigned a log-odds score equal to
+<P>
+Each predicted conserved element is assigned a log-odds score equal to
 its log probability under the conserved model minus its log probability
 under the non-conserved model.  The "score" field associated with this
 track contains transformed log-odds scores, taking values between 0 and
@@ -63,50 +65,56 @@ software by Adam Siepel at UCSC.
 
 <H2>References</H2>
 
-<H3>Phylo-HMMs</H3>
+<H3>Phylo-HMM</H3>
 <P>
-Felsenstein J and Churchill GA (1996).  A hidden Markov model approach to
-variation among sites in rate of evolution.
-<em>Mol Biol Evol</em> 13:93-104. </P>
+Felsenstein, J. and Churchill, G.A.  
+<A HREF="http://mbe.oupjournals.org/cgi/content/abstract/13/1/93"
+TARGET=_blank>A hidden Markov model approach to variation among sites in 
+rate of evolution</A>.
+<em>Mol Biol Evol</em> <B>13</B>, 93-104 (1996). </P>
 <P>
-Siepel A and Haussler D (2003).  
-<a href="http://www.cse.ucsc.edu/~acs/phyhmm.pdf">Combining
-phylogenetic and hidden Markov models in biosequence analysis</a>.
-In <em> Proceedings of the Seventh Annual 
-International Conference on Computational Molecular Biology (RECOMB
-2003)</em>, pp. 277-286. </P>
+Siepel, A. and Haussler, D.
+<A HREF="http://www.cse.ucsc.edu/~acs/phyhmm.pdf" 
+TARGET=_blank>Combining phylogenetic and hidden Markov models in biosequence
+analysis</A>.
+In <em> Proceedings of the Seventh Annual International Conference on 
+Computational Molecular Biology (RECOMB 2003)</em>, pp. 277-286 (2003).</P>
 <P>
-Siepel A and Haussler D (2004). Phylogenetic hidden Markov models.
-In R. Nielsen, ed.,  Statistical Methods in Molecular Evolution, Springer  
-(in press). </P>
+Siepel, A. and Haussler, D. Phylogenetic hidden Markov models.
+In <em>Statistical Methods in Molecular Evolution</em>, (ed. Nielsen, R.)
+(in press) (Springer, 2004). </P>
 <P>
-Yang Z (1995).  A space-time process model for the evolution of DNA
-sequences.  <em>Genetics</em>, 139:993-1005. </P>
+Yang, Z. <A HREF="http://www.genetics.org/cgi/content/abstract/139/2/993"
+TARGET=_blank>A space-time process model for the evolution of DNA 
+sequences</A>.  <em>Genetics</em>, <B>139</B>, 993-1005 (1995). </P>
 
 <H3>Chain/Net</H3>
 <P>
-Kent WJ, Baertsch R, Hinrichs A, Miller W, and Haussler D (2003). 
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
 <A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
-TARGET=_blank>Evolution's cauldron: 
-Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
-<I>Proc Natl Acad Sci USA</I> 100(20):11484-11489 Sep 30 2003.
+TARGET=_blank>Evolution's cauldron: Duplication, deletion, and rearrangement
+in the mouse and human genomes</A>.
+<em>Proc Natl Acad Sci USA</em> <B>100</B>(20), 11484-11489 (2003).</P>
 
 <H3>Multiz</H3>
 <P>
-Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AFA, Roskin KM, Baertsch R,
-Rosenbloom K, Clawson H, Green ED, Haussler D, Miller W. (2004). 
-<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708" TARGET=_blank>Aligning Multiple Genomic Sequences with the Threaded Blockset Aligner</A>.
-<em>Genome Res.</em> 14(4):708-15.
+Blanchette, M., Kent, W.J., Riemer, C., Elnitski, L., Smit, A.F.A., 
+Roskin, K.M., Baertsch, R., Rosenbloom, K., Clawson, H., Green, E.D., 
+Haussler, D., Miller, W. 
+<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708" 
+TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset
+aligner</A>.
+<em>Genome Res.</em> <B>14</B>(4), 708-15 (2004).</P>
 
 <H3>Blastz</H3>
 <P>
-Chiaromonte F, Yap VB, and Miller W (2002). 
+Chiaromonte, F., Yap, V.B., Miller, W. 
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract" 
 TARGET=_blank>Scoring pairwise genomic sequence alignments</A>. 
-<em>Pac Symp Biocomput</em> 2002;:115-26.</P>
+<em>Pac Symp Biocomput 2002</em>, 115-26 (2002).</P>
 <P>
-Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison R, Haussler D, and 
-Miller W. (2003). 
+Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
+Haussler, D., and Miller, W.
 <A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" 
 TARGET=_blank>Human-Mouse Alignments with BLASTZ</A>. 
-<em>Genome Res.</em> 13(1):103-7.</P>
+<em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).</P>
