@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.732 2004/08/27 05:20:04 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.733 2004/08/29 00:54:42 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10476,7 +10476,7 @@ if (row != NULL)
 	    }
 	else
 	    {
-	    printf("<TR><TD WIDTH=100 ALIGN=center>%s</TD><TD ALIGN=center>%s - %s</TD></TR>",
+	    printf("<TR><TD WIDTH=100 ALIGN=left>%s</TD><TD ALIGN=center>%s - %s</TD></TR>",
 		   fc->labs[i], fc->bandStarts[i], fc->bandEnds[i]);
 	    }
 	}
