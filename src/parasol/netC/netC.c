@@ -1,10 +1,12 @@
 /* netC - net client. */
 #include "common.h"
 #include <sys/socket.h>
+#include <net/if.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <sys/ioctl.h>
 
-char signature[] = "0d2f070562685f29";
+char signature[] = "0d2f";
 
 void usage()
 /* Explain usage and exit. */
@@ -13,6 +15,7 @@ errAbort("netC - net client.\n"
          "usage:\n"
 	 "    netC host command parameter(s)\n");
 }
+
 
 void netC(char *hostName, int argc, char *argv[])
 /* netC - a net client. */
@@ -40,11 +43,12 @@ if (host == NULL)
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
 memcpy(&sai.sin_addr.s_addr, host->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
-sd = socket(AF_INET, SOCK_STREAM, 0);
-if (connect(sd, &sai, sizeof(sai)) == -1)
+sd = socket(AF_INET, SOCK_DGRAM, 0);
+if (connect(sd, (struct sockaddr *)&sai, sizeof(sai)) == -1)
     errAbort("Couldn't connect to %s", hostName);
 
 /* Put command line back together as one string. */
+memset(buf, 0, sizeof(buf));
 memcpy(buf, signature, sizeof(signature));
 bufPos = sizeof(signature);
 for (i=0; i<argc; ++i)
@@ -60,19 +64,12 @@ for (i=0; i<argc; ++i)
     }
 
 /* Issue command. */
-if (write(sd, buf, bufPos) < 0)
+if (send(sd, buf, sizeof(buf), 0) < 0)
     {
     perror("");
     errAbort("Couldn't write to %s", hostName);
     }
 
-/* Perhaps read back results. */
-if (sameString(command, "status"))
-    {
-    bufPos = read(sd, buf, sizeof(buf));
-    buf[bufPos] = 0;
-    printf("Status %s\n", buf);
-    }
 close(sd);
 }
 
