@@ -4314,7 +4314,6 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
 freez(&cgiItem);
 }
 
-
 /* 
  Multipurpose function to show alignments in details pages where applicable
  */
@@ -4355,6 +4354,41 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
+/* 
+ Multipurpose function to show alignments in details pages where applicable
+ */
+void longXenoPsl1Chimp(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable, char *otherDb)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+struct psl *psl = NULL, *trimmedPsl = NULL;
+char otherString[256];
+char *cgiItem = cgiEncode(item);
+char *thisOrg = hOrganism(database);
+
+cartWebStart(cart, tdb->longLabel);
+psl = loadPslFromRangePair(tdb->tableName, item);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	psl->qName, psl->qStart+1, psl->qEnd);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
+	psl->tName, psl->tStart+1, psl->tEnd);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg,
+	psl->tEnd - psl->tStart);
+printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Strand:</B> %s<BR>\n",psl->strand);
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
+printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart, 
+	tdb->tableName, otherOrg, otherChromTable, otherDb);
+
+printCustomUrl(tdb, item, TRUE);
+printTrackHtml(tdb);
+freez(&cgiItem);
+}
 
 void longXenoPsl1zoo2(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable)
@@ -8633,6 +8667,14 @@ else if (containsStringNoCase(track, "blastzStrictChain")
     strcpy(&dbName[3 + len], "3");
 //    uglyf("DBNAME: %s, ORGNAME: %s, ITEM: %s\n", dbName, orgName, item);
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
+    }
+else if (sameWord(track, "chimpBlat"))
+    {
+    longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
+    }
+else if (sameWord(track, "chimpBac"))
+    {
+    longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
     }
 else if (sameWord(track, "blastzHg"))
     {
