@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.859 2005/03/23 21:44:05 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.860 2005/03/24 20:31:38 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14599,7 +14599,7 @@ int tStart = psl->tStart;
 int tEnd = psl->tEnd;
 char tName[256];
 struct dnaSeq *tSeq;
-char *tables[4] = {"ncbiGeneSet", "hinxtonGeneSet", "refGene", "mgcGenes"};
+char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
 
 /* open file to write to */
 makeTempName(&indexTn, "index", ".html");
@@ -14786,7 +14786,7 @@ row = sqlNextRow(sr);
 
 if(row != NULL)
     {
-    info = putaInfoLoad(row);
+    info = putaInfoLoad(row+1);
     }
 else
     {
@@ -15623,7 +15623,7 @@ else if (sameWord(track, "vntr"))
     {
     doVntr(tdb, item);
     }
-else if (sameWord(track, "luNega") || sameWord (track, "luPosi"))
+else if (sameWord(track, "luNega") || sameWord (track, "luPosi") || sameWord (track, "mRNARemains"))
     {
     doPutaFrag(tdb, item);
     }
