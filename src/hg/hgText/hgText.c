@@ -130,6 +130,16 @@ static void printTables(struct hashEl *hel)
 }
 
 
+int compareTable(const void *elem1,  const void *elem2)
+/* compairs two hash element by name */
+{
+struct hashEl* a = *((struct hashEl **)elem1);
+struct hashEl* b = *((struct hashEl **)elem2);
+	
+return strcmp(a->name, b->name);
+}
+
+
 void getTable()
 /* get the a talbe selection from the user */
 {
@@ -149,7 +159,9 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-struct hash *tableHash = newHash(6);
+struct hash *tableHash = newHash(7);
+struct hashEl *tableList;
+struct hashEl *currentListEl;
 
 current = cgiVarList();
 position = cgiOptionalString("position");
@@ -165,12 +177,15 @@ conn = hAllocConn();
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
-if(position != NULL && position[0] != 0)
+if(strcmp(position, "genome"))
 	{
-	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
-		return;
+	if(position != NULL && position[0] != 0)
+		{
+		if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+			return;
+		}
+	findGenomePos(position, &chromName, &winStart, &winEnd);
 	}
-findGenomePos(position, &chromName, &winStart, &winEnd);
 
 /* print the form */
 puts("<CENTER>");
@@ -186,11 +201,12 @@ printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
 fputs("position ", stdout);
 cgiMakeTextVar("position", position, 30);
 cgiMakeButton("submit", " jump ");
+cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("phase", "table");
 
 puts("<P>");
 
-/* iterate through all the tables and store the positional ones in tableHash */
+/* iterate through all the tables and store the positional ones in a list */
 strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
@@ -221,7 +237,17 @@ sqlDisconnect(&conn);
 /* get the list of tables */
 puts("<SELECT NAME=table SIZE=1>");
 puts("<OPTION>Choose table</OPTION>");
-hashTraverseEls(tableHash, printTables);
+
+tableList = hashElListHash(tableHash);
+slSort(&tableList, compareTable);
+
+currentListEl = tableList;
+while(currentListEl != 0)
+	{
+	printf("<OPTION>%s\n", currentListEl->name);
+
+	currentListEl = currentListEl->next;
+	}
 puts("</SELECT>");
 
 puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
@@ -241,6 +267,8 @@ while(current != 0)
 	}
 printf("%s from %d to %d\n", chromName, winStart, winEnd);
 puts("</TABLE>");*/
+
+hashElFreeList(&tableList);
 
 puts("</CENTER>");
 }
@@ -291,12 +319,15 @@ char* position;
 position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
-if(position != NULL && position[0] != 0)
+if(strcmp(position, "genome"))
 	{
-	if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
-		return;
+	if(position != NULL && position[0] != 0)
+		{
+		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+			return;
+		}
+	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 	}
-findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
@@ -364,6 +395,9 @@ int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
 
+boolean allGenome = FALSE;	/* this flag is true if we are fetching the whole genome
+							   not just chrom by chrom */
+
 position = cgiOptionalString("position");
 
 /* select the database */
@@ -377,12 +411,17 @@ conn = hAllocConn();
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
-if(position != NULL && position[0] != 0)
+if(strcmp(position, "genome"))
 	{
-	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
-		return;
+	if(position != NULL && position[0] != 0)
+		{
+		if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+			return;
+		}
+	findGenomePos(position, &chromName, &winStart, &winEnd);
 	}
-findGenomePos(position, &chromName, &winStart, &winEnd);
+else
+	allGenome = TRUE;	/* read all chrom info */
 
 /* print the form */
 puts("<CENTER>");
@@ -398,8 +437,20 @@ printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
 if(existsAndEqual("table", "Choose table"))
 	errAbort("Please choose a table.");
 
-/* get the real name of the table */
-parseTableName(table, chromName);
+if(!allGenome)
+	{
+	/* get the real name of the table */
+	parseTableName(table, chromName);
+	}
+else	/* if all the genome */
+	{
+	strcpy(table, cgiString("table"));
+	/* take table of the form chrN_* to chr1_* and uses chr1_* as prototypical table */
+	if(table[0] == 'c' && table[1] == 'h' && table[2] == 'r' && table[3] == 'N' && table[4] == '_')
+		table[3] = '1';
+	}
+
+puts(table);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
@@ -409,6 +460,7 @@ if(!allLetters(table))
 fputs("position ", stdout);
 cgiMakeTextVar("position", position, 30);
 cgiMakeButton("submit", "jump");
+cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("phase", "Choose fields");
 
 /* print the name of the selected table */
@@ -456,12 +508,15 @@ char* position;
 position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
-if(position != NULL && position[0] != 0)
+if(strcmp(position, "genome"))
 	{
-	if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
-		return;
+	if(position != NULL && position[0] != 0)
+		{
+		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+			return;
+		}
+	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 	}
-findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 
 /* get the real name of the table */
 parseTableName(table, choosenChromName);
@@ -545,6 +600,423 @@ while((row = sqlNextRow(sr)) != NULL)
 	}
 }
 
+
+void getGenomeWideNonSplit()
+/* output the info. for a non-split table (i.e. not chrN_* tables) */
+{
+struct cgiVar* current = cgiVarList();
+char query[256];
+int i;
+int numberColumns;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char* field;
+char* database;
+
+char* table = cgiString("table");
+
+/* select the database */
+database = cgiOptionalString("db");
+if (database == NULL)
+    database = "hg6";
+hSetDb(database);
+hDefaultConnect();
+conn = hAllocConn();
+
+strcpy(query, "SELECT");
+
+/* the first field selected is special */
+while(current != 0)
+	{
+	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
+		{	
+		/* make sure that the field names don't have anything "weird" in them */
+		if(!allLetters(current->name + strlen("field_")))
+			errAbort("Malformated field name.");
+
+		sprintf(query, "%s %s", query, current->name + strlen("field_"));
+		break; /* only process the first field this way */
+		}
+
+	current = current->next;
+	}
+
+/* if there are no fields sellected, say so */
+if(current == 0)
+	{
+	printf("Content-Type: text/plain\n\n");
+	printf("\n\nNo fields selected.\n");
+	return;
+	}
+else
+	current = current->next;	/* skip past the first field */
+
+/* process the rest of the selected fields */
+while(current != 0)
+	{
+	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
+		{	
+		/* make sure that the field names don't have anything "weird" in them */
+		if(!allLetters(current->name + strlen("field_")))
+			errAbort("Malformated field name.");
+
+		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
+		}
+
+	current = current->next;
+	}
+
+/* build the rest of the query */
+sprintf(query, "%s FROM %s", query, table);
+
+conn = hAllocConn();
+sr = sqlGetResult(conn, query);
+numberColumns = sqlCountColumns(sr);
+
+printf("Content-Type: text/plain\n\n");
+puts(query);
+/* print the field names */
+printf("#");
+while((field = sqlFieldName(sr)) != 0)
+		printf("%s\t", field);
+
+printf("\n");
+
+/* print the data */
+while((row = sqlNextRow(sr)) != NULL)
+	{
+	for(i = 0; i < numberColumns; i++)
+		{
+			printf("%s\t", row[i]);
+		}
+	printf("\n");
+	}
+}
+
+
+
+void outputTabData(char* query, char* tableName, struct sqlConnection *conn, boolean outputFields)
+/* execute the given query and outputs the data in a tab seperated form */
+{
+int i;
+int numberColumns;
+struct sqlResult *sr;
+char **row;
+char* field;
+char* database;
+
+/* if there is no table, do nothing */
+if(!sqlTableExists(conn, tableName))
+	return;
+
+sr = sqlGetResult(conn, query);
+numberColumns = sqlCountColumns(sr);
+
+/* print the field names */
+if(outputFields)
+	{
+	printf("#");
+	while((field = sqlFieldName(sr)) != 0)
+		printf("%s\t", field);
+
+	printf("\n");
+}
+
+/* print the data */
+while((row = sqlNextRow(sr)) != NULL)
+	{
+	for(i = 0; i < numberColumns; i++)
+		{
+			printf("%s\t", row[i]);
+		}
+	printf("\n");
+	}
+}
+
+
+void getGenomeWideSplit()
+/* output the info. for a split table (i.e. chrN_* tables) */
+{
+struct cgiVar* current;
+char fields[256] = "";	/* the fields part of the query */
+char query[256];
+int i;
+int c;
+int numberColumns;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char* field;
+char* database;
+
+char* table = cgiString("table");
+char parsedTableName[256];
+
+/* select the database */
+database = cgiOptionalString("db");
+if (database == NULL)
+    database = "hg6";
+hSetDb(database);
+hDefaultConnect();
+conn = hAllocConn();
+
+/* the first field selected is special */
+current = cgiVarList();
+while(current != 0)
+	{
+	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
+		{	
+		/* make sure that the field names don't have anything "weird" in them */
+		if(!allLetters(current->name + strlen("field_")))
+			errAbort("Malformated field name.");
+
+		sprintf(fields, "%s %s", fields, current->name + strlen("field_"));
+		break; /* only process the first field this way */
+		}
+
+	current = current->next;
+	}
+
+/* if there are no fields sellected, say so */
+if(current == 0)
+	{
+	printf("Content-Type: text/plain\n\n");
+	printf("\n\nNo fields selected.\n");
+	return;
+	}
+else
+	current = current->next;	/* skip past the first field */
+
+/* process the rest of the selected fields */
+while(current != 0)
+	{
+	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
+		{	
+		/* make sure that the field names don't have anything "weird" in them */
+		if(!allLetters(current->name + strlen("field_")))
+			errAbort("Malformated field name.");
+
+		sprintf(fields, "%s, %s", fields, current->name + strlen("field_"));
+		}
+
+	current = current->next;
+	}
+
+/* build the rest of the query */
+table = strstr(table, "_");
+
+printf("Content-type: text/plain\n\n");
+
+sprintf(parsedTableName, "chr%d%s", 1, table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, TRUE);
+
+sprintf(parsedTableName, "chr%d_random%s", 1, table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+for(c  = 2; c <= 22; c++)
+	{
+	sprintf(parsedTableName, "chr%d%s", c, table); 
+	sprintf(query, "SELECT%s FROM %s", fields, parsedTableName); 
+	outputTabData(query, parsedTableName, conn, FALSE);
+	sprintf(parsedTableName, "chr%d_random%s", c, table); 
+	sprintf(query, "SELECT%s FROM %s", fields, parsedTableName); 
+	outputTabData(query, parsedTableName, conn, FALSE);
+	}
+
+sprintf(parsedTableName, "chr%s%s", "X", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "X", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "Y", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "Y", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "NA", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "NA", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "UL", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "UL", table);
+sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+}
+
+void getSomeFieldsGenome()
+/* get the fields that the user choose for the genome-wide informations */
+{
+char* table = cgiString("table");
+	
+if(strstr(table, "chrN_") == table)
+	{
+	/* have to search through a split table */
+	getGenomeWideSplit();
+	}
+else
+	{
+	/* don't have t search for a split table */
+	getGenomeWideNonSplit();
+	}
+}	
+			
+
+
+
+void getAllGenomeWideNonSplit()
+{
+struct cgiVar* current = cgiVarList();
+char* table;
+char query[256];
+struct sqlConnection *conn;
+
+table = cgiString("table");
+
+/* make sure that the table name doesn't have anything "weird" in it */
+if(!allLetters(table))
+	{
+	printf("Content-Type: text/plain\n\n");
+	printf("Malformated table name.");
+	return;
+	}
+
+/* get the name of the start and end fields */
+sprintf(query, "SELECT * FROM %s", table);
+
+conn = hAllocConn();
+
+printf("Content-Type: text/plain\n\n");
+outputTabData(query, table, conn, TRUE);
+}
+
+
+void getAllGenomeWideSplit()
+{
+char query[256];
+struct sqlConnection *conn;
+char* database;
+int c;
+
+char* table = cgiString("table");
+char parsedTableName[256];
+
+/* select the database */
+database = cgiOptionalString("db");
+if (database == NULL)
+    database = "hg6";
+hSetDb(database);
+hDefaultConnect();
+conn = hAllocConn();
+
+/* build the rest of the query */
+table = strstr(table, "_");
+
+printf("Content-type: text/plain\n\n");
+
+sprintf(parsedTableName, "chr%d%s", 1, table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, TRUE);
+
+sprintf(parsedTableName, "chr%d_random%s", 1, table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+for(c  = 2; c <= 22; c++)
+	{
+	sprintf(parsedTableName, "chr%d%s", c, table); 
+	sprintf(query, "SELECT * FROM %s", parsedTableName); 
+	outputTabData(query, parsedTableName, conn, FALSE);
+	sprintf(parsedTableName, "chr%d_random%s", c, table); 
+	sprintf(query, "SELECT * FROM %s", parsedTableName); 
+	outputTabData(query, parsedTableName, conn, FALSE);
+	}
+
+sprintf(parsedTableName, "chr%s%s", "X", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "X", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "Y", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "Y", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "NA", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "NA", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+sprintf(parsedTableName, "chr%s%s", "UL", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+sprintf(parsedTableName, "chr%s_random%s", "UL", table);
+sprintf(query, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+void getAllFieldsGenome()
+{
+char* table = cgiString("table");
+	
+/* if they haven't choosen a table tell them */
+if(existsAndEqual("table", "Choose table"))
+	{
+	printf("Content-type: text/plain\n\n");
+	printf("\n\nPlease choose a table.");
+	exit(0);
+	}
+
+if(strstr(table, "chrN_") == table)
+	{
+	/* have to search through a split table */
+	getAllGenomeWideSplit();
+	}
+else
+	{
+	/* don't have t search for a split table */
+	getAllGenomeWideNonSplit();
+	}
+}
+
+
+
+
+
 /* the main body of the program */
 void execute()
 {
@@ -568,14 +1040,23 @@ else
 		}
 	else if(table != 0 && existsAndEqual("phase", "Get all fields"))
 		{	
-		getAllFields();
+		if(existsAndEqual("position", "genome"))
+			getAllFieldsGenome();
+		else
+			getAllFields();
 		}
 	else if(table != 0 && existsAndEqual("phase", "Get these fields"))
 		{
-		getSomeFields();
+		if(existsAndEqual("position", "genome"))
+			getSomeFieldsGenome();
+		else
+			getSomeFields();
 		}
 	}
 }
+
+
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
