@@ -287,7 +287,7 @@ freeDyString(&dy);
 hgFreeConn(&conn);
 }
 
-void printRnaAlignments(struct psl *pslList, 
+void printAlignments(struct psl *pslList, 
 	int startFirst, char *hgcCommand, char *typeName, char *seqName)
 /* Print list of mRNA alignments. */
 {
@@ -353,7 +353,7 @@ slReverse(&pslList);
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", (isEst ? "EST" : "mRNA"));
 
-printRnaAlignments(pslList, start, "htcCdnaAli", type, acc);
+printAlignments(pslList, start, "htcCdnaAli", type, acc);
 }
 
 void parseSs(char *ss, char **retPslName, char **retFaName)
@@ -378,18 +378,19 @@ struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName;
 char *encItem = cgiEncode(item);
+enum gfType qt, tt;
 
-htmlStart("Fast Sequence Search Alignments");
-printf("<H2>Fast Sequence Search Alignments</H2>\n");
+htmlStart("BLAT Search Alignments");
+printf("<H2>BLAT Search Alignments</H2>\n");
 parseSs(item, &pslName, &faName);
-lf = lineFileOpen(pslName, TRUE);
+pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
     {
     slAddHead(&pslList, psl);
     }
 slReverse(&pslList);
 lineFileClose(&lf);
-printRnaAlignments(pslList, start, "htcUserAli", "user", encItem);
+printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
 }
 
@@ -557,7 +558,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-void showAlignment(struct psl *psl, struct dnaSeq *rnaSeq)
+void showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq)
 /* Show alignment for accession. */
 {
 struct tempName indexTn, bodyTn;
@@ -636,6 +637,13 @@ puts("</FRAMESET>");
 puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
 }
 
+void showProtAlignment(struct psl *psl, struct dnaSeq *rnaSeq)
+/* Show protein/DNA alignment. */
+{
+uglyf("Buh - still working out how to show detailed protein vs. genomic DNA alignments.");
+}
+
+
 void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
@@ -670,7 +678,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-showAlignment(psl, rnaSeq);
+showDnaAlignment(psl, rnaSeq);
 }
 
 void htcUserAli(char *fileNames)
@@ -678,9 +686,11 @@ void htcUserAli(char *fileNames)
 {
 char *pslName, *faName;
 struct lineFile *lf;
-struct dnaSeq *rnaSeq;
+bioSeq *oSeq;
 struct psl *psl;
 int start;
+enum gfType tt, qt;
+boolean isProt;
 
 /* Print start of HTML. */
 puts("Content-Type:text/html\n");
@@ -689,7 +699,8 @@ puts("<HTML>");
 
 start = cgiInt("o");
 parseSs(fileNames, &pslName, &faName);
-lf = lineFileOpen(pslName, TRUE);
+pslxFileOpen(pslName, &tt, &qt, &lf);
+isProt = (qt == gftProt);
 while ((psl = pslNext(lf)) != NULL)
     {
     if (sameString(psl->tName, seqName) && psl->tStart == start)
@@ -699,8 +710,11 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%d", seqName, start);
-rnaSeq = faReadDna(faName);
-showAlignment(psl, rnaSeq);
+oSeq = faReadSeq(faName, !isProt);
+if (isProt)
+    showDnaAlignment(psl, oSeq);
+else
+    showProtAlignment(psl, oSeq);
 }
 
 

@@ -15,6 +15,7 @@
 #include "hgFind.h"
 #include "spaceSaver.h"
 #include "wormdna.h"
+#include "aliType.h"
 #include "psl.h"
 #include "agpFrag.h"
 #include "agpGap.h"
@@ -865,8 +866,10 @@ else
     return '+';
 }
 
-struct linkedFeatures *lfFromPsl(struct psl *psl)
-/* Create a linked feature item from psl. */
+
+struct linkedFeatures *lfFromPslx(struct psl *psl, int sizeMul)
+/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
+ * sizeMul=3 for protein. */
 {
 unsigned *starts = psl->tStarts;
 unsigned *sizes = psl->blockSizes;
@@ -875,16 +878,27 @@ int grayIx = mrnaGrayIx(psl->qStart,
 	psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
 struct simpleFeature *sfList = NULL, *sf;
 struct linkedFeatures *lf;
+boolean rcTarget = (psl->strand[1] == '-');
 
 AllocVar(lf);
 lf->grayIx = grayIx;
 strncpy(lf->name, psl->qName, sizeof(lf->name));
 lf->orientation = orientFromChar(psl->strand[0]);
+if (rcTarget)
+    lf->orientation = -lf->orientation;
 for (i=0; i<blockCount; ++i)
     {
     AllocVar(sf);
     sf->start = sf->end = starts[i];
-    sf->end += sizes[i];
+    sf->end += sizes[i]*sizeMul;
+    if (rcTarget)
+        {
+	int s, e;
+	s = psl->tSize - sf->end;
+	e = psl->tSize - sf->start;
+	sf->start = s;
+	sf->end = e;
+	}
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
@@ -893,6 +907,13 @@ lf->components = sfList;
 finishLf(lf);
 return lf;
 }
+
+struct linkedFeatures *lfFromPsl(struct psl *psl)
+/* Create a linked feature item from psl. */
+{
+return lfFromPslx(psl, 1);
+}
+
 
 
 struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end)
@@ -940,6 +961,19 @@ tg->loadItems = loadMrnaAli;
 return tg;
 }
 
+void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
+/* Set track group color to r,g,b.  Set altColor to a lighter version
+ * of the same. */
+{
+tg->ignoresColor = FALSE;
+tg->color.r = r;
+tg->color.g = g;
+tg->color.b = b;
+tg->altColor.r = (r+255)/2;
+tg->altColor.g = (g+255)/2;
+tg->altColor.b = (b+255)/2;
+}
+
 char *usrPslMapName(struct trackGroup *tg, void *item)
 /* Return name of item. */
 {
@@ -958,6 +992,8 @@ char *faFileName, *pslFileName;
 struct lineFile *f;
 struct psl *psl;
 struct linkedFeatures *lfList = NULL, *lf;
+enum gfType qt, tt;
+int sizeMul = 1;
 
 strcpy(buf, ss);
 wordCount = chopLine(buf, ssWords);
@@ -966,13 +1002,20 @@ if (wordCount < 2)
 pslFileName = ssWords[0];
 faFileName = ssWords[1];
 
-f = lineFileOpen(pslFileName, TRUE);
+
+pslxFileOpen(pslFileName, &qt, &tt, &f);
+if (qt != gftDna && qt != gftRna)
+    {
+    setTgDarkLightColors(tg, 0, 80, 150);
+    tg->ignoresColor = FALSE;
+    sizeMul = 3;
+    }
 tg->itemName = linkedFeaturesName;
 while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPsl(psl);
+	lf = lfFromPslx(psl, sizeMul);
 	lf->extra = ss;
 	slAddHead(&lfList, lf);
 	}
@@ -1135,16 +1178,10 @@ struct trackGroup *genieAltTg()
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "genieAlt";
 tg->visibility = tvDense;
-tg->longLabel = "Affymetrix Gene Predictions (excluding known genes)";
+tg->longLabel = "Affymetrix Gene Predictions";
 tg->shortLabel = "Affy Genes";
 tg->loadItems = loadGenieAlt;
-tg->ignoresColor = FALSE;
-tg->color.r = 125;
-tg->color.g = 0;
-tg->color.b = 150;
-tg->altColor.r = (125+255)/2;
-tg->altColor.g = (0+255)/2;
-tg->altColor.b = (150+255)/2;
+setTgDarkLightColors(tg, 125, 0, 150);
 tg->itemName = genieName;
 tg->mapItemName = genieMapName;
 return tg;
@@ -1238,13 +1275,7 @@ tg->visibility = tvFull;
 tg->longLabel = "Known Genes (from full length mRNAs)";
 tg->shortLabel = "Known Genes";
 tg->loadItems = loadGenieKnown;
-tg->ignoresColor = FALSE;
-tg->color.r = 20;
-tg->color.g = 20;
-tg->color.b = 170;
-tg->altColor.r = (20+255)/2;
-tg->altColor.g = (20+255)/2;
-tg->altColor.b = (170+255)/2;
+setTgDarkLightColors(tg, 20, 20, 170);
 tg->itemName = genieName;
 tg->mapItemName = genieMapName;
 tg->itemColor = genieKnownColor;
@@ -1285,13 +1316,7 @@ tg->visibility = tvDense;
 tg->longLabel = "Ensembl Gene Predictions";
 tg->shortLabel = "Ensembl Genes";
 tg->loadItems = loadEnsGene;
-tg->ignoresColor = FALSE;
-tg->color.r = 150;
-tg->color.g = 0;
-tg->color.b = 0;
-tg->altColor.r = (150+255)/2;
-tg->altColor.g = (0+255)/2;
-tg->altColor.b = (0+255)/2;
+setTgDarkLightColors(tg, 150, 0, 0);
 tg->itemName = ensGeneName;
 tg->mapItemName = ensGeneMapName;
 return tg;
@@ -1312,13 +1337,7 @@ tg->visibility = tvDense;
 tg->longLabel = "Fgenesh++ Gene Predictions";
 tg->shortLabel = "Fgenesh++ Genes";
 tg->loadItems = loadSoftberryGene;
-tg->ignoresColor = FALSE;
-tg->color.r = 0;
-tg->color.g = 100;
-tg->color.b = 0;
-tg->altColor.r = (tg->color.r+255)/2;
-tg->altColor.g = (tg->color.g+255)/2;
-tg->altColor.b = (tg->color.b+255)/2;
+setTgDarkLightColors(tg, 0, 100, 0);
 return tg;
 }
 
