@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.17 2004/11/08 20:55:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.18 2004/11/08 21:07:46 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -32,6 +32,8 @@ errAbort(
   "hgTablesTest - Test hgTables web page\n"
   "usage:\n"
   "   hgTablesTest url log\n"
+  "Where url is something like hgwbeta.cse.ucsc.edu/cgi-bin/hgTables\n"
+  "and log is a file where error messages and statistics will be written\n"
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
   "   -db=hg17 - Restrict to particular database\n"
