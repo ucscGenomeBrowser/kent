@@ -111,6 +111,9 @@
 #include "scoredRef.h"
 #include "minGeneInfo.h"
 #include "tigrCmrGene.h"
+#include "codeBlastScore.h"
+#include "codeBlast.h"
+#include "rnaGenes.h"
 #include "tigrOperon.h"
 #include "llaInfo.h"
 #include "loweTrnaGene.h"
@@ -142,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.737 2004/09/02 00:29:09 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.738 2004/09/03 20:26:31 kschneid Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12908,6 +12911,290 @@ return bedWSList;
 }
 
 /* Lowe Lab additions */
+/*Function to print out full code name from code letter*/
+void printCode(char code)
+{
+    switch(code)
+	{
+	case 'a':    
+	    printf("Aerobic");
+	    break;
+	case 'b':
+	    printf("Bacteria");
+	    break;
+	case 'c':
+	    printf("Crenarchae");
+	    break;
+	case 'd':
+	    printf("Acidophile");
+	    break;
+	case 'e':
+	    printf("Euryarchae");
+	    break;
+	case 'g':
+	    printf("Genus");
+	    break;
+	case 'h':
+	    printf("Hyperthermophile");
+	    break;	
+	case 'm':
+	    printf("Methanogen");
+	    break;
+	case 'n':
+	     printf("Anaerobic");
+	    break;
+	case 'o':
+	    printf("Nanoarchae");
+	    break;
+	case 't':
+	    printf("Thermophile");
+	    break;
+	case 'u':
+	    printf("Eukaryotic");
+	    break;
+	case 'v':
+	    printf("Viral");
+    	    break;
+	case 'k':
+	    printf("Alkali");
+    	    break;	
+	case 'l':
+	    printf("Halophile");
+    	    break;		
+       }
+}
+
+void doRnaGenes(struct trackDb *tdb, char *trnaName)
+{
+char *track = tdb->tableName;
+struct rnaGenes *trna;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *dupe, *type, *words[16];
+char **row;
+int wordCount;
+int rowOffset;
+int start = cartInt(cart, "o"), num = 0;
+
+genericHeader(tdb,trnaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, trnaName, start, num);
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    trna = rnaGenesLoad(row);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (trna != NULL && (trna->ci[0]=='N' || trna->ci[0]=='Y'))
+    {
+    printf("<B>Amino acid: </B> %s<BR>\n",trna->aa);
+    printf("<B>tRNA anti-codon: </B> %s<BR>\n",trna->ac);
+    printf("<B>Contains an inton? </B> %s<BR>\n",(trna->ci[0]=='Y'?"Yes":"No"));    
+    printf("<B>tRNAScanSE score: </B> %.2f<BR>\n",trna->scan);    
+    }
+printTrackHtml(tdb);
+rnaGenesFree(&trna);
+}
+
+void doCodeBlast(struct trackDb *tdb, char *trnaName)
+{
+struct codeBlast *cb=NULL;
+struct codeBlastScore *cbs=NULL, *cbs2, *list=NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *track = tdb->tableName;
+char query[512];
+char *dupe, *type, *code, *words[16];
+char **row;
+char tempstring[255]="";
+int i, flag,  z, dashes,wordCount,rowOffset,currentGI=0;
+int start = cartInt(cart, "o"), num = 0, flag2=0;
+float sequenceLength, dashlength=60;
+
+genericHeader(tdb,trnaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, trnaName, start, num);
+rowOffset = hOffsetPastBin(seqName, track);
+
+sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cb=codeBlastLoad(row);
+    }
+    
+sequenceLength=(cb->chromEnd - cb->chromStart);
+if(sequenceLength<0){ sequenceLength=sequenceLength*-1;}
+sequenceLength=sequenceLength/3;
+dashlength=sequenceLength/60;
+
+/*Query the database for the extrainfo file for codeBlast*/
+conn=hAllocConn();/*sqlConnect(dupe);*/  
+strcat(tempstring, "select * from codeBlastScore where qname = '");
+strcat(tempstring, trnaName);
+strcat(tempstring, "'");
+sr = sqlGetResult(conn, tempstring);
+ 
+/*Load the required data from the database*/
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cbs=codeBlastScoreLoad(row);
+    slAddHead(&list, cbs);
+    }
+
+/*Print out the table for the alignments*/
+printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
+printf("</td>\n    </tr>\n    <tr>");
+printf("     <td style=\"vertical-align: top;\">%s where each - is approx. %f amino acids", trnaName, dashlength);
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<code>\n");
+for(z=0; z<60; z++)
+{
+	printf("-");
+}
+printf("</code>");
+
+printf("</td>\n    </tr>\n    <tr>");
+flag=0;
+flag2=0;
+
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {		    
+    if(strcmp(trnaName,cbs2->qName)==0);
+        {
+	if(flag==0)
+	    {
+	    currentGI=cbs2->GI;
+	    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    flag=1;
+	    }
+	if((cbs2->next!=NULL) && (currentGI== cbs2->GI) && (currentGI== cbs2->next->GI) )
+	    {
+	    }  		
+	else
+	    {
+	    dashes=cbs2->seqstart-cbs2->seqend;
+	    if(dashes<0) dashes=dashes*-1;           
+	    printf("<a name=\"%i-align\"></a>",cbs2->GI);
+            printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species,cbs2->name);
+	    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<code>\n");
+	    dashes=dashes/dashlength;
+	    if(cbs2->seqstart>cbs2->seqend)
+		for(z=0; z<((cbs2->seqend)/dashlength); z++)
+		    {
+		    printf("&nbsp;");
+		    }
+	    else
+		for(z=0; z<((cbs2->seqstart)/dashlength); z++)
+		    {
+		    printf("&nbsp;");
+		    }
+	    if(dashes<1) printf("-");
+	    for(z=0; z<dashes; z++) printf("-");
+	    printf("</code>");
+	    printf("</td>\n    </tr>\n");
+	    flag=0;
+	
+	    }
+                        
+        }
+                     
+    }
+   
+/*Print out table with Blast information*/
+printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Blast Against Category</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Organism Name</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Gene Name</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Product</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Link</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Evalue</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Percent Identity</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Alignment Length</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Gap openings</b>");
+printf("</td>\n    </tr>\n    <tr>");
+
+flag=0;
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {
+    if(strcmp(trnaName,cbs2->qName)==0)
+        {
+	if(flag==0)
+	    {
+	    currentGI=cbs2->GI;
+	    printf("\n      \n      <td style=\"vertical-align: top;\">");
+	    flag=1;
+	    }
+			
+	if((cbs2->next!=NULL) && (currentGI== cbs2->GI) && (currentGI== cbs2->next->GI)  )
+	    {
+	    printCode(cbs2->code[0]);
+            printf(", ");
+	    } 
+			
+	else
+	    {
+	   
+	    printCode(cbs2->code[0]);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	   
+	    printf("<a name=\"%i-desc\"></a>",cbs2->GI);
+	
+	    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%s",cbs2->name);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%s",cbs2->product);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%f",cbs2->evalue);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%f",cbs2->PI);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%i",cbs2->length);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%i",cbs2->gap);
+	    printf("<br></td>\n    </tr>\n");
+	    flag=0;
+	    
+	    }               
+        }               
+    }	
+printf("  <br><br></tbody>\n</table>  \n");
+printf("  </tbody>\n</table>  \n");
+
+/*Free the data*/
+
+hFreeConn(&conn);
+codeBlastScoreFree(&cbs);
+codeBlastFree(&cb);
+printTrackHtml(tdb);
+}
 
 void llDoCodingGenes(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
@@ -14938,6 +15225,17 @@ else if (sameWord(track, "loweTrnaGene"))
     {
     doLoweTrnaGene(tdb,item);
     }
+
+
+else if (sameWord(track,"codeBlast"))
+    {
+    doCodeBlast(tdb, item);
+    }
+else if (sameWord(track,"rnaGenes"))
+    {
+    doRnaGenes(tdb, item);
+    }
+
 /* else if (startsWith("lla", track))  */
 /*     { */
 /*     llArrayDetails(tdb,item); */
