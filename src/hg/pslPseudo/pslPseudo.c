@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.30 2004/08/26 08:08:00 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.31 2004/12/06 23:27:20 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -655,8 +655,8 @@ void initWeights()
     8 = + coverage *((qSize-qEnd)/qSize)
     9 = - repeats
  */
-wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.5; wt[4] = 0.5; 
-wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1; wt[9] = 1;
+wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.4; wt[4] = 0.3; 
+wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1.3; wt[9] = 1;
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
    /* char *type, char *bestqName, char *besttName, 
@@ -1696,8 +1696,8 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
     {
         struct psl *mPsl;
         int exonCount = -1;
-        struct genePred *gene = getOverlappingGene(&gpList1, "refGene", psl->tName, psl->tStart, 
-                            psl->tEnd , psl->qName, &geneOverlap);
+        //struct genePred *gene = getOverlappingGene(&gpList1, "refGene", psl->tName, psl->tStart, 
+        //                    psl->tEnd , psl->qName, &geneOverlap);
         int maxOverlap = overlapMrna(psl, mrnaHash, &exonCount, &mPsl);
         pg->maxOverlap = maxOverlap;
         if ((float)maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch) > splicedOverlapRatio 
@@ -1881,6 +1881,10 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     struct psl *pslMerge;
     int score = calcSizedScore(psl, bkHash, trfHash);
     
+    verbose(4,"milli %d > %d match %d > %d score: %d best %d qName %s tName %s:%d-%d \n",
+            calcMilliScore(psl), milliMin, 
+            (psl->match + psl->repMatch + psl->misMatch) , round(minCover * psl->qSize),
+            score, bestScore, psl->qName, psl->tName, psl->tStart, psl->tEnd );
     if (
         calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, score) 
         && (psl->match + psl->repMatch + psl->misMatch) >= round(minCover * psl->qSize))
@@ -1888,6 +1892,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         ++bestAliCount;
         AllocVar(pslMerge);
         pslMergeBlocks(psl, pslMerge, 30);
+        verbose(4,"merge blockCount %d \n", pslMerge->blockCount);
         
         if (score  > bestScore && pslMerge->blockCount > 1)
             {
@@ -1896,6 +1901,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
             bestEnd = psl->tEnd;
             bestChrom = cloneString(psl->tName);
             bestScore = score;
+            verbose(4,"BEST score: %d tName %s:%d \n",score,psl->tName,psl->tStart);
             }
         if (score  > bestSEScore )
             {
@@ -1910,6 +1916,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         pslFree(&pslMerge);
 	}
     }
+verbose(4,"---DONE finding best---\n");
 /* output parent genes, retrogenes, and calculate feature vector */
 for (psl = pslList; psl != NULL; psl = psl->next)
 {
