@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.14 2003/09/14 23:17:02 sugnet Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.15 2003/12/05 23:48:33 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -367,6 +367,7 @@ slReverse(&bList);
 /* Make new chain based on old. */
 if (bList != NULL)
     {
+    double sizeRatio;
     AllocVar(sub);
     sub->blockList = bList;
     sub->qName = cloneString(chain->qName);
@@ -379,6 +380,11 @@ if (bList != NULL)
     sub->tStart = tStart;
     sub->tEnd = tEnd;
     sub->id = chain->id;
+
+    /* Fake new score. */
+    sizeRatio = (sub->tEnd - sub->tStart);
+    sizeRatio /= (chain->tEnd - chain->tStart);
+    sub->score = sizeRatio * chain->score;
     }
 *retSubChain = *retChainToFree = sub;
 }
