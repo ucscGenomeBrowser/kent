@@ -231,7 +231,6 @@ for (;;)
     if ((var = skipLeadingSpaces(s)) == NULL)
         break;
 
-    fprintf(stderr, "%s\n", var);
     if ((c = *var) == 0)
         break;
     if (!isalpha(c))
