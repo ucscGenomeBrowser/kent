@@ -387,7 +387,7 @@ cd ../../
 zip -j zip/ScaffoldFa.zip scaffolds/*.fa
 zip -j zip/ScaffoldFaMasked.zip maskedScaffolds/*.fa
 cd bed/simpleRepeat
-zip ../../zip/ScaffoldTrf.zip trfMask/*.bed
+zip -j ../../zip/ScaffoldTrf.zip trfMask/*.bed
 cd ../..
 cd /cluster/data/genbank
 ./bin/i386/gbGetSeqs -db=ci1 -native GenBank mrna /cluster/data/ci1/zip/mrna.fa
