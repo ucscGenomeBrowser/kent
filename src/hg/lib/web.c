@@ -265,54 +265,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(orgCgiName, orgList, values, numOrganisms, selOrganism, onChangeText);
 }
 
-void printAssemblyListHtml(char *db)
-{
-/* Find all the assemblies that pertain to the selected genome 
-Prints to stdout the HTML to render a dropdown list containing a list of the possible
-assemblies to choose from.
-
-param curDb - The assembly (the database name) to choose as selected. 
-If NULL, no default selection.
- */
-char *assemblyList[128];
-char *values[128];
-int numAssemblies = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
-struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *organism = hOrganism(db);
-char *assembly = NULL;
-
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
-    }
-
-cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
-}
-
-void printBlatAssemblyListHtml(char *db)
+void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)
 {
 /* Find all the assemblies that pertain to the selected genome and that have
 BLAT servers set up.
@@ -325,7 +278,6 @@ If NULL, no default selection.
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
-struct dbDb *dbList = hGetBlatIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *organism = hOrganism(db);
@@ -360,7 +312,34 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
 }
 
+void printAssemblyListHtml(char *db)
+{
+/* Find all the assemblies that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+struct dbDb *dbList = hGetIndexedDatabases();
+printSomeAssemblyListHtml(db, dbList);
+}
+
+void printBlatAssemblyListHtml(char *db)
+{
+/* Find all the assemblies that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+struct dbDb *dbList = hGetBlatIndexedDatabases();
+printSomeAssemblyListHtml(db, dbList);
+}
+
 char *getDbForOrganism(char *organism, struct cart *cart)
+{
 /*
   Function to find the default database for the given organism.
 It looks in the cart first and then, if that database's organism matches the 
@@ -371,7 +350,6 @@ param organism - The organism for which to find a database
 param cart - The cart to use to first search for a suitable database name
 return - The database matching this organism type
 */
-{
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
 char *dbOrg = hOrganism(retDb);
 
