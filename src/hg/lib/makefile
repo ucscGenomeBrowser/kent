@@ -7,7 +7,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o  axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
-    bed6FloatScore.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o \
+    bedCart.o bed6FloatScore.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
