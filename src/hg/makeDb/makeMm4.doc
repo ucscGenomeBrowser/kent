@@ -2900,10 +2900,6 @@ hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
     # Note that the unmapped 5000 records are from all-N sequences.
     hgLoadBed mm4 gnfAtlas2 gnfAtlas2.bed
 
-    # Create known gene mapping table and distance table.
-    hgMapToGene mm4 affyGnf1m knownGene knownToGnf1m
-    hgExpDistance mm4 hgFixed.gnfMouseAtlas2MedianRatio hgFixed.gnfMouseAtlsas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
-
 ######## MAKING FAMILY BROWSER TABLES #######  (DONE - 2004-01-06 - Hiram)
 # These are instructions for building the
 # neighborhood browser.  Don't start these until
@@ -2999,6 +2995,14 @@ cd /cluster/data/mm4/bed/blastp/self/run/out
 hgLoadBlastTab mm4 knownBlastTab *.tab
 # Scanning through 7737 files
 # Loading database with 7522182 rows
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes an hour.)
+hgMapToGene mm4 affyGnf1m knownGene knownToGnf1m
+hgExpDistance mm4 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1m
+
 
 # Create table that maps between known genes and RefSeq
 hgMapToGene mm4 refGene knownGene knownToRefSeq
