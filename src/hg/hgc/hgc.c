@@ -50,6 +50,8 @@
 #include "genomicDups.h"
 #include "est3.h"
 #include "rnaGene.h"
+#include "hgMaf.h"
+#include "maf.h"
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "recombRate.h"
@@ -159,7 +161,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.846 2005/03/07 20:47:33 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.847 2005/03/08 21:50:45 jsp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -854,6 +856,7 @@ if (bedSize >= 5 && showTopScorers != NULL)
 
 #define RED 0xFF0000
 #define GREEN 0x00FF00
+#define LTGREEN 0x33FF33
 #define BLUE 0x0000FF
 #define MEDBLUE 0x6699FF
 #define PURPLE 0x9900cc
@@ -14867,6 +14870,17 @@ else if (startsWith("map", track) ||startsWith("blastz", track) || startsWith("b
 else if (sameWord(track, "rnaGene"))
     {
     doRnaGene(tdb, item);
+    }
+else if (sameWord(track, "RfamSeedFolds") 
+	 || sameWord(track, "rfamTestFolds") 
+	 || sameWord(track, "evofold") 
+	 || sameWord(track, "rnafold") 
+	 || sameWord(track, "rnaTestFolds") 
+	 || sameWord(track, "mcFolds") 
+	 || sameWord(track, "rnaEditFolds")
+	 || sameWord(track, "altSpliceFolds"))
+    {
+    doRnaSecStr(tdb, item);
     }
 else if (sameWord(track, "fishClones"))
     {

@@ -143,6 +143,9 @@ void doScaffoldEcores(struct trackDb *tdb, char *item);
 struct customTrack *lookupCt(char *name);
 /* Return custom track for name, or NULL. */
 
+void doRnaSecStr(struct trackDb *tdb, char *itemName);
+/* Handle click on rnaSecStr type elements. */
+
 void doTriangle(struct trackDb *tdb, char *item, char *motifTable);
 /* Display detailed info on a regulatory triangle item. */
 
