@@ -8,6 +8,8 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "chromInfo.h"
+#include "bed.h"
+#include "genePred.h"
 #include <regex.h>
 
 char *database = "hg7";
@@ -63,6 +65,134 @@ char *currentUrl()
 static char url[512];
 sprintf(url, "http://%s%s%s", getenv("SERVER_NAME"), getenv("SCRIPT_NAME"), getenv("PATH_INFO"));
 return url;
+}
+
+struct tableDef
+/* A table definition. */
+    {
+    struct tableDef *next;	/* Next in list. */
+    char *name;			/* Name of table. */
+    struct slName *splitTables;	/* Names of subTables.  Only used if isSplit. */
+    char *chromField;		/* Name of field chromosome is stored in. */
+    char *startField;		/* Name of field chromosome start is in. */
+    char *endField;		/* Name of field chromosome end is in. */
+    char *category;		/* Category type. */
+    char *method;		/* Category type. */
+    };
+
+boolean tableIsSplit(char *table)
+/* Return TRUE if table is split. */
+{
+if (!startsWith("chr", table))
+    return FALSE;
+if (strchr(table, '_') == NULL)
+    return FALSE;
+return TRUE;
+}
+
+char *skipOverChrom(char *table)
+/* Skip over chrN_ or chrN_random_. */
+{
+char *e = strchr(table, '_');
+if (e != NULL)
+    {
+    ++e;
+    if (startsWith("random_", e))
+	e += 7;
+    table = e;
+    }
+return table;
+}
+
+struct tableDef *getTables()
+/* Get all tables. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct hash *hash = newHash(0);
+struct hash *skipHash = newHash(7);
+struct tableDef *tdList = NULL, *td;
+struct sqlResult *sr;
+char **row;
+char *table, *root;
+boolean isSplit;
+char chromField[32], startField[32], endField[32];
+
+/* Set up some big tables that we don't actually want to serve. */
+hashAdd(skipHash, "all_est", NULL);
+hashAdd(skipHash, "all_mrna", NULL);
+hashAdd(skipHash, "refFlat", NULL);
+hashAdd(skipHash, "simpleRepeat", NULL);
+hashAdd(skipHash, "ctgPos", NULL);
+hashAdd(skipHash, "gold", NULL);
+hashAdd(skipHash, "clonePos", NULL);
+hashAdd(skipHash, "rmsk", NULL);
+hashAdd(skipHash, "estPair", NULL);
+
+sr = sqlGetResult(conn, "show tables");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    table = root = row[0];
+    if (hFindChromStartEndFields(table, chromField, startField, endField))
+	{
+	isSplit = tableIsSplit(table);
+	if (isSplit)
+	    root = skipOverChrom(table);
+	if (hashLookup(skipHash, root) == NULL)
+	    {
+	    if ((td = hashFindVal(hash, root)) == NULL)
+		{
+		AllocVar(td);
+		slAddHead(&tdList, td);
+		hashAdd(hash, root, td);
+		td->name = cloneString(root);
+		td->chromField = cloneString(chromField);
+		td->startField = cloneString(startField);
+		td->endField = cloneString(endField);
+		if (stringIn("snp", root) || stringIn("Snp", root))
+		     {
+		     td->category = "variation";
+		     }
+		else if (stringIn("est", root) || stringIn("Est", root) 
+		    || stringIn("mrna", root) || stringIn("Mrna", root)
+		    || sameString("txStart", startField) || stringIn("rnaGene", root))
+		    {
+		    td->category = "transcription";
+		    td->method = "BLAT";
+		    }
+		else if (stringIn("mouse", root) || stringIn("Mouse", root) ||
+		    stringIn("fish", root) || stringIn("Fish", root))
+		    {
+		    td->category = "similarity";
+		    if (startsWith("blat", root))
+		         td->method = "BLAT";
+		    else if (sameString("exoMouse", root))
+		         td->method = "Exonerate";
+		    else if (sameString("exoMouse", root))
+		         td->method = "Exofish";
+		    }
+		else if (sameString("gap", root) || sameString("gold", root) ||
+			sameString("gl", root) || sameString("clonePos", root))
+		    {
+		    td->category = "structural";
+		    td->method = "GigAssembler";
+		    }
+		else
+		    td->category = "other";
+		}
+	    if (isSplit)
+	        {
+		struct slName *sln = newSlName(table);
+		slAddHead(&td->splitTables, sln);
+		}
+	    }
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+hashFree(&hash);
+hashFree(&skipHash);
+slReverse(&tdList);
+return tdList;
 }
 
 struct segment
@@ -175,12 +305,63 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 return segmentList;
 }
 
+struct regExp
+/* A compiled regular expression. */
+    {
+    struct regExp *next;
+    char *exp;			/* Expression (uncompiled) */
+    regex_t compiled;		/* Compiled version of regExp. */
+    };
+
+struct regExp *regExpFromCgiVar(char *cgiVar)
+/* Make up regExp list from cgiVars */
+{
+struct slName *nList = cgiStringList(cgiVar), *n;
+struct regExp *reList = NULL, *re;
+for (n = nList; n != NULL; n = n->next)
+    {
+    AllocVar(re);
+    slAddHead(&reList, re);
+    re->exp = n->name;
+    if (regcomp(&re->compiled, n->name, REG_NOSUB))
+	earlyError(402);
+    }
+slReverse(&reList);
+return reList;
+}
+
+boolean regExpFilter(struct regExp *reList, char *string)
+/* Return TRUE if string matches any of the regular expressions
+ * on reList. */
+{
+struct regExp *re;
+for (re = reList; re != NULL; re = re->next)
+    {
+    if (regexec(&re->compiled, string, 0, NULL, 0) == 0)
+        return TRUE;
+    }
+return FALSE;
+}
+
+boolean catTypeFilter(struct regExp *catExp, char *cat, struct regExp *typeExp, char *type)
+/* Combined category/type filter. */
+{
+if (catExp != NULL && typeExp != NULL)
+    return regExpFilter(catExp,cat) || regExpFilter(typeExp, type);
+if (catExp != NULL)
+    return regExpFilter(catExp,cat);
+if (typeExp != NULL)
+    return regExpFilter(typeExp, type);
+return TRUE;
+}
+
+
 void doDsn()
 /* dsn - DSN Server for DAS. */
 {
 normalHeader();
 printf(
-" <!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
+// " <!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
 " <DASDSN>\n");
 printf(
 "   <DSN>\n"
@@ -191,7 +372,152 @@ printf(
 printf(" </DASDSN>\n");
 }
 
-void dasOutPsl(struct psl *psl)
+int countFeatures(struct tableDef *td, struct segment *segmentList)
+/* Count all the features in a given segment. */
+{
+struct segment *segment;
+int acc = 0;
+struct sqlConnection *conn = hAllocConn();
+char chrTable[256];
+char query[512];
+struct slName *n;
+
+if (segmentList == NULL)
+    {
+    if (td->splitTables == NULL)
+        {
+	sprintf(query, "select count(*) from %s", td->name);
+	acc = sqlQuickNum(conn, query);
+	}
+    else
+        {
+	for (n = td->splitTables; n != NULL; n = n->next)
+	    {
+	    sprintf(query, "select count(*) from %s", n->name);
+	    acc += sqlQuickNum(conn, query);
+	    }
+	}
+    }
+else
+    {
+    for (segment = segmentList; segment != NULL; segment = segment->next)
+	{
+	if (segment->wholeThing)
+	    {
+	    if (td->splitTables == NULL)
+	        {
+		sprintf(query, "select count(*) from %s where %s = '%s'", 
+			td->name, td->chromField, segment->seq);
+		acc += sqlQuickNum(conn, query);
+		}
+	    else
+	        {
+		sprintf(chrTable, "%s_%s", segment->seq, td->name);
+		if (sqlTableExists(conn, chrTable))
+		    {
+		    sprintf(query, "select count(*) from %s", 
+			    chrTable);
+		    acc += sqlQuickNum(conn, query);
+		    }
+		}
+	    }
+	else
+	    {
+	    if (td->splitTables == NULL)
+	        {
+		sprintf(query, "select count(*) from %s where %s = '%s' and %s < %d and %s > %d",
+		     td->name, td->chromField, segment->seq,
+		     td->startField, segment->end, td->endField, segment->start);
+		acc += sqlQuickNum(conn, query);
+		}
+	    else
+	        {
+		sprintf(chrTable, "%s_%s", segment->seq, td->name);
+		if (sqlTableExists(conn, chrTable))
+		    {
+		    sprintf(query, "select count(*) from %s where %s < %d and %s > %d", chrTable, 
+			 td->startField, segment->end, td->endField, segment->start);
+		    acc += sqlQuickNum(conn, query);
+		    }
+		}
+	    }
+	}
+    }
+hFreeConn(&conn);
+return acc;
+}
+
+
+void regExpTest(char *needle, char *haystack)
+/* Test regular expression. */
+{
+regex_t preg;
+int res;
+res = regcomp(&preg, needle, REG_NOSUB);
+printf("Result of regcomp is %d\n", res);
+res = regexec(&preg, haystack, 0, NULL, 0);
+printf("Result of regexec is %d\n", res);
+regfree(&preg);
+printf("All done\n");
+}
+
+void doTypes()
+/* Handle a types request. */
+{
+struct segment *segmentList = dasSegmentList(FALSE);
+struct tableDef *tdList = getTables(), *td;
+struct regExp *category = regExpFromCgiVar("category");
+struct regExp *type = regExpFromCgiVar("type");
+
+normalHeader();
+// printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
+printf("<DASTYPES>\n");
+printf("<GFF version=\"1.2\" summary=\"yes\" href=\"%s\">\n", currentUrl());
+printf("<SEGMENT version=\"%s\">\n", version);
+for (td = tdList; td != NULL; td = td->next)
+    {
+    if (catTypeFilter(category, td->category, type, td->name) )
+	{
+	int count = countFeatures(td, segmentList);
+	printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
+	if (td->method != NULL)
+	    printf("method=\"%s\" ", td->method);
+	printf(">");
+	if (count > 0)
+	    printf("%d", count);
+	printf("</TYPE>\n");
+	}
+    }
+printf("</SEGMENT>\n");
+printf("</GFF>\n");
+printf("</DASTYPES>\n");
+}
+
+void dasOutGp(struct genePred *gp, struct tableDef *td)
+/* Write out DAS info on a gene prediction. */
+{
+int i;
+for (i=0; i<gp->exonCount; ++i)
+    {
+    int start = gp->exonStarts[i];
+    int end =  gp->exonEnds[i];
+    printf(
+    "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", gp->name, gp->chrom, gp->txStart, i, gp->name);
+    printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+    if (td->method != NULL)
+	printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
+    printf(" <START>%d</START>\n", start+1);
+    printf(" <END>%d</END>\n", end);
+    printf(" <ORIENTATION>%c</ORIENTATION>\n", gp->strand[0]);
+    printf(" <GROUP id=\"%s.%s.%d\">\n", gp->name, gp->chrom, gp->txStart);
+    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
+    	gp->chrom, gp->txStart, gp->txEnd);
+    printf(" </GROUP>\n");
+    printf("</FEATURE>\n");
+    }
+}
+
+void dasOutPsl(struct psl *psl, struct tableDef *td)
 /* Write out DAS info on a psl alignment. */
 {
 int i;
@@ -211,45 +537,64 @@ for (i=0; i<psl->blockCount; ++i)
 	end = e;
 	}
     printf(
-    "<FEATURE id=\"%s.%s.%d\" label=\"%s\">\n", psl->qName, psl->tName, psl->tStart, psl->qName);
-    printf(" <TYPE id=\"intronEst\" category=\"transcription\" reference=\"no\">spliced ESTs</TYPE>\n");
-    printf(" <METHOD id=\"id\">BLAT</METHOD>\n");
-    printf(" <START>%d</START>\n", start);
+    "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", psl->qName, psl->tName, psl->tStart, i, psl->qName);
+    printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+    if (td->method != NULL)
+	printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
+    printf(" <START>%d</START>\n", start+1);
     printf(" <END>%d</END>\n", end);
     printf(" <ORIENTATION>%c</ORIENTATION>\n", psl->strand[0]);
     printf(" <GROUP id=\"%s.%s.%d\">\n", psl->qName, psl->tName, psl->tStart);
     printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s\">Link to UCSC Browser</LINK>\n", psl->qName);
+    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
+	psl->tName, psl->tStart, psl->tEnd);
     printf(" </GROUP>\n");
     printf("</FEATURE>\n");
     }
+}
+
+void dasOutBed(char *chrom, int start, int end, char *name, struct tableDef *td)
+/* Write out a generic one. */
+{
+printf("<FEATURE id=\"%s.%s.%d\" label=\"%s\">\n", name, chrom, start, name);
+printf(" <TYPE id=\"%s\" category=\"%s\" reference=\"no\">%s</TYPE>\n", td->name, td->category, td->name);
+if (td->method != NULL)
+    printf(" <METHOD id=\"id\">%s</METHOD>\n", td->method);
+printf(" <START>%d</START>\n", start+1);
+printf(" <END>%d</END>\n", end);
+printf(" <GROUP id=\"%s.%s.%d\">\n", name, chrom, start);
+printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
+    chrom, start, end);
+printf(" </GROUP>\n");
+printf("</FEATURE>\n");
 }
 
 void doFeatures()
 /* features - DAS Annotation Feature Server. */
 {
 struct segment *segmentList = dasSegmentList(TRUE), *segment;
+struct tableDef *tdList = getTables(), *td;
 struct slName *typeList = cgiStringList("type"), *typeEl;
-char *type = cgiOptionalString("type");
-char *category = cgiOptionalString("category");
+struct regExp *category = regExpFromCgiVar("category");
+struct regExp *type = regExpFromCgiVar("type");
 char *parts[3];
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int start, end;
 char *seq;
+struct dyString *table = newDyString(0);
+struct dyString *query = newDyString(0);
 
 /* Write out DAS features header. */
 normalHeader();
 printf(
-"<!DOCTYPE DASGFF SYSTEM \"http://www.biodas.org/dtd/dasgff.dtd\">\n"
+// "<!DOCTYPE DASGFF SYSTEM \"http://www.biodas.org/dtd/dasgff.dtd\">\n"
 "<DASGFF>\n"
 "<GFF version=\"1.0\" href=\"%s\">\n", currentUrl());
 
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
-    struct dyString *table = newDyString(0);
-    struct dyString *query = newDyString(0);
-
     /* Print segment header. */
     seq = segment->seq;
     start = segment->start;
@@ -259,26 +604,65 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	   start+1, end, version, seq);
 
     /* Query database and output features. */
-    conn = hAllocConn();
-    dyStringPrintf(table, "%s_intronEst", seq);
-    dyStringPrintf(query, "select * from %s where tStart<%u and tEnd>%u",
-       table->string, end, start);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
+    for (td = tdList; td != NULL; td = td->next)
 	{
-	struct psl *psl = pslLoad(row);
-	dasOutPsl(psl);
-	pslFree(&psl);
+	if (catTypeFilter(category, td->category, type, td->name) )
+	    {
+	    dyStringClear(table);
+	    dyStringClear(query);
+	    if (td->splitTables == NULL)
+		{
+		dyStringPrintf(query, "select * from %s where %s='%s' and %s<%d and %s>%d",
+			td->name, td->chromField, seq,
+			td->startField, end, td->endField, start);
+		}
+	    else
+		{
+	        dyStringPrintf(table, "%s_%s", seq, td->name);
+		if (!sqlTableExists(conn, table->string))
+		    continue;
+		dyStringPrintf(query, "select * from %s where %s<%d and %s>%d",
+			table->string, td->startField, end, td->endField, start);
+		}
+	    sr = sqlGetResult(conn, query->string);
+	    if (sameString(td->startField, "tStart"))
+		{
+		while ((row = sqlNextRow(sr)) != NULL)
+		    {
+		    struct psl *psl = pslLoad(row);
+		    dasOutPsl(psl, td);
+		    pslFree(&psl);
+		    }
+		}
+	    else if (sameString(td->startField, "txStart"))
+	        {
+		while ((row = sqlNextRow(sr)) != NULL)
+		    {
+		    struct genePred *gp = genePredLoad(row);
+		    dasOutGp(gp, td);
+		    genePredFree(&gp);
+		    }
+		}
+	    else if (sameString(td->startField, "chromStart"))
+	        {
+		while ((row = sqlNextRow(sr)) != NULL)
+		    dasOutBed(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]), row[3], td);
+		}
+	    sqlFreeResult(&sr);
+	    }
 	}
     printf("</SEGMENT>\n");
-    sqlFreeResult(&sr);
-    freeDyString(&table);
-    freeDyString(&query);
     }
 
 /* Write out DAS footer. */
 printf("</GFF></DASGFF>\n");
+
+/* Clean up. */
+freeDyString(&table);
+freeDyString(&query);
+hFreeConn(&conn);
 }
+
 
 void doEntryPoints()
 /* Handle entry points request. */
@@ -290,7 +674,7 @@ struct chromInfo *ci;
 
 normalHeader();
 conn = hAllocConn();
-printf("<!DOCTYPE DASEP SYSTEM \"http://www.biodas.org/dtd/dasep.dtd\">\n");
+// printf("<!DOCTYPE DASEP SYSTEM \"http://www.biodas.org/dtd/dasep.dtd\">\n");
 printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
 	currentUrl());
@@ -302,6 +686,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf(" <SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" orientation=\"+\" subparts=\"no\">%s</SEGMENT>\n", ci->chrom, 1, ci->size, ci->chrom);
     chromInfoFree(&ci);
     }
+#ifdef SOON
+#endif /* SOON */
+
 printf("</ENTRY_POINTS>\n");
 printf("</DASEP>\n");
 }
@@ -316,7 +703,7 @@ int i, oneSize, lineSize = 50;
 
 /* Write header. */
 normalHeader();
-printf("<!DOCTYPE DASDNA SYSTEM \"http://www.biodas.org/dtd/dasdna.dtd\">\n");
+// printf("<!DOCTYPE DASDNA SYSTEM \"http://www.biodas.org/dtd/dasdna.dtd\">\n");
 printf("<DASDNA>\n");
 
 /* Write each sequence. */
@@ -344,49 +731,6 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 
 /* Write footer. */
 printf("</DASDNA>\n");
-}
-
-int countFeatures(char *table, struct segment *segmentList)
-/* Count all the features in a given segment. */
-{
-struct segment *segment;
-int acc = 0;
-struct sqlConnection *conn = hAllocConn();
-char chrTable[256];
-char query[512];
-for (segment = segmentList; segment != NULL; segment = segment->next)
-    {
-    if (segment->wholeThing)
-        {
-	sprintf(chrTable, "%s_%s", segment->seq, table);
-	if (sqlTableExists(conn, chrTable))
-	    {
-	    sprintf(query, "select count(*) from %s", chrTable);
-	    acc += sqlQuickNum(conn, query);
-	    }
-	}
-    }
-hFreeConn(&conn);
-return acc;
-}
-
-void doTypes()
-/* Handle a types request. */
-{
-struct segment *segmentList = dasSegmentList(FALSE);
-int count = countFeatures("intronEst", segmentList);
-normalHeader();
-printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
-printf("<DASTYPES>\n");
-printf("<GFF version=\"1.2\" summary=\"yes\" href=\"%s\">\n", currentUrl());
-printf("<SEGMENT version=\"%s\">\n", version);
-printf("<TYPE id=\"intronEst\" category=\"transcription\" method=\"BLAT\" >");
-if (count > 0)
-    printf("%d", count);
-printf("</TYPE>\n");
-printf("</SEGMENT>\n");
-printf("</GFF>\n");
-printf("</DASTYPES>\n");
 }
 
 void dispatch(char *dataSource, char *command)
@@ -432,6 +776,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *path = getenv("PATH_INFO");
+
+cgiSpoof(&argc, argv);
+if (argc == 2)
+    path = argv[1];
 das(path);
 return 0;
 }
