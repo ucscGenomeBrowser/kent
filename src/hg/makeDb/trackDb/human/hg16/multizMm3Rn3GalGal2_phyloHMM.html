@@ -37,7 +37,7 @@ conservation scores by phylo-HMM.</P>
     of as a machine that generates a multiple alignment, in the same way
     that an ordinary hidden Markov model (HMM) generates an individual
     sequence.  While the states of an ordinary HMM are associated with
-    simple multinomial probability distributions, however, the states of a
+    simple multinomial probability distributions, the states of a
     phylo-HMM are associated with more complex distributions defined by
     probabilistic phylogenetic models.  These distributions can capture
     differences in the rates and patterns of nucleotide
@@ -48,9 +48,10 @@ conservation scores by phylo-HMM.</P>
     align="right"> To compute a conservation score, we use a
     <em>k</em>-state phylo-HMM, whose <em>k</em> associated phylogenetic
     models differ only in overall evolutionary rate (Felsenstein and
-    Churchill 1996, Yang 1995). In the image at right, k = 3 states, 
+    Churchill 1996, Yang 1995). In the image at right, there are three
+    <EM>k</EM>states, 
     S<SUB>1</SUB>, S<SUB>2</SUB>, and S<SUB>3</SUB>, but in practice we 
-    use k = 10.  
+    use <EM>k</EM> = 10.  
     A phylogenetic model is estimated globally, using the discrete gamma model
     for rate variation (Yang 1994), then a scaled version of the estimated model
     is associated with each state in a phylo-HMM. There is a
@@ -59,9 +60,9 @@ conservation scores by phylo-HMM.</P>
     The transition probabilities between states allow for autocorrelation of
     substitution rates, i.e., for adjacent sites to tend to exhibit similar
     overall substitution rates.  A single parameter, lambda, describes the
-    degree of autocorrelation and defines all transition probabilities (see
-    picture).  Here, we have estimated the rate constants from the data,
-    similarly to Yang (1995) (see Siepel and Haussler 2003), but have
+    degree of autocorrelation and defines all transition probabilities.  
+    Here, we have estimated the rate constants from the data,
+    similarly to Yang (1995) (Siepel and Haussler 2003), but have
     allowed lambda to be treated as a tuning parameter.  For the
     conservation score, we use the posterior probability that each site was
     "generated" by the state having the smallest rate constant.  Because of
@@ -135,7 +136,7 @@ Group</A>.
 AxtBest, axtChain, chainNet, netSyntenic, and netClass 
 developed by Jim Kent at UCSC. 
 <LI>Tree estimation and phylo-HMM software by Adam Siepel at UCSC.
-<LI>"Wiggle track" plotting software was developed by Hiram Clawson at UCSC.
+<LI>"Wiggle track" plotting software by Hiram Clawson at UCSC.
 </UL>
 </P>
 
