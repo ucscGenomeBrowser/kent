@@ -1242,7 +1242,23 @@ XXX - running 2004-07-13 14;18
     #	table axtInfo may already exist, ignore create error.
     hgsql mm5 < axtInfoInserts.sql
 
-
+# MM5 TO CANFAM1 LIFTOVER CHAIN (DONE 1/7/05 Andy)
+    ssh kolossus
+    cd /cluster/data/mm5/bed/blastz.canFam1/axtChain
+    mkdir net
+    netSplit dog.net net 
+    mkdir over
+    for file in chain/*.chain; do
+       chrom=`basename $file .chain`
+       netChainSubset net/$chrom.net chain/$chrom.chain over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain    
+    done
+    rm -rf over/
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm5/liftOver
+    cp /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain .
+    gzip mm5ToCanFam1.chain
+ 
 # ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
     ssh hgwdev
     cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
