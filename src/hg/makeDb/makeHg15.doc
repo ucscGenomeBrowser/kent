@@ -101,7 +101,7 @@ exit; # don't actually run this like a script :)
     /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
 
-# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (TO DO)
+# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (DONE ALREADY - VERIFIED 4/9/03)
     # Run this just before the sequence gets here!  It's OK to work on 
     # this in parallel with Terry's steps above, or in parallel with 
     # RepeatMasker below, but DO NOT let this hold up RepeatMasker.  
@@ -489,7 +489,7 @@ exit; # don't actually run this like a script :)
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
-# CREATING DATABASE  (TO DO)
+# CREATING DATABASE  (DONE 04/08/03)
     ssh hgwdev
     # if you haven't already:
     ln -s /cluster/store5/gs.16/build33 ~/oo
@@ -497,13 +497,13 @@ exit; # don't actually run this like a script :)
     # Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     df -h /var/lib/mysql
     # Create the database.
-    echo 'create database hg15' | hgsql hg13
+    echo 'create database hg15' | hgsql hg14
     # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
         alias hg15 mysql -u hguser -phguserstuff -A hg15
     # Initialize the relational-mrna and external sequence info tables:
     hgLoadRna new hg15
     # Copy over grp table (for track grouping) from another database:
-    echo "create table grp (PRIMARY KEY(NAME)) select * from hg13.grp" \
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg14.grp" \
     | hgsql hg15
 
 
@@ -628,7 +628,7 @@ exit; # don't actually run this like a script :)
     cvs commit makefile
 
 
-# PRELOAD MRNA/EST SEQUENCE INFO INTO DATABASE (TO DO)
+# PRELOAD MRNA/EST SEQUENCE INFO INTO DATABASE (DONE 04/08/03)
     # Make /gbdb symlinks for sequence .fa (not .ra)
     mkdir -p /gbdb/hg15/mrna.134
     cd /gbdb/hg15/mrna.134
@@ -648,11 +648,11 @@ exit; # don't actually run this like a script :)
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TO DO)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 04/08/03)
     ssh hgwdev
     # Substitute BBB with the correct number for the hostname:
-    echo 'insert into blatServers values("hg15", "blat11", "17778", "1"); \
-          insert into blatServers values("hg15", "blat11", "17779", "0");' \
+    echo 'insert into blatServers values("hg15", "blat2", "17778", "1"); \
+          insert into blatServers values("hg15", "blat2, "17779", "0");' \
     | hgsql -h genome-testdb hgcentraltest
 
 
@@ -963,9 +963,7 @@ Locate motifs on all promoters with
 # Create accession_info file
 	make accession_info.rdb
 
-
-# UPDATE STS INFORMATION (DONE 4/7/2003)
-
+# UPDATE STS INFORMATION (TODO 4/7/2003)
 # Download and unpack updated information from dbSTS:
 # In a web browser, go to ftp://ftp.ncbi.nih.gov/repository/dbSTS/.  
 # Download dbSTS.sts, dbSTS.aliases, and dbSTS.FASTA.dailydump.Z to /projects/hg2/booch/psl/update
@@ -1446,7 +1444,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
     mkdir /iscratch/i/fugu
     cp -p /cluster/store3/fuguSeq/split2.5Mb/*.fa /iscratch/i/fugu
     ~kent/bin/iSync
-DONE TO HERE
+
     ssh kk
     mkdir ~/hg15/bed/blatFugu
     cd ~/hg15/bed/blatFugu
