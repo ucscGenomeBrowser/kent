@@ -6617,3 +6617,41 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # refGene:cds 0.938%, netDanRer1 19.993%, both 0.702%, cover 74.87%, 
 # enrich 3.74x
 # add trackDb.ra entries and html for details pages
+
+# TIGR GENE INDEX (DONE 2004-1213 Fan)
+    mkdir -p /cluster/data/mm5/bed/tigr
+    cd /cluster/data/mm5/bed/tigr
+    wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_MouseGenome_mm5_05-2004.tgz
+    
+    tar xvzf TGI*.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/tigr
+    hgsql mm5 -e "drop table tigrGeneIndex"
+    hgsql mm5 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC mm5 tigrGeneIndex $f
+        hgsql mm5 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 354491 entries created in tigrGeneIndex table.
+
+    hgsql mm5 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql mm5 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords mm5 tigrGeneIndex
+    
+    gzip *.gff *TCs
