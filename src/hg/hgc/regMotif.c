@@ -12,6 +12,7 @@
 #include "cart.h"
 #include "trackDb.h"
 #include "hgc.h"
+#include "genePred.h"
 #include "dnaMotif.h"
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
@@ -159,6 +160,61 @@ motifHitSection(seq, motif);
 printTrackHtml(tdb);
 }
 
+static void wrapHgGeneLink(struct sqlConnection *conn, char *name, 
+	char *label, char *geneTable)
+/* Wrap label with link to hgGene if possible. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int rowOffset = hOffsetPastBin(seqName, "sgdGene");
+safef(query, sizeof(query), 
+    "select * from %s where name = '%s'", geneTable, name);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gp = genePredLoad(row+rowOffset);
+    printf("<A HREF=\"../cgi-bin/hgGene?db=%s", database);
+    printf("&hgg_gene=%s", gp->name);
+    printf("&hgg_chrom=%s", gp->chrom);
+    printf("&hgg_start=%d", gp->txStart);
+    printf("&hgg_end=%d", gp->txEnd);
+    printf("\">");
+    printf("%s", label);
+    printf("</A>");
+    }
+else
+    printf("%s", label);
+sqlFreeResult(&sr);
+}
+
+static void transRegCodeAnchor(struct transRegCode *trc)
+/* Print anchor to transRegCode details page. */
+{
+int hgsid = cartSessionId(cart);
+printf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart));
+printf("&g=transRegCode");
+printf("&i=%s", trc->name);
+printf("&o=%d", trc->chromStart);
+printf("&c=%s", trc->chrom);
+printf("\">");
+}
+
+static void sacCerHgGeneLinkName(struct sqlConnection *conn, char *name)
+/* Wrap link to hgGene if possible around yeast gene name. */
+{
+char query[256];
+char *orf;
+safef(query, sizeof(query), 
+	"select name from sgdToName where value = '%s'", name); 
+orf = sqlQuickString(conn, query);
+if (orf != NULL)
+    wrapHgGeneLink(conn, orf, name, "sgdGene");
+else
+    printf("%s", name);
+freez(&orf);
+}
+
 void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable)
 /* Display detailed info on a transcriptional regulatory code item. */
 {
@@ -191,7 +247,9 @@ if (trc != NULL)
     strand[1] = 0;
     if (strand[0] == '-')
         reverseComplement(seq->dna, seq->size);
-    printf("<B>Name:</B> %s<BR>\n", trc->name);
+    printf("<B>Name:</B> ");
+    sacCerHgGeneLinkName(conn, trc->name);
+    printf("<BR>\n");
     printf("<B>CHIP/CHIP Evidence:</B> %s<BR>\n", trc->chipEvidence);
     printf("<B>Species conserved in:</B> %d of 2<BR>\n", trc->consSpecies);
     printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
@@ -218,31 +276,6 @@ dnaSeqFree(&seq);
 return score;
 }
 
-static void findBestScoringMotifHit(char *motifTable, struct hash *trcHash, 
-	char *name, struct transRegCode **retTrc, double *retScore, int *retCount)
-/* Find best hit of named motif in hash. */
-{
-struct transRegCode *trc, *bestTrc = NULL;
-double score, bestScore = -BIGNUM;
-struct hashEl *el = hashLookup(trcHash, name);
-int count = 0;
-while (el != NULL)
-    {
-    trc = el->val;
-    score = motifScoreHere(trc->chrom, trc->chromStart, trc->chromEnd,
-    	name, motifTable);
-    if (score > bestScore)
-        {
-	bestScore = score;
-	bestTrc = trc;
-	}
-    el = el->next;
-    ++count;
-    }
-*retTrc = bestTrc;
-*retScore = bestScore;
-*retCount = count;
-}
 
 static void colLabel(char *label, int columns)
 /* Print out label of given width. */
@@ -262,7 +295,7 @@ struct tfData
    struct transRegCode *trcList;	/* List of binding sites. */
    };
 
-int tfDataCmpName(const void *va, const void *vb)
+static int tfDataCmpName(const void *va, const void *vb)
 /* Compare two tfData names. */
 {
 const struct tfData *a = *((struct tfData **)va);
@@ -364,8 +397,10 @@ if (probe != NULL)
 	    struct slName *cond;
 	    printf("<TR>");
 
-	    /* Parse out factor and growth condition and print. */
-	    printf("<TD>%s</TD>", tf->name);
+	    /* Print transcription factor and growth conditions. */
+	    printf("<TD>");
+	    sacCerHgGeneLinkName(conn, tf->name);
+	    printf("</TD>");
 	    printf("<TD>");
 	    slSort(&tf->conditionList, slNameCmp);
 	    for (cond = tf->conditionList; cond != NULL; cond = cond->next)
@@ -393,7 +428,8 @@ if (probe != NULL)
 		    score = motifScoreHere(
 		    	trc->chrom, trc->chromStart, trc->chromEnd,
 			trc->name, motifTable);
-		    printf("%3.1f", score);
+		    transRegCodeAnchor(trc);
+		    printf("%3.1f</A>", score);
 		    }
 		printf("</TD><TD>");
 		for (trc = tf->trcList; trc != NULL; trc = trc->next)
