@@ -38,6 +38,12 @@ struct rbTree *rbTreeNew(int (*compare)(void *, void *));
 void rbTreeFree(struct rbTree **pTree);
 /* Frees space used by the red-black tree pointed to by t. */
 
+struct rbTree *rbTreeNewDetailed(int (*compare)(void *, void *), struct lm *lm, 
+	struct rbTreeNode *stack[256]);
+/* Allocate rbTree on an existing local memory & stack.  This is for cases
+ * where you want a lot of trees, and don't want the overhead for each one. 
+ * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
+
 void *rbTreeAdd(struct rbTree *t, void *item);
 /* Inserts an item into the red-black tree pointed to by t,
  * according the the value its key.  The key of an item in the red-black
@@ -66,6 +72,12 @@ void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxItem);
 /* Return a sorted list of references to items in tree between range.
  * slFree this list when done. */
+
+void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item));
+/* Apply doItem function to all items in tree */
+
+struct slRef *rbTreeItems(struct rbTree *tree);
+/* Return sorted list of items. */
 
 void rbTreeDump(struct rbTree *tree, FILE *f, 
 	void (*dumpItem)(void *item, FILE *f));

@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.7 2004/11/16 22:04:32 kent Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.8 2004/11/16 22:29:11 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -606,8 +606,8 @@ static void (*doIt)(void *item);
 static void *minIt, *maxIt;
 static int (*compareIt)(void *, void *);
 
-void rTreeTraverseRange(struct rbTreeNode *n)
-/* Recursively traverse tree applying doIt. */
+static void rTreeTraverseRange(struct rbTreeNode *n)
+/* Recursively traverse tree in range applying doIt. */
 {
 if (n != NULL)
    {
@@ -622,6 +622,17 @@ if (n != NULL)
    }
 }
 
+static void rTreeTraverse(struct rbTreeNode *n)
+/* Recursively traverse full tree applying doIt. */
+{
+if (n != NULL)
+    {
+    rTreeTraverse(n->left);
+    doIt(n->item);
+    rTreeTraverse(n->right);
+    }
+}
+
 void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 	void (*doItem)(void *item))
 /* Apply doItem function to all items in tree such that
@@ -632,6 +643,14 @@ minIt = minItem;
 maxIt = maxItem;
 compareIt = tree->compare;
 rTreeTraverseRange(tree->root);
+}
+
+void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item))
+/* Apply doItem function to all items in tree */
+{
+doIt = doItem;
+compareIt = tree->compare;
+rTreeTraverse(tree->root);
 }
 
 struct slRef *itList;  /* List of items that rbTreeItemsInRange returns. */
@@ -648,6 +667,15 @@ struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxIt
 {
 itList = NULL;
 rbTreeTraverseRange(tree, minItem, maxItem, addRef);
+slReverse(&itList);
+return itList;
+}
+
+struct slRef *rbTreeItems(struct rbTree *tree)
+/* Return sorted list of items. */
+{
+itList = NULL;
+rbTreeTraverse(tree, addRef);
 slReverse(&itList);
 return itList;
 }
