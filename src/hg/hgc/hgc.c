@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.437 2003/06/18 19:59:27 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.438 2003/06/18 21:16:43 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3055,7 +3055,7 @@ if (row != NULL)
         printf("<B>Version:</B> %s<BR>\n", version);
         }
 
-    if (!startsWith("worm", organism))
+    if (!startsWith("Worm", organism))
     {
 	/* Put up Gene Lynx */
 	if (sameWord(type, "mrna"))
@@ -5742,7 +5742,7 @@ if (rl->locusLinkId != 0)
 	sqlFreeResult(&sr);
 	}
     } 
-if (!startsWith("worm", organism))
+if (!startsWith("Worm", organism))
 {
     medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
     if (rl->product[0] != 0)
@@ -5784,7 +5784,7 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-if (!startsWith("worm", organism))
+if (!startsWith("Worm", organism))
 {
     printStanSource(rl->mrnaAcc, "mrna");
 }
