@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.843 2005/03/03 07:46:48 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.844 2005/03/04 00:54:15 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4809,7 +4809,6 @@ if (hTableExists(goldTable))
 	     "select chromStart from %s where frag = \"%s\"",
 	     goldTable, bactig->startContig);
     ctgStart = sqlQuickNum(conn, query);
-    ctgStart -= 1;
     snprintf(ctgStartStr, sizeof(ctgStartStr), "%d", ctgStart);
     hgcAnchor("gold", bactig->startContig, ctgStartStr);
     }
@@ -4822,7 +4821,6 @@ if (hTableExists(goldTable))
 	     "select chromStart from %s where frag = \"%s\"",
 	     goldTable, bactig->endContig);
     ctgStart = sqlQuickNum(conn, query);
-    ctgStart -= 1;
     snprintf(ctgStartStr, sizeof(ctgStartStr), "%d", ctgStart);
     hgcAnchor("gold", bactig->endContig, ctgStartStr);
     }
