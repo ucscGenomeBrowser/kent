@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.11 2004/03/12 08:41:07 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.12 2004/03/12 09:39:45 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -17,6 +17,7 @@ char *fieldListIn;
 char *fieldListOut;
 char *identifier;
 char *database;
+boolean foreignKeys;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +32,7 @@ errAbort(
   "   -fieldListIn=file - Get list of fields from file rather than mysql.\n"
   "   -identifier=name - Just validate given identifier.\n"
   "   -database=name - Just validate given database.\n"
+  "   -foreignKeys - Validate (foreign) keys.  Takes about an hour.\n"
   );
 }
 
@@ -40,6 +42,7 @@ static struct optionSpec options[] = {
    {"fieldListOut", OPTION_STRING},
    {"identifier", OPTION_STRING},
    {"database", OPTION_STRING},
+   {"foreignKeys", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -198,7 +201,7 @@ if (conn == NULL)
     }
 else if (!sqlTableExists(conn, keyField->table))
     {
-    warn("Key table %s.%s doesn't exist", db, keyField->table);
+    /* warn("Key table %s.%s doesn't exist", db, keyField->table); */
     }
 else
     {
@@ -208,6 +211,7 @@ else
     struct sqlResult *sr;
     int itemCount = 0;
     int dupeCount = 0;
+    struct slName *chop;
     char *dupe = NULL;
     keyHash = hashNew(hashSize);
     safef(query, sizeof(query), "select %s from %s", 
@@ -217,6 +221,18 @@ else
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *id = row[0];
+	for (chop = keyField->chopBefore; chop != NULL; chop = chop->next)
+	    {
+	    char *s = stringIn(chop->name, id);
+	    if (s != NULL)
+	         id = s + strlen(chop->name);
+	    }
+	for (chop = keyField->chopAfter; chop != NULL; chop = chop->next)
+	    {
+	    char *s = rStringIn(chop->name, id);
+	    if (s != NULL)
+	        *s = 0;
+	    }
 	if (hashLookup(keyHash, id))
 	    {
 	    if (!keyField->dupeOk)
@@ -273,7 +289,7 @@ if (conn != NULL)
 	    }
 	sqlFreeResult(&sr);
 	hitsNeeded = round(total * jf->minCheck);
-	if (hitsNeeded < hits)
+	if (hits < hitsNeeded)
 	    {
 	    warn("%d of %d elements of %s.%s.%s are not in key line %d of %s\n"
 	         "Example miss: %s",
@@ -409,7 +425,8 @@ if (!parseOnly)
     {
     struct hash *fieldHash = processFieldHash(fieldListIn, fieldListOut);
     joinerValidateFields(joiner, fieldHash, identifier);
-    joinerValidateKeys(joiner, identifier, database);
+    if (foreignKeys)
+	joinerValidateKeys(joiner, identifier, database);
     }
 }
 
@@ -424,6 +441,7 @@ fieldListIn = optionVal("fieldListIn", NULL);
 fieldListOut = optionVal("fieldListOut", NULL);
 identifier = optionVal("identifier", NULL);
 database = optionVal("database", NULL);
+foreignKeys = optionExists("foreignKeys");
 joinerCheck(argv[1]);
 return 0;
 }
