@@ -350,7 +350,7 @@ track ecoresTetNig1
 shortLabel Tetraodon Ecores
 longLabel Human/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
-priority 152.1
+priority 151.1
 visibility hide
 color 0,60,120
 type genePred
