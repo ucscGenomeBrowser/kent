@@ -20,13 +20,16 @@ struct genomeBit
     int chromEnd;
 };
 
+char *hgdbTestDb = NULL;
+char *hgdbTestTable = NULL;
 void usage() 
 {
 errAbort("samplesForCoordinates - Small program that takes coordinates for hg7 build\n"
 	 "and cuts out the results from the affy transcriptome tracks. Can also be used\n"
 	 "for loading all the exons froma given genePred record.\n"
 	 "usage:\n\t"
-	 "samplesForCoordinates <chrN:100-200> <optionally gpFile=fileName>\n");
+	 "samplesForCoordinates <chrN:100-200> <hgdbTestTable=tableName> <optionally gpFile=fileName>\n"
+	 "<optionally bedFile=bedFileName> <optionally hgdbTestDb=dbName>\n");
 }
 
 struct genomeBit *parseGenomeBit(char *name)
@@ -177,7 +180,7 @@ struct sqlResult *sr = NULL;
 char **row;
 struct sample *sList=NULL,*s=NULL;
 int rowOffset;
-sr = hRangeQuery(conn, "affyTrans", chrom, chromStart, chromEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, hgdbTestTable, chrom, chromStart, chromEnd, NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)
     {
     s = sampleLoad(row+rowOffset);
@@ -191,13 +194,13 @@ void getSamples(char *coordinates, FILE *out)
 /* Select the samples and output. */
 {
 struct genomeBit *gb = parseGenomeBit(coordinates);
-struct sqlConnection *conn = getHgdbtestConn("sugnet");
+struct sqlConnection *conn = getHgdbtestConn(hgdbTestDb);
 struct sqlResult *sr = NULL;
 char **row;
 struct sample *sList=NULL,*s=NULL;
 int rowOffset;
 warn("Starting query for coordiantes %s:%d-%d, size %d", gb->chrom, gb->chromStart, gb->chromEnd, (gb->chromEnd-gb->chromStart));
-sr = hRangeQuery(conn, "affyTrans", gb->chrom, gb->chromStart, gb->chromEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, hgdbTestTable, gb->chrom, gb->chromStart, gb->chromEnd, NULL, &rowOffset);
 warn("Putting into samples list");
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -359,7 +362,7 @@ for(i=0; i<gp->exonCount; i++)
 void loadGenePredSamples(char *fileName, FILE *out)
 /* Load all of the genePreds from a file and output their samples. */
 {
-struct sqlConnection *conn = getHgdbtestConn("sugnet");
+struct sqlConnection *conn = getHgdbtestConn(hgdbTestDb);
 struct genePred *gpList = genePredLoadAll(fileName);
 struct genePred *gp = NULL;
 for(gp = gpList; gp != NULL; gp = gp->next)
@@ -421,7 +424,7 @@ return bedList;
 void loadBedSamples(char *fileName, FILE *out)
 /* Load all of the beds from a file and output their samples. */
 {
-struct sqlConnection *conn = getHgdbtestConn("sugnet");
+struct sqlConnection *conn = getHgdbtestConn(hgdbTestDb);
 struct bed *bedList = bedLoadAll(fileName);
 struct bed *bed = NULL;
 for(bed = bedList; bed != NULL; bed = bed->next)
@@ -441,7 +444,10 @@ if(argc == 1)
 cgiSpoof(&argc, argv);
 gpFileName = cgiOptionalString("gpFile");
 bedFileName = cgiOptionalString("bedFile");
+hgdbTestDb = cgiUsualString("hgdbTestDb", "sugnet");
+hgdbTestTable = cgiString("hgdbTestTable");
 warn("Loading Records");
+cgiOutputCommandLine(argc, argv, stdout);
 if(gpFileName != NULL)
     loadGenePredSamples(gpFileName, stdout);
 else if(bedFileName != NULL)
