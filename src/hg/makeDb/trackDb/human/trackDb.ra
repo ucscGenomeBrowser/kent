@@ -307,6 +307,7 @@ type bed 6+
 spectrum on
 scoreMin 830
 scoreMax 1000
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track promoterStanford
 shortLabel Stanford Promoters
