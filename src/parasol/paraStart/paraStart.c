@@ -1,14 +1,7 @@
 /* paraHub - parasol hub server. */
-#include <signal.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include "common.h"
-#include "dlist.h"
-#include "dystring.h"
-#include "linefile.h"
-#include "paraLib.h"
-#include "cheapcgi.h"
+#include "obscure.h"
+#include "options.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +9,9 @@ void usage()
 errAbort("paraStart - start parasol hub server on host list.\n"
          "usage:\n"
 	 "    paraStart machineList\n"
-	 "where machineList is a file containing a list of hosts\n");
+	 "where machineList is a file containing a list of hosts\n"
+	 "options:\n"
+	 "    -exe=/path/to/paranode");
 }
 
 void paraStart(char *machineList)
@@ -25,26 +20,27 @@ void paraStart(char *machineList)
 int mCount;
 char *mBuf, **mNames, *name;
 int i;
+char buf[512];
+char *exe = optionVal("exe", "paraNode");
 
 readAllWords(machineList, &mNames, &mCount, &mBuf);
 for (i=0; i<mCount; ++i)
     {
     name = mNames[i];
     uglyf("Starting up %s\n", name);
-    execlp("rsh", name,
-	    "/projects/cc/hg/jk/bin/i386/paraNode", 
-	    "start", NULL);
+    sprintf(buf, "rsh %s %s start", name, exe);
+    system(buf);
     }
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 2)
     usage();
 paraStart(argv[1]);
+return 0;
 }
 
 

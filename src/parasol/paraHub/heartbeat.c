@@ -2,10 +2,8 @@
  * every now and again. */
 
 #include <signal.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include "common.h"
+#include "errabort.h"
 #include "paraLib.h"
 #include "net.h"
 #include "paraHub.h"

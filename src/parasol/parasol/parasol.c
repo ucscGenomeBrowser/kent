@@ -11,6 +11,17 @@
 #include "options.h"
 #include "paraLib.h"
 
+int hubFd;	/* Network connection to paraHub. */
+
+void closeHubFd()
+/* Close connection to hub if it's open. */
+{
+if (hubFd != 0)
+    {
+    close(hubFd);
+    hubFd = 0;
+    }
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +35,7 @@ errAbort(
   "         options: -out=out -in=in -err=err -dir=dir\n"
   "   parasol remove job id\n"
   "   parasol close (close down system - kill paraHub, but not paraNodes on remote machines)\n"
+  "   parasol ping [count]\n"
   "   parasol remove user name [jobPattern]\n"
   "   parasol list machines\n"
   "   parasol list jobs\n"
@@ -31,8 +43,6 @@ errAbort(
   "   parasol status\n"
   );
 }
-
-int hubFd;	/* Network connection to paraHub. */
 
 void commandHub(char *command)
 /* Send a command to hub. */
@@ -42,6 +52,44 @@ if (write(hubFd, paraSig, sigSize) < sigSize)
     errnoAbort("Couldn't write signature to hub");
 netSendLongString(hubFd, command);
 }
+
+void hubCommandGetReciept(char *command)
+/* Send command to hub, and wait for one line response which should
+ * be 'ok'. */
+{
+char *line;
+commandHub(command);
+line = netRecieveLongString(hubFd);
+if (line == NULL || !sameString(line, "ok"))
+    errAbort("Hub didn't acknowledge %s", command);
+freeMem(line);
+}
+
+void hubCommandAndPrint(char *command)
+/* Send command to hub, and print response until blank line. */
+{
+char *line = NULL;
+struct slRef *list = NULL, *ref;
+
+/* Issue command and suck down response quickly into memory. */
+commandHub(command);
+for (;;)
+    {
+    line = netRecieveLongString(hubFd);
+    if (line[0] == 0)
+        break;
+    refAdd(&list, line);
+    }
+slReverse(&list);
+
+/* Print results. */
+for (ref = list; ref != NULL; ref = ref->next)
+    {
+    line = ref->val;
+    puts(line);
+    }
+}
+
 
 void addMachine(char *machine)
 /* Tell hub about a new machine. */
@@ -66,7 +114,7 @@ getcwd(dirBuf, sizeof(dirBuf));
 dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
-commandHub(dy->string);
+hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
 }
 
@@ -98,31 +146,6 @@ void dehub()
 /* Tell hub to die. */
 {
 commandHub("quit");
-}
-
-void hubCommandAndPrint(char *command)
-/* Send command to hub, and print response until blank line. */
-{
-char *line = NULL;
-struct slRef *list = NULL, *ref;
-
-/* Issue command and suck down response quickly into memory. */
-commandHub(command);
-for (;;)
-    {
-    line = netRecieveLongString(hubFd);
-    if (line[0] == 0)
-        break;
-    refAdd(&list, line);
-    }
-slReverse(&list);
-
-/* Print results. */
-for (ref = list; ref != NULL; ref = ref->next)
-    {
-    line = ref->val;
-    puts(line);
-    }
 }
 
 struct jobInfo
@@ -195,11 +218,7 @@ void reopenHub()
 /* Close hub if it's already open.  Then reopen it. */
 {
 char portName[16];
-if (hubFd != 0)
-    {
-    close(hubFd);
-    hubFd = 0;
-    }
+closeHubFd();
 sprintf(portName, "%d", paraPort);
 hubFd = netMustConnect(getHost(), portName);
 }
@@ -259,11 +278,25 @@ void status()
 hubCommandAndPrint("status");
 }
 
+void ping(int count)
+/* Ping hub server given number of times. */
+{
+int i;
+for (i=0; i<count; ++i)
+    {
+    if (i != 0)
+	reopenHub();
+    hubCommandGetReciept("ping");
+    }
+printf("Pinged hub %d times\n", count);
+}
+
 
 void parasol(char *command, int argc, char *argv[])
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
 {
 char *subType = argv[0];
+atexit(closeHubFd);
 reopenHub();
 if (sameString(command, "add"))
     {
@@ -310,17 +343,24 @@ else if (sameString(command, "list"))
     else
         usage();
     }
+else if (sameString(command, "ping"))
+    {
+    int count = 1;
+    if (argc >= 1)
+        {
+	if (!isdigit(argv[0][0]))
+	    usage();
+	count = atoi(argv[0]);
+	}
+    ping(count);
+    }
 else if (sameString(command, "status"))
     status();
 else if (sameString(command, "close"))
     dehub();
 else
     usage();
-if (hubFd != 0)
-    {
-    close(hubFd);
-    hubFd = 0;
-    }
+closeHubFd();
 }
 
 int main(int argc, char *argv[])

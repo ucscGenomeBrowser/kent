@@ -1,12 +1,7 @@
 /* paraStat - query list of nodes for status. */
-#include <signal.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include "common.h"
-#include "dlist.h"
-#include "dystring.h"
-#include "linefile.h"
+#include "obscure.h"
+#include "net.h"
 #include "paraLib.h"
 
 void usage()
@@ -33,7 +28,7 @@ readAllWords(machineList, &mNames, &mCount, &mBuf);
 for (i=0; i<mCount; ++i)
     {
     name = mNames[i];
-    if ((sd = netConnPort(name, paraPort)) >= 0)
+    if ((sd = netConnect(name, paraPort)) >= 0)
 	{
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, "status");
@@ -65,6 +60,7 @@ int main(int argc, char *argv[])
 if (argc != 2)
     usage();
 paraStat(argv[1]);
+return 0;
 }
 
 

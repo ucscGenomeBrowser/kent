@@ -42,7 +42,8 @@ struct spoke
     char *socketName;		/* File name of socket. */
     int pid;			/* Process ID. */
     char *machine;		/* Machine this spoke is communicating with or NULL */
-    time_t lastChecked;		/* Last time saw spoke was alive in seconds past 1972 */
+    time_t lastPinged;		/* Last time we pinged spoke. */
+    int pingCount;		/* Number of times we've pinged spoke. */
     };
 
 struct spoke *spokeNew(int *closeList);
@@ -59,6 +60,10 @@ void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *messag
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job);
 /* Send a job to machine through spoke. */
 
+void spokePing(struct spoke *spoke);
+/* Send ping message to spoke.  It should eventually respond
+ * with recycleSpoke message to hub socked.  */
+
 void startHeartbeat();
 /* Start heartbeat deamon. */
 
@@ -67,5 +72,12 @@ void endHeartbeat();
 
 int hubConnect();
 /* Return connection to hub socket - with paraSig already written. */
+
+extern char *hubHost;	/* Name of machine running this. */
+extern char hubHAddress[32]; /* Host address of machine running this. Not IP address. 
+			      * Just for use between hub daemon and spokes*/
+
+void logIt(char *format, ...);
+/* Print message to log file. */
 
 #endif /* PARAHUB_H */

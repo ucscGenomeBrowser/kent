@@ -1,12 +1,5 @@
 /* paraQuit - tell list of node servers to stand down. */
-#include <signal.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include "common.h"
-#include "dlist.h"
-#include "dystring.h"
-#include "linefile.h"
 #include "paraLib.h"
 #include "net.h"
 
@@ -32,7 +25,7 @@ for (i=0; i<mCount; ++i)
     {
     name = mNames[i];
     uglyf("Telling %s to quit \n", name);
-    if ((sd = netConnPort(name, paraPort)) >= 0)
+    if ((sd = netConnect(name, paraPort)) >= 0)
 	{
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, "quit");
@@ -42,7 +35,6 @@ for (i=0; i<mCount; ++i)
 freeMem(mNames);
 freeMem(mBuf);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */

@@ -23,19 +23,35 @@ static void notifyNodeDown(char *machine)
 {
 int hubFd = hubConnect();
 char buf[512];
-sprintf(buf, "nodeDown %s", machine);
-netSendLongString(hubFd, buf);
-close(hubFd);
+if (hubFd > 0)
+    {
+    sprintf(buf, "nodeDown %s", machine);
+    netSendLongString(hubFd, buf);
+    close(hubFd);
+    }
 }
 
-static void spokeSendRemote(char *socketName, char *machine, char *message)
+static void sendRecycleMessage(char *spokeName)
+/* Tell hub spoke is free. */
+{
+char buf[512];
+int hubFd = hubConnect();
+if (hubFd > 0)
+    {
+    sprintf(buf, "recycleSpoke %s", spokeName);
+    netSendLongString(hubFd, buf);
+    freeMem(netGetLongString(hubFd));
+    close(hubFd);
+    }
+}
+
+static void spokeSendRemote(char *spokeName, char *machine, char *message)
 /* Send message to remote machine. */
 {
-int sd, hubFd;
-char buf[512];
+int sd;
 
 /* Try and tell machine about job. */
-sd = netConnPort(machine, paraPort);
+sd = netConnect(machine, paraPort);
 if (sd > 0)
     {
     write(sd, paraSig, strlen(paraSig));
@@ -48,13 +64,7 @@ else
     }
 
 /* Tell hub spoke is free. */
-hubFd = hubConnect();
-if (hubFd > 0)
-    {
-    sprintf(buf, "recycleSpoke %s", socketName);
-    netSendLongString(hubFd, buf);
-    close(hubFd);
-    }
+sendRecycleMessage(spokeName);
 }
 
 static void spokeProcess(char *socketName)
@@ -70,8 +80,7 @@ int sigLen = strlen(paraSig);
 assert(sigLen < sizeof(sig));
 sig[sigLen] = 0;
 
-/* Make your basic socket. */
-uglyf("%s: starting\n", socketName);
+/* Make your basic Unix socket. */
 sd = socket(AF_UNIX, SOCK_STREAM, 0);
 if (sd < 0)
     {
@@ -91,7 +100,7 @@ if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
     }
 
 /* Listen on socket until we get killed. */
-listen(sd,2);
+listen(sd,3);
 conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
@@ -106,10 +115,15 @@ for (;;)
 	continue;
 	}
     line = buf = netGetLongString(conn);
-    uglyf("%s: %s\n", socketName, line);
+    // uglyf("%s: %s\n", socketName, line);
     machine = nextWord(&line);
-    if (machine != NULL && line != NULL && line[0] != 0)
-	spokeSendRemote(socketName, machine, line);
+    if (machine != NULL)
+	{
+	if (sameWord(machine, "ping"))
+	    sendRecycleMessage(socketName);
+	else if (line != NULL && line[0] != 0)
+	    spokeSendRemote(socketName, machine, line);
+	}
     freez(&buf);
     }
 }
@@ -127,7 +141,7 @@ int spokeId = ++spokeLastId;
 struct sockaddr_un sa;
 
 sprintf(socketName, "spoke.%03d", spokeId);
-// remove(socketName);
+remove(socketName);
 
 childId = fork();
 if (childId < 0)
@@ -162,7 +176,6 @@ else
     spoke->id = spokeLastId;
     spoke->socketName = cloneString(socketName);
     spoke->pid = childId;
-    spoke->lastChecked = time(NULL);
     return spoke;
     }
 }
@@ -217,6 +230,18 @@ if (sd == 0)
 return sd;
 }
 
+void spokePing(struct spoke *spoke)
+/* Send ping message to spoke.  It should eventually respond
+ * with recycleSpoke message to hub socked.  */
+{
+int sd = spokeGetSocket(spoke);
+if (sd > 0)
+    {
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, "ping");
+    }
+}
+
 void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
 /* Send a generic message to machine through spoke. */
 {
@@ -244,7 +269,7 @@ if (sd > 0)
     {
     spoke->machine = cloneString(machine->name);
     dyStringPrintf(dy, "%s %s", machine->name, "run");
-    dyStringPrintf(dy, " %s", getHost());
+    dyStringPrintf(dy, " %s", hubHost);
     dyStringPrintf(dy, " %d", job->id);
     dyStringPrintf(dy, " %s", job->user);
     dyStringPrintf(dy, " %s", job->dir);

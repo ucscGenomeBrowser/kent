@@ -1,11 +1,11 @@
 /* paraNode - parasol node server. */
-#include "common.h"
 #include <signal.h>
-#include <sys/socket.h>
 #include <sys/wait.h>
-#include <netinet/in.h>
-#include <netdb.h>
+#include "common.h"
+#include "errabort.h"
 #include "dystring.h"
+#include "hash.h"
+#include "options.h"
 #include "paraLib.h"
 #include "net.h"
 
@@ -24,9 +24,34 @@ void usage()
 {
 errAbort("paraNode - parasol node serve.\n"
          "usage:\n"
-	 "    paraNode start\n");
+	 "    paraNode start\n"
+	 "options:\n"
+	 "    log=file - file may be 'stdout' to go to console");
 }
 
+FILE *logFile = NULL;
+
+void vLogIt(char *format, va_list args)
+/* Virtual logit. */
+{
+if (logFile != NULL)
+    {
+    vfprintf(logFile, format, args);
+    fflush(logFile);
+    }
+}
+
+void logIt(char *format, ...)
+/* Print message to log file. */
+{
+if (logFile != NULL)
+    {
+    va_list args;
+    va_start(args, format);
+    vLogIt(format, args);
+    va_end(args);
+    }
+}
 
 void childSignalHandler(int x)
 /* Handle child died signal. */
@@ -114,7 +139,8 @@ else
     char buf[128];
     signal(SIGTERM, handleTerm);
     wait(&status);
-    sd = netConnPort(managingHost, paraPort);
+    // sleep(1);	/* Help keep from overloading server. I wish there were a better way. */
+    sd = netConnect(managingHost, paraPort);
     if (sd > 0)
         {
 	sprintf(buf, "jobDone %s %d", jobId, status);
@@ -132,7 +158,7 @@ void doCheck(char *line)
 char *managingHost = nextWord(&line);
 if (managingHost != NULL)
     {
-    int sd = netConnPort(managingHost, paraPort);
+    int sd = netConnect(managingHost, paraPort);
     char *status = (busy ? "busy" : "free");
     char buf[256];
     sprintf(buf, "checkIn %s %s", hostName, status);
@@ -148,7 +174,7 @@ void doResurrect(char *line)
 char *managingHost = nextWord(&line);
 if (managingHost != NULL)
     {
-    int sd = netConnPort(managingHost, paraPort);
+    int sd = netConnect(managingHost, paraPort);
     char buf[256];
     sprintf(buf, "alive %s", hostName);
     write(sd, paraSig, strlen(paraSig));
@@ -206,7 +232,7 @@ void doKill()
 {
 if (childId != 0)
     {
-    uglyf("Killing %s\n", execCommand);
+    logIt("Killing %s\n", execCommand);
     kill(childId, SIGTERM);
     clearZombie();
     }
@@ -231,11 +257,9 @@ write(connectionHandle, dy->string, dy->stringSize);
 void paraNode()
 /* paraNode - a net server. */
 {
-struct sockaddr_in sai;
 char *buf = NULL, *line;
 int fromLen, readSize;
 int childCount = 0;
-struct hostent *hostent;
 char *command;
 char signature[20];
 int sigLen = strlen(paraSig);
@@ -248,29 +272,20 @@ assert(sigLen < sizeof(signature));
 signature[sigLen] = 0;
 
 /* Set up socket and self to listen to it. */
-hostent = gethostbyname(hostName);
-if (hostent == NULL)
-    {
-    herror("");
-    errAbort("Couldn't find host %s.  h_errno %d", hostName, h_errno);
-    }
-ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(paraPort);
-memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
-socketHandle = socket(AF_INET, SOCK_STREAM, 0);
-if (bind(socketHandle, &sai, sizeof(sai)) == -1)
-    errAbort("Couldn't bind to %s", hostName);
-listen(socketHandle, 10);
+socketHandle = netAcceptingSocket(paraPort, 10);
+if (socketHandle < 0)
+    errAbort("I'm dead without my socket, sorry");
+
+/* Event loop. */
 for (;;)
     {
-    connectionHandle = accept(socketHandle, &sai, &fromLen);
+    connectionHandle = netAccept(socketHandle);
     if (netMustReadAll(connectionHandle, signature, sigLen))
 	{
 	if (sameString(paraSig, signature))
 	    {
 	    line = buf = netGetLongString(connectionHandle);
-	    uglyf("node  %s: %s\n", hostName, line);
+	    logIt("node  %s: %s\n", hostName, line);
 	    clearZombie();
 	    ++childCount;
 	    command = nextWord(&line);
@@ -297,14 +312,35 @@ for (;;)
     }
 }
 
+void paraFork()
+/* Fork off real handler and exit */
+{
+if (fork() == 0)
+    {
+    /* Set up log handler. */
+    char *log = optionVal("log", NULL);
+    if (log != NULL)
+        logFile = mustOpen(log, "w");
+    pushWarnHandler(vLogIt);
+
+    /* Close standard file handles. */
+    close(0);
+    if (log == NULL || !sameString(log, "stdout"))
+	close(1);
+    close(2);
+
+    /* Execute daemon. */
+    paraNode();
+    }
+}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc != 2)
     usage();
-if (fork() == 0)
-    paraNode();
+paraFork();
 return 0;
 }
 
