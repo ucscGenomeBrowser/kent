@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.910 2005/02/16 21:23:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.911 2005/02/21 01:47:00 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3041,6 +3041,34 @@ tg->itemEnd 	= superfamilyItemEnd;
 tg->drawName 	= FALSE;
 }
 
+char *getOrganism(struct sqlConnection *conn, char *acc)
+/* lookup the organism for an mrna, or NULL if not found.  Warning: static
+ * return */
+{
+static char orgBuf[256];
+char query[256], *org;
+sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+org = sqlQuickQuery(conn, query, orgBuf, sizeof(orgBuf));
+if ((org != NULL) && (org[0] == '\0'))
+    org = NULL;
+return org;
+}
+
+char *getGeneName(struct sqlConnection *conn, char *acc)
+/* get geneName from refLink or NULL if not found.  Warning: static return */
+{
+static char nameBuf[256];
+char query[256], *name = NULL;
+if (hTableExists("refLink"))
+    {
+    sprintf(query, "select name from refLink where mrnaAcc = '%s'", acc);
+    name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
+    if ((name != NULL) && (name[0] == '\0'))
+        name = NULL;
+    }
+return name;
+}
+
 char *refGeneName(struct track *tg, void *item)
 /* Get name to use for refGene item. */
 {
@@ -3062,7 +3090,6 @@ void lookupRefNames(struct track *tg)
 /* This converts the refSeq accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-char query[256];
 struct sqlConnection *conn = hAllocConn();
 boolean isNative = sameString(tg->mapName, "refGene");
 char *refGeneLabel = cartUsualString(cart, (isNative ? "refGene.label" : "xenoRefGene.label"), "gene");
@@ -3071,40 +3098,30 @@ boolean useGeneName = sameString(refGeneLabel, "gene")
 boolean useAcc = sameString(refGeneLabel, "accession")
     || sameString(refGeneLabel, "both");
 
-if (hTableExists("refLink"))
+for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    struct sqlResult *sr;
-    char **row;
-
-    for (lf = tg->items; lf != NULL; lf = lf->next)
-	{
-	sprintf(query, "select name from refLink where mrnaAcc = '%s'", lf->name);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-            if (strlen(row[0]) > 0)
-                {
-                /* allow space for both */
-                int size = strlen(row[0]) + strlen(lf->name) + 2;
-                lf->extra = needMem(size);
-                if (useGeneName)
-                    strcat(lf->extra, row[0]);
-                if (useGeneName && useAcc)
-                    strcat(lf->extra, "/");
-                if (useAcc)
-                    strcat(lf->extra, lf->name);
-                }
-            else
-                {
-                /* no reflink, use name unless none is selected  */
-                if (useGeneName || useAcc)
-                    lf->extra = cloneString(lf->name);
-                else
-                    lf->extra = cloneString("");
-                }
-	    }
-	sqlFreeResult(&sr);
-	}
+    struct dyString *name = dyStringNew(64);
+    if ((useGeneName || useAcc) && !isNative)
+        {
+        /* append upto 7 chars of org, plus a space */
+        char *org = getOrganism(conn, lf->name);
+        org = firstWordInLine(org);
+        if (org != NULL)
+            dyStringPrintf(name, "%0.7s ", org);
+        }
+    if (useGeneName)
+        {
+        char *gene = getGeneName(conn, lf->name);
+        if (gene != NULL)
+            {
+            dyStringAppend(name, gene);
+            if (useAcc)
+                dyStringAppendC(name, '/');
+            }
+        }
+    if (useAcc)
+        dyStringAppend(name, lf->name);
+    lf->extra = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
 }
@@ -5036,10 +5053,7 @@ char *xenoMrnaName(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char *name = lf->name;
 struct sqlConnection *conn = hAllocConn();
-char query[256];
-char organism[256], *org;
-sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", name);
-org = sqlQuickQuery(conn, query, organism, sizeof(organism));
+char *org = getOrganism(conn, name);
 hFreeConn(&conn);
 if (org == NULL)
     return name;
@@ -5071,7 +5085,7 @@ void xenoRefGeneMethods(struct track *tg)
 /* Make track of known genes from xenoRefSeq. */
 {
 tg->loadItems = loadRefGene;
-tg->itemName = xenoMrnaName;
+tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
 }
