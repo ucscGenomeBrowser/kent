@@ -50,7 +50,6 @@ alpha:
 	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -visibility=mouse/mm4/visibility.ra mouse mm4 trackDb ../../lib/trackDb.sql .
-	cp mouse/mm4/description.html /gbdb/mm4/html
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -visibility=rat/visibility.ra rat rn3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb ../../lib/trackDb.sql .
@@ -63,7 +62,9 @@ alpha:
 	hgTrackDb drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
+	cp mouse/mm4/description.html /gbdb/mm4/html
 	cp fugu/fr1/description.html /gbdb/fr1/html
+	cp zoo/description.html /gbdb/zoo3/html
 
 strict:
 	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .
