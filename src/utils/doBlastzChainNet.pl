@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.11 2005/03/11 18:23:32 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.12 2005/03/18 01:13:59 baertsch Exp $
 
 # to-do items:
 # - lots of testing
@@ -725,7 +725,7 @@ sub postProcessChains {
   }
   &run("ssh -x $workhorse nice " .
        "'chainMergeSort $runDir/run/chain/*.chain " .
-       "| gzip -c > $runDir/$chain'");
+       "| nice gzip -c > $runDir/$chain'");
   if ($splitRef) {
     &run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$chain");
