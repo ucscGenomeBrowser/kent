@@ -36,4 +36,7 @@
 #define CDS_PARTIAL_CODON_G 0xc0
 #define CDS_PARTIAL_CODON_B	0xc0
 
+
+ #define CDS_DRAW_DEFAULT "off"
+
 #endif
