@@ -855,6 +855,7 @@ identifier ucscStsId
 identifier ucscMouseStsId
 "UCSC Mouse STS (Sequenced Tagged Site, aka mapping sequence) ID"
     $mm.stsInfoMouseNew.identNo
+    $mm.stsAlias.identNo
     $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
@@ -873,6 +874,7 @@ identifier stsTrueName typeOf=stsName
 identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
+    $mm.stsAlias.trueName minCheck=0.99
     $mm.all_sts_primer.qName chopBefore=_ minCheck=0.99
     $mm.stsMapMouseNew.name
 
