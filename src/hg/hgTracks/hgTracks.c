@@ -4803,6 +4803,60 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
+
+static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
+ * it could be cleaned up some but more importantly it should be integrated back 
+ * into the main draw routine */
+{
+int baseWidth = seqEnd - seqStart;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int s, e, e2, s2;
+int itemOff, itemHeight;
+boolean isFull = (vis == tvFull);
+Color *shades = tg->colorShades;
+Color bColor = tg->ixAltColor;
+double scale = width/(double)baseWidth;
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + midLineOff;
+int compCount = 0;
+int w;
+int prevEnd = -1;
+
+lf=tg->items;    
+for(lf = tg->items; lf != NULL; lf = lf->next) 
+    {
+    if (lf->components != NULL && !hideLine)
+	{
+	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	w = x2-x1;
+	/* draw thick line ... */
+	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, blackIndex());
+	}
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	heightPer = tg->heightPer;
+	s = sf->start;
+	e = sf->end;
+	drawScaledBox(mg, s, e, scale, xOff, y, heightPer, blackIndex());
+	}
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
@@ -5605,6 +5659,12 @@ void perlegenMethods(struct trackGroup *tg)
 tg->drawItems = perlegenLinkedFeaturesDraw;
 tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
+}
+
+void wiggleMethods(struct trackGroup *tg)
+/* setup special methods for wiggle track */
+{
+tg->drawItems = wiggleLinkedFeaturesDraw;
 }
 
 Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
@@ -6648,6 +6708,7 @@ registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
+registerTrackHandler("wiggle", wiggleMethods );
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
