@@ -29,12 +29,15 @@ my $debug         = 0;
 my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/lib/ggDbRep.as" => "",
 		      "hg/lib/rmskOut.as" => "",
+		      "hg/lib/genotype.as" => "",
 		      "hg/makeDb/schema/joinerGraph/all.as" => "",
 		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
 		      "hg/protein/spToDb/spDbTables.as" => "",
 		      "hg/ultras/ultraDb/as/udHistory.as" => "",
 		      "hg/bioImage/bioImage.as" => "",
 		      "hg/bioImage/loadMahoney/mahoney.as" => "",
+		      "hg/genePix/genePix.as" => "",
+		      "hg/genePix/loadMahoney/mahoney.as" => "",
 		      "lib/pslWScore.as" => "",
 		    );
 
