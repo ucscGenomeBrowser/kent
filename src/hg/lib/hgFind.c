@@ -121,7 +121,7 @@ return startsWith("ctg", contig);
 static boolean isAncientRName(char *name)
 /* Return TRUE if name is an ancientRepeat ID. */
 {
-return (startsWith("chr", name) && (name[strlen(name)-2] == '.'));
+return startsWith("ar", name);
 }
 
 static void findAncientRPos(char *name, char **retChromName, 
