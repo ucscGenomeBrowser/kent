@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.838 2005/02/25 01:03:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.839 2005/02/25 21:51:33 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5579,6 +5579,8 @@ if (cgiVarExists("o"))
 	    }
 	else
 	    island = cpgIslandLoad(row+rowOffset);
+	if (! startsWith("CpG: ", island->name))
+	    printf("<B>Name:</B> %s<BR>\n", island->name);
 	bedPrintPos((struct bed *)island, 3);
 	printf("<B>Size:</B> %d<BR>\n", island->chromEnd - island->chromStart);
 	printf("<B>CpG count:</B> %d<BR>\n", island->cpgNum);
@@ -15139,7 +15141,7 @@ else if (startsWith("pscreen", track))
     {
     doPscreen(tdb, item);
     }
-else if (sameWord("flyreg", track))
+else if (startsWith("flyreg", track))
     {
     doFlyreg(tdb, item);
     }

@@ -19,6 +19,7 @@
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
 #include "flyreg.h"
+#include "flyreg2.h"
 
 static void printSpacedDna(char *dna, int size)
 /* Print string with spaces between each letter. */
@@ -163,6 +164,7 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char *motifTable = "flyregMotif";
 struct dnaMotif *motif = NULL;
+boolean isVersion2 = sameString(tdb->tableName, "flyreg2");
 
 genericHeader(tdb, item);
 hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
@@ -173,10 +175,15 @@ dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
 sr = sqlGetResult(conn, query->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    struct flyreg fr;
-    flyregStaticLoad(row+hasBin, &fr);
+    struct flyreg2 fr;
+    if (isVersion2)
+	flyreg2StaticLoad(row+hasBin, &fr);
+    else
+	flyregStaticLoad(row+hasBin, (struct flyreg *)(&fr));
     printf("<B>Factor:</B> %s<BR>\n", fr.name);
     printf("<B>Target:</B> %s<BR>\n", fr.target);
+    if (isVersion2)
+	printf("<B>Footprint ID:</B> %06d<BR>\n", fr.fpid);
     printf("<B>PubMed ID:</B> <A HREF=\"");
     printEntrezPubMedUidUrl(stdout, fr.pmid);
     printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
