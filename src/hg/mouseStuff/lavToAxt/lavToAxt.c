@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.9 2003/05/17 07:25:08 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.10 2003/05/18 07:58:09 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -113,7 +113,7 @@ struct block *lastBlock = NULL;
 struct block *block;
 struct dyString *qSym = newDyString(16*1024);
 struct dyString *tSym = newDyString(16*1024);
-struct dnaSeq *qSeq, *tSeq, *seq;
+struct dnaSeq *qSeq, *tSeq, *seq = NULL;
 struct axt axt;
 
 static int ix = 0;
@@ -136,9 +136,19 @@ if (isRc)
     reverseIntRange(&qStart, &qEnd, qSize);
     if (optionExists("fa"))
         {
-        for (qSeq = faList ; qSeq != NULL ; qSeq = qSeq->next)
-            if (sameString(qName, qSeq->name))
+        for (seq = faList ; seq != NULL ; seq = seq->next)
+            if (sameString(qName, seq->name))
                 break;
+        if (seq != NULL)
+            {
+            AllocVar(qSeq);
+            qSeq->size = qEnd - qStart;
+            qSeq->name = cloneString(qName);
+            qSeq->mask = seq->mask;
+            qSeq->dna = cloneMem((seq->dna)+qStart, qSeq->size);
+            }
+        else
+            errAbort("sequence not found %d\n",qName);
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
@@ -147,16 +157,25 @@ if (isRc)
     }
 else
     {    
-    if (optionExists("fa"))
+if (optionExists("fa"))
         {
-        for (qSeq = faList ; qSeq != NULL ; qSeq = qSeq->next)
-            if (sameString(qName, qSeq->name))
+        for (seq = faList ; seq != NULL ; seq = seq->next)
+            if (sameString(qName, seq->name))
                 break;
+            if (seq != NULL)
+                {
+                AllocVar(qSeq);
+                qSeq->size = qEnd - qStart;
+                qSeq->name = cloneString(qName);
+                qSeq->mask = seq->mask;
+                qSeq->dna = (seq->dna)+qStart;
+                }
+            else
+                errAbort("sequence not found %d\n",qName);
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
     }
-//printf("%s %s q size %d qstart %d %s\n",qName, qSeq->name, qSeq->size, qStart, qSeq->dna); 
 tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize);
 
 /* Loop through blocks copying sequence into dynamic strings. */
