@@ -682,6 +682,7 @@ for (i=0; i<chromCount; ++i)
         return i;
     }
 errAbort("Unknown chromosome %s", name);
+return -1;
 }
 
 
