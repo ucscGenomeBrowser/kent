@@ -64,32 +64,36 @@ struct ffAli
 
 /************* lib/ffAli.c routines - using alignments ************/
 
-/* FFA */void ffFreeAli(struct ffAli **pAli);
+void ffFreeAli(struct ffAli **pAli);
 /* Dispose of memory gotten from fuzzyFind(). */
 
-/* FFA */int ffOneIntronOrientation(struct ffAli *left, struct ffAli *right);
+int ffOneIntronOrientation(struct ffAli *left, struct ffAli *right);
 /* Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron. */
 
-/* FFA */int ffIntronOrientation(struct ffAli *ali);
+int ffIntronOrientation(struct ffAli *ali);
 /* Return + for positive orientation overall, - for negative,
  * 0 if can't tell. */
 
-/* FFA */struct ffAli *ffRightmost(struct ffAli *ff);
+int ffScoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation);
+/* Return a better score the closer an intron is to
+ * consensus. Max score is 4. */
+
+struct ffAli *ffRightmost(struct ffAli *ff);
 /* Return rightmost block of alignment. */
 
-/* FFA */struct ffAli *ffMakeRightLinks(struct ffAli *rightMost);
+struct ffAli *ffMakeRightLinks(struct ffAli *rightMost);
 /* Given a pointer to the rightmost block in an alignment
  * which has all of the left pointers filled in, fill in
  * the right pointers and return the leftmost block. */
  
-/* FFA */void ffCountGoodEnds(struct ffAli *aliList);
+void ffCountGoodEnds(struct ffAli *aliList);
 /* Fill in the goodEnd and badEnd scores. */
 
-/* FFA */int ffAliCount(struct ffAli *d);
+int ffAliCount(struct ffAli *d);
 /* How many blocks in alignment? */
 
-/* FFA */struct ffAli *ffAliFromSym(int symCount, char *nSym, char *hSym,
+struct ffAli *ffAliFromSym(int symCount, char *nSym, char *hSym,
 	struct lm *lm, char *nStart, char *hStart);
 /* Convert symbol representation of alignments (letters plus '-')
  * to ffAli representation.  If lm is nonNULL, ffAli result 
@@ -98,104 +102,109 @@ struct ffAli
 
 /************* lib/ffScore.c routines - scoring alignments ************/
 
-/* FFS */int ffScoreCdna(struct ffAli *ali);
+int ffScoreMatch(DNA *a, DNA *b, int size);
+/* Compare two pieces of DNA base by base. Total mismatches are
+ * subtracted from total matches and returned as score. 'N's 
+ * neither hurt nor help score. */
+
+int ffScoreCdna(struct ffAli *ali);
 /* Return score of alignment.  A perfect allignment score will
  * be the number of bases in needle. */
 
-/* FFS */int ffScore(struct ffAli *ali, enum ffStringency stringency);
+int ffScore(struct ffAli *ali, enum ffStringency stringency);
 /* Score DNA based alignment. */
 
-/* FFS */int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency);
+int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency);
 /* Figure out overall score of protein alignment. */
 
-/* FFS */int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
+int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
    boolean isProt);
 /* Score any alignment. */
 
-/* FFS */int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency);
+int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency);
 /* Figure out score of count consecutive alis. */
 
-/* FFS */int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency);
+int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency);
 /* Return gap penalty for given h and n gaps. */
 
-/* FFS */int ffCalcCdnaGapPenalty(int hGap, int nGap);
+int ffCalcCdnaGapPenalty(int hGap, int nGap);
 /* Return gap penalty for given h and n gaps in cDNA. */
 
-/* FFS */int ffGapPenalty(struct ffAli *ali, struct ffAli *right, enum ffStringency stringency);
+int ffGapPenalty(struct ffAli *ali, struct ffAli *right, enum ffStringency stringency);
 /* Calculate gap penaltly for alignment. */
 
-/* FFS */int ffCdnaGapPenalty(struct ffAli *ali, struct ffAli *right);
+int ffCdnaGapPenalty(struct ffAli *ali, struct ffAli *right);
 /* Calculate gap penaltly for cdna alignment. */
 
 /************* jkOwnLib/ffAliHelp -helpers for alignment producers. ****************/
 
-/* FAA */boolean ffSlideIntrons(struct ffAli *ali);
+boolean ffSlideIntrons(struct ffAli *ali);
 /* Slide introns (or spaces between aligned blocks)
  * to match consensus.  Return TRUE if any slid. */
 
-/* FAA */boolean ffSlideOrientedIntrons(struct ffAli *ali, int orient);
+boolean ffSlideOrientedIntrons(struct ffAli *ali, int orient);
 /* Slide introns (or spaces between aligned blocks)
  * to match consensus on given strand (usually from ffIntronOrientation). */
 
-/* FAA */struct ffAli *ffRemoveEmptyAlis(struct ffAli *ali, boolean doFree);
+struct ffAli *ffRemoveEmptyAlis(struct ffAli *ali, boolean doFree);
 /* Remove empty blocks from list. Optionally free empties too. */
 
-/* FAA */struct ffAli *ffMergeHayOverlaps(struct ffAli *ali);
+struct ffAli *ffMergeHayOverlaps(struct ffAli *ali);
 /* Remove overlaps in haystack that perfectly abut in needle.
  * These are transformed into perfectly abutting haystacks
  * that have a gap in the needle. */
 
-/* FAA */struct ffAli *ffMergeNeedleAlis(struct ffAli *ali, boolean doFree);
+struct ffAli *ffMergeNeedleAlis(struct ffAli *ali, boolean doFree);
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors.*/
 
-/* FAA */void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd);
+void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd);
 /* Expand aligned segment to right as far as can exactly. */
 
-/* FAA */void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart);
+void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart);
 /* Expand aligned segment to left as far as can exactly. */
 
-/* FAA */struct ffAli *ffMergeClose(struct ffAli *aliList);
+struct ffAli *ffMergeClose(struct ffAli *aliList);
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors or
  * ones that could be merged at the expense of just a few mismatches.*/
 
-/* FAA */void ffAliSort(struct ffAli **pList, 
+void ffAliSort(struct ffAli **pList, 
 	int (*compare )(const void *elem1,  const void *elem2));
 /* Sort a doubly linked list of ffAlis. */
 
-/* FAA */void ffCat(struct ffAli **pA, struct ffAli **pB);
+void ffCat(struct ffAli **pA, struct ffAli **pB);
 /* Concatenate B to the end of A. Eat up second list
  * in process. */
 
-/* FAA */int ffCmpHitsHayFirst(const void *va, const void *vb);
+int ffCmpHitsHayFirst(const void *va, const void *vb);
 /* Compare function to sort hit array by ascending
  * target offset followed by ascending query offset. */
 
-/* FAA */int ffCmpHitsNeedleFirst(const void *va, const void *vb);
+int ffCmpHitsNeedleFirst(const void *va, const void *vb);
 /* Compare function to sort hit array by ascending
  * query offset followed by ascending target offset. */
 
 /************* jkOwnLib/fuzzyFind - old local cDNA alignment. ****************/
 
-/* FZF */struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEnd,
+struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEnd,
     enum ffStringency stringency);
 /* Return an allignment of needle in haystack. (Returns left end of doubly
  * linked allignment list.) The input DNA is all expected to be lower case
  * characters - a, c, g, t, or n. */
 
-/* FZF */boolean ffFindEitherStrand(DNA *needle, DNA *haystack, enum ffStringency stringency,
+boolean ffFindEitherStrand(DNA *needle, DNA *haystack, enum ffStringency stringency,
     struct ffAli **pAli, boolean *pRcNeedle);
 /* Return TRUE if find an alignment using needle, or reverse complement of 
  * needle to search haystack. DNA must be lower case. Needle and haystack
  * are zero terminated. */
 
-/* FZF */boolean ffFindEitherStrandN(DNA *needle, int needleSize, DNA *haystack, int haySize,
+boolean ffFindEitherStrandN(DNA *needle, int needleSize, DNA *haystack, int haySize,
     enum ffStringency stringency, struct ffAli **pAli, boolean *pRcNeedle);
 /* Return TRUE if find an allignment using needle, or reverse complement of 
  * needle to search haystack. DNA must be lower case. */
 
-/* FZF */boolean ffFindAndScore(DNA *needle, int needleSize, DNA *haystack, int haySize,
+boolean ffFindAndScore(DNA *needle, int needleSize, DNA *haystack, int haySize,
     enum ffStringency stringency, struct ffAli **pAli, boolean *pRcNeedle, int *pScore);
 /* Return TRUE if find an allignment using needle, or reverse complement of 
  * needle to search haystack. DNA must be lower case. If pScore is non-NULL returns
@@ -203,7 +212,7 @@ struct ffAli
 
 /************* lib/fuzzyShow - display alignments. ****************/
 
-/* FSH */int ffShAliPart(FILE *f, struct ffAli *aliList, 
+int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
@@ -213,7 +222,7 @@ struct ffAli
 /* Display parts of alignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 
-/* FSH */int ffShAli(FILE *f, struct ffAli *aliList, 
+int ffShAli(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
     int blockMaxGap,
@@ -221,7 +230,7 @@ struct ffAli
 /* Display alignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 
-/* FSH */void ffShowAli(struct ffAli *aliList, 
+void ffShowAli(struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleNumOffset,
     char *haystackName, DNA *haystack, int hayNumOffset,
     boolean rcNeedle);
