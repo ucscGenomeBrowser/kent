@@ -30,6 +30,7 @@ longLabel Operon predictions by TIGR
 group genes
 priority 2.12
 visibility pack
+spectrum on
 type bed 15 .
 
 track tigrCmrORFs
