@@ -542,6 +542,16 @@ struct linkedFeaturesPair
 
 #endif /* ROGIC_CODE */
 
+
+int linkedFeaturesCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+return a->start - b->start;
+}
+
+
 char *linkedFeaturesName(struct trackGroup *tg, void *item)
 /* Return name of item. */
 {
@@ -827,17 +837,17 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    color = tg->itemColor(tg, lf, mg);
 	else if (shades) 
 	    color =  shades[lf->grayIx+isXeno];
-	bColor = tg->ixAltColor;
 	tallStart = lf->tallStart;
 	tallEnd = lf->tallEnd;
 
 	x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
 	x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	w = x2-x1;
+	bColor = mgFindColor(mg,0,0,0);
 	if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
 	    {
 	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-		 		     lfs->orientation, bColor, TRUE);
+		 		     lfs->orientation, color, TRUE);
 	    }
 	if (prevEnd != -1 && !lfs->noLine) 
 	    {
@@ -845,6 +855,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    }
 	prevEnd = lf->end;
 
+	bColor = color;
 	if (lf->components != NULL && !hideLine)
 	    {
 	    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
@@ -854,7 +865,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, x2-x1, lineHeight);
 	    if (isFull)
 	        {
-		if (shades) bColor =  shades[(lf->grayIx>>1)];  /* Color follows score in this case. */
+	        if (shades) bColor =  shades[(lf->grayIx>>1)];
 		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
 		 		     lf->orientation, bColor, FALSE);
 		}
@@ -6269,6 +6280,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	}
     }
 slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
