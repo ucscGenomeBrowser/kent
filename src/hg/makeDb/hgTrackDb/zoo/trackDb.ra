@@ -141,7 +141,7 @@ shortLabel MCS (Binomial)
 longLabel Binomial-based MCSs
 priority 399
 visibility dense
-color 0,60,120
+color 160,0,0
 type bed 3 .
 
 track binomialCons
