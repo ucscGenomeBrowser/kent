@@ -17,7 +17,10 @@ set pyrAer pyAer1
 set plaFac falciparum
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,plaFac
+set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,$plaFac
+
+# Define 'other' database for chains
+set otherDb pt0,mm3,rn3,hg16
 
 # Define the shared identifiers and the fields they appear in.
 identifier ECgeneName
@@ -76,25 +79,21 @@ identifier affyU133
     $hg.knownToU133.value
     $hg.affyU133.qName
 
-identifier chainPt0Id
-"Link together chimp pt0 chain info"
-    hg16.allChainPt0.id
-    hg16.chainPt0.id
-    hg16.chainPt0Link.chainId
-    hg16.netRxBestPt0.chainId
+identifier affyU74
+"Affymetrix Mouse U74 chip identifiers"
+    $mm.affyGnfU74A.name
+    $mm.affyGnfU74B.name
+    $mm.affyGnfU74C.name
+    $mm.affyU74.qName
+    $mm.knownToU74.value
 
-identifier chainMm4Id
-"Link together mouse mm4 chain info"
-    $gbd.chainMm4.id
-    $gbd.chainMm4Link.chainId
-    $gbd.netMm4.chainId
-    $gbd.netMm4NonGap.chainId
-
-identifier chainRn3
-"Link together rat rn2 chain info"
-    $gbd.chainRn3.id
-    $gbd.chainRn3Link.chainId
-    $gbd.netRn3.chainId
+identifier chain${chainDb}Id
+"Link together chimp ${chainDb} chain info"
+    $gbd.allChain${chainDb}.id
+    $gbd.chain${chainDb}.id
+    $gbd.chain${chainDb}Link.chainId
+    $gbd.netRxBest${chainDb}.chainId
+    $gbd.net${chainDb}NonGap.chainId
 
 identifier chainSelf
 "Link together self chain info"
@@ -216,7 +215,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $hg,$mm.ceBlastTab.query
     $hg,$mm.dmBlastTab.query
     $hg,$mm.drBlastTab.query
-    $hg|$mm.scBlastTab.query
+    $hg,$mm.scBlastTab.query
     $gbd.dupSpMrna.mrnaID
     $gbd.mrna.acc subset
     $gbd.seq.acc subset
@@ -263,7 +262,7 @@ identifier $hg.fosmidEndId
 
 identifier dbStsId external=dbSts
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
-    $gbd.all_sts_primer.qName chopBefore=dbSTS_
+    $hg.all_sts_primer.qName chopBefore=dbSTS_
     $gbd.all_sts_seq.qName
     $gbd.stsInfo2.dbSTSid
 
@@ -271,18 +270,25 @@ identifier ucscStsId
 "UCSC STS (Sequenced Tagged Site, aka mapping sequence) ID"
     $gbd.stsAlias.identNo
     $gbd.stsInfo2.identNo
-    $gbd.stsMap.indentNo
+    $gbd.stsMap.identNo
+    $mm.all_sts_primer.qName chopAfter=_
+    $mm.stsInfoMouseNew.identNo
+    $mm.stsMapMouseNew.identNo
 
 identifier stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
     $hg.fishClones.stsNames comma
     $gbd.stsInfo2.otherNames comma
+    $mm.stsInfoMouseNew.alias separator=;
  
 identifier stsTrueName typeOf stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $gbd.stsAlias.trueName
     $gbd.stsInfo2.name
     $gbd.stsMap.name
+    $mm.all_sts_primer.qName chopBefore=_
+    $mm.stsInfoMouseNew.name
+    $mm.stsMapMouseNew.name
 
 identifier hugoName external=HUGO
 "International Human Gene Identifier"
