@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.14 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.15 2003/06/19 15:45:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.14 2003/06/10 17:19:33 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.15 2003/06/19 15:45:14 kent Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -132,17 +132,21 @@ makeMakefile(fileOnly, fileName);
 
 if (doCvs)
     {
-
     /* Set current directory.  Return FALSE if it fails. */
     printf("Adding %s to CVS\n", module);
     if (!setCurrentDir(dirName))
         errAbort("Couldn't change dir to %s", dirName);
-    sprintf(command, "cvs import -m \"%s\" %s kent start", description, module);
+    if (!setCurrentDir(".."))
+        errAbort("Couldn't change dir to ..", dirName);
+    sprintf(command, "cvs add %s", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
-    if (!setCurrentDir(".."))
-        errAbort("Couldn't change dir to ..");
-    sprintf(command, "cvs checkout -d %s %s", fileOnly, module);
+    sprintf(command, "cvs commit -m \"%s\" %s", description, fileOnly);
+    if (system(command) != 0)
+        errAbort("system call '%s' returned non-zero", command);
+    if (!setCurrentDir(dirName))
+        errAbort("Couldn't change dir to %s", dirName);
+    sprintf(command, "cvs add %s.c makefile", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
     }
