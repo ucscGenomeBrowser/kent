@@ -1,6 +1,6 @@
 track cytoBandIdeo
-shortLabel ChromosomeBand
-longLabel Chromosome Bands Localized by FISH Mapping Clones
+shortLabel Chromosome Band (Ideogram)
+longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
 group map
 priority .1
 visibility dense

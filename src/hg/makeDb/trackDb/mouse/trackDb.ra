@@ -1,6 +1,6 @@
 track cytoBandIdeo
-shortLabel Chromosome 
-longLabel Chromosome Bands Based On ISCN Lengths
+shortLabel Chromosome Band (Ideogram)
+longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
 group map
 priority .1
 visibility dense
@@ -9,7 +9,7 @@ type bed 4 +
 
 track cytoBand
 shortLabel Chromosome Band
-longLabel 
+longLabel Chromosome Bands Based On ISCN Lengths
 group map
 priority 1
 visibility dense
