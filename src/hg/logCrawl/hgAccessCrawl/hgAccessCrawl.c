@@ -4,8 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.1 2003/12/22 13:24:55 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.2 2003/12/24 00:41:46 kent Exp $";
 
 int verbose = 0;
 
@@ -193,11 +194,63 @@ ll->program = buf;
 return ll;
 }
 
+boolean cgiHashVal(struct hash *cgiHash, char *var, char *val)
+/* Return TRUE if var exists in hash with given value. */
+{
+struct cgiVar *cv = hashFindVal(cgiHash, var);
+return cv != NULL && sameString(cv->val, val);
+}
+
+struct nameCount
+/* List of name/count pairs. */
+    {
+    struct nameCount *next;
+    char *name;
+    int count;
+    };
+
+boolean isRobot(char *ip, char *program)
+/* Return TRUE if it appears to be a robot ip address. */
+{
+static struct hash *roboHash = NULL;
+if (startsWith("Java", program))
+    return TRUE;
+else if (startsWith("Wget", program))
+    return TRUE;
+else if (startsWith("AgentName", program))
+    return TRUE;
+else if (startsWith("libwww-perl", program))
+    return TRUE;
+if (roboHash == NULL)
+    {
+    roboHash = hashNew(0);
+    hashAdd(roboHash, "joiner.stanford.edu", NULL);
+    hashAdd(roboHash, "pc-glass-1.ucsd.edu", NULL);
+    hashAdd(roboHash, "pc-glass-2.ucsd.edu", NULL);
+    hashAdd(roboHash, "pc-glass-3.ucsd.edu", NULL);
+    hashAdd(roboHash, "64-170-97-98.ded.pacbell.net", NULL);
+    hashAdd(roboHash, "ce.hosts.jhmi.edu", NULL);
+    }
+return hashLookup(roboHash, ip) != NULL;
+}
+
+int nameCountCmp(const void *va, const void *vb)
+/* Compare to sort based on count - biggest first. */
+{
+const struct nameCount *a = *((struct nameCount **)va);
+const struct nameCount *b = *((struct nameCount **)vb);
+return b->count - a->count;
+}
+
 void hgAccessCrawl(int logCount, char *logFiles[])
 /* hgAccessCrawl - Go through Apache access log collecting stats on hgXXX programs. */
 {
 int i;
-int total = 0;
+int hgTracksTotal = 0;
+int hgTracksPosted = 0;
+int hgNearTotal = 0;
+int hgGeneTotal = 0;
+int hgTextTotal = 0;
 int other = 0;
 int fromGateway = 0;
 int fromHgBlat = 0;
@@ -216,13 +269,34 @@ int jump = 0;
 int refresh = 0;
 int gatewayMultiple = 0;
 int zoomInRuler = 0;
-int robot = 0;
+int hgTracksRobot = 0;
+int hgTextRobot = 0;
+int hgGeneRobot = 0;
+int hgNearRobot = 0;
 int undisclosedOutsideSimple = 0;
 int undisclosedOutsideWithCustom = 0;
 int resetAll = 0;
 int hideAll = 0;
 int postScriptOutput = 0;
 int addYourOwn = 0;
+struct hash *gHash = hashNew(0);
+struct nameCount *gList = NULL, *gEl, *gNone, *gPost, *gRobot;
+int hgcTotal = 0;
+
+/* Allocate dummy group for POSTed htc's. */
+AllocVar(gPost);
+gPost->name = "Posted (no CGI vars available)";
+slAddHead(&gList, gPost);
+
+/* Allocate dummy group for htc's with no 'g' variable. */
+AllocVar(gNone);
+gNone->name = "no 'g'";
+slAddHead(&gList, gNone);
+
+/* Allocate dummy group for htc robots. */
+AllocVar(gRobot);
+gRobot->name = "robot";
+slAddHead(&gList, gRobot);
 
 for (i=0; i<logCount; ++i)
     {
@@ -234,92 +308,198 @@ for (i=0; i<logCount; ++i)
 	struct logLine *ll = logLineParse(line, lf->fileName, lf->lineIx);
 	if (ll != NULL)
 	    {
-	    if (sameString(ll->method, "GET") && startsWith("/cgi-bin/hgTracks", ll->url))
-	        {
-		++total;
-		if (stringIn("Submit=Submit", ll->url))
-		    ++fromGateway;
-		else if (stringIn("submit=jump", ll->url))
-		    ++jump;
-		else if (stringIn("submit=refresh", ll->url))
-		    ++refresh;
-		else if (stringIn("hgt.out", ll->url))
-		    ++zoomOut;
-		else if (stringIn("hgt.in", ll->url))
-		    ++zoomIn;
-		else if (stringIn("hgt.left", ll->url))
-		    ++left;
-		else if (stringIn("hgt.right", ll->url))
-		    ++right;
-		else if (stringIn("hgt.dink", ll->url))
-		    ++dink;
-		else if (ll->referrer != NULL && stringIn("cgi-bin/hgBlat", ll->referrer))
-		    ++fromHgBlat;
-		else if (ll->referrer == NULL && 
-		    (stringIn("ss=../trash", ll->url) || 
-		    stringIn("ss=http://genome.ucsc.edu/trash", ll->url)))
-		    ++fromOtherBlat;
-		else if (ll->referrer != NULL 
-			&& !startsWith("http://genome.ucsc.edu", ll->referrer)
-			&& !startsWith("http://genome.cse.ucsc.edu", ll->referrer))
-		    ++fromOutside;
-		else if (countChars(ll->url, '=') == 2 && stringIn("position=", ll->url) 
-		    && stringIn("hgsid=", ll->url))
-		    ++zoomInRuler;
-		else if (countChars(ll->url, '=') == 3 && stringIn("position=", ll->url) 
-		    && stringIn("hgsid=", ll->url))
-		    ++gatewayMultiple;
-		else if (stringIn("dummyEnterButton", ll->url))
-		    {
-		    if (stringIn("guideline", ll->url))
-			++jump;
-		    else
-		        ++fromGateway;
-		    }
-		else if (startsWith("Java", ll->program))
-		    ++robot;
-		else if (sameString("joiner.stanford.edu", ll->ip))
-		    ++robot;
-		else if (ll->referrer == NULL && countChars(ll->url, '=') == 2 
-		    && stringIn("db=", ll->url) && stringIn("position=", ll->url))
-		    ++undisclosedOutsideSimple;
-		else if (ll->referrer == NULL && countChars(ll->url, '=') == 2 
-		    && stringIn("org=", ll->url) && stringIn("position=", ll->url))
-		    ++undisclosedOutsideSimple;
-		else if (ll->referrer == NULL && countChars(ll->url, '=') == 3 
-		    && stringIn("db=", ll->url) && stringIn("position=", ll->url)
-		    && stringIn("org=", ll->url))
-		    ++undisclosedOutsideSimple;
-		else if (ll->referrer == NULL && stringIn("hgt.customText=", ll->url))
-		    ++undisclosedOutsideWithCustom;
-		else if (stringIn("hgt.reset=", ll->url))
-		    ++resetAll;
-		else if (stringIn("hgt.hideAll=", ll->url))
-		    ++hideAll;
-		else if (ll->referrer != NULL && stringIn("cgi-bin/hgc", ll->referrer))
-		    ++fromHgc;
-		else if (ll->referrer != NULL && stringIn("cgi-bin/hgNear", ll->referrer))
-		    ++fromHgNear;
-		else if (ll->referrer != NULL && stringIn("cgi-bin/hgGene", ll->referrer))
-		    ++fromHgGene;
-		else if (ll->referrer != NULL && 
-		     (stringIn("ENCODE", ll->referrer) || stringIn("Encode", ll->referrer)) )
-		    ++fromEncode;
-		else if (stringIn("hgt.psOutput=on", ll->url))
-		    ++postScriptOutput;
-		else if (stringIn("Add+Your+Own", ll->url))
-		    ++addYourOwn;
+	    if (sameString(ll->method, "GET") && startsWith("/cgi-bin/", ll->url))
+		{
+		struct hash *cgiHash;
+		struct cgiVar *cgiList;
+		char *cgiString = strchr(ll->url, '?');
+		int cgiCount;
+		if (cgiString == NULL)
+		    cgiString = "";
 		else
+		    cgiString += 1;
+		cgiString = cloneString(cgiString);
+		if (!cgiParseInput(cgiString, &cgiHash, &cgiList))
 		    {
-		    ++other;
-		    uglyf("%s\n", line);
+		    if (verbose > 0)
+		        printf("%s\n", ll->url);
+		    continue;
+	            }
+		cgiCount = slCount(cgiList);
+		if (startsWith("/cgi-bin/hgTracks", ll->url))
+		    {
+		    ++hgTracksTotal;
+		    if (isRobot(ll->ip, ll->program))
+			++hgTracksRobot;
+		    else if (cgiHashVal(cgiHash, "Submit", "Submit"))
+			++fromGateway;
+		    else if (cgiHashVal(cgiHash, "submit", "jump"))
+			++jump;
+		    else if (cgiHashVal(cgiHash, "submit", "refresh"))
+			++refresh;
+		    else if (stringIn("hgt.out", ll->url))
+			++zoomOut;
+		    else if (stringIn("hgt.in", ll->url))
+			++zoomIn;
+		    else if (stringIn("hgt.left", ll->url))
+			++left;
+		    else if (stringIn("hgt.right", ll->url))
+			++right;
+		    else if (stringIn("hgt.dink", ll->url))
+			++dink;
+		    else if (ll->referrer != NULL && stringIn("cgi-bin/hgBlat", ll->referrer))
+			++fromHgBlat;
+		    else if (ll->referrer == NULL && 
+		        hashLookup(cgiHash, "ss"))
+			++fromOtherBlat;
+		    else if (ll->referrer != NULL 
+			    && !startsWith("http://genome.ucsc.edu", ll->referrer)
+			    && !startsWith("http://genome.cse.ucsc.edu", ll->referrer))
+			++fromOutside;
+		    else if (cgiCount == 2 
+		    	&& hashLookup(cgiHash, "position") 
+			&& hashLookup(cgiHash, "hgsid"))
+			{
+			++zoomInRuler;
+			}
+		    else if (cgiCount == 3 
+		    	&& hashLookup(cgiHash, "position") 
+			&& hashLookup(cgiHash, "hgsid"))
+			{
+			++gatewayMultiple;
+			}
+		    else if (stringIn("dummyEnterButton", ll->url))
+			{
+			if (stringIn("guideline", ll->url))
+			    ++jump;
+			else
+			    ++fromGateway;
+			}
+		    else if (ll->referrer == NULL && cgiCount == 2  &&
+			hashLookup(cgiHash, "db") && hashLookup(cgiHash, "position"))
+			++undisclosedOutsideSimple;
+		    else if (ll->referrer == NULL && cgiCount == 2  &&
+			hashLookup(cgiHash, "org") && hashLookup(cgiHash, "position"))
+			++undisclosedOutsideSimple;
+		    else if (ll->referrer == NULL && cgiCount == 3  &&
+			hashLookup(cgiHash, "db") 
+			&& hashLookup(cgiHash, "org")
+			&& hashLookup(cgiHash, "position"))
+			++undisclosedOutsideSimple;
+		    else if (ll->referrer == NULL && hashLookup(cgiHash, "hgt.customText"))
+			++undisclosedOutsideWithCustom;
+		    else if (hashLookup(cgiHash, "hgt.reset"))
+			++resetAll;
+		    else if (hashLookup(cgiHash, "hgt.hideAll"))
+			++hideAll;
+		    else if (ll->referrer != NULL && stringIn("cgi-bin/hgc", ll->referrer))
+			++fromHgc;
+		    else if (ll->referrer != NULL && stringIn("cgi-bin/hgNear", ll->referrer))
+			++fromHgNear;
+		    else if (ll->referrer != NULL && stringIn("cgi-bin/hgGene", ll->referrer))
+			++fromHgGene;
+		    else if (ll->referrer != NULL && 
+			 (stringIn("ENCODE", ll->referrer) || stringIn("Encode", ll->referrer)) )
+			++fromEncode;
+		    else if (hashLookup(cgiHash, "hgt.psOutput"))
+			++postScriptOutput;
+		    else if (stringIn("Add+Your+Own", ll->url))
+			++addYourOwn;
+		    else
+			{
+			++other;
+			if (verbose >= 2)
+			    printf("%s\n", line);
+			}
+		    }
+		else if (startsWith("/cgi-bin/hgc", ll->url))
+		    {
+		    struct cgiVar *cv = hashFindVal(cgiHash, "g");
+		    struct nameCount *gEl;
+		    ++hgcTotal;
+		    if (isRobot(ll->ip, ll->program))
+			gRobot->count += 1;
+		    else if (cv == NULL)
+		        {
+		        gNone->count += 1;
+		        }
+		    else
+			{
+			gEl = hashFindVal(gHash, cv->val);
+			if (gEl == NULL)
+			    {
+			    AllocVar(gEl);
+			    hashAddSaveName(gHash, cv->val, gEl, &gEl->name);
+			    slAddHead(&gList, gEl);
+			    }
+			gEl->count += 1;
+			}
+		    }
+		else if (startsWith("/cgi-bin/hgGene", ll->url))
+		    {
+		    hgGeneTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgGeneRobot += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgNear", ll->url))
+		    {
+		    hgNearTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgNearRobot += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgText", ll->url))
+		    {
+		    hgTextTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgTextRobot += 1;
+		    }
+		hashFree(&cgiHash);
+		slFreeList(&cgiList);
+		freez(&cgiString);
+		}
+	    else if (sameString(ll->method, "POST"))
+		{
+		if (startsWith("/cgi-bin/hgc", ll->url))
+		    {
+		    hgcTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        gRobot->count += 1;
+		    else
+			gPost->count += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgTracks", ll->url))
+		    {
+		    hgTracksTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgTracksRobot += 1;
+		    else
+			hgTracksPosted += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgGene", ll->url))
+		    {
+		    hgGeneTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgGeneRobot += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgNear", ll->url))
+		    {
+		    hgNearTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgNearRobot += 1;
+		    }
+		else if (startsWith("/cgi-bin/hgText", ll->url))
+		    {
+		    hgTextTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgTextRobot += 1;
 		    }
 		}
 	    logLineFree(&ll);
 	    }
 	}
     }
-printf("total: %d\n", total);
+printf("hgTracksTotal: %d\n", hgTracksTotal);
+printf("hgTracksPosted: %d\n", hgTracksPosted);
 printf("fromGateway: %d\n", fromGateway);
 printf("gatewayMultiple: %d\n", gatewayMultiple);
 printf("fromHgBlat: %d\n", fromHgBlat);
@@ -338,13 +518,28 @@ printf("zoomInRuler: %d\n", zoomInRuler);
 printf("fromOutside: %d\n", fromOutside);
 printf("undisclosedOutsideSimple: %d\n", undisclosedOutsideSimple);
 printf("undisclosedOutsideWithCustom: %d\n", undisclosedOutsideWithCustom);
-printf("robot: %d\n", robot);
+printf("robot: %d\n", hgTracksRobot);
 printf("resetAll: %d\n", resetAll);
 printf("hideAll: %d\n", hideAll);
 printf("fromEncode: %d\n", fromEncode);
 printf("postScriptOutput: %d\n", postScriptOutput);
 printf("addYourOwn: %d\n", addYourOwn);
 printf("other: %d\n", other);
+printf("\n");
+
+printf("hgText total %d, robot %d (%4.2f%%)\n", 
+	hgTextTotal, hgTextRobot, 100.0*hgTextRobot/hgTextTotal);
+printf("hgGene total %d, robot %d (%4.2f%%)\n", 
+	hgGeneTotal, hgGeneRobot, 100.0*hgGeneRobot/hgGeneTotal);
+printf("hgNear total %d, robot %d (%4.2f%%)\n", 
+	hgNearTotal, hgGeneRobot, 100.0*hgNearRobot/hgNearTotal);
+
+printf("\n");
+slSort(&gList, nameCountCmp);
+printf("total hgc clicks: %d\n", hgcTotal);
+for (gEl = gList; gEl != NULL; gEl = gEl->next)
+    printf("%4.2f%% hgc %s: %d\n", 100.0 * gEl->count/hgcTotal, 
+    	gEl->name, gEl->count);
 }
 
 int main(int argc, char *argv[])
