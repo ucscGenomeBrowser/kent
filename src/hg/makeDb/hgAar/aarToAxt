@@ -89,7 +89,7 @@ inAarAlign {
     qSeq = qAlign;
     gsub("-+", "", qSeq);
     if (length(qSeq) != qLen) {
-        printf "Warning: query sequence length does not match queryrange length for\n" > "/dev/stderr";
+        printf "Warning: query sequence length does not match query range length for\n" > "/dev/stderr";
         printf "  %s:%d-%d, adjusting size to compensate for known bug\n",
             qName, qStart, qEnd > "/dev/stderr";
         qStart = qStart+(qLen-length(qSeq));
