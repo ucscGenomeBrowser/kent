@@ -162,9 +162,9 @@ spectrum on
 type chain hg16
 otherDb hg16
 
-track uniGene
+track uniGene_gg
 shortLabel UniGene
-longLabel UniGene Alignments
+longLabel $Organism UniGene Alignments
 group rna
 priority 70
 visibility hide
