@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.901 2005/02/09 23:43:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.902 2005/02/10 20:57:06 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6603,7 +6603,8 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 char c[2] = "";
 int i,j,textPos=0;
 int x1, x2;
-char *motifString = cartOptionalString(cart,"hgt.motifs");
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
+boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 char **motifs = NULL;
 boolean *inMotif = NULL;
 int motifCount = 0;
@@ -6618,8 +6619,21 @@ if(motifString != NULL && strlen(motifString) != 0)
     touppers(motifString);
     motifString = cloneString(motifString);
     motifCount = chopString(motifString, ",", NULL, 0);
-    AllocArray(motifs, motifCount);
+    if (complementsToo)
+	AllocArray(motifs, motifCount*2);	/* twice as many */
+    else
+	AllocArray(motifs, motifCount);
     chopString(motifString, ",", motifs, motifCount);
+    if (complementsToo)
+	{
+	for(i = 0; i < motifCount; i++)
+	    {
+	    int comp = i + motifCount;
+	    motifs[comp] = cloneString(motifs[i]);
+	    reverseComplement(motifs[comp],strlen(motifs[comp]));
+	    }
+	motifCount *= 2;	/* now we have this many	*/
+	}
     AllocArray(inMotif, textLength);
     for(i = 0; i < motifCount; i++)
 	{
@@ -6635,6 +6649,7 @@ if(motifString != NULL && strlen(motifString) != 0)
 	    }
 	}
     freez(&motifString);
+    freez(&motifs);
     }
 
 for (i=0; i<count; i++, text++, textPos++)
@@ -10092,7 +10107,7 @@ void tracksDisplay()
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
-char *motifString = cartOptionalString(cart,"hgt.motifs");
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
 if (NULL == position) 
