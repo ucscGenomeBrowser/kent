@@ -69,6 +69,17 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track slamNonCodingHuman
+shortLabel Slam Non Coding Human
+longLabel SLAM predictions of human/mouse conserved non-coding regions
+group compGeno
+priority 120
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5
+
 track blastzBestMouse
 shortLabel Best Mouse
 longLabel Blastz Mouse(Feb03) Best in Genome Alignments
