@@ -115,7 +115,7 @@ hgp->posCount = posCount;
 static boolean isContigName(char *contig)
 /* Return TRUE if a FPC contig name. */
 {
-return startsWith("ctg", contig);
+return startsWith("ctg", contig) || startsWith("NT_", contig);
 }
 
 static boolean isAncientRName(char *name)
@@ -151,9 +151,8 @@ hFreeConn(&conn);
 }
 
 
-void findContigPos(char *contig, char **retChromName, 
+boolean findContigPos(char *contig, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
-
 /* Find position in genome of contig.  Don't alter
  * return variables if some sort of error. */
 {
@@ -161,20 +160,26 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
 char **row;
-struct ctgPos *ctgPos;
+boolean foundIt;
+
 dyStringPrintf(query, "select * from ctgPos where contig = '%s'", contig);
 sr = sqlMustGetResult(conn, query->string);
 row = sqlNextRow(sr);
 if (row == NULL)
-    errAbort("Couldn't find contig %s", contig);
-ctgPos = ctgPosLoad(row);
-*retChromName = hgOfficialChromName(ctgPos->chrom);
-*retWinStart = ctgPos->chromStart;
-*retWinEnd = ctgPos->chromEnd;
-ctgPosFree(&ctgPos);
+    foundIt = FALSE;
+else
+    {
+    struct ctgPos *ctgPos = ctgPosLoad(row);
+    *retChromName = hgOfficialChromName(ctgPos->chrom);
+    *retWinStart = ctgPos->chromStart;
+    *retWinEnd = ctgPos->chromEnd;
+    ctgPosFree(&ctgPos);
+    foundIt = TRUE;
+    }
 freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+return foundIt;
 }
 
 static char *startsWithShortHumanChromName(char *chrom)
@@ -1450,15 +1455,14 @@ else if (isAncientRName(query))
     singlePos( hgp, "Human/Mouse Ancient Repeats", NULL, query, chrom, start, end );
     }
 
-else if (isContigName(query))
+else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
     {
-    findContigPos(query, &chrom, &start, &end);
     if (relativeFlag == TRUE)
 	{
 	end = start + iEnd;
 	start = start + iStart;
 	}
-    singlePos(hgp, "FPC Contig", NULL, query, chrom, start, end);
+    singlePos(hgp, "Map Contig", NULL, query, chrom, start, end);
     }
 else if (hgFindCytoBand(query, &chrom, &start, &end))
     {
