@@ -5,6 +5,7 @@
 #include "psl.h"
 #include "options.h"
 
+int minScore = 0;
 int maxIns = 100000000;
 boolean singleQ = FALSE;
 boolean swapScore = FALSE;
@@ -32,6 +33,7 @@ errAbort(
   "   -singleQ      only one hit per query\n"
   "   -maxIns=num   maximum number of tInsert\n"
   "   -swapScore    swap query and target in input score file\n"
+  "   -minScore=num minimum score to get printed\n"
   );
 }
 int sortByScore(const void *e1, const void *e2)
@@ -97,7 +99,7 @@ for(score = scoreList ; score != NULL ; score = score->next)
     psl = hashFindVal(pslHash, ds->string);
     if (psl == NULL)
 	printf("%s not found", ds->string);
-    else if (psl->tBaseInsert < maxIns)
+    else if ((psl->tBaseInsert < maxIns) && (score->score > minScore))
 	{
 	if (!singleQ ||  (hashFindVal(qHash, psl->qName) == NULL) )
 	    {
@@ -120,6 +122,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+minScore = optionInt("minScore", minScore);
 maxIns = optionInt("maxIns", maxIns);
 singleQ = optionExists("singleQ");
 swapScore = optionExists("swapScore");
