@@ -120,4 +120,13 @@ void spaceToUnderbar(char *s);
 int chrStrippedCmp(char *chrA, char *chrB);
 /*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix */
 
+int chrNameCmp(char *str1, char *str2);
+/* Compare chromosome names by number, then suffix.  str1 and str2 must 
+ * match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+
+int chrSlNameCmp(const void *el1, const void *el2);
+/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
+ * slName **s (as passed in by slSort) whose names match the regex 
+ * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+
 #endif /* OBSCURE_H */
