@@ -1282,15 +1282,6 @@ visibility hide
 color 0,100,100
 type psl .
 
-track eponine
-shortLabel Eponine TSS
-longLabel Eponine Predicted Transcription Start Sites
-group regulation
-priority 91.9
-visibility dense
-color 0,100,100
-type bed 4 +
-
 track pHMM_5_WayTop1
 shortLabel 1% Conserved
 longLabel Top 1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
