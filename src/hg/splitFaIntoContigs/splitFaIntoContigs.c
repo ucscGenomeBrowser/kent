@@ -66,74 +66,38 @@ fflush(stdout);
     exit(-1);
 }
 
-void writeChromLiftFiles(char *chromName)
+void writeChromLiftFiles(char *chromName, struct agpData *startAgpData, char *destDir)
 /*
 Writes the lift and list files out for a single chromsome
 
-param chromName - The name of the chromsome for which we are 
- writing the agp entries
+param chromName - The name of the chromsome.
+param startGap - Pointer to the dna gap or fragment at which we are starting to
+ write data. The data will include the contents of this gap/frag.
+param destDir - The destination dir to which to write the agp file.
  */
 {
 
 }
 
-void writeChromAgpFile(char *chromName)
+void writeAgpFile(char *chromName, struct agpData *startAgpData, char *filename)
 /*
 Writes the agp file out for a single chromsome
 
-param chromName - The name of the chromsome for which we are 
- writing the agp entries
- */
-{
-
-}
-
-void writeChromFaFile(char *chromName, char *dna, int dnaSize)
-/*
-Writes the contents of a single chromsome out to a file in FASTA format.
-
-param chromName - The name of the chromosome for which we are writing
- the fa file.
-param dna - Pointer to the dna array.
-param dnaSize - The size of the dna array.
- */
-{
-char command[DEFAULT_PATH_SIZE];
-char destDir[DEFAULT_PATH_SIZE];
-char filename [DEFAULT_PATH_SIZE];
-int i = 0;
-
-/* Strip off the leading "chr" prefix */
-sprintf(destDir, "%s/%s", outputDir, &chromName[3]);
-sprintf(command, "mkdir -p %s", destDir);
-system(command);
-
-sprintf(filename, "%s/%s.fa", destDir, chromName);
-faWrite(filename, chromName, dna, dnaSize);
-}
-
-void writeSuperContigAgpFile(struct agpData *startData, struct agpData *endData, char *filename, int sequenceNum)
-/*
-Creates an agp file containing the contents of a supercontig in agp format.
-
+param chromName - The name of the chromsome.
 param startGap - Pointer to the dna gap or fragment at which we are starting to
  write data. The data will include the contents of this gap/frag.
-param endGap - Pointer to the dna gap or fragment at which we are stopping to
- write data. The data will include the contents of this gap/frag.
-param filename - The file name to which to write.
-param sequenceNum - The 1-based number of this clone supercontig in the chromsome.
+param filename - The file to write.
  */
 {
-int startOffset = startData->data.pGap->chromStart;
-int endOffset = endData->data.pGap->chromEnd;
 struct agpData *curData = NULL;
-FILE *fp = fopen(filename, "w");
+FILE *fp = NULL;
 
-printf("Writing agp file for chromo %s\n", endData->data.pGap->chrom);
-printf("Filename = %s\n", filename);
-printf("Writing agp file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
+fp = fopen(filename, "w");
 
-curData = startData;
+printf("Writing agp file %s for chromo %s\n", filename, startAgpData->data.pGap->chrom);
+
+
+curData = startAgpData;
 while (NULL != curData) 
     {
     if (curData->isGap)
@@ -161,14 +125,67 @@ while (NULL != curData)
 fclose(fp);
 }
 
+void writeChromAgpFile(char *chromName, struct agpData *startAgpData, char *destDir)
+/*
+Writes the agp file out for a single chromsome
+
+param chromName - The name of the chromsome.
+param startGap - Pointer to the dna gap or fragment at which we are starting to
+ write data. The data will include the contents of this gap/frag.
+param destDir - The destination dir to which to write the agp file.
+ */
+{
+char *filename = NULL;
+
+sprintf(filename, "%s/%s.agp", destDir, chromName);
+printf("Writing chromosome agp file\n");
+writeAgpFile(chromName, startAgpData, filename);
+}
+
+void writeSuperContigAgpFile(struct agpData *startAgpData, struct agpData *endAgpData, char *filename, int sequenceNum)
+/*
+Creates an agp file containing the contents of a supercontig in agp format.
+
+param startAgpData - Pointer to the dna gap or fragment at which we are starting to
+ write data. The data will include the contents of this gap/frag.
+param endAgpData - Pointer to the dna gap or fragment at which we are stopping to
+ write data. The data will include the contents of this gap/frag.
+param filename - The file name to which to write.
+param sequenceNum - The 1-based number of this clone supercontig in the chromsome.
+ */
+{
+int startOffset = startAgpData->data.pGap->chromStart;
+int endOffset = endAgpData->data.pGap->chromEnd;
+
+printf("Writing supercontig agp file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
+writeAgpFile( endAgpData->data.pGap->chrom, startAgpData, filename);
+}
+
+void writeChromFaFile(char *chromName, char *dna, int dnaSize, char *destDir)
+/*
+Writes the contents of a single chromsome out to a file in FASTA format.
+
+param chromName - The name of the chromosome for which we are writing
+ the fa file.
+param dna - Pointer to the dna array.
+param dnaSize - The size of the dna array.
+ */
+{
+char filename [DEFAULT_PATH_SIZE];
+
+sprintf(filename, "%s/%s.fa", destDir, chromName);
+printf("Writing fa file %s for chromosome %s\n", filename, chromName);
+faWrite(filename, chromName, dna, dnaSize);
+}
+
 void writeSuperContigFaFile(DNA *dna, struct agpData *startData, struct agpData *endData, char *filename, int sequenceNum)
 /*
 Creates a fasta file containing the contents of a supercontig in FASTA format.
 
 param dna - Pointer to the dna array.
-param startGap - Pointer to the dna gap or fragment at which we are starting to
+param startData - Pointer to the dna gap or fragment at which we are starting to
  write data. The data will include the contents of this gap/frag.
-param endGap - Pointer to the dna gap or fragment at which we are stopping to
+param end - Pointer to the dna gap or fragment at which we are stopping to
  write data. The data will include the contents of this gap/frag.
 param filename - The file name to which to write.
 param sequenceNum - The 1-based number of this clone supercontig in the chromsome.
@@ -176,14 +193,10 @@ param sequenceNum - The 1-based number of this clone supercontig in the chromsom
 {
 int startOffset = startData->data.pGap->chromStart;
 int endOffset = endData->data.pGap->chromEnd;
-int i = 0;
 int dnaSize = 0;
 char sequenceName[BUF_SIZE];
 
-printf("Writing fa file for chromo %s\n", endData->data.pGap->chrom);
-printf("Filename = %s\n", filename);
-printf("Writing fa file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
-
+printf("Writing supercontig fa file %s starting at dna[%d] up to but not including dna[%d]\n", filename, startOffset, endOffset);
 sprintf(sequenceName, "%s_%d %d-%d", startData->data.pGap->chrom, sequenceNum, startOffset, endOffset);
 dnaSize = endOffset - startOffset;
 faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
@@ -288,7 +301,7 @@ curAgpData->next = NULL; /* Terminate the linked list */
 return curAgpData;
 }
 
-void makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, int splitSize)
+struct agpData* makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, int splitSize, char *destDir)
 /*
 Makes supercontig files for each chromosome
 
@@ -297,38 +310,42 @@ param dna - The dna sequence we are splitting up.
 param dnaSize - The size of the dna sequence we are splitting up.
 param splitSize - The sizes of the supercontigs we are splitting the 
  dna into.
+param destDir - The destination directory where to store files.
+
+return startAgpData - The first agp entry in the sequence.
  */
 {
 struct agpData *startAgpData = NULL;
 struct agpData *endAgpData = NULL;
+struct agpData *startChromAgpData = NULL;
 
-char destDir[DEFAULT_PATH_SIZE];
 char filename[DEFAULT_PATH_SIZE];
+char contigDir[DEFAULT_PATH_SIZE];
 char command[DEFAULT_PATH_SIZE];
 int sequenceNum = 0;
-
-/*
-output filename = outputDir/chromName/chromFrag/chromFrag.fa
-example:
-  outputDir = "output"
-  chromName = "chr1" - we strip off the "chr"
-  chromFrag = "chr1_1"
-  result    = "output/1/chr1_1/chr1_1.fa"
-*/
 
 do
     {
     endAgpData = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpData);
     sequenceNum++;
-    sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startAgpData->data.pGap->chrom[3]), startAgpData->data.pGap->chrom, sequenceNum);
-    sprintf(command, "mkdir -p %s", destDir);
+    sprintf(contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
+    sprintf(command, "mkdir -p %s", contigDir);
     system(command);
 
-    sprintf(filename, "%s/%s_%d.fa", destDir, startAgpData->data.pGap->chrom, sequenceNum);
+    sprintf(filename, "%s/%s_%d.fa", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
     writeSuperContigFaFile(dna, startAgpData, endAgpData, filename, sequenceNum);
-    sprintf(filename, "%s/%s_%d.agp", destDir, startAgpData->data.pGap->chrom, sequenceNum);
+
+    sprintf(filename, "%s/%s_%d.agp", contigDir, startAgpData->data.pGap->chrom, sequenceNum);
     writeSuperContigAgpFile(startAgpData, endAgpData, filename, sequenceNum);
+
+    /* Save the start of the whole chromosome */
+    if (NULL == startChromAgpData)
+	{
+	startChromAgpData = startAgpData;
+	}
     } while (endAgpData->data.pGap->chromEnd < dnaSize);
+
+return startChromAgpData;
 }
 
 void splitFaIntoContigs(char *agpFile, char *faFile, int splitSize)
@@ -347,6 +364,9 @@ struct lineFile *lfFa = lineFileOpen(faFile, TRUE);
 int dnaSize = 0;
 char *chromName = NULL;
 DNA *dna = NULL;
+struct agpData *startAgpData = NULL;
+char destDir[DEFAULT_PATH_SIZE];
+char command[DEFAULT_PATH_SIZE];
 
 printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bases\n", agpFile, faFile, splitSize);
 
@@ -354,10 +374,27 @@ printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bas
 while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     {
     printf("\nProcessing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
-    writeChromFaFile(chromName, dna, dnaSize);
-    writeChromAgpFile(chromName);
-    writeChromLiftFiles(chromName);
-    makeSuperContigs(lfAgp, dna, dnaSize, splitSize);
+
+    /* Make the output directory. Strip off the leading "chr" prefix.
+       output filename = outputDir/chromName/chromFrag/chromFrag.xxx
+       example:
+       outputDir = "output"
+       chromName = "chr1" - we strip off the "chr"
+       chromFrag = "chr1_1"
+       result    = "output/1/chr1_1/chr1_1.fa"
+     */
+
+
+    sprintf(destDir, "%s/%s", outputDir, &chromName[3]);
+    sprintf(command, "mkdir -p %s", destDir);
+    system(command);
+
+    startAgpData = makeSuperContigs(lfAgp, dna, dnaSize, splitSize, destDir);
+
+    writeChromFaFile(chromName, dna, dnaSize, destDir);
+    writeChromAgpFile(chromName, startAgpData, destDir);
+    writeChromLiftFiles(chromName, startAgpData, destDir);
+
     printf("Done processing chromosome %s\n", chromName);
     }
 
