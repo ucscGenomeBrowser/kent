@@ -566,6 +566,7 @@ exit; # don't actually run this like a script :)
     ssh eieio
     cd ~/hg15
     #- Build the .zip files
+    # Make sure to read and edit jkStuff/zipAll.sh to point to the correct paths.
     ./jkStuff/zipAll.sh |& tee zipAll.log
     #- Look at zipAll.log to make sure all file lists look reasonable.  
     #- Check zip file integrity:
