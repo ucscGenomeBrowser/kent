@@ -334,7 +334,7 @@ else
     struct rudp *ru = rudpOpen();
     struct tms tms;
 
-    ru->maxRetries = 15;
+    ru->maxRetries = 20;
     signal(SIGTERM, termHandler);
     cid = wait(&status);
     times(&tms);
