@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.706 2004/07/28 14:53:13 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.707 2004/07/28 21:08:37 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11729,7 +11729,7 @@ if (row != NULL)
 	}
     printf("</TABLE>\n");
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-    if (lfs->score == 1000 && (!sameString("bacEndSingles", track)) )
+    if (lfs->score == 1000)
         {
 	printf("<H4>This is the only location found for %s</H4>\n",clone);
 	}
