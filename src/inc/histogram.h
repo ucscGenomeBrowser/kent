@@ -17,5 +17,6 @@ void freeHistoGram(struct histoResult **histoResults);
 /*      free the histoResults list	*/
 
 struct histoResult *histoGram(float *values, size_t N, float binSize,
-	unsigned binCount, float minValue, float min, float max);
+	unsigned binCount, float minValue, float min, float max,
+	struct histoResult *accumHisto);
 /*	construct histogram of data in values[N] array.	*/
