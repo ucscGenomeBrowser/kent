@@ -3667,3 +3667,63 @@ XXXX need to check the track
     # update ~/kent/src/hg/makeDb/trackDb/human/hg16/uniGene_2.html 
     # with current uniGene date. 
 
+# MAKING KNOWNFOLDUTR TABLES
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    mkdir -p /cluster/data/hg16/bed/rnaStruct
+    cd /cluster/data/hg16/bed/rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa hg16 knownGene utr3 utr3/utr.fa
+    utrFa hg16 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/hg16/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 split/s
+    faSplit sequence utr5/utr.fa 50000 split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(PATH1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+#CPU time in finished jobs:     842416s   14040.26m   234.00h    9.75d  0.027 y
+#IO & Wait Time:                 78541s    1309.02m    21.82h    0.91d  0.002 y
+#Average job time:                  32s       0.53m     0.01h    0.00d
+#Longest job:                     3318s      55.30m     0.92h    0.04d
+#Submission to last job:          4282s      71.37m     1.19h    0.05d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+#Completed: 25808 of 25808 jobs
+#CPU time in finished jobs:      51700s     861.67m    14.36h    0.60d  0.002 y
+#IO & Wait Time:                114430s    1907.16m    31.79h    1.32d  0.004 y
+#Average job time:                   6s       0.11m     0.00h    0.00d
+#Longest job:                     1044s      17.40m     0.29h    0.01d
+#Submission to last job:          1164s      19.40m     0.32h    0.01d
+
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/rnaStruct/utr5
+    hgLoadRnaFold hg16 knownFoldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold hg16 knownFoldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr3
+    rm -r split fold err batch.bak
