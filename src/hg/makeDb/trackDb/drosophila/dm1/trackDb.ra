@@ -27,7 +27,7 @@ type genePred twinscanPep
 
 track evofold
 shortLabel evofold
-longLabel evofold predictions of RNA secondary structure (id_score)
+longLabel evofold predictions of RNA secondary structure (id_strand_score)
 group genes
 priority 63
 visibility hide
@@ -37,7 +37,7 @@ mafTrack multiz8way
 
 track rnafold
 shortLabel RNAfold
-longLabel RNAfold predictions of RNA secondary structure (id_score)
+longLabel RNAfold predictions of RNA secondary structure (id_strand_score)
 group genes
 priority 64
 visibility hide
