@@ -44,11 +44,22 @@ visibility dense
 spectrum on
 type psl xeno
 
+track blatTetra
+shortLabel Tetra BLAT
+longLabel Tetraodon (May 02) Translated BLAT Alignments
+group compGeno
+priority 121
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
 track blatHg16
 shortLabel Human BLAT
 longLabel Human (hg16-Jul 03) Translated BLAT Alignments
 group compGeno
-priority 122
+priority 130
 visibility dense
 color 0,60,120
 altColor 200,220,255

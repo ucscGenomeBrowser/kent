@@ -34,5 +34,11 @@ visibility      dense
 track           ensGene
 visibility      dense
 
+track           blatTetra
+visibility      dense
+
 track           blatHg16
+visibility      dense
+
+track           ctgPos
 visibility      dense
