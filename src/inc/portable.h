@@ -89,5 +89,8 @@ char *getUser();
 void envUpdate(char *name, char *value);
 /* Update an environment string */
 
+int mustFork();
+/* Fork or abort. */
+
 #endif /* PORTABLE_H */
 

@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.18 2003/09/24 02:29:25 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.19 2005/01/10 00:23:53 kent Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -280,5 +280,14 @@ struct passwd *pw = getpwuid(uid);
 if (pw == NULL)
     errnoAbort("can't get user name for uid %d", uid);
 return pw->pw_name;
+}
+
+int mustFork()
+/* Fork or abort. */
+{
+int childId = fork();
+if (childId == -1)
+    errnoAbort("Unable to fork");
+return childId;
 }
 
