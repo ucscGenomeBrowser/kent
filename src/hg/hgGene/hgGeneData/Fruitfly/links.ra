@@ -39,7 +39,7 @@ priority 40
 name pubMed
 shortLabel PubMed
 tables bdgpSwissProt
-idSql select symbol from bdgpSwissProt where bdgpName = '%s'
+idSql select symbol from bdgpSwissProt where bdgpName = '%s' and symbol != SUBSTRING_INDEX(bdgpName,'-',1)
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 60
 
