@@ -11,4 +11,4 @@ hgWormLinks: $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgWormLinks${EXE}
 
 test:
-	cd /cluster/data/ce1/bed/steinHelp ; hgWormLinks spWp.ace seqPepDesc.ace wbConcise.txt wbGeneClass.txt ../orfToGene/orfToGene sangerLinks.txt
+	cd /cluster/data/ce1/bed/steinHelp && hgWormLinks spWp.ace seqPepDesc.ace wbConcise.txt wbGeneClass.txt ../orfToGene/orfToGene sangerLinks.txt
