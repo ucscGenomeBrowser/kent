@@ -66,12 +66,7 @@ spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
 
-searchTable ctgPos2
-searchMethod exact
-shortCircuit 1
-termRegex (ctg|BX|AL)[0-9]+
-query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
-searchPriority 5
+
 
 searchTable gold
 searchMethod exact
@@ -80,20 +75,8 @@ shortCircuit 1
 termRegex Contig[0-9]+
 searchPriority 8
 
-searchTable blastHg17KG
-searchType psl
-xrefTable hg17.blastKGRef01
-xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
-searchPriority 25
+searchTable geneid
+searchType genePred
+termRegex SCAFFOLD[0-9]+_[0-9]+\.[0-9]+
+searchPriority 50
 
-searchName blastHg17KGGene
-searchTable blastHg17KG
-searchType psl
-xrefTable hg17.blastKGRef01
-xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
-searchPriority 25
-
-searchTable blastHg17KG
-searchType psl
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
-searchPriority 25
