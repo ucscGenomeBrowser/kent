@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.3 2004/09/12 21:30:17 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.4 2004/09/12 23:49:04 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -248,7 +248,7 @@ for (i=0; i<motif->columnCount; ++i)
 dnaMotifNormalize(motif);
 }
 
-void dnaMotifMakeProbabilitic(struct dnaMotif *motif)
+void dnaMotifMakeProbabalistic(struct dnaMotif *motif)
 /* Change motif, which may be score or count based, to 
  * probabalistic one, where each column adds to 1.0 */
 {
@@ -360,9 +360,9 @@ static void dnaMotifDims(struct dnaMotif *motif, double widthPerBase, double hei
 	int *retWidth, int *retHeight)
 /* Calculate dimensions of motif when rendered. */
 {
-static int widthFudgeFactor = 2;
+static int widthFudgeFactor = 2, heightFudgeFactor = 4;
 *retWidth = ceil(widthPerBase * motif->columnCount) + widthFudgeFactor;
-*retHeight = ceil(height);
+*retHeight = ceil(height) + heightFudgeFactor;
 }
 
 void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, char *fileName)
