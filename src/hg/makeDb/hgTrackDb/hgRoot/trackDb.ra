@@ -158,6 +158,15 @@ visibility dense
 color 0,100,0
 type bed 5 +
 
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+priority 17.5
+visibility dense
+color 120,50,0
+type genePred genscanPep
+chromosomes chr22,
+
 track mrna
 shortLabel Human mRNAs
 longLabel Human mRNAs from Genbank
