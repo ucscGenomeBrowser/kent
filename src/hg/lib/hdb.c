@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.216 2004/11/04 23:45:16 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.217 2004/11/05 02:08:26 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -225,7 +225,7 @@ if (minLen <= 0)
     char **row;
     struct slName *nameList = NULL, *name, *last;
     int len = 4;
-    sr = sqlGetResult(conn, "select name from chromInfo");
+    sr = sqlGetResult(conn, "select chrom from chromInfo");
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	name = slNameNew(row[0]);
