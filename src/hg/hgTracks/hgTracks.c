@@ -291,7 +291,8 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = slCount(tg->items) * tg->lineHeight;
+	/*tg->height = slCount(tg->items) * tg->lineHeight;*/
+	tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
@@ -1038,7 +1039,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
         //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)s-e)*(double)heightPer/1000.0+(double)heightPer);
+        y1 = (int)((double)y+((double)(s-e))*(double)heightPer/1000.0+(double)heightPer);
 
         ybase = (int)((double)y+(double)heightPer/1000.0+(double)heightPer);
 
@@ -1078,8 +1079,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
 
 	    }
-    if (isFull)
-	y += lineHeight;
+    /*if (isFull) y += lineHeight; CURRENTLY NO FULL MODE*/
     }
 }
 
