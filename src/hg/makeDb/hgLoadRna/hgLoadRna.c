@@ -125,7 +125,7 @@ char query[256];
 sprintf(query,
     "create table %s (" 
        "id int not null primary key,"
-       "name varchar(255) not null,"
+       "name longtext not null,"
        "index (name(16)))",
     tableName); 
 sqlUpdate(conn, query);

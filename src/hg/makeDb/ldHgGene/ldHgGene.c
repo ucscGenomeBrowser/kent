@@ -2,12 +2,25 @@
  * mySQL database. */
 
 #include "common.h"
+#include "cheapcgi.h"
 #include "hash.h"
 #include "dystring.h"
 #include "linefile.h"
 #include "gff.h"
 #include "jksql.h"
 #include "genePred.h"
+
+char *exonType = "exon";	/* Type field that signifies exons. */
+
+void usage()
+{
+errAbort(
+    "ldHgGene - load database with gene predictions from a gff file.\n"
+    "usage:\n"
+    "     ldHgGene database table file(s).gff\n"
+    "options:\n"
+    "     -exon=type   Sets type field for exons to specific value\n");
+}
 
 char *createString = 
 "CREATE TABLE %s ( \n"
@@ -23,18 +36,10 @@ char *createString =
 "   exonEnds longblob not null,	# Exon end positions \n"
           "   #Indices \n"
 "   INDEX(name), \n"
-"   INDEX(chrom(12),txStart), \n"
-"   INDEX(chrom(12),txEnd) \n"
+"   INDEX(chrom(8),txStart), \n"
+"   INDEX(chrom(8),txEnd) \n"
 ")";
 
-
-void usage()
-{
-errAbort(
-    "ldHgGene - load database with gene predictions from a gff file.\n"
-    "usage:\n"
-    "     ldHgGene database table file(s).gff");
-}
 
 void loadIntoDatabase(char *database, char *table, char *tabName)
 /* Load tabbed file into database table. Drop and create table. */
@@ -105,7 +110,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
         {
 	name = convertSoftberryName(name);
 	}
-    gp = genePredFromGroupedGff(gff, group, name, "exon");
+    gp = genePredFromGroupedGff(gff, group, name, exonType);
     if (gp != NULL)
 	slAddHead(&gpList, gp);
     }
@@ -125,7 +130,9 @@ loadIntoDatabase(database, table, tabName);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc < 3)
     usage();
+exonType = cgiUsualString("exon", exonType);
 ldHgGene(argv[1], argv[2], argc-3, argv+3);
 }

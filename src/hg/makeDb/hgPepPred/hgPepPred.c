@@ -1,5 +1,6 @@
 /* hgPepPred - Load peptide predictions from Ensembl or Genie. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
@@ -17,9 +18,13 @@ errAbort(
   "or\n"
   "   hgPepPred database generic table files(s)\n"
   "which will load the given table assuming the peptide name is\n"
-  "in the fasta record"
+  "in the fasta record\n"
+  "options:\n"
+  "   -abbr=prefix  Abbreviate by removing prefix from names\n"
   );
 }
+
+char *abbr = NULL;
 
 
 void makeCustomTable(char *database, char *table, char *defString)
@@ -166,6 +171,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	else
 	    fputc('\n', f);
 	trans = firstWordInLine(line+1);
+	if (abbr != NULL && startsWith(abbr, trans))
+	    trans += strlen(abbr);
 	if (hashLookup(uniq, trans) != NULL)
 	    {
 	    warn("Duplicate %s line %d of %s. Ignoring all but first.", trans, lf->lineIx, lf->fileName);
@@ -235,6 +242,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	else
 	    fputc('\n', f);
 	trans = firstWordInLine(line+1);
+	if (abbr != NULL && startsWith(abbr, trans))
+	    trans += strlen(abbr);
 	if (hashLookup(uniq, trans) != NULL)
 	    errAbort("Duplicate %s line %d of %s", trans, lf->lineIx, lf->fileName);
 	hashAdd(uniq, trans, NULL);
@@ -283,8 +292,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *type;
+cgiSpoof(&argc, argv);
 if (argc < 4)
     usage();
+abbr = cgiUsualString("abbr", abbr);
 type = argv[2];
 if (sameWord(type, "ensembl"))
     ensPepPred(argv[1], argc-3, argv+3);

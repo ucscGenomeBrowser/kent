@@ -137,12 +137,11 @@ while (refAlign != NULL)
     }
 }
 
-static void createTabFile(struct refAlign* refAlignList)
+static void addToTabFile(struct refAlign* refAlignList, FILE *tabFh)
 /* Create the tmp tab file from a list of refAlign objects */
 {
 struct refAlign* refAlign = NULL;
 
-FILE* tabFh = mustOpen(TMP_TAB_FILE, "w");
 for (refAlign = refAlignList; refAlign != NULL; refAlign = refAlign->next)
     {
     if (!noBin)
@@ -150,8 +149,16 @@ for (refAlign = refAlignList; refAlign != NULL; refAlign = refAlign->next)
                 hFindBin(refAlign->chromStart, refAlign->chromEnd));
     refAlignTabOut(refAlign, tabFh);
     }
+}
+
+static void createTabFile(struct refAlign* refAlignList)
+/* Create the tmp tab file from a list of refAlign objects */
+{
+FILE* tabFh = mustOpen(TMP_TAB_FILE, "w");
+addToTabFile(refAlignList, tabFh);
 carefulClose(&tabFh);
 }
+
 
 static void createTable(struct sqlConnection *conn,
                         char* table)
@@ -174,41 +181,35 @@ sqlRemakeTable(conn, table, sqlCmd->string);
 dyStringFree(&sqlCmd);
 }
 
-static void loadTable(struct sqlConnection *conn,
-                      char* database,
+static void loadTabFile(char* database,
+                            char* table)
+/* load a reference alignment into a table containing all chromosomes */
+{
+struct sqlConnection* conn =  sqlConnect(database);
+char query[512];
+
+printf("Creating database table %s\n", table);
+createTable(conn, table);
+sprintf(query, "load data local infile '%s' into table %s", TMP_TAB_FILE,
+        table);
+sqlUpdate(conn, query);
+sqlDisconnect(&conn);
+#if REMOVE_TMP_FILE
+unlink(TMP_TAB_FILE);
+#endif
+}
+
+
+static void loadTable(char* database,
                       char* table,
                       struct refAlign* refAlignList)
 /* Load a single refAlign table from a list of refAlign objects. */
 {
 char query[512];
 
-printf("Creating table %s\n", table);
-createTabFile(refAlignList);
-createTable(conn, table);
-
 printf("Writing tab-delimited file %s\n", TMP_TAB_FILE);
 createTabFile(refAlignList);
-
-printf("Importing into %d rows into %s.%s\n",
-       slCount(refAlignList), database, table);
-sprintf(query, "load data local infile '%s' into table %s", TMP_TAB_FILE,
-        table);
-sqlUpdate(conn, query);
-
-#if REMOVE_TMP_FILE
-unlink(TMP_TAB_FILE);
-#endif
-}
-
-static void loadSingleTable(char* database,
-                            char* rootTable,
-                            struct refAlign* refAlignList)
-/* load a reference alignment into a table containing all chromosomes */
-{
-struct sqlConnection* conn =  sqlConnect(database);
-loadTable(conn, database, rootTable, refAlignList);
-sqlDisconnect(&conn);
-slFreeList(&refAlignList);
+loadTabFile(database, table);
 }
 
 static void loadTablePerChrom(char* database,
@@ -216,7 +217,6 @@ static void loadTablePerChrom(char* database,
                               struct refAlign* refAlignList)
 /* load a reference alignment into multiple tables, one per chromosome */
 {
-struct sqlConnection* conn =  sqlConnect(database);
 struct refAlignChrom* chromList 
     = refAlignChromListBuild(refAlignList);
 struct refAlignChrom* chromEntry = chromList;
@@ -227,11 +227,10 @@ while (chromEntry != NULL)
     char table[256];
     sprintf(table, "%s_%s", chromEntry->chrom, rootTable);
     if (chromEntry->refAlignList != NULL)
-        loadTable(conn, database, table, chromEntry->refAlignList);
+        loadTable(database, table, chromEntry->refAlignList);
     chromEntry = chromEntry->next;
     }
 
-sqlDisconnect(&conn);
 /* free list and refAlign objects */
 refAlignChromListFree(chromList);
 }
@@ -245,8 +244,9 @@ if (msg != NULL)
 errAbort(
 "hgRefAlign - Load a reference alignment into a table.\n"
   "usage:\n"
-  "   hgRefAlign [-n] format db table alignfile ...\n"
-  "supported formats are: `webb', `tab'");
+  "   hgRefAlign [-n] format db table alignfile(s) ...\n"
+  "supported formats are: `webb', `tab'\n"
+  "The same chromosome should not appear in multiple alignfiles");
 }
 
 int main(int argc, char *argv[])
@@ -259,6 +259,9 @@ int nfiles;
 char** fnames;
 int opt;
 struct refAlign* refAlignList = NULL;
+int i;
+FILE* tabFh = NULL;
+
 setlinebuf(stdout); 
 setlinebuf(stderr); 
 
@@ -285,25 +288,37 @@ rootTable = argv[2];
 nfiles = argc-3;
 fnames = argv+3;
 
-/* read data */
-if (strcmp(fileFormat, "webb") == 0)
-    refAlignList = parseWebbFiles(nfiles, fnames);
- else if (strcmp(fileFormat, "tab") == 0)
-    refAlignList = parseTabFiles(nfiles, fnames);
-else
-    errAbort("unknown alignment file format \"%s\"", fileFormat);
+if (!tablePerChrom)
+    tabFh = mustOpen(TMP_TAB_FILE, "w");
 
-if (refAlignList == NULL)
-    errAbort("no alignments found");
-
-slSort(&refAlignList, bedCmp);
-calcStats(refAlignList);
-
-/* load database  */
-if (tablePerChrom)
-    loadTablePerChrom(database, rootTable, refAlignList);
-else
-    loadSingleTable(database, rootTable, refAlignList);
+/* read data and write tab file. */
+for (i=0; i<nfiles; ++i)
+    {
+    char *fileName = fnames[i];
+    printf("Reading %s\n", fileName);
+    if (sameString(fileFormat, "webb"))
+	refAlignList = parseWebbFile(fileName);
+    else if (sameString(fileFormat, "tab"))
+        refAlignList = parseTabFile(fileName);
+    else
+	errAbort("unknown alignment file format \"%s\"", fileFormat);
+    if (refAlignList == NULL)
+        continue;
+    slSort(&refAlignList, bedCmp);
+    calcStats(refAlignList);
+    if (tablePerChrom)
+	loadTablePerChrom(database, rootTable, refAlignList);
+    else
+        addToTabFile(refAlignList, tabFh);
+    refAlignFreeList(&refAlignList);
+    }
+       
+/* load database if doing it in one big table. */
+if (!tablePerChrom)
+    {
+    carefulClose(&tabFh);
+    loadTabFile(database, rootTable);
+    }
 
 printf("Import complete\n");
 

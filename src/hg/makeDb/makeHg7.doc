@@ -669,6 +669,24 @@ PATTERN HUNTER MOUSE ALIGNMENTS
      - cd /projects/hg3/mouse/patternHunter
      - zcat chr22.ph.gz | hgRefAlign -n tab hg7 phMouseAli -
 
+TIGR GENE INDEX
+
+  o - Download ftp://ftp.tigr.org/private/HGI_ren/*.tgz into
+      ~/oo.29/bed/tgi and then execute the following commands:
+          cd ~/oo.29/bed/tgi
+	  mv cattleTCs.tgz cowTCs.tgz
+	  foreach i (mouse cow human pig rat)
+	      mkdir $i
+	      cd $i
+	      gtar -zxf ../${i}*.tgz
+	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
+	      cd ..
+	  end
+	  mv human.gff human.bak
+	  sed s/THCs/TCs/ human.bak > human.gff
+	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+
+
 PRODUCING PSUEDO_GENE INFO
 
 o - Align with translated blat all human and non-human mRNAs into
