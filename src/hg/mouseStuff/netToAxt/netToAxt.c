@@ -11,6 +11,7 @@
 #include "axt.h"
 
 boolean qChain = FALSE;  /* Do chain from query side. */
+int maxGap = 10000;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +22,8 @@ errAbort(
   "   netToAxt in.net in.chain tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -qChain - net is with respect to the q side of chains.\n"
+  "   -maxGap=N - maximum size of gap before breaking. Default 10000\n"
+  "   -gapOut=gap.tab - Output gap sizes to file\n"
   );
 }
 
@@ -110,7 +113,7 @@ struct nibInfo
     FILE *f;		/* Open file. */
     };
 
-void subchainT(struct chain *chain, int subStart, int subEnd, 
+void chainSubsetOnT(struct chain *chain, int subStart, int subEnd, 
     struct chain **retSubChain,  struct chain **retChainToFree)
 /* Get subchain of chain bounded by subStart-subEnd on 
  * target side.  Return result in *retSubChain.  In some
@@ -221,8 +224,10 @@ axt->tStart = startB->tStart;
 axt->tEnd = a->tEnd;
 axt->tStrand = '+';
 axt->symCount = symCount;
-axt->qSym = qSym = needMem(symCount+1);
-axt->tSym = tSym = needMem(symCount+1);
+axt->qSym = qSym = needLargeMem(symCount+1);
+qSym[symCount] = 0;
+axt->tSym = tSym = needLargeMem(symCount+1);
+tSym[symCount] = 0;
 
 /* Fill in symbols. */
 a = NULL;
@@ -273,7 +278,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
         {
 	int dq = b->qStart - a->qEnd;
 	int dt = b->tStart - a->tEnd;
-	if (dq > 0 && dt > 0)
+	if ((dq > 0 && dt > 0) || dt > maxGap || dq > maxGap)
 	    {
 	    axt = axtFromBlocks(chain, startB, b, qSeq, qOffset, tSeq, tOffset);
 	    slAddHead(&axtList, axt);
@@ -288,12 +293,26 @@ slReverse(&axtList);
 return axtList;
 }
 
+void writeGaps(struct chain *chain, FILE *f)
+/* Write gaps to simple two column file. */
+{
+struct boxIn *a, *b;
+a = chain->blockList;
+for (b = a->next; b != NULL; b = b->next)
+    {
+    fprintf(f, "%d\t%d\n", b->tStart - a->tEnd, b->qStart - a->qEnd);
+    a = b;
+    }
+}
+
 void writeAxtFromChain(struct chain *chain, struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset, FILE *f)
+	struct dnaSeq *tSeq, int tOffset, FILE *f, FILE *gapFile)
 /* Write out axt's that correspond to chain. */
 {
 struct axt *axt, *axtList;
 
+if (gapFile != NULL)
+    writeGaps(chain, gapFile);
 axtList = axtListFromChain(chain, qSeq, qOffset, tSeq, tOffset);
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
@@ -302,7 +321,7 @@ axtFreeList(&axtList);
 
 void convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
 	struct hash *qChromHash, char *nibDir,
-	struct chain *chain, FILE *f)
+	struct chain *chain, FILE *f, FILE *gapFile)
 /* Convert subset of chain as defined by fill to axt. */
 {
 struct dnaSeq *qSeq;
@@ -332,16 +351,17 @@ int qOffset;
     else
 	qOffset = fill->qStart;
     }
-subchainT(chain, fill->tStart, fill->tStart + fill->tSize, &subChain, &chainToFree);
+chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize, 
+	&subChain, &chainToFree);
 assert(subChain != NULL);
-writeAxtFromChain(subChain, qSeq, qOffset, tChrom, 0, f);
+writeAxtFromChain(subChain, qSeq, qOffset, tChrom, 0, f, gapFile);
 chainFree(&chainToFree);
 freeDnaSeq(&qSeq);
 }
 
 void rConvert(struct cnFill *fillList, struct dnaSeq *tChrom,
 	struct hash *qChromHash, char *qNibDir, struct hash *chainHash, 
-	FILE *f)
+	FILE *f, FILE *gapFile)
 /* Recursively output chains in net as axt. */
 {
 struct cnFill *fill;
@@ -349,9 +369,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     {
     if (fill->chainId)
         convertFill(fill, tChrom, qChromHash, qNibDir, 
-		chainLookup(chainHash, fill->chainId), f);
+		chainLookup(chainHash, fill->chainId), f, gapFile);
     if (fill->children)
-        rConvert(fill->children, tChrom, qChromHash, qNibDir, chainHash, f);
+        rConvert(fill->children, tChrom, qChromHash, qNibDir, chainHash, 
+		f, gapFile);
     }
 }
 
@@ -365,7 +386,11 @@ FILE *f = mustOpen(axtName, "w");
 struct dnaSeq *tChrom = NULL;
 struct hash *qChromHash = hashNew(0);
 char path[512];
+char *gapFileName = optionVal("gapOut", NULL);
+FILE *gapFile = NULL;
 
+if (gapFileName)
+    gapFile = mustOpen(gapFileName, "w");
 chainHash = chainReadAll(chainName);
 while ((net = chainNetRead(lf)) != NULL)
     {
@@ -377,7 +402,7 @@ while ((net = chainNetRead(lf)) != NULL)
 		tChrom->name);
     fprintf(stderr, "loaded %s\n", path);
 
-    rConvert(net->fillList, tChrom, qChromHash, qNibDir, chainHash, f);
+    rConvert(net->fillList, tChrom, qChromHash, qNibDir, chainHash, f, gapFile);
     freeDnaSeq(&tChrom);
     chainNetFree(&net);
     }
@@ -389,6 +414,7 @@ int main(int argc, char *argv[])
 dnaUtilOpen();
 optionHash(&argc, argv);
 qChain = optionExists("qChain");
+maxGap = optionInt("maxGap", maxGap);
 if (argc != 6)
     usage();
 netToAxt(argv[1], argv[2], argv[3], argv[4], argv[5]);
