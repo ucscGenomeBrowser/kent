@@ -5,7 +5,7 @@
 #ifndef WIGGLE_H
 #define WIGGLE_H
 
-#define WIGGLE_NUM_COLS 10
+#define WIGGLE_NUM_COLS 11
 
 struct wiggle
 /* Wiggle track values to display as y-values (first 6 fields are bed6) */
@@ -15,10 +15,11 @@ struct wiggle
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
-    unsigned score;	/* Score from 0-1000 currently meaningless */
-    char strand[2];	/* + or - (may be not needed for this) */
+    unsigned score;	/* range [0:127] == maximum in this block */
+    char strand[2];	/* + or - (may not be needed for wiggle) */
+    unsigned Min;	/* range [0:126] == minimum in this block */
     unsigned Span;	/* each value spans this many bases */
-    unsigned Count;	/* number of values to use */
+    unsigned Count;	/* number of values in this block */
     unsigned Offset;	/* offset in File to fetch data */
     char *File;	/* path name to data file, one byte per value */
     };
@@ -74,4 +75,3 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define MAX_WIG_VALUE	127
 
 #endif /* WIGGLE_H */
-
