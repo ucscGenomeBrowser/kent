@@ -25,7 +25,7 @@
 struct acc
 {
   struct acc *next;
-  char *name;
+  char name[16];
 };
 
 struct indel
@@ -87,12 +87,74 @@ struct hash *rnaSeqs = NULL;
 
 int indels[128];
 
+void accFree(struct acc **acc)
+/* Free a dynamically allocated acc */
+{
+struct acc *a;
+
+if ((a = *acc) == NULL) return;
+freez(acc);
+}
+
+void accFreeList(struct acc **aList)
+/* Free a dynamically allocated list of acc's */
+{
+struct acc *a = NULL, *next = NULL;
+
+for (a = *aList; a != NULL; a = next)
+    {
+    next = a->next;
+    accFree(&a);
+    }
+*aList = NULL;
+}
+
+void indelFree(struct indel **in)
+/* Free a dynamically allocated indel */
+{
+struct indel *i;
+
+if ((i = *in) == NULL) return;
+/*freeMem(i->chrom);
+  freeMem(i->mrna);*/
+accFreeList(&(i->genMrnaAcc));
+accFreeList(&(i->genEstAcc));
+accFreeList(&(i->mrnaMrnaAcc));
+accFreeList(&(i->mrnaEstAcc));
+accFreeList(&(i->noMrnaAcc));
+accFreeList(&(i->noEstAcc));
+freez(in);
+}
+
+void indelListFree(struct indel **iList)
+/* Free a dynamically allocated list of indel's */
+{
+struct indel *i, *next;
+
+for (i = *iList; i != NULL; i = next)
+    {
+    next = i->next;
+    indelFree(&i);
+    }
+*iList = NULL;
+}
+
+void pslInfoFree(struct pslInfo **pi)
+/* Free a single dynamically allocated pslInfo element */
+{
+struct pslInfo *el;
+
+if ((el = *pi) == NULL) return;
+pslFree(&(el->psl));
+indelListFree(&(el->indelList));
+freez(pi);
+}
+
 void readCds(struct lineFile *cf)
 /* Read in file of coding region starts and stops 
    Convert start to 0-based to make copmarison with psl easier */
 {
 int lineSize, wordCount;
-char *line;
 char *words[4];
 char *name;
 int start;
@@ -127,7 +189,6 @@ void readLoci(struct lineFile *lf)
 /* Read in file of loci id's, primarily from LocusLink */
 {
 int lineSize, wordCount;
-char *line;
 char *words[4];
 char *name;
 int thisLoci;
@@ -191,7 +252,6 @@ int snpBase(struct sqlConnection *conn, char *chr, int position)
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct snp *snp;  
 
 sprintf(query, "select * from snpTsc where chrom = '%s' and chromStart = %d", chr, position); 
 sr = sqlGetResult(conn, query);
@@ -262,7 +322,7 @@ for (i = 0; i < psl->blockCount; i++)
     if (((psl->tStarts[i] + psl->blockSizes[i]) >= gstart) && (psl->tStarts[i] <= gend))
        {
        /* Determine the start position offset */
-       if (gstart > psl->tStarts[i])
+       if (gstart >= psl->tStarts[i])
 	  {
 	  *start = psl->qStarts[i] + (gstart - psl->tStarts[i]);
 	  gs = gstart;
@@ -270,7 +330,7 @@ for (i = 0; i < psl->blockCount; i++)
        else 
 	  gs = psl->tStarts[i];
        /* Determine the end position offset */
-       if (gend < (psl->tStarts[i]+psl->blockSizes[i]))
+       if (gend <= (psl->tStarts[i]+psl->blockSizes[i]))
 	  {
 	  *end = psl->qStarts[i] + gend - psl->tStarts[i];
 	   ge = gend;
@@ -296,84 +356,100 @@ return(ret);
 void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct dnaSeq *rna, struct indel *ni, char *strand)
 /* Find all mRNA's or EST's that align in the region of an indel */
 {
-  struct sqlResult *sr;
-  char **row;
-  int offset, start=0, end=0;
-  struct psl *psl;
-  struct dnaSeq *seq, *gseq, *mseq;
-  struct acc *acc;
-  char thisStrand[2];
+struct sqlResult *sr;
+char **row;
+int offset, start=0, end=0;
+struct psl *psl;
+struct dnaSeq *seq, *gseq, *mseq;
+DNA mdna[10000], dna[10000];
+struct acc *acc;
+char thisStrand[2];
 
-  /* Determine the indel sequence, plus one base on each side */
-  AllocVar(mseq);
-  mseq->dna = rna->dna + ni->mrnaStart - 2;
-  *(mseq->dna+ni->mrnaEnd-ni->mrnaStart+4) = '\0';
-  mseq->size = ni->mrnaEnd - ni->mrnaStart + 4;
-  /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
-  /* Find all sequences that span this region */
-  sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+2, NULL, &offset);
-  while ((row = sqlNextRow(sr)) != NULL) 
+/* Determine the indel sequence, plus one base on each side */
+AllocVar(mseq);
+if ((ni->mrnaEnd-ni->mrnaStart+4) > 0)
     {
-      psl = pslLoad(row+offset);
-      if (strcmp(psl->qName,mrnaName))
-         {
-         start = end = 0;
-         /* Get the DNA sequence for the indel */
-         gseq = getDna(psl, ni->chromStart-2, ni->chromEnd+2, &start, &end, thisStrand);
-         if (gseq->dna) 
-	     {
-	     /* Get the corresponding mRNA or EST  sequence */
-	     seq = hRnaSeq(psl->qName);
-	     seq->dna = seq->dna + start;
-	     *(seq->dna+end-start) = '\0';
-	     seq->size = end - start;
-	     if (thisStrand[0] != strand[0])
+    strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
+    mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
+    }
+else 
+    mdna[0] = '\0';
+/**(mdna+ni->mrnaEnd-ni->mrnaStart+4) = '\0';*/
+/*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
+/* Find all sequences that span this region */
+sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+2, NULL, &offset);
+while ((row = sqlNextRow(sr)) != NULL) 
+    {
+    psl = pslLoad(row+offset);
+    if (strcmp(psl->qName,mrnaName))
+	{
+	start = end = 0;
+	/* Get the DNA sequence for the indel */
+	gseq = getDna(psl, ni->chromStart-2, ni->chromEnd+2, &start, &end, thisStrand);
+	if (gseq->dna) 
+	    {
+	    /* Get the corresponding mRNA or EST  sequence */
+	    seq = hRnaSeq(psl->qName);
+	    if (thisStrand[0] != strand[0])
 	        {
+		int temp = start;
+		start = seq->size - end;
+		end = seq->size - temp;
 	        reverseComplement(seq->dna, seq->size);
 	        reverseComplement(gseq->dna, gseq->size);
 	        }
-	     /*printf("Comparing %s:%d-%d(%d) bases %s with genomic %s\n",psl->qName, start, end, seq->size, seq->dna, gseq->dna);*/
-	     AllocVar(acc);
-	     acc->name = seq->name;
-	     if (!strcmp(gseq->dna, seq->dna)) 
-	        if (!strcmp(table, "mrna"))
-	        {
-		ni->genMrna++;
-		slAddHead(&ni->genMrnaAcc, acc);
-		} 
-	        else 
+	    if ((end-start) > 0)
 		{
+		strncpy(dna,seq->dna + start, end-start);
+		dna[end-start] = '\0';
+		}
+	    else
+		dna[0] = '\0';
+	    /*printf("Comparing %s:%d-%d(%d) bases %s with genomic %s\n",psl->qName, start, end, seq->size, seq->dna, gseq->dna);*/
+	    AllocVar(acc);
+	    strcpy(acc->name,seq->name);
+	    if (!strcmp(gseq->dna, dna)) 
+	        if (!strcmp(table, "mrna"))
+		    {
+		    ni->genMrna++;
+		    slAddHead(&ni->genMrnaAcc, acc);
+		    } 
+	        else 
+		    {
 		    ni->genEst++;
 		    slAddHead(&ni->genEstAcc, acc);
-		}
-	     else  
-	       if (!strcmp(mseq->dna, seq->dna)) 
-		 if (!strcmp(table, "mrna"))
-		   {
-		     ni->mrnaMrna++;
-		     slAddHead(&ni->mrnaMrnaAcc, acc);
-		   } 
-		 else 
-		   {
-		     ni->mrnaEst++;
-		     slAddHead(&ni->mrnaEstAcc, acc);
-		   }
-	       else
-		 if (!strcmp(table, "mrna"))
-		   {
-		     ni->noMrna++;
-		     slAddHead(&ni->noMrnaAcc, acc);
-		   } 
-		 else 
-		   {
-		     ni->noEst++;
-		     slAddHead(&ni->noEstAcc, acc);
-		   }
-	     }
-	 }
-      pslFree(&psl);
+		    }
+	    else  
+		if (!strcmp(mdna, dna)) 
+		    if (!strcmp(table, "mrna"))
+			{
+			ni->mrnaMrna++;
+			slAddHead(&ni->mrnaMrnaAcc, acc);
+			} 
+		    else 
+			{
+			ni->mrnaEst++;
+			slAddHead(&ni->mrnaEstAcc, acc);
+			}
+		else
+		    if (!strcmp(table, "mrna"))
+			{
+			ni->noMrna++;
+			slAddHead(&ni->noMrnaAcc, acc);
+			} 
+		    else 
+			{
+			ni->noEst++;
+			slAddHead(&ni->noEstAcc, acc);
+			}
+	    dnaSeqFree(&seq);
+	    }
+	dnaSeqFree(&gseq);
+	}
+    pslFree(&psl);
     }
-  sqlFreeResult(&sr);
+/*dnaSeqFree(&mseq);*/
+sqlFreeResult(&sr);
 }
 
 struct indel *createIndel(struct sqlConnection *conn, char *mrna, int mstart, int mend, char* chr, int gstart, int gend, 
@@ -581,8 +657,62 @@ freeDnaSeq(&dnaSeq);
 return(pi);
 }
 
+void writeOut(FILE *of, FILE *in, struct pslInfo *pi)
+/* Output results of the mRNA alignment analysis */
+{
+struct indel *indel;
+struct acc *acc;
+int i;
 
-void doFile(struct lineFile *pf)
+/*for (pi = piList; pi != NULL; pi = pi->next)
+  {*/
+fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->psl->qName, pi->psl->tName, pi->psl->tStart, 
+	pi->psl->tEnd,pi->psl->qStart,pi->psl->qEnd,pi->psl->qSize,pi->loci);
+fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t", 
+	pi->coverage, pi->pctId, pi->cdsStart, 
+	pi->cdsEnd, pi->cdsCoverage, pi->cdsPctId, pi->cdsMatch, 
+	pi->cdsMismatch, pi->snp, pi->thirdPos, pi->introns, pi->stdSplice);
+fprintf(of, "%d\t%d\t%d\t%d\t", pi->unalignedCds, pi->singleIndel, pi->tripleIndel, pi->totalIndel);
+for (i = 0; i < pi->indelCount; i++)
+    fprintf(of, "%d,", pi->indels[i]);
+fprintf(of, "\n");
+
+printf("Writing out indels\n");
+for (indel = pi->indelList; indel != NULL; indel=indel->next)
+    {
+    /*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
+      indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
+      indel->chrom, indel->chromStart, indel->chromEnd);*/
+    fprintf(in, "Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
+	    indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
+	    indel->chrom, indel->chromStart, indel->chromEnd);
+    fprintf(in, "\t%d mRNAs support genomic: ", indel->genMrna);
+    for (acc = indel->genMrnaAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\t%d ESTs support genomic: ",indel->genEst);
+    for (acc = indel->genEstAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\t%d mRNAs support %s: ", indel->mrnaMrna, indel->mrna);
+    for (acc = indel->mrnaMrnaAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\t%d ESTs support %s: ",indel->mrnaEst, indel->mrna);
+    for (acc = indel->mrnaEstAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\t%d mRNAs support neither: ", indel->noMrna);
+    for (acc = indel->noMrnaAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\t%d ESTs support neither: ",indel->noEst);
+    for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
+	fprintf(in, "%s ", acc->name);
+    fprintf(in, "\n\n");
+    }
+/*}/
+
+/*for (i = 1; i <= 100; i++) 
+  fprintf(in, "%d\t%d\n",i,indels[i]);*/
+}
+ 
+void doFile(struct lineFile *pf, FILE *of, FILE *in)
 /* Process all records in a psl file of mRNA alignments */
 {
 int lineSize;
@@ -600,71 +730,12 @@ while (lineFileNext(pf, &line, &lineSize))
 	errAbort("Bad line %d of %s\n", pf->lineIx, pf->fileName);
     psl = pslLoad(words);
     pi = processPsl(conn, psl);
-    slAddHead(&piList,pi);
+    slAddHead(&piList, pi);
+    writeOut(of, in, pi);
+    pslInfoFree(&pi);
     }
-slReverse(&piList);
 hFreeConn(&conn);
 }
-
-void writeOut(FILE *of, FILE *in)
-/* Output results of the mRNA alignment analysis */
-{
-struct pslInfo *pi;
- struct indel *indel;
- struct acc *acc;
-int i;
-
-fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\n");
-fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\n");
-for (pi = piList; pi != NULL; pi = pi->next)
-    {
-    fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->psl->qName, pi->psl->tName, pi->psl->tStart, 
-	    pi->psl->tEnd,pi->psl->qStart,pi->psl->qEnd,pi->psl->qSize,pi->loci);
-    fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t", 
-	    pi->coverage, pi->pctId, pi->cdsStart, 
-	    pi->cdsEnd, pi->cdsCoverage, pi->cdsPctId, pi->cdsMatch, 
-	    pi->cdsMismatch, pi->snp, pi->thirdPos, pi->introns, pi->stdSplice);
-    fprintf(of, "%d\t%d\t%d\t%d\t", pi->unalignedCds, pi->singleIndel, pi->tripleIndel, pi->totalIndel);
-    for (i = 0; i < pi->indelCount; i++)
-	fprintf(of, "%d,", pi->indels[i]);
-    fprintf(of, "\n");
-
-    printf("Writing out indels\n");
-    for (indel = pi->indelList; indel != NULL; indel=indel->next)
-      {
-      /*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
-	       indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
-	       indel->chrom, indel->chromStart, indel->chromEnd);*/
-	fprintf(in, "Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
-		indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
-		indel->chrom, indel->chromStart, indel->chromEnd);
-	fprintf(in, "\t%d mRNAs support genomic: ", indel->genMrna);
-	for (acc = indel->genMrnaAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\t%d ESTs support genomic: ",indel->genEst);
-	for (acc = indel->genEstAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\t%d mRNAs support %s: ", indel->mrnaMrna, indel->mrna);
-	for (acc = indel->mrnaMrnaAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\t%d ESTs support %s: ",indel->mrnaEst, indel->mrna);
-	for (acc = indel->mrnaEstAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\t%d mRNAs support neither: ", indel->noMrna);
-	for (acc = indel->noMrnaAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\t%d ESTs support neither: ",indel->noEst);
-	for (acc = indel->noEstAcc; acc != NULL; acc = acc->next)
-	  fprintf(in, "%s ", acc->name);
-	fprintf(in, "\n\n");
-      }
-    }
-
-/*for (i = 1; i <= 100; i++) 
-  fprintf(in, "%d\t%d\n",i,indels[i]);*/
-}
- 
-
 
 int main(int argc, char *argv[])
 {
@@ -683,6 +754,8 @@ cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
 faFile = argv[4];
 of = mustOpen(argv[5], "w");
+fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\n");
+fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\n");
 in = mustOpen(argv[6], "w");
 
 hSetDb("hg15");
@@ -693,9 +766,9 @@ readRnaSeq(faFile);
 printf("Reading loci file\n");
 readLoci(lf);
 printf("Processing psl file\n");
-doFile(pf);
-printf("Writing out file\n");
-writeOut(of, in);
+doFile(pf, of, in);
+/*printf("Writing out file\n");
+  writeOut(of, in);*/
 
 lineFileClose(&pf);
 fclose(of);
