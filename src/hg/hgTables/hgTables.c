@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.58 2004/09/03 16:57:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.59 2004/09/10 18:08:04 hiram Exp $";
 
 
 void usage()
@@ -174,6 +174,18 @@ char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 return sameString(regionType, "genome");
 }
 
+static int regionCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,start */
+{
+const struct region *a = *((struct region **)va);
+const struct region *b = *((struct region **)vb);
+int dif;
+dif = chrStrippedCmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->start - b->start;
+return dif;
+}
+
 static struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
@@ -185,7 +197,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     region->chrom = cloneString(chrom->name);
     slAddHead(&regionList, region);
     }
-slReverse(&regionList);
+slSort(&regionList, regionCmp);
 slFreeList(&chromList);
 return regionList;
 }
@@ -208,7 +220,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-slReverse(&list);
+slSort(&list, regionCmp);
 return list;
 }
 
@@ -642,8 +654,6 @@ for (region = regionList; region != NULL; region = region->next)
     struct sqlResult *sr;
     char **row;
     int colIx, lastCol = fieldCount-1;
-    char chromTable[256];
-    boolean gotWhere = FALSE;
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
