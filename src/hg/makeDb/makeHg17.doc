@@ -7046,8 +7046,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain .
     gzip hg17ToMm5.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain /gbdb/hg17/liftOver/hg17ToMm5.over.chain
-    echo 'insert into liftOverChain values ("hg17","mm5","/gbdb/hg17/liftOver/hg17ToMm5.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 mm5
 
 # HG17 TO CANFAM1 LIFTOVER CHAIN (DONE 1/7/05 Andy)
     ssh kolossus
@@ -7064,8 +7063,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain .
     gzip hg17ToCanFam1.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain /gbdb/hg17/liftOver/hg17ToCanFam1.over.chain
-    echo 'insert into liftOverChain values ("hg17","canFam1","/gbdb/hg17/liftOver/hg17ToCanFam1.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 canFam1
 
 # HG17 TO PANTRO1 LIFTOVER CHAIN (DONE 1/20/05 Andy)
     ssh kolossus
@@ -7082,8 +7080,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain .
     gzip hg17ToPanTro1.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain /gbdb/hg17/liftOver/hg17ToPanTro1.over.chain
-    echo 'insert into liftOverChain values ("hg17","panTro1","/gbdb/hg17/liftOver/hg17ToPanTro1.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 panTro1    
 
 # ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
     ssh hgwdev
