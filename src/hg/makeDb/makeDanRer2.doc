@@ -1513,6 +1513,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     end
 
 # CHAIN MOUSE (mm5) BLASTZ (DONE, 2004-12-13, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-21, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/danRer2/bed/blastz.mm5.swap
@@ -1579,8 +1581,26 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     rm -r chain
     chainSplit chain all.chainFilt5k
 
+    # remove repeats from chains and reload into database
+    # (2004-12-21, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
+    mv chain chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c 
+       nice chainAntiRepeat /iscratch/i/danRer2/nib \
+                       /cluster/bluearc/scratch/mus/mm5/softNib $f \
+                       ../chain/$c.chain
+    end
+    cd ..  
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # load chains into database
     ssh hgwdev
-    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain/chain
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain danRer2 ${c}_chainMm5 $i
@@ -1597,12 +1617,22 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # featureBits -chrom=chr1 danRer1 refGene:cds chainMm5Link -enrichment
 # refGene:cds 0.529%, chainMm5Link 7.948%, both 0.412%, cover 77.80%, 
 # enrich 9.79x
+# after chainAntiRepeats:
+# featureBits -chrom=chr1 danRer2 refGene:cds chainMm5Link -enrichment
+# refGene:cds 0.512%, chainMm5Link 4.499%, both 0.395%, cover 77.08%, 
+# enrich 17.13x
+ 
+# before chainAntiRepeat:
+# chr1_chainMm5Link 167661
+# after chainAntiRepeat:
+# chr1_chainMm5Link 162853
 
 # NET MOUSE (mm5) BLASTZ (DONE, 2004-12-13, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-21,hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
     mkdir preNet
-    cd chain
+    cd chainAR 
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -1619,7 +1649,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 122568704, utime 857 s/100, stime 82
+    # memory usage 119873536, utime 849 s/100, stime 81
     # Add classification info using db tables:
     # netClass looks for ancient repeats in one of the databases
     # hg17 has this table - hand-curated by Arian but this is for
@@ -1636,7 +1666,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     time netClass noClass.net danRer2 mm5 mouseMm5.net \
           -tNewR=/cluster/bluearc/danRer2/linSpecRep.notInMouse \
           -qNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish -noAr
-    # 106.160u 62.900s 5:15.30 53.6%  0+0k 0+0io 201pf+0w
+    # 86.210u 51.710s 4:02.29 56.9%   0+0k 0+0io 206pf+0w
     netFilter -minGap=10 mouseMm5.net |  hgLoadNet danRer2 netMm5 stdin
 
 # featureBits danRer2 refGene:cds netMm5 -enrichment
@@ -1644,6 +1674,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # featureBits danRer1 refGene:cds netMm5 -enrichment
 # refGene:cds 0.461%, netMm5 36.622%, both 0.395%, cover 85.70%, enrich 2.34x
 # add html and trackDb.ra entries 
+# after chainAntiRepeat:
+# featureBits danRer2 refGene:cds netMm5 -enrichment
+# refGene:cds 0.468%, netMm5 30.565%, both 0.405%, cover 86.40%, enrich 2.83x  
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-12-14, hartera)
     ssh kksilo
@@ -1741,6 +1774,8 @@ zip -j est.zip est.fa
     # Copy over & edit README.txt w/pointers to chain, net formats.
  
 # MAKE VSMM5 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
+# (DONE, 2004-12-21, hartera)
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/danRer2
@@ -1751,27 +1786,35 @@ zip -j est.zip est.fa
     md5sum *.gz > md5sum.txt
     
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-21, hartera)
+    rm $gp/vsMm5/mouse*.gz $gp/vsMm5/md5sum.txt
     cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
-    gzip -c all.chainFilt5k > /cluster/data/danRer2/zip/mouse.chain.gz
-    gzip -c mouseMm5.net > /cluster/data/danRer2/zip/mouse.net.gz
+    gzip -c all.chain.antirepeat > /cluster/data/danRer2/zip/mouseMm5.chain.gz
+    gzip -c mouseMm5.net > /cluster/data/danRer2/zip/mouseMm5.net.gz
     cd $gp/vsMm5
     mv /cluster/data/danRer2/zip/mouse*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # BLASTZ HG17 CLEANUP (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-21, hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.hg17.swap
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
-    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered xtChain/*.net &
-
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
+    
 # BLASTZ MM5 CLEANUP (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-21, hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.mm5.swap
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
-    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain & 
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR FUGU (fr1) (DONE, 2004-12-14, hartera)
 # Blastz requires lineage-specific repeats but there are none 
@@ -1923,6 +1966,8 @@ cat `ls -1 *.lav | sort -g` \
 # refGene:cds 0.529%, blastzFr1 5.542%, both 0.463%, cover 87.50%, enrich 15.79x
 
 # CHAIN FUGU (fr1) BLASTZ (DONE, 2004-12-14, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-21, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/danRer2/bed/blastz.fr1
@@ -1975,9 +2020,27 @@ axtChain $1 /iscratch/i/danRer2/nib \
     rm -r chain
     chainSplit chain all.chainFilt5k
                              
+    # remove repeats from chains and reload into database
+    # (2004-12-21, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
+    gunzip all.chainFilt5k.gz
+    chainSplit chainRaw all.chainFilt5k 
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c 
+       nice chainAntiRepeat /iscratch/i/danRer2/nib \
+                       /cluster/bluearc/fugu/fr1/chromNib $f \
+                       ../chain/$c.chain
+    end
+    cd ..  
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain/chain
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain danRer2 ${c}_chainFr1 $i
@@ -1992,13 +2055,18 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # refGene:cds 0.529%, chainFr1 19.003%, both 0.479%, cover 90.41%, enrich 4.76x
 # featureBits -chrom=chr1 danRer1 refGene:cds chainFr1Link -enrichment
 # refGene:cds 0.529%, chainFr1Link 4.686%, both 0.450%, cover 85.11%, enrich 18.16x
+# after chainAntiRepeat:
+# featureBits -chrom=chr1 danRer2 refGene:cds chainFr1Link -enrichment
+# refGene:cds 0.512%, chainFr1Link 7.726%, both 0.426%, cover 83.16%, 
+# enrich 10.76x 
 
 # NET FUGU (fr1) BLASTZ (DONE, 2004-12-14, hartera)
 # REMADE NET FOR FUGU (2004-12-15, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-21,hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -2017,7 +2085,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
                                                                                 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 108797952, utime 679 s/100, stime 103
+    # memory usage 108306432, utime 690 s/100, stime 58
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
@@ -2034,9 +2102,15 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # refGene:cds 0.468%, netFr1 19.389%, both 0.411%, cover 87.95%, enrich 4.54x
 # featureBits danRer1 refGene:cds netFr1 -enrichment
 # refGene:cds 0.461%, netFr1 17.530%, both 0.391%, cover 84.78%, enrich 4.84x
+# after chainAntiRepeat:
+# featureBits danRer2 refGene:cds netFr1 -enrichment
+# refGene:cds 0.468%, netFr1 19.372%, both 0.412%, cover 87.97%, enrich 4.54x 
 
 # MAKE VSFR1 DOWNLOADABLES (DONE, 2004-12-15, hartera)
 # REPLACE FR1 NET WITH NEW VERSION IN DOWNLOADS (2004-12-15, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
+# (DONE, 2004-12-21, hartera)
+
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/danRer2
@@ -2047,21 +2121,25 @@ axtChain $1 /iscratch/i/danRer2/nib \
     md5sum *.gz > md5sum.txt
     
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-21, hartera)
+    rm $gp/vsFr1/fugu*.gz $gp/vsFr1/md5sum.txt
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
-    gzip -c all.chainFilt5k > /cluster/data/danRer2/zip/fugu.chain.gz
-    gzip -c fuguFr1.net > /cluster/data/danRer2/zip/fugu.net.gz
+    gzip -c all.chain.antirepeat > /cluster/data/danRer2/zip/fuguFr1.chain.gz
+    gzip -c fuguFr1.net > /cluster/data/danRer2/zip/fuguFr1.net.gz
     cd $gp/vsFr1
     mv /cluster/data/danRer2/zip/fugu*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # BLASTZ FR1 CLEANUP (DONE, 2004-12-15, hartera)
+# RE-DONE (DONE, 2004-12-21, hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.fr1
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
-    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered axtChain/*.net &
-    nice rm -r axtChain/chain axtChain/preNet &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/all.chainFilt5k axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR TETRAODON (tetNig1) (in progress, 2004-12-14, hartera)
     # blastz requires lineage-specific repeats but there are none
@@ -2147,11 +2225,11 @@ SEQ2_LEN=$BASE/S2.len
     para try, check, push, etc ...
 # para time
 # Completed: 3193 of 3193 jobs
-# CPU time in finished jobs:        401s       6.69m     0.11h    0.00d  0.000 y
-# IO & Wait Time:                  8321s     138.68m     2.31h    0.10d  0.000 y
+# CPU time in finished jobs:        327s       5.46m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                  8483s     141.38m     2.36h    0.10d  0.000 y
 # Average job time:                   3s       0.05m     0.00h    0.00d
 # Longest job:                        9s       0.15m     0.00h    0.00d
-# Submission to last job:           906s      15.10m     0.25h    0.01d
+# Submission to last job:           560s       9.33m     0.16h    0.01d
 
     #   Third cluster run to convert lav's to axt's
     ssh kki
@@ -2184,11 +2262,12 @@ cat `ls -1 *.lav | sort -g` \
     para try, check, push, check,...
 # para time
 # Completed: 28 of 28 jobs
-# CPU time in finished jobs:        242s       4.04m     0.07h    0.00d  0.000 y
-# IO & Wait Time:                   729s      12.14m     0.20h    0.01d  0.000 y
-# Average job time:                  35s       0.58m     0.01h    0.00d
-# Longest job:                      121s       2.02m     0.03h    0.00d
-# Submission to last job:           192s       3.20m     0.05h    0.00d
+# CPU time in finished jobs:        224s       3.74m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                  1240s      20.66m     0.34h    0.01d  0.000 y
+# Average job time:                  52s       0.87m     0.01h    0.00d
+# Longest job:                      148s       2.47m     0.04h    0.00d
+# Submission to last job:           157s       2.62m     0.04h    0.00d
+
     # lift up query sequences
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kksilo
