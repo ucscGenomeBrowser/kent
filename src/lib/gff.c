@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.15 2004/02/15 02:19:59 baertsch Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.16 2004/02/17 22:35:47 angie Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -429,16 +429,16 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 if (el->geneId != NULL)
-    fprintf(f, "gene_id = %s\"%s%s\"; ",
+    fprintf(f, "gene_id %s\"%s%s\"; ",
 	    (sep == ',') ? "\\" : "",
 	    el->geneId,
 	    (sep == ',') ? "\\" : "");
-fprintf(f, "transcript_id = %s\"%s%s\"; ",
+fprintf(f, "transcript_id %s\"%s%s\"; ",
 	(sep == ',') ? "\\" : "",
 	el->group,
 	(sep == ',') ? "\\" : "");
 if (el->exonId != NULL)
-    fprintf(f, "exon_id = %s\"%s%s\"; ",
+    fprintf(f, "exon_id %s\"%s%s\"; ",
 	    (sep == ',') ? "\\" : "",
 	    el->exonId,
 	    (sep == ',') ? "\\" : "");
