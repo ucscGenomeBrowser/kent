@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.1 2004/07/15 06:35:37 markd Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.2 2004/07/21 16:09:13 hiram Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -100,8 +100,8 @@ if (pos->singlePos != NULL)
     }
 if (pos->tableList != NULL)
     {
-    prIndent(indent, "tableList:\n");
     struct hgPosTable *posTab;
+    prIndent(indent, "tableList:\n");
     for (posTab = pos->tableList; posTab != NULL; posTab = posTab->next)
         printHgPosTable(indent+1, posTab);
     }
