@@ -105,6 +105,9 @@ struct slName *spGeneToAccs(struct sqlConnection *conn,
 struct slName *spGenes(struct sqlConnection *conn, char *acc);
 /* Return list of genes associated with accession */
 
+struct slName *spTaxons(struct sqlConnection *conn, char *acc);
+/* Return list of taxons associated with accession */
+
 struct slName *spBinomialNames(struct sqlConnection *conn, char *acc);
 /* Return list of scientific names of organisms
  * associated with accessoin */
