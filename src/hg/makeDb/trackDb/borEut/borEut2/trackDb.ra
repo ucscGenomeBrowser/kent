@@ -48,6 +48,22 @@ type psl xeno
 spectrum on
 blastRef hg17.blastKGRef01
 
+track tba12way
+shortLabel TBA 12-way
+longLabel TBA 12-way Multiple Alignment
+group compGeno
+priority 110
+visibility pack
+type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# wiggle phastCons5
+# spanList 1
+# yLinOnOff Off
+# autoScaleDefault Off
+#pairwise fakePairwise
+summary tba12waySummary
+speciesOrder eutGli2 eutPri2 hg17 chimp rabbit mouse rat canFam1 cow armadillo elephant
+
 track webbMaf
 shortLabel Multiple Alignment
 longLabel TBA 9-way Multiple Alignment
