@@ -8799,3 +8799,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgMapToGene hg16 ensGene knownGene knownToEnsembl
     zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | hgKnownToSuper hg16 hs stdin
 
+# seq table acc field is too small; up the max to match new hgLoadSeq 
+# schema (2004/05/22 markd)
+
+    alter table modify column `acc` varchar(128) NOT NULL default '';
