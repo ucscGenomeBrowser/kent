@@ -17,8 +17,8 @@ char *s;
 
 ret->chrom = row[0];
 ret->level = sqlUnsigned(row[1]);
-ret->start = sqlUnsigned(row[2]);
-ret->end = sqlUnsigned(row[3]);
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromSnd = sqlUnsigned(row[3]);
 }
 
 struct netGap *netGapLoad(char **row)
@@ -32,8 +32,8 @@ char *s;
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
 ret->level = sqlUnsigned(row[1]);
-ret->start = sqlUnsigned(row[2]);
-ret->end = sqlUnsigned(row[3]);
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromSnd = sqlUnsigned(row[3]);
 return ret;
 }
 
@@ -92,8 +92,8 @@ if (ret == NULL)
     AllocVar(ret);
 ret->chrom = sqlStringComma(&s);
 ret->level = sqlUnsignedComma(&s);
-ret->start = sqlUnsignedComma(&s);
-ret->end = sqlUnsignedComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromSnd = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -132,9 +132,9 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->level);
 fputc(sep,f);
-fprintf(f, "%u", el->start);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->end);
+fprintf(f, "%u", el->chromSnd);
 fputc(lastSep,f);
 }
 

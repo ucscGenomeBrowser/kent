@@ -7,8 +7,8 @@
 CREATE TABLE netGap (
     chrom varchar(255) not null,	# gap on Chrom
     level int unsigned not null,	# Level of alignment
-    start int unsigned not null,	# Start of gap
-    end int unsigned not null,	# End of gap
+    chromStart int unsigned not null,	# Start of gap
+    chromSnd int unsigned not null,	# End of gap
               #Indices
     PRIMARY KEY(chrom)
 );
