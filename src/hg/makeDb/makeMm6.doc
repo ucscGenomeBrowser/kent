@@ -1,0 +1,33 @@
+# This file describes browser build for the mouse
+# genome, March 2005, ncbi mouse_34 - Mm6
+#
+#	"$Id: makeMm6.doc,v 1.1 2005/03/09 18:34:21 hiram Exp $"
+#
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
+#
+#	Examine disk space issues, summarize mm5 usage:
+    ssh kksilo
+    cd /cluster/store6
+    du -hsc mm5
+#	476G    mm5
+#    That is a lot of disk space for an assembly, I wonder if it needs
+#    some cleaning.  Our last vestige of large amounts of space is on
+#    store10, thus:
+    ssh kksilo
+    mkdir /cluster/store10/mm6
+    ln -s /cluster/store10/mm6 /cluster/data/mm6
+    mkdir /cluster/data/mm6/ncbi
+    cd /cluster/data/mm6/ncbi
+#	set the login name and password in a .wgetrc file in this
+#	directory, permissions 600, its format:
+#	login = hgpguest
+#	passwd = xxxx
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=4 --no-parent \
+	--no-host-directories --cut-dirs=1 \
+	ftp://ftp-private.ncbi.nih.gov/mouse_34
+#	Downloaded: 1,586,892,564 bytes in 57 files
+#
+#
