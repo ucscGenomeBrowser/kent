@@ -195,9 +195,11 @@ fromGtfRegressTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=regress.gtf opts="-cdsStatFld -exonFramesFld"
 
 
-# GFF bug regression:
+# GFF bug regressions; weird things ce2/sangerGene:
+#   - single exon CDS genes with frame column not being set
+#   - bogus key name fields that get converted to ids 'ZC101.2c ; Confirmed_by_EST'
 fromGffRegressTest:
-	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld"
+	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld -exonSelectWord=exon -ignoreUnconverted"
 
 
 # recursive target for GFF/GTF tests

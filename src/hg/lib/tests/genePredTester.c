@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.4 2004/02/26 03:45:12 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.5 2004/05/10 23:15:27 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -67,7 +67,9 @@ errAbort(
     "  -info=fname - write info about genePred to this file.\n"
     "  -withBin - create bin column when loading a table\n"
     "  -exonSelectWord=feat - use feat as the exon feature name when creating\n"
-    "   from GFF\n",
+    "   from GFF\n"
+    "  -ignoreUnconverted - don't print warnings when genens couldn't be converted\n"
+    "   to genePreds\n",
     msg);
 }
 
@@ -86,6 +88,7 @@ static struct optionSpec options[] = {
     {"info", OPTION_STRING},
     {"withBin", OPTION_BOOLEAN},
     {"exonSelectWord", OPTION_STRING},
+    {"ignoreUnconverted", OPTION_BOOLEAN},
     {NULL, 0},
 };
 int gVerbose = 0;
@@ -99,6 +102,7 @@ char *gChrom = NULL;
 char *gOutput = NULL;
 char *gInfo = NULL;
 char *gExonSelectWord = NULL;
+boolean gIgnoreUnconverted = FALSE;
 
 void checkNumRows(char *src, int numRows)
 /* check the number of row constraints */
@@ -310,7 +314,10 @@ for (group = gxf->groupList; group != NULL; group = group->next)
         gp = genePredFromGroupedGff(gxf, group,  group->name, gExonSelectWord,
                                     gOptFields);
     if (gp == NULL)
-        groupConvertWarn(gxfFile, isGtf, group);
+        {
+        if (!gIgnoreUnconverted)
+            groupConvertWarn(gxfFile, isGtf, group);
+        }
     else
         {
         if (outFh != NULL)
@@ -349,6 +356,7 @@ gWhere = optionVal("where", gWhere);
 gOutput = optionVal("output", gOutput);
 gInfo = optionVal("info", gInfo);
 gExonSelectWord = optionVal("exonSelectWord", gExonSelectWord);
+gIgnoreUnconverted = optionExists("ignoreUnconverted");
 
 if (optionExists("withBin"))
     gCreateOpts |= genePredWithBin;

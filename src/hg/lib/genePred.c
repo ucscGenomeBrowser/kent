@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.48 2004/05/10 21:51:17 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.49 2004/05/10 23:15:27 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -433,71 +433,32 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
     }
 }
 
-static void fixFrame(struct genePred *gp)
-/* Fix various problems with exon frames fields:
- *   1) GFF/GTF that don't specify frame.
- *   2) GTF with the all or part of the stop codon as the only
- *       codon in an exon, we must set the frame on this exon.
- */
+static void fixStopFrame(struct genePred *gp)
+/* Nasty corner case: GTF with the all or part of the stop codon as the only
+ * codon in an exon, we must set the frame on this exon.  */
 {
-int iStart, iEnd, iIncr, iExon;
-int frame = 0;
+int stopPos = (gp->strand[0] == '+') ? gp->cdsEnd-1 : gp->cdsStart;
+int iStop = -1, i;
 
-/* start at 3' end unless incomplete */
-if (gp->strand[0] == '+')
+/* find position containing last base */
+for (i = 0; (i < gp->exonCount) && (iStop < 0); i++)
     {
-    if (gp->cdsEndStat == cdsComplete)
+    if ((gp->exonStarts[i] <= stopPos) && (stopPos < gp->exonEnds[i]))
+        iStop = i;
+    }
+if ((iStop >= 0) && (gp->exonFrames[iStop] < 0))
+    {
+    if (gp->strand[0] == '+')
         {
-        iStart = gp->exonCount-1;
-        iEnd = -1;
-        iIncr = -1;
+        /* pos, compute from previous exon */
+        assert(iStop > 0);
+        gp->exonFrames[iStop] = (gp->exonFrames[iStop-1]+(gp->exonEnds[iStop-1]-gp->exonStarts[iStop-1])) % 3;
         }
     else
         {
-        iStart = 0;
-        iEnd = gp->exonCount;
-        iIncr = 1;
-        }
-    }
-else
-    {
-    if (gp->cdsEndStat == cdsComplete)
-        {
-        iStart = 0;
-        iEnd = gp->exonCount;
-        iIncr = 1;
-        }
-    else
-        {
-        iStart = gp->exonCount-1;
-        iEnd = -1;
-        iIncr = -1;
-        }
-    }
-
-for (iExon = iStart; iExon != iEnd; iExon += iIncr)
-    {
-    /* get CDS within exon */
-    int cdsStart = gp->exonStarts[iExon];
-    int cdsEnd = gp->exonEnds[iExon];
-    if (cdsStart < gp->cdsStart)
-        cdsStart = gp->cdsStart;
-    if (cdsEnd > gp->cdsEnd)
-        cdsEnd = gp->cdsEnd;
-    if (cdsStart < cdsEnd)
-        {
-        if (gp->cdsEndStat == cdsComplete)
-            {
-            /* pre-adjust 3' -> 5' */
-            frame = (frame + (cdsEnd - cdsStart)) % 3;
-            frame = (frame == 2) ? 1 : (frame == 1) ? 2 : 0;
-            }
-        if (gp->exonFrames[iExon] >= 0)
-            frame = gp->exonFrames[iExon];  /* have frame, sync up */
-        else
-            gp->exonFrames[iExon] = frame;
-        if (gp->cdsEndStat != cdsComplete)
-            frame = (frame + (cdsEnd - cdsStart)) % 3;  /* post-adjust 5' -> 3' */
+        /* neg, compute from next exon */
+        assert(iStop < gp->exonCount-1);
+        gp->exonFrames[iStop] = (gp->exonFrames[iStop+1]+(gp->exonEnds[iStop+1]-gp->exonStarts[iStop+1])) % 3;
         }
     }
 }
@@ -651,7 +612,7 @@ i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (isExon(gl->feature, isGtf, exonSelectWord) || isCds(gl->feature))
+    if (isExon(gl->feature, isGtf, exonSelectWord) || (isGtf && isCds(gl->feature)))
         {
         chkGroupLine(group, gl, gp);
         if ((i < 0) || (gl->start > eEnds[i]))
@@ -680,13 +641,17 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
          * other feature of the same exon */
         int frame = phaseToFrame(gl->frame);
         if (frame >= 0)
+            {
             eFrames[i] = frame;
+            haveFrame = TRUE;
+            }
         }
     }
 gp->exonCount = i+1;
 
-if ((optFields & genePredExonFramesFld) && haveCds)
-    fixFrame(gp);
+/* only fix frame if some entries in the gene had frame */
+if (haveFrame)
+    fixStopFrame(gp);
 
 return gp;
 }
