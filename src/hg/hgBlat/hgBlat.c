@@ -10,8 +10,9 @@
 #include "genoFind.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "hdb.h"
 
-char *defaultDatabase = "hg7";	/* Default database. */
+char *defaultDatabase;	/* Default database. */
 
 struct serverTable
 /* Information on a server. */
@@ -555,6 +556,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
 htmEmptyShell(errDoMiddle, NULL);
 return 0;
