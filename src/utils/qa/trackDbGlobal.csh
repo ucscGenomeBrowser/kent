@@ -31,6 +31,16 @@ endif
 
 if ( $#argv ==  2 ) then
   set mode="$argv[2]"
+  if ( $mode == "realTime" ) then
+    set mode = ""
+  else
+    if ( $mode != "fast" ) then
+      echo '\n  mode not "realTime" or "fast"\n'
+      echo "${0}:"
+      $0
+      exit 1
+    endif
+  endif
 endif
 
 checkMachineName.csh $machine
