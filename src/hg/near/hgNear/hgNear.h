@@ -201,6 +201,9 @@ void makeTitle(char *title, char *helpName);
 void selfAnchorId(struct genePos *gp);
 /* Print self anchor to given id. */
 
+void colInfoAnchor(struct column *col);
+/* Print anchor tag that leads to column info page. */
+
 void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn);
 /* Print self and hyperlink to make this the search term. */

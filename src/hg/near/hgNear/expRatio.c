@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.15 2003/08/30 00:22:22 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.16 2003/09/03 23:17:28 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -312,7 +312,9 @@ for (i=0; i<numExpts; i += groupSize+1)
     safef(gifName, sizeof(gifName), "../trash/near_%s%d.gif", 
     	col->name, ++gifCount);
     gifLabelVerticalText(gifName, experiments+i, groupSize, height);
-    hPrintf("<IMG SRC=\"%s\">", gifName);
+    colInfoAnchor(col);
+    hPrintf("<IMG BORDER=0 SRC=\"%s\">", gifName);
+    hPrintf("</A>");
     hPrintf("</TD>");
     }
 
