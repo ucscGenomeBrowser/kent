@@ -5,7 +5,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlAddCol.c,v 1.1 2004/10/02 06:57:39 kent Exp $";
+static char const rcsid[] = "$Id: sqlAddCol.c,v 1.2 2004/10/02 07:00:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,8 +20,8 @@ errAbort(
   "options:\n"
   "   -key=field What field to use for key.  Defaults to the primary key, then\n"
   "              'name', then 'acc', then 'id'.\n"
-  "   -new=type  Add new column of given type.  Type can be 'int', 'varchar',\n"
-  "              and other legal SQL types\n"
+  "   -new=type  Add new column of given type.  Type can be 'int', 'varchar(255)',\n"
+  "              and other legal SQL types.\n"
   "   -index     Add index too\n"
   "   -unique    Add unique index too\n"
   );
