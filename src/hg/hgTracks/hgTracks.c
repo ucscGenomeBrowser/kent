@@ -1213,7 +1213,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         if (lf->filterColor > 0)
             color = lf->filterColor;
         else if (tg->itemColor)
+	    {
             color = tg->itemColor(tg, lf, vg);
+	    bColor = tg->ixAltColor;
+	    }
         else if (shades) 
             color =  shades[lf->grayIx+isXeno];
         tallStart = lf->tallStart;
@@ -5164,9 +5167,12 @@ if (chptr == NULL)
 else
     {
     char chromStr[3];
+    Color c;
     strncpy(chromStr, (char *)(chptr+3), 2);
     chromStr[2] = '\0';
-    return(getChromColor(chromStr, vg));
+    c = getChromColor(chromStr, vg);
+    tg->ixAltColor = c;
+    return c;
     }
 }
 
