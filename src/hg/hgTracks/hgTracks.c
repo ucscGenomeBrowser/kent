@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.557 2003/07/10 15:59:36 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.558 2003/07/11 17:20:42 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1299,7 +1299,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	int qGap, tGap;
 	qGap = sf->next->grayIx - sf->grayIx;
 	tGap = sf->next->start - sf->start;
-	s = e;
+	s = sf->end;
 	e = sf->next->start;
 
 	x1 = round((double)((int)s-winStart)*scale) + xOff;
