@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.48 2003/11/13 17:23:35 baertsch Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.49 2004/02/13 09:33:32 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -154,24 +154,6 @@ while ((next = el->next) != NULL)
     el = next;
 return el;
 }
-
-#ifdef OLD
-   Now use a macro for this. 
-/* Add new node to start of list.
- * Usage:
- *    slAddHead(&list, node);
- * where list and nodes are both pointers to structure
- * that begin with a next pointer. 
- */
-void slAddHead(void *listPt, void *node)
-{
-struct slList **ppt = (struct slList **)listPt;
-struct slList *n = (struct slList *)node;
-
-n->next = *ppt;
-*ppt = n;
-}
-#endif /* OLD */
 
 /* Add new node to tail of list.
  * Usage:

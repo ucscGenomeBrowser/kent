@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: ffAli.c,v 1.8 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: ffAli.c,v 1.9 2004/02/13 09:33:32 kent Exp $";
 
 void ffFreeAli(struct ffAli **pAli)
 /* Dispose of memory gotten from fuzzyFind(). */
@@ -127,68 +127,6 @@ while (d != NULL)
     }
 return acc;
 }
-
-#ifdef UNUSED
-boolean ffSolidMatch(struct ffAli **pLeft, struct ffAli **pRight, DNA *needle, 
-    int minMatchSize, int *retStartN, int *retEndN)
-/* Return start and end (in needle coordinates) of solid parts of 
- * match if any. Necessary because fuzzyFinder algorithm will extend
- * ends a little bit beyond where they're really solid.  We want
- * to effectively save these bases for aligning somewhere else. */
-{
-struct ffAli *next;
-int segSize;
-int runTotal = 0;
-int gapSize;
-struct ffAli *left = *pLeft, *right = *pRight;
-
-/* Get rid of small segments on left end that are separated from main body. */
-for (;;)
-    {
-    if (left == NULL)
-        return FALSE;
-    next = left->right;
-    segSize = left->nEnd - left->nStart;
-    runTotal += segSize;
-    if (segSize > minMatchSize || runTotal > minMatchSize*2)
-        break;
-    if (next != NULL)
-        {
-        gapSize = next->nStart - left->nEnd;
-        if (gapSize > 1)
-            runTotal = 0;
-        }
-    left = next;
-    }
-*retStartN = left->nStart - needle;
-
-/* Do same thing on right end... */
-runTotal = 0;
-for (;;)
-    {
-    if (right == NULL)
-        return FALSE;
-    next = right->left;
-    segSize = right->nEnd - right->nStart;
-    runTotal += segSize;
-    if (segSize > minMatchSize || runTotal > minMatchSize*2)
-        break;
-    if (next != NULL)
-        {
-        gapSize = next->nStart - left->nEnd;
-        if (gapSize > 1)
-            runTotal = 0;
-        }
-    right = next;
-    }
-*retEndN = right->nEnd - needle;
-
-*pLeft = left;
-*pRight = right;
-return *retEndN - *retStartN >= minMatchSize;
-}
-#endif /* UNUSED */
-
 
 struct ffAli *ffAliFromSym(int symCount, char *nSym, char *hSym,
 	struct lm *lm, char *nStart, char *hStart)

@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.13 2003/09/10 19:41:29 markd Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.14 2004/02/13 09:33:32 kent Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -92,9 +92,6 @@ if (startsWith("gene-", groupName))
     groupName += 5;
 if (startsWith("cc_", groupName))
     groupName += 3;
-#ifdef OLD
-sprintf(nameBuf, "%s.%s", seqName, groupName);
-#endif /* OLD */
 strcpy(nameBuf, groupName);
 return nameBuf;
 }
