@@ -135,6 +135,7 @@ else if (pp->type == pptAssignment)
 	struct pfParse *right = left->next;
 	pp->type = pptVarInit;
 	pp->children = left->children;
+	pp->name = left->name;
 	slAddTail(&pp->children, right);
 	}
     }
