@@ -1565,6 +1565,7 @@ SEQ2_LEN=$BASE/S2.len
         # 14052627 bases of 221562941 (6.342%) in intersection
         # hg15: 13990547 bases of 218713898 (6.397%) in intersection
 
+
     # make axtNet300
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
@@ -1743,6 +1744,13 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
     cd /cluster/data/hg16/bed/blastz.mm3/axtBest
     ln -s ../axtNet/chr*.axt .
 
+    # copy net axt's to download area (DONE 2003-09-24 kate)
+    cd /cluster/data/hg16/bed/blastz.mm3/axtNet
+    gzip *.axt
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsMm3/axtNet
+    cp -p *.axt.gz /usr/local/apache/htdocs/goldenPath/hg16/vsMm3/axtNet
+    # add README.txt file to dir, if needed
+
     #  Convert those axt files to psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3
@@ -1794,6 +1802,7 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
      hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
+
 # MAKING THE AXTTIGHT FROM AXTBEST (DONE - 2003-08-25 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
@@ -1819,6 +1828,13 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/pslTight
     hgLoadPsl hg16 chr*_blastzTightMm3.psl
+
+    # copy to axt's to download area (DONE 2003-09-24 kate)
+    cd /cluster/data/hg16/bed/blastz.mm3/axtTight
+    gzip *.axt
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsMm3/axtTight
+    cp -p *.axt.gz /usr/local/apache/htdocs/goldenPath/hg16/vsMm3/axtTight
+    # add README.txt file to dir, if needed
 
 # CHAIN MOUSE BLASTZ (DONE 2003-08-28 - Hiram)
 
@@ -2216,6 +2232,16 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
     cd /cluster/data/hg16/bed/blastz.rn3/axtBest
     ln -s ../axtNet/chr*.axt .
 
+    # copy net axt's to download area (DONE 2003-09-24 kate)
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtNet
+    gzip *.axt
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtNet
+    cd /cluster/data/hg16/bed/blastz.rn3/axtNet
+    cp -p *.axt.gz /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtNet
+    # add README.txt file to dir, if needed
+
     #  Convert those axt files to psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.rn3
@@ -2289,6 +2315,16 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.rn3/pslTight
     hgLoadPsl hg16 chr*_blastzTightRn3.psl
+
+    # copy  axt's to download area (DONE 2003-09-24 kate)
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtTight
+    gzip *.axt
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtTight
+    cd /cluster/data/hg16/bed/blastz.rn3/axtTight
+    cp -p *.axt.gz /usr/local/apache/htdocs/goldenPath/hg16/vsRn3/axtTight
+    # add README.txt file to dir, if needed
 
 # CHAIN RAT BLASTZ (DONE 2003-08-08 - Hiram)
 
@@ -2678,6 +2714,7 @@ EOF
     end
 
     # load into database
+    cd $multizDir/hmr/*.maf
     /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
 
 
@@ -3000,18 +3037,20 @@ cat << 'EOF' > gsub
         mv $i ${r}_blatFr1.psl
     end
     hgLoadPsl hg16 *.psl
+        # $ featureBits hg16 blatFr1 refGene:CDS
+        # 12787423 bases of 2865248791 (0.446%) in intersection
+        # $ featureBits hg15 blatFugu refGene:CDS
+        # 12427544 bases of 2866466359 (0.434%) in intersection
 
     # Edit trackDb.ra to include blatFr1
 
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
-    # Necessary ?
     mkdir /gbdb/hg16/fuguSeq
     cd /gbdb/hg16/fuguSeq
     ln -s /cluster/data/fr1/fugu_v3.masked.fa
     # hide .tab file
     cd /cluster/store2/tmp
     hgLoadSeq hg16 /gbdb/hg16/fuguSeq/fugu_v3.masked.fa
-
 
 
 # MAKE BLASTZ BEST SELF (RE-DONE - 2003-08-28 - Hiram)
