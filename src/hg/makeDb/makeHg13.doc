@@ -297,25 +297,26 @@ format.
       gunzip -c hs.gbff.gz  | \
         gbToFaRa ~kent/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta \
         stdin
-  o - Log onto server and change to yo 
-gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
-        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.132/xenoRna.fa \
-        ../mrna.132/xenoRna.ra ../mrna.132/xenoRna.ta stdiur genbank directory.
-      mkdir -p /cluster/store1/mrna.132
-      cd /cluster/store1/mrna.132
-      gunzip -c /cluster/store1/genbank.132/gbpri*.gz | \
-        gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-      gunzip -c /cluster/store1/genbank.132/gbest*.gz | \
-        gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
-      gunzip -c /cluster/store1/genbank.132/gbest*.gz | \
-        gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
-      cd /cluster/store1/genbank.132
-      gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
-        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.132/xenoRna.fa \
-        ../mrna.132/xenoRna.ra ../mrna.132/xenoRna.ta stdin
+  o - cd /cluster/store2/mrna.132
+
+# Make the RNAs
+        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
+
+# Make the ESTs
+        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
+
+# Make the nonhuman RNAs
+        gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin
+
+# Make the nonhuman ESTs
+        gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+        gbToFaRa xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
 
 
-STORING mRNA/EST SEQUENCE AND AUXILIARY INFO (IN PROGRESS)
+STORING mRNA/EST SEQUENCE AND AUXILIARY INFO (DONE 12/04/02 - MATT)
 
 o - Make /gbdb symlinks
      cd /gbdb
@@ -327,19 +328,20 @@ o - Make /gbdb symlinks
      ln -s /cluster/store2/mrna.132/org/Homo_sapiens/mrna.ra mrna.ra
      ln -s /cluster/store2/mrna.132/org/Homo_sapiens/est.fa est.fa
      ln -s /cluster/store2/mrna.132/org/Homo_sapiens/est.ra est.ra
+     ln -s /cluster/store1/refSeqCum/112602/org/Homo_sapiens/refSeq.fa refSeq.fa
+     ln -s /cluster/store1/refSeqCum/112602/org/Homo_sapiens/refSeq.ra refSeq.ra
      
-MAKE REFSEQ
+STORE MRNA (DONE 12/04/02 - MATT)
 
 o - Store the mRNA (non-alignment) info in database.
      hgLoadRna new hg13
-     hgLoadRna add hg13 /gbdb/hg13/mrna.132/mrna.fa /gbdb/hg13/mrna.132/mrna.ra
-     hgLoadRna add hg13 /gbdb/hg13/mrna.132/est.fa /gbdb/hg13/mrna.132/est.ra
-     hgLoadRna add -type=refSeq hg13 /gbdb/hg13/mrna.132/refSeq.fa /gbdb/hg13/mrna.132/refSeq.ra
+     hgLoadRna add -type=mRNA hg13 /gbdb/hg13/mrna.132/mrna.fa /gbdb/hg13/mrna.132/mrna.ra
+     hgLoadRna add -type=EST hg13 /gbdb/hg13/mrna.132/est.fa /gbdb/hg13/mrna.132/est.ra
 
     The est line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (TO DO)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.132 into 
@@ -361,12 +363,9 @@ Using the bash shell do:
               mkdir -p $i
               cd $i
               cp ~kent/lastOo/bed/$i/gsub .
-              ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
-              ls -1 /scratch/hg/mrna.132/$i/$i.fa > mrna.lst
+              ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > genome.lst
+              ls -1 /scratch/hg/mrna.132/Homo_sapiens/$i.fa > mrna.lst
               mkdir -p psl
-              # Note: build31/bed/refSeq directory not writeable, so I had to 
-              # create a bed/refSeq/psl and change the gsub
-              mkdir -p /cluster/store4/gs.14/build31/bed/refSeq/psl
               gensub2 genome.lst mrna.lst gsub spec
               para create spec
               cd ..
@@ -403,7 +402,7 @@ o - Load refSeq alignments into database
       cd /cluster/store4/gs.14/build31/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg13 -tNameIx refSeqAli.psl
-
+DONE TO HERE FOR REFSEQ
 o - Load mRNA alignments into database. 
       ssh hgwdev
       cd /cluster/store4/gs.14/build31/bed/mrna/chrom
@@ -495,34 +494,43 @@ o - Create rnaCluster table (depends on {est,mrna}OrientInfo above)
    cd bed/rnaCluster
    hgLoadBed hg13 rnaCluster chrom/*.bed > /dev/null
 
+PRODUCING KNOWN GENES (DONE 11/26/02 - MATT)
 
-PRODUCING KNOWN GENES (TO DO)
+o - Download everything from ftp://ftp.ncbi.nih.gov/refseq/cumulative
+    into /cluster/store1/refSeqCum/112602
+        cd /cluster/store1/refSeqCum/112602
+        uncompress rscu.gbff.Z
+        Put the following lines into anyRna.fil
+        restrict mol=mRNA
+        hide mol
 
+        gbToFaRa anyRna.fil refSeq.fa refSeq.ra refSeq.ta -byOrganism=org rscu.gbff
+        This will create fasta and annotations for the human in refSeq/org/Homo_sapiens
+        in refSeq.fa and refSeq.ra under the org/Homo_sapiens directory
 o - Get extra info from NCBI and produce refGene table as so:
-       ssh hgwdev
-       cd ~/oo/bed
-       mkdir refSeq
-       cd refSeq
-       # Note: downloaded these to refSeq (refSeq dir perms)
-       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
-       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc 
-o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa.
-        I have changed the name to hs.prot.fa.
-o - RefSeq should have already been aligned to the genome by processes 
-        described under mRNA/EST alignments above.
-o - Produce refGene, refPep, refMrna, and refLink tables as so:
-       ssh hgwdev
-       cd ~/oo/bed/refSeq
-       ln -s /cluster/store1/mrna.132 mrna
-#
-# NOTE: If hgRefSeqMrna is losing refLink's protAcc field, I think it's due to 
-# a format-change issue with .-suffixes in mrna acc's
-#
-       hgRefSeqMrna hg13 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl \
-         loc2ref mrna/refSeq/human/hs.prot.fa mim2loc
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
 
-o - Add RefSeq status info 
-    hgRefSeqStatus hg13 loc2ref
+o -   Load the refSeq mRNA
+      hgLoadRna add -type=refSeq hg13 /gbdb/hg13/mrna.132/refSeq.fa /gbdb/hg13/mrna.132/refSeq.ra
+
+o - Produce refGene, refPep, refMrna, and refLink tables as so:
+Get the human proteins:
+        wget ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/hs.faa.gz
+        gunzip hs.faa.gz
+        cd ~/oo/bed/refSeq
+       hgRefSeqMrna hg13 /cluster/store1/refSeqCum/112602/org/Homo_sapiens/refSeq.fa \
+        /cluster/store1/refSeqCum/112602/org/Homo_sapiens/refSeq.ra \
+        all_refSeq.psl /cluster/store1/refSeqCum/112602/loc2ref \
+        /cluster/store1/refSeqCum/112602/hs.faa \
+        /cluster/store1/refSeqCum/112602/mim2loc
+# Don't worry about the "No gene name" errors
+o - Add RefSeq status info
+    hgRefSeqStatus hg13 /cluster/store1/refSeqCum/112602/loc2ref
+
+o - create precomputed join of refFlat and refGene:
+      echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneNam\
+e, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql hg13
 
 o - Add Jackson labs info
      cd ~/oo/bed
