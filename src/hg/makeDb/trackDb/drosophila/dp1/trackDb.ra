@@ -6,14 +6,14 @@ priority 9
 visibility pack
 color 150,0,0
 
-track bdgpGene
+track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
 longLabel D.melanogaster BDGP Genes Mapped to D.pseudoobscura
 group genes
 priority 45.5
 visibility pack
 color 0,100,180
-type genePred bdgpGenePep
+type genePred bdgpLiftGenePep
 
 track chainDm1
 shortLabel D. mel. Chain

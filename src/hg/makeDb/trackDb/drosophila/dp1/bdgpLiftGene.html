@@ -28,7 +28,10 @@ blocks are found by running a dynamic program over the kd-tree.  Chains
 scoring below a threshold are discarded, and the remaining chains are
 used by the <em>liftOver</em> program to translate <em>D. melanogaster</em> 
 coordinates into <em>D. pseudoobscura</em> coordinates for display in 
-this track.  
+this track.  Because of the evolutionary distance between the two species 
+and the incomplete sequence of <em>D. pseudoobscura</em>, liftOver was 
+run with relaxed constraints (minimum 50% matching bases, minimum 50% 
+mapping of aligned blocks/exons, tolerate missing start/end of CDS).
 </P>
 <H2>Credits</H2>
 <P>
