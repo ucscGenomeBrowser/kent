@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.852 2004/12/08 21:43:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.853 2004/12/13 02:26:32 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7269,6 +7269,8 @@ int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
+/* Start a global track hash. */
+trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
@@ -7291,6 +7293,7 @@ if (rulerMode != RULER_MODE_OFF)
 
 for (track = trackList; track != NULL; track = track->next)
     {
+    hashAddUnique(trackHash, track->mapName, track);
     if (track->visibility != tvHide)
 	{
         if (isCompositeTrack(track))
