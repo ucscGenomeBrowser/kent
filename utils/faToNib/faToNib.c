@@ -1,4 +1,5 @@
 /* faToNib - Convert from .fa to .nib format. */
+/* FIXME: this code is stale and not used */
 #include "common.h"
 #include "nib.h"
 #include "fa.h"
