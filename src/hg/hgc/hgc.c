@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.675 2004/06/26 16:12:33 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.676 2004/06/28 16:28:00 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13420,17 +13420,26 @@ if ((pos = strchr(acc, '.')) != NULL)
 
 cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-printf("Human Position:\n");
-printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+if (pos != NULL)
+    {
+    printf("Human Position:\n");
+    printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
 	hgTracksName(), pos, "hg16");
-printf("%s</A><BR>",pos);
-printf("Human mRNA: <A HREF=\"");
-printEntrezNucleotideUrl(stdout, acc);
-printf("\" TARGET=_blank>%s</A><BR>\n", acc);
-printf("SwissProt: ");
-printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-	    "TARGET=_blank>%s</A></B>\n",
-	    prot, prot);
+    printf("%s</A><BR>",pos);
+    }
+if (acc != NULL)
+    {
+    printf("Human mRNA: <A HREF=\"");
+    printEntrezNucleotideUrl(stdout, acc);
+    printf("\" TARGET=_blank>%s</A><BR>\n", acc);
+    }
+if (prot != NULL)
+    {
+    printf("SwissProt: ");
+    printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+		"TARGET=_blank>%s</A></B>\n",
+		prot, prot);
+    }
 printf("<BR>protein length: %d<BR>\n",pslList->qSize);
 
 slSort(&pslList, pslCmpMatch);
