@@ -49,7 +49,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.68 2004/09/24 16:15:14 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.69 2004/09/24 16:39:24 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -759,7 +759,8 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logDebug("message: %s\n", line);
+	    logDebug("message from 0x%x: %s",
+                     ntohl(pmIn.ipAddress.sin_addr.s_addr), line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -788,7 +789,8 @@ for (;;)
 	    }
 	else
 	    {
-	    logWarn("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
+	    logWarn("command from unauthorized host 0x%x",
+                    ntohl(pmIn.ipAddress.sin_addr.s_addr));
 	    }
 	}
     }
