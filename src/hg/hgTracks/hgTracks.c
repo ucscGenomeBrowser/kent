@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.698 2004/04/01 03:22:37 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.699 2004/04/01 15:40:12 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1178,6 +1178,7 @@ boolean exonArrows = tg->exonArrows;
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
 boolean foundStart = FALSE;
+boolean *foundStartPtr = &foundStart;
 int drawOptionNum = 0; //off
 boolean errorColor = FALSE;
 
@@ -1242,11 +1243,11 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > s)
 	{
         if (zoomedToCdsColorLevel && drawOptionNum>0 && 
-            e + 6 >= winStart && s - 6 < winEnd) 
-            drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
+            e + 6 >= winStart && s - 6 < winEnd && e-s <= 3) 
+                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
-                    psl, drawOptionNum, errorColor, &foundStart,
-                    MAXPIXELS, winStart);
+                    psl, drawOptionNum, errorColor, foundStartPtr,
+                    MAXPIXELS, winStart, color);
         else
             {
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
@@ -2119,7 +2120,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
 int rowOffset;
 struct genePredReader *gpr = NULL;
-struct genePred *gp;
+struct genePred *gp = NULL;
 
 int drawOptionNum = 0; //off
 if (table != NULL)
@@ -2136,8 +2137,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     strncpy(lf->name, gp->name, sizeof(lf->name));
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if (drawOptionNum>0 && zoomedToCdsColorLevel)
-        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL);
+    if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
+        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL,FALSE);
     else
         lf->components = sfFromGenePred(gp, grayIx);
 
@@ -7288,7 +7289,9 @@ boolean showedRuler = FALSE;
 
 zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
-zoomedToCdsColorLevel = (ceil(winBaseCount/30) * tl.mWidth) <= insideWidth;
+zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
+
+
 if (psOutput != NULL)
    {
    suppressHtml = TRUE;

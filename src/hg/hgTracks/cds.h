@@ -22,7 +22,8 @@
 #endif
 
 struct simpleFeature *splitGenePredByCodon( char *chrom, 
-        struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps);
+        struct linkedFeatures *lf, struct genePred *gp, unsigned
+        *gaps, boolean notGenomic);
 /*divide a genePred record into a linkedFeature, where each simple
   feature is a 3-base codon (or a partial codon if on a gap boundary).
   It starts at the cdsStarts position on the genome and goes to 
@@ -34,7 +35,8 @@ int getCdsDrawOptionNum(char *mapName);
  * cdsColors.h for return value meanings*/
 
 void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf, 
-        struct psl *psl, int sizeMul, boolean isXeno, int maxShade);
+        struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
+        int displayOption);
 /*divide a pslX record into a linkedFeature, where each simple feature
  * is a 3-base codon (or a partial codon if on a boundary). Uses
  * GenBank to get the CDS start/stop of the psl record and also grabs
@@ -48,7 +50,8 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf,
         double scale, MgFont *font, int s, int e, int heightPer,
         boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl
         *psl, int drawOptionNum, boolean errorColor, 
-        boolean *foundStart, int maxPixels, int winStart);
+        boolean *foundStart, int maxPixels, int winStart, Color
+        originalColor);
 /*draw a box that is colored by the bases inside it and its
  * orientation. Stop codons are red, start are green, otherwise they
  * alternate light/dark blue colors. These are defined in

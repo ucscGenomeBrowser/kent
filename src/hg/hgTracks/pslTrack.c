@@ -273,7 +273,7 @@ if (rcTarget)
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
 if (drawOptionNum>0 && zoomedToCdsColorLevel)
-        lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade);
+        lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade, drawOptionNum);
     else
         {
         sfList = sfFromPslX(psl, grayIx, sizeMul);
