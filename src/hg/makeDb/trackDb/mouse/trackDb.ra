@@ -64,7 +64,8 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-expTable affyGnfU74AExps
+#expTable affyGnfU74AExps
+expTable gnfMouseU74aAllExps
 chip U74
 canPack off
 
@@ -77,7 +78,8 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-expTable affyGnfU74BExps
+#expTable affyGnfU74BExps
+expTable gnfMouseU74bAllExps
 chip U74
 canPack off
 
@@ -90,7 +92,8 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-expTable affyGnfU74CExps
+#expTable affyGnfU74CExps
+expTable gnfMouseU74cAllExps
 chip U74
 canPack off
 
