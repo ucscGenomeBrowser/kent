@@ -17,8 +17,8 @@ spectrum on
 type psl .
 
 track xenoMrna
-shortLabel viral mRNAs
-longLabel all viral mRNAs from Genbank using blastz
+shortLabel Viral mRNAs
+longLabel All Viral mRNAs from Genbank Using Blastz
 group rna
 priority 55
 visibility pack
@@ -26,8 +26,8 @@ spectrum on
 type psl xeno
 
 track xenoBlastzMrna
-shortLabel viral mRNAs Chained
-longLabel all viral mRNAs from Genbank using blastz chained
+shortLabel Viral mRNAs Chained
+longLabel All Viral mRNAs from Genbank Using Blastz Chained
 group rna
 priority 55
 visibility pack
@@ -35,8 +35,8 @@ spectrum on
 type psl xeno
 
 track viralProt
-shortLabel Coronavirus proteins 
-longLabel Coronavirus proteins from Swissprot at least 67% id using Blat
+shortLabel Coronavirus Proteins 
+longLabel Coronavirus Proteins from Swissprot at least 67% ID Using Blat
 group compGeno
 priority 133
 visibility pack
@@ -44,8 +44,8 @@ type psl .
 url http://us.expasy.org/cgi-bin/niceprot.pl?$$
 
 track viralProtLoose
-shortLabel Coronavirus loose 
-longLabel Coronavirus proteins from Swissprot loose alignments using Blat
+shortLabel Coronavirus Loose 
+longLabel Coronavirus Proteins from Swissprot Loose Alignments Using Blat
 group compGeno
 priority 135
 visibility hide
@@ -62,7 +62,7 @@ type bed 4 +
 
 track otherSARS
 shortLabel Other SARS
-longLabel Other SARS coronavirus (partial or complete)
+longLabel Other SARS Coronavirus (Partial or Complete)
 group compGeno
 priority 132
 visibility pack
