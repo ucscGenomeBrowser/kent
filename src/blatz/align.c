@@ -598,8 +598,7 @@ return clumpList;
 }
 
 static void removeSimpleOverlaps(struct cBlock **pBlockList)
-/* Remove from list blocks that start in exactly the same
- * place on both coordinates. */
+/* Remove from list blocks that overlap and are on same diagonal. */
 {
 struct cBlock *newList = NULL, *b, *next, *last = NULL;
 slSort(pBlockList, cBlockCmpDiagQuery);
