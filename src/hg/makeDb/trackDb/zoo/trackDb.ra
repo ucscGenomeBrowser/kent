@@ -595,3 +595,13 @@ altColor 0,0,160
 visibility hide
 type sample
 
+track mavid
+shortLabel MAVID
+longLabel MAVID Alignment
+group compGeno
+priority 100
+visibility full
+color 100,0,0
+altColor 100,0,0
+type maf
+
