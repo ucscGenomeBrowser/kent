@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.47 2004/06/04 21:18:49 angie Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.48 2004/06/10 17:07:39 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -467,6 +467,14 @@ int diff = strcmp(a->qName, b->qName);
 if (diff == 0)
     diff = pslScore(b) - pslScore(a);
 return diff;
+}
+
+int pslCmpMatch(const void *va, const void *vb)
+/* Compare to sort based on match */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+return b->match - a->match;
 }
 
 static void pslLabelColumns(FILE *f)

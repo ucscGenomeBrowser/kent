@@ -151,6 +151,9 @@ int pslCalcMilliBad(struct psl *psl, boolean isMrna);
 int pslCmpScoreDesc(const void *va, const void *vb);
 /* Compare to sort based on score descending. */
 
+int pslCmpMatch(const void *va, const void *vb);
+/* Compare to sort based on match. */
+
 int pslScore(const struct psl *psl);
 /* Return score for psl. */
 
