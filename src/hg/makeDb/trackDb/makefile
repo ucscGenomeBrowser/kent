@@ -96,7 +96,7 @@ old_alpha:
 # visibility settings
 mgc:
 	hgTrackDb -visibility=mgcView.ra human hg15 trackDb ../../lib/trackDb.sql .
-#	hgTrackDb -visibility=mgcView.ra human hg13 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -visibility=mgcView.ra mouse mm3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 
 

@@ -308,6 +308,24 @@ visibility hide
 color 34,139,34
 type genePred
 
+track mgcTSExpPcr
+shortLabel TWINSCAN Exp PCR
+longLabel TWINSCAN predictions proposed for exploratory PCR confirmation
+group genes
+priority 36.5
+visibility hide
+color 125,0,150
+type genePred
+
+track mgcTSFullOrfPcr
+shortLabel TWINSCAN Full ORF PCR
+longLabel TWINSCAN predictions proposed for full-ORF PCR confirmation
+group genes
+priority 36.6
+visibility hide
+color 155,0,125
+type genePred
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix

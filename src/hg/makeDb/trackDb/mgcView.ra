@@ -4,6 +4,12 @@ visibility pack
 track mgcGenes
 visibility pack
 
+track mgcTSExpPcr
+visibility pack
+
+track mgcTSFullOrfPcr
+visibility pack
+
 track mgcIncompleteMrna
 visibility dense
 
