@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.23 2004/11/08 19:35:51 kent Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.24 2004/11/20 16:04:15 kent Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -568,6 +568,8 @@ canDoIntrons = hti->hasBlocks;
 rowCount = totalCount = 0;
 for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     {
+    if (bedItem->blockCount == 0) /* An intersection may have made hti unreliable. */
+        canDoIntrons = FALSE;
     rowCount++;
     chromSize = hChromSize(bedItem->chrom);
     // bed: translate relative starts to absolute starts
