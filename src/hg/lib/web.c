@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.40 2003/06/27 17:33:42 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.41 2003/09/26 23:04:34 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -448,17 +448,25 @@ struct dbDb *cur = NULL;
 char *db = hGetDb();
 char *organism = hOrganism(db);
 char *assembly = cgiOptionalString(dbCgi);
+char orgAssembly[256];
 
 for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
     {
-    assemblyList[numAssemblies] = cur->description;
+    safef(orgAssembly, sizeof(orgAssembly), "%s %s",
+	  cur->organism, cur->description);
+    assemblyList[numAssemblies] = cloneString(orgAssembly);
     values[numAssemblies] = cur->name;
     numAssemblies++;
     }
 
 // Have to use the "menu" name, not the value, to mark selected:
 if (assembly != NULL)
-    assembly = hFreezeFromDb(assembly);
+    {
+    char *selOrg    = hOrganism(assembly);
+    char *selFreeze = hFreezeFromDb(assembly);
+    safef(orgAssembly, sizeof(orgAssembly), "%s %s", selOrg, selFreeze);
+    assembly = cloneString(orgAssembly);
+    }
 
 cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
