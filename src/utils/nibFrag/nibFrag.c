@@ -12,7 +12,7 @@ errAbort(
   "usage:\n"
   "   nibFrag [options] file.nib start end strand out.fa\n"
   "options:\n"
-  "   -masked - use lower case characters masked-out based\n"
+  "   -masked - use lower case characters for masked-out bases\n"
   );
 }
 
