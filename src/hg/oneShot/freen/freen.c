@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "fa.h"
-#include "twoBit.h"
+#include "jksql.h"
+#include "mysqlTableStatus.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.42 2004/02/24 22:04:13 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.43 2004/03/17 02:19:52 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -17,19 +18,18 @@ errAbort("usage: freen something");
 void freen(char *in)
 /* Test some hair-brained thing. */
 {
-if (twoBitIsFile(in))
-    printf("%s is a twoBit file\n", in);
-else if (twoBitIsRange(in))
+struct sqlConnection *conn = sqlConnect(in);
+struct sqlConnection *conn2 = sqlConnect(in);
+struct sqlResult *sr;
+char query[256], **row;
+sr = sqlGetResult(conn, "show table status");
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *file, *seq;
-    int start, end;
-    printf("%s is a range in a twoBit file\n", in);
-    twoBitParseRange(in, &file, &seq, &start, &end);
-    printf("file %s, seq %s, start %d, end %d\n", file, seq, start, end);
-    }
-else
-    {
-    printf("%s is not twoBit\n", in);
+    struct mysqlTableStatus mst;
+    mysqlTableStatusStaticLoad(row, &mst);
+    printf("%s\t%d\t%s\t%d\t%d\n", mst.name, mst.rowCount, 
+    	mst.updateTime, sqlDateToUnixTime(mst.updateTime),
+	sqlTableUpdateTime(conn2, mst.name) );
     }
 }
 
