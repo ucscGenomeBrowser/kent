@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.6 2005/02/19 01:16:57 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.7 2005/02/19 08:13:52 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 
@@ -137,6 +137,8 @@ int combinedWidth = 0;
 int *offsets = (int *)NULL;
 int widthSpace = 0;
 int bitmapColumn = 0;
+int maxYcoord = 0;
+int minYcoord = BIGNUM;
 
 slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
 
@@ -156,7 +158,7 @@ widthSpace = glyphs->dWidth;	/*	first one is space (LO_LMT) */
 encoding = glyphs->encoding - 1;	/* to check for missing glyphs */
 for (glyph = glyphs; glyph; glyph=glyph->next)
     {
-    int yExtent;
+    int yTop;
     if (glyph->encoding != (encoding + 1))
 	{
 	verbose(2, "#\tmissing glyph for encodings: %d - %d\n", 
@@ -168,28 +170,25 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     if (glyph->xOff > maxXoff) maxXoff = glyph->xOff;
     if (glyph->yOff < minYoff) minYoff = glyph->yOff;
     if (glyph->yOff > maxYoff) maxYoff = glyph->yOff;
-    yExtent = glyph->h;
+    yTop = glyph->h + glyph->yOff;
+    if (yTop > maxYcoord) maxYcoord = yTop;
+    if (glyph->yOff < minYcoord) minYcoord = glyph->yOff;
+/*
     if (yExtent < 0)
 	errAbort("negative yExtent for glyph: %d, h: %d, yOff: %d",
 		glyph->encoding, glyph->h, glyph->yOff);
     if (yExtent > font->frm_hgt)
 	errAbort("yExtent larger than possible for glyph: %d, h: %d, yOff: %d",
  		glyph->encoding, glyph->h, glyph->yOff);
-    if (glyph->w > maxXextent) maxXextent = glyph->w;
+*/
     if (glyph->dWidth > maxDwidth) maxDwidth = glyph->dWidth;
-    if (yExtent > maxYextent) maxYextent = yExtent;
+    if ((maxYcoord - minYcoord) > maxYextent)
+	maxYextent = (maxYcoord - minYcoord);
     combinedWidth += BYTEWIDTH(glyph->dWidth) * 8;
     ++glyphCount;
     }
 
 lastEncoding = encoding;
-
-if ((glyphCount + missing) > maxGlyphCount)
-    errAbort("found more glyphs than allowed: (%d + %d) = %d  vs. %d\n",
-	glyphCount, missing, glyphCount + missing, maxGlyphCount);
-if (font->frm_hgt != maxYextent)
-    errAbort("do not find the same maximum height during scan ? %d != %d",
-	font->frm_hgt, maxYextent);
 
 verbose(2, "#\thave %d glyphs to merge, missing: %d (maxGlyphCount: %d)\n",
 	glyphCount, missing, maxGlyphCount);
@@ -199,6 +198,13 @@ verbose(2, "#\tmin,max Y offsets: %d, %d, maxYextent: %d\n",
 	minYoff, maxYoff, maxYextent);
 verbose(2, "#\tadding width of %d*%d = %d to combinedWidth %d for %d missing glyphs\n",
 	missing, widthSpace, BYTEWIDTH(missing * widthSpace)*8, combinedWidth, missing);
+
+if ((glyphCount + missing) > maxGlyphCount)
+    errAbort("found more glyphs than allowed: (%d + %d) = %d  vs. %d\n",
+	glyphCount, missing, glyphCount + missing, maxGlyphCount);
+if (font->frm_hgt != maxYextent)
+    errAbort("do not find the same maximum height during scan ? %d != %d",
+	font->frm_hgt, maxYextent);
 
 combinedWidth += BYTEWIDTH(missing * widthSpace)*8;
 font->frm_wdt = BYTEWIDTH(combinedWidth);
@@ -231,6 +237,7 @@ for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     {
     int byteWidth;
     struct bdfGlyph *glyphToUse = glyph;
+    int startRow;
 
     if(NULL == glyphToUse)
 	errAbort("got lost in glyphs at number: %d, encoding: %d",
@@ -246,21 +253,21 @@ verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding, (char)encoding);
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
 
-if (encoding == 99)
-    verbose(4,"bitmapColumn: %d\n", bitmapColumn);
-
     byteWidth = BYTEWIDTH(glyphToUse->dWidth);
+    startRow = maxYextent -
+		(((glyphToUse->h + glyphToUse->yOff) - 1) - minYoff) - 1;
+verbose(4,"#\tchar %d '%c' w,h bytes: %d, %d, h,yOff: %d, %d, startRow: %d\n",
+	encoding, (char)encoding, byteWidth, glyphToUse->h, glyphToUse->h,
+		glyphToUse->yOff, startRow);
     /* adjust starting row here by yOff and minYoff	TBD */
     for (col = 0; col < byteWidth; ++col)
 	{
-	for (row = 0; row < glyphToUse->h; ++row)
+	int j;
+	row = startRow;
+	for (j = 0; j < glyphToUse->h && (row<maxYextent); ++j)
 	    {
-	    bitmap[row][bitmapColumn] = glyphToUse->bitmap[row][col];
-if (encoding < 35)
-    {
-    verbose(4, "bitmap[%d][%d] = bitmap[%d][%d] = %02X\n",
-	row, bitmapColumn, row, col, bitmap[row][bitmapColumn]);
-    }
+	    bitmap[row][bitmapColumn] = glyphToUse->bitmap[j][col];
+	    ++row;
 	    }
 	bitmapColumn += 1;
 	}
@@ -385,8 +392,8 @@ int maxH = 0;		/*	dimensions, smallest and largest box,	*/
 int minH = BIGNUM;	/*	for sanity checking purposes.	*/
 int BBw = 0;		/*	the current character bounding box	*/
 int BBh = 0;		/*	width, height, X,Y offsets	*/
-int BBxoff = 0;
-int BByoff = 0;
+int BBxOff = 0;
+int BByOff = 0;
 int glyphRow = 0;	/*	to count bitmap rows read for current char */
 int encoding = 0;	/*	the current character's ascii value	*/
 int maxX = 0;		/*	largest bounding box possible	*/
@@ -396,6 +403,10 @@ int offY = 0;		/*	offset to Y=0 in the FONTBOUNDINGBOX */
 int combinedWidth = 0;	/*	sum of all glyph dWidths	*/
 struct bdfGlyph *curGlyph = NULL;    /* to accumulate the current glyph data */
 struct bdfGlyph *glyphList = NULL;   /* list of all glyphs read in */
+int minYoff = BIGNUM;
+int maxYcoord = 0;
+int minYcoord = BIGNUM;
+int yRange = 0;
 
 fontHeader.id = STPROP;
 fontHeader.size = 0;
@@ -533,6 +544,11 @@ if (encoding < 35)
 		encoding);
 	/*	finished with a character definition, add to list	*/
 	slAddHead(&glyphList, curGlyph);
+	if (curGlyph->yOff < minYoff) minYoff = curGlyph->yOff;
+	if ((curGlyph->yOff + curGlyph->h) > maxYcoord)
+		maxYcoord = curGlyph->yOff + curGlyph->h;
+	if (curGlyph->yOff < minYcoord)
+		minYcoord = curGlyph->yOff;
 	if (curGlyph->dWidth < 1)
 	    errAbort("less than one dWidth for character: %d",
 		curGlyph->encoding);
@@ -578,29 +594,31 @@ if (encoding < 35)
 	/*	I don't know why there are glyphs defined that are
  	 *	larger than the font size, I'm going to skip them
 	 */
-	if (BBh > fontHeader.size)
+	BByOff = sqlSigned(words[4]);
+	if (BBh > maxY)
 	    {
 	    skipToNext = TRUE;
 	    --validGlyphs;
 	    combinedWidth -= curGlyph->dWidth;
-	    verbose(2,"#\tBBh == %d > %d for character: %d '%c' - skipping this char\n",
-		BBh, fontHeader.size, encoding, (char)encoding);
+	    verbose(2,"#\t(BBh %d + BByOff %d) == %d > %d for character: %d '%c' - skipping this char\n",
+		BBh, BByOff, BBh+BByOff, fontHeader.size, encoding,
+		(char)encoding);
 	    }
 	else
 	    {
 	    BBw = sqlSigned(words[1]);
-	    BBxoff = sqlSigned(words[3]);
-	    BByoff = sqlSigned(words[4]);
+	    BBxOff = sqlSigned(words[3]);
 	    if (BBw < minW) minW = BBw;
 	    if (BBw > maxDwidth) maxDwidth = BBw;
 	    if (BBh < minH) minH = BBh;
 	    if (BBh > maxH) maxH = BBh;
 	    curGlyph->w = BBw;
 	    curGlyph->h = BBh;
-	    curGlyph->xOff = BBxoff;
-	    curGlyph->yOff = BByoff;
+	    curGlyph->xOff = BBxOff;
+	    curGlyph->yOff = BByOff;
 	    if ((curGlyph->xOff < offX) || (curGlyph->yOff < offY))
 		errAbort("a glyph's x,y offsets are out of range: %d,%d vs limits %d,%d\n", curGlyph->xOff, curGlyph->yOff, offX, offY);
+	    if (BBh > yRange) yRange = BBh;
 	    }
 	}
     }
@@ -611,11 +629,13 @@ verbose(2, "#\tascii range: %d - %d, valid glyphs: %d\n", asciiLo, asciiHi,
 	validGlyphs);
 verbose(2, "#\tW,H range (%d-%d) (%d-%d), combinedWidth: %d\n", minW, minH,
 	maxDwidth, maxH, combinedWidth);
+verbose(2, "#\tminYoff: %d, minYcoord: %d, maxYcoord: %d, yRange: %d\n",
+	minYoff, minYcoord, maxYcoord, yRange);
 /*	the wdt needs to be adjusted after everything is scanned in outputGem.
  *	There may be missing glyphs which will affect the combined width.
  */
 fontHeader.frm_wdt = combinedWidth;
-fontHeader.frm_hgt = maxH;
+fontHeader.frm_hgt = maxYcoord - minYcoord;
 fontHeader.ADE_lo = asciiLo;
 fontHeader.ADE_hi = asciiHi;
 
