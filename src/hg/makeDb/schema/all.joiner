@@ -710,6 +710,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.bioCycPathway.geneID minCheck=0.98
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb.knownToRefSeq.value minCheck=0.98
+    $kgDb.refSeqKg.refseq minCheck=0.60
+    $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
     $gbd.refFlat.name
@@ -776,6 +778,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.blastKGPep00.name minCheck=0.90
     $kgDb.blastKGPep01.name minCheck=0.99
     $kgDb.blastKGRef01.acc minCheck=0.99
+    $kgDb.refSeqKg.kgId minCheck=0.50
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
@@ -785,6 +788,11 @@ identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
     $kgDb.knownIsoforms.clusterId full
+
+identifier ccdsGeneId 
+"CCDS Gene ID"
+    $kgDb.ccdsGene.name
+    $kgDb.ccdsInfo.ccds full
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
@@ -1162,6 +1170,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
+    $kgDb.ccdsInfo.mrnaAcc minCheck=0.30
 
 identifier ensemblTranscriptId3 external=Ensembl dependency
 "Ensembl Transcript ID"
