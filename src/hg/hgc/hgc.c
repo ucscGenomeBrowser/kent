@@ -4182,7 +4182,7 @@ struct rgbColor getColorForAffyBed(float val, float max)
 struct rgbColor color; 
 int colorIndex = 0;
 int offset = 0;
-val = fabs(val);
+
 /* if log score is -10000 data is missing */
 if(val == -10000) 
     {
@@ -4190,6 +4190,7 @@ if(val == -10000)
     return(color);
     }
 
+val = fabs(val);
 /* take the log for visualization */
 if(val > 0)
     val = logBase2(val);
@@ -4802,7 +4803,7 @@ if(name != NULL)
     printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
-    printf("<p>A <a href=\"%s%s.png\">histogram</a> of the data for the probe selected (%s) over all",gnf, name, name);
+    printf("<p>A <a href=\"%s%s.png\">histogram</a> of the data for the probe set selected (%s) over all",gnf, name, name);
     printf("tissues is available at <a href=\"http://www.gnf.org\">Novartis</a>.\n");
     }
 }
