@@ -128,9 +128,9 @@ while (totalRead < size)
     {
     oneRead = read(sd, buf + totalRead, size - totalRead);
     if (oneRead < 0)
-        {
 	return oneRead;
-	}
+    if (oneRead == 0)
+        break;
     totalRead += oneRead;
     }
 return totalRead;
