@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.8 2003/06/30 23:15:45 hiram Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -52,10 +52,10 @@ else
 }
 
 long long sqlLongLong(char *s)
-/* Convert string to an off_t.  Unlike atol assumes all of string is
+/* Convert string to a long long.  Unlike atol assumes all of string is
  * number. */
 {
-off_t res = 0;
+long long res = 0;
 char *p = s;
 char c;
 
