@@ -24,6 +24,14 @@ visibility hide
 spectrum on
 type psl est
 
+track multizMm3Rn2 
+shortLabel Human/Mouse/Rat
+longLabel Human/Mouse/Rat Alignments
+group compGeno
+priority 118.1
+visibility full
+type maf
+
 track blastzMm3
 shortLabel Blastz Mouse
 longLabel All Blastz Mouse(Feb03) Alignments
