@@ -549,6 +549,16 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     # check log file /cluster/data/genbank/var/build/logs/*mm4*
     # check for para problems in /cluster/bluearc/genbank/work/initial.mm4/align
 
+    # refseq protein ids included version, which caused searches to fail.
+    # clean our refseq sequences and reload:
+      drop table refFlat,refGene,refLink,refSeqAli,refSeqStatus;
+      delete from gbSeq where acc like 'NM_%' or acc like 'NP_%';
+      delete from gbStatus where acc like 'NM_%' or acc like 'NP_%';
+      delete from mrna where acc like 'NM_%';
+      delete from gbLoaded where srcDb='RefSeq';
+     nice ./bin/gbDbLoadStep -verbose=1 mm4
+    # opps, need to clean out imageClone table too.  going to just rerun
+    # gbDbLoadStep, which should clean things up.
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-07-08 kate)
     ssh eieio
