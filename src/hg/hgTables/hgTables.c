@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.15 2004/07/15 01:06:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.16 2004/07/15 04:45:08 kent Exp $";
 
 
 void usage()
@@ -626,8 +626,10 @@ else if (cartVarExists(cart, hgtaDoValueHistogram))
     doValueHistogram(cartString(cart, hgtaDoValueHistogram));
 else if (cartVarExists(cart, hgtaDoValueRange))
     doValueRange(cartString(cart, hgtaDoValueRange));
-else if (cartVarExists(cart, hgtaDoSelectedFields))
-    doSelectedFields();
+else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
+    doSelectFieldsMore();
+else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
+    doPrintSelectedFields();
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else	/* Default - put up initial page. */

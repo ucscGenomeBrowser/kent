@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "dlist.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -14,44 +13,45 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char *fsVarName(char *type, char *table, char *field)
+static char *fsVarName(char *type, char *db, char *table, char *field)
 /* Get variable name that encodes type, table and field. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s%s%s_%s", 
-	hgtaFieldSelectPrefix, type, table, field);
+safef(buf, sizeof(buf), "%s.%s.%s.%s.%s", 
+	hgtaFieldSelectPrefix, type, db, table, field);
 return buf;
 }
 
-static char *checkVarName(char *table, char *field)
+static char *checkVarName(char *db, char *table, char *field)
 /* Get variable name for check box on given table/field. */
 {
-return fsVarName("check_", table, field);
+return fsVarName("check", db, table, field);
 }
 
-static char *openLinkedVarName(char *table, char *field)
+#define linkedSym "linked"
+
+static char *linkedPrefix()
+/* Get prefix for openLinked check-boxes. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, linkedSym);
+return buf;
+}
+
+static char *linkedTableVar(char *db, char *table)
 /* Get variable name that lets us know whether to include
  * linked tables or not. */
 {
-return fsVarName("openLinked_", table, field);
+static char buf[128];
+safef(buf, sizeof(buf), "%s.%s.%s.%s", 
+	hgtaFieldSelectPrefix, linkedSym, db, table);
+return buf;
 }
 
 static boolean varOn(char *var)
 /* Return TRUE if variable exists and is set. */
 {
 return cartVarExists(cart, var) && cartBoolean(cart, var);
-}
-
-boolean anyJoinings(struct joinerPair *jpList, char *field)
-/* Return TRUE if field looks like a joiner target. */
-{
-struct joinerPair *jp;
-for (jp = jpList; jp != NULL; jp = jp->next)
-    {
-    if (sameString(jp->a->field, field))
-        return TRUE;
-    }
-return FALSE;
 }
 
 struct dbTable
@@ -72,6 +72,19 @@ dt->table = cloneString(table);
 return dt;
 }
 
+int dbTableCmp(const void *va, const void *vb)
+/* Compare two dbTables. */
+{
+const struct dbTable *a = *((struct dbTable **)va);
+const struct dbTable *b = *((struct dbTable **)vb);
+int diff;
+diff = strcmp(a->db, b->db);
+if (diff == 0)
+    diff = strcmp(a->table, b->table);
+return diff;
+}
+
+
 void dbTableFree(struct dbTable **pDt)
 /* Free up dbTable struct. */
 {
@@ -84,22 +97,17 @@ if (dt != NULL)
     }
 }
 
-void showTableSection(struct joiner *joiner, struct dbTable *dt, 
-	struct dlList *tableList)
-/* Put up a section of web page with check boxes and links
- * for each field of table.  If there are open links 
- * add them to the tail of the table list. */
+static void showTableFields(struct joiner *joiner, char *db, char *rootTable)
+/* Put up a little html table with a check box, name, and hopefully
+ * a description for each field in SQL rootTable. */
 {
-struct sqlConnection *conn = sqlConnect(dt->db);
-char *table = chromTable(conn, dt->table);
+struct sqlConnection *conn = sqlConnect(db);
+char *table = chromTable(conn, rootTable);
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct asObject *asObj = asForTable(conn, dt->table);
-struct joinerPair *jpList;
+struct asObject *asObj = asForTable(conn, rootTable);
 
-webNewSection("Fields in %s.%s", dt->db, dt->table);
-jpList = joinerRelate(joiner, dt->db, dt->table);
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
@@ -107,45 +115,11 @@ hTableStart();
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *field = row[0];
-    char *var = checkVarName(dt->table, field);
+    char *var = checkVarName(db, rootTable, field);
     struct asColumn *asCol;
     hPrintf("<TR>");
     hPrintf("<TD>");
     cgiMakeCheckBox(var, varOn(var));
-    hPrintf("</TD>");
-    hPrintf("<TD>");
-    if (anyJoinings(jpList, field ))
-        {
-	boolean opened;
-	var = openLinkedVarName(table, field);
-	opened = varOn(var);
-	hPrintf("<A HREF=\"../cgi-bin/hgTables");
-	hPrintf("?%s", cartSidUrlString(cart));
-	hPrintf("&%s=on", hgtaDoTopSubmit);
-	hPrintf("&%s=%d", var, !opened);
-	hPrintf("\">&nbsp;");
-	if (opened)
-	    {
-	    struct joinerPair *jp;
-	    hPrintf("-");
-	    /* Go add stuff to list. */
-	    for (jp = jpList; jp != NULL; jp = jp->next)
-	        {
-		if (sameString(jp->a->field, field))
-		    {
-		    dlAddValTail(tableList, 
-		    	dbTableNew(jp->b->database, jp->b->table));
-		    }
-		}
-	    }
-	else
-	    hPrintf("+");
-	hPrintf("&nbsp;</A>");
-	}
-    else
-        {
-	hPrintf("&nbsp;");
-	}
     hPrintf("</TD>");
     hPrintf("<TD>");
     hPrintf(" %s<BR>\n", field);
@@ -162,88 +136,162 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 hTableEnd();
 
-joinerPairFreeList(&jpList);
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoSelectedFields, "Submit");
+cgiMakeButton(hgtaDoPrintSelectedFields, "Submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
 
-
-void fieldSelectorTable(struct joiner *joiner, struct dlList *tableList)
-/* Put up table that lets user select fields.  As a side effect this
- * will empty out tableList. */
+static void showLinkedTables(struct joiner *joiner, struct dbTable *inList)
+/* Print section with list of linked tables and check boxes to turn them
+ * on. */
 {
-struct dbTable *dt;
-struct dlNode *node;
-struct hash *seenHash = hashNew(0);
-char tableName[256];
+struct slName *table;
+struct dbTable *outList = NULL, *out, *in;
+char dtName[256];
+struct hash *uniqHash = newHash(0);
+struct hash *inHash = newHash(8);
 
-/* Keep processing as long as there are tables on list,
- * filtering out tables we've seen already. */
-while ((node = dlPopHead(tableList)) != NULL)
+/* Build up list of tables we link to in outList. */
+for (in = inList; in != NULL; in = in->next)
     {
-    dt = node->val;
-    safef(tableName, sizeof(tableName), "%s.%s", dt->db, dt->table);
-    if (!hashLookup(seenHash, tableName))
-        {
-	hashAdd(seenHash, tableName, NULL);
-	showTableSection(joiner, dt, tableList);
-	}
+    struct sqlConnection *conn = sqlConnect(in->db);
+    struct joinerPair *jpList, *jp;
+    
+    /* Keep track of tables in inList. */
+    safef(dtName, sizeof(dtName), "%s.%s", inList->db, inList->table);
+    hashAdd(inHash, dtName, NULL);
 
-    /* Free up this node, we are done. */
-    dbTableFree(&dt);
-    freez(&node);
+    /* First table in input is not allowed in output. */
+    if (in == inList)	
+        hashAdd(uniqHash, dtName, NULL);
+
+    /* Scan through joining information and add tables,
+     * avoiding duplicate additions. */
+    jpList = joinerRelate(joiner, in->db, in->table);
+    for (jp = jpList; jp != NULL; jp = jp->next)
+        {
+	safef(dtName, sizeof(dtName), "%s.%s", 
+		jp->b->database, jp->b->table);
+	if (!hashLookup(uniqHash, dtName))
+	    {
+	    hashAdd(uniqHash, dtName, NULL);
+	    out = dbTableNew(jp->b->database, jp->b->table);
+	    slAddHead(&outList, out);
+	    }
+	}
+    joinerPairFreeList(&jpList);
+    sqlDisconnect(&conn);
     }
-hashFree(&seenHash);
+slSort(&outList, dbTableCmp);
+
+/* Print html. */
+webNewSection("Linked Tables");
+hTableStart();
+for (out = outList; out != NULL; out = out->next)
+    {
+    char *var = linkedTableVar(out->db, out->table);
+    hPrintf("<TR>");
+    hPrintf("<TD>");
+    cgiMakeCheckBox(var, varOn(var));
+    hPrintf("</TD>");
+    hPrintf("<TD>%s</TD>", out->db);
+    hPrintf("<TD>%s</TD>", out->table);
+    hPrintf("</TR>");
+    }
+hTableEnd();
+hPrintf("<BR>");
+
+cgiMakeButton(hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
+}
+
+void showLinkedFields(struct joiner *joiner)
+/* Put up a section with fields for each linked table. */
+{
+struct hashEl *varList = NULL, *var;
+char *prefix = linkedPrefix();
+int prefixSize = strlen(prefix);
+struct dbTable *dtList = NULL, *dt;
+
+/* Build up list of tables to show by looking at
+ * variables with right prefix in cart. */
+varList = cartFindPrefix(cart, prefix);
+for (var = varList; var != NULL; var = var->next)
+    {
+    if (cartBoolean(cart, var->name))
+	{
+	/* From variable name parse out database and table. */
+	char *dbTab = cloneString(var->name + prefixSize);
+	char *db = dbTab;
+	char *table = strchr(db, '.');
+	if (table == NULL)
+	    internalErr();
+	*table++ = 0;
+
+	dt = dbTableNew(db, table);
+	slAddHead(&dtList, dt);
+	freez(&dbTab);
+	}
+    }
+hashElFreeList(&varList);
+slSort(&dtList, dbTableCmp);
+
+for (dt = dtList; dt != NULL; dt = dt->next)
+    {
+    /* Put it up in a new section. */
+    webNewSection("%s.%s fields", dt->db, dt->table);
+    showTableFields(joiner, dt->db, dt->table);
+    }
 }
 
 void doBigSelectPage(char *db, char *table)
 /* Put up big field selection page. Assumes html page open already*/
 {
 struct joiner *joiner = joinerRead("all.joiner");
-struct dlList *tableList = newDlList();
 
+htmlOpen("Select Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, database);
 cgiMakeHiddenVar(hgtaTable, table);
 
-dlAddValTail(tableList, dbTableNew(database, table));
-fieldSelectorTable(joiner, tableList);
+showTableFields(joiner, database, table);
+showLinkedTables(joiner, dbTableNew(database, table));
+showLinkedFields(joiner);
 
 /* clean up. */
 hPrintf("</FORM>");
+htmlClose();
 joinerFree(&joiner);
-freeDlList(&tableList);
 }
 
+void doSelectFieldsMore()
+/* Do select fields page (generally as a continuation. */
+{
+char *db = cartString(cart, hgtaDatabase);
+char *table = cartString(cart, hgtaTable);
+doBigSelectPage(database, table);
+}
 
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
 char *table = connectingTableForTrack(track);
-htmlOpen("Select Fields from %s And Related Tables", track->shortLabel);
-hPrintf(
-   "Use the check boxes to select the fields you want to include. "
-   "In some cases a field links to other tables.  Click on the '+' "
-   "by the field name to view and select from these tables as well. "
-   "(They will appear under the primary table.)" );
+cartRemovePrefix(cart, hgtaFieldSelectPrefix);
 doBigSelectPage(database, table);
-htmlClose();
 }
 
-void doSelectedFields()
+void doPrintSelectedFields()
 /* Actually produce selected field output as text stream. */
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaTable);
 struct sqlConnection *conn = sqlConnect(db);
-char *varPrefix = checkVarName(table, "");
+char *varPrefix = checkVarName(db, table, "");
 int varPrefixSize = strlen(varPrefix);
-struct hashEl *varList, *var;
+struct hashEl *varList = NULL, *var;
 struct dyString *fields = dyStringNew(0);
 int fieldCount = 0;
 
@@ -265,6 +313,7 @@ doTabOutTable(table, conn, fields->string);
 
 /* Clean up. */
 dyStringFree(&fields);
+hashElFreeList(&varList);
 sqlDisconnect(&conn);
 }
 
