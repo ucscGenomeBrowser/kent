@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.16 2004/10/18 18:10:09 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.17 2005/04/03 05:23:24 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -37,6 +37,11 @@ static char *REF_FLAT_TBL = "refFlat";
 static char *XENO_REF_SEQ_ALI = "xenoRefSeqAli";
 static char *XENO_REF_GENE_TBL = "xenoRefGene";
 static char *XENO_REF_FLAT_TBL = "xenoRefFlat";
+
+/* tables to make larger than 4gb */
+static char *gLargeTables[] = {
+    "xenoEst", NULL
+};
 
 /* strings to create refSeq tables are put here */
 static char *gRefGeneTableDef = NULL;
@@ -71,6 +76,18 @@ static struct sqlUpdater* gRefFlatUpd = NULL;
 static struct sqlUpdater* gXenoRefSeqAliUpd = NULL;
 static struct sqlUpdater* gXenoRefGeneUpd = NULL;
 static struct sqlUpdater* gXenoRefFlatUpd = NULL;
+
+static boolean isLargeTable(char *table)
+/* see if a table is in the large tables list */
+{
+int i;
+for (i = 0; gLargeTables[i] != NULL; i++)
+    {
+    if (sameString(table, gLargeTables[i]))
+        return TRUE;
+    }
+return FALSE;
+}
 
 void makeRefGeneCreateSql(char *geneTable, char *flatTable,
                           char **geneTableDef, char **flatTableDef)
@@ -110,6 +127,29 @@ if (gRefGeneTableDef == NULL)
                          &gXenoRefGeneTableDef, &gXenoRefFlatTableDef);
     }
 }
+
+static void createPslTable(struct sqlConnection *conn, char* table,
+                           unsigned options)
+/* create a PSL table. Will create a over 4gb table if in gLargeTables */
+{
+/* create with tName index and bin */
+char *sqlCmd = pslGetCreateSql(table, options, 0);
+char extra[64];
+
+if (isLargeTable(table))
+    {
+    /* add options to create table to allow over 4gb */
+    static unsigned avgRowLength = 200;
+    static unsigned long long maxRows = 0xffffffffffffLL;
+    safef(extra, sizeof(extra), " AVG_ROW_LENGTH=%u MAX_ROWS=%llu",
+          avgRowLength, maxRows);
+    sqlCmd = needMoreMem(sqlCmd, strlen(sqlCmd)+1, strlen(sqlCmd)+strlen(extra)+1);
+    strcat(sqlCmd, extra);
+    }
+sqlRemakeTable(conn, table, sqlCmd);
+freez(&sqlCmd);
+}
+
 static FILE* getPslTabFile(char* table, struct sqlConnection* conn,
                            struct sqlUpdater **tabFileVar)
 /* Get the tab file for a combined PSL table, opening if necessary. */
@@ -120,9 +160,7 @@ if (*tabFileVar == NULL)
     if (!sqlTableExists(conn, table))
         {
         /* create with tName index and bin */
-        char *sqlCmd = pslGetCreateSql(table, (PSL_TNAMEIX|PSL_WITH_BIN), 0);
-        sqlRemakeTable(conn, table, sqlCmd);
-        freez(&sqlCmd);
+        createPslTable(conn, table, (PSL_TNAMEIX|PSL_WITH_BIN));
         }
     }
 return sqlUpdaterGetFh(*tabFileVar, 1);
@@ -141,9 +179,7 @@ for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
     if (!sqlTableExists(conn, table))
         {
         /* create with bin */
-        char *sqlCmd = pslGetCreateSql(table, PSL_WITH_BIN, 0);
-        sqlRemakeTable(conn, table, sqlCmd);
-        freez(&sqlCmd);
+        createPslTable(conn, table, PSL_WITH_BIN);
         }
     }
 }
