@@ -27,6 +27,7 @@ alpha: compile
 beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
+
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A

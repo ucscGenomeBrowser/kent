@@ -78,6 +78,8 @@
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
 
+char mousedb[] = "mm1";
+
 struct cart *cart;	/* User's settings. */
 
 char *seqName;		/* Name of sequence we're working on. */
@@ -164,6 +166,14 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other);
+}
+
+
+void hgcAnchorSomewhereDb(char *group, char *item, char *other, char *chrom, char *db)
+/* Generate an anchor that calls click processing program with item and other parameters. */
+{
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
+	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
@@ -400,6 +410,32 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void showGenePosMouse(char *name, struct trackDb *tdb, struct sqlConnection *connMm)
+/* Show gene prediction position and other info. */
+{
+char query[512];
+char *track = tdb->tableName;
+struct sqlResult *sr;
+char **row;
+struct genePred *gp = NULL;
+boolean hasBin; 
+int posCount = 0;
+char table[64] ;
+
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s'", table, name);
+sr = sqlGetResult(connMm, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (posCount > 0)
+        printf("<BR>\n");
+    ++posCount;
+    gp = genePredLoad(row + hasBin);
+    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE);
+    genePredFree(&gp);
+    }
+sqlFreeResult(&sr);
+}
 void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
 	char *pepTable, char *pepClick, 
 	char *mrnaClick, char *genomicClick, char *mrnaDescription)
@@ -422,6 +458,27 @@ printf("<LI>Genomic Sequence</A>\n");
 printf("</UL>\n");
 }
 
+void geneShowPosAndLinksMouse(char *geneName, char *pepName, struct trackDb *tdb, 
+	char *pepTable, struct sqlConnection *connMm, char *pepClick, 
+	char *mrnaClick, char *genomicClick, char *mrnaDescription)
+/* Show parts of gene common to everything */
+{
+char *geneTable = tdb->tableName;
+char other[256];
+showGenePosMouse(geneName, tdb, connMm);
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+if (pepTable != NULL && hTableExists(pepTable))
+    {
+    hgcAnchorSomewhereDb(pepClick, pepName, pepTable, seqName, mousedb);
+    printf("<LI>Translated Protein</A>\n"); 
+    }
+hgcAnchorSomewhereDb(mrnaClick, geneName, geneTable, seqName, mousedb);
+printf("<LI>%s</A>\n", mrnaDescription);
+hgcAnchorSomewhereDb(genomicClick, geneName, geneTable, seqName, mousedb);
+printf("<LI>Genomic Sequence</A>\n");
+printf("</UL>\n");
+}
 void geneShowCommon(char *geneName, struct trackDb *tdb, char *pepTable)
 /* Show parts of gene common to everything */
 {
@@ -429,6 +486,13 @@ geneShowPosAndLinks(geneName, geneName, tdb, pepTable, "htcTranslatedProtein",
 	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 }
 
+
+void geneShowMouse(char *geneName, struct trackDb *tdb, char *pepTable, struct sqlConnection *connMm)
+/* Show parts of gene common to everything */
+{
+geneShowPosAndLinksMouse(geneName, geneName, tdb, pepTable, connMm, "htcTranslatedProtein",
+	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+}
 
 void genericGenePredClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, char *pepTable, char *mrnaTable)
@@ -3094,6 +3158,57 @@ geneShowCommon(geneName, tdb, "softberryPep");
 printTrackHtml(tdb);
 }
 
+void showOrthology(char *geneName, char *table, struct sqlConnection *connMm)
+/* Show mouse Orthlogous info. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+boolean isFirst = TRUE, gotAny = FALSE;
+char *gi;
+struct softberryHom hom;
+
+
+if (sqlTableExists(connMm, table))
+    {
+    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    sr = sqlGetResult(connMm, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	softberryHomStaticLoad(row, &hom);
+	if ((gi = getGi(hom.giString)) == NULL)
+	    continue;
+	if (isFirst)
+	    {
+	    htmlHorizontalLine();
+	    printf("<H3>Protein Homologies:</H3>\n");
+	    isFirst = FALSE;
+	    gotAny = TRUE;
+	    }
+	printf("<A HREF=");
+	sprintf(query, "%s[gi]", gi);
+	printEntrezProteinUrl(stdout, query);
+	printf(" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
+	}
+    }
+if (gotAny)
+    htmlHorizontalLine();
+sqlFreeResult(&sr);
+}
+
+void doMouseOrtho(struct trackDb *tdb, char *geneName)
+/* Handle click on MouseOrtho gene track. */
+{
+struct hash *trackHash;
+struct sqlConnection *connMm = sqlConnect(mousedb);
+genericHeader(tdb, geneName);
+showOrthology(geneName, "softberryHom",connMm);
+trackHash = makeTrackHash(seqName);
+tdb = hashFindVal(trackHash, "softberryGene");
+geneShowMouse(geneName, tdb, "softberryPep", connMm);
+printTrackHtml(tdb);
+sqlDisconnect(&connMm);
+}
 
 void showSangerExtra(char *geneName, char *extraTable)
 /* Show info from sanger22extra table if it exists. */
@@ -3408,6 +3523,13 @@ void doBlatHuman(struct trackDb *tdb, char *item)
  * sequence is in a nib file. */
 {
 longXenoPsl1(tdb, item, "Human", "humanChrom");
+}
+
+void doBlatHumanSelf(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+longXenoPsl1(tdb, item, "Human", "chromInfo");
 }
 
 
@@ -4220,6 +4342,44 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doMouseOrthoDetail(char *track, char *itemName)
+/* Handle click on mouse synteny track. */
+{
+struct mouseSyn el;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+
+cartWebStart("Mouse Synteny");
+printf("<H2>Mouse Synteny</H2>\n");
+
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
+    track, seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    mouseSynStaticLoad(row+rowOffset, &el);
+    printf("<B>mouse chromosome:</B> %s<BR>\n", el.name+6);
+    printf("<B>human chromosome:</B> %s<BR>\n", skipChr(el.chrom));
+    printf("<B>human starting base:</B> %d<BR>\n", el.chromStart);
+    printf("<B>human ending base:</B> %d<BR>\n", el.chromEnd);
+    printf("<B>size:</B> %d<BR>\n", el.chromEnd - el.chromStart);
+    htmlHorizontalLine();
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+puts("<P>This track syntenous (corresponding) regions between human "
+     "and mouse chromosomes.  This track was created by looking for "
+     "homology to known mouse genes in the draft assembly. The method" 
+     "used was to align Fgenesh++ predictions using BLAT (protein alignment)"
+     "comparing the Dec 2001 Human assembly with the Nov 2001 Mouse draft assembly."
+     "For more information on the methods used please contact <A HREF=\"mailto:baertsch@cse.ucsc.edu\">Robert Baertsch</A> at UCSC.");
+}
 void doMouseSyn(char *track, char *itemName)
 /* Handle click on mouse synteny track. */
 {
@@ -6519,6 +6679,10 @@ else if (sameWord(track, "blatHuman"))
     {
     doBlatHuman(tdb, item);
     }
+else if (sameWord(track, "blastzHg"))
+    {
+    doBlatHumanSelf(tdb, item);
+    }
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
     htcLongXenoPsl2(track, item);
@@ -6554,6 +6718,10 @@ else if (sameWord(track, "uPennClones"))
 else if (sameWord(track, "mouseSyn"))
     {
     doMouseSyn(track, item);
+    }
+else if (sameWord(track, "mouseOrtho"))
+    {
+    doMouseOrtho(tdb, item);
     }
 else if (sameWord(track, "hgUserPsl"))
     {
