@@ -64,7 +64,7 @@ struct genePred
                                    * empty if none, NULL if field not
                                    * requested */
     enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
-    enum cdsStatus cdsEndStat;    /* Status of cdsStart annotation */
+    enum cdsStatus cdsEndStat;    /* Status of cdsEnd annotation */
     int *exonFrames;              /* List of frame for each exon, or -1
                                    * if no frame or not known. NULL if not
                                    * available. */
