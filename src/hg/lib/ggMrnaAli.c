@@ -465,6 +465,7 @@ for (i=1; i<ma->blockCount; ++i)
     if (intAbs(readBlock->qStart - writeBlock->qEnd) <= maxGap &&
         intAbs(readBlock->tStart - writeBlock->tEnd) <= maxGap)
 	{
+	ma->baseCount += readBlock->tStart - writeBlock->tEnd; /* If we've added bases keep track. */
 	writeBlock->qEnd = readBlock->qEnd;
 	writeBlock->tEnd = readBlock->tEnd;
 	mergedSome = TRUE;

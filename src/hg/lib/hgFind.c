@@ -512,7 +512,7 @@ char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
 
-if ((type = mrnaType(acc)) == NULL)
+if ((type = mrnaType(acc)) == NULL || type[0] == 0)
     return FALSE;
 else
     {
@@ -1585,6 +1585,9 @@ else if (findGenePred(query, hgp, "softberryGene"))
     {
     }
 else if (findGenePred(query, hgp, "acembly"))
+    {
+    }
+else if (findGenePred(query, hgp, "genscan"))
     {
     }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */

@@ -25,6 +25,8 @@ enum kxTokType
     kxtSub,
     kxtDiv,
     kxtMul,
+    kxtDot,
+    kxtPunct,
     };
 
 struct kxTok

@@ -316,7 +316,7 @@ for (gene = seg->geneList; gene != NULL; gene = gene->next)
 	    cdsOut(gtf, gsf, geneName, seqName);
 	    }
 	}
-    if (trans != NULL)
+    if ((trans != NULL) && (gene->featureList != NULL))
         {
 	faWriteNext(trans, geneName, gene->translation, strlen(gene->translation));
 	}

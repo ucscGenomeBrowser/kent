@@ -5,9 +5,8 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "sqlNum.h"
-#include "sqlList.h"
 #include "jobDb.h"
+#include "sqlList.h"
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret)
 /* Create a submission out of a comma separated string. 

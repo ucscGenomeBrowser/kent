@@ -18,7 +18,6 @@ struct altGraph *ag;
 ag = ggToAltGraph(gg);
 altGraphTabOut(ag, f);
 altGraphFree(&ag);
-
 }
 
 struct geneGraph *ggFromAltGraph(struct altGraph *ag)

@@ -76,6 +76,16 @@ int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 void lineFileSkip(struct lineFile *lf, int lineCount);
 /* Skip a number of lines. */
 
+boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
+				boolean *chunked, int *contentLength);
+/* Extract HTTP response header from lf into hdr, tell if it's 
+ * "Transfer-Encoding: chunked" or if it has a contentLength. */
+
+struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
+				       boolean chunked, int contentLength);
+/* Return a dyString that contains the http response body in lf.  Handle 
+ * chunk-encoding and content-length. */
+
 #endif /* LINEFILE_H */
 
 

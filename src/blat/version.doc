@@ -1,0 +1,5 @@
+12 - Put in fix from Darren Platt that cured crashes on
+     protein/translated DNA alignments on Solaris.
+11 - Fixed a bug that led to translated protein alignments coming
+     back in multiple pieces.  This also caused small exons
+     to sometimes be dropped.  Added -noTrimA flag

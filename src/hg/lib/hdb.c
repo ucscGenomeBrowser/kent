@@ -19,11 +19,13 @@
 #include "subText.h"
 #include "blatServers.h"
 
-static struct sqlConnCache *hdbCc = NULL;
+static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
+static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost;
-static char *hdbName = "hg11";
+static char *hdbName = "hg12";
+static char *hdbName2 = "mm2";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
@@ -68,6 +70,14 @@ void hSetDbConnect(char* host, char *db, char *user, char *password)
     hdbUser = user;
     hdbPassword = password;
 }
+void hSetDbConnect2(char* host, char *db, char *user, char *password)
+/* set the connection information for the database */
+{
+    hdbHost = host;
+    hdbName2 = db;
+    hdbUser = user;
+    hdbPassword = password;
+}
 
 void hSetDb(char *dbName)
 /* Set the database name. */
@@ -77,10 +87,24 @@ if (hdbCc != NULL)
 hdbName = dbName;
 }
 
+void hSetDb2(char *dbName)
+/* Set the database name. */
+{
+if (hdbCc2 != NULL)
+    errAbort("Can't hgSetDb after an hgAllocConn2(), sorry.");
+hdbName2 = dbName;
+}
+
 char *hGetDb()
 /* Return the current database name. */
 {
 return hdbName;
+}
+
+char *hGetDb2()
+/* Return the current database name. */
+{
+return hdbName2;
 }
 
 char *hGetDbHost()
@@ -117,10 +141,26 @@ if (hdbCc == NULL)
 return sqlAllocConnection(hdbCc);
 }
 
+struct sqlConnection *hAllocConn2()
+/* Get free connection if possible. If not allocate a new one. */
+{
+if (hdbHost == NULL)
+    hDefaultConnect();
+if (hdbCc2 == NULL)
+    hdbCc2 = sqlNewRemoteConnCache(hdbName2, hdbHost, hdbUser, hdbPassword);
+return sqlAllocConnection(hdbCc2);
+}
+
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(hdbCc, pConn);
+}
+
+void hFreeConn2(struct sqlConnection **pConn)
+/* Put back connection for reuse into second pool for second database connection */
+{
+sqlFreeConnection(hdbCc2, pConn);
 }
 
 struct sqlConnection *hConnectCentral()
@@ -130,14 +170,14 @@ struct sqlConnection *hConnectCentral()
 {
 if (centralCc == NULL)
     {
-    char *database = "hgcentral";
+    char *database = cfgOption("central.db");
     char *host = cfgOption("central.host");
     char *user = cfgOption("central.user");
     char *password = cfgOption("central.password");;
 
     if (host == NULL || user == NULL || password == NULL)
 	errAbort("Please set central options in the hg.conf file.");
-    centralCc = sqlNewRemoteConnCache("hgcentral", host, user, password);
+    centralCc = sqlNewRemoteConnCache(database, host, user, password);
     }
 return sqlAllocConnection(centralCc);
 }
@@ -157,6 +197,15 @@ hFreeConn(&conn);
 return exists;
 }
 
+boolean hTableExists2(char *table)
+/* Return TRUE if a table exists in secondary database. */
+{
+struct sqlConnection *conn = hAllocConn2();
+boolean exists = sqlTableExists(conn, table);
+hFreeConn2(&conn);
+return exists;
+}
+
 
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
@@ -169,6 +218,20 @@ conn = hAllocConn();
 sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
 size = sqlQuickNum(conn, query);
 hFreeConn(&conn);
+return size;
+}
+
+int hChromSize2(char *chromName)
+/* Return size of chromosome. */
+{
+struct sqlConnection *conn;
+int size;
+char query[256];
+
+conn = hAllocConn2();
+sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
+size = sqlQuickNum(conn, query);
+hFreeConn2(&conn);
 return size;
 }
 
@@ -211,6 +274,45 @@ struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 char fileName[512];
 hNibForChrom(chrom, fileName);
 return nibLoadPart(fileName, start, end-start);
+}
+
+boolean hChromBandConn(struct sqlConnection *conn, 
+	char *chrom, int pos, char retBand[64])
+/* Return text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+{
+char query[256];
+char buf[64];
+char *s;
+boolean ok = TRUE;
+
+sprintf(query, 
+	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
+	chrom, pos, pos);
+buf[0] = 0;
+s = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (s == NULL)
+   {
+   s = "";
+   ok = FALSE;
+   }
+sprintf(retBand, "%s%s", skipChr(chrom), buf);
+return ok;
+}
+
+boolean hChromBand(char *chrom, int pos, char retBand[64])
+/* Return text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+{
+if (!hTableExists("cytoBand"))
+    return FALSE;
+else
+    {
+    struct sqlConnection *conn = hAllocConn();
+    boolean ok = hChromBandConn(conn, chrom, pos, retBand);
+    hFreeConn(&conn);
+    return ok;
+    }
 }
 
 
@@ -308,7 +410,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     }
 }
 
-void *readOpenFileSection(int fd, long offset, size_t size, char *fileName)
+void *readOpenFileSection(int fd, unsigned long offset, size_t size, char *fileName)
 /* Allocate a buffer big enough to hold a section of a file,
  * and read that section into it. */
 {
@@ -332,7 +434,7 @@ char query[256];
 int fd;
 HGID extId;
 size_t size;
-long offset;
+unsigned long offset;
 char *buf;
 struct dnaSeq *seq;
 struct largeSeqFile *lsf;
@@ -544,6 +646,24 @@ return nList;
 }
 
 
+static boolean fitField(struct hash *hash, char *fieldName,
+	char retField[32])
+/* Return TRUE if fieldName is in hash.  
+ * If so copy it to retField.
+ * Helper routine for findMoreFields below. */
+{
+if (hashLookup(hash, fieldName))
+    {
+    strcpy(retField, fieldName);
+    return TRUE;
+    }
+else
+    {
+    retField[0] = 0;
+    return FALSE;
+    }
+}
+
 static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Return TRUE if chrom/start/end are in hash.  
@@ -584,18 +704,29 @@ return binned;
 }
 
 
-boolean hFindFieldsAndBin(char *table, 
+boolean hFindMoreFieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
 	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, 
- * and whether it's binned . */
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
 {
 char query[256];
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
-struct sqlConnection *conn = hAllocConn();
 boolean gotIt = TRUE, binned = FALSE;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
 
 /* Read table description into hash. */
 sprintf(query, "describe %s", table);
@@ -610,36 +741,111 @@ sqlFreeResult(&sr);
 
 /* Look for bed-style names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "name", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for psl-style names. */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "qName", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "name", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "repName", retName);
+    fitField(hash, "strand", retStrand);
+    }
 else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
     {
     strcpy(retChrom, "");
     strcpy(retStart, "start");
     strcpy(retEnd, "end");
+    fitField(hash, "frag", retName);
+    fitField(hash, "strand", retStrand);
     }
 else
     gotIt = FALSE;
 freeHash(&hash);
-hFreeConn(&conn);
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 *retBinned = binned;
 return gotIt;
+}
+
+boolean hFindMoreFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
+{
+return hFindMoreFieldsAndBinDb(hGetDb(),
+			       table, retChrom, retStart, retEnd,
+			       retName, retStrand, retBinned);
+}
+
+boolean hFindMoreFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32])
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+{
+boolean isBinned;
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, &isBinned);
+}
+
+boolean hFindMoreFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32])
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+{
+boolean isBinned;
+return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+			       retName, retStrand, &isBinned);
+}
+
+boolean hFindFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * and whether it's binned . */
+{
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, retBinned);
 }
 
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
-int isBinned;
-return hFindFieldsAndBin(table, retChrom, retStart, retEnd, &isBinned);
+boolean isBinned;
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, &isBinned);
+}
+
+
+boolean hFindChromStartEndFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32])
+/* Given a table return the fields for selecting chromosome, start, and end. */
+{
+boolean isBinned;
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBinDb(db, table, retChrom, retStart, retEnd,
+			       retName, retStrand, &isBinned);
 }
 
 
@@ -954,6 +1160,61 @@ slReverse(&tdbList);
 return tdbList;
 }
 
+boolean hgParseTargetRange(char *spec, char **retTargetName,
+                           int *retWinStart, int *retWinEnd)
+/* Parse something of form target:start-end into pieces. */
+{
+char *target = NULL;
+char *start = NULL;
+char *end = NULL;
+char buf[256];
+int iStart = 0;
+int iEnd = 0;
+
+strncpy(buf, spec, 256);
+target = buf;
+start = strchr(target, ':');
+
+/* T1 is a temporary hack - MATT */
+if (!strstrNoCase(buf, "T1"))
+    {
+    return FALSE;
+    }
+
+if (start == NULL)
+    {
+    *retTargetName = "T1"; // = buf;
+    iStart = 0;
+    iEnd = hChromSize(target);
+    }
+else
+    {
+    *start++ = 0;
+    end = strchr(start, '-');
+    if (end == NULL)
+        return FALSE;
+    else
+        *end++ = 0;
+    target = trimSpaces(target);
+    start = trimSpaces(start);
+    end = trimSpaces(end);
+    if (!isdigit(start[0]))
+        return FALSE;
+    if (!isdigit(end[0]))
+        return FALSE;
+    if (!strstrNoCase(target, "T1"))
+        return FALSE;
+    iStart = atoi(start)-1;
+    iEnd = atoi(end);
+    }
+if (retTargetName != NULL)
+    *retTargetName = target;
+if (retWinStart != NULL)
+    *retWinStart = iStart;
+if (retWinEnd != NULL)
+    *retWinEnd = iEnd;
+return TRUE;
+}
 
 boolean hgParseChromRange(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
@@ -1071,8 +1332,8 @@ return hgParseContigRange(spec, NULL, NULL, NULL);
 }  
 #endif /* UNUSED */
 
-struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
-/* Look up track in database. */
+struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
+/* Look up track in database, return NULL if it's not there. */
 {
 char query[256];
 struct sqlResult *sr;
@@ -1082,10 +1343,21 @@ struct trackDb *tdb;
 sprintf(query, "select * from %s where tableName = '%s'", hTrackDbName(), trackName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Track %s not found", trackName);
+    return NULL;
 tdb = trackDbLoad(row);
 hLookupStringsInTdb(tdb, hGetDb());
 sqlFreeResult(&sr);
+return tdb;
+}
+
+struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
+/* Look up track in database, errAbort if it's not there. */
+{
+struct trackDb *tdb;
+
+tdb = hMaybeTrackInfo(conn, trackName);
+if (tdb == NULL)
+    errAbort("Track %s not found", trackName);
 return tdb;
 }
 

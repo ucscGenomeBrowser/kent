@@ -613,22 +613,23 @@ SGP GENE PREDICTIONS (done)
      hgPepPred mm2 generic sgpPep download/*.prot
 
 
-TIGR GENE INDEX (todo)
+TIGR GENE INDEX (done 7/1/02)
+    mkdir -p ~/mm2/bed/tigr
+    cd ~/mm2/bed/tigr
+    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Feb2002.tgz
+    gunzip -c TGI_track_MouseGenome_Feb2002.tgz | tar xvf -
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC mm2 tigrGeneIndex *.gff
 
-  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
-      ~/oo.29/bed/tgi and then execute the following commands:
-          cd ~/oo.29/bed/tgi
-	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
-	      mkdir $i
-	      cd $i
-	      gtar -zxf ../${i}*.tgz
-	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
-	      cd ..
-	  end
-	  mv human.gff human.bak
-	  sed s/THCs/TCs/ human.bak > human.gff
-	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
 
 LOAD STS MAP (todo)
      - login to hgwdev
@@ -754,6 +755,27 @@ LOAD ENSEMBLE GENES (done 05/28/02)
        mouse-ensembl-fixed.pep
      hgPepPred mm2 generic ensPep mouse-ensembl-fixed.pep
 
+LOAD ENSEMBL "Merge" TRACKs - SECRET! (done 6/25/02)
+     - Use mgsc database, not mm2.  Only MGSC members should be able to 
+       access this track, and only by password protection.
+     mkdir -p ~/mm2/bed/ensembl
+     cd ~/mm2/bed/ensembl
+     foreach tier (b c d)
+       GET http://www.ebi.ac.uk/~stabenau/tier$tier.gtf.gz > tier$tier.gtf.gz
+       GET http://www.ebi.ac.uk/~stabenau/mouse_tier$tier.fa.gz > tier$tier.fa.gz
+       gunzip -c tier$tier.gtf.gz | \
+         perl -w -p -e 's/^(\w)/chr$1/' > tier$tier-fixed.gtf
+       gunzip -c tier$tier.fa.gz | \
+         perl -w -p -e 's/^\>.*source_id=(\S+)\s+.*$/\>$1/' > \
+         tier$tier-fixed.pep
+       set Tier = `echo $tier | tr 'a-z' 'A-Z'`
+       ldHgGene mgsc ensMergeTier$Tier tier$tier-fixed.gtf
+       hgPepPred mgsc generic ensMergeTier${Tier}Pep tier$tier-fixed.pep
+     end
+     NOTE: because this track contains ensRiken transcripts, it had to 
+     be made secret - see NOTE's below & revision history comments for 
+     hgTracks.c 1.277.
+
 LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
      - Use mgsc database, not mm2.  Only MGSC members should be able to 
        access this track, and only by password protection.
@@ -872,6 +894,19 @@ LOAD GENIE CLONE BOUNDS (done 6/3/02)
        tail +2 chr${c}_cb.bed > chr${c}_cb-fixed.bed
      end
      hgLoadBed mm2 genieBounds *-fixed.bed
+
+LOAD JACKSON LABS QTL (done 7/16/02)
+     Carol Bult at Jackson Labs sent us tab-separated QTL info -- 
+     See RT289.  
+     - Reformat QTL info into bed 6 + (really bed 5, no strand).
+       There will be some complaints about lines that are missing 
+       chromStart, chromEnd (they're on MIT Markers that we don't have 
+       in our stsMapMouse table...?)
+     cd ~/mm2/bed/qtl
+     ./fixit.pl mgi_qtl.rpt > mgi_qtl.bed
+     autoSql jaxQTL.as jaxQTL
+     - edit jaxQTL.sql to list name, not chrom, as primary key
+     hgLoadBed -noBin -tab -sqlTable=./jaxQTL.sql mm2 jaxQTL mgi_qtl.bed
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store2/mm.2002.02/mm2 ~/mm

@@ -55,10 +55,17 @@ static boolean upstreamQualifier(char *qualifier, char *extra, int *retSize)
 return fetchQualifiers("upstream", qualifier, extra, retSize);
 }
 
+
 static boolean exonQualifier(char *qualifier, char *extra, int *retSize)
 /* Return TRUE if it's a exon qualifier. */
 {
 return fetchQualifiers("exon", qualifier, extra, retSize);
+}
+
+static boolean intronQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a exon qualifier. */
+{
+return fetchQualifiers("intron", qualifier, extra, retSize);
 }
 
 static boolean cdsQualifier(char *qualifier, char *extra, int *retSize)
@@ -70,6 +77,9 @@ return fetchQualifiers("cds", qualifier, extra, retSize);
 static boolean endQualifier(char *qualifier, char *extra, int *retSize)
 /* Return TRUE if it's an end qualifier. */
 {
+boolean res = fetchQualifiers("downstream", qualifier, extra, retSize);
+if (res)
+    return res;
 return fetchQualifiers("end", qualifier, extra, retSize);
 }
 
@@ -95,7 +105,9 @@ boolean understand = FALSE;
 char *type;
 
 struct sqlConnection *conn = hAllocConn();
-tdb = hTrackInfo(conn, track);
+tdb = hMaybeTrackInfo(conn, track);
+if (tdb == NULL)
+    return FALSE;
 type = tdb->type;
 understand = (startsWith("psl ", type) || startsWith("bed ", type) ||
 	sameString("genePred", type) || startsWith("genePred ", type) ||
@@ -165,14 +177,17 @@ static struct featureBits *fbPslBits(int winStart, int winEnd,
 struct psl *psl;
 char **row;
 int i, blockCount, *tStarts, *blockSizes, s, e, w;
-boolean doUp, doExon;
-int promoSize, extraSize = 0;
+boolean doUp, doExon, doEnd;
+int promoSize = 0, endSize = 0, extraSize = 0;
 struct featureBits *fbList = NULL, *fb;
 int chromSize;
 char *chrom;
 char nameBuf[512];
 
+if (intronQualifier(qualifier, extra, &extraSize))
+    errAbort("Can't handle intron on psl tables yet, sorry");
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
+doEnd = endQualifier(qualifier, extra, &endSize);
 doExon = exonQualifier(qualifier, extra, &extraSize);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -183,7 +198,6 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	int start;
 	char strand;
-
 
 	if (psl->strand[0] == '-')
 	    {
@@ -200,6 +214,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	fbAddFeature(&fbList, nameBuf, chrom, start, promoSize, strand, 
 		winStart, winEnd);
 	}
+    else if (doEnd)
+        {
+	int start;
+	char strand;
+
+	if (psl->strand[0] == '-')
+	    {
+	    start = psl->tStart - endSize;
+	    strand = '-';
+	    }
+	else
+	    {
+	    start = psl->tEnd;
+	    strand = '+';
+	    }
+	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+		psl->qName, endSize, chrom, start+1, frForStrand(strand));
+	fbAddFeature(&fbList, nameBuf, chrom, start, endSize, strand, 
+		winStart, winEnd);
+	}
     else
 	{
 	blockCount = psl->blockCount;
@@ -212,9 +246,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		w = blockSizes[i];
 		s = chromSize - tStarts[i] - w;
 		e = s + w;
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', 
-			(i == 0 ? 0 : extraSize), 
-			(i == blockCount-1 ?  0 : extraSize), winStart, winEnd);
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', extraSize, 
+				  extraSize, winStart, winEnd);
 		}
 	    }
 	else
@@ -223,9 +256,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		s = tStarts[i];
 		e = s + blockSizes[i];
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', 
-			(i == 0 ? 0 : extraSize), 
-			(i == blockCount-1 ? 0 : extraSize), winStart, winEnd);
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', extraSize, 
+				  extraSize, winStart, winEnd);
 		}
 	    }
 	}
@@ -243,10 +275,16 @@ struct bed *bed;
 char **row;
 struct featureBits *fbList = NULL;
 char strand = '?';
-boolean doUp;
-int promoSize;
+boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE;
+int promoSize, endSize, extraSize;
+int i, count, *starts, *sizes;
 
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
+doEnd = endQualifier(qualifier, extra, &endSize);
+if (doExon = exonQualifier(qualifier, extra, &extraSize))
+    ;
+else if (doIntron = intronQualifier(qualifier, extra, &extraSize))
+    ;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int s, e; 
@@ -265,14 +303,64 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    e = bed->chromStart;
 	    s = e - promoSize;
 	    }
+	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
+		     winStart, winEnd);
+	}
+    else if (doEnd)
+        {
+	if (strand == '-')
+	    {
+	    e = bed->chromStart;
+	    s = e - endSize;
+	    }
+	else
+	    {
+	    s = bed->chromEnd;
+	    e = s + endSize;
+	    }
+	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
+		     winStart, winEnd);
+	}
+    else if (doIntron)
+        {
+	if (fields >= 12)
+	    {
+	    count  = bed->blockCount;
+	    starts = bed->chromStarts;
+	    sizes  = bed->blockSizes;
+	    for (i=1; i<count; ++i)
+	      {
+		s = bed->chromStart + starts[i-1] + sizes[i-1];
+		e = bed->chromStart + starts[i];
+		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+				  extraSize, extraSize, winStart, winEnd);
+	      }
+	    }
+	/* N/A if fields < 12.... but don't crash, just return empty. */
 	}
     else
         {
-	s = bed->chromStart;
-	e = bed->chromEnd;
+	if (fields >= 12)
+	    {
+	    count  = bed->blockCount;
+	    starts = bed->chromStarts;
+	    sizes  = bed->blockSizes;
+	    for (i=0; i<count; ++i)
+	      {
+		s = bed->chromStart + starts[i];
+		e = bed->chromStart + starts[i] + sizes[i];
+		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+				  extraSize, extraSize, winStart, winEnd);
+	      }
+	    }
+	else
+  	    {
+	    s = bed->chromStart;
+	    e = bed->chromEnd;
+	    setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+			      extraSize, extraSize, winStart, winEnd);
+	    }
 	}
-    fbAddFeature(&fbList, NULL, bed->chrom, 
-	s, e - s, strand, winStart, winEnd);
     bedFree(&bed);
     }
 slReverse(&fbList);
@@ -288,8 +376,8 @@ struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
 boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE,
-	doUtr3 = FALSE, doUtr5 = FALSE;
-int promoSize = 0, extraSize = 0;
+	doUtr3 = FALSE, doUtr5 = FALSE, doIntron = FALSE;
+int promoSize = 0, extraSize = 0, endSize = 0;
 struct featureBits *fbList = NULL;
 char nameBuf[512];
 
@@ -300,6 +388,9 @@ else if ((doCds = cdsQualifier(qualifier, extra, &extraSize)) != FALSE)
     {
     }
 else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
+else if ((doIntron = intronQualifier(qualifier, extra, &extraSize)) != FALSE)
     {
     }
 else if ((doEnd = endQualifier(qualifier, extra, &extraSize)) != FALSE)
@@ -316,7 +407,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row+rowOffset);
     if (doUp)
 	{
-	if (gp->txStart != gp->cdsStart)
+	if (gp->txStart != gp->cdsStart && gp->txEnd != gp->cdsEnd)
 	    {
 	    int start;
 	    char strand;
@@ -340,20 +431,38 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	int start;
 	char strand;
-	if (gp->strand[0] == '-')
+	if (gp->txStart != gp->cdsStart && gp->txEnd != gp->cdsEnd)
 	    {
-	    start = gp->txStart;
-	    strand = '-';
+	    if (gp->strand[0] == '-')
+		{
+		start = gp->txStart - extraSize;
+		strand = '-';
+		}
+	    else
+		{
+		start = gp->txEnd;
+		strand = '+';
+		}
+	    sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
+		    gp->name, promoSize, gp->chrom, 
+		    start+1, frForStrand(strand));
+	    fbAddFeature(&fbList, nameBuf, gp->chrom, 
+	    	start, extraSize, strand, 
+		winStart, winEnd);
 	    }
-	else
+	}
+    else if (doIntron)
+        {
+	count = gp->exonCount;
+	starts = gp->exonStarts;
+	ends = gp->exonEnds;
+	for (i=1; i<count; ++i)
 	    {
-	    start = gp->txEnd - extraSize;
-	    strand = '+';
+	    s = ends[i-1];
+	    e = starts[i];
+	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
+		extraSize, extraSize, winStart, winEnd);
 	    }
-	sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
-		gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
-	fbAddFeature(&fbList, nameBuf, gp->chrom, start, extraSize, strand, 
-	    winStart, winEnd);
 	}
     else
 	{
@@ -371,15 +480,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 		}
 	    else if (doUtr5)
 	        {
-		if (e > gp->cdsStart) e = gp->cdsStart;
+		if (gp->strand[0] == '-')
+		    {
+		    if (s < gp->cdsEnd) s = gp->cdsEnd;
+		    }
+		else
+		    {
+		    if (e > gp->cdsStart) e = gp->cdsStart;
+		    }
 		}
 	    else if (doUtr3)
 	        {
-		if (s < gp->cdsEnd) s = gp->cdsEnd;
+		if (gp->strand[0] == '-')
+		    {
+		    if (e > gp->cdsStart) e = gp->cdsStart;
+		    }
+		else
+		    {
+		    if (s < gp->cdsEnd) s = gp->cdsEnd;
+		    }
 		}
-	    setRangePlusExtra(&fbList, NULL, gp->chrom, s, e, gp->strand[0],
-	    	(i == 0 ? 0 : extraSize), 
-		(i == count-1 ? 0 : extraSize), winStart, winEnd);
+	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
+			      extraSize, extraSize, winStart, winEnd);
 	    }
 	}
     genePredFree(&gp);

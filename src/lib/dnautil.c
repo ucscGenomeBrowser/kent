@@ -303,6 +303,7 @@ ntCompTable['g'] = 'c';
 ntCompTable['t'] = 'a';
 ntCompTable['n'] = 'n';
 ntCompTable['-'] = '-';
+ntCompTable['.'] = '.';
 ntCompTable['A'] = 'T';
 ntCompTable['C'] = 'G';
 ntCompTable['G'] = 'C';

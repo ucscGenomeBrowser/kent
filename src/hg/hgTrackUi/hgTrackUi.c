@@ -296,205 +296,68 @@ printf("&nbsp;pixels");
 printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("zooCons.interp.gap", zooConsLineGap, 10 );
 printf("&nbsp;bases");
-
-
 }
 
 
-void blastzHgRefUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
+void colorCrossSpeciesUi(struct trackDb *tdb, boolean colorDefaultOn)
+/* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
-char *aa = cartUsualString(cart, "blastzHgRef.color", "off");
+char colorVar[256];
+char *aa;
+char *colorVal = (colorDefaultOn ? "on" : "off");
 
 printf("<p><b>Color track based on chromosome</b>: ");
-cgiMakeRadioButton("blastzHgRef.color", "on", sameString(aa, "on"));
+snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
+aa = cartUsualString(cart, colorVar, colorVal);
+cgiMakeRadioButton(colorVar, "on", sameString(aa, "on"));
 printf(" on ");
-cgiMakeRadioButton("blastzHgRef.color", "off", sameString(aa, "off"));
+cgiMakeRadioButton(colorVar, "off", sameString(aa, "off"));
 printf(" off ");
-
 printf("<br><br>");
-
 }
 
-void blastzMmHgUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
+
+void binomialConsUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
 {
-char *aa = cartUsualString(cart, "blastzMmHg.color", "off");
+int binomialConsHeightPer = atoi(cartUsualString(cart, "binomialCons.heightPer", "30"));
+char *interpolate = cartUsualString(cart, "binomialCons.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "binomialCons.anti.alias", "on");
+char *fill = cartUsualString(cart, "binomialCons.fill", "1");
+int binomialConsLineGap = atoi(cartUsualString(cart, "binomialCons.interp.gap", "25000"));
 
-printf("<p><b>Color track based on chromosome</b>: ");
-cgiMakeRadioButton("blastzMmHg.color", "on", sameString(aa, "on"));
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("binomialCons.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("binomialCons.anti.alias", "on", sameString(aa, "on"));
 printf(" on ");
-cgiMakeRadioButton("blastzMmHg.color", "off", sameString(aa, "off"));
+cgiMakeRadioButton("binomialCons.anti.alias", "off", sameString(aa, "off"));
 printf(" off ");
 
 printf("<br><br>");
-}
-void blastzMmHgRefUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzMmHgRef.color", "off");
-
-printf("<p><b>Color track based on chromosome</b>: ");
-cgiMakeRadioButton("blastzMmHgRef.color", "on", sameString(aa, "on"));
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("binomialCons.fill", "1", sameString(fill, "1"));
 printf(" on ");
-cgiMakeRadioButton("blastzMmHgRef.color", "off", sameString(aa, "off"));
+
+cgiMakeRadioButton("binomialCons.fill", "0", sameString(fill, "0"));
 printf(" off ");
 
-printf("<br><br>");
-}
-
-void blastzHgUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzHg.color", "off");
-
-printf("<p><b>Color track based on chromosome</b>: ");
-cgiMakeRadioButton("blastzHg.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blastzHg.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-
-}
-void blastzBestMouseUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzBestMouse.color", "off");
-
-printf("<p><b>Color track based on chromosome</b>: ");
-cgiMakeRadioButton("blastzBestMouse.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blastzBestMouse.color", "off", sameString(aa, "off"));
-printf(" off ");
-printf("<br><br>");
-
-}
-void blastzMm2Ui(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzMm2.color", "off");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("blastzMm2.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blastzMm2.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("binomialCons.heightPer", binomialConsHeightPer, 5 );
+printf("&nbsp;pixels");
 
 }
 
-void blastzMm2ScUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzMm2Sc.color", "off");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("blastzMm2Sc.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blastzMm2Sc.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-
-}
-
-void blastzMm2RefUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blastzMm2Ref.color", "off");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("blastzMm2Ref.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blastzMm2Ref.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-
-}
-
-void aarMm2Ui(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "aarMm2.color", "off");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("aarMm2.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("aarMm2.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-
-}
-
-void mouseOrthoUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "mouseOrtho.color", "on");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("mouseOrtho.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("mouseOrtho.color", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-
-}
-
-void mouseSynUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "mouseSyn.color", "on");
-/*
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("mouseSyn.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("mouseSyn.color", "off", sameString(aa, "off"));
-printf(" off ");
-printf("<br><br>");
-*/
-
-}
-
-void blatMusUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blatMus.color", "off");
-
-printf("<p><b>Color track based on mouse chromosome</b>: ");
-cgiMakeRadioButton("blatMus.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blatMus.color", "off", sameString(aa, "off"));
-printf(" off ");
-printf("<br><br>");
-
-}
-
-void blatHumanUi(struct trackDb *tdb)
-/* put up UI for the selecting rainbow chromosome color or intensity score*/
-{
-char *aa = cartUsualString(cart, "blatHuman.color", "off");
-
-printf("<p><b>Color track based on human chromosome</b>: ");
-cgiMakeRadioButton("blatHuman.color", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("blatHuman.color", "off", sameString(aa, "off"));
-printf(" off ");
-printf("<br><br>");
-
-}
 
 void zooUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
 {
-int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "100"));
+int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "30"));
 char *interpolate = cartUsualString(cart, "zoo.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "zoo.anti.alias", "on");
 char *fill = cartUsualString(cart, "zoo.fill", "1");
+int zooLineGap = atoi(cartUsualString(cart, "zoo.interp.gap", "25000"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("zoo.linear.interp", interpolate );
@@ -658,6 +521,8 @@ else if (sameString(track, "GCwiggle"))
     GCwiggleUi(tdb);
 else if (sameString(track, "zoo"))
     zooUi(tdb);
+else if (sameString(track, "binomialCons"))
+    binomialConsUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
@@ -667,31 +532,33 @@ else if (sameString(track, "humMusL"))
 else if (sameString(track, "zooCons"))
     zooConsUi(tdb);
 else if (sameString(track, "blastzMm2"))
-    blastzMm2Ui(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Sc"))
-    blastzMm2ScUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Ref"))
-    blastzMm2RefUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHgRef"))
-    blastzHgRefUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHg"))
-    blastzHgUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzBestMouse"))
-    blastzBestMouseUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzBestHuman"))
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMmHg"))
-    blastzMmHgUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMmHgRef"))
-    blastzMmHgRefUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "aarMm2"))
-    aarMm2Ui(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "mouseOrtho"))
-    mouseOrthoUi(tdb);
+    colorCrossSpeciesUi(tdb, TRUE);
 else if (sameString(track, "mouseSyn"))
-    mouseSynUi(tdb);
+    colorCrossSpeciesUi(tdb, TRUE);
 else if (sameString(track, "blatMus"))
-    blatMusUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blatHuman"))
-    blatHumanUi(tdb);
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
 }

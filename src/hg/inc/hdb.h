@@ -52,11 +52,20 @@ char *hTrackDbName();
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
+void hSetDbConnect2(char* host, char *db, char *user, char *password);
+/* set the connection information for the database */
+
 void hSetDb(char *dbName);
+/* Set the database name. */
+
+void hSetDb2(char *dbName);
 /* Set the database name. */
 
 char *hGetDb();
 /* Return the current database name. */
+
+char *hGetDb2();
+/* Return the secondary database name. */
 
 char *hGetDbHost();
 /* Return the current database host. */
@@ -73,8 +82,14 @@ char *hGetDbPassword();
 struct sqlConnection *hAllocConn();
 /* Get free connection if possible. If not allocate a new one. */
 
+struct sqlConnection *hAllocConn2();
+/* Get free connection if possible. If not allocate a new one. */
+
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
+
+void hFreeConn2(struct sqlConnection **pConn);
+/* Put back secondary db connection for reuse. */
 
 struct sqlConnection *hConnectCentral();
 /* Connect to central database where user info and other info
@@ -87,11 +102,30 @@ void hDisconnectCentral(struct sqlConnection **pConn);
 boolean hTableExists(char *table);
 /* Return TRUE if a table exists in database. */
 
+boolean hTableExists2(char *table);
+/* Return TRUE if a table exists in secondary database. */
+
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
+int hChromSize2(char *chromName);
+/* Return size of chromosome from secondary database. */
+
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
+
+boolean hChromBand(char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+
+boolean hChromBandConn(struct sqlConnection *conn, 
+	char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
+
+boolean hChromBand(char *chrom, int pos, char retBand[64]);
+/* Fill in text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
 
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
@@ -153,14 +187,37 @@ boolean hFindChromStartEndFields(char *table,
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
+boolean hFindChromStartEndFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32]);
+/* Given a table return the fields for selecting chromosome, start, and end. */
+
 boolean hIsBinned(char *table);
 /* Return TRUE if a table is binned. */
 
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	boolean *retBinned);
-/* Given a table return the fields for selecting chromosome, start, 
+/* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
+
+boolean hFindMoreFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32]);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+
+boolean hFindMoreFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32]);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+
+boolean hFindMoreFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+	boolean *retBinned);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);
@@ -217,8 +274,11 @@ boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
  * chromosome chrom and some N and M. */
 
+struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName);
+/* Look up track in database, return NULL if it's not there. */
+
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
-/* Look up track in database. */
+/* Look up track in database, errAbort if it's not there. */
 
 struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 

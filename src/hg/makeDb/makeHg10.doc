@@ -808,7 +808,7 @@ LOAD SOFTBERRY GENES (done)
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
-     - get ftp://www.softberry.com/pub/SC_DEC01/*
+     - wget ftp://www.softberry.com/pub/SC_HUM_DEC01/soft_fg_hum_dec01.tar.gz
      - mkdir output
      - Run the fixFormat.pl routine in
      	~/oo/bed/softberry like so:
@@ -819,6 +819,13 @@ LOAD SOFTBERRY GENES (done)
      ldHgGene hg10 softberryGene chr*.gff
      hgPepPred hg10 softberry *.pro
      hgSoftberryHom hg10 *.pro
+     - RT 283 fixed 7/19/02:
+     cd ~/hg10/bed/softberry/output
+     foreach f (chr*.gff)
+       set f2 = $f:r-fixed.gff
+       ../removeBogusExons.pl $f > $f2
+     end
+     ldHgGene hg10 softberryGene chr*-fixed.gff
 
 LOAD GENEID GENES (done)
      mkdir ~/oo/bed/geneid
@@ -944,6 +951,8 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
         <above loops>
 
     - Load tables
+        - alter table chr19_blastzMm2  max_rows=10000000 avg_row_length=1200;
+
         cd blastzMm2.xa
         hgLoadPsl -xa hg10 *.xa
         cd blastzMm2.xa
@@ -957,3 +966,9 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
      - The original data contained may duplicated alignments, so did a 
            sort -u | sort -k 15n -k 16n
        on each PSL before loading.
+     - Need to filter for #aligned < 50
+        
+   - Append mm2 nib info to mouseChrom table with mm2. prefix
+     - cd  /cluster/store2/mm.2002.02/mm2/
+     - hgNibSeq -preMadeNib -table=mouseChrom -chromPrefix=mm2. -append hg10 /cluster/store2/mm.2002.02/mm2/nib ?/chr*.fa ??/chr*.fa
+

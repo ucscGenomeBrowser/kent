@@ -93,7 +93,14 @@ void htmlSetBackground(char *imageFile)
 htmlBackground = imageFile;
 }
 
+static int *htmlBgColor = NULL;
 
+void htmlSetBgColor(int *color)
+/* Set background color - needs to be called before htmlStart
+ * or htmShell. */
+{
+htmlBgColor = color;
+}
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
 /* create a cookie with the given stats */
 {
@@ -129,10 +136,12 @@ void _htmStart(FILE *f, char *title)
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", title);
-if (htmlBackground == NULL)
-    fputs("<BODY>\n",f);
-else
-    fprintf(f, "<BODY BACKGROUND=\"%s\">\n", htmlBackground);
+fputs("<BODY",f);
+if (htmlBackground != NULL )
+    fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
+if (htmlBgColor != NULL)
+    fprintf(f, " BGCOLOR=\"%X\"", *htmlBgColor);
+fputs(">\n",f);
 }
 
 /* Write the start of an html from CGI */

@@ -1,15 +1,18 @@
 .c.o:
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
-L = -lm
+L = -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = blat.o
 
 blat: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
-#strip $(HOME)/bin/$(MACHTYPE)/blat
+	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
+	strip ../../bin/$(MACHTYPE)/blat
 
+all:
+	cd ../lib; make
+	make
 tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h

@@ -143,7 +143,7 @@ void freeGgMrnaInput(struct ggMrnaInput **pCi)
 struct ggMrnaInput *ci;
 if ((ci = *pCi) != NULL)
     {
-    freeGgMrnaAliList(&ci->maList);
+    ggMrnaAliFreeList(&ci->maList);
     freeDnaSeq(&ci->genoSeq);
     freez(pCi);
     }

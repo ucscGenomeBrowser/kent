@@ -353,7 +353,7 @@ int start, lines;
 int heightFromCart;
 char o1[128];
 
-sprintf( o1, "%s.heightPer", tg->mapName);
+snprintf( o1, 128, "%s.heightPer", tg->mapName);
 heightFromCart = atoi(cartUsualString(cart, o1, "100"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
@@ -363,24 +363,20 @@ switch (vis)
     case tvFull:
 
     lines = 1;
-    start = 0;
-	for (item = tg->items; item != NULL; item = item->next)
-    {
-        if( !start && item->next != NULL )
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+        if( item->next != NULL )
             if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
                 lines++;
-        start = 0;
-     }
-
-
+    }
 	tg->height = lines * tg->lineHeight;
-	//tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
+
     case tvDense:
 	tg->height = tg->lineHeight;
 	break;
-    }
 
+    }
 return tg->height;
 }
 
@@ -556,14 +552,20 @@ if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
 }
+
 void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 int i;
-int x1 = round((double)(chromStart-winStart)*scale) + xOff;
-int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-int w = x2-x1;
+int x1, x2, w;
+
+x1 = round((double)(chromStart-winStart)*scale) + xOff;
+x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+if (x2 >= MAXPIXELS)
+    x2 = MAXPIXELS - 1;
+w = x2-x1;
+
 if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
@@ -1084,11 +1086,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
         x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
         w = x2-x1;
-        bColor = mgFindColor(mg,0,0,0);
         if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
               {
               mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-                           lfs->orientation, color, TRUE);
+                           lfs->orientation, bColor, TRUE);
               }
         if (prevEnd != -1 && !lfs->noLine) 
               {
@@ -1096,7 +1097,6 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
               }
         prevEnd = lf->end;
       
-        bColor = color;
         if (lf->components != NULL && !hideLine)
             {
             x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
@@ -1247,13 +1247,12 @@ shades = tg->colorShades;
 lf=tg->items;    
 if(lf==NULL) return;
 
-
 //take care of cart options
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
 snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
-interpolate = cartUsualString(cart, o1, "Only samples");
+interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
@@ -1294,8 +1293,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 0.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( minRange, 0.0, 3.66958, 1000 );
-    max0 = whichNum( maxRange, 0.0, 3.66958, 1000 );
+    min0 = whichNum( minRange, 0.0, 8.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 8.0, 1000 );
 
     if( !isFull )
     {   
@@ -1315,7 +1314,11 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
-    minRange = 600.0;
+
+    /*Always interpolate zoo track (since gaps are explicitly defined*/
+    lineGapSize = -1;
+
+    minRange = 500.0;
     maxRange = 1000.0;
     }
     else if( sameString( tg->mapName, "zooCons" ) )
@@ -1323,21 +1326,17 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 1.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( 1.0, -6.30436, 5.53297, 1000 );
-    max0 = whichNum( 1000.0, -6.30436, 5.53297, 1000 );
+    min0 = whichNum( 1.0, 0.0, 5.0, 1000 );
+    max0 = whichNum( 1000.0, 0.0, 5.0, 1000 );
+    
+    }
+    else if( sameString( tg->mapName, "binomialCons" ) )
+    {
+    minRange = 1.0;
+    maxRange = 250.0;
 
-    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    tmp = -whichBin( 0.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 2.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 5.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+    min0 = whichNum( minRange, 0.0, 100.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 100.0, 1000 );
     
     }
     else
@@ -1393,7 +1392,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-                    if( prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
+                    if( lineGapSize < 0 || prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
                         {
                         if( sameString( aa, "on" )) /*use anti-aliasing*/
                             mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
@@ -3287,7 +3286,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     item = loader(row + rowOffset);
     slAddHead(&itemList, item);
     }
+
 slReverse(&itemList);
+slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
 hFreeConn(&conn);
@@ -3935,6 +3936,144 @@ tg->drawItems = cytoBandDraw;
 tg->itemName = cytoBandName;
 }
 
+static void swissDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items for protein track of SWISS-PROT, etc. */
+{
+int baseWidth = seqEnd - seqStart;
+struct bed *item;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int invPpt;
+int midLineOff = heightPer/2;
+int midY = y + midLineOff;
+int dir;
+Color *shades = tg->colorShades;
+
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, mg);
+    else
+	{
+	if (shades)
+	    {
+	    color = shades[grayInRange(item->score, 0, 1000)];
+	    }
+	}
+    if (w < 1)
+	w = 1;
+    if (color)
+	{
+	if (strstr(item->name, "PDB")     != NULL) color = MG_BLACK;
+        if (strstr(item->name, "SWISS")  != NULL) 
+		{
+		color = mgFindColor(mg, 150, 0, 0);
+		}
+        if (strstr(item->name, "TrEMBL")  != NULL) 
+		{
+		color = mgFindColor(mg, 190, 100, 100);
+		}
+	
+	mgDrawBox(mg, x1, y, w, heightPer, color);
+	if (tg->drawName)
+	    {
+	    /* Clip here so that text will tend to be more visible... */
+	    char *s = tg->itemName(tg, item);
+	    if (x1 < xOff)
+		x1 = xOff;
+	    if (x2 > xOff + width)
+		x2 = xOff + width;
+	    w = x2-x1;
+	    if (w > mgFontStringWidth(font, s))
+		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+	    }
+	}
+    if (tg->subType == lfWithBarbs)
+        {
+        dir = 0;
+        if(sameString(item->strand , "+")) 
+            dir = 1;
+        if(sameString(item->strand , "-")) 
+            dir = -1;
+	    w = x2-x1;
+        if (dir != 0)
+        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+        }
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+static int swissMin = 320;
+static int swissMax = 600;
+
+Color swissColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return name of protein track item. */
+{
+int l;
+char *chp;
+struct bed *bed = item;
+
+l = strlen(bed->name);
+if (l > 6)
+    {
+    return(tg->ixColor);
+    }
+else return(MG_GRAY);
+}
+
+char *swissName(struct trackGroup *tg, void *item)
+/* Return name of xxx track item. */
+{
+struct bed *sw = item;
+static char buf[32];
+char *chp;
+
+sprintf(buf, "%s",  sw->name);
+
+chp = strstr(buf, "(SWISS)");
+if (chp != NULL)
+	{
+	chp = buf+strlen(buf)-strlen("(SWISS)");
+	*chp = '\0';
+	}
+			
+chp = strstr(buf, "(PDB)");
+if (chp != NULL)
+        {
+	chp = buf+strlen(buf)-strlen("(PDB)");
+	*chp = '\0';
+	}
+
+chp = strstr(buf, "(TrEMBL)");
+if (chp != NULL)
+        {
+	chp = buf+strlen(buf)-strlen("(TrEMBL)");
+	*chp = '\0';
+	}
+			
+return(buf);
+}
+
+void swissMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->drawItems = swissDraw;
+tg->itemName  = swissName;
+tg->itemColor = swissColor;
+tg->drawName  = TRUE;
+}
+
+
 void loadGcPercent(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
@@ -3944,8 +4083,8 @@ char **row;
 struct gcPercent *itemList = NULL, *item;
 char query[256];
 
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    "gcPercent", chromName, winEnd, winStart);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->mapName,
+    chromName, winEnd, winStart);
 
 /* Get the frags and load into tg->items. */
 sr = sqlGetResult(conn, query);
@@ -3970,6 +4109,7 @@ void freeGcPercent(struct trackGroup *tg)
 {
 gcPercentFreeList((struct gcPercent**)&tg->items);
 }
+
 
 char *gcPercentName(struct trackGroup *tg, void *item)
 /* Return name of gcPercent track item. */
@@ -4056,6 +4196,8 @@ tg->itemName = gcPercentName;
 tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
 }
+
+/* Make track group for simple repeats. */
 
 #ifdef OLD
 struct genomicDups *filterOldDupes(struct genomicDups *oldList)
@@ -6523,6 +6665,7 @@ int resolution = 0;
 char tableName[256];
 int zoom1 = 23924, zoom2 = 2991; /* bp per data point */
 float pixPerBase = 0;
+
 if(tl.picWidth == 0)
     errAbort("hgTracks.c::loadAffyTranscriptome() - can't have pixel width of 0");
 pixPerBase = (winEnd - winStart)/ tl.picWidth;
@@ -6575,7 +6718,6 @@ slReverse(&lfList);
 /* sort to bring items with common names to the same line
 but only for tracks with a summary table (with name=shortLabel) in
 dense mode*/
-
 if( hasDense != NULL )
     {
     sortGroupList = tg; /* used to put track name at top of sorted list. */
@@ -6583,12 +6725,18 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
+
+/* Since we've taken care of loading too many things using the 
+   zoom tables, take care of limiting visibility here. */
+tg->limitedVis = tg->visibility;
+tg->limitedVisSet = TRUE;
 }
 
 
 void affyTranscriptomeMethods(struct trackGroup *tg)
 /* Overide the load function to look for zoomed out tracks. */
 {
+
 tg->loadItems = loadAffyTranscriptome;
 }
 
@@ -7931,8 +8079,8 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "humMusL" ) )
     {
-        min0 = whichNum( 0.0, 0.0, 3.66958, 1000 );
-        max0 =  whichNum( 1000.0, 0.0, 3.66958, 1000 );
+        min0 = whichNum( 0.0, 0.0, 8.0, 1000 );
+        max0 =  whichNum( 1000.0, 0.0, 8.0, 1000 );
         sprintf( minRangeStr, "%0.2g", min0  );
         sprintf( maxRangeStr, "%0.2g", max0 );
 
@@ -7946,18 +8094,23 @@ if (withLeftLabels)
     }
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
-	    sprintf( minRangeStr, "%d", 60); //whichNum( 1.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
 	    }
     else if( sameString( group->mapName, "zooCons" ) )
 	    {
-	    sprintf( minRangeStr, "%g", whichNum( 1.0, -6.30436, 5.53297, 1000 ));
-	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -6.30436, 5.53297, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 5.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
+	    }
+     else if( sameString( group->mapName, "binomialCons" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 250.0, 0.0, 100.0, 1000 ));
 	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
 	    }
 	
 	switch (group->limitedVis)
@@ -8334,6 +8487,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
@@ -8341,6 +8495,7 @@ tg->items = lfList;
 void loadSampleIntoLinkedFeature(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
 {
+int maxWiggleTrackHeight = 2500;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -8350,6 +8505,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
 char query[256];
+
 
 
 /*see if we have a summary table*/
@@ -8392,6 +8548,18 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
+
+/*turn off full mode if there are too many rows or each row is too
+ * large. A total of maxWiggleTrackHeight is allowed for number of
+ * rows times the rowHeight*/
+if( tg->visibility == tvFull 
+    && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+    {
+    tg->limitedVisSet = TRUE;
+    tg->limitedVis = tvDense;
+    }
+
+
 }
 
 
@@ -8572,6 +8740,21 @@ void ensRikenMethods(struct trackGroup *tg)
 tg->loadItems = ensRikenLoadItems;
 }
 
+void ensMergeLoadItems(struct trackGroup *tg)
+/* Load ensMerge genepreds  - have to get them from special secret database. */
+{
+struct sqlConnection *conn = sqlConnect("mgsc");
+tg->items = connectedLfFromGenePredInRange(conn, tg->mapName, chromName,
+					   winStart, winEnd);
+sqlDisconnect(&conn);
+}
+
+void ensMergeMethods(struct trackGroup *tg)
+/* Load up ensMerge specific methods. */
+{
+tg->loadItems = ensMergeLoadItems;
+}
+
 void secretRikenTracks(struct trackGroup **pTrackList)
 /* If not on right host remove Riken tracks. */
 {
@@ -8581,7 +8764,10 @@ if (!hIsMgscHost())
     for (tg = *pTrackList; tg != NULL; tg = tg->next)
         {
 	  if (sameString(tg->mapName, "rikenMrna") ||
-	      sameString(tg->mapName, "ensRiken"))
+	      sameString(tg->mapName, "ensRiken")  ||
+	      sameString(tg->mapName, "ensMergeTierB")  ||
+	      sameString(tg->mapName, "ensMergeTierC")  ||
+	      sameString(tg->mapName, "ensMergeTierD"))
 	     {
 	     slRemoveEl(pTrackList, tg);
 	     }
@@ -8894,7 +9080,8 @@ struct dyString *uiVars = uiStateUrlPart(NULL);
 
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-printf("<TD ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+printf("<TD ALIGN=CENTER><A HREF=\"/index.html?db=%s\">%s</A></TD>", database, wrapWhiteFont("Home"));
+
 if (gotBlat)
     {
     fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
@@ -8970,6 +9157,8 @@ registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
+registerTrackHandler("gcPercentSmall", gcPercentMethods);
+registerTrackHandler("swiss", swissMethods);
 registerTrackHandler("ctgPos", contigMethods);
 registerTrackHandler("gold", goldMethods);
 registerTrackHandler("gap", gapMethods);
@@ -9006,12 +9195,16 @@ registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
+registerTrackHandler("blastzStrictChainMouse", longXenoPslMethods);
+registerTrackHandler("blastzStrictChainHuman", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("blastzMmHg", longXenoPslMethods);
 registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
+registerTrackHandler("blastzBestHuman", longXenoPslMethods);
+registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -9019,6 +9212,7 @@ registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
+registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
@@ -9040,6 +9234,9 @@ registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
+registerTrackHandler("ensMergeTierB", ensMergeMethods);
+registerTrackHandler("ensMergeTierC", ensMergeMethods);
+registerTrackHandler("ensMergeTierD", ensMergeMethods);
 registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
@@ -9121,7 +9318,7 @@ if (!hideControls)
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
 	printf("  size %d, ", winEnd-winStart);
-	fputs(" pixel width ", stdout);
+	fputs(" image width ", stdout);
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
 	cgiMakeButton("submit", "jump");

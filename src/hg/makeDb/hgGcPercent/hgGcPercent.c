@@ -5,6 +5,10 @@
 #include "dnaseq.h"
 #include "nib.h"
 #include "jksql.h"
+#include "cheapcgi.h"
+
+int winSize ;               /* window size */
+boolean noLoad = FALSE;		/* Suppress loading mysql table . */
 
 void usage()
 /* Explain usage and exit. */
@@ -12,7 +16,10 @@ void usage()
 errAbort(
   "hgGcPercent - Calculate GC Percentage in 20kb windows\n"
   "usage:\n"
-  "   hgGcPercent database nibDir\n");
+  "   hgGcPercent database nibDir\n"
+  "options:\n"
+  "   -win=size change windows size (default 20000)\n"
+  "   -noLoad do not load mysql table - create bed file\n");
 }
 
 char *createTable = 
@@ -32,7 +39,7 @@ void makeGcTab(char *nibFile, char *chrom, FILE *f)
 /* Scan through nib file and write out GC percentage info in
  * 20 kb windows. */
 {
-int chromSize, start, end, oneSize, winSize = 20000;
+int chromSize, start, end, oneSize;
 int minCount = winSize/4;
 int i, count, gcCount, val, ppt;
 struct dnaSeq *seq = NULL;
@@ -40,6 +47,7 @@ FILE *nf = NULL;
 DNA *dna;
 int dotMod = 0;
 
+printf("Calculating gcPercent with window size %d\n",winSize);
 nibOpenVerify(nibFile, &nf, &chromSize);
 for (start=0; start<chromSize; start = end)
     {
@@ -94,15 +102,19 @@ for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
     makeGcTab(nibEl->name, chrom, tabFile);
     }
 carefulClose(&tabFile);
+printf("File %s created\n",tabFileName);
 
 /* Load that file in database. */
-conn = sqlConnect(database);
-printf("Loading gcPercent table\n");
-sqlMaybeMakeTable(conn, "gcPercent", createTable);
-sqlUpdate(conn, "DELETE from gcPercent");
-sprintf(query, "LOAD data local infile '%s' into table gcPercent", tabFileName);
-sqlUpdate(conn, query);
-sqlDisconnect(&conn);
+if (!noLoad)
+    {
+    conn = sqlConnect(database);
+    printf("Loading gcPercent table\n");
+    sqlMaybeMakeTable(conn, "gcPercent", createTable);
+    sqlUpdate(conn, "DELETE from gcPercent");
+    sprintf(query, "LOAD data local infile '%s' into table gcPercent", tabFileName);
+    sqlUpdate(conn, query);
+    sqlDisconnect(&conn);
+    }
 
 slFreeList(&nibList);
 }
@@ -110,9 +122,12 @@ slFreeList(&nibList);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+cgiSpoof(&argc, argv);
+if (argc <3)
     usage();
 dnaUtilOpen();
+winSize = cgiOptionalInt("win", 20000);
+noLoad = cgiBoolean("noLoad");
 hgGcPercent(argv[1], argv[2]);
 return 0;
 }

@@ -212,11 +212,22 @@ struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
 char *hgcUrl = hgcName();
 char uiState[64];
+char *vis;
+char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", sortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
 
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+
+/* If user has hidden BLAT track, add a setting that will unhide the 
+   track if user clicks on a browser link. */
+vis = cartOptionalString(cart, "hgUserPsl");
+if (vis != NULL && sameString(vis, "hide"))
+    snprintf(unhideTrack, sizeof(unhideTrack), "&hgUserPsl=dense");
+else
+    unhideTrack[0] = 0;
+
 while ((psl = pslNext(lf)) != NULL)
     {
     slAddHead(&pslList, psl);
@@ -265,9 +276,9 @@ else
     printf("--------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
+	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
 	    browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
-	    pslName, faName, uiState);
+	    pslName, faName, uiState, unhideTrack);
 	printf("browser</A> ");
 	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,

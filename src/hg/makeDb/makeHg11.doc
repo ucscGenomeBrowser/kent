@@ -1,6 +1,105 @@
 This file describes how we made the browser database on 
 NCBI build 29 (April, 2002 freeze)
 
+(The numbered stuff was brought in from
+ /cluster/store1/gs.12/build29/build.ncbi.doc)
+
+HOW TO BUILD A ASSEMBLY FROM NCBI FILES
+---------------------------------------
+
+NOTE: It is best to run most of this stuff on kkstore since it
+is not adverse to handling files > 2Gb
+
+1) Download seq_contig.md, ncbi_buildXX.agp,
+	contig_overlaps.agp and contig fa file into directory.
+
+2) Unpack contig fa file into ../ffa/ncbi_buildXX.fa
+
+#2.1) Extract Hs to NT conversion from .fa files to convert .agp file (NOT NEEDED ANYMORE)
+#
+#	/cluster/bin/scripts/extractHs ncbi_buildXX.fa
+#
+#2.2) Create allcontig.agp.buildXX file (NOT NEEDED ANYMORE)#
+#
+#	/cluster/bin/scripts/convertHsAgp hs.to.nt <agp file> > allcontig.agp.buildXX
+	
+2.3) Sanity check things with
+        ~kent/bin/i386/checkYbr ncbi_buildXX.agp ../ffa/ncbi_buildXX.fa seq_contig.md
+     report any errors back to Richa and Greg at NCBI.
+
+3) Convert fa files into UCSC style fa files and place in "contigs" directory
+	mkdir contigs
+	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ncbi_buildXX.fa contigs
+
+4) Create lift files (this will create chromosome directory structure) and inserts file
+
+	/cluster/bin/scripts/createNcbiLifts seq_contig.md .
+
+5) Create contig agp files (will create contig directory structure)
+	
+	/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_buildXX.agp .
+
+5.1) Create contig gl files
+
+        ~kent/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+
+6) Create chromsome agp files
+
+	/cluster/bin/scripts/createNcbiChrAgp .
+
+6.1) Copy over jkStuff
+	mkdir jkStuff
+        cp ../../gs.11/build28/jkStuff/*.sh jkStuff
+        cp ../../gs.11/build28/jkStuff/*.csh jkStuff
+        cp ../../gs.11/build28/jkStuff/*.gsub jkStuff        
+
+6.2) Patch in size of chromosome Y into Y/lift/ordered.lft
+     by grabbing it from the last line of Y/chrY.agp
+
+6.3) Create chromosome gl files
+  
+        jkStuff/liftGl.sh contig.gl
+
+7) Distribute contig .fa and .out files to appropriate directory (assumes all files
+   are in "contigs" directory).
+
+	/cluster/bin/scripts/distNcbiCtgFa contigs .
+
+8) Reverse complement NT contig fa files that are flipped in the assembly
+   (uses faRc program)
+
+	/cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
+	
+9) Generate RepeatMasked files for contigs (Patrick)
+   For the NCBI assembly we repeat mask on the sensitive mode setting.
+
+        cd ~/oo
+        /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
+        log into kk
+        cd ~/oo
+        para create RMJobs
+        para try
+        make sure jobs don't die right away
+        para push
+
+10) Lift up RepeatMask .out files to chromosome coordinates via
+       tcsh jkStuff/liftOut2.sh
+
+11) Generate contig and chromosome level masked and unmasked files via:
+       tcsh jkStuff/chrFa.sh
+       tcsh jkStuff/makeFaMasked.sh
+
+12) Copy all contig and chrom fa files to /scratch on kkstore to get ready for
+    cluster jobs, and ask to propagate to nodes
+
+	/cluster/bin/scripts/cpNcbiFaScratch . </scratch/hg/gs.X/>
+
+13) Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
+    Note: this ncbi.lift will not lift floating contigs to chr_random coords,
+    but it will show the strand orientation of the floating contigs 
+    (grep for '|').
+	mdToNcbiLift seq_contig_randoms.md jkStuff/ncbi.lft 
+
 
 CREATING DATABASE  (DONE)
 
@@ -26,6 +125,10 @@ o - Create the trackDb table as so
        make update
        cvs commit makefile
 
+
+LOAD REPEAT MASKS (DONE 7/10/02)
+    Load the RepeatMasker .out files into the database with:
+       hgLoadOut hg11 ?/*.fa.out ??/*.fa.out
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE)
 
@@ -168,30 +271,6 @@ o - Store the mRNA (non-alignment) info in database.
 
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
-
-
-
-REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
-
-For the NCBI assembly we repeat mask on the sensitive mode setting.
-Patrick Gavin did this, and perhaps will fill in the details later.
-Overall the process was to break the NT contigs into pieces of
-1000000 bases each with
-    cd NTXXX
-    mkdir split
-    cd split
-    faSplit size ../NTXXX.fa 1000000 NTXXX -maxN=1000001 -lift=../NTXXX.lft
-and then arrange to do a cluster run that generates NTXXX_X.fa.out files
-in the split directory.   After this lift up the .out files to whole contig
-coordinates with
-    liftUp NTXXX.fa.out NTXXX.lft warn split/*.fa.out
-Then lift these up to chromosome coordinates with
-    cd ~/oo
-    tcsh jkStuff/liftOut2.sh
-Then load the .out files into the database with:
-    ssh hgwdev
-    cd ~/oo
-    hgLoadOut hg11 ?/*.fa.out ??/*.fa.out DONE BY MATT
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE)
@@ -748,7 +827,6 @@ o - Do the cluster run as so
        cd ~/oo/bed/blatMus
        mkdir psl
        para create specE
-ABOVE IS ALL DONE - FAILING WITH SEG FAULT IN PARA TRY - DO PARA PROBLEMS TO SEE THIS.
        para try
     and then do para push/check/push/check/shove etc.
 
@@ -929,22 +1007,22 @@ hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
 DONE
 
 
-TIGR GENE INDEX (todo)
-
-  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
-      ~/oo.29/bed/tgi and then execute the following commands:
-          cd ~/oo.29/bed/tgi
-	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
-	      mkdir $i
-	      cd $i
-	      gtar -zxf ../${i}*.tgz
-	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
-	      cd ..
-	  end
-	  mv human.gff human.bak
-	  sed s/THCs/TCs/ human.bak > human.gff
-	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+TIGR GENE INDEX (done 7/1/02)
+    mkdir -p ~/hg11/bed/tigr
+    cd ~/hg11/bed/tigr
+    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build29.tgz
+    gunzip -c TGI_track_HumanGenome_build29.tgz | tar xvf -
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC hg11 tigrGeneIndex *.gff
 
 
 LOAD STS MAP (todo) DONE BY TERRY I BELIEVE - HE WILL UPDATE THIS
@@ -1013,51 +1091,31 @@ LOAD SNPS (Done; Daryl Thomas May 28, 2002)
       hgLoadBed hg11 snpNih snpNih.bed
      -gzip all of the big files
 
-LOAD CPGISLANDS (todo) NEW RELEASE NOT YET AVAILABLE
+LOAD CPGISLANDS (done 7/18/02)
      - login to hgwdev
-     cd /cluster/store1/gs.12/build29/bed
-     mkdir cpgIsland
-     cd cpgIsland
-     hg11 < ~kent/src/hg/lib/cpgIsland.sql
-     wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_apr01.oo29.tar 
-     tar -xf cpg*.tar
-     -copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland to cpg_apr01.oo29
-     cd cpg_apr01.oo29
-     awk -f filter.awk */ctg*/*.cpg.out > contig.bed
-     liftUp cpgIsland.bed ../../../jkStuff/liftAll.lft warn contig.bed
-     - Enter database with "hg11" command.
-     - At mysql> prompt type in:
-          load data local infile 'cpgIsland.bed' into table cpgIsland
+     mkdir -p ~/hg11/cpgIsland
+     cd ~/hg11/cpgIsland
+     - Asif Chinwalla <achinwal@watson.wustl.edu> emailed the data in an 
+       attachment; it was unpacked into ~/hg11/cpgIsland
+     - copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland 
+       to cpg_apr2002.masked
+     awk -f filter.awk */*.cpg > cpgIsland.bed
+     hgLoadBed hg11 cpgIsland -tab -noBin \
+       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL GENES (todo)
-     cd ~/oo/bed
-     mkdir ensembl
-     cd ensembl
-     Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
-     predictions) here. (e.g.
-     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
-     gunzip xxx.gtf.gz
-DONE TO HERE
-     Starting from Hg10, ensembl seems to have done their own lifting,
-     so just collect all chromosome .gtf files.
-     cat ?.gtf ??.gtf >all.gtf
-
-     Add "chr" to front of each line to make it compatible with ldHgGene 
-     addchr all.gtf > ensembl.gtf
-     rm all.gtf
-     ldHgGene hg11 ensGene ensembl.gtf
-o - Load Ensembl peptides:
-     (poke around ensembl to get their peptide files as ensembl.pep)
-     
-     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
-
-     gunzip Homo_sapiens.pep.fa.gz
-     
-     Substitute ENST for ENSP in ensemble.pep with subs
-     edit subs.in to read: ENSP|ENST
-
-     subs -e Homo_sapiens.pep.fa >/dev/null
-
+LOAD ENSEMBL GENES (done 7/9/02)
+     mkdir -p ~/hg11/bed/ensembl
+     cd ~/hg11/bed/ensembl
+     # wget complains about a Redirection loop, but GET handles it (?):
+     GET http://www.ebi.ac.uk/~stabenau/human_29_gtf.gz > human_29_gtf.gtf.gz
+     # add "chr" to the chrom ids:
+     gunzip -c human_29_gtf.gtf.gz | \
+       perl -w -p -e 's/^(\w)/chr$1/' > human_29_gtf-fixed.gtf
+     ldHgGene hg11 ensGene human_29_gtf-fixed.gtf
+     # Load Ensembl peptides, replace ">ENSP" with ">ENST":
+     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/Homo_sapiens.pep.all.fa.gz
+     gunzip -c Homo_sapiens.pep.all.fa.gz | sed -e 's/^>ENSP/>ENST/' \
+	> ensembl.pep
      hgPepPred hg11 generic ensPep ensembl.pep
 
 LOAD SANGER22 GENES 

@@ -1,6 +1,7 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
 #include <sys/wait.h>
 #include "common.h"
+#include "errabort.h"
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"
@@ -45,23 +46,26 @@ errAbort(
   "   Create database and run all jobs in it if possible.  If one job\n"
   "   failes repeatedly this will fail.  Suitable for inclusion in makefiles\n"
   "   Same as a 'create' followed by a 'shove'.\n"
-  "para check \n"
+  "para check\n"
   "   This checks on the progress of the jobs.\n"
-  "para stop \n"
+  "para stop\n"
   "   This stops all the jobs in the batch\n"
-  "para finished \n"
+  "para chill\n"
+  "   Tells system to not launch more jobs in this batch, but\n"
+  "   does not stop jobs that are already running.\n"
+  "para finished\n"
   "   List jobs that have finished\n"
-  "para hung \n"
+  "para hung\n"
   "   List hung jobs in the batch\n"
-  "para crashed \n"
+  "para crashed\n"
   "   List jobs that crashed or failed output checks the last time they were run.\n"
-  "para failed \n"
+  "para failed\n"
   "   List jobs that crashed after repeated restarts.\n"
-  "para problems \n"
+  "para problems\n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
-  "para running \n"
+  "para running\n"
   "   Print info on currently running jobs\n"
-  "para time \n"
+  "para time\n"
   "   List timing information\n"
   );
 }
@@ -69,7 +73,7 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 200000;
+int maxQueue = 1000000;
 int minPush = 1;
 int maxPush = 100000;
 int warnTime = 3*24*60;
@@ -396,84 +400,23 @@ printf("%d jobs in batch\n", db->jobCount);
 return db;
 }
 
-
-void paraCreate(char *batch, char *jobList)
-/* Create a batch database from a job list. */
-{
-struct lineFile *lf = lineFileOpen(jobList, TRUE);
-char *line;
-int jobCount = 0;
-struct jobDb *db;
-struct job *job;
-char backup[512];
-
-makeDir("err");
-AllocVar(db);
-while (lineFileNext(lf, &line, NULL))
-    {
-    line = trimSpaces(line);
-    if (line == NULL || line[0] == '#' || line[0] == 0)
-        continue;
-    ++db->jobCount;
-    job = jobFromLine(lf, line);
-    slAddHead(&db->jobList, job);
-    }
-lineFileClose(&lf);
-slReverse(&db->jobList);
-
-doChecks(db, "in");
-sprintf(backup, "%s.bak", batch);
-writeBatch(db, backup);
-atomicWriteBatch(db, batch);
-printf("%d jobs written to %s\n", db->jobCount, batch);
-}
-
-char *submitJobToHub(char *jobMessage)
-/* Submit job to hub.  Return jobId, or NULL on failure. */
+char *hubSingleLineQuery(char *query)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
 {
 int hubFd = netConnect("localhost", paraPort);
-char *jobIdString;
+char *result;
 
 if (hubFd < 0)
     return NULL;
-if (!sendWithSig(hubFd, jobMessage))
+if (!sendWithSig(hubFd, query))
     {
     close(hubFd);
     return NULL;
     }
-jobIdString = netRecieveLongString(hubFd);
+result = netRecieveLongString(hubFd);
 close(hubFd);
-return jobIdString;
-}
-
-boolean submitJob(struct job *job, char *curDir)
-/* Attempt to submit job. */
-{
-struct dyString *cmd = dyStringNew(1024);
-struct submission *sub;
-char *jobId = NULL;
-
-dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
-jobId = submitJobToHub(cmd->string);
-if (jobId != NULL)
-    {
-    AllocVar(sub);
-    slAddHead(&job->submissionList, sub);
-    job->submissionCount += 1;
-    sub->submitTime = time(NULL);
-    sub->host = cloneString("n/a");
-    sub->id = jobId;
-    sub->inQueue = TRUE;
-    }
-dyStringFree(&cmd);
-return jobId != NULL;
-}
-
-void statusOutputChanged()
-/* Complain about status output format change and die. */
-{
-errAbort("\n%s output format changed, please update markQueuedJobs in para.c", 
-	statusCommand);
+return result;
 }
 
 struct slRef *hubMultilineQuery(char *query)
@@ -499,6 +442,107 @@ if (hubFd > 0)
     }
 slReverse(&list);
 return list;
+}
+
+boolean batchRunning(char *batchName)
+/* Return TRUE if a batch is running. */
+{
+struct slRef *lineList = hubMultilineQuery("listBatches"), *lineEl;
+boolean ret = FALSE;
+for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
+    {
+    int wordCount;
+    char *line = lineEl->val;
+    char *row[6];
+    if (line[0] != '#')
+	{
+	char *b;
+	wordCount = chopLine(line, row);
+	b = row[5];
+	if (wordCount < 6 || b[0] != '/')
+	    errAbort("paraHub and para out of sync on listBatches");
+	if (sameString(b, batchName))
+	    ret = TRUE;
+	}
+    freez(&lineEl->val);
+    }
+slFreeList(&lineList);
+return ret;
+}
+
+boolean thisBatchRunning()
+/* Return true if this batch is running */
+{
+char batchDir[512];
+
+if (getcwd(batchDir, sizeof(batchDir)) == NULL)
+    errAbort("Couldn't get current directory");
+strcat(batchDir, "/");
+return batchRunning(batchDir);
+}
+
+void paraCreate(char *batch, char *jobList)
+/* Create a batch database from a job list. */
+{
+struct lineFile *lf = lineFileOpen(jobList, TRUE);
+char *line;
+int jobCount = 0;
+struct jobDb *db;
+struct job *job;
+char backup[512];
+
+if (thisBatchRunning())
+    errAbort("This batch is currently running.  Please para stop first.");
+makeDir("err");
+AllocVar(db);
+while (lineFileNext(lf, &line, NULL))
+    {
+    line = trimSpaces(line);
+    if (line == NULL || line[0] == '#' || line[0] == 0)
+        continue;
+    ++db->jobCount;
+    job = jobFromLine(lf, line);
+    slAddHead(&db->jobList, job);
+    }
+lineFileClose(&lf);
+slReverse(&db->jobList);
+
+doChecks(db, "in");
+sprintf(backup, "%s.bak", batch);
+writeBatch(db, backup);
+atomicWriteBatch(db, batch);
+printf("%d jobs written to %s\n", db->jobCount, batch);
+}
+
+
+boolean submitJob(struct job *job, char *curDir)
+/* Attempt to submit job. */
+{
+struct dyString *cmd = dyStringNew(1024);
+struct submission *sub;
+char *jobId = NULL;
+
+dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
+jobId = hubSingleLineQuery(cmd->string);
+if (jobId != NULL)
+    {
+    AllocVar(sub);
+    slAddHead(&job->submissionList, sub);
+    job->submissionCount += 1;
+    sub->submitTime = time(NULL);
+    sub->host = cloneString("n/a");
+    sub->id = jobId;
+    sub->inQueue = TRUE;
+    }
+dyStringFree(&cmd);
+return jobId != NULL;
+}
+
+void statusOutputChanged()
+/* Complain about status output format change and die. */
+{
+errAbort("\n%s output format changed, please update markQueuedJobs in para.c", 
+	statusCommand);
 }
 
 int markQueuedJobs(struct jobDb *db)
@@ -637,13 +681,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	    struct jobResult *jr = hashFindVal(resultsHash, sub->id);
 	    if (jr == NULL)
 	        {
-		long subTime;
-		subTime = sub->submitTime;
-		duration = now - subTime;
-		if (duration > 60)	/* Give it up to 60 seconds to show up. */
-		    sub->trackingError = 3;
-		else
-		    sub->inQueue = TRUE;
+		sub->trackingError = 3;
 		}
 	    else
 	        {
@@ -726,16 +764,12 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 if (pushCount > 0)
     printf("\n");
 atomicWriteBatch(db, batch);
-uglyf("(updated job database on disk)\n");
+printf("updated job database on disk\n");
 if (pushCount > 0)
-    {
-    printf("\n");
     printf("Pushed Jobs: %d\n", pushCount);
-    }
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
 freeResults(&resultsHash);
-uglyf("(freed results)\n");
 return db;
 }
 
@@ -744,7 +778,6 @@ void paraPush(char *batch)
 {
 struct jobDb *db = paraCycle(batch);
 jobDbFree(&db);
-uglyf("(freed database)\n");
 }
 
 void paraShove(char *batch)
@@ -898,6 +931,36 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
+void fetchOpenFile(int fd, char *fileName)
+/* Read everything you can from socket and output to file. */
+{
+FILE *f = mustOpen(fileName, "w");
+char buf[4*1024];
+int size;
+
+while ((size = read(fd, buf, sizeof(buf))) > 0)
+    mustWrite(f, buf, size);
+if (size < 0)
+    errnoAbort("Couldn't read all into %s", fileName);
+
+carefulClose(&f);
+}
+
+void fetchFile(char *host, char *sourceName, char *destName)
+/* Fetch small file. */
+{
+struct dyString *dy = newDyString(1024);
+int sd = netConnect(host, paraPort);
+if (sd >= 0)
+    {
+    dyStringPrintf(dy, "fetch %s %s", cuserid(NULL), sourceName);
+    if (sendWithSig(sd, dy->string))
+	fetchOpenFile(sd, destName);
+    close(sd);
+    }
+dyStringFree(&dy);
+}
+
 void printErrFile(struct submission *sub, struct jobResult *jr)
 /* Print error file if it exists. */
 {
@@ -905,11 +968,7 @@ char localName[64];
 sprintf(localName, "err/%s", jr->jobId);
 if (!fileExists(localName))
     {
-    struct dyString *dy = newDyString(256);
-    dyStringPrintf(dy, "rcp %s:%s %s", jr->host, jr->errFile, localName);
-    if (system(dy->string) != 0)
-        warn("'%s' failed", dy->string);
-    freeDyString(&dy);
+    fetchFile(jr->host, jr->errFile, localName);
     }
 if (fileExists(localName))
     {
@@ -1026,82 +1085,94 @@ printf("total jobs running: %d\n", runCount);
 }
 
 
-/* Death row is where jobs to be killed get
- * bundled together to send to server in 
- * batches of 256 or so. */
-
-static struct dyString *deathRow = NULL;
-static int deathRowSize = 0;
-static int deathRowMaxSize = 10;
-
-void deathRowStart()
-/* Start up death row */
+void sendChillMessage()
+/* Tell hub to chill out on job */
 {
-deathRow = newDyString(16*1024);
-deathRowSize = 0;
-dyStringAppend(deathRow, "removeJob");
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "chill %s %s/para.results", cuserid(NULL), curDir);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || !sameString(result, "ok"))
+    errAbort("Couldn't chill %s\n", curDir);
+freez(&result);
+printf("Told hub to chill out\n");
 }
 
 
-
-
-void deathRowExecute()
-/* Send list of jobs to kill to server. */
+int cleanTrackingErrors(struct jobDb *db)
+/* Remove submissions with tracking errors. 
+ * Returns count of these submissions */
 {
-int hubFd = netConnect("localhost", paraPort);
-char *ok;
-mustSendWithSig(hubFd, deathRow->string);
-ok = netRecieveLongString(hubFd);
-if (ok == NULL || !sameString(ok, "ok"))
-    errAbort("No reciept in deathRowExecute");
-freez(&ok);
-close(hubFd);
-dyStringClear(deathRow);
-dyStringAppend(deathRow, "removeJob");
-deathRowSize = 0;
+int count = 0;
+struct job *job;
+struct submission *sub;
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    sub = job->submissionList;
+    if (sub != NULL)
+        {
+	if (sub->trackingError)
+	    {
+	    job->submissionCount -= 1;
+	    job->submissionList = sub->next;
+	    ++count;
+	    }
+	}
+    }
+printf("Chilled %d jobs\n", count);
+return count;
 }
 
-void deathRowEnd()
-/* Close out death row. */
+void removeChilledSubmissions(char *batch)
+/* Remove submissions from job database if we
+ * asked them to chill out. */
 {
-deathRowExecute();
-dyStringFree(&deathRow);
+struct jobDb *db = readBatch(batch);
+int chillCount;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+chillCount = cleanTrackingErrors(db);
+atomicWriteBatch(db, batch);
 }
 
-void deathRowAdd(char *jobId)
-/* Add job to death row. */
+void paraChill(char *batch)
+/*  Tells system to not launch more jobs in this batch, but
+ *  does not stop jobs that are already running.\n */
 {
-dyStringPrintf(deathRow, " %s", jobId);
-++deathRowSize;
-if (deathRowSize >= deathRowMaxSize)
-    deathRowExecute();
+sendChillMessage();
+removeChilledSubmissions(batch);
 }
 
-void killSubmission(struct submission *sub)
-/* Kill a submission. */
+boolean killJob(char *jobId)
+/* Tell hub to kill a job.  Return TRUE on
+ * success. */
 {
-struct dyString *cmd = newDyString(256);
-int hubFd = netConnect("localhost", paraPort);
-dyStringPrintf(cmd, "%s %s", "removeJob", sub->id);
-mustSendWithSig(hubFd, cmd->string);
-close(hubFd);
-freeDyString(&cmd);
+char buf[256];
+char *result = NULL;
+boolean ok;
+snprintf(buf, sizeof(buf), "removeJob %s", jobId);
+result = hubSingleLineQuery(buf);
+ok = (result != NULL && sameString(result, "ok"));
+freez(&result);
+return ok;
 }
 
-
-void paraStop(char *batch)
+void paraStopAll(char *batch)
 /* Stop batch of jobs. */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
+int killCount = 0, missCount = 0;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
-deathRowStart();
-/* It's less thrashing on the scheduler if we kill jobs
- * in opposite order. */
-slReverse(&db->jobList);
+cleanTrackingErrors(db);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     sub = job->submissionList;
@@ -1109,14 +1180,31 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->inQueue || sub->running)
 	    {
-	    deathRowAdd(sub->id);
-	    sub->crashed = TRUE;
+	    if (killJob(sub->id))
+		{
+		job->submissionCount -= 1;
+		job->submissionList = sub->next;
+		killCount += 1;
+		}
+	    else
+	        {
+		missCount += 1;
+		}
 	    }
 	}
     }
-deathRowEnd();
-slReverse(&db->jobList);
+printf("%d running jobs stopped\n", killCount);
+if (missCount > 0)
+    printf("%d jobs not stopped - try another para stop in a little while\n",
+    	missCount);
 atomicWriteBatch(db, batch);
+}
+
+void paraStop(char *batch)
+/* Stop batch of jobs. */
+{
+sendChillMessage();	/* Remove waiting jobs first, it's faster. */
+paraStopAll(batch);
 }
 
 void printTimes(char *title, double seconds,  boolean showYears)
@@ -1291,64 +1379,68 @@ command = argv[1];
 batch = "batch";
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
-if (sameString(command, "create"))
+if (sameWord(command, "create") || sameWord(command, "creat"))
     {
     if (argc != 3)
         usage();
     paraCreate(batch, argv[2]);
     }
-else if (sameString(command, "check"))
+else if (sameWord(command, "check"))
     {
     paraCheck(batch);
     }
-else if (sameString(command, "push"))
+else if (sameWord(command, "push"))
     {
     paraPush(batch);
     }
-else if (sameString(command, "shove"))
+else if (sameWord(command, "shove"))
     {
     paraShove(batch);
     }
-else if (sameString(command, "make"))
+else if (sameWord(command, "make"))
     {
     if (argc != 3)
         usage();
     paraMake(batch, argv[2]);
     }
-else if (sameString(command, "try"))
+else if (sameWord(command, "try"))
     {
     maxPush = 10;
     paraPush(batch);
     }
-else if (sameString(command, "stop"))
+else if (sameWord(command, "stop"))
     {
     paraStop(batch);
     }
-else if (sameString(command, "hung"))
+else if (sameWord(command, "chill"))
+    {
+    paraChill(batch);
+    }
+else if (sameWord(command, "hung"))
     {
     paraListState(batch, jaHung);
     }
-else if (sameString(command, "crashed"))
+else if (sameWord(command, "crashed"))
     {
     paraListState(batch, jaCrashed);
     }
-else if (sameString(command, "failed"))
+else if (sameWord(command, "failed"))
     {
     paraListFailed(batch);
     }
-else if (sameString(command, "finished"))
+else if (sameWord(command, "finished"))
     {
     paraListState(batch, jaFinished);
     }
-else if (sameString(command, "problems") || sameString(command, "problem"))
+else if (sameWord(command, "problems") || sameWord(command, "problem"))
     {
     paraProblems(batch);
     }
-else if (sameString(command, "running"))
+else if (sameWord(command, "running"))
     {
     paraRunning(batch);
     }
-else if (sameString(command, "time") || sameString(command, "times"))
+else if (sameWord(command, "time") || sameWord(command, "times"))
     {
     paraTimes(batch);
     }

@@ -27,7 +27,7 @@ for (i=0; i<wordCount; ++i)
         dyStringAppend(dy, " ");
     dyStringAppend(dy, words[i]);
     }
-printf("%s = %d\n", dy->string, intExp(dy->string));
+printf("%s = %f\n", dy->string, doubleExp(dy->string));
 }
 
 int main(int argc, char *argv[])

@@ -1100,6 +1100,16 @@ int e = min(end1,end2);
 return e-s;
 }
 
+int positiveRangeIntersection(int start1, int end1, int start2, int end2)
+/* Return number of bases in intersection of two ranges, or
+ * zero if they don't intersect. */
+{
+int ret = rangeIntersection(start1,end1,start2,end2);
+if (ret < 0)
+    ret = 0;
+return ret;
+}
+
 bits32 byteSwap32(bits32 a)
 /* Return byte-swapped version of a */
 {

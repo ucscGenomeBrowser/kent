@@ -103,6 +103,7 @@ sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 %d -m %s",
 	tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
 uglyf("faFile %s, command %s\n", faFile, command);
 system(command);
+exit(0);
 }
 
 void outputWithBreaks(FILE *out, char *s, int size, int lineSize)

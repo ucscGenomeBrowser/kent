@@ -54,6 +54,7 @@ errAbort(
   "   parasol list machines - list machines in pool\n"
   "   parasol list jobs - list jobs one per line\n"
   "   parasol list users - list users one per line\n"
+  "   parasol list batches - list batches one per line\n"
   "   parasol status - summarize status of machines, jobs, and spoke daemons\n"
   );
 }
@@ -157,7 +158,6 @@ void removeMachine(char *machine)
 /* Tell hub to get rid of machine. */
 {
 char buf[512];
-mustBeRoot();
 sprintf(buf, "%s %s", "removeMachine", machine);
 commandHub(buf);
 }
@@ -285,24 +285,6 @@ for (job = jobList; job != NULL; job = job->next)
 jobInfoFreeList(&jobList);
 }
 
-void listJobs()
-/* Send list job command to hub and print. */
-{
-hubCommandAndPrint("listJobs");
-}
-
-void listMachines()
-/* Send list machines command to hub and print. */
-{
-hubCommandAndPrint("listMachines");
-}
-
-void listUsers()
-/* Send list users command to hub and print. */
-{
-hubCommandAndPrint("listUsers");
-}
-
 void status()
 /* Send status command to hub and print. */
 {
@@ -375,11 +357,13 @@ else if (sameString(command, "list"))
     if (argc != 1)
         usage();
     if (sameString(subType, "machine") || sameString(subType, "machines"))
-        listMachines();
+        hubCommandAndPrint("listMachines");
     else if (sameString(subType, "job") || sameString(subType, "jobs"))
-        listJobs();
+        hubCommandAndPrint("listJobs");
     else if (sameString(subType, "user") || sameString(subType, "users"))
-        listUsers();
+        hubCommandAndPrint("listUsers");
+    else if (sameString(subType, "batch") || sameString(subType, "batches"))
+        hubCommandAndPrint("listBatches");
     else
         usage();
     }

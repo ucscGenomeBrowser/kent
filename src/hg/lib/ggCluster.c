@@ -398,6 +398,7 @@ if (aMc->tStart > bMc->tStart)
     aMc->tStart = bMc->tStart;
 if (aMc->tEnd < bMc->tEnd)
     aMc->tEnd = bMc->tEnd;
+freez(&bMc->tName);
 freeMem(bMc);
 }
 
@@ -406,15 +407,14 @@ static struct ggMrnaCluster *clustersFromMas(struct ggMrnaAli *maList, struct dn
 {
 struct ggMrnaCluster *activeClusters = NULL;	/* List that can still add to. */
 struct ggMrnaCluster *finishedClusters = NULL;    /* List that's all done. */
-struct ggMrnaCluster *mc;
+struct ggMrnaCluster *mc = NULL;
 struct ggMrnaAli *ma;
 
 for (ma = maList; ma != NULL; ma = ma->next)
     {
-    struct ggMrnaCluster *mergableClusters, *newMc;
+    struct ggMrnaCluster *mergableClusters = NULL, *newMc = NULL;
     updateActiveClusters(&activeClusters, &finishedClusters, ma->strand, ma->tStart);
-    newMc = ggMrnaClusterOfOne(ma, genoSeq);
-    if (newMc)
+    newMc = ggMrnaClusterOfOne(ma, genoSeq);    if (newMc)
 	{
 	mergableClusters = findMergableClusters(&activeClusters, newMc);
 	if (mergableClusters == NULL)
@@ -444,7 +444,7 @@ return finishedClusters;
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci)
 /* Make a list of clusters from ci. */
 {
-struct ggMrnaCluster *mc;
+struct ggMrnaCluster *mc = NULL;
 slSort(&ci->maList, cmpGgMrnaAliTargetStart);
 mc =  clustersFromMas(ci->maList, ci->genoSeq);
 return mc;
@@ -473,6 +473,26 @@ for (da = *pDaList; da != NULL; da = next)
 *pDaList = NULL;
 }
 
+void maRefFree(struct maRef **pMaRef)
+{
+struct maRef *ma;
+if ((ma = *pMaRef) != NULL)
+    {
+    ggMrnaAliFreeList(&ma->ma);
+    }
+}
+
+void maRefFreeList(struct maRef **pMaRef)
+{
+struct maRef *ma, *next;
+for(ma = *pMaRef; ma != NULL; ma = ma->next)
+    {
+    next = ma->next;
+    maRefFree(&ma);
+    }
+*pMaRef = NULL;
+}
+
 static void freeMrnaCluster(struct ggMrnaCluster **pMc)
 /* Free a single mrna cluster */
 {
@@ -482,6 +502,7 @@ if ((mc = *pMc) != NULL)
     {
     slFreeList(&mc->refList);
     freeDenseAliInfoList(&mc->mrnaList);
+    freez(&mc->tName);
     freez(pMc);
     }
 }
@@ -491,7 +512,7 @@ void ggFreeMrnaClusterList(struct ggMrnaCluster **pMcList)
 {
 struct ggMrnaCluster *mc, *next;
 
-for (mc = *pMcList; mc != NULL; mc = next)
+for(mc = *pMcList; mc != NULL; mc = next)
     {
     next = mc->next;
     freeMrnaCluster(&mc);

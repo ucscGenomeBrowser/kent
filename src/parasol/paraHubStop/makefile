@@ -2,12 +2,12 @@
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = paraHubStop.o
 
 paraHubStop: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/paraHubStop
-	chmod 744 $(HOME)/bin/$(MACHTYPE)/paraHubStart
+	chmod 744 $(HOME)/bin/$(MACHTYPE)/paraHubStop

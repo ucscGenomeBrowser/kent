@@ -741,3 +741,11 @@
       control system.  Doing EST clustering on genome.
 441 - Refinements to parasol, and mouse browser.  Start of zoo
       browser.  Start of golden triangle code.
+442 - Much work on mouse/human alignment analysis.  Made pslPretty
+      and improved BLAT's ability to find small internal exons and
+      gfServer's network error handling.
+443 - Various odds and ends.  Increasingly you'll have to see the
+      CVS logs for details of what's going on as now 10 people work
+      on the code base.
+444 - Made web.c compile again.  Including CVS directories in the
+      archive

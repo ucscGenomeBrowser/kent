@@ -30,6 +30,20 @@ if (el != NULL)
     }
 }
 
+void axtFreeList(struct axt **pList)
+/* Free a list of dynamically allocated axt's */
+{
+struct axt *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    axtFree(&el);
+    }
+*pList = NULL;
+}
+
+
 struct axt *axtRead(struct lineFile *lf)
 /* Read in next record from .axt file and return it.
  * Returns NULL at EOF. */
@@ -219,7 +233,6 @@ else
     a.qSym = qSymStart;
     a.tSym = tSymStart;
     a.score = axtScore(&a, ss);
-    /* uglyf("subsetting %s %d %d %s %d %d to %s %d %d, score %d\n", axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->tName, newStart, newEnd, a.score); */
     axtWrite(&a, f);
     }
 }

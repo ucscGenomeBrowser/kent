@@ -18,9 +18,13 @@
 #include "nib.h"
 #include "web.h"
 #include "dbDb.h"
+#include "kxTok.h"
+#include "featureBits.h"
+
+/* main() sets this and calls hSetDb() before calling execute(): */
+char *database = NULL;		/* Which database? */
 
 /* Variables used by getFeatDna code */
-char *database = NULL;		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
@@ -28,6 +32,7 @@ boolean breakUp = FALSE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 char *position = NULL;
+struct cart *cart = NULL;
 
 static int blockIx = 0;	/* Index of block written. */
 
@@ -36,7 +41,6 @@ void showPage(char *errorMsg)
  Function to show the page if no suitable parameters are given
  */
 {
-char *database = cgiUsualString("db", hGetDb());
 char *organism = hOrganism(database);
 char *assemblyList[128];
 char *values[128];
@@ -45,7 +49,7 @@ struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 char *assembly = NULL;
 
-webStart("Genome Table Browser");
+webStart(cart, "Table Browser");
 
 puts(
      "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
@@ -181,6 +185,24 @@ these in the mouse genome. See the <A HREF=\"/goldenPath/help/hgTracksHelp.html\
     );
 }
 
+static boolean allLetters(char* s)
+/* returns true if the string only has letters number and underscores */
+{
+int i;
+for(i = 0; i < strlen(s); i++)
+	if(!isalnum(s[i]) && s[i] != '_')
+		return FALSE;
+
+return TRUE;
+}
+
+void checkIsAlpha(char *desc, char *word)
+/* make sure that the table name doesn't have anything "weird" in it */
+{
+if (!allLetters(word))
+	webAbort("Error", "Malformatted %s \"%s\".", desc, word);
+}
+
 char* getTableVar()
 {
 char* table  = cgiOptionalString("table");
@@ -197,13 +219,49 @@ if(table1 != 0 && strcmp(table1, "Choose table") == 0)
 	table1 = 0;
 
 if(table != 0)
-	return table;
+    return table;
 else if(table0 != 0)
 	return table0;
 else
 	return table1;
 }
 
+char* getTableName()
+{
+char *val, *ptr;
+	
+val = getTableVar();
+if (val == NULL)
+    return val;
+else if ((ptr = strchr(val, '.')) != NULL)
+    return ptr + 1;
+else
+    return val;
+}
+
+char* getTableDb()
+{
+char *val, *ptr;
+	
+val = cloneString(getTableVar());
+if ((ptr = strchr(val, '.')) != NULL)
+    *ptr = 0;
+return(val);
+}
+
+
+boolean tableExists(char *table)
+{
+return ((sameString(database, getTableDb()) && hTableExists(table)) ||
+		(sameString(hGetDb2(), getTableDb()) && hTableExists2(table)));
+}
+
+void checkTableExists(char *table)
+{
+if (! tableExists(table))
+	webAbort("No data", "Table %s (%s) does not exist in database %s.",
+			 getTableName(), table, getTableDb());
+}
 
 static boolean existsAndEqual(char* var, char* value)
 /* returns true is the given CGI var exists and equals value */
@@ -242,7 +300,7 @@ if ((pos = hgp->singlePos) != NULL)
     }
 else
     {
-    webStart("Genome Table Browser");
+    webStart(cart,  "Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
     webEnd();
@@ -252,23 +310,18 @@ freeDyString(&ui);
 }
 
 
-static boolean allLetters(char* s)
-/* returns true if the string only has letters number and underscores */
+static void printSelectOptions(struct hashEl *optList, char *name)
+/* this function is used to iterates over a hash el list and prints out
+ * the name in a select input form */
 {
-int i;
-for(i = 0; i < strlen(s); i++)
-	if(!isalnum(s[i]) && s[i] != '_')
-		return FALSE;
-
-return TRUE;
-}
-
-
-static void printTables(struct hashEl *hel)
-/* this function is used to iterates over a hash table and prints out
- * the name in a input form */
-{
-	printf("<OPTION>%s\n", hel->name);
+struct hashEl *cur;
+for (cur = optList;  cur != NULL;  cur = cur->next)
+	{
+	if(existsAndEqual(name, cur->name))
+		printf("<OPTION SELECTED>%s</OPTION>\n", cur->name);
+	else
+		printf("<OPTION>%s</OPTION>\n", cur->name);
+	}
 }
 
 
@@ -281,12 +334,53 @@ struct hashEl* b = *((struct hashEl **)elem2);
 return strcmp(a->name, b->name);
 }
 
+void getTableNames(char *dbName, struct sqlConnection *conn,
+				   struct hash *posTableHash, struct hash *nonposTableHash)
+/* iterate through all the tables and store the positional ones in a list */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+char name[128];
+
+strcpy(query, "SHOW TABLES");
+sr = sqlGetResult(conn, query);
+while((row = sqlNextRow(sr)) != NULL)
+	{
+	if(strcmp(row[0], "all_est") == 0 || strcmp(row[0], "all_mrna") == 0)
+		continue;
+
+	/* positional or non? */
+	if(hFindChromStartEndFieldsDb(dbName, row[0], query, query, query))
+		{
+		char chrom[32];
+		char post[32];
+
+		/* if table name is of the form, chr*_random_* or chr*_*: */
+		if(sscanf(row[0], "chr%32[^_]_random_%32s", chrom, post) == 2 ||
+			sscanf(row[0], "chr%32[^_]_%32s", chrom, post) == 2)
+			{
+			snprintf(name, sizeof(name), "%s.chrN_%s", dbName, post);
+			hashStoreName(posTableHash, cloneString(name));
+			}
+		else
+		    {
+			snprintf(name, sizeof(name), "%s.%s", dbName, row[0]);
+			hashStoreName(posTableHash, cloneString(name));
+			}
+		}
+	else
+		{
+		snprintf(name, sizeof(name), "%s.%s", dbName, row[0]);
+		hashStoreName(nonposTableHash, cloneString(name));
+		}
+	}
+sqlFreeResult(&sr);
+}
 
 void getTable()
 /* get the a table selection from the user */
 {
-char* database;
-
 char *chromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
@@ -295,24 +389,17 @@ char* position;
 char* freezeName;
 
 struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
-char query[256];
 
 struct hash *posTableHash = newHash(7);
 struct hashEl *posTableList;
 struct hash *nonposTableHash = newHash(7);
 struct hashEl *nonposTableList;
-
-struct hashEl *currentListEl;
+struct hash *fixedPosTableHash = newHash(7);
+struct hashEl *fixedPosTableList;
+struct hash *fixedNonposTableHash = newHash(7);
+struct hashEl *fixedNonposTableList;
 
 position = cgiOptionalString("position");
-
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
-hDefaultConnect();
-conn = hAllocConn();
 
 /* if the position information is not given, get it */
 if(position == NULL)
@@ -332,40 +419,23 @@ if(strcmp(position, "genome"))
     findPositionInGenome(position, &chromName, &winStart, &winEnd);
     }
 
-/* iterate through all the tables and store the positional ones in a list */
-strcpy(query, "SHOW TABLES");
-sr = sqlGetResult(conn, query);
-while((row = sqlNextRow(sr)) != NULL)
-	{
-	if(strcmp(row[0], "all_est") == 0 || strcmp(row[0], "all_mrna") == 0)
-		continue;
-
-	/* if they are positional, print them */
-	if(hFindChromStartEndFields(row[0], query, query, query))
-		{
-		char chrom[32];
-		char post[32];
-		char key[32];
-
-		/* if table name is of the form, chr*_random_* or chr*_* */
-		if(sscanf(row[0], "chr%32[^_]_random_%32s", chrom, post) == 2 ||
-			sscanf(row[0], "chr%32[^_]_%32s", chrom, post) == 2)
-			{
-			/* parse the name into chrN_* */
-			snprintf(key, 32, "chrN_%s", post);
-			/* and insert it into the hash table if it is not already there */
-			hashStoreName(posTableHash, key);
-			}
-		else
-			hashStoreName(posTableHash, row[0]);
-		}
-	else
-		{
-		hashStoreName(nonposTableHash, row[0]);
-		}
-	}
-sqlFreeResult(&sr);
+/* get table names from the database */
+conn = hAllocConn();
+getTableNames(database, conn, posTableHash, nonposTableHash);
+hFreeConn(&conn);
+/* get table names from hgFixed too */
+conn = sqlConnect("hgFixed");
+getTableNames("hgFixed", conn, fixedPosTableHash, fixedNonposTableHash);
 sqlDisconnect(&conn);
+/* get lists of names from the hashes and sort them */
+posTableList = hashElListHash(posTableHash);
+slSort(&posTableList, compareTable);
+nonposTableList = hashElListHash(nonposTableHash);
+slSort(&nonposTableList, compareTable);
+fixedPosTableList = hashElListHash(fixedPosTableHash);
+slSort(&fixedPosTableList, compareTable);
+fixedNonposTableList = hashElListHash(fixedNonposTableHash);
+slSort(&fixedNonposTableList, compareTable);
 
 /* print the form */
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
@@ -375,7 +445,10 @@ puts("<TR><TD>");
 /* print the location and a jump button */
 {
     char buf[256];
-    sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
+    if (sameString(position, "genome"))
+        strcpy(buf, position);
+    else
+        sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 
     puts("Choose a position: ");
     puts("</TD><TD>");
@@ -387,44 +460,20 @@ cgiMakeHiddenVar("phase", "table");
 puts("</TD></TR>");
 
 puts("<TR><TD>");
+
 /* get the list of tables */
 puts("Choose a table:");
 puts("</TD><TD>");
 puts("<SELECT NAME=table0 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-
-posTableList = hashElListHash(posTableHash);
-slSort(&posTableList, compareTable);
-
-nonposTableList = hashElListHash(nonposTableHash);
-slSort(&nonposTableList, compareTable);
-
-currentListEl = posTableList;
-while(currentListEl != 0)
-	{
-	if(existsAndEqual("table0", currentListEl->name))
-		printf("<OPTION SELECTED>%s</OPTION>\n", currentListEl->name);
-	else
-		printf("<OPTION>%s</OPTION>\n", currentListEl->name);
-
-	currentListEl = currentListEl->next;
-	}
+printSelectOptions(posTableList, "table0");
+printSelectOptions(fixedPosTableList, "table0");
 puts("</SELECT>");
 
 puts("<SELECT NAME=table1 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
-
-currentListEl = nonposTableList;
-while(currentListEl != 0)
-	{
-	if(existsAndEqual("table1", currentListEl->name))
-		printf("<OPTION SELECTED>%s</OPTION>\n", currentListEl->name);
-	else
-		printf("<OPTION>%s</OPTION>\n", currentListEl->name);
-
-	currentListEl = currentListEl->next;
-	}
-
+printSelectOptions(nonposTableList, "table1");
+printSelectOptions(fixedNonposTableList, "table1");
 puts("</SELECT>");
 
 puts("</TD></TR>");
@@ -432,7 +481,7 @@ puts("</TD></TR>");
 puts("<TR><TD>");
 puts("Choose an action: ");
 puts("</TD><TD>");
-puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
+puts("<INPUT TYPE=\"submit\" VALUE=\"Filter fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get all fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
 puts("</TD></TR>");
@@ -457,7 +506,7 @@ puts(
 	"<P>" "\n"
 	/*"The non-positional tables display all entries associated with the selected assembly -- there is no way to restrict them to chromosomes.  However there is a provision in the text box to add a single word restriction.  Thus, to see which species of macaque monkeys have contributed sequence data, selected the organism table, view all fields, and restrict the text box to the genus Macaca." "\n"
 	"<P>" "\n"*/
-	"For either type of table, a user not familiar with what the table offers should select \"Choose fields\".   Some tables offer many columns of data of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return.  If all the fields are wanted, shortcut this step by selecting \"Get all fields\".  If a chromosome and range are in the text box, \"Get DNA\" will retrieve genomic sequences in fasta format without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates." "\n"
+	"For either type of table, a user not familiar with what the table offers should select \"Filter fields\".   Some tables offer many columns of data of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return.  If all the fields are wanted, shortcut this step by selecting \"Get all fields\".  If a chromosome and range are in the text box, \"Get DNA\" will retrieve genomic sequences in fasta format without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates." "\n"
 );
 }
 
@@ -470,7 +519,7 @@ char selectChro[64];
 char chro[64];
 char post[64];
 
-table = getTableVar();
+table = getTableName();
 
 sscanf(chrom_name, "chr%64s", selectChro);
 
@@ -532,25 +581,24 @@ if(existsAndEqual("table", "Choose table"))
 /* get the real name of the table */
 parseTableName(table, choosenChromName);
 
-if(!hTableExists(table))
-	webAbort("No data", "%s There is no information in table %s for chromosome %s.", table, getTableVar(), choosenChromName);
-
 /* make sure that the table name doesn't have anything "weird" in it */
-if(!allLetters(table))
-	webAbort("Error", "Malformated table name.");
-	
+checkIsAlpha("table name", table);
+
+checkTableExists(table);
+
 /* get the name of the start and end fields */
-if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
+if(hFindChromStartEndFieldsDb(getTableDb(), table,
+							  chromFieldName, startName, endName))
 	{
         if(sameString(chromFieldName, ""))
             {
-            snprintf(query, 256, "SELECT * FROM %s WHERE %s >= %d AND %s <= %d",
-		table, startName, winStart, endName, winEnd);
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s < %d AND %s > %d",
+		table, startName, winEnd, endName, winStart);
             }
         else
             {
-            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s < %d AND %s > %d",
+		table, chromFieldName, choosenChromName, startName, winEnd, endName, winStart);
             }
         }
 else
@@ -558,8 +606,10 @@ else
     snprintf(query, 256, "SELECT * FROM %s ", table);
     }
 
-
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
@@ -575,7 +625,6 @@ webStartText();
 printf("#");
 while((field = sqlFieldName(sr)) != 0)
 	    printf("%s\t", field);
-
 printf("\n");
 
 /* print the data */
@@ -588,8 +637,40 @@ do
 	printf("\n");
 	}
 while((row = sqlNextRow(sr)) != NULL);
+
+if (sameString(database, getTableDb()))
+  hFreeConn(&conn);
+else
+  hFreeConn2(&conn);
 }
 
+/* Droplist menus for filtering on fields: */
+char *ddOpMenu[] =
+    {
+	"does",
+	"doesn't"
+    };
+int ddOpMenuSize = 2;
+
+char *logOpMenu[] =
+    {
+	"AND",
+	"OR"
+    };
+int logOpMenuSize = 2;
+
+char *cmpOpMenu[] =
+    {
+	"ignored",
+	"in range",
+	"<",
+	"<=",
+	"=",
+	"!=",
+	">=",
+	">"
+    };
+int cmpOpMenuSize = 8;
 
 void getChoosenFields()
 /* output a form that allows the user to choose what fields they want to download */
@@ -604,7 +685,6 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 char* field;
-char* database;
 char* freezeName;
 
 char startName[32];	/* the start and end names of the positional fields */
@@ -614,6 +694,10 @@ char *chromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
+char *oldVal;
+char *newVal;
+boolean checkAll;
+boolean clearAll;
 
 boolean allGenome = FALSE;	/* this flag is true if we are fetching the whole genome
 							   not just chrom by chrom */
@@ -624,11 +708,10 @@ position = cgiOptionalString("position");
 if(existsAndEqual("table0", "Choose table") && existsAndEqual("table1", "Choose table"))
 	webAbort("Missing table selection", "Please choose a table.");
 
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
-hDefaultConnect();
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 /* if the position information is not given, get it */
 if(position == NULL)
@@ -655,19 +738,17 @@ printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 
 /* take a first stab */
 //if(allGenome)
-	parseTableName(table, "chr22");
+	parseTableName(table, "chr1");
 //else
 //	parseTableName(table, chromName);
 
-if(!hTableExists(table))
-	webAbort("No data", "%s There is no information in table %s for chromosome %s.", table, getTableVar(), chromName);
-
 /* make sure that the table name doesn't have anything "weird" in it */
-if(!allLetters(table))
-	webAbort("Error", "Malformated table name.");
+checkIsAlpha("table name", table);
+
+checkTableExists(table);
 
 /* print the location and a jump button if the table is positional */
-if(hFindChromStartEndFields(table, query, query, query))
+if(hFindChromStartEndFieldsDb(getTableDb(), table, query, query, query))
 	{
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
@@ -678,35 +759,296 @@ else
 	cgiMakeHiddenVar("position", position);
 	}
 cgiMakeHiddenVar("db", database);
-cgiMakeHiddenVar("phase", "Choose fields");
+cgiMakeHiddenVar("phase", "Filter fields");
 
 /* print the name of the selected table */
-printf("<H3>Track: %s</H3>\n", getTableVar());
+printf("<H3>Table: %s</H3>\n", getTableVar());
 
 snprintf(query, 256, "DESCRIBE %s", table);
 //puts(query);
 sr = sqlGetResult(conn, query);
 
-printf("<INPUT TYPE=\"hidden\" NAME=\"table\" VALUE=\"%s\">\n", getTableVar());
-puts("<TABLE><TR><TD>");
+cgiMakeHiddenVar("table", getTableVar());
+puts("<TABLE><TR><TD>\n");
+cgiMakeButton("submit", "Check All");
+cgiMakeButton("submit", "Clear All");
+puts("</TD></TR><TR><TD><TABLE>\n");
+checkAll = existsAndEqual("submit", "Check All") ? TRUE : FALSE;
+clearAll = existsAndEqual("submit", "Clear All") ? TRUE : FALSE;
 while((row = sqlNextRow(sr)) != NULL)
 	{
 	char name[126];
+	puts("<TR><TD> ");
 	snprintf(name, 126, "field_%s", row[0]);
-	if(existsAndEqual(name, "on"))
-		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s<BR>\n", name, row[0]);
+	if (checkAll || (existsAndEqual(name, "on") && !clearAll))
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s\n", name, row[0]);
 	else
-		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s<BR>\n", name, row[0]);
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s\n", name, row[0]);
+	/* Provide a filter interface */
+	puts("</TD><TD>");
+	if (! strstr(row[1], "blob"))
+  	    {
+	    if (strstr(row[1], "char"))
+	        {
+			snprintf(name, sizeof(name), "dd_%s", row[0]);
+			oldVal = cgiOptionalString(name);
+			newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+			  ddOpMenu[0];
+			cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, newVal);
+			puts(" match </TD><TD>\n");
+			newVal = "*";
+	        }
+	    else
+	        {
+			puts(" is \n");
+			snprintf(name, sizeof(name), "cmp_%s", row[0]);
+			oldVal = cgiOptionalString(name);
+			newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+			  cmpOpMenu[0];
+			cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, newVal);
+			puts("</TD><TD>\n");
+			newVal = "";
+	        }
+	    snprintf(name, sizeof(name), "pat_%s", row[0]);
+	    oldVal = cgiOptionalString(name);
+	    newVal = ((oldVal != NULL) && !clearAll) ? oldVal : newVal;
+	    cgiMakeTextVar(name, newVal, 20);
+	    snprintf(name, sizeof(name), "log_%s", row[0]);
+	    oldVal = cgiOptionalString(name);
+	    newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+		  logOpMenu[0];
+	    cgiMakeDropList(name, logOpMenu, logOpMenuSize, newVal);
+	    }
+	else
+	    puts("</TD><TD>\n");
+	puts("</TD></TR>\n");
 	}
-
+puts("</TABLE>\n");
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 	
 puts("<INPUT TYPE=\"submit\" NAME=\"phase\" VALUE=\"Get these fields\">");
 
+puts(
+"<P>\n"
+"By default, all lines in the specified position range will be returned. \n"
+"To restrict the number of lines that are returned, you may enter \n"
+"patterns with wildcards for each text field, and/or enter range \n"
+"restrictions for numeric fields. \n"
+"</P><P>\n"
+"Wildcards are \"*\" (to match \n"
+"0 or more characters) and \"?\" (to match a single character).  \n"
+"Each word in a text field box will be treated as a pattern to match \n"
+"against that field (implicit OR).  If any pattern matches, that field \n"
+"matches. \n"
+"</P><P>\n"
+"For numeric fields, enter a single number for operators such as &lt;, \n"
+"&gt;, != etc.  Enter two numbers (start and end) separated by a \"-\" or \n"
+"\",\" for \"in range\". \n"
+"</P><P>\n"
+"Different fields' match criteria can be combined by selecting AND/OR \n"
+"from the boxes. OR's have precedence: if <em>any</em> field marked OR \n"
+"matches, then the line matches.  Otherwise, if <em>all</em> fields marked \n"
+"AND match, the line matches. \n"
+"</P>\n"
+);
+
 puts("</TD></TR></TABLE>");
 puts("</FORM>");
-sqlDisconnect(&conn);
 
 webEnd();
+}
+
+
+void parseNum(char *fieldName, struct kxTok **tok, struct dyString *q)
+{
+if (*tok == NULL)
+    webAbort("Error", "Parse error when reading number for field %s.",
+			 fieldName);
+
+if ((*tok)->type == kxtString)
+    {
+	if (! isdigit((*tok)->string[0]))
+	    webAbort("Error", "Parse error when reading number for field %s.",
+				 fieldName);
+	dyStringAppend(q, (*tok)->string);
+	*tok = (*tok)->next;
+	}
+else
+    {
+	webAbort("Error", "Parse error when reading number for field %s: Incorrect token type %d for token \"%s\"",
+			 fieldName, (*tok)->type, (*tok)->string);
+	}
+}
+
+void constrainNumber(char *fieldName, char *op, char *pat, char *log,
+					 struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+
+if (fieldName == NULL || op == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (don't expect wildcards) */
+tokPtr = tokList = kxTokenize(pat, FALSE);
+
+if (clause->stringSize > 0)
+	dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringPrintf(clause, "(%s %s ", fieldName, op);
+parseNum(fieldName, &tokPtr, clause);
+dyStringAppend(clause, ")");
+
+slFreeList(&tokList);
+}
+
+void constrainRange(char *fieldName, char *pat, char *log,
+					struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+
+if (fieldName == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (don't expect wildcards) */
+tokPtr = tokList = kxTokenize(pat, FALSE);
+
+if (clause->stringSize > 0)
+    dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringPrintf(clause, "((%s >= ", fieldName);
+parseNum(fieldName, &tokPtr, clause);
+dyStringPrintf(clause, ") && (%s <= ", fieldName);
+while (tokPtr != NULL && (tokPtr->type == kxtSub ||
+						  tokPtr->type == kxtPunct))
+tokPtr = tokPtr->next;
+parseNum(fieldName, &tokPtr, clause);
+dyStringAppend(clause, "))");
+
+slFreeList(&tokList);
+}
+
+void constrainPattern(char *fieldName, char *dd, char *pat, char *log,
+					  struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+boolean needOr = FALSE;
+char *cmp, *or, *ptr;
+
+if (fieldName == NULL || dd == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (do allow wildcards) */
+tokList = kxTokenize(pat, TRUE);
+
+/* The subterms are joined by OR if dd="does", AND if dd="doesn't" */
+or  = sameString(dd, "does") ? " OR " : " AND ";
+cmp = sameString(dd, "does") ? "LIKE"   : "NOT LIKE";
+
+if (clause->stringSize > 0)
+    dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringAppend(clause, "(");
+for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
+    {
+	if (tokPtr->type == kxtWildString || tokPtr->type == kxtString ||
+		/* Allow these types for strand matches too: */
+		tokPtr->type == kxtSub || tokPtr->type == kxtAdd)
+	    {
+		if (needOr)
+			dyStringAppend(clause, or);
+		/* Replace normal wildcard characters with SQL: */
+		while ((ptr = strchr(tokPtr->string, '?')) != NULL)
+			*ptr = '_';
+		while ((ptr = strchr(tokPtr->string, '*')) != NULL)
+			*ptr = '%';
+		dyStringPrintf(clause, "(%s %s \"%s\")",
+					   fieldName, cmp, tokPtr->string);
+		needOr = TRUE;
+		}
+	else if (tokPtr->type == kxtEnd)
+	    break;
+	else
+	    {
+		webAbort("Error", "Match pattern parse error for field %s: bad token type (%d) for this word: \"%s\".",
+				 fieldName, tokPtr->type, tokPtr->string);
+		}
+	}
+dyStringAppend(clause, ")");
+
+slFreeList(&tokList);
+}
+
+char *constrainFields()
+/* If the user specified constraints, append SQL conditions (suitable
+ * for a WHERE clause) to q. */
+{
+struct cgiVar *current;
+struct dyString *orClause = newDyString(512);
+struct dyString *andClause = newDyString(512);
+struct dyString *clause;
+char *fieldName;
+char *dd, *cmp, *pat;
+char varName[128];
+char *ret;
+
+/* Lump everything with a logical operator of "OR" into an OR clause 
+ * that will take precedence over the AND clause.... */
+dyStringClear(orClause);
+dyStringClear(andClause);
+for (current = cgiVarList();  current != NULL;  current = current->next)
+    {
+	/* Look for logical operators (AND/OR) associated with each field. */
+	if (startsWith("log_", current->name))
+	    {	
+		fieldName = current->name + strlen("log_");
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", fieldName);
+		snprintf(varName, sizeof(varName), "dd_%s", fieldName);
+		dd = cgiOptionalString(varName);
+		snprintf(varName, sizeof(varName), "cmp_%s", fieldName);
+		cmp = cgiOptionalString(varName);
+		snprintf(varName, sizeof(varName), "pat_%s", fieldName);
+		pat = cgiOptionalString(varName);
+		/* If it's a null constraint, skip it. */
+		if ( (dd != NULL &&
+			  (pat == NULL || pat[0] == 0 ||
+			   sameString(trimSpaces(pat), "*"))) ||
+			 (cmp != NULL && sameString(cmp, "ignored")) )
+  		    continue;
+		/* Otherwise, expect it to be a well-formed constraint and tack 
+		 * it on to the appropriate clause. */
+		clause = sameString(current->val, "OR") ? orClause : andClause;
+		if (cmp != NULL && sameString(cmp, "in range"))
+		    constrainRange(fieldName, pat, current->val, clause);
+		else if (cmp != NULL)
+		    constrainNumber(fieldName, cmp, pat, current->val, clause);
+		else
+		    constrainPattern(fieldName, dd, pat, current->val, clause);
+		}
+	}
+ if (andClause->stringSize > 0)
+     dyStringAppend(andClause, ")");
+ if (orClause->stringSize > 0 && andClause->stringSize > 0)
+     dyStringAppend(orClause, " OR ");
+ if (orClause->stringSize > 0)
+    {
+	dyStringAppend(orClause, andClause->string);
+	dyStringAppend(orClause, ")");
+    }
+ else
+    {
+	dyStringAppend(orClause, andClause->string);
+	}
+ret = cloneString(orClause->string);
+freeDyString(&orClause);
+freeDyString(&andClause);
+return ret;
 }
 
 
@@ -731,6 +1073,7 @@ char *choosenChromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
+char *constraints = NULL;
 
 /* if the position information is not given, get it */
 position = cgiOptionalString("position");
@@ -754,12 +1097,10 @@ if(strcmp(position, "genome"))
 /* get the real name of the table */
 parseTableName(table, choosenChromName);
 
-if(!hTableExists(table))
-	webAbort("No data", "%s There is no information in table %s for chromosome %s.", table, getTableVar(), choosenChromName);
-
 /* make sure that the table name doesn't have anything "weird" in it */
-if(!allLetters(table))
-	webAbort("Error", "Malformated table name.");
+checkIsAlpha("table name", table);
+
+checkTableExists(table);
 
 strcpy(query, "SELECT");
 
@@ -768,10 +1109,8 @@ while(current != 0)
 	{
 	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
 		{	
-		/* make sure that the field names don't have anything "weird" in them */
-		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Error", "Malformated field name.");
-
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", current->name + strlen("field_"));
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
 		}
@@ -795,10 +1134,8 @@ while(current != 0)
 	{
 	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
 		{	
-		/* make sure that the field names don't have anything "weird" in them */
-		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Error", "Malformated field name.");
-
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", current->name + strlen("field_"));
 		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
 		}
 
@@ -807,19 +1144,34 @@ while(current != 0)
 
 sprintf(query, "%s FROM %s", query, table);
 
+constraints = constrainFields();
+
 /* get the name of the start and end fields */
-if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
+if(hFindChromStartEndFieldsDb(getTableDb(), table,
+							  chromFieldName, startName, endName))
 	{
 	/* build the rest of the query */
         if(sameString(chromFieldName, ""))
-            sprintf(query, "%s WHERE %s >= %d AND %s <= %d",
-                            query, startName, winStart, endName, winEnd);
+            sprintf(query, "%s WHERE %s < %d AND %s > %d",
+                            query, startName, winEnd, endName, winStart);
         else
-            sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-                            query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+            sprintf(query, "%s WHERE %s = \"%s\" AND %s < %d AND %s > %d",
+                            query, chromFieldName, choosenChromName,
+                            startName, winEnd, endName, winStart);
+		/* Add constraints (if any) that the user specified. */
+		if (constraints != NULL && constraints[0] != 0)
+			sprintf(query, "%s AND %s", query, constraints);
 	}
-	
-conn = hAllocConn();
+else
+    {
+		/* Add constraints (if any) that the user specified. */
+		if (constraints != NULL && constraints[0] != 0)
+			sprintf(query, "%s WHERE %s", query, constraints);
+    }	
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
@@ -829,7 +1181,7 @@ if(row == 0)
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
-//puts(query);
+// printf("# query: %s\n", query);
 /* print the field names */
 printf("#");
 while((field = sqlFieldName(sr)) != 0)
@@ -847,6 +1199,11 @@ do
 	printf("\n");
 	}
 while((row = sqlNextRow(sr)) != NULL);
+
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 }
 
 
@@ -854,22 +1211,22 @@ void getGenomeWideNonSplit()
 /* output the info. for a non-split table (i.e. not chrN_* tables) */
 {
 struct cgiVar* current = cgiVarList();
-char query[256];
+char query[4096];
 int i;
 int numberColumns;
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 char* field;
-char* database;
+char *constraints;
 
-char* table = getTableVar();
+char* table = getTableName();
 
 /* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
-hDefaultConnect();
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 strcpy(query, "SELECT");
 
@@ -878,10 +1235,8 @@ while(current != 0)
 	{
 	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
 		{	
-		/* make sure that the field names don't have anything "weird" in them */
-		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Error", "Malformated field name.");
-
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", current->name + strlen("field_"));
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
 		}
@@ -918,7 +1273,11 @@ while(current != 0)
 /* build the rest of the query */
 sprintf(query, "%s FROM %s", query, table);
 
-conn = hAllocConn();
+/* Add constraints (if any) that the user specified. */
+constraints = constrainFields();
+if (constraints != NULL && constraints[0] != 0)
+	sprintf(query, "%s WHERE %s", query, constraints);
+
 //puts(query);
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
@@ -947,6 +1306,11 @@ do
 	printf("\n");
 	}
 while((row = sqlNextRow(sr)) != NULL);
+
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 }
 
 
@@ -959,7 +1323,6 @@ int numberColumns;
 struct sqlResult *sr;
 char **row;
 char* field;
-char* database;
 
 /* if there is no table, do nothing */
 if(!sqlTableExists(conn, tableName))
@@ -995,7 +1358,7 @@ void getGenomeWideSplit()
 {
 struct cgiVar* current;
 char fields[256] = "";	/* the fields part of the query */
-char query[256];
+char query[4096];
 int i;
 int c;
 int numberColumns;
@@ -1003,16 +1366,15 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 char* field;
-char* database;
+char *constraints;
 
-char* table = getTableVar();
+char* table = getTableName();
 char parsedTableName[256];
 
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
-hDefaultConnect();
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 /* the first field selected is special */
 current = cgiVarList();
@@ -1020,10 +1382,8 @@ while(current != 0)
 	{
 	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
 		{	
-		/* make sure that the field names don't have anything "weird" in them */
-		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Error", "Malformated field name.");
-
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", current->name + strlen("field_"));
 		sprintf(fields, "%s %s", fields, current->name + strlen("field_"));
 		break; /* only process the first field this way */
 		}
@@ -1047,10 +1407,8 @@ while(current != 0)
 	{
 	if(strstr(current->name, "field_") == current->name && strcmp(current->val, "on") == 0)
 		{	
-		/* make sure that the field names don't have anything "weird" in them */
-		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Error", "Malformated field name.");
-
+		/* make sure that the field name doesn't have anything "weird" in it */
+		checkIsAlpha("field name", current->name + strlen("field_"));
 		sprintf(fields, "%s, %s", fields, current->name + strlen("field_"));
 		}
 
@@ -1063,57 +1421,88 @@ table = strstr(table, "_");
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
+constraints = constrainFields();
+
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+   snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, TRUE);
 
 snprintf(parsedTableName, 256, "chr%d_random%s", 1, table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 for(c  = 2; c <= 22; c++)
 	{
 	snprintf(parsedTableName, 256, "chr%d%s", c, table); 
-	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName); 
+	if (constraints != NULL && constraints[0] != 0)
+	    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 	outputTabData(query, parsedTableName, conn, FALSE);
 	snprintf(parsedTableName, 256, "chr%d_random%s", c, table); 
-	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName); 
+	if (constraints != NULL && constraints[0] != 0)
+	    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 	outputTabData(query, parsedTableName, conn, FALSE);
 	}
 
 snprintf(parsedTableName, 256, "chr%s%s", "X", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "X", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "Y", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "Y", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "NA", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "NA", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "UL", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "UL", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
+
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 }
 
 void getSomeFieldsGenome()
 /* get the fields that the user choose for the genome-wide informations */
 {
-char* table = getTableVar();
+char* table = getTableName();
 	
 if(strstr(table, "chrN_") == table)
 	{
@@ -1135,25 +1524,27 @@ char* table;
 char query[256];
 struct sqlConnection *conn;
 
-table = getTableVar();
+table = getTableName();
 
 /* make sure that the table name doesn't have anything "weird" in it */
-if(!allLetters(table))
-	{
-	webAbort("Error", "Malformated table name.");
-	//printf("Content-Type: text/plain\n\n");
-	//printf("Malformated table name.");
-	return;
-	}
+checkIsAlpha("table name", table);
 
 /* get the name of the start and end fields */
 snprintf(query, 256, "SELECT * FROM %s", table);
 
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
 outputTabData(query, table, conn, TRUE);
+
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 }
 
 
@@ -1161,17 +1552,15 @@ void getAllGenomeWideSplit()
 {
 char query[256];
 struct sqlConnection *conn;
-char* database;
 int c;
 
-char* table = getTableVar();
+char* table = getTableName();
 char parsedTableName[256];
 
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
-hDefaultConnect();
-conn = hAllocConn();
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 /* build the rest of the query */
 table = strstr(table, "_");
@@ -1224,11 +1613,16 @@ outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "UL", table);
 snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
+
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 }
 
 void getAllFieldsGenome()
 {
-char* table = getTableVar();
+char* table = getTableName();
 	
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
@@ -1250,7 +1644,7 @@ else
 }
 
 
-char *makeFaStartLine(char *chrom, char *table, int start, int size)
+char *makeFaStartLine(char *chrom, char *table, char *name, int start, int size, char strand)
 /* Create fa start line. */
 {
 char faName[128];
@@ -1258,11 +1652,15 @@ static char faStartLine[512];
 
 ++blockIx;
 if (startsWith("chr", table))
-    sprintf(faName, "%s_%d", table, blockIx);
+    sprintf(faName, "%s", table);
 else
-    sprintf(faName, "%s_%s_%d", chrom, table, blockIx);
-sprintf(faStartLine, "%s %s %s %d %d", 
-	faName, database, chrom, start, start+size);
+    sprintf(faName, "%s_%s", chrom, table);
+if (name != NULL)
+    sprintf(faName, "%s_%s", faName, name);
+sprintf(faName, "%s_%d", faName, blockIx);
+sprintf(faStartLine, "%s %s %s %d %d%s", 
+	faName, database, chrom, start+1, start+size,
+		(strand == '-' ? " (reverse complemented)" : ""));
 return faStartLine;
 }
 
@@ -1279,7 +1677,7 @@ else
 
 
 void outputDna(FILE *f, char *chrom, char *table, int start, int size, char *dna, 
-	char *nibFileName, FILE *nibFile, int nibSize, char strand)
+	char *nibFileName, FILE *nibFile, int nibSize, char strand, char *name)
 /* Output DNA either directly from nib or by upper-casing DNA. */
 {
 if (merge >= 0)
@@ -1289,13 +1687,14 @@ else
     struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
     if (strand == '-')
         reverseComplement(seq->dna, size);
-    writeOut(f, chrom, start, size, strand, seq->dna, makeFaStartLine(chrom, table, start, size));
+    writeOut(f, chrom, start, size, strand, seq->dna,
+			 makeFaStartLine(chrom, table, name, start, size, strand));
     freeDnaSeq(&seq);
     }
 }
 
 
-void chromFeatDna(char *table, char *chrom, FILE *f)
+void chromFeatDna(char *table, char *chrom, FILE *f, char *fbSpec)
 /* chromFeatDna - Get dna for a type of feature on one chromosome. */
 {
 /* Get chromosome in lower case case.  If merging set bits that 
@@ -1303,10 +1702,11 @@ void chromFeatDna(char *table, char *chrom, FILE *f)
  * for blocks of lower upper case and output them. If not merging
  * then just output dna for features directly. */
 struct dyString *query = newDyString(512);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 char chromField[32], startField[32], endField[32];
+char nameField[32], strandField[32];
 struct dnaSeq *seq = NULL;
 DNA *dna = NULL;
 int s,e,sz,i,size;
@@ -1318,8 +1718,14 @@ int nibSize;
 
 s = size = 0;
 
-if (!hFindChromStartEndFields(table, chromField, startField, endField))
+if (!hFindMoreFieldsDb(getTableDb(), table, chromField, startField, endField,
+					   nameField, strandField))
     webAbort("Missing field in table", "Couldn't find chrom/start/end fields in table");
+
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
 
 if (merge >= 0)
     {
@@ -1337,6 +1743,7 @@ if (breakUp)
     {
     if (sameString(startField, "tStart"))
 	{
+	boolean isBinned = hIsBinned(table);
 	dyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
 	    table, chromStart, chromEnd);
 	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
@@ -1345,11 +1752,7 @@ if (breakUp)
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-		char trash[32];
-		boolean isBinned;
 		struct psl *psl;
-		
-		hFindFieldsAndBin(table, trash, trash, trash, &isBinned);
 		
 	    psl = pslLoad(row + isBinned);
 	    if (psl->strand[1] == '-')	/* Minus strand on target */
@@ -1359,14 +1762,15 @@ if (breakUp)
 		     {
 		     sz = psl->blockSizes[i];
 		     s = tSize - (psl->tStarts[i] + sz);
-		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '-');
+		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile,
+					   nibSize, '-', NULL);
 		     }
 		}
 	    else
 		{
 		for (i=0; i<psl->blockCount; ++i)
 		     outputDna(f, chrom, table, psl->tStarts[i], psl->blockSizes[i], 
-			    dna, nibFileName, nibFile, nibSize, '+');
+					   dna, nibFileName, nibFile, nibSize, '+', NULL);
 		}
 	    pslFree(&psl);
 	    }
@@ -1387,7 +1791,8 @@ if (breakUp)
 		 s = gp->exonStarts[i];
 		 sz = gp->exonEnds[i] - s;
 		 outputDna(f, chrom, table, 
-		    s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0]);
+				   s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0],
+				   NULL);
 		 }
 	    genePredFree(&gp);
 	    }
@@ -1397,24 +1802,74 @@ if (breakUp)
         webAbort("Error", "Can only use breakUp parameter with psl or genePred formatted tables");
 	}
     }
+else if (fbSpec != NULL && fbSpec[0] != 0)
+    {
+	struct featureBits *fbList, *fbPtr;
+	char fbTQ[256];
+	char table2[128];
+	char *ptr;
+
+	strcpy(table2, table);
+	/* Make sure this table will be recognized by hTrackInfo: */
+	if (startsWith("chr", table))
+	    {
+	    if ((ptr = strchr(table, '_')) != NULL)
+	        {
+		ptr++;
+		if (startsWith("random", ptr))
+		    {
+		    if ((ptr = strchr(ptr, '_')) != NULL)
+		        {
+			ptr++;
+			strcpy(table2, ptr);
+			}
+		    }
+		else
+		    strcpy(table2, ptr);
+		}
+	    }
+	snprintf(fbTQ, sizeof(fbTQ), "%s:%s", table2, fbSpec);
+	fbList = fbGetRange(fbTQ, chrom, chromStart, chromEnd);
+	if (fbList == NULL)
+	  printf("# Your query produced no results.\n");
+	for (fbPtr = fbList;  fbPtr != NULL;  fbPtr = fbPtr->next)
+	    {
+		s = fbPtr->start;
+		e = fbPtr->end;
+		sz = e - s;
+		if (seq != NULL && (sz < 0 || e >= size))
+		    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)",
+					 s, e, chrom, size);
+		outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize,
+				  fbPtr->strand, firstWordInLine(fbPtr->name));
+		}
+	featureBitsFreeList(&fbList);
+	}
 else
     {
-    dyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
-	    startField, endField, table,
-	    startField, chromStart, endField, chromEnd);
+	char strand;
+    dyStringPrintf(query, "select %s,%s", startField, endField);
+	if (strandField[0] != 0)
+	    dyStringPrintf(query, ",%s", strandField);
+	dyStringPrintf(query, " from %s where %s < %d and %s > %d", 
+				   table, startField, chromEnd, endField, chromStart);
     dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
     if (where != NULL)
-	dyStringPrintf(query, " and %s", where);
+	    dyStringPrintf(query, " and %s", where);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	s = sqlUnsigned(row[0]);
-	e = sqlUnsigned(row[1]);
-	sz = e - s;
-	if (seq != NULL && (sz < 0 || e >= size))
-	    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
-	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
-	}
+	    {
+	    s = sqlUnsigned(row[0]);
+		e = sqlUnsigned(row[1]);
+		strand = '?';
+		if (strandField[0] != 0 && row[2] != NULL)
+		    strand = row[2][0];
+		sz = e - s;
+		if (seq != NULL && (sz < 0 || e >= size))
+		    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
+		outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize,
+				  strand, NULL);
+		}
     }
 
 /* Merge nearby upper case blocks. */
@@ -1451,24 +1906,28 @@ if (merge >= 0)
 	    {
 	    e = i;
 	    sz = e - s;
-	    writeOut(f, chrom, s, sz, '+', dna+s, makeFaStartLine(chrom, table, s, sz));
+	    writeOut(f, chrom, s, sz, '+', dna+s,
+				 makeFaStartLine(chrom, table, NULL, s, sz, '+'));
 	    }
 	lastIsUpper = isUpper;
 	}
     }
 
-hFreeConn(&conn);
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 freeDnaSeq(&seq);
 carefulClose(&nibFile);
 }
 
 
-void getFeatDna(char *table, char *chrom, char *outName)
+void getFeatDna(char *table, char *chrom, char *outName, char *fbSpec)
 /* getFeatDna - Get dna for a type of feature an all relevant chromosomes. */
 {
 char chrTableBuf[256];
 struct slName *chromList = NULL, *chromEl;
-boolean chromSpecificTable = !hTableExists(table);
+boolean chromSpecificTable = !tableExists(table);
 char *chrTable = (chromSpecificTable ? chrTableBuf : table);
 FILE *f = mustOpen(outName, "w");
 boolean toStdout = (sameString(outName, "stdout"));
@@ -1484,13 +1943,13 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     if (chromSpecificTable)
         {
 	sprintf(chrTable, "%s_%s", chrom, table);
-	if (!hTableExists(table))
+	if (!tableExists(table))
 	    webAbort("Cannot find table", "table %s (and %s) don't exist in %s", table, 
 	         chrTable, database);
 	}
     if (!toStdout)
         printf("Processing %s %s\n", chrTable, chrom);
-    chromFeatDna(chrTable, chrom, f);
+    chromFeatDna(chrTable, chrom, f, fbSpec);
     }
 carefulClose(&f);
 if (!toStdout)
@@ -1501,13 +1960,15 @@ if (!toStdout)
 void getDNA()
 /* get the DNA for the given position */
 {
-char* table = getTableVar();
+char* table = getTableName();
 char* position = cgiString("position");
 char *choosenChromName;		/* Name of chromosome sequence . */
 int winStart;				/* Start of window in sequence. */
 int winEnd;					/* End of window in sequence. */
 char parsedTableName[256];
 int c;
+char *fbQual;
+char fbSpec[64];
 
 /* if they haven't choosen a positional table, tell them */
 if(existsAndEqual("table0", "Choose table"))
@@ -1519,9 +1980,6 @@ if(existsAndEqual("table", "Choose table"))
 	webAbort("Missing table selection", "Please choose a table.");
 	}
 	
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
@@ -1541,8 +1999,113 @@ if(strcmp(position, "genome"))
 	}
 
 /* make sure that the table name doesn't have anything "weird" in it */
-if(!allLetters(table))
-	webAbort("Error", "Malformated table name.");
+checkIsAlpha("table name", table);
+
+/* If this table is something featureBits-able, then offer the user 
+ * featureBits options (unless we already did). */
+fbQual  = cgiOptionalString("fbQual");
+/* Make sure we can find this in trackDb: */
+if (startsWith("chrN_", table))
+    strcpy(parsedTableName, table+strlen("chrN_"));
+else
+    strcpy(parsedTableName, table);
+if (fbQual == NULL && fbUnderstandTrack(parsedTableName))
+    {
+	struct trackDb *tdb;
+	boolean doAll=FALSE, doIntron=FALSE;
+	struct sqlConnection *conn;
+
+	if (sameString(database, getTableDb()))
+	    conn = hAllocConn();
+	else
+	    conn = hAllocConn2();
+    /* Figure out what type of table we have so we know what to offer: */
+	tdb = hTrackInfo(conn, parsedTableName);
+	if (startsWith("genePred", tdb->type))
+	    doAll = TRUE;
+	else if (startsWith("bed", tdb->type) &&
+			 (atoi(tdb->type + strlen("bed ")) >= 12))
+	    doIntron = TRUE;
+	if (sameString(database, getTableDb()))
+	    hFreeConn(&conn);
+	else
+	    hFreeConn2(&conn);
+	webStart(cart, "Table Browser: Select Gene Regions for %s", table);
+	puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
+	puts("<H3> Select Gene Regions: </H3>\n");
+	puts("<TABLE><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "whole", TRUE);
+	puts(" Whole Gene </TD><TD> ");
+	puts(" </TD></TR><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "exon", FALSE);
+	puts(" Exons plus </TD><TD> ");
+	cgiMakeTextVar("fbExonBases", "0", 8);
+	puts(" bases at each end </TD></TR><TR><TD>\n");
+  	if (doIntron || doAll)
+	    {
+		cgiMakeRadioButton("fbQual", "intron", FALSE);
+		puts(" Introns plus </TD><TD> ");
+		cgiMakeTextVar("fbIntronBases", "0", 8);
+		puts(" bases at each end </TD></TR><TR><TD>\n");
+		}
+	if (doAll)
+	    {
+		cgiMakeRadioButton("fbQual", "cds", FALSE);
+		puts(" Coding Exons </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		cgiMakeRadioButton("fbQual", "utr3", FALSE);
+		puts(" 3' UTR </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		cgiMakeRadioButton("fbQual", "utr5", FALSE);
+		puts(" 5' UTR </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		}
+	cgiMakeRadioButton("fbQual", "upstream", FALSE);
+	puts(" Upstream by </TD><TD> ");
+	cgiMakeTextVar("fbUpBases", "200", 8);
+	puts(" bases </TD></TR><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "end", FALSE);
+	puts(" Downstream by </TD><TD> ");
+	cgiMakeTextVar("fbDownBases", "200", 8);
+	puts(" bases </TD></TR></TABLE>");
+	cgiMakeHiddenVar("db", database);
+	cgiMakeHiddenVar("phase", "Get DNA");
+	cgiMakeHiddenVar("position", position);
+	cgiMakeHiddenVar("table", getTableVar());
+	cgiMakeButton("submit", "Submit");
+	puts("</FORM>\n");
+	puts("<P>");
+	puts("One of the above options may be chosen to restrict the ");
+	puts("regions for which DNA will be retrieved.  For exon");
+	if (doIntron || doAll)
+	    puts(" and intron");
+	puts(", positive numbers extend the exon");
+	if (doIntron || doAll)
+	    puts("/intron ");
+	puts("range at ");
+	puts("both ends and negative numbers cut in at both ends. ");
+	puts("For upstream and downstream, genes that are not complete ");
+	puts("are excluded. ");
+	puts("</P>");
+	webEnd();
+	return;
+	}
+
+/* If featureBits options have been specified, lump them into a string 
+ * that featureBits will parse. */
+if (fbQual == NULL || sameString(fbQual, "whole"))
+    fbSpec[0] = 0;
+else if (sameString(fbQual, "exon"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbExonBases"));
+else if (sameString(fbQual, "intron"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual,
+			 cgiString("fbIntronBases"));
+else if (sameString(fbQual, "upstream"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbUpBases"));
+else if (sameString(fbQual, "end"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbDownBases"));
+else
+    strcpy(fbSpec, fbQual);
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
@@ -1559,33 +2122,33 @@ if(existsAndEqual("position", "genome"))
 		for(c  = 1; c <= 22; c++)
 			{
 			snprintf(parsedTableName, 256, "chr%d_%s", c, post); 
-			getFeatDna(parsedTableName, "all", "stdout");
+			getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 			snprintf(parsedTableName, 256, "chr%d_random_%s", c, post); 
-			getFeatDna(parsedTableName, "all", "stdout");
+			getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 			}
 
 		snprintf(parsedTableName, 256, "chr_%s_%s", "X", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "X", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "Y", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "Y", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "NA", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "NA", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "UL", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "UL", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		}
 	else
-		getFeatDna(table, "all", "stdout");
+		getFeatDna(table, "all", "stdout", fbSpec);
 	}
 else
 	{
@@ -1595,7 +2158,7 @@ else
 	chromStart = winStart;
 	chromEnd = winEnd;
 
-	getFeatDna(parsedTableName, choosenChromName, "stdout");
+	getFeatDna(parsedTableName, choosenChromName, "stdout", fbSpec);
 	}
 }
 
@@ -1603,21 +2166,14 @@ else
 /* the main body of the program */
 void execute()
 {
-char* table = getTableVar("table");
+char* table = getTableName();
 
-char* database;
 char* freezeName;
-
-/* select the database */
-database = cgiUsualString("db", hGetDb());
-hSetDb(database);
 
 /* output the freexe name and informaion */
 freezeName = hFreezeFromDb(database);
 if(freezeName == NULL)
     freezeName = "Unknown";
-
-hDefaultConnect();	/* read in the default connection options */
 
 /*if(cgiOptionalString("position") == 0)
 	webAbort("No position given", "Please choose a position");*/
@@ -1629,16 +2185,20 @@ if(table == NULL || existsAndEqual("phase", "table"))
 	    webAbort("Missing table selection", "Please choose a table and try again.");
 	else
 	    {
-		webStart("Genome Table Browser on %s Freeze", freezeName);
+		webStart(cart, "Table Browser on %s Freeze", freezeName);
 		getTable();
 		webEnd();
 	    }
 	}
 else
 	{
-	if(table != 0 && existsAndEqual("phase", "Choose fields"))
+	if ((! sameString(database, getTableDb())) &&
+		(! sameString(hGetDb2(), getTableDb())))
+		hSetDb2(getTableDb());
+
+	if(table != 0 && existsAndEqual("phase", "Filter fields"))
 		{
-		webStart("Genome Table Browser on %s Freeze: Select Fields", freezeName);
+		webStart(cart , "Table Browser on %s Freeze: Select Fields", freezeName);
 		getChoosenFields();
 		webEnd();
 		}
@@ -1665,7 +2225,9 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char* database;
+struct hash *oldVars = hashNew(8);
+char *excludeVars[] = {NULL};
+char *cookieName = "hguid";
 
 if (!cgiIsOnWeb())
    {
@@ -1674,13 +2236,16 @@ if (!cgiIsOnWeb())
    cgiSpoof(&argc, argv);
    }
 
-/* select the database */
-database = cgiUsualString("db", hGetDb());
+cart = cartAndCookieWithHtml(cookieName, excludeVars, oldVars, FALSE);
 
+/* select the database */
+database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 
-execute(); /* call the main function */
+/* call the main function */
+execute();
 
+cartCheckout(&cart);
 return 0;
 }

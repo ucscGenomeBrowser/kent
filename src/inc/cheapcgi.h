@@ -112,6 +112,9 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked);
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
 
+void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
+/* Make a text area with area rowCount X columnCount and with text: intialVal. */
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
@@ -124,6 +127,10 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */
+
+void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length);
+/* Make a list of names which can have multiple selections.
+ * Same as drop-down list except "multiple" is added to select tag */
 
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
@@ -165,3 +172,6 @@ boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb);
 /* Use the command line to set up things as if we were a CGI program. 
  * If preferWeb is TRUE will choose real CGI variables over command
  * line ones. */
+
+void useTempFile();
+/* tell cheapcgi to use temp files */

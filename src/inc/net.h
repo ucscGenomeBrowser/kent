@@ -76,7 +76,7 @@ struct netParsedUrl
    char protocol[16];	/* Protocol - http or ftp, etc. */
    char host[128];	/* Name of host computer - www.yahoo.com, etc. */
    char port[16];       /* Port, usually 80 or 8080. */
-   char file[512];	/* Remote file name, starts with '/' */
+   char file[1024];	/* Remote file name/query string, starts with '/' */
    };
 
 void netParseUrl(char *url, struct netParsedUrl *parsed);
@@ -100,6 +100,24 @@ struct lineFile *netLineFileMayOpen(char *url);
 
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string. */
+
+struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu);
+/* Parse URL and open an HTTP socket for it but don't send a request yet. */
+
+void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
+		boolean keepAlive);
+/* Send a GET request, possibly with Keep-Alive. */
+
+int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
+		       void (*responseCB)(void *userData, char *req,
+					  char *hdr, struct dyString *body));
+/* Given an URL which is the base of all requests to be made, and a 
+ * linked list of queries to be appended to that base and sent in as 
+ * requests, send the requests as a batch and read the HTTP response 
+ * headers and bodies.  If not all the requests get responses (i.e. if 
+ * the server is ignoring Keep-Alive or is imposing a limit), try again 
+ * until we can't connect or until all requests have been served. 
+ * For each HTTP response, do a callback. */
 
 #endif /* NET_H */
 

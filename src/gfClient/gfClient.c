@@ -1,4 +1,5 @@
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "linefile.h"
 #include "aliType.h"

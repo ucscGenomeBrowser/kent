@@ -98,11 +98,12 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "options:\n"
 	 "    spokes=N  Number of processes that feed jobs to nodes - default %d\n"
 	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
-	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
+	 "    machineCheckPeriod=N Minutes between checking on machine - default %d\n"
 	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "    nextJobId=N  Starting job ID number\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
 	 "    logFlush Flush log with every write\n"
+	 "    noResume  Don't try to reconnect with jobs running on nodes\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -122,9 +123,13 @@ struct dlList *runningJobs;     /* Jobs that are running. */
 
 struct hash *userHash;		/* Hash of all users. */
 struct user *userList;		/* List of all users. */
+struct batch *batchList;	/* List of all batches. */
 struct dlList *queuedUsers;	/* Users with jobs in queue. */
 struct dlList *unqueuedUsers;   /* Users with no jobs in queue. */
 
+struct hash *stringHash;	/* Unique strings throughout system go here
+                                 * including directory names and results file
+				 * names/batch names. */
 
 struct resultQueue *resultQueues; /* Result files. */
 int finishedJobCount = 0;		/* Number of finished jobs. */
@@ -135,7 +140,7 @@ FILE *jobIdFile = NULL;			/* Handle to jobId file. */
 
 char *hubHost;	/* Name of machine running this. */
 
-void removeJobId(int id);
+boolean removeJobId(int id);
 /* Remove job with given ID. */
 
 void setupLists()
@@ -155,6 +160,52 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+struct batch *findBatchInList(struct dlList *list,  char *nameString)
+/* Find a batch of jobs in list or return NULL. 
+ * nameString must be from stringHash. */
+{
+struct dlNode *node;
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (nameString == batch->name)
+        return batch;
+    }
+return NULL;
+}
+
+struct batch *newBatch(char *nameString, struct user *user)
+/* Make new batch.  NameString must be in stringHash already */
+{
+struct batch *batch;
+AllocVar(batch);
+slAddHead(&batchList, batch);
+AllocVar(batch->node);
+batch->node->val = batch;
+batch->name = nameString;
+batch->user = user;
+batch->jobQueue = newDlList();
+return batch;
+}
+
+struct batch *findBatch(struct user *user, char *name)
+/* Find batch of jobs.  If no such batch yet make it. */
+{
+struct batch *batch;
+name = hashStoreName(stringHash, name);
+batch = findBatchInList(user->curBatches, name);
+if (batch == NULL)
+     {
+     batch = findBatchInList(user->oldBatches, name);
+     if (batch != NULL)
+	 dlRemove(batch->node);
+     else
+	 batch = newBatch(name, user);
+     dlAddTail(user->curBatches, batch->node);
+     }
+return batch;
+}
+
 struct user *findUser(char *name)
 /* Find user.  If it's the first time we've seen this
  * user then make up a user object and put it on the
@@ -169,10 +220,27 @@ if (user == NULL)
     AllocVar(user->node);
     user->node->val = user;
     dlAddTail(unqueuedUsers, user->node);
-    user->jobQueue = newDlList();
+    user->curBatches = newDlList();
+    user->oldBatches = newDlList();
     }
 return user;
 }
+
+
+int userQueuedCount(struct user *user)
+/* Count up jobs user has waiting */
+{
+struct dlNode *node;
+struct batch *batch;
+int count = 0;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    batch = node->val;
+    count += dlCount(batch->jobQueue);
+    }
+return count;
+}
+
 
 struct user *findLuckyUser()
 /* Find lucky user who gets to run a job. */
@@ -183,7 +251,7 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if (user->runningCount < minCount && !dlEmpty(user->jobQueue))
+    if (!dlEmpty(user->curBatches) && user->runningCount < minCount)
         {
 	minCount = user->runningCount;
 	minUser = user;
@@ -192,40 +260,70 @@ for (node = queuedUsers->head; !dlEnd(node); node = node->next)
 return minUser;
 }
 
+struct batch *findLuckyBatch(struct user *user)
+/* Find the batch that gets to run a job. */
+{
+struct batch *minBatch = NULL;
+int minCount = BIGNUM;
+struct dlNode *node;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (batch->runningCount < minCount)
+        {
+	minCount = batch->runningCount;
+	minBatch = batch;
+	}
+    }
+return minBatch;
+}
+
 
 boolean runNextJob()
 /* Assign next job in pending queue if any to a machine. */
 {
-struct user *user = findLuckyUser();
+struct user *user;
+user = findLuckyUser();
 if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     {
     struct dlNode *mNode, *jNode, *sNode;
     struct spoke *spoke;
+    struct batch *batch = findLuckyBatch(user);
     struct job *job;
     struct machine *machine;
     time_t now = time(NULL);
 
-    /* Get free resources from free lists and move them to busy lists. */
+    /* Get free machine and spoke and move them to busy lists. */
     mNode = dlPopHead(freeMachines);
     dlAddTail(busyMachines, mNode);
     machine = mNode->val;
     machine->lastChecked = now;
-    jNode = dlPopHead(user->jobQueue);
-    dlAddTail(runningJobs, jNode);
-    job = jNode->val;
     sNode = dlPopHead(freeSpokes);
     dlAddTail(busySpokes, sNode);
     spoke = sNode->val;
     spoke->lastPinged = now;
     spoke->pingCount = 0;
 
-    /* Update user and if this is the last job take them off queue. */
+    /* Get active batch from user and take job off of it.
+     * If it's the last job in the batch move batch to
+     * finished list. */
+    jNode = dlPopHead(batch->jobQueue);
+    dlAddTail(runningJobs, jNode);
+    job = jNode->val;
+    ++batch->runningCount;
     ++user->runningCount;
-    if (dlEmpty(user->jobQueue))
+    if (dlEmpty(batch->jobQueue))
         {
-	dlRemove(user->node);
-	dlAddTail(unqueuedUsers, user->node);
+	dlRemove(batch->node);
+	dlAddTail(user->oldBatches, batch->node);
+	/* Check if it's last user batch and if so take them off queue */
+	if (dlEmpty(user->curBatches))
+	    {
+	    dlRemove(user->node);
+	    dlAddTail(unqueuedUsers, user->node);
+	    }
 	}
+
 
     /* Tell machine, job, and spoke about each other. */
     machine->job = job;
@@ -358,16 +456,29 @@ void requeueJob(struct job *job)
  * queue.  This happens when a node is down or when
  * it missed the message about a job. */
 {
-struct user *user = job->user;
+struct batch *batch = job->batch;
+struct user *user = batch->user;
 struct machine *mach = job->machine;
 if (mach != NULL)
     mach->job = NULL;
 job->machine = NULL;
 dlRemove(job->node);
-dlAddHead(user->jobQueue, job->node);
+dlAddHead(batch->jobQueue, job->node);
+batch->runningCount -= 1;
+batch->user->runningCount -= 1;
+dlRemove(batch->node);
+dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
-user->runningCount -= 1;
-dlAddTail(queuedUsers, user->node);
+dlAddHead(queuedUsers, user->node);
+}
+
+void machineDown(struct machine *mach)
+/* Mark machine as down and move it to dead list. */
+{
+dlRemove(mach->node);
+mach->lastChecked = time(NULL);
+mach->isDead = TRUE;
+dlAddTail(deadMachines, mach->node);
 }
 
 void nodeDown(char *line)
@@ -387,10 +498,7 @@ if ((mach = findMachineWithJob(machName, jobId)) != NULL)
     {
     if ((job = mach->job) != NULL)
 	requeueJob(job);
-    dlRemove(mach->node);
-    mach->lastChecked = time(NULL);
-    mach->isDead = TRUE;
-    dlAddTail(deadMachines, mach->node);
+    machineDown(mach);
     }
 runner(1);
 }
@@ -428,21 +536,24 @@ exe[size] = 0;
 return exe;
 }
 
-struct job *jobNew(char *cmd, char *user, char *dir, char *in, char *out, char *results)
+struct job *jobNew(char *cmd, char *userName, char *dir, char *in, char *out, 
+	char *results)
 /* Create a new job structure */
 {
 struct job *job;
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, results);
+
 AllocVar(job);
 AllocVar(job->node);
 job->node->val = job;
 job->id = ++nextJobId;
 job->exe = cloneString(exeFromCommand(cmd));
 job->cmd = cloneString(cmd);
-job->user = findUser(user);
-job->dir = cloneString(dir);
+job->batch = batch;
+job->dir = hashStoreName(stringHash, dir);
 job->in = cloneString(in);
 job->out = cloneString(out);
-job->results = cloneString(results);
 return job;
 }
 
@@ -455,11 +566,9 @@ if (job != NULL)
     freeMem(job->node);
     freeMem(job->exe);
     freeMem(job->cmd);
-    freeMem(job->dir);
     freeMem(job->in);
     freeMem(job->out);
     freeMem(job->err);
-    freeMem(job->results);
     freez(pJob);
     }
 }
@@ -582,21 +691,24 @@ for (rq = resultQueues; rq != NULL; rq = rq->next)
     }
 }
 
-void writeJobResults(struct job *job, time_t now, char *status,
-	char *uTime, char *sTime)
+
+void writeResults(char *fileName, char *userName, char *machineName,
+	int jobId, char *exe, time_t submitTime, time_t startTime,
+	char *errFile, char *cmd,
+	time_t now, char *status, char *uTime, char *sTime)
 /* Write out job results to output queue.  This
  * will create the output queue if it doesn't yet
  * exist. */
 {
 struct resultQueue *rq;
 for (rq = resultQueues; rq != NULL; rq = rq->next)
-    if (sameString(job->results, rq->name))
+    if (sameString(fileName, rq->name))
         break;
 if (rq == NULL)
     {
     AllocVar(rq);
     slAddHead(&resultQueues, rq);
-    rq->name = cloneString(job->results);
+    rq->name = fileName;
     rq->f = fopen(rq->name, "a");
     if (rq->f == NULL)
         warn("hub: couldn't open results file %s", rq->name);
@@ -604,22 +716,37 @@ if (rq == NULL)
     }
 if (rq->f != NULL)
     {
-    char *machName;
-    if (job->machine != NULL)
-        machName = job->machine->name;
-    else
-        machName = "ghost";
     fprintf(rq->f, "%s %s %d %s %s %s %lu %lu %lu %s %s '%s'\n",
-        status, machName, job->id, job->exe, 
+        status, machineName, jobId, exe, 
 	uTime, sTime, 
-	job->submitTime, job->startTime, now,
-	job->user->name, job->err, job->cmd);
-    if (sameString(status, "0"))
-        ++finishedJobCount;
-    else
-        ++crashedJobCount;
+	submitTime, startTime, now,
+	userName, errFile, cmd);
     rq->lastUsed = now;
     }
+}
+
+void writeJobResults(struct job *job, time_t now, char *status,
+	char *uTime, char *sTime)
+/* Write out job results to output queue.  This
+ * will create the output queue if it doesn't yet
+ * exist. */
+{
+struct batch *batch = job->batch;
+if (sameString(status, "0"))
+    {
+    ++finishedJobCount;
+    ++batch->doneCount;
+    ++batch->user->doneCount;
+    }
+else
+    {
+    ++crashedJobCount;
+    ++batch->crashCount;
+    }
+writeResults(batch->name, batch->user->name, job->machine->name,
+	job->id, job->exe, job->submitTime, 
+	job->startTime, job->err, job->cmd,
+	now, status, uTime, sTime);
 }
 
 void resultQueueFree(struct resultQueue **pRq)
@@ -629,7 +756,6 @@ struct resultQueue *rq = *pRq;
 if (rq != NULL)
     {
     carefulClose(&rq->f);
-    freeMem(rq->name);
     freez(pRq);
     }
 }
@@ -755,7 +881,7 @@ if (status != NULL)
     if (sameString(status, "free"))
 	{
 	struct job *job = jobFind(runningJobs, jobId);
-	struct user *user = job->user;
+	struct user *user = job->batch->user;
 	if (job != NULL)
 	    {
 	    struct machine *mach = job->machine;
@@ -802,12 +928,28 @@ else
     runner(1);
 }
 
-int addJob(char *line)
+int addJob(char *userName, char *dir, char *in, char *out, char *results,
+	char *command)
 /* Add job to queues. */
 {
-char *userName, *dir, *in, *out, *results, *command;
 struct job *job;
 struct user *user;
+struct batch *batch;
+
+job = jobNew(command, userName, dir, in, out, results);
+batch = job->batch;
+dlAddTail(batch->jobQueue, job->node);
+user = batch->user;
+dlRemove(user->node);
+dlAddTail(queuedUsers, user->node);
+job->submitTime = time(NULL);
+return job->id;
+}
+
+int addJobFromMessage(char *line)
+/* Parse out addJob message and add job to queues. */
+{
+char *userName, *dir, *in, *out, *results, *command;
 
 if ((userName = nextWord(&line)) == NULL)
     return 0;
@@ -822,20 +964,14 @@ if ((results = nextWord(&line)) == NULL)
 if (line == NULL || line[0] == 0)
     return 0;
 command = line;
-job = jobNew(command, userName, dir, in, out, results);
-user = job->user;
-dlAddTail(user->jobQueue, job->node);
-dlRemove(user->node);
-dlAddTail(queuedUsers, user->node);
-job->submitTime = time(NULL);
-return job->id;
+return addJob(userName, dir, in, out, results, command);
 }
 
 void addJobAcknowledge(char *line, int connectionHandle)
 /* Add job.  Line format is <user> <dir> <stdin> <stdout> <results> <command> 
  * Returns job ID or 0 if a problem.  Send jobId back to client. */
 {
-int id = addJob(line);
+int id = addJobFromMessage(line);
 char jobIdString[16];
 sprintf(jobIdString, "%d", id);
 netSendLongString(connectionHandle, jobIdString);
@@ -849,82 +985,138 @@ netSendLongString(connectionHandle, "ok");
 processHeartbeat();
 }
 
-void sendKillJobMessage(struct machine *machine, struct job *job)
+boolean sendKillJobMessage(struct machine *machine, struct job *job)
 /* Send message to compute node to kill job there. */
 {
 char message[64];
 sprintf(message, "kill %d", job->id);
 logIt("  %s %s\n", machine->name, message);
-sendViaSpoke(machine, message);
-     /* There's a race condition here that can cause jobs not
-      * to be killed if there are no spokes free to handle
-      * this message.  I'm trying to think of a simple solution
-      * to this. The damage isn't too serious though,
-      * since the jobs will at least stay on the main job list.
-      * if they are not killed.  User can curse us and try to
-      * kill jobs again.  At least the node won't end up 
-      * double-booked.  */
+if (!sendViaSpoke(machine, message))
+    {
+    logIt("  out of spokes!\n");
+    return FALSE;
+    }
+return TRUE;
 }
 
 void finishJob(struct job *job)
 /* Recycle job memory and the machine it's running on. */
 {
 struct machine *mach = job->machine;
-struct user *user = job->user;
+struct batch *batch = job->batch;
+struct user *user = batch->user;
 if (mach != NULL)
-    {
     recycleMachine(mach);
-    user->runningCount -= 1;
-    }
+batch->runningCount -= 1;
+user->runningCount -= 1;
 recycleJob(job);
 }
 
-void removeJob(struct job *job)
+boolean removeJob(struct job *job)
 /* Remove job - if it's running kill it,  remove from job list. */
 {
 if (job->machine != NULL)
-    sendKillJobMessage(job->machine, job);
+    if (!sendKillJobMessage(job->machine, job))
+        return FALSE;
 finishJob(job);
+return TRUE;
 }
 
-void removeJobId(int id)
+boolean removeJobId(int id)
 /* Remove job of a given id. */
 {
 struct job *job = jobFind(runningJobs, id);
-logIt("Running job %x\n", job);
 if (job == NULL)
     {
     /* If it's not running look in user job queues. */
     struct user *user;
     for (user = userList; user != NULL; user = user->next)
         {
-	if ((job = jobFind(user->jobQueue, id)) != NULL)
+	struct dlNode *node;
+	for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+	    {
+	    struct batch *batch = node->val;
+	    if ((job = jobFind(batch->jobQueue, id)) != NULL)
+		break;
+	    }
+	if (job != NULL)
 	    break;
 	}
     logIt("Pending job %x\n", job);
     }
 if (job != NULL)
-    removeJob(job);
+    {
+    logIt("Removing %s's %s\n", job->batch->user, job->cmd);
+    if (!removeJob(job))
+        return FALSE;
+    }
+return TRUE;
 }
 
 void removeJobAcknowledge(char *names, int connectionHandle)
 /* Remove job of a given name(s). */
 {
 char *name;
+char *retVal = "ok";
+
 while ((name = nextWord(&names)) != NULL)
-    removeJobId(atoi(name));
-netSendLongString(connectionHandle, "ok");
+    {
+    /* It is possible for this remove to fail if we
+     * run out of spokes at the wrong time.  Currently
+     * the para client will just report the problem. */
+    if (!removeJobId(atoi(name)))
+        {
+	retVal = "err";
+	break;
+	}
+    }
+netSendLongString(connectionHandle, retVal);
 }
+
+
+void chillBatch(char *line, int connectionHandle)
+/* Stop launching jobs from a batch, but don't disturb
+ * running jobs. */
+{
+char *userName = nextWord(&line);
+char *batchName = nextWord(&line);
+char *res = "err";
+if (batchName != NULL)
+    {
+    struct user *user = hashFindVal(userHash, userName);
+    if (user != NULL)
+	{
+	struct batch *batch;
+	batchName = hashStoreName(stringHash, batchName);
+	batch = findBatchInList(user->curBatches, batchName);
+	if (batch != NULL)
+	    {
+	    struct dlNode *el, *next;
+	    for (el = batch->jobQueue->head; !dlEnd(el); el = next)
+		{
+		struct job *job = el->val;
+		next = el->next;
+		recycleJob(job);	/* This free's el too! */
+		}
+	    dlRemove(batch->node);
+	    dlAddTail(user->oldBatches, batch->node);
+	    }
+	res = "ok";
+	}
+    }
+netSendLongString(connectionHandle, res);
+}
+
 
 void jobDone(char *line)
 /* Handle job is done message. */
 {
 struct job *job;
-char *id, *status, *uTime, *sTime, *tTime;
-id = nextWord(&line);
-status = nextWord(&line);
-uTime = nextWord(&line);
-sTime = nextWord(&line);
+char *id = nextWord(&line);
+char *status = nextWord(&line);
+char *uTime = nextWord(&line);
+char *sTime = nextWord(&line);
+
 if (sTime != NULL)
     {
     job = jobFind(runningJobs, atoi(id));
@@ -953,7 +1145,7 @@ for (mach = machineList; mach != NULL; mach = mach->next)
     dyStringPrintf(dy, "%-10s ", mach->name);
     job = mach->job;
     if (job != NULL)
-        dyStringPrintf(dy, "%-10s %s", job->user->name, job->cmd);
+        dyStringPrintf(dy, "%-10s %s", job->batch->user->name, job->cmd);
     else
 	{
 	if (mach->isDead)
@@ -967,6 +1159,23 @@ netSendLongString(fd, "");
 freeDyString(&dy);
 }
 
+int countUserActiveBatches(struct user *user)
+/* Count active batches for user. */
+{
+int count = dlCount(user->curBatches);
+/* Start with batches with pending jobs. */
+struct dlNode *node;
+
+/* Add in batches with running but no pending jobs. */
+for (node = user->oldBatches->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (batch->runningCount > 0)
+	++count;
+    }
+return count;
+}
+
 void listUsers(int fd)
 /* Write list of users to fd.  Format is one user per line
  * followed by a blank line. */
@@ -975,14 +1184,55 @@ struct dyString *dy = newDyString(256);
 struct user *user;
 for (user = userList; user != NULL; user = user->next)
     {
+    int totalBatch = dlCount(user->curBatches) + dlCount(user->oldBatches);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s ", user->name);
-    dyStringPrintf(dy, "%d running, %d waiting", 
-    	user->runningCount, dlCount(user->jobQueue));
+    dyStringPrintf(dy, 
+    	"%d jobs running, %d waiting, %d finished, %d of %d batches active", 
+	user->runningCount,  userQueuedCount(user), user->doneCount,
+	countUserActiveBatches(user), totalBatch);
     netSendLongString(fd, dy->string);
     }
 netSendLongString(fd, "");
 freeDyString(&dy);
+}
+
+void writeOneBatchInfo(int fd, struct user *user, struct batch *batch)
+/* Write out info on one batch. */
+{
+char shortBatchName[512];
+struct dyString *dy = newDyString(256);
+splitPath(batch->name, shortBatchName, NULL, NULL);
+dyStringClear(dy);
+dyStringPrintf(dy, "%-8s %4d %6d %6d %5d %s",
+	user->name, batch->runningCount, 
+	dlCount(batch->jobQueue), batch->doneCount,
+	batch->crashCount, shortBatchName);
+netSendLongString(fd, dy->string);
+freeDyString(&dy);
+}
+
+void listBatches(int fd)
+/* Write list of batches to fd.  Format is one batch per
+ * line followed by a blank line. */
+{
+struct user *user;
+netSendLongString(fd, "#user     run   wait   done crash batch");
+for (user = userList; user != NULL; user = user->next)
+    {
+    struct dlNode *bNode;
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	writeOneBatchInfo(fd, user, bNode->val);
+	}
+    for (bNode = user->oldBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	struct batch *batch = bNode->val;
+	if (batch->runningCount > 0)
+	    writeOneBatchInfo(fd, user, batch);
+	}
+    }
+netSendLongString(fd, "");
 }
 
 void appendLocalTime(struct dyString *dy, time_t t)
@@ -1013,7 +1263,8 @@ if (dotQ)
 return ret;
 }
 
-void oneJobList(int fd, struct dlList *list, struct dyString *dy, boolean sinceStart)
+void oneJobList(int fd, struct dlList *list, struct dyString *dy, 
+	boolean sinceStart)
 /* Write out one job list. */
 {
 struct dlNode *el;
@@ -1027,7 +1278,7 @@ for (el = list->head; !dlEnd(el); el = el->next)
     else
 	machName = "none";
     dyStringClear(dy);
-    dyStringPrintf(dy, "%-4d %-10s %-10s ", job->id, machName, job->user->name);
+    dyStringPrintf(dy, "%-4d %-10s %-10s ", job->id, machName, job->batch->user->name);
     if (sinceStart)
         appendLocalTime(dy, job->startTime);
     else
@@ -1043,9 +1294,18 @@ void listJobs(int fd)
 {
 struct dyString *dy = newDyString(256);
 struct user *user;
+struct dlNode *bNode;
+struct batch *batch;
+
 oneJobList(fd, runningJobs, dy, TRUE);
 for (user = userList; user != NULL; user = user->next)
-    oneJobList(fd, user->jobQueue, dy, FALSE);
+    {
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	batch = bNode->val;
+	oneJobList(fd, batch->jobQueue, dy, FALSE);
+	}
+    }
 netSendLongString(fd, "");
 freeDyString(&dy);
 }
@@ -1074,7 +1334,7 @@ for (node = list->head; !dlEnd(node); node = node->next)
         t = job->submitTime;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s %d %s %s %lu %s", 
-        state, job->id, job->user->name, job->exe, t, machName);
+        state, job->id, job->batch->user->name, job->exe, t, machName);
     netSendLongString(fd, dy->string);
     }
 }
@@ -1084,9 +1344,17 @@ void pstat(int fd)
 {
 struct dyString *dy = newDyString(0);
 struct user *user;
+struct dlNode *bNode;
+struct batch *batch;
 onePstatList(fd, runningJobs, TRUE, dy);
 for (user = userList; user != NULL; user = user->next)
-    onePstatList(fd, user->jobQueue, FALSE, dy);
+    {
+    for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
+        {
+	batch = bNode->val;
+	onePstatList(fd, batch->jobQueue, FALSE, dy);
+	}
+    }
 netSendLongString(fd, "");
 freeDyString(&dy);
 }
@@ -1098,7 +1366,7 @@ struct user *user;
 int count = 0;
 
 for (user = userList; user != NULL; user = user->next)
-    count += dlCount(user->jobQueue);
+    count += userQueuedCount(user);
 return count;
 }
 
@@ -1110,9 +1378,20 @@ int count = 0;
 
 for (user = userList; user != NULL; user = user->next)
     {
-    if (user->runningCount > 0 || !dlEmpty(user->jobQueue))
+    if (user->runningCount > 0 || !dlEmpty(user->curBatches))
         ++count;
     }
+return count;
+}
+
+int countActiveBatches()
+/* Return count of active batches */
+{
+int count = 0;
+struct user *user;
+
+for (user = userList; user != NULL; user = user->next)
+    count += countUserActiveBatches(user);
 return count;
 }
 
@@ -1140,6 +1419,10 @@ netSendLongString(fd, buf);
 sprintf(buf, "Spokes busy: %d", dlCount(busySpokes));
 netSendLongString(fd, buf);
 sprintf(buf, "Spokes dead: %d", dlCount(deadSpokes));
+netSendLongString(fd, buf);
+sprintf(buf, "Active batches: %d", countActiveBatches());
+netSendLongString(fd, buf);
+sprintf(buf, "Total batches: %d", slCount(batchList));
 netSendLongString(fd, buf);
 sprintf(buf, "Active users: %d", countActiveUsers());
 netSendLongString(fd, buf);
@@ -1234,6 +1517,359 @@ for (i=0; i<sizeof(unpacked); ++i)
 return TRUE;
 }
 
+struct multiMachine 
+/* A machine with multiple CPUs.   A little kludge
+ * for now to cope with most of system thinking a 
+ * machine is a cpu. */
+    {
+    struct multiMachine *next;
+    char *name;			/* Name, not allocated here. */
+    struct slRef *cpuList;	/* Machine valued list. */
+    };
+
+void multiMachineFree(struct multiMachine **pMm)
+/* Free a multiMachine */
+{
+struct multiMachine *mm = *pMm;
+if (mm != NULL)
+    {
+    slFreeList(&mm->cpuList);
+    freez(&mm);
+    }
+}
+
+void multiMachineFreeList(struct multiMachine **pList)
+/* Free list of multiMachines */
+{
+struct multiMachine *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    multiMachineFree(&el);
+    }
+*pList = NULL;
+}
+
+void multiMachineDown(struct multiMachine *mm)
+/* Note all cpu's are down for machine */
+{
+struct slRef *ref;
+for (ref = mm->cpuList; ref != NULL; ref = ref->next)
+    machineDown(ref->val);
+}
+
+
+struct existingResults
+/* Keep track of old results we need to integrate into */
+    {
+    struct existingResults *next;
+    char *fileName;	  /* Name of file this is in, not allocated here */
+    struct hash *hash;    /* Hash keyed by ascii jobId indicated job results
+                           * already recorded. */
+    };
+
+void existingResultsFree(struct existingResults **pEr)
+/* Free up existing results structure */
+{
+struct existingResults *er = *pEr;
+if (er != NULL)
+    {
+    freeHash(&er->hash);
+    freez(pEr);
+    }
+}
+
+void existingResultsFreeList(struct existingResults **pList)
+/* Free list of existingResults */
+{
+struct existingResults *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    existingResultsFree(&el);
+    }
+*pList = NULL;
+}
+
+
+void readResults(char *fileName, struct hash *hash)
+/* Read jobId's of results into hash */
+{
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+char *row[3];
+char *line;
+int wordCount;
+if (lf == NULL)
+     {
+     warn("Couldn't open results file %s\n", fileName);
+     return;
+     }
+while (lineFileNext(lf, &line, NULL))
+     {
+     wordCount = chopLine(line, row);
+     if (wordCount == 0 || row[0][0] == '#')
+         continue;
+     if (wordCount < 3)
+	 {
+         warn("Short line %d of %s", lf->lineIx, lf->fileName);
+	 continue;
+	 }
+     if (!isdigit(row[2][0]))
+         {
+	 warn("Expecting number field 3 line %d of %s", lf->lineIx, lf->fileName);
+	 break;
+	 }
+     hashAdd(hash, row[2], NULL);
+     }
+lineFileClose(&lf);
+}
+
+struct existingResults *getExistingResults(char *fileName, struct hash *erHash,
+	struct existingResults **pErList)
+/* Get results from hash if we've seen them before, otherwise
+ * read them in, save in hash, and return them. */
+{
+struct existingResults *er = hashFindVal(erHash, fileName);
+if (er == NULL)
+    {
+    AllocVar(er);
+    slAddHead(pErList, er);
+    hashAddSaveName(erHash, fileName, er, &er->fileName);
+    er->hash = newHash(18);
+    readResults(fileName, er->hash);
+    }
+return er;
+}
+
+struct machine *findFreeCpuInMulti(struct multiMachine *mm)
+/* Return a free cpu or NULL. */
+{
+struct slRef *ref;
+struct machine *mach;
+for (ref = mm->cpuList; ref != NULL; ref = ref->next)
+    {
+    mach = ref->val;
+    if (mach->job == NULL)
+        return mach;
+    }
+return NULL;
+}
+
+void addRunningJob(struct runJobMessage *rjm, char *resultFile, 
+	struct multiMachine *mm)
+/* Add job that is already running to queues. */
+{
+struct machine *mach = findFreeCpuInMulti(mm);
+if (mach == NULL)
+    warn("%s seems to have more jobs running than it has cpus", mm->name);
+else
+    {
+    time_t now = time(NULL);
+    struct job *job = jobNew(rjm->command, rjm->user, rjm->dir, rjm->in,
+	    rjm->out, resultFile);
+    struct batch *batch = job->batch;
+    struct user *user = batch->user;
+    job->id = atoi(rjm->jobIdString);
+    ++batch->runningCount;
+    ++user->runningCount;
+    dlRemove(batch->node);
+    dlAddTail(user->oldBatches, batch->node);
+    mach->job = job;
+    job->machine = mach;
+    dlAddTail(runningJobs, job->node);
+    dlRemove(mach->node);
+    dlAddTail(busyMachines, mach->node);
+    mach->lastChecked = job->submitTime = job->startTime = now;
+    }
+}
+
+void pljErr(struct multiMachine *mm, int no)
+/* Print out error message in the middle of routine below. */
+{
+warn("%s: truncated listJobs response %d\n", mm->name, no);
+}
+
+void getExeOnly(char *command, char exe[256])
+/* Extract executable file (not including path) from command line. */
+{
+/* Extract name of executable file with no path. */
+char *dupeCommand = cloneString(command);
+char *exePath = firstWordInLine(dupeCommand);
+char exeFile[128], exeExt[64];
+splitPath(exePath, NULL, exeFile, exeExt);
+sprintf(exe, "%s%s", exeFile, exeExt);
+freez(&dupeCommand);
+}
+
+void writeExistingResults(char *fileName, char *line, struct machine *mach, 
+	struct runJobMessage *rjm)
+{
+char err[512], exe[256];
+int jobId = atoi(rjm->jobIdString);
+time_t now = time(NULL);
+char *status = nextWord(&line);
+char *uTime = nextWord(&line);
+char *sTime = nextWord(&line);
+
+if (sTime == NULL)
+    {
+    warn("Bad line format in writeExistingResults for %s", mach->name);
+    return;
+    }
+
+
+getExeOnly(rjm->command, exe);
+fillInErrFile(err, jobId, mach->tempDir);
+fileName = hashStoreName(stringHash, fileName);
+
+writeResults(fileName, rjm->user, mach->name, 
+	jobId, exe, now, now,
+	err, rjm->command, 
+	now, status, uTime, sTime);
+}
+
+boolean processListJobs(struct multiMachine *mm,
+	int sd, struct hash *erHash, struct existingResults **pErList,
+	int *pRunning, int *pFinished)
+/* Process response to list jobs message. Read jobs node is running and
+ * has recently finished.  Add running ones to job list. Add finished
+ * ones to results file if necessary.
+ *
+ * Format of message is
+ *     running count
+ *     one line for each running job.
+ *     recent count
+ *     two lines for each recent job.
+ */
+{
+char *line;
+int running, recent, i, finCount = 0;
+struct runJobMessage rjm;
+char resultsFile[512], *resultsFileString;
+
+if ((line = netGetLongString(sd)) == NULL)
+    {
+    warn("%s: no listJobs response", mm->name);
+    return FALSE;
+    }
+running = atoi(line);
+freez(&line);
+for (i=0; i<running; ++i)
+    {
+    line = netGetLongString(sd);
+    if (line == NULL)
+        {
+	pljErr(mm, 1);
+	return FALSE;
+	}
+    if (!parseRunJobMessage(line, &rjm))
+        {
+	pljErr(mm, 5);
+	freez(&line);
+	return FALSE;
+	}
+    snprintf(resultsFile, sizeof(resultsFile), "%s/%s", rjm.dir, "para.results");
+    addRunningJob(&rjm, resultsFile, mm);
+    freez(&line);
+    }
+*pRunning += running;
+if ((line = netGetLongString(sd)) == NULL)
+    {
+    pljErr(mm, 2);
+    return FALSE;
+    }
+recent = atoi(line);
+freez(&line);
+for (i=0; i<recent; ++i)
+    {
+    struct existingResults *er;
+    char *startLine = NULL, *doneLine = NULL;
+    startLine = netGetLongString(sd);
+    if (startLine == NULL)
+        {
+	pljErr(mm, 3);
+	return FALSE;
+	}
+    if (!parseRunJobMessage(startLine, &rjm))
+        {
+	pljErr(mm, 6);
+	freez(&startLine);
+	return FALSE;
+	}
+    doneLine = netGetLongString(sd);
+    if (doneLine == NULL)
+        {
+	pljErr(mm, 4);
+	freez(&startLine);
+	return FALSE;
+	}
+    snprintf(resultsFile, sizeof(resultsFile), "%s/%s", rjm.dir, "para.results");
+    er = getExistingResults(resultsFile, erHash, pErList);
+    if (!hashLookup(er->hash, rjm.jobIdString))
+        {
+	struct machine *mach = mm->cpuList->val;
+	writeExistingResults(resultsFile, doneLine, mach, &rjm);
+	++finCount;
+	}
+    freez(&startLine);
+    freez(&doneLine);
+    }
+*pFinished += finCount;
+return TRUE;
+}
+
+void checkForJobsOnNodes()
+/* Poll nodes and see if they have any jobs for us. */
+{
+struct machine *mach;
+char *line;
+int running = 0, finished = 0;
+struct hash *erHash = newHash(8);	/* A hash of existingResults */
+struct existingResults *erList = NULL, *er;
+struct hash *mmHash = newHash(0);	/* Hash of machines. */
+struct multiMachine *mmList = NULL, *mm;
+time_t now = time(NULL);
+
+printf("Checking for jobs already running on nodes\n");
+for (mach = machineList; mach != NULL; mach = mach->next)
+    {
+    mm = hashFindVal(mmHash, mach->name);
+    mach->lastChecked = now;
+    if (mm == NULL)
+        {
+	AllocVar(mm);
+	slAddHead(&mmList, mm);
+	hashAddSaveName(mmHash, mach->name, mm, &mm->name);
+	}
+    refAdd(&mm->cpuList, mach);
+    }
+
+for (mm = mmList; mm != NULL; mm = mm->next)
+    {
+    int sd = netConnect(mm->name, paraPort);
+    if (sd < 0)
+        {
+	multiMachineDown(mm);
+	continue;
+	}
+    if (!sendWithSig(sd, "listJobs") || 
+    	!processListJobs(mm, sd, erHash, &erList, &running, &finished))
+	multiMachineDown(mm);
+    close(sd);
+    }
+
+/* Clean up time. */
+multiMachineFreeList(&mmList);
+hashFree(&mmHash);
+existingResultsFreeList(&erList);
+hashFree(&erHash);
+
+/* Report results. */
+printf("%d running jobs, %d jobs that finished while hub was down\n",
+	running, finished);
+}
 
 void startHub(char *machineList)
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
@@ -1249,6 +1885,7 @@ setupDaemonLog(optionVal("log", NULL));
 logIt("Starting paraHub on %s\n", hubHost);
 
 /* Set up various lists. */
+stringHash = newHash(0);
 setupLists();
 startMachines(machineList);
 assert(sigLen < sizeof(sig));
@@ -1259,12 +1896,14 @@ startSpokes();
 startHeartbeat();
 
 /* Set up socket. */
-socketHandle = netAcceptingSocket(paraPort, 1100);
+socketHandle = netAcceptingSocket(paraPort, 2000);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
-openJobId();
+if (!optionExists("noResume"))
+    checkForJobsOnNodes();
 
+openJobId();
 printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
 
 /* Bump up our priority to just shy of real-time. */
@@ -1312,6 +1951,8 @@ for (;;)
 	     nodeCheckIn(line);
 	else if (sameWord(command, "removeJob"))
 	     removeJobAcknowledge(line, connectionHandle);
+	else if (sameWord(command, "chill"))
+	     chillBatch(line, connectionHandle);
 	else if (sameWord(command, "ping"))
 	     respondToPing(connectionHandle);
 	else if (sameWord(command, "addMachine"))
@@ -1324,6 +1965,8 @@ for (;;)
 	     listMachines(connectionHandle);
 	else if (sameWord(command, "listUsers"))
 	     listUsers(connectionHandle);
+	else if (sameWord(command, "listBatches"))
+	     listBatches(connectionHandle);
 	else if (sameWord(command, "status"))
 	     status(connectionHandle);
 	else if (sameWord(command, "pstat"))

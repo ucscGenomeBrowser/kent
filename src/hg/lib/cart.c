@@ -460,7 +460,8 @@ clearDbContents(conn, "sessionDb", hgsid);
 cartDefaultDisconnector(&conn);
 }
 
-struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars)
+struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, struct hash *oldVars, 
+                                   boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 {
@@ -475,10 +476,20 @@ cartExclude(cart, sessionVar);
 /* Write out cookie for next time. */
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\n",
 	cookieName, cart->userInfo->id, cfgOption("central.domain"), cookieDate());
-puts("Content-Type:text/html");
-puts("\n");
+if (doContentType)
+    {
+    puts("Content-Type:text/html");
+    puts("\n");
+    }
 
 return cart;
+}
+
+struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars)
+/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
+ * HTTP preamble to web page.  Don't write any HTML though. */
+{
+return cartAndCookieWithHtml(cookieName, exclude, oldVars, TRUE);
 }
 
 static void cartErrorCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart)
@@ -522,14 +533,14 @@ pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
 }
 
-void cartWebStart(char *format, ...)
+void cartWebStart(struct cart *theCart, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 va_list args;
 va_start(args, format);
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(format, args, FALSE, FALSE);
+webStartWrapper(theCart, format, args, FALSE, FALSE);
 va_end(args);
 inWeb = TRUE;
 }

@@ -39,16 +39,16 @@ switch(num)
     }
 }
 
-struct sample *avgSamples(struct sample *sList1,
-			  struct sample *sList2,
-			  struct sample *sList3,
+struct sample *avgSamples(struct sample *s1,
+			  struct sample *s2,
+			  struct sample *s3,
 			  int expIndex, int index)
 {
-struct sample *ret = NULL, *s1, *s2, *s3;
+struct sample *ret = NULL; //, *s1, *s2, *s3;
 int i;
-s1 = (struct sample *)slElementFromIx(sList1, index);
-s2 = (struct sample *)slElementFromIx(sList2, index);
-s3 = (struct sample *)slElementFromIx(sList3, index);
+/* s1 = (struct sample *)slElementFromIx(sList1, index); */
+/* s2 = (struct sample *)slElementFromIx(sList2, index); */
+/* s3 = (struct sample *)slElementFromIx(sList3, index); */
 AllocVar(ret);
 ret->chrom = cloneString(s1->chrom);
 ret->chromStart = s1->chromStart;
@@ -73,7 +73,9 @@ return ret;
 void avgTranscriptomeExps()
 {
 struct sample *sList = NULL, *s = NULL;
+struct sample *s1,*s2,*s3;
 struct sample *sList1, *sList2, *sList3 = NULL;
+struct sample **sArray1, **sArray2, **sArray3 = NULL;
 int i,j,k;
 FILE *out = NULL;
 for(i=1; i<12; i++)
@@ -93,9 +95,18 @@ for(i=1; i<12; i++)
 	    snprintf(buff, sizeof(buff), "%d.%c.3.pairs.sample.norm", i,j);
 	    sList3 = sampleLoadAll(buff);
 	    count = slCount(sList1);
+	    AllocArray(sArray1,count);
+	    AllocArray(sArray2,count);
+	    AllocArray(sArray3,count);
+	    for(k=0, s1=sList1, s2=sList2, s3=sList3; k<count; s1=s1->next,s2=s2->next,s3=s3->next, k++)
+		{
+		sArray1[k] = s1;
+		sArray2[k] = s2;
+		sArray3[k] = s3;
+		}
 	    for(k=0;k<count; k++)
 		{
-		avg = avgSamples(sList1, sList2, sList3, i, k);
+		avg = avgSamples(sArray1[k], sArray2[k], sArray3[k], i, k);
 		slAddHead(&avgList, avg);
 		}
 	    slReverse(&avgList);
@@ -104,6 +115,9 @@ for(i=1; i<12; i++)
 	    for(s = avgList; s != NULL; s = s->next)
 		sampleTabOut(s, out);
 	    carefulClose(&out);
+	    freez(&sArray1);
+	    freez(&sArray2);
+	    freez(&sArray3);
 	    sampleFreeList(&avgList);
 	    sampleFreeList(&sList1);
 	    sampleFreeList(&sList2);

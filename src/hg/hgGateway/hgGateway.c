@@ -32,20 +32,11 @@ void hgGateway()
 char *oldDb = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cartUsualString(cart, "position", defaultPosition);
-char *assembly = NULL;
-char *orgList[128];
-char *assemblyList[128];
-char *values[128];
-int numOrganisms = 0;
-int numAssemblies = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
-struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
+
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeText = "onchange=\"document.orgForm.org.value = document.trackForm.org.options[document.trackForm.org.selectedIndex].value; document.orgForm.submit();\"";
-
 /* 
    If we are changing databases via explicit cgi request,
    then remove custom track data which will 
@@ -66,11 +57,7 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
 "<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A> and "
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
-"of UC Santa Cruz.<BR></CENTER>\n");
-
-printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
-cartSaveSession(cart);
-printf("</FORM>");
+"of UC Santa Cruz.<P></CENTER><P>\n");
 
 puts(
 "<center>\n"
@@ -85,6 +72,7 @@ puts(
 "<tr>\n"
 "<td>\n"
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
@@ -93,56 +81,17 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* Only add mouse or human to menu */
-    if (!hashFindVal(hash, cur->organism) && 
-        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
-        {
-        hashAdd(hash, cur->organism, cur);
-        orgList[numOrganisms] = cur->organism;
-        numOrganisms++;
-        }
-    }
-cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, 
-                           organism, onChangeText);
+printOrgListHtml(db, onChangeText);
 puts("</td>\n");
+
 puts("<td align=center>\n");
-
-/* Find all the assemblies that pertain to the selected genome */
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
-    }
-
-cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
+printAssemblyListHtml(db);
 puts("</td>\n");
 
 puts("<td align=center>\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
+
 freez(&defaultPosition);
 position = NULL;
 
@@ -374,14 +323,15 @@ puts(
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
 "	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
 "	</FORM>\n"
+);
+
+printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+cartSaveSession(cart);
+puts("</FORM>"
 "	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
 "	</TD></TR></TABLE>\n"
 "			\n"
 "</TD></TR></TABLE>\n");
-
-freeHash(&hash);
-dbDbFreeList(&dbList);
-numOrganisms = 0;
 }
 
 char *getDbForOrganism(char *organism, struct cart *cart)
@@ -439,7 +389,7 @@ else
     organism = hOrganism(db);
     }
 
-cartWebStart("%s Genome Browser Gateway \n", organism);
+cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();
 }

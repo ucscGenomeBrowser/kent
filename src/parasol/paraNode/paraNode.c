@@ -17,6 +17,7 @@
 #include "subText.h"
 #include "paraLib.h"
 #include "net.h"
+#include "portable.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -47,25 +48,44 @@ in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
 int socketHandle;		/* Main message queue socket. */
 int connectionHandle;		/* A connection accepted. */
-struct hash *finHash;		/* Hash of finished jobs.  Value is job return code. */
 
 struct job
 /* Info on one job in this node. */
     {
     struct job *next;	/* Next job. */
     int jobId;		/* Job ID for hub. */
-    int pid;			/* Process ID of running job. */
+    int pid;		/* Process ID of running job. */
+    char *startMessage;	/* Full message that started this job. */
+    char *doneMessage;  /* Full message that ended this job if any. */
+    struct dlNode *node; /* Node for list this is on. */
     };
-struct job *runningJobs;
+struct dlList *jobsRunning;		/* List of currently running jobs. */
+struct dlList *jobsFinished;	/* List of recent finished jobs. */
 
-struct job *findJob(int jobId)
+struct job *findJobOnList(struct dlList *list, int jobId)
 /* Return job if it's on list, otherwise NULL */
 {
+struct dlNode *node;
 struct job *job;
-for (job = runningJobs; job != NULL; job = job->next)
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    job = node->val;
     if (job->jobId == jobId)
         return job;
+    }
 return NULL;
+}
+
+struct job *findRunningJob(int jobId)
+/* Return job if it's on running list, otherwise NULL */
+{
+return findJobOnList(jobsRunning, jobId);
+}
+
+struct job *findFinishedJob(int jobId)
+/* Return recently finished job or NULL if it doesn't exist */
+{
+return findJobOnList(jobsFinished, jobId);
 }
 
 extern char **environ;	/* The environment strings. */
@@ -108,6 +128,39 @@ while ((s = *env++) != NULL)
     }
 return hash;
 }
+
+unsigned randomNumber;	/* Last random number generated. */
+
+void initRandom()
+/* Initialize random number generator */
+{
+/* Set up random number generator with seed depending on host name. */
+unsigned seed = hashCrc(hostName)&0xfffff;
+srand(seed);
+}
+
+void nextRandom()
+/* Generate next random number.  This is in
+ * executed main thread in response to any message
+ * rather than in child threads. */
+{
+randomNumber = rand();
+}
+
+void randomSleep()
+/* Put in a random sleep time of 0-4 seconds to help
+ * prevent overloading hub with jobDone messages all
+ * at once. */
+{
+int sleepTime = randomNumber%4;
+int spinTime = randomNumber%200;
+long doneSpin = clock1000() + spinTime;
+while (clock1000() < doneSpin)
+    ;
+if (sleepTime > 0)
+    sleep(sleepTime);
+}
+
 
 void hashUpdate(struct hash *hash, char *name, char *val)
 /* Update hash with name/val pair.   If name not in hash
@@ -212,6 +265,19 @@ if ((grandChildId = fork()) == 0)
     setpgrp();
     umask(umaskVal); 
 
+    /* Update environment. */
+        {
+	struct hash *hash = environToHash(environ);
+	hashUpdate(hash, "JOB_ID", jobIdString);
+	hashUpdate(hash, "USER", user);
+	hashUpdate(hash, "HOME", homeDir);
+	hashUpdate(hash, "HOST", hostName);
+	hashUpdate(hash, "PARASOL", "1");
+	updatePath(hash, userPath, homeDir, sysPath);
+	environ = hashToEnviron(hash);
+	freeHashAndVals(&hash);
+	}
+
     /* Redirect standard io.  There has to  be a less
      * cryptic way to do this. Close all open files, then
      * open in/out/err in order so they have descriptors
@@ -226,23 +292,11 @@ if ((grandChildId = fork()) == 0)
     open(out, O_WRONLY | O_CREAT, 0666);
     open(err, O_WRONLY | O_CREAT, 0666);
 
-    /* Update environment. */
-        {
-	struct hash *hash = environToHash(environ);
-	hashUpdate(hash, "JOB_ID", jobIdString);
-	hashUpdate(hash, "USER", user);
-	hashUpdate(hash, "HOME", homeDir);
-	hashUpdate(hash, "HOST", hostName);
-	hashUpdate(hash, "PARASOL", "1");
-	updatePath(hash, userPath, homeDir, sysPath);
-	environ = hashToEnviron(hash);
-	freeHashAndVals(&hash);
-	}
     
     if ((execErr = execvp(exe, params)) < 0)
 	{
-	perror("");
-	warn("Error execlp'ing %s %s", exe, params);
+	perror("execvp");
+	warn("Error execvp'ing %s %s", exe, params);
 	}
     exit(execErr);
     }
@@ -251,10 +305,12 @@ else
     /* Wait on executed job and send jobID and status back to 
      * main process. */
     int status;
+    int cid;
     int sd;
 
     signal(SIGTERM, termHandler);
-    wait(&status);
+    cid = wait(&status);
+    randomSleep();
     sd = netConnect("localhost", paraPort);
     if (sd >= 0)
         {
@@ -305,6 +361,19 @@ if (sd >= 0)
     }
 }
 
+void jobFree(struct job **pJob)
+/* Free up memory associated with job */
+{
+struct job *job = *pJob;
+if (job != NULL)
+    {
+    freeMem(job->startMessage);
+    freeMem(job->doneMessage);
+    freeMem(job->node);
+    freez(pJob);
+    }
+}
+
 void jobDone(char *line)
 /* Handle job-done message - forward it to managing host. */
 {
@@ -314,17 +383,21 @@ char *jobIdString = nextWord(&line);
 clearZombies();
 if (jobIdString != NULL && line != NULL && line[0] != 0)
     {
-    /* Remove job from list. */
-    struct job *job = findJob(atoi(jobIdString));
+    /* Remove job from list running list and put on recently finished list. */
+    struct job *job = findRunningJob(atoi(jobIdString));
     if (job != NULL)
         {
-	slRemoveEl(&runningJobs, job);
-	freez(&job);
+	job->doneMessage = cloneString(line);
+	dlRemove(job->node);
+	if (dlCount(jobsFinished) >= 4*maxProcs)
+	    {
+	    struct dlNode *node = dlPopTail(jobsFinished);
+	    struct job *oldJob = node->val;
+	    jobFree(&oldJob);
+	    }
+	dlAddHead(jobsFinished, job->node);
 	--busyProcs;
 	}
-
-    /* Save job time and status in hash. */
-    hashAdd(finHash, jobIdString, cloneString(line));
 
     /* Tell managing host that job is done. */
     if (fork() == 0)
@@ -344,7 +417,7 @@ char *jobIdString = nextWord(&line);
 if (jobIdString != NULL)
     {
     int jobId = atoi(jobIdString);
-    struct job *job = findJob(jobId);
+    struct job *job = findRunningJob(jobId);
     int sd = netConnect(managingHost, paraPort);
     if (sd >= 0)
 	{
@@ -353,11 +426,11 @@ if (jobIdString != NULL)
 	    snprintf(buf, sizeof(buf), "checkIn %s %s running", hostName, jobIdString);
 	else
 	    {
-	    char *jobInfo = hashFindVal(finHash, jobIdString);
-	    if (jobInfo == NULL)
+	    struct job *job = findFinishedJob(jobId);
+	    if (job == NULL)
 		snprintf(buf, sizeof(buf), "checkIn %s %s free", hostName, jobIdString);
 	    else
-		snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, jobInfo);
+		snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, job->doneMessage);
 	    }
 	sendWithSig(sd, buf);
 	close(sd);
@@ -383,28 +456,24 @@ void doRun(char *line)
 /* Execute command. */
 {
 static char *args[1024];
-char *managingHost, *jobIdString, *reserved, *user, *dir, *in, 
-	*out, *err, *cmd;
 int argCount;
+nextRandom();
 if (line == NULL)
     warn("Executing nothing...");
 else if (busyProcs < maxProcs)
     {
     char *exe;
     int childPid;
+    char *jobMessage = cloneString(line);
+    struct runJobMessage rjm;
 
-    managingHost = nextWord(&line);
-    jobIdString = nextWord(&line);
-    reserved = nextWord(&line);
-    user = nextWord(&line);
-    dir = nextWord(&line);
-    in = nextWord(&line);
-    out = nextWord(&line);
-    err = nextWord(&line);
-
-    if (line == NULL || (argCount = chopLine(line, args)) < 1)
-	warn("Not enough parameters to run");
-    else if (argCount >= ArraySize(args))
+    if (!parseRunJobMessage(line, &rjm))
+	{
+	freez(&jobMessage);
+	return;
+	}
+    argCount = chopLine(rjm.command, args);
+    if (argCount >= ArraySize(args))
 	warn("Too many arguments to run");
     else
 	{
@@ -412,25 +481,26 @@ else if (busyProcs < maxProcs)
 	if ((childPid = fork()) == 0)
 	    {
 	    /* Do JOB_ID substitutions */
-	    struct subText *st = subTextNew("$JOB_ID", jobIdString);
+	    struct subText *st = subTextNew("$JOB_ID", rjm.jobIdString);
 	    int i;
-	    in = subTextString(st, in);
-	    out = subTextString(st, out);
-	    err = subTextString(st, err);
+	    rjm.in = subTextString(st, rjm.in);
+	    rjm.out = subTextString(st, rjm.out);
+	    rjm.err = subTextString(st, rjm.err);
 	    for (i=0; i<argCount; ++i)
 	        args[i] = subTextString(st, args[i]);
 
-	    execProc(managingHost, jobIdString, reserved,
-		user, dir, in, out, err, args[0], args);
+	    execProc(rjm.managingHost, rjm.jobIdString, rjm.reserved,
+		rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
 	    exit(0);
 	    }
 	else
 	    {
 	    struct job *job;
 	    AllocVar(job);
-	    job->jobId = atoi(jobIdString);
+	    job->jobId = atoi(rjm.jobIdString);
 	    job->pid = childPid;
-	    slAddHead(&runningJobs, job);
+	    job->startMessage = jobMessage;
+	    job->node = dlAddValTail(jobsRunning, job);
 	    ++busyProcs;
 	    }
 	}
@@ -441,6 +511,31 @@ else
     }
 }
 
+void doFetch(char *line)
+/* Fetch a file. */
+{
+char *user = nextWord(&line);
+char *fileName = nextWord(&line);
+if (fileName != NULL)
+    {
+    if (fork() == 0)
+        {
+	FILE *f = fopen(fileName, "r");
+	if (f == NULL)
+	    warn("Couldn't open %s", fileName);
+	else
+	    {
+	    char buf[4*1024];
+	    int size;
+	    while ((size = fread(buf, 1, sizeof(buf), f)) > 0)
+		write(connectionHandle, buf, size);
+	    fclose(f);
+	    }
+	exit(0);
+	}
+    }
+}
+
 void doKill(char *line)
 /* Kill current job if any. */
 {
@@ -448,12 +543,12 @@ char *jobIdString = nextWord(&line);
 int jobId = atoi(jobIdString);
 if (jobId != 0)
     {
-    struct job *job = findJob(jobId);
+    struct job *job = findRunningJob(jobId);
     if (job != NULL)
         {
 	kill(job->pid, SIGTERM);
-	slRemoveEl(&runningJobs, job);
-	freez(&job);
+	dlRemove(job->node);
+	jobFree(&job);
 	--busyProcs;
 	}
     }
@@ -469,8 +564,42 @@ void doStatus()
 {
 struct dyString *dy = newDyString(256);
 dyStringPrintf(dy, "%d of %d CPUs busy", busyProcs, maxProcs);
+if (busyProcs > 0)
+    {
+    struct dlNode *node;
+    dyStringPrintf(dy, ". Jobs:");
+    for (node = jobsRunning->head; !dlEnd(node); node = node->next)
+        {
+	struct job *job = node->val;
+        dyStringPrintf(dy, " %d", job->jobId);
+	}
+    }
 write(connectionHandle, dy->string, dy->stringSize);
 dyStringFree(&dy);
+}
+
+void listJobs()
+/* Report jobs running and recently finished. */
+{
+char buf[64];
+struct job *job;
+struct dlNode *node;
+
+sprintf(buf, "%d running", dlCount(jobsRunning));
+netSendLongString(connectionHandle, buf);
+for (node = jobsRunning->head; !dlEnd(node); node=node->next)
+    {
+    job = node->val;
+    netSendLongString(connectionHandle, job->startMessage);
+    }
+sprintf(buf, "%d recent", dlCount(jobsFinished));
+netSendLongString(connectionHandle, buf);
+for (node = jobsFinished->head; !dlEnd(node); node=node->next)
+    {
+    job = node->val;
+    netSendLongString(connectionHandle, job->startMessage);
+    netSendLongString(connectionHandle, job->doneMessage);
+    }
 }
 
 void paraNode()
@@ -484,12 +613,14 @@ int sigLen = strlen(paraSig);
 
 /* We have to know who we are... */
 hostName = getMachine();
+initRandom();
 
 /* Precompute some signature stuff. */
 assert(sigLen < sizeof(signature));
 
-/* Make hash of finished jobs. */
-finHash = newHash(0);
+/* Make job lists. */
+jobsRunning = newDlList();
+jobsFinished = newDlList();
 
 /* Set up socket and self to listen to it. */
 socketHandle = netAcceptingSocket(paraPort, 10);
@@ -534,6 +665,10 @@ for (;;)
 				doCheck(line);
 			    else if (sameString("resurrect", command))
 				doResurrect(line);
+			    else if (sameString("listJobs", command))
+			        listJobs();
+			    else if (sameString("fetch", command))
+			        doFetch(line);
 			    }
 			freez(&buf);
 			}

@@ -35,8 +35,8 @@ enum trackVisibility
 /* How to look at a track. */
     {
     tvHide=0, 		/* Hide it. */
-    tvDense=1,        /* Squish it together. */
-    tvFull=2        /* Expand it out. */
+    tvDense=1,          /* Squish it together. */
+    tvFull=2            /* Expand it out. */
     };  
 
 enum trackVisibility hTvFromString(char *s);

@@ -510,6 +510,10 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 or negative if no
  * intersection. */
 
+int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
+/* Return amount of bases two ranges intersect over, 0 or negative if no
+ * intersection. */
+
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
@@ -521,6 +525,10 @@ void removeReturns(char* dest, char* src);
 int intExp(char *text);
 /* Convert text to integer expression and evaluate. 
  * Throws if it finds a non-number. */
+
+double doubleExp(char *text);
+/* Convert text to floating point expression and
+ * evaluate. */
 
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */

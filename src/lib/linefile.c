@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include <fcntl.h>
+#include "dystring.h"
 #include "linefile.h"
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
@@ -119,7 +120,7 @@ while (!gotLf)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
     readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
-    if (readSize + sizeLeft <= 0)
+    if (readSize <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
 	return FALSE;
@@ -248,3 +249,188 @@ for (i=0; i<lineCount; ++i)
         errAbort("Premature end of file in %s", lf->fileName);
     }
 }
+
+boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
+				boolean *chunked, int *contentLength)
+/* Extract HTTP response header from lf into hdr, tell if it's 
+ * "Transfer-Encoding: chunked" or if it has a contentLength. */
+{
+  struct dyString *header = newDyString(1024);
+  char *line;
+  int lineSize;
+
+  if (chunked != NULL)
+    *chunked = FALSE;
+  if (contentLength != NULL)
+    *contentLength = -1;
+  dyStringClear(header);
+  if (lineFileNext(lf, &line, &lineSize))
+    {
+      if (startsWith("HTTP/", line))
+	{
+	char *version, *code;
+	dyStringAppendN(header, line, lineSize-1);
+	dyStringAppendC(header, '\n');
+	version = nextWord(&line);
+	code = nextWord(&line);
+	if (code == NULL)
+	    {
+	    warn("%s: Expecting HTTP/<version> <code> header line, got this: %s\n", lf->fileName, header->string);
+	    *hdr = cloneString(header->string);
+	    dyStringFree(&header);
+	    return FALSE;
+	    }
+	if (!sameString(code, "200"))
+	    {
+	    warn("%s: Errored HTTP response header: %s %s %s\n", lf->fileName, version, code, line);
+	    *hdr = cloneString(header->string);
+	    dyStringFree(&header);
+	    return FALSE;
+	    }
+	while (lineFileNext(lf, &line, &lineSize))
+	    {
+	    /* blank line means end of HTTP header */
+	    if ((line[0] == '\r' && line[1] == 0) || line[0] == 0)
+	        break;
+	    if (strstr(line, "Transfer-Encoding: chunked") && chunked != NULL)
+	        *chunked = TRUE;
+	    dyStringAppendN(header, line, lineSize-1);
+	    dyStringAppendC(header, '\n');
+	    if (strstr(line, "Content-Length:"))
+	      {
+		code = nextWord(&line);
+		code = nextWord(&line);
+		if (contentLength != NULL)
+		    *contentLength = atoi(code);
+	      }
+	    }
+	}
+      else
+	{
+	  /* put the line back, don't put it in header/hdr */
+	  lineFileReuse(lf);
+	  warn("%s: Expecting HTTP/<version> <code> header line, got this: %s\n", lf->fileName, header->string);
+	  *hdr = cloneString(header->string);
+	  dyStringFree(&header);
+	  return FALSE;
+	}
+    }
+  else
+    {
+      *hdr = cloneString(header->string);
+      dyStringFree(&header);
+      return FALSE;
+    }
+
+  *hdr = cloneString(header->string);
+  dyStringFree(&header);
+  return TRUE;
+} /* lineFileParseHttpHeader */
+
+struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
+				       boolean chunked, int contentLength)
+/* Return a dyString that contains the http response body in lf.  Handle 
+ * chunk-encoding and content-length. */
+{
+  struct dyString *body = newDyString(64*1024);
+  char *line;
+  int lineSize;
+
+  dyStringClear(body);
+  if (chunked)
+    {
+      /* Handle "Transfer-Encoding: chunked" body */
+      /* Procedure from RFC2068 section 19.4.6 */
+      char *csword;
+      unsigned chunkSize = 0;
+      unsigned size;
+      do
+	{
+	  /* Read line that has chunk size (in hex) as first word. */
+	  if (lineFileNext(lf, &line, NULL))
+	    csword = nextWord(&line);
+	  else break;
+	  if (sscanf(csword, "%x", &chunkSize) < 1)
+	    {
+	      warn("%s: chunked transfer-encoding chunk size parse error.\n",
+		   lf->fileName);
+	      break;
+	    }
+	  /* If chunk size is 0, read in a blank line & then we're done. */
+	  if (chunkSize == 0)
+	    {
+	      lineFileNext(lf, &line, NULL);
+	      if (line == NULL || (line[0] != '\r' && line[0] != 0))
+		warn("%s: chunked transfer-encoding: expected blank line, got %s\n",
+		     lf->fileName, line);
+	      
+	      break;
+	    }
+	  /* Read (and save) lines until we have read in chunk. */
+	  for (size = 0;  size < chunkSize;  size += lineSize)
+	    {
+	      if (! lineFileNext(lf, &line, &lineSize))
+		break;
+	      dyStringAppendN(body, line, lineSize-1);
+	      dyStringAppendC(body, '\n');
+	    }
+	  /* Read blank line - or extra CRLF inserted in the middle of the 
+	   * current line, in which case we need to trim it. */
+	  if (size > chunkSize)
+	    {
+	      body->stringSize -= (size - chunkSize);
+	      body->string[body->stringSize] = 0;
+	    }
+	  else if (size == chunkSize)
+	    {
+	      lineFileNext(lf, &line, NULL);
+	      if (line == NULL || (line[0] != '\r' && line[0] != 0))
+		warn("%s: chunked transfer-encoding: expected blank line, got %s\n",
+		     lf->fileName, line);
+	    }
+	} while (chunkSize > 0);
+      /* Try to read in next line.  If it's an HTTP header, put it back. */
+      /* If there is a next line but it's not an HTTP header, it's a footer. */
+      if (lineFileNext(lf, &line, NULL))
+	{
+	  if (startsWith("HTTP/", line))
+	    lineFileReuse(lf);
+	  else
+	    {
+	      /* Got a footer -- keep reading until blank line */
+	      warn("%s: chunked transfer-encoding: got footer %s, discarding it.\n",
+		   lf->fileName, line);
+	      while (lineFileNext(lf, &line, NULL))
+		{
+		  if ((line[0] == '\r' && line[1] == 0) || line[0] == 0)
+		    break;
+		  warn("discarding footer line: %s\n", line);
+		}
+	    }
+	}
+    }
+  else if (contentLength >= 0)
+    {
+      /* Read in known length */
+      int size;
+      for (size = 0;  size < contentLength;  size += lineSize)
+	{
+	  if (! lineFileNext(lf, &line, &lineSize))
+	    break;
+	  dyStringAppendN(body, line, lineSize-1);
+	  dyStringAppendC(body, '\n');
+	}
+    }
+  else
+    {
+      /* Read in to end of file (assume it's not a persistent connection) */
+      while (lineFileNext(lf, &line, &lineSize))
+	{
+	  dyStringAppendN(body, line, lineSize-1);
+	  dyStringAppendC(body, '\n');
+	}
+    }
+
+  return(body);
+} /* lineFileSlurpHttpBody */
+

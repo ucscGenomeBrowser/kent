@@ -29,7 +29,7 @@ if (format != NULL) {
     }
 }
 
-#define maxWarnHandlers 10
+#define maxWarnHandlers 20
 static WarnHandler warnArray[maxWarnHandlers] = {defaultVaWarn,};
 static int warnIx = 0;
 

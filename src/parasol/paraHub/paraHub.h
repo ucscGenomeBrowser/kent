@@ -8,12 +8,11 @@ struct job
     int id;			/* Uniq	job id. */
     char *exe;			/* Executable name - no path or parameters. */
     char *cmd;                  /* Executable name plus parameters. */
-    struct user *user;		/* User who submitted job. */
+    struct batch *batch;	/* Batch this job is in. */
     char *dir;			/* Starting dir. */
     char *in;			/* Stdin. */
     char *out;			/* Stdout. */
     char *err;			/* Stderr. */
-    char *results;		/* File to append results to. */
     time_t submitTime;          /* Time job submitted. */
     time_t startTime;           /* Start job run time in seconds past 1972 */
     struct machine *machine;	/* Machine it's running on if any. */
@@ -32,14 +31,29 @@ struct machine
     char *tempDir;		/* Name of local temp dir. */
     };
 
+struct batch
+/* A batch of jobs from a user. */
+    {
+    struct batch *next;		/* Next in master list. */
+    struct dlNode *node;	/* Node in active/done list. */
+    char *name;			/* Batch name.  Not allocated here. */
+    struct user *user;		/* User this is associated with. */
+    struct dlList *jobQueue;	/* List of jobs not running */
+    int runningCount;		/* Number of jobs running */
+    int doneCount;		/* Number of jobs done */
+    int crashCount;		/* Number of jobs crashed */
+    };
+
 struct user
 /* One of our users. */
     {
     struct user *next;		/* Next in master list. */
     struct dlNode *node;	/* Node in active/idle list. */
     char *name;			/* User name. Not allocated here. */
-    struct dlList *jobQueue;	/* List of jobs not including running ones. */
+    struct dlList *curBatches;	/* Current active batches. */
+    struct dlList *oldBatches;	/* Inactive batches. */
     int runningCount;		/* Count of jobs currently running. */
+    int doneCount;		/* Count of jobs finished. */
     };
 
 struct spoke
@@ -101,6 +115,8 @@ extern char hubHAddress[32]; /* Host address of machine running this. Not IP add
 
 void logIt(char *format, ...);
 /* Print message to log file. */
+
+#define uglyLog logIt
 
 #define MINUTE 60
 

@@ -49,6 +49,7 @@ struct elChild
    struct elChild *next;	/* Next in list. */
    char *name;			/* Name of element. */
    char copyCode;		/* '1', '+', '?', or '*' */
+   boolean isOr;                /* Is this part of a ( n | m ) "or" list? */
    struct element *el;		/* Element definition. */
    };
 
@@ -123,6 +124,7 @@ int wordCount, i;
 struct elChild *ec;
 struct element *el;
 boolean isOr;
+char orCopyCode = '?';
 boolean isSmall;
 
 word = needNextWord(&line, lf);
@@ -142,6 +144,12 @@ if (line != NULL && (s = strchr(line, '(')) != NULL)
         errAbort("Missing ')' line %d of %s", lf->lineIx, lf->fileName);
     *e = 0;
     isOr = (strchr(s, '|') != NULL);
+    if (isOr)
+      {
+	orCopyCode = *(e+1);
+	if ((orCopyCode != '+') && (orCopyCode != '*'))
+	  orCopyCode = '?';
+      }
     wordCount = chopString(s, "| ,\t", words, ArraySize(words));
     if (wordCount == ArraySize(words))
 	errAbort("Too many children in list line %d of %s", lf->lineIx, lf->fileName);
@@ -164,8 +172,9 @@ if (line != NULL && (s = strchr(line, '(')) != NULL)
 	    {
 	    AllocVar(ec);
 	    slAddHead(&el->children, ec);
+	    ec->isOr = isOr;
 	    if (isOr)
-	       ec->copyCode = '?';
+	       ec->copyCode = orCopyCode;
 	    else
 		{
 		if (lastC == '+' || lastC == '?' || lastC == '*')
@@ -326,6 +335,8 @@ for (ec = el->children; ec != NULL; ec = ec->next)
     fprintf(f, "%s", ec->name);
     if (ec->copyCode != '1')
         fprintf(f, "%c", ec->copyCode);
+    if (ec->isOr)
+        fprintf(f, " (isOr)");
     if (ec->next != NULL)
         fprintf(f, ", ");
     }
@@ -793,8 +804,14 @@ for (el = elList; el != NULL; el = el->next)
 		}
 	    else if (ec->copyCode == '+')
 	        {
-		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
-		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
+		if (! ec->isOr)
+		    {
+		    /* bypassing this is not the Right thing to do -- 
+		     * really we should make sure that somebody in the Or list
+		     * was present */
+		    fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
+		    fprintf(f, "        xapError(xp, \"Missing %s\");\n",cBIG);
+		    }
 		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
 		}
 	    else if (ec->copyCode == '*')

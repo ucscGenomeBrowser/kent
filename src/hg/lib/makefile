@@ -2,18 +2,18 @@ OPT= -ggdb
 
 #Optimized for performance
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+	gcc -ggdb -O -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 #For debugging
 #.c.o:
-#	gcc -ggdb -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+#	gcc -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
-    borf.o cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
+O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
+    borf.o borkPseudoHom.o cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneGraph.o \
@@ -37,7 +37,8 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
     ancientRref.o ggMrnaAli.o \
     glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o genMapDb.o \
-    dbSnpRS.o synMap.o refSeqStatus.o
+    dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
+    affyAtlas.o imageClone.o stanMad.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)

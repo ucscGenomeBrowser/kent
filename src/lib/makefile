@@ -16,7 +16,7 @@ O = aliType.o axt.o bits.o binRange.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o supStitch.o trans3.o wildcmp.o wormdna.o \
-    xa.o xAli.o xap.o xenbig.o xenshow.o xensmall.o xp.o web.o 
+    xa.o xAli.o xap.o xenbig.o xenshow.o xensmall.o xp.o
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)

@@ -1,27 +1,26 @@
 /* freen - My Pet Freen. */
 #include "common.h"
 #include "linefile.h"
-#include "psl.h"
+#include "axt.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen in.psl out.psl");
+errAbort("usage: freen in.axt out.axt");
 }
 
 void freen(char *in, char *out)
 /* Print status code. */
 {
-struct psl *psl, *pslList = pslLoadAll(in);
+struct axt *axt;
+struct lineFile *lf = lineFileOpen(in, TRUE);
 FILE *f = mustOpen(out, "w");
 char buf[256];
 
-uglyf("Loaded %s\n", in);
-for (psl = pslList; psl != NULL; psl = psl->next)
+while ((axt = axtRead(lf)) != NULL)
     {
-    sprintf(buf, "mm2.%s", psl->qName);
-    psl->qName = buf;
-    pslTabOut(psl, f);
+    if (!sameString(axt->qName, "chr2"))
+       axtWrite(axt, f);
     }
 }
 

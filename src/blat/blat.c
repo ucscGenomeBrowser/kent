@@ -1,4 +1,5 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -16,7 +17,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-int version = 10;	/* Blat version number. */
+int version = 12;	/* Blat version number. */
 
 enum constants {
 	qWarnSize = 5000000, /* Warn if more than this many bases in one query. */
@@ -52,8 +53,8 @@ errAbort(
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
-  "   database is either a .fa file, a .nib file, or a list of .fa or .nib files\n"
-  "   query is similarly a .fa, .nib, or list of .fa or .nib files\n"
+  "   database is either a .fa file, a .nib file, or a list of .fa or .nib\n"
+  "   files, query is similarly a .fa, .nib, or list of .fa or .nib files\n"
   "   -ooc=11.ooc tells the program to load over-occurring 11-mers from\n"
   "               and external file.  This will increase the speed\n"
   "               by a factor of 40 in many cases, but is not required\n"
@@ -66,33 +67,32 @@ errAbort(
   "               triggers an alignments.  Default is 0.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2 for nucleotide, 1 for protein.\n"
-  "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
-  "               minus some sort of gap penalty.  Default is 30\n"
-  "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is 90 for\n"
-  "               nucleotide searches, 25 for protein or translated protein searches.\n"
-  "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
-  "               from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
+  "   -minScore=N sets minimum score.  This is twice the matches minus the \n"
+  "               mismatches minus some sort of gap penalty.  Default is 30\n"
+  "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is\n"
+  "               90 for nucleotide searches, 25 for protein or translated\n"
+  "               protein searches.\n"
+  "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually\n"
+  "               set from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
   "               the tileSize\n"
   "   -makeOoc=N.ooc Make overused tile file\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
-  "               it is marked as overused.  Typically this is 256 for tileSize 12,\n"
-  "               1024 for tile size 11, 4096 for tile size 10.\n"
+  "               it is marked as overused.  Typically this is 256 for tileSize\n"
+  "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
   "               Default is 1024.  Typically only comes into play with makeOoc\n"
-  "   -mask=type  Mask out repeats.  Alignments won't be started in masked region but\n"
-  "               may extend through it.  Masking only works for nucleotides. Mask types are:\n"
+  "   -mask=type  Mask out repeats.  Alignments won't be started in masked region\n"
+  "               but may extend through it in nucleotide searches.  Masked areas\n"
+  "               are ignored entirely in protein or translated searches. Types are\n"
   "                 lower - mask out lower cased sequence\n"
   "                 upper - mask out upper cased sequence\n"
   "                 out   - mask according to database.out RepeatMasker .out file\n"
   "                 file.out - mask database according to RepeatMasker file.out\n"
-  "   -qMask=type Mask out repeats in query sequence.  Alignments won't be started in masked\n"
-  "               region but may extend through it.  Masking only works for nucleotides. Mask:\n"
-  "               types are:\n"
-  "                 lower - mask out lower cased sequence\n"
-  "                 upper - mask out upper cased sequence\n"
+  "   -qMask=type Mask out repeats in query sequence.  Similar to -mask above but\n"
+  "               for query rather than target sequence.\n"
   "   -minRepDivergence=NN - minimum percent divergence of repeats to allow them to be\n"
-  "               unmasked.  Default is 15\n"
+  "               unmasked.  Default is 15.  Only relevant for RepeatMasker .out files.\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
@@ -111,6 +111,7 @@ errAbort(
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
   "   -trimT      Trim leading poly-T\n"
+  "   -noTrimA    Don't trim trailing poly-A\n"
   , version
   );
 }
@@ -445,10 +446,8 @@ if (trimT)
 	else
 	    break;
 	}
-    dna += tSize;
-    trimmed->dna = dna;
-    size -= tSize;
-    trimmed->size = size;
+    if (tSize >= 4)
+	memset(dna, 'n', tSize);
     }
 if (trimA)
     {
@@ -461,8 +460,8 @@ if (trimA)
 	else
 	    break;
 	}
-    trimmed->size -= aSize;
-    trimmed->dna[size] = 0;
+    if (aSize >= 4)
+	memset(dna + size - aSize, 'n', aSize);
     }
 }
 
@@ -594,7 +593,6 @@ for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gfSavePslx, &outForm);
     if (qIsDna)
 	{
-	uglyf("Reverse Complement\n");
         reverseComplement(qSeq->dna, qSeq->size);
 	}
     }
@@ -620,7 +618,9 @@ boolean maskUpper = FALSE;
 ZeroVar(&trimmedSeq);
 printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
-/* Figure out how to manage query case. */
+/* Figure out how to manage query case.  Proteins want to be in
+ * upper case, generally, nucleotides in lower case.  But there
+ * may be repeatMasking based on case as well. */
 if (transQuery)
     {
     if (qMask == NULL)
@@ -809,6 +809,8 @@ if (cgiVarExists("q"))
     qType = gfTypeFromName(cgiString("q"));
 if (qType == gftRnaX || qType == gftRna)
     trimA = TRUE;
+if (cgiVarExists("noTrimA"))
+    trimA = FALSE;
 switch (qType)
     {
     case gftProt:

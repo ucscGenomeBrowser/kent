@@ -230,7 +230,7 @@ if (c == '\n')
     ++xp->lineIx;
 
 /* Parse attributes. */
-if (c != '>' && c != '-')
+if (c != '>' && c != '/')
     {
     for (;;)
 	{
@@ -247,7 +247,7 @@ if (c != '>' && c != '-')
 	    else
 		break;
 	    }
-	if (c == '>' || c == '-')
+	if (c == '>' || c == '/')
 	    break;
 
 	/* Allocate space in attribute table. */
@@ -274,7 +274,7 @@ if (c != '>' && c != '-')
 		}
 	    if (c == '=')
 		break;
-	    if (c == '-' || c == '>')
+	    if (c == '/' || c == '>')
 		xpError(xp, "Expecting '=' after attribute name");
 	    }
 
@@ -354,12 +354,12 @@ xp->attBuf[attCount] = NULL;
 /* Call user start function. */
 xp->atStartTag(xp->userData, stack->tag->string, xp->attBuf);
 
-if (c == '-')
+if (c == '/')
     {
     if ((c = xpGetChar(xp)) == 0)
        xpUnexpectedEof(xp);
     if (c != '>')
-       xpError(xp, "Expecting '>' after '-'");
+       xpError(xp, "Expecting '>' after '/'");
     }
 else
     {
@@ -443,7 +443,7 @@ else
 		xpError(xp, "Mismatch between start tag %s and end tag %s",  stack->tag->string, dy->string);
 	    break;
 	    }
-	else if (c == '?' || c == '-' || c == '!')
+	else if (c == '?' || c == '/' || c == '!')
 	    xpEatComment(xp, c);
 	else
 	    {
@@ -477,7 +477,7 @@ for (;;)
 	{
 	if ((c = xpGetChar(xp)) == 0)
 	    xpUnexpectedEof(xp);
-	if (c == '?' || c == '-' || c == '!')
+	if (c == '?' || c == '/' || c == '!')
 	    {
 	    xpEatComment(xp, c);
 	    }

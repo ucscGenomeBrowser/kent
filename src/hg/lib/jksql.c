@@ -30,6 +30,17 @@ struct sqlResult
 
 static struct dlList *sqlOpenConnections;
 
+static char* getCfgValue(char* envName, char* cfgName)
+/* get a configuration value, from either the environment or the cfg file,
+ * with the env take precedence.
+ */
+{
+char *val = getenv(envName);
+if (val == NULL)
+    val = cfgOption(cfgName);
+return val;
+}
+
 void sqlFreeResult(struct sqlResult **pRes)
 /* Free up a result. */
 {
@@ -141,9 +152,9 @@ return sc;
 struct sqlConnection *sqlConnect(char *database)
 /* Connect to database on default host as default user. */
 {
-char* host = cfgOption("db.host");
-char* user = cfgOption("db.user");
-char* password = cfgOption("db.password");
+char* host = getCfgValue("HGDB_HOST", "db.host");
+char* user = getCfgValue("HGDB_USER", "db.user");
+char* password = getCfgValue("HGDB_PASSWORD", "db.password");
 
 if(host == 0 || user == 0 || password == 0)
 	errAbort("Could not read hostname, user, or password to the database from configuration file.");
@@ -465,9 +476,9 @@ return cache;
 struct sqlConnCache *sqlNewConnCache(char *database)
 /* Return a new connection cache. */
 {
-char* host = cfgOption("db.host");
-char* user = cfgOption("db.user");
-char* password = cfgOption("db.password");
+char* host = getCfgValue("HGDB_HOST", "db.host");
+char* user = getCfgValue("HGDB_USER", "db.user");
+char* password = getCfgValue("HGDB_PASSWORD", "db.password");
 if (password == NULL || user == NULL || host == NULL)
     errAbort("Could not read hostname, user, or password to the database from configuration file.");
 return sqlNewRemoteConnCache(database, host, user, password);

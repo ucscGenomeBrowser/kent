@@ -11,9 +11,39 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "ggPrivate.h"
+#include "hdb.h"
 
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
+int ggEvidenceIx(struct ggEvidence *hayStack, struct ggEvidence *needle)
+/* return index of needle in haystack or -1 if not present */
+{
+int count = 0;
+struct ggEvidence *ge = NULL;
+for(ge = hayStack; ge != NULL; ge = ge->next)
+    {
+    if(needle->id == ge->id)
+	return count;
+    count++;
+    }
+return -1;
+}
+
+void addEvidenceIfUnique(struct ggEvidence **currList, struct ggEvidence *newList)
+/* add the new evidence to the old if not currently in in */
+{
+struct ggEvidence *ge = NULL, *geNext = NULL;
+for(ge = newList; ge != NULL; ge = geNext)
+    {
+    int index = -1;
+    geNext = ge->next;
+    index = ggEvidenceIx(*currList, ge);
+    if(index == -1)
+	slSafeAddHead(currList, ge);
+    else
+	ggEvidenceFree(&ge);
+    }
+}
 
 static int vertexIx(struct ggVertex *array, int arraySize, int pos, int type)
 /* Return index of vertex in array, or -1 if not in array. */
@@ -28,6 +58,33 @@ for (i=0; i<arraySize; ++i)
 return -1;
 }
 
+struct ggEvidence * ggEvidenceClone(struct ggEvidence *geList)
+/* clone a list of evidence */
+{
+struct ggEvidence *retList = NULL, *ret=NULL;
+struct ggEvidence *ge = NULL;
+for(ge = geList; ge != NULL; ge = ge->next)
+    {
+    AllocVar(ret);
+    ret->id = ge->id;
+    slAddHead(&retList, ret);
+    }
+slReverse(&retList);
+return retList;
+}
+
+int findMrnaIdByName(char *name, char **mrnaRefs, int count)
+/* find the index of the name in the mrnaRef array, return -1 if not found */
+{
+int i;
+for(i = 0; i < count ; ++i)
+    {
+    if(sameString(name, mrnaRefs[i]))
+	return i;
+    }
+return -1;
+}
+
 static struct geneGraph *makeInitialGraph(struct ggMrnaCluster *mc, struct ggMrnaInput *ci)
 /* Create initial gene graph from input input. */
 {
@@ -36,13 +93,13 @@ int i;
 struct ggVertex *vAll;
 int vAllCount = 0;
 struct ggAliInfo *da;
-struct geneGraph *gg;
+struct geneGraph *gg = NULL;
 bool **em;
 int totalWithDupes = 0;
 struct maRef *ref;
 char **mrnaRefs = NULL;
 int mrnaRefCount;
-
+struct ggEvidence ***evM = NULL;
 AllocArray(vAll, vAlloc);
 
 /* First fill up array with unique vertices. */
@@ -69,39 +126,7 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
 	}
     }
 
-
-/* Allocate gene graph and edge matrix. */
 AllocVar(gg);
-gg->vertexCount = vAllCount;
-AllocArray(gg->vertices, vAllCount);
-memcpy(gg->vertices, vAll, vAllCount*sizeof(*vAll));
-gg->edgeMatrix = AllocArray(em, vAllCount);
-for (i=0; i<vAllCount; ++i)
-    {
-    AllocArray(em[i], vAllCount);
-    }
-
-/* Fill in edge matrix. */
-/* for each alignment in cluster create edges from each exon to the next,
-   as we have seen them in mRNAs we know that they are valid splicings. */
-for (da = mc->mrnaList; da != NULL; da = da->next)
-    {
-    int countOne = da->vertexCount;
-    struct ggVertex *vOne = da->vertices;
-    int vix, lastVix;
-    vix = vertexIx(vAll, vAllCount, vOne->position, vOne->type);
-    for (i=1; i<countOne; ++i)
-	{
-	++vOne;
-	lastVix = vix;
-	vix = vertexIx(vAll, vAllCount, vOne->position, vOne->type);
-	assert(vix >= 0 && lastVix >= 0);
-	em[lastVix][vix] = TRUE;
-	}
-    }
-freeMem(vAll);
-
-
 /* Fill in other info from ci and mc. */
 snprintf(gg->strand, sizeof(gg->strand), "%s", mc->strand);
 gg->tName = cloneString(ci->tName);
@@ -111,6 +136,48 @@ gg->mrnaRefCount = mrnaRefCount = slCount(mc->refList);
 gg->mrnaRefs = needMem(sizeof(char *) * mrnaRefCount);
 for (ref = mc->refList, i=0; ref != NULL; ref = ref->next, ++i)
      gg->mrnaRefs[i] = cloneString(ref->ma->qName);
+
+/* Allocate gene graph and edge matrix. Also the evidence matrix */
+
+gg->vertexCount = vAllCount;
+AllocArray(gg->vertices, vAllCount);
+memcpy(gg->vertices, vAll, vAllCount*sizeof(*vAll));
+gg->edgeMatrix = AllocArray(em, vAllCount);
+gg->evidence = AllocArray(evM, vAllCount);
+for (i=0; i<vAllCount; ++i)
+    {
+    AllocArray(em[i], vAllCount);
+    AllocArray(evM[i], vAllCount);
+    }
+
+/* Fill in edge matrix. */
+/* for each alignment in cluster create edges from each exon to the next,
+ *  as we have seen them in mRNAs we know that they are valid splicings. 
+ *  Note that the id's stored in the evidences index into the mrnaRefs array. 
+ */
+for (da = mc->mrnaList; da != NULL; da = da->next)
+    {
+    int countOne = da->vertexCount;
+    struct ggVertex *vOne = da->vertices;
+    int vix, lastVix;
+    struct ggEvidence *ev = NULL;
+    vix = vertexIx(vAll, vAllCount, vOne->position, vOne->type);
+    for (i=1; i<countOne; ++i)
+	{
+	AllocVar(ev);
+	++vOne;
+	lastVix = vix;
+	vix = vertexIx(vAll, vAllCount, vOne->position, vOne->type);
+	assert(vix >= 0 && lastVix >= 0);
+	em[lastVix][vix] = TRUE;
+	ev->id = findMrnaIdByName(da->ma->qName, gg->mrnaRefs, gg->mrnaRefCount);
+	if(ev->id < 0)
+	    errAbort("ggGraph::makeInitialGraph() - Couldn't find %s in mrnalist.", da->ma->tName);
+	slAddHead(&evM[lastVix][vix], ev); 
+	}
+    }
+freeMem(vAll);
+
 return gg;
 }
 
@@ -151,7 +218,7 @@ bool *edgesOut = em[softIx];
 int endIx;
 boolean anyTrim = FALSE;
 boolean anyLeft = FALSE;
-
+struct ggEvidence ***evid = gg->evidence;
 for (endIx=0; endIx < vCount; ++endIx)
     {
     if (edgesOut[endIx])
@@ -161,6 +228,8 @@ for (endIx=0; endIx < vCount; ++endIx)
 	    {
 	    anyTrim = TRUE;
 	    edgesOut[endIx] = FALSE;
+	    addEvidenceIfUnique(&gg->evidence[bestStart][endIx], gg->evidence[softIx][endIx]);
+//	    ggEvidenceFreeList(&gg->evidence[softIx][endIx]);
 	    }
 	else
 	    {
@@ -211,7 +280,7 @@ bool **em = gg->edgeMatrix;
 int startIx;
 boolean anyTrim = FALSE;
 boolean anyLeft = FALSE;
-
+struct ggEvidence ***evid = gg->evidence;
 for (startIx=0; startIx < vCount; ++startIx)
     {
     if (em[startIx][softIx])
@@ -220,7 +289,9 @@ for (startIx=0; startIx < vCount; ++startIx)
 	if (bestEnd != softIx)
 	    {
 	    anyTrim = TRUE;
-	    em[startIx][softIx] = FALSE;
+	    em[startIx][softIx] = FALSE; // update evidence
+	    addEvidenceIfUnique(&gg->evidence[startIx][bestEnd], gg->evidence[startIx][softIx]);
+//	    ggEvidenceFreeList(&gg->evidence[startIx][softIx]);
 	    }
 	else
 	    {
@@ -259,7 +330,8 @@ for (i=0; i<vCount; ++i)
 return result;
 }
 
-static boolean arcsForSoftStartedExon(struct geneGraph *gg, int softStartIx, int hardEndIx)
+
+static boolean arcsForSoftStartedExon(struct geneGraph *gg, int softStartIx, int endIx)
 /* Put in arcs between hard start, and hard ends of any compatible
  * exons overlapping this one */
 {
@@ -269,8 +341,8 @@ int sIx, eIx;
 bool **em = gg->edgeMatrix;
 struct ggVertex *vertices = gg->vertices;
 int softStartPos = vertices[softStartIx].position;
-int hardEndPos = vertices[hardEndIx].position;
-
+int hardEndPos = vertices[endIx].position;
+struct ggEvidence  ***evid = gg->evidence;
 /* for each vertice */
 for (eIx = 0; eIx < vCount; ++eIx)
     {
@@ -286,19 +358,18 @@ for (eIx = 0; eIx < vCount; ++eIx)
             /* Why did jim comment this out? looks like now if there is a connection to any downstream exon we create the edge */
 	    // if (evpos <= hardEndPos && evpos > softStartPos) 
 	    {
-	    /* for each vertex again, apparently this is an n^2 algorithm  */
 	    for (sIx = 0; sIx < vCount; ++sIx)
 		{
-		if (sIx != softStartIx && em[sIx][eIx])
+		if (sIx != softStartIx && em[sIx][eIx]) 
 		    {
-		    /* look for an exon with a hard end before the softStart position
-		       and before the end that we are looking for if there is one assume
-		       that this is that exon and make the edge */
 		    struct ggVertex *sv = vertices+sIx;
 		    if (sv->position <= softStartPos + softBleedAdjust)
 			{
-			em[sIx][hardEndIx] = TRUE;
-			result = TRUE;
+			struct ggEvidence *ge = NULL;
+			ge = ggEvidenceClone(gg->evidence[softStartIx][endIx]);
+			em[sIx][endIx] = TRUE; 
+			addEvidenceIfUnique(&gg->evidence[sIx][endIx], ge);
+			result = TRUE;  
 			}
 		    }
 		}
@@ -319,7 +390,7 @@ bool **em = gg->edgeMatrix;
 boolean result = FALSE;
 boolean anyLeft = FALSE;
 int i;
-
+struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (em[softStartIx][i])
@@ -329,6 +400,7 @@ for (i=0; i<vCount; ++i)
 	if (res)
 	    {
 	    em[softStartIx][i] = FALSE;
+	    ggEvidenceFreeList(&gg->evidence[softStartIx][i]);
 	    result = TRUE;
 	    }
 	else
@@ -344,7 +416,7 @@ if (!anyLeft)
 return result;
 }
 
-static boolean arcsForSoftEndedExon(struct geneGraph *gg, int hardStartIx, int softEndIx)
+static boolean arcsForSoftEndedExon(struct geneGraph *gg, int startIx, int softEndIx)
 /* Put in arcs between hard start, and hard ends of any compatible
  * exons overlapping this one */
 {
@@ -353,9 +425,9 @@ int vCount = gg->vertexCount;
 int sIx, eIx;
 bool **em = gg->edgeMatrix;
 struct ggVertex *vertices = gg->vertices;
-int hardStartPos = vertices[hardStartIx].position;
+int startPos = vertices[startIx].position;
 int softEndPos = vertices[softEndIx].position;
-
+struct ggEvidence ***evid = gg->evidence;
 for (sIx = 0; sIx < vCount; ++sIx)
     {
     struct ggVertex *sv = vertices+sIx;
@@ -364,7 +436,7 @@ for (sIx = 0; sIx < vCount; ++sIx)
 	{
 	int svpos = sv->position;
 	int softBleedAdjust = (type == ggHardStart ? softEndBleedLimit : 0);
-	// if (svpos >= hardStartPos && svpos < softEndPos)
+	// if (svpos >= startPos && svpos < softEndPos)
 	if (svpos < softEndPos)
 	    {
 	    for (eIx = 0; eIx < vCount; ++eIx)
@@ -374,7 +446,10 @@ for (sIx = 0; sIx < vCount; ++sIx)
 		    struct ggVertex *ev = vertices+eIx;
 		    if (ev->position >= softEndPos - softBleedAdjust)
 			{
-			em[hardStartIx][eIx] = TRUE;
+			struct ggEvidence *ge = NULL;
+			ge = ggEvidenceClone(gg->evidence[startIx][softEndIx]);
+			em[startIx][eIx] = TRUE; 
+			addEvidenceIfUnique(&gg->evidence[startIx][eIx], ge);
 			result = TRUE;
 			}
 		    }
@@ -395,7 +470,7 @@ bool **em = gg->edgeMatrix;
 boolean result = FALSE;
 boolean anyLeft = FALSE;
 int i;
-
+struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (em[i][softEndIx])
@@ -405,6 +480,7 @@ for (i=0; i<vCount; ++i)
 	if (res)
 	    {
 	    em[i][softEndIx] = FALSE;
+	    ggEvidenceFreeList(&gg->evidence[i][softEndIx]);
 	    result = TRUE;
 	    }
 	else
@@ -429,16 +505,19 @@ int vCount = gg->vertexCount;
 struct ggVertex *vertices = gg->vertices;
 boolean result = FALSE;
 
-
 for (i=0; i<vCount; ++i)
     {
     switch (vertices[i].type)
 	{
 	case ggSoftStart:
 	    result |= softStartArcs(gg, i);
+	    if(!matricesInSync(gg)) 
+		errAbort("matrices are out of synch on vertex %d with ggSoftStart"); 	    
 	    break;
 	case ggSoftEnd:
 	    result |= softEndArcs(gg, i);
+	    if(!matricesInSync(gg)) 
+		errAbort("matrices are out of synch on vertex %d with ggSoftEnd"); 	    
 	    break;
 	}
     }
@@ -487,6 +566,7 @@ int vCount = gg->vertexCount;
 struct ggVertex *vertices = gg->vertices;
 bool **em = gg->edgeMatrix;
 boolean result = FALSE;
+struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (vertices[i].type == ggSoftStart)
@@ -500,6 +580,7 @@ for (i=0; i<vCount; ++i)
 		if (vertices[j].type == ggSoftEnd && exonEnclosed(gg, i, j))
 		    {
 		    waysOut[j] = FALSE;
+		    ggEvidenceFreeList(&gg->evidence[i][j]);
 		    result = TRUE;
 		    }
 		else
@@ -515,13 +596,27 @@ for (i=0; i<vCount; ++i)
 return result;
 }
 
+void ggOutputDebug(struct geneGraph *gg, int offset)
+/* convert to altGraphX and output to stdout */
+{
+struct altGraphX *ag = NULL;
+ag =  ggToAltGraphX(gg);
+altGraphXoffset(ag, offset);
+altGraphXVertPosSort(ag);
+altGraphXTabOut(ag, stdout);
+altGraphXFree(&ag);
+}
+
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci)
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 {
+struct sqlConnection *conn = hAllocConn();
 struct geneGraph *gg = makeInitialGraph(mc, ci);
 arcsForOverlaps(gg);
 softlyTrim(gg);
 hideLittleOrphans(gg);
+ggFillInTissuesAndLibraries(gg, conn);
+hFreeConn(&conn);
 return gg;
 }
 

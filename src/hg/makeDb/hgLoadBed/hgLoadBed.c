@@ -24,7 +24,7 @@ errAbort(
   "usage:\n"
   "   hgLoadBed database track files(s).bed\n"
   "options:\n"
-  "   -nobin   suppress bin field\n"
+  "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -tab  Separate by tabs rather than space\n"
@@ -42,7 +42,6 @@ if (strictTab)
     wordCount = chopTabs(line, words);
 else
     wordCount = chopLine(line, words);
-wordCount = lineFileChop(lf, words);
 if (wordCount == 0)
     errAbort("%s appears to be empty", fileName);
 lineFileClose(&lf);
@@ -97,7 +96,6 @@ while (lineFileNext(lf, &line, NULL))
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
     bed->line = dupe;
     slAddHead(pList, bed);
-    printf("chr=%s\n",bed->chrom);
     }
 lineFileClose(&lf);
 }

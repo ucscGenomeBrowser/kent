@@ -87,12 +87,15 @@ while (lineFileNext(lf, &line, &lineSize))
     if (line[0] != '#')
 	{
 	int wordCount;
-	char *words[12];
+	int i;
+	char *words[9];
 	struct hashEl *hel;
 	struct gffLine *gl;
-	wordCount = chopTabs(line, words);
-	if (wordCount < 9)
-	    syntaxError(lf);
+	for (i=0; i<8; ++i)
+	    {
+	    if ((words[i] = nextWord(&line)) == NULL)
+		syntaxError(lf);
+	    }
 	AllocVar(rna);
 	rna->chrom = cloneString(words[0]);
 	rna->chromStart = atoi(words[3])-1;
@@ -103,7 +106,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	rna->strand[0] = words[6][0];
 	rna->type = cloneString(words[2]);
 	rna->source = cloneString(words[1]);
-	parseEnd(lf, words[8], &rna->name, &rna->isPsuedo);
+	parseEnd(lf, line, &rna->name, &rna->isPsuedo);
 	slAddHead(&rnaList, rna);
 	}
     }

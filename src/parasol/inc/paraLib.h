@@ -34,5 +34,25 @@ void setupDaemonLog(char *fileName);
 void logClose();
 /* Close log file. */
 
+struct runJobMessage
+/* Parsed out runJob message as paraNode sees it. */
+    {
+    char *managingHost;	   /* Hub's machine. */
+    char *jobIdString;	   /* Unique ID - ascii number */
+    char *reserved;	   /* Reserved for future expansion, always "0" */
+    char *user;		   /* User associated with job. */
+    char *dir;		   /* Directory to run job in. */
+    char *in;              /* File for stdin. */
+    char *out;		   /* File for stdout. */
+    char *err;             /* File for stderr. */
+    char *command;	   /* Command line for job. */
+    };
+
+boolean parseRunJobMessage(char *line, struct runJobMessage *rjm);
+/* Parse runJobMessage as paraNodes sees it. */
+
+void fillInErrFile(char errFile[512], int jobId, char *tempDir);
+/* Fill in error file name */
+
 #endif /* PARALIB_H */
 

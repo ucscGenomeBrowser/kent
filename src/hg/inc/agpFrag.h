@@ -49,5 +49,15 @@ void agpFragOutput(struct agpFrag *el, FILE *f, char sep, char lastSep);
 #define agpFragCommaOut(el,f) agpFragOutput(el,f,',',',');
 /* Print out agpFrag as a comma separated list including final comma. */
 
+struct agpFrag *agpFragLoadAll(char *fileName); 
+/* Load all agpFrag from a tab-separated file.
+ * Dispose of this with agpFragFreeList(). */
+
+/* ---------------------- End autoSql generated code. ---------------------- */
+
+struct agpFrag *agpFragLoadAllNotGaps(char *fileName) ;
+/* Load all agpFrag that aren't gaps from a tab-separated file.
+ * Dispose of this with agpFragFreeList(). */
+
 #endif /* AGPFRAG_H */
 

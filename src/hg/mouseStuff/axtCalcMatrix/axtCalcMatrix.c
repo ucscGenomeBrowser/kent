@@ -30,7 +30,8 @@ for (i=0; i<count; ++i)
     }
 }
 
-void addInsert(int *hist, int histSize, char *sym, int symCount)
+void addInsert(int *hist, int histSize, char *sym, int symCount, 
+	int *sumStart, int *sumExt)
 /* Add inserts to histogram. */
 {
 char c, lastC = 0;
@@ -44,9 +45,15 @@ for (i=0; i<=symCount; ++i)
     if (c == '-')
         {
 	if (lastC == '-')
+	     {
 	     ++insSize; 
+	     *sumExt += 1;
+	     }
 	else
+	     {
 	     insSize = 1;
+	     *sumStart += 1;
+	     }
 	}
     else
         {
@@ -136,7 +143,7 @@ for (i=0; i<=symCount; ++i)
 void printLabeledPercent(char *label, int num, int total)
 /* Print a label, absolute number, and number as percent of total. */
 {
-printf("%s %7.3f%% (%d)\n", label, 100.0*num/total, num);
+printf("%s %4.1f%% (%d)\n", label, 100.0*num/total, num);
 }
 
 void printMedianEtc(char *label, int *hist, int histSize, char *bestPos)
@@ -212,8 +219,10 @@ for (fileIx = 0; fileIx < fileCount; ++fileIx)
         {
 	totalT += axt->tEnd - axt->tStart;
 	addMatrix(matrix, axt->tSym, axt->qSym, axt->symCount);
-	addInsert(histIns, maxInDel, axt->tSym, axt->symCount);
-	addInsert(histDel, maxInDel, axt->qSym, axt->symCount);
+	addInsert(histIns, maxInDel, axt->tSym, axt->symCount,
+		&tGapStart, &tGapExt);
+	addInsert(histDel, maxInDel, axt->qSym, axt->symCount,
+		&qGapStart, &qGapExt);
 	addPerfect(axt, histPerfect, maxPerfect, 
 		axt->qSym, axt->tSym, axt->symCount, bestPerfect);
 	addGapless(axt, histGapless, maxPerfect, 
@@ -260,11 +269,10 @@ for (i=1; i<21; ++i)
     {
     if (i == 20)
         printf(">=");
-    tGapStart += histIns[i];
-    qGapStart += histDel[i];
     printf("%2d  %6.4f%% %6.4f%%\n", i, 100.0*histIns[i]/totalT, 
     	100.0*histDel[i]/totalT);
     }
+
 #ifdef OLD
 for (i=0; i<100; i += 10)
     {
@@ -291,10 +299,6 @@ for (i=0; i<1000; i += 100)
 	both = ins + del;
 	insSum += ins;
 	delSum += del;
-	tGapStart += ins;
-	qGapStart += del;
-	tGapExt += ins*(ix-1);
-	qGapExt += del*(ix-1);
 	perfectSum += histPerfect[ix];
 	perfectBaseSum += histPerfect[ix] * ix;
 	}
@@ -306,6 +310,10 @@ printf(">1000  %6.4f%% %6.4f%% %6d %7d\n",
 	histPerfect[1000]*1000);
 both = histIns[1000] + histDel[1000];
 #endif /* OLD */
+
+printf("\n");
+printMedianEtc("perfect", histPerfect, maxPerfect, bestPerfect);
+printMedianEtc("gapless", histGapless, maxPerfect, bestGapless);
 printf("\n");
 printLabeledPercent("totalT:    ", totalT, totalT);
 printLabeledPercent("matches:   ", totalMatch, totalT);
@@ -314,9 +322,7 @@ printLabeledPercent("tGapStart: ", tGapStart, totalT);
 printLabeledPercent("qGapStart: ", qGapStart, totalT);
 printLabeledPercent("tGapExt:   ", tGapExt, totalT);
 printLabeledPercent("qGapExt:   ", qGapExt, totalT);
-printf("\n");
-printMedianEtc("perfect", histPerfect, maxPerfect, bestPerfect);
-printMedianEtc("gapless", histGapless, maxPerfect, bestGapless);
+printLabeledPercent("baseId:    ", totalMatch, totalMatch+totalMismatch);
 }
 
 int main(int argc, char *argv[])

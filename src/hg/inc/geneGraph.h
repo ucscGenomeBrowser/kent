@@ -28,11 +28,13 @@
 enum ggVertexType
  /* Classifies a vertex.  */
     {
-    ggSoftStart,  /* First vertex - exact position unknown. */
-    ggHardStart,  /* Start of a middle exon, position known. */      
-    ggSoftEnd,    /* Last vertex - exact position unknown. */
-    ggHardEnd,    /* End of a middle exon, position known. */
-    ggUnused,     /* Vertex no longer part of graph. */
+    ggSoftStart,  /* 0 First vertex - exact position unknown. */
+    ggHardStart,  /* 1 Start of a middle exon, position known. */      
+    ggSoftEnd,    /* 2 Last vertex - exact position unknown. */
+    ggHardEnd,    /* 3 End of a middle exon, position known. */
+    ggUnused,     /* 4 Vertex no longer part of graph. */
+    ggRangeEnd,   /* 5 An end that could happen anywhere in a range. */ 
+    ggRangeStart  /* 6 An start that could happen anywhere in a range. */
     };
 
 enum ggEdgeType
@@ -199,6 +201,10 @@ struct ggEdge *ggFindCassetteExons(struct geneGraph *gg);
 
 struct ggEdge *ggCreateEdge(int v1, int v2, int type);
 /* create and return and graph edge, free with freez(). */
+
+boolean ggIsCassetteExonEdge(struct geneGraph *gg, int vertex1, int vertex2);
+/* Return TRUE if there is evidence that this exon is optional
+ * or FALSE otherwise.  */
 
 #endif /* GENEGRAPH_H */
 
