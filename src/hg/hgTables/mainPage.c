@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.37 2004/09/13 23:58:37 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.45 2004/09/22 07:59:11 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -116,6 +116,7 @@ jsDropDownCarryOver(dy, hgtaGroup);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
 jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
+jsTextCarryOver(dy, hgtaOutFileName);
 return dy;
 }
 
@@ -271,7 +272,7 @@ static char *usualTypes[] =
      outHyperlinks};
 static char *usualLabels[] =
     {"all fields from primary table", 
-     "selected fields from related tables", 
+     "selected fields from primary and related tables", 
      "sequence", 
      "GTF - gene transfer format", 
      "BED - browser extensible data", 
@@ -282,7 +283,7 @@ static char *tracklessTypes[] =
      outSelectedFields};
 static char *tracklessLabels[] =
     {"all fields from primary table", 
-     "selected fields from related tables"};
+     "selected fields from primary and related tables"};
     
 static char *wigTypes[] = 
      {
@@ -297,15 +298,68 @@ static char *wigLabels[] =
     "custom track",
     };
 
-hPrintf("<TR><TD><B>output:</B>\n");
+static char *galaUsualTypes[] =
+    {
+    outPrimaryTable,
+    outSelectedFields,
+    outSequence,
+    outGff,
+    outBed,
+    outGala,
+    outCustomTrack,
+    outHyperlinks,
+    };
+static char *galaUsualLabels[] =
+    {
+    "all fields from primary table",
+    "selected fields from related tables",
+    "sequence",
+    "GTF - gene transfer format",
+    "BED - browser extensible data",
+    "query results to GALA",
+    "custom track",
+    "hyperlinks to Genome Browser",
+    };
+static char *galaWigTypes[] =
+     {
+     outWigData,
+     outWigBed,
+     outGala,
+     outCustomTrack,
+     };
+static char *galaWigLabels[] =
+    {
+    "data points",
+    "bed format",
+    "query results to GALA",
+    "custom track",
+    };
+
+hPrintf("<TR><TD><B>output format:</B>\n");
+
 if (isWig)
-    showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
+    if (galaAvail(database))
+        showOutDropDown(galaWigTypes, galaWigLabels, ArraySize(galaWigTypes));
+    else
+        showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
 else if (isPositional)
-    showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+    {
+    if (galaAvail(database))
+        showOutDropDown(galaUsualTypes, galaUsualLabels, ArraySize(galaUsualTypes));
+    else
+        showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+    }
 else
     showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
 }
 
+void nbSpaces(int count)
+/* Print some non-breaking spaces. */
+{
+int i;
+for (i=0; i<count; ++i)
+    hPrintf("&nbsp;");
+}
 
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
@@ -318,22 +372,24 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD><B>genome:</B>\n");
     printGenomeListHtml(database, onChangeOrg());
+    nbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
     printAssemblyListHtml(database, onChangeDb());
     hPrintf("</TD></TR>\n");
     }
 
-/* Print group line. */
+/* Print group and track line. */
     {
     hPrintf("<TR><TD>");
     selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn);
+    nbSpaces(3);
+    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");
     }
 
-/* Print track and table line. */
+/* Print table line. */
     {
     hPrintf("<TR><TD>");
-    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     curTable = showTableField(curTrack);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
@@ -343,14 +399,18 @@ hPrintf("<TABLE BORDER=0>\n");
     isWig = isWiggle(database, curTable);
     if (isWig)
 	isPositional = TRUE;
+    nbSpaces(1);
+    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
     hPrintf("</TD></TR>\n");
     }
 
 /* Region line */
+{
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+char *range = cartUsualString(cart, hgtaRange, "");
+if (isPositional)
     {
-    char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
     boolean doEncode = sqlTableExists(conn, "encodeRegions");
-    char *range = cartUsualString(cart, hgtaRange, "");
 
     hPrintf("<TR><TD><B>region:</B>\n");
 
@@ -369,14 +429,16 @@ hPrintf("<TABLE BORDER=0>\n");
 	}
     makeRegionButton("range", regionType);
     hPrintf(" range ");
-    cgiMakeTextVar(hgtaRange, range, 29);
-#ifdef JAVASCRIPT_EXPERIMENT_THAT_DOESNT_WORK
-    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=30 VALUE=\"%s\"",
-    	hgtaRange, range);
-    hPrintf(" onChange=\"document.mainForm.%s.value='range';document.mainForm.%s.checked=TRUE;\">",
-    	hgtaRegionType);
-#endif /* OLD */
+    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=29 VALUE=\"%s\" onFocus=\"%s\">\n",
+    	hgtaRange, range, jsOnRangeChange(hgtaRegionType, "regionType", "range"));
     hPrintf("</TD></TR>\n");
+    }
+else
+    {
+    /* Need to put at least stubs of cgi variables in for JavaScript to work. */
+    jsTrackingVar("regionType", regionType);
+    cgiMakeHiddenVar(hgtaRange, range);
+    cgiMakeHiddenVar(hgtaRegionType, regionType);
     }
 
 /* Select identifiers line. */
@@ -393,6 +455,7 @@ if (!isWig)
 	}
     hPrintf("</TD></TR>\n");
     }
+}
 
 /* Filter line. */
 {
@@ -430,10 +493,22 @@ if (isPositional)
 /* Print output type line. */
 showOutputTypeRow(isWig, isPositional);
 
+/* Print output destination line. */
+    {
+    char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+    hPrintf("<TR><TD>\n");
+    hPrintf("<B>output file:</B> ");
+    cgiMakeTextVar(hgtaOutFileName, fileName, 29);
+    hPrintf(" (leave blank to keep output in browser)\n");
+    hPrintf("</TD></TR>\n");
+    }
+
 hPrintf("</TABLE>\n");
+
 
 /* Submit buttons. */
     {
+    hPrintf("<BR>\n");
     if (isWig)
 	{
 	char *name;
@@ -463,7 +538,6 @@ hPrintf("</TABLE>\n");
 	cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
 	hPrintf(" ");
 	}
-    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
 
 #ifdef SOMETIMES
     hPrintf(" ");
@@ -485,6 +559,7 @@ hPrintf("%s",
 /* Main form. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
+jsWriteFunctions();
 showMainControlTable(conn);
 hPrintf("</FORM>\n");
 
@@ -492,7 +567,7 @@ hPrintf("</FORM>\n");
     {
     static char *saveVars[] = {
       "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
-      hgtaRange, hgtaOutputType, };
+      hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(saveVars, ArraySize(saveVars));
     }
 

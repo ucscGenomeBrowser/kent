@@ -13,7 +13,7 @@
 
 #define MAX_PB_ORG 50		/* max number of oganisms that support PB */
 
-#define GLOBAL_PB_DB "pbGlobal"
+#define GLOBAL_PB_DB "proteins"
 
 #ifndef VGFX_H
 #include "vGfx.h"
@@ -134,6 +134,7 @@ void doPathwayLinks(char *protDisplayID, char *mrnaID);
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
 void doGeneSorterLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
+void doBlatLink(char *db, char *sciName, char *commonName);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);

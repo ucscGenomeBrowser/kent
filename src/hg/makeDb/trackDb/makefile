@@ -16,6 +16,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
 	canFam1 \
 	mm2 mm3 mm4 mm5\
+	mm2X mm3X \
 	rn2 rn3 \
 	galGal2 \
         tetNig1 \
@@ -36,8 +37,10 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	sc1
 
 MGC_DBS = \
-	hg15 hg16 hg17 \
-	mm3 mm4 mm5
+	hg16 hg17 \
+	mm3 mm4 mm5 \
+	rn3 \
+	danRer1
 
 update:
 	@for DB in $(DBS) x; do \
@@ -114,7 +117,8 @@ checkbeta:
 
 beta: checkbeta strict
 
-# This target adds trackDbLocal to the mgc-specific server.  
+# This target adds trackDbLocal to the mgc-specific server.  Also
+# loads the grpMgc table.
 mgc:
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
@@ -125,6 +129,8 @@ mgc:
 		    cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
+		    echo $$cmd ;  $$cmd ; \
+		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ;  $$cmd ; \
 		fi ; \
 	    fi ; \

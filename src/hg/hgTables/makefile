@@ -9,7 +9,7 @@ A = hgTables
 O = $A.o asObj.o bedList.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o javascript.o \
     joining.o mainPage.o rangeHistogram.o schema.o \
-    seqOut.o sumStats.o usage.o wiggle.o
+    seqOut.o sumStats.o usage.o wiggle.o gala.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -24,12 +24,15 @@ alpha::
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
 	chmod a+r ${CGI_BIN}/all.joiner
 	chmod g+w ${CGI_BIN}/all.joiner
+	wget -O ${CGI_BIN}/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
+	cp ${CGI_BIN}/galaAvail.tab ${CGI_BIN}-${USER}
 
 beta::
 	rm -f ${CGI_BIN}-beta/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-beta
 	chmod a+r ${CGI_BIN}-beta/all.joiner
 	chmod g+w ${CGI_BIN}-beta/all.joiner
+	wget -O ${CGI_BIN}-beta/galaAvail.tab http://gala.cse.psu.edu/cgi-bin/live_versions
 
 
 compile: $O 

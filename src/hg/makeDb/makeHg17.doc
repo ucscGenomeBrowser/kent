@@ -5343,24 +5343,35 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# MAKE VSGALGAL2 DOWNLOADABLES (DONE 6/23/04 angie)
+# MAKE VSGALGAL2 DOWNLOADABLES (REDONE 9/13/04 angie)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
-    ln all.chain chicken.chain
-    zip /cluster/data/hg17/zip/chicken.chain.zip chicken.chain
-    rm chicken.chain
-    ln human.net chicken.net
-    zip /cluster/data/hg17/zip/chicken.net.zip chicken.net
-    rm chicken.net
-    ln humanSyn.net chickenSyn.net
-    zip /cluster/data/hg17/zip/chickenSyn.net.zip chickenSyn.net
-    rm chickenSyn.net
+    gzip -c all.chain > /cluster/data/hg17/zip/chicken.chain.gz
+    gzip -c human.net > /cluster/data/hg17/zip/chicken.net.gz
+    mkdir /cluster/data/hg17/zip/axtNet
+    foreach f (axtNet/chr*axt)
+      gzip -c $f > /cluster/data/hg17/zip/$f.gz
+    end
+    # Doh! above for loop didn't work because all axt's have been removed 
+    # from this dir!  :|  Just this once, regenerate compressed axtNet on 
+    # the fly:
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain/net
+    foreach f (*.net)
+      set chr = $f:t:r
+      echo $chr
+      netToAxt $f ../chain/$chr.chain /cluster/data/hg17/nib \
+        /cluster/data/galGal2/nib stdout \
+      | axtSort stdin stdout \
+      | gzip -c > /cluster/data/hg17/zip/axtNet/$chr.axt.gz
+    end    
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
-    mv /cluster/data/hg17/zip/chicken*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/hg17/zip/chicken*.gz .
+    mv /cluster/data/hg17/zip/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -8797,4 +8808,153 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     nice rm -rf lav &
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
+
+# regulatory potential 2X track (WORKING - 2004-09-14 - Hiram)
+    ssh eieio
+    mkdir /cluster/store3/gs.18/build35/bed/regPotential2X
+    mkdir /cluster/store3/gs.18/build35/bed/regPotential3X
+    cd /cluster/data/hg17/bed
+    ln -s /cluster/store3/gs.18/build35/bed/regPotential2X .
+    ln -s /cluster/store3/gs.18/build35/bed/regPotential3X .
+    cd regPotential2X
+    wget --timestamping 'http://www.bx.psu.edu/~james/stuff/rp_kit.tgz' .
+    tar xvzf rp_kit.tgz
+    # fixup the hmr_rp_score.sh and hm_rp_score.sh to set
+    #	RP=. to read: RP=/cluster/data/hg17/bed/regPotential2X/rp_kit
+    #	And fix the usage of SHIFT and WINDOW, the following diff shows
+    #	the changes:
+    #	5c5
+    #	< RP_DIR=/cluster/data/hg17/bed/regPotential2X/rp_kit
+    #	---
+    #	> RP_DIR=.
+    #	8,9c8,9
+    #	< MAPPING=rp_kit/hm_5a_mapping.txt
+    #	< MATRIX=rp_kit/hm_5a+3_scoreMatrix.dat
+    #	---
+    #	> MAPPING=hm_5a_mapping.txt
+    #	> MATRIX=hm_5a+3_scoreMatrix.dat
+    #	12c12
+    #	< SHIFT=1
+    #	---
+    #	> SHIFT=5
+    #	24,25c24,25
+    #	<     --shiftAmount $SHIFT \
+    #	<     --windowSize $WINDOW \
+    #	---
+    #	>     --shiftAmount 5 \
+    #	>     --windowSize 100 \
+
+    mkdir maf
+    for A in  `(cd /cluster/data/hg17/bed/blastz.mm5/axtNet; ls chr*.axt)`
+    do
+	C=${A/.axt}
+	echo "/cluster/data/hg17/bed/blastz.mm5/axtNet/${A} -> maf/${C}.maf.gz"
+	axtToMaf /cluster/data/hg17/bed/blastz.mm5/axtNet/${A} \
+		/cluster/data/hg17/chrom.sizes /cluster/data/mm5/chrom.sizes \
+		stdout | gzip > maf/${C}.maf.gz
+    done
+
+    #	a valid java runtime is only on hgwdev.  This is a java procedure
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/regPotential2X
+    mkdir rp_scores
+    #  WARNING - the following loop takes almost 12 hours !
+    for M in maf/chr*.maf.gz
+    do
+	C=${M/.maf.gz}
+	C=${C#maf/}
+	echo "$M -> rp_scores/$C.score.gz"
+	(zcat ${M} | ./rp_kit/hm_rp_score.sh /dev/stdin /dev/stderr 2>&1 >/dev/null) | sort -n | \
+	    gzip > rp_scores/${C}.score.gz
+    done
+    #	real    709m55.805s
+    #	user    754m51.030s
+    #	sys     20m11.000s
+
+    #	Back to the file server to create the wiggle data
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/regPotential2X
+    mkdir wigData dataLimits
+    for S in rp_scores/chr*.score.gz
+    do
+	C=${S/.score.gz}
+	C=${C#rp_scores/}
+	echo "$S -> wigData/$C.wig"
+	zcat $S | sort -n | \
+	    wigAsciiToBinary -chrom=$C -dataSpan=1 \
+	    -wibFile=wigData/$C stdin 2> dataLimits/$C.limits
+    done
+    #	real    313m0.567s
+    #	user    285m37.319s
+    #	sys     23m8.301s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/regPotential2X/wigData
+    mkdir /gbdb/hg17/wib/regPotential2X
+    ln -s `pwd`/*.wib /gbdb/hg17/wib/regPotential2X
+    time hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/regPotential2X \
+	hg17 regPotential2X chr*.wig
+    #	real    1m40.961s
+    #	user    0m30.880s
+    #	sys     0m5.890s
+
+# regulatory potential 3X track (WORKING - 2004-09-14 - Hiram)
+    #	Expects groundwork done above in the 2X track
+    #	a valid java runtime is only on hgwdev.  This is a java procedure
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/regPotential3X
+    ln -s ../regPotential2X/rp_kit/hmr_rp_score.sh .
+    mkdir rp_scores
+    #  WARNING - the following loop takes almost 12 hours !
+    for M in maf/chr*.maf.gz
+    do
+	C=${M/.maf.gz}
+	C=${C#maf/}
+	echo "$M -> rp_scores/$C.score.gz"
+	(zcat ${M} | ./rp_kit/hm_rp_score.sh /dev/stdin /dev/stderr 2>&1 >/dev/null) | sort -n | \
+	    gzip > rp_scores/${C}.score.gz
+    done
+    #	real    613m8.230s
+    #	user    623m7.110s
+    #	sys     20m24.550s
+
+    #	Back to the file server to create the wiggle data
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/regPotential3X
+    mkdir wigData dataLimits
+
+    for S in rp_scores/chr*.score.gz
+    do
+	C=${S/.score.gz}
+	C=${C#rp_scores/}
+	echo "$S -> wigData/$C.wig"
+	zcat $S | sort -n | \
+	    wigAsciiToBinary -chrom=$C -dataSpan=1 \
+		-wibFile=wigData/$C stdin 2> dataLimits/$C.limits
+    done
+XXX - running 2004-09-16 09:20
+
+
+# SGP GENES (DONE 9/17/04 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/sgp
+    cd /cluster/data/hg17/bed/sgp
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/SGP/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/SGP/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null sgpPep.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> sgpPep.fa
+    end
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/sgp
+    ldHgGene -gtf -genePredExt hg17 sgpGene chr*.gtf
+    hgPepPred hg17 generic sgpPep sgpPep.fa
+
 

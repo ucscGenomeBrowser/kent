@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.22 2004/08/28 23:42:15 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.23 2004/09/21 16:53:59 donnak Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -237,11 +237,11 @@ struct joinerPair *jpList, *jp;
 struct asObject *asObj = asForTable(conn, table);
 char *splitTable = chromTable(conn, table);
 
-hPrintf("<B>Database:</B> %s ", db);
-hPrintf("<B>Primary Table:</B> %s", table);
+hPrintf("<B>Database:</B> %s", db);
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s", table);
 if (!sameString(splitTable, table))
     hPrintf(" (%s)", splitTable);
-hPrintf(" <B>Row Count:</B> ");
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
 printLongWithCommas(stdout, sqlTableSize(conn, splitTable));
 hPrintf("<BR>\n");
 describeFields(db, splitTable, asObj, conn);

@@ -1814,3 +1814,24 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     cd /cluster/data/tetNig1/bed/Genoscope/cytokines
     # loaded chr1 only into rahseq first to check then load all chroms
     nice ldHgGene -genePredExt tetNig1 cytokines chr*.gff
+
+
+# GENEID GENES (DONE 9/22/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/tetNig1/bed/geneid
+    cd /cluster/data/tetNig1/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/T.nigroviridis/tetNigFeb2004/geneid_v1.2/$chr.gtf
+      wget http://genome.imim.es/genepredictions/T.nigroviridis/tetNigFeb2004/geneid_v1.2/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null geneidPep.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> geneidPep.fa
+    end
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/geneid
+    ldHgGene -gtf -genePredExt tetNig1 geneid chr*.gtf
+    hgPepPred tetNig1 generic geneidPep geneidPep.fa
+
+

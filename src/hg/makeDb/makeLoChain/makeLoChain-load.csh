@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -ef
 # Name:         makeLoChain-load
 #
 # Function:     Load a liftOver chain into database and save to download dir
@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh,v 1.1 2004/04/20 20:28:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh,v 1.2 2004/09/18 00:18:57 angie Exp $
 
 if ( $#argv != 2 ) then
     echo "usage: $0 <old-assembly> <new-assembly>"
@@ -34,11 +34,11 @@ endif
 set downloadDir = /usr/local/apache/htdocs/goldenPath/$oldAssembly
 cd $downloadDir
 mkdir -p liftOver
-cp  $chainFile liftOver
-gzip liftOver/$filename
+gzip -c $chainFile > liftOver/$filename.gz
 
 # load into database
 mkdir -p /gbdb/$oldAssembly/liftOver
+rm -f /gbdb/$oldAssembly/liftOver/$filename
 ln -s /cluster/data/$oldAssembly/bed/bedOver/$filename \
                 /gbdb/$oldAssembly/liftOver
 hgAddLiftOverChain $oldAssembly $newAssembly

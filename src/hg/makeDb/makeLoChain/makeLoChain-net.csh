@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -ef
 # Name:         makeLoChain-net
 #
 # Function:     Create alignment net and extract liftOver chains
@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh,v 1.1 2004/04/20 20:28:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh,v 1.2 2004/09/18 00:18:57 angie Exp $
 
 if ( $#argv != 2 ) then
     echo "$0 usage: <old-assembly> <new-assembly>"
@@ -16,7 +16,7 @@ endif
 set oldAssembly = $1
 set newAssembly = $2
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
 cd $blatDir
 
 if ( ! -e $blatDir/chainRaw ) then
@@ -24,8 +24,8 @@ if ( ! -e $blatDir/chainRaw ) then
     exit 1
 endif
 
-set fs = `fileServer`
-if ( $fs != "" && $fs != $HOST ) then
+set fs = `fileServer $blatDir`
+if ( $HOST != $fs ) then
     echo "Run this on $fs"
     exit 1
 endif
@@ -52,12 +52,19 @@ foreach i (*.chain)
     netChainSubset ../net/$i:r.net $i ../over/$i
 end
 
-cat ../over/*.chain > ../over.chain
-mkdir -p /cluster/data/$oldAssembly/bed/bedOver
 set upperNewAssembly = $newAssembly:u
 set filename = ${oldAssembly}To${upperNewAssembly}.over.chain
-cp ../over.chain /cluster/data/$oldAssembly/bed/bedOver/$filename
+cat ../over/*.chain > ../$filename
+set destDir = /cluster/data/$oldAssembly/bed/bedOver
+mkdir -p $destDir
+cp ../$filename $destDir/$filename
 
-echo "Finished creating $filename"
+set execDir = $0:h
+echo ""
+echo "Created $blatDir/$filename and copied to $destDir/$filename"
+echo "DO THIS NEXT:"
+echo "    ssh hgwdev"
+echo "    $execDir/makeLoChain-load.csh $oldAssembly $newAssembly"
+echo ""
 exit 0
 

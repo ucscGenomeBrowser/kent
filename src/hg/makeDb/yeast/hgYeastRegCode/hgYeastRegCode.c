@@ -7,9 +7,10 @@
 #include "portable.h"
 #include "jksql.h"
 #include "hgRelate.h"
+#include "obscure.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.2 2004/09/13 05:59:22 kent Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.4 2004/09/22 18:18:04 kent Exp $";
 
 char *tmpDir = ".";
 char *tableName = "transRegCode";
@@ -21,7 +22,7 @@ errAbort(
   "hgYeastRegCode - Load files from the regulatory code paper (large scale \n"
   "CHIP-CHIP on yeast) into database\n"
   "usage:\n"
-  "   hgYeastRegCode gffDir Final_InTableS2_v24.motifs output.bed output.motifs\n"
+  "   hgYeastRegCode motifGffDir Final_InTableS2_v24.motifs probe.gff outputMotif.bed output.motifs outputProbe.bed\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -30,6 +31,17 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+int romanToArabicChrom(char *roman, struct lineFile *lf)
+/* Convert chromosome from roman numeral to a regular number. */
+{
+static char *chromNames[16] = {"I", "II", "III", "IV", "V", "VI", 
+	"VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI"};
+int chromIx = stringArrayIx(roman, chromNames, ArraySize(chromNames));
+if (chromIx < 0)
+    errAbort("Unrecognized chromosome line %d of %s", lf->lineIx, lf->fileName);
+return chromIx;
+}
 
 struct yrc
 /* Info about yeastRegulatoryCode record. */
@@ -42,15 +54,13 @@ struct yrc
     int consLevel;		/* Conservation level. */
     };
 
-struct hash *makeBed(char *gffDir, char *outBed)
+struct hash *makeMotifBed(char *gffDir, char *outBed)
 /* Make bed file from GFFs.  Return hash of transcription factors. */
 {
 static char *consLevelPath[3] = {"3", "2", "0"};
 static char *consLevelBed[3] = {"2", "1", "0"};
 static char *pLevelPath[3] = {"p001b", "p005b", "nobind"};
 static char *pLevelBed[3] = {"good", "weak", "none"};
-static char *chromNames[16] = {"I", "II", "III", "IV", "V", "VI", 
-	"VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI"};
 int cIx, pIx;
 FILE *f = mustOpen(outBed, "w");
 struct hash *tfHash = newHash(0);
@@ -83,9 +93,7 @@ for (cIx=0; cIx<3; ++cIx)
 	    if (e == NULL)
 	        errAbort("Expecting semicolon line %d of %s", lf->lineIx, lf->fileName);
 	    *e = 0;
-	    chromIx = stringArrayIx(row[0], chromNames, ArraySize(chromNames));
-	    if (chromIx < 0)
-	        errAbort("Unrecognized chromosome line %d of %s", lf->lineIx, lf->fileName);
+	    chromIx = romanToArabicChrom(row[0], lf);
 	    chromStart = lineFileNeedNum(lf, row, 3);
 	    chromEnd = lineFileNeedNum(lf, row, 4);
 	    safef(hashKey, sizeof(hashKey), "%s.%d.%d", name, chromIx, chromStart);
@@ -216,11 +224,86 @@ carefulClose(&f);
 lineFileClose(&lf);
 }
 
-void hgYeastRegCode(char *gffDir, char *inMotifs, char *outBed, char *outMotifs)
+void chopOff(char *s, char c)
+/* Chop string at last occurence of char c. */
+{
+s = strrchr(s, c);
+if (s != NULL)
+    *s = 0;
+}
+
+struct hash *makeProbeBed(char *inGff, char *outBed)
+/* Convert probe location GFF file to BED. */
+{
+struct lineFile *lf = lineFileOpen(inGff, TRUE);
+char *line, *row[9];
+struct hash *hash = newHash(16);
+FILE *f = mustOpen(outBed, "w");
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
+    {
+    int chromIx = romanToArabicChrom(row[0], lf);
+    int start = lineFileNeedNum(lf, row, 3) - 1;
+    int end = lineFileNeedNum(lf, row, 4);
+    char *s = row[8];
+    char *probe, *orf, *note; 
+    char *boundBy = "Bound by: ";
+    struct slName *tfList = NULL, *tf;
+    if (!startsWith("Probe ", s))
+        errAbort("Expecting 9th column to start with 'Probe ' line %d of %s",
+		lf->lineIx, lf->fileName);
+    probe = nextWord(&s);
+    orf = nextWord(&s);
+    chopOff(orf, ';');
+    note = nextWord(&s);
+    if (!sameWord("Note", note))
+        errAbort("Expecting 'note' in 9th column line %d of %s", 
+		lf->lineIx, lf->fileName);
+    s = skipLeadingSpaces(s);
+    if (!parseQuotedString(s, s, NULL))
+        errAbort("Expecting quoted string in 9th column line %d of %s",
+		lf->lineIx, lf->fileName);
+    if (startsWith(boundBy, s))
+        {
+	char *word;
+	s += strlen(boundBy);
+	while ((word = nextWord(&s)) != NULL)
+	    {
+	    chopOff(word, ',');
+	    tf = slNameNew(word);
+	    slAddHead(&tfList, tf);
+	    }
+	slReverse(&tfList);
+	}
+    else if (startsWith("Bad Probe", s))
+        continue;
+    else if (startsWith("Not bound", s))
+        {
+	/* Ok, we do nothing. */
+	}
+    else
+        {
+	errAbort("Expecting %s in note line %d of %s", boundBy, 
+		lf->lineIx, lf->fileName);
+	}
+    fprintf(f, "chr%d\t%d\t%d\t", chromIx+1, start, end);
+    fprintf(f, "%s\t%d\t", orf, slCount(tfList));
+    for (tf = tfList; tf != NULL; tf = tf->next)
+	fprintf(f, "%s,", tf->name);
+    fprintf(f, "\n");
+    hashAdd(hash, orf, NULL);
+    }
+lineFileClose(&lf);
+carefulClose(&f);
+return hash;
+}
+
+void hgYeastRegCode(char *motifGffDir, char *inMotifs, char *probeGff, 
+	char *outMotifBed, char *outMotifs, char *outProbe)
 /* hgYeastRegCode - Load files from the regulatory code paper 
  * (large scale CHIP-CHIP on yeast) into database. */
 {
-struct hash *tfHash = makeBed(gffDir, outBed);
+struct hash *probeHash = makeProbeBed(probeGff, outProbe);
+struct hash *tfHash = makeMotifBed(motifGffDir, outMotifBed);
 makeMotifs(inMotifs, tfHash, outMotifs);
 }
 
@@ -229,8 +312,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 7)
     usage();
-hgYeastRegCode(argv[1], argv[2], argv[3], argv[4]);
+hgYeastRegCode(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }

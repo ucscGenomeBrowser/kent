@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.60 2004/08/23 20:33:36 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.62 2004/09/22 21:23:10 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -599,7 +599,11 @@ else
 	    }
 	else
 	    {
-	    replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
+	    //replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
+	    replaceInStr(html, sizeof(html), 
+		"<!bouncebutton>", 
+		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"unbounce\">&nbsp;&nbsp;"
+		); 
 	    }
 	    
 	replaceInStr(html, sizeof(html), "<!lockbutton>", 
@@ -979,15 +983,17 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 
 /* draw table header */
 
-if (sameString(pushQtbl,"pushQ"))
+printf("<H2>Track Push Queue");
+if (!sameString(pushQtbl,"pushQ"))
     {
-    printf("<H2>Track Push Queue</H2>\n");
+    printf(" for %s",pushQtbl);
     }
-else
+if (!sameString(month,""))    
     {
-    printf("<H2>Track Push Queue for %s</H2>\n",pushQtbl);
+    printf(" (%s)",month);
     }
-
+printf("</H2>\n");
+    
 printf("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
 printf("  <TR>\n");
 
@@ -1660,6 +1666,11 @@ if ((sameString(bouncebutton,"bounce"))&&(!sameString(q.priority,"A")))
     safef(msg,sizeof(msg),"Only priority A records should be bounced. <br>\n");
     isRedo = TRUE;
     }
+if ((sameString(bouncebutton,"unbounce"))&&(sameString(q.priority,"A")))
+    {
+    safef(msg,sizeof(msg),"Priority A records should not be unbounced. <br>\n");
+    isRedo = TRUE;
+    }
 
 
 if (isRedo)
@@ -1674,6 +1685,11 @@ if (sameString(bouncebutton,"bounce"))
     safef(newPriority, sizeof(newPriority), "B");
     strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
     q.bounces++;
+    }
+if (sameString(bouncebutton,"unbounce")) 
+    {
+    safef(newPriority, sizeof(newPriority), "A");
+    strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
     }
 
 
@@ -1767,7 +1783,9 @@ if (sameString(showSizes,"Show Sizes"))
 
 if (sameString(submitbutton,"Submit")) 
     { /* if submit button, saved data, now return to readonly view.  */
+    
     safef(msg, sizeof(msg), "Data saved.");
+    
     cgiVarSet("qid", q.qid); /* for new rec */
     doEdit();
     return;

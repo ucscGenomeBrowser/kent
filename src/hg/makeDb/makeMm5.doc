@@ -5960,3 +5960,24 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     nice rm -rf axtChrom.orig &
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
+
+# SGP GENES (DONE 9/17/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/mm5/bed/sgp
+    cd /cluster/data/mm5/bed/sgp
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/M.musculus/mmMay2004/SGP/humangp200405/$chr.gtf
+      wget http://genome.imim.es/genepredictions/M.musculus/mmMay2004/SGP/humangp200405/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null sgpPep.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> sgpPep.fa
+    end
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/sgp
+    ldHgGene -gtf -genePredExt mm5 sgpGene chr*.gtf
+    hgPepPred mm5 generic sgpPep sgpPep.fa
+
+

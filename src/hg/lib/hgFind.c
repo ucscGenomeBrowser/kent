@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.149 2004/09/09 00:08:59 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.150 2004/09/17 03:17:21 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -678,7 +678,7 @@ struct sqlResult *sr;
 char **row;
 int ret;
 
-sprintf(query, "select type, organism from mrna where acc = '%s'", acc);
+sprintf(query, "select type, organism from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -803,7 +803,7 @@ char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
 char tableName [64];
-if (!hTableExists("mrna"))
+if (!hTableExists("gbCdnaInfo"))
     return FALSE;
 if ((type = mrnaType(acc)) == NULL || type[0] == 0)
     /* this excludes refseq mrna's, and accessions with
@@ -912,7 +912,7 @@ for (i = 0; i<tableCount; ++i)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
 	sprintf(query, 
-            "select acc, organism from mrna where %s = %s and type = 'mRNA'",
+            "select acc, organism from gbCdnaInfo where %s = %s and type = 'mRNA'",
                         field, idEl->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -1065,23 +1065,23 @@ for (el = accList; el != NULL; el = el->next)
     /* print description for item, or lacking that, the product name */
     sprintf(description, "n/a"); 
     sprintf(query, 
-        "select description.name from mrna,description"
-        " where mrna.acc = '%s' and mrna.description = description.id", acc);
+        "select description.name from gbCdnaInfo,description"
+        " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.description = description.id", acc);
     sqlQuickQuery(conn, query, description, sizeof(description));
     if (sameString(description, "n/a"))
         {
         /* look for product name */
         sprintf(query, 
-            "select productName.name from mrna,productName"
-            " where mrna.acc = '%s' and mrna.productName = productName.id",
+            "select productName.name from gbCdnaInfo,productName"
+            " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.productName = productName.id",
                  acc);
         sqlQuickQuery(conn, query, product, sizeof(product));
         if (!sameString(product, "n/a"))
             {
             /* get organism name */
             sprintf(query, 
-                "select organism.name from mrna,organism"
-                " where mrna.acc = '%s' and mrna.organism = organism.id", acc);
+                "select organism.name from gbCdnaInfo,organism"
+                " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
             *organism = 0;
             sqlQuickQuery(conn, query, organism, sizeof(organism));
             safef(description, sizeof(description), "%s%s%s",

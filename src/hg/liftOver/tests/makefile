@@ -1,6 +1,6 @@
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   simpleTest 
+test:   enm001 enm006 enr112 enr223
 
 PROG=liftOver
 
@@ -22,24 +22,50 @@ minus:	mkdirs
 	cat output/enr223.S.{good,bad}.bed | \
                 diff - expected/enr223.S.bed
 
+# test w/o multiple
 enm001:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple \
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 \
             input/enm001.bed \
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr7.chain \
                 output/enm001.good.bed output/enm001.bad.bed
 	cat output/enm001.{good,bad}.bed | \
                 diff - expected/enm001.bed
 
+chuckTest:	mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} \
+            input/chuckTest.bed \
+            /cluster/data/mm2/bed/liftOver/mm2.mm5.liftOver/over/chr19.chain \
+                output/chuckTest.good.bed output/chuckTest.bad.bed
+	cat output/chuckTest.{good,bad}.bed | \
+                diff - expected/chuckTest.bed
+
+chuckBigTest:	mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} \
+            input/chuckBigTest.bed \
+            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain \
+                output/chuckBigTest.good.bed output/chuckBigTest.bad.bed
+	cat output/chuckBigTest.{good,bad}.bed | \
+                diff - expected/chuckBigTest.bed
+
 enm006:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple \
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -minMatch=.01 -multiple \
             input/enm006.bed \
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chrX.chain \
                 output/enm006.good.bed output/enm006.bad.bed
 	cat output/enm006.{good,bad}.bed | \
                 diff - expected/enm006.bed
 
+enr112:	mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE} \
+                input/enr112.bed \
+                    /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr2.chain \
+                    output/enr112.good.bed \
+                    output/enr112.bad.bed
+	cat output/enr112.{good,bad}.bed | \
+                diff - expected/enr112.bed
+
 enr223:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple \
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE} \
                 input/enr223.bed \
                     /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
                     output/enr223.good.bed \

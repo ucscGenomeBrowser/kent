@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.803 2004/09/15 21:50:09 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.804 2004/09/17 03:17:20 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3382,7 +3382,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 int direction = -1;
 char query[512];
 char buf[64], *s = NULL;
-sprintf(query, "select direction from mrna where acc='%s'", acc);
+sprintf(query, "select direction from gbCdnaInfo where acc='%s'", acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
     direction = atoi(s);
@@ -4918,7 +4918,7 @@ char *name = lf->name;
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 char organism[256], *org;
-sprintf(query, "select organism.name from mrna,organism where mrna.acc = '%s' and mrna.organism = organism.id", name);
+sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", name);
 org = sqlQuickQuery(conn, query, organism, sizeof(organism));
 hFreeConn(&conn);
 if (org == NULL)

@@ -1,4 +1,4 @@
-table source
+table productName
 "The protein product name of a genbank sequence"
     (
     uint id;	"Unique numerical id"

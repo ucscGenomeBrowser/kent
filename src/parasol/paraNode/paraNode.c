@@ -49,6 +49,8 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
+static char const rcsid[] = "$Id: paraNode.c,v 1.66 2004/09/23 00:29:14 galt Exp $";
+
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
 int umaskVal = 0002;		/* File creation mask. */

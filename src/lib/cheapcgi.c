@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.66 2004/09/03 22:01:19 markd Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.67 2004/09/23 15:53:33 giardine Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -50,6 +50,12 @@ char *cgiScriptName()
 /* Return name of script so libs can do context-sensitive stuff. */
 {
 return getenv("SCRIPT_NAME");
+}
+
+char *cgiServerName()
+/* Return name of server */
+{
+return getenv("SERVER_NAME");
 }
 
 char *_cgiRawInput()

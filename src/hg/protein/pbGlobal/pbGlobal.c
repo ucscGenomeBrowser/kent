@@ -187,8 +187,10 @@ void makeActiveImagePB(char *psOutput, char *psOutput2)
 char *mapName = "map";
 int pixWidth, pixHeight;
 
+char *answer;
 char cond_str[255];
 struct sqlConnection *conn; 
+struct sqlConnection *connCentral;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -196,24 +198,46 @@ char *chp;
 int  i,l;
 int  ii = 0;
 int  iypos;
+char *blatGbDb;
+char *sciName, *commonName;
 
-hPrintf("<br><font size=4>");
-
-if (!proteinInSupportedGenome)
-    {
-    hPrintf("Protein: ");
-    }
-else
-    {
-    hPrintf("%s protein: ", organism);
-    }
+hPrintf("<br><font size=4>Protein ");
 
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
 
 hPrintf(" %s\n", description);
-hPrintf("</font><br><br>");
+hPrintf("</font><br>");
+
+hPrintf("Organism: ");
+conn = sqlConnect("swissProt");
+/* get scientific and Genbank common name of this organism */
+    
+sciName    = NULL;
+commonName = NULL;
+/* NOTE: on rare occasions, acc to taxon id is not a one to one relationship, 
+   but we will just use the first valid one */
+safef(cond_str, sizeof(cond_str),"accToTaxon.acc='%s' and accToTaxon.taxon=taxon.id", proteinID);
+answer = sqlGetField(conn, "swissProt", "accToTaxon, taxon", "taxon.id", cond_str);
+    
+if (answer != NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
+    sciName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    
+    safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
+    commonName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    }
+if (sciName != NULL)
+    {
+    printf("%s", sciName);
+    }
+if (commonName != NULL)
+    {
+    printf(" (%s)", commonName);
+    }
+hPrintf("<br>");
 
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
@@ -221,6 +245,8 @@ if (protSeq == NULL)
     errAbort("%s is not a current valid entry in SWISS-PROT/TrEMBL\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
+
+fflush(stdout);
 
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
@@ -281,22 +307,54 @@ hPrintf("<P>");
 histDone:
 
 hPrintf("<P>");
+fflush(stdout);
 
-/* Do GB links only if the protein belongs to a supported genome */
-if (proteinInSupportedGenome)
+/* See if a UCSC Genome Browser exist for this organism.  If so, display BLAT link. */
+connCentral = hConnectCentral();
+safef(query, sizeof(query), 
+      "select defaultDb.name from dbDb, defaultDb where dbDb.scientificName='%s' and dbDb.name=defaultDb.name",
+      sciName);
+sr = sqlGetResult(connCentral, query);
+row = sqlNextRow(sr);
+if (row != NULL)
     {
-    doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
-    doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+    blatGbDb = strdup(row[0]);
+    }
+else
+    {
+    blatGbDb = NULL;
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&connCentral);
+
+if (proteinInSupportedGenome || (blatGbDb != NULL))
+    {
+    hPrintf("\n<B>UCSC links:</B><BR>\n ");
+    hPrintf("<UL>\n");
+
+    /* Show GB links only if the protein belongs to a supported genome */
+    if (proteinInSupportedGenome)
+    	{
+    	doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
+    	doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+    	}
+
+    /* Show Gene Sorter link only if it is valid for this genome */
+    if (hgNearOk(database))
+    	{
+    	doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
+    	}
+	
+    /* Show BLAT link if we have UCSC Genome Browser for it */
+    if (blatGbDb != NULL)
+    	{
+    	doBlatLink(blatGbDb, sciName, commonName);
+    	}
+	
+    hPrintf("</UL><P>");
     }
 
-/* show Gene Sorter link only if it is valid for this genome */
-if (hgNearOk(database))
-    {
-    doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
-    }
-
-hPrintf("</UL><P>");
-;
+/* This section shows various types of  domains */
 conn = sqlConnect("swissProt");
 domainsPrint(conn, proteinID);
 
@@ -435,8 +493,7 @@ else
     /* search existing GB databases to see if this protein can be found */
     protCntInSupportedGenomeDb = 
     	searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
-   
-    if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene > 1)
+    if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
     	{
 	/* more than 1 proteins match the query ID, present selection web page */
 	presentProteinSelections(queryID);

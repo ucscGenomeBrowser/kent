@@ -1,18 +1,21 @@
 1	Antigen
-2	Sporozoite
-3	Repeat
+2	Repeat
+3	Sporozoite
 4	Signal
 5	Germination
 6	Malaria
-7	Seed storage protein
-8	Multigene family
-9	Pyrrolidone carboxylic acid
-10	Glycoprotein
-11	Cell wall
-12	S-layer
-13	Plasmid
-14	GTP-binding
-15	Bile acid catabolism
-16	Oxidoreductase
-17	NADP
-18	Allergen
+7	Multigene family
+8	Seed storage protein
+9	Direct protein sequencing
+10	Pyrrolidone carboxylic acid
+11	
+12	Cell wall
+13	Glycoprotein
+14	S-layer
+15	Virulence
+16	GTP-binding
+17	Bile acid catabolism
+18	NADP
+19	Oxidoreductase
+20	Alternative splicing
+21	Allergen

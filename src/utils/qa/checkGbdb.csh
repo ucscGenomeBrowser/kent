@@ -107,7 +107,7 @@ end
 if ($errFlag == "1") then
   cat $output 
 else
-  echo "\nall files match on dev and hgnfs1\n"
+  echo "\n  all /gbdb files match on dev and hgnfs1 for $db.\n"
   rm -f $output
 endif
 

@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.19 2004/09/14 04:40:58 baertsch Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.20 2004/09/16 19:33:00 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -117,7 +117,8 @@ if (outDirDepth > 0)
         }
     }
 
-sprintf(outPath+strlen(outPath), "%s%0*d.fa", fname, digits, fileCount);
+if (digits)
+    sprintf(outPath+strlen(outPath), "%s%0*d.fa", fname, digits, fileCount);
 }
 
 void splitByBase(char *inName, int splitCount, char *outRoot, unsigned long estSize)
@@ -274,10 +275,23 @@ char outDir[256], outFile[128], ext[64], outPath[512];
 ZeroVar(&seq);
 
 splitPath(outRoot, outDir, outFile, ext);
+
 while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     carefulClose(&f);
-    sprintf(outPath, "%s%s.fa", outDir, seq.name);
+    if (outDirDepth > 0)
+	{
+	char *ptr;
+
+	for(ptr=&seq.name[strlen(seq.name) - 1]; isdigit(*ptr); ptr--)
+	    ;
+	if (ptr > &seq.name[strlen(seq.name)])
+	    errAbort("outDirDepth specified but sequence name doesn't have any digits");
+
+	ptr++;
+	mkOutPath(outPath, outRoot, 0, atoi(ptr));
+	safef(outPath+strlen(outPath), sizeof(outPath) - strlen(outPath), "%s.fa", seq.name);
+	}
     verbose(2, "writing %s\n", outPath);
     f = mustOpen(outPath, "w");
     faWriteNext(f, seq.name, seq.dna, seq.size);

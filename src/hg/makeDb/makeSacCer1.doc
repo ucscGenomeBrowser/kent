@@ -209,7 +209,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed sacCer1 sgdClone  sgdClone.bed -tab \
         -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
 
-# AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
+# AUTO UPDATE GENBANK MRNA RUN  (Done 2003-11-24 Jim)
 
     # Put the nib's on /cluster/bluearc:
     ssh eieio
@@ -248,7 +248,7 @@ sacCer1.downloadDir = sacCer1
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
 
-# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST
+# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST  (Done Jim)
 # Grab sequence from all six yeast and massage
 # it so that fasta records all start with sacXXX
 # in the directory /cluster/data/sacCer1/bed/otherYeast/align
@@ -360,7 +360,7 @@ end
 	cd sgdLocalization
 	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
 
-# UPDATE GO DATABASE
+# UPDATE GO DATABASE  (DONE -Jim)
     ssh hgwdev
     cd /cluster/store1/geneOntology
     mkdir 20031202
@@ -760,7 +760,7 @@ end
     cd /cluster/data/sacCer1/bed/blastp/hg16/run/out
     hgLoadBlastTab sacCer1 hgBlastTab -maxPer=1 *.tab
 
-# LOADING ERAN SEGAL'S REGULATORY MODULE STUFF
+# LOADING ERAN SEGAL'S REGULATORY MODULE STUFF  (DONE 2004-9-22 -Jim)
     cd /cluster/data/sacCer1/bed
     mkdir eranSegal
     cd eranSegal
@@ -773,14 +773,19 @@ end
     hgLoadEranModules sacCer1 module_assignments.tab motif_modules.tab \
     	modules_motifs.gxm modules_motif_positions.tab gene_position.tab
 
-# LOADING REGULATORY CODE STUFF
+# LOADING REGULATORY CODE STUFF (In Progress 2004-9-22 -Jim)
     cd /cluster/data/sacCer1/bed
     mkdir fraenkelYoung
     cd fraenkelYoung
     # Get GFF files and motif file from downloads section of 
     # http://jura.wi.mit.edu/fraenkel/regulatory_map
-    hgYeastRegCode gff Final_InTableS2_v24.motifs transRegCode.bed transRegCodeMotif.tab
+    # Also get v24_probes.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
+
+    sort v24_probes.GFF | uniq > probes.GFF
+    hgYeastRegCode motifGff Final_InTableS2_v24.motifs probes.GFF \
+    	transRegCode.bed transRegCodeMotif.tab transRegCodeProbe.bed
     hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
+    hgLoadBed sacCer1 transRegCodeProbe transRegCodeProbe.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCodeProbe.sql -tab
     hgsql sacCer1 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
     hgsql sacCer1 -e 'load data local infile "transRegCodeMotif.tab" into table transRegCodeMotif'
     # Get rid of some crufty motif placements Ben Gordon doesn't like anymore that aren't in the
@@ -818,7 +823,7 @@ CREATE TABLE mitopred (
     hgsql sacCer1 < mitopred.sql
     hgsql sacCer1 -e 'load data local infile "mitopred.tab" into table mitopred'
 
-# MAKE Human Proteins track
+# MAKE Human Proteins track (DONE 2004-08-25 braney)
     ssh kksilo
     mkdir -p /cluster/data/sacCer1/blastDb
     cd /cluster/data/sacCer1/blastDb
@@ -851,7 +856,8 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
 #!/bin/sh
 BLASTMAT=/iscratch/i/blast/data
 export BLASTMAT
-f=/tmp/`basename $3`
+g=`basename $2`
+f=/tmp/`basename $3`.$g
 for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
 do
 if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
@@ -883,7 +889,7 @@ exit 1
     ssh kk
     cd /cluster/data/sacCer1/bed/tblastn.hg16KG
     para create blastSpec
-    para shove   # jobs will need to be restarted, but they should all finish
+    para try, push
 
     cat << '_EOF_' > chainGsub
 #LOOP
@@ -927,7 +933,7 @@ chainSome $(path1)
 
 # End tblastn
 
-# BLAT SGD predicted sacCer1 proteins against sacCer1
+# BLAT SGD predicted sacCer1 proteins against sacCer1 (DONE 2004-08-31 braney)
     ssh hgwdev
     cd /cluster/data/sacCer1/bed
     mkdir blat.sacCer1SG
@@ -983,3 +989,146 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     hgsql sacCer1 < ~/kent/src/hg/lib/blastRef.sql
     echo "rename table blastRef to blastSGRef00" | hgsql sacCer1
     echo "load data local infile 'blastSGRef00' into table blastSGRef00" | hgsql sacCer1
+
+# PHASTCONS AND PHASTCONS ELEMENTS (acs, 9/15/04)
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/otherYeast
+    mkdir phastCons
+    cd phastCons
+
+    # split up alignments; no need to use cluster here
+    MAF=/cluster/data/sacCer1/bed/otherYeast/align/mafOut
+    FA=/cluster/data/sacCer1
+    CHROMS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M"
+    mkdir -p SS
+    for i in $CHROMS ; do \
+	echo chr${i} ; \
+	msa_view $MAF/chr${i}.maf -M $FA/$i/chr${i}.fa -i MAF -o SS -O sacCer1,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu > SS/chr${i}.ss ; \
+    done
+
+    # produce rough starting model
+    msa_view -i SS --aggregate sacCer1,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu -o SS -z SS/*.ss > all.ss
+    phyloFit -i SS all.ss --tree "((((((sacCer1,sacPar),sacMik),sacKud),sacBay),sacCas),sacKlu)" -o starting-tree
+    # (cheat the branch lengths up a bit, since this represents an
+    # average of conserved and nonconserved sites; we want to
+    # initialize for nonconserved)
+    tree_doctor  --scale 2 starting-tree.mod > tmp.mod
+    mv tmp.mod starting-tree.mod 
+
+    # also get average GC content of aligned regions
+    msa_view -i SS all.ss --summary-only
+#descrip.                      A          C          G          T        G+C  length   all_gaps  some_gaps
+#all.ss                   0.3052     0.1954     0.1951     0.3042     0.3906   13251474          0    2260153
+
+    # save some I/O and space
+    gzip SS/*.ss
+    
+    # now set up cluster job to estimate model parameters.  See
+    # makeHg17.doc for add'l details
+
+    cat << 'EOF' > doEstimate.sh
+#!/bin/sh
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.3906 --nrates 1,1 --no-post-probs --ignore-missing --expected-lengths 75 --target-coverage 0.5 --quiet --log $2 --estimate-trees $3
+EOF
+    chmod u+x doEstimate.sh
+
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobs.lst
+    for f in SS/*.ss.gz ; do
+	root=`basename $f .ss.gz` ;\
+	echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobs.lst ;\
+    done
+
+    # run cluster job
+    ssh kk9... para create ...
+    # (takes about 15 minutes)
+
+    # Now combine parameter estimates.  
+    ls TREES/*.cons.mod > cons.txt
+    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+
+    # Now set up cluster job for computing consevation scores and
+    # predicted elements
+cat << 'EOF' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p POSTPROBS ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --expected-lengths 75 --target-coverage 0.5 --quiet --seqname $chr --idpref $pref --viterbi ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
+gzip -c $tmpfile > POSTPROBS/$pref.pp.gz
+rm $tmpfile
+EOF
+    chmod u+x doPhastCons.sh
+
+    rm -fr POSTPROBS ELEMENTS
+    rm -f jobs2.lst
+    for f in SS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
+
+    # run cluster job
+    ssh kk9... para create, ...
+    # (takes about 30 sec)
+
+    # set up phastConsElements track
+    awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' ELEMENTS/*.bed > all.raw.bed 
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    hgLoadBed sacCer1 phastConsElements all.bed
+    featureBits sacCer1 phastConsElements
+# 7517116 bases of 12156302 (61.837%) in intersection
+
+    # set up wiggle
+    mkdir -p wib
+    for i in $CHROMS ; do \
+	wigAsciiToBinary -chrom=chr${i} -wibFile=wib/chr${i}_phastCons POSTPROBS/chr${i}.pp.gz ;\
+    done
+    hgLoadWiggle sacCer1 phastCons -pathPrefix=/gbdb/sacCer1/wib wib/chr*_phastCons.wig
+    mkdir -p /gbdb/ce2/phastCons/wib
+    rm -f /gbdb/sacCer1/wib/chr*_phastCons.wib
+    ln -s /cluster/data/sacCer1/bed/otherYeast/phastCons/wib/*.wib /gbdb/sacCer1/wib
+    chmod 775 . wib /gbdb/sacCer1/wib
+    chmod 664 wib/*.wib
+
+    # set up full alignment/conservation track
+    rm -rf pwMaf /gbdb/sacCer1/pwMaf
+    mkdir -p pwMaf /gbdb/sacCer1/pwMaf
+    cd pwMaf ;\
+    for org in sacBay sacCas sacKlu sacKud sacMik sacPar ; do \
+	mkdir -p $org ; \
+	cp /cluster/data/sacCer1/bed/otherYeast/align/mafIn/chr*.$org $org ; \
+	for f in $org/* ; do chr=`basename $f .$org` ; mv $f $org/$chr.maf ; done ;\
+	ln -s /cluster/data/sacCer1/bed/otherYeast/phastCons/pwMaf/$org /gbdb/sacCer1/pwMaf/${org}_pwMaf ; \
+	hgLoadMaf sacCer1 -warn ${org}_pwMaf -pathPrefix=/gbdb/sacCer1/pwMaf/${org}_pwMaf ;\
+    done
+    cd ..
+    chmod 755 pwMaf pwMaf/* /gbdb/sacCer1/pwMaf /gbdb/sacCer1/pwMaf/*
+    chmod 644 pwMaf/*/*.maf
+
+    # trackDb entries:
+#track multizYeast 
+#shortLabel Conservation
+#longLabel Seven Species of Saccharomyces, Alignments & Conservation
+#group compGeno
+#priority 100
+#visibility pack
+#type wigMaf 0.0 1.0
+#maxHeightPixels 100:40:11
+#wiggle phastCons
+#yLineOnOff Off
+#autoScaleDefault Off
+#pairwise pwMaf
+#speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
+
+#track phastConsElements
+#shortLabel Most Conserved
+#longLabel PhastCons Conserved Elements (Seven Species of Saccharomyces)
+#group compGeno
+#priority 105
+#visibility hide
+#spectrum on
+#exonArrows off
+#showTopScorers 200
+#type bed 5 .

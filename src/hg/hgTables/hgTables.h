@@ -3,6 +3,7 @@
 #ifndef HGTABLES_H
 #define HGTABLES_H
 
+
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif
@@ -81,6 +82,9 @@ char *curTableLabel();
 void jsCreateHiddenForm(char **vars, int varCount);
 /* Create a hidden form with the given variables */
 
+void jsWriteFunctions();
+/* Write out Javascript functions. */
+
 char *jsOnChangeEnd(struct dyString **pDy);
 /* Finish up javascript onChange command. */
 
@@ -105,6 +109,10 @@ void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal);
 /* Make a check box filling in with existing value and
  * putting a javascript tracking variable on it. */
+
+char *jsOnRangeChange(char *cgiVar, char *jsVar, char *val);
+/* Make a little javascript to set the range radio button when
+ * they type in the range text box. */
 
 /* ---------- Other UI stuff. ----------------------*/
 
@@ -331,6 +339,8 @@ boolean anyIntersection();
 #define hgtaDoGetBed "hgta_doGetBed"
 #define hgtaDoGetCustomTrack "hgta_doGetCustomTrack"
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
+#define hgtaDoGetGalaQuery "hgta_doGetGalaQuery"
+#define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -341,12 +351,14 @@ boolean anyIntersection();
 #define hgtaOffsetEnd "hgta_offsetEnd"
 #define hgtaOffsetRelativeTo "hgta_offsetRelativeTo"
 #define hgtaOutputType "hgta_outputType"
+#define hgtaOutputPad "hgta_outputPad"
+#define hgtaOutFileName "hgta_outFileName"
 #define hgtaDatabase "hgta_database"  /* In most cases use "db" */
 #define hgtaTable "hgta_table"
 #define hgtaHistoTable "hgta_histoTable"
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
-#define hgtaFilterOn "hgta_filterOn"
+#define hgtaFilterTable "hgta_filterTable"
 #define hgtaGeneSeqType "hgta_geneSeqType"
 #define hgtaPrintCustomTrackHeaders "hgta_printCustomTrackHeaders"
 #define hgtaCtName "hgta_ctName"
@@ -392,6 +404,7 @@ boolean anyIntersection();
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
 #define outWigBed "wigBed"
+#define outGala "galaQuery"
 
 /* --------- Identifier list handling stuff. ------------ */
 
@@ -400,6 +413,10 @@ char *identifierFileName();
 
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
+
+char *getIdField(char *db, struct trackDb *track, char *table, 
+	struct hTableInfo *hti);
+/* Get ID field for table, or NULL if none.  FreeMem result when done */
 
 /* --------- Summary and stats stuff -------------- */
 long long basesInRegion(struct region *regionList);
@@ -548,6 +565,9 @@ void doOutGff(char *table, struct sqlConnection *conn);
 void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
+void doOutGalaQuery(struct trackDb *track, char *table, struct sqlConnection *conn);
+/* Put up form to select GALA query output format. */
+
 void doSummaryStats(struct sqlConnection *conn);
 /* Put up page showing summary stats for track. */
 
@@ -589,6 +609,18 @@ void doGetCustomTrack(struct sqlConnection *conn);
 
 void doGetCustomTrackFile(struct sqlConnection *conn);
 /* Get Custom Track file output (UI has already told us how). */
+
+/* --------------- GALA functions --------------- */
+#define galaCmdBufferSize 160
+
+void doGetGalaQuery(struct sqlConnection *conn);
+/* Get GALA query output */
+
+void doAllGalaQuery(struct sqlConnection *conn);
+/* Run GALA generated query in table browser, return results to GALA */
+
+boolean galaAvail(char *db);
+/* Check to see if GALA is available for this freeze */
 
 #endif /* HGTABLES_H */
 

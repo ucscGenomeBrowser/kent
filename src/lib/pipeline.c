@@ -11,8 +11,8 @@
 
 /* FIXME: add close-on-exec startup hack */
 
-enum pipelineOpts
-/* Option flag set */
+enum pipelineFlags
+/* internal option bitset */
     {
     pipelineRead    = 0x01, /* read from pipeline */
     pipelineWrite   = 0x02, /* write to pipeline */
@@ -130,15 +130,15 @@ static void plProcFree(struct plProc *proc)
 {
 int i;
 for (i = 0; proc->cmd[i] != NULL; i++)
-    free(proc->cmd[i]);
-free(proc->cmd);
-free(proc);
+    freeMem(proc->cmd[i]);
+freeMem(proc->cmd);
+freeMem(proc);
 }
 
 static void plProcExec(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
-/* Start one process in a pipeline with the supplied stdio files.  These maybe
- * pipelineInheritFd or pipelineDevNull.  Setting stderrFh to STDERR_FILENO
- * cause stderr to be passed through the pipeline along with stdout */
+/* Start one process in a pipeline with the supplied stdio files.  Setting
+ * stderrFh to STDERR_FILENO cause stderr to be passed through the pipeline
+ * along with stdout */
 {
 int fd;
 if ((proc->pid = fork()) < 0)
@@ -146,26 +146,20 @@ if ((proc->pid = fork()) < 0)
 if (proc->pid == 0)
     {
     /* child, first setup stdio files */
-    if (stdinFd != pipelineInheritFd)
+    if (stdinFd != STDIN_FILENO)
         {
-        if (stdinFd == pipelineDevNull)
-            stdinFd = devNullOpen(O_RDONLY);
         if (dup2(stdinFd, STDIN_FILENO) < 0)
             errnoAbort("can't dup2 to stdin");
         }
     
-    if (stdoutFd != pipelineInheritFd)
+    if (stdoutFd != STDOUT_FILENO)
         {
-        if (stdoutFd == pipelineDevNull)
-            stdoutFd = devNullOpen(O_WRONLY);
         if (dup2(stdoutFd, STDOUT_FILENO) < 0)
             errnoAbort("can't dup2 to stdout");
         }
     
-    if (stderrFd != pipelineInheritFd)
+    if (stderrFd != STDERR_FILENO)
         {
-        if (stderrFd == pipelineDevNull)
-            stderrFd = devNullOpen(O_WRONLY);
         if (dup2(stderrFd, STDERR_FILENO) < 0)
             errnoAbort("can't dup2 to stderr");
         }
@@ -258,73 +252,102 @@ for (proc = pl->procs; proc != NULL; proc = proc->next)
     }
 }
 
-struct pipeline *pipelineCreateRead(char ***cmds, char *stdinFile)
+static void checkOpts(unsigned opts, char *stdFile)
+/* check that options and stdin/out file make sense together */
+{
+if ((opts & pipelineInheritFd) && (opts & pipelineDevNull))
+    errAbort("can't specify both pipelineInheritFd and pipelineDevNull when creating a pipeline");
+if (stdFile != NULL)
+    {
+    if ((opts & pipelineInheritFd) || (opts & pipelineDevNull))
+        errAbort("can't specify pipelineInheritFd or pipelineDevNull with a file path when creating a pipeline");
+    }
+else
+    {
+    if (!((opts & pipelineInheritFd) || (opts & pipelineDevNull)))
+        errAbort("must specify pipelineInheritFd or pipelineDevNull or a file path when creating a pipeline");
+    }
+}
+
+struct pipeline *pipelineCreateRead(char ***cmds, unsigned opts,
+                                    char *stdinFile)
 /* create a read pipeline from an array of commands.  Each command is
  * an array of arguments.  Shell expansion is not done on the arguments.
- * If stdinFile is not NULL, it will be opened as the input to the pipe.
+ * If stdinFile is not NULL, it will be opened as the input to the pipe,
+ * otherwise pipelineOpts is used to determine the input file.
  */
 {
 struct pipeline *pl = pipelineNew(cmds, pipelineRead);
-int stdinFd, pipeWrFd;
+int stdinFd = -1, pipeWrFd;
+checkOpts(opts, stdinFile);
 if (stdinFile != NULL)
     {
     stdinFd = open(stdinFile, O_RDONLY);
     if (stdinFd < 0)
         errnoAbort("can't open for read access: %s", stdinFile);
     }
-else
+else if (opts & pipelineInheritFd)
+    stdinFd = STDIN_FILENO;
+else if (opts & pipelineDevNull)
     stdinFd = devNullOpen(O_RDONLY);
 
 pl->pipeFd = pipeCreate(&pipeWrFd);
 pipelineBuild(pl, cmds);
-pipelineExec(pl, stdinFd, pipeWrFd, pipelineInheritFd);
+pipelineExec(pl, stdinFd, pipeWrFd, STDERR_FILENO);
 safeClose(&stdinFd);
 safeClose(&pipeWrFd);
 return pl;
 }
 
-struct pipeline *pipelineCreateRead1(char **cmd, char *stdinFile)
+struct pipeline *pipelineCreateRead1(char **cmd, unsigned opts,
+                                     char *stdinFile)
 /* like pipelineCreateRead(), only takes a single command */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
-return pipelineCreateRead(cmds, stdinFile);
+return pipelineCreateRead(cmds, opts, stdinFile);
 }
 
-struct pipeline *pipelineCreateWrite(char ***cmds, char *stdoutFile)
+struct pipeline *pipelineCreateWrite(char ***cmds, unsigned opts,
+                                     char *stdoutFile)
 /* create a write pipeline from an array of commands.  Each command is
  * an array of arguments.  Shell expansion is not done on the arguments.
  * If stdoutFile is not NULL, it will be opened as the output from the pipe.
+ * otherwise pipelineOpts is used to determine the output file.
  */
 {
-struct pipeline *pl = pipelineNew(cmds, pipelineRead);
-int stdoutFd, pipeRdFd;
+struct pipeline *pl = pipelineNew(cmds, pipelineWrite);
+int stdoutFd = -1, pipeRdFd;
+checkOpts(opts, stdoutFile);
 if (stdoutFile != NULL)
     {
     stdoutFd = open(stdoutFile, O_WRONLY|O_CREAT);
     if (stdoutFd < 0)
         errnoAbort("can't open for write access: %s", stdoutFile);
     }
-else
+else if (opts & pipelineInheritFd)
+    stdoutFd = STDOUT_FILENO;
+else if (opts & pipelineDevNull)
     stdoutFd = devNullOpen(O_WRONLY);
 
 pipeRdFd = pipeCreate(&pl->pipeFd);
 
 pipelineBuild(pl, cmds);
-pipelineExec(pl, pipeRdFd, stdoutFd, pipelineInheritFd);
+pipelineExec(pl, pipeRdFd, stdoutFd, STDERR_FILENO);
 safeClose(&stdoutFd);
 safeClose(&pipeRdFd);
 return pl;
 }
 
-struct pipeline *pipelineCreateWrite1(char **cmd, char *stdoutFile)
+struct pipeline *pipelineCreateWrite1(char **cmd, unsigned opts,
+                                      char *stdoutFile)
 /* like pipelineCreateWrite(), only takes a single command */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
-return pipelineCreateWrite(cmds, stdoutFile);
+return pipelineCreateWrite(cmds, opts, stdoutFile);
 }
 
 char *pipelineDesc(struct pipeline *pl)

@@ -15,6 +15,8 @@
 #include "jobResult.h"
 #include "verbose.h"
 
+static char const rcsid[] = "$Id: para.c,v 1.55 2004/09/23 00:29:14 galt Exp $";
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"retries", OPTION_INT},

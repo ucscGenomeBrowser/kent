@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.15 2004/09/13 23:10:06 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.16 2004/09/21 00:05:07 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -641,19 +641,16 @@ else if (doCt)
 	char browserUrl[256];
 	char headerText[512];
 	char posBuf[256];
-	char *position = cartOptionalString(cart, "position");
+	char *position;
 	int redirDelay = 3;
-	if (position == NULL)
+	if (isWig && wigOutData)
+	    position = wigPosition;
+	else
 	    {
-	    if (isWig && wigOutData)
-		position = wigPosition;
-	    else
-		{
-		struct bed *bed = ctNew->bedList;
-		safef(posBuf, sizeof(posBuf), 
-		    "%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
-		position = posBuf;
-		}
+	    struct bed *bed = ctNew->bedList;
+	    safef(posBuf, sizeof(posBuf), 
+		"%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
+	    position = posBuf;
 	    }
 	safef(browserUrl, sizeof(browserUrl),
 	      "%s?db=%s&position=%s", hgTracksName(), database, position);

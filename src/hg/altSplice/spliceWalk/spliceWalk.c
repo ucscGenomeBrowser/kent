@@ -9,7 +9,7 @@
 #include "cheapcgi.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: spliceWalk.c,v 1.6 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: spliceWalk.c,v 1.7 2004/09/17 03:17:18 kent Exp $";
 
 void usage()
 {
@@ -678,7 +678,7 @@ char *db = cgiUsualString("db","hg10");
 struct sqlConnection *conn = NULL;
 hSetDb(db);
 conn = hAllocConn();
-snprintf(query, sizeof(query), "select acc from mrna where type = 2");
+snprintf(query, sizeof(query), "select acc from gbCdnaInfo where type = 2");
 hashRow0(conn, query, hash);
 }
 

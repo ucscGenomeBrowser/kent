@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.9 2004/08/28 23:42:15 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.10 2004/09/17 03:17:20 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -233,7 +233,6 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm);
-    int uglyCount = 0;
     hgSeqBed(hti, bedList);
     lmCleanup(&lm);
     }

@@ -10,11 +10,13 @@ into 3K chunks onto a reasonable location
 for cluster input (see make doc).
 
 They are run in the following order:
-        align   kk
-        lift    fileserver
-        chain
-        net
-        load
+
+        makeLoChain-split   kkr1u00
+        makeLoChain-align   kk or kk9
+        makeLoChain-lift    fileserver
+        makeLoChain-chain   kk, kk9 or kki
+        makeLoChain-net     fileserver
+        makeLoChain-load    hgwdev
 
 They are run on the KiloKluster, fileserver, or database server --
 each script tests that it is being executed on the appropriate

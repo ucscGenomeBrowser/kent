@@ -17,8 +17,8 @@ altColor 200,150,150
 type bed 4 +
 
 track mzDy1Dp2Ag1_phast
-shortLabel (dp2) Conservation
-longLabel (dp2) D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
+shortLabel Conservation
+longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
 group compGeno
 priority 100
 visibility pack
@@ -31,7 +31,7 @@ pairwise mypa
 speciesOrder d_yakuba d_pseudoobscura a_gambiae
 
 track chainDp2
-shortLabel (dp2) D. pseud. Chain
+shortLabel D. pseud. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
@@ -43,7 +43,7 @@ type chain dp2
 otherDb dp2
 
 track netDp2
-shortLabel (dp2) D. pseud. Net
+shortLabel D. pseud. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134
@@ -53,8 +53,8 @@ type netAlign dp2 chainDp2
 otherDb dp2
 
 track mzDy1Dp1Ag1_phast
-shortLabel Conservation
-longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
+shortLabel (dp1) Conservation
+longLabel (dp1) D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
 group compGeno
 priority 100
 visibility pack
@@ -67,7 +67,7 @@ pairwise mypa
 speciesOrder d_yakuba d_pseudoobscura a_gambiae
 
 track chainDp1
-shortLabel D. pseud. Chain
+shortLabel (dp1) D. pseud. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
@@ -79,7 +79,7 @@ type chain dp1
 otherDb dp1
 
 track netDp1
-shortLabel D. pseud. Net
+shortLabel (dp1) D. pseud. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134

@@ -16,6 +16,31 @@
 #include "cart.h"
 #include "hgTables.h"
 
+
+void jsWriteFunctions()
+/* Write out Javascript functions. */
+{
+hPrintf("\n<SCRIPT>\n");
+hPrintf("%s\n",
+"function setRadioCheck(varName, value) \n"
+"{\n"
+"var len = document.mainForm.elements.length;\n"
+"var i = 0;\n"
+"for (i = 0; i < len; i++) \n"
+"    {\n"
+"    if (document.mainForm.elements[i].name == varName) \n"
+"	{\n"
+"	if (document.mainForm.elements[i].value == value)\n"
+"	    document.mainForm.elements[i].checked = true;\n"
+"	else\n"
+"	    document.mainForm.elements[i].checked = false;\n"
+"	}\n"
+"    }\n"
+"}\n"
+);
+hPrintf("</SCRIPT>\n");
+}
+
 char *jsOnChangeEnd(struct dyString **pDy)
 /* Finish up javascript onChange command. */
 {
@@ -78,6 +103,16 @@ void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar)
 /* Carry over tracked variable (radio button?) to hidden form. */
 {
 dyStringPrintf(dy, "document.hiddenForm.%s.value=%s; ", cgiVar, jsVar);
+}
+
+char *jsOnRangeChange(char *cgiVar, char *jsVar, char *val)
+/* Make a little javascript to set the range radio button when
+ * they type in the range text box. */
+{
+static char buf[256];
+safef(buf, sizeof(buf),
+    "setRadioCheck('%s', '%s'); %s='%s'", cgiVar, val, jsVar, val);
+return buf;
 }
 
 void jsCreateHiddenForm(char **vars, int varCount)

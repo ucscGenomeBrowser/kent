@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.204 2004/09/10 20:16:25 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.205 2004/09/17 03:17:21 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1133,7 +1133,7 @@ if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
 	sqlFreeResult(&sr);
     if (gbDate != NULL)
         sprintf(query,
-                "select gbSeq.id,gbExtFile,file_offset,file_size,moddate from gbSeq,mrna where (gbSeq.acc = '%s') and (mrna.acc = gbSeq.acc)",
+                "select gbSeq.id,gbExtFile,file_offset,file_size,moddate from gbSeq,gbCdnaInfo where (gbSeq.acc = '%s') and (gbCdnaInfo.acc = gbSeq.acc)",
                 acc);
     else
         sprintf(query,
@@ -2420,7 +2420,7 @@ return ret;
 }
 
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
-/* Find table information.  Return NULL if no table. */
+/* Find table information.  Return NULL if no table.  */
 {
 static struct hash *dbHash = NULL;	/* Values are hashes of tables. */
 struct hash *hash;
@@ -2837,8 +2837,11 @@ char splitTable[64];
 if (tdb->restrictCount > 0 && chrom != NULL)
     chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
 return (chromOk && 
-	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) &&
+	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+	&&
 	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 	);
 }
 

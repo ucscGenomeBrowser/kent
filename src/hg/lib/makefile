@@ -12,7 +12,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
-    clonePos.o codeBlast.o codeBlastScore.o cogs.o columnInfo.o coordConv.o \
+    clonePos.o codeBlast.o codeBlastScore.o cogs.o columnInfo.o \
+    contigAcc.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
     encodeErge.o encodeErgeHssCellLines.o\
@@ -50,7 +51,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
     tableDescriptions.o tfbsConsMap.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackTable.o transRegCode.o vegaInfo.o wabAli.o web.o \
+    trackDbCustom.o trackTable.o transRegCode.o transRegCodeProbe.o \
+    vegaInfo.o wabAli.o web.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
     vntr.o zdobnovSynt.o
 

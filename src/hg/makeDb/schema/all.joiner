@@ -620,7 +620,7 @@ identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
     $gbd.gbSeq.acc 
     $gbd.gbStatus.acc unique
-    $gbd.mrna.acc unique
+    $gbd.gbCdnaInfo.acc unique
     $gbd.imageClone.acc
     $gbd.altGraphX.mrnaRefs comma
 
@@ -746,75 +746,75 @@ identifier knownIsoformCluster
 identifier genBankAuthor
 "Connects genBank mRNA/EST and it's author"
     $gbd.author.id
-    $gbd.mrna.author 
+    $gbd.gbCdnaInfo.author 
 
 identifier genBankCds
 "Connects genBank mRNA/EST and it's coding region (CDS)"
     $gbd.cds.id
-    $gbd.mrna.cds 
+    $gbd.gbCdnaInfo.cds 
 
 identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
     $gbd.cell.id
-    $gbd.mrna.cell 
+    $gbd.gbCdnaInfo.cell 
 
 identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
     $gbd.development.id
-    $gbd.mrna.development 
+    $gbd.gbCdnaInfo.development 
 
 identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
     $gbd.description.id
-    $gbd.mrna.description 
+    $gbd.gbCdnaInfo.description 
     
 identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
     $gbd.geneName.id
-    $gbd.mrna.geneName 
+    $gbd.gbCdnaInfo.geneName 
     $gbd.refLink.geneName
 
 identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
     $gbd.keyword.id
-    $gbd.mrna.keyword 
+    $gbd.gbCdnaInfo.keyword 
 
 identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.library.id
-    $gbd.mrna.library 
+    $gbd.gbCdnaInfo.library 
     $gbd.altGraphX.mrnaLibs comma
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
     $gbd.mrnaClone.id
-    $gbd.mrna.mrnaClone 
+    $gbd.gbCdnaInfo.mrnaClone 
 
 identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.organism.id
-    $gbd.mrna.organism 
+    $gbd.gbCdnaInfo.organism 
 
 identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
     $gbd.productName.id
-    $gbd.mrna.productName 
+    $gbd.gbCdnaInfo.productName 
     $gbd.refLink.prodName
 
 identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.sex.id
-    $gbd.mrna.sex 
+    $gbd.gbCdnaInfo.sex 
 
 identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
     $gbd.source.id
-    $gbd.mrna.source 
+    $gbd.gbCdnaInfo.source 
 
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.mrna.tissue 
+    $gbd.gbCdnaInfo.tissue 
     $gbd.altGraphX.mrnaTissues comma
 
 
@@ -1033,6 +1033,9 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdToSgd.name
     $sacCer.sgdToSgd.value
     $sacCer.sgdToName.name
+    $sacCer.esRegGeneToModule.gene
+    $sacCer.esRegGeneToMotif.gene
+    $sacCer.esRegGeneUpstreamRegion.name
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -1278,6 +1281,16 @@ identifier encodeRegion
      galGal2.blastHg16KG.qName
 
 
+identifier esRegModule
+"Eran Segal's collection of motifs that appear together in a regulatory module"
+    $sacCer.esRegModuleToMotif.module dupeOk
+    $sacCer.esRegGeneToModule.module full minCheck=0.99
+
+identifier esRegMotif
+"Eran Segal's motifs deduced from coregulated genes"
+    $sacCer.esRegMotif.name
+    $sacCer.esRegModuleToMotif.motif 
+    $sacCer.esRegGeneToMotif.name 
 
 # Dependencies not already captured in identifiers
 

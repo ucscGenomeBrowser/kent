@@ -17,10 +17,11 @@
 #include "trackDb.h"
 #include "grp.h"
 #include "customTrack.h"
+#include "pipeline.h"
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.62 2004/09/14 03:57:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.69 2004/09/23 15:55:43 giardine Exp $";
 
 
 void usage()
@@ -120,6 +121,33 @@ else
     return curTable;
 }
 
+/* --------------- Compression on the fly stuff ------ */
+
+#ifdef MIGHT_WORK_SOMEDAY
+struct pipeline *gzipPipe = NULL;
+
+void gzipPipeOpen()
+/* Redirect stdout to go through a pipe to gzip. */
+{
+static char *gzip[] = {"gzip", "-c", "-f", NULL};
+gzipPipe = pipelineCreateWrite1(gzip, pipelineInheritFd, NULL);
+if (dup2(pipelineFd(gzipPipe), 1) < 0)
+   errnoAbort("dup2 to stdout failed");
+}
+
+
+void gzipPipeClose()
+/* Finish up gzip pipeline. */
+{
+if (gzipPipe != NULL)
+    {
+    fclose(stdout);  /* must close first or pipe will hang */
+    pipelineWait(&gzipPipe);
+    }
+}
+#endif /* MIGHT_WORK_SOMEDAY */
+
+   
 /* --------------- Text Mode Helpers ----------------- */
 
 static void textWarnHandler(char *format, va_list args)
@@ -145,7 +173,25 @@ exit(-1);
 void textOpen()
 /* Start up page in text format. (No need to close this). */
 {
-printf("Content-Type: text/plain\n\n");
+char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+trimSpaces(fileName);
+if (fileName[0] == 0)
+    printf("Content-Type: text/plain\n\n");
+#ifdef MIGHT_WORK_SOMEDAY
+else if (endsWith(fileName, ".gz") || endsWith(fileName, ".GZ"))
+    {
+    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+    printf("Content-Type: application/x-gzip\n");
+    printf("\n");
+    gzipPipeOpen();
+    }
+#endif /* MIGHT_WORK_SOMEDAY */
+else
+    {
+    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+    printf("Content-Type: application/octet-stream\n");
+    printf("\n");
+    }
 pushWarnHandler(textWarnHandler);
 pushAbortHandler(textAbortHandler);
 }
@@ -155,8 +201,19 @@ pushAbortHandler(textAbortHandler);
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(NULL);
+struct trackDb *list = hTrackDb(NULL), *tdb;
 struct customTrack *ctList, *ct;
+
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+/* Change the mrna track to all_mrna to avoid confusion elsewhere. */
+for (tdb = list; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(tdb->tableName, "mrna"))
+        {
+	tdb->tableName = cloneString("all_mrna");
+	}
+    }
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -255,7 +312,7 @@ else if (sameString(regionType, "encode"))
     }
 else
     {
-    errAbort("Unrecognized region type %s", regionType);
+    regionList = getRegionsFullGenome();
     }
 return regionList;
 }
@@ -330,9 +387,11 @@ char *trackTable(char *rawTable)
  * for mRNA if need be. */
 {
 char *table = rawTable;
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (sameString(table, "mrna"))
     return "all_mrna";
 else
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
     return table;
 }
 
@@ -355,9 +414,12 @@ char *chromTable(struct sqlConnection *conn, char *table)
  * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom();
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (sameString("mrna", table))
     return cloneString(table);
-else if (sqlTableExists(conn, table))
+else 
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+if (sqlTableExists(conn, table))
     return cloneString(table);
 else
     {
@@ -432,19 +494,16 @@ boolean isPositional(char *db, char *table)
 {
 boolean result = FALSE;
 struct sqlConnection *conn = sqlConnect(db);
-if (!sameString(table, "mrna"))
+if (sqlTableExists(conn, "chromInfo"))
     {
-    if (sqlTableExists(conn, "chromInfo"))
+    char chromName[64];
+    struct hTableInfo *hti;
+    sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
+	chromName, sizeof(chromName));
+    hti = hFindTableInfoDb(db, chromName, table);
+    if (hti != NULL)
 	{
-	char chromName[64];
-	struct hTableInfo *hti;
-	sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
-	    chromName, sizeof(chromName));
-	hti = hFindTableInfoDb(db, chromName, table);
-	if (hti != NULL)
-	    {
-	    result = htiIsPositional(hti);
-	    }
+	result = htiIsPositional(hti);
 	}
     }
 sqlDisconnect(&conn);
@@ -558,9 +617,10 @@ struct slName *tablesForTrack(struct trackDb *track)
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 struct joinerPair *jpList, *jp;
+char *trackTable = track->tableName;
 
-hashAdd(uniqHash, track->tableName, NULL);
-jpList = joinerRelate(allJoiner, database, track->tableName);
+hashAdd(uniqHash, trackTable, NULL);
+jpList = joinerRelate(allJoiner, database, trackTable);
 for (jp = jpList; jp != NULL; jp = jp->next)
     {
     struct joinerDtf *dtf = jp->b;
@@ -581,7 +641,7 @@ for (jp = jpList; jp != NULL; jp = jp->next)
 	}
     }
 slNameSort(&nameList);
-name = slNameNew(track->tableName);
+name = slNameNew(trackTable);
 slAddHead(&nameList, name);
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
 hashFree(&uniqHash);
@@ -627,6 +687,38 @@ boolean htiIsPositional(struct hTableInfo *hti)
 return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
+char *getIdField(char *db, struct trackDb *track, char *table, 
+	struct hTableInfo *hti)
+/* Get ID field for table, or NULL if none.  FreeMem result when done */
+{
+char *idField = NULL;
+if (hti != NULL && hti->nameField[0] != 0)
+    idField = cloneString(hti->nameField);
+else
+    {
+    struct hTableInfo *trackHti = getHti(db, track->tableName);
+    if (hti != NULL && trackHti->nameField[0] != 0)
+        {
+	struct joinerPair *jp, *jpList;
+	jpList = joinerRelate(allJoiner, db, track->tableName);
+	for (jp = jpList; jp != NULL; jp = jp->next)
+	    {
+	    if (sameString(jp->a->field, trackHti->nameField))
+	        {
+		if ( sameString(jp->b->database, db) 
+		  && sameString(jp->b->table, table) )
+		    {
+		    idField = cloneString(jp->b->field);
+		    break;
+		    }
+		}
+	    }
+	joinerPairFreeList(&jpList);
+	}
+    }
+return idField;
+}
+
 int countTableColumns(struct sqlConnection *conn, char *table)
 /* Count columns in table. */
 {
@@ -651,8 +743,10 @@ boolean doIntersection;
 char *filter = filterClause(db, table);
 int fieldCount;
 int bedFieldsOffset, bedFieldCount;
+char *idField;
 
 hti = getHti(db, table);
+idField = getIdField(db, curTrack, table, hti);
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
@@ -667,16 +761,16 @@ else
     }
 bedFieldsOffset = fieldCount;
 
-/* If table has and identity (name) field, and user has
+/* If can find id field for table then get
  * uploaded list of identifiers, create identifier hash
  * and add identifier column to end of result set. */
-if (hti->nameField[0] != 0)
+if (idField != NULL)
     {
     idHash = identifierHash();
     if (idHash != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
-	dyStringAppend(fieldSpec, hti->nameField);
+	dyStringAppend(fieldSpec, idField);
 	bedFieldsOffset += 1;
 	}
     }
@@ -749,18 +843,19 @@ else
     }
 }
 
-void doOutPrimaryTable(char *table, 
+void doOutPrimaryTable(char *trackName, char *table, 
 	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
 textOpen();
-doTabOutTable(database, trackTable(table), conn, NULL);
+doTabOutTable(database, table, conn, NULL);
 }
 
 void doOutHyperlinks(char *table, struct sqlConnection *conn)
 /* Output as genome browser hyperlinks. */
 {
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
+int outputPad = cartUsualInt(cart, hgtaOutputPad,0);
 struct region *region, *regionList = getRegions();
 char posBuf[64];
 int count = 0;
@@ -774,8 +869,10 @@ for (region = regionList; region != NULL; region = region->next)
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	char *name;
+        int start = max(0,bed->chromStart+1-outputPad);
+        int end = min(hChromSize(bed->chrom),bed->chromEnd+outputPad);
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
-		    bed->chrom, bed->chromStart+1, bed->chromEnd);
+		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
 	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
 	hPrintf("&db=%s", database);
@@ -810,7 +907,7 @@ char *trackName = cartString(cart, hgtaTrack);
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(table, conn);
+    doOutPrimaryTable(trackName, table, conn);
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))
@@ -827,6 +924,8 @@ else if (sameString(output, outWigData))
     doOutWigData(track, table, conn);
 else if (sameString(output, outWigBed))
     doOutWigBed(track, table, conn);
+else if (sameString(output, outGala))
+    doOutGalaQuery(track, table, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -897,6 +996,10 @@ else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
     doGetCustomTrackFile(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
+else if (cartVarExists(cart, hgtaDoAllGalaQuery))
+    doAllGalaQuery(conn);
+else if (cartVarExists(cart, hgtaDoGetGalaQuery))
+    doGetGalaQuery(conn);
 else	/* Default - put up initial page. */
     doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);
@@ -931,6 +1034,9 @@ dispatch(conn);
 
 /* Save variables. */
 cartCheckout(&cart);
+#ifdef MIGHT_WORK_SOMEDAY
+gzipPipeClose();
+#endif /* MIGHT_WORK_SOMEDAY */
 }
 
 int main(int argc, char *argv[])

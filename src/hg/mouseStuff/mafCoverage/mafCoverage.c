@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.3 2003/09/06 18:15:16 baertsch Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.4 2004/09/21 21:41:49 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,8 +38,8 @@ struct optionSpec options[] = {
 struct chromInfo *getAllChromInfo()
 /* Return list of info for all chromosomes. */
 {
-//struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
+struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = sqlConnectRemote(hGetDb());
 struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;
@@ -178,8 +178,8 @@ void getChromSizes(struct hash **retHash,
 /* Return hash of chromSizes.  Also calculates size without
  * gaps. */
 {
-//struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
+struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct chromInfo *ci, *ciList = getAllChromInfo();
 struct sqlResult *sr;
 char **row;
@@ -280,8 +280,8 @@ void restrictGaps(UBYTE *cov, int size, char *chrom)
 /* Mark gaps as off-limits. */
 {
 int rowOffset;
-//struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
+struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
 int s,e;

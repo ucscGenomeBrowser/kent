@@ -29,6 +29,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 #include "ctgPos.h"
+#include "contigAcc.h"
 #include "ctgPos2.h"
 #include "clonePos.h"
 #include "bactigPos.h"
@@ -146,7 +147,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.753 2004/09/13 21:28:57 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.757 2004/09/21 16:15:19 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3652,7 +3653,7 @@ int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
-boolean hasVersion = hHasField("mrna", "version");
+boolean hasVersion = hHasField("gbCdnaInfo", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
@@ -3672,37 +3673,37 @@ struct trackDb *tdbRgdEst;
  * Uses the gbSeq table if available, otherwise use seq for older databases. 
  */
 dyStringAppend(dy,
-               "select mrna.type,mrna.direction,"
+               "select gbCdnaInfo.type,gbCdnaInfo.direction,"
                "source.name,organism.name,library.name,mrnaClone.name,"
                "sex.name,tissue.name,development.name,cell.name,cds.name,"
                "description.name,author.name,geneName.name,productName.name,");
 if (haveGbSeq)
     dyStringAppend(dy,
-                   "gbSeq.size,mrna.moddate,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
+                   "gbSeq.size,gbCdnaInfo.moddate,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
 else
     dyStringAppend(dy,
 		   "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
 
-/* If the mrna table has a "version" column then will show it */
+/* If the gbCdnaInfo table has a "version" column then will show it */
 if (hasVersion) 
     {
     dyStringAppend(dy,
-                   ", mrna.version ");    
+                   ", gbCdnaInfo.version ");    
     } 
 
 dyStringPrintf(dy,
-               " from mrna,%s,source,organism,library,mrnaClone,sex,tissue,"
+               " from gbCdnaInfo,%s,source,organism,library,mrnaClone,sex,tissue,"
                "development,cell,cds,description,author,geneName,productName "
-               " where mrna.acc = '%s' and mrna.id = %s.id ",
+               " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.id = %s.id ",
                seqTbl, acc, seqTbl);
 dyStringAppend(dy,
-               "and mrna.source = source.id and mrna.organism = organism.id "
-               "and mrna.library = library.id and mrna.mrnaClone = mrnaClone.id "
-               "and mrna.sex = sex.id and mrna.tissue = tissue.id "
-               "and mrna.development = development.id and mrna.cell = cell.id "
-               "and mrna.cds = cds.id and mrna.description = description.id "
-               "and mrna.author = author.id and mrna.geneName = geneName.id "
-               "and mrna.productName = productName.id");
+               "and gbCdnaInfo.source = source.id and gbCdnaInfo.organism = organism.id "
+               "and gbCdnaInfo.library = library.id and gbCdnaInfo.mrnaClone = mrnaClone.id "
+               "and gbCdnaInfo.sex = sex.id and gbCdnaInfo.tissue = tissue.id "
+               "and gbCdnaInfo.development = development.id and gbCdnaInfo.cell = cell.id "
+               "and gbCdnaInfo.cds = cds.id and gbCdnaInfo.description = description.id "
+               "and gbCdnaInfo.author = author.id and gbCdnaInfo.geneName = geneName.id "
+               "and gbCdnaInfo.productName = productName.id");
 
 sr = sqlMustGetResult(conn, dy->string);
 row = sqlNextRow(sr);
@@ -3789,7 +3790,7 @@ if (row != NULL)
     }
 else
     {
-    warn("Couldn't find %s in mrna table", acc);
+    warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
 
 sqlFreeResult(&sr);
@@ -4144,6 +4145,7 @@ char query3[256];
 struct sqlResult *sr3;
 char **row3;
 struct agpFrag frag;
+struct contigAcc contigAcc;
 int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
@@ -4165,6 +4167,24 @@ agpFragStaticLoad(row+hasBin, &frag);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
+
+if (hTableExists("contigAcc"))
+    {
+    sprintf(query2, "select * from contigAcc where contig = '%s'", frag.frag);
+    if (sr2 = sqlGetResult(conn2, query2))
+        {
+        row = sqlNextRow(sr2);
+        if (row)
+            {
+            contigAccStaticLoad(row, &contigAcc);
+            printf("<B>Genbank Accession: <A HREF=");
+            printEntrezNucleotideUrl(stdout, contigAcc.acc);
+            printf(" TARGET=_BLANK>%s</A></B><BR>\n", contigAcc.acc);
+            }
+        sqlFreeResult(&sr2);
+        }
+    }
+
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE, NULL);
 
 if (hTableExists("certificate"))
@@ -4629,9 +4649,9 @@ start = cartInt(cart, "o");
 
 /* Get cds start and stop, if available */
 conn = hAllocConn();
-if (sqlTableExists(conn, "mrna"))
+if (sqlTableExists(conn, "gbCdnaInfo"))
     {
-    sprintf(query, "select cds from mrna where acc = '%s'", acc);
+    sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", acc);
     sr = sqlGetResult(conn, query); 
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -5352,7 +5372,6 @@ return motif;
 void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
 /* Print out section about motif. */
 {
-
 webNewSection("Motif:");
 printf("<PRE>");
 if (motif != NULL)
@@ -5369,7 +5388,7 @@ if (seq != NULL)
     {
     touppers(seq->dna);
     printSpacedDna(seq->dna, seq->size);
-    printf("sequence here\n");
+    printf("this occurence\n");
     }
 if (motif != NULL)
     {
@@ -5417,6 +5436,7 @@ if (hit != NULL)
 	reverseComplement(seq->dna, seq->size);
     }
 motifHitSection(seq, motif);
+printTrackHtml(tdb);
 }
 
 void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable)
@@ -5453,12 +5473,13 @@ if (trc != NULL)
         reverseComplement(seq->dna, seq->size);
     printf("<B>Name:</B> %s<BR>\n", trc->name);
     printf("<B>CHIP/CHIP Evidence:</B> %s<BR>\n", trc->chipEvidence);
-    printf("<B>Species conserved in:</B> %d<BR>\n", trc->consSpecies);
+    printf("<B>Species conserved in:</B> %d of 2<BR>\n", trc->consSpecies);
     printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
     	dnaMotifBitScore(motif, seq->dna));
     printPosOnChrom(trc->chrom, trc->chromStart, trc->chromEnd, strand, TRUE, trc->name);
     }
 motifHitSection(seq, motif);
+printTrackHtml(tdb);
 }
 
 
@@ -6154,7 +6175,7 @@ else
     {
     printf("<B>mRNA:</B> ");
     sprintf(cond_str, "acc='%s'", mrnaName);
-    descID = sqlGetField(conn, database, "mrna", "description", cond_str);
+    descID = sqlGetField(conn, database, "gbCdnaInfo", "description", cond_str);
     sprintf(cond_str, "id=%s", descID);
     mrnaDesc = sqlGetField(conn, database, "description", "name", cond_str);
     if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);

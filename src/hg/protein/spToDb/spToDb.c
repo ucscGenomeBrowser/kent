@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.8 2004/03/19 19:39:55 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.10 2004/09/21 17:06:52 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,6 +77,7 @@ struct spRecord
     char *annDate;	/* Annotation last update. */
     char *description;  /* Description - may be a couple of lines. */
     char *genes;	/* Associated genes (not yet parsed) */
+    struct hashEl *gnList; /* Gene name list */
     char *orgSciName;	/* Organism scientific name. */
     struct slName *commonNames;	/* Common name(s). */
     char *taxonToGenus;	/* Taxonomy up to genus. */
@@ -138,10 +139,11 @@ struct spLitRef
     char *cite;		/* Journal/book/patent citation. */
     struct slName *authorList;	/* Author names in lastName, F.M. format. */
     char *rp;		/* Somewhat complex 'Reference Position' line. */
-    struct hashEl *rcList; /* TISSUE=XXX X; STRAIN=YYY; parsed out. */
     struct hashEl *rxList; /* Cross-references. */
+    struct hashEl *rcList; /* TISSUE=XXX X; STRAIN=YYY; parsed out. */
     char *pubMedId;	/* pubMed ID, may be NULL. */
     char *medlineId;	/* Medline ID, may be NULL. */
+    char *doiId;	/* DOI ID, may be NULL. */
     };
 
 static void spParseComment(struct lineFile *lf, char *line, 
@@ -213,13 +215,24 @@ static void parseNameVals(struct lineFile *lf, struct lm *lm,
  * *pList. */
 {
 char *name, *val, *e;
+char *inLine;
 struct hashEl *hel;
+inLine = strdup(line);
 while (line != NULL && line[0] != 0)
     {
     name = skipLeadingSpaces(line);
     val = strchr(name, '=');
     if (val == NULL)
-        errAbort("Expecting = line %d of %s", lf->lineIx, lf->fileName);
+        {
+	/* temporarily disable hard exit to accept new Swiss-Prot file format */
+	/* errAbort("Expecting = line %d of %s", lf->lineIx, lf->fileName); */
+        /* fprintf(stderr, "Expecting = line %d of %s:%s\n", lf->lineIx, lf->fileName, inLine); */
+        if (!strstr(inLine, "DOI"))
+	    {
+	    fprintf(stderr, "%d of %s:%s\n", lf->lineIx, lf->fileName, inLine);
+	    }
+	break;
+	}
     *val++ = 0;
     e = strchr(val, ';');
     if (e == NULL)
@@ -231,6 +244,7 @@ while (line != NULL && line[0] != 0)
     slAddHead(pList, hel);
     line = e;
     }
+freeMem(inLine);
 }
 
 static void spParseReference(struct lineFile *lf, char *line, 
@@ -245,7 +259,13 @@ lmAllocVar(lm, lit);
 
 while (lineFileNext(lf, &line, NULL))
     {
+    /* uglyf("%d %s\n", lf->lineIx, line); */
     if (startsWith("RP", line))
+        {
+	groupLine(lf, line, line+5, dy);
+	lit->rp = lmCloneString(lm, dy->string);
+	}
+    else if (startsWith("RG", line))
         {
 	groupLine(lf, line, line+5, dy);
 	lit->rp = lmCloneString(lm, dy->string);
@@ -309,6 +329,7 @@ slReverse(&lit->rxList);
 /* Look up medline/pubmed IDs. */
 lit->pubMedId = hashElFindVal(lit->rxList, "PubMed");
 lit->medlineId = hashElFindVal(lit->rxList, "MEDLINE");
+lit->doiId     = hashElFindVal(lit->rxList, "DOI");
 slAddHead(&spr->literatureList, lit);
 }
 
@@ -420,7 +441,7 @@ for (;;)
     {
     if (!lineFileNextReal(lf, &line))
         errAbort("%s ends in middle of a record", lf->fileName);
-    // uglyf("%d %s\n", lf->lineIx, line);
+    /* uglyf("%d %s\n", lf->lineIx, line);*/
     type = line;
     line += 5;
     if (startsWith("FT", type))
@@ -571,6 +592,7 @@ for (;;)
         {
 	groupLine(lf, type, line, dy);
 	spr->genes = lmCloneString(lm, dy->string);
+	parseNameVals(lf, lm, dy->string, &spr->gnList);
 	}
     else
         {
@@ -579,6 +601,7 @@ for (;;)
 	}
     }
 slReverse(&spr->accList);
+slReverse(&spr->gnList);
 slReverse(&spr->taxonList);
 slReverse(&spr->commonNames);
 slReverse(&spr->literatureList);
@@ -668,29 +691,19 @@ else
     return s;
 }
 
-
 char *nextGeneWord(char **pS)
-/* Return next gene, which can be "AND" or "OR" separated. */
+/* Return next gene, which is "," separated. */
 {
 char *start = skipLeadingSpaces(*pS);
 char *next;
 
 if (start == NULL || start[0] == 0)
     return NULL;
-next = stringIn(" AND ", start);
+next = stringIn(",", start);
 if (next != NULL)
     {
     *next = 0;
-    next += 5;
-    }
-if (next == NULL)
-    {
-    next = stringIn(" OR ", start);
-    if (next != NULL)
-        {
-	*next = 0;
-	next += 4;
-	}
+    next += 1;
     }
 *pS = next;
 return start;
@@ -802,26 +815,29 @@ for (;;)
 	subChar(spr->description, '\t', ' ');
 	fprintf(description, "%s\t%s\n", acc, spr->description);
 	}
-
-    /* gene logic  and gene */
-    if (spr->genes != NULL)
-        {
+	
+    /* gene logic and gene */
+    if (spr->gnList != NULL)
+	{
+	struct hashEl *hel;
 	char *s = spr->genes, *word;
+	char *gn;
 	stripLastPeriod(s);
 	fprintf(geneLogic, "%s\t%s\n", acc, s);
-	stripChar(s, '(');
-	stripChar(s, ')');
-	word = nextGeneWord(&s);
-	fprintf(gene, "%s\t%s\n", acc, word);
-	for (;;)
+	for (hel = spr->gnList; hel != NULL; hel = hel->next)
 	    {
-	    word = nextGeneWord(&s);
-	    if (word == NULL)
-	         break;
-	    fprintf(gene, "%s\t%s\n", acc, word);
+	    gn = (char *) hel->val;
+	    /* separte gene names if there are multiple gene names */ 
+	    for (;;)
+	    	{
+	    	word = nextGeneWord(&gn);
+	    	if (word == NULL)
+	            break;
+	    	fprintf(gene, "%s\t%s\n", acc, word);
+	    	}
 	    }
-	}
-
+ 	}
+    
     /* taxon, commonName, accToTaxon */
     if (spr->taxonList != NULL)
         {
@@ -918,9 +934,9 @@ for (;;)
 		hashAddInt(referenceUni->hash, ref->cite, refId);
 		if (ref->title)
 		    subChar(ref->title, '\t', ' ');
-		fprintf(reference, "%d\t%s\t%s\t%s\t%s\n", 
+		fprintf(reference, "%d\t%s\t%s\t%s\t%s\t%s\n", 
 		    refId, blankForNull(ref->title), ref->cite, 
-		    blankForNull(ref->pubMedId), blankForNull(ref->medlineId));
+		    blankForNull(ref->pubMedId), blankForNull(ref->medlineId), blankForNull(ref->doiId));
 		for (n = ref->authorList; n != NULL; n = n->next)
 		    {
 		    int authorId = uniqueStore(authorUni, n->name);

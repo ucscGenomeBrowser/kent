@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.14 2004/09/15 18:30:06 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.15 2004/09/22 01:06:44 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -189,7 +189,7 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     {
     int start=s, end=e;
     if (multiple)
-        /* no real need to veriy ratio again (it would require
+        /* no real need to verify ratio again (it would require
          * adjusting coords again). */
         minRatio = 0;
     verbose(3,"sorted hit chain %s:%d %s:%d-%d %c\n",
@@ -200,9 +200,10 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
     verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
-    if (end - start < minSizeQ)
+    if (multiple && end - start < minSizeQ)
         {
-        verbose(2,"dropping %s:%d-%d (too small)\n", chain->qName, start, end);
+        verbose(2,"dropping %s:%d-%d size %d (too small)\n", 
+                       chain->qName, start, end, end - start);
         continue;
         }
     AllocVar(bed);
@@ -327,7 +328,14 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
             else
                 {
                 for (i=3; i<wordCount; ++i)
-                    fprintf(f, "\t%s", words[i]);
+                    {
+                    if (i == 5)
+                        /* get strand from remap */
+                        fprintf(f, "\t%c", bed->strand[0]);
+                    else
+                        /* everything else just passed through */
+                        fprintf(f, "\t%s", words[i]);
+                    }
                 }
             fprintf(f, "\n");
             next = bed->next;

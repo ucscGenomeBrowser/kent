@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -ef
 # Name:         makeLoChain-chain
 #
 # Function:     Setup cluster job to chaining alignments for liftOver chain
@@ -6,15 +6,16 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.1 2004/04/20 20:28:25 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.2 2004/09/18 00:18:57 angie Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-nibdir>"
+    echo "    Run this on a cluster hub: kk, kk9 or kki."
     exit 1
 endif
 
-if ( $HOST != kk ) then
-    echo "Must run on host kk"
+if ( $HOST != 'kk' && $HOST != 'kk9' && $HOST != 'kki' ) then
+    echo "Must run on host kk, kk9 or kki"
     exit 1
 endif
 
@@ -23,20 +24,20 @@ set oldNibDir = $2
 set newAssembly = $3
 set newNibDir = $4
 
-if ( ! -e $oldNibDir/chr1.nib ) then
-    echo "Can't find $oldNibDir/chr1.nib"
+if (`ls -1 $oldNibDir/*.nib | wc -l` < 1) then
+    echo "Can't find any .nib files in $oldNibDir"
     exit 1
 endif
 
-if ( ! -e $newNibDir/chr1.nib ) then
-    echo "Can't find $newNibDir/chr1.nib"
+if (`ls -1 $newNibDir/*.nib | wc -l` < 1) then
+    echo "Can't find any .nib files in $newNibDir"
     exit 1
 endif
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
 cd $blatDir
 rm -fr chainRun chainRaw
-mkdir -p chainRun chainRaw
+mkdir chainRun chainRaw
 cd chainRun
 
 cat > gsub << EOF
@@ -49,8 +50,18 @@ ls -1S ../psl/*.psl > in.lst
 gensub2 in.lst single gsub spec
 para create spec
 
+set execDir = $0:h
+set fs = `fileServer $blatDir`
+
+echo ""
+echo "First two lines of para spec:"
 head -2 spec
-echo "Created parasol job in $blatDir/chainRun"
-echo "Now, run the cluster job on kk, then run makeLoChain-net on the fileserver"
+echo ""
+echo "DO THIS NEXT:"
+echo "    cd $blatDir/chainRun"
+echo "    para try, check, push, check, ..."
+echo "    ssh $fs"
+echo "    $execDir/makeLoChain-net.csh $oldAssembly $newAssembly"
+echo ""
 exit 0
 

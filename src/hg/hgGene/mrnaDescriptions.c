@@ -10,15 +10,14 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.4 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.5 2004/09/17 03:17:19 kent Exp $";
 
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
-/* Return TRUE if mrna
- * on this one. */
+/* Return TRUE if mrna  on this one. */
 {
 struct psl *list = NULL, *psl;
-if (hTableExists("mrna"))
+if (hTableExists("all_mrna"))
     {
     struct sqlResult *sr;
     char **row;
@@ -68,8 +67,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	char query[512];
 	char *description;
 	safef(query, sizeof(query),
-	    "select description.name from mrna,description"
-	    " where mrna.acc='%s' and mrna.description = description.id"
+	    "select description.name from gbCdnaInfo,description"
+	    " where gbCdnaInfo.acc='%s' and gbCdnaInfo.description = description.id"
 	    , psl->qName);
 	description = sqlQuickString(conn, query);
 	if (description != NULL)

@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.26 2004/09/07 05:02:41 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.27 2004/09/17 17:57:12 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -600,13 +600,10 @@ struct joinedTables *tjLoadFirst(struct region *regionList,
 struct joinedTables *joined = joinedTablesNew(totalFieldCount, 
 	totalKeyCount, maxRowCount);
 struct hash *idHash = NULL;
-char *idField = NULL;
 struct hTableInfo *hti = getHti(tj->database, tj->table);
-if (hti != NULL && hti->nameField[0] != 0)
-    {
+char *idField = getIdField(tj->database, curTrack, tj->table, hti);
+if (idField != NULL)
     idHash = identifierHash();
-    idField = hti->nameField;
-    }
 tjLoadSome(regionList, joined, 0, 0, 
 	idField, idHash, NULL, NULL, tj, 
 	isPositional(tj->database, tj->table), TRUE);

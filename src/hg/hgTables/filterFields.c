@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.9 2004/09/10 03:44:44 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.10 2004/09/21 00:05:37 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -461,7 +461,8 @@ return filterFieldVarName(db, table, field, filterPatternVar);
 boolean anyFilter()
 /* Return TRUE if any filter set. */
 {
-return varOn(hgtaFilterOn);
+char *filterTable = cartOptionalString(cart, hgtaFilterTable);
+return (filterTable != NULL && sameString(filterTable, curTable));
 }
 
 /* Droplist menus for filtering on fields: */
@@ -786,7 +787,7 @@ doBigFilterPage(conn, database, table);
 void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
-cartSetBoolean(cart, hgtaFilterOn, TRUE);
+cartSetString(cart, hgtaFilterTable, curTable);
 doMainPage(conn);
 }
 
@@ -794,7 +795,7 @@ void doClearFilter(struct sqlConnection *conn)
 /* Respond to click on clear filter. */
 {
 cartRemovePrefix(cart, hgtaFilterPrefix);
-cartSetBoolean(cart, hgtaFilterOn, FALSE);
+cartRemove(cart, hgtaFilterTable);
 doMainPage(conn);
 }
 

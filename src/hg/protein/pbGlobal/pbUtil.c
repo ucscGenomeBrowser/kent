@@ -142,9 +142,33 @@ char **row;
 char *chp;
 int i,len;
 char *seq;
-    
+char *protDbDate;
+
 conn= hAllocConn();
-safef(query, sizeof(query), "select val  from swissProt.protein where acc='%s';", pepAccession);
+
+/* Figure out which is the appropriate DB to use, 
+   either spXXXXXX (for PB supported GB) so that we can handle TrEMBL-NEW entries
+   or swissProt (to support global proteome 
+
+   The following convention needs to be followed when building protein DBs:
+   
+       spXXXXXX ---> proteinsXXXXXX
+
+       swissProt points to the latest spXXXXXX
+       proteins  points to the latest proteinsXXXXXX
+       
+*/
+
+protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
+if (sameWord(protDbDate, ""))
+    {
+    safef(query, sizeof(query), "select val from swissProt.protein where acc='%s';", pepAccession);
+    }
+else
+    {
+    safef(query, sizeof(query), 
+    "select val from sp%s.protein where acc='%s';", protDbDate, pepAccession);
+    }
 
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -386,6 +410,7 @@ for (i=0; i<l; i++)
     }
 
 hPrintf("</pre>");
+fflush(stdout);
 }
 
 /* more sophisticated processing can be done using genome coordinates */
@@ -487,8 +512,6 @@ hPrintf("<font color = black>");
 
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
-hPrintf("\n<B>UCSC links:</B><BR>\n ");
-hPrintf("<UL>\n");
 hPrintf("\n<LI>Genome Browser - ");
 if (mrnaID != NULL)
     {
@@ -527,6 +550,15 @@ if (mrnaID != NULL)
     hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s&db=%s%s\"", mrnaID, database, hgsidStr);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
+}
+
+void doBlatLink(char *db, char *sciName, char *commonName)
+{
+hPrintf("\n<LI>BLAT - ");
+hPrintf("<A HREF=\"../cgi-bin/hgBlat?db=%s\"", db);
+hPrintf(" TARGET=_BLANK>%s", sciName);
+if (commonName != NULL) hPrintf(" (%s)", commonName);
+hPrintf("</A></LI>\n");
 }
 
 void doPathwayLinks(char *proteinID, char *mrnaName)
@@ -787,7 +819,6 @@ while (row3 != NULL)
     row3 = sqlNextRow(srCentral);
     }
 maxPbOrg = i;
-
 /* go through each genome DB that supports PB */
 safef(queryCentral, sizeof(queryCentral),
       "select defaultDb.name, dbDb.organism, dbDb.scientificName from dbDb,defaultDb where hgPbOk=1 and defaultDb.name=dbDb.name");
@@ -807,7 +838,7 @@ while (row3 != NULL)
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
 	/* display organism name */
-	hPrintf("<FONT SIZE=4><B>%s:</B></FONT>\n", org);
+	hPrintf("<FONT SIZE=4><B>%s (%s):</B></FONT>\n", orgSciName, org);
 	hPrintf("<UL>");
     	    
 	conn = sqlConnect(gDatabase);
@@ -822,11 +853,12 @@ while (row3 != NULL)
 	    {
    	    spID = row[0];
 	    
-	    proteinsConn = sqlConnect("proteins");
+	    protDbName = hPdbFromGdb(gDatabase);
+	    proteinsConn = sqlConnect(protDbName);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    displayID = sqlGetField(proteinsConn, "proteins", "spXref3", "displayID", cond_str);
+    	    displayID = sqlGetField(proteinsConn, protDbName, "spXref3", "displayID", cond_str);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    desc = sqlGetField(proteinsConn, "proteins", "spXref3", "description", cond_str);
+    	    desc = sqlGetField(proteinsConn, protDbName, "spXref3", "description", cond_str);
 
 	    /* display a protein */
 	    hPrintf(
@@ -864,7 +896,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     {
     if (protCntInSupportedGenomeDb >1)
     	{
-    	hPrintf("<FONT SIZE=4><B>Other Oganisms:</B></FONT>\n");
+    	hPrintf("<FONT SIZE=4><B>Other Organisms:</B></FONT>\n");
     	hPrintf("<UL>");
 	}
     else
@@ -875,7 +907,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     oldOrg = strdup("");
     conn3 = sqlConnect("swissProt");
     safef(query3, sizeof(query3), 
-     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by taxon.id", 
+     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial", 
      queryID);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
@@ -906,7 +938,19 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	        {
 	        hPrintf("</UL>\n");
 		}
-	    if (!skipIt) hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
+	    if (!skipIt) 
+	    	{
+    		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
+    		answer = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+		if (answer != NULL)
+		    {
+		    hPrintf("<FONT SIZE=3><B>%s (%s):</B></FONT>\n", protOrg, answer);
+		    }
+		else
+		    {
+		    hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
+		    }
+		}
             hPrintf("<UL>\n");
 	    }
 		
