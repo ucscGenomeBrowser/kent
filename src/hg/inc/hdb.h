@@ -42,7 +42,15 @@ char *hGetDbPassword();
 struct sqlConnection *hAllocConn();
 /* Get free connection if possible. If not allocate a new one. */
 
-struct sqlConnection *hFreeConn(struct sqlConnection **pConn);
+void hFreeConn(struct sqlConnection **pConn);
+/* Put back connection for reuse. */
+
+struct sqlConnection *hConnectCentral();
+/* Connect to central database where user info and other info
+ * not specific to a particular genome lives.  Free this up
+ * with hDisconnectCentral(). */
+
+void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
 boolean hTableExists(char *table);

@@ -56,7 +56,7 @@
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
-#define CONTROL_TABLE_WIDTH 600
+#define CONTROL_TABLE_WIDTH 610
 #ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
@@ -72,7 +72,7 @@ char *thisFrame = NULL;
 /* end Chuck code */
 #endif /*CHUCK_CODE*/
 
-int maxItemsInFullTrack = 300;
+int maxItemsInFullTrack = 400;
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
 
@@ -5769,7 +5769,7 @@ void loadCustomTracks(struct trackGroup **pGroupList)
 {
 struct customTrack *ctList = NULL, *ct;
 struct trackGroup *tg;
-char *customText = cartOptionalString(cart, "customText");
+char *customText = cartOptionalString(cart, "hgt.customText");
 char *fileName = cartOptionalString(cart, "ct");
 struct slName *browserLines = NULL, *bl;
 
@@ -5777,7 +5777,7 @@ customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
     customText = NULL;
 if (customText == NULL || customText[0] == 0)
-    customText = cartOptionalString(cart, "customFile");
+    customText = cartOptionalString(cart, "hgt.customFile");
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && customText[0] != 0)
     {
@@ -6016,20 +6016,20 @@ if (!hideControls)
 
     /* Put up scroll and zoom controls. */
     fputs("move ", stdout);
-    cgiMakeButton("left3", "<<<");
-    cgiMakeButton("left2", " <<");
-    cgiMakeButton("left1", " < ");
-    cgiMakeButton("right1", " > ");
-    cgiMakeButton("right2", ">> ");
-    cgiMakeButton("right3", ">>>");
+    cgiMakeButton("hgt.left3", "<<<");
+    cgiMakeButton("hgt.left2", " <<");
+    cgiMakeButton("hgt.left1", " < ");
+    cgiMakeButton("hgt.right1", " > ");
+    cgiMakeButton("hgt.right2", ">> ");
+    cgiMakeButton("hgt.right3", ">>>");
     fputs(" zoom in ", stdout);
-    cgiMakeButton("in1", "1.5x");
-    cgiMakeButton("in2", " 3x ");
-    cgiMakeButton("in3", "10x");
+    cgiMakeButton("hgt.in1", "1.5x");
+    cgiMakeButton("hgt.in2", " 3x ");
+    cgiMakeButton("hgt.in3", "10x");
     fputs(" zoom out ", stdout);
-    cgiMakeButton("out1", "1.5x");
-    cgiMakeButton("out2", " 3x ");
-    cgiMakeButton("out3", "10x");
+    cgiMakeButton("hgt.out1", "1.5x");
+    cgiMakeButton("hgt.out2", " 3x ");
+    cgiMakeButton("hgt.out3", "10x");
     fputs("<BR>\n", stdout);
 
     /* Make line that says position. */
@@ -6054,10 +6054,10 @@ if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
-    fputs("Click on an item in a track to view more information on that item. "
-	  "Click center label to toggle between full and dense display of "
-	  "that track.  Tracks with more than 300 items are always displayed "
-	  "densely.  Click on base position to zoom in by 3x around where you "
+    ~~~
+    printf("<TABLE border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+    fputs("Click on object to view more information on that object. "
+	  "Click on base position to zoom in by 3x around where you "
 	  "clicked.<BR>",
 	  stdout);
     smallBreak();
@@ -6102,6 +6102,8 @@ if (!hideControls)
 	}
     /* now finish out the table */
     endControlGrid(&cg);
+    printf("Note: Tracks with more than 400 items are always displayed in "
+           "dense mode.");
 
     printf("</CENTER>\n");
 
@@ -6255,29 +6257,29 @@ if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 
 /* Do zoom/scroll if they hit it. */
-if (cgiVarExists("left3"))
+if (cgiVarExists("hgt.left3"))
     relativeScroll(-0.95);
-else if (cgiVarExists("left2"))
+else if (cgiVarExists("hgt.left2"))
     relativeScroll(-0.475);
-else if (cgiVarExists("left1"))
+else if (cgiVarExists("hgt.left1"))
     relativeScroll(-0.1);
-else if (cgiVarExists("right1"))
+else if (cgiVarExists("hgt.right1"))
     relativeScroll(0.1);
-else if (cgiVarExists("right2"))
+else if (cgiVarExists("hgt.right2"))
     relativeScroll(0.475);
-else if (cgiVarExists("right3"))
+else if (cgiVarExists("hgt.right3"))
     relativeScroll(0.95);
-else if (cgiVarExists("in3"))
+else if (cgiVarExists("hgt.in3"))
     zoomAroundCenter(1.0/10.0);
-else if (cgiVarExists("in2"))
+else if (cgiVarExists("hgt.in2"))
     zoomAroundCenter(1.0/3.0);
-else if (cgiVarExists("in1"))
+else if (cgiVarExists("hgt.in1"))
     zoomAroundCenter(1.0/1.5);
-else if (cgiVarExists("out1"))
+else if (cgiVarExists("hgt.out1"))
     zoomAroundCenter(1.5);
-else if (cgiVarExists("out2"))
+else if (cgiVarExists("hgt.out2"))
     zoomAroundCenter(3.0);
-else if (cgiVarExists("out3"))
+else if (cgiVarExists("hgt.out3"))
     zoomAroundCenter(10.0);
 
 /* Chuck code for synching with different frames */
@@ -6295,8 +6297,17 @@ printf("updating the database and the display software with a number of\n");
 printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
 }
 
-char *excludeVars[] = { "submit", "Submit", "in1", "in2", "in3", "out1", "out2", "out3",
-	"left1", "left2", "left3", "right1", "right2", "right3", "customText", "customFile",
+/* Other than submit and Submit all these vars should start with hgt.
+ * to avoid weeding things out of other program's namespaces.
+ * Because the browser is a central program, most of it's cart 
+ * variables are not hgt. qualified.  It's a good idea if other
+ * program's unique variables be qualified with a prefix though. */
+char *excludeVars[] = { "submit", "Submit", 
+	"hgt.in1", "hgt.in2", "hgt.in3", 
+	"hgt.out1", "hgt.out2", "hgt.out3",
+	"hgt.left1", "hgt.left2", "hgt.left3", 
+	"hgt.right1", "hgt.right2", "hgt.right3", 
+	"hgt.customText", "hgt.customFile",
 	NULL };
 
 int main(int argc, char *argv[])

@@ -92,6 +92,9 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
+void cartResetInDb(char *cookieName);
+/* Clear cart in database. */
+
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and

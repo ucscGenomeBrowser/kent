@@ -248,33 +248,62 @@ sprintf(buf, "%s (%s)\n", tdb->longLabel, item);
 cartWebStart(buf);
 }
 
-void printCustomUrl(char *url, char *itemName, boolean encode)
+struct dyString *subMulti(char *orig, int subCount, char *in[], char *out[])
+/* Perform multiple substitions on orig. */
+{
+int i;
+struct dyString *s = newDyString(256), *d = NULL;
+
+dyStringAppend(s, orig);
+for (i=0; i<subCount; ++i)
+   {
+   d = dyStringSub(s->string, in[i], out[i]);
+   dyStringFree(&s);
+   s = d;
+   d = NULL;
+   }
+return s;
+}
+
+void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print custom URL. */
 {
+char *url = tdb->url;
 if (url != NULL && url[0] != 0)
     {
     char *before, *after = "", *s;
-    struct dyString *uUrl = newDyString(0);
-    struct dyString *eUrl = newDyString(0);
+    struct dyString *uUrl = NULL;
+    struct dyString *eUrl = NULL;
+    char startString[64], endString[64];
     char fixedUrl[1024];
-    before = url;
-    s = stringIn("$$", url);
-    if (s != NULL)
-       {
-       char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
-       *s = 0;
-       after = s+2;
-       dyStringPrintf(uUrl, "%s%s%s", before, itemName, after);
-       dyStringPrintf(eUrl, "%s%s%s", before, eItem, after);
-       }
-    else
-       {
-       dyStringPrintf(uUrl, "%s", url);
-       dyStringPrintf(eUrl, "%s", url);
-       }
+    char *ins[7], *outs[7];
+    char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
+
+    sprintf(startString, "%d", winStart);
+    sprintf(endString, "%d", winEnd);
+    ins[0] = "$$";
+    outs[0] = itemName;
+    ins[1] = "$T";
+    outs[1] = tdb->tableName;
+    ins[2] = "$S";
+    outs[2] = seqName;
+    ins[3] = "$[";
+    outs[3] = startString;
+    ins[4] = "$]";
+    outs[4] = endString;
+    ins[5] = "$s";
+    outs[5] = skipChr(seqName);
+    ins[6] = "$D";
+    outs[6] = database;
+    uUrl = subMulti(url, ArraySize(ins), ins, outs);
+    outs[0] = eItem;
+    eUrl = subMulti(url, ArraySize(ins), ins, outs);
     printf("<B>Outside Link: </B>");
     printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
     printf("%s</A><BR>\n", uUrl->string);
+    freeMem(eItem);
+    freeDyString(&uUrl);
+    freeDyString(&eUrl);
     }
 }
 
@@ -314,9 +343,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
-void showGenePos(char *name, char *track)
+void showGenePos(char *name, struct trackDb *tdb)
 /* Show gene prediction position and other info. */
 {
+char *track = tdb->tableName;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -338,12 +368,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void geneShowPosAndLinks(char *geneName, char *pepName, char *geneTable, char *pepTable,
-	char *pepClick, char *mrnaClick, char *genomicClick, char *mrnaDescription)
+void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
+	char *pepTable, char *pepClick, 
+	char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
+char *geneTable = tdb->tableName;
 char other[256];
-showGenePos(geneName, geneTable);
+showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 if (pepTable != NULL && hTableExists(pepTable))
@@ -358,10 +390,10 @@ printf("<LI>Genomic Sequence</A>\n");
 printf("</UL>\n");
 }
 
-void geneShowCommon(char *geneName, char *geneTable, char *pepTable)
+void geneShowCommon(char *geneName, struct trackDb *tdb, char *pepTable)
 /* Show parts of gene common to everything */
 {
-geneShowPosAndLinks(geneName, geneName, geneTable, pepTable, "htcTranslatedProtein",
+geneShowPosAndLinks(geneName, geneName, tdb, pepTable, "htcTranslatedProtein",
 	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 }
 
@@ -370,7 +402,7 @@ void genericGenePredClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start, char *pepTable, char *mrnaTable)
 /* Handle click in generic genePred track. */
 {
-geneShowCommon(item, tdb->tableName, pepTable);
+geneShowCommon(item, tdb, pepTable);
 }
 
 void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -409,7 +441,7 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (wordCount > 0)
     {
     type = words[0];
@@ -558,8 +590,8 @@ printf(" Upper ");
 cgiMakeRadioButton("case", "lower", TRUE);
 printf(" Lower ");
 cgiMakeButton("Submit", "Submit");
-printf("<BR>");
-printf("<TABLE BORDER=1>\n");
+printf("<BR>\n");
+printf("<TABLE BORDER=1 COL=8>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
@@ -2452,9 +2484,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void doKnownGene(char *track, char *geneName)
+void doKnownGene(struct trackDb *tdb, char *geneName)
 /* Handle click on known gene track. */
 {
+char *track = tdb->tableName;
 char *transName = geneName;
 struct knownMore *km = NULL;
 boolean anyMore = FALSE;
@@ -2529,7 +2562,7 @@ if (geneName != NULL)
 if (anyMore)
     htmlHorizontalLine();
 
-geneShowCommon(transName, track, "genieKnownPep");
+geneShowCommon(transName, tdb, "genieKnownPep");
 puts(
    "<P>Known genes are derived from the "
    "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
@@ -2552,9 +2585,10 @@ puts(
 webEnd();
 }
 
-void doRefGene(char *track, char *rnaName)
+void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
+char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -2612,7 +2646,7 @@ if (hTableExists("jaxOrtholog"))
     }
 htmlHorizontalLine();
 
-geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, track, "refPep", "htcTranslatedProtein",
+geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 puts(
@@ -2689,7 +2723,7 @@ void doSoftberryPred(struct trackDb *tdb, char *geneName)
 {
 genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
-geneShowCommon(geneName, tdb->tableName, "softberryPep");
+geneShowCommon(geneName, tdb, "softberryPep");
 puts(tdb->html);
 webEnd();
 }
@@ -2729,7 +2763,7 @@ void doSangerGene(struct trackDb *tdb, char *geneName, char *pepTable, char *mrn
 {
 genericHeader(tdb, geneName);
 showSangerExtra(geneName, extraTable);
-geneShowCommon(geneName, tdb->tableName, pepTable);
+geneShowCommon(geneName, tdb, pepTable);
 puts(tdb->html);
 webEnd();
 }
@@ -3830,7 +3864,7 @@ if(tdb == NULL)
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
+printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
@@ -4453,8 +4487,8 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
     }
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
+printCustomUrl(ct->tdb, itemName, TRUE);
 bedPrintPos(bed);
-printCustomUrl(ct->tdb->url, itemName, TRUE);
 webEnd();
 }
 
@@ -4566,11 +4600,11 @@ else if (sameWord(track, "cpgIsland") || sameWord(track, "cpgIsland2"))
     }
 else if (sameWord(track, "refGene"))
     {
-    doRefGene(track, item);
+    doRefGene(tdb, item);
     }
 else if (sameWord(track, "genieKnown"))
     {
-    doKnownGene(track, item);
+    doKnownGene(tdb, item);
     }
 else if (sameWord(track, "softberryGene"))
     {
