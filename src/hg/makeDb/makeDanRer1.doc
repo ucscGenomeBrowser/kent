@@ -2162,6 +2162,14 @@ table ctgPos2
     # Loaded 53992 elements of size 11
     hgLoadBed danRer1 bacEndSingles bacEndSinglesGoodScores.bed \
                  -sqlTable=../singles/bacEndSingles.sql
+
+    # featureBits danRer1 bacEndPairs gap
+    # 18271004 bases of 1459132082 (1.252%) in intersection
+    # featureBits danRer1 bacEndSingles gap
+    # 2718421 bases of 1459132082 (0.186%) in intersection
+    # featureBits danRer1 bacEndSingles bacEndPairs
+    # 158155304 bases of 1459132082 (10.839%) in intersection
+
     # Loaded 179170 elements of size 11
     # 179170 record(s), 0 row(s) skipped, 23 warning(s) loading bed.tab
     # loaded bacEndPairsBad table (hartera, 2004-08-02)
