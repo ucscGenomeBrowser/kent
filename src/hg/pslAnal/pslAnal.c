@@ -30,6 +30,7 @@ static struct optionSpec optionSpecs[] = {
     {"verbose", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
+    {"unaligned", OPTION_BOOLEAN},
     {"mismatches", OPTION_BOOLEAN},
     {"codonsub", OPTION_BOOLEAN},
     {NULL, 0}
@@ -37,6 +38,7 @@ static struct optionSpec optionSpecs[] = {
 
 boolean verbose = FALSE;
 boolean indelReport = FALSE;
+boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
 boolean codonSubReport = FALSE;
 boolean xeno = FALSE;
@@ -110,6 +112,7 @@ struct pslInfo
 {
   struct pslInfo *next;
   struct psl *psl;
+  short splice[256];
   struct acc *mrna;
   float pctId;
   float coverage;
@@ -353,7 +356,7 @@ for (i = 1; i < count; i++)
 return(ret);
 }
 
-int countStdSplice(struct psl *psl, DNA *seq)
+int countStdSplice(struct psl *psl, DNA *seq, struct pslInfo *pi)
 /* For each intron, determine whether it has a canonical splice site
    Return the number of introns that do */
 {
@@ -362,24 +365,31 @@ int count=0, i;
 for (i=1; i<psl->blockCount; ++i)
     {
     int iStart, iEnd, blockSize = psl->blockSizes[i-1];
-    if ((psl->qStarts[i-1] + blockSize == psl->qStarts[i]) && 
+    pi->splice[i] = 0;
+    /*    if ((psl->qStarts[i-1] + blockSize == psl->qStarts[i]) && 
 	(psl->tStarts[i] - (psl->tStarts[i-1] + psl->blockSizes[i-1]) > 30))
-	{
+	{*/
 	iStart = psl->tStarts[i-1] + psl->blockSizes[i-1] - psl->tStart;
 	iEnd = psl->tStarts[i] - psl->tStart;
 	if (psl->strand[0] == '+')
 	    {
 	    if ((seq[iStart] == 'g' && seq[iStart+1] == 't' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g') ||
 		(seq[iStart] == 'g' && seq[iStart+1] == 'c' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'g'))
+	      {
 		count++;
+		pi->splice[i] = 1;
+	      }
 	    }
 	else 
 	    {
 	    if ((seq[iStart] == 'c' && seq[iStart+1] == 't' && seq[iEnd-2] == 'a' && seq[iEnd-1] == 'c') ||
 		(seq[iStart] == 'c' && seq[iStart+1] == 't' && seq[iEnd-2] == 'g' && seq[iEnd-1] == 'c'))
+	      {
 		count++;
+		pi->splice[i] = 1;
+	      }
 	    }
-	}
+	/*}*/
     }
 return(count);
 }
@@ -602,11 +612,11 @@ for (el = clist; el != NULL; el = el->next)
 return(0);
 }
 
-void getCoords(struct psl *psl, int gstart, int gend, int *start, int *end, char *strand)
+void getCoords(struct psl *psl, int gstart, int gend, int *start, int *end, char *strand, boolean *nogap)
 /* Get the genomic DNA that corresponds to an indel, and determine the corresponding \
    start and end positions for this sequence in the query sequence */ 
 {
-int gs, ge, off, i;
+int gs = 0, ge = 0, off, i, bStart = -1, bEnd = 0;
 
 /* Reverse complement xeno alignments if done on target - strand */
 if (psl->strand[1] == '-')
@@ -623,18 +633,26 @@ for (i = 0; i < psl->blockCount; i++)
 	  {
 	  *start = psl->qStarts[i] + (gstart - psl->tStarts[i]);
 	  gs = gstart;
-	  } 
-       else 
-	  gs = psl->tStarts[i];
+	  bStart = i;
+	  }
+       /*else if (gs == 0)
+	 gs = psl->tStarts[i];*/
        /* Determine the end position offset */
        if (gend <= (psl->tStarts[i]+psl->blockSizes[i]))
 	  {
 	  *end = psl->qStarts[i] + gend - psl->tStarts[i];
 	   ge = gend;
+	   bEnd = i;
 	  }
-       else
+
+       /*else if (ge == 0)
 	  ge = psl->tStarts[i]+psl->blockSizes[i];
-	}
+	  }*/
+       }
+    if (gstart < psl->tStarts[i])
+      bStart = i;
+    if ((gend > (psl->tStarts[i] + psl->blockSizes[i])) && (!bEnd))
+      bEnd = i;
     }
 /*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/
 /*if (retSeq)
@@ -652,6 +670,17 @@ if (((psl->strand[0] == '-')  && (psl->strand[1] != '-'))
 else
     sprintf(strand, "+");
    
+/* Check if mrna aligns completely in this region */
+ if ((bStart == bEnd) && (bStart > 0))
+   *nogap = TRUE;
+else if ((bStart < bEnd) && (bStart > 0))
+  {
+    *nogap = TRUE;
+    for (i = bStart; i < bEnd; i++) 
+      if ((psl->qStarts[i] + psl->blockSizes[i]) < psl->qStarts[i+1])
+	*nogap = FALSE;
+  }
+
 /*strcpy(strand, psl->strand); */
 /*return(ret);*/
 }
@@ -660,16 +689,18 @@ void searchTransPsl(char *table, DNA *mdna, struct indel *ni, char *strand, unsi
 /* process one mRNA or EST for searchTrans */
 {
 int start = 0, end = 0;
+boolean nogap = FALSE;
 struct dnaSeq *dummy = NULL, *mseq = NULL;
-char *dna = NULL;
+char *dna = NULL, *dnaStart = NULL, *dnaEnd = NULL;
 char thisStrand[2];
 struct sqlConnection *conn2 = hAllocConn();
+int mrnaSize = ni->mrnaEnd - ni->mrnaStart;
 
 /* Get the start and end coordinates for the mRNA or EST sequence */
-if (type == INDEL)
-    getCoords(psl, ni->chromStart-1, ni->chromEnd+1, &start, &end, thisStrand);
+if ((type == INDEL) || (type == UNALIGNED))
+    getCoords(psl, ni->chromStart-2, ni->chromEnd+1, &start, &end, thisStrand, &nogap);
 else
-    getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
+    getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand, &nogap);
 /* Get the corresponding mRNA or EST  sequence */
 struct dnaSeq *seq = hRnaSeq(psl->qName);
 if (thisStrand[0] != strand[0])
@@ -687,8 +718,20 @@ if ((end-start) > 0)
     }
 else
     dna = cloneString("");
+if ((type == INDEL) || (type == UNALIGNED))
+  {
+    dnaStart = needMem(mrnaSize+4);
+    strncpy(dnaStart, seq->dna + start-1, mrnaSize + 3);
+    dnaStart[mrnaSize+3] = '\0';
+    dnaEnd = needMem(mrnaSize+4);
+    strncpy(dnaEnd, seq->dna + end - mrnaSize-4, mrnaSize + 3);
+    dnaEnd[mrnaSize+3] = '\0';
+  }    
 
 /* fprintf(stderr, "Comparing genomic %s at %d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", gseq->dna, ni->chromStart, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);*/
+/* fprintf(stderr, "Comparing genomic at %d-%d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", ni->chromStart, ni->chromEnd, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);
+   fprintf(stderr, "\tfrom start - %s\n\tfrom end - %s\n", dnaStart, dnaEnd); */
+
 /* If it doesn't align to this region */
 if (start == end)
     {
@@ -716,7 +759,7 @@ if (start == end)
 	}
     }
 /* If it agrees with the genomic sequence */
-else if ((sameString(gseq->dna, dna)) || ((type == INDEL) && (strlen(dna) == gseq->size))) 
+else if ((sameString(gseq->dna, dna)) || (((type == INDEL) || (type == UNALIGNED)) && (nogap))) 
     {
     if (sameString(table, "mrna"))
         {
@@ -742,8 +785,10 @@ else if ((sameString(gseq->dna, dna)) || ((type == INDEL) && (strlen(dna) == gse
         }
     }
 /* If it agrees with the mrna sequence */
-else if ((sameString(mdna, dna)) || ((type == INDEL) && (strlen(dna) == strlen(mdna)))) 
-    {
+else if ((sameString(mdna, dna)) || 
+	 (((type == INDEL) || (type == UNALIGNED)) && 
+	  ((strlen(dna) == strlen(mdna)) || (sameString(mdna, dnaStart)) || (sameString(mdna, dnaEnd)))))
+  {
     if (sameString(table, "mrna"))
         {
 	  ni->hs->mrnaMrna++;
@@ -817,13 +862,13 @@ if (type == CODONSUB)
     assert(((ni->mrnaEnd-ni->mrnaStart)+1) == 3);
 
 /* Determine the sequence, If indel, add one base on each side */
-if (type == INDEL)
+ if ((type == INDEL) || (type == UNALIGNED))
     {
     if ((ni->mrnaEnd-ni->mrnaStart) > 0)
         {
-	assert((ni->mrnaEnd-ni->mrnaStart+3) < sizeof(mdna));
-        strncpy(mdna,rna->dna + ni->mrnaStart - 1,ni->mrnaEnd-ni->mrnaStart+2);
-        mdna[ni->mrnaEnd-ni->mrnaStart+2] = '\0';
+	assert((ni->mrnaEnd-ni->mrnaStart+4) < sizeof(mdna));
+        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+3);
+        mdna[ni->mrnaEnd-ni->mrnaStart+3] = '\0';
         /* printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna); */
         }
     else
@@ -839,8 +884,8 @@ else
     }
 
 /* Get dna sequence */
-if (type == INDEL)
-  gseq = hDnaFromSeq(ni->chrom, ni->chromStart-1, ni->chromEnd+1, dnaLower);
+ if ((type == INDEL) || (type == UNALIGNED))
+  gseq = hDnaFromSeq(ni->chrom, ni->chromStart-2, ni->chromEnd+1, dnaLower);
 else
   gseq = hDnaFromSeq(ni->chrom, ni->chromStart-1, ni->chromEnd, dnaLower);
 if (strand[0] == '-')
@@ -848,7 +893,7 @@ if (strand[0] == '-')
 
 
 /* Find all sequences that span this region */
-if (type == INDEL)
+ if ((type == INDEL) || (type == UNALIGNED))
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+1, NULL, &offset);
 else 
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-1, ni->chromEnd, NULL, &offset);
@@ -1095,6 +1140,36 @@ if (codonSubReport)
     }
 }
 
+struct indel *createUnali(struct sqlConnection *conn, int mstart, int mend, char* chr, int gstart, int gend, 
+			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc)
+/* Create a record of an unaligned region of cds */
+{
+  struct indel *ni;
+ 
+  AllocVar(ni);
+  ni->next = NULL;
+  ni->size = mend - mstart;
+  ni->chrom = chr;
+  ni->chromStart = gstart;
+  ni->chromEnd = gend;
+  ni->mrna = acc;
+  ni->mrnaStart = mstart;
+  ni->mrnaEnd = mend;
+  ni->hs = createEvid();
+  ni->xe = createEvid();
+  
+  /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
+  searchTrans(conn, "mrna", rna, ni, strand, UNALIGNED, cloneId);
+  searchTrans(conn, "est", rna, ni, strand, UNALIGNED, cloneId);
+  if (xeno)
+      {
+      searchTrans(conn, "xenoMrna", rna, ni, strand, UNALIGNED, cloneId);
+      searchTrans(conn, "xenoEst", rna, ni, strand, UNALIGNED, cloneId);
+      }
+  
+  return(ni);
+}
+
 struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char* chr, int gstart, int gend, 
 			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc)
 /* Create a record of an indel */
@@ -1134,7 +1209,7 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 {
   int i, j;
   int unaligned=0, prevqend=0, prevtend=0, qstart=0, tstart=0;
-  struct indel *ni, *niList=NULL, *uiList=NULL;
+  struct indel *ni=NULL, *niList=NULL, *uiList=NULL;
   int cdsS = pi->cdsStart, cdsE = pi->cdsEnd;
   boolean unali = FALSE;
   
@@ -1160,16 +1235,16 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	  prevtend = tstart;
 	  }
 	unaligned = qstart - prevqend;
-	if (unaligned == (tstart - prevtend))
+	if ((tstart - prevtend) != 0)
 	    unali = TRUE;
 	else
 	    unali = FALSE;
-	/* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
-	if (unaligned > 30)
-	  pi->cdsGap += unaligned;
 	/* Check if there is an indel */
-	else if (unaligned > 0)
+	if (unaligned > 0)
 	  {
+	    /* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
+	    if (unaligned > 30)
+	      pi->cdsGap += unaligned;
 	    if (!unali)
 	        {
 	        if (unaligned == 1) 
@@ -1190,15 +1265,18 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	      tstart = pi->psl->tSize - prevtend;
 	      prevtend = pi->psl->tSize - temp;
 	    }
-            /* Create an indel record for this */
-	    if (indelReport) 
-	        {
+            /* Create an unali record for this */	
+	    if ((unaliReport) && (unali)) 
+	      {
+		ni = createUnali(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna); 
+		slAddHead(&uiList, ni);
+	      }
+            /* Create an indel record for this */	
+	    if ((indelReport) && (!unali)) 
+	      {
 		ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna); 
-		if (unali)
-		    slAddHead(&uiList, ni);
-		else
-		    slAddHead(&niList,ni);
-		}
+		slAddHead(&niList,ni);
+	      }
 	  }
       }
     
@@ -1221,13 +1299,14 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	  prevtend = tstart;
 	  }
 	unaligned = tstart - prevtend;
-	if (unaligned == (qstart - prevqend))
+	if ((qstart - prevqend) > 0)
 	    unali = TRUE;
 	else
 	    unali = FALSE;
 	/* Check if unaligned part is an intron */
-	if (unaligned > 30)
-	  pi->cdsGap += unaligned;
+	if ((unaligned > 30) || (pi->splice[i]))
+	  /*pi->cdsGap += unaligned;*/
+	  pi->cdsGap += 0;
 	/* Check if there is an indel */
 	else if ((unaligned != 0) && (!unali)) 
 	  {
@@ -1260,6 +1339,9 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
       { 
       slReverse(&niList);
       pi->indelList = niList;
+      }
+  if (unaliReport)
+      { 
       slReverse(&uiList);
       pi->unaliList = uiList;
       }
@@ -1314,7 +1396,7 @@ pi->mrnaCloneId = getMrnaCloneId(conn, pi->mrna->name);
 /* Get the corresponding sequences */
 rnaSeq = hashFindVal(rnaSeqs, pi->mrna->name);
 dnaSeq = hDnaFromSeq(psl->tName, psl->tStart, psl->tEnd, dnaLower);
-pi->stdSplice = countStdSplice(psl, dnaSeq->dna);
+pi->stdSplice = countStdSplice(psl, dnaSeq->dna, pi);
 
 /* Reverse compliment genomic and psl record if aligned on opposite strand */
 if (psl->strand[0] == '-') 
@@ -1352,13 +1434,13 @@ for (indel = iList; indel != NULL; indel=indel->next)
 		indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == UNALIGNED)
-        fprintf(of, "Unaligned bases of size %d in %s.%s:%d-%d vs. %s:%d-%d\n",
-		indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
-		indel->chrom, indel->chromStart, indel->chromEnd);
+      fprintf(of, "Unaligned bases of size %d in %s.%s:%d-%d vs. %s:%d-%d\n",
+	      indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
+	      indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == MISMATCH)
-       {
-       fprintf(of, "Mismatch at %s.%s:%d vs. %s:%d",
-	    indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->chrom, indel->chromStart);
+      {
+	fprintf(of, "Mismatch at %s.%s:%d vs. %s:%d",
+		indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->chrom, indel->chromStart);
        if (indel->knownSnp)
 	   fprintf(of, ", SNP\n");
        else
@@ -1477,14 +1559,22 @@ fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\
 fprintf(of, "%d\t%d\t%d\t%d\t", pi->unalignedCds, pi->singleIndel, pi->tripleIndel, pi->totalIndel);
 for (i = 0; i < pi->indelCount; i++)
     fprintf(of, "%d,", pi->indels[i]);
+fprintf(of, "\t%d", pi->cdsGap);
 fprintf(of, "\n");
 
 /* Write out detailed records of indels, if requested */
 if (indelReport) 
     {
     if (verbose)
-        printf("Writing out indels and unaligned regions\n");
+        printf("Writing out indels\n");
     writeList(in, pi->indelList, INDEL, NULL, NULL);
+    }
+
+/* Write out detailed records of indels, if requested */
+if (unaliReport) 
+    {
+    if (verbose)
+        printf("Writing out unaligned reginos\n");
     writeList(un, pi->unaliList, UNALIGNED, NULL, NULL);
     }
 
@@ -1547,6 +1637,7 @@ db = optionVal("db", "hg15");
 vfName = optionVal("ver", NULL);
 verbose = optionExists("verbose");
 indelReport = optionExists("indels");
+unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
 codonSubReport = optionExists("codonsub");
 xeno = optionExists("xeno");
@@ -1556,14 +1647,17 @@ lf = lineFileOpen(argv[3], FALSE);
 faFile = argv[4];
 sprintf(filename, "%s.anal", argv[5]);
 of = mustOpen(filename, "w");
-fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tSyn\tNonSyn\tSynSnp\tNonSynSnp\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\n");
-fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\n");
+fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tSyn\tNonSyn\tSynSnp\tNonSynSnp\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\tGaps\n");
+fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\t10N\n");
 if (vfName) 
   vf = lineFileOpen(vfName, FALSE);
 if (indelReport) 
     {
     sprintf(filename, "%s.indel", argv[5]);
     in = mustOpen(filename, "w");
+    }
+if (unaliReport) 
+    {
     sprintf(filename, "%s.unali", argv[5]);
     un = mustOpen(filename, "w");
     }
@@ -1601,10 +1695,9 @@ if (verbose)
 doFile(pf, of, in, mm, cs, un);
 
 if (indelReport)
-    {
     fclose(in);
+if (unaliReport)
     fclose(un);
-    }
 if (mismatchReport)
     fclose(mm);
 if (codonSubReport)
