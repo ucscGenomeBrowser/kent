@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.41 2004/09/10 17:56:30 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.42 2004/09/10 18:48:51 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1849,8 +1849,11 @@ if (wds->stats)
     }
 else
     {
-    showConstraints(wds, fh);
-    fprintf(fh, "#\tstats: no data points found\n");
+    if (!htmlOut)
+	{
+	showConstraints(wds, fh);
+	fprintf(fh, "#\tstats: no data points found\n");
+	}
     }
 carefulClose(&fh);
 }	/*	static void statsOut()	*/
