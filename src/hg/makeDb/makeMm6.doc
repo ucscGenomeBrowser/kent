@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.2 2005/03/10 01:16:40 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.3 2005/03/11 01:07:03 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -58,6 +58,9 @@
     #	it would not function:
     #	sed -e "#NT_039769#i\
     #		....  this is supposed to work, I don't know why it does not
+    #  And even more curiously, this command cut and paste did NOT work
+    #	on hgwdev in my login.  Mysteries of environment.  Only worked
+    #	on kksilo.
     gzip seq_contig.md
 #   summarize sequence counts
     mkdir faCounts
@@ -93,11 +96,12 @@
 # CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2005-03-09 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/jkStuff
-    mkdir /cluster/data/mm6/Un
     cd /cluster/data/mm6
+    mkdir Un tmp
     cp -p /cluster/data/mm5/jkStuff/ncbiFixAgp ./jkStuff
     zcat allrefcontig.chr.agp.gz | ./jkStuff/ncbiFixAgp /dev/stdin | gzip > \
 	allrefcontig.chr.ordered.agp.gz
+    #	Set the appropriate release number here, this one is 34
     sed -e "s/buildNum = 33/buildNum = 34/" \
 	/cluster/data/mm5/jkStuff/ncbiToRandomAgps > \
 	    jkStuff/ncbiToRandomAgps
@@ -105,6 +109,9 @@
     gunzip seq_contig.md.gz allrefcontig.chr.ordered.agp.gz
     ./jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
                         ncbi/contig.idmap .
+    #	XXXX - there are problems with the chrY_random specifications
+    #   XXXX - it appears they are not specified in the contig.idmap file
+    #   XXXX - and they don't have fasta sequence in contigfasta/chrY.fa.gz
     #  The chrUn_random.agp created by this is too large with the 5000
     #  gaps.  it will work with 1000 gaps, so fixup the chrUn_random
     #  agp:
@@ -117,16 +124,14 @@
 	    rm -f ./tmp.fa
 	    zcat ncbi/contigfasta/chr${C}.fa.gz | \
 		perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' > ./tmp.fa
-	    $HOME/bin/i386/agpToFa -simpleMulti \
+	    $HOME/bin/i386/agpToFa -verbose=2 -simpleMulti \
 		${C}/chr${C}_random.ctg.agp chr${C}_random \
 		    ${C}/chr${C}_random.fa ./tmp.fa
 	    rm -f ./tmp.fa
 	fi
-    done > agpToFa.out 2>&1
-    #	got a segfault on chrY_random.fa
-    #	There is some kind of problem with the coordinates in the
-    #	seq_contig.md and contig.idmap files
-XXXXX - awaiting answer from Deanna - 2005-03-09 17:16
+    done > tmp/agpToFa.out 2>&1
+    #	the above loop takes about 6 minutes, examine the tmp/agpToFa.out
+    #	record for any errors
     # Clean these up to avoid confusion later... they're easily rebuilt
     #   with the ncbiToRandomAgps script above
     rm ?/*_random.ctg.agp ??/*_random.ctg.agp
@@ -137,21 +142,300 @@ XXXXX - awaiting answer from Deanna - 2005-03-09 17:16
     ssh kksilo
     cd /cluster/data/mm6
     for C in ? ??
-    for C in Y
     do
-	if [ -s ${C}/chr${C}_random.ctg.agp ]; then
-	    splitFaIntoContigs ${C}/chr${C}_random.agp \
-		${C}/chr${C}_random.fa . -nSize=5000000
+	if [ -s ${C}/chr${C}_random.fa ]; then
+	    splitFaIntoContigs  -nSize=5000000 ${C}/chr${C}_random.agp \
+		${C}/chr${C}_random.fa .
 	    mkdir -p ${C}/lift
+	    rm -f ${C}/lift/rOut.lst ${C}/lift/random.lft ${C}/lift/random.lst
 	    mv ${C}_random/lift/oOut.lst ${C}/lift/rOut.lst
 	    mv ${C}_random/lift/ordered.lft ${C}/lift/random.lft
 	    mv ${C}_random/lift/ordered.lst ${C}/lift/random.lst
 	    rmdir ${C}_random/lift
 	    rm ${C}_random/chr${C}_random.agp ${C}_random/chr${C}_random.fa
-	    mv ${C}_random/chr${C}_random_* $C
+	    rm -rf ${C}/chr${C}_random_*
+	    mv ${C}_random/chr${C}_random_* ${C}
 	    rmdir ${C}_random
 	fi
-    done
-    #  This has a lot of output.  It is difficult to see if anything
-    #   goes wrong.
+    done > tmp/split.out 2>&1
+    #	the above loop takes less than a minute
+    #	scan the tmp/split.out file for possible errors
 
+# MAKE LIFTALL.LFT (DONE - 2005-03-10 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm6
+    cat ?/lift/*.lft ??/lift/*.lft > jkStuff/liftAll.lft
+
+# CREATING DATABASE (DONE - 2005-03-10 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm6
+    faToTwoBit ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa \
+	mm6.2bit
+    twoBitInfo mm6.2bit stdout | sort -rn +1 > chrom.sizes
+    grep -v random chrom.sizes | cut -f1 | sed -e "s/chr//" > chrom.lst
+    twoBitInfo mm6.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/mm6/mm6.2bit\n", $1,$2}' > chromInfo.tab
+
+    ssh hgwdev
+    cd /cluster/data/mm6
+    hgsql -e "create database mm6;" mysql
+    #	Make sure we have enough room (eventually ~ 70Gb) for mysql tables:
+    df -h | grep mysql
+    #	/dev/sda1             472G  227G  222G  51% /var/lib/mysql2
+    #	/dev/sdc1             1.8T  728G  933G  44% /var/lib/mysql
+
+    # CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2005-03-10 - Hiram)
+    #   Use any of the newest databases to ensure that the organization
+    #   of the grp table is up to date
+    ssh hgwdev
+    hgsql mm6 -e "create table grp (PRIMARY KEY(NAME)) select * from hg17.grp"
+    hgsql mm6 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql mm6 -e 'load data local infile "chromInfo.tab" into table chromInfo;'
+
+    # Enter mm6 into dbDb and defaultDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("mm6", "March 2005", "/gbdb/mm6", "Mouse", \
+        "chr6:28912411-28925620", 1, 24, "Mouse", \
+        "Mus musculus", "/gbdb/mm6/html/description.html", 0, 0, \
+        "NCBI Build 34");' -h localhost hgcentraltest
+    #	do this defaultDb entry later after there is something to see
+    #	on this browser.
+    hgsql -e 'INSERT INTO defaultDb (name, genome) VALUES("mm6", "Mouse")' \
+        -h localhost hgcentraltest
+    # start a new entry in the trackDb hierarchy
+    cd $HOME/kent/src/hg/makeDb/trackDb/mouse
+    mkdir mm6
+    cvs add mm6
+    cd mm6
+    cp ../mm5/description.html .
+    vi description.html - fixup text for this assembly
+    cvs add description.html
+    cvs commit
+    cd ../..
+    vi trackDb.ra - add mm6 to the list
+    mkdir /cluster/data/mm6/html
+    mkdir /gbdb/mm6
+    ln -s /cluster/data/mm6/html /gbdb/mm6/html
+    ln -s /cluster/data/mm6/mm6.2bit /gbdb/mm6/mm6.2bit
+    cp -p mouse/mm6/description.html /gbdb/mm6/html
+    make DBS=mm6 ZOO_DBS=""
+
+#  GOLD GAP tracks (DONE - 2005-03-10 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/mm6
+    #	make sure these tmp contig agp files are gone, easily generated
+    #	as above with jkStuff/ncbiToRandomAgps
+    rm -f */chr*.ctg.agp
+    mkdir ffa
+    zcat ncbi/sequence.inf.gz > ffa/sequence.inf
+    hgGoldGapGl -chromLst=chrom.lst mm6 /cluster/data/mm6 .
+    featureBits mm6 gold
+    #	2597150411 bases of 2597150411 (100.000%) in intersection
+    featureBits mm5 gold
+    #	2615483787 bases of 2615483787 (100.000%) in intersection
+    featureBits mm4 gold
+    #	2627444668 bases of 2627444668 (100.000%) in intersection
+
+    featureBits mm6 gap
+    #	482483041 bases of 2597150411 (18.577%) in intersection
+    featureBits mm5 gap
+    #	549468286 bases of 2615483787 (21.008%) in intersection
+    featureBits mm4 gap
+    #	325167539 bases of 2627444668 (12.376%) in intersection
+
+#  DISTRIBUTE SEQUENCE TO INTERMEDIATE SERVERS FOR KLUSTER RUNS
+    ssh kksilo
+    mkdir /cluster/bluearc/mm6
+    cd /cluster/data/mm6
+    mkdir /cluster/bluearc/mm6/chrom
+    cp -p */*.fa /cluster/bluearc/mm6/chrom
+
+    # break up into 500,000 sized chunks for repeat masker runs
+TOP=`pwd`
+export TOP
+for CTG_DIR in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
+        ??/chr??_random_[0-9]*
+do
+    ctg=`basename ${CTG_DIR}`
+    cd ${CTG_DIR}
+    faSplit size ${ctg}.fa 500000 ${ctg}_ -lift=${ctg}.lft -maxN=500000
+    cd ${TOP}
+done > tmp/ctg_split.out 2>&1
+    #	about 3 minutes, check the tmp/ctg_split.out for anything unusual
+
+    #	make a list of the contigs
+TOP=`pwd`
+export TOP
+for CTG_DIR in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
+        ??/chr??_random_[0-9]*
+do
+    ctg=`basename ${CTG_DIR}`
+    cd ${CTG_DIR}
+    ls ${ctg}_* | while read F
+    do
+        echo ${CTG_DIR}/${F}
+    done
+    cd ${TOP}
+done > contig500K.lst
+    #	count 'em
+    wc contig500K.lst
+    #	6678   6678 176765 contig500K.lst
+
+    mkdir -p /cluster/panasas/home/store/mm6/contigs
+    rsync -a --progress --files-from=contig500K.lst . \
+        /cluster/panasas/home/store/mm6/contigs/
+
+    ssh kkr1u00
+    mkdir /iscratch/i/mm6
+    cd /iscratch/i/mm6
+    cp -p /cluster/bluearc/mm6/chrom/* .
+    /cluster/bin/iSync
+    #	verify the contig copy above functioned OK
+    find /cluster/panasas/home/store/mm6/contigs -type f | wc
+    #	6678    6678  443885
+
+# SIMPLE REPEAT TRACK (DONE - 2005-03-10 Hiram)
+    # TRF can be run in parallel with RepeatMasker on the file server
+    #   since it doesn't require masked input sequence.
+    #   Run this on the rack 9 cluster     
+    ssh kk9 
+    mkdir /cluster/data/mm6/bed/simpleRepeat
+    cd /cluster/data/mm6/bed/simpleRepeat
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set path1 = $1
+set inputFN = $1:t  
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runTrf
+
+cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    ls -1S /iscratch/i/mm6/chrom/chr*.fa > genome.lst
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    #	be gentle on the start up of these things since each starting
+    #	job is a copy of the .fa file, a 'para try' starts 10 jobs
+    #	there are only 40 total jobs
+    para try
+    sleep 30
+    para check
+    para try
+    sleep 30
+    para check
+    para try
+    sleep 30
+    para check
+    para try
+    para check ... all 40 are running at this point, some are already done
+    para time
+Completed: 40 of 40 jobs
+CPU time in finished jobs:      20946s     349.11m     5.82h    0.24d  0.001 y
+IO & Wait Time:                  5543s      92.38m     1.54h    0.06d  0.000 y
+Average job time:                 662s      11.04m     0.18h    0.01d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            1934s      32.23m     0.54h    0.02d
+Submission to last job:          1934s      32.23m     0.54h    0.02d
+
+    # Load into the database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/simpleRepeat
+    cat trf/chr*.bed > simpleRepeat.bed
+    hgLoadBed mm6 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    #	Loaded 1152810 elements of size 16
+
+    featureBits mm6 simpleRepeat
+    #	83220723 bases of 2597150411 (3.204%) in intersection
+    featureBits mm5 simpleRepeat
+    # 81414259 bases of 2615483787 (3.113%) in intersection
+    featureBits mm4 simpleRepeat
+    # 82600648 bases of 2627444668 (3.144%) in intersection
+    featureBits mm3 simpleRepeat
+    # 75457193 bases of 2505900260 (3.011%) in intersection
+
+# REPEATMASKER RUN (after contigs have been distributed to panasas FS)
+#	(WORKING - 2005-03-10 - Hiram)
+    ssh kk
+
+    #- Make the run directory and job list:
+    cd /cluster/data/mm6
+    cat << '_EOF_' > jkStuff/RMMouse
+#!/bin/csh -fe
+
+cd /cluster/data/mm6/$1
+pushd .
+/bin/mkdir -p /tmp/mm6/$2
+/bin/cp /cluster/panasas/home/store/mm6/contigs/$1/$2 /tmp/mm6/$2
+cd /tmp/mm6/$2
+/cluster/bluearc/RepeatMasker050112/RepeatMasker -ali -s -species mus $2
+popd
+/bin/cp /tmp/mm6/$2/$2.out ./
+if (-e /tmp/mm6/$2/$2.align) /bin/cp /tmp/mm6/$2/$2.align ./
+if (-e /tmp/mm6/$2/$2.tbl) /bin/cp /tmp/mm6/$2/$2.tbl ./
+if (-e /tmp/mm6/$2/$2.cat) /bin/cp /tmp/mm6/$2/$2.cat ./
+/bin/rm -fr /tmp/mm6/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm6/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm6
+'_EOF_'
+    chmod +x jkStuff/RMMouse
+
+    mkdir -p RMRun
+    rm -f RMRun/RMJobs
+    cat contig500K.lst | while read C
+    do
+	D=`dirname ${C}`
+	F=`basename ${C}`
+	echo /cluster/data/mm6/jkStuff/RMMouse ${D} ${F} \
+		'{'check out line+ /cluster/data/mm6/${D}/${F}.out'}'
+    done >> RMRun/RMJobs
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/mm6/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+#XXXX - RUNNING 2005-03-10 - Hiram
+
+# GC5BASE (DONE - 2005-03-10 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm6/bed/gc5Base
+    cd /cluster/data/mm6/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 mm6 \
+        /cluster/data/mm6 | wigEncode stdin gc5Base.wig gc5Base.wib
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/mm6/mm6.2bit
+    #       File stdout created
+    #	Converted stdin, upper limit 100.00, lower limit 0.00
+
+    #	runs for about 50 minutes
+
+    mkdir /gbdb/mm6/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/mm6/wib
+    hgLoadWiggle -pathPrefix=/gbdb/mm6/wib mm6 gc5Base gc5Base.wig
+
+    #	verify index is correct:
+    hgsql mm6 -e "show index from gc5Base;"
+    #	should see good numbers in Cardinality column, NULL:
+    hgsql mm6 -e "analyze table gc5Base;"
