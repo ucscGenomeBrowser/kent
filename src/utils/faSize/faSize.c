@@ -88,8 +88,8 @@ int i;
 struct dnaSeq seq;
 int fileCount = 0;
 int seqCount = 0;
-unsigned long baseCount = 0;
-unsigned long nCount = 0;
+unsigned long long baseCount = 0;
+unsigned long long nCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
 boolean detailed = cgiBoolean("detailed");
@@ -128,7 +128,7 @@ for (i = 0; i<faCount; ++i)
     }
 if (!detailed)
     {
-    printf("%lu bases (%lu N's %lu real) in %d sequences in %d files\n",
+    printf("%llu bases (%llu N's %llu real) in %d sequences in %d files\n",
 	baseCount, nCount, baseCount - nCount, seqCount, fileCount);
     printStats(&fiList);
     }
