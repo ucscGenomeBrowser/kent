@@ -513,3 +513,18 @@ SEQ2_LEN=$BASE/S2.len
     mkdir /gbdb/bosTau1/wib
     ln -s `pwd`/gc5Base.wib /gbdb/bosTau1/wib
     hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 gc5Base gc5Base.wig
+
+
+# LOAD GAP & GOLD TABLES FROM AGP (DONE 11/10/04 angie)
+    ssh hgwdev
+    # There is one line of AGP containing a 0-length contig segment, and 
+    # this causes a problem for findBin in hgGoldGapGl.  awk that out:
+    awk '$3 != 0 {print;}' \ 
+      /cluster/data/bosTau1/downloads/contigs/Btau_v1.0_20040927.agp \
+    | hgGoldGapGl -noGl bosTau1 stdin
+    # For some reason, the indices did not get built correctly --
+    # "show index from gap/gold" shows NULL cardinalities for chrom.  
+    # Rebuild indices with "analyze table".
+    hgsql bosTau1 -e 'analyze table gold; analyze table gap;'
+
+
