@@ -3329,133 +3329,6 @@ tg->itemName = sanger22Name;
 }
 
 
-int cmpAgpFrag(const void *va, const void *vb)
-/* Compare two agpFrags by chromStart. */
-{
-const struct agpFrag *a = *((struct agpFrag **)va);
-const struct agpFrag *b = *((struct agpFrag **)vb);
-return a->chromStart - b->chromStart;
-}
-
-
-void goldLoad(struct track *tg)
-/* Load up golden path from database table to track items. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct agpFrag *fragList = NULL, *frag;
-struct agpGap *gapList = NULL, *gap;
-int rowOffset;
-
-/* Get the frags and load into tg->items. */
-sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    frag = agpFragLoad(row+rowOffset);
-    slAddHead(&fragList, frag);
-    }
-slSort(&fragList, cmpAgpFrag);
-sqlFreeResult(&sr);
-tg->items = fragList;
-
-/* Get the gaps into tg->customPt. */
-sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gap = agpGapLoad(row+rowOffset);
-    slAddHead(&gapList, gap);
-    }
-slReverse(&gapList);
-sqlFreeResult(&sr);
-tg->customPt = gapList;
-hFreeConn(&conn);
-}
-
-void goldFree(struct track *tg)
-/* Free up goldTrackGroup items. */
-{
-agpFragFreeList((struct agpFrag**)&tg->items);
-agpGapFreeList((struct agpGap**)&tg->customPt);
-}
-
-char *goldName(struct track *tg, void *item)
-/* Return name of gold track item. */
-{
-struct agpFrag *frag = item;
-return frag->frag;
-}
-
-static void goldDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw golden path items. */
-{
-int baseWidth = seqEnd - seqStart;
-struct agpFrag *frag;
-struct agpGap *gap;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
-Color brown = color;
-Color gold = tg->ixAltColor;
-Color col;
-int ix = 0;
-double scale = scaleForPixels(width);
-
-/* Draw gaps if any. */
-if (!isFull)
-    {
-    int midY = y + midLineOff;
-    for (gap = tg->customPt; gap != NULL; gap = gap->next)
-	{
-	if (!sameWord(gap->bridge, "no"))
-	    {
-	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
-	    }
-	}
-    }
-
-for (frag = tg->items; frag != NULL; frag = frag->next)
-    {
-    x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    color =  ((ix&1) ? gold : brown);
-    if (w < 1)
-	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
-    if (isFull)
-	y += lineHeight;
-    else if (baseWidth < 10000000)
-	{
-	char status[256];
-	sprintf(status, "%s:%d-%d %s %s:%d-%d", 
-	    frag->frag, frag->fragStart, frag->fragEnd,
-	    frag->strand,
-	    frag->chrom, frag->chromStart, frag->chromEnd);
-
-	mapBoxHc(frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	    frag->frag, status);
-	}
-    ++ix;
-    }
-}
-
-void goldMethods(struct track *tg)
-/* Make track for golden path */
-{
-tg->loadItems = goldLoad;
-tg->freeItems = goldFree;
-tg->drawItems = goldDraw;
-tg->itemName = goldName;
-tg->mapItemName = goldName;
-}
-
-
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
  * during repeatLoad, but rather query the database during the
@@ -3773,6 +3646,147 @@ AllocVar(tg);
 bedMethods(tg);
 return tg;
 }
+
+int cmpAgpFrag(const void *va, const void *vb)
+/* Compare two agpFrags by chromStart. */
+{
+const struct agpFrag *a = *((struct agpFrag **)va);
+const struct agpFrag *b = *((struct agpFrag **)vb);
+return a->chromStart - b->chromStart;
+}
+
+
+void goldLoad(struct track *tg)
+/* Load up golden path from database table to track items. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct agpFrag *fragList = NULL, *frag;
+struct agpGap *gapList = NULL, *gap;
+int rowOffset;
+
+/* Get the frags and load into tg->items. */
+sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    frag = agpFragLoad(row+rowOffset);
+    slAddHead(&fragList, frag);
+    }
+slSort(&fragList, cmpAgpFrag);
+sqlFreeResult(&sr);
+tg->items = fragList;
+
+/* Get the gaps into tg->customPt. */
+sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gap = agpGapLoad(row+rowOffset);
+    slAddHead(&gapList, gap);
+    }
+slReverse(&gapList);
+sqlFreeResult(&sr);
+tg->customPt = gapList;
+hFreeConn(&conn);
+}
+
+void goldFree(struct track *tg)
+/* Free up goldTrackGroup items. */
+{
+agpFragFreeList((struct agpFrag**)&tg->items);
+agpGapFreeList((struct agpGap**)&tg->customPt);
+}
+
+char *goldName(struct track *tg, void *item)
+/* Return name of gold track item. */
+{
+struct agpFrag *frag = item;
+return frag->frag;
+}
+
+static void goldDrawDense(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw golden path items. */
+{
+int baseWidth = seqEnd - seqStart;
+struct agpFrag *frag;
+struct agpGap *gap;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+int midLineOff = heightPer/2;
+boolean isFull = (vis == tvFull);
+Color brown = color;
+Color gold = tg->ixAltColor;
+Color col;
+int ix = 0;
+double scale = scaleForPixels(width);
+
+/* Draw gaps if any. */
+if (!isFull)
+    {
+    int midY = y + midLineOff;
+    for (gap = tg->customPt; gap != NULL; gap = gap->next)
+	{
+	if (!sameWord(gap->bridge, "no"))
+	    {
+	    drawScaledBox(vg, gap->chromStart, gap->chromEnd, scale, xOff, midY, 1, brown);
+	    }
+	}
+    }
+
+for (frag = tg->items; frag != NULL; frag = frag->next)
+    {
+    x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    color =  ((ix&1) ? gold : brown);
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (isFull)
+	y += lineHeight;
+    else if (baseWidth < 10000000)
+	{
+	char status[256];
+	sprintf(status, "%s:%d-%d %s %s:%d-%d", 
+	    frag->frag, frag->fragStart, frag->fragEnd,
+	    frag->strand,
+	    frag->chrom, frag->chromStart, frag->chromEnd);
+
+	mapBoxHc(frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->mapName, 
+	    frag->frag, status);
+	}
+    ++ix;
+    }
+}
+
+static void goldDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw golden path items. */
+{
+if (vis == tvDense)
+    goldDrawDense(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    	font, color, vis);
+else
+    genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+    	font, color, vis);
+}
+
+void goldMethods(struct track *tg)
+/* Make track for golden path */
+{
+tg->loadItems = goldLoad;
+tg->freeItems = goldFree;
+tg->drawItems = goldDraw;
+tg->drawItemAt = bedDrawSimpleAt;
+tg->itemName = goldName;
+tg->mapItemName = goldName;
+}
+
 
 void isochoreLoad(struct track *tg)
 /* Load up isochores from database table to track items. */
@@ -4173,11 +4187,11 @@ x2 = round((double)((int)band->chromEnd-winStart)*scale) + xOff;
 /* Clip here so that text will tend to be more visible... */
 if (x1 < xOff)
     x1 = xOff;
+if (x2 > insideX + insideWidth)
+    x2 = insideX + insideWidth;
 w = x2-x1;
 if (w < 1)
     w = 1;
-if (w > insideWidth)
-    w = insideWidth;
 col = cytoBandColor(tg, band, vg);
 textCol = contrastingColor(vg, col);
 vgBox(vg, x1, y, w, heightPer, col);
@@ -6683,43 +6697,27 @@ sprintf(buf, "%s %s", gap->type, gap->bridge);
 return buf;
 }
 
-static void gapDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+static void gapDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gap items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct agpGap *item;
-int y = yOff;
+struct agpGap *gap = item;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
 int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = scaleForPixels(width);
 int halfSize = heightPer/2;
 
-for (item = tg->items; item != NULL; item = item->next)
+x1 = round((double)((int)gap->chromStart-winStart)*scale) + xOff;
+x2 = round((double)((int)gap->chromEnd-winStart)*scale) + xOff;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (sameString(gap->bridge, "no"))
+    vgBox(vg, x1, y, w, heightPer, color);
+else  /* Leave white line in middle of bridged gaps. */
     {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    if (sameString(item->bridge, "no"))
-	vgBox(vg, x1, y, w, heightPer, color);
-    else  /* Leave white line in middle of bridged gaps. */
-        {
-	vgBox(vg, x1, y, w, halfSize, color);
-	vgBox(vg, x1, y+heightPer-halfSize, w, halfSize, color);
-	}
-    if (isFull)
-	{
-	char name[32];
-	sprintf(name, "%s", item->type);
-	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
-	    name, name);
-	y += lineHeight;
-	}
+    vgBox(vg, x1, y, w, halfSize, color);
+    vgBox(vg, x1, y+heightPer-halfSize, w, halfSize, color);
     }
 }
 
@@ -6729,7 +6727,8 @@ void gapMethods(struct track *tg)
 {
 tg->loadItems = gapLoad;
 tg->freeItems = gapFree;
-tg->drawItems = gapDraw;
+tg->drawItemAt = gapDrawAt;
+tg->drawItems = genericDrawItems;
 tg->itemName = gapName;
 tg->mapItemName = gapName;
 }
@@ -8863,6 +8862,7 @@ for (track = trackList; track != NULL; track = track->next)
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 /* Draw mini-buttons. */
+if (withLeftLabels)
     {
     int butOff;
     y = gfxBorder;
@@ -9179,7 +9179,7 @@ if (withCenterLabels)
 	    {
 	    if (withCenterLabels)
 		y += fontHeight;
-	    if (track->limitedVis == tvPack && withLeftLabels)
+	    if (track->limitedVis == tvPack)
 		{
 		vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
 		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
