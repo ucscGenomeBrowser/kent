@@ -1042,8 +1042,8 @@ identifier bdgpNonCodingId external=BDGP
 identifier flyBase2004Id external=FlyBase
 "FlyBase Xref as of 2004"
     dm2.flyBase2004Xref.name
-    dm2.flyBaseGene.name
-    dm2.flyBaseNoncoding.name
+    dm2.flyBaseGene.name minCheck=0.99
+    dm2.flyBaseNoncoding.name minCheck=0.90
     dp3.flyBase2004Xref.name
     dp3.flyBaseGene.name
 
