@@ -989,9 +989,11 @@ Make the xenoRna file
         gunzip -c /cluster/store2/genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
         | gbToFaRa -byOrganism=org mouseXenoRna.fil mouseXenoRna.fa mouseXenoRna.ra mouseXenoRna.ta stdin
 
-
-       hgLoadRna add rn1 /cluster/store2/mrna.132/mouseXenoRna.fa  /cluster/store2/mrna.132/mouseXenoRna.ra
-
+       Make a /gbdb symlink
+       cd /gbdb/rn1/mrna.132
+       ln -s /cluster/store2/mrna.132/mouseXenoRna.fa mouseXenoRna.fa
+       ln -s /cluster/store2/mrna.132/mouseXenoRna.ra mouseXenoRna.ra
+       hgLoadRna add rn1 /gbdb/rn1/mrna.132/mouseXenoRna.fa  /gbdb/rn1/mrna.132/mouseXenoRna.ra
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
