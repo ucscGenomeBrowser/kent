@@ -242,7 +242,14 @@ void altGraphXReverseComplement(struct altGraphX *ag);
    chromosomal coordinates were reverse complemented. */
 
 int altGraphXGetEdgeNum(struct altGraphX *ag, int v1, int v2);
-/** Find the edge index that corresponds to v1 and v2 */
+/* Find the edge index that corresponds to v1 and v2 */
+
+void altGraphXEnlargeExons(struct altGraphX *ag);
+/* Scale the exons up in size such that the smallest one
+   is no smaller than minIntronFact the largest intron. Method is
+   to extend the ends of exons, this makes the exons appear larger
+   but the coordinates will no longer be meaningful with respect to the
+   genome coordinates. */
 
 #endif /* ALTGRAPHX_H */
 
