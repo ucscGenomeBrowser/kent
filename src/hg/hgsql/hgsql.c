@@ -4,7 +4,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgsql.c,v 1.5 2004/02/24 18:47:09 kent Exp $";
+static char const rcsid[] = "$Id: hgsql.c,v 1.6 2004/07/19 18:13:32 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,10 +34,11 @@ while ((c = *s++) != 0)
 return FALSE;
 }
 
-void hgsql(int argc, char *argv[])
+int hgsql(int argc, char *argv[])
 /* hgsql - Execute some sql code using passwords in .hg.conf. */
 {
 int i;
+int rc;
 struct dyString *command = newDyString(1024);
 char *password = cfgOption("db.password");
 char *user = cfgOption("db.user");
@@ -53,14 +54,15 @@ for (i=0; i<argc; ++i)
     if (hasSpace)
 	dyStringAppendC(command, '\'');
     }
-system(command->string);
+rc = system(command->string);
+return (WEXITSTATUS(rc));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int rc;
 if (argc <= 1)
     usage();
-hgsql(argc-1, argv+1);
-return 0;
+return (hgsql(argc-1, argv+1));
 }
