@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.4 2004/07/16 16:18:59 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.5 2004/07/18 01:38:17 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -102,14 +102,14 @@ void jsDropDownCarryOver(struct dyString *dy, char *var)
 {
 dyStringPrintf(dy, "document.hiddenForm.%s.value=", var);
 dyStringPrintf(dy, "document.mainForm.%s.options", var);
-dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value;", var);
+dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value; ", var);
 }
 
 void jsTextCarryOver(struct dyString *dy, char *var)
 /* Add statement to carry-over text item to dy. */
 {
 dyStringPrintf(dy, 
-    " document.hiddenForm.%s.value=document.mainForm.%s.value;",
+    "document.hiddenForm.%s.value=document.mainForm.%s.value; ",
     var, var);
 }
 
@@ -121,11 +121,8 @@ dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
 dyStringAppend(dy, 
-	" document.hiddenForm.hgta_regionType.value=regionType;");
+	"document.hiddenForm.hgta_regionType.value=regionType; ");
 jsTextCarryOver(dy, hgtaRange);
-jsTextCarryOver(dy, hgtaOffsetStart);
-jsTextCarryOver(dy, hgtaOffsetEnd);
-jsDropDownCarryOver(dy, hgtaOffsetRelativeTo);
 jsDropDownCarryOver(dy, hgtaOutputType);
 return dy;
 }
@@ -133,7 +130,7 @@ return dy;
 char *onChangeEnd(struct dyString **pDy)
 /* Finish up javascript onChange command. */
 {
-dyStringAppend(*pDy, " document.hiddenForm.submit();\"");
+dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
 return dyStringCannibalize(pDy);
 }
 
@@ -273,37 +270,32 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-/* Offset line. */
-    {
-    char *start = cartUsualString(cart, hgtaOffsetStart, "");
-    char *end = cartUsualString(cart, hgtaOffsetEnd, "");
-    char *rel = cartUsualString(cart, hgtaOffsetRelativeTo, "both");
-    static char *relMenu[3] = {"both", "start", "end"};
-    hPrintf("<TR><TD><B>offset:</B>\n");
-    hPrintf(" start: ");
-    cgiMakeTextVar(hgtaOffsetStart, start, 6);
-    hPrintf("\n");
-    hPrintf(" end: ");
-    cgiMakeTextVar(hgtaOffsetEnd, end, 6);
-    hPrintf("\n");
-    hPrintf(" relative to: ");
-    cgiMakeDropListFull(hgtaOffsetRelativeTo, relMenu, relMenu,
-    	ArraySize(relMenu), rel, NULL);
-    hPrintf("</TD></TR>\n");
-    }
-
 /* Output line. */
     {
+    int i;
+    uglyf("cartString(%s) = %s<BR>\n", hgtaOutputType, cartString(cart, hgtaOutputType));
     char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
+    uglyf("outputTYpe = %s<BR>\n", outputType);
     static char *symbols[] = 
-        {outPrimaryTable, outSequence, outSelectedFields, outSchema,
-	 outStats, outBed, outGtf, outCustomTrack };
+        {outPrimaryTable, outSequence, 
+	 outSelectedFields, outSchema,
+	 outStats, outBed, 
+	 outGtf, outCustomTrack };
     static char *labels[] =
-        {"all fields from primary table", "sequence", "selected fields from related tables", "schema (database organization)",
-	 "statistics", "BED - Browser Extensible Data", "GTF - Gene Transfer Format", "custom track"};
+        {"all fields from primary table", "sequence", 
+	 "selected fields from related tables", "schema (database organization)",
+	 "statistics", "BED - Browser Extensible Data", 
+	 "GTF - Gene Transfer Format", "custom track"};
     hPrintf("<TR><TD><B>output:</B>\n");
-    cgiMakeDropListFull(hgtaOutputType, labels, symbols, 
-    	ArraySize(symbols), outputType, NULL);
+    hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
+    for (i=0; i<ArraySize(symbols); ++i)
+	{
+	hPrintf(" <OPTION VALUE=%s", symbols[i]);
+	if (sameString(symbols[i], outputType))
+	    hPrintf(" SELECTED");
+	hPrintf(">%s\n", labels[i]);
+	}
+    hPrintf("</SELECT>\n");
     hPrintf("</TD></TR>\n");
     }
 
@@ -341,8 +333,7 @@ hPrintf("</FORM>\n");
     {
     static char *saveVars[] = {
       "org", "db", hgtaGroup, hgtaTrack, hgtaRegionType,
-      hgtaRange, hgtaOffsetStart, hgtaOffsetEnd, hgtaOffsetRelativeTo,
-      hgtaOutputType, };
+      hgtaRange, hgtaOutputType, };
     int i;
 
     hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=\"GET\" NAME=\"hiddenForm\">\n");
