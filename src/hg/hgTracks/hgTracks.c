@@ -1092,13 +1092,16 @@ int ybase;
 int tmp;
 
 enum wiggleOptEnum wiggleType;
-char *interpolate;
-char *aa; 
+char *interpolate = NULL;
+char *aa = NULL; 
 int fill; 
+char *lineGapStr = NULL;
+int lineGapSize;
 
 char o1[128]; /* Option 1 - linear interp */
 char o2[128]; /* Option 2 - anti alias */
 char o3[128]; /* Option 3 - fill */
+char o4[128]; /* Option 4 - max gap where interpolation is still done */
 
 double hFactor;
 double minRange, maxRange;
@@ -1114,10 +1117,12 @@ if(lf==NULL) return;
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
+snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
 interpolate = cartUsualString(cart, o1, "Only samples");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
+lineGapSize = atoi(cartUsualString(cart, o4, "10000"));
 
 //this information should be moved to the trackDb.ra
 if( sameString( tg->mapName, "humMus" ) )
@@ -1182,10 +1187,13 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-                    if( sameString( aa, "on" )) /*use anti-aliasing*/
-                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
-                    else
-                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
+                    if( prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
+                        {
+                        if( sameString( aa, "on" )) /*use anti-aliasing*/
+                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
+                        else
+                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
+                        }
                     }
                 }
 	        }
