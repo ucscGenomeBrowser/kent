@@ -179,7 +179,7 @@ __attribute__((format(printf, 1, 2)))
 void verbose(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
  * default is stdout) if global verbose variable
- * is set to verbosity or higher. */
+ * is set to verbosity or higher.  Default level is 1. */
 #if defined(__GNUC__) && defined(JK_WARN)
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -190,6 +190,9 @@ void verboseDot();
 
 int verboseLevel();
 /* Get verbosity level. */
+
+int verboseSetLevel(int level);
+/* Set verbosity level. (1 is default) */
 
 void zeroBytes(void *vpt, int count);     
 /* fill a specified area of memory with zeroes */

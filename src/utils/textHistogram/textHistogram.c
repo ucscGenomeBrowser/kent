@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.13 2004/02/23 09:07:26 kent Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.14 2004/02/23 18:10:36 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,7 +18,7 @@ static struct optionSpec optionSpecs[] = {
     {"real", OPTION_BOOLEAN},
     {"autoscale", OPTION_INT},
     {"pValues", OPTION_BOOLEAN},
-    {"verbose", OPTION_BOOLEAN},
+    {"extra", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -57,7 +57,7 @@ errAbort(
   "   -real - Data input are real values (default is integer)\n"
   "   -autoscale=N - autoscale to N # of bins\n"
   "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
-  "   -verbose - extra outputs during processing\n"
+  "   -extra - extra outputs during processing\n"
   );
 }
 
@@ -349,7 +349,7 @@ col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
-extraVerbose = optionExists("verbose");
+extraVerbose = optionExists("extra");
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;
@@ -378,7 +378,7 @@ else
 
 if (extraVerbose)
     {
-    fprintf(stderr, "#\tverbose on, options:\n");
+    fprintf(stderr, "#\textra on, options:\n");
     fprintf(stderr, "#\tbinSize: ");
     if (real) fprintf(stderr, "%f\n", binSizeR);
 	else fprintf(stderr, "%d\n", binSize);

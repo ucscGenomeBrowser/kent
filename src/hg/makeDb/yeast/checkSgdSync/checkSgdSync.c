@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkSgdSync.c,v 1.2 2004/02/23 09:07:22 kent Exp $";
+static char const rcsid[] = "$Id: checkSgdSync.c,v 1.3 2004/02/23 18:10:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,7 +19,7 @@ errAbort(
   "usage:\n"
   "   checkSgdSync sgdDownloadDir\n"
   "options:\n"
-  "   -verbose - List status of every CDS\n"
+  "   -verbose=2 - List status of every CDS\n"
   );
 }
 
@@ -111,7 +111,7 @@ while (lineFileRowTab(lf, row))
 	    ++badCount;
 	else
 	    ++goodCount;
-	if (verboseLevel()>0)
+	if (verboseLevel()>=2)
 	    {
 	    char *s = startCodon;
 	    printf("%s\t%d\t%c%c%c\t%c\t%s\n", chrom, start, s[0], s[1], s[2], strand, row[9]);

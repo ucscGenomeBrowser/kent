@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.17 2004/02/23 09:07:25 kent Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.18 2004/02/23 18:10:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +41,7 @@ errAbort(
   "at gap boundaries if possible.\n"
   "\n"
   "Options:\n"
-  "    -verbose=1 - Write names of each file created\n"
+  "    -verbose=2 - Write names of each file created\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
@@ -176,7 +176,7 @@ while (lineFileNext(lf, &line, &lineSize))
 		fclose(f);
 		}
             mkOutPath(outPathName, outRoot, digits, fileCount);
-	    verbose(1, "writing %s\n", outPathName);
+	    verbose(2, "writing %s\n", outPathName);
 	    f = mustOpen(outPathName, "w");
 	    fprintf(f, ">%s%0*d\n", outFile, digits, fileCount);
 	    ++fileCount;
@@ -220,7 +220,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
 	carefulClose(&f);
         mkOutPath(outPath, outRoot, digits, fileCount++);
-	verbose(1, "writing %s\n", outPath);
+	verbose(2, "writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
 	nextEnd = calcNextEnd(fileCount, splitCount, estSize);
 	}
@@ -250,7 +250,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	carefulClose(&f);
 	curPos = 0;
         mkOutPath(outPath, outRoot, digits, fileCount++);
-	verbose(1, "writing %s\n", outPath);
+	verbose(2, "writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
 	}
     curPos += seq.size;
@@ -274,7 +274,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     carefulClose(&f);
     sprintf(outPath, "%s%s.fa", outDir, seq.name);
-    verbose(1, "writing %s\n", outPath);
+    verbose(2, "writing %s\n", outPath);
     f = mustOpen(outPath, "w");
     faWriteNext(f, seq.name, seq.dna, seq.size);
     }

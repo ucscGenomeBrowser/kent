@@ -5,7 +5,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.7 2004/02/23 09:07:23 kent Exp $";
+static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.8 2004/02/23 18:10:34 kent Exp $";
 
 /* output files */
 FILE *only1Fh = NULL;
@@ -124,7 +124,7 @@ struct queryList *q, *h;
 char *qName;
 int count = 0;
 
-verbose(1, "Comparing %s and %s\n", listName, hashName);
+verbose(2, "Comparing %s and %s\n", listName, hashName);
 for (q = list; q != NULL; q = q->next)
     {
     ++count;
@@ -134,14 +134,14 @@ for (q = list; q != NULL; q = q->next)
 	++uniqCount;
         if (onlyFh != NULL)
             pslTabOut(q->psl, onlyFh);
-	verbose(1, " %s only in %s\n", qName, listName);
+	verbose(2, " %s only in %s\n", qName, listName);
 	}
     else if (!pslSame(q->psl, h->psl) && q->score > h->score)
         {
 	++betterCount;
         if (betterFh != NULL)
             pslTabOut(q->psl, betterFh);
-	verbose(1, " %s better in %s\n", qName, listName);
+	verbose(2, " %s better in %s\n", qName, listName);
 	}
     }
 printf("%d total in %s\n", count, listName);
@@ -173,7 +173,7 @@ for (el = list; el != NULL; el = el->next)
                 pslTabOut(b, sameFh);
             }
 	else 
-	    verbose(1, " %s is different in two files.\n", name);
+	    verbose(2, " %s is different in two files.\n", name);
 	}
     }
 printf("%d of %d (%4.2f%%) are the same in both files\n", same, total, 100.0 * same / total);

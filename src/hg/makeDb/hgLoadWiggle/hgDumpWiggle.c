@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.3 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.4 2004/02/23 18:10:33 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* do not expect a bin column in the table */
@@ -107,7 +107,7 @@ if (db)
 		    {
 		    double dataValue =
   wiggle->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
-		    verbose(1, "%d\t%g\n",
+		    printf("%d\t%g\n",
 	1 + wiggle->chromStart + (dataOffset * wiggle->span), dataValue);
 		    }
 		}
@@ -125,7 +125,7 @@ if (db)
     }
 else
     {
-    warn("ERROR: file option has not been implemented yet ...\n");
+    warn("ERROR: file option has not been implemented yet ...");
     }
 }	/*	void hgDumpWiggle(int trackCount, char *tracks[])	*/
 
@@ -150,12 +150,12 @@ if (noBin)
     verbose(2, "expect no bin column in table\n");
 if (db && file)
     {
-    warn("ERROR: specify only one of db or file, not both\n");
+    warn("ERROR: specify only one of db or file, not both");
     usage();
     }
 if (!(db || file))
     {
-    warn("ERROR: must specify one of db or file\n");
+    warn("ERROR: must specify one of db or file");
     usage();
     }
 hgDumpWiggle(argc-1, argv+1);

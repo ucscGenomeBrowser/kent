@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.89 2004/02/23 09:07:18 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.90 2004/02/23 18:10:31 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -506,7 +506,7 @@ for (i=0; i<fileCount; ++i)
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
 	    Bits *qMaskBits = NULL;
-	    verbose(1, "%s\n", seq.name);
+	    verbose(2, "%s\n", seq.name);
 	    if (isProt)
 		faToProtein(seq.dna, seq.size);
 	    else

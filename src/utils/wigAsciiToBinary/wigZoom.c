@@ -12,7 +12,7 @@
 #include	"options.h"
 #include	"linefile.h"
 
-static char const rcsid[] = "$Id: wigZoom.c,v 1.2 2004/02/23 09:07:26 kent Exp $";
+static char const rcsid[] = "$Id: wigZoom.c,v 1.3 2004/02/23 18:10:36 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,9 +26,9 @@ static void usage()
 {
 errAbort(
     "wigZoom - process wiggle data to a zoomed view\n"
-    "usage: wigZoom [-verbose=1] [-dataSpan=N] <file names>\n"
+    "usage: wigZoom [-verbose=2] [-dataSpan=N] <file names>\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1024\n"
-    "\t-verbose=1 - display process while underway\n"
+    "\t-verbose=2 - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
     "First column of data is a chromosome location (IN NUMERICAL ORDER !).\n"
@@ -141,7 +141,7 @@ if (argc < 2)
 
 dataSpan = optionLongLong("dataSpan", 1024);
 
-verbose(1, "options: -verbose, dataSpan= %llu\n", dataSpan);
+verbose(2, "options: -verbose, dataSpan= %llu\n", dataSpan);
 if (dataSpan < 2)
     errAbort("ERROR: data span: %llu ! must be greater than one\n");
 

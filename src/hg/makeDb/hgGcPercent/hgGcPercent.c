@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.7 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.8 2004/02/23 18:10:33 kent Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -148,7 +148,7 @@ for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
 	{
 	char chrNib[256];
 	safef(chrNib, ArraySize(chrNib), "%s/%s.nib", nibDir, chr);
-	verbose(1, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
+	verbose(2, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
 	if (sameString(chrNib,nibEl->name))
 	    {
 	    printf("Processing %s\n", nibEl->name);
@@ -205,7 +205,7 @@ if (file)
     }
 
 
-if (verboseLevel() > 0)
+if (verboseLevel() >= 2)
     {
     fprintf(stderr, "hgGcPercent -win=%d", winSize);
     if (file) fprintf(stderr, " -file=%s", file);

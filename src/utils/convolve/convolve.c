@@ -9,7 +9,7 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.8 2004/02/23 09:07:25 kent Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.9 2004/02/23 18:10:36 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -300,6 +300,7 @@ for (i = 1; i < argc; ++i)
     histo0 = newHash(0);
 
     lf = lineFileOpen(argv[i], TRUE);	/*	input file	*/
+    verbose(1, "Processing %s\n", argv[1]);
     while (lineFileNext(lf, &line, NULL))
 	{
 	int j;			/*	loop counter over words	*/
@@ -317,7 +318,7 @@ warn("Expecting at least a word at line %d, file: %s, found %d words",
 	if (wordCount == 128)
 warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 
-	verbose(1, "Input data read from file: %s\n", argv[i]);
+	verbose(2, "Input data read from file: %s\n", argv[i]);
 	for (j = 0; j < wordCount; ++j)
 	    {
 	    char binName[128];
@@ -345,7 +346,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 		medianLog_2 = log_2;
 		medianBin0 = bin;
 		}
-	    verbose(1, "bin %d: %g %0.5g\n",
+	    verbose(2, "bin %d: %g %0.5g\n",
 		    inputValuesCount-1, probInput, log_2);
 
 	    AllocVar(hg);	/*	the histogram element	*/
@@ -360,7 +361,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	}	/*	for each line in a file	*/
 
 	/*	file read complete, echo input	*/
-	if (verboseLevel() > 0)
+	if (verboseLevel() >= 2)
 	    printHistogram(histo0, medianBin0);
 
 	/*	perform convolutions to specified count
@@ -373,7 +374,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	    int medianBin;
 	    histo1 = newHash(0);
 	    medianBin = iteration(histo0, histo1);
-	    if (verboseLevel() > 0)
+	    if (verboseLevel() >= 2)
 		printHistogram(histo1, medianBin);
 	    freeHashAndVals(&histo0);
 	    histo0 = histo1;
@@ -396,7 +397,7 @@ convolve_count = optionInt("count", 4);
 logs = optionExists("logs");
 html = optionExists("html");
 
-if (verboseLevel() > 0)
+if (verboseLevel() >= 2)
     {
     printf("options: -verbose, input file(s):\n");
     printf("-count=%d\n", convolve_count);
