@@ -17,11 +17,21 @@ errAbort(
  "     <name> <number of cpus>\n"
  "It may have other columns as well\n"
  "options:\n"
- "    -exe=/path/to/paranode\n"
- "    -log=/path/to/log/file\n"
- "    -umask=000 - set file creation mask, defaults to 002\n"
- "    -hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
- "    -rsh=/path/to/rsh/like/command\n");
+ "    exe=/path/to/paranode\n"
+ "    log=/path/to/log/file\n"
+ "    umask=000 - set file creation mask, defaults to 002\n"
+ "    userPath=bin:bin/i386 User dirs to add to path\n"
+ "    sysPath=/sbin:/local/bin System dirs to add to path\n"
+ "    hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
+ "    rsh=/path/to/rsh/like/command\n");
+}
+
+void carryOption(char *option, struct dyString *dy)
+/* Carry option from our command line to paraNode's. */
+{
+char *val = optionVal(option, NULL);
+if (val != NULL)
+   dyStringPrintf(dy, " %s=%s", option, val);
 }
 
 void paraNodeStart(char *machineList)
@@ -30,9 +40,6 @@ void paraNodeStart(char *machineList)
 int i;
 char *exe = optionVal("exe", "paraNode");
 char *rsh = optionVal("rsh", "rsh");
-char *log = optionVal("log", NULL);
-char *hub = optionVal("hub", NULL);
-char *umask = optionVal("umask", NULL);
 struct lineFile *lf = lineFileOpen(machineList, TRUE);
 char *row[2];
 struct dyString *dy = newDyString(256);
@@ -46,12 +53,11 @@ while (lineFileRow(lf, row))
 		lf->lineIx, lf->fileName);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s %s %s start -cpu=%d", rsh, name, exe, cpu);
-    if (log != NULL)
-       dyStringPrintf(dy, " log=%s", log);
-    if (hub != NULL)
-       dyStringPrintf(dy, " hub=%s", hub);
-    if (umask != NULL)
-       dyStringPrintf(dy, " umask=%s", umask);
+    carryOption("log", dy);
+    carryOption("hub", dy);
+    carryOption("umask", dy);
+    carryOption("sysPath", dy);
+    carryOption("userPath", dy);
     printf("%s\n", dy->string);
     system(dy->string);
     }

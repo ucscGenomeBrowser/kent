@@ -17,15 +17,35 @@
 #include "paraLib.h"
 #include "net.h"
 
+void usage()
+/* Explain usage and exit. */
+{
+errAbort("paraNode - parasol node serve.\n"
+         "usage:\n"
+	 "    paraNode start\n"
+	 "options:\n"
+	 "    log=file - file may be 'stdout' to go to console\n"
+	 "    hub=host - restrict access to connections from hub\n"
+	 "    umask=000 - set umask to run under, default 002\n"
+	 "    userPath=bin:bin/i386 User dirs to add to path\n"
+	 "    sysPath=/sbin:/local/bin System dirs to add to path\n"
+	 "    cpu=N - Number of CPUs to use.  Default 1\n");
+}
+
+/* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
+int umaskVal = 0002;		/* File creation mask. */
+int maxProcs = 1;		/* Number of processers allowed to use. */
+char *userPath = "";		/* User stuff to add to path. */
+char *sysPath = "";		/* System stuff to add to path. */
+
+/* Other globals. */
 char *hostName;			/* Name of this machine. */
 in_addr_t hubIp;		/* Hub IP address. */
 in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
-int maxProcs = 1;		/* Number of processers allowed to use. */
 int socketHandle;		/* Main message queue socket. */
 int connectionHandle;		/* A connection accepted. */
-int umaskVal = 0002;		/* File creation mask. */
 
 struct job
 /* Info on one job in this node. */
@@ -46,65 +66,71 @@ for (job = runningJobs; job != NULL; job = job->next)
 return NULL;
 }
 
-void usage()
-/* Explain usage and exit. */
-{
-errAbort("paraNode - parasol node serve.\n"
-         "usage:\n"
-	 "    paraNode start\n"
-	 "options:\n"
-	 "    log=file - file may be 'stdout' to go to console\n"
-	 "    hub=host - restrict access to connections from hub\n"
-	 "    umask=000 - set umask to run under, default 002\n"
-	 "    cpu=N - Number of CPUs to use.  Default 1\n");
-}
-
 extern char **environ;	/* The environment strings. */
 
-int countEnv(char **env)
-/* Count elements in environment type string. */
+char **hashToEnviron(struct hash *hash)
+/* Create an environ formatted string from hash. */
 {
-char *s;
-int count = 0;
-while ((s = *env++) != NULL)
-    ++count;
-return count;
-}
-
-char **envExpand(int extra)
-/* Make environ have extra slots. Return first new slot. */
-{
-int oldSize = countEnv(environ);
-int newSize = oldSize + extra + 1;
+struct dyString *dy = newDyString(512);
+struct hashEl *list = hashElListHash(hash), *el;
 char **newEnv;
-AllocArray(newEnv, newSize);
-memcpy(newEnv, environ, oldSize * sizeof(newEnv[0]));
-environ = newEnv;
-return environ + oldSize;
+int envCount = slCount(list), i;
+AllocArray(newEnv, envCount+1);
+for (i=0, el=list; i<envCount; ++i, el = el->next)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, el->name);
+    dyStringAppend(dy, "=");
+    dyStringAppend(dy, el->val);
+    newEnv[i] = cloneString(dy->string);
+    }
+freeDyString(&dy);
+return newEnv;
 }
 
-char *envPair(char *name, char *val)
-/* Return name=val in a freshly allocated string. */
+struct hash *environToHash(char **env)
+/* Put environment into hash. */
 {
-int size = strlen(name) + strlen(val) + 2;  /* Include '=' and zero tag */
-char *pair = needMem(size);
-snprintf(pair, size, "%s=%s", name, val);
-return pair;
+struct hash *hash = newHash(7);
+char *name, *val, *s, *e;
+while ((s = *env++) != NULL)
+    {
+    name = cloneString(s);
+    val = strchr(name, '=');
+    if (val != NULL)
+        {
+	*val++ = 0;
+	hashAdd(hash, name, cloneString(val));
+	}
+    freez(&name);
+    }
+return hash;
 }
 
-void addEnv(char *name, char *val)
-/* Add name=value pair to environment. */
+void hashUpdate(struct hash *hash, char *name, char *val)
+/* Update hash with name/val pair.   If name not in hash
+ * already, put it in hash, otherwise free up old value
+ * associated with name and put new value in it's place. */
 {
-char **env = envExpand(1);
-*env = envPair(name, val);
+struct hashEl *hel = hashLookup(hash, name);
+val = cloneString(val);
+if (hel == NULL)
+    hashAdd(hash, name, val);
+else
+    {
+    freez(&hel->val);
+    hel->val = val;
+    }
 }
 
-void changeUid(char *name)
+void changeUid(char *name, char **retDir)
 /* Try and change process user (and group) id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
 setgid(pw->pw_gid);
 setuid(pw->pw_uid);
+if (retDir != NULL)
+   *retDir = pw->pw_dir;
 }
 
 static int grandChildId = 0;
@@ -119,6 +145,52 @@ if (grandChildId != 0)
     }
 }
 
+void updatePath(struct hash *hash, char *userPath, 
+	char *homeDir, char *sysPath)
+/* Prepend userPath and system path to existing path. 
+ * Add homeDir in front of all elements of user path. */
+{
+struct dyString *dy = newDyString(1024);
+char *s, *e;
+char *oldPath;
+
+/* Go through user path - which is colon separated
+ * and prepend homeDir to it. */
+userPath = cloneString(userPath);
+s = userPath;
+for (;;)
+    {
+    if (s == NULL || s[0] == 0)
+        break;
+    e = strchr(s, ':');
+    if (e != NULL)
+       *e++ = 0;
+    dyStringAppend(dy, homeDir);
+    dyStringAppend(dy, "/");
+    dyStringAppend(dy, s);
+    dyStringAppend(dy, ":");
+    s = e;
+    }
+
+/* Add system path next. */
+if (sysPath != NULL && sysPath[0] != 0)
+    {
+    dyStringAppend(dy, sysPath);
+    if (lastChar(sysPath) != ':')
+	dyStringAppend(dy, ":");
+    }
+
+/* Add paths we inherited from root. */
+oldPath = hashFindVal(hash, "PATH");
+if (oldPath == NULL || oldPath[0] == 0)
+    oldPath = "/bin:/usr/bin";
+dyStringAppend(dy, oldPath);
+
+hashUpdate(hash, "PATH", dy->string);
+freez(&userPath);
+dyStringFree(&dy);
+}
+
 void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
@@ -130,9 +202,10 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 if ((grandChildId = fork()) == 0)
     {
     int newStdin, newStdout, newStderr, execErr;
+    char *homeDir;
 
     /* Change to given user and dir. */
-    changeUid(user);
+    changeUid(user, &homeDir);
     chdir(dir);
     umask(umaskVal); 
 
@@ -150,9 +223,17 @@ if ((grandChildId = fork()) == 0)
     open(out, O_WRONLY | O_CREAT, 0666);
     open(err, O_WRONLY | O_CREAT, 0666);
 
-    /* Add jobId to environment. */
-    addEnv("JOB_ID", jobIdString);
-
+    /* Update environment. */
+        {
+	struct hash *hash = environToHash(environ);
+	hashUpdate(hash, "JOB_ID", jobIdString);
+	hashUpdate(hash, "USER", user);
+	hashUpdate(hash, "HOME", homeDir);
+	updatePath(hash, userPath, homeDir, sysPath);
+	environ = hashToEnviron(hash);
+	freeHashAndVals(&hash);
+	}
+    
     if ((execErr = execvp(exe, params)) < 0)
 	{
 	perror("");
@@ -496,6 +577,8 @@ if (argc != 2)
     usage();
 maxProcs = optionInt("cpu", 1);
 umaskVal = optionInt("umask", 0002);
+userPath = optionVal("userPath", userPath);
+sysPath = optionVal("sysPath", sysPath);
 
 /* Look up IP addresses. */
 localIp = lookupIp("localhost");

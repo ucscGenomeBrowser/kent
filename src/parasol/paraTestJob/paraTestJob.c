@@ -17,6 +17,8 @@ errAbort(
   "   -crash - Try to write to NULL when done.\n"
   "   -err   - Return -1 error code when done\n"
   "   -output=file - make some output in file as well\n"
+  "   -heavy=n - make output heavy: n extra 'lumberjack lines\n"
+  "   -input = file - make it read in a file too\n"
   "   -sleep=n Sleep for N seconds\n"
   );
 }
@@ -50,6 +52,7 @@ void paraTestJob(char *countString)
 {
 int i, count = atoi(countString);
 char *outName = optionVal("output", NULL);
+int heavy = optionInt("heavy", 0);
 FILE *f = NULL;
 if (outName != NULL)
     f = mustOpen(outName, "w");
@@ -58,8 +61,13 @@ for (i=0; i<count; ++i)
     compute();
     if (f != NULL)
         {
+	int j;
 	fprintf(f, "Computation number %d of %d.  Error so far is %f\n",
 		i+1, count, cumErr);
+	for (j=0; j<heavy; ++j)
+	    {
+	    fprintf(f, "  I'm a lumberjack and I'm ok.  I work all night and I sleep all day\n");
+	    }
 	}
     }
 printf("Cumulative error %f\n", cumErr);

@@ -283,6 +283,7 @@ for (check = job->checkList; check != NULL; check = check->next)
     if (sameWord(when, check->when))
 	{
 	errCount += doOneCheck(check, hash, stderr);
+	putc('.', stdout);
 	}
     }
 return errCount;
@@ -295,11 +296,13 @@ int errCount = 0;
 struct job *job;
 struct hash *hash = newHash(0);
 
+printf("Checking %sput files", when);
 for (job = db->jobList; job != NULL; job = job->next)
     errCount += checkOneJob(job, when, hash);
 if (errCount > 0)
     errAbort("%d total errors in file check", errCount);
 freeHashAndVals(&hash);
+printf("\n");
 }
 
 void writeBatch(struct jobDb *db, char *fileName)
@@ -314,6 +317,34 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 carefulClose(&f);
 }
+
+boolean gotSig = FALSE;	/* Set to true if got signal. */
+int sigVal;		/* Which signal we got. */
+
+void catchSig(int sig)
+/* Catch termination signal. */
+{
+gotSig = TRUE;
+sigVal = sig;
+}
+
+void atomicWriteBatch(struct jobDb *db, char *fileName)
+/* Wrapper to avoid termination in the middle of
+ * writing a batch file out. */
+{
+void (*oldHup)(int) = signal(SIGHUP, catchSig);
+void (*oldTerm)(int) = signal(SIGTERM, catchSig);
+void (*oldInt)(int) = signal(SIGINT, catchSig);
+void (*oldQuit)(int) = signal(SIGQUIT, catchSig);
+writeBatch(db, fileName);
+signal(SIGHUP, oldHup);
+signal(SIGTERM, oldTerm);
+signal(SIGINT, oldInt);
+signal(SIGQUIT, oldQuit);
+if (gotSig)
+    errAbort("Exiting from signal %d", sigVal);
+}
+
 
 struct jobDb *readBatch(char *batch)
 /* Read a batch file. */
@@ -335,6 +366,7 @@ while (lineFileNext(lf, &line, NULL))
     }
 lineFileClose(&lf);
 slReverse(&db->jobList);
+printf("%d jobs in batch\n", db->jobCount);
 return db;
 }
 
@@ -364,30 +396,11 @@ lineFileClose(&lf);
 slReverse(&db->jobList);
 
 doChecks(db, "in");
-writeBatch(db, batch);
 sprintf(backup, "%s.bak", batch);
 writeBatch(db, backup);
+atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
-
-#ifdef OLD
-void fillInSub(char *fileName, struct submission *sub)
-/* Fill in submission from output file produced by qsub. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *words[8];
-int wordCount;
-char buf[256];
-
-if (!lineFileNext(lf, &line, NULL))
-    errAbort("Empty qsub output, sorry can't cope.");
-wordCount = chopLine(line, words);
-if (wordCount < 3 || !sameString("your", words[0]) || !isdigit(words[2][0]))
-    errAbort("qsub output seems to have changed, you'll have to update fillInSub");
-sub->id = cloneString(words[2]);
-lineFileClose(&lf);
-}
-#endif /* OLD */
 
 char *submitJobToHub(char *jobMessage)
 /* Submit job to hub.  Return jobId, or NULL on failure. */
@@ -433,39 +446,6 @@ else
     }
 dyStringFree(&cmd);
 }
-
-#ifdef OLD
-void submitJob(struct job *job)
-/* Attempt to submit job. */
-{
-struct dyString *cmd = dyStringNew(1024);
-struct submission *sub;
-int err;
-char dirBuf[512];
-
-if (getcwd(dirBuf, sizeof(dirBuf)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(cmd, "parasol results=%s/para.results -verbose add job %s > %s", 
-	dirBuf, job->command, tempName);
-err = system(cmd->string);
-AllocVar(sub);
-slAddHead(&job->submissionList, sub);
-job->submissionCount += 1;
-sub->submitTime = time(NULL);
-sub->host = cloneString("n/a");
-if (err != 0)
-    {
-    sub->submitError = TRUE;
-    sub->id = cloneString("n/a");
-    }
-else
-    {
-    fillInSub(tempName, sub);
-    sub->inQueue = TRUE;
-    }
-dyStringFree(&cmd);
-}
-#endif /* OLD */
 
 void statusOutputChanged()
 /* Complain about status output format change and die. */
@@ -620,7 +600,7 @@ return 1.0/(double)CLK_TCK * (jr->usrTicks + jr->sysTicks);
 
 struct hash *markRunJobStatus(struct jobDb *db)
 /* Mark jobs based on results output file. 
- * Returns has of results. */
+ * Returns hash of results. */
 {
 struct job *job;
 struct submission *sub;
@@ -634,6 +614,7 @@ struct hash *resultsHash = hashResults(resultsName);
 char host[128];
 time_t now = time(NULL);
 
+printf("Checking finished jobs");
 for (job=db->jobList; job != NULL; job = job->next)
     {
     if ((sub = job->submissionList) != NULL)
@@ -673,6 +654,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	}
     }
 freeHash(&checkHash);
+printf("\n");
 return resultsHash;
 }
 
@@ -727,7 +709,7 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	    }
 	}
     }
-writeBatch(db, batch);
+atomicWriteBatch(db, batch);
 if (pushCount > 0)
     {
     printf("\n");
@@ -859,7 +841,7 @@ queueSize = markQueuedJobs(db);
 markRunJobStatus(db);
 reportOnJobs(db);
 
-writeBatch(db, batch);
+atomicWriteBatch(db, batch);
 }
 
 void paraListFailed(char *batch)
@@ -1050,7 +1032,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	}
     }
 slReverse(&db->jobList);
-writeBatch(db, batch);
+atomicWriteBatch(db, batch);
 }
 
 void printTimes(char *title, double seconds,  boolean showYears)
@@ -1203,6 +1185,7 @@ if (timedCount > 0)
     printTimes("Longest job:", longestWall, FALSE);
     printTimes("Submission to last job:", calcFirstToLast(db), FALSE);
     }
+atomicWriteBatch(db, batch);
 }
 
 int main(int argc, char *argv[])
