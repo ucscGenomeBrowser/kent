@@ -10,7 +10,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.8 2003/05/11 22:21:54 kent Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.9 2003/05/13 18:50:01 kent Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -343,7 +343,8 @@ struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
     seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
 int x1,x2,y,w;
-int height1 = tg->heightPer-1;
+struct mafItem *mi = tg->items;
+int height1 = mi->height-2;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -438,7 +439,7 @@ static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
-if (seqSize >= 500000)
+if (seqSize >= 1000000)
     {
     mafDrawOverview(tg, seqStart, seqEnd, vg, 
     	xOff, yOff, width, font, color, vis);
