@@ -15,6 +15,7 @@ struct vGfx
     {
     struct vGfx *next;	/* Next in list. */
     void *data;		/* Type specific data. */
+    boolean pixelBased; /* Real pixels, not PostScript or something. */
     int width, height;  /* Virtual pixel dimensions. */
 
     void (*close)(void **pV);

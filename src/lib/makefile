@@ -3,11 +3,11 @@
 
 O = aliType.o axt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
-    cda.o chainBlock.o cheapcgi.o codebias.o common.o \
+    cda.o chainBlock.o cheapcgi.o codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaMarkov.o \
     dnaseq.o dnautil.o dystring.o emblParse.o errabort.o \
-    fa.o ffAli.o fixColor.o flydna.o fof.o fuzzyShow.o gdf.o \
-    gemfont.o gfNet.o gff.o \
+    fa.o ffAli.o fixColor.o flydna.o fof.o \
+    fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
     gifcomp.o gifdecomp.o gifread.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o intExp.o jointalign.o\
     keys.o kxTok.o largefnt.o linefile.o localmem.o \

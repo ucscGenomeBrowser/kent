@@ -6,38 +6,6 @@
 #include "vGfx.h"
 #include "browserGfx.h"
 
-void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
-	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
-	boolean needDrawMiddle)
-/* Draw a horizontal line starting at xOff, yOff of given width.  Will
- * put barbs (successive arrowheads) to indicate direction of line.  
- * BarbDir of 1 points barbs to right, of -1 points them to left. */
-{
-int x1, x2, yHi = y + barbHeight, yLo = y - barbHeight;
-int offset, startOffset, endOffset, barbAdd;
-
-if (barbDir < 0)
-    {
-    startOffset = 0;
-    endOffset = width - barbHeight;
-    barbAdd = barbHeight;
-    }
-else
-    {
-    startOffset = barbHeight;
-    endOffset = width;
-    barbAdd = -barbHeight;
-    }
-
-for (offset = startOffset; offset < endOffset; offset += barbSpacing)
-    {
-    x1 = x + offset;
-    x2 = x1 + barbAdd;
-    mgDrawLine(mg, x1, y, x2, yHi, color);
-    mgDrawLine(mg, x1, y, x2, yLo, color);
-    }
-}
-
 
 static long figureTickSpan(long totalLength, int maxNumTicks)
 /* Figure out whether ticks on ruler should be 1, 5, 10, 50, 100, 500, 
@@ -136,9 +104,12 @@ void vgBarbedHorizontalLine(struct vGfx *vg, int x, int y,
  * put barbs (successive arrowheads) to indicate direction of line.  
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
 {
-int x1, x2, yHi = y + barbHeight, yLo = y - barbHeight;
+int x1, x2;
+int yHi, yLo;
 int offset, startOffset, endOffset, barbAdd;
 
+yHi = y + barbHeight;
+yLo = y - barbHeight;
 if (barbDir < 0)
     {
     startOffset = 0;

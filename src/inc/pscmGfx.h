@@ -17,8 +17,11 @@ struct pscmGfx
     struct psGfx *ps;	  /* Underlying postScript object. */
     int colAlloc;	  /* Colors allocated. */
     int colUsed;	  /* Colors used. */
-    struct rgbColor *colMap; /* Colors. */
     void *curFont;	  /* Current font. */
+    int curColor;	  /* Current color. */
+    struct colHash *colorHash;	/* Hash for fast look up of color. */
+    struct rgbColor colorMap[256]; /* The color map. */
+    int colorsUsed;		/* Number of colors actually used. */
     };
 
 struct pscmGfx *pscmOpen(int width, int height, char *file);

@@ -89,7 +89,7 @@ if (ps != NULL)
     }
 }
 
-void psXyOut(struct psGfx *ps, int x, int y)
+void psXyOut(struct psGfx *ps, double x, double y)
 /* Output x,y position transformed into PostScript space. */
 {
 FILE *f = ps->f;
@@ -97,7 +97,7 @@ psFloatOut(f, x * ps->xScale + ps->xOff);
 psFloatOut(f, y * ps->yScale + ps->yOff);
 }
 
-void psWhOut(struct psGfx *ps, int width, int height)
+void psWhOut(struct psGfx *ps, double width, double height)
 /* Output width/height transformed into PostScript space. */
 {
 FILE *f = ps->f;
@@ -105,21 +105,23 @@ psFloatOut(f, width * ps->xScale);
 psFloatOut(f, height * -ps->yScale);
 }
 
-void psMoveTo(struct psGfx *ps, int x, int y)
+void psMoveTo(struct psGfx *ps, double x, double y)
 /* Move PostScript position to given point. */
 {
 psXyOut(ps, x, y);
 fprintf(ps->f, "moveto\n");
 }
 
-static void psLineTo(struct psGfx *ps, int x, int y)
+static void psLineTo(struct psGfx *ps, double x, double y)
 /* Draw line from current point to given point,
  * and make given point new current point. */
 {
 psXyOut(ps, x, y);
 fprintf(ps->f, "lineto\n");
 }
-void psDrawBox(struct psGfx *ps, int x, int y, int width, int height)
+
+void psDrawBox(struct psGfx *ps, double x, double y, 
+	double width, double height)
 /* Draw a filled box in current color. */
 {
 psWhOut(ps, width, height);
@@ -127,7 +129,7 @@ psXyOut(ps, x, y+height);
 fprintf(ps->f, "fillBox\n");
 }
 
-void psDrawLine(struct psGfx *ps, int x1, int y1, int x2, int y2)
+void psDrawLine(struct psGfx *ps, double x1, double y1, double x2, double y2)
 /* Draw a line from x1/y1 to x2/y2 */
 {
 FILE *f = ps->f;
@@ -138,8 +140,8 @@ fprintf(ps->f, "lineto\n");
 fprintf(f, "stroke\n");
 }
 
-void psFillUnder(struct psGfx *ps, int x1, int y1, int x2, int y2, 
-	int bottom)
+void psFillUnder(struct psGfx *ps, double x1, double y1, 
+	double x2, double y2, double bottom)
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
  * it's top, a horizontal line at bottom at it's bottom,  and
  * vertical lines from the bottom to y1 on the left and bottom to
@@ -161,22 +163,23 @@ void psTimesFont(struct psGfx *ps, double size)
 FILE *f = ps->f;
 fprintf(f, "/Times-Roman findfont ");
 
-/* Note the 1.2 and the 0.95 below seem to get it to 
+/* Note the 1.2 and the 1.0 below seem to get it to 
  * position about where the stuff developed for pixel
  * based systems expects it.  It is all a kludge though! */
 fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
-ps->fontHeight = size*0.95;
+ps->fontHeight = size*0.8;
 }
 
 
-void psTextAt(struct psGfx *ps, int x, int y, char *text)
+void psTextAt(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
 {
 psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(%s) show\n", text);
 }
 
-void psTextRight(struct psGfx *ps, int x, int y, int width, int height, 
+void psTextRight(struct psGfx *ps, double x, double y, 
+	double width, double height, 
 	char *text)
 /* Draw a line of text right justified in box defined by x/y/width/height */
 {
@@ -185,7 +188,8 @@ psMoveTo(ps, x+width, y + ps->fontHeight);
 fprintf(ps->f, "(%s) showBefore\n", text);
 }
 
-void psTextCentered(struct psGfx *ps, int x, int y, int width, int height, 
+void psTextCentered(struct psGfx *ps, double x, double y, 
+	double width, double height, 
 	char *text)
 /* Draw a line of text centered in box defined by x/y/width/height */
 {
@@ -194,7 +198,7 @@ psMoveTo(ps, x+width/2, y + ps->fontHeight);
 fprintf(ps->f, "(%s) showMiddle\n", text);
 }
 
-void psTextDown(struct psGfx *ps, int x, int y, char *text)
+void psTextDown(struct psGfx *ps, double x, double y, char *text)
 /* Output text going downwards rather than across at position. */
 {
 FILE *f = ps->f;
@@ -243,18 +247,17 @@ fprintf(ps->f, "gsave\n");
 void psPopG(struct psGfx *ps)
 /* Pop off saved graphics state. */
 {
-fprintf(ps->f, "grestore\n");
+fprintf(ps->f, "grestore %%unclip\n");
 }
 
-void psPushClipRect(struct psGfx *ps, int x, int y, int width, int height)
+void psPushClipRect(struct psGfx *ps, double x, double y, 
+	double width, double height)
 /* Push clipping rectangle onto graphics stack. */
 {
 FILE *f = ps->f;
-fprintf(f, "gsave\n");
-fprintf(f, "newpath\n");
-psWhOut(ps, width, height);
+fprintf(f, "gsave ");
 psXyOut(ps, x, y+height);
-fprintf(f, "boxAt\n");
-fprintf(f, "clip\n");
+psWhOut(ps, width, height);
+fprintf(f, "rectclip\n");
 }
 

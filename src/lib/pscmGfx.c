@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "memgfx.h"
+#include "colHash.h"
 #include "psGfx.h"
 #include "pscmGfx.h"
 #include "gemfont.h"
@@ -22,38 +23,77 @@ psPushClipRect(pscm->ps, x, y, width, height);
 void pscmUnclip(struct pscmGfx *pscm)
 /* Set clipping rect to cover full thing. */
 {
+/* This is one of the most painful parts of the interface.
+ * Postscript can only cleanly clip/unclip via
+ * gsave/grestores, which requires nesting.
+ * Unfortunately the grestore will also likely
+ * nuke our current font and color, so uncache it. */
 psPopG(pscm->ps);
+pscm->curFont = NULL;
+pscm->curColor = -1;
+}
+
+static Color pscmClosestColor(struct pscmGfx *pscm, 
+	unsigned char r, unsigned char g, unsigned char b)
+/* Returns closest color in color map to r,g,b */
+{
+struct rgbColor *c = pscm->colorMap;
+int closestDist = 0x7fffffff;
+int closestIx = -1;
+int dist, dif;
+int i;
+for (i=0; i<pscm->colorsUsed; ++i)
+    {
+    dif = c->r - r;
+    dist = dif*dif;
+    dif = c->g - g;
+    dist += dif*dif;
+    dif = c->b - b;
+    dist += dif*dif;
+    if (dist < closestDist)
+        {
+        closestDist = dist;
+        closestIx = i;
+        }
+    ++c;
+    }
+return closestIx;
+}
+
+static Color pscmAddColor(struct pscmGfx *pscm, 
+	unsigned char r, unsigned char g, unsigned char b)
+/* Adds color to end of color map if there's room. */
+{
+int colIx = pscm->colorsUsed;
+struct rgbColor *mapPos;
+struct rgbColor *c = pscm->colorMap + pscm->colorsUsed;
+c->r = r;
+c->g = g;
+c->b = b;
+pscm->colorsUsed += 1;
+colHashAdd(pscm->colorHash, r, g, b, colIx);;
+return (Color)colIx;
 }
 
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
-/* Find color index for rgb. */
+/* Returns closest color in color map to rgb values.  If it doesn't
+ * already exist in color map and there's room, it will create
+ * exact color in map. */
 {
-/* This guy always returns a new color index.  We probably
- * should borrow the color hashing scheme from memGfx,
- * but it's so absurd really, since PostScript is really
- * not color mapped in the first place... */
-int colIx;
-struct rgbColor *col;
-if (pscm->colAlloc >= pscm->colUsed);
-    {
-    int oldAlloc = pscm->colAlloc;
-    pscm->colAlloc *= 2;
-    pscm->colMap = ExpandArray(pscm->colMap, oldAlloc, pscm->colAlloc);
-    }
-colIx = pscm->colUsed++;
-col = pscm->colMap + colIx;
-col->r = r;
-col->g = g;
-col->b = b;
-return colIx;
+struct colHashEl *che;
+if ((che = colHashLookup(pscm->colorHash, r, g, b)) != NULL)
+    return che->ix;
+if (pscm->colorsUsed < 256)
+    return pscmAddColor(pscm, r, g, b);
+return pscmClosestColor(pscm, r, g, b);
 }
+
 
 struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
 /* Return rgb value at color index. */
 {
-return pscm->colMap[colorIx];
+return pscm->colorMap[colorIx];
 }
-
 
 static void pscmSetDefaultColorMap(struct pscmGfx *pscm)
 /* Set up default color map for a memGfx. */
@@ -75,8 +115,7 @@ int i;
 
 AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
-pscm->colAlloc = 8;
-AllocArray(pscm->colMap, pscm->colAlloc);
+pscm->colorHash = colHashNew();
 pscmSetDefaultColorMap(pscm);
 pscmSetClip(pscm, 0, 0, width, height);
 return pscm;
@@ -88,8 +127,8 @@ void pscmClose(struct pscmGfx **pPscm)
 struct pscmGfx *pscm = *pPscm;
 if (pscm != NULL)
     {
-    freez(&pscm->colMap);
     psClose(&pscm->ps);
+    colHashFree(&pscm->colorHash);
     freez(pPscm);
     }
 }
@@ -97,8 +136,12 @@ if (pscm != NULL)
 void pscmSetColor(struct pscmGfx *pscm, int colorIx)
 /* Set color to index. */
 {
-struct rgbColor *col = pscm->colMap + colorIx;
-psSetColor(pscm->ps, col->r, col->g, col->b);
+struct rgbColor *col = pscm->colorMap + colorIx;
+if (colorIx != pscm->curColor)
+    {
+    psSetColor(pscm->ps, col->r, col->g, col->b);
+    pscm->curColor = colorIx;
+    }
 }
 
 void pscmBox(struct pscmGfx *pscm, int x, int y, 
@@ -121,7 +164,7 @@ void pscmLine(struct pscmGfx *pscm,
 /* Draw a line from one point to another. */
 {
 pscmSetColor(pscm, color);
-psDrawLine(pscm->ps, x1, y1, x2, y2);
+psDrawLine(pscm->ps, x1+0.5, y1+0.5, x2+0.5, y2+0.5);
 }
 
 static void pscmVerticalSmear(struct pscmGfx *pscm,
@@ -137,7 +180,7 @@ for (i=0; i<width; ++i)
     {
     x = xOff + i;
     c = dots[i];
-    if (c != 0)
+    if (c != 0 || !zeroClear)
 	{
 	pscmSetColor(pscm, c);
 	psDrawBox(ps, x, yOff, 1, height);

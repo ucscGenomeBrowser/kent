@@ -58,7 +58,7 @@
 "show\n"
 "} def\n"
 "\n"
-"/showMiddle\n"
+"/showMiddle {\n"
 "% Draw text centered at current position.\n"
 "% Usage (some text) showMiddle\n"
 "dup stringwidth\n"

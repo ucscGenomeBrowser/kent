@@ -149,14 +149,86 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     } tl;
 
-void printHtmlComment(char *comment)
-/*
- Function to print output as a comment so it is not seen in the HTML
- output but only in the HTML source
-param comment _ The comment to be printed
-*/
+boolean suppressHtml = FALSE;	
+	/* If doing PostScript output we'll suppress most
+         * of HTML output. */
+
+void hPrintf(char *format, ...)
+/* Printf that can be suppressed if not making
+ * html. */
 {
-printf("\n<!-- DEBUG: %s -->\n", comment);
+va_list(args);
+va_start(args, format);
+if (!suppressHtml)
+    {
+    vprintf(format, args);
+    }
+va_end(args);
+}
+
+void hPuts(char *string)
+/* Puts that can be suppressed if not making
+ * html. */
+{
+if (!suppressHtml)
+    puts(string);
+}
+
+void hPutc(char c)
+/* putc than can be suppressed if not makeing html. */
+{
+if (!suppressHtml)
+    fputc('\n', stdout);
+}
+
+void hWrites(char *string)
+/* Write string with no '\n' if not suppressed. */
+{
+if (!suppressHtml)
+    fputs(string, stdout);
+}
+
+void hButton(char *name, char *label)
+/* Write out button if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButton(name, label);
+}
+
+void hTextVar(char *varName, char *initialVal, int charSize)
+/* Write out text entry field if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeTextVar(varName, initialVal, charSize);
+}
+
+void hIntVar(char *varName, int initialVal, int maxDigits)
+/* Write out numerical entry field if not supressed. */
+{
+if (!suppressHtml)
+    cgiMakeIntVar(varName, initialVal, maxDigits);
+}
+
+void hCheckBox(char *varName, boolean checked)
+/* Make check box if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeCheckBox(varName, checked);
+}
+
+void hDropList(char *name, char *menu[], int menuSize, char *checked)
+/* Make a drop-down list with names if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeDropList(name, menu, menuSize, checked);
+}
+
+void printHtmlComment(char *comment)
+/* Function to print output as a comment so it is not seen in the HTML
+ * output but only in the HTML source
+ * param comment _ The comment to be printed */
+{
+hPrintf("\n<!-- DEBUG: %s -->\n", comment);
 //fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 }
 
@@ -487,11 +559,11 @@ void mapBoxTrackUi(int x, int y, int width, int height, struct trackGroup *tg)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 char *track = tg->mapName;
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-printf(" ALT=\"%s controls\">\n", tg->shortLabel);
+hPrintf(" ALT=\"%s controls\">\n", tg->shortLabel);
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -503,23 +575,23 @@ void mapBoxReinvoke(int x, int y, int width, int height,
 {
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 if (chrom == NULL)
     {
     chrom = chromName;
     start = winStart;
     end = winEnd;
     }
-printf("HREF=\"%s?position=%s:%d-%d",
+hPrintf("HREF=\"%s?position=%s:%d-%d",
 	hgTracksName(), chrom, start+1, end);
-printf("&%s\"", ui->string);
+hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 
 if (toggleGroup)
-    printf(" ALT=\"Change between dense and full view of %s track\">\n", 
+    hPrintf(" ALT=\"Change between dense and full view of %s track\">\n", 
            toggleGroup->shortLabel);
 else
-    printf(" ALT=\"jump to %s\">\n", message);
+    hPrintf(" ALT=\"jump to %s\">\n", message);
 }
 
 
@@ -556,13 +628,12 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
  * program. */
 {
 char *encodedItem = cgiEncode(item);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 if (start !=-1)
-    printf("onMouseOver=\"javascript:void(popup('%s'));\"",statusLine);
-/*printf("ALT=\"%s\">\n", statusLine); */
+    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\"",statusLine);
 freeMem(encodedItem);
 }
 
@@ -1061,6 +1132,30 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
+void clippedBarbs(struct vGfx *vg, int x, int y, 
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean needDrawMiddle)
+/* Draw barbed line.  Clip it to fit the window first though since
+ * some barbed lines will span almost the whole chromosome, and the
+ * clipping at the lower level is not efficient since we added
+ * PostScript output support. */
+{
+int x2 = x + width;
+if (x < 0) x = 0;
+if (x2 > vg->width) x2 = vg->width;
+vgBarbedHorizontalLine(vg, x, y, x2 - x, barbHeight, barbSpacing, barbDir,
+	color, needDrawMiddle);
+}
+
+void innerLine(struct vGfx *vg, int x, int y, int w, Color color)
+/* Draw a horizontal line of given width minus a pixel on either
+ * end.  This pixel is needed for PostScript only, but doesn't
+ * hurt elsewhere. */
+{
+if (w > 1)
+   vgLine(vg, x+1, y, x+w-1, y, color);
+}
+
 static void linkedFeaturesSeriesDraw(struct trackGroup *tg, 
 	int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -1122,13 +1217,11 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         w = x2-x1;
         if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
               {
-              vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, 
+              clippedBarbs(vg, x1, midY, w, 2, 5, 
                            lfs->orientation, bColor, TRUE);
               }
         if (prevEnd != -1 && !lfs->noLine) 
-              {
-              vgBox(vg, x1, midY, w, 1, color);
-              }
+	    innerLine(vg, x1, midY, w, color);
         prevEnd = lf->end;
       
         if (lf->components != NULL && !hideLine)
@@ -1141,10 +1234,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
             if (isFull)
                 {
                 if (shades) bColor =  shades[(lf->grayIx>>1)];
-                vgBarbedHorizontalLine(vg, x1, midY, x2-x1, 2, 5, 
+                clippedBarbs(vg, x1, midY, x2-x1, 2, 5, 
                          lf->orientation, bColor, FALSE);
                 }
-            vgBox(vg, x1, midY, w, 1, color);
+	    innerLine(vg, x1, midY, w, color);
             }
         for (sf = lf->components; sf != NULL; sf = sf->next)
             {
@@ -1188,9 +1281,9 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
         x2 = round((double)((int)lfs->end-winStart)*scale) + xOff;
         w = x2-x1;
-	vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, 
+	clippedBarbs(vg, x1, midY, w, 2, 5, 
 			       lfs->orientation, bColor, TRUE);
-	vgBox(vg, x1, midY, w, 1, color);
+	innerLine(vg, x1, midY, w, color);
 	}
 
     if (isFull) y += lineHeight;
@@ -1795,11 +1888,11 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 	      if (isFull)
 		  {
 		  if (shades) bColor =  shades[(lf->grayIx>>1)];
-		  vgBarbedHorizontalLine(vg, x1, midY, x2-x1, 2, 5, 
+		  clippedBarbs(vg, x1, midY, x2-x1, 2, 5, 
 					 lf->orientation, bColor, FALSE);
 		  }
 	      if (shades) color =  shades[lf->grayIx+isXeno];
-	      vgBox(vg, x1, midY, w, 1, color);
+	      innerLine(vg, x1, midY, w, color);
 	      }
 	  for (sf = lf->components; sf != NULL; sf = sf->next)
 	      {
@@ -3548,12 +3641,12 @@ for (item = tg->items; item != NULL; item = item->next)
             dir = 1;
         if(sameString(item->strand , "-")) 
             dir = -1;
-	    w = x2-x1;
+	w = x2-x1;
         if (dir != 0)
 	    {
 	    int midY = y + midLineOff;
 	    textColor = contrastingColor(vg, color);
-	    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
 	    }
         }
     if (isFull)
@@ -4205,11 +4298,11 @@ for (item = tg->items; item != NULL; item = item->next)
             dir = 1;
         if(sameString(item->strand , "-")) 
             dir = -1;
-	    w = x2-x1;
+	w = x2-x1;
         if (dir != 0)
 	    {
 	    int midY = y + midLineOff;
-	    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+	    clippedBarbs(vg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
 	    }
         }
     if (isFull)
@@ -4912,9 +5005,7 @@ if (isFull)
         netAlignStaticLoad(row+rowOffset, &na);
         netAlignStaticLoad(row+rowOffset, &np);
         sprintf(levelName,"%d", na.level-1);
-        ni = hashFindVal(hash, levelName);
-        if (ni == NULL)
-            printf("ni NULL\n");
+        ni = hashMustFindVal(hash, levelName);
         midY = ni->yOffset + midLineOff;
         percId = na.score;
         grayLevel = grayInRange(percId, 500, 1000);
@@ -4964,7 +5055,7 @@ if (isFull)
                     w = 1;
                 vgBox(vg, g1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
-                    vgBarbedHorizontalLine(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
+                    clippedBarbs(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
                 if (baseWidth <= 10000000)
                     {
                     sprintf(levelName,"%d", na.level);
@@ -4982,7 +5073,7 @@ if (isFull)
                 {
                 vgBox(vg, x1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
-                    vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+                    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
                 if (baseWidth <= 10000000)
                     {
                     sprintf(levelName,"%d", na.level);
@@ -5004,7 +5095,7 @@ if (isFull)
             vgBox(vg, x1, ni->yOffset, w, heightPer, col);
             textColor = contrastingColor(vg, col);
             if (w > 3)
-                vgBarbedHorizontalLine(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+                clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
         }
     freeHash(&hash);
     }
@@ -7169,10 +7260,10 @@ void altGraphMapItem(struct trackGroup *tg, void *item, char *itemName, int star
 struct altGraph *ag = item;
 if(tg->visibility == tvFull)
     {
-    printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    printf("HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraph=full&%s\"",
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+    hPrintf("HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraph=full&%s\"",
 	   hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
-    printf(" ALT=\"Zoom to browser coordinates of altGraph\">\n");
+    hPrintf(" ALT=\"Zoom to browser coordinates of altGraph\">\n");
     }
 }
 
@@ -7681,9 +7772,6 @@ else if(z == 3)
 else
     snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
 
-//printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase
-//);
-
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
     where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7839,11 +7927,11 @@ void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height,
 {
 char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
        hgcNameAndSettings(), start, end, group, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
        database, tl.picWidth);
-printf("ALT=\"%s\">\n", statusLine); 
+hPrintf("ALT=\"%s\">\n", statusLine); 
 freeMem(encodedItem1);
 freeMem(encodedItem2);
 }
@@ -8763,15 +8851,15 @@ void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height,
  * program. */
 {
 char *encodedItem = cgiEncode(item);
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 if(target) 
     {
-    printf(" target=\"%s\" ", otherFrame);
+    hPrintf(" target=\"%s\" ", otherFrame);
     } 
-printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
+hPrintf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
 freeMem(encodedItem);
 }
 
@@ -8977,7 +9065,7 @@ tg->drawItems = drawTriangle;
 void smallBreak()
 /* Draw small horizontal break */
 {
-printf("<FONT SIZE=1><BR></FONT>\n");
+hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
 void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
@@ -9030,7 +9118,7 @@ void printYAxisLabel( struct vGfx *vg, int y, struct trackGroup *group, char *la
     vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixColor, tl.font, labelString );
 }
 
-void makeActiveImage(struct trackGroup *groupList)
+void makeActiveImage(struct trackGroup *groupList, char *psOutput)
 /* Make image and image map. */
 {
 struct trackGroup *group;
@@ -9084,14 +9172,19 @@ for (group = groupList; group != NULL; group = group->next)
 	    pixHeight += fontHeight;
 	}
     }
-makeTempName(&gifTn, "hgt", ".gif");
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+if (psOutput)
+    vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
+else
+    {
+    makeTempName(&gifTn, "hgt", ".gif");
+    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    }
 makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
 
 /* Start up client side map. */
-printf("<MAP Name=%s>\n", mapName);
+hPrintf("<MAP Name=%s>\n", mapName);
 /* Find colors to draw in. */
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -9231,7 +9324,8 @@ if (withLeftLabels)
 		    newy = y;
 		    
 		    
-		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
+		    /* Do some fancy stuff for sample tracks. 
+		     * Draw y-value limits for 'sample' tracks. */
 		    if(group->subType == lfSubSample )
 			{
 
@@ -9266,22 +9360,13 @@ if (withLeftLabels)
 					group->ixColor, font, rootName );
 
 			freeMem( rootName );
-
-
-			/* Reset the clipping rectangle to its original proportions */
-			vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			start = 0;
 			y = newy;
 			}
 		    else
 			{
-
-			/* Set the clipping rectangle to account for the buttons */
-			vgSetClip(vg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
-		    
-			vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-                        /* Reset the clipping rectangle to its original proportions */
-			vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			vgTextRight(vg, gfxBorder, y, inWid - 1, 
+				itemHeight, group->ixColor, font, name);
 			y += itemHeight;
 			}
 		    }
@@ -9307,6 +9392,7 @@ if (withLeftLabels)
 		break;
 	    }
         }
+    vgUnclip(vg);
     }
 
 /* Draw guidelines. */
@@ -9324,6 +9410,7 @@ if (withGuidelines)
 
     for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
 	vgBox(vg, x, y, 1, height, color);
+    vgUnclip(vg);
     }
 
 /* Show ruler at top. */
@@ -9334,6 +9421,7 @@ if (withRuler)
     relNumOff = winStart;
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 			relNumOff, winBaseCount, 0, 1);
+    vgUnclip(vg);
 
     /* Make hit boxes that will zoom program around ruler. */
 	{
@@ -9390,6 +9478,7 @@ if (withCenterLabels)
 	    y += group->height;
 	    }
         }
+    vgUnclip(vg);
     }
 
 
@@ -9405,6 +9494,7 @@ for (group = groupList; group != NULL; group = group->next)
 	group->drawItems(group, winStart, winEnd,
 			 vg, insideX, y, insideWidth, 
 			 font, group->ixColor, group->limitedVis);
+	vgUnclip(vg);
 	y += group->height;
 	}
     }
@@ -9475,13 +9565,13 @@ for (group = groupList; group != NULL; group = group->next)
     }
 }
 /* Finish map. */
-printf("</MAP>\n");
+hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
 vgClose(&vg);
 smallBreak();
 smallBreak();
-printf(
+hPrintf(
     "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 }
@@ -9502,13 +9592,13 @@ if (ucscSize < 1000000)
     if (bigStart < 0) bigStart = 0;
     bigEnd += 500000;
     if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
 	    chromName, bigStart, bigEnd, smallStart, smallEnd);
     }
 else
     {
-    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
 	    chromName, bigStart, bigEnd);
     }
@@ -10194,40 +10284,40 @@ void hotLinks()
 boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 
-printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-printf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", organism, wrapWhiteFont("Home"));
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", organism, wrapWhiteFont("Home"));
 
 if (gotBlat)
     {
-    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
     }
-printf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&%s=%u\">%s</A></TD>",
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&%s=%u\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("Tables"));
 
 if (gotBlat)
     {
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
 if (sameString(database, "hg12"))
     {
-    fputs("<TD ALIGN=CENTER>", stdout);
+    hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor();
-    printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
-    printf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
-    printf("%s</A></TD>", wrapWhiteFont("Map View"));
+    hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
-printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
-fputs("</TR></TABLE>", stdout);
-fputs("</TD></TR></TABLE>\n", stdout);
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
+hPuts("</TR></TABLE>");
+hPuts("</TD></TR></TABLE>\n");
 }
 
-void doTrackForm()
+void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
@@ -10237,8 +10327,14 @@ int controlColNum=0;
 char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 
+if (psOutput != NULL)
+   {
+   suppressHtml = TRUE;
+   hideControls = TRUE;
+   }
+
 /* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
 cartSaveSession(cart);
 
 
@@ -10249,8 +10345,8 @@ if (userSeqString && !ssFilesExist(userSeqString))
     userSeqString = NULL;
     cartRemove(cart, "ss");
     }
-
-hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
+if (!hideControls)
+    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
@@ -10437,7 +10533,7 @@ for (group = tGroupList; group != NULL; group = group->next)
     }
 
 /* Center everything from now on. */
-printf("<CENTER>\n");
+hPrintf("<CENTER>\n");
 
 if (!hideControls)
     {
@@ -10446,26 +10542,26 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    printf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
+    hPrintf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
-    printf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
+    hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
-    fputs("move ", stdout);
-    cgiMakeButton("hgt.left3", "<<<");
-    cgiMakeButton("hgt.left2", " <<");
-    cgiMakeButton("hgt.left1", " < ");
-    cgiMakeButton("hgt.right1", " > ");
-    cgiMakeButton("hgt.right2", ">> ");
-    cgiMakeButton("hgt.right3", ">>>");
-    fputs(" zoom in ", stdout);
-    cgiMakeButton("hgt.in1", "1.5x");
-    cgiMakeButton("hgt.in2", " 3x ");
-    cgiMakeButton("hgt.in3", "10x");
-    fputs(" zoom out ", stdout);
-    cgiMakeButton("hgt.out1", "1.5x");
-    cgiMakeButton("hgt.out2", " 3x ");
-    cgiMakeButton("hgt.out3", "10x");
-    fputs("<BR>\n", stdout);
+    hWrites("move ");
+    hButton("hgt.left3", "<<<");
+    hButton("hgt.left2", " <<");
+    hButton("hgt.left1", " < ");
+    hButton("hgt.right1", " > ");
+    hButton("hgt.right2", ">> ");
+    hButton("hgt.right3", ">>>");
+    hWrites(" zoom in ");
+    hButton("hgt.in1", "1.5x");
+    hButton("hgt.in2", " 3x ");
+    hButton("hgt.in3", "10x");
+    hWrites(" zoom out ");
+    hButton("hgt.out1", "1.5x");
+    hButton("hgt.out2", " 3x ");
+    hButton("hgt.out3", "10x");
+    hWrites("<BR>\n");
 
     /* Make line that says position. */
 	{
@@ -10474,64 +10570,65 @@ if (!hideControls)
 
         if (containsStringNoCase(database, "zoo"))
             {
-            puts("Organism ");
+            hPuts("Organism ");
             printAssemblyListHtmlExtra(database, javascript);
             }
 
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
-	fputs("position ", stdout);
-	cgiMakeTextVar("position", position, 30);
-	printf("  size %d, ", winEnd-winStart);
-	fputs(" image width ", stdout);
-	cgiMakeIntVar("pix", tl.picWidth, 4);
-	fputs(" ", stdout);
-	cgiMakeButton("submit", "jump");
-	fputc('\n', stdout);
+	hWrites("position ");
+	hTextVar("position", position, 30);
+	hPrintf("  size %d, ", winEnd-winStart);
+	hWrites(" image width ");
+	hIntVar("pix", tl.picWidth, 4);
+	hWrites(" ");
+	hButton("submit", "jump");
+	hPutc('\n');
 	}
     }
 
 /* Make clickable image and map. */
-makeActiveImage(tGroupList);
+makeActiveImage(tGroupList, psOutput);
 
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
-    printf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
+    hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
     	tl.picWidth, 27);
-    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
-    printf("move start<BR>");
-    cgiMakeButton("hgt.dinkLL", " < ");
-    cgiMakeTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    cgiMakeButton("hgt.dinkLR", " > ");
-    printf("<TD COLSPAN=15>");
-    fputs("Click on a feature for details. "
+    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("move start<BR>");
+    hButton("hgt.dinkLL", " < ");
+    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
+    hButton("hgt.dinkLR", " > ");
+    hPrintf("<TD COLSPAN=15>");
+    hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options" 
-	  , stdout);
-    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
-    printf("move end<BR>");
-    cgiMakeButton("hgt.dinkRL", " < ");
-    cgiMakeTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    cgiMakeButton("hgt.dinkRR", " > ");
-    printf("<TR></TABLE>\n");
+	  "Click on left mini-buttons for track-specific options" );
+    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("move end<BR>");
+    hButton("hgt.dinkRL", " < ");
+    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
+    hButton("hgt.dinkRR", " > ");
+    hPrintf("<TR></TABLE>\n");
     smallBreak();
 
     /* Display bottom control panel. */
-    cgiMakeButton("hgt.reset", "reset all");
-    printf(" ");
-    cgiMakeButton("hgt.hideAll", "hide all");
-    printf(" Guidelines ");
-    cgiMakeCheckBox("guidelines", withGuidelines);
-    printf(" <B>Labels:</B> ");
-    printf("left ");
-    cgiMakeCheckBox("leftLabels", withLeftLabels);
-    printf("center ");
-    cgiMakeCheckBox("centerLabels", withCenterLabels);
-    printf(" ");
-    cgiMakeButton("submit", "refresh");
-    printf("<BR>\n");
+    hButton("hgt.psOutput", "PostScript");
+    hPrintf(" ");
+    hButton("hgt.reset", "reset all");
+    hPrintf(" ");
+    hButton("hgt.hideAll", "hide all");
+    hPrintf(" Guidelines ");
+    hCheckBox("guidelines", withGuidelines);
+    hPrintf(" <B>Labels:</B> ");
+    hPrintf("left ");
+    hCheckBox("leftLabels", withLeftLabels);
+    hPrintf("center ");
+    hCheckBox("centerLabels", withCenterLabels);
+    hPrintf(" ");
+    hButton("submit", "refresh");
+    hPrintf("<BR>\n");
 
     /* Display viewing options for each group. */
     /* Chuck: This is going to be wrapped in a table so that
@@ -10539,39 +10636,39 @@ if (!hideControls)
      */
     if( chromosomeColorsMade )
         {
-        printf("<B>Chromosome Color Key:</B><BR> ");
-        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
+        hPrintf("<B>Chromosome Color Key:</B><BR> ");
+        hPrintf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
         }
-    printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
+    hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+    hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
     smallBreak();
-    printf("<B>Track Controls:</B>");
-    printf("</th></tr>\n");
-    printf("<tr>\n");
-    printf("<tr><td colspan='5' align='middle' nowrap>Note: Tracks with more than %d items are always displayed in "
+    hPrintf("<B>Track Controls:</B>");
+    hPrintf("</th></tr>\n");
+    hPrintf("<tr>\n");
+    hPrintf("<tr><td colspan='5' align='middle' nowrap>Note: Tracks with more than %d items are always displayed in "
            "dense mode.</td></tr>\n", maxItemsInFullTrack);
 
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     controlGridStartCell(cg);
-    printf(" Base Position <BR>");
-    cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
+    hPrintf(" Base Position <BR>");
+    hDropList("ruler", offOn, 2, offOn[withRuler]);
     controlGridEndCell(cg);
     for (group = tGroupList; group != NULL; group = group->next)
 	{
 	controlGridStartCell(cg);
 	if (group->hasUi)
-	    printf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+	    hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart),
 		chromName, group->mapName);
-	printf(" %s<BR> ", group->shortLabel);
+	hPrintf(" %s<BR> ", group->shortLabel);
 	if (group->hasUi)
-	    printf("</A>");
+	    hPrintf("</A>");
 	hTvDropDown(group->mapName, group->visibility);
 	controlGridEndCell(cg);
 	}
     /* now finish out the table */
     endControlGrid(&cg);
-    printf("</CENTER>\n");
+    hPrintf("</CENTER>\n");
     }
 
 
@@ -10582,7 +10679,7 @@ for (group = tGroupList; group != NULL; group = group->next)
 	if (group->freeItems != NULL)
 		group->freeItems(group);
     }
-printf("</FORM>");
+hPrintf("</FORM>");
 }
 
 
@@ -10674,6 +10771,20 @@ x = atof(stringVal);
 return round(x*guideBases);
 }
 
+void handlePostscript()
+/* Deal with Postscript output. */
+{
+struct tempName psTn;
+makeTempName(&psTn, "hgt", ".eps");
+printf("<H1>PostScript Output</H1>\n");
+printf("PostScript images can be printed at high resolution "
+       "and edited by many drawing programs such as Adobe "
+       "Illustrator. ");
+doTrackForm(psTn.forCgi);
+printf("<A HREF=\"%s\">Click here to download</A> "
+       "the browser graphic in PostScript.  ", psTn.forCgi);
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
@@ -10692,12 +10803,10 @@ if(sameString(position, ""))
 chromName = NULL;
 hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
-//fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", chromName);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     cartSetString(cart, hgp->tableList->name, "full");
-    // fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
     }
 
 /* This means that no single result was found 
@@ -10779,7 +10888,10 @@ if (winBaseCount <= 0)
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
-doTrackForm();
+if (cgiVarExists("hgt.psOutput"))
+    handlePostscript();
+else
+    doTrackForm(NULL);
 }
 
 
@@ -10825,7 +10937,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll",
+			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
 			NULL };
 
 void resetVars()

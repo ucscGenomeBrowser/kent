@@ -28,42 +28,44 @@ struct psGfx *psOpen(char *fileName,
 void psClose(struct psGfx **pPs);
 /* Close out postScript file. */
 
-void psDrawBox(struct psGfx *ps, int x, int y, int width, int height);
+void psDrawBox(struct psGfx *ps, double x, double y, 
+	double width, double height);
 /* Draw a filled box in current color. */
 
-void psDrawLine(struct psGfx *ps, int x1, int y1, int x2, int y2);
+void psDrawLine(struct psGfx *ps, double x1, double y1, 
+	double x2, double y2);
 /* Draw a line from x1/y1 to x2/y2 */
 
-void psFillUnder(struct psGfx *ps, int x1, int y1, int x2, int y2, 
-	int bottom);
+void psFillUnder(struct psGfx *ps, double x1, double y1, 
+	double x2, double y2, double bottom);
 /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
  * it's top, a horizontal line at bottom at it's bottom,  and
  * vertical lines from the bottom to y1 on the left and bottom to
  * y2 on the right. */
 
-void psXyOut(struct psGfx *ps, int x, int y);
+void psXyOut(struct psGfx *ps, double x, double y);
 /* Output x,y position transformed into PostScript space. 
  * Useful if you're mixing direct PostScript with psGfx
  * functions. */
 
-void psWhOut(struct psGfx *ps, int width, int height);
+void psWhOut(struct psGfx *ps, double width, double height);
 /* Output width/height transformed into PostScript space. */
 
-void psMoveTo(struct psGfx *ps, int x, int y);
+void psMoveTo(struct psGfx *ps, double x, double y);
 /* Move PostScript position to given point. */
 
-void psTextAt(struct psGfx *ps, int x, int y, char *text);
+void psTextAt(struct psGfx *ps, double x, double y, char *text);
 /* Output text in current font at given position. */
 
-void psTextDown(struct psGfx *ps, int x, int y, char *text);
+void psTextDown(struct psGfx *ps, double x, double y, char *text);
 /* Output text going downwards rather than across at position. */
 
-void psTextRight(struct psGfx *mg, int x, int y, int width, int height, 
-	char *text);
+void psTextRight(struct psGfx *mg, double x, double y, 
+	double width, double height, char *text);
 /* Draw a line of text right justified in box defined by x/y/width/height */
 
-void psTextCentered(struct psGfx *mg, int x, int y, int width, int height, 
-	char *text);
+void psTextCentered(struct psGfx *mg, double x, double y, 
+	double width, double height, char *text);
 /* Draw a line of text centered in box defined by x/y/width/height */
 
 void psTimesFont(struct psGfx *ps, double size);
@@ -81,7 +83,8 @@ void psPushG(struct psGfx *ps);
 void psPopG(struct psGfx *ps);
 /* Pop off saved graphics state. */
 
-void psPushClipRect(struct psGfx *ps, int x, int y, int width, int height);
+void psPushClipRect(struct psGfx *ps, double x, double y, 
+	double width, double height);
 /* Push clipping rectangle onto graphics stack. */
 
 
