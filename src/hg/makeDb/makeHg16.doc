@@ -10712,3 +10712,11 @@ cat `ls -1 *.lav | sort -g` \
     rm celeraOverlay.bed bed.tab
 
 
+# YALE PSEUDOGENES (started Robert Baertsch, finished JK 2/21/05)
+    ssh hgwdev
+    cd /cluster/data/hg16/bed
+    mkdir pseudoYale
+    cd pseudoYale
+    # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
+    ldHgGene hg16 pseudoYale pseudoYale.gtf
+    # Note - I'm guessing how this goes.  Robert left no record. -jk

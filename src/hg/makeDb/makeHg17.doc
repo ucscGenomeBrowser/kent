@@ -13431,3 +13431,11 @@ SEQ2_LEN=$BASE/S2.len
     cd axtNet
     md5sum *.gz > md5sum.txt
 
+# YALE PSEUDOGENES (started Robert Baertsch, finished JK 2/21/05)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir pseudoYale
+    cd pseudoYale
+    # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
+    ldHgGene hg17 pseudoYale pseudoYale.gtf
+    # Note - I'm guessing how this goes.  Robert left no record. -jk
