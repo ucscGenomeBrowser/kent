@@ -248,6 +248,24 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BactigPos">bactigPos</A> 
   - Bactig positions in chromosome coordinates
   <LI><A 
+  href="#BlastTab">bgdbBlastTab</A> 
+  - Blastp results of known genes vs. one another (Drosophila)
+  <LI><A 
+  href="#KnownCanonical">bdgbCanonical</A> 
+  - Describes the canonical splice variant of a gene (Drosophila)
+  <LI><A 
+  href="#KnownIsoforms">bdgbIsoforms</A> 
+  - Links together various transcripts of a gene into a cluster (Drosophila)
+  <LI><A 
+  href="#KnownTo">bdgbToLocusLink</A> 
+  - Associates known gene and LocusLink accession (Drosophila)
+  <LI><A 
+  href="#KnownTo">bdgbToPfam</A> 
+  - Associates known gene and Pfam ID (Drosophila)
+  <LI><A 
+  href="#KnownTo">bdgbToRefSeq</A> 
+  - Associates known gene and RefSeq accession (Drosophila)
+  <LI><A 
   href="#WiggleTrack">binomialCons2</A> 
   - Zoo blastz alignments conservation scores 
   <LI><A 
@@ -255,7 +273,7 @@ stored in a single table rather than one table per chromosome:</P>
   - Blat alignments of Pan troglodytes against the draft human genome
   <LI><A 
   href="#BlastTab">ceBlastTab</A> 
-  - Tab-delimited blast output file for <em>C. elegans</em>
+  - Blastp results of known genes vs. one another (<em>C. elegans</em>)
   <LI><A 
   href="#ChainLink">chainLink</A> 
   - Alignment block in chain </LI>
@@ -294,10 +312,10 @@ stored in a single table rather than one table per chromosome:</P>
   - DNase I hypersensitive sites (DHS) mapped to the human genome sequence (Zoo)</LI>
   <LI><A 
   href="#BlastTab">dmBlastTab</A> 
-  - Tab-delimited blast output file for <em>Drosophila melanogastor</em>
+  - Blastp results of known genes vs. one another (<em>Drosophila melanogastor</em>)
   <LI><A 
   href="#BlastTab">drBlastTab</A> 
-  - Tab-delimited blast output file for <em>Danio rerio</em>
+  - Blastp results of known genes vs. one another (<em>Danio rerio</em>)
   <LI><A 
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
@@ -430,8 +448,17 @@ stored in a single table rather than one table per chromosome:</P>
   href="#KgXref">kgXref</A> 
   - Links together a Known Gene ID and mRNA, SwissProt, RefSeq, and NCBI accessions/IDs
   <LI><A 
+  href="#BlastTab">knownBlastTab</A> 
+  - Blastp results of known genes vs. one another (human)
+  <LI><A 
   href="#KnownCanonical">knownCanonical</A> 
   - Describes the canonical splice variant of a gene
+  <LI><A 
+  href="#Distance">knownExpDistance</A> 
+  - Describes the distance between genes in the expression space (UCLA)
+  <LI><A 
+  href="#Distance">knownGnfDistance</A> 
+  - Describes the distance between genes in the expression space (GNF)
   <LI><A 
   href="#KnownGene">knownGene</A> 
   - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
@@ -440,8 +467,35 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#KnownGeneLink">knownGeneLink</A> 
   - Stores the seqType info for Known Genes track entries.
   <LI><A 
+  href="#KnownIsoforms">knownIsoforms</A> 
+  - Links together various transcripts of a gene into a cluster
+  <LI><A 
+  href="#KnownTo">knownToCdsSnp</A> 
+  - Associates known gene and coding SNP IDs
+  <LI><A 
+  href="#KnownTo">knownToEnsembl</A> 
+  - Associates known gene and Ensembl transcript
+  <LI><A 
+  href="#KnownTo">knownToLocusLink</A> 
+  - Associates known gene and LocusLink ID
+  <LI><A 
+  href="#KnownTo">knownToPfam</A> 
+  - Associates known gene and Pfam ID
+  <LI><A 
+  href="#KnownTo">knownToRefSeq</A> 
+  - Associates known gene and RefSeq accession
+  <LI><A 
   href="#KnownToSuper">knownToSuper</A> 
-  - Maps protein superfamilies to known genes
+  - Associates known gene and Superfamily ID
+  <LI><A 
+  href="#KnownTo">knownToU133</A> 
+  - Associates known gene and Affy U133 chip ID
+  <LI><A 
+  href="#KnownTo">knownToU74</A> 
+  - Associates known gene and Affy U74 (mouse) chip ID
+  <LI><A 
+  href="#KnownTo">knownToU95</A> 
+  - Associates known gene and Affy U95 chip ID
   <LI><A 
   href="#MrnaPredictions">knownGeneMrna</A> 
   - Known Genes mRNA
@@ -475,7 +529,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Links MGI ID to Locus Link ID (Mouse)
   <LI><A 
   href="#BlastTab">mmBlastTab</A> 
-  - Tab-delimited blast output file for mouse
+  - Blastp results of known genes vs. one another (mouse)
   <LI><A 
   href="#Chain">mouseChain</A> 
   - Summary info about chain of mouse alignments </LI>
@@ -606,11 +660,29 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#GenePredictions">sanger22pseudo</A> 
   - Sanger Institute Chromosome 22 Pseudogenes </LI>
   <LI><A 
-  href="#Seq">seq</A> 
-  - Locations of database table sequences referenced in external fasta files </LI>
+  href="#BlastTab">sangerBlastTab</A> 
+  - Blastp results of Sanger genes vs. one another (<em>C. elegans</em>)
+  <LI><A 
+  href="#KnownCanonical">sangerCanonical</A> 
+  - Describes the canonical splice variant of a Sanger gene (<em>C. elegans</em>)
+  <LI><A 
+  href="#KnownIsoforms">sangerIsoforms</A> 
+  - Links together various transcripts of Sanger gene into a cluster (<em>C. elegans</em>)
+  <LI><A 
+  href="#KnownTo">sangerToKim</A> 
+  - Associates Sanger IDs and Kim Lab expression IDs (which are mostly - but not all - the same)ID (<em>C. elegans</em>)
+  <LI><A 
+  href="#KnownTo">sangerToPfam</A> 
+  - Associates Sanger IDs and Pfam ID (<em>C. elegans</em>)
+  <LI><A 
+  href="#KnownTo">sangerToRefSeq</A> 
+  - Associates Sanger IDs and RefSeq accession (<em>C. elegans</em>)
   <LI><A 
   href="#BlastTab">scBlastTab</A> 
-  - Tab-delimited blast output file for SARS
+  - Blastp results of known genes vs. one another (SARS)
+  <LI><A 
+  href="#Seq">seq</A> 
+  - Locations of database table sequences referenced in external fasta files </LI>
   <LI><A 
   href="#SfDescription">sfDescription</A> 
   - Stores domain descriptions for the Superfamily track</LI> 
@@ -889,6 +961,7 @@ for various organisms.
     double bitScore;	"Bit score"
     )
 </PRE>
+
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
@@ -1484,6 +1557,45 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     string kgID;        "Known Gene ID"
     string displayID;	"protein display ID"
     string alias;	"A protein alias"
+    )
+</PRE>
+
+<H4><A name=KnownTo></A>Known Genes Associations</H4>
+<P>
+The following definition describes tables that associate Known Genes with other 
+IDs and accessions.
+<PRE>table knownTo
+"Maps Known Gene to another ID"
+    (
+    string name;        "Same as name field in known gene"
+    string value;       "Other id"
+    )
+
+</PRE>
+
+<H4><A name=Distance></A>Known Genes Distance</H4>
+<P>
+The following definition describes tables that show the abstract distance 
+between two genes.
+<PRE>table distance
+"Abstract distance between two genes"
+    (
+    char query;  	"Query gene (indexed)"
+    char target; 	"Target gene (not indexed)"
+    float distance; 	"Distance between the two genes, possibly in some expression space"
+    )
+</PRE>
+
+<H4><A name=KnownIsoforms></A>Known Genes Isoforms</H4>
+<P>
+The following definition describes tables that link together various transcripts 
+of a gene into a cluster.
+
+<PRE>table knownIsoforms
+"Links together various transcripts of a gene into a cluster"
+    (
+    int clusterId;      "Unique id for transcript cluster (aka gene)"
+    string transcript;  "Corresponds to name in knownGene table, transcript in knownCanonical"
     )
 </PRE>
 
