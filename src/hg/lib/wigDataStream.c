@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.42 2004/09/10 18:48:51 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.43 2004/09/10 21:16:23 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1744,7 +1744,8 @@ if (htmlOut)
 	fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
     if (wds->isFile)
 	{
-	if (stringIn("trash/ct_",wds->tblName))
+	if ( (stringIn("trash/ct_",wds->tblName)) ||
+		(stringIn("trash/hgtct_",wds->tblName)))
 	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
 	else
 	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wds->tblName);
