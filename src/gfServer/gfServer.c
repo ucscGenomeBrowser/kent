@@ -143,32 +143,35 @@ for (;;)
 	    struct dnaSeq seq;
 
 	    seq.size = atoi(s);
-	    seq.name = NULL;
-	    seq.dna = needLargeMem(seq.size);
 	    buf[0] = 'Y';
 	    write(connectionHandle, buf, 1);
-	    if (readLarge(connectionHandle, seq.dna, seq.size) != seq.size)
-	        {
-		warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
-		}
-	    else
-	        {
-		struct gfClump *clumpList = gfFindClumps(gf, &seq), *clump;
-		int limit = 100;
-
-		for (clump = clumpList; clump != NULL; clump = clump->next)
+	    seq.name = NULL;
+	    if (seq.size > 0)
+		{
+		seq.dna = needLargeMem(seq.size);
+		if (readLarge(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
-		    struct gfSeqSource *ss = clump->target;
-		    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
-			clump->qStart, clump->qEnd, ss->fileName,
-			clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
-		    gfSendString(connectionHandle, buf);
-		    if (--limit < 0)
-		        break;
+		    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
 		    }
-		gfSendString(connectionHandle, "end");
-		gfClumpFreeList(&clumpList);
+		else
+		    {
+		    struct gfClump *clumpList = gfFindClumps(gf, &seq), *clump;
+		    int limit = 100;
+
+		    for (clump = clumpList; clump != NULL; clump = clump->next)
+			{
+			struct gfSeqSource *ss = clump->target;
+			sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
+			    clump->qStart, clump->qEnd, ss->fileName,
+			    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
+			gfSendString(connectionHandle, buf);
+			if (--limit < 0)
+			    break;
+			}
+		    gfClumpFreeList(&clumpList);
+		    }
 		}
+	    gfSendString(connectionHandle, "end");
 	    }
 	}
     else if (sameString("files", command))
