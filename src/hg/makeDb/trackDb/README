@@ -82,7 +82,8 @@ The format of the type fields:
       with other organism.  If present the display can be colored by
       chromosome and the chromosome and position in kilobases is shown
       as the item label.
-   Optional variable here, for psl tracks that also have sequence loaded:
+   Optional variable here, for psl tracks that also have sequence loaded.
+   The presence of this option in the trackDb entry enables its function.
    pslSequence no		# allows user to select the other two
    pslSequence all		# show nucleotide labels on all bases
    pslSequence different	# show nucleotide labes only on different bases
@@ -141,6 +142,16 @@ The format of the type fields:
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
       windowingFunction maximum|mean|minimum # default is maximum
       smoothingWindow   off|[2-16]           # default is off
+15. type bedGraph [column]
+   Same type of graphing function as #14 above 'type wig'
+   In this case, the data table is a bed type of table loaded
+   with hgLoadBed.  The [column] specified is a numeric column of data
+   in the table to be used for the graphing value.  The default column
+   to graph would be column five, the 'score'.  All graphing options as
+   described above in 'type wig' apply to this type of track.
+   Two extra options are used here to specify maximum graphing bounds:
+      minLimit <value>   # default is 0
+      maxLimit <value>   # default is 1000
     
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
