@@ -3,30 +3,56 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "chain.h"
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "chainSort - Sort chains\n"
+  "chainSort - Sort chains.  By default sorts by score.\n"
+  "Note this loads all chains into memory, so it is not\n"
+  "suitable for large sets.  Use chainMergeSort for that\n"
   "usage:\n"
-  "   chainSort XXX\n"
+  "   chainSort inFile outFile\n"
+  "Note that inFile and outFile can be the same\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -target sort on target start rather than score\n"
   );
 }
 
-void chainSort(char *XXX)
+void chainSort(char *inFile, char *outFile)
 /* chainSort - Sort chains. */
 {
+struct chain *chainList = NULL, *chain;
+struct lineFile *lf = lineFileOpen(inFile, TRUE);
+FILE *f;
+
+/* Read in all chains. */
+while ((chain = chainRead(lf)) != NULL)
+    {
+    slAddHead(&chainList, chain);
+    }
+lineFileClose(&lf);
+
+/* Sort. */
+if (optionExists("target"))
+    slSort(&chainList, chainCmpTarget);
+else
+    slSort(&chainList, chainCmpScore);
+
+/* Output. */
+f = mustOpen(outFile, "w");
+for (chain = chainList; chain != NULL; chain = chain->next)
+    chainWrite(chain, f);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 2)
+if (argc != 3)
     usage();
-chainSort(argv[1]);
+chainSort(argv[1], argv[2]);
 return 0;
 }
