@@ -517,7 +517,12 @@ SEQ2_LEN=$BASE/S2.len
     mkdir /gbdb/bosTau1/wib
     ln -s `pwd`/gc5Base.wib /gbdb/bosTau1/wib
     hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 gc5Base gc5Base.wig
-
+    #	The index is no good for this organism due to the scaffold
+    #	naming scheme, drop the index and create one that works:
+    hgsql -e "drop index chrom on gc5Base;" bosTau1
+    hgsql -e "create index chrom on gc5Base (chrom(16));" bosTau1
+    #	The speeds up an operation on the hgTables browser by orders of
+    #	magnitude - whole genome statistics display
 
 # LOAD GAP & GOLD TABLES FROM AGP (DONE 11/10/04 angie)
     ssh hgwdev
