@@ -915,7 +915,7 @@ int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
        cdsColorsMade = TRUE;
        }
    
-
+/*
     if(drawOptionNum>0 && zoomedToCodonLevel)
        {
        char *database = cartUsualString(cart, "db", hGetDb());
@@ -935,6 +935,7 @@ int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
             }
 
        }
+       */
     return(drawOptionNum);
 }
 

@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.648 2004/01/06 09:00:57 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.649 2004/01/06 19:18:02 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1162,8 +1162,32 @@ boolean errorColor = FALSE;
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
 if(zoomedToCdsColorLevel)
+{
     drawOptionNum = cdsColorSetup(vg, tg, cdsColor, mrnaSeq, psl,
             &errorColor, lf, cdsColorsMade);
+
+    if(drawOptionNum>0 && zoomedToCodonLevel)
+       {
+       char *database = cartUsualString(cart, "db", hGetDb());
+
+       if(sameString(tg->mapName,"mrna")   ||
+       sameString(tg->mapName,"est")    ||
+       sameString(tg->mapName,"xenoMrna"))
+            {
+
+            mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
+            psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
+
+            if(mrnaSeq != NULL && psl != NULL && psl->strand[0] == '-')
+                reverseComplement(mrnaSeq->dna,strlen(mrnaSeq->dna));
+            else
+                errorColor = TRUE;
+            }
+
+       }
+ 
+
+}
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1218,7 +1242,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
         if(drawOptionNum>0 && zoomedToCdsColorLevel)
             drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
-                psl, drawOptionNum, errorColor, &foundStart, MAXPIXELS);
+                psl, drawOptionNum, errorColor, &foundStart,
+                MAXPIXELS, winStart);
         else
             {
 	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score );

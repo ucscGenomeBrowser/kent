@@ -35,4 +35,7 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf,
  int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
          struct dnaSeq *mrnaSeq, struct psl *psl, boolean *errorColor,
          struct linkedFeatures *lf, boolean cdsColorsMade);
+struct dnaSeq *mustGetSeqUpper(char *name, char *tableName);
+struct psl *genePredLookupPsl(char *db, char *chrom, struct
+        linkedFeatures* lf, char *pslTable );
 #endif /* CDS_H */
