@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.29 2004/07/18 16:04:13 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.30 2004/07/18 18:41:10 kent Exp $";
 
 
 void usage()
@@ -297,7 +297,6 @@ if (!sqlTableExists(conn, table))
 freeMem(splitTable);
 }
 
-
 struct customTrack *getCustomTracks()
 /* Get custom track list. */
 {
@@ -426,6 +425,20 @@ if (!sameString(table, "mrna"))
 sqlDisconnect(&conn);
 return result;
 }
+
+boolean isSqlStringType(char *type)
+/* Return TRUE if it a a stringish SQL type. */
+{
+return strstr(type, "char") || strstr(type, "text") 
+	|| strstr(type, "blob") || startsWith("enum", type);
+}
+
+boolean isSqlNumType(char *type)
+/* Return TRUE if it is a numerical SQL type. */
+{
+return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
+}
+
 
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
     struct grp *group)
@@ -652,6 +665,8 @@ else if (cartVarExists(cart, hgtaDoFilterMore))
     doFilterMore(conn);
 else if (cartVarExists(cart, hgtaDoFilterSubmit))
     doFilterSubmit(conn);
+else if (cartVarExists(cart, hgtaDoClearFilter))
+     doClearFilter(conn);
 else if (cartVarExists(cart, hgtaDoSchema))
     {
     doTableSchema( cartString(cart, hgtaDoSchemaDb), 

@@ -17,21 +17,8 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.11 2004/07/16 16:18:59 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.12 2004/07/18 18:41:10 kent Exp $";
 
-
-boolean isSqlStringType(char *type)
-/* Return TRUE if it a a stringish SQL type. */
-{
-return strstr(type, "char") || strstr(type, "text") 
-	|| strstr(type, "blob") || startsWith("enum", type);
-}
-
-boolean isSqlNumType(char *type)
-/* Return TRUE if it is a numerical SQL type. */
-{
-return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
-}
 
 void describeFields(char *db, char *table, 
 	struct asObject *asObj, struct sqlConnection *conn)

@@ -93,6 +93,7 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 /* Return chrN_table if table is split, otherwise table. 
  * You can freeMem this when done. */
 
+
 void doTabOutTable(char *database, char *table, 
 	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
@@ -106,13 +107,22 @@ boolean htiIsPositional(struct hTableInfo *hti);
 boolean isPositional(char *db, char *table);
 /* Return TRUE if it looks to be a positional table. */
 
-/* ------------- Functions related to joining ------------*/
+boolean isSqlStringType(char *type);
+/* Return TRUE if it a a stringish SQL type. */
+
+boolean isSqlNumType(char *type);
+/* Return TRUE if it is a numerical SQL type. */
+
+/* ------------- Functions related to joining and filtering ------------*/
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
 	struct slName *fieldList);	/* List of db.table.field */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
+
+boolean anyFilter();
+/* Return TRUE if any filter set. */
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -129,7 +139,8 @@ void tabOutSelectedFields(
 #define hgtaDoClearIdentifiers "hgta_doClearIdentifiers"
 #define hgtaDoFilterPage "hgta_doFilterPage"
 #define hgtaDoFilterSubmit "hgta_doFilterSubmit"
-#define hgtaDoFilterMore "hgtd_doFilterMore"
+#define hgtaDoFilterMore "hgta_doFilterMore"
+#define hgtaDoClearFilter "hgta_doClearFilter"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -153,9 +164,12 @@ void tabOutSelectedFields(
 #define hgtaTable "hgta_table"
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
+#define hgtaFilterOn "hgta_filterOn"
 
 /* Prefix for variables managed by field selector. */
-#define hgtaFieldSelectPrefix "hgta_fs"
+#define hgtaFieldSelectPrefix "hgta_fs."
+/* Prefix for variables managed by filter page. */
+#define hgtaFilterPrefix "hgta_fil."
 
 
 /* Output types. */
@@ -236,6 +250,9 @@ void doFilterMore(struct sqlConnection *conn);
 
 void doFilterSubmit(struct sqlConnection *conn);
 /* Respond to submit on filters page. */
+
+void doClearFilter(struct sqlConnection *conn);
+/* Respond to click on clear filter. */
 
 
 void printMainHelp();

@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.8 2004/07/18 04:15:13 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.9 2004/07/18 18:41:10 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -268,7 +268,16 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Filter line. */
     {
     hPrintf("<TR><TD><B>filter:</B>\n");
-    cgiMakeButton(hgtaDoFilterPage, "(Create)");
+    if (anyFilter())
+        {
+	cgiMakeButton(hgtaDoFilterPage, "Edit");
+	hPrintf(" ");
+	cgiMakeButton(hgtaDoClearFilter, "Clear");
+	}
+    else
+        {
+	cgiMakeButton(hgtaDoFilterPage, "Create");
+	}
     hPrintf("</TD></TR>\n");
     }
 

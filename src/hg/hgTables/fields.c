@@ -30,6 +30,15 @@ safef(buf, sizeof(buf), "%s%s.%s",
 return buf;
 }
 
+static char *dbTableFieldVar(char *prefix, char *db, char *table, char *field)
+/* Get variable name of form prefixDb.table.field */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s%s.%s.%s", 
+	prefix, db, table, field);
+return buf;
+}
+
 struct dbTable
 /* database/table pair. */
     {
@@ -181,30 +190,27 @@ if (outList != NULL)
     }
 }
 
-
 /* ------- Select Fields Stuff ----------*/
 
 static char *checkVarPrefix()
 /* Return prefix for checkBox */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.check.", hgtaFieldSelectPrefix);
+safef(buf, sizeof(buf), "%scheck.", hgtaFieldSelectPrefix);
 return buf;
 }
 
 static char *checkVarName(char *db, char *table, char *field)
 /* Get variable name for check box on given table/field. */
 {
-static char buf[128];
-safef(buf, sizeof(buf), "%s%s.%s.%s", checkVarPrefix(), db, table, field);
-return buf;
+return dbTableFieldVar(checkVarPrefix(), db, table, field);
 }
 
 static char *selFieldLinkedTablePrefix()
 /* Get prefix for openLinked check-boxes. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "%s.%s.", hgtaFieldSelectPrefix, "linked");
+safef(buf, sizeof(buf), "%s%s.", hgtaFieldSelectPrefix, "linked");
 return buf;
 }
 
@@ -394,6 +400,118 @@ doSelectFieldsMore();
 
 /* ------- Filter Page Stuff ----------*/
 
+#define filterLinkedTablePrefix hgtaFilterPrefix "linked."
+#define filterVarPrefix hgtaFilterPrefix "v."
+#define filterDdPrefix filterVarPrefix "dd."
+#define filterCmpPrefix filterVarPrefix "cmp."
+#define filterPatternPrefix filterVarPrefix "pat."
+
+static char *filterPatternVarName(char *db, char *table, char *field)
+/* Return variable name for a filter page text box. */
+{
+return dbTableFieldVar(filterPatternPrefix, db, table, field);
+}
+
+boolean anyFilter()
+/* Return TRUE if any filter set. */
+{
+return varOn(hgtaFilterOn);
+}
+
+/* Droplist menus for filtering on fields: */
+char *ddOpMenu[] =
+{
+    "does",
+    "doesn't"
+};
+int ddOpMenuSize = 2;
+
+char *logOpMenu[] =
+{
+    "AND",
+    "OR"
+};
+int logOpMenuSize = 2;
+
+char *cmpOpMenu[] =
+{
+    "ignored",
+    "in range",
+    "<",
+    "<=",
+    "=",
+    "!=",
+    ">=",
+    ">"
+};
+int cmpOpMenuSize = ArraySize(cmpOpMenu);
+
+char *eqOpMenu[] =
+{
+    "ignored",
+    "=",
+    "!=",
+};
+int eqOpMenuSize = ArraySize(eqOpMenu);
+
+void stringFilterOption(char *db, char *table, char *field, char *logOp)
+/* Print out a table row with filter constraint options for a string/char. */
+{
+char *name;
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+name = dbTableFieldVar(filterDdPrefix, db, table, field);
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+		cartUsualString(cart, name, ddOpMenu[0]));
+puts(" match </TD><TD>");
+name = filterPatternVarName(db, table, field);
+cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
+if (logOp == NULL)
+    logOp = "";
+printf("</TD><TD> %s </TD></TR>\n", logOp);
+}
+
+void numericFilterOption(char *db, char *table, char *field, char *label,
+	char *logOp)
+/* Print out a table row with filter constraint options for a number. */
+{
+char *name;
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
+puts(" is ");
+name = dbTableFieldVar(filterCmpPrefix, db, table, field);
+cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+		cartUsualString(cart, name, cmpOpMenu[0]));
+puts("</TD><TD>\n");
+name = filterPatternVarName(db, table, field);
+cgiMakeTextVar(name, cartUsualString(cart, name, ""), 20);
+if (logOp == NULL)
+    logOp = "";
+printf("</TD><TD>%s</TD></TR>\n", logOp);
+}
+
+void eqFilterOption(char *db, char *table, char *field,
+	char *fieldLabel1, char *fieldLabel2, char *logOp)
+/* Print out a table row with filter constraint options for an equality 
+ * comparison. */
+{
+char *name;
+
+printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
+puts(" is ");
+name = dbTableFieldVar(filterCmpPrefix, db, table, field);
+cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
+		cgiUsualString(name, eqOpMenu[0]));
+/* make a dummy pat_ CGI var for consistency with other filter options */
+name = filterPatternVarName(db, table, field);
+cgiMakeHiddenVar(name, "0");
+puts("</TD><TD>\n");
+printf("%s\n", fieldLabel2);
+if (logOp == NULL)
+    logOp = "";
+printf("<TD>%s</TD></TR>\n", logOp);
+}
+
 static void filterControlsForTable(char *db, char *rootTable)
 /* Put up filter controls for a single table. */
 {
@@ -402,6 +520,7 @@ char *table = chromTable(conn, rootTable);
 char query[256];
 struct sqlResult *sr;
 char **row;
+boolean gotFirst = FALSE;
 
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
@@ -409,22 +528,45 @@ hPrintf("<TABLE BORDER=0>\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *field = row[0];
-    // char *var = checkVarName(db, rootTable, field);
-    hPrintf("<TR>");
-    hPrintf("<TD>");
-    hPrintf(" %s \n", field);
-    uglyf("Filter Controls Here");
-    hPrintf("</TD>");
-    hPrintf("</TR>");
+    char *type = row[1];
+    char *logic = "";
+
+    if (!sameWord(type, "longblob"))
+        {
+	if (!gotFirst)
+	    gotFirst = TRUE;
+	else
+	    logic = " AND ";
+	}
+    if (isSqlStringType(type))
+        {
+	stringFilterOption(db, rootTable, field, logic);
+	}
+    else
+        {
+	numericFilterOption(db, rootTable, field, field, logic);
+	}
     }
 hPrintf("</TABLE>");
 
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "Submit");
+cgiMakeButton(hgtaDoFilterSubmit, "(Submit)");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
+}
+
+static void showLinkedFilters(struct dbTable *dtList)
+/* Put up a section with filters for each linked table. */
+{
+struct dbTable *dt;
+for (dt = dtList; dt != NULL; dt = dt->next)
+    {
+    /* Put it up in a new section. */
+    webNewSection("%s.%s based filters", dt->db, dt->table);
+    filterControlsForTable(dt->db, dt->table);
+    }
 }
 
 
@@ -441,6 +583,12 @@ cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
 
 filterControlsForTable(db, table);
+dtList = extraTableList(filterLinkedTablePrefix);
+showLinkedFilters(dtList);
+dt = dbTableNew(db, table);
+slAddHead(&dtList, dt);
+showLinkedTables(joiner, dtList, filterLinkedTablePrefix,
+	hgtaDoFilterMore, "Allow Filtering Using Fields in Checked Tables");
 
 hPrintf("</FORM>\n");
 htmlClose();
@@ -467,7 +615,15 @@ doBigFilterPage(conn, database, table);
 void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
-htmlOpen("Submitted Filter");
-mainPageAfterOpen(conn);
+cartSetBoolean(cart, hgtaFilterOn, TRUE);
+doMainPage(conn);
+}
+
+void doClearFilter(struct sqlConnection *conn)
+/* Respond to click on clear filter. */
+{
+cartRemovePrefix(cart, hgtaFilterPrefix);
+cartSetBoolean(cart, hgtaFilterOn, FALSE);
+doMainPage(conn);
 }
 
