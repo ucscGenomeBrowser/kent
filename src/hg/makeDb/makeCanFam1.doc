@@ -1235,6 +1235,7 @@ axtChain $1 \
 
 
 # PHASTCONS DOG/HUMAN/MOUSE (DONE 7/21/04 angie)
+# NOTE: REPLACED, SEE "NEW PHASTCONS" BELOW
     # step 1: fit phylogenetic model, with rate variation (discrete
     # gamma model) first we need to extract the sufficient stats for
     # the phylogenetic model from the MAFs.  In this case, we don't
@@ -2225,5 +2226,264 @@ set chr = "chr$c"
     | perl -wpe 's/^(>ENSCANT\d+\.\d+).*/$1/' \
     > ensPep.fa
     hgPepPred canFam1 generic ensPep ensPep.fa
+
+
+# NEW PHASTCONS DOG/HUMAN/MOUSE (DONE 9/29/04 angie)
+    ssh kksilo
+    # copy chrom fa to bluearc, break up the genome-wide MAFs into pieces
+    mkdir -p /cluster/bluearc/canFam1/chrom
+    cp -p /cluster/data/canFam1/?{,?}/chr*.fa /cluster/bluearc/canFam1/chrom/
+    ssh kki
+    mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons
+    mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.split
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.split
+    set WINDOWS = /cluster/bluearc/canFam1/phastCons/WINDOWS
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    cat << 'EOF' > doSplit.sh
+#!/bin/csh -ef
+
+set PHAST=/cluster/bin/phast
+set FA_SRC=/cluster/bluearc/canFam1/chrom
+set WINDOWS=/cluster/bluearc/canFam1/phastCons/WINDOWS
+
+set maf=$1
+set c = $maf:t:r
+set tmpDir = /scratch/msa_split/$c
+rm -rf $tmpDir
+mkdir -p $tmpDir
+${PHAST}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O canFam1,hg17,mm5 \
+   -w 1000000,0 -r $tmpDir/$c -o SS -I 1000 -B 5000
+cd $tmpDir
+foreach file ($c.*.ss)
+  gzip -c $file > ${WINDOWS}/$file.gz
+end
+rm -f $tmpDir/$c.*.ss
+rmdir $tmpDir
+'EOF'
+# << for emacs
+    chmod a+x doSplit.sh
+    rm -f jobList
+    foreach file (../../chm/*.maf)
+      if (-s $file) then
+        echo "doSplit.sh {check in line+ $file}" >> jobList
+      endif
+    end
+    para create jobList
+    para try,  check, push, check...
+#Completed: 41 of 41 jobs
+#Average job time:                 201s       3.36m     0.06h    0.00d
+#Longest job:                      392s       6.53m     0.11h    0.00d
+#Submission to last job:           720s      12.00m     0.20h    0.01d
+    cd ..
+
+    # use the model previously estimated (see above) as a starting model
+    /cluster/bin/phast/tree_doctor \
+      --rename '1 -> canFam1 ; 2 -> hg17 ; 3 -> mm5' \
+      ../../phastCons/rev-dg.mod \
+      > starting-tree.mod
+#TREE: ((canFam1:0.176986,hg17:0.142776):0.170935,mm5:0.170935);
+
+    # Get genome-wide average GC content (for all species together,
+    # not just the reference genome).  If you have a globally
+    # estimated tree model, as above, you can get this from the
+    # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.276938 0.223190 0.223142 0.276730
+    # add up the C and G:
+    awk '$1 == "BACKGROUND:" {printf "%0.3f\n", $3 + $4;}' starting-tree.mod
+#0.405
+    # Great, use 0.405 as the --gc parameter in phastCons below:.
+
+    # Now set up cluster job to estimate model parameters.  
+    # Parameters will be estimated separately for each alignment fragment 
+    # then will be combined across fragments.
+    # Use --gc from above, --expected-lengths 12 a typical for mammals,
+    # and --target-coverage computed as follows:
+    # 1. Jim would like phastConsElements coverage to be 5% for mammals.
+    # 2. ~66% of canFam1 is covered by chainHg17Link, so use .05 / .66 = .08 
+    #    as an initial --target-coverage.
+    # 3. If actual coverage is different from our target, come back to this 
+    #    step, adjust --target-coverage and rerun up through phastConsElements.
+    # OK, .08 landed us a little low, try .10:
+#90197498 bases of 2359845093 (3.822%) in intersection
+    # .10 still a little low, try .15:
+#95675167 bases of 2359845093 (4.054%) in intersection
+    # OK, .15 seems close enough:
+#110676039 bases of 2359845093 (4.690%) in intersection
+
+    mkdir run.estimate
+    cd run.estimate
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/csh -ef
+zcat $1 \
+| /cluster/bin/phast/phastCons - ../starting-tree.mod --gc 0.405 --nrates 1,1 \
+    --no-post-probs --ignore-missing --expected-lengths 12 \
+    --target-coverage 0.15 --quiet --log $2 --estimate-trees $3
+'_EOF_'
+# << for emacs
+    chmod a+x doEstimate.sh
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobList
+    foreach f (/cluster/bluearc/canFam1/phastCons/WINDOWS/*.ss.gz)
+      set root = $f:t:r:r
+      echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobList
+    end
+    # run cluster job
+    ssh kk
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.estimate
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 2427 of 2427 jobs
+#Average job time:                  79s       1.31m     0.02h    0.00d
+#Longest job:                      146s       2.43m     0.04h    0.00d
+#Submission to last job:          1159s      19.32m     0.32h    0.01d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.estimate
+    ls -1 TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' \
+      --output-average ave.cons.mod > cons_summary.txt
+    ls -1 TREES/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
+      --output-average ave.noncons.mod > noncons_summary.txt
+    grep TREE ave*.mod
+#ave.cons.mod:TREE: ((canFam1:0.052234,hg17:0.043243):0.052171,mm5:0.052171);
+#ave.noncons.mod:TREE: ((canFam1:0.196400,hg17:0.162279):0.195831,mm5:0.195831);
+    cat cons_summary.txt
+    # look over the files cons_summary.txt and noncons_summary.txt.
+    # The means and medians should be roughly equal and the stdevs
+    # should be reasonably small compared to the means, particularly
+    # for rate matrix parameters (at bottom) and for branches to the
+    # leaves of the tree.  The stdevs may be fairly high for branches
+    # near the root of the tree; that's okay.  Some min values may be
+    # 0 for some parameters.  That's okay, but watch out for very large
+    # values in the max column, which might skew the mean.  If you see
+    # any signs of bad outliers, you may have to track down the
+    # responsible .mod files and throw them out.  I've never had to do
+    # this; the estimates generally seem pretty well behaved.
+
+    # NOTE: Actually, a random sample of several hundred to a thousand
+    # alignment fragments (say, a number equal to the number of
+    # available cluster nodes) should be more than adequate for
+    # parameter estimation.  If pressed for time, use this strategy.
+
+    # Now we are ready to set up the cluster job for computing the
+    # conservation scores and predicted elements.  It's all downhill
+    # from here.
+    ssh kk
+    mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.phast
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.phast
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/csh -ef
+set pref = $1:t:r:r
+set chr = `echo $pref | awk -F\. '{print $1}'`
+set tmpfile = /scratch/phastCons.canFam1.$pref.$$
+zcat $1 \
+| /cluster/bin/phast/phastCons - \
+    ../run.estimate/ave.cons.mod,../run.estimate/ave.noncons.mod \
+    --expected-lengths 12 --target-coverage 0.15 --quiet --seqname $chr \
+    --idpref $pref \
+    --viterbi /cluster/bluearc/canFam1/phastCons/ELEMENTS/$pref.bed --score \
+    --require-informative 0 \
+  > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/canFam1/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+'EOF'
+# << for emacs
+    chmod a+x doPhastCons.sh
+    rm -fr /cluster/bluearc/canFam1/phastCons/{POSTPROBS,ELEMENTS}
+    mkdir -p /cluster/bluearc/canFam1/phastCons/{POSTPROBS,ELEMENTS}
+    rm -f jobList
+    foreach f (/cluster/bluearc/canFam1/phastCons/WINDOWS/*.ss.gz)
+      echo doPhastCons.sh $f >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 2427 of 2427 jobs
+#Average job time:                  67s       1.12m     0.02h    0.00d
+#Longest job:                      290s       4.83m     0.08h    0.00d
+#Submission to last job:           920s      15.33m     0.26h    0.01d
+
+    # back on kksilo:
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons
+    cp /dev/null all.bed
+    foreach chr (`awk '{print $1;}' /cluster/data/canFam1/chrom.sizes`)
+      cat /cluster/bluearc/canFam1/phastCons/ELEMENTS/$chr.*.bed \
+      | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+      | /cluster/bin/scripts/lodToBedScore >> all.bed
+    end
+
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons
+    featureBits canFam1 all.bed
+#110676039 bases of 2359845093 (4.690%) in intersection
+
+    # OK, close enough.
+    hgLoadBed canFam1 phastConsElements all.bed
+
+    # Create wiggle on the small cluster
+    ssk kki
+    mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.wib
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.wib
+    rm -rf /cluster/bluearc/canFam1/phastCons/wib
+    mkdir -p /cluster/bluearc/canFam1/phastCons/wib
+    cat << 'EOF' > doWigAsciiToBinary
+#!/bin/csh -ef
+set chr = $1
+zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
+      | sort -t\. -k2,2n` \
+| wigAsciiToBinary -chrom=$chr \
+    -wibFile=/cluster/bluearc/canFam1/phastCons/wib/${chr}_phastCons stdin 
+'EOF'
+# << for emacs
+    chmod a+x doWigAsciiToBinary
+    rm -f jobList
+    foreach chr (`ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS \
+                  | awk -F\. '{print $1}' | sort -u`)
+      echo doWigAsciiToBinary $chr >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 41 of 41 jobs
+#Average job time:                 502s       8.37m     0.14h    0.01d
+#Longest job:                     1194s      19.90m     0.33h    0.01d
+#Submission to last job:          1459s      24.32m     0.41h    0.02d
+
+    # back on kksilo, copy wibs, wigs and POSTPROBS (people sometimes want 
+    # the raw scores) from bluearc
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons
+    rm -rf wib POSTPROBS
+    rsync -av /cluster/bluearc/canFam1/phastCons/wib .
+    rsync -av /cluster/bluearc/canFam1/phastCons/POSTPROBS .
+
+    # load wiggle component of Conservation track
+    ssh hgwdev
+    rm -rf /gbdb/canFam1/wib/mzHg17Mm5_phast2
+    mkdir -p /gbdb/canFam1/wib/mzHg17Mm5_phast2
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+    ln -s `pwd`/wib/*.wib /gbdb/canFam1/wib/mzHg17Mm5_phast2/
+    hgLoadWiggle canFam1 mzHg17Mm5_phast2_wig \
+      -pathPrefix=/gbdb/canFam1/wib/mzHg17Mm5_phast2 wib/*.wig
+
+#TODO
+    # make top-5000 list and launcher on Adam's home page:
+    sort -k5,5nr raw.bed | head -5000 > top5000.bed
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/cf-top5000 \
+      "top 5000 conserved elements" canFam1
+
+    # and clean up bluearc.
+    rm -r /cluster/bluearc/canFam1/phastCons
+    rm -r /cluster/bluearc/canFam1/chrom
 
 
