@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.19 2004/05/12 00:02:08 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.20 2004/05/12 21:04:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -495,7 +495,15 @@ strcpy(q.ndxYN     ,"N");  /* default to not checked yet */
 strcpy(q.joinerYN  ,"N");  /* default to all.joiner not checked yet */
 q.stat   = "";
 strcpy(q.sponsor   ,"");
-strcpy(q.reviewer  ,qaUser);   /* default to this user */
+strcpy(q.reviewer  ,""); 
+if (sameString(myUser.role,"qa"))
+    {
+    strcpy(q.reviewer  ,qaUser);   /* if role is qa, default reviewer to this user */
+    }
+if (sameString(myUser.role,"dev"))
+    {
+    strcpy(q.sponsor   ,qaUser);   /* if role is dev, default sponsor to current user */
+    }
 strcpy(q.extSource ,"");
 q.openIssues   = "";
 q.notes   = "";
