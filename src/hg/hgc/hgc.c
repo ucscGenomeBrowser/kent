@@ -212,7 +212,7 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
+       hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other,
        tbl);
 }
 
