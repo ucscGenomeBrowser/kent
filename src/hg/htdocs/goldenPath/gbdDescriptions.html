@@ -267,6 +267,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#LFS">genscanSubopt</A> 
   - Genscan byproducts: good individual exons out of frame with main predictions (Last used Apr. 2001) </LI>
   <LI><A 
+  href="#HumanSynteny">humanSynteny</A> 
+  - Human synteny alignnments from blastz single coverage </LI>
+  <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
   <LI><A 
@@ -276,6 +279,10 @@ stored in a single table rather than one table per chromosome:</P>
   href="#OtherKnown">knownInfo</A> 
   - Other information about known genes (Oct. 2000 and earlier known gene 
   track) 
+  <LI><A 
+  href="#KnownGene">knownGene</A> 
+  - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
+TrEMBL-NEW and their corresponding mRNAs from Genbank
   <LI><A 
   href="#MoreKnown">knownMore</A> 
   - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
@@ -291,6 +298,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#MouseSyn">mouseSyn</A> 
   - Synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
   <LI><A 
+  href="#MouseSynteny">mouseSynteny</A> 
+  - Synteny between mouse and human chromosomes (First used in hg13) </LI>
+  <LI><A 
   href="#MouseSynWhd">mouseSynWhd</A> 
   - Whitehead synteny between mouse and human chromosomes </LI>
   <LI><A 
@@ -305,6 +315,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#RatSynteny">ratSynteny</A> 
+  - Synteny between rat and human chromosomes (First used in hg13) </LI>
   <LI><A 
   href="#RecombRate">recombRate</A> 
   - Describes the recombination rate in 1Mb intervals based on deCODE, Genethon and Marshfield maps</LI>
@@ -876,6 +889,19 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=HumanSynteny></A>Synteny Alignments between Mouse and Human</H4>
+<PRE>table humanSynteny
+"Human synteny alignnments from blastz single coverage"
+    (
+    string chrom;       "Mouse Chrom"
+    uint chromStart;    "Start on Mouse"
+    uint chromEnd;      "End on Mouse"
+    string humanChrom;    "Human Chromosome"
+    uint score;         "score always zero"
+    char[1] strand;     "+ direction matches - opposite"
+    )
+</PRE>
+
 <H4><A name=JaxOrtholog></A>Jackson Labs Mouse Orthologs</H4>
 <PRE>table jaxOrtholog
 "Jackson Labs Mouse Orthologs"
@@ -907,6 +933,26 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=KnownGene></A>Known Genes</H4>
+<PRE>table knownGene
+"Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
+TrEMBL-NEW and their corresponding mRNAs from Genbank"
+    (
+    string  name;       "Name of gene"
+    string  chrom;      "Chromosome name"
+    char[1] strand;     "+ or - for strand"
+    uint    txStart;    "Transcription start position"
+    uint    txEnd;      "Transcription end position"
+    uint    cdsStart;   "Coding region start"
+    uint    cdsEnd;     "Coding region end"
+    uint    exonCount;  "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    string  proteinID;  "SWISS-PROT ID" 
+    string  alignID;    "Unique identifier for each (known gene, alignment position) pair"
+    )
+</PRE>
+
 <H4><A name=MGIid></A>MGI ID</H4>
 <PRE>table MIGIid
 "Links MGI ID to Locus Link ID (Mouse)"
@@ -927,6 +973,19 @@ Last used Apr. 2001.
     uint    chromEnd;    "End in chromosome"
     string  name;        "Name of mouse chromosome"
     int     segment;     "Number of segment"
+    )
+</PRE>
+
+<H4><A name=MouseSynteny></A>Synteny Alignments between Human and Mouse</H4>
+<PRE>table mouseSynteny
+"Mouse synteny alignnments from blastz single coverage"
+    (
+    string chrom;       "Human Chrom"
+    uint chromStart;    "Start on Human"
+    uint chromEnd;      "End on Human"
+    string mouseChrom;  "Mouse Chromosome"
+    uint score;         "score always zero"
+    char[1] strand;     "+ direction matches - opposite"
     )
 </PRE>
 
@@ -1078,6 +1137,19 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
 	                         of EST/mRNA, or 0 if no signal"
    short revSignalPos;       "PolyA signal position on reverse strand if any"
    )
+</PRE>
+
+<H4><A name=RatSynteny></A>Synteny Alignments between Human and Rat</H4>
+<PRE>table ratSynteny
+"Rat synteny alignnments from blastz single coverage"
+    (
+    string chrom;       "Human Chrom"
+    uint chromStart;    "Start on Human"
+    uint chromEnd;      "End on Human"
+    string ratChrom;    "Rat Chromosome"
+    uint score;         "score always zero"
+    char[1] strand;     "+ direction matches - opposite"
+    )
 </PRE>
 
 <H4><A name=RecombRate></A>Recombination Rate</H4>
@@ -1564,6 +1636,8 @@ The bacEndPairs table uses all fields.
     string endBand;          "End of range of bands on FISH map"
     string lab;              "Laboratory that placed the FISH clone"
     )             
+</PRE>
+
 
 <H4><A name=TilingPath></A>Tiling Path of Clones through a Chromosome</H4>
 <PRE>table tilingPath
