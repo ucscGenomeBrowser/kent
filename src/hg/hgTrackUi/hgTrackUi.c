@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.182 2005/02/15 22:15:59 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.183 2005/02/16 21:24:11 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -383,7 +383,7 @@ baseDrawDefault = trackDbSettingOrDefault(tdb, PSL_SEQUENCE_BASES, PSL_SEQUENCE_
 drawOption = cartUsualString(cart, baseColorVar, baseDrawDefault);
 baseColorDropDown(baseColorVar, drawOption);
 printf("&nbsp;<b>bases.</b>\n");
-printf("<BR><BR><a href=%s>Help on EST base coloring</a><br>",CDS_BASE_HELP_PAGE);
+printf("<BR><BR><a href=%s>Help on EST base labeling</a><br>",CDS_BASE_HELP_PAGE);
 }
 
 
