@@ -1062,7 +1062,7 @@ else
 	     "select * from %s where chrom = '%s' and species = '%s'",
 	     table, gp->chrom, db);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     ai = axtInfoLoad(row );
     }
@@ -4534,11 +4534,11 @@ struct sqlResult *sr;
 char **row;
 char *track = cartString(cart, "o");
 char *chrom = cartString(cart, "c");
-char *left = cartString(cart, "l");
-char *right = cartString(cart, "r");
-char *seqName = cartOptionalString(cart, "i");
+char *name = cartOptionalString(cart, "i");
 char *alignment = cgiOptionalString("alignment");
 char *db2 = cartString(cart, "db2");
+int left = cgiInt("l");
+int right = cgiInt("r");
 char table[64];
 char query[512];
 char nibFile[512];
@@ -4546,7 +4546,7 @@ boolean hasBin;
 boolean alignmentOK;
 
 cartWebStart(cart, "Alignment of %s in %s to %s",
-	     seqName, hOrganism(database), hOrganism(db2));
+	     name, hOrganism(database), hOrganism(db2));
 
 // get nibFile
 sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
@@ -4555,14 +4555,19 @@ if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
 
 // get gp
 hFindSplitTable(chrom, track, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s'", table, seqName);
+snprintf(query, sizeof(query),
+	 "select * from %s where name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
+	 table, name, chrom, right, left);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+if (gp == NULL)
+    errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
+	     database, table, name, chrom, left+1, right);
 
 puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
 cartSaveSession(cart);
@@ -4570,6 +4575,8 @@ cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("i");
 cgiContinueHiddenVar("o");
 cgiContinueHiddenVar("c");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
 puts("\n<TABLE><tr>");
 puts("<td align=center valign=baseline>genome/version</td>");
 puts("<td align=center valign=baseline>alignment</td>");
