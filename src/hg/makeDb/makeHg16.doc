@@ -2604,7 +2604,7 @@ end
       echo chr$c
       perl -wpe 's/^(\>\S+)\s.*$/$1.a/' < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
     end
-    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
+    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf -genePredExt
     hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 # RAW TWINSCAN 1.3 GENE PREDICTIONS, WITHOUT FILTERING OF PSEUDOGENES
