@@ -1189,7 +1189,6 @@ Load into database as so:
        hgLoadRna add hg12 xenoEst.fa xenoEst.ra
     
 PRODUCING FISH ALIGNMENTS (DONE 08/05/02)
-TODO: Update this to reflect the fact that FUGU and NOT TETRA were used.
 o - Do fish/human alignments.
        ssh kk
        cd ~/oo/bed
@@ -1839,7 +1838,8 @@ do
   wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_jun02/chr${i}_gp_F25Jun02.psl
 done
 
-Remove the first line from each psl file. It is junk.
+Remove the first line from each psl file to prepare them for pslCat using the fixFile.sh shell script.
+./fixFile.sh
 pslCat *.psl > chimpBlat.psl
 hgLoadPsl hg12 chimpBlat.psl
 
@@ -1851,7 +1851,8 @@ do
         wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/Riken-be_jun02/chr${i}_gp_F25Jun02.psl
 done
 
-Remove the first line from each psl file. It is junk.
+Remove the first line from each psl file to prepare them for pslCat using the fixFile.sh shell script.
+./fixFile.sh
 pslCat *.psl > chimpBac.psl
 hgLoadPsl hg12 chimpBac.psl
 
@@ -1914,7 +1915,9 @@ mv mrna.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 Request that the admins push all this to hgwbeta.
 
 
-o Dump the database
+o Dump the database - DON'T DO THIS
+IT IS HERE FOR REFERENCE ONLY
+IT IS DONE AUTOMATICALLY BY A PAUL T. SCRIPT ON THE PRODUCTION MACHINES
 ssh hgwbeta
 We dump the database on hgwbeta in order to only dump the most accurate database state.
 
@@ -1997,3 +2000,49 @@ ALIGNMENT COUNTS FOR WIGGLE TRACK
            hgCountAlign -winSize=50 -winSlide=5 $axt $tab
         end
 
+
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE w/ mrna.130)
+
+o ssh to kkstore
+ mkdir -p /cluster/store1/gs.13/build30/bed/refFull
+ cd /cluster/store1/gs.13/build30/bed/refFull
+
+ Download the sequence: wget ftp://blue3.ims.u-tokyo.ac.jp/pub/db/hgc/dbtss/ref-full.fa.gz
+
+ gunzip it and split the ref-rull.fa file into about 200 pieces
+ gunzip ref-full.fa.gz
+ faSplit sequence ref-full.fa 50 splitRefFull
+ mkdir /scratch/hg/refFull
+ splitRefFull* /scratch/hg/refFull/
+ ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+ ls -1S /scratch/hg/refFull/split*.fa > refFull.lst
+
+o - Request the admins to do a binrsync to the cluster of /scratch/hg/refFull
+
+o - Use BLAT to generate refFull alignments as so:
+      Make sure that /scratch/hg/gs.13/build30/contig/ is loaded
+      with NT_*.fa and pushed to the cluster nodes.
+
+          ssh kk
+          cd /cluster/store1/gs.13/build30/bed/refFull
+          mkdir -p psl
+#          run mkdirs.sh script to create sudirs in the psl directory
+#               in order to modularize the blat job.
+          gensub2 genome.lst refFull.lst gsub spec
+          para create spec
+          
+    Now run a para try/push and para check in each one.
+
+o - Process refFull alignments into near best in genome.
+      cd ~/oo/bed
+      cd refFull
+      pslSort dirs raw.psl /tmp psl/*
+      pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
+      liftUp -nohead all_refFull.psl ../../jkStuff/liftAll.lft carry contig.psl
+      pslSortAcc nohead chrom /tmp all_refFull.psl
+
+o - Load refFull alignments into database
+      ssh hgwdev
+      cd /cluster/store1/gs.13/build30/bed/refFull
+      pslCat -dir chrom > refFullAli.psl
+      hgLoadPsl hg12 -tNameIx refFullAli.psl
