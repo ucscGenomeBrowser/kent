@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.1 2003/12/07 18:10:41 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.2 2003/12/07 19:27:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -42,7 +42,7 @@ errAbort(
   "spliced codons.\n"
   "\n"
   "usage:\n"
-  "   mapProteins [options] psl1 psl2 outPsl\n"
+  "   pslMap [options] psl1 psl2 outPsl\n"
   "\n"
   "Options:\n"
   "  -suffix=str - append str to the query ids in the output alignment.\n"
@@ -158,15 +158,15 @@ if (mappedPsl->strand[1] == '-')
 
 struct block findBlockMapping(struct psl* psl1, struct psl* psl2,
                               struct block* align1Blk)
-/* Map part or all of a ungapped protein->mrna block to the genome. 
- * This returns the coordinates of the sub-block starting at the
- * beginning of the align1Blk.  If this is a gap, either the target
- * or query coords are zero.  This works in genomic strand space.
+/* Map part or all of a ungapped psl block to the genome.  This returns the
+ * coordinates of the sub-block starting at the beginning of the align1Blk.
+ * If this is a gap, either the target or query coords are zero.  This works
+ * in genomic strand space.
  */
 {
 int iBlk;
-struct block protGenBlk;
-ZeroVar(&protGenBlk);
+struct block mappedBlk;
+ZeroVar(&mappedBlk);
 
 /* search for block or gap containing start of mrna block */
 for (iBlk = 0; iBlk < psl2->blockCount; iBlk++)
@@ -177,35 +177,35 @@ for (iBlk = 0; iBlk < psl2->blockCount; iBlk++)
     if (align1Blk->tStart < mStart)
         {
         /* mRNA start in genomic gap before this block, this will
-         * be a protein insert */
+         * be a psl1 insert */
         unsigned size = (align1Blk->tEnd < mStart)
             ? (align1Blk->tEnd - align1Blk->tStart)
             : (mStart - align1Blk->tStart);
-        protGenBlk.qStart = align1Blk->qStart;
-        protGenBlk.qEnd = align1Blk->qStart + size;
-        return protGenBlk;
+        mappedBlk.qStart = align1Blk->qStart;
+        mappedBlk.qEnd = align1Blk->qStart + size;
+        return mappedBlk;
         }
     if ((align1Blk->tStart >= mStart) && (align1Blk->tStart < mEnd))
         {
-        /* mRNA start contained in this block, this handles aligned
+        /* common sequence start contained in this block, this handles aligned
          * and genomic inserts */
         unsigned off = align1Blk->tStart - mStart;
         unsigned size = (align1Blk->tEnd > mEnd)
             ? (mEnd - align1Blk->tStart)
             : (align1Blk->tEnd - align1Blk->tStart);
-        protGenBlk.qStart = align1Blk->qStart;
-        protGenBlk.qEnd = align1Blk->qStart + size;
-        protGenBlk.tStart = gStart + off;
-        protGenBlk.tEnd = gStart + off + size;
-        return protGenBlk;
+        mappedBlk.qStart = align1Blk->qStart;
+        mappedBlk.qEnd = align1Blk->qStart + size;
+        mappedBlk.tStart = gStart + off;
+        mappedBlk.tEnd = gStart + off + size;
+        return mappedBlk;
         }
     }
 
 /* reached the end of the mRNA->genome alignment, finish off the 
  * rest of the the protein as an insert */
-protGenBlk.qStart = align1Blk->qStart;
-protGenBlk.qEnd = align1Blk->qEnd;
-return protGenBlk;
+mappedBlk.qStart = align1Blk->qStart;
+mappedBlk.qEnd = align1Blk->qEnd;
+return mappedBlk;
 }
 
 boolean mapBlock(struct psl *psl1, struct psl* psl2,
