@@ -169,17 +169,11 @@ void slSafeAddHead(void *listPt, void *node);
  * that begin with a next pointer. 
  */
 
-/* The macro below is faster.  For some reason under
- * GNU C the braces below are ignored.  This leads
- * to problems if slAddHead is a single statement
- * after an if/for/while.  Either use slSafeAddHead
- * or enclose the slAddHead line in braces in these
- * situations. */
+/* Add new node to start of list, this macro is faster
+ * than slSafeAddHead, but has standard macro restriction
+ * on what can be safely passed as arguments. */
 #define slAddHead(listPt, node) \
-    { \
-    (node)->next = *(listPt); \
-    *(listPt) = (node); \
-    }
+    ((node)->next = *(listPt), *(listPt) = (node))
 
 void slAddTail(void *listPt, void *node);
 /* Add new node to tail of list.
