@@ -1396,6 +1396,11 @@ searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50
 
+searchTable sgpGene
+searchType genePred
+termRegex chr[^_]+_(random_)?[0-9]+\.[0-9]+
+searchPriority 50
+
 searchTable geneid
 searchType genePred
 termRegex chr[^_]+_(random_)?[0-9]+\.[0-9]+
