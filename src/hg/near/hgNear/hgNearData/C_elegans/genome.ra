@@ -5,3 +5,4 @@ canonicalTable sangerCanonical
 isoformTable sangerIsoforms
 allTranscriptQuery select name,chrom,txStart,txEnd,proteinID from sangerGene
 allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from sangerCanonical
+oneGeneQuery select name,chrom,txStart,txEnd,proteinId from sangerGene where name = '%s'

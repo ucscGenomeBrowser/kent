@@ -17,9 +17,10 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.96 2003/09/27 02:24:52 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.97 2003/10/02 07:19:36 kent Exp $";
 
-char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
+char *excludeVars[] = { "submit", "Submit", confVarName, 
+	detailsVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
 	saveCurrentConfName, useSavedConfName, 
 	filSaveCurrentVarName, filUseSavedVarName,
@@ -493,7 +494,7 @@ char *host = getHost();
 return startsWith("hgwdev", host);
 }
 
-static char *debugCellVal(struct column *col, struct genePos *gp, 
+char *debugCellVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Return value for debugging column. */
 {
@@ -502,11 +503,22 @@ safef(buf, sizeof(buf), "%f", gp->distance);
 return cloneString(buf);
 }
 
+void debugCellPrint(struct column *col, struct genePos *gp,
+	struct sqlConnection *conn)
+/* Print value including favorite hyperlink in debug column. */
+{
+hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
+	cartSidUrlString(cart), detailsVarName, gp->name);
+hPrintf("%f", gp->distance);
+hPrintf("</A></TD>");
+}
+
 void setupColumnDebug(struct column *col, char *parameters)
 /* Set up a column that displays the geneId (accession) */
 {
 col->exists = debugExists;
 col->cellVal = debugCellVal;
+col->cellPrint = debugCellPrint;
 }
 
 
@@ -1628,6 +1640,8 @@ else
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
+else if (cartVarExists(cart, detailsVarName))
+    doDetails(conn, colList, cartString(cart, detailsVarName));
 else if (cartVarExists(cart, colInfoVarName))
     doColInfo(conn, colList, cartString(cart, colInfoVarName));
 else if ((var = cartFindFirstLike(cart, "near.do.up.*")) != NULL)

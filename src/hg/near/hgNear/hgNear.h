@@ -183,6 +183,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define dbVarName "db"      /* Which assembly to use. */
 #define orgVarName "org"      /* Which organism to use. */
 #define confVarName "near.do.configure"	/* Configuration button */
+#define detailsVarName "near.do.details" /* Do details page. */
 #define countVarName "near.count"	/* How many items to display. */
 #define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
@@ -357,6 +358,9 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
+
+struct genePos *knownPosOne(struct sqlConnection *conn, char *name);
+/* Get all positions of named gene. */
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
@@ -557,6 +561,9 @@ void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList);
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
 /* Configuration page. */
+
+void doDetails(struct sqlConnection *conn, struct column *colList,  char *gene);
+/* Put up details page on gene. */
 
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 /* Do configuration starting with defaults. */
