@@ -539,10 +539,12 @@ static void parseClass(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
+struct pfParse *name, *body;
 skipRequiredName("class", &tok);
 pp = pfParseNew(pptClass, tok, parent);
-tok = tok->next;
-compoundToChildren(pp, &tok, scope);
+name = parseNameUse(pp, &tok, scope);
+parseCompound(pp, &tok, scope);
+slAddHead(&pp->children, name);
 *pTokList = tok;
 slAddHead(&parent->children, pp);
 }
