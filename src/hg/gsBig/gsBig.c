@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.12 2004/01/06 00:20:30 angie Exp $";
+static char const rcsid[] = "$Id: gsBig.c,v 1.13 2004/02/04 23:38:55 kent Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
@@ -318,7 +318,7 @@ return seg;
 void cdsOut(FILE *f, struct genScanFeature *gsf, char *geneName, char *seqName)
 /* Output a CDS type GTF feature to f. */
 {
-fprintf(f, "%s\tgenscan\texon\t%d\t%d\t", seqName, gsf->start+1, gsf->end);
+fprintf(f, "%s\tgenscan\tCDS\t%d\t%d\t", seqName, gsf->start+1, gsf->end);
 fprintf(f, ".\t%c\t%d\t", gsf->strand, round(gsf->p * 1000));
 fprintf(f, "gene_id \"%s\"; transcript_id \"%s\"; exon_number \"%d\"; exon_id \"%s.%d\";\n",
     geneName, geneName, gsf->featId, geneName, gsf->featId);
