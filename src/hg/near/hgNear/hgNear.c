@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.33 2003/07/08 06:18:04 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.34 2003/07/21 23:10:38 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -176,7 +176,7 @@ return outList;
 }
 
 static boolean alwaysExists(struct column *col, struct sqlConnection *conn)
-/* We don't exist ever. */
+/* We always exist. */
 {
 return TRUE;
 }
