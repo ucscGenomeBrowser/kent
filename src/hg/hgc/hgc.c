@@ -3934,7 +3934,8 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *itemForUrl = item;
-int numSnpsReq = -1;
+double ident = -1.0;
+
 if(tdb == NULL)
     errAbort("TrackDb entry null for ancientR, item=%s\n", item);
 
@@ -3959,14 +3960,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 	name = bed->name;
 
     /* get % identity from score */
-	numSnpsReq = bed->score;
+	ident = ((bed->score + 500.0)/1500.0)*100.0;
     
     /* finish off report ... */
-    printf("<B>Block:</B> %s<BR>\n", name);
-    printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
-    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
+    printf("<B>Alignment id:</B> %s<BR>\n", name);
+    printf("<B>Number of aligned blocks:</B> %d<BR>\n", bed->blockCount);
+
+    if( ident == 50.0 )
+        printf("<B>Percent identity of aligned blocks:</B> <= %g%%<BR>\n", ident);
+    else
+        printf("<B>Percent identity of aligned blocks:</B> %g%%<BR>\n", ident);
+
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
+
+    printf("<br>test line<br>");
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
