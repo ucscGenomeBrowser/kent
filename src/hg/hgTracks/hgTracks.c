@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.766 2004/07/20 20:10:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.767 2004/07/20 23:16:16 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7504,7 +7504,7 @@ else if (sameWord(type, "psl"))
     }
 else if (sameWord(type, "chain"))
     {
-    chainMethods(track);
+    chainMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "netAlign"))
     {

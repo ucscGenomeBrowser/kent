@@ -489,8 +489,9 @@ void cytoBandIdeoMethods(struct track *tg);
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
 
-void chainMethods(struct track *tg);
-/* Return name of item from extra field. */
+void chainMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[]);
+/* Make track group for chain alignment. */
 
 void netMethods(struct track *tg);
 /* Make track group for chain/net alignment. */
