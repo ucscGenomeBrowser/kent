@@ -10,7 +10,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.27 2004/03/25 01:09:55 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.28 2004/07/13 12:53:15 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,7 @@ errAbort(
 
 int dot = 0;
 boolean doShort = FALSE;
+struct axtScoreScheme *ss = NULL;
 
 struct seqFilePos
 /* Where a sequence is in a file. */
@@ -223,11 +224,10 @@ void axtOutString(char *q, char *t, int size, int lineSize,
 	struct psl *psl, FILE *f)
 /* Output string side-by-side in Scott's axt format. */
 {
-    int i;
+int i;
 static int ix = 0;
 int qs = psl->qStart, qe = psl->qEnd;
 int ts = psl->tStart, te = psl->tEnd;
-struct axtScoreScheme *ss = axtScoreSchemeDefault();
 int score = axtScoreSym(ss, size, q, t);
 
 if (psl->strand[0] == '-')
@@ -242,9 +242,13 @@ if (psl->strand[1] != 0)
 else
     fprintf(f, "%d %s %d %d %s %d %d %c %d\n", ++ix, psl->tName, psl->tStart+1, 
             psl->tEnd, psl->qName, qs+1, qe, psl->strand[0], score);
+if (strlen(t) != size)
+    warn("size of T %d and Q %d differ on line %d\n",strlen(t), size, ix);
 for (i=0; i<size ; i++) 
     fputc(t[i],f);
 fputc('\n',f);
+if (strlen(q) != size)
+    warn("size of T %d and Q %d differ on line %d\n",strlen(q), size, ix);
 for (i=0; i<size ; i++) 
     fputc(q[i],f);
 fputc('\n',f);
@@ -722,6 +726,7 @@ dot = optionInt("dot", dot);
 doShort = !optionExists("long");
 if (argc != 5)
     usage();
+ss = axtScoreSchemeDefault();
 pslPretty(argv[1], argv[2], argv[3], argv[4], axt, optionVal("check", NULL));
 return 0;
 }
