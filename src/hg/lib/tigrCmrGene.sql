@@ -5,13 +5,17 @@
 
 #For TIGR CMR genes tracks
 CREATE TABLE tigrCmrGene (
-    tigrLocus varchar(255) not null,	# TIGR locus
+    bin smallint not null,	# Bin number for browser speedup
+    chrom varchar(255) not null,	# Human chromosome or FPC contig
+    chromStart int unsigned not null,	# Start position in chromosome
+    chromEnd int unsigned not null,	# End position in chromosome
+    name varchar(255) not null,	# TIGR locus
+    score int unsigned not null,	# Score from 900-1000.  1000 is best
+    strand char(1) not null,	# Value should be + or -
     tigrCommon longblob not null,	# TIGR Common Name
     tigrGene varchar(255) not null,	# TIGR Gene Symbol
     tigrECN varchar(255) not null,	# TIGR Enzyme Commission Number
     primLocus varchar(255) not null,	# Primary Locus Name
-    tigr5p int unsigned not null,	# TIGR 5' end
-    tigr3p int unsigned not null,	# TIGR 3' end
     tigrLength int unsigned not null,	# TIGR sequence length
     tigrPepLength int unsigned not null,	# TIGR Protein length
     tigrMainRole longblob not null,	# TIGR Main Role
@@ -21,6 +25,10 @@ CREATE TABLE tigrCmrGene (
     tigrMw float not null,	# Molecular Weight
     tigrPi float not null,	# Isoelectric point (I think)
     tigrGc float not null,	# GC content
+    goTerm varchar(255) not null,	# GO term (gene ontology)
               #Indices
-    PRIMARY KEY(tigrLocus)
+    INDEX(bin),
+    INDEX(chromStart),
+    INDEX(chromEnd),
+    PRIMARY KEY(name)
 );

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "tigrCmrGene.h"
 
-static char const rcsid[] = "$Id: tigrCmrGene.c,v 1.1 2003/06/30 21:49:52 aamp Exp $";
+static char const rcsid[] = "$Id: tigrCmrGene.c,v 1.2 2004/03/01 22:58:37 aamp Exp $";
 
 void tigrCmrGeneStaticLoad(char **row, struct tigrCmrGene *ret)
 /* Load a row from tigrCmrGene table into ret.  The contents of ret will
@@ -17,22 +17,27 @@ void tigrCmrGeneStaticLoad(char **row, struct tigrCmrGene *ret)
 int sizeOne,i;
 char *s;
 
-ret->tigrLocus = row[0];
-ret->tigrCommon = row[1];
-ret->tigrGene = row[2];
-ret->tigrECN = row[3];
-ret->primLocus = row[4];
-ret->tigr5p = sqlUnsigned(row[5]);
-ret->tigr3p = sqlUnsigned(row[6]);
-ret->tigrLength = sqlUnsigned(row[7]);
-ret->tigrPepLength = sqlUnsigned(row[8]);
-ret->tigrMainRole = row[9];
-ret->tigrSubRole = row[10];
-ret->swissProt = row[11];
-ret->genbank = row[12];
-ret->tigrMw = atof(row[13]);
-ret->tigrPi = atof(row[14]);
-ret->tigrGc = atof(row[15]);
+ret->bin = sqlSigned(row[0]);
+ret->chrom = row[1];
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
+ret->name = row[4];
+ret->score = sqlUnsigned(row[5]);
+strcpy(ret->strand, row[6]);
+ret->tigrCommon = row[7];
+ret->tigrGene = row[8];
+ret->tigrECN = row[9];
+ret->primLocus = row[10];
+ret->tigrLength = sqlUnsigned(row[11]);
+ret->tigrPepLength = sqlUnsigned(row[12]);
+ret->tigrMainRole = row[13];
+ret->tigrSubRole = row[14];
+ret->swissProt = row[15];
+ret->genbank = row[16];
+ret->tigrMw = atof(row[17]);
+ret->tigrPi = atof(row[18]);
+ret->tigrGc = atof(row[19]);
+ret->goTerm = row[20];
 }
 
 struct tigrCmrGene *tigrCmrGeneLoad(char **row)
@@ -44,22 +49,27 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->tigrLocus = cloneString(row[0]);
-ret->tigrCommon = cloneString(row[1]);
-ret->tigrGene = cloneString(row[2]);
-ret->tigrECN = cloneString(row[3]);
-ret->primLocus = cloneString(row[4]);
-ret->tigr5p = sqlUnsigned(row[5]);
-ret->tigr3p = sqlUnsigned(row[6]);
-ret->tigrLength = sqlUnsigned(row[7]);
-ret->tigrPepLength = sqlUnsigned(row[8]);
-ret->tigrMainRole = cloneString(row[9]);
-ret->tigrSubRole = cloneString(row[10]);
-ret->swissProt = cloneString(row[11]);
-ret->genbank = cloneString(row[12]);
-ret->tigrMw = atof(row[13]);
-ret->tigrPi = atof(row[14]);
-ret->tigrGc = atof(row[15]);
+ret->bin = sqlSigned(row[0]);
+ret->chrom = cloneString(row[1]);
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
+ret->name = cloneString(row[4]);
+ret->score = sqlUnsigned(row[5]);
+strcpy(ret->strand, row[6]);
+ret->tigrCommon = cloneString(row[7]);
+ret->tigrGene = cloneString(row[8]);
+ret->tigrECN = cloneString(row[9]);
+ret->primLocus = cloneString(row[10]);
+ret->tigrLength = sqlUnsigned(row[11]);
+ret->tigrPepLength = sqlUnsigned(row[12]);
+ret->tigrMainRole = cloneString(row[13]);
+ret->tigrSubRole = cloneString(row[14]);
+ret->swissProt = cloneString(row[15]);
+ret->genbank = cloneString(row[16]);
+ret->tigrMw = atof(row[17]);
+ret->tigrPi = atof(row[18]);
+ret->tigrGc = atof(row[19]);
+ret->goTerm = cloneString(row[20]);
 return ret;
 }
 
@@ -69,7 +79,7 @@ struct tigrCmrGene *tigrCmrGeneLoadAll(char *fileName)
 {
 struct tigrCmrGene *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[21];
 
 while (lineFileRow(lf, row))
     {
@@ -87,7 +97,7 @@ struct tigrCmrGene *tigrCmrGeneLoadAllByChar(char *fileName, char chopper)
 {
 struct tigrCmrGene *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[21];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -131,8 +141,8 @@ void tigrCmrGeneSaveToDb(struct sqlConnection *conn, struct tigrCmrGene *el, cha
  * If worried about this use tigrCmrGeneSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%s,'%s','%s','%s',%u,%u,%u,%u,%s,%s,'%s','%s',%f,%f,%f)", 
-	tableName,  el->tigrLocus,  el->tigrCommon,  el->tigrGene,  el->tigrECN,  el->primLocus,  el->tigr5p,  el->tigr3p,  el->tigrLength,  el->tigrPepLength,  el->tigrMainRole,  el->tigrSubRole,  el->swissProt,  el->genbank,  el->tigrMw,  el->tigrPi,  el->tigrGc);
+dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s',%s,'%s','%s','%s',%u,%u,%s,%s,'%s','%s',%f,%f,%f,'%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->tigrCommon,  el->tigrGene,  el->tigrECN,  el->primLocus,  el->tigrLength,  el->tigrPepLength,  el->tigrMainRole,  el->tigrSubRole,  el->swissProt,  el->genbank,  el->tigrMw,  el->tigrPi,  el->tigrGc,  el->goTerm);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -147,8 +157,10 @@ void tigrCmrGeneSaveToDbEscaped(struct sqlConnection *conn, struct tigrCmrGene *
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *tigrLocus, *tigrCommon, *tigrGene, *tigrECN, *primLocus, *tigrMainRole, *tigrSubRole, *swissProt, *genbank;
-tigrLocus = sqlEscapeString(el->tigrLocus);
+char  *chrom, *name, *strand, *tigrCommon, *tigrGene, *tigrECN, *primLocus, *tigrMainRole, *tigrSubRole, *swissProt, *genbank, *goTerm;
+chrom = sqlEscapeString(el->chrom);
+name = sqlEscapeString(el->name);
+strand = sqlEscapeString(el->strand);
 tigrCommon = sqlEscapeString(el->tigrCommon);
 tigrGene = sqlEscapeString(el->tigrGene);
 tigrECN = sqlEscapeString(el->tigrECN);
@@ -157,12 +169,15 @@ tigrMainRole = sqlEscapeString(el->tigrMainRole);
 tigrSubRole = sqlEscapeString(el->tigrSubRole);
 swissProt = sqlEscapeString(el->swissProt);
 genbank = sqlEscapeString(el->genbank);
+goTerm = sqlEscapeString(el->goTerm);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s',%u,%u,%u,%u,'%s','%s','%s','%s',%f,%f,%f)", 
-	tableName,  tigrLocus,  tigrCommon,  tigrGene,  tigrECN,  primLocus, el->tigr5p , el->tigr3p , el->tigrLength , el->tigrPepLength ,  tigrMainRole,  tigrSubRole,  swissProt,  genbank, el->tigrMw , el->tigrPi , el->tigrGc );
+dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%u,%u,'%s','%s','%s','%s',%f,%f,%f,'%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  tigrCommon,  tigrGene,  tigrECN,  primLocus, el->tigrLength , el->tigrPepLength ,  tigrMainRole,  tigrSubRole,  swissProt,  genbank, el->tigrMw , el->tigrPi , el->tigrGc ,  goTerm);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&tigrLocus);
+freez(&chrom);
+freez(&name);
+freez(&strand);
 freez(&tigrCommon);
 freez(&tigrGene);
 freez(&tigrECN);
@@ -171,6 +186,7 @@ freez(&tigrMainRole);
 freez(&tigrSubRole);
 freez(&swissProt);
 freez(&genbank);
+freez(&goTerm);
 }
 
 struct tigrCmrGene *tigrCmrGeneCommaIn(char **pS, struct tigrCmrGene *ret)
@@ -183,13 +199,17 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->tigrLocus = sqlStringComma(&s);
+ret->bin = sqlSignedComma(&s);
+ret->chrom = sqlStringComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromEnd = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->score = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->tigrCommon = sqlStringComma(&s);
 ret->tigrGene = sqlStringComma(&s);
 ret->tigrECN = sqlStringComma(&s);
 ret->primLocus = sqlStringComma(&s);
-ret->tigr5p = sqlUnsignedComma(&s);
-ret->tigr3p = sqlUnsignedComma(&s);
 ret->tigrLength = sqlUnsignedComma(&s);
 ret->tigrPepLength = sqlUnsignedComma(&s);
 ret->tigrMainRole = sqlStringComma(&s);
@@ -199,6 +219,7 @@ ret->genbank = sqlStringComma(&s);
 ret->tigrMw = sqlFloatComma(&s);
 ret->tigrPi = sqlFloatComma(&s);
 ret->tigrGc = sqlFloatComma(&s);
+ret->goTerm = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -210,7 +231,8 @@ void tigrCmrGeneFree(struct tigrCmrGene **pEl)
 struct tigrCmrGene *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->tigrLocus);
+freeMem(el->chrom);
+freeMem(el->name);
 freeMem(el->tigrCommon);
 freeMem(el->tigrGene);
 freeMem(el->tigrECN);
@@ -219,6 +241,7 @@ freeMem(el->tigrMainRole);
 freeMem(el->tigrSubRole);
 freeMem(el->swissProt);
 freeMem(el->genbank);
+freeMem(el->goTerm);
 freez(pEl);
 }
 
@@ -239,8 +262,24 @@ void tigrCmrGeneOutput(struct tigrCmrGene *el, FILE *f, char sep, char lastSep)
 /* Print out tigrCmrGene.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
+fprintf(f, "%d", el->bin);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tigrLocus);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -258,10 +297,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->primLocus);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->tigr5p);
-fputc(sep,f);
-fprintf(f, "%u", el->tigr3p);
 fputc(sep,f);
 fprintf(f, "%u", el->tigrLength);
 fputc(sep,f);
@@ -288,6 +323,10 @@ fputc(sep,f);
 fprintf(f, "%f", el->tigrPi);
 fputc(sep,f);
 fprintf(f, "%f", el->tigrGc);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->goTerm);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
