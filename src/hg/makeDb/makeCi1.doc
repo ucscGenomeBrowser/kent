@@ -187,6 +187,14 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     sort -n --key=16 uniqProts.psl | sort --key=14 | uniq > bestHg16KG.psl
     cp bestHg16KG.psl blastHg16KG.psl
     hgLoadPsl ci1 blastHg16KG.psl     
+    echo "drop index bin on blastHg16KG ;" | hgsql ci1
+    echo "drop index tStart on blastHg16KG ;" | hgsql ci1
+    echo "drop index tEnd on blastHg16KG ;" | hgsql ci1
+    echo "drop index qName on blastHg16KG ;" | hgsql ci1
+    echo "create index tName on blastHg16KG (tName, bin) ;" | hgsql ci1
+    echo "create index tName_2 on blastHg16KG  (tName, tStart);" | hgsql ci1
+    echo "create index tName_3 on blastHg16KG  (tName, tEnd);" | hgsql ci1
+    echo "create index qName on blastHg16KG  (qName);" | hgsql ci1
 
     foreach i ( kg?? )
 	findExons uniqProts.psl ts.$i.psl x.$i.psl xa.$i.psl
