@@ -245,6 +245,15 @@ void altGraphXFreeItems(struct track *tg)
 altGraphXFreeList((struct altGraphX**)(&tg->items));
 }
 
+static int altGraphXFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Used to calculate total height when in pack or squish modes. */
+{
+if(vis == tvPack)
+    return tgFixedTotalHeightOverflow(tg,vis, tg->lineHeight, tg->heightPer, FALSE);
+else
+    return tgFixedTotalHeight(tg,vis);
+}
+
 static int altGraphXCalcHeight(struct track *tg, enum trackVisibility vis)
 /* Calculate the height of the track. Have to determine if we can
  * display things in elaborate with altGraphXDrawPackTrack() or just
@@ -253,9 +262,10 @@ static int altGraphXCalcHeight(struct track *tg, enum trackVisibility vis)
 {
 int rows = 0;
 boolean tooMany = FALSE;
+
 if(vis == tvFull)
     {
-    tg->lineHeight  = 2 * tl.fontHeight+1;
+    tg->lineHeight  = 2 * tl.fontHeight;
     tg->heightPer = tg->lineHeight -1;
     /* Try to layout the track in ultra full mode. */
     rows = altGraphXLayoutTrack(tg, 3*maxItemsInFullTrack+1);
@@ -270,20 +280,13 @@ if(vis == tvFull)
     }
 if(tooMany || vis != tvFull)
     {
+    tg->lineHeight  = 2 * tl.fontHeight;
+    tg->heightPer = tg->lineHeight -1;
     tg->drawItemAt = altGraphXDrawAt;
     tg->drawItems = genericDrawItems;
-    tg->totalHeight = tgFixedTotalHeight;
+    tg->totalHeight = altGraphXFixedTotalHeight;
     tg->itemHeight = tgFixedItemHeight;
-    /* Using the standard way to compute height needed, allows
-       features like to pack, squish, etc. However, it assigns height
-       to be too small for altGraphX in pack mode. */
-    vis = limitVisibility(tg);
-    if(tg->limitedVis == tvPack)
-	{
-	tg->lineHeight = 2 * tl.fontHeight + 1;
-        tg->heightPer = tg->lineHeight - 1;
-	tg->height = 2 * tg->height;
-	}
+    limitVisibility(tg);
     }
 /* If we're pretending to be in pack mode, remember
    that we're really in full. */
