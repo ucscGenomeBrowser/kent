@@ -3938,7 +3938,8 @@ puts("<table width=\"100%\" cellpadding=0 cellspacing=0>\n"
      "<tr><th align=left><h3>Plot Options:</h3></th></tr><tr><td><p><br>");
 makeCheckBox("f", FALSE);
 printf(" Show browser in different Frame<br>\n");
-
+cgiMakeHiddenVar("table", tableName);
+cgiMakeHiddenVar("db", database);
 zeroBytes(buff,64);
 sprintf(buff,"%d",winStart);
 cgiMakeHiddenVar("winStart", buff);
@@ -3946,7 +3947,6 @@ zeroBytes(buff,64);
 sprintf(buff,"%d",winEnd);
 cgiMakeHiddenVar("t",type);
 cgiMakeHiddenVar("winEnd", buff);
-cgiMakeHiddenVar("db",database); 
 if(thisFrame != NULL)
     cgiMakeHiddenVar("of",thisFrame);
 if(otherFrame != NULL)
