@@ -93,6 +93,13 @@ longLabel Clone Coverage/Fragment Position
 visibility dense
 altColor 180,180,180 
 
+track dupes
+priority 11
+shortLabel Duplications
+longLabel Duplications of >98% Identity >1kb
+visibility dense
+type bed 6 .
+
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
