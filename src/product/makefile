@@ -16,7 +16,7 @@ install_dir=${DESTDIR}/install_image
 
 all::	INST_DIR COPYRIGHT.txt README.building.source.txt \
 	README.cvs.access.txt README.install.txt \
-	README.mysql.setup.txt version source_clean source_tar \
+	README.mysql.setup.txt version source_tar \
 	source_built example gbdb goldenPath
 
 INST_DIR:
