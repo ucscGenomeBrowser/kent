@@ -100,7 +100,7 @@ otherDb rn2
 
 track blastzTightHuman
 shortLabel Tight Human
-longLabel Blastz Human (Apr. 03), Tight Subset of Alignments
+longLabel Blastz Human (Apr. '03), Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -124,7 +124,7 @@ otherDb hg15
 
 track mm3Hg15L
 shortLabel Human Cons
-longLabel Mouse/Human (Apr. 03) Evolutionary Conservation Score
+longLabel Mouse/Human (Apr. '03) Evolutionary Conservation Score
 group compGeno
 color 100,50,0
 altColor 175,150,128
@@ -165,7 +165,7 @@ type bed 4 +
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human (Apr. 03) Best in Genome Alignments
+longLabel Blastz Human (Apr. '03) Best in Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
@@ -177,7 +177,7 @@ otherDb hg15
 
 track blastzHuman
 shortLabel Blastz Human
-longLabel All Blastz Human (Nov. 02) Blastz Alignments
+longLabel All Blastz Human (Nov. '02) Blastz Alignments
 group compGeno
 priority 128
 visibility hide
