@@ -1,5 +1,5 @@
 table spSecondaryID 
-"A cross-reference table between Swiss-Prot accession IDs and InterPro IDs."
+"A cross-reference table between Swiss-Prot IDs and the secondary accession numbers."
 	(
 	string displayID;	"SWISS-PROT display ID"
 	string accession;	"SWISS-PROT accession number"
