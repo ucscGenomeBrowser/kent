@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.33 2005/01/06 15:50:31 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.34 2005/01/06 16:09:11 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -147,6 +147,19 @@ for (;;)
 	    }
 	}
     }
+}
+
+FILE *netFileFromSocket(int socket)
+/* Wrap a FILE around socket.  This should be fclose'd
+ * and separately the socket close'd. */
+{
+FILE *f;
+if ((socket = dup(socket)) < 0)
+   errnoAbort("Couldn't dupe socket in netFileFromSocket");
+f = fdopen(socket, "r+");
+if (f == NULL)
+   errnoAbort("Couldn't fdopen socket in netFileFromSocket");
+return f;
 }
 
 static boolean plumberInstalled = FALSE;

@@ -40,6 +40,10 @@ int netAcceptFrom(int sd, unsigned char subnet[4]);
  * from IP address in subnet.  Subnet is something
  * returned from netParseDottedQuad.  */
 
+FILE *netFileFromSocket(int socket);
+/* Wrap a FILE around socket.  This should be fclose'd
+ * and separately the socket close'd. */
+
 void netBlockBrokenPipes();
 /* Make it so a broken pipe doesn't kill us. */
 
