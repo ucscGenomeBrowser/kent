@@ -33,8 +33,9 @@
 #include "botDelay.h"
 #include "wiggle.h"
 #include "hgText.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.149 2004/06/29 17:43:31 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.150 2004/07/09 19:47:13 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -5034,6 +5035,7 @@ else
 	doOutputOptions();
     else if (existsAndEqual("phase", getOutputPhase))
 	{
+	hgBotDelay();
 	if (existsAndEqual("outputType", allFieldsPhase) ||
 	    existsAndEqual("outputType", oldAllFieldsPhase))
 	    doTabSeparated(TRUE);
