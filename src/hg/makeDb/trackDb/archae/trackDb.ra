@@ -24,6 +24,15 @@ color 40,40,160
 altColor 255,0,0
 type bed 6 .
 
+track easyGene
+shortLabel EasyGenes
+longLabel EasyGene 1.2 gene predictions
+group genes
+priority 2.12
+visibility dense
+spectrum on
+type bed 6 +
+
 track gbRRNA
 shortLabel GenBank rRNA
 longLabel GenBank ribosomal RNA
