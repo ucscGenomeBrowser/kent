@@ -458,10 +458,10 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    pi->unalignedCds += unaligned;
 	    pi->indels[pi->indelCount] = unaligned;
 	    pi->indelCount++;
-	    if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
-	      indels[unaligned]++;
+	    /*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
+	      indels[unaligned]++;*/
 	    if (pi->indelCount > 256) 
-	      errAbort("Indel count too high");
+		errAbort("Indel count too high");
 	    if (pi->psl->strand[0] == '-') {
 	      int temp = tstart;
 	      tstart = pi->psl->tSize - prevtend;
@@ -475,6 +475,8 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
     
     /* Find deletions in the mRNA sequence */
     unaligned = 0;
+    qstart = pi->psl->qStarts[i];
+    tstart = pi->psl->tStarts[i];
     prevqend = 0;
     prevtend = 0;
     /* Check if in the coding region */
@@ -506,8 +508,8 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    pi->indelCount++;
 	    if (pi->indelCount > 256) 
 	      errAbort("Indel count too high");
-	    if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
-	      indels[unaligned]++;
+	    /*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
+	      indels[unaligned]++;*/
 	    if (pi->psl->strand[0] == '-') {
 	      int temp = tstart;
 	      tstart = pi->psl->tSize - prevtend;
@@ -630,9 +632,9 @@ for (pi = piList; pi != NULL; pi = pi->next)
     printf("Writing out indels\n");
     for (indel = pi->indelList; indel != NULL; indel=indel->next)
       {
-	printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
+      /*printf("Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
 	       indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
-	       indel->chrom, indel->chromStart, indel->chromEnd);
+	       indel->chrom, indel->chromStart, indel->chromEnd);*/
 	fprintf(in, "Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
 		indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd);
