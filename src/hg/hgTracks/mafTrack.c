@@ -12,7 +12,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.12 2003/08/01 16:28:29 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.13 2003/10/17 06:26:20 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -67,22 +67,19 @@ else
     return mafLoadInRegion(conn, tg->mapName, chrom, start, end);
 }
 
-static void dbPartOfName(char *name, char *retDb, int retDbSize)
+static boolean dbPartOfName(char *name, char *retDb, int retDbSize)
 /* Parse out just database part of name (up to but not including
- * first dot). */
+ * first dot). If dot found, return entire name */
 {
+int len;
 char *e = strchr(name, '.');
 /* Put prefix up to dot into buf. */
-if (e == NULL)
-    errAbort("Expecting db.chrom, got %s in maf", name);
-else
-    {
-    int len = e - name;
-    if (len >= retDbSize)
-	 len = retDbSize-1;
-    memcpy(retDb, name, len);
-    retDb[len] = 0;
-    }
+len = (e == NULL ? strlen(name) : e - name);
+if (len >= retDbSize)
+     len = retDbSize-1;
+memcpy(retDb, name, len);
+retDb[len] = 0;
+return TRUE;
 }
 
 static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight, 
@@ -93,6 +90,7 @@ struct mafItem *miList = NULL, *mi;
 struct mafAli *maf;
 char *myOrg = hOrganism(database);
 char buf[64];
+char *otherOrganism;
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
@@ -126,7 +124,9 @@ slAddHead(&miList, mi);
 	        {
 		AllocVar(mi);
 		mi->db = cloneString(buf);
-		mi->name = hOrganism(mi->db);
+                otherOrganism = hOrganism(mi->db);
+                mi->name = 
+                    (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
 		mi->height = tl.fontHeight;
 		slAddHead(&miList, mi);
 		hashAdd(hash, mi->db, mi);
@@ -565,7 +565,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	lineOffset = subStart - seqStart;
 	for (mc = sub->components; mc != NULL; mc = mc->next)
 	    {
-	    dbPartOfName(mc->src, db, sizeof(db));
+            dbPartOfName(mc->src, db, sizeof(db));
 	    if (mc == mcMaster)
 		{
 		processInserts(mc->text, sub->textSize, 
