@@ -1729,6 +1729,20 @@ done
     rm upstream5000.fa
     # mrna zips -- auto dump process takes care of this
 
+# CREATE CYTOBAND TRACK
+    # Can be done at any time
+    ssh hgwdev
+    cd /cluster/data/mm4
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.32/Mouse400.dat.gz
+    gunzip Mouse400.dat.gz
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand Mouse400.dat
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm4 cytoBand cytoBand.bed
+
 
 # UPDATE BACEND SEQUENCES (DONE - 2003-10-27 - Hiram)
 

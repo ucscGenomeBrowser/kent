@@ -394,6 +394,20 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 03/05/03)
     rm upstream5000.fa
 
 
+CREATE CYTOBAND TRACK
+    # Can be done at any time
+    ssh hgwdev
+    cd /cluster/data/mm3
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.30/Mouse400.dat.gz
+    gunzip Mouse400.dat.gz
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand Mouse400.dat
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm3 cytoBand cytoBand.bed
+
 PREPARE CLUSTER FOR BLASTZ RUN (DONE 03/05/03)
     # This needs to be done after trf-masking and nib generation.
     ssh kkstore

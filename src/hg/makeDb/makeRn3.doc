@@ -666,6 +666,19 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
 
+# CREATE CYTOBAND TRACK
+    # Can be done at any time
+    ssh hgwdev
+    cd /cluster/data/rn3
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/R_norvegicus/maps/mapview/BUILD.2/ideogram.gz
+    gunzip ideogram.gz
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand ideogram
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql rn3 cytoBand cytoBand.bed
 
 # PREPARE CLUSTER FOR BLASTZ RUN (IN PROGRESS - 2003-07-10 - kate)
     # This needs to be done after trf-masking and nib generation.
