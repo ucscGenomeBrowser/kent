@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 21;       /* Current version number. */
+int version = 22;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 boolean isPlaced;	/* TRUE if want to really follow map. */
 FILE *logFile;	/* File to write decision steps to. */
@@ -49,6 +49,7 @@ struct mmClone
     char *name;                /* Name of clone (accession). */
     char *bacName;	       /* Name of BAC (usually like RP11-something) */
     int mapPos;                /* Relative position in contig according to map. */
+    int flipTendency;	       /* Tendency of clone to flip. */
     char *seqCenter;	       /* Sequencing center if known. */
     char *placeInfo;	       /* Placement info. */
     enum htgPhase phase;       /* HTG phase. */
@@ -293,7 +294,6 @@ struct mmClone *cloneList = NULL, *clone;
 struct hash *cloneHash = newHash(11);
 struct cloneEnd *ce;
 int endCount;
-static char dummyFrag;
 
 while (lineFileRow(lf, words))
     {
@@ -316,8 +316,9 @@ void mmAddInfo(char *fileName, struct mmClone *cloneList, struct hash *cloneHash
 /* Read in .info file and add map position to it. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *header[2], *words[3];
+char *header[2], *words[4];
 struct mmClone *clone;
+double flipMod;
 
 /* Parse first line and save it in global variables.. */
 if (!lineFileRow(lf, header))
@@ -338,6 +339,9 @@ while (lineFileRow(lf, words))
 	if ((clone = hashFindVal(cloneHash, words[0])) == NULL)
 	    errAbort("Clone %s is in info but not cloneInfo file", words[0]);
 	clone->mapPos = lineFileNeedNum(lf, words, 1) * 1000;
+	flipMod = sqrt(clone->size/300000.0);
+	if (flipMod < 1.0) flipMod = 1.0;
+	clone->flipTendency = lineFileNeedNum(lf, words, 3) * 1000 * flipMod;
 	}
     }
 lineFileClose(&lf);
@@ -355,7 +359,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[10];
 int wordCount;
 struct mmClone *clone;
-char dummyFrag;
+static char dummyFrag[] = "dummyFrag";
 
 /* Read ends from file. */
 while ((wordCount = lineFileChop(lf, words)) != 0)
@@ -365,8 +369,8 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 		lf->lineIx, lf->fileName, wordCount);
     if ((clone = hashFindVal(cloneHash, words[0])) == NULL)
 	errAbort("Clone %s is in %s but not cloneInfo file", words[0], fileName);
-    clone->sEnd = newCloneEnd(clone, &dummyFrag);
-    clone->tEnd = newCloneEnd(clone, (wordCount == 9 ? &dummyFrag : NULL));
+    clone->sEnd = newCloneEnd(clone, dummyFrag);
+    clone->tEnd = newCloneEnd(clone, (wordCount == 9 ? dummyFrag : NULL));
     }
 lineFileClose(&lf);
 
@@ -377,8 +381,8 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
         {
 	if (clone->phase >= 2)	/* Ordered or finished? */
 	    {
-	    clone->sEnd = newCloneEnd(clone, &dummyFrag);
-	    clone->tEnd = newCloneEnd(clone, &dummyFrag);
+	    clone->sEnd = newCloneEnd(clone, dummyFrag);
+	    clone->tEnd = newCloneEnd(clone, dummyFrag);
 	    }
 	else
 	    {
@@ -2107,6 +2111,7 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
 }
 
 /* Place buried clones in proper position in barges. */
+
 struct dlList *mmBargeList(struct mmClone *cloneList, struct hash *cloneHash,
 	struct hash *ocpHash, struct overlappingClonePair **pOcpList)
 /* Make contigs of overlapping clones (aka barges) using overlap info. 
@@ -2213,23 +2218,31 @@ barge->cloneEndList = flipList;
 boolean needFlipBarge(struct barge *barge)
 /* See if barge looks to need flipping according to map. */
 {
-int diff = 0;
+int diff = 0, oneDiff;
 struct dlNode *node;
 struct cloneEnd *ce;
+struct mmClone *clone;
 boolean isFirst = TRUE;
 boolean startPos, lastStartPos = 0;
 
 for (node = barge->cloneEndList->head; !dlEnd(node); node = node->next)
     {
     ce = node->val;
-    if (ce->isStart)
+    if (ce->isStart && !ce->clone->enclosed)
         {
-	startPos = ce->clone->mapPos;
+	clone = ce->clone;
+	startPos = clone->mapPos;
+	diff += clone->flipTendency * ce->orientation;
 	if (isFirst)
 	    isFirst = FALSE;
 	else
 	    {
-	    diff += (startPos - lastStartPos);
+	    oneDiff = startPos - lastStartPos;
+	    if (oneDiff > clone->size)
+	        oneDiff = clone->size;
+	    if (oneDiff < -clone->size)
+	        oneDiff = -clone->size;
+	    diff += oneDiff;
 	    }
 	lastStartPos = startPos;
 	}
@@ -2776,7 +2789,7 @@ for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
 	if (ce->isStart)
 	    {
 	    clone = ce->clone;
-	    fprintf(f, "%s %d %d\n", clone->name, clone->mmPos/1000, clone->phase);
+	    fprintf(f, "%s %d %d %d\n", clone->name, clone->mmPos/1000, clone->phase, clone->flipTendency);
 	    }
 	}
     }
@@ -2942,21 +2955,7 @@ sprintf(fileName, "%s/mmBarge", contigDir, version);
 saveBargeFile(fileName, contigName, bargeList, ocpHash, cloneHash, bepHash);
 
 sprintf(fileName, "%s/info.mm", contigDir);
-#ifdef BROKEN
-if (sameWord(contigType, "PLACED"))
-    {
-    char sourceFile[512];
-    sprintf(sourceFile, "%s/info", contigDir);
-    copyFile(sourceFile, fileName);
-    sprintf(fileName, "%s/mmEnds", contigDir);
-    slSort(&cloneList, mmCloneCmpMapPos);
-    saveLiteralEnds(fileName, cloneList);
-    }
-else
-#endif
-    {
-    saveInfo(fileName, contigName, bargeList);
-    }
+saveInfo(fileName, contigName, bargeList);
 }
 
 int main(int argc, char *argv[])
