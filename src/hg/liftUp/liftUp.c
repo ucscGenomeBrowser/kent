@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.14 2003/06/24 18:05:53 hiram Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.15 2003/06/24 19:38:20 heather Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -515,7 +515,8 @@ int lineSize, wordCount;
 char *line, *words[32];
 char *s;
 struct liftSpec *spec;
-int start, end;
+int start = 0;
+int end = 0;
 int ix = 0;
 char newDir[256], newName[128], newExt[64];
 struct bigInsert *bi;
@@ -654,7 +655,10 @@ char *words[128], *line, *source;
 struct lineFile *lf;
 FILE *f = mustOpen(destFile, "w");
 int i,j;
-int start, end, start2, end2;
+int start = 0;
+int end = 0;
+int start2 = 0;
+int end2 = 0;
 char *contig, *chrom = NULL, *chrom2 = NULL;
 struct liftSpec *spec;
 static char buf[1024*16];
@@ -976,5 +980,6 @@ dots = cgiUsualInt("dots", dots);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
+return 0;
 }
 
