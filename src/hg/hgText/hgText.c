@@ -32,7 +32,7 @@
 #include "tableDescriptions.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.109 2004/02/14 17:31:00 markd Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.110 2004/02/18 00:03:31 donnak Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -649,17 +649,8 @@ puts(
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
 "<CENTER>\n"
-"UCSC Table Browser created by\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
-"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
-"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
-"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
-"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
-"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
-"and the Genome Bioinformatics Group of UC Santa Cruz.\n"
+"The UCSC Table Browser was created by the \n"
+"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>. \n"
 "<BR>\n"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
