@@ -2,7 +2,8 @@
 #
 # gbAlignFinish [options] database ...
 #
-# Finish up the BLAT alignments, combining and lifting PSL files.
+# Finish up the BLAT alignments, sort, combining and installing PSL 
+# and associated files.
 #
 # Options:
 #   -workdir=work/align - Must be the same as specified for gbAlignSetup.
@@ -15,7 +16,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.10 2004/08/22 21:23:10 markd Exp $
+# $Id: gbAlignFinish,v 1.11 2004/10/16 05:02:48 markd Exp $
 #
 use strict;
 use warnings;
@@ -135,8 +136,8 @@ sub getPslRepsArgs($$$) {
 # output of pslRep for use by selectWithPsl.  Instead of writing the data
 # twice, we just save the offsets in the output PSL file.  These are used by
 # selectWithPsl to only load a subset of the PSL.
-sub combinePslSet($$$$$$$) {
-    my($queryDir, $pslRepsArgs, $liftFile, $tmpDir, $outPsl, $outRawPsl,
+sub combinePslSet($$$$$$) {
+    my($queryDir, $pslRepsArgs, $tmpDir, $outPsl, $outRawPsl,
        $pslQueryOffsets) = @_;
 
     my $startOff = (-e $outPsl) ? getFileSize($outPsl) : 0;
@@ -144,9 +145,6 @@ sub combinePslSet($$$$$$$) {
     # sort by query for pslReps
     my $cmd = "find $queryDir -name '*.psl' | xargs cat "
         . "| sort -T $tmpDir -k 10,10 -k 12n,12n ";
-    if (defined($liftFile)) {
-        $cmd .= "| liftUp -nohead -type=.psl stdout $liftFile carry stdin ";
-    }
     if (defined($outRawPsl)) {
         $cmd .= "| tee -a $outRawPsl "
     }
@@ -161,13 +159,12 @@ sub combinePslSet($$$$$$$) {
     $$pslQueryOffsets{$queryDir} = [$startOff, $endOff];
 }
 
-# Combine and lift alignments, removing repeats, return name of output psl or
-# undef if no PSLs.
-sub combinePsls($$$$$$$$@) {
-    my($db, $release, $type, $typePrefix, $liftFile, $updWorkDir, $tmpDir,
+# Combine, removing duplicates, return name of output psl or undef if no PSLs.
+sub combinePsls($$$$$$$@) {
+    my($db, $release, $type, $typePrefix, $updWorkDir, $tmpDir,
        $pslQueryOffsets, @queryDirs) = @_;
     
-    # tmp file for lifted psls
+    # tmp file for combined PSLs
     my $outPsl = "$updWorkDir/$typePrefix.psl";
     if (-e $outPsl) {
         unlink($outPsl) || die("unlink $outPsl");
@@ -187,10 +184,10 @@ sub combinePsls($$$$$$$$@) {
 
     # Process each query dir in a pipeline with error checking, use find to
     # avoid possible comand line overflow. Sort by qName,qStart,qEnd for
-    # pslReps and lift.
+    # pslReps.
     foreach my $queryDir (@queryDirs) {
-        combinePslSet($queryDir, $pslRepsArgs, $liftFile,
-                      $tmpDir, $outPsl, $outRawPsl, $pslQueryOffsets);
+        combinePslSet($queryDir, $pslRepsArgs, $tmpDir, $outPsl, $outRawPsl,
+                      $pslQueryOffsets);
     }
 
     # return pair of output files, or undef if empty
@@ -212,17 +209,14 @@ sub getPslQueryOffsets($$) {
 }
 
 # Combine one set of orientation info files.  Return 1 if any were extracted.
-sub combineOISet($$$$$$) {
-    my($queryDir, $liftFile, $outPsl, $pslQueryOffsets, $outOI, $outRawOI) = @_;
+sub combineOISet($$$$$) {
+    my($queryDir, $outPsl, $pslQueryOffsets, $outOI, $outRawOI) = @_;
 
     my($startOff, $endOff) =  getPslQueryOffsets($queryDir, $pslQueryOffsets);
     if (($startOff == $endOff) && !define($outRawOI)) {
         return; # nothing to do
     }
     my $cmd = "find $queryDir -name '*.oi' | xargs cat ";
-    if (defined($liftFile)) {
-        $cmd .= "| liftUp -type=.bed -nosort stdout $liftFile carry stdin ";
-    }
     if ($startOff < $endOff) {
         # at least create selected OI
         if (defined($outRawOI)) {
@@ -237,10 +231,10 @@ sub combineOISet($$$$$$) {
     runPipe($cmd);
 }
 
-# Combine and lift orientation info. Only called if there are PSLs, and hence
+# Combine orientation info. Only called if there are PSLs, and hence
 # must be orientInfo files.  This processing parallels combinePsls.
-sub combineOIs($$$$$$$@) {
-    my($type, $typePrefix, $liftFile, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
+sub combineOIs($$$$$$@) {
+    my($type, $typePrefix, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
 
     # Process each query dir in a pipeline, selecting the ones kept
     # by pslReps.
@@ -257,7 +251,7 @@ sub combineOIs($$$$$$$@) {
         }
     }
     foreach my $queryDir (@queryDirs) {
-        combineOISet($queryDir, $liftFile, $outPsl, $pslQueryOffsets, $outOI, $outRawOI);
+        combineOISet($queryDir, $outPsl, $pslQueryOffsets, $outOI, $outRawOI);
     }
 
     # return pair of output files, or undef if empty
@@ -269,33 +263,24 @@ sub combineOIs($$$$$$$@) {
 }
 
 # combine one set of intron PSLs
-sub combineIntronPslSet($$$$$) {
-    my($queryDir, $liftFile, $outPsl, $pslQueryOffsets, $outIntronPsl) = @_;
+sub combineIntronPslSet($$$$) {
+    my($queryDir, $outPsl, $pslQueryOffsets, $outIntronPsl) = @_;
 
-    # must determine if there are any intronPsl files, as liftUp will
-    # complain about empty input
-    my @intronPsls = glob("$queryDir/*/*/*.intronPsl");
-    if ($#intronPsls < 0) {
-        return;
-    }
     my($startOff, $endOff) =  getPslQueryOffsets($queryDir, $pslQueryOffsets);
     if ($startOff == $endOff) {
         return;  # will no PSLs saved
     }
     my $cmd = "find $queryDir -name '*.intronPsl' | xargs cat ";
-    if (defined($liftFile)) {
-        $cmd .= "| liftUp -nohead -type=.psl -nosort stdout $liftFile carry stdin ";
-    }
     $cmd .= "| selectWithPsl -fmt=psl -startOff=$startOff -endOff=$endOff $outPsl stdin stdout"
         . " >> $outIntronPsl";
     runPipe($cmd);
 }
 
-# Combine and lift intronPsl files. This processing parallels combinePsls,
-# however intronPsl files only exist for native ESTs and not all EST psl will
-# have intronPsl files.
-sub combineIntronPsls($$$$$$$@) {
-    my($db, $typePrefix, $liftFile, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
+# Combine intronPsl files. This processing parallels combinePsls, however
+# intronPsl files only exist for native ESTs and not all EST psl will have
+# intronPsl files.
+sub combineIntronPsls($$$$$$@) {
+    my($db, $typePrefix, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
 
     my $outIntronPsl = "$updWorkDir/$typePrefix.intronPsl";
     if (-e $outIntronPsl) {
@@ -305,8 +290,8 @@ sub combineIntronPsls($$$$$$$@) {
     # Process each query dir in a pipeline, selecting the ones kept
     # by pslReps.
     foreach my $queryDir (@queryDirs) {
-        combineIntronPslSet($queryDir, $liftFile, $outPsl,
-                            $pslQueryOffsets, $outIntronPsl);
+        combineIntronPslSet($queryDir, $outPsl, $pslQueryOffsets,
+                            $outIntronPsl);
     }
 
     # return output file, or undef if empty
@@ -341,14 +326,11 @@ sub finishOrgCatAligns($$$$) {
         return;
     }
 
-    # combine files
-    my $liftFile = getDbConfNo($db, "lift");
-
     my ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl, %pslQueryOffset);
     my @queryDirs = glob("$updWorkDir/psl/$typePrefix.*");
     if ($#queryDirs >= 0) {
         ($outPsl, $outRawPsl)
-            = combinePsls($db, $release, $type, $typePrefix, $liftFile,
+            = combinePsls($db, $release, $type, $typePrefix,
                           $updWorkDir, $tmpDir, \%pslQueryOffset,
                           @queryDirs);
         
@@ -356,11 +338,11 @@ sub finishOrgCatAligns($$$$) {
         if ((defined($outPsl) || defined($outRawPsl))
             && ($orgCat eq "native")) {
             ($outOI, $outRawOI)
-                = combineOIs($type, $typePrefix, $liftFile, $updWorkDir,
+                = combineOIs($type, $typePrefix, $updWorkDir,
                              $tmpDir, $outPsl, \%pslQueryOffset,
                              @queryDirs);
             if ($type eq "est") {
-                $outIntronPsl = combineIntronPsls($db, $typePrefix, $liftFile,
+                $outIntronPsl = combineIntronPsls($db, $typePrefix,
                                                   $updWorkDir, $tmpDir,
                                                   $outPsl, \%pslQueryOffset,
                                                   @queryDirs);
