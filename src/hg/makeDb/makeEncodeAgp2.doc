@@ -58,15 +58,18 @@ rm -f *.contig.tab */*.packing.list >& /dev/null
 
 ########################################################################
 # MOUSE
+ssh hgwdev
+cd /cluster/data/encode/ortho2/agp
 set mouse = mm5
 
 # Create AGP's
 csh genomeAgps.csh $mouse mouse $mouse
 
 # Create packing list
+set consensusDir = $orthoDir/consensus
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
-        $consensusDir/$mouse.bed5 $mouse mouse "Mus musculus" 10090 C57BL/6J MAY-2004 \
-        $mouse "NCBI Build 33" > $mouse/$mouse.packing.list
+    $consensusDir/$mouse.bed5 $mouse mouse "Mus musculus" 10090 \
+        C57BL/6J MAY-2004 $mouse "NCBI Build 33" > $mouse/$mouse.packing.list
 
 # Copy  to downloads area
 cp -f $mouse/$mouse.packing.list $downloadDir
@@ -76,7 +79,7 @@ hgsql -e "select count(*) from $mouse.encodeRegionConsensus"
 tar tvfz $downloadDir/$mouse.agp.tar.gz | wc -l
 grep Region $downloadDir/$mouse.packing.list | wc -l
 
-########################################################################
+n######################################################################a
 # RAT
 set rat = rn3
 
@@ -88,8 +91,8 @@ csh genomeAgps.csh $rat rat $rat
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $consensusDir/$rat.bed5 $rat  rat "Rattus norvegicus" \
-    10116  BN/SsNHsdMCW JUN-2003 $rat "Baylor HGSC v3.1" > $rat/$rat.packing.list
+    $consensusDir/$rat.bed5 $rat  rat "Rattus norvegicus" 10116  \
+    BN/SsNHsdMCW JUN-2003 $rat "Baylor HGSC v3.1" > $rat/$rat.packing.list
 
 # Copy  to downloads area
 cp -f $rat/$rat.packing.list $downloadDir
@@ -192,6 +195,8 @@ grep Region $downloadDir/$dog.packing.list | wc -l
 
 ########################################################################
 # CHIMP
+ssh hgwdev
+cd /cluster/data/encode/ortho2/agp
 set chimp = panTro1
 mkdir -p $chimp
 echo
@@ -204,7 +209,8 @@ hgsql $chimp -s -e "select * from contigAcc" > chimp.contig.tab
 # NOTE: next time, put chimpChromContigs.agp into $outDir
 cat /cluster/data/$chimp/?{,?}/*.agp | \
    chimpChromContigAgp stdin /cluster/data/$chimp/assembly.agp chimpChromContigs.agp
-$regionAgp -contigFile=chimp.contig.tab -namePrefix=chimp_ \
+set consensusDir = /cluster/data/encode/ortho2/consensus
+~kate/bin/i386/regionAgp -contigFile=chimp.contig.tab -namePrefix=chimp_ \
     $consensusDir/$chimp.bed5 chimpChromContigs.agp -dir $chimp
 
 # Create packing list
@@ -216,13 +222,10 @@ $regionAgp -contigFile=chimp.contig.tab -namePrefix=chimp_ \
 cp -f $chimp/$chimp.packing.list $downloadDir
 tar cvfz $downloadDir/$chimp.agp.tar.gz $chimp/*.agp
 
+set downloadDir  = /usr/local/apache/htdocs/encode/downloads/EncodeAgps2
 hgsql -e "select count(*) from $chimp.encodeRegionConsensus"
 tar tvfz $downloadDir/$chimp.agp.tar.gz | wc -l
 grep Region $downloadDir/$chimp.packing.list | wc -l
-
-# Test
-ssh kolossus
-time agpToFa testChimp.agp chimp_ENm001_1 testChimp.fa -simpleMulti /cluster/data/panTro1/contigs.bases
 
 ########################################################################
 # cleanup
@@ -257,7 +260,7 @@ cat /cluster/data/$chicken/{1,13}/*.agp | \
 ssh hgwdev
 cd /cluster/data/encode/ortho2/agp/tests
 #foreach db (galGal2 canFam1 panTro1)
-foreach db (canFam1)
+foreach db (panTro1)
     echo $db
     cat ../$db/*.agp > $db.agp
     /cluster/data/encode/bin/scripts/agpAccToContig.pl $db $db.agp > \
