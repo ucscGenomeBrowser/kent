@@ -22,11 +22,11 @@ public class HGGeneCheck {
   */
  static void usage() {
     System.out.println(
-      "HGGeneCheck - do some basic automatic tests on hgGene cgi\n" +
+      "\nHGGeneCheck - do some basic automatic tests on hgGene cgi\n" +
       "usage:\n" +
-      "   java HGGeneCheck propertiesFile\n" +
-      "where properties files may contain machine, database, quick." +
-      "   java HGGeneCheck default\n" +
+      "   HGGeneCheck propertiesFile\n" +
+      "\nwhere properties files may contain machine, database, quick." +
+      "   \nHGGeneCheck default\n" +
       "This will use the default properties\n"
       );
     System.exit(-1);
