@@ -188,6 +188,36 @@ printf("&nbsp;pixels");
 
 }
 
+void zooUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
+{
+int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "zoo.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "zoo.anti.alias", "on");
+char *fill = cartUsualString(cart, "zoo.fill", "1");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("zoo.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("zoo.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("zoo.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("zoo.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("zoo.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("zoo.heightPer", zooHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
 
 
 void chimpUi(struct trackDb *tdb)
@@ -302,6 +332,8 @@ else if (sameString(track, "chimp"))
     chimpUi(tdb);
 else if (sameString(track, "GCwiggle"))
     GCwiggleUi(tdb);
+else if (sameString(track, "zoo"))
+    zooUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 }
