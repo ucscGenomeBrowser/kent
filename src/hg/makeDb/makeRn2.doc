@@ -583,7 +583,7 @@ LOAD MRNA DATA (DONE 02/09/03)
       /cluster/store2/mrna.133/org/Rattus_norvegicus/est.ra
 
 
-PRODUCING ESTORIENTINFO TABLE (TODO)
+PRODUCING ESTORIENTINFO TABLE (IN PROGRESS)
 
 This table is needed for proper orientation of ESTs in the
 browser.  Many will appear on the wrong strand without it.
@@ -592,22 +592,22 @@ as so:
      ssh eieio
      cd ~/rn2/bed/est
      pslSortAcc nohead contigs /cluster/store2/temp contig.psl
-     ssh kkstore
-     mkdir /scratch/hg/rn2/est
+     mkdir /mnt/scratch/hg/rn2/est
      cd ~/rn2/bed/est
-     cp -r contigs /scratch/hg/rn2/est
+     cp -r contigs /mnt/scratch/hg/rn2/est
 
 Wait for these to finish.
      cd ..
      mkdir estOrientInfo
      cd estOrientInfo
      mkdir ei
-     ls -1S /scratch/hg/rn2/est/contigs/* > psl.lst
-     cp ~/lastRn/bed/estOrientInfo/gsub .
+     ls -1S /mnt/scratch/hg/rn2/est/contigs/* > psl.lst
+     cp ~/rn1/bed/estOrientInfo/gsub .
 Update gsub to refer to rat contig sequence currently on
-/scratch/hg/rn2/trfFa, and rat ESTs on /scratch/hg/rn2/est/contigs
+/mnt//scratch/hg/rn2/trfFa, and rat ESTs on /mnt/scratch/hg/rn2/est/contigs
 and the rat est in /scratch/hg/mrna.133/Rattus_norvegicus/est.fa.
      gensub2 psl.lst single gsub spec
+
      ssh kk
      para create spec
 Then run the  job on the cluster
@@ -617,6 +617,7 @@ Then run the  job on the cluster
      para check
 If things look good
      para push
+DONE TO HERE
 Wait for this to finish then
      liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
 Load them into database as so:

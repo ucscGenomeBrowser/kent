@@ -473,60 +473,6 @@ LOAD MRNA DATA (DONE 02/09/03)
       /cluster/store2/mrna.133/org/Mus_musculus/est.ra
 
 
-PRODUCING ESTORIENTINFO TABLE (TODO)
-
-This table is needed for proper orientation of ESTs in the
-browser.  Many will appear on the wrong strand without it.
-This involves a cluster run.  First load the EST psl files
-as so:
-     ssh kkstore
-     cd ~/mm/bed/est
-     pslSortAcc nohead contig /cluster/store2/tmp contig.psl
-     mkdir /scratch/hg/mm3/est
-     cp -r contig /scratch/hg/mm3/est
-     sudo /cluster/install/utilities/updateLocal
-Wait for these to finish.
-     cd ..
-     mkdir estOrientInfo
-     cd estOrientInfo
-     mkdir ei
-     ls -1S /scratch/hg/mm3/est/contig > psl.lst
-     cp ~/lastMm/bed/estOrientInfo/gsub .
-Update gsub to refer to mouse contig sequence currently on
-/scratch, and mouse ESTs on /scratch.
-     gensub2 psl.lst single gsub spec
-     para create spec
-Then run the  job on the cluster
-     ssh kk
-     cd ~/mm/bed/estOrientInfo
-     para try
-     sleep 60
-     para check
-If things look good
-     para push
-Wait for this to finish then
-     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
-Load them into database as so:
-     ssh hgwdev
-     cd ~/mm/bed/estOrientInfo
-     hgLoadBed mm3 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
-     
-CREATE RNACLUSTER TABLE (TODO)
- Make sure that refSeqAli and estOrientInfo tables are made already
- (see above).
-
-   ssh hgwdev
-   cd ~/mm/bed
-   mkdir rnaCluster
-   cd rnaCluster
-   mkdir rna est
-   foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
-       clusterRna mm3 rna/chr$i.bed est/chr$i.bed -chrom=chr$i
-       echo done $i
-   end
-   hgLoadBed mm3 rnaCluster est/*.bed
-
-
 LOADING MOUSE MM3 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
 
     # Translate Penn State .lav files into sorted axt:
@@ -991,6 +937,62 @@ Make the xenoRna file
        ln -s /cluster/store2/mrna.133/mouseXenoRna.fa mouseXenoRna.fa
        ln -s /cluster/store2/mrna.133/mouseXenoRna.ra mouseXenoRna.ra
        hgLoadRna add -type=xenoRna mm3 /gbdb/mm3/mrna.133/mouseXenoRna.fa  /gbdb/mm3/mrna.133/mouseXenoRna.ra
+
+PRODUCING ESTORIENTINFO TABLE (DONE - 2/19/03 MATT)
+
+This table is needed for proper orientation of ESTs in the
+browser.  Many will appear on the wrong strand without it.
+This involves a cluster run.  First load the EST psl files
+as so:
+     ssh kkstore
+     cd ~/mm3/bed/est
+     pslSortAcc nohead contig /cluster/store2/temp contig.psl
+     mkdir /mnt/scratch/hg/mm3/est
+     cp -r contig /mnt/scratch/hg/mm3/est
+
+Wait for these to finish.
+     cd ..
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1S /mnt/scratch/hg/mm3/est/contig/* > psl.lst
+     cp ~/mm3/bed/estOrientInfo/gsub .
+Update gsub to refer to mouse contig sequence currently on
+/scratch, and mouse ESTs on /scratch.
+     gensub2 psl.lst single gsub spec
+     para create spec
+Then run the  job on the cluster
+     ssh kk
+     cd ~/mm3/bed/estOrientInfo
+     para try
+     sleep 60
+     para check
+If things look good
+     para push
+
+Wait for this to finish then
+     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
+Load them into database as so:
+     ssh hgwdev
+     cd ~/mm3/bed/estOrientInfo
+     hgLoadBed mm3 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+     
+CREATE RNACLUSTER TABLE (DONE 2/19-03 - MATT)
+ Make sure that refSeqAli and estOrientInfo tables are made already
+ (see above).
+
+   ssh hgwdev
+   cd ~/mm3/bed
+   mkdir rnaCluster
+   cd rnaCluster
+   mkdir rna est
+   foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
+       clusterRna mm3 rna/chr$i.bed est/chr$i.bed -chrom=chr$i
+       echo done $i
+   end
+   hgLoadBed mm3 rnaCluster est/*.bed
+
+
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
 
