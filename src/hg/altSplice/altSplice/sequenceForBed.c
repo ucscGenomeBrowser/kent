@@ -55,8 +55,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     seq = hSeqForBed(bed);
     safef(nameBuff, sizeof(nameBuff), "%s.%s.%s:%d-%d", bed->name, bed->strand, 
 	  bed->chrom, bed->chromStart, bed->chromEnd);
-    if(optionExist
-s("upCase"))
+    if(optionExists("upCase"))
 	touppers(seq->dna);
     faWriteNext(fasta, nameBuff, seq->dna, seq->size);
     dnaSeqFree(&seq);

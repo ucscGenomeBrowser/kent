@@ -13,7 +13,7 @@
 #include "errabort.h"
 #include "malloc.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.12 2005/01/02 21:02:43 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.13 2005/01/06 23:24:44 sugnet Exp $";
 
 void usage()
 {
@@ -819,7 +819,7 @@ int exonPathCountExons(struct exonPath *ep)
 return slCount(ep->nodes);
 }
 
-void exonPathBedOut(struct exonPath *ep, FILE *out)
+void exonPathBedOut(struct altGraphX *agx, struct exonPath *ep, FILE *out)
 /** Print out a exon path in the form of a bed file, for viewing in the browser. */    
 {
 int i=0;
@@ -828,8 +828,8 @@ int exonCount = 0;
 exonCount = exonPathCountExons(ep);
 if(exonCount > 0) 
     {
-    fprintf(out, "%s\t%u\t%u\t%s\t1000\t%s\t%u\t%u\t0\t", 
-	    ep->tName, ep->tStart, ep->tEnd, ep->qName, ep->strand, ep->tStart, ep->tEnd);
+    fprintf(out, "%s\t%u\t%u\t%s.%s\t1000\t%s\t%u\t%u\t0\t", 
+	    ep->tName, ep->tStart, ep->tEnd, agx->name, ep->qName, ep->strand, ep->tStart, ep->tEnd);
 /* Only print out blocks that correspond to exons. */
     
     fprintf(out, "%d\t", exonCount );
@@ -1706,7 +1706,7 @@ for(i=0; i < en->edgeInCount; i++)
 return TRUE;
 }
 
-struct exonPath *exonGraphBreadthFirstMaxPaths(struct exonGraph *eg)
+struct exonPath *exonGraphBreadthFirstMaxPaths(struct altGraphX *agx, struct exonGraph *eg)
 /** Construct maximal paths through the exonGraph. Maximal paths
    are those which are not subpaths of any other path. Based on breadth
    first search using implicit ordering of exons.
@@ -1746,64 +1746,70 @@ if(!skipTrimGraph)
     }
 fflush(stderr);
 if(debug) { nodeSanityCheck(eg); }
-
+if(activeEdges > 500)
+    {
+    altGraphXTabOut(agx, hippos);
+    warn("%s:%d-%d is a hippo...", eg->tName, eg->tStart, eg->tEnd);
+    }
+else 
+    {
 /* Seed the priority queue with nodes that don't have anything pointing
    to them, or that only have incoming edges from other exons that are the same. */
-for(i=0; i<eg->nodeCount; i++)
-    {
-    if(noIncomingEdges(eg, orderedNodes[i]) && orderedNodes[i]->class != inActive)
+    for(i=0; i<eg->nodeCount; i++)
 	{
+	if(noIncomingEdges(eg, orderedNodes[i]) && orderedNodes[i]->class != inActive)
+	    {
 /* 	struct exonPath *ep = newExonPath(orderedNodes[i]); */
-	struct smallPath *sp = newSmallPath(orderedNodes[i]);
-	slAddHead(&orderedNodes[i]->paths, sp);
+	    struct smallPath *sp = newSmallPath(orderedNodes[i]);
+	    slAddHead(&orderedNodes[i]->paths, sp);
 /* 	ep->nodeCount++; */
 /* 	slAddHead(&orderedNodes[i]->paths, ep); */
-	heapMinInsert(queue, orderedNodes[i]);
+	    heapMinInsert(queue, orderedNodes[i]);
 //	warn("%s\t%d\t%d", orderedNodes[i]->tName, orderedNodes[i]->tStart, orderedNodes[i]->tEnd);
-	}
-    }
-
-/* Do the exonWalk. */
-if(debug) { nodeSanityCheck(eg); }
-exonGraphBfs(eg, &maximalPaths, queue);
-
-/* Do some cleanup and reporting. */
-for(i=0; i<eg->nodeCount; i++)
-    {
-    struct exonNode *target = eg->nodes[i];
-    if(target->class != inActive)
-	{
-/* 	exonPathFreeList(&target->paths); */
-	smallPathFreeList(&target->paths);
-	if(diagnostics)
-	    {
-	    if(target->color == enWhite)
-		{
-//		warn("White: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
-		whiteCount++;
-		fprintf(whites, "%s\t%d\t%d\n", target->tName, target->tStart, target->tEnd);
-		}
-	    else if(target->color == enGray)
-		{
-//		warn("Gray: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
-		grayCount++;
-		}
-	    else if(target->color == enBlack)
-		{
-//		warn("Black: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
-		blackCount++;
-		}
-	    else
-		{
-		errAbort("Don't know what color %d is for %d", target->color, target->id);
-		}
 	    }
 	}
-
-    }
+    
+/* Do the exonWalk. */
+    if(debug) { nodeSanityCheck(eg); }
+    exonGraphBfs(eg, &maximalPaths, queue);
+    
+/* Do some cleanup and reporting. */
+    for(i=0; i<eg->nodeCount; i++)
+	{
+	struct exonNode *target = eg->nodes[i];
+	if(target->class != inActive)
+	    {
+/* 	exonPathFreeList(&target->paths); */
+	    smallPathFreeList(&target->paths);
+	    if(diagnostics)
+		{
+		if(target->color == enWhite)
+		    {
+//		warn("White: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		    whiteCount++;
+		    fprintf(whites, "%s\t%d\t%d\n", target->tName, target->tStart, target->tEnd);
+		    }
+		else if(target->color == enGray)
+		    {
+//		warn("Gray: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		    grayCount++;
+		    }
+		else if(target->color == enBlack)
+		    {
+//		warn("Black: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		    blackCount++;
+		    }
+		else
+		    {
+		    errAbort("Don't know what color %d is for %d", target->color, target->id);
+		    }
+		}
+	    }
+	
+	}
 /* if(diagnostics) */
 /*     warn("White: %d, Gray: %d, Black: %d", whiteCount, grayCount, blackCount); */
-
+    }
 heapFree(&queue);
 freez(&orderedNodes);
 for(smallPath = maximalPaths; smallPath != NULL; smallPath = smallPath->next)
@@ -1992,6 +1998,41 @@ snprintf(query, sizeof(query), "select acc from gbCdnaInfo where type = 2");
 hashRow0(conn, query, hash);
 }
 
+void removeShortFragments(struct exonGraph *eg)
+/** Remove paths that doen't have at least log_2 exons of the
+    maximal path. */
+{
+struct exonPath *ep = NULL, *epList = NULL, *epNext = NULL, *rejects = NULL;
+int maxExons = 0;
+int threshold = 0;
+/* Find the transcript with the most exons. */
+for(ep = eg->paths; ep != NULL; ep = ep->next)
+    maxExons = max(ep->nodeCount, maxExons);
+
+/* Now remove paths that don't meet threshold. */
+threshold = floor(log2(maxExons));
+for(ep = eg->paths; ep != NULL; ep = epNext)
+    {
+    epNext = ep->next;
+    if(ep->nodeCount >= threshold) 
+	{
+	slAddHead(&epList, ep);
+	}
+    else 
+	{
+	struct exonNode *en = NULL;
+	slAddHead(&rejects, ep);
+	for(en = ep->nodes; en != NULL; en = en->next)
+	    en->class = inActive;
+	}
+    }
+slReverse(&epList);
+slReverse(&rejects);
+eg->rejects = slCat(eg->rejects, rejects);
+eg->paths = epList;
+eg->pathCount = slCount(epList);
+}
+
 void exonWalk(char *inFile, char *bedOut)
 /** Starting routine. */
 {
@@ -2003,6 +2044,7 @@ FILE *cleanEsts = NULL;
 FILE *rejects = NULL;
 
 boolean mrnaFilter = cgiBoolean("mrnaFilter");
+boolean removeFrags = !cgiBoolean("keepFrags");
 struct hash *mrnaHash = newHash(10);
 int index = 0;
 int count = 0;
@@ -2036,11 +2078,12 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	writeOutNodes(agx, exonSites);
 
     eg = exonGraphFromAgx(agx);
+    removeShortFragments(eg);
     currentGraph = eg;
     if(diagnostics)
 	{
 	for(ep = eg->paths; ep != NULL; ep = ep->next)
-	    exonPathBedOut(ep,cleanEsts);
+	    exonPathBedOut(agx, ep,cleanEsts);
 	fflush(cleanEsts);
 	}
     exonGraphConnectEquivalentNodes(eg);
@@ -2048,7 +2091,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 
     /* If we have something to output. */
     if(eg->nodeCount != 0)
-	epList = exonGraphBreadthFirstMaxPaths(eg);
+	epList = exonGraphBreadthFirstMaxPaths(agx, eg);
     
     for(ep = epList; ep != NULL; ep = ep->next)
 	{
@@ -2061,12 +2104,12 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	    if(debug)
 		{
 		printf("%s\n", ep->path);
-		exonPathBedOut(ep, stdout);
+		exonPathBedOut(agx, ep, stdout);
 		}
-	    exonPathBedOut(ep,f);
+	    exonPathBedOut(agx, ep,f);
 	    }
 	else if(diagnostics)
-	    exonPathBedOut(ep, rejects);
+	    exonPathBedOut(agx, ep, rejects);
 	}
     exonPathFreeList(&epList);
     exonGraphFree(&eg);

@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.28 2004/12/27 20:39:40 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.29 2005/01/06 23:24:43 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -1681,7 +1681,7 @@ for(i=0;i<vCount; i++)
 		}
 	    else if(trumpValue(oldEv, ag) >= trumpNum && !isSoftEdge(ag, i, j))
 		match = TRUE;
-	    else if(trumpValue(oldEv, ag) >= round(1.5*trumpNum) && isSoftEdge(ag, i, j))
+	    else if(trumpValue(oldEv, ag) >= floor(1.5*trumpNum) && isSoftEdge(ag, i, j))
 		match = TRUE;
 	    else if(possibleExons != NULL)
 		match |= isExactPossibleExon(ag, i, j);

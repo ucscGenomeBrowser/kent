@@ -1,18 +1,18 @@
-OPT= -ggdb 
+#OPT= -O2
 #OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
-#OPT= -ggdb -pg
+OPT= -ggdb -pg
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceGraph.a 
 
 % : %.c
 	${CC} ${COPT} ${CFLAGS} $(OPT) -Wformat -Wimplicit -I../inc -I../../inc  -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm
-	cp $@ $(HOME)/bin/$(ARCHTYPE)
+	cp $@ $(HOME)/bin/$(MACHTYPE)
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
-O =  exonWalk
+O =  exonWalk borfMatcher
 
 TESTO = 
 

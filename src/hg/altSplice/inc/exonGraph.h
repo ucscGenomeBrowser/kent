@@ -10,6 +10,16 @@ enum nodeColor {
     enGray,
     enBlack
 };
+
+struct smallPath 
+/* low memory version of a path. */
+{
+    struct smallPath *next; /* Next in list. */
+    int maxCount;           /* Amount of memory allocated for array. */
+    int currCount;          /* Number of items currently stored in array. */
+    int *path;              /* Array of node ids. */
+};
+
 struct exonNode
 /* A Single exon site node in a splicing graph */
 {
@@ -38,7 +48,8 @@ struct exonNode
     char **accs;	/* Accessions that support this node. */
     boolean accDeepFree;   /* Freee each bit of memory individually for accs. */
     struct exonPath *ep; /* Path that this node is part of. */
-    struct exonPath *paths; /* Paths that lead to this node. */
+/*     struct exonPath *paths; /\* Paths that lead to this node. *\/ */
+    struct smallPath *paths;
 };
 
 struct exonNode *exonNodeLoad(char **row);

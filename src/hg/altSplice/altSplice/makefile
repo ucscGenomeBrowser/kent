@@ -15,7 +15,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceG
 
 O =  sequenceForBed  altAnalysis \
 	altSplice orthoSplice agxToBed altSummary bedInGraph \
-	consForBed altPaths
+	consForBed altPaths bedToExons exonMatch
 # genePredToBed genePredToPsl
 TESTO = test_geneGraph.o
 

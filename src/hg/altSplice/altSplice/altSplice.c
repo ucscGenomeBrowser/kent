@@ -73,7 +73,7 @@
 
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.16 2004/08/24 21:16:01 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.17 2005/01/06 23:24:43 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -375,7 +375,8 @@ char *wholeTables[] = {"splicesTmp"}; // {"refSeqAli"};
 #endif
 #ifdef USUAL
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
-char *wholeTables[] = {"refSeqAli"};
+char *wholeTables[] = {};
+//char *wholeTables[] = {"refSeqAli"};
 #endif
 int i;
 char buff[256];
@@ -439,7 +440,7 @@ tissLibHash = newHash(12);
 /* Now load up all of the accessions for this organism. */
 for(i = 0; i < numDbTables; i++)
     {
-    safef(query, sizeof(query), "select library, tissue, acc from %s inner join mrna on qName = acc",
+    safef(query, sizeof(query), "select library, tissue, acc from %s inner join gbCdnaInfo on qName = acc",
 	  dbTables[i]);
     warn("%s", query);
     sr = sqlGetResult(conn, query);
@@ -757,6 +758,11 @@ else
     warn("Must specify either a bed file or a genePred file");
     usage();
     }
+
+/* Sanity check to make sure we got some loci to work
+   with. */
+if(gpList == NULL)
+    errAbort("No gene boundaries were found.");
 slSort(&gpList, genePredCmp);
 setupTables(gpList->chrom);
 

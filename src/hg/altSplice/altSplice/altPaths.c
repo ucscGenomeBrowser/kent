@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.10 2004/12/27 20:39:40 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.11 2005/01/06 23:24:43 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -398,7 +398,7 @@ for(i = source; i <= sink; i++)
 		{
 		subNext = sub->next;
 		/* Add to tail for now. Later reverse the 
-		   order. */
+		   order. Running ou tof memory here...*/
 		pathAddTail(sub, startIx); 
 		slAddHead(&pathList, sub);
 		}
@@ -467,7 +467,8 @@ for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
     if(verts[vertIx] != source && verts[vertIx] != sink)
 	{
 	/* If exon add up the base pairs. */
-	if(altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) == ggExon)
+	if(verts[vertIx] != source && verts[vertIx+1] != sink &&
+	   altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) == ggExon)
 	    {
 	    bed->blockSizes[bed->blockCount] = vPos[verts[vertIx+1]] - vPos[verts[vertIx]];
 	    bed->chromStarts[bed->blockCount] = vPos[verts[vertIx]];
@@ -498,7 +499,7 @@ for(i = 0; i < path->vCount; i++)
 	dyStringPrintf(buff, "%d,", path->vertices[i]);
     }
 bed->name = cloneString(buff->string);
-for(i = 0; i < bed->blockCount; i++)
+for(i = 0;  i < bed->blockCount; i++)
     bed->chromStarts[i] -= bed->chromStart;
 
 if(splice->type == altCassette && path->vCount == 4) 
@@ -532,7 +533,7 @@ assert(path->vCount > 1);
 /* For each edge that is an exon count up the base pairs. */
 for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
     {
-    if(verts[vertIx] != source && verts[vertIx] != sink)
+    if(verts[vertIx] != source && verts[vertIx+1] != sink)
 	{
 	/* If exon add up the base pairs. */
 	if(altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) == ggExon)
@@ -888,8 +889,9 @@ int *verts = splice->paths->vertices;
 struct path *path = NULL;
 int softStartCount = 0;
 /* Count how many soft starts are attached to the source. */
-for(path = splice->paths; path != NULL; path = path->next)
-    if(vTypes[path->vertices[1]] == ggSoftStart)
+for(path = splice->paths; path != NULL && path->vCount > 1; path = path->next)
+    if(path->vertices[1] != source && path->vertices[1] != sink &&
+       vTypes[path->vertices[1]] == ggSoftStart)
 	softStartCount++;
 
 if(verts[0] == source && softStartCount > 1 &&
@@ -1304,21 +1306,30 @@ void altPaths(char *fileIn, char *fileOut)
 /* Loop through each graph and output alternative splicing paths. */
 {
 struct altGraphX *agx = NULL, *agxList = NULL;
+char *row[18];
 FILE *out = NULL, *subOut = NULL;
+struct lineFile *lf = NULL;
 int altGraphCount = 0, numAlts = 0;
 int totalAltCount = 0;
 int idCount = 0;
 char *subOutName = optionVal("saveGraphs", NULL);
+int total = 0;
 warn("Loading graphs from %s", fileIn);
-agxList = altGraphXLoadAll(fileIn);
+//agxList = altGraphXLoadAll(fileIn);
 out = mustOpen(fileOut, "w");
 if(subOutName != NULL)
     subOut = mustOpen(subOutName, "w");
-dotForUserInit(max(slCount(agxList)/20, 1));
-for(agx = agxList; agx != NULL; agx = agx->next)
+//dotForUserInit(max(slCount(agxList)/20, 1));
+dotForUserInit(200);
+lf = lineFileOpen(fileIn, TRUE);
+while(lineFileRow(lf, row))
     {
     struct altGraphX *subAgx = NULL, *subAgxList = NULL;
     boolean counted = FALSE;
+    agx = altGraphXLoad(row);
+    if(agx->vertexCount > 250)
+	warn("\nDoing: %s", agx->name);
+	
     dotForUser();
     /* Break the graph into connected components, 
        with the orthologous graphs it is possible that the
@@ -1329,7 +1340,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	subAgx->id = idCount++;
 	if(subOut != NULL)
 	    altGraphXTabOut(subAgx, subOut);
-	numAlts = doAltPathsAnalysis(subAgx, out);
+	numAlts = doAltPathsAnalysis(subAgx, out); 
 	totalAltCount += numAlts;
 	if(numAlts > 0 && !counted)
 	    {
@@ -1337,11 +1348,14 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	    counted = TRUE;
 	    }
 	}
+    total++;
+    altGraphXFree(&agx);
     altGraphXFreeList(&subAgxList);
     }
 warn("");
+lineFileClose(&lf);
 carefulClose(&subOut);
-printSpliceTypeInfo(slCount(agxList), altGraphCount, totalAltCount);
+printSpliceTypeInfo(total, altGraphCount, totalAltCount);
 warn("Cleaning up.");
 altGraphXFreeList(&agxList);
 }
@@ -1429,14 +1443,5 @@ carefulClose(&distMatrixFile);
 carefulClose(&pathBedFile);
 return 0;
 }
-
-	 
-
-
-
-
-
-
-
 
    
