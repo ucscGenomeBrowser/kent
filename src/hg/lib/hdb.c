@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.223 2004/11/29 11:48:25 daryl Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.224 2004/11/30 18:07:30 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2961,11 +2961,10 @@ struct trackDb *hTrackDb(char *chrom)
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
 struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
-struct trackDb *tdbRetList = NULL;
+struct trackDb *tdbFullList = NULL, *tdbRetList = NULL;
 char *database = hGetDb();
 boolean privateHost = hIsPrivateHost();
 struct hash *compositeHash = newHash(0);
-char *composite;
 struct trackDb *tdb, *compositeTdb;
 struct trackDb *nextTdb;
 
@@ -2982,11 +2981,11 @@ while (tdbList != NULL)
         }
     if (trackDbSetting(tdb, "compositeTrack"))
         {
-        slAddHead(&tdbRetList, tdb);
+        slAddHead(&tdbFullList, tdb);
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
     else
-        processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+        processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
     }
 
 /* add remaing local trackDbs */
@@ -2999,22 +2998,28 @@ while (tdbLocalList != NULL)
         slAddHead(&tdbRetList, tdb);
         }
     else
-        processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+        processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
     }
 
-/* move subtrack entries to subtracks field of composite tracks */
-nextTdb = tdbRetList;
-for (tdb = tdbRetList; nextTdb != NULL; tdb = nextTdb)
+/* create new list with subtrack entries in subtracks field of composite track*/
+nextTdb = tdbFullList;
+for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
     {
+    char *composite = trackDbSetting(tdb, "subTrack");
     nextTdb = tdb->next;
-    composite = trackDbSetting(tdb, "subTrack");
-    if (composite != NULL)
+    if (composite)
         {
-        slRemoveEl(&tdbRetList, tdb);
         compositeTdb = (struct trackDb *)hashFindVal(compositeHash, composite);
-        if (compositeTdb != NULL)
-            slAddHead(&compositeTdb->subtracks, tdb);
+        if (compositeTdb)
+            {
+            /* should be a short list -- we can shortcut and add to tail
+             * rather than reversing later */
+            tdb->type = cloneString(compositeTdb->type);
+            slAddTail(&compositeTdb->subtracks, tdb);
+            }
         }
+    else
+        slAddHead(&tdbRetList, tdb);
     }
 hFreeConn(&conn);
 slReverse(&tdbRetList);

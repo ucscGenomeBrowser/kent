@@ -85,7 +85,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.841 2004/11/29 23:56:08 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.842 2004/11/30 18:07:30 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -144,6 +144,7 @@ static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
 
 int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
+int trackTabWidth = 11;
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -6958,6 +6959,126 @@ vgUnclip(vg);
 return y;
 }
 
+static int doCenterLabels(struct track *track, struct track *parentTrack,
+                                struct vGfx *vg, MgFont *font, 
+                                        int y)
+/* Draw center labels.  Return y coord */
+{
+int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int trackPastTabWidth = tl.picWidth - trackPastTabX;
+int fontHeight = mgFontLineHeight(font);
+int insideHeight = fontHeight-1;
+if (track->limitedVis != tvHide)
+    {
+    Color labelColor = (track->labelColor ? 
+                        track->labelColor : track->ixColor);
+    vgTextCentered(vg, insideX, y+1, insideWidth, insideHeight, 
+                        labelColor, font, track->longLabel);
+    mapBoxToggleVis(trackPastTabX, y+1, 
+                    trackPastTabWidth, insideHeight, parentTrack);
+    y += fontHeight;
+    y += track->height;
+    }
+return y;
+}
+
+static int doDrawItems(struct track *track, struct vGfx *vg, MgFont *font, 
+                                    int y, long *lastTime)
+/* Draw track items.  Return y coord */
+{
+if (track->subtracks)
+    verbose(5, "subtracks");
+int fontHeight = mgFontLineHeight(font);
+int pixWidth = tl.picWidth;
+if (withCenterLabels)
+    y += fontHeight;
+if (track->limitedVis == tvPack)
+    {
+    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+        pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+    }
+else
+    vgSetClip(vg, insideX, y, insideWidth, track->height);
+track->drawItems(track, winStart, winEnd, vg, insideX, y, insideWidth, 
+                 font, track->ixColor, track->limitedVis);
+if (measureTiming && lastTime)
+    {
+    long thisTime = clock1000();
+    track->drawTime = thisTime - *lastTime;
+    *lastTime = thisTime;
+    }
+vgUnclip(vg);
+y += track->height;
+return y;
+}
+
+static int doMapItems(struct track *track, int fontHeight, int y)
+/* Draw map boxes around track items */
+{
+int newy;
+boolean doHgGene = trackWantsHgGene(track);
+int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int trackPastTabWidth = tl.picWidth - trackPastTabX;
+int start = 1;
+struct slList *item;
+
+if (track->subType == lfSubSample && track->items == NULL)
+     y += track->lineHeight;
+if (withCenterLabels)
+    y += fontHeight;
+for (item = track->items; item != NULL; item = item->next)
+    {
+    int height = track->itemHeight(track, item);
+
+    /*wiggle tracks don't always increment height (y-value) here*/
+    if( track->subType == lfSubSample )
+        {
+        newy = y;
+        if( !start && item->next != NULL  )
+            {
+            newy += sampleUpdateY( track->itemName(track, item),
+                             track->itemName(track, item->next),
+                             height );
+            }
+        else if( item->next != NULL || start )
+            newy += height;
+        start = 0;
+        y = newy;
+        }
+    else
+        {
+        if (!track->mapsSelf)
+            {
+            mapBoxHgcOrHgGene(track->itemStart(track, item),
+                    track->itemEnd(track, item), trackPastTabX,
+                    y, trackPastTabWidth,height, track->mapName,
+                    track->mapItemName(track, item),
+                    track->itemName(track, item), doHgGene);
+            }
+        y += height;
+        }
+    }
+return y;
+}
+
+static int limitTrackVis(struct track *track, int pixHeight, int fontHeight)
+{
+int h;
+if (withCenterLabels)
+    pixHeight += fontHeight;
+limitVisibility(track);
+h = track->height;
+pixHeight += h;
+return pixHeight;
+}
+
+static bool isCompositeTrack(struct track *track)
+/* Determine if this is a composite track. This is currently defined
+ * as a top-level dummy track, with a list of subtracks of the same type */
+{
+return (track->subtracks && differentString(track->tdb->type, "wigMaf"));
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -6968,9 +7089,8 @@ struct tempName gifTn;
 char *mapName = "map";
 int fontHeight = mgFontLineHeight(font);
 int insideHeight = fontHeight-1;
-int trackTabX = gfxBorder;
-int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int trackTabX = gfxBorder;
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int start, newy;
@@ -7003,22 +7123,28 @@ if (rulerMode != RULER_MODE_OFF)
         }
     }
 
-trackHash = newHash(8);
 for (track = trackList; track != NULL; track = track->next)
     {
-    hashAddUnique(trackHash, track->mapName, track);
     if (track->visibility != tvHide)
 	{
-	int h;
-	if (withCenterLabels)
-	    pixHeight += fontHeight;
-	limitVisibility(track);
-	h = track->height;
-	pixHeight += h;
-	}
+        if (isCompositeTrack(track))
+            {
+            struct track *subtrack;
+            limitTrackVis(track, pixHeight, fontHeight);
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                {
+                subtrack->visibility = track->visibility;
+                pixHeight = limitTrackVis(subtrack, pixHeight, fontHeight);
+                }
+            }
+        else
+            pixHeight = limitTrackVis(track, pixHeight, fontHeight);
+        }
     else
         track->limitedVis = tvHide;
     }
+
 
 imagePixelHeight = pixHeight;
 if (psOutput)
@@ -7049,13 +7175,24 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
 	{
+        struct track *subtrack;
 	track->ixColor = vgFindRgb(vg, &track->color);
 	track->ixAltColor = vgFindRgb(vg, &track->altColor);
-	}
+        if (isCompositeTrack(track))
+            {
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                {
+                subtrack->ixColor = vgFindRgb(vg, &subtrack->color);
+                subtrack->ixAltColor = vgFindRgb(vg, &subtrack->altColor);
+                }
+            }
+        }
     }
 
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
+
 /* Draw mini-buttons. */
 if (withLeftLabels && psOutput == NULL)
     {
@@ -7082,7 +7219,12 @@ if (withLeftLabels && psOutput == NULL)
 	    {
 	    y += track->height;
 	    if (withCenterLabels)
-		y += fontHeight;
+                {
+                int labelCt = 1;
+                if (isCompositeTrack(track))
+                    labelCt = slCount(track->subtracks);
+		y += (fontHeight * labelCt);
+                }
 	    yEnd = y;
 	    h = yEnd - yStart - 1;
 
@@ -7128,7 +7270,7 @@ if (withLeftLabels)
     for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
-        if (track->subtracks && differentString(track->tdb->type, "wigMaf"))
+        if (isCompositeTrack(track))
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
@@ -7307,30 +7449,25 @@ if (rulerMode != RULER_MODE_OFF)
     vgUnclip(vg);
     }
 
-
 /* Draw center labels. */
 if (withCenterLabels)
     {
-    int clWidth = insideWidth;
     vgSetClip(vg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
         {
-	if (track->limitedVis != tvHide)
-	    {
-	    Color labelColor = (track->labelColor ? 
-                                track->labelColor : track->ixColor);
-	    vgTextCentered(vg, insideX, y+1, clWidth, insideHeight, 
-                                labelColor, font, track->longLabel);
-	    mapBoxToggleVis(trackPastTabX, y+1, 
-			    trackPastTabWidth, insideHeight, track);
-	    y += fontHeight;
-	    y += track->height;
-	    }
+        struct track *subtrack;
+        if (isCompositeTrack(track))
+            {
+            for (subtrack = track->subtracks; subtrack != NULL;
+                         subtrack = subtrack->next)
+                y = doCenterLabels(subtrack, track, vg, font, y);
+            }
+        else
+            y = doCenterLabels(track, track, vg, font, y);
         }
     vgUnclip(vg);
     }
-
 
 /* Draw tracks. */
 {
@@ -7342,30 +7479,18 @@ if (withCenterLabels)
 	{
 	if (track->limitedVis != tvHide)
 	    {
-	    if (withCenterLabels)
-		y += fontHeight;
-	    if (track->limitedVis == tvPack)
-		{
-		vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
-		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-		}
-	    else
-		vgSetClip(vg, insideX, y, insideWidth, track->height);
-	    track->drawItems(track, winStart, winEnd,
-			     vg, insideX, y, insideWidth, 
-			     font, track->ixColor, track->limitedVis);
-	    if (measureTiming)
-		{
-		thisTime = clock1000();
-		track->drawTime = thisTime - lastTime;
-		lastTime = thisTime;
-		}
-	    vgUnclip(vg);
-	    y += track->height;
-	    }
-	}
-    }
-
+            if (isCompositeTrack(track))
+                {
+                struct track *subtrack;
+                for (subtrack = track->subtracks; subtrack != NULL;
+                             subtrack = subtrack->next)
+                    y = doDrawItems(subtrack, vg, font, y, &lastTime);
+                }
+            else
+                y = doDrawItems(track, vg, font, y, &lastTime);
+            }
+        }
+}
 /* if a track can draw its left labels, now is the time since it
  *	knows what exactly happened during drawItems
  */
@@ -7412,8 +7537,13 @@ if (withLeftLabels)
 y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
+    int labelCt = 1;
     struct slList *item;
-    boolean doHgGene = FALSE;
+    if (track->limitedVis != tvHide)
+        {
+        if (isCompositeTrack(track))
+            labelCt = slCount(track->subtracks);
+        }
     switch (track->limitedVis)
 	{
 	case tvHide:
@@ -7421,61 +7551,30 @@ for (track = trackList; track != NULL; track = track->next)
 	case tvPack:
 	case tvSquish:
 	    if (withCenterLabels)
-		y += fontHeight;
+		y += (fontHeight * labelCt);
 	    y += track->height;
 	    break;
 	case tvFull:
-	    doHgGene = trackWantsHgGene(track);
-	    if (withCenterLabels)
-		y += fontHeight;
-	    start = 1;
-	    if( track->subType == lfSubSample && track->items == NULL )
-		 y += track->lineHeight;
-
-	    for (item = track->items; item != NULL; item = item->next)
-		{
-		int height = track->itemHeight(track, item);
-
-            
-
-		/*wiggle tracks don't always increment height (y-value) here*/
-		if( track->subType == lfSubSample )
-		    {
-		    newy = y;
-		    if( !start && item->next != NULL  )
-			{
-			newy += sampleUpdateY( track->itemName(track, item),
-					 track->itemName(track, item->next),
-					 height );
-			}
-		    else if( item->next != NULL || start )
-			newy += height;
-		    start = 0;
-		    y = newy;
-		    }
-		else
-		    {
-		    if (!track->mapsSelf)
-			{
-                        mapBoxHgcOrHgGene(track->itemStart(track, item), track->itemEnd(track, item),
-				 trackPastTabX,y,trackPastTabWidth,height, track->mapName,
-				 track->mapItemName(track, item),
-				 track->itemName(track, item), doHgGene);
-			}
-		    y += height;
-		    }
-		}
+            if (isCompositeTrack(track))
+                {
+                struct track *subtrack;
+                for (subtrack = track->subtracks; subtrack != NULL;
+                                subtrack = subtrack->next)
+                    y = doMapItems(subtrack, fontHeight, y);
+                }
+            else
+                y = doMapItems(track, fontHeight, y);
 	    break;
 	case tvDense:
 	    if (withCenterLabels)
-		y += fontHeight;
-	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,track->lineHeight,track);
+		y += (fontHeight * labelCt);
+	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,
+                    track->lineHeight,track);
 	    y += track->height;
-    
 	    break;
 	}
     }
-hashFree(&trackHash);
+
 /* Finish map. */
 hPrintf("</MAP>\n");
 
@@ -8211,6 +8310,7 @@ struct track *track = trackNew();
 struct trackDb *subTdb;
 char *iatName = NULL;
 char *exonArrows;
+int subtrackCt;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -8260,37 +8360,68 @@ if (!doSubtracks)
     /* stop recursion */
     return track;
 
-if (tdb->subtracks)
+subtrackCt = slCount(tdb->subtracks);
+if (subtrackCt)
     {
+    unsigned char finalR = track->color.r, finalG = track->color.g, 
+                                finalB = track->color.b;
+    unsigned char thisR = 50, thisG = 50, thisB = 50;
+    unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
+
     /* setup function handlers for composite track */
     track->loadItems = compositeLoad;
     track->drawItems = compositeDraw;
     track->totalHeight = compositeTotalHeight;
-    }
-/* fill in subtracks of composite track */
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    {
-    /* initialize from composite track settings */
-    struct track *subtrack = trackFromTrackDb(tdb, FALSE);
 
-    /* add subtrack settings (table, colors, labels, vis & pri) */
-    subtrack->mapName = subTdb->tableName;
-    subtrack->shortLabel = subTdb->shortLabel;
-    subtrack->longLabel = subTdb->longLabel;
-    /* later 
-    subtrack->visibility = subTdb->visibility;
-    subtrack->priority = subTdb->priority;
-    subtrack->color.r = subTdb->colorR;
-    subtrack->color.g = subTdb->colorG;
-    subtrack->color.b = subTdb->colorB;
-    subtrack->altColor.r = subTdb->altColorR;
-    subtrack->altColor.g = subTdb->altColorG;
-    subtrack->altColor.b = subTdb->altColorB;
-    */
+    if (finalR || finalG || finalB)
+        {
+        /* not black -- make a color gradient for the subtracks,
+                    from black, to the specified color */
+        deltaR = (finalR - 50) / (subtrackCt-1);
+        deltaG = (finalG - 50) / (subtrackCt-1);
+        deltaB = (finalB - 50) / (subtrackCt-1);
+        }
 
-    slAddHead(&track->subtracks, subtrack);
+    /* fill in subtracks of composite track */
+    for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+        {
+        /* initialize from composite track settings */
+        struct track *subtrack = trackFromTrackDb(tdb, FALSE);
+
+        /* add subtrack settings (table, colors, labels, vis & pri) */
+        subtrack->mapName = subTdb->tableName;
+        subtrack->shortLabel = subTdb->shortLabel;
+        subtrack->longLabel = subTdb->longLabel;
+        if (finalR || finalG || finalB)
+            {
+            subtrack->color.r = thisR;
+            subtrack->altColor.r = (255+thisR)/2;
+            thisR += deltaR;
+            subtrack->color.g = thisG;
+            subtrack->altColor.g = (255+thisG)/2;
+            thisG += deltaG;
+            subtrack->color.b = thisB;
+            subtrack->altColor.b = (255+thisB)/2;
+            thisB += deltaB;
+            }
+        else
+            {
+            subtrack->color.r = subTdb->colorR;
+            subtrack->color.g = subTdb->colorG;
+            subtrack->color.b = subTdb->colorB;
+            subtrack->altColor.r = subTdb->altColorR;
+            subtrack->altColor.g = subTdb->altColorG;
+            subtrack->altColor.b = subTdb->altColorB;
+            }
+        /* later  ?
+        subtrack->visibility = subTdb->visibility;
+        /* currently - priority is based on order in trackDb.ra 
+        subtrack->priority = subTdb->priority;
+        */
+        slAddHead(&track->subtracks, subtrack);
+        }
+    slReverse(&track->subtracks);
     }
-slReverse(&track->subtracks);
 return track;
 }
 
@@ -9278,6 +9409,15 @@ if (!hideControls)
 	for (track = trackList; track != NULL; track = track->next)
 	    {
 	    if (track->visibility != tvHide)
+            if (isCompositeTrack(track))
+                {
+                struct track *subtrack;
+                for (subtrack = track->subtracks; subtrack != NULL; 
+                                                    subtrack = subtrack->next)
+                    hPrintf("%s, %d, %d<BR>\n", subtrack->shortLabel, 
+                                subtrack->loadTime, subtrack->drawTime);
+                }
+            else
 	        hPrintf("%s, %d, %d<BR>\n", 
 			track->shortLabel, track->loadTime, track->drawTime);
 	    }
