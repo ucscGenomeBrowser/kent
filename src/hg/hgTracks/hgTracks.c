@@ -7888,7 +7888,7 @@ if(!exprBedColorsMade)
     makeRedGreenShades(vg);
 
 /* cap the value to be less than or equal to maxDeviation */
-if (tg->limitedVis == tvFull)
+if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
     maxDeviation = fullMax;
 else 
     maxDeviation = denseMax;
