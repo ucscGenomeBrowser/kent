@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.4 2005/01/29 00:16:12 angie Exp $
+# $Id: blastz-run-ucsc,v 1.5 2005/01/29 02:01:35 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -431,11 +431,17 @@ foreach my $tSpec (@tFileSpecs) {
       &liftLav($littleRaw, $littleOut, $tSeq, undef);
     } else {
       &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
-      &run("rm $qLocal") if ($qLocal =~ /^$TMP/);
+      if ($qLocal =~ /^$TMP/) {
+	  $qLocal =~ s/\[.*\]$//;
+	  &run("rm $qLocal");
+      }
     }
     &run("cat $littleOut >> $localOut");
   }
-  &run("rm $tLocal") if ($tLocal =~ /^$TMP/);
+  if ($tLocal =~ /^$TMP/) {
+      $tLocal =~ s/\[.*\]$//;
+      &run("rm $tLocal");
+  }
 }
 # Move collected results to final location.
 &run("mv $localOut $out");
