@@ -18,13 +18,14 @@
 #include "hgRefAlignTab.h"
 #include "hgRefAlignChromList.h"
 #include "refAlign.h"
+#include "bed.h"
 
 /* set to zero for debugging */
-#define REMOVE_TMP_FILE 1
+#define REMOVE_TMP_FILE 0
 
 /* table construction parameters */
 static boolean noBin = FALSE;
-static boolean tablePerChrom = TRUE;
+static boolean tablePerChrom = FALSE;
 static boolean uniqueIndices = TRUE;
 
 static char* TMP_TAB_FILE = "refAlign.tab";
@@ -295,6 +296,7 @@ else
 if (refAlignList == NULL)
     errAbort("no alignments found");
 
+slSort(&refAlignList, bedCmp);
 calcStats(refAlignList);
 
 /* load database  */

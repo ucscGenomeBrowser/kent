@@ -587,7 +587,7 @@ o - Load exoFish table
      - At mysql> prompt type in:
           load data local infile 'exoFish.bed' into table exoFish
 
-o - Mouse synteny track
+o - Mouse synteny track (done)
      - login to cc94.
      - cd ~/kent/src/hg/lib
      - hg7 < mouseSyn.sql
@@ -621,6 +621,7 @@ o - Load Softberry genes and associated peptides:
      - get ftp://www.softberry.com/pub/GP_SCOCT/*
      - ldHgGene hg7 softberryGene chr*.sgp.gff
      - hgPepPred hg7 softberry *.pro
+     - hgSoftberryHom hg7 *.pro
 
 
 FAKING DATA FROM PREVIOUS VERSION

@@ -180,8 +180,9 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
      ssh roar
      cd ~/oo.33
      source jkStuff/gsBig.sh &
-    Wait about 4 days 1 hours for these to finish.
-     started 11:00 am Oct 529.
+    Wait about 3 1/2 days for these to finish.
+     started 11:00 am Oct 5.
+     finished by 9:00 pm Oct 8.
 
 o - Convert these to chromosome level files as so:
      cd ~/oo.33
@@ -193,9 +194,9 @@ o - Convert these to chromosome level files as so:
 o - Load into the database as so:
      ssh cc94
      cd ~/oo.33/bed/genscan
-     ldHgGene hg7 genscan genscan.gtf
-     hgPepPred hg7 generic genscanPep genscan.pep
-     hgLoadBed hg7 genscanSubopt genscanSubopt.bed
+     ldHgGene hg8 genscan genscan.gtf
+     hgPepPred hg8 generic genscanPep genscan.pep
+     hgLoadBed hg8 genscanSubopt genscanSubopt.bed
 
 
 PRODUCING MOUSE ALIGNMENTS
@@ -507,13 +508,13 @@ o - Load SNPs into database.
 	hgLoadBed hg8 snpTsc snpTsc.bed
 	hgLoadBed hg8 snpNih snpNih.bed
 
-o - Load cpgIslands
+o - Load cpgIslands (done)
      - login to cc94
      - cd /projects/hg3/gs.8/oo.33/bed
      - mkdir cpgIsland
      - cd cpgIsland
      - hg8 < ~kent/src/hg/lib/cpgIsland.sql
-     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/cpg_dec12.oo27.tar
+     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/cpg_aug.oo33.tar
      - tar -xf cpg*.tar
      - awk -f filter.awk */ctg*/*.cpg > contig.bed
      - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
@@ -610,7 +611,14 @@ o - Load Softberry genes and associated peptides:
      - get ftp://www.softberry.com/pub/GP_SCOCT/*
      - ldHgGene hg8 softberryGene chr*.sgp.gff
      - hgPepPred hg8 softberry *.pro
+     - hgSoftberryHom hg8 *.pro
 
+o - Load Acembly (done)
+    - Get acembly.gff from Jean and Michelle Thierry-Miegs and
+      place in ~/oo/bed/acembly
+    - Replace c_chr with chr
+    - Load into database as so:
+        ldHgGene hg8 acembly *.gff
 
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
