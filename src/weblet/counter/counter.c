@@ -85,7 +85,7 @@ count = incCount(counterFileName, saveWhence);
 if (mute)
     mg = mg = mgNew(1, 1);
 else
-    mg = makeCountPic(count, mgSmallishFont());
+    mg = makeCountPic(count, mgMediumFont());
 fprintf(stdout, "Content-type: image/gif\n\n");
 mgSaveToGif(stdout, mg);
 return 0;
