@@ -24,7 +24,7 @@
 			Gene Sorter</A> &nbsp; - &nbsp; 
 		<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
 			Blat </A> &nbsp; - &nbsp; 
-		<A HREF="/cgi-bin/hgText?command=start" class="topbar">
+		<A HREF="/cgi-bin/hgTables?command=start" class="topbar">
 			Table Browser</A> &nbsp; - &nbsp; 
 		<A HREF="/FAQ/" class="topbar">
 			FAQ</A> &nbsp; - &nbsp; 
@@ -59,7 +59,8 @@
 		    <P><B>General Structure</B><P> The .maf format is
 		    line-oriented. Each multiple alignment ends with a
 		    blank line.  Each sequence in an alignment is on a
-		    single line, which can get quite long, but there is not length limit. Words in a
+		    single line, which can get quite long, but there is no 
+		    length limit. Words in a
 		    line are delimited by any white space. Lines
 		    starting with # are considered to be comments.
 		    Lines starting with ## can be ignored by most
@@ -157,7 +158,7 @@
 		               source sequence.  </LI>
 		    <LI> size -- The size of the aligning region in the
 		               source sequence.  This number is equal
-		               to the number of non-dash characters in
+				       tosthe number of non-dash characters in
 		               the alignment text field below.  </LI>
 		    <LI> strand -- Either '+' or '-'.  If '-', then the
 		               alignment is to the
