@@ -777,15 +777,25 @@ end
     cd /cluster/data/sacCer1/bed
     mkdir harbisonGordon
     cd harbisonGordon
+
+    # Create growthCondition.tab by editing by hand
+    # http://jura.wi.mit.edu/young_public/regulatory_code/GrowthEnvironments.html
+    # and then load:
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/growthCondition.sql
+    hgsql sacCer1 -e 'load data local infile "growthCondition.tab" into table growthCondition'
+
     # Get GFF files and motif file from downloads section of 
     # http://jura.wi.mit.edu/fraenkel/regulatory_map
     # Also get v24_probes_041004.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
+    # Get Conditions_Summary.txt also from Ben from email.
 
     sort v24_probes_041004.GFF | uniq > probes.GFF
-    hgYeastRegCode motifGff Final_InTableS2_v24.motifs probes.GFF \
-    	transRegCode.bed transRegCodeMotif.tab transRegCodeProbe.bed
+    hgYeastRegCode motifGff Final_InTableS2_v24.motifs probes.GFF Conditions_Summary.txt\
+    	transRegCode.bed transRegCodeMotif.tab transRegCodeProbe.bed transRegCodeCondition.tab
     hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
     hgLoadBed sacCer1 transRegCodeProbe transRegCodeProbe.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCodeProbe.sql -tab
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/transRegCodeCondition.sql
+    hgsql sacCer1 -e 'load data local infile "transRegCodeCondition.tab" into table transRegCodeCondition'
     hgsql sacCer1 < $HOME/kent/src/hg/lib/transRegCodeMotif.sql
     hgsql sacCer1 -e 'load data local infile "transRegCodeMotif.tab" into table transRegCodeMotif'
     # Get rid of some crufty motif placements Ben Gordon doesn't like anymore that aren't in the
