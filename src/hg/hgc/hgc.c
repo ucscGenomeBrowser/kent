@@ -1444,28 +1444,31 @@ printf("<B>%s size:</B> %d<BR>\n", org, net.tEnd - net.tStart);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, net.qEnd - net.qStart);
 sqlFreeResult(&sr);
 
-netWinSize = min(winEnd-winStart, net.tEnd - net.tStart);
-printf("<BR>\n");
-if (netWinSize < 1000000)
+if (net.chainId != 0)
     {
-    int ns = max(winStart, net.tStart);
-    int ne = min(winEnd, net.tEnd);
-    if (ns < ne)
+    netWinSize = min(winEnd-winStart, net.tEnd - net.tStart);
+    printf("<BR>\n");
+    if (netWinSize < 1000000)
 	{
-	char id[20];
-	snprintf(id, sizeof(id), "%d", net.chainId);
-	hgcAnchorWindow("htcChainAli", id, ns, ne, "o", seqName);
-	printf("View details of parts of net within browser window.</A><BR>\n");
+	int ns = max(winStart, net.tStart);
+	int ne = min(winEnd, net.tEnd);
+	if (ns < ne)
+	    {
+	    char id[20];
+	    snprintf(id, sizeof(id), "%d", net.chainId);
+	    hgcAnchorWindow("htcChainAli", id, ns, ne, "o", seqName);
+	    printf("View details of parts of net within browser window.</A><BR>\n");
+	    }
+	else
+	    {
+	    printf("Odd, net not in window<BR>\n");
+	    }
 	}
     else
-        {
-	printf("Odd, net not in window<BR>\n");
+	{
+	printf("Zoom so that browser window covers 1,000,000 bases or less "
+	       "and return here to see alignment details.<BR>\n");
 	}
-    }
-else
-    {
-    printf("Zoom so that browser window covers 1,000,000 bases or less "
-           "and return here to see alignment details.<BR>\n");
     }
 }
 
@@ -3089,9 +3092,10 @@ tolowers(oLetters);
     freez(&colorFlags);
     htmHorizontalLine(f);
     }
-
+fprintf(f, "</TT></PRE>\n");
 fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n", 
 	organism, psl->tName, (tIsRc ? "(reverse strand)" : ""));
+fprintf(f, "<PRE><TT>");
 /* Display DNA sequence. */
     {
     struct cfm *cfm;
@@ -3155,7 +3159,9 @@ fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n",
     }
 
 /* Display side by side. */
+fprintf(f, "</TT></PRE>\n");
 fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
+fprintf(f, "<PRE><TT>");
     {
     struct baf baf;
     int i,j;
