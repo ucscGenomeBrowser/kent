@@ -6,15 +6,6 @@ group map
 visibility dense
 type bed 3 +
 
-track refGene
-shortLabel RefSeq Genes
-longLabel RefSeq Genes
-group genes
-priority 35
-visibility pack
-color 12,12,120
-type genePred refPep refMrna
-
 track blastzMm3
 shortLabel Blastz Mouse
 longLabel All Blastz Mouse(Feb03) Alignments
