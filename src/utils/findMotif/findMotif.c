@@ -8,7 +8,7 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.3 2004/02/27 19:33:34 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.4 2004/02/27 21:22:43 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -16,6 +16,9 @@ unsigned motifLen = 0;		/*	length of motif	*/
 unsigned long long motifVal;	/*	motif converted to a number	*/
 unsigned long long complementVal;	/*	- strand complement	*/
 boolean bedOutput;		/*	output bed file instead of wiggle */
+char *strand = (char *)NULL;
+boolean doPlusStrand = TRUE;	/*	output bed file instead of wiggle */
+boolean doMinusStrand = TRUE;	/*	output bed file instead of wiggle */
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +31,7 @@ errAbort(
   "   nibDir - path to nib directory, relative or absolute path OK\n"
   "   -motif=acgt - search for this specified motif (case ignored, acgt only)\n"
   "   -chr=<chrN> - process only this one chrN from the nibDir\n"
+  "   -strand=<+|-> - limit to only one strand.  Default is both.\n"
   "   -bedOutput - output bed format instead of the default wiggle\n"
   "   NOTE: motif must be longer than 4 characters, less than 17"
   );
@@ -35,6 +39,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
+   {"strand", OPTION_STRING},
    {"motif", OPTION_STRING},
    {"bedOutput", OPTION_BOOLEAN},
    {NULL, 0},
@@ -86,7 +91,8 @@ for (start=0; start<chromSize; start = end)
 	    case G_BASE_VAL:
     		incomingVal = mask & ((incomingVal << 2) | val);
 		++incomingLength;
-		if ((incomingLength >= motifLen) && (incomingVal == posNeedle))
+		if (doPlusStrand && (incomingLength >= motifLen)
+			&& (incomingVal == posNeedle))
 		    {
 			++posFound;
 		    if (bedOutput)
@@ -97,7 +103,8 @@ for (start=0; start<chromSize; start = end)
 verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", chrom, posPreviousPosition, chromPosition);
 		    posPreviousPosition = chromPosition;
 		    }
-		if ((incomingLength >= motifLen) && (incomingVal == negNeedle))
+		if (doMinusStrand && (incomingLength >= motifLen)
+			&& (incomingVal == negNeedle))
 		    {
 			++negFound;
 		    if (bedOutput)
@@ -168,10 +175,13 @@ dnaUtilOpen();
 
 motif = optionVal("motif", NULL);
 chr = optionVal("chr", NULL);
+strand = optionVal("strand", NULL);
 bedOutput = optionExists("bedOutput");
 
 if (chr)
     verbose(2, "#\tprocessing chr: %s\n", chr);
+if (strand)
+    verbose(2, "#\tprocessing strand: '%s'\n", strand);
 if (motif)
     verbose(2, "#\tsearching for motif: %s\n", motif);
 else {
@@ -181,6 +191,19 @@ else {
 verbose(2, "#\ttype output: %s\n", bedOutput ? "bed format" : "wiggle data");
 verbose(2, "#\tspecified nibDir: %s\n", argv[1]);
 verbose(2, "#\tsizeof(motifVal): %d\n", sizeof(motifVal));
+if (strand)
+    {
+    if (! (sameString(strand,"+") | sameString(strand,"-")))
+	{
+	warn("ERROR: -strand specified ('%s') is not + or - ?\n", strand);
+	usage();
+	}
+    /*	They are both on by default, turn off the one not specified */
+    if (sameString(strand,"-"))
+	doPlusStrand = FALSE;
+    if (sameString(strand,"+"))
+	doMinusStrand = FALSE;
+    }
 motifLen = strlen(motif);
 /*	at two bits per character, size limit of motif is
  *	number of bits in motifVal / 2
