@@ -9,7 +9,7 @@
 #include "pfToken.h"
 #include "pfParse.h"
 
-static char *pfParseTypeAsString(enum pfParseType type)
+char *pfParseTypeAsString(enum pfParseType type)
 /* Return string corresponding to pfParseType */
 {
 switch (type)
@@ -840,16 +840,18 @@ struct pfParse *pfParseExpression(struct pfParse *parent,
 return parseTuple(parent, pTokList, scope);
 }
 
-static void compoundToChildren(struct pfParse *pp, struct pfToken **pTokList,
-	struct pfScope *scope)
-/* Parse {, a list of statements, and } and hang statements on
- * pp->children. */
+static struct pfParse *parseCompound(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse a compound statement (statement list surrounded
+ * by brackets */
 {
+struct pfParse *pp;
 struct pfToken *tok = *pTokList;
 struct pfParse *statement;
 if (tok->type != '{')
     expectingGot("{", tok);
 scope = tok->val.scope;
+pp = pfParseNew(pptCompound, *pTokList, parent, scope);
 tok = tok->next;
 for (;;)
     {
@@ -859,22 +861,14 @@ for (;;)
 	}
     if (tok->type == '}')
         {
-	*pTokList = tok->next;
-	slReverse(&pp->children);
-	return;
+	tok = tok->next;
+	break;
 	}
     statement = pfParseStatement(pp, &tok, scope);
     slAddHead(&pp->children, statement);
     }
-}
-
-static struct pfParse *parseCompound(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse a compound statement (statement list surrounded
- * by brackets */
-{
-struct pfParse *pp = pfParseNew(pptCompound, *pTokList, parent, scope);
-compoundToChildren(pp, pTokList, scope);
+*pTokList = tok;
+slReverse(&pp->children);
 return pp;
 }
 

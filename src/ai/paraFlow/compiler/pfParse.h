@@ -75,6 +75,9 @@ enum pfParseType
     pptVarInit,
     };
 
+char *pfParseTypeAsString(enum pfParseType type);
+/* Return string corresponding to pfParseType */
+
 struct pfParse
 /* The para parse tree. */
     {

@@ -159,6 +159,29 @@ rParseCount(&parseCount, pp);
 return parseCount;
 }
 
+static void printScopeInfo(int level, struct pfParse *pp)
+/* Print out info on each new scope. */
+{
+switch (pp->type)
+    {
+    case pptProgram:
+    case pptModule:
+    case pptFor:
+    case pptToDec:
+    case pptFlowDec:
+    case pptParaDec:
+    case pptCompound:
+        spaceOut(stdout, 2*level);
+	printf("%s: types %d, vars %d\n", 
+		pfParseTypeAsString(pp->type),
+		pp->scope->types->elCount,
+		pp->scope->vars->elCount);
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    printScopeInfo(level+1, pp);
+}
+
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
@@ -178,6 +201,7 @@ pfParseDump(program, 0, stdout);
 
 printf("%d modules, %d token, %d parse\n",
 	tkz->modules->elCount, tkz->tokenCount, pfParseCount(program));
+printScopeInfo(0, program);
 }
 
 int main(int argc, char *argv[])
