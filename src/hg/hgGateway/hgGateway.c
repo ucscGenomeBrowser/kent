@@ -39,16 +39,20 @@ char *position = cartUsualString(cart, "position", defaultPosition);
 This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+
 /* 
    If we are changing databases via explicit cgi request,
    then remove custom track data which will 
    be irrelevant in this new database .
    If databases were changed then use the new default position too.
 */
+
+fprintf(stderr, "Position 1 = %s\n", position);
 oldDb = hashFindVal(oldVars, dbCgiName);
-if (NULL != oldDb && !strstrNoCase(oldDb, db))
+if (!containsStringNoCase(oldDb, db))
     {
     position = defaultPosition;
+    fprintf(stderr, "Position 2 = %s\n", position);
     removeCustomTrackData();
     }
 
