@@ -76,7 +76,7 @@ priority 85
 name stanfordSource
 shortLabel Stanford SOURCE
 tables kgXref
-idSql select refseq from kgXref where kgID = '%s'
+idSql select kgID from kgXref where kgID = '%s'
 url http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?option=Number&criteria=%s&choice=Gene
 priority 90
 
