@@ -23,7 +23,6 @@ if (!cgiVarExists("nohead"))
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
     int conn = gfConnect(hostName, portName);
-    printf("Processing %s\n", seq.name);
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	static struct gfSavePslxData data;
@@ -34,7 +33,6 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	static struct gfSavePslxData data;
-	uglyf("Getting set to do the big trans/trans.\n");
 	data.f = out;
 	data.reportTargetStrand = TRUE;
 	gfAlignTransTrans(conn, nibDir, &seq, FALSE, 12, gfSavePslx, &data);
@@ -61,7 +59,8 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	}
     close(conn);
     }
-printf("Output is in %s\n", outName);
+if (out != stdout)
+    printf("Output is in %s\n", outName);
 }
 
 void usage()
