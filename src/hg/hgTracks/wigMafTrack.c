@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.52 2004/12/07 00:36:42 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.53 2005/02/01 17:45:28 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1000,7 +1000,7 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
             }
         dyStringPrintf(wigType, "\n");
         tdb->type = cloneString(wigType->string);
-        wigTrack = trackFromTrackDb(tdb, FALSE);
+        wigTrack = trackFromTrackDb(tdb);
         tdb->type = savedType;
 
         // replace tablename with wiggle table from "wiggle" setting
