@@ -70,6 +70,9 @@ void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 
+void lineFileShort(struct lineFile *lf);
+/* Complain that line is too short. */
+
 boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
 /* Return next non-blank line that doesn't start with '#' chopped into words.
  * Returns FALSE at EOF.  Aborts on error. */

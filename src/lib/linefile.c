@@ -11,7 +11,7 @@
 #include "linefile.h"
 //#include <sys/vfs.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.24 2003/09/09 00:02:41 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.25 2003/10/01 23:12:53 kent Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -244,6 +244,11 @@ if (got < expecting)
 	    expecting, lf->lineIx, lf->fileName, got);
 }
 
+void lineFileShort(struct lineFile *lf)
+/* Complain that line is too short. */
+{
+errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
+}
 
 boolean lineFileNextReal(struct lineFile *lf, char **retStart)
 /* Fetch next line from file that is not blank and 
