@@ -3,7 +3,7 @@
 #include "common.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: histogram.c,v 1.3 2004/09/13 20:18:08 hiram Exp $";
+static char const rcsid[] = "$Id: histogram.c,v 1.4 2004/09/14 23:43:58 hiram Exp $";
 
 static unsigned autoScale(float *values, size_t N, float *binSize,
 	unsigned *binCount, float *minValue, float *min, float *max)
@@ -165,6 +165,17 @@ unsigned missed = 0;
 if (N == 0)
     return NULL;	/*	we don't work on zero number of values	*/
 
+if (accumHisto)		/*	if accumulating in existing histogram	*/
+    {			/*	use its parameters as the scaling values */
+    autoBinCount = accumHisto->binCount;
+    autoBinSize = accumHisto->binSize;
+    autoMinValue = accumHisto->binZero;
+    autoScaling = FALSE;
+    range = autoBinSize * (autoBinCount - 1);
+    valueCount = accumHisto->count;
+    }
+else
+    {
 /*	Caller may give us a range to work within	*/
 if ( (0.0 == min) && (0.0 == max) )
     autoScaling = TRUE;
@@ -200,10 +211,17 @@ if (autoScaling)
     }
 else
     autoValueCount = N;
+    }
 
-AllocVar(hr);
-AllocArray(hr->binCounts,autoBinCount);
-AllocArray(hr->pValues,autoBinCount);
+if (accumHisto)		/*	if accumulating in existing histogram	*/
+    hr = accumHisto;
+else
+    {
+    AllocVar(hr);
+    AllocArray(hr->binCounts,autoBinCount);
+    AllocArray(hr->pValues,autoBinCount);
+    }
+
 for (i = 0; i < N; ++i)
     {
     if (!isnan(values[i]) && (values[i] >= autoMinValue))
@@ -228,10 +246,15 @@ for (i = 0; i < N; ++i)
 	    ++missed;
     }	/*	for (i = 0; i < N; ++i)	*/
 
-hr->binSize = autoBinSize;
-hr->binCount = autoBinCount;
-hr->count = valueCount;
-hr->binZero = autoMinValue;
+if (accumHisto)		/*	if accumulating in existing histogram	*/
+    hr->count = valueCount;	/*	only this is new	*/
+else
+    {
+    hr->binSize = autoBinSize;
+    hr->binCount = autoBinCount;
+    hr->count = valueCount;
+    hr->binZero = autoMinValue;
+    }
 
 for (i = 0; i < autoBinCount; ++i)
     {
