@@ -1664,20 +1664,19 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    {
 	    y2 = prevY;
 	    x2 = round((double)(prevX-winStart)*scale) + xOff;
-	    if( wiggleType == wiggleLinearInterpolation ) 
-	    /*connect samples*/
-		{
-		if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )
-		    /*don't interpolate over large gaps*/
-		    {
-		    if (fill)
-			vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
-		    else
-			vgLine(vg, x1,y1, x2,y2, color);
-		    }
-		}
-	    }
 
+	    /*connect samples*/
+            if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )
+                /*don't interpolate over large gaps*/
+                {
+                if (fill)
+                    vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
+                else
+                    vgLine(vg, x1,y1, x2,y2, color);
+                }
+            
+	    }
+        
 	/* Draw the points themselves*/
 	if (wiggleType != wiggleLinearInterpolation)
 	    {
