@@ -324,6 +324,52 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	Wiggle track Windowing combining function option	*/
+enum wiggleWindowingEnum {
+   wiggleWindowingMax = 0,
+   wiggleWindowingMean = 1,
+   wiggleWindowingMin = 2,
+};
+
+enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleWindowingEnumToString(enum wiggleWindowingEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleWindowingDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/*	Wiggle track use Smoothing option, 1 is the same as Off	*/
+enum wiggleSmoothingEnum {
+   wiggleSmoothingOff = 0,
+   wiggleSmoothing1 = 1,
+   wiggleSmoothing2 = 2,
+   wiggleSmoothing3 = 3,
+   wiggleSmoothing4 = 4,
+   wiggleSmoothing5 = 5,
+   wiggleSmoothing6 = 6,
+   wiggleSmoothing7 = 7,
+   wiggleSmoothing8 = 8,
+   wiggleSmoothing9 = 9,
+   wiggleSmoothing10 = 10,
+   wiggleSmoothing11 = 11,
+   wiggleSmoothing12 = 12,
+   wiggleSmoothing13 = 13,
+   wiggleSmoothing14 = 14,
+   wiggleSmoothing15 = 15,
+   wiggleSmoothing16 = 16,
+};
+
+enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleSmoothingEnumToString(enum wiggleSmoothingEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleSmoothingDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	Wiggle track use AutoScale option	*/
 enum wiggleScaleOptEnum {
    wiggleScaleManual = 0,
