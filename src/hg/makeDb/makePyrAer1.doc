@@ -56,6 +56,39 @@ exit; # don't actually run this like a script :)
     # GC percent for 2,000 base windows instead (simply cut and paste
     # ~/kent/src/hg/makeDb/trackDb/trackDb.ra).
 
+#  GC 5 BASE WIGGLE TRACK (DONE - 2004-01-28 - Hiram)
+
+    mkdir /cluster/data/pyrAer1/bed/gc5Base
+    cd /cluster/data/pyrAer1/bed/gc5Base
+    mkdir wigData5 dataLimits5
+    hgGcPercent -chr=chr1 -file=stdout -win=5 pyrAer1 ../../nib | grep -w GC | \
+    awk '
+{
+    bases = $3 - $2
+    perCent = $5/10.0
+    printf "%d\t%.1f\n", $2+1, perCent
+}' | wigAsciiToBinary -dataSpan=5 -chrom=chr1 \
+	-wibFile=wigData5/gc5Base_1 -name=1 stdin > dataLimits5/chr1
+    hgLoadWiggle pyrAer1 gc5Base wigData5/*.wig
+    mkdir /gbdb/pyrAer1/wib
+    ln -s `pwd`/wigData5/*.wib /gbdb/pyrAer1/wib
+    #	the trackDb entry
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5 base windows
+group map
+priority 23.5
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 30:70
+type wig 0 100    
+
 # TANDEM REPEAT MASKER (NOT DONE YET)
 
     ssh hgwdev
