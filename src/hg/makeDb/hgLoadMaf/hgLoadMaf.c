@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 #include "maf.h"
-#include "mafRef.h"
+#include "scoredRef.h"
 #include "dystring.h"
 
 void usage()
@@ -32,7 +32,8 @@ char *createString =
 "    chromStart int unsigned not null,	# Start position in chromosome (forward strand)\n"
 "    chromEnd int unsigned not null,	# End position in chromosome\n"
 "    extFile int unsigned not null,	# Pointer to associated MAF file\n"
-"    offset int unsigned not null,	# Offset in MAF file\n"
+"    offset bigint not null,	# Offset in MAF file\n"
+"    score float not null,	# Score\n"
 "              #Indices\n"
 "    INDEX(chrom(8),bin),\n"
 "    INDEX(chrom(8),chromStart),\n"
@@ -103,7 +104,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     char *fileName = fileEl->name;
     struct mafFile *mf;
     struct mafComp *mc;
-    struct mafRef mr;
+    struct scoredRef mr;
     struct mafAli *maf;
     off_t offset;
     HGID extId = addToExtFile(fileName, conn);
@@ -126,8 +127,9 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	    reverseIntRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
 	mr.extFile = extId;
 	mr.offset = offset;
+	mr.score = maf->score;
 	fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
-	mafRefTabOut(&mr, f);
+	scoredRefTabOut(&mr, f);
 	mafAliFree(&maf);
 	}
     mafFileFree(&mf);
