@@ -317,7 +317,8 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 /* Count occurences of tiles in seqList and make a .ooc file. */
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
-   boolean isRc, int minScore, Bits *qMaskBits, struct gfOutput *out);
+   boolean isRc, int minScore, Bits *qMaskBits, struct gfOutput *out,
+   boolean fastMap);
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 
