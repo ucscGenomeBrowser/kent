@@ -491,7 +491,7 @@ struct largeSeqFile
 {
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
-    int seqTblSet;              /* extFile or gbExtFile */
+    unsigned seqTblSet;         /* extFile or gbExtFile */
     HGID id;                    /* Id in extFile table. */
     int fd;                     /* File handle. */
     };
@@ -531,9 +531,9 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     /* Save info on list. Check that file size is what we think it should be. */
     AllocVar(lsf);
     lsf->path = path = cloneString(row[0]);
-    size = sqlUnsigned(row[1]);
+    size = sqlOffset(row[1]);
     if (fileSize(path) != size)
-        errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
+        errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", path, size, fileSize(path));
     lsf->seqTblSet = seqTblSet;
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
@@ -545,7 +545,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     }
 }
 
-void *readOpenFileSection(int fd, unsigned long offset, size_t size, char *fileName)
+static void *readOpenFileSection(int fd, off_t offset, size_t size, char *fileName)
 /* Allocate a buffer big enough to hold a section of a file,
  * and read that section into it. */
 {
@@ -558,8 +558,9 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
-static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
-/* Return sequence as a fasta record in a string and it's database ID. */
+char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
+/* Return sequence as a fasta record in a string and it's database ID, or 
+ * NULL if not found. */
 {
 struct sqlResult *sr;
 char **row;
@@ -567,7 +568,7 @@ char query[256];
 int fd;
 HGID extId;
 size_t size;
-unsigned long offset;
+off_t offset;
 char *buf;
 int seqTblSet = SEQ_TBL_SET;
 struct dnaSeq *seq;
@@ -597,7 +598,7 @@ if (row == NULL)
 if (retId != NULL)
     *retId = sqlUnsigned(row[0]);
 extId = sqlUnsigned(row[1]);
-offset = sqlUnsigned(row[2]);
+offset = sqlOffset(row[2]);
 size = sqlUnsigned(row[3]);
 
 lsf = largeFileHandle(extId, seqTblSet);
@@ -611,7 +612,7 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 /* Return sequence as a fasta record in a string and it's database ID,
  * abort if not found */
 {
-char *buf= getSeqAndId(conn, acc, retId);
+char *buf= hGetSeqAndId(conn, acc, retId);
 if (buf == NULL)
     errAbort("No sequence for %s in database", acc);
 return buf;
