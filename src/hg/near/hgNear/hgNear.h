@@ -310,6 +310,9 @@ void makeTitle(char *title, char *helpName);
 void selfAnchorId(struct genePos *gp);
 /* Print self anchor to given id. */
 
+char *colInfoUrl(struct column *col);
+/* Return URL to get column info.  freeMem this when done. */
+
 void colInfoAnchor(struct column *col);
 /* Print anchor tag that leads to column info page. */
 

@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.102 2003/10/11 09:28:43 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.103 2003/10/13 19:29:24 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -397,11 +397,21 @@ while (--count >= 0)
     hPrintf(" ");
 }
 
+char *colInfoUrl(struct column *col)
+/* Return URL to get column info.  freeMem this when done. */
+{
+char url[512];
+safef(url, sizeof(url), "../cgi-bin/hgNear?%s&%s=%s",
+	cartSidUrlString(cart), colInfoVarName, col->name);
+return cloneString(url);
+}
+
 void colInfoAnchor(struct column *col)
 /* Print anchor tag that leads to column info page. */
 {
-hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
-	cartSidUrlString(cart), colInfoVarName, col->name);
+char *url = colInfoUrl(col);
+hPrintf("<A HREF=\"%s\">", url);
+freeMem(url);
 }
 
 void colInfoLink(struct column *col)

@@ -12,7 +12,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.24 2003/10/08 21:03:08 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.25 2003/10/13 19:29:24 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *lookupConn,
@@ -327,16 +327,14 @@ for (i=0; i<maxCount; ++i)
 return i;
 }
 
-void expLabelPrint(struct column *col, char *subName, 
-	int representativeCount, int *representatives,
+void hgExpLabelPrint(char *colName, char *subName, int skipName,
+	char *url, int representativeCount, int *representatives,
 	char *expTable)
 /* Print out labels of various experiments. */
 {
 int i;
-boolean doGreen = FALSE;
 int groupSize, gifCount = 0;
 char gifName[128];
-int skipName = atoi(columnSetting(col, "skipName", "0"));
 char **experiments = getExperimentNames("hgFixed", 
 	expTable, representativeCount, representatives, skipName);
 int height = gifLabelMaxWidth(experiments, representativeCount);
@@ -346,11 +344,13 @@ for (i=0; i<representativeCount; i += groupSize+1)
     hPrintf("<TD>");
     groupSize = countNonNull(experiments+i, representativeCount-i);
     safef(gifName, sizeof(gifName), "../trash/near_%s_%s%d.gif", 
-    	col->name, subName, ++gifCount);
+    	colName, subName, ++gifCount);
     gifLabelVerticalText(gifName, experiments+i, groupSize, height);
-    colInfoAnchor(col);
+    if (url != NULL)
+       hPrintf("<A HREF=\"%s\">", url); 
     hPrintf("<IMG BORDER=0 SRC=\"%s\">", gifName);
-    hPrintf("</A>");
+    if (url != NULL)
+	hPrintf("</A>");
     hPrintf("</TD>");
     }
 
@@ -358,6 +358,19 @@ for (i=0; i<representativeCount; i += groupSize+1)
 for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
+}
+
+void expLabelPrint(struct column *col, char *subName, 
+	int representativeCount, int *representatives,
+	char *expTable)
+/* Print out labels of various experiments. */
+{
+int skipName = atoi(columnSetting(col, "skipName", "0"));
+char *url = colInfoUrl(col);
+    colInfoAnchor(col);
+hgExpLabelPrint(col->name, subName, skipName, url,
+	representativeCount, representatives, expTable);
+freeMem(url);
 }
 
 void expRatioLabelPrint(struct column *col)

@@ -9,4 +9,4 @@ isoformTable knownIsoforms
 allTranscriptQuery select name,chrom,txStart,txEnd,proteinId from knownGene
 allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from knownCanonical
 oneGeneQuery select name,chrom,txStart,txEnd,proteinId from knownGene where name = '%s'
-spDb sp092903
+spDb swissProt
