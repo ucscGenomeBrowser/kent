@@ -12,11 +12,27 @@
 #include "rmskOut.h"
 #include "binRange.h"
 #include "obscure.h"
-#include "chainInfo.h"
 #include "genePred.h"
 
 int minGap = 40;
 float minOverlap = 0.90;
+
+struct intronChain {
+    /* scoring of aligned introns in a chain */ 
+    struct intronChain *next;	/* Next in list. */
+    struct chain *chain;        /* scored chain */
+    int qIntron ;               /* count of introns on query side */ 
+    int tIntron ;               /* count of introns on target side */ 
+    int tGap ;                  /* count of bases in gaps on target */
+    int qGap ;                  /* count of bases in gaps on query */
+    int tReps;              /* total number of repeats in target */
+    int qReps;              /* total number of repeats in target */
+    int total;                  /* total size of chain */
+    float score1;               /* score2 * ratio of bases in target/query gaps */
+    float score2;               /* ratio of introns target/query , negative if query has more */
+    int overlap1;               /* bases that overlap with gene */
+    int overlap2;
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -130,7 +146,7 @@ for (b = chain->blockList; b != NULL; b = nextB)
     t += tg;
     q += qg;
 
-    /* remove 'introns' that are actually repeats on target*/
+    /* remove repeasts so we don't call them 'introns' on target*/
     tReps = 0;
     for (el = binKeeperFindSorted(bk, tGapStart, tGapEnd); el != NULL; el = el->next)
         {
@@ -147,6 +163,7 @@ for (b = chain->blockList; b != NULL; b = nextB)
         iChain->tReps += tReps;
         }
 
+    /* remove repeasts so we don't call them 'introns' on query */
     /* get bk for query */
     bkQ = hashFindVal(bkHash, chain->qName);
     qReps = 0;
@@ -154,8 +171,6 @@ for (b = chain->blockList; b != NULL; b = nextB)
         {
         rmsk = el->val;
         qReps = positiveRangeIntersection(qGapStart, qGapEnd, rmsk->genoStart, rmsk->genoEnd);
-        if ((qEnd(chain) == 116409111) && sameString(chain->qName, "chr11"))
-            printf("\n %s %d %d %d %d %d %s %4.1f", chain->qName, qGapStart, qGapEnd, qReps , rmsk->genoStart, rmsk->genoEnd, rmsk->repClass, (float)(rmsk->milliDiv)/10);
         }
     percentQOverlap = (float)qReps / (float)(qGapEnd - qGapStart);
     if (((qGapEnd - qGapStart) > 0) && percentQOverlap > minOverlap)
@@ -288,36 +303,48 @@ void scoreChains(struct chain *chainList, char *db, FILE *f, struct binKeeper *b
 /* score all chains in a chain file based on ration of introns and gaps  , mask repeats first */
 /* return best overlapping gene in the target sequence */
 {
-    struct chain *chain;
-    struct intronChain *iChain, *iChainList = NULL;
+    struct chain *chain, *retSubChain,*retChainToFree;
+    struct intronChain *iChain=NULL, *iChainList = NULL;
     struct genePred *gp = NULL, *vg;
+    int overlap1;
 
     hSetDb(db);
     for (chain = chainList; chain != NULL; chain = chain->next)
         {
-        iChain = scoreNextAlignedIntron(chain,f, bk, bkHash);
-        slAddHead(&iChainList, iChain);
-        chain = iChain->chain;
-        gp = getOverlappingGene(&gpList1, "refGene",chain->tName, chain->tStart, chain->tEnd);
+        gp = getOverlappingGene(&gpList1, "refGene",chain->tName, chain->tStart, chain->tEnd , &overlap1);
         if (gp == NULL)
             {
-            gp = getOverlappingGene(&gpList2, "softberryGene",chain->tName, chain->tStart, chain->tEnd);
+            gp = getOverlappingGene(&gpList2, "softberryGene",chain->tName, chain->tStart, chain->tEnd, &overlap1);
             }
-//        if (chain->qStrand == '-')
-//            fprintf(f,"%7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %d",iChain->score1, iChain->score2, chain->tEnd-chain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->id);
-//        else
-            fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %d",iChain->score1, iChain->score2, chain->tEnd-chain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, chain->tStart, chain->tEnd, chain->qName, qStart(chain), qEnd(chain), chain->id);
         if (gp != NULL)
-            fprintf(f," %s %s %d %d",gp->name, gp->chrom, gp->cdsStart, gp->cdsEnd);
-        else
-            fprintf(f," NO gene 0 0");
+            {
+            chainSubsetOnT(chain, gp->cdsStart, gp->cdsEnd, &retSubChain,  &retChainToFree);
+            if (retSubChain != NULL)
+                {
+                iChain = scoreNextAlignedIntron(retSubChain,f, bk, bkHash);
+                iChain->overlap1 = overlap1;
+                slAddHead(&iChainList, iChain);
+                //chain = iChain->chain;
+        //        if (chain->qStrand == '-')
+        //            fprintf(f,"%7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %d",iChain->score1, iChain->score2, chain->tEnd-chain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd, chain->id);
+        //        else
+                if (gp != NULL)
+                    fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %s %d %d %c %d",iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, retSubChain->tStart, retSubChain->tEnd, retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, chain->id);
+                if (gp != NULL && genePredBases(gp) != 0)
+                    fprintf(f," %s %s %d %d %d %2.2f",gp->name, gp->chrom, gp->cdsStart, gp->cdsEnd, iChain->overlap1, (float)iChain->overlap1/(float)genePredBases(gp));
+            //    else
+            //        fprintf(f," NO gene 0 0 0 0.0");
 
 
-        vg = getOverlappingGene(&gpList3, "vegaPseudoGene",chain->qName, qStart(chain), qEnd(chain));
-        if (vg != NULL)
-            fprintf(f," %s %s %d %d",vg->name, vg->chrom, vg->cdsStart, vg->cdsEnd);
+                vg = getOverlappingGene(&gpList3, "vegaPseudoGene",retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), &iChain->overlap2);
+                if (vg != NULL && genePredBases(vg) != 0 && gp != NULL)
+                    fprintf(f," %s %s %d %d %d %2.2f",vg->name, vg->chrom, vg->cdsStart, vg->cdsEnd, iChain->overlap2, (float)iChain->overlap2/(float)genePredBases(vg));
 
-        fprintf(f,"\n");
+                if (gp != NULL)
+                    fprintf(f,"\n");
+                }
+            chainFree(&retChainToFree);
+            }
         /*
        AllocVar(chainId);
         sprintf(chainId, "%d",chain->id);
