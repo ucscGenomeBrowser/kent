@@ -2509,7 +2509,7 @@ end
     hgLoadPsl hg15 blatChimp.psl         
 
 
-# SGP GENE PREDICTIONS (TODO)
+# SGP GENE PREDICTIONS (DONE - 2003-05-14 - Hiram - to be verified)
     mkdir -p ~/hg15/bed/sgp/download
     cd ~/hg15/bed/sgp/download
     foreach f (~/hg15/?{,?}/chr?{,?}{,_random}.fa)
