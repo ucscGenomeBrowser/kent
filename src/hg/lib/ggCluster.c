@@ -48,16 +48,16 @@ if (a->qEnd == b->qStart && b->tStart - a->tEnd > 40)
     if (isRev)
 	{
         if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'c')
-            {
             return TRUE;
-            }
+        if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'g' && iEnd[-1] == 'c')
+	    return TRUE;
 	}
     else
 	{
         if (iStart[0] == 'g' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
-            {
             return TRUE;
-            }
+        if (iStart[0] == 'g' && iStart[1] == 'c' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
+            return TRUE;
 	}
     }
 return FALSE;
