@@ -22,18 +22,19 @@ table sliceType
 table treatment
 "Fixation and other treatment conditions"
     (
-    int id;
+    int id;	"ID of treatment"
     string conditions;	"Text string describing conditions"
     )
 
 table imageType
-"Type of image - mRNA in situ, fluorescent antibody, etc."
+"Type of image - RNA in situ, fluorescent antibody, etc."
     (
     int id;		"ID of image type"
     string name;	"Name of image type"
     )
 
 table submissionSet
+"Info on a batch of images submitted at once"
     (
     int id;			"ID of submission set"
     lstring contributor;	"Name of contributor"
@@ -43,12 +44,23 @@ table submissionSet
     lstring itemUrl;		"URL for item.  Put $$ where image.submitId should go"
     )
 
-table image
+table sectionSet
+"Info on a bunch of sections through same sample"
     (
+    int id;	"Section id"
+    int count;	"Count of sections"
+    )
+
+table image
+"A single biological image"
+    (
+    int id;		"ID of image"
     string name;	"Image name (file name in directory)"
     int fullLocation;	"Location of full image"
     int thumbLocation;	"Location of thumbnail image"
     int submissionSet;	"Submission set this is part of"
+    int sectionSet;	"Set of sections this is part of or 0 if none"
+    int sectionIx;	"Position (0 based) within set of sections"
     string submitId;	"ID within submission set"
     string gene;	"Gene symbol (HUGO if available)"
     string locusLink;	"Locus link ID or blank if none"
