@@ -69,6 +69,7 @@ char mrnaTable[] =
 "create table mrna ("
   "id int unsigned not null primary key,"          /* Id, same as seq ID. */
   "acc char(12) not null,"		  /* Genbank accession. */
+  "version char(12) not null,"		  /* Genbank version. */
   "type enum('EST','mRNA') not null,"	  /* Full length or EST. */
   "direction enum('5','3','0') not null," /* Read direction. */
   "source int unsigned not null,"	 	  /* Ref in source table. */
@@ -87,6 +88,7 @@ char mrnaTable[] =
   "author int unsigned not null,"                 /* Ref in author table. */
 	   /* Extra indices. */
   "unique (acc),"
+  "unique (acc, version),"
   "index (type),"
   "index (library),"
   "index (mrnaClone),"
@@ -414,6 +416,7 @@ for (;;)
     int faNameSize;
     char sqlDate[32];
     int dnaSize = 0;
+    char version [32] = "X"; // Init to obvious value
 
     ++count;
     if (--mod == 0)
@@ -449,7 +452,8 @@ for (;;)
     clearUniqueIds();
     for (;;)
 	{
-	struct hashEl *hel;
+	struct hashEl *hel = NULL;
+
 	if (!lineFileNext(raLf, &raTag, &raLineSize))
 	    errAbort("Unexpected eof in %s", raName);
 	if (raTag[0] == 0)
@@ -484,6 +488,10 @@ for (;;)
 	    {
 	    dnaSize = sqlUnsigned(raVal);
 	    }
+	else if (sameString(raTag, "ver"))
+	    {	    
+            strcpy(version, firstWordInLine(raVal));
+            }
 	}
 
     /* Do a little error checking and then write out to tables. */
@@ -497,11 +505,11 @@ for (;;)
 
     fprintf(seqTab, "%lu\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
 	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
-    fprintf(mrnaTab, "%lu\t%s\t%s\t%c\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\n",
-	id, faAcc, type, dir,
-	uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
-	uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
-	uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
+    fprintf(mrnaTab, "%lu\t%s\t%s\t%s\t%c\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\n",
+            id, faAcc, version, type, dir,
+            uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
+            uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
+            uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
     }
 printf("%d\n", count);
 printf("Updating tissue, lib, etc. values\n");
