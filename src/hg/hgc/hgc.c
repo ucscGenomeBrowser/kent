@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.679 2004/07/07 06:32:10 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.680 2004/07/07 18:40:55 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3604,7 +3604,10 @@ if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
-printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
+if (startsWith("chr", pslList->tName))
+    printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END              QUERY      START  END  TOTAL\n");
+else
+    printf(" SIZE IDENTITY  SCAFFOLD   STRAND    START     END              QUERY      START  END  TOTAL\n");
 printf("--------------------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
