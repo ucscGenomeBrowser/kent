@@ -2738,8 +2738,6 @@ cat << 'EOF' > makeMaf.csh
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-    # TODO: redo copy to download area
-
     ln -s ../axtNet/chr*.axt .
 
     # copy net axt's to download area
@@ -2795,7 +2793,7 @@ cat << 'EOF' > makeMaf.csh
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
-# MAKING RAT SYNTENY (DONE - 2004-06-14 - Hiram)
+# MAKING RAT SYNTENY (DONE - 2004-06-30 - Hiram)
 #	Re-Done after above done without the axtFilter
 
 ssh hgwdev
@@ -2811,19 +2809,24 @@ cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg17 -table=blastzBestRn3
 ./synteny2bed.pl
-XXX - running 2004-06-24 09:31
 #	The five commands above
-#	real    208m6.514s
-#	user    0m23.120s
-#	sys     0m5.010s
+#	real    196m2.565s
+#	user    0m21.170s
+#	sys     0m4.690s
 
 #	Used to load this in syntenyRn3, but that type is misleading to
 #	the table browser and fails the checkTableCoords check.
 #	Better to use this ensRatMusHom type:
-sed -e 's/ensPhusionBlast/ensRatMusHom/g' \
+sed -e 's/ensPhusionBlast/ensRn3MusHom/g' \
       $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
-      > ensRatMusHom.sql
-hgLoadBed hg17 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
+      > ensRn3MusHom.sql
+hgLoadBed hg17 ensRn3MusHom ucsc100k.bed -sqlTable=ensRn3MusHom.sql
+
+    #	featureBits hg17 ensRn3MusHom
+    #	2592164486 bases of 2866216770 (90.439%) in intersection
+    #	featureBits hg16 syntenyRn3
+    #	2595919851 bases of 2865248791 (90.600%) in intersection
+
 
 # MAKING RAT AXTTIGHT FROM AXTBEST (DONE - 2004-06-15 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
@@ -2853,6 +2856,13 @@ hgLoadBed hg17 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
 	/cluster/bin/i386/hgLoadPsl hg17 ${I}
 	echo "done ${I}"
     done
+
+    #	Compare results with previous assembly
+    #	featureBits hg17 blastzTightRn3
+    #	153936720 bases of 2866216770 (5.371%) in intersection
+    #	featureBits hg16 blastzTightRn3
+    #	153151903 bases of 2865248791 (5.345%) in intersection
+
 
     # copy  axt's to download area
     ssh hgwdev
@@ -3851,7 +3861,7 @@ SEQ2_LEN=$BASE/S2.len
     # featureBits hg17 blastzMm4
     # 1056201417 bases of 2866216770 (36.850%) in intersection
 
-# CHAIN MM4 BLASTZ (WORKING - 2004-06-22 - Hiram)
+# CHAIN MM4 BLASTZ (DONE - 2004-06-29 - Hiram)
 # redone with the 'axtFilter -notQ_random' removed - 2004-06-23
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
@@ -3918,15 +3928,13 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
         hgLoadChain hg17 ${c}_chainMm4 $i
         echo done $c
     end
-XXXX - running 2004-06-24 10:44
 
     #	featureBits hg17 chainMm4
-    #	xxx 2826192649 bases of 2866216770 (98.604%) in intersection
+    #	2829135227 bases of 2866216770 (98.706%) in intersection
     #	featureBits hg16 chainMm4
-    #	xxx 2830563493 bases of 2865248791 (98.789%) in intersection
+    #	2828363353 bases of 2865248791 (98.713%) in intersection
 
-# NET MM4 (WORKING - 2004-06-22 - Hiram)
-
+# NET MM4 (DONE - 2004-06-29 - Hiram)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
     mkdir preNet
@@ -3978,17 +3986,16 @@ XXXX - running 2004-06-24 10:44
     #	real    44m20.735s
     #	user    15m58.620s
     #	sys     1m58.720s
-XXXX - running 2004-06-24 13:52
     # check results
     # featureBits hg17 netMm4
-    # XXXX 2816623107 bases of 2866216770 (98.270%) in intersection
+    #	2824272033 bases of 2866216770 (98.537%) in intersection
     # featureBits hg16 netMm4
-    # XXXX 2820958389 bases of 2865248791 (98.454%) in intersection
+    #	2823565051 bases of 2865248791 (98.545%) in intersection
 
     # featureBits hg17 syntenyNetMm4
-    # XXXX 2780883450 bases of 2866216770 (97.023%) in intersection
+    #	2785830955 bases of 2866216770 (97.195%) in intersection
     # featureBits hg16 syntenyNetMm4
-    # XXXX 2784011730 bases of 2865248791 (97.165%) in intersection
+    #	2786960572 bases of 2865248791 (97.268%) in intersection
 
     # Add entries for net and chain to mouse/hg17 trackDb
 
@@ -4001,7 +4008,7 @@ XXXX - running 2004-06-24 13:52
     #	user    8m35.050s
     #	sys     1m7.230s
 
-    #	extract axt's from net, and convert to maf's
+    #	extract axt's from net, and convert to maf's (DONE - Kate - 2004-06-24)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
     mkdir ../axtNet ../mafNet
@@ -4031,9 +4038,9 @@ cat > makeMaf.csh << '_EOF_'
     # copy net axt's to download area
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.mm4/axtNet
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsmm4/axtNet
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsmm4/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsmm4/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtNet
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
 
@@ -4043,34 +4050,34 @@ cat > makeMaf.csh << '_EOF_'
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo "processing $c.axt -> ${c}_blastzBestmm4.psl"
+	echo "processing $c.axt -> ${c}_blastzBestMm4.psl"
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
-	S1.len S2.len pslBest/${c}_blastzBestmm4.psl
-	echo "Done: ${c}_blastzBestmm4.psl"
+	S1.len S2.len pslBest/${c}_blastzBestMm4.psl
+	echo "Done: ${c}_blastzBestMm4.psl"
     end
 
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.mm4/pslBest
-    for I in chr*Bestmm4.psl
+    for I in chr*BestMm4.psl
     do
 	/cluster/bin/i386/hgLoadPsl hg17 ${I}
 	echo "done ${I}"
     done
 
      # check results
-    # featureBits hg17 blastzBestmm4
-    #	970005525 bases of 2866216770 (33.843%) in intersection
-    # featureBits hg16 blastzBestmm4
-    #	976121391 bases of 2865248791 (34.068%) in intersection
+    # featureBits hg17 blastzBestMm4
+    #	1017319919 bases of 2866216770 (35.493%) in intersection
+    # featureBits hg16 blastzBestMm4
+    #	996722004 bases of 2865248791 (34.787%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg17/axtBest/mm4
-     cd /gbdb/hg17/axtBest/mm4
+     mkdir -p /gbdb/hg17/axtBest/Mm4
+     cd /gbdb/hg17/axtBest/Mm4
      ln -s /cluster/data/hg17/bed/blastz.mm4/axtNet/chr*.axt .
      cd /cluster/data/hg17/bed/blastz.mm4/axtNet
      rm -f axtInfoInserts.sql
-     foreach f (/gbdb/hg17/axtBest/mm4/chr*.axt)
+     foreach f (/gbdb/hg17/axtBest/Mm4/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
                 VALUES ('mm4','Blastz Best in Genome','$chr','$f');" \
@@ -4080,6 +4087,81 @@ cat > makeMaf.csh << '_EOF_'
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
+# MAKING MOUSE SYNTENY (DONE - 2004-06-29 - Hiram)
+
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/syntenyMm4
+cd /cluster/data/hg17/bed/syntenyMm4
+
+# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyMm3
+cp -p /cluster/data/hg17/bed/syntenyRn3/*.pl .
+
+./syntenicBest.pl -db=hg17 -table=blastzBestMm4
+./smooth.pl
+./joinsmallgaps.pl
+./fillgap.pl -db=hg17 -table=blastzBestMm4
+./synteny2bed.pl
+#	The five commands above
+#	real    220m16.227s
+#	user    0m22.940s
+#	sys     0m3.960s
+
+#	Used to load this in syntenyMm4, but that type is misleading to
+#	the table browser and fails the checkTableCoords check.
+#	Better to use this ensRatMusHom type:
+#	Need a new name here for the Mm4 to not conflict with Rn3
+sed -e 's/ensPhusionBlast/ensRatMm4Hom/g' \
+      $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
+      > ensRatMm4Hom.sql
+hgLoadBed hg17 ensRatMm4Hom ucsc100k.bed -sqlTable=ensRatMm4Hom.sql
+    #	featureBits hg17 ensRatMm4Hom
+    #	2549307611 bases of 2866216770 (88.943%) in intersection
+    #	featureBits hg16 syntenyMm4
+    #	2560252977 bases of 2865248791 (89.355%) in intersection
+
+# MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-06-29 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.mm4/axtNet
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm4.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.mm4/pslTight
+    for I in chr*TightMm4.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+    #	Compare results with previous assembly:
+    #	featureBits hg17 blastzTightMm4
+    #	166569246 bases of 2866216770 (5.811%) in intersection
+    #	featureBits hg16 blastzTightMm4
+    #	162641577 bases of 2865248791 (5.676%) in intersection
+
+    # copy  axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.mm4/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm4/axtTight
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
 
 # BLASTZ CHIMP panTro1 (2004-06-21 kate)
 # NOTE: Ran with abridge repeats=0, although SMSK was set
@@ -4850,8 +4932,135 @@ rm $TMP/$root.pp
 #type bed 12 .
 
 
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2003-08-01 - Hiram)
+#	Needed to download a new binary for this run.  Our Linux systems
+#  XXX - I thought a new binary was needed.  Turned out it was already
+#  here in our hg3rdParty CVS project.  All of this discussed here can
+#  be simply fetched from cvs:  cvs co hg3rdParty/genscanlinux
+#	have been updated since the last time, the old binary would not
+#	run.  Go to: http://genes.mit.edu/GENSCAN.html
+#	and then to: http://genes.mit.edu/license.html
+#	Fill in the license agreement and you can then pick up the
+#	README and the Linux version: genscanlinux.tar.uue.tgz
+#	To uudecode that file, go to one of the Solaris home machines
+#	and use the uudecode command:
+#	uudecode genscanlinux.tar.uue.tgz
+#	That produces the file: genscanlinux.tar
+#	Which contains the files:
+# drwxr-xr-x chris/burgelab    0 2003-02-17 11:48:44 ./
+# -rw-r--r-- chris/burgelab 219056 2000-09-07 12:39:26 ./Arabidopsis.smat
+# -rw-r--r-- chris/burgelab   6622 2000-09-07 12:39:26 ./HUMRASH
+# -rw-r--r-- chris/burgelab    849 2000-09-07 12:39:26 ./HUMRASH.sample
+# -rw-r--r-- chris/burgelab 219050 2000-09-07 12:39:26 ./HumanIso.smat
+# -rw-r--r-- chris/burgelab 155735 2000-09-07 12:39:26 ./Maize.smat
+# -rw-r--r-- chris/burgelab  24465 2000-09-07 12:39:26 ./README
+# -rw-r--r-- chris/burgelab   6344 2000-09-07 12:39:27 ./HUMRASH.ps
+# -rwxr-xr-x chris/burgelab 126365 2003-02-17 11:48:44 ./genscan
+#
+#	I placed these currently in: /cluster/home/hiram/GENSCAN/
+#	I'll check with Angie where it should properly live ...
 
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/genscan
+    cd /cluster/data/hg17/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the contigs
+    # *that do not have pure Ns* (due to heterochromatin, unsequencable 
+    # stuff) which would cause genscan to run forever.
+    rm -f genome.list
+    bash
+    for f in `cat /cluster/data/hg17/contig.lst`
+    do
+      egrep '[ACGT]' /cluster/data/hg17/$f > /dev/null
+	if [ $? = 0 ]; then
+	    echo /cluster/data/hg17/$f >> genome.list
+	fi
+    done
+    # exit your bash shell if you are [t]csh ...
+    #	This egrep matched all the contigs in hg17.  I guess none of
+    #	them are complete Ns* at this point.
 
+    # Log into kki (not kk !).  kki is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kki
+    cd /cluster/data/hg17/bed/genscan
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/home/hiram/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/hiram/GENSCAN/genscan -par=/cluster/home/hiram/GENSCAN/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+# Completed: 370 of 380 jobs
+# Crashed: 10 jobs
+# CPU time in finished jobs:      69632s    1160.53m    19.34h    0.81d  0.002 y
+# IO & Wait Time:                  1547s      25.78m     0.43h    0.02d  0.000 y
+# Average job time:                 192s       3.21m     0.05h    0.00d
+# Longest job:                     2846s      47.43m     0.79h    0.03d
+# Submission to last job:          6350s     105.83m     1.76h    0.07d
+    #	Ten of these jobs failed due to out of memory.
 
+    # If there were out-of-memory problems (run "para problems"), then 
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.  In build33, this was 22/NT_011519.
+    #  In build34 there were NO failures !
+
+    #	Evidently this new version of genscan is quite different than
+    #	was used in Hg16 - in fact the results below indicate a vast
+    #	difference.
+
+    #	One works OK with no change in window on kolossus: NT_005403
+    #	Trying the last 9 with a window of 2000000.  Four worked at that size:
+    #	NT_022184 NT_026437 NT_010783 NT_008583
+    #	Trying the remaining 5 at 1800000
+    #	done: NT_010194 NT_005612 NT_008470 NT_024524
+    #	Only one failed at that setting: NT_011520
+    #	Run it with a window of 1600000 - that worked
+    #	It doesn't make any difference to run these on kolossus or not,
+    #	the memory limitation is in the genscan program itself.
+
+    # Convert these to chromosome level files as so:     
+    ssh eieio
+    cd /cluster/data/hg17/bed/genscan
+    $HOME/bin/i386/liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/N*.gtf
+    $HOME/bin/i386/liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft \
+	warn subopt/N*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/genscan
+    ldHgGene hg17 genscan genscan.gtf
+    #	This command is taking a very long time to run ...
+XXX - running 2004-06-30 14:46
+    #	Read 100444 transcripts in 496249 lines in 1 files
+    #	100444 groups 46 seqs 1 sources 1 feature types
+
+    #	Note the difference from Hg16 which used to be:
+    #	Reading genscan.gtf
+    #	Read 42974 transcripts in 326300 lines in 1 files
+    #	  42974 groups 41 seqs 1 sources 1 feature types
+    #	42974 gene predictions
+    hgPepPred hg17 generic genscanPep genscan.pep
+#	Processing genscan.pep
+    hgLoadBed hg17 genscanSubopt genscanSubopt.bed
+#	stringTab = 0
+#	Reading genscanSubopt.bed
+#	Loaded 518038 elements
+#	Sorted
+#	Creating table definition for 
+#	Saving bed.tab
+#	Loading hg17
+
+    #	featureBits hg16 genscan
+    #	55333689 bases of 2865248791 (1.931%) in intersection
 
 
