@@ -97,47 +97,25 @@
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD><TD>
 
-	            <P> This site contains information derived from
-		    the ENCODE project at NHGRI.  Additional 
-		    <A TARGET=_blank HREF="http://www.genome.gov/10005107" TARGET=_blank>background information</A>
-		    on the ENCODE project can be found on the 
-		    <A HREF="http://www.genome.gov/" TARGET=_blank>NHGRI</A> 
-		    website.  &nbsp;
-		    There is also an <A HREF="http://www.ensembl.org">Ensembl</A> version of the 
-		    <A HREF="http://www.ensembl.org/Homo_sapiens/encode.html">ENCODE</A>
-		    resource page available.
-		    <P>
-In April 2003, the sequence of the human genome was completed, but
-much remains to be done. To maximize the information contained in the
-sequence, the identity and precise location of all of the functional
-elements in the genome will have to be determined. These include
-promoters and other transcriptional regulatory sequences, and
-determinants of chromosome structure and function such as origins of
-replication. This project is assembling a comprehensive encyclopedia
-of all of these features in a selected 1% of the genome to better
-understand human biology, to predict potential disease risks, and to
-stimulate the development of new therapies to prevent and treat
-disease.
-		    <P>
-The NHGRI has created a highly interactive public research consortium
-to carry out a pilot project for testing and comparing existing and
-new methods to identify functional sequences in DNA. The aim is to
-examine a diverse set of techniques, technologies and strategies to
-identify all the functional elements in defined regions of human
-genomic sequence, to identify gaps in our ability to annotate genomic
-sequence, and to consider the suitability of such methods to be scaled
-up for an effort to analyze the entire human genome.
-		    <P>
-There are several roles for the UCSC Genome Bioinformatics group in
-this work.  We manage the official repository of the sequence-related
-data for the consortium and support the coordination of data
-submission, storage, retrieval, and visualization.  We also have a
-special interest in comparative genomics, and are providing additional
-resources for the ENCODE groups working in this area.
-		    <P>
-We'd like to thank NHGRI for their support of this project, and to the
-various contributors of annotations and analyses.  The team at UCSC
-that develops and maintains this ENCODE site is made up of 
+	            <P> This site contains information related to
+		    the 
+		    <A TARGET=_blank HREF="http://www.genome.gov/10005107" TARGET=_blank>
+                    ENCODE project </A>
+                    at 
+		    <A HREF="http://www.genome.gov/" TARGET=_blank>NHGRI</A>.
+The UCSC Genome Bioinformatics group manages the official repository of 
+sequence-related data for the ENCODE consortium and supports the 
+coordination of data submission, storage, retrieval, and visualization. 
+UCSC also has a special interest in comparative genomics, and we provide
+resources for the ENCODE multiple sequence alignment interest group.
+<A HREF="http://www.ensembl.org" TARGET=_BLANK> Ensembl</A>
+also provides an
+<A HREF="http://www.ensembl.org/Homo_sapiens/encode.html" TARGET=_BLANK>
+ENCODE resource page</A>.
+<P>
+We'd like to thank NHGRI and the contributors of annotations and analyses
+to this project.  
+The team at UCSC that develops and maintains this ENCODE site is made up of 
 <A HREF="http://www.soe.ucsc.edu/~daryl" TARGET=_BLANK>
 Daryl Thomas</A>, 
 <A HREF="mailto:&#107;&#97;t&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.&#101;&#100;u">
@@ -146,6 +124,7 @@ Kate Rosenbloom</A>,
 Jim Kent<A>,
 and the 
 <A HREF="/staff.html">UCSC Genome Bioinformatics staff</A>.
+&nbsp; <A HREF="about.html">Read more.</A>
 
 	            </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
@@ -166,7 +145,78 @@ and the
   		        <FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; News</B></FONT></TD>
 		        <TD ALIGN="right">&nbsp;
 		    </TD></TR></TABLE>
+
 	        </TD></TR></TABLE>
+	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                    <TR><TH HEIGHT=3></TH></TR>
+                    <TR><TD WIDTH=10></TD>
+                    <TD>
+	            <P> <FONT FACE="courier" SIZE=3><B>26 October 2004 -
+		    ENCODE Sequence Freeze For Multiple Alignments</B></FONT><BR>
+		    <P>
+We are pleased to release the first "official" sequence data freeze for
+the ENCODE multiple sequence alignment projects. 
+
+The data formats are described in the 
+<A HREF="http://genome-test.cse.ucsc.edu/encode/downloads/msa/README" TARGET=_BLANK> README</A>
+file, and the sequences and supporting information is collected in the 
+<A HREF="http://genome-test.cse.ucsc.edu/encode/downloads/msa/OCT-2004" TARGET=_BLANK> data directory</A>
+<P>
+The species included in this freeze are as follows:
+<PRE>
+       _SPECIES_      _SOURCE_
+        Human           hg16
+        Chimpanzee      panTro1
+        Dog             canFam1
+        Rat             rn3
+        RatB	        BCM
+        Mouse           mm5
+        Chicken		galGal2
+        Galago		NISC
+        Baboon		NISC
+        Marmoset        NISC
+        Armadillo       NISC
+        Platypus        NISC
+</PRE>
+You will notice that we have worked hard to include a number of species
+for which genome-wide sequence data was already available. The process
+by which these orthologous regions were identified is still an area of
+active research development, the details of which will be presented at
+the upcoming ENCODE meeting at CSHL.
+<P>
+Please note that we have also included a *second* rat sequence (ratB) in
+this freeze.  RatB represents an initiative to standardize the quality
+level of sequences in the ENCODE regions for species with genome-wide
+sequence data. The data were made available just before our freeze date,
+so we decided to include both versions of the rat sequence for
+now. Eventually these sequences will likely be rolled into future genome
+assemblies.
+<P>
+Remember, this is a work in progress, so not all targets have sequence
+from all species. And some species/target combinations may not be
+complete yet. Progress on the NISC-generated sequences can be found at the
+<A HREF="http://www.nisc.nih.gov/open_page.html?/projects/encode/index.cgi" TARGET=_BLANK>
+NISC ENCODE Project: Comparative Sequencing</A>.
+<P>
+Many people have worked very hard to make these data available. Special
+thanks to Daryl Thomas, Kate Rosenbloom and the entire UCSC Team; Greg
+Schuler and the NCBI team; Colin Dewey and Lior Pachter; Pam Thomas and
+the NISC team; and David Wheeler and the BCM team.
+<P>
+Please send any comments to the 
+<A HREF="mailto: <ENCODE_MSA-L@LIST.NIH.GOV>" TARGET=_BLANK>
+ENCODE MSA Mailing List</A>.
+<P>
+&nbsp; &nbsp; Elliott
+<BR>
+-- 
+<BR>
+Elliott H. Margulies, Ph.D.
+Genome Technology Branch, NHGRI
+    	            </TD><TD WIDTH=15>
+	        </TD></TR></TABLE>
+                <HR>
+
 	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD>
@@ -174,6 +224,7 @@ and the
 	            <P> <FONT FACE="courier" SIZE=3><B>24 June 2004 -
 		    ENCODE Project Portal Released</B></FONT><BR>
 		    <P>
+
 		    We are proud to announce the release of features
 		    in the UCSC Genome Browser that are tailored to
 		    the ENCODE project community, including this home
