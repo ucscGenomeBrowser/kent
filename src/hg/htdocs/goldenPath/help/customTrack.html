@@ -13,7 +13,9 @@
 <P>You can temporarily add your own tracks to the genome browser by 
 uploading or pasting in text in the formats
 described in this document.    Here is a simple example:</P>
-<PRE><TT>track name=spacer description=&quot;Blue ticks every 10000 bases&quot; color=0,0,255
+<PRE><TT>
+browser position chr22:1-20001
+track name=spacer description=&quot;Blue ticks every 10000 bases&quot; color=0,0,255
 chr22	0	 1
 chr22	10000 10001
 chr22	20000 20001
@@ -24,6 +26,20 @@ chr22	400	500 third</TT></PRE>
 <P>The format is line oriented.  A line can describe a track, or an item in a track. Empty lines and lines starting with # are ignored.  Track lines always
 begin with the word 'track'.  Item lines can be in any one of four formats: BED, PSL,  GFF or GTF.  All the lines
 for a given track must be in the same format. </P>
+<H2>Browser Lines</H2>
+<P>Lines that begin with the word 'browser' control the overall browser
+display.  The second word in the line specifies what to control and may
+be one of the following:</P>
+<UL>
+   <LI>position - Describes the part of the genome the browser will display in 
+       chromosome:start-end format.  
+   <LI>hide all - Hides all tracks except for custom ones.
+   <LI>hide trackName(s) - this hides tracks based on their symbolic names.  You can find the symbolic names of tracks by viewing the genome browser as source under your web browser.
+   <LI>dense all - Shows all tracks in dense mode.
+   <LI>dense trackName(s) - makes particular tracks dense.
+   <LI>full all - Shows all tracks in full mode.
+   <LI>full trackName(s) - makes particular tracks full.
+</UL>
 <H2>Track Lines</H2>
 <P>Track lines are used to define attributes that are used for all lines of a track.  Track lines begin with the
 word 'track' and are followed by a number of attribute=value settings.   Here are the currently defined attributes:</P>
@@ -45,7 +61,6 @@ word 'track' and are followed by a number of attribute=value settings.   Here ar
 	with the item name. No default.
 </UL>
 
-<PRE></PRE>
 <H2>BED Lines</H2>
 <P>BED lines are a flexible way of defining things to display in the browser.  BED lines must have at least three
 fields, and optionally can have up to twelve fields.  The number of fields must be consistent throughout any single
