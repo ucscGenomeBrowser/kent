@@ -42,6 +42,7 @@
 #include "exprBed.h"
 #include "refLink.h"
 #include "browserTable.h"
+#include "hgConfig.h"
 
 #define CHUCK_CODE 0
 #define ROGIC_CODE 0
@@ -2835,6 +2836,8 @@ struct browserTable *tableList = NULL;
 database = cgiOptionalString("db");
 if (database == NULL)
     database = "hg5";
+
+hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
 seqName = cgiString("c");
 winStart = cgiInt("l");

@@ -5629,6 +5629,7 @@ database = cgiOptionalString("db");
 if (database == NULL)
     database = "hg6";
 hSetDb(database);
+hDefaultConnect();
 initTl();
 
 /* Read in input from CGI. */

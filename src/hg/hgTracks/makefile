@@ -17,3 +17,5 @@ hgTracks: $O
 lib:
 	cd ../../lib; make
 
+tags: 
+		ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
