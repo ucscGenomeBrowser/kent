@@ -2383,7 +2383,7 @@ LOAD RNAGENES (TO DO)
       - liftUp chrom.gff ../../jkStuff/liftAll.lft carry ncrna-oo27.gff
       - hgRnaGenes rn3 chrom.gff
 
-LOAD EXOFISH (TO DO)
+LOAD EXOFISH (TO DO)  (SEE ECORES TRACKS BELOW, hartera)
      - login to hgwdev
      - cd /cluster/store3/rn3/bed
      - mkdir exoFish
@@ -3054,8 +3054,28 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # add html for details pages to this directory:
     # ecoresFr1.html and ecoresTetraodon.html
 
+# MAKE RAT 11.OOC FILE [DONE, 2004-05-04, hartera]
+# OOC FILE REQUIRED FOR BLAT
+# Use -repMatch=1024 (based on genome size, for human use 1024)
+    ssh kkr1u00
+    mkdir -p /cluster/bluearc/rat/rn3
+    mkdir -p /cluster/data/rn3/bed/ooc
+    cd /cluster/data/rn3/bed/ooc
+    mkdir -p /cluster/bluearc/rat/rn3/softNib
+    cp -p /cluster/data/rn3/softNib/chr*.nib /cluster/bluearc/rat/rn3/softNib
+
+    ls -1 /cluster/data/rn3/softNib/chr*.nib > nib.lst
+    /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/rat/rn3/11.ooc -repMatch=1024
+# Writing /cluster/bluearc/rat/rn3/11.ooc
+# Wrote 25600 overused 11-mers to /cluster/bluearc/rat/rn3/11.ooc 
+    cp -p /cluster/bluearc/rat/rn3/11.ooc rn3_11.ooc
+    cp -p /cluster/bluearc/rat/rn3/11.ooc /iscratch/i/rn3/rn3_11.ooc
+    iSync
+
 # Affymetrix RAE230 GeneChip track - affyRAE230
-# [DONE, hartera, 2004-03-26]
+# RE-DO alignments using rat specific 11.ooc file
+# [DONE, hartera, 2004-05-04]
 
     mkdir /projects/compbio/data/microarray/affyRat
     # Download RAE230A and RAE230B consensus sequences from Affymetrix web site
@@ -3075,32 +3095,31 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # Set up cluster job to align RAE230 consensus sequences to rn3
     ssh kkr1u00
     cd /cluster/data/rn3/bed
-    mkdir affyRat
-    cd affyRat
+    mkdir affyRat.2004-05-04
+    cd affyRat.2004-05-04
     mkdir -p /iscratch/i/affy 
     cp /cluster/bluearc/affy/RAE230_all.fa /iscratch/i/affy
     iSync
-
+    
     ssh kk
-    cd /cluster/data/rn3/bed/affyRat
+    cd /cluster/data/rn3/bed/affyRat.2004-05-04
     ls -1 /iscratch/i/affy/RAE230_all.fa > affy.lst
     ls -1 /scratch/rat/rn3/trfFa/ > allctg.lst
 
-    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/rat/rn3/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/rn3/rn3_11.ooc /scratch/rat/rn3/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
 
     gensub2 allctg.lst affy.lst template.sub para.spec
     mkdir psl
     para create para.spec
 
     # Actually do the job with usual para try/check/push/time etc.
-# para time 2004-03-25
+# para time 2004-05-04
 #Completed: 591 of 591 jobs
-#CPU time in finished jobs:      17786s     296.43m     4.94h    0.21d  0.001 y
-#IO & Wait Time:                  5807s      96.79m     1.61h    0.07d  0.000 y
-#Average job time:                  40s       0.67m     0.01h    0.00d
-#Longest job:                      104s       1.73m     0.03h    0.00d
-#Submission to last job:           260s       4.33m     0.07h    0.00d
-
+# CPU time in finished jobs:       9950s     165.83m     2.76h    0.12d  0.000 y
+# IO & Wait Time:                  5522s      92.04m     1.53h    0.06d  0.000 y
+# Average job time:                  26s       0.44m     0.01h    0.00d
+# Longest job:                       49s       0.82m     0.01h    0.00d
+# Submission to last job:           165s       2.75m     0.05h    0.00d
 
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create affyRAE230.psl
@@ -3117,7 +3136,13 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     mv affyRAE230.psl.bak affyRAE230.psl
     
     # load track into database
-   
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/affyRat.2004-05-04
+    hgsql -e 'drop table affyRAE230' rn3
+    hgsql -e 'select * from  history' rn3 | less
+    # affyRAE230 was added as entry ix = 23 
+    # so add errata to say these alignments have been removed
+    hgsql -e 'update history set errata = "Removed alignmnents and re-align sequences using rat specific 11.ooc file for Blat" where ix = 23' rn3
     hgLoadPsl rn3 affyRAE230.psl
 
     # Add consensus sequences for RAE230
@@ -3125,11 +3150,19 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
     ln -s /projects/compbio/data/microarray/affyRat/RAE230_all.fa .
-   
+    # sequences are the still the same so no need to reload these
     hgLoadSeq -abbr=RAE230 rn3 /gbdb/hgFixed/affyProbes/RAE230_all.fa
    
     # Clean up    
     rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab psl.tab 
+
+# UPDATE knownToRAE230 TABLE - USED BY THE FAMILY BROWSER [DONE, 2004-05-04, hartera]
+# knownToRAE230 depends on affyRAE230 so update this table
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/affyRat.2004-05-04
+    hgsql -e 'drop table knownToRAE230' rn3
+    # create and load knownToRAE230
+    hgMapToGene rn3 affyRAE230 knownGene knownToRAE23
 
 #  gc5Base wiggle TRACK (DONE - 2004-04-07 - Hiram)
     # Perform a gc count with a 5 base
@@ -3517,16 +3550,3 @@ o Adjust drawing parameters for Proteome Browser stamps
 o Perform preliminary review of Proteome Browser for rn3
 
 o Notify QA for formal review, when all PB build steps done.
-
-#  miRNA track (DONE - 2004-05-04 - Hiram)
-    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
-    #	and Michel.Weber@ibcg.biotoul.fr
-    #	notify them if this assembly updates to renew this track
-    ssh hgwdev
-    mkdir /cluster/data/rn3/bed/miRNA
-    cd /cluster/data/rn3/bed/miRNA
-    wget --timestamping \
-    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/rno_rgsc3_1.*"
-    grep -v "^track " rno_rgsc3_1.bed | sed -e "s/ /\t/g" > rn3.bed
-    hgLoadBed rn3 miRNA rn3.bed
-    # entry in trackDb/trackDb.ra already there
