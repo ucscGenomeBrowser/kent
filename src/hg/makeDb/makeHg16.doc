@@ -8728,15 +8728,22 @@ $HOME/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
 #Submission to last job:            80s       1.33m     0.02h    0.00d
 
 
-# CHAIN FUGU BLASTZ (DONE 4/19/04 angie)
+# CHAIN FUGU BLASTZ (REDONE 10/1/04 angie)
+    # NOTE: originally done 4/19, but with a buggy axtChain.
+    # axtChain dir moved aside to axtChain.orig before rebuilding.
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChrom/*.axt \
-      > input.lst
+    # Check size>0 for .axt files (empty inputs cause out line+ check to fail):
+    cp /dev/null input.lst
+    foreach f (`ls -1S /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChrom/*.axt`)
+      if (-s $f) then
+        echo $f >> input.lst
+      endif
+    end
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
@@ -8745,21 +8752,11 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # << this line makes emacs coloring happy
 
     # Reuse gap penalties from chicken run.
-    cat << '_EOF_' > ../../chickenHumanTuned.gap
-tablesize	11
-smallSize	111
-position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
-qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
-tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
-bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
-'_EOF_'
-    # << this line makes emacs coloring happy
-
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
-                      -linearGap=../../chickenHumanTuned.gap \
-                      -minScore=5000 $1 \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -minScore=5000 $1 \
     /iscratch/i/gs.17/build34/bothMaskedNibs \
     /iscratch/i/fr1/nib $2 > $3
 '_EOF_'
@@ -8768,12 +8765,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-    # axtChrom/chr19_random.axt is empty, so the {out line +} checks failed:
-#Completed: 41 of 42 jobs
-#Crashed: 1 jobs
-#Average job time:                  18s       0.30m     0.00h    0.00d
-#Longest job:                       86s       1.43m     0.02h    0.00d
-#Submission to last job:            86s       1.43m     0.02h    0.00d
+#Completed: 41 of 41 jobs
+#Average job time:                  26s       0.44m     0.01h    0.00d
+#Longest job:                      121s       2.02m     0.03h    0.00d
+#Submission to last job:           121s       2.02m     0.03h    0.00d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -8792,7 +8787,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# NET FUGU BLASTZ (DONE 4/19/04 angie)
+# NET FUGU BLASTZ (REDONE 10/1/04 angie)
+    # NOTE: originally done 4/19, but with results of a buggy axtChain.
     ssh kksilo
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -8802,20 +8798,20 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
-    netClass noClass.net hg16 fr1 human.net
+    netClass noClass.net hg16 fr1 fugu.net
 
     # Make a 'syntenic' subset:
     ssh kksilo
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
     rm noClass.net
     # Make a 'syntenic' subset of these with
-    netFilter -syn human.net > humanSyn.net
+    netFilter -syn fugu.net > fuguSyn.net
 
     # Load the nets into database 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg16 netFr1 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyFr1 stdin
+    netFilter -minGap=10 fugu.net |  hgLoadNet hg16 netFr1 stdin
+    netFilter -minGap=10 fuguSyn.net | hgLoadNet hg16 netSyntenyFr1 stdin
 
 # LIFTOVER CHAIN TO FUGU FR1 (DONE 2004-09-28 kate)
     ssh kolossus
