@@ -5,7 +5,7 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.6 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: dlist.c,v 1.7 2003/05/17 06:45:09 kent Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */
@@ -215,7 +215,7 @@ if (len > 1)
     compareFunc = compare;
     qsort(sorter, len, sizeof(sorter[0]), dlNodeCmp);
     dlListInit(list);
-    for (i=0, node = list->head; i<len; ++i, node = node->next)
+    for (i=0; i<len; ++i)
 	dlAddTail(list, sorter[i].node);
     freeMem(sorter);
     }
