@@ -1032,7 +1032,7 @@ type wig 0 100
     ls ?{,?}/*.fa > jkStuff/chrom.lst
     blat jkStuff/chrom.lst jkStuff/ooc.txt jkStuff/ooc.psl \
         -tileSize=11 -makeOoc=11.ooc -repMatch=1024
-    cp 11.ooc /cluster/bluearc/hg/hg/chimp11.ooc
+    cp 11.ooc /cluster/bluearc/hg/h/chimp11.ooc
 
     # redo chimp mrna's
     ssh eieio
@@ -1239,9 +1239,10 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ssh kksilo
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap/netChain
+
     # needs Angie's mod to chainNet to suppress info messages
 cat > net.csh << 'EOF'
-    chainMergeSort -saveId *.chain | \
+    chainMergeSort -saveId chr*.chain | \
         chainPreNet stdin \
                 /cluster/data/panTro1/chrom.sizes \
                 /cluster/data/hg16/chrom.sizes stdout | \
@@ -1253,7 +1254,10 @@ cat > net.csh << 'EOF'
     # << this line makes emacs coloring happy
     csh net.csh >&! net.log &
     tail -100f net.log
-    
+
+    # create all.chain file with new ID's, for swapping to human browser
+    chainMergeSort -saveId chr*.chain > ../all.newId.chain
+
     ssh hgwdev
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap/netChain
@@ -1858,5 +1862,58 @@ cat > split.csh << 'EOF'
     hgsql panTro1 < ~/kent/src/hg/lib/ensGtp.sql
     hgsql panTro1 -e 'load data local infile "ensGtp.txt" into table ensGtp'
     hgPepPred panTro1 generic ensPep ensPep.fa
+
+
+# MAP ENCODE ORTHOLOG REGIONS (DONE 2004-07-09 kate)
+    ssh kksilo
+    mkdir /cluster/data/panTro1/bed/encodeRegions
+    cd /cluster/data/panTro1/bed/encodeRegions
+
+    ssh kksilo
+    mkdir /cluster/data/panTro1/bed/encodeRegions
+    cd /cluster/data/panTro1/bed/encodeRegions
+    # at .60, mapped 42, at .50 mapped all 44
+    liftOver -minMatch=.50 \
+        /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16ToPanTro1.newId.over.chain \
+        encodeRegions.bed encodeRegions.unmapped
+    wc -l *
+     # 44 encodeRegions.bed
+      # 0 encodeRegions.unmapped
+     # 44 total
+
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/encodeRegions
+    hgLoadBed panTro1 encodeRegionsNew encodeRegions.bed -noBin
+     
+    # TODO: remove this stuff 
+    # swap hg16->panTro1 chains for display in chimp browser (temporary, for ENCODE development)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/liftOver
+    chainSwap hg16TopanTro1.chain panTro1ToHg16.swp.chain
+
+    # TODO: remove this stuff 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/liftOver
+    hgLoadChain panTro1 liftOverHg16SwpChain panTro1ToHg16.swp.chain
+
+    # TODO: remove this stuff
+    # also load "all chains" liftOver chain (not reciprocal best)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/liftOver
+    chainSwap /cluster/data/hg16/blat-blastz.panTro1/over.chain \
+        panTro1ToHg16.all.swp.chain 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/liftOver
+    hgLoadChain panTro1 liftOverHg16SwpAllChain panTro1ToHg16.all.swp.chain
+
+    # TODO: remove this stuff too
+    ssh kolossus
+    cd /cluster/data/hg16/bed/liftOver
+    chainSwap /cluster/data/hg16/bed/blastz-blat.panTro1/over.newId.chain \
+        panTro1ToHg16.newId.swp.chain 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/liftOver
+    hgLoadChain panTro1 liftOverHg16SwpNewIdChain panTro1ToHg16.newId.swp.chain
 
 
