@@ -274,4 +274,12 @@ if (startsWith("chr", s))
 return s;
 }
 
+boolean hIsFin(char *chrom)
+/* Return TRUE if this is a finished chromosome. */
+{
+chrom = skipChr(chrom);
+return sameString(chrom, "20") || sameString(chrom, "21")
+   || sameString(chrom, "22");
+}
+
 

@@ -31,6 +31,9 @@ struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCa
 struct dnaSeq *hLoadChrom(char *chromName);
 /* Fetch entire chromosome into memory. */
 
+void hNibForChrom(char *chromName, char retNibName[512]);
+/* Get .nib file associated with chromosome. */
+
 struct slName *hAllChromNames();
 /* Get list of all chromosomes. */
 
