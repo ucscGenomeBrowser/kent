@@ -3,10 +3,10 @@ shortLabel Gap
 longLabel Gap Locations
 priority 11
 group map
-visibility hide
+visibility dense
 type bed 3 +
 
-track est
+track all_est
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
@@ -25,8 +25,8 @@ spectrum on
 type psl mrna
 
 track xenoMrna
-shortLabel Non-ciona mRNA
-longLabel Non$organism mRNAs from Genbank
+shortLabel Non-$Organism mRNA
+longLabel Non-$Organism mRNAs from Genbank
 group rna
 priority 63
 visibility dense
@@ -38,25 +38,26 @@ shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
 group rna
 priority 56
-visibility hide
+visibility dense
 spectrum on
 intronGap 30
 type psl est
 
-track xenoEst
-shortLabel Non-ciona EST
-longLabel Non$organism ESTs from Genbank 
-group rna
-priority 65
+track xenoRefGene
+shortLabel Non-Ciona RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
 visibility hide
-spectrum on
-type psl xeno
-url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
+track mgcGenes
 
 track snapGene
 shortLabel SNAP Genes
 longLabel SNAP Gene Predictions
-group compGeno
+group genes
 priority 49
 visibility dense
 type genePred
@@ -64,27 +65,30 @@ type genePred
 track jgiGene
 shortLabel JGI Genes
 longLabel JGI Gene Predictions
-group compGeno
+group genes
 priority 49
 visibility dense
 type genePred
 
-track xenoRefGene
-shortLabel xenoRefGene 
-longLabel xenoRefGene
-group compGeno
-priority 50
-visibility dense
-type genePred refPep refMrna
-
 track blastHg16KG
-shortLabel human protein blast
-longLabel human protein blast
-group x
-priority 1101
-visibility dense
+shortLabel Human knownGene tBLASTn
+longLabel Human knownGene tBLASTn
+group compGeno
+priority 114
+visibility pack
 colorChromDefault off
 type psl protein
+
+track blatSavignyi
+shortLabel C. savignyi Blat
+longLabel Ciona savignyi Translated Blat Alignments
+group compGeno
+priority 113
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
 
 track tblastHg16
 shortLabel tblastHg16
