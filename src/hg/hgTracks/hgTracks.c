@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.775 2004/07/30 18:34:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.776 2004/08/04 17:46:35 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6091,8 +6091,8 @@ int spreadStringCharWidth(int width, int count)
 }
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
-                        Color color, MgFont *font, char *text, 
-                        char *match, int count)
+		       Color color, MgFont *font, char *text, 
+		       char *match, int count)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color. 
@@ -6103,13 +6103,41 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
  * the input line (text) */
 {
 char c[2] = "";
-int i;
+int i,j,textPos=0;
 int x1, x2;
-
+char *motifString = cartOptionalString(cart,"hgt.motifs");
+char **motifs = NULL;
+boolean *inMotif = NULL;
+int motifCount = 0;
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
 
-for (i=0; i<count; i++, text++)
+/* If we have motifs, look for them in the string. */
+if(motifString != NULL)
+    {
+    touppers(motifString);
+    motifString = cloneString(motifString);
+    motifCount = chopString(motifString, ",", NULL, 0);
+    AllocArray(motifs, motifCount);
+    chopString(motifString, ",", motifs, motifCount);
+    AllocArray(inMotif, count);
+    for(i = 0; i < motifCount; i++)
+	{
+	char *mark = text;
+	while((mark = stringIn(motifs[i], mark)) != NULL)
+	    {
+	    int end = mark-text + strlen(motifs[i]);
+	    for(j = mark-text; j < end && j < count ; j++)
+		{
+		inMotif[j] = TRUE;
+		}
+	    mark++;
+	    }
+	}
+    freez(&motifString);
+    }
+
+for (i=0; i<count; i++, text++, textPos++)
     {
     x1 = i * width / count;
     x2 = (i+1) * width/count;
@@ -6117,6 +6145,7 @@ for (i=0; i<count; i++, text++)
         {
         /* insert count follows -- replace with a colored vertical bar */
         text++;
+	textPos++;
         i--;
         vgBox(vg, x1+x, y, 1, height, alignInsertsColor());
         continue;
@@ -6126,8 +6155,15 @@ for (i=0; i<count; i++, text++)
     if (match != NULL && match[i])
         if (*text != match[i])
             clr = noMatchColor;
-    vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
+    if(inMotif != NULL && inMotif[textPos])
+	{
+	vgBox(vg, x1+x, y, x2-x1, height, clr);
+	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
+	}
+    else
+	vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
     }
+freez(&inMotif);
 }
 
 void spreadString(struct vGfx *vg, int x, int y, int width, int height,
@@ -6148,9 +6184,11 @@ if (thisSeq == NULL)
    seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
 else
     seq = thisSeq;
+
 if (complementSeq)
     complement(seq->dna, seq->size);
 spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
+
 if (thisSeq == NULL)
     freeDnaSeq(&seq);
 }
@@ -6701,8 +6739,8 @@ if (rulerMode != RULER_MODE_OFF)
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
         struct dnaSeq *extraSeq;
-		    /* extraSeq has extra leading & trailing bases
-		     * for translation in to amino acids */
+	/* extraSeq has extra leading & trailing bases
+	 * for translation in to amino acids */
         boolean complementRulerBases = 
                 cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
         if (complementRulerBases)
@@ -8319,7 +8357,6 @@ if (!hideControls)
 
 /* Make chromsome ideogram gif and map. */
 makeChromIdeoImage(&trackList, psOutput);
-
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 if (!hideControls)
@@ -8666,7 +8703,8 @@ void tracksDisplay()
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char *s;
-
+char *motifString = cartOptionalString(cart,"hgt.motifs");
+boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -8800,10 +8838,18 @@ sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
+/* If are viewing the negative strand on ruler have
+   to revsere the motifs to highlight. */
+if(complementRulerBases && motifString != NULL)
+    reverseBytes(motifString, strlen(motifString));
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
 else
     doTrackForm(NULL);
+/* If motifs were reversed, put them back in original
+   order. */
+if(complementRulerBases && motifString != NULL)
+    reverseBytes(motifString, strlen(motifString));
 }
 
 

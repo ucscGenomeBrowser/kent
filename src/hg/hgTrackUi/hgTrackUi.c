@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.127 2004/07/30 18:39:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.128 2004/08/04 17:46:35 sugnet Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -619,8 +619,12 @@ void rulerUi(struct trackDb *tdb)
 {
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
+char *motifString = cartCgiUsualString(cart, "hgt.motifs", "");
 puts("<P><B>Zoom in:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
+puts("<P><B>Motifs to highlight:&nbsp;</B>");
+cgiMakeTextVar("hgt.motifs", motifString, 20);
+puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
 }
 
 void wigMafUi(struct trackDb *tdb)
