@@ -13,12 +13,12 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.15 2003/07/11 23:09:07 baertsch Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.16 2003/07/15 17:52:25 braney Exp $";
 
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
 			struct lm *lm, struct hash *hash, 
-			int start, int end)
+			int start, int end, char * chainId)
 /* doQuery- check the database for chain elements between
  * 	start and end.  Use the passed hash to resolve chain
  * 	id's and place the elements into the right
@@ -31,8 +31,12 @@ struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct dyString *query = newDyString(1024);
 
-dyStringPrintf(query, 
-    "select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
+if (chainId == NULL)
+    dyStringPrintf(query, 
+	"select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
+else
+    dyStringPrintf(query, 
+	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",fullName,chainId);
 hAddBinToQuery(start, end, query);
 dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);
@@ -122,7 +126,7 @@ if (hash->size)
      * so we don't need items off the screen 
      */
     if (vis == tvDense)
-	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd);
+	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd, NULL);
     else
 	{
 	/* if chains extend beyond edge of window we need to get 
@@ -135,7 +139,7 @@ if (hash->size)
 	start = seqStart - extra;
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
-	doQuery(conn, fullName, lm,  hash, start, end);
+	doQuery(conn, fullName, lm,  hash, start, end, NULL);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
@@ -155,7 +159,7 @@ if (hash->size)
 		extra *= 10;
 		start = end;
 		end = start + extra;
-		doQuery(conn, fullName, lm,  hash, start, end);
+		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
 		}
@@ -171,7 +175,7 @@ if (hash->size)
 		extra *= 10;
 		end = start;
 		start = end - extra;
-		doQuery(conn, fullName, lm,  hash, start, end);
+		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    }
