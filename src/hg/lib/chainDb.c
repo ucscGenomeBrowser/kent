@@ -15,7 +15,7 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.7 2004/07/23 22:57:21 hiram Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.8 2004/07/23 23:28:15 hiram Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -163,7 +163,8 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-boolean chainDbNormScoreAvailable(char *chromName, char *mapName)
+boolean chainDbNormScoreAvailable(char *chromName, char *mapName,
+	char **foundTable)
 /*	check if normScore column is available in this table	*/
 {
 boolean normScoreAvailable = FALSE;
@@ -186,5 +187,9 @@ if (tableName[0])
     normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
     hFreeConn(&conn);
     }   
+
+if (normScoreAvailable && foundTable)
+	*foundTable = cloneString(tableName);
+
 return normScoreAvailable;
 }
