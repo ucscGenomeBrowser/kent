@@ -395,7 +395,7 @@ struct axtScoreScheme *axtScoreSchemeRnaDefault()
 {
 static struct axtScoreScheme *ss;
 if (ss == NULL)
-    ss = axtScoreSchemeSimpleDna(100, 200, 400, 400);
+    ss = axtScoreSchemeSimpleDna(100, 200, 300, 300);
 return ss;
 }
 
