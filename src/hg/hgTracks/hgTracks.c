@@ -3677,7 +3677,7 @@ void loadXenoPslWithPos(struct trackGroup *tg)
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
 }
 
-void blatMusMethods(struct trackGroup *tg)
+void longXenoPslMethods(struct trackGroup *tg)
 /* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
 {
 tg->loadItems = loadXenoPslWithPos;
@@ -6723,6 +6723,58 @@ tg->freeItems = freeMcnBreakpoints;
 
 #endif /*FUREY_CODE*/
 
+static void drawTriangle(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
+ * a horizontal box connecting items in full mode. */
+{
+/* In dense mode try and draw golden background for promoter regions. */
+if (vis == tvDense)
+    {
+    if (hTableExists("rnaCluster"))
+        {
+	int heightPer = tg->heightPer;
+	Color gold = mgFindColor(mg, 250,190,60);
+	int promoSize = 1000;
+	int rowOffset;
+	int baseWidth = seqEnd - seqStart;
+	double scale = width/(double)baseWidth;
+	struct sqlConnection *conn = hAllocConn();
+	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
+		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
+	char **row;
+	// mgDrawBox(mg, xOff, yOff, width, heightPer, gold);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int start, end;
+	    row += rowOffset;
+	    if (row[5][0] == '-')
+	        {
+		start = atoi(row[2]);
+		end = start + promoSize;
+		}
+	    else
+	        {
+		end = atoi(row[1]);
+		start = end - promoSize;
+		}
+	    drawScaledBox(mg, start, end, scale, xOff, yOff, heightPer, gold);
+	    }
+
+	hFreeConn(&conn);
+	}
+    }
+bedDrawSimple(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+}
+
+void triangleMethods(struct trackGroup *tg)
+/* Register custom methods for regulatory triangle track. */
+{
+tg->drawItems = drawTriangle;
+// tg->itemName = nameTriangle;
+}
+
 void smallBreak()
 /* Draw small horizontal break */
 {
@@ -7806,7 +7858,8 @@ registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
-registerTrackHandler("blatMus", blatMusMethods);
+registerTrackHandler("blatHuman", longXenoPslMethods);
+registerTrackHandler("blatMus", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -7825,6 +7878,7 @@ registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
+registerTrackHandler("triangle", triangleMethods );
 /* MGC related */
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);

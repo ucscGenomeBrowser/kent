@@ -3387,39 +3387,63 @@ pslRecalcBounds(newPsl);
 return newPsl;
 }
 
-void doBlatMus(struct trackDb *tdb, char *item)
+void longXenoPsl1(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
 struct psl *psl = NULL, *trimmedPsl = NULL;
 char otherString[256];
 char *cgiItem = cgiEncode(item);
+char *thisOrg = hOrganism(database);
 
 cartWebStart(tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
-printf("<B>Mouse position:</B> %s:%d-%d<BR>\n", psl->qName, psl->qStart, psl->qEnd);
-printf("<B>Mouse size:</B> %d<BR>\n", psl->qEnd - psl->qStart);
-printf("<B>Human position:</B> %s:%d-%d<BR>\n", psl->tName, psl->tStart, psl->tEnd);
-printf("<B>Human size:</B> %d<BR>\n", psl->tEnd - psl->tStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	psl->qName, psl->qStart, psl->qEnd);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
+	psl->tName, psl->tStart, psl->tEnd);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg,
+	psl->tEnd - psl->tStart);
 printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
-sprintf(otherString, "%d", psl->tStart);
+sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
+	tdb->tableName, otherOrg, otherChromTable);
 if (trimPsl(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcBlatMus", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
     printf("View details of parts of alignment within browser window.</A><BR>\n");
     }
 printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
+void doBlatMus(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
+}
 
-void htcBlatMus(char *htcCommand, char *item)
+void doBlatHuman(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+longXenoPsl1(tdb, item, "Human", "humanChrom");
+}
+
+
+
+void htcLongXenoPsl2(char *htcCommand, char *item)
 /* Display alignment - loading sequence from nib file. */
 {
-struct psl *psl = loadPslFromRangePair("blatMus",  item);
+char *pslTable = cgiString("pslTable");
+char *otherChromTable = cgiString("otherChromTable");
+char *otherOrg = cgiString("otherOrg");
+struct psl *psl = loadPslFromRangePair(pslTable,  item);
 char nibFile[512];
 char query[256];
 char name[256];
@@ -3427,11 +3451,12 @@ struct dnaSeq *musSeq = NULL;
 struct sqlConnection *conn = hAllocConn();
 
 psl = trimPsl(psl, winStart, winEnd);
-sprintf(query, "select fileName from mouseChrom where chrom = '%s'", psl->qName);
+sprintf(query, "select fileName from %s where chrom = '%s'", 
+	otherChromTable, psl->qName);
 if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
     errAbort("Sequence %s isn't in mouseChrom", psl->qName);
 musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
-snprintf(name, sizeof(name), "mouse.%s", psl->qName);
+snprintf(name, sizeof(name), "%s.%s", otherOrg, psl->qName);
 showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 hFreeConn(&conn);
 }
@@ -6499,9 +6524,13 @@ else if (sameWord(track, "blatMus"))
     {
     doBlatMus(tdb, item);
     }
-else if (sameWord(track, "htcBlatMus"))
+else if (sameWord(track, "blatHuman"))
     {
-    htcBlatMus(track, item);
+    doBlatHuman(tdb, item);
+    }
+else if (sameWord(track, "htcLongXenoPsl2"))
+    {
+    htcLongXenoPsl2(track, item);
     }
 else if (sameWord(track, "blatFish"))
     {
