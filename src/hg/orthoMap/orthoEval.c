@@ -4,7 +4,7 @@
 #include "bed.h"
 #include "altGraphX.h"
 
-static char const rcsid[] = "$Id: orthoEval.c,v 1.1 2003/06/24 00:08:54 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEval.c,v 1.2 2003/08/05 19:54:13 sugnet Exp $";
 
 void orthoEvalTabOut(struct orthoEval *ev, FILE *f)
 /* Tab out an orthoEval record. Skipping the agxBed, and agx records. */
@@ -57,6 +57,20 @@ assert(sizeOne == oe->numIntrons);
 sqlStringDynamicArray(row[9], &oe->agxNames, &sizeOne);
 assert(sizeOne == oe->numIntrons);
 return oe;
+}
+
+void orthoEvalFree(struct orthoEval **pEv)
+{
+struct orthoEval *ev = *pEv;
+borfFree(&ev->borf);
+freez(&ev->inCodInt);
+freez(&ev->orientation);
+freez(&ev->support);
+freez(&ev->agxNames);
+altGraphXFree(&ev->agx);
+bedFree(&ev->agxBed);
+freez(&ev);
+*pEv = NULL;
 }
 
 struct orthoEval *orthoEvalLoadAll(char *fileName) 

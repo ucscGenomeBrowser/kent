@@ -12,9 +12,11 @@
 #include "altGraphX.h"
 #include "psl.h"
 #include "bed.h"
+#include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.4 2003/07/31 20:23:03 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.5 2003/08/05 19:54:13 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
+static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -27,6 +29,7 @@ static struct optionSpec optionSpecs[] =
     {"altGraphXFile", OPTION_STRING},
     {"altGraphXTable", OPTION_STRING},
     {"netTable", OPTION_STRING},
+    {"netFile", OPTION_STRING},
     {"chainFile", OPTION_STRING},
     {"outBed", OPTION_STRING},
     {"altGraphXOut", OPTION_STRING},
@@ -45,6 +48,7 @@ static char *optionDescripts[] =
     "File containing altGraphX records.",
     "Table containing altGraphX records.",
     "Datbase table containing net records, i.e. mouseNet.",
+    "File table containing net records, i.e. chr16.net.",
     "File containing the chains. Usually I do this on a chromosome basis.",
     "File to output beds to.",
     "File to output altGraphX records to."
@@ -70,6 +74,34 @@ errAbort("\nusage:\n"
 	 "     -chainFile=mm3.hg13.chains/chrX.chain -pslTable=mrna -outBed=mm3.hg13.orthoMrna.bed");
 }
 
+int cnFillRangeCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct cnFill *a = va;
+struct cnFill *b = vb;
+if (a->tStart + a->tSize <= b->tStart)
+    return -1;
+else if (b->tStart + b->tSize <= a->tStart)
+    return 1;
+else
+    return 0;
+}
+
+struct rbTree *rbTreeFromNetFile(char *fileName)
+/* Build an rbTree from a net file */
+{
+struct rbTree *rbTree = rbTreeNew(cnFillRangeCmp);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct chainNet *cn = chainNetRead(lf);
+struct cnFill *fill = NULL;
+for(fill=cn->fillList; fill != NULL; fill = fill->next)
+    {
+    rbTreeAdd(rbTree, fill);
+    }
+return rbTree;
+}
+
 struct hash *allChainsHash(char *fileName)
 {
 struct hash *hash = newHash(0);
@@ -92,6 +124,8 @@ struct chain *chainFromId(int id)
 static struct hash *chainHash = NULL;
 char key[128];
 struct chain *chain = NULL;
+if(id == 0)
+    return NULL;
 if(chainHash == NULL)
     {
     char *chainFile = optionVal("chainFile", NULL);
@@ -101,7 +135,7 @@ if(chainHash == NULL)
     }
 safef(key, sizeof(key), "%d", id);
 chain =  hashFindVal(chainHash, key);
-if(chain == NULL)
+if(chain == NULL && id != 0)
     warn("Chain not found for id: %d", id);
 return chain;
 }
@@ -136,6 +170,8 @@ boolean checkChain(struct chain *chain, int start, int end)
 {
 struct chain *subChain=NULL, *toFree=NULL;
 boolean good = FALSE;
+if(chain == NULL || chain->tStart > end || chain->tStart + chain->tSize < start)
+    return FALSE;
 chainSubsetOnT(chain, start, end, &subChain, &toFree);    
 if(subChain != NULL)
     good = TRUE;
@@ -158,18 +194,56 @@ for(fill = list; fill != NULL; fill = fill->next)
 	return chain;
     for(gap = fill->children; gap != NULL; gap = gap->next)
 	{
-	chain = chainFromId(fill->chainId);
+	chain = chainFromId(gap->chainId);
 	if(checkChain(chain, start,end))
 	    return chain;
-/* 	if(gap->children) */
-/* 	    { */
-/* 	    chain = lookForChain(gap->children, start, end); */
-/* 	    if(checkChain(chain, start,end)) */
-/* 		return chain; */
-/* 	    } */
+	if(gap->children)
+	    {
+	    chain = lookForChain(gap->children, start, end);
+	    if(checkChain(chain, start,end))
+		return chain;
+	    }
 	}
     }
 return chain;
+}
+
+void chainNetGetRange(char *db, char *netTable, char *chrom,
+		      int start, int end, char *extraWhere, struct cnFill **fill,
+		      struct chainNet **toFree)
+{
+struct cnFill *searchHi=NULL, *searchLo = NULL;
+struct slRef *refList = NULL, *ref = NULL;
+(*fill) = NULL;
+(*toFree) = NULL;
+if(netTree != NULL)
+    {
+    AllocVar(searchLo);
+    searchLo->tStart = start;
+    searchLo->tSize = 0;
+    AllocVar(searchHi);
+    searchHi->tStart = end;
+    searchHi->tSize = 0;
+    refList = rbTreeItemsInRange(netTree, searchLo, searchHi);
+    for(ref = refList; ref != NULL; ref = ref->next)
+	{
+	slSafeAddHead(fill, ((struct slList *)ref->val));
+	}
+    slReverse(fill);
+    freez(&searchHi);
+    freez(&searchLo);
+    (*toFree) = NULL;
+    }
+else
+    {
+    struct chainNet *net =chainNetLoadRange(db, netTable, chrom,
+					   start, end, NULL);
+    if(net != NULL)
+	(*fill) = net->fillList;
+    else
+	(*fill) = NULL;
+    (*toFree) = net;
+    }
 }
 
 struct chain *chainForPosition(struct sqlConnection *conn, char *db, char *netTable, 
@@ -183,12 +257,11 @@ struct cnFill *fill=NULL;
 struct cnFill *gap=NULL;
 struct chain *subChain=NULL, *toFree=NULL;
 struct chain *chain = NULL;
-struct chainNet *net = chainNetLoadRange(db, netTable, chrom,
-					 start, end, NULL);
-if(net == NULL)
-    return NULL;
-fill = net->fillList;
-chain = lookForChain(fill, start, end);
+struct chainNet *net = NULL;
+chainNetGetRange(db, netTable, chrom,
+		 start, end, NULL, &fill, &net);
+if(fill != NULL)
+    chain = lookForChain(fill, start, end);
 chainNetFreeList(&net);
 return chain;
 }
@@ -294,8 +367,8 @@ return bed;
 void occassionalDot()
 /* Write out a dot every 20 times this is called. */
 {
-static int dotMod = 20;
-static int dot = 20;
+static int dotMod = 100;
+static int dot = 100;
 if (doHappyDots && (--dot <= 0))
     {
     putc('.', stdout);
@@ -325,12 +398,43 @@ slReverse(&pslList);
 return pslList;
 }
 
+void altGraphXReverse(struct altGraphX *ag)
+{
+int vCount = ag->vertexCount;
+int *vPos = ag->vPositions;
+int *tmp = NULL;
+unsigned char *vTypes = ag->vTypes;
+int i;
+for(i=0; i<vCount; i++)
+    {
+    if(ag->vTypes[i] == ggHardEnd)
+	ag->vTypes[i] = ggHardStart;
+    else if(ag->vTypes[i] ==ggHardStart)
+	ag->vTypes[i] = ggHardEnd;
+    else if(ag->vTypes[i] == ggSoftEnd)
+	ag->vTypes[i] = ggSoftStart;
+    else if(ag->vTypes[i] == ggSoftStart)
+	ag->vTypes[i] = ggSoftEnd;
+    }
+tmp = ag->edgeEnds;
+ag->edgeEnds = ag->edgeStarts;
+ag->edgeStarts = tmp;
+if(sameString(ag->strand, "+"))
+    snprintf(ag->strand, sizeof(ag->strand), "%s", "-");
+else if(sameString(ag->strand, "-"))
+    snprintf(ag->strand, sizeof(ag->strand), "%s", "+");
+else
+    errAbort("orthoMap::altGraphXReverse() - Don't recognize strand: %s", ag->strand);
+}
+
+
 struct altGraphX *mapAltGraphX(struct altGraphX *ag, struct sqlConnection *conn,
 			       char *db, char *netTable )
 /* Map one altGraphX record. Return NULL if can't find. */
 {
 struct altGraphX *agNew = NULL;
 struct chain *chain = chainForPosition(conn, db, netTable, ag->tName, ag->tStart, ag->tEnd);
+struct chain *workingChain = NULL, *workingChainFree = NULL;
 struct chain *subChain = NULL, *toFree = NULL;
 int i,j,k;
 int edgeCountNew =0;
@@ -338,23 +442,30 @@ int vCountNew=0;
 bool reverse = FALSE;
 if(chain == NULL)
     return NULL;
+/* Make a smaller chain to work on... */
+chainSubsetOnT(chain, ag->tStart-1, ag->tEnd+1, &workingChain, &workingChainFree);
+if(workingChain == NULL)
+    return NULL;
 if ((chain->qStrand == '-'))
     reverse = TRUE;
 agNew = altGraphXClone(ag);
+freez(&agNew->tName);
+agNew->tName = cloneString(chain->qName);
 /* Map vertex positions using chain. */
 for(i = 0; i < agNew->vertexCount; i++)
     {
     struct boxIn *bi = NULL;
     int targetPos = agNew->vPositions[i];
+    struct chain *subChain=NULL, *toFree=NULL;
     agNew->vPositions[i] = -1;
-    for(bi = chain->blockList; bi != NULL; bi = bi->next)
+    chainSubsetOnT(workingChain, targetPos , targetPos, &subChain, &toFree);    
+    if(subChain != NULL)
 	{
-	if(targetPos >= bi->tStart && targetPos <= bi->tEnd)
-	    {
-	    agNew->vPositions[i] = (targetPos - bi->tStart) + bi->qStart;
-	    break;
-	    }
+	int qs, qe;
+	qChainRangePlusStrand(subChain, &qs, &qe);
+	agNew->vPositions[i] = qs;
 	}
+    chainFree(&toFree);
     }
 /* Prune out edges not found. */
 
@@ -430,10 +541,12 @@ for(i=0; i<agNew->edgeCount; i++)
 	     agNew->name, max(agNew->edgeStarts[i], agNew->edgeEnds[i]), agNew->vertexCount);
 	}
     }
-
 /* If it is on the other strand reverse it. */
 if(reverse)
-    altGraphXReverseComplement(agNew);
+    {
+    altGraphXReverse(agNew);
+    }
+chainFree(&workingChainFree);
 return agNew;
 }
 
@@ -444,21 +557,28 @@ void mapAltGraphXFile(struct sqlConnection *conn, char *db, char *orthoDb, char 
 another. Basically create a mapping for the vertices and then reverse
 them if on '-' strand.*/
 {
+int count =0;
 struct bed *bed = NULL;
 struct altGraphX *agList = NULL, *ag = NULL, *agNew = NULL;
+
 if(altGraphXFileName != NULL)
+    {
+    warn("Loading altGraphX Records from file %s.", altGraphXFileName);
     agList = altGraphXLoadAll(altGraphXFileName);
+    }
 else if(altGraphXTableName != NULL)
     {
     char query[256];
+    warn("Reading altGraphX Records from table %s.", altGraphXTableName);
     safef(query, sizeof(query), "select * from %s where tName like '%s'", altGraphXTableName, chrom);
     agList = altGraphXLoadByQuery(conn, query);
     }
 else
     errAbort("orthoMap::mapAlGraphXFile() - Need a table name or file name to load altGraphX records");
-
+warn("Mapping altGraphX records.");
 for(ag = agList; ag != NULL; ag = ag->next)
     {
+    occassionalDot();
     agNew = mapAltGraphX(ag, conn, db, netTable);
     if(agNew == NULL)
 	(*notFoundCount)++;
@@ -468,6 +588,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	altGraphXTabOut(agNew, agxOut);
 	altGraphXFree(&agNew);
 	}
+    count++;
     }	
 }
 
@@ -489,6 +610,8 @@ struct sqlConnection *conn = NULL;
 FILE *bedOut = NULL;
 int foundCount=0, notFoundCount=0;
 char *chrom = NULL;
+char *netFile = NULL;
+netFile=optionVal("netFile", NULL);
 agxOutName = optionVal("altGraphXOut", NULL);
 altGraphXFileName = optionVal("altGraphXFile", NULL);
 altGraphXTableName = optionVal("altGraphXTable", NULL);
@@ -500,20 +623,27 @@ db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
 chrom = optionVal("chrom", NULL);
 
-if(orthoDb == NULL || db == NULL || netTable == NULL || chrom == NULL || 
+if(orthoDb == NULL || db == NULL || (netTable == NULL && netFile == NULL) || chrom == NULL || 
    (outBedName == NULL && agxOutName == NULL) ||
    (pslTableName == NULL && pslFileName == NULL && altGraphXFileName == NULL && altGraphXTableName == NULL))
     usage();
 hSetDb(db);
 hSetDb2(orthoDb);
-conn = hAllocConn();
+if(netFile != NULL)
+    {
+    warn("Loading net info from file %s", netFile);
+    netTree = rbTreeFromNetFile(netFile);
+    }
+if(netTable != NULL || altGraphXTableName != NULL)
+    conn = hAllocConn();
 if(altGraphXFileName != NULL || altGraphXTableName != NULL)
     {
     FILE *agxOut = NULL;
     if(agxOutName == NULL)
 	errAbort("Must specify altGraphXOut if specifying altGraphXFile. Use -help for help");
     agxOut = mustOpen(agxOutName, "w");
-    mapAltGraphXFile(conn, db, orthoDb, chrom, netTable, altGraphXFileName, altGraphXTableName, agxOut, &foundCount, &notFoundCount);
+    mapAltGraphXFile(conn, db, orthoDb, chrom, netTable, altGraphXFileName, altGraphXTableName, 
+		     agxOut, &foundCount, &notFoundCount);
     carefulClose(&agxOut);
     }
 else 

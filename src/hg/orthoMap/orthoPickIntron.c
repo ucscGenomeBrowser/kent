@@ -1,57 +1,44 @@
-/** \page orthoPickIntron.c Pick an intron for RACE PCR using both mouse and human transcript data.
+/** \page orthoPickIntron.c Pick an intron for exploratory PCR using mouse transcript data.
 
-<h2>Overview:</h2>
-<p>Mouse mRNAs were mapped to orthologous locations in the human
-genome using blastz nets and chains created by Jim
-Kent. Individual introns and flanking exons were chosen as
-candidates for RACE PCR by the size of the coding region in the
-mapped mRNA and the number of human transcripts that exactly
-overlap the mapped mRNA from mouse. Thus introns are selected based
-on the amount of transcript evidence present in the human genome and
-have a confirmed orthologous transcribed intron in mouse.
+<h2>Overview:</h2> <p>Mouse mRNAs and ESTs were summarized in a more
+compact format and were mapped to orthologous locations in the human
+genome using blastz nets and chains created by Jim Kent. Individual
+introns and flanking exons were chosen as candidates for exploratory
+PCR by the number of mouse transcripts containing the intron, The
+objective is to take advantage of the mouse ESTs and mRNAs to
+supplement the human ones in looking for novel genes.
 
 <h2>Details:</h2> 
-<p><b>Objective:</b> To use full length mouse mRNAs and orthology
-as well as human transcripts to help select high confidence
-introns and flanking exons for directed RACE PCR.
+<p><b>Objective:</b>
+
+Construct a summary of all mRNA and EST data in mouse and map them to
+human genome via whole genome alignments. Select mouse mapped
+transcripts that are not overlapped by native human transcripts for
+exploratory PCR.
 
 <h2>Algorithm:</h2>
 <ul>
-<li>Mouse mRNAs were aligned to the mouse draft genome (build30)
-and were mapped via Jim Kent's <a
+
+<li>Mouse mRNAs and cDNAs are clustered on the mouse genome and
+a summary of the cluster (altGraphX) is generated.</li>
+
+<li>Mouse clusters are mapped via Jim Kent's <a
 href="http://mgc.cse.ucsc.edu/cgi-bin/hgTrackUi?&c=chr14&g=mouseNet">
 net/chain mapping</a> of the mouse and human genomes to the human
-genome. By using the net/chain mapping we can take into account
-more sequence than just the individual mRNA.</li>
+genome. By using the net/chain mapping we can take into account more
+sequence than just the individual mRNAs and also take into account
+synteny</li>
 
-<li>Mapped mouse mRNAs are evaluated for coding potential in human
-using Victor Solovyev's bestorf program.</li>
 
-<li>Each intron and flanking exons were compared with human
-transcripts to find the number of human transcripts that overlap
-the intron and flanking exons with the exact same splice
-sites.</li>
-
-<li>Individual introns are scored for consensus splice sites,
-coding potential of mapped mRNA, and number of supporting native
-transcripts.</li>
+<li>Each intron and flanking exons are evaluated for the number of mouse
+mRNAs and ESTs that mapped over, as well as overlap with exons predicted
+by gene finding programs.</li>
 
 <li>Individual introns are selected and the loci are remembered so
-that only one intron is chosen from each loci. Also, introns are
-skipped if they overlap with a current MGC pick or MGC A-List pick.
-Introns are also examined to see if they overlap with a RefSeq gene
-or if they overlap a MGC incomplete mRNA or an MGC failed EST.</li>
-</ul>
+that only one intron is chosen from each loci. Also, no intron is 
+chosen if it is overlapped by any transcript evidence. </li>
 
-<h2>Results:</h2>
-1577 total introns and flanking exons were found and scored. They 
-are classified as follows:
-<table border=1>
-<tr><th>Overlaps</th><th>Number</th><th>Ave. Score</th></tr>
-<tr><td>Overlapped by both RefSeq and MGC Incomplete/Failed.</td><td>459</td><td>188</td></tr>
-<tr><td>Overlapped by RefSeq but not MGC Incomplete/Failed.</td><td>572</td><td>159</td></tr>
-<tr><td>Overlapped by MGC Incomplete/Failed but not RefSeq.</td><td>248</td><td>144</td></tr>
-<tr><td>Overlapped by Neither</td><td>298</td><td>90</td></tr>
+</ul>
 </table>
 */
 #include "common.h"
@@ -70,8 +57,8 @@ are classified as follows:
 #include "bits.h"
 #include "dnautil.h"
 #include "orthoEval.h"
-
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.5 2003/07/22 02:45:09 sugnet Exp $";
+#include "rbTree.h"
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.6 2003/08/05 19:54:13 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -155,6 +142,21 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
+/* int bedCmp(void *va, void *vb) */
+/* { */
+/* struct bed *a = va; */
+/* struct bed *b = vb; */
+/* int diff = strcmp(a->chrom, b->chrom); */
+/* if(diff == 0) */
+/*     { */
+/*     if (diff == 0) */
+/* 	diff = a->chromStart - b->chromStart; */
+/*     if(diff == 0)  */
+/* 	diff = a->chromEnd - b->chromEnd; */
+/*     } */
+/* return diff; */
+/* } */
+
 struct intronEv *intronIvForEv(struct orthoEval *ev, int intron)
 /** Return an intronEv record for a particular intron. */
 {
@@ -174,10 +176,13 @@ iv->e2S = bed->chromStart + bed->chromStarts[intron+1];
 iv->e2E = iv->e2S + bed->blockSizes[intron+1];
 
 iv->agxName = ev->agxNames[intron];
-iv->support = ev->support[intron];
+iv->support = ev->basesOverlap;
 iv->orientation = ev->orientation[intron];
 iv->inCodInt = ev->inCodInt[intron];
-iv->borfScore = ev->borf->score;
+if(sameString(ev->borf->name, "dummy"))
+    iv->borfScore = ev->orthoBed->score + (ev->borf->score * 100);
+else
+    iv->borfScore = ev->borf->score;
 return iv;
 }
 
@@ -192,9 +197,9 @@ if(out == NULL && scoreFile != NULL)
 if(out != NULL)
     fprintf(out, "%d\t%d\t%f\t%d\n", iv->orientation, iv->support, iv->borfScore, iv->inCodInt);
 if(iv->orientation != 0)
-    score += 5;
-score += iv->support *2;
-score += (float) iv->borfScore/5;
+    score += 200;
+// score += iv->support *2;
+score += (float) iv->borfScore;
 if(iv->inCodInt)
     score = score +2;
 return score;
@@ -234,21 +239,26 @@ hFreeConn(&conn);
 return foundSome;
 }
 
-
-boolean isOverlappedByTable(struct intronEv *iv, char *table)
-/** Return TRUE if there is a refSeq overlapping. */
+boolean coordOverlappedByTable(char *chrom, int start, int end, char *table)
+/** Return TRUE if there is a record overlapping. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset = 0;
 boolean foundSome = FALSE;
-sr = hRangeQuery(conn, table, iv->chrom, iv->e1S, iv->e2E, NULL, &rowOffset); 
+sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset); 
 if(sqlNextRow(sr) != NULL)
     foundSome = TRUE;
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return foundSome;
+}
+
+boolean isOverlappedByTable(struct intronEv *iv, char *table)
+/** Return TRUE if there is a record overlapping. */
+{
+return coordOverlappedByTable(iv->chrom, iv->e1S, iv->e2E, table);
 }
 
 boolean isOverlappedByRefSeq(struct intronEv *iv)
@@ -261,6 +271,16 @@ boolean isOverlappedByMgcBad(struct intronEv *iv)
 return isOverlappedByTable(iv, "chuckMgcBad");
 }
 
+boolean isOverlappedByEst(struct intronEv *iv)
+{
+return isOverlappedByTable(iv, "est");
+}
+
+boolean isOverlappedByMRna(struct intronEv *iv)
+{
+return isOverlappedByTable(iv, "mrna");
+}
+
 int intronEvalCmp(const void *va, const void *vb)
 /** Compare to sort based score function. */
 {
@@ -271,17 +291,61 @@ float bScore = scoreForIntronEv(b);
 return bScore - aScore; /* reverse to get largest values first. */
 }
 
+boolean bedUniqueInTree(struct rbTree *bedTree, struct intronEv *iv)
+{
+static struct bed searchLo, searchHi; 
+struct slRef *refList = NULL, *ref = NULL;
+searchLo.chrom = iv->chrom;
+searchLo.chromStart =iv->e1S;
+searchLo.chromEnd = iv->e2E;
+
+/* searchHi.chrom = iv->chrom; */
+/* searchHi.chromStart = iv->e2E; */
+/* searchHi.chromEnd = iv->e2E; */
+refList = rbTreeItemsInRange(bedTree, &searchLo, &searchLo);
+if(refList == NULL)
+    return TRUE;
+else
+    slFreeList(&refList);
+return FALSE;
+}
+
+int bedRangeCmp(void *va, void *vb)
+{
+struct bed *a = va;
+struct bed *b = vb;
+int diff = strcmp(a->chrom, b->chrom);
+if(diff == 0)
+    {
+    if(a->chromEnd <= b->chromStart)
+	diff = -1;
+    else if(a->chromStart >= b->chromEnd)
+	diff = 1;
+    else 
+	diff = 0;
+    }
+return diff;
+}
+
 boolean isUniqueCoordAndAgx(struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
 /** Return TRUE if iv isn't in posHash and agxHash.
    Return FALSE otherwise. */
 {
 static char key[1024];
+static struct rbTree *bedTree = NULL;
 boolean unique = TRUE;
-
-safef(key, sizeof(key), "%s-%d-%d-%d-%d", iv->chrom, iv->e1S, iv->e1E, iv->e2S, iv->e2E);
+struct bed *bed = NULL;
+if(bedTree == NULL)
+    bedTree = rbTreeNew(bedRangeCmp);
 /* Unique location (don't pick same intron twice. */
-if(hashFindVal(posHash, key) == NULL)
-    hashAdd(posHash, key, iv);
+if(bedUniqueInTree(bedTree, iv))
+    {
+    AllocVar(bed);
+    bed->chrom = cloneString(iv->chrom);
+    bed->chromStart = iv->e1S;
+    bed->chromEnd = iv->e2E;
+    rbTreeAdd(bedTree, bed);
+    }
 else 
     unique = FALSE;
 
@@ -292,7 +356,9 @@ if(hashFindVal(agxHash, key) == NULL)
 else
     unique = FALSE;
 
+
 /* Definitely don't pick from same mRNA. */
+chopSuffix(iv->ev->orthoBedName);
 safef(key, sizeof(key), "%s", iv->ev->orthoBedName);
 if(hashFindVal(agxHash, key) == NULL)
     hashAdd(agxHash, key, iv);
@@ -331,16 +397,16 @@ bed->score = scoreForIntronEv(iv);
 return bed;
 }
 
-void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
+void writeOutFrames(FILE *htmlOut, char *fileName, char *db, char *bedFile, char *pos)
 /** Write out frame for htmls. */
 {
-fprintf(htmlOut, "<html><head><title>Introns and flanking exons for RACE PCR</title></head>\n"
+fprintf(htmlOut, "<html><head><title>Introns and flanking exons for exploratory PCR</title></head>\n"
 	"<frameset cols=\"18%,82%\">\n"
 	"<frame name=\"_list\" src=\"./%s\">\n"
-	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=chrX:151171710-151173193&"
-	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/tmp/mgcIntron.bed\">\n"
+	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s&"
+	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/mgc/%s\">\n"
 	"</frameset>\n"
-	"</html>\n", fileName, db);
+	"</html>\n", fileName, db, pos, bedFile);
 }
 
 void pickIntrons()
@@ -359,6 +425,7 @@ int i=0;
 boolean isRefSeq=FALSE, isMgcBad=FALSE;
 struct hash *posHash = newHash(12), *agxHash = newHash(12);
 struct bed *bed = NULL;
+char buff[256];
 
 htmlFileName = optionVal("htmlFile", NULL);
 htmlFrameFileName = optionVal("htmlFrameFile", "frame.html");
@@ -391,28 +458,34 @@ htmlOut = mustOpen(htmlFileName, "w");
 bedOut = mustOpen(bedFileName, "w");
 htmlFrameOut = mustOpen(htmlFrameFileName, "w");
 orthoBedOut = mustOpen(orthoBedFileName, "w");
-writeOutFrames(htmlFrameOut, htmlFileName, db);
-fprintf(htmlOut, "<html><body><table border=1><tr><th>Mouse Acc.</th><th>Score</th><th>RefSeq</th><th>Mgc Frag</th></tr>\n");
-warn("Writing out");
+i=0;
+fprintf(htmlOut, "<html><body><table border=1><tr><th>Num</th><th>Mouse Acc.</th><th>Score</th><th>TS Pick</th></tr>\n");
+warn("Filtering");
+safef(buff, sizeof(buff), "tmp");
 for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
     {
-    if(isUniqueCoordAndAgx(iv, posHash, agxHash))
+    if(isUniqueCoordAndAgx(iv, posHash, agxHash) && iv->support == 0 && !isOverlappedByRefSeq(iv) &&
+       ! isOverlappedByEst(iv) && ! isOverlappedByMRna(iv))
 	{
+	boolean twinScan = (coordOverlappedByTable(iv->chrom, iv->e1S, iv->e1E, "mgcTSExpPcr") &&
+			    coordOverlappedByTable(iv->chrom, iv->e2S, iv->e2E, "mgcTSExpPcr"));
 	bed = bedForIv(iv);
-	isRefSeq = isOverlappedByRefSeq(iv);
-	isMgcBad = isOverlappedByMgcBad(iv);
-	fprintf(htmlOut, "<tr><td><a target=\"browser\" "
+	if(sameString(buff, "tmp"))
+	    safef(buff, sizeof(buff), "%s:%d-%d", bed->chrom, bed->chromStart-50, bed->chromEnd+50);
+//	isMgcBad = isOverlappedByMgcBad(iv);
+	fprintf(htmlOut, "<tr><td>%d</td><td><a target=\"browser\" "
 		"href=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=%s:%d-%d\"> "
-		"%s </a></td><td>%d</td><td>%s</td><td>%s</td></tr>\n", 
-		bed->chrom, bed->chromStart-40, bed->chromEnd+50, bed->name, bed->score, 
-		isRefSeq ? "yes" : "no",
-		isMgcBad ? "yes" : "no");
+		"%s </a></td><td>%d</td><td>%s</td></tr>\n", 
+		++i,bed->chrom, bed->chromStart-50, bed->chromEnd+50, bed->name, bed->score, 
+		twinScan ? "yes" : "no");
+
 	bedTabOutN(bed, 12, bedOut);
 	bedTabOutN(iv->ev->orthoBed, 12, orthoBedOut);
 	bedFree(&bed);
 	maxPicks--;
 	}
     }
+writeOutFrames(htmlFrameOut, htmlFileName, db, bedFileName, buff);
 fprintf(htmlOut, "</table></body></html>\n");
 carefulClose(&bedOut);
 carefulClose(&htmlOut);

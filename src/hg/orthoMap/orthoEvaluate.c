@@ -19,9 +19,11 @@
 #include "bits.h"
 #include "dnautil.h"
 #include "orthoEval.h"
+#include "rbTree.h"
+#include "genePred.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.9 2003/07/22 02:45:09 sugnet Exp $";
-
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.10 2003/08/05 19:54:13 sugnet Exp $";
+static struct rbTree *gpTree = NULL;
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -32,6 +34,8 @@ static struct optionSpec optionSpecs[] =
     {"bestOrfExe", OPTION_STRING},
     {"tmpFa", OPTION_STRING},
     {"tmpOrf", OPTION_STRING},
+    {"skipBorf", OPTION_BOOLEAN},
+    {"altGraphXTable", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -44,7 +48,9 @@ static char *optionDescripts[] =
     "File to output evaluation records.",
     "[optional default: borf] bestOrf executable name.",
     "[optional default: generated] temp fasta file for bestOrf.",
-    "[optional default: generated] temp output file for bestOrf."
+    "[optional default: generated] temp output file for bestOrf.",
+    "[optional default: FALSE] skip doing orf prediction.",
+    "[optional default: altGraphX] altGraphX tables."
 };
 
 
@@ -98,16 +104,14 @@ if(!(hTableExists(table)))
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row + rowOffset, 12);
-    if(sameString(bed->strand, orthoBed->strand))
-	slAddHead(&bedList, bed);
-    else
-	bedFree(&bed);
+    slAddHead(&bedList, bed);
     }
 slSort(&bedList, bedCmp);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return bedList;
 }
+
 
 void calcBasesOverlap(struct orthoEval *ev)
 /* Load the agxBed for the orthoEval and get the number of bases that
@@ -124,14 +128,16 @@ int start = 0;
 int end = 0;
 int maxOverlap = 0;
 int currentOverlap =0;
+char *agxTable = optionVal("agxTable", "agxBed");
 struct bed *bed = NULL, *orthoBed = NULL; //ev->orthoBed;
 assert(ev);
 assert(ev->orthoBed);
 orthoBed = ev->orthoBed;
 
 /* Load beds in this range. */
-ev->agxBed = loadNativeAgxBedsForBed(ev->orthoBed, "agxBed");
-
+ev->agxBed = loadNativeAgxBedsForBed(ev->orthoBed, agxTable);
+if(ev->agxBed  != NULL)
+    ev->basesOverlap++;
 /* Find the minimum and maximum coordinates spans. */
 for(bed = ev->agxBed; bed != NULL; bed = bed->next)
     {
@@ -270,7 +276,7 @@ e2VS = numInArray(vPos, vC, e2Start);
 e2VE = numInArray(vPos, vC, e2End);
 
 /* If we found them get the support for each edge and sum them. */
-if(e1VS == -1 || e1VE == -1 || e1VS == -1 || e1VE == -1)
+if(e1VS == -1 || e1VE == -1 || e2VS == -1 || e2VE == -1)
     return 0;
 em = altGraphXCreateEdgeMatrix(agx);
 if(em[e1VS][e1VE] && em[e1VE][e2VS] && em[e2VS][e2VE])
@@ -369,6 +375,7 @@ void calcIntronStats(struct orthoEval *ev)
 /* Calculate the overlap for each intron. */
 {
 struct altGraphX *agx = NULL, *agxList = NULL;
+char *agxTable = optionVal("altGraphXTable", "altGraphX");
 int i=0, start=0, end=0;
 int numIntrons = 0;
 int *support = NULL;
@@ -390,7 +397,7 @@ AllocArray(support, orthoBed->blockCount -1);
 AllocArray(inCodInt, orthoBed->blockCount -1);
 AllocArray(agxNames, orthoBed->blockCount -1);
 genoSeq = hChromSeq(orthoBed->chrom, orthoBed->chromStart, orthoBed->chromEnd);
-agxList = loadNativeAgxForBed(orthoBed, "altGraphX");
+agxList = loadNativeAgxForBed(orthoBed, agxTable);
 for(i=0; i<orthoBed->blockCount -1; i++)
     evaluateAnIntron(ev, orthoBed, i, agxList, genoSeq, orientation, support, inCodInt, agxNames);
 ev->agx = agxList;
@@ -521,11 +528,129 @@ bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
 
+struct borf *makeUpBorf()
+{
+struct borf *borf = NULL;
+AllocVar(borf);
+borf->name = cloneString("dummy");
+safef(borf->strand, sizeof(borf->strand),"+");
+borf->feature = cloneString("CDSo");
+safef(borf->frame, sizeof(borf->frame), "+1");
+borf->protein = cloneString("dummy");
+return borf;
+}
+
+int bedRangeCmp(void *va, void *vb)
+{
+struct bed *a = va;
+struct bed *b = vb;
+int diff = strcmp(a->chrom, b->chrom);
+if(diff == 0)
+    {
+    if(a->chromEnd <= b->chromStart)
+	diff =  -1;
+    else if(b->chromEnd <= a->chromStart)
+	diff = 1;
+    }
+return diff;
+}
+
+void initGpTree()
+/* Create a rbTree and populate it with blocks from gene predictions. */
+{
+struct bed *bed = NULL;
+struct genePred *gp = NULL, *gpList = NULL;
+int i = 0, j=0;
+char query[256];
+struct sqlResult *sr = NULL;
+char **row=NULL;
+struct sqlConnection *conn = hAllocConn();
+char *tableNames[] = {"sgpGene","softberryGene", "twinscan", "genscan"};
+gpTree = rbTreeNew(bedRangeCmp);
+warn("Loading tree.");
+for(i=0; i<ArraySize(tableNames); i++)
+    {
+    warn("Loading table: %s", tableNames[i]);
+    safef(query,sizeof(query),"select * from %s", tableNames[i]);
+    sr = sqlGetResult(conn, query);
+    while((row = sqlNextRow(sr)) != NULL)
+	{
+	gp = genePredLoad(row);
+	slAddHead(&gpList, gp);
+	}
+    sqlFreeResult(&sr);
+    for(gp = gpList; gp != NULL; gp = gp->next)
+	{
+	for(j=0; j<gp->exonCount; j++)
+	    {
+	    AllocVar(bed);
+	    bed->chrom = cloneString(gp->chrom);
+	    bed->name = cloneString(gp->name);
+	    safef(bed->strand, sizeof(bed->strand), "%s", gp->strand);
+	    bed->chromStart = gp->exonStarts[j];
+	    bed->chromEnd = gp->exonEnds[j];
+	    rbTreeAdd(gpTree, bed);
+	    }
+	}
+    genePredFreeList(&gpList);
+    }
+warn("Tree loaded");
+hFreeConn(&conn);
+}
+
+
+
+float codingBasesForBed(struct bed *bed)
+/* Calculate how many bases of the bed are overlapped by gene predictions. */
+{
+struct slRef *refList = NULL, *ref = NULL;
+static struct bed searchLo, searchHi; 
+struct bed *b = NULL;
+int i,intersect=0;
+int baseCount = 0;
+float *overlap = NULL;
+float ave = 0;
+AllocArray(overlap, bed->blockCount);
+if(gpTree == NULL)
+    initGpTree();
+searchLo.chrom = bed->chrom;
+searchLo.chromStart = bed->chromStart;
+searchLo.chromEnd = bed->chromEnd;
+
+/* searchHi.chrom = bed->chrom; */
+/* searchHi.chromStart = bed->chromEnd; */
+/* searchHi.chromEnd = bed->chromEnd; */
+refList = rbTreeItemsInRange(gpTree, &searchLo, &searchLo);
+for(ref = refList; ref != NULL; ref = ref->next)
+    {
+    b = ref->val;
+    for(i=0; i<bed->blockCount; i++)
+	{
+	intersect = rangeIntersection(bed->chromStarts[i] + bed->chromStart, 
+				    bed->chromStarts[i] + bed->chromStart + bed->blockSizes[i],
+				    b->chromStart,
+				    b->chromEnd);
+	if(intersect > 0)
+	    overlap[i] += ((float)intersect) /bed->blockSizes[i];
+	}
+    }
+slFreeList(&refList);
+for(i=0;i<bed->blockCount; i++)
+    ave+=overlap[i];
+freez(&overlap);
+if(ave == 0)
+    return 0;
+ave = ave/bed->blockCount;
+
+return ave;
+}
+    
 struct orthoEval *scoreOrthoBeds(char *bedFile, char *db, FILE *out)
 /* Score each bed in the orhtoBed file. */
 {
 struct bed *bedList = NULL, *bed = NULL;
 struct borf *borf = NULL;
+boolean skipBorf = optionExists("skipBorf");
 struct orthoEval *evList = NULL, *ev = NULL;
 hSetDb(db);
 bedList = bedLoadNAll(bedFile, 12);
@@ -537,14 +662,23 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     ev->orthoBedName = cloneString(bed->name);
     ev->agxBedName = cloneString(bed->name);
     ev->orthoBed = bed;
-    ev->borf = borf = borfForBed(bed);
-    setThickStartStop(ev);
+    if(skipBorf != TRUE)
+	{
+	ev->borf = borf = borfForBed(bed);
+	setThickStartStop(ev);
+	}
+    else
+	{
+	ev->borf = makeUpBorf();
+	ev->borf->score = codingBasesForBed(bed);
+	}
     calcBasesOverlap(ev);
     calcIntronStats(ev);
 //    borfTabOut(borf, stdout);
     if(ev->numIntrons > 0)
 	orthoEvalTabOut(ev, out);
-    slAddHead(&evList, ev);
+    orthoEvalFree(&ev);
+//    slAddHead(&evList, ev);
     }
 warn("\nDone.");
 //bedFreeList(&bedList);
