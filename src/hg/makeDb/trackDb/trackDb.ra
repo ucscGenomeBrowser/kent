@@ -1237,7 +1237,11 @@ wiggle binCons_encode
 yLineOnOff Off
 pairwise encode_tba 15
 autoScaleDefault Off
-speciesOrder chimp baboon marmoset galago mouse rat cow dog armadillo platypus chicken
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp baboon marmoset galago
+sGroup_placental rat mouse cow dog armadillo 
+sGroup_mammal platypus 
+sGroup_vertebrate chicken 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track binMCS95_encode
