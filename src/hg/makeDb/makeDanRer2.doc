@@ -2852,7 +2852,8 @@ mkdir -p $3:h
     ssh kksilo
     mkdir -p /cluster/data/danRer2/blastDb
     cd /cluster/data/danRer2/blastDb
-    for i in `cut -f 1 ../chrom.sizes | sed "s/chr//"`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
+    cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA/d" | sed "/Un/d" > chrom.list
+    for i in `cat chrom.list`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
     ln -s `cat list` .
     for i in *.fa
     do
@@ -2860,25 +2861,26 @@ mkdir -p $3:h
     done
     rm *.log *.fa list
     cd ..
-    for i in `cut -f 1 chrom.sizes | sed "s/chr//"`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+    for i in `cat blastDb/chrom.list`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+    rm blastDb/chrom.list
 
-mkdir /cluster/data/danRer2/scaffoldBlastDb
-cd /cluster/data/danRer2/scaffoldBlastDb
-cat ../Un/scaffolds/*.fa ../NA/scaffolds/*.fa |  faSplit sequence stdin 500 scaf
-for i in *.fa
-do
-    formatdb -i $i -p F
-done
-rm *.log *.fa
+    mkdir /cluster/data/danRer2/scaffoldBlastDb
+    cd /cluster/data/danRer2/scaffoldBlastDb
+    cat ../Un/scaffolds/*.fa ../NA/scaffolds/*.fa |  faSplit sequence stdin 500 scaf
+    for i in *.fa
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
 
     ssh kkr1u00
     mkdir -p /iscratch/i/danRer2/blastDb
     cd /cluster/data/danRer2/blastDb
     for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/blastDb     ; echo $i; done
 
-mkdir -p /iscratch/i/danRer2/scaffoldBlastDb
-cd /cluster/data/danRer2/scaffoldBlastDb
-for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/scaffoldBlastDb     ; echo $i; done
+    mkdir -p /iscratch/i/danRer2/scaffoldBlastDb
+    cd /cluster/data/danRer2/scaffoldBlastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/scaffoldBlastDb     ; echo $i; done
 
     cd
     (iSync) > sync.out
@@ -2886,7 +2888,7 @@ for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/scaffoldBlastDb     ; echo 
     mkdir -p /cluster/data/danRer2/bed/tblastn.hg17KG
     cd /cluster/data/danRer2/bed/tblastn.hg17KG
     echo  /iscratch/i/danRer2/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
-echo  /iscratch/i/danRer2/scaffoldBlastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > scaffold.lst  
+    echo  /iscratch/i/danRer2/scaffoldBlastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > scaffold.lst  
     # back to kksilo
     exit
 
@@ -2945,7 +2947,9 @@ exit 1
 
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-gensub2 scaffold.lst kg.lst blastGsub scaffoldBlastSpec
+    # I ended up doing the scaffolds separately from the chopped up chrom segments
+    # but next time I wouldn't
+    gensub2 scaffold.lst kg.lst blastGsub scaffoldBlastSpec
 
     ssh kk
     cd /cluster/data/danRer2/bed/tblastn.hg17KG
@@ -2986,13 +2990,14 @@ chainSome $(path1)
     exit
     # back to kksilo
     cd /cluster/data/danRer2/bed/tblastn.hg17KG/blastOut
-for i in kg??
-do 
-    cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > cs60.$i.psl
-    sort -rn cs60.$i.psl | pslUniq stdin us.$i.psl
-    awk "((\$1 / \$11) ) > 0.60 { print   }" cs60.$i.psl > ms60.$i.psl
-    echo $i
-done
+    # again some weirdness because I did the NA and Un scaffolds separately
+    for i in kg??
+    do 
+	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > cs60.$i.psl
+	sort -rn cs60.$i.psl | pslUniq stdin us.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" cs60.$i.psl > ms60.$i.psl
+	echo $i
+    done
 
     for i in kg??
     do 
@@ -3004,6 +3009,7 @@ done
 
     cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/danRer2/bed/tblastn.hg17KG/blastHg17KG.psl
     cd ..
+    # lift the chrUn and chrNA scaffolds 
 
     ssh hgwdev
     cd /cluster/data/danRer2/bed/tblastn.hg17KG
