@@ -16,7 +16,6 @@
 #include "fa.h"
 #include "psl.h"
 #include "nib.h"
-#include "web.h"
 
 /* Variables used by getFeatDna code */
 char *database = "hg7";		/* Which database? */
@@ -28,6 +27,157 @@ int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 
 static int blockIx = 0;	/* Index of block written. */
+
+boolean webHeadAlreadyOutputed = FALSE;
+boolean webInTextMode = FALSE;
+
+
+void webStartText()
+{
+printf("Content-Type: text/plain\n\n");
+
+webHeadAlreadyOutputed = TRUE;
+webInTextMode = TRUE;
+}
+
+
+void webStart(char* format,...)
+{
+va_list args;
+va_start(args, format);
+
+if(webHeadAlreadyOutputed)
+    return;
+
+/* Preamble. */
+dnaUtilOpen();
+
+puts("Content-type:text/html\n");
+
+puts(
+	"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">" "\n"
+	"<HTML>" "\n"
+	"<HEAD>" "\n"
+	"	<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+	"	<TITLE>"
+);
+
+vprintf(format, args);
+
+puts(
+	"</TITLE>" "\n"
+	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
+	"</HEAD>" "\n"
+	"<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
+	"<A NAME=\"TOP\"></A>" "\n"
+	"" "\n"
+	"<TABLE BORDER=0 WIDTH=\"100%\">" "\n"
+	"<TR><TH COLSPAN=2 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
+	"" "\n"
+	"<!--HOTLINKS BAR----------------------------------------------------------->" "\n"
+	"<TR><TD COLSPAN=2 HEIGHT=40>" "\n"
+	"   <CENTER>" "\n"
+	"	<TABLE BGCOLOR=\"2636D1\" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=1 HEIGHT=\"22\"><TR><TD>" "\n"
+	"		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>" "\n"
+	"		<TD WIDTH=1></TD>" "\n"
+	"		<TD WIDTH=75>" "\n"
+	"			<A HREF=\"/index.html\" onMouseOver=\"HOME.src='/images/hl_home.jpg'\" onMouseOut=\"HOME.src='/images/h_home.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_home.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"HOME\" ALT=\"Home\" ></A></TD>" "\n"
+	"		<TD WIDTH=155>" "\n"
+	"			<A HREF=\"/goldenPath/hgTracks.html\" onMouseOver=\"BROWSER.src='/images/hl_browser.jpg'\" onMouseOut=\"BROWSER.src='/images/h_browser.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_browser.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"BROWSER\" ALT=\"&nbsp;&nbsp; Genome Browser\"></A></TD>		" "\n"
+	"		<TD WIDTH=100>" "\n"
+	"			<A HREF=\"/cgi-bin/hgBlat?command=start\" onMouseOver=\"SEARCH.src='/images/hl_blat.jpg'\" onMouseOut=\"SEARCH.src='/images/h_blat.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_blat.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"SEARCH\" ALT=\"&nbsp;&nbsp; BLAT Search\"></A></TD>	" "\n"
+	"		<TD WIDTH=100>" "\n"
+	"			<A HREF=\"/FAQ.html\" onMouseOver=\"GUIDE.src='/images/hl_faq.jpg'\" onMouseOut=\"GUIDE.src='/images/h_faq.jpg'\">" "\n"
+	"			<IMG SRC=\"/images/h_faq.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"GUIDE\" ALT=\"&nbsp;&nbsp; FAQ\"></A></TD>" "\n"
+	"		</TR></TABLE>" "\n"
+	"	 </TR></TABLE>" "\n"
+	"	 </CENTER>" "\n"
+	"    </TD>" "\n"
+	"</TR>" "\n"
+	"" "\n"
+	"<!--Content Tables------------------------------------------------------->" "\n"
+	"<TR><TD CELLPADDING=10>	" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" BORDERCOLOR=\"888888\" BORDER=1><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+	"		<FONT SIZE=\"4\"><b>&nbsp;  "
+);
+
+vprintf(format, args);
+
+puts(
+	"</b></FONT>" "\n"
+	"	</TD></TR></TABLE>" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TH HEIGHT=10></TH>" "\n"
+	"	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+	"" "\n"
+);
+
+webHeadAlreadyOutputed = TRUE;
+
+va_end(args);
+}
+
+
+void webNewSection(char* title)
+{
+puts(
+	"" "\n"
+	"" "\n"
+	"	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+	"	<br></TD></TR></TABLE>" "\n"
+	"	" "\n"
+	"<!--START SECOND SECTION ------------------------------------------------------->" "\n"
+	"<BR>" "\n"
+	"" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDERCOLOR=\"888888\" BORDER=1><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"ffffff\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+	"		<FONT SIZE=\"4\"><b>&nbsp;  "
+);
+puts(title);
+
+puts("</b></FONT>" "\n"
+	"	</TD></TR></TABLE>" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TH HEIGHT=10></TH>" "\n"
+	"	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+	"" "\n"
+);
+}
+
+void webEnd()
+{
+if(!webInTextMode)
+	puts(
+		"" "\n"
+		"	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+		"	<br></TD></TR></TABLE>" "\n"
+		"	" "\n"
+		"</TD></TR></TABLE>" "\n"
+		"</BODY></HTML>" "\n"
+	);
+}
+
+
+void webAbort(char* title, char* format, ...)
+{
+va_list args;
+va_start(args, format);
+
+if(!webHeadAlreadyOutputed)
+	webStart(title);
+
+if(webInTextMode)
+	printf("\n\n\n          %s\n\n", title);
+
+vprintf(format, args);
+
+webEnd();
+
+va_end(args);
+exit(1);
+}
 
 
 char* getTableVar()
@@ -399,8 +549,6 @@ row = sqlNextRow(sr);
 if(row == 0)
     webAbort("Empty Result", "Your query produced no results.");
 
-
-printf("Content-Type: text/plain\n\n");
 webStartText();
 
 /* print the columns names */
@@ -648,7 +796,6 @@ row = sqlNextRow(sr);
 if(row == 0)
     webAbort("empty result", "your query produced no results.");
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 //puts(query);
 /* print the field names */
@@ -750,7 +897,6 @@ row = sqlNextRow(sr);
 if(row == 0)
     webAbort("Empty result", "You query found no results.");
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 //puts(query);
 /* print the field names */
@@ -885,7 +1031,6 @@ while(current != 0)
 /* build the rest of the query */
 table = strstr(table, "_");
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
@@ -976,7 +1121,6 @@ snprintf(query, 256, "SELECT * FROM %s", table);
 
 conn = hAllocConn();
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 outputTabData(query, table, conn, TRUE);
 }
@@ -1003,7 +1147,6 @@ conn = hAllocConn();
 /* build the rest of the query */
 table = strstr(table, "_");
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
@@ -1370,7 +1513,6 @@ if(strcmp(position, "genome"))
 if(!allLetters(table))
 	webAbort("Error", "Malformated table name.");
 
-printf("Content-Type: text/plain\n\n");
 webStartText();
 
 if(existsAndEqual("position", "genome"))
@@ -1453,14 +1595,14 @@ hDefaultConnect();	/* read in the default connection options */
 /* if there is no table chosen, ask for one. */
 if(table == NULL || existsAndEqual("phase", "table"))
 	{
-	if(existsAndEqual("table0", "Choose table") && existsAndEqual("table1", "Choose table") && !existsAndEqual("submit", "Look up"))
-	    webAbort("Missing table selection", "Please choose a table and try again.");
-	else
-	    {
+
+	if(cgiOptionalString("table0") == 0 && cgiOptionalString("table1") == 0)
+		{
 		webStart("Genome Table Browser on %s Freeze", freezeName);
 		getTable();
 		webEnd();
-	    }
+	} else
+	    webAbort("Missing table selection", "Please choose a table and try again.");
 	}
 else
 	{
