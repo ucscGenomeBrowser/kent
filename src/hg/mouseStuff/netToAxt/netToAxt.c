@@ -11,7 +11,7 @@
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.15 2003/08/12 20:52:00 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.16 2003/08/13 04:42:15 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -105,9 +105,29 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
+#define maxChainId (256*1024*1024)
+
+Bits *findUsedIds(char *netFileName)
+/* Create a bit array with 1's corresponding to
+ * chainId's used in net file. */
+{
+struct lineFile *lf = lineFileOpen(netFileName, TRUE);
+Bits *bits = bitAlloc(maxChainId);
+struct chainNet *net;
+while ((net = chainNetRead(lf)) != NULL)
+    {
+    chainNetMarkUsed(net, bits, maxChainId);
+    chainNetFree(&net);
+    }
+lineFileClose(&lf);
+return bits;
+}
+
+
 void netToAxt(char *netName, char *chainName, char *tNibDir, char *qNibDir, char *axtName)
 /* netToAxt - Convert net (and chain) to axt.. */
 {
+Bits *usedBits = findUsedIds(netName);
 struct hash *chainHash;
 struct chainNet *net;
 struct lineFile *lf = lineFileOpen(netName, TRUE);
@@ -120,7 +140,8 @@ FILE *gapFile = NULL;
 
 if (gapFileName)
     gapFile = mustOpen(gapFileName, "w");
-chainHash = chainReadAllSwap(chainName, qChain);
+chainHash = chainReadUsedSwap(chainName, qChain, usedBits);
+bitFree(&usedBits);
 while ((net = chainNetRead(lf)) != NULL)
     {
     fprintf(stderr, "Processing %s\n", net->name);
