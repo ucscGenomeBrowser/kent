@@ -1,0 +1,1151 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how we made the browser database on the 
+# Chicken (Gallus gallus) January 2004 release.
+
+
+# CREATE BUILD DIRECTORY (DONE 1/23/04 angie)
+    ssh kksilo
+    mkdir /cluster/store6/galGal1
+    ln -s /cluster/store6/galGal1 /cluster/data/galGal1
+
+
+# DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE 1/23/04 angie)
+    mkdir /cluster/data/galGal1/M
+    cd /cluster/data/galGal1/M
+    # go to http://www.ncbi.nih.gov/ and search Nucleotide for 
+    # "gallus mitochondrion genome".  That shows the gi number:
+    # 5834843 
+    # Use that number in the entrez linking interface to get fasta:
+    wget -O chrM.fa \
+      'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=5834843&dopt=FASTA'
+    # Edit chrM.fa: make sure the long fancy header line says it's the 
+    # Gallus gallus mitochondrion complete genome, and then replace the 
+    # header line with just ">chrM".
+
+
+# DOWNLOAD GENOME SEQUENCE (DONE 1/28/04 angie)
+    ssh kksilo
+    cd /cluster/data/galGal1
+    # Contig sequences have been stable for a while:
+    wget ftp://genome.wustl.edu/private/chicken_040105/Fasta/chicken_040105.contigs.tar.gz
+    mkdir contigs
+    cd contigs
+    tar xvfz ../chicken_040105.contigs.tar.gz
+    foreach f (chicken_031214.pcap.contigs*)
+      set n = `echo $f | sed -e 's/chicken_031214.pcap.contigs//'`
+      mv $f contigs$n.fa
+    end
+    faSize *.fa
+#1054180845 bases (107580 N's 1054073265 real) in 111864 sequences in 100 files
+#Total size: mean 9423.8 sd 19990.9 min 52 (Contig28908.1) max 441791 (Contig132.21) median 2122
+#N count: mean 1.0 sd 5.1
+    mkdir /cluster/bluearc/galGal1
+    cat ../contigs/*.fa > /cluster/bluearc/galGal1/allContigs.fa
+    # Get qual scores too
+    wget ftp://genome.wustl.edu/private/chicken_040105/Qual/chicken_040105.contigs.qual.tar.gz
+    
+
+# BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE 1/29/04 angie)
+    ssh kolossus
+    cd /cluster/data/galGal1
+    # PRELIMINARY -- COMPARE VERY CAREFULLY TO RELEASED AGPS!!!!
+    wget ftp://genome.wustl.edu/private/lhillier/old/chicken_agp.040129.tar.gz
+    tar xvzf chicken_agp.040129.tar.gz
+    cd chicken_agp
+    cp /dev/null ../chrom.lst
+    foreach f (*.agp)
+      set chr = `echo $f:r | sed -e 's/^chr//'`
+      set base = `echo $chr | sed -e 's/_random$//'`
+      mkdir -p ../$base
+      cp -p $f ../$base
+      if ("$chr" == "$base") echo $chr >> ../chrom.lst
+    end
+    # There is a ZW_random but not a ZW... well, pretend there is a ZW.
+    echo ZW >> ../chrom.lst
+    # OK, tack chrM on there too:
+    echo M >> ../chrom.lst
+    cd /cluster/data/galGal1
+    foreach c (`cat chrom.lst`)
+      foreach agp ($c/chr$c{,_random}.agp)
+        if (-e $agp) then
+          set fa = $agp:r.fa
+          echo building $fa from $agp
+          agpToFa -simpleMultiMixed $agp $agp:t:r $fa \
+            /cluster/bluearc/galGal1/allContigs.fa
+        endif
+      end
+    end
+    # checkAgpAndFa prints out way too much info -- keep the end/stderr only:
+    foreach c (`cat chrom.lst`)
+      foreach agp ($c/chr$c{,_random}.agp)
+        if (-e $agp) then
+          set fa = $agp:r.fa
+          echo checking consistency of $agp and $fa
+          checkAgpAndFa $agp $fa | tail -1
+        endif
+      end
+    end
+    faSize */chr*.fa
+#1172150385 bases (118060345 N's 1054090040 real) in 48 sequences in 48 files
+#Total size: mean 24419799.7 sd 47367971.2 min 2535 (chrE50C23) max 229650211 (chrUn) median 7900282
+#N count: mean 2459590.5 sd 12312257.6
+
+
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 1/29/04 angie)
+    ssh kksilo
+    cd /cluster/data/galGal1
+    foreach c (`cat chrom.lst`)
+      foreach agp ($c/chr$c{,_random}.agp)
+        if (-e $agp) then
+          set fa = $agp:r.fa
+          echo splitting $agp and $fa
+          cp -p $agp $agp.bak
+          cp -p $fa $fa.bak
+          splitFaIntoContigs $agp $fa . -nSize=5000000
+        endif
+      end
+    end
+    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents 
+    # back into the main chrom dirs and get rid of the _random dirs.
+    foreach d (*_random)
+      set base = `echo $d | sed -e 's/_random$//'`
+      mv $d/lift/oOut.lst $base/lift/rOut.lst
+      mv $d/lift/ordered.lft $base/lift/random.lft
+      mv $d/lift/ordered.lst $base/lift/random.lst
+      rmdir $d/lift
+      mv $d/* $base
+      rmdir $d
+    end
+    # Make a "pseudo-contig" for processing chrM too:
+    mkdir M/chrM_1
+    sed -e 's/chrM/chrM_1/' M/chrM.fa > M/chrM_1/chrM_1.fa
+    mkdir M/lift
+    echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
+    echo "chrM_1" > M/lift/ordered.lst
+    echo "0       M/chrM_1        16775 chrM    16775" > M/lift/ordered.lft
+
+
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE 1/23/04 angie)
+    # This used to hold scripts -- better to keep them inline here so 
+    # they're in CVS.  Now it should just hold lift file(s) and 
+    # temporary scripts made by copy-paste from this file.  
+    mkdir /cluster/data/galGal1/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/galGal1/bed
+
+
+# CREATING DATABASE (DONE 1/28/04 angie)
+    ssh hgwdev
+    echo 'create database galGal1' | hgsql ''
+    # Use df to make sure there is at least 75G free on hgwdev:/var/lib/mysql
+    df -h /var/lib/mysql
+    # /dev/sdc1             1.8T  221G  1.5T  14% /var/lib/mysql
+
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 1/28/04 angie)
+    ssh hgwdev
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" \
+      | hgsql galGal1
+
+
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 1/29/04 angie)
+    # Make nib/, unmasked until RepeatMasker and TRF steps are done.
+    # Do this now so we can load up RepeatMasker and run featureBits; 
+    # can also load up other tables that don't depend on masking.  
+    ssh kksilo
+    cd /cluster/data/galGal1
+    mkdir nib
+    foreach c (`cat chrom.lst`)
+      foreach f ($c/chr${c}{,_random}.fa)
+        if (-e $f) then
+          echo "nibbing $f"
+          /cluster/bin/i386/faToNib $f nib/$f:t:r.nib
+        endif
+      end
+    end
+
+    # Make symbolic links from /gbdb/galGal1/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/galGal1/nib
+    foreach f (/cluster/data/galGal1/nib/chr*.nib)
+      ln -s $f /gbdb/galGal1/nib
+    end
+    # Load /gbdb/galGal1/nib paths into database and save size info.
+    cd /cluster/data/galGal1
+    hgsql galGal1  < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgNibSeq -preMadeNib galGal1 /gbdb/galGal1/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N galGal1 > chrom.sizes
+    # take a look at chrom.sizes, should be 48 lines
+    wc chrom.sizes
+
+
+# REPEAT MASKING (IN PROGRESS 1/29/04 angie)
+    #- Split contigs into 500kb chunks, at gaps if possible:
+    ssh kksilo
+    cd /cluster/data/galGal1
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        ~/bin/i386/faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
+    end
+
+    #- Make the run directory and job list:
+    cd /cluster/data/galGal1
+    cat << '_EOF_' > jkStuff/RMChicken
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/galGal1/$2
+/bin/cp $2 /tmp/galGal1/$2/
+cd /tmp/galGal1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec chicken $2
+popd
+/bin/cp /tmp/galGal1/$2/$2.out ./
+if (-e /tmp/galGal1/$2/$2.align) /bin/cp /tmp/galGal1/$2/$2.align ./
+if (-e /tmp/galGal1/$2/$2.tbl) /bin/cp /tmp/galGal1/$2/$2.tbl ./
+if (-e /tmp/galGal1/$2/$2.cat) /bin/cp /tmp/galGal1/$2/$2.cat ./
+/bin/rm -fr /tmp/galGal1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/galGal1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/galGal1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMChicken
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    touch RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}{,_random}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/galGal1/jkStuff/RMChicken \
+                 /cluster/data/galGal1/$d $f \
+               '{'check out line+ /cluster/data/galGal1/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+
+TODO
+    #- Do the run
+    ssh kk
+    cd /cluster/data/galGal1/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/galGal1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      if (-e lift/random.lft && ! -z lift/random.lft) then
+        liftUp chr${c}_random.fa.out lift/random.lft warn `cat lift/rOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/galGal1
+    hgLoadOut galGal1 */chr*.fa.out
+
+
+# VERIFY REPEATMASKER RESULTS (TODO)
+    # Eyeball some repeat annotations in the browser, compare to lib seqs.
+    # Run featureBits on galGal1 and on a comparable genome build, and compare:
+    ssh hgwdev
+    featureBits galGal1 rmsk
+    # No comparable species -- in conf call 01/21/04, Arian said about 
+    # 8-10% should be covered.
+
+
+# MAKE LIFTALL.LFT (DONE 1/29/04 angie)
+    ssh kksilo
+    cd /cluster/data/galGal1
+    cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
+
+
+# PUT UNMASKED CHUNKS ON BLUEARC (DONE 1/29/04 angie)
+    # Some of Terry's staging scripts require a flat dir containing 
+    # all contigs; also, doesn't hurt to set aside unmasked seq.
+    ssh kksilo
+    cd /cluster/data/galGal1
+    mkdir /cluster/bluearc/galGal1/unmaskedChunks
+    foreach d (*/chr*_?{,?})
+      cp -p $d/${d:t}.fa /cluster/bluearc/galGal1/unmaskedChunks
+    end
+
+
+# MAKE STS MARKERS TRACK (IN PROGRESS 1/29/04 angie)
+    # Doing a dry run to see if I can duplicate Terry's mapping of 
+    # markers to the prelim release.
+    set base = /cluster/data/galGal1/bed/markers
+    mkdir -p $base/primers $base/sts
+    # Need to find out how Terry built these:
+    cp -p /cluster/bluearc/gg1/markers/sts/convert.pl $base
+    cp -p /cluster/bluearc/gg1/markers/stsAlias.bed $base
+    cp -p /cluster/bluearc/gg1/markers/stsInfoGG.bed $base
+    cp -p /cluster/bluearc/gg1/10.ooc $base
+
+    # Need to find out where Terry got these files:
+    cp -p /cluster/bluearc/gg1/markers/primers/all.primers{,.fa} $base/primers
+    cp -p /cluster/bluearc/gg1/markers/sts/all.sequence.fa $base/sts
+
+    # Run e-PCR on primers
+    mkdir $base/primers/epcr
+    cd $base/primers/epcr
+    mkdir epcr.out
+    /cluster/bin/scripts/createCloneList \
+      /cluster/bluearc/galGal1/unmaskedChunks
+    # That script creates in.lst/$n.in files, where $n is 
+    # the contigs number *plus 1*!  in.lst/0.in is empty and makes 
+    # para create complain, so get rid of it.  
+    rm in.lst/0.in
+    egrep -v '/0.in$' files.lst > tmp.lst; mv tmp.lst files.lst
+    echo $base/primers/all.primers > epcr.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/scripts/runEpcr {check in line+ $(path1)} {check in line+ $(path2)} {check out exists epcr.out/$(root2).epcr}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    /cluster/bin/i386/gensub2 epcr.lst files.lst template jobList
+    ssh kk
+    set base = /cluster/data/galGal1/bed/markers
+    cd $base/primers/epcr
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 251 of 251 jobs
+#Average job time:                  11s       0.19m     0.00h    0.00d
+#Longest job:                       19s       0.32m     0.01h    0.00d
+#Submission to last job:            73s       1.22m     0.02h    0.00d
+    cat `ls -1 epcr.out/* | sort -g` > all.epcr
+
+    # blat primers -- with old blat.2 !
+    mkdir $base/primers/blat
+    cd $base/primers/blat
+    mkdir primers.out
+    ls -1S /cluster/bluearc/galGal1/unmaskedChunks/*.fa > contigs.lst
+    echo $base/primers/all.primers.fa > primers.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/home/kent/bin/i386/blat.2 -tileSize=10 -ooc=../../10.ooc -minMatch=1 -minScore=1 -minIdentity=75 {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ primers.out/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    /cluster/bin/i386/gensub2 contigs.lst primers.lst template jobList
+    ssh kk
+    set base = /cluster/data/galGal1/bed/markers
+    cd $base/primers/blat
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 262 of 262 jobs
+#Average job time:                  19s       0.32m     0.01h    0.00d
+#Longest job:                       33s       0.55m     0.01h    0.00d
+#Submission to last job:            65s       1.08m     0.02h    0.00d
+    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+    rm -r temp
+
+    # Make primers.final from e-PCR and blat results:
+    cd $base/primers
+    filterPrimers -chicken ../stsInfoGG.bed blat/primers.psl all.primers \
+      epcr/all.epcr > primers.psl.filter
+    extractPslInfo primers.psl.filter
+    mv primers.psl.filter.initial primers.initial
+    sort -k 4n primers.initial > primers.final
+
+    # blat sts sequences
+    mkdir $base/sts/blat
+    cd $base/sts/blat
+    mkdir stsMarkers.out
+    ls -1S /cluster/bluearc/galGal1/unmaskedChunks/*.fa > contigs.lst
+    echo $base/sts/all.sequence.fa > stsMarkers.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ stsMarkers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    /cluster/bin/i386/gensub2 contigs.lst stsMarkers.lst template jobList
+    ssh kk
+    set base = /cluster/data/galGal1/bed/markers
+    cd $base/sts/blat
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 262 of 262 jobs
+#Average job time:                 108s       1.79m     0.03h    0.00d
+#Longest job:                      207s       3.45m     0.06h    0.00d
+#Submission to last job:           276s       4.60m     0.08h    0.00d
+    /cluster/bin/i386/pslSort dirs raw.psl temp stsMarkers.out
+    /cluster/bin/i386/pslReps -nearTop=0.01 -minCover=0.6 -minAli=0.8 \
+      -noIntrons raw.psl stsMarkers.psl /dev/null
+    rm -rf temp
+    rm -f raw.psl
+
+    cd $base/sts
+    filterPsl blat/stsMarkers.psl
+    extractUniqPsl stsMarkers.psl.filter stsMarkers.psl.filter
+    pslReps stsMarkers.psl.filter.dup.psl stsMarkers.psl.filter.1 /dev/null \
+      -noIntrons -minCover=0.80 -minAli=0.90 -nearTop=0.05
+    mv stsMarkers.psl.filter stsMarkers.psl.filter.orig
+    cat stsMarkers.psl.filter.1 stsMarkers.psl.filter.uniq.psl \
+      > stsMarkers.psl.filter
+    extractPslInfo -h stsMarkers.psl.filter
+    rm stsMarkers.psl.filter.1*
+    rm stsMarkers.psl.filter.dup.psl stsMarkers.psl.filter.names \
+      stsMarkers.psl.filter.uniq.psl
+    extractPslInfo -h stsMarkers.psl.filter
+    mv stsMarkers.psl.filter.initial stsMarkers.initial
+    sort -k 4n stsMarkers.initial > stsMarkers.final.orig
+    ../convert.pl ../stsAlias.bed stsMarkers.final.orig > stsMarkers.final
+
+    cd $base
+    combineSeqPrimerPos $base/sts/stsMarkers.final \
+      $base/primers/primers.final > stsMarkers_pos.rdb
+    # This step needs work -- output is 0-length
+    createSTSbed stsInfoGG.bed stsMarkers_pos.rdb > stsMap.bed
+
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/markers
+    awk '{printf "%s\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5 * 1000};' \
+      sts/stsMarkers.final.orig \
+    | liftUp -type=.bed stsMarkersTmp.bed ../../jkStuff/liftAll.lft warn stdin
+    hgLoadBed galGal1 stsMarkerTmp stsMarkersTmp.bed 
+
+
+# SIMPLE REPEATS (TRF) (IN PROGRESS 1/29/04 angie)
+    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/simpleRepeat
+    cd /cluster/data/galGal1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach d (/cluster/data/galGal1/*/chr*_?{,?})
+      set ctg = $d:t
+      foreach f ($d/${ctg}.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+      end
+    end
+    csh jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    # When job is done do:
+    liftUp simpleRepeat.bed /cluster/data/galGal1/jkStuff/liftAll.lft warn \
+      trf/*.bed
+
+    # Load into the database:
+    ssh hgwdev
+    hgLoadBed galGal1 simpleRepeat \
+      /cluster/data/galGal1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    featureBits galGal1 simpleRepeat
+    # 8436953 bases of 1054197620 (0.800%) in intersection
+    # Seems awful low even though chicken is supposed to be a 
+    # low-repeat-density animal.  Run it by someone...
+
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 1/30/04/ angie)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/galGal1
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c (`cat chrom.lst`)
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+
+# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO)
+    ssh kksilo
+    cd /cluster/data/galGal1
+    # Soft-mask (lower-case) the contig and chr .fa's, 
+    # then make hard-masked versions from the soft-masked.  
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking f"
+      /cluster/bin/i386/maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      /cluster/bin/i386/maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      /cluster/bin/i386/maskOutFa $f hard $f.masked
+    end
+    foreach c (`cat chrom.lst`)
+      echo "repeat- and trf-masking contigs of chr$c, chr${c}_random"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        /cluster/bin/i386/maskOutFa -soft $f $f.out $f
+        /cluster/bin/i386/maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        /cluster/bin/i386/maskOutFa $f hard $f.masked
+      end
+    end
+    #- Rebuild the nib files, using the soft masking in the fa:
+    mkdir nib
+    foreach f (*/chr*.fa)
+      /cluster/bin/i386/faToNib -softMask $f nib/$f:t:r.nib
+    end
+    # Copy the masked contig fa to /cluster/bluearc:
+    ssh kksilo
+    rm -rf /cluster/bluearc/galGal1/trfFa
+    mkdir -p /cluster/bluearc/galGal1/trfFa
+    foreach d (/cluster/data/galGal1/*/chr*_?{,?})
+      set ctg = $d:t
+      cp -p $d/$ctg.fa /cluster/bluearc/galGal1/trfFa
+    end
+
+
+# GOLD AND GAP TRACKS (DONE 1/29/04 angie)
+    ssh hgwdev
+    cd /cluster/data/galGal1
+    hgGoldGapGl -noGl -chromLst=chrom.lst galGal1 /cluster/data/galGal1 .
+    # featureBits fails if there's no chrM_gap, so make one:
+    # echo "create table chrM_gap like chr1_gap" | hgsql galGal1
+    # oops, that won't work until v4.1, so do this for the time being:
+    echo "create table chrM_gap select * from chr1_gap where 0=1" \
+    | hgsql galGal1
+
+
+# MAKE GCPERCENT (DONE 1/29/04 angie)
+     ssh hgwdev
+     mkdir /cluster/data/galGal1/bed/gcPercent
+     cd /cluster/data/galGal1/bed/gcPercent
+     hgsql galGal1  < $HOME/kent/src/hg/lib/gcPercent.sql
+     hgGcPercent galGal1 ../../nib
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR GALGAL1 (DONE 1/28/04 angie)
+    ssh hgwdev
+    # Add dbDb and defaultDb entries:
+    echo 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk)  \
+          values("galGal1", "Jan. 2004", \
+          "/gbdb/galGal1/nib", "Chicken", "chr2:1000000-1100000", 1, \
+          35, "Chicken", "Gallus gallus", \
+          "/gbdb/galGal1/html/description.html", 0);' \
+    | hgsql -h genome-testdb hgcentraltest
+    echo 'insert into defaultDb values("Chicken", "galGal1");' \
+        | hgsql -h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add galGal1 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR GALGAL1 (TODO)
+    ssh hgwdev
+    echo 'insert into blatServers values("galGal1", "blat?", "17778", "1"); \
+          insert into blatServers values("galGal1", "blat?", "17779", "0");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE 1/28/04 angie)
+    ssh hgwdev
+    mkdir /gbdb/galGal1/html
+    # Write ~/kent/src/hg/makeDb/trackDb/chicken/galGal1/description.html 
+    # with a description of the assembly and some sample position queries.  
+    chmod a+r $HOME/kent/src/hg/makeDb/trackDb/chicken/galGal1/description.html
+    # Check it in and copy (ideally using "make alpha" in trackDb) to 
+    # /gbdb/galGal1/html
+
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (TODO)
+    ssh kksilo
+    cd /cluster/data/galGal1
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip
+mkdir zip
+zip -j zip/chromAgp.zip */chr*.agp
+zip -j zip/chromOut.zip */chr*.fa.out
+zip -j zip/chromFa.zip */chr*.fa
+zip -j zip/chromFaMasked.zip */chr*.fa.masked
+cd bed/simpleRepeat
+zip ../../zip/chromTrf.zip trfMaskChrom/chr*.bed
+cd ../..
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=galGal1 -native GenBank mrna \
+        /cluster/data/galGal1/zip/mrna.fa
+cd /cluster/data/galGal1/zip
+zip -j mrna.zip mrna.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh ./jkStuff/zipAll.csh |& tee zip/zipAll.log
+    cd zip
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/galGal1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/galGal1
+    mkdir -p $gp/chromosomes
+    foreach f ( ../*/chr*.fa )
+      zip -j $gp/chromosomes/$f:t.zip $f
+    end
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+
+    cd $gp
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+    # Can't make refGene upstream sequence files - no refSeq for chicken.
+    # Maybe ensGene when we get that.
+
+
+# PREPARE CLUSTER FOR BLASTZ RUN (TODO)
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    ssh kkr1u00
+    rm -rf /cluster/bluearc/galGal1/nib
+    mkdir -p /cluster/bluearc/galGal1/nib
+    cp -p nib/chr*.nib /cluster/bluearc/galGal1/nib
+
+
+# SWAP BLASTZ HUMAN-CHICKEN TO CHICKEN-HUMAN (HG16) (TODO)
+    ssh kolossus
+    mkdir /cluster/data/galGal1/bed/blastz.hg16.swap
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap
+    set aliDir = /cluster/bluearc/hg16/bed/blastz.galGal1.2004-01-DD
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    rm -r unsorted
+
+
+# CHAIN HUMAN BLASTZ (TODO)
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+
+    # Run axtChain on little cluster
+    ssh kkr1u00
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap
+    mkdir -p axtChain/run1
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/run1
+    ls -1S /cluster/data/galGal1/bed/blastz.hg16.swap/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtFilter -notQ=chrUn_random $1 \
+| axtChain stdin /cluster/bluearc/galGal1/nib /iscratch/i/hg16/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    mkdir out chain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain galGal1 ${c}_chainHg16 $i
+        echo done $c
+    end
+
+
+# NET HUMAN BLASTZ (TODO)
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      chainPreNet $i /cluster/data/galGal1/chrom.sizes \
+                        /cluster/data/hg16/chrom.sizes ../preNet/$i
+    end
+    cd ..
+    # This foreach loop will take about 15 min to execute.
+
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      chainNet $i -minSpace=1 /cluster/data/galGal1/chrom.sizes \
+                            /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
+    netClass hNoClass.net galGal1 hg16 human.net
+
+    # If things look good do
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet galGal1 netHg16 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet galGal1 syntenyHg16 stdin
+
+    # Add entries for net and chain to chicken/galGal1 trackDb
+
+
+# BLASTZ Self (TODO)
+
+    ssh kksilo
+    mkdir -p /cluster/data/galGal1/bed/blastz.galGal1
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+    cat << '_EOF_' > DEF
+# chicken vs. chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET
+# Chicken
+SEQ1_DIR=/cluster/bluearc/galGal1/nib
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+# not used
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Human
+SEQ2_DIR=/cluster/bluearc/galGal1/nib
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/galGal1/bed/blastz.galGal1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.galGal1-galGal1
+
+    ssh kk
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+
+    # source the DEF file
+    bash
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    head j2
+
+    # make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+        # 97344 jobs 
+    para try
+    para check
+    para push
+    # ... etc ...
+       # 1.3 hr longest job
+
+    # make tSizes, qSizes files
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+    echo 'select chrom,size from chromInfo' | hgsql -A -N galGal1 \
+      > tSizes
+    echo 'select chrom,size from chromInfo' | hgsql -A -N galGal1 \
+      > qSizes
+
+    # post-process blastz
+    # --- normalize (PennSpeak for lift)
+    ssh kk
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+    # run bash shell if not running it already
+    source DEF
+    mkdir -p $BASE/run.1
+    mkdir -p $BASE/lav
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
+                        > run.1/jobList
+    cd run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+    head jobList
+
+    para create jobList
+    para push
+
+    # convert lav files to axt
+    ssh kk
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+    mkdir axtChrom
+    
+    # a new run directory
+    mkdir run.2
+    cd run.2
+
+    # create template file for gensub2
+    # Use blastz-self-chromlav2axt, which includes axtDropOverlap in 
+    # the pipe (that helps to keep axtSort from barfing).
+    # usage:  blastz-self-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-self-chromlav2axt /cluster/data/galGal1/bed/blastz.galGal1/lav/$(root1) {check out line+ /cluster/data/galGal1/bed/blastz.galGal1/axtChrom/$(root1).axt} /cluster/bluearc/galGal1/nib /cluster/bluearc/galGal1/nib /cluster/data/galGal1/bed/blastz.galGal1/tSizes /cluster/data/galGal1/bed/blastz.galGal1/qSizes
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1S /cluster/data/galGal1/bed/blastz.galGal1/lav > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+
+    cd /cluster/data/galGal1/bed/blastz.galGal1/run.2
+    para create jobList
+    para try
+    para check
+    para push
+
+    # Chroms 1,2,3,4,Un,X crashed... run in 2 passes:
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.galGal1
+    set base=/cluster/data/galGal1/bed/blastz.galGal1
+    set seq1_dir=/cluster/data/galGal1/nib
+    set seq2_dir=/cluster/data/galGal1/nib
+    foreach c (lav/chr1 lav/chr2 lav/chr3 lav/chr4 lav/chrX lav/chrUn)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropOverlap stdin /cluster/data/galGal1/bed/blastz.galGal1/tSizes \
+          /cluster/data/galGal1/bed/blastz.galGal1/qSizes stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` > $out
+      popd
+    end
+    foreach f (axtChrom/chr*.axt)
+      echo gzipping $f...
+      gzip $f
+    end
+
+    # Make the axt's available on genome-test:
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/galGal1/alignments/vsGalGal1
+    cd /usr/local/apache/htdocs/goldenPath/galGal1/alignments/vsGalGal1
+    cp -p /cluster/data/galGal1/bed/blastz.galGal1/axtChrom/*.axt.gz .
+        
+
+# AUTO UPDATE GENBANK MRNA RUN  (TODO)
+    ssh eieio
+    cd /cluster/data/genbank
+    # Edit /cluster/data/genbank/etc/genbank.conf and add these lines:
+# galGal1
+galGal1.genome = /cluster/bluearc/galGal1/nib/chr*.nib
+galGal1.lift = /cluster/data/galGal1/jkStuff/liftAll.lft
+galGal1.refseq.mrna.native.load = no
+galGal1.genbank.mrna.native.load = yes
+galGal1.genbank.mrna.xeno.load = yes
+galGal1.genbank.est.xeno.load = no
+galGal1.downloadDir = galGal1
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+      -srcDb=genbank -type=mrna -verbose=1 -initial galGal1
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad galGal1
+
+    # -initial for ESTs:
+    ssh eieio
+    # To get this next one started, the work directory of the initial run 
+    # needs to be moved out of the way.  
+    rm -r /cluster/bluearc/genbank/work/initial.galGal1
+    # Now align ESTs:
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+      -srcDb=genbank -type=est -verbose=1 -initial galGal1
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 galGal1
+    # Clean up:
+    rm -r /cluster/bluearc/genbank/work/initial.galGal1
+
+
+# PRODUCING GENSCAN PREDICTIONS (TODO)
+    # Run on small cluster (more mem than big cluster).
+    ssh kkr1u00
+    mkdir -p /cluster/data/galGal1/bed/genscan
+    cd /cluster/data/galGal1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/data/galGal1/*/chr*_*/chr*_?{,?}.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+    wc -l genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    
+    # Convert these to chromosome level files as so:
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/genscan
+    ldHgGene galGal1 genscan genscan.gtf
+    hgPepPred galGal1 generic genscanPep genscan.pep
+    hgLoadBed galGal1 genscanSubopt genscanSubopt.bed
+
+
+# PRODUCING FUGU FISH ALIGNMENTS (TODO)
+    ssh kk
+    mkdir /cluster/data/galGal1/bed/blatFr1
+    cd /cluster/data/galGal1/bed/blatFr1
+    ls -1S /cluster/bluearc/fugu/fr1/trfFa/*.fa > fugu.lst
+    ls -1S /cluster/bluearc/galGal1/trfFa/*.fa > chicken.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 chicken.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+    # Sort alignments:
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blatFr1
+    pslCat -dir psl \
+    | liftUp -type=.psl stdout /cluster/data/galGal1/jkStuff/liftAll.lft \
+        warn stdin \
+    | pslSortAcc nohead chrom /cluster/store2/temp stdin
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blatFr1/chrom
+    hgLoadPsl -fastLoad -table=blatFr1 galGal1 *.psl
+    mkdir -p /gbdb/galGal1/fuguSeq
+    cd /gbdb/galGal1/fuguSeq
+    ln -s /cluster/data/fuguSeq/fugu_v3_mask.fasta
+    cd /cluster/data/galGal1/bed/blatFr1
+    hgLoadSeq galGal1 /gbdb/galGal1/fuguSeq/fugu_v3_mask.fasta
+
+
+# LOAD CPGISSLANDS (TODO)
+    ssh hgwdev
+    mkdir -p /cluster/data/galGal1/bed/cpgIsland
+    cd /cluster/data/galGal1/bed/cpgIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    mv cpglh.exe /cluster/data/galGal1/bed/cpgIsland/
+    
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/cpgIsland
+    foreach f (../../*/chr*.fa.masked)
+      set fout=$f:t:r:r.cpg
+      echo running cpglh on $f to $fout
+      ./cpglh.exe $f > $fout.cpg
+    end
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+/* chr1\t1325\t3865\t754\tCpG: 183\t64.9\t0.7 */
+/* Transforms to:  (tab separated columns above, spaces below) */
+/* chr1  1325    3865    CpG: 183  754  183 489  64.9  0.7 */
+{
+width = $3-$2;
+printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
+  $1,$2,$3,$5,$6,width,$6,width*$7*0.01,100.0*2*$6/($3-$2),$7);}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/cpgIsland
+    hgLoadBed galGal1 cpgIsland -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
+
+
+# LOAD SOFTBERRY GENES (TODO)
+     cd /cluster/data/galGal1/bed
+     mkdir softberry
+     cd softberry
+     wget \
+        ftp://www.softberry.com/pub/SC_CHICKEN_JUN03/Softb_fgenesh_chicken_jun03.tar.gz
+     tar xvzf Softb_fgenesh_chicken_jun03.tar.gz
+     ldHgGene galGal1 softberryGene chr*.gff
+     hgPepPred galGal1 softberry *.protein
+     hgSoftberryHom galGal1 *.protein
+
+
+# TIGR GENE INDEX (TODO)
+    mkdir -p /cluster/data/galGal1/bed/tigr
+    cd /cluster/data/galGal1/bed/tigr
+    wget ftp://ftp.tigr.org//pub/data/tgi/TGI_track_ChickenGenome_Jun2003.tgz
+    tar xvfz TGI_track_ChickenGenome_Jun2003.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (rat cow human pig chicken)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC galGal1 tigrGeneIndex *.gff
+       # 139456 gene predictions
+    gzip *TCs *.gff
+
+
