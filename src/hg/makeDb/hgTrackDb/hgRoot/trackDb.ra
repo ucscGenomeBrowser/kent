@@ -560,3 +560,10 @@ chromosomes chr22,
 type bed 4 +
 private on
 
+track nci60
+shortLabel NCI60
+longLabel Microarray Experiments for NCI 60 Cell Lines
+priority 38
+visibility hide
+type bed 15 +
+private on
