@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.850 2004/12/08 18:15:47 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.851 2004/12/08 18:41:50 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8460,7 +8460,8 @@ static void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 {
 unsigned char finalR = track->color.r, finalG = track->color.g, 
                             finalB = track->color.b;
-unsigned char thisR = 50, thisG = 50, thisB = 50;
+unsigned char altR = track->altColor.r, altG = track->altColor.g, 
+                            altB = track->altColor.b;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
 struct trackDb *subTdb;
 /* number of possible subtracks for this track */
@@ -8474,9 +8475,9 @@ if (finalR || finalG || finalB)
     {
     /* not black -- make a color gradient for the subtracks,
                 from black, to the specified color */
-    deltaR = (finalR - 50) / (subtrackCt-1);
-    deltaG = (finalG - 50) / (subtrackCt-1);
-    deltaB = (finalB - 50) / (subtrackCt-1);
+    deltaR = (finalR - altR) / (subtrackCt-1);
+    deltaG = (finalG - altG) / (subtrackCt-1);
+    deltaB = (finalB - altB) / (subtrackCt-1);
     }
 
 /* count number of visible subtracks for this track */
@@ -8507,15 +8508,15 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     subtrack->longLabel = subTdb->longLabel;
     if (finalR || finalG || finalB)
         {
-        subtrack->color.r = thisR;
-        subtrack->altColor.r = (255+thisR)/2;
-        thisR += deltaR;
-        subtrack->color.g = thisG;
-        subtrack->altColor.g = (255+thisG)/2;
-        thisG += deltaG;
-        subtrack->color.b = thisB;
-        subtrack->altColor.b = (255+thisB)/2;
-        thisB += deltaB;
+        subtrack->color.r = altR;
+        subtrack->altColor.r = (255+altR)/2;
+        altR += deltaR;
+        subtrack->color.g = altG;
+        subtrack->altColor.g = (255+altG)/2;
+        altG += deltaG;
+        subtrack->color.b = altB;
+        subtrack->altColor.b = (255+altB)/2;
+        altB += deltaB;
         }
     else
         {
