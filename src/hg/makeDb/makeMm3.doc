@@ -120,12 +120,11 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM3 (DONE 02/06/03)
     cvs commit makefile
 
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM3 (TODO)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM3 (DONE 02/13/03)
     ssh hgwdev
-    mysql -h genome-testdb -u hgcat -pBIGSECRET -A hgcentraltest
-      insert into blatServers values("mm3", "blat?", "17778", "1");
-      insert into blatServers values("mm3", "blat?", "17779", "0");
-      quit
+    echo 'insert into blatServers values("mm3", "blat9", "17778", "1"); \
+          insert into blatServers values("mm3", "blat9", "17779", "0");' \
+      | hgsql -h genome-testdb hgcentraltest
 
 
 REPEAT MASKING (DONE 02/07/03)
