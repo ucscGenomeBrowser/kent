@@ -53,4 +53,6 @@ boolean hIsMgcServer();
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
 
+#define hgDefaultPixWidth 620
+
 #endif /* HCOMMON_H */
