@@ -1,18 +1,20 @@
 #!/bin/bash -e
 
-# Script load the MGC server. This polls to determine if a new build has been
-# done and the result download to the gbdb server.  Expects the $gbRoot
-# to be NFS exported from the gbdb server.
+# dbload for mgc server.
+#   - loads all MGC tables (in conf file)
+#   - has different databases than other rr.
 
 # errors terminate with message
 set -e
-trap "echo Error: genbank-mgc-load failed on `hostname` >&2; exit 1" ERR
+trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
 
-# initialize
-gbRoot=/scratch/genbank
+# databases to update
+databases="hg15 mm3 rn2"
+
+# gbRoot on hgnfs1
+gbRoot=/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-
 
 verb=""
 verb="-verbose=1"
@@ -20,7 +22,7 @@ verb="-verbose=1"
 # allow 250mb core dumps
 ulimit -c 256000
 
-# workdir is a local dir, allowing gbRoot, including, var to be shared on NFS
+# workdir is a local dir
 workdir=/scratch/tmp/genbank
 
 # data files and dirs
@@ -29,6 +31,8 @@ copyTime=var/copy/copy.time
 lastCopyTime=$dbloadVar/copy.time
 lastCopyTimeTmp=$lastCopyTime.tmp
 dbloadTime=$dbloadVar/dbload.time
+
+mkdir -p $dbloadVar
 
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.
@@ -43,11 +47,11 @@ fi
 cp -f $copyTime $lastCopyTimeTmp
 
 # update databases
-gbDbLoadStep $verb -workdir=$workdir \
-     hg15 mm3 rn2
+gbDbLoadStep $verb -workdir=$workdir -downloadUpdate $databases
 
 # on success, save time load completely and build time we started with
 mv -f $lastCopyTimeTmp $lastCopyTime
 gbMkTimeFile $dbloadTime
 
-echo "genbank-mgc-load complete on `hostname`"
+echo "`hostname`: dbload completed"
+

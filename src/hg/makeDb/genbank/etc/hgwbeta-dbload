@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# dbload for hgwdev server.
+# dbload for hgwbeta server.
 #   - separate script since hgwbeta is updated before rr
 #   - does weekly dump of tables, which are picked up by other rr nodes
 

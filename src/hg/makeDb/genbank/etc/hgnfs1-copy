@@ -8,7 +8,7 @@ set -e  # errors terminate
 trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
 
 # databases to copy:
-databases="hg15 rn3"
+databases="hg15 mm3 rn2 rn3"
 
 # initialize
 gbRoot=/export/genbank
