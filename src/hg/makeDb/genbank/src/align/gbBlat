@@ -129,12 +129,12 @@ esac
 # local directory for all work.
 tmpDir="/var/tmp/gbBlat.$$.tmp"
 rm -rf $tmpDir
-mkdir -p $tmpDir
+mkdir -p -m 02775 $tmpDir
 
 # create out directory now, so mkdir failure (usually NFS) will not happen
 # after blat has completed.  Try twice, just because we sometimes get 
-# weird failures 
-mkdir -p $outDir || (sleep 2 && mkdir -p $outDir)
+# weird failures.  Maintain group write/sticky
+mkdir -p -m 02775 $outDir || (sleep 2 && mkdir -p -m 02775 $outDir)
 
 # arrange for cleanup on any exit
 if [ "x$keepTmp" = "xYES" ] ; then

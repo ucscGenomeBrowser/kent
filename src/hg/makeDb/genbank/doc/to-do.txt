@@ -458,3 +458,5 @@
   command failed: gbAlignSetup -workdir=work/initial.ci1/align -verbose=1 -clusterdir=/iscratch/genbank ci1 '/scratch/hg/ci1/nib/*.nib' "" at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176.
 
 - make sure directorys have the group stick bit maintained.
+
+- make sure all I/O inside of perl does error checking.
