@@ -217,9 +217,13 @@ if (strstr(spDisplayId, proteinID) == NULL)
     if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
     	{
 	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+        hPrintf(")<br>\n", oldSpDisplayId(spDisplayId));
 	}
-									            
-    hPrintf(")\n", oldSpDisplayId(spDisplayId));
+    else
+    	{
+        hPrintf(")\n", oldSpDisplayId(spDisplayId));
+	}
+    
     }											    
 
 hPrintf(" %s\n", description);
