@@ -19,7 +19,7 @@ O = aliType.o axt.o bits.o binRange.o \
     xa.o xAli.o xap.o xenbig.o xenshow.o xensmall.o xp.o web.o 
 
 
-$(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
+$(MACHTYPE)/jkweb.a: clean $(O) $(MACHTYPE)
 	ar rcu $(MACHTYPE)/jkweb.a $(O)
 	ranlib $(MACHTYPE)/jkweb.a
 
