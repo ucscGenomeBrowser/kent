@@ -2195,7 +2195,7 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
 # SET UP RAT BLASTZ CLUSTER RUNS
 # FIRST FOLLOW INSTRUCTIONS IN ~angie/hummus/Notes
 
-# LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
+# LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE - 2003-05-06 - Hiram)
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
@@ -2229,9 +2229,8 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     cd $base/pslChrom
     /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
 
-#	DONE - hgLoadPsl is in progress 2003-05-08 13:55 - Hiram
 
-# MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (TO DO)
+# MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (Working on this - 2003-05-06 16:36 - Hiram)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
@@ -2242,10 +2241,12 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     foreach chrdir (lav/chr*)
       set chr=$chrdir:t
       echo axtBesting $chr
-      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      /cluster/bin/i386/axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
       echo translating axtBest to psl for $chr
       /cluster/bin/i386/axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
+
+#  Above loop is running 2003-05-06 16:36 - Hiram
 
     # Load tables
      ssh hgwdev
@@ -2254,7 +2255,7 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
      cd $base/pslBest
      /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
 
-    # Make /gbdb links and add them to the axtInfo table:
+# Make /gbdb links and add them to the axtInfo table:
 # Not done for build 32:
      mkdir -p /gbdb/hg15/axtBestRn2
      cd /gbdb/hg15/axtBestRn2
@@ -2269,13 +2270,13 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
        echo "INSERT INTO axtInfo VALUES ('rn2','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
-     hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
-     hgsql hg15 < axtInfoInserts.sql
+     /cluster/bin/i386/hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
+     /cluster/bin/i386/hgsql hg15 < axtInfoInserts.sql
 
-# MAKING THE AXTTIGHT FROM AXTBEST (TO DO)
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE 2003-05-08 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg15/bed/blastz.rn2.2003-03-18-ASH/axtBest
+    cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2290,7 +2291,7 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg15/bed/blastz.rn2.2003-03-18-ASH/pslTight
+    cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/pslTight
     hgLoadPsl hg15 chr*_blastzTightRn2.psl
 
 # XXX END OF RAT BLASTZ
