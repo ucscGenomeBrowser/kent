@@ -16,8 +16,9 @@
 #include "ggPrivate.h"
 #include "altGraphX.h"
 #include "geneGraph.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.8 2003/05/27 20:30:52 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.9 2003/06/18 16:48:19 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -482,6 +483,7 @@ int edgeCount = 0;
 int totalVertexCount = gg->vertexCount;
 int usedVertexCount;
 int usedCount;
+struct dyString *accessionList = NULL;
 int *translator;	/* Translates away unused vertices. */
 struct ggVertex *vertices = gg->vertices;
 struct ggEvidence *ev = NULL;
@@ -510,11 +512,16 @@ ag->vertexCount = usedVertexCount;
 ag->vTypes = AllocArray(vTypes, usedVertexCount);
 ag->vPositions = AllocArray(vPositions, usedVertexCount);
 ag->mrnaRefCount = gg->mrnaRefCount;
-ag->mrnaRefs = AllocArray(ag->mrnaRefs, gg->mrnaRefCount);
-for(i=0; i < gg->mrnaRefCount; i++)
-    {
-    ag->mrnaRefs[i] = cloneString(gg->mrnaRefs[i]);
-    }
+accessionList = newDyString(10*gg->mrnaRefCount);
+for(i=0; i<gg->mrnaRefCount; i++)
+    dyStringPrintf(accessionList, "%s,", gg->mrnaRefs[i]);
+sqlStringDynamicArray(accessionList->string, &ag->mrnaRefs, &ag->mrnaRefCount);
+dyStringFree(&accessionList);
+/*ag->mrnaRefs = AllocArray(ag->mrnaRefs, gg->mrnaRefCount);*/
+/* for(i=0; i < gg->mrnaRefCount; i++) */
+/*     { */
+/*     ag->mrnaRefs[i] = cloneString(gg->mrnaRefs[i]); */
+/*     } */
 ag->mrnaTissues = CloneArray(gg->mrnaTissues, gg->mrnaRefCount);
 ag->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
 
