@@ -1903,7 +1903,7 @@ some reason, perhaps having to do with the regulation of gene expression.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
 	CpG islands are represented by green boxes. Darker green items indicate CpG 
-	islands that exceed 400 occurrences.</TD></TR> 
+	islands that exceed 300 occurrences.</TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
 	Clicking on a CpG entry in full display mode will show basic track information, 
@@ -3330,7 +3330,7 @@ filter. Some mRNAs align to multiple places but only the near-best are retained.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Overlap SNPs</B><BR>
+<P><B>Overlap SNPs</B> (older archived versions only)<BR>
 This track shows single nucleotide polymorphisms found on overlapping contigs. 
 Overlap SNPs are useful markers in mapping genes and diseases. This data was provided 
 by the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP Consortium</A>.
@@ -3447,7 +3447,7 @@ reported peak LOD scores taken from Jackson Lab's
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Random SNPs</B><BR> 
+<P><B>Random SNPs</B> (older archived versions only)<BR> 
 This track displays single nucleotide polymorphisms (SNPs)found by random 
 sequencing. Random SNPs are useful markers in mapping genes and complex traits.
 Because these SNPs are detected from random reads, they are useful for
@@ -3807,6 +3807,33 @@ DNA sequences.
 	slamMouseNonCoding, slamRatNonCoding</I>). To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>SNPs</B><BR> 
+This track displays all the known Simple Nucleotide Polymorphisms (SNPs) that
+can be mapped against the current genome assembly. These include known point 
+mutations (Single Nucleotide Polymorphisms), insertions, deletions, and 
+segmental mutations from the current build of dbSnp (shown in the Genome
+Browser <A HREF="/goldenPath/releaseLog.html">release log</A>). See the track
+description page for more informaiton about major cases that are not mapped.
+These data were provided by the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP 
+Consortium</A>.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	SNP locations are indicated by thin grey vertical lines.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+ 	Clicking in full mode brings up a location description 
+ 	and <A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP</A> link.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>snpTsc</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#SNPsites"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
