@@ -95,7 +95,15 @@ void gfSendString(int sd, char *s);
 
 char *gfRecieveString(int sd, char buf[256]);
 /* Read string into buf and return it.  If buf is NULL
- * an internal buffer will be used. */
+ * an internal buffer will be used. Abort if any problem. */
+
+char *gfGetString(int sd, char buf[256]);
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Print warning message
+ * and return NULL if any problem. */
+
+int gfReadMulti(int sd, void *vBuf, size_t size);
+/* Read in until all is read or there is an error. */
 
 /* ---  Some routines for dealing with gfServer at a high level ---- */
 

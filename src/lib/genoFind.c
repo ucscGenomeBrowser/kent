@@ -391,7 +391,6 @@ for (i=0; i < nibSize; i = endBuf)
     freeDnaSeq(&seq);
     }
 fclose(f);
-printf("Done adding\n");
 return nibSize;
 }
 
@@ -491,6 +490,7 @@ for (i=0; i<nibCount; ++i)
     offset += nibSize;
     ss->end = offset;
     }
+printf("Done adding\n");
 gfZeroOverused(gf);
 return gf;
 }

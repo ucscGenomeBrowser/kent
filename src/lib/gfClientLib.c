@@ -146,7 +146,6 @@ write(sd, seq->dna, seq->size);
 for (;;)
     {
     gfRecieveString(sd, buf);
-    // uglyf("gf: %s\n", buf);
     if (sameString(buf, "end"))
 	{
 	break;
@@ -283,8 +282,8 @@ for (range = combined->components; range != NULL; range = range->next)
 		 tSeq->dna + tStart - combined->tStart,
 		 tSeq->dna + tEnd - combined->tStart,
 		 stringency);
-    // uglyf("  qStart %d, combined->qStart %d, tStart %d, combined->tStart %d\n", qStart, combined->qStart, tStart, combined->tStart);
-    // uglyf("  ffFind %d-%d %d-%d has %d blocks\n", qStart, qEnd, tStart, tEnd, ffAliCount(ali));
+     //uglyf("  qStart %d, combined->qStart %d, tStart %d, combined->tStart %d<BR>\n", qStart, combined->qStart, tStart, combined->tStart);
+    //uglyf("  ffFind %d-%d %d-%d has %d blocks<BR>\n", qStart, qEnd, tStart, tEnd, ffAliCount(ali));
     if (ali != NULL)
         {
 	AllocVar(ffi);
