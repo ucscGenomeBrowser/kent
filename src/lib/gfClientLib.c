@@ -85,6 +85,8 @@ int diff;
 
 diff = strcmp(a->tName, b->tName);
 if (diff == 0)
+    diff = a->t3 - b->t3;
+if (diff == 0)
     diff = a->tStart - b->tStart;
 return diff;
 }
@@ -317,6 +319,7 @@ for (exon = exonList; exon != NULL; exon = nextExon)
     {
     nextExon = exon->next;
     if (lastExon == NULL || !sameString(lastExon->tName, exon->tName) 
+	|| exon->t3  != lastExon->t3
         || exon->tStart - lastExon->tEnd > maxIntron)
 	{
 	AllocVar(gene);
