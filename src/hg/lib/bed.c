@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.18 2003/08/13 18:10:47 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.19 2003/08/15 13:32:38 weber Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -517,6 +517,44 @@ if (sep == ',') fputc('}',f);
 
 fputc(lastSep,f);
 }
+
+struct bed *bedFromGenePred(struct genePred *genePred)
+/* Convert a single genePred to a bed structure */
+{
+struct bed *bed;
+int i, blockCount, *chromStarts, *blockSizes, chromStart;
+
+/* A tiny bit of error checking on the genePred. */
+if (genePred->txStart >= genePred->txEnd || genePred->cdsStart > genePred->cdsEnd
+    || genePred->exonCount < 0 )
+    {
+    errAbort("mangled genePred format for %s", genePred->name);
+    }
+
+/* Allocate bed and fill in from psl. */
+AllocVar(bed);
+bed->chrom = cloneString(genePred->chrom);
+bed->chromStart = chromStart = genePred->txStart;
+bed->chromEnd = genePred->txEnd;
+bed->thickStart = genePred->cdsStart;
+bed->thickEnd = genePred->cdsEnd;
+bed->score = 0;
+strncpy(bed->strand,  genePred->strand, sizeof(bed->strand));
+bed->blockCount = blockCount = genePred->exonCount;
+bed->blockSizes = blockSizes = (int *)cloneMem(genePred->exonEnds,(sizeof(int)*genePred->exonCount));
+bed->chromStarts = chromStarts = (int *)cloneMem(genePred->exonStarts, (sizeof(int)*genePred->exonCount));
+bed->name = cloneString(genePred->name);
+
+/* Convert coordinates to relative and exnosEnds to blockSizes. */
+for (i=0; i<blockCount; ++i)
+{
+    blockSizes[i] -= chromStarts[i];
+    chromStarts[i] -= chromStart;
+}
+return bed;
+}
+
+
 
 
 struct bed *bedFromPsl(struct psl *psl)
