@@ -102,7 +102,7 @@
 #include "stsMapMouseNew.h"
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
-#include "mafRef.h"
+#include "scoredRef.h"
 #include "hgc.h"
 
 
@@ -10788,15 +10788,15 @@ else
     struct lineFile *lf = NULL;
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	struct mafRef mr;
-	mafRefStaticLoad(row + rowOffset, &mr);
-	if (mr.extFile != extFileId)
+	struct scoredRef ref;
+	scoredRefStaticLoad(row + rowOffset, &ref);
+	if (ref.extFile != extFileId)
 	    {
 	    lineFileClose(&lf);
-	    lf = openExtLineFile(mr.extFile);
-	    extFileId = mr.extFile;
+	    lf = openExtLineFile(ref.extFile);
+	    extFileId = ref.extFile;
 	    }
-	lineFileSeek(lf, mr.offset, SEEK_SET);
+	lineFileSeek(lf, ref.offset, SEEK_SET);
 	printf("<TT><PRE>");
 	for (;;)
 	    {
