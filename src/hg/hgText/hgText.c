@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.114 2004/03/17 23:15:45 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.115 2004/03/17 23:54:07 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2946,17 +2946,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    if ((trackType != (char *) NULL) && sameString(trackType,"wig")
-			&& sameString(row[0],"file"))
-		{
-		snprintf(button, sizeof(button), "%s", wigglePhase);
-		cgiMakeButton("phase", button);
-		}
-	    else
-		{
-		snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
-		cgiMakeButton("phase", button);
-		}
+	    snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
+	    cgiMakeButton("phase", button);
 	    }
 	else
 	    {
