@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.11 2004/03/04 06:04:48 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.12 2004/03/04 07:28:56 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -342,9 +342,16 @@ struct htmlPage *quickSubmit(struct htmlPage *basePage,
 struct nearTest *test;
 struct qaStatus *qs;
 struct htmlPage *page;
-qs = qaPageFromForm(basePage, basePage->forms, 
-	button, buttonVal, &page);
-test = nearTestNew(qs, testName, sort, org, db, col, gene);
+if (basePage != NULL)
+    {
+    if (db != NULL)
+	htmlPageSetVar(basePage, NULL, "db", db);
+    if (org != NULL)
+	htmlPageSetVar(basePage, NULL, "org", org);
+    qs = qaPageFromForm(basePage, basePage->forms, 
+	    button, buttonVal, &page);
+    test = nearTestNew(qs, testName, sort, org, db, col, gene);
+    }
 return page;
 }
 
@@ -461,32 +468,14 @@ if (emptyConfig != NULL )
 htmlPageFree(&emptyConfig);
 }
 
-#ifdef SOON
-void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene)
-/* Test one column. */
-{
-struct htmlPage *printPage = NULL;
-htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
-htmlPageSetVar(emptyConfig, NULL, orderVarName, sort);
-htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
-htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
-printPage = quickSubmit(emptyConfig, sort, org, db, NULL, gene, "sortType", NULL, NULL);
-if (printPage != NULL)
-    {
-    int lineCount = nearCountRows(printPage);
-    if (lineCount < 1)
-	qaStatusSoftError(nearTestList->status, "No rows for sort %s", sort);
-    }
-quickErrReport();
-htmlPageFree(&printPage);
-}
-#endif /* SOON */
 
-void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene)
+void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene, char *accColumn)
 /* Test one column. */
 {
+char accVis[256];
 struct htmlPage *printPage = NULL;
-htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
+safef(accVis, sizeof(accVis), "near.col.%s.vis", accColumn);
+htmlPageSetVar(emptyConfig, NULL, accVis, "on");
 htmlPageSetVar(emptyConfig, NULL, orderVarName, sort);
 htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
@@ -505,7 +494,7 @@ htmlPageFree(&printPage);
 
 
 void testDbSorts(struct htmlPage *dbPage, char *org, char *db, 
-	struct slName *geneList)
+	char *accColumn, struct slName *geneList)
 /* Test on one database. */
 {
 struct htmlPage *emptyConfig;
@@ -524,7 +513,7 @@ if (emptyConfig != NULL)
 	{
 	for (gene = geneList; gene != NULL; gene = gene->next)
 	    {
-	    testSort(emptyConfig, org, db, sort->name, gene->name);
+	    testSort(emptyConfig, org, db, sort->name, gene->name, accColumn);
 	    }
 	}
     htmlPageFree(&emptyConfig);
@@ -532,12 +521,13 @@ if (emptyConfig != NULL)
 }
 
 void testDbFilters(struct htmlPage *dbPage, char *org, char *db, 
-	struct slName *geneList)
+	char *accColumn, struct slName *geneList)
 /* Test filter that returns just geneList. */
 {
 struct slName *gene;
 int rowCount;
-char *accFilter = "near.as.acc.wild";
+char accFilter[256];
+safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
 
 /* Start out with filter page. */
 struct htmlPage *page = quickSubmit(dbPage, NULL, org, db, NULL, NULL,
@@ -581,6 +571,13 @@ if (rowCount != 1)
 	    "Acc multi filter expecting %d, tog %d items", geneCount, rowCount);
 	}
     }
+
+/* Clear out advanced filters. */
+    {
+    htmlPageFree(&page);
+    page = quickSubmit(dbPage, NULL, org, db, NULL, NULL,
+	"advFilterClear", advFilterClearVarName, "on");
+    }
 htmlPageFree(&page);
 }
 
@@ -589,19 +586,20 @@ void testDb(struct htmlPage *orgPage, char *org, char *db)
 {
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
+char *accColumn = hashMustFindVal(genomeRa, "idColumn");
 struct slName *geneList = randomSample(db, canonicalTable, "transcript", clRepeat);
-struct nearTest *test;
-struct qaStatus *qs;
 struct htmlPage *dbPage;
 
 htmlPageSetVar(orgPage, NULL, "db", db);
 htmlPageSetVar(orgPage, NULL, searchVarName, "");
-qs = qaPageFromForm(orgPage, orgPage->forms, "Submit", "Go!", &dbPage);
-test = nearTestNew(qs, "dbEmptyPage", "n/a", org, db, "n/a", "n/a");
-
-testDbColumns(dbPage, org, db, geneList);
-testDbSorts(dbPage, org, db, geneList);
-testDbFilters(dbPage, org, db, geneList);
+dbPage = quickSubmit(orgPage, NULL, org, db, NULL, NULL, "dbEmptyPage", "submit", "go");
+quickErrReport();
+if (dbPage != NULL)
+    {
+    testDbColumns(dbPage, org, db, geneList);
+    testDbSorts(dbPage, org, db, accColumn, geneList);
+    testDbFilters(dbPage, org, db, accColumn, geneList);
+    }
 
 hashFree(&genomeRa);
 }
