@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.37 2004/10/30 01:39:27 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.38 2004/11/22 20:36:33 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -771,6 +771,68 @@ for (i=0; i<=axt->symCount; ++i)
     lastIn = thisIn;
     qPos += advanceQ;
     tPos += advanceT;
+    }
+}
+
+void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, FILE *f)
+/* Print out an alignment with line-breaks. */
+{
+int lineStart;
+int qPos = axt->qStart;
+int tPos = axt->tStart;
+int symPos;
+int aDigits = digitsBaseTen(axt->qEnd);
+int bDigits = digitsBaseTen(axt->tEnd);
+int digits = max(aDigits, bDigits);
+
+for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
+    {
+    /* Figure out which part of axt to use for this line. */
+    int lineSize = axt->symCount - symPos;
+    int lineEnd, i;
+    if (lineSize > maxLine)
+        lineSize = maxLine;
+    lineEnd = symPos + lineSize;
+
+    /* Draw query line including numbers. */
+    fprintf(f, "%0*d ", digits, qPos+1);
+    for (i=symPos; i<lineEnd; ++i)
+        {
+	char c = axt->qSym[i];
+	fputc(c, f);
+	if (c != '.' && c != '-')
+	    ++qPos;
+	}
+    fprintf(f, " %0*d\n", digits, qPos);
+
+    /* Draw line with match/mismatch symbols. */
+    spaceOut(f, digits+1);
+    for (i=symPos; i<lineEnd; ++i)
+        {
+	char q = axt->qSym[i];
+	char t = axt->tSym[i];
+	char out = ' ';
+	if (q == t)
+	    out = '|';
+	else if (ss != NULL && ss->matrix[q][t] > 0)
+	    out = '+';
+	fputc(out, f);
+	}
+    fputc('\n', f);
+
+    /* Draw target line including numbers. */
+    fprintf(f, "%0*d ", digits, tPos+1);
+    for (i=symPos; i<lineEnd; ++i)
+        {
+	char c = axt->tSym[i];
+	fputc(c, f);
+	if (c != '.' && c != '-')
+	    ++tPos;
+	}
+    fprintf(f, " %0*d\n", digits, tPos);
+
+    /* Draw extra empty line. */
+    fputc('\n', f);
     }
 }
 

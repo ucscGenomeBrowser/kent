@@ -195,6 +195,9 @@ void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt);
 /* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
  * Note: list will be in reverse order of axt blocks. */
 
+void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, 
+	FILE *f);
+/* Print out an alignment with line-breaks. */
 
 #endif /* AXT_H */
 
