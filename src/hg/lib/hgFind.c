@@ -20,6 +20,7 @@
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "stsMapMouse.h"
 #include "knownInfo.h"
 #include "cart.h"
 #include "hgFind.h"
@@ -585,31 +586,41 @@ char **row;
 boolean ok = FALSE;
 char *alias = NULL, *temp;
 struct stsMap sm;
-char *tableName;
-boolean newFormat;
+struct stsMapMouse smm;
+char *tableName, *tableAlias;
+boolean newFormat = FALSE, mouse = FALSE;
 char *chrom;
 char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 
-if (hTableExists("stsMap"))
+if (hTableExists("stsMapMouse"))
+    {
+    mouse = TRUE;
+    tableName = "stsMapMouse";
+    tableAlias = "stsAliasMouse";
+    }
+else if (hTableExists("stsMap"))
     {
     newFormat = TRUE;
     tableName = "stsMap";
+    tableAlias = "stsAlias";
     }
 else if (hTableExists("stsMarker"))
     {
     newFormat = FALSE;
     tableName = "stsMarker";
+    tableAlias = "stsAlias";
     }
 else
     return FALSE;
+
 conn = hAllocConn();
 query = newDyString(256);
-if (hTableExists("stsAlias"))
+if (hTableExists(tableAlias))
     {
     dyStringPrintf(query, 
-        "select trueName from stsAlias where alias = '%s'", spec);
+        "select trueName from %s where alias = '%s'", tableAlias, spec);
     alias = sqlQuickQuery(conn, query->string, buf, sizeof(buf));
     if ((alias != NULL) && (!sameString(alias, spec)))
         {
@@ -636,7 +647,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
-    if (newFormat)
+    if (mouse)
+	stsMapMouseStaticLoad(row, &smm);
+    else if (newFormat)
 	stsMapStaticLoad(row, &sm);
     else
         {
@@ -644,12 +657,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 	stsMarkerStaticLoad(row, &oldSm);
 	stsMapFromStsMarker(&oldSm, &sm);
 	}
-    if ((chrom = hgOfficialChromName(sm.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s", sm.chrom, tableName); 
+    if (mouse) 
+	{
+	if ((chrom = hgOfficialChromName(smm.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s", smm.chrom, tableName);
+	}
+    else 
+	{
+	if ((chrom = hgOfficialChromName(sm.chrom)) == NULL)
+	    errAbort("Internal Database error: Odd chromosome name '%s' in %s", sm.chrom, tableName); 
+	}
     AllocVar(pos);
     pos->chrom = chrom;
-    pos->chromStart = sm.chromStart - 100000;
-    pos->chromEnd = sm.chromEnd + 100000;
+    if (mouse) 
+	{
+	pos->chromStart = smm.chromStart - 100000;
+	pos->chromEnd = smm.chromEnd + 100000;
+	}
+    else 
+	{
+	pos->chromStart = sm.chromStart - 100000;
+	pos->chromEnd = sm.chromEnd + 100000;
+	}
     pos->name = cloneString(spec);
     slAddHead(&table->posList, pos);
     }
