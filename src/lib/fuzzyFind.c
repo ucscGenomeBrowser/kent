@@ -106,6 +106,7 @@ int i;
 
 dnaBaseHistogram(dna, dnaSize, histo);
 total = histo[0] + histo[1] + histo[2] + histo[3];
+if (total == 0) total = 1;
 for (i=0; i<4; ++i)
     freq[i] = (double)histo[i] / total;
 }
