@@ -49,6 +49,12 @@ char *finChroms[] =
 /* Chromosomes that are finished - no need to assemble these. */
     { "20", "21", "22", };
 
+boolean isFinChrom(char *chrom)
+/* Return TRUE if is a finished chromosome. */
+{
+return (stringArrayIx(chrom, finChroms, ArraySize(finChroms)) >= 0);
+}
+
 FILE *errLog;
 
 struct hash *badHash;   /* Hash for bad clones. */
@@ -432,6 +438,8 @@ while (lineFileNext(in, &line, &lineSize))
     if (*pContigList != NULL)
 	errAbort("Duplicate chromosome %s %s",
 		chromName, words[3]);
+    if (isFinChrom(chromName))
+        continue;
     if (sameString(chromName, "NA"))
 	readNa(in, chrom, pContigList, cloneHash, pCloneList, ctgHash);
     else
@@ -526,7 +534,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (sameString(chrom->name, "COMMIT"))
 	continue;
-    if (stringArrayIx(chrom->name, finChroms, ArraySize(finChroms)) >= 0)
+    if (isFinChrom(chrom->name))
 	{
 	printf("Skipping finished %s\n", chrom->name);
         continue;
@@ -805,6 +813,11 @@ splitPath(sDir, NULL, sFile, NULL);
 chromName = sFile;
 if (startsWith("Chr", chromName))
     chromName += 3;
+if (isFinChrom(chromName))
+    {
+    lineFileClose(&lf);
+    return NULL;
+    }
 AllocVar(chrom);
 chrom->name = cloneString(chromName);
 while (lineFileNext(lf, &line, &lineSize))
@@ -869,6 +882,7 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 printf("%d clones in Imre map missing from freeze\n", missingFromFreeze);
 slReverse(&chrom->orderedList);
+lineFileClose(&lf);
 return chrom;
 }
 
@@ -1146,7 +1160,10 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 	    {
 	    chrom = imParseOne(fi2->name, cloneHash, pCloneList, 
 	    	ctgHash, basicHash);
-	    slAddHead(&chromList, chrom);
+	    if (chrom != NULL)
+		{
+		slAddHead(&chromList, chrom);
+		}
 	    }
 	slFreeList(&fiList2);
 	}
@@ -1211,7 +1228,7 @@ for (clone = list; clone != NULL; clone = clone->next)
 	sprintf(chromName, "chr%s%s", contig->chrom->name,
 		(contig->isRandom ? "_random" : ""));
 	printf("%s\t%s\n", clone->acc, chromName);
-	if (stringArrayIx(chromName, finChroms, ArraySize(finChroms)) < 0)
+	if (!isFinChrom(chromName))
 	    {
 	    ++missCount;
 	    miss = hashFindVal(missHash, chromName);
@@ -1417,12 +1434,9 @@ else if (imreVsNa != NULL)
     }
 else if (imreMerge != NULL)
     {
-    uglyf("Looking to imreMerge\n");
     if (!cgiVarExists("fpcChrom"))
         errAbort("imreMerge without fpcChrom");
-    uglyf("ok 0\n");
     doImreMerge(gsDir, imreMerge, inName, outDir);
-    uglyf("ok 100\n");
     }
 else if (imreFormat)
     {
