@@ -5,6 +5,7 @@
 #include "common.h"
 #include "jksql.h"
 #include "gff.h"
+#include "psl.h"
 #include "linefile.h"
 #include "genePred.h"
 
@@ -250,5 +251,116 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
 	}
     }
 return gp;
+}
+
+#define SMALL_INS 5
+
+static void findCdsStartEndInGenome(struct psl *psl,
+                                    int rnaCdsStart, int rnaCdsEnd,
+                                    int *retCdsStart, int *retCdsEnd)
+/* Convert cdsStart/End from mrna to genomic coordinates. */
+{
+int startOffset, endOffset;
+int cdsStart = -1, cdsEnd = -1;
+int i;
+
+if (psl->strand[0] == '-')
+    {
+    endOffset = rnaCdsStart - psl->qStart;
+    startOffset =  psl->qEnd - rnaCdsEnd;
+    }
+else
+    {
+    startOffset = rnaCdsStart - psl->qStart;
+    endOffset =  psl->qEnd - rnaCdsEnd;
+    }
+
+/* Adjust starting pos. */
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int blockSize = psl->blockSizes[i];
+    if (startOffset < 0)
+        startOffset = 0;
+    if (startOffset < blockSize)
+	{
+        cdsStart = psl->tStarts[i] + startOffset;
+	break;
+	}
+
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
+    startOffset -= blockSize;
+    if (i != psl->blockCount - 1)
+	{
+	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
+	startOffset -= skip;
+	}
+    }
+
+/* Adjust end pos. */
+for (i=psl->blockCount-1; i >= 0; --i)
+    {
+    int blockSize = psl->blockSizes[i];
+    if (endOffset < 0) endOffset = 0;
+    if (endOffset < blockSize)
+        {
+	cdsEnd = psl->tStarts[i] + blockSize - endOffset;
+	break;
+	}
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
+    endOffset -= blockSize;
+    if (i != 0)
+        {
+	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
+	endOffset -= skip;
+	}
+    }
+
+if ((cdsStart == -1) || (cdsEnd == -1))
+    cdsEnd = cdsStart = psl->tEnd;
+*retCdsStart = cdsStart;
+*retCdsEnd = cdsEnd;
+}
+
+static void pslToExons(struct psl *psl, struct genePred *gene)
+/* Convert psl alignment blocks to genePred exons, merging together blocks
+ * separated by small inserts as necessary. */
+{
+int iBlk, iExon = -1;
+
+gene->exonStarts = needMem(psl->blockCount*sizeof(unsigned));
+gene->exonEnds = needMem(psl->blockCount*sizeof(unsigned));
+
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    {
+    unsigned tStart = psl->tStarts[iBlk];
+    unsigned tEnd = tStart + psl->blockSizes[iBlk];
+    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > SMALL_INS))
+        {
+        iExon++;
+        gene->exonStarts[iExon] = tStart;
+	}
+    gene->exonEnds[iExon] = tEnd;
+    }
+gene->exonCount = iExon+1;
+}
+
+struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd)
+/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
+ * specification string to genomic coordinates.  */
+{
+struct genePred *gene;
+AllocVar(gene);
+gene->name = cloneString(psl->qName);
+gene->chrom = cloneString(psl->tName);
+gene->strand[0] = psl->strand[0];
+gene->txStart = psl->tStart;
+gene->txEnd = psl->tEnd;
+
+findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
+                        &gene->cdsStart, &gene->cdsEnd);
+pslToExons(psl, gene);
+return gene;
 }
 

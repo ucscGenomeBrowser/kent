@@ -8,7 +8,7 @@
 #ifndef GFF_H
 #include "gff.h"
 #endif
-
+struct psl;
 
 struct genePred
 /* A gene prediction. */
@@ -64,6 +64,10 @@ struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *gr
 	char *name, char *exonSelectWord);
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
+
+struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd);
+/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
+ * specification string to genomic coordinates.  */
 
 #endif /* GENEPRED_H */
 
