@@ -84,7 +84,7 @@ example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	cp -p ex.hgcentral.sql "${install_dir}/example/hgcentral.sql"
 	cp -p ex.hg.conf "${install_dir}/example/hg.conf"
 	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" \
-		ex.MySQLUserPerms.sh "${install_dir}/example/MySQLUserPerms.sh"
+		ex.MySQLUserPerms.sh >"${install_dir}/example/MySQLUserPerms.sh"
 	chmod 755 "${install_dir}/example/MySQLUserPerms.sh"
 	touch example
 
