@@ -60,6 +60,10 @@ void hTableEnd();
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
+struct region *getRegionsWithChromEnds();
+/* Get list of regions.  End field is set to chrom size rather
+ * than zero for full chromosomes. */
+
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
 
@@ -218,7 +222,7 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define outSequence "sequence"
 #define outSelectedFields "selectedFields"
 #define outSchema "schema"
-#define outStats "stats"
+#define outSummaryStats "stats"
 #define outBed "bed"
 #define outGff "gff"
 #define outCustomTrack "customTrack"
@@ -326,6 +330,9 @@ void doOutGff(struct trackDb *track, struct sqlConnection *conn);
 
 void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
+
+void doOutSummaryStats(struct trackDb *track, struct sqlConnection *conn);
+/* Put up page showing summary stats for track. */
 
 void doFilterPage(struct sqlConnection *conn);
 /* Respond to filter create/edit button */

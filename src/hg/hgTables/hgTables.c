@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.39 2004/07/20 09:25:09 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.40 2004/07/20 20:47:40 kent Exp $";
 
 
 void usage()
@@ -229,6 +229,19 @@ else
     }
 // uglyf("regionTYpe %s\n", regionType);
 // for (region=regionList;region!=NULL;region=region->next) uglyf("%s:%d-%d\n", region->chrom, region->start, region->end);
+return regionList;
+}
+
+struct region *getRegionsWithChromEnds()
+/* Get list of regions.  End field is set to chrom size rather
+ * than zero for full chromosomes. */
+{
+struct region *region, *regionList = getRegions();
+for (region = regionList; region != NULL; region = region->next)
+    {
+    if (region->end == 0)
+        region->end = hChromSize(region->chrom);
+    }
 return regionList;
 }
 
@@ -622,6 +635,8 @@ else if (sameString(output, outBed))
     doOutBed(track, conn);
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(track, conn);
+else if (sameString(output, outSummaryStats))
+    doOutSummaryStats(track, conn);
 else if (sameString(output, outGff))
     doOutGff(track, conn);
 else
@@ -728,7 +743,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
-pushCarefulMemHandler(100000000);
+pushCarefulMemHandler(500000000);
 cgiSpoof(&argc, argv);
 hgTables();
 return 0;
