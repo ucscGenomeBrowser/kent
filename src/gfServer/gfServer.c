@@ -14,7 +14,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 13;
+int version = 14;
 int maxSeqSize = 20000;
 int maxAaSize = 6000;
 

@@ -17,12 +17,12 @@ enum {qSizeMax = 20000};
 
 /* Variables that can be set from command line. */
 int tileSize = 11;
-int minMatch = 3;
+int minMatch = 2;
 int minBases = 20;
 int maxGap = 2;
 int repMatch = 1024;
 int dotEvery = 0;
-boolean oneMismatch = FALSE;
+boolean oneOff = FALSE;
 boolean noHead = FALSE;
 char *makeOoc = NULL;
 char *ooc = NULL;
@@ -48,10 +48,10 @@ errAbort(
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 4 for protein.\n"
-  "   -oneMismatch If present this allows one mismatch in tile and still\n"
-  "                triggers an alignmetns\n"
+  "   -oneOff     If present this allows one mismatch in tile and still\n"
+  "               triggers an alignmetns\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
-  "               Default is 3\n"
+  "               Default is 2\n"
   "   -minBases=N sets minimum number of matching bases.  Default is 20\n"
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
   "               from 0 to 3.  Default is 2.\n"
@@ -363,7 +363,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, 
-		repMatch, ooc, TRUE, oneMismatch);
+		repMatch, ooc, TRUE, oneOff);
 	}
 
     for (i=0; i<queryCount; ++i)
@@ -374,6 +374,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
 	    dotOut();
+	    // uglyf("%s %d %c\n", qSeq.name, qSeq.size, isRc ? '-' : '+');
 	    if (qSeq.size > qSizeMax)
 	        {
 		warn("Truncating %s first qSizeMax bases", qSeq.name);
@@ -427,7 +428,7 @@ if ((tType == gftDna && (qType == gftDna || qType == gftRna))
  || (tType == gftProt && qType == gftProt))
     {
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	dbIsProt, oneMismatch);
+    	dbIsProt, oneOff);
     searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
     }
 else if (tType == gftDnaX && qType == gftProt)
@@ -559,7 +560,7 @@ else
 
 /* Gather last few command line options. */
 noHead = cgiBoolean("noHead");
-oneMismatch = cgiBoolean("oneMismatch");
+oneOff = cgiBoolean("oneOff");
 ooc = cgiOptionalString("ooc");
 makeOoc = cgiOptionalString("makeOoc");
 

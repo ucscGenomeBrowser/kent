@@ -70,12 +70,8 @@ void gfClumpFreeList(struct gfClump **pList);
 /* Free a list of dynamically allocated gfClump's */
 
 struct genoFind
-/* A pattern space - something that holds an index of all N-mers in
- * genome. */
+/* An index of all K-mers in the genome. */
     {
-    bits32 **lists;                      /* A list for each N-mer */
-    bits32 *listSizes;                    /* Size of list for each N-mer */
-    bits32 *allocated;                   /* Storage space for all lists. */
     int maxPat;                          /* Max # of times pattern can occur
                                           * before it is ignored. */
     int minMatch;                        /* Minimum number of tile hits needed
@@ -86,16 +82,34 @@ struct genoFind
     int tileMask;			 /* 1-s for each N-mer. */
     int sourceCount;			 /* Count of source files. */
     struct gfSeqSource *sources;         /* List of sequence sources. */
-    boolean isPep;			 /* Is a peptide. */
+    bool isPep;			 	 /* Is a peptide. */
+    bool allowOneMismatch;		 /* Allow a single mismatch? */
+    int segSize;			 /* Index is segmented if non-zero. */
     bits32 totalSeqSize;		 /* Total size of all sequences. */
+    bits32 *listSizes;                   /* Size of list for each N-mer */
+    void *allocated;                     /* Storage space for all lists. */
+    bits32 **lists;                      /* A list for each N-mer. Used if
+                                          * isSegmented is false. */
+    bits16 **endLists;                   /* A more complex list for each N-mer.
+                                          * Used if isSegmented is true.
+					  * Values come in groups of threes.
+					  * The first is the packed last few
+					  * letters of the tile.  The next two
+					  * are the offset in the genome.  This
+					  * would be a struct but that would take
+					  * 8 bytes instead of 6, or nearly an
+					  * extra gigabyte of RAM. */
     };
 
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
+void gfCheckTileSize(int tileSize, boolean isPep);
+/* Check that tile size is legal.  Abort if not. */
+
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-	boolean isPep);
+	boolean isPep, boolean allowOneMismatch);
 /* Make index for all seqs in list. 
  *      minMatch - minimum number of matching tiles to trigger alignments
  *      maxGap   - maximum deviation from diagonal of tiles
@@ -105,17 +119,21 @@ struct genoFind *gfIndexSeq(bioSeq *seqList,
  *      isPep    - TRUE if indexing proteins, FALSE for DNA. */
 
 struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
-	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
+	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
+	boolean allowOneMismatch);
 /* Make index for all nib files. */
 
 void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
-    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
+    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
+    boolean allowOneMismatch);
 /* Make translated (6 frame) index for all nib files. */
 
-struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, struct lm *lm, int *retHitCount);
+struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, 
+	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, struct lm *lm, int *retHitCount);
+struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, 
+	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);

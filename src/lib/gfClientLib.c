@@ -803,6 +803,7 @@ for (range = rangeList; range != NULL; range = range->next)
 gfRangeFreeList(&rangeList);
 }
 
+/* ~~~ */
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
 	enum ffStringency stringency, int minMatch, 
 	GfSaveAli outFunction, void *outData)
@@ -922,6 +923,7 @@ for (range = rangeList; range != NULL; range = range->next)
 }
 
 
+/* ~~~ */
 void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
     int minMatch, 
     GfSaveAli outFunction, struct gfSavePslxData *outData)
@@ -1128,7 +1130,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
 	    bun, outData, qIsRc, ffCdna, minMatch, outFunction);
-		/* ~~~ */
 #ifdef SOON
 	saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	    bun, outData, qIsRc, ffLoose, minMatch, outFunction);
@@ -1180,7 +1181,7 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfRange *rangeSet = NULL;
-	    clumpToHspRange(clump, qSeq, tileSize, tFrame, NULL, &rangeSet);
+	    clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, NULL, &rangeSet);
 	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash, NULL, 0);
 	    rangeList = slCat(rangeSet, rangeList);
 	    }
