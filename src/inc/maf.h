@@ -94,6 +94,12 @@ void mafWriteEnd(FILE *f);
 void mafWriteAll(struct mafFile *mf, char *fileName);
 /* Write out full mafFile. */
 
+struct mafComp *mafMayFindComponent(struct mafAli *maf, char *src);
+/* Find component of given source. Return NULL if not found. */
+
+struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
+/* Find component of given source or die trying. */
+
 void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 	struct mafAli *temp);
 /* Make a maf out of axt,  parasiting on the memory in axt.
@@ -126,6 +132,9 @@ double mafScoreRangeMultiz(struct mafAli *maf, int start, int size);
  *   scoreRange(maf,start,size) =
  *	scoreRange(maf,0,start+size) - scoreRange(maf,0,start)
  */
+
+double mafScoreMultizMaxCol(int species);
+/* Return maximum possible score for a column. */
 
 #endif /* MAF_H */
 

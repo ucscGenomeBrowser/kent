@@ -131,3 +131,12 @@ double mafScoreMultiz(struct mafAli *maf)
 return mafScoreRangeMultiz(maf, 0, maf->textSize);
 }
 
+double mafScoreMultizMaxCol(int species)
+/* Return maximum possible score for a column. */
+{
+int i, count = 0;
+for (i=1; i<species; ++i)
+    count += i;
+return 100.0*count; 
+}
+
