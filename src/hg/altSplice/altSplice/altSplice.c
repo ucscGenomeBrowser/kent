@@ -71,11 +71,12 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.7 2003/07/10 16:06:58 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.8 2003/08/18 15:58:42 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
 int clusterCount = 0;  /* Number of gene clusters identified. */
+struct hash *uniqPos = NULL; /* Hash to make sure we're not outputting doubles. */
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -192,6 +193,19 @@ dif = -1 * (abs(a->tEnd - a->tStart) - abs(b->tEnd - b->tStart));
 return dif;
 }
 
+boolean agIsUnique(struct altGraphX *ag)
+/* Return TRUE if there isn't an altGraphX record already seen like this one. */
+{
+char *dummy = "d";
+char buff[256];
+safef(buff, sizeof(buff), "%s-%s-%d-%d", ag->tName, ag->strand, ag->tStart, ag->tEnd);
+if(hashFindVal(uniqPos, buff))
+    return FALSE;
+else 
+    hashAdd(uniqPos, buff, dummy);
+return TRUE;
+}    
+
 struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
 				   struct genePred *gp, int chromStart, int chromEnd, FILE *out )
 /** Custer overlaps from maList into altGraphX structure. */
@@ -214,54 +228,33 @@ if(mcList == NULL)
 slSort(&mcList, mcLargestFirstCmp);
 mc = mcList;
 clusterCount++;
-if(optionExists("consensus"))
+for(mc != mcList; mc != NULL; mc = mc->next)
     {
-    gg = ggGraphConsensusCluster(mc, ci, TRUE);
-    }
-else
-    gg = ggGraphCluster(mc,ci);
-//gg = ggGraphCluster(mc, ci);
-assert(checkEvidenceMatrix(gg));
-ag = ggToAltGraphX(gg);
-if(ag != NULL)
-    {
-    struct geneGraph *gTemp = NULL;
-    struct ggEdge *cassettes = NULL;
-    char name[256];
-    freez(&ag->name);
-    safef(name, sizeof(name), "%s.%d", ag->tName, count++);
-    ag->name = cloneString(name);
-    /* Convert back to genomic coordinates. */
-    altGraphXoffset(ag, chromStart);
-    /* Sort vertices so that they are chromosomal order */
-    altGraphXVertPosSort(ag);
-    
-    /* See if we have any cassette exons */
-    gTemp = altGraphXToGG(ag);
-    cassettes = ggFindCassetteExons(gTemp);
-    if(cassettes != NULL)
+    if(optionExists("consensus"))
 	{
-	struct ggEdge *edge = NULL;
-	warn("Cassette %s:%d-%d", gTemp->tName, gTemp->tStart, gTemp->tEnd);
-	for(edge = cassettes; edge != NULL; edge = edge->next)
-	    {
-	    int length = ag->vPositions[edge->vertex2] - ag->vPositions[edge->vertex1];
-	    int edgeNum = -1;
-	    if(length % 3 != 0)
-		{
-		warn("Exon changes coding. Length is %d, mod 3 is %d", length, length %3);
-		misSense++;
-		}
-	    warn("Exon %s:%d-%d", gTemp->tName, gTemp->vertices[edge->vertex1].position, gTemp->vertices[edge->vertex2].position);
-	    edgeNum = agIndexFromEdge(ag, edge);
-	    assert(edgeNum != -1);
-	    cassetteCount++;
-	    }
-	slFreeList(&cassettes);
+	gg = ggGraphConsensusCluster(mc, ci, TRUE);
 	}
-    freeGeneGraph(&gTemp);
-    /* write to file */
-    altGraphXTabOut(ag, out);    /* genoSeq and maList are freed with ci and gg */
+    else
+	gg = ggGraphCluster(mc,ci);
+       //gg = ggGraphCluster(mc, ci);
+    assert(checkEvidenceMatrix(gg));
+    ag = ggToAltGraphX(gg);
+    if(ag != NULL)
+	{
+	struct geneGraph *gTemp = NULL;
+	struct ggEdge *cassettes = NULL;
+	char name[256];
+	freez(&ag->name);
+	safef(name, sizeof(name), "%s.%d", ag->tName, count++);
+	ag->name = cloneString(name);
+	/* Convert back to genomic coordinates. */
+	altGraphXoffset(ag, chromStart);
+	/* Sort vertices so that they are chromosomal order */
+	altGraphXVertPosSort(ag);
+	/* write to file */
+	if(agIsUnique(ag))
+	   altGraphXTabOut(ag, out);    /* genoSeq and maList are freed with ci and gg */
+	}
     }
 ggFreeMrnaClusterList(&mcList);
 freeGgMrnaInput(&ci);
@@ -483,6 +476,7 @@ if(outFile == NULL)
 memTest = optionExists("memTest");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
+uniqPos = newHash(10);
 createAltSplices(outFile, memTest );
 return 0;
 }
