@@ -235,13 +235,14 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE - 2003-10-20 - Hiram)
+    #	using the Mm3 position blatted onto Mm4:
     # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb \
         (name, description, nibPath, organism, defaultPos, \
          active, orderKey, genome, scientificName, htmlPath, hgNearOK) \
       VALUES(
         "mm4", "Oct. 2003", "/gbdb/mm4/nib", "Mouse", \
-	"chr6:135181700-135238301", \
+	"chr6:122959016-122974672", \
          1, 20, "Mouse", "Mus musculus", "/gbdb/mm4/html/description.html",
 	0);' \
 	-h genome-testdb hgcentraltest
@@ -1457,6 +1458,57 @@ SEQ2_LEN=$BASE/S2.len
 
     # add README.txt file to dir, if needed
 
+# MAKING RAT AND HUMAN SYNTENY (DONE - 2003-11-05 - Hiram)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm4/bed/syntenyRn3
+    cd /cluster/data/mm4/bed/syntenyRn3
+
+#	updating the scripts in use here from 
+#	/cluster/data/hg16/bed/syntenyMm3
+    cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
+
+#	fix the syntenicBest script to not try and work on empty
+#	results from its queries.  Also, set the db and table name
+#	in the script itself so the arguments are not needed
+
+    ./syntenicBest.pl
+#	on the order of 3 to 4 hours to complete syntenicBest
+#	almost no time, or only a few minutes at most for any of
+#	the rest
+    ./smooth.pl
+    ./joinsmallgaps.pl
+#	set db and table name in fillgap.pl
+    ./fillgap.pl
+    ./synteny2bed.pl
+    hgLoadBed mm4 syntenyRn3 ucsc100k.bed
+
+#	same thing for Hg16
+    mkdir -p /cluster/data/mm4/bed/syntenyHg16
+    cd /cluster/data/mm4/bed/syntenyHg16
+
+    cp ../syntenyRn3/syntenicBest.pl
+    # fixup table name to be Hg16
+    ./syntenicBest.pl
+    ../syntenyRn3/smooth.pl
+    ../syntenyRn3/joinsmallgaps.pl
+    cp ../syntenyRn3/fillgap.pl
+    # fixup table name to be Hg16
+    ./fillgap.pl
+    ../syntenyRn3/synteny2bed.pl
+    hgLoadBed mm4 syntenyHg16 ucsc100k.bed
+
+    #	check results
+# featureBits mm3 syntenyRat
+# 2384684351 bases of 2505900260 (95.163%) in intersection
+# featureBits mm4 syntenyRn3
+# 2397585098 bases of 2627444668 (91.252%) in intersection
+# featureBits mm3 syntenyHuman
+# 2343924066 bases of 2505900260 (93.536%) in intersection
+# featureBits mm4 syntenyHg16
+# 2299774191 bases of 2627444668 (87.529%) in intersection
+
+
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
 
     ssh kk
@@ -2001,33 +2053,132 @@ XXXX - running 2003-10-31 14:45
 
     # Load the tables
     cd /cluster/data/mm4/bacends
-    hgsql -e 'load data local infile "bacEnds.load.psl" into table all_bacends;' mm4
-    hgsql -e 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' mm4
-    hgsql -e 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' mm4
-    hgsql -e 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' mm4
+    hgsql -e \
+	'load data local infile "bacEnds.load.psl" into table all_bacends;' mm4
+    hgsql -e \
+	'load data local infile "bacEndPairs.bed" into table bacEndPairs;' mm4
+    hgsql -e \
+    'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' \
+	mm4
+    hgsql -e \
+  'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' \
+	mm4
+# featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+# featureBits mm3 all_bacends
+# 220398676 bases of 2505900260 (8.795%) in intersection
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXX  -----   all below is old data for reference only  XXXXXXXXXX
-XXXX	The sections below will be deleted as they are performed above
-# ADD MAP CONTIGS TRACK (2003-07-03 Kate)
+# featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+# featureBits mm3 bacEndPairs
+# 2508331798 bases of 2505900260 (100.097%) in intersection
+
+# featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
+# featureBits mm3 bacEndPairsBad
+# 547271514 bases of 2505900260 (21.839%) in intersection
+
+# featureBits mm4 bacEndPairsLong
+# 2833125883 bases of 2627444668 (107.828%) in intersection
+# featureBits mm3 bacEndPairsLong
+# 2500534101 bases of 2505900260 (99.786%) in intersection
+
+XXXX - running 2003-11-04 10:32
+
+# ADD MAP CONTIGS TRACK (DONE - 2003-11-04 - Hiram)
     ssh hgwdev
-    mkdir -p ~/mm4/bed/ctgPos
-    cd ~/mm4/bed/ctgPos
+    mkdir -p /cluster/data/mm4/bed/ctgPos
+    cd /cluster/data/mm4/bed/ctgPos
     # hgCtgPos uses the lift files... but mouse lift files are for the
     # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
     # from the assembly.  (In the future, we should go with the NT's!)
     # So... just for this release, go straight from the seq_contig.md
     # to the table def'n: contig, size, chrom, chromStart, chromEnd
-    perl -we \
-     'while (<>) { \
-        if (/^\d+\s+(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+(NT_\d+)\s+.*ref_strain/) { \
-          $chr=$1; $start=$2; $start -= 1; $end=$3; $ctg=$4; \
-          print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n"; \
-        } \
-      }' /cluster/store5/mm.2003.06/ncbi/seq_contig.md \
-    > ctgPos.tab
+    cat << '_EOF_' > parseSeqContig.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (<>) {
+    if (/^\d+\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(N[TC]_\d+)\s+(\S+)\s+contig\s+\S+\s+\S+\s*$/i) {
+        my $chr=$1; my $start=$2; $start -= 1; my $end=$3; my $ctg=$5;
+        if ($chr !~ /N/ ) {
+        print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n";
+        }
+    }
+}
+'_EOF_'
+    chmod +x parseSeqContig.pl
+      ./parseSeqContig.pl ../../ncbi/seq_contig.md > ctgPos.tab
     hgsql mm4 < ~/kent/src/hg/lib/ctgPos.sql
     echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql mm4
     # Note: the info is there in seq_contig.md to also do the _random's,
     # but we'd have to do some more work: duplicate the gaps of 50000 between
     # contigs for all _random's except chrUn_random (1000 between).
+
+    # featureBits mm4 ctgPos
+    # 2554101163 bases of 2627444668 (97.209%) in intersection
+    # featureBits mm3 ctgPos
+    # 2500661074 bases of 2505900260 (99.791%) in intersection
+
+# KNOWN GENES TRACK (DONE - 2003-11-20 - Hiram)
+
+    # you will probably need to make the programs in kent/src/hg/protein
+    cd ~/kent/src/hg/protein
+    make
+    # The scripts run below will check for programs and let you know
+    # which ones are missing
+
+    # obtain new SwissProt database (should be done about once a month)
+    # the swiss prot data is currently living on store5, first step is
+    # on the fileserver.  This script was used once as it was created,
+    # it may need to be verified and improved as it is used again.  See
+    # comments at the top of the script.
+    ssh eieio
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # that obtains the data and unpacks it, second step is on hgwdev
+    # to create the database
+    ssh hgwdev
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # Now the proteins database can be created from that.  Must be on hgwdev
+    # Again, a script that has been used once upon creation, see
+    # comments in it.  For example currently it is assumed these two
+    # scripts have been run on the same day.  In this case 03112
+    ssh hgwdev
+    cd /cluster/data/proteins
+    ~/kent/src/hg/protein/mkProteinsDb.sh
+    # with those two databases existing, read for the actual known genes
+    # track build.  Must be on hgwdev since it is all mostly database
+    # operations.  The {Date} argument is the date stamp created by the
+    # above two scripts.  Something of the form YYMMDD, e.g.: 031112
+    # Again, a script that has been used only once at creation, see
+    # comments at top of script.
+    ssh hgwdev
+    mkdir /cluster/data/mm4/bed/knownGenes
+    cd /cluster/data/mm4/bed/knownGenes
+    DateStamp=031112
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that runs to a point where it prepares data and jobList for a
+    # cluster run.  Continue with a cluster run on kk
+    ssh kk
+    cd /cluster/data/mm4/bed/knownGenes/kgBestMrna
+    para create jobList
+    para try
+    para check
+    para push
+    # this is a quick cluster job.  Less than five minutes. e.g.:
+# Completed: 43580 of 43580 jobs
+# CPU time in finished jobs:     114636s    1910.60m    31.84h    1.33d  0.004 y
+# IO & Wait Time:                111889s    1864.82m    31.08h    1.30d  0.004 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           282s       4.70m     0.08h    0.00d
+
+    # Continuing back on hgwdev, run the same script again
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/knownGenes
+    DateStamp=031112
+    ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
+    # that should run to completion and the known genes track is ready
