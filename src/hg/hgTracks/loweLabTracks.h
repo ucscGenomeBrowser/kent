@@ -13,3 +13,5 @@ void codeBlastMethods(struct track *tg);
 void tigrOperonMethods(struct track *tg);
 
 void rnaGenesMethods(struct track *tg);
+void sargassoSeaMethods(struct track *tg);
+

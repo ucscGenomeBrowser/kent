@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.805 2004/09/27 18:38:21 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.806 2004/09/29 21:44:20 kschneid Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8599,6 +8599,7 @@ registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
+registerTrackHandler("sargassoSea",sargassoSeaMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -8678,15 +8679,22 @@ if (!hideControls)
 	freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
     if (hIsMgcServer()) {
-        hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
-    } else {
+	if(strcmp(organism, "Archaea")==0)
+            hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
+	else
+            hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
+    	    
+	} else {
 	if( startsWith("zoo",database) ) {
 /* HACK ALERT - same alert as in hgGateway - The Zoo needs its own
  * mechanism of producing this title with its date and target.
  */
 	    hPrintf("UCSC Genome Browser on %s June 2002 Assembly %s target1", organism, freezeName); 
 	} else {
-	    hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
+	    if(strcmp(organism, "Archaea")==0)
+                hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
+	    else
+                hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
 	}
     }
     hPrintf("</B></FONT><BR>\n");

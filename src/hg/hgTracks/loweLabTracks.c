@@ -103,16 +103,12 @@ if(hTableExists("COG")){
     }
     else
         {
-        if (bed->strand[0] == '+')
-            return tg->ixColor;
-        return tg->ixAltColor;
+        return shadesOfGray[9];
         }
     }
 else
     {
-    if (bed->strand[0] == '+')
-            return tg->ixColor;
-        return tg->ixAltColor;
+    return shadesOfGray[9];
     }
 }
 
@@ -120,8 +116,39 @@ void gbGeneMethods(struct track *tg)
 /* Track group for genbank gene tracks */
 {
 tg->loadItems = loadBed6;
-
 tg->itemColor = gbGeneColor;
+}
+
+Color sargassoSeaGeneColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw gene in. */
+{
+struct bed *lf=item;
+if (lf->score > 990)
+    return shadesOfGray[10];
+else if (lf->score > 850)
+    return shadesOfGray[9];
+else if (lf->score > 700)
+    return shadesOfGray[8];
+else if (lf->score > 550)
+    return shadesOfGray[7];
+else if (lf->score > 450)
+    return shadesOfGray[6];
+else if (lf->score > 300)
+    return shadesOfGray[5];
+else if (lf->score > 200)
+    return shadesOfGray[4];
+else if (lf->score > 100)
+    return shadesOfGray[3];
+else return shadesOfGray[2];
+
+}
+
+
+void sargassoSeaMethods(struct track *tg)
+/* Track group for genbank gene tracks */
+{
+tg->loadItems = loadBed6;
+tg->itemColor = sargassoSeaGeneColor;
 }
 
 Color tigrGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -300,7 +327,7 @@ for(cb = list; cb != NULL; cb = cb->next)
     lf->score = cb->score;
     tempstring=cloneString(cb->code);
  
-    chopString(tempstring, "," , temparray, 9999);
+    chopString(tempstring, "," , temparray, ArraySize(temparray));
     temparray3=(char**)calloc(16*8,8);
     for(x=0; x<16; x++){
 	temparray3[x]=cloneString(temparray[x]);	
