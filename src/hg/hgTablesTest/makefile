@@ -8,7 +8,7 @@ O = hgTablesTest.o
 
 hgTablesTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgTablesTest $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgTablesTest
+#	strip ${HOME}/bin/${MACHTYPE}/hgTablesTest
 
 clean:
 	rm -f $O

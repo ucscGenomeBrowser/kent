@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.11 2004/11/08 04:09:58 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.12 2004/11/08 04:47:19 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -22,6 +22,8 @@ char *clDb = NULL;	/* DB from command line */
 int clGroups = BIGNUM;	/* Number of groups to test. */
 int clTracks = 2;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
+int clDbs = 1;		/* Number of databases per organism. */
+int clOrgs = 2;		/* Number of organisms to test. */
 
 void usage()
 /* Explain usage and exit. */
@@ -33,17 +35,21 @@ errAbort(
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
   "   -db=hg17 - Restrict to particular database\n"
+  "   -orgs=N - Number of organisms to test.  Default %d\n"
+  "   -dbs=N - Number of databases per organism to test. Default %d\n"
   "   -groups=N - Number of groups to test (default all)\n"
   "   -tracks=N - Number of tracks per group to test (default %d)\n"
   "   -tables=N - Number of tables per track to test (deault %d)\n"
   "   -verbose=N - Set to 0 for silent operation, 2 for debugging\n"
-  , clTracks, clTables);
+  , clOrgs, clDbs, clTracks, clTables);
 }
 
 
 static struct optionSpec options[] = {
    {"org", OPTION_STRING},
    {"db", OPTION_STRING},
+   {"orgs", OPTION_INT},
+   {"dbs", OPTION_INT},
    {"search", OPTION_STRING},
    {"groups", OPTION_INT},
    {"tracks", OPTION_INT},
@@ -233,10 +239,13 @@ return NULL;
 void checkExpectedSimpleRows(struct htmlPage *outPage, int expectedRows)
 /* Make sure we got the number of rows we expect. */
 {
-int rowCount = countNoncommentLines(outPage->htmlText);
-if (rowCount != expectedRows)
-    qaStatusSoftError(tablesTestList->status, 
-	    "Got %d rows, expected %d", rowCount, expectedRows);
+if (outPage != NULL)
+    {
+    int rowCount = countNoncommentLines(outPage->htmlText);
+    if (rowCount != expectedRows)
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d rows, expected %d", rowCount, expectedRows);
+    }
 }
 
 void testOneField(struct htmlPage *tablePage, struct htmlForm *mainForm,
@@ -356,11 +365,14 @@ if (outPage != NULL)
     struct htmlFormVar *groupVar;
     serialSubmit(&outPage, org, db, group, track, table, "outCustom",
     	hgtaDoGetCustomTrackTb, "submit");
-    groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
-    if (!slNameInList(groupVar->values, "user"))
+    if (outPage != NULL)
 	{
-	qaStatusSoftError(tablesTestList->status, 
-		"No custom track group after custom track submission");
+	groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
+	if (!slNameInList(groupVar->values, "user"))
+	    {
+	    qaStatusSoftError(tablesTestList->status, 
+		    "No custom track group after custom track submission");
+	    }
 	}
     }
 htmlPageFree(&outPage);
@@ -369,11 +381,14 @@ htmlPageFree(&outPage);
 void checkFaOutput(struct htmlPage *page, int expectedCount)
 /* Check that page contains expected number of sequences. */
 {
-char *s = page->htmlText;
-int count = countChars(page->htmlText, '>');
-if (count != expectedCount)
-    qaStatusSoftError(tablesTestList->status, 
-	    "Got %d sequences, expected %d", count, expectedCount);
+if (page != NULL)
+    {
+    char *s = page->htmlText;
+    int count = countChars(page->htmlText, '>');
+    if (count != expectedCount)
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d sequences, expected %d", count, expectedCount);
+    }
 }
 
 void testOutSequence(struct htmlPage *tablePage, struct htmlForm *mainForm,
@@ -441,27 +456,30 @@ struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group,
 	track, table, "selectTable", hgtaTable, table);
 struct htmlForm *mainForm;
 
-if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
-    errAbort("Couldn't get main form on tablePage");
-testSchema(tablePage, mainForm, org, db, group, track, table);
-testSummaryStats(tablePage, mainForm, org, db, group, track, table);
-if (outTypeAvailable(mainForm, "primaryTable"))
+if (tablePage != NULL)
     {
-    int rowCount;
-    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-    if (outTypeAvailable(mainForm, "bed"))
-        {
-	testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
-	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
-	testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
-	testOutGff(tablePage, mainForm, org, db, group, track, table);
-	if (rowCount > 0)
-	    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+    if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
+	errAbort("Couldn't get main form on tablePage");
+    testSchema(tablePage, mainForm, org, db, group, track, table);
+    testSummaryStats(tablePage, mainForm, org, db, group, track, table);
+    if (outTypeAvailable(mainForm, "primaryTable"))
+	{
+	int rowCount;
+	rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+	testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+	if (outTypeAvailable(mainForm, "bed"))
+	    {
+	    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
+	    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+	    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
+	    testOutGff(tablePage, mainForm, org, db, group, track, table);
+	    if (rowCount > 0)
+		testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+	    }
 	}
+    verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
+    htmlPageFree(&tablePage);
     }
-verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
-htmlPageFree(&tablePage);
 carefulCheckHeap();
 }
 
@@ -587,6 +605,7 @@ struct htmlPage *orgPage;
 struct htmlForm *mainForm;
 struct htmlFormVar *dbVar;
 struct slName *db;
+int dbIx;
 
 htmlPageSetVar(rootPage, rootForm, "org", org);
 if (forceDb)
@@ -598,7 +617,8 @@ if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on orgPage");
 if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
     errAbort("Couldn't get org var");
-for (db = dbVar->values; db != NULL; db = db->next)
+for (db = dbVar->values, dbIx=0; db != NULL && dbIx < clDbs; 
+	db = db->next, ++dbIx)
     {
     if (forceDb == NULL || sameString(forceDb, db->name))
 	testDb(orgPage, org, db->name);
@@ -669,13 +689,19 @@ if (allPage != NULL)
     htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
     serialSubmit(&page, org, db, group, track, NULL, "taxonLinks",
 	hgtaDoSelectFieldsMore, "submit");
-    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
-    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
-    serialSubmit(&page, org, db, group, track, NULL, "taxonJoined",
-	hgtaDoPrintSelectedFields, "submit");
-    checkExpectedSimpleRows(page, expectedCount);
-    verifyJoinedFormat(page->htmlText);
-    htmlPageFree(&page);
+    if (page != NULL)
+	{
+	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
+	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
+	serialSubmit(&page, org, db, group, track, NULL, "taxonJoined",
+	    hgtaDoPrintSelectedFields, "submit");
+	if (page != NULL)
+	    {
+	    checkExpectedSimpleRows(page, expectedCount);
+	    verifyJoinedFormat(page->htmlText);
+	    htmlPageFree(&page);
+	    }
+	}
     }
 
 htmlPageFree(&allPage);
@@ -774,7 +800,9 @@ else
     else
 	{
 	struct slName *org;
-	for (org = orgVar->values; org != NULL; org = org->next)
+	int orgIx;
+	for (org = orgVar->values, orgIx=0; org != NULL && orgIx < clOrgs; 
+		org = org->next, ++orgIx)
 	    {
 	    testOrg(rootPage, mainForm, org->name, clDb);
 	    }
@@ -798,9 +826,13 @@ if (argc != 3)
     usage();
 clDb = optionVal("db", clDb);
 clOrg = optionVal("org", clOrg);
+clDbs = optionInt("dbs", clDbs);
+clOrgs = optionInt("orgs", clOrgs);
 clGroups = optionInt("groups", clGroups);
 clTracks = optionInt("tracks", clTracks);
 clTables = optionInt("tables", clTables);
+if (clOrg != NULL)
+   clOrgs = BIGNUM;
 hgTablesTest(argv[1], argv[2]);
 carefulCheckHeap();
 return 0;
