@@ -1684,15 +1684,14 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (TO DO)
-     - ln -s /cluster/store4/gs.14/build31/ ~/oo
-     - cd ~/oo/bed
-     - mkdir softberry
-     - cd softberry
-     - wget ftp://www.softberry.com/pub/sc_fgenesh_jun02/sb_fgenesh_jun02.tar.gz
+LOAD SOFTBERRY GENES (DONE 02/04/03)
+     mkdir -p ~/oo/bed/softberry
+     cd ~/oo/bed/softberry
+     wget ftp://www.softberry.com/pub/sc_fgenesh_hum_nov02up/sc_fgenesh_hum_nov02up.tar.gz
+     gunzip -c sc_fgenesh_hum_nov02up.tar.gz | tar xvf -
      ldHgGene hg13 softberryGene chr*.gff
-     hgPepPred hg13 softberry *.pro
-     hgSoftberryHom hg13 *.pro
+     hgPepPred hg13 softberry *.protein
+     hgSoftberryHom hg13 *.protein
 
 LOAD GENEID GENES (DONE 01/28/03)
     mkdir ~/oo/bed/geneid
