@@ -1,9 +1,10 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 #
 # hgTest.pl: parameterizable test for hg CGI tools.
 # See usage for a description of parameters.
 #
 
+use warnings;
 # Figure out path of executable so we can add perllib to the path.
 use FindBin qw($Bin);
 use lib "$Bin/perllib";
