@@ -1,10 +1,14 @@
 <H3>Description</H3>
-This track shows the ID of the Affymetrix HGU95 expression data associated with 
-this gene.  
+<P>This track the Affymetrix ID from the HG-U95 chip
+that corresponds best to this gene</P>
+
 <H3>Methods</H3>
-Spots on Affymetrix chip are designed to probe expression
-levels of a particular UniGene cluster.  A representative
-EST from each cluster is mapped to the genome with BLAT.
-The cluster which shares the most genomic bases (on the same
-strand) as the known gene is used to provide expression data
-for that gene.
+<P>Target genome sequences were downloaded from the
+<A HREF="http://www.affymetrix.com/analysis/download_center.affx">Affymetrix Download Center</A>
+and mapped to the genome using blat followed by pslReps with the parameters
+-minCover=0.85 -minAli=0.95.  For each gene the most overlapping target (on the same strand 
+and excluding introns) is chosen.
+
+<H3>Credits</H3>
+Thanks to <A HREF="http://www.affymetrix.com">Affymetrix</A> for the data underlying this
+track.
