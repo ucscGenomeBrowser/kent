@@ -7,7 +7,7 @@
 #include "chainNet.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: netSyntenic.c,v 1.6 2005/01/13 20:15:31 heather Exp $";
+static char const rcsid[] = "$Id: netSyntenic.c,v 1.7 2005/01/14 06:28:24 angie Exp $";
 
 struct lm *lm;
 struct rbTreeNode **rbStack;
@@ -270,7 +270,7 @@ void netSyntenic(char *inFile, char *outFile)
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct chainNet *netList, *net;
-struct hash *qChromHash = newHash(10);
+struct hash *qChromHash = newHash(21);
 
 lm = lmInit(0);
 lmAllocArray(lm, rbStack, 256);
