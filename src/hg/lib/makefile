@@ -2,11 +2,11 @@ OPT= -ggdb
 
 #Optimized for performance
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+	gcc -ggdb -O -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 #For debugging
 #.c.o:
-#	gcc -ggdb -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+#	gcc -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
