@@ -62,6 +62,22 @@ alpha:
 	cd zoo; make alpha; cd ..
 	cp fugu/fr1/description.html /gbdb/fr1/html
 
+strict:
+	cvs up -d -P .
+	hgTrackDb -strict=yes human hg12 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes human hg15 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes human hg16 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes mouse mm2 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes mouse mm3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes rat rn1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes rat rn2 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -visibility=rat/visibility.ra rat rn3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes sars sc1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -visibility=fugu/visibility.ra fugu fr1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes worm ce1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes worm cb1 trackDb ../../lib/trackDb.sql .
+
 beta:
 	# this will fail if we are not in a beta checkout:
 	cvs status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
