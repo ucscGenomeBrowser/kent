@@ -9,6 +9,7 @@
 #include "psl.h"
 #include "ctgPos.h"
 #include "clonePos.h"
+#include "bactigPos.h"
 #include "genePred.h"
 #include "glDbRep.h"
 #include "bed.h"
@@ -28,6 +29,7 @@
 #include "refLink.h"
 #include "cheapcgi.h"
 #include "web.h"
+#include <regex.h>
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -332,8 +334,36 @@ static boolean isContigName(char *contig)
 /* Return TRUE if a FPC contig name. */
 {
 return(startsWith("ctg", contig) ||
-       startsWith("NT_", contig) ||
-       startsWith("RNOR", contig));
+       startsWith("NT_", contig));
+}
+
+static boolean isBactigName(char *name)
+/* Return TRUE if name matches the regular expression for a 
+   Baylor rat assembly bactig name. */
+{
+char *exp = "^[gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9])?$";
+regex_t compiledExp;
+char *errStr;
+int errNum;
+
+if (errNum = regcomp(&compiledExp, exp, REG_NOSUB | REG_EXTENDED | REG_ICASE))
+    errAbort("Regular expression compilation error %d", errNum);
+
+return(regexec(&compiledExp, name, 0, NULL, 0) == 0);
+}
+
+static boolean isRatContigName(char *contig)
+/* Return TRUE if a Baylor rat assembly contig name. */
+{
+return(startsWith("RNOR", contig) && (strlen(contig) == 12) &&
+       isdigit(contig[4]) &&
+       isdigit(contig[5]) &&
+       isdigit(contig[6]) &&
+       isdigit(contig[7]) &&
+       isdigit(contig[8]) &&
+       isdigit(contig[9]) &&
+       isdigit(contig[10]) &&
+       isdigit(contig[11]));
 }
 
 static boolean isAncientRName(char *name)
@@ -401,6 +431,78 @@ else
     }
 freeDyString(&query);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
+return foundIt;
+}
+
+boolean findBactigPos(char *bactig, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find position in genome of bactig.  Don't alter return variables 
+ * unless found. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(256);
+char **row;
+boolean foundIt;
+
+if (! hTableExists("bactigPos"))
+    return FALSE;
+
+dyStringPrintf(query, "select * from bactigPos where name = '%s'", bactig);
+sr = sqlMustGetResult(conn, query->string);
+row = sqlNextRow(sr);
+if (row == NULL)
+    foundIt = FALSE;
+else
+    {
+    struct bactigPos *bactigPos = bactigPosLoad(row);
+    *retChromName = hgOfficialChromName(bactigPos->chrom);
+    *retWinStart = bactigPos->chromStart;
+    *retWinEnd = bactigPos->chromEnd;
+    bactigPosFree(&bactigPos);
+    foundIt = TRUE;
+    }
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return foundIt;
+}
+
+boolean findRatContigPos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find position in genome of Baylor rat assembly RNOR* contig.  
+ * Don't alter return variables unless found. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct slName *allChroms = hAllChromNames();
+struct slName *chromPtr;
+char **row;
+char query[256];
+boolean foundIt;
+
+if (! hTableExists("chr1_gold"))
+    return FALSE;
+
+foundIt = FALSE;
+for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
+    {
+    snprintf(query, sizeof(query), "select chromStart,chromEnd from %s_gold where frag = '%s'",
+	     chromPtr->name, name);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	*retChromName = chromPtr->name;
+	*retWinStart = atoi(row[0]);
+	*retWinEnd = atoi(row[1]);
+	foundIt = TRUE;
+	}
+    sqlFreeResult(&sr);
+    if (foundIt)
+	break;
+    }
 hFreeConn(&conn);
 return foundIt;
 }
@@ -1896,6 +1998,24 @@ else if (findGenePred(query, hgp, "genscan"))
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
     singlePos(hgp, "STS Position", NULL, "mapGenethon", query, chrom, start, end);
+    }
+else if (isBactigName(query) && findBactigPos(query, &chrom, &start, &end))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "Bactig", NULL, "bactigPos", query, chrom, start, end);
+    }
+else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "Rat Contig", NULL, "gold", query, chrom, start, end);
     }
 else 
     {
