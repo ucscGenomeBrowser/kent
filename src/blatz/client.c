@@ -16,7 +16,7 @@
 #include "bzp.h"      /* Blatz parameter structure. */
 #include "blatz.h"    /* Alignment routines. */
 
-int port = bzpDefaultPort;        /* Server TCP/IP port. */
+int port = bzpDefaultPort;       /* Server TCP/IP port. */
 char *host = "localhost";        /* Name of computer server is running on. */
 
 static void usage()
