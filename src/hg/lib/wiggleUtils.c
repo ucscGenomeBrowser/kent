@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.23 2004/08/31 18:36:13 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.24 2004/09/02 18:02:09 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
@@ -95,9 +95,16 @@ printf("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
 sprintLongWithCommas(num1Buf, winEnd - winStart);
 printf("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
 
-/*	This printout is becoming common to what is already in
- *	hgc/wiggleClick.c, need to put this in one of the library files.
- */
+if (wDS->useDataConstraint)
+    {
+    if (sameWord(wDS->dataConstraint,"in range"))
+	printf("<P><B> Filter: (%g >= data value < %g) </B></P>\n",
+		wDS->limit_0, wDS->limit_1);
+    else
+	printf("<P><B> Filter: (data value %s %g) </B> </P>\n",
+		wDS->dataConstraint, wDS->limit_0);
+    }
+
 if (valuesMatched == 0)
     {
     if ( span < (3 * (winEnd - winStart)))

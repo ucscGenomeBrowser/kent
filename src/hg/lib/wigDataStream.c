@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.33 2004/08/31 22:06:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.34 2004/09/02 18:02:09 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -297,7 +297,7 @@ if (wDS->useDataConstraint)
     {
     if ((wDS->dataConstraint) &&
 	sameWord(wDS->dataConstraint,"in range"))
-	    fprintf (fh, "#\tdata values in range [%g : %g]\n",
+	    fprintf (fh, "#\tdata values in range [%g : %g)\n",
 		    wDS->limit_0, wDS->limit_1);
     else
 	    fprintf (fh, "#\tdata values %s %g\n",
@@ -556,9 +556,10 @@ wDS->stats = NULL;
  *	falls within the specified range, then it is considered to be in
  *	that bucket.
  */
-/* InRange means the SQL row begins before the limit_1 (lower<=limit_1)
+/* InRange means the SQL row begins before the limit_1 (lower<limit_1)
  *	 and the row ends after the limit_0 (upper>=limit_0)
  *	i.e. there is at least some overlap of the range
+ *	This is a half open inquiry: [ limit_0 : limit_1 )
  */
 /* LessThan means:  the row begins before the limit_0 (value<limit_0)
  *	i.e. there are data values below the specified limit_0
@@ -847,7 +848,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 		takeIt = TRUE;
 		break;
 	    case wigInRange_e:
-		takeIt = (wiggle->lowerLimit <= wDS->limit_1) &&
+		takeIt = (wiggle->lowerLimit < wDS->limit_1) &&
 		    ((wiggle->lowerLimit + wiggle->dataRange) >=
 			    wDS->limit_0);
 		break;
@@ -983,7 +984,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 			takeIt = TRUE;
 			break;
 		    case wigInRange_e:
-			takeIt = (*datum <= wDS->ucUpperLimit) &&
+			takeIt = (*datum < wDS->ucUpperLimit) &&
 			    (*datum >= wDS->ucLowerLimit);
 			break;
 		    case wigLessThan_e:
