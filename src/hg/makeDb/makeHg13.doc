@@ -2104,19 +2104,11 @@ Remove the first line from each psl file to prepare them for pslCat using the fi
 pslCat *.psl > chimpBac.psl
 hgLoadPsl hg13 chimpBac.psl
 
+# For the first database table dump
+do (it'a automated after that):
 
-
-# Dump the database - DON'T DO THIS
-IT IS HERE FOR REFERENCE ONLY
-IT IS DONE AUTOMATICALLY BY A PAUL T. SCRIPT ON THE PRODUCTION MACHINES
 ssh hgwbeta
-We dump the database on hgwbeta in order to only dump the most accurate database state.
-
-There is one trick here: mysqldump becomes the mysql user
-and the directory you want to dump to must have that
-user the ability to write to it.
-
-# Here's what to do:
+mkdir /usr/local/apache/htdocs/goldenPath/14nov2002/database
 
 cd /var/tmp
 mkdir hg13-dump
@@ -2129,11 +2121,12 @@ When it is done do:
 
 cd /var/tmp/hg13-dump
 gzip *.txt
-mv * /usr/local/apache/htdocs/goldenPath/28jun2002/database
+mv * /usr/local/apache/htdocs/goldenPath/14nov2002/database
+DONE TO HERE
 
  - Make database.zip
 ssh hgwbeta
-cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
+cd /usr/local/apache/htdocs/goldenPath/14nov2002/database
 zip ../bigZips/database.zip *
 
 SGP GENE PREDICTIONS (TO DO)

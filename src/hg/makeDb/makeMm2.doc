@@ -466,11 +466,11 @@ MAKING THE HUMAN AXTTIGHT FROM AXTBEST (IN PROGRESS: generated 12/7/02, not load
     hgLoadPsl mm2 chr*_blastzTightHuman.psl
 
 
-LOADING MOUSE MM2 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/19/02)
+LOADING MOUSE MM2 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/23/02 - MATT)
 
     # Translate Penn State .lav files into sorted axt:
     ssh kkstore
-    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-18-ASH"
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-19-ASH"
     set seq1_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
     set seq2_dir="/cluster/store4/rn1/mixedNib/"
     set tbl="blastzRn1"
@@ -503,24 +503,24 @@ LOADING MOUSE MM2 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/19/02)
     # Translate the sorted axt files into psl:
     cd $base
     mkdir -p pslChrom
-    foreach f (axtChrom/chr*.axt.gz)
+    foreach f (axtChrom/chr*.axt)
       set c=$f:t:r:r
-      gunzip -c $f | \
-        axtToPsl stdin S1.len S2.len pslChrom/${c}_${tbl}.psl
+       axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-18-ASH"
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-19-ASH"
     set tbl="blastzRn1"
     cd $base/pslChrom
     hgLoadPsl mm2 chr*_${tbl}.psl
+DONE TO HERE
 
 MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/19/02)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
-    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-18-ASH"
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-19-ASH"
     set seq1_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
     set seq2_dir="/cluster/store4/rn1/mixedNib/"
     set tbl="blastzBestRat"
@@ -545,7 +545,7 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/19/02)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-18-ASH"
+     set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-19-ASH"
      set tbl="blastzBestRat"
      cd $base/pslBest
      hgLoadPsl mm2 chr*_${tbl}.psl
@@ -570,7 +570,7 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/19/02)
 MAKING THE RAT AXTTIGHT FROM AXTBEST (DONE 12/19/02)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh kkstore
-    cd ~/mm2/bed/blastz.rn1.2002-12-18-ASH/axtBest
+    cd ~/mm2/bed/blastz.rn1.2002-12-19-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -585,7 +585,7 @@ MAKING THE RAT AXTTIGHT FROM AXTBEST (DONE 12/19/02)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/mm2/bed/blastz.rn1.2002-12-18-ASH/pslTight
+    cd ~/mm2/bed/blastz.rn1.2002-12-19-ASH/pslTight
     hgLoadPsl mm2 chr*_blastzTightRat.psl
 
 
