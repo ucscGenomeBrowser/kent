@@ -236,7 +236,7 @@ longLabel Regions Assayed for SDD
 group map
 priority 29
 visibility hide
-type bed 6 +
+type bed 4 .
 
 track celeraDupPositive
 shortLabel WSSD Duplication
@@ -244,7 +244,15 @@ longLabel Sequence Identified as Duplicate by High Depth Celera Reads
 group map
 priority 30
 visibility hide
-type bed 6 +
+type bed 4 +
+
+track celeraOverlay
+shortLabel WSSD Overlay
+longLabel Celera WGS Assembly Overlay on Public Assembly
+group map
+priority 30.1
+visibility hide
+type bed 4 +
 
 track genomicDups
 shortLabel Duplications
