@@ -142,19 +142,31 @@ struct wiggleDataStream
     struct sqlResult *sr;	/*	SQL result when talking to db	*/
     char *chrName;		/*	for chrom==chrName on file reads */
     unsigned spanLimit;		/*	for span==spanLimit on file reads */
+    int winStart;		/*	for fetches between winStart, winEnd */
+    int winEnd;			/*	for fetches between winStart, winEnd */
     boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
 	double upper);		/*	for comparing with SQL row values */
     boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
 				/*	for comparing to real data bytes */
-    void (*addChromConstraint)(struct wiggleDataStream *wDS, char *chr);
-    void (*addSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
+    void (*setPositionConstraint)(struct wiggleDataStream *wDS,
+	int winStart, int winEnd);
+				/*	work only within specified position */
+    void (*setChromConstraint)(struct wiggleDataStream *wDS, char *chr);
+				/*	work only on specified chrom 	*/
+    void (*setSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
+				/*	work only on specified span 	*/
     void (*setDataConstraint)(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit);
+				/*	setting data compare limits 	*/
     void (*setCompareByte)(struct wiggleDataStream *wDS,
 	double lower, double range);
+/*	this will be internal only when the read functions are here */
     void (*openWibFile)(struct wiggleDataStream *wDS, char *file);
+/*	this will be internal only when the read functions are here */
     void (*closeWigConn)(struct wiggleDataStream *wDS);
+				/*	close a connection	*/
     void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
+				/*	start a connection	*/
     };
 
 #include "hdb.h"
