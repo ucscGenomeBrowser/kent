@@ -1,13 +1,32 @@
+<H2> Description </H2>
+<P>
+Genome-wide location analyses of TAF1 binding and RNA polymerase II binding 
+were conducted using chromatin extracted from 
+<A TARGET=_BLANK HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,186695,CCL-186&text=IMR90&max=20">
+IMR90</A> (lung fibroblast),
+<A TARGET=_BLANK HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,360353,CCL-247&text=hct116&max=20">
+HCT116 </A> (colon epithelial carcinoma),
+<A TARGET=_BLANK HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,202467,CCL-2&text=hela&max=20">
+HeLa</A> (cervix epithelial adenocarcinoma), and
+<A TARGET=_BLANK HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,6399592,TIB-202&text=thp1&max=20">
+THP1</A> (blood monocyte leukemia) cells.
+
+<H2> Methods </H2>
+<P>
 A PCR tiling array composed of 24537 non-repetitive sequences within the 44 
-ENCODE regions was manufactured by the Ren lab at UCSD. Genome-wide location 
-analyses of TAF1 binding and RNA polymerase II binding were conducted using 
-chromatin extracted from IMR90, HCT116, HeLa and THP1 cells. 
+ENCODE regions was manufactured by the Ren Lab at UC San Diego.
+<P>
+For each marker, there are three replicates.  Each experiment is 
+normalized using their median values; the P-value and R-value are 
+calculated using the modified single array error model 
+(Li Z, et al. (2003)).
+The P-value and R-value are then derived from the weighted average 
+results of the replicates, 
+<P>
+The scale is 0-16, corresponding to -log base 10. 
+<H2> Verification</H2>
 <P>
 There are three replicates for each of the eight experiments.  
-The P-value were generated using the weighted average 
-(methods described in Li Z et al. (2003)  
-PNAS, 100:8184-8169) results of the corresponding three replicates.
-The scale is 0-16, corresponding to -log base 10. 
 <P>
 The 
 <A HREF=" http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GPL1454&view=quick" TARGET=_BLANK> array platform </A>, the
@@ -15,3 +34,27 @@ The
 raw data and normalized data </A> for each experiment, and the
 <A HREF="ftp://ftp.ncbi.nih.gov/pub/geo/data/geo/raw_data/series/GSE1778" TARGET=_BLANK> image files </A> have all been deposited at the NCBI
 <A HREF="" TARGET=_BLANK> GEO Microarray Database</A>.
+
+<H2>Credits</H2>
+The data for this track was generated at the 
+<A TARGET=_BLANK HREF="http://licr-renlab.ucsd.edu">Ren Lab</A>
+, Ludwig Institute for Cancer Research, at UC San Diego.
+
+<H2>References</H2>
+<P>
+Kim, T., Barrera, L.O., Qu, C., van Calcar, S., Luna, R., Glass, C.K., 
+Rosenfeld, M.G., Ren, B.  Direct isolation and identification of 
+promoters in human genome.  To be submitted.
+<P>
+Li, Z., Van Calcar, S., Qu, C., Cavenee, W.K., Zhang, M.Z., and Ren, B. (2003) 
+<A TARGET=_BLANK HREF="http://www.pubmedcentral.nih.gov/articlerender.fcgi?tool=pubmed&pubmedid=12808131">
+A Global Transcriptional Regulatory Role for c-Myc in 
+Burkitt's Lymphoma Cells</A>.
+<I>Proc. Natl. Acad. Sci.</I>, 100:8164-8169
+<P>
+Ren, B., Robert, F., Wyrick, J. W., Aparicio, O., Jennings, E.
+G., Simon, I., Zeitlinger, J., Schreiber, J., Hannett, N., Kanin, E.,
+Volkert , T. L., Wilson, C., Bell, S. P. and Young, R. A. (2000) 
+<A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Abstract&list_uids=11125145">Genome-wide Location and Function of DNA-associated Proteins</A>
+<I>Science</I>, 290: 2306-2309
+
