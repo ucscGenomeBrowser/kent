@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.19 2004/07/21 08:15:50 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.20 2004/07/21 08:38:50 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -276,7 +276,6 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
         {
 	cgiMakeButton(hgtaDoIntersectPage, "Create");
 	}
-    hPrintf(" <I>Note: intersection still in development</I>");
     hPrintf("</TD></TR>\n");
     }
 
@@ -286,16 +285,24 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
     int i;
     char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
     static char *symbols[] = 
-        {outPrimaryTable, outSequence, 
-	 outSelectedFields, outSchema,
-	 outSummaryStats, outBed, 
-	 outGff, outCustomTrack ,
+        {outPrimaryTable, 
+	 outSelectedFields, 
+	 outSequence, 
+	 outSchema,
+	 outSummaryStats, 
+	 outGff, 
+	 outBed, 
+	 outCustomTrack ,
 	 outHyperlinks};
     static char *labels[] =
-        {"all fields from primary table", "sequence", 
-	 "selected fields from related tables", "schema (database organization)",
-	 "summary/statistics", "BED - browser extensible data", 
-	 "GTF - gene transfer format", "custom track",
+        {"all fields from primary table", 
+	 "selected fields from related tables", 
+	 "sequence", 
+	 "schema (database organization)",
+	 "summary/statistics", 
+	 "GTF - gene transfer format", 
+	 "BED - browser extensible data", 
+	 "custom track",
 	 "hyperlinks to Genome Browser"};
     hPrintf("<TR><TD><B>output:</B>\n");
     hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
@@ -309,18 +316,17 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
     hPrintf("</SELECT>\n");
     hPrintf("</TD></TR>\n");
     }
+hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    hPrintf("<TR><TD>\n");
+    hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output</I><BR>");
     cgiMakeButton(hgtaDoTopSubmit, "Submit");
+#ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");
-#ifdef SOMETIMES
 #endif /* SOMETIMES */
-    hPrintf("</TD></TR>\n");
     }
-hPrintf("</TABLE>\n");
 }
 
 void mainPageAfterOpen(struct sqlConnection *conn)
