@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.6 2005/02/14 18:26:59 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.7 2005/03/03 06:47:19 donnak Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -24,11 +24,11 @@ cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoPastedIdentifiers, "Submit");
+cgiMakeButton(hgtaDoPastedIdentifiers, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoClearPasteIdentifierText, "Clear");
+cgiMakeButton(hgtaDoClearPasteIdentifierText, "clear");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
 htmlClose();
 }
@@ -44,9 +44,9 @@ hPrintf("space, tab, or ");
 hPrintf("line separated list of the items you want to include.<BR>");
 hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", hgtaPastedIdentifiers);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoPastedIdentifiers, "Submit");
+cgiMakeButton(hgtaDoPastedIdentifiers, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
 htmlClose();
 }

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.32 2005/02/14 20:14:46 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.33 2005/03/03 06:47:19 donnak Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -354,18 +354,18 @@ else
     }
 if (doCt)
     {
-    cgiMakeButton(hgtaDoGetCustomTrackTb, "Get Custom Track in Table Browser");
+    cgiMakeButton(hgtaDoGetCustomTrackTb, "get custom track in table browser");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoGetCustomTrackFile, "Get Custom Track in File");
+    cgiMakeButton(hgtaDoGetCustomTrackFile, "get custom track in file");
     hPrintf("<BR>\n");
-    cgiMakeButton(hgtaDoGetCustomTrackGb, "Get Custom Track in Genome Browser");
+    cgiMakeButton(hgtaDoGetCustomTrackGb, "get custom track in genome browser");
     }
 else
     {
-    cgiMakeButton(hgtaDoGetBed, "Get BED");
+    cgiMakeButton(hgtaDoGetBed, "get BED");
     }
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 htmlClose();
 }
@@ -604,7 +604,7 @@ else if (doCt)
 	      redirDelay, browserUrl);
 	webStartHeader(cart, headerText,
 		       "Table Browser: %s %s: %s", hOrganism(database), 
-		       freezeName, "Get Custom Track");
+		       freezeName, "get custom track");
 	if (isWig && wigOutData)
 	    {
 	    hPrintf("There are %d data points in custom track. ", wigDataSize);

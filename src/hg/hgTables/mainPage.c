@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.69 2005/02/24 18:27:28 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.70 2005/03/03 06:47:19 donnak Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -462,10 +462,10 @@ hPrintf("<TABLE BORDER=0>\n");
     nbSpaces(1);
     if (isCustomTrack(curTable))
 	{
-	cgiMakeButton(hgtaDoRemoveCustomTrack, "Remove Custom Track");
+	cgiMakeButton(hgtaDoRemoveCustomTrack, "remove custom track");
         hPrintf(" ");
 	}
-    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
+    cgiMakeButton(hgtaDoSchema, "describe table schema");
     hPrintf("</TD></TR>\n");
     }
 
@@ -496,7 +496,7 @@ if (isPositional)
     hPrintf(" position ");
     hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=26 VALUE=\"%s\" onFocus=\"%s\">\n",
     	hgtaRange, range, jsOnRangeChange(hgtaRegionType, "regionType", "range"));
-    cgiMakeButton(hgtaDoLookupPosition, "Lookup");
+    cgiMakeButton(hgtaDoLookupPosition, "lookup");
     hPrintf("</TD></TR>\n");
     }
 else
@@ -511,13 +511,13 @@ else
 if (!isWig)
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
-    cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
+    cgiMakeButton(hgtaDoPasteIdentifiers, "paste list");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoUploadIdentifiers, "Upload List");
+    cgiMakeButton(hgtaDoUploadIdentifiers, "upload list");
     if (identifierFileName() != NULL)
         {
 	hPrintf(" ");
-	cgiMakeButton(hgtaDoClearIdentifiers, "Clear List");
+	cgiMakeButton(hgtaDoClearIdentifiers, "clear list");
 	}
     hPrintf("</TD></TR>\n");
     }
@@ -528,15 +528,15 @@ if (!isWig)
 hPrintf("<TR><TD><B>filter:</B>\n");
 if (anyFilter())
     {
-    cgiMakeButton(hgtaDoFilterPage, "Edit");
+    cgiMakeButton(hgtaDoFilterPage, "edit");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoClearFilter, "Clear");
+    cgiMakeButton(hgtaDoClearFilter, "clear");
     if (isWig)
 	wigShowFilter(conn);
     }
 else
     {
-    cgiMakeButton(hgtaDoFilterPage, "Create");
+    cgiMakeButton(hgtaDoFilterPage, "create");
     }
 hPrintf("</TD></TR>\n");
 }
@@ -548,14 +548,14 @@ if (isPositional)
         {
 	hPrintf("<TR><TD><B>intersection with %s:</B>\n",
 		cartString(cart, hgtaIntersectTrack));
-	cgiMakeButton(hgtaDoIntersectPage, "Edit");
+	cgiMakeButton(hgtaDoIntersectPage, "edit");
 	hPrintf(" ");
-	cgiMakeButton(hgtaDoClearIntersect, "Clear");
+	cgiMakeButton(hgtaDoClearIntersect, "clear");
 	}
     else
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
-	cgiMakeButton(hgtaDoIntersectPage, "Create");
+	cgiMakeButton(hgtaDoIntersectPage, "create");
 	}
     hPrintf("</TD></TR>\n");
     }
@@ -611,17 +611,17 @@ hPrintf("</TABLE>\n");
 	if (anyIntersection())
 	    hPrintf("<I>Note: Intersection doesn't work with all fields, selected fields or maf output.</I><BR>");
         }
-    cgiMakeButton(hgtaDoTopSubmit, "Get Output");
+    cgiMakeButton(hgtaDoTopSubmit, "get output");
     hPrintf(" ");
     if (isPositional || isWig)
 	{
-	cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
+	cgiMakeButton(hgtaDoSummaryStats, "summary/statistics");
 	hPrintf(" ");
 	}
 
 #ifdef SOMETIMES
     hPrintf(" ");
-    cgiMakeButton(hgtaDoTest, "Test");
+    cgiMakeButton(hgtaDoTest, "test");
 #endif /* SOMETIMES */
     }
 hPrintf("<P>"

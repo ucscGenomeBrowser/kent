@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.22 2005/02/07 20:33:39 hiram Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.23 2005/03/03 06:47:19 donnak Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -175,9 +175,9 @@ else
     hPrintf("(data track %s is not composed of gene records.  Specialized intersection operations are not available.)<P>\n", name);
     }
 
-cgiMakeButton(hgtaDoIntersectSubmit, "Submit");
+cgiMakeButton(hgtaDoIntersectSubmit, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 
 /* Hidden form - for benefit of javascript. */

@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.7 2004/12/08 00:03:51 kate Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.8 2005/03/03 06:47:19 donnak Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -96,9 +96,9 @@ else
     fbOptionsHtiCart(hti, cart);
     }
 
-cgiMakeButton(hgtaDoGetGalaQuery, "Send results to GALA");
+cgiMakeButton(hgtaDoGetGalaQuery, "send results to GALA");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 htmlClose();
 }

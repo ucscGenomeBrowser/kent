@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.14 2004/12/08 00:03:51 kate Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.15 2005/03/03 06:47:19 donnak Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -81,9 +81,9 @@ else
 	    }
 	}
     }
-cgiMakeButton(hgtaDoGenePredSequence, "Submit");
+cgiMakeButton(hgtaDoGenePredSequence, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 htmlClose();
 freez(&dupType);
@@ -220,9 +220,9 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoGenomicDna, "Get Sequence");
+cgiMakeButton(hgtaDoGenomicDna, "get sequence");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>");
 htmlClose();
 }

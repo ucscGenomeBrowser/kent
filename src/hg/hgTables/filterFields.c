@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.31 2005/02/17 17:47:17 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.32 2005/03/03 06:47:19 donnak Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -249,16 +249,16 @@ static void showTableButtons(char *db, char *table, boolean withGetButton)
 hPrintf("<BR>\n");
 if (withGetButton)
     {
-    cgiMakeButton(hgtaDoPrintSelectedFields, "Get Output");
+    cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoMainPage, "Cancel");
+    cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");
     }
 cgiMakeButton(setClearAllVar(hgtaDoSetAllFieldPrefix,db,table), 
-	"Check All");
+	"check all");
 hPrintf(" ");
 cgiMakeButton(setClearAllVar(hgtaDoClearAllFieldPrefix,db,table), 
-	"Clear All");
+	"clear all");
 }
 
 static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
@@ -733,9 +733,9 @@ if (isWiggle(db, table))
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "Submit");
+cgiMakeButton(hgtaDoFilterSubmit, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 }
 
 static void filterControlsForTableCt(char *db, char *table)
@@ -815,9 +815,9 @@ if (ct->wiggle)
     }
 
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "Submit");
+cgiMakeButton(hgtaDoFilterSubmit, "submit");
 hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+cgiMakeButton(hgtaDoMainPage, "cancel");
 }
 
 
