@@ -1034,6 +1034,7 @@ while (lineFileRow(lf, row))
 	struct rgbColor *col = chromColor(hChrom);
 	band[0] = strand[0];
 	hChromBandConn(hConn, hChrom, (hs+he)/2, band+1);
+	chopSuffix(band+1);
 	printTab(f, cg, chrom, atoi(row[1]), atoi(row[2]), 
 		"synteny", "box", col->r, col->g, col->b, band);
 	}
