@@ -7,6 +7,9 @@
 #include "jksql.h"
 #include "mahoney.h"
 
+/* Globals set from the command line. */
+FILE *conflictLog = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -14,10 +17,13 @@ errAbort(
   "loadMahoney - Convert Paul Gray/Mahoney in situs into something genePixLoad can handle\n"
   "usage:\n"
   "   loadMahoney /gbdb/genePix mm5 input.tab pcr.bed outDir\n"
+  "options:\n"
+  "   conflictLog=fileName - put info on conflict resolution here\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"conflictLog", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -452,6 +458,7 @@ for (m = mahoneyList; m != NULL; m = m->next)
     char buf[9];
     safef(mtf, sizeof(mtf), "%d", m->mtf);
     struct rnaList *rl;
+    boolean gotConflict = FALSE;
     rl = hashFindVal(pcrHash, mtf);
 
     /* Look for conflicts between refSeq and locusLink representations. 
@@ -470,24 +477,40 @@ for (m = mahoneyList; m != NULL; m = m->next)
 	        ++bothWin;
 		resolved = TRUE;
 		}
-	    else if (rl != NULL)
+	    else
+	        {
+		if (conflictLog != NULL)
+		    fprintf(conflictLog, 
+		    	"MTF #%d locusLink %d (from %s)  doesn't match %s\n",
+		    	m->mtf, rsRsi->locusLink, m->genbank, m->locusId);
+		}
+	    if (!resolved)
 		{
-		if (slNameInList(rl->accList, rsRsi->refSeq))
+		if (rl != NULL)
 		    {
-		    safef(buf, sizeof(buf), "%d", rsRsi->locusLink);
-		    m->locusId = cloneString(buf);
-		    ++refWinsByPcr;
-		    resolved = TRUE;
-		    }
-		else if (slNameInList(rl->accList, llRsi->refSeq))
-		    {
-		    m->genbank = cloneString(llRsi->refSeq);
-		    ++llWinsByPcr;
-		    resolved = TRUE;
-		    }
-		else
-		    {
-		    ++noWin;
+		    if (slNameInList(rl->accList, rsRsi->refSeq))
+			{
+			safef(buf, sizeof(buf), "%d", rsRsi->locusLink);
+			m->locusId = cloneString(buf);
+			++refWinsByPcr;
+			if (conflictLog != NULL)
+			    fprintf(conflictLog, "    picking %d by PCR\n",
+				rsRsi->locusLink);	
+			resolved = TRUE;
+			}
+		    else if (slNameInList(rl->accList, llRsi->refSeq))
+			{
+			m->genbank = cloneString(llRsi->refSeq);
+			++llWinsByPcr;
+			if (conflictLog != NULL)
+			    fprintf(conflictLog, "    picking %d by PCR\n",
+				llRsi->locusLink);	
+			resolved = TRUE;
+			}
+		    else
+			{
+			++noWin;
+			}
 		    }
 		}
 	    else
@@ -501,25 +524,45 @@ for (m = mahoneyList; m != NULL; m = m->next)
 		    safef(buf, sizeof(buf), "%d", rsRsi->locusLink);
 		    m->locusId = cloneString(buf);
 		    ++refWinsByName;
+		    if (conflictLog != NULL)
+		        fprintf(conflictLog, "    picking %d by name\n",
+			    rsRsi->locusLink);	
 		    resolved = TRUE;
 		    }
 		else if (mahoneyNameAgrees(m->geneName, llRsi->geneName))
 		    {
 		    m->genbank = cloneString(llRsi->refSeq);
 		    ++llWinsByName;
+		    if (conflictLog != NULL)
+		        fprintf(conflictLog, "    picking %d by name\n",
+			    llRsi->locusLink);	
 		    resolved = TRUE;
 		    }
 		else
+		    {
 		    verbose(3, "No resolution MTF%d by name or PCR\n", m->mtf);
+		    }
 		}
 	    }
 	else if (rsRsi == NULL && llRsi == NULL)
 	    {
 	    verbose(3, "refSeq %s, locusLink %s not found in refLink\n", m->genbank, m->locusId);
+	    if (conflictLog != NULL)
+		fprintf(conflictLog, 
+		    "MTF #%d neither locusLink %s nor refSeq %s exist for mouse\n",
+		    m->mtf, m->locusId, m->genbank);
 	    ++noWinByDefault;
 	    }
 	else if (llRsi == NULL)
 	    {
+	    if (conflictLog != NULL)
+		{
+		fprintf(conflictLog, 
+		    "MTF #%d locusLink %d (from %s)  doesn't match %s\n",
+		    m->mtf, rsRsi->locusLink, m->genbank, m->locusId);
+		fprintf(conflictLog, "    picking %d since %s not in mouse\n",
+		    rsRsi->locusLink, m->locusId);	
+		}
 	    verbose(3, "locusId %s not found in refLink (refSeq %s)\n", m->locusId, m->genbank);
 	    safef(buf, sizeof(buf), "%d", rsRsi->locusLink);
 	    m->locusId = cloneString(buf);
@@ -528,6 +571,14 @@ for (m = mahoneyList; m != NULL; m = m->next)
 	    }
 	else if (rsRsi == NULL)
 	    {
+	    if (conflictLog != NULL)
+		{
+		fprintf(conflictLog, 
+		    "MTF #%d refSeq %s doesn't exist in mouse\n",
+		    m->mtf, m->genbank);
+		fprintf(conflictLog, "    replacing with %s from locusLink %s\n",
+		    llRsi->refSeq, m->locusId);	
+		}
 	    verbose(3, "refSeq %s not found in refLink (locusLink %s)\n", m->genbank, m->locusId);
 	    m->genbank = cloneString(llRsi->refSeq);
 	    ++llWinsByDefault;
@@ -536,11 +587,6 @@ for (m = mahoneyList; m != NULL; m = m->next)
 	else
 	    {
 	    internalErr();
-	    }
-	if (!resolved)
-	    {
-	    m->locusId = "";
-	    m->genbank = "";
 	    }
 	}
 
@@ -560,6 +606,14 @@ for (m = mahoneyList; m != NULL; m = m->next)
 		    ++locusLinkFromPcr;
 		    safef(buf, sizeof(buf), "%d", rsi->locusLink);
 		    verbose(3, "MTF%d from PCR refSeq %s\n", m->mtf, refSeq);
+		    if (conflictLog != NULL)
+			{
+			fprintf(conflictLog, 
+			    "MTF #%d  setting locusLink/refseq to %d/%s from PCR\n",
+			    m->mtf, rsi->locusLink, refSeq);
+			fprintf(conflictLog, "    replacing with %s from locusLink %s\n",
+			    rsi->refSeq, m->locusId);	
+			}
 		    m->locusId = cloneString(buf);
 		    m->genbank = refSeq;
 		    }
@@ -619,6 +673,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
+if (optionExists("conflictLog"))
+    conflictLog = mustOpen(optionVal("conflictLog", NULL), "w");
 loadMahoney(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
