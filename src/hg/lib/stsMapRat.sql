@@ -21,7 +21,7 @@ CREATE TABLE stsMapRat (
     shrspChrom varchar(255) not null,	# Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none
     shrspPos float not null,	# Position on SHRSPxBN genetic map
               #Indices
-    PRIMARY KEY(identNo),
+    INDEX(identNo),
     INDEX(chrom(8),chromStart),
     INDEX(chrom(8),chromEnd)
 
