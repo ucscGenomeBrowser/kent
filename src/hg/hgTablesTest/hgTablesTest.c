@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.7 2004/11/07 23:46:22 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.8 2004/11/07 23:51:00 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -653,6 +653,7 @@ for (i=0; i<ntiiTotalCount; ++i)
     statsOnSubsets(list, i, f);
 for (test = list; test != NULL; test = test->next)
     qaStatisticsAdd(stats, test->status);
+fprintf(f, "\ngrand total\n");
 qaStatisticsReport(stats, "Total", f);
 }
 
