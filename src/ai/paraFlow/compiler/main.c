@@ -30,11 +30,14 @@ enum pfParseType
     pptNop,
     pptCompound,
     pptTuple,
+    pptOf,
     pptIf,
+    pptElse,
     pptWhile,
     pptFor,
-    pptOf,
     pptForeach,
+    pptBreak,
+    pptContinue,
     pptClass,
     pptVarDec,
     pptNameUse,
@@ -44,7 +47,6 @@ enum pfParseType
     pptFlowDec,
     pptParaDec,
     pptCall,
-    pptBreak,
     pptAssignment,
     pptPlusEquals,
     pptMinusEquals,
@@ -83,16 +85,22 @@ switch (type)
     	return "pptCompound";
     case pptTuple:
         return "pptTuple";
+    case pptOf:
+        return "pptOf";
     case pptIf:
     	return "pptIf";
+    case pptElse:
+    	return "pptElse";
     case pptWhile:
     	return "pptWhile";
     case pptFor:
 	return "pptFor";
-    case pptOf:
-        return "pptOf";
     case pptForeach:
 	return "pptForeach";
+    case pptBreak:
+    	return "pptBreak";
+    case pptContinue:
+    	return "pptContinue";
     case pptClass:
 	return "pptClass";
     case pptVarDec:
@@ -109,8 +117,6 @@ switch (type)
 	return "pptParaDec";
     case pptCall:
 	return "pptCall";
-    case pptBreak:
-	return "pptBreak";
     case pptAssignment:
 	return "pptAssignment";
     case pptPlusEquals:
@@ -756,13 +762,49 @@ static struct pfParse *parseClass(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *body;
-tok = tok->next;	/* Skip 'class' token */
 pp = pfParseNew(pptClass, tok, parent);
+tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 body = parseCompound(pp, &tok, scope);
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);
 *pTokList = tok;
+return pp;
+}
+
+
+static struct pfParse *parseIf(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse if statement (which may include else) */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptIf, tok, parent);
+struct pfParse *conditional, *trueBody, *falseBody = NULL;
+tok = tok->next;	/* Skip 'if' */
+
+/* Get conditional. */
+if (tok->type != '(')
+    expectingGot("(", tok);
+tok = tok->next;
+conditional = pfParseExpression(pp, &tok, scope);
+if (tok->type != ')')
+    expectingGot(")", tok);
+tok = tok->next;
+
+/* Body */
+trueBody = pfParseSemiStatement(pp, &tok, scope);
+
+/* Else clause. */
+if (tok->type == pftElse)
+    {
+    tok = tok->next;
+    falseBody = pfParseSemiStatement(pp, &tok, scope);
+    }
+*pTokList = tok;
+
+pp->children = conditional;
+conditional->next = trueBody;
+trueBody->next = falseBody;
 return pp;
 }
 
@@ -807,7 +849,7 @@ tok = tok->next;
 
 /* Parse up through first semicolon */
 if (tok->type == ';')
-    init = emptyTuple(pp, tok);
+    init = emptyStatement(pp, tok);
 else
     init = pfParseStatement(pp, &tok, scope);
 if (tok->type != ';')
@@ -816,7 +858,7 @@ tok = tok->next;
 
 /* Parse up through through semicolon */
 if (tok->type == ';')
-    check = emptyTuple(pp, tok);
+    check = emptyStatement(pp, tok);
 else
     check = pfParseExpression(pp, &tok, scope);
 if (tok->type != ';')
@@ -825,7 +867,7 @@ tok = tok->next;
 
 /* Parse advance statment and closing ')' */
 if (tok->type == ')')
-    advance = emptyTuple(pp, tok);
+    advance = emptyStatement(pp, tok);
 else
     advance = pfParseStatement(pp, &tok, scope);
 if (tok->type != ')')
@@ -857,8 +899,11 @@ switch (tok->type)
     case '{':
 	statement = parseCompound(parent, &tok, scope);
 	break;
-    case pftEnd:
+    case ';':
 	statement = emptyStatement(parent, tok);
+	break;
+    case pftIf:
+        statement = parseIf(parent, &tok, scope);
 	break;
     case pftForeach:
 	statement = parseForeach(parent, &tok, scope);
@@ -935,6 +980,8 @@ hashAddInt(hash, "while", pftWhile);
 hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "if", pftIf);
 hashAddInt(hash, "else", pftElse);
+hashAddInt(hash, "break", pftBreak);
+hashAddInt(hash, "continue", pftContinue);
 return hash;
 }
 
