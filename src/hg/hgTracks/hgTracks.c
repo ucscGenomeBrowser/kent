@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.520 2003/05/20 01:12:59 blanchem Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.521 2003/05/22 21:11:49 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1613,6 +1613,7 @@ if( sameString( tg->mapName, "humMusL" )
 	|| sameString( tg->mapName, "musHumL" )  
 	|| sameString( tg->mapName, "regpotent" )
 	|| sameString( tg->mapName, "mm3Rn2L" )
+	|| sameString( tg->mapName, "hg15Mm3L" )
 	|| sameString( tg->mapName, "olly25")
 	|| sameString( tg->mapName, "olly2")
 	)
@@ -8758,6 +8759,7 @@ if (withLeftLabels)
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
+	    sameString( track->mapName, "hg15Mm3L" ) ||		
 	    sameString( track->mapName, "regpotent" ) ||
 	    sameString( track->mapName, "HMRConservation" )  )
 	    {
@@ -8842,7 +8844,8 @@ if (withLeftLabels)
 
 			rootName = cloneString( name );
 			beforeFirstPeriod( rootName );
-			if( sameString( track->mapName, "humMusL" ))
+			if( sameString( track->mapName, "humMusL" ) || 
+				 sameString( track->mapName, "hg15Mm3L" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons");
 			else if( sameString( track->mapName, "musHumL" ))
@@ -10192,6 +10195,7 @@ registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
+registerTrackHandler("hg15Mm3L", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
 registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
