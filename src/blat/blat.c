@@ -169,17 +169,23 @@ return seqList;
 void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, boolean isRc)
 /* Search for seq in index, align it, and write results to psl. */
 {
-struct gfClump *clumpList = gfFindClumps(gf, seq);
+int hitCount;
+struct lm *lm = lmInit(0);
+struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 gfAlignDnaClumps(clumpList, seq, isRc, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
+lmCleanup(&lm);
 }
 
 void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for protein seq in index and write results to psl. */
 {
-struct gfClump *clump, *clumpList = gfFindClumps(gf, seq);
+int hitCount;
+struct lm *lm = lmInit(0);
+struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 gfAlignAaClumps(gf, clumpList, seq, FALSE, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
+lmCleanup(&lm);
 }
 
 void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
