@@ -10519,7 +10519,7 @@ position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
     /* Read in input from CGI. */
-    position = cartString(cart, "position");
+    position = cartUsualString(cart, "position", hDefaultPos(database));
     }
 
 if(sameString(position, ""))
