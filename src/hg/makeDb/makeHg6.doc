@@ -274,7 +274,7 @@ o - load into database as so:
 o - Build fa file with only mouse traces that are part of alignments:
         ssh kks00
 	cd ~/mouse/vsOo29
-	subsetTraces ~/mouse/ncbiTrimmed blatMouse aliTrace.fa '-abbr=gnl|'
+	subsetTraces ~/mouse/ncbiTrimmed blatMouse aliTrace.fa '-abbr=gnl|' '-tracePat=*.fa' '=pslPat=*.psl'
 
 o - Load mouse trace ancillary information into the mouseTraceInfo table.
     This parses the trace id and template id out of the NCBI trace FASTA
