@@ -1111,6 +1111,13 @@ identifier ensemblTranscriptId3 external=Ensembl dependency
     $gbd.superfamily.name
     $gbd.sfDescription.name chopAfter=.
 
+# Ensembl EST
+
+identifier ensemblESTTranscriptId external=Ensembl dependency
+"Ensembl EST Transcript ID"
+    $gbd.ensESTGene.name chopAfter=.
+    $gbd.ensESTGtp.transcript chopAfter=.
+    $gbd.ensESTPep.name chopAfter=.
 
 # H-Invitational Database Identifiers
 
