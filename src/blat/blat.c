@@ -16,10 +16,10 @@
 #include "trans3.h"
 #include "repMask.h"
 
-int version = 9;	/* Blat version number. */
+int version = 10;	/* Blat version number. */
 
 enum constants {
-	qWarnSize = 5000000,	/* Warn if more than this many bases in one query. */
+	qWarnSize = 5000000, /* Warn if more than this many bases in one query. */
 	};
 
 /* Variables that can be set from command line. */
@@ -31,6 +31,8 @@ int repMatch = 1024*4;
 int dotEvery = 0;
 boolean oneOff = FALSE;
 boolean noHead = FALSE;
+boolean trimA = FALSE;
+boolean trimT = FALSE;
 char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
@@ -108,6 +110,7 @@ errAbort(
   "                 rnax - DNA sequence translated in three frames to protein\n"
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -trimT      Trim leading poly-T\n"
   , version
   );
 }
@@ -423,6 +426,45 @@ else
     }
 }
 
+void trimSeq(struct dnaSeq *seq, struct dnaSeq *trimmed)
+/* Copy seq to trimmed (shallow copy) and optionally trim
+ * off polyA tail or polyT head. */
+{
+DNA *dna = seq->dna;
+int i, size = seq->size;
+*trimmed = *seq;
+if (trimT)
+    {
+    int tSize = 0;
+    for (i=0; i<size; ++i)
+        {
+	DNA b = dna[i];
+	if (b == 't' || b == 'T')
+	    ++tSize;
+	else
+	    break;
+	}
+    dna += tSize;
+    trimmed->dna = dna;
+    size -= tSize;
+    trimmed->size = size;
+    }
+if (trimA)
+    {
+    int aSize = 0;
+    for (i=size-1; i>=0; --i)
+        {
+	DNA b = dna[i];
+	if (b == 'a' || b == 'A')
+	    ++aSize;
+	else
+	    break;
+	}
+    trimmed->size -= aSize;
+    trimmed->dna[size] = 0;
+    }
+}
+
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut, 
 	boolean isProt, struct hash *maskHash)
 /* Search all sequences in all files against single genoFind index. */
@@ -435,6 +477,7 @@ unsigned long totalSize = 0;
 FILE *psl = mustOpen(pslOut, "w");
 boolean maskQuery = (qMask != NULL);
 boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
+struct dnaSeq trimmedSeq;
 
 if (!noHead)
     pslWriteHead(psl);
@@ -451,8 +494,9 @@ for (i=0; i<fileCount; ++i)
 	seq = nibLoadAll(fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
+	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
-	searchOne(seq, gf, psl, isProt, maskHash, NULL);
+	searchOne(&trimmedSeq, gf, psl, isProt, maskHash, NULL);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
@@ -480,7 +524,8 @@ for (i=0; i<fileCount; ++i)
 	        {
 		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
 		}
-	    searchOne(&seq, gf, psl, isProt, maskHash, qMaskBits);
+	    trimSeq(&seq, &trimmedSeq);
+	    searchOne(&trimmedSeq, gf, psl, isProt, maskHash, qMaskBits);
 	    totalSize += seq.size;
 	    count += 1;
 	    bitFree(&qMaskBits);
@@ -557,7 +602,7 @@ void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], cha
 /* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
-struct dnaSeq *seq;
+struct dnaSeq *seq, trimmedSeq;
 struct genoFind *gfs[3];
 aaSeq *dbSeqLists[3];
 struct trans3 *t3List = NULL, *t3;
@@ -630,10 +675,11 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	        {
 		warn("Query sequence %d has size %d, it might take a while.", qSeq.name, qSeq.size);
 		}
+	    trimSeq(&qSeq, &trimmedSeq);
 	    if (transQuery)
-	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, qIsDna, pslOut);
+	        transTripleSearch(&trimmedSeq, gfs, t3Hash, isRc, qIsDna, pslOut);
 	    else
-		tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
+		tripleSearch(&trimmedSeq, gfs, t3Hash, isRc, pslOut);
 	    }
 	lineFileClose(&lf);
 	}
@@ -740,6 +786,8 @@ if (cgiVarExists("prot"))
     qType = tType = gftProt;
 if (cgiVarExists("t"))
     tType = gfTypeFromName(cgiString("t"));
+trimA = cgiBoolean("trimA") || cgiBoolean("trima");
+trimT = cgiBoolean("trimT") || cgiBoolean("trimt");
 switch (tType)
     {
     case gftProt:
@@ -756,6 +804,8 @@ switch (tType)
     }
 if (cgiVarExists("q"))
     qType = gfTypeFromName(cgiString("q"));
+if (qType == gftRnaX || qType == gftRna)
+    trimA = TRUE;
 switch (qType)
     {
     case gftProt:
