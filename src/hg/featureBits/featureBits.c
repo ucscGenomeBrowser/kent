@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.18 2003/05/16 19:16:35 booch Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.19 2003/05/23 15:16:58 kent Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -69,7 +69,7 @@ boolean thisBit, lastBit = FALSE;
 int start = 0;
 int id = 0;
 
-for (i=0; i<chromSize; ++i)	/* We depend on extra zero bit at end. */
+for (i=0; i<chromSize; ++i)
     {
     thisBit = bitReadOne(bits, i);
     if (thisBit)
@@ -333,8 +333,8 @@ Bits *bits = NULL;
 char *table;
 
 *retChromSize = chromSize = hChromSize(chrom);
-acc = bitAlloc(chromSize+1);
-bits = bitAlloc(chromSize+1);
+acc = bitAlloc(chromSize);
+bits = bitAlloc(chromSize);
 for (i=0; i<tableCount; ++i)
     {
     boolean not = FALSE;
