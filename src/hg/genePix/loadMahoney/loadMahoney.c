@@ -32,7 +32,7 @@ void raCommon(FILE *f)
 {
 fprintf(f, "%s",
 "taxon 10090\n"
-"imageType RNA in situ\n"
+"strain C57BL\n"
 "contributor Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q.\n"
 "publication Mouse brain organization revealed through direct genome-scale TF expression analysis\n"
 "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15618518\n"
@@ -40,6 +40,7 @@ fprintf(f, "%s",
 "journalUrl http://www.sciencemag.org/\n"
 "setUrl http://mahoney.chip.org/mahoney/\n"
 "itemUrl http://mahoney.chip.org/servlet/Mahoney2.ShowTF?mTF_ID=%s\n"
+"fixation 4% paraformaldehyde\n"
 "probeColor purple\n"
 );
 }
@@ -74,8 +75,9 @@ fprintf(f, "%s",
 "screenDir ../genePix/700/inSitu/Mouse/mahoney/slices\n"
 "thumbDir ../genePix/200/inSitu/Mouse/mahoney/slices\n"
 "priority 100\n"
-"bodyPart brain\n"
+"bodyPart head\n"
 "sliceType transverse\n"
+"embedding cryosection\n"
 );
 
 raCommon(f);
