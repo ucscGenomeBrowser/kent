@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 53
+#define PSEUDOGENELINK_NUM_COLS 56
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -16,20 +16,20 @@ struct pseudoGeneLink
     unsigned chromEnd;	/* pseudogene alignment end position */
     char *name;	/* Name of pseudogene */
     unsigned score;	/* score of pseudogene with gene */
-    char *strand;	/* + or - */
+    char strand[3];	/* + or - */
     unsigned thickStart;	/* Start of where display should be thick (start codon) */
     unsigned thickEnd;	/* End of where display should be thick (stop codon) */
     unsigned reserved;	/* Always zero for now */
     int blockCount;	/* Number of blocks */
     int *blockSizes;	/* Comma separated list of block sizes */
     int *chromStarts;	/* Start positions relative to chromStart */
-    char *assembly;	/* assembly for gene */
-    char *geneTable;	/* mysql table of gene */
-    char *gene;	/* Name of gene */
+    float trfRatio;	/* ratio of tandem repeats */
+    char *type;	/* type of evidence */
+    int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
     char *gChrom;	/* Chromosome name */
-    unsigned gStart;	/* gene alignment start position */
-    unsigned gEnd;	/* gene alignment end position */
-    char *gStrand;	/* strand of gene */
+    int gStart;	/* gene alignment start position */
+    int gEnd;	/* gene alignment end position */
+    char gStrand[3];	/* strand of gene */
     unsigned exonCount;	/* # of exons in gene  */
     unsigned geneOverlap;	/* bases overlapping */
     unsigned polyA;	/* length of polyA */
@@ -44,14 +44,13 @@ struct pseudoGeneLink
     unsigned qReps;	/* repeats in pseudogene */
     unsigned overlapDiag;	/* bases on the diagonal to mouse */
     unsigned coverage;	/* bases on the diagonal to mouse */
-    unsigned label;	/* 1=pseudogene,-1 not pseudogene */
+    int label;	/* 1=pseudogene,-1 not pseudogene */
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned oldScore;	/* another heuristic */
     int oldIntronCount;	/* old simple intron count */
     int conservedIntrons;	/* conserved intron count */
     char *intronScores;	/* Intron sizes in gene/pseudogene */
-    int chainId;	/*  reserved */
-    int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
+    int maxOverlap;	/* largest overlap with another mrna */
     char *refSeq;	/* Name of closest regSeq to gene */
     int rStart;	/* refSeq alignment start position */
     int rEnd;	/* refSeq alignment end position */
@@ -61,6 +60,10 @@ struct pseudoGeneLink
     char *kgName;	/* Name of closest knownGene to gene */
     int kStart;	/* kg alignment start position */
     int kEnd;	/* kg alignment end position */
+    char *overName;	/* name of overlapping mrna */
+    int overStart;	/* overlapping mrna start position */
+    int overEnd;	/* overlapping mrna end position */
+    char overStrand[3];	/* strand of overlapping mrna */
     int adaBoost;	/* adaBoost label */
     float posConf;	/* pvalue for positive */
     float negConf;	/* pvalue for positive */
