@@ -21,14 +21,14 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.13 2004/04/14 05:25:22 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.14 2004/04/14 20:33:08 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
-#define HGLFT_FROMDB_VAR "hglft.fromDb"         /* FROM assembly */
-#define HGLFT_TODB_VAR "hglft.toDb"             /* TO assembly */
+#define HGLFT_FROMDB_VAR "fromDb"               /* FROM assembly */
+#define HGLFT_TODB_VAR "toDb"                   /* TO assembly */
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
@@ -46,6 +46,9 @@ char *formatList[] =
 
 /* Filename prefix */
 #define HGLFT   "hglft"
+
+/* Javascript to change New Assembly pulldown when Orig Assembly changes */
+char *onChangeFromDb = "onchange=\"document.mainForm.toDb.value = document.mainForm.toDb.options[document.mainForm.toDb.selectedIndex].value; document.mainForm.submit();\"";
 
 void webMain(char *organism, char *fromDb, char *toDb, char *dataFormat)
     /* set up page for entering data */
@@ -83,7 +86,7 @@ cgiTableFieldEnd();
 
 /* from assembly */
 cgiSimpleTableFieldStart();
-printSomeAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, "");
+printAllAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, FALSE, "");
 cgiTableFieldEnd();
 
 /* to assembly */
@@ -91,7 +94,8 @@ cgiSimpleTableFieldStart();
 if (dbList)
     dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(fromDb);
-printSomeAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, "");
+printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, 
+                                FALSE, onChangeFromDb);
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
