@@ -48,7 +48,8 @@ while (<CONSENSUS>) {
     my ($chr, $start, $end, $regionPart) = split /\s/;
     $orthoRegionPartPosition{$regionPart} = 
             sprintf "%s:%d-%d", $chr, $start, $end;
-    my ($region) = split (/_/, $regionPart);
+    $regionPart =~ /(EN.*)[_.][0-9]+$/;
+    my $region = $1;
     if (defined($orthoRegionParts{$region})) {
         $orthoRegionParts{$region} = 
             join (",", $orthoRegionParts{$region}, $regionPart);
@@ -65,7 +66,8 @@ while (<LIFTOVER>) {
     my ($chr, $start, $end, $regionPart) = split /\s/;
     $LORegionPartPosition{$regionPart} = 
             sprintf "%s:%d-%d", $chr, $start, $end;
-    my ($region) = split (/_/, $regionPart);
+    $regionPart =~ /(EN.*)[_.][0-9]+$/;
+    my $region = $1;
     if (defined($LORegionParts{$region})) {
         $LORegionParts{$region} = 
             join (",", $LORegionParts{$region}, $regionPart);
@@ -82,7 +84,8 @@ while (<MERCATOR>) {
     my ($chr, $start, $end, $regionPart) = split /\s/;
     $MCRegionPartPosition{$regionPart} = 
             sprintf "%s:%d-%d", $chr, $start, $end;
-    my ($region) = split (/_/, $regionPart);
+    $regionPart =~ /(EN.*)[_.][0-9]+$/;
+    my $region = $1;
     if (defined($MCRegionParts{$region})) {
         $MCRegionParts{$region} = 
             join (",", $MCRegionParts{$region}, $regionPart);
