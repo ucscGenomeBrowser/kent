@@ -303,6 +303,14 @@ visibility hide
 color 200,0,50
 type bed 12
 
+track triangle
+shortLabel Golden Triangle
+longLabel Golden Triangle Possible Transcription Factor Binding Sites
+priority 18.3
+visibility dense
+spectrum on
+type bed 6
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
