@@ -195,6 +195,7 @@ for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
 printf("Loaded %d elements\n", slCount(bedList));
 slSort(&bedList, bedStubCmp);
+printf("Sorted\n");
 loadDatabase(database, track, bedSize, bedList);
 }
 
