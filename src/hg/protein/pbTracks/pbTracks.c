@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.35 2005/03/02 00:49:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.36 2005/03/09 21:24:18 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -396,6 +396,7 @@ char **row;
 char *proteinAC;
 char *chp, *chp1, *chp9;
 char *debugTmp = NULL;
+char *answer;
 struct dyString *state = NULL;
 
 /* Initialize layout and database. */
@@ -457,7 +458,23 @@ else
     protDisplayID = sqlGetField(conn, protDbName, "spXref3", "displayID", cond_str);
     }
 
-if (proteinID != spFindAcc(spConn, proteinID))
+if (spFindAcc(spConn, proteinID) == NULL)
+    {
+    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    answer = sqlGetField(conn, protDbName, "spXref3", "biodatabaseID", cond_str);
+    if (sameWord(answer, "3"))
+        {
+        errAbort("The corresponding protein %s is no longer available from Swiss-Prot/TrEMBL.", 
+		 proteinID);
+        }
+    else
+        {
+        errAbort("%s seems not to be a valid protein ID.", proteinID);
+        }
+    } 
+else
+   {
+   if (!sameWord(proteinID, spFindAcc(spConn, proteinID)))
     {
     hPrintf("%s seems to be an outdated protein ID.", proteinID);
     printf("<BR><BR>Please try ");
@@ -465,6 +482,7 @@ if (proteinID != spFindAcc(spConn, proteinID))
 	     spFindAcc(spConn, proteinID), spFindAcc(spConn, proteinID));fflush(stdout);
     errAbort(" ");
     }
+  }
 safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
 mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
 
