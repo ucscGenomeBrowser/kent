@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.673 2004/06/21 07:17:30 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.674 2004/06/23 03:36:31 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2658,6 +2658,7 @@ char fullTable[64];
 boolean hasBin;
 char buffer[2048], *str = buffer;
 int i, j, c;
+char *ptr;
 
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
@@ -2673,6 +2674,9 @@ printf("<PRE><TT>");
 end = psl->tEnd;
 if (psl->strand[1] == '+')
     end = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] *3;
+if ((ptr = strchr(readName, '.')) != NULL)
+    *ptr++ = 0;
+
 printf(">%s\n", readName);
 tSeq = hDnaFromSeq(psl->tName, start, end, dnaLower);
 
@@ -4611,7 +4615,15 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 if (addp == 1)
     {
-    sprintf(buffer, "%sp",readName);
+    char *ptr;
+    sprintf(buffer, "%s",readName);
+    if ((ptr = strchr(buffer, '.')) != NULL)
+	{
+	*ptr = 0;
+	psl->qName = cloneString(buffer);
+	*ptr++ = 'p';
+	*ptr = 0;
+	}
     seq = hPepSeq(buffer);
     }
 else
@@ -13409,44 +13421,41 @@ struct dnaSeq *seq;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
-char buffer[256];
 char uiState[64];
 struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
 char *useName = itemName;
+char *acc = NULL, *prot = NULL;
+char *gene = NULL, *pos = NULL;
+char buffer[1024];
 
-if (hTableExists("kgMapName"))
+strcpy(buffer, itemName);
+acc = buffer;
+if ((pos = strchr(acc, '.')) != NULL)
     {
-    struct sqlResult *sr;
-    char **row;
-    sprintf(query, "select geneName from kgMapName where kgPepId = '%s'", itemName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
+    *pos++ = 0;
+    if ((gene = strchr(pos, '.')) != NULL)
 	{
-	useName = cloneString(row[0]);
+	*gene++ = 0;
+	useName = gene;
+	if ((prot = strchr(gene, '.')) != NULL)
+	    *prot++ = 0;
 	}
-    sqlFreeResult(&sr);
     }
 
 cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-if (hTableExists("hg16KG"))
-    {
-    sprintf(query, "select * from hg16KG where qName = '%s'", itemName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	psl = pslLoad(row+1);
-	printf("Human Position:\n");
-	printf("<A TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s\">",
-		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, "hg16");
-	sprintLongWithCommas(startBuf, psl->tStart + 1);
-	sprintLongWithCommas(endBuf, psl->tEnd);
-	printf("%s:%s-%s</A><BR>",psl->tName,startBuf, endBuf);
-	printf("protein length: %d<BR>\n",psl->qSize);
-	}
-    sqlFreeResult(&sr);
-    }
-printf("supporting human mRNA : %s<BR>\n",itemName);
+printf("Human Position:\n");
+printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	hgTracksName(), pos, "hg16");
+printf("%s</A><BR>",pos);
+printf("Human mRNA: <A HREF=\"");
+printEntrezNucleotideUrl(stdout, acc);
+printf("\" TARGET=_blank>%s</A><BR>\n", acc);
+printf("SwissProt: ");
+printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+	    "TARGET=_blank>%s</A></B>\n",
+	    prot, prot);
+printf("<BR>protein length: %d<BR>\n",pslList->qSize);
 
 slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
