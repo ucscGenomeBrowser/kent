@@ -7,16 +7,12 @@
 #
 include ../inc/common.mk
 
-#	This version string needs to be raised for a release
-
-VER=50
-
 DESTDIR=.
 install_dir=${DESTDIR}/install_image
 
 all::	INST_DIR COPYRIGHT.txt README.building.source.txt \
 	README.cvs.access.txt README.install.txt \
-	README.mysql.setup.txt version source_tar \
+	README.mysql.setup.txt source_tar \
 	source_built example webroot gbdb goldenPath
 
 INST_DIR:
@@ -24,12 +20,9 @@ INST_DIR:
 		${MKDIR} "${install_dir}"; \
 	fi
 
-version:
-	@rm -f ${install_dir}/Version_*
-	touch ${install_dir}/Version_${VER}.`date -I`
-
 COPYRIGHT.txt:	COPYRIGHT INST_DIR
-	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" COPYRIGHT | \
+	@VER=`cat ${install_dir}/Version_*`; \
+	sed -e "s/VER/$${VER}/" -e "s/DATE_STAMP/`date -I`/" COPYRIGHT | \
 	unix2dos > ${install_dir}/$@
 	@chmod 644 ${install_dir}/$@
 
@@ -49,15 +42,17 @@ README.mysql.setup.txt: README.mysql.setup INST_DIR
 	@unix2dos -n README.mysql.setup ${install_dir}/$@
 	@chmod 644 ${install_dir}/$@
 
-source_tar:
+source_tar:	INST_DIR
 	if [ ! -d "${install_dir}/source_tree_clean" ]; then \
 		${MKDIR} "${install_dir}/source_tree_clean"; \
 		(cd "${install_dir}/source_tree_clean" && \
-		cvs co -r v${VER}_branch kent;) \
+		cvs co -r beta kent;) \
 	fi
 	rm -f ${install_dir}/source_tree_clean.tgz
 	(cd ${install_dir}/source_tree_clean && \
 	tar -cvzf ../source_tree_clean.tgz  ./kent)
+	rm -f ${install_dir}/Version_*
+	./touchVersion.sh "${install_dir}"
 	rm -fr ${install_dir}/source_tree_clean
 	touch source_tar
 
@@ -85,7 +80,8 @@ example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	cp -p ex.CleanTrash.sh "${install_dir}/example/CleanTrash.sh"
 	cp -p ex.cvsup.pl "${install_dir}/example/cvsup.pl"
 	cp -p ex.hg.conf "${install_dir}/example/hg.conf"
-	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" \
+	VER=`cat ${install_dir}/Version_*`; \
+	sed -e "s/VER/$${VER}/" -e "s/DATE_STAMP/`date -I`/" \
 		ex.MySQLUserPerms.sh >"${install_dir}/example/MySQLUserPerms.sh"
 	chmod 755 "${install_dir}/example/MySQLUserPerms.sh"
 	chmod 755 "${install_dir}/example/CleanTrash.sh"
