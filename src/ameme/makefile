@@ -5,6 +5,7 @@ O = ameme.o fragFind.o
 
 alpha: $(O)
 	gcc $O ../lib/$(MACHTYPE)/jkweb.a -lm 
+	strip a.out
 	mv a.out $(HOME)/bin/$(MACHTYPE)/ameme 
 
 cgi: $(O)

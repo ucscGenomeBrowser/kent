@@ -11,6 +11,7 @@
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
+boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
@@ -26,6 +27,7 @@ errAbort(
   "   -nobin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -tab  Separate by tabs rather than space\n"
   );
 }
 
@@ -33,8 +35,13 @@ int findBedSize(char *fileName)
 /* Read first line of file and figure out how many words in it. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[32];
+char *words[64], *line;
 int wordCount;
+lineFileNeedNext(lf, &line, NULL);
+if (strictTab)
+    wordCount = chopTabs(line, words);
+else
+    wordCount = chopLine(line, words);
 wordCount = lineFileChop(lf, words);
 if (wordCount == 0)
     errAbort("%s appears to be empty", fileName);
@@ -73,12 +80,16 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
+boolean tab = 
 
 printf("Reading %s\n", fileName);
 while (lineFileNext(lf, &line, NULL))
     {
     dupe = cloneString(line);
-    wordCount = chopLine(line, words);
+    if (strictTab)
+	wordCount = chopTabs(line, words);
+    else
+	wordCount = chopLine(line, words);
     lineFileExpectWords(lf, bedSize, wordCount);
     AllocVar(bed);
     bed->chrom = cloneString(words[0]);
@@ -86,6 +97,7 @@ while (lineFileNext(lf, &line, NULL))
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
     bed->line = dupe;
     slAddHead(pList, bed);
+    printf("chr=%s\n",bed->chrom);
     }
 lineFileClose(&lf);
 }
@@ -101,7 +113,10 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!noBin)
         fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
-    wordCount = chopLine(bed->line, words);
+    if (strictTab)
+	wordCount = chopTabs(bed->line, words);
+    else
+	wordCount = chopLine(bed->line, words);
     for (i=0; i<wordCount; ++i)
         {
 	fputs(words[i], f);
@@ -195,6 +210,7 @@ for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
 printf("Loaded %d elements\n", slCount(bedList));
 slSort(&bedList, bedStubCmp);
+printf("Sorted\n");
 loadDatabase(database, track, bedSize, bedList);
 }
 
@@ -205,6 +221,8 @@ cgiSpoof(&argc, argv);
 if (argc < 4)
     usage();
 noBin = cgiBoolean("noBin");
+strictTab = cgiBoolean("tab");
+uglyf("stringTab = %d\n", strictTab);
 oldTable = cgiBoolean("oldTable");
 sqlTable = cgiOptionalString("sqlTable");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);

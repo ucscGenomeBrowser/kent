@@ -3,6 +3,7 @@
 #include "affyOffset.h"
 #include "sample.h"
 #include "hash.h"
+#include "linefile.h"
 
 void usage()
 /* Give the user a hint about how to use this program. */
@@ -11,7 +12,69 @@ errAbort("affyPairsToSample - Takes a 'pairs' format file from the Affy transcri
 	 "data set and combines it with the Affy offset.txt file to output a 'sample' file\n"
 	 "which has the contig coordinates of the result.\n"
 	 "usage:\n\t"
-	 "affyPairsToSample <offset.txt> <pairs files....>\n");
+	 "affyPairsToSample <offset.txt> <grouping amount> <pairs files....>\n");
+}
+
+struct liftSpec
+/* How to lift coordinates. */
+    {
+    struct liftSpec *next;	/* Next in list. */
+    char *oldName;		/* Name in source file. */
+    int offset;			/* Offset to add. */
+    char *newName;		/* Name in dest file. */
+    int size;                   /* Size of new sequence. */
+    };
+
+struct liftSpec *readLifts(char *fileName)
+/* Read in lift file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+int wordCount;
+char *words[16];
+struct liftSpec *list = NULL, *el;
+
+while ((wordCount = lineFileChop(lf, words)) != 0)
+    {
+    char *offs;
+    lineFileExpectWords(lf, 5, wordCount);
+    offs = words[0];
+    if (!isdigit(offs[0]) && !(offs[0] == '-' && isdigit(offs[1])))
+	errAbort("Expecting number in first field line %d of %s", lf->lineIx, lf->fileName);
+    if (!isdigit(words[4][0]))
+	errAbort("Expecting number in fifth field line %d of %s", lf->lineIx, lf->fileName);
+    AllocVar(el);
+    el->oldName = cloneString(words[1]);
+    el->offset = atoi(offs);
+    el->newName = cloneString(words[3]);
+    el->size = atoi(words[4]);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+lineFileClose(&lf);
+printf("Got %d lifts in %s\n", slCount(list), fileName);
+if (list == NULL)
+    errAbort("Empty liftSpec file %s", fileName);
+return list;
+}
+
+char *rmChromPrefix(char *s)
+/* Remove chromosome prefix if any. */
+{
+char *e = strchr(s, '/');
+if (e != NULL)
+    return e+1;
+else
+    return s;
+}
+
+struct hash *hashLift(struct liftSpec *list)
+/* Return a hash of the lift spec. */
+{
+struct hash *hash = newHash(0);
+struct liftSpec *el;
+for (el = list; el != NULL; el = el->next)
+    hashAdd(hash, el->oldName, el);
+return hash;
 }
 
 void loadAoHash(struct hash *aoHash, struct affyOffset *aoList)
@@ -34,27 +97,36 @@ assert(probeSet);
 ret = cloneString(probeSet);
 tmp = strstr(ret, "piece");
 if(tmp == NULL)
-    errAbort("affyPairsToSample.c::contigFromAffyPairName() - Couldn't find 'piece' in %s", probeSet);
+    {
+    freez(&ret);
+    return NULL;
+    }
+//    errAbort("affyPairsToSample.c::contigFromAffyPairName() - Couldn't find 'piece' in %s", probeSet);
 tmp[0] = '\0';
-snprintf(buff, sizeof(buff),"%c%c/%s", ret[3], ret[4], ret);
+snprintf(buff, sizeof(buff), "%c%c/%s", ret[3],ret[4],ret);
 freez(&ret);
 return cloneString(buff);
 }
 
-struct sample *sampFromAffyPair(struct affyPairs *ap, struct hash *aoHash)
+struct sample *sampFromAffyPair(struct affyPairs *ap, struct hash *liftHash)
 /* Use the data in the affy pair and the offset info in the hash to make a
    sample data type. */
 {
 struct sample *samp = NULL;
-struct affyOffset *ao = NULL;
+struct liftSpec *lf = NULL;
+char *name = contigFromAffyPairName(ap->probeSet);
 float score = 0;
-ao = hashFindVal(aoHash, ap->probeSet);
-if(ao != NULL)
+if(name != NULL)
+    {
+    lf = hashFindVal(liftHash, name);
+    freez(&name);
+    }
+if(lf != NULL)
     {
     AllocVar(samp);
-    samp->chrom = contigFromAffyPairName(ap->probeSet);
-    samp->chromStart = samp->chromEnd = ap->pos;
-    samp->name = cloneString("");
+    samp->chrom = cloneString(lf->newName);
+    samp->chromStart = samp->chromEnd = ap->pos + lf->offset;
+    samp->name = cloneString("a");
     score = (ap->pm) - (ap->mm);
     if(score < 1)
 	score = 1;
@@ -81,56 +153,103 @@ if(diff == 0)
 return diff;
 }
 
-void affyPairsToSample( char *offsetName, char *pairsIn)
+void addSampleToCurrent(struct sample *target, struct sample *samp, int grouping)
+{
+int i;
+int base = target->sampleCount;
+for(i=0;i<samp->sampleCount; i++)
+    {
+    assert(base+i < grouping);
+    target->score += samp->score;
+    target->samplePosition[base + i] = samp->samplePosition[i] + samp->chromStart - target->chromStart;
+    target->sampleHeight[base + i] = samp->sampleHeight[i];
+    target->sampleCount++;
+    }
+}
+
+struct sample *groupByPosition(int grouping , struct sample *sampList)
+{
+struct sample *groupedList = NULL, *samp = NULL, *currSamp = NULL, *sampNext=NULL;
+int count = 0;
+for(samp = sampList; samp != NULL; samp = sampNext)
+    {
+    sampNext = samp->next;
+    AllocVar(currSamp);
+    currSamp->chrom = cloneString(samp->chrom);
+    currSamp->chromStart = samp->chromStart;
+    currSamp->name = cloneString(samp->name);
+    snprintf(currSamp->strand, sizeof(currSamp->strand), "%s", samp->strand);
+    AllocArray(currSamp->samplePosition, grouping);
+    AllocArray(currSamp->sampleHeight, grouping);
+    count = 0;
+    while(samp != NULL && count < grouping && sameString(samp->chrom,currSamp->chrom))
+	{
+	addSampleToCurrent(currSamp, samp, grouping);
+	count += samp->sampleCount;
+	samp = sampNext = samp->next;
+	}
+    if(count != 0)
+	currSamp->score = currSamp->score / count;
+    currSamp->chromEnd = currSamp->chromStart + currSamp->samplePosition[count -1];
+    slAddHead(&groupedList, currSamp);
+    }
+slReverse(&groupedList);
+return groupedList;
+}
+
+void affyPairsToSample(struct hash *liftHash, int grouping, char *pairsIn)
 /* Top level function to run combine pairs and offset files to give sample. */
 {
 struct affyPairs *apList = NULL, *ap = NULL;
-struct affyOffset *aoList = NULL, *ao = NULL;
 struct sample *sampList = NULL, *samp = NULL;
-struct hash *aoHash = newHash(15);
+struct sample *groupedList = NULL;
 char *fileRoot = NULL;
 char buff[10+strlen(pairsIn)];
 FILE *out = NULL;
-warn("Loading Affy Pairs.");
+fprintf(stderr, ".");
+fflush(stderr);
+//warn("Loading Affy Pairs.");
 apList = affyPairsLoadAll(pairsIn);
-warn("Loading Affy offsets.");
-aoList = affyOffsetLoadAll(offsetName);
-warn("Loading hash.");
-loadAoHash(aoHash, aoList);
-
-warn("Creating samples.");
+//warn("Creating samples.");
 for(ap = apList; ap != NULL; ap = ap->next)
     {
-    samp = sampFromAffyPair(ap, aoHash);
+    samp = sampFromAffyPair(ap, liftHash);
     if(samp != NULL)
 	{
 	slAddHead(&sampList, samp);
 	}
     }
-warn("Sorting Samples");
+//warn("Sorting Samples");
 slSort(&sampList, sampleCoordCmp);
-warn("Saving Samples.");
+groupedList = groupByPosition(grouping, sampList);
+//warn("Saving Samples.");
 snprintf(buff, sizeof(buff), "%s.sample", pairsIn);
 out = mustOpen(buff, "w");
-for(samp = sampList; samp != NULL; samp = samp->next)
+for(samp = groupedList; samp != NULL; samp = samp->next)
     {
     sampleTabOut(samp, out);
     }
-warn("Cleaning up.");
+//warn("Cleaning up.");
 carefulClose(&out);
 sampleFreeList(&sampList);
-affyOffsetFreeList(&aoList);
+sampleFreeList(&groupedList);
 affyPairsFreeList(&apList);
-hashFree(&aoHash);
 }
 
 
 int main(int argc, char *argv[])
 {
 int i;
-if(argc < 3)
+struct liftSpec *lsList = NULL;
+struct hash *liftHash = NULL;
+int grouping;
+if(argc < 4)
     usage();
-for(i=2; i<argc; i++)
-    affyPairsToSample(argv[1], argv[i]);
+lsList = readLifts(argv[1]);
+liftHash = hashLift(lsList);
+grouping = atoi(argv[2]);
+for(i=3; i<argc; i++)
+    affyPairsToSample(liftHash, grouping , argv[i]);
+fprintf(stderr,"\nfinished.\n");
 return 0;
 }

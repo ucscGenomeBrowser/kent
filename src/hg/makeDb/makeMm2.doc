@@ -9,7 +9,7 @@ o - cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
     - Run 
 	gunzip -c /cluster/store2/mm.2002.02/mm2/assembly/*.fasta.gz | splitFaIntoContigs /cluster/store2/mm.2002.02/mm2/assembly/*.agp stdin /cluster/store2/mm.2002.02/mm2 2000000
 
-    - This will split the mouse sequence into approx. 10Mbase supercontigs between non-bridged clone contigs and drop the resulting dir structure in /cluster/store2/mm.2002.02/mm2.
+    - This will split the mouse sequence into approx. 2 Mbase supercontigs between non-bridged clone contigs and drop the resulting dir structure in /cluster/store2/mm.2002.02/mm2.
     - The resulting dir structure will include 1 dir for each chromosome, each of which has a set of subdirectories, one subdir per supercontig.    
 
 
@@ -81,7 +81,7 @@ Create packed chromosome sequence files
 
 Load chromosome sequence info into database 
      ssh hgwdev
-     mysql -A -u hgcat -pbigsecret mm2  < ~/src/hg/lib/chromInfo.sql
+     hgsql mm2  < ~/src/hg/lib/chromInfo.sql
      cd ~/mm
      hgNibSeq -preMadeNib mm2 /cluster/store2/mm.2002.02/mm2/nib ?/chr*.fa ??/chr*.fa 
 
@@ -177,6 +177,67 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/mm/bed/est/intronEst
       hgLoadPsl mm2 *.psl
 
+o - Load refSeq alignments into database
+      ssh hgwdev
+      cd ~/mm/bed/refSeq
+      pslCat -dir chrom > refSeqAli.psl
+      hgLoadPsl hg10 -tNameIx refSeqAli.psl
+
+
+PRODUCING ESTORIENTINFO TABLE
+
+This table is needed for proper orientation of ESTs in the
+browser.  Many will appear on the wrong strand without it.
+This involves a cluster run.  First load the EST psl files
+as so:
+     ssh kkstore
+     cd ~/mm/bed/est
+     pslSortAcc nohead contig /cluster/fast1/temp contig.psl
+     mkdir /scratch/hg/mm2/est
+     cp -r contig /scratch/hg/mm2/est
+     sudo /cluster/install/utilities/updateLocal
+Wait for these to finish.
+     cd ..
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1S /scratch/hg/mm2/est/contig > psl.lst
+     cp ~/oo/bed/estOrientInfo/gsub .
+Update gsub to refer to mouse contig sequence currently on
+/scratch, and mouse ESTs on /scratch.
+     gensub2 psl.lst single gsub spec
+     para create spec
+Then run the  job on the cluster
+     ssh kk
+     cd ~/mm/bed/estOrientInfo
+     para try
+     sleep 60
+     para check
+If things look good
+     para push
+Wait for this to finish then
+     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
+Load them into database as so:
+     ssh hgwdev
+     cd ~/mm/bed/estOrientInfo
+     hgLoadBed mm2 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+     
+CREATE RNACLUSTER TABLE (done)
+ Make sure that refSeqAli and estOrientInfo tables are made already
+ (see above).
+
+   ssh hgwdev
+   cd ~/oo/bed
+   mkdir rnaCluster
+   cd rnaCluster
+   mkdir rna est
+   foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
+       clusterRna mm2 rna/chr$i.bed est/chr$i.bed -chrom=chr$i
+       echo done $i
+   end
+   hgLoadBed mm2 rnaCluster est/*.bed
+
+
 PRODUCING KNOWN GENES (done)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
@@ -215,28 +276,45 @@ o - Load this into the database as so
 	hgLoadBed mm2 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (in progress)
+PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
-	First make sure you have appropriate set up, permissions, etc. and you have 
-     	tried using Parasol to submit and finished a set of jobs successfully.
+	First make sure you have appropriate set up, permissions, etc.
+	and you have tried using Parasol to submit and finished a set 
+	of jobs successfully.
+	
 	Load up the cluster with hard-masked contigs in
 	   /scratch/hg/mm2/mContigs
      	
-	Log into kk
+	Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+	cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
+	big cluster, due to limitation of memory and swap space on each
+	processing node).
 	     	cd ~/mm
      		cd bed/genscan
 	Make 3 subdirectories for genscan to put their output files in
 		mkdir gtf pep subopt
 	Generate a list file, genome.list, of all the contigs
-		ls -1S /scratch/hg/mm2/mContigs/* >genome.list	
+		ls -1S /cluster/store2/mm.2002.02/mm2/mContigs/* >genome.list
+	Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
+	Those files have pure Ns due to heterochromatin (unsequencable
+	stuff) and will cause genscan to run forever.
+	
 	Create template file, gsub, for gensub2.  For example (3 lines file):
-		#LO:xP
+		#LOOP
 		/cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 		#ENDLOOP
+	Create a file containing a single line.
+		echo single > single
 	Generate job list file, jobList, for Parasol
 		gensub2 genome.list single gsub jobList
+	
+	Edit jobList to find the line containing "chr12_5.fa.masked"
+	and change "-window=2400000" into "-window=1200000", because
+	genscan has "not enough memory" problem with this particular
+	file.
+	
 	First issue the following Parasol command:
 		para create jobList
 	Run the following command, which will try first 10 jobs from jobList
@@ -245,7 +323,8 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 		para check
 	If they have problems, debug and fix your program, template file, 
 	commands, etc. and try again.  If they are OK, then issue the following 
-	command, which will ask Parasol to start all the jobs (around 3000 jobs).
+	command, which will ask Parasol to start all the remaining jobs (around
+	~252 jobs).
 		para push
 	Issue either one of the following two commands to check the 
 	status of the cluster and your jobs, until they are done.
@@ -459,6 +538,36 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq mm2 /cluster/store2/fish/seq15jun2001/*.fa
 
 
+LOAD GENEID GENES (done)
+     cd ~/mm/bed
+     mkdir geneid
+     cd geneid
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/geneid_v1.1
+   Get rid of the extra .N in the transcripts with subs.  
+     cd ..
+     cp ~/oo/bed/geneid/subs .
+     subs -e download/*.gtf > /dev/null
+     ldHgGene mm2 geneid download/*.gtf -exon=CDS
+     hgPepPred mm2 generic geneidPep download/*.prot
+
+SGP GENE PREDICTIONS (done)
+     cd ~/mm/bed
+     mkdir sgp
+     cd sgp
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/
+   Get rid of the extra .N in the transcripts with subs.  
+     cd ..
+     cp ~/oo/bed/sgp/subs .
+     subs -e download/*.gtf > /dev/null
+     ldHgGene mm2 sgpGene download/*.gtf -exon=CDS
+     hgPepPred mm2 generic sgpPep download/*.prot
+
 
 TIGR GENE INDEX (todo)
 
@@ -659,16 +768,9 @@ LOAD SOFTBERRY GENES (todo)
      - mkdir softberry
      - cd softberry
      - get ftp://www.softberry.com/pub/SC_MOU_NOV01/softb_mou_genes_nov01.tar.gz
-     - mkdir output
-     - Run the fixFormat.pl routine in
-        ~/mm/bed/softberry like so:
-        ./fixFormat.pl output
-     - This will stick all the properly converted .gff and .pro files in
-     the directory named "output".
-     - cd output
      ldHgGene mm2 softberryGene chr*.gff
-     hgPepPred mm2 softberry *.pro
-     hgSoftberryHom mm2 *.pro
+     hgPepPred mm2 softberry *.protein
+     hgSoftberryHom mm2 *.protein
 
 LOAD ACEMBLY (todo)
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and

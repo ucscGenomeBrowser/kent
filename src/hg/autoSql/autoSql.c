@@ -12,6 +12,8 @@
 #include "errabort.h"
 #include "linefile.h"
 #include "obscure.h"
+#include "dystring.h"
+#include "cheapcgi.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -20,9 +22,10 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "a structure in database and loading it back into memory\n"
 	 "based on a specification file\n"
 	 "usage:\n"
-	 "    autoSql specFile outRoot\n"
+	 "    autoSql specFile outRoot {optional: -dbLink} \n"
 	 "This will create outRoot.sql outRoot.c and outRoot.h based\n"
-	 "on the contents of specFile");
+	 "on the contents of specFile. The -dbLink flag optionally\n"
+	 "generates code to execute queries and updates of the table.\n");
 }
 
 enum lowTypes
@@ -656,14 +659,16 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct dbObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
-		fprintf(f, "ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
+		fprintf(f, "if(s != NULL)\n");
+		fprintf(f, "   ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
 		break;
 		}
 	    case t_simple:
 		{
 		struct dbObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
-		fprintf(f, "%sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
+		fprintf(f, "if(s != NULL)\n");
+		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
 		}
 	    }
 	}
@@ -866,35 +871,33 @@ fprintf(f, "return list;\n");
 fprintf(f, "}\n\n");
 }
 
-void dynamicLoadWherePrintPrototype(char *tableName, FILE *f, boolean addSemi)
+void dynamicLoadByQueryPrintPrototype(char *tableName, FILE *f, boolean addSemi)
 /* Print out function prototype and opening comment. */
 {
 fprintf(f, 
-   "struct %s *%sLoadWhere(struct sqlConnection *conn, char *table, char *where)%s\n", 
+   "struct %s *%sLoadByQuery(struct sqlConnection *conn, char *query)%s\n", 
     tableName, tableName,
     (addSemi ? ";" : ""));
-fprintf(f, "/* Load all %s from table that satisfy where clause. The\n", tableName);
-fprintf(f, " * where clause may be NULL in which case whole table is loaded\n");
+fprintf(f, "/* Load all %s from table that satisfy the query given.  \n", tableName);
+fprintf(f, " * Where query is of the form 'select * from example where something=something'\n");
+fprintf(f, " * or 'select example.* from example, anotherTable where example.something = \n");
+fprintf(f, " * anotherTable.something'.\n");
 fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
 }
 
-void dynamicLoadWhere(struct dbObject *table, FILE *f, FILE *hFile)
-/* Create C code to build a list from a query. */
+void dynamicLoadByQuery(struct dbObject *table, FILE *f, FILE *hFile)
+/* Create C code to build a list from a query to database. */
 {
 char *tableName = table->name;
-dynamicLoadWherePrintPrototype(tableName, hFile, TRUE);
+dynamicLoadByQueryPrintPrototype(tableName, hFile, TRUE);
 fprintf(hFile, "\n");
-dynamicLoadWherePrintPrototype(tableName, f, FALSE);
+dynamicLoadByQueryPrintPrototype(tableName, f, FALSE);
 fprintf(f, "{\n");
 fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
-fprintf(f, "struct dyString *query = dyStringNew(256);\n");
 fprintf(f, "struct sqlResult *sr;\n");
 fprintf(f, "char **row;\n");
 fprintf(f, "\n");
-fprintf(f, "dyStringPrintf(query, \"select * from %%s\", table);\n");
-fprintf(f, "if (where != NULL)\n");
-fprintf(f, "    dyStringPrintf(query, \" where %%s\", where);\n");
-fprintf(f, "sr = sqlGetResult(conn, query->string);\n");
+fprintf(f, "sr = sqlGetResult(conn, query);\n");
 fprintf(f, "while ((row = sqlNextRow(sr)) != NULL)\n");
 fprintf(f, "    {\n");
 fprintf(f, "    el = %sLoad(row);\n", tableName);
@@ -902,10 +905,331 @@ fprintf(f, "    slAddHead(&list, el);\n");
 fprintf(f, "    }\n");
 fprintf(f, "slReverse(&list);\n");
 fprintf(f, "sqlFreeResult(&sr);\n");
-fprintf(f, "dyStringFree(&query);\n");
 fprintf(f, "return list;\n");
 fprintf(f, "}\n\n");
 }
+
+void dynamicSaveToDbPrintPrototype(char *tableName, FILE *f, boolean addSemi)
+/* Print out function prototype and opening comment. */
+{
+fprintf(f,
+	"void %sSaveToDb(struct sqlConnection *conn, struct %s *el, char *tableName, int updateSize)%s\n", 
+	tableName, tableName, (addSemi ? ";" : ""));
+fprintf(f,
+	"/* Save %s as a row to the table specified by tableName. \n", tableName);
+fprintf(f, " * As blob fields may be arbitrary size updateSize specifies the approx size\n");
+fprintf(f, " * of a string that would contain the entire query. Arrays of native types are\n");
+fprintf(f, " * converted to comma separated strings and loaded as such, User defined types are\n");
+fprintf(f, " * inserted as NULL. Note that strings must be escaped to allow insertion into the database.\n");
+fprintf(f, " * For example \"autosql's features include\" --> \"autosql\\'s features include\" \n");
+fprintf(f, " * If worried about this use %sSaveToDbEscaped() */\n", tableName);
+}
+
+boolean lastArrayType(struct column *colList)
+/* if there are any more string types returns TRUE else returns false */
+{
+struct column *col;
+for(col = colList; col != NULL; col = col->next)
+    {
+    struct lowTypeInfo *lt = col->lowType;
+    enum lowTypes type = lt->type;
+    if((col->isArray || col->isList) && type != t_object && type != t_simple)
+	return FALSE;
+    }
+return TRUE;
+}
+
+boolean noMoreColumnsToInsert(struct column *colList)
+{
+struct column *col;
+for(col = colList; col != NULL; col = col->next)
+    {
+    if(col->obType == NULL)
+	return FALSE;
+    }
+return TRUE;
+}
+
+void dynamicSaveToDb(struct dbObject *table, FILE *f, FILE *hFile)
+/* create C code that will save a table structure to the database */
+{
+char *tableName = table->name;
+struct column *col;
+struct dyString *colInsert = newDyString(1024);           /* code to associate columns with printf format characters the insert statement */
+struct dyString *stringDeclarations = newDyString(1024);  /* code to declare necessary strings */
+struct dyString *stringFrees = newDyString(1024);         /* code to free necessary strings */
+struct dyString *update = newDyString(1024);              /* code to do the update statement itself */
+struct dyString *stringArrays = newDyString(1024);        /* code to convert arrays to strings */
+boolean hasArray = FALSE;
+dynamicSaveToDbPrintPrototype(tableName, hFile, TRUE);
+fprintf(hFile, "\n");
+dynamicSaveToDbPrintPrototype(tableName, f, FALSE);
+fprintf(f, "{\n");
+fprintf(f, "struct dyString *update = newDyString(updateSize);\n");
+dyStringPrintf(update, "dyStringPrintf(update, \"insert into %%s values ( ");
+dyStringPrintf(stringDeclarations, "char ");
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    char *colName = col->name;
+    char *outString = NULL; /* printf formater for column, i.e. %d for int, '%s' for string */
+    struct dbObject *obType = col->obType;
+    struct lowTypeInfo *lt = col->lowType;
+    enum lowTypes type = lt->type;
+    char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
+    boolean colInsertFlag = TRUE; /* if column is not a native type insert NULL with no associated variable */
+    switch(type)
+	{
+	case t_char:
+	case t_string:
+	case t_lstring:
+	    outString = "'%s'";
+
+	    break;
+	case t_float:
+	    outString = "%f";
+	    break;
+	case t_int:
+	case t_short:
+	case t_byte:
+	    outString = "%d";
+	    break;
+	case t_uint:
+	case t_ushort:
+	case t_ubyte:
+	    outString = "%u";
+	}
+    sprintf(colInsertBuff, " el->%s", colName);
+
+    /* it gets pretty ugly here as we have to handle arrays of objects.. */
+    if(col->isArray || col->isList)
+	{
+	/* if we have a basic array type convert it to a string representation and insert into db */
+	if(type != t_object && type != t_simple )
+	    {
+	    hasArray = TRUE;
+	    outString = "'%s'";
+	    /* if this is the last array put a semi otherwise a comment */
+	    if(lastArrayType(col->next))
+		dyStringPrintf(stringDeclarations, " *%sArray;", colName);
+	    else 
+		dyStringPrintf(stringDeclarations, " *%sArray,", colName);
+	    /* set up call to convert array to char * */
+	    if(col->fixedSize)
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, %d);\n", colName, lt->listyName, colName, col->fixedSize);
+	    else
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, el->%s);\n", colName, lt->listyName, colName, col->linkedSizeName);
+	    /* code to free allocated strings */
+	    dyStringPrintf(stringFrees, "freez(&%sArray);\n", colName);
+	    sprintf(colInsertBuff, " %sArray ", colName);
+	    }
+	/* if we have an object, or simple data type just insert NULL, don't wrap the whole thing up into one string.*/
+	else
+	    {
+	    warn("The user defined type \"%s\" in table \"%s\" will be saved to the database as NULL.", col->obType->name, tableName);
+	    outString = " NULL ";
+	    colInsertFlag = FALSE;
+	    }
+	}
+    /* can't have a comma at the end of the list */
+    if(col->next == NULL)
+	dyStringPrintf(update, "%s", outString);
+    else
+	dyStringPrintf(update, "%s,",outString);
+
+    /* if we still have more columns to insert add a comma */
+    if(!noMoreColumnsToInsert(col->next))
+	strcat(colInsertBuff, ", ");
+
+    /* if we have a column to append do so */
+    if(colInsertFlag)
+	dyStringPrintf(colInsert, "%s", colInsertBuff);
+    }
+if(hasArray)
+    {
+    fprintf(f, "%s\n", stringDeclarations->string);
+    }
+fprintf(f, "%s", stringArrays->string);
+fprintf(f, "%s", update->string);
+fprintf(f, ")\", \n\ttableName, ");
+fprintf(f, "%s);\n", colInsert->string);
+fprintf(f, "sqlUpdate(conn, update->string);\n");
+fprintf(f, "freeDyString(&update);\n");
+if(hasArray)
+    {
+    fprintf(f, "%s", stringFrees->string);
+    }
+fprintf(f, "}\n\n");
+dyStringFree(&colInsert);
+dyStringFree(&stringDeclarations);
+dyStringFree(&stringFrees);
+dyStringFree(&update);
+}
+
+void dynamicSaveToDbEscapedPrintPrototype(char *tableName, FILE *f, boolean addSemi)
+/* Print out function prototype and opening comment. */
+{
+fprintf(f,
+	"void %sSaveToDbEscaped(struct sqlConnection *conn, struct %s *el, char *tableName, int updateSize)%s\n", 
+	tableName, tableName, (addSemi ? ";" : ""));
+fprintf(f,
+	"/* Save %s as a row to the table specified by tableName. \n", tableName);
+fprintf(f, " * As blob fields may be arbitrary size updateSize specifies the approx size.\n");
+fprintf(f, " * of a string that would contain the entire query. Automatically \n");
+fprintf(f, " * escapes all simple strings (not arrays of string) but may be slower than %sSaveToDb().\n", tableName);
+fprintf(f, " * For example automatically copies and converts: \n");
+fprintf(f, " * \"autosql's features include\" --> \"autosql\\'s features include\" \n");
+fprintf(f, " * before inserting into database. */ \n");
+}
+
+boolean lastStringType(struct column *colList)
+/* if there are any more string types returns TRUE else returns false */
+{
+struct column *col;
+for(col = colList; col != NULL; col = col->next)
+    {
+    struct lowTypeInfo *lt = col->lowType;
+    enum lowTypes type = lt->type;
+    if(type == t_char || type == t_string || type == t_lstring || ((col->isArray || col->isList) && type != t_object && type != t_simple))
+	return FALSE;
+    }
+return TRUE;
+}
+
+void dynamicSaveToDbEscaped(struct dbObject *table, FILE *f, FILE *hFile)
+/* create C code that will save a table structure to the database with 
+ * all strings escaped. */
+{
+char *tableName = table->name;
+struct column *col;
+/* We need to do a lot of things with the string datatypes use
+ * these buffers to only cycle through columns once */
+struct dyString *colInsert = newDyString(1024);          /* code to associate columns with printf format characters the insert statement */
+struct dyString *stringDeclarations = newDyString(1024); /* code to declare necessary strings */
+struct dyString *stringFrees = newDyString(1024);        /* code to free necessary strings */
+struct dyString *update = newDyString(1024);             /* code to do the update statement itself */
+struct dyString *stringEscapes = newDyString(1024);      /* code to escape strings */
+struct dyString *stringArrays = newDyString(1024);       /* code to convert arrays to strings */
+boolean hasString = FALSE;
+boolean hasArray = FALSE;
+dynamicSaveToDbEscapedPrintPrototype(tableName, hFile, TRUE);
+fprintf(hFile, "\n");
+dynamicSaveToDbEscapedPrintPrototype(tableName, f, FALSE);
+fprintf(f, "{\n");
+fprintf(f, "struct dyString *update = newDyString(updateSize);\n");
+dyStringPrintf(update, "dyStringPrintf(update, \"insert into %%s values ( ");
+dyStringPrintf(stringDeclarations, "char ");
+
+/* loop through each of the columns and add things appropriately */
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    char *colName = col->name;
+    char *outString = NULL; /* printf formater for column, i.e. %d for int, '%s' for string */
+    struct lowTypeInfo *lt = col->lowType;
+    enum lowTypes type = lt->type;
+    char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
+    struct dbObject *obType = col->obType;
+    boolean colInsertFlag = TRUE; /* if column is not a native type insert NULL with no associated variable */
+    switch(type)
+	{
+	case t_char:
+	case t_string:
+	case t_lstring:
+	    /* if of string type have to do all the work of declaring, escaping,
+	     * and freeing */
+	    if(!col->isArray && !col->isList)
+		{
+		hasString = TRUE;
+		outString = "'%s'";
+		/* code to escape strings */
+		dyStringPrintf(stringEscapes, "%s = sqlEscapeString(el->%s);\n", colName, colName);
+		/* code to free strings */
+		dyStringPrintf(stringFrees, "freez(&%s);\n", colName);
+		sprintf(colInsertBuff, " %s", colName);
+		if(lastStringType(col->next))
+		    dyStringPrintf(stringDeclarations, " *%s;", colName);
+		else 
+		    dyStringPrintf(stringDeclarations, " *%s,", colName);
+		}
+	    break;
+	case t_float:
+	    outString = "%f";
+	    sprintf(colInsertBuff, "el->%s ", colName);
+	    break;
+	case t_int:
+	case t_short:
+	case t_byte:
+	    outString = "%d";
+	    sprintf(colInsertBuff, "el->%s ", colName);
+	    break;
+	case t_uint:
+	case t_ushort:
+	case t_ubyte:
+	    outString = "%u";
+	    sprintf(colInsertBuff, "el->%s ", colName);	
+	}
+    if(col->isArray || col->isList)
+	{
+	/* if we have a basic array type convert it to a string representation and insert into db */
+	if(type != t_object && type != t_simple )
+	    {
+	    hasArray = TRUE;
+	    outString = "'%s'";
+	    if(lastStringType(col->next) && lastArrayType(col->next))
+		dyStringPrintf(stringDeclarations, " *%sArray;", colName);
+	    else 
+		dyStringPrintf(stringDeclarations, " *%sArray,", colName);
+	    if(col->fixedSize)
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, %d);\n", colName, lt->listyName, colName, col->fixedSize);
+	    else
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, el->%s);\n", colName, lt->listyName, colName, col->linkedSizeName);
+	    dyStringPrintf(stringFrees, "freez(&%sArray);\n", colName);
+	    sprintf(colInsertBuff, " %sArray ", colName);
+	    }
+	/* if we have an object, or simple data type just insert NULL, don't wrap the whole thing up into one string.*/
+	else
+	    {
+	    warn("The user defined type \"%s\" in table \"%s\" will be saved to the database as NULL.", col->obType->name, tableName);
+	    outString = " NULL ";
+	    colInsertFlag = FALSE;
+	    }
+	}
+    /* can't have comma at the end of the insert */
+    if(col->next == NULL)
+	dyStringPrintf(update, "%s", outString);
+    else
+	dyStringPrintf(update, "%s,",outString);
+
+    /* if we still have more columns to insert add a comma */
+    if(!noMoreColumnsToInsert(col->next))
+	strcat(colInsertBuff, ", ");
+    /* if we have a column to append do so */
+    if(colInsertFlag)
+	dyStringPrintf(colInsert, "%s", colInsertBuff);
+    }
+if(hasString || hasArray)
+    {
+    fprintf(f, "%s\n", stringDeclarations->string);
+    fprintf(f, "%s\n", stringEscapes->string);
+    }
+fprintf(f, "%s", stringArrays->string);
+fprintf(f, "%s", update->string);
+fprintf(f, ")\", \n\ttableName, ");
+fprintf(f, "%s);\n", colInsert->string);
+fprintf(f, "sqlUpdate(conn, update->string);\n");
+fprintf(f, "freeDyString(&update);\n");
+if(hasString)
+    {
+    fprintf(f, "%s", stringFrees->string);
+    }
+fprintf(f, "}\n\n");
+dyStringFree(&colInsert);
+dyStringFree(&stringDeclarations);
+dyStringFree(&stringEscapes);
+dyStringFree(&stringFrees);
+dyStringFree(&update);
+}
+
+
 
 void makeFree(struct dbObject *table, FILE *f, FILE *hFile)
 /* Make function that frees a dynamically allocated table. */
@@ -1145,7 +1469,9 @@ FILE *cFile;
 FILE *hFile;
 FILE *sqlFile;
 char defineName[256];
-
+boolean doDbLoadAndSave = FALSE;
+cgiSpoof(&argc, argv);
+doDbLoadAndSave = cgiBoolean("dbLink");
 if (argc != 3)
     usage();
 
@@ -1184,6 +1510,12 @@ sprintf(defineName, "%s_H", outRoot);
 touppers(defineName);
 fprintf(hFile, "#ifndef %s\n", defineName);
 fprintf(hFile, "#define %s\n\n", defineName);
+if(doDbLoadAndSave)
+    {
+    fprintf(hFile, "#ifndef JKSQL_H\n");
+    fprintf(hFile, "#include \"jksql.h\"\n");
+    fprintf(hFile, "#endif\n\n");
+    }
 
 /* Put the usual includes in .c file, and also include .h file we are
  * generating. */
@@ -1206,7 +1538,12 @@ for (obj = objList; obj != NULL; obj = obj->next)
 	    staticLoadRow(obj, cFile, hFile);
 	dynamicLoadRow(obj, cFile, hFile);
 	dynamicLoadAll(obj, cFile, hFile);
-	dynamicLoadWhere(obj, cFile, hFile);
+	if(doDbLoadAndSave)
+	    {
+	    dynamicLoadByQuery(obj, cFile, hFile);
+	    dynamicSaveToDb(obj, cFile, hFile);
+	    dynamicSaveToDbEscaped(obj, cFile, hFile);
+	    }
 	}
     makeCommaIn(obj, cFile, hFile);
     if (!obj->isSimple)
@@ -1218,7 +1555,10 @@ for (obj = objList; obj != NULL; obj = obj->next)
     printf("Made %s object\n", obj->name);
     }
 
+fprintf(cFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
+fprintf(hFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
 /* Finish off H file bracket. */
 fprintf(hFile, "#endif /* %s */\n\n", defineName);
 return 0;
 }
+

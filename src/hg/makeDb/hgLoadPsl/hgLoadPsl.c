@@ -10,6 +10,7 @@
 boolean tNameIx = FALSE;
 boolean noBin = FALSE;
 boolean xaFormat = FALSE;
+boolean exportOutput = FALSE;
 char *clTableName = NULL;
 
 void usage()
@@ -25,6 +26,11 @@ errAbort(
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
   "   -tNameIx  add target name index\n"
   "   -xa    Include sequence info\n"
+  "   -export - create output in a manner similar to mysqlexport -T.\n"
+  "      This create a sql script $table.sql and tab seperate file $table.txt\n"
+  "      Useful when a psl is to be loaded in multiple databases or to avoid\n"
+  "      writing an intermediate PSL file when used in a pipeline. The database is\n"
+  "      is not loaded and db parameter is ignored\n"
   "   -nobin Repress binning");
 }
 
@@ -61,17 +67,12 @@ char *indexString =
     "INDEX(%stEnd)\n"
 ")\n";
 
-void hgLoadPsl(char *database, int pslCount, char *pslNames[])
-/* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
+
+void createTable(struct sqlConnection *conn, char* table)
 {
-int i;
-char table[128];
-char *pslName;
-struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
+struct dyString *sqlCmd = newDyString(2048);
 char *extraIx = (tNameIx ? "tName(8)," : "" );
 char *binIxString = "";
-
 if (!noBin)
     {
     if (tNameIx)
@@ -79,42 +80,61 @@ if (!noBin)
     else
         binIxString = "INDEX(bin),\n";
     }
+dyStringPrintf(sqlCmd, createString, table, 
+    (noBin ? "" : "bin smallint unsigned not null,\n"));
+if (xaFormat)
+    {
+    dyStringPrintf(sqlCmd, "qSeq longblob not null,\n");
+    dyStringPrintf(sqlCmd, "tSeq longblob not null,\n");
+    }
+dyStringPrintf(sqlCmd, indexString, binIxString, extraIx, extraIx);
+
+if (exportOutput)
+    {
+    char sqlFName[1024];
+    FILE* fh;
+    sprintf(sqlFName, "%s.sql", table);
+    fh = mustOpen(sqlFName, "w");
+    mustWrite(fh, sqlCmd->string, sqlCmd->stringSize);
+    carefulClose(&fh);
+    }
+else
+    sqlRemakeTable(conn, table, sqlCmd->string);
+dyStringFree(&sqlCmd);
+}
+
+void hgLoadPsl(char *database, int pslCount, char *pslNames[])
+/* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
+{
+int i;
+char table[128];
+char *pslName;
+struct sqlConnection *conn = NULL;
+struct dyString *ds = newDyString(2048);
+if (!exportOutput)
+    conn = sqlConnect(database);
+
 for (i = 0; i<pslCount; ++i)
     {
+    char tabFile[1024];
     pslName = pslNames[i];
     printf("Processing %s\n", pslName);
     if (clTableName != NULL)
         strcpy(table, clTableName);
     else
 	splitPath(pslName, NULL, table, NULL);
-    if (sqlTableExists(conn, table))
-	{
-	dyStringClear(ds);
-	dyStringPrintf(ds, "drop table %s", table);
-	sqlUpdate(conn, ds->string);
-	}
-    dyStringClear(ds);
-    dyStringPrintf(ds, createString, table, 
-        (noBin ? "" : "bin smallint unsigned not null,\n"));
-    if (xaFormat)
-	{
-        dyStringPrintf(ds, "qSeq longblob not null,\n");
-        dyStringPrintf(ds, "tSeq longblob not null,\n");
-	}
-    dyStringPrintf(ds, indexString, binIxString, extraIx, extraIx);
-    sqlUpdate(conn, ds->string);
-    dyStringClear(ds);
     if (noBin)
-	{
-	dyStringPrintf(ds, 
-	   "LOAD data local infile '%s' into table %s", pslName, table);
-	sqlUpdate(conn, ds->string);
-	}
+        strcpy(tabFile, pslName);
     else
         {
-	char *tab = "psl.tab";
-	FILE *f = mustOpen(tab, "w");
+        FILE *f;
 	struct lineFile *lf = NULL;
+        if (exportOutput)
+            sprintf(tabFile, "%s.txt", table);
+        else
+            strcpy(tabFile, "psl.tab");
+
+	f = mustOpen(tabFile, "w");
 	if (xaFormat)
 	    {
 	    struct xAli *xa;
@@ -141,12 +161,18 @@ for (i = 0; i<pslCount; ++i)
 	    lineFileClose(&lf);
 	    }
 	carefulClose(&f);
-	dyStringPrintf(ds, 
-	   "LOAD data local infile '%s' into table %s", tab, table);
-	sqlUpdate(conn, ds->string);
-	}
+        }
+    createTable(conn, table);
+    if (!exportOutput)
+        {
+        dyStringClear(ds);
+        dyStringPrintf(ds, 
+           "LOAD data local infile '%s' into table %s", tabFile, table);
+        sqlUpdate(conn, ds->string);
+        }
     }
-sqlDisconnect(&conn);
+if (conn != NULL)
+    sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
@@ -156,8 +182,14 @@ optionHash(&argc, argv);
 tNameIx = optionExists("tNameIx");
 clTableName = optionVal("table", NULL);
 xaFormat = optionExists("xa");
+exportOutput = optionExists("export");
+if (noBin && exportOutput)
+    errAbort("-nobin not supported with -export\n");
 if (argc < 3)
     usage();
+/* force progress message out immediatly */
+setlinebuf(stdout);
+setlinebuf(stderr);
 hgLoadPsl(argv[1], argc-2, argv+2);
 return 0;
 }

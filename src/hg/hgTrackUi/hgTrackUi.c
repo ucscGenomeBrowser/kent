@@ -196,6 +196,7 @@ int humMusHeightPer = atoi(cartUsualString(cart, "humMus.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "humMus.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "humMus.anti.alias", "on");
 char *fill = cartUsualString(cart, "humMus.fill", "1");
+int humMusLineGap = atoi(cartUsualString(cart, "humMus.interp.gap", "200"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("humMus.linear.interp", interpolate );
@@ -218,8 +219,144 @@ printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("humMus.heightPer", humMusHeightPer, 5 );
 printf("&nbsp;pixels");
 
+printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("humMus.interp.gap", humMusLineGap, 10 );
+printf("&nbsp;bases");
+
+
+}
+void blastzHgRefUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzHgRef.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzHgRef.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzHgRef.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
 }
 
+void blastzHgUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzHg.color", "off");
+
+printf("<p><b>Color track based on chromosome</b>: ");
+cgiMakeRadioButton("blastzHg.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzHg.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+void blastzMm2Ui(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzMm2.color", "off");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("blastzMm2.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzMm2.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void blastzMm2ScUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzMm2Sc.color", "off");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("blastzMm2Sc.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzMm2Sc.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void blastzMm2RefUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blastzMm2Ref.color", "off");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("blastzMm2Ref.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blastzMm2Ref.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void aarMm2Ui(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "aarMm2.color", "off");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("aarMm2.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("aarMm2.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void mouseOrthoUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "mouseOrtho.color", "on");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("mouseOrtho.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("mouseOrtho.color", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+
+}
+
+void mouseSynUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "mouseSyn.color", "on");
+/*
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("mouseSyn.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("mouseSyn.color", "off", sameString(aa, "off"));
+printf(" off ");
+printf("<br><br>");
+*/
+
+}
+
+void blatMusUi(struct trackDb *tdb)
+/* put up UI for the selecting rainbow chromosome color or intensity score*/
+{
+char *aa = cartUsualString(cart, "blatMus.color", "off");
+
+printf("<p><b>Color track based on mouse chromosome</b>: ");
+cgiMakeRadioButton("blatMus.color", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("blatMus.color", "off", sameString(aa, "off"));
+printf(" off ");
+printf("<br><br>");
+
+}
 
 void zooUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
@@ -248,6 +385,30 @@ printf(" off ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("zoo.heightPer", zooHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+void affyTranscriptomeUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
+{
+int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
+char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
+char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
+
+
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("affyTranscriptome.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("affyTranscriptome.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("affyTranscriptome.heightPer", affyTranscriptomeHeightPer, 5 );
 printf("&nbsp;pixels");
 
 }
@@ -371,6 +532,26 @@ else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
     humMusUi(tdb);
+else if (sameString(track, "blastzMm2"))
+    blastzMm2Ui(tdb);
+else if (sameString(track, "blastzMm2Sc"))
+    blastzMm2ScUi(tdb);
+else if (sameString(track, "blastzMm2Ref"))
+    blastzMm2RefUi(tdb);
+else if (sameString(track, "blastzHgRef"))
+    blastzHgRefUi(tdb);
+else if (sameString(track, "blastzHg"))
+    blastzHgUi(tdb);
+else if (sameString(track, "aarMm2"))
+    aarMm2Ui(tdb);
+else if (sameString(track, "mouseOrtho"))
+    mouseOrthoUi(tdb);
+else if (sameString(track, "mouseSyn"))
+    mouseSynUi(tdb);
+else if (sameString(track, "blatMus"))
+    blatMusUi(tdb);
+else if (sameString(track, "affyTranscriptome"))
+    affyTranscriptomeUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
@@ -400,7 +581,7 @@ struct trackDb *tdb;
 struct sqlConnection *conn;
 char where[256];
 char *track;
-
+char *trackDb = hTrackDbName();
 cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
@@ -408,7 +589,7 @@ hSetDb(database);
 chromosome = cartString(cart, "c");
 conn = hAllocConn();
 sprintf(where, "tableName = '%s'", track);
-tdb = trackDbLoadWhere(conn, "trackDb", where);
+tdb = trackDbLoadWhere(conn, trackDb, where);
 hLookupStringsInTdb(tdb, database);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);

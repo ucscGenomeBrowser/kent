@@ -43,7 +43,11 @@
 #include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "mouseOrtho.h"
+#include "humanParalog.h"
+#include "synteny100000.h"
 #include "mouseSyn.h"
+#include "syntenyBerk.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -63,8 +67,14 @@
 #define MAX_CONTROL_COLUMNS 5
 #define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
+#define CHROMOSOME_SHADES 4
+#define LOW 1
+#define MEDIUM 2
+#define BRIGHT 3
+#define MAXPIXELS 14000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
+int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
@@ -72,6 +82,15 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
+/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 colors allocated */
+boolean chromosomeColorsMade = FALSE; /* Have the 3 shades of 8 chromosome colors been allocated? */
+
+Color chromColor[CHROMOSOME_SHADES * 8];
+
+int z;
+int maxCount ;
+int bestColor;
+int maxChromShade = CHROMOSOME_SHADES - 1;
 int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
@@ -82,7 +101,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
-char *position; 		/* Name of position. */
+char *position = NULL; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
@@ -103,6 +122,16 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     } tl;
 
+void printHtmlComment(char *comment)
+/*
+ Function to print output as a comment so it is not seen in the HTML
+ output but only in the HTML source
+param comment _ The comment to be printed
+*/
+{
+printf("\n<!-- DEBUG: %s -->\n", comment);
+//fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
+}
 
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
@@ -524,6 +553,28 @@ if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
 }
+void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
+	int xOff, int y, int height, Color color, int score)
+/* Draw a box scaled from chromosome to window coordinates. */
+{
+int i;
+int x1 = round((double)(chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+mgDrawBox(mg, x1, y, w, height, color);
+if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
+    {
+    for (i = x1 ; i < x1+w; i++)
+        {
+        assert(i<MAXPIXELS);
+        z = colorBin[i][color] ;  /*pick color of highest scoreing alignment  for this pixel */
+        colorBin[i][color] = (z > score)? z : score;
+        }
+    }
+}
+
 
 void filterItems(struct trackGroup *tg, 
     boolean (*filter)(struct trackGroup *tg, void *item),
@@ -545,6 +596,7 @@ else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
     color = TRUE;
+
 for (el = tg->items; el != NULL; el = next)
     {
     next = el->next;
@@ -593,6 +645,7 @@ struct simpleFeature
 
 enum {lfSubXeno = 1};
 enum {lfSubSample = 2};
+enum {lfWithBarbs = 3}; /* turn on barbs to show direction based on strand field */
 
 struct linkedFeatures
 {
@@ -679,6 +732,7 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
 /* Free up a linked features series list. */
 {
 struct linkedFeaturesSeries *lfs;
+
 for (lfs = *pList; lfs != NULL; lfs = lfs->next)
     freeLinkedFeatures(&lfs->features);
 slFreeList(pList);
@@ -695,6 +749,7 @@ void linkedFeaturesToLinkedFeaturesSeries(struct trackGroup *tg)
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
+
 for (lf = tg->items; lf != NULL; lf = lf->next) 
     { 
     AllocVar(lfs);
@@ -715,6 +770,7 @@ void linkedFeaturesSeriesToLinkedFeatures(struct trackGroup *tg)
 {
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
+
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
     slAddHead(&lfList, lfs->features)
@@ -816,6 +872,89 @@ mgMakeColorGradient(mg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
+void makeChromosomeShades(struct memGfx *mg) 
+/* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
+{
+static struct rgbColor blk = {0, 0, 0};
+static struct rgbColor white = {255, 255, 255};
+static struct rgbColor chrom1 = {255, 0, 0};  /* red */
+static struct rgbColor chrom2 = {255, 153, 0}; /* orange */
+static struct rgbColor chrom3 = {255, 255, 0}; /* yellow */
+static struct rgbColor chrom4 = {0, 255, 0}; /* green */
+static struct rgbColor chrom5 = {0, 255, 255}; /* cyan? aka lt blue */
+static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
+static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
+static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
+chromColor[0] = mgFindColor(mg, 0,0, 0);
+chromColor[1] = mgFindColor(mg, 255,204, 204);  /* light red */
+chromColor[2] = mgFindColor(mg, 204,0, 0);      /* med red */
+chromColor[3] = mgFindColor(mg, 255,0, 0);      /* bright red */
+
+chromColor[4] = mgFindColor(mg, 255,102,0);     /* bright orange */
+chromColor[5] = mgFindColor(mg, 255,153,0);
+chromColor[6] = mgFindColor(mg, 255,0,204);     /* magenta */
+
+chromColor[7] = mgFindColor(mg, 255,255,204);     /* light yellow  */
+chromColor[8] = mgFindColor(mg, 255,255,153);   /* med yellow */
+chromColor[9] = mgFindColor(mg, 255,255,0);     /* bright yellow*/
+
+chromColor[10] = mgFindColor(mg, 0,255,0);      /*bt gr*/
+chromColor[11] = mgFindColor(mg, 204,255,0);    /* yellow green */
+chromColor[12] = mgFindColor(mg, 102,102,0);  /* dark  green*/
+
+chromColor[13] = mgFindColor(mg, 204,255,255);  /*lt cyan*/
+chromColor[14] = mgFindColor(mg, 153,204,204);  /* gray cyan */
+chromColor[15] = mgFindColor(mg, 0,255,255);    /*med cyan*/
+
+chromColor[16] = mgFindColor(mg, 153,204,255);  /*light med blue */
+chromColor[17] = mgFindColor(mg, 102,153,255);  /* med blue */
+chromColor[18] = mgFindColor(mg, 0,0 ,204);     /* deep blue */
+
+chromColor[19] = mgFindColor(mg, 204,153,255);  /*lt violet*/
+chromColor[20] = mgFindColor(mg, 204,051,255);  /* med violet */
+chromColor[21] = mgFindColor(mg, 153,0,204);    /* dark violet */
+
+chromColor[22] = mgFindColor(mg, 204,204,204); /* light gray */
+chromColor[23] = mgFindColor(mg, 153,153,153); /* med gray */
+chromColor[24] = mgFindColor(mg, 102,102,102);  /* med gray */
+
+chromColor[25] = mgFindColor(mg, 255,255,255); /* black */
+/*
+mgMakeColorGradient(mg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
+mgMakeColorGradient(mg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
+mgMakeColorGradient(mg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
+mgMakeColorGradient(mg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
+mgMakeColorGradient(mg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
+mgMakeColorGradient(mg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
+mgMakeColorGradient(mg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
+mgMakeColorGradient(mg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
+chromColor[0] = kshadesOfChrom1[LOW];
+chromColor[1] = shadesOfChrom1[MEDIUM];
+chromColor[2] = shadesOfChrom1[BRIGHT];
+chromColor[3] = shadesOfChrom2[LOW];
+chromColor[4] = shadesOfChrom2[MEDIUM];
+chromColor[5] = shadesOfChrom2[BRIGHT];
+chromColor[6] = shadesOfChrom3[LOW];
+chromColor[7] = shadesOfChrom3[MEDIUM];
+chromColor[8] = shadesOfChrom3[BRIGHT];
+chromColor[9] = shadesOfChrom4[LOW];
+chromColor[10] = shadesOfChrom4[MEDIUM];
+chromColor[11] = shadesOfChrom4[BRIGHT];
+chromColor[12] = shadesOfChrom5[LOW];
+chromColor[13] = shadesOfChrom5[MEDIUM];
+chromColor[14] = shadesOfChrom5[BRIGHT];
+chromColor[15] = shadesOfChrom6[LOW];
+chromColor[16] = shadesOfChrom6[MEDIUM];
+chromColor[17] = shadesOfChrom6[BRIGHT];
+chromColor[18] = shadesOfChrom7[LOW];
+chromColor[19] = shadesOfChrom7[MEDIUM];
+chromColor[20] = shadesOfChrom7[BRIGHT];
+chromColor[21] = shadesOfChrom8[LOW];
+chromColor[22] = shadesOfChrom8[MEDIUM];
+chromColor[23] = shadesOfChrom8[BRIGHT];
+*/
+chromosomeColorsMade = TRUE;
+}
 
 int grayInRange(int val, int minVal, int maxVal)
 /* Return gray shade corresponding to a number from minVal - maxVal */
@@ -909,99 +1048,105 @@ double scale = width/(double)baseWidth;
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
+memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
+
 if (tg->itemColor)	/* Item color overrides spectrum processing. */
+    {
     shades = NULL;
+    }
 
 if (vis == tvDense && shades)
+    {
     slSort(&tg->items, cmpLfWhiteToBlack);
+    }
+
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
     int midY = y + midLineOff;
     int compCount = 0;
     int w;
     int prevEnd = -1;
-    
+
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
-	if (lf->filterColor > 0)
-	    color = lf->filterColor;
-	else if (tg->itemColor)
-	    color = tg->itemColor(tg, lf, mg);
-	else if (shades) 
-	    color =  shades[lf->grayIx+isXeno];
-	tallStart = lf->tallStart;
-	tallEnd = lf->tallEnd;
+        if (lf->filterColor > 0)
+            color = lf->filterColor;
+        else if (tg->itemColor)
+            color = tg->itemColor(tg, lf, mg);
+        else if (shades) 
+            color =  shades[lf->grayIx+isXeno];
+        tallStart = lf->tallStart;
+        tallEnd = lf->tallEnd;
 
-	x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	w = x2-x1;
-	bColor = mgFindColor(mg,0,0,0);
-	if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
-	    {
-	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-		 		     lfs->orientation, color, TRUE);
-	    }
-	if (prevEnd != -1 && !lfs->noLine) 
-	    {
-	    mgDrawBox(mg, x1, midY, w, 1, color);
-	    }
-	prevEnd = lf->end;
+        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+        x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+        w = x2-x1;
+        bColor = mgFindColor(mg,0,0,0);
+        if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
+              {
+              mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
+                           lfs->orientation, color, TRUE);
+              }
+        if (prevEnd != -1 && !lfs->noLine) 
+              {
+              mgDrawBox(mg, x1, midY, w, 1, color);
+              }
+        prevEnd = lf->end;
+      
+        bColor = color;
+        if (lf->components != NULL && !hideLine)
+            {
+            x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+            x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+            w = x2-x1;
+            if(tg->mapsSelf && tg->mapItem)
+            tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
+            if (isFull)
+                {
+                if (shades) bColor =  shades[(lf->grayIx>>1)];
+                mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+                         lf->orientation, bColor, FALSE);
+                }
+            mgDrawBox(mg, x1, midY, w, 1, color);
+            }
+        for (sf = lf->components; sf != NULL; sf = sf->next)
+            {
+            s = sf->start; e = sf->end;
 
-	bColor = color;
-	if (lf->components != NULL && !hideLine)
-	    {
-	    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	    w = x2-x1;
-	    if(tg->mapsSelf && tg->mapItem)
-		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
-	    if (isFull)
-	        {
-	        if (shades) bColor =  shades[(lf->grayIx>>1)];
-		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-		 		     lf->orientation, bColor, FALSE);
-		}
-	    mgDrawBox(mg, x1, midY, w, 1, color);
-	    }
-	for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    s = sf->start;
-	    e = sf->end;
-	    if (s < tallStart)
-	        {
-		e2 = e;
-		if (e2 > tallStart) e2 = tallStart;
-		drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
-		s = e2;
-		}
-	    if (e > tallEnd)
-	        {
-		s2 = s;
-		if (s2 < tallEnd) s2 = tallEnd;
-		drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
-		e = s2;
-		}
-	    if (e > s)
-	        {
-	        drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
-		++compCount;
-		}
-	    if(hgDebug)
-		{
-		char buff[16];
-		int textWidth;
-		int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
-		int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
-		int sw = sx2 - sx1;
-		snprintf(buff, sizeof(buff), "%.2f", lf->score);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw )
-		    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
-		}
-	    }
-	}
-    if (isFull)
-	y += lineHeight;
+            if (s < tallStart)
+                {
+                e2 = e;
+                if (e2 > tallStart) e2 = tallStart;
+                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+                s = e2;
+                }
+            if (e > tallEnd)
+                {
+                s2 = s;
+                if (s2 < tallEnd) s2 = tallEnd;
+                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+                e = s2;
+                }
+            if (e > s)
+                {
+                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color, lf->score);
+                ++compCount;
+                }
+            if(hgDebug)
+                {
+                char buff[16];
+                int textWidth;
+                int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
+                int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
+                int sw = sx2 - sx1;
+                snprintf(buff, sizeof(buff), "%.2f", lf->score);
+                textWidth = mgFontStringWidth(font, buff);
+                if (textWidth <= sw )
+                    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
+                }
+            }
+        }
+    if (isFull) y += lineHeight;
     } 
 }
 
@@ -1030,7 +1175,7 @@ int whichBin( double tmp, double thisMin, double thisMax, int n )
 {
     double atmp = tmp - thisMin;
     double amax = thisMax - thisMin;
-    double ret = (double)atmp * 1000.0 / (double)amax;
+    double ret = (double)atmp * (double)n / (double)amax;
     return( ret );
 }
 
@@ -1073,38 +1218,66 @@ int ybase;
 int tmp;
 
 enum wiggleOptEnum wiggleType;
-char *interpolate;
-char *aa; 
+char *interpolate = NULL;
+char *aa = NULL; 
 int fill; 
+char *lineGapStr = NULL;
+int lineGapSize;
 
 char o1[128]; /* Option 1 - linear interp */
 char o2[128]; /* Option 2 - anti alias */
 char o3[128]; /* Option 3 - fill */
+char o4[128]; /* Option 4 - max gap where interpolation is still done */
 
-double hFactor;
+double hFactor, hFactor2;
 double minRange, maxRange;
+
 int gapPrevEnd = -1;
+
+Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
 
+
 lf=tg->items;    
 if(lf==NULL) return;
+
 
 //take care of cart options
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-interpolate = cartUsualString(cart, o1, "Linear Interpolation");
+snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
+interpolate = cartUsualString(cart, o1, "Only samples");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
+lineGapSize = atoi(cartUsualString(cart, o4, "25000"));
+
+heightPer = tg->heightPer+1;
+hFactor = (double)heightPer/1000.0;
 
 //this information should be moved to the trackDb.ra
 if( sameString( tg->mapName, "humMus" ) )
     {
-    minRange = 500.0;
+    minRange = 300.0;
     maxRange = 1000.0;
+
+
+    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
+    tmp = -whichBin( 0.0, -1.535, 9.49389, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 2.0, -1.535, 9.49389, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 5.0, -1.535, 9.49389, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+    
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
@@ -1117,12 +1290,12 @@ if( sameString( tg->mapName, "humMus" ) )
     maxRange = 1000.0;
     }
 
-heightPer = tg->heightPer+1;
-hFactor = (double)heightPer/1000.0;
+
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     gapPrevEnd = -1;
     prevEnd = -1;
+    
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 	    s = sf->start;
@@ -1131,7 +1304,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         /*mapping or sequencing gap*/
         if( (sf->start - sf->end) == 0 ) 
 	        {
-            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 1000 );
+            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 999 );
             y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
             //if( prevEnd == -5 && gapPrevEnd >= 0 )
 	        //    drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
@@ -1149,7 +1322,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             continue;
 	        }
 	
-        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
+        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 999 );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         ybase = (int)((double)y+hFactor+(double)heightPer);
@@ -1163,10 +1336,13 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-                    if( sameString( aa, "on" )) /*use anti-aliasing*/
-                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
-                    else
-                        mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
+                    if( prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
+                        {
+                        if( sameString( aa, "on" )) /*use anti-aliasing*/
+                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
+                        else
+                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
+                        }
                     }
                 }
 	        }
@@ -1797,6 +1973,7 @@ struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
 
 AllocVar(lf);
+lf->score = (psl->match - psl->misMatch - psl->repMatch);
 lf->grayIx = grayIx;
 if (nameGetsPos)
     {
@@ -2009,12 +2186,13 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 hFreeConn(&conn);
 }
 
-void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
-	char *chromName, boolean isXeno, boolean nameGetsPos)
-/* Return linked features from range of table. */
+void connectedLfFromPslsInRange(struct sqlConnection *conn,
+    struct trackGroup *tg, int start, int end, char *chromName,
+    boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table after have
+ * already connected to database.. */
 {
 char *track = tg->mapName;
-struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -2034,8 +2212,17 @@ if (limitVisibility(tg, lfList) == tvFull)
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 tg->items = lfList;
+}
+
+void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+	char *chromName, boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
+	isXeno, nameGetsPos);
+hFreeConn(&conn);
 }
 
 #ifdef FUREY_CODE
@@ -3002,6 +3189,9 @@ int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
 int invPpt;
+int midLineOff = heightPer/2;
+int midY = y + midLineOff;
+int dir;
 Color *shades = tg->colorShades;
 
 for (item = tg->items; item != NULL; item = item->next)
@@ -3034,6 +3224,17 @@ for (item = tg->items; item != NULL; item = item->next)
 		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
 	    }
 	}
+    if (tg->subType == lfWithBarbs)
+        {
+        dir = 0;
+        if(sameString(item->strand , "+")) 
+            dir = 1;
+        if(sameString(item->strand , "-")) 
+            dir = -1;
+	    w = x2-x1;
+        if (dir != 0)
+        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+        }
     if (isFull)
 	y += lineHeight;
     }
@@ -3670,6 +3871,37 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
+Color getChromColor(char *name, struct memGfx *mg)
+{
+    int chromNum = 0;
+    Color colorNum = 0;
+    if(!chromosomeColorsMade)
+        makeChromosomeShades(mg);
+    if (atoi(name) != 0)
+        chromNum =  atoi(name);
+    else if (!strcmp(name,"X"))
+        chromNum = 23;
+    else if (!strcmp(name,"X "))
+        chromNum = 23;
+    else if (!strcmp(name,"Y"))
+        chromNum = 24;
+    else if (!strcmp(name,"Y "))
+        chromNum = 24;
+    if (chromNum > 24) chromNum = 0;
+    colorNum = chromColor[chromNum];
+    return colorNum;
+}
+Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of mouseOrtho track item. */
+{
+char chromStr[20];     
+char *chptr;
+struct linkedFeatures *lf = item;
+chptr = strstr(lf->name,"chr");
+strncpy(chromStr,(char *)(chptr+3),2);
+chromStr[2] = '\0';
+return ((Color)getChromColor(chromStr, mg));
+}
 void loadXenoPslWithPos(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
@@ -3679,8 +3911,16 @@ lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
 void longXenoPslMethods(struct trackGroup *tg)
 /* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
 {
+char option[128]; /* Option -  rainbow chromosome color */
+char *optionStr;
 tg->loadItems = loadXenoPslWithPos;
 tg->mapItemName = mapNameFromLfExtra;
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use chromosome coloring*/
+    tg->itemColor = pslItemColor;
+else
+    tg->itemColor = NULL;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -3980,12 +4220,190 @@ tg->freeItems = freeFishClones;
 tg->itemColor = fishClonesColor;
 }
 
+
+void loadSyntenyBerk(struct trackGroup *tg)
+{
+bedLoadItem(tg, "syntenyBerk", (ItemLoader)syntenyBerkLoad);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSyntenyBerk(struct trackGroup *tg)
+{
+syntenyBerkFreeList((struct syntenyBerk**)&tg->items);
+}
+
+void loadSynteny100000(struct trackGroup *tg)
+{
+bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSynteny100000(struct trackGroup *tg)
+{
+synteny100000FreeList((struct synteny100000**)&tg->items);
+}
+
+void loadMouseOrtho(struct trackGroup *tg)
+{
+bedLoadItem(tg, "mouseOrtho", (ItemLoader)mouseOrthoLoad);
+slSort(&tg->items, bedCmpPlusScore);
+}
+
+void freeMouseOrtho(struct trackGroup *tg)
+{
+mouseOrthoFreeList((struct mouseOrtho**)&tg->items);
+}
+
+Color mouseOrthoItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct mouseOrtho *ms = item;
+if (strlen(ms->name) == 8)
+{
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+}
+else if (strlen(ms->name) == 9)
+{
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+}
+else
+    strncpy(chromStr,ms->name,2);
+return ((Color)getChromColor(chromStr, mg));
+}
+
+void loadHumanParalog(struct trackGroup *tg)
+{
+bedLoadItem(tg, "humanParalog", (ItemLoader)humanParalogLoad);
+slSort(&tg->items, bedCmpPlusScore);
+}
+
+void freeHumanParalog(struct trackGroup *tg)
+{
+humanParalogFreeList((struct humanParalog**)&tg->items);
+}
+
+Color humanParalogItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct humanParalog *ms = item;
+if (strlen(ms->name) == 8)
+{
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+}
+else if (strlen(ms->name) == 9)
+{
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+}
+else
+    strncpy(chromStr,ms->name,2);
+return ((Color)getChromColor(chromStr, mg));
+}
+Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct synteny100000 *ms = item;
+if (strlen(ms->mouseChrom) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->mouseChrom+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->mouseChrom) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->mouseChrom+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    strncpy(chromStr,ms->mouseChrom+3,2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, mg));
+}
+
+Color syntenyBerkItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+char *chptr;
+struct syntenyBerk *ms = item;
+if (strlen(ms->name) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->name) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    chptr = strstr(ms->name,"chr");
+    strncpy(chromStr,(char *)(chptr+3),2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, mg));
+}
+
 void loadMouseSyn(struct trackGroup *tg)
 /* Load up mouseSyn from database table to trackGroup items. */
 {
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
+void synteny100000Methods(struct trackGroup *tg)
+{
+tg->loadItems = loadSynteny100000;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+void syntenyBerkMethods(struct trackGroup *tg)
+{
+tg->loadItems = loadSyntenyBerk;
+tg->freeItems = freeSyntenyBerk;
+tg->itemColor = syntenyBerkItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+void mouseOrthoMethods(struct trackGroup *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadMouseOrtho;
+tg->freeItems = freeMouseOrtho;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = mouseOrthoItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
+void humanParalogMethods(struct trackGroup *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadHumanParalog;
+tg->freeItems = freeHumanParalog;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = humanParalogItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
 void freeMouseSyn(struct trackGroup *tg)
 /* Free up mouseSyn items. */
 {
@@ -3995,8 +4413,12 @@ mouseSynFreeList((struct mouseSyn**)&tg->items);
 Color mouseSynItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of mouseSyn track item. */
 {
+char chromStr[20];     
 struct mouseSyn *ms = item;
-return (ms->segment&1) ? tg->ixColor : tg->ixAltColor;
+/* return (ms->segment&1) ? tg->ixColor : tg->ixAltColor; old color scheme */    
+strncpy(chromStr,ms->name+6,2);
+chromStr[2] = '\0';
+return ((Color)getChromColor(chromStr, mg));
 }
 
 void mouseSynMethods(struct trackGroup *tg)
@@ -4665,7 +5087,10 @@ else if (stage == 'D')
 else if (stage == 'F')
     inc = finishedInc;
 else
-    errAbort("Unknown stage %c", stage);
+    {
+    warn("Unknown stage %c (%d)", stage, stage);
+    inc = draftInc;
+    }
 for (i=0; i<width; ++i)
    b[i] = inc[b[i]];
 }
@@ -6879,7 +7304,6 @@ void triangleMethods(struct trackGroup *tg)
 /* Register custom methods for regulatory triangle track. */
 {
 tg->drawItems = drawTriangle;
-// tg->itemName = nameTriangle;
 }
 
 void smallBreak()
@@ -6922,6 +7346,30 @@ else				/* try to make the button look as if
     }
 }
 
+
+void beforeFirstPeriod( char *str )
+{
+char *t = rindex( str, '.' );
+
+if( t == NULL )
+    return;
+else
+    str[strlen(str) - strlen(t)] = '\0';
+}
+
+void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString )
+/*print a label for a horizontal y-axis line*/
+{
+    double tmp;
+    int fontHeight = mgFontLineHeight(tl.font);
+    double ymin = y - (group->heightPer / 2) + fontHeight;
+    int itemHeight0 = group->itemHeight(group, group->items);
+    int inWid = trackOffsetX()-gfxBorder*3;
+    
+    tmp = -whichBin( atof(labelString), -1.535, 9.49389, 1000 );
+    tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer);
+    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
+}
 
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
@@ -7014,6 +7462,7 @@ if (withLeftLabels)
         {
 	struct slList *item;
 	int h;
+    double tmp;
 	lastY = y;
 	if (group->limitedVis != tvHide)
 	    {
@@ -7028,8 +7477,13 @@ if (withLeftLabels)
 
 	if( sameString( group->mapName, "humMus" ) )
 	    {
-	    sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
-	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+	    sprintf( minRangeStr, "%0.2g",  -1.535 );
+	    sprintf( maxRangeStr, "%0.2g",  9.49389 );
+
+        printYAxisLabel( mg, y, group, "0.0" );
+        printYAxisLabel( mg, y, group, "2.0" );
+        printYAxisLabel( mg, y, group, "5.0" );
+
 	    }
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
@@ -7052,6 +7506,7 @@ if (withLeftLabels)
 		start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
+            char *rootName;
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
 		    newy = y;
@@ -7092,10 +7547,14 @@ if (withLeftLabels)
 			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
 					    group->ixAltColor, font, maxRangeStr );
 				}
-			    
 			    }
 			prev = item;
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+
+            rootName = cloneString( name );
+            beforeFirstPeriod( rootName );
+			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, rootName);
+            freeMem( rootName );
+
 			/* Reset the clipping rectangle to its original proportions */
 			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			start = 0;
@@ -7434,6 +7893,7 @@ char query[256];
 
 /*see if we have a summary table*/
 snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+//errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
 /* If we're in dense mode and have a summary table load it. */
@@ -7622,6 +8082,38 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+void rikenMrnaLoadItems(struct trackGroup *tg)
+/* Load riken mrna's  - have to get them from special secret database. */
+{
+struct sqlConnection *conn = sqlConnect("mgsc");
+connectedLfFromPslsInRange(conn, tg, winStart, winEnd, chromName, FALSE, FALSE);
+sqlDisconnect(&conn);
+}
+
+void rikenMethods(struct trackGroup *tg)
+/* Load up riken mRNA specific methods. */
+{
+tg->loadItems = rikenMrnaLoadItems;
+}
+
+void secretRikenTrack(struct trackGroup **pTrackList)
+/* If not on right host remove Riken track. */
+{
+if (!hIsMgscHost())
+    {
+    struct trackGroup *tg;
+    for (tg = *pTrackList; tg != NULL; tg = tg->next)
+        {
+	if (sameString(tg->mapName, "rikenMrna"))
+	     {
+	     slRemoveEl(pTrackList, tg);
+	     break;
+	     }
+	}
+    }
+}
+
+
 void ctLoadSimpleBed(struct trackGroup *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
@@ -7698,6 +8190,64 @@ char c = *s;
 return c != '_' && !isalnum(c);
 }
 
+char *getPositionFromCustomTracks()
+/*
+  Parses custom track data to get the position variable
+return - The first chromosome position variable found in the 
+ custom track data.
+ */
+{
+char *pos = NULL;
+char *customText = cloneString(cgiOptionalString("hgt.customText"));
+char *fileName = cloneString(cgiOptionalString("ct"));
+struct slName *browserLines = NULL;
+struct slName *bl = NULL;
+struct customTrack *ctList = NULL;
+
+customText = skipLeadingSpaces(customText);
+if (NULL != customText && bogusMacEmptyChars(customText))
+    {
+    customText = NULL;
+    }
+
+if (NULL == customText || 0 == customText[0])
+    {
+    customText = cloneString(cgiOptionalString("hgt.customFile"));
+    }
+
+if (NULL != customText && 0 != customText[0])
+    {
+    ctList = customTracksParse(customText, FALSE, &browserLines);
+    }
+else if (fileName != NULL && fileExists(fileName))
+    {
+    ctList = customTracksParse(fileName, TRUE, &browserLines);
+    }
+
+for (bl = browserLines; bl != NULL; bl = bl->next)
+    {
+    char *words[96];
+    int wordCount;
+
+    wordCount = chopLine(bl->name, words);
+    if (wordCount >= 3)
+        {
+        char *command = words[1];
+        if (sameString(command, "position"))
+            {
+            /* Return the first position found */
+            pos = words[2];
+            break;
+            }
+        }
+    }
+
+freez(&fileName);
+freez(&customText);
+
+return pos;
+}
+
 void loadCustomTracks(struct trackGroup **pGroupList)
 /* Load up custom tracks and append to list. */
 {
@@ -7763,12 +8313,14 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     {
     char *words[96];
     int wordCount;
+
     wordCount = chopLine(bl->name, words);
     if (wordCount > 1)
         {
 	char *command = words[1];
-	if (sameString(command, "hide") || 
-		sameString(command, "dense") || sameString(command, "full"))
+	if (sameString(command, "hide") 
+            || sameString(command, "dense") 
+            || sameString(command, "full"))
 	    {
 	    if (wordCount > 2)
 	        {
@@ -7790,11 +8342,20 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    {
 	    char *chrom;
 	    int start, end;
+            
 	    if (wordCount < 3)
 	        errAbort("Expecting 3 words in browser position line");
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+
+            /*Fix a start window of -1 that is returned when a custom track position
+              begins at 0
+            */
+            if (winStart < 0) 
+                {
+                winStart = 0;
+                }
 	    }
 	else if (sameString(command, "pix"))
 	    {
@@ -7805,6 +8366,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	}
     }
+
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
@@ -7832,13 +8394,17 @@ struct sqlConnection *conn = hAllocConn();
 char *name;
 struct sqlResult *sr;
 char **row;
-char *query = "select tableName from trackDb";
+char *trackDb = hTrackDbName();
+char query[256];
+assert(trackDb);
+snprintf(query, sizeof(query), "select tableName from %s", trackDb);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     assert(row[0]);
     cartSetString(cart, row[0], "hide");
     }
+freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -7920,6 +8486,11 @@ registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
+registerTrackHandler("synteny100000", synteny100000Methods);
+registerTrackHandler("syntenyBerk", syntenyBerkMethods);
+registerTrackHandler("mouseOrtho", mouseOrthoMethods);
+registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
+registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
 registerTrackHandler("ctgPos", contigMethods);
@@ -7942,6 +8513,13 @@ registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("blatHuman", longXenoPslMethods);
 registerTrackHandler("blatMus", longXenoPslMethods);
+registerTrackHandler("aarMm2", longXenoPslMethods);
+registerTrackHandler("blastzMm2", longXenoPslMethods);
+registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
+registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
+registerTrackHandler("blastzHg", longXenoPslMethods);
+registerTrackHandler("blastzHgRef", longXenoPslMethods);
+registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -7961,17 +8539,24 @@ registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
+registerTrackHandler("triangleSelf", triangleMethods );
+registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
+registerTrackHandler("rikenMrna", rikenMethods);
+
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&tGroupList);
+secretRikenTrack(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 loadCustomTracks(&tGroupList);
+
+
 slSort(&tGroupList, tgCmpPriority);
 
 /* Get visibility values if any from ui. */
@@ -8095,6 +8680,11 @@ if (!hideControls)
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly
      */
+    if( chromosomeColorsMade )
+        {
+        printf("<B>Chromosome Color Key:</B><BR> ");
+        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
+        }
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
     smallBreak();
@@ -8220,16 +8810,19 @@ x = atof(stringVal);
 return round(x*guideBases);
 }
 
-
-
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
 
-/* Read in input from CGI. */
-position = cartString(cart, "position");
+position = getPositionFromCustomTracks();
+if (NULL == position) 
+    {
+    /* Read in input from CGI. */
+    position = cartString(cart, "position");
+    }
+
 if(sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
@@ -8310,6 +8903,8 @@ database = cartOptionalString(cart, "db");
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
+else
+    hgDebug = FALSE;
 if (database == NULL)
     database = hGetDb();
 hSetDb(database);
@@ -8358,15 +8953,13 @@ cgiVarExcludeExcept(except);
 }
 
 
-
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
+
 cartHtmlShell("UCSC Genome Browser v11", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
-
-

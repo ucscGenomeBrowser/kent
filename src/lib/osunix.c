@@ -1,13 +1,12 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Some wrappers around operating-system specific stuff. */
+
 #include <unistd.h>
 #include <time.h>
 #include <dirent.h>
+#include <sys/utsname.h>
 #include "common.h"
 #include "portable.h"
+#include "portimpl.h"
 
 
 /* Return how long the named file is in bytes. 
@@ -187,8 +186,19 @@ if (hostName == NULL)
     hostName = getenv("HTTP_HOST");
     if (hostName == NULL)
         {
-	hostName = "";
-	}
+	hostName = getenv("HOST");
+	if (hostName == NULL)
+	    {
+	    if (hostName == NULL)
+		{
+		static struct utsname unamebuf;
+		if (uname(&unamebuf) >= 0)
+		    hostName = unamebuf.nodename;
+		else
+		    hostName = "unknown";
+		}
+	    }
+        }
     strncpy(buf, hostName, sizeof(buf));
     chopSuffix(buf);
     hostName = buf;
@@ -214,4 +224,29 @@ if (!gotIt)
     }
 return host;
 }
+
+char *rTempName(char *dir, char *base, char *suffix)
+/* Make a temp name that's almost certainly unique. */
+{
+char midder[256];
+int pid = getpid();
+int num = time(NULL);
+static char fileName[512];
+char host[512];
+char *s;
+
+strcpy(host, getHost());
+s = strchr(host, '.');
+if (s != NULL)
+     *s = 0;
+for (;;)
+   {
+   sprintf(fileName, "%s/%s_%s_%d_%d%s", dir, base, host, pid, num, suffix);
+   if (!fileExists(fileName))
+       break;
+   num += 1;
+   }
+return fileName;
+}
+
 

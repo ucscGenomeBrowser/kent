@@ -115,17 +115,11 @@ conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
     if (netReadAll(conn, sig, sigLen) != sigLen)
-        {
-	close(conn);
 	continue;
-	}
     if (!sameString(sig, paraSig))
-        {
-	close(conn);
 	continue;
-	}
     line = buf = netGetLongString(conn);
-    logIt("%s: %s\n", socketName, line);
+    // logIt("%s: %s\n", socketName, line);
     machine = nextWord(&line);
     if (machine != NULL)
 	{
@@ -261,6 +255,7 @@ int sd = spokeGetSocket(spoke);
 if (sd > 0)
     {
     /* Send out signature, machine, and message to spoke. */
+    freez(&spoke->machine);
     spoke->machine = cloneString(machine->name);
     dyStringPrintf(dy, "%s %s", spoke->machine, message);
     write(sd, paraSig, strlen(paraSig));
@@ -280,7 +275,9 @@ if (sd > 0)
     {
     char err[512];
     sprintf(err, "%s/para%d.err", machine->tempDir, job->id);
+    freez(&job->err);
     job->err = cloneString(err);
+    freez(&spoke->machine);
     spoke->machine = cloneString(machine->name);
     dyStringPrintf(dy, "%s %s", machine->name, runCmd);
     dyStringPrintf(dy, " %s", hubHost);

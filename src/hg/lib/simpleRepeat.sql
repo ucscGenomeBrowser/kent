@@ -17,9 +17,9 @@ CREATE TABLE simpleRepeat (
     perIndel int unsigned not null,	# Percentage Indel
     score int unsigned not null,	# Score between  and .  Best is .
     A int unsigned not null,	# Number of A's in repeat unit
-    T int unsigned not null,	# Number of T's in repeat unit
     C int unsigned not null,	# Number of C's in repeat unit
     G int unsigned not null,	# Number of G's in repeat unit
+    T int unsigned not null,	# Number of T's in repeat unit
     entropy float not null,	# Entropy
     sequence longblob not null,	# Sequence of repeat unit element
               #Indices

@@ -1,4 +1,5 @@
 /* freen - My Pet Freen. */
+#include <sys/wait.h>
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -9,6 +10,15 @@ void usage()
 /* Print usage and exit. */
 {
 errAbort("usage: freen in out");
+}
+
+int statusToRetVal(int status)
+/* Convert wait() return status to return value. */
+{
+if (WIFEXITED(status))
+    return WEXITSTATUS(status);
+else 
+    return -666;
 }
 
 void genePredOffset(struct genePred *gp, int offset)
@@ -42,22 +52,11 @@ while (lineFileChop(lf, row))
     }
 }
 
-void freen(char *root)
+void freen(char *status)
+/* Print status code. */
 {
-char buf[256];
-char *hello = "hello";
-int fd;
-struct xAli *xa = NULL;
-
-snprintf(buf, sizeof(buf), "%sXXXXXX", root);
-mkstemp(buf);
-fd = mkstemp(buf);
-printf("%d\n", fd);
-if (fd > 0)
-   write(fd, hello, strlen(hello));
-else
-   perror("mkstemp error");
-xAliFree(&xa);
+int stat = atoi(status);
+printf("%d\n", statusToRetVal(stat));
 }
 
 int main(int argc, char *argv[])

@@ -26,6 +26,7 @@ static char *hdbHost;
 static char *hdbName = "hg10";
 static char *hdbUser;
 static char *hdbPassword;
+static char *hdbTrackDb = NULL;
 
 void hDefaultConnect()
 /* read in the connection options from config file */
@@ -33,11 +34,20 @@ void hDefaultConnect()
 hdbHost 	= cfgOption("db.host");
 hdbUser 	= cfgOption("db.user");
 hdbPassword	= cfgOption("db.password");
-
+hdbTrackDb      = cfgOption("db.trackDb");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
 }
 
+char *hTrackDbName()
+/* return the name of the track database from the config file. Freez when done */
+{
+if(hdbTrackDb == NULL)
+    hdbTrackDb = cfgOption("db.trackDb");
+if(hdbTrackDb == NULL)
+    errAbort("Please set the db.trackDb field in the hg.conf config file.");
+return cloneString(hdbTrackDb);
+}
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
@@ -392,7 +402,8 @@ return hFreezeDbConversion(NULL, freeze);
 }
 
 char *hDefaultPos(char *database)
-/* Return organism associated with database.   use freeMem on
+/* Return default chromosome position for the 
+  organism associated with database.   use freeMem on
  * this when done. */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -674,6 +685,22 @@ if (hasBin != NULL)
 return TRUE;
 }
 
+boolean hIsMgscHost()
+/* Return TRUE if this is running on web server only
+ * accessible to Mouse Genome Sequencing Consortium. */
+{
+static boolean gotIt = FALSE;
+static boolean priv = FALSE;
+if (!gotIt)
+    {
+    char *t = getenv("HTTP_HOST");
+    if (t != NULL && (startsWith("hgwdev-mgsc", t)))
+        priv = TRUE;
+    gotIt = TRUE;
+    }
+return priv;
+}
+
 boolean hIsPrivateHost()
 /* Return TRUE if this is running on private web-server. */
 {
@@ -878,8 +905,13 @@ boolean privateToo = hIsPrivateHost();
 struct sqlResult *sr;
 char **row;
 char *database = hGetDb();
+char query[256];
+char *trackDb = hTrackDbName();
+if(hdbTrackDb == NULL)
+    errAbort("Please contact the system administrator to set the hg.trackDb in hg.conf");
+snprintf(query, sizeof(query), "select * from %s", trackDb);
 
-sr = sqlGetResult(conn, "select * from trackDb");
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     boolean keeper = FALSE;
@@ -896,6 +928,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!keeper)
        trackDbFree(&tdb);
     }
+freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&tdbList);
@@ -1152,3 +1185,4 @@ sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
 }
+

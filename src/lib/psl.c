@@ -40,10 +40,22 @@ ret->tSize = sqlUnsigned(row[14]);
 ret->tStart = sqlUnsigned(row[15]);
 ret->tEnd = sqlUnsigned(row[16]);
 sqlUnsignedDynamicArray(row[18], &ret->blockSizes, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne bloxksizes %d bs %d block=%s\n",sizeOne, ret->blockCount,row[18]);
+    }
 assert(sizeOne == ret->blockCount);
 sqlUnsignedDynamicArray(row[19], &ret->qStarts, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne qStarts %d bs %d\n",sizeOne, ret->blockCount);
+    }
 assert(sizeOne == ret->blockCount);
 sqlUnsignedDynamicArray(row[20], &ret->tStarts, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne tStarts %d bs %d\n",sizeOne, ret->blockCount);
+    }
 assert(sizeOne == ret->blockCount);
 return ret;
 }
@@ -336,7 +348,7 @@ else
         {
 	char *s = cloneString(line);
 	wordCount = chopLine(s, words);
-	if (wordCount < 21 || wordCount > 22 || (words[8][0] != '+' && words[8][0] != '-'))
+	if (wordCount < 21 || wordCount > 23 || (words[8][0] != '+' && words[8][0] != '-'))
 	    errAbort("%s is not a psLayout file", fileName);
 	else
 	    lineFileReuse(lf); 
@@ -704,5 +716,113 @@ for (i=0; i<psl->blockCount; ++i)
     fprintf(f, "  size %d, qStart %d, tStart %d\n", 
     	psl->blockSizes[i], psl->qStarts[i], psl->tStarts[i]);
 fprintf(f, "</PRE>");
+}
+
+static void pslRecalcBounds(struct psl *psl)
+/* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
+ * with blocks. */
+{
+int qStart, qEnd, tStart, tEnd, size;
+int last = psl->blockCount - 1;
+qStart = psl->qStarts[0];
+tStart = psl->tStarts[0];
+size = psl->blockSizes[last];
+qEnd = psl->qStarts[last] + size;
+tEnd = psl->tStarts[last] + size;
+if (psl->strand[0] == '-')
+    reverseIntRange(&qStart, &qEnd, psl->qSize);
+if (psl->strand[1] == '-')
+    reverseIntRange(&tStart, &tEnd, psl->tSize);
+psl->qStart = qStart;
+psl->qEnd = qEnd;
+psl->tStart = tStart;
+psl->tEnd = tEnd;
+}
+
+struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax)
+/* Return psl trimmed to fit inside tMin/tMax.  Note this does not
+ * update the match/misMatch and related fields. */
+{
+int newSize;
+int oldBlockCount = oldPsl->blockCount;
+boolean tIsRc = (oldPsl->strand[1] == '-');
+boolean qIsRc = (oldPsl->strand[0] == '-');
+int newBlockCount = 0, completeBlockCount = 0;
+int i, newI = 0;
+struct psl *newPsl = NULL;
+int tMn = tMin, tMx = tMax;   /* tMin/tMax adjusted for strand. */
+
+/* Deal with case where we're completely trimmed out quickly. */
+newSize = rangeIntersection(oldPsl->tStart, oldPsl->tEnd, tMin, tMax);
+if (newSize <= 0)
+    return NULL;
+
+if (tIsRc)
+    reverseIntRange(&tMn, &tMx, oldPsl->tSize);
+
+/* Count how many blocks will survive trimming. */
+oldBlockCount = oldPsl->blockCount;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int s = oldPsl->tStarts[i];
+    int e = s + oldPsl->blockSizes[i];
+    int sz = e - s;
+    int overlap;
+    if ((overlap = rangeIntersection(s, e, tMn, tMx)) > 0)
+        ++newBlockCount;
+    if (overlap == sz)
+        ++completeBlockCount;
+    }
+
+if (newBlockCount == 0)
+    return NULL;
+
+/* Allocate new psl and fill in what we already know. */
+AllocVar(newPsl);
+strcpy(newPsl->strand, oldPsl->strand);
+newPsl->qName = cloneString(oldPsl->qName);
+newPsl->qSize = oldPsl->qSize;
+newPsl->tName = cloneString(oldPsl->tName);
+newPsl->tSize = oldPsl->tSize;
+newPsl->blockCount = newBlockCount;
+AllocArray(newPsl->blockSizes, newBlockCount);
+AllocArray(newPsl->qStarts, newBlockCount);
+AllocArray(newPsl->tStarts, newBlockCount);
+
+/* Fill in blockSizes, qStarts, tStarts with real data. */
+newBlockCount = completeBlockCount = 0;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int oldSz = oldPsl->blockSizes[i];
+    int sz = oldSz;
+    int tS = oldPsl->tStarts[i];
+    int tE = tS + sz;
+    int qS = oldPsl->qStarts[i];
+    int qE = qS + sz;
+    if (rangeIntersection(tS, tE, tMn, tMx) > 0)
+        {
+	int diff;
+	if ((diff = (tMn - tS)) > 0)
+	    {
+	    tS += diff;
+	    qS += diff;
+	    sz -= diff;
+	    }
+	if ((diff = (tE - tMx)) > 0)
+	    {
+	    tE -= diff;
+	    qE -= diff;
+	    sz -= diff;
+	    }
+	newPsl->qStarts[newBlockCount] = qS;
+	newPsl->tStarts[newBlockCount] = tS;
+	newPsl->blockSizes[newBlockCount] = sz;
+	++newBlockCount;
+	if (sz == oldSz)
+	    ++completeBlockCount;
+	}
+    }
+pslRecalcBounds(newPsl);
+return newPsl;
 }
 

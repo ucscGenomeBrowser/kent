@@ -10,6 +10,8 @@ and split each chromosomes into subdirs and files for each supercontig.
 #include "fa.h"
 #include "agpGap.h"
 #include "agpFrag.h"
+#include "options.h"
+#include "portable.h"
 
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
@@ -23,8 +25,12 @@ that we can split a sequence at the end of it into supercontigs
 */
 static const char *NO = "no";
 
-/* Default size of the files into which we are splitting fa entries */
-static const int defaultSize = 1000000;
+/* The default size at which we split the genome on a non-bridged contig gap bound */
+int _nSize = 1000000;
+/* The size at which we split the genome on a bridged or non-bridged contig gap bound */
+int _bSize = 0;
+/* The size at which we split the genome on any contig fragment or gap bound */
+int _aSize = 0;
 
 /*
 The top-level dir where we are sticking all the split up data files
@@ -68,10 +74,20 @@ Explain usage and exit.
 {
 fflush(stdout);
     printf(
-      "\nsplitFaIntoContigs - takes a .agp file and .fa file a destination directory in which to save data and a size (default 1Mbase) into which to split each chromosome of the fa file along non-bridged gaps\n"
-      "usage:\n\n"
-      "   splitFaIntoContigs in.agp in.fa outputDir [approx size in kilobases (default 1000)]\n"
-      "\n");
+      "\nusage:\n"
+      "\tsplitFaIntoContigs in.agp in.fa outputDir [-nSize=N (default 100000)] [-bSize=N] [-aSize=N]\n"
+      "\n"
+      "splitFaIntoContigs - takes a .agp file, a .fa file, and an output directory in which to save the data \n"
+      " along with hierarchical size parameters into which to split each chromosome of the fa file.\n"
+      "The following parameters may be used alone or in combination: "
+      "\n -nSize (non-bridged size) refers to the minimum size at which we want to split after NON-BRIDGED contig boundaries"
+      "\n -bSize (bridged size) refers to the minimum size at which we want to split after BRIDGED contig boundaries"
+      "\n -aSize (any fragment size) refers to the size after which we want to split no matter what (i.e., no contig boundary is available)\n"
+      "\nWhen given more than one of these options, splitFaIntoContigs will first try to split at the nSize number on a non-bridged contig.\n"
+      "If it reaches the bSize number without finding a non-bridged contig, it will try to split on a non-bridged or bridged contig.\n"
+      "Finally, if given an aSize param, it will always split after that fragment if no prior suitable bridged or\n"
+      " non-bridged contig split boundary has been found.\n"
+      "NOTE: aSize > bSize > nSize must hold true\n\n");
     exit(-1);
 }
 
@@ -117,7 +133,7 @@ param startGap - Pointer to the dna gap or fragment at which we are starting to
 param destDir - The destination dir to which to write the agp file.
  */
 {
-char command[DEFAULT_PATH_SIZE];
+char liftDir[DEFAULT_PATH_SIZE];
 char filename[DEFAULT_PATH_SIZE];
 struct agpData *loopStartData = NULL;
 struct agpData *curData = NULL;
@@ -127,8 +143,8 @@ FILE *fpLstOut = NULL;
 
 int contigSize = 0;
 
-sprintf(command, "mkdir -p %s/lift", destDir);
-system(command);
+sprintf(liftDir, "%s/lift", destDir);
+makeDir(liftDir);
 
 sprintf(filename, "%s/lift/ordered.lft", destDir);
 fpLft = fopen(filename, "w");
@@ -178,7 +194,7 @@ struct agpData *curData = NULL;
 FILE *fp = NULL;
 
 fp = fopen(filename, "w");
-printf("Writing agp file %s for chromo %s\n", filename, startAgpData->data.pGap->chrom);
+/*printf("Writing agp file %s for chromo %s\n", filename, startAgpData->data.pGap->chrom);*/
 
 curData = startAgpData;
 while (NULL != curData) 
@@ -218,7 +234,7 @@ param destDir - The destination dir to which to write the agp file.
 char filename[DEFAULT_PATH_SIZE];
 
 sprintf(filename, "%s/%s.agp", destDir, chromName);
-printf("Writing chromosome agp file\n");
+printf("Writing chromosome agp file %s\n", filename);
 writeAgpFile(chromName, startAgpData, filename);
 }
 
@@ -237,7 +253,8 @@ param sequenceNum - The 1-based number of this clone supercontig in the chromsom
 int startOffset = startAgpData->data.pGap->chromStart;
 int endOffset = endAgpData->data.pGap->chromEnd;
 
-printf("Writing supercontig agp file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
+printf("Writing supercontig agp file %s\n", filename);
+//starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 writeAgpFile( endAgpData->data.pGap->chrom, startAgpData, filename);
 }
 
@@ -276,13 +293,14 @@ int endOffset = endData->data.pGap->chromEnd;
 int dnaSize = 0;
 char sequenceName[BUF_SIZE];
 
-printf("Writing supercontig fa file %s starting at dna[%d] up to but not including dna[%d]\n", filename, startOffset, endOffset);
+printf("Writing supercontig fa file %s\n", filename);
+// starting at dna[%d] up to but not including dna[%d]\n", filename, startOffset, endOffset);
 sprintf(sequenceName, "%s_%d %d-%d", startData->data.pGap->chrom, sequenceNum, startOffset, endOffset);
 dnaSize = endOffset - startOffset;
 faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
 }
 
-struct agpData* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, int splitSize, struct agpData **retStartData)
+struct agpData* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, struct agpData **retStartData)
 /*
 Finds the next agp entry in the agp file at which to split on.
 
@@ -290,8 +308,6 @@ param lfAgpFile - The .agp file we are examining.
 param dnaSize - The total size of the chromsome's dna sequence 
  we are splitting up. Used to prevent overrun of the algorithm
  that looks at agp entries.
-param splitSize - The size of the split fragments that we are
- trying to make.
 param retStartData - An out param returning the starting(inclusive) gap that we
  will start to split on.
 
@@ -308,6 +324,7 @@ struct agpFrag *agpFrag = NULL;
 struct agpData *curAgpData = NULL;
 struct agpData *prevAgpData = NULL;
 boolean splitPointFound = FALSE;
+int splitSize = _nSize;
 
 do 
 {
@@ -320,6 +337,7 @@ if (line[0] == '#' || line[0] == '\n')
 
 curAgpData = AllocVar(curAgpData);
 curAgpData->endOfContig = FALSE;
+curAgpData->isGap = FALSE;
 curAgpData->prev = NULL;
 curAgpData->next = NULL;
 
@@ -338,20 +356,37 @@ if ('N' == words[4][0])
         startIndex = agpGap->chromStart;
         }
 
-    splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
+    if (numBasesRead >= _bSize)
+        {
+        splitPointFound = TRUE;
+        }
+    else
+        {
+        /* Split points are made after non-bridged contigs only here */
+        splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
+        }
+     
     curAgpData->isGap = TRUE;
     curAgpData->data.pGap = agpGap;
     }
 else
     {
     agpFrag = agpFragLoad(words);
-    /* If we find a fragment and not a gap we can't split there */
+    /* If we find a fragment and not a gap */
     if (0 == startIndex)
         {
         startIndex = agpFrag->chromStart;
         }
 
-    splitPointFound = FALSE;
+    if (numBasesRead >= _aSize) 
+        {
+        splitPointFound = TRUE;
+        }
+    else
+        {
+        splitPointFound = FALSE;
+        }
+
     curAgpData->isGap = FALSE;
     curAgpData->data.pFrag = agpFrag;
     }
@@ -364,31 +399,29 @@ if (NULL == prevAgpData)
     }
 else
     {
-    /* Build a doubly linked list for use elewhere */
+    /* Build a doubly linked list for use elsewhere */
     prevAgpData->next = curAgpData;
     curAgpData->prev = prevAgpData;
     }
 
 prevAgpData = curAgpData;
 numBasesRead = curAgpData->data.pGap->chromEnd - startIndex;
+
 } while ((numBasesRead < splitSize || !splitPointFound)
-             && curAgpData->data.pGap->chromEnd < dnaSize);
+       && curAgpData->data.pGap->chromEnd < dnaSize);
 
 curAgpData->next = NULL; /* Terminate the linked list */
-
 curAgpData->endOfContig = TRUE;
 return curAgpData;
 }
 
-struct agpData* makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, int splitSize, char *destDir)
+struct agpData* makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, char *destDir)
 /*
 Makes supercontig files for each chromosome
 
 param agpFile - The agpFile we are examining.
 param dna - The dna sequence we are splitting up.
 param dnaSize - The size of the dna sequence we are splitting up.
-param splitSize - The sizes of the supercontigs we are splitting the 
- dna into.
 param destDir - The destination directory where to store files.
 
 return startAgpData - The first agp entry in the sequence.
@@ -401,12 +434,11 @@ struct agpData *startChromAgpData = NULL;
 
 char filename[DEFAULT_PATH_SIZE];
 char contigDir[DEFAULT_PATH_SIZE];
-char command[DEFAULT_PATH_SIZE];
 int sequenceNum = 0;
 
 do
     {
-    endAgpData = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpData);
+    endAgpData = nextAgpEntryToSplitOn(agpFile, dnaSize, &startAgpData);
     /* Point the end of the previous loop iteration's linked list at
        the start of this new one */
     if (NULL != prevAgpData)
@@ -418,8 +450,7 @@ do
 
     sequenceNum++;
     sprintf(contigDir, "%s/%s_%d", destDir, startAgpData->data.pGap->chrom, sequenceNum);
-    sprintf(command, "mkdir -p %s", contigDir);
-    system(command);
+    makeDir(contigDir);
 
     sprintf(startAgpData->contigName, "%s_%d", startAgpData->data.pGap->chrom, sequenceNum);
 
@@ -439,15 +470,13 @@ do
 return startChromAgpData;
 }
 
-void splitFaIntoContigs(char *agpFile, char *faFile, int splitSize)
+void splitFaIntoContigs(char *agpFile, char *faFile)
 /* 
 splitFaIntoContigs - read the .agp file the .fa file. and split each
  chromsome into supercontigs at non-bridged sections.
 
 param agpFile - The pathname of the agp file to check.
 param faFile - The pathname of the fasta file to check.
-param splitSize - The sizes of the supercontigs we are splitting the
- dna into.
 */
 {
 struct lineFile *lfAgp = lineFileOpen(agpFile, TRUE);
@@ -457,9 +486,8 @@ char *chromName = NULL;
 DNA *dna = NULL;
 struct agpData *startAgpData = NULL;
 char destDir[DEFAULT_PATH_SIZE];
-char command[DEFAULT_PATH_SIZE];
 
-printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bases\n", agpFile, faFile, splitSize);
+printf("Processing agpFile %s and fasta file %s, with nonbridged split boundaries of %d bases, bridged split boundaries of %d bases\n", agpFile, faFile, _nSize, _bSize);
 
 /* For each chromosome entry */
 while (faMixedSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
@@ -477,11 +505,9 @@ while (faMixedSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
 
 
     sprintf(destDir, "%s/%s", outputDir, &chromName[3]);
-    sprintf(command, "mkdir -p %s", destDir);
-    system(command);
+    makeDir(destDir);
 
-    startAgpData = makeSuperContigs(lfAgp, dna, dnaSize, splitSize, destDir);
-
+    startAgpData = makeSuperContigs(lfAgp, dna, dnaSize, destDir);
     writeChromFaFile(chromName, dna, dnaSize, destDir);
     writeChromAgpFile(chromName, startAgpData, destDir);
     writeLiftFiles(chromName, dnaSize, startAgpData, destDir);
@@ -489,7 +515,7 @@ while (faMixedSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     printf("Done processing chromosome %s\n", chromName);
     }
 
-printf("Done processing agpFile %s and fasta file %s, with split boundaries of %d kbases\n", agpFile, faFile, splitSize);
+printf("Done processing agpFile %s and fasta file %s, with nonbridged split boundaries of %d, bridged split boundaries of %d, absolute split boundaries of %d  bases\n", agpFile, faFile, _nSize, _bSize, _aSize);
 }
 
 int main(int argc, char *argv[])
@@ -497,32 +523,59 @@ int main(int argc, char *argv[])
 Process command line then delegate main work to splitFaIntoContigs().
 */
 {
-int size = defaultSize;
-char command[DEFAULT_PATH_SIZE];
+char *arg = NULL;
 
-cgiSpoof(&argc, argv);
+/* Turn off I/O buffering for more sequential output */
+setbuf(stdout, NULL);
 
-if (4 != argc && 5 != argc)
+optionHash(&argc, argv);
+
+if (argc < 4 || argc > 6)
+    {
+    usage();
+    }
+
+arg = optionVal("nSize", NULL);
+if (NULL != arg && atoi(arg) > 0)
+    {
+    _nSize = atoi(arg);
+    }
+else if (NULL != arg)
+    {
+    usage();
+    }
+
+arg = optionVal("bSize", NULL);
+if (NULL != arg && atoi(arg) > 0)
+    {
+    _bSize = atoi(arg);
+    }
+else if (NULL != arg)
+    {
+    usage();
+    }
+
+arg = optionVal("aSize", NULL);
+if (NULL != arg && atoi(arg) > 0)
+    {
+    _aSize = atoi(arg);
+    }
+else if (NULL != arg)
+    {
+    usage();
+    }
+
+if ((_aSize != 0 && _aSize <= _bSize) 
+ || (_bSize != 0 && _bSize <= _nSize)
+ || (_aSize != 0 && _aSize <= _nSize))
     {
     usage();
     }
 
 strcpy(outputDir, argv[3]);
-sprintf(command, "mkdir -p %s", outputDir);
-system(command);
+makeDir(outputDir);
 
-if (5 == argc) 
-    {
-    if (!isdigit(argv[4][0]))
-        usage();
-    size = atoi(argv[4]);
-    size *= 1000;
-    }
-
-/* Turn off I/O buffering for more sequential output */
-setbuf(stdout, NULL);
-
-splitFaIntoContigs(argv[1], argv[2], size);
+splitFaIntoContigs(argv[1], argv[2]);
 faFreeFastBuf();
 return 0;
 }

@@ -94,10 +94,10 @@ AllocArray(m->gProb, colCount);
 AllocArray(m->tProb, colCount);
 for (i=0; i<colCount; ++i)
     {
-    m->aProb[i] = slog( old->aProb[i] );
-    m->cProb[i] = slog( old->cProb[i] );
-    m->gProb[i] = slog( old->gProb[i] );
-    m->tProb[i] = slog( old->tProb[i] );
+    m->aProb[i] = carefulSlog( old->aProb[i] );
+    m->cProb[i] = carefulSlog( old->cProb[i] );
+    m->gProb[i] = carefulSlog( old->gProb[i] );
+    m->tProb[i] = carefulSlog( old->tProb[i] );
     }
 return m;
 }

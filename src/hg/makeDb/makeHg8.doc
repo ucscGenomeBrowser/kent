@@ -413,6 +413,19 @@ o - Copy to cc94:/scratch.  Rename to correspond with tables as so and
        end
        hgLoadPsl hg8 *.psl
 
+SGP GENE PREDICTIONS
+     mkdir ~/oo/bed/sgp
+     cd ~/oo/bed/sgp
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   http://www1.imim.es/genepredictions/H.sapiens/golden_path_20010806/SGP/
+   Get rid of the extra .N in the transcripts with subs.  
+     cd ..
+     cp ~/oo/bed/geneid/subs .
+     subs -e download/*.gtf > /dev/null
+     ldHgGene hg8 sgpGene download/*.gtf -exon=CDS
+     hgPepPred hg8 generic sgpPep download/*.prot
 
 
 TIGR GENE INDEX

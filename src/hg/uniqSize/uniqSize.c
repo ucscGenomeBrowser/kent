@@ -353,7 +353,7 @@ for (chromEl = chromDirs; chromEl != NULL; chromEl = chromEl->next)
 	{
 	struct chromInfo *ctgList = NULL, *ctg;
 	sprintf(subDir, "%s/%s", ooDir, chromName);
-	contigDirs = listDirX(subDir, "ctg*", FALSE);
+	contigDirs = listDirX(subDir, "NT*", FALSE);
 	for (contigEl = contigDirs; contigEl != NULL; contigEl = contigEl->next)
 	    {
 	    if (contigEl->isDir)

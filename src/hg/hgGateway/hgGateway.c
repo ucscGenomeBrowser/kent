@@ -18,6 +18,7 @@ char *db = cartUsualString(cart, "db", hGetDb());
 char *oldDb = hashFindVal(oldVars, "db");
 char *defaultPosition = hDefaultPos(db);
 char *position = cartUsualString(cart, "position", defaultPosition);
+boolean isHuman = sameString("Human", hOrganism(db));
 
 if (oldDb != NULL && !sameString(db, oldDb))
     {
@@ -52,7 +53,11 @@ cgiMakeButton("Submit", "Submit");
 cartSetString(cart, "db", db);
 printf("</CENTER>");
 
-puts(
+//if (isHuman)
+// TEMPORARY
+if (TRUE)
+    {
+    puts(
 "<P>A genome position can be specified by the accession number of a "
 "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
 "a cytological band, a chromosomal coordinate range, or keywords from "
@@ -148,6 +153,11 @@ AC008101\n"
 "format, GenBank entries themselves use Evans,J.E.  internally.\n"
 "</TABLE></CENTER>\n"
 "\n");
+    }
+else
+    {
+    puts("<P><H2>Cool mouse stuff goes here</P></H2>\n");
+    }
 
 webNewSection("Add Your Own Tracks");
 
@@ -167,10 +177,28 @@ puts(
 "</TD></TR></TABLE>\n");
 }
 
+void removeCustomTrackData()
+/*
+  Remove any custom track data from the cart.
+*/
+{
+cartRemove(cart, "hgt.customText");
+cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "ct");
+}
+
 void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
 cart = theCart;
+
+/* If we are changing databases, then remove custom track data which will 
+   be irrelevant in this new database */
+if (cgiOptionalString("db"))
+    {
+    removeCustomTrackData();
+    }
+
 cartWebStart("UCSC Genome Browser Gateway");
 hgGateway();
 cartWebEnd();
@@ -183,6 +211,7 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
+
 cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;
 }

@@ -1,0 +1,988 @@
+This file describes how we made the browser database on 
+NCBI build 29 (April, 2002 freeze)
+
+
+CREATING DATABASE  (DONE)
+
+o - ln -s /cluster/store1/gs.12/build29 ~/oo
+o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
+o - Create the database.
+     - ssh hgwdev
+     - Enter mysql via:
+           hgsql
+     - At mysql prompt type:
+	create database hg11;
+	quit
+     - make a semi-permanent read-only alias:
+        alias hg11 mysql -u hguser -phguserstuff -A hg11
+o - Tell the hgCentral database about it.  Log onto genome-centdb
+    and enter mysql via
+        mysql -u root -pbigSecret hgCentral
+    At the mysql prompt type:
+       insert into dbDb values("hg11", "Human April 2002", "/cluster/store1/gs.12/build29/nib", "Human", "USP18");
+o - Create the trackDb table as so
+       cd ~/src/hg/makeDb/hgTrackDb
+    Edit makefile to add hg11 after hg10 and do
+       make update
+       cvs commit makefile
+
+
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE)
+
+Create packed chromosome sequence files 
+     ssh kkstore
+     cd ~/oo
+     tcsh jkStuff/makeNib.sh
+
+Load chromosome sequence info into database
+     ssh hgwdev
+     hgsql hg11 < ~/src/hg/lib/chromInfo.sql
+     cd ~/oo
+     hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
+
+Store o+o info in database.
+     cd /cluster/store1/gs.12/build29
+     jkStuff/liftGl.sh contig.gl
+     hgGoldGapGl hg11 /cluster/store1/gs.12 build29 
+     cd /cluster/store1/gs.12
+     hgClonePos hg11 build29 ffa/sequence.inf /cluster/store1/gs.12 -maxErr=3
+(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
+     hgCtgPos hg11 build29 
+
+Make and load GC percent table
+     ssh hgwdev
+     cd ~/oo
+     mkdir -p bed/gcPercent
+     cd bed/gcPercent
+     hgsql hg11  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent hg11 ../../nib
+
+SIMPLE REPEAT TRACK (DONE)
+
+o - Create cluster parasol job like so:
+        ssh kk
+	cd ~/oo/bed
+	mkdir simpleRepeat
+	cd simpleRepeat
+	cp /cluster/store1/gs11.build28/bed/simpleRepeat/gsub ./gsub
+	mkdir trf
+	ls -1S /scratch/hg/gs.12/build29/contig/*.fa > genome.lst
+	gensub2 genome.lst single gsub spec
+	para create spec
+	para try
+	para check
+	para push
+        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
+
+o - Load this into the database as so
+        ssh hgwdev
+	cd ~/oo/bed/simpleRepeat
+	hgLoadBed hg11 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE)
+
+Make sure that the NT*.fa files are lower-case repeat masked.
+Do something much like the simpleRepeat track, but only
+masking out stuff with a period of 12 or less as so:
+    ssh kk
+    cd ~/oo/bed
+    mkdir trfMask
+    cd trfMask
+
+# I couldn't find a valid gsub according to these instructions so I used the one
+#  from /cluster/store1/gs.12/build29.bad/bed/trfMask
+#  instead of doing ->  cp ~/lastOo/bed/trfMask/gsub ./gsub
+    mkdir trf
+    ls -1S /scratch/hg/gs.12/build29/contig/*.fa > genome.lst
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+When that is done do:
+    ssh kkstore
+    mkdir /scratch/hg/gs.12/build29/trfFa
+    cd ~/oo
+NOTE:Below is a tcsh script
+    foreach i (? ??)
+	cd $i
+        foreach j (NT*)
+	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.12/build29/trfFa/$j.fa.trf
+	echo done $i/$j
+	end
+	cd ..
+    end
+Then ask admins to do a binrsync. DONE
+
+
+
+GETTING FRESH mRNA AND EST SEQUENCE FROM GENBANK. (DONE)
+
+This will create a genbank.129 directory containing compressed
+GenBank flat files and a mrna.129 containing unpacked sequence
+info and auxiliary info in a relatively easy to parse (.ra) 
+format.
+
+  o - Point your browser to ftp://ncbi.nlm.nih.gov/genbank and
+      look at the README.  Figure out the current release number
+      (which is 129).
+  o - Consider deleting one of the older genbank releases.  It's
+      good to at least keep one previous release though.
+  o - Where there is space make a new genbank directory.  Create a
+      symbolic link to it:
+	  mkdir /cluster/store1/genbank.129
+          ln -s /cluster/store1/genbank.129 ~/genbank
+  o - cd ~/genbank
+  o - ftp ncbi.nlm.nih.gov  (do anonymous log-in).  Then do the
+      following commands inside ftp:
+      	   cd genbank
+           prompt
+	   mget gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv*
+      This will take at least 2 hours.
+  o - Log onto server and change to your genbank directory.
+  o - cd /cluster/store1
+  o - mkdir mrna.129
+  o - cd mrna.129
+  o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz | gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
+  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
+
+
+STORING mRNA/EST SEQUENCE AND AUXILIARY INFO  (DONE)
+
+o - Store the mRNA (non-alignment) info in database.
+     hgLoadRna new hg11
+     hgLoadRna add hg11 /cluster/store1/mrna.129/mrna.fa /cluster/store1/mrna.129/mrna.ra
+     hgLoadRna add hg11 /cluster/store1/mrna.129/est.fa /cluster/store1/mrna.129/est.ra
+    The last line will take quite some time to complete.  It will count up to
+    about 3,800,000 before it is done.
+
+
+
+REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
+
+For the NCBI assembly we repeat mask on the sensitive mode setting.
+Patrick Gavin did this, and perhaps will fill in the details later.
+Overall the process was to break the NT contigs into pieces of
+1000000 bases each with
+    cd NTXXX
+    mkdir split
+    cd split
+    faSplit size ../NTXXX.fa 1000000 NTXXX -maxN=1000001 -lift=../NTXXX.lft
+and then arrange to do a cluster run that generates NTXXX_X.fa.out files
+in the split directory.   After this lift up the .out files to whole contig
+coordinates with
+    liftUp NTXXX.fa.out NTXXX.lft warn split/*.fa.out
+Then lift these up to chromosome coordinates with
+    cd ~/oo
+    tcsh jkStuff/liftOut2.sh
+Then load the .out files into the database with:
+    ssh hgwdev
+    cd ~/oo
+    hgLoadOut hg11 ?/*.fa.out ??/*.fa.out DONE BY MATT
+
+
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE)
+
+o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
+    Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
+    Request the admins to do a binrsync to the cluster.
+DONE
+o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
+      Make sure that /scratch/hg/gs.12/build29/contigs is loaded
+      with NT_*.fa and pushed to the cluster nodes.
+          ssh kkstore
+
+	  cd ~/oo/bed
+	  foreach i (refSeq mrna est)
+	      mkdir -p $i
+	      cd $i
+              cp ~kent/lastOo/bed/$i/gsub .
+	      echo /scratch/hg/gs.12/build29/contig/*.fa | wordLine stdin > genome.lst
+	      ls -1 /scratch/hg/h/mrna/$i.fa > mrna.lst
+	      mkdir -p psl
+	      gensub2 genome.lst mrna.lst gsub spec
+	      para create spec
+              cd ..
+	  end 
+DONE
+
+    Now, by hand cd to the mrna, refSeq, and est directories respectively
+     and run a para push and para check in each one. DONE
+      
+o - Process refSeq mRNA and EST alignments into near best in genome.
+      cd ~/oo/bed
+
+      cd refSeq
+      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
+      liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
+      pslSortAcc nohead chrom /cluster/fast1/temp all_refSeq.psl
+      cd .. DONE
+
+      cd mrna
+      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
+      liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
+      pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
+      cd .. DONE
+
+      cd est
+      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
+      liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
+      pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
+      cd .. DONE
+
+o - Load refSeq alignments into database DONE
+      ssh hgwdev
+      cd /cluster/store1/gs.12/build29/bed/refSeq
+      pslCat -dir chrom > refSeqAli.psl
+      hgLoadPsl hg11 -tNameIx refSeqAli.psl
+
+o - Load mRNA alignments into database. DONE
+      ssh hgwdev
+      cd /cluster/store1/gs.12/build29/bed/mrna/chrom
+      foreach i (*.psl)
+          mv $i $i:r_mrna.psl
+      end
+      hgLoadPsl hg11 *.psl
+      cd ..
+      hgLoadPsl hg11 all_mrna.psl -nobin
+
+o - Load EST alignments into database. DONE
+      ssh hgwdev
+      cd /cluster/store1/gs.12/build29/bed/est/chrom
+      foreach i (*.psl)
+            mv $i $i:r_est.psl
+      end
+      hgLoadPsl hg11 *.psl
+      cd ..
+      hgLoadPsl hg11 all_est.psl -nobin
+
+o - Create subset of ESTs with introns and load into database. DONE
+      - ssh kkstore
+      cd ~/oo
+      tcsh jkStuff/makeIntronEst.sh
+      - ssh hgwdev
+      cd ~/oo/bed/est/intronEst
+      hgLoadPsl hg11 *.psl
+
+o - Put orientation info on ESTs into database:
+     ssh kkstore
+     cd ~/oo/bed/est
+     pslSortAcc nohead contig /cluster/fast1/temp contig.psl
+     mkdir /scratch/hg/gs.12/build29/bed
+     cp -r contig /scratch/hg/gs.12/build29/bed/est
+     sudo /cluster/install/utilities/updateLocal
+     cd ~/oo/bed
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1 /scratch/hg/gs.12/build29/bed/est/*.psl > psl.lst
+
+   Now ssh to kk and cd to ~/oo/bed/estOrientInfo.  Copy in
+   gsub from the previous version and edit it to say where
+   things are located in scratch on this version.  Then:
+     gensub2 psl.lst single gsub spec
+     para create spec
+     para try 
+     para push
+   check until done, or use 'para shove'
+DONE - BUT WHEN DOES THIS GO INTO THE DB???
+
+o - Create rnaCluster table
+   ssh hgwdev
+   cd ~/oo
+   mkdir -p bed/rnaCluster/chrom
+   foreach i (? ??)
+       cd $i
+       foreach j (chr*.fa)
+	   set c = $j:r
+	   echo clusterRna hg11 /dev/null ../bed/rnaCluster/chrom/$c.bed -chrom=$c
+	   clusterRna hg11 /dev/null ../bed/rnaCluster/chrom/$c.bed -chrom=$c
+       end
+       cd ..
+   end
+   cd bed/rnaCluster
+   hgLoadBed hg11 rnaCluster chrom/*.bed
+DONE
+
+PRODUCING KNOWN GENES (DONE)
+
+o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
+    into /cluster/store1/mrna.129/refSeq. DONE
+o - Unpack this into fa files and get extra info with:
+       cd /cluster/store1/mrna.129/refSeq
+       gunzip hs.gbff
+       gunzip hs.faa.gz
+       gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta DONE
+o - Align refSeq.fa to genome as described under mRNA/EST alignments above. DONE
+o - Get extra info from NCBI and produce refGene table as so:
+       ssh hgwdev
+       cd ~/oo/bed
+       mkdir refSeq
+       cd refSeq
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref DONE
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc DONE
+o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
+o - RefSeq should have already been aligned to the genome by processes 
+        described under mRNA/EST alignments above.
+o - Produce refGene, refPep, refMrna, and refLink tables as so:
+       ssh hgwdev
+       cd ~/oo/bed/refSeq
+       ln -s /cluster/store1/mrna.129 mrna
+       hgRefSeqMrna hg11 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc DONE
+o - Add Jackson labs info DONE
+     cd ~/oo/bed
+     mkdir jaxOrtholog
+     cd jaxOrtholog
+     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
+     awk -f filter.awk *.rpt > jaxOrtholog.tab
+    Load this into mysql with something like:
+     mysql -u hgcat -pBIGSECRET hg11 < ~/src/hg/lib/jaxOrtholog.sql
+     mysql -u hgcat -pBIGSECRET -A hg11
+    and at the mysql> prompt
+     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+
+
+PRODUCING GENSCAN PREDICTIONS (done)
+   
+o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
+
+        Load up the cluster with hard-masked contigs in
+		/cluster/store1/gs.12/build29/bed/genscan/mContigs
+	(For hg11, the .masked files were not saved during repeat masking.  
+	So the contig (.fa) files in /cluster/store1/gs.12/build29/? and ?? 
+	were processed to convert all lower case bases into N and named 
+	as *.fa.masked and placed under genscan/mContigs).
+
+        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+        cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+        big cluster, due to limitation of memory and swap space on each
+        processing node).
+                cd ~/oo
+                cd bed/genscan
+        Make 3 subdirectories for genscan to put their output files in
+                mkdir gtf pep subopt
+        Generate a list file, genome.list, of all the contigs
+		ls -1S ./mContigs/*.masked > genome.list
+        
+	Edit genome.list to remove jobs on files of "*.fa.masked" which
+        have pure Ns due to heterochromatin (unsequencable stuff) and 
+	will cause genscan to run forever.
+        
+	Create template file, gsub, for gensub2.  For example (3 lines file):
+                #LOOP
+                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+                #ENDLOOP
+        Create a file containing a single line.
+                echo single > single
+        Generate job list file, jobList, for Parasol
+                gensub2 genome.list single gsub jobList
+
+        First issue the following Parasol command:
+                para create jobList
+        Run the following command, which will try first 10 jobs from jobList
+                para try
+        Check if these 10 jobs run OK by
+                para check
+        If they have problems, debug and fix your program, template file,
+        commands, etc. and try again.  If they are OK, then issue the following
+        command, which will ask Parasol to start all the remaining jobs.  For
+	hg11, there were 2043 jobs in total.
+                para push
+        Issue either one of the following two commands to check the
+        status of the cluster and your jobs, until they are done.
+                parasol status
+                para check
+
+o - Convert these to chromosome level files as so:     
+     cd ~/mm
+     cd bed/genscan
+     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+     cat pep/*.pep > genscan.pep
+
+o - Load into the database as so:
+     ssh hgwdev
+     cd ~/mm/bed/genscan
+     ldHgGene hg11 genscan genscan.gtf
+     hgPepPred hg11 generic genscanPep genscan.pep
+
+
+CREATE GOLDEN TRIANGLE (todo)
+
+Make sure that rnaCluster table is in place.   Then
+extract Affy expression info into a form suitable
+for Eisen's clustering program with:
+      cd ~/oo/bed
+      mkdir triangle
+      cd triangle
+      eisenInput hg11 affyHg10.txt
+Transfer this to Windows and do k-means clustering
+with k=200 with cluster.  Transfer results file back
+to ~/oo/bed/triangle/affyCluster_K_G200.kgg.  Then
+do
+      promoSeqFromCluster hg11 1000 affyCluster_K_G200.kgg kg200.unmasked
+Then RepeatMask the .fa file inkg200.unmasked, and copy masked versions
+to kg200.   Then
+      cat kg200/*.fa > all1000.fa
+and set up cluster Improbizer run to do 100 controls for every real
+run on each - putting the output in imp.200.1000.e.  When improbizer
+run is done make a file summarizing the runs as so:
+      cd imp.200.1000.e
+      motifSig ../imp.200.1000.e.iri ../kg200 motif control*
+get rid of insignificant motifs with:
+      cd ..
+      awk '{if ($2 > $3) print; }' imp.200.1000.e.iri > sig.200.1000.e.iri
+turn rest into just dnaMotifs with
+      iriToDnaMotif sig.200.1000.e.iri motif.200.1000.e.txt
+Extract all promoters with
+      featureBits hg11 rnaCluster:upstream:1000 -bed=upstream1000.bed -fa=upstream1000.fa
+Locate motifs on all promoters with
+      dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
+      liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
+
+
+DOING HUMAN/MOUSE ALIGMENTS (todo)
+
+o - Start with the mouse assembly in 1 Mb chunks lower-case
+    repeat and tandem-repeat masked in /scratch/hg/mm1/trfFa,
+    and the human assembly in contigs similiarly masked in
+    /scratch/hg/gs.12/build29/trfFa
+    Then
+        ssh kkstore
+	cd ~/oo/bed
+	mkdir blatMus
+	cd blatMus
+	ls -1 /scratch/hg/mm1/trfFa/*.fa.trf > mouseAll
+	mkdir mm
+	cd mm
+	splitFile ../mouseAll 50 mm
+	cd ..
+	ls -1 mm/* > mouse.lst
+    Then bundle up the human into pieces of less than 12
+    meg mostly by
+	ls -lS /scratch/hg/gs.12/build29/trfFa/*.fa.trf > bigHuman
+    edit this file and move all of the lines less than 3 meg
+    into the file smallHuman.  Then do
+        awk '{printf("/scratch/hg/gs.12/build29/trfFa/%s\n", $9);}' bigHuman > bigH
+        awk '{printf("/scratch/hg/gs.12/build29/trfFa/%s\n", $9);}' smallHuman > smallH
+	mkdir hs
+	cd hs
+	splitFile ../bigH 1 big
+	rm big177
+	splitFile ../smallH 4 small
+	rm small 705
+        cd ..
+	ls -1 hs/* > human.lst
+    (The rm's probably indicate splitFile needs a fix - they are zero length).
+    Finally generate the job list with
+        gensub2 human.lst mouse.lst gsub spec
+
+o - Do the cluster run as so
+       ssh kk
+       cd ~/oo/bed/blatMus
+       mkdir psl
+       para create spec
+       para try
+    and then do para push/check/push/check/shove etc.
+
+o - Sort alignments as so 
+       ssh kkstore
+       cd ~/oo/bed/blatMus
+       pslCat -dir -check psl | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin -pslQ | pslSortAcc nohead chromPile /cluster/store2/temp stdin
+o - Get rid of big pile-ups due to contamination as so:
+       mkdir chrom
+       cd chromPile
+       foreach i (*.psl)
+           echo $i
+           pslUnpile -maxPile=250 $i ../chrom/$i
+       end
+o - Rename to correspond with tables as so and load into database:
+       ssh hgwdev
+       cd ~/oo/bed/blatMus/chrom
+       foreach i (*.psl)
+	   set r = $i:r
+           mv $i ${r}_blatMus.psl
+       end
+       hgLoadPsl hg11 *.psl
+o - load sequence into database as so:
+	ssh kks00
+	faSplit about /projects/hg3/mouse/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/mouse/arachne.3/whole/unplaced
+	ssh hgwdev
+	hgLoadRna addSeq '-abbr=gnl|' hg11 /projects/hg3/mouse/arachne.3/whole/unpla*.fa
+	hgLoadRna addSeq '-abbr=con' hg11 /projects/hg3/mouse/arachne.3/whole/SET*.mfa
+    This will take quite some time.  Perhaps an hour .
+
+o - Produce 'best in genome' filtered version:
+        ssh kks00
+	cd ~/mouse/vsOo33
+	pslSort dirs blatMouseAll.psl temp blatMouse
+	pslReps blatMouseAll.psl bestMouseAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
+	pslSortAcc nohead bestMouse temp bestMouseAll.psl
+	cd bestMouse
+        foreach i (*.psl)
+	   set r = $i:r
+           mv $i ${r}_bestMouse.psl
+        end
+o - Load best in genome into database as so:
+	ssh hgwdev
+	cd ~/mouse/vsOo33/bestMouse
+        hgLoadPsl hg11 *.psl
+
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (for mRNA, not for EST) IN PROGRESS
+
+Here you align vertebrate mRNAs against the masked genome on the
+cluster you set up during the previous step.
+
+o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
+    /cluster/store1/genbank.129 DONE
+
+o - Process these out of genbank flat files as so:
+       ssh kkstore
+       cd /cluster/store1/genbank.129
+       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
+       cd ../mrna.129
+       faSplit sequence xenoRna.fa 2 xenoRna
+       ssh kks00
+       cd /scratch/hg
+       mkdir mrna.129
+       cp /cluster/store1/mrna.129/xenoRna*.* mrna.129
+Request binrysnc of /scratch/hg/mrna.129 from the admins
+
+Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.12/build29/contig/trf
+in RepeatMasked + trf form.  (This is probably done already in mouse alignment
+stage).  Also make sure /scratch/hg/mrna.129 is loaded with xenoRna.fa Then do:
+       ssh kkstore
+       cd /cluster/store1/gs.12/build29/bed
+       mkdir xenoMrna
+       cd xenoMrna
+       mkdir psl
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
+       ls -1S /scratch/hg/mrna.129/xenoRna?*.fa > mrna.lst
+       cp ~kent/lastOo/bed/xenoMrna/gsub .
+       gensub2 human.lst mrna.lst gsub spec
+       para create spec
+       para try
+       para check
+       para push 
+Do para check until the run is done, doing para push if
+necessary on occassion.
+
+Sort xeno mRNA alignments as so:
+       ssh kkstore
+       cd ~/oo/bed/xenoMrna
+       pslSort dirs raw.psl /cluster/store2/temp psl
+       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
+       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+       pslCat -dir chrom > xenoMrna.psl
+       rm -r chrom raw.psl cooked.psl chrom.psl
+DONE
+Load into database as so:
+       ssh hgwdev
+       cd ~/oo/bed/xenoMrna
+       hgLoadPsl hg11 xenoMrna.psl -tNameIx
+       cd /cluster/store1/mrna.129
+       hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
+DONE
+Similarly do xenoEst aligments:
+       ssh kkstore
+       cd /cluster/store1/gs.8/build29/oo/bed
+       mkdir xenoEst
+       cd xenoEst
+       mkdir psl
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
+       ls -1S /scratch/hg/mrna.129/xenoEst?*.fa > mrna.lst
+       cp ~kent/lastOo/bed/xenoEst/gsub .IN PROGRESS - making xenoEST.fa /.ra
+       gensub2 human.lst mrna.lst gsub spec
+       para create spec
+       para push
+
+Sort xenoEst alignments:
+       ssh kkstore
+       cd ~/oo/bed/xenoEst
+       pslSort dirs raw.psl /cluster/store2/temp psl
+       pslReps raw.psl cooked.psl /dev/null -minAli=0.10
+       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
+       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+       pslCat -dir chrom > xenoEst.psl
+       rm -r chrom raw.psl cooked.psl chrom.psl
+
+Load into database as so:
+       ssh hgwdev
+       cd ~/oo/bed/xenoEst
+       hgLoadPsl hg11 xenoEst.psl -tNameIx
+       cd /cluster/store1/mrna.129
+       foreach i (xenoEst*.fa)
+	   echo processing $i
+	   hgLoadRna add hg11 /cluster/store1/mrna.129/$i $i:r.ra
+       end
+
+
+PRODUCING FISH ALIGNMENTS (IN PROGRESS)
+
+o - Do fish/human alignments.
+       ssh kk
+       cd ~/oo/bed
+       mkdir blatFish
+       cd blatFish
+       mkdir psl
+       ls -1S /scratch/hg/fish/*.fa > fish.lst
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
+     Copy over gsub from previous version and edit paths to
+     point to current assembly.
+       gensub2 human.lst fish.lst gsub spec
+       para create spec DONE
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push
+     wait about 2 hours and do another
+       para push IN PROGRESS
+     do para checks and if necessary para pushes until done
+     or use para shove.
+o - Sort alignments as so 
+       pslCat -dir psl | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
+    load into database:
+       ssh hgwdev
+       cd ~/oo/bed/blatFish/chrom
+       foreach i (*.psl)
+	   set r = $i:r
+           mv $i ${r}_blatFish.psl
+       end
+       hgLoadPsl hg11 *.psl
+
+
+
+TIGR GENE INDEX (todo)
+
+  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
+      ~/oo.29/bed/tgi and then execute the following commands:
+          cd ~/oo.29/bed/tgi
+	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
+	  foreach i (mouse cow human pig rat)
+	      mkdir $i
+	      cd $i
+	      gtar -zxf ../${i}*.tgz
+	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
+	      cd ..
+	  end
+	  mv human.gff human.bak
+	  sed s/THCs/TCs/ human.bak > human.gff
+	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+
+
+      
+LOAD STS MAP (todo)
+     - login to hgwdev
+      cd ~/oo/bed
+      hg11 < ~/src/hg/lib/stsMap.sql
+      mkdir stsMap
+      cd stsMap
+      bedSort /projects/cc/hg/mapplots/data/tracks/build29/stsMap.bed stsMap.bed
+      - Enter database with "hg11" command.
+      - At mysql> prompt type in:
+          load data local infile 'stsMap.bed' into table stsMap;
+      - At mysql> prompt type
+          quit
+
+
+LOAD CHROMOSOME BANDS (todo)
+      - login to hgwdev
+      cd /cluster/store1/gs.12/build29/bed
+      mkdir cytoBands
+      cp /projects/cc/hg/mapplots/data/tracks/build29/cytobands.bed cytoBands
+      hg11 < ~/src/hg/lib/cytoBand.sql
+      Enter database with "hg11" command.
+      - At mysql> prompt type in:
+          load data local infile 'cytobands.bed' into table cytoBand;
+      - At mysql> prompt type
+          quit
+
+LOAD MOUSEREF TRACK (todo)
+    First copy in data from kkstore to ~/oo/bed/mouseRef.  
+    Then substitute 'genome' for the appropriate chromosome 
+    in each of the alignment files.  Finally do:
+       hgRefAlign webb hg11 mouseRef *.alignments
+
+LOAD AVID MOUSE TRACK (todo)
+      ssh cc98
+      cd ~/oo/bed
+      mkdir avidMouse
+      cd avidMouse
+      wget http://pipeline.lbl.gov/tableCS-LBNL.txt
+      hgAvidShortBed *.txt avidRepeat.bed avidUnique.bed
+      hgLoadBed avidRepeat avidRepeat.bed
+      hgLoadBed avidUnique avidUnique.bed
+
+
+LOAD SNPS (todo)
+      - ssh hgwdev
+      - cd ~/oo/bed
+      - mkdir snp
+      - cd snp
+      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo33.gz
+      - Unpack.
+        grep RANDOM gp.oo33 > snpTsc.txt
+        grep MIXED  gp.oo33 >> snpTsc.txt
+        grep BAC_OVERLAP  gp.oo33 > snpNih.txt
+        grep OTHER  gp.oo33 >> snpNih.txt
+        awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
+        awk -f filter.awk snpNih.txt > snpNih.contig.bed
+        liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
+        liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
+	hgLoadBed hg11 snpTsc snpTsc.bed
+	hgLoadBed hg11 snpNih snpNih.bed
+
+LOAD CPGISLANDS (todo)
+     - login to hgwdev
+     - cd /cluster/store1/gs.12/build29/bed
+     - mkdir cpgIsland
+     - cd cpgIsland
+     - hg11 < ~kent/src/hg/lib/cpgIsland.sql
+     - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_dec2001.tar.gz
+     - tar -xf cpg*.tar
+     - copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland
+     - awk -f filter.awk */*/NT_*/*.cpg > contig.bed
+     - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
+     - Enter database with "hg11" command.
+     - At mysql> prompt type in:
+          load data local infile 'cpgIsland.bed' into table cpgIsland
+
+LOAD ENSEMBL GENES (todo)
+     cd ~/oo/bed
+     mkdir ensembl
+     cd ensembl
+     Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
+     predictions) here. (e.g. wget
+     http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
+     gunzip xxx.gtf.gtz
+     Starting from Hg10, ensembl seems to have done their own lifting,
+     so just collect all chromosome .gtf files.
+     cat ?.gtf ??.gtf >all.gtf
+
+     Add "chr" to front of each line to make it compatible with ldHgGene 
+     addchr all.gtf > ensembl.gtf
+     rm all.gtf
+     ldHgGene hg11 ensGene ensembl.gtf
+o - Load Ensembl peptides:
+     (poke around ensembl to get their peptide files as ensembl.pep)
+     
+     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
+
+     gunzip Homo_sapiens.pep.fa.gz
+     
+     Substitute ENST for ENSP in ensemble.pep with subs
+     edit subs.in to read: ENSP|ENST
+
+     subs -e Homo_sapiens.pep.fa >/dev/null
+
+     hgPepPred hg11 generic ensPep ensembl.pep
+
+LOAD SANGER22 GENES 
+      cd ~/oo/bed
+      mkdir sanger22
+      cd sanger22
+      not sure where these files were downloaded from
+      grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg11 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
+          | ldHgGene hg11 sanger22pseudo stdin
+  Note: this creates sanger22extras, but doesn't currently create
+  a correct sanger22 table, which are replaced in the next steps
+      sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+          | ldHgGene hg11 sanger22 stdin
+      sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+          | ldHgGene hg11 sanger22pseudo stdin
+
+      hgPepPred hg11 generic sanger22pep *.pep
+
+LOAD SANGER 20 GENES (todo)
+     First download files from James Gilbert's email to ~/oo/bed/sanger20 and
+     go to that directory while logged onto hgwdev.  Then:
+        grep -v Pseudogene chr_20*.gtf | ldHgGene hg11 sanger20 stdin
+	hgSanger20 hg11 *.gtf *.info
+
+
+LOAD RNAGENES (todo)
+      - login to hgwdev
+      - cd ~kent/src/hg/lib
+      - hg11 < rnaGene.sql
+      - cd /cluster/store1/gs.12/build29/bed
+      - mkdir rnaGene
+      - cd rnaGene
+      - download data from ftp.genetics.wustl.edu/pub/eddy/pickup/ncrna-oo27.gff.gz
+      - gunzip *.gz
+      - liftUp chrom.gff ../../jkStuff/liftAll.lft carry ncrna-oo27.gff
+      - hgRnaGenes hg11 chrom.gff
+
+LOAD EXOFISH (todo)
+     - login to hgwdev
+     - cd /cluster/store1/gs.12/build29/bed
+     - mkdir exoFish
+     - cd exoFish
+     - hg11 < ~kent/src/hg/lib/exoFish.sql
+     - Put email attatchment from Olivier Jaillon (ojaaillon@genoscope.cns.fr)
+       into /cluster/store1/gs.12/build29/bed/exoFish/all_maping_ecore
+     - awk -f filter.awk all_maping_ecore > exoFish.bed
+     - hgLoadBed hg11 exoFish exoFish.bed
+
+LOAD MOUSE SYNTENY (todo)
+     - login to hgwdev.
+     - cd ~/kent/src/hg/lib
+     - hg11 < mouseSyn.sql
+     - mkdir ~/oo/bed/mouseSyn
+     - cd ~/oo/bed/mouseSyn
+     - Put Dianna Church's (church@ncbi.nlm.nih.gov) email attatchment as
+       mouseSyn.txt
+     - awk -f format.awk *.txt > mouseSyn.bed
+     - delete first line of mouseSyn.bed
+     - Enter database with "hg11" command.
+     - At mysql> prompt type in:
+          load data local infile 'mouseSyn.bed' into table mouseSyn
+
+
+LOAD GENIE (todo)
+     - cat */ctg*/ctg*.affymetrix.gtf > predContigs.gtf
+     - liftUp predChrom.gtf ../../jkStuff/liftAll.lft warn predContigs.gtf
+     - ldHgGene hg11 genieAlt predChrom.gtf
+
+     - cat */ctg*/ctg*.affymetrix.aa > pred.aa
+     - hgPepPred hg11 genie pred.aa 
+
+     - hg11
+         mysql> delete * from genieAlt where name like 'RS.%';
+         mysql> delete * from genieAlt where name like 'C.%';
+
+LOAD SOFTBERRY GENES (todo)
+     - ln -s /cluster/store1/gs.12/build29/ ~/oo
+     - cd ~/oo/bed
+     - mkdir softberry
+     - cd softberry
+     - get ftp://www.softberry.com/pub/SC_DEC01/*
+     - mkdir output
+     - Run the fixFormat.pl routine in
+     	~/oo/bed/softberry like so:
+        ./fixFormat.pl output
+     - This will stick all the properly converted .gff and .pro files in
+     the directory named "output".
+     - cd output
+     ldHgGene hg11 softberryGene chr*.gff
+     hgPepPred hg11 softberry *.pro
+     hgSoftberryHom hg11 *.pro
+
+LOAD GENEID GENES (todo)
+     mkdir ~/oo/bed/geneid
+     cd ~/oo/bed/geneid
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/geneid_v1.1/
+     cd ..
+     ldHgGene hg11 geneid download/*.gtf -exon=CDS
+     hgPepPred hg11 generic geneidPep download/*.prot
+
+LOAD ACEMBLY
+    - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
+      place in ~/oo/bed/acembly
+    - cd ~/oo/bed/acembly
+    - Replace c_chr with chr in acembly*.gff
+    - Use /cluster/store1/gs.12/build29/mattStuff/filterGff.pl to do the above
+        and to concat the results into the the aceChrom.gff gile. 
+      Read the script to see what it does. It's tiny and simple.
+    - Use /cluster/store1/gs.12/build29/mattStuff/filterProteins.pl to do the
+below steps.
+    - Remove G_t*_  and likewise G_t2_, etc., from acemblyproteins.*.fasta
+       and concatenate all the protein.fasta files into a single acembly.pep file
+    - Load into database as so:
+        ldHgGene hg11 acembly aceChrom.gff
+        hgPepPred hg11 generic acemblyPep acembly.pep
+
+LOAD GENOMIC DUPES (todo)
+o - Load genomic dupes
+    ssh hgwdev
+    cd ~/oo/bed
+    mkdir genomicDups
+    cd genomicDups
+    wget http://codon/jab/web/takeoff/oo33_dups_for_kent.zip
+    unzip *.zip
+    awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
+    mysql -u hgcat -pbigSECRET hg11 < ~/src/hg/lib/genomicDups.sql
+    hgLoadBed hg11 -oldTable genomicDups genomicDupes.bed
+
+FAKING DATA FROM PREVIOUS VERSION
+(This is just for until proper track arrives.  Rescues about
+97% of data  Just an experiment, not really followed through on).
+
+o - Rescuing STS track:
+     - log onto hgwdev
+     - mkdir ~/oo/rescue
+     - cd !$
+     - mkdir sts
+     - cd sts
+     - bedDown hg3 mapGenethon sts.fa sts.tab
+     - echo ~/oo/sts.fa > fa.lst
+     - pslOoJobs ~/oo ~/oo/rescue/sts/fa.lst ~/oo/rescue/sts g2g
+     - log onto cc01
+     - cc ~/oo/rescue/sts
+     - split all.con into 3 parts and condor_submit each part
+     - wait for assembly to finish
+     - cd psl
+     - mkdir all
+     - ln ?/*.psl ??/*.psl *.psl all
+     - pslSort dirs raw.psl temp all
+     - pslReps raw.psl contig.psl /dev/null
+     - rm raw.psl
+     - liftUp chrom.psl ../../../jkStuff/liftAll.lft carry contig.psl
+     - rm contig.psl
+     - mv chrom.psl ../convert.psl
+
+
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
+
+    - loading both blastz alignments and reference (single coverage) alignments
+    - in xAli format, which includes sequence
+    - done in a tmp dir and intermediate files discarded
+
+    - create psl files for each per-contig lav file
+
+       set sc=""
+       set tbl="blastzMm2"
+       foreach chrdir (/cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/lav/chr*)
+         set chr=$chrdir:t
+         set outdir=lav-psl${sc}/$chr
+         mkdir -p $outdir
+         foreach lav ($chrdir/*.lav${sc})
+           lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
+         end
+       end
+
+    - Convert to per-chromsome files, sort, and add sequence
+       mkdir -p lav-xa{sc}
+       foreach chrdir (lav-psl${sc}/*)
+         set chr=$chrdir:t
+         pslCat -check -nohead -ext=.psl -dir lav-psl${sc}/$chr \
+          | liftUp -type=.psl -pslQ -nohead stdout /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
+          | sort -k 15n -k 16n \
+          | pslToXa stdin lav-xa${sc}/${chr}_${tbl}.xa /cluster/store2/mm.2002.02/mm2/nib /cluster/store1/gs.12/build29/nib
+       end
+
+    - repeat both loops, this time doing the single-coverage alignment:
+        set sc=".sc"
+        set tbl="blastzMm2Sc
+        <above loops>
+
+    - Load tables
+        cd lav-xa
+        hgLoadPsl -xa hg11 *.xa
+        cd lav-xa.sc
+        hgLoadPsl -xa hg11 *.xa
+  
+
+   - Load aligned ancient repeats, from
+       /cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/aar
+     Ryan create:
+       /cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/aar/xali
+     - Loaded into aarMm2
+

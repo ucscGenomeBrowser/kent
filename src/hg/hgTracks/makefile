@@ -10,7 +10,7 @@ A = hgTracks
 O = $A.o
 
 my: compile
-	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
+	mv $A /usr/local/apache/cgi-bin-$(USER)/$A.2
 
 alpha: compile
 	mv $A /usr/local/apache/cgi-bin/$A
@@ -18,14 +18,21 @@ alpha: compile
 beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
+mgsc: compile
+	mv $A /usr/local/apache/cgi-bin-mgsc/$A
+
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
 #	strip $A
 	chmod a+rx $A
 
+debug: $O
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out $A
+
 lib:
 	cd ../../lib; make
 
-tags: 
+tags:  
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h

@@ -46,13 +46,58 @@ altColor 128,128,255,
 type bed 5 +
 
 track mouseSyn
-shortLabel Mouse Synteny
+shortLabel NCBI Synteny
 longLabel Corresponding Chromosome in Mouse
 priority 4 
 visibility hide
 color 120,70,30
 altColor 0,0,0
 type bed 4+
+
+track syntenyBerk
+shortLabel Berkeley Synteny
+longLabel UC Berkeley Corresponding Chromosome in Mouse (100k window)
+priority 4.4
+visibility hide
+color 120,70,30
+altColor 0,0,0
+type bed 4+
+
+track mouseOrtho
+shortLabel Mouse Ortholog
+longLabel Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)
+priority 4.1
+visibility dense
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track mouseOrthoSeed
+shortLabel Tight Ortholog
+longLabel Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)
+priority 4.1
+visibility dense
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track humanParalog
+shortLabel Human Paralog 
+longLabel Human Paralogs using Fgenesh++ Gene Predictions
+priority 4.2
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track synteny100000
+shortLabel UCSC Synteny
+longLabel Mouse Synteny using blastz single coverage with 100,000 base window
+priority 4.3
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 .
 
 track isochores
 shortLabel Isochores
@@ -105,7 +150,7 @@ track clonePos
 priority 9.5
 shortLabel Coverage
 longLabel Clone Coverage/Fragment Position
-visibility dense
+visibility hide
 altColor 180,180,180 
 
 track bacEndPairs
@@ -246,11 +291,28 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
+track mouseOrtho
+shortLabel Mouse Ortholog
+longLabel Mouse Orthology using Fgenesh++ Gene Predictions
+priority 4.1
+visibility dense
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Mouse Genome Homology
+priority 15.5
+visibility dense
+color 0,90,100
+type genePred sgpPep
+
 track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
 priority 16
-visibility dense
+visibility hide
 color 0,100,0
 type genePred softberryPep
 
@@ -270,6 +332,14 @@ visibility hide
 color 0,90,100
 type genePred geneidPep
 
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+priority 17.5
+visibility dense
+color 170,100,0
+type genePred genscanPep
+
 track genscanExtra
 shortLabel Genscan Extra
 longLabel Genscan Extra (Suboptimal) Exon Predictions 
@@ -278,6 +348,15 @@ visibility hide
 color 180,90,0
 type bed 6
 chromosomes chr22,
+
+track npredGene
+shortLabel NCBI Prediction
+longLabel NCBI Gene Predictions
+priority 17.8
+visibility hide
+color 170,100,0
+type genePred npredPep 
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
 
 track mrna
 shortLabel $Organism mRNAs
@@ -303,11 +382,27 @@ visibility hide
 color 200,0,50
 type bed 12
 
-track triangle
-shortLabel Golden Triangle
+track transfacHit
+shortLabel Transfac Hits 
+longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
+priority 18.28
+visibility hide
+spectrum on
+type bed 6
+
+track triangleSelf
+shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
+priority 18.29
+visibility hide
+spectrum on
+type bed 6
+
+track triangle
+shortLabel Golden Extra
+longLabel Golden Triangle Motif Matching Sites Near Transcription Start
 priority 18.3
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
@@ -356,7 +451,7 @@ track uniGene
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
 priority 20.5
-visibility dense
+visibility hide
 type psl .
 
 track mgc_mrna
@@ -421,16 +516,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blatMusRef
-shortLabel Mouse Blat Ref
-longLabel Mouse Translated Blat Reference Alignment
-priority 24
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
 track blatMouse
 shortLabel Mouse Blat
 longLabel Mouse Translated Blat Alignments
@@ -483,13 +568,13 @@ track blastzMouse
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse Alignments
 priority 25.8
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
 type bed 5 +
 
-track blastzMousePsl
+track blastzMm2
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse Alignments
 priority 25.8
@@ -497,8 +582,67 @@ visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
+type psl xeno
+
+track blastzMm2Sc
+shortLabel Blastz Mouse SC
+longLabel Merged Blastz Mouse Single Coverage Alignments
+priority 25.81
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track aarMm2
+shortLabel Ancient Repeats
+longLabel Aligned Human/Mouse Ancient Repeats
+priority 25.82
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
 type psl .
 
+track blastzMm2Ref
+shortLabel Blastz Mouse Ref
+longLabel Blastz Mouse + Ancient Repeats Reference Alignment
+priority 25.83
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzHg
+shortLabel Blastz Human 
+longLabel Blastz Human Human
+priority 25.85
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzHgRef
+shortLabel Blastz Human Ref
+longLabel Blastz Human Human Reference Alignment 
+priority 25.86
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzHgTop
+shortLabel Blastz Human Top
+longLabel Blastz Human Human Top Scoring Alignments
+priority 25.87
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
 
 track avidUnique
 shortLabel AVID Mouse
@@ -555,6 +699,14 @@ altColor 255,240,200
 spectrum on
 chromosomes chr22,
 type bed 5 +
+
+track humMus
+shortLabel Mouse Evolution
+longLabel Human/Mouse Evolutionary Mutual Information
+altColor 10,50,100
+priority 25.6
+visibility hide
+type sample 9 
 
 track exoFish
 shortLabel Exofish Ecores
@@ -627,14 +779,6 @@ priority 33.5
 visibility hide
 spectrum on
 type bed 12
-
-track humMus
-shortLabel Mouse Evolution
-longLabel Human/Mouse Evolutionary Mutual Information
-altColor 10,50,100
-priority 33.6
-visibility hide
-type sample 9 
 
 track rmsk
 shortLabel RepeatMasker
@@ -755,29 +899,3 @@ visibility hide
 spectrum on
 private 1
 type psl est
-
-track blatMus0202
-shortLabel blatMus0202
-longLabel Blat alignment of mm.2002.02/arachne for contamination checking
-priority 50.0
-visibility hide
-spectrum on
-private 1
-type psl .
-
-track blatMus0202sm
-shortLabel blatMus0202sm
-longLabel Blat soft-masked alignment of mm.2002.02/arachne for contamination checking
-priority 50.1
-visibility hide
-spectrum on
-private 1
-type psl .
-
-track blatMus0202Contam
-shortLabel blatMus0202Contam
-longLabel Known contamination of blatMus0202
-priority 50.2
-visibility hide
-private 1
-type psl .

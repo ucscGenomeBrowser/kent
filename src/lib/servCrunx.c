@@ -18,8 +18,8 @@ char *tempDirHtml = "/trash";
 int tlcLen = strlen(tempDirCgi);
 int tlhLen = strlen(tempDirHtml);
 
-tname = tempnam(tempDirCgi, base);
-sprintf(tn->forCgi, "%s%s", tname, suffix);
+tname = rTempName(tempDirCgi, base, suffix);
+strcpy(tn->forCgi, tname);
 memcpy(tn->forHtml, tempDirHtml, tlhLen);
 strcpy(tn->forHtml+tlhLen, tn->forCgi+tlcLen);
 }

@@ -5,6 +5,10 @@
 #ifndef DNAMOTIF_H
 #define DNAMOTIF_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 struct dnaMotif
 /* A gapless DNA motif */
     {

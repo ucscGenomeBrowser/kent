@@ -512,8 +512,11 @@ struct ggMrnaAli *maList=NULL, *ma=NULL;
 for(psl = pslList; psl != NULL; psl = psl->next)
     {
     ma = pslToGgMrnaAli(psl, chrom, chromStart, chromEnd, genoSeq);
-    ggMrnaAliMergeBlocks(ma, maxGap);
-    slAddHead(&maList, ma);
+    if(ma != NULL)
+	{
+	ggMrnaAliMergeBlocks(ma, maxGap);
+	slAddHead(&maList, ma);
+	}
     }
 slReverse(&maList);
 return maList;

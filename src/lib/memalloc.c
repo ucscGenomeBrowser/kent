@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* memalloc.c - Routines to allocate and deallocate dynamic memory. 
  * This lets you have a stack of memory handlers.  The default
  * memory handler is a thin shell around malloc/free.  You can

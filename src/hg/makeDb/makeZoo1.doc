@@ -1,117 +1,87 @@
-This file describes how we made the zoo browser database starting first with
-just using the mouse data.
+This file describes how we made the zoo browser database for each organism,
+specified by $ORG
 
-DOWNLOAD THE ZOO MOUSE DATA AND SET UP A LOCAL DIRECTORY STRUCTURE
+DOWNLOAD THE ZOO $ORG DATA AND SET UP A LOCAL DIRECTORY STRUCTURE
 o - See the doc in /cluster/store2/zoo/zoo.readme for download instructions,
 then download the data.
+
+The following should be put in a script, but it is not yet
+For each organism $ORG in the organism list
+do:
     cd /cluster/store2/zoo
-    mkdir zooMouse1
-    cd zooMouse1
+    mkdir zoo$ORG1
+    cd zoo$ORG1
     mkdir 1 (This fakes the chromosome directory structure so we can fake a
 browser track with 1 chromosome)
     cd 1
     mkdir ctgCFTR
-    cp /cluster/store2/zoo/rawData/CFTRseqs/mouse_CFTR.fasta.masked ctgCFTR
+    cp /cluster/store2/zoo/rawData/CFTRseqs/$ORG_CFTR.fasta.masked ctgCFTR
     cd ..
-    ln -s ctgCFTR/mouse_CFTR.fasta.masked ./chr1.fa
-    cd /cluster/store2/zoo/zooMouse1
+    ln -s ctgCFTR/$ORG_CFTR.fasta.masked ./chr1.fa
+    cd /cluster/store2/zoo/zoo$ORG1
     mkdir bed
-    mkdir bed/scripts
 
-PROCESSING MOUSE MRNA FROM GENBANK INTO DATABASE. (done)
+IMPORTANT STEP - FAKE THE CHR1 CHROMOSOME IN THE FA FILEs
+o      NOTE: The string CFTR_$ORG needs to be changed to chr1 in all the .fa files
+      files in the zoo/$ORG/1 directory. For example zoo/zooMouse1/1/chr1.fa has the string 
+      mouse_CFTR in it. This needs to be changed to chr1 globally in the file. I did this by hand in each
+      .fa file (all 12) to get them to work. In vi, you can do a global search and replace by typing:
+      ESC :%s/mouse_CFTR/chr1/g
+      The above example is for the mouse.
 
-o - Create the mouseRNA and mouseEST fasta files.
+PROCESSING $ORG MRNA FROM GENBANK INTO DATABASE. (done)
+
+o - Create the $ORGRNA and $ORGEST fasta files. This is usually already done.
     ssh kkstore
     cd /cluster/store1/genbank.127
-    gunzip -c gbrod*.gz | gbToFaRa /projects/compbio/experiments/hg/h/mouseRna.fil ../m
-rna.127/mouseRna.fa ../mrna.127/mouseRna.ra ../mrna.127/mouseRna.ta stdin
-    gunzip -c gbest*.gz | gbToFaRa /projects/compbio/experiments/hg/h/mouseRna.fil ../m
-rna.127/mouseEst.fa ../mrna.127/mouseEst.ra ../mrna.127/mouseEst.ta stdin
+    gunzip -c gbrod*.gz | gbToFaRa /projects/compbio/experiments/hg/h/anyRna.fil mrna.ra mrna.fa mrna.ta -byOrganism=org stdin gunzip -c gbrod*.gz | gbToFaRa /projects/compbio/experiments/hg/h/anyRna.fil mrna.ra mrna.127 mrna.ta -byOrganism=org stdin
+    gunzip -c gbest*.gz | gbToFaRa /projects/compbio/experiments/hg/h/anyRna.fil est.ra est.fa est.ta -byOrganism=org stdin gunzip -c gbrod*.gz | gbToFaRa /projects/compbio/experiments/hg/h/anyRna.fil mrna.ra mrna.127 mrna.ta -byOrganism=org stdin
 
 
 CREATING DATABASE (done)
 
 o - ln -s /cluster/store2/zoo ~/zoo
-o - Create the database.
-     - ssh hgwdev
-     - Enter mysql via:
-           mysql -u hgcat -pbigsecret
-     - At mysql prompt type:
-	create database zooMouse1;
-	quit
-     - make a semi-permanent read-only alias:
-        alias zooMouse1 mysql -u hguser -phguserstuff -A zooMouse1
-o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
-o - Store the mRNA (non-alignment) info in database.
-     hgLoadRna new zooMouse1
-     hgLoadRna add -type=mRNA zooMouse1 /cluster/store1/mrna.127/mouseRna.fa /cluster/store1/mrna.127/mouseRna.ra
-     hgLoadRna add -type=EST zooMouse1 /cluster/store1/mrna.127/mouseEst.fa cvs update/cluster/store1/mrna.127/mouseEst.ra
+  - make a semi-permanent read-only alias:
+        alias zoo$ORG1 mysql -u hguser -phguserstuff -A zoo$ORG1
+o - Make sure there is at least 20 gig free on hgwdev:/usr/local/mysql 
+o The makeZoo.pl script will do the following things
+o - Run the zoo/scripts/makeZoo.pl script to create the databases and store the mRNA (non-alignment) info in database.
+The script will do the following for each organism:
+     hgLoadRna new zoo$ORG1
+     hgLoadRna add -type=mRNA zoo$ORG1 /cluster/store1/mrna.128/org/$ORG-GENUS_SP/mrna.fa /cluster/store1/mrna.128/org/$ORG-GENUS_SPECIES/mrna.ra
+    If EST data is available it will also do:
+     hgLoadRna add -type=EST zoo$ORG1 /cluster/store1/mrna.128/org/$ORG-GENUS_SP/est.fa /cluster/store1/mrna.128/org/$ORG-GENUS_SPECIES/est.ra
     The last line will take quite some time to complete.  
-        It will count up to about 3,800,000 before it is done.
 
-REPEAT MASKING (done)
+o - Add the trackDB table to the database
+The script will also do this
+
+STORING ZOO SEQUENCE AND ASSEMBLY INFORMATION  (DONE) 
+
+Create packed chromosome sequence files 
+o The makeZoo.pl script will also do the following things
+- Load chromosome sequence info into database 
+- Store zoo info in database.
+- Make and load GC percent table
+
+REPEAT MASKING (DONE)
 
 We don't use the cluster for this because we have such a small input data set.
 Repeat mask on sensitive settings by doing.
-    ssh kk
-    cd ~/zoo/zooMouse1/bed
-    mkdir rmskS
-    cd rmskS
-    cp /cluster/store2/mm.2001.11/mm1/bed/rmskS/rmskS.csh  ../scripts
-    edit rmskS.csh to update paths to current mouse assembly and to output
-    directory called "out"
-    mkdir out
-    run ../scripts/rmskS.csh chr1.fa     
 
-Then load the .out files into the database with:
-    ssh hgwdev
-    cd /cluster/store2/zoo/zooMouse1/bed/rmskS/out 
-    hgLoadOut zooMouse1 *.fa.out
+The makeZoo.pl script will generate the files needed to repeat mask. It will put them in zoo/work/rmskS
+Then just ssh to kk, then cd to the zoo/work/rmskS directory and do a 'para push'.
 
+When repeat masking is done, load the .out files by running the makeZoo.pl script again
 
-STORING ZOO SEQUENCE AND ASSEMBLY INFORMATION  (done) 
-
-Create packed chromosome sequence files 
-     ssh kkstore
-     cd ~/zoo/zooMouse1
-     cp /cluster/store2/mm.2001.11/mm1/jkStuff/makeNib.sh bed/scripts
-     bed/scripts/makeNib.sh
-     You will get some error messages because we aren't processing as
-         many chromsomes as makeNib.sh is expecting but that's ok.
-
-Load chromosome sequence info into database 
-     ssh hgwdev
-     mysql -A -u hgcat -pbigsecret zooMouse1  < ~/src/hg/lib/chromInfo.sql
-     cd ~/zoo/zooMouse1
-     hgNibSeq -preMadeNib zooMouse1 /cluster/store2/zoo/zooMouse1/nib ?/chr*.fa ??/chr*.fa NA*/chr*.fa
-
-Store zoo info in database.
-     cd /cluster/store2/zoo/zooMouse1
-     hgGoldGapGl zooMouse1 /cluster/store2/zoo/ zooMouse1 -noGl
-
-Make and load GC percent table
-     ssh hgwdev
-     cd /cluster/store2/zoo/zooMouse1/bed
-     mkdir gcPercent
-     cd gcPercent
-     mysql -u hgcat -pCa7outB6 -A zooMouse1 < ~/src/hg/lib/gcPercent.sql
-     hgGcPercent zooMouse1 ../../nib
-
-
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE)
-
-o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE)
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
-      ssh kkstore
-      cd /cluster/store2/zoo/zooMouse1/bed
-      Run the following shell script: scripts/alignMrna.sh
-      Then cd to each directory in (refSeq, mrna, and est) and run "para make spec" in each one. 
-      This will run the blat job.
-      Check on progress with para check in mrna, est, and refSeq directories.
-      
+cd to zoo/work/blat and on kk and do a para push. Check on progress using para check.
+
 o - Process refSeq mRNA and EST alignments into near best in genome.
+The below is done by the makeZoo.pl script
+
       Note: No lifting up is needed because the fragments are already in chromosome
 coordinates.
 
@@ -139,25 +109,24 @@ coordinates.
 
 o - Load mRNA alignments into database.
       ssh hgwdev
-      cd /cluster/store2/zoo/zooMouse1/bed/mrna/chrom
+      cd /cluster/store2/zoo/zoo$ORG1/bed/mrna/chrom
       ../../scripts/mrnaLoadPsl.csh
 
 o - Load EST alignments into database.
       ssh hgwdev
-      cd /cluster/store2/zoo/zooMouse1/bed/est/chrom
+      cd /cluster/store2/zoo/zoo$ORG1/bed/est/chrom
       ../../scripts/estLoadPsl.csh
 
 o - Create subset of ESTs with introns and load into database.
       - ssh kkstore
-      cd ~/zoo/zooMouse1
+      cd ~/zoo/zoo$ORG1
       cp /cluster/store1/gs.11/build28/jkStuff/makeIntronEst.sh bed/scripts
       tcsh bed/scripts/jkStuff/makeIntronEst.sh
       - ssh hgwdev
-      cd ~/zoo/zooMouse1/bed/est/intronEst
-      hgLoadPsl zooMouse1 *.psl
+      cd ~/zoo/zoo$ORG1/bed/est/intronEst
+      hgLoadPsl zoo$ORG1 *.psl
 
-      NOTE: The name CFTR_mouse needs to be changed to chr1 in a lot of
-      files. Details to be forthcoming.
+The above is all done for you in the makeZoo.pl script.
 
 PRODUCING KNOWN GENES (todo)
 
@@ -165,8 +134,10 @@ o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.127/refSeq.
 o - Unpack this into fa files and get extra info with:
        cd /cluster/store1/mrna.127/refSeq
-       gunzip mouse.gbff.gz
-       gunzip mouse.faa.gz
+       gunzip $ORG.gbff.gz
+       gunzip $ORG.faa.gz
+The above 2 files need to be symlinked from /cluster/store1/mrna.128/refSeq/$ORG/$ORG.fa /cluster/store1/mrna.128/org/$ORG/refSeq.fa
+and refSeq.ra respectively.
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/mm/bed/refSeq
@@ -178,7 +149,7 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/mm/bed/refSeq
        ln -s /cluster/store1/mrna.127 mrna
-       hgRefSeqMrna mm1 mrna/mouseRefSeq.fa mrna/mouseRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/mouse.faa mim2loc
+       hgRefSeqMrna mm1 mrna/$ORGRefSeq.fa mrna/$ORGRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/$ORG.faa mim2loc
 o - Add Jackson labs info
      cd ~/mm/bed
      mkdir jaxOrtholog
@@ -190,6 +161,20 @@ o - Add Jackson labs info
      mysql -u hgcat -pBIGSECRET -A mm1
     and at the mysql> prompt
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+
+
+CREATING PAIRWISE ALIGNMENTS (TODO)
+- This has been tested but needs to be customized to your specific needs.
+
+        The makeZoo.pl script has comments on how to make pairwise alignments. The basic algorithm is as follows:
+
+Echo all the organism names to one input file.
+Echo all the mrna, est, and refSeq fasta file names to another input file.
+Then run genSub2 to generate the cross-product of all sequences aligned against all mrnas and ests. Look at scripts/blat-gsub for
+the gsub I used to test this. For each organism it creates a file called chr1_$X_mrna.fa and chr1_$X_est.fa, where X is the organism whose
+mrna and est this organism's sequence was aligned against it using BLAT.
+For example, for the zooMouse/1/chr1.fa sequence aligned against the Cat mrna we get zooMouse/bed/mrna/psl/chr1_Felis_catus_mrna.fa
+The above loogic is already commented out in the makeZoo.pl script. It just has to be selectively uncommented.
 
 
 SIMPLE REPEAT TRACK (todo)
@@ -291,7 +276,7 @@ repeat mask files onto /cluster local drive as so.
 Then ask admins to do a binrsync.
 
 
-DOING HUMAN/MOUSE ALIGMENTS (todo)
+DOING HUMAN/$ORG ALIGMENTS (todo)
 
 o - Download the lower-case-masked assembly and put it in
     kkstore:/cluster/store1/a2ms.
@@ -314,24 +299,24 @@ o - Copy the RepeatMasked and trf masked genome to
     kkstore:/scratch/hg/gs.11/build28/contigTrf, and ask
     Jorge and all to binrsync to propagate the data
     across the new cluster.
-o - Download the assembled mouse genome in lower-case
+o - Download the assembled $ORG genome in lower-case
     masked form to /cluster/store1/arachne.3/whole.  
     Execute the script splitAndCopy.csh to chop it
     into roughly 50M pieces in arachne.3/parts
 o - Set up the jabba job to do the alignment as so:
        ssh kkstore
        cd /cluster/store2/mm.2001.11/mm1
-       mkdir blatMouse.phusion
-       cd blatMouse.phusion
+       mkdir blat$ORG.phusion
+       cd blat$ORG.phusion
        ls -1S /scratch/hg/gs.3/build28/contigTrf/* > human.lst
-       ls -1 /cluster/store1/arachne.3/parts/* > mouse.lst
+       ls -1 /cluster/store1/arachne.3/parts/* > $ORG.lst
     Make a file 'gsub' with the following three lines in it
 #LOOP
 /cluster/home/kent/bin/i386/blat -q=dnax -t=dnax {check in line+ $(path2)} {check in line+ $(path1)}  {check out line+ psl/$(root2)_$(root1).psl} -minScore=20 -minIdentity=20 -tileSize=4 -minMatch=2 -oneOff=0 -ooc={check in exists /scratch/hg/h/4.pooc} -qMask=lower -mask=lower
 #ENDLOOP
     Process this into a jabba file and launch the first set
     of jobs (10,000 out of 70,000) as so:
-        gensub2 mouse.lst human.lst gsub spec
+        gensub2 $ORG.lst human.lst gsub spec
 	jabba make hut spec
 	jabba push hut
     Do a 'jabba check hut' after about 20 minutes and make sure
@@ -342,7 +327,7 @@ o - Set up the jabba job to do the alignment as so:
 
 o - Sort alignments as so 
        ssh kkstore
-       cd /cluster/store2/mm.2001.11/mm1/blatMouse
+       cd /cluster/store2/mm.2001.11/mm1/blat$ORG
        pslCat -dir -check psl | liftUp -type=.psl stdout ../liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/store2/temp stdin
 o - Get rid of big pile-ups due to contamination as so:
        cd chrom
@@ -357,134 +342,55 @@ o - Remove long redundant bits from read names by making a file
         gnl|ti^ti
         contig_^tig_
     and running the commands
-        cd ~/mouse/vsOo33/blatMouse.phusion/chrom
+        cd ~/$ORG/vsOo33/blat$ORG.phusion/chrom
 	subs -e -c ^ *.psl > /dev/null
 o - Copy over to network where database is:
         ssh kks00
 	cd ~/mm/bed
-	mkdir blatMouse
-	mkdir blatMouse/ph.chrom600
+	mkdir blat$ORG
+	mkdir blat$ORG/ph.chrom600
 	cd !$
-        cp /cluster/store2/mm.2001.11/mm1/blatMouse.phusion/chrom/*.psl .
+        cp /cluster/store2/mm.2001.11/mm1/blat$ORG.phusion/chrom/*.psl .
 o - Rename to correspond with tables as so and load into database:
        ssh hgwdev
-       cd ~/mm/bed/blatMouse/ph.chrom600
+       cd ~/mm/bed/blat$ORG/ph.chrom600
        foreach i (*.psl)
 	   set r = $i:r
-           mv $i ${r}_blatMouse.psl
+           mv $i ${r}_blat$ORG.psl
        end
        hgLoadPsl mm1 *.psl
 o - load sequence into database as so:
 	ssh kks00
-	faSplit about /projects/hg3/mouse/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/mouse/arachne.3/whole/unplaced
+	faSplit about /projects/hg3/$ORG/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/$ORG/arachne.3/whole/unplaced
 	ssh hgwdev
-	hgLoadRna addSeq '-abbr=gnl|' mm1 /projects/hg3/mouse/arachne.3/whole/unpla*.fa
-	hgLoadRna addSeq '-abbr=con' mm1 /projects/hg3/mouse/arachne.3/whole/SET*.mfa
+	hgLoadRna addSeq '-abbr=gnl|' mm1 /projects/hg3/$ORG/arachne.3/whole/unpla*.fa
+	hgLoadRna addSeq '-abbr=con' mm1 /projects/hg3/$ORG/arachne.3/whole/SET*.mfa
     This will take quite some time.  Perhaps an hour .
 
 o - Produce 'best in genome' filtered version:
         ssh kks00
-	cd ~/mouse/vsOo33
-	pslSort dirs blatMouseAll.psl temp blatMouse
-	pslReps blatMouseAll.psl bestMouseAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
-	pslSortAcc nohead bestMouse temp bestMouseAll.psl
-	cd bestMouse
+	cd ~/$ORG/vsOo33
+	pslSort dirs blat$ORGAll.psl temp blat$ORG
+	pslReps blat$ORGAll.psl best$ORGAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
+	pslSortAcc nohead best$ORG temp best$ORGAll.psl
+	cd best$ORG
         foreach i (*.psl)
 	   set r = $i:r
-           mv $i ${r}_bestMouse.psl
+           mv $i ${r}_best$ORG.psl
         end
 o - Load best in genome into database as so:
 	ssh hgwdev
-	cd ~/mouse/vsOo33/bestMouse
+	cd ~/$ORG/vsOo33/best$ORG
         hgLoadPsl mm1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (todo)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (done)
 
-Here you align vertebrate mRNAs against the masked genome on the
-cluster you set up during the previous step.
-
-o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-    /cluster/store1/genbank.127
-
-o - Process these out of genbank flat files as so:
-       ssh kkstore
-       cd /cluster/store1/genbank.127
-       mkdir ../mrna.127
-       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~/hg/h/xenoRna.fil ../mrna.127/xenoRna.fa ../mrna.127/xenoRna.ra ../mrna.127/xenoRna.ta stdin
-       cd ../mrna.127
-       faSplit sequence xenoRna.fa 2 xenoRna
-       ssh kks00
-       cd /projects/hg2
-       mkdir mrna.127
-       cp /cluster/store1/mrna.127/xenoRna.* mrna.127
-
-Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.11/build28/contigTrf
-in RepeatMasked + trf form.  (This is probably done already in mouse alignment
-stage).  Also make sure /scratch/hg/mrna.127 is loaded with xenoRna.fa Then do:
-       ssh kkstore
-       cd /cluster/store2/mm.2001.11/mm1/mm/bed
-       mkdir xenoMrna
-       cd xenoMrna
-       mkdir psl
-       ls -1S /scratch/hg/gs.11/build28/trfFa > human.lst
-       ls -1S /scratch/hg/mrna.127/xenoRna?*.fa > mrna.lst
-       cp ~/lastOo/bed/xenoMrna/gsub .
-       gensub2 human.lst mrna.lst gsub spec
-       jabba make hut spec
-       jabba push hut
-Do jabba check hut until the run is done, doing jabba push hut if
-necessary on occassion.
-
-Sort xeno mRNA alignments as so:
-       ssh kkstore
-       cd ~/mm/bed/xenoMrna
-       pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
-       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoMrna.psl
-       rm -r chrom raw.psl cooked.psl chrom.psl
-
-Load into database as so:
-       ssh hgwdev
-       cd ~/mm/bed/xenoMrna
-       hgLoadPsl mm1 xenoMrna.psl -tNameIx
-       cd /cluster/store1/mrna.127
-       hgLoadRna add mm1 /cluster/store1/mrna.127/xenoRna.fa xenoRna.ra
-
-Similarly do xenoEst aligments:
-       ssh kkstore
-       cd /cluster/store2/mm.2001.11/mm1/mm/bed
-       mkdir xenoEst
-       cd xenoEst
-       mkdir psl
-       ls -1S /scratch/hg/gs.11/build28/trfFa/*.fa > human.lst
-       ls -1S /scratch/hg/mrna.127/xenoEst?*.fa > mrna.lst
-       cp ~/lastOo/bed/xenoEst/gsub .
-       gensub2 human.lst mrna.lst gsub spec
-       jabba make hut spec
-       jabba shove hut
-
-Sort xenoEst alignments:
-       ssh kkstore
-       cd ~/mm/bed/xenoEst
-       pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.10
-       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoEst.psl
-       rm -r chrom raw.psl cooked.psl chrom.psl
-
-Load into database as so:
-       ssh hgwdev
-       cd ~/mm/bed/xenoEst
-       hgLoadPsl mm1 xenoEst.psl -tNameIx
-       cd /cluster/store1/mrna.127
-       foreach i (xenoEst*.fa)
-	   echo processing $i
-	   hgLoadRna add mm1 /cluster/store1/mrna.127/$i $i:r.ra
-       end
-
+This is done by the makeZoo.pl script. It sets up the BLAT job, which has to be run by hand on kk.
+After that the script will load the xeno mrna into the db.
+The cross-species alignments are done a little differently here, in that, instead of aligning each
+species against all other species, I have aligned each species in the group of 12 against the other 11. 
+For example, mouse is aligned against the other 11 species in the list.
+See the spec file in zoo/work/blat.
 
 PRODUCING FISH ALIGNMENTS (todo)
 
@@ -536,7 +442,7 @@ TIGR GENE INDEX (todo)
       ~/oo.29/bed/tgi and then execute the following commands:
           cd ~/oo.29/bed/tgi
 	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
+	  foreach i ($ORG cow human pig rat)
 	      mkdir $i
 	      cd $i
 	      gtar -zxf ../${i}*.tgz
@@ -575,17 +481,17 @@ LOAD CHROMOSOME BANDS
       - At mysql> prompt type
           quit
 
-LOAD MOUSEREF TRACK (todo)
-    First copy in data from kkstore to ~/mm/bed/mouseRef.  
+LOAD $ORGREF TRACK (todo)
+    First copy in data from kkstore to ~/mm/bed/$ORGRef.  
     Then substitute 'genome' for the appropriate chromosome 
     in each of the alignment files.  Finally do:
-       hgRefAlign webb mm1 mouseRef *.alignments
+       hgRefAlign webb mm1 $ORGRef *.alignments
 
-LOAD AVID MOUSE TRACK (todo)
+LOAD AVID $ORG TRACK (todo)
       ssh cc98
       cd ~/mm/bed
-      mkdir avidMouse
-      cd avidMouse
+      mkdir avid$ORG
+      cd avid$ORG
       wget http://pipeline.lbl.gov/tableCS-LBNL.txt
       hgAvidShortBed *.txt avidRepeat.bed avidUnique.bed
       hgLoadBed avidRepeat avidRepeat.bed
@@ -687,19 +593,19 @@ LOAD EXOFISH (todo)
      - awk -f filter.awk all_maping_ecore > exoFish.bed
      - hgLoadBed mm1 exoFish exoFish.bed
 
-LOAD MOUSE SYNTENY (todo)
+LOAD $ORG SYNTENY (todo)
      - login to hgwdev.
      - cd ~/kent/src/hg/lib
-     - mm1 < mouseSyn.sql
-     - mkdir ~/mm/bed/mouseSyn
-     - cd ~/oo/bed/mouseSyn
+     - mm1 < $ORGSyn.sql
+     - mkdir ~/mm/bed/$ORGSyn
+     - cd ~/oo/bed/$ORGSyn
      - Put Dianna Church's (church@ncbi.nlm.nih.gov) email attatchment as
-       mouseSyn.txt
-     - awk -f format.awk *.txt > mouseSyn.bed
-     - delete first line of mouseSyn.bed
+       $ORGSyn.txt
+     - awk -f format.awk *.txt > $ORGSyn.bed
+     - delete first line of $ORGSyn.bed
      - Enter database with "mm1" command.
      - At mysql> prompt type in:
-          load data local infile 'mouseSyn.bed' into table mouseSyn
+          load data local infile '$ORGSyn.bed' into table $ORGSyn
 
 
 LOAD GENIE (todo)

@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* portable.h - wrappers around things that vary from server
  * to server and operating system to operating system. */
 
@@ -50,6 +45,9 @@ long clock1000();
 
 /* A 1 hz clock. */
 long clock1();
+
+/* Make a temp name that's almost certainly unique. */
+char *rTempName(char *dir, char *base, char *suffix);
 
 /* This structure helps us generate temp names and use
  * them.  Since different servers locate where the cgi

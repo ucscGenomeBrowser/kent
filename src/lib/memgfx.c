@@ -216,7 +216,27 @@ for (i=0; i<width; ++i)
         d[i] = c;
     }
 }
+/*
+static void mgChangeColor(struct memGfx *mg, int x, int y, int width, Color color)
+{
+int x1, x2;
+Color *pt;
+if (y < mg->clipMinY || y > mg->clipMaxY)
+    return;
+x2 = x + width;
+if (x2 > mg->clipMaxX)
+    x2 = mg->clipMaxX;
+if (width > 0)
+    {
+    pt = _mgPixAdr(mg, x, y);
+    if (zeroClear)
+        nonZeroCopy(pt, dots, width);
+    else
+	memcpy(pt, dots, width);
+    }
+}
 
+*/
 static void mgPutSegMaybeZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots, boolean zeroClear)
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Possibly don't put zero dots though. */
@@ -259,11 +279,11 @@ mgPutSegMaybeZeroClear(mg, x, y, width, dots, TRUE);
 
 void mgDrawBox(struct memGfx *mg, int x, int y, int width, int height, Color color)
 {
-int wrapCount;
 int i;
 Color *pt;
 int x2 = x + width;
 int y2 = y + height;
+int wrapCount;
 
 if (x < mg->clipMinX)
     x = mg->clipMinX;
@@ -278,6 +298,7 @@ height = y2-y;
 if (width > 0 && height > 0)
     {
     pt = _mgPixAdr(mg,x,y);
+    /*colorBin[x][color]++;  increment color count for this pixel */
     wrapCount = _mgBpr(mg) - width;
     while (--height >= 0)
 	{
@@ -287,6 +308,13 @@ if (width > 0 && height > 0)
 	pt += wrapCount;
 	}
     }
+}
+
+void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color)
+/*special case of mgDrawLine, for horizontal line across entire window 
+  at y-value y1.*/
+{
+mgDrawLine( mg, mg->clipMinX, y1, mg->clipMaxX, y1, color);
 }
 
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)

@@ -19,7 +19,9 @@ errAbort(
     "usage:\n"
     "     ldHgGene database table file(s).gff\n"
     "options:\n"
-    "     -exon=type   Sets type field for exons to specific value\n");
+    "     -exon=type   Sets type field for exons to specific value\n"
+    "     -oldTable    Don't overwrite what's already in table\n"
+    "     -noncoding   Forces whole prediction to be UTR\n");
 }
 
 char *createString = 
@@ -47,13 +49,16 @@ void loadIntoDatabase(char *database, char *table, char *tabName)
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 
-dyStringPrintf(ds, createString, table);
-sqlMaybeMakeTable(conn, table, ds->string);
-dyStringClear(ds);
-dyStringPrintf(ds, 
-   "delete from %s", table);
-sqlUpdate(conn, ds->string);
-dyStringClear(ds);
+if (!cgiVarExists("oldTable"))
+    {
+    dyStringPrintf(ds, createString, table);
+    sqlMaybeMakeTable(conn, table, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, 
+       "delete from %s", table);
+    sqlUpdate(conn, ds->string);
+    dyStringClear(ds);
+    }
 dyStringPrintf(ds, 
    "LOAD data local infile '%s' into table %s", tabName, table);
 sqlUpdate(conn, ds->string);
@@ -84,6 +89,8 @@ int lineCount;
 struct genePred *gpList = NULL, *gp;
 char *tabName = "genePred.tab";
 FILE *f;
+boolean nonCoding = cgiVarExists("noncoding") || cgiVarExists("nonCoding");
+
 boolean isSoftberry = sameWord("softberryGene", table);
 boolean isEnsembl = sameWord("ensGene", table);
 boolean isSanger22 = sameWord("sanger22", table);
@@ -112,7 +119,11 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	}
     gp = genePredFromGroupedGff(gff, group, name, exonType);
     if (gp != NULL)
+	{
+	if (nonCoding)
+	    gp->cdsStart = gp->cdsEnd = 0;
 	slAddHead(&gpList, gp);
+	}
     }
 printf("%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);

@@ -12,13 +12,8 @@
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */
 {
-char *tname;
-#ifdef WIN32
-tname = _tempnam(".", base);
-#else
-tname = tempnam(".", base);
-#endif
-sprintf(tn->forCgi, "%s%s", tname, suffix);
+char *tname = rTempName(".", base, suffix);
+strcpy(tn->forCgi, tname);
 strcpy(tn->forHtml, tn->forCgi);
 }
 

@@ -97,6 +97,10 @@ void mgDrawBox(struct memGfx *mg, int x, int y, int width, int height, Color col
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color);
 /* Draw a line from one point to another. */
 
+
+void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color);
+/*special case of mgDrawLine*/
+
 void mgSaveGif(struct memGfx *mg, char *name);
 /* Save memory bitmap as a gif. */
 

@@ -332,6 +332,46 @@ repeat mask files onto /cluster local drive as so.
 Then ask admins to do a binrsync.
 
 
+
+CREATE GOLDEN TRIANGLE (todo)
+
+Make sure that rnaCluster table is in place.   Then
+extract Affy expression info into a form suitable
+for Eisen's clustering program with:
+      cd ~/oo/bed
+      mkdir triangle
+      cd triangle
+      eisenInput hg10 affyHg10.txt
+Transfer this to Windows and do k-means clustering
+with k=200 with cluster.  Transfer results file back
+to ~/oo/bed/triangle/affyCluster_K_G200.kgg.  Then
+do
+      promoSeqFromCluster hg10 1000 affyCluster_K_G200.kgg kg200.unmasked kg200.lift
+Then RepeatMask the .fa file inkg200.unmasked, and copy masked versions
+to kg200.   Then
+      cat kg200/*.fa > all1000.fa
+and set up cluster Improbizer run to do 100 controls for every real
+run on each - putting the output in imp.200.1000.e.  When improbizer
+run is done make a file summarizing the runs as so:
+      cd imp.200.1000.e
+      motifSig ../imp.200.1000.e.iri ../kg200 motif control*
+get rid of insignificant motifs with:
+      cd ..
+      awk '{if ($2 > $3) print; }' imp.200.1000.e.iri > sig.200.1000.e.iri
+turn rest into just dnaMotifs with
+      iriToDnaMotif sig.200.1000.e.iri motif.200.1000.e.txt
+Extract all promoters with
+      featureBits hg10 rnaCluster:upstream:1000 -bed=upstream1000.bed -fa=upstream1000.fa
+Locate motifs on all promoters with
+      dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
+      liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
+
+
+
+
+
+
+
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
 o - Start with the mouse assembly in 1 Mb chunks lower-case
@@ -714,7 +754,7 @@ LOAD EXOFISH (todo)
      - awk -f filter.awk all_maping_ecore > exoFish.bed
      - hgLoadBed hg10 exoFish exoFish.bed
 
-LOAD MOUSE SYNTENY (todo)
+LOAD MOUSE SYNTENY (done)
      - login to hgwdev.
      - cd ~/kent/src/hg/lib
      - hg10 < mouseSyn.sql
@@ -763,11 +803,26 @@ LOAD GENEID GENES (done)
      cd ~/oo/bed/geneid
      mkdir download
      cd download
-   Now download *.gtf and *.cds from 
+   Now download *.gtf and *.prot from 
    http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/geneid_v1.1/
      cd ..
      ldHgGene hg10 geneid download/*.gtf -exon=CDS
-     hgPepPred hg10 generic geneidPep download/*.cds
+     hgPepPred hg10 generic geneidPep download/*.prot
+
+SGP GENE PREDICTIONS
+     mkdir ~/oo/bed/sgp
+     cd ~/oo/bed/sgp
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/SGP/
+   Get rid of the extra .N in the transcripts with subs.  
+     cd ..
+     cp ~/oo/bed/geneid/subs.in .
+     subs -e download/*.gtf > /dev/null
+     ldHgGene hg10 sgpGene download/*.gtf -exon=CDS
+     hgPepPred hg10 generic sgpPep download/*.prot
+
 
 LOAD ACEMBLY
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
@@ -825,3 +880,58 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
+
+    - loading both blastz alignments and reference (single coverage) alignments
+    - in xAli format, which includes sequence
+    - done in a tmp dir and intermediate files discarded
+
+    - create psl files for each per-contig lav file
+
+       set sc=""
+       set tbl="blastzMm2"
+       foreach chrdir (/cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/lav/chr*)
+         set chr=$chrdir:t
+         set outdir=${tbl}.psl/$chr
+         mkdir -p $outdir
+         foreach lav ($chrdir/*.lav${sc})
+           lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
+         end
+       end
+
+    - Make temporary per-contig mouse nib files for use by pslToXa
+      (which doesn't currenty support FASTA)
+        mkdir -p mm.contig.nib
+        foreach fa (/cluster/store2/mm.2002.02/mm2/*/chr*/chr*.fa)
+            set nib=mm.contig.nib/$fa:r:t.nib
+            faToNib $fa $nib
+        end
+
+    - Convert to per-chromsome files, sort, and add sequence
+       mkdir -p ${tbl}.xa
+       foreach chrdir (${tbl}.psl/*)
+         set chr=$chrdir:t
+         pslCat -check -nohead -ext=.psl -dir ${tbl}.psl/$chr \
+          | sort -k 15n -k 16n \
+          | pslToXa stdin ${tbl}.xa/${chr}_${tbl}.xa mm.contig.nib /cluster/store1/gs.11/build28/nib
+       end
+
+    - repeat both loops, this time doing the single-coverage alignment:
+        set sc=".sc"
+        set tbl="blastzMm2Sc
+        <above loops>
+
+    - Load tables
+        cd blastzMm2.xa
+        hgLoadPsl -xa hg10 *.xa
+        cd blastzMm2.xa
+        hgLoadPsl -xa hg10 *.xa
+
+   - Load aligned ancient repeats, from
+       /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar
+     Ryan create:
+       /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar/xali
+     - Loaded into aarMm2, delete repeats with < 50 aligned positions
+     - The original data contained may duplicated alignments, so did a 
+           sort -u | sort -k 15n -k 16n
+       on each PSL before loading.

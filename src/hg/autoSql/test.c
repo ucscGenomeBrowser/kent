@@ -149,20 +149,18 @@ slReverse(&list);
 return list;
 }
 
-struct polygon *polygonLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all polygon from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct polygon *polygonLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all polygon from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
  * Dispose of this with polygonFreeList(). */
 {
 struct polygon *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = polygonLoad(row);
@@ -170,8 +168,39 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
+}
+
+void polygonSaveToDb(struct sqlConnection *conn, struct polygon *el, char *tableName, int updateSize)
+/* Save polygon as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use polygonSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%d, NULL , NULL )", 
+	tableName,  el->id,  el->pointCount);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void polygonSaveToDbEscaped(struct sqlConnection *conn, struct polygon *el, char *tableName, int updateSize)
+/* Save polygon as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than polygonSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,%d, NULL , NULL )", 
+	tableName, el->id , el->pointCount );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
 }
 
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret)
@@ -327,20 +356,18 @@ slReverse(&list);
 return list;
 }
 
-struct polyhedron *polyhedronLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all polyhedron from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct polyhedron *polyhedronLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all polyhedron from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
  * Dispose of this with polyhedronFreeList(). */
 {
 struct polyhedron *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = polyhedronLoad(row);
@@ -348,8 +375,45 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
+}
+
+void polyhedronSaveToDb(struct sqlConnection *conn, struct polyhedron *el, char *tableName, int updateSize)
+/* Save polyhedron as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use polyhedronSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+char  *namesArray;
+namesArray = sqlStringArrayToString(el->names, 2);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%d, NULL , NULL )", 
+	tableName,  el->id,  namesArray ,  el->polygonCount);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&namesArray);
+}
+
+void polyhedronSaveToDbEscaped(struct sqlConnection *conn, struct polyhedron *el, char *tableName, int updateSize)
+/* Save polyhedron as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than polyhedronSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *namesArray;
+
+namesArray = sqlStringArrayToString(el->names, 2);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%d, NULL , NULL )", 
+	tableName, el->id ,  namesArray , el->polygonCount );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
 }
 
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret)
@@ -570,20 +634,18 @@ slReverse(&list);
 return list;
 }
 
-struct stringArray *stringArrayLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all stringArray from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct stringArray *stringArrayLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all stringArray from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
  * Dispose of this with stringArrayFreeList(). */
 {
 struct stringArray *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = stringArrayLoad(row);
@@ -591,8 +653,45 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
+}
+
+void stringArraySaveToDb(struct sqlConnection *conn, struct stringArray *el, char *tableName, int updateSize)
+/* Save stringArray as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use stringArraySaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+char  *namesArray;
+namesArray = sqlStringArrayToString(el->names, el->numNames);
+dyStringPrintf(update, "insert into %s values ( %d,'%s')", 
+	tableName,  el->numNames,  namesArray );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&namesArray);
+}
+
+void stringArraySaveToDbEscaped(struct sqlConnection *conn, struct stringArray *el, char *tableName, int updateSize)
+/* Save stringArray as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than stringArraySaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *namesArray;
+
+namesArray = sqlStringArrayToString(el->names, el->numNames);
+dyStringPrintf(update, "insert into %s values ( %d,'%s')", 
+	tableName, el->numNames ,  namesArray );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
 }
 
 struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret)
@@ -662,4 +761,6 @@ for (i=0; i<el->numNames; ++i)
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

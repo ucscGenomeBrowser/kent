@@ -19,10 +19,14 @@ void usage()
 errAbort(
   "clusterRna - Make clusters of mRNA and ESTs\n"
   "usage:\n"
-  "   clusterRna database mrnaOut.bed estOut.bed\n"
+  "   clusterRna database rnaOut.bed estOut.bed\n"
   "options:\n"
   "   -MGC=mgc.out - output MGC ESTs to sequence fully\n"
   "   -chrom=chrN - work on chrN (default chr22)\n"
+  "   -rna=rnaTable - table to use for mRNA\n"
+  "   -est=estTable - table to use for ESTs\n"
+  "   -orient=orientTable - table to use for EST orientation\n"
+  "   -group=group.out - produce list of mRNA/EST in cluster\n"
   );
 }
 
@@ -114,12 +118,12 @@ return maList;
 }
 
 struct estOrientInfo *loadEstOrientInfo(struct sqlConnection *conn, 
-	char *chromName)
+	char *chromName, char *orientTable)
 /* Return list EST infos. */
 {
 struct estOrientInfo *eoiList = NULL, *eoi;
 int rowOffset;
-struct sqlResult *sr = hChromQuery(conn, "estOrientInfo", chromName, NULL, &rowOffset);
+struct sqlResult *sr = hChromQuery(conn, orientTable, chromName, NULL, &rowOffset);
 char **row;
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -535,6 +539,71 @@ sprintf(query, "select id from %s where name like '%s'", table, pattern);
 return hashRow0(conn, query);
 }
 
+struct hash *hashMa(struct ggMrnaAli *maList)
+/* Return hash of ma's keyed by rna accession. */
+{
+struct ggMrnaAli *ma;
+struct hash *hash = newHash(18);
+for (ma = maList; ma != NULL; ma = ma->next)
+    hashAdd(hash, ma->qName, ma);
+return hash;
+}
+
+void listMaInHash(FILE *f, struct maRef *list, struct hash *hash)
+/* Output the count of elements in list that are also in hash, and
+ * then a comma separated list of such elements. */
+{
+struct maRef *el;
+struct ggMrnaAli *ma;
+int count = 0;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    ma = el->ma;
+    if (hashLookup(hash, ma->qName))
+        ++count;
+    }
+fprintf(f, "\t%d\t", count);
+for (el = list; el != NULL; el = el->next)
+    {
+    ma = el->ma;
+    if (hashLookup(hash, ma->qName))
+	fprintf(f, "%s,", ma->qName);
+    }
+}
+
+void outputGroup(struct sqlConnection *conn, 
+	struct binKeeper *bins, char *chromName,
+	int chromSize, 
+    	struct ggMrnaAli *refSeqMa, struct ggMrnaAli *mrnaMa, struct ggMrnaAli *estMa, 
+	char *fileName)
+{
+FILE *f = mustOpen(fileName, "w");
+struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
+int clusterIx = 0;
+struct hash *refHash = hashMa(refSeqMa);
+struct hash *mrnaHash = hashMa(mrnaMa);
+struct hash *estHash = hashMa(estMa);
+
+for (el = list; el != NULL; el = el->next)
+    {
+    struct ggMrnaCluster *cluster = el->val;
+    fprintf(f, "%s\t%d\t%d\t%s.%d\t1000\t%s", 
+	chromName,
+    	cluster->tStart, cluster->tEnd, 
+	chromName, ++clusterIx, 
+	cluster->strand);
+
+    listMaInHash(f, cluster->refList, refHash);
+    listMaInHash(f, cluster->refList, mrnaHash);
+    listMaInHash(f, cluster->refList, estHash);
+    fprintf(f, "\n");
+    }
+hashFree(&refHash);
+hashFree(&mrnaHash);
+hashFree(&estHash);
+}
+
 void outputMgc(struct sqlConnection *conn, 
 	struct binKeeper *bins, char *chromName,
 	int chromSize, char *fileName)
@@ -606,23 +675,27 @@ struct psl *estPslList = NULL;
 struct ggMrnaCluster *clusterList = NULL, *cluster;
 struct binKeeper *bins = NULL;
 char *mgcOut = cgiOptionalString("MGC");
+char *group = cgiOptionalString("group");
+char *rnaTable = cgiUsualString("rna", "mrna");
+char *estTable = cgiUsualString("est", "est");
+char *orientTable = cgiUsualString("orient", "estOrientInfo");
 
 chrom = hLoadChrom(chromName);
 printf("Loaded %d bases in %s\n", chrom->size, chromName);
 
 /* Load EST info and use it to categorize ESTs. */
-eoiList = loadEstOrientInfo(conn, chromName);
+eoiList = loadEstOrientInfo(conn, chromName, orientTable);
 uglyf("Loaded %d eoi's\n", slCount(eoiList));
 categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
 
 /* Load mRNA. */
 refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
 	chrom, TRUE, TRUE);
-mrnaMaList = maFromPslTable(conn, "tightMrna", chromName, 
+mrnaMaList = maFromPslTable(conn, rnaTable, chromName, 
 	chrom, FALSE, FALSE);
 
 /* Load ESTs into three separate lists. */
-estPslList = loadPsls(conn, "tightEst", chromName);
+estPslList = loadPsls(conn, estTable, chromName);
 splicedEstMaList = maFromSomePsls(estPslList, chromName, 
 	chrom, splicedHash, FALSE, FALSE);
 tailedEstMaList = maFromSomePsls(estPslList, chromName, 
@@ -652,6 +725,9 @@ outputClusters(bins, chromName, chrom->size, estOut);
 
 if (mgcOut != NULL)
     outputMgc(conn, bins, chromName, chrom->size, mgcOut);
+if (group != NULL)
+    outputGroup(conn, bins, chromName, chrom->size, 
+    	refSeqMaList, mrnaMaList, splicedEstMaList, group);
 }
 
 void clusterRna(char *database, char *rnaOut, char *estOut)

@@ -169,7 +169,7 @@ char buf[512];
 if (!isdigit(job[0]))
     errAbort("remove job requires a numerical job id");
 sprintf(buf, "%s %s", "removeJob", job);
-commandHub(buf);
+hubCommandCheckReciept(buf);
 }
 
 struct jobInfo

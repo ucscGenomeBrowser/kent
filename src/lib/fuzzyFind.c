@@ -106,6 +106,7 @@ int i;
 
 dnaBaseHistogram(dna, dnaSize, histo);
 total = histo[0] + histo[1] + histo[2] + histo[3];
+if (total == 0) total = 1;
 for (i=0; i<4; ++i)
     freq[i] = (double)histo[i] / total;
 }
@@ -1669,12 +1670,36 @@ if (rwCheckGoodEnough)
 return bestAli;
 }
 
+static struct ffAli *exactAli(DNA *ns, DNA *ne, DNA *hs, DNA *he)
+/* Return alignment based on exact match. */
+{
+int exactOffset;
+if (exactFind(ns, ne-ns, hs, he-hs, &exactOffset))
+    {
+    struct ffAli *ali = ffNeedMem(sizeof(*ali));
+    ali->nStart = ns;
+    ali->nEnd = ne;
+    ali->hStart = hs + exactOffset;
+    ali->hEnd = ali->hStart + (ne - ns);
+    if (ali->hEnd > he)
+        ali->hEnd = he;
+    return ali;
+    }
+else
+    return NULL;
+}
+
 static struct ffAli *recursiveWeave(DNA *ns, DNA *ne, DNA *hs, DNA *he, 
-    enum ffStringency stringency, double probMax, int level)
+    enum ffStringency stringency, double probMax, int level, int orientation)
 /* Find a set of tiles, then recurse to find set of tiles between the tiles
  * at somewhat lower stringency. */
 {
 struct ffAli *left = NULL, *right = NULL, *aliList;
+
+if ((left = exactAli(ns, ne, hs, he)) != NULL)
+    return left;
+if (stringency == ffExact)
+    return NULL;
 
 aliList = rwFindTilesBetween(ns, ne, hs, he, stringency, probMax);
 if (aliList != NULL)
@@ -1682,6 +1707,8 @@ if (aliList != NULL)
     DNA *lne, *rns, *lhe, *rhs;
     int ndif, hdif;
     right = aliList;
+    if (orientation == 0)
+        orientation = ffIntronOrientation(aliList);
     for (;;)
         {
         /* Figure out the end points to recurse to. */
@@ -1710,8 +1737,85 @@ if (aliList != NULL)
         /* If a big enough gap left recurse. */
         if (ndif >= 5 && hdif >= 5)
             {
-            struct ffAli *newLeft, *newRight;
-            newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency, probMax*2, level+1);
+            struct ffAli *newLeft = NULL, *newRight;
+
+#ifdef NICE_TRY_BUT
+	    /* On short exons first try to find exact match that includes 
+	     * cannonical splice sites, or part of cannonical splice sites. */
+	    if (ndif <= 10)
+	        {
+		DNA l1=0,l2=0,r1=0,r2=0;
+		int creep;
+		for (creep=2; creep <= 1 && newLeft == NULL; --creep)
+		    {
+		    if (left)
+			{
+			l1 = lne[-2];
+			l2 = lne[-1];
+			if (orientation >= 0)
+			    {
+			    if (creep > 1)
+				lne[-2] = 'a';
+			    lne[-1] = 'g';
+			    }
+			else
+			    {
+			    if (creep > 1)
+				lne[-2] = 'a';
+			    lne[-1] = 'c';
+			    }
+			lne -= creep;
+			}
+		    if (right)
+			{
+			r1 = rns[0];
+			r2 = rns[1];
+			if (orientation >= 0)
+			    {
+			    rns[0] = 'g';
+			    if (creep > 1)
+				rns[1] = 't';
+			    }
+			else
+			    {
+			    rns[0] = 'c';
+			    if (creep > 1)
+				rns[1] = 't';
+			    }
+			rns += creep;
+			}
+		    if ((newLeft = exactAli(lne, rhs, lhe, rhs)) != NULL)
+			{
+			if (left)
+			    {
+			    newLeft->nStart += creep;
+			    newLeft->hStart += creep;
+			    }
+			if (right)
+			    {
+			    newLeft->nEnd -= creep;
+			    newLeft->hEnd -= creep;
+			    }
+			}
+		    if (left)
+			{
+			lne[0] = l1;
+			lne[1] = l2;
+			lne += creep;
+			}
+		    if (right)
+			{
+			rns -= creep;
+			rns[0] = r1;
+			rns[1] = r2;
+			}
+		    }
+		}
+	    if (newLeft == NULL && ndif >= 5)
+#endif /* NICE_TRY_BUT */
+
+	    newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency, probMax*2, level+1, 
+		orientation);
             if (newLeft != NULL)
                 {
                 /* Insert new tiles between left and right. */
@@ -1763,32 +1867,39 @@ makeFreqTable(hs, haySize, rwFreq);
 rwIsCdna = (stringency == ffCdna);
 rwCheckGoodEnough = (stringency == ffTight || stringency == ffCdna);
 
-bestAli = recursiveWeave(ns, ne, hs, he, stringency, tileStrinProbMult[stringency], 1);
+bestAli = recursiveWeave(ns, ne, hs, he, stringency, tileStrinProbMult[stringency], 1, 0);
 
 return bestAli;
 }
 
-static int scoreIntron(DNA a, DNA b, DNA y, DNA z)
+static int scoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
 /* Return a better score the closer an intron is to
  * consensus. */
 {
 int score = 0;
 int revScore = 0;
 
-if (a == 'g') ++score;
-if (b == 't') ++score;
-if (y == 'a') ++score;
-if (z == 'g') ++score;
+if (orientation >= 0)
+    {
+    if (a == 'g') ++score;
+    if (b == 't') ++score;
+    if (y == 'a') ++score;
+    if (z == 'g') ++score;
+    }
 
-if (a == 'c') ++revScore;
-if (b == 't') ++revScore;
-if (y == 'a') ++revScore;
-if (z == 'c') ++revScore;
+if (orientation <= 0)
+    {
+    if (a == 'c') ++revScore;
+    if (b == 't') ++revScore;
+    if (y == 'a') ++revScore;
+    if (z == 'c') ++revScore;
+    }
 
 return score > revScore ? score : revScore;
 }
 
-static int slideIntron(struct ffAli *left, struct ffAli *right)
+
+static int slideIntron(struct ffAli *left, struct ffAli *right, int orientation)
 /* Slides space between alignments if possible to match
  * intron consensus better.  Returns how much it slid intron. */
 {
@@ -1830,7 +1941,7 @@ while (nLeft > nLeftEnd)
    intron score as you go. */
 while (nRight < nRightEnd)
     {
-    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1]);
+    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1], orientation);
     if (curScore > bestScore)
         {
         bestScore = curScore;
@@ -1870,12 +1981,13 @@ void ffSlideIntrons(struct ffAli *ali)
 {
 struct ffAli *left = ali, *right;
 int slid;
+boolean orient = ffIntronOrientation(ali);
 
 if (left == NULL)
     return;
 while((right = left->right) != NULL)
     {
-    slid = slideIntron(left, right);
+    slid = slideIntron(left, right, orient);
     left = right;
     }
 }
@@ -1890,21 +2002,6 @@ struct ffAli *bestAli;
 int matchSize;
 int exactOffset;
 int needleSize = ne-ns;
-
-/* First check for an exact match and quickly return it if it exists. */
-if (exactFind(ns, ne-ns, hs, he-hs, &exactOffset))
-    {
-    struct ffAli *ali = ffNeedMem(sizeof(*ali));
-    ali->nStart = ns;
-    ali->nEnd = ne;
-    ali->hStart = hs + exactOffset;
-    ali->hEnd = ali->hStart + needleSize;
-    if (ali->hEnd > he)
-        ali->hEnd = he;
-    return ali;
-    }
-if (stringency == ffExact)
-    return NULL;
 
 matchSize = nextPowerOfFour(he-hs)+1;
 if (matchSize < midTileMinSize[stringency])

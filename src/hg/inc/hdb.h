@@ -46,6 +46,9 @@ struct hTableInfo
 void hDefaultConnect();
 /* read the default settings from the config file */
 
+char *hTrackDbName();
+/* return the name of the track database from the config file. Freez when done */
+
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
@@ -131,6 +134,10 @@ struct dbDb *hDbDbList();
 
 boolean hIsPrivateHost();
 /* Return TRUE if this is running on private web-server. */
+
+boolean hIsMgscHost();
+/* Return TRUE if this is running on web server only
+ * accessible to Mouse Genome Sequencing Consortium. */
 
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
@@ -227,6 +234,13 @@ boolean hIsBlatIndexedDatabase(char *db);
 
 struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
 /* return the blat server information corresponding to the database */
+
+
+char *hDefaultPos(char *database);
+/* param database - The database within which to look up this position.
+   return - default chromosome position associated with database.
+    Use freeMem on return value when done.
+ */
 
 char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on

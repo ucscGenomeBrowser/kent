@@ -159,5 +159,9 @@ void pslTargetOffset(struct psl *psl, int offset);
 void pslDump(struct psl *psl, FILE *f);
 /* Dump most of PSL to file - for debugging. */
 
+struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax);
+/* Return psl trimmed to fit inside tMin/tMax.  Note this does not
+ * update the match/misMatch and related fields. */
+
 #endif /* PSL_H */
 

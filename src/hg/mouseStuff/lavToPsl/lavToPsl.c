@@ -2,7 +2,10 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
+
+/* strand to us for target */
+char* targetStrand = "+";
 
 void usage()
 /* Explain usage and exit. */
@@ -12,7 +15,7 @@ errAbort(
   "usage:\n"
   "   lavToPsl in.lav out.psl\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -target-strand=c set the target strand to c (default is no strand)\n"
   );
 }
 
@@ -78,18 +81,20 @@ if (psl)
     {
     fprintf(f, "%d\t%d\t0\t0\t", match, mismatch);
     fprintf(f, "%d\t%d\t%d\t%d\t", qNumInsert, qBaseInsert, tNumInsert, tBaseInsert);
+    fprintf(f, "%c%s\t", (isRc ? '-' : '+'), targetStrand);
+    /* if query is - strand, convert start/end to genomic */
     if (isRc)
-	fprintf(f, "-\t");
+        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize,
+                (qSize - qTotalEnd), (qSize - qTotalStart));
     else
-	fprintf(f, "+\t");
-    fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
+        fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
     fprintf(f, "%s\t%d\t%d\t%d\t", tName, tSize, tTotalStart, tTotalEnd);
     fprintf(f, "%d\t", blockCount);
     for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->tEnd - block->tStart);
+        fprintf(f, "%d,", block->tEnd - block->tStart);
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->qStart);
+        fprintf(f, "%d,", block->qStart);
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tStart);
@@ -100,10 +105,7 @@ else  /* Output bed line. */
     score = (match - mismatch - qNumInsert*2) * 1000 / (qTotalEnd - qTotalStart);
     fprintf(f, "%s\t%d\t%d\t%s\t%d\t", tName, tTotalStart, tTotalEnd,
 	qName, score);
-    if (isRc)
-	fprintf(f, "-\t");
-    else
-	fprintf(f, "+\t");
+    fprintf(f, "%c\t", (isRc ? '-' : '+'));
     fprintf(f, "%d\t%d\t0\t%d\t", tTotalStart, tTotalEnd, blockCount);
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tEnd - block->tStart);
@@ -192,8 +194,7 @@ for (i=0; ; ++i)
         *tName = cloneString(word);
     else if (i == 1)
         *qName = cloneString(word);
-    word = nextWord(&line);
-    if (word != NULL && startsWith("(reverse", word))
+    if ((line != NULL) && (stringIn("(reverse", line) != NULL))
         *isRc = TRUE;
     }
 }
@@ -286,9 +287,10 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 3)
     usage();
+targetStrand = optionVal("target-strand", "");
 lavToPsl(argv[1], argv[2]);
 return 0;
 }
