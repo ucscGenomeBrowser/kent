@@ -28,6 +28,6 @@ CREATE TABLE psl (
     tStarts longblob not null,	# Start of each block in target.
               #Indices
     INDEX(tStart),
-    INDEX(qName),
+    INDEX(qName(12)),
     INDEX(tEnd)
 );

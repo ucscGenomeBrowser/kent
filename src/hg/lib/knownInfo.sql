@@ -14,8 +14,8 @@ CREATE TABLE knownInfo (
     ngi varchar(255) not null,	# Genbank gi of nucleotide seq.
     pgi varchar(255) not null,	# Genbank gi of protein seq.
               #Indices
-    INDEX(name),
-    PRIMARY KEY(transId),
-    INDEX(geneName),
-    INDEX(productName)
+    INDEX(name(20)),
+    PRIMARY KEY(transId(20)),
+    INDEX(geneName(20)),
+    INDEX(productName(20))
 );

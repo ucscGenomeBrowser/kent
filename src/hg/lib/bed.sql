@@ -10,5 +10,5 @@ CREATE TABLE bed (
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(chrom,12)
 );

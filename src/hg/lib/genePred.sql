@@ -16,7 +16,7 @@ CREATE TABLE genieStat (
     exonStarts longblob not null,	# Exon start positions
     exonEnds longblob not null,	# Exon end positions
               #Indices
-    PRIMARY KEY(name),
+    PRIMARY KEY(name(16)),
     INDEX(chrom(12),txStart),
     INDEX(chrom(12),txEnd)
 );
@@ -33,7 +33,7 @@ CREATE TABLE genieAlt (
     exonStarts longblob not null,	# Exon start positions
     exonEnds longblob not null,	# Exon end positions
               #Indices
-    PRIMARY KEY(name),
+    PRIMARY KEY(name(16)),
     INDEX(chrom(12),txStart),
     INDEX(chrom(12),txEnd)
 );

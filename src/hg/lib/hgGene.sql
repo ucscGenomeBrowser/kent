@@ -25,7 +25,7 @@ CREATE TABLE hgGene (
     transcripts longblob not null,	# Array of transcripts
               #Indices
     PRIMARY KEY(id),
-    index(name),
+    index(name(12)),
     index(startBac,startPos),
     index(endBac,endPos)
 );

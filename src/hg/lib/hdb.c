@@ -192,8 +192,8 @@ hFreeConn(&conn);
 }
 
 
-struct dnaSeq *hRnaSeq(char *acc)
-/* Return sequence for RNA. */
+struct dnaSeq *hExtSeq(char *acc)
+/* Return sequence for external sequence. */
 {
 struct dnaSeq *seq;
 HGID id;
@@ -201,4 +201,10 @@ hRnaSeqAndId(acc, &seq, &id);
 return seq;
 }
 
+
+struct dnaSeq *hRnaSeq(char *acc)
+/* Return sequence for RNA. */
+{
+return hExtSeq(acc);
+}
 

@@ -17,5 +17,5 @@ CREATE TABLE exprBed (
     hybes longblob not null,	# Name of experimental hybridization performed, often name of tissue used
     scores longblob not null,	# log of ratio of feature for particular hybridization
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(chrom(12))
 );
