@@ -22,7 +22,7 @@ description.   XML stands for eXtensible Markup Language.
 It's a tag-based format.   A simple example of
 an XML doc might be:
    <POLYGON id="square">
-       <DESCRIPTION>This soooo square man</DESCRIPTION>
+       <DESCRIPTION>This is soooo square man</DESCRIPTION>
        <POINT x="0" y="0" ->
        <POINT x="0" y="1" ->
        <POINT x="1" y="1" ->
@@ -32,7 +32,7 @@ Everything in XML lives between <TAG></TAG> pairs.
 A tag may have associated text, attributes and subtags.  
 In the example above POLYGON has the subtags DESCRIPTION 
 and POINT, the attribute id, and no text.  DESCRIPTON has 
-the text"This is soooo square man" and no subtags or
+the text "This is soooo square man" and no subtags or
 attributes.   POINT has the attributes x and y.  POINT
 also illustrates a little XML shortcut - tags containing
 only attributes can be written <TAG att="something" ->
@@ -46,7 +46,7 @@ closed.  The tags in HTML are predefined.   In XML the
 definition of tags is up to you.
 
 Tags can be defined two ways in XML - by a DTD file or
-by and XML schema.  There are pros and cons of each
+by an XML schema.  There are pros and cons of each
 method.  DTD files are relatively simple, and are recognized
 by a wide variety of parsers and XML browsers.  On the
 other hand DTD files can't express that a certain attribute
@@ -82,9 +82,8 @@ if there is no following character the subelement occurs exactly
 once.
 
 The ATTLIST defines an attribute and associates it with an element.
-Though an ATTLIST need not follow the element it is associated
-with directly, it is good style to keep ATTLISTs together with
-their ELEMENT.  Here are the fields in an ATTLIST:
+It is good style to keep ATTLISTs together with their ELEMENT.  
+Here are the fields in an ATTLIST:
     element - name of element this is associated with
     name - name of this attribute
     type - generally CDATA.  Can be a reference or date, but these
@@ -93,20 +92,21 @@ their ELEMENT.  Here are the fields in an ATTLIST:
            is not present.   The keyword #REQUIRED in this field means
 	   that the attribute must be present.  The keyword #IMPLIED
 	   means that it's ok for this attribute to be missing (in which
-	   case it will have a NULL or zero value after read by autoXML).
+	   case it will have a NULL or zero value after it is read by 
+	   autoXML).
 
 AUTOXML EXTENSIONS AND LIMITS
 
 AutoXml extends the type field of ATTLIST to include INT or FLOAT for
 numerical rather than string values.  Similarly you can put
 #INT or #FLOAT in place of #PCDATA to put a numerical type in the
-text field.  If you include these extensions
-please use the .dtdx rather than .dtd suffix on your dtd file.
+text field.  If you include these extensions please use the .dtdx 
+rather than .dtd suffix on your dtd file.
 
 Currently AutoXML only copes with dtd comments if they start on
 a line by themselves.  AutoXml expects all ELEMENTS and ATTLIST 
-declarations to fit on a line.  It doesn't handle reference 
-or data types either.
+declarations to fit on a single line.  It doesn't handle reference 
+data types beyond saving the reference ID as a string.
 
 
 AUTOXML CODE GENERATION
@@ -121,7 +121,7 @@ The polygon.dtdx file here:
 <!ATTLIST POINT y INT #REQUIRED>
 <!ATTLIST POINT z INT "0">
 
-And the command line:
+and the command line:
    autoXml polygon.dtdx poly
 
 Generates poly.h as follows
