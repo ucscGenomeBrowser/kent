@@ -53,5 +53,5 @@ name percentId
 type distance sangerBlastTab query target identity
 
 name description
-type lookup sangerLinks orfName description
+type knownDetails sangerLinks orfName description
 
