@@ -102,7 +102,8 @@ for (asciiData = wDS->ascii; asciiData && (valueCount <= valuesMatched);
 
 histoGramResult = histoGram(valuesArray, valueCount,
 	    NAN, (unsigned) 0, NAN, (float) wDS->stats->lowerLimit,
-		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange));
+		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange),
+		(struct histoResult *)NULL);
 
 /*	global enclosing table row, add a blank line	*/
 puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\"> &nbsp </TD></TR>\n");
