@@ -6,7 +6,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgGene
 
-O = hgGene.o links.o sequence.o
+O = hgGene.o links.o sequence.o swissProtComments.o
 
 include ../../inc/cgi_build_rules.mk
 

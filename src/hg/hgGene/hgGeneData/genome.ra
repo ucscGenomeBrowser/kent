@@ -5,6 +5,7 @@
 
 name global
 nameSql select geneSymbol from kgXref where kgID = '%s'
+proteinSql select spId from kgXref where kgID = '%s'
 descriptionSql select description from kgXref where kgID = '%s'
 knownGene knownGene
 knownGeneMrna knownGeneMrna

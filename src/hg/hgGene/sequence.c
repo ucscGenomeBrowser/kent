@@ -111,7 +111,7 @@ hPrintLinkTableEnd();
 
 struct section *sequenceSection(struct sqlConnection *conn,
 	struct hash *sectionRa)
-/* Create links section. */
+/* Create sequence section. */
 {
 struct section *section = sectionNew(sectionRa, "sequence");
 section->print = sequencePrint;

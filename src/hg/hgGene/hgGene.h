@@ -30,6 +30,7 @@ struct section
 
     /* Some section-specific data. */
     char *raFile;	/* Ra file to load additional info from. */
+    void *items;	/* Some list of items. */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -46,7 +47,11 @@ struct section *otherOrgsSection(struct sqlConnection *conn,
 
 struct section *sequenceSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
-/* Create links section. */
+/* Create sequence section. */
+
+struct section *swissProtCommentsSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create SwissProt comments section. */
 
 #ifdef EXAMPLE
 struct section *xyzOrgsSection(struct sqlConnection *conn, 
@@ -80,6 +85,9 @@ void hPrintLinkCellEnd();
 
 struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 /* Read in ra in root, root/org, and root/org/database. */
+
+char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId);
+/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.*/
 
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */

@@ -11,9 +11,10 @@
 #include "hdb.h"
 #include "web.h"
 #include "ra.h"
+#include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.6 2003/10/12 18:51:40 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.7 2003/10/12 19:36:07 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -77,6 +78,22 @@ if (!sameString(name, "global"))
     errAbort("Can't find global ra record in genome.ra");
 genomeSettings = hash;
 }
+
+char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId)
+/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.*/
+{
+char *proteinSql = genomeSetting("proteinSql");
+char query[256];
+char *someAcc, *primaryAcc;
+safef(query, sizeof(query), proteinSql, geneId);
+someAcc = sqlQuickString(conn, query);
+if (someAcc == NULL)
+    return NULL;
+primaryAcc = spFindAcc(spConn, someAcc);
+freeMem(someAcc);
+return primaryAcc;
+}
+
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -264,7 +281,7 @@ addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
