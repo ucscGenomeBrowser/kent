@@ -1,6 +1,8 @@
 # These are instructions for building the
 # neighborhood browser.  Don't start these until
-# there is a knownGene track.
+# there is a knownGene track, or a track with the 
+# usual genePred fields followed by a proteinID field 
+# with SwissProt IDs.
 
 # Set up db variable (you'll actually need to redo this
 # after each ssh until we work out a better system.)
