@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.96 2004/12/08 00:03:51 kate Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.97 2004/12/11 00:34:01 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -901,8 +901,8 @@ if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
 else if (track != NULL)
     {
-    struct hTableInfo *trackHti = getHti(db, track->tableName);
-    if (hti != NULL && trackHti->nameField[0] != 0)
+    struct hTableInfo *trackHti = maybeGetHti(db, track->tableName);
+    if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
 	struct joinerPair *jp, *jpList;
 	jpList = joinerRelate(allJoiner, db, track->tableName);
