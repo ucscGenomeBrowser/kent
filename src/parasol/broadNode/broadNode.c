@@ -277,9 +277,11 @@ void calcMd5OnSection(struct fileTracker *ft)
 struct md5_context ctx;
 if (!ft->doneMd5)
     {
+#ifdef SOON
     md5_starts(&ctx);
     md5_update(&ctx, (uint8 *)ft->sectionData, ft->curSectionSize);
     md5_finish(&ctx, ft->md5);
+#endif
     ft->doneMd5 = TRUE;
     }
 }
@@ -351,6 +353,7 @@ else
 	{
 	/* Check md5 signature.  If it matches we're good to go, otherwise
 	 * set up things to tell server to resend the whole section. */
+#ifdef SOON
 	calcMd5OnSection(ft);
 	if (memcmp(ft->md5, md5, sizeof(ft->md5)) == 0)
 	    ft->sectionClosed = TRUE;
@@ -365,6 +368,9 @@ else
 		}
 	    ft->doneMd5 = FALSE;
 	    }
+#else /* SOON */
+	ft->sectionClosed = TRUE;
+#endif /* SOON */
 	}
     bdMakeMissingBlocksMessage(m, ownIp, m->id, fileId, missingCount, missingList);
     }
