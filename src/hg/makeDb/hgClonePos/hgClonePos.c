@@ -11,7 +11,7 @@
 #include "gsSeqInfo.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgClonePos.c,v 1.11 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgClonePos.c,v 1.12 2004/06/17 19:13:28 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,9 +19,15 @@ void usage()
 errAbort(
   "hgClonePos - create clonePos table in browser database\n"
   "usage:\n"
-  "   hgClonePos database ooDir ffa/sequence.inf gsDir\n"
+  "   hgClonePos [options] database ooDir ffa/sequence.inf gsDir\n"
   "options:\n"
-  "   maxErr=N  set maximum allowed errors before aborting (default 0)\n");
+  "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
+  "   -maxErr=N  set maximum allowed errors before aborting (default 0)\n"
+  "   -verbose=N  set verbose level to N\n"
+  "example:\n"
+  "   cd /cluster/store5/gs.18/build35\n"
+  "   hgClonePos -chromLst=chrom.lst hg17 build35 ./sequence.inf \\\n"
+  "       /cluster/store5/gs.18 -maxErr=3");
 }
 
 int maxErr = 0;
@@ -113,13 +119,31 @@ struct clonePos *cloneList = NULL;
 struct fileInfo *chrFiList = NULL, *chrFi; 
 struct fileInfo *glFiList = NULL, *glFi;
 char pathName[512];
+struct hash *chromDirHash = newHash(4);
+char *chromLst = optionVal("chromLst", NULL);
 
+if (chromLst != NULL)
+    {
+    struct lineFile *clf = lineFileOpen(chromLst, TRUE);
+    char *row[1];
+    while (lineFileRow(clf, row))
+        {
+        hashAdd(chromDirHash, row[0], NULL);
+	verbose(3,"%s\n",row[0]);
+        }
+    lineFileClose(&clf);
+    }
+
+verbose(2,"ooDir: %s\n",ooDir);
 chrFiList = listDirX(ooDir, "*", FALSE);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
-    if (chrFi->isDir && strlen(chrFi->name) <= 2)
+verbose(2,"%s\n",chrFi->name);
+    if ( ((chrFi->isDir && strlen(chrFi->name) <= 2))
+	|| hashLookup(chromDirHash, chrFi->name) )
         {
 	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
+	verbose(2,"%s\n",pathName);
 	glFiList = listDirX(pathName, "*.gl", TRUE);
 	for (glFi = glFiList; glFi != NULL; glFi = glFi->next)
 	    addCloneInfo(glFi->name, cloneHash, &cloneList);
@@ -132,6 +156,7 @@ slSort(&cloneList, cmpClonePos);
 if (slCount(cloneList) < 0)
    errAbort("No .gl files in %s\n", ooDir);
 printf("Got %d clones\n", slCount(cloneList));
+hashFree(&chromDirHash);
 return cloneList;
 }
 
