@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.39 2004/09/17 17:57:12 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.40 2004/09/18 00:20:16 baertsch Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -304,6 +304,16 @@ else if (isPositional)
     showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
 else
     showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
+
+{
+int outputPad = cartUsualInt(cart, hgtaOutputPad, 0);
+    hPrintf("</TD></TR>\n");
+    hPrintf("<tr><td><B>widen output: </B>\n");
+    cgiMakeIntVar(hgtaOutputPad, outputPad, 10);
+    hPrintf(" bases \n");
+    hPrintf("</TD></TR>\n");
+}
+
 }
 
 void nbSpaces(int count)

@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.64 2004/09/17 17:57:12 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.65 2004/09/18 00:20:16 baertsch Exp $";
 
 
 void usage()
@@ -809,6 +809,7 @@ void doOutHyperlinks(char *table, struct sqlConnection *conn)
 /* Output as genome browser hyperlinks. */
 {
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
+int outputPad = cartUsualInt(cart, hgtaOutputPad,0);
 struct region *region, *regionList = getRegions();
 char posBuf[64];
 int count = 0;
@@ -822,8 +823,10 @@ for (region = regionList; region != NULL; region = region->next)
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	char *name;
+        int start = max(0,bed->chromStart+1-outputPad);
+        int end = min(hChromSize(bed->chrom),bed->chromEnd+outputPad);
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
-		    bed->chrom, bed->chromStart+1, bed->chromEnd);
+		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
 	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
 	hPrintf("&db=%s", database);
