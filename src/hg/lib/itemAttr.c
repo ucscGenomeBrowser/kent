@@ -6,22 +6,20 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "hdb.h"
 #include "itemAttr.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: itemAttr.c,v 1.1 2004/03/24 18:40:42 markd Exp $";
+static char const rcsid[] = "$Id: itemAttr.c,v 1.2 2004/10/04 19:56:50 markd Exp $";
 
 void itemAttrStaticLoad(char **row, struct itemAttr *ret)
 /* Load a row from itemAttr table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
-ret->chrom = row[0];
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->itemId = sqlUnsigned(row[3]);
+ret->name = row[0];
+ret->chrom = row[1];
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
 ret->colorR = sqlUnsigned(row[4]);
 ret->colorG = sqlUnsigned(row[5]);
 ret->colorB = sqlUnsigned(row[6]);
@@ -32,14 +30,12 @@ struct itemAttr *itemAttrLoad(char **row)
  * from database.  Dispose of this with itemAttrFree(). */
 {
 struct itemAttr *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
-ret->chrom = cloneString(row[0]);
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->itemId = sqlUnsigned(row[3]);
+ret->name = cloneString(row[0]);
+ret->chrom = cloneString(row[1]);
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
 ret->colorR = sqlUnsigned(row[4]);
 ret->colorG = sqlUnsigned(row[5]);
 ret->colorB = sqlUnsigned(row[6]);
@@ -88,14 +84,13 @@ struct itemAttr *itemAttrCommaIn(char **pS, struct itemAttr *ret)
  * return a new itemAttr */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->name = sqlStringComma(&s);
 ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
-ret->itemId = sqlUnsignedComma(&s);
 ret->colorR = sqlUnsignedComma(&s);
 ret->colorG = sqlUnsignedComma(&s);
 ret->colorB = sqlUnsignedComma(&s);
@@ -110,6 +105,7 @@ void itemAttrFree(struct itemAttr **pEl)
 struct itemAttr *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->name);
 freeMem(el->chrom);
 freez(pEl);
 }
@@ -130,7 +126,10 @@ for (el = *pList; el != NULL; el = next)
 void itemAttrOutput(struct itemAttr *el, FILE *f, char sep, char lastSep) 
 /* Print out itemAttr.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -138,8 +137,6 @@ fputc(sep,f);
 fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->chromEnd);
-fputc(sep,f);
-fprintf(f, "%u", el->itemId);
 fputc(sep,f);
 fprintf(f, "%u", el->colorR);
 fputc(sep,f);
@@ -151,11 +148,13 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
 struct itemAttrTbl
 /* object holding itemAttr from a range query */
 {
     char *table;
-    struct hash *idHash;  /* hash of items, indexed by item id */
+    struct hash *nameMap;  /* hash of items, indexed by name, multiple
+                            * entries per name allowed. */
 };
 
 struct itemAttrTbl *itemAttrTblNew(char *table)
@@ -178,8 +177,8 @@ struct sqlResult *result;
 char **row;
 char idBuf[64];
 
-if (iat->idHash == NULL)
-    iat->idHash = hashNew(18);
+if (iat->nameMap == NULL)
+    iat->nameMap = hashNew(18);
 
 result = hRangeQuery(conn, iat->table, chrom, start, end,
                      NULL, &rowOffset);
@@ -187,19 +186,27 @@ result = hRangeQuery(conn, iat->table, chrom, start, end,
 while ((row = sqlNextRow(result)) != NULL)
     {
     struct itemAttr* ia = itemAttrLoad(row+rowOffset);
-    safef(idBuf, sizeof(idBuf), "%d", ia->itemId);
-    hashAdd(iat->idHash, idBuf, ia);
+    hashAdd(iat->nameMap, ia->name, ia);
     }
 sqlFreeResult(&result);
 }
 
-struct itemAttr *itemAttrTblGet(struct itemAttrTbl *iat, int itemId)
-/* lookup an itemAttr by itemId */
+struct itemAttr *itemAttrTblGet(struct itemAttrTbl *iat, char* name,
+                                char *chrom, int chromStart, int chromEnd)
+/* lookup an itemAttr by name and location */
 {
-    struct itemAttr* ia;
-char idBuf[64];
-safef(idBuf, sizeof(idBuf), "%d", itemId);
-return hashFindVal(iat->idHash, idBuf);
+struct hashEl *hel = hashLookup(iat->nameMap, name);
+
+/* search for matching location */
+while (hel != NULL)
+    {
+    struct itemAttr* ia = hel->val;
+    if ((ia->chromStart == chromStart) && (ia->chromEnd == chromEnd)
+        && sameString(ia->chrom, chrom))
+        return ia;
+    hel = hashLookupNext(hel);
+    }
+return NULL; /* not found */
 }
 
 void itemAttrTblFree(struct itemAttrTbl **iatPtr)
@@ -208,11 +215,11 @@ void itemAttrTblFree(struct itemAttrTbl **iatPtr)
 struct itemAttrTbl *iat = *iatPtr;
 if (iat != NULL)
     {
-    struct hashCookie cookie = hashFirst(iat->idHash);
+    struct hashCookie cookie = hashFirst(iat->nameMap);
     struct hashEl *hel;
     while((hel = hashNext(&cookie)) != NULL)
         itemAttrFree((struct itemAttr**)&hel->val);
-    hashFree(&iat->idHash);
+    hashFree(&iat->nameMap);
     freez(iatPtr);
     }
 }

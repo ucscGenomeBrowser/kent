@@ -135,6 +135,6 @@ are added to the trackDb->settingsHash table.
 
 Some settings used by various tracks:
     o exonArrows - if speciufied to draw strand arrows on exons.
-    o itemAttrIdTbl - table used to color individual items in a track, selected
-      by numeric id.
+    o itemAttrTbl - table used to color individual items in a track, selected
+      by name and locations.  Currently works for genePred tracks.
 

@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.808 2004/10/03 17:51:52 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.809 2004/10/04 19:56:49 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2370,7 +2370,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->components = sfFromGenePred(gp, grayIx);
 
     if ((tg->itemAttrTbl != NULL) && (gp->optFields & genePredIdFld))
-        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->id);
+        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
+                                      gp->chrom, gp->txStart, gp->txEnd);
 
     linkedFeaturesBoundsAndGrays(lf);
 
@@ -8061,7 +8062,7 @@ if (exonArrows == NULL)
     }
 track->exonArrows = sameString(exonArrows, "on");
 
-iatName = trackDbSetting(tdb, "itemAttrIdTbl");
+iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);

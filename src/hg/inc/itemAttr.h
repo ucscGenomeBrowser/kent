@@ -8,13 +8,13 @@
 #define ITEMATTR_NUM_COLS 7
 
 struct itemAttr
-/* Relational object of display attributes for individual items */
+/* Relational object of display attributes for individual track items */
     {
     struct itemAttr *next;  /* Next in singly linked list. */
+    char *name;	/* name of item */
     char *chrom;	/* chromosome */
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
-    unsigned itemId;	/* Primary key of item */
     unsigned char colorR;	/* Color red component 0-255 */
     unsigned char colorG;	/* Color green component 0-255 */
     unsigned char colorB;	/* Color blue component 0-255 */
@@ -63,9 +63,6 @@ void itemAttrOutput(struct itemAttr *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct itemAttrTbl;
-struct sqlConnection;
-
 struct itemAttrTbl *itemAttrTblNew(char *table);
 /* Create a new itemAttr object. This saves the table name, but
  * doesn't load the data. */
@@ -75,8 +72,9 @@ void itemAttrTblLoad(struct itemAttrTbl *iat,
                      char *chrom, int start, int end);
 /* load itemAttrs for the specified chrom range */
 
-struct itemAttr *itemAttrTblGet(struct itemAttrTbl *iat, int itemId);
-/* lookup an itemAttr by itemId */
+struct itemAttr *itemAttrTblGet(struct itemAttrTbl *iat, char* name,
+                                char *chrom, int chromStart, int chromEnd);
+/* lookup an itemAttr by name and location */
 
 void itemAttrTblFree(struct itemAttrTbl **iatPtr);
 /* free an itemAttrTbl */
