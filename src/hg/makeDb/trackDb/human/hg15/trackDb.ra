@@ -334,8 +334,8 @@ type chain hg15
 otherDb hg15
 
 track selfNet
-shortLabel self Net
-longLabel Human/$Organism Alignment Net
+shortLabel Self Net
+longLabel $Organism Self Alignment Net
 group varRep
 priority 147.5
 visibility hide

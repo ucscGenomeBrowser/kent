@@ -730,7 +730,7 @@ type psl .
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel Human Merged Blastz Alignments
+longLabel Human Merged Blastz Self Alignments
 group varRep
 priority 160
 visibility hide
