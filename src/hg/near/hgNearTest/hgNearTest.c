@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.8 2004/03/04 03:56:18 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.9 2004/03/04 05:19:53 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -265,13 +265,12 @@ struct nearTest *nearTestNew(struct qaStatus *status,
 struct nearTest *test;
 AllocVar(test);
 test->status = status;
-test->info[ntiiType] = type;
-test->info[ntiiSort] = sort;
-test->info[ntiiSort] = sort;
-test->info[ntiiOrg] = org;
-test->info[ntiiDb] = db;
-test->info[ntiiCol] = col;
-test->info[ntiiGene] = gene;
+test->info[ntiiType] = cloneString(naForNull(type));
+test->info[ntiiSort] = cloneString(naForNull(sort));
+test->info[ntiiOrg] = cloneString(naForNull(org));
+test->info[ntiiDb] = cloneString(naForNull(db));
+test->info[ntiiCol] = cloneString(naForNull(col));
+test->info[ntiiGene] = cloneString(naForNull(gene));
 return test;
 }
 
@@ -323,6 +322,15 @@ if (s != NULL)
 return count;
 }
 
+int nearCountRows(struct htmlPage *page)
+/* Count number of rows in big table. */
+{
+if (page == NULL)
+    return -1;
+return qaCountBetween(page->htmlText, 
+	"<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+}
+
 void testCol(struct htmlPage *emptyConfig, char *org, char *db, char *col, char *gene,
 	struct nearTest **pTestList)
 /* Test one column. */
@@ -343,8 +351,7 @@ slAddHead(pTestList, test);
 if (printPage != NULL)
     {
     int expectCount = 25;
-    int lineCount = qaCountBetween(printPage->fullText, 
-	    "<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+    int lineCount = nearCountRows(printPage);
     if (lineCount != expectCount)
 	qaStatusSoftError(qs, "Got %d rows, expected %d", lineCount, expectCount);
     }
@@ -367,6 +374,26 @@ slAddHead(pTestList, test);
 if (emptyConfig == NULL)
     warn("Couldn't get empty config page for %s\n", db);
 return emptyConfig;
+}
+
+void testColInfo(struct htmlPage *dbPage, char *org, char *db, char *col, 
+	struct nearTest **pTestList)
+/* Click on all colInfo columns. */
+{
+struct nearTest *test;
+struct qaStatus *qs;
+struct htmlPage *infoPage;
+qs = qaPageFromForm(dbPage, dbPage->forms, colInfoVarName, col, &infoPage);
+test = nearTestNew(qs, "colInfo", "n/a", org, db, col, "n/a");
+slAddHead(pTestList, test);
+if (infoPage == NULL)
+    warn("Couldn't get empty config page for %s\n", db);
+else
+    {
+    if (stringIn("No additional info available", infoPage->htmlText))
+	qaStatusSoftError(qs, "%s failed - no %s.html?", colInfoVarName, col);
+    }
+htmlPageFree(&infoPage);
 }
 
 void testDbColumns(struct htmlPage *dbPage, char *org, char *db, 
@@ -404,6 +431,10 @@ if (emptyConfig != NULL )
 	    testCol(emptyConfig, org, db, col->name, gene->name, pTestList);
 	    }
 	}
+    for (col = colList; col != NULL; col = col->next)
+        {
+	testColInfo(dbPage, org, db, col->name, pTestList);
+	}
     }
 htmlPageFree(&emptyConfig);
 }
@@ -422,12 +453,11 @@ htmlPageSetVar(emptyConfig, NULL, searchVarName, gene);
 
 qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
 	"submit", "Submit", &printPage);
-test = nearTestNew(qs, "sortType", cloneString(sort), org, db, "n/a", gene);
+test = nearTestNew(qs, "sortType", sort, org, db, "n/a", gene);
 slAddHead(pTestList, test);
 if (printPage != NULL)
     {
-    int lineCount = qaCountBetween(printPage->fullText, 
-	    "<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+    int lineCount = nearCountRows(printPage);
     if (lineCount < 1)
 	qaStatusSoftError(qs, "No rows for sort %s", sort);
     }
@@ -464,6 +494,88 @@ if (emptyConfig != NULL)
     }
 }
 
+struct htmlPage *quickSubmit(struct htmlPage *basePage,
+	char *sort, char *org, char *db, char *col, char *gene, 
+	char *testName, char *button, char *buttonVal, struct nearTest **pTestList)
+/* Submit page and record info.  Return NULL if a problem. */
+{
+struct nearTest *test;
+struct qaStatus *qs;
+struct htmlPage *page;
+qs = qaPageFromForm(basePage, basePage->forms, 
+	button, buttonVal, &page);
+test = nearTestNew(qs, testName, sort, org, db, col, gene);
+slAddHead(pTestList, test);
+return page;
+}
+
+void serialSubmit(struct htmlPage **pPage,
+	char *sort, char *org, char *db, char *col, char *gene, 
+	char *testName, char *button, char *buttonVal, struct nearTest **pTestList)
+/* Submit page, replacing old page with new one. */
+{
+struct htmlPage *oldPage = *pPage;
+if (oldPage != NULL)
+    {
+    *pPage = quickSubmit(oldPage, sort, org, db, col, gene, 
+    	testName, button, buttonVal, pTestList);
+    htmlPageFree(&oldPage);
+    }
+}
+
+void testDbFilters(struct htmlPage *dbPage, char *org, char *db, 
+	struct slName *geneList, struct nearTest **pTestList)
+/* Test filter that returns just geneList. */
+{
+struct slName *gene;
+int rowCount;
+char *accFilter = "near.as.acc.wild";
+
+/* Start out with filter page. */
+struct htmlPage *page = quickSubmit(dbPage, NULL, org, db, NULL, NULL,
+	"accOneFilterPage", advFilterVarName, "on", pTestList);
+verbose(1, "testFilters %s %s\n", org, db);
+if (page == NULL)
+    return;
+
+/* Set up to filter exactly one gene. */
+htmlPageSetVar(page, NULL, accFilter, geneList->name);
+htmlPageSetVar(page, NULL, searchVarName, geneList->name);
+serialSubmit(&page, NULL, org, db, NULL, NULL,
+        "accOneFilterSubmit", "Submit", "on", pTestList);
+if (page == NULL)
+    return;
+
+/* Make sure really got one gene. */
+rowCount = nearCountRows(page);
+if (rowCount != 1)
+    {
+    qaStatusSoftError((*pTestList)->status, 
+    	"Acc exact filter returned %d items", rowCount);
+    }
+
+/* Set up filter for all genes in list. */
+    {
+    struct dyString *dy = newDyString(0);
+    int geneCount = slCount(geneList);
+    for (gene = geneList; gene != NULL; gene = gene->next)
+	dyStringPrintf(dy, "%s ", gene->name);
+    htmlPageSetVar(page, NULL, accFilter, dy->string);
+    dyStringFree(&dy);
+    serialSubmit(&page, NULL, org, db, NULL, NULL,
+	    "accMultiFilterSubmit", "Submit", "on", pTestList);
+    if (page == NULL)
+	return;
+    rowCount = nearCountRows(page);
+    if (rowCount != geneCount)
+	{
+	qaStatusSoftError((*pTestList)->status, 
+	    "Acc multi filter expecting %d, tog %d items", geneCount, rowCount);
+	}
+    }
+htmlPageFree(&page);
+}
+
 void testDb(struct htmlPage *orgPage, char *org, char *db, struct nearTest **pTestList)
 /* Test on one database. */
 {
@@ -482,8 +594,8 @@ slAddHead(pTestList, test);
 
 testDbColumns(dbPage, org, db, geneList, pTestList);
 testDbSorts(dbPage, org, db, geneList, pTestList);
+testDbFilters(dbPage, org, db, geneList, pTestList);
 
-slFreeList(&geneList);
 hashFree(&genomeRa);
 }
 
@@ -509,7 +621,7 @@ if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
 for (db = dbVar->values; db != NULL; db = db->next)
     {
     if (forceDb == NULL || sameString(forceDb, db->name))
-	testDb(orgPage, org, cloneString(db->name), pTestList);
+	testDb(orgPage, org, db->name, pTestList);
     }
 htmlPageFree(&orgPage);
 }
@@ -590,6 +702,8 @@ struct htmlFormVar *orgVar;
 struct nearTest *testList = NULL;
 FILE *f = mustOpen(log, "w");
 htmlPageValidateOrAbort(rootPage);
+htmlPageSetVar(rootPage, NULL, orderVarName, "geneDistance");
+htmlPageSetVar(rootPage, NULL, countVarName, "25");
 if ((mainForm = htmlFormGet(rootPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form");
 if ((orgVar = htmlFormVarGet(mainForm, "org")) == NULL)
@@ -601,7 +715,7 @@ else
     struct slName *org;
     for (org = orgVar->values; org != NULL; org = org->next)
         {
-	testOrg(rootPage, mainForm, cloneString(org->name), clDb, &testList);
+	testOrg(rootPage, mainForm, org->name, clDb, &testList);
 	}
     }
 htmlPageFree(&rootPage);
