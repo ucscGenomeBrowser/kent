@@ -365,3 +365,5 @@
 95 - Ported to Mac. Making it autolift from nib/2bit subranges in target.
       4.22 chain 1310598 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
       0:49.757 chain 8325211 human 2000000 + 361721 1947371 mouse 1120000 + 8735 1116037 1
+96 - Doing autolift on target in server as well as standalone.  Doing autolift on
+     query as well as target in standalone.

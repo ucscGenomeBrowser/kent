@@ -12,6 +12,7 @@
 #include "chain.h"
 #endif
 
+
 struct blatzIndexPos
 /* An array of places where indexed word occurs. */
     {
@@ -37,8 +38,10 @@ struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int offset, int parentSize,
 	int weight);
 /* Create a new index of given seed weight populated by seq. */
 
-struct blatzIndex *blatzIndexAll(struct dnaSeq *seqList, int seedWeight);
-/* Return a list of indexes, one for each seq on seqList */
+struct dnaLoad;
+
+struct blatzIndex *blatzIndexDl(struct dnaLoad *dl, int weight, boolean unmask);
+/* Cycle through everything in dl, save it, and make an index for it. */
 
 void blatzIndexFree(struct blatzIndex **pIndex);
 /* Free up memory associated with index. */
@@ -54,8 +57,8 @@ void blatzGaplessScan(struct bzp *bzp, struct blatzIndex *index,
  * onto pBlockList. */
 
 void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
-	struct dnaSeq *query, struct blatzIndex *targetIndexList, 
-	FILE *f);
+	struct dnaSeq *query, int queryOffset, int queryParentSize,
+	struct blatzIndex *targetIndexList, FILE *f);
 /* Output chainList to file in format specified by bzp->outType. */
 
 struct chain *blatzAlign(struct bzp *bzp, struct blatzIndex *indexList,

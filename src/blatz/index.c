@@ -5,9 +5,10 @@
 #include "hash.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "dnaLoad.h"
 #include "localmem.h"
-#include "blatz.h"
 #include "spacedSeed.h"
+#include "blatz.h"
 
 int blatzIndexKey(DNA *dna, int *seedOffsets, int seedWeight)
 /* Calculate which slot in index to look into.  Returns -1 if
@@ -114,16 +115,21 @@ lmCleanup(&lm);
 return index;
 }
 
-struct blatzIndex *blatzIndexAll(struct dnaSeq *seqList, int seedWeight)
-/* Return a list of indexes, one for each seq on seqList */
+struct blatzIndex *blatzIndexDl(struct dnaLoad *dl, int weight, boolean unmask)
+/* Cycle through everything in dl, save it, and make an index for it. */
 {
-struct blatzIndex *indexList = NULL, *index;
 struct dnaSeq *seq;
-for (seq = seqList; seq != NULL; seq = seq->next)
+struct blatzIndex *indexList = NULL, *index;
+while ((seq = dnaLoadNext(dl)) != NULL)
     {
-    index = blatzIndexOne(seq, 0, seq->size, seedWeight);
+    int offset = dnaLoadCurOffset(dl);
+    int size = dnaLoadCurSize(dl);
+    if (unmask)
+	toUpperN(seq->dna, seq->size);
+    index = blatzIndexOne(seq, offset, size, weight);
     slAddHead(&indexList, index);
     }
 slReverse(&indexList);
 return indexList;
 }
+

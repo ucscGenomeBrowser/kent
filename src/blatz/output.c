@@ -117,7 +117,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 dnaSeqFree(&rQuery);
 }
 
-static void blatzOffsetChainTargets(struct chain *chainList, 
+static void blatzOffsetChains(struct chain *chainList, 
+	int qOffset, int qSize,
 	struct hash *targetHash, boolean reverse)
 /* Add targetHash[tName]->targetOffset to chainList. */
 {
@@ -126,33 +127,38 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
     struct cBlock *block;
-    int offset = index->targetOffset;
-    int size = index->targetParentSize;
+    int tOffset = index->targetOffset;
+    int tSize = index->targetParentSize;
     if (reverse)
 	{
-        offset = -offset;
-	size = index->target->size;
+        tOffset = -tOffset;
+	tSize = index->target->size;
 	}
-    chain->tStart += offset;
-    chain->tEnd += offset;
-    chain->tSize = size;
+    chain->qStart += qOffset;
+    chain->qEnd += qOffset;
+    chain->qSize = qSize;
+    chain->tStart += tOffset;
+    chain->tEnd += tOffset;
+    chain->tSize = tSize;
     for (block = chain->blockList; block != NULL; block = block->next)
         {
-	block->tStart += offset;
-	block->tEnd += offset;
+	block->qStart += qOffset;
+	block->qEnd += qOffset;
+	block->tStart += tOffset;
+	block->tEnd += tOffset;
 	}
     }
 }
         
 void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
-        struct dnaSeq *query, struct blatzIndex *targetIndexList, 
-        FILE *f)
+	struct dnaSeq *query, int queryOffset, int queryParentSize,
+	struct blatzIndex *targetIndexList, FILE *f)
 /* Output chainList to file in format specified by bzp->out. */
 {
 struct hash *targetHash = hashTargetsFromIndex(targetIndexList);
 char *out = bzp->out;
 
-blatzOffsetChainTargets(chainList, targetHash, FALSE);
+blatzOffsetChains(chainList, queryOffset, queryParentSize, targetHash, FALSE);
 if (sameString(out, "chain"))
     chainWriteAll(chainList, f);
 else if (sameString(out, "psl"))
@@ -165,7 +171,7 @@ else if (sameString(out, "wublast") || sameString(out, "blast") ||
    chainWriteAllAsBlast(chainList, out, query, targetHash, f);
 else 
     errAbort("blatzWriteChains doesn't recognize format %s", bzp->out);
-blatzOffsetChainTargets(chainList, targetHash, TRUE);
+blatzOffsetChains(chainList, -queryOffset, query->size, targetHash, TRUE);
 hashFree(&targetHash);
 }
 

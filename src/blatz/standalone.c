@@ -64,31 +64,12 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 	}
     verbose(1, "%s (%d bases) score %2.0f\n", 
             query->name, query->size, bestScore);
-    blatzWriteChains(bzp, chainList, query, indexList, f);
+    blatzWriteChains(bzp, chainList, query, 
+    	dnaLoadCurOffset(queryDl), dnaLoadCurSize(queryDl), indexList, f);
     chainFreeList(&chainList);
     dnaSeqFree(&query);
     }
 carefulClose(&f);
-}
-
-static struct blatzIndex *blatzIndexDl(struct bzp *bzp,
-	struct dnaLoad *dl)
-/* Cycle through everything in dl, save it, and make an
- *index for it. */
-{
-struct dnaSeq *seq;
-struct blatzIndex *indexList = NULL, *index;
-while ((seq = dnaLoadNext(dl)) != NULL)
-    {
-    int offset = dnaLoadCurOffset(dl);
-    int size = dnaLoadCurSize(dl);
-    if (bzp->unmask)
-	toUpperN(seq->dna, seq->size);
-    index = blatzIndexOne(seq, offset, size, bzp->weight);
-    slAddHead(&indexList, index);
-    }
-slReverse(&indexList);
-return indexList;
 }
 
 static void loadAndAlignAll(struct bzp *bzp, 
@@ -97,7 +78,7 @@ static void loadAndAlignAll(struct bzp *bzp,
 {
 struct dnaLoad *queryDl = dnaLoadOpen(query);
 struct dnaLoad *targetDl = dnaLoadOpen(target);
-struct blatzIndex *indexList = blatzIndexDl(bzp, targetDl);
+struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);
 bzpTime("loaded and indexed target DNA");
 
 verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
