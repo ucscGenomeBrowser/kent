@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.44 2003/06/18 20:34:31 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.45 2003/06/19 15:29:38 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -61,20 +61,26 @@ cartSetString(cart, "position",position);
 
 puts(
 "<CENTER>"
-"Web tool created by "
-"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>, "
-"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>, "
-"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
-"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>, "
-"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
-"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
-"and the Genome Bioinformatics Group of UC Santa Cruz.<BR>\n"
-"UCSC Genome Browser Software Copyright 2001 The Regents of the University of 
-California. "
-"All rights reserved.<P></CENTER><P>\n");
+"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
+"<TR><TD><FONT SIZE=\"2\">\n"
+"<CENTER>\n"
+"UCSC Genome Browser created by\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>,\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
+"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
+"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
+"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
+"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
+"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
+"and the Genome Bioinformatics Group of UC Santa Cruz.\n"
+"<BR>"
+"Copyright 2001 The Regents of the University of California.\n"
+"All rights reserved.\n"
+"</CENTER>\n"
+"</FONT></TD></TR></TABLE></CENTER><P>\n"
+);
 
 puts(
 "<center>\n"
@@ -85,7 +91,7 @@ puts(
 );
 
 puts(
-"<table bgcolor=\"FFFEF3\" border=0>\n"
+"<table bgcolor=\"fffef3\" border=0>\n"
 "<tr>\n"
 "<td>\n"
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
