@@ -134,6 +134,10 @@
            <param name="progPkg" value="edu.ucsc.genome.qa.monitor"/>
            <param name="progClass" value="ApacheMonitor"/>
         </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.qa.monitor"/>
+           <param name="progClass" value="ApacheReport"/>
+        </antcall>
     </target>
 
     <target name="clean" depends="init">
