@@ -1462,33 +1462,48 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
     para try
     para check
     para push
-    # 75 minutes.  Almost all of which is I/O time:
-# Completed: 39 of 40 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:       2264s      37.74m     0.63h    0.03d  0.000 y
-# IO & Wait Time:                 36360s     606.00m    10.10h    0.42d  0.001 y
-# Average job time:                 990s      16.51m     0.28h    0.01d
-# Longest job:                     4514s      75.23m     1.25h    0.05d
-# Submission to last job:          4516s      75.27m     1.25h    0.05d
-    # The one crashed job may have been due to cluster bluearc problems.
-    # Run that one job manually:
-    ssh kkr1u00
-    # remove the two empty results:
-    cd /cluster/data/hg16/bed/blastz.mm3/axtBest
-    rm chr2.axt
-    cd /cluster/data/hg16/bed/blastz.mm3/pslBest
-    rm chr2.psl
-    cd /cluster/data/hg16/bed/blastz.mm3/run.3
-    ./doBestAxt chr2 /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom/chr2.axt \
-	/cluster/data/hg16/bed/blastz.mm3/axtBest/chr2.axt \
-	/cluster/data/hg16/bed/blastz.mm3/pslBest/chr2_blastzBestMm3.psl
-#Read 381426 elements from \
-#	/cluster/bluearc/hg16/bed/blastz.mm3/axtChrom/chr2.axt
-#Allocated 243394390 elements in array
-#144159 elements in after soft filter.
-#Output 141446 alignments including 0 trimmed from overlaps
-#Bases in 210613471, bases out 103187961 (48.99%)
+    #  With the chr19 situation, went back and reran this situation.
+    #	for some unknown reason the first time it had 9 failed jobs:
+Completed: 32 of 41 jobs
+Crashed: 9 jobs
+CPU time in finished jobs:        827s      13.78m     0.23h    0.01d  0.000 y
+IO & Wait Time:                  1299s      21.65m     0.36h    0.02d  0.000 y
+Average job time:                  66s       1.11m     0.02h    0.00d
+Longest job:                      361s       6.02m     0.10h    0.00d
+Submission to last job:          1195s      19.92m     0.33h    0.01d
+    # And then rerunning those 9 failed jobs, only chr19 failed:
+Completed: 8 of 9 jobs
+Crashed: 1 jobs
+CPU time in finished jobs:        748s      12.47m     0.21h    0.01d  0.000 y
+IO & Wait Time:                  2290s      38.16m     0.64h    0.03d  0.000 y
+Average job time:                 380s       6.33m     0.11h    0.00d
+Longest job:                     1247s      20.78m     0.35h    0.01d
+Submission to last job:          1261s      21.02m     0.35h    0.01d
 
+    #  To get a result for chr19 - proceed with the chain and net below
+    #	When the mouse.net is complete:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mkdir mouseNet
+    netSplit mouse.net mouseNet
+    netToAxt mouseNet/chr19.net chain/chr19.chain \
+	/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+	/cluster/data/mm3.RM030619/mixedNib \
+	../axtNet/chr19.axt
+# read 6175021 chains in chain/chr19.chain
+# Processing chr19
+# loaded /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs/chr19.nib
+
+    cd /cluster/data/hg16/bed/blastz.mm3/axtBest
+    rm chr19.axt
+    ln -s ../axtNet/chr19.axt .
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3
+    /cluster/bin/i386/axtToPsl axtBest/chr19.axt \
+	/cluster/data/hg16/bed/blastz.mm3/S1.len \
+	/cluster/data/hg16/bed/blastz.mm3/S2.len \
+	pslBest/chr19_blastzBestMm3.psl
 
     # Load tables
      ssh hgwdev
@@ -1496,6 +1511,7 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
      set tbl="blastzBestMm3"
      cd $base/pslBest
      /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+XXXX
 
      # check results
      featureBits hg16 blastzBestMm3
@@ -1522,13 +1538,12 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
      # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
-# CHAIN MOUSE BLASTZ (DONE 2003-08-08 - Hiram)
+# CHAIN MOUSE BLASTZ (DONE 2003-08-28 - Hiram)
 
 # Run axtChain on little cluster
     ssh kkr1u00
-    cd /cluster/data/hg16/bed/blastz.mm3
-    mkdir -p axtChain/run1
-    cd axtChain/run1
+    mkdir -p /cluster/data/hg16/bed/blastz.mm3/axtChain/run1
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/run1
     mkdir out chain
 
     ls -1S /cluster/data/hg16/bed/blastz.mm3/axtChrom/*.axt > input.lst
@@ -1549,18 +1564,17 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     chmod a+x doChain
     mkdir out chain
 
-    # 40 jobs
+    # 41 jobs
     gensub2 input.lst single gsub jobList
     para create jobList
     para try
     para push # ... etc ...
-    # With only 6 CPUs available:
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:      18878s     314.64m     5.24h    0.22d  0.001 y
-# IO & Wait Time:                  6697s     111.61m     1.86h    0.08d  0.000 y
-# Average job time:                 639s      10.66m     0.18h    0.01d
-# Longest job:                     2421s      40.35m     0.67h    0.03d
-# Submission to last job:          4526s      75.43m     1.26h    0.05d
+Completed: 41 of 41 jobs
+CPU time in finished jobs:      31379s     522.98m     8.72h    0.36d  0.001 y
+IO & Wait Time:                 10761s     179.35m     2.99h    0.12d  0.000 y
+Average job time:                1028s      17.13m     0.29h    0.01d
+Longest job:                    10327s     172.12m     2.87h    0.12d
+Submission to last job:         10327s     172.12m     2.87h    0.12d
 
     # now on the cluster server, sort chains
     ssh eieio
@@ -1581,7 +1595,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         echo done $c
     end
 
-# NET MOUSE BLASTZ (DONE - 2003-08-08 - Hiram)
+# NET MOUSE BLASTZ (DONE - 2003-08-22 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
@@ -1606,7 +1620,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    # memory usage 2459066368, utime 15182 s/100, stime 3645
+    # memory usage 2490523648, utime 15421 s/100, stime 3665
 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
@@ -2389,4 +2403,188 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 
     # remake trackDb tables
+
+# MAKE BLASTZ BEST SELF (TBD)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChrom
+    mkdir -p /cluster/bluearc/hg16/bed/blastzSelf/axtChrom
+    
+    # copy chrom axt's to bluearc, to avoid hitting fileserver too hard
+    cp -p *.axt /cluster/bluearc/hg16/bed/blastzSelf/axtChrom
+
+    ssh kk
+    cd /cluster/data/hg16/bed/blastzSelf
+    mkdir -p axtBest pslBest
+    mkdir run.3
+    cd run.3
+
+    # create script to filter files 
+    cat << '_EOF_' > doBestAxt
+#!/bin/csh -f
+# usage: doBestAxt chr axt-file best-file psl-file
+/cluster/bin/i386/axtBest $2 $1 $3 -minScore=300
+sleep 1
+/cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastzSelf/S1.len \
+	/cluster/data/hg16/bed/blastzSelf/S2.len $4
+'_EOF_'
+    chmod +x doBestAxt
+    cd ../axtChrom
+    ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
+    cd ../run.3
+
+    # create template for cluster job
+    cat << '_EOF_' > gsub
+#LOOP
+doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastzSelf/axtChrom/$(root1).axt} {check out line+ /cluster/data/hg16/bed/blastzSelf/axtBest/$(root1).axt} {check out line+  /cluster/data/hg16/bed/blastzSelf/pslBest/$(root1)_blastzBestMm3.psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 42 jobs
+    head jobList
+
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed/blastzSelf/run.3
+    para create jobList
+    para try
+    para check
+    para push
+Completed: 38 of 42 jobs
+Crashed: 4 jobs
+CPU time in finished jobs:       1884s      31.41m     0.52h    0.02d  0.000 y
+IO & Wait Time:                  8421s     140.34m     2.34h    0.10d  0.000 y
+Average job time:                 271s       4.52m     0.08h    0.00d
+Longest job:                     2061s      34.35m     0.57h    0.02d
+Submission to last job:          2277s      37.95m     0.63h    0.03d
+    #  Some of these files are getting too big for this operation
+    # We will have to get back to these via the chains, nets and a
+    # netToAxt trick
+
+    # Problems:
+/cluster/data/hg16/bed/blastzSelf/axtBest/chr19.axt is empty
+/cluster/data/hg16/bed/blastzSelf/pslBest/chr19_blastzBestMm3.psl is empty
+Out of memory - request size 1564 bytes
+/cluster/data/hg16/bed/blastzSelf/axtBest/chr7.axt is empty
+/cluster/data/hg16/bed/blastzSelf/pslBest/chr7_blastzBestMm3.psl is empty
+Out of memory - request size 634045604 bytes
+/cluster/data/hg16/bed/blastzSelf/axtBest/chr1.axt is empty
+/cluster/data/hg16/bed/blastzSelf/pslBest/chr1_blastzBestMm3.psl is empty
+ut of memory - request size 984185908 bytes
+/cluster/data/hg16/bed/blastzSelf/axtBest/chr2.axt is empty
+/cluster/data/hg16/bed/blastzSelf/pslBest/chr2_blastzBestMm3.psl is empty
+Out of memory - request size 973662824 bytes
+
+XXXX
+    # 75 minutes.  Almost all of which is I/O time:
+    ssh kkr1u00
+    # remove the two empty results:
+    cd /cluster/data/hg16/bed/blastzSelf/axtBest
+    rm chr2.axt
+    cd /cluster/data/hg16/bed/blastzSelf/pslBest
+    rm chr2.psl
+    cd /cluster/data/hg16/bed/blastzSelf/run.3
+    ./doBestAxt chr2 /cluster/bluearc/hg16/bed/blastzSelf/axtChrom/chr2.axt \
+	/cluster/data/hg16/bed/blastzSelf/axtBest/chr2.axt \
+	/cluster/data/hg16/bed/blastzSelf/pslBest/chr2_blastzBestMm3.psl
+#Read 381426 elements from \
+#	/cluster/bluearc/hg16/bed/blastzSelf/axtChrom/chr2.axt
+#Allocated 243394390 elements in array
+#144159 elements in after soft filter.
+#Output 141446 alignments including 0 trimmed from overlaps
+#Bases in 210613471, bases out 103187961 (48.99%)
+
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/data/hg16/bed/blastzSelf"
+     set tbl="blastzBestMm3"
+     cd $base/pslBest
+     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+
+     # check results
+     featureBits hg16 blastzBestMm3
+        # 1667035238 bases of 2571104688 (64.837%) in intersection
+     featureBits hg16 blastzMm3
+        # 1669090687 bases of 2571104688 (64.917%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg16/axtBestMm3
+     cd /gbdb/hg16/axtBestMm3
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg16/axtBestMm3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     # already done, above
+     # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg16 < axtInfoInserts.sql
+
+# CHAIN SELF BLASTZ (TBD)
+
+# Run axtChain on little cluster
+    ssh kkr1u00
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/axtChain/run1
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/hg16/bed/blastzSelf/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+
+#    axtFilter -notQ=chrUn_random $1 | axtChain stdin
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ=chrUn_random $1 | axtChain stdin \
+	/iscratch/i/gs.17/build34/bothMaskedNibs \
+	/iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
+'_EOF_'
+    chmod a+x doChain
+    mkdir out chain
+
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    # 42 jobs
+    para try
+    para push # ... etc ...
+    #  The chr19 job failed, out of memory.  This is a current roadblock
+# Completed: 41 of 42 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      39851s     664.19m    11.07h    0.46d  0.001 y
+# IO & Wait Time:                 25735s     428.91m     7.15h    0.30d  0.001 y
+# Average job time:                1600s      26.66m     0.44h    0.02d
+# Longest job:                     7146s     119.10m     1.99h    0.08d
+# Submission to last job:          7146s     119.10m     1.99h    0.08d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg16 ${c}_chainSelf $i
+        echo done $c
+    end
+XXXX
 
