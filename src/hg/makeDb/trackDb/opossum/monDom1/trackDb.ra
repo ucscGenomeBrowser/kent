@@ -38,3 +38,14 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
+
+track blastHg17KG
+shortLabel Hg17  Proteins
+longLabel Hg17 Proteins
+group compGeno
+priority 142
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
