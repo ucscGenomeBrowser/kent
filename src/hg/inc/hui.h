@@ -33,6 +33,12 @@ char *wrapWhiteFont(char *s);
 /* Configuration variable to cause ruler zoom to zoom to base level */
 #define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
 
+/* Maf track display variables and their values */
+
+#define MAF_GENEPRED_VAR  "hgt.mafGenePred"
+#define MAF_FRAMING_VAR   "hgt.mafFrame"
+#define MAF_DOT_VAR       "hgt.mafDot"
+
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 
