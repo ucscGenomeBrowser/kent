@@ -44,6 +44,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "recombRate.h"
+#include "chr18deletions.h"
 #include "mouseOrtho.h"
 #include "humanParalog.h"
 #include "synteny100000.h"
@@ -69,8 +70,6 @@
 #include "celeraCoverage.h"
 #include "web.h"
 
-#define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
-#define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
 #define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
@@ -675,8 +674,6 @@ struct linkedFeatures
     void *extra;			/* Extra info that varies with type. */
     };
 
-#ifdef ROGIC_CODE
-
 struct linkedFeaturesPair
     {
       struct linkedFeaturesPair *next;
@@ -684,9 +681,6 @@ struct linkedFeaturesPair
       struct linkedFeatures *lf5prime;   /*linked features for 5 prime est */
       struct linkedFeatures *lf3prime;   /*linked features for 5 prime est */
     };
-
-#endif /* ROGIC_CODE */
-
 
 int linkedFeaturesCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,chromStart. */
@@ -721,7 +715,6 @@ freeLinkedFeatures((struct linkedFeatures**)(&tg->items));
 
 enum {blackShadeIx=9,whiteShadeIx=0};
 
-#ifdef FUREY_CODE
 
 struct linkedFeaturesSeries
 /* series of linked features that are comprised of multiple linked features */
@@ -795,7 +788,6 @@ freeLinkedFeaturesSeriesItems(tg);
 tg->items = lfList;
 }
 
-#endif /* FUREY_CODE */
 
 Color whiteIndex()
 /* Return index of white. */
@@ -1626,7 +1618,6 @@ for (i=0; i<count; ++i)
     }
 }
 
-#ifdef FUREY_CODE 
 
 static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -1726,10 +1717,7 @@ else if (vis == tvDense)
     linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
     }*/
 }
-#endif /* FUREY_CODE */
 
-
-#ifdef ROGIC_CODE
 
 static void linkedFeaturesDrawPair(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -1896,8 +1884,6 @@ static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, 
     }
 }
 
-#endif /* ROGIC_CODE */
-
 int lfCalcGrayIx(struct linkedFeatures *lf)
 /* Calculate gray level from components. */
 {
@@ -1979,7 +1965,6 @@ tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 }
 
-#ifdef FUREY_CODE
 int linkedFeaturesSeriesItemStart(struct trackGroup *tg, void *item)
 /* Return start chromosome coordinate of item. */
 {
@@ -2006,7 +1991,6 @@ tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
 }
-#endif /* FUREY_CODE */
 
 struct trackGroup *linkedFeaturesTg()
 /* Return generic track group for linked features. */
@@ -2371,7 +2355,6 @@ connectedLfFromPslsInRange(conn, tg, start, end, chromName,
 hFreeConn(&conn);
 }
 
-#ifdef FUREY_CODE
 
 struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 /* Create linked feature series object from database bed record */ 
@@ -2447,9 +2430,6 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
-#endif /* FUREY_CODE */
-
-#ifdef ROGIC_CODE
 
 struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom, int start, int end, boolean isXeno)
 /* Return a linked list of structures that have a pair of linked features for 5' and 3' ESTs from range of table. */
@@ -2554,9 +2534,6 @@ tg->mapItemName = getEstPairName;
 tg->loadItems = loadEstPairAli;
 tg->drawItems = linkedFeaturesAverageDensePair;
 }
-
-#endif /* ROGIC_CODE */
-
 
 
 char *mapNameFromLfExtra(struct trackGroup *tg, void *item)
@@ -4284,10 +4261,39 @@ tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
 }
 
+char *recombRateMap;
+enum recombRateOptEnum recombRateType;
+
+boolean recombRateSetRate(struct trackGroup *tg, void *item)
+/* Change the recombRate value to the one chosen */
+{
+struct recombRate *el = item;
+switch (recombRateType)
+    {
+    case rroeDecodeAvg:
+	return TRUE;
+        break;
+    case rroeDecodeFemale:
+	el->recombRate = el->femaleRate;
+        return TRUE;
+        break;
+    case rroeDecodeMale:
+	el->recombRate = el->maleRate;
+        return TRUE;
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
 void loadRecombRate(struct trackGroup *tg)
 /* Load up recombRate from database table to trackGroup items. */
 {
+recombRateMap = cartUsualString(cart, "recombRate.type", rroeEnumToString(0));
+recombRateType = rroeStringToEnum(recombRateMap);
 bedLoadItem(tg, "recombRate", (ItemLoader)recombRateLoad);
+filterItems(tg, recombRateSetRate, "include");
 }
 
 void freeRecombRate(struct trackGroup *tg)
@@ -4297,12 +4303,26 @@ recombRateFreeList((struct recombRate**)&tg->items);
 }
 
 char *recombRateName(struct trackGroup *tg, void *item)
-/* Return name of gcPercent track item. */
+/* Return name of recombRate track item. */
 {
 struct recombRate *rr = item;
 static char buf[32];
 
-sprintf(buf, "%3.1f cM/Mb", rr->recombRate);
+switch (recombRateType)
+    {
+    case rroeDecodeAvg:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->recombRate);
+        break;
+    case rroeDecodeFemale:
+	sprintf(buf, "%3.1f cM/Mb (F)", rr->recombRate);
+        break;
+    case rroeDecodeMale:
+	sprintf(buf, "%3.1f cM/Mb (M)", rr->recombRate);
+        break;
+    default:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->recombRate);
+        break;
+    }
 return buf;
 }
 
@@ -4330,6 +4350,85 @@ tg->freeItems = freeRecombRate;
 tg->itemName = recombRateName;
 tg->colorShades = shadesOfGray;
 tg->itemColor = recombRateColor;
+}
+
+
+/* Chromosome 18 deletions track */
+void loadChr18deletions(struct trackGroup *tg)
+/* Load up chr18deletions from database table to trackGroup items. */
+{
+bedLoadItem(tg, "chr18deletions", (ItemLoader)chr18deletionsLoad);
+}
+
+void freeChr18deletions(struct trackGroup *tg)
+/* Free up chr18deletions items. */
+{
+chr18deletionsFreeList((struct chr18deletions**)&tg->items);
+}
+
+static void drawChr18deletions(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chr18deletions items. */
+{
+int baseWidth = seqEnd - seqStart;
+struct chr18deletions *cds;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int tallStart, tallEnd, shortStart, shortEnd;
+int itemOff, itemHeight;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+
+memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
+
+if (vis == tvDense)
+    {
+    slSort(&tg->items, cmpLfWhiteToBlack);
+    }
+
+for (cds = tg->items; cds != NULL; cds = cds->next)
+    {
+    int midY = y + midLineOff;
+    int wTall, wShort, end, start, blocks;
+
+    for (blocks = 0; blocks < cds->ssCount; blocks++) 
+	{ 
+    	tallStart = cds->largeStarts[blocks];
+	tallEnd = cds->largeEnds[blocks];
+	shortStart = cds->smallStarts[blocks];
+	shortEnd = cds->smallEnds[blocks];
+	wTall = tallEnd - tallStart;
+	wShort = shortEnd - shortStart;
+
+	if (shortStart < tallStart)
+	    {
+	    end = tallStart;
+	    drawScaledBoxSample(mg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    }
+	if (shortEnd > tallEnd)
+	    {
+	    start = tallEnd;
+	    drawScaledBoxSample(mg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    }
+	if (tallEnd > tallStart)
+	    {
+	    drawScaledBoxSample(mg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
+	    }
+	}
+    if (isFull) y += lineHeight;
+    }
+}
+
+void chr18deletionsMethods(struct trackGroup *tg)
+/* Make track group for recombination rates. */
+{
+tg->loadItems = loadChr18deletions;
+tg->freeItems = freeChr18deletions;
+tg->drawItems = drawChr18deletions;
 }
 
 /* Make track group for simple repeats. */
@@ -7935,7 +8034,6 @@ printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine);
 freeMem(encodedItem);
 }
 
-#ifdef FUREY_CODE
 
 /* Use the RepeatMasker style code to generate the
  * the Comparative Genomic Hybridization track */
@@ -8083,9 +8181,6 @@ tg->loadItems = loadMcnBreakpoints;
 tg->freeItems = freeMcnBreakpoints;
 }
 
-
-
-#endif /*FUREY_CODE*/
 
 static void drawTriangle(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -9435,6 +9530,7 @@ registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("recombRate", recombRateMethods);
+registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
