@@ -3,41 +3,31 @@
 #include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"
-#include "jksql.h"
+#include "obscure.h"
+#include "dnautil.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.55 2004/12/03 13:56:30 kent Exp $";
-
-struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where);
-/* load list of trackDb objects, with optional where */
+static char const rcsid[] = "$Id: freen.c,v 1.56 2005/01/10 00:41:12 kent Exp $";
 
 void usage()
-/* Print usage and exit. */
 {
-errAbort("usage: freen something");
+errAbort("freen - test some hair brained thing.\n"
+         "usage:  freen now\n");
 }
 
-void freen(char *db)
+void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr;
-char **row, *query;
-
-uglyf("connected to %s\n", db);
-query = "show tables like '%gap%'";
-sr = sqlGetResult(conn, query);
-uglyf("sr = %p\n", sr);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    uglyf("%s\n", row[0]);
-    }
-uglyf("done with rows\n");
-sqlFreeResult(&sr);
-uglyf("Freed result\n");
-sqlDisconnect(&conn);
-uglyf("disconnected\n");
+printf("log 2 = %f\n", log(2));
+printf("1/log 2 = %f\n", 1.0/log(2));
+printf("33%%100 = %d\n", 33%100);
+printf("133%%100 = %d\n", 133%100);
+printf("-33%%100 = %d\n", -33%100);
+printf("-133%%100 = %d\n", -33%100);
+printf("33u%%100u = %d\n", 33u%100u);
+printf("133u%%100u = %d\n", 133u%100u);
+printf("-33u%%100u = %d\n", (unsigned)-33%100u);
+printf("-133u%%100u = %d\n", (unsigned)-33%100u);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
