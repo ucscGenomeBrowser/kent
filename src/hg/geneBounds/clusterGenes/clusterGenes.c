@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.17 2004/07/11 19:34:21 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.18 2004/07/11 19:47:03 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -109,7 +109,7 @@ else
 track->table = cloneString(table);
 
 if (gNumRequiredTracks > 0)
-    track->required = (stringArrayIx(track->name, gRequiredTracks, gNumRequiredTracks) > 0);
+    track->required = (stringArrayIx(track->name, gRequiredTracks, gNumRequiredTracks) >= 0);
 return track;
 }
 
