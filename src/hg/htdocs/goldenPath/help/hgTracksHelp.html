@@ -13,9 +13,9 @@
 
 <!--HOTLINKS BAR-->
 <TR><TD COLSPAN=2 HEIGHT=40>
-	<table bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><tr bgcolor="2636D1"><td valign="middle">
-	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
-			<TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp; &nbsp;
+	<TABLE bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><TR bgcolor="2636D1"><TD valign="middle">
+	<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
+			<TR><TD VALIGN="middle"><FONT color="#89A1DE">&nbsp; &nbsp;
 		<A HREF="/index.html" class="topbar">
 			Home</A> &nbsp; - &nbsp;
 		<A HREF="/cgi-bin/hgGateway" class="topbar">
@@ -27,14 +27,14 @@
 		<A HREF="/cgi-bin/hgText?command=start" class="topbar">
 			Table Browser</A> &nbsp; - &nbsp; 
 		<A HREF="/FAQ/" class="topbar">
-			FAQ</A> &nbsp;&nbsp; 
-	</TR></TABLE>
+			FAQ</A> &nbsp;&nbsg; 
+	</FONT></TD></TR></TABLE>
 	</TD></TR></TABLE>
 </TD></TR>
 
 <!--Content Tables-->  
-<TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
-<TR><TD CELLPADDING=10>	
+<TD ROWSPAN=2 VALIGN="top"></TD>
+<TR><TD>	
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
@@ -45,7 +45,7 @@
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <B><FONT SIZE=4> Table of Contents: </FONT></B>
-<TABLE BORDER=0 nowrap cellpadding=0 cellspacing=0 margins=0><TR><TH HEIGHT=10></TH></TR>
+<TABLE BORDER=0 cellpadding=0 cellspacing=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD><UL><B>
   		<LI><A CLASS="toc" HREF="#What">
 			What does the Genome Browser do?</A>
@@ -82,7 +82,7 @@ The Genome Browser User's Guide was last updated on 9 Sep 2003.
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-			<FONT SIZE="4"><b><a NAME="TOC"></a><b>&nbsp; What does
+			<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; What does
 			the Genome Browser do?  </b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -130,7 +130,7 @@ text formatting options. Other links tie the Genome Browser to the BLAT
 alignment tool, provide access to the underlying relational database via the
 Table Browser, convert coordinates across different assembly dates, and open the 
 window at the complementary <A HREF="http://www.ensembl.org/" TARGET=_blank>Ensembl</A>
-or <A HREF="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi" TARGET=_blank>NCBI Map 
+or <A HREF="http://www.ncbi.nlm.nih.gov/mapview/" TARGET=_blank>NCBI Map 
 Viewer</A> annotation.
 <P>
 The browser data represents an immense 
@@ -475,7 +475,7 @@ Each annotation track within the window may have up to five display modes:
 	display to pack mode by narrowing the chromosomal range displayed or by 
 	using a track filter to reduce the number of items 
 	displayed.  To toggle between pack and full display modes, click on 
-	the track's center label.</TD></TR>
+	the track's center label.
 	</TD></TR>
 </TABLE> 
 <P>
@@ -618,6 +618,7 @@ Some common uses of BLAT include:
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD> 
 	finding human homologs of a query from another species. 
+	</TD></TR> 
 </TABLE>	
 	
 <P><B>Making a BLAT query</B><BR>
@@ -1053,14 +1054,17 @@ directory may contain some or all of the following files:<BR>
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mrna.zip:</B>
 	a zipped-up file of mRNA from GenBank. 
+	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream1000.zip:</B>
 	Sequences 1000 bases upstream of annotated transcription start of RefSeq 
 	genes.  This includes only cases where the transcription start is 
 	annotated separately from the coding region start.
+	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream2000.zip:</B>
 	Same as upstream1000, but with 2000 bases. 
+	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream5000.zip:</B>
 	Same as upstream1000, but with 5000 bases. 
@@ -3787,6 +3791,7 @@ page for more details.
 	human position information, alignment details, and link to a detailed
 	view of parts of the alignment.
 	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
@@ -3817,6 +3822,7 @@ page for more details.
 	mouse position information, alignment details, and link to a detailed
 	view of parts of the alignment.
 	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
@@ -3847,6 +3853,7 @@ page for more details.
 	rat position information, alignment details, and link to a detailed
 	view of parts of the alignment.
 	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
@@ -3970,6 +3977,7 @@ UniGene track in the assembled and annotated genome.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
 	This track uses the display conventions for mRNA tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on a UniGene feature will show an elaborate display of tabular and 
 	graphical data from the SAGE project relevant to that cluster.</TD></TR>
