@@ -5,6 +5,7 @@
 
 #Extra information on mRNAs - calculated by polyInfo program
 CREATE TABLE mrnaOrientInfo (
+    bin smallint unsigned not null,   # Bin for fast index
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
