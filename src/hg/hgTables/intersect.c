@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.11 2004/09/10 03:42:49 hiram Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.12 2004/09/13 16:26:41 hiram Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -398,7 +398,8 @@ static struct bed *getIntersectedBeds(struct sqlConnection *conn,
  * (and filtering) */
 {
 struct bed *bedList = getFilteredBeds(conn, table, region, lm);
-if (anyIntersection())
+/*	wiggle tracks have already done the intersection if there was one */
+if (!isWiggle(database, table) && anyIntersection())
     {
     struct bed *iBedList = intersectOnRegion(conn, region, table, bedList, lm);
     return iBedList;
