@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.152 2004/07/19 17:46:43 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.153 2004/07/20 16:13:59 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3769,16 +3769,7 @@ if (! doCt)
 
 bedList = getBedList(FALSE, NULL);
 
-if (hti->hasBlocks)
-    fields = 12;
-else if (hti->hasCDS)
-    fields = 8;
-else if (hti->strandField[0] != 0)
-    fields = 6;
-else if (hti->scoreField[0] != 0)
-    fields = 5;
-else
-    fields = 4;
+fields = hTableInfoBedFieldCount(hti);
 
 if (doCtHdr && (bedList != NULL))
     {
