@@ -7,7 +7,7 @@ trap "echo Error: `hostname` update download failed >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/export/genbank
+gbRoot=/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
