@@ -166,14 +166,14 @@ shortLabel MCS (Parsimony P-Value)
 longLabel Parsimony P_Value based MCSs
 priority 429
 visibility dense
-color 0,60,120
+color 0,0,160
 type bed 3 .
 
 track parsPValues
 shortLabel parsPValues
 longlabel Parsimony PValues Conservation Score
 priority 430
-altColor 0,160,0
+altColor 0,0,160
 visibility full
 type sample 9
 
@@ -189,7 +189,7 @@ track uniformPValues
 shortLabel uniformPValues
 longlabel Uniform PValues Conservation Score
 priority 435
-altColor 0,160,0
+altColor 0,120,0
 visibility full
 type sample 9
 
