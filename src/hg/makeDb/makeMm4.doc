@@ -584,7 +584,13 @@ done
     cd /cluster/data/genbank
     nice ./bin/gbAlignStep -initial -continue=finish -type=mrna -verbose=1 \
 	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
-
+    # to load that:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm4
+    # then, for the big est run
+    ssh eieio
+    cd /cluster/data/genbank
     nice ./bin/gbAlignStep -initial -type=est -verbose=1 \
 	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
 
@@ -621,6 +627,9 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
 
 # BLASTZ Human	(IN PROGRESS - 2003-10-21 - Hiram)
 
+    ssh kk
+    mkdir -p /cluster/data/mm4/bed/blastz.hg16
+    cd /cluster/data/mm4/bed/blastz.hg16
     cat << '_EOF_' > DEF
 # mouse vs. human
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
@@ -663,23 +672,135 @@ SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
-    # run bash shell if you don't already:
-    bash
-    source DEF
-    mkdir run
-    ~angie/hummus/make-joblist $DEF > $BASE/run/j
-    sh ./xdir.sh
-    cd run
-    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
-    wc -l j*
-    head j2
-    mv j2 j
-    # cluster run
-    ssh kk
-    cd /cluster/data/mm4/bed/blastz.hg16/run
-    para create j
-    para try, check, push, check, ....
 
+    # prepare first cluster run script
+    source DEF
+    cat << '_EOF_' > ../../jkStuff/BlastZ_run0.sh
+#!/bin/sh
+#       prepare first cluster run for blastz processing
+#
+M=`uname -n`
+if [ "$M" != "kk" ]; then
+    echo "ERROR: you are on machine: '$M'"
+    echo -e "\tthis script expects machine kk"
+    exit 255
+fi
+source DEF
+mkdir run
+echo "running 'make-joblist'"
+~angie/hummus/make-joblist $DEF > $BASE/run/j
+if [ ! -f ./xdir.sh ]; then
+    echo "ERROR: no ./xdir.sh file present.  Should have been made by make-joblist."
+    exit 255
+fi
+echo "running 'xdir.sh'"
+sh ./xdir.sh
+cd run
+sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+mv j2 j
+echo "running 'para create'"
+para create j
+echo "Ready for cluster run.  para try, check, push, etc ..."
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x ../../jkStuff/BlastZ_run0.sh
+    # prepare first cluster run
+    ../../jkStuff/BlastZ_run0.sh
+    para try, check, push, check, ....
+# CPU time in finished jobs:   15818152s  263635.86m  4393.93h  183.08d  0.502 y
+# IO & Wait Time:               6171331s  102855.52m  1714.26h   71.43d  0.196 y
+# Average job time:                 507s       8.45m     0.14h    0.01d
+# Longest job:                     8930s     148.83m     2.48h    0.10d
+# Submission to last job:         85042s    1417.37m    23.62h    0.98d
+
+    #	Prepare second cluster run script, .out's to .lav's
+    ssh kk
+    cd /cluster/data/mm4/bed/blastz.hg16
+cat << '_EOF_' > ../../jkStuff/BlastZ_run1.sh
+#!/bin/sh
+#       prepare second cluster run for blastz processing
+#
+M=`uname -n`
+if [ "$M" != "kk" ]; then
+    echo "ERROR: you are on machine: '$M'"
+    echo -e "\tthis script expects machine kk"
+    exit 255
+fi
+source DEF
+mkdir $BASE/run.1
+mkdir $BASE/lav
+echo "running 'make-joblist'"
+/cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+cd run.1
+wc -l jobList
+echo "running 'para create'"
+para create jobList
+echo "Ready for cluster run.  para try, check, push, etc ..."
+'_EOF_'
+    chmod +x ../../jkStuff/BlastZ_run1.sh
+
+    #	Second cluster run to convert the .out's to .lav's
+    source DEF
+    ../../jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 339 of 339 jobs
+# CPU time in finished jobs:      12386s     206.43m     3.44h    0.14d  0.000 y
+# IO & Wait Time:                255610s    4260.17m    71.00h    2.96d  0.008 y
+# Average job time:                 791s      13.18m     0.22h    0.01d
+# Longest job:                     5837s      97.28m     1.62h    0.07d
+# Submission to last job:          5852s      97.53m     1.63h    0.07d
+
+    #	Prepare third cluster run script to convert lav's to axt's
+cat << '_EOF_' > ../../jkStuff/BlastZ_run2.sh
+#!/bin/sh
+#       prepare third cluster run for blastz processing
+#
+M=`uname -n`
+if [ "$M" != "kk" ]; then
+    echo "ERROR: you are on machine: '$M'"
+    echo -e "\tthis script expects machine kk"
+    exit 255
+fi
+source DEF
+mkdir axtChrom
+mkdir run.2
+cd run.2
+# usage:  blastz-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
+echo '#LOOP' > gsub
+echo '/cluster/bin/scripts/blastz-chromlav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR} ${SEQ2_DIR} >> gsub
+echo '#ENDLOOP' >> gsub
+ls -1S ${BASE}/lav > chrom.list
+gensub2 chrom.list single gsub jobList
+wc -l jobList
+echo "running 'para create'"
+para create jobList
+echo "Ready for cluster run.  para try, check, push, etc ..."
+'_EOF_'
+    chmod +x ../../jkStuff/BlastZ_run2.sh
+    #	Third cluster run to convert lav's to axt's
+    source DEF
+    ../../jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+# Completed: 40 of 42 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:       2141s      35.69m     0.59h    0.02d  0.000 y
+# IO & Wait Time:                 36142s     602.36m    10.04h    0.42d  0.001 y
+# Average job time:                 957s      15.95m     0.27h    0.01d
+# Longest job:                     3273s      54.55m     0.91h    0.04d
+# Submission to last job:          3478s      57.97m     0.97h    0.04d
+    #	This failed on chr19, (and chr19_random.axt is empty ?)
+    # turn to snort (ia64) to run the job
+    #  It took about two hours and created a 5 Gb file:
+    # 5,357,211,785 Oct 23 16:59 chr19.axt
+    # Take the /cluster/bin/scripts/blastz-chromlav2axt script and
+    # specify ia64 binaries on the last lines:
+    # cat `ls -1 *.lav | sort -g` \
+    #	| $HOME/bin/ia64/lavToAxt stdin $seq1Dir $seq2Dir stdout \
+    #	| $HOME/bin/ia64/axtSort stdin $axtFile
+    # those are built on a source tree you build on snort
 
 # BLASTZ Rat	(IN PROGRESS - 2003-10-21 - Hiram)
 
@@ -731,22 +852,46 @@ SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
-    # run bash shell if you don't already:
-    bash
-    source DEF
-    mkdir run
-    ~angie/hummus/make-joblist $DEF > $BASE/run/j
-    sh ./xdir.sh
-    cd run
-    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
-    wc -l j*
-    head j2
-    mv j2 j
-    # cluster run
-    ssh kk
-    cd /cluster/data/mm4/bed/blastz.hg16/run
-    para create j
+
+    # prepare first cluster run
+    ../../jkStuff/BlastZ_run0.sh
     para try, check, push, check, ....
+# Completed: 39936 of 39936 jobs
+# CPU time in finished jobs:   16181528s  269692.14m  4494.87h  187.29d  0.513 y
+# IO & Wait Time:               8090355s  134839.24m  2247.32h   93.64d  0.257 y
+# Average job time:                 608s      10.13m     0.17h    0.01d
+# Longest job:                     7953s     132.55m     2.21h    0.09d
+# Submission to last job:         87634s    1460.57m    24.34h    1.01d
+
+    #	Second cluster run to convert the .out's to .lav's
+    ssh kk
+    cd /cluster/data/mm4/bed/blastz.rn3
+    source DEF
+    ../../jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 312 of 312 jobs
+# CPU time in finished jobs:      28753s     479.22m     7.99h    0.33d  0.001 y
+# IO & Wait Time:                751345s   12522.41m   208.71h    8.70d  0.024 y
+# Average job time:                2500s      41.67m     0.69h    0.03d
+# Longest job:                     3196s      53.27m     0.89h    0.04d
+# Submission to last job:          3208s      53.47m     0.89h    0.04d
+
+    #	Third cluster run to convert lav's to axt's
+    ssh kk
+    cd /cluster/data/mm4/bed/blastz.rn3
+    source DEF
+    ../../jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+# Completed: 43 of 44 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      10777s     179.61m     2.99h    0.12d  0.000 y
+# IO & Wait Time:                182778s    3046.31m    50.77h    2.12d  0.006 y
+# Average job time:                4501s      75.02m     1.25h    0.05d
+# Longest job:                    24347s     405.78m     6.76h    0.28d
+# Submission to last job:         24385s     406.42m     6.77h    0.28d
+    # the failure appears to be on chr1.
 
 
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
@@ -821,8 +966,26 @@ SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
-    #	Setup first cluster run
-    ../../jkStuff/BlastZ.run0.sh
+    #	First cluster run
+    source DEF
+    ../../jkStuff/BlastZ_run0.sh
+    para try, check, push, check, ....
+
+    #	Second cluster run to convert the .out's to .lav's
+    ssh kk
+    cd /cluster/data/mm4/bed/blastzSelf
+    source DEF
+    ../../jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+
+    #	Third cluster run to convert lav's to axt's
+    ssh kk
+    cd /cluster/data/mm4/bed/blastzSelf
+    source DEF
+    ../../jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
 
 # PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-10-22 - Hiram)
     
