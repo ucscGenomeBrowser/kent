@@ -11,6 +11,9 @@
 #include "nib.h"
 #include "trans3.h"
 
+void dumpBuns(struct ssBundle *bunList);  /* uglyf */
+void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */
+
 struct gfRange
 /* A range of bases found by genoFind.  Recursive
  * data structure.  Lowest level roughly corresponds
@@ -460,7 +463,6 @@ for (range = combined->components; range != NULL; range = range->next)
     if (tStart < combined->tStart) tStart = combined->tStart;
     if (qEnd > combined->qEnd) qEnd = combined->qEnd;
     if (tEnd > combined->tEnd) tEnd = combined->tEnd;
-
     ali = ffFind(qSeq->dna + qStart,
                  qSeq->dna + qEnd,
 		 tSeq->dna + tStart - combined->tStart,
@@ -568,7 +570,6 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-#ifdef DEBUG
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
 {
@@ -582,6 +583,7 @@ struct gfRange *range;
 for (range = rangeList; range != NULL; range = range->next)
     dumpRange(range, f);
 }
+#ifdef DEBUG
 #endif /* DEBUG */
 
 struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, struct dnaSeq *seq,
@@ -594,7 +596,7 @@ struct dnaSeq *targetSeq;
 
 rangeList = seqClumpToRangeList(clumpList, 0);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 1000);
+rangeList = gfRangesBundle(rangeList, 2000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -1228,7 +1230,7 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	}
     }
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 1000);
+rangeList = gfRangesBundle(rangeList, 2000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;

@@ -350,7 +350,7 @@ return mysql_field_count(sr->result);
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
- * Return NULL query comes up empty. */
+ * Returns NULL if query comes up empty. */
 {
 struct sqlResult *sr;
 char **row;
@@ -416,6 +416,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 return ix;
+}
+
+unsigned int sqlLastAutoId(struct sqlConnection *conn)
+/* Return last automatically incremented id inserted into database. */
+{
+return mysql_insert_id(conn->conn);
 }
 
 /* Stuff to manage and cache up to 16 open connections on 

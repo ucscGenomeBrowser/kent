@@ -107,6 +107,9 @@ int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);
 /* Returns index of field in a row from table, or -1 if it 
  * doesn't exist. */
 
+unsigned int sqlLastAutoId(struct sqlConnection *conn);
+/* Return last automatically incremented id inserted into database. */
+
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 

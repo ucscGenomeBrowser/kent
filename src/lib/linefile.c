@@ -23,6 +23,15 @@ lf->buf = needMem(lf->bufSize+1);
 return lf;
 }
 
+void lineFileExpandBuf(struct lineFile *lf, int newSize)
+/* Expand line file buffer. */
+{
+assert(newSize > lf->bufSize);
+lf->buf = needMoreMem(lf->buf, lf->bytesInBuf, newSize);
+lf->bufSize = newSize;
+}
+
+
 struct lineFile *lineFileStdin(bool zTerm)
 /* Wrap a line file around stdin. */
 {
@@ -102,15 +111,17 @@ for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
 	break;
 	}
     }
+
 /* If not in buffer read in a new buffer's worth. */
-if (!gotLf)
+while (!gotLf)
     {
     int oldEnd = lf->lineEnd;
     int sizeLeft = bytesInBuf - oldEnd;
     int bufSize = lf->bufSize;
     int readSize = bufSize - sizeLeft;
 
-    memmove(buf, buf+oldEnd, sizeLeft);
+    if (oldEnd > 0 && sizeLeft > 0)
+	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
     readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
     if (readSize + sizeLeft <= 0)
@@ -121,8 +132,7 @@ if (!gotLf)
     bytesInBuf = lf->bytesInBuf = readSize + sizeLeft;
     lf->lineEnd = 0;
 
-    /* Look for next end of line.  If can't find it
-     * squawk and die. */
+    /* Look for next end of line.  */
     for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
 	{
 	if (buf[endIx] == '\n')
@@ -134,16 +144,22 @@ if (!gotLf)
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	errAbort("Line too long (more than %d chars) line %d of %s",
-	    lf->bufSize, lf->lineIx+1, lf->fileName);
+	if (bufSize > 1024*1024)
+	    {
+	    errAbort("Line too long (more than %d chars) line %d of %s",
+		lf->bufSize, lf->lineIx+1, lf->fileName);
+	    }
+	else
+	    {
+	    lineFileExpandBuf(lf, bufSize*2);
+	    buf = lf->buf;
+	    }
 	}
-		
     }
 
 if (lf->zTerm)
     {
     buf[endIx-1] = 0;
-    //uglyf("%03d: %s\n", lf->lineIx, buf+lf->lineEnd);
     }
 lf->lineStart = newStart = lf->lineEnd;
 lf->lineEnd = endIx;

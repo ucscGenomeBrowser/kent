@@ -125,7 +125,7 @@ if (text[0] == '>')
     {
     char *end;
     s = strchr(text, '\n') + 1;
-    name = text+1;
+    name = skipLeadingSpaces(text+1);
     end = skipToSpaces(name);
     if (end != NULL)
         *end = 0;

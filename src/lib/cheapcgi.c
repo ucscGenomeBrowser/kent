@@ -9,10 +9,11 @@
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
-
+#include "portable.h"
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
+static unsigned long inputSize;
 static struct hash *inputHash = NULL;
 static struct cgiVar *inputList = NULL;
 
@@ -51,7 +52,6 @@ if (inputString == NULL)
 static void getPostInput()
 /* Get input from file if they've used POST method. */
 {
-long inputSize;
 char *s;
 long i;
 int r;
@@ -81,6 +81,8 @@ char *namePt, *nameEndPt, *dataPt, *dataEndPt, *filenamePt = 0, *filenameEndPt;
 struct hash *hash = newHash(6);
 struct cgiVar *list = NULL, *el;
 
+char* inputEnd = input + inputSize;
+
 /* find the boundary string */
 s = getenv("CONTENT_TYPE");
 s = strstr(s, "boundary=");
@@ -96,14 +98,12 @@ boundary[0] = '-';
 boundary[1] = '-';
 strcpy(boundary + 2, s);
 		
-/* remove the '\r' characters from input */
-removeReturns(input, input);
-		
 namePt = input;
 while(namePt != 0) 
     {
+    filenamePt = 0;
     // find the boundary
-    namePt = strstr(namePt, boundary);
+    namePt = memmem(namePt, inputEnd - namePt, boundary, strlen(boundary));
     if(namePt != 0) 
 	{
 	// skip passed the boundary
@@ -114,28 +114,34 @@ while(namePt != 0)
 	    break;
 
 	// find the name
-	namePt = strstr(namePt, "name=\"");
+	namePt = memmem(namePt, inputEnd - namePt, "name=\"", strlen("name=\""));
+	//namePt = strstr(namePt, "name=\"");
 	if(namePt == 0)
 	    errAbort("Mangled CGI input (0) string %s", input);
 	namePt += strlen("name=\"");
 
 	// find the end of the name
-	nameEndPt = strstr(namePt, "\"");
+	nameEndPt = memmem(namePt, inputEnd - namePt, "\"", strlen("\""));
+	//nameEndPt = strstr(namePt, "\"");
 	if (nameEndPt == 0)
 	    errAbort("Mangled CGI input (1) string %s", input);
 	*nameEndPt = 0;
 
 	// find the data
-	dataPt = strstr(nameEndPt + 1, "\n\n");
+	dataPt = memmem(nameEndPt + 1, inputEnd - nameEndPt - 1, "\n\r\n", strlen("\n\r\n"));
+	//dataPt = strstr(nameEndPt + 1, "\n\r\n");
 	if (dataPt == 0)
 	    errAbort("Mangled CGI input (2) string %s", input);
-	dataPt += 2;
+	dataPt += 3;
 
 	// find the end of the data
-	dataEndPt = strstr(dataPt, boundary);
-	if (dataPt == 0)
+	dataEndPt = memmem(dataPt, inputEnd - dataPt, boundary, strlen(boundary));
+	//dataEndPt = strstr(dataPt, boundary);
+	if (dataEndPt == 0)
 	    errAbort("Mangled CGI input (3) string %s", input);
-	*(dataEndPt - 1) = '\0';
+	dataEndPt -= 2;
+
+	*(dataEndPt) = '\0';
 
 	// find the filename if there is one
 	if(*(nameEndPt + 1) == ';' && *(nameEndPt + 2) == ' ' && *(nameEndPt + 3) == 'f') {
@@ -143,7 +149,8 @@ while(namePt != 0)
 	    struct cgiVar *filenameEl;
 
 	    filenamePt = nameEndPt + 13;
-	    filenameEndPt = strstr(filenamePt, "\"");
+	    filenameEndPt = memmem(filenamePt, inputEnd - filenamePt, "\"", strlen("\""));
+	    //filenameEndPt = strstr(filenamePt, "\"");
 	    if(filenameEndPt == 0)
 		errAbort("Mangled CGI input (4) string %s", input);
 	    *filenameEndPt = '\0';
@@ -157,7 +164,23 @@ while(namePt != 0)
 	}
 
 	if(filenamePt != 0 && doUseTempFile) {
+	    struct tempName uploadedFile;
+	    FILE* f;
+	    char varNameFilename[256];
+	    struct cgiVar *filenameEl;
 
+	    makeTempName(&uploadedFile, "hgSs", ".cgi");
+
+	    /* write the temp filename */
+	    f = mustOpen(uploadedFile.forCgi, "w");
+	    fwrite(dataPt, sizeof(char), dataEndPt - dataPt, f);
+	    carefulClose(&f);
+
+	    snprintf(varNameFilename, 256, "%s__data", namePt);
+	    AllocVar(filenameEl);
+	    filenameEl->val = uploadedFile.forCgi;
+	    slAddHead(&list, filenameEl);
+	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
 	} else {
 	    AllocVar(el);
 	    el->val = dataPt;
@@ -186,11 +209,11 @@ struct cgiVar *list = NULL, *el;
 if(haveCookiesHash == TRUE)
 	return;
 
-hash = newHash(6);
-
 str = getenv("HTTP_COOKIE");
 if(str == NULL) /* don't have a cookie */
 	return;
+
+hash = newHash(6);
 
 namePt = str;
 while (namePt != NULL)
@@ -210,9 +233,7 @@ while (namePt != NULL)
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
-
     namePt = nextNamePt;
-
     }
 
 haveCookiesHash = TRUE;
@@ -229,7 +250,8 @@ struct cgiVar *var;
 
 /* make sure that the cookie hash table has been created */
 parseCookies(&cookieHash, &cookieList);
-
+if (cookieHash == NULL)
+    return NULL;
 if ((var = hashFindVal(cookieHash, varName)) == NULL)
     return NULL;
 return var->val;
@@ -296,9 +318,7 @@ while (namePt != NULL && namePt[0] != 0)
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
-
     namePt = nextNamePt;
-
     }
 slReverse(&list);
 *retList = list;

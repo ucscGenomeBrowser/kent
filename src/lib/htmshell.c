@@ -18,7 +18,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static jmp_buf htmlRecover;
+jmp_buf htmlRecover;
 
 void htmlVaParagraph(char *line, va_list args)
 /* Print a line in it's own paragraph. */
@@ -65,7 +65,7 @@ fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
 }
 
 
-static void htmlVaWarn(char *format, va_list args)
+void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
 htmlHorizontalLine();
@@ -73,8 +73,8 @@ htmlVaParagraph(format,args);
 htmlHorizontalLine();
 }
 
+void htmlAbort()
 /* Terminate HTML file. */
-static void htmlAbort()
 {
 longjmp(htmlRecover, -1);
 }
@@ -138,7 +138,7 @@ else
 
 /* Write the start of an html from CGI */
 void htmlStart(char *title)
-    {
+{
 puts("Content-Type:text/html");
 puts("\n");
 
@@ -155,7 +155,7 @@ _htmStart(f, title);
 /* Write the end of an html file */
 void htmEnd(FILE *f)
 {
-fputs("</P>\n\n</BODY>\n</HTML>\n", f);
+fputs("\n</BODY>\n</HTML>\n", f);
 }
 
 /* Write the end of a stand-alone html file */
@@ -208,19 +208,13 @@ status = setjmp(htmlRecover);
 /* Do your main thing. */
 if (status == 0)
     {
-#ifdef DEBUG
-    /* Debugging output */
-    htmlParagraph("Input is:");
-    htmlEchoInput();
-    htmlHorizontalLine();
-#endif /* DEBUG */
-
     doMiddle();
     }
 
 popWarnHandler();
 popAbortHandler();
 }
+
 
 /* Wrap an html file around the passed in function.
  * The passed in function is already in the body. It

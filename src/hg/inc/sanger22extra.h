@@ -49,5 +49,9 @@ void sanger22extraOutput(struct sanger22extra *el, FILE *f, char sep, char lastS
 #define sanger22extraCommaOut(el,f) sanger22extraOutput(el,f,',',',');
 /* Print out sanger22extra as a comma separated list including final comma. */
 
+/* ---------- End of AutoSQL generated code ---------------- */
+
+extern char *sanger22extraCreate;
+
 #endif /* SANGER22EXTRA_H */
 
