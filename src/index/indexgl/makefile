@@ -3,9 +3,10 @@ include ../../inc/common.mk
 
 O = indexgl.o 
 
-indexgl: $(O) 
-	gcc $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out $(HOME)/bin/$(MACHTYPE)/indexgl
+indexgl: ${O} 
+	${CC} $O ../../lib/${MACHTYPE}/jkweb.a \
+		-o ${HOME}/bin/${MACHTYPE}/indexgl
+	strip ${HOME}/bin/${MACHTYPE}/indexgl
 
 lib:
 	cd ../../lib;make; cd ../index/indexgl

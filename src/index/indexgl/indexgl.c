@@ -16,7 +16,8 @@ int i;
 
 if (!readOne(f, geneNameSize))
     return FALSE;
-assert(geneNameSize > 0 && geneNameSize < 20);
+if (!(geneNameSize > 0 && geneNameSize < 21))
+    errAbort("geneNameSize out of range [1:20] at: %d", geneNameSize);
 mustRead(f, geneNameBuf, geneNameSize);
 geneNameBuf[geneNameSize] = 0;
 mustReadOne(f, chromIx);
