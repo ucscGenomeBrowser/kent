@@ -15,6 +15,6 @@ table genePredExt
     string name2;       "Alternate name (e.g. gene_id from GTF)"
     string cdsStartStat; "enum('none','unk','incmpl','cmpl')"
     string cdsEndStat;   "enum('none','unk','incmpl','cmpl')"
-    lstring exonFrames; "Exon frame offsets {0,1,2}"
+    int[exonCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
     )
 
