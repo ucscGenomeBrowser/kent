@@ -1483,6 +1483,7 @@ void removeThrowbackHits(struct protoGene *proto)
 {
 struct ffAli *left, *right;
 boolean gotThrowback = FALSE;
+
 right = proto->hits;
 for (;;)
     {
@@ -1492,21 +1493,9 @@ for (;;)
         break;
     if (left->hStart > right->hStart)
         {
-        int lSize = left->nEnd - left->nStart;
-        int rSize = right->nEnd - right->nStart;
-        gotThrowback = TRUE;
-        if (lSize > rSize)
-            {
-            /* Empty out right side. */
-            right->hStart = right->hEnd;
-            right->nStart = right->nEnd;
-            }
-        else
-            {
-            /* Empty out left side. */
-            left->hStart = left->hEnd;
-            left->nStart = left->nEnd;
-            }
+	right->hStart = right->hEnd = left->hEnd;
+	right->nStart = right->nEnd = left->nEnd;
+	gotThrowback = TRUE;
         }
     }
 if (gotThrowback)
@@ -1738,81 +1727,6 @@ if (aliList != NULL)
         if (ndif >= 5 && hdif >= 5)
             {
             struct ffAli *newLeft = NULL, *newRight;
-
-#ifdef NICE_TRY_BUT
-	    /* On short exons first try to find exact match that includes 
-	     * cannonical splice sites, or part of cannonical splice sites. */
-	    if (ndif <= 10)
-	        {
-		DNA l1=0,l2=0,r1=0,r2=0;
-		int creep;
-		for (creep=2; creep <= 1 && newLeft == NULL; --creep)
-		    {
-		    if (left)
-			{
-			l1 = lne[-2];
-			l2 = lne[-1];
-			if (orientation >= 0)
-			    {
-			    if (creep > 1)
-				lne[-2] = 'a';
-			    lne[-1] = 'g';
-			    }
-			else
-			    {
-			    if (creep > 1)
-				lne[-2] = 'a';
-			    lne[-1] = 'c';
-			    }
-			lne -= creep;
-			}
-		    if (right)
-			{
-			r1 = rns[0];
-			r2 = rns[1];
-			if (orientation >= 0)
-			    {
-			    rns[0] = 'g';
-			    if (creep > 1)
-				rns[1] = 't';
-			    }
-			else
-			    {
-			    rns[0] = 'c';
-			    if (creep > 1)
-				rns[1] = 't';
-			    }
-			rns += creep;
-			}
-		    if ((newLeft = exactAli(lne, rhs, lhe, rhs)) != NULL)
-			{
-			if (left)
-			    {
-			    newLeft->nStart += creep;
-			    newLeft->hStart += creep;
-			    }
-			if (right)
-			    {
-			    newLeft->nEnd -= creep;
-			    newLeft->hEnd -= creep;
-			    }
-			}
-		    if (left)
-			{
-			lne[0] = l1;
-			lne[1] = l2;
-			lne += creep;
-			}
-		    if (right)
-			{
-			rns -= creep;
-			rns[0] = r1;
-			rns[1] = r2;
-			}
-		    }
-		}
-	    if (newLeft == NULL && ndif >= 5)
-#endif /* NICE_TRY_BUT */
 
 	    newLeft = recursiveWeave(lne, rns, lhe, rhs, stringency, probMax*2, level+1, 
 		orientation);

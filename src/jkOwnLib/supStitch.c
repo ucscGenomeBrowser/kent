@@ -224,7 +224,8 @@ aliList = ffRemoveEmptyAlis(aliList, TRUE);
 return aliList;
 }
 
-struct ffAli *smallMiddleExons(struct ffAli *aliList, struct ssBundle *bundle, 
+struct ffAli *smallMiddleExons(struct ffAli *aliList, 
+	struct ssBundle *bundle, 
 	enum ffStringency stringency)
 /* Look for small exons in the middle. */
 {
@@ -727,6 +728,7 @@ boolean firstTime = TRUE;
 if (bundle->ffList == NULL)
     return 0;
 
+
 /* The score may improve when we stitch together more alignments,
  * so don't let minScore be too harsh at this stage. */
 if (minScore > 20)
@@ -734,7 +736,9 @@ if (minScore > 20)
 
 /* Create ffAlis for all in bundle and move to one big list. */
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
+    {
     ffCat(&ffList, &ffl->ff);
+    }
 slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
