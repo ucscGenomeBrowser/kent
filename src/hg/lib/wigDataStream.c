@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.30 2004/08/27 23:11:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.31 2004/08/30 23:52:42 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1090,6 +1090,46 @@ closeWigConn(wDS);
 return(valuesMatched);
 }	/*	unsigned long long getData()	*/
 
+static float *asciiToDataArray(struct wiggleDataStream *wDS,
+	unsigned long long count, size_t *returned)
+/*	convert the AsciiData list to a float array */ 
+{
+float *floatArray = NULL;
+float *fptr = NULL;
+unsigned long long valuesDone = 0;
+struct wigAsciiData *asciiData = NULL;
+
+if (count < 1)
+    return floatArray;
+
+AllocArray(floatArray, count);
+fptr = floatArray;
+
+/*	the (valuesDone <= count) condition is for safety */
+for (asciiData = wDS->ascii; asciiData && (valuesDone < count);
+	asciiData = asciiData->next)
+    {
+    if (asciiData->count)
+	{
+	struct asciiDatum *data;
+	unsigned i;
+
+	data = asciiData->data;
+	for (i = 0; (i < asciiData->count)&&(valuesDone < count); ++i)
+	    {
+	    *fptr++ = data->value;
+	    ++data;
+	    ++valuesDone;
+	    }
+	}
+    }
+
+if (returned)
+    *returned = valuesDone;
+
+return floatArray;
+}
+
 static unsigned long long getDataViaBed(struct wiggleDataStream *wDS, char *db,
 	char *table, int operations, struct bed **bedList)
 /* getDataViaBed - constrained by the bedList	*/
@@ -1611,6 +1651,14 @@ if (wDS->stats)
 
     if (htmlOut)
 	{
+	/* For some reason BORDER=1 does not work in our web.c nested table
+	 * scheme.  So use web.c's trick of using an enclosing table
+	 *	to provide a border.  
+	 */
+	fprintf(fh,"<P><!--outer table is for border purposes-->" "\n"
+	    "<TABLE BGCOLOR=\"#" HG_COL_BORDER
+	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+
 	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR>");
 	if (wDS->db)
 	    fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->db, wDS->tblName);
@@ -1697,7 +1745,7 @@ if (wDS->stats)
 	}
 
     if (htmlOut)
-	fprintf(fh,"</TABLE>\n");
+	fprintf(fh,"</TABLE></TD></TR></TABLE>\n");
     }
 else
     {
@@ -1816,6 +1864,7 @@ wds->bedOut = bedOut;
 wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
 wds->sortResults = sortResults;
+wds->asciiToDataArray = asciiToDataArray;
 wds->getDataViaBed = getDataViaBed;
 wds->getData = getData;
 return wds;
