@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.724 2004/05/07 22:35:33 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.725 2004/05/07 23:38:08 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7435,6 +7435,12 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&ph
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("Tables"));
 
+if (hgNearOk(database))
+    {
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\">%s</A></TD>",
+                 uiVars->string, wrapWhiteFont("Families"));
+    }
+
 if (gotBlat)
     {
     /* the only zoo organism this currently works with is human.
@@ -7454,16 +7460,15 @@ if (sameString(database, "hg16")
     printEnsemblAnchor(database);
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
-
 if (sameString(database, "hg16"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
+    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Help"));
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
