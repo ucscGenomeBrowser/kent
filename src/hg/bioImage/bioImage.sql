@@ -46,17 +46,33 @@ CREATE TABLE imageType (
     UNIQUE(name(32))
 );
 
+# Info on contributor
+CREATE TABLE contributer (
+    id int auto_increment not null,   # ID of contributer
+    name varchar(255) not null,	# Name in format like Kend W.J."
+         #Indices
+    PRIMARY KEY(id),
+    INDEX(name(32))
+);
+
 #Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
-    contributor longblob not null,	# Name of contributor
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     setUrl longblob not null,	# URL for whole set
     itemUrl longblob not null,	# URL for item.  Put $$ where image.submitId should go
               #Indices
-    PRIMARY KEY(id),
-    INDEX(contributor(32))
+    PRIMARY KEY(id)
+);
+
+# Association between contributers and submissionSets"
+CREATE TABLE submissionContributer (
+    submissionSet int not null,  # ID in submissionSet table
+    contributer int not null,    # ID in contributer table
+          #Indices
+    INDEX(submissionSet),
+    INDEX(contributer)
 );
 
 #Info on a bunch of sections through same sample
