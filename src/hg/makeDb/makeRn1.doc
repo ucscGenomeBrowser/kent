@@ -1,31 +1,67 @@
-This file describes how we made the browser database on the Rattus 
-Norvegicus genome, November 2002 build.
+# This file describes how we made the browser database on the Rattus 
+# Norvegicus genome, November 2002 build.
 
-BREAK UP THE RAT SEQUENCE INTO 2 MB CHUNKS AT NON_BRIDGED CONTIGS (done)
+BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (DONE 11/25/02)
 
-o - This version of the rat sequence data is in /cluster/store4/rn1/assembly
-o - cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
-    - Type make
-    - Run 
-	gunzip -c /cluster/store4/rn1/assembly/*.fasta.gz | splitFaIntoContigs /cluster/store4/rn1/assembly/*.agp stdin /cluster/store4/rn1 2000000
+    # This version of the rat sequence data is in /cluster/store4/rn1.
+    # The version of the sequence downloaded 11/25/02 is multi-record FA 
+    # with AGP.  Use agpToFA to make chromosome .fa files, then use 
+    # splitFaIntoContigs to make contig chromosome files.
+    ssh eieio
+    ln -s /cluster/store4/rn1 ~/rn1
+    cd ~/rn1
+    foreach c (?{,?})
+      agpToFa -simpleMulti $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
+      if (-e $c/chr${c}.random.agp) then
+        agpToFa -simpleMulti $c/chr$c.random.agp chr${c}_random \
+          $c/chr${c}_random.fa $c/chr$c.random.contig.fa
+      endif
+    end
+    # Check that the size of each chromosome .fa file is equal to the 
+    # last coord of the .agp:
+    foreach f ( */*.agp )
+      set agpLen = `tail -1 $f | awk '{print $3;}'`
+      set g = `echo $f:r | sed -e 's/\.random/_random/'`
+      set faLen = `faSize $g.fa | awk '{print $1;}'`
+      if ($agpLen == $faLen) then
+        echo $f length = $g length = $faLen
+      else
+        echo Error\!\!\!  $f length = $agpLen, but $g length = $faLen
+      endif
+    end
 
-    - This will split the rat sequence into approx. 2 Mbase supercontigs between non-bridged clone contigs and drop the resulting dir structure in /cluster/store4/rn1.
-    - The resulting dir structure will include 1 dir for each chromosome, each of which has a set of subdirectories, one subdir per supercontig.    
+    ssh hgwdev
+    cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
+    make
+
+    # This will split the rat sequence into approx. 5 Mbase
+    # supercontigs between non-bridged clone contigs and drop the
+    # resulting dir structure in /cluster/store4/rn1.  The resulting
+    # dir structure will include 1 dir for each chromosome, each of
+    # which has a set of subdirectories, one subdir per supercontig.
+    ssh eieio
+    cd ~/rn1
+    foreach c (?{,?})
+      cp -p $c/chr$c.agp $c/chr$c.agp.bak
+      cp -p $c/chr$c.fa $c/chr$c.fa.bak
+      splitFaIntoContigs $c/chr$c.agp $c/chr$c.fa . -nSize=5000000
+      if (-e $c/chr${c}_random.fa) then
+        cp -p $c/chr$c.random.agp $c/chr$c.random.agp.bak
+        cp -p $c/chr${c}_random.fa $c/chr${c}_random.fa.bak
+        splitFaIntoContigs $c/chr$c.random.agp $c/chr${c}_random.fa . \
+          -nSize=5000000
+        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
+        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
+        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
+        rmdir ${c}_random/lift
+        rm ${c}_random/chr${c}_random.{agp,fa}
+        mv ${c}_random/* $c
+        rmdir ${c}_random
+      endif
+    end
 
 
-COPY THE RAT SEQUENCE DATA TO THE CLUSTER (done)
-o - ssh kkstore
-o - Copy the rna data to the cluster if it isn't there already:
-       mkdir /scratch/hg/mrna.128
-       cp -r /cluster/store1/mrna.128/org /scratch/hg/mrna.128
-o - Copy the rat sequence supercontigs to the cluster
-       mkdir /scratch/hg/rn1/
-       mkdir /scratch/hg/rn1/contigs
-       cp /cluster/store4/rn1/*/chr*/chr*.fa /scratch/hg/rn1/contigs
-o - Distribute this data to the local nodes:
-       sudo /cluster/install/utilities/localUpdate
-
-REPEAT MASKING (DONE 07/30/02)
+REPEAT MASKING (IN PROGRESS)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -36,6 +72,7 @@ REPEAT MASKING (DONE 07/30/02)
      (RepeatMasker -m -s)
 
         #- Split contigs into 500kb chunks:
+        ssh eieio
         cd ~/rn1
         foreach d ( */chr*_?{,?} )
           cd $d
@@ -103,7 +140,20 @@ REPEAT MASKING (DONE 07/30/02)
         tcsh jkStuff/cpToWeb.sh
 
 
-EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (DONE 11/4/02)
+COPY THE RAT SEQUENCE DATA TO THE CLUSTER (TODO)
+   ssh kkstore
+   # Copy the rna data to the cluster if it isn't there already:
+       mkdir /scratch/hg/mrna.130
+       cp -r /cluster/store1/mrna.130/org /scratch/hg/mrna.130
+   # Copy the rat sequence supercontigs to the cluster
+       mkdir /scratch/hg/rn1/
+       mkdir /scratch/hg/rn1/contigs
+       cp /cluster/store4/rn1/*/chr*/chr*.fa /scratch/hg/rn1/contigs
+   # Distribute this data to the local nodes:
+       sudo /cluster/install/utilities/localUpdate
+
+
+EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
 
     ssh kkstore
     mkdir -p ~/rn1/bed/linSpecRep
@@ -128,8 +178,8 @@ o - Create the database.
      - Enter mysql via:
            mysql -u hgcat -pbigsecret
      - At mysql prompt type:
-	create database rn1;
-	quit
+        create database rn1;
+        quit
      - make a semi-permanent read-only alias:
         alias rn1 "mysql -u hguser -phguserstuff -A rn1"
 o - Use df to ake sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
@@ -137,7 +187,7 @@ o - Store the mRNA (non-alignment) info in database.
     (Matt - pleas update this section... )
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (done)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TODO)
 
 Create packed chromosome sequence files 
      ssh kkstore
@@ -161,7 +211,7 @@ Make and load GC percent table
 
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (done)
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
@@ -171,17 +221,17 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       with chr*_*.fa and pushed to the cluster nodes.  The following
       cshell script needs updating.
 
-	  cd ~/rn1/bed
-	  foreach i (refSeq mrna est)
-	      mkdir $i
-	      cd $i
-	      echo /scratch/hg/gs.11/build28/contigs | wordLine stdin > genome.lst
-	      ls -1 /scratch/hg/mrna.127/$i.fa > mrna.lst
-	      mkdir psl
-	      gensub2 genome.lst mrna.lst gsub spec
-	      jabba make hut spec
-	      jabba push hut
-	  end 
+          cd ~/rn1/bed
+          foreach i (refSeq mrna est)
+              mkdir $i
+              cd $i
+              echo /scratch/hg/gs.11/build28/contigs | wordLine stdin > genome.lst
+              ls -1 /scratch/hg/mrna.127/$i.fa > mrna.lst
+              mkdir psl
+              gensub2 genome.lst mrna.lst gsub spec
+              jabba make hut spec
+              jabba push hut
+          end 
 
     check on progress with jabba check hut in mrna, est, and refSeq
     directories.
@@ -284,7 +334,7 @@ Load them into database as so:
      cd ~/rn1/bed/estOrientInfo
      hgLoadBed rn1 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
      
-CREATE RNACLUSTER TABLE (done)
+CREATE RNACLUSTER TABLE (TODO)
  Make sure that refSeqAli and estOrientInfo tables are made already
  (see above).
 
@@ -300,7 +350,7 @@ CREATE RNACLUSTER TABLE (done)
    hgLoadBed rn1 rnaCluster est/*.bed
 
 
-PRODUCING KNOWN GENES (done)
+PRODUCING KNOWN GENES (TODO)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into ~/rn1/bed/refSeq
@@ -314,7 +364,7 @@ o - Get extra info from NCBI and produce refGene table as so:
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
 o - Produce refGenn, refPep, refMrna, and refLink tables as so:
        hgRefSeqMrna rn1 refSeq.fa refSeq.ra all_refSeq.psl loc2ref rat.faa mim2loc
-o - Add RefSeq status info (done 6/19/02)
+o - Add RefSeq status info (TODO)
     hgRefSeqStatus rn1 loc2ref
 
 REFFLAT
@@ -322,29 +372,29 @@ REFFLAT
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn1
 
-SIMPLE REPEAT TRACK (done)
+SIMPLE REPEAT TRACK (TODO)
 
 o - Create cluster parasol job like so:
         ssh kk
-	cd ~/rn1/bed
-	mkdir simpleRepeat
-	cd simpleRepeat
-	cp ~/lastOo/bed/simpleRepeat/gsub
-	mkdir trf
-	ls -1 /scratch/hg/rn1/contigs/*.fa > genome.lst
-	gensub2 genome.lst single gsub spec
-	para make spec
+        cd ~/rn1/bed
+        mkdir simpleRepeat
+        cd simpleRepeat
+        cp ~/lastOo/bed/simpleRepeat/gsub
+        mkdir trf
+        ls -1 /scratch/hg/rn1/contigs/*.fa > genome.lst
+        gensub2 genome.lst single gsub spec
+        para make spec
         para push 
      When job is done do:
         liftUp simpleRepeat.bed ~/rn1/jkStuff/liftAll.lft warn trf/*.bed
 
 o - Load this into the database as so
         ssh hgwdev
-	cd ~/rn1/bed/simpleRepeat
-	hgLoadBed rn1 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+        cd ~/rn1/bed/simpleRepeat
+        hgLoadBed rn1 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (IN PROGRESS)
+MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (TODO)
     # When Scott Schwartz is done generating .axt's for the blastz 
     # alignments...
 
@@ -417,62 +467,62 @@ TODO     ssh hgwdev
      cvs add ~/kent/src/hg/lib/axtInfoFillRn1.sql
      cvs ci ~/kent/src/hg/lib/axtInfoFillRn1.sql
 
-PRODUCING GENSCAN PREDICTIONS (done)
+PRODUCING GENSCAN PREDICTIONS (TODO)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
-	First make sure you have appropriate set up, permissions, etc.
-	and you have tried using Parasol to submit and finished a set 
-	of jobs successfully.
-	
-	Load up the cluster with hard-masked contigs in
-	   /scratch/hg/rn1/mContigs
-     	
-	Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-	cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
-	big cluster, due to limitation of memory and swap space on each
-	processing node).
-	     	cd ~/rn1
-     		cd bed/genscan
-	Make 3 subdirectories for genscan to put their output files in
-		mkdir gtf pep subopt
-	Generate a list file, genome.list, of all the contigs
-		ls -1S /cluster/store4/rn1/mContigs/* >genome.list
-	Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
-	Those files have pure Ns due to heterochromatin (unsequencable
-	stuff) and will cause genscan to run forever.
-	
-	Create template file, gsub, for gensub2.  For example (3 lines file):
-		#LOOP
-		/cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
-		#ENDLOOP
-	Create a file containing a single line.
-		echo single > single
-	Generate job list file, jobList, for Parasol
-		gensub2 genome.list single gsub jobList
-	
-	Edit jobList to find the line containing "chr12_5.fa.masked"
-	and change "-window=2400000" into "-window=1200000", because
-	genscan has "not enough memory" problem with this particular
-	file.
-	
-	First issue the following Parasol command:
-		para create jobList
-	Run the following command, which will try first 10 jobs from jobList
-		para try
-	Check if these 10 jobs run OK by
-		para check
-	If they have problems, debug and fix your program, template file, 
-	commands, etc. and try again.  If they are OK, then issue the following 
-	command, which will ask Parasol to start all the remaining jobs (around
-	~252 jobs).
-		para push
-	Issue either one of the following two commands to check the 
-	status of the cluster and your jobs, until they are done.
-		parasol status
-		para check
-	If any job fails to complete, study the problem and ask Jim to help
-	if necessary.
+        First make sure you have appropriate set up, permissions, etc.
+        and you have tried using Parasol to submit and finished a set 
+        of jobs successfully.
+        
+        Load up the cluster with hard-masked contigs in
+           /scratch/hg/rn1/mContigs
+             
+        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+        cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
+        big cluster, due to limitation of memory and swap space on each
+        processing node).
+                     cd ~/rn1
+                     cd bed/genscan
+        Make 3 subdirectories for genscan to put their output files in
+                mkdir gtf pep subopt
+        Generate a list file, genome.list, of all the contigs
+                ls -1S /cluster/store4/rn1/mContigs/* >genome.list
+        Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
+        Those files have pure Ns due to heterochromatin (unsequencable
+        stuff) and will cause genscan to run forever.
+        
+        Create template file, gsub, for gensub2.  For example (3 lines file):
+                #LOOP
+                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+                #ENDLOOP
+        Create a file containing a single line.
+                echo single > single
+        Generate job list file, jobList, for Parasol
+                gensub2 genome.list single gsub jobList
+        
+        Edit jobList to find the line containing "chr12_5.fa.masked"
+        and change "-window=2400000" into "-window=1200000", because
+        genscan has "not enough memory" problem with this particular
+        file.
+        
+        First issue the following Parasol command:
+                para create jobList
+        Run the following command, which will try first 10 jobs from jobList
+                para try
+        Check if these 10 jobs run OK by
+                para check
+        If they have problems, debug and fix your program, template file, 
+        commands, etc. and try again.  If they are OK, then issue the following 
+        command, which will ask Parasol to start all the remaining jobs (around
+        ~252 jobs).
+                para push
+        Issue either one of the following two commands to check the 
+        status of the cluster and your jobs, until they are done.
+                parasol status
+                para check
+        If any job fails to complete, study the problem and ask Jim to help
+        if necessary.
 
 o - Convert these to chromosome level files as so:
      cd ~/rn1
@@ -489,7 +539,7 @@ o - Load into the database as so:
      hgLoadBed rn1 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (done 6/10/02)
+TWINSCAN GENE PREDICTIONS (TODO)
 
     mkdir -p ~/rn1/bed/twinscan
     cd ~/rn1/bed/twinscan
@@ -501,11 +551,11 @@ TWINSCAN GENE PREDICTIONS (done 6/10/02)
     - pare down to id:
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
       perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
-	chr$c.ptx > chr$c-fixed.fa
+        chr$c.ptx > chr$c-fixed.fa
     end
     hgPepPred rn1 generic twinscanPep chr*-fixed.fa
 
-NCBI GENE MODELS (done 05/31/02)
+NCBI GENE MODELS (TODO)
 
     mkdir -p ~/rn1/bed/ncbiGenes
     cd ~/rn1/bed/ncbiGenes
@@ -518,7 +568,7 @@ NCBI GENE MODELS (done 05/31/02)
     ldHgGene rn1 ncbiGenes chr_genes-fixed.gtf
     hgPepPred rn1 generic ncbiPep protein-fixed.fa
 
-NCBI GENOMESCAN MODELS (done 05/31/02)
+NCBI GENOMESCAN MODELS (TODO)
 
     mkdir -p ~/rn1/bed/genomeScan
     cd ~/rn1/bed/genomeScan
@@ -531,7 +581,7 @@ NCBI GENOMESCAN MODELS (done 05/31/02)
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
     hgPepPred rn1 generic genomeScanPep GS_prot.fsa
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 8/02/02)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TODO)
 
 Make sure that the contig files are lower-case repeat masked
 then do
@@ -544,7 +594,7 @@ and do
    # sudo /cluster/install/utilities/updateLocal
 
 
-PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for blastz (DONE 11/6/02)
+PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for blastz (TODO)
 
     # lift trfMask output to chrom-level... this is a pain because all 
     # trf output was put in the same dir.  maybe next time around, we 
@@ -604,8 +654,8 @@ o - Set up the jabba job to do the alignment as so:
     Process this into a jabba file and launch the first set
     of jobs (10,000 out of 70,000) as so:
         gensub2 rat.lst human.lst gsub spec
-	jabba make hut spec
-	jabba push hut
+        jabba make hut spec
+        jabba push hut
     Do a 'jabba check hut' after about 20 minutes and make sure
     everything is right.  After that make a little script that
     does a "jabba push hut" followed by a "sleep 30" about 50
@@ -630,53 +680,53 @@ o - Remove long redundant bits from read names by making a file
         contig_^tig_
     and running the commands
         cd ~/rat/vsOo33/blatRat.phusion/chrom
-	subs -e -c ^ *.psl > /dev/null
+        subs -e -c ^ *.psl > /dev/null
 o - Copy over to network where database is:
         ssh kks00
-	cd ~/rn1/bed
-	mkdir blatRat
-	mkdir blatRat/ph.chrom600
-	cd !$
+        cd ~/rn1/bed
+        mkdir blatRat
+        mkdir blatRat/ph.chrom600
+        cd !$
         cp /cluster/store4/rn1/blatRat.phusion/chrom/*.psl .
 o - Rename to correspond with tables as so and load into database:
        ssh hgwdev
        cd ~/rn1/bed/blatRat/ph.chrom600
        foreach i (*.psl)
-	   set r = $i:r
+           set r = $i:r
            mv $i ${r}_blatRat.psl
        end
        hgLoadPsl rn1 *.psl
 o - load sequence into database as so:
-	ssh kks00
-	faSplit about /projects/hg3/rat/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/rat/arachne.3/whole/unplaced
-	ssh hgwdev
-	hgLoadRna addSeq '-abbr=gnl|' rn1 /projects/hg3/rat/arachne.3/whole/unpla*.fa
-	hgLoadRna addSeq '-abbr=con' rn1 /projects/hg3/rat/arachne.3/whole/SET*.mfa
+        ssh kks00
+        faSplit about /projects/hg3/rat/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/rat/arachne.3/whole/unplaced
+        ssh hgwdev
+        hgLoadRna addSeq '-abbr=gnl|' rn1 /projects/hg3/rat/arachne.3/whole/unpla*.fa
+        hgLoadRna addSeq '-abbr=con' rn1 /projects/hg3/rat/arachne.3/whole/SET*.mfa
     This will take quite some time.  Perhaps an hour .
 
 o - Produce 'best in genome' filtered version:
         ssh kks00
-	cd ~/rat/vsOo33
-	pslSort dirs blatRatAll.psl temp blatRat
-	pslReps blatRatAll.psl bestRatAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
-	pslSortAcc nohead bestRat temp bestRatAll.psl
-	cd bestRat
+        cd ~/rat/vsOo33
+        pslSort dirs blatRatAll.psl temp blatRat
+        pslReps blatRatAll.psl bestRatAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
+        pslSortAcc nohead bestRat temp bestRatAll.psl
+        cd bestRat
         foreach i (*.psl)
-	   set r = $i:r
+           set r = $i:r
            mv $i ${r}_bestRat.psl
         end
 o - Load best in genome into database as so:
-	ssh hgwdev
-	cd ~/rat/vsOo33/bestRat
+        ssh hgwdev
+        cd ~/rat/vsOo33/bestRat
         hgLoadPsl rn1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (done)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store1/genbank.128 and unpacked by organism into /cluster/store1/mrna.128/org. 
+/cluster/store1/genbank.130 and unpacked by organism into /cluster/store1/mrna.130/org. 
 
 Set up cluster run more or less as so:
       ssh kk
@@ -684,7 +734,7 @@ Set up cluster run more or less as so:
       mkdir xenoMrna
       cd xenoMrna
       ls -1S /scratch/hg/rn1/mContigs/* > genome.lst
-      ls -1S /scratch/hg/mrna.128/org/*/mrna.fa > allMrna
+      ls -1S /scratch/hg/mrna.130/org/*/mrna.fa > allMrna
 Then edit allMrna removing the Mus.musculus line,  and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
@@ -713,15 +763,15 @@ Load into database as so:
        cd ~/rn1/bed/xenoMrna
        hgLoadPsl rn1 xenoMrna.psl -tNameIx
 Load other RNA into database as so:
-       cd /cluster/store1/mrna.128/topOrg
+       cd /cluster/store1/mrna.130/topOrg
 Note - need to describe how topOrg was made.  See topOrg/README...
        foreach i (*/mrna.fa)
-	   hgLoadRna add rn1 /cluster/store1/mrna.128/org/$i $i:r.ra -type=$i:r
-	   echo done $i
-	end
+           hgLoadRna add rn1 /cluster/store1/mrna.130/org/$i $i:r.ra -type=$i:r
+           echo done $i
+        end
 
 
-PRODUCING TETRAODON FISH ALIGNMENTS (done)
+PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
 
 o - Download sequence from ... and put it on the cluster local disk
     at
@@ -751,14 +801,14 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        ssh hgwdev
        cd ~/rn1/bed/blatFish/chrom
        foreach i (*.psl)
-	   set r = $i:r
+           set r = $i:r
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl rn1 *.psl
        hgLoadRna addSeq rn1 /cluster/store2/fish/seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (Done 10/21/02 by Matt)
+PRODUCING FUGU FISH ALIGNMENTS (TODO)
 
 o - Download sequence to /cluster/store3/fuguSeq from ... and put it on the cluster local disk
     at /scratch/hg/fugu on kkstore.
@@ -793,14 +843,14 @@ o - ssh hgwdev
        ssh hgwdev
        cd ~/rn1/bed/blatFugu/chrom
        foreach i (*.psl)
-	   set r = $i:r
+           set r = $i:r
            mv $i ${r}_blatFugu.psl
        end
        hgLoadPsl rn1 *.psl
        hgLoadRna addSeq rn1 /cluster/store3/fuguSeq/fugu_v3_mask.fasta
 
 
-LOAD GENEID GENES (done)
+LOAD GENEID GENES (TODO)
      cd ~/rn1/bed
      mkdir geneid
      cd geneid
@@ -815,7 +865,7 @@ LOAD GENEID GENES (done)
      ldHgGene rn1 geneid download/*.gtf -exon=CDS
      hgPepPred rn1 generic geneidPep download/*.prot
 
-SGP GENE PREDICTIONS (done)
+SGP GENE PREDICTIONS (TODO)
      cd ~/rn1/bed
      mkdir sgp
      cd sgp
@@ -831,7 +881,7 @@ SGP GENE PREDICTIONS (done)
      hgPepPred rn1 generic sgpPep download/*.prot
 
 
-TIGR GENE INDEX (done 7/1/02)
+TIGR GENE INDEX (TODO)
     mkdir -p ~/rn1/bed/tigr
     cd ~/rn1/bed/tigr
     wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_RatGenome_Feb2002.tgz
@@ -861,10 +911,10 @@ LOAD STS MAP (todo)
           load data local infile 'stsMap.bed' into table stsMap;
       - At mysql> prompt type
 
-LOAD MGI IDs (done)
+LOAD MGI IDs (TODO)
       - The Locuslink ID to MGI IDs converstion data file,
         LL2MGI.txt, from Jackson Lab should be found under
-	~/rn1/bed/refSeq
+        ~/rn1/bed/refSeq
       - login to hgwdev
       
       cd ~/rn1/bed/refSeq
@@ -903,7 +953,7 @@ LOAD AVID RAT TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (Done.  Daryl Thomas August 16, 2002)
+LOAD SNPS (TODO)
       - ssh hgwdev
       - cd ~/rn1/bed
       - mkdir snp
@@ -926,7 +976,7 @@ LOAD CPGISSLANDS (todo)
      At mysql> prompt type in:
        load data local infile 'cpgIsland.bed' into table cpgIsland
 
-LOAD ENSEMBL ESTs (done 05/28/02, reloaded w/new data 08/05/02)
+LOAD ENSEMBL ESTs (TODO)
      ln -s /cluster/store4/rn1 ~/rn1
      mkdir -p ~/rn1/bed/ensembl
      cd ~/rn1/bed/ensembl
@@ -944,7 +994,7 @@ LOAD ENSEMBL ESTs (done 05/28/02, reloaded w/new data 08/05/02)
        rat-est-fixed.pep
      hgPepPred rn1 generic ensEstPep rat-est-fixed.pep
 
-LOAD ENSEMBLE GENES (done 05/28/02, reloaded w/new data 08/05/02)
+LOAD ENSEMBLE GENES (TODO)
      mkdir -p ~/rn1/bed/ensembl
      cd ~/rn1/bed/ensembl
      wget http://www.ebi.ac.uk/~stabenau/rat-ensembl.gz
@@ -962,7 +1012,7 @@ LOAD ENSEMBLE GENES (done 05/28/02, reloaded w/new data 08/05/02)
        rat-ensembl-fixed.pep
      hgPepPred rn1 generic ensPep rat-ensembl-fixed.pep
 
-LOAD ENSEMBL "Merge" TRACKs - SECRET! (done 6/25/02)
+LOAD ENSEMBL "Merge" TRACKs - SECRET! (TODO)
      - Use mgsc database, not rn1.  Only MGSC members should be able to 
        access this track, and only by password protection.
      mkdir -p ~/rn1/bed/ensembl
@@ -1007,17 +1057,17 @@ LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo, reloaded w/new data 08/05/02)
      - NOTE: had to create empty ensRiken table in rn1 in order for 
              hdb.c to believe the track exists.  I used this sql command:
      CREATE TABLE ensRiken (
-	name varchar(255) not null,
-	chrom varchar(255) not null,
-	strand char(1) not null,
-	txStart int(10) unsigned not null,
-	txEnd int(10) unsigned not null,
-	cdsStart int(10) unsigned not null,
-	cdsEnd int(10) unsigned not null,
-	exonCount int(10) unsigned not null,
-	exonStarts longblob not null,
-	exonEnds longblob not null
-	);
+        name varchar(255) not null,
+        chrom varchar(255) not null,
+        strand char(1) not null,
+        txStart int(10) unsigned not null,
+        txEnd int(10) unsigned not null,
+        cdsStart int(10) unsigned not null,
+        cdsEnd int(10) unsigned not null,
+        exonCount int(10) unsigned not null,
+        exonStarts longblob not null,
+        exonEnds longblob not null
+        );
 
 LOAD SANGER22 GENES (todo)
       - cd ~/rn1/bed
@@ -1039,7 +1089,7 @@ LOAD SANGER 20 GENES (todo)
      First download files from James Gilbert's email to ~/rn1/bed/sanger20 and
      go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene rn1 sanger20 stdin
-	hgSanger20 rn1 *.gtf *.info
+        hgSanger20 rn1 *.gtf *.info
 
 
 LOAD RNAGENES (todo)
@@ -1080,7 +1130,7 @@ LOAD RAT SYNTENY (todo)
           load data local infile 'ratSyn.bed' into table ratSyn
 
 
-LOAD GENIE (done 05/30/02)
+LOAD GENIE (TODO)
      mkdir -p ~/rn1/bed/genieAlt
      cd ~/rn1/bed/genieAlt
      wget http://www.neomorphic.com/mgap/mgscv3/gtf/mgscv3.genie.gtf.tgz
@@ -1090,7 +1140,7 @@ LOAD GENIE (done 05/30/02)
      gunzip -c mgscv3.aa.tgz | tar xvf -
      hgPepPred rn1 genie geniePep chr*.aa.fa
 
-LOAD GENIE CLONE BOUNDS (done 6/3/02)
+LOAD GENIE CLONE BOUNDS (TODO)
      mkdir -p ~/rn1/bed/genieBounds
      cd ~/rn1/bed/genieBounds
      wget http://www.neomorphic.com/mgap/mgscv3/cb.bed/mgscv3_cb.bed.tgz
@@ -1102,7 +1152,7 @@ LOAD GENIE CLONE BOUNDS (done 6/3/02)
      end
      hgLoadBed rn1 genieBounds *-fixed.bed
 
-LOAD JACKSON LABS QTL (done 7/16/02)
+LOAD JACKSON LABS QTL (TODO)
      Carol Bult at Jackson Labs sent us tab-separated QTL info -- 
      See RT289.  
      - Reformat QTL info into bed 6 + (really bed 5, no strand).
