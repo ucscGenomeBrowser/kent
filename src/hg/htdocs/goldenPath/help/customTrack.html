@@ -1,27 +1,32 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: Custom Tracks</TITLE>
-	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+  <HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+      <TITLE>UCSC Genome Browser: Custom Tracks</TITLE>
+      <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+  </HEAD>
+  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+  <A NAME="TOP"></A>
 
+  <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+    <TR><TD COLSPAN=2 HEIGHT=40><!--#include file="../../inc/topbar.html"--></TD></TR>
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
-
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include file="../../inc/topbar.html"--></TD></TR>
 <!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  Displaying Your Own Annotations in the Genome Browser</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+ <TR><TD COLSPAN=2 CELLPADDING=10>	
+   <!--outer table is for border purposes-->
+     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+       <TR><TD>	
+         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+ 	   <TR><TD>	
+	     <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+		<TR><TD>
+		  <FONT SIZE="4"><B>&nbsp;  Displaying Your Own Annotations in the Genome Browser</B></FONT>
+	 	</TD></TR>
+	     </TABLE>
+	     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+		<TR><TH HEIGHT=10></TH></TR>
+		<TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <P>The Genome Browser provides dozens of aligned annotation tracks 
 that have been computed at UCSC or have been provided by
@@ -117,10 +122,10 @@ Genome Browser home page <A HREF="http://genome.ucsc.edu/"
 TARGET=_blank>(http://genome.ucsc.edu/)</a> and click the Genome 
 Browser link in the top menu bar. On the Genome Browser Gateway page that
 displays, select the genome and assembly on which your
-annotation data is based, then click the Add Your Own Tracks button. Upload 
+annotation data is based, then click the <em>add your own tracks</em> button. Upload 
 your annotation file by entering the name of your file in the Annotation File 
 box or by pasting the contents of your file into the large edit
-box. Click the Submit button to
+box. Click the <em>submit</em> button to
 display the Genome Browser track window with your annotation. If you
 encounter difficulties in displaying your annotation, read the section 
 <A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.</P> 
@@ -641,7 +646,7 @@ TARGET=_BLANK><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg16&amp;position=c
 <P><B>Step 3.</B> Provide the URL to others. To upload a custom annotation
 pointed to by a URL into the Genome Browser, paste the URL into the large text edit 
 box in the Add Your Own Tracks section of the Genome Browser Gateway page, then click 
-the Submit button. 
+the <em>submit</em> button. 
 <P>If you'd like to share your annotation track with a broader 
 audience, send the URL for your track - along with a description of 
 the format, methods, and data used - to the UCSC Genome mailing list 
@@ -683,7 +688,7 @@ lines in your annotation file contains a line break. If the example contains GFF
 or GTF data lines, check that all the fields are tab-separated rather than
 space-separated.
 
-<P><B><I>Problem:</I></B> When I click the Submit button, I get 
+<P><B><I>Problem:</I></B> When I click the <em>submit</em> button, I get 
 the error message &quot;line 1 of custom input:&quot;.<BR>
 <B><I>Solution:</I></B> Check that none of the browser lines, 
 track lines, or data lines in your annotation file contains a line break. A 
@@ -693,13 +698,13 @@ a line break. If you are uploading your annotation file by pasting it
 into the text box on the Genome Browser Gateway page, check that the cut and paste operation
 did not inadvertently insert unwanted line feeds into the longer lines.
 
-<P><B><I>Problem:</I></B> When I click the Submit button, I get the
+<P><B><I>Problem:</I></B> When I click the <em>submit</em> button, I get the
 error message &quot;line # of custom input: missing = in var/val pair&quot;.<BR>
 <B><I>Solution:</I></B> Check for incorrect syntax in the track 
 lines in the annotation file. Be sure that each track line
 attribute pair consists of the format <I>attribute=attribute name</I>.
 
-<P><B><I>Problem:</I></B> When I click the Submit button, I get the
+<P><B><I>Problem:</I></B> When I click the <em>submit</em> button, I get the
 error message &quot;line # of custom input: BED chromStarts[i] must be in ascending order&quot;.<BR>
 <B><I>Solution:</I></B> This is most likely caused by a logical conflict in the 
 Genome Browse software. It accepts custom GFF tracks that have multiple &quot;exons&quot; at
@@ -708,7 +713,7 @@ to BED format before storing the custom track data, GFF tracks with multiple
 exons will case an error when the BED is read back in. To work around this 
 problem, remove duplicate lines in the GFF track. 
 
-<P><B><I>Problem:</I></B> When I click the Submit button, the Genome Browser
+<P><B><I>Problem:</I></B> When I click the <em>submit</em> button, the Genome Browser
 track window displays OK, but my track isn't visible.<BR>
 <B><I>Solution:</I></B> Check the browser and track lines in your annotation
 file to make sure that you haven't accidentally set
@@ -718,7 +723,7 @@ upload the track, check that you've
 entered the correct file name. If neither of these are the cause 
 of the problem, try resetting the Genome Browser to clear any 
 settings that may be preventing the annotation to display. To 
-reset the Genome Browser, click on &quot;Click here to reset&quot; on the Gateway
+reset the Genome Browser, click the <em>Click here to reset</em> link on the Gateway
 page. If the annotation track still doesn't display, you may 
 need to clear the cookies in your Internet browser as well
 (refer to your Internet browser's documentation for further information).
@@ -727,8 +732,8 @@ need to clear the cookies in your Internet browser as well
 but now I can't make it go away! How do I remove an annotation
 track from my Genome Browser display?<BR>
 <B><I>Solution:</I></B> Reset the Genome Browser by clicking the 
-&quot;reset all&quot; button on the Genome Browser tracks window or by clicking on 
-&quot;Click here to reset&quot; on the Gateway page. This should reset 
+<em>default tracks</em> button on the Genome Browser tracks window or 
+<em>Click here to reset</em> link on the Gateway page. This should reset 
 your Genome Browser display to its default settings.
 
 </TD><TD WIDTH=15></TD></TR></TABLE>
