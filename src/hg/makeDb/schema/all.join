@@ -1,4 +1,5 @@
-# So far have looked through hg16,mm4,rn3,ce1,dm1,sacCer1 databases
+# So far have looked through hg16,mm4,rn3,ce1,dm1,sacCer1,
+# panTro1,galGal2 databases
 
 # Define databases used for various organisms
 set hg hg11,hg12,hg13,hg15,hg16
@@ -13,7 +14,7 @@ set dp dp1
 set sc sc1
 set sacCer sacCer1
 set panTro panTro1
-set galGal galGal1,galGal2
+set galGal galGal2
 set pyrFur pyrFur1,pyrFur2
 set pyrAer pyAer1
 set plaFac falciparum
@@ -22,7 +23,7 @@ set plaFac falciparum
 set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,$plaFac
 
 # Define 'other' database for chains
-set chainDb Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1
+set chainDb Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1
 
 # Define databases that support known genes
 set knownDb $hg,$mm,$rn
@@ -106,11 +107,13 @@ identifier chain${chainDb}Id
     $gbd.chain${chainDb}Link.chainId
     $gbd.netRxBest${chainDb}.chainId
     $gbd.net${chainDb}NonGap.chainId
+    $gbd.netSynteny${chainDb}.chainId
 
 identifier chainSelf
 "Link together self chain info"
     $gbd.chainSelf.id
     $gbd.chainSelfLink.chainId
+    $gbd.netSelf.chainId
 
 identifier bacCloneName 
 "A Roswell Park, Cal Tech or other clone ID"
@@ -591,6 +594,7 @@ identifier ensemblProteinId external=Ensembl
     $gbd.ensGtp.protein chopAfter=.
     $gbd.ensTranscript.translation_name
     $gbd.sfDescription.proteinID
+    $gbd.sfAssign.seqID
 
 identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
