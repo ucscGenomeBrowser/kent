@@ -312,6 +312,29 @@ void markStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
     vLineM(tx[iTarget]+(tx[iTarget+1]-tx[iTarget])/2.0, 0, ytop, 2,  MG_BLUE);
     }
 
+void markStamp0(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
+	      double xValue, char *valStr, double tx[], double ty[])
+/* mark the the stamp with valStr only, used for 'N/A' case only */
+    {
+    int ix, iy;
+    int index;
+  
+    double txmin, tymin, txmax, tymax;
+    double ytop=0.0;
+    int len;
+    int xx,  yy;
+    int i, iTarget;
+ 
+    len   = pbStampPtr->len; 
+    txmin = pbStampPtr->xmin;
+    txmax = pbStampPtr->xmax;
+    tymin = pbStampPtr->ymin;
+    tymax = pbStampPtr->ymax;
+  
+    calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
+    vgTextCentered(g_vg, xx-5, yy+3, 10, 10, MG_BLUE, g_font, valStr);
+    }
+
 struct pbStamp *getStampData(char *stampName)
 /* get data for a stamp */
     {
@@ -357,8 +380,9 @@ struct pbStamp *getStampData(char *stampName)
 void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"../goldenPath/help/pb%s.html\"", tagName);
+hPrintf("HREF=\"../goldenPath/help/pb%s.shtml\"", tagName);
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
+//hPrintf(" target=\"HistogramHelp\" ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
 void drawPbStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
@@ -463,7 +487,7 @@ void drawPbStampB(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
     yScale = (double)(ih)/(tymax - tymin);
     
     calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
-    vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomoly");
+    vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomaly");
     
     titleLen = strlen("Amino Acid Anomoly");
     mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  "Amino Acid Anomoly", "pepRes");
@@ -542,9 +566,11 @@ int exonNum;
 char cond_str[200];
 char *valStr;
 char valStr2[50];
+char *vertLabel;
 int sf_cnt;
 char *answer;
-double pI, aaLen;
+double pI=0.0;
+double aaLen;
 double exonCount;
 char *chp;
 int len;
@@ -560,7 +586,8 @@ int aaResFound;
 int totalResCnt;
 
 char *aap;
-double molWeight, hydroSum;
+double molWeight=0.0;
+double hydroSum;
 struct pbStamp *stampDataPtr;
 
 Color bkgColor;
@@ -621,20 +648,41 @@ if (answer != NULL)
     markStamp(stampDataPtr, stampPictPtr, pI, valStr2, tx, ty);
     pbStampFree(&stampDataPtr);
     }
+else
+    {
+    stampDataPtr = getStampData("pepPi");
+    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    drawPbStamp(stampDataPtr, stampPictPtr);
+    drawXScale(stampDataPtr, stampPictPtr, 2);
+    sprintf(valStr2, "N/A");
+    markStamp0(stampDataPtr, stampPictPtr, pI, valStr2, tx, ty);
+    pbStampFree(&stampDataPtr);
+    }
 
 // draw Mol Wt stamp
 sprintf(cond_str, "accession='%s'", proteinID);
 answer = sqlGetField(NULL, database, "pepMwAa", "MolWeight", cond_str);
 if (answer != NULL)
     {
-    valStr = strdup(answer);
+    sprintf(valStr2, "%s Da", answer);
     molWeight  = (double)atof(answer);
     stampDataPtr = getStampData("pepMolWt");
     xPosition = xPosition + stampWidth + stampWidth/8;
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
     drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
-    markStamp(stampDataPtr, stampPictPtr, molWeight, valStr, tx, ty);
+    markStamp(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
+    pbStampFree(&stampDataPtr);
+    }
+else
+    {
+    sprintf(valStr2, "N/A");
+    stampDataPtr = getStampData("pepMolWt");
+    xPosition = xPosition + stampWidth + stampWidth/8;
+    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    drawPbStamp(stampDataPtr, stampPictPtr);
+    drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
+    markStamp0(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
     pbStampFree(&stampDataPtr);
     }
 
@@ -673,16 +721,26 @@ xPosition = 15;
 yPosition = yPosition + 170;
 
 // draw family size stamp
-sprintf(cond_str, "proteinAC='%s'", proteinID);
-answer = sqlGetField(NULL, database, "pfamCount", "pfamCount", cond_str);
+sprintf(cond_str, "accession='%s'", proteinID);
+answer = sqlGetField(NULL, protDbName, "swInterPro", "count(*)", cond_str);
 if (answer != NULL)
     {
     valStr       = strdup(answer);
-    stampDataPtr = getStampData("pfamCnt");
+    stampDataPtr = getStampData("intPCnt");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
     drawXScale(stampDataPtr, stampPictPtr, 1);
     markStamp(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
+    pbStampFree(&stampDataPtr);
+    }
+else
+    {
+    valStr       = strdup("N/A");
+    stampDataPtr = getStampData("intPCnt");
+    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    drawPbStamp(stampDataPtr, stampPictPtr);
+    drawXScale(stampDataPtr, stampPictPtr, 1);
+    markStamp0(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
     pbStampFree(&stampDataPtr);
     }
 
@@ -736,4 +794,13 @@ if (answer != NULL)
 	}
     pbStampFree(&stampDataPtr);
     }
+
+vertLabel = strdup("Frequency");
+for (i=strlen(vertLabel)-1; i>=0; i--)
+    {
+    vertLabel[i+1] = '\0';
+    vgTextCentered(g_vg, 3, 45+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
+    vgTextCentered(g_vg, 3, 215+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
+    }
+
 }
