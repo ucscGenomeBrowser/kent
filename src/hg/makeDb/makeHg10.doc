@@ -763,11 +763,11 @@ LOAD GENEID GENES (done)
      cd ~/oo/bed/geneid
      mkdir download
      cd download
-   Now download *.gtf and *.cds from 
+   Now download *.gtf and *.prot from 
    http://www1.imim.es/genepredictions/H.sapiens/golden_path_20011222/geneid_v1.1/
      cd ..
      ldHgGene hg10 geneid download/*.gtf -exon=CDS
-     hgPepPred hg10 generic geneidPep download/*.cds
+     hgPepPred hg10 generic geneidPep download/*.prot
 
 LOAD ACEMBLY
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and

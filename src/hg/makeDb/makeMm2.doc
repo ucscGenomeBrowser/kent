@@ -177,6 +177,45 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/mm/bed/est/intronEst
       hgLoadPsl mm2 *.psl
 
+PRODUCING ESTORIENTINFO TABLE
+
+This table is needed for proper orientation of ESTs in the
+browser.  Many will appear on the wrong strand without it.
+This involves a cluster run.  First load the EST psl files
+as so:
+     ssh kkstore
+     cd ~/mm/bed/est
+     pslSortAcc nohead contig /cluster/fast1/temp contig.psl
+     mkdir /scratch/hg/mm2/est
+     cp -r contig /scratch/hg/mm2/est
+     sudo /cluster/install/utilities/updateLocal
+Wait for these to finish.
+     cd ..
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1S /scratch/hg/mm2/est/contig > psl.lst
+     cp ~/oo/bed/estOrientInfo/gsub .
+Update gsub to refer to mouse contig sequence currently on
+/scratch, and mouse ESTs on /scratch.
+     gensub2 psl.lst single gsub spec
+     para create spec
+Then run the  job on the cluster
+     ssh kk
+     cd ~/mm/bed/estOrientInfo
+     para try
+     sleep 60
+     para check
+If things look good
+     para push
+Wait for this to finish then
+     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
+Load them into database as so:
+     ssh hgwdev
+     cd ~/mm/bed/estOrientInfo
+     hgLoadBed mm2 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+     
+
 PRODUCING KNOWN GENES (done)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
