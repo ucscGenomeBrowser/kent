@@ -1499,9 +1499,11 @@ return maxWeight;
 
 int iterateProfile(struct profile *prof, struct profile *rcProf, 
     struct seqList *seqList, int seqElSize,
-    struct profile **retProfile, struct profile **retRcProfile, boolean erase)
+    struct profile **retProfile, struct profile **retRcProfile, boolean erase,
+    FILE *hitOut, int profileId)
 /* Run a profile over sequence list and return the score.  Possibly update
- * the profile or erase where the profile hits from the sequences. */
+ * the profile or erase where the profile hits from the sequences. 
+ * If hitOut is non-NULL store info on hit there.*/
 {
 int profScore = 0;
 int onePos;
@@ -1523,6 +1525,12 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
     for (pos = newPosList; pos != NULL; pos = pos->next)
         {
         profScore += pos->score; 
+	if (hitOut != NULL && pos->score > 0)
+	    {
+	    fprintf(hitOut, "%d\t%2.3f\t%s\t%d\n", 
+	    	profileId, invSlogScale*pos->score, 
+	    	seqEl->seq->name, pos->pos);
+	    }
         }
     posList = slCat(newPosList, posList);
     }
@@ -1755,7 +1763,7 @@ void maskProfileFromSeqList(struct profile *profile, struct profile *rcProfile, 
 /* Skew the soft mask of the seqList so that things the profile matches will
  * become unlikely to be matched by something else. */
 {
-iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE);
+iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE, NULL, 0);
 }
 
 struct profile *scanStartProfiles(struct seqList *goodSeq, int scanLimit, boolean considerRc)
@@ -1785,7 +1793,8 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
 	    {
             if (considerRc)
                 rcProfile =  rcProfileCopy(profile);
-	    profile->score = iterateProfile(profile, rcProfile, goodSeq, goodSeqElSize, NULL, NULL, FALSE);
+	    profile->score = iterateProfile(profile, rcProfile, goodSeq, 
+	    	goodSeqElSize, NULL, NULL, FALSE, NULL, 0);
 	    freeProfile(&rcProfile);
             slAddHead(&profileList, profile);
 	    if (++progTime >= 50)
@@ -2123,7 +2132,8 @@ for (i=0; i<maxIterations; ++i)
     {
     lastScore = score;
     lastHash = profHash;
-    score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize, &newProf, &rcNewProf, FALSE);
+    score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize, 
+    	&newProf, &rcNewProf, FALSE, NULL, 0);
     if (prof != initProf)
         freeProfile(&prof);
     freeProfile(&rcProf);
@@ -3114,7 +3124,10 @@ boolean considerRc = cgiBoolean("rcToo");
 char *motifOutName;
 FILE *motifOutFile = NULL;
 char *motifInName;
-char *seqFileName;
+char *seqFileName, *backFileName;
+char *hitFileName = cgiOptionalString("hits");
+FILE *hitFile = NULL;
+int profIx = 0;
 
 if ((motifOutName = cgiOptionalString("motifOutput")) != NULL)
     motifOutFile = mustOpen(motifOutName, "w"); 
@@ -3126,27 +3139,33 @@ if (cgiVarExists("maxOcc"))
 useLocation = !cgiBoolean("ignoreLocation");
 
 
-/* Copy the input sequences to an fa file and then load it
- * back as a sequence list. (My how indirect!) */
-if ((seqFileName = cgiOptionalString("seqFile")) != NULL)
-    {
-    seqList = readSeqList(seqFileName);
-    }
-else
+/* Get input sequence from file.  If necessary copy pasted
+ * in sequence to file first. */
+seqFileName = cgiOptionalString("seqFile");
+if (seqFileName == NULL)
+    seqFileName = cgiOptionalString("good");
+if (seqFileName == NULL)
     {
     pasteToFa("seq", &faName, &seqCount, &seqElSize);
-    seqList = readSeqList(faName);
+    seqFileName = faName;
     }
+seqList = readSeqList(seqFileName);
 nameSize = maxSeqNameSize(seqList);
 
-/* Set up background model as simple Markov 0. */
-makeFreqTable(seqList);
+/* Set up background model. */
+backFileName = cgiOptionalString("bad");
+if (backFileName == NULL)
+    backFileName = seqFileName;
 nullModel = nmMark0;
+if (cgiVarExists("background"))
+    nullModel = cgiOneChoice("background", nullModelChoices, ArraySize(nullModelChoices));
+getNullModel(seqFileName, backFileName, FALSE);
 
 /* Make all sequences the same size and fill in
  * soft mask table. */
 seqElSize = uniformSeqSize(seqList, TRUE, nullModel);
 
+/* Read in motifs. */
 if ((motifInName = cgiOptionalString("motifs")) != NULL)
     {
     char *buf;
@@ -3174,6 +3193,10 @@ motifCount = slCount(profList);
 if (motifCount == 0)
     errAbort("No motifs entered.");
 
+/* Possibly open hit file. */
+if (hitFileName != NULL)
+    hitFile = mustOpen(hitFileName, "w");
+
 /* Run the motifs once to figure out where they land and
  * what the score is. */
 for (prof = profList; prof != NULL; prof = prof->next)
@@ -3181,7 +3204,8 @@ for (prof = profList; prof != NULL; prof = prof->next)
     struct profile *rcProf = NULL;
     if (considerRc)
         rcProf = rcProfileCopy(prof);
-    prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, NULL, NULL, FALSE);  
+    prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, 
+    	NULL, NULL, FALSE, hitFile, ++profIx);  
     horizontalLine();
     printProfile(htmlOut, prof);
     if (motifOutFile)
