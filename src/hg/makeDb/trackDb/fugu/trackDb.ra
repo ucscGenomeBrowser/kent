@@ -1,0 +1,29 @@
+track blatHg15
+shortLabel Human BLAT
+longLabel Human (Apr. 03) Translated BLAT Alignments
+group compGeno
+priority 122
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg15
+
+track gold
+shortLabel Scaffolds
+longLabel Unordered Assembly from Fragments
+group map
+priority 10
+visibility pack
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+track xenoMrna
+shortLabel Non-$Organism mRNA
+longLabel Non-$Organism mRNAs from Genbank
+group rna
+priority 63
+visibility dense
+spectrum on
+type psl xeno
