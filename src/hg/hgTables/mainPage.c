@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.55 2004/10/15 16:46:07 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.56 2004/10/29 21:40:10 angie Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -572,6 +572,11 @@ hPrintf("</TABLE>\n");
     cgiMakeButton(hgtaDoTest, "Test");
 #endif /* SOMETIMES */
     }
+hPrintf("<P>"
+	"To reset <B>all</B> user cart settings (including custom tracks), \n"
+	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
+	hgTablesName());
+
 }
 
 void mainPageAfterOpen(struct sqlConnection *conn)
