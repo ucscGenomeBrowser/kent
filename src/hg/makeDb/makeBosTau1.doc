@@ -573,6 +573,11 @@ SEQ2_LEN=$BASE/S2.len
   ssh kksilo
   cd /cluster/data/bosTau1/bed/blastz/axtChain
   /cluster/bin/i386/netSplit noClass.net noClass
+  mkdir ../axtNet
+  cd noClass
+  foreach i (*.net)
+    /cluster/bin/i386/netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
+  end
 
 
 
