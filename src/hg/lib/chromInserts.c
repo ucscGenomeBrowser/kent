@@ -71,7 +71,7 @@ return NULL;
 
 static int chromInsertsDefaultGapSize = 200000;
 
-boolean chromInsertsSetDefaultGapSize(int size)
+void chromInsertsSetDefaultGapSize(int size)
 /* Set default gap size. */
 {
 chromInsertsDefaultGapSize = size;

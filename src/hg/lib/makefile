@@ -5,7 +5,8 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
+O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
+    axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     borf.o borkPseudoHom.o cart.o cartDb.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chromInfo.o chromInserts.o chr18deletions.o \
@@ -16,8 +17,8 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
-    hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
-    knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
+    hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
+    knownInfo.o knownMore.o lfs.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
@@ -28,12 +29,12 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     softPromoter.o stsAlias.o stsInfo.o stsInfo2.o \
     stsMap.o stsMapMouse.o stsMarker.o stsInfoMouse.o synteny100000.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackDb.o trackTable.o wabAli.o \
-    sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
-    ancientRref.o ggMrnaAli.o \
-    glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o genMapDb.o \
+    trackDbCustom.o trackTable.o wabAli.o \
+    coordConv.o expRecord.o dnaProbe.o \
+    ggMrnaAli.o \
+    glDbRep.o ggDump.o sample.o exprBed.o genMapDb.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
-    affyAtlas.o imageClone.o stanMad.o jaxQTL.o hgSeq.o bactigPos.o 
+    imageClone.o stanMad.o bactigPos.o 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) jksql.o
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)

@@ -30,7 +30,7 @@ char *hgGetDb();
 struct sqlConnection *hgAllocConn();
 /* Get free connection if possible. If not allocate a new one. */
 
-struct sqlConnection *hgFreeConn(struct sqlConnection **pConn);
+void hgFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
 

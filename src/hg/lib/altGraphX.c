@@ -608,7 +608,8 @@ for(i=0; i<vertCount; i++)
 freez(pEm);
 }
 
-int agDfsTopo(bool **em, int vertex, int *colors, int *topo, int numVert, int *topoNum)
+static void agDfsTopo(bool **em, int vertex, int *colors, int *topo, 
+	int numVert, int *topoNum)
 /* recursive depth first search routine for topological sort */
 {
 int i,j;
@@ -854,7 +855,7 @@ freez(&seen);
 return conf;
 }
 
-int assignToArray(int *array, int arraySize, int count, int val)
+static void assignToArray(int *array, int arraySize, int count, int val)
 {
 if(count >= arraySize)
     errAbort("Can't have count: %d greater than array size: %d", count, arraySize);

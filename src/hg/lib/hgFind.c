@@ -2408,8 +2408,7 @@ if (strstrNoCase(organism, "human"))
 "	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>20p13</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region for band p13 on chr
-20</TD></TR>\n"
+"	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>\n"
@@ -2439,8 +2438,7 @@ if (strstrNoCase(organism, "human"))
 "	(set \"Map contigs\" track to \"dense\" and refresh to see contigs)</TD></TR> -->\n"
 "<TR><TD VALIGN=Top NOWRAP>AC008101</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of clone with GenBank accession
-AC008101\n"
+"	<TD VALIGN=Top>Displays region of clone with GenBank accession AC008101\n"
 "</TD></TR>\n"
 "\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"

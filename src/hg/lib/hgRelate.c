@@ -32,7 +32,7 @@ struct sqlConnection *hgAllocConn()
 return hAllocConn();
 }
 
-struct sqlConnection *hgFreeConn(struct sqlConnection **pConn)
+void hgFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 hFreeConn(pConn);
