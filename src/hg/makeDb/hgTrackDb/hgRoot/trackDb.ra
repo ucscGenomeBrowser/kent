@@ -133,10 +133,11 @@ priority 10
 visibility hide
 
 
+
 track genomicSuperDups
 shortLabel filtered WGAC
 longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
-priority 10.6
+priority 10
 visibility hide
 type bed 6 
 
@@ -144,14 +145,14 @@ type bed 6
 track celeraDupPositive
 shortLabel WSSD Duplication
 longLabel Sequence identified as duplicate by high depth Celera Reads 
-priority 10.6
+priority 10.2
 visibility hide
 type bed 6 +
 
 track celeraCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
-priority 10.6
+priority 10.1
 visibility hide
 type bed 6 +
 
@@ -268,7 +269,7 @@ priority 14.5
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=human&l=$$
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
 
 track aceTest
 shortLabel Acembly Test
