@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.126 2003/08/06 03:19:26 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.127 2003/08/08 13:22:30 fanhsu Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1204,7 +1204,7 @@ return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 
 
 // default protein database for older genome releases
-char DEFAULT_PROT_DB[20] = {"proteins1129"};
+char DEFAULT_PROT_DB[20] = {"proteins070403"};
 char *hPdbFromGdb(char *genomeDb)
 /* Find proteome database name given genome database name */
 {
