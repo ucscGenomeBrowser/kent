@@ -118,7 +118,9 @@ longLabel phastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
 group compGeno
 priority 105
 visibility hide
-color 0,10,100
+spectrum on
+color 0,60,120
+altColor 200,220,255
 exonArrows off
 type bed 12 .
 
