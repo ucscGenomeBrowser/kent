@@ -1179,4 +1179,5 @@ for (obj = objList; obj != NULL; obj = obj->next)
 
 /* Finish off H file bracket. */
 fprintf(hFile, "#endif /* %s */\n\n", defineName);
+return 0;
 }
