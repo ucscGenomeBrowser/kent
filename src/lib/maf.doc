@@ -7,7 +7,7 @@ alignments in a format that is easy to parse and relatively
 easy to read.  We apologize for creating yet another
 multiple alignment format.  We realize that there are
 many in existence.  What motivates this format is
-the storage multiple alignments at the dna level between
+to storage multiple alignments at the dna level between
 entire genomes. The existing formats we are aware of
 are geared towards multiple alignments of single proteins,
 and would require considerable extension at the least to
@@ -20,7 +20,7 @@ A Simple Example
 Here is a simple example of a file with two alignments
 with three sequences each:
 
-##maf version=1 scoring=multiz
+##maf version=1 scoring=probability
 #mblastz 8.91 02-Jan-2005
 a score=0.128
 s human_hoxa 100  9 + 100257 ACA-TTACT
@@ -79,14 +79,19 @@ The currently defined variables are:
     score - Optional. Floating point score. If this is present
             it is good practice to also define scoring in the first 
 	    line.
-[Note - Scott, I don't see how to generalize your notion of type
-to multiple alignments.]
+    pass - Optional.  Positive integer value.  For programs that
+           do multiple pass alignments such as blastz,
+	   this shows which pass this alignment came from.
+	   Typically the pass 1 will find the strongest alignments
+	   genome-wide,  and pass 2 will find weaker alignments
+	   between two first pass alignments.
 
 
 's' Lines    
 
 The s lines together with the a lines define a multiple alignment.
-The s lines have the following fields:
+The s lines have the following fields which are defined by 
+position rather than name=value pairs. 
 
   src - The name of one of the source sequences for the alignment.
         Typically this will be the first word following the '>' in
@@ -104,3 +109,5 @@ The s lines have the following fields:
          involved in the alignment.
   text - The bases (or amino acids) in the alignment and any dashes
          as well.
+
+
