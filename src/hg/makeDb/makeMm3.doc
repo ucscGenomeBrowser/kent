@@ -1813,7 +1813,7 @@ LOAD CPGISSLANDS (DONE 03/06/03)
      hgLoadBed mm3 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL GENES (DONE June 6, 03)
+LOAD ENSEMBL GENES (DONE Matt June 6, 03) Peptides 2003-10-01 braney
      cd ~/mm3/bed
      mkdir ensembl
      cd ensembl
@@ -1845,13 +1845,15 @@ o - Load Ensembl peptides:
         Page 1) Choose the Ensembl Genes choice. Hit next.
         Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
         Page 3) Choose the "Sequences" box. 
-        Page 4) Choose Transcripts/Proteins and Gene sequence Only as the ouput, choose text/fasta and gzip compression and then hit export. Name to mm3EnsGene.pep.gz
+        Page 4) Choose Transcripts/Proteins and peptide Only as the ouput, choose text/fasta and gzip compression and then hit export. Name to mm3EnsGene.pep.gz
 
      If needed, substitute ENST for ENSP in ensPep with the program called subs
      edit subs.in to read: ENSP|ENST
-     subs -e mm3EnsGene.pep > /dev/null
+     #subs -e mm3EnsGene.pep > /dev/null
 
-     ~matt/bin/fixPep.pl mm3EnsGene.pep ensembl.pep
+     #~matt/bin/fixPep.pl mm3EnsGene.pep ensembl.pep
+     #delete * at end of each protein
+     sed "s/\*$//" mm3EnsGene.pep > ensembl.pep
      hgPepPred mm3 generic ensPep ensembl.pep
 
 
