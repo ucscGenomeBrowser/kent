@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.36 2004/10/18 20:04:01 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.37 2004/10/19 20:20:47 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -123,7 +123,9 @@ slAddHead(&miList, mi);
     /* get species order from trackDb setting */
     char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
     char *species[100];
+    char option[64];
     int speciesCt = chopLine(speciesOrder, species);
+
     struct hash *hash = newHash(8);	/* keyed by database. */
     struct hashEl *el;
     int i;
@@ -152,9 +154,13 @@ slAddHead(&miList, mi);
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
         {
+        /* skip this species if UI checkbox was unchecked */
+        safef (option, sizeof(option), "%s.%s", track->mapName, species[i]);
+        if (!cartUsualBoolean(cart, option, TRUE))
+            continue;
         *species[i] = tolower(*species[i]);
-        if ((el = hashLookup(hash, species[i])) != NULL)
-            slAddHead(&miList, (struct wigMafItem *)el->val);
+        if ((mi = hashFindVal(hash, species[i])) != NULL)
+            slAddHead(&miList, mi);
         }
     hashFree(&hash);
     }
@@ -700,10 +706,20 @@ char option[64];
 int alignLineLength = winBaseCount*2 * 1;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
-bool dots;
+bool dots, chainBreaks;         /* configuration options */
+/* this line must be longer than the longest base-level display */
+char noAlignment[2000] = {'^'};
+
+/* initialize "no alignment" string to "^--------------" */
+/* The ^ indicates a break in the alignment, to distinguish from
+ * a gapped alignment */
+for (i = 1; i < sizeof noAlignment - 1; i++)
+    noAlignment[i] = '-';
 
 safef (option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
+safef (option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+chainBreaks = cartCgiUsualBoolean(cart, option, FALSE);
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -739,7 +755,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
 /* Go through the mafs saving relevant info in lines. */
 mafList = track->customPt;
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
-i = 0;
+
+
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
@@ -749,8 +766,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	char db[64];
 	int subStart,subEnd;
 	int lineOffset, subSize;
+        struct sqlConnection *conn;
+        char query[128];
 
-        i++;
+        /* process alignment for reference ("master") species */
 	mcMaster = mafFindComponent(sub, dbChrom);
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(sub);
@@ -758,20 +777,42 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	subEnd = subStart + mcMaster->size;
 	subSize = subEnd - subStart;
 	lineOffset = subStart - seqStart;
-	for (mc = sub->components; mc != NULL; mc = mc->next)
-	    {
-            dbPartOfName(mc->src, db, sizeof(db));
-	    if (mc == mcMaster)
-		{
-		processInserts(mc->text, sub->textSize, 
-			&insertCounts[lineOffset], subSize);
-		}
-	    else
-	        {
-                mi = hashMustFindVal(miHash, db);
+        processInserts(mcMaster->text, sub->textSize, 
+                                &insertCounts[lineOffset], subSize);
+
+        /* fill in bases for each species */
+        for (mi = miList; mi != NULL; mi = mi->next)
+            {
+            if (mi->db == NULL)
+                /* not a species line -- it's the gaps line, or... */
+                continue;
+            if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
+                {
+                char chainTable[64];
+
+                /* no alignment for this species */
+                if (!chainBreaks)       /* user doesn't want to see this */
+                    continue;
+
+                /* if chain spans this region, "extend" alignment */
+                char *dbUpper = cloneString(mi->db);
+                dbUpper[0] = toupper(dbUpper[0]);
+                safef(chainTable, sizeof chainTable, "%s_chain%s", 
+                                            chromName, dbUpper);
+                if (!hTableExistsDb(database, chainTable))
+                    continue;
+                conn = hAllocConn();
+                safef(query, sizeof query,
+                    "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
+                                chainTable, subStart, subEnd);
+                if (sqlQuickNum(conn, query) > 0)
+                    processOtherSeq(noAlignment, mcMaster->text, sub->textSize, 
+                                    lines[mi->ix], lineOffset, subSize);
+                hFreeConn(&conn);
+                }
+            else
                 processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
-                                lines[mi->ix], lineOffset, subSize);
-		}
+                                    lines[mi->ix], lineOffset, subSize);
 	    }
 	}
     mafAliFree(&sub);

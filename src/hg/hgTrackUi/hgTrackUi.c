@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.143 2004/10/19 18:55:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.144 2004/10/19 20:20:47 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -791,7 +791,12 @@ for (i = 0; i < speciesCt; i++)
 puts("</TR></TABLE><BR>");
 
 puts("<B>Display dot for bases identical to reference:</B>" );
-cgiMakeCheckBox(MAF_DOT_VAR, cartCgiUsualBoolean(cart, MAF_DOT_VAR, FALSE));
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
+
+puts("<BR><B>Display unaligned sequence as gaps with break indicator:</B>" );
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 
 puts("<P><B>Base-level codon highlighting:</B></P>" );
 

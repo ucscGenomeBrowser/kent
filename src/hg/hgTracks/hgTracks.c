@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.818 2004/10/19 18:55:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.819 2004/10/19 20:20:47 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -102,6 +102,7 @@ Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 Color orangeColor = 0;
+Color magentaColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -1075,6 +1076,11 @@ exprBedColorsMade = TRUE;
 Color  makeOrangeColor(struct vGfx *vg)
 {
 return vgFindColorIx(vg, 230, 130, 0);
+}
+
+Color  makeMagentaColor(struct vGfx *vg)
+{
+return vgFindColorIx(vg, 230, 0, 130);
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -6467,6 +6473,12 @@ Color alignInsertsColor()
     return orangeColor;
 }
 
+Color alignBreakColor()
+/* Return color used for alignment break indicators in multiple alignments */
+{
+    return magentaColor;
+}
+
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
@@ -6536,6 +6548,12 @@ for (i=0; i<count; i++, text++, textPos++)
         i--;
         vgBox(vg, x1+x, y, 1, height, alignInsertsColor());
         continue;
+        }
+    if (*text == '^')
+        {
+        /* indicates break in alignment - use alt colored vertical bar */
+        *text = '-';
+        vgBox(vg, x1+x, y, 1, height, alignBreakColor());
         }
     c[0] = *text;
     clr = color;
@@ -6780,6 +6798,7 @@ makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
+magentaColor = makeMagentaColor(vg);
 
 if (rulerMode == RULER_MODE_FULL &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)

@@ -37,6 +37,7 @@ char *wrapWhiteFont(char *s);
 #define MAF_GENEPRED_VAR  "mafGenePred"
 #define MAF_FRAMING_VAR   "mafFrame"
 #define MAF_DOT_VAR       "mafDot"
+#define MAF_CHAIN_VAR     "mafChain"
 
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
