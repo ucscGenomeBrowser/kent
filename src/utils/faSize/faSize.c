@@ -4,7 +4,7 @@
 #include "dnautil.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: faSize.c,v 1.6 2005/01/07 20:40:41 galt Exp $";
+static char const rcsid[] = "$Id: faSize.c,v 1.7 2005/01/07 21:56:09 galt Exp $";
 
 void usage()
 /* Print usage info and exit. */
@@ -162,12 +162,16 @@ for (i = 0; i<faCount; ++i)
 	    {
 	    DNA d = seq.dna[j];
 	    if (d == 'n' || d == 'N')
+		{
 		++ns;
-	    if (isupper(d)) 
-		++us;
-	    if (islower(d)) 
-		++ls;
-	    
+		}
+	    else
+		{
+		if (isupper(d)) 
+		    ++us;
+		if (islower(d)) 
+		    ++ls;
+		}
 	    }
 	baseCount += seq.size;
 	nCount += ns;
