@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.23 2004/03/22 14:17:09 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -114,6 +114,8 @@ for (col = dbObj->columnList; col != NULL; col = col->next)
 	    {
 	    if (col->fixedSize > 0)
 		fprintf(f, " %s[%d]", col->name, col->fixedSize+1); 
+	    else if (col->isList)
+		fprintf(f, " *%s", col->name);
 	    else
 		fprintf(f, " %s", col->name); 
 	    }
@@ -178,6 +180,9 @@ else if (lt->type == t_char)
     if (col->fixedSize > 0)
 	fprintf(f, "%ssqlFixedStringComma(&s, ret->%s%s, sizeof(ret->%s%s));\n",
 		indent, col->name, arrayRef, col->name, arrayRef);
+    else if (col->isList)
+	fprintf(f, "%sret->%s%s = sqlCharComma(&s);\n",
+		indent, col->name, arrayRef);
     else
 	fprintf(f, "%ssqlFixedStringComma(&s, &(ret->%s), sizeof(ret->%s));\n",
 		indent, col->name, col->name);
@@ -1173,7 +1178,7 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.23 2004/03/22 14:17:09 kent Exp $\";\n");
+fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 
