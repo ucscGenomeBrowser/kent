@@ -19,5 +19,17 @@ struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.
  * As above freeHash this when done. */
 
+boolean raFoldInOne(struct lineFile *lf, struct hash *hashOfHash);
+/* Fold in one record from ra file into hashOfHash. 
+ * This will add ra's and ra fields to whatever already
+ * exists in the hashOfHash,  overriding fields of the
+ * same name if they exist already. */
+
+void raFoldIn(char *fileName, struct hash *hashOfHash);
+/* Read ra's in file name and fold them into hashOfHash. 
+ * This will add ra's and ra fields to whatever already
+ * exists in the hashOfHash,  overriding fields of the
+ * same name if they exist already. */
+
 #endif /* RA_H */
 

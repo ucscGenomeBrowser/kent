@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.7 2003/09/21 15:33:13 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.8 2003/10/11 09:26:38 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -85,5 +85,75 @@ for (;;)
     }
 freeMem(dupe);
 return hash;
+}
+
+boolean raFoldInOne(struct lineFile *lf, struct hash *hashOfHash)
+/* Fold in one record from ra file into hashOfHash. 
+ * This will add ra's and ra fields to whatever already
+ * exists in the hashOfHash,  overriding fields of the
+ * same name if they exist already. */
+{
+char *word, *line, *name;
+struct hash *ra;
+struct hashEl *hel;
+
+/* Get first nonempty non-comment line and make sure
+ * it contains name. */
+if (!lineFileNextReal(lf, &line))
+    return FALSE;
+word = nextWord(&line);
+if (!sameString(word, "name"))
+    errAbort("Expecting 'name' line %d of %s, got %s", 
+    	lf->lineIx, lf->fileName, word);
+name = nextWord(&line);
+if (name == NULL)
+    errAbort("Short name field line %d of %s", lf->lineIx, lf->fileName);
+
+/* Find ra hash associated with name, making up a new
+ * one if need be. */
+if ((ra = hashFindVal(hashOfHash, name)) == NULL)
+    {
+    ra = newHash(7);
+    hashAdd(hashOfHash, name, ra);
+    hashAdd(ra, "name", lmCloneString(ra->lm, name));
+    }
+
+/* Fill in fields of ra hash with data up to next
+ * blank line or end of file. */
+for (;;)
+    {
+    if (!lineFileNext(lf, &line, NULL))
+        break;
+    line = skipLeadingSpaces(line);
+    if (line[0] == 0)
+        break;
+    if (line[0] == '#')
+        continue;
+    word = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    if (line == NULL)
+        line = "";
+    hel = hashLookup(ra, word);
+    if (hel == NULL)
+        hel = hashAdd(ra, word, lmCloneString(ra->lm, line));
+    else
+        hel->val = lmCloneString(ra->lm, line);
+    }
+return TRUE;
+}
+
+void raFoldIn(char *fileName, struct hash *hashOfHash)
+/* Read ra's in file name and fold them into hashOfHash. 
+ * This will add ra's and ra fields to whatever already
+ * exists in the hashOfHash,  overriding fields of the
+ * same name if they exist already. */
+{
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf != NULL)
+    {
+    while (raFoldInOne(lf, hashOfHash))
+        ;
+    lineFileClose(&lf);
+    }
 }
 
