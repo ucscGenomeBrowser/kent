@@ -18,6 +18,7 @@
 #include "jksql.h"
 #endif
 
+#define UNIPROT_DB_NAME  "uniProt"
 #define PROTEOME_DB_NAME "proteome"
 
 typedef char SpAcc[9];	/* Enough space for accession and 0 terminator. */
