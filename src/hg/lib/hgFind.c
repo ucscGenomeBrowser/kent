@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.98 2003/08/06 03:02:02 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.99 2003/08/06 21:16:57 booch Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -2559,33 +2559,36 @@ char **row;
 struct bed *bed = NULL;
 struct hgPosTable *table = NULL;
 dyStringPrintf(query, "select chrom, chromStart, chromEnd, name from %s where name = '%s'", tableName, name);
-if(!hTableExists(tableName))
-    errAbort("Sorry %s track not available yet in this version of the browser.", tableName);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+/* if(!hTableExists(tableName))
+   errAbort("Sorry %s track not available yet in this version of the browser.", tableName); */
+if (hTableExists(tableName))
     {
-    if(table == NULL)
-	{
-	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "%s Bed Records", tableName);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
-	}
-    bed = bedLoadN(row,4);
-    AllocVar(pos);
-    pos->chrom = hgOfficialChromName(row[0]);
-    pos->chromStart = atoi(row[1]);
-    pos->chromEnd = atoi(row[2]);
-    pos->name = cloneString(row[3]);
-    slAddHead(&table->posList, pos);
-    bedFree(&bed);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        if(table == NULL)
+	    {
+	    AllocVar(table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Bed Records", tableName);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString(tableName);
+	    slAddHead(&hgp->tableList, table);
+	    }
+        bed = bedLoadN(row,4);
+        AllocVar(pos);
+        pos->chrom = hgOfficialChromName(row[0]);
+        pos->chromStart = atoi(row[1]);
+        pos->chromEnd = atoi(row[2]);
+        pos->name = cloneString(row[3]);
+        slAddHead(&table->posList, pos);
+        bedFree(&bed);
+        }
+    if (table != NULL)
+        slReverse(&table->posList);
+    sqlFreeResult(&sr);
     }
-if (table != NULL)
-    slReverse(&table->posList);
 freeDyString(&query);
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
