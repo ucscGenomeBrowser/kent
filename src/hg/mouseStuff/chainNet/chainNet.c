@@ -87,6 +87,7 @@ struct chrom
     struct gap *root;	    /* Root of the gap/chain tree */
     struct rbTree *spaces;  /* Store gaps here for fast lookup. Items are spaces. */
     struct rbTree *seqGaps; /* Gaps (stretches of Ns) in sequence.  Items are ranges.*/
+    struct rbTree *repeats; /* Repeats.  Items are ranges.  Only exists during flattening */
     };
 
 
@@ -187,7 +188,7 @@ boolean strictlyInside(int minStart, int maxEnd, int start, int end)
 return (minStart < start && start + minSpace <= end && end < maxEnd);
 }
 
-struct rbTree *getSeqGaps(char *db, char *chrom, struct lm *lm)
+struct rbTree *getSeqGaps(char *db, char *chrom)
 /* Return a tree of ranges for sequence gaps in chromosome */
 {
 struct sqlConnection *conn = sqlConnect(db);
@@ -201,7 +202,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct agpGap gap;
     struct range *range;
     agpGapStaticLoad(row+rowOffset, &gap);
-    lmAllocVar(lm, range);
+    lmAllocVar(tree->lm, range);
     range->start = gap.chromStart;
     range->end = gap.chromEnd;
     rbTreeAdd(tree, range);
@@ -211,9 +212,36 @@ sqlDisconnect(&conn);
 return tree;
 }
 
+struct rbTree *getRepeats(char *db, char *chrom)
+/* Return a tree of ranges for sequence gaps in chromosome */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct rbTree *tree = rbTreeNew(rangeCmp);
+char tableName[64];
+char query[256];
+boolean hasBin;
+struct sqlResult *sr;
+char **row;
 
-void makeChroms(char *db, struct lm *lm,
-	struct hash **retHash, struct chrom **retList)
+if (!hFindSplitTable(chrom, "rmsk", tableName, &hasBin))
+    errAbort("Can't find rmsk table for %s\n", chrom);
+sprintf(query, "select genoStart,genoEnd from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct range *range;
+    lmAllocVar(tree->lm, range);
+    range->start = sqlUnsigned(row[0]);
+    range->end = sqlUnsigned(row[1]);
+    rbTreeAdd(tree, range);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return tree;
+}
+
+
+void makeChroms(char *db, struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each
  * element.  Read in gaps and repeats. */
 {
@@ -234,7 +262,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     chrom->size = sqlUnsigned(row[1]);
     chrom->spaces = rbTreeNew(spaceCmp);
     chrom->root = addGap(chrom, 0, chrom->size);
-    chrom->seqGaps = getSeqGaps(db, chrom->name, lm);
+    chrom->seqGaps = getSeqGaps(db, chrom->name);
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
@@ -449,10 +477,10 @@ for (b = *pList; b != NULL; b = b->next)
     reverseIntRange(&b->qStart, &b->qEnd, qSize);
 }
 
-int intersectingGapSize(struct chrom *chrom, int start, int end)
+int intersectionSize(struct rbTree *tree, int start, int end)
 /* Return total size of gaps intersecting ranges start-end. */
 {
-struct slRef *refList = findRanges(chrom->seqGaps, start, end);
+struct slRef *refList = findRanges(tree, start, end);
 struct slRef *ref;
 int size, totalSize = 0;
 
@@ -483,7 +511,7 @@ if (otherSize < 100)  /* Smallest gap size */
     return FALSE;
 if (minSize * 2 + 2000 < maxSize) /* 2x expansion plus one LINE */
     return FALSE;
-oGapSize = intersectingGapSize(otherChrom, otherStart, otherEnd);
+oGapSize = intersectionSize(otherChrom->seqGaps, otherStart, otherEnd);
 isPlugged = (oGapSize >= oGapRatio * otherSize);
 return isPlugged;
 }
@@ -774,7 +802,7 @@ void writeFlatFill(FILE *f, struct chrom *chrom, int start, int end,
 	struct chain *chain, boolean isQuery)
 /* Write out flattened fill record. */
 {
-fprintf(f, "%s\t%d\t%d\tfill\tD %d\tP %d\tI %d\t%s\t%c\n", 
+fprintf(f, "%s\t%d\t%d\tfill\tD %d\tP %-7d\tI %-7d\t%s\t%c\n", 
 	chrom->name, start, end-start, depth, parentId, id,
 	(isQuery ? chain->tName : chain->qName),
 	chain->qStrand);
@@ -806,11 +834,13 @@ if (lastEnd != fill->end)
 void writeFlatGap(FILE *f, struct gap *gap, struct chrom *chrom, int start, int end, 
 	int depth, int parentId) 
 {
-int nBases = intersectingGapSize(chrom, start, end);
+int nBases = intersectionSize(chrom->seqGaps, start, end);
 int size = end - start;
 double percentN = 100.0 * nBases/size;
-fprintf(f, "%s\t%d\t%d\t%s\tD %d\tP %d\tN %5.2f\n", chrom->name, start, end-start, 
-	gapType(gap), depth, parentId, percentN);
+int rBases = intersectionSize(chrom->repeats, start, end);
+double percentR = 100.0 * rBases/size;
+fprintf(f, "%s\t%d\t%d\t%s\tD %d\tP %-7d\tN %3.0f%%\tR %3.0f%%\n", chrom->name, start, end-start, 
+	gapType(gap), depth, parentId, percentN, percentR);
 }
 
 void rFlatGapOut(struct gap *gap, struct chrom *chrom, FILE *f, 
@@ -834,7 +864,7 @@ if (lastEnd != gap->end)
     }
 }
 
-void flatOut(struct chrom *chromList, char *fileName, boolean isQuery)
+void flatOut(struct chrom *chromList, char *db, char *fileName, boolean isQuery)
 /* Output flattened, classified data. */
 {
 FILE *f = mustOpen(fileName, "w");
@@ -843,7 +873,11 @@ struct chrom *chrom;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (chromHasData(chrom))
+	{
+	chrom->repeats = getRepeats(db, chrom->name);
 	rFlatGapOut(chrom->root, chrom, f, 0, 0, isQuery);
+	rbTreeFree(&chrom->repeats);
+	}
     }
 carefulClose(&f);
 }
@@ -856,10 +890,11 @@ struct lineFile *lf = lineFileOpen(chainFile, TRUE);
 struct hash *qHash, *tHash;
 struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
-struct lm *lm = lmInit(0);	/* Local memory for chromosome data. */
+char *qFlat = optionVal("qFlat", NULL);
+char *tFlat = optionVal("tFlat", NULL);
 
-makeChroms(qDb, lm, &qHash, &qChromList);
-makeChroms(tDb, lm, &tHash, &tChromList);
+makeChroms(qDb, &qHash, &qChromList);
+makeChroms(tDb, &tHash, &tChromList);
 printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tDb,
 	slCount(qChromList), qDb);
 
@@ -899,6 +934,7 @@ compactChromList(qChromList);
  * reasons this is not done during the main build up.   
  * It's a little less efficient this way, but to change it
  * some hard reverse strand issues would have to be juggled. */
+printf("Finishing nets\n");
 finishNet(qChromList, TRUE);
 finishNet(tChromList, FALSE);
 
@@ -909,10 +945,16 @@ printf("writing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
 
 /* Optionally write out flattened classification files. */
-if (optionExists("tFlat"))
-   flatOut(tChromList, optionVal("tFlat", NULL), FALSE);
-if (optionExists("qFlat"))
-   flatOut(qChromList, optionVal("qFlat", NULL), TRUE);
+if (tFlat != NULL)
+   {
+   printf("writing %s\n",tFlat);
+   flatOut(tChromList, tDb, tFlat, FALSE);
+   }
+if (qFlat != NULL)
+   {
+   printf("writing %s\n",qFlat);
+   flatOut(qChromList, tDb, qFlat, TRUE);
+   }
 printMem();
 }
 
