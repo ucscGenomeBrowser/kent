@@ -5198,37 +5198,28 @@ return(strcmp(a->name, b->name));
 }
 
 
-struct linkedFeaturesSeries *bedFilterMinLength(struct bed *bedList, int minLength ) 
+struct linkedFeatures *bedFilterMinLength(struct bed *bedList, int minLength ) 
 {
-struct linkedFeaturesSeries *lfsList = NULL, **lfsArray;
-struct linkedFeatures *lf = NULL;
-struct bed *bed;
-
-
+struct linkedFeatures *lf = NULL, *lfList=NULL;
+struct bed *bed = NULL;
 
 /* traditionally if there is nothing to show
    show nothing .... */
 if(bedList == NULL)
     return NULL;
 
-lfsList = needMem(sizeof(struct linkedFeaturesSeries*));
-AllocVar(lfsList);
-
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
 	/* create the linked features */
     if( bed->chromEnd - bed->chromStart >=  minLength )
         {
-	    lf = lfFromBed(bed);
-	    slAddHead(&lfsList->features, lf);
-
+        lf = lfFromBed(bed);
+        slAddHead(&lfList, lf);
         }
-        else
-            free(&bed);
     }
 
-slReverse(&lfsList);
-return lfsList;
+slReverse(&lfList);
+return lfList;
 }
 
 
@@ -5501,16 +5492,13 @@ bedFreeList(&bedList);
 
 
 
-void lfsFromAncientRBed(struct trackGroup *tg)
+void lfFromAncientRBed(struct trackGroup *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
 minimum munber of aligned bases cutoff */
 {
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL, *tmp=NULL, *tmpList=NULL;
 int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
-int i=0, et=-1;
 bedList = tg->items;
 tg->items = bedFilterMinLength(bedList, ancientRMinLength);
 bedFreeList(&bedList);
@@ -5948,14 +5936,15 @@ void loadAncientR(struct trackGroup *tg)
 {
 globalAncientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
 bedLoadItem(tg, "ancientR", (ItemLoader)bedLoad12);
-filterItems(tg, ancientRFilterItem, "include" );
+ lfFromAncientRBed(tg);
+//filterItems(tg, ancientRFilterItem, "include" );
 }
 
 
 void ancientRMethods(struct trackGroup *tg)
 /* setup special methods for ancientR track */
 {
-//tg->loadItems = loadAncientR;
+tg->loadItems = loadAncientR;
 //tg->trackFilter = lfsFromAncientRBed;
 }
 
