@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.641 2004/05/24 22:07:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.642 2004/05/25 18:50:18 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6378,10 +6378,10 @@ sqlFreeResult(&sr);
 skipPB:
 printf("</UL>");
 
-// Display Gene Family Browser link
+// Display Gene Sorter link
 if (sqlTableExists(conn, "knownCanonical"))
     {
-    printf("<B>UCSC Gene Family Browser:</B> ");
+    printf("<B>UCSC Gene Sorter:</B> ");
     printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
