@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.22 2004/03/03 02:10:35 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.23 2004/03/03 02:18:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,7 @@ errAbort(
   "   checkLocalLinks - check local links in page\n"
   "   checkLocalLinks2 - check local links in page and connected local pages\n"
   "             (Just one level of recursion)\n"
+  "   submit - submit first form in page if any using 'GET' method\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
   );
 }
@@ -140,6 +141,34 @@ for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
     htmlStatusFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlCookieFree(struct htmlCookie **pCookie)
+/* Free memory associated with cookie. */
+{
+struct htmlCookie *cookie = *pCookie;
+if (cookie != NULL)
+    {
+    freeMem(cookie->name);
+    freeMem(cookie->value);
+    freeMem(cookie->domain);
+    freeMem(cookie->path);
+    freeMem(cookie->expires);
+    freez(pCookie);
+    }
+}
+
+void htmlCookieFreeList(struct htmlCookie **pList)
+/* Free a list of dynamically allocated htmlCookie's */
+{
+struct htmlCookie *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlCookieFree(&el);
     }
 *pList = NULL;
 }
@@ -258,10 +287,11 @@ void htmlPageFree(struct htmlPage **pPage)
 struct htmlPage *page = *pPage;
 if (page != NULL)
     {
-    htmlStatusFree(&page->status);
     freez(&page->url);
-    freez(&page->fullText);
+    htmlStatusFree(&page->status);
     freeHashAndVals(&page->header);
+    htmlCookieFreeList(&page->cookies);
+    freez(&page->fullText);
     htmlTagFreeList(&page->tags);
     htmlFormFreeList(&page->forms);
     freez(pPage);
