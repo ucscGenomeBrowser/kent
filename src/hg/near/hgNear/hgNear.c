@@ -14,11 +14,11 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.40 2003/08/21 01:57:43 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.41 2003/08/21 06:11:03 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
-	getSeqVarName, getTextVarName, 
+	getSeqVarName, getSeqPageVarName, getTextVarName, 
 	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
 	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
@@ -642,7 +642,7 @@ hPrintf("</TR>\n<TR><TD ALIGN=CENTER>");
 /* Make getDna, getText, advancedSearch buttons */
     {
     hPrintf(" ");
-    cgiMakeButton(getSeqVarName, "as sequence");
+    cgiMakeButton(getSeqPageVarName, "as sequence");
     hPrintf(" ");
     cgiMakeButton(getTextVarName, "as text");
     hPrintf(" ");
@@ -1182,7 +1182,8 @@ if (geneList != NULL)
 hPrintf("</FORM>");
 }
 
-void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
+void displayData(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *gp)
 /* Display data in neighborhood of gene. */
 {
 struct genePos *geneList = NULL;
@@ -1192,13 +1193,13 @@ if (gp)
 if (cartVarExists(cart, getTextVarName))
     doGetText(conn, colList, geneList);
 else if (cartVarExists(cart, getSeqVarName))
-    doGetSeq(conn, colList, geneList);
+    doGetSeq(conn, colList, geneList, cartString(cart, getSeqHowVarName));
 else
     doMainDisplay(conn, colList, geneList);
 }
 
-void doFixedId(struct sqlConnection *conn, struct column *colList)
-/* Put up the main page based on id/idPos. */
+struct genePos *curGenePos()
+/* Return current gene pos from cart variables. */
 {
 struct genePos *gp;
 AllocVar(gp);
@@ -1209,7 +1210,13 @@ if (cartVarExists(cart, idPosVarName))
     	&gp->chrom, &gp->start, &gp->end);
     gp->chrom = cloneString(gp->chrom);
     }
-displayData(conn, colList, gp);
+return gp;
+}
+
+void doFixedId(struct sqlConnection *conn, struct column *colList)
+/* Put up the main page based on id/idPos. */
+{
+displayData(conn, colList, curGenePos());
 }
 
 
@@ -1258,6 +1265,8 @@ else if (cartVarExists(cart, advSearchBrowseVarName))
     doAdvancedSearchBrowse(conn, colList);
 else if (cartVarExists(cart, advSearchListVarName))
     doAdvancedSearchList(conn, colList);
+else if (cartVarExists(cart, getSeqPageVarName))
+    doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else if ((col = advSearchKeyPastePressed(colList)) != NULL)

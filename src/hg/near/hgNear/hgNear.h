@@ -120,6 +120,11 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define idPosVarName "near.idPos"      	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
+#define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
+#define getSeqPageVarName "near.getSeqPage" /* Button go to getSequence page. */
+#define proUpSizeVarName "near.proUpSize" /* Promoter upstream size. */
+#define proDownSizeVarName "near.proDownSize" /* Promoter downstream size. */
+#define proIncludeFiveOnly "near.proIncludeFiveOnly" /* Include without 5' UTR? */
 #define getTextVarName "near.getText"	/* Button to get as text. */
 #define advSearchVarName "near.advSearch"      /* Advanced search */
 #define advSearchClearVarName "near.advSearchClear" /* Advanced search clear all button. */
@@ -367,9 +372,12 @@ void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
 /* Respond to hide all button in configuration page. */
 
-void doGetSeq(struct sqlConnection *conn, struct column *colList, 
-	struct genePos *geneList);
+void doGetSeqPage(struct sqlConnection *conn, struct column *colList);
 /* Put up the get sequence page. */
+
+void doGetSeq(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList, char *how);
+/* Display get page. */
 
 #endif /* HGNEAR_H */
 
