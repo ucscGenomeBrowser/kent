@@ -10,3 +10,13 @@ chainColor Normalized Score
 spectrum on
 type chain mm6
 otherDb mm6
+
+track netSelf
+shortLabel Self Net
+longLabel $Organism Chained Self-Alignment Net
+group varRep
+priority 164
+visibility full
+spectrum on
+type netAlign mm6 chainSelf
+otherDb mm6
