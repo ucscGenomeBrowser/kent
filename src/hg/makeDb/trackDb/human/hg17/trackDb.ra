@@ -1273,16 +1273,13 @@ termRegex [BCPORU][A-Z]+[0-9]+(_H)?
 searchMethod prefix
 searchPriority 50
 
-searchName acemblyGene
+searchName acemblyExactOrDot
 searchTable acembly
 searchType genePred
-searchMethod prefix
-searchPriority 50
-
-searchTable acembly
-searchType genePred
+shortCircuit 1
+query select chrom,txStart,txEnd,name from %s where name rlike "^%s(\\\\..+)?$"
 termRegex [^[:space:]]+
-searchPriority 52
+searchPriority 50
 
 track uniGene_2
 shortLabel UniGene
