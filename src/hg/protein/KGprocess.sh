@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.9 2004/02/09 22:16:34 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.10 2004/02/18 21:49:17 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -800,13 +800,20 @@ if [ ! -s psl.tmp/kgProtMrna.psl ]; then
     echo "`date` Assuming cluster run done, Running analysis of output."
     echo "`date` creating psl.tmp/kgProtMrna.psl"
     find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
-	pslReps -nohead stdin psl.tmp/kgProtMrna.psl /dev/null
+	pslReps -nohead -singleHit -minAli=0.9 stdin \
+		psl.tmp/kgProtMrna.psl /dev/null
+fi
+
+if [ ! -s psl.tmp/refSeqAli.psl ]; then
+    hgsql -N -e 'select * from refSeqAli' ${RO_DB} | cut -f 2-30 > \
+	psl.tmp/refSeqAli.psl
 fi
 
 if [ ! -s psl.tmp/kgProtMap.psl ]; then
     echo "`date` creating psl.tmp/kgProtMap.psl"
     cd psl.tmp
-    (pslMap kgProtMrna.psl ${TOP}/tight_mrna.psl stdout | \
+    cat ${TOP}/tight_mrna.psl refSeqAli.psl > both.psl
+    (pslMap kgProtMrna.psl both.psl stdout | \
 	sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
 fi
 
