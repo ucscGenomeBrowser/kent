@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.27 2003/10/01 19:17:12 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.28 2003/11/08 00:09:04 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -420,6 +420,35 @@ void rosettaExonDropDown(char *var, char *curVal)
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 }
 
+/****** Options for the wiggle track AutoScale *******/
+
+static char *wiggleScaleOptions[] = {
+    "Use Vertical Viewing Range Setting",
+    "Auto-Scale to data view"
+    };
+
+enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleScaleOptions);
+if (x < 0)
+   errAbort("hui::wiggleScaleStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleScaleEnumToString(enum wiggleScaleOptEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleScaleOptions[x];
+}
+
+void wiggleScaleDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleScaleOptions, ArraySize(wiggleScaleOptions), 
+	curVal);
+}
+
 /****** Options for the wiggle track type of graph *******/
 
 static char *wiggleGraphOptions[] = {
@@ -448,7 +477,6 @@ void wiggleGraphDropDown(char *var, char *curVal)
 cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions), 
 	curVal);
 }
-
 
 /****** Options for the wiggle track horizontal grid lines *******/
 

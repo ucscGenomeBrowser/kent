@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.73 2003/09/29 22:47:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.74 2003/11/08 00:09:28 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -300,7 +300,7 @@ void wigUi(struct trackDb *tdb)
 char *typeLine = NULL;	/*	to clone the tdb->type string	*/
 char *words[8];		/*	chopping the typeLine	*/
 int wordCount = 0;	/*	number of words found in typeLine */
-char options[9][256];	/*	our option strings here	*/
+char options[10][256];	/*	our option strings here	*/
 char *heightPer;	/*	string from cart	*/
 char *minY_str;	/*	string from cart	*/
 char *maxY_str;	/*	string from cart	*/
@@ -312,6 +312,7 @@ int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
 char *interpolate;	/*	points only, or interpolate	*/
 char *horizontalGrid;	/*	Grid lines, off by default */
 char *lineBar;	/*	Line or Bar graph */
+char *autoScale;	/*	Auto scaling on or off */
 
 minY = DEFAULT_MIN_Yv;
 maxY = DEFAULT_MAX_Yv;
@@ -332,6 +333,7 @@ snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
 snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
 snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
 snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
+snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
 minY_str = cartOptionalString(cart, &options[4][0]);
 maxY_str = cartOptionalString(cart, &options[5][0]);
 
@@ -354,6 +356,7 @@ printf(" ");
 
 horizontalGrid = cartUsualString(cart, &options[7][0], "OFF");
 lineBar = cartUsualString(cart, &options[8][0], "Bar");
+autoScale = cartUsualString(cart, &options[9][0], "Auto-Scale to data view");
 
 printf("<TABLE BORDER=0><TR><TD>\n");
 
@@ -375,6 +378,8 @@ printf("<b>Vertical Viewing Range</b>:&nbsp;&nbsp;\nmin:");
 cgiMakeDoubleVar(&options[4][0], minYc, 6 );
 printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
 cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
+printf("&nbsp;&nbsp;&nbsp;&nbsp;Data view scaling:");
+wiggleScaleDropDown(&options[9][0], autoScale );
 printf("<BR>(data range limits:&nbsp;%.1f-%.1f)", minY, maxY);
 printf("</TD></TR></TABLE>\n");
 

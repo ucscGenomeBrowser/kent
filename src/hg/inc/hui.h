@@ -189,9 +189,24 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	Wiggle track use AutoScale option	*/
+enum wiggleScaleOptEnum {
+   wiggleScaleManual = 0,
+   wiggleScaleAuto = 1,
+};
+
+enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleScaleEnumToString(enum wiggleScaleOptEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleScaleDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	Wiggle track type of graph option	*/
 enum wiggleGraphOptEnum {
-   wiggleGraphLine = 0,
+   wiggleGraphPoints = 0,
    wiggleGraphBar = 1,
 };
 
