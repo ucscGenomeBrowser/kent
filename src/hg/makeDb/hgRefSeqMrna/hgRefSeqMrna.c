@@ -193,6 +193,7 @@ void findCdsStartEndInGenome(struct refSeqInfo *rsi, struct psl *psl,
 int startOffset, endOffset;
 int cdsStart = -1, cdsEnd = -1;
 int i;
+boolean fuglyf = (sameString(psl->qName, "XX_006440"));
 
 if (psl->strand[0] == '-')
     {
@@ -205,6 +206,9 @@ else
     endOffset =  psl->qEnd - rsi->cdsEnd;
     }
 
+if (fuglyf) uglyf("%s qStart %d, rsi->cdsStart %d, startOffset %d\n", psl->qName, psl->qStart, rsi->cdsStart, startOffset);
+if (fuglyf) uglyf("   qEnd %d, rsi->cdsEnd %d, endOffset %d\n", psl->qEnd, rsi->cdsEnd, endOffset);
+
 /* Adjust starting pos. */
 for (i=0; i<psl->blockCount; ++i)
     {
@@ -213,14 +217,17 @@ for (i=0; i<psl->blockCount; ++i)
     if (startOffset < blockSize)
 	{
         cdsStart = psl->tStarts[i] + startOffset;
+	if (fuglyf)uglyf("cdsStart calculated = %d\n", cdsStart);
 	break;
 	}
     /* Adjust start offset for this block.  Also adjust for
      * query sequence between blocks that doesn't align. */
     startOffset -= blockSize;
+    if (fuglyf)uglyf("blockSize = %d\n", blockSize);
     if (i != psl->blockCount - 1)
 	{
-	int skip =  psl->qStarts[i+1] - psl->qStarts[i] + blockSize;
+	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
+	if (fuglyf)uglyf("skip = %d\n", skip);
 	startOffset -= skip;
 	}
     }
@@ -486,8 +493,11 @@ while ((psl = pslNext(lf)) != NULL)
     }
 if (clDots) printf("\n");
 
-writeSeqTable(pepFile, refPepTab, TRUE, TRUE);
-writeSeqTable(faFile, refMrnaTab, FALSE, FALSE);
+if (!clTest)
+    {
+    writeSeqTable(pepFile, refPepTab, TRUE, TRUE);
+    writeSeqTable(faFile, refMrnaTab, FALSE, FALSE);
+    }
 
 carefulClose(&kgTab);
 carefulClose(&productTab);
@@ -495,19 +505,23 @@ carefulClose(&geneTab);
 carefulClose(&refLinkTab);
 carefulClose(&refPepTab);
 carefulClose(&refMrnaTab);
-printf("Loading database with %s\n", kgName);
-hgLoadTabFile(conn, kgName);
-printf("Loading database with %s\n", "productName");
-hgLoadTabFile(conn, "productName");
-printf("Loading database with %s\n", "geneName");
-hgLoadTabFile(conn, "geneName");
-printf("Loading database with %s\n", "refLink");
-hgLoadTabFile(conn, "refLink");
-printf("Loading database with %s\n", "refPep");
-hgLoadTabFile(conn, "refPep");
-printf("Loading database with %s\n", "refMrna");
-hgLoadTabFile(conn, "refMrna");
-hgEndUpdate(&conn, "Added refSeq genes");
+
+if (!clTest)
+    {
+    printf("Loading database with %s\n", kgName);
+    hgLoadTabFile(conn, kgName);
+    printf("Loading database with %s\n", "productName");
+    hgLoadTabFile(conn, "productName");
+    printf("Loading database with %s\n", "geneName");
+    hgLoadTabFile(conn, "geneName");
+    printf("Loading database with %s\n", "refLink");
+    hgLoadTabFile(conn, "refLink");
+    printf("Loading database with %s\n", "refPep");
+    hgLoadTabFile(conn, "refPep");
+    printf("Loading database with %s\n", "refMrna");
+    hgLoadTabFile(conn, "refMrna");
+    hgEndUpdate(&conn, "Added refSeq genes");
+    }
 }
 
 void hgRefSeqMrna(char *database, char *faFile, char *raFile, char *pslFile, 
