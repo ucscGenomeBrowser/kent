@@ -7229,14 +7229,14 @@ if (gotBlat)
     {
     printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-#ifdef SOON
-if (sameString(database, "hg8"))
+
+if (sameString(database, "hg10"))
     {
     fputs("<TD><P ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
     printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
-#endif /* SOON */
+
 if (sameString(database, "hg10"))
     {
     fputs("<TD><P ALIGN=CENTER>", stdout);
@@ -7723,7 +7723,7 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v10", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v11", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
 
