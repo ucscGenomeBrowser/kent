@@ -4128,6 +4128,16 @@ hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
     #	user    13m35.110s
     #	sys     0m28.470s
 
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes only 10 minutes.)
+
+hgMapToGene hg17 affyGnf1h knownGene knownToGnf1h
+hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1h
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 9756 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
 #	I update this GO database very carefully, checking that all
