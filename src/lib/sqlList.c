@@ -730,7 +730,7 @@ float sqlFloatComma(char **pS)
 {
 char *s = *pS;
 char *e = strchr(s, ',');
-unsigned ret;
+float ret;
 
 *e++ = 0;
 *pS = e;

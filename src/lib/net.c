@@ -233,11 +233,15 @@ int sd;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "http"))
-    errAbort("Sorry, can only slurp http's currently");
+    errAbort("Sorry, can only netOpen http's currently");
 sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
-dyStringPrintf(dy, "GET %s HTTP/1.0\r\n\r\n", npu.file);
+dyStringPrintf(dy, "GET %s HTTP/1.0\r\n", npu.file);
+dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
+dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
+dyStringPrintf(dy, "Accept: */*\r\n", npu.host, npu.port);
+dyStringPrintf(dy, "\r\n", npu.host, npu.port);
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
@@ -267,14 +271,27 @@ close(sd);
 return dy;
 }
 
-static void netSkipHttpHeaderLines(struct lineFile *lf)
-/* Skip http header lines. */
+static boolean netSkipHttpHeaderLines(struct lineFile *lf)
+/* Skip http header lines. Return FALSE if there's a problem */
 {
 char *line;
 if (lineFileNext(lf, &line, NULL))
     {
     if (startsWith("HTTP/", line))
         {
+	char *version, *code;
+	version = nextWord(&line);
+	code = nextWord(&line);
+	if (code == NULL)
+	    {
+	    warn("Strange http header on %s\n", lf->fileName);
+	    return FALSE;
+	    }
+	if (!sameString(code, "200"))
+	    {
+	    warn("%s: %s %s\n", lf->fileName, code, line);
+	    return FALSE;
+	    }
 	while (lineFileNext(lf, &line, NULL))
 	    {
 	    if ((line[0] == '\r' && line[1] == 0) || line[0] == 0)
@@ -284,6 +301,26 @@ if (lineFileNext(lf, &line, NULL))
     else
         lineFileReuse(lf);
     }
+return TRUE;
+}
+
+struct lineFile *netLineFileMayOpen(char *url)
+/* Return a lineFile attatched to url. Skipp
+ * http header.  Return NULL if there's a problem. */
+{
+int sd = netUrlOpen(url);
+if (sd < 0)
+    {
+    warn("Couldn't open %s", url);
+    return NULL;
+    }
+else
+    {
+    struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
+    if (!netSkipHttpHeaderLines(lf))
+	lineFileClose(&lf);
+    return lf;
+    }
 }
 
 struct lineFile *netLineFileOpen(char *url)
@@ -291,9 +328,9 @@ struct lineFile *netLineFileOpen(char *url)
  * will skip any headers.   Free this with
  * lineFileClose(). */
 {
-int sd = netUrlOpen(url);
-struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
-netSkipHttpHeaderLines(lf);
+struct lineFile *lf = netLineFileMayOpen(url);
+if (lf == NULL)
+    noWarnAbort();
 return lf;
 }
 

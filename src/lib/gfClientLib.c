@@ -1606,6 +1606,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
      * maxSize or less do it all.   Otherwise just
      * do prefered size, and set it up to overlap
      * with surrounding pieces by overlapSize.  */
+    uglyf("."); fflush(stdout);
     if (subOffset == 0 && query->size <= maxSize)
 	nextOffset = subSize = query->size;
     else
@@ -1630,12 +1631,15 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
     }
+uglyf("\nstitching2\n");
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna);
+    uglyf("."); fflush(stdout);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, outData, qIsRc, stringency, minScore, outFunction);
     }
+uglyf("\n");
 hashFree(&bunHash);
 ssBundleFreeList(&bigBunList);
 }
