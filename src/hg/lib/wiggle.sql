@@ -16,6 +16,11 @@ CREATE TABLE wiggle (
     Count int unsigned not null,	# number of values in this block
     Offset int unsigned not null,	# offset in File to fetch data
     File varchar(255) not null,	# path name to data file, one byte per value
+    lowerLimit double not null,	# lowest data value in this block
+    dataRange double not null,	# lowerLimit + dataRange = upperLimit
+    validCount int unsigned not null,	# number of valid data values in this block
+    average double not null,	# average of the data valeus, we may need this later
+    stddev double not null,	# standard deviation, we may need this later
               #Indices
     PRIMARY KEY(chrom)
 );

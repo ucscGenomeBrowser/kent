@@ -5,7 +5,7 @@
 #ifndef WIGGLE_H
 #define WIGGLE_H
 
-#define WIGGLE_NUM_COLS 11
+#define WIGGLE_NUM_COLS 16
 
 struct wiggle
 /* Wiggle track values to display as y-values (first 6 fields are bed6) */
@@ -22,6 +22,11 @@ struct wiggle
     unsigned Count;	/* number of values in this block */
     unsigned Offset;	/* offset in File to fetch data */
     char *File;	/* path name to data file, one byte per value */
+    double lowerLimit;	/* lowest data value in this block */
+    double dataRange;	/* lowerLimit + dataRange = upperLimit */
+    unsigned validCount;	/* number of valid data values in this block */
+    double average;	/* average of the data valeus, we may need this later */
+    double stddev;	/* standard deviation, we may need this later */
     };
 
 void wiggleStaticLoad(char **row, struct wiggle *ret);

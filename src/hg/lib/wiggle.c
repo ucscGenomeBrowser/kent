@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.2 2003/10/10 21:45:41 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.3 2003/11/06 20:17:35 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
@@ -28,6 +28,11 @@ ret->Span = sqlUnsigned(row[7]);
 ret->Count = sqlUnsigned(row[8]);
 ret->Offset = sqlUnsigned(row[9]);
 ret->File = row[10];
+ret->lowerLimit = atof(row[11]);
+ret->dataRange = atof(row[12]);
+ret->validCount = sqlUnsigned(row[13]);
+ret->average = atof(row[14]);
+ret->stddev = atof(row[15]);
 }
 
 struct wiggle *wiggleLoad(char **row)
@@ -50,6 +55,11 @@ ret->Span = sqlUnsigned(row[7]);
 ret->Count = sqlUnsigned(row[8]);
 ret->Offset = sqlUnsigned(row[9]);
 ret->File = cloneString(row[10]);
+ret->lowerLimit = atof(row[11]);
+ret->dataRange = atof(row[12]);
+ret->validCount = sqlUnsigned(row[13]);
+ret->average = atof(row[14]);
+ret->stddev = atof(row[15]);
 return ret;
 }
 
@@ -59,7 +69,7 @@ struct wiggle *wiggleLoadAll(char *fileName)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -77,7 +87,7 @@ struct wiggle *wiggleLoadAllByChar(char *fileName, char chopper)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -110,6 +120,11 @@ ret->Span = sqlUnsignedComma(&s);
 ret->Count = sqlUnsignedComma(&s);
 ret->Offset = sqlUnsignedComma(&s);
 ret->File = sqlStringComma(&s);
+ret->lowerLimit = sqlDoubleComma(&s);
+ret->dataRange = sqlDoubleComma(&s);
+ret->validCount = sqlUnsignedComma(&s);
+ret->average = sqlDoubleComma(&s);
+ret->stddev = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -173,6 +188,16 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->File);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%f", el->lowerLimit);
+fputc(sep,f);
+fprintf(f, "%f", el->dataRange);
+fputc(sep,f);
+fprintf(f, "%u", el->validCount);
+fputc(sep,f);
+fprintf(f, "%f", el->average);
+fputc(sep,f);
+fprintf(f, "%f", el->stddev);
 fputc(lastSep,f);
 }
 
