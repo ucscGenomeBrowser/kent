@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.629 2004/05/17 18:18:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.630 2004/05/17 23:11:07 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1500,7 +1500,16 @@ if (!foundPep)
     {
     puts("<LI>\n");
     hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
-    printf("Translated Protein</A> from predicted mRNA \n"); 
+    /* put out correct message to describe translated mRNA */
+    printf("Translated Protein</A> from ");
+    if (sameString(geneTable, "refGene") ) 
+        {
+        printf("mRNA\n");
+        } 
+    else
+        {
+        printf("predicted mRNA \n"); 
+        }
     puts("</LI>\n");
     foundPep = TRUE;
     }
