@@ -25,14 +25,6 @@ visibility dense
 color 13,124,115
 type bed 6 .
 
-track igenics
-shortLabel Intergenics
-longLabel Intergenics on microarray
-group genes
-priority 2.63
-visibility dense
-type bed 6 .
-
 track llaPaePrintA
 shortLabel LL microarray A
 longLabel Lowe lab full-genome P. aerophilum microarray experiments

@@ -1,51 +1,30 @@
-track promoterScanPos
-shortLabel Promoter Plus
-longLabel Patricia's log-odds scan of promoters on plus strand
-group regulation
-priority 81
-visibility hide
-autoScaleDefault Off
-maxHeightPixels 128:36:16
-graphTypeDefault Bar
-gridDefault OFF
-defaultViewLimits 0.0:1.0
-color 44,201,52
-altColor 255,128,0
-type wig 0 1
+track llOperons
+shortLabel LL Operons
+longLabel Operon predictions by Lowe Lab
+group genes
+priority 2.13
+visibility pack
+spectrum on
+type bed 12 .
 
-track promoterScanNeg
-shortLabel Promoter Minus 
-longLabel Patricia's log-odds scan of promoters on minus strand
-group regulation
-priority 82
-visibility hide
-autoScaleDefault Off
-maxHeightPixels 128:36:16
-graphTypeDefault Bar
-gridDefault OFF
-defaultViewLimits 0.0:1.0
-color 136,38,193
-altColor 255,128,0
-type wig 0 1
-
-track llaPfuPrintA
-shortLabel LL microarray A
-longLabel Lowe lab and DiRuggiero lab full-genome P. furiosus microarray experiments
-group regulation
-priority 85.0
-visibility hide
-type expRatio
-expScale 4.0
-expStep 0.5
-expTable llaPfuPrintAExps
-chip printA
-canPack off
+#track llaPfuPrintA
+#shortLabel LL microarray A
+#longLabel Lowe lab and DiRuggiero lab full-genome P. furiosus microarray experiments
+#group regulation
+#priority 85.0
+#visibility hide
+#type expRatio
+#expScale 4.0
+#expStep 0.5
+#expTable llaPfuPrintAExps
+#chip printA
+#canPack off
 
 track llaPfuPrintC
 shortLabel HS Microarray
 longLabel Heat Shock full-genome P. furiosus microarray experiments
 group regulation
-priority 86.0
+priority 9.0
 visibility dense
 type expRatio
 expScale 4.0
@@ -58,7 +37,7 @@ track multizPyro
 shortLabel Conservation
 longLabel Pyrococcus 3-way multiz alignments
 group compGeno
-priority 100
+priority 10.0
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
