@@ -675,12 +675,12 @@ boundaryColor = vgFindColorIx(g_vg, 170, 170, 170);
 // draw pI stamp
 
 sprintf(cond_str, "accession='%s'", proteinID);
-answer = sqlGetField(NULL, database, "pepPiMw", "count(*)", cond_str);
+answer = sqlGetField(NULL, database, "pepPi", "count(*)", cond_str);
 
 // either 0 or multiple rows are not valid
 if (strcmp(answer, "1") == 0)
     {
-    answer = sqlGetField(NULL, database, "pepPiMw", "pI", cond_str);
+    answer = sqlGetField(NULL, database, "pepPi", "pI", cond_str);
     pI     = (double)atof(answer);
     stampDataPtr = getStampData("pepPi");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
