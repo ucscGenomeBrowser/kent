@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.80 2003/09/20 00:50:55 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.81 2003/09/21 04:45:45 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -796,9 +796,9 @@ slReverse(&orgList);
 hPrintf("organism: ");
 hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
-  "document.orgForm.org=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
-  "document.orgForm.db.value = 0;"
-  "document.orgForm.near_search.value = \"\";"
+  "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
+  "document.orgForm.db.value=0;"
+  "document.orgForm.near_search.value='';"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
@@ -1262,9 +1262,10 @@ cartSaveSession(cart);
 controlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
-hPrintf("</FORM>");
+hPrintf("</FORM>\n");
 
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
+hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
 	cartUsualString(cart, searchVarName, ""));
@@ -1488,11 +1489,6 @@ cart = theCart;
 
 getDbAndGenome(cart, &database, &organism);
 makeSureDbHasHgNear();
-#ifdef OLD
-database = "hg15";
-cartSetString(cart, "db", database);
-organism = "Human";
-#endif /* OLD */
 hSetDb(database);
 conn = hAllocConn();
 
