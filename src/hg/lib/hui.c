@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.55 2005/01/31 18:37:05 hartera Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.56 2005/02/03 19:00:02 hartera Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1104,8 +1104,8 @@ return trackHash;
 
 static char *acemblyOptions[] = {
     "All Genes",
-    "Main",
-    "Putative",
+    "main",
+    "putative",
 };
 
 enum acemblyOptEnum acemblyStringToEnum(char *string)
