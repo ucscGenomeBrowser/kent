@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.63 2004/12/15 00:29:36 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.64 2004/12/15 00:36:26 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -688,6 +688,7 @@ void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
  * was in their cart, unless the Genome doesn't match.
  */
 {
+boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
@@ -706,7 +707,7 @@ else if (*retGenome && !sameWord(*retGenome, "0"))
     *retDb = getDbForGenome(*retGenome, cart);
     *retGenome = hGenome(*retDb);
     }
-else if (*retClade)
+else if (*retClade && gotClade)
     {
     *retGenome = getGenomeForClade(*retClade, cart);
     *retDb = getDbForGenome(*retGenome, cart);
@@ -726,7 +727,7 @@ else
 	{
 	*retDb = hDefaultDbForGenome(*retGenome);
 	}
-    else if (*retClade)
+    else if (*retClade && gotClade)
 	{
 	*retGenome = getGenomeForClade(*retClade, cart);
 	*retDb = getDbForGenome(*retGenome, cart);
