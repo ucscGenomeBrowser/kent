@@ -51,12 +51,12 @@ conservation scores by phylo-HMM.</P>
     Churchill 1996, Yang 1995). In the image at right, k = 3 states, 
     S<SUB>1</SUB>, S<SUB>2</SUB>, and S<SUB>3</SUB>, but in practice we 
     use k = 10.  
-    Using a separate "rate constant," <EM>r<SUB>i</SUB></EM>, for each state i, 
-    which is multiplied by all branch lengths in the globally estimated model,
-    a phylogenetic model is estimated globally, using the discrete gamma model
+    A phylogenetic model is estimated globally, using the discrete gamma model
     for rate variation (Yang 1994), then a scaled version of the estimated model
-    is associated with each state in a phylo-HMM.  The
-    transition probabilities between states allow for autocorrelation of
+    is associated with each state in a phylo-HMM. There is a
+    separate &quot;rate constant&quot;, <em>r<sub>i</sub></em>, for each state i, 
+    which is multiplied by all branch lengths in the globally estimated model.
+    The transition probabilities between states allow for autocorrelation of
     substitution rates, i.e., for adjacent sites to tend to exhibit similar
     overall substitution rates.  A single parameter, lambda, describes the
     degree of autocorrelation and defines all transition probabilities (see
