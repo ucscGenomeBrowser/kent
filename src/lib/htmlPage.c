@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.14 2004/11/09 23:34:21 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.15 2004/11/10 02:10:43 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1144,6 +1144,7 @@ if (sameWord(form->method, "GET"))
     {
     cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
     dyStringAppend(dyUrl, cgiVars);
+    verbose(3, "GET %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringAppend(dyHeader, "\r\n");
     write(sd, dyHeader->string, dyHeader->stringSize);
@@ -1154,6 +1155,7 @@ else if (sameWord(form->method, "POST"))
     /* remove question mark from beginning */
     stripChar(cgiVars, '?');
     contentLength = strlen(cgiVars);
+    verbose(3, "POST %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
     dyStringAppend(dyHeader, "\r\n");
