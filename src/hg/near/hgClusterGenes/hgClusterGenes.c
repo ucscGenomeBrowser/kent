@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.6 2003/09/24 04:09:49 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.7 2003/09/25 00:37:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,16 +26,19 @@ errAbort(
   "   -chrom=chrN - Just work on one chromosome\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -noProt - Skip protein field\n"
+  "   -sangerLinks - Use sangerLinks table for protein\n"
   );
 }
 
 int verbose = 0;
 boolean noProt = FALSE;
+boolean sangerLinks = FALSE;
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"verbose", OPTION_INT},
    {"noProt", OPTION_BOOLEAN},
+   {"sangerLinks", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -332,7 +335,10 @@ sqlFreeResult(&sr);
 if (!noProt)
     {
     protHash = newHash(16);
-    safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
+    if (sangerLinks)
+	safef(query, sizeof(query), "select orfName,protName from sangerLinks");
+    else
+	safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	hashAdd(protHash, row[0], cloneString(row[1]));
@@ -362,7 +368,11 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	}
     protName = cannonical->name;
     if (protHash != NULL)
-        protName = hashMustFindVal(protHash, protName);
+	{
+	char *newVal = hashFindVal(protHash, protName);
+	if (newVal != NULL)
+	    protName = newVal;
+	}
     fprintf(canFile, "%s\t%d\t%d\t%d\t%s\t%s\n", 
     	chrom, cluster->start, cluster->end, clusterId, cannonical->name,
 	protName);
@@ -409,6 +419,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 verbose = optionInt("verbose", verbose);
 noProt = optionExists("noProt");
+sangerLinks = optionExists("sangerLinks");
 if (argc != 5)
     usage();
 hgClusterGenes(argv[1], argv[2], argv[3], argv[4]);
