@@ -61,3 +61,12 @@ exit; # don't actually run this like a script :)
   create database xenTro1;
   use xenTro1;
   create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
+
+# CREATE AGP FILES AND GAP/GOLD TABLES (DONE JK 10/23/04)
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  hgFakeAgp downloads/xenopus.041015.fasta xenTro1.agp
+  
+  ssh hgwdev
+  cd /cluster/data/xenTro1
+  hgGoldGapGl xenTro1 xenTro1.agp
