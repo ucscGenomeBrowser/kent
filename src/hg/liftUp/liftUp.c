@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.13 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.14 2003/06/24 18:05:53 hiram Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -243,8 +243,9 @@ for (i=0; i<sourceCount; ++i)
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	wordCount = chopLine(line, words);
-	if (wordCount < 14 || wordCount > 16)
-	    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
+	// 16 becomes 17, new field in RMasker June23 '03 - Hiram
+	if (wordCount < 14 || wordCount > 17)
+	    errAbort("Expecting 14-17 words (found %d) line %d of %s", wordCount, lf->lineIx, lf->fileName);
 	if (wordCount >= 15)
 	    id = words[14];
 	else
