@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.153 2004/12/08 20:03:59 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.154 2004/12/08 20:23:02 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -842,7 +842,15 @@ else
             }
         else
             {
-            safef(tableName, sizeof(tableName), "%s", suffix);      
+	    /* Now we have to watch out for scaffold-based browsers where 
+	     * the track is all_{mrna,est} not {mrna,est}. */
+	    char splitTable[256];
+	    safef(splitTable, sizeof(splitTable), "%s_%s",
+		  hDefaultChrom(), suffix);
+	    if (hTableExists(splitTable))
+		safef(tableName, sizeof(tableName), "%s", suffix);
+	    else
+		safef(tableName, sizeof(tableName), "all_%s", suffix);
             }
 
 	AllocVar(table);
