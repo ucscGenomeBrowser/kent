@@ -127,13 +127,17 @@ int genePredCmp(const void *va, const void *vb);
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
 	char *name, char *exonSelectWord, boolean gFrame);
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
- * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
+ * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in)
+ * if gFrame is true, fill in frame info from gff using optional genePred fields
+ */
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name);
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, boolean gFrame);
 /* Convert gff->groupList to genePred list, using GTF feature conventions;
  * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
  * gffGroup is sorted in assending coords, with overlaping starts sorted by
- * end coords, which is true if it was created by gffGroupLines(). */
+ * end coords, which is true if it was created by gffGroupLines(). 
+ * if gFrame is true, fill in frame info from gff using optional genePred fields
+ */
 
 struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
                                   struct genbankCds* cds, int insertMergeSize);
