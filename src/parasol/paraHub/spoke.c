@@ -50,16 +50,16 @@ static void spokeSendRemote(char *spokeName, char *machine, char *message)
 /* Send message to remote machine. */
 {
 int sd;
+boolean ok = FALSE;
 
 /* Try and tell machine about job. */
 sd = netConnect(machine, paraPort);
 if (sd > 0)
     {
-    write(sd, paraSig, strlen(paraSig));
-    netSendLongString(sd, message);
+    ok = sendWithSig(sd, message);
     close(sd);
     }
-else
+if (!ok)
     {
     char *command = nextWord(&message);
     char *job = NULL;

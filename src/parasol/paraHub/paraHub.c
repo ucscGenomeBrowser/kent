@@ -62,6 +62,9 @@
  
 
 #include <time.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "common.h"
 #include "options.h"
 #include "linefile.h"
@@ -78,6 +81,8 @@
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
 int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
+unsigned char subnet[4] = {255,255,255,255};   /* Subnet to check. */
+unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
 
 void usage()
 /* Explain usage and exit. */
@@ -91,6 +96,7 @@ errAbort("paraHub - parasol hub server.\n"
 	 "    spokes=N  Number of processes that feed jobs to nodes - default %d\n"
 	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
 	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
+	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
 	               ,
 	 initialSpokes, jobCheckPeriod, machineCheckPeriod
@@ -1040,7 +1046,7 @@ int hubConnect()
 {
 int hubFd;
 int sigSize = strlen(paraSig);
-hubFd  = netConnect(hubHost, paraPort);
+hubFd  = netConnect("127.0.0.1", paraPort);
 if (hubFd > 0)
     write(hubFd, paraSig, sigSize);
 return hubFd;
@@ -1068,6 +1074,29 @@ while (lineFileRow(lf, row))
 	doAddMachine(ms.name, ms.tempDir);
     }
 lineFileClose(&lf);
+}
+
+void unpackIp(in_addr_t packed, unsigned char unpacked[4])
+/* Unpack IP address into 4 bytes. */
+{
+memcpy(unpacked, &packed, sizeof(unpacked));
+}
+
+boolean ipAddressOk(in_addr_t packed, unsigned char *spec)
+/* Return TRUE if packed IP address matches spec. */
+{
+unsigned char unpacked[4], c;
+int i;
+unpackIp(packed, unpacked);
+for (i=0; i<sizeof(unpacked); ++i)
+    {
+    c = spec[i];
+    if (c == 255)
+        break;
+    if (c != unpacked[i])
+        return FALSE;
+    }
+return TRUE;
 }
 
 
@@ -1104,64 +1133,114 @@ startHeartbeat();
 /* Main event loop. */
 for (;;)
     {
-    int connectionHandle = netAccept(socketHandle);
+    struct sockaddr_in inAddress;
+    int len_inet = sizeof(inAddress);
+    int connectionHandle = accept(socketHandle, 
+    	(struct sockaddr *)&inAddress, &len_inet);
     if (connectionHandle < 0)
         continue;
-    if (netReadAll(connectionHandle, sig, sigLen) < sigLen || !sameString(sig, paraSig))
+    if (ipAddressOk(inAddress.sin_addr.s_addr, subnet) || 
+    	ipAddressOk(inAddress.sin_addr.s_addr, localHost))
 	{
-	close(connectionHandle);
-        continue;
+	if (netReadAll(connectionHandle, sig, sigLen) < sigLen || !sameString(sig, paraSig))
+	    {
+	    close(connectionHandle);
+	    continue;
+	    }
+	line = buf = netGetLongString(connectionHandle);
+	if (line == NULL)
+	    {
+	    close(connectionHandle);
+	    continue;
+	    }
+	logIt("hub: %s\n", line);
+	command = nextWord(&line);
+	if (sameWord(command, "jobDone"))
+	     jobDone(line);
+	else if (sameWord(command, "recycleSpoke"))
+	     recycleSpoke(line, connectionHandle);
+	else if (sameWord(command, "heartbeat"))
+	     processHeartbeat();
+	else if (sameWord(command, "addJob"))
+	     addJobAcknowledge(line, connectionHandle);
+	else if (sameWord(command, "nodeDown"))
+	     nodeDown(line);
+	else if (sameWord(command, "alive"))
+	     nodeAlive(line);
+	else if (sameWord(command, "checkIn"))
+	     nodeCheckIn(line);
+	else if (sameWord(command, "removeJob"))
+	     removeJobName(line);
+	else if (sameWord(command, "ping"))
+	     respondToPing(connectionHandle);
+	else if (sameWord(command, "addMachine"))
+	     addMachine(line);
+	else if (sameWord(command, "removeMachine"))
+	     removeMachine(line);
+	else if (sameWord(command, "listJobs"))
+	     listJobs(connectionHandle);
+	else if (sameWord(command, "listMachines"))
+	     listMachines(connectionHandle);
+	else if (sameWord(command, "status"))
+	     status(connectionHandle);
+	else if (sameWord(command, "qstat"))
+	     qstat(connectionHandle);
+	else if (sameWord(command, "pstat"))
+	     pstat(connectionHandle);
+	else if (sameWord(command, "addSpoke"))
+	     addSpoke(socketHandle, connectionHandle);
+	if (sameWord(command, "quit"))
+	     break;
+	freez(&buf);
 	}
-    line = buf = netGetLongString(connectionHandle);
-    if (line == NULL)
+    else
         {
-	close(connectionHandle);
-        continue;
+	char ip[4];
+	unpackIp(inAddress.sin_addr.s_addr, ip);
+	logIt("hub: unauthorized %d.%d.%d.%d\n", 
+		ip[0], ip[1], ip[2], ip[3]);
 	}
-    logIt("hub: %s\n", line);
-    command = nextWord(&line);
-    if (sameWord(command, "jobDone"))
-         jobDone(line);
-    else if (sameWord(command, "recycleSpoke"))
-         recycleSpoke(line, connectionHandle);
-    else if (sameWord(command, "heartbeat"))
-         processHeartbeat();
-    else if (sameWord(command, "addJob"))
-         addJobAcknowledge(line, connectionHandle);
-    else if (sameWord(command, "nodeDown"))
-         nodeDown(line);
-    else if (sameWord(command, "alive"))
-         nodeAlive(line);
-    else if (sameWord(command, "checkIn"))
-         nodeCheckIn(line);
-    else if (sameWord(command, "removeJob"))
-         removeJobName(line);
-    else if (sameWord(command, "ping"))
-         respondToPing(connectionHandle);
-    else if (sameWord(command, "addMachine"))
-         addMachine(line);
-    else if (sameWord(command, "removeMachine"))
-         removeMachine(line);
-    else if (sameWord(command, "listJobs"))
-         listJobs(connectionHandle);
-    else if (sameWord(command, "listMachines"))
-         listMachines(connectionHandle);
-    else if (sameWord(command, "status"))
-         status(connectionHandle);
-    else if (sameWord(command, "qstat"))
-         qstat(connectionHandle);
-    else if (sameWord(command, "pstat"))
-         pstat(connectionHandle);
-    else if (sameWord(command, "addSpoke"))
-         addSpoke(socketHandle, connectionHandle);
-    if (sameWord(command, "quit"))
-         break;
     close(connectionHandle);
-    freez(&buf);
     }
 endHeartbeat();
 killSpokes();
 close(socketHandle);
+}
+
+void notGoodSubnet(char *sns)
+/* Complain about subnet format. */
+{
+errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
+         "one to three dot-separated numbers between 0 and 255\n");
+}
+
+void fillInSubnet()
+/* Parse subnet paramenter if any into subnet variable. */
+{
+char *sns = optionVal("subnet", NULL);
+if (sns == NULL)
+    sns = optionVal("subNet", NULL);
+if (sns != NULL)
+    {
+    char *snsCopy = strdup(sns);
+    char *words[5];
+    int wordCount, i;
+    wordCount = chopString(snsCopy, ".", words, ArraySize(words));
+    if (wordCount > 3 || wordCount < 1)
+        notGoodSubnet(sns);
+    for (i=0; i<wordCount; ++i)
+	{
+	char *s = words[i];
+	int x;
+	if (!isdigit(s[0]))
+	    notGoodSubnet(sns);
+	x = atoi(s);
+	if (x > 255)
+	    notGoodSubnet(sns);
+	subnet[i] = x;
+	}
+    freez(&snsCopy);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -1173,6 +1252,7 @@ if (argc < 2)
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
+fillInSubnet();
 startHub(argv[1]);
 return 0;
 }
