@@ -125,9 +125,11 @@ public class ApacheReport {
       pw.print("<HTML>\n");
       pw.print("<HEAD>\n");
       if (fileFlag.equals("daily")) {
-        pw.print("<TITLE>Daily Apache Report</TITLE>\n");
+        pw.print("<TITLE>Daily Apache Report -- " + getMonth(month) + " " 
+           + day + ", " + year + " </TITLE>\n");
       } else {
-        pw.print("<TITLE>Monthly Apache Report</TITLE>\n");
+        pw.print("<TITLE>Daily Apache Report -- " + getMonth(month) + " "  
+           + year + " </TITLE>\n");
       }
       pw.print("</HEAD>\n");
       pw.print("<BODY>\n");
