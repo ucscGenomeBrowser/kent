@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.9 2004/07/17 17:02:16 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.10 2004/07/17 17:09:28 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -34,6 +34,7 @@ struct joinedTables
     int keyCount;	/* Number of keys- calculated at start of load. */
     struct joinedRow *rowList;	/* Rows - allocated in lm. */
     int rowCount;	/* Number of rows. */
+    int maxRowCount;	/* Max row count allowed (0 means no limit) */
     };
 
 void joinedTablesTabOut(struct joinedTables *joined)
@@ -67,7 +68,8 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
     }
 }
 
-struct joinedTables *joinedTablesNew(int fieldCount, int keyCount)
+struct joinedTables *joinedTablesNew(int fieldCount, 
+	int keyCount, int maxRowCount)
 /* Make up new empty joinedTables. */
 {
 struct joinedTables *jt;
@@ -77,6 +79,7 @@ AllocVar(jt);
 lm = jt->lm = lmInit(64*1024);
 jt->fieldCount = fieldCount;
 jt->keyCount = keyCount;
+jt->maxRowCount = maxRowCount;
 return jt;
 }
 
@@ -93,28 +96,38 @@ if (jt != NULL)
     }
 }
 
-struct joinedRow *jrRowAdd(struct joinedTables *joined, char **row,
+static struct joinedRow *jrRowAdd(struct joinedTables *joined, char **row,
 	int fieldCount, int keyCount)
 /* Add new row to joinable table. */
 {
-struct joinedRow *jr;
-int i;
-struct lm *lm = joined->lm;
-lmAllocVar(lm, jr);
-lmAllocArray(lm, jr->fields, joined->fieldCount);
-lmAllocArray(lm, jr->keys, joined->keyCount);
-for (i=0; i<fieldCount; ++i)
-    jr->fields[i] = lmCloneString(lm, row[i]);
-row += fieldCount;
-for (i=0; i<keyCount; ++i)
-    jr->keys[i] = lmCloneString(lm, row[i]);
-slAddHead(&joined->rowList, jr);
-joined->rowCount += 1;
-return jr;
+if (joined->maxRowCount != 0 && joined->rowCount >= joined->maxRowCount)
+    {
+    warn("Stopping after %d rows, try restricting region or adding filter", 
+    	joined->rowCount);
+    return NULL;
+    }
+else
+    {
+    struct joinedRow *jr;
+    int i;
+    struct lm *lm = joined->lm;
+    lmAllocVar(lm, jr);
+    lmAllocArray(lm, jr->fields, joined->fieldCount);
+    lmAllocArray(lm, jr->keys, joined->keyCount);
+    for (i=0; i<fieldCount; ++i)
+	jr->fields[i] = lmCloneString(lm, row[i]);
+    row += fieldCount;
+    for (i=0; i<keyCount; ++i)
+	jr->keys[i] = lmCloneString(lm, row[i]);
+    slAddHead(&joined->rowList, jr);
+    joined->rowCount += 1;
+    return jr;
+    }
 }
 
-void jrRowExpand(struct joinedTables *joined, struct joinedRow *jr, char **row,
-     int fieldOffset, int fieldCount, int keyOffset, int keyCount)
+static void jrRowExpand(struct joinedTables *joined, 
+	struct joinedRow *jr, char **row,
+        int fieldOffset, int fieldCount, int keyOffset, int keyCount)
 /* Add some more to row. */
 {
 int i;
@@ -446,7 +459,8 @@ for (region = regionList; region != NULL; region = region->next)
         {
 	if (idFieldIx < 0)
 	    {
-	    jrRowAdd(joined, row, fieldCount, keyCount);
+	    if (jrRowAdd(joined, row, fieldCount, keyCount) == NULL)
+	        break;
 	    }
 	else
 	    {
@@ -456,7 +470,8 @@ for (region = regionList; region != NULL; region = region->next)
 		{
 		if (hashLookup(idHash, chopKey(NULL, NULL, id)))
 		    {
-		    jrRowAdd(joined, row, fieldCount, keyCount);
+		    if (jrRowAdd(joined, row, fieldCount, keyCount) == NULL)
+		        break;
 		    }
 		}
 	    else
@@ -480,11 +495,12 @@ sqlDisconnect(&conn);
 	
 struct joinedTables *tjLoadFirst(struct region *regionList,
 	struct tableJoiner *tj, int totalFieldCount,
-	int totalKeyCount)
+	int totalKeyCount, int maxRowCount)
 /* Load up first table in series of joined tables.  This allocates
  * field and key arrays big enough for all. */
 {
-struct joinedTables *joined = joinedTablesNew(totalFieldCount, totalKeyCount);
+struct joinedTables *joined = joinedTablesNew(totalFieldCount, 
+	totalKeyCount, maxRowCount);
 struct hash *idHash = NULL;
 char *idField = NULL;
 struct hTableInfo *hti = getHti(tj->database, tj->table);
@@ -620,7 +636,7 @@ else
     /* Do first table.  This one uses identifier hash if any. */
 	{
 	joined = tjLoadFirst(regionList,
-		tjList, totalFieldCount, totalKeyCount);
+		tjList, totalFieldCount, totalKeyCount, 500000);
 	curKeyCount = slCount(tjList->keysOut);
 	curFieldCount = slCount(tjList->fieldList);
 	uglyf("After load first %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
