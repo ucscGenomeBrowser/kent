@@ -97,7 +97,6 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
     hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
     # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
 	echo 'drop table chromInfo;' | hgsql ce1
-    cd ~/ce1/softMask
     hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
 # Typical output:
 # Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
@@ -319,6 +318,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     ssh eieio
     cd ~/ce1
     mkdir softMask
+    cd ~/ce1/softMask
     foreach c (I II III IV V X M)
         echo -n "masking chr${c} "
 	/cluster/bin/i386/maskOutFa chr${c}.fa RMRun/chr${c}.fa.out \
@@ -458,13 +458,19 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     para create spec
     para try
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (TODO)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (DONE - 2003-05-29 - Hiram)
     # next machine
     ssh hgwdev
-    echo 'insert into blatServers values("ce1", "blat10", "17778", "1"); \
-          insert into blatServers values("ce1", "blat10", "17779", "0");' \
+    # DNA port is "0", trans prot port is "1"
+    echo 'insert into blatServers values("ce1", "blat10", "17784", "0"); \
+          insert into blatServers values("ce1", "blat10", "17785", "1");' \
       | hgsql -h genome-testdb hgcentraltest
-
+        # if you need to delete those entries
+	echo 'delete from blatServers where db="ce1";' \
+        | hgsql -h genome-testdb hgcentraltest
+        # to check the entries:
+	echo 'select * from blatServers where db="ce1";' \
+        | hgsql -h genome-testdb hgcentraltest
 
 SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
     # This TRF run takes about an hour on eieio
@@ -580,7 +586,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$f' > wabaRun
     chmod +x wabaRun
 
     echo '#LOOP
-/cluster/store4/worm/ce1/bed/waba/wabaRun {check in exists+ $(path1)} /cluster/store4/worm/ce1/bed/waba/elegans.lst {check out line+ /cluster/store4/worm/ce1/bed/waba/out/$(root1).wab}
+/cluster/store4/worm/ce1/bed/waba/wabaRun {check in exists+ $(path1)} /cluster/store4/worm/ce1/bed/waba/elegans.lst {check out exists /cluster/store4/worm/ce1/bed/waba/out/$(root1).wab}
 #ENDLOOP' > gsub
 
     gensub2 briggsae.lst dummy.lst gsub spec
@@ -592,23 +598,259 @@ rmdir --ignore-fail-on-non-empty /tmp/$f' > wabaRun
 
 
 RUN BLASTZ with C. briggsae
-    #  Still trying to figure out how this works.  There is more to this
-    #  than seems at first glance.
-    # Created a new DEF file for this since this is the first time
-    
-
-MAKING VIRAL mRNA FILES (DONE 04/15/03)
-    cd /cluster/store5/mrna.134
-    gunzip -c \
-      /cluster/store5/genbank.134/gbvrl* \
-    | gbToFaRa anyRna.fil viralRna.{fa,ra,ta} stdin
-    mkdir /gbdb/sc1/mrna.134
-    ln -s  /cluster/store5/mrna.134/viralRna.fa /gbdb/sc1/mrna.134/
-    hgLoadRna add -type=mrna sc1 /gbdb/sc1/mrna.134/viralRna.fa \
-      /cluster/store5/mrna.134/viralRna.ra
-    # distribute to /iscratch/i/
     # next machine
     ssh kkr1u00
-    mkdir -p /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/viralRna.fa  /iscratch/i/mrna.134
-    ~kent/bin/iSync
+    #  These nibs were created in the combined RepeatMasker and TRF above
+    mkdir -p /iscratch/i/worms/Celegans/chromTrfMixedNib
+    cd /iscratch/i/worms/Celegans/chromTrfMixedNib
+    cp -p /cluster/store4/worm/ce1/nib/chr*.nib .
+    mkdir -p /iscratch/i/worms/Celegans/rmsk
+    cd /iscratch/i/worms/Celegans/rmsk
+    cp -p /cluster/store4/worm/ce1/RMRun/chr*.fa.out .
+
+  
+# BEGINNING OF Cbriggsae BLASTZ
+
+#	These blastz sections usually start by saying:
+#		FIRST FOLLOW INSTRUCTIONS IN ~angie/hummus/Notes
+#	This Notes file is the actual blastz run.
+#	But I found those notes a bit obscure, for clarity I have
+#	reproduced the exact steps here.
+#	The initial DEF file has been created for this.
+#	It is in ~angie/hummus/DEF.ce1-cb1.2003-05-29
+#	which will blastz soft masked Cbriggsae ultra contigs
+#	against the soft masked Celegans chroms
+
+#	1. created the DEF file for this particular blastz run
+#	    The TARGET files are the masked NIBS created above, in:
+#	SEQ1_DIR=/iscratch/i/worms/Celegans/chromTrfMixedNib
+#	    and the repeatmasker *.out files in:
+#	SEQ1_RMSK=/iscratch/i/worms/Celegans/rmsk
+#	    There is no lineage specific repeats for the worms as far as
+#	    I can tell, thus:
+#	SEQ1_SMSK=/dev/null
+#	    This requires:
+#	BLASTZ_ABRIDGE_REPEATS=0
+#	    The QUERY sequence are the repeat and trf soft masked *.fa
+#	    files from the briggsae processing:
+#	SEQ2_DIR=/iscratch/i/worms/Cbriggsae/trfFa
+#	    And the repeat masker run from the briggsae processing:
+#	SEQ2_RMSK=/iscratch/i/worms/Cbriggsae/rmsk
+#	    No lineage specific repeats:
+#	SEQ2_SMSK=/dev/null
+#	    Despite the meaning of this, would not operate when = 1
+#	SEQ2_IN_CONTIGS=0
+#	    That should be =1 according to Scott, but the comment in
+#	    blastz-run belies that:
+#	case $SEQ2_IN_CONTIGS in 
+#	1) echo "seq2 must not be in contigs!" 1>&2 ; exit 14;;
+#	*) ;;
+#	esac
+#	    We will see this problem again in lavToAxt
+#
+#	    Our base of operations:
+#	BASE=/cluster/store4/worm/ce1/bed/blastzBriggsae
+#
+
+#	Reproduced here are the instructions as specified in the
+#	hummus/Notes file.
+#	Evidently historical archives of the DEF files exist in
+#	in ~angie/hummus/DEF* and they are copied out of there to
+#	to the file: $BASE/DEF for the actual run.  Don't worry, none of
+#	this seems to make any sense.
+	# next machine
+	ssh kk
+	cd ~/ce1/bed/blastzBriggsae
+#	source the DEF file which was carefully written as above.
+	. ./DEF
+	mkdir -p $BASE/run
+	~angie/hummus/make-joblist $DEF > $BASE/run/j
+	# that created xdir.sh and joblist run/j
+	sh $BASE/xdir.sh
+	# xdir.sh makes a bunch of result directories in $BASE/raw/
+	# based on chrom name and CHUNK size
+        cd $BASE/run
+	# now edit j because it is not correct:
+	sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+	wc -l j*
+	head j2
+	# *** make sure the j2 edits are OK, then use it:
+	mv j2 j
+	# para create will create the file: 'batch' for the cluster run
+	para create j
+	para try
+	para check
+	para push
+	... etc ...
+# Longest job:                     2454s      40.90m     0.68h    0.03d
+
+	# When that cluster run is done, results are in $BASE/raw/chr*/*
+	# continuing with ~angie/hummus/Notes:
+	# --- normalize and single_cov
+	cd ~/ce1/bed/blastzBriggsae
+	#   source the DEF file again in case you are coming back to this
+	. ./DEF
+	# a new run directory
+	mkdir -p $BASE/run.1
+	# another obscure script creates a new job list:
+	~angie/hummus/do.out2lav $DEF >$BASE/run.1/j
+ 	cd $BASE/run.1
+	# the job list is once again incorrect, edit it:
+ 	sed -e 's/^/\/cluster\/home\/angie\/schwartzbin\//' j > j2
+ 	wc -l j*
+ 	head j2
+	# make sure the edited j2 is OK, then use it:
+ 	mv j2 j
+ 	para create j
+ 	para try
+	para push;para check; ... etc ...
+	# I'm having a problem with one of the jobs in this run:
+#job: /cluster/home/angie/schwartzbin/xout2lav chrIV 17493790
+# /cluster/store4/worm/ce1/bed/blastzBriggsae/raw/chrIV/1.10010000
+# /cluster/store4/worm/ce1/bed/blastzBriggsae/lav/chrIV/1.10010000.lav
+# /cluster/store4/worm/ce1/bed/blastzBriggsae/DEF
+# id: 43985786
+# failure type: crash
+# host: kkr8u49.kilokluster.ucsc.edu
+# start time: Fri May 30 11:38:10 2003
+# return: 255
+# stderr:
+# Use of uninitialized value in concatenation (.) or string at
+# /cluster/home/angie/schwartzbin/normalize-lav line 133, <> line 1.
+# Use of uninitialized value in numeric gt (>) at
+# /cluster/home/angie/schwartzbin/normalize-lav line 15, <> line 14.
+# Use of uninitialized value in numeric eq (==) at
+# /cluster/home/angie/schwartzbin/normalize-lav line 81, <> line 22.
+
+
+
+	
+
+    # Translate the .lav files created by the end of ~angie/hummus Notes
+    # into axt files
+    ssh eieio
+    set base="/cluster/store4/worm/ce1/bed/blastzBriggsae"
+    set seq1_dir="/cluster/store4/worm/ce1/nib"
+    set seq2_dir="/cluster/store5/worm/cb1/softMask"
+    set tbl="blastzBriggsae"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | /cluster/home/hiram/bin/i386/lavToAxt -fa stdin $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $out
+      popd
+    end
+
+    # Translate the sorted axt files into psl:
+
+    mkdir -p ~/ce1/bed/blastzBriggsae
+    cd ~/ce1/bed/blastzBriggsae
+
+# LOADING WORM CB1 BLASTZ ALIGNMENTS
+    # Translate Penn State .lav files into sorted axt:
+    ssh eieio
+    set base="/cluster/store4/worm/ce1/bed/blastzBriggsae"
+    set seq1_dir="/cluster/store4/worm/ce1/nib"
+    set seq2_dir="/cluster/store4/worm/cb1/softMask"
+    set tbl="blastzCb1"
+    cd $base
+    mkdir -p axtChrom
+# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $out
+      popd
+    end
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
+    set tbl="blastzRn2"
+    cd $base/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
+
+
+# MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES
+#		DONE - 2003-05-09 - Hiram, to be verified
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh eieio
+    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
+    set tbl="blastzBestRn2"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach chrdir (lav/chr*)
+      set chr=$chrdir:t
+      echo axtBesting $chr
+      /cluster/bin/i386/axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      /cluster/bin/i386/axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
+     set tbl="blastzBestRn2"
+     cd $base/pslBest
+     /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
+
+# Make /gbdb links and add them to the axtInfo table:
+# Not done for build 32:
+     mkdir -p /gbdb/hg15/axtBestRn2
+     cd /gbdb/hg15/axtBestRn2
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg15/axtBestRn2/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('rn2','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     /cluster/bin/i386/hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
+     /cluster/bin/i386/hgsql hg15 < axtInfoInserts.sql
+
+# MAKING THE AXTTIGHT FROM AXTBEST
+#		DONE - 2003-05-09 - Hiram, to be verified
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn2.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/pslTight
+    hgLoadPsl hg15 chr*_blastzTightRn2.psl
+
+# XXX END OF RAT BLASTZ
+
