@@ -15,8 +15,8 @@
 #include "cheapcgi.h"
 #include "psl.h"
 #include "dystring.h"
-char *defaultOldDb = "Dec. 12, 2000";
-char *defaultNewDb = "Aug. 6, 2001";
+char *defaultOldDb = "Aug. 6, 2001";
+char *defaultNewDb = "Dec. 22, 2001";
 char *newDb = NULL;
 char *oldDb = NULL;
 char *chrom = NULL;
@@ -53,16 +53,16 @@ struct serverTab
    };
 
 /* old draft versions to choose from */
-struct namePair oldVersions[] = { // { "Oct. 7, 2000", "hg5" },
-				  { "Dec. 12, 2000","hg6" },
+struct namePair oldVersions[] = { 
 				  { "April 1, 2001","hg7" },
-				  { "Aug. 6, 2001", "hg8" }
+				  { "Aug. 6, 2001", "hg8" },
+				  { "Dec. 22, 2001", "hg10"},
 };
 
 struct serverTab serverTab[] =  {
-{"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
-{"hg8", "Aug. 6, 2001", FALSE, "blat3", "17779", "/projects/hg3/gs.8/oo.33/nib"}
+{"hg8", "Aug. 6, 2001", FALSE, "blat3", "17779", "/projects/hg3/gs.8/oo.33/nib"},
+{"hg10", "Dec. 22, 2001", FALSE, "blat4", "17779", "/cluster/store1/gs.11/build28/nib"}
 };
 
 /** print usage and quit */
