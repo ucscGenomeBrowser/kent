@@ -194,8 +194,7 @@ cart = theCart;
 
 /* If we are changing databases, then remove custom track data which will 
    be irrelevant in this new database */
-
-if (!sameString(cgiUsualString("db", "XXX"), cartUsualString(cart, "db", "YYY")))
+if (cgiOptionalString("db"))
     {
     removeCustomTrackData();
     }
