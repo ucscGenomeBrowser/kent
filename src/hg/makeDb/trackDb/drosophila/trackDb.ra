@@ -41,7 +41,7 @@ shortLabel BDGP Non-coding
 longLabel Non-Coding Genes from Berkeley Drosophila Genome Project
 group genes
 priority 46
-visibility dense
+visibility pack
 color 30,130,210
 type genePred 
 
