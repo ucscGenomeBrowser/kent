@@ -227,6 +227,9 @@ stored in a single table rather than one table per chromosome:</P>
   - 800 chromosome bands mapped to golden path by Terry Furey using
   fish data from BAC Resource Consortium
   <LI><A 
+  href="#DbSnp">dbSnpRS</A> 
+  - Information from dbSNP at the reference SNP level </LI>
+  <LI><A 
   href="#PslInfo">dbtssAli</A> 
   - RefSeq mRNA extended to the 5' end from DBTSS (Database of Transcriptional Start Sites)</LI>
   <LI><A 
@@ -269,12 +272,6 @@ stored in a single table rather than one table per chromosome:</P>
   href="#GeneBands">geneBands</A> 
   - Band locations of known genes
   <LI><A 
-  href="#GenMapDb">genMapDb</A> 
-  - BAC clones from GenMapDB placed on the assembly by U Penn (V. Cheung)</LI>
-  <LI><A 
-  href="#GenomicSuperDups">genomicSuperDups</A> 
-  - Duplications of >1000 Bases Sequence </LI>
-  <LI><A 
   href="#GenePredictions">geneid</A> 
   - Gene predictions from the geneid program </LI>
   <LI><A 
@@ -297,6 +294,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PepPredictions">genieKnownPep</A> 
   - Translations of known genes into its corresponding amino acid sequence (Oct. 
   2000 and earlier known gene track)
+  <LI><A 
+  href="#GenMapDb">genMapDb</A> 
+  - BAC clones from GenMapDB placed on the assembly by U Penn (V. Cheung)</LI>
+  <LI><A 
+  href="#GenomicSuperDups">genomicSuperDups</A> 
+  - Duplications of >1000 Bases Sequence </LI>
   <LI><A 
   href="#GenePredictions">genScan</A> 
   - Genscan Gene Predictions </LI>
@@ -494,10 +497,11 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   - Slam predictions of conserved noncoding regions in homologous DNA sequences (rat genome)
   <LI><A 
   href="#SNPsites">snpNih</A> 
-  - Locations of random SNPs as determined by the SNP Consortium 
+  - Locations of SNPs detected by aligning reads from random genomic clones against the genome </LI>
   <LI><A 
   href="#SNPsites">snpTsc</A> 
-  - Locations of random SNPs as determined by the SNP Consortium 
+  - Locations of SNPs detected primarily by looking at overlaps between clones that
+cover the same region </LI>
   <LI><A 
   href="#GenePredictions">softberryGene</A> 
   - Fgenesh++ Gene Predictions </LI>
@@ -841,6 +845,22 @@ The following definition is used for several tables as follows:<BR>
    uint   perGc;        "Percentage of island that is C or G"
    )
 </PRE>
+
+<H4><A name=DbSnp></A>dbSnpRS</H4>
+<PRE>table dbSnpRS 
+"Information from dbSNP at the reference SNP level"
+    (
+    uint    rsId;    	"RS identifier"
+    float   avHet;   	"Average heterozygosity from all observations"
+    float   avHetSE; 	"Standard Error for the average heterozygosity from all observations"
+    string  valid;   	"Validation status of the SNP"
+    char[1] base1;   	"Base of the first allele"
+    char[1] base2;   	"Base of the second allele"
+    string  assembly; 	"Sequence in the ucsc assembly"
+    string  alternate; 	"Sequence of the alternate allele"
+    )
+</PRE>
+
 
 <H4><A name=DupSpMrna></A>DupSpMrna</H4>
 <PRE>table dupSpMrna
@@ -1784,16 +1804,12 @@ of finding simple tandem repeats than RepeatMasker does.
 This table is used for both the snpNih and snpTsc tables.
 <PRE>table snp
 "Single nucleotide polymorphisms"
-   (
-   ushort  bin;           "A field to speed indexing added to many 
-                           tables August 2001"
-   uint    matches;       "Number of bases that match that aren't repeats"
-   uint    misMatches;    "Number of bases that don't match"
-   string chrom;          "Human chromosome or FPC contig"
-   uint   chromStart;     "Start position in chromosome"
-   uint   chromEnd;       "End position in chromosome"
-   string name;           "Name of SNP"
-   )                                                                           
+    (
+    string chrom;      "Human chromosome or FPC contig"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of SNP"
+    )
 </PRE>
 
 <H4><A name=SoftberryHom></A>Softberry Genes - Protein Homologies</H4>
