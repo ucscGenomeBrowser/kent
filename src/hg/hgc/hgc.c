@@ -212,7 +212,7 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
+       hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other,
        tbl);
 }
 
@@ -238,7 +238,7 @@ if (dbList != NULL)
 else
     db2 = "mm2";
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
-       hgcPathAndSettings(), "htcGenePsl", item, chrom, winStart, winEnd,
+       hgcPathAndSettings(), "htcGenePsl", cgiEncode(item), chrom, winStart, winEnd,
        other, db2, tag);
 dbDbFreeList(&dbList);
 }
@@ -249,7 +249,7 @@ void hgcAnchorSomewhereDb(char *group, char *item, char *other,
  * and other parameters. */
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
+	hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
@@ -584,6 +584,16 @@ startColorStr(dy,setAttributeColor(class),track);
 void resetClassStr(struct dyString *dy, int track)
 {
 stopColorStr(dy,track);
+}
+
+int numberOfGaps(char *q,int size) 
+    /* count number of gaps in a string array */
+{
+    int i;
+    int count = 0;
+    for (i = 0 ; i<size ; i++)
+        if (q[i] == '-') count++;
+    return (count);
 }
 
 void axtOneGeneOut(struct axt *axtList, int lineSize, 
@@ -954,21 +964,24 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         resetClassStr(dyQ,1);
         dyStringAppendC(dyQprot,'\n');
         dyStringAppendC(dyTprot,'\n');
-        fputs(dyTprot->string,f);
-        fputs(dyT->string,f);
-
-        for (i=0; i<oneSize; ++i)
+        if (numberOfGaps(q,oneSize) < oneSize)
             {
-            if (toupper(q[i]) == toupper(t[i]) && isalpha(q[i]))
-                fputc('|', f);
-            else
-                fputc(' ', f);
-            }
-        fputc('\n', f);
+            fputs(dyTprot->string,f);
+            fputs(dyT->string,f);
 
-        fputs(dyQ->string,f);
-        fputs(dyQprot->string,f);
-        fputc('\n', f);
+            for (i=0; i<oneSize; ++i)
+                {
+                if (toupper(q[i]) == toupper(t[i]) && isalpha(q[i]))
+                    fputc('|', f);
+                else
+                    fputc(' ', f);
+                }
+            fputc('\n', f);
+
+            fputs(dyQ->string,f);
+            fputs(dyQprot->string,f);
+            fputc('\n', f);
+            }
         if (oneSize > lineSize)
             oneSize = lineSize;
         /*
