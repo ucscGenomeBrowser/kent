@@ -116,8 +116,6 @@ if (pp->type == pptInto)
 	module = hashStoreName(tkz->modules, dy->string);
 	}
     pp->name = module;
-#ifdef SOON
-#endif /* SOON */
     dyStringFree(&dy);
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
@@ -133,14 +131,9 @@ struct pfParse *program = pfParseNew(pptProgram, NULL, NULL);
 struct pfParse *pp = pfParseFile(fileName, tkz, program);
 
 
-program->children = pp;
-pfParseDump(program, 0, stdout);
-
-uglyf(">>>AND NOW<<<\n");
-
-expandInto(program, tkz, program);
-#ifdef SOON
-#endif /* SOON */
+expandInto(program, tkz, pp);
+slAddHead(&program->children, pp);
+slReverse(&program->children);
 
 pfParseDump(program, 0, stdout);
 }

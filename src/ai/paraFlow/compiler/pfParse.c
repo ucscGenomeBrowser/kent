@@ -1148,7 +1148,6 @@ switch (tok->type)
 	statement = pfParseExpression(parent, &tok, scope);
 	break;
     default:
-	pfTokenDump(tok, uglyOut, FALSE);
         expectingGot("statement", tok);
 	statement = NULL;
 	break;
