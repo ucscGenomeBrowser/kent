@@ -1416,7 +1416,7 @@ while (readGbInfo(lf))
                     else
                         {
                         /* Replace illegal directory chars */
-                        orgDir = replaceChars(org, " ()'/", ".###~");
+                        orgDir = replaceChars(org, " ()'/", "_###~");
                         }
             
                     if (!hashLookup(orgHash, org))
