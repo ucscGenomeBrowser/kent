@@ -56,13 +56,14 @@ for (i=0; i<count; ++i)
     charOut(f, 'N');
 }
 
-void addFa(FILE *f, char *ctgFaName)
-/* Append contents of FA file. */
+int addFa(FILE *f, char *ctgFaName)
+/* Append contents of FA file. Return the number of bases written. */
 {
 struct lineFile *lf = lineFileOpen(ctgFaName, TRUE);
 int lineSize;
 char *line, c;
 int recordCount = 0;
+int baseCount = 0;
 int i;
 
 while (lineFileNext(lf, &line, &lineSize))
@@ -79,11 +80,15 @@ while (lineFileNext(lf, &line, &lineSize))
 	    {
 	    c = line[i];
 	    if (isalpha(c))
+		{
 	        charOut(f, c);
+		baseCount++;
+		}
 	    }
 	}
     }
 lineFileClose(&lf);
+return(baseCount);
 }
 
 struct lift
@@ -95,6 +100,7 @@ struct lift
     int start;		/* Start of contig in chromosome. */
     int size;		/* Size of contig. */
     int nBefore;	/* Number of N's to insert before. */
+    int chromSize;      /* Chromosome size. */
     };
 
 void ctgToChromFa(char *chromName, char *insertFile, char *chromDir, 
@@ -110,6 +116,8 @@ FILE *f = mustOpen(outName, "w");
 char ctgFaName[512];
 char *words[2];
 int wordCount;
+int liftChromSize = 0;
+int actualChromSize = 0;
 boolean isFirst = TRUE;
 
 chromInsertsRead(insertFile, insertHash);
@@ -124,16 +132,18 @@ while (lineFileNextRow(lf, words, 1))
         {
 	struct lift *lift = hashMustFindVal(liftHash, contig);
 	nSize = lift->nBefore;
+	liftChromSize = lift->chromSize;
 	}
     else
         nSize = chromInsertsGapSize(chromInserts, rmChromPrefix(contig), isFirst);
     hashAddUnique(uniq, contig, NULL);
     addN(f, nSize);
+    actualChromSize += nSize;
     isFirst = FALSE;
     sprintf(ctgFaName, "%s/%s/%s.fa", chromDir, contig, contig);
     if (fileExists(ctgFaName))
         {
-	addFa(f, ctgFaName);
+	actualChromSize += addFa(f, ctgFaName);
 	}
     }
 lineFileClose(&lf);
@@ -141,7 +151,11 @@ if (chromInserts != NULL)
     if  ((bi = chromInserts->terminal) != NULL)
         {
 	addN(f, bi->size);
+	actualChromSize += bi->size;
 	}
+if ((liftHash != NULL) && (actualChromSize != liftChromSize))
+    errAbort("Error: chromosome size from lift file is %d, but actual fa size is %d.  Possible inconsistency between lift and inserts?",
+	     liftChromSize, actualChromSize);
 if (linePos != 0)
    fputc('\n', f);
 fclose(f);
@@ -169,6 +183,7 @@ while (lineFileRow(lf, row))
     lift->start = lineFileNeedNum(lf, row, 0);
     lift->size = lineFileNeedNum(lf, row, 2);
     lift->nBefore = lift->start - lastEnd;
+    lift->chromSize = lineFileNeedNum(lf, row, 4);
     lastEnd = lift->start + lift->size;
     }
 return hash;
