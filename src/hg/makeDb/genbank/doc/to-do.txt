@@ -581,3 +581,5 @@ without refseq:
   program run after gbProcess would be good.
 
 - NCBI index has species wrong for AB107958
+
+- NC_005036 is incorrectly classified as mRNA

@@ -3,11 +3,11 @@
 OPT= -ggdb
 
 KENT = ${GBROOT}/../kent/src
-export MYSQLINC=/projects/hg2/usr/markd/genefind/mysql/include/mysql
-export MYSQLLIBS=/projects/hg2/usr/markd/genefind/mysql/lib/mysql/libmysqlclient.a
-ifeq ($(wildcard ${MYSQLLIBS}),)
-    export MYSQLINC=/usr/include/mysql
-    export MYSQLLIBS=-lmysqlclient
+export MYSQLINC=/usr/include/mysql
+export MYSQLLIBS=-lmysqlclient
+ifeq ($(wildcard ${MYSQLINC}/*.h),)
+    export MYSQLINC=/projects/hg2/usr/markd/genefind/mysql/include/mysql
+    export MYSQLLIBS=/projects/hg2/usr/markd/genefind/mysql/lib/mysql/libmysqlclient.a
 endif
 
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc -I$(MYSQLINC)

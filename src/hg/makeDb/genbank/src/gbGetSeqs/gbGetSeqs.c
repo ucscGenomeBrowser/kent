@@ -3,21 +3,24 @@
 #include "gbGenome.h"
 #include "gbUpdate.h"
 #include "gbProcessed.h"
+#include "gbAligned.h"
 #include "gbEntry.h"
 #include "gbRelease.h"
 #include "gbFileOps.h"
 #include "gbVerb.h"
+#include "seqData.h"
+#include "pslData.h"
+#include "raData.h"
 #include "common.h"
 #include "hash.h"
 #include "portable.h"
 #include "options.h"
-#include "gbFa.h"
-#include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.5 2003/07/14 19:53:25 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.6 2003/07/19 21:26:33 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"get", OPTION_STRING},
     {"gbRoot", OPTION_STRING},
     {"db", OPTION_STRING},
     {"native", OPTION_BOOLEAN},
@@ -29,13 +32,15 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-/* maximum faction of sequence that can be invalid mRNA characters */
-#define MAX_INVALID_MRNA_BASES 0.01
-
 /* global options from command line */
+static unsigned gSrcDb;
+static unsigned gType;
 static unsigned gOrgCats;
 static boolean gInclVersion;
 static boolean gAllowMissing;
+static char* gGetWhat;  /* "seq", "psl", "intronPsl" */
+static unsigned gGetState;  /* getting GB_PROCESSED | GB_ALIGNED */
+static char* gDatabase;
 
 struct seqIdSelect
 /* Record in hash table of a sequence id that was specified  */
@@ -78,6 +83,76 @@ while (lineFileNextRow(lf, words, 1))
 gzLineFileClose(&lf);
 }
 
+int idSelectedProcessed(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
+/* check a specified the sequence id is, if so return version, or 0
+ * if not aligned */
+{
+if (seqIdSelect->version == 0)
+    {
+    /* version not specifed, return latest */
+    return entry->processed->version;
+    }
+else
+    {
+    /* version specified */
+    struct gbProcessed* processed
+        = gbEntryFindProcessed(entry, seqIdSelect->version);
+    if (processed == NULL)
+        {
+        fprintf(stderr, "Error: %s does not have version %d \n",
+                entry->acc, seqIdSelect->version);
+        gNumMissingVersions++;
+        return 0;
+        }
+    else
+        return processed->version;
+    }
+}
+
+int idSelectedAligned(struct gbEntry* entry, struct seqIdSelect *seqIdSelect)
+/* check a specified the sequence id is, if so return version, or 0
+ * if not aligned */
+{
+if (seqIdSelect->version == 0)
+    {
+    /* version not specifed, return latest */
+    if (entry->aligned == NULL)
+        return 0;
+    else
+        return entry->aligned->version;
+    }
+else
+    {
+    /* version specified */
+    struct gbAligned* aligned
+        = gbEntryFindAlignedVer(entry, seqIdSelect->version);
+    if (aligned == NULL)
+        {
+        /* no aligned entry, generate error if no processed  */
+        if (gbEntryFindProcessed(entry, seqIdSelect->version) == NULL)
+            {
+            fprintf(stderr, "Error: %s does not have version %d \n",
+                    entry->acc, seqIdSelect->version);
+            gNumMissingVersions++;
+            }
+        else
+            {
+            /* no aligned entry, means we havn't tried to align it yet */
+            fprintf(stderr, "Warning: %s.%d is in update that is not aligned\n",
+                    entry->acc, seqIdSelect->version);
+            }
+        return 0;
+        }
+    else
+        {
+        if (aligned->numAligns > 0)
+            return aligned->version;
+        else
+            return 0;
+        }
+    }
+}
+
 int idSelectedVer(struct gbEntry* entry)
 /* check if the sequence id was specified, if so return version, or 0
  * if not specified */
@@ -86,21 +161,10 @@ struct seqIdSelect *seqIdSelect = hashFindVal(gIdHash, entry->acc);
 int selectVer = 0;
 if (seqIdSelect != NULL)
     {
-    if (seqIdSelect->version != 0)
-        {
-        struct gbProcessed* processed
-            = gbEntryFindProcessed(entry, seqIdSelect->version);
-        if (processed == NULL)
-            {
-            fprintf(stderr, "Error: %s does not have version %d \n",
-                    entry->acc, seqIdSelect->version);
-            gNumMissingVersions++;
-            }
-        else
-            selectVer = processed->version;
-        }
+    if (gGetState == GB_PROCESSED)
+        selectVer = idSelectedProcessed(entry, seqIdSelect);
     else
-        selectVer = entry->processed->version;;
+        selectVer = idSelectedAligned(entry, seqIdSelect);
     if (selectVer != 0)
         seqIdSelect->count++;
     }
@@ -115,19 +179,11 @@ boolean orgCatSelected(struct gbEntry* entry)
 return ((entry->orgCat & gOrgCats) || (entry->orgCat == 0));
 }
 
-boolean shouldSelect(struct gbEntry* entry)
-/* check if the entry should be selected */
-{
-if (!orgCatSelected(entry))
-    return FALSE;
-else
-    return TRUE;
-}
-
 void selectEntry(struct gbEntry* entry)
 /* Mark an entry if it passes criteria */
 {
-if (shouldSelect(entry))
+boolean orgCatOk = orgCatSelected(entry);
+if (orgCatOk)
     {
     int selectVer;
     if (gIdHash != NULL)
@@ -139,6 +195,17 @@ if (shouldSelect(entry))
         entry->selectVer = selectVer;
         entry->processed->update->selectProc = TRUE;
         }
+    }
+if (verbose >= 3)
+    {
+    if (!orgCatOk)
+        gbVerbPr(3, "select: skip %s: is %s", entry->acc, gbOrgCatName(entry->orgCat));
+    else if (entry->selectVer <= 0)
+        gbVerbPr(3, "select: skip %s", entry->acc);
+    else
+        gbVerbPr(3, "select: %s.%d in %s", entry->acc, entry->selectVer,
+                 entry->processed->update->name);
+        
     }
 }
 
@@ -153,76 +220,39 @@ while ((hel = hashNext(&cookie)) != NULL)
     selectEntry((struct gbEntry*)hel->val);
 }
 
-boolean isValidMrnaSeq(struct gbFa* inFa)
-/* check if the sequence appears to be a valid mrna sequence */
-{
-char* seq = gbFaGetSeq(inFa);
-int numInvalid = numAllowedRNABases(seq);
-int maxInvalid = MAX_INVALID_MRNA_BASES * inFa->seqLen;
-if ((MAX_INVALID_MRNA_BASES > 0.0) && (maxInvalid == 0))
-    maxInvalid = 1;  /* round up */
-return (numInvalid <= maxInvalid);
-}
-
-void processSeq(struct gbSelect* select, struct gbFa* inFa, struct gbFa* outFa)
-/* process the next sequence from an update fasta file, possibly outputing
- * the sequence */
-{
-char acc[GB_ACC_BUFSZ];
-short version = gbSplitAccVer(inFa->id, acc);
-
-/* will return NULL on ignored sequences */
-struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (entry->selectVer == version))
-    {
-    /* selected, output if it appears valid */
-    if (isValidMrnaSeq(inFa))
-        {
-        if (!gInclVersion)
-            strcpy(inFa->id, acc);  /* remove version */
-        gbFaWriteFromFa(outFa, inFa, NULL);
-        }
-    else
-        {
-        fprintf(stderr, "warning: %s does not appear to be a valid mRNA sequence, skipped: %s:%d\n",
-                inFa->id, inFa->fileName, inFa->recLineNum);
-        }
-    }
-}
-
-void processUpdate(struct gbSelect* select, struct gbUpdate* update,
-                   struct gbFa* outFa)
-/* process files in selected update */
-{
-char inFasta[PATH_LEN];
-struct gbFa* inFa;
-select->update = update;
-gbProcessedGetPath(select, "fa", inFasta);
-inFa = gbFaOpen(inFasta, "r"); 
-while (gbFaReadNext(inFa))
-    processSeq(select, inFa, outFa);
-gbFaClose(&inFa);
-select->update = NULL;
-}
-
-void getPartitionSeqs(struct gbSelect* select, struct gbFa* outFa)
-/* Get sequences from a partation */
+void getPartitionData(struct gbSelect* select)
+/* Get sequences or PSL from a partation */
 {
 struct gbUpdate *update;
+gbVerbEnter(2, "process partition: %s", gbSelectDesc(select));
+
 gbReleaseLoadProcessed(select);
+if (gGetState == GB_ALIGNED)
+    gbReleaseLoadAligned(select);
 selectEntries(select);
 
 /* process select updates */
 for (update = select->release->updates; update != NULL; update = update->next)
     {
     if (update->selectProc)
-        processUpdate(select, update, outFa);
+        {
+        gbVerbEnter(2, "process update: %s", update->name);
+        select->update = update;
+        if (sameString(gGetWhat, "seq"))
+            seqDataProcessUpdate(select);
+        else if (sameString(gGetWhat, "ra"))
+            raDataProcessUpdate(select);
+        else
+            pslDataProcessUpdate(select);
+        gbVerbLeave(2, "process update: %s", update->name);
+        }
     }
 gbReleaseUnload(select->release);
+gbVerbLeave(2, "process partition: %s", gbSelectDesc(select));
 }
 
-void checkForMissingSeqs()
-/* check for specified sequences that were not found */
+void checkForMissingAcc()
+/* check for specified accessions that were not found */
 {
 struct hashCookie cookie = hashFirst(gIdHash);
 struct hashEl *hel;
@@ -249,40 +279,50 @@ if (numNotFound > 0)
     }
 }
 
-void gbGetSeqs(char *gbRoot, char *database, unsigned srcDb, unsigned type,
-               char *outFasta)
+void gbGetSeqs(char *gbRoot, char *outFile)
 /* Get fasta file of some partation GenBank or RefSeq. */
 {
-struct gbIndex* index = gbIndexNew(database, gbRoot);
+struct gbIndex* index = gbIndexNew(gDatabase, gbRoot);
 struct gbSelect* selectList;
 struct gbSelect* select;
-struct gbFa* outFa;
 
-selectList = gbIndexGetPartitions(index, GB_PROCESSED, srcDb,
-                                  NULL, type, GB_NATIVE|GB_XENO, NULL);
+selectList = gbIndexGetPartitions(index, gGetState, gSrcDb, NULL,
+                                  gType, gOrgCats, NULL);
 if (selectList == NULL)
-    errAbort("no matching release or types");
+    errAbort("no matching release or types need, make sure -gbRoot is correct");
 
-outFa = gbFaOpen(outFasta, "w"); 
+if (sameString(gGetWhat, "seq"))
+    seqDataOpen(gInclVersion, outFile);
+else if (sameString(gGetWhat, "ra"))
+    raDataOpen(outFile);
+else
+    pslDataOpen(gGetWhat, gInclVersion, outFile);
 
 for (select = selectList; select != NULL; select = select->next)
-    getPartitionSeqs(select, outFa);
+    getPartitionData(select);
 
-gbFaClose(&outFa);
+if (sameString(gGetWhat, "seq"))
+    seqDataClose();
+else if (sameString(gGetWhat, "ra"))
+    raDataClose();
+else
+    pslDataClose();
 slFreeList(&selectList);
 gbIndexFree(&index);
 if (gIdHash != NULL)
-    checkForMissingSeqs();
+    checkForMissingAcc();
 }
 
 void usage()
 /* print usage and exit */
 {
-errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
+errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "\n"
-         "Get fasta file of some partation GenBank or RefSeq.\n"
+         "Get sequences or alignments of some partation GenBank or RefSeq.\n"
          "\n"
          " Options:\n"
+         "    -get=what - what is seq, psl, or intronPsl, ra.  Default is\n"
+         "     seq.\n"
          "    -gbRoot=rootdir - specified the genbank root directory.  This\n"
          "     must contain the data/processed/ directory.  Defaults to \n"
          "     current directory.\n"
@@ -302,8 +342,9 @@ errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
          " Arguments:\n"
          "     srcDb - genbank or refseq\n"
          "     type - type. mrna, or est\n"
-         "     seqFa - fasta file to create.  It will be compressed if it\n"
-         "             ends in .gz."
+         "     seqFa - output file.  If -get=seq, a fasta file is created,\n"
+         "             others are PSLs.  It will be compressed if it ends\n"
+         "             in .gz."
          "     ids - If sequence ids are specified, only they are extracted.\n"
          "           They may optionally include the version numnber.\n"
          "\n");
@@ -311,21 +352,20 @@ errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
 
 int main(int argc, char* argv[])
 {
-unsigned srcDb, type;
-char *gbRoot, *database, *outFasta;
+char *gbRoot, *outFile;
 
 optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
 gbVerbInit(optionInt("verbose", 0));
 
-srcDb = gbParseSrcDb(argv[1]);
-type = gbParseType(argv[2]);
-outFasta = argv[3];
+gSrcDb = gbParseSrcDb(argv[1]);
+gType = gbParseType(argv[2]);
+outFile = argv[3];
 gbRoot = optionVal("gbRoot", NULL);
-database = optionVal("db", NULL);
+gDatabase = optionVal("db", NULL);
 if ((optionExists("native") || optionExists("xeno"))
-    && (database == NULL))
+    && (gDatabase == NULL))
     errAbort("must supply -db with -native or -xeno");
 gOrgCats = 0;
 if (optionExists("native"))
@@ -336,6 +376,22 @@ if (gOrgCats == 0)
     gOrgCats = GB_NATIVE|GB_XENO;
 gInclVersion = optionExists("inclVersion");
 gAllowMissing = optionExists("allowMissing");
+gGetWhat = optionVal("get", "seq");
+if (!(sameString(gGetWhat, "seq")
+      || sameString(gGetWhat, "psl")
+      || sameString(gGetWhat, "intronPsl")
+      || sameString(gGetWhat, "ra")))
+    errAbort("invalid value for -get, expected seq, psl, intronPsl, or ra: %s",
+             gGetWhat);
+if ((sameString(gGetWhat, "psl") || sameString(gGetWhat, "intronPsl")))
+    {
+    if (gDatabase == NULL)
+        errAbort("must specify -db to get psl alignments");
+    gGetState = GB_ALIGNED;
+    }
+else
+    gGetState = GB_PROCESSED;
+
 
 if (optionExists("accFile"))
     loadAccSelectFile(optionVal("accFile", NULL));
@@ -346,7 +402,7 @@ if (argc > 4)
     for (argi = 4; argi < argc; argi++)
         addIdSelect(argv[argi]);
     }
-gbGetSeqs(gbRoot, database, srcDb, type, outFasta);
+gbGetSeqs(gbRoot, outFile);
 
 return 0;
 }

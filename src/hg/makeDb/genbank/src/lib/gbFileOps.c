@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.4 2003/07/14 19:53:25 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.5 2003/07/19 21:26:34 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -445,7 +445,7 @@ if (compressor != NULL)
         if (sameString(mode, "w"))
             options |= PIPELINE_WRITE;
         else if (sameString(mode, "a"))
-            options |= PIPELINE_APPEND;
+            errAbort("gzMustOpen append mode does not work for compressed output");
         else
             errAbort("invalid mode for gzMustOpen \"%s\"", mode);
         }

@@ -1,7 +1,7 @@
 GBROOT = ../..
 include ${GBROOT}/common.mk
 
-O = gbGetSeqs.o
+O = seqData.o pslData.o raData.o gbGetSeqs.o
 
 PROGS = $(BINARCH)/gbGetSeqs
 
