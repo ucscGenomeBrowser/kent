@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.4 2004/04/13 17:59:25 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.5 2004/04/15 00:39:29 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -215,7 +215,6 @@ boolean doCheckTermRegex()
 {
 struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
 struct hgFindSpec *hfs = NULL;
-struct slName *allChroms = hAllChromNames();
 boolean gotError = FALSE;
 
 hgFindSpecGetAllSpecs(&shortList, &longList);
@@ -227,7 +226,6 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
     if (isNotEmpty(hfs->termRegex))
 	{
 	char *table = NULL, *query = NULL;
-	struct hTableInfo *hti = NULL;
 	if (isNotEmpty(hfs->xrefTable))
 	    {
 	    table = hfs->xrefTable;
@@ -238,9 +236,10 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 	    table = hfs->searchTable;
 	    query = hfs->query;
 	    }
-	hti = hFindTableInfo(NULL, table);
-	if (hti != NULL && isNotEmpty(query))
+	if (isNotEmpty(query))
 	    {
+	    struct slName *tableList = hSplitTableNames(table);
+	    struct slName *tPtr = NULL;
 	    char *termPrefix = hgFindSpecSetting(hfs, "termPrefix");
 	    char *field = getFieldFromQuery(query, hfs->searchName);
 	    char *termRegex = hfs->termRegex;
@@ -249,28 +248,15 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 		termRegex += strlen(termPrefix)+1;
 	    verbose(2, "Checking termRegex \"%s\" for table %s (search %s).\n",
 		    termRegex, table, hfs->searchName);
-	    if (hti->isSplit)
+	    for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 		{
-		struct slName *cn;
-		for (cn = allChroms;  cn != NULL;  cn = cn->next)
-		    {
-		    char fullTableName[256];
-		    safef(fullTableName, sizeof(fullTableName), "%s_%s",
-			  cn->name, table);
-		    gotError |= checkRegexOnTableField(termRegex, altRegex,
-				       fullTableName, field, hfs->searchName);
-		    }
-		}
-	    else
-		{
-		gotError |= checkRegexOnTableField(termRegex, altRegex, table,
-						   field, hfs->searchName);
+		gotError |= checkRegexOnTableField(termRegex, altRegex,
+				       tPtr->name, field, hfs->searchName);
 		}
 	    }
 	}
     }
 
-slFreeList(&allChroms);
 hgFindSpecFreeList(&wholeList);
 return(gotError);
 }
@@ -292,15 +278,20 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
     if (isNotEmpty(hfs->query) && hTableOrSplitExists(hfs->searchTable))
 	{
 	char *field = getFieldFromQuery(hfs->query, hfs->searchName);
-	if (! hFieldHasIndex(hfs->searchTable, field))
+	struct slName *tableList = hSplitTableNames(hfs->searchTable);
+	struct slName *tPtr = NULL;
+	for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    {
-	    gotError = TRUE;
-	    printf("Error: No SQL index defined for %s.%s (search %s)\n",
-		   hfs->searchTable, field, hfs->searchName);
+	    if (! hFieldHasIndex(tPtr->name, field))
+		{
+		gotError = TRUE;
+		printf("Error: No SQL index defined for %s.%s (search %s)\n",
+		       tPtr->name, field, hfs->searchName);
+		}
+	    else
+		verbose(2, "Index exists for %s.%s (search %s)\n",
+			tPtr->name, field, hfs->searchName);
 	    }
-	else
-	    verbose(2, "Index exists for %s.%s (search %s)\n",
-		    hfs->searchTable, field, hfs->searchName);
 	}
     if (isNotEmpty(hfs->xrefQuery) && hTableOrSplitExists(hfs->xrefTable))
 	{
