@@ -15,6 +15,8 @@ int minScore = 15;
 int minMatch = 30;
 int minUniqueMatch = 20;
 int maxBadPpt = 700;
+int minAli = 600;
+int minAliT = 0;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -31,19 +33,27 @@ errAbort(
     "    -minScore=N (default %d) Minimum score to pass filter\n"
     "    -minMatch=N (default %d) Min match (including repeats to pass)\n"
     "    -minUniqueMatch (default %d) Min non-repeats to pass)\n"
-    "    -maxBadPpt (default %d) Maximum divergence in parts per thousand\n",
+    "    -maxBadPpt (default %d) Maximum divergence in parts per thousand\n"
+    "    -minAli (default %d) Minimum ratio query in alignment in ppt\n"
+    "    -minAliT (default %d) Like minAli for target\n",
     reward, cost, gapOpenCost, gapSizeLogMod, minScore, minMatch,
-    minUniqueMatch, maxBadPpt);
+    minUniqueMatch, maxBadPpt, minAli, minAliT);
 }
 
 boolean filterOk(struct psl *psl)
 /* Return TRUE if psl passes filter. */
 {
 int score;
+int totalAli = psl->match + psl->repMatch + psl->misMatch;
+double totAli1000 = totalAli * 1000;
 
 if (psl->match + psl->repMatch < minMatch)
     return FALSE;
 if (psl->match < minUniqueMatch)
+    return FALSE;
+if (totAli1000 / psl->qSize < minAli)
+    return FALSE;
+if (totAli1000 / psl->tSize < minAliT)
     return FALSE;
 if (pslCalcMilliBad(psl, FALSE) > maxBadPpt)
     return FALSE;
@@ -112,6 +122,7 @@ minScore = cgiUsualInt("minScore", minScore);
 minMatch = cgiUsualInt("minMatch", minMatch);
 minUniqueMatch = cgiUsualInt("minUniqueMatch", minUniqueMatch);
 maxBadPpt = cgiUsualInt("maxBadPpt", maxBadPpt);
+minAli = cgiUsualInt("minAli", minAli);
 if (cgiBoolean("dir") || cgiBoolean("dirs"))
     {
     pslFilterDir(argv[1], argv[2]);
