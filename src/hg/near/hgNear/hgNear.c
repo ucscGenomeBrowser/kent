@@ -14,7 +14,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.38 2003/08/02 00:00:38 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.39 2003/08/02 04:33:04 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -171,7 +171,7 @@ if (gp->chrom != NULL)
 hPrintf("\">");
 }
 
-static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
+void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print self and hyperlink to make this the search term. */
 {
@@ -551,7 +551,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     char *search = "";
     if (gp != NULL) search = gp->name;
     hPrintf(" search ");
-    cgiMakeTextVar(searchVarName,  search, 50);
+    cgiMakeTextVar(searchVarName,  search, 25);
     }
 
 /* Do go button. */
@@ -938,8 +938,10 @@ else if (sameString(type, "distance"))
     setupColumnDistance(col, s);
 else if (sameString(type, "knownPos"))
     setupColumnKnownPos(col, s);
-else if (sameString(type, "lookupKnown"))
-    setupColumnLookupKnown(col, s);
+else if (sameString(type, "knownDetails"))
+    setupColumnKnownDetails(col, s);
+else if (sameString(type, "knownName"))
+    setupColumnKnownName(col, s);
 else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
 else

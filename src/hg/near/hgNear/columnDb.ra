@@ -7,10 +7,10 @@ type num
 
 name name
 shortLabel Name
-longLabel gene name/link to details page
+longLabel gene name/select gene
 priority 2
 visibility on
-type lookupKnown kgXref kgID geneSymbol
+type knownName kgXref kgID geneSymbol
 search fuzzy
 searchLabel Known Gene Names
 
@@ -91,10 +91,10 @@ type knownPos
 
 name description
 shortLabel Description
-longLabel short description line
+longLabel short description line/link to details page
 priority 8
 visibility on
-type lookup kgXref kgID description
+type knownDetails kgXref kgID description
 search fuzzy
 searchLabel Known Gene Descriptions
 

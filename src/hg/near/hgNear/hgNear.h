@@ -161,6 +161,10 @@ void makeTitle(char *title, char *helpName);
 void selfAnchorId(struct genePos *gp);
 /* Print self anchor to given id. */
 
+void cellSelfLinkPrint(struct column *col, struct genePos *gp,
+	struct sqlConnection *conn);
+/* Print self and hyperlink to make this the search term. */
+
 void selfAnchorSearch(struct genePos *gp);
 /* Print self anchor to given search term. */
 
@@ -186,10 +190,6 @@ void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnectio
 
 void labelSimplePrint(struct column *col);
 /* This just prints cell->shortLabel. */
-
-static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
-	struct sqlConnection *conn);
-/* Print self and hyperlink to make this the search term. */
 
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
@@ -259,8 +259,11 @@ void setupColumnKnownPos(struct column *col, char *parameters);
 /* Set up column that links to genome browser based on known gene
  * position. */
 
-void setupColumnLookupKnown(struct column *col, char *parameters);
+void setupColumnKnownDetails(struct column *col, char *parameters);
 /* Set up a column that links to details page for known genes. */
+
+void setupColumnKnownName(struct column *col, char *parameters);
+/* Set up a column that looks up name to display, and selects on a click. */
 
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */

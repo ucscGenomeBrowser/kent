@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.8 2003/06/25 21:47:28 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.9 2003/08/02 04:33:05 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -90,7 +90,7 @@ else
 hPrintf("</TD>");
 }
 
-void genePredPosSearchControls(struct column *col, struct sqlConnection *conn)
+static void genePredPosSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
 hPrintf("chromosome: ");
@@ -101,7 +101,7 @@ hPrintf(" end: ");
 advSearchRemakeTextVar(col, "end", 8);
 }
 
-struct genePos *genePredPosAdvancedSearch(struct column *col, 
+static struct genePos *genePredPosAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on position. */
 {
@@ -226,7 +226,7 @@ genePredPosMethods(col, "knownGene");
 col->cellVal = knownPosCellVal;
 }
 
-void lookupKnownCellPrint(struct column *col, struct genePos *gp, 
+static void linkToDetailsCellPrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Print a link to known genes details page. */
 {
@@ -296,7 +296,7 @@ dyStringFree(&dy);
 return sr;
 }
 
-struct searchResult *lookupKnownSimpleSearch(struct column *col, 
+static struct searchResult *knownNameSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Look for matches to known genes. */
 {
@@ -311,11 +311,17 @@ for (ka = kaList; ka != NULL; ka = ka->next)
 return srList;
 }
 
-void setupColumnLookupKnown(struct column *col, char *parameters)
+void setupColumnKnownDetails(struct column *col, char *parameters)
 /* Set up a column that links to details page for known genes. */
 {
 setupColumnLookup(col, parameters);
-col->cellPrint = lookupKnownCellPrint;
-col->simpleSearch = lookupKnownSimpleSearch;
+col->cellPrint = linkToDetailsCellPrint;
 }
 
+void setupColumnKnownName(struct column *col, char *parameters)
+/* Set up a column that looks up name to display, and selects on a click. */
+{
+setupColumnLookup(col, parameters);
+col->cellPrint = cellSelfLinkPrint;
+col->simpleSearch = knownNameSimpleSearch;
+}
