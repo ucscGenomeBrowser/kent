@@ -747,8 +747,8 @@ for (;;)
 
 
 
-/* Replace trailing white space with zeroes. */
 void eraseTrailingSpaces(char *s)
+/* Replace trailing white space with zeroes. */
 {
 int len = strlen(s);
 int i;
@@ -785,10 +785,12 @@ for (;;)
 char *trimSpaces(char *s)
 /* Remove leading and trailing white space. */
 {
+if (s != NULL)
+    {
     s = skipLeadingSpaces(s);
     eraseTrailingSpaces(s);
-    if (s[0] == 0) return NULL;
-    return s;
+    }
+return s;
 }
 
 char *firstWordInLine(char *line)
