@@ -175,7 +175,7 @@ slFreeList(&overlappingRecs);
 }
 
 static void doAggregateOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
-/* Do agreate overlap process of chromAnn object given the criteria,
+/* Do aggreate overlap process of chromAnn object given the criteria,
  * and if so output */
 {
 float overlap = selectAggregateOverlap(selectOpts, inCa);
@@ -367,7 +367,8 @@ errAbort("%s:\n"
          "  -excludeSelf - don't compare alignments with the same coordinates and name.\n"
          "  -aggregate - instead of computing overlap bases on individual select entries, \n"
          "      compute it based on the total number of inFile bases overlap by select file\n"
-         "      records. Some other options will not work with this aggregate counting.\n"
+         "      records. -overlapSimilarity and -mergeOutput will not work with\n"
+         "      this option.\n"
          "  -overlapThreshold=0.0 - minimun fraction of an inFile block that\n"
          "      must be overlapped by a single select record to be considered overlapping.\n"
          "      Note that this is only coverage by a single select record, not total coverage.\n"
@@ -375,6 +376,7 @@ errAbort("%s:\n"
          "      Note that this is only coverage by a single select record and this is;\n"
          "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
          "      will select identical records (or CDS if both CDS options are specified.\n"
+         "      Not currently supported with -aggregate.\n"
          "  -statsOutput - output overlap statistics instead of selected records. \n"
          "      If no overlap criteria is specified, all overlapping entries are reported,\n"
          "      Otherwise only the pairs passing the citeria are reported. This results\n"
@@ -389,6 +391,7 @@ errAbort("%s:\n"
          "         inRec<tab>selectRec.\n"
          "      if multiple select records hit, inRec is repeated.\n"
          "      This will increase the memory required\n"
+         "      Not currently supported with -aggregate.\n"
          "  -idOutput - output a table seprate file of pairs of\n"
          "        inId selectId\n"
          "      with -aggregate, omly a single column of inId is written\n"
