@@ -48,5 +48,8 @@
      longest job to longest finished job. Fixed paraFormatIp to 
      return host instead of network order. Added reminder to 
      documentation that the machine names in .ms files should 
-     match the $HOST variables on the nodes.
+     match the $HOST variables on the nodes.  Fixed parsol remove machine 
+     so you don't have to do it twice, and so it logs user and requires
+     a comment for the log so admin knows why it was removed.
+
 
