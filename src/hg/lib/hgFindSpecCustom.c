@@ -13,25 +13,48 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.3 2004/04/03 19:38:55 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.4 2004/04/06 07:04:33 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
 #define REGEX_OPTIONS (REG_NOSUB | REG_EXTENDED | REG_ICASE)
 
+static regex_t *compileRegex(char *exp, char *what, int compileFlags)
+/* Compile exp (or die with an informative-as-possible error message). 
+ * Cache pre-compiled regex's internally (so don't free result after use). */
+{
+static struct hash *reHash = NULL;
+struct hashEl *hel = NULL;
+
+if (reHash == NULL)
+    reHash = newHash(10);
+hel = hashLookup(reHash, exp);
+if (hel != NULL)
+    return((regex_t *)hel->val);
+else
+    {
+    regex_t *compiledExp = NULL;
+    int errNum = 0;
+    AllocVar(compiledExp);
+    errNum = regcomp(compiledExp, exp, compileFlags);
+    if (errNum != 0)
+	{
+	char errBuf[512];
+	regerror(errNum, compiledExp, errBuf, sizeof(errBuf));
+	errAbort("%s \"%s\" got regular expression compilation error %d:\n%s\n",
+		 what, exp, errNum, errBuf);
+	}
+    hashAdd(reHash, exp, compiledExp);
+    return(compiledExp);
+    }
+}
+
 boolean matchRegex(char *name, char *exp)
 /* Return TRUE if name matches the regular expression pattern
  * (case insensitive). */
 {
-regex_t compiledExp;
-char *errStr;
-int errNum;
-
-if (errNum = regcomp(&compiledExp, exp, REGEX_OPTIONS))
-    errAbort("Regular expression compilation error %d for expression \"%s\"",
-	     errNum, exp);
-
-return(regexec(&compiledExp, name, 0, NULL, 0) == 0);
+regex_t *compiledExp = compileRegex(exp, "Regular expression", REGEX_OPTIONS);
+return(regexec(compiledExp, name, 0, NULL, 0) == 0);
 }
 
 static void anchorTermRegex(struct hgFindSpec *hfs)
@@ -62,13 +85,10 @@ static void checkTermRegex(struct hgFindSpec *hfs)
 {
 if (isNotEmpty(hfs->termRegex))
     {
-    regex_t compiledExp;
-    char *errStr;
-    int errNum;
-    
-    if (errNum = regcomp(&compiledExp, hfs->termRegex, REGEX_OPTIONS))
-	errAbort("hfsPolish: search %s: Regular expression compilation error %d for termRegex %s",
-		 hfs->searchName, errNum, hfs->termRegex);
+    regex_t *compiledExp = NULL;
+    char buf[256];
+    safef(buf, sizeof(buf), "hfsPolish: search %s: termRegex", hfs->searchName);
+    compiledExp = compileRegex(hfs->termRegex, buf, REGEX_OPTIONS);
     }
 }
 
@@ -129,7 +149,8 @@ return(queryFormat);
 }
 
 static char *queryFormatRegex =
-    "select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
+    "select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ from %s "
+    "where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
 static char *exactTermFormatRegex = "['\"]?%s[^%]*['\"]?$";
 
 static void checkQueryFormat(struct hgFindSpec *hfs)
@@ -138,28 +159,36 @@ static void checkQueryFormat(struct hgFindSpec *hfs)
 if (isNotEmpty(hfs->query))
     {
     if (! matchRegex(hfs->query, queryFormatRegex))
-	errAbort("hfsPolish: search %s: query needs to be of the format \"select field1,field2,field3,field4 from %%s where field4 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
+	errAbort("hfsPolish: search %s: query needs to be of the format "
+		 "\"select field1,field2,field3,field4 from %%s "
+		 "where field4 like '%%s'\" "
+		 "(for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), "
+		 "but instead is this:\n%s",
 		 hfs->searchName, hfs->query);
     if (isNotEmpty(hfs->xrefQuery))
 	{
 	if (!matchRegex(hfs->query, exactTermFormatRegex))
-	    errAbort("hfsPolish: search %s: there is an xrefQuery so query needs to end with %s (exact match to xref results).",
+	    errAbort("hfsPolish: search %s: there is an xrefQuery so query "
+		     "needs to end with %s (exact match to xref results).",
 		     hfs->searchName, exactTermFormat);
 	}
     else
 	{
 	if (sameString(hfs->searchMethod, "fuzzy") &&
 	    !endsWith(hfs->query, fuzzyTermFormat))
-	    errAbort("hfsPolish: search %s: searchMethod is fuzzy so query needs to end with %s.",
+	    errAbort("hfsPolish: search %s: searchMethod is fuzzy so query "
+		     "needs to end with %s.",
 		     hfs->searchName, fuzzyTermFormat);
 	else if (sameString(hfs->searchMethod, "prefix") &&
 		 !endsWith(hfs->query, prefixTermFormat))
-	    errAbort("hfsPolish: search %s: searchMethod is prefix so query needs to end with %s.",
+	    errAbort("hfsPolish: search %s: searchMethod is prefix so query "
+		     "needs to end with %s.",
 		     hfs->searchName, prefixTermFormat);
 	
 	else if (sameString(hfs->searchMethod, "exact") &&
 		 !matchRegex(hfs->query, exactTermFormatRegex))
-	    errAbort("hfsPolish: search %s: searchMethod is exact so query needs to end with %s.",
+	    errAbort("hfsPolish: search %s: searchMethod is exact so query "
+		     "needs to end with %s.",
 		     hfs->searchName, exactTermFormat);
 	}
     }
@@ -174,20 +203,26 @@ static void checkXrefQueryFormat(struct hgFindSpec *hfs)
 if (isNotEmpty(hfs->xrefQuery))
     {
     if (! matchRegex(hfs->xrefQuery, xrefQueryFormatRegex))
-	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format \"select field1,field2 from %%s where field2 like '%%s'\" (for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), but instead is this:\n%s",
+	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format "
+		 "\"select field1,field2 from %%s where field2 like '%%s'\" "
+		 "(for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), "
+		 "but instead is this:\n%s",
 		 hfs->searchName, hfs->xrefQuery);
     if (sameString(hfs->searchMethod, "fuzzy") &&
 	!endsWith(hfs->xrefQuery, fuzzyTermFormat))
-	errAbort("hfsPolish: search %s: searchMethod is fuzzy so xrefQuery needs to end with %s.",
+	errAbort("hfsPolish: search %s: searchMethod is fuzzy so xrefQuery "
+		 "needs to end with %s.",
 		 hfs->searchName, fuzzyTermFormat);
     else if (sameString(hfs->searchMethod, "prefix") &&
 	     !endsWith(hfs->xrefQuery, prefixTermFormat))
-	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery needs to end with %s.",
+	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery "
+		 "needs to end with %s.",
 		 hfs->searchName, prefixTermFormat);
 	
     else if (sameString(hfs->searchMethod, "exact") &&
 	     !matchRegex(hfs->xrefQuery, exactTermFormatRegex))
-	errAbort("hfsPolish: search %s: searchMethod is exact so xrefQuery needs to end with %s.",
+	errAbort("hfsPolish: search %s: searchMethod is exact so xrefQuery "
+		 " needs to end with %s.",
 		 hfs->searchName, exactTermFormat);
     }
 }
@@ -205,11 +240,13 @@ if (hfs->searchTable == NULL)
     hfs->searchTable = cloneString(hfs->searchName);
 /* If searchType is not defined, query must be defined. */
 if (hfs->searchType == NULL && hfs->query == NULL)
-    errAbort("hfsPolish: search %s: if searchType is not defined, then query must be defined.\n",
+    errAbort("hfsPolish: search %s: if searchType is not defined, "
+	     "then query must be defined.\n",
 	     hfs->searchName);
 /* If one of {xrefTable,xrefQuery} is defined, both must be. */
 if ((hfs->xrefTable == NULL) ^ (hfs->xrefQuery == NULL))
-    errAbort("hfsPolish: search %s: can't define xrefTable without xrefQuery or vice versa.\n",
+    errAbort("hfsPolish: search %s: can't define xrefTable without xrefQuery "
+	     "or vice versa.\n",
 	     hfs->searchName);
 if (hfs->searchMethod == NULL)
     hfs->searchMethod = cloneString("exact");
@@ -404,8 +441,8 @@ return(cloneString(buf));
 }
 
 
-struct hgFindSpec *hgFindSpecGetShortCircuits()
-/* Load all short-circuit search specs from the current db, sorted by 
+struct hgFindSpec *hgFindSpecGetSpecs(boolean shortCircuit)
+/* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 {
 struct hgFindSpec *hfsList = NULL;
@@ -415,9 +452,10 @@ char **row = NULL;
 char *hgFindSpec = hgFindSpecName();
 char query[512];
 
+/* Descending order, then slAddHead --> correct order out. */
 safef(query, sizeof(query),
-      "select * from %s where shortCircuit = 1 order by searchPriority",
-      hgFindSpec);
+      "select * from %s where shortCircuit = %d order by searchPriority desc",
+      hgFindSpec, shortCircuit);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -426,35 +464,45 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&hfsList);
 return(hfsList);
 }
 
-struct hgFindSpec *hgFindSpecGetAdditives()
-/* Load all non-short-circuit search specs from the current db, sorted by 
- * searchPriority. */
+void hgFindSpecGetAllSpecs(struct hgFindSpec **retShortCircuitList,
+			   struct hgFindSpec **retAdditiveList)
+/* Load all search specs from the current db, separated according to 
+ * shortCircuit and sorted by searchPriority. */
 {
-struct hgFindSpec *hfsList = NULL;
+struct hgFindSpec *shortList = NULL, *longList = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char *hgFindSpec = hgFindSpecName();
 char query[512];
 
+/* Descending order, then slAddHead --> correct order out. */
 safef(query, sizeof(query),
-      "select * from %s where shortCircuit = 0 order by searchPriority",
+      "select * from %s order by searchPriority desc",
       hgFindSpec);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgFindSpec *hfs = hgFindSpecLoad(row);
-    slAddHead(&hfsList, hfs);
+    if (hfs->shortCircuit)
+	slAddHead(&shortList, hfs);
+    else
+	slAddHead(&longList, hfs);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&hfsList);
-return(hfsList);
+if (retShortCircuitList != NULL)
+    *retShortCircuitList = shortList;
+else
+    hgFindSpecFreeList(&shortList);
+if (retAdditiveList != NULL)
+    *retAdditiveList = longList;
+else
+    hgFindSpecFreeList(&longList);
 }
 
 

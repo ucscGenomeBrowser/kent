@@ -91,13 +91,14 @@ char *hgFindSpecSettingOrDefault(struct hgFindSpec *hfs, char *name,
 				 char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
 
-struct hgFindSpec *hgFindSpecGetShortCircuits();
-/* Load all short-circuit search specs from the current db, sorted by 
+struct hgFindSpec *hgFindSpecGetSpecs(boolean shortCircuit);
+/* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 
-struct hgFindSpec *hgFindSpecGetAdditives();
-/* Load all non-short-circuit search specs from the current db, sorted by 
- * searchPriority. */
+void hgFindSpecGetAllSpecs(struct hgFindSpec **retShortCircuitList,
+			   struct hgFindSpec **retAdditiveList);
+/* Load all search specs from the current db, separated according to 
+ * shortCircuit and sorted by searchPriority. */
 
 #endif /* HGFINDSPEC_H */
 

@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.131 2004/04/03 02:36:28 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.132 2004/04/06 07:04:33 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -187,7 +187,8 @@ hFreeConn(&conn);
 return result;
 }
 
-static boolean findKnownGeneExact(char *spec, char *geneSymbol, struct hgPositions *hgp, char *tableName)
+static boolean findKnownGeneExact(char *spec, char *geneSymbol,
+				  struct hgPositions *hgp, char *tableName)
 /* Look for position in Known Genes table. */
 {
 struct sqlConnection *conn;
@@ -241,7 +242,8 @@ hFreeConn(&conn);
 return ok;
 }
 
-static boolean findKnownGeneLike(char *spec, struct hgPositions *hgp, char *tableName)
+static boolean findKnownGeneLike(char *spec, struct hgPositions *hgp,
+				 char *tableName)
 /* Look for position in gene prediction table. */
 {
 struct sqlConnection *conn;
@@ -263,7 +265,9 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s%%'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s "
+	       "WHERE name LIKE '%s%%'",
+	       tableName, localName);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -293,7 +297,8 @@ hFreeConn(&conn);
 return ok;
 }
 
-static boolean findKnownGene(char *spec, struct hgPositions *hgp, char *tableName)
+static boolean findKnownGene(char *spec, struct hgPositions *hgp,
+			     char *tableName)
 /* Look for position in gene prediction table. */
 {
 struct sqlConnection *conn;
@@ -559,8 +564,8 @@ for (;;)
 }
 
 boolean hgIsCytoBandName(char *spec, char **retChromName, char **retBandName)
-/* Return TRUE if spec is a cytological band name including chromosome short name.  
- * Returns chromosome chrN name and band (with chromosome stripped off). */
+/* Return TRUE if spec is a cytological band name including chromosome short 
+ * name. Returns chromosome chrN name and band (with chromosome stripped off) */
 {
 char *fullChromName, *shortChromName;
 int len;
@@ -595,8 +600,10 @@ if (dotCount > 1)
 return TRUE;
 }
 
-boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart, int *retWinEnd)
-/* Return position associated with cytological band if spec looks to be in that form. */
+boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart,
+		       int *retWinEnd)
+/* Return position associated with cytological band if spec looks to be 
+ * in that form. */
 {
 char *bandName;
 
@@ -967,7 +974,8 @@ for (el = aList; el != NULL; el = el->next)
 *retList = list;
 }
 
-static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
+static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos,
+			       FILE *f)
 {
 fprintf(f, "%s", pos->description);
 }
@@ -1067,7 +1075,10 @@ for (el = accList; el != NULL; el = el->next)
         /* TODO: link to Genbank record */
         //dyStringPrintf(dy, "%s ", acc);
         dyStringPrintf(dy, 
-            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>", acc, acc);
+            "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?"
+		       "cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank"
+		       "&tool=genome.ucsc.edu\" TARGET=_blank>%s</A>",
+		       acc, acc);
         }
     /* print description for item, or lacking that, the product name */
     sprintf(description, "n/a"); 
@@ -1160,7 +1171,8 @@ if (wordCount == 0)
 found = TRUE;
 for (i=0; i<wordCount; ++i)
     {
-    findHitsToTables(words[i], tables, ArraySize(tables), &oneKeyHash, &oneKeyList);
+    findHitsToTables(words[i], tables, ArraySize(tables),
+		     &oneKeyHash, &oneKeyList);
     if (allKeysHash == NULL)
         {
 	allKeysHash = oneKeyHash;
@@ -1170,7 +1182,8 @@ for (i=0; i<wordCount; ++i)
 	}
     else
         {
-	andHits(oneKeyHash, oneKeyList, allKeysHash, allKeysList, &andedHash, &andedList);
+	andHits(oneKeyHash, oneKeyList, allKeysHash, allKeysList,
+		&andedHash, &andedList);
 	freeHash(&oneKeyHash);
 	slFreeList(&oneKeyList);
 	freeHash(&allKeysHash);
@@ -1186,7 +1199,8 @@ if (allKeysList == NULL)
 
 /* generate position lists and add to hgp */
 /* organism aligning */
-alignCount = addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, FALSE);
+alignCount = addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName,
+				  TRUE, FALSE);
 /* organism non-aligning */
 addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, FALSE, FALSE);
 /* xeno aligning */
@@ -1238,7 +1252,8 @@ int kgFound 		    = 0;
 
 if (gotKgAlias)
     {
-    /* get a link list of kgAlias (kgID/alias pair) nodes that match the spec using "Fuzzy" mode*/
+    /* get a linked list of kgAlias (kgID/alias pair) nodes that match 
+     * the spec using "Fuzzy" mode*/
     kaList = findKGAlias(hGetDb(), spec, "P");
     }
 
@@ -1262,7 +1277,8 @@ if (kaList != NULL)
 
         hashAdd(hash, kl->kgID, kl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'",
+		       kl->kgID);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1272,7 +1288,8 @@ if (kaList != NULL)
 	    pos->name = cloneString(kl->alias);
 
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
-	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
+				 cond_str);
 	    if (answer != NULL) 
 		{
 		desc = answer;
@@ -1346,7 +1363,8 @@ if (kpaList != NULL)
 
         hashAdd(hash, kl->kgID, kl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from knownGene where name = '%s'", kl->kgID);
+	dyStringPrintf(ds, "select * from knownGene where name = '%s'",
+		       kl->kgID);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1356,7 +1374,8 @@ if (kpaList != NULL)
 	    pos->name = cloneString(kl->alias);
 
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
-	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description", cond_str);
+	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
+				 cond_str);
 	    if (answer != NULL) 
 		{
 		desc = answer;
@@ -1428,7 +1447,8 @@ if (gotRefLink)
 	}
     else if (isUnsignedInt(spec))
         {
-	dyStringPrintf(ds, "select * from refLink where locusLinkId = %s", spec);
+	dyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
+		       spec);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
 	dyStringPrintf(ds, "select * from refLink where omimId = %s", spec);
@@ -1436,10 +1456,12 @@ if (gotRefLink)
 	}
     else 
 	{
-	dyStringPrintf(ds, "select * from refLink where name like '%s%%'", spec);
+	dyStringPrintf(ds, "select * from refLink where name like '%s%%'",
+		       spec);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'", spec);
+	dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
+		       spec);
 	addRefLinks(conn, ds, &rlList);
 	}
     }
@@ -1468,7 +1490,8 @@ if (rlList != NULL)
 
         hashAdd(hash, rl->mrnaAcc, rl);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from %s where name = '%s'",refGene, rl->mrnaAcc);
+	dyStringPrintf(ds, "select * from %s where name = '%s'",
+		       refGene, rl->mrnaAcc);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1667,7 +1690,8 @@ hFreeConn(&conn);
 
 /* End of Lowe Lab stuff */
 
-static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName, struct hgPosTable *table)
+static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp,
+				   char *tableName, struct hgPosTable *table)
 /* Look for position pattern in gene prediction table. */
 {
 struct sqlConnection *conn;
@@ -1688,7 +1712,9 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, pattern);
+dyStringPrintf(query,
+	      "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'",
+	      tableName, pattern);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1855,7 +1881,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
 		fprintf(f, "%s&%s=%s\">%s at %s</A>",
-		    extraCgi, table->name, hTrackOpenVis(table->name), pos->name, range);
+			extraCgi, table->name, hTrackOpenVis(table->name),
+			pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);
@@ -1896,8 +1923,8 @@ else
     }
 
 if (strstr(searchSpec,";") != NULL)
-    return handleTwoSites(searchSpec, retChromName, retWinStart, retWinEnd, cart,
-			  useWeb, hgAppName);
+    return handleTwoSites(searchSpec, retChromName, retWinStart, retWinEnd,
+			  cart, useWeb, hgAppName);
 
 hgp = hgPositionsFind(searchSpec, "", hgAppName, cart);
 if (hgp == NULL || hgp->posCount == 0)
@@ -1973,8 +2000,8 @@ int secondWinEnd;
 struct hgPositions *firstSuccess;
 struct hgPositions *secondSuccess;
 
-firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
-secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
+firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites */
+secondWinStart = 1;    /* through firstWinStart and secondWinStart.           */
 
 commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
@@ -1986,7 +2013,8 @@ secondSuccess = genomePos(secondstring, &secondChromName, &secondWinStart,
 			  &secondWinEnd, cart, FALSE, useWeb, hgAppName);
 if (NULL == firstSuccess && NULL == secondSuccess)
     {
-    errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",
+    errAbort("Neither site uniquely determined.  %d locations for %s and "
+	     "%d locations for %s.",
 	     firstWinStart, firststring, secondWinStart, secondstring);
     return NULL;
     }
@@ -2306,11 +2334,12 @@ if (hgOfficialChromName(term) != NULL)
     }
 else
     {
-    struct hgFindSpec *hfsList = hgFindSpecGetShortCircuits();
+    struct hgFindSpec *shortList = NULL, *longList = NULL;
     struct hgFindSpec *hfs;
     boolean done = FALSE;
 
-    for (hfs = hfsList;  hfs != NULL;  hfs = hfs->next)
+    hgFindSpecGetAllSpecs(&shortList, &longList);
+    for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
 	if (hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd))
 	    {
@@ -2318,11 +2347,9 @@ else
 	    break;
 	    }
 	}
-    hgFindSpecFreeList(&hfsList);
     if (! done)
 	{
-	hfsList = hgFindSpecGetAdditives();
-	for (hfs = hfsList;  hfs != NULL;  hfs = hfs->next)
+	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
 	    hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd);
 	    }
@@ -2331,6 +2358,8 @@ else
 	findGenbankGenes(term, hgp);
 	findTigrGenes(term, hgp);
 	}
+    hgFindSpecFreeList(&shortList);
+    hgFindSpecFreeList(&longList);
     }
 
 slReverse(&hgp->tableList);
