@@ -389,3 +389,11 @@ priority 148
 visibility hide
 type bed 4 +
 
+track chesMamHmm
+shortLabel PFam Hmm hits
+longLabel  PFam Hmm hits
+group x
+priority 148
+visibility hide
+type bed 6 +
+
