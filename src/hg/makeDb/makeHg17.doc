@@ -5915,6 +5915,288 @@ rm $TMP/$root.pp
     #	featureBits -chrom=chr1 hg17 genscan rmsk
     #	794 bases of 222827847 (0.000%) in intersection
 
+
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR DOG (DONE 7/1/04 angie)
+    ssh eieio
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    # Even though we already have the human-mouse linSpecReps,
+    # extractLinSpecReps requires two columns of DateRepsinRMoutput.pl
+    # additions.  So add mouse, then ignore it.  
+    # Dog in extra column 1, Mouse in extra column 2
+    foreach outfl ( *.out )
+        echo "$outfl"
+        /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
+          ${outfl} -query human -comp dog -comp mouse
+    end
+    # Now extract dog (extra column 1), ignore mouse.
+    cd /cluster/bluearc/scratch/hg/gs.18/build35
+    mkdir linSpecRep.notInDog
+    foreach f (rmsk/*.out_dog_mus)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInDog/$base.out.spec
+    end
+    # Clean up.
+    rm /cluster/bluearc/scratch/hg/gs.18/build35/rmsk/*.out_dog_mus
+    # Ask cluster-admin for an rsync.
+
+
+# BLASTZ DOG (CANFAM1) (DONE 7/8/04 angie)
+    ssh kk
+    # space is awful tight on store4 -- use store7.  
+    mkdir -p /cluster/store7/hg17/bed/blastz.canFam1.2004-07-08
+    ln -s /cluster/store7/hg17/bed/blastz.canFam1.2004-07-08 \
+      /cluster/data/hg17/bed/
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    # Use default (Human-Mouse) settings for starters.
+    cat << '_EOF_' > DEF
+# human vs. dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/scratch/hg/gs.18/build35/linSpecRep.notInDog
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog
+SEQ2_DIR=/scratch/hg/canFam1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/scratch/hg/canFam1/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # first cluster run: raw blastz alignments
+    ssh kk
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+    para try, check, push, check, ....
+    # Moving the human chr19 jobs up to the top of the jobList probably 
+    # would have shaved 4 hours off the total time!  It was almost done 
+    # after 6 hours, except for a few chr19 stragglers.
+#Completed: 93775 of 93775 jobs
+#Average job time:                 202s       3.37m     0.06h    0.00d
+#Longest job:                    17806s     296.77m     4.95h    0.21d
+#Submission to last job:         35523s     592.05m     9.87h    0.41d
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+    para try, check, push, etc ...
+#Completed: 341 of 341 jobs
+#Average job time:                  36s       0.61m     0.01h    0.00d
+#Longest job:                      302s       5.03m     0.08h    0.00d
+#Submission to last job:          1143s      19.05m     0.32h    0.01d
+
+    # third run: lav -> axt
+    # (if non-default BLASTZ_Q is used in the future, put axtRescore in 
+    # the pipe after lavToAxt)
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| $HOME/bin/x86_64/lavToAxt stdin \
+    /iscratch/i/gs.18/build35/bothMaskedNibs /iscratch/i/canFam1/nib stdout \
+| $HOME/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt 
+$HOME/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 46 of 46 jobs
+#Average job time:                 300s       5.00m     0.08h    0.00d
+#Longest job:                     1669s      27.82m     0.46h    0.02d
+#Submission to last job:          1689s      28.15m     0.47h    0.02d
+
+
+# CHAIN DOG BLASTZ (DONE 7/9/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+    /iscratch/i/gs.18/build35/bothMaskedNibs \
+    /iscratch/i/canFam1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 46 of 46 jobs
+#Average job time:                 266s       4.43m     0.07h    0.00d
+#Longest job:                     3578s      59.63m     0.99h    0.04d
+#Submission to last job:          3578s      59.63m     0.99h    0.04d
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Lots of chaff with scores in the 3000's.  Many very-high-scoring 
+    # chains.  So filter the chain down somewhat...
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm chain/*
+    chainSplit chain all.chain
+    gzip all.chain.unfiltered
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg17 ${c}_chainCanFam1 $i
+    end
+    # Coverage is significantly higher than mouse:
+    featureBits hg17 -chrom=chr1 chainCanFam1Link
+#123999291 bases of 222827847 (55.648%) in intersection
+# before filtering: 124750124 bases of 222827847 (55.985%) in intersection
+    featureBits hg17 -chrom=chr1 chainMm5Link
+#83773012 bases of 222827847 (37.595%) in intersection
+
+
+# NET DOG BLASTZ (DONE 7/9/04 angie)
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    netClass noClass.net hg17 canFam1 dog.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn dog.net > dogSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    netFilter -minGap=10 dog.net |  hgLoadNet hg17 netCanFam1 stdin
+    netFilter -minGap=10 dogSyn.net | hgLoadNet hg17 syntenyNetCanFam1 stdin
+    # Add entries for chainCanFam1, netCanFam1 to human/hg17 trackDb
+
+
+# MAKE VSCANFAM1 DOWNLOADABLES (TODO 7/9/04 angie)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    ln all.chain dog.chain
+    zip /cluster/data/hg17/zip/dog.chain.zip dog.chain
+    rm dog.chain
+    zip /cluster/data/hg17/zip/dog.net.zip dog.net
+    zip /cluster/data/hg17/zip/dogSyn.net.zip dogSyn.net
+    # Mike Zody asked for raw blastz in chain format, so figure out some 
+    # way to translate axt or psl to chain and put it out there.  
+    # Actually, it's probably just hg16-canFam1 that he wants for now -- ?
+    # Ask when we get to this point.
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam1
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam1
+    mv /cluster/data/hg17/zip/dog*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# GENERATE CANFAM1 MAF FOR MULTIZ FROM NET (DONE 7/9/04 angie)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
+    netSplit dog.net net
+    cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/hg17/nib \
+        /cluster/data/canFam1/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.hg.maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/canFam1/chrom.sizes \
+            $maf -tPrefix=hg17. -qPrefix=canFam1.
+    end
+
+
 # BLASTZ MM5 (DONE - 2004-06-22 - Hiram)
     ssh kk
     mkdir -p /cluster/data/hg17/bed/blastz.mm5.2004-07-01
