@@ -2046,13 +2046,13 @@ LOAD GENEID GENES (DONE - 2003-07-08 - Hiram)
     ldHgGene rn3 geneid download/*.gtf -exon=CDS
     hgPepPred rn3 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (TO DO)
+SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     mkdir -p ~/rn3/bed/sgp/download
     cd ~/rn3/bed/sgp/download
     foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.gtf
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.prot
+      wget http://monstre1.imim.es/genepredictions/R.norvegicus/rnJun2003/SGP/humangp20030410/$chr.gtf
+      wget http://monstre1.imim.es/genepredictions/R.norvegicus/rnJun2003/SGP/humangp20030410/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)
@@ -2309,4 +2309,48 @@ AXTBEST
     hgLoadPsl hg15 chr*_${tbl}.psl
 
                                                                                 
+# LIFTING REPEATMASKER .ALIGN FILES (TODO)
+foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
 
+ssh kkstore
+cd rn3
+foreach c (?{,?})
+  foreach d ($c/chr${c}_?{,?} $c/chr${c}_random_?{,?})
+    pushd . > /dev/null
+    set contig=$d:t
+    cd $d
+    echo $contig to $contig.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl ${contig}.lft > ${contig}.fa.align
+    popd > /dev/null
+    end
+end
+#  There are some FYI warnings from the above script, but they
+#	are for contigs that RepeatMasker said there was nothing
+#	to work with in those contigs so it did not make an align file.
+
+foreach chr (?{,?})
+  cd $chr
+  echo making symbolic links for chr$chr .fa.align files
+  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
+    ln -s $ctg/$ctg.fa.align .
+  end
+  cd ..
+  if (-e $chr/lift/ordered.lft) then
+    echo making $chr/chr$chr.fa.align
+    ls -og $chr/lift/ordered.lft
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/ordered.lft \
+      > $chr/chr$chr.fa.align
+  endif
+  if (-e $chr/lift/random.lft) then
+    echo making $chr/chr${chr}_random.fa.align
+    ls -og $chr/lift/random.lft
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/random.lft \
+      > $chr/chr${chr}_random.fa.align
+  endif
+  echo removing symbolic links for chr$chr .fa.align files
+  cd $chr
+  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
+    echo rm $ctg/$ctg.fa.align
+  end
+  cd ..
+end
