@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.18 2004/11/08 21:07:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.19 2004/11/09 21:12:30 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -379,11 +379,18 @@ if (outPage != NULL)
     	hgtaDoGetCustomTrackTb, "submit");
     if (outPage != NULL)
 	{
-	groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
-	if (!slNameInList(groupVar->values, "user"))
+	if (outPage->forms == NULL)
 	    {
-	    qaStatusSoftError(tablesTestList->status, 
-		    "No custom track group after custom track submission");
+	    errAbort("Custom track submission didn't go back to main page");
+	    }
+	else
+	    {
+	    groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
+	    if (!slNameInList(groupVar->values, "user"))
+		{
+		qaStatusSoftError(tablesTestList->status, 
+			"No custom track group after custom track submission");
+		}
 	    }
 	}
     }
@@ -475,34 +482,40 @@ struct htmlForm *mainForm;
 if (tablePage != NULL)
     {
     if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
-	errAbort("Couldn't get main form on tablePage");
-    testSchema(tablePage, mainForm, org, db, group, track, table);
-    testSummaryStats(tablePage, mainForm, org, db, group, track, table);
-    if (outTypeAvailable(mainForm, "bed")) 
-        {
-	if (outTypeAvailable(mainForm, "primaryTable"))
-	    {
-	    int rowCount;
-	    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-	    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-	    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
-	    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
-	    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
-	    testOutGff(tablePage, mainForm, org, db, group, track, table);
-	    if (rowCount > 0)
-		testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
-	    }
-	}
-    else if (outTypeAvailable(mainForm, "primaryTable"))
 	{
-	if (tableSize(db, table) < 500000)
-	    {
-	    int rowCount;
-	    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-	    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-	    }
+	qaStatusSoftError(tablesTestList->status, 
+		"Couldn't get main form on tablePage for %s %s %s %s", db, group, track, table);
 	}
-    verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
+    else
+	{
+	testSchema(tablePage, mainForm, org, db, group, track, table);
+	testSummaryStats(tablePage, mainForm, org, db, group, track, table);
+	if (outTypeAvailable(mainForm, "bed")) 
+	    {
+	    if (outTypeAvailable(mainForm, "primaryTable"))
+		{
+		int rowCount;
+		rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
+		testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+		testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
+		testOutGff(tablePage, mainForm, org, db, group, track, table);
+		if (rowCount > 0)
+		    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+		}
+	    }
+	else if (outTypeAvailable(mainForm, "primaryTable"))
+	    {
+	    if (tableSize(db, table) < 500000)
+		{
+		int rowCount;
+		rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		}
+	    }
+	verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
+	}
     htmlPageFree(&tablePage);
     }
 carefulCheckHeap();
@@ -697,36 +710,44 @@ void testJoining(struct htmlPage *rootPage)
  * couple of swissProt tables. */
 {
 struct htmlPage *allPage, *page;
-char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt";
+char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt";
 int expectedCount = tableSize("swissProt", "taxon");
 
 allPage = quickSubmit(rootPage, org, db, group, "swissProt", 
 	"swissProt.taxon", "taxonJoin1", NULL, NULL);
 if (allPage != NULL)
     {
-    int count = testAllFields(allPage, allPage->forms, org, db,
-    	group, track, "swissProt.taxon");
-    if (count != expectedCount)
-	qaStatusSoftError(tablesTestList->status, 
-		"Got %d rows in swissProt.taxon, expected %d", count, 
-		expectedCount);
-    htmlPageSetVar(allPage, NULL, hgtaOutputType, "selectedFields");
-    page = quickSubmit(allPage, org, db, group, track, 
-    	"swissProt.taxon", "taxonJoin2", hgtaDoTopSubmit, "submit");
-    htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
-    serialSubmit(&page, org, db, group, track, NULL, "taxonJoin3",
-	hgtaDoSelectFieldsMore, "submit");
-    if (page != NULL)
+    if (allPage->forms == NULL)
+        {
+	uglyf("%s\n", allPage->htmlText);
+	errAbort("swissProt page with no form");
+	}
+    else
 	{
-	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
-	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
-	serialSubmit(&page, org, db, group, track, NULL, "taxonJoin4",
-	    hgtaDoPrintSelectedFields, "submit");
+	int count = testAllFields(allPage, allPage->forms, org, db,
+	    group, track, "swissProt.taxon");
+	if (count != expectedCount)
+	    qaStatusSoftError(tablesTestList->status, 
+		    "Got %d rows in swissProt.taxon, expected %d", count, 
+		    expectedCount);
+	htmlPageSetVar(allPage, NULL, hgtaOutputType, "selectedFields");
+	page = quickSubmit(allPage, org, db, group, track, 
+	    "swissProt.taxon", "taxonJoin2", hgtaDoTopSubmit, "submit");
+	htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
+	serialSubmit(&page, org, db, group, track, NULL, "taxonJoin3",
+	    hgtaDoSelectFieldsMore, "submit");
 	if (page != NULL)
 	    {
-	    checkExpectedSimpleRows(page, expectedCount);
-	    verifyJoinedFormat(page->htmlText);
-	    htmlPageFree(&page);
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
+	    serialSubmit(&page, org, db, group, track, NULL, "taxonJoin4",
+		hgtaDoPrintSelectedFields, "submit");
+	    if (page != NULL)
+		{
+		checkExpectedSimpleRows(page, expectedCount);
+		verifyJoinedFormat(page->htmlText);
+		htmlPageFree(&page);
+		}
 	    }
 	}
     }
@@ -769,7 +790,7 @@ void testFilter(struct htmlPage *rootPage)
 /* Simulate pressing buttons to get a reasonable filter on
  * swissProt taxon. */
 {
-char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt",
+char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt",
 	*table = "swissProt.taxon";
 struct htmlPage *page;
 page = quickSubmit(rootPage, org, db, group, "swissProt", 
@@ -809,7 +830,7 @@ void testIdentifier(struct htmlPage *rootPage)
  * 8355	Xenopus laevis being stable taxon (and not being filtered out
  * by testFilter). */
 {
-char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt",
+char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt",
 	*table = "swissProt.taxon";
 struct htmlPage *page;
 page = quickSubmit(rootPage, org, db, group, "swissProt", 
