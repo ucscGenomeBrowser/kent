@@ -5,6 +5,7 @@
 
 #All rna Genes
 CREATE TABLE rnaGenes (
+    bin int unsigned not null,
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome

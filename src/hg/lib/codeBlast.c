@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "codeBlast.h"
 
-static char const rcsid[] = "$Id: codeBlast.c,v 1.1 2004/07/15 21:45:46 aamp Exp $";
+static char const rcsid[] = "$Id: codeBlast.c,v 1.2 2004/09/29 21:41:18 kschneid Exp $";
 
 void codeBlastStaticLoad(char **row, struct codeBlast *ret)
 /* Load a row from codeBlast table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->bin = sqlSigned(row[0]);
 ret->chrom = row[1];
@@ -32,8 +30,6 @@ struct codeBlast *codeBlastLoad(char **row)
  * from database.  Dispose of this with codeBlastFree(). */
 {
 struct codeBlast *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->bin = sqlSigned(row[0]);
@@ -83,77 +79,12 @@ slReverse(&list);
 return list;
 }
 
-struct codeBlast *codeBlastLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all codeBlast from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with codeBlastFreeList(). */
-{
-struct codeBlast *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = codeBlastLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void codeBlastSaveToDb(struct sqlConnection *conn, struct codeBlast *el, char *tableName, int updateSize)
-/* Save codeBlast as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use codeBlastSaveToDbEscaped() */
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s','%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->code);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
-
-void codeBlastSaveToDbEscaped(struct sqlConnection *conn, struct codeBlast *el, char *tableName, int updateSize)
-/* Save codeBlast as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than codeBlastSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *code;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-code = sqlEscapeString(el->code);
-
-dyStringPrintf(update, "insert into %s values ( %d,'%s',%u,%u,'%s',%u,'%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  code);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&code);
-}
-
 struct codeBlast *codeBlastCommaIn(char **pS, struct codeBlast *ret)
 /* Create a codeBlast out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
  * return a new codeBlast */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -198,7 +129,6 @@ for (el = *pList; el != NULL; el = next)
 void codeBlastOutput(struct codeBlast *el, FILE *f, char sep, char lastSep) 
 /* Print out codeBlast.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->bin);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

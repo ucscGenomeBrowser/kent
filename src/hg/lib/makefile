@@ -12,7 +12,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
-    clonePos.o codeBlast.o codeBlastScore.o cogs.o columnInfo.o \
+    clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
@@ -42,7 +42,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
-    sanger22extra.o sangerGene.o scopDes.o scoredRef.o sgdAbundance.o \
+    sanger22extra.o sangerGene.o sargassoSeaXra.o scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snpMap.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
