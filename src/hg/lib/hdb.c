@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.118 2003/06/30 22:28:30 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.119 2003/07/08 06:15:45 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1206,16 +1206,19 @@ char **row;
 char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
-if (genomeDb != NULL)
-    dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s'", genomeDb);
-else
-    internalErr();
-sr = sqlGetResult(conn, dy->string);
-if ((row = sqlNextRow(sr)) != NULL)
-    ret = cloneString(row[0]);
-else
-    ret = strdup(DEFAULT_PROT_DB);
-sqlFreeResult(&sr);
+if (sqlTableExists(conn, "gdbPdb"))
+    {
+    if (genomeDb != NULL)
+	dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s'", genomeDb);
+    else
+	internalErr();
+    sr = sqlGetResult(conn, dy->string);
+    if ((row = sqlNextRow(sr)) != NULL)
+	ret = cloneString(row[0]);
+    else
+	ret = strdup(DEFAULT_PROT_DB);
+    sqlFreeResult(&sr);
+    }
 hDisconnectCentral(&conn);
 freeDyString(&dy);
 return(ret);
