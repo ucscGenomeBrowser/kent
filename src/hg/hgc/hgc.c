@@ -51,6 +51,66 @@ char *database;		/* Name of mySQL database. */
 
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
 
+#ifdef CHUCK_CODE
+struct browserTable *checkDbForTables()
+/* Look in the database meta table to get information on which
+ *   tables to load that aren't hardcoded into the database. */
+{
+struct browserTable *tableList = NULL;
+struct browserTable *table = NULL;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+if(!hTableExists("browserTable"))
+    return NULL;
+sprintf(query, "select * from browserTable order by priority");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    table = browserTableLoad(row);
+    slAddHead(&tableList, table);
+    }
+slReverse(&tableList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return tableList;
+}
+
+struct browserTable *getBrowserTableFromList(char *group, struct browserTable *tableList)
+/* Look through list to see if that group is defined in meta-table */
+{
+struct browserTable *table = NULL;
+for(table=tableList; table!=NULL; table=table->next)
+    {
+    if(sameString(group,table->mapName))
+	return table;
+    }
+return NULL;
+}
+
+boolean inBrowserTable(char *group, struct browserTable *tableList)
+{
+struct browserTable *table = getBrowserTableFromList(group,tableList);
+if(table == NULL)
+    return FALSE;
+else
+    return TRUE;
+}
+
+void doBrowserTable(char *group, struct browserTable *tableList)
+{
+struct browserTable *table = getBrowserTableFromList(group,tableList);
+htmlStart(table->shortLabel);
+printf("<h2>Track: %s, Version: %s.</h2>\n",table->shortLabel, table->version);
+printf("<p>This track was prepared by:<br>%s\n",table->credit);
+if(table->other != NULL)
+    printf("<p>%s\n", table->other);
+printf("<p>For more information please see <a href=\"%s\">%s</a>.\n", table->url, table->url);
+
+}
+#endif /*CHUCK_CODE*/
+
 void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
@@ -2021,9 +2081,14 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+struct browserTable *table = NULL;
+struct browserTable *tableList = checkDbForTables();
+table = getBrowserTableFromList("hgExoFish", tableList);
 
 htmlStart("Exofish Ecores");
 printf("<H2>Exofish ECORES</A></H2>\n");
+if(table != NULL)
+    printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
 
 sprintf(query, "select * from exoFish where chrom = '%s' and chromStart = %d",
     seqName, start);
@@ -2059,6 +2124,7 @@ puts("<P>The Exofish track shows regions of homology with the "
      "genome-wide analysis using <I>Tetraodon nigroviridis</I> "
      "DNA sequence' <I>Nature Genetics</I> volume 25 page 235, "
      "June 2000.</P>");
+browserTableFreeList(&tableList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -2194,10 +2260,15 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+struct browserTable *table = NULL;
+struct browserTable *tableList = checkDbForTables();
+table = getBrowserTableFromList("hgRnaGene", tableList);
 
 htmlStart("RNA Genes");
-printf("<H2>RNA Gene %s</H2>\n", itemName);
 
+printf("<H2>RNA Gene %s</H2>\n", itemName);
+if(table != NULL)
+    printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
 sprintf(query, "select * from rnaGene where chrom = '%s' and chromStart = %d and name = '%s'",
     seqName, start, itemName);
 
@@ -2219,6 +2290,7 @@ puts("<P>This track shows where non-protein coding RNA genes and "
      "pseudo-genes are located.  This data was kindly provided by "
      "Sean Eddy at Washington University.</P>");
 sqlFreeResult(&sr);
+browserTableFreeList(&tableList);
 hFreeConn(&conn);
 }
 
@@ -2745,62 +2817,6 @@ printf("</td></tr></table></td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
-struct browserTable *checkDbForTables()
-/* Look in the database meta table to get information on which
- *   tables to load that aren't hardcoded into the database. */
-{
-struct browserTable *tableList = NULL;
-struct browserTable *table = NULL;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-
-sprintf(query, "select * from browserTable order by priority");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    table = browserTableLoad(row);
-    slAddHead(&tableList, table);
-    }
-slReverse(&tableList);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return tableList;
-}
-
-struct browserTable *getBrowserTableFromList(char *group, struct browserTable *tableList)
-/* Look through list to see if that group is defined in meta-table */
-{
-struct browserTable *table = NULL;
-for(table=tableList; table!=NULL; table=table->next)
-    {
-    if(sameString(group,table->mapName))
-	return table;
-    }
-return NULL;
-}
-
-boolean inBrowserTable(char *group, struct browserTable *tableList)
-{
-struct browserTable *table = getBrowserTableFromList(group,tableList);
-if(table == NULL)
-    return FALSE;
-else
-    return TRUE;
-}
-
-void doBrowserTable(char *group, struct browserTable *tableList)
-{
-struct browserTable *table = getBrowserTableFromList(group,tableList);
-htmlStart(table->shortLabel);
-printf("<h2>Track: %s, Version: %s.</h2>\n",table->shortLabel, table->version);
-printf("<p>This track was prepared by:<br>%s\n",table->credit);
-if(table->other != NULL)
-    printf("<p>%s\n", table->other);
-printf("<p>For more information please see <a href=\"%s\">%s</a>.\n", table->url, table->url);
-
-}
 
 
 #endif /*CHUCK_CODE*/
@@ -3019,6 +3035,7 @@ else
        printf("Sorry, clicking there doesn't do anything yet (%s).", group);
        }
    }
+browserTableFreeList(&tableList);
 htmlEnd();
 }
 
