@@ -42,6 +42,7 @@
 #include <math.h>
 #include <errno.h>
 #include <unistd.h>
+#include <libgen.h>
 
 /* Let's pretend C has a boolean type. */
 #define TRUE 1
