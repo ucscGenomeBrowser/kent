@@ -3813,11 +3813,9 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     ln -s /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa /gbdb/hgFixed/affyProbes
     hgLoadPsl hg16 affyGnf1h.psl
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/gnf1h.fa
-    grep -v U133B ../affyUcla/affyU133AB.psl | sed 's/exemplar://' \
+    grep -v U133B ../affyUcla.2004-02-04/affyU133.psl | sed 's/exemplar://' \
 	| sed 's/consensus://' \
         | sed 's/HG-U133A://' | sed 's/;//' > affyU133A.psl
-    # Note that affyU133AB.psl is a somewhat improved (reran pslReps)
-    # version of affyU133.psl in same directory.
     hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
     	affyU133A.psl  /cluster/data/hg16/bed/geneAtlas2/affyGnf1h.psl
     # Note that the unmapped 11000 records are from all-N sequences.
