@@ -76,6 +76,7 @@ static char *hTvStrings[] =
     "hide",
     "dense",
     "full",
+    "pack"
     };
 
 enum trackVisibility hTvFromString(char *s)
@@ -94,10 +95,27 @@ char *hStringFromTv(enum trackVisibility vis)
 return hTvStrings[vis];
 }
 
-void hTvDropDown(char *varName, enum trackVisibility vis)
+void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack)
 /* Make track visibility drop down for varName */
 {
-cgiMakeDropList(varName, hTvStrings, ArraySize(hTvStrings), hTvStrings[vis]);
+static char *noPack[] = 
+    {
+    "hide",
+    "dense",
+    "full",
+    };
+static char *pack[] = 
+    {
+    "hide",
+    "dense",
+    "pack",
+    "full",
+    };
+static int packIx[] = {0,1,3,2};
+if (canPack)
+    cgiMakeDropList(varName, pack, ArraySize(pack), pack[packIx[vis]]);
+else
+    cgiMakeDropList(varName, noPack, ArraySize(noPack), noPack[vis]);
 }
 
 /****** Some stuff for stsMap related controls *******/

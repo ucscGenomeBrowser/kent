@@ -38,7 +38,8 @@ enum trackVisibility
     {
     tvHide=0, 		/* Hide it. */
     tvDense=1,          /* Squish it together. */
-    tvFull=2            /* Expand it out. */
+    tvFull=2,           /* Expand it out. */
+    tvPack=3,         /* Zig zag it up and down. */
     };  
 
 enum trackVisibility hTvFromString(char *s);
@@ -48,7 +49,7 @@ enum trackVisibility hTvFromString(char *s);
 char *hStringFromTv(enum trackVisibility vis);
 /* Given enum representation convert to string. */
 
-void hTvDropDown(char *varName, enum trackVisibility vis);
+void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
 /* Make track visibility drop down for varName */
 
 /****** Some stuff for stsMap related controls *******/

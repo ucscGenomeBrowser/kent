@@ -117,6 +117,7 @@ int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
+int insideWidth;		/* Width of area to draw tracks in in pixels. */
 
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -128,7 +129,9 @@ struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
+#ifdef ROBERTS_EXPERIMENT
 boolean withPopUps = TRUE;		/* Display PopUps? */
+#endif /* ROBERTS_EXPERIMENT */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
@@ -255,6 +258,8 @@ MgFont *font;
 char *s;
 
 font = tl.font = mgSmallFont();
+tl.mWidth = mgFontStringWidth(font, "M");
+tl.nWidth = mgFontStringWidth(font, "N");
 tl.leftLabelWidth = 120;
 tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
@@ -323,6 +328,35 @@ int tgFixedItemHeight(struct track *tg, void *item)
 return tg->lineHeight;
 }
 
+int packFixedHeight(struct track *tg)
+/* Return packed height. */
+{
+struct spaceSaver *ss;
+struct slList *item;
+MgFont *font = tl.font;
+int extraWidth = tl.mWidth * 2;
+int start, end, height;
+double scale = (double)insideWidth/(winEnd - winStart);
+ss = tg->ss = spaceSaverNew(0, insideWidth);
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    int baseStart = tg->itemStart(tg, item);
+    int baseEnd = tg->itemEnd(tg, item);
+    start = round((double)(baseStart - winStart)*scale);
+    start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
+    end = round((baseEnd - winStart)*scale);
+    if (start < insideWidth && end > 0)
+        {
+	if (start < 0) start = 0;
+	if (end > insideWidth) end = insideWidth;
+	spaceSaverAdd(ss, start, end, item);
+	}
+    }
+spaceSaverFinish(ss);
+height = ss->rowCount * tg->lineHeight;
+return height;
+}
+
 int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
@@ -336,6 +370,9 @@ switch (vis)
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
+	break;
+    case tvPack:
+        tg->height = packFixedHeight(tg);
 	break;
     }
 return tg->height;
@@ -398,20 +435,18 @@ switch (vis)
     {
     case tvFull:
 
-    lines = 1;
-    for (item = tg->items; item != NULL; item = item->next)
-	{
-        if( item->next != NULL )
-            if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
-                lines++;
-    }
+	lines = 1;
+	for (item = tg->items; item != NULL; item = item->next)
+	    {
+	    if( item->next != NULL )
+		if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
+		    lines++;
+	    }
 	tg->height = lines * tg->lineHeight;
 	break;
-
     case tvDense:
 	tg->height = tg->lineHeight;
 	break;
-
     }
 return tg->height;
 }
@@ -496,15 +531,12 @@ void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
 {
-if( withPopUps ) 
-    {
-    va_list(args);
-    va_start(args, format);
-    hPrintf(" ALT=\"");
-    hvPrintf(format, args);
-    hPutc('"');
-    va_end(args);
-    }
+va_list(args);
+va_start(args, format);
+hPrintf(" ALT=\"");
+hvPrintf(format, args);
+hPutc('"');
+va_end(args);
 }
 
 void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
@@ -595,7 +627,8 @@ if (x < xEnd)
 	chromName, winStart, winEnd, 
 	database, tl.picWidth);
     /*if (start !=-1)*/
-    mapStatusMessage("%s", statusLine);
+    if (statusLine != NULL)
+	mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
     freeMem(encodedItem);
     }
@@ -2855,7 +2888,6 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
-int invPpt;
 int midLineOff = heightPer/2;
 int midY = y + midLineOff;
 int dir;
@@ -3522,7 +3554,6 @@ typedef struct slList *(*ItemLoader)(char **row);
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
-  
 struct sqlConnection *conn = hAllocConn();
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, table, chromName, 
@@ -3555,76 +3586,101 @@ else
     return MG_WHITE;
 }
 
+static void bedDrawSimpleAt(struct track *tg, struct bed *item, 
+	struct vGfx *vg, int xStart, int xEnd, int y, int midLineOff,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single simple bed item at position. */
+{
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)item->chromStart-winStart)*scale) + xStart;
+int x2 = round((double)((int)item->chromEnd-winStart)*scale) + xStart;
+int w = x2-x1;
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, item, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(item->score, 0, 1000)];
+    }
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, item);
+	if (x1 < xStart)
+	    x1 = xStart;
+	if (x2 > xEnd)
+	    x2 = xEnd;
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	}
+    else if (vis == tvPack)
+        {
+	char *s = tg->itemName(tg, item);
+	int sWidth = mgFontStringWidth(font, s);
+	int dotWidth = tl.nWidth/2;
+	int textX = x1 - sWidth - dotWidth;
+	vgTextRight(vg, textX, y, sWidth, heightPer, color, font, s);
+	mapBoxHc(item->chromStart, item->chromEnd, textX, y, x2 - textX, heightPer,
+		tg->mapName, tg->mapItemName(tg, item), NULL);
+	}
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (item->strand[0] == '+')
+	dir = 1;
+    else if(item->strand[0] == '-') 
+	dir = -1;
+    w = x2-x1;
+    if (dir != 0)
+	{
+	int midY = y + midLineOff;
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
+    }
+}
+
 static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
 int y = yOff;
-int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
-int invPpt;
-int midLineOff = heightPer/2;
-int dir;
-Color *shades = tg->colorShades;
-Color textColor = MG_WHITE;
+int midLineOff = tg->heightPer/2;
+struct bed *item;
 
-
-for (item = tg->items; item != NULL; item = item->next)
+if (vis == tvPack)
     {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, vg);
-    else
-	{
-	if (shades)
-	    color = shades[grayInRange(item->score, 0, 1000)];
-	}
-    if (w < 1)
-	w = 1;
-    if (color)
-	{
-	vgBox(vg, x1, y, w, heightPer, color);
-	if (tg->drawName)
-	    {
-	    /* Clip here so that text will tend to be more visible... */
-	    char *s = tg->itemName(tg, item);
-	    if (x1 < xOff)
-		x1 = xOff;
-	    if (x2 > xOff + width)
-		x2 = xOff + width;
-	    w = x2-x1;
-	    if (w > mgFontStringWidth(font, s))
-		{
-		textColor = contrastingColor(vg, color);
-		vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
-		}
-	    }
-	}
-    if (tg->subType == lfWithBarbs)
+    struct spaceSaver *ss = tg->ss;
+    struct spaceNode *sn;
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
-        dir = 0;
-        if(sameString(item->strand , "+")) 
-            dir = 1;
-        if(sameString(item->strand , "-")) 
-            dir = -1;
-	w = x2-x1;
-        if (dir != 0)
-	    {
-	    int midY = y + midLineOff;
-	    textColor = contrastingColor(vg, color);
-	    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
-	    }
-        }
-    if (isFull)
-	y += lineHeight;
+	y = yOff + lineHeight * sn->row;
+	item = sn->val;
+	bedDrawSimpleAt(tg, item, vg, xOff, xOff + width, y, midLineOff, scale, font, color, vis);
+	}
+    }
+else
+    {
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	bedDrawSimpleAt(tg, item, vg, xOff, xOff + width, y, midLineOff, scale, font, color, vis);
+	if (isFull)
+	    y += lineHeight;
+	}
     }
 }
 
@@ -3708,7 +3764,6 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
-int invPpt;
 
 for (item = tg->items; item != NULL; item = item->next)
     {
@@ -4137,7 +4192,6 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
-int invPpt;
 int midLineOff = heightPer/2;
 int dir;
 Color *shades = tg->colorShades;
@@ -8650,6 +8704,7 @@ void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
 int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
+uglyh("drawButtonBox(x %d, y %d, w %d, h %d", x, y, w, h);
 if (enabled) 
     {
     vgBox(vg, x, y, w, 1, light);
@@ -8712,7 +8767,6 @@ int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
-int insideWidth;
 int y;
 int typeCount = slCount(trackList);
 int leftLabelWidth = 0;
@@ -8745,7 +8799,8 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (track->visibility != tvHide)
 	{
-	pixHeight += track->totalHeight(track, track->limitedVis);
+	track->height = track->totalHeight(track, track->limitedVis);
+	pixHeight += track->height;
 	if (withCenterLabels)
 	    pixHeight += fontHeight;
 	}
@@ -8780,10 +8835,11 @@ if (withLeftLabels)
     int inWid = insideX-gfxBorder*3;
     int nextY, lastY, trackIx = 0;
     double min0, max0;
+    Color mediumBlue = vgFindColorIx(vg, 150, 150, 250);
 
-    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, 
-    	vgFindColorIx(vg, 0, 0, 200));
+    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mediumBlue);
     vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
+    uglyh("setClip %d %d %d %d", gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
     if (withRuler)
 	{
@@ -8795,11 +8851,12 @@ if (withLeftLabels)
         {
 	struct slList *item;
 	int h;
+	enum trackVisibility vis = track->limitedVis;
 	double tmp;
 	lastY = y;
-	if (track->limitedVis != tvHide)
+	if (vis != tvHide)
 	    {
-	    nextY = lastY + track->totalHeight(track, track->limitedVis);
+	    nextY = lastY + track->height;
 	    if (withCenterLabels)
 		nextY += fontHeight;
 	    h = nextY - lastY - 1;
@@ -8810,14 +8867,13 @@ if (withLeftLabels)
 
 	if( sameString( track->mapName, "humMus" ) )
 	    {
-
 	    min0 = whichSampleNum( 300.0, -7.99515, 6.54171, binCount );
 	    max0 =  whichSampleNum( 1000.0, -7.99515, 6.54171, binCount );
 	    sprintf( minRangeStr, "%0.2g", min0  );
 	    sprintf( maxRangeStr, "%0.2g", max0 );
 
 
-	    if( track->limitedVis == tvDense )
+	    if( vis == tvDense )
 		{
 		printYAxisLabel( vg, y, track, "0.0", min0, max0 );
 		printYAxisLabel( vg, y, track, "2.0", min0, max0 );
@@ -8838,7 +8894,7 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, " "  );
 	    sprintf( maxRangeStr, " " );
 
-	    if( track->limitedVis == tvFull && track->heightPer >= 74  )
+	    if( vis == tvFull && track->heightPer >= 74  )
 		{
 		printYAxisLabel( vg, y+5, track, "1.0", min0, max0 );
 		printYAxisLabel( vg, y+5, track, "2.0", min0, max0 );
@@ -8882,10 +8938,15 @@ if (withLeftLabels)
 	    }
 
 	
-	switch (track->limitedVis)
+	switch (vis)
 	    {
 	    case tvHide:
 		break;	/* Do nothing; */
+	    case tvPack:
+		if (withCenterLabels)
+		    y += fontHeight;
+	        y += track->height;
+		break;
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
@@ -8893,7 +8954,6 @@ if (withLeftLabels)
 
 		if( track->subType == lfSubSample && track->items == NULL )
 		    y += track->height;
-
 
 		for (item = track->items; item != NULL; item = item->next)
 		    {
@@ -8981,14 +9041,14 @@ if (withGuidelines)
     int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    Color color = vgFindRgb(vg, &guidelineColor);
     int lineHeight = mgFontLineHeight(tl.font)+1;
+    Color lightBlue = vgFindRgb(vg, &guidelineColor);
 
     vgSetClip(vg, insideX, gfxBorder, insideWidth, height);
     y = gfxBorder;
 
     for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
-	vgBox(vg, x, y, 1, height, color);
+	vgBox(vg, x, y, 1, height, lightBlue);
     vgUnclip(vg);
     }
 
@@ -9069,7 +9129,10 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	if (withCenterLabels)
 	    y += fontHeight;
-	vgSetClip(vg, insideX, y, insideWidth, track->height);
+	if (track->limitedVis == tvPack)
+	    vgSetClip(vg, gfxBorder, y, pixWidth-2*gfxBorder, track->height);
+	else
+	    vgSetClip(vg, insideX, y, insideWidth, track->height);
 	track->drawItems(track, winStart, winEnd,
 			 vg, insideX, y, insideWidth, 
 			 font, track->ixColor, track->limitedVis);
@@ -9080,7 +9143,6 @@ for (track = trackList; track != NULL; track = track->next)
 
 /* Make map background. */
 {
-
 int currentX, currentXEnd, currentWidth;
 int leftSide, rightSide;
 
@@ -9092,6 +9154,11 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	case tvHide:
 	    break;	/* Do nothing; */
+	case tvPack:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    break;
 	case tvFull:
 	    if (withCenterLabels)
 		y += fontHeight;
@@ -9544,6 +9611,7 @@ track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
 track->priority = tdb->priority;
 track->groupName = tdb->grp;
+track->canPack = tdb->canPack;
 if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
@@ -10003,7 +10071,9 @@ if (!hideControls)
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+#ifdef ROBERTS_EXPERIMENT
 withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
+#endif /* ROBERTS_EXPERIMENT */
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
@@ -10282,8 +10352,10 @@ if (!hideControls)
     hCheckBox("leftLabels", withLeftLabels);
     hPrintf("center ");
     hCheckBox("centerLabels", withCenterLabels);
+#ifdef ROBERTS_EXPERIMENT
     hPrintf("popUp ");
     hCheckBox("popUps", withPopUps);
+#endif /* ROBERTS_EXPERIMENT */
     hPrintf(" ");
     hButton("submit", "refresh");
     hPrintf("<BR>\n");
@@ -10340,7 +10412,7 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDown(track->mapName, track->visibility);
+	    hTvDropDown(track->mapName, track->visibility, track->canPack);
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
@@ -10501,13 +10573,13 @@ printf("PostScript images can be printed at high resolution "
        "Illustrator.<BR>");
 doTrackForm(psTn.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
-       "the browser graphic in PostScript.  ", psTn.forCgi);
+       "the current browser graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if(pdfFile != NULL) 
     {
     printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
     printf("<A HREF=\"%s\">Click here to download</A> "
-	   "the browser graphic in PDF", pdfFile);
+	   "the current browser graphic in PDF", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");

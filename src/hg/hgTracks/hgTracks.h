@@ -99,6 +99,8 @@ struct track
     float priority;   /* Tracks are drawn in priority order. */
     char *groupName;	/* Name of group if any. */
     struct group *group;  /* Group this track is associated with. */
+    boolean canPack;	/* Can we pack the display for this track? */
+    struct spaceSaver *ss;  /* Layout when packed. */
     };
 
 struct trackRef 
@@ -157,6 +159,8 @@ struct trackLayout
     int leftLabelWidth;		/* Width of left labels. */
     int trackWidth;		/* Width of tracks. */
     int picWidth;		/* Width of entire picture. */
+    int mWidth;			/* Width of 'M' in font. */
+    int nWidth;			/* Width of 'N' in font. */
     };
 
 extern struct trackLayout tl;

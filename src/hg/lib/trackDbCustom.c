@@ -68,6 +68,7 @@ for (;;)
 
     /* Allocate track structure and fill it in until next blank line. */
     AllocVar(bt);
+    bt->canPack = 2;	/* Unknown value */
     slAddHead(&btList, bt);
     for (;;)
         {
@@ -139,6 +140,8 @@ else if (sameString(var, "visibility"))
 	bt->visibility = tvFull;
     else if (sameString(value, "hide") || sameString(value, "0"))
 	bt->visibility = tvHide;
+    else if (sameString(value, "pack") || sameString(value, "3"))
+        bt->visibility = tvPack;
     else
 	errAbort("Unknown visibility %s line %d of %s", 
 		value, lf->lineIx, lf->fileName);
@@ -159,6 +162,10 @@ else if (sameWord(var, "spectrum") || sameWord(var, "useScore"))
     {
     bt->useScore = TRUE;
     }
+else if (sameWord(var, "canPack"))
+    {
+    bt->canPack = !(sameString(value, "0") || sameString(value, "off"));
+    }
 else if (sameWord(var, "chromosomes"))
     sqlStringDynamicArray(value, &bt->restrictList, &bt->restrictCount);
 else if (sameWord(var, "private"))
@@ -167,6 +174,17 @@ else if (sameWord(var, "group"))
     {
     bt->grp = cloneString(value);
     }
+}
+
+static boolean packableType(char *type)
+/* Return TRUE if we can pack this type. */
+{
+char *t = cloneString(type);
+char *s = firstWordInLine(t);
+boolean canPack = (sameString("psl", s) || sameString("chain", s) 
+    || sameString("bed", s) || sameString("genePred", s));
+freeMem(t);
+return canPack;
 }
 
 void trackDbPolish(struct trackDb *bt)
@@ -192,5 +210,7 @@ if (bt->html == NULL)
     bt->html = cloneString("");
 if (bt->grp == NULL)
     bt->grp = cloneString("x");
+if (bt->canPack == 2)
+    bt->canPack = packableType(bt->type);
 }
 

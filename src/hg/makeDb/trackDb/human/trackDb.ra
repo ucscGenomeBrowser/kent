@@ -59,8 +59,8 @@ spectrum on
 type psl xeno
 
 track blastzBestHuman
-shortLabel Blastz Best Human June
-longLabel Blastz Human Best in Genome Alignments  June
+shortLabel Best Human 
+longLabel Blastz Human Best in Genome Alignments
 group varRep
 priority 146.2
 visibility hide

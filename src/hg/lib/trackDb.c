@@ -37,6 +37,7 @@ assert(sizeOne == ret->restrictCount);
 ret->url = cloneString(row[16]);
 ret->html = cloneString(row[17]);
 ret->grp = cloneString(row[18]);
+ret->canPack = sqlUnsigned(row[19]);
 return ret;
 }
 
@@ -120,6 +121,7 @@ s = sqlEatChar(s, ',');
 ret->url = sqlStringComma(&s);
 ret->html = sqlStringComma(&s);
 ret->grp = sqlStringComma(&s);
+ret->canPack = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -221,6 +223,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->grp);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->canPack);
 fputc(lastSep,f);
 }
 

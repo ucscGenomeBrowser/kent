@@ -1650,6 +1650,8 @@ for (ct=ctList;  ct != NULL;  ct=ct->next)
     tdb->useScore = ct->tdb->useScore;
     tdb->private = ct->tdb->private;
     tdb->url = ct->tdb->url;
+    tdb->grp = ct->tdb->grp;
+    tdb->canPack = ct->tdb->canPack;
     trackDbPolish(tdb);
     slAddHead(&tdbList, tdb);
     }

@@ -22,7 +22,7 @@ struct trackDb
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
     char *longLabel;	/* Long label displayed in middle */
-    unsigned char visibility;	/* 0=hide, 1=dense, 2=full */
+    unsigned char visibility;	/* 0=hide, 1=dense, 2=full, 3=pack*/
     float priority;	/* 0-100 - where to position.  0 is top */
     unsigned char colorR;	/* Color red component 0-255 */
     unsigned char colorG;	/* Color green component 0-255 */
@@ -37,6 +37,7 @@ struct trackDb
     char *url;	/* URL to link to when they click on an item */
     char *html;	/* Some html to display when they click on an item */
     char *grp;	/* Which group track belongs to */
+    unsigned char canPack;      /* 1 if can pack track display, 0 otherwise */
     };
 
 struct trackDb *trackDbLoad(char **row);

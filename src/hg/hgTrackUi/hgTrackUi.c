@@ -357,7 +357,8 @@ void trackUi(struct trackDb *tdb)
 char *vis = hStringFromTv(tdb->visibility);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 printf("<B>Display mode:</B>");
-hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart, tdb->tableName, vis)));
+hTvDropDown(tdb->tableName, hTvFromString(cartUsualString(cart, tdb->tableName, vis)),
+	tdb->canPack);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");

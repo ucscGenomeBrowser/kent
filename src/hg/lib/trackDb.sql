@@ -9,7 +9,7 @@ CREATE TABLE trackDb (
     shortLabel varchar(255) not null,	# Short label displayed on left
     type varchar(255) not null,	# Track type: bed, psl, genePred, etc.
     longLabel varchar(255) not null,	# Long label displayed in middle
-    visibility tinyint unsigned not null,	# 0=hide, 1=dense, 2=full
+    visibility tinyint unsigned not null,	# 0=hide, 1=dense, 2=full, 3=pack
     priority float not null,	# 0-100 - where to position.  0 is top
     colorR tinyint unsigned not null,	# Color red component 0-255
     colorG tinyint unsigned not null,	# Color green component 0-255
@@ -24,6 +24,7 @@ CREATE TABLE trackDb (
     url longblob not null,	# URL to link to when they click on an item
     html longblob not null,	# Some html to display when they click on an item
     grp varchar(255) not null,	# Which group track belongs to
+    canPack tinyint unsigned not null, # 1 if can pack track display, 0 otherwise
               #Indices
     PRIMARY KEY(tableName)
 );

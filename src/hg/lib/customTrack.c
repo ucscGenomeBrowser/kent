@@ -711,6 +711,7 @@ if (retBrowserLines != NULL)
     slReverse(retBrowserLines);
 return trackList;
 }
+
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
 {
