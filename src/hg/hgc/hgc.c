@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.729 2004/08/26 11:31:41 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.730 2004/08/26 17:33:37 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2255,6 +2255,7 @@ char title[256];
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
+
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -13202,7 +13203,7 @@ struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;
 int rowCount = 0;
 struct tempName gifTn;
-int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
+int pixWidth = atoi(cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH ));
 int pixHeight = 0;
 struct vGfx *vg;
 int lineHeight = 0;
@@ -14305,7 +14306,7 @@ void doMiddle()
 {
 char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
-char title[256];
+char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb;
 
 /*	database and organism are global variables used in many places	*/
@@ -14322,7 +14323,36 @@ seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
 trackHash = makeTrackHash(database, seqName);
-tdb = hashFindVal(trackHash, track);
+if (parentWigMaf)
+    {
+    int wordCount, i;
+    char *words[16];
+    char *typeLine;
+    char *wigType = needMem(128);
+    tdb = hashFindVal(trackHash, parentWigMaf);
+    if (!tdb)
+        errAbort("can not find trackDb entry for parentWigMaf track %s.",
+		parentWigMaf);
+    typeLine = cloneString(tdb->type);
+    wordCount = chopLine(typeLine, words);
+    if (wordCount < 1)
+     errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
+		parentWigMaf);
+    safef(wigType, 128, "wig ");
+    for (i = 1; i < wordCount; ++i)
+	{
+	strncat(wigType, words[i], 128 - strlen(wigType));
+	strncat(wigType, " ", 128 - strlen(wigType));
+	}
+    strncat(wigType, "\n", 128 - strlen(wigType));
+    tdb->type = wigType;
+    tdb->tableName = cloneString(track);
+    freeMem(typeLine);
+    cartRemove(cart, "parentWigMaf");	/* ONE TIME ONLY USE !!!	*/
+    }
+else
+    tdb = hashFindVal(trackHash, track);
+
 if (sameWord(track, "getDna"))
     {
     doGetDna1();
