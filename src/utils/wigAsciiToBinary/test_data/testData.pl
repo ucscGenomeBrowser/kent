@@ -19,10 +19,8 @@ if ( $argc < 1 ) {
 	print "\t\tmust have frequency for this third arg to work\n";
 	exit(255);
 }
-for( my $i = 0; $i < $argc; ++$i ) {
-	printf STDERR "arg %d: %s\n", $i, $ARGV[$i];
-}
 
+my $maxDataPointsAllowed = 16777216;	# limit output to 16M data values
 my $count = shift;		#	number of points to generate
 my $frequency = 1;
 my $dataSpan = 1;
@@ -39,25 +37,36 @@ if( $count < 2 ) {
 	exit(255);
 }
 
-if( $count > 20000 ) {
-	print "ERROR: limit of number of points at this time < 20000\n";
+if( $count > $maxDataPointsAllowed ) {
+	print "ERROR: limit of number of points at this time < $maxDataPointsAllowed\n";
 	exit(255);
 }
 
 my $PI = 3.14159265;
-# to make it generate exactly the number input, make $incr slightly
-#       smaller than perfect
-my $incr = 360.001 / $count;
+my $incr = 360 / $count;
 my $Radians;
 #       To be less than 128 after scaling, use 2.001
 #       This produces a max of 127 at 1.0 = sin(x)
 my $Scale = 128/2.001;
 my $ByteValue;
 
+my $pointsDone = 0;
 my $i = 1;
-for( my $j = 0; $j < 360; $j += $incr ) {
+for( my $j = 0; ($j < 360) && ($pointsDone < $count); $j += $incr ) {
 	$Radians = $frequency * ((2.0 * $PI) * $j) / 360;
 	$ByteValue = floor((1.0 + sin($Radians)) * $Scale);
 	printf "%d\t%d\n", $i, $ByteValue;
 	$i += $dataSpan;
+	++$pointsDone;
+}
+#	round off errors in $incr sometimes misses a point or two
+#	on the end.  Continue going to reach $count.
+if( $pointsDone < $count ) {
+for( my $j = 0; ($j < 360) && ($pointsDone < $count); $j += $incr ) {
+	$Radians = $frequency * ((2.0 * $PI) * $j) / 360;
+	$ByteValue = floor((1.0 + sin($Radians)) * $Scale);
+	printf "%d\t%d\n", $i, $ByteValue;
+	$i += $dataSpan;
+	++$pointsDone;
+}
 }

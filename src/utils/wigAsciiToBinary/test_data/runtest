@@ -1,6 +1,8 @@
 #!/bin/sh
 VERBOSE=""
 
+#	16570 data values, frequency of 4 - simple single base coverage
+#	of chrM, with test of -chrom option to set output file names
 rm -f chrM.ascii chr0.wib chrM.wib
 ./testData.pl 16570 4 > chrM.ascii
 wigAsciiToBinary ${VERBOSE} -chrom=chr0 chrM.ascii
@@ -9,22 +11,64 @@ S0=`sum -r gold.wib`
 S1=`sum -r chr0.wib`
 
 if [ "${S0}" != "${S1}" ]; then
-	echo "*** FAIL ***"
+	echo "*** FAIL test 0, fundamental data creation  ***"
 fi
 
-rm -f chrM_256.ascii chrS.wig chrS.wib
+#	16570 data values, frequency of 4, each value represents 256 bases
+#	no -chrom option, testing name mangling for output files
+#	testing -dataSpan option - each value represents 256 bases
+#	testing -binsize option - 4 data values per table row
+rm -f chrM_256.ascii chrM_256.wig chrM_256.wib
 ./testData.pl 16570 4 256 > chrM_256.ascii
-wigAsciiToBinary ${VERBOSE} -dataSpan=256 -binsize=4 -chrom=chrS chrM_256.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=256 -binsize=4 chrM_256.ascii
 
 #	This binary file should be the same as before
+#	The .wig file merely has different offsets
 S0=`sum -r gold.wib`
-S1=`sum -r chrS.wib`
+S1=`sum -r chrM_256.wib`
 
 if [ "${S0}" != "${S1}" ]; then
-	echo "*** FAIL ***"
+	echo "*** FAIL test 1, data span and binsize  ***"
 fi
 
-rm -f chrM_1K.ascii chrK.wig chrK.wib
-./testData.pl 16570 16 1024 > chrM_1K.ascii
-echo -e "26976758\t63" >> chrM_1K.ascii
-wigAsciiToBinary ${VERBOSE} -dataSpan=1024 -binsize=16 -chrom=chrK chrM_1K.ascii
+#	start with 16570 data values, frequency of 16, and 1024 bases per value
+#	Then add one extra data point well beyond the last row to test
+#	the NO_DATA fill operation.
+rm -f chr_1K.ascii chrK.wig chrK.wib
+./testData.pl 16570 16 1024 > chr_1K.ascii
+echo -e "26976758\t63" >> chr_1K.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=1024 -binsize=16 -chrom=chrK chr_1K.ascii
+S0=`sum -r gold_chrK.wib`
+S1=`sum -r chrK.wib`
+
+if [ "${S0}" != "${S1}" ]; then
+	echo "*** FAIL test 2, data missing test ***"
+fi
+
+#	Big offset test, 1K data points, frequency of 4, each point
+#	representing 1M bases.  Thus a total span of 1G bases.
+#	Thus, the dataSpan is 1M, and setting binsize to 128
+#	Should have 4 table rows.
+#	The binary file should be 4K
+rm -f chr_1M.ascii chr1M.wig chr1M.wib
+./testData.pl 1024 4 1048576 > chr_1M.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=1048576 -binsize=128 \
+	-chrom=chr1M chr_1M.ascii
+diff -q gold_chr1M.wig chr1M.wig
+if [ "$?" != "0" ]; then
+	echo "*** FAIL test 3, big offset test ***"
+fi
+
+#	Big file test, 4M data points, frequency of 1024, each point
+#	representing 1 base.  Thus a total span of 4m bases.
+#	Thus, the dataSpan is 1, and setting binsize to 4096
+#	Should have 1024 table rows.
+#	The binary file should be 4M
+rm -f chr_4M.ascii chr4M.wig chr4M.wib
+./testData.pl 4194304 1024 1 > chr_4M.ascii
+wigAsciiToBinary ${VERBOSE} -dataSpan=1 -binsize=4096 \
+	-chrom=chr4M chr_4M.ascii
+diff -q gold_chr4M.wig chr4M.wig
+if [ "$?" != "0" ]; then
+	echo "*** FAIL test 4, large data file test ***"
+fi
