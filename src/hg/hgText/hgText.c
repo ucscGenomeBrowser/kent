@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.136 2004/04/13 17:22:01 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.137 2004/04/14 21:59:23 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2422,7 +2422,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     else
 	{
 	if (typeWiggle)
-	    wigMakeBedList(db, fullTableName, chromPtr->name, winStart, winEnd,
+	    wigMakeBedList(db, fullTableName, chromPtr->name,
 		constraints, WIG_TABLE_1);
 	if (typeWiggle && (bedListWig[WIG_TABLE_1] != (struct bed *)NULL))
 	    bedListT1 = bedListWig[WIG_TABLE_1];
@@ -2489,8 +2489,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    struct hTableInfo *hti2 = getHti(db2, table2);
 
 	    if (typeWiggle2)
-		wigMakeBedList(db2, table2, chromPtr->name, winStart, winEnd,
-		    constraints2, WIG_TABLE_2);
+		wigMakeBedList(db2, table2, chromPtr->name, constraints2,
+		    WIG_TABLE_2);
 
 	    if ((typeWiggle2) && (bedListWig[WIG_TABLE_2] !=(struct bed *)NULL))
 		{
@@ -4251,7 +4251,6 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
-struct hTableInfo *hti2 = NULL;
 boolean typeWiggle2 = FALSE;
 boolean wiggleDone = FALSE;
 
@@ -4540,14 +4539,12 @@ if (hti->hasBlocks)
 
 if (typeWiggle)
     {
-    wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1,
-	constraints);
+    wigDoStats(database, table, chromList, WIG_TABLE_1, constraints);
     wiggleDone = TRUE;
     }
 if (typeWiggle2)
     {
-    wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2,
-	constraints2);
+    wigDoStats(db2, table2, chromList, WIG_TABLE_2, constraints2);
     }
 
 if (! wiggleDone)
