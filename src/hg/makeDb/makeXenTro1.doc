@@ -728,12 +728,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.galGal2
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.galGal2/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -757,10 +757,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
                       -linearGap=../../xenopusHumanTuned.gap \
                       -minScore=5000 $1 \
        /iscratch/i/galGal2/nib \
-       /iscratch/i/xenTro1/xenTro1.2bit $2 \
-    | chainAntiRepeat /iscratch/i/galGal2/nib  \
-       /iscratch/i/xenTro1/xenTro1.2bit stdin $3 \
+       /iscratch/i/xenTro1/xenTro1.2bit $2 $3
 '_EOF_'
+
     # << this line makes emacs coloring happy
     chmod a+x doChain
     gensub2 input.lst single gsub jobList
@@ -779,10 +778,21 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # Note, the two crashed were from chr6_random and chr8_random, that simply
 # had no alignments and thus produced empty files, so no problem.
 
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
+
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
     ssh kksilo
     cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+
+
     chainMergeSort run1/chain/*.chain > all.chain
     rm run1/chain/*.chain
     rm -r ../axtTemp
@@ -975,12 +985,12 @@ cat `ls -1 *.lav | sort -g` \
     cd /cluster/data/xenTro1/bed/zb.hg17
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.hg17/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1019,6 +1029,15 @@ IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
 Average job time:                 209s       3.48m     0.06h    0.00d
 Longest job:                     2042s      34.03m     0.57h    0.02d
 Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
 
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
@@ -1200,12 +1219,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.mm5
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.mm5/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1244,6 +1263,15 @@ IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
 Average job time:                 209s       3.48m     0.06h    0.00d
 Longest job:                     2042s      34.03m     0.57h    0.02d
 Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
 
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
@@ -1423,12 +1451,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/xenTro1/bed/zb.danRer1
     mkdir -p axtChain/run1
     cd axtChain/run1
-    mkdir out chain
+    mkdir out chainRaw
     ls -1S /cluster/data/xenTro1/bed/zb.danRer1/axtTemp/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1471,6 +1499,15 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 #
 # Note, the two crashed were from chr6_random and chr8_random, that simply
 # had no alignments and thus produced empty files, so no problem.
+
+    # On the cluster server weed the chains for repeats
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    mkdir chain
+    cd chainRaw
+    foreach i (*.chain)
+        chainAntiRepeat /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit $i ../chain/$i
+    end
 
     # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
@@ -1655,7 +1692,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 	  echo msa_split $i
 	  /cluster/bin/phast/msa_split /cluster/data/xenTro1/bed/multiz/mtz/$i.maf \
 	     --refseq /cluster/bluearc/xenTro1/scaffoldFa/$i.fa \
-	     --in-format MAF --windows 1000000,1000 --between-blocks 5000 \
+	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
 	     --out-format SS --out-root $i
       endif
   end
