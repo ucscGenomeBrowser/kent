@@ -9,8 +9,8 @@ altColor 0,50,50
 type genePred twinscanPep
 
 track blastzTightHg15
-shortLabel Tight Human
-longLabel Blastz Human (Apr. 03) Tight Subset of Best Alignments
+shortLabel Human Tight
+longLabel Human (Apr. 03) Tight Subset of Best Blastz Alignments
 group compGeno
 priority 112
 visibility hide
@@ -20,8 +20,8 @@ spectrum on
 type psl xeno hg15
 
 track blastzBestHg15
-shortLabel Best Human
-longLabel Blastz Human (Apr. 03) Best in Genome Alignments
+shortLabel Human Best
+longLabel Human (Apr. 03) Best in Genome Blastz Alignments
 group compGeno
 priority 113
 visibility hide
@@ -31,8 +31,8 @@ spectrum on
 type psl xeno hg15
 
 track blastzHg15
-shortLabel Human Blastz
-longLabel All BLASTZ Human (Apr. 03) alignments
+shortLabel Human All
+longLabel Human (Apr. 03) All Blastz Alignments
 group compGeno
 priority 114
 visibility hide
@@ -43,7 +43,7 @@ type psl xeno hg15
     
 track chainHg15
 shortLabel Human Chain 
-longLabel Chained Human/$Organism Alignments
+longLabel Chained Human (Apr. 2003) Alignments
 group compGeno
 priority 115
 visibility dense
@@ -54,7 +54,7 @@ type chain hg15
 
 track netHg15
 shortLabel Human Net
-longLabel Human/$Organism Alignment Net
+longLabel Human (Apr. 2003) Alignment Net
 group compGeno
 priority 116
 visibility dense
@@ -63,7 +63,7 @@ type netAlign hg15 chainHg15
 
 track hg15SynNet
 shortLabel Human Syntenic Net
-longLabel Human/Rat Syntenic Alignment Net
+longLabel Human (Apr. 2003) Syntenic Alignment Net
 group compGeno
 priority 117
 visibility hide
@@ -71,8 +71,8 @@ spectrum on
 type netAlign hg15 chainHg15
 
 track blastzTightMm3
-shortLabel Tight Mouse
-longLabel Blastz Mouse (Feb. 03) Tight Subset of Best Alignments
+shortLabel Mouse Tight
+longLabel Mouse (Feb. 03) Tight Subset of Best Blastz Alignments
 group compGeno
 priority 212
 visibility hide
@@ -82,8 +82,8 @@ spectrum on
 type psl xeno mm3
 
 track blastzBestMm3
-shortLabel Best Mouse
-longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
+shortLabel Mouse Best
+longLabel Mouse (Feb. 03) Best in Genome Blastz Alignments
 group compGeno
 priority 213
 visibility hide
@@ -93,8 +93,8 @@ spectrum on
 type psl xeno mm3
 
 track blastzMm3
-shortLabel Mouse Blastz
-longLabel All BLASTZ Mouse (Feb. 03) alignments
+shortLabel Mouse All
+longLabel Mouse (Feb. 03) All Blastz Alignments
 group compGeno
 priority 214
 visibility hide
@@ -105,7 +105,7 @@ type psl xeno mm3
     
 track chainMm3
 shortLabel Mouse Chain 
-longLabel Chained Mouse/$Organism Alignments
+longLabel Chained Mouse (Feb. 03) Alignments
 group compGeno
 priority 215
 visibility dense
@@ -116,18 +116,18 @@ type chain mm3
 
 track netMm3
 shortLabel Mouse Net
-longLabel Mouse/$Organism Alignment Net
+longLabel Mouse (Feb. 03) Alignment Net
 group compGeno
 priority 216
 visibility dense
 spectrum on
-type netAlign mm3 chainHg15
+type netAlign mm3 chainMm3
 
 track mm3SynNet
 shortLabel Mouse Syntenic Net
-longLabel Mouse/Rat Syntenic Alignment Net
+longLabel Mouse (Feb. 03) Syntenic Alignment Net
 group compGeno
 priority 217
 visibility hide
 spectrum on
-type netAlign mm3 chainHg15
+type netAlign mm3 chainMm3
