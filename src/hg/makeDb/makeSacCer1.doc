@@ -162,7 +162,7 @@ exit; # don't actually run this like a script :)
     cd sgdGene
     ldHgGene sacCer1 sgdGene codingGenes.gff
     hgLoadBed sacCer1 sgdOther otherFeatures.bed \
-        -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+        -tab -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
     zcat ../../download/orf_protein/*.fasta.gz \
         | hgSgdPep -restrict=genePred.tab stdin sgdPep.fa symbol.txt
     hgPepPred sacCer1 generic sgdPep sgdPep.fa
