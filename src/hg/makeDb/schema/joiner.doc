@@ -137,3 +137,10 @@ identifier chainRn2Id
     $gbd.chainRn2Link.chainId 
     $gbd.netRn2.chainId
 
+
+Handling of Identifiers Spread Across Multiple Databases
+
+When an identifier involves more than one database the
+primary key must either be in a single database, or in
+all databases.
+
