@@ -4685,7 +4685,10 @@ else if (stage == 'D')
 else if (stage == 'F')
     inc = finishedInc;
 else
-    errAbort("Unknown stage %c", stage);
+    {
+    warn("Unknown stage %c (%d)", stage, stage);
+    inc = draftInc;
+    }
 for (i=0; i<width; ++i)
    b[i] = inc[b[i]];
 }
