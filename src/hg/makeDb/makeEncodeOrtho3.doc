@@ -208,6 +208,19 @@ wc -l danRer2.*bed*
 awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' danRer2.bed5 > danRer2.bed
 hgLoadBed -noBin danRer2 encodeRegionsLiftOver danRer2.bed >>& danRer2.log
 
+########################################################################
+# COW
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=20000 -multiple -chainTable=hg17.chainBosTau1 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToBosTau1.chain \
+                    /gbdb/hg17/liftOver/hg17ToBosTau1.over.chain
+    bosTau1.unmerged.bed5 bosTau1.unmapped.bed -verbose=2 >& bosTau1.log
+liftOverMerge -mergeGap=20000 -verbose=2 bosTau1.unmerged.bed5 bosTau1.bed5 >>& bosTau1.log
+wc -l bosTau1.*bed*
+    #
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' bosTau1.bed5 > bosTau1.bed
+hgLoadBed -noBin bosTau1 encodeRegionsLiftOver bosTau1.bed >>& bosTau1.log
+
 rm -f bed.tab
 
 
@@ -286,7 +299,9 @@ chmod ug+x /cluster/bin/scripts/mkOrthologAllFrame.pl
 foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
     echo `date` $db
     rm -f $db.html
-    mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 $db encodeRegionsConsensus encodeRegionsLiftOver encodeRegionsMercator > $db.html
+    mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 \
+	$db encodeRegionsConsensus encodeRegionsLiftOver encodeRegionsMercator \
+	> $db.html
 end
 
 set outDir = /usr/local/apache/htdocs/encode/ortho3
