@@ -12,7 +12,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.5 2003/05/25 23:57:42 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.6 2003/05/26 21:32:48 sugnet Exp $";
 
 struct spliceEdge 
 /* Structure to hold information about one edge in 
@@ -30,6 +30,7 @@ struct spliceEdge
     int v2;                     /* Vertex 2 in graph. */
     int alt;                    /* Possible alt splice? 1=TRUE 0=FALSE */
     int conserved;              /* Conserved in ortholgous genome? 1=TRUE 0=FALSE */    
+    int soft;                   /* TRUE (1) if a vertex is soft, FALSE otherwise. */
 };
 
 struct orthoAgReport
@@ -40,8 +41,10 @@ struct orthoAgReport
     char *agName;             /**< AltGraphX from first genome name. */
     char *orthoAgName;        /**< Orthologous altGraphX name. */
     char *chrom;                 /**< Chrom name. */
-    int ssFound;                 /**< Number of splice sites in ag that are splice sites in orhtoAg. */
-    int ssMissing;               /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
+    int ssSoftFound;                 /**< Number of splice sites in ag that are splice sites in orhtoAg. */
+    int ssSoftMissing;               /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
+    int ssHardFound;                 /**< Number of splice sites in ag that are splice sites in orhtoAg. */
+    int ssHardMissing;               /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
     int ssDoubles;               /**< Number of splice sites in ag that map to two places in orhtoAg (hopefully rare). */
     int ssVeryClose;             /**< How many times were we off by one. */
     int alt;                     /**< Number of alternative splices in graph. */
@@ -156,27 +159,28 @@ for (el = *pList; el != NULL; el = next)
 void orthoAgReportHeader(FILE *out)
 /** Output a header for the orthoAgReport fields. */
 {
-fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", "altEdges", "altEdgesFound", "ssFound", "ssMissing", "ssDoubles", "ssVeryClose");
+fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", "altEdges", "altEdgesFound", "ssSoftFound", "ssSoftMissing", "ssHardFound", "ssHardMissing", "ssDoubles", "ssVeryClose");
 }
 
 void orthoAgReportTabOut(struct orthoAgReport *r, FILE *out)
 /** Write out a one line summary of a report. */
 {
-fprintf(out, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", r->agName, r->orthoAgName, r->alt, r->altFound, r->ssFound, r->ssMissing, r->ssDoubles, r->ssVeryClose);
+fprintf(out, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", r->agName, r->orthoAgName, r->alt, r->altFound, 
+	r->ssSoftFound, r->ssSoftMissing, r->ssHardFound, r->ssHardMissing, r->ssDoubles, r->ssVeryClose);
 }
 
 void spliceEdgeHeader(FILE *out)
 {
-fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#chrom", "chromStart", "chromEnd", 
+fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#chrom", "chromStart", "chromEnd", 
 	"agName", "conf", "strand",
-	"type", "v1", "v2", "alt", "conserved");
+	"type", "v1", "v2", "alt", "conserved", "soft");
 }
 
 void spliceEdgeTabOut(struct spliceEdge *se, FILE *out)
 {
-fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
 	se->agName, se->conf, se->strand,
-	se->type, se->v1, se->v2, se->alt, se->conserved);
+	se->type, se->v1, se->v2, se->alt, se->conserved, se->soft);
 }
 
 void outputReport(struct orthoAgReport *rep)
@@ -256,6 +260,42 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
+struct hash *allChainsHash(char *fileName)
+{
+struct hash *hash = newHash(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct chain *chain;
+char chainId[128];
+
+while ((chain = chainRead(lf)) != NULL)
+    {
+    safef(chainId, sizeof(chainId), "%d", chain->id);
+    hashAddUnique(hash, chainId, chain);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+struct chain *chainFromId(int id)
+/** Return a chain given the id. */
+{
+static struct hash *chainHash = NULL;
+char key[128];
+struct chain *chain = NULL;
+if(chainHash == NULL)
+    {
+    char *chainFile = optionVal("chainTable", NULL);
+    if(chainFile == NULL)
+	errAbort("orthoSplice::chainFromId() - Can't find file for 'chainTable' parameter");
+    chainHash = allChainsHash(chainFile);
+    }
+safef(key, sizeof(key), "%d", id);
+chain =  hashFindVal(chainHash, key);
+if(chain == NULL)
+    warn("Chain not found for id: %d", id);
+return chain;
+}
+
 struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
 			  char *chrom, int id)
 /** Load chain. */
@@ -291,7 +331,10 @@ char **row;
 struct chain *chain = NULL;
 struct chainNet *net = chainNetLoadRange(db, netTable, chrom,
 					 start, end, NULL);
-chain = chainDbLoad(conn, chainTable, chrom, net->fillList->chainId);
+if(net == NULL)
+    return NULL;
+chain = chainFromId(net->fillList->chainId);
+//chain = chainDbLoad(conn, chainTable, chrom, net->fillList->chainId);
 chainNetFreeList(&net);
 return chain;
 }
@@ -384,17 +427,17 @@ for(se = seList; se != NULL; se = se->next)
 	}
     chainFreeList(&toFree);
     }
-fprintf(stdout, "track name=\"ss\" description=\"splice sites\"\n");
+//fprintf(stdout, "track name=\"ss\" description=\"splice sites\"\n");
 for(i=0; i<vCount; i++)
     {
     if((*vertexMap)[i] != -1)
 	{
-	fprintf(stdout, "%s\t%d\t%d\t%d-%d\n", orthoAg->tName, orthoAg->vPositions[(*vertexMap)[i]], 
-		orthoAg->vPositions[(*vertexMap)[i]] +1, i, (*vertexMap)[i]);
+//	fprintf(stdout, "%s\t%d\t%d\t%d-%d\n", orthoAg->tName, orthoAg->vPositions[(*vertexMap)[i]], 
+//		orthoAg->vPositions[(*vertexMap)[i]] +1, i, (*vertexMap)[i]);
 	}
     }
 warn("%d splice sites: %d found, %d missing, %d doubles, %d very close (+/- 1)",
-     vCount, agRep->ssFound, agRep->ssMissing, agRep->ssDoubles, agRep->ssVeryClose);
+     vCount, agRep->ssHardFound, agRep->ssHardMissing, agRep->ssDoubles, agRep->ssVeryClose);
 slFreeList(&seList);
 }
 
@@ -411,9 +454,9 @@ int qs = 0, qe = 0;
 int oVCount = orthoAg->vertexCount;
 bool edge; 
 chainSubsetOnT(chain, vPos[softStart], vPos[hardEnd], &subChain, &toFree);    
-qChainRangePlusStrand(subChain, &qs, &qe);
 if(subChain == NULL)
     return -1;
+qChainRangePlusStrand(subChain, &qs, &qe);
 for(i=0; i<oVCount; i++)
     {
     if(reverse)
@@ -453,9 +496,9 @@ int qs = 0, qe = 0;
 int oVCount = orthoAg->vertexCount;
 bool edge; 
 chainSubsetOnT(chain, vPos[hardStart], vPos[softEnd], &subChain, &toFree);    
-qChainRangePlusStrand(subChain, &qs, &qe);
 if(subChain == NULL)
     return -1;
+qChainRangePlusStrand(subChain, &qs, &qe);
 for(i=0; i<oVCount; i++)
     {
     if(reverse)
@@ -529,6 +572,7 @@ ret->name = cloneString(ag->name);
 ret->edgeCount = 0;
 ret->vTypes = CloneArray(ag->vTypes, vC);
 ret->vPositions = CloneArray(ag->vPositions, vC);
+ret->evidence = NULL;
 AllocArray(ret->edgeStarts, eC);
 AllocArray(ret->edgeEnds, eC);
 AllocArray(ret->edgeTypes, eC);
@@ -628,6 +672,7 @@ freeMem(el->vPositions);
 freeMem(el->edgeStarts);
 freeMem(el->edgeEnds);
 freeMem(el->edgeTypes);
+evidenceFreeList(&el->evidence);
 freeMem(el);
 *ag = NULL;
 }
@@ -649,6 +694,10 @@ se->chromStart = ag->vPositions[v1];
 se->chromEnd = ag->vPositions[v2];
 se->v1 = v1;
 se->v2 = v2;
+if(ag->vTypes[v1] == ggSoftStart || ag->vTypes[v1] == ggSoftEnd)
+    se->soft = TRUE;
+if(ag->vTypes[v2] == ggSoftStart || ag->vTypes[v2] == ggSoftEnd)
+    se->soft = TRUE;
 edgeNum = getEdgeNum(ag, v1, v2);
 e = slElementFromIx(ag->evidence, edgeNum);
 se->conf = e->evCount;
@@ -686,13 +735,27 @@ int *edgeSeen = NULL, *cEdgeSeen = NULL; /* Used to keep track of alt splicing. 
 struct spliceEdge *seList = NULL, *se = NULL;
 AllocArray(edgeSeen, vCount);
 AllocArray(cEdgeSeen, vCount);
-agRep->ssMissing = agRep->ssFound = 0;
+agRep->ssSoftMissing = agRep->ssSoftFound = 0;
+agRep->ssHardMissing = agRep->ssHardFound = 0;
+
+/* Count up vertices found. */
 for(i=0; i<vCount; i++)
     if(vMap[i] != -1)
-	agRep->ssFound++;
+	{
+	if(ag->vTypes[i] == ggHardStart || ag->vTypes[i] == ggHardEnd)
+	    agRep->ssHardFound++;
+	else
+	    agRep->ssSoftFound++;
+	}
     else 
-	agRep->ssMissing++;
+	{
+	if(ag->vTypes[i] == ggHardStart || ag->vTypes[i] == ggHardEnd)
+	    agRep->ssHardMissing++;
+	else
+	    agRep->ssSoftMissing++;
+	}
 
+/* Count up the edges found. */
 for(i=0; i<vCount; i++)
     for(j=0;j<vCount; j++)
 	{
@@ -785,6 +848,13 @@ for(i=0;i<vCount; i++)
 		match = FALSE;
 	    if(match)
 		{
+		struct evidence *commonEv = NULL;
+		struct evidence *oldEv = NULL;
+		oldEv = slElementFromIx(ag->evidence, getEdgeNum(ag, i, j));
+		AllocVar(commonEv);
+		commonEv->evCount = oldEv->evCount;
+		commonEv->mrnaIds = CloneArray(oldEv->mrnaIds, oldEv->evCount);
+		slAddTail(&commonAg->evidence, commonEv);
 		commonAg->edgeStarts[commonAg->edgeCount] = i;
 		commonAg->edgeEnds[commonAg->edgeCount] = j;
 		commonAg->edgeTypes[commonAg->edgeCount] = getSpliceEdgeType(commonAg, commonAg->edgeCount);
@@ -802,7 +872,7 @@ altGraphXFreeEdgeMatrix(&commonEm, commonAg->vertexCount);
 altGraphXFreeEdgeMatrix(&orthoEm, orthoAg->vertexCount);
 if(commonAg->edgeCount > 0)
     {
-    altGraphXTabOut(commonAg, stdout);
+//    altGraphXTabOut(commonAg, stdout);
     }
 else
     freeCommonAg(&commonAg);
@@ -823,10 +893,12 @@ struct sqlConnection *conn = hAllocConn();
 struct spliceEdge *seList = NULL, *se = NULL;
 int qs = 0, qe = 0;
 chain = chainForPosition(conn, db, netTable, chainTable, ag->tName, ag->tStart, ag->tEnd);
-
+hFreeConn(&conn);
+if(chain == NULL)
+    return NULL;
 seList = altGraphXToEdges(ag);
 orthoAg = makeCommonAltGraphX(ag, chain);
-fprintf(stdout, "track name=\"exons\" description=\"human exons mapped.\"\n");
+//fprintf(stdout, "track name=\"exons\" description=\"human exons mapped.\"\n");
 for(se = seList; se != NULL; se = se->next)
     {
     if(se->type != ggExon)
@@ -837,16 +909,16 @@ for(se = seList; se != NULL; se = se->next)
 	{
 	qChainRangePlusStrand(subChain, &qs, &qe);
 
-	fprintf(stdout, "%s\t%d\t%d\t%d-%d\n",
-		subChain->qName, qs, qe, se->v1, se->v2);
+//	fprintf(stdout, "%s\t%d\t%d\t%d-%d\n",
+//		subChain->qName, qs, qe, se->v1, se->v2);
 	}
     else
 	warn("Yikes got a NULL for %s:%d-%d", ag->tName, se->chromStart, se->chromEnd);
     chainFree(&toFree);
     }
-hFreeConn(&conn);
+
 slFreeList(&seList);
-chainFreeList(&chain);
+//chainFreeList(&chain); /* Hashed in memory, don't free. */
 return orthoAg;
 }
 
@@ -856,7 +928,6 @@ void orthoSplice(char *db, char *orthoDb)
 {
 struct lineFile *lf = NULL;
 char *altIn = optionVal("altInFile", NULL);
-struct sqlConnection *conn = hAllocConn();
 char **row = NULL;
 int rowCount = 0;
 char *line = NULL;
@@ -900,22 +971,24 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
     if(isUnique(ag))
 	{
 	agOrtho = findOrthoAltGraphX(ag, db,  netTable, chainTable);
-
 	if(agOrtho != NULL)
 	    {
 	    foundOrtho++;
+	    printf("FoundOne.\n");
 	    altGraphXTabOut(agOrtho,cFile);
 	    freeCommonAg(&agOrtho);
 	    }
 	else
+	    {
 	    noOrtho++;
+	    printf("NoOrtho\n");
+	    }
 	}
     altGraphXFree(&ag);
     }
 warn("%d graphs, %d orthos found %d no ortho splice graph",
      (noOrtho+foundOrtho), foundOrtho, noOrtho);
 freez(&row);
-hFreeConn(&conn);
 lineFileClose(&lf);
 carefulClose(&cFile);
 carefulClose(&rFile);
