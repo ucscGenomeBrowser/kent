@@ -384,12 +384,12 @@ struct hash *productHash = loadNameTable(conn, "productName", 16);
 struct hash *geneHash = loadNameTable(conn, "geneName", 16);
 struct hash *kgHash = newHash(0);
 char *kgName = "refGene";
-FILE *kgTab = hgCreateTabFile(kgName);
-FILE *productTab = hgCreateTabFile("productName");
-FILE *geneTab = hgCreateTabFile("geneName");
-FILE *refLinkTab = hgCreateTabFile("refLink");
-FILE *refPepTab = hgCreateTabFile("refPep");
-FILE *refMrnaTab = hgCreateTabFile("refMrna");
+FILE *kgTab = hgCreateTabFile(".", kgName);
+FILE *productTab = hgCreateTabFile(".", "productName");
+FILE *geneTab = hgCreateTabFile(".", "geneName");
+FILE *refLinkTab = hgCreateTabFile(".", "refLink");
+FILE *refPepTab = hgCreateTabFile(".", "refPep");
+FILE *refMrnaTab = hgCreateTabFile(".", "refMrna");
 int productNameId, geneNameId;
 struct exon *exonList = NULL, *exon;
 
@@ -553,17 +553,17 @@ carefulClose(&refMrnaTab);
 if (!clTest)
     {
     printf("Loading database with %s\n", kgName);
-    hgLoadTabFile(conn, kgName);
+    hgLoadTabFile(conn, ".", kgName, NULL);
     printf("Loading database with %s\n", "productName");
-    hgLoadTabFile(conn, "productName");
+    hgLoadTabFile(conn, ".", "productName", NULL);
     printf("Loading database with %s\n", "geneName");
-    hgLoadTabFile(conn, "geneName");
+    hgLoadTabFile(conn, ".", "geneName", NULL);
     printf("Loading database with %s\n", "refLink");
-    hgLoadTabFile(conn, "refLink");
+    hgLoadTabFile(conn, ".", "refLink", NULL);
     printf("Loading database with %s\n", "refPep");
-    hgLoadTabFile(conn, "refPep");
+    hgLoadTabFile(conn, ".", "refPep", NULL);
     printf("Loading database with %s\n", "refMrna");
-    hgLoadTabFile(conn, "refMrna");
+    hgLoadTabFile(conn, ".", "refMrna", NULL);
     hgEndUpdate(&conn, "Added refSeq genes");
     }
 }

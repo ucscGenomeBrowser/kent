@@ -154,7 +154,7 @@ for (uni = uniqueTableList; uni != NULL; uni = uni->next)
     {
     carefulClose(&uni->tabFile);
     table = uni->tableName;
-    hgLoadTabFile(conn, table);
+    hgLoadTabFile(conn, ".", table, NULL);
     freeHash(&uni->hash);
     }
 }
@@ -192,7 +192,7 @@ if (sr != NULL)
     }
 sqlFreeResult(&sr);
 slAddHead(&uniqueTableList, uni);
-uni->tabFile = hgCreateTabFile(tableName);
+uni->tabFile = hgCreateTabFile(".", tableName);
 return uni;
 }
 
@@ -380,8 +380,8 @@ int mod = maxMod;
 int lineMaxMod = 50;
 int lineMod = lineMaxMod;
 int count = 0;
-FILE *mrnaTab = hgCreateTabFile("mrna");
-FILE *seqTab = hgCreateTabFile("seq");
+FILE *mrnaTab = hgCreateTabFile(".", "mrna");
+FILE *seqTab = hgCreateTabFile(".", "seq");
 struct uniqueTable *uniSrc, *uniOrg, *uniLib, *uniClo, *uniSex,
                    *uniTis, *uniDev, *uniCel, *uniCds, *uniGen,
 		   *uniPro, *uniAut, *uniKey, *uniDef;
@@ -530,9 +530,9 @@ lineFileClose(&raLf);
 fclose(mrnaTab);
 fclose(seqTab);
 printf("Updating mrna table\n");
-hgLoadTabFile(conn, "mrna");
+hgLoadTabFile(conn, ".", "mrna", NULL);
 printf("Updating seq table\n");
-hgLoadTabFile(conn, "seq");
+hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add mRNA from %s,%s", faName, raName);
 printf("All done\n");
 }
@@ -598,7 +598,7 @@ char faAcc[64];
 
 hgSetDb(database);
 conn = hgStartUpdate();
-seqTab = hgCreateTabFile("seq");
+seqTab = hgCreateTabFile(".", "seq");
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
@@ -665,7 +665,7 @@ for (i=0; i<fileCount; ++i)
     }
 printf("Updating seq table\n");
 fclose(seqTab);
-hgLoadTabFile(conn, "seq");
+hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add sequences");
 printf("All done\n");
 }

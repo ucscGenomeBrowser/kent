@@ -50,16 +50,15 @@ void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...);
 HGID hgNextId();
 /* Get next unique id.  (Should only be called after hgStartUpdate). */
 
-FILE *hgCreateTabFile(char *tableName);
-/* Open a tab file with name corresponding to tableName.  This
- * may just be fclosed when done. (Currently just makes
- * tableName.tab in the current directory.) */
+FILE *hgCreateTabFile(char *tmpDir, char *tableName);
+/* Open a tab file with name corresponding to tableName in tmpDir. */
 
-void hgLoadTabFile(struct sqlConnection *conn, char *tableName);
-/* Load tab delimited file corresponding to tableName. 
- * Should only be used after hgCreatTabFile, and only after
- * file closed. */
+void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
+                   FILE **fh);
+/* Load tab delimited file corresponding to tableName. close fh if not NULL */
 
+HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);
+/* get the maximum value of the id column in a table or zero if empry  */
 
 #endif /* HGRELATE_H */
 

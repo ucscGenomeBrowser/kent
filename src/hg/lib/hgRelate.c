@@ -99,24 +99,54 @@ sqlUpdate(conn,query->string);
 sqlDisconnect(pConn);
 }
 
-FILE *hgCreateTabFile(char *tableName)
-/* Open a tab file with name corresponding to tableName.  This
- * may just be fclosed when done. (Currently just makes
- * tableName.tab in the current directory.) */
+static void getTabFile(char *tmpDir, char *tableName, char *path)
+/* generate path to tab file */
 {
-char fileName[256];
-sprintf(fileName, "%s.tab", tableName);
-return mustOpen(fileName, "w");
+strcpy(path, tmpDir);
+strcat(path, "/");
+strcat(path, tableName);
+strcat(path, ".tab");
 }
 
-void hgLoadTabFile(struct sqlConnection *conn, char *tableName)
-/* Load tab delimited file corresponding to tableName. */
+FILE *hgCreateTabFile(char *tmpDir, char *tableName)
+/* Open a tab file with name corresponding to tableName in tmpDir. */
 {
-char query[512];
-char fileName[256];
-sprintf(fileName, "%s.tab", tableName);
-sprintf(query,
-   "LOAD data local infile '%s' into table %s", fileName, tableName);
+char path[PATH_LEN];
+getTabFile(tmpDir, tableName, path);
+return mustOpen(path, "w");
+}
+
+void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
+                   FILE **fh)
+/* Load tab delimited file corresponding to tableName. close fh if not NULL */
+{
+char path[PATH_LEN];
+char query[PATH_LEN+128];
+getTabFile(tmpDir, tableName, path);
+carefulClose(fh);
+safef(query, sizeof(query), "LOAD data local infile '%s' into table %s",
+      path, tableName);
 sqlUpdate(conn, query);
 }
 
+HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
+/* get the maximum value of the id column in a table or zero if empry  */
+{
+/* we get a row with NULL if the table is empty */
+char query[128];
+char **row = NULL;
+HGID maxId;
+struct sqlResult *sr;
+
+safef(query, sizeof(query), "SELECT MAX(id) from %s", tableName);
+
+sr = sqlGetResult(conn, query);
+if (sr != NULL)
+    row = sqlNextRow(sr);
+if ((row == NULL) || (row[0] == NULL))
+    maxId = 0;  /* empty table */
+else
+    maxId = sqlUnsigned(row[0]);
+sqlFreeResult(&sr);
+return maxId;
+}
