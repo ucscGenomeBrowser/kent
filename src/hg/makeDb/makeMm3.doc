@@ -2286,6 +2286,9 @@ ssh hgwdev
 cd /cluster/data/mm3/bed/affyU74.2004-02-05
 pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
+# Feb 24, 2004, shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table, this is so qName matches those in interdependent
+# tables in hgFixed
 hgLoadPsl mm3 affyU74.psl -tNameIx
 rm -r chrom temp run
 
@@ -2302,6 +2305,9 @@ cd /cluster/data/mm3/bed/affyGnf.2004-02-05
 affyPslAndAtlasToBed ../affyU74.2004-02-05/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
 affyPslAndAtlasToBed ../affyU74.2004-02-05/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
 affyPslAndAtlasToBed ../affyU74.2004-02-05/affyU74.psl /projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+
+# Feb 24, 2004, shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
 hgLoadBed mm3 affyGnfU74A affyGnfU74A.bed
 hgLoadBed mm3 affyGnfU74B affyGnfU74B.bed
 hgLoadBed mm3 affyGnfU74C affyGnfU74C.bed
@@ -2314,10 +2320,13 @@ hgLoadBed mm3 affyGnfU74C affyGnfU74C.bed
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-    
-    hgLoadSeq mm3 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
-    hgLoadSeq mm3 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
-    hgLoadSeq mm3 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+    # use perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # in sequence files.
+    # reload sequences with "U74Xv2" prefix removed so acc matches name used
+    # in other dependent tables.
+    hgLoadSeq -abbr=U74Av2: mm3 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq -abbr=U74Bv2: mm3 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq -abbr=U74Cv2: mm3 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
     
 MAKE ALIAS TABLES FOR hgFind
 ----------------------------------

@@ -2804,6 +2804,8 @@ ssh hgwdev
 cd /cluster/data/mm4/bed/affyU74.2004-02-06
 pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
 hgLoadPsl mm4 affyU74.psl -tNameIx
 rm -fr chrom temp run
 
@@ -2827,6 +2829,9 @@ affyPslAndAtlasToBed ../affyU74.2004-02-06/affyU74.psl \
 affyPslAndAtlasToBed ../affyU74.2004-02-06/affyU74.psl \
 	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
 	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
 hgLoadBed mm4 affyGnfU74A affyGnfU74A.bed
 hgLoadBed mm4 affyGnfU74B affyGnfU74B.bed
 hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
@@ -2839,10 +2844,14 @@ hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
     ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-                                                                                
-    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
-    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
-    hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+    
+    # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # reload sequences with prefix removed so acc matches name used in
+    # other dependent tables
+                                                    
+    hgLoadSeq -abbr=U74Av2: mm4 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq -abbr=U74Bv2: mm4 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq -abbr=U74Cv2: mm4 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
 
 ######## MAKING FAMILY BROWSER TABLES #######  (DONE - 2004-01-06 - Hiram)
 # These are instructions for building the
