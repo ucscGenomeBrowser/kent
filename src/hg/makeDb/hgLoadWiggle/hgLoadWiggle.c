@@ -11,10 +11,11 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.12 2004/08/20 20:21:33 sugnet Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.13 2004/12/09 20:14:31 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
+static boolean noLoad = FALSE;		/* Do not load table, create tab file */
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
 static char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
@@ -26,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"smallInsertSize", OPTION_INT},
     {"tab", OPTION_BOOLEAN},
     {"noBin", OPTION_BOOLEAN},
+    {"noLoad", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
     {"pathPrefix", OPTION_STRING},
     {NULL, 0}
@@ -39,10 +41,14 @@ errAbort(
   "usage:\n"
   "   hgLoadWiggle [options] database track files(s).wig\n"
   "options:\n"
-  "   -noBin\t suppress bin field\n"
-  "   -oldTable\t add to existing table\n"
-  "   -tab\tSeparate by tabs rather than space\n"
-  "   -pathPrefix=<path>\t.wib file path prefix to use (default /gbdb/<DB>/wib)"
+  "   -noBin\tsuppress bin field\n"
+  "   -noLoad\tdo not load table, only create .tab file\n"
+  "   -oldTable\tadd to existing table\n"
+  "   -tab\t\tSeparate by tabs rather than space\n"
+  "   -pathPrefix=<path>\t.wib file path prefix to use "
+      "(default /gbdb/<DB>/wib)\n"
+  "   -verbose=N\tN=2 see # of lines input, N=3 see chrom size info,\n"
+  "\t\tN=4 see details on chrom size info"
   );
 }
 
@@ -259,14 +265,22 @@ fclose(f);
 void loadDatabase(char *database, char *track, int wiggleSize, struct wiggleStub *wiggleList)
 /* Load database from wiggleList. */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = (struct sqlConnection *)NULL;
 struct dyString *dy = newDyString(1024);
 char *tab = "wiggle.tab";
 
-verbose(1, "Connected to database %s for track %s\n", database, track);
-/* First make table definition. */
-if (!oldTable)
+if (! noLoad)
     {
+    hSetDb(database);
+    conn = hAllocConn();
+    verbose(1, "Connected to database %s for track %s\n", database, track);
+    }
+
+/* First make table definition. */
+if ((!oldTable) && (!noLoad))
+    {
+    int indexLen = hGetMinIndexLength();
+
     /* Create definition statement. */
     verbose(1, "Creating table definition with %d columns in %s.%s\n",
 	    wiggleSize, database, track);
@@ -288,11 +302,11 @@ if (!oldTable)
     dyStringAppend(dy, "  sumSquares double not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
-       dyStringAppend(dy, "  INDEX(chrom(8),bin)\n");
+	dyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", indexLen);
     else
 	{
-	dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
-	dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", indexLen);
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", indexLen);
 	}
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
@@ -301,11 +315,16 @@ if (!oldTable)
 verbose(1, "Saving %s\n", tab);
 writeWiggleTab(tab, wiggleList, wiggleSize, database);
 
-verbose(1, "Loading %s\n", database);
-dyStringClear(dy);
-dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
-sqlUpdate(conn, dy->string);
-sqlDisconnect(&conn);
+if (! noLoad)
+    {
+    verbose(1, "Loading %s\n", database);
+    dyStringClear(dy);
+    dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
+    sqlUpdate(conn, dy->string);
+    sqlDisconnect(&conn);
+    }
+else
+    verbose(1, "noLoad option requested, see resulting file: %s\n", tab);
 }
 
 void hgLoadWiggle(char *database, char *track, int wiggleCount, char *wiggleFiles[])
@@ -319,7 +338,6 @@ chromHash = loadAllChromInfo(database);
 
 if (verboseLevel() > 2)
     {
-    /*struct chromInfo *ci;*/
     struct hashCookie cookie;
     struct hashEl *el;
 
@@ -348,11 +366,13 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
 noBin = optionExists("noBin");
+noLoad = optionExists("noLoad");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 pathPrefix = optionVal("pathPrefix",NULL);
-verbose(2, "noBin: %s, tab: %s, oldTable: %s\n",
+verbose(2, "noBin: %s, noLoad: %s, tab: %s, oldTable: %s\n",
 	noBin ? "TRUE" : "FALSE",
+	noLoad ? "TRUE" : "FALSE",
 	strictTab ? "TRUE" : "FALSE",
 	oldTable ? "TRUE" : "FALSE");
 if (pathPrefix)
