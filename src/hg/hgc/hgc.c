@@ -136,7 +136,7 @@
 #include "botDelay.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.614 2004/04/23 06:34:28 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.615 2004/04/23 22:58:42 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2179,7 +2179,7 @@ if (wordCount > 0)
         {
 	genericAxtClick(conn, tdb, item, start, words[1]);
 	}
-    else if (sameString(type, "expRatio"))
+    else if (sameString(type, "expRatio") || sameString(type, "gnfAtlas2"))
         {
 	genericExpRatio(conn, tdb, item, start);
 	}
@@ -14305,7 +14305,7 @@ else if(sameWord(track, "affy"))
     }
 else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
 	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
-	|| sameWord(track, "affyUclaNorm") || sameWord(track, "gnfAtlas2"))
+	|| sameWord(track, "affyUclaNorm") )
     {
     gnfExpRatioDetails(tdb, item);
     }
