@@ -39,9 +39,11 @@ char *outputList[] = {"hyperlink", "psl", "psl no header"};
 void getIndexedGenomeDescriptions(char ***retArray, int *retCount)
 /* Find out the list of genomes that have blat servers on them. */
 {
-struct dbDb *dbList = hGetBlatIndexedDatabases(), *db;
-int i, count = slCount(dbList);
-char **array;
+struct dbDb *dbList = hGetBlatIndexedDatabases();
+struct dbDb *db = NULL;
+int i = 0;
+int count = slCount(dbList);
+char **array = NULL;
 
 if (count == 0)
     errAbort("No active blat servers in database");
@@ -472,6 +474,13 @@ char *db = cartUsualString(cart, "db", defaultDatabase);
 struct serverTable *serve = findServer(db, FALSE);
 char **genomeList;
 int genomeCount;
+char *organism = hOrganism(db);
+char *assemblyList[128];
+char *values[128];
+int numAssemblies = 0;
+struct dbDb *dbList = hGetBlatIndexedDatabases();
+struct dbDb *cur = NULL;
+char *assembly = NULL;
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
@@ -483,8 +492,36 @@ cartSaveSession(cart);
 
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Freeze:<BR>");
-getIndexedGenomeDescriptions(&genomeList, &genomeCount);
-cgiMakeDropList("genome", genomeList, genomeCount, serve->genome);
+
+/* Find all the assemblies that pertain to the selected genome */
+for (cur = dbList; cur != NULL; cur = cur->next)
+    {
+    /* If we are looking at a zoo database then show the zoo database list */
+    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
+        strstrNoCase(cur->description, "zoo"))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+    else if (strstrNoCase(organism, cur->organism) && 
+             !strstrNoCase(cur->description, "zoo") &&
+             (cur->active || strstrNoCase(cur->name, db)))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+
+    /* Save a pointer to the current assembly */
+    if (strstrNoCase(db, cur->name))
+       {
+       assembly = cur->description;
+       }
+    }
+
+cgiMakeDropList("genome", assemblyList, numAssemblies, serve->genome);
+
 printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
