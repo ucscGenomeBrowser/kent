@@ -498,8 +498,6 @@ else if (sameString(track, "blastzMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Sc"))
     colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blastzBestMouse"))
-    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Ref"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHgRef"))
@@ -507,6 +505,8 @@ else if (sameString(track, "blastzHgRef"))
 else if (sameString(track, "blastzHg"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzBestMouse"))
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzBestHuman"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMmHg"))
     colorCrossSpeciesUi(tdb, FALSE);
