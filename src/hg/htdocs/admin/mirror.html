@@ -105,7 +105,7 @@ databases </A>&nbsp;(100 Gb)
 <LI><A HREF="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</A>
 <LI><A HREF="#step9">Set up HgFixed database</A>&nbsp;(500 Mb)
 <LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(700 Mb)
-<LI><A HREF="#step11">Set up the swissProt database</A>&nbsp;(400 Mb)
+<LI><A HREF="#step11">Set up the Swiss-Prot database</A>&nbsp;(400 Mb)
 </OL>
 <BR><BR>
 <HR>
@@ -659,19 +659,18 @@ mysql&gt; create database proteins040915
 </OL>
 
 <H4><a NAME="step11"></A>
-11. Create the swissProt database</H4>
+11. Create the Swiss-Prot database</H4>
 
 <OL type="a">
-<LI>Please note <A HREF="/goldenPath/swissProt/database/README.txt">
-	Usage Rights </A> for the swissProt database.
+<LI>Please note <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/swissProt/database/README.txt">usage rights</A> for the Swiss-Prot database.
 
-<LI>Download a copy of the dumped swissProt tables. (400 Mb)
+<LI>Download a copy of the dumped Swiss-Prot tables. (400 Mb)
 <PRE>
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/swissProt/ \
   $WEBROOT/goldenPath/swissProt/
 </PRE>
-<LI>Create the swissProt database
+<LI>Create the Swiss-Prot database
 <PRE>
 mysql&gt; create database swissProt
 </PRE>
