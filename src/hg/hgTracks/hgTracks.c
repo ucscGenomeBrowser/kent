@@ -66,6 +66,7 @@
 #include "expRecord.h"
 #include "altGraph.h"
 #include "altGraphX.h"
+#include "loweLabTracks.h"
 #include "geneGraph.h"
 #include "sample.h"
 #include "genMapDb.h"
@@ -75,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.541 2003/06/26 15:15:31 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.542 2003/06/26 16:33:37 aamp Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9997,6 +9998,11 @@ registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
+/* Lowe lab related */
+registerTrackHandler("gbProtCode", gbGeneMethods);
+registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
+registerTrackHandler("llaPfuPrintA",llArrayMethods);
+registerTrackHandler("llaPaePrintA",llArrayMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
