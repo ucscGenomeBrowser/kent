@@ -1986,16 +1986,17 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     [hgwdev:affyGnf> cp affyRatio.bed  /cluster/store5/gs.16/build33/bed/affyRatio
     [hgwdev:affyGnf> rm rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
     
-# LOAD SAGE DATA (TODO)
+# LOAD SAGE DATA (DONE - 2003-05-14 - Hiram)
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
     # XXX = uniGene build for which SAGE was built -- not necessarily current!
     # Figure out the build number by peeking at this file:
-    lynx ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt
-    set version = XXX
-    mkdir /projects/cc/hg/sugnet/sage/sage.$version
-    cd /projects/cc/hg/sugnet/sage/sage.$version
+    wget -O - ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt 2> /dev/null
+#   set Version = XXX
+    set Version=160
+    mkdir /projects/cc/hg/sugnet/sage/sage.$Version
+    cd /projects/cc/hg/sugnet/sage/sage.$Version
     ncftp ftp://ftp.ncbi.nih.gov/pub/sage
       mget -R map/readme.txt map/info.txt extr info map/Hs
       quit
@@ -2023,9 +2024,9 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     # Create the uniGene alignments 
     # ~/hg15/uniGene/hg15.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
-    cd /projects/cc/hg/sugnet/sage/sage.XXX/extr
+    cd /projects/cc/hg/sugnet/sage/sage.$Version/extr
     addAveMedScoreToPsls \
-      ~/hg15/bed/uniGene.$version/hg15.uniGene.lifted.pslReps.psl \
+      ~/hg15/bed/uniGene.$Version/hg15.uniGene.lifted.pslReps.psl \
       sageSummary.sage  uniGene.wscores.bed
     hgLoadBed hg15 uniGene_2 uniGene.wscores.bed
     hgsql hg15 < ~kent/src/hg/lib/sage.sql 
@@ -2039,7 +2040,7 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     # with current uniGene date. 
 
     
-# MAKE UNIGENE ALIGNMENTS (TODO)
+# MAKE UNIGENE ALIGNMENTS (DONE - 2003-05-15 - Hiram)
     # Download of the latest UniGene version is now automated by a 
     # cron job -- see /cluster/home/angie/crontab , 
     # /cluster/home/angie/unigeneVers/unigene.csh .  
@@ -2049,26 +2050,28 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     # substitute XXX -> the uniGene version used by SAGE, if building the 
     # uniGene/SAGE track;  or just the latest uniGene version in 
     # /projects/cc/hg/sugnet/uniGene/ , if doing uniGene alignments only.
-    set version = XXX
-    cd /projects/cc/hg/sugnet/uniGene/uniGene.$version
-    gunzip Hs.seq.uniq.gz 
+    # set Version = XXX
+    set Version = 160
+    cd /projects/cc/hg/sugnet/uniGene/uniGene.$Version
+    gunzip Hs.seq.uniq.gz Hs.data.gz
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
     # Distribute UniGene sequence to /iscratch/i/ (kkstore can see /projects)
     ssh kkstore
-    set version = XXX # same as above
-    mkdir -p /iscratch/i/uniGene.$version
+    set Version = 160 # same as above
+    mkdir -p /iscratch/i/uniGene.$Version
     cp -p \
-  /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
-      /iscratch/i/uniGene.$version
+  /projects/cc/hg/sugnet/uniGene/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
+      /iscratch/i/uniGene.$Version
     ssh kkr1u00
     ~kent/bin/iSync
     ssh kk
-    set version = XXX # same as above
-    mkdir -p ~/hg15/bed/uniGene.$version
-    cd ~/hg15/bed/uniGene.$version
-    ls -1S /cluster/store5/gs.16/build33/trfFa/* > allctg.lst
-    ls -1S /iscratch/i/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
+    set Version = 160 # same as above
+    mkdir -p ~/hg15/bed/uniGene.$Version
+    cd ~/hg15/bed/uniGene.$Version
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > allctg.lst
+#   ls -1S /cluster/store5/gs.16/build33/trfFa/* > allctg.lst
+    ls -1S /iscratch/i/uniGene.$Version/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
     echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
@@ -2078,8 +2081,8 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     para check
     para push
     # ssh eieio
-    set version = XXX # same as above
-    cd ~/hg15/bed/uniGene.$version
+    set Version = 160 # same as above
+    cd ~/hg15/bed/uniGene.$Version
     pslSort dirs raw.psl tmp psl >& pslSort.log
     liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
     | pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
