@@ -15,7 +15,7 @@ errAbort(
   "usage:\n"
   "   lavToPsl in.lav out.psl\n"
   "options:\n"
-  "   -target-strand=c set the target strand to c (default +)\n"
+  "   -target-strand=c set the target strand to c (default is no strand)\n"
   );
 }
 
@@ -86,10 +86,15 @@ if (psl)
     fprintf(f, "%s\t%d\t%d\t%d\t", tName, tSize, tTotalStart, tTotalEnd);
     fprintf(f, "%d\t", blockCount);
     for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->tEnd - block->tStart);
+        fprintf(f, "%d,", block->tEnd - block->tStart);
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
-	fprintf(f, "%d,", block->qStart);
+        {
+        if (isRc)
+            fprintf(f, "%d,", (qSize - block->qEnd));
+        else
+            fprintf(f, "%d,", block->qStart);
+        }
     fprintf(f, "\t");
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tStart);
@@ -100,10 +105,7 @@ else  /* Output bed line. */
     score = (match - mismatch - qNumInsert*2) * 1000 / (qTotalEnd - qTotalStart);
     fprintf(f, "%s\t%d\t%d\t%s\t%d\t", tName, tTotalStart, tTotalEnd,
 	qName, score);
-    if (isRc)
-	fprintf(f, "-\t");
-    else
-	fprintf(f, "+\t");
+    fprintf(f, "%c\t", (isRc ? '-' : '+'));
     fprintf(f, "%d\t%d\t0\t%d\t", tTotalStart, tTotalEnd, blockCount);
     for (block = blockList; block != NULL; block = block->next)
 	fprintf(f, "%d,", block->tEnd - block->tStart);
@@ -288,7 +290,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-targetStrand = optionVal("target-strand", "+");
+targetStrand = optionVal("target-strand", "");
 lavToPsl(argv[1], argv[2]);
 return 0;
 }
