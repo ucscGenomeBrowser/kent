@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.16 2004/03/13 02:59:31 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.17 2004/03/13 16:55:18 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -60,16 +60,25 @@ for (db = jf->dbList; db != NULL; db = db->next)
 fprintf(f, ".%s.%s", jf->table, jf->field);
 }
 
+static char *emptyForNull(char *s)
+/* Return "" for NULL strings, otherwise string itself. */
+{
+if (s == NULL)
+    s = "";
+return s;
+}
+
 struct slName *getTablesForField(struct sqlConnection *conn, 
-	char *splitPrefix, char *table)
+	char *splitPrefix, char *table, char *splitSuffix)
 /* Get tables that match field. */
 {
 struct slName *list = NULL, *el;
-if (splitPrefix != NULL)
+if (splitPrefix != NULL || splitSuffix != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    safef(query, sizeof(query), "show tables like '%s%s'", splitPrefix, table);
+    safef(query, sizeof(query), "show tables like '%s%s%s'", 
+    	emptyForNull(splitPrefix), table, emptyForNull(splitSuffix));
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -95,7 +104,7 @@ for (db = jf->dbList; db != NULL && !gotIt; db = db->next)
     {
     struct sqlConnection *conn = sqlConnect(db->name);
     struct slName *table, *tableList = getTablesForField(conn,
-    			jf->splitPrefix, jf->table);
+    			jf->splitPrefix, jf->table, jf->splitSuffix);
     char fieldName[512];
     sqlDisconnect(&conn);
     for (table = tableList; table != NULL; table = table->next)
@@ -254,7 +263,8 @@ else
     {
     struct slName *table;
     struct slName *tableList = getTablesForField(conn,keyField->splitPrefix,
-    						 keyField->table);
+    						 keyField->table, 
+						 keyField->splitSuffix);
     int rowCount = totalTableRows(conn, tableList);
     int hashSize = digitsBaseTwo(rowCount)+1;
     char query[256], **row;
@@ -341,7 +351,7 @@ if (conn != NULL)
     char *miss = NULL;
     struct slName *table;
     struct slName *tableList = getTablesForField(conn,jf->splitPrefix,
-    						 jf->table);
+    						 jf->table, jf->splitSuffix);
     for (table = tableList; table != NULL; table = table->next)
 	{
 	char query[256], **row;
