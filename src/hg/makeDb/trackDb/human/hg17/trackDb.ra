@@ -314,7 +314,7 @@ otherDb mm5
 
 track ensRatMm5Hom
 shortLabel Mouse Synteny
-longLabel $Organism/Mouse (mm5-June 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Mouse (mm5-June 04) Synteny Using Blastz Single Coverage (100k window)
 priority 187.5
 group compGeno
 visibility hide
