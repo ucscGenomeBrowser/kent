@@ -566,7 +566,7 @@ longLabel Microarray Experiments for NCI 60 Cell Lines
 priority 38
 visibility hide
 type bed 15 +
-private on
+
 
 track cghNci60
 shortLabel CGH NCI60
@@ -576,3 +576,11 @@ visibility hide
 type bed 15 +
 private on
 
+track rosetta
+shortLabel Rosetta
+longLabel Rosetta Experimental Confirmation of Chr22 Exons
+priority 40
+visibility hide
+chromosomes chr22,
+type bed 15 +
+private on
