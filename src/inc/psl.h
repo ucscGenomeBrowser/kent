@@ -32,6 +32,9 @@
 #define PSL_WITH_BIN  0x02  /* add bin column */
 #define PSL_XA_FORMAT 0x04  /* add XA format columns */
 
+/* options for pslFromAlign */
+#define PSL_IS_SOFTMASK 0x01 /* lower case are mask */
+
 struct psl
 /* Summary info about a patSpace alignment */
     {
@@ -206,6 +209,13 @@ struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName);
 
 boolean pslIsProtein(const struct psl *psl);
 /* is psl a protein psl (are it's blockSizes and scores in protein space) */
+
+struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qString,
+                         char *tName, int tSize, int tStart, int tEnd, char *tString,
+                         char* strand, unsigned options);
+/* Create a PSL from an alignment.  Options PSL_IS_SOFTMASK if lower case
+ * bases indicate repeat masking.  Returns NULL if alignment is empty after
+ * triming leading and trailing indels.*/
 
 #endif /* PSL_H */
 
