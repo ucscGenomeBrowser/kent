@@ -10,6 +10,7 @@ cgi:
 	cd hgTracks; make; cd ..
 	cd hgTrackUi; make; cd ..
 	cd hgc; make; cd ..
+	cd cartDump; make; cd ..
 
 alpha:
 	cd lib; make; cd ..
@@ -22,6 +23,7 @@ alpha:
 	cd hgTracks; make alpha; cd ..
 	cd hgTrackUi; make alpha; cd ..
 	cd hgc; make alpha; cd ..
+	cd cartDump; make alpha; cd ..
 
 beta:
 	cd lib; make; cd ..
@@ -34,6 +36,7 @@ beta:
 	cd hgTracks; make beta; cd ..
 	cd hgTrackUi; make beta; cd ..
 	cd hgc; make beta; cd ..
+	cd cartDump; make beta; cd ..
 
 clean: 
 	cd lib; make clean; cd ..;
