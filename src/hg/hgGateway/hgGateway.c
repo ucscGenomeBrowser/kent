@@ -90,6 +90,12 @@ if (oldDb != NULL && !sameString(db, oldDb))
 	      "	(open \"STS Markers\" track by clicking to see this
 	      marker) 
 	      </TD></TR>\n"
+	      "<TR><TD VALIGN=Top NOWRAP>D22S586;D22S43</TD>\n"
+	      "	<TD WIDTH=14></TD>\n"
+	      "	<TD VALIGN=Top>Displays region between STS markers "
+	      "D22S586 and D22S43.  Includes 500,000 bases to either "
+	      "side as well."
+	      "</TD></TR>\n"
 	      "<TR><TD VALIGN=Top NOWRAP>AA205474</TD>\n"
 	      "	<TD WIDTH=14></TD>\n"
 	      "	<TD VALIGN=Top>Displays region of EST with GenBank acc.
