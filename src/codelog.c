@@ -675,4 +675,14 @@
 	       up (taming nlogn a little) major sort on hit
 	       diagonal.
 	   o - Custom hit diagonal sort routine.
-407 - Bringing stuff over to Lincoln Stein's lab.
+407 - Fixed blat standalone bug where it only worked on one sequence
+      databases.  Made hgBlat front end do protein as well as DNA.
+      Bringing stuff over to Lincoln Stein's lab.
+408 - hgBlat does translated dna/rna.
+409 - Various refinements to blat.
+410 - Added 'allow one miss in tile' and long tile sizes (up to
+      8 in protein, 18 in amino acids) to blat.
+411 - A little blat debugging.  Tweaked score function in ssStitch
+      and rationalized stringency parameters.
+412 - Adding in preliminary blat mouse alignment tracks on 21 and 22.
+413 - Added in full genome blat mouse alignment track.
