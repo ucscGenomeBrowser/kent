@@ -1033,9 +1033,12 @@ chainSome $(path1)
 
   # syntenic (using revision 1.6)
   /cluster/home/heather/bin/x86_64/netSyntenic bosTau1.net.raw bosTau1.net.syn
-  gzip bosTau1.net.raw
-
   # memory usage 2757492736, utime 13404 s/100, stime 616
+
+  # gzip
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  gzip bosTau1.net.raw
 
   # split
   ssh kksilo
