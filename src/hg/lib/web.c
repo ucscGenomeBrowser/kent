@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.60 2004/09/27 19:20:25 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.61 2004/10/20 11:44:05 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -175,6 +175,8 @@ else if (endsWith(scriptName, "hgText"))
     puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
 else if (endsWith(scriptName, "hgNear"))
     puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+else if (endsWith(scriptName, "hgTables"))
+    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
 else
     puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
 puts("       class=\"topbar\">");
