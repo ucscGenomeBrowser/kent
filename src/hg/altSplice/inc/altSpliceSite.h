@@ -7,20 +7,6 @@
 
 #define ALTSPLICESITE_NUM_COLS 18
 
-enum altSpliceType
-/* Type of alternative splicing event. */
-{
-    alt5Prime,     /* 0 */
-    alt3Prime,     /* 1 */
-    altCassette,   /* 2 */
-    altRetInt,     /* 3 */
-    altIdentity,   /* 4 */
-    altOther,      /* 5 */
-    altControl,    /* 6 */
-    alt3SoftPrime, /* 7 */
-    alt5SoftPrime  /* 8 */
-};
-
 struct altSpliceSite
 /* Structre to hold information about one splice site in graph. */
 {
