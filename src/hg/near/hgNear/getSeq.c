@@ -14,30 +14,29 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.5 2003/08/25 23:52:49 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.6 2003/10/18 16:34:37 kent Exp $";
 
-static void printNameAndDescription(struct sqlConnection *conn, char *id)
+static void printNameAndDescription(struct sqlConnection *conn, 
+	struct genePos *gp, struct column *nameCol, struct column *descCol)
 /* Look up name and description and print. */
 {
-char **row;
-char query[256];
-struct sqlResult *sr;
-char *name = "";
-char *description = "";
-safef(query, sizeof(query),
-	"select geneSymbol,description from kgXref where kgID = '%s'", id);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    name = row[0];
-    description = row[1];
-    }
-hPrintf(" %s - %s", name, description);
-sqlFreeResult(&sr);
+char *name = NULL;
+char *description = NULL;
+
+if (nameCol != NULL)
+    name = nameCol->cellVal(nameCol, gp, conn);
+if (descCol != NULL)
+    description = descCol->cellVal(descCol, gp, conn);
+if (name != NULL)
+    hPrintf(" %s", name);
+if (description != NULL)
+    hPrintf(" - %s", description);
+freeMem(name);
+freeMem(description);
 }
 
-static void getSeqFromBlob(struct sqlConnection *conn, struct genePos *geneList,
-	char *tableName)
+static void getSeqFromBlob(struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList, char *tableId)
 /* Get sequence from blob field in table and print it as fasta. */
 {
 struct sqlResult *sr;
@@ -45,6 +44,9 @@ char **row;
 char query[256];
 struct genePos *gp;
 struct sqlConnection *conn2 = hAllocConn();
+char *tableName = genomeSetting(tableId);
+struct column *descCol = findNamedColumn(colList, "description");
+struct column *nameCol = findNamedColumn(colList, "name");
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -57,7 +59,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	{
 	char *seq = row[0];
 	hPrintf(">%s", id);
-	printNameAndDescription(conn2, id);
+	printNameAndDescription(conn2, gp, nameCol, descCol);
 	hPrintf("\n");
 	writeSeqWithBreaks(stdout, seq, strlen(seq), 60);
 	}
@@ -67,16 +69,62 @@ hPrintf("</TT></PRE>");
 hFreeConn(&conn2);
 }
 
-static void getProtein( struct sqlConnection *conn, struct genePos *geneList)
+
+static void getProtein( struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList)
 /* Print out proteins. */
 {
-getSeqFromBlob(conn, geneList, "knownGenePep");
+getSeqFromBlob(conn, colList, geneList, "pepTable");
 }
 
-static void getMrna(struct sqlConnection *conn, struct genePos *geneList)
+void getGeneMrna(struct sqlConnection *conn, 
+	struct column *colList, struct genePos *geneList, char *tableId)
+/* Get promoter sequence for gene. */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct genePos *gp;
+struct sqlConnection *conn2 = hAllocConn();
+struct column *descCol = findNamedColumn(colList, "description");
+struct column *nameCol = findNamedColumn(colList, "name");
+char *table = genomeSetting(tableId);
+
+hPrintf("<TT><PRE>");
+for (gp = geneList; gp != NULL; gp = gp->next)
+    {
+    char *id = gp->name;
+    safef(query, sizeof(query), 
+    	"select * from %s where name='%s'"
+	" and chrom='%s' and txStart=%d and txEnd=%d", 
+    	table, id, gp->chrom, gp->start, gp->end);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	struct genePred *gene = genePredLoad(row);
+	struct bed *bed = bedFromGenePred(gene);
+	struct dnaSeq *seq = hSeqForBed(bed);
+	hPrintf(">%s (predicted mRNA)", id);
+	printNameAndDescription(conn2, gp, nameCol, descCol);
+	hPrintf("\n");
+	writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
+	dnaSeqFree(&seq);
+	bedFree(&bed);
+	genePredFree(&gene);
+	}
+    }
+hPrintf("</TT></PRE>");
+hFreeConn(&conn2);
+}
+
+static void getMrna(struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList)
 /* Print out proteins. */
 {
-getSeqFromBlob(conn, geneList, "knownGeneMrna");
+if (genomeOptionalSetting("mrnaTable") != NULL)
+    getSeqFromBlob(conn, colList, geneList, "mrnaTable");
+else
+    getGeneMrna(conn, colList, geneList, "geneTable");
 }
 
 static boolean hasUtr5(struct genePred *gp)
@@ -110,23 +158,30 @@ else
 return seq;
 }
 
-static void getPromoter(struct sqlConnection *conn, struct genePos *geneList)
+static void getPromoter(struct sqlConnection *conn, struct column *colList,
+	struct genePos *geneList)
 /* Print out promoters. */
 {
 struct sqlResult *sr;
 char **row;
 char query[256];
 struct genePos *gp;
+char *table = genomeSetting("geneTable");
 struct sqlConnection *conn2 = hAllocConn();
 int upSize = cartInt(cart, proUpSizeVarName);
 int downSize = cartInt(cart, proDownSizeVarName);
 boolean fiveOnly = cartBoolean(cart, proIncludeFiveOnly);
+struct column *descCol = findNamedColumn(colList, "description");
+struct column *nameCol = findNamedColumn(colList, "name");
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
-    safef(query, sizeof(query), "select * from knownGene where name='%s'", id);
+    safef(query, sizeof(query), 
+    	"select * from %s where name='%s'"
+	" and chrom='%s' and txStart=%d and txEnd=%d", 
+    	table, id, gp->chrom, gp->start, gp->end);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -135,7 +190,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	    {
 	    struct dnaSeq *seq = genePromoSeq(gene, upSize, downSize);
 	    hPrintf(">%s (promoter %d %d)", id, upSize, downSize);
-	    printNameAndDescription(conn2, id);
+	    printNameAndDescription(conn2, gp, nameCol, descCol);
 	    hPrintf("\n");
 	    writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
 	    dnaSeqFree(&seq);
@@ -147,10 +202,11 @@ hPrintf("</TT></PRE>");
 hFreeConn(&conn2);
 }
 
-static void getGenomic(struct sqlConnection *conn, struct genePos *geneList)
+static void getGenomic(struct sqlConnection *conn, 
+	struct column *colList, struct genePos *geneList)
 /* Put up dialog to get genomic sequence. */
 {
-struct hTableInfo *hti = hFindTableInfo(NULL, "knownGene");
+struct hTableInfo *hti = hFindTableInfo(NULL, genomeSetting("geneTable"));
 hPrintf("<H2>Get Genomic Sequence Near Gene</H2>");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -164,7 +220,8 @@ void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList)
 /* Retrieve genomic sequence sequence according to options. */
 {
-struct hTableInfo *hti = hFindTableInfo(NULL, "knownGene");
+char *table = genomeSetting("geneTable");
+struct hTableInfo *hti = hFindTableInfo(NULL, table);
 struct genePos *gp;
 char query[256];
 struct sqlResult *sr;
@@ -174,7 +231,8 @@ hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
-    safef(query, sizeof(query), "select * from knownGene where name='%s'", id);
+    safef(query, sizeof(query), "select * from %s where name='%s'", 
+    	table, id);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -193,13 +251,13 @@ void doGetSeq(struct sqlConnection *conn, struct column *colList,
 /* Put up the get sequence page. */
 {
 if (sameString(how, "protein"))
-    getProtein(conn, geneList);
+    getProtein(conn, colList, geneList);
 else if (sameString(how, "mRNA"))
-    getMrna(conn, geneList);
+    getMrna(conn, colList, geneList);
 else if (sameString(how, "promoter"))
-    getPromoter(conn, geneList);
+    getPromoter(conn, colList, geneList);
 else if (sameString(how, "genomic"))
-    getGenomic(conn, geneList);
+    getGenomic(conn, colList, geneList);
 else
     errAbort("Unrecognized %s value %s", getSeqHowVarName, how);
 }
