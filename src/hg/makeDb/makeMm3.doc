@@ -1092,13 +1092,13 @@ RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (DONE 9/23/03 angie)
     # 1738562766 bases of 2505900260 (69.379%) in intersection
 
 
-LOADING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/10/03)
+RE-AXT-ING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 09/25/03)
 
     # Translate Penn State .lav files into sorted axt:
-    ssh kkstore
-    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.mm3.2003-03-06-ASH"
-    set seq1_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
-    set seq2_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
+    ssh kksilo
+    set base="/cluster/data/mm3/bed/blastz.mm3.redo.2003-09-23"
+    set seq1_dir="/cluster/data/mm3/mixedNib"
+    set seq2_dir="/cluster/data/mm3/mixedNib"
     set tbl="blastzMouse"
     cd $base
     mkdir -p axtChrom
@@ -1109,12 +1109,29 @@ LOADING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/10/03)
       echo "Translating $chr lav to $out"
       cat `ls -1 *.lav | sort -g` \
         | lavToAxt stdin $seq1_dir $seq2_dir stdout \
-        | axtDropSelf stdin stdout \
+        | axtDropOverlap stdin /cluster/data/mm3/chrom.sizes \
+            /cluster/data/mm3/chrom.sizes stdout \
         | axtSort stdin $out
       popd
     end
+    # chrUn_random ran out of mem; re-run in 2 passes:
+    foreach chrdir (lav/chrUn_random)
+      set chr=$chrdir:t
+      echo two-pass translating $chr lav to axtChrom/$chr.axt
+      foreach d ($chrdir/*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropOverlap stdin /cluster/data/mm3/chrom.sizes \
+            /cluster/data/mm3/chrom.sizes stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 $chrdir/*.axt | sort -g` \
+        > axtChrom/$chr.axt
+    end
+    rm lav/chr*/*.axt*
 
-    # Translate the sorted axt files into psl:
+# Did not load tables for this one -- they're very big, and low demand.
+TODO    # Translate the sorted axt files into psl:
     cd $base
     mkdir -p pslChrom
     foreach f (axtChrom/chr*.axt)
@@ -1123,8 +1140,7 @@ LOADING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/10/03)
     end
 
     # Load tables
-# Did not load tables for this one -- they're very big, and low demand.
-TODO    ssh hgwdev
+    ssh hgwdev
     set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.mm3.2003-03-06-ASH"
     set tbl="blastzMouse"
     cd $base/pslChrom
