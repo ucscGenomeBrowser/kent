@@ -8,6 +8,7 @@
 boolean doTarget = TRUE;
 boolean noHead = FALSE;
 int maxPile = 100;
+int minPile = 1;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +24,8 @@ errAbort(
   "   -nohead - suppress psl header in output.\n"
   "   -maxPile - maximum number of hits allowed in a pile before filtering\n"
   "              (default 100)\n"
+  "   -minPile - min number of hits allowed in a pile before filtering \n"
+  "              (default 1)\n"
   "in.psl should be sorted by query or target as appropriate");
 }
 
@@ -43,6 +46,14 @@ else
     }
 }
 
+checkPile(struct psl *list)
+{
+    if (minPile == 1)
+	    return (slCount(list) <= maxPile);
+    else
+        
+        return (slCount(list) >= minPile);
+}
 void pslUnpile(char *inName, char *outName)
 /* pslUnpile - Removes huge piles of alignments from sorted 
  * psl files (due to unmasked repeats presumably).. */
@@ -63,7 +74,7 @@ for (;;)
 	if (list != NULL)
 	    {
 	    slReverse(&list);
-	    if (slCount(list) <= maxPile)
+        if (checkPile(list))
 	        {
 		for (el = list; el != NULL; el = el->next)
 		    {
@@ -100,6 +111,7 @@ if (argc != 3)
 doTarget = !cgiBoolean("query");
 noHead = (cgiBoolean("nohead") || cgiBoolean("noHead"));
 maxPile = cgiOptionalInt("maxPile", maxPile);
+minPile = cgiOptionalInt("minPile", minPile);
 pslUnpile(argv[1], argv[2]);
 return 0;
 }
