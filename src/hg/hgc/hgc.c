@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.858 2005/03/23 21:35:21 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.859 2005/03/23 21:44:05 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4520,13 +4520,10 @@ if (hTableExists("contigAcc"))
         row = sqlNextRow(sr2);
         if (row)
             {
-            char noversion[128];
             contigAccStaticLoad(row, &contigAcc);
-            strncpy(noversion, contigAcc.acc, 128);
-            chopSuffix(contigAcc.acc);
             printf("<B>Genbank Accession: <A HREF=");
             printEntrezNucleotideUrl(stdout, contigAcc.acc);
-            printf(" TARGET=_BLANK>%s</A></B><BR>\n", noversion);
+            printf(" TARGET=_BLANK>%s</A></B><BR>\n", contigAcc.acc);
             }
         sqlFreeResult(&sr2);
         }
