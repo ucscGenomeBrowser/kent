@@ -110,6 +110,7 @@ type bed 3
 
 searchTable blastHg16KG
 searchType bed
+searchMethod fuzzy
 shortCircuit 1
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 1
@@ -117,7 +118,7 @@ searchPriority 1
 searchTable blatCioSav1
 termRegex paired_scaffold_[0-9]+?
 query select tName,tStart,tEnd,qName from %s where qName like '%s'
-searchMethod prefix
+searchMethod exact
 searchType bed
 shortCircuit 1
 searchPriority 60
@@ -131,5 +132,6 @@ searchPriority 49
 
 searchTable snapGene
 searchType genePred
+searchMethod exact
 shortCircuit 1
 searchPriority 50
