@@ -71,7 +71,7 @@ void dnaMotifScoreToProb(struct dnaMotif *motif);
  * that is probability based.  This assumes that the
  * background distribution is simple: 25% for each base */
 
-void dnaMotifMakeProbabilitic(struct dnaMotif *motif);
+void dnaMotifMakeProbabalistic(struct dnaMotif *motif);
 /* Change motif, which may be score or count based, to 
  * probabalistic one, where each column adds to 1.0 */
 
