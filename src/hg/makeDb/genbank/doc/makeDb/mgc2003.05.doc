@@ -85,3 +85,37 @@ ids[$5] {print $0}
     ./bin/gbDbLoadStep -verbose=1 -initialLoad rn2&
     # this takes hours
 
+2003/07/30:
+
+    The URL of  the exploratory PCR and full_ORF data are
+    http://genes.cs.wustl.edu/predictions/human/NCBI33/exploratory_PCR/chr_gtf
+    and
+    http://genes.cs.wustl.edu/predictions/human/NCBI33/full_ORF/chr_gtf
+
+    cd mgcTSExpPcr
+    ldHgGene -gtf hg15 mgcTSExpPcr *.gtf
+
+    cd mgcTSFullOrfPcr
+    ldHgGene -gtf hg15 mgcTSFullOrfPcr *.gtf
+
+2003/08/05:
+   update twinscan PCR tracks
+   cd /usr/local/apache/htdocs/mgc/twinscanPcr
+   mkdir 2003.08.05
+   cd 2003.08.05
+
+   wget -nv --no-parent -r http://genes.cs.wustl.edu/predictions/MGC/human/exploratory_PCR/chr_gtf/
+   mkdir mgcTSExpPcr
+   mv genes.cs.wustl.edu/predictions/MGC/human/exploratory_PCR/chr_gtf/*.gtf mgcTSExpPcr
+   rm -rf genes.cs.wustl.edu
+
+   wget -nv --no-parent -r http://genes.cs.wustl.edu/predictions/MGC/human/full_ORF/chr_gtf/
+   mkdir mgcTSFullOrfPcr
+   mv genes.cs.wustl.edu/predictions/MGC/human/full_ORF/chr_gtf/*.gtf mgcTSFullOrfPcr
+   rm -rf genes.cs.wustl.edu
+
+   cd mgcTSExpPcr
+   ldHgGene -gtf hg15 mgcTSExpPcr *.gtf
+
+   cd mgcTSFullOrfPcr
+   ldHgGene -gtf hg15 mgcTSFullOrfPcr *.gtf
