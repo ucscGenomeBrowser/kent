@@ -1358,6 +1358,22 @@ o - Load genomic dupes
     hgsql rn1 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed rn1 -oldTable genomicDups genomicDupes.bed
 
+LOAD RGD CURATED GENES TRACK
+    - cd rn1
+    - cd bed
+    - mkdir rgdGene
+    - Browse to http://zephyrus.brc.mcw.edu/cgi-bin/pub/viewcvs.cgi/pub_gbrowse/gff_files/RGD_curated_genes.gff
+        This is a web-based CVS page. Click the download link and save the file to ~/rn1/bed/RGD_curated_genes.gff
+     - Now massage the data format using:
+         rn1/bed/rgdGene/massage.pl
+     - Load the data:
+        ldHgGene rn1 rgdGene Fixed_RGD_Curated_genes.gff
+     - Create the link table for searching
+        In mysql for the rn1 database do:
+        create table rgdLink (id int primary key, name varchar(32) not null);
+        LOAD DATA LOCAL INFILE 'RGD.links' into table rgdLink; 
+     
+
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
 97% of data  Just an experiment, not really followed through on).
