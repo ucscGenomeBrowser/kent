@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.739 2004/09/05 20:17:41 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.740 2004/09/08 05:15:37 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2054,35 +2054,85 @@ if (net->chainId)
 	printf("<B>%s bases duplicated:</B> %d<BR>\n", otherOrg, net->qDup);
     }
 if (net->tN >= 0)
-    printf("<B>N's in %s:</B> %d (%1.1f%%)<BR>\n",
-	   org, net->tN, 100.0*net->tN/tSize);
+    {
+    printf("<B>N's in %s:</B> %d ", org, net->tN);
+    if (tSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->tN/tSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->qN >= 0)
-    printf("<B>N's in %s:</B> %d (%1.1f%%)<BR>\n",
-	   otherOrg, net->qN, 100.0*net->qN/qSize);
+    {
+    printf("<B>N's in %s:</B> %d ", otherOrg, net->qN);
+    if (qSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->qN/qSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->tTrf >= 0)
-    printf("<B>%s tandem repeat (trf) bases:</B> %d (%1.1f%%)<BR>\n", 
-	   org, net->tTrf, 100.0*net->tTrf/tSize);
+    {
+    printf("<B>%s tandem repeat (trf) bases:</B> %d ", org, net->tTrf);
+    if (tSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->tTrf/tSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->qTrf >= 0)
-    printf("<B>%s tandem repeat (trf) bases:</B> %d (%1.1f%%)<BR>\n", 
-	   otherOrg, net->qTrf, 100.0*net->qTrf/qSize);
+    {
+    printf("<B>%s tandem repeat (trf) bases:</B> %d ", otherOrg, net->qTrf);
+    if (qSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->qTrf/qSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->tR >= 0)
-    printf("<B>%s RepeatMasker bases:</B> %d (%1.1f%%)<BR>\n", 
-	   org, net->tR, 100.0*net->tR/tSize);
+    {
+    printf("<B>%s RepeatMasker bases:</B> %d ", org, net->tR);
+    if (tSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->tR/tSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->qR >= 0)
-    printf("<B>%s RepeatMasker bases:</B> %d (%1.1f%%)<BR>\n", 
-	   otherOrg, net->qR, 100.0*net->qR/qSize);
+    {
+    printf("<B>%s RepeatMasker bases:</B> %d ", otherOrg, net->qR);
+    if (qSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->qR/qSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->tOldR >= 0)
-    printf("<B>%s old repeat bases:</B> %d (%1.1f%%)<BR>\n", 
-	   org, net->tOldR, 100.0*net->tOldR/tSize);
+    {
+    printf("<B>%s old repeat bases:</B> %d ", org, net->tOldR);
+    if (tSize != 0 )
+        printf("(%1.1f%%)<BR>\n", 100.0*net->tOldR/tSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->qOldR >= 0)
-    printf("<B>%s old repeat bases:</B> %d (%1.1f%%)<BR>\n", 
-	   otherOrg, net->qOldR, 100.0*net->qOldR/qSize);
+    {
+    printf("<B>%s old repeat bases:</B> %d ", otherOrg, net->qOldR);
+    if (qSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->qOldR/qSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->tNewR >= 0)
-    printf("<B>%s new repeat bases:</B> %d (%1.1f%%)<BR>\n", 
-	   org, net->tNewR, 100.0*net->tNewR/tSize);
+    {
+    printf("<B>%s new repeat bases:</B> %d ", org, net->tNewR);
+    if (tSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->tNewR/tSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->qNewR >= 0)
-    printf("<B>%s new repeat bases:</B> %d (%1.1f%%)<BR>\n", 
-	   otherOrg, net->qNewR, 100.0*net->qNewR/qSize);
+    {
+    printf("<B>%s new repeat bases:</B> %d ", otherOrg, net->qNewR);
+    if (qSize != 0)
+        printf("(%1.1f%%)<BR>\n", 100.0*net->qNewR/qSize);
+    else
+        printf("<BR>\n");
+    }
 if (net->tEnd >= 0)
     printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
 if (net->qEnd >= 0)
