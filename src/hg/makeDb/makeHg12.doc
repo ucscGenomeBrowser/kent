@@ -270,14 +270,8 @@ format.
 
   o - cd mrna.129
   o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz | gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-  o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz | gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin -byOrganism=org
-
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
-  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin -byOrganism=org
-
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
-  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin -byOrganism=org
-
   o - cd /cluster/store1/genbank.129
   o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
 
