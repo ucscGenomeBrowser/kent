@@ -38,6 +38,8 @@ table pseudoGeneLink
     uint milliBad;      "milliBad score, pseudogene aligned to genome"
     uint chainId;       "chain id of gene/pseudogene alignment"
     int axtScore;       "blastz score, gene mrna aligned to pseudogene"
+    int oldIntronCount; "old simple intron count"
+    string intronScores; "Intron sizes in gene/pseudogene"
     string refSeq;	"Name of closest regSeq to gene"
     int rStart;	        "refSeq alignment start position"
     int rEnd;           "refSeq alignment end position"
