@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.15 2004/04/05 21:16:44 kent Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.16 2005/01/12 17:50:05 kent Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -62,6 +62,17 @@ for (seq = *pSeqList; seq != NULL; seq = next)
     freeDnaSeq(&seq);
     }
 *pSeqList = NULL;
+}
+
+boolean seqIsLower(bioSeq *seq)
+/* Return TRUE if sequence is all lower case. */
+{
+int size = seq->size, i;
+char *poly = seq->dna;
+for (i=0; i<size; ++i)
+    if (!islower(poly[i]))
+        return FALSE;
+return TRUE;
 }
 
 boolean seqIsDna(bioSeq *seq)

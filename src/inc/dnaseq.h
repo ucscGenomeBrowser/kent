@@ -53,6 +53,9 @@ aaSeq *translateSeq(struct dnaSeq *inSeq, unsigned offset, boolean stop);
 boolean seqIsDna(bioSeq *seq);
 /* Make educated guess whether sequence is DNA or protein. */
 
+boolean seqIsLower(bioSeq *seq);
+/* Return TRUE if sequence is all lower case. */
+
 bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters);
 /* Figure out which if any sequence letters is in. */
 
