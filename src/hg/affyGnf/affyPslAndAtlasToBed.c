@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.4 2003/09/21 04:34:21 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.5 2003/09/27 01:34:07 kent Exp $";
 
 
 #define DEBUG 0
@@ -36,6 +36,7 @@ int missingVal = -10000;  /* use this value for missing data */
 static struct optionSpec options[] = {
    {"newType", OPTION_BOOLEAN},
    {"suffix", OPTION_STRING},
+   {"chip", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -580,6 +581,7 @@ struct psl *psl;
 struct bed *bed;
 FILE *f = NULL;
 int dataCount = 0, pslCount = 0, bedCount = 0;
+int minExpVal = 20;
 
 /* Open Atlas file and use first line to create experiment table. */
 if (!lineFileNext(lf, &line, NULL))
@@ -630,13 +632,13 @@ while ((psl = pslNext(lf)) != NULL)
 	AllocArray(bed->expIds, expCount);
 	AllocArray(bed->expScores, expCount);
 	median = findPositiveMedian(data, expCount);
-	if (median >= 0)
+	if (median >= minExpVal)
 	    {
 	    invMedian = 1.0/median;
 	    for (i=0; i<expCount; ++i)
 		{
 		int val = data[i];
-		if (val > 0)
+		if (val >= minExpVal)
 		    bed->expScores[i] = safeLog2(invMedian*val);
 		else
 		    bed->expScores[i] = missingVal;
