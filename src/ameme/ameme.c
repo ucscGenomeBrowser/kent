@@ -2058,18 +2058,21 @@ for (repIx = 0; repIx < repCount; ++repIx)
 	progress(".");
         }
     progress("\n");
-    slSort(&newList, cmpProfiles);
-    bestProf = newList;
-    printProfile(htmlOut,bestProf);
-    if (logFile)
-        printProfile(logFile, bestProf);
-    horizontalLine();
-    if (considerRc)
-        rcProf = rcProfileCopy(bestProf);
-    showProfHits(bestProf, rcProf, goodSeq, goodSeqElSize, goodSeqNameSize, &bestProf->bestIndividualScore);
-    writeProfile(f, bestProf);
-    horizontalLine();
-    maskProfileFromSeqList(bestProf, rcProf, goodSeq, goodSeqElSize);
+    if (newList != NULL)
+	{
+	slSort(&newList, cmpProfiles);
+	bestProf = newList;
+	printProfile(htmlOut,bestProf);
+	if (logFile)
+	    printProfile(logFile, bestProf);
+	horizontalLine();
+	if (considerRc)
+	    rcProf = rcProfileCopy(bestProf);
+	showProfHits(bestProf, rcProf, goodSeq, goodSeqElSize, goodSeqNameSize, &bestProf->bestIndividualScore);
+	writeProfile(f, bestProf);
+	horizontalLine();
+	maskProfileFromSeqList(bestProf, rcProf, goodSeq, goodSeqElSize);
+	}
     freeProfile(&rcProf);
     freeProfileList(&profList);
     freeProfileList(&newList);
@@ -2409,7 +2412,8 @@ void loadAndColorProfiles(char *profFileName, struct seqList *seqList, int seqSi
 /* Display profile in color on sequences. */
 {
 struct profile *profList = loadProfiles(profFileName);
-colorProfiles(profList, seqList, seqSize, considerRc);
+if (profList != NULL)
+    colorProfiles(profList, seqList, seqSize, considerRc);
 freeProfileList(&profList);
 }
 
@@ -2436,8 +2440,6 @@ unsigned seed = (unsigned)time(NULL);
 char *host = getenv("HOST");
 if (host == NULL)
     host = getenv("JOB_ID");
-uglyf("host = %s\n", host); /* uglyf */
-fprintf(htmlOut, "host = %p\n", host); /* uglyf */
 if (host != NULL)
     seed += hashCrc(host);
 srand(seed);
