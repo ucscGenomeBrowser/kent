@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.33 2005/03/14 22:27:04 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.34 2005/03/14 23:27:42 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1310,12 +1310,12 @@ for (var = varList; var != NULL; var = var->next)
 		    {
 		    if (neg)
 			dyStringAppend(dy, "not ");
-		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0",
+		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
 				   word, explicitDbTable, field);
 		    }
 		else
 		    {
-		    dyStringPrintf(dy, "%s.%s", explicitDbTable, field);
+		    dyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
 		    if (sqlWildcardIn(sqlPat))
 			{
 			if (neg)
