@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.7 2004/06/02 22:04:20 baertsch Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.8 2004/06/03 17:56:43 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -102,7 +102,7 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != axt->qStrand)
 	    writeIt = FALSE;
-        if (!startsWith(qStartsWith, axt->qName))
+        if (qStartsWith != NULL && !startsWith(qStartsWith, axt->qName))
 	    writeIt = FALSE;
 	if (writeIt)
 	    axtWrite(axt, stdout);
