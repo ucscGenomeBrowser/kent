@@ -477,7 +477,8 @@ altColor 255,128,0
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
-defaultViewLimits -800:800
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
+defaultViewLimits -10:500
 type wig -2504.86 4396.07
 
 track affyTransfrags
@@ -486,8 +487,9 @@ longLabel Affy. SK-N-AS Transfrags
 group x
 priority 165
 visibility hide
-color 175,150,128
+color 35,35,175
 altColor 255,128,0
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
 
 
