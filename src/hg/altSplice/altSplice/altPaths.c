@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.16 2005/02/23 09:35:15 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.17 2005/03/15 23:28:14 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -23,6 +23,8 @@ static struct optionSpec optionSpecs[] =
     {"htmlPrefix", OPTION_STRING},
     {"browser", OPTION_STRING},
     {"noSpoofEnds", OPTION_BOOLEAN},
+    {"constExons", OPTION_STRING},
+    {"minConstCount", OPTION_INT},
     {NULL, 0}
 };
 
@@ -39,6 +41,8 @@ static char *optionDescripts[] =
     "Create a frame based web page to view splices.",
     "Browser to point at when creating web page.",
     "Don't add 1bp ends to paths in bed file.",
+    "Output constitutive exons to this file.",
+    "Min Num of transcripts for exon to be const (10 default)",
 };
 
 FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
@@ -46,6 +50,8 @@ FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
 
 FILE *pathBedFile = NULL;    /* File to dump out paths in bed form for
 				debugging and testing. */
+FILE *constExonsOut = NULL;  /* File to output constitutive exons to. */
+int minConstExonCount = 10;  /* Minimum number of transcripts to be considered consitutive. */
 boolean oldClassification = FALSE; /* Use altAnalysis style of classification. */
 boolean looseCassettes = FALSE;    /* Are we using the loose definition of cassettes? Meaning that
 				      we don't care about other alternative events going on, just that
@@ -138,6 +144,45 @@ fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
 fprintf(stderr, "%d control paths.\n", altControlCount);
 fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
 	totalSplices, totalLoci, (float)totalSplices/altSpliceLoci);
+}
+
+boolean isHardExon(struct altGraphX *agx, int v1, int v2)
+/* Return TRUE if edge from v1 to v2 is an exon with hard splice 
+   sites. */
+{
+unsigned char *vTypes = agx->vTypes;
+return vTypes[v1] == ggHardStart && vTypes[v2] == ggHardEnd;
+}
+
+void outputConstitutiveExons(struct altGraphX *agx, struct splice *splice)
+/* Output the internal constitutive exons that are supported by 
+   at least minConstExonCount transcripts. */
+{
+int vertIx = 0;
+int *vPos = agx->vPositions;
+struct path *path = splice->paths;
+int *v = path->vertices;
+int vC = path->vCount;
+
+if(constExonsOut != NULL)
+    {
+    /* Loop through and find exons that have enough 
+       transcript support to print out as beds. */
+    for(vertIx = 0; vertIx < vC - 1; vertIx++) 
+	{
+	if(isHardExon(agx, v[vertIx], v[vertIx+1]))
+	    {
+	    int edgeIx = altGraphXGetEdgeNum(agx, v[vertIx], v[vertIx+1]);
+	    struct evidence *ev = slElementFromIx(agx->evidence, edgeIx);
+	    if(ev->evCount >= minConstExonCount)
+		{
+		fprintf(constExonsOut, "%s\t%d\t%d\t%s\t%d\t%s\n", 
+			agx->tName, vPos[v[vertIx]], vPos[v[vertIx+1]],
+			splice->name, ev->evCount, agx->strand);
+		}
+	    }
+	}
+    }
 }
 
 int inDegree(bool **em, int vIx, int start, int end)
@@ -1062,11 +1107,25 @@ int *vPos = ag->vPositions;
 if(cassetteHash == NULL) 
     return FALSE;
 safef(buff, sizeof(buff), "%s:%d-%d:%c", 
-      splice->tName,  vPos[splice->paths->next->vertices[1]],
-      vPos[splice->paths->next->vertices[2]], splice->strand[0]);
+      splice->tName,  vPos[splice->paths->next->vertices[0]],
+      vPos[splice->paths->next->vertices[3]], splice->strand[0]);
 if(hashIntValDefault(cassetteHash, buff, -1) == 1) 
     return TRUE;
 return FALSE;
+}
+
+void registerMutualExonCassette(struct splice *splice, struct altGraphX *ag, bool **em)
+/* Add the cassette to the hash so we can remember that it has been
+   logged later on. */
+{
+char buff[256];
+int *vPos = ag->vPositions;
+if(cassetteHash == NULL) 
+    cassetteHash = newHash(8);
+safef(buff, sizeof(buff), "%s:%d-%d:%c", 
+      splice->tName,  vPos[splice->paths->vertices[0]],
+      vPos[splice->paths->vertices[3]], splice->strand[0]);
+hashAddInt(cassetteHash, buff, 1);
 }
 
 void registerCassette(struct splice *splice, struct altGraphX *ag, bool **em)
@@ -1078,8 +1137,8 @@ int *vPos = ag->vPositions;
 if(cassetteHash == NULL) 
     cassetteHash = newHash(8);
 safef(buff, sizeof(buff), "%s:%d-%d:%c", 
-      splice->tName,  vPos[splice->paths->next->vertices[1]],
-      vPos[splice->paths->next->vertices[2]], splice->strand[0]);
+      splice->tName,  vPos[splice->paths->next->vertices[0]],
+      vPos[splice->paths->next->vertices[3]], splice->strand[0]);
 hashAddInt(cassetteHash, buff, 1);
 }
 
@@ -1107,7 +1166,11 @@ else if(isAlt3Path(splice, ag, em, source, sink))
 else if(isRetIntPath(splice, ag, em, source, sink))
     type = altRetInt;
 else if(isMutuallyExclusiveExonPath(splice, ag, em, source, sink))
+    {
     type = altMutExclusive;
+    if(looseCassettes) 
+	registerMutualExonCassette(splice, ag, em);
+    }
 
 /* Fix the strand. */
 if(ag->strand[0] == '-')
@@ -1531,6 +1594,7 @@ for(vertIx = source; vertIx <= sink; )
 	    splice->type = altControl;
 	    finishSplice(splice, distance, agx, source, sink);
 	    logSpliceType(splice->type, splice->paths->bpCount);
+	    outputConstitutiveExons(agx, splice);
 	    slAddHead(&spliceList, splice);
 	    }
 	else
@@ -1567,6 +1631,7 @@ if(splice != NULL && splice->paths->vCount > 1)
     splice->type = altControl;
     finishSplice(splice, distance, agx, source, sink);
     logSpliceType(splice->type, splice->paths->bpCount);
+    outputConstitutiveExons(agx, splice);
     slAddHead(&spliceList, splice);
     }
 else
@@ -1745,11 +1810,16 @@ if(optionExists("htmlPrefix"))
 if(optionExists("looseCassettes"))
     looseCassettes = TRUE;
 
+if(optionExists("constExons")) 
+    constExonsOut = mustOpen(optionVal("constExons", NULL), "w");
+minConstExonCount = optionInt("minConstCount", 10);
+
 altPaths(argv[1], argv[2]);
 if(optionExists("htmlPrefix"))
     closeHtmlFiles();
 carefulClose(&distMatrixFile);
 carefulClose(&pathBedFile);
+carefulClose(&constExonsOut);
 return 0;
 }
 
