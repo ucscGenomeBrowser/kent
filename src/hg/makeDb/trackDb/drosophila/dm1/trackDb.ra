@@ -27,7 +27,7 @@ maxHeightPixels 100:40:11
 wiggle mzDy1Dp2Ag1_phast_wig
 yLineOnOff Off
 autoScaleDefault Off
-pairwise mypa
+pairwise myp2a
 speciesOrder d_yakuba d_pseudoobscura a_gambiae
 
 track chainDp2
@@ -134,7 +134,7 @@ otherDb anoGam1
 
 track anophelesEcores
 shortLabel Anopheles Ecores
-longLabel Fruitfly/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel $Organism/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
 priority 132.05
 visibility dense
