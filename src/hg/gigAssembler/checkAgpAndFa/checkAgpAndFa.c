@@ -11,7 +11,7 @@ that they are in synch.
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.4 2003/10/14 01:25:20 angie Exp $";
+static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.5 2004/02/28 02:43:50 angie Exp $";
 
 void usage()
 /* 
@@ -197,6 +197,14 @@ while (faSpeedReadNext(lfFa, &retDna, &retSize, &retName))
                fflush(stdout);
                errAbort("1Sizes don't match in %s and %s line %d of %s\n",
                     agpFrag->chrom, agpFrag->frag, lfAgp->lineIx, lfAgp->fileName);
+               }
+            if (agpFrag->chromEnd - agpFrag->chromStart <= 0)
+               {
+               fflush(stdout);
+               errAbort("Size is %d in %s and %s line %d of %s\n",
+			agpFrag->chromEnd - agpFrag->chromStart,
+			agpFrag->chrom, agpFrag->frag, lfAgp->lineIx,
+			lfAgp->fileName);
                }
             }
         else
