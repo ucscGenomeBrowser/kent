@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.740 2004/05/19 23:18:34 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.741 2004/05/21 05:54:08 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6522,13 +6522,33 @@ if (rulerMode != RULER_MODE_OFF)
     if (zoomedToBaseLevel)
         {
         Color baseColor = MG_BLACK;
-        boolean complementRulerBases = cartUsualBoolean(cart, "complement", FALSE);
-        if(complementRulerBases)
+        int start, end, chromSize;
+        struct dnaSeq *extraSeq;
+        boolean complementRulerBases = 
+                cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+        if (complementRulerBases)
             baseColor = MG_GRAY;
-        // TODO: manage off-the-chromosome conditions
-        extraSeq = hDnaFromSeq(chromName, winStart-3, winEnd+3, dnaUpper);
 
-        /* clip off leading and trailing 3 bases, used for AA translation */
+        /* get sequence, with leading & trailing 3 bases
+         * used for amino acid translation */
+        start = max(winStart - 3, 0);
+        chromSize = hChromSize(chromName);
+        end = min(winEnd + 3, chromSize);
+        extraSeq = hDnaFromSeq(chromName, start, end, dnaUpper);
+        if (start != winStart - 3 || winEnd != winEnd + 3)
+            {
+            /* at chromosome boundaries, pad with N's to assure
+             * leading & trailing 3 bases */
+            char header[4] = "NNN", trailer[4] = "NNN";
+            int size = winEnd - winStart + 6;
+            char *padded = (char *)needMem(size+1);
+            header[max(3 - winStart, 0)] = 0;
+            trailer[max(winEnd - chromSize + 3, 0)] = 0;
+            safef(padded, size+1, "%s%s%s", header, extraSeq->dna, trailer);
+            extraSeq = newDnaSeq(padded, strlen(padded), extraSeq->name);
+            }
+
+        /* for drawing bases, must clip off leading and trailing 3 bases */
         seq = cloneDnaSeq(extraSeq);
         seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
@@ -6542,7 +6562,6 @@ if (rulerMode != RULER_MODE_OFF)
                                 rulerMenu[RULER_MODE_ON] : 
                                 rulerMenu[RULER_MODE_FULL]);
             mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
-                                //NULL, chromName, winStart, winEnd,
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
         if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
@@ -6550,16 +6569,37 @@ if (rulerMode != RULER_MODE_OFF)
             /* display codons */
             char codon[4];
             int frame;
+            int firstFrame = 0;
+            int mod;            // for determining frame ordering on display
             struct simpleFeature *sfList;
             double scale = scaleForWindow(insideWidth, winStart, winEnd);
+
+            /* WARNING: tricky code to assure that an amino acid
+             * stays in the same frame line on the browser during panning.
+             * There may be a simpler way... */
+            if (complementRulerBases)
+                mod = (chromSize - winEnd) % 3;
+            else
+                mod = winStart % 3;
+            if (mod == 0)
+                firstFrame = 0;
+            else if (mod == 1)
+                firstFrame = 2;
+            else if (mod == 2)
+                firstFrame = 1;
 
             y = yAfterBases;
             if (complementRulerBases)
                 reverseComplement(extraSeq->dna, extraSeq->size);
             for (frame = 0; frame < 3; frame++, y += codonHeight)
                 {
-                sfList = splitDnaByCodon(frame, winStart, winEnd, extraSeq, 
-                                                complementRulerBases); 
+                /* reference frame to start of chromosome */
+                int refFrame = (firstFrame + frame) % 3;
+
+                /* create list of codons in the specified coding frame */
+                sfList = splitDnaByCodon(refFrame, winStart, winEnd,
+                                             extraSeq, complementRulerBases); 
+                /* draw the codons in the list, with alternating colors */
                 drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
                                     font, cdsColor, winStart, MAXPIXELS);
                 }
