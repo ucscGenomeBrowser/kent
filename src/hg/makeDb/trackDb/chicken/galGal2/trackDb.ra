@@ -346,10 +346,6 @@ shortCircuit 1
 termRegex (UM|GBC|GBP|HDG|IG|MG|LA|HC)\.[[:alnum:]._]+
 searchPriority 50
 
-searchTable xenoRefGene
-searchType refGene
-searchPriority 1
-
 searchTable ensGene
 searchType genePred
 shortCircuit 1
