@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.5 2004/08/28 16:07:10 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.6 2004/08/31 00:07:55 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -153,9 +153,11 @@ struct customTrack *ct;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wDS = NULL;
 unsigned long long valuesMatched = 0;
-char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+int regionCount = 0;
 
-wDS = newWigDataStream();
+/*	Count the regions, when only one, we can do a histogram	*/
+for (region = regionList; region != NULL; region = region->next)
+    ++regionCount;
 
 htmlOpen("%s (%s) Wiggle Summary Statistics", track->shortLabel, table);
 
@@ -166,7 +168,6 @@ if (isCustomTrack(table))
 	{
 	warn("doSummaryStatsWiggle: called to do wiggle stats on a custom track that isn't wiggle data ?");
 	htmlClose();
-	destroyWigDataStream(&wDS);
 	return;
 	}
 
@@ -175,11 +176,14 @@ if (isCustomTrack(table))
     isCustom = TRUE;
     }
 
+wDS = newWigDataStream();
+
 startTime = clock1000();
 for (region = regionList; region != NULL; region = region->next)
     {
     unsigned span = 0;
     boolean hasBin;
+    int operations;
 
 /*
     sprintLongWithCommas(num1Buf, region->start + 1);
@@ -190,6 +194,10 @@ for (region = regionList; region != NULL; region = region->next)
     hPrintf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
 */
 
+    operations = wigFetchStats;
+    if (1 == regionCount)
+	operations |= wigFetchDataArray;
+
     wDS->setChromConstraint(wDS, region->chrom);
     wDS->setPositionConstraint(wDS, region->start, region->end);
     /* depending on what is coming in on regionList, we may need to be
@@ -199,7 +207,11 @@ for (region = regionList; region != NULL; region = region->next)
     if (isCustom)
 	{
 	valuesMatched = wDS->getData(wDS, NULL,
-		splitTableOrFileName, wigFetchStats);
+		splitTableOrFileName, operations);
+	if (wDS->stats)
+	    span = wDS->stats->span;
+	else
+	    span = 1;
 	}
     else
 	{
@@ -209,10 +221,14 @@ for (region = regionList; region != NULL; region = region->next)
 		region->start, region->end, cart);
 	    wDS->setSpanConstraint(wDS, span);
 	    valuesMatched = wDS->getData(wDS, database,
-		splitTableOrFileName, wigFetchStats);
+		splitTableOrFileName, operations);
 	    }
 	}
 
+/*
+    statsPreamble(wDS, region->chrom, region->start, region->end,
+	valuesMatched, span);
+*/
     /*	This printout is becoming common to what is already in
      *	hgc/wiggleClick.c, need to put this in one of the library files.
      */
@@ -235,8 +251,6 @@ for (region = regionList; region != NULL; region = region->next)
 	}
 */
 
-
-
     wDS->freeConstraints(wDS);
     }
 wigFetchTime = clock1000() - startTime;
@@ -252,6 +266,8 @@ hTableEnd();
 wDS->freeStats(wDS);
 
     /*	TBD: histogram printout here when only one region (lib call)	*/
+if (1 == regionCount)
+    wDS->freeArray(wDS);
 
 webNewSection("Region and Timing Statistics");
 hTableStart();
