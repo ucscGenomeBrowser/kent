@@ -11,7 +11,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.25 2004/03/03 04:16:57 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.26 2004/03/03 06:29:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -895,6 +895,13 @@ char *contentType;
 
 if (status == NULL)
     return NULL;
+if (status->status != 200)
+   {
+   warn("%s returned with status code %d", url, status->status);
+   htmlStatusFree(&status);
+   return NULL;
+   }
+
 AllocVar(page);
 page->url = cloneString(url);
 page->fullText = fullText;
@@ -917,8 +924,6 @@ struct htmlPage *htmlPageParseOk(char *url, char *fullText)
 struct htmlPage *page = htmlPageParse(url, fullText);
 if (page == NULL)
    noWarnAbort();
-if (page->status->status != 200)
-   errAbort("Page returned with status code %d", page->status->status);
 return page;
 }
 
@@ -1032,10 +1037,9 @@ for (var = form->vars; var != NULL; var = var->next)
 return dyStringCannibalize(&dy);
 }
 
-static void sendCookies(int sd, struct htmlCookie *cookieList)
-/* Send out cookies (and final <CR><LF>) to sd */
+void cookieOutput(struct dyString *dy, struct htmlCookie *cookieList)
+/* Write cookies to dy. */
 {
-struct dyString *dy = dyStringNew(0);
 struct htmlCookie *cookie;
 if (cookieList != NULL)
     {
@@ -1050,38 +1054,48 @@ if (cookieList != NULL)
 	}
     dyStringAppend(dy, "\r\n");
     }
-dyStringAppend(dy, "\r\n");
-write(sd, dy->string, dy->stringSize);
-dyStringFree(&dy);
 }
 
 struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
-	char *method, char *buttonName, char *buttonVal)
+	char *buttonName, char *buttonVal)
 /* Return a new htmlPage based on response to pressing indicated button
  * on indicated form in origPage. */
 {
 struct htmlPage *newPage = NULL;
 struct dyString *dyUrl = dyStringNew(0);
+struct dyString *dyHeader = dyStringNew(0);
 struct dyString *dyText = NULL;
 char *url = htmlExpandUrl(origPage->url, form->action);
+char *cgiVars = NULL;
+int contentLength = 0;
+int sd = -1;
 
 dyStringAppend(dyUrl, url);
-if (sameWord(method, "GET"))
+cookieOutput(dyHeader, origPage->cookies);
+if (sameWord(form->method, "GET"))
     {
-    char *cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+    cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
     dyStringAppend(dyUrl, cgiVars);
-    int sd = netOpenHttpExt(dyUrl->string, method, FALSE);
-    sendCookies(sd, origPage->cookies);
-    dyText = netSlurpFile(sd);
-    close(sd);
+    sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
+    dyStringAppend(dyHeader, "\r\n");
+    write(sd, dyHeader->string, dyHeader->stringSize);
     }
-else
+else if (sameWord(form->method, "POST"))
     {
-    errAbort("Sorry, htmlPageFromForm does not yet handle %s method", method);
+    cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+    contentLength = strlen(cgiVars);
+    sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
+    dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
+    dyStringAppend(dyHeader, "\r\n");
+    write(sd, dyHeader->string, dyHeader->stringSize);
+    write(sd, cgiVars, contentLength);
     }
-newPage = htmlPageParseOk(url, dyText->string);
+dyText = netSlurpFile(sd);
+close(sd);
+newPage = htmlPageParse(url, dyText->string);
 freez(&url);
 dyStringFree(&dyUrl);
+dyStringFree(&dyHeader);
 dyStringFree(&dyText);
 return newPage;
 }
@@ -1568,7 +1582,7 @@ void quickSubmit(struct htmlPage *page)
 struct htmlPage *newPage;
 if (page->forms == NULL)
     errAbort("No forms on %s", page->url);
-newPage = htmlPageFromForm(page, page->forms, "GET", "submit", "Submit");
+newPage = htmlPageFromForm(page, page->forms, "submit", "Submit");
 validate(newPage);
 }
 
