@@ -178,11 +178,8 @@ void mgDrawRulerBumpText(struct memGfx *mg, int xOff, int yOff,
 void mgFilledSlopedLine( struct memGfx *mg,   Color *pt1,
            Color *pt1Home, double slope, int mult, int w, double h, Color
            *colors, int colRange, Color *pt1Base );
-    /*draws a sloped line that is dominated by x-component movement
-     * with anti-aliasing in the sense that for the y-value 0.3 with a
-     * 1 pixel thick line the shading is 70% in the lower pixel and
-     * 30% in the top pixel. A value such as 2.0 would only occupy one
-     * pixel with 100% shading.*/
+    /*fills area below line for by Y and X sloping lines. Called from
+    mgConnectingLine if the 'wiggle.fill' option is on(1).*/
 
 
 void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1,
@@ -207,10 +204,6 @@ void mgConnectingLine( struct memGfx *mg, int x1, double y1, int x2,
  * with wiggle tracks to interpolate between samples, connecting the
  * end of one block to the beginning of the next one.  Uses
  * anti-aliasing unlike mgDrawLine and accepts real-valued y's.*/
-
-void mgDrawPointAntiAlias( struct memGfx *mg, int x1, double y1d, Color *colors );
-    /*Draws a one base dot (or line) at a fractional position
-     * (possibly) between two pixels so 14.2 and 14.3 are displayed differently.*/
 
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,

@@ -865,52 +865,6 @@ if (minY <= y1i && y1i < maxY
 
 }
 
-void mgDrawPointAntiAlias( struct memGfx *mg, int x1, double y1d, Color *colors )
-    /*Draws a one base dot (or line) at a fractional position
-     * (possibly) between two pixels so 14.2 and 14.3 are displayed differently.*/
-{
-
-int yLower, pLower;
-int yUpper, pUpper;
-    
-int minY;
-int maxY;
-Color *pt1;
-double sum, slope;
-int bpr = _mgBpr(mg);
-int thisMaxY = 10;
-double colRange = 9.0;
-
-int y1i = (int)y1d;
-
-if (x1 < mg->clipMinX)
-    x1 = mg->clipMinX;
-
-minY = mg->clipMinY;
-maxY = mg->clipMaxY;
-pt1 = _mgPixAdr(mg,x1,y1i);
-
-if (minY <= y1i && y1i < maxY )
-    {
-
-    yLower = min(abs((int)y1d), thisMaxY);
-    yUpper = min(abs((int)y1d)+1, thisMaxY );
-    pUpper = (int)(colRange * ((double)min(y1d,thisMaxY) - (double)yLower));
-    pLower = (int)colRange - pUpper;
-
-    if( pUpper != colRange )
-        pt1[0] = colors[pLower];
-
-    pt1 -= bpr;
-    if( pLower != colRange )
-        pt1[0] = colors[pUpper];
-            
-    }
-
-}
-
-
-
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean drawMiddle)
