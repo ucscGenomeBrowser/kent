@@ -85,9 +85,10 @@ declined by nearly 7500 genes to 21,787 in progressing to NCBI assembly 34
 (UCSC version hg16). 
 <P>
 <CENTER>
-<IMG height=259 width=280 src="exon.jpg">
+<IMG height=280 width=294 src="exonCntDist.jpg">
 </CENTER>
 <P>
-[FIXME] Change sulfatase graphs to bar graph using revised data from Tom for 17 human
+<!--[FIXME] Change sulfatase graphs to bar graph using revised data from Tom for 17 human
 sulfatases]
+-->
 
