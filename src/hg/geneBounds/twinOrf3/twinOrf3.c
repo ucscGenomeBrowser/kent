@@ -1,4 +1,4 @@
-/* twinOrf2 - Predict open reading frame in cDNA given a cross species alignment. */
+/* twinOrf3 - Predict open reading frame in cDNA given a cross species alignment. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -12,9 +12,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "twinOrf2 - Predict open reading frame in cDNA given a cross species alignment\n"
+  "twinOrf3 - Predict open reading frame in cDNA given a cross species alignment\n"
   "usage:\n"
-  "   twinOrf2 twinOrf2.stats in.axt out.orf\n"
+  "   twinOrf3 twinOrf3.stats in.axt out.orf\n"
   "options:\n"
   "   -checkIn=seq.cds - File that says size and cds position of sequences\n"
   "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
@@ -46,19 +46,29 @@ enum aStates
 /* Internal states for HMM. */
 {
     aUtr5,                      /* 5' UTR. */
-    aUtr3,			/* 3' UTR. */
     
+    /* States associated with coding start */
     aKoz0, aKoz1, aKoz2, aKoz3, aKoz4,  /* Kozak preamble. */
     aKoz5, aKoz6, aKoz7,        /* Start codon. */
     aKoz8, aKoz9,               /* Two bases after start */
-    aC1, aC2, aC3,              /* Regular codon. */
-    aStop1, aStop2, aStop3,     /* Stop codon. */
 
+    /* States associated with first part of coding. */
+    aEarlyC1, aEarlyC2, aEarlyC3,              /* Regular codon. */
+    aEarlyInsC1, aEarlyInsC2, aEarlyInsC3,	/* Single inserts in coding. */
+    aEarlyI1C1, aEarlyI2C1, aEarlyI3C1,	/* Multiple of 3 inserts in coding. */
+    aEarlyI1C2, aEarlyI2C2, aEarlyI3C2,	/* Multiple of 3 inserts in coding. */
+    aEarlyI1C3, aEarlyI2C3, aEarlyI3C3,	/* Multiple of 3 inserts in coding. */
+
+    /* States associated with most of coding. */
+    aC1, aC2, aC3,              /* Regular codon. */
     aInsC1, aInsC2, aInsC3,	/* Single inserts in coding. */
     aI1C1, aI2C1, aI3C1,	/* Multiple of 3 inserts in coding. */
     aI1C2, aI2C2, aI3C2,	/* Multiple of 3 inserts in coding. */
     aI1C3, aI2C3, aI3C3,	/* Multiple of 3 inserts in coding. */
 
+    aStop1, aStop2, aStop3,     /* Stop codon. */
+
+    aUtr3,			/* 3' UTR. */
 
     aStateCount,		/* Keeps track of total states */
 };
@@ -67,19 +77,29 @@ char visStates[] =
 /* User visible states of HMM. */
 {
     'U',		     /* 5' UTR. */
-    'u',                     /* 3' UTR. */
     
     'k', 'k', 'k', 'k', 'k',  /* Kozak */
     'A', 'A', 'A',  	      /* Start codon. */
     '1', '2', 		      /* More Kozak. */
-    '1', '2', '3',               /* Regular codon. */
-    'Z', 'Z', 'Z',        /* Stop codon. */
 
+    /* States associated with first part of coding. */
+    'a', 'b', 'c',               /* Regular codon. */
+    // '1', '2', '3',               /* Regular codon. */
     '^', '^', '^',        /* Inserts in coding. */
     '-', '-', '-',        /* Multiple of 3 inserts in coding. */
     '-', '-', '-',        /* Multiple of 3 inserts in coding. */
     '-', '-', '-',        /* Multiple of 3 inserts in coding. */
 
+    /* States associated with most of coding. */
+    '1', '2', '3',               /* Regular codon. */
+    '^', '^', '^',        /* Inserts in coding. */
+    '-', '-', '-',        /* Multiple of 3 inserts in coding. */
+    '-', '-', '-',        /* Multiple of 3 inserts in coding. */
+    '-', '-', '-',        /* Multiple of 3 inserts in coding. */
+
+    'Z', 'Z', 'Z',        /* Stop codon. */
+
+    'u',                     /* 3' UTR. */
     'x',	/* bad state. */
 };
 
@@ -133,8 +153,16 @@ void makeTransitionProbs(double **transProbLookup)
 /* Allocate transition probabilities and initialize them. */
 {
 int i, j;
+double codIns1 = 0.0001;	/* Probability of single base insert in coding */
+double codIns3 = 0.001;		/* Probability of three base insert in coding. */
+double codIns= codIns1 + codIns3; /* Probability of any insert in coding */
+double earlyEnd = 1.0/20;       /* Chance of going from early to middle coding */
+double codStop = 0.003;         /* Chance of stop codon. */
+double insMore1 = 0.01;         /* Chance of one insert after first one. */
+double insMore3 = 0.2;		/* Chance of three inserts after first three */
 
-/* Make certain transitions reasonably likely. */
+
+/* 5' UTR and Kozak consensus. */
 transProbLookup[aUtr5][aUtr5] = scaledLog(0.990);
 transProbLookup[aUtr5][aKoz0] = scaledLog(0.010);
 transProbLookup[aKoz0][aKoz1] = always;
@@ -146,39 +174,74 @@ transProbLookup[aKoz5][aKoz6] = always;
 transProbLookup[aKoz6][aKoz7] = always;
 transProbLookup[aKoz7][aKoz8] = always;
 transProbLookup[aKoz8][aKoz9] = always;
-transProbLookup[aKoz9][aC3] = always;
-transProbLookup[aC1][aC2] = scaledLog(0.9999);
-transProbLookup[aC2][aC3] = scaledLog(0.9999);
-transProbLookup[aC3][aC1] = scaledLog(0.9969);
-transProbLookup[aC3][aStop1] = scaledLog(0.003);
+transProbLookup[aKoz9][aEarlyC3] = always;
+
+/* Early coding part. */
+transProbLookup[aEarlyC1][aEarlyC2] = scaledLog(1.0 - codIns);
+transProbLookup[aEarlyC2][aEarlyC3] = scaledLog(1.0 - codIns);
+transProbLookup[aEarlyC3][aEarlyC1] = scaledLog(1.0 - codIns - earlyEnd);
+transProbLookup[aEarlyC3][aC1] = scaledLog(earlyEnd);
+transProbLookup[aEarlyC1][aEarlyInsC1] = scaledLog(codIns1);
+transProbLookup[aEarlyC2][aEarlyInsC2] = scaledLog(codIns1);
+transProbLookup[aEarlyC3][aEarlyInsC3] = scaledLog(codIns1);
+transProbLookup[aEarlyInsC1][aEarlyC2] = scaledLog(1 - insMore1);
+transProbLookup[aEarlyInsC1][aEarlyInsC1] = scaledLog(insMore1);
+transProbLookup[aEarlyInsC2][aEarlyC3] = scaledLog(1 - insMore1);
+transProbLookup[aEarlyInsC2][aEarlyInsC2] = scaledLog(insMore1);
+transProbLookup[aEarlyInsC3][aEarlyC1] = scaledLog(1 - insMore1);
+transProbLookup[aEarlyInsC3][aEarlyInsC3] = scaledLog(insMore1);
+transProbLookup[aEarlyC1][aEarlyI1C1] = scaledLog(codIns3);
+transProbLookup[aEarlyI1C1][aEarlyI2C1] = always;
+transProbLookup[aEarlyI2C1][aEarlyI3C1] = always;
+transProbLookup[aEarlyI3C1][aEarlyI1C1] = scaledLog(insMore3);
+transProbLookup[aEarlyI3C1][aEarlyC2] = scaledLog(1.0 - insMore3);
+transProbLookup[aEarlyC2][aEarlyI1C2] = scaledLog(codIns3);
+transProbLookup[aEarlyI1C2][aEarlyI2C2] = always;
+transProbLookup[aEarlyI2C2][aEarlyI3C2] = always;
+transProbLookup[aEarlyI3C2][aEarlyI1C2] = scaledLog(insMore3);
+transProbLookup[aEarlyI3C2][aEarlyC3] = scaledLog(1.0 - insMore3);
+transProbLookup[aEarlyC3][aEarlyI1C3] = scaledLog(codIns3);
+transProbLookup[aEarlyI1C3][aEarlyI2C3] = always;
+transProbLookup[aEarlyI2C3][aEarlyI3C3] = always;
+transProbLookup[aEarlyI3C3][aEarlyI1C3] = scaledLog(insMore3);
+transProbLookup[aEarlyI3C3][aEarlyC1] = scaledLog(1.0 - insMore3);
+
+/* Middle coding part. */
+transProbLookup[aC1][aC2] = scaledLog(1.0 - codIns);
+transProbLookup[aC2][aC3] = scaledLog(1.0 - codIns);
+transProbLookup[aC3][aC1] = scaledLog(1.0 - codIns - codStop);
+transProbLookup[aC3][aStop1] = scaledLog(codStop);
+transProbLookup[aC1][aInsC1] = scaledLog(codIns1);
+transProbLookup[aC2][aInsC2] = scaledLog(codIns1);
+transProbLookup[aC3][aInsC3] = scaledLog(codIns1);
+transProbLookup[aInsC1][aC2] = scaledLog(1 - insMore1);
+transProbLookup[aInsC1][aInsC1] = scaledLog(insMore1);
+transProbLookup[aInsC2][aC3] = scaledLog(1 - insMore1);
+transProbLookup[aInsC2][aInsC2] = scaledLog(insMore1);
+transProbLookup[aInsC3][aC1] = scaledLog(1 - insMore1);
+transProbLookup[aInsC3][aInsC3] = scaledLog(insMore1);
+transProbLookup[aC1][aI1C1] = scaledLog(codIns3);
+transProbLookup[aI1C1][aI2C1] = always;
+transProbLookup[aI2C1][aI3C1] = always;
+transProbLookup[aI3C1][aI1C1] = scaledLog(insMore3);
+transProbLookup[aI3C1][aC2] = scaledLog(1.0 - insMore3);
+transProbLookup[aC2][aI1C2] = scaledLog(codIns3);
+transProbLookup[aI1C2][aI2C2] = always;
+transProbLookup[aI2C2][aI3C2] = always;
+transProbLookup[aI3C2][aI1C2] = scaledLog(insMore3);
+transProbLookup[aI3C2][aC3] = scaledLog(1.0 - insMore3);
+transProbLookup[aC3][aI1C3] = scaledLog(codIns3);
+transProbLookup[aI1C3][aI2C3] = always;
+transProbLookup[aI2C3][aI3C3] = always;
+transProbLookup[aI3C3][aI1C3] = scaledLog(insMore3);
+transProbLookup[aI3C3][aC1] = scaledLog(1.0 - insMore3);
+
+
+/* Stop codon and 3' UTR */
 transProbLookup[aStop1][aStop2] = always;
 transProbLookup[aStop2][aStop3] = always;
 transProbLookup[aStop3][aUtr3] =   always;
 transProbLookup[aUtr3][aUtr3] = always;
-transProbLookup[aC1][aInsC1] = scaledLog(0.0001);
-transProbLookup[aC2][aInsC2] = scaledLog(0.0001);
-transProbLookup[aC3][aInsC3] = scaledLog(0.0001);
-transProbLookup[aInsC1][aC2] = scaledLog(0.99);
-transProbLookup[aInsC1][aInsC1] = scaledLog(0.01);
-transProbLookup[aInsC2][aC3] = scaledLog(0.99);
-transProbLookup[aInsC2][aInsC2] = scaledLog(0.01);
-transProbLookup[aInsC3][aC1] = scaledLog(0.99);
-transProbLookup[aInsC3][aInsC3] = scaledLog(0.01);
-transProbLookup[aC1][aI1C1] = scaledLog(0.001);
-transProbLookup[aI1C1][aI2C1] = always;
-transProbLookup[aI2C1][aI3C1] = always;
-transProbLookup[aI3C1][aI1C1] = scaledLog(0.2);
-transProbLookup[aI3C1][aC2] = scaledLog(0.8);
-transProbLookup[aC2][aI1C2] = scaledLog(0.001);
-transProbLookup[aI1C2][aI2C2] = always;
-transProbLookup[aI2C2][aI3C2] = always;
-transProbLookup[aI3C2][aI1C2] = scaledLog(0.2);
-transProbLookup[aI3C2][aC3] = scaledLog(0.8);
-transProbLookup[aC3][aI1C3] = scaledLog(0.001);
-transProbLookup[aI1C3][aI2C3] = always;
-transProbLookup[aI2C3][aI3C3] = always;
-transProbLookup[aI3C3][aI1C3] = scaledLog(0.2);
-transProbLookup[aI3C3][aC1] = scaledLog(0.8);
 }
 
 int countReal(char *s, int size)
@@ -580,6 +643,9 @@ struct trainingData
     struct markov2 *cod1;	/* 1st codon position */
     struct markov2 *cod2;	/* 2nd codon position */
     struct markov2 *cod3;	/* 3rd codon position */
+    struct markov2 *earlyCod1;	/* early  1st codon position */
+    struct markov2 *earlyCod2;	/* early  1st codon position */
+    struct markov2 *earlyCod3;	/* early  1st codon position */
     struct markov2 *stop;	/* stop codon position */
     };
 
@@ -634,6 +700,12 @@ while (lineFileNext(lf, &line, NULL))
          td->cod2 = m2FromCountsInFile(lf, row, psuedoCount);
      else if (sameString(type, "cod3"))
          td->cod3 = m2FromCountsInFile(lf, row, psuedoCount);
+     else if (sameString(type, "earlyCod1"))
+         td->earlyCod1 = m2FromCountsInFile(lf, row, psuedoCount);
+     else if (sameString(type, "earlyCod2"))
+         td->earlyCod2 = m2FromCountsInFile(lf, row, psuedoCount);
+     else if (sameString(type, "earlyCod3"))
+         td->earlyCod3 = m2FromCountsInFile(lf, row, psuedoCount);
      else if (sameString(type, "stop"))
 	 {
          td->stop = readM2Odds(lf, row, psuedoCount);
@@ -650,6 +722,7 @@ while (lineFileNext(lf, &line, NULL))
 	 }
      }
 lineFileClose(&lf);
+
 if (td->m0Utr3 == NULL)
     errAbort("Missing 'c1_utr3' record from %s\n", fileName);
 if (td->m1Utr3 == NULL)
@@ -668,6 +741,12 @@ if (td->cod2 == NULL)
     errAbort("Missing 'cod2' record from %s\n", fileName);
 if (td->cod3 == NULL)
     errAbort("Missing 'cod3' record from %s\n", fileName);
+if (td->earlyCod1 == NULL)
+    errAbort("Missing 'earlyCod1' record from %s\n", fileName);
+if (td->earlyCod2 == NULL)
+    errAbort("Missing 'earlyCod2' record from %s\n", fileName);
+if (td->earlyCod3 == NULL)
+    errAbort("Missing 'earlyCod3' record from %s\n", fileName);
 if (td->stop == NULL)
     errAbort("Missing 'stop' record from %s\n", fileName);
 for (i=0; i<10; ++i)
@@ -677,11 +756,15 @@ for (i=0; i<10; ++i)
     if (td->m1Kozak[i] == NULL)
 	errAbort("Missing 'c2_kozak[%d]' record from %s\n", i-5, fileName);
     }
-killStopCodons(td->cod3);
 keepOnlyStops(td->stop);
+killStopCodons(td->cod3);
 killInsertsInCodons(td->cod1);
 killInsertsInCodons(td->cod2);
 killInsertsInCodons(td->cod3);
+killStopCodons(td->earlyCod3);
+killInsertsInCodons(td->earlyCod1);
+killInsertsInCodons(td->earlyCod2);
+killInsertsInCodons(td->earlyCod3);
 return td;
 }
 
@@ -836,6 +919,9 @@ dyno->prevScores[aKoz9] = scaledLog(0.1);
 dyno->prevScores[aC1] = scaledLog(0.1);
 dyno->prevScores[aC2] = scaledLog(0.1);
 dyno->prevScores[aC3] = scaledLog(0.1);
+dyno->prevScores[aEarlyC1] = scaledLog(0.1);
+dyno->prevScores[aEarlyC2] = scaledLog(0.1);
+dyno->prevScores[aEarlyC3] = scaledLog(0.1);
 dyno->prevScores[aUtr3] = scaledLog(0.1);
 
 for (symIx=0; symIx<scanSize; symIx += 1)
@@ -955,11 +1041,98 @@ for (symIx=0; symIx<scanSize; symIx += 1)
         source(aKoz8, b);
     endState(aKoz9)
 
+    /* Early coding main states */
+    startState(aEarlyC1)
+	double b = codonProb(td->earlyCod1, qSym, tSym, symIx);
+	if (tc == '-')
+	   b = never;
+        source(aEarlyC3, b);	
+	source(aEarlyInsC3, b);
+	source(aEarlyI3C3, b);
+    endState(aEarlyC1)
+
+    startState(aEarlyC2)
+	double b = codonProb(td->earlyCod2, qSym, tSym, symIx);
+	if (tc == '-')
+	   b = never;
+        source(aEarlyC1, b);
+	source(aEarlyInsC1, b);
+	source(aEarlyI3C1, b);
+    endState(aEarlyC2)
+
+    startState(aEarlyC3)
+	double b = codonProb(td->earlyCod3, qSym, tSym, symIx);
+	if (tc == '-')
+	   b = never;
+        source(aKoz9, b);
+	source(aEarlyC2, b);
+	source(aEarlyInsC2, b);
+	source(aEarlyI3C2, b);
+    endState(aEarlyC3)
+
+    /* Early coding short inserts. */
+    startState(aEarlyInsC1)
+        source(aEarlyC1, tIsIns);
+        source(aEarlyInsC1, tIsIns);
+    endState(aEarlyInsC1)
+
+    startState(aEarlyInsC2)
+        source(aEarlyC2, tIsIns);
+        source(aEarlyInsC2, tIsIns);
+    endState(aEarlyInsC2)
+
+    startState(aEarlyInsC3)
+        source(aEarlyC3, tIsIns);
+        source(aEarlyInsC3, tIsIns);
+    endState(aEarlyInsC3)
+
+    /* Early coding multiple of three inserts. */
+    startState(aEarlyI1C1)
+        source(aEarlyC1, tIsIns);
+	source(aEarlyI3C1, tIsIns);
+    endState(aEarlyI1C1);
+
+    startState(aEarlyI2C1)
+        source(aEarlyI1C1, tIsIns);
+    endState(aEarlyI2C1)
+
+    startState(aEarlyI3C1)
+        source(aEarlyI2C1, tIsIns);
+    endState(aEarlyI3C1)
+
+    startState(aEarlyI1C2)
+        source(aEarlyC2, tIsIns);
+	source(aEarlyI3C2, tIsIns);
+    endState(aEarlyI1C2);
+
+    startState(aEarlyI2C2)
+        source(aEarlyI1C2, tIsIns);
+    endState(aEarlyI2C2)
+
+    startState(aEarlyI3C2)
+        source(aEarlyI2C2, tIsIns);
+    endState(aEarlyI3C2)
+
+    startState(aEarlyI1C3)
+        source(aEarlyC3, tIsIns);
+	source(aEarlyI3C3, tIsIns);
+    endState(aEarlyI1C3);
+
+    startState(aEarlyI2C3)
+        source(aEarlyI1C3, tIsIns);
+    endState(aEarlyI2C3)
+
+    startState(aEarlyI3C3)
+        source(aEarlyI2C3, tIsIns);
+    endState(aEarlyI3C3)
+
+
     /* Coding main states */
     startState(aC1)
 	double b = codonProb(td->cod1, qSym, tSym, symIx);
 	if (tc == '-')
 	   b = never;
+        source(aEarlyC3, b);
         source(aC3, b);	
 	source(aInsC3, b);
 	source(aI3C3, b);
@@ -978,7 +1151,6 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 	double b = codonProb(td->cod3, qSym, tSym, symIx);
 	if (tc == '-')
 	   b = never;
-        source(aKoz9, b);
 	source(aC2, b);
 	source(aInsC2, b);
 	source(aI3C2, b);
@@ -1059,7 +1231,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
         source(aStop2, b);
     endState(aStop3)
 
-    /* UTR states. */
+    /* UTR 3. */
     startState(aUtr3)
         double b = probUpToM2(td->m0Utr3, td->m1Utr3, td->m2Utr3, 
 		qSym, tSym, symIx);
