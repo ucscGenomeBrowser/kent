@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.37 2004/11/22 20:31:56 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.38 2004/11/24 20:30:48 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -524,7 +524,7 @@ struct region *region, *regionList = getRegions();
 char *regionName = getRegionName();
 long long regionSize = 0;
 long long gapTotal = 0;
-long startTime = 0, wigFetchTime = 0, freeTime = 0;
+long startTime = 0, wigFetchTime = 0;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
@@ -711,16 +711,8 @@ else
     double stddev;
 
     /*	Too expensive to lookup the numbers for thousands of regions */
-    if (regionsDone >= MAX_REGION_DISPLAY)
-	{
-	regionSize = basesInRegion(regionList,MAX_REGION_DISPLAY);
-	gapTotal = gapsInRegion(conn, regionList,MAX_REGION_DISPLAY);
-	}
-    else
-	{
-	regionSize = basesInRegion(regionList,0);
-	gapTotal = gapsInRegion(conn, regionList,0);
-	}
+    regionSize = basesInRegion(regionList,MAX_REGION_DISPLAY);
+    gapTotal = gapsInRegion(conn, regionList,MAX_REGION_DISPLAY);
     realSize = regionSize - gapTotal;
 
     /*	close the table which was left open in the loop above	*/
