@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.36 2004/09/08 22:00:04 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.37 2004/10/30 01:39:27 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -65,7 +65,6 @@ if (wordCount <= 0)
     return NULL;
 if (wordCount < 8)
     {
-    warn("ugly word 0 = %s", words[0]);
     errAbort("Expecting at least 8 words line %d of %s got %d\n", lf->lineIx, lf->fileName,
     	wordCount);
     }
