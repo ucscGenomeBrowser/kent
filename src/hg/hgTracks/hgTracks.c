@@ -1084,11 +1084,10 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
         x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
         x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
         w = x2-x1;
-        bColor = mgFindColor(mg,0,0,0);
         if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
               {
               mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-                           lfs->orientation, color, TRUE);
+                           lfs->orientation, bColor, TRUE);
               }
         if (prevEnd != -1 && !lfs->noLine) 
               {
@@ -1096,7 +1095,6 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
               }
         prevEnd = lf->end;
       
-        bColor = color;
         if (lf->components != NULL && !hideLine)
             {
             x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
