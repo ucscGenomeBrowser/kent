@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: ave.c,v 1.5 2003/05/06 07:41:04 kate Exp $";
+static char const rcsid[] = "$Id: ave.c,v 1.6 2005/01/25 00:45:04 kent Exp $";
 
 int col = 1;
 
@@ -20,18 +20,24 @@ errAbort(
   );
 }
 
-int cmpInt(const void *va, const void *vb)
+int cmpDouble(const void *va, const void *vb)
 /* Compare two slNames. */
 {
-const int *a = va;
-const int *b = vb;
-return *a - *b;
+const double *a = va;
+const double *b = vb;
+double diff = *a - *b;
+if (diff < 0)
+   return -1;
+else if (diff > 0)
+   return 1;
+else
+   return 0;
 }
 
-void showStats(int *array, int count)
+void showStats(double *array, int count)
 /* Compute stats on sorted array */
 {
-int val, minVal = BIGNUM, maxVal = -BIGNUM;
+double val, minVal = 9.9E999, maxVal = -9.9E999;
 double total = 0, average;
 int i;
 double oneVar, totalVar = 0;
@@ -45,10 +51,10 @@ for (i=0; i<count; ++i)
     }
 average = total/count;
 
-printf("median %d\n", array[count/2]);
+printf("median %f\n", array[count/2]);
 printf("average %f\n", average);
-printf("min %d\n", minVal);
-printf("max %d\n", maxVal);
+printf("min %f\n", minVal);
+printf("max %f\n", maxVal);
 printf("count %d\n", count);
 printf("total %f\n", total);
 
@@ -65,7 +71,7 @@ void ave(char *fileName)
 /* ave - Compute average and basic stats. */
 {
 int count = 0, alloc = 1024;
-int *array;
+double *array;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[128], *word;
 int wordCount;
@@ -83,12 +89,12 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
     word = words[wordIx];
     if (word[0] == '-' || isdigit(word[0]))
         {
-	array[count++] = atoi(word);
+	array[count++] = atof(word);
 	}
     }
 if (count == 0)
     errAbort("No numerical data column %d of %s", col, fileName);
-qsort(array, count, sizeof(array[0]), cmpInt);
+qsort(array, count, sizeof(array[0]), cmpDouble);
 showStats(array, count);
 }
 
