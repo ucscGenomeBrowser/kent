@@ -11,7 +11,7 @@ hgLoadRna: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} ${F64} -o $(INSTALLDIR)/hgLoadRna $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 test: $(INSTALLDIR)/$(PROG)
 	cd test && csh runtest

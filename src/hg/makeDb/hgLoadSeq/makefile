@@ -10,4 +10,7 @@ hgLoadSeq: $O ../../../lib/$(MACHTYPE)/jkweb.a makefile
 	${CC} ${COPT} ${CFLAGS} ${F64} -o $(HOME)/bin/$(MACHTYPE)/hgLoadSeq $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} hgLoadSeq

@@ -12,7 +12,7 @@ hgLoadChain: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadChain${EXE}
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 clean::
 	rm -f ${O}
