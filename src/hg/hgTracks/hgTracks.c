@@ -1578,12 +1578,12 @@ lf=tg->items;
 if(lf==NULL) return;
 
 //take care of cart options
-snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
-snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
-snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-snprintf( o4, sizeof(o4),"%s.min.cutoff", tg->mapName);
-snprintf( o5, sizeof(o5),"%s.max.cutoff", tg->mapName);
-snprintf( o6, sizeof(o6),"%s.interp.gap", tg->mapName);
+snprintf( o1, 128,"%s.linear.interp", tg->mapName);
+snprintf( o2, 128, "%s.anti.alias", tg->mapName);
+snprintf( o3, 128,"%s.fill", tg->mapName);
+snprintf( o4, 128,"%s.min.cutoff", tg->mapName);
+snprintf( o5, 128,"%s.max.cutoff", tg->mapName);
+snprintf( o6, 128,"%s.interp.gap", tg->mapName);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
