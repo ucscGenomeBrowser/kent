@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.34 2005/03/14 23:27:42 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.35 2005/03/16 19:14:51 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -639,7 +639,7 @@ else
     errAbort("makeEnumValMenu: expecting a ')' at the end of the last word "
 	     "of SQL type, but got \"%s\"", type);
 *pMenuSize = wordCount + 1;
-*pMenu = (char **)needLargeZeroedMem(sizeof(char *) * (wordCount + 1));
+AllocArray(*pMenu, wordCount+1);
 *pMenu[0] = noop;
 for (i = 1;  i < wordCount + 1;  i++)
     {
