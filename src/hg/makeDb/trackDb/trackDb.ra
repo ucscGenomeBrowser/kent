@@ -1354,7 +1354,7 @@ termRegex ENSP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 track phastConsElements
-shortLabel PhastConsElements
+shortLabel Cons Elements
 longLabel PhastCons Conserved Elements
 group compGeno
 priority 105
