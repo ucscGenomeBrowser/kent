@@ -11,3 +11,6 @@ simpleChain: $O $(MYLIBS)
 	$(CC) -o simpleChain $O $(MYLIBS) $L
 	cp -f simpleChain $(BINDIR)
 #	${STRIP} $(BINDIR)/simpleChain${EXE}
+
+clean::
+	rm -f simpleChain ${O}
