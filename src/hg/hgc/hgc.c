@@ -7343,7 +7343,7 @@ cartWebStart(cart, clone);
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM fishClones WHERE name = '%s' "
                "AND chrom = '%s' AND chromStart = %d "
-                "ND chromEnd = %d",
+                "AND chromEnd = %d",
 	clone, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
