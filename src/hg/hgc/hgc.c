@@ -558,92 +558,12 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-void showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq)
-/* Show alignment for accession. */
-{
-struct tempName indexTn, bodyTn;
-FILE *index, *body;
-struct dnaSeq *dnaSeq;
-DNA *rna;
-int dnaSize,rnaSize;
-boolean isRc = FALSE;
-struct ffAli *ffAli, *ff;
-int tStart, tEnd, tRcAdjustedStart;
-int lastEnd = 0;
-int blockCount;
-int i;
-char title[256];
-
-
-makeTempName(&indexTn, "index", ".html");
-makeTempName(&bodyTn, "body", ".html");
-
-/* Get RNA and DNA sequence.  Save a mixed case copy of DNA, make
- * all lower case for fuzzyFinder. */
-rna = rnaSeq->dna;
-rnaSize = rnaSeq->size;
-tStart = psl->tStart - 100;
-if (tStart < 0) tStart = 0;
-tEnd  = psl->tEnd + 100;
-if (tEnd > psl->tSize) tEnd = psl->tSize;
-dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaMixed);
-freez(&dnaSeq->name);
-dnaSeq->name = cloneString(psl->tName);
-
-/* Start writing body of alignment. */
-body = mustOpen(bodyTn.forCgi, "w");
-htmStart(body, psl->qName);
-
-/* Convert psl alignment to ffAli. */
-tRcAdjustedStart = tStart;
-if (psl->strand[0] == '-')
-    {
-    isRc = TRUE;
-    reverseComplement(dnaSeq->dna, dnaSeq->size);
-    pslRcBoth(psl);
-    tRcAdjustedStart = psl->tSize - tEnd;
-    }
-ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
-
-/* Write body. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
-fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
-blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
-	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
-	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE);
-fclose(body);
-chmod(bodyTn.forCgi, 0666);
-
-/* Write index. */
-index = mustOpen(indexTn.forCgi, "w");
-htmStart(index, psl->qName);
-fprintf(index, "<H3>%s</H3>", psl->qName);
-fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">cDNA</A><BR>\n", bodyTn.forCgi);
-fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
-for (i=1; i<=blockCount; ++i)
-    {
-    fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
-         bodyTn.forCgi, i, i);
-    }
-fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
-fclose(index);
-chmod(indexTn.forCgi, 0666);
-
-/* Write (to stdout) the main html page containing just the frame info. */
-puts("<FRAMESET COLS = \"13%,87% \" >");
-printf("  <FRAME SRC=\"%s\" NAME=\"index\" RESIZE>\n", indexTn.forCgi);
-printf("  <FRAME SRC=\"%s\" NAME=\"body\" RESIZE>\n", bodyTn.forCgi);
-puts("</FRAMESET>");
-puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
-}
-
-void showProtAlignment(struct psl *psl, aaSeq *aaSeq)
+int showProtAlignment(struct psl *psl, aaSeq *aaSeq, FILE *f)
 /* Show protein/DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
 int tStart = psl->tStart, tEnd = psl->tEnd;
 boolean tIsRc = (psl->strand[1] == '-');
-FILE *f = stdout;
 
 
 /* Load dna sequence. */
@@ -660,6 +580,7 @@ if (tIsRc)
     }
 
 fprintf(f, "<TT><PRE>");
+fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (psl->strand[0] == '-'  ? " (reverse complemented)" : ""));
 /* Display amino acid sequence. */
     {
     struct cfm cfm;
@@ -690,11 +611,15 @@ fprintf(f, "<TT><PRE>");
     htmHorizontalLine(f);
     }
 
+fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
+    psl->tName, (tIsRc ? "(reverse strand)" : ""));
 /* Display DNA sequence. */
     {
     struct cfm cfm;
     char *colorFlags = needMem(dnaSeq->size);
     int i,j;
+    int curBlock = 0;
+    int anchorCount = 0;
 
     for (i=0; i<psl->blockCount; ++i)
 	{
@@ -719,7 +644,16 @@ fprintf(f, "<TT><PRE>");
 	}
     cfmInit(&cfm, 10, 60, TRUE, tIsRc, f, psl->tStart);
     for (i=0; i<dnaSeq->size; ++i)
+	{
+	/* Put down "anchor" on first match position in haystack
+	 * so user can hop here with a click on the needle. */
+	if (curBlock < psl->blockCount && psl->tStarts[curBlock] == (i + tStart) )
+	     {
+	     fprintf(f, "<A NAME=%d></A>", ++curBlock);
+	     }
+	     
 	cfmOut(&cfm, dnaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+	}
     cfmCleanup(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
@@ -727,6 +661,7 @@ fprintf(f, "<TT><PRE>");
 
 /* ~~~ */
 /* Display side by side. */
+fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     {
     struct baf baf;
     int i,j;
@@ -752,6 +687,99 @@ fprintf(f, "<TT><PRE>");
 	}
     }
 fprintf(f, "</TT></PRE>");
+return psl->blockCount;
+}
+
+
+int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, FILE *body)
+/* Show alignment for accession. */
+{
+struct dnaSeq *dnaSeq;
+DNA *rna;
+int dnaSize,rnaSize;
+boolean isRc = FALSE;
+struct ffAli *ffAli, *ff;
+int tStart, tEnd, tRcAdjustedStart;
+int lastEnd = 0;
+int blockCount;
+char title[256];
+
+
+/* Get RNA and DNA sequence.  Save a mixed case copy of DNA, make
+ * all lower case for fuzzyFinder. */
+rna = rnaSeq->dna;
+rnaSize = rnaSeq->size;
+tStart = psl->tStart - 100;
+if (tStart < 0) tStart = 0;
+tEnd  = psl->tEnd + 100;
+if (tEnd > psl->tSize) tEnd = psl->tSize;
+dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaMixed);
+freez(&dnaSeq->name);
+dnaSeq->name = cloneString(psl->tName);
+
+/* Convert psl alignment to ffAli. */
+tRcAdjustedStart = tStart;
+if (psl->strand[0] == '-')
+    {
+    isRc = TRUE;
+    reverseComplement(dnaSeq->dna, dnaSeq->size);
+    pslRcBoth(psl);
+    tRcAdjustedStart = psl->tSize - tEnd;
+    }
+ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
+
+/* Write body. */
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
+fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
+blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
+	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
+	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE);
+return blockCount;
+}
+
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, boolean isProt)
+/* Display protein or DNA alignment in a frame. */
+{
+int blockCount;
+struct tempName indexTn, bodyTn;
+FILE *index, *body;
+char title[256];
+int i;
+
+makeTempName(&indexTn, "index", ".html");
+makeTempName(&bodyTn, "body", ".html");
+
+/* Writing body of alignment. */
+body = mustOpen(bodyTn.forCgi, "w");
+htmStart(body, psl->qName);
+if (isProt)
+    blockCount = showProtAlignment(psl, oSeq, body);
+else
+    blockCount = showDnaAlignment(psl, oSeq, body);
+fclose(body);
+chmod(bodyTn.forCgi, 0666);
+
+/* Write index. */
+index = mustOpen(indexTn.forCgi, "w");
+htmStart(index, psl->qName);
+fprintf(index, "<H3>Alignment</H3>", psl->qName);
+fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, psl->qName);
+fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
+for (i=1; i<=blockCount; ++i)
+    {
+    fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+         bodyTn.forCgi, i, i);
+    }
+fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+fclose(index);
+chmod(indexTn.forCgi, 0666);
+
+/* Write (to stdout) the main html page containing just the frame info. */
+puts("<FRAMESET COLS = \"13%,87% \" >");
+printf("  <FRAME SRC=\"%s\" NAME=\"index\" RESIZE>\n", indexTn.forCgi);
+printf("  <FRAME SRC=\"%s\" NAME=\"body\" RESIZE>\n", bodyTn.forCgi);
+puts("</FRAMESET>");
+puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
 }
 
 
@@ -789,7 +817,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-showDnaAlignment(psl, rnaSeq);
+showSomeAlignment(psl, rnaSeq, FALSE);
 }
 
 void htcUserAli(char *fileNames)
@@ -822,11 +850,7 @@ lineFileClose(&lf);
 if (psl == NULL)
     errAbort("Couldn't find alignment at %s:%d", seqName, start);
 oSeq = faReadSeq(faName, !isProt);
-uglyf("Aligning %s to genome according to %s<BR>\n", faName, pslName);
-if (isProt)
-    showProtAlignment(psl, oSeq);
-else
-    showDnaAlignment(psl, oSeq);
+showSomeAlignment(psl, oSeq, isProt);
 }
 
 
