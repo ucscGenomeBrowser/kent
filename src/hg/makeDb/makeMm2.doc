@@ -493,19 +493,22 @@ o - Load into the database as so:
      hgLoadBed mm2 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (done 6/10/02)
+TWINSCAN GENE PREDICTIONS (done 6/10/02; reloaded 12/3/02)
 
     mkdir -p ~/mm2/bed/twinscan
     cd ~/mm2/bed/twinscan
-    wget http://genes.cs.wustl.edu/mouse/Gtf.tgz
-    wget http://genes.cs.wustl.edu/mouse/Ptx.tgz
-    gunzip -c Gtf.tgz | tar xvf -
-    gunzip -c Ptx.tgz | tar xvf -
+    mv Gtf.tgz Gtf.020610.tgz
+    mv Ptx.tgz Ptx.020610.tgz
+    rm chr*.gtf chr*.ptx chr*.fa *.tab
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
+      wget http://genes.cs.wustl.edu/mouse/12-3-02/gtf/chr$c.gtf
+      wget http://genes.cs.wustl.edu/mouse/12-3-02/ptx/chr$c.ptx
+    end
     ldHgGene mm2 twinscan chr*.gtf -exon=CDS
     - pare down to id:
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
       perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
-	chr$c.ptx > chr$c-fixed.fa
+        chr$c.ptx > chr$c-fixed.fa
     end
     hgPepPred mm2 generic twinscanPep chr*-fixed.fa
 
