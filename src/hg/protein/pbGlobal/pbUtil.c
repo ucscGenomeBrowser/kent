@@ -410,6 +410,7 @@ for (i=0; i<l; i++)
     }
 
 hPrintf("</pre>");
+fflush(stdout);
 }
 
 /* more sophisticated processing can be done using genome coordinates */
@@ -511,8 +512,6 @@ hPrintf("<font color = black>");
 
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
-hPrintf("\n<B>UCSC links:</B><BR>\n ");
-hPrintf("<UL>\n");
 hPrintf("\n<LI>Genome Browser - ");
 if (mrnaID != NULL)
     {
@@ -551,6 +550,15 @@ if (mrnaID != NULL)
     hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s&db=%s%s\"", mrnaID, database, hgsidStr);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
+}
+
+void doBlatLink(char *db, char *sciName, char *commonName)
+{
+hPrintf("\n<B>BLAT - </B>");
+hPrintf("<A HREF=\"../cgi-bin/hgBlat?db=%s\"", db);
+hPrintf(" TARGET=_BLANK>%s", sciName);
+if (commonName != NULL) hPrintf(" (%s)", commonName);
+hPrintf("</A></LI>\n");
 }
 
 void doPathwayLinks(char *proteinID, char *mrnaName)
