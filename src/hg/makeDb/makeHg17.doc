@@ -355,8 +355,9 @@ done >> seq_contig.md
 # REPEAT MASKING (DONE - 2004-05-24 - Hiram)
     #	The randoms were rearranged after this was first done,
     #	they are re-made below 2004-06-02)
-    #	RM version:
+    #	Record the RM version here:
     #	RepBase Update 8.12, RM database version 20040130
+    #	as this changes over time and there is no record in the results
 
     # Split contigs, run RepeatMasker, lift results
 
@@ -12575,6 +12576,35 @@ rm $tmpfile
 #refGene:cds 1.308%, fr1.chr1.mafRanges.bed 1.892%, both 0.854%, cover 65.29%, enrich 34.50x
 #refGene:cds 1.308%, tetNig1.chr1.mafRanges.bed 1.384%, both 0.805%, cover 61.57%, enrich 44.50x
 #refGene:cds 1.308%, danRer1.chr1.mafRanges.bed 2.716%, both 0.847%, cover 64.81%, enrich 23.86x
+
+    #	Create histogram of this phastCons data  (Hiram - 2005-02-07)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz.2004-12-22/cons
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg17 phastCons > histogram.data 2>&1
+    #	34 minutes
+
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 xff0000 xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Hg17 Histogram phastCons track"
+set xlabel "Hg17 phastCons score"
+set ylabel "p-Value"
+set y2label "Cumulative Probability Distribution"
+set y2range [0:1]
+set y2tics
+
+plot "histogram.data" using 2:5 title " pValue" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CPD" with lines
+'_EOF_'
+    
+    gnuplot histo.gp > histo.png
+    display histo.png &
 
 # BLASTZ BOREOEUTHERIAN (BOREUT1) (DONE 1/29/05 braney)
     ssh kk
