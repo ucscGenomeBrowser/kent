@@ -25,8 +25,10 @@ static struct cgiVar *cookieList = NULL;
 /* should cheapcgi use temp files to store uploaded files */
 static boolean doUseTempFile = FALSE;
 
+
+void useTempFile() 
 /* tell cheapcgi to use temp files */
-void useTempFile() {
+{
 doUseTempFile = TRUE;
 }
 
@@ -624,6 +626,13 @@ sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 
+void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount)
+/* Make a text area with area rowCount X columnCount and with text: intialVal */
+{
+printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d>%s</TEXTAREA>", varName,
+       rowCount, columnCount, (initialVal != NULL ? initialVal : ""));
+}
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
@@ -651,6 +660,26 @@ int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
 printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+for (i=0; i<menuSize; ++i)
+    {
+    if (!differentWord(menu[i], checked))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    }
+printf("</SELECT>");
+}
+
+void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length)
+/* Make a list of names with window height equalt to length,
+ * which can have multiple selections. Same as drop-down list 
+ * except "multiple" is added to select tag. */
+{
+int i;
+char *selString;
+if (checked == NULL) checked = menu[0];
+printf("<SELECT MULTIPLE SIZE=%d ALIGN=CENTER NAME=\"%s\">", length, name);
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
