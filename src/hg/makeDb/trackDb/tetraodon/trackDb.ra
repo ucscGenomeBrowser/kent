@@ -36,6 +36,16 @@ spectrum on
 type psl xeno
 cdsDrawOptions enabled
 
+track ecoresHg17
+shortLabel Human Ecores
+longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+group compGeno
+priority 120.1
+visibility hide
+color 0,60,120
+type genePred
+otherDb hg17
+
 track blastzHg17
 shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
