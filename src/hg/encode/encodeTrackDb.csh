@@ -10,8 +10,10 @@ echo "SELECT * FROM trackDb WHERE grp <> 'encode'" | \
 echo "SELECT * FROM trackDb WHERE grp = 'encode'" | hgsql -N hg16 >> $tempfile
 echo "LOAD DATA LOCAL INFILE '"$tempfile"' INTO TABLE $newtable" | \
             hgsql hg16
-echo "DROP TABLE trackDb_encodedev_old" | hgsql hg16
+echo "DROP TABLE IF EXISTS trackDb_encodedev_old" | hgsql hg16
 echo "ALTER TABLE trackDb_encodedev RENAME TO trackDb_encodedev_old" | \
+            hgsql hg16
+echo "UPDATE $newtable SET visibility = 3 WHERE grp = 'encode'" | \
             hgsql hg16
 echo "ALTER TABLE $newtable RENAME TO trackDb_encodedev" | \
             hgsql hg16
