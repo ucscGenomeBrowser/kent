@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.10 2003/10/26 08:13:20 kent Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.11 2003/11/10 20:08:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -79,6 +79,14 @@ for (i=0; i<wordCount; ++i)
     {
     if (startsWith(pat, words[i]))
         return words[i] + patSize;
+    }
+// Ensembl appears to have changed their format recently; handle both formats.
+wordCount = chopString(line+1, "|", words, ArraySize(words));
+if (wordCount >= 3)
+    {
+    char *ptr = strchr(words[2], '.');
+    if (ptr != NULL) *ptr = 0;
+    return(words[2]);
     }
 errAbort("Couldn't find '%s' key for transcript name line %d of %s",
     pat, lf->lineIx, lf->fileName);
