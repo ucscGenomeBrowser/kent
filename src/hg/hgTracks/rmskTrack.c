@@ -137,7 +137,7 @@ else
 	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
-	dyStringPrintf(query, "genoStart<%u and genoEnd>%u", winEnd, winStart);
+	dyStringPrintf(query, "genoStart<%u and genoEnd>%u and genoName = '%s' ", winEnd, winStart, chromName);
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
