@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.722 2004/05/05 22:54:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.723 2004/05/06 00:22:20 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -374,11 +374,13 @@ for (item = tg->items; item != NULL; item = item->next)
     start = round((double)(baseStart - winStart)*scale);
     if (!tg->drawName && withLabels)
 	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
-    end = round((baseEnd - winStart)*scale);
+    if (baseEnd >= winEnd)
+	end = insideWidth;
+    else
+	end = round((baseEnd - winStart)*scale);
     if (baseStart < winEnd && baseEnd > winStart)
         {
 	if (start < 0) start = 0;
-	if (end > insideWidth) end = insideWidth;
 	if (spaceSaverAdd(ss, start, end, item) == NULL)
 	    break;
 	}
