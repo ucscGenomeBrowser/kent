@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.866 2005/01/21 06:51:53 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.867 2005/01/24 22:26:23 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8354,6 +8354,79 @@ else
     return tg->ixColor;
 }
 
+Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw a genePred based on looking up the gene class */
+/* in an itemClass table */
+{
+char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
+char *gClassesClone = NULL;
+int class, classCt = 0;
+char *classes[20];
+char gClass[24];
+char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
+struct linkedFeatures *lf = item;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row = NULL;
+char query[256];
+boolean found = FALSE;
+char *colorString = NULL, *colorClone = NULL, *name = NULL;
+struct rgbColor gClassColor;
+int color = tg->ixColor; /* default color in trackDb */
+int size = 3;
+char *rgbVals[5];
+char *sep = ",";
+
+if (geneClasses == NULL)
+   errAbort(
+      "Track %s missing required trackDb setting: geneClasses", tg->mapName);
+if (geneClasses)
+   {
+   gClassesClone = cloneString(geneClasses);
+   classCt = chopLine(gClassesClone, classes);
+   }
+if (hTableExists(classTable))
+   {
+   /* need to chop down name so remove the part after the "." */
+   name = cloneString(lf->name);
+   chopSuffix(name);
+   sprintf(query, "select class from %s where name like '%s'", classTable,name);   
+   sr = sqlGetResult(conn, query);
+   if ((row = sqlNextRow(sr)) != NULL)
+        {
+        /* scan through groups to find a match */
+        for (class = 0; class < classCt; class++)
+           {
+           if (startsWith(classes[class], row[0]))
+           /* get color from trackDb settings hash */
+              {
+              found = TRUE;
+              safef(gClass, sizeof gClass, "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
+              colorString = trackDbSetting(tg->tdb, gClass);
+              break;
+              }
+           }
+        }
+   sqlFreeResult(&sr);
+   if (found) 
+      {
+      /* need to convert color string to rgb */
+      // check how these are found for trackDb
+      colorClone = cloneString(colorString);     
+      chopString(colorClone, sep, rgbVals, size);
+      gClassColor.r = (sqlUnsigned(rgbVals[0]));
+      gClassColor.g = (sqlUnsigned(rgbVals[1]));
+      gClassColor.b = (sqlUnsigned(rgbVals[2]));
+   
+      /* find index for color */
+      color = vgFindRgb(vg, &gClassColor);
+      }
+   }
+hFreeConn(&conn);
+/* return index for color to draw item */
+return color;
+}
+
 void drawColorMethods(struct track *tg)
 /* Fill in color track items based on chrom  */
 {
@@ -8435,6 +8508,8 @@ else if (sameWord(type, "genePred"))
     track->colorShades = NULL;
     if (track->itemAttrTbl != NULL)
         track->itemColor = genePredItemAttrColor;
+    else if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
+        track->itemColor = genePredItemClassColor;
     }
 else if (sameWord(type, "psl"))
     {
