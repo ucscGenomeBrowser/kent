@@ -40,6 +40,8 @@ for (;;)
     AllocVar(pm);
     if (pmReceive(pm, ru))
 	{
+	/* FIXME: I think there may be some byte order issues here. 
+	 * that are hidden under the Pentiums we are using. */
 	if (ipAddressOk(pm->ipAddress.sin_addr.s_addr, hubSubnet) || 
 	    ipAddressOk(pm->ipAddress.sin_addr.s_addr, localHost))
 	    {
