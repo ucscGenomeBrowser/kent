@@ -9,4 +9,4 @@ newSang6: $O ../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o newSang6 $O ../../lib/$(MACHTYPE)/jkweb.a $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

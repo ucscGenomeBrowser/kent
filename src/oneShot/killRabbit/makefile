@@ -11,4 +11,4 @@ killRabbit: lib $O ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} killRabbit${EXE}
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
