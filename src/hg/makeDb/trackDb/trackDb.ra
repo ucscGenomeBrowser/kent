@@ -384,6 +384,17 @@ altColor 255,240,200
 spectrum on
 type bed 5 .
 
+track pseudoMrna
+shortLabel Pseudo Mrna
+longLabel Processed Pseudogene Locus Based on mrna alignments
+group genes
+priority 45
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
 track ucscFromMouse
 shortLabel UCSC Mm3
 longLabel UCSC Gene Predictions from Known Mouse Genes Mapped to Human
@@ -905,15 +916,6 @@ priority 134.5
 visibility hide
 spectrum on
 type netAlign rn2 ratChain
-
-track mouseSynNet
-shortLabel Syntenic Net
-longLabel Mouse/Human Syntenic Alignment Net
-group compGeno
-priority 136
-visibility hide
-spectrum on
-type netAlign mm2
 
 track mouseSyn
 shortLabel NCBI Synteny
