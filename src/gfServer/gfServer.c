@@ -98,7 +98,6 @@ struct hostent *hostent;
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
     {
-    herror("");
     errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
     }
 sai.sin_family = AF_INET;

@@ -6,7 +6,8 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-void gfClient(char *hostName, char *portName, char *nibDir, char *inName, char *outName, boolean tx)
+void gfClient(char *hostName, char *portName, char *nibDir, char *inName, 
+	char *outName, boolean tx)
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -14,6 +15,7 @@ static bioSeq seq;
 struct ssBundle *bundleList;
 enum ffStringency stringency = ffCdna;
 FILE *out = mustOpen(outName, "w");
+int conn = gfConnect(hostName, portName);
 
 if (!cgiVarExists("nohead"))
     pslWriteHead(out);
@@ -22,17 +24,23 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !tx))
     printf("Processing %s\n", seq.name);
     if (tx)
         {
+	static struct gfSavePslxData data;
 	uglyf("got tx\n");
-	gfAlignTrans(hostName, portName, nibDir, &seq, 12, gfSavePsl, NULL);
+	data.f = out;
+	data.reportTargetStrand = TRUE;
+	gfAlignTrans(conn, nibDir, &seq, 12, gfSavePslx, &data);
 	}
     else
 	{
-	gfAlignStrand(hostName, portName, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
+	gfAlignStrand(conn, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
+	close(conn);
+	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(hostName, portName, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
+	gfAlignStrand(conn, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
 	}
     }
 printf("Output is in %s\n", outName);
+close(conn);
 }
 
 void usage()
