@@ -8,6 +8,7 @@
 #include "dystring.h"
 #include "bed.h"
 #include "hdb.h"
+#include "chainNet.h"
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -36,6 +37,7 @@ struct align
     char *qStrand;
     int qStart, qEnd;
     int tSize;
+    int chainId;
     };
 
 struct space
@@ -97,15 +99,20 @@ void writeGap(struct gap *g, char *tName, int level, FILE *f)
 }
 void writeAlignment(struct align *a, char *tName, int level, FILE *f)
 {
-    fprintf(f,"%u\t%s\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%d\n",hFindBin(a->tStart, a->tEnd), tName, level, a->tStart, a->tEnd, a->tSize, a->qName, a->qStrand, a->qStart, a->qEnd, a->qSize);
+    fprintf(f,"%u\t%s\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%d\t%d\n",hFindBin(a->tStart, a->tEnd), tName, level, a->tStart, a->tEnd, a->tSize, a->qName, a->qStrand, a->qStart, a->qEnd, a->qSize, a->chainId);
 }
-struct chrom *chromRead(struct lineFile *lf, FILE *gf, FILE *af)
+void chromRead(struct lineFile *lf, FILE *gf, FILE *af, struct chrom **cList)
 /* Read next chromosome from net file.  Return NULL at EOF. 
    */
 {
 struct chrom *chrom;
 int start,end, wordCount;
-char *row[12];
+char *row[14];
+char *line;
+int lineSize;
+struct gap *g;
+struct align *a;
+int level = 1;
 
 wordCount = lineFileChopNext(lf, row, 3);
 if (wordCount < 3)
@@ -120,20 +127,12 @@ if (chrom->size <= 0)
     errAbort("Chomosome %s size must be a positive number line %d of %s", row[1], lf->lineIx, lf->fileName);
 
 /* Now read in gap list. */
-for (;;)
+while (lineFileNext(lf, &line, &lineSize))
     {
-    int lineSize, wordCount;
-    char *line;
-    struct gap *g;
-    struct align *a;
-    int level = 1;
-
-    lineFileNext(lf, &line, &lineSize);
-    wordCount = chopByWhite(line, row, 9);
-    if (wordCount <= 3)
-        return NULL;
-/*        errAbort("Expecting at least 3 words line %d of %s\n", 
-		lf->lineIx, lf->fileName);*/
+    wordCount = chopByWhite(line, row, 11);
+    if (wordCount < 3)
+        errAbort("Expecting at least 3 words line %d of %s\n", 
+        lf->lineIx, lf->fileName);
 
     if (sameString("gap", row[0]))
         {
@@ -157,8 +156,8 @@ for (;;)
     else if (sameString("fill", row[0]))
         {
         int newLevel;
-        if (wordCount < 9)
-            errAbort("Expecting at least 9 words line %d of %s\n", 
+        if (wordCount < 11)
+            errAbort("Expecting at least 11 words got %d line %d of %s\n", wordCount ,
             lf->lineIx, lf->fileName);
         newLevel = findLevel(line, row[0]);
         AllocVar(a);
@@ -170,11 +169,19 @@ for (;;)
         a->qStart = lineFileNeedNum(lf, row, 6);
         a->qEnd = lineFileNeedNum(lf, row, 7);
         a->qSize = lineFileNeedNum(lf, row, 8);
+        a->chainId = lineFileNeedNum(lf, row, 10);
+
         writeAlignment(a,chrom->name,newLevel,af);
         }
+    else if (sameString("net" , row[0]))
+        {
+        AllocVar(chrom);
+        chrom->name = cloneString(row[1]);
+        chrom->size = lineFileNeedNum(lf, row, 2);
+        slAddHead(cList, chrom);
+        }
     }
-slReverse(&chrom->root);
-return chrom;
+return ;
 }
 int findBedSize(char *fileName)
 /* Read first line of file and figure out how many words in it. */
@@ -300,12 +307,12 @@ else if (!oldTable)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
     dyStringAppend(dy, "  chrom varchar(255) not null,\n");
     dyStringAppend(dy, "  level int unsigned not null,\n");
-    dyStringAppend(dy, "  start int unsigned not null,\n");
-    dyStringAppend(dy, "  end int unsigned not null,\n");
+    dyStringAppend(dy, "  chromStart int unsigned not null,\n");
+    dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),start)\n");
+    dyStringAppend(dy, "  INDEX(chrom(8),chromStart)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
@@ -343,16 +350,30 @@ else if (!oldTable)
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
+    dyStringAppend(dy, "  type varchar(255) not null,\n");
     dyStringAppend(dy, "  tName varchar(255) not null,\n");
     dyStringAppend(dy, "  level int unsigned not null,\n");
     dyStringAppend(dy, "  tStart int unsigned not null,\n");
     dyStringAppend(dy, "  tEnd int unsigned not null,\n");
-    dyStringAppend(dy, "  tSize int unsigned not null,\n");
        dyStringAppend(dy, "  qName varchar(255) not null,\n");
        dyStringAppend(dy, "  strand char(1) not null,\n");
        dyStringAppend(dy, "  qStart int unsigned not null,\n");
        dyStringAppend(dy, "  qEnd int unsigned not null,\n");
        dyStringAppend(dy, "  score int unsigned not null,\n");
+       dyStringAppend(dy, "  chainId int unsigned not null,\n");
+       dyStringAppend(dy, "  qOver int unsigned not null, \n");
+       dyStringAppend(dy, "  qFar int unsigned not null, \n");
+       dyStringAppend(dy, "  qDup int unsigned not null, \n");
+       dyStringAppend(dy, "  tN int unsigned not null, \n");
+       dyStringAppend(dy, "  qN int unsigned not null, \n");
+       dyStringAppend(dy, "  tR int unsigned not null, \n");
+       dyStringAppend(dy, "  qR int unsigned not null, \n");
+       dyStringAppend(dy, "  tNewR int unsigned not null, \n");
+       dyStringAppend(dy, "  qNewR int unsigned not null, \n");
+       dyStringAppend(dy, "  tOldR int unsigned not null, \n");
+       dyStringAppend(dy, "  qOldR int unsigned not null, \n");
+       dyStringAppend(dy, "  tTrf int unsigned not null, \n");
+       dyStringAppend(dy, "  qTrf int unsigned not null, \n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(tName(8),bin),\n");
@@ -368,35 +389,94 @@ sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
 
+void cnWriteTables(char *chrom, struct cnFill *fillList, FILE *f, int depth)
+/* Recursively write out fill and gap lists. */
+{
+struct cnFill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    char *type = (fill->chainId ? "fill" : "gap");
+    if (!fill->score)
+        fill->score = 0;
+    if (fill->score < 0)
+        fill->score = 0;
+    fprintf(f, "%d\t%s\t%s\t%d\t%d\t%d\t%s\t%c\t%d\t%d", hFindBin(fill->tStart, (fill->tStart)+(fill->tSize)),type, chrom, fill->chainId ? (depth+1)/2 : depth/2, fill->tStart, (fill->tStart)+(fill->tSize),
+    	fill->qName, fill->qStrand, fill->qStart, fill->qStart+fill->qSize);
+    if (fill->chainId)
+        fprintf(f, "\t%d", fill->chainId);
+    fprintf(f, "\t%1.0f", fill->score);
+    if (fill->qOver < 0)
+        fill->qOver = 0;
+        fprintf(f, "\t%d", fill->qOver);
+    if (fill->qFar <= 0)
+        fill->qFar = 0;
+        fprintf(f, "\t%d", fill->qFar);
+    if (fill->qDup <= 0)
+        fill->qDup = 0;
+        fprintf(f, "\t%d", fill->qDup);
+    if (fill->tN <= 0)
+        fill->tN = 0;
+        fprintf(f, "\t%d", fill->tN);
+    if (fill->qN <= 0)
+        fill->qN = 0;
+        fprintf(f, "\t%d", fill->qN);
+    if (fill->tR <= 0)
+        fill->tR = 0;
+        fprintf(f, "\t%d", fill->tR);
+    if (fill->qR <= 0)
+        fill->qR = 0;
+        fprintf(f, "\t%d", fill->qR);
+    if (fill->tNewR <= 0)
+        fill->tNewR = 0;
+        fprintf(f, "\t%d", fill->tNewR);
+    if (fill->qNewR <= 0)
+        fill->qNewR = 0;
+        fprintf(f, "\t%d", fill->qNewR);
+    if (fill->tOldR <= 0)
+        fill->tOldR = 0;
+        fprintf(f, "\t%d", fill->tOldR);
+    if (fill->qOldR <= 0)
+        fill->qOldR = 0;
+        fprintf(f, "\t%d", fill->qOldR);
+    if (fill->tTrf < 0)
+        fill->tTrf = 0;
+        fprintf(f, "\t%d", fill->tTrf);
+    if (fill->qTrf < 0)
+        fill->qTrf = 0;
+        fprintf(f, "\t%d", fill->qTrf);
+    fputc('\n', f);
+    if (fill->children)
+        cnWriteTables(chrom, fill->children, f, depth+1);
+    }
+}
 void hgLoadNet(char *database, char *track, int netCount, char *netFiles[])
 /* hgLoadNet - Load a net file into database. */
 {
 int i;
 struct hash *qHash, *tHash;
-struct chrom *chromList, *chrom;
+struct chrom *chromList = NULL, *chrom;
+struct chainNet *cn;
 struct lineFile *lf ;
-char gapFileName[] ="gap.tab";
+struct chainNet *net;
 char alignFileName[] ="align.tab";
-FILE *gapFile = mustOpen(gapFileName,"w");
 FILE *alignFile = mustOpen(alignFileName,"w");
-char trackA[128], trackG[128];
-sprintf(trackA, "%sAlign",track);
-sprintf(trackG, "%sGap",track);
 
 for (i=0; i<netCount; ++i)
     {
     lf = lineFileOpen(netFiles[i], TRUE);
     printf("file is %s\n",netFiles[i]);
-    while ((chrom = chromRead(lf, gapFile, alignFile)) != NULL)
+    /*chromRead(lf, gapFile, alignFile, &chromList);*/
+    while ((net = chainNetRead(lf)) != NULL)
         {
+        printf("read %s\n",net->name);
+        cnWriteTables(net->name,net->fillList, alignFile, 1);
         }
+
     }
-fclose(gapFile);
 fclose(alignFile);
 /*slSort(&bedList, bedStubCmp);
 printf("Sorted\n");*/
-loadDatabaseAlign(database, alignFileName, trackA);
-loadDatabaseGap(database, gapFileName, trackG);
+loadDatabaseAlign(database, alignFileName, track);
 }
 
 int main(int argc, char *argv[])
