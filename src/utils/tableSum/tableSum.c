@@ -1,6 +1,7 @@
 /* tableSum - Summarize a table somehow. */
 #include "common.h"
 #include "linefile.h"
+#include "dystring.h"
 #include "hash.h"
 #include "options.h"
 
@@ -20,6 +21,10 @@ errAbort(
   "                     next 60 columns to second column in output,\n"
   "                     and next 10 columns to third column in output.\n"
   "   -rowDiv=30,60,10  Similar to colDiv, but for rows,  may be combined\n"
+  "   -colEven=N         Output columns that are sum of N columns of input\n"
+  "   -rowEven=N         Output rows that are sum of N rows of input\n"
+  "   -row         Sum all rows\n"
+  "   -col         Sum all columns\n"
   );
 }
 
@@ -99,6 +104,23 @@ freeMem(words);
 *retOutCount = wordCount;
 }
 
+char *evenDivisions(int inSize, int divSize)
+/* Make a string divSize,divSize,divSize */
+{
+struct dyString *dy = dyStringNew(512);
+char *s;
+int cut;
+for (cut=0; cut<inSize; cut += divSize)
+    {
+    if (cut != 0)
+        dyStringPrintf(dy, ",");
+    dyStringPrintf(dy, "%d", divSize);
+    }
+s = cloneString(dy->string);
+dyStringFree(&dy);
+return s;
+}
+
 void tableSum(char *table)
 /* tableSum - Summarize a table somehow. */
 {
@@ -110,7 +132,6 @@ int *xCuts, xOutDim, *yCuts, yOutDim, xCutIx, yCutIx;
 double *rowSum;
 
 tableFileDimensions(table, &xInDim, &yInDim);
-uglyf("%s is %d x %d\n", table, xInDim, yInDim);
 
 /* Set up default output,  which user may override
  * from command line. */
@@ -120,11 +141,18 @@ colDiv = optionVal("colDiv", colDiv);
 sprintf(buf, "%d", yInDim);
 rowDiv = cloneString(buf);
 rowDiv = optionVal("rowDiv", rowDiv);
+if (optionExists("colEven"))
+    colDiv = evenDivisions(xInDim, optionInt("colEven", 0));
+if (optionExists("rowEven"))
+    rowDiv = evenDivisions(yInDim, optionInt("rowEven", 0));
+if (optionExists("col") || optionExists("column"))
+    colDiv = evenDivisions(xInDim, 1);
+if (optionExists("row"))
+    rowDiv = evenDivisions(yInDim, 1);
 
 /* Parse ascii representation of output specification into cut list. */
 parseCuts(xInDim, colDiv, &xCuts, &xOutDim);
 parseCuts(yInDim, rowDiv, &yCuts, &yOutDim);
-uglyf("outDims: %d x %d\n", xOutDim, yOutDim);
 
 AllocArray(row, xInDim);
 AllocArray(rowSum, xInDim);
