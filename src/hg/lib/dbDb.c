@@ -19,9 +19,10 @@ ret->name = row[0];
 ret->description = row[1];
 ret->nibPath = row[2];
 ret->organism = row[3];
-ret->genome = row[4];
-ret->defaultPos = row[5];
+ret->defaultPos = row[4];
+ret->orderKey = sqlSigned(row[5]);
 ret->active = sqlSigned(row[6]);
+ret->genome = row[7];
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -37,9 +38,10 @@ ret->name = cloneString(row[0]);
 ret->description = cloneString(row[1]);
 ret->nibPath = cloneString(row[2]);
 ret->organism = cloneString(row[3]);
-ret->genome = cloneString(row[4]);
-ret->defaultPos = cloneString(row[5]);
+ret->defaultPos = cloneString(row[4]);
+ret->orderKey = sqlSigned(row[5]);
 ret->active = sqlSigned(row[6]);
+ret->genome = cloneString(row[7]);
 return ret;
 }
 
@@ -49,7 +51,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -100,9 +102,10 @@ ret->name = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
 ret->nibPath = sqlStringComma(&s);
 ret->organism = sqlStringComma(&s);
-ret->genome = sqlStringComma(&s);
 ret->defaultPos = sqlStringComma(&s);
+ret->orderKey = sqlSignedComma(&s);
 ret->active = sqlSignedComma(&s);
+ret->genome = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -118,8 +121,8 @@ freeMem(el->name);
 freeMem(el->description);
 freeMem(el->nibPath);
 freeMem(el->organism);
-freeMem(el->genome);
 freeMem(el->defaultPos);
+freeMem(el->genome);
 freez(pEl);
 }
 
@@ -157,14 +160,16 @@ fprintf(f, "%s", el->organism);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->genome);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->defaultPos);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%d", el->orderKey);
+fputc(sep,f);
 fprintf(f, "%d", el->active);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->genome);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

@@ -14,7 +14,9 @@ struct dbDb
     char *nibPath;	/* Path to packed sequence files */
     char *organism;	/* Common name of organism - first letter capitalized */
     char *defaultPos;	/* Default starting position */
+    int orderKey;	/* Int used to control display order within a genome */
     int active;	/* Flag indicating whether this db is in active use */
+    char *genome;	/* Unifying genome collection to which an assembly belongs */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);
