@@ -3942,6 +3942,7 @@ struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row, **row1;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
+int hgsid = cartSessionId(cart);
 struct stsMapMouse stsRow;
 struct stsInfoMouse *infoRow;
 char stsid[20];
@@ -3965,7 +3966,7 @@ if (row != NULL)
     stsMapMouseStaticLoad(row, &stsRow);
     /* Find the instance of the object in the stsInfo table */ 
     sqlFreeResult(&sr);
-    sprintf(query, "SELECT * FROM stsInfoMouse WHERE MGIMarkerID = '%d'", stsRow.identNo);
+    sprintf(query, "SELECT * FROM stsInfoMouse WHERE identNo = '%d'", stsRow.identNo);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -3998,13 +3999,13 @@ if (row != NULL)
 	printf("<TABLE>\n");
 	printf("<TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
 	printf("<TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->stsMarkerName, infoRow->Chr, infoRow->geneticPos);   
+	       infoRow->stsMarkerName, infoRow->Chr, infoRow->geneticPos);  
 	printf("</TABLE><P>\n");
 
 	/* Print out alignment information - full sequence */
 	webNewSection("Genomic Alignments:");
 	sprintf(stsid,"%d",infoRow->MGIPrimerID);
-	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", stsid);  
+	sprintf(query, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsid, start, end); 
 	sr1 = sqlGetResult(conn1, query);
 	i = 0;
 	pslStart = 0;
@@ -4047,8 +4048,10 @@ if (row != NULL)
             while ((row = sqlNextRow(sr)) != NULL)
 		{
 		stsMapMouseStaticLoad(row, &stsRow);
-		printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
-		       stsRow.chrom, (stsRow.chromStart+stsRow.chromEnd)>>1);
+		
+		
+		printf("<TR><TD>%s:</TD><TD><A HREF = \"http://genome-test.cse.ucsc.edu/cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 		}
 	    printf("</TABLE>\n");
 	    }
