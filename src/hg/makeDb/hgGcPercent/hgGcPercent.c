@@ -9,7 +9,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.14 2004/10/19 20:17:26 angie Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.15 2004/10/26 21:29:20 hiram Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -18,6 +18,7 @@ char *file = (char *)NULL;	/* file name for output */
 char *chr = (char *)NULL;	/* process only chromosome listed */
 boolean noDots = FALSE;	        /* TRUE == do not display ... progress */
 boolean doGaps = FALSE;	        /* TRUE == process gaps correctly */
+boolean wigOut = FALSE;	        /* TRUE == output wiggle ascii data */
 int overlap = 0;                /* overlap size */
 
 /* command line option specifications */
@@ -29,9 +30,11 @@ static struct optionSpec optionSpecs[] = {
     {"noDots", OPTION_BOOLEAN},
     {"doGaps", OPTION_BOOLEAN},
     {"overlap", OPTION_INT},
+    {"wigOut", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
+static char * previousChrom = (char *) NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -49,9 +52,14 @@ errAbort(
   "   -chr=<chrN> - process only chrN from the nibDir\n"
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
+  "   -wigOut - output wiggle ascii data ready to pipe to wigBedToBinary\n"
   "   -overlap=N - overlap windows by N bases (default 0)\n"
-  "   -verbose=N - display details to stderr during processing",
-  winSize);
+  "   -verbose=N - display details to stderr during processing\n\n"
+  "example:\n"
+  "  calculate GC percent in 5 base windows using a 2bit nib assembly (dp2):\n"
+  "  hgGcPercent -wigOut -doGaps -file=stdout -win=5 dp2 \\\n"
+  "      /cluster/data/dp2 | wigBedToBinary stdin gc5Base.wig gc5Base.wib"
+      , winSize);
 }
 
 char *createTable = 
@@ -67,6 +75,21 @@ char *createTable =
     "INDEX(chrom(12), chromEnd)\n"
 ");\n";
 
+static void wigOutLine(FILE *f, char *chrom, int start, int end, int ppt)
+{
+/*	only full winSize spans are valid	*/
+if ((end - start) < winSize)
+    return;
+
+/*	see if we are starting on a new chrom	*/
+if (! (previousChrom && (sameWord(previousChrom, chrom))))
+    {
+    freeMem(previousChrom);
+    previousChrom = cloneString(chrom);
+    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, winSize);
+    }
+fprintf(f, "%d\t%g\n", start+1, ppt/10.0);
+}
 
 void makeGcLineFromSeq(struct dnaSeq *seq, char *chrom, int start, int end,
 		       FILE *f)
@@ -92,7 +115,7 @@ if ((++dotMod&127) == 0)
 gapCount = count = gcCount = 0;
 for (i=0; i < seq->size; ++i)
     {
-    if ((val = ntVal[dna[i]]) >= 0)
+    if ((val = ntVal[(int)dna[i]]) >= 0)
 	{
 	++count;
 	if (val == G_BASE_VAL || val == C_BASE_VAL)
@@ -110,14 +133,23 @@ if (count >= minCount)
 else
     ppt = 0;
 
+
 if (doGaps)
     {
     if (gapCount < seq->size)
-	fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
+	{
+	if (wigOut)
+	    wigOutLine(f, chrom, start, end, ppt);
+	else
+	    fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
+	}
     }
 else
     {
-    fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
+    if (wigOut)
+	wigOutLine(f, chrom, start, end, ppt);
+    else
+	fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
     }
 }
 
@@ -160,7 +192,7 @@ for (el = twoBitNames; el != NULL; el = el->next)
     int start = 0, end = 0;
     int chromSize = twoBitSeqSize(tbf, el->name);
     char *chrom = el->name;
-    verbose(2, "Processing twoBit sequence %s\n", chrom);
+    verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
     for (start=0, end=0;  start < chromSize && end < chromSize;  
 	 start = end - overlap)
 	{
@@ -185,13 +217,13 @@ char *tabFileName = file ? file : "gcPercent.bed";
 FILE *tabFile = mustOpen(tabFileName, "w");
 char twoBitFile[512];
 
-verbose(1, "Calculating gcPercent with window size %d\n", winSize);
-verbose(2, "Writing to tab file %s\n", tabFileName);
+verbose(1, "#\tCalculating gcPercent with window size %d\n", winSize);
+verbose(2, "#\tWriting to tab file %s\n", tabFileName);
 
 sprintf(twoBitFile, "%s/%s.2bit", nibDir, database);
 if (fileExists(twoBitFile))
     {
-    verbose(1, "Using twoBit: %s\n", twoBitFile);
+    verbose(1, "#\tUsing twoBit: %s\n", twoBitFile);
     makeGcTabFromTwoBit(twoBitFile, tabFile);
     }  
 else
@@ -204,24 +236,24 @@ else
         splitPath(nibEl->name, dir, chrom, ext);
         if (chr)
 	    {
-	    verbose(2, "checking name: %s =? %s\n", chrom, chr);
+	    verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
 	    if (! sameString(chrom, chr))
 		continue;
 	    }
-	verbose(1, "Processing %s\n", nibEl->name);
+	verbose(1, "#\tProcessing %s\n", nibEl->name);
 	makeGcTabFromNib(nibEl->name, chrom, tabFile);
         }
     slFreeList(&nibList);
     }
 carefulClose(&tabFile);
-verbose(1, "File %s created\n", tabFileName);
+verbose(1, "#\tFile %s created\n", tabFileName);
 
 /* Load that file in database. */
 if (!noLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
     char query[1024];
-    verbose(1, "Loading gcPercent table\n");
+    verbose(1, "#\tLoading gcPercent table\n");
     sqlMaybeMakeTable(conn, "gcPercent", createTable);
     sqlUpdate(conn, "DELETE from gcPercent");
     safef(query, sizeof(query),
@@ -245,6 +277,7 @@ winSize = optionInt("win", 20000);
 noLoad = optionExists("noLoad");
 noDots = optionExists("noDots");
 doGaps = optionExists("doGaps");
+wigOut = optionExists("wigOut");
 overlap = optionInt("overlap", 0);
 file = optionVal("file", NULL);
 chr = optionVal("chr", NULL);
@@ -261,11 +294,12 @@ if (file)
 
 if (verboseLevel() >= 2)
     {
-    fprintf(stderr, "hgGcPercent -win=%d", winSize);
+    fprintf(stderr, "#\thgGcPercent -win=%d", winSize);
     if (file) fprintf(stderr, " -file=%s", file);
     if (noLoad) fprintf(stderr, " -noLoad");
     if (noDots) fprintf(stderr, " -noDots");
     if (doGaps) fprintf(stderr, " -doGaps");
+    if (wigOut) fprintf(stderr, " -wigOut");
     if (chr) fprintf(stderr, " -chr=%s", chr);
     fprintf(stderr, "\n");
     }
