@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.47 2004/08/30 19:34:01 daryl Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.48 2004/10/18 21:26:38 daryl Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -273,15 +273,15 @@ static char *snpTypeStates[] = {
     "exclude",
 };
 
-static char *snpTypeValue[] = {
-    "include",
-    "exclude",
-};
-
 static char *snpTypeDefaults[] = {
     "include",
     "include",
     "include",
+};
+
+static char *snpTypeValue[] = {
+    "include",
+    "exclude",
 };
 
 enum snpTypeEnum snpTypeStringToEnum(char *string)
@@ -388,14 +388,6 @@ static char *snpSourceDataName[] = {
     "Affy120K",
 };
 
-static char *snpSourceValue[] = {
-    "red",
-    "green",
-    "blue",
-    "black",
-    "exclude",
-};
-
 static char *snpSourceDefault[] = {
     "blue",
     "blue",
@@ -403,6 +395,14 @@ static char *snpSourceDefault[] = {
     "black",
     "green",
     "green",
+};
+
+static char *snpSourceValue[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+    "exclude",
 };
 
 enum snpSourceEnum snpSourceStringToEnum(char *string)
