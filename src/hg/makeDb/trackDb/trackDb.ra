@@ -1476,6 +1476,16 @@ spectrum on
 type chain rn3
 otherDb rn3
 
+track netRn3
+shortLabel Rat Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 176.1
+visibility hide 
+spectrum on
+type netAlign rn3 chainRn3
+otherDb rn3
+
 track chainMm3
 shortLabel Mm3 Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
