@@ -291,11 +291,11 @@ color 12,12,120
 type genePred refPep refMrna
 
 track mgcGenes
-shortLabel MGC Clones
-longLabel Mammalian Gene Collection Clones
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
 priority 36
-visibility dense
+visibility hide
 color 12,12,120
 type genePred
 
@@ -608,6 +608,42 @@ group rna
 priority 74
 visibility hide
 type bed 3
+
+track mgcIncompleteMrna
+shortLabel MGC Incomplete
+longLabel Mammalian Gene Collection Incomplete mRNAs
+group rna
+priority 75
+visibility hide
+color 12,12,120
+type psl
+
+track mgcPickedEst
+shortLabel MGC In-progress
+longLabel Mammalian Gene Collection EST in Sequencing Pipeline
+group rna
+priority 75.1
+visibility hide
+color 12,12,120
+type psl est
+
+track mgcFailedEst
+shortLabel MGC Failed
+longLabel Mammalian Gene Collection Failed ESTs
+group rna
+priority 75.2
+visibility hide
+color 12,12,120
+type psl est
+
+track mgcUnpickedEst
+shortLabel MGC ESTs
+longLabel Mammalian Gene Collection EST Libraries
+group rna
+priority 75.3
+visibility hide
+color 12,12,120
+type psl est
 
 track cpgIsland
 shortLabel CpG Islands
@@ -1242,14 +1278,6 @@ shortLabel TwinScan MGC
 longLabel TwinScan MGC candidates
 group x
 priority 159
-visibility hide
-type psl .
-
-track mgcUcscEst
-shortLabel UCSC MGC ESTs
-longLabel UCSC MGC Candidates
-group x
-priority 160
 visibility hide
 type psl .
 

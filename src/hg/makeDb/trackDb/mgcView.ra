@@ -1,0 +1,18 @@
+track mgcGenes
+visibility full
+
+track mgcIncompleteMrna
+visibility dense
+
+track mgcFailedEst
+visibility dense
+
+track mgcPickedEst
+visibility dense
+
+track mgcUnpickedEst
+visibility dense
+
+track refGene
+visibility dense
+

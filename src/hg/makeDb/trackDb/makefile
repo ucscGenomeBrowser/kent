@@ -65,8 +65,10 @@ old_alpha:
 	hgTrackDb human hg8  trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg9  trackDb ../../lib/trackDb.sql .
 
+# This target initializes the MGC-browser database, overriding the default 
+# visibility settings
 mgc:
-	hgTrackDb human hg13 trackDb ../../lib/trackDb.sql .
-	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
-	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra human hg13 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra mouse mm3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra rat rn1 trackDb ../../lib/trackDb.sql .
 
