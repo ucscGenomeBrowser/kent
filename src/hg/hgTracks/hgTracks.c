@@ -1600,9 +1600,9 @@ lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 
 //update cart settings to reflect truncated range cutoff values
 cartSetString( cart, "win", "F" );
-itoa(minRangeCutoff, cartStr );
+snprintf( cartStr, 64, "%g", minRangeCutoff );
 cartSetString( cart, o4, cartStr );
-itoa(maxRangeCutoff, cartStr );
+snprintf( cartStr, 64, "%g", maxRangeCutoff );
 cartSetString( cart, o5, cartStr );
 
 heightPer = tg->heightPer+1;
@@ -2077,7 +2077,7 @@ for (i=0; i<sampleCount; ++i)
     start = X[i] + sample->chromStart;
     sf->start = start;
 
-    if( Y[i] == -29 )      /*hack for negative values not loading correctly*/
+    if( Y[i] < 0 )      /*hack for negative values not loading correctly*/
         sf->end = start;
     else if( Y[i] == 0 )
         sf->end = start + 1;
@@ -5587,6 +5587,7 @@ struct wabaChromHit *wch;
 
 AllocVar(wch);
 wch->query = cloneString(row[0]);
+
 wch->chromStart = sqlUnsigned(row[1]);
 wch->chromEnd = sqlUnsigned(row[2]);
 wch->strand = row[3][0];
