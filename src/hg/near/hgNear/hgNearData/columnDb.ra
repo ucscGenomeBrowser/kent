@@ -154,17 +154,6 @@ queryOne select value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
 itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
-name description
-shortLabel Description
-longLabel Short description line/link to details page
-priority 8
-visibility on
-type knownDetails kgXref kgID description
-search fuzzy
-noKeys on
-searchLabel Known Gene Descriptions
-colWidth 50
-
 name pfamDomains
 shortLabel Pfam Domains
 longLabel Protein family domain structure.
@@ -183,3 +172,15 @@ priority 10
 visibility off
 type go
 colWidth 50
+
+name description
+shortLabel Description
+longLabel Short description line/link to details page
+priority 20
+visibility on
+type knownDetails kgXref kgID description
+search fuzzy
+noKeys on
+searchLabel Known Gene Descriptions
+colWidth 50
+
