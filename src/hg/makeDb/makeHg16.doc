@@ -9485,7 +9485,7 @@ para push
 
     # this is an addendum to Katie's '5-WAY MULTIZ & PHYLO-HMM' (see above)
     # just redoing the 'label' step with the new 'phastCons' program
-    # pick at the where it says "compute the conservation scores" 
+    # picking up where it says "compute the conservation scores" 
 
     ssh hgwdev
     cd /cluster/data/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/phyloHMM
@@ -9511,7 +9511,7 @@ rm $TMP/$root.pp
     # the --cut-params arguments are approximate maximum likelihood
     # estimates obtained by running the program *without* --cut-params
     # (causes estimation by EM) on five randomly selected 1M bp
-    # windows.  All estimates were within the same ballpark.
+    # windows.  All estimates were in the same ballpark (took a rough average)
 
     # set up cluster job
     ssh eieio
