@@ -32,6 +32,10 @@ enum pfTokType
     pftNotEquals,
     pftGreaterOrEquals,
     pftLessOrEquals,
+    pftLogAnd,
+    pftLogOr,
+    pftShiftLeft,
+    pftShiftRight,
 
     /* - reserved words - */
     pftClass,

@@ -646,12 +646,28 @@ switch (c)
     case '>':
         if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftGreaterOrEquals);
-	else
+	else if (c2 == '>')
+	    tokTwoChar(tkz, tok, pftShiftRight);
+	else 
 	    tokSingleChar(tkz, tok, c);
         break;
     case '<':
         if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftLessOrEquals);
+	else if (c2 == '<')
+	    tokTwoChar(tkz, tok, pftShiftLeft);
+	else
+	    tokSingleChar(tkz, tok, c);
+        break;
+    case '&':
+        if (c2 == '&')
+	    tokTwoChar(tkz, tok, pftLogAnd);
+	else
+	    tokSingleChar(tkz, tok, c);
+        break;
+    case '|':
+        if (c2 == '|')
+	    tokTwoChar(tkz, tok, pftLogOr);
 	else
 	    tokSingleChar(tkz, tok, c);
         break;

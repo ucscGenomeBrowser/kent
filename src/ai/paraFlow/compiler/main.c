@@ -26,6 +26,7 @@ static struct optionSpec options[] = {
 enum pfParseType
 /* Parse type */
     {
+    pptNone = 0,
     pptProgram,
     pptNop,
     pptCompound,
@@ -50,14 +51,16 @@ enum pfParseType
     pptAssignment,
     pptPlusEquals,
     pptMinusEquals,
-    pptTimesEquals,
+    pptMulEquals,
     pptDivEquals,
     pptModEquals,
     pptIndex,
     pptPlus,
     pptMinus,
-    pptTimes,
+    pptMul,
     pptDiv,
+    pptShiftLeft,
+    pptShiftRight,
     pptMod,
     pptAnd,
     pptOr,
@@ -69,6 +72,8 @@ enum pfParseType
     pptGreaterOrEquals,
     pptLessOrEquals,
     pptNegate,
+    pptNot,
+    pptFlipBits,
     };
 
 
@@ -123,8 +128,8 @@ switch (type)
 	return "pptPlusEquals";
     case pptMinusEquals:
 	return "pptMinusEquals";
-    case pptTimesEquals:
-	return "pptTimesEquals";
+    case pptMulEquals:
+	return "pptMulEquals";
     case pptDivEquals:
 	return "pptDivEquals";
     case pptModEquals:
@@ -135,10 +140,14 @@ switch (type)
 	return "pptPlus";
     case pptMinus:
 	return "pptMinus";
-    case pptTimes:
-	return "pptTimes";
+    case pptMul:
+	return "pptMul";
     case pptDiv:
 	return "pptDiv";
+    case pptShiftLeft:
+        return "pptShiftLeft";
+    case pptShiftRight:
+        return "pptShiftRight";
     case pptMod:
 	return "pptMod";
     case pptAnd:
@@ -161,6 +170,10 @@ switch (type)
 	return "pptLessOrEquals";
     case pptNegate:
 	return "pptNegate";
+    case pptNot:
+        return "pptNot";
+    case pptFlipBits:
+        return "pptFlipBits";
     default:
         internalErr();
 	return NULL;
@@ -468,7 +481,19 @@ if (tok->type == '-')
     {
     pp = pfParseNew(pptNegate, tok, parent);
     tok = tok->next;
-    pp->children = parseCall(pp, &tok, scope);
+    pp->children = parseNegation(pp, &tok, scope);
+    }
+else if (tok->type == '!')
+    {
+    pp = pfParseNew(pptNot, tok, parent);
+    tok = tok->next;
+    pp->children = parseNegation(pp, &tok, scope);
+    }
+else if (tok->type == '~')
+    {
+    pp = pfParseNew(pptFlipBits, tok, parent);
+    tok = tok->next;
+    pp->children = parseNegation(pp, &tok, scope);
     }
 else
     {
@@ -484,20 +509,27 @@ struct pfParse *parseProduct(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseNegation(parent, &tok, scope);
-while (tok->type == '*' || tok->type == '/' || tok->type == '%')
+while (tok->type == '*' || tok->type == '/' || tok->type == '%'
+	|| tok->type == pftShiftLeft || tok->type == pftShiftRight)
     {
     struct pfParse *left = pp, *right;
-    enum pfTokType tt = pptTimes;
+    enum pfTokType tt = pptMul;
     switch (tok->type)
         {
 	case '*':
-	   tt = pptTimes;
+	   tt = pptMul;
 	   break;
 	case '/':
 	   tt = pptDiv;
 	   break;
 	case '%':
 	   tt = pptMod;
+	   break;
+	case pftShiftLeft:
+	   tt = pptShiftLeft;
+	   break;
+	case pftShiftRight:
+	   tt = pptShiftRight;
 	   break;
 	}
     pp = pfParseNew(tt, tok, parent);
@@ -583,16 +615,42 @@ struct pfParse *parseAssign(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseCmp(parent, &tok, scope);
 struct pfParse *assign = NULL;
-if (tok->type == '=')
+enum pfParseType type = pptNone;
+
+
+switch (tok->type)
     {
-    assign = pfParseNew(pptAssignment, tok, parent);
+    case '=':
+        type = pptAssignment;
+	break;
+    case pftPlusEquals:
+	type = pptPlusEquals;
+	break;
+    case pftMinusEquals:
+	type = pptMinusEquals;
+	break;
+    case pftMulEquals:
+	type = pptMulEquals;
+	break;
+    case pftDivEquals:
+	type = pptDivEquals;
+	break;
+    case pftModEquals:
+	type = pptModEquals;
+	break;
+    }
+if (type != pptNone)
+    {
+    assign = pfParseNew(type, tok, parent);
     assign->children = pp;
     pp->parent = assign;
-    while (tok->type == '=')
+    for (;;)
 	{
 	tok = tok->next;
 	pp = parseCmp(assign, &tok, scope);
 	slAddHead(&assign->children, pp);
+	if (tok->type != '=' || type != pptAssignment)
+	    break;
 	}
     }
 *pTokList = tok;
