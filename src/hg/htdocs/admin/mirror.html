@@ -121,6 +121,15 @@ is. We use a reference platform of Redhat 9 for all the steps
 described here.
 <BR>
 <LI>
+Beginning early March 2005, the static html pages for the browser expect
+Apache to be configured with the XbitHack option enabled.
+<PRE>
+#
+# Executable files will be processed for SSI
+#
+XBitHack on
+</PRE>
+<LI>
 Find the location of your web pages. For example, on a Redhat Linux
 system using a stock apache RPM, the web pages are stored in
 <em>/var/www/html</em>. We will refer to this directory as
@@ -231,6 +240,16 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/canFam1/database/
 </PRE>
 
+<LI>Get Cow September 2004 full data set (bosTau1: x.x Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/bosTau1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/bosTau1/database/ \
+  $WEBROOT/goldenPath/bosTau1/database/
+</PRE>
+
+
 <LI>Get Mouse May, 2004 full data set (mm5: 8.6 Gb) by doing:
 <P>
 <PRE>
@@ -276,6 +295,15 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
+<LI>Get Opossum October, 2004 full data set (monDom1: x.x Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/monDom1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/monDom1/database/ \
+  $WEBROOT/goldenPath/monDom1/database/
+</PRE>
+
 <LI>Get Chicken February, 2004 full data set (galGal2: 755 Mb) by doing:
 <P>
 <PRE>
@@ -283,6 +311,24 @@ mkdir -p $WEBROOT/goldenPath/galGal2/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/galGal2/database/ \
   $WEBROOT/goldenPath/galGal2/database/
+</PRE>
+
+<LI>Get X. tropicalis October, 2004 full data set (xenTro1: x.x Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/xenTro1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/xenTro1/database/ \
+  $WEBROOT/goldenPath/xenTro1/database/
+</PRE>
+
+<LI>Get Zebrafish June, 2004 full data set (danRer2: x.x Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/danRer2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer2/database/ \
+  $WEBROOT/goldenPath/danRer2/database/
 </PRE>
 
 <LI>Get Zebrafish November, 2003 full data set (danRer1: 1.2 Gb) by doing:
@@ -321,6 +367,15 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/ci1/database/
 </PRE>
 
+<LI>Get Fruitfly January, 2003 full data set (dm2: 299 Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/dm2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dm2/database/ \
+  $WEBROOT/goldenPath/dm2/database/
+</PRE>
+
 <LI>Get Fruitfly January, 2003 full data set (dm1: 299 Mb) by doing:
 <P>
 <PRE>
@@ -339,6 +394,15 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/droYak1/database/
 </PRE>
 
+<LI>Get D. ananassae July 2004 full data set (droAna1: x Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/droAna1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droAna1/database/ \
+  $WEBROOT/goldenPath/droAna1/database/
+</PRE>
+
 <LI>Get D. pseudoobscura August 2003 full data set (dp2: 130 Mb) by doing:
 <P>
 <PRE>
@@ -346,6 +410,42 @@ mkdir -p $WEBROOT/goldenPath/dp2/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp2/database/ \
   $WEBROOT/goldenPath/dp2/database/
+</PRE>
+
+<LI>Get D. virilis July 2004 full data set (droVir1: x Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/droVir1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droVir1/database/ \
+  $WEBROOT/goldenPath/droVir1/database/
+</PRE>
+
+<LI>Get D. mojavensis August 2004 full data set (droMoj1: x Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/droMoj1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droMoj1/database/ \
+  $WEBROOT/goldenPath/droMoj1/database/
+</PRE>
+
+<LI>Get A. mellifera January 2005 full data set (apiMel2: x Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/apiMel2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/apiMel2/database/ \
+  $WEBROOT/goldenPath/apiMel2/database/
+</PRE>
+
+<LI>Get A. mellifera July 2004 full data set (apiMel1: x Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/apiMel1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/apiMel1/database/ \
+  $WEBROOT/goldenPath/apiMel1/database/
 </PRE>
 
 <LI>Get A. gambiae Feb 2003 full data set (anoGam1: 127 Mb) by doing:
@@ -433,19 +533,29 @@ assembly:
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15        </TD></TR>
 <TR><TD> panTro1     </TD><TD></TD><TD> panTro1     </TD></TR>
 <TR><TD> canFam1     </TD><TD></TD><TD> canFam1     </TD></TR>
+<TR><TD> bosTau1     </TD><TD></TD><TD> bosTau1     </TD></TR>
 <TR><TD> mm5         </TD><TD></TD><TD> mm5         </TD></TR>
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
 <TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
+<TR><TD> monDom1     </TD><TD></TD><TD> monDom1     </TD></TR>
 <TR><TD> galGal2     </TD><TD></TD><TD> galGal2     </TD></TR>
+<TR><TD> xenTro1     </TD><TD></TD><TD> xenTro1     </TD></TR>
+<TR><TD> danRer2     </TD><TD></TD><TD> danRer2     </TD></TR>
 <TR><TD> danRer1     </TD><TD></TD><TD> danRer1     </TD></TR>
 <TR><TD> tetNig1     </TD><TD></TD><TD> tetNig1     </TD></TR>
 <TR><TD> fr1         </TD><TD></TD><TD> fr1         </TD></TR>
 <TR><TD> ci1         </TD><TD></TD><TD> ci1         </TD></TR>
+<TR><TD> dm2         </TD><TD></TD><TD> dm2         </TD></TR>
 <TR><TD> dm1         </TD><TD></TD><TD> dm1         </TD></TR>
 <TR><TD> droYak1     </TD><TD></TD><TD> droYak1     </TD></TR>
+<TR><TD> droAna1     </TD><TD></TD><TD> droAna1     </TD></TR>
 <TR><TD> dp2         </TD><TD></TD><TD> dp2         </TD></TR>
+<TR><TD> droVir1     </TD><TD></TD><TD> droVir1     </TD></TR>
+<TR><TD> droMoj1     </TD><TD></TD><TD> droMoj1     </TD></TR>
+<TR><TD> apiMel2     </TD><TD></TD><TD> apiMel2     </TD></TR>
+<TR><TD> apiMel1     </TD><TD></TD><TD> apiMel1     </TD></TR>
 <TR><TD> anoGam1     </TD><TD></TD><TD> anoGam1     </TD></TR>
 <TR><TD> ce2         </TD><TD></TD><TD> ce2         </TD></TR>
 <TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
@@ -467,7 +577,14 @@ mysql&gt; create database $DBVERSION;
 All the files for creating the "$DBVERSION" database are in this directory.
 
 <LI>Create and load data into the tables: (The script here is an example
-for this process.  This takes a long time, 10 hours or more for one database.)
+for this process.<BR>
+This takes a long time, 10 hours or more for one database.)<BR>
+Optionally, you can download the MySQL tables via rsync directly into
+your <em>/var/lib/mysql/</em> database hierarchy.<BR>
+Note the rsync source location for these directories is
+<em>rsync://hgdownload.cse.ucsc.edu/mysql/</em><BR>
+You can see a list of directories to fetch with the command:
+<em> rsync -v --dry-run rsync://hgdownload.cse.ucsc.edu/mysql/ </em>
 <PRE>
 #!/bin/sh
 DB=$FREEZEDATE
@@ -478,8 +595,8 @@ do
     echo "loading table ${T_NAME}"
     mysql -youraccountoptions -e "DROP TABLE ${T_NAME};" ${DB} > /dev/null 2> /dev/null
     mysql -youraccountoptions ${DB} < ${SQL}
-    zcat "${T_NAME}.txt.gz" | mysql -youraccountoptions -e \
-        "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};" ${DB}
+    zcat "${T_NAME}.txt.gz" | mysql -youraccountoptions --local-infile=1 \
+        -e "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};" ${DB}
 done
 </PRE>
 </UL>
@@ -655,6 +772,8 @@ mysql&gt; create database proteins040115
 mysql&gt; create database proteins040315
 mysql&gt; create database proteins040515
 mysql&gt; create database proteins040915
+mysql&gt; create database proteins041115
+mysql&gt; create database proteins050201
 </PRE>
 <LI>Import the data from proteinDB/proteins*/database in a similar
 	fashion as listed above.

@@ -57,8 +57,18 @@
 <!--start of INSTALLING---------------------------------------------->
 
 <P>
-NOTE: These instructions are intended for Unix systems only. Building the source
-on other systems is beyond the scope of these instructions.
+NOTE: These instructions are intended for Unix systems only.
+Building the source on other systems is beyond the scope of
+these instructions.
+<P>
+SEE ALSO: README files in the source tree describing the build process:
+<UL>
+<LI> src/README
+<LI> src/product/README.*
+<LI> src/hg/makeDb/trackDB/README
+<LI> src/hg/makeDb/make*.doc   (plain text files)
+</UL>
+<P>
 <OL>
 <LI>
 Check that the environment variable MACHTYPE exists on your system.
@@ -134,12 +144,9 @@ This builds the cgi binaries from the directories:
 	</UL>
 <P>
 The resulting binaries are moved to <em>/destination/prefix/cgi-bin/path</em>. 
-<P>Pre-compiled Red-Hat Intel x86 binaries can be found in the 
-<A HREF="/admin/cgi-binaries.tgz">cgi-binaries.tgz</A> file.  Download this file 
-and extract with:<BR>
-<TT>
-	tar -xvzf cgi-binaries.tgz.
-</TT>
+<P>Pre-compiled Red-Hat Intel x86 binaries can be fetched with the
+rsync command:<BR>
+<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/ </TT>
 <P>
 <LI>
 Many other programs are available in the source tree. For any particular 
@@ -166,7 +173,7 @@ not Microsoft word doc files). </P>
 <A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">
 &#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
 </em>.
-<BR><em>Last Modified: 2003-11-03 - 03 Nov. 2003</em>
+<BR><em>This page last modified: <!--#echo var="LAST_MODIFIED"-->.</em>
 <BR>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
