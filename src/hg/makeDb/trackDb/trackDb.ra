@@ -630,15 +630,6 @@ priority 74
 visibility hide
 type bed 3
 
-track refFullAli
-shortLabel DBTSS mRNA
-longLabel RefSeq mRNA extended to the 5' end from DBTSS
-group rna
-priority 75
-visibility hide
-color 0, 0, 100
-type psl .
-
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
