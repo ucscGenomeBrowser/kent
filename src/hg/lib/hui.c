@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.36.4.1 2004/04/02 16:19:15 heather Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.36.4.2 2004/04/02 16:21:42 heather Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -363,7 +363,7 @@ static char *snpSourceDataName[] = {
 
 static char *snpSourceColor[] = {
     "red",
-    "blue",
+    "green",
     "blue",
     "black",
     "exclude",
