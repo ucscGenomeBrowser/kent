@@ -8,7 +8,7 @@
 #include "htmlPage.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.1 2004/03/03 10:41:39 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.2 2004/03/03 10:54:19 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -122,6 +122,8 @@ char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 uglyf("testCol(%s,%s,%s,%s)\n", org, db, col, gene);
 setVar(emptyConfig, NULL, visVar, "on");
+setVar(emptyConfig, NULL, "near.order", "geneDistance");
+setVar(emptyConfig, NULL, "near.count", "25");
 
 colPage = htmlPageFromForm(emptyConfig, emptyConfig->forms, "submit", "Submit");
 uglyf(" %d chars\n", strlen(colPage->fullText));
