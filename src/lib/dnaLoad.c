@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: dnaLoad.c,v 1.5 2005/01/15 06:26:17 kent Exp $";
+static char const rcsid[] = "$Id: dnaLoad.c,v 1.6 2005/01/15 06:27:43 kent Exp $";
 
 struct dnaLoadStack
 /* Keep track of a single DNA containing file. */
@@ -246,6 +246,7 @@ struct dnaSeq *dnaLoadNext(struct dnaLoad *dl)
 {
 struct dnaSeq *seq;
 dl->curSize = 0;
+dl->curOffset = 0;
 seq = dnaLoadStackOrSingle(dl);
 if (seq != NULL)
     if (dl->curSize == 0)
