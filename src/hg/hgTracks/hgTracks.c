@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.552 2003/07/07 23:49:15 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.553 2003/07/08 06:14:19 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2890,7 +2890,7 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 		lf->extra = cloneString(refSeqName);
 		}
 	    }
-	else
+	else if (protDbName != NULL)
 	    {
 	    sprintf(cond_str, "mrnaID='%s'", lf->name);
 	    proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
@@ -2955,10 +2955,10 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 char cond_str[256];
-char *proteinID;
-char *pdbID;
-char *ans;
-char *refAcc;
+char *proteinID = NULL;
+char *pdbID = NULL;
+char *ans = NULL;
+char *refAcc = NULL;
 
 /* color scheme:
 
@@ -3020,7 +3020,7 @@ if (refAcc != NULL)
 	} to dark blue */
 sprintf(cond_str, "name='%s'", (char *)(lf->name));
 proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
-if (proteinID != NULL)
+if (proteinID != NULL && protDbName != NULL)
     {
     sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
     ans= sqlGetField(conn, protDbName, "spXref2", "displayID", cond_str);
@@ -3031,8 +3031,11 @@ if (proteinID != NULL)
     }
 
 /* if a corresponding PDB entry exists, set it to black */
-sprintf(cond_str, "sp='%s'", proteinID);
-pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+if (protDbName != NULL)
+    {
+    sprintf(cond_str, "sp='%s'", proteinID);
+    pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+    }
 if (pdbID != NULL) 
     {
     col = MG_BLACK;
@@ -10104,7 +10107,6 @@ registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
-// secretRikenTracks(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 loadCustomTracks(&trackList);
 
