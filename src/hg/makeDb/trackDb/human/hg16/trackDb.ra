@@ -242,7 +242,7 @@ type netAlign seq chainPt0
 
 track chainPt0
 shortLabel Chimp Chains
-longLabel Chimp (Nov 03) Reciprocal Best Chained Alignments
+longLabel Chimp (Nov 03) Chained Alignments
 group compGeno
 priority 145.6
 visibility hide
