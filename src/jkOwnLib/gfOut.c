@@ -28,8 +28,7 @@ struct axtData
     char *databaseName;		/* Just used for blast. */
     int databaseSeqCount;	/* Just used for blast. */
     double databaseLetters; /* Just used for blast. */
-    boolean isWu;		/* Is wuBlast? */
-    boolean isXml;		/* Is xml output? */
+    char *blastType;	/* 'blast' or 'wublast' or 'xml' or 'blast8' or 'blast9' */
     };
 
 static void savePslx(char *chromName, int chromSize, int chromOffset,
@@ -409,12 +408,12 @@ axtBundleFreeList(&aod->bundleList);
 }
 
 static void blastQueryOut(struct gfOutput *out, FILE *f)
-/* Output wublast on query. */
+/* Output blast on query. */
 {
 struct axtData *aod = out->data;
 axtBlastOut(aod->bundleList, out->queryIx, out->qIsProt, f,
 	aod->databaseName, aod->databaseSeqCount, aod->databaseLetters,
-	aod->isWu, aod->isXml, "blat");
+	aod->blastType, "blat");
 axtBundleFreeList(&aod->bundleList);
 }
 
@@ -502,7 +501,7 @@ return out;
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	boolean isWu, boolean isXml, FILE *f)
+	char *blastType, FILE *f)
 /* Setup output for blast format. */
 {
 struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
@@ -510,8 +509,7 @@ struct axtData *ad = out->data;
 ad->databaseName = databaseName;
 ad->databaseSeqCount = databaseSeqCount;
 ad->databaseLetters = databaseLetters;
-ad->isWu = isWu;
-ad->isXml = isXml;
+ad->blastType = blastType;
 out->queryOut = blastQueryOut;
 return out;
 }
@@ -535,6 +533,8 @@ struct gfOutput *gfOutputAny(char *format,
  */
 {
 struct gfOutput *out = NULL;
+static char *blastTypes[] = {"blast", "wublast", "blast8", "blast9", "xml"};
+
 if (format == NULL)
     format = "psl";
 if (sameWord(format, "psl"))
@@ -543,15 +543,9 @@ else if (sameWord(format, "pslx"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, TRUE, noHead);
 else if (sameWord(format, "sim4"))
     out = gfOutputSim4(goodPpt, qIsProt, tIsProt, databaseName);
-else if (sameWord(format, "blast"))
+else if (stringArrayIx(format, blastTypes, ArraySize(blastTypes)) >= 0)
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, FALSE, FALSE, f);
-else if (sameWord(format, "wublast"))
-    out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, TRUE, FALSE, f);
-else if (sameWord(format, "xml"))
-    out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, FALSE, TRUE, f);
+	    databaseName, databaseSeqCount, databaseLetters, format, f);
 else if (sameWord(format, "axt"))
     out = gfOutputAxt(goodPpt, qIsProt, tIsProt, f);
 else if (sameWord(format, "maf"))

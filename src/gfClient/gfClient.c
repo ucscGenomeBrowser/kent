@@ -59,6 +59,8 @@ printf(
   "                   sim4 - similar to sim4 format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
+  "                   blast8- NCBI blast tabular format\n"
+  "                   blast9 - NCBI blast tabular format with comments\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n",
                         gfVersion, ffIntronMaxDefault);
 exit(-1);

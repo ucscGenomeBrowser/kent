@@ -4,6 +4,8 @@
        splice sites way away from the rest of the alignment.
      o Fixing a memory leak.
      o Adding sim4 compatable output.
+     o Adding tabular blast compatable output (blast -m 8 and -m 9) as
+       -out=blast8 and -out=blast9.
 
 23:
      Made -maxIntron a command line option.  Default is 750000.
