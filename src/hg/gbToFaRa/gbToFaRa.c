@@ -24,7 +24,7 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.20 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.21 2003/06/18 17:49:02 kate Exp $";
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -1564,9 +1564,10 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "usage:\n"
          "   gbToFaRa filterFile faFile raFile taFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
-         "to use or the word null if you want no filtering."
+         // NOTE: this doesn't work -- seg faults
+         //"to use or the word null if you want no filtering."
 	 "options:\n"
-	 "     byOrganism=outputDir - Make separate files for each organism\n");
+	 "    -byOrganism=outputDir - Make separate files for each organism\n");
 }
 
 struct filter *makeFilter(char *fileName)
