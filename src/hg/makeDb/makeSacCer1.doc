@@ -877,7 +877,7 @@ chainSome $(path1)
 '_EOF_'
 
     cat << '_EOF_' > chainSome
-(cd $1; cat q.*.psl | simpleChain -outPsl -maxGap=7500 stdin ../c.`basename $1`.psl)
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=7500 stdin ../c.`basename $1`.psl)
 '_EOF_'
     chmod +x chainSome
 

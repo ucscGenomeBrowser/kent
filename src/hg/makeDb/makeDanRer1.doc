@@ -2972,7 +2972,7 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
 	cat $i/q.*.bscore > q.$i.bscore
 	cat $i/t.*.psl > t.$i.psl
 	cat $i/t.*.bscore > t.$i.bscore
-	simpleChain -maxGap=27000 -outPsl q.$i.psl c.$i.psl
+	simpleChain -prot -maxGap=27000 -outPsl q.$i.psl c.$i.psl
 	sort -rn c.$i.psl | pslUniq stdin stdout | awk "((\$13 - \$12) / \$11) > 0.6 {print}" > u.$i.psl
 	awk "((\$1 / \$11) ) > 0.60 { print   }" c.$i.psl > m60.$i.psl
 	echo $i
