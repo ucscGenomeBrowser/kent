@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: dnaLoad.c,v 1.7 2005/01/26 05:23:16 kent Exp $";
+static char const rcsid[] = "$Id: dnaLoad.c,v 1.8 2005/03/28 17:21:28 hiram Exp $";
 
 struct dnaLoadStack
 /* Keep track of a single DNA containing file. */
@@ -115,7 +115,6 @@ if (nibIsFile(fileName))
     /* Save offset out of fileName for auto-lifting */
     char filePath[PATH_LEN];
     char name[PATH_LEN];
-    char seqName[PATH_LEN];
     nibParseName(0, fileName, filePath, name, &start, &end);
 
     if (end != 0)	/* It's just a range. */
@@ -189,7 +188,9 @@ while ((dls = dl->stack) != NULL)
 	if (faMixedSpeedReadNext(dls->textFile, &dna, &size, &name))
 	    {
 	    AllocVar(seq);
-	    seq->dna = cloneStringZ(dna, size);
+	    seq->dna = needLargeMem(size+1);
+	    memcpy((void *)seq->dna, (void *)dna, size);
+	    seq->dna[size] = 0;
 	    seq->size = size;
 	    seq->name = cloneString(name);
 	    dl->curStart = 0;
