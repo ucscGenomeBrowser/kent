@@ -1,13 +1,13 @@
 include ../../inc/common.mk
-HG_WARN += ${HG_WERR}
+COPT += ${HG_WERR_ERR}
 
 L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = selectTable.h coordCols.h
-O = selectTable.o coordCols.o overlapSelect.o
+H = chromAnn.h selectTable.h coordCols.h
+O = chromAnn.o selectTable.o coordCols.o overlapSelect.o
 B =  ${HOME}/bin/${MACHTYPE}/overlapSelect
 
 $B: overlapSelect
@@ -16,6 +16,11 @@ $B: overlapSelect
 
 overlapSelect: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o overlapSelect $O ${MYLIBS} ${MYSQLLIBS} $L
+
+chromAnn.o: chromAnn.c chromAnn.h
+coordCols.o: coordCols.c coordCols.h
+selectTable.o: selectTable.c selectTable.h coordCols.h chromAnn.h
+overlapSelect.o: overlapSelect.c coordCols.h selectTable.h chromAnn.h
 
 
 test:

@@ -4,26 +4,14 @@
 #include "selectTable.h"
 #include "linefile.h"
 #include "binRange.h"
-#include "psl.h"
-#include "bed.h"
-#include "genePred.h"
-#include "coordCols.h"
+#include "hash.h"
+#include "chromAnn.h"
+#include "verbose.h"
 
-#define SELTBL_DEBUG 0
-
-struct selectRange
-/* specifies a range to select */
-{
-    char* chrom;
-    int start;
-    int end;
-    char strand;
-    char* name;
-};
-
-/* table is never freed */
-static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeep of
-                                              * selectRange objects */
+/* tables are never freed */
+static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeeper of
+                                              * chromAnn objects */
+static struct chromAnn *selectObjs = NULL;  /* all chromAnn objects */
 
 static struct binKeeper* selectGetChromBins(char* chrom, boolean createMissing,
                                             char** key)
@@ -47,170 +35,147 @@ if ((key != NULL) && (hel != NULL))
 return (struct binKeeper*)hel->val;
 }
 
-static void selectAddRange(char* chrom, int start, int end, char strand, char *name)
-/* Add a range to the select table */
+static void selectAddChromAnn(struct chromAnn *ca)
+/* Add a chromAnn to the select table */
 {
-char *chromKey;
-struct binKeeper* bins = selectGetChromBins(chrom, TRUE, &chromKey);
-struct selectRange* range;
-AllocVar(range);
-if (SELTBL_DEBUG)
-    fprintf(stderr, "selectAddRange: %s: %s %d-%d, %c\n", name, chrom, start, end, (strand == 0) ? '?' : strand);
-
-range->chrom = chromKey;
-range->start = start;
-range->end = end;
-range->strand = strand;
-if (name != NULL)
-    range->name = cloneString(name);
-
-binKeeperAdd(bins, start, end, range);
-}
-
-static void selectAddPsl(struct psl* psl)
-/* add blocks from a psl to the select table */
-{
-int iBlk;
-char strand;
-if (psl->strand[1] == '\0')
-    strand = psl->strand[0];
-else
-    strand = (psl->strand[0] != psl->strand[1]) ? '-' : '+';
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+struct binKeeper* bins = selectGetChromBins(ca->chrom, TRUE, NULL);
+if (verboseLevel() >= 2)
     {
-    int start = psl->tStarts[iBlk];
-    int end = start + psl->blockSizes[iBlk];
-    if (psl->strand[1] == '-')
-        reverseIntRange(&start, &end, psl->tSize);
-    selectAddRange(psl->tName, start, end, strand, psl->qName);
-    }
-}
-
-void selectAddPsls(struct lineFile *pslLf)
-/* add records from a psl file to the select table */
-{
-struct psl* psl;
-
-while ((psl = pslNext(pslLf)) != NULL)
-    {
-    selectAddPsl(psl);
-    pslFree(&psl);
-    }
-}
-
-static void selectAddGenePred(struct genePred* gp, boolean useCds)
-/* add blocks from a genePred to the select table */
-{
-int iExon;
-for (iExon = 0; iExon < gp->exonCount; iExon++)
-    {
-    int start = gp->exonStarts[iExon];
-    int end = gp->exonEnds[iExon];
-    if (useCds && (gp->cdsStart > start))
-        start = gp->cdsStart;
-    if (useCds && (gp->cdsEnd < end))
-        end = gp->cdsEnd;
-    if (start < end)
-        selectAddRange(gp->chrom, start, end, gp->strand[0], gp->name);
-    }
-}
-
-void selectAddGenePreds(struct lineFile *genePredLf, boolean useCds)
-/* add blocks from a genePred file to the select table */
-{
-char* row[GENEPRED_NUM_COLS];
-while (lineFileNextRowTab(genePredLf, row, GENEPRED_NUM_COLS))
-    {
-    struct genePred *gp = genePredLoad(row);
-    selectAddGenePred(gp, useCds);
-    genePredFree(&gp);
-    }
-}
-
-static void selectAddBed(struct bed* bed)
-/* add blocks from a bed to the select table */
-{
-if (bed->blockCount == 0)
-    {
-    selectAddRange(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
-                   bed->name);
-    }
-else
-    {
-    int iBlk;
-    for (iBlk = 0; iBlk < bed->blockCount; iBlk++)
+    verbose(2, "selectAddChromAnn: %s: %s %c %d-%d\n", ca->name, ca->chrom,
+            ((ca->strand == 0) ? '?' : ca->strand), ca->start, ca->end);
+    if (verboseLevel() >= 3)
         {
-        int start = bed->chromStart + bed->chromStarts[iBlk];
-        selectAddRange(bed->chrom, start, start + bed->blockSizes[iBlk],
-                       bed->strand[0], bed->name);
+        struct chromAnnBlk *cab;
+        for (cab = ca->blocks; cab != NULL; cab = cab->next)
+            verbose(3, "    blk: %d-%d\n", cab->start, cab->end);
         }
     }
+binKeeperAdd(bins, ca->start, ca->end, ca);
 }
 
-void selectAddBeds(struct lineFile* bedLf)
+static unsigned getChomAnnOpts(unsigned selOpts)
+/* determine chromAnn options from selOps */
+{
+unsigned caOpts = 0;
+if (selOpts & selSelectCds)
+    caOpts |= chromAnnCds;
+if (selOpts & selSaveLines)
+    caOpts |= chromAnnSaveLines;
+return caOpts;
+}
+
+void selectAddPsls(unsigned opts, struct lineFile *pslLf)
+/* add records from a psl file to the select table */
+{
+char *line;
+
+while (lineFileNextReal(pslLf, &line))
+    selectAddChromAnn(chromAnnFromPsl(getChomAnnOpts(opts), pslLf, line));
+}
+
+void selectAddGenePreds(unsigned opts, struct lineFile *genePredLf)
+/* add blocks from a genePred file to the select table */
+{
+char *line;
+while (lineFileNextReal(genePredLf, &line))
+    selectAddChromAnn(chromAnnFromGenePred(getChomAnnOpts(opts), genePredLf, line));
+}
+
+void selectAddBeds(unsigned opts, struct lineFile* bedLf)
 /* add records from a bed file to the select table */
 {
-char* row[12];
-int numCols;
-while ((numCols = lineFileChopNextTab(bedLf, row, ArraySize(row))) > 0)
-    {
-    struct bed *bed = bedLoadN(row, numCols);
-    selectAddBed(bed);
-    bedFree(&bed);
-    }
+char *line;
+
+while (lineFileNextReal(bedLf, &line))
+    selectAddChromAnn(chromAnnFromBed(getChomAnnOpts(opts), bedLf, line));
 }
 
-void selectAddCoordCols(struct lineFile *tabLf, struct coordCols* cols)
+void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols* cols)
 /* add records with coordiates at a specified column */
 {
-char** row;
-int numCols;
-struct coordColVals colVals;
+char *line;
 
-row = needMem(cols->minNumCols*sizeof(char*));
-
-while ((numCols = lineFileChopNextTab(tabLf, row, cols->minNumCols)) > 0)
-    {
-    colVals = coordColParseRow(cols, tabLf, row, numCols);
-    selectAddRange(colVals.chrom, colVals.start, colVals.end, colVals.strand,
-                   NULL);
-    }
-freez(&row);
+while (lineFileNextReal(tabLf, &line))
+    selectAddChromAnn(chromAnnFromCoordCols(getChomAnnOpts(opts), tabLf, line, cols));
 }
 
-static boolean allowedOverlap(unsigned options, char *name, char strand, struct selectRange* range)
-/* see if range attributes other than chrom,start, end pass */
+static boolean isSelfMatch(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
+/* check if this is a self record */
 {
-if ((options & SEL_USE_STRAND) && (range->strand != '\0')
-    && (strand != range->strand))
+struct chromAnnBlk *inCaBlk, *selCaBlk;
+
+/* already know we are on same chrom and strand (if check strand) */
+if ((inCa->start != selCa->start) || (inCa->end != selCa->end))
+    return FALSE;
+if (((inCa->name != NULL) && (selCa->name != NULL))
+    && !sameString(inCa->name, selCa->name))
     return FALSE;
 
-if ((options & SEL_EXCLUDE_SELF) && (range->name != NULL) && (name != NULL)
-    && sameString(name, range->name))
-    return FALSE;
+/* check for identical block structures */
+for (inCaBlk = inCa->blocks, selCaBlk = selCa->blocks;
+     ((inCaBlk != NULL) && (selCaBlk != NULL));
+     inCaBlk = inCaBlk->next, selCaBlk = selCaBlk->next)
+    {
+    if ((inCaBlk->start != selCaBlk->start) || (inCaBlk->end != selCaBlk->end))
+        return FALSE;
+    }
+if ((inCaBlk != NULL) || (selCaBlk != NULL))
+    return FALSE;  /* different lengths */
+
 return TRUE;
 }
 
-boolean selectIsOverlapped(unsigned options, char *name, char* chrom, int start, int end, char strand)
-/* determine if a range is overlapped */
+static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
+/* see an chromAnn objects overlap */
 {
-boolean isOverlapped = FALSE;
-struct binKeeper* bins = selectGetChromBins(chrom, FALSE, NULL);
+struct chromAnnBlk *inCaBlk, *selCaBlk;
+if ((opts & selUseStrand) && (inCa->strand != selCa->strand))
+    return FALSE;
+if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
+    return FALSE;
+for (inCaBlk = inCa->blocks; inCaBlk != NULL; inCaBlk = inCaBlk->next)
+    for (selCaBlk = selCa->blocks; selCaBlk != NULL; selCaBlk = selCaBlk->next)
+        {
+            if ((inCaBlk->start < selCaBlk->end) && (inCaBlk->end > selCaBlk->start))
+                return TRUE;
+        }
+return FALSE;
+}
+
+boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
+                           struct slRef **overlappedRecLines)
+/* Determine if a range is overlapped.  If overlappedRecLines is not null,
+ * a list of the line form of overlaping select records is returned.  Free
+ * with slFreelList. */
+{
+boolean hit = FALSE;
+struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
 if (bins != NULL)
     {
-    /* check each element */
-    struct binElement* overlapping = binKeeperFind(bins, start, end);
+    struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
     struct binElement* o;
-    for (o = overlapping; (o != NULL) && !isOverlapped; o = o->next)
+
+    /* check each overlapping chomAnn */
+    for (o = overlapping; o != NULL; o = o->next)
         {
-        struct selectRange* range = o->val;
-        isOverlapped = allowedOverlap(options, name, strand, range);
+        struct chromAnn* selCa = o->val;
+        hit = isOverlapped(opts, inCa, selCa);
+        if (hit)
+            {
+            if (overlappedRecLines != NULL)
+                {
+                if (!refOnList(*overlappedRecLines, selCa))
+                    refAdd(overlappedRecLines, selCa);
+                }
+            else
+                break;  /* only need one overlap */
+            }
         }
     slFreeList(&overlapping);
     }
-if (SELTBL_DEBUG)
-    fprintf(stderr, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", name, chrom, start, end, 
-            ((strand == '\0') ? '?' : strand), (isOverlapped ? "yes" : "no"));
-return isOverlapped;
+if (verboseLevel() >= 2)
+    verboseLevel(2, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
+            ((inCa->strand == '\0') ? '?' : inCa->strand), (hit ? "yes" : "no"));
+return hit;
 }
 

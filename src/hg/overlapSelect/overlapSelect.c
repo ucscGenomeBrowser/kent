@@ -6,6 +6,7 @@
 #include "psl.h"
 #include "bed.h"
 #include "coordCols.h"
+#include "chromAnn.h"
 #include "genePred.h"
 #include "dystring.h"
 #include "options.h"
@@ -20,10 +21,11 @@ static struct optionSpec optionSpecs[] = {
     {"inFmt", OPTION_STRING},
     {"inCoordCols", OPTION_STRING},
     {"inCds", OPTION_BOOLEAN},
-    {"nonOverlaping", OPTION_BOOLEAN},
+    {"nonOverlapping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
+    {"merge", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -37,12 +39,21 @@ static struct optionSpec optionSpecs[] = {
 /* Options parsed from the command line */
 unsigned selectFmt = UNKNOWN_FMT;
 struct coordCols selectCoordCols;
-boolean selectUseCds = FALSE;
+unsigned selectOpts = 0;
+unsigned inCaOpts = 0;
 unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
-boolean inUseCds = FALSE;
-boolean nonOverlaping = FALSE;
-unsigned selectOptions = 0;
+boolean doMerge = FALSE;
+boolean nonOverlapping = FALSE;
+
+
+struct ioFiles
+/* object containing input files */
+{
+    struct lineFile *inLf;
+    FILE* outFh;
+    FILE* dropFh;
+};
 
 unsigned parseFormatSpec(char *fmt)
 /* parse a format specification */
@@ -70,179 +81,93 @@ errAbort("can't determine file format of %s", path);
 return UNKNOWN_FMT;
 }
 
-static boolean pslSelected(struct psl* psl)
-/* Check if a PSL should be selected for output */
+static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+/* Check if a chromAnn object is overlapped given the criteria, and if so
+ * output */
 {
-int iBlk;
-char strand;
+struct slRef *overlappedRecLines = NULL, *selectCaRef;
 boolean overlaps = FALSE;
-if (psl->strand[1] == '\0')
-    strand = psl->strand[0];
-else
-    strand = (psl->strand[0] != psl->strand[1]) ? '-' : '+';
 
-for (iBlk = 0; (iBlk < psl->blockCount) && !overlaps; iBlk++)
+overlaps = selectIsOverlapped(selectOpts, inCa, (doMerge ? &overlappedRecLines : NULL));
+if ((nonOverlapping) ? !overlaps : overlaps)
     {
-    int start = psl->tStarts[iBlk];
-    int end = start + psl->blockSizes[iBlk];
-    if (psl->strand[1] == '-')
-        reverseIntRange(&start, &end, psl->tSize);
-    overlaps = selectIsOverlapped(selectOptions, psl->qName,
-                                  psl->tName, start, end, strand);
-    }
-if (nonOverlaping)
-    return !overlaps;
-else
-    return overlaps;
-}
-
-void pslSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
-/* copy psl records that matches the selection criteria */
-{
-char* row[PSL_NUM_COLS];
-
-while (lineFileNextRowTab(inLf, row, PSL_NUM_COLS))
-    {
-    struct psl* psl = pslLoad(row);
-    if (pslSelected(psl))
-        pslTabOut(psl, outFh);
-    else if (dropFh != NULL)
-        pslTabOut(psl, dropFh);
-    pslFree(&psl);
-    }
-}
-
-static boolean genePredSelected(struct genePred* gp)
-/* Check if a genePred should be selected for output */
-{
-int iExon;
-boolean overlaps = FALSE;
-for (iExon = 0; (iExon < gp->exonCount) && !overlaps; iExon++)
-    {
-    int start = gp->exonStarts[iExon];
-    int end = gp->exonEnds[iExon];
-    if (inUseCds && (gp->cdsStart > start))
-        start = gp->cdsStart;
-    if (inUseCds && (gp->cdsEnd < end))
-        end = gp->cdsEnd;
-    if (start < end)
-        overlaps = selectIsOverlapped(selectOptions, gp->name,
-                                      gp->chrom, start, end, gp->strand[0]);
-    }
-if (nonOverlaping)
-    return !overlaps;
-else
-    return overlaps;
-}
-
-void genePredSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
-/* copy genePred records that matches the selection criteria */
-{
-char* row[GENEPRED_NUM_COLS];
-while (lineFileNextRowTab(inLf, row, GENEPRED_NUM_COLS))
-    {
-    struct genePred *gp = genePredLoad(row);
-    if (genePredSelected(gp))
-        genePredTabOut(gp, outFh);
-    else if (dropFh != NULL)
-        genePredTabOut(gp, dropFh);
-    genePredFree(&gp);
-    }
-}
-
-static boolean bedSelected(struct bed* bed)
-/* Check if a bed should be selected for output */
-{
-boolean overlaps = FALSE;
-if (bed->blockCount == 0)
-    {
-    overlaps = selectIsOverlapped(selectOptions, bed->name,
-                                  bed->chrom, bed->chromStart,
-                                  bed->chromEnd, bed->strand[0]);
-    }
-else
-    {
-    int iBlk;
-    for (iBlk = 0; (iBlk < bed->blockCount) && !overlaps; iBlk++)
+    if (doMerge)
         {
-        int start = bed->chromStart + bed->chromStarts[iBlk];
-        overlaps = selectIsOverlapped(selectOptions, bed->name, 
-                                      bed->chrom, start,
-                                      start + bed->blockSizes[iBlk],
-                                      bed->strand[0]);
+        /* out pairs of inRec and overlap */
+        for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+            {
+            struct chromAnn *selectCa = selectCaRef->val;
+            fputs(inCa->recLine, ioFiles->outFh);
+            fputc('\t', ioFiles->outFh);
+            fputs(selectCa->recLine, ioFiles->outFh);
+            fputc('\n', ioFiles->outFh);
+            }
+        slFreeList(&overlappedRecLines);
+        }
+    else
+        {
+        fputs(inCa->recLine, ioFiles->outFh);
+        fputc('\n', ioFiles->outFh);
         }
     }
-if (nonOverlaping)
-    return !overlaps;
-else
-    return overlaps;
+else if (ioFiles->dropFh != NULL)
+    {
+    fputs(inCa->recLine, ioFiles->dropFh);
+    fputc('\n', ioFiles->dropFh);
+    }
 }
 
-void bedSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
+void pslSelect(struct ioFiles *ioFiles)
+/* copy psl records that matches the selection criteria */
+{
+char *line;
+struct chromAnn* inCa;
+while (lineFileNextReal(ioFiles->inLf, &line))
+    {
+    inCa = chromAnnFromPsl(inCaOpts, ioFiles->inLf, line);
+    doOverlap(inCa, ioFiles);
+    chromAnnFree(&inCa);
+    }
+}
+
+void genePredSelect(struct ioFiles *ioFiles)
+/* copy genePred records that matches the selection criteria */
+{
+char *line;
+struct chromAnn* inCa;
+while (lineFileNextReal(ioFiles->inLf, &line))
+    {
+    inCa = chromAnnFromGenePred(inCaOpts, ioFiles->inLf, line);
+    doOverlap(inCa, ioFiles);
+    chromAnnFree(&inCa);
+    }
+}
+
+void bedSelect(struct ioFiles *ioFiles)
 /* copy bed records that matches the selection criteria */
 {
-char* row[12];
-int numCols;
-while ((numCols = lineFileChopNextTab(inLf, row, ArraySize(row))) > 0)
+char *line;
+struct chromAnn* inCa;
+while (lineFileNextReal(ioFiles->inLf, &line))
     {
-    struct bed *bed = bedLoadN(row, numCols);
-    if (bedSelected(bed))
-        bedTabOutN(bed, numCols, outFh);
-    else if (dropFh != NULL)
-        bedTabOutN(bed, numCols, dropFh);
-    bedFree(&bed);
+    inCa = chromAnnFromBed(inCaOpts, ioFiles->inLf, line);
+    doOverlap(inCa, ioFiles);
+    chromAnnFree(&inCa);
     }
 }
 
-boolean coordColsSelected(char *line, struct lineFile *lf)
-/* parse line and determine if it is selected; don't corrupt line */
-{
-static struct dyString *lineBuf = NULL;
-static int rowBufSize = 0;
-static char** rowBuf = NULL;
-int numCols;
-boolean overlaps;
-struct coordColVals colVals;
-
-/* setup local buffers */
-if (lineBuf == NULL)
-    lineBuf = dyStringNew(512);
-if (inCoordCols.minNumCols > rowBufSize)
-    {
-    rowBuf = needMoreMem(rowBuf, rowBufSize*sizeof(char*), inCoordCols.minNumCols*sizeof(char*));
-    rowBufSize = inCoordCols.minNumCols;
-    }
-if (line[0] == '#')
-    return TRUE;  /* keep header line */
-
-dyStringClear(lineBuf);
-dyStringAppend(lineBuf, line);
-numCols = chopByChar(lineBuf->string, '\t', rowBuf, rowBufSize);
-if (numCols == 0)
-    return FALSE;  /* skip empty lines */
-lineFileExpectAtLeast(lf, inCoordCols.minNumCols, numCols);
-colVals = coordColParseRow(&inCoordCols, lf, rowBuf, numCols);
-overlaps = selectIsOverlapped(selectOptions, NULL, colVals.chrom,
-                              colVals.start, colVals.end, colVals.strand);
-
-if (nonOverlaping)
-    return !overlaps;
-else
-    return overlaps;
-}
-
-void coordColsSelect(struct lineFile *inLf, FILE* outFh, FILE* dropFh)
+void coordColsSelect(struct ioFiles *ioFiles)
 /* copy records that matches the selection criteria when the coordinates are
  * specified by start column. */
 {
+/*FIXME: should keep header lines in files */
 char *line;
-
-while (lineFileNextReal(inLf, &line))
+struct chromAnn* inCa;
+while (lineFileNextReal(ioFiles->inLf, &line))
     {
-    if (coordColsSelected(line, inLf))
-        fprintf(outFh, "%s\n", line);
-    else if (dropFh != NULL)
-        fprintf(dropFh, "%s\n", line);
+    inCa = chromAnnFromCoordCols(inCaOpts, ioFiles->inLf, line, &inCoordCols);
+    doOverlap(inCa, ioFiles);
+    chromAnnFree(&inCa);
     }
 }
 
@@ -255,16 +180,16 @@ struct lineFile *lf = (selectFmt == PSL_FMT)
 switch (selectFmt)
     {
     case PSL_FMT:
-        selectAddPsls(lf);
+        selectAddPsls(selectOpts, lf);
         break;
     case GENEPRED_FMT:
-        selectAddGenePreds(lf, selectUseCds);
+        selectAddGenePreds(selectOpts, lf);
         break;
     case BED_FMT:
-        selectAddBeds(lf);
+        selectAddBeds(selectOpts, lf);
         break;
     case COORD_COLS_FMT:
-        selectAddCoordCols(lf, &selectCoordCols);
+        selectAddCoordCols(selectOpts, lf, &selectCoordCols);
         break;
     }
 lineFileClose(&lf);
@@ -273,34 +198,34 @@ lineFileClose(&lf);
 void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
 /* select records based on overlap of chromosome ranges */
 {
-struct lineFile *inLf = (inFmt == PSL_FMT)
-    ? pslFileOpen(inFile)
-    : lineFileOpen(inFile, TRUE);
-FILE *outFh, *dropFh = NULL;
+struct slRef *overlappedRecLines = NULL;
+struct ioFiles ioFiles;
+ZeroVar(&ioFiles);
+ioFiles.inLf = (inFmt == PSL_FMT) ? pslFileOpen(inFile) : lineFileOpen(inFile, TRUE);
 
 loadSelectTable(selectFile);
-outFh = mustOpen(outFile, "w");
+ioFiles.outFh = mustOpen(outFile, "w");
 if (dropFile != NULL)
-    dropFh = mustOpen(dropFile, "w");
+    ioFiles.dropFh = mustOpen(dropFile, "w");
 
 switch (inFmt)
     {
     case PSL_FMT:
-        pslSelect(inLf, outFh, dropFh);
+        pslSelect(&ioFiles);
         break;
     case GENEPRED_FMT:
-        genePredSelect(inLf, outFh, dropFh);
+        genePredSelect(&ioFiles);
         break;
     case BED_FMT:
-        bedSelect(inLf, outFh, dropFh);
+        bedSelect(&ioFiles);
         break;
     case COORD_COLS_FMT:
-        coordColsSelect(inLf, outFh, dropFh);
+        coordColsSelect(&ioFiles);
         break;
     }
-lineFileClose(&inLf);
-carefulClose(&outFh);
-carefulClose(&dropFh);
+lineFileClose(&ioFiles.inLf);
+carefulClose(&ioFiles.outFh);
+carefulClose(&ioFiles.dropFh);
 }
 
 void usage(char *msg)
@@ -334,10 +259,16 @@ errAbort("%s:\n"
          "  -inCoordCols=spec - in file is tab-separate with coordinates specified by\n"
          "          spec, in format described above.\n"
          "  -inCds - Use only CDS in the in file\n"
-         "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
+         "  -nonOverlapping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
-         "  -excludeSelf - don't compare alignments with the same id.\n"
+         "  -excludeSelf - don't compare alignments with the same coordinates and name.\n"
          "  -dropped=file - output rows that were dropped to this file.\n",
+         "  -merge - output file with be a merge of the input file with the\n"
+         "      selectFile records that selected it.  The format is\n"
+         "         inRec<tab>selectRec.\n"
+         "      if multiple select records hit, inRec is repeated.\n"
+         "      This will increase the memory required\n"
+         "  -verbose=n - verbose > 1 prints some details\n",
          msg);
 }
 
@@ -367,9 +298,13 @@ else if (optionExists("selectCoordCols"))
     }
 else
     selectFmt = getFileFormat(selectFile);
-selectUseCds = optionExists("selectCds");
-if (selectUseCds && (selectFmt != GENEPRED_FMT))
-    errAbort("-selectCds only allowed with genePred format select files");
+
+if (optionExists("selectCds"))
+    {
+    if (selectFmt != GENEPRED_FMT)
+        errAbort("-selectCds only allowed with genePred format select files");
+    selectOpts |= selSelectCds;
+    }
 
 if (optionExists("inFmt"))
     inFmt = parseFormatSpec(optionVal("inFmt", NULL));
@@ -381,17 +316,29 @@ else if (optionExists("inCoordCols"))
     }
 else
     inFmt = getFileFormat(inFile);
-inUseCds = optionExists("inCds");
-if (inUseCds && (inFmt != GENEPRED_FMT))
-    errAbort("-inCds only allowed with genePred format in files");
+inCaOpts = chromAnnSaveLines; /* always need lines for output */
+if (optionExists("inCds"))
+    inCaOpts |= chromAnnCds;
+if (inCaOpts & chromAnnCds)
+    {
+    if (inFmt != GENEPRED_FMT)
+        errAbort("-inCds only allowed with genePred format in files");
+    }
+nonOverlapping = optionExists("nonOverlapping");
+if (optionExists("strand"))
+    selectOpts |= selUseStrand;
+if (optionExists("excludeSelf"))
+    selectOpts |= selExcludeSelf;
+
+doMerge = optionExists("merge");
+if (doMerge)
+    {
+    if (nonOverlapping)
+        errAbort("can't use -merge with -nonOverlapping");
+    selectOpts |= selSaveLines;
+    }
 
 dropFile = optionVal("dropped", NULL);
-
-nonOverlaping = optionExists("nonOverlaping");
-if (optionExists("strand"))
-    selectOptions |= SEL_USE_STRAND;
-if (optionExists("excludeSelf"))
-    selectOptions |= SEL_EXCLUDE_SELF;
 
 overlapSelect(selectFile, inFile, outFile, dropFile);
 return 0;
