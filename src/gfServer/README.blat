@@ -55,9 +55,8 @@ reads or ESTs with gfClient.
 
 hgBlat is currently hard wired to query
 kks00.cse.ucsc.edu.  Please change this
-to your local server.  Then you probably
-want to hack it to call Ensembl rather
-than the UCSC browser.
+to your local server once things are up
+if you are mirroring the web site.  
 
 Thanks much for your interest, and best
 of luck with it.  Let me know how it 
