@@ -247,7 +247,7 @@ type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
 track mouseOrtho
-shortLabel UCSC Mouse Synteny
+shortLabel UCSC Mouse Syn.
 longLabel Mouse Synteny using Fgenesh++ Gene Predictions
 priority 4.1
 visibility hide
