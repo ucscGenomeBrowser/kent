@@ -16,15 +16,16 @@ errAbort(
   "usage:\n"
   "   tableSum tableFile\n"
   "options:\n"
+  "   -row         Sum all rows\n"
+  "   -col         Sum all columns\n"
+  "   -colEven=N         Output columns that are sum of N columns of input\n"
+  "   -rowEven=N         Output rows that are sum of N rows of input\n"
   "   -colDiv=30,60,10  Produce table that sums columns first\n"
   "                     30 columns in input to first column in output,\n"
   "                     next 60 columns to second column in output,\n"
   "                     and next 10 columns to third column in output.\n"
   "   -rowDiv=30,60,10  Similar to colDiv, but for rows,  may be combined\n"
-  "   -colEven=N         Output columns that are sum of N columns of input\n"
-  "   -rowEven=N         Output rows that are sum of N rows of input\n"
-  "   -row         Sum all rows\n"
-  "   -col         Sum all columns\n"
+  "   -average          Compute average instead of sum\n"
   );
 }
 
@@ -130,6 +131,7 @@ char **row;
 char buf[64];
 int *xCuts, xOutDim, *yCuts, yOutDim, xCutIx, yCutIx;
 double *rowSum;
+boolean doAverage = optionExists("ave") || optionExists("average");
 
 tableFileDimensions(table, &xInDim, &yInDim);
 
@@ -160,6 +162,7 @@ AllocArray(rowSum, xInDim);
 for (yCutIx = 0; yCutIx < yOutDim; ++yCutIx)
     {
     int yEnd = yCuts[yCutIx];
+    int yStart = y;
     for (x=0; x<xInDim; ++x)
         rowSum[x] = 0;
         
@@ -175,8 +178,17 @@ for (yCutIx = 0; yCutIx < yOutDim; ++yCutIx)
         {
 	double sum = 0.0;
 	int xEnd = xCuts[xCutIx];
+	int xStart = x;
 	for (; x<xEnd; ++x)
 	    sum += rowSum[x];
+	if (doAverage)
+	    {
+	    int dx = yEnd - yStart;
+	    int dy = xEnd - xStart;
+	    int binCount = (dx) * (dy);
+	    if (binCount > 0)
+		sum /= binCount;
+	    }
 	printf("%f ", sum);
 	}
     printf("\n");
