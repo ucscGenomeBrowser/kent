@@ -348,7 +348,7 @@ foreach my $db (@dbs) {
   close(SQL);
   if (! $noLoad) {
     system("echo drop table tableDescriptions | hgsql $db");
-    (! system("hgsql $db < $sqlFile")) || die "hgsql error for $sqlFile";
+    (! system("hgsql $db < $sqlFile")) || warn "hgsql error for $sqlFile";
     print "Loaded $db.tableDescriptions.\n";
     unlink($sqlFile);
   }
