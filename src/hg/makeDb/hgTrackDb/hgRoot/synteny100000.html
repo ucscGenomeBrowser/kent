@@ -1,7 +1,10 @@
-This track shows syntenous (corresponding) regions between human 
-and mouse chromosomes.  This track was created by looking for 
-homology to known mouse genes in the draft assembly. The method 
-used was to align Fgenesh++ predictions using BLAT (protein alignment) 
-comparing the Dec 2001 Human assembly with the Nov 2001 Mouse draft assembly. 
-For more information on the methods used please contact 
-<A HREF="mailto:baertsch@cse.ucsc.edu">Robert Baertsch</A> at UCSC.
+<H2>Description</H2>
+<P>
+This track shows syntenous (corresponding) regions between human and mouse chromosomes. 
+<H2>Methods</H2>
+<P>
+Pass a 100k non-overlapping window over the genome and using the blastz best in mouse genome alignments, look for high scoring regions with at least 40% of the bases aligning with the same region in mouse. Join 100k segments together if they agree in direction and
+are within 500kb of each other in human and 4mb in mouse. Gaps are joinedbetween syntenic anchors if the bases between two
+flanking regions agree with synteny (direction and mouse location). Finally we extend the syntenic block to include those areas.<p>
+ 
+Contact: <A HREF="mailto:baertsch@cse.ucsc.edu">Robert Baertsch</A> at UCSC.
