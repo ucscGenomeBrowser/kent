@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.19 2004/11/09 21:12:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.20 2004/11/09 22:17:37 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -119,7 +119,9 @@ struct tablesTest *test;
 struct qaStatus *qs;
 struct htmlPage *page;
 verbose(2, "quickSubmit(%p, %s, %s, %s, %s, %s, %s, %s, %s)\n",
-	basePage, org, db, group, track, table, testName, button, buttonVal);
+	basePage, naForNull(org), naForNull(db), naForNull(group), 
+	naForNull(track), naForNull(table), naForNull(testName), 
+	naForNull(button), naForNull(buttonVal));
 if (basePage != NULL)
     {
     if (db != NULL)
@@ -475,50 +477,59 @@ void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table. */
 {
-struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group, 
-	track, table, "selectTable", hgtaTable, table);
-struct htmlForm *mainForm;
-
-if (tablePage != NULL)
+static struct hash *uniqHash = NULL;
+char fullName[256];
+if (uniqHash == NULL)
+     uniqHash = newHash(0);
+safef(fullName, sizeof(fullName), "%s.%s", db, table);
+if (!hashLookup(uniqHash, fullName))
     {
-    if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
+    struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group, 
+	    track, table, "selectTable", hgtaTable, table);
+    struct htmlForm *mainForm;
+
+    hashAdd(uniqHash, fullName, NULL);
+    if (tablePage != NULL)
 	{
-	qaStatusSoftError(tablesTestList->status, 
-		"Couldn't get main form on tablePage for %s %s %s %s", db, group, track, table);
-	}
-    else
-	{
-	testSchema(tablePage, mainForm, org, db, group, track, table);
-	testSummaryStats(tablePage, mainForm, org, db, group, track, table);
-	if (outTypeAvailable(mainForm, "bed")) 
+	if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
 	    {
-	    if (outTypeAvailable(mainForm, "primaryTable"))
-		{
-		int rowCount;
-		rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-		testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-		testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
-		testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
-		testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
-		testOutGff(tablePage, mainForm, org, db, group, track, table);
-		if (rowCount > 0)
-		    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
-		}
+	    qaStatusSoftError(tablesTestList->status, 
+		    "Couldn't get main form on tablePage for %s %s %s %s", db, group, track, table);
 	    }
-	else if (outTypeAvailable(mainForm, "primaryTable"))
+	else
 	    {
-	    if (tableSize(db, table) < 500000)
+	    testSchema(tablePage, mainForm, org, db, group, track, table);
+	    testSummaryStats(tablePage, mainForm, org, db, group, track, table);
+	    if (outTypeAvailable(mainForm, "bed")) 
 		{
-		int rowCount;
-		rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-		testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		if (outTypeAvailable(mainForm, "primaryTable"))
+		    {
+		    int rowCount;
+		    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    testOutGff(tablePage, mainForm, org, db, group, track, table);
+		    if (rowCount > 0)
+			testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+		    }
 		}
+	    else if (outTypeAvailable(mainForm, "primaryTable"))
+		{
+		if (tableSize(db, table) < 500000)
+		    {
+		    int rowCount;
+		    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    }
+		}
+	    verbose(1, "Tested %s %s %s %s %s\n", naForNull(org), db, group, track, table);
 	    }
-	verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
+	htmlPageFree(&tablePage);
 	}
-    htmlPageFree(&tablePage);
+    carefulCheckHeap();
     }
-carefulCheckHeap();
 }
 
 void testOneTrack(struct htmlPage *groupPage, char *org, char *db,
