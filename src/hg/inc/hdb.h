@@ -7,11 +7,29 @@
 #include "dnautil.h"
 #endif
 
+void hDefaultConnect();
+/* read the default settings from the config file */
+
+void hSetDbConnect(char* host, char *db, char *user, char *password);
+/* set the connection information for the database */
+
 void hSetDb(char *dbName);
 /* Set the database name. */
 
 char *hGetDb();
 /* Return the current database name. */
+
+char *hGetDbHost();
+/* Return the current database host. */
+
+char *hGetDbName();
+/* Return the current database name. */
+
+char *hGetDbUser();
+/* Return the current database user. */
+
+char *hGetDbPassword();
+/* Return the current database password. */
 
 struct sqlConnection *hAllocConn();
 /* Get free connection if possible. If not allocate a new one. */
