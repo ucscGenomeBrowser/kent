@@ -1701,15 +1701,6 @@ TODO    - If a chromosome's axts are too large for gunzip to unpack into 1 file,
      cvs add ~/kent/src/hg/lib/axtInfoFillHg12.sql
      cvs ci ~/kent/src/hg/lib/axtInfoFillHg12.sql
 
-ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ (TODO)
-
-   - Load aligned ancient repeats, from
-       $base/aar
-     Ryan create:
-       $base/aar/xali
-     - Loaded into aarMm2
-
-
 MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
 
 Download the fasta file from http://www.gen.emory.edu/MITOMAP/mitomapRCRS.fasta
@@ -1808,3 +1799,14 @@ mv * /usr/local/apache/htdocs/goldenPath/28jun2002/database
 ssh hgwbeta
 cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
 zip ../bigZips/database.zip *
+
+
+ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ
+    cd ~/oo/bed
+    mkdir aarMm2
+    cd aarMm2
+    set mmdir=../../blastz.mm2.2002-08-01
+    foreach aar ($mmdir/aar/*.aar.gz)
+         zcat $aar | aarToAxt | axtToPsl stdin $mmdir/H.len $mmdir/M.len stdout | liftUp -type=.psl -nohead -pslQ stdout $mmdir/liftAllMm2.lft warn stdin > chr$aar:t:r:r_aarMm2.psl
+    end   
+    hgLoadPsl hg12 *.psl
