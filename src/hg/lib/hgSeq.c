@@ -400,10 +400,10 @@ cdsFlags[*count]  = cFlag;
 (*count)++;
 }
 
-void hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
-			 int chromEnd, char *sqlConstraints)
+int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
+			int chromEnd, char *sqlConstraints)
 /* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table.  */
+   in the given range in table.  Return number of items. */
 {
 struct dyString *query = newDyString(512);
 struct sqlConnection *conn;
@@ -730,25 +730,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     freeMem(exonFlags);
     freeMem(cdsFlags);
     }
-if (rowCount == 0)
-    printf("\n# No items in table %s in the range %s:%d-%d%s%s\n\n",
-	   table, chrom, chromStart+1, chromEnd,
-	   useSqlConstraints ? " with SQL constraints " : "",
-	   useSqlConstraints ? sqlConstraints : "");
-else if (totalCount == 0)
-    printf("\n# No regions were selected.\n\n");
 sqlFreeResult(&sr);
 if (sameString(db, hGetDb()))
     hFreeConn(&conn);
 else
     hFreeConn2(&conn);
+return totalCount;
 }
 
-void hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
+int hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
 		       char *sqlConstraints)
 /* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table.  */
+   in the given range in table.  Return number of items. */
 {
-hgSeqItemsInRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
-		    sqlConstraints);
+return hgSeqItemsInRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
+			   sqlConstraints);
 }
