@@ -238,14 +238,14 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
 }
 
 void hgcAnchorWindow(char *group, char *item, int thisWinStart, 
-        int thisWinEnd, char *other, char *chrom)
+		     int thisWinEnd, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item
  * and other parameters, INCLUDING the ability to specify left and
  * right window positions different from the current window*/
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
-	hgcPathAndSettings(), group, item, chrom, 
-	thisWinStart, thisWinEnd, other);
+       hgcPathAndSettings(), group, item, chrom, 
+       thisWinStart, thisWinEnd, other);
 }
 
 
@@ -254,7 +254,7 @@ void hgcAnchorGenePsl(char *item, char *other, char *chrom, char *tag)
 {
 struct dbDb *dbList = hGetAxtInfoDbs();
 char *db2;
-    char *encodedItem = cgiEncode(item);
+char *encodedItem = cgiEncode(item);
 if (dbList != NULL)
     db2 = dbList->name;
 else
@@ -266,12 +266,12 @@ dbDbFreeList(&dbList);
 }
 
 void hgcAnchorSomewhereDb(char *group, char *item, char *other, 
-	char *chrom, char *db)
+			  char *chrom, char *db)
 /* Generate an anchor that calls click processing program with item 
  * and other parameters. */
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
+       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
@@ -293,7 +293,7 @@ boolean clipToChrom(int *pStart, int *pEnd)
 static int chromSize = -1;
 
 if (chromSize < 0)
-   chromSize = hChromSize(seqName);
+    chromSize = hChromSize(seqName);
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
@@ -321,9 +321,9 @@ toUpperN(seq->dna + (start-s), end - start);
 printf("<PRE><TT>");
 cfm = cfmNew(10, 50, TRUE, FALSE, stdout, s);
 for (i=0; i<seq->size; ++i)
-   {
-   cfmOut(cfm, seq->dna[i], 0);
-   }
+    {
+    cfmOut(cfm, seq->dna[i], 0);
+    }
 cfmFree(&cfm);
 printf("</TT></PRE>");
 }
@@ -347,8 +347,8 @@ if (featDna)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
     printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	  "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	  start, chrom, start, end, strand, tbl);
+	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   start, chrom, start, end, strand, tbl);
     }
 }
 
@@ -357,12 +357,12 @@ void samplePrintPos(struct sample *smp, int smpSize)
 /* Print first three fields of a sample 9 type structure in
  * standard format. */
 {
-    if( smpSize != 9 ) 
-        errAbort( "Invalid sample entry!\n It has %d fields instead of 9\n" );
+if( smpSize != 9 ) 
+    errAbort( "Invalid sample entry!\n It has %d fields instead of 9\n" );
 
-    printf("<B>Item:</B> %s<BR>\n", smp->name);
-    printf("<B>Score:</B> %d<BR>\n", smp->score);
-    printf("<B>Strand:</B> %s<BR>\n", smp->strand);
+printf("<B>Item:</B> %s<BR>\n", smp->name);
+printf("<B>Score:</B> %d<BR>\n", smp->score);
+printf("<B>Strand:</B> %s<BR>\n", smp->strand);
 printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
 }
 
@@ -389,7 +389,7 @@ cartWebStart(cart, buf);
 }
 
 static struct dyString *subMulti(char *orig, int subCount, 
-	char *in[], char *out[])
+				 char *in[], char *out[])
 /* Perform multiple substitions on orig. */
 {
 int i;
@@ -397,12 +397,12 @@ struct dyString *s = newDyString(256), *d = NULL;
 
 dyStringAppend(s, orig);
 for (i=0; i<subCount; ++i)
-   {
-   d = dyStringSub(s->string, in[i], out[i]);
-   dyStringFree(&s);
-   s = d;
-   d = NULL;
-   }
+    {
+    d = dyStringSub(s->string, in[i], out[i]);
+    dyStringFree(&s);
+    s = d;
+    d = NULL;
+    }
 return s;
 }
 
@@ -457,7 +457,7 @@ if (url != NULL && url[0] != 0)
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int smpSize)
+			char *item, int start, int smpSize)
 /* Handle click in generic sample (wiggle) track. */
 {
 char table[64];
@@ -489,7 +489,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int bedSize)
+		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
 {
 char table[64];
@@ -505,7 +505,7 @@ if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
     sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-    	table, item, seqName, start);
+	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -550,32 +550,32 @@ while ((row = sqlNextRow(sr)) != NULL)
 int setAttributeColor(int class)
 {
 switch (class)
-   {
-   case STARTCODON:
-      return GREEN;
-   case STOPCODON:
-      return RED;
-   case CODINGA:
-      return MEDBLUE;
-   case CODINGB:
-      return PURPLE;
-   case UTR5:
-   case UTR3:
-      return LTGRAY;
-   case INTRON:
-      return LTGRAY;
-   case SPLICESITE:
-   case NONCONSPLICE:
-      return BLACK;
-   case INFRAMESTOP:
-      return MAGENTA;
-   case REGULATORY:
-      return YELLOW;
-   case INTERGENIC:
-      return GRAY;
-   case LABEL:
-   default:
-      return BLACK;
+    {
+    case STARTCODON:
+	return GREEN;
+    case STOPCODON:
+	return RED;
+    case CODINGA:
+	return MEDBLUE;
+    case CODINGB:
+	return PURPLE;
+    case UTR5:
+    case UTR3:
+	return LTGRAY;
+    case INTRON:
+	return LTGRAY;
+    case SPLICESITE:
+    case NONCONSPLICE:
+	return BLACK;
+    case INFRAMESTOP:
+	return MAGENTA;
+    case REGULATORY:
+	return YELLOW;
+    case INTERGENIC:
+	return GRAY;
+    case LABEL:
+    default:
+	return BLACK;
     }
 }
 
@@ -609,17 +609,17 @@ stopColorStr(dy,track);
 }
 
 int numberOfGaps(char *q,int size) 
-    /* count number of gaps in a string array */
+/* count number of gaps in a string array */
 {
-    int i;
-    int count = 0;
-    for (i = 0 ; i<size ; i++)
-        if (q[i] == '-') count++;
-    return (count);
+int i;
+int count = 0;
+for (i = 0 ; i<size ; i++)
+    if (q[i] == '-') count++;
+return (count);
 }
 
 void axtOneGeneOut(struct axt *axtList, int lineSize, 
-	FILE *f, struct genePred *gp)
+		   FILE *f, struct genePred *gp)
 /* Output axt and orf in pretty format. */
 {
 struct axt *axt;
@@ -691,8 +691,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     int sizeLeft = size;
     int qPtr ;
     fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d \n", 
-        axt->tName, axt->tStart+1, axt->tEnd,
-        axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
+	    axt->tName, axt->tStart+1, axt->tEnd,
+	    axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
 
     qPtr = axt->qStart;
     qCodonPos = tCodonPos; /* put translation back in sync */
@@ -740,24 +740,24 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-                if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
-                    { /*start of exon on neg strand */
-                    tCoding=TRUE;
-                    dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
-                    addTag(dyT,exonTag);
+	    if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
+		{ /*start of exon on neg strand */
+		tCoding=TRUE;
+		dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
+		addTag(dyT,exonTag);
 
-                    if (qStopCodon == FALSE) 
-                        {
-                        qCoding=TRUE;
-                        qCodonPos = tCodonPos; /* put translation back in sync */
-                        qFlip = tFlip;
-                        }
-                    }
-                else if ((tPtr <= nextStart-1) && (tPtr > tStart))
-                    { /* start of UTR 5'*/
-                    tClass=UTR5; qClass=UTR5;
-                    }
-                }
+		if (qStopCodon == FALSE) 
+		    {
+		    qCoding=TRUE;
+		    qCodonPos = tCodonPos; /* put translation back in sync */
+		    qFlip = tFlip;
+		    }
+		}
+	    else if ((tPtr <= nextStart-1) && (tPtr > tStart))
+		{ /* start of UTR 5'*/
+		tClass=UTR5; qClass=UTR5;
+		}
+	    }
             if (tCoding && tFlip )
                 tClass=CODINGA;
             if (tCoding && (tFlip == FALSE) )
@@ -931,9 +931,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if (tCodonPos>3) tCodonPos=1;
                 }
             /*else
-                {
-                tClass=INTRON;
-                }*/
+	      {
+	      tClass=INTRON;
+	      }*/
             if (q[i] != '-')
                 {
                 if (qCoding) 
@@ -944,9 +944,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if (qCodonPos>3) qCodonPos=1;
                 }
             /*else
-                {
-                qClass=INTRON;
-                }*/
+	      {
+	      qClass=INTRON;
+	      }*/
             }
         resetClassStr(dyT,0);
         setClassStr(dyT,LABEL,0);
@@ -963,11 +963,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 dyStringPrintf(dyT, "exon %d", (nextEndIndex == 0) ? 1 : nextEndIndex+1);
             }
         /* debug version
-        if (posStrand)
-            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex);
-        else
-            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ]+1, gp->exonEnds[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ],(nextEndIndex == 0) ? 1 : nextEndIndex);
-            */
+	   if (posStrand)
+	   dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex);
+	   else
+	   dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ]+1, gp->exonEnds[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ],(nextEndIndex == 0) ? 1 : nextEndIndex);
+	*/
         dyStringAppendC(dyT,'\n');
         resetClassStr(dyT,0);
         resetClassStr(dyQ,1);
@@ -977,11 +977,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         else
             dyStringPrintf(dyQ, " %d ",qPtr);
         /* debug version
-        if (posStrand)
-            dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex+1);
-        else
-            dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex);
-            */
+	   if (posStrand)
+	   dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex+1);
+	   else
+	   dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex);
+	*/
         dyStringAppendC(dyQ,'\n');
         resetClassStr(dyQ,1);
         dyStringAppendC(dyQprot,'\n');
@@ -1007,12 +1007,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         if (oneSize > lineSize)
             oneSize = lineSize;
         /*
-        for (i=0; i<oneSize; ++i)
-            {
-            fputc(q[i], f);
+	  for (i=0; i<oneSize; ++i)
+	  {
+	  fputc(q[i], f);
 
-            }
-        fputc('\n', f);
+	  }
+	  fputc('\n', f);
         */
         sizeLeft -= oneSize;
         q += oneSize;
@@ -1026,7 +1026,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 }
 
 struct axt *createAxtGap(char *nibFile, char *chrom, 	
-	int start, int end, char strand)
+			 int start, int end, char strand)
 /* return an axt alignment with the query all deletes - null aligment */
 {
 struct axt *axt;
@@ -1094,11 +1094,11 @@ lf = lineFileOpen(ai->fileName, TRUE);
 while ((axt = axtRead(lf)) != NULL)
     {
     if (sameString(gp->chrom , axt->tName) && 
-            (
-             (((axt->tStart <= gp->cdsStart) && (axt->tEnd >= gp->cdsStart)) || ((axt->tStart <= gp->cdsEnd) && (axt->tEnd >= gp->cdsEnd)))
-             || (axt->tStart < gp->cdsEnd && axt->tEnd > gp->cdsStart)
-            )
-    )
+	(
+	 (((axt->tStart <= gp->cdsStart) && (axt->tEnd >= gp->cdsStart)) || ((axt->tStart <= gp->cdsEnd) && (axt->tEnd >= gp->cdsEnd)))
+	 || (axt->tStart < gp->cdsEnd && axt->tEnd > gp->cdsStart)
+	 )
+	)
         {
         if (gp->strand[0] == '-')
             {
@@ -1176,7 +1176,7 @@ hFreeConn(&conn);
 }
 
 void showGenePosMouse(char *name, struct trackDb *tdb, 
-	struct sqlConnection *connMm)
+		      struct sqlConnection *connMm)
 /* Show gene prediction position and other info. */
 {
 char query[512];
@@ -1204,8 +1204,8 @@ sqlFreeResult(&sr);
 }
 
 void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
-	char *pepTable, char *pepClick, 
-	char *mrnaClick, char *genomicClick, char *mrnaDescription)
+			 char *pepTable, char *pepClick, 
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
 char *geneTable = tdb->tableName;
@@ -1245,8 +1245,8 @@ printf("</UL>\n");
 }
 
 void geneShowPosAndLinksDNARefseq(char *geneName, char *pepName, struct trackDb *tdb,
-        char *pepTable, char *pepClick,
-        char *mrnaClick, char *genomicClick, char *mrnaDescription)
+				  char *pepTable, char *pepClick,
+				  char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of a DNA based RefSeq gene */
 {
 char *geneTable = tdb->tableName;
@@ -1256,18 +1256,18 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 /*
-if (pepTable != NULL && hTableExists(pepTable))
-    {
-    puts("<LI>\n");
-    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("Predicted Protein</A> \n");
-    puts("</LI>\n");
-    }
-puts("<LI>\n");
-hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("%s</A> may be different from the genomic sequence.\n",
-       mrnaDescription);
-puts("</LI>\n");
+  if (pepTable != NULL && hTableExists(pepTable))
+  {
+  puts("<LI>\n");
+  hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+  printf("Predicted Protein</A> \n");
+  puts("</LI>\n");
+  }
+  puts("<LI>\n");
+  hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
+  printf("%s</A> may be different from the genomic sequence.\n",
+  mrnaDescription);
+  puts("</LI>\n");
 */
 puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
@@ -1285,9 +1285,9 @@ printf("</UL>\n");
 }
 
 void geneShowPosAndLinksMouse(char *geneName, char *pepName, 
-	struct trackDb *tdb, char *pepTable, 
-	struct sqlConnection *connMm, char *pepClick, 
-	char *mrnaClick, char *genomicClick, char *mrnaDescription)
+			      struct trackDb *tdb, char *pepTable, 
+			      struct sqlConnection *connMm, char *pepClick, 
+			      char *mrnaClick, char *genomicClick, char *mrnaDescription)
 /* Show parts of gene common to everything */
 {
 char *geneTable = tdb->tableName;
@@ -1311,27 +1311,27 @@ void geneShowCommon(char *geneName, struct trackDb *tdb, char *pepTable)
 /* Show parts of gene common to everything */
 {
 geneShowPosAndLinks(geneName, geneName, tdb, pepTable, "htcTranslatedProtein",
-	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+		    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 }
 
 void geneShowMouse(char *geneName, struct trackDb *tdb, char *pepTable,
-	struct sqlConnection *connMm)
+		   struct sqlConnection *connMm)
 /* Show parts of gene common to everything */
 {
 geneShowPosAndLinksMouse(geneName, geneName, tdb, pepTable, connMm, 
-	"htcTranslatedProtein", "htcGeneMrna", "htcGeneInGenome", 
-	"Predicted mRNA");
+			 "htcTranslatedProtein", "htcGeneMrna", "htcGeneInGenome", 
+			 "Predicted mRNA");
 }
 
 void genericGenePredClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *pepTable, char *mrnaTable)
+			  char *item, int start, char *pepTable, char *mrnaTable)
 /* Handle click in generic genePred track. */
 {
 geneShowCommon(item, tdb, pepTable);
 }
 
 void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *subType)
+		     char *item, int start, char *subType)
 /* Handle click in generic psl track. */
 {
 char table[64];
@@ -1379,7 +1379,7 @@ else
 }
 
 struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
-	char *chrom, int id)
+			  char *chrom, int id)
 /* Load chain. */
 {
 char table[64];
@@ -1392,7 +1392,7 @@ struct chain *chain;
 if (!hFindSplitTable(seqName, track, table, &rowOffset))
     errAbort("No %s track in database", track);
 snprintf(query, sizeof(query), 
-	"select * from %s where id = %d", table, id);
+	 "select * from %s where id = %d", table, id);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -1412,13 +1412,13 @@ int qs,qe;
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 qChainRangePlusStrand(subChain, &qs, &qe);
 printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-	otherDb, subChain->qName, qs, qe);
+       otherDb, subChain->qName, qs, qe);
 printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
 chainFree(&toFree);
 }
 
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
-    char *item, int start, char *otherDb)
+		       char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
 char *track = tdb->tableName;
@@ -1430,12 +1430,12 @@ int qs, qe;
 
 chain = chainDbLoad(conn, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
-    thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
+       thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
 printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
-    otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
-    qs, qe, chain->qEnd - chain->qStart);
+       otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
+       qs, qe, chain->qEnd - chain->qStart);
 printf("<B>chain id:</B> %s<BR>\n", item);
 printf("<B>score:</B> %1.0f<BR>\n", chain->score);
 printf("<BR>\n");
@@ -1463,7 +1463,7 @@ struct sqlConnection *conn = hAllocConn();
 char buf[512];
 char query[256];
 snprintf(query, sizeof(query), 
-	"select type from %s where tableName = '%s'",  trackDb, track);
+	 "select type from %s where tableName = '%s'",  trackDb, track);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) == NULL)
     errAbort("%s isn't in %s", track, trackDb);
 hFreeConn(&conn);
@@ -1477,14 +1477,14 @@ struct sqlConnection *conn = sqlConnect(db);
 char query[256];
 
 snprintf(query, sizeof(query),
-	"select fileName from chromInfo where chrom = '%s'", chrom);
+	 "select fileName from chromInfo where chrom = '%s'", chrom);
 if (sqlQuickQuery(conn, query, nibFile, 512) == NULL)
     errAbort("Sequence %s isn't in database %s", chrom, db);
 sqlDisconnect(&conn);
 }
 
 struct dnaSeq *loadGenomePart(char *db, 
-	char *chrom, int start, int end)
+			      char *chrom, int start, int end)
 /* Load genomic dna from given database and position. */
 {
 char nibFile[512];
@@ -1493,7 +1493,7 @@ return nibLoadPart(nibFile, start, end - start);
 }
 
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *otherDb, char *chainTrack)
+		     char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
 {
 char table[64];
@@ -1510,9 +1510,9 @@ struct chain *chain;
 
 hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
-	"select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
-	"and level = %s",
-	table, seqName, start, start, item);
+	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
+	 "and level = %s",
+	 table, seqName, start, start, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s:%d in %s", seqName, start, table);
@@ -1522,9 +1522,9 @@ qSize = net.qEnd - net.qStart;
 printf("<B>type:</B> %s<BR>\n", net.type);
 printf("<B>level:</B> %d<BR>\n", net.level/2 + 1);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
-	org, net.tName, net.tStart+1, net.tEnd);
+       org, net.tName, net.tStart+1, net.tEnd);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
-	otherOrg, net.qName, net.qStart+1, net.qEnd);
+       otherOrg, net.qName, net.qStart+1, net.qEnd);
 printf("<B>strand:</B> %c<BR>\n", net.strand[0]);
 printf("<B>score:</B> %1.1f<BR>\n", net.score);
 if (net.chainId)
@@ -1538,21 +1538,21 @@ if (net.chainId)
 printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net.tN, 100.0*net.tN/tSize);
 printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net.qN, 100.0*net.qN/qSize);
 printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-	org, net.tTrf, 100.0*net.tTrf/tSize);
+       org, net.tTrf, 100.0*net.tTrf/tSize);
 printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
-	otherOrg, net.qTrf, 100.0*net.qTrf/qSize);
+       otherOrg, net.qTrf, 100.0*net.qTrf/qSize);
 printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-	org, net.tR, 100.0*net.tR/tSize);
+       org, net.tR, 100.0*net.tR/tSize);
 printf("<B>%s RepeatMasker bases:</B> %u (%1.1f%%)<BR>\n", 
-	otherOrg, net.qR, 100.0*net.qR/qSize);
+       otherOrg, net.qR, 100.0*net.qR/qSize);
 printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-	org, net.tOldR, 100.0*net.tOldR/tSize);
+       org, net.tOldR, 100.0*net.tOldR/tSize);
 printf("<B>%s old repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-	otherOrg, net.qOldR, 100.0*net.qOldR/qSize);
+       otherOrg, net.qOldR, 100.0*net.qOldR/qSize);
 printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-	org, net.tNewR, 100.0*net.tNewR/tSize);
+       org, net.tNewR, 100.0*net.tNewR/tSize);
 printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n", 
-	otherOrg, net.qNewR, 100.0*net.qNewR/qSize);
+       otherOrg, net.qNewR, 100.0*net.qNewR/qSize);
 printf("<B>%s size:</B> %d<BR>\n", org, net.tEnd - net.tStart);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, net.qEnd - net.qStart);
 sqlFreeResult(&sr);
@@ -1595,13 +1595,13 @@ void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
 char *dupe, *type, *words[16];
- char title[256];
+char title[256];
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
 if (itemForUrl == NULL)
-   itemForUrl = item;
+    itemForUrl = item;
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
@@ -1661,7 +1661,7 @@ hFreeConn(&conn);
 
 void savePosInTextBox(char *chrom, int start, int end)
 /* Save basic position/database info in text box and hidden var. 
- Positions becomes chrom:start-end*/
+   Positions becomes chrom:start-end*/
 {
 char position[128];
 snprintf(position, 128, "%s:%d-%d", chrom, start, end);
@@ -1757,10 +1757,10 @@ boolean dnaIgnoreTrack(char *track)
  * to put DNA on. */
 {
 return (sameString("cytoBand", track) ||
-    sameString("gcPercent", track) ||
-    sameString("gold", track) ||
-    sameString("gap", track) ||
-    startsWith("mouseSyn", track));
+	sameString("gcPercent", track) ||
+	sameString("gold", track) ||
+	sameString("gap", track) ||
+	startsWith("mouseSyn", track));
 }
 
 
@@ -1905,10 +1905,10 @@ tdbList = slCat(utdbList, ctdbList);
 cartWebStart(cart, "Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
-"Use this page to highlight features in genomic DNA text. "
-"DNA covered by a particular track can be hilighted by "
-"case, underline, bold, italic, or color.  See below for "
-"details about color, and for examples. <P>");
+     "Use this page to highlight features in genomic DNA text. "
+     "DNA covered by a particular track can be hilighted by "
+     "case, underline, bold, italic, or color.  See below for "
+     "details about color, and for examples. <P>");
 
 if (cgiBooleanDefined("hgSeq.revComp"))
     {
@@ -2034,44 +2034,44 @@ printf("</FORM>\n");
 printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
 puts("The examples below show a few ways to hilight individual tracks, "
-  "and their interplay. It's good to keep it simple at first.  It's easy "
-  "to make pretty but completely cryptic displays with this feature.");
+     "and their interplay. It's good to keep it simple at first.  It's easy "
+     "to make pretty but completely cryptic displays with this feature.");
 puts(
-  "<UL>"
-  "<LI>To put exons from RefSeq Genes in upper case red text, check the "
-  "appropriate box in the Toggle Case column and set the color to pure "
-  "red, RGB (255,0,0). Upon submitting, any RefSeq Gene within the "
-  "designated chromosomal interval will now appear in red capital letters.\n"
-  "<LI>To see the overlap between RefSeq Genes and Genscan predictions try "
-  "setting the RefSeq Genes to red (255,0,0) and Genscan to green (0,255,0). "
-  "Places where the RefSeq Genes and Genscan overlap will be painted yellow "
-  "(255,255,0).\n"
-  "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
-  "multiple overlapping items, initially select a darker color such as deep "
-  "green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark "
-  "green, while regions covered with more ESTs get progressively brighter -- "
-  "saturating at 4 ESTs."
-  "<LI>Another track can be used to mask unwanted features. Setting the "
-  "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
-  "of LINEs but not mainstream host genes; masking with RefSeq Genes will show "
-  "what is new in the gene prediction sector."
-  "</UL>");
+     "<UL>"
+     "<LI>To put exons from RefSeq Genes in upper case red text, check the "
+     "appropriate box in the Toggle Case column and set the color to pure "
+     "red, RGB (255,0,0). Upon submitting, any RefSeq Gene within the "
+     "designated chromosomal interval will now appear in red capital letters.\n"
+     "<LI>To see the overlap between RefSeq Genes and Genscan predictions try "
+     "setting the RefSeq Genes to red (255,0,0) and Genscan to green (0,255,0). "
+     "Places where the RefSeq Genes and Genscan overlap will be painted yellow "
+     "(255,255,0).\n"
+     "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
+     "multiple overlapping items, initially select a darker color such as deep "
+     "green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark "
+     "green, while regions covered with more ESTs get progressively brighter -- "
+     "saturating at 4 ESTs."
+     "<LI>Another track can be used to mask unwanted features. Setting the "
+     "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
+     "of LINEs but not mainstream host genes; masking with RefSeq Genes will show "
+     "what is new in the gene prediction sector."
+     "</UL>");
 puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
- "will retain upper case but lose colors and other formatting. That's still "
- "useful because other web tools such as "
- "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\">NCBI Blast</A> "
- "can be set to ignore lower case.  To fully capture formatting such as color "
- "and underlining, view the output as \"source\" in your web browser, or download "
- "it, or copy the output page into an html editor.</P>");
+     "will retain upper case but lose colors and other formatting. That's still "
+     "useful because other web tools such as "
+     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\">NCBI Blast</A> "
+     "can be set to ignore lower case.  To fully capture formatting such as color "
+     "and underlining, view the output as \"source\" in your web browser, or download "
+     "it, or copy the output page into an html editor.</P>");
 puts("<P>The default line width of 60 characters is standard, but if you have "
- "a reasonable sized monitor it's useful to set this higher - to 125 characters "
- "or more.  You can see more DNA at once this way, and fewer line breaks help "
- "in finding DNA strings using the web browser search function.</P>");
+     "a reasonable sized monitor it's useful to set this higher - to 125 characters "
+     "or more.  You can see more DNA at once this way, and fewer line breaks help "
+     "in finding DNA strings using the web browser search function.</P>");
 puts("<P>Be careful about requesting complex formatting for a very large "
- "chromosomal region.  After all the html tags are added to the output page, "
- "the file size may exceed size limits that your browser, clipboard, and "
- "other software can safely display.  The tool will format 10Mbp and more though.</P>");
+     "chromosomal region.  After all the html tags are added to the output page, "
+     "the file size may exceed size limits that your browser, clipboard, and "
+     "other software can safely display.  The tool will format 10Mbp and more though.</P>");
 trackDbFreeList(&tdbList);
 }
 
@@ -2309,8 +2309,8 @@ for (i=start; i<end; ++i)
 }
 
 void getDnaHandleBits(char *track, char *type, Bits *bits, 
-	int winStart, int winEnd, boolean isRc,
-	struct featureBits *fbList)
+		      int winStart, int winEnd, boolean isRc,
+		      struct featureBits *fbList)
 /* See if track_type variable exists, and if so set corresponding bits. */
 {
 char buf[256];
@@ -2365,7 +2365,7 @@ tdbList = slCat(utdbList, ctdbList);
 cartWebStart(cart, "Extended DNA Output");
 printf("<PRE><TT>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
-    	(isRc ? "(reverse complement)" : ""));
+       (isRc ? "(reverse complement)" : ""));
 seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
 if (isRc)
     reverseComplement(seq->dna, seq->size);
@@ -2462,12 +2462,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 cfm = cfmNew(0, lineWidth, FALSE, FALSE, stdout, 0);
 for (i=0; i<seq->size; ++i)
-   {
-   struct rgbColor *color = colors+i;
-   int c = (color->r<<16) + (color->g<<8) + color->b;
-   cfmOutExt(cfm, seq->dna[i], c, 
-   	bitReadOne(uBits, i), bitReadOne(bBits, i), bitReadOne(iBits, i));
-   }
+    {
+    struct rgbColor *color = colors+i;
+    int c = (color->r<<16) + (color->g<<8) + color->b;
+    cfmOutExt(cfm, seq->dna[i], c, 
+	      bitReadOne(uBits, i), bitReadOne(bBits, i), bitReadOne(iBits, i));
+    }
 cfmFree(&cfm);
 freeDnaSeq(&seq);
 bitFree(&uBits);
@@ -2575,7 +2575,7 @@ char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;
 
 accession = acc;
 snprintf(qry, sizeof(qry), 
-	"select seqid from rikenaltid where altid='%s';", accession);
+	 "select seqid from rikenaltid where altid='%s';", accession);
 sr = sqlMustGetResult(conn, qry);
 row = sqlNextRow(sr);
 
@@ -2584,8 +2584,8 @@ if (row != NULL)
     seqid=strdup(row[0]);
 
     snprintf(qry, sizeof(qry), 
-    	"select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence "
-	"from rikenann where seqid='%s';", seqid);
+	     "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence "
+	     "from rikenann where seqid='%s';", seqid);
 
     sqlFreeResult(&sr);
     sr = sqlMustGetResult(conn, qry);
@@ -2603,7 +2603,7 @@ if (row != NULL)
 	}
 
     snprintf(qry, sizeof(qry), 
-    	"select comment from rikenseq where id='%s';", seqid);
+	     "select comment from rikenseq where id='%s';", seqid);
     sqlFreeResult(&sr);
     sr = sqlMustGetResult(conn, qry);
     row = sqlNextRow(sr);
@@ -2749,8 +2749,8 @@ struct sqlConnection *conn = hgAllocConn();
 struct sqlResult *sr;
 char **row;
 char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
-     *development,*cell,*cds,*description, *author,*geneName,
-     *date,*productName;
+    *development,*cell,*cds,*description, *author,*geneName,
+    *date,*productName;
 boolean isMgcTrack = startsWith("mgc", tdb->tableName);
 int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
@@ -2782,7 +2782,7 @@ if (haveGbSeq)
                    "gbSeq.size,gbSeq.gb_date,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
 else
     dyStringAppend(dy,
-                "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
+		   "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
 
 /* If the mrna table has a "version" column then will show it */
 if (hasVersion) 
@@ -2842,7 +2842,7 @@ if (row != NULL)
     medlineLinkedLine("author", author, dy->string);
     printf("<B>organism:</B> ");
     printf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
-    	cgiEncode(organism));
+	   cgiEncode(organism));
     printf("%s</A><BR>\n", organism);
     printf("<B>tissue:</B> %s<BR>\n", tissue);
     printf("<B>development stage:</B> %s<BR>\n", development);
@@ -2885,7 +2885,7 @@ hgFreeConn(&conn);
 
 
 void printAlignments(struct psl *pslList, 
-	int startFirst, char *hgcCommand, char *typeName, char *itemIn)
+		     int startFirst, char *hgcCommand, char *typeName, char *itemIn)
 /* Print list of mRNA alignments. */
 {
 struct psl *psl;
@@ -2908,10 +2908,10 @@ for (same = 1; same >= 0; same -= 1)
 	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
-		psl->match + psl->misMatch + psl->repMatch,
-		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
-		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
+		   psl->match + psl->misMatch + psl->repMatch,
+		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
+		   skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
+		   psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
 	    printf("\n");
 	    }
 	}
@@ -3075,7 +3075,7 @@ boolean hasBin;
 char splitTable[64];
 char *chp;
 char *accession1, *accession2, *spanner, *evaluation, *variation, *varEvidence, 
-     *contact, *remark, *comment;
+    *contact, *remark, *comment;
 char *secondAcc, *secondAccVer;
 char *tmpString;
 int first;
@@ -3096,7 +3096,7 @@ printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
 if (hTableExists("certificate"))
     {
     first = 1;
-again:
+    again:
     tmpString = strdup(frag.frag);
     chp = strstr(tmpString, ".");
     if (chp != NULL) *chp = '\0';
@@ -3162,7 +3162,7 @@ again:
 	if (strcmp(remark, "") != 0) printf("<B>Remark: </B> %s<BR>\n", remark);
 	if (strcmp(comment, "") != 0) printf("<B>Comment: </B> %s<BR>\n", comment);
 	if (strcmp(contact, "") != 0) 
-		printf("<B>Contact: </B> <A HREF=\"mailto:%s\">%s</A><BR>", contact, contact);
+	    printf("<B>Contact: </B> <A HREF=\"mailto:%s\">%s</A><BR>", contact, contact);
 
 	sqlFreeResult(&sr3);
 	row2 = sqlNextRow(sr2);
@@ -3216,7 +3216,7 @@ hFreeConn(&conn);
 
 
 void selectOneRow(struct sqlConnection *conn, char *table, char *query, 
-	struct sqlResult **retSr, char ***retRow)
+		  struct sqlResult **retSr, char ***retRow)
 /* Do query and return one row offset by bin as needed. */
 {
 char fullTable[64];
@@ -3268,16 +3268,16 @@ char *cloneStageName(char *stage)
 /* Expand P/D/F. */
 {
 switch (stage[0])
-   {
-   case 'P':
-      return "predraft (less than 4x coverage shotgun)";
-   case 'D':
-      return "draft (at least 4x coverage shotgun)";
-   case 'F':
-      return "finished";
-   default:
-      return "unknown";
-   }
+    {
+    case 'P':
+	return "predraft (less than 4x coverage shotgun)";
+    case 'D':
+	return "draft (at least 4x coverage shotgun)";
+    case 'F':
+	return "finished";
+    default:
+	return "unknown";
+    }
 }
 
 void doHgCover(struct trackDb *tdb, char *cloneName)
@@ -3298,8 +3298,8 @@ clone = clonePosLoad(row);
 sqlFreeResult(&sr);
 
 sprintf(query, 
-    "select count(*) from %s_gl where end >= %d and start <= %d and frag like '%s%%'",
-    clone->chrom, clone->chromStart, clone->chromEnd, clone->name);
+	"select count(*) from %s_gl where end >= %d and start <= %d and frag like '%s%%'",
+	clone->chrom, clone->chromStart, clone->chromEnd, clone->name);
 fragCount = sqlQuickNum(conn, query);
 
 printf("<H2>Information on <A HREF=\"");
@@ -3381,7 +3381,7 @@ hFreeConn(&conn);
 }
 
 int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, 
-	enum gfType qType, int qStart, int qEnd, char *qName)
+		    enum gfType qType, int qStart, int qEnd, char *qName)
 /* Show protein/DNA alignment or translated DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
@@ -3455,199 +3455,199 @@ fprintf(f, "<PRE><TT>");
 tolowers(oLetters);
 
 /* Display query sequence. */
-    {
-    struct cfm *cfm;
-    char *colorFlags = needMem(oSeq->size);
-    int i,j;
+{
+struct cfm *cfm;
+char *colorFlags = needMem(oSeq->size);
+int i,j;
 
-    for (i=0; i<psl->blockCount; ++i)
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int qs = psl->qStarts[i] - qStart;
+    int ts = psl->tStarts[i] - tStart;
+    int sz = psl->blockSizes[i]-1;
+    colorFlags[qs] = socBrightBlue;
+    oLetters[qs] = toupper(oLetters[qs]);
+    colorFlags[qs+sz] = socBrightBlue;
+    oLetters[qs+sz] = toupper(oLetters[qs+sz]);
+    if (isProt)
 	{
-	int qs = psl->qStarts[i] - qStart;
-	int ts = psl->tStarts[i] - tStart;
-	int sz = psl->blockSizes[i]-1;
-	colorFlags[qs] = socBrightBlue;
-	oLetters[qs] = toupper(oLetters[qs]);
-	colorFlags[qs+sz] = socBrightBlue;
-	oLetters[qs+sz] = toupper(oLetters[qs+sz]);
-	if (isProt)
+	for (j=1; j<sz; ++j)
 	    {
-	    for (j=1; j<sz; ++j)
+	    AA aa = oSeq->dna[qs+j];
+	    DNA *codon = &dnaSeq->dna[ts + 3*j];
+	    AA trans = lookupCodon(codon);
+	    if (trans != 'X' && trans == aa)
 		{
-		AA aa = oSeq->dna[qs+j];
-		DNA *codon = &dnaSeq->dna[ts + 3*j];
-		AA trans = lookupCodon(codon);
-		if (trans != 'X' && trans == aa)
-		    {
-		    colorFlags[qs+j] = socBlue;
-		    oLetters[qs+j] = toupper(oLetters[qs+j]);
-		    }
-		}
-	    }
-	else
-	    {
-	    for (j=1; j<sz; ++j)
-	        {
-		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
-		    {
-		    colorFlags[qs+j] = socBlue;
-		    oLetters[qs+j] = toupper(oLetters[qs+j]);
-		    }
+		colorFlags[qs+j] = socBlue;
+		oLetters[qs+j] = toupper(oLetters[qs+j]);
 		}
 	    }
 	}
-    cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
-    for (i=0; i<oSize; ++i)
-	cfmOut(cfm, oLetters[i], seqOutColorLookup[colorFlags[i]]);
-    cfmFree(&cfm);
-    freez(&colorFlags);
-    htmHorizontalLine(f);
+    else
+	{
+	for (j=1; j<sz; ++j)
+	    {
+	    if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		{
+		colorFlags[qs+j] = socBlue;
+		oLetters[qs+j] = toupper(oLetters[qs+j]);
+		}
+	    }
+	}
     }
+cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
+for (i=0; i<oSize; ++i)
+    cfmOut(cfm, oLetters[i], seqOutColorLookup[colorFlags[i]]);
+cfmFree(&cfm);
+freez(&colorFlags);
+htmHorizontalLine(f);
+}
 fprintf(f, "</TT></PRE>\n");
 fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n", 
 	organism, psl->tName, (tIsRc ? "(reverse strand)" : ""));
 fprintf(f, "<PRE><TT>");
 /* Display DNA sequence. */
+{
+struct cfm *cfm;
+char *colorFlags = needMem(dnaSeq->size);
+int i,j;
+int curBlock = 0;
+int anchorCount = 0;
+
+for (i=0; i<psl->blockCount; ++i)
     {
-    struct cfm *cfm;
-    char *colorFlags = needMem(dnaSeq->size);
-    int i,j;
-    int curBlock = 0;
-    int anchorCount = 0;
-
-    for (i=0; i<psl->blockCount; ++i)
+    int qs = psl->qStarts[i] - qStart;
+    int ts = psl->tStarts[i] - tStart;
+    int sz = psl->blockSizes[i];
+    if (isProt)
 	{
-	int qs = psl->qStarts[i] - qStart;
-	int ts = psl->tStarts[i] - tStart;
-	int sz = psl->blockSizes[i];
-	if (isProt)
+	for (j=0; j<sz; ++j)
 	    {
-	    for (j=0; j<sz; ++j)
+	    AA aa = oSeq->dna[qs+j];
+	    int codonStart = ts + 3*j;
+	    DNA *codon = &dnaSeq->dna[codonStart];
+	    AA trans = lookupCodon(codon);
+	    if (trans != 'X' && trans == aa)
 		{
-		AA aa = oSeq->dna[qs+j];
-		int codonStart = ts + 3*j;
-		DNA *codon = &dnaSeq->dna[codonStart];
-		AA trans = lookupCodon(codon);
-		if (trans != 'X' && trans == aa)
-		    {
-		    colorFlags[codonStart] = socBlue;
-		    colorFlags[codonStart+1] = socBlue;
-		    colorFlags[codonStart+2] = socBlue;
-		    toUpperN(dna+codonStart, 3);
-		    }
+		colorFlags[codonStart] = socBlue;
+		colorFlags[codonStart+1] = socBlue;
+		colorFlags[codonStart+2] = socBlue;
+		toUpperN(dna+codonStart, 3);
 		}
 	    }
-	else
-	    {
-	    for (j=0; j<sz; ++j)
-	        {
-		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
-		    {
-		    colorFlags[ts+j] = socBlue;
-		    dna[ts+j] = toupper(dna[ts+j]);
-		    }
-		}
-	    }
-	colorFlags[ts] = socBrightBlue;
-	colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
 	}
-
-    cfm = cfmNew(10, 60, TRUE, tIsRc, f, tcfmStart);
-    
-    for (i=0; i<dnaSeq->size; ++i)
+    else
 	{
-	/* Put down "anchor" on first match position in haystack
-	 * so user can hop here with a click on the needle. */
-	if (curBlock < psl->blockCount && psl->tStarts[curBlock] == (i + tStart) )
-	     {
-	     fprintf(f, "<A NAME=%d></A>", ++curBlock);
-	     }
-	cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
+	for (j=0; j<sz; ++j)
+	    {
+	    if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		{
+		colorFlags[ts+j] = socBlue;
+		dna[ts+j] = toupper(dna[ts+j]);
+		}
+	    }
 	}
-    cfmFree(&cfm);
-    freez(&colorFlags);
-    htmHorizontalLine(f);
+    colorFlags[ts] = socBrightBlue;
+    colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
     }
+
+cfm = cfmNew(10, 60, TRUE, tIsRc, f, tcfmStart);
+    
+for (i=0; i<dnaSeq->size; ++i)
+    {
+    /* Put down "anchor" on first match position in haystack
+     * so user can hop here with a click on the needle. */
+    if (curBlock < psl->blockCount && psl->tStarts[curBlock] == (i + tStart) )
+	{
+	fprintf(f, "<A NAME=%d></A>", ++curBlock);
+	}
+    cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
+    }
+cfmFree(&cfm);
+freez(&colorFlags);
+htmHorizontalLine(f);
+}
 
 /* Display side by side. */
 fprintf(f, "</TT></PRE>\n");
 fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
 fprintf(f, "<PRE><TT>");
-    {
-    struct baf baf;
-    int i,j;
+{
+struct baf baf;
+int i,j;
 
-    bafInit(&baf, oSeq->dna, qbafStart, qIsRc,
-            dnaSeq->dna, tbafStart, tIsRc, f, 60, isProt);
+bafInit(&baf, oSeq->dna, qbafStart, qIsRc,
+	dnaSeq->dna, tbafStart, tIsRc, f, 60, isProt);
 	    
-    if (isProt)
+if (isProt)
+    {
+    for (i=0; i<psl->blockCount; ++i)
 	{
-	for (i=0; i<psl->blockCount; ++i)
-	    {
-	    int qs = psl->qStarts[i] - qStart;
-	    int ts = psl->tStarts[i] - tStart;
-	    int sz = psl->blockSizes[i];
+	int qs = psl->qStarts[i] - qStart;
+	int ts = psl->tStarts[i] - tStart;
+	int sz = psl->blockSizes[i];
 
-	    bafSetPos(&baf, qs, ts);
-	    bafStartLine(&baf);
-	    for (j=0; j<sz; ++j)
-		{
-		AA aa = oSeq->dna[qs+j];
-		int codonStart = ts + 3*j;
-		DNA *codon = &dnaSeq->dna[codonStart];
-		bafOut(&baf, ' ', codon[0]);
-		bafOut(&baf, aa, codon[1]);
-		bafOut(&baf, ' ', codon[2]);
-		}
-	    bafFlushLine(&baf);
-	    }
-	}
-    else
-	{
-	int lastQe = psl->qStarts[0] - qStart;
-	int lastTe = psl->tStarts[0] - tStart;
-	int maxSkip = 20;
-	bafSetPos(&baf, lastQe, lastTe);
+	bafSetPos(&baf, qs, ts);
 	bafStartLine(&baf);
-	for (i=0; i<psl->blockCount; ++i)
+	for (j=0; j<sz; ++j)
 	    {
-	    int qs = psl->qStarts[i] - qStart;
-	    int ts = psl->tStarts[i] - tStart;
-	    int sz = psl->blockSizes[i];
-	    boolean doBreak = TRUE;
-	    int qSkip = qs - lastQe;
-	    int tSkip = ts - lastTe;
-
-	    if (qSkip >= 0 && qSkip <= maxSkip && tSkip == 0)
-	        {
-		for (j=0; j<qSkip; ++j)
-		    bafOut(&baf, oSeq->dna[lastQe+j], '-');
-		doBreak = FALSE;
-		}
-	    else if (tSkip > 0 && tSkip <= maxSkip && qSkip == 0)
-	        {
-		for (j=0; j<tSkip; ++j)
-		    bafOut(&baf, '-', dnaSeq->dna[lastTe+j]);
-		doBreak = FALSE;
-		}
-	    if (doBreak)
-		{
-		bafFlushLine(&baf);
-		bafSetPos(&baf, qs, ts);
-	        bafStartLine(&baf);
-		}
-	    for (j=0; j<sz; ++j)
-		bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
-	    lastQe = qs + sz;
-	    lastTe = ts + sz;
+	    AA aa = oSeq->dna[qs+j];
+	    int codonStart = ts + 3*j;
+	    DNA *codon = &dnaSeq->dna[codonStart];
+	    bafOut(&baf, ' ', codon[0]);
+	    bafOut(&baf, aa, codon[1]);
+	    bafOut(&baf, ' ', codon[2]);
 	    }
 	bafFlushLine(&baf);
-
-	fprintf( f, "<I>*Aligned Blocks with gaps <= %d bases are merged for this display</I>\n", maxSkip);
 	}
     }
+else
+    {
+    int lastQe = psl->qStarts[0] - qStart;
+    int lastTe = psl->tStarts[0] - tStart;
+    int maxSkip = 20;
+    bafSetPos(&baf, lastQe, lastTe);
+    bafStartLine(&baf);
+    for (i=0; i<psl->blockCount; ++i)
+	{
+	int qs = psl->qStarts[i] - qStart;
+	int ts = psl->tStarts[i] - tStart;
+	int sz = psl->blockSizes[i];
+	boolean doBreak = TRUE;
+	int qSkip = qs - lastQe;
+	int tSkip = ts - lastTe;
+
+	if (qSkip >= 0 && qSkip <= maxSkip && tSkip == 0)
+	    {
+	    for (j=0; j<qSkip; ++j)
+		bafOut(&baf, oSeq->dna[lastQe+j], '-');
+	    doBreak = FALSE;
+	    }
+	else if (tSkip > 0 && tSkip <= maxSkip && qSkip == 0)
+	    {
+	    for (j=0; j<tSkip; ++j)
+		bafOut(&baf, '-', dnaSeq->dna[lastTe+j]);
+	    doBreak = FALSE;
+	    }
+	if (doBreak)
+	    {
+	    bafFlushLine(&baf);
+	    bafSetPos(&baf, qs, ts);
+	    bafStartLine(&baf);
+	    }
+	for (j=0; j<sz; ++j)
+	    bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
+	lastQe = qs + sz;
+	lastTe = ts + sz;
+	}
+    bafFlushLine(&baf);
+
+    fprintf( f, "<I>*Aligned Blocks with gaps <= %d bases are merged for this display</I>\n", maxSkip);
+    }
+}
 fprintf(f, "</TT></PRE>");
 if (qIsRc)
-    reverseComplement(oSeq->dna, oSeq->size);
+reverseComplement(oSeq->dna, oSeq->size);
 freeMem(dna);
 freeMem(oLetters);
 return psl->blockCount;
@@ -3695,13 +3695,13 @@ if (psl->strand[0] == '-')
 ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
 
 blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
-	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
-	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE);
+			 dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
+			 8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE);
 return blockCount;
 }
 
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
-	enum gfType qType, int qStart, int qEnd, char *qName)
+		       enum gfType qType, int qStart, int qEnd, char *qName)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -3726,7 +3726,7 @@ chmod(bodyTn.forCgi, 0666);
 /* Write index. */
 index = mustOpen(indexTn.forCgi, "w");
 if (qName == NULL)
-     qName = psl->qName;
+    qName = psl->qName;
 htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
@@ -3734,7 +3734,7 @@ fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
-         bodyTn.forCgi, i, i);
+	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
 fclose(index);
@@ -3778,7 +3778,7 @@ start = cartInt(cart, "o");
 conn = hAllocConn();
 hFindSplitTable(seqName, type, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tStart=%d",
-    table, acc, start);
+	table, acc, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", acc, start);
@@ -3833,7 +3833,7 @@ writeFramesetType();
 puts("<HTML>");
 sprintf(name, "%s.%s", otherOrg, psl->qName);
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
-	otherOrg, psl->qName, org, psl->tName );
+       otherOrg, psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 }
 
@@ -3871,7 +3871,7 @@ oSeqList = faReadAllSeq(faName, !isProt);
 for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     {
     if (sameString(oSeq->name, qName))
-         break;
+	break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
 showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL);
@@ -3900,7 +3900,7 @@ printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
-    fullTable, readName, seqName, start);
+	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
@@ -3936,7 +3936,7 @@ printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
-    fullTable, readName, seqName, start);
+	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
@@ -3977,7 +3977,7 @@ sprintf(query, "select * from %s where query = '%s' and chrom = '%s' and chromSt
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Sorry, couldn't find alignment of %s at %d of %s in database",
-    	name, start, seqName);
+	     name, start, seqName);
 wa = wabAliLoad(row);
 printf("<PRE><TT>");
 qOffset = wa->qStart;
@@ -3987,7 +3987,7 @@ if (wa->strand[0] == '-')
     qOffset = wa->qEnd;
     }
 xenShowAli(wa->qSym, wa->tSym, wa->hSym, wa->symCount, stdout,
-    qOffset, wa->chromStart, strand, '+', 60);
+	   qOffset, wa->chromStart, strand, '+', 60);
 printf("</TT></PRE>");
 
 wabAliFree(&wa);
@@ -3999,7 +3999,7 @@ void doHgTet(struct trackDb *tdb, char *name)
 {
 cartWebStart(cart, "Fish Alignment");
 printf("Alignment between fish sequence %s (above) and human chromosome %s (below)\n",
-    name, skipChr(seqName));
+       name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
 }
 
@@ -4013,7 +4013,7 @@ if (offset >= 0)
     {
     struct sqlConnection *conn = hAllocConn();
  
-   struct sqlResult *sr;
+    struct sqlResult *sr;
     char **row;
     struct rmskOut *ro;
     char query[256];
@@ -4172,25 +4172,25 @@ if (cgiVarExists("o"))
 printf("<P>This track was kindly provided by Victor Solovyev (EOS Biotechnology Inc.) on behalf of ");
 printf("<A HREF=\"http://www.softberry.com\" TARGET=_blank>Softberry Inc.</A> ");
 puts("using the TSSW program. "
-   "Commercial use of these predictions is restricted to viewing in "
-   "this browser.  Please contact Softberry Inc. to make arrangements "
-   "for further commercial access.  Further information from Softberry on"
-   "this track appears below.</P>"
+     "Commercial use of these predictions is restricted to viewing in "
+     "this browser.  Please contact Softberry Inc. to make arrangements "
+     "for further commercial access.  Further information from Softberry on"
+     "this track appears below.</P>"
 
-"<P>\"Promoters were predicted by Softberry promoter prediction program TSSW in "
-"regions up to 3000 from known starts of coding regions (ATG codon) or known "
-"mapped 5'-mRNA ends. We found that limiting promoter search to  such regions "
-"drastically reduces false positive predictions. Also, we have very strong "
-"thresholds for prediction of TATA-less promoters to minimize false positive "
-"predictions. </P>"
-" "
-"<P>\"Our promoter prediction software accurately predicts about 50% promoters "
-"accurately with a small average deviation from true start site. Such accuracy "
-"makes possible experimental work with found promoter candidates. </P>"
-" "
-"<P>\"For 20 experimentally verified promoters on Chromosome 22, TSSW predicted "
-"15, placed 12 of them  within (-150,+150) region from true TSS and 6 (30% of "
-"all promoters) - within -8,+2 region from true TSS.\" </P>");
+     "<P>\"Promoters were predicted by Softberry promoter prediction program TSSW in "
+     "regions up to 3000 from known starts of coding regions (ATG codon) or known "
+     "mapped 5'-mRNA ends. We found that limiting promoter search to  such regions "
+     "drastically reduces false positive predictions. Also, we have very strong "
+     "thresholds for prediction of TATA-less promoters to minimize false positive "
+     "predictions. </P>"
+     " "
+     "<P>\"Our promoter prediction software accurately predicts about 50% promoters "
+     "accurately with a small average deviation from true start site. Such accuracy "
+     "makes possible experimental work with found promoter candidates. </P>"
+     " "
+     "<P>\"For 20 experimentally verified promoters on Chromosome 22, TSSW predicted "
+     "15, placed 12 of them  within (-150,+150) region from true TSS and 6 (30% of "
+     "all promoters) - within -8,+2 region from true TSS.\" </P>");
 }
 
 void doCpgIsland(struct trackDb *tdb, char *item)
@@ -4260,20 +4260,20 @@ for (i=0; i<size; ++i)
     c = 'a';
     best = motif->aProb[i];
     if (motif->cProb[i] > best)
-       {
-       best = motif->cProb[i];
-       c = 'c';
-       }
+	{
+	best = motif->cProb[i];
+	c = 'c';
+	}
     if (motif->gProb[i] > best)
-       {
-       best = motif->gProb[i];
-       c = 'g';
-       }
+	{
+	best = motif->gProb[i];
+	c = 'g';
+	}
     if (motif->tProb[i] > best)
-       {
-       best = motif->tProb[i];
-       c = 't';
-       }
+	{
+	best = motif->tProb[i];
+	c = 't';
+	}
     consensus[i] = c;
     }
 return consensus;
@@ -4286,7 +4286,7 @@ void printSpacedDna(char *dna, int size)
 int i;
 printf("  ");
 for (i=0; i<size; ++i)
-     printf(" %c   ", dna[i]);
+    printf(" %c   ", dna[i]);
 }
 
 void printConsensus(struct dnaMotif *motif)
@@ -4302,20 +4302,20 @@ for (i=0; i<size; ++i)
     c = 'a';
     best = motif->aProb[i];
     if (motif->cProb[i] > best)
-       {
-       best = motif->cProb[i];
-       c = 'c';
-       }
+	{
+	best = motif->cProb[i];
+	c = 'c';
+	}
     if (motif->gProb[i] > best)
-       {
-       best = motif->gProb[i];
-       c = 'g';
-       }
+	{
+	best = motif->gProb[i];
+	c = 'g';
+	}
     if (motif->tProb[i] > best)
-       {
-       best = motif->tProb[i];
-       c = 't';
-       }
+	{
+	best = motif->tProb[i];
+	c = 't';
+	}
     printf(" ");
     if (best >= 0.90)
 	printf("<B>%c</B>", toupper(c));
@@ -4364,7 +4364,7 @@ if (hit != NULL)
     int i;
     seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
     if (hit->strand[0] == '-')
-       reverseComplement(seq->dna, seq->size);
+	reverseComplement(seq->dna, seq->size);
     touppers(seq->dna);
     printSpacedDna(seq->dna, seq->size);
     printf("sequence here\n");
@@ -4458,16 +4458,16 @@ int prefixSize;
 
 e = strchr(name, '.');
 if (e == NULL)
-   return FALSE;
+    return FALSE;
 prefixSize = e - name;
 if (prefixSize > 3 || prefixSize == 0)
-   return FALSE;
+    return FALSE;
 s = e+1;
 if (!startsWith("ctg", s))
-   return FALSE;
+    return FALSE;
 e = strchr(name, '-');
 if (e == NULL)
-   return FALSE;
+    return FALSE;
 return TRUE;
 }
 
@@ -4483,7 +4483,7 @@ name = sqlQuickQuery(conn, query, buf, sizeof(buf));
 hFreeConn(&conn);
 if (name == NULL)
     errAbort("Database inconsistency: couldn't find gene name %s in knownInfo",
-    	hugoName);
+	     hugoName);
 return name;
 }
 
@@ -4741,7 +4741,7 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
 	{
 	s -= startOffset;
 	if (s < 0 ||  s + size > seq->size)
-	   errAbort("Out of range! %d-%d not in %d-%d", s, s+size, 0, size);
+	    errAbort("Out of range! %d-%d not in %d-%d", s, s+size, 0, size);
 	toUpperN(seq->dna + s, size);
 	}
     }
@@ -4796,9 +4796,9 @@ if (knownMoreExists)
     sprintf(query, "select * from knownMore where transId = '%s'", transName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-       {
-       km = knownMoreLoad(row);
-       }
+	{
+	km = knownMoreLoad(row);
+	}
     sqlFreeResult(&sr);
 
     hFreeConn(&conn);
@@ -4821,7 +4821,7 @@ if (km != NULL)
         {
 	printf("<B>LocusLink:</B> ");
 	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-		km->locusLinkId);
+	       km->locusLinkId);
 	printf("%d</A><BR>\n", km->locusLinkId);
 	}
     anyMore = TRUE;
@@ -4832,7 +4832,7 @@ if (geneName != NULL)
     printGeneLynxName(geneName);
     printf("<B>GeneCards:</B> ");
     printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-	    geneName);
+	   geneName);
     printf("%s</A><BR>\n", geneName);
     anyMore = TRUE;
     }
@@ -4842,24 +4842,24 @@ if (anyMore)
 
 geneShowCommon(transName, tdb, "genieKnownPep");
 puts(
-   "<P>Known genes are derived from the "
-   "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
-   "RefSeq</A> mRNA database supplemented by other mRNAs with annotated coding regions.  "
-   "These mRNAs were mapped to the draft "
-   "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
-   "Jim Kent's</A> PatSpace software, and further processed by "
-   "<A HREF = \"http://www.affymetrix.com\" TARGET=_blank>Affymetrix</A> to cope "
-   "with sequencing errors in the draft.</P>\n");
+     "<P>Known genes are derived from the "
+     "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
+     "RefSeq</A> mRNA database supplemented by other mRNAs with annotated coding regions.  "
+     "These mRNAs were mapped to the draft "
+     "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
+     "Jim Kent's</A> PatSpace software, and further processed by "
+     "<A HREF = \"http://www.affymetrix.com\" TARGET=_blank>Affymetrix</A> to cope "
+     "with sequencing errors in the draft.</P>\n");
 if (!upgraded)
     {
     puts(
-       "<P>The treatment of known genes in the browser is quite "
-       "preliminary.  We hope to provide links into OMIM and LocusLink "
-       "in the near future.</P>");
+	 "<P>The treatment of known genes in the browser is quite "
+	 "preliminary.  We hope to provide links into OMIM and LocusLink "
+	 "in the near future.</P>");
     }
 puts(
-   "<P>Additional information may be available by clicking on the "
-   "mRNA associated with this gene in the main browser window.</P>");
+     "<P>Additional information may be available by clicking on the "
+     "mRNA associated with this gene in the main browser window.</P>");
 }
 
 void doViralProt(struct trackDb *tdb, char *geneName)
@@ -4878,9 +4878,9 @@ struct psl *pslList = NULL;
 
 cartWebStart(cart, "Viral Gene");
 printf("<H2>Viral Gene %s</H2>\n", geneName);
-        printf("<A test HREF=");
-        printSwissProtProteinUrl(stdout, geneName);
-        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+printf("<A test HREF=");
+printSwissProtProteinUrl(stdout, geneName);
+printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
 
 pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
@@ -4904,9 +4904,9 @@ if (knownMoreExists)
     sprintf(query, "select * from knownMore where transId = '%s'", transName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-       {
-       km = knownMoreLoad(row);
-       }
+	{
+	km = knownMoreLoad(row);
+	}
     sqlFreeResult(&sr);
 
     hFreeConn(&conn);
@@ -4929,28 +4929,28 @@ if (km != NULL)
         {
 	printf("<B>LocusLink:</B> ");
 	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-		km->locusLinkId);
+	       km->locusLinkId);
 	printf("%d</A><BR>\n", km->locusLinkId);
 	}
     anyMore = TRUE;
     }
 /*
-if (geneName != NULL) 
-    {
-    medlineLinkedLine("Symbol", geneName, geneName);
-    printGeneLynxName(geneName);
-    printf("<B>GeneCards:</B> ");
-    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-	    geneName);
-    printf("%s</A><BR>\n", geneName);
-    anyMore = TRUE;
-    }
+  if (geneName != NULL) 
+  {
+  medlineLinkedLine("Symbol", geneName, geneName);
+  printGeneLynxName(geneName);
+  printf("<B>GeneCards:</B> ");
+  printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+  geneName);
+  printf("%s</A><BR>\n", geneName);
+  anyMore = TRUE;
+  }
 */
 if (anyMore)
     htmlHorizontalLine();
 
 /*
-geneShowCommon(transName, tdb, "genieKnownPep");
+  geneShowCommon(transName, tdb, "genieKnownPep");
 */
 }
 
@@ -5055,7 +5055,7 @@ if (pdbID != NULL)
 
 printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
 printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-	proteinID, proteinID);
+       proteinID, proteinID);
 
 // print more protein links if there are other proteins correspond to this mRNA
 sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
@@ -5063,13 +5063,13 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
-	{
-    	//spID  = row[0];
-	printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-		row[0], row[0]);
-	row = sqlNextRow(sr);
-	if (row != NULL) printf(", ");
-    	}
+    {
+    //spID  = row[0];
+    printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
+	   row[0], row[0]);
+    row = sqlNextRow(sr);
+    if (row != NULL) printf(", ");
+    }
 sqlFreeResult(&sr);
 printf("<BR>");
 
@@ -5088,171 +5088,171 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
-	{
-	printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
-	printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
-	printf(" target=_blank>");
-	printf(" %s</A>", row[0]);
-	row = sqlNextRow(sr);
-	if (row != NULL) printf(", ");
-    	}
+{
+printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
+printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
+printf(" target=_blank>");
+printf(" %s</A>", row[0]);
+row = sqlNextRow(sr);
+if (row != NULL) printf(", ");
+}
 sqlFreeResult(&sr);
 */
 
-printf("</UL>");
-fflush(stdout);
+    printf("</UL>");
+    fflush(stdout);
 
 // Display RefSeq related info, if there is a corresponding RefSeq
-sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if ((row == NULL) && (!dnaBased))
-    {
-    printf("<B>RefSeq:</B>"); 
-    printf(" No corresponding RefSeq entry found for %s.<br>\n", mrnaName);
-    fflush(stdout);
-    }
-else
-    {
-    if (dnaBased)
-        {
-        refSeqName = strdup(mrnaName);
-        }
-    else
-        {
-        refSeqName = strdup(row[0]);
-        }
-    sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
-
-    sqlFreeResult(&sr);
+    sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
     sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) == NULL) 
-    	{
-    	sqlFreeResult(&sr);
-    	printf("<B>RefSeq:</B>"); 
-    	printf(" A corresponding Reference Sequence ");
-    	printf("<A HREF=\"");
-    	printEntrezNucleotideUrl(stdout, refSeqName);
-    	printf("\" TARGET=_blank>%s</A>", refSeqName);
-	printf(" is not found in our database for "); 
-        freezeName = hFreezeFromDb(database);
-        if(freezeName == NULL) freezeName = "Unknown";
-    	printf("%s Freeze.<BR>\n",freezeName); 
+    row = sqlNextRow(sr);
+    if ((row == NULL) && (!dnaBased))
+	{
+	printf("<B>RefSeq:</B>"); 
+	printf(" No corresponding RefSeq entry found for %s.<br>\n", mrnaName);
 	fflush(stdout);
 	}
     else
 	{
-    	rl = refLinkLoad(row);
-    	sqlFreeResult(&sr);
-    
-    	htmlHorizontalLine();
-    	printf("<B>RefSeq:</B> <A HREF=\"");
-    	printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-    	printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
-
-    	/* If refSeqStatus is available, report it: */
-    	if (hTableExists("refSeqStatus"))
-     	    {
-     	    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
-	    	    refSeqName);
-    	    sr = sqlGetResult(conn, query);
-    	    if ((row = sqlNextRow(sr)) != NULL)
-		{
-		printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
-		}
-    	    sqlFreeResult(&sr);
-    	    }
-	printf("<BR>");
-
-    	printf("<B>Gene ID: %s<BR></B>\n", rl->name);
-    
-    	if (rl->omimId != 0)
-    	    {
-    	    printf("<B>OMIM:</B> <A HREF=\"");
-	    printEntrezOMIMUrl(stdout, rl->omimId);
-	    printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
-    	    }
-    	if (rl->locusLinkId != 0)
-   	    {
-    	    printf("<B>LocusLink:</B> ");
-    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?");
-	    printf("l=%d\" TARGET=_blank>", rl->locusLinkId);
-    	    printf("%d</A><BR>\n", rl->locusLinkId);
-    	    if ((strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
-	    	{
-	    	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
-	   	 	rl->locusLinkId);
-
-	    	sr = sqlGetResult(conn, query);
-	    	if ((row = sqlNextRow(sr)) != NULL)
-    		    {
-		    printf("<B>Mouse Genome Informatics:</B> ");
-		    mgiID = strdup(row[0]);
-		    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-		    printf("id=%s\">%s</A><BR>\n",mgiID, mgiID);
-		    }
-	    	else
-		    {
-		    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
-		    // with Locuslink on seq to gene association.
-		    // Thus, not finding a MGIid even if a LocusLink ID
-		    // exists is always a possibility.
-    		    }
-	    	sqlFreeResult(&sr);
- 	    	}
+	if (dnaBased)
+	    {
+	    refSeqName = strdup(mrnaName);
 	    }
-    	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-    	if (rl->product[0] != 0)
+	else
+	    {
+	    refSeqName = strdup(row[0]);
+	    }
+	sprintf(query, "select * from refLink where mrnaAcc = '%s'", refSeqName);
+
+	sqlFreeResult(&sr);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) == NULL) 
+	    {
+	    sqlFreeResult(&sr);
+	    printf("<B>RefSeq:</B>"); 
+	    printf(" A corresponding Reference Sequence ");
+	    printf("<A HREF=\"");
+	    printEntrezNucleotideUrl(stdout, refSeqName);
+	    printf("\" TARGET=_blank>%s</A>", refSeqName);
+	    printf(" is not found in our database for "); 
+	    freezeName = hFreezeFromDb(database);
+	    if(freezeName == NULL) freezeName = "Unknown";
+	    printf("%s Freeze.<BR>\n",freezeName); 
+	    fflush(stdout);
+	    }
+	else
+	    {
+	    rl = refLinkLoad(row);
+	    sqlFreeResult(&sr);
+    
+	    htmlHorizontalLine();
+	    printf("<B>RefSeq:</B> <A HREF=\"");
+	    printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
+	    printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+
+	    /* If refSeqStatus is available, report it: */
+	    if (hTableExists("refSeqStatus"))
+		{
+		sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+			refSeqName);
+		sr = sqlGetResult(conn, query);
+		if ((row = sqlNextRow(sr)) != NULL)
+		    {
+		    printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
+		    }
+		sqlFreeResult(&sr);
+		}
+	    printf("<BR>");
+
+	    printf("<B>Gene ID: %s<BR></B>\n", rl->name);
+    
+	    if (rl->omimId != 0)
+		{
+		printf("<B>OMIM:</B> <A HREF=\"");
+		printEntrezOMIMUrl(stdout, rl->omimId);
+		printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
+		}
+	    if (rl->locusLinkId != 0)
+		{
+		printf("<B>LocusLink:</B> ");
+		printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?");
+		printf("l=%d\" TARGET=_blank>", rl->locusLinkId);
+		printf("%d</A><BR>\n", rl->locusLinkId);
+		if ((strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
+		    {
+		    sprintf(query, "select MGIid from MGIid where LLid = '%d';",
+			    rl->locusLinkId);
+
+		    sr = sqlGetResult(conn, query);
+		    if ((row = sqlNextRow(sr)) != NULL)
+			{
+			printf("<B>Mouse Genome Informatics:</B> ");
+			mgiID = strdup(row[0]);
+			printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
+			printf("id=%s\">%s</A><BR>\n",mgiID, mgiID);
+			}
+		    else
+			{
+			// per Carol from Jackson Lab 4/12/02, JAX do not always agree
+			// with Locuslink on seq to gene association.
+			// Thus, not finding a MGIid even if a LocusLink ID
+			// exists is always a possibility.
+			}
+		    sqlFreeResult(&sr);
+		    }
+		}
+	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+	    if (rl->product[0] != 0)
     		medlineLinkedLine("PubMed on Product", rl->product, rl->product);
-    	printf("\n");
-    	printGeneLynxName(rl->name);
-    	printf("\n");
-    	printf("<B>GeneCards:</B> ");
-    	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?");
-	printf("search=%s\" TARGET=_blank>", rl->name);
-    	printf("%s</A><BR>\n", rl->name);
-    	if (hTableExists("jaxOrtholog"))
-    	    {
-    	    struct jaxOrtholog jo;
-    	    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
-    	    sr = sqlGetResult(conn, query);
-    	    while ((row = sqlNextRow(sr)) != NULL)
-             	{
-	    	jaxOrthologStaticLoad(row, &jo);
-	    	printf("<B>MGI Mouse Ortholog:</B> ");
-	    	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-		printf("id=%s\" target=_BLANK>", jo.mgiId);
-	    	printf("%s</A><BR>\n", jo.mouseSymbol);
-	    	}
-    	    sqlFreeResult(&sr);
-    	    }
+	    printf("\n");
+	    printGeneLynxName(rl->name);
+	    printf("\n");
+	    printf("<B>GeneCards:</B> ");
+	    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?");
+	    printf("search=%s\" TARGET=_blank>", rl->name);
+	    printf("%s</A><BR>\n", rl->name);
+	    if (hTableExists("jaxOrtholog"))
+		{
+		struct jaxOrtholog jo;
+		sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
+		sr = sqlGetResult(conn, query);
+		while ((row = sqlNextRow(sr)) != NULL)
+		    {
+		    jaxOrthologStaticLoad(row, &jo);
+		    printf("<B>MGI Mouse Ortholog:</B> ");
+		    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
+		    printf("id=%s\" target=_BLANK>", jo.mgiId);
+		    printf("%s</A><BR>\n", jo.mouseSymbol);
+		    }
+		sqlFreeResult(&sr);
+		}
 
-    	if (startsWith("hg", hGetDb()))
-    	    {
-    	    printf("\n");
-    	    printf("<B>AceView:</B> ");
-    	    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?");
-	    printf("db=human&l=%s\" TARGET=_blank>", rl->name);
-    	    printf("%s</A><BR>\n", rl->name);
-    	    }
-    	printStanSource(rl->mrnaAcc, "mrna");
-    	}
+	    if (startsWith("hg", hGetDb()))
+		{
+		printf("\n");
+		printf("<B>AceView:</B> ");
+		printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?");
+		printf("db=human&l=%s\" TARGET=_blank>", rl->name);
+		printf("%s</A><BR>\n", rl->name);
+		}
+	    printStanSource(rl->mrnaAcc, "mrna");
+	    }
 
-    htmlHorizontalLine();
-    if (dnaBased)
-        {
-        geneShowPosAndLinksDNARefseq(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
-                        "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
-        }
-    else
-        {
-        geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
-                        "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
-        }
-    }
+	htmlHorizontalLine();
+	if (dnaBased)
+	    {
+	    geneShowPosAndLinksDNARefseq(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+					 "htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+	    }
+	else
+	    {
+	    geneShowPosAndLinks(mrnaName, mrnaName, tdb, "knownGenePep", "htcTranslatedProtein",
+				"htcKnownGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+	    }
+	}
 
-printTrackHtml(tdb);
-hFreeConn(&conn);
+    printTrackHtml(tdb);
+    hFreeConn(&conn);
 }
 
 void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
@@ -5274,15 +5274,15 @@ if (url != NULL && url[0] != 0)
 
     organism = hOrganism(database);
     if (sameWord(organism, "human"))
-    {
+	{
         strcpy(genomeStrEnsembl, "Homo_sapiens");
-    }
+	}
     else
-    {
+	{
         if (sameWord(organism, "mouse"))
-        {
-        strcpy(genomeStrEnsembl, "Mus_musculus");
-        }
+	    {
+	    strcpy(genomeStrEnsembl, "Mus_musculus");
+	    }
         else
             {
             if (sameWord(organism, "rat"))
@@ -5295,12 +5295,12 @@ if (url != NULL && url[0] != 0)
                 return;
                 }
             }
-    }
+	}
         
 
     printf("<B>Ensembl Gene Link: </B>");
     printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" target=_blank>", 
-       genomeStrEnsembl,itemName);
+	   genomeStrEnsembl,itemName);
     printf("%s</A><br>", itemName);
 
     if (hTableExists("superfamily"))
@@ -5312,7 +5312,7 @@ if (url != NULL && url[0] != 0)
 	    { 
             printf("<B>Ensembl Protein: </B>");
             printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-           	    genomeStrEnsembl,proteinID);
+		   genomeStrEnsembl,proteinID);
             printf("%s</A><BR>\n", proteinID);
 	    }
 
@@ -5352,13 +5352,13 @@ void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Ensembl Gene track info. */
 {
 char *dupe, *type, *words[16];
- char title[256];
+char title[256];
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
 if (itemForUrl == NULL)
-   itemForUrl = item;
+    itemForUrl = item;
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
@@ -5425,14 +5425,14 @@ if (url != NULL && url[0] != 0)
     else
 	{
     	if (sameWord(organism, "mouse"))
-		{
-		strcpy(genomeStr, "mm");
-		}
+	    {
+	    strcpy(genomeStr, "mm");
+	    }
 	else
-		{
-		printf("<br>Organism %s not found!!!", organism); fflush(stdout);
-		return;
-		}
+	    {
+	    printf("<br>Organism %s not found!!!", organism); fflush(stdout);
+	    return;
+	    }
 	}
 
     printf("<B>Superfamily Link: </B>");
@@ -5454,7 +5454,7 @@ int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
 if (itemForUrl == NULL)
-   itemForUrl = item;
+    itemForUrl = item;
 
 genericHeader(tdb, item);
 
@@ -5520,29 +5520,29 @@ if (rl->locusLinkId != 0)
     {
     printf("<B>LocusLink:</B> ");
     printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
-	    rl->locusLinkId);
+	   rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
 
     if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
     	{
 	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
-	rl->locusLinkId);
+		rl->locusLinkId);
 
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
-    		{
-		printf("<B>Mouse Genome Informatics:</B> ");
-		mgiID = strdup(row[0]);
+	    {
+	    printf("<B>Mouse Genome Informatics:</B> ");
+	    mgiID = strdup(row[0]);
 		
-		printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</A><BR>\n",mgiID, mgiID);
-		}
+	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</A><BR>\n",mgiID, mgiID);
+	    }
 	else
-		{
-		// per Carol from Jackson Lab 4/12/02, JAX do not always agree
-		// with Locuslink on seq to gene association.
-		// Thus, not finding a MGIid even if a LocusLink ID
-		// exists is always a possibility.
-    		}
+	    {
+	    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
+	    // with Locuslink on seq to gene association.
+	    // Thus, not finding a MGIid even if a LocusLink ID
+	    // exists is always a possibility.
+	    }
 	sqlFreeResult(&sr);
 	}
     } 
@@ -5554,7 +5554,7 @@ printGeneLynxName(rl->name);
 printf("\n");
 printf("<B>GeneCards:</B> ");
 printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-	rl->name);
+       rl->name);
 printf("%s</A><BR>\n", rl->name);
 if (hTableExists("jaxOrtholog"))
     {
@@ -5592,7 +5592,7 @@ htmlHorizontalLine();
 /* older databases have peptide sequence in a table, newer have in ext file */
 pepTbl = sqlTableExists(conn, "refPep") ? "refPep" : "seq";
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, pepTbl, "htcTranslatedProtein",
-	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -5709,16 +5709,16 @@ if (sqlTableExists(conn, table))
 	    isFirst = FALSE;
 	    gotAny = TRUE;
 	    }
-    clone = cloneStringZ(hom.protRef,80);
-    partCount = chopString(hom.protRef, "_", parts, ArraySize(parts));
-    if (partCount > 1)
-        {
-        printf("<A HREF=");
-        sprintf(query, "%s", parts[1]);
-        printSwissProtProteinUrl(stdout, query);
-        printf(" TARGET=_blank>Jump to SwissProt %s </A> " ,geneName);
-        }
-    printf(" %s <BR><BR>Alignment Information:<BR><BR>%s<BR>", clone, hom.description);
+	clone = cloneStringZ(hom.protRef,80);
+	partCount = chopString(hom.protRef, "_", parts, ArraySize(parts));
+	if (partCount > 1)
+	    {
+	    printf("<A HREF=");
+	    sprintf(query, "%s", parts[1]);
+	    printSwissProtProteinUrl(stdout, query);
+	    printf(" TARGET=_blank>Jump to SwissProt %s </A> " ,geneName);
+	    }
+	printf(" %s <BR><BR>Alignment Information:<BR><BR>%s<BR>", clone, hom.description);
 	}
     }
 if (gotAny)
@@ -5905,7 +5905,7 @@ char *s, *e;
 int len;
 e = strchr(pos, ':');
 if (e == NULL)
-   errAbort("No : in chromosome point position %s", pos);
+    errAbort("No : in chromosome point position %s", pos);
 len = e - pos;
 memcpy(retChrom, pos, len);
 retChrom[len] = 0;
@@ -5934,16 +5934,16 @@ if (cgiVarExists("o"))
     parseChromPointPos(dupName, oChrom, &oStart);
 
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
-		   "and otherChrom = '%s' and otherStart = %d",
-		   track, seqName, start, oChrom, oStart);
+	    "and otherChrom = '%s' and otherStart = %d",
+	    track, seqName, start, oChrom, oStart);
     sr = sqlGetResult(conn, query);
     while (row = sqlNextRow(sr))
 	{
 	genomicDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>First Position:</B> %s:%d-%d<BR>\n",
-	   dup.chrom, dup.chromStart, dup.chromEnd);
+	       dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("<B>Second Position:</B> %s:%d-%d<BR>\n",
-	   dup.otherChrom, dup.otherStart, dup.otherEnd);
+	       dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("<B>Relative orientation:</B> %s<BR>\n", dup.strand);
 	printf("<B>Percent identity:</B> %3.1f%%<BR>\n", 0.1*dup.score);
 	printf("<B>Size:</B> %d<BR>\n", dup.alignB);
@@ -5992,7 +5992,7 @@ if (tiNum != NULL)
     ++tiNum;
 cartWebStart(cart, itemName);
 printf("<H1>Information on Mouse %s %s</H1>", 
-	(tiNum == NULL ? "Contig" : "Read"), itemName);
+       (tiNum == NULL ? "Contig" : "Read"), itemName);
 
 /* Print links to NCBI and to sequence. */
 if (tiNum != NULL)
@@ -6003,7 +6003,7 @@ if (tiNum != NULL)
     }
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Mouse DNA</A><BR>\n");
 
 /* Print info about mate pair. */
@@ -6025,7 +6025,7 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 	        {
 		printf("Get ");
 		printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-		      hgcPathAndSettings(), seqName, winStart, winEnd, ti);
+		       hgcPathAndSettings(), seqName, winStart, winEnd, ti);
 		printf("DNA for read on other end of plasmid</A><BR>\n");
 		gotMate = TRUE;
 		}
@@ -6076,7 +6076,7 @@ void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd)
 /* Parse seq:start-end or die. */
 {
 if (!parseRange(range, retSeq, retStart, retEnd))
-     errAbort("Malformed range %s", range);
+    errAbort("Malformed range %s", range);
 }
 
 struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tName, int tStart, int tEnd)
@@ -6125,7 +6125,7 @@ return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
 }
 
 void longXenoPsl1Given(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable, char *otherDb, struct psl *psl, char *pslTableName )
+		       char *otherOrg, char *otherChromTable, char *otherDb, struct psl *psl, char *pslTableName )
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file, AND psl record is given. */
 {
@@ -6138,9 +6138,9 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 
 
-   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-        otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
-            psl->qName, psl->qStart+1, psl->qEnd);
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
+       psl->qName, psl->qStart+1, psl->qEnd);
 
 /*superceded by above code*/
 //    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
@@ -6150,7 +6150,7 @@ cartWebStart(cart, tdb->longLabel);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-   psl->tName, psl->tStart+1, psl->tEnd);
+       psl->tName, psl->tStart+1, psl->tEnd);
 
 
 printf("<B>%s size:</B> %d<BR>\n", thisOrg, psl->tEnd - psl->tStart);
@@ -6172,10 +6172,10 @@ freez(&cgiItem);
 }
 
 /* 
- Multipurpose function to show alignments in details pages where applicable
- */
+   Multipurpose function to show alignments in details pages where applicable
+*/
 void longXenoPsl1(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable, char *otherDb)
+		  char *otherOrg, char *otherChromTable, char *otherDb)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
@@ -6187,12 +6187,12 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart+1, psl->qEnd);
+       psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart+1, psl->tEnd);
+       psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
-	psl->tEnd - psl->tStart);
+       psl->tEnd - psl->tStart);
 printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
@@ -6218,12 +6218,12 @@ freez(&cgiItem);
 }
 
 /* 
- Multipurpose function to show alignments in details pages where applicable
-Show the URL from trackDb as well. 
-Only used for the Chimp tracks right now.
- */
+   Multipurpose function to show alignments in details pages where applicable
+   Show the URL from trackDb as well. 
+   Only used for the Chimp tracks right now.
+*/
 void longXenoPsl1Chimp(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable, char *otherDb)
+		       char *otherOrg, char *otherChromTable, char *otherDb)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
@@ -6235,12 +6235,12 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart+1, psl->qEnd);
+       psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart+1, psl->tEnd);
+       psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
-	psl->tEnd - psl->tStart);
+       psl->tEnd - psl->tStart);
 printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
@@ -6256,7 +6256,7 @@ freez(&cgiItem);
 }
 
 void longXenoPsl1zoo2(struct trackDb *tdb, char *item, 
-	char *otherOrg, char *otherChromTable)
+		      char *otherOrg, char *otherChromTable)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
@@ -6269,12 +6269,12 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart+1, psl->qEnd);
+       psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart+1, psl->tEnd);
+       psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
-	psl->tEnd - psl->tStart);
+       psl->tEnd - psl->tStart);
 printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Strand:</B> %s<BR>\n",psl->strand);
@@ -6502,7 +6502,7 @@ printf("<H1>Information on Fish Sequence %s</H1>", itemName);
 
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Fish DNA</A><BR>\n");
 
 /* Get alignment info and print. */
@@ -6539,7 +6539,7 @@ cartWebStart(cart, itemName);
 printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Sequence</A><BR>\n");
 
 /* Get alignment info and print. */
@@ -6574,7 +6574,7 @@ printf("<H2>EST 3' Ends</H2>\n");
 
 rowOffset = hOffsetPastBin(seqName, "est3");
 sprintf(query, "select * from est3 where chrom = '%s' and chromStart = %d",
-    seqName, start);
+	seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6608,7 +6608,7 @@ int rowOffset;
 genericHeader(tdb, itemName);
 rowOffset = hOffsetPastBin(seqName, track);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-    track, seqName, start, itemName);
+	track, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6662,10 +6662,10 @@ sprintf(title, "STS Marker %s", marker);
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        table, sqlMarker, seqName, start, end);  
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	table, sqlMarker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -6800,11 +6800,11 @@ if (row != NULL)
 		       infoRow->marshfieldPos);
 		}
 	    if ((stsInfo2Exists) && (!sameString(info2Row->decodeName,"")))
-	    {
-	    printf("<TH ALIGN=left>deCODE:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-		   info2Row->decodeName, info2Row->decodeChr,
-		   info2Row->decodePos);
-	    }
+		{
+		printf("<TH ALIGN=left>deCODE:</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
+		       info2Row->decodeName, info2Row->decodeChr,
+		       info2Row->decodePos);
+		}
 	    printf("</TABLE><P>\n");
 	    }
 	if (!sameString(infoRow->wiyacName,"")) 
@@ -6958,8 +6958,8 @@ if (row != NULL)
 	    sqlFreeResult(&sr);
 	    printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
 	    printf("<TABLE>\n");
-	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+                           "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
 		    table, marker, seqName, start, end); 
 	    sr = sqlGetResult(conn,query);
 	    while ((row = sqlNextRow(sr)) != NULL)
@@ -7015,10 +7015,10 @@ sprintf(title, "STS Marker %s", marker);
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        table, marker, seqName, start, end);  
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	table, marker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -7090,31 +7090,31 @@ if (row != NULL)
 	slFreeList(&pslList);
 	stsInfoMouseFree(&infoRow);
 	}
-	htmlHorizontalLine();
+    htmlHorizontalLine();
 
-	if (stsRow.score == 1000)
+    if (stsRow.score == 1000)
+	{
+	printf("<H3>This is the only location found for %s</H3>\n",marker);
+	}
+    else
+	{
+	sqlFreeResult(&sr);
+	printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+	printf("<TABLE>\n");
+	sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+                       "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+		table, marker, seqName, start, end); 
+	sr = sqlGetResult(conn,query);
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    printf("<H3>This is the only location found for %s</H3>\n",marker);
-            }
-        else
-	    {
-	    sqlFreeResult(&sr);
-            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
-            printf("<TABLE>\n");
-	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
-	            table, marker, seqName, start, end); 
-            sr = sqlGetResult(conn,query);
-            while ((row = sqlNextRow(sr)) != NULL)
-		{
-		stsMapMouseStaticLoad(row, &stsRow);
+	    stsMapMouseStaticLoad(row, &stsRow);
 		
 		
-		printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapMouse&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
-		}
-	    printf("</TABLE>\n");
 	    }
+	printf("</TABLE>\n");
+	}
     }
 webNewSection("Notes:");
 puts(tdb->html);
@@ -7154,10 +7154,10 @@ sprintf(title, "STS Marker %s", marker);
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        table, marker, seqName, start, end);
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	table, marker, seqName, start, end);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -7202,27 +7202,27 @@ if (row != NULL)
 	htmlHorizontalLine();
 	/* Print out information from genetic maps for this marker */
 	if(strcmp(infoRow->fhhName, "") || strcmp(infoRow->shrspName, "") || strcmp(infoRow->rhName, ""))
-	  {
+	    {
 	    printf("<H3>Map Position</H3>\n");  
 	    printf("<TABLE>\n");
-	  }
+	    }
 	if(strcmp(infoRow->fhhName, ""))
 	    {
 	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
 	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->fhhName, infoRow->fhhChr, infoRow->fhhGeneticPos); 
+		   infoRow->fhhName, infoRow->fhhChr, infoRow->fhhGeneticPos); 
 	    }
 	if(strcmp(infoRow->shrspName, ""))
 	    {
 	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH></TR>\n");
 	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->shrspName, infoRow->shrspChr, infoRow->shrspGeneticPos); 
+		   infoRow->shrspName, infoRow->shrspChr, infoRow->shrspGeneticPos); 
 	    }
 	if(strcmp(infoRow->rhName, ""))
 	    {
 	    printf("<TR><TH>&nbsp</TH><TH ALIGN=left WIDTH=150>Name</TH><TH ALIGN=left WIDTH=150>Chromosome</TH><TH ALIGN=left WIDTH=150>Position</TH><TH ALIGN=left WIDTH=150>Score</TH?</TR>\n");
 	    printf("<TR><TH ALIGN=left>&nbsp</TH><TD WIDTH=150>%s</TD><TD WIDTH=150>%s</TD><TD WIDTH=150>%.2f</TD><TD WIDTH=150>%.2f</TD></TR>\n",
-	       infoRow->rhName, infoRow->rhChr, infoRow->rhGeneticPos, infoRow->RHLOD); 
+		   infoRow->rhName, infoRow->rhChr, infoRow->rhGeneticPos, infoRow->RHLOD); 
 	    }
 	printf("</TABLE><P>\n");
 
@@ -7238,24 +7238,24 @@ if (row != NULL)
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL )
-	  {  
+	    {  
 	    psl = pslLoad(row);
 	    fflush(stdout);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
-	      {
+		{
 		pslStart = psl->tStart;
-	      }
+		}
 	    slAddHead(&pslList, psl);
 	    i++;
-	  }
+	    }
 	slReverse(&pslList);
 	if (i > 0) 
-	  {
+	    {
 	    printf("<H3>Primers:</H3>\n");
 	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsPrimer);
 	    sqlFreeResult(&sr1);
-	  }
+	    }
 	slFreeList(&pslList);
 	stsInfoRatFree(&infoRow);
        
@@ -7265,51 +7265,51 @@ if (row != NULL)
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr2)) != NULL )
-	  {  
+	    {  
 	    psl = pslLoad(row);
 	    fflush(stdout);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
-	      {
+		{
 		pslStart = psl->tStart;
-	      }
+		}
 	    slAddHead(&pslList, psl);
 	    i++;
-	  }
+	    }
 	slReverse(&pslList);
 	if (i > 0) 
-	  {
+	    {
 	    printf("<H3>Clone:</H3>\n");
 	    printAlignments(pslList, pslStart, "htcCdnaAli", "all_sts_primer", stsClone);
 	    sqlFreeResult(&sr1);
-	  }
+	    }
 	slFreeList(&pslList);
 	stsInfoRatFree(&infoRow);
 	}
 
-	htmlHorizontalLine();
+    htmlHorizontalLine();
 
-	if (stsRow.score == 1000)
+    if (stsRow.score == 1000)
+	{
+	printf("<H3>This is the only location found for %s</H3>\n",marker);
+	}
+    else
+	{
+	sqlFreeResult(&sr);
+	printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
+	printf("<TABLE>\n");
+	sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+                       "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+		table, marker, seqName, start, end); 
+	sr = sqlGetResult(conn,query);
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    printf("<H3>This is the only location found for %s</H3>\n",marker);
-            }
-        else
-	    {
-	    sqlFreeResult(&sr);
-            printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
-            printf("<TABLE>\n");
-	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
-	            table, marker, seqName, start, end); 
-            sr = sqlGetResult(conn,query);
-            while ((row = sqlNextRow(sr)) != NULL)
-		{
-		stsMapRatStaticLoad(row, &stsRow);
-		printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
-		       stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
-		}
-	    printf("</TABLE>\n");
+	    stsMapRatStaticLoad(row, &stsRow);
+	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
+		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
+	printf("</TABLE>\n");
+	}
     }
 webNewSection("Notes:");
 puts(tdb->html);
@@ -7340,10 +7340,10 @@ cartWebStart(cart, clone);
 
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM fishClones WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        clone, seqName, start, end);  
+sprintf(query, "SELECT * FROM fishClones WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+                "ND chromEnd = %d",
+	clone, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -7457,10 +7457,10 @@ cartWebStart(cart, "Recombination Rates");
 
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM recombRate WHERE 
-                chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        seqName, start, end);  
+sprintf(query, "SELECT * FROM recombRate WHERE "
+               "chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -7520,10 +7520,10 @@ int i,size;
 cartWebStart(cart, "GenMapDB BAC Clones");
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM genMapDb WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        clone, seqName, start, end);  
+sprintf(query, "SELECT * FROM genMapDb WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	clone, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -7614,7 +7614,7 @@ cartWebStart(cart, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-    track, seqName, start);
+	track, seqName, start);
 rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7648,7 +7648,7 @@ cartWebStart(cart, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-    track, seqName, start);
+	track, seqName, start);
 rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7682,7 +7682,7 @@ cartWebStart(cart, "Mouse Synteny (Whitehead)");
 printf("<H2>Mouse Synteny (Whitehead)</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-    track, seqName, start);
+	track, seqName, start);
 rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7724,7 +7724,7 @@ cartWebStart(cart, "%s", tdb->longLabel);
 printf("<H2>%s</H2>\n", tdb->longLabel);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
-    track, seqName, start);
+	track, seqName, start);
 rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7765,8 +7765,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	}
     printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	  "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	  el.chromStart, el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
+	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   el.chromStart, el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
     freez(&elname);
     }
 printTrackHtml(tdb);
@@ -7805,13 +7805,12 @@ if (snp!=NULL)
 	printf("<B>Average Heterozygosity:</B> Not Known<BR>\n");
 	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
 	}
-    printf("<B>Validation Status:</B> %s<BR>\n",snp->valid);
-    printf("<B>Allele1:          </B> %s<BR>\n",snp->allele1);
-    printf("<B>Allele2:          </B> %s<BR>\n",snp->allele2);
-    printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
-    printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
+    printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",snp->valid);
+    printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->allele1);
+    printf("<B>Allele2:          </B> <font face=\"Courier\">%s<BR>\n",snp->allele2);
+    printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
+    printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-/* else printf("Could not find detail record for rsID %s<BR>\n",name); */
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -7820,6 +7819,7 @@ void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
 char *group = tdb->tableName;
+char *ncbiName = itemName;
 struct snp snp;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -7828,11 +7828,12 @@ char **row;
 char query[256];
 int rowOffset;
 
+ncbiName += 2;
 cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) rs%s</H2>\n", itemName);
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-    group, seqName, start, itemName);
+	group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7840,11 +7841,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     snpStaticLoad(row+rowOffset, &snp);
     bedPrintPos((struct bed *)&snp, 3);
     }
-doDbSnpRS(itemName);
-printf(
-  "<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" TARGET=_blank>", 
-  snp.name);
-printf("dbSNP link</A></P>\n");
+doDbSnpRS(ncbiName);
+/************************/
+
+printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s", 
+       snp.name);
+printf("\" TARGET=_blank>dbSNP link</A></P>\n");
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -7858,14 +7860,14 @@ char *id = strchr(animal, '_');
 char buf[128];
 
 if (id == NULL)
-   {
-   animal = "human";
-   id = item;
-   }
+    {
+    animal = "human";
+    id = item;
+    }
 else
-   *id++ = 0;
+    *id++ = 0;
 if (sameString(animal, "cow"))
-   animal = "cattle";
+    animal = "cattle";
 sprintf(buf, "species=%s&tc=%s ", animal, id);
 genericClickHandler(tdb, item, buf);
 }
@@ -7918,17 +7920,17 @@ struct lfs *lfs;
 
 printf("<H4>Other locations found for %s in the genome:</H4>\n", clone);
 printf("<TABLE>\n");
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND (chrom != '%s'
-                OR chromStart != %d OR chromEnd != %d)",
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+               "AND (chrom != '%s' "
+               "OR chromStart != %d OR chromEnd != %d)",
 	table, clone, seqName, start, end); 
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-      lfs = lfsLoad(row+1);
-      printf("<TR><TD>%s:</TD><TD>%d</TD><TD>-</TD><TD>%d</TD></TR>\n",
-	     lfs->chrom, lfs->chromStart, lfs->chromEnd);
-      lfsFree(&lfs);
+    lfs = lfsLoad(row+1);
+    printf("<TR><TD>%s:</TD><TD>%d</TD><TD>-</TD><TD>%d</TD></TR>\n",
+	   lfs->chrom, lfs->chromStart, lfs->chromEnd);
+    lfsFree(&lfs);
     }
 printf("</TABLE>\n"); 
 sqlFreeResult(&sr);
@@ -7996,10 +7998,10 @@ if (sameString("fosEndPairsLong", track))
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
-	        table, clone, seqName, start, end);  
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+               "AND chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	table, clone, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -8098,39 +8100,39 @@ char **row;
 struct cgh *cghRow;
 
 if (tissue)
-     {
-     sprintf(query, "type = %d AND tissue = '%s' ORDER BY name, chromStart", type, tissue);
-     }
+    {
+    sprintf(query, "type = %d AND tissue = '%s' ORDER BY name, chromStart", type, tissue);
+    }
 else 
-     {
-     sprintf(query, "type = %d ORDER BY name, chromStart", type);
-     }
+    {
+    sprintf(query, "type = %d ORDER BY name, chromStart", type);
+    }
      
 sr = hRangeQuery(conn, "cgh", seqName, winStart, winEnd, query, &rowOffset);
 while (row = sqlNextRow(sr)) 
-     {
-     cghRow = cghLoad(row);
-     if (strcmp(currName,cghRow->name))
-         {
-	 if (bold) 
-	      {    
-	      printf("</TR>\n<TR>\n<TH>%s</TH>\n",cghRow->name);
-              } 
-         else
-	      {    
-	      printf("</TR>\n<TR>\n<TD>%s</TD>\n",cghRow->name);
-              } 
-      	 strcpy(currName,cghRow->name);
-	 }
-     if (bold)
-          {
-          printf("<TH ALIGN=right>%.6f</TH>\n",cghRow->score);
-	  }
-     else
-          {
-          printf("<TD ALIGN=right>%.6f</TD>\n",cghRow->score);
-	  }
-     }
+    {
+    cghRow = cghLoad(row);
+    if (strcmp(currName,cghRow->name))
+	{
+	if (bold) 
+	    {    
+	    printf("</TR>\n<TR>\n<TH>%s</TH>\n",cghRow->name);
+	    } 
+	else
+	    {    
+	    printf("</TR>\n<TR>\n<TD>%s</TD>\n",cghRow->name);
+	    } 
+	strcpy(currName,cghRow->name);
+	}
+    if (bold)
+	{
+	printf("<TH ALIGN=right>%.6f</TH>\n",cghRow->score);
+	}
+    else
+	{
+	printf("<TD ALIGN=right>%.6f</TD>\n",cghRow->score);
+	}
+    }
 sqlFreeResult(&sr);
 }
 
@@ -8162,14 +8164,14 @@ if (cgiVarExists("o"))
 
 
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
-		   track, seqName, start ,dupName);
+	    track, seqName, start ,dupName);
     sr = sqlGetResult(conn, query);
     while (row = sqlNextRow(sr))
 	{
 	celeraDupPositiveStaticLoad(row+rowOffset, &dup);
 	printf("<B>Duplication Name:</B> %s<BR>\n",dup.name);
 	printf("<B>Position:</B> %s:%d-%d<BR>\n",
-	dup.chrom, dup.chromStart, dup.chromEnd);
+	       dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("<B>Full Descriptive Name:</B> %s<BR>\n", dup.fullName);
 
 	printf("<B>Fraction BP Match:</B> %3.4f<BR>\n", dup.fracMatch);
@@ -8225,7 +8227,7 @@ int idLen;
 int chrLen;
 periodPlaceHolder = strchr(pos, '.');
 if (periodPlaceHolder == NULL)
-   errAbort("No . in chromosome point position %s", pos);
+    errAbort("No . in chromosome point position %s", pos);
 idLen = periodPlaceHolder - pos;
 idStr=malloc(idLen+1);
 memcpy(idStr, pos, idLen);
@@ -8239,7 +8241,7 @@ chromStr=periodPlaceHolder+1;
 
 colonPlaceHolder=strchr(pos,':');
 if (colonPlaceHolder == NULL)
-   errAbort("No : in chromosome point position %s", pos);
+    errAbort("No : in chromosome point position %s", pos);
 chrLen=colonPlaceHolder-chromStr;
 
 
@@ -8281,25 +8283,25 @@ if (cgiVarExists("o"))
 
 
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
-		   "and uid = %d and otherStart = %d",
-		   track, seqName, start, dupId, oStart);
-      sr = sqlGetResult(conn, query);
+	    "and uid = %d and otherStart = %d",
+	    track, seqName, start, dupId, oStart);
+    sr = sqlGetResult(conn, query);
     while (row = sqlNextRow(sr))
 	{
 
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
-	   dup.chrom, dup.chromStart+1, dup.chromEnd);
+	       dup.chrom, dup.chromStart+1, dup.chromEnd);
 	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
-			  "View DNA for this feature</A><BR>\n",
+	       "View DNA for this feature</A><BR>\n",
 	       hgcPathAndSettings(), dup.chromStart, dup.chromEnd,
 	       dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
 
 
 	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
-	   dup.otherChrom, dup.otherStart+1, dup.otherEnd);
+	       dup.otherChrom, dup.otherStart+1, dup.otherEnd);
 	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
-				  "View DNA for this feature</A><BR>\n",
+	       "View DNA for this feature</A><BR>\n",
 	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd,
 	       dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand,
 	       database, tbl);
@@ -8366,13 +8368,13 @@ printf("<P><HR ALIGN=\"CENTER\"></P>\n");
 /* Find the names of all of the clones in this range */
 printf("<TABLE>\n");
 printf("<TR><TH>Cell Line</TH>");
-sprintf(query, "SELECT spot from cgh where chrom = '%s' AND
-                chromStart <= '%d' AND chromEnd >= '%d' AND
-                tissue = '%s' AND type = 3 GROUP BY spot ORDER BY chromStart",
-	        seqName, winEnd, winStart, tissue);
+sprintf(query, "SELECT spot from cgh where chrom = '%s' AND "
+               "chromStart <= '%d' AND chromEnd >= '%d' AND "
+               "tissue = '%s' AND type = 3 GROUP BY spot ORDER BY chromStart",
+	seqName, winEnd, winStart, tissue);
 sr = sqlMustGetResult(conn, query);
 while (row = sqlNextRow(sr)) {
-  printf("<TH>Spot %s</TH>",row[0]);
+printf("<TH>Spot %s</TH>",row[0]);
 }  
 printf("</TR>\n");
 sqlFreeResult(&sr);
@@ -8415,7 +8417,7 @@ cartWebStart(cart, title);
 
 /* Print general range info */
 /*printf("<H2>MCN Breakpoints - %s</H2>\n", name);
-printf("<P><HR ALIGN=\"CENTER\"></P>");*/
+  printf("<P><HR ALIGN=\"CENTER\"></P>");*/
 printf("<TABLE>\n");
 printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
 printf("<TR><TH ALIGN=left>Begin in Chromosome:</TH><TD>%d</TD></TR>\n",start);
@@ -8426,21 +8428,21 @@ if (hChromBand(seqName, start, startBand) && hChromBand(seqName, end - 1, endBan
 printf("</TABLE>\n");
 
 /* Find all of the breakpoints in this range for this name*/
-sprintf(query, "SELECT * FROM mcnBreakpoints WHERE chrom = '%s' AND
-                chromStart = %d and chromEnd = %d AND name = '%s'",
-                seqName, start, end, name);
+sprintf(query, "SELECT * FROM mcnBreakpoints WHERE chrom = '%s' AND "
+               "chromStart = %d and chromEnd = %d AND name = '%s'",
+	seqName, start, end, name);
 sr = sqlGetResult(conn, query);
 while (row = sqlNextRow(sr)) 
-     {
-     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-     mcnRecord = mcnBreakpointsLoad(row);
-     printf("<TABLE>\n");
-     printf("<TR><TH ALIGN=left>Case ID:</TH><TD>%s</TD></TR>", mcnRecord->caseId);
-     printf("<TR><TH ALIGN=left>Breakpoint ID:</TH><TD>%s</TD></TR>", mcnRecord->bpId);
-     printf("<TR><TH ALIGN=left>Trait:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->trId, mcnRecord->trTxt);
-     printf("<TR><TH ALIGN=left>Trait Group:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->tgId, mcnRecord->tgTxt);
-     printf("</TR>\n</TABLE>\n");
-     }  
+    {
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+    mcnRecord = mcnBreakpointsLoad(row);
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Case ID:</TH><TD>%s</TD></TR>", mcnRecord->caseId);
+    printf("<TR><TH ALIGN=left>Breakpoint ID:</TH><TD>%s</TD></TR>", mcnRecord->bpId);
+    printf("<TR><TH ALIGN=left>Trait:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->trId, mcnRecord->trTxt);
+    printf("<TR><TH ALIGN=left>Trait Group:</TH><TD>%s</TD><TD>%s</TD></TR>", mcnRecord->tgId, mcnRecord->tgTxt);
+    printf("</TR>\n</TABLE>\n");
+    }  
 sqlFreeResult(&sr);
 hgFreeConn(&conn);
 } 
@@ -8449,13 +8451,13 @@ void doMgcMrna(char *track, char *acc)
 /* Redirects to genbank record */
 {
 
-  printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
-  printf("location.replace('");
-  printEntrezNucleotideUrl(stdout, acc);
-  puts("');"); 
-  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
-  printEntrezNucleotideUrl(stdout, acc);
-  puts("\">continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
+printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+printf("location.replace('");
+printEntrezNucleotideUrl(stdout, acc);
+puts("');"); 
+printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
+printEntrezNucleotideUrl(stdout, acc);
+puts("\">continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -8538,23 +8540,23 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* determine number of SNPs required from score */ 
     switch(bed->score)
-    {
-    case 1000:
-	numSnpsReq = 0;
-	break;
-    case 650:
-	numSnpsReq = 1;
-	break;
-    case 500:
-	numSnpsReq = 2;
-	break;
-    case 250:
-	numSnpsReq = 3;
-	break;
-    case 50:
-	numSnpsReq = 4;
-	break;
-    }
+	{
+	case 1000:
+	    numSnpsReq = 0;
+	    break;
+	case 650:
+	    numSnpsReq = 1;
+	    break;
+	case 500:
+	    numSnpsReq = 2;
+	    break;
+	case 250:
+	    numSnpsReq = 3;
+	    break;
+	case 50:
+	    numSnpsReq = 4;
+	    break;
+	}
     
     /* finish off report ... */
     printf("<B>Block:</B> %s<BR>\n", name);
@@ -8662,23 +8664,23 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* determine number of SNPs required from score */ 
     switch(bed->score)
-    {
-    case 1000:
-	numSnpsReq = 0;
-	break;
-    case 650:
-	numSnpsReq = 1;
-	break;
-    case 500:
-	numSnpsReq = 2;
-	break;
-    case 250:
-	numSnpsReq = 3;
-	break;
-    case 50:
-	numSnpsReq = 4;
-	break;
-    }
+	{
+	case 1000:
+	    numSnpsReq = 0;
+	    break;
+	case 650:
+	    numSnpsReq = 1;
+	    break;
+	case 500:
+	    numSnpsReq = 2;
+	    break;
+	case 250:
+	    numSnpsReq = 3;
+	    break;
+	case 50:
+	    numSnpsReq = 4;
+	    break;
+	}
     
     /* finish off report ... */
     printf("<B>Block:</B> %s<BR>\n", name);
@@ -8733,10 +8735,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, 12);
 
-	name = bed->name;
+    name = bed->name;
 
     /* get % identity from score */
-	ident = ((bed->score + 500.0)/1500.0)*100.0;
+    ident = ((bed->score + 500.0)/1500.0)*100.0;
     
     /* finish off report ... */
     printf("<h4><i>Joint Alignment</i></h4>");
@@ -8770,7 +8772,7 @@ while ((row = sqlNextRow(sr)) != NULL )
     htmlHorizontalLine();
     printf("<i>human sequence on top, mouse on bottom</i><br><br>" );
     htmlPrintJointAlignment( ar->hseq, ar->mseq, 80,
-            bed->chromStart, bed->chromEnd, bed->strand );
+			     bed->chromStart, bed->chromEnd, bed->strand );
     }
 
 printTrackHtml(tdb);
@@ -8793,7 +8795,7 @@ cartWebStart(cart, "Percentage GC in 20,000 Base Windows (GC)");
 
 hFindSplitTable(seqName, group, table, &hasBin);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-    table, seqName, start, itemName);
+	table, seqName, start, itemName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8829,7 +8831,7 @@ void makeCheckBox(char *name, boolean isChecked)
 /* Create a checkbox with the given name in the given state. */
 {
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
-    (isChecked ? " CHECKED" : "") );
+       (isChecked ? " CHECKED" : "") );
 }
 
 
@@ -8937,15 +8939,15 @@ void abbr(char *s, char *fluff)
 int len;
 s = strstr(s, fluff);
 if (s != NULL)
-   {
-   len = strlen(fluff);
-   strcpy(s, s+len);
-   }
+    {
+    len = strlen(fluff);
+    strcpy(s, s+len);
+    }
 }
 
 char *abbrevExprBedName(char *name)
 /* chops part off rosetta exon identifiers, returns pointer to 
-local static char* */
+   local static char* */
 {
 static char abbrev[32];
 char *ret;
@@ -9001,8 +9003,8 @@ freez(&header);
 }
 
 void msBedPrintTableHeader(struct bed *bedList, 
-	struct hash *erHash, char *itemName, 
-	char **headerNames, int headerCount, char *scoresHeader)
+			   struct hash *erHash, char *itemName, 
+			   char **headerNames, int headerCount, char *scoresHeader)
 /* print out a bed with multiple scores header for a table.
    headerNames contain titles of columns up to the scores columns. scoresHeader
    is a single string that will span as many columns as there are beds.*/
@@ -9027,7 +9029,7 @@ printf("</tr>\n");
 }
 
 void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
-	char *itemName)
+			     char *itemName)
 /* print out a header with names for each bed with itemName highlighted */
 {
 char *headerNames[] = {"Experiment"};
@@ -9036,7 +9038,7 @@ msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNa
 }
 
 void rosettaPrintHeader(struct bed *bedList, 
-	struct hash *erHash, char *itemName)
+			struct hash *erHash, char *itemName)
 /* print out the header for the rosetta details table */
 {
 char *headerNames[] = {"&nbsp", "Hybridization"};
@@ -9045,7 +9047,7 @@ msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNa
 }
 
 void cghNci60PrintHeader(struct bed *bedList, 
-	struct hash *erHash, char *itemName)
+			 struct hash *erHash, char *itemName)
 /* print out the header for the CGH NCI 60 details table */
 {
 char *headerNames[] = {"Cell Line", "Tissue"};
@@ -9083,7 +9085,7 @@ printf("</td></tr></table>\n");
 }
 
 void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize,
-			  struct rgbColor(*getColor)(float val, float maxVal))
+			      struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
@@ -9115,7 +9117,7 @@ printf("</td></tr></table>\n");
 }
 
 void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
-	int expIndex, char *expName, float maxScore)
+			     int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -9135,10 +9137,10 @@ else
 
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
-	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
-	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-	}
+    /* use the background colors to creat patterns */
+    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
+    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    }
 printf("</tr>\n");
 }
 
@@ -9162,20 +9164,20 @@ else
 
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
-	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForAffyBed(bed->expScores[expIndex], maxScore);
-	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-	}
+    /* use the background colors to creat patterns */
+    struct rgbColor rgb = getColorForAffyBed(bed->expScores[expIndex], maxScore);
+    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    }
 printf("</tr>\n");
 }
 
 
 void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
-     char *expName, float minScore, float maxScore, float stepSize,
-     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
-     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
-     struct rgbColor(*getColor)(float val, float max))
+		     char *expName, float minScore, float maxScore, float stepSize,
+		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
+		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
+		     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
+		     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
 int i,featureCount=0, currnetRow=0, square=10;
@@ -9371,10 +9373,10 @@ else
     printf("<td align=left> %s</td>\n", er->name);
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
-	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
-	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-	}
+    /* use the background colors to creat patterns */
+    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
+    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    }
 printf("</tr>\n");
 }
 
@@ -9566,7 +9568,7 @@ else
 
 void affyRatioDetails(struct trackDb *tdb, char *expName) 
 /* print out a page for the affy data from gnf based on ratio of
-* measurements to the median of the measurements. */
+ * measurements to the median of the measurements. */
 {
 struct bed *bedList;
 char *tableName = "affyExps";
@@ -9693,10 +9695,10 @@ else
 printf("<td align=left>  %s</td>\n", er->extras[1]);
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
-	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForCghBed(bed->expScores[expIndex], maxScore);
-	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-	}
+    /* use the background colors to creat patterns */
+    struct rgbColor rgb = getColorForCghBed(bed->expScores[expIndex], maxScore);
+    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    }
 printf("</tr>\n");
 }
 
@@ -10014,13 +10016,13 @@ else
     }
 printf("</td></tr></table>\n");
 /*zeroBytes(buff,64);
-sprintf(buff,"%d",winStart);
-cgiMakeHiddenVar("winStart", buff);
-zeroBytes(buff,64);
-sprintf(buff,"%d",winEnd);
-cgiMakeHiddenVar("winEnd", buff);
-cgiMakeHiddenVar("db",database); 
-printf("<br>\n");*/
+  sprintf(buff,"%d",winStart);
+  cgiMakeHiddenVar("winStart", buff);
+  zeroBytes(buff,64);
+  sprintf(buff,"%d",winEnd);
+  cgiMakeHiddenVar("winEnd", buff);
+  cgiMakeHiddenVar("db",database); 
+  printf("<br>\n");*/
 chuckHtmlContactInfo();
 }
 
@@ -10040,8 +10042,8 @@ shadesOfGray[maxShade+1] = MG_RED;
 }
 
 void mgMakeColorGradient(struct memGfx *mg, 
-    struct rgbColor *start, struct rgbColor *end,
-    int steps, Color *colorIxs)
+			 struct rgbColor *start, struct rgbColor *end,
+			 int steps, Color *colorIxs)
 /* Make a color gradient that goes smoothly from start
  * to end colors in given number of steps.  Put indices
  * in color table in colorIxs */
@@ -10241,8 +10243,8 @@ altGraphXDraw(ag, mg, 0, 1, pixWidth, font);
 makeTempName(&gifTn, "hgc", ".gif");
 mgSaveGif(mg, gifTn.forCgi);
 printf(
-    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
-    gifTn.forHtml, pixWidth, pixHeight);
+       "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
+       gifTn.forHtml, pixWidth, pixHeight);
 mgFree(&mg);
 return cloneString(gifTn.forHtml);
 }
@@ -10254,7 +10256,7 @@ if(ag->vTypes[ag->edgeStarts[i]] == ggSoftStart ||
    ag->vTypes[ag->edgeStarts[i]] == ggHardStart)
     return "exon";
 else if (ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd ||
-   ag->vTypes[ag->edgeStarts[i]] == ggHardEnd)
+	 ag->vTypes[ag->edgeStarts[i]] == ggHardEnd)
     return "intron";
 else
     return "unknown";
@@ -10358,7 +10360,7 @@ webEnd();
 
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings.
-*/
+ */
 {
 static struct dyString *dy = NULL;
 if (dy == NULL)
@@ -10370,8 +10372,8 @@ return dy->string;
 }
 
 void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
-        thisWinEnd, char *winStr, char *otherOrg, char *otherDb, 
-        char *pslTableName )
+			thisWinEnd, char *winStr, char *otherOrg, char *otherDb, 
+			char *pslTableName )
 {
 char otherString[256];
 char pslItem[1024];
@@ -10380,11 +10382,11 @@ char *cgiPslItem;
 sprintf( pslItem, "%s:%d-%d %s:%d-%d", thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
 cgiPslItem = cgiEncode(pslItem);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart, 
-pslTableName, otherOrg, "chromInfo" , otherDb );
+	pslTableName, otherOrg, "chromInfo" , otherDb );
 if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
     {
     hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
-	    thisWinEnd, otherString, thisPsl->tName);
+		    thisWinEnd, otherString, thisPsl->tName);
     printf("%s</A>\n", winStr );
     }
 }
@@ -10397,38 +10399,38 @@ void firstAndLastPosition( int *thisStart, int *thisEnd, struct psl *thisPsl )
 *thisStart = thisPsl->tStarts[0];
 *thisEnd = thisPsl->tStarts[thisPsl->blockCount - 1];
 if( thisPsl->strand[1] == '-' )
-{
+    {
     *thisStart = thisPsl->tSize - *thisStart;
     *thisEnd = thisPsl->tSize - *thisEnd;
-}
+    }
 *thisEnd += thisPsl->blockSizes[thisPsl->blockCount - 1];
 }
 
 boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
-        int humMusWinSize, int thisStart, int thisEnd )
+			     int humMusWinSize, int thisStart, int thisEnd )
 /* Decides if a sample is relevant for the current window and psl
  * record start and end positions */
 {
 
 if( smp->chromStart + smp->samplePosition[i] -
-       humMusWinSize / 2 + 1< left
-&&  smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < left ) 
+    humMusWinSize / 2 + 1< left
+    &&  smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < left ) 
     return(0);
 
 if( smp->chromStart + smp->samplePosition[i] -
-       humMusWinSize / 2  + 1< thisStart 
-&& smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  ) 
-   return(0);
+    humMusWinSize / 2  + 1< thisStart 
+    && smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  ) 
+    return(0);
 
 if( smp->chromStart + smp->samplePosition[i] -
-       humMusWinSize / 2 + 1> right
-   && smp->chromStart + smp->samplePosition[i] +
-   humMusWinSize / 2  > right )
+    humMusWinSize / 2 + 1> right
+    && smp->chromStart + smp->samplePosition[i] +
+    humMusWinSize / 2  > right )
     return(0);
 
 
 if( smp->chromStart + smp->samplePosition[i] -
-       humMusWinSize / 2 + 1 > thisEnd 
+    humMusWinSize / 2 + 1 > thisEnd 
     && smp->chromStart + smp->samplePosition[i] +
     humMusWinSize / 2  > thisEnd  ) 
     return(0);
@@ -10443,8 +10445,8 @@ return( (max0 - min0)/(double)n * tmp + min0 );
 }
 
 void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
-    char *item, int start, int smpSize, char *otherOrg, char *otherDb,
-    char *pslTableName, boolean printWindowFlag )
+		       char *item, int start, int smpSize, char *otherOrg, char *otherDb,
+		       char *pslTableName, boolean printWindowFlag )
 /* Handle click in humMus sample (wiggle) track. */
 {
 int humMusWinSize = 50;
@@ -10484,7 +10486,7 @@ char *winOn = cartUsualString( cart, "win", "F" );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
-table, item, seqName);
+	table, item, seqName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -10498,8 +10500,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" 
-	, table, smp->chrom, smp->chromStart+smp->samplePosition[0]
-	, smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+	    , table, smp->chrom, smp->chromStart+smp->samplePosition[0]
+	    , smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
 
     pslSr = sqlGetResult(conn2, query);
@@ -10512,12 +10514,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
 
 	    snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
-	    thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
-	    thisPsl->tStart, thisPsl->tEnd );
+		     thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
+		     thisPsl->tStart, thisPsl->tEnd );
 
 	    cgiItem = cgiEncode(thisItem);
 	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
-	     otherDb, thisPsl, pslTableName );
+			      otherDb, thisPsl, pslTableName );
 
 	    sprintf(otherString, "%d&win=T", thisPsl->tStart );
 	    hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
@@ -10529,8 +10531,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	cartSetString( cart, "win", "F" );
 	printf("<h3>Alignments Windows </h3>\n"
-	   "<b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop"
-	   "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
+	       "<b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop"
+	       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
 
 
 	while(( pslRow = sqlNextRow(pslSr)) != NULL )
@@ -10542,26 +10544,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    for( i=0; i<smp->sampleCount; i++ )
 		{
 		if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
-			thisStart, thisEnd ) )
+					  thisStart, thisEnd ) )
 		    continue;
 
 		snprintf( str, 256, 
-		    "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
-		max( smp->chromStart + smp->samplePosition[i] -
-		humMusWinSize / 2 + 1, thisStart + 1),
-		min(smp->chromStart +  smp->samplePosition[i] +
-		humMusWinSize / 2, thisEnd ),
-		whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
+			  "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+			  max( smp->chromStart + smp->samplePosition[i] -
+			       humMusWinSize / 2 + 1, thisStart + 1),
+			  min(smp->chromStart +  smp->samplePosition[i] +
+			      humMusWinSize / 2, thisEnd ),
+			  whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
 		//0 to 8.0 is the fixed total L-score range for
 		//all these conservation tracks. Scores outside 
 		//this range are truncated.
 
 		printSampleWindow( thisPsl,
-		    smp->chromStart + smp->samplePosition[i] -
-		    humMusWinSize / 2,
-		    smp->chromStart + smp->samplePosition[i] +
-		    humMusWinSize / 2,
-		    str, otherOrg, otherDb, pslTableName );
+				   smp->chromStart + smp->samplePosition[i] -
+				   humMusWinSize / 2,
+				   smp->chromStart + smp->samplePosition[i] +
+				   humMusWinSize / 2,
+				   str, otherOrg, otherDb, pslTableName );
 		}
 	    printf("<br>");
 	    }
@@ -10570,7 +10572,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int smpSize)
+			    char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
 {
 int humMusWinSize = 50;
@@ -10609,15 +10611,15 @@ int right = cartIntExp( cart, "r" );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'",
-    table, item);
+	table, item);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (firstTime)
-	    firstTime = FALSE;
+	firstTime = FALSE;
     else
-	    htmlHorizontalLine();
+	htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
 
     sscanf(smp->name,"footPrinter.%d.%d",&offset,&motifid);
@@ -10626,8 +10628,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
-	table, smp->chrom, smp->chromStart+smp->samplePosition[0],
-	smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
+	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
     printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
     printf("location.replace('%s')\n",filename); 
@@ -10640,12 +10642,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 void humMusClickHandler(struct trackDb *tdb, char *item, boolean
-        reverse, boolean printWindowFlag )
+			reverse, boolean printWindowFlag )
 /* Put up generic track info. */
 {
 char *dupe, *type, *words[16];
- char title[256];
- int num;
+char title[256];
+int num;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -10657,17 +10659,17 @@ if (wordCount > 0)
     {
     type = words[0];
 
-	num = 0;
-	if (wordCount > 1)
-	    num = atoi(words[1]);
-	if (num < 3) num = 3;
+    num = 0;
+    if (wordCount > 1)
+	num = atoi(words[1]);
+    if (num < 3) num = 3;
 
     if( !reverse )
         humMusSampleClick(conn, tdb, item, start, num,
-            "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
+			  "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
     else
         humMusSampleClick( conn, tdb, item, start, num,
-            "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
+			   "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -10678,8 +10680,8 @@ void footPrinterClickHandler(struct trackDb *tdb, char *item )
 /* Put up generic track info. */
 {  
 char *dupe, *type, *words[16];
- char title[256];
- int num;
+char title[256];
+int num;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -10690,11 +10692,11 @@ if (wordCount > 0)
     {
     type = words[0];
 
-	num = 0;
-	if (wordCount > 1)
-	    num = atoi(words[1]);
-	if (num < 3) num = 3;
-        footPrinterSampleClick(conn, tdb, item, start, num);
+    num = 0;
+    if (wordCount > 1)
+	num = atoi(words[1]);
+    if (num < 3) num = 3;
+    footPrinterSampleClick(conn, tdb, item, start, num);
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -10726,12 +10728,12 @@ if (ct == NULL)
 for (bed = ct->bedList; bed != NULL; bed = bed->next)
     {
     if (bed->chromStart == start && sameString(seqName, bed->chrom))
-         {
-	 if (bed->name == NULL || sameString(itemName, bed->name) )
-	     {
-	     break;
-	     }
-	 }
+	{
+	if (bed->name == NULL || sameString(itemName, bed->name) )
+	    {
+	    break;
+	    }
+	}
     }
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
@@ -10765,17 +10767,17 @@ if (sameWord(track, "getDna"))
     doGetDna1();
     }
 else if (sameWord(track, "htcGetDna2"))
-   {
-   doGetDna2();
-   }
+    {
+    doGetDna2();
+    }
 else if (sameWord(track, "htcGetDna3"))
-   {
-   doGetDna3();
-   }
+    {
+    doGetDna3();
+    }
 else if (sameWord(track, "htcGetDnaExtended1"))
-   {
-   doGetDnaExtended1();
-   }
+    {
+    doGetDnaExtended1();
+    }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
@@ -10900,7 +10902,7 @@ else if (sameWord(track, "genomicDups"))
     doGenomicDups(tdb, item);
     }
 else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
-  || sameWord(track, "blastzTest") || sameWord(track, "blastzTest2"))
+	 || sameWord(track, "blastzTest") || sameWord(track, "blastzTest2"))
     {
     doBlatMouse(tdb, item);
     }
@@ -10909,8 +10911,8 @@ else if (startsWith("multAlignWebb", track))
     doMultAlignZoo(tdb, item, &track[13] );
     }
 /*
-Generalized code to show strict chain blastz alignments in the zoo browsers
- */
+  Generalized code to show strict chain blastz alignments in the zoo browsers
+*/
 else if (containsStringNoCase(track, "blastzStrictChain")
          && containsStringNoCase(database, "zoo"))
     {
@@ -11007,13 +11009,13 @@ else if (sameWord(track, "hgUserPsl"))
     doUserPsl(track, item);
     }
 else if (sameWord(track, "softPromoter"))
-   {
-   hgSoftPromoter(track, item);
-   }
+    {
+    hgSoftPromoter(track, item);
+    }
 else if (startsWith("ct_", track))
-   {
-   hgCustom(track, item);
-   }
+    {
+    hgCustom(track, item);
+    }
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
@@ -11026,11 +11028,11 @@ else if (sameWord(track, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
     }
- else if (sameWord(track, "mgc_mrna"))
+else if (sameWord(track, "mgc_mrna"))
     {
     doMgcMrna(track, item);
     }
- else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")))
+else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")))
     {
     doLinkedFeaturesSeries(track, item, tdb);
     }
@@ -11038,11 +11040,11 @@ else if ((sameWord(track, "fosEndPairs")) || (sameWord(track, "fosEndPairsBad"))
     {
     doLinkedFeaturesSeries(track, item, tdb);
     }
- else if (sameWord(track, "cgh"))
+else if (sameWord(track, "cgh"))
     {
     doCgh(track, item, tdb);
     }
- else if (sameWord(track, "mcnBreakpoints"))
+else if (sameWord(track, "mcnBreakpoints"))
     {
     doMcnBreakpoints(track, item, tdb);
     }
@@ -11187,14 +11189,14 @@ else if (sameWord(track, "jaxQTL"))
     doJaxQTL(tdb, item);
     }
 else if (tdb != NULL)
-   {
-   genericClickHandler(tdb, item, NULL);
-   }
+    {
+    genericClickHandler(tdb, item, NULL);
+    }
 else
-   {
-   cartWebStart(cart, track);
-   printf("Sorry, clicking there doesn't do anything yet (%s).", track);
-   }
+    {
+    cartWebStart(cart, track);
+    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
+    }
 cartHtmlEnd();
 }
 
