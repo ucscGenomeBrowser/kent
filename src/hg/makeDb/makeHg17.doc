@@ -1273,12 +1273,58 @@ cat > gsub << 'EOF'
     pslSort dirs raw.psl temp out/fosEnds*
     pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons raw.psl \
                         fosEnds.psl /dev/null
+        # Processed 84096767 alignments
+
     rm -r temp
     rm raw.psl
-    liftUp
 
-    /cluster/home/booch/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -min=30000 -max=50000 -slop -short -long -orphan -mismatch -verbose fosEnds.psl.lifted $(PAIRS) all_fosends fosEnds
-    cat $(HEADER) fosEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairs.bed
+    mkdir lifted
+    liftUp lifted/fosEnds.lifted.psl \
+                /cluster/data/hg17/jkStuff/liftAll.lft warn fosEnds.psl
+    pslSort dirs fosEnds.sorted.psl temp lifted
+    rmdir temp
+    wc -l *.sorted.psl
+        # 1693693 fosEnds.sorted.psl
+ 
+    set ncbiDir = /cluster/data/ncbi/fosends/human/fosends.3
+    ~/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=500000 -slop -short -long -orphan -mismatch -verbose fosEnds.sorted.psl $ncbiDir/fosEnds.pairs all_fosends fosEnds
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header fosEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairs.bed
+    cat header fosEnds.slop fosEnds.short fosEnds.long fosEnds.mismatch \
+         fosEnds.orphan \
+    | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairsBad.bed
+
+    extractPslLoad -noBin fosEnds.sorted.psl fosEndPairs.bed \
+                fosEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > fosEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/fosends
+    hgLoadBed hg17 fosEndPairs fosEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairs.sql 
+        # Loaded 387542 elements
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed hg17 fosEndPairsBad fosEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairsBad.sql
+        # Loaded  27919 elements
+    #hgLoadPsl hg17 -nobin -table=all_fosends fosEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg17 -table=all_fosends fosEnds.load.psl
+        #load of all_fosends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # load sequences
+
+    mkdir -p /gbdb/hg17/fosends
+    ln -s /cluster/data/ncbi/fosends/human/fosends.3/fosEnds.fa \
+                                /gbdb/hg17/fosends/fosEnds.fa
+    hgLoadSeq hg17 /gbdb/hg17/fosends/fosEnds.fa
+        # 1087670 sequences
+       # NOTE: extFile ID is 832625 (shouldn't be so large ??) 
+       # may want to reset this.
 
 
 # BAC END PAIRS TRACK (DONE - 2004-06-09 kate)
@@ -1806,36 +1852,79 @@ cat > split.csh << 'EOF'
     ssh eieio
     ln -s /cluster/store1/sts.8 /cluster/data/ncbi
     cd /cluster/data/ncbi/sts.9
+
+    # this time, snag from Terry's dir
+    cp ~booch/tracks/update/all.STS.fa.new /cluster/data/sts.8/all.STS.fa
     cp ~booch/tracks/update/stsInfo2.bed .
-    # reuse hg16's fasta file
-    cp /cluster/data/ncbi/sts.8/all.STS.fa.new all.STS.fa.old
+
+    # NOTE: checkStsIds modifies stsInfo2.bed and all.STS.fa
+    # It creates all.primers, all.primers.fa, stsAlias.bed
+    cp /cluster/data/ncbi/sts.8/all.STS.fa all.STS.fa
     checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
-                        dbSTS.FASTA.dailydump all.STS.fa.old
+                        dbSTS.FASTA.dailydump all.STS.fa
+
+    mkdir -p /cluster/bluearc/sts.9/sts
+    faSplit sequence all.STS.fa 10 /cluster/bluearc/sts.9/sts/sts
+
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/sts
+    cd bed/sts
+    mkdir run
+    cd run
+    cp /cluster/data/ncbi/sts.9/all.STS.fa /cluster/bluearc/sts.9
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/sts/sts*.fa > sts.lst
+    mkdir -p /cluster/bluearc/hg17/sts/sts/out
+cat > template << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst sts.lst template jobList
+    para create jobList
+        # 3420 jobs
+    para try
+    para check
+    para push
+# CPU time in finished jobs:      36148s     602.47m    10.04h    0.42d  0.001 y
+# IO & Wait Time:                 22211s     370.18m     6.17h    0.26d  0.001 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest job:                      154s       2.57m     0.04h    0.00d
+# Submission to last job:           362s       6.03m     0.10h    0.00d
+
+    # NOTE: this went really fast -- probably not even necessary
+    #   to split the all.STS.fa file
 
     # primers
     ssh eieio
     cd /cluster/data/ncbi/sts.9
-    mkdir -p /cluster/bluearc/sts.9/split
-    faSplit about all.primers.fa 700000 /cluster/bluearc/sts.9/split/primers
-a
+    mkdir -p /cluster/bluearc/sts.9/primers
+    faSplit about all.primers.fa 50000 /cluster/bluearc/sts.9/primers/primers
+
     ssh kk
     cd /cluster/data/hg17
-    mkdir -p bed/primers
-    cd bed/primers
-    mkdir run out
+    mkdir -p bed/sts/primers
+    cd bed/sts/primers
+    mkdir run
     cd run
     ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
-    ls -1S /cluster/bluearc/sts.9/split/primers*.fa > primers.lst
+    ls -1S /cluster/bluearc/sts.9/primers/primers*.fa > primers.lst
+    mkdir -p /cluster/bluearc/hg17/sts/primers/out
+    foreach c (`cat contigs.lst`)
+        set d = $c:t:r
+        echo $d
+        mkdir -p /cluster/bluearc/hg17/sts/primers/out/$d
+    end
 cat > template << 'EOF'
 #LOOP
-/cluster/bin/i386/blat.2 -tileSize=10 -oneOff -ooc=/scratch/hg/h/10.ooc -m
-inMatch=1 -minScore=0 -minIdentity=80 $(path1) $(path2) {check out line+ /cluster/data/hg1
-7/bed/primers/out/$(root1).$(root2).psl}
+# special blat version needed for primer alignment
+/cluster/bin/i386/blat.2 -tileSize=10 -oneOff -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=0 -minIdentity=80 $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
     para create jobList
-        #  31160 jobs
+        # 215840 jobs
     para try
     para check
     para push
