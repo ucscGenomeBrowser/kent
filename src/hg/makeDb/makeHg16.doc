@@ -6355,7 +6355,7 @@ cd /cluster/data/hg16/bed/famBro
 # Create table that maps between known genes and RefSeq
 hgMapToGene hg16 refGene knownGene knownToRefSeq
 #	may need to build this command in src/hg/near/hgMapToGene
-#	row count did not change 32674 == 32674 - refGene isn't different ?
+#	row count changed from 32674 to 35416
 
 # Create table that maps between known genes and LocusLink
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg16 \
@@ -6395,6 +6395,8 @@ hgMapToGene hg16 affyU95 knownGene knownToU95
 cd ~/kent/src/hg/near/hgExpDistance
 XXXX - needs to be done after above affyUcla run is done
 #	affyRatioExps argument is unused, no need to exist
+hgExpDistance hg16 gnfHumanU95Median gnfHumanU95Exps \
+	knownGnfDistance  -lookup=knownToU95
 hgExpDistance hg16 affyRatio affyRatioExps knownGnfDistance -lookup=knownToU95
 #	this does not work, claims there is nothing in common between
 #	the knownToU95 and the affyRatio tables
