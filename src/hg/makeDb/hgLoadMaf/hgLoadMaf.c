@@ -1,5 +1,6 @@
 /* hgLoadMaf - Load a maf file index into the database. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -11,7 +12,17 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.7 2003/05/16 15:26:48 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.8 2003/07/28 22:56:20 kate Exp $";
+
+/* Command line options */
+
+/* multiz currently will generate some alignments that have a missing score
+ * and/or contain only 1 or 2 sequences.  Webb Miller recommends these
+ * be ignored, and he intends to remove them from multiz output.
+ * When/if this happens, the -warn option should not be used.
+ */
+boolean warnOption = FALSE;
+boolean warnVerboseOption = FALSE;     /* print warning detail */
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +31,10 @@ errAbort(
   "hgLoadMaf - Load a maf file index into the database\n"
   "usage:\n"
   "   hgLoadMaf database table\n"
+  "options:\n"
+    "   -warn   warn instead of error if empty/incomplete alignments\n"
+    "           are found found.\n"
+    "   -WARN   warn instead of error, with detail for the warning\n" 
   "The maf files need to already exist in chromosome coordinates\n"
   "in the directory /gbdb/database/table.\n"
   );
@@ -63,6 +78,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     struct scoredRef mr;
     struct mafAli *maf;
     off_t offset;
+    int warnCount = 0;
     HGID extId = hgAddToExtFile(fileName, conn);
     int dbNameLen = strlen(database);
 
@@ -74,9 +90,21 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	mafColMinMaxScore(maf, &minScore, &maxScore);
 	++mafCount;
 	mc = findComponent(maf, database);
-	if (mc == NULL)
-	    errAbort("Couldn't find %s. sequence line %d of %s\n", 
-	    	database, mf->lf->lineIx, fileName);
+	if (mc == NULL) 
+            {
+            if (warnOption || warnVerboseOption) 
+                {
+                warnCount++;
+                if (warnVerboseOption)
+                    printf("Couldn't find %s. sequence line %d of %s\n", 
+	    	                database, mf->lf->lineIx, fileName);
+                mafAliFree(&maf);
+                continue;
+                }
+            else 
+                errAbort("Couldn't find %s. sequence line %d of %s\n", 
+	    	                database, mf->lf->lineIx, fileName);
+            }
 	ZeroVar(&mr);
 	mr.chrom = mc->src + dbNameLen + 1;
 	mr.chromStart = mc->start;
@@ -94,6 +122,8 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	mafAliFree(&maf);
 	}
     mafFileFree(&mf);
+    if (warnCount)
+        printf("%d warnings\n", warnCount);
     }
 printf("Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
@@ -103,9 +133,11 @@ hgEndUpdate(&conn, "Add %ld mafs in %d files from %s", mafCount, slCount(fileLis
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+cgiSpoof(&argc, argv);
 if (argc != 3)
     usage();
+warnOption = cgiBoolean("warn");
+warnVerboseOption = cgiBoolean("WARN");
 hgLoadMaf(argv[1], argv[2]);
 return 0;
 }
