@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.12 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.13 2003/07/09 18:44:18 kent Exp $";
 
 
 void usage()
@@ -86,7 +86,8 @@ struct dyString *ds = newDyString(2048);
 struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char goldName[128], gapName[128];
-char goldTabName[L_tmpnam], gapTabName[L_tmpnam];
+char *goldTabName = "gold.tab";
+char *gapTabName = "gap.tab";
 char *agpName;
 FILE *goldTab, *gapTab;
 struct lineFile *lf;
@@ -113,8 +114,6 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 
     /* Scan through .agp file splitting it into gold
      * and gap components. */
-    tmpnam(goldTabName);
-    tmpnam(gapTabName);
     goldTab = mustOpen(goldTabName, "w");
     gapTab = mustOpen(gapTabName, "w");
     lf = lineFileOpen(agpName, TRUE);
