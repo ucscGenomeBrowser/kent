@@ -578,7 +578,15 @@ identifier bacEndAccession typeOf=genbankAccession
 "Genbank accession of a BAC end read."
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
+    $danRer.bacEndSingles.lfNames comma
+    $danRer.bacEndAlias.alias minCheck = 0.55
     $hg.fishClones.beNames comma minCheck=0.70
+
+identifier bacExtName
+"External name for BAC clones." 
+    $danRer.bacCloneXRef.extName
+    $danRer.bacEndPairs.name
+    $danRer.bacEndSingles.name
 
 identifier bacAccession typeOf=genbankAccession
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
@@ -1631,3 +1639,7 @@ tablesIgnored hg16
     mouse_hmrg
     syntenyMm3
     syntenyMm4
+
+tablesIgnored $danRer
+    wz_ests
+    rhMap
