@@ -32,8 +32,8 @@ if ($#argv == 2) then
 endif
 
 # get whole list from access_log
-#### hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
-#### sort remote_host | uniq -c | sort -nr > xxUserCountxx
+hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
+sort remote_host | uniq -c | sort -nr > xxUserCountxx
 set totalHits=`wc -l remote_host | gawk '{print $1}'`
 
 set checked=0
@@ -99,7 +99,7 @@ else
   # stay quiet
 endif
 
-#### rm xxUserCountxx
-#### rm  $output
+rm xxUserCountxx
+rm  $output
 
 exit
