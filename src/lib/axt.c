@@ -582,6 +582,7 @@ if (!gotO || !gotE)
     errAbort("Expecting O = and E = in last line of %s", lf->fileName);
 if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
     errAbort("Must have positive gap scores");
+propagateCase(ss);
 return ss;
 }
 
