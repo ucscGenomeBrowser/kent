@@ -20,29 +20,36 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.2 2004/03/18 04:18:13 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.3 2004/03/20 03:29:49 kate Exp $";
 
-struct cart *cart;	/* The user's ui state. */
-struct hash *oldVars = NULL;
+/* CGI Variables */
+#define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
+#define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
+#define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
+#define HGLFT_CMD_PREFIX "hglft.do_"            /* prefix for commands */
+#define HGLFT_SHOWPAGE_CMD "hglft.do_showPage"  /* command to display output */
+
+/* Global Variables */
+struct cart *cart;	        /* CGI and other variables */
+struct hash *oldCart = NULL;
 
 char *formatList[] = 
-        {"Position", "BED*", "MAF*", "Wiggle*", "GFF", 0};
+        //{"Position", "BED*", "MAF*", "Wiggle*", "GFF", 0};
+        {"Position", "BED", 0};
 
 char *genomeList[] = {"Human", 0};
-char *origAssemblyList[] = {"June 2002", "Nov. 2002", "April 2003", 0};
-char *newAssemblyList[] = {"Nov. 2002", "April 2003", "July 2003", 0};
+//char *origAssemblyList[] = {"June 2002", "Nov. 2002", "April 2003", 0};
+//char *newAssemblyList[] = {"Nov. 2002", "April 2003", "July 2003", 0};
+char *origAssemblyList[] = {"April 2003"};
+char *newAssemblyList[] = {"July 2003"};
 
-void doMiddle(struct cart *theCart)
+void webMain(struct sqlConnection *conn)
+/* set up page for entering data */
 {
 char *userData;
 char *db, *organism;
 
-//getDbAndGenome(cart, &db, &organism);
-cart = theCart;
-
-cartWebStart(cart, "Convert Genome Coordinates");
-
-printf("<P>"
+cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
     "The input data can be pasted into the text box, or uploaded from a file."
@@ -56,99 +63,133 @@ if(userData != 0 && userData[0] == '\0')
     userData = cartOptionalString(cart, "hglft.dataFile");
     }
     */
-cartSaveSession(cart);
 
 /* create HMTL form */
 printf("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
        " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+cgiMakeHiddenVar(HGLFT_USERDATA_VAR, "");
+cgiMakeHiddenVar(HGLFT_DATAFILE_VAR, "");
+cgiMakeHiddenVar(HGLFT_DATAFILE_VAR, "BED");
+cgiMakeHiddenVar(HGLFT_SHOWPAGE_CMD, "true");
+cartSaveSession(cart);
 
 /* create HTML table for layout purposes */
-printf("<TABLE WIDTH=\"100%%\">\n");
+printf("\n<TABLE WIDTH=\"100%%\">\n");
 
 /* top two rows -- genome and assembly menus */
-printf("<TR>\n");
-printf("<TD> Original Genome: </TD>");
-printf("<TD> Assembly: </TD>");
-printf("<TD> New Genome: </TD>");
-printf("<TD> Assembly: </TD>");
-printf("</TR>\n");
+cgiSimpleTableRowStart();
+cgiTableField("Genome: ");
+cgiTableField("Original Assembly: ");
+cgiTableField("New Assembly: ");
+cgiTableRowEnd();
 
-printf("<TR>\n");
-printf("<TD>");
-cgiMakeDropList("origGenome", genomeList, 1, "Human");
-printf("</TD>");
-printf("<TD>");
-cgiMakeDropList("origAssembly", origAssemblyList, 3, "April 2003");
-printf("</TD>");
-printf("<TD>");
-cgiMakeDropList("newGenome", genomeList, 1, "Human");
-printf("</TD>");
-printf("<TD>");
-cgiMakeDropList("newAssembly", newAssemblyList, 3, "July 2003");
-printf("</TD>");
-printf("</TR>\n");
-printf("</TABLE>\n");
+cgiSimpleTableRowStart();
+
+cgiSimpleTableFieldStart();
+cgiMakeDropList("genome", genomeList, 1, "Human");
+cgiTableFieldEnd();
+
+cgiSimpleTableFieldStart();
+cgiMakeDropList("origAssembly", origAssemblyList, 1, "April 2003");
+cgiTableFieldEnd();
+
+cgiSimpleTableFieldStart();
+cgiMakeDropList("newAssembly", newAssemblyList, 1, "July 2003");
+cgiTableFieldEnd();
+
+cgiTableRowEnd();
+cgiTableEnd();
 
 /* next row -- file format menu */
-printf("<P>\n");
-printf("Data input formats marked with star (*) are suitable for "
-        "ENCODE data submission.&nbsp;&nbsp;"
-        "For the \"position\" format, enter a list of "
-        "chromosome positions using the format chrN:X.\n");
-printf("<TABLE>\n");
-printf("<TR>\n");
-printf("<TD>");
-printf("Format: ");
-printf("</TD>");
-printf("<TD>");
-cgiMakeDropList("dataFormat", formatList, 5, "BED*");
-printf("</TD>");
-printf("</TR>\n");
-printf("</TABLE>\n");
+//printf("Data input formats marked with star (*) are suitable for "
+        //"ENCODE data submission.&nbsp;&nbsp;"
+cgiParagraph("For the \"Position\" format, enter a list of "
+            "chromosome positions using the format chrN:X.\n");
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
+cgiTableField("Format: ");
+cgiSimpleTableFieldStart();
+cgiMakeDropList(HGLFT_DATAFORMAT_VAR, formatList, 2, "BED");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-printf("<P>\n");
-printf("Paste in data:\n");
-printf("<TABLE>\n");
-printf("<TR>\n");
-printf("<TD>\n");
-printf("<TEXTAREA NAME=userData ROWS=14 COLS=70> </TEXTAREA>\n");
-printf("</TD>\n");
-printf("<TD>\n");
+cgiParagraph("Paste in data:\n");
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
 
-printf("<TABLE>\n");
-printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit></TD></TR>\n");
-printf("<TR><TD><INPUT TYPE=RESET NAME=Reset VALUE=Reset></TD></TR>\n");
-printf("</TABLE>\n");
+cgiSimpleTableFieldStart();
+cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 15, 75);
+cgiTableFieldEnd();
 
-printf("</TABLE>\n");
+/* right element of table is a nested table
+ * with two buttons stacked on top of each other */
+cgiSimpleTableFieldStart();
+cgiSimpleTableStart();
+
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeSubmitButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeResetButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiTableEnd();
+cgiTableFieldEnd();
+
+cgiTableRowEnd();
+cgiTableEnd();
 
 /* next  row -- file upload controls */
-printf("<P>\n");
-printf("Or upload data from a file:\n");
-printf("<TABLE>\n");
-printf("<TR>\n");
-printf("<TD><INPUT TYPE=FILE NAME=\"dataFile\"></TD>\n");
+cgiParagraph("Or upload data from a file:");
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
+printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
 printf("<TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit File></TD>\n");
-printf("</TR>\n");
-printf("</TABLE>\n");
+cgiTableRowEnd();
+cgiTableEnd();
 
+printf("</FORM>\n");
+
+}
+
+void doMiddle(struct cart *theCart)
+/* Set up globals and make web page */
+{
+struct sqlConnection *conn = NULL;
+cart = theCart;
+conn = hAllocConn();
+
+//getDbAndGenome(cart, &db, &organism);
+cart = theCart;
+cartWebStart(cart, "Lift Genome Annotations");
+webMain(conn);
 cartWebEnd();
+
+cartRemovePrefix(cart, HGLFT_CMD_PREFIX);
 }
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {"Submit", "submit", 
-                        "hglft.genome", "hglft.userData", "hglft.dataFile", 
+                        HGLFT_USERDATA_VAR,
+                        HGLFT_DATAFILE_VAR,
+                        HGLFT_SHOWPAGE_CMD,
                         NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-oldVars = hashNew(8);
+oldCart = hashNew(8);
 cgiSpoof(&argc, argv);
 //htmlSetBackground("../images/floret.jpg");
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
 
