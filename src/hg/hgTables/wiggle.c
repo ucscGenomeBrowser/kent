@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.2 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.3 2004/07/22 02:10:23 kent Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -135,7 +135,7 @@ for (region = regionList; region != NULL; region = region->next)
         break;
     }
 if (curOut >= maxOut)
-    warn("Only fetching first %d data values, please make region smaller");
+    warn("Only fetching first %d data values, please make region smaller", curOut);
 }
 
 

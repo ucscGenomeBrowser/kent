@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.23 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.24 2004/07/22 02:10:23 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -348,7 +348,10 @@ hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    if (!isWig)
+    if (isWig)
+	hPrintf("<I>Note: Only up to the first 100,000 data points in region will be "
+	        "output.</I><BR>");
+    else
 	hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output.</I><BR>");
     cgiMakeButton(hgtaDoTopSubmit, "Get Output");
     hPrintf(" ");
