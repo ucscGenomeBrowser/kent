@@ -92,15 +92,66 @@ else
 static void typeMismatch(struct pfParse *pp)
 /* Complain about type mismatch at node. */
 {
-uglyf("Type mismatch\n");
 errAt(pp->tok, "type mismatch");
 }
 
-static void coerceOne(struct pfCompile *pfc, struct pfParse *pp,
+static void numericCast(struct pfCompile *pfc,
+	struct pfType *newType, struct pfParse **pPp)
+/* Insert a cast operation to base on top of *pPp */
+{
+struct pfBaseType *newBase = newType->base;
+struct pfParse *pp = *pPp;
+struct pfBaseType *oldBase = pp->ty->base;
+struct pfParse *cast;
+enum pfParseType castType = pptCastByteToByte;
+int numTypeCount = 6;
+
+if (oldBase == pfc->byteType)
+    castType += 0 * numTypeCount;
+else if (oldBase == pfc->shortType)
+    castType += 1 * numTypeCount;
+else if (oldBase == pfc->intType)
+    castType += 2 * numTypeCount;
+else if (oldBase == pfc->longType)
+    castType += 3 * numTypeCount;
+else if (oldBase == pfc->floatType)
+    castType += 4 * numTypeCount;
+else if (oldBase == pfc->doubleType)
+    castType += 5 * numTypeCount;
+else
+    internalErrAt(pp->tok);
+
+if (newBase == pfc->byteType)
+    castType += 0;
+else if (newBase == pfc->shortType)
+    castType += 1;
+else if (newBase == pfc->intType)
+    castType += 2;
+else if (newBase == pfc->longType)
+    castType += 3;
+else if (newBase == pfc->floatType)
+    castType += 4;
+else if (newBase == pfc->doubleType)
+    castType += 5;
+else
+    internalErrAt(pp->tok);
+
+cast = pfParseNew(castType, pp->tok, pp->parent, pp->scope);
+cast->next = pp->next;
+cast->children = pp;
+cast->ty = newType;
+pp->parent = cast;
+pp->next = NULL;
+*pPp = cast;
+}
+
+
+static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type)
 /* Make sure that a single variable is of the required type.  
  * Add casts if necessary */
 {
+struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;
 if (pt == NULL)
     {
@@ -144,13 +195,24 @@ else
     {
     if (pt->base != type->base)
 	{
+	boolean ok = FALSE;
 	if (pt->isTuple && slCount(pt->children) == 1 && pt->children->base == type->base)
 	    {
+	    ok = TRUE;
 	    }
-	else if (type->isTuple == slCount(pt->children) == 1 && type->children->base == pt->base)
+	else if (type->isTuple && slCount(pt->children) == 1 && type->children->base == pt->base)
 	    {
+	    ok = TRUE;
 	    }
 	else
+	    {
+	    if (type->base->parent == pfc->numType && pt->base->parent == pfc->numType)
+	        {
+		numericCast(pfc, type, pPp);
+		ok = TRUE;
+		}
+	    }
+	if (!ok)
 	    {
 	    typeMismatch(pp);
 	    }
@@ -164,17 +226,22 @@ static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
 {
 int tupSize = slCount(tuple->children);
 int typeSize = slCount(types->children);
-struct pfParse *pp;
+struct pfParse *pp, **pos;
 struct pfType *type;
 if (tupSize != typeSize)
     {
     errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
     	typeSize, tupSize);
     }
-for (pp=tuple->children, type = types->children; pp != NULL;
-     pp = pp->next, type = type->next)
+pos = &tuple->children;
+type = types->children;
+for (;;)
      {
-     coerceOne(pfc, pp, type);
+     coerceOne(pfc, pos, type);
+     pos = &(*pos)->next;
+     type = type->next;
+     if (type == NULL)
+         break;
      }
 }
 
@@ -182,7 +249,6 @@ static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that parameters to call are right.  Then
  * set pp->type to call's return type. */
 {
-uglyf("coerceCall\n");
 struct pfParse *function = pp->children;
 struct pfParse *paramTuple = function->next;
 struct pfVar *functionVar = function->var;
@@ -191,7 +257,6 @@ struct pfType *inputType = functionType->children;
 struct pfType *outputType = inputType->next;
 coerceTuple(pfc, paramTuple, inputType);
 pp->ty = outputType;
-uglyf("done coerceCall\n");
 }
 
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)
@@ -214,12 +279,20 @@ static void coerceAssign(struct pfCompile *pfc, struct pfParse *pp)
  * compatible type.  Set pp->type to l-value type. */
 {
 struct pfParse *lval = pp->children;
-struct pfParse *rval = lval->next;
 struct pfType *destType = coerceLval(pfc, lval);
-coerceOne(pfc, rval, destType);
-#ifdef SOON
-#endif /* SOON */
+coerceOne(pfc, &lval->next, destType);
 pp->ty = destType;
+}
+
+static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that variable initialization can be coerced to variable
+ * type. */
+{
+struct pfParse *type = pp->children;
+struct pfParse *symbol = type->next;
+struct pfParse *init = symbol->next;
+
+coerceOne(pfc, &symbol->next, type->ty);
 }
 
 
@@ -229,24 +302,45 @@ static void coerceBinaryMathOp(struct pfCompile *pfc, struct pfParse *pp)
 struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
 
-if (lval->type == pptConstUse)
+if (lval->type == pptConstUse && rval->type == pptConstUse)
     {
-    if (rval->ty != NULL)
-	 coerceOne(pfc, lval, rval->ty);
+    struct pfBaseType *base = NULL;
+    if (lval->tok->type == pftString)
+        expectingGot("number in binary op", lval->tok);
+    else if (rval->tok->type == pftString)
+        expectingGot("number in binary op", rval->tok);
+    else if (lval->tok->type == pftFloat || rval->tok->type == pftFloat)
+	base = pfc->doubleType;
+    else if (lval->tok->val.i > 0x7FFFFFFFLL || rval->tok->val.i > 0x7FFFffffLL
+	|| lval->tok->val.i < -0x7FFFFFFFLL || rval->tok->val.i < -0x7FFFffffLL)
+        base = pfc->longType;
+    else 
+        base = pfc->intType;
+    pp->ty = pfTypeNew(base);
+    coerceOne(pfc, &lval, pp->ty);
+    coerceOne(pfc, &rval, pp->ty);
+    }
+else
+    {
+    if (lval->type == pptConstUse)
+	{
+	if (rval->ty != NULL)
+	     coerceOne(pfc, &lval, rval->ty);
 
+	}
+    if (rval->type == pptConstUse)
+	{
+	if (lval->ty != NULL)
+	    coerceOne(pfc, &rval, lval->ty);
+	}
+    if (lval->ty == NULL)
+	expectingGot("number", lval->tok);
+    if (rval->ty == NULL)
+	expectingGot("number", rval->tok);
+    if (!pfTypeSame(lval->ty, rval->ty))
+	typeMismatch(pp);
+    pp->ty = lval->ty;
     }
-if (rval->type == pptConstUse)
-    {
-    if (lval->ty != NULL)
-	coerceOne(pfc, rval, lval->ty);
-    }
-if (lval->type == NULL)
-    expectingGot("number", lval->tok);
-if (rval->type == NULL)
-    expectingGot("number", rval->tok);
-if (!pfTypeSame(lval->ty, rval->ty))
-    typeMismatch(pp);
-pp->ty = lval->ty;
 }
 
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
@@ -271,6 +365,9 @@ switch (pp->type)
 	break;
     case pptAssignment:
         coerceAssign(pfc, pp);
+	break;
+    case pptVarInit:
+        coerceVarInit(pfc, pp);
 	break;
     }
 }
