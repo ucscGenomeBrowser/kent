@@ -17,43 +17,27 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.8 2004/07/23 22:03:55 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.9 2004/07/24 05:32:38 kent Exp $";
 
-
-struct bed *getRegionAsBed(
-	char *db, char *table, 	/* Database and table. */
-	struct region *region,  /* Region to get data for. */
-	char *filter, 		/* Filter to add to SQL where clause if any. */
-	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
-	struct lm *lm)		/* Where to allocate memory. */
-/* Return a bed list of all items in the given range in table.
- * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+boolean htiIsPsl(struct hTableInfo *hti)
+/* Return TRUE if table looks to be in psl format. */
 {
-struct dyString *fields = newDyString(0);
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr;
-struct hTableInfo *hti;
-struct bed *bedList=NULL, *bed;
-char **row;
-char rangeStr[32];
-char *strand, tStrand, qStrand;
-int i, blockCount;
-int fieldCount;
-boolean isPsl, isGenePred, isBedWithBlocks;
-boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
+return sameString("tStarts", hti->startsField);
+}
 
-/* Caller can give us either a full table name or root table name. */
-hti = hFindTableInfoDb(db, region->chrom, table);
-if (hti == NULL)
-    errAbort("Could not find table info for table %s", table);
-fieldCount = hTableInfoBedFieldCount(hti);
-isPsl = sameString("tStarts", hti->startsField);
-isGenePred = sameString("exonEnds", hti->endsSizesField);
-isBedWithBlocks = (sameString("chromStarts", hti->startsField) 
-         && sameString("blockSizes", hti->endsSizesField));
+void bedSqlFieldsExceptForChrom(struct hTableInfo *hti,
+	int *retFieldCount, char **retFields)
+/* Given tableInfo figure out what fields are needed to
+ * add to a database query to have information to create
+ * a bed. The chromosome is not one of these fields - we
+ * assume that is already known since we're processing one
+ * chromosome at a time.   Return a comma separated (no last
+ * comma) list of fields that can be freeMem'd, and the count
+ * of fields (this *including* the chromosome). */
+{
+struct dyString *fields = dyStringNew(128);
+int fieldCount = fieldCount = hTableInfoBedFieldCount(hti);
 
-/* All beds have at least chrom,start,end.  We omit the chrom
- * form the query since we already know it. */
 dyStringPrintf(fields, "%s,%s", hti->startField, hti->endField);
 if (fieldCount >= 4)
     {
@@ -88,112 +72,172 @@ if (fieldCount >= 12)
     dyStringPrintf(fields, ",%s,%s,%s", hti->countField, 
         hti->endsSizesField, hti->startsField);
     }
-if (isPsl)
+if (htiIsPsl(hti))
     {
     /* For psl format we need to know chrom size as well
      * to handle reverse strand case. */
     dyStringPrintf(fields, ",tSize");
     }
-sr = regionQuery(conn, table, fields->string, region, TRUE, filter);
+*retFieldCount = fieldCount;
+*retFields = dyStringCannibalize(&fields);
+}
+
+struct bed *bedFromRow(
+	char *chrom, 		  /* Chromosome bed is on. */
+	char **row,  		  /* Row with other data for bed. */
+	int fieldCount,		  /* Number of fields in final bed. */
+	boolean isPsl, 		  /* True if in PSL format. */
+	boolean isGenePred,	  /* True if in GenePred format. */
+	boolean isBedWithBlocks,  /* True if BED with block list. */
+	boolean *pslKnowIfProtein,/* Have we figured out if psl is protein? */
+	boolean *pslIsProtein,    /* True if we know psl is protien. */
+	struct lm *lm)		  /* Local memory pool */
+/* Create bed from a database row when we already understand
+ * the format pretty well.  The bed is allocated inside of
+ * the local memory pool lm.  Generally use this in conjunction
+ * with the results of a SQL query constructed with the aid
+ * of the bedSqlFieldsExceptForChrom function. */
+{
+char *strand, tStrand, qStrand;
+struct bed *bed;
+int i, blockCount;
+
+lmAllocVar(lm, bed);
+bed->chrom = chrom;
+bed->chromStart = sqlUnsigned(row[0]);
+bed->chromEnd = sqlUnsigned(row[1]);
+
+if (fieldCount < 4)
+    return bed;
+bed->name = lmCloneString(lm, row[2]);
+if (fieldCount < 5)
+    return bed;
+bed->score = sqlSigned(row[3]);
+if (fieldCount < 6)
+    return bed;
+strand = row[4];
+qStrand = strand[0];
+tStrand = strand[1];
+if (tStrand == 0)
+    bed->strand[0] = qStrand;
+else
+    {
+    /* psl: use XOR of qStrand,tStrand if both are given. */
+    if (tStrand == qStrand)
+	bed->strand[0] = '+';
+    else
+	bed->strand[0] = '-';
+    }
+if (fieldCount < 8)
+    return bed;
+bed->thickStart = sqlUnsigned(row[5]);
+bed->thickEnd   = sqlUnsigned(row[6]);
+if (fieldCount < 12)
+    return bed;
+bed->blockCount = blockCount = sqlUnsigned(row[7]);
+lmAllocArray(lm, bed->blockSizes, blockCount);
+sqlUnsignedArray(row[8], bed->blockSizes, blockCount);
+lmAllocArray(lm, bed->chromStarts, blockCount);
+sqlUnsignedArray(row[9], bed->chromStarts, blockCount);
+if (isGenePred)
+    {
+    /* Translate end coordinates to sizes. */
+    for (i=0; i<bed->blockCount; ++i)
+	bed->blockSizes[i] -= bed->chromStarts[i];
+    }
+else if (isPsl)
+    {
+    if (!*pslKnowIfProtein)
+	{
+	/* Figure out if is protein using a rather elaborate but
+	 * working test I think Angie or Brian must have figured out. */
+	if (tStrand == '-')
+	    {
+	    int tSize = sqlUnsigned(row[10]);
+	    *pslIsProtein = 
+		   (bed->chromStart == 
+		    tSize - (3*bed->blockSizes[bed->blockCount - 1]  + 
+		    bed->chromStarts[bed->blockCount - 1]));
+	    }
+	else
+	    {
+	    *pslIsProtein = (bed->chromEnd == 
+		    3*bed->blockSizes[bed->blockCount - 1]  + 
+		    bed->chromStarts[bed->blockCount - 1]);
+	    }
+	*pslKnowIfProtein = TRUE;
+	}
+    if (*pslIsProtein)
+	{
+	/* if protein then blockSizes are in protein space */
+	for (i=0; i<blockCount; ++i)
+	    bed->blockSizes[i] *= 3;
+	}
+    if (tStrand == '-')
+	{
+	/* psl: if target strand is '-', flip the coords.
+	 * (this is the target part of pslRcBoth from src/lib/psl.c) */
+	int tSize = sqlUnsigned(row[10]);
+	for (i=0; i<blockCount; ++i)
+	    {
+	    bed->chromStarts[i] = tSize - 
+		    (bed->chromStarts[i] + bed->blockSizes[i]);
+	    }
+	reverseInts(bed->chromStarts, bed->blockCount);
+	reverseInts(bed->blockSizes, bed->blockCount);
+	}
+    }
+if (!isBedWithBlocks)
+    {
+    /* non-bed: translate absolute starts to relative starts */
+    for (i=0;  i < bed->blockCount;  i++)
+	bed->chromStarts[i] -= bed->chromStart;
+    }
+return bed;
+}
+
+struct bed *getRegionAsBed(
+	char *db, char *table, 	/* Database and table. */
+	struct region *region,  /* Region to get data for. */
+	char *filter, 		/* Filter to add to SQL where clause if any. */
+	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+	struct lm *lm)		/* Where to allocate memory. */
+/* Return a bed list of all items in the given range in table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+{
+char *fields = NULL;
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+struct hTableInfo *hti;
+struct bed *bedList=NULL, *bed;
+char **row;
+int fieldCount;
+boolean isPsl, isGenePred, isBedWithBlocks;
+boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
+
+hti = hFindTableInfoDb(db, region->chrom, table);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s", table);
+bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
+isPsl = htiIsPsl(hti);
+isGenePred = sameString("exonEnds", hti->endsSizesField);
+isBedWithBlocks = (sameString("chromStarts", hti->startsField) 
+         && sameString("blockSizes", hti->endsSizesField));
+
+/* All beds have at least chrom,start,end.  We omit the chrom
+ * form the query since we already know it. */
+sr = regionQuery(conn, table, fields, region, TRUE, filter);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* If have a name field apply hash filter. */
     if (fieldCount >= 4 && idHash != NULL)
         if (!hashLookup(idHash, row[2]))
 	    continue;
-    lmAllocVar(lm, bed);
+    bed = bedFromRow(region->chrom, row, fieldCount, isPsl, isGenePred,
+    		     isBedWithBlocks, &pslKnowIfProtein, &pslIsProtein, lm);
     slAddHead(&bedList, bed);
-    bed->chrom = region->chrom;
-    bed->chromStart = sqlUnsigned(row[0]);
-    bed->chromEnd = sqlUnsigned(row[1]);
-    if (fieldCount < 4)
-        continue;
-    bed->name = lmCloneString(lm, row[2]);
-    if (fieldCount < 5)
-        continue;
-    bed->score = sqlSigned(row[3]);
-    if (fieldCount < 6)
-        continue;
-    strand = row[4];
-    qStrand = strand[0];
-    tStrand = strand[1];
-    if (tStrand == 0)
-        bed->strand[0] = qStrand;
-    else
-        {
-	/* psl: use XOR of qStrand,tStrand if both are given. */
-	if (tStrand == qStrand)
-	    bed->strand[0] = '+';
-	else
-	    bed->strand[0] = '-';
-	}
-    if (fieldCount < 8)
-        continue;
-    bed->thickStart = sqlUnsigned(row[5]);
-    bed->thickEnd   = sqlUnsigned(row[6]);
-    if (fieldCount < 12)
-        continue;
-    bed->blockCount = blockCount = sqlUnsigned(row[7]);
-    lmAllocArray(lm, bed->blockSizes, blockCount);
-    sqlUnsignedArray(row[8], bed->blockSizes, blockCount);
-    lmAllocArray(lm, bed->chromStarts, blockCount);
-    sqlUnsignedArray(row[9], bed->chromStarts, blockCount);
-    if (isGenePred)
-        {
-	/* Translate end coordinates to sizes. */
-	for (i=0; i<bed->blockCount; ++i)
-	    bed->blockSizes[i] -= bed->chromStarts[i];
-	}
-    else if (isPsl)
-        {
-	if (!pslKnowIfProtein)
-	    {
-	    /* Figure out if is protein using a rather elaborate but
-	     * working test I think Angie or Brian must have figured out. */
-	    if (tStrand == '-')
-	        {
-		int tSize = sqlUnsigned(row[10]);
-		pslIsProtein = 
-		       (bed->chromStart == 
-			tSize - (3*bed->blockSizes[bed->blockCount - 1]  + 
-			bed->chromStarts[bed->blockCount - 1]));
-		}
-	    else
-	        {
-		pslIsProtein = (bed->chromEnd == 
-			3*bed->blockSizes[bed->blockCount - 1]  + 
-			bed->chromStarts[bed->blockCount - 1]);
-		}
-	    pslKnowIfProtein = TRUE;
-	    }
-	if (pslIsProtein)
-	    {
-	    /* if protein then blockSizes are in protein space */
-	    for (i=0; i<blockCount; ++i)
-		bed->blockSizes[i] *= 3;
-	    }
-	if (tStrand == '-')
-	    {
-	    /* psl: if target strand is '-', flip the coords.
-	     * (this is the target part of pslRcBoth from src/lib/psl.c) */
-	    int tSize = sqlUnsigned(row[10]);
-	    for (i=0; i<blockCount; ++i)
-		{
-		bed->chromStarts[i] = tSize - 
-			(bed->chromStarts[i] + bed->blockSizes[i]);
-		}
-	    reverseInts(bed->chromStarts, bed->blockCount);
-	    reverseInts(bed->blockSizes, bed->blockCount);
-	    }
-	}
-    if (!isBedWithBlocks)
-	{
-	/* non-bed: translate absolute starts to relative starts */
-	for (i=0;  i < bed->blockCount;  i++)
-	    bed->chromStarts[i] -= bed->chromStart;
-	}
     }
-dyStringFree(&fields);
+freez(&fields);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 slReverse(&bedList);
