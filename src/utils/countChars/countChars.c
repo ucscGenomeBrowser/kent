@@ -1,7 +1,7 @@
 /* countChars - Count the number of occurences of a particular char. */
 #include "common.h"
 
-static char const rcsid[] = "$Id: countChars.c,v 1.2 2003/05/06 07:41:05 kate Exp $";
+static char const rcsid[] = "$Id: countChars.c,v 1.3 2003/06/14 16:21:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,8 +51,8 @@ fclose(f);
 return count;
 }
 
-void countChars(char *ch, int fileCount, char *fileNames[])
-/* countChars - Count the number of occurences of a particular char. */
+void doIt(char *ch, int fileCount, char *fileNames[])
+/* doIt - Count the number of occurences of a particular char. */
 {
 char c;
 int i;
@@ -77,6 +77,6 @@ int main(int argc, char *argv[])
 {
 if (argc < 3)
     usage();
-countChars(argv[1], argc-2, argv+2);
+doIt(argv[1], argc-2, argv+2);
 return 0;
 }
