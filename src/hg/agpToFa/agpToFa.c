@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.9 2003/11/17 16:55:39 booch Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.10 2004/02/24 18:44:36 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -241,14 +241,15 @@ DNA *dna;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
-    if (line[0] == '#' || line[0] == '\n')
+    if (line[0] == 0 || line[0] == '#' || line[0] == '\n')
         continue;
     wordCount = chopLine(line, words);
     if (wordCount < 5)
-        errAbort("Bad line %d of %s\n", lf->lineIx, lf->fileName);
+        errAbort("Bad line %d of %s: need at least 5 words, got %d\n",
+		 lf->lineIx, lf->fileName, wordCount);
     if (words[4][0] != 'N')
 	{
-	lineFileExpectWords(lf, 9, wordCount);
+	lineFileExpectAtLeast(lf, 9, wordCount);
 	if (sameWord(words[0], agpSeq))
 	    {
 	    agp = agpFragLoad(words);
