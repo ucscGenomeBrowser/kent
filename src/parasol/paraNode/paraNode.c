@@ -469,6 +469,13 @@ void doStatus()
 {
 struct dyString *dy = newDyString(256);
 dyStringPrintf(dy, "%d of %d CPUs busy", busyProcs, maxProcs);
+if (busyProcs > 0)
+    {
+    struct job *job;
+    dyStringPrintf(dy, ". Jobs:");
+    for (job = runningJobs; job != NULL; job = job->next)
+        dyStringPrintf(dy, " %d", job->jobId);
+    }
 write(connectionHandle, dy->string, dy->stringSize);
 dyStringFree(&dy);
 }
