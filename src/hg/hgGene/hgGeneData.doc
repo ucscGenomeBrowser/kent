@@ -24,6 +24,8 @@ The files are :
   otherOrgs.ra - information used to construct the section
       with links to homologous genes in other organisms.
 A more detailed description of each of these files follows.
+Note that the microarray section also uses the columnDb.ra
+files in the hgNearData directory.  
 
 genome.ra - This file contains a single record.  All fields
 are required. The fields are:
