@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.4 2004/01/23 23:48:29 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.5 2004/01/29 00:36:55 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -455,7 +455,7 @@ TablePopulated "knownGene" ${DB} || {
 #	${RO_DB}.refGene
 #	to create dnaGene.tab and dnaLink.tab
 if [ ! -s dnaLink.tab ]; then
-    echo "`date` running dnaGene ${DB} ${PDB}"
+    echo "`date` running dnaGene ${DB} ${PDB} ${RO_DB}"
     dnaGene ${DB} ${PDB} ${RO_DB}
     rm -f loadedKnownDnaGene
 fi
@@ -505,7 +505,7 @@ cd ${TOP}
 #	sp${DATE}.protein
 #	to create knownGenePep.tab and knownGeneMrna.tab
 if [ ! -s knownGenePep.tab ]; then
-    echo "`date` running rmKGPepMrna ${DB} ${DATE}"
+    echo "`date` running rmKGPepMrna ${DB} ${DATE} ${RO_DB}"
     rmKGPepMrna ${DB} ${DATE} ${RO_DB}
     rm -f loadedPepMrna
 fi
@@ -555,6 +555,7 @@ TablePopulated "kgXref" ${DB} || { \
     echo "`date` loading kgXref into ${DB}.kgXref"; \
     hgsql -e \
     'LOAD DATA local INFILE "kgXref.tab" into table kgXref;' ${DB}; \
+    rm -f kgAliasM.tab
 }
 
 #	kgAliasM reads from ${PDB}.hugo.symbol, ${PDB}.hugo.aliases
@@ -653,8 +654,8 @@ TablePopulated "kgAlias" ${DB} || { \
 if [ ! -s kgProtAliasBoth.tab ]; then
     echo "`date` running kgProtAlias ${DB} ${PDB}"
     kgProtAlias ${DB} ${PDB}
-    echo "`date` running kgProtAliasNCBI ${DB}"
-    kgProtAliasNCBI ${DB}
+    echo "`date` running kgProtAliasNCBI ${DB} ${RO_DB}"
+    kgProtAliasNCBI ${DB} ${RO_DB}
     cat kgProtAliasNCBI.tab kgProtAlias.tab | sort | uniq > kgProtAliasBoth.tab
     rm kgProtAliasNCBI.tab kgProtAlias.tab
 fi
@@ -662,7 +663,8 @@ fi
 TablePopulated "kgProtAlias" ${DB} || { \
     echo "`date` creating table kgProtAlias"; \
     hgsql -e "drop table kgProtAlias;" ${DB} 2> /dev/null; \
-    hgsql ${DB} < ~/kent/src/hg/lib/kgProtAlias.sql; \
+    hgsqldump --all -d -c hg16 kgProtAlias > ./kgProtAlias.sql; \
+    hgsql ${DB} < ./kgProtAlias.sql; \
     hgsql -e \
     'LOAD DATA local INFILE "kgProtAliasBoth.tab" into table kgProtAlias;' \
 	${DB}; \
