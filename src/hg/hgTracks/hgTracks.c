@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.656 2004/01/13 04:44:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.657 2004/01/15 00:51:33 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2103,8 +2103,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     lf->components = sfList;
     linkedFeaturesBoundsAndGrays(lf);
-    lf->tallStart = gp->cdsStart;
-    lf->tallEnd = gp->cdsEnd;
+
+    if (gp->cdsStart >= gp->cdsEnd)
+        {
+        lf->tallStart = gp->txEnd;
+        lf->tallEnd = gp->txEnd;
+        }
+    else
+        {
+        lf->tallStart = gp->cdsStart;
+        lf->tallEnd = gp->cdsEnd;
+        }
     
     slAddHead(&lfList, lf);
     genePredFree(&gp);
