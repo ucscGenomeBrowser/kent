@@ -135,6 +135,24 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track intersectingMCS
+shortLabel MCS Inter
+longLabel Intersecting MCSs
+group compGeno
+priority 15.5
+visibility hide
+color 0,160,0
+type bed 4 .
+
+track intersectingMergedMCS
+shortLabel MCS InterMerged
+longLabel Merged Intersecting MCSs
+group compGeno
+priority 15.6
+visibility hide
+color 0,160,0
+type bed 4 .
+
 track mcs_b
 shortLabel MCS (Binomial)
 longLabel Binomial-based MCSs
@@ -496,27 +514,9 @@ visibility full
 type sample
 
 
-track intersectingMergedMCS
-shortLabel MCS InterMerged
-longLabel Merged Intersecting MCSs
-group compGeno
-priority 50
-visibility hide
-color 0,160,0
-type bed 4 .
-
-track intersectingMCS
-shortLabel MCS Inter
-longLabel Intersecting MCSs
-group compGeno
-priority 50
-visibility hide
-color 0,160,0
-type bed 4 .
-
 track dhs
-shortLabel DNAase HyperSens
-longLabel DNAase I Hypersensitive Sites
+shortLabel DNAse HyperSens
+longLabel DNAse I Hypersensitive Sites
 group regulation
 priority 51
 visibility hide
