@@ -288,63 +288,138 @@ if (width > 0 && height > 0)
     }
 }
 
+void mgBrezy(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color,
+	int yBase, boolean fillFromBase)
+/* Brezenham line algorithm.  Optionally fill in under line. */
+{
+if (x1 == x2)
+    {
+    int y,height;
+    if (y1 > y2)
+	{
+	y = y2;
+	height = y1-y2;
+	}
+    else
+        {
+	y = y1;
+	height = y2-y1;
+	}
+    if (fillFromBase)
+        {
+	if (y < yBase)
+	    mgDrawBox(mg, x1, y, 1, yBase-y, color);
+	}
+    else
+        mgDrawBox(mg, x1, y, 1, height, color);
+    }
+else if (y1 == y2)
+    {
+    int x,width;
+    if (x1 > x2)
+        {
+	x = x2;
+	width = x1-x2;
+	}
+    else
+        {
+	x = x1;
+	width = x2-x1;
+	}
+    if (fillFromBase)
+        {
+	if (y1 < yBase)
+	    mgDrawBox(mg, x, y1, width, yBase - y1, color);
+	}
+    else
+        {
+	mgDrawBox(mg, x, y1, width, 1, color);
+	}
+    }
+else
+    {
+    int duty_cycle;
+    int incy;
+    int   delta_x, delta_y;
+    int dots;
+    delta_y = y2-y1;
+    delta_x = x2-x1;
+    if (delta_y < 0) 
+	{
+	delta_y = -delta_y;
+	incy = -1;
+	}
+    else
+	{
+	incy = 1;
+	}
+    if (delta_x < 0) 
+	{
+	delta_x = -delta_x;
+	incy = -incy;
+	x1 = x2;
+	y1 = y2;
+	}
+    duty_cycle = (delta_x - delta_y)/2;
+    if (delta_x >= delta_y)
+	{
+	dots = delta_x+1;
+	while (--dots >= 0)
+	    {
+	    if (fillFromBase)
+		{
+		if (y1 < yBase)
+		    mgDrawBox(mg,x1,y1,1,yBase-y1,color);
+		}
+	    else
+		mgPutDot(mg,x1,y1,color);
+	    duty_cycle -= delta_y;
+	    x1 += 1;
+	    if (duty_cycle < 0)
+		{
+		duty_cycle += delta_x;	  /* update duty cycle */
+		y1+=incy;
+		}
+	    }
+	}
+    else
+	{
+	dots = delta_y+1;
+	while (--dots >= 0)
+	    {
+	    if (fillFromBase)
+		{
+		if (y1 < yBase)
+		    mgDrawBox(mg,x1,y1,1,yBase-y1,color);
+		}
+	    else
+		mgPutDot(mg,x1,y1,color);
+	    duty_cycle += delta_x;
+	    y1+=incy;
+	    if (duty_cycle > 0)
+		{
+		duty_cycle -= delta_y;	  /* update duty cycle */
+		x1 += 1;
+		}
+	    }
+	}
+    }
+}
+
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)
 /* Draw a line from one point to another. */
 {
-int   duty_cycle;
-int incy;
-int   delta_x, delta_y;
-int dots;
+mgBrezy(mg, x1, y1, x2, y2, color, 0, FALSE);
+}
 
-delta_y = y2-y1;
-delta_x = x2-x1;
-if (delta_y < 0) 
-    {
-    delta_y = -delta_y;
-    incy = -1;
-    }
-else
-    {
-    incy = 1;
-    }
-if (delta_x < 0) 
-    {
-    delta_x = -delta_x;
-    incy = -incy;
-    x1 = x2;
-    y1 = y2;
-    }
-duty_cycle = (delta_x - delta_y)/2;
-if (delta_x >= delta_y)
-    {
-    dots = delta_x+1;
-    while (--dots >= 0)
-	{
-	mgPutDot(mg,x1,y1,color);
-	duty_cycle -= delta_y;
-	x1 += 1;
-	if (duty_cycle < 0)
-	    {
-	    duty_cycle += delta_x;	  /* update duty cycle */
-	    y1+=incy;
-	    }
-	}
-    }
-else
-    {
-    dots = delta_y+1;
-    while (--dots >= 0)
-	{
-	mgPutDot(mg,x1,y1,color);
-	duty_cycle += delta_x;
-	y1+=incy;
-	if (duty_cycle > 0)
-	    {
-	    duty_cycle -= delta_y;	  /* update duty cycle */
-	    x1 += 1;
-	    }
-	}
-    }
+void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+	int bottom, Color color)
+/* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+ * it's top, a horizontal line at bottom at it's bottom,  and
+ * vertical lines from the bottom to y1 on the left and bottom to
+ * y2 on the right. */
+{
+mgBrezy(mg, x1, y1, x2, y2, color, bottom, TRUE);
 }
 
 void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots)
