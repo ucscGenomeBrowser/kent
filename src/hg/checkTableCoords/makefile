@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = checkTableCoords
 O = $A.o 
 
-all: compile install test
+all: compile install
 
 compile: $A
 
