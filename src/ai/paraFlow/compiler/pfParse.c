@@ -208,6 +208,20 @@ switch (type)
 	return "pptCastDoubleToLong";
     case pptCastDoubleToFloat:
 	return "pptCastDoubleToFloat";
+    case pptConstByte:
+	return "pptConstByte";
+    case pptConstShort:
+	return "pptConstShort";
+    case pptConstInt:
+	return "pptConstInt";
+    case pptConstLong:
+	return "pptConstLong";
+    case pptConstFloat:
+	return "pptConstFloat";
+    case pptConstDouble:
+	return "pptConstDouble";
+    case pptConstString:
+	return "pptConstString";
 
     default:
         internalErr();
@@ -262,6 +276,13 @@ if (pp->name != NULL)
 switch (pp->type)
     {
     case pptConstUse:
+    case pptConstByte:
+    case pptConstShort:
+    case pptConstInt:
+    case pptConstLong:
+    case pptConstFloat:
+    case pptConstDouble:
+    case pptConstString:
 	fprintf(f, " ");
 	pfDumpConst(pp->tok, f);
 	break;

@@ -115,6 +115,13 @@ enum pfParseType
     pptCastDoubleToLong,
     pptCastDoubleToFloat,
 
+    pptConstByte,
+    pptConstShort,
+    pptConstInt,
+    pptConstLong,
+    pptConstFloat,
+    pptConstDouble,
+    pptConstString,
     };
 
 char *pfParseTypeAsString(enum pfParseType type);

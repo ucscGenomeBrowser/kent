@@ -41,6 +41,15 @@ struct pfCompile
     struct pfBaseType *paraType;	/* Type for para declarations */
     struct pfBaseType *flowType;	/* Type for flow declarations */
     struct pfBaseType *classType;	/* Type for class declarations. */
+
+    struct pfBaseType *bitType;
+    struct pfBaseType *byteType;
+    struct pfBaseType *shortType;
+    struct pfBaseType *intType;
+    struct pfBaseType *longType;
+    struct pfBaseType *floatType;
+    struct pfBaseType *doubleType;
+    struct pfBaseType *stringType;
     };
 
 struct pfCompile *pfCompileNew(char *fileName);
