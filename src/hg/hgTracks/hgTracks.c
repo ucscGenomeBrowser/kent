@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.814 2004/10/12 01:57:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.815 2004/10/12 21:11:54 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8845,7 +8845,7 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
-        char *javascript = "onchange=\"document.location = '../cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+        char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
         if (containsStringNoCase(database, "zoo"))
             {
             hPuts("Organism ");
@@ -9372,7 +9372,7 @@ void customTrackPage()
 /* Put up page that lets user upload custom tracks. */
 {
 puts("<H2>Add Your Own Custom Track</H2>");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
 puts(
