@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.4 2004/03/02 17:05:39 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.5 2005/03/07 04:25:36 kent Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -106,7 +106,7 @@ for (i=0; i<representativeCount; i += groupSize+1)
     {
     printf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
-    safef(gifName, sizeof(gifName), "../trash/near_%s_%s%d.gif", 
+    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.gif", 
     	colName, subName, ++gifStart);
     gifLabelVerticalText(gifName, experiments+i, groupSize, height);
     if (url != NULL)
