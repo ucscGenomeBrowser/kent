@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.826 2005/01/27 00:43:30 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.827 2005/01/28 22:59:38 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1675,7 +1675,6 @@ boolean hasBin;
 char table[64];
 struct sqlResult *sr = NULL;
 char **row = NULL;
-char *geneName = NULL;
 char *classTable;
 char *class = "Class";
 
@@ -1702,10 +1701,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     classTable = addSuffix(track, class);
     if (hTableExists(classTable)) 
        {
-       geneName = cloneString(name);
-       /* get suffix */
-       chopSuffix(geneName);
-       sprintf(query, "select class from acemblyClass where name like '%s'", geneName);
+       sprintf(query, "select class from %s where name = '%s'", classTable, name);
        sr = sqlGetResult(conn, query);
        /* print class */
        if ((row = sqlNextRow(sr)) != NULL)
