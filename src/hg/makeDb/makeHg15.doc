@@ -94,6 +94,7 @@ exit; # don't actually run this like a script :)
 # 7) Distribute contig .fa to appropriate directory (assumes all files
 #    are in "contigs" directory).
 
+    cd ~/hg15
     /cluster/bin/scripts/distNcbiCtgFa contigs .
     rm -r contigs
 
@@ -202,7 +203,7 @@ exit; # don't actually run this like a script :)
 -   ~kent/bin/iSync
 
 
-# REPEAT MASKING (TO DO)
+# REPEAT MASKING (DONE 041103)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
     # * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -244,16 +245,22 @@ exit; # don't actually run this like a script :)
     #- Now while that's running, run TRF (simpleRepeat), and RefSeq 
     #- alignments, in parallel.  Also, create the database and the 
     #- tracks that don't rely on cluster runs or on masked sequence.  
-DONE TO HERE
+    # Distribute the split files and splitting lift files back to our normal
+    #  chromosome contig directory tree.
+    cd ~/hg15
+# Edit script first!
+    /cluster/bin/scripts/distNcbiCtgOut contigOut/split .
+
     #- Lift up the split-contig .out's to contig-level .out's
     ssh eieio
     cd ~/hg15
     foreach d ( ?{,?}/NT_* )
       cd $d
       set contig = $d:t
-      liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+      liftUp $contig.fa.out $contig.fa.lft warn ${contig}?*.fa.out > /dev/null
       cd ../..
     end
+
     #- Lift up RepeatMask .out files to chromosome coordinates via
     tcsh jkStuff/liftOut2.sh
     #- By this point, the database should have been created (below):
@@ -288,7 +295,7 @@ DONE TO HERE
     # for $nt given in seq_contig.md).  
 
 
-# MAKE LIFTALL.LFT, NCBI.LFT (TO DO)
+# MAKE LIFTALL.LFT, NCBI.LFT (DONE 041103)
     cd ~/hg15
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
     # Create jkStuff/ncbi.lft for lifting stuff built with the NCBI assembly.
@@ -297,10 +304,10 @@ DONE TO HERE
     # (grep for '|').
     mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
     # If a lift file has been edited (e.g. as in 6.2.5 above), edit ncbi.lft 
-    # to match.
+    # to match. If no step 6.2.5 then no editing needed
 
 
-# SIMPLE REPEAT [TRF] TRACK (TO DO)
+# SIMPLE REPEAT [TRF] TRACK (DONE 041103)
     # Distribute contigs to /iscratch/i
     ssh kkr1u00
     rm -rf /iscratch/i/gs.16/build33/contigs
@@ -324,7 +331,6 @@ DONE TO HERE
     para create spec
     para try
     para check
-DONE TO HERE
     para push
     para check
     # When cluster run is done
@@ -337,7 +343,7 @@ DONE TO HERE
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-# REFSEQ ALIGNMENTS AND REFGENE TRACK PREP (TO DO)
+# REFSEQ ALIGNMENTS AND REFGENE TRACK PREP (DONE 041103)
     # Make sure contigs have been distributed to /iscratch/i/ (should have 
     # been done for simpleRepeat/TRF above)
     # Make sure refSeq.fa is under /iscratch/i too (GENBANK above)
@@ -345,11 +351,16 @@ DONE TO HERE
     mkdir ~/hg15/bed/refSeq
     cd ~/hg15/bed/refSeq
     mkdir psl
-    ls -1S /iscratch/i/gs.16/build33/contigs/*.fa > genome.lst
+    ls -1S /iscratch/i/gs.16/agp/*.fa > genome.lst
+    # Remove DR51.fa, DR52.fa and bottomDrawer.fa from the list in genome.lst
+    # Edit each fa file to say chr1, chr2, etc. in the top comment line.
     ls -1 /iscratch/i/mrna.134/Homo_sapiens/refSeq.fa > mrna.lst
     cp ~/hg13/bed/refSeq/gsub .
     # Edit the file to make it do blat.x -band
     gensub2 genome.lst mrna.lst gsub spec
+    
+    # Run this on the small cluster
+    ssh kkr1u00
     para create spec
     para try, para check, para push, para check....
     para time > time
@@ -365,7 +376,7 @@ DONE TO HERE
     # After the database has been created, go to "LOAD REFGENE" below...
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (TO DO)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 041103)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
@@ -398,12 +409,18 @@ DONE TO HERE
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
     ssh eieio
     cd ~/hg15
+    # Make chr*.fa from contig .fa
+    tcsh jkStuff/chrFa.sh
+
     #- Soft-mask (lower-case) the contig and chr .fa's
-    ./jkStuff/makeFaMasked.sh
+    tcsh jkStuff/makeFaMasked.sh
     #- Make hard-masked .fa.masked files as well:
-    ./jkStuff/makeHardMasked.sh
+    tcsh jkStuff/makeHardMasked.sh
     #- Rebuild the nib, mixedNib, maskedNib files:
-    ./jkStuff/makeNib.sh
+    tcsh jkStuff/makeNib.sh
+
+DONE TO HERE
+
     # Copy the masked contig fa to /iscratch and /scratch:
     ssk kkr1u00
     rm -rf /iscratch/i/gs.16/build33/trfFa
@@ -524,8 +541,7 @@ DONE TO HERE
         endif
       endif
     end
-    # Make chr*.fa from contig .fa
-    tcsh jkStuff/chrFa.sh
+DONE TO HERE
     # Make unmasked nibs -- necessary for building chromInfo.
     mkdir nib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
@@ -573,7 +589,7 @@ DONE TO HERE
     hgCtgPos hg15 build33 
 
 
-# LOAD REFGENE (TO DO)
+# LOAD REFGENE (DONE 041103)
     # Do this after the database has been created and the RefSeq alignments 
     # are done (above)
     # Load refSeq alignments into database
@@ -586,18 +602,18 @@ DONE TO HERE
     ln -s /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.fa
     # Load the refSeq mRNA
     cd /cluster/store2/tmp
-DONE ->    ~kent/bin/i386/hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
+    ~kent/bin/i386/hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
       /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.ra
     cd ~/hg15/bed/refSeq
     hgRefSeqMrna hg15 /gbdb/hg15/mrna.134/refSeq.fa \
-      /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.ra \
+      /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.ra \
       all_refSeq.psl \
-      /cluster/store5/mrna.134/refSeq/loc2ref \
-      /cluster/store5/mrna.134/refSeq/hs.faa \
-      /cluster/store5/mrna.134/refSeq/mim2loc
+      /cluster/store5/mrna.134/refSeq/041003/loc2ref \
+      /cluster/store5/mrna.134/refSeq/041003/hs.faa \
+      /cluster/store5/mrna.134/refSeq/041003/mim2loc
     # Don't worry about the "No gene name" errors
     # Add RefSeq status info
-    hgRefSeqStatus -human hg15 /cluster/store5/mrna.134/refSeq/loc2ref
+    hgRefSeqStatus hg15 /cluster/store5/mrna.134/refSeq/041003/loc2ref
     # Create precomputed join of refFlat and refGene:
     echo 'CREATE TABLE refFlat \
           (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) \
