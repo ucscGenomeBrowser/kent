@@ -317,6 +317,7 @@ int main(int argc, char *argv[])
 char *command;
 bzpTime(NULL);
 dnaUtilOpen();
+setMaxAlloc(2LL*1024LL*1024LL*1024LL)
 optionInit(&argc, argv, options);
 port = optionInt("port", port);
 host = optionVal("host", host);
