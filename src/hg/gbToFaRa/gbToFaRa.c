@@ -24,7 +24,7 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.22 2003/06/30 20:32:15 kate Exp $";
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.23 2004/06/23 23:39:21 markd Exp $";
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -1361,7 +1361,7 @@ while (readGbInfo(lf))
 		}
             }
 
-        if (keyExpEval(filter->keyExp, kvt))
+        if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
             {
             int chunkIx;
             /* Store size in histogram for statistical analysis. */
