@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.37 2004/09/10 19:16:31 angie Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.38 2004/10/21 07:57:24 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -199,6 +199,7 @@ for (;;)
     if (readSize <= 0)
         break;
     }
+freeMem(buf);
 }
 
 void *intToPt(int i)
