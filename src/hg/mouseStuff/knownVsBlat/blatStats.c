@@ -1,7 +1,7 @@
 #include "common.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: blatStats.c,v 1.3 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: blatStats.c,v 1.4 2003/06/14 16:31:25 kent Exp $";
 
 
 float divAsPercent(double a, double b)
@@ -12,7 +12,7 @@ if (b == 0)
 return 100.0 * a / b;
 }
 
-void reportStat(FILE *f, char *name, struct stat *stat, boolean reportPercentId)
+void reportStat(FILE *f, char *name, struct oneStat *stat, boolean reportPercentId)
 /* Print out one set of stats. */
 {
 char buf[64];
@@ -30,46 +30,48 @@ if (reportPercentId)
 fprintf(f, "\n");
 }
 
-struct stat *totalUtr(struct blatStats *stats)
+struct oneStat *totalUtr(struct blatStats *stats)
 /* Return sum of 5' and 3' UTRs. */
 {
-static struct stat acc;
+static struct oneStat acc;
 ZeroVar(&acc);
 addStat(&stats->utr5, &acc);
 addStat(&stats->utr3, &acc);
 return &acc;
 }
 
-struct stat *totalSplice(struct blatStats *stats)
+struct oneStat *totalSplice(struct blatStats *stats)
 /* Return sum of 5' and 3' splice sites. */
 {
-static struct stat acc;
+static struct oneStat acc;
 ZeroVar(&acc);
 addStat(&stats->splice5, &acc);
 addStat(&stats->splice3, &acc);
 return &acc;
 }
 
-struct stat *totalCds(struct blatStats *stats)
+struct oneStat *totalCds(struct blatStats *stats)
 /* Return sum of all CDS regions. */
 {
-static struct stat acc;
+static struct oneStat acc;
 ZeroVar(&acc);
 addStat(&stats->firstCds, &acc);
 addStat(&stats->middleCds, &acc);
 addStat(&stats->endCds, &acc);
 addStat(&stats->onlyCds, &acc);
+return &acc;
 }
 
-struct stat *totalIntron(struct blatStats *stats)
+struct oneStat *totalIntron(struct blatStats *stats)
 /* Return sum of all intron regions. */
 {
-static struct stat acc;
+static struct oneStat acc;
 ZeroVar(&acc);
 addStat(&stats->firstIntron, &acc);
 addStat(&stats->middleIntron, &acc);
 addStat(&stats->endIntron, &acc);
 addStat(&stats->onlyIntron, &acc);
+return &acc;
 }
 
 
@@ -110,7 +112,7 @@ reportStat(f, "only intron", &stats->onlyIntron, reportPercentId);
 fprintf(f, "\n");
 }
 
-void addStat(struct stat *a, struct stat *acc)
+void addStat(struct oneStat *a, struct oneStat *acc)
 /* Add stat from a into acc. */
 {
 acc->features += a->features;
@@ -120,7 +122,7 @@ acc->basesPainted += a->basesPainted;
 acc->cumIdRatio += a->cumIdRatio;
 }
 
-struct blatStats *addStats(struct blatStats *a, struct blatStats *acc)
+void addStats(struct blatStats *a, struct blatStats *acc)
 /* Add stats in a to acc. */
 {
 addStat(&a->upstream100, &acc->upstream100);

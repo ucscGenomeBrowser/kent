@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: knownVsBlat.c,v 1.12 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: knownVsBlat.c,v 1.13 2003/06/14 16:31:25 kent Exp $";
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
@@ -133,7 +133,7 @@ if (tIsRc)
 int pslMilliId(struct psl *psl)
 /* Return percent ID more or less. */
 {
-1000 - pslCalcMilliBad(psl, FALSE);
+return 1000 - pslCalcMilliBad(psl, FALSE);
 }
 
 void simpleAddMilli(int *milliMatches, int score, int start, int end, int genoStart, int genoEnd)
@@ -184,7 +184,7 @@ for (i=0; i<blockCount; ++i)
     }
 }
 
-int halfAddToStats(struct stat *stat, int hitStart, int hitEnd, 
+int halfAddToStats(struct oneStat *stat, int hitStart, int hitEnd, 
     int genoStart, int genoEnd, int *milliMatches)
 /* Fold in info from milliMatches between hitStart and hitEnd to stat.
  * Update base info but not feature info. */
@@ -213,7 +213,7 @@ stat->basesTotal += count;
 return painted;
 }
 
-int addToStats(struct stat *stat, int hitStart, int hitEnd, 
+int addToStats(struct oneStat *stat, int hitStart, int hitEnd, 
     int genoStart, int genoEnd, int *milliMatches)
 /* Fold in info from milliMatches between hitStart and hitEnd to stat. */
 {
@@ -349,14 +349,14 @@ for (exonIx = 0; exonIx < exonCount; ++exonIx)
 	}
     if (exonStart < gp->cdsStart)	/* UTR */
         {
-	struct stat *stat = (gp->strand[0] == '+' ? &stats->utr5 : &stats->utr3);
+	struct oneStat *stat = (gp->strand[0] == '+' ? &stats->utr5 : &stats->utr3);
 	int end = min(exonEnd, gp->cdsStart);
 	addToStats(stat, exonStart, end, genoStart, genoEnd, milliMatches);
 	utrSize += end - exonStart;
 	}
     if (exonEnd > gp->cdsEnd)		/* Other UTR */
         {
-	struct stat *stat = (gp->strand[0] == '-' ? &stats->utr5 : &stats->utr3);
+	struct oneStat *stat = (gp->strand[0] == '-' ? &stats->utr5 : &stats->utr3);
 	int start = max(exonStart, gp->cdsEnd);
 	addToStats(stat, start, exonEnd, genoStart, genoEnd, milliMatches);
 	utrSize += exonEnd - start;
@@ -369,13 +369,13 @@ for (exonIx = 0; exonIx < exonCount; ++exonIx)
 	}
     else if (exonStart <= gp->cdsStart && exonEnd > gp->cdsStart)
         {
-	struct stat *stat = (gp->strand[0] == '+' ? &stats->firstCds : &stats->endCds);
+	struct oneStat *stat = (gp->strand[0] == '+' ? &stats->firstCds : &stats->endCds);
 	addToStats(stat, gp->cdsStart, exonEnd, genoStart, genoEnd, milliMatches);
 	cdsSize += exonEnd - gp->cdsStart;
 	}
     else if (exonStart < gp->cdsEnd && exonEnd >= gp->cdsEnd)
         {
-	struct stat *stat = (gp->strand[0] == '-' ? &stats->firstCds : &stats->endCds);
+	struct oneStat *stat = (gp->strand[0] == '-' ? &stats->firstCds : &stats->endCds);
 	addToStats(stat, exonStart, gp->cdsEnd, genoStart, genoEnd, milliMatches);
 	cdsSize += gp->cdsEnd - exonStart;
 	}
@@ -398,7 +398,7 @@ for (exonIx = 1; exonIx < exonCount; ++exonIx)
     int intronStart = gp->exonEnds[exonIx-1];
     int intronEnd = gp->exonStarts[exonIx];
     int spliceSize = 10;
-    struct stat *stat;
+    struct oneStat *stat;
     if (intronEnd - intronStart > 2*spliceSize)
         {
 	if (gp->strand[0] == '+')

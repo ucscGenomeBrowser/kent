@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: kvsSummary.c,v 1.2 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: kvsSummary.c,v 1.3 2003/06/14 16:31:25 kent Exp $";
 
 #define maxRuns 256
 #define maxChroms 256
@@ -57,7 +57,7 @@ char *line, *words[32];
 char *s, *e;
 int i, wordCount;
 char *catName;
-struct stat *stat;
+struct oneStat *stat;
 struct hash *hash = newHash(5);
 
 for (;;)
@@ -206,7 +206,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     for (cat = catList; cat != NULL; cat = cat->next)
 	{
 	char *catName = cat->name;
-	struct stat *stat;
+	struct oneStat *stat;
 	fprintf(f, "%-15s", catName);
 
 	/* Print all runs on this field. */
