@@ -283,6 +283,8 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define filterPatternVar "pat"
 #define filterRawLogicVar "rawLogic"
 #define filterRawQueryVar "rawQuery"
+#define filterDataValueVar "dataValue"
+#define filterMaxOutputVar "maxOutput"
 
 /* --------- Functions related to intersecting. --------------- */
 
