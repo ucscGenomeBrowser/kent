@@ -1,4 +1,8 @@
 #!/bin/csh -efx
+echo "Please make a copy of this script, modifying the "
+echo "set's to point to the right directory and deleting "
+echo "these echos and the exit"
+exit -1
 
 # This script will create chains and nets on a blastz
 # cross species alignment run and load them into the
