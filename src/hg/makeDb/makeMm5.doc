@@ -311,13 +311,13 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     make alpha
     cvs commit makefile
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM5 (TO_BE_DONE - 2004-07-XX Fan)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM5 (DONE - 2004-07-14 Fan)
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-    VALUES ("mm5", "blat5", "17778", "1", "0"); \
+    VALUES ("mm5", "snort", "17778", "1", "0"); \
     INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-    VALUES ("mm5", "blat5", "17779", "0", "1");' \
+    VALUES ("mm5", "snort", "17779", "0", "1");' \
     -h genome-testdb hgcentraltest
 
 
@@ -1394,4 +1394,84 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # Sorted
     # Saving bed.tab
     # Loading mm5
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE 2004-07-14 Fan)
+    ssh kksilo
+    cd /cluster/data/mm5
+
+    # Build the .zip files
+    cp /cluster/data/rn3/jkStuff/zipAll.sh jkStuff
+    # edit this zipAll.sh to produce output to /cluster/data/mm5/bigZips
+    jkStuff/zipAll.sh > zipAll.log
+    #	bash:	./jkStuff/zipAll.sh > zipAll.log 2>&1 &
+    tail -f zipAll.log
+
+    mkdir zip
+    mv *.zip zip
+    cd zip
+    # Look at zipAll.log to make sure all file lists look reasonable.
+    # Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+
+    wc -l *.zip.test
+    # 46 chromAgp.zip.test
+    # 45 chromFa.zip.test
+    # 45 chromFaMasked.zip.test
+    # 45 chromOut.zip.test
+    # 45 chromTrf.zip.test
+    # 641 contigAgp.zip.test
+    # 641 contigFa.zip.test
+    # 641 contigFaMasked.zip.test
+    # 641 contigOut.zip.test
+    # 641 contigTrf.zip.test
+    #3431 total
+
+    ssh hgwdev
+    cd /cluster/data/mm5/jkStuff
+    # create generic copy program
+    cat << '_EOF_' > cpToWeb.sh
+#!/bin/sh
+if [ $# -ne 1 ]; then
+	echo "usage: cpToWeb.sh <goldenPath download directory>"
+	echo -e "\texample: cpToWeb.sh mm5"
+	exit 255
+fi
+GP=/usr/local/apache/htdocs/goldenPath/$1
+mkdir -p ${GP}
+mkdir -p ${GP}/chromosomes
+for f in ../?/*.fa ../??/*.fa
+do
+    BN=`basename ${f}`
+    zip -j ${GP}/chromosomes/${BN}.zip ${f}
+    echo "zipped: ${BN}"
+done
+mkdir -p ${GP}/bigZips
+for Z in *.zip
+do
+	cp -p ${Z} ${GP}/bigZips
+	echo "copied: ${Z}"
+done
+'_EOF_'
+    chmod +x cpToWeb.sh
+    cd /cluster/data/mm5/zip
+    ../jkStuff/cpToWeb.sh mm5
+    cd /usr/local/apache/htdocs/goldenPath/mm5
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+    # Make the upstream sequence files.
+    # NOTE: must be redone due to bad gap track
+    cd bigZips
+    featureBits mm5 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    rm upstream1000.fa
+    featureBits mm5 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    rm upstream2000.fa
+    featureBits mm5 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+    rm upstream5000.fa
+    # mrna zips -- auto dump process takes care of this
 
