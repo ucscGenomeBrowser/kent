@@ -7,7 +7,7 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.5 2005/01/06 20:12:26 galt Exp $";
+static char const rcsid[] = "$Id: axtAffine.c,v 1.6 2005/01/10 00:09:54 kent Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)
@@ -28,7 +28,6 @@ struct phmmMatrix *a;
 struct phmmState *hf, *iq, *it;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
-int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
 int badScore = -0x3fffffff;
@@ -47,10 +46,6 @@ a = phmmMatrixNew(3, query, querySize, target, targetSize);
 hf = phmmNameState(a, 0, "match", 'M');
 iq = phmmNameState(a, 1, "qSlip", 'Q');
 it = phmmNameState(a, 2, "tSlip", 'T');
-
-qSlipOff = -a->qDim;
-tSlipOff = -1;
-matchOff = qSlipOff + tSlipOff;
 
 for (tIx = 1; tIx < a->tDim; tIx += 1)
     {
