@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.6 2004/08/20 00:01:47 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.7 2004/08/20 23:04:09 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -143,14 +143,14 @@ if (!dirOption)
 /* process BED lines, emitting an AGP file */
 for (pos = posList; pos != NULL; pos = pos->next)
     {
+    /* convert BED start to 1-based, since AGP is */
+    pos->chromStart++;
     if (pos->score == 1)
         /* score field of the BED is actually the sequence number
          * of the segment in the region */
         start = 1;
-    /*
     verbose(2, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
             pos->chrom, pos->chromStart, pos->chromEnd, pos->name, pos->score);
-            */
     safef(regionName, ArraySize(regionName), "%s%s_%d", 
                 namePrefix, pos->name, pos->score);
     if (dirOption)

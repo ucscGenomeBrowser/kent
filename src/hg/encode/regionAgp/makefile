@@ -4,13 +4,16 @@ L = -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 INSTALLDIR = ${HOME}/bin/${MACHTYPE}
-
 SCRIPT_DIR = /cluster/data/encode/bin/scripts
+
+PROG = regionAgp
 
 SCRIPTS = \
 	encodeRegionPackingList.pl
 
-all:
+all: ${PROG} scripts
+
+scripts:
 	@for F in $(SCRIPTS); do \
             I=$${F%.*}; \
             if test "$$F" -nt "$(SCRIPT_DIR)/$$I"; then \
@@ -20,11 +23,9 @@ all:
             fi ;\
 	done
 
-PROG = regionAgp
-
 O = ${PROG}.o
 
-regionAgp: $O $(MYLIBS)
+${PROG}: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(INSTALLDIR)/${PROG} $O $(MYLIBS) $L
 #strip $(HOME)/bin/$(MACHTYPE)/${PROG}
 
