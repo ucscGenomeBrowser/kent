@@ -750,3 +750,132 @@ droYak1.downloadDir = droYak1
       | hgsql -h genome-testdb hgcentraltest
 
 
+# MAKE Drosophila Proteins track
+    ssh kksilo
+    mkdir -p /cluster/data/droYak1/blastDb
+    cd /cluster/data/droYak1/blastDb
+    for i in ../*/*/*_[0-9]*_[0-9]*.fa; do ln -s $i .; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/droYak1/blastDb
+    cp /cluster/data/droYak1/blastDb/* /iscratch/i/droYak1/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/droYak1/bed/tblastn.dm1FB
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB
+    ls -1S /iscratch/i/droYak1/blastDb/*.nsq | sed "s/\.nsq//" > bug.lst
+    exit
+
+    # back to kksilo
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB
+    mkdir fbfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl | awk "{print \\\$1}"`/\(150000/`wc bug.lst | awk "{print \\\$1}"`\)
+    # 18735/(150000/463) = 57.828700
+    split -l 58 /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir blastOut
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/droYak1/jkStuff/subLift.lft warn $f.2
+        liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/droYak1/jkStuff/liftAll.lft warn $f.3
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /iscratch/i/dm1/protein.lft warn $f.4
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 bug.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB
+    para create blastSpec
+    para shove   # jobs will need to be restarted, but they should all finish
+# Completed: 150012 of 150012 jobs
+# CPU time in finished jobs:    2892894s   48214.90m   803.58h   33.48d  0.092 y
+# IO & Wait Time:                748046s   12467.43m   207.79h    8.66d  0.024 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest job:                      562s       9.37m     0.16h    0.01d
+# Submission to last job:         14761s     246.02m     4.10h    0.17d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB
+    para create chainSpec
+    para push
+# Completed: 324 of 324 jobs
+#  CPU time in finished jobs:        409s       6.81m     0.11h    0.00d  0.000 y
+#  IO & Wait Time:                  8539s     142.32m     2.37h    0.10d  0.000 y
+#  Average job time:                  28s       0.46m     0.01h    0.00d
+#  Longest job:                       89s       1.48m     0.02h    0.00d
+#  Submission to last job:           585s       9.75m     0.16h    0.01d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastDm1FB.psl
+    cd ..
+    blatDir=/cluster/data/dm1/bed/blat.dm1FB
+    protDat -fb preblastDm1FB.psl $blatDir/dm1FB.psl $blatDir/dm1FB.mapNames blastDm1FB.psl
+
+    ssh hgwdev
+    cd /cluster/data/droYak1/bed/tblastn.dm1FB
+    hgLoadPsl droYak1 blastDm1FB.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
