@@ -1884,3 +1884,65 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # emailed the files to John Wallis w/warning they're prelim, automated.
 
 
+# SNP & GENES FROM BEIJING GENOME INST. (DONE 3/16/04 angie)
+    ssh kolossus
+    mkdir /cluster/data/galGal2/bed/bgi
+    cd /cluster/data/galGal2/bed/bgi
+    # Their files are very fragmented into a deep dir structure.  
+    # Pull the whole thing (except chromatograms) over intact.  
+    # Use --active-ftp because passive mode was timing out.  
+    # Replace XXXX and YYYY with username and password emailed from 
+    # Yong Zhang <zhangy@genomics.org.cn>.
+    wget -r --exclude-directories=\*/chromatograms --active-ftp \
+      --timestamping ftp://XXXX:YYYY@61.50.158.101/BGI/
+    # Takes hours... ~30kB/s from China, & lots o' data...
+    mv 61.50.158.101/BGI .
+    rmdir 61.50.158.101
+
+    # Coverage track: bed 4 showing where SNP reads were performed.
+    # Looks like we can get strain info from filename... 
+    find . -name \*ContigCov-\*.txt\* -print \
+    | xargs $HOME/kent/src/hg/snp/bgi/bgiCovToBed.pl \
+      > bgiCov.bed
+
+    # Gene annotations: trim the input file to 10 columns, use as genePred.
+    find . -name \*exon_intron.txt -print \
+    | sed -e 's/ /\\ /g' \
+    | xargs awk '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
+                  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10;}' \
+      > bgiGene.tab
+
+    # Gene annotation peptide seqs:
+    cp /dev/null bgiGenePep.fa
+    foreach f (`find 61.50.158.101 -name \*.pep\* -print | g -v HumanDis`)
+      set gz = `echo $f | grep .gz`
+      if ("$gz" != "") then
+        gunzip -c $f >> bgiGenePep.fa
+      else
+        cat $f >> bgiGenePep.fa
+      endif
+    end
+
+    # Gene info and SNPs: slurp in all of the GeneSNPcon* files and 
+    # SNPlist-* files, cross-reference, and dump out bgiGeneInfo.sql 
+    # and bgiSnp.bed.  (bgiGeneInfo.sql with INSERT statements because of 
+    # the longblobs which can't be loaded in from .tab unfortunately)
+    find . -name SNPlist-\*.txt\* -print \
+      > SNPlists.list
+    find 61.50.158.101/BGI/SNPs_by_cDNA/2004-03-15 -name \*GeneSNPcon\*.txt\* \
+      -print \
+      > GeneSNPcons.list
+    $HOME/kent/src/hg/snp/bgi/bgiXref.pl SNPlists.list GeneSNPcons.list
+
+    # Load 'em up...
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/bgi
+    hgLoadBed galGal2 bgiCov bgiCov.bed
+    ldHgGene galGal2 bgiGene -predTab bgiGene.tab
+    hgPepPred galGal2 generic bgiGenePep bgiGenePep.fa
+    hgsql galGal2 < $HOME/kent/src/hg/lib/bgiGeneInfo.sql
+    hgsql galGal2 < ./bgiGeneInfo.sql
+    hgLoadBed galGal2 bgiSnp -tab -sqlTable=$HOME/kent/src/hg/lib/bgiSnp.sql \
+      bgiSnp.bed
+
+
