@@ -132,6 +132,11 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     int e = s + mc->size;
     safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
     chrom = chopPrefix(dbOnly);
+    
+    /* skip repeats, labeled as "rep" */
+    if (sameString("rep", dbOnly))
+        continue;    
+        
     if (mc->strand == '-')
         reverseIntRange(&s, &e, mc->srcSize);
     fprintf(f, "%s %s (%s) ", 
