@@ -9377,24 +9377,25 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
 # Added knownToU133Plus2 track (2004-10-14) - see GeneSorter section
 
-# MAF COVERAGE FIGURES FOR ADAM (DONE 10/13/04 angie)
+
+# MAF COVERAGE FIGURES FOR ADAM (DONE 10/18/04 angie)
     # First, get ranges of target coverage:
     ssh eieio
     mkdir /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
     cat /cluster/data/hg17/bed/var_multiz.2004-08-12/maf.09-12-04/*.maf \
-    | nice mafRanges stdin hg17 hg17.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.mafRanges.bed
     # Get pairwise coverage as well.
     ssh kolossus
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage/
     cat /cluster/bluearc/hg17/multiz8way/rn3/*.maf \
-    | nice mafRanges stdin hg17 hg17.rn3.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.rn3.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/mm5/*.maf \
-    | nice mafRanges stdin hg17 hg17.mm5.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.mm5.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/galGal2/*.maf \
-    | nice mafRanges stdin hg17 hg17.galGal2.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.galGal2.mafRanges.bed
     cat /cluster/bluearc/hg17/multiz8way/fr1/*.maf \
-    | nice mafRanges stdin hg17 hg17.fr1.mafRanges.bed
+    | nice mafRanges -notAllOGap stdin hg17 hg17.fr1.mafRanges.bed
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
@@ -9402,15 +9403,15 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     # duplicate/overlapping ranges collapsed:
     nice featureBits hg17 hg17.mafRanges.bed \
       -bed=hg17.mafRangesCollapsed.bed
-#1269322379 bases of 2866216770 (44.286%) in intersection
+#1147548420 bases of 2866216770 (40.037%) in intersection
     foreach other (mm5 rn3 galGal2 fr1)
       nice featureBits hg17 hg17.$other.mafRanges.bed \
       -bed=hg17.${other}.mafRangesCollapsed.bed
     end
-#1136313433 bases of 2866216770 (39.645%) in intersection
-#1097183733 bases of 2866216770 (38.280%) in intersection
-#108042503 bases of 2866216770 (3.770%) in intersection
-#49394089 bases of 2866216770 (1.723%) in intersection
+#1013348528 bases of 2866216770 (35.355%) in intersection
+#975533772 bases of 2866216770 (34.036%) in intersection
+#101623034 bases of 2866216770 (3.546%) in intersection
+#46737824 bases of 2866216770 (1.631%) in intersection
 
     # mafCoverage barfs currently, so pass on this for now:
     #cat ../maf.09-12-04/*.maf \
@@ -9422,18 +9423,18 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
       ../phastCons/stats2/knownGenesCds.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafCds.bed
-#knownGenesCds.bed 1.166%, hg17.mafRangesCollapsed.bed 44.286%, both 1.123%, cover 96.39%, enrich 2.18x
+#knownGenesCds.bed 1.166%, hg17.mafRangesCollapsed.bed 40.037%, both 1.111%, cover 95.36%, enrich 2.38x
 
     nice featureBits hg17 -enrichment \
       ../phastCons/stats2/knownGenesUtr3.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafUtr3.bed
-#knownGenesUtr3.bed 0.918%, hg17.mafRangesCollapsed.bed 44.286%, both 0.724%, cover 78.95%, enrich 1.78x
+#knownGenesUtr3.bed 0.918%, hg17.mafRangesCollapsed.bed 40.037%, both 0.662%, cover 72.18%, enrich 1.80x
     nice featureBits hg17 -enrichment \
       ../phastCons/stats2/knownGenesUtr5.bed \
       hg17.mafRangesCollapsed.bed \
       -bed=hg17.mafUtr5.bed
-#knownGenesUtr5.bed 0.266%, hg17.mafRangesCollapsed.bed 44.286%, both 0.215%, cover 80.76%, enrich 1.82x
+#knownGenesUtr5.bed 0.266%, hg17.mafRangesCollapsed.bed 40.037%, both 0.198%, cover 74.42%, enrich 1.86x
 
     # Intersect pairwise target coverages with gene regions:
     foreach other (mm5 rn3 galGal2 fr1)
@@ -9447,18 +9448,77 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
         ../phastCons/stats2/knownGenesUtr5.bed \
         hg17.$other.mafRangesCollapsed.bed -bed=hg17.${other}Utr5.bed
     end
-#knownGenesCds.bed 1.166%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 1.109%, cover 95.17%, enrich 2.40x
-#knownGenesUtr3.bed 0.918%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.691%, cover 75.35%, enrich 1.90x
-#knownGenesUtr5.bed 0.266%, hg17.mm5.mafRangesCollapsed.bed 39.645%, both 0.205%, cover 76.90%, enrich 1.94x
-#knownGenesCds.bed 1.166%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 1.087%, cover 93.26%, enrich 2.44x
-#knownGenesUtr3.bed 0.918%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.670%, cover 72.97%, enrich 1.91x
-#knownGenesUtr5.bed 0.266%, hg17.rn3.mafRangesCollapsed.bed 38.280%, both 0.198%, cover 74.22%, enrich 1.94x
-#knownGenesCds.bed 1.166%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.791%, cover 67.91%, enrich 18.01x
-#knownGenesUtr3.bed 0.918%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.208%, cover 22.67%, enrich 6.02x
-#knownGenesUtr5.bed 0.266%, hg17.galGal2.mafRangesCollapsed.bed 3.770%, both 0.060%, cover 22.37%, enrich 5.94x
-#knownGenesCds.bed 1.166%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.731%, cover 62.69%, enrich 36.38x
-#knownGenesUtr3.bed 0.918%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.077%, cover 8.43%, enrich 4.89x
-#knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.723%, both 0.041%, cover 15.59%, enrich 9.05x
+#knownGenesCds.bed 1.166%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 1.093%, cover 93.74%, enrich 2.65x
+#knownGenesUtr3.bed 0.918%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 0.618%, cover 67.37%, enrich 1.91x
+#knownGenesUtr5.bed 0.266%, hg17.mm5.mafRangesCollapsed.bed 35.355%, both 0.186%, cover 69.81%, enrich 1.97x
+#knownGenesCds.bed 1.166%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 1.071%, cover 91.85%, enrich 2.70x
+#knownGenesUtr3.bed 0.918%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 0.597%, cover 65.09%, enrich 1.91x
+#knownGenesUtr5.bed 0.266%, hg17.rn3.mafRangesCollapsed.bed 34.036%, both 0.179%, cover 67.33%, enrich 1.98x
+#knownGenesCds.bed 1.166%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.779%, cover 66.84%, enrich 18.85x
+#knownGenesUtr3.bed 0.918%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.194%, cover 21.12%, enrich 5.96x
+#knownGenesUtr5.bed 0.266%, hg17.galGal2.mafRangesCollapsed.bed 3.546%, both 0.056%, cover 21.03%, enrich 5.93x
+#knownGenesCds.bed 1.166%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.714%, cover 61.26%, enrich 37.57x
+#knownGenesUtr3.bed 0.918%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.073%, cover 7.92%, enrich 4.86x
+#knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.039%, cover 14.82%, enrich 9.09x
+
+
+# ALTERNATIVE CPG ISLANDS (IN PROGRESS 10/14/04 angie)
+    ssh eieio
+    nice tcsh
+    mkdir /cluster/data/hg17/bed/cpgIslandAlt
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    # Try cpg_ash (WUSTL program modified to not chop islands in half before 
+    # scoring) with default params:
+    cp /dev/null cpg_ash.default.cpg
+    foreach f (../../?{,?}/chr*.fa.masked)
+      echo running on $f:t:r:r
+      ~angie/cb/hg3rdParty/cpgIslands/cpg_ash.exe $f >> cpg_ash.default.cpg
+    end
+    awk -f ../cpgIsland/filter.awk cpg_ash.default.cpg > cpgIslandAlt.bed
+    # Run Andy Law's script on masked seq:
+    cp /dev/null cpgIslandGgfAndyMasked.bed
+    foreach f (../../?{,?}/chr*.fa.masked)
+      set chr = $f:t:r:r
+      echo running on $chr
+      /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy $f \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyMasked.bed
+    end
+    # Compare enrichment for knownGene upstream -- an uphill battle for 
+    # programs closer to meeting the stated length, GC, O/E params!
+    ssh hgwdev
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIsland/cpgIsland.bed
+#knownGene:upstream:1000 0.857%, cpgIsland.bed 0.741%, both 0.166%, cover 19.37%, enrich 26.13x
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIslandAlt/cpgIslandAlt.bed
+#knownGene:upstream:1000 0.857%, cpgIslandAlt.bed 1.075%, both 0.200%, cover 23.38%, enrich 21.76x
+    nice featureBits hg17 -enrichment knownGene:upstream:1000 \
+      /cluster/data/hg17/bed/cpgIslandAlt/cpgIslandGgfAndyMasked.bed
+#knownGene:upstream:1000 0.857%, cpgIslandGgfAndyMasked.bed 1.964%, both 0.292%, cover 34.06%, enrich 17.34x
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    sed -e 's/cpgIslandExt/cpgIslandAlt/g' \
+      ~/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandAlt.sql
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandAlt.sql \
+      hg17 cpgIslandAlt cpgIslandAlt.bed
+#Loaded 29998 elements of size 10
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      ~/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandGgfAndyMasked.sql \
+      hg17 cpgIslandGgfAndyMasked cpgIslandGgfAndyMasked.bed
+#Loaded 80555 elements of size 10
+    # Quick length stats:
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandExt'
+#|         201 |    764.1913 |       40058 |
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandAlt'
+#|         200 |   1026.9194 |       32440 |
+    hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandGgfAndyMasked'
+#|         200 |    698.8257 |      100308 |
 
 
 # MAKE UNIGENE/SAGE TRACK (DONE - 2004-10-15 Fan)
@@ -9607,6 +9667,7 @@ line+ psl/$(root1)_$(root2).psl}
     # update ~/kent/src/hg/makeDb/trackDb/human/hg17/uniGene_2.html 
     # with current uniGene date.
 
+
 # CREATE kgSpAlias TABLE FOR PB (Done 10/20/04)
 
     hgsql hg17 -e \
@@ -9620,4 +9681,5 @@ line+ psl/$(root1)_$(root2).psl}
     hgsql hg17 -e 'drop table kgSpAlias';
     hgsql hg17 < ~/src/hg/lib/kgSpAlis.sql
     hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+
 
