@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.562 2004/02/10 01:31:49 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.563 2004/02/10 16:07:02 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12068,7 +12068,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<B>Molecular weight: </B> %.2f d<BR>\n",tigr->tigrMw);
 	printf("<B>Isoelectric point: </B> %.2f<BR>\n",tigr->tigrPi);
 	printf("<B>GC percent: </B> %.2f<BR>\n",tigr->tigrGc);
-	printf("<B>GO term: </B> %s<BR>\n",tigr->goTerm);
+	// printf("<B>GO term: </B> %s<BR>\n",tigr->goTerm);
 	if (tigr->next != NULL)
 	    printf("<hr>\n");
 	}
