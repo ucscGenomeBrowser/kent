@@ -633,8 +633,12 @@ sprintf(query, "%s FROM %s", query, table);
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
 	/* build the rest of the query */
-	sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-			query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+        if(sameString(chromFieldName, ""))
+            sprintf(query, "%s WHERE %s >= %d AND %s <= %d",
+                            query, startName, winStart, endName, winEnd);
+        else
+            sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+                            query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 	}
 	
 conn = hAllocConn();
