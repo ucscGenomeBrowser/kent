@@ -7,6 +7,8 @@
 #include "genePred.h"
 #include "cheapcgi.h"
 #include "sample.h"
+#include "bed.h"
+#include "linefile.h"
 
 struct genomeBit
 /* Piece of the genome */
@@ -50,6 +52,19 @@ gp->chromEnd = atoi(pos2);
 return gp;
 }
 
+int getExpNum(char *name)
+{
+char *s = cloneString(name);
+char *mark = strstr(s,".");
+int exp = 0;
+char buff[256];
+assert(mark);
+*mark = '\0';
+exp = atoi(s);
+freez(&s);
+return exp;
+}
+
 struct sqlConnection *getHgdbtestConn(char *db) 
 /* Read .hg.conf and return connection. */
 {
@@ -66,7 +81,9 @@ int sampleCmpName(const void *va, const void *vb)
 const struct sample *a = *((struct sample **)va);
 const struct sample *b = *((struct sample **)vb);
 int dif;
-dif = strcmp(a->name, b->name);
+dif = getExpNum(a->name) - getExpNum(b->name);
+if(dif == 0)
+    dif = strcmp(a->name, b->name);
 if (dif == 0)
     dif = a->chromStart - b->chromEnd;
 return dif;
@@ -117,6 +134,7 @@ s = getNameForExp(exp);
 snprintf(buff, sizeof(buff), "%s", s, name);
 return cloneString(buff);
 }
+
 
 void outputSamples(struct sample *sList, FILE *out, int chromStart, int chromEnd)
 /* Output the sample results in tab delimited form where first column
@@ -257,7 +275,7 @@ for(i=0;i<expCount; i++)
 }
 
 int outputSampleRows(struct sample *sList, FILE *out, char *chrom, 
-		     int chromStart, int chromEnd, int exon, int probeCount, char *name)
+		     int chromStart, int chromEnd, int exon, int exonCount, int probeCount, char *name)
 /* Write out a sample row in R's data frame format... */
 {
 struct sample *s = NULL, *tail = NULL;
@@ -280,13 +298,16 @@ for(tail = sList; tail != NULL; tail = tail->next)
 		{
 		int sampStart = start + tail->samplePosition[i];
 		int sampEnd = start + tail->samplePosition[i] +1;
+		int count = 1;
 		for(s=tail; s != NULL; s=s->next)
 		    {
 		    if(s->chromStart == start && s->chromEnd == end)
 			{
+			int expNum = getExpNum(s->name);
+			int exonExp = ((expNum-1) * exonCount) + exon;
 			outputName = getHumanName(s->name);
-			fprintf(out,"%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n", 
-				outputName, exon, probeCount+probeOffset, s->sampleHeight[i], 
+			fprintf(out,"%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n", 
+				outputName, expNum, exonExp, exon, probeCount+probeOffset, count++, s->sampleHeight[i], 
 				name, s->chrom, sampStart, sampEnd, s->strand);
 			freez(&outputName);
 			}
@@ -302,7 +323,7 @@ return probeOffset;
 
 void printOutHeader(FILE *out)
 {
-printf("exp\texon\tprobe\tresponse\tname\tchrom\tchromStart\tchromEnd\tstrand\n");
+printf("exp\texpNum\texonExp\texon\tprobe\trep\tresponse\tname\tchrom\tchromStart\tchromEnd\tstrand\n");
 }
 
 void outputGpSamples(struct genePred *gp, struct sqlConnection *conn, FILE *out)
@@ -327,7 +348,7 @@ for(i=0; i<gp->exonCount; i++)
     for(j=0; j<expCount; j++)
 	{
 	probesInExon = outputSampleRows(pSamp[j], out, gp->chrom, 
-					gp->exonStarts[i], gp->exonEnds[i],(i+1), probeCount, gp->name);
+					gp->exonStarts[i], gp->exonEnds[i],(i+1), gp->exonCount, probeCount, gp->name);
 	sampleFreeList(&pSamp[j]);
 	}
     probeCount += probesInExon;
@@ -349,16 +370,82 @@ genePredFreeList(&gpList);
 sqlDisconnect(&conn);
 }
 
+void outputBedSamples(struct bed *bed, struct sqlConnection *conn, FILE *out)
+/* Select the probes for each exon. */
+{
+int exonCount = 0;
+struct sample *sList = NULL;
+int i;
+int probeCount =1;
+int probesInExon =0;
+printOutHeader(out);
+for(i=0; i<bed->blockCount; i++)
+    {
+    struct sample **pSamp = NULL;
+    int expCount = 0;
+    int j;
+    int chromStart = bed->chromStarts[i] + bed->chromStart;
+    int size = bed->blockSizes[i];
+    sList = loadSamples(bed->chrom, chromStart,chromStart+size, conn);
+    slSort(&sList, sampleCmpName);
+    expCount = countDifferentNameOrRoot(sList);
+    pSamp = AllocArray(pSamp, expCount);
+    groupSamplesByName(pSamp, sList, expCount);
+    for(j=0; j<expCount; j++)
+	{
+	probesInExon = outputSampleRows(pSamp[j], out, bed->chrom, 
+					chromStart, chromStart+size,(i+1), bed->blockCount, probeCount, bed->name);
+	sampleFreeList(&pSamp[j]);
+	}
+    probeCount += probesInExon;
+    freez(&pSamp);
+    }
+}
+
+struct bed *bedLoadAll(char *fileName)
+/* Load all bed's in file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct bed *bedList = NULL, *bed;
+char *row[12];
+while(lineFileRow(lf,row))
+    {
+    bed = bedLoad12(row);
+    slAddHead(&bedList, bed);
+    }
+slReverse(&bedList);
+lineFileClose(&lf);
+return bedList;
+}
+
+void loadBedSamples(char *fileName, FILE *out)
+/* Load all of the beds from a file and output their samples. */
+{
+struct sqlConnection *conn = getHgdbtestConn("sugnet");
+struct bed *bedList = bedLoadAll(fileName);
+struct bed *bed = NULL;
+for(bed = bedList; bed != NULL; bed = bed->next)
+    {
+    outputBedSamples(bed, conn, out);
+    }
+bedFreeList(&bedList);
+sqlDisconnect(&conn);
+}
+
 int main(int argc, char *argv[])
 {
 char *gpFileName = NULL;
+char *bedFileName = NULL;
 if(argc == 1)
     usage();
 cgiSpoof(&argc, argv);
 gpFileName = cgiOptionalString("gpFile");
+bedFileName = cgiOptionalString("bedFile");
 warn("Loading Records");
 if(gpFileName != NULL)
     loadGenePredSamples(gpFileName, stdout);
+else if(bedFileName != NULL)
+    loadBedSamples(bedFileName, stdout);
 else
     getSamples(argv[1],stdout);
 warn("Done");

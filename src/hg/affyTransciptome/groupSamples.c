@@ -46,7 +46,9 @@ for(samp = sampList; samp != NULL; samp = sampNext)
 	    }
 	addSampleToCurrent(currSamp, samp, grouping);
 	count += samp->sampleCount;
-	samp = sampNext = samp->next;
+	sampNext = samp->next;
+	sampleFree(&samp);
+	samp = sampNext;
 	}
     if(count != 0)
 	currSamp->score = currSamp->score / count;
@@ -70,7 +72,7 @@ for(samp = groupedList; samp != NULL; samp = samp->next)
     sampleTabOut(samp, out);
     }
 carefulClose(&out);
-sampleFreeList(&sampList);
+//sampleFreeList(&sampList);
 sampleFreeList(&groupedList);
 }
 
