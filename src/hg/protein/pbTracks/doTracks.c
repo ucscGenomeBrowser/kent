@@ -1157,8 +1157,16 @@ for (j = 0; j < mrnaLen; j++)
 	k++;
         color = exonColor[(exonNumber-1) % 2];
         calxy(j/3, *yOffp, &xx, &yy);
-        vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
-        if (strand == '-') vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
+
+	if (strand == '-') 
+	    {
+            vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, MG_GRAY, g_font, base);
+	    vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
+       	    }
+	else
+	    {
+	    vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
+            }
         }
     color = MG_BLUE;
     }
@@ -1172,8 +1180,8 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
 
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "& complement");
- 
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& complement");
+
 if (strand == '-')
     {
     *yOffp = *yOffp + 20;
