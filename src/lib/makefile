@@ -5,7 +5,7 @@ O = aliType.o axt.o bits.o binRange.o \
     cda.o chain.o chainBlock.o chainToAxt.o chainToPsl.o cheapcgi.o \
     codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaMarkov.o \
-    dnaseq.o dnautil.o dystring.o emblParse.o errabort.o \
+    dnaseq.o dnautil.o dystring.o emblParse.o errabort.o errCatch.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
