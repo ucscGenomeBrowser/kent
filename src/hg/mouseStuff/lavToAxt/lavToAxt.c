@@ -113,6 +113,8 @@ struct dyString *tSym = newDyString(16*1024);
 struct dnaSeq *qSeq, *tSeq;
 struct axt axt;
 
+static int ix = 0;
+
 if (blockList == NULL)
     return;
 
@@ -151,13 +153,13 @@ for (block = blockList; block != NULL; block = block->next)
 	    }
 	if (qGap > 0)
 	    {
-	    dyStringAppendMultiC(qSym, '-', qGap);
-	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, qGap);
+	    dyStringAppendMultiC(tSym, '-', qGap);
+	    dyStringAppendN(qSym, qSeq->dna + lastBlock->qEnd - qStart, qGap);
 	    }
 	if (tGap > 0)
 	    {
-	    dyStringAppendMultiC(tSym, '-', tGap);
-	    dyStringAppendN(qSym, qSeq->dna + lastBlock->qEnd - qStart, tGap);
+	    dyStringAppendMultiC(qSym, '-', tGap);
+	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, tGap);
 	    }
 	}
     dyStringAppendN(qSym, qSeq->dna + block->qStart - qStart,
