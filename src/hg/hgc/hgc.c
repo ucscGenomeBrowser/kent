@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.523 2003/11/24 19:04:26 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.524 2003/12/04 05:05:04 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4565,7 +4565,7 @@ pslFree(&fatPsl);
 
 if (sameWord(otherDb, "seq"))
     {
-    qSeq = hExtSeq(psl->qName);
+    qSeq = hExtSeqPart(psl->qName, psl->qStart, psl->qEnd);
     sprintf(name, "%s", psl->qName);
     }
 else

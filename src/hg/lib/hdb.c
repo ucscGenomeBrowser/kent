@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.156 2003/12/03 03:41:40 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.157 2003/12/04 05:05:13 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1012,6 +1012,14 @@ struct dnaSeq *seq;
 HGID id;
 hRnaSeqAndId(acc, &seq, &id);
 return seq;
+}
+
+struct dnaSeq *hExtSeqPart(char *acc, int start, int end)
+/* Return part of external sequence. */
+{
+struct dnaSeq *seq = hExtSeq(acc);
+//FIXME: freeing this won't free up the entire DNA seq
+return newDnaSeq(seq->dna + start, end - start, acc);
 }
 
 struct dnaSeq *hRnaSeq(char *acc)
