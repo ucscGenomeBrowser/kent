@@ -511,6 +511,31 @@ else
     }
 }
 
+void doFetch(char *line)
+/* Fetch a file. */
+{
+char *user = nextWord(&line);
+char *fileName = nextWord(&line);
+if (fileName != NULL)
+    {
+    if (fork() == 0)
+        {
+	FILE *f = fopen(fileName, "r");
+	if (f == NULL)
+	    warn("Couldn't open %s", fileName);
+	else
+	    {
+	    char buf[4*1024];
+	    int size;
+	    while ((size = fread(buf, 1, sizeof(buf), f)) > 0)
+		write(connectionHandle, buf, size);
+	    fclose(f);
+	    }
+	exit(0);
+	}
+    }
+}
+
 void doKill(char *line)
 /* Kill current job if any. */
 {
@@ -642,6 +667,8 @@ for (;;)
 				doResurrect(line);
 			    else if (sameString("listJobs", command))
 			        listJobs();
+			    else if (sameString("fetch", command))
+			        doFetch(line);
 			    }
 			freez(&buf);
 			}

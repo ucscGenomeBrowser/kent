@@ -1,6 +1,7 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
 #include <sys/wait.h>
 #include "common.h"
+#include "errabort.h"
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"
@@ -726,14 +727,10 @@ if (pushCount > 0)
 atomicWriteBatch(db, batch);
 uglyf("(updated job database on disk)\n");
 if (pushCount > 0)
-    {
-    printf("\n");
     printf("Pushed Jobs: %d\n", pushCount);
-    }
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
 freeResults(&resultsHash);
-uglyf("(freed results)\n");
 return db;
 }
 
@@ -742,7 +739,6 @@ void paraPush(char *batch)
 {
 struct jobDb *db = paraCycle(batch);
 jobDbFree(&db);
-uglyf("(freed database)\n");
 }
 
 void paraShove(char *batch)
@@ -896,6 +892,36 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
+void fetchOpenFile(int fd, char *fileName)
+/* Read everything you can from socket and output to file. */
+{
+FILE *f = mustOpen(fileName, "w");
+char buf[4*1024];
+int size;
+
+while ((size = read(fd, buf, sizeof(buf))) > 0)
+    mustWrite(f, buf, size);
+if (size < 0)
+    errnoAbort("Couldn't read all into %s", fileName);
+
+carefulClose(&f);
+}
+
+void fetchFile(char *host, char *sourceName, char *destName)
+/* Fetch small file. */
+{
+struct dyString *dy = newDyString(1024);
+int sd = netConnect(host, paraPort);
+if (sd >= 0)
+    {
+    dyStringPrintf(dy, "fetch %s %s", cuserid(NULL), sourceName);
+    if (sendWithSig(sd, dy->string))
+	fetchOpenFile(sd, destName);
+    close(sd);
+    }
+dyStringFree(&dy);
+}
+
 void printErrFile(struct submission *sub, struct jobResult *jr)
 /* Print error file if it exists. */
 {
@@ -903,11 +929,7 @@ char localName[64];
 sprintf(localName, "err/%s", jr->jobId);
 if (!fileExists(localName))
     {
-    struct dyString *dy = newDyString(256);
-    dyStringPrintf(dy, "rcp %s:%s %s", jr->host, jr->errFile, localName);
-    if (system(dy->string) != 0)
-        warn("'%s' failed", dy->string);
-    freeDyString(&dy);
+    fetchFile(jr->host, jr->errFile, localName);
     }
 if (fileExists(localName))
     {
@@ -1318,68 +1340,68 @@ command = argv[1];
 batch = "batch";
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
-if (sameString(command, "create"))
+if (sameWord(command, "create") || sameWord(command, "creat"))
     {
     if (argc != 3)
         usage();
     paraCreate(batch, argv[2]);
     }
-else if (sameString(command, "check"))
+else if (sameWord(command, "check"))
     {
     paraCheck(batch);
     }
-else if (sameString(command, "push"))
+else if (sameWord(command, "push"))
     {
     paraPush(batch);
     }
-else if (sameString(command, "shove"))
+else if (sameWord(command, "shove"))
     {
     paraShove(batch);
     }
-else if (sameString(command, "make"))
+else if (sameWord(command, "make"))
     {
     if (argc != 3)
         usage();
     paraMake(batch, argv[2]);
     }
-else if (sameString(command, "try"))
+else if (sameWord(command, "try"))
     {
     maxPush = 10;
     paraPush(batch);
     }
-else if (sameString(command, "stop"))
+else if (sameWord(command, "stop"))
     {
     paraStop(batch);
     }
-else if (sameString(command, "chill"))
+else if (sameWord(command, "chill"))
     {
     paraChill(batch);
     }
-else if (sameString(command, "hung"))
+else if (sameWord(command, "hung"))
     {
     paraListState(batch, jaHung);
     }
-else if (sameString(command, "crashed"))
+else if (sameWord(command, "crashed"))
     {
     paraListState(batch, jaCrashed);
     }
-else if (sameString(command, "failed"))
+else if (sameWord(command, "failed"))
     {
     paraListFailed(batch);
     }
-else if (sameString(command, "finished"))
+else if (sameWord(command, "finished"))
     {
     paraListState(batch, jaFinished);
     }
-else if (sameString(command, "problems") || sameString(command, "problem"))
+else if (sameWord(command, "problems") || sameWord(command, "problem"))
     {
     paraProblems(batch);
     }
-else if (sameString(command, "running"))
+else if (sameWord(command, "running"))
     {
     paraRunning(batch);
     }
-else if (sameString(command, "time") || sameString(command, "times"))
+else if (sameWord(command, "time") || sameWord(command, "times"))
     {
     paraTimes(batch);
     }

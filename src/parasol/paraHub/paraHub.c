@@ -98,7 +98,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "options:\n"
 	 "    spokes=N  Number of processes that feed jobs to nodes - default %d\n"
 	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
-	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
+	 "    machineCheckPeriod=N Minutes between checking on machine - default %d\n"
 	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "    nextJobId=N  Starting job ID number\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
@@ -1897,11 +1897,11 @@ socketHandle = netAcceptingSocket(paraPort, 2000);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
-openJobId();
-printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
-
 if (!optionExists("noResume"))
     checkForJobsOnNodes();
+
+openJobId();
+printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
 
 /* Bump up our priority to just shy of real-time. */
 nice(-40);
