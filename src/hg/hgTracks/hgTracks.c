@@ -6731,7 +6731,10 @@ for (group = tGroupList; group != NULL; group = group->next)
 if(hideAll)
     {
     for (group = tGroupList; group != NULL; group = group->next)
+	{
 	group->visibility = tvHide;
+	cartSetString(cart, group->mapName, "hide");
+	}
     }
 
 /* Tell groups to load their items. */
@@ -7189,11 +7192,11 @@ cgiVarExcludeExcept(except);
 
 int main(int argc, char *argv[])
 {
+
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-
 cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
