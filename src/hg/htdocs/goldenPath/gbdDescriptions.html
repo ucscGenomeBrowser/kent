@@ -231,6 +231,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BactigPos">bactigPos</A> 
   - Bactig positions in chromosome coordinates
   <LI><A 
+  href="#WiggleTrack">binomialCons2</A> 
+  - Zoo blastz alignments conservation scores 
+  <LI><A 
   href="#PslInfo">blatChimp</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
   <LI><A 
@@ -266,6 +269,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#PslInfo">dbtssAli</A> 
   - RefSeq mRNA extended to the 5' end from DBTSS (Database of Transcriptional Start Sites)</LI>
+  <LI><A 
+  href="#BED">dhs</A> 
+  - DNase I hypersensitive sites (DHS) mapped to the human genome sequence (Zoo)</LI>
   <LI><A 
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
@@ -341,7 +347,7 @@ stored in a single table rather than one table per chromosome:</P>
   href="#GenomicSuperDups">genomicSuperDups</A> 
   - Duplications of >1000 Bases Sequence </LI>
   <LI><A 
-  href="#GenePredictions">genScan</A> 
+  href="#GenePredictions">genscan</A> 
   - Genscan Gene Predictions </LI>
   <LI><A 
   href="#PepPredictions">genscanPep</A> 
@@ -359,15 +365,17 @@ stored in a single table rather than one table per chromosome:</P>
   href="#NetAlign">humanNet</A> 
   - Database representation of a net of alignments with human </LI>
   <LI><A 
+  href="#BED">intersectingMCS</A> 
+  - Multi-Species Conserved Sequences (MCS) found by intersecting MCSs generated using binomial-based and parsimony p-value-based methods (Zoo) </LI>
+  <LI><A 
+  href="#BED">intersectingMergedMCS</A> 
+  - Same as intersectingMCS, but with regions less than 10 bp apart merged (Zoo)</LI>
+  <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
   <LI><A 
   href="#JaxQTL">jaxQTL</A> 
   - Jackson Labs Mouse Quantitative Trait Loci </LI>
-  <LI><A 
-  href="#OtherKnown">knownInfo</A> 
-  - Other information about known genes (Oct. 2000 and earlier known gene 
-  track) 
   <LI><A 
   href="#KnownGene">knownGene</A> 
   - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
@@ -382,9 +390,18 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#PepPredictions">knownGenePep</A> 
   - Known Genes translated proteins
   <LI><A 
+  href="#OtherKnown">knownInfo</A> 
+  - Other information about known genes (Oct. 2000 and earlier known gene track) 
+  <LI><A 
   href="#MoreKnown">knownMore</A> 
   - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
   (Oct. 2000 and earlier known (RefSeq) gene track) 
+  <LI><A 
+  href="#BED">mcs_b</A> 
+  - Binomial-based Multi-Species Conserved Sequences (MCSs) (Zoo)
+  <LI><A 
+  href="#BED">mcs_p</A> 
+  - Parsimony P-value-based Multi-Species Conserved Sequences (MCSs) (Zoo)
   <LI><A 
   href="#PslInfo">mgcFullMrna</A> 
   - Mammalian Gene Collection (MGC) full ORF mRNAs
@@ -429,8 +446,17 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
   <LI><A 
+  href="#wiggleTrack">pGC</A> 
+  - Percentage of bases that are G or C in small regions across the genome </LI>
+  <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#BED">pjt_gene</A> 
+  - NISC-generated gene annotations for zoo</LI>
+  <LI><A 
+  href="#BED">pjt_genscan</A> 
+  - Genscan gene predictions for Zoo</LI>
   <LI><A 
   href="#RecombRate">recombRate</A> 
   - Describes the recombination rate in 1Mb intervals based on deCODE, Genethon and Marshfield maps</LI>
@@ -527,17 +553,17 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#GenePredictions">slamHuman</A> 
   - Slam predictions of coding exons in homologous DNA sequences (human genome)
   <LI><A 
-  href="#GenePredictions">slamMouse</A> 
-  - Slam predictions of coding exons in homologous DNA sequences (mouse genome)
-  <LI><A 
-  href="#GenePredictions">slamRat</A> 
-  - Slam predictions of coding exons in homologous DNA sequences (rat genome)
-  <LI><A 
   href="#BED">slamHumanNonCoding</A> 
   - Slam predictions of conserved noncoding regions in homologous DNA sequences (human genome) 
   <LI><A 
+  href="#GenePredictions">slamMouse</A> 
+  - Slam predictions of coding exons in homologous DNA sequences (mouse genome)
+  <LI><A 
   href="#BED">slamMouseNonCoding</A> 
   - Slam predictions of conserved noncoding regions in homologous DNA sequences  (mouse genome)
+  <LI><A 
+  href="#GenePredictions">slamRat</A> 
+  - Slam predictions of coding exons in homologous DNA sequences (rat genome)
   <LI><A 
   href="#BED">slamRatNonCoding</A> 
   - Slam predictions of conserved noncoding regions in homologous DNA sequences (rat genome)
@@ -639,6 +665,12 @@ cover the same region </LI>
   <LI><A 
   href="#PslInfo">xenoMrna</A> 
   - Nonhuman mRNAs from Genbank </LI>
+  <LI><A 
+  href="#wiggleTrack">zoo</A> 
+  - Zoo conservation scores for each zoo species based on blastz pair-wise alignments </LI>
+  <LI><A 
+  href="#PslInfo">zooHuman3_zoo[Organism]3</A> 
+  - Blastz alignments of each zoo species against human (Zoo)</LI>
   <LI><A 
   href="#wiggleTrack">zoom1_affyTranscriptome</A> 
   - Affymetrix Transcriptome scores (large scale)</LI>
@@ -759,10 +791,17 @@ autoSql format.
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
 - affyRatio -all 15 fields <BR>
+- dhs - first 4 fields <BR>
 - firstEF - first 6 fields <BR>
 - haplotype - first 12 fields <BR>
+- intersectingMCS - first 4 fields <BR>
+- intersectingMergedMCS - first 4 fields <BR>
+- mcs_b - first 4 fields <BR>
+- mcs_p - first 4 fields <BR>
 - nci60 - all 15 fields <BR>
 - perlegen - first 12 fields <BR>
+- pjt_gene - first 12 fields <BR>
+- pjt_genscan - first 12 fields <BR>
 - rosetta - all 15 fields <BR>
 - slamNonCoding* - first 5 fields <BR>
 - superfamily - first 4 fields  <BR>
@@ -1745,8 +1784,9 @@ Last used Apr. 2001.
 </PRE>
 
 <H4><A name=wiggleTrack></A>Sample Tracks for Plotting Real-valued Data</H4>
-The following definition is used for: chrN_humMusL, chrN_musHumL, chrN_zoom2500_humMusL, 
-chrN_zoom50_humMusL, chrN_zoom1_humMusL, affyTranscriptome, zoom1_affyTranscriptome, zoom2_affyTranscriptome.
+The following definition is used for: affyTranscriptome, binomialCons2, 
+chrN_humMusL, chrN_musHumL, chrN_zoom2500_humMusL, chrN_zoom50_humMusL, 
+chrN_zoom1_humMusL, pGC, zoo, zoom1_affyTranscriptome, zoom2_affyTranscriptome.
 Each table entry in the chrN_humMusL is displayed as a "mountain range" on
 the browser and corresponds to one blastz alignment. The zoom tables
 chrN_zoom2500_humMusL, chrN_zoom50_humMusL, and chrN_zoom1_humMusL are
