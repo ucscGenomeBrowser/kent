@@ -26,6 +26,7 @@ update:
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb fugu fr1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
@@ -49,6 +50,7 @@ alpha:
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb fugu fr1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 
 beta:
@@ -68,6 +70,7 @@ beta:
 	hgTrackDb rat rn2 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb fugu fr1 trackDb_beta ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 
 old_alpha:
