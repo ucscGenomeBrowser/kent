@@ -1344,6 +1344,28 @@ SEQ2_LEN=$BASE/S2.len
 #Average job time:                 602s      10.04m     0.17h    0.01d
 #Longest job:                     1723s      28.72m     0.48h    0.02d
 #Submission to last job:          1802s      30.03m     0.50h    0.02d
+    # To fixup the chr19 axtsort problem
+    # sometimes alignments are so huge that they cause axtSort to run out 
+    # of memory.  Run them in two passes like this:
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed/blastz.mm3
+    set base=/cluster/data/hg16/bed/blastz.mm3
+    set seq1_dir=/iscratch/i/gs.17/build34/bothMaskedNibs
+    set seq2_dir=/iscratch/i/mm3.RM030619/mixedNib/
+    foreach c (lav/chr19)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropSelf stdin stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` > $base/$out
+      popd
+    end
 
     #	Remove the empty axtChrom/chr19_random.axt file to avoid future
     #	processing errors
