@@ -1094,6 +1094,37 @@ dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2Medi
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
+dependency $mm.pbAnomLimit $mm.kgProtMap
+dependency $mm.pbResAvgStd $mm.kgProtMap
+dependency $mm.pepCCntDist $mm.kgProtMap
+dependency $mm.pepExonCntDist $mm.kgProtMap
+dependency $mm.pepHydroDist $mm.kgProtMap
+dependency $mm.pepIPCntDist $mm.kgProtMap
+dependency $mm.pepMolWtDist $mm.kgProtMap
+dependency $mm.pepMwAaDist $mm.kgProtMap
+dependency $mm.pepPi $mm.kgProtMap
+dependency $mm.pepPiDist $mm.kgProtMap
+dependency $mm.pepResDist $mm.kgProtMap
+dependency $mm.pbAaDistA $mm.kgProtMap
+dependency $mm.pbAaDistC $mm.kgProtMap
+dependency $mm.pbAaDistD $mm.kgProtMap
+dependency $mm.pbAaDistE $mm.kgProtMap
+dependency $mm.pbAaDistF $mm.kgProtMap
+dependency $mm.pbAaDistG $mm.kgProtMap
+dependency $mm.pbAaDistH $mm.kgProtMap
+dependency $mm.pbAaDistI $mm.kgProtMap
+dependency $mm.pbAaDistK $mm.kgProtMap
+dependency $mm.pbAaDistL $mm.kgProtMap
+dependency $mm.pbAaDistM $mm.kgProtMap
+dependency $mm.pbAaDistN $mm.kgProtMap
+dependency $mm.pbAaDistP $mm.kgProtMap
+dependency $mm.pbAaDistQ $mm.kgProtMap
+dependency $mm.pbAaDistR $mm.kgProtMap
+dependency $mm.pbAaDistS $mm.kgProtMap
+dependency $mm.pbAaDistT $mm.kgProtMap
+dependency $mm.pbAaDistV $mm.kgProtMap
+dependency $mm.pbAaDistW $mm.kgProtMap
+dependency $mm.pbAaDistY $mm.kgProtMap
 
 # Table types - only needed when the table does not have the same name .as file record.
 type genePred
