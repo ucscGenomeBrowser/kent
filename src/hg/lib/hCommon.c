@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "chromInfo.h"
+#include "portable.h"
 
 char *hgChromNames[] =
     {
@@ -254,4 +255,17 @@ return sameString(chrom, "20") || sameString(chrom, "21")
    || sameString(chrom, "22");
 }
 
-
+boolean hIsMgcServer()
+/* Is this the MGC-custom server? */
+{
+static boolean mgcHost = FALSE;
+static boolean haveChecked = FALSE;
+if (!haveChecked)
+    {
+    char *name = getHost();
+    /* snort is a tmp test machine */
+    mgcHost = (startsWith("snort.", name) || startsWith("mgc.", name));
+    haveChecked = TRUE;
+    }
+return mgcHost;
+}

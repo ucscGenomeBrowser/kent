@@ -60,4 +60,7 @@ char *skipChr(char *s);
 boolean hIsFin(char *chrom);
 /* Return TRUE if this is a finished chromosome. */
 
+boolean hIsMgcServer();
+/* Is this the MGC-custom server? */
+
 #endif /* HCOMMON_H */
