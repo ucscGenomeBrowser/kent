@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.4 2004/06/16 08:25:51 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.5 2004/07/17 05:25:58 kate Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -325,7 +325,7 @@ for (;;)
 	fGoodPos = fpMatch - goodSize - seq->dna;
 	rGoodPos = rpMatch + minPerfect - seq->dna;
 	matchSize = rPos - fPos;
-	if (rPos >= 0 && fPos < seq->size && matchSize <= maxSize)
+        if (rPos >= 0 && fPos >= 0 && fPos < seq->size && matchSize <= maxSize)
 	    {
 	    /* If matches well enough create output record. */
 	    if (goodMatch(seq->dna + fGoodPos, fpPerfect - goodSize, goodSize) &&
