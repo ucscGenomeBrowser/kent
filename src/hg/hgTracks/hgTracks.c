@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.923 2005/03/08 00:39:58 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.924 2005/03/08 21:50:00 jsp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5286,7 +5286,6 @@ tg->itemName = rnaGeneName;
 tg->itemColor = rnaGeneColor;
 }
 
-
 Color wgRnaColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of wgRna track item. */
 {
@@ -9644,6 +9643,14 @@ registerTrackHandler("altGraphXPsb2004", altGraphXMethods );
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
 registerTrackHandler("altGraphXT6Con", altGraphXMethods ); 
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
+registerTrackHandler("RfamSeedFolds", rnaSecStrMethods);
+registerTrackHandler("rfamTestFolds", rnaSecStrMethods);
+registerTrackHandler("rnaTestFolds", rnaSecStrMethods);
+registerTrackHandler("evofold", rnaSecStrMethods);
+registerTrackHandler("rnafold", rnaSecStrMethods);
+registerTrackHandler("mcFolds", rnaSecStrMethods);
+registerTrackHandler("rnaEditFolds", rnaSecStrMethods);
+registerTrackHandler("altSpliceFolds", rnaSecStrMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);

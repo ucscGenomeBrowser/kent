@@ -406,6 +406,9 @@ Color getChromColor(char *name, struct vGfx *vg);
 Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg);
 /* assign fake chrom color to scaffold, based on number */
 
+Color lighterColor(struct vGfx *vg, Color color);
+/* Get lighter shade of a color */ 
+
 void clippedBarbs(struct vGfx *vg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
 	boolean needDrawMiddle);
@@ -629,6 +632,10 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis);
 /* Make track for wig - wiggle tracks. */
 
 /* Make track group for maf track with wiggle. */
+
+
+void rnaSecStrMethods(struct track *tg);
+/* Make track which visualizes RNA secondary structure annotation. */
 
 void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Load up methods for a generic sample type track. */

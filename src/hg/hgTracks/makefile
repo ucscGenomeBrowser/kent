@@ -12,7 +12,8 @@ O = $A.o altGraphXTrack.o bedGraph.o chainTrack.o config.o contigTrack.o \
         expRatioTracks.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o wabaTrack.o wigTrack.o cds.o \
-	wigMafTrack.o encode.o variation.o transcriptome.o
+	wigMafTrack.o encode.o variation.o transcriptome.o\
+	rnaFoldTrack.o	
 
 include ../../inc/cgi_build_rules.mk
 
