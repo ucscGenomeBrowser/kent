@@ -444,9 +444,10 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     # Temporary entry until mrna tables come along.  Approximate
     # calculated position the same as rn2
     # Note: for next assembly, set scientificName column to "Rattus norvegicus"
-    echo 'insert into dbDb values("rn3", "Jun 2003", \
+    echo 'insert into dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName) values("rn3", "June 2003", \
         "/gbdb/rn3/nib", "Rat", "chr5:169359914-169392264", 1, \
         30, "Rat", "Rattus norvegicus");' | hgsql -h genome-testdb hgcentraltest
+
     # Trying to request Espn in this new rat results in 4 different
     # hits on the genome.  Thus, the specified position here is the
     # desired Espn position as was in the previous Rat
@@ -461,6 +462,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
 
     echo 'insert into defaultDb values("Rat", "rn3");' \
 	| hgsql -h genome-testdb hgcentraltest
+
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -487,7 +489,7 @@ SIMPLE REPEAT TRACK (DONE - 2003-07-01 - Hiram)
     mkdir -p /cluster/bluearc/rat/rn3
     cd /cluster/store3/rn3/
     ls ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa  \
-	| tar -c -T - -f - | (cd /cluster/bluearc/rat/rn3.1.split; tar xfBp -)'
+	| tar -c -T - -f - | (cd /cluster/bluearc/rat/rn3.1.split; tar xfBp -)
 
     # now, a safe cluster job to trf mask
     ssh kk
