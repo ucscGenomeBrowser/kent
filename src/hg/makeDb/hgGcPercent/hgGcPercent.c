@@ -7,7 +7,8 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 
-int winSize ;
+int winSize ;               /* window size */
+boolean noLoad = FALSE;		/* Suppress loading mysql table . */
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +18,8 @@ errAbort(
   "usage:\n"
   "   hgGcPercent database nibDir\n"
   "options:\n"
-  "   -win=size change windows size (default 20000)\n");
+  "   -win=size change windows size (default 20000)\n"
+  "   -noLoad do not load mysql table - create bed file\n");
 }
 
 char *createTable = 
@@ -100,15 +102,19 @@ for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
     makeGcTab(nibEl->name, chrom, tabFile);
     }
 carefulClose(&tabFile);
+printf("File %s created\n",tabFileName);
 
 /* Load that file in database. */
-//conn = sqlConnect(database);
-//printf("Loading gcPercent table\n");
-//sqlMaybeMakeTable(conn, "gcPercent", createTable);
-//sqlUpdate(conn, "DELETE from gcPercent");
-//sprintf(query, "LOAD data local infile '%s' into table gcPercent", tabFileName);
-//sqlUpdate(conn, query);
-//sqlDisconnect(&conn);
+if (!noLoad)
+    {
+    conn = sqlConnect(database);
+    printf("Loading gcPercent table\n");
+    sqlMaybeMakeTable(conn, "gcPercent", createTable);
+    sqlUpdate(conn, "DELETE from gcPercent");
+    sprintf(query, "LOAD data local infile '%s' into table gcPercent", tabFileName);
+    sqlUpdate(conn, query);
+    sqlDisconnect(&conn);
+    }
 
 slFreeList(&nibList);
 }
@@ -121,6 +127,7 @@ if (argc <3)
     usage();
 dnaUtilOpen();
 winSize = cgiOptionalInt("win", 20000);
+noLoad = cgiBoolean("noLoad");
 hgGcPercent(argv[1], argv[2]);
 return 0;
 }
