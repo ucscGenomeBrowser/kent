@@ -13449,3 +13449,8 @@ SEQ2_LEN=$BASE/S2.len
     # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
     ldHgGene hg17 pseudoYale pseudoYale.gtf
     # Note - I'm guessing how this goes.  Robert left no record. -jk
+
+# added xenoRefGene track (markd ~2005-02-20)
+    add to /cluster/data/genbank/genbank.con
+    hg17.refseq.mrna.xeno.load  = yes
+    hg17.refseq.mrna.xeno.loadDesc = yes
