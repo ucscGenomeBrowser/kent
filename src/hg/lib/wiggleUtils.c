@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.38 2004/11/24 20:22:24 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.39 2005/03/14 17:48:14 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -20,21 +20,21 @@ if (html)
 	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
     puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-    printf("<TR><TH ALIGN=CENTER COLSPAN=8> %d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
+    printf("<TR><TH ALIGN=CENTER COLSPAN=8>%d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
 	    histoResults->binCount - 1, histoResults->count);
     puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
     puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
     puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
     puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
-    puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range in bin </TH></TR>\n");
-    puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
-    puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
+    puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER>range&nbsp;in&nbsp;bin</TH></TR>\n");
+    puts ("        <TR><TH ALIGN=LEFT>minimum</TH>\n");
+    puts ("              <TH ALIGN=RIGHT>maximum</TH></TR>\n");
     puts ("      </TABLE>\n");
     puts ("    </TD>\n");
-    puts ("    <TH ALIGN=CENTER> count </TH>\n");
-    puts ("    <TH ALIGN=CENTER> p&nbsp;Value </TH>\n");
-    puts ("    <TH ALIGN=CENTER> log2(p&nbsp;Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution <BR> (CPD) </TH>\n");
-    puts ("    <TH ALIGN=CENTER> 1.0&nbsp;-&nbsp;CPD </TH></TR>\n");
+    puts ("    <TH ALIGN=CENTER>count</TH>\n");
+    puts ("    <TH ALIGN=CENTER>Relative<BR>Frequency</TH>\n");
+    puts ("    <TH ALIGN=CENTER>log2(Frequency)</TH><TH ALIGN=CENTER>Cumulative<BR>Relative<BR>Frequency<BR>(CRF)</TH>\n");
+    puts ("    <TH ALIGN=CENTER>1.0&nbsp;-&nbsp;CRF</TH></TR>\n");
     }
 else
     {
