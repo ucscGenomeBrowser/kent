@@ -92,7 +92,7 @@ track pseudoGeneLink
 shortLabel Retroposed Genes 
 longLabel Funcional and Nonfunctional (pseudogenes) Retroposed Genes Based on mrna alignments
 group genes
-priority 50
+priority 52.5
 visibility hide
 color 100,50,0
 altColor 255,240,200
