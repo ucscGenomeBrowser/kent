@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: dnaLoad.c,v 1.1 2005/01/10 00:02:11 kent Exp $";
+static char const rcsid[] = "$Id: dnaLoad.c,v 1.2 2005/01/14 01:25:14 kent Exp $";
 
 struct dnaLoadStack
 /* Keep track of a single DNA containing file. */
@@ -101,11 +101,13 @@ dl->fileName = cloneString(fileName);
 return dl;
 }
 
-struct dnaSeq *dnaLoadNib(char *fileName)
-/* Return sequence if it's a nib file, NULL otherwise. */
+struct dnaSeq *dnaLoadSingle(char *fileName)
+/* Return sequence if it's a nib file or 2bit part, NULL otherwise. */
 {
 if (nibIsFile(fileName))
     return nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+else if (twoBitIsRange(fileName))
+    return twoBitLoadAll(fileName);
 else
     return NULL;
 }
@@ -157,7 +159,7 @@ while ((dls = dl->stack) != NULL)
 	if (lineFileNextReal(dls->textFile, &line))
 	    {
 	    line  = trimSpaces(line);
-	    if ((seq = dnaLoadNib(line)) != NULL)
+	    if ((seq = dnaLoadSingle(line)) != NULL)
 	         return seq;
 	    else
 	         {
@@ -185,7 +187,7 @@ if (dl->finished)
     return NULL;
 if (dl->stack == NULL)
     {
-    if ((seq = dnaLoadNib(dl->fileName)) != NULL)
+    if ((seq = dnaLoadSingle(dl->fileName)) != NULL)
 	{
 	dl->finished = TRUE;
 	return seq;
