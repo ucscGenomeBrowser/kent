@@ -203,7 +203,31 @@ exit; # don't actually run this like a script :)
   para time
   etc.
 
-# SIMPLE REPEATS
+  # concatenate into one output file; took about 90 minutes
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  /bin/tcsh concatRM.tcsh
+  # use grep -v to get rid of all the headers
+  # then, add back in an initial header
+  # this is so hgLoadOut is happy
+  grep SCAFFOLD repeats.all > repeats.clean
+  cat repeats.header repeats.clean > repeats.final
+  grep "There were no repetitive sequences found" repeats.final > repeats.notfound
+  grep -v "There were no repetitive sequences found" repeats.final > repeats.final.final
+  hgLoadOut bosTau1 repeats.final.final
+  # Strange perc. fields:
+  # -2.3 line 925441
+  # -18.2 line 1644720
+  # -18.2 line 1644722
+  hgsql bosTau1
+  rename table repeats_rmsk to rmsk
+
+  # select count(*) from rmsk;
+  # 4,244,045
+  # select count(*) from rmsk where repName like "Bov%";
+  # 1,445,972
+
+# SIMPLE REPEATS (DONE, Oct. 6, 2004, Heather)
 # put the results throughout the scaffold 0/0/0 directories,
 # same as RepeatMasker, to avoid too many files in the same directory
   ssh kksilo
@@ -213,8 +237,21 @@ exit; # don't actually run this like a script :)
   mkdir simpleRepeat
   cd simpleRepeat
 
-  # /bin/csh makeJoblist-trf.csh
-
-  # do the run
+  /bin/csh makeJoblist-trf.csh
+  # do the run; took about 12 hours
   tcsh trf-run.csh > & ! trf.log &
+
+  # concatenate into one output file; took about an hour
+  /bin/tcsh concatTRF.csh
+
+  # load
+  /cluster/bin/i386/hgLoadBed bosTau1 simpleRepeat trf.all \
+    -sqlTable = /cluster/home/heather/kent/src/hg/lib/simpleRepeat.sql
+
+  # Reading trf.all
+  # Loaded 248313 elements of size 16
+  # Sorted
+  # Saving bed.tab
+  # Loading bosTau1
+
 
