@@ -125,7 +125,7 @@ int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
-	char *name, char *exonSelectWord);
+	char *name, char *exonSelectWord, boolean gFrame);
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
 
