@@ -6541,6 +6541,18 @@ if (withLeftLabels)
 		    int itemHeight = group->itemHeight(group, item);
                     /* Set the clipping rectangle to account for the buttons */
                     mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+
+            /*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
+            if( group->loadItems == loadSampleIntoLinkedFeature &&
+                group->heightPer > (3 * fontHeight ) )
+                {
+                ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+                ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+		        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+			        group->ixAltColor, font, "0%");
+		        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+			        group->ixAltColor, font, "100%");
+                }
 		    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                     /* Reset the clipping rectangle to its original proportions */
                     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
@@ -6559,9 +6571,9 @@ if (withLeftLabels)
             ymax = y - (group->heightPer / 2) + (fontHeight / 2);
             ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
-			    group->ixColor, font, "0%");
+			    group->ixAltColor, font, "0%");
 		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
-			    group->ixColor, font, "100%");
+			    group->ixAltColor, font, "100%");
             }
 		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
 			group->ixColor, font, group->shortLabel);
