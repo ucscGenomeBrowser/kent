@@ -10,7 +10,7 @@ O = hgc.o
 hgc: $O ../../lib/$(MACHTYPE)/jkweb.a 
 	gcc $O $(MYLIBS) $L
 	mv a.out hgc
-	strip hgc
+#	strip hgc
 	chmod a+rx hgc
 	mv hgc $(HGCGI)
 
