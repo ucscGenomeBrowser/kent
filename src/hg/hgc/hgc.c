@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.767 2004/10/12 00:03:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.768 2004/10/12 06:04:01 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13177,7 +13177,7 @@ sprintf(query, "select * from %s where name = '%s'", track, trnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    trna = rnaGenesLoad(row);
+    trna = rnaGenesLoad(row+rowOffset);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -15456,8 +15456,6 @@ else if (sameWord(track, "loweTrnaGene"))
     {
     doLoweTrnaGene(tdb,item);
     }
-
-
 else if (sameWord(track,"codeBlast"))
     {
     doCodeBlast(tdb, item);
@@ -15466,11 +15464,6 @@ else if (sameWord(track,"rnaGenes"))
     {
     doRnaGenes(tdb, item);
     }
-
-/* else if (startsWith("lla", track))  */
-/*     { */
-/*     llArrayDetails(tdb,item); */
-/*     } */
 
 /*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
