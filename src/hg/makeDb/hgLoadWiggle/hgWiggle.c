@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.1 2004/07/27 00:02:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.2 2004/07/27 23:43:28 hiram Exp $";
 
 /* Command line switches. */
 static char *db = NULL;		/* database to read from */
@@ -44,6 +44,35 @@ errAbort(
   );
 }
 
+static boolean wigNextRow(struct sqlResult *sr, struct lineFile *lf,
+	char *row[], int maxRow)
+/*	read next wig row from sql query or lineFile	*/
+{
+int numCols;
+
+if (file)
+    {
+    numCols = lineFileChopNextTab(wigFile, row, maxRow);
+    verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
+	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
+    if (numCols != maxRow) return FALSE;
+    }
+else
+    {
+    int i;
+    char **sqlRow;
+    sqlRow = sqlNextRow(sr);
+    if (sqlRow == NULL)
+	return FALSE;
+    /*	skip the bin column sqlRow[0]	*/
+    for (i=1; i <= maxRow; ++i)
+	{
+	row[i-1] = sqlRow[i];
+	}
+    }
+return TRUE;
+}
+
 void hgWiggle(int trackCount, char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
 {
@@ -66,12 +95,15 @@ if (db)
 
 for (i=0; i<trackCount; ++i)
     {
-    char **row;
+    char *row[WIGGLE_NUM_COLS];
     char query[256];
     FILE *f = (FILE *) NULL;
     unsigned char *ReadData;    /* the bytes read in from the file */
     int dataOffset = 0;         /*      within data block during reading */
     int rowCount = 0;
+    unsigned int currentSpan = 0;
+    char *currentChrom = NULL;
+
 
     if (file)
 	{
@@ -81,17 +113,40 @@ for (i=0; i<trackCount; ++i)
 	wigFile = lineFileOpen(fileName->string, TRUE);
 	dyStringFree(&fileName);
 	}
-
-    if (chr)
-	snprintf(query, 256, "select * from %s where chrom = \"%s\"\n", tracks[i], chr);
     else
-	snprintf(query, 256, "select * from %s\n", tracks[i]);
-    verbose(2, "#\t%s\n", query);
-    sr = sqlGetResult(conn,query);
-    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (chr)
+	    snprintf(query, 256, "select * from %s where chrom = \"%s\"\n",
+		tracks[i], chr);
+	else
+	    snprintf(query, 256, "select * from %s\n", tracks[i]);
+	verbose(2, "#\t%s\n", query);
+	sr = sqlGetResult(conn,query);
+	}
+    while (wigNextRow(sr, wigFile, row, WIGGLE_NUM_COLS))
 	{
 	++rowCount;
-	wiggle = wiggleLoad(row + 1);  /* the +1 avoids the bin column*/
+	wiggle = wiggleLoad(row);
+	if (file)
+	    {
+	    if (chr)
+		if (differentString(chr,wiggle->chrom))
+		    continue;
+	    }
+
+	if ( (currentSpan != wiggle->span) || 
+		(currentChrom && differentString(currentChrom, wiggle->chrom)))
+	    {
+	    freeMem(currentChrom);
+	    currentChrom=cloneString(wiggle->chrom);
+	    printf ("variableStep chrom=%s", currentChrom);
+	    currentSpan = wiggle->span;
+	    if (currentSpan > 1)
+		printf (" span=%d\n", currentSpan);
+	    else
+		printf ("\n");
+	    }
+
 	verbose(2, "#\trow: %d, start: %u, data range: %g: [%g:%g]\n", rowCount, wiggle->chromStart, wiggle->dataRange, wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
 	verbose(2, "#\tresolution: %g per bin\n",wiggle->dataRange/(double)MAX_WIG_VALUE);
 	if (wibFile)
@@ -128,8 +183,10 @@ for (i=0; i<trackCount; ++i)
     1 + wiggle->chromStart + (dataOffset * wiggle->span), dataValue);
 		}
 	    }
+	wiggleFree(&wiggle);
 	}
     }	/*	for (i=0; i<trackCount; ++i)	*/
+
 if (file)
     lineFileClose(&wigFile);
 if (wibFile)
