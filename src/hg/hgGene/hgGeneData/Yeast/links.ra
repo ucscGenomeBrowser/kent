@@ -20,13 +20,6 @@ name swissProt
 tables sgdGene
 idSql select proteinID from sgdGene where name = '%s'
 
-name pubMed
-shortLabel PubMed
-tables bdgpSwissProt
-idSql select value from sgdToName where name = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
-priority 60
-
 name geneCards
 hide
 
