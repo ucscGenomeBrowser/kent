@@ -215,6 +215,9 @@ void hNibForChrom(char *chromName, char retNibName[512]);
 struct slName *hAllChromNames();
 /* Get list of all chromosomes. */
 
+struct slName *hAllChromNamesDb(char *db);
+/* Get list of all chromosomes in database. */
+
 char *hExtFileName(char *extFileTable, unsigned extFileId);
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
