@@ -64,7 +64,7 @@ struct axtScoreScheme
 /* A scoring scheme or DNA alignment. */
     {
     struct scoreMatrix *next;
-    int matrix[5][5];   /* Look up with A_BASE_VAL etc. */
+    int matrix[256][256];   /* Look up with letters. */
     int gapOpen;	/* Gap open cost. */
     int gapExtend;	/* Gap extension. */
     };
@@ -72,6 +72,10 @@ struct axtScoreScheme
 struct axtScoreScheme *axtScoreSchemeDefault();
 /* Return default scoring scheme (after blastz). */
 
+struct axtScoreScheme *axtScoreSchemeProteinDefault();
+/* Returns default protein scoring scheme.  This is
+
+ * scaled to be compatible with the blastz one. */
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 /* Read in scoring scheme from file. Looks like
     A    C    G    T
@@ -85,6 +89,12 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */
 
+int axtScoreDnaDefault(struct axt *axt);
+/* Score DNA-based axt using default scheme. */
+
+int axtScoreProteinDefault(struct axt *axt);
+/* Score protein-based axt using default scheme. */
+
 void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
 	struct axtScoreScheme *ss, FILE *f);
 /* Write out subset of axt that goes from newStart to newEnd
@@ -92,6 +102,21 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 
 int axtTransPosToQ(struct axt *axt, int tPos);
 /* Convert from t to q coordinates */
+
+struct axtBundle
+/* A bunch of axt's on the same query/target sequence. */
+    {
+    struct axtBundle *next;
+    struct axt *axtList;	/* List of alignments. */
+    int tSize;			/* Size of target. */
+    int qSize;			/* Size of query. */
+    };
+
+void axtBundleFree(struct axtBundle **pObj);
+/* Free a axtBundle. */
+
+void axtBundleFreeList(struct axtBundle **pList);
+/* Free a list of gfAxtBundles. */
 
 #endif /* AXT_H */
 

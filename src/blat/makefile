@@ -5,7 +5,7 @@ L = -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
 
-O = blat.o wublastOut.o
+O = blat.o blastOut.o
 
 blat: $O $(MYLIBS)
 	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat.14 $O $(MYLIBS) $L

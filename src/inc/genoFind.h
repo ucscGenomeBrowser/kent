@@ -215,27 +215,12 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
 
-struct gfAxtBundle
-/* A bunch of axt's on the same query/target sequence. */
-    {
-    struct gfAxtBundle *next;
-    struct axt *axtList;	/* List of alignments */
-    int tSize;			/* Size of target. */
-    int qSize;			/* Size of query. */
-    };
-
-void gfAxtBundleFree(struct gfAxtBundle **pObj);
-/* Free a gfAxtBundle. */
-
-void gfAxtBundleFreeList(struct gfAxtBundle **pList);
-/* Free a list of gfAxtBundles. */
-
 struct gfSaveAxtData
 /* This data structure passed as output data for gfSaveWuBlast and
  * possibly others. */
     {
     struct gfSaveAxtData *next;
-    struct gfAxtBundle *bundleList;	/* List of bundles. */
+    struct axtBundle *bundleList;	/* List of bundles. */
     int minGood;	 /* Minimum sequence identity in parts per thousand. */
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
@@ -245,7 +230,7 @@ struct gfSaveAxtData
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
-/* Analyse one alignment and if it looks good enough save it in gfAxtBundle. */
+/* Analyse one alignment and if it looks good enough save it in axtBundle. */
 
 
 void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,

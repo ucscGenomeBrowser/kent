@@ -390,7 +390,7 @@ void axtQueryOut(FILE *f, void *data)
 /* Do axt oriented output - at end of processing query. */
 {
 struct gfSaveAxtData *aod = data;
-struct gfAxtBundle *gab;
+struct axtBundle *gab;
 struct axtScoreScheme *ss = axtScoreSchemeDefault();
 for (gab = aod->bundleList; gab != NULL; gab = gab->next)
     {
@@ -401,10 +401,25 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 	axtWrite(axt, f);
 	}
     }
-gfAxtBundleFreeList(&aod->bundleList);
+axtBundleFreeList(&aod->bundleList);
 }
 
-void wublastQueryOut(FILE *f, void *data);
+void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	boolean isWu, char *ourId);
+
+void wublastQueryOut(FILE *f, void *data)
+/* Output wublast on query. */
+{
+char blatName[16];
+struct gfSaveAxtData *aod = data;
+++aod->queryIx;
+sprintf(blatName, "blat %d", version);
+axtBlastOut(aod->bundleList, aod->queryIx, aod->qIsProt, f,
+	databaseName, databaseSeqCount, databaseLetterCount,
+	TRUE, blatName);
+axtBundleFreeList(&aod->bundleList);
+}
 
 
 void initBasicOutput(char *format, FILE *f, int minIdentity, boolean qIsProt, boolean tIsProt)

@@ -1516,30 +1516,6 @@ for (;;)
 return rt;
 }
 
-void gfAxtBundleFree(struct gfAxtBundle **pObj)
-/* Free a gfAxtBundle. */
-{
-struct gfAxtBundle *obj = *pObj;
-if (obj != NULL)
-    {
-    axtFreeList(&obj->axtList);
-    freez(pObj);
-    }
-}
-
-void gfAxtBundleFreeList(struct gfAxtBundle **pList)
-/* Free a list of gfAxtBundles. */
-{
-struct gfAxtBundle *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    gfAxtBundleFree(&el);
-    }
-*pList = NULL;
-}
-
 
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
@@ -1551,7 +1527,7 @@ struct ffAli *sAli, *eAli, *ff, *rt;
 char *he = NULL, *ne = NULL;
 struct axt *axt;
 struct dyString *q = newDyString(1024), *t = newDyString(1024);
-struct gfAxtBundle *gab;
+struct axtBundle *gab;
 
 AllocVar(gab);
 gab->tSize = genoSeq->size;
@@ -1600,6 +1576,10 @@ for (sAli = ali; sAli != NULL; sAli = eAli)
     axt->symCount = t->stringSize;
     axt->qSym = cloneString(q->string);
     axt->tSym = cloneString(t->string);
+    if (ad->qIsProt && ad->tIsProt)
+	axt->score = axtScoreProteinDefault(axt);
+    else 
+	axt->score = axtScoreDnaDefault(axt);
     slAddHead(&gab->axtList, axt);
     }
 slReverse(&gab->axtList);

@@ -212,11 +212,29 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[ntVal5[q]][ntVal5[t]];
+	score += ss->matrix[ntChars[q]][ntChars[t]];
 	lastGap = FALSE;
 	}
     }
 return score;
+}
+
+int axtScoreDnaDefault(struct axt *axt)
+/* Score DNA-based axt using default scheme. */
+{
+static struct axtScoreScheme *ss;
+if (ss == NULL)
+    ss = axtScoreSchemeDefault();
+return axtScore(axt, ss);
+}
+
+int axtScoreProteinDefault(struct axt *axt)
+/* Score protein-based axt using default scheme. */
+{
+static struct axtScoreScheme *ss;
+if (ss == NULL)
+    ss = axtScoreSchemeProteinDefault();
+return axtScore(axt, ss);
 }
 
 void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
@@ -270,36 +288,155 @@ static void shortScoreScheme(struct lineFile *lf)
 errAbort("Scoring matrix file %s too short\n", lf->fileName);
 }
 
-
-
 struct axtScoreScheme *axtScoreSchemeDefault()
 /* Return default scoring scheme (after blastz). */
 {
 struct axtScoreScheme *ss;
 AllocVar(ss);
-ss->matrix[A_BASE_VAL][A_BASE_VAL] = 91;
-ss->matrix[A_BASE_VAL][C_BASE_VAL] = -114;
-ss->matrix[A_BASE_VAL][G_BASE_VAL] = -31;
-ss->matrix[A_BASE_VAL][T_BASE_VAL] = -123;
+ss->matrix['a']['a'] = 91;
+ss->matrix['a']['c'] = -114;
+ss->matrix['a']['g'] = -31;
+ss->matrix['a']['t'] = -123;
 
-ss->matrix[C_BASE_VAL][A_BASE_VAL] = -114;
-ss->matrix[C_BASE_VAL][C_BASE_VAL] = 100;
-ss->matrix[C_BASE_VAL][G_BASE_VAL] = -125;
-ss->matrix[C_BASE_VAL][T_BASE_VAL] = -31;
+ss->matrix['c']['a'] = -114;
+ss->matrix['c']['c'] = 100;
+ss->matrix['c']['g'] = -125;
+ss->matrix['c']['t'] = -31;
 
-ss->matrix[G_BASE_VAL][A_BASE_VAL] = -31;
-ss->matrix[G_BASE_VAL][C_BASE_VAL] = -125;
-ss->matrix[G_BASE_VAL][G_BASE_VAL] = 100;
-ss->matrix[G_BASE_VAL][T_BASE_VAL] = -114;
+ss->matrix['g']['a'] = -31;
+ss->matrix['g']['c'] = -125;
+ss->matrix['g']['g'] = 100;
+ss->matrix['g']['t'] = -114;
 
-ss->matrix[T_BASE_VAL][A_BASE_VAL] = -123;
-ss->matrix[T_BASE_VAL][C_BASE_VAL] = -31;
-ss->matrix[T_BASE_VAL][G_BASE_VAL] = -114;
-ss->matrix[T_BASE_VAL][T_BASE_VAL] = 91;
+ss->matrix['t']['a'] = -123;
+ss->matrix['t']['c'] = -31;
+ss->matrix['t']['g'] = -114;
+ss->matrix['t']['t'] = 91;
 
 ss->gapOpen = 400;
 ss->gapExtend = 30;
 return ss;
+}
+
+static char blosumText[] = {
+"#  Matrix made by matblas from blosum62.iij\n"
+"#  * column uses minimum score\n"
+"#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units\n"
+"#  Blocks Database = /data/blocks_5.0/blocks.dat\n"
+"#  Cluster Percentage: >= 62\n"
+"#  Entropy =   0.6979, Expected =  -0.5209\n"
+"   A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V  B  Z  X  *\n"
+"A  4 -1 -2 -2  0 -1 -1  0 -2 -1 -1 -1 -1 -2 -1  1  0 -3 -2  0 -2 -1  0 -4 \n"
+"R -1  5  0 -2 -3  1  0 -2  0 -3 -2  2 -1 -3 -2 -1 -1 -3 -2 -3 -1  0 -1 -4 \n"
+"N -2  0  6  1 -3  0  0  0  1 -3 -3  0 -2 -3 -2  1  0 -4 -2 -3  3  0 -1 -4 \n"
+"D -2 -2  1  6 -3  0  2 -1 -1 -3 -4 -1 -3 -3 -1  0 -1 -4 -3 -3  4  1 -1 -4 \n"
+"C  0 -3 -3 -3  9 -3 -4 -3 -3 -1 -1 -3 -1 -2 -3 -1 -1 -2 -2 -1 -3 -3 -2 -4 \n"
+"Q -1  1  0  0 -3  5  2 -2  0 -3 -2  1  0 -3 -1  0 -1 -2 -1 -2  0  3 -1 -4 \n"
+"E -1  0  0  2 -4  2  5 -2  0 -3 -3  1 -2 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 \n"
+"G  0 -2  0 -1 -3 -2 -2  6 -2 -4 -4 -2 -3 -3 -2  0 -2 -2 -3 -3 -1 -2 -1 -4 \n"
+"H -2  0  1 -1 -3  0  0 -2  8 -3 -3 -1 -2 -1 -2 -1 -2 -2  2 -3  0  0 -1 -4 \n"
+"I -1 -3 -3 -3 -1 -3 -3 -4 -3  4  2 -3  1  0 -3 -2 -1 -3 -1  3 -3 -3 -1 -4 \n"
+"L -1 -2 -3 -4 -1 -2 -3 -4 -3  2  4 -2  2  0 -3 -2 -1 -2 -1  1 -4 -3 -1 -4 \n"
+"K -1  2  0 -1 -3  1  1 -2 -1 -3 -2  5 -1 -3 -1  0 -1 -3 -2 -2  0  1 -1 -4 \n"
+"M -1 -1 -2 -3 -1  0 -2 -3 -2  1  2 -1  5  0 -2 -1 -1 -1 -1  1 -3 -1 -1 -4 \n"
+"F -2 -3 -3 -3 -2 -3 -3 -3 -1  0  0 -3  0  6 -4 -2 -2  1  3 -1 -3 -3 -1 -4 \n"
+"P -1 -2 -2 -1 -3 -1 -1 -2 -2 -3 -3 -1 -2 -4  7 -1 -1 -4 -3 -2 -2 -1 -2 -4 \n"
+"S  1 -1  1  0 -1  0  0  0 -1 -2 -2  0 -1 -2 -1  4  1 -3 -2 -2  0  0  0 -4 \n"
+"T  0 -1  0 -1 -1 -1 -1 -2 -2 -1 -1 -1 -1 -2 -1  1  5 -2 -2  0 -1 -1  0 -4 \n"
+"W -3 -3 -4 -4 -2 -2 -3 -2 -2 -3 -2 -3 -1  1 -4 -3 -2 11  2 -3 -4 -3 -2 -4 \n"
+"Y -2 -2 -2 -3 -2 -1 -2 -3  2 -1 -1 -2 -1  3 -3 -2 -2  2  7 -1 -3 -2 -1 -4 \n"
+"V  0 -3 -3 -3 -1 -2 -2 -3 -3  3  1 -2  1 -1 -2 -2  0 -3 -1  4 -3 -2 -1 -4 \n"
+"B -2 -1  3  4 -3  0  1 -1  0 -3 -4  0 -3 -3 -2  0 -1 -4 -3 -3  4  1 -1 -4 \n"
+"Z -1  0  0  1 -3  3  4 -2  0 -3 -3  1 -1 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 \n"
+"X  0 -1 -1 -1 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -2  0  0 -2 -1 -1 -1 -1 -1 -4 \n"
+"* -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4  1 \n"
+};
+
+static void badProteinMatrixLine(int lineIx, char *fileName)
+/* Explain line syntax for protein matrix and abort */
+{
+errAbort("Expecting letter and 25 numbers line %d of %s", lineIx, fileName);
+}
+
+struct axtScoreScheme *axtScoreSchemeFromProteinText(char *text, char *fileName)
+/* Parse text into a scoring scheme.  This should be in BLAST protein matrix
+ * format as in blosumText above. */
+{
+char *line, *nextLine;
+int lineIx = 0;
+int realCount = 0;
+char columns[24];
+char *row[25];
+int i;
+struct axtScoreScheme *ss;
+
+AllocVar(ss);
+for (line = text; line != NULL; line = nextLine)
+    {
+    nextLine = strchr(line, '\n');
+    if (nextLine != NULL)
+        *nextLine++ = 0;
+    ++lineIx;
+    line = skipLeadingSpaces(line);
+    if (line[0] == '#' || line[0] == 0)
+        continue;
+    ++realCount;
+    if (realCount == 1)
+        {
+	int wordCount = chopLine(line, row);
+	if (wordCount != 24)
+	    errAbort("Not a good protein matrix - expecting 24 letters line %d of %s", lineIx, fileName);
+	for (i=0; i<wordCount; ++i)
+	    {
+	    char *letter = row[i];
+	    if (strlen(letter) != 1)
+		errAbort("Not a good protein matrix - got word not letter line %d of %s", lineIx, fileName);
+	    columns[i] = letter[0];
+	    }
+	}
+    else
+        {
+	int wordCount = chopLine(line, row);
+	char letter;
+	if (wordCount != 25)
+	    badProteinMatrixLine(lineIx, fileName);
+	letter = row[0][0];
+	if (strlen(row[0]) != 1 || isdigit(letter))
+	    badProteinMatrixLine(lineIx, fileName);
+	for (i=1; i<wordCount; ++i)
+	    {
+	    char *s = row[i];
+	    if (s[0] == '-') ++s;
+	    if (!isdigit(s[0]))
+		badProteinMatrixLine(lineIx, fileName);
+	    ss->matrix[letter][columns[i-1]] = atoi(row[i]);
+	    }
+	}
+    }
+if (realCount < 25)
+    errAbort("Unexpected end of %s", fileName);
+return ss;
+}
+
+struct axtScoreScheme *axtScoreSchemeProteinDefault()
+/* Returns default protein scoring scheme.  This is
+ * scaled to be compatible with the blastz one. */
+{
+struct axtScoreScheme *ss;
+int i,j;
+ss = axtScoreSchemeFromProteinText(blosumText, "blosum62");
+for (i=0; i<128; ++i)
+    for (j=0; j<128; ++j)
+        ss->matrix[i][j] *= 33;
+ss->gapOpen = 500;
+ss->gapExtend = 100;
+return ss;
+}
+
+void axtScoreSchemeFree(struct axtScoreScheme **pObj)
+/* Free up score scheme. */
+{
+freez(pObj);
 }
 
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
@@ -317,7 +454,7 @@ char *line, *row[4], *parts[32];
 int i,j, partCount;
 struct axtScoreScheme *ss;
 boolean gotO = FALSE, gotE = FALSE;
-static int trans[4] = {A_BASE_VAL, C_BASE_VAL, G_BASE_VAL, T_BASE_VAL};
+static int trans[4] = {'a', 'c', 'g', 't'};
 
 AllocVar(ss);
 if (!lineFileRow(lf, row))
@@ -352,5 +489,29 @@ if (!gotO || !gotE)
 if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
     errAbort("Must have positive gap scores");
 return ss;
+}
+
+void axtBundleFree(struct axtBundle **pObj)
+/* Free a axtBundle. */
+{
+struct axtBundle *obj = *pObj;
+if (obj != NULL)
+    {
+    axtFreeList(&obj->axtList);
+    freez(pObj);
+    }
+}
+
+void axtBundleFreeList(struct axtBundle **pList)
+/* Free a list of axtBundles. */
+{
+struct axtBundle *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    axtBundleFree(&el);
+    }
+*pList = NULL;
 }
 

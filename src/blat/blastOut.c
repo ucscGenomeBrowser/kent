@@ -1,14 +1,10 @@
+/* blastOut.c - stuff to output an alignment in blast format. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "axt.h"
 #include "obscure.h"
 #include "genoFind.h"
-
-extern int version;	/* Blat version number. */
-extern char *databaseName;		/* File name of database. */
-extern int databaseSeqCount;	/* Number of sequences in database. */
-extern unsigned long databaseLetterCount;	/* Number of bases in database. */
 
 struct targetHits
 /* Collection of hits to a single target. */
@@ -20,7 +16,7 @@ struct targetHits
     int score;		    /* Score of best element */
     };
 
-void targetHitsFree(struct targetHits **pObj)
+static void targetHitsFree(struct targetHits **pObj)
 /* Free one target hits structure. */
 {
 struct targetHits *obj = *pObj;
@@ -32,7 +28,7 @@ if (obj != NULL)
     }
 }
 
-void targetHitsFreeList(struct targetHits **pList)
+static void targetHitsFreeList(struct targetHits **pList)
 /* Free a list of dynamically allocated targetHits's */
 {
 struct targetHits *el, *next;
@@ -46,7 +42,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-int targetHitsCmpScore(const void *va, const void *vb)
+static int targetHitsCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score. */
 {
 const struct targetHits *a = *((struct targetHits **)va);
@@ -55,14 +51,14 @@ const struct targetHits *b = *((struct targetHits **)vb);
 return b->score - a->score;
 }
 
-int blastzToWublastScore(int bzScore)
+static int blastzToWublastScore(int bzScore)
 /* Convert from 100 points/match blastz score to 5 points/match
  * wu-blast score. */
 {
 return bzScore/19;
 }
 
-double blastzScoreToWuBits(int bzScore)
+static double blastzScoreToWuBits(int bzScore)
 /* Convert from blastz score to bit score.  The magic number
  * 32.1948 was derived from the wu-blast bit to score ratio.
  * I'm not sure I agree with this, but am doing it to be compatible.   
@@ -72,7 +68,7 @@ double blastzScoreToWuBits(int bzScore)
 return blastzToWublastScore(bzScore) * 0.1553;
 }
 
-double blastzScoreToWuExpectation(int bzScore, double databaseSize)
+static double blastzScoreToWuExpectation(int bzScore, double databaseSize)
 /* I'm puzzled by the wu-blast expectation score.  I would
  * think it would be  databaseSize / (2^bitScore)  but
  * it's not.   I think the best I can do is approximate
@@ -82,7 +78,7 @@ double logProbOne = -log(2) * bzScore / 32.1948;
 return databaseSize * exp(logProbOne);
 }
 
-double expectationToProbability(double e)
+static double expectationToProbability(double e)
 /* Convert expected number of hits to probability of at least
  * one hit.  This is a crude approximation, but actually pretty precise
  * for e < 0.1, which is all that really matters.... */
@@ -93,7 +89,7 @@ else
     return 0.999;
 }
 
-int countMatches(char *a, char *b, int size)
+static int countMatches(char *a, char *b, int size)
 /* Count number of characters that match between a and b. */
 {
 int count = 0;
@@ -104,7 +100,7 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-int plusStrandPos(int pos, int size, char strand, boolean isEnd)
+static int plusStrandPos(int pos, int size, char strand, boolean isEnd)
 /* Return position on plus strand, one based. */
 {
 if (strand == '-')
@@ -121,19 +117,22 @@ else
 return pos;
 }
 
-void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize, 
+static void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize, 
 	int lineSize)
 /* Output base-by-base part of alignment in blast-like fashion. */
 {
 int tOff = axt->tStart;
 int qOff = axt->qStart;
 int lineStart, lineEnd, i;
+int tDig = digitsBaseTen(axt->tEnd);
+int qDig = digitsBaseTen(axt->qEnd);
+int digits = max(tDig, qDig);
 
 for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     {
     lineEnd = lineStart + lineSize;
     if (lineEnd > axt->symCount) lineEnd = axt->symCount;
-    fprintf(f, "Query: %6d ", plusStrandPos(qOff, qSize, axt->qStrand, FALSE));
+    fprintf(f, "Query: %*d ", digits, plusStrandPos(qOff, qSize, axt->qStrand, FALSE));
     for (i=lineStart; i<lineEnd; ++i)
 	{
 	char c = axt->qSym[i];
@@ -142,14 +141,14 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
 	    ++qOff;
 	}
     fprintf(f, " %-d\n", plusStrandPos(qOff, qSize, axt->qStrand, TRUE));
-    fprintf(f, "              ");
+    fprintf(f, "       %*s ", digits, " ");
     for (i=lineStart; i<lineEnd; ++i)
         {
 	char c = ((axt->qSym[i] == axt->tSym[i]) ? '|' : ' ');
 	fputc(c, f);
 	}
     fprintf(f, "\n");
-    fprintf(f, "Sbjct: %6d ", plusStrandPos(tOff, tSize, axt->tStrand, FALSE));
+    fprintf(f, "Sbjct: %*d ", digits, plusStrandPos(tOff, tSize, axt->tStrand, FALSE));
     for (i=lineStart; i<lineEnd; ++i)
 	{
 	char c = axt->tSym[i];
@@ -162,25 +161,24 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     }
 }
 
-void wublastQueryOut(FILE *f, void *data)
+static void wuBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	char *ourId)
 /* Do wublast-like output at end of processing query. */
 {
-struct gfSaveAxtData *aod = data;
 char asciiNum[32];
 struct hash *targetHash = newHash(10);
 struct targetHits *targetList = NULL, *target;
-struct gfAxtBundle *gab;
-struct axtScoreScheme *ss = axtScoreSchemeDefault();
+struct axtBundle *ab;
 char *queryName;
 int isRc;
 int querySize = 0;
 
-++aod->queryIx;
-if (aod->bundleList == NULL)
-    return;
-
 /* Print out stuff that doesn't depend on query or database. */
-fprintf(f, "BLASTN 2.0MP-WashU [blat v%d]\n", version);
+if (ourId == NULL)
+    ourId = "axtBlastOut";
+fprintf(f, "BLASTN 2.0MP-WashU [%s]\n", ourId);
 fprintf(f, "\n");
 fprintf(f, "Copyright (C) 2000-2002 Jim Kent\n");
 fprintf(f, "All Rights Reserved\n");
@@ -193,9 +191,9 @@ fprintf(f, "alignments please use other methods.\n");
 fprintf(f, "\n");
 
 /* Print query and database info. */
-queryName = aod->bundleList->axtList->qName;
+queryName = abList->axtList->qName;
 fprintf(f, "Query=  %s\n", queryName);
-fprintf(f, "        (%d letters; record %d)\n", aod->bundleList->qSize, aod->queryIx);
+fprintf(f, "        (%d letters; record %d)\n", abList->qSize, queryIx);
 fprintf(f, "\n");
 fprintf(f, "Database:  %s\n",  databaseName);
 sprintLongWithCommas(asciiNum, databaseLetterCount);
@@ -205,14 +203,13 @@ fprintf(f, "\n");
 
 /* Build up a list of targets in database hit by query sorted by
  * score of hits. */
-for (gab = aod->bundleList; gab != NULL; gab = gab->next)
+for (ab = abList; ab != NULL; ab = ab->next)
     {
     struct axt *axt, *next;
-    querySize = gab->qSize;
-    for (axt = gab->axtList; axt != NULL; axt = next)
+    querySize = ab->qSize;
+    for (axt = ab->axtList; axt != NULL; axt = next)
 	{
 	next = axt->next;
-	axt->score = axtScore(axt, ss);
 	target = hashFindVal(targetHash, axt->tName);
 	if (target == NULL)
 	    {
@@ -220,13 +217,13 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 	    slAddHead(&targetList, target);
 	    hashAdd(targetHash, axt->tName, target);
 	    target->name = cloneString(axt->tName);
-	    target->size = gab->tSize;
+	    target->size = ab->tSize;
 	    }
 	if (axt->score > target->score)
 	    target->score = axt->score;
 	slAddHead(&target->axtList, axt);
 	}
-    gab->axtList = NULL;
+    ab->axtList = NULL;
     }
 slSort(&targetList, targetHitsCmpScore);
 for (target = targetList; target != NULL; target = target->next)
@@ -287,8 +284,30 @@ for (target = targetList; target != NULL; target = target->next)
     }
 
 /* Cleanup time. */
-gfAxtBundleFreeList(&aod->bundleList);
 hashFree(&targetHash);
 targetHitsFreeList(&targetList);
+}
+
+
+void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	boolean isWu, char *ourId)
+/* Output a bundle of axt's on the same query sequence in blast format.
+ * The parameters in detail are:
+ *   ab - the list of bundles of axt's. 
+ *   f  - output file handle
+ *   databaseSeqCount - number of sequences in database
+ *   databaseLetterCount - number of bases or aa's in database
+ *   isWu - TRUE if want wu-blast rather than blastall format
+ *   ourId - optional (may be NULL) thing to put in header
+ */
+{
+if (isProt)
+   errAbort("Sorry, currently can only output nucleotides in BLAST format");
+if (isWu)
+    wuBlastOut(abList, isProt, queryIx, f, databaseName,
+   	databaseSeqCount, databaseLetterCount, ourId);
+else
+    errAbort("Currently only handle wu-blast output.");
 }
 
