@@ -15,8 +15,8 @@
 #include "trans3.h"
 
 int version = 14;
-int maxSeqSize = 20000;
-int maxAaSize = 6000;
+int maxSeqSize = 40000;
+int maxAaSize = 8000;
 
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
@@ -90,7 +90,6 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     }
 lineFileClose(&lf);
 genoFindFree(&gf);
-uglyf("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
 int getPortIx(char *portName)
@@ -526,6 +525,7 @@ int sd = 0;
 bioSeq *seq = faReadSeq(faName, !isProt);
 int matchCount = 0;
 
+
 /* Set up socket.  Get ready to listen to it. */
 sd = setupSocket(portName, hostName);
 if (connect(sd, &sai, sizeof(sai)) == -1)
@@ -612,7 +612,6 @@ cgiSpoof(&argc, argv);
 command = argv[1];
 if (cgiBoolean("trans"))
     {
-    uglyf("Do trans\n");
     doTrans = TRUE;
     tileSize = 4;
     minMatch = 3;
