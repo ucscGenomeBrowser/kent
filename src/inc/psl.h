@@ -25,6 +25,8 @@
 #include "dnaseq.h"
 #endif
 
+#define PSL_NUM_COLS 21
+
 struct psl
 /* Summary info about a patSpace alignment */
     {
