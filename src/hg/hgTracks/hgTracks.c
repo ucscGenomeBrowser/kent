@@ -105,8 +105,8 @@ if (s != NULL && isdigit(s[0]))
     tl.picWidth = atoi(s);
     if (tl.picWidth > 5000)
         tl.picWidth = 5000;
-    if (tl.picWidth < 500)
-        tl.picWidth = 500;
+    if (tl.picWidth < 320)
+        tl.picWidth = 320;
     }
 tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
 }
@@ -1012,7 +1012,7 @@ struct trackGroup *fullMgcMrnaTg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "mgc_mrna";
-tg->visibility = tvFull;
+tg->visibility = tvHide;
 tg->longLabel = "Full Length MGC mRNAs";
 tg->shortLabel = "Full MGC mRNAs";
 tg->loadItems = loadMgcMrnaAli;
@@ -1193,6 +1193,24 @@ tg->drawItems = linkedFeaturesAverageDense;
 return tg;
 }
 
+void loadBlatMouse(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+tg->items = lfFromPslsInRange("blatMouse", winStart, winEnd, chromName, TRUE);
+}
+
+struct trackGroup *blatMouseTg()
+/* Make track group of full length mRNAs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgBlatMouse";
+tg->visibility = tvDense;
+tg->longLabel = "Mouse Translated Blat Alignments Score > 30";
+tg->shortLabel = "Blat Mouse";
+tg->loadItems = loadBlatMouse;
+tg->drawItems = linkedFeaturesAverageDense;
+return tg;
+}
 
 struct linkedFeatures *lfFromGenePredInRange(char *table, 
 	char *chrom, int start, int end)
@@ -4736,6 +4754,7 @@ if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
+if (hTableExists("blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
 if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
