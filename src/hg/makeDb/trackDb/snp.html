@@ -71,14 +71,19 @@
       <B>Variant Class</B>: Variant classification<BR>
       <UL>
         <LI><B>Unknown</B> - no classification provided by data contributor
-        <LI><B>Single Nucleotide Polymorphism</B> - single nucleotide variation: alleles of length=1 and from set of {A,T,C,G}
-        <LI><B>Insertion/deletion</B> - insertion/deletion variation: alleles of different length or include '-' character
-        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
-        <LI><B>Microsatellite</B> - microsatellite variation: allele string contains numbers and '(motif)' pattern
+        <LI><B>Single Nucleotide Polymorphism</B> - single nucleotide 
+	variation: alleles of length=1 and from set of {A,T,C,G}
+        <LI><B>Insertion/deletion</B> - insertion/deletion variation: alleles 
+	of different length or include '-' character
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: 
+	allele contains string '(heterozygous)'
+        <LI><B>Microsatellite</B> - microsatellite variation: allele string 
+	contains numbers and '(motif)' pattern
         <LI><B>Named</B> - insertion/deletion of named object (length unknown)
         <LI><B>No Variation</B> - no variation asserted for sequence
         <LI><B>Mixed</B> - mixed class
-        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same length and length>1 and from set of {A,T,C,G}
+        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same 
+	length, length > 1, and from set of {A,T,C,G}
       </UL>
     </LI>
     <LI> 
@@ -88,10 +93,14 @@
 	the variant (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
         <LI><B>Unknown</B> - no validation has been reported for this refSNP
-        <LI><B>Other Population</B> - at least one ss in cluster was validated by independent assay
-        <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
-        <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
-        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ chromosomes
+        <LI><B>Other Population</B> - at least one ss in cluster was validated
+	by independent assay
+        <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency
+	data submitted
+        <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ 
+	submissions assayed with a non-computational method
+        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ 
+	chromosomes
         <LI><B>By HapMap</B> - validated by HapMap project
         <LI><B>By Genotype</B> - at least one genotype reported for this refSNP
       </UL>
