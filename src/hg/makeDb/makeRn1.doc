@@ -387,7 +387,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE 11/28/02)
     hgLoadPsl rn1 -tNameIx refSeqAli.psl
 
 
-PRODUCING ESTORIENTINFO TABLE (DONE 12/2/02 -MATT)
+PRODUCING ESTORIENTINFO TABLE (DONE 12/2/02 - MATT)
 
 This table is needed for proper orientation of ESTs in the
 browser.  Many will appear on the wrong strand without it.
@@ -936,7 +936,7 @@ o - Load best in genome into database as so:
         cd ~/rat/vsOo33/bestRat
         hgLoadPsl rn1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (IN PROGRESS - MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
