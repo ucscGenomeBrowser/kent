@@ -341,6 +341,14 @@ struct genePos *getSearchNeighbors(struct column *colList,
 	struct sqlConnection *conn, struct hash *goodHash, int maxCount);
 /* Get neighbors by search. */
 
+void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
+	int height);
+/* Make a gif file with given labels. */
+
+int gifLabelMaxWidth(char **labels, int labelCount);
+/* Return maximum pixel width of labels.  It's ok to have
+ * NULLs in labels array. */
+
 /* ---- Column method setters. ---- */
 
 void columnDefaultMethods(struct column *col);

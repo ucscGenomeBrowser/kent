@@ -15,7 +15,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.49 2003/08/29 22:14:28 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.50 2003/08/30 00:22:22 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1375,6 +1375,7 @@ struct sqlConnection *conn;
 struct column *colList, *col;
 long startTime = clock1000();
 cart = theCart;
+
 #ifdef SOON
 getDbAndGenome(cart, &database, &organism);
 #else

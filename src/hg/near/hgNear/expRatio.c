@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.14 2003/08/29 20:10:41 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.15 2003/08/30 00:22:22 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -282,51 +282,41 @@ for (i=0; i<expCount; ++i)
 return names;
 }
 
+static int countNonNull(char **row, int maxCount)
+/* Count number of non-null rows. */
+{
+int i;
+for (i=0; i<maxCount; ++i)
+    {
+    if (row[i] == NULL)
+        break;
+    }
+return i;
+}
+
 void expRatioLabelPrint(struct column *col)
 /* Print out labels of various experiments. */
 {
 int i, numExpts = col->representativeCount;
 boolean doGreen = FALSE;
-char **experiments = getExperimentNames("hgFixed", col->experimentTable, numExpts,
-	col->representatives);
-startExpCell();
-for (i=0; i<numExpts; ++i)
-    {
-    char *label = experiments[i], c;
-    if (label == NULL)
-        {
-	restartExpCell();
-	}
-    else
-	{
-	hPrintf("<TD VALIGN=BOTTOM ALIGN=MIDDLE");
-	if (doGreen)
-	    hPrintf(" BGCOLOR=\"#FFC8C8\"");
-	hPrintf(">");
-	hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
-	while ((c = *label++) != 0)
-	    {
-	    char cString[2], *s;
-	    if (c == ' ')
-		{
-		s = "&nbsp;";
-		}
-	    else
-		{
-		s = cString;
-		s[0] = c;
-		s[1] = 0;
-		}
-	    hPrintf(" <TR ><TD ALIGN=MIDDLE WIDTH=%d", expSubcellWidth);
-	    hPrintf(">%s</TD></TR>\n", s);
-	    }
-	hPrintf("</TABLE></TD>\n");
-	doGreen = 1 - doGreen;	/* Toggle value */
-	}
-    }
-endExpCell();
+int groupSize, gifCount = 0;
+char gifName[128];
+char **experiments = getExperimentNames("hgFixed", 
+	col->experimentTable, numExpts, col->representatives);
+int height = gifLabelMaxWidth(experiments, numExpts);
 
-/* CLean up */
+for (i=0; i<numExpts; i += groupSize+1)
+    {
+    hPrintf("<TD>");
+    groupSize = countNonNull(experiments+i, numExpts-i);
+    safef(gifName, sizeof(gifName), "../trash/near_%s%d.gif", 
+    	col->name, ++gifCount);
+    gifLabelVerticalText(gifName, experiments+i, groupSize, height);
+    hPrintf("<IMG SRC=\"%s\">", gifName);
+    hPrintf("</TD>");
+    }
+
+/* Clean up */
 for (i=0; i<numExpts; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
