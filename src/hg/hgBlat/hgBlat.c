@@ -518,9 +518,9 @@ puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
 
 printf("%s", 
-"<P>Only DNA sequences less than 20,000 bases and protein or translated \n"
-"sequence of less than 4000 letters will be processed.  If multiple sequences\n"
-"are submitted at the same time, the total limit is 50,000 bases or 10,000\n"
+"<P>Only DNA sequences of 25,000 or less bases and protein or translated \n"
+"sequence of 5000 or less letters will be processed.  If multiple sequences\n"
+"are submitted at the same time, the total limit is 50,000 bases or 12,500\n"
 "letters.\n</P>"
 "BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
