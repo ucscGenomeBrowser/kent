@@ -252,6 +252,20 @@ sacCer1.downloadDir = sacCer1
 	# and run again.
 	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
 
+# UPDATE GO DATABASE
+    ssh hgwdev
+    cd /cluster/store1/geneOntology
+    mkdir 20031202
+    cd 20031202
+    wget ftp://ftp.geneontology.org/pub/go/godatabase/archive/latest/go_200311-termdb-data.gz
+    wget ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_sptr.gz
+    hgsql mysql <<end
+    drop database go;
+    create database go;
+    end
+    zcat go_*data.gz | hgsql go
+    zcat gene_association.goa_sptr.gz | hgGoAssociation go goaPart stdin -taxon=9606,10090,10116,6239,7227,4932
+
 ######## MAKING FAMILY BROWSER TABLES #######
 
     # Making tables to cluster splice varients
