@@ -116,6 +116,7 @@ UTIL_DIRS = \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
+	genePredToGtf \
 	getFeatDna \
 	getRna \
 	getRnaPred \
