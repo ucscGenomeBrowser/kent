@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "common.h"
+#include "errabort.h"
 #include "jointalign.h"
 
 
