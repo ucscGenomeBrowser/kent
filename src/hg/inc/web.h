@@ -4,6 +4,7 @@
 #define WEB_H
 
 #include "cart.h"
+#include "dbDb.h"
 
 void webStartText();
 /* output the head for a text page */
