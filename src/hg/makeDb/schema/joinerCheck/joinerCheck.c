@@ -7,9 +7,12 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.8 2004/03/12 01:02:37 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.9 2004/03/12 02:46:27 kent Exp $";
 
+/* Variable that are set from command line. */
 boolean parseOnly; 
+char *fieldListIn;
+char *fieldListOut;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,9 +23,18 @@ errAbort(
   "   joinerCheck file.joiner\n"
   "options:\n"
   "   -parseOnly just parse joiner file, don't check database.\n"
-  "   -xxx=XXX\n"
+  "   -fieldListOut=file - List all fields in all databases to file.\n"
+  "   -fieldListIn=file - Get list of fields from file rather than mysql.\n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"parseOnly", OPTION_BOOLEAN},
+   {"fieldListIn", OPTION_STRING},
+   {"fieldListOut", OPTION_STRING},
+   {NULL, 0},
+};
+
 
 struct joinerField
 /* A field that can be joined on. */
@@ -156,11 +168,6 @@ while (nextSubTok(lf, &s, &tok, &size))
     }
 return dy->string;
 }
-
-static struct optionSpec options[] = {
-   {"parseOnly", OPTION_BOOLEAN},
-   {NULL, 0},
-};
 
 char *nextSubbedLine(struct lineFile *lf, struct hash *hash, 
 	struct dyString *dy)
@@ -669,14 +676,14 @@ slFreeList(&dbList);
 return dbHash;
 }
 
-void joinerValidateOnDbs(struct joinerSet *jsList)
+
+void joinerValidateOnDbs(struct joinerSet *jsList, struct hash *fieldHash)
 /* Make sure that joiner refers to fields that exist at
  * least somewhere. */
 {
 struct joinerSet *js;
 struct joinerField *jf;
 struct slName *db;
-struct hash *fieldHash = sqlAllFields();
 struct hash *dbChromHash = getDbChromHash();
 
 for (js=jsList; js != NULL; js = js->next)
@@ -696,6 +703,31 @@ for (js=jsList; js != NULL; js = js->next)
     }
 }
 
+struct hash *processFieldHash(char *inName, char *outName)
+/* Read in field hash from file if inName is non-NULL, 
+ * else read from database.  If outName is non-NULL, 
+ * save it to file. */
+{
+struct hash *fieldHash;
+struct hashEl *el;
+
+if (inName != NULL)
+    fieldHash = hashWordsInFile(inName, 18);
+else
+    fieldHash = sqlAllFields();
+if (outName != NULL)
+    {
+    struct hashEl *el, *list = hashElListHash(fieldHash);
+    FILE *f = mustOpen(outName, "w");
+    slSort(&list, hashElCmp);
+    for (el = list; el != NULL; el = el->next)
+	fprintf(f, "%s\n", el->name);
+    slFreeList(&list);
+    carefulClose(&f);
+    }
+return fieldHash;
+}
+
 void joinerCheck(char *fileName)
 /* joinerCheck - Parse and check joiner file. */
 {
@@ -704,7 +736,10 @@ struct joinerSet *js, *jsList = joinerParsePassOne(lf);
 jsList = joinerExpand(jsList);
 joinerParsePassTwo(jsList);
 if (!parseOnly)
-    joinerValidateOnDbs(jsList);
+    {
+    struct hash *fieldHash = processFieldHash(fieldListIn, fieldListOut);
+    joinerValidateOnDbs(jsList, fieldHash);
+    }
 }
 
 
@@ -715,6 +750,8 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 parseOnly = optionExists("parseOnly");
+fieldListIn = optionVal("fieldListIn", NULL);
+fieldListOut = optionVal("fieldListOut", NULL);
 joinerCheck(argv[1]);
 return 0;
 }
