@@ -1,7 +1,7 @@
 track sgdClone
 priority 14
-shortLabel WashU Clone
-longLabel Washington University Clone
+shortLabel WashU Clones
+longLabel Washington University Clones
 group map
 visibility hide
 altColor 180,180,180 
@@ -9,7 +9,7 @@ type bed 4+
 
 track sgdGene
 shortLabel SGD Genes
-longLabel Protein-Coding Genes from Sacchromyces Genome Database
+longLabel Protein-Coding Genes from Saccharomyces Genome Database
 group genes
 priority 45.5
 visibility pack
@@ -20,7 +20,7 @@ exonArrows on
 
 track sgdOther
 shortLabel SGD Other
-longLabel Other Features from Sacchromyces Genome Database
+longLabel Other Features from Saccharomyces Genome Database
 group genes
 priority 46
 visibility pack
