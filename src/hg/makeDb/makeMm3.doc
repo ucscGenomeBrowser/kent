@@ -1625,9 +1625,9 @@ LOAD ENSEMBL ESTS (DONE June 6, 03)
 
 # Add "chr" to front of each line in the gene data gtf file to make 
 # it compatible with ldHgGene 
-     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
-     ~matt/bin/fixEns.pl ensGene.gtf ensFixed.gtf 
-     ldHgGene mm3 ensGene ensGene.gtf
+     ~matt/bin/addchr.pl unrandom.gtf ensEst.gtf
+     ~matt/bin/fixEns.pl ensEst.gtf ensFixed.gtf 
+     ldHgGene mm3 ensEst ensEst.gtf
 
 o - Load Ensembl peptides:
         Get the ensembl protein data from http://www.ensembl.org/
