@@ -9,7 +9,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslShow.c,v 1.2 2004/06/16 22:05:06 braney Exp $";
+static char const rcsid[] = "$Id: pslShow.c,v 1.3 2004/08/12 22:18:40 angie Exp $";
 
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -71,6 +71,9 @@ if (qName == NULL)
 if (tName == NULL)
     tName = psl->tName;
 
+
+fputs("Matching bases are colored blue and capitalized. " 
+      "Light blue bases mark the boundaries of gaps in either sequence.\n", f);
 
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
 fprintf(f, "<PRE><TT>");
