@@ -31,9 +31,9 @@ name percentId
 type distance sgdBlastTab query target identity
 
 name pdb
-queryFull select acc,pdb from  proteome.pdbSP,swissProt.displayId where val=sp 
-queryOne select pdb,pdb from proteome.pdbSP,swissProt.displayId where val=sp and acc='%s'
-invQueryOne select acc from proteome.pdbSP,swissProt.displayId where val=sp and pdb='%s'
+queryFull select acc,pdb from  proteome.pdbSP,uniProt.displayId where val=sp 
+queryOne select pdb,pdb from proteome.pdbSP,uniProt.displayId where val=sp and acc='%s'
+invQueryOne select acc from proteome.pdbSP,uniProt.displayId where val=sp and pdb='%s'
 
 name yeastChoCellCycle
 shortLabel Cho Cell Cycle
