@@ -984,6 +984,22 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
+track multizMm3Rn3GalGal2_phyloHMM
+shortLabel Hu/Mouse/Rat/Chick
+longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
+group compGeno
+priority 148.3
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle multizMm3Rn3GalGal2_phyloHMM_wig
+yLineOnOff Off
+autoScaleDefault Off
+pairwise hmrg
+speciesOrder mouse rat chicken
+
 track tblastGg0
 shortLabel Chicken Best Exon
 longLabel best gg0 blast hit/hg16 knownGene exon
