@@ -26,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
     {"mismatch", OPTION_BOOLEAN},
     {"orphan", OPTION_BOOLEAN},
     {"noRandom", OPTION_BOOLEAN},
+    {"noBin", OPTION_BOOLEAN},
     {"min", OPTION_INT},
     {"max", OPTION_INT},
     {"slopval", OPTION_INT},
@@ -42,6 +43,7 @@ boolean LONG = FALSE;
 boolean MISMATCH = FALSE;
 boolean ORPHAN = FALSE;
 boolean NORANDOM = FALSE;
+boolean NOBIN = FALSE;
 int MIN;
 int MAX;
 int SLOPVAL;
@@ -227,17 +229,17 @@ void readPairFile(struct lineFile *prf)
 	{
 	  char *test;
 	  AllocVar(cloneName);
-	  clone = createClone(words[0],words[1],words[2]);
-	  hashAdd(clones, words[0], clone);
-	  sprintf(cloneName->name, "%s", words[0]);
+	  clone = createClone(words[2],words[0],words[1]);
+	  hashAdd(clones, words[2], clone);
+	  sprintf(cloneName->name, "%s", words[2]);
+	  hashAdd(endNames, words[0], cloneName);
+	  test = hashMustFindVal(endNames, words[0]);
+	  if (strcmp(test, words[2]))
+	    errAbort("%s ne %s for %s\n",test,words[2],words[0]);
 	  hashAdd(endNames, words[1], cloneName);
 	  test = hashMustFindVal(endNames, words[1]);
-	  if (strcmp(test, words[0]))
-	    errAbort("%s ne %s for %s\n",test,words[0],words[1]);
-	  hashAdd(endNames, words[2], cloneName);
-	  test = hashMustFindVal(endNames, words[2]);
-	  if (strcmp(test, words[0]))
-	    errAbort("%s ne %s for %s\n",test,words[0],words[2]);
+	  if (strcmp(test, words[2]))
+	    errAbort("%s ne %s for %s\n",test,words[2],words[1]);
 	  slAddHead(&cloneList,clone);
 	}
     }     
@@ -366,9 +368,11 @@ void printBed(FILE *out, struct pslPair *ppList, struct clone *clone)
 	strand = "-";
       d1 = pp->f->psl->tEnd - pp->f->psl->tStart + 1;
       d2 = pp->r->psl->tEnd - pp->r->psl->tStart + 1;
-
-      fprintf(out, "%d\t%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t2\t%d,%d\t%d,%d\t%s,%s\n",
-	      bin, pp->f->psl->tName,pp->f->psl->tStart,pp->r->psl->tEnd,clone->name,
+      
+      if (!NOBIN) 
+	fprintf(out, "%d\t",bin);
+      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t2\t%d,%d\t%d,%d\t%s,%s\n",
+	      pp->f->psl->tName,pp->f->psl->tStart,pp->r->psl->tEnd,clone->name,
 	      score, strand, pp->f->psl->tStart, pp->r->psl->tStart, d1, d2, 
 	      pp->f->psl->qName, pp->r->psl->qName);
     }
@@ -402,8 +406,10 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone)
 	strand = "-";
       d1 = pa->psl->tEnd - pa->psl->tStart + 1;
 
-      fprintf(out, "%d\t%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t1\t%d\t%d\t%s\n",
-	      bin, pa->psl->tName,pa->psl->tStart,pa->psl->tEnd,clone->name,
+      if (!NOBIN) 
+	fprintf(out, "%d\t",bin);
+      fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\tall_fosends\t1\t%d\t%d\t%s\n",
+	      pa->psl->tName,pa->psl->tStart,pa->psl->tEnd,clone->name,
 	      score, strand, pa->psl->tStart, d1, pa->psl->qName);        
       }
 }
@@ -452,6 +458,7 @@ int main(int argc, char *argv[])
   MISMATCH = optionExists("mismatch");
   ORPHAN = optionExists("orphan");
   NORANDOM = optionExists("noRandom");
+  NOBIN = optionExists("noBin");
   MIN = optionInt("min",32000);
   MAX = optionInt("max",47000);
   TINSERT = optionInt("tInsert",500);
