@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.84 2004/10/31 02:55:42 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.85 2004/11/17 02:17:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -961,6 +961,9 @@ else
 void doOutPrimaryTable(char *table, struct sqlConnection *conn)
 /* Dump out primary table. */
 {
+if (anyIntersection())
+    errAbort("Can't do all fields output when intersection is on. "
+    "Please go back and select another output type, or clear the intersection.");
 textOpen();
 doTabOutTable(database, table, conn, NULL);
 }
