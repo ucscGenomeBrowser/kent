@@ -1072,6 +1072,9 @@ end
     time hgLoadBlastTab dm1 bdgpBlastTab *.tab
     # Create table that maps between bdgp genes and RefSeq
     hgMapToGene dm1 refGene bdgpGene bdgpToRefSeq
+    # Create table that maps between bdgp genes and LocusLink
+    echo "select mrnaAcc,locusLinkId from refLink" | hgsql -N dm1 > refToLl.txt
+    hgMapToGene dm1 refGene bdgpGene bdgpToLocusLink -lookup=refToLl.txt
     # Create a table that maps BDGP root names to canonical transcripts:
     cd /cluster/data/dm1/bed/blastp
     cat > bdgpToCanonical.sql <<end
