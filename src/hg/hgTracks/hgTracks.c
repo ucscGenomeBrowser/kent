@@ -1030,6 +1030,12 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    s = sf->start;
 	    e = sf->end;
 
+        if( s - e == 0 ) /*ignore scores of 0*/
+        {
+            prevEnd = -1;  /*set so no interpolation where no data*/
+            continue;
+        }
+
         //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)s-e)*(double)heightPer/1000.0+(double)heightPer);
@@ -1061,17 +1067,17 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	        }
 
 
-    /*draw the points themselves*/
-    //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
-	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
-    if( fill )
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shades[3]);
+        /*draw the points themselves*/
+        //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
+        if( fill )
+	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shades[3]);
 
-    prevEnd = s;
-    prevY = y1;
+        prevEnd = s;
+        prevY = y1;
 
 
-	}
+	    }
     if (isFull)
 	y += lineHeight;
     }
