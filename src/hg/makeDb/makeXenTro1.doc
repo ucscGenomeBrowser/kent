@@ -2260,3 +2260,14 @@ chainSome $(path1)
     # back to kksilo
     rm -rf blastOut
 # End tblastn
+
+# MAKE JGI FILTERED GENES
+#
+# Copy email attatchment from Igor Grigoriev (IVGrigoriev@lbl.gov)
+# to /cluster/data/xenTro1/bed/jgiFilteredModels/xenopus.FilteredModels
+# and then
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/jgiFilteredModels
+    hgJgiFilteredModels xenopus.FilteredModels jgiFilteredModels.gff
+    ldHgGene xenTro1 jgiFilteredModels jgiFilteredModels.gff
+# Then edit trackDb to put in the track.
