@@ -1,7 +1,13 @@
 /* joiner - information about what fields in what tables
  * in what databases can fruitfully be related together
  * or joined.  Another way of looking at it is this
- * defines identifiers shared across tables. */
+ * defines identifiers shared across tables. 
+ *
+ * The main routines you'll want to use here are 
+ *    joinerRead - to read in a joiner file
+ *    joinerRelate - to get list of possible joins given a table.
+ */
+
 
 #include "common.h"
 #include "linefile.h"
@@ -550,6 +556,7 @@ for (js = jsList; js != NULL; js = js->next)
 	if (js->parent == NULL)
 	    errAbort("%s not define line %d of %s", 
 	    	typeOf, js->lineIx, fileName);
+	refAdd(&js->parent->children, js);
 	}
     }
 for (js = jsList; js != NULL; js = js->next)
@@ -560,6 +567,7 @@ for (js = jsList; js != NULL; js = js->next)
 	    errAbort("Circular typeOf dependency on joiner %s line %d of %s", 
 	    	js->name, js->lineIx, fileName);
 	}
+    slReverse(&js->children);
     }
 }
 
@@ -579,5 +587,188 @@ joiner->jsList = jsList;
 joiner->symHash = symHash;
 joiner->fileName = cloneString(fileName);
 return joiner;
+}
+
+static struct joinerDtf *joinerDtfNew(char *database, char *table, char *field)
+/* Create new joinerDtf. */
+{
+struct joinerDtf *dtf;
+AllocVar(dtf);
+dtf->database = cloneString(database);
+dtf->table = cloneString(table);
+dtf->field = cloneString(field);
+return dtf;
+}
+
+void joinerDtfFree(struct joinerDtf **pDtf)
+/* Free up resources associated with joinerDtf. */
+{
+struct joinerDtf *dtf = *pDtf;
+if (dtf != NULL)
+    {
+    freeMem(dtf->database);
+    freeMem(dtf->table);
+    freeMem(dtf->field);
+    freez(pDtf);
+    }
+}
+
+void joinerDtfFreeList(struct joinerDtf **pList)
+/* Free up memory associated with list of joinerDtfs. */
+{
+struct joinerDtf *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    joinerDtfFree(&el);
+    }
+*pList = NULL;
+}
+
+void joinerPairFree(struct joinerPair **pJp)
+/* Free up memory associated with joiner pair. */
+{
+struct joinerPair *jp = *pJp;
+if (jp != NULL)
+    {
+    joinerDtfFree(&jp->a);
+    joinerDtfFree(&jp->b);
+    freez(pJp);
+    }
+}
+
+void joinerPairFreeList(struct joinerPair **pList)
+/* Free up memory associated with list of joinerPairs. */
+{
+struct joinerPair *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    joinerPairFree(&el);
+    }
+*pList = NULL;
+}
+
+static struct joinerField *joinerSetIncludesTable(struct joinerSet *js, 
+	char *database, char *table)
+/* If joiner set includes database and table, return the associated field. */
+{
+struct joinerField *jf;
+for (jf = js->fieldList; jf != NULL; jf = jf->next)
+    {
+    if (sameString(table, jf->table) && slNameInList(jf->dbList, database))
+        return jf;
+    }
+return NULL;
+}
+
+static boolean tableExists(char *database, char *table)
+/* Return TRUE if database and table exist. */
+{
+struct sqlConnection *conn = sqlMayConnect(database);
+boolean exists;
+if (conn == NULL)
+    return FALSE;
+exists = sqlTableExists(conn, table);
+sqlDisconnect(&conn);
+return exists;
+}
+
+static void addChildren(struct joinerSet *js,  struct slRef **pList)
+/* Recursively add children to list. */
+{
+struct slRef *childRef;
+for (childRef = js->children; childRef != NULL; childRef = childRef->next)
+    {
+    struct joinerSet *child = childRef->val;
+    refAdd(pList, child);
+    addChildren(child, pList);
+    }
+}
+
+static struct slRef *joinerSetInheritanceChain(struct joinerSet *js)
+/* Return list of self, children, and parents (but not siblings).
+ * slFreeList result when done. */
+{
+struct slRef *list = NULL, *el;
+struct joinerSet *parent;
+struct slRef *child;
+
+/* Add self and parents. */
+for (parent = js; parent != NULL; parent = parent->parent)
+    refAdd(&list, parent);
+addChildren(js, &list);
+slReverse(&list);
+return list;
+}
+
+static struct joinerPair *joinerToField(char *aDatabase, struct joinerField *aJf,
+	char *bDatabase, struct joinerField *bJf)
+/* Construct joiner pair linking from a to b. */
+{
+struct joinerPair *jp;
+AllocVar(jp);
+jp->a = joinerDtfNew(aDatabase, aJf->table, aJf->field);
+jp->b = joinerDtfNew(bDatabase, bJf->table, bJf->field);
+return jp;
+}
+
+
+struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
+	char *table)
+/* Get list of all ways to link table in given database to other tables,
+ * possibly in other databases. */
+{
+struct joinerSet *js, *jsChain;
+struct joinerField *jf, *jfBase;
+struct joinerPair *jpList = NULL, *jp;
+struct slRef *chainList, *chainEl;
+/* Return list of self, children, and parents (but not siblings) */
+
+if (!tableExists(database, table))
+    errAbort("%s.%s - table doesn't exist", database, table);
+
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    if ((jfBase = joinerSetIncludesTable(js, database, table)) != NULL)
+        {
+	chainList = joinerSetInheritanceChain(js);
+	for (chainEl = chainList; chainEl != NULL; chainEl = chainEl->next)
+	    {
+	    jsChain = chainEl->val;
+	    for (jf = jsChain->fieldList; jf != NULL; jf = jf->next)
+		{
+		if (slNameInList(jf->dbList, database))
+		    {
+		    if (!sameString(table, jf->table))
+			{
+			if (tableExists(database, jf->table))
+			    {
+			    jp = joinerToField(database, jfBase, database, jf);
+			    slAddHead(&jpList, jp);
+			    }
+			}
+		    }
+		else
+		    {
+		    struct slName *db;
+		    for (db = jf->dbList; db != NULL; db = db->next)
+			{
+			if (tableExists(db->name, jf->table))
+			    {
+			    jp = joinerToField(database, jfBase, db->name, jf);
+			    slAddHead(&jpList, jp);
+			    }
+			}
+		    }
+		}
+	    }
+	slFreeList(&chainList);
+	}
+    }
+slReverse(&jpList);
+return jpList;
 }
 

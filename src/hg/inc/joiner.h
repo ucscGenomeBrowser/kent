@@ -1,7 +1,12 @@
 /* joiner - information about what fields in what tables
  * in what databases can fruitfully be related together
  * or joined.  Another way of looking at it is this
- * defines identifiers shared across tables. */
+ * defines identifiers shared across tables. 
+ *
+ * The main routines you'll want to use here are 
+ *    joinerRead - to read in a joiner file
+ *    joinerRelate - to get list of possible joins given a table.
+ */
 
 #ifndef JOINER_H
 #define JOINER_H
@@ -40,6 +45,7 @@ struct joinerSet
     char *name;				/* Name of field set. */
     int lineIx;			/* Line index of start for error reporting */
     struct joinerSet *parent;		/* Parsed-out parent type if any. */
+    struct slRef *children;		/* References to children if any. */
     char *typeOf;			/* Parent type name if any. */
     char *external;			/* External name if any. */
     char *description;			/* Short description. */
@@ -68,5 +74,40 @@ void joinerFree(struct joiner **pJoiner);
 
 struct joiner *joinerRead(char *fileName);
 /* Read in a .joiner file. */
+
+struct joinerDtf
+/* Just database, table, and field. */
+    {
+    struct joinerDtf *next;	/* Next in list. */
+    char *database;		/* Database. */
+    char *table;		/* Table. */
+    char *field;		/* Field. */
+    };
+
+void joinerDtfFree(struct joinerDtf **pDtf);
+/* Free up resources associated with joinerDtf. */
+
+void joinerDtfFreeList(struct joinerDtf **pList);
+/* Free up memory associated with list of joinerDtfs. */
+
+struct joinerPair
+/* A pair of linked fields. */
+    {
+    struct joinerPair *next;	/* Next in list. */
+    struct joinerDtf *a;	/* Typically contains field from input table */
+    struct joinerDtf *b;	/* Field in another table */
+    };
+
+void joinerPairFree(struct joinerPair **pJp);
+/* Free up memory associated with joiner pair. */
+
+void joinerPairFreeList(struct joinerPair **pList);
+/* Free up memory associated with list of joinerPairs. */
+
+struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
+	char *table);
+/* Get list of all ways to link table in given database to other tables,
+ * possibly in other databases. */
+
 
 #endif /* JOINER_H */
