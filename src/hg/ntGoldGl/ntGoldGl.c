@@ -209,8 +209,7 @@ for (nt = ntList; nt != NULL; nt = nt->next)
 *retNtHash = ntHash;
 }
 
-#ifdef SOON
-void patchOneGold(char *inName, struct hash *ntHash, struct hash *cloneHash, char *outName)
+void patchOneGold(char *inName, struct hash *ntHash, char *outName)
 /* Make patched copy of inName in outName. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -332,62 +331,94 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     }
 lineFileClose(&lf);
+carefulClose(&f);
 }
 
-void hashFirstWords(char *fileName, struct hash **retHash)
-/* Read in lines with one word into hash. */
+
+void patchOneGl(char *inName, struct hash *ntHash, char *outName)
+/* Make patched copy of inName in outName. */
 {
-struct hash *hash = newHash(8);
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[1];
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+FILE *f = mustOpen(outName, "w");
+int lineOutIx = 0;
+int i;
+char *row[4];
+int lineSize;
+char choppedLine[512], *line;
+struct ntContig *nt;
+int startOffset = 0, endOffset;
+
 
 while (lineFileRow(lf, row))
     {
-    hashAdd(hash, row[0], NULL);
+    if (startsWith("NT_", row[0]))
+        {
+	char ntName[128];
+	strcpy(ntName, row[0]);
+	chopSuffix(ntName);
+	startOffset = atoi(row[1]);
+	endOffset = atoi(row[2]);
+	nt = hashFindVal(ntHash, ntName);
+	if (nt == NULL)	/* Just leave a gap - no good info here. */
+	    {
+	    warn("Couldn't find %s", ntName);
+	    }
+	else    /* Unpack the contig. */
+	    {
+	    struct cloneRef *ref;
+	    struct clone *clone;
+	    boolean isRev = (row[3][0] == '-');
+	    
+	    if (isRev)
+	        {
+		int start, end, cloneEnd;
+	        slReverse(&nt->cloneList);
+		for (ref = nt->cloneList; ref != NULL; ref = ref->next)
+		    {
+		    clone = ref->ref;
+		    cloneEnd = clone->ntEnd;
+		    if (clone->ntOrientation > 0)
+		        cloneEnd += clone->size - clone->goldEnd;
+		    else
+		        cloneEnd += clone->goldStart;
+		    start = startOffset + (nt->size - cloneEnd);
+		    end = start + clone->size;
+		    fprintf(f, "%s %d %d %c\n",
+		        clone->fragName, 
+			start, end,
+			(clone->ntOrientation < 1 ? '+' : '-'));
+		    }
+	        slReverse(&nt->cloneList);
+		}
+	    else
+	        {
+		for (ref = nt->cloneList; ref != NULL; ref = ref->next)
+		    {
+		    int start, end;
+
+		    start = startOffset + clone->ntStart;
+		    if (clone->ntOrientation > 0)
+		        start -= clone->goldStart;
+		    else
+		        start -= clone->size - clone->goldEnd;
+		    end = start + clone->size;
+		    clone = ref->ref;
+		    fprintf(f, "%s %d %d %c\n",
+		        clone->fragName, startOffset + clone->ntStart, 
+			startOffset + clone->ntStart + clone->size, 
+			(clone->ntOrientation < 1 ? '-' : '+'));
+		    }
+		}
+	    }
+	}
+    else
+        {
+	fprintf(f, "%s %s %s %s\n", row[0], row[1], row[2], row[3]);
+	}
     }
 lineFileClose(&lf);
-*retHash = hash;
+carefulClose(&f);
 }
-
-void patchNtAgp(char *cloneSizes, char *patchFile, char *okFile, char *ctgCoors,
-	char *newDir, int agpCount, char *agpFiles[])
-/* patchNtAgp - Patch in NT contigs into AGP files.. */
-{
-struct hash *cloneHash = NULL, *ntHash = NULL;
-struct hash *okHash = NULL;
-struct clone *cloneList = NULL, *clone;
-struct ntContig *ntList = NULL, *nt;
-int i;
-char *agpFile;
-char sDir[256], sFile[128], sExt[64];
-
-/* Read in patch data and other data and make sure it's
- * consistent. */
-makeDir(newDir);
-readCloneSizes(cloneSizes, &cloneList, &cloneHash);
-printf("Read %d clones in %s\n", slCount(cloneList), cloneSizes);
-hashFirstWords(okFile, &okHash);
-readPatch(patchFile, cloneHash, &ntList, &ntHash);
-printf("Read %d nt contigs in %s\n", slCount(ntList), patchFile);
-
-/* clear problems that we override as ok. */
-for (nt = ntList; nt != NULL; nt = nt->next)
-    {
-    if (nt->problem && hashLookup(okHash, nt->name) != NULL)
-        nt->problem = FALSE;
-    }
-
-/* Patch each AGP file. */
-for (i=0; i<agpCount; ++i)
-    {
-    char newFile[512];
-    char *agpFile = agpFiles[i];
-    splitPath(agpFile, sDir, sFile, sExt);
-    sprintf(newFile, "%s/%s.agp", newDir, sFile);
-    patchOne(agpFile, ntHash, cloneHash, newFile);
-    }
-}
-#endif /* SOON */
 
 
 void ntGoldGl(char *cloneSizes, char *ntAgp, char *oogVersion, int ctgCount, char *ctgNames[])
@@ -410,6 +441,12 @@ for (i=0; i<ctgCount; ++i)
     {
     contig = ctgNames[i];
     printf(" %s\n", contig);
+    sprintf(oldName, "%s/gold.%s.noNt", contig, oogVersion);
+    sprintf(newName, "%s/gold.%s", contig, oogVersion);
+    patchOneGold(oldName, ntHash, newName);
+    sprintf(oldName, "%s/ooGreedy.%s.gl.noNt", contig, oogVersion);
+    sprintf(newName, "%s/ooGreedy.%s.gl", contig, oogVersion);
+    patchOneGl(oldName, ntHash, newName);
     }
 }
 
