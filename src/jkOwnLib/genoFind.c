@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.18 2004/12/09 04:18:39 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.18.18.1 2005/03/15 15:56:01 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -2039,17 +2039,21 @@ static void mergeAdd(struct binKeeper *bk, int start, int end, struct gfSeqSourc
 /* Add interval to bin-keeper, merging with any existing overlapping
  * intervals. */
 {
-struct binElement *iEl, *iList = binKeeperFind(bk, start, end);
-for (iEl = iList; iEl != NULL; iEl = iEl->next)
+struct binElement *iEl, *iList;
+if (start != end)
     {
-    if (iEl->start < start)
-        start = iEl->start;
-    if (iEl->end > end)
-        end = iEl->end;
-    binKeeperRemove(bk, iEl->start, iEl->end, src);
+    iList = binKeeperFind(bk, start, end);
+    for (iEl = iList; iEl != NULL; iEl = iEl->next)
+	{
+	if (iEl->start < start)
+	    start = iEl->start;
+	if (iEl->end > end)
+	    end = iEl->end;
+	binKeeperRemove(bk, iEl->start, iEl->end, src);
+	}
+    slFreeList(&iList);
+    binKeeperAdd(bk, start, end, src);
     }
-slFreeList(&iList);
-binKeeperAdd(bk, start, end, src);
 }
 
 static struct gfClump *pcrClumps(struct genoFind *gf, char *fPrimer, int fPrimerSize, 
