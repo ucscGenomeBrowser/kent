@@ -4832,13 +4832,17 @@ struct stsMap *el = item;
 switch (stsMapType)
     {
     case smoeGenetic:
-	return el->genethonChrom[0] != '0' || el->marshfieldChrom[0] != '0';
+	return el->genethonChrom[0] != '0' || el->marshfieldChrom[0] != '0'
+	    || el->decodeChrom[0] != '0';
         break;
     case smoeGenethon:
 	return el->genethonChrom[0] != '0';
         break;
     case smoeMarshfield:
 	return el->marshfieldChrom[0] != '0';
+        break;
+    case smoeDecode:
+	return el->decodeChrom[0] != '0';
         break;
     case smoeGm99:
 	return el->gm99Gb4Chrom[0] != '0';
@@ -4870,6 +4874,17 @@ filterItems(tg, stsMapFilterItem, stsMapFilter);
 stsMapFilterColor = getFilterColor(stsMapFilter, MG_BLACK);
 }
 
+void loadStsMap28(struct trackGroup *tg)
+/* Load up stsMarkers from database table to trackGroup items. */
+{
+stsMapFilter = cartUsualString(cart, "stsMap.filter", "blue");
+stsMapMap = cartUsualString(cart, "stsMap.type", smoeEnumToString(0));
+stsMapType = smoeStringToEnum(stsMapMap);
+bedLoadItem(tg, "stsMap", (ItemLoader)stsMapLoad28);
+filterItems(tg, stsMapFilterItem, stsMapFilter);
+stsMapFilterColor = getFilterColor(stsMapFilter, MG_BLACK);
+}
+
 void freeStsMap(struct trackGroup *tg)
 /* Free up stsMap items. */
 {
@@ -4895,7 +4910,16 @@ else
 void stsMapMethods(struct trackGroup *tg)
 /* Make track group for sts markers. */
 {
-tg->loadItems = loadStsMap;
+struct sqlConnection *conn = hAllocConn();
+if (sqlCountRows(conn, "stsMap") == 26) 
+    {
+    tg->loadItems = loadStsMap;
+    }
+else
+    {
+    tg->loadItems = loadStsMap28;
+    }
+hFreeConn(&conn);
 tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
 }
