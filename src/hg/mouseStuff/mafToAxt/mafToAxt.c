@@ -53,8 +53,8 @@ while ((ali = mafNext(mp)) != NULL)
 
             if( axt->tStrand != '+' )
             {
-                fprintf( stderr, "Target sequence not on positive
-                        strand, as required\n");
+                fprintf( stderr, "Target sequence not on positive"
+                        "strand, as required\n");
                 exit(1);
             }
 	    }
@@ -79,8 +79,8 @@ while ((ali = mafNext(mp)) != NULL)
         axt->symCount = strlen( axt->tSym );
     else
     {
-        fprintf( stderr, "Target and query sequences are different
-                 lengths\n%s\n%s\n\n", axt->tSym, axt->qSym );
+        fprintf( stderr, "Target and query sequences are different"
+                 "lengths\n%s\n%s\n\n", axt->tSym, axt->qSym );
         axtFree(&axt);
         continue;
         //exit(1);
