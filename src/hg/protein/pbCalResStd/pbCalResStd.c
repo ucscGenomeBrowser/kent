@@ -83,7 +83,7 @@ for (j=0; j<=nDist; j++)
 if (totalCnt != nInput)
     errAbort("nInput %d is not equal totalCnt %d, aborting ...\n", nInput, totalCnt);
    
-// do not print out count of the last inteval, which is everything beyond xMax 
+/* do not print out count of the last inteval, which is everything beyond xMax */
 for (j=0; j<nDist; j++)
     {
     fprintf(o3, "%f\t%d\n", xDist[j], distCnt[j]);
@@ -134,19 +134,18 @@ proteinDatabaseName = argv[1];
 taxon = argv[2];
 database = argv[3];
 
-//o1 = mustOpen("resData.tab", "w");
 o2 = mustOpen("pbResAvgStd.tab", "w");
 
 for (i=0; i<20; i++)
     {
-    sprintf(temp_str, "%c.txt", aaAlphabet[i]);
+    safef(temp_str, sizeof(temp_str), "%c.txt", aaAlphabet[i]);
     fh[i] = mustOpen(temp_str, "w");
     }
 
 conn  = hAllocConn();
 conn2 = hAllocConn();
 
-sprintf(query2,"select proteinID from %s.knownGene;", database);
+safef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 icnt = 0;
@@ -161,29 +160,29 @@ while (row2 != NULL)
     {
     protDisplayId = row2[0];   
   
-    sprintf(cond_str, "val='%s'", protDisplayId);
+    safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
-        sprintf(cond_str, "acc='%s'", protDisplayId);
+        safef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
     	accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
-	    //printf("%s not found.\n", protDisplayId);fflush(stdout);
+	    /* printf("%s not found.\n", protDisplayId);fflush(stdout); */
 	    goto skip;
 	    }
 	}
     
-    sprintf(cond_str, "accession='%s'", accession);
+    safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
     answer = sqlGetField(conn, "proteins040115", "spXref2", "biodatabaseID", cond_str);
     if (answer[0] != '1')
 	{
-	//printf("%s not in SWISS-PROT\n", protDisplayId);fflush(stdout);
+	/* printf("%s not in SWISS-PROT\n", protDisplayId);fflush(stdout); */
 	goto skip;
 	}
     
-    sprintf(cond_str, "acc='%s'", accession);
+    safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
     aaSeq = sqlGetField(conn, proteinDatabaseName, "protein", "val", cond_str);
 
     len  = strlen(aaSeq);
@@ -246,7 +245,6 @@ for (j=0; j<20; j++)
     carefulClose(&(fh[j]));
     }
 
-//carefulClose(&o1);
 sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
@@ -267,19 +265,18 @@ for (j=0; j<20; j++)
     fprintf(o2, "%c\t%f\t%f\n", aaAlphabet[j], avg[j], sigma[j]);
     }
 
-//carefulClose(&o1);
 carefulClose(&o2);
 
 o1 = mustOpen("pbAnomLimit.tab", "w");
 for (j=0; j<20; j++)
     {
-    sprintf(temp_str, "cat %c.txt|sort|uniq > %c.srt",  aaAlphabet[j], aaAlphabet[j]);
+    safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt",  aaAlphabet[j], aaAlphabet[j]);
     system(temp_str);
 
-    // figure out how many unique entries 
-    sprintf(temp_str, "wc %c.srt > %c.tmp",  aaAlphabet[j], aaAlphabet[j]);
+    /* figure out how many unique entries */
+    safef(temp_str, sizeof(temp_str), "wc %c.srt > %c.tmp",  aaAlphabet[j], aaAlphabet[j]);
     system(temp_str);
-    sprintf(temp_str, "%c.tmp",  aaAlphabet[j]);
+    safef(temp_str, sizeof(temp_str), "%c.tmp",  aaAlphabet[j]);
     o3 = mustOpen(temp_str, "r");
     fgets(temp_str, 1000, o3);
     chp = temp_str;
@@ -287,14 +284,14 @@ for (j=0; j<20; j++)
     while (*chp != ' ') chp++;
     *chp = '\0';
     sscanf(temp_str, "%d", &sortedCnt);
-    sprintf(temp_str, "rm %c.tmp", aaAlphabet[j]);
+    safef(temp_str, sizeof(temp_str), "rm %c.tmp", aaAlphabet[j]);
     system(temp_str);
 
-    // cal hi and low cutoff threshold
+    /* cal hi and low cutoff threshold */
     ilow = (int)((float)sortedCnt * 0.025);
     ihi  = (int)((float)sortedCnt * 0.975);
     
-    sprintf(temp_str, "%c.srt",  aaAlphabet[j]);
+    safef(temp_str, sizeof(temp_str), "%c.srt",  aaAlphabet[j]);
     o2 = mustOpen(temp_str, "r");
     i=0;
     for (i=0; i<ilow; i++)
@@ -324,7 +321,7 @@ for (j=0; j<20; j++)
 	{
 	measure[i] = freq[i][j]; 
 	}
-    sprintf(temp_str, "pbAaDist%c.tab", aaAlphabet[j]);
+    safef(temp_str, sizeof(temp_str), "pbAaDist%c.tab", aaAlphabet[j]);
     calDist(measure,  recordCnt,    51,     0.0, 0.005, temp_str);
     }
     
