@@ -56,4 +56,8 @@ boolean pmReceive(struct paraMessage *pm, struct rudp *ru);
 /* Receive message.  Print warning message and return FALSE if
  * there is a problem. */
 
+boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut);
+/* Wait up to timeOut microseconds for message.  To wait forever
+ * set timeOut to zero. */
+
 #endif /* PARAMESSAGE_H */

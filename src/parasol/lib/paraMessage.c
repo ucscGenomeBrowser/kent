@@ -108,11 +108,11 @@ pmSet(pm, string);
 return pmSend(pm, ru);
 }
 
-boolean pmReceive(struct paraMessage *pm, struct rudp *ru)
-/* Receive message.  Print warning message and return FALSE if
- * there is a problem. */
+boolean pmReceiveTimeOut(struct paraMessage *pm, struct rudp *ru, int timeOut)
+/* Wait up to timeOut microseconds for message.  To wait forever
+ * set timeOut to zero. */
 {
-int size = rudpReceiveFrom(ru, pm->data, sizeof(pm->data)-1, &pm->ipAddress);
+int size = rudpReceiveTimeOut(ru, pm->data, sizeof(pm->data)-1, &pm->ipAddress, timeOut);
 if (size < 0)
     {
     pmClear(pm);
@@ -121,6 +121,13 @@ if (size < 0)
 pm->size = size;
 pm->data[size] = 0;
 return TRUE;
+}
+
+boolean pmReceive(struct paraMessage *pm, struct rudp *ru)
+/* Receive message.  Print warning message and return FALSE if
+ * there is a problem. */
+{
+return pmReceiveTimeOut(pm, ru, 0);
 }
 
 static char *addLongData(char *data, bits32 val)
