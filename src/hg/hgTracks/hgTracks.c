@@ -3454,6 +3454,77 @@ tg->itemName = sanger22Name;
 }
 
 
+Color vegaColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw vega gene/pseudogene in. */
+{
+struct linkedFeatures *lf = item;
+Color col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+/* If vegaInfo is available, use it to determine the color:
+ *  Known - black
+ *  {Novel_CDS, Novel_Transcript} - dark blue
+ *  {Putative,Ig_Segment} - medium blue
+ *  {Predicted_gene,Pseudogene,Ig_Pseudogene_Segment} - light blue
+ *  None of the above - gray
+ * If no vegaGene, color it normally. 
+ */
+if (hTableExists("vegaInfo"))
+    {
+    sprintf(query, "select method from vegaInfo where transcriptId = '%s'",
+	    lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (sameWord("Known", row[0]))
+	    {
+	    col = blackIndex();
+	    }
+	else if (sameWord("Novel_CDS", row[0]) ||
+		 sameWord("Novel_Transcript", row[0]))
+	    {
+	    /* Use the usual color (dark blue) */
+	    }
+	else if (sameWord("Putative", row[0]) ||
+		 sameWord("Ig_Segment", row[0]))
+	    {
+	    lighter.r = (6*normal->r + 4*255) / 10;
+	    lighter.g = (6*normal->g + 4*255) / 10;
+	    lighter.b = (6*normal->b + 4*255) / 10;
+	    col = vgFindRgb(vg, &lighter);
+	    }
+	else if (sameWord("Predicted_gene", row[0]) ||
+		 sameWord("Pseudogene", row[0]) ||
+		 sameWord("Ig_Pseudogene_Segment", row[0]))
+	    {
+	    lightest.r = (1*normal->r + 2*255) / 3;
+	    lightest.g = (1*normal->g + 2*255) / 3;
+	    lightest.b = (1*normal->b + 2*255) / 3;
+	    col = vgFindRgb(vg, &lightest);
+	    }
+	else
+	    {
+	    col = lightGrayIndex();
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return(col);
+}
+
+void vegaMethods(struct track *tg)
+/* Special handling for vegaGene/vegaPseudoGene items. */
+{
+tg->itemColor = vegaColor;
+}
+
+
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
  * during repeatLoad, but rather query the database during the
@@ -10036,6 +10107,8 @@ registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
+registerTrackHandler("vegaGene", vegaMethods);
+registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
