@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadRna.c,v 1.22 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadRna.c,v 1.23 2003/06/10 19:26:37 markd Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -122,6 +122,29 @@ struct uniqueTable
     HGID curId;
     FILE *tabFile;
     };
+
+void checkForGenBankIncr(char *database, char *funcMsg)
+/* check to see if the database contains tables created by the incremental
+ * genbank update process, and abort with useful message if so */
+{
+static char *CHK_TABLES[] = {
+    "gbStatus", "gbSeq", "gbExtFile", NULL
+};
+int i;
+char *foundGbTable = NULL;
+struct sqlConnection *conn = sqlConnect(database);
+
+for (i = 0; CHK_TABLES[i] != NULL; i++)
+    {
+    if (sqlTableExists(conn, CHK_TABLES[i]))
+        errAbort("Table %s.%s exists, indicating that this database is managed\n"
+                 "by the GenBank incremental update process.  This program should not be used\n"
+                 "with this database.  %s",
+                 database, CHK_TABLES[i], funcMsg);
+    }
+
+sqlDisconnect(&conn);
+}
 
 void createUniqTable(struct sqlConnection *conn, char *tableName)
 /* Create a simple ID/Name pair table. */
@@ -545,6 +568,9 @@ void hgLoadRna(char *database, char *faPath, char *raFile)
 /* hgLoadRna - load browser database with mRNA/EST info.. */
 {
 char *type, *symName, *mrnaType;
+
+checkForGenBankIncr(database, "Use the GenBank incremental load tools.");
+
 hgSetDb(database);
 
 type = cgiOptionalString("type");
@@ -610,6 +636,8 @@ int lineMod = lineMaxMod;
 char symFaName[256+64], ext[64];
 long extFileId;
 char faAcc[64];
+
+checkForGenBankIncr(database, "Use hgLoadSeq to load generic sequences.");
 
 hgSetDb(database);
 conn = hgStartUpdate();
@@ -692,6 +720,8 @@ struct sqlConnection *conn = sqlConnect(database);
 int i;
 char *table;
 
+checkForGenBankIncr(database, "Use the GenBank incremental load tools or hgLoadSeq.");
+
 sqlUpdate(conn, historyTable);
 sqlUpdate(conn, "INSERT into history VALUES(NULL,0,10,USER(),'New',NOW())");
 sqlUpdate(conn, extFileTable);
@@ -714,6 +744,8 @@ void dropAll(char *database)
 struct sqlConnection *conn = sqlConnect(database);
 char *table;
 int i;
+
+checkForGenBankIncr(database, "Use the GenBank incremental load tools.");
 
 sqlUpdate(conn, "drop table history");
 sqlUpdate(conn, "drop table extFile");
