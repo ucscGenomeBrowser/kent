@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.631 2003/11/13 17:53:29 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.632 2003/11/19 05:08:37 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3946,6 +3946,24 @@ else if (!strcmp(name,"V "))
 if (chromNum > CHROM_COLORS) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
+}
+
+boolean isNonChromColor(Color color)
+/* test if color is a non-chrom color (black or gray) */
+{
+    return color == chromColor[0];
+}
+
+Color nonChromColor()
+/* return main non-chrom color (black) */
+{
+    return chromColor[0];
+}
+
+Color altNonChromColor(Color color)
+/* return other non-chrom color (black or gray) */
+{
+    return color == chromColor[0] ? shadesOfGray[2] : chromColor[0];
 }
 
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)

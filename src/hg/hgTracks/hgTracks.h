@@ -401,6 +401,15 @@ void linkedFeaturesMethods(struct track *tg);
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
 
+boolean isNonChromColor(Color color);
+/* test if color is a non-chrom color (black or gray) */
+
+Color nonChromColor();
+/* return main non-chrom color (black) */
+
+Color altNonChromColor(Color color);
+/* return other non-chrom color (black or gray) */
+
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of chromosome for linked feature type items
  * where the chromosome is listed somewhere in the lf->name. */

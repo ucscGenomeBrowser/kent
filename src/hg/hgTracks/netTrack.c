@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.11 2003/11/19 04:55:04 kate Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.12 2003/11/19 05:08:37 kate Exp $";
 
 struct netItem
 /* A net track item. */
@@ -71,18 +71,10 @@ static double rScale;   /* Scale from bases to pixels. */
 static boolean rIsFull; /* Full display? */
 
 static char *netColorLastChrom;
-static Color lastNonChromColor;
-
-static void setCachedColor(char *chrom, Color color)
-/* set last chrom and last color */
-{
-netColorLastChrom = chrom;
-lastNonChromColor = color;
-}
 
 static void netColorClearCashe()
 {
-setCachedColor("UNKNOWN", altNonChromColor(nonChromColor()));
+netColorLastChrom = "UNKNOWN";
 }
 
 static Color netColor(char *chrom, int level)
@@ -95,18 +87,14 @@ if (!sameString(chrom, netColorLastChrom))
     color = getChromColor(chrom+3, rVg);
     if (isNonChromColor(color)) 
        {
-       if (level == 1)
+       if (startsWith("scaffold_", chrom)
            {
-            color = altNonChromColor(lastNonChromColor);
+            color = getScaffoldColor(chrom+9, rVg);
             netColorLastChrom = chrom;
-            lastNonChromColor = color;
            }
         }
-    else
-        {
-        netColorLastChrom = chrom;
-        }
     }
+netColorLastChrom = chrom;
 return color;
 }
 
