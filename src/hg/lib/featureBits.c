@@ -622,10 +622,22 @@ if (hti->hasBlocks)
 if (hti->hasBlocks && hti->hasCDS)
     {
     cgiMakeRadioButton("fbQual", "utr5", FALSE);
-    puts(" 5' UTR </TD><TD> ");
+    puts(" 5' UTR Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     cgiMakeRadioButton("fbQual", "cds", FALSE);
     puts(" Coding Exons </TD><TD> ");
+    puts(" </TD></TR><TR><TD>\n");
+    cgiMakeRadioButton("fbQual", "utr3", FALSE);
+    puts(" 3' UTR Exons </TD><TD> ");
+    puts(" </TD></TR><TR><TD>\n");
+    }
+else if (hti->hasCDS)
+    {
+    cgiMakeRadioButton("fbQual", "utr5", FALSE);
+    puts(" 5' UTR  </TD><TD> ");
+    puts(" </TD></TR><TR><TD>\n");
+    cgiMakeRadioButton("fbQual", "cds", FALSE);
+    puts(" CDS </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     cgiMakeRadioButton("fbQual", "utr3", FALSE);
     puts(" 3' UTR </TD><TD> ");
