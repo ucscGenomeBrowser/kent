@@ -68,6 +68,16 @@ spectrum on
 type netAlign hg16 chainHg16
 otherDb hg16
 
+track axtNetHg16
+shortLabel Human Best
+longLabel Best Human (hg16-Jul 03) Alignments from Net
+group compGeno
+priority 145.8
+visibility hide
+color 100,50,0
+altColor 100,50,0
+type axt hg16
+
 track humanDels
 shortLabel Human Deletions
 longLabel Deletions in Human (hg16-Jul 03) Relative to Chimp
