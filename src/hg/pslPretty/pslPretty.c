@@ -11,7 +11,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.29 2004/09/04 15:47:13 kent Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.30 2005/01/10 00:42:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -204,7 +204,7 @@ struct dnaSeq *readSeqFromFaPos(struct seqFilePos *sfp,  FILE *f)
 {
 struct dnaSeq *seq;
 fseek(f, sfp->pos, SEEK_SET);
-if (!faReadNext(f, "", TRUE, NULL, &seq))
+if (!faReadMixedNext(f, TRUE, "", TRUE, NULL, &seq))
     errAbort("Couldn't faReadNext on %s in %s\n", sfp->name, sfp->file);
 return seq;
 }
@@ -220,13 +220,13 @@ struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
 FILE *f = openFromCache(fileCache, sfp->file);
 if (sfp->isNib)
     {
-    *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
+    *retSeq = nibLdPartMasked(NIB_MASK_MIXED, sfp->file, f, sfp->pos, start, size);
     *retOffset = start;
     *retIsPartial = TRUE;
     }
 else if (sfp->isTwoBit)
     {
-    *retSeq = twoBitReadSeqFragLower(sfp->tbf, seqName, start, start+size);
+    *retSeq = twoBitReadSeqFrag(sfp->tbf, seqName, start, start+size);
     *retOffset = start;
     *retIsPartial = TRUE;
     }
@@ -294,7 +294,7 @@ while (sizeLeft > 0)
 
     for (i=0; i<oneSize; ++i)
         {
-	if (q[i] == t[i] && isalpha(q[i]))
+	if (toupper(q[i]) == toupper(t[i]) && isalpha(q[i]))
 	    fputc('|', f);
 	else
 	    fputc(' ', f);
