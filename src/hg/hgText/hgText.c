@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.130 2004/04/02 23:44:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.131 2004/04/05 22:45:10 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2378,12 +2378,14 @@ else if (allGenome)
     chromList = hAllChromNames();
 else
     chromList = newSlName(chrom);
+
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     bedListChrom = NULL;
     getFullTableName(fullTableName, chromPtr->name, table);
     if (! tableExists(fullTableName, db))
 	continue;
+
     if (sameString(customTrackPseudoDb, db))
 	{
 	struct customTrack *ct = lookupCt(table);
@@ -2395,15 +2397,18 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	}
     else
 	{
-	if (typeWiggle && (bedListWig[0] != (struct bed *)NULL))
-	    {
-	    bedListT1 = bedListWig[0];
-	    }
+	if (typeWiggle && (bedListWig[WIG_TABLE_1] == (struct bed *)NULL))
+	    wigFetchAndProcess(db, fullTableName, chrom, winStart, winEnd,
+		constraints, WIG_TABLE_1);
+	if (typeWiggle && (bedListWig[WIG_TABLE_1] != (struct bed *)NULL))
+	    bedListT1 = bedListWig[WIG_TABLE_1];
 	else
 	    bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
 				   winEnd, constraints);
 	}
+
     bedFilterBatch(&bedListT1);
+
     /* If 2 tables are named, get their intersection. */
     if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 	{
@@ -2419,6 +2424,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	char *constraints2 = constrainFields("2");
 	char fullTableName2[256];
 	int chromSize = hChromSize(chromPtr->name);
+
 	if ((!sameString("any", op)) &&
 	    (!sameString("none", op)) &&
 	    (!sameString("more", op)) &&
@@ -2437,6 +2443,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 		table2, constraints2,
 		op, moreThresh, lessThresh, invTable, invTable2);
 	getFullTableName(fullTableName2, chromPtr->name, table2);
+
 	if (! tableExists(fullTableName2, db2))
 	    fbListT2 = NULL;
 	else if (sameString(customTrackPseudoDb, db2))
@@ -2454,13 +2461,16 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    }
 	else
 	    {
-	    if ((typeWiggle2) && (bedListWig[1] != (struct bed *)NULL))
-		{
-		    char *db2 = getTable2Db();
-		    struct hTableInfo *hti2 = getHti(db2, table2);
-		    fbListT2 = fbFromBed(track2, hti2, bedListWig[1],
-			winStart, winEnd, FALSE, FALSE);
-		}
+	    char *db2 = getTable2Db();
+	    struct hTableInfo *hti2 = getHti(db2, table2);
+
+	    if (typeWiggle2 && (bedListWig[WIG_TABLE_2] == (struct bed *)NULL))
+		wigFetchAndProcess(db2, table2, chrom, winStart, winEnd,
+		    constraints2, WIG_TABLE_2);
+
+	    if ((typeWiggle2) && (bedListWig[WIG_TABLE_2] !=(struct bed *)NULL))
+		fbListT2 = fbFromBed(track2, hti2, bedListWig[WIG_TABLE_2],
+		    winStart, winEnd, FALSE, FALSE);
 	    else
 		fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart,
 			    winEnd, constraints2, FALSE, FALSE);
@@ -2472,11 +2482,9 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    // Base-pair-wise operation: get featureBits for primary table too
 	    struct featureBits *fbListT1;
 	    Bits *bitsT1;
-	    if (typeWiggle && (bedListWig[0] != (struct bed *)NULL))
-		{
-		fbListT1 = fbFromBed(track, hti, bedListWig[0], winStart,
-			winEnd, FALSE, FALSE);
-		}
+	    if (typeWiggle && (bedListWig[WIG_TABLE_1] != (struct bed *)NULL))
+		fbListT1 = fbFromBed(track, hti, bedListWig[WIG_TABLE_1],
+		    winStart, winEnd, FALSE, FALSE);
 	    else
 		fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
 				 FALSE, FALSE);
@@ -3674,6 +3682,7 @@ if (! doCt)
     printf("Content-Type: text/plain\n\n");
     webStartText();
     }
+
 bedList = getBedList(FALSE, NULL);
 
 if (hti->hasBlocks)
@@ -4515,7 +4524,7 @@ if (hti->hasBlocks)
     getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
     }
 
-if (! wiggleDone)
+if (0 && ! wiggleDone)
     {
     // For some reason BORDER=1 does not work in our web.c nested table scheme.
     // So use web.c's trick of using an enclosing table to provide a border.  
@@ -4990,13 +4999,15 @@ else
     else if (existsAndEqual("phase", bedOptionsPhase))
 	doBedCtOptions(FALSE);
     else if (existsAndEqual("phase", getCtWigglePhase))
-	doGetWiggleData(TRUE);
+	doGetWiggleData(DO_CT_DATA,DATA_AS_POINTS);
     else if (existsAndEqual("phase", ctWigOptionsPhase))
 	doWiggleCtOptions(TRUE);
     else if (existsAndEqual("phase", wigOptionsPhase))
 	doWiggleCtOptions(FALSE);
     else if (existsAndEqual("phase", getWigglePhase))
-	doGetWiggleData(FALSE);
+	doGetWiggleData(NOT_CT_DATA,DATA_AS_POINTS);
+    else if (existsAndEqual("phase", getWiggleBedPhase))
+	doGetWiggleData(NOT_CT_DATA,DATA_AS_BED);
     else if (existsAndEqual("phase", ctOptionsPhase))
 	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
