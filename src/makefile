@@ -39,6 +39,7 @@ clean:
 	cd utils && ${MAKE} clean
 
 test::
+	cd lib && ${MAKE} test
 	cd blat && ${MAKE} test
 	cd hg && ${MAKE} test
 	cd utils && ${MAKE} test
