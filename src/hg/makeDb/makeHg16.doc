@@ -2494,6 +2494,16 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     # translate sorted axt files into psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf
+    #  Need to drop overlaps to eliminate diagonals
+    #	DropOverlap seems to drop more than axtDropSelf above
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+	mv axtChrom/$c.axt axtChrom/$c.axt.preDrop
+	/cluster/bin/i386/axtDropOverlap axtChrom/$c.axt.preDrop \
+		/cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/$c.axt
+	echo "Done: $c"
+    end
+XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
     mkdir -p pslChrom
     set tbl = "blastzSelf"
     foreach f (axtChrom/chr*.axt)
