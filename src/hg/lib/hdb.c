@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.203 2004/09/10 19:16:31 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.204 2004/09/10 20:16:25 braney Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -159,6 +159,69 @@ while ((hashEl = hashNext(&cookie)) != NULL)
     }
 return NULL;
 }
+
+int hGetMinIndexLength()
+/* get the minimum index size for the current database that won't smoosh together chromNames
+ * such that any group of smooshed entries has a cumulative size greater than the
+ * the largest chromosome.  Allow one exception cuz we're nice
+ */
+{
+struct hash *hash = hdbChromInfoHash();
+struct hashEl *pList = hashElListHash(hash);
+struct hashEl *pel, *prevPel;
+struct chromInfoEntry *cent;
+int min, maxVal, error, sum, maxLen;
+
+slSort(&pList, hashElCmp);
+slReverse(&pList);
+
+/* find the largest chromosome */
+maxVal = maxLen = 0;
+for(pel = pList->next; pel ; prevPel = pel, pel=pel->next)
+    {
+    int len;
+
+    cent = (struct chromInfoEntry *)pel->val;
+    if ((len = strlen(pel->name)) > maxLen)
+	maxLen = len;
+    if (cent->size > maxVal)
+	maxVal = cent->size;
+    }
+
+/* try smaller and smaller index sizes */
+for(min = maxLen; min; min--)
+    {
+    prevPel = pList;
+    cent = (struct chromInfoEntry *)prevPel->val;
+    sum = cent->size;
+    error = 0;
+    for(pel = pList->next; pel ; prevPel = pel, pel=pel->next)
+	{
+	cent = (struct chromInfoEntry *)pel->val;
+
+	if (strncmp(pel->name, prevPel->name, min) == 0)
+	    {
+	    sum += cent->size;
+	    if (sum > maxVal)
+		{
+		/* let one error go by */
+		if (error)
+		    goto out;
+		error++;
+		}
+	    }
+	else
+	    sum = cent->size;
+	}
+    }
+
+out:
+slFreeList(&pList);
+min++;
+
+return (min < 8) ? 8 : min;
+}
+
 
 void hDefaultConnect()
 /* read in the connection options from config file */
