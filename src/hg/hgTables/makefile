@@ -39,3 +39,25 @@ beta::
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
+
+#	all objects depend on hgTables.h
+
+asObj.o:	hgTables.h
+bedList.o:	hgTables.h
+custom.o:	hgTables.h
+filterFields.o:	hgTables.h
+gala.o:	hgTables.h
+gffOut.o:	hgTables.h
+hgTables.o:	hgTables.h
+identifiers.o:	hgTables.h
+intersect.o:	hgTables.h
+javascript.o:	hgTables.h
+joining.o:	hgTables.h
+maf.o:	hgTables.h
+mainPage.o:	hgTables.h
+rangeHistogram.o:	hgTables.h
+schema.o:	hgTables.h
+seqOut.o:	hgTables.h
+sumStats.o:	hgTables.h
+usage.o:	hgTables.h
+wiggle.o:	hgTables.h
