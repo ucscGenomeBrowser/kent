@@ -7,7 +7,7 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSelect.c,v 1.1 2003/12/27 22:22:47 markd Exp $";
+static char const rcsid[] = "$Id: pslSelect.c,v 1.2 2004/02/10 23:18:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -47,6 +47,21 @@ lineFileClose(&lf);
 return hash;
 }
 
+boolean pairSelected(struct hash* selectHash, char *qName, char *tName)
+/* determine if the query/target pair is select.  Handle the query
+ * being paired to multiple targets */
+{
+struct hashEl *hel = hashLookup(selectHash, qName);
+while (hel != NULL)
+    {
+    char *target = hel->val;
+    if (sameString(target, tName))
+        return TRUE;
+    hel = hashLookupNext(hel);
+    }
+return FALSE;
+}
+
 void pslSelect(char *inPsl, char *outPsl)
 /* select psl */
 {
@@ -57,8 +72,7 @@ struct psl* psl;
 
 while ((psl = pslNext(inPslLf)) != NULL)
     {
-    char *target = hashFindVal(selectHash, psl->qName);
-    if ((target != NULL) && sameString(target, psl->tName))
+    if (pairSelected(selectHash, psl->qName, psl->tName))
         pslTabOut(psl, outPslFh);
     pslFree(&psl);
     }
