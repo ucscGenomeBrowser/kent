@@ -359,6 +359,14 @@ visibility hide
 spectrum on
 type psl .
 
+track mgcFullClones
+shortLabel MGC ESTs
+longLabel Mammalian Gene Collection CDS Complete ESTs
+priority 21.1
+visibility hide
+spectrum on
+type psl .
+
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 400 Bases are Light Green)
