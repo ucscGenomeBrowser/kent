@@ -163,7 +163,7 @@ puts ("<TR><TH ALIGN=CENTER> bin </TH>\n");
 puts ("    <TH ALIGN=CENTER> bin range <BR> [min:max) </TH>\n");
 puts ("    <TH ALIGN=CENTER> count </TH>\n");
 puts ("    <TH ALIGN=CENTER> p Value </TH>\n");
-puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> CPD </TH>\n");
+puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution </TH>\n");
 puts ("    <TH ALIGN=CENTER> 1.0 - CPD </TH></TR>\n");
 
 if (histoGramResult)
