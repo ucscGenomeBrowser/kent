@@ -204,6 +204,7 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
  * sizeMul=3 for protein. */
 {
 unsigned *starts = psl->tStarts;
+unsigned *qStarts = psl->qStarts;
 unsigned *sizes = psl->blockSizes;
 int i, blockCount = psl->blockCount;
 int grayIx = pslGrayIx(psl, isXeno);
@@ -233,6 +234,8 @@ for (i=0; i<blockCount; ++i)
     AllocVar(sf);
     sf->start = sf->end = starts[i];
     sf->end += sizes[i]*sizeMul;
+    sf->qStart = sf->qEnd = qStarts[i];
+    sf->qEnd += sizes[i];
     if (rcTarget)
         {
 	int s, e;
