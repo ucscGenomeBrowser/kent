@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.914 2005/02/23 18:49:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.915 2005/02/23 19:24:38 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10492,7 +10492,8 @@ puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-if (startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom))
+if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
+    hChromCount() < 100)
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
