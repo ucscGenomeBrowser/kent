@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.811 2004/10/06 17:25:26 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.812 2004/10/08 01:30:47 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2369,7 +2369,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     else
         lf->components = sfFromGenePred(gp, grayIx);
 
-    if ((tg->itemAttrTbl != NULL) && (gp->optFields & genePredIdFld))
+    if (tg->itemAttrTbl != NULL)
         lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
                                       gp->chrom, gp->txStart, gp->txEnd);
 
