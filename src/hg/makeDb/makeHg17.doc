@@ -10931,6 +10931,46 @@ end
 
     gzip *.gff *TCs
 
+#### TIGR GENE INDEX (RE-DONE 2004-12-22 Fan)
+# This is the 2nd rework due to an error (missing strand info) in original files from TIGR
+    cd /cluster/data/hg17/bed
+    mv tigr tigr_old_wrong2
+    mkdir -p /cluster/data/hg17/bed/tigr
+    cd /cluster/data/hg17/bed/tigr
+    wget -timestamp ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_build35.tgz
+    tar xvzf TGI*.tgz
+
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/tigr
+    hgsql hg17 -e "drop table tigrGeneIndex"
+    hgsql hg17 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC hg17 tigrGeneIndex $f
+        hgsql hg17 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 401322 entries created in tigrGeneIndex table.
+
+    hgsql hg17 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql hg17 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords hg17 tigrGeneIndex
+    gzip *.gff *TCs
+
 # BLASTZ FOR ZEBRAFISH (danRer2) (DONE, 2004-12-09, hartera)
     ssh kkr1u00
     # blastz requires lineage-specific repeats
