@@ -16,6 +16,7 @@ static struct optionSpec optionSpecs[] = {
     {"inFmt", OPTION_STRING},
     {"nonOverlaping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
+    {"excludeSelf", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -29,7 +30,7 @@ static struct optionSpec optionSpecs[] = {
 unsigned selectFmt = UNKNOWN_FMT;
 unsigned inFmt = UNKNOWN_FMT;
 boolean nonOverlaping = FALSE;
-boolean useStrand = FALSE;
+unsigned selectOptions = 0;
 
 unsigned parseFormatSpec(char *fmt)
 /* parse a format specification */
@@ -87,10 +88,8 @@ for (iBlk = 0; (iBlk < psl->blockCount) && !overlaps; iBlk++)
     int end = start + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&start, &end, psl->tSize);
-    if (useStrand)
-        overlaps = selectOverlapsStrand(psl->tName, start, end, strand, psl->qName);
-    else
-        overlaps = selectOverlapsGenomic(psl->tName, start, end, psl->qName);
+    overlaps = selectIsOverlapped(selectOptions, psl->qName,
+                                  psl->tName, start, end, strand);
     }
 if (nonOverlaping)
     return !overlaps;
@@ -123,12 +122,9 @@ int iExon;
 boolean overlaps = FALSE;
 for (iExon = 0; (iExon < gp->exonCount) && !overlaps; iExon++)
     {
-    if (useStrand)
-        overlaps = selectOverlapsStrand(gp->chrom, gp->exonStarts[iExon],
-                                        gp->exonEnds[iExon], gp->strand[0], gp->name);
-    else
-        overlaps = selectOverlapsGenomic(gp->chrom, gp->exonStarts[iExon],
-                                         gp->exonEnds[iExon], gp->name);
+    overlaps = selectIsOverlapped(selectOptions, gp->name,
+                                  gp->chrom, gp->exonStarts[iExon],
+                                  gp->exonEnds[iExon], gp->strand[0]);
     }
 if (nonOverlaping)
     return !overlaps;
@@ -159,13 +155,9 @@ static boolean bedSelected(struct bed* bed)
 boolean overlaps = FALSE;
 if (bed->blockCount == 0)
     {
-    if (useStrand)
-        overlaps = selectOverlapsStrand(bed->chrom, bed->chromStart,
-                                        bed->chromEnd, bed->strand[0],
-                                        bed->name);
-    else
-        overlaps = selectOverlapsGenomic(bed->chrom, bed->chromStart,
-                                         bed->chromEnd, bed->name);
+    overlaps = selectIsOverlapped(selectOptions, bed->name,
+                                  bed->chrom, bed->chromStart,
+                                  bed->chromEnd, bed->strand[0]);
     }
 else
     {
@@ -173,14 +165,10 @@ else
     for (iBlk = 0; (iBlk < bed->blockCount) && !overlaps; iBlk++)
         {
         int start = bed->chromStart + bed->chromStarts[iBlk];
-        if (useStrand)
-            overlaps = selectOverlapsStrand(bed->chrom, start,
-                                            start + bed->blockSizes[iBlk],
-                                            bed->strand[0], bed->name);
-        else
-            overlaps = selectOverlapsGenomic(bed->chrom, start,
-                                             start + bed->blockSizes[iBlk],
-                                             bed->name);
+        overlaps = selectIsOverlapped(selectOptions, bed->name, 
+                                      bed->chrom, start,
+                                      start + bed->blockSizes[iBlk],
+                                      bed->strand[0]);
         }
     }
 if (nonOverlaping)
@@ -265,7 +253,8 @@ errAbort("%s:\n"
          "                If BED doesn't have blocks, the bed range is used.\n" 
          "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
          "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
-         "  -strand - must be on the same strand to be considered overlaping\n",
+         "  -strand - must be on the same strand to be considered overlaping\n"
+         "  -excludeSelf - don't compare alignments with the same id.\n"
          msg);
 }
 
@@ -289,7 +278,10 @@ else
     inFmt = getFileFormat(inFile);
 
 nonOverlaping = optionExists("nonOverlaping");
-useStrand = optionExists("strand");
+if (optionExists("strand"))
+    selectOptions |= SEL_USE_STRAND;
+if (optionExists("excludeSelf"))
+    selectOptions |= SEL_EXCLUDE_SELF;
 
 overlapSelect(selectFile, inFile, outFile);
 return 0;

@@ -10,9 +10,6 @@
 
 #define SELTBL_DEBUG 0
 
-/* FIXME: really don't need to keep range as object in table,. The only value
- * out of selectRange ever used is strand */
-
 struct selectRange
 /* specifies a range to select */
 {
@@ -20,45 +17,51 @@ struct selectRange
     int start;
     int end;
     char strand;
+    char* name;
 };
 
 /* table is never freed */
 static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeep of
                                               * selectRange objects */
-static char *lastChrom = NULL; /* cache of last chromosome to avoid
-                                * mallocs */
 
-static struct binKeeper* selectGetChromBins(char* chrom, boolean createMissing)
-/* get the bins for a chromsome, optionally creating if it doesn't exist */
+static struct binKeeper* selectGetChromBins(char* chrom, boolean createMissing,
+                                            char** key)
+/* get the bins for a chromsome, optionally creating if it doesn't exist.
+ * Return key if requested so string can be reused. */
 {
-struct binKeeper* bins;
+struct hashEl* hel;
+
 if (selectChromHash == NULL)
     selectChromHash = hashNew(10);  /* first time */
-bins = hashFindVal(selectChromHash, chrom);
-if ((bins == NULL) && createMissing)
+hel = hashLookup(selectChromHash, chrom);
+if ((hel == NULL) && createMissing)
     {
-    bins = binKeeperNew(0, 300000000);
-    hashAdd(selectChromHash, chrom, bins);
+    struct binKeeper* bins = binKeeperNew(0, 300000000);
+    hel = hashAdd(selectChromHash, chrom, bins);
     }
-return bins;
+if (hel == NULL)
+    return NULL;
+if ((key != NULL) && (hel != NULL))
+    *key = hel->name;
+return (struct binKeeper*)hel->val;
 }
 
-static void selectAddRange(char* chrom, int start, int end, char strand, char *dbgName)
+static void selectAddRange(char* chrom, int start, int end, char strand, char *name)
 /* Add a range to the select table */
 {
-struct binKeeper* bins = selectGetChromBins(chrom, TRUE);
+char *chromKey;
+struct binKeeper* bins = selectGetChromBins(chrom, TRUE, &chromKey);
 struct selectRange* range;
 AllocVar(range);
 if (SELTBL_DEBUG)
-    fprintf(stderr, "selectAddRange: %s: %s %d-%d, %c\n", dbgName, chrom, start, end, strand);
+    fprintf(stderr, "selectAddRange: %s: %s %d-%d, %c\n", name, chrom, start, end, strand);
 
-/* since structure is never freed, we can reuse chromosome string */
-if ((lastChrom == NULL) || !sameString(chrom, lastChrom))
-    lastChrom = cloneString(chrom);
-range->chrom = lastChrom;
+range->chrom = chromKey;
 range->start = start;
 range->end = end;
 range->strand = strand;
+range->name = cloneString(name);
+
 binKeeperAdd(bins, start, end, range);
 }
 
@@ -155,43 +158,28 @@ while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
 lineFileClose(&lf);
 }
 
-boolean selectOverlapsGenomic(char* chrom, int start, int end, char *dbgName)
-/* determine if a range is overlapped without considering strand */
-{
-struct binKeeper* bins = selectGetChromBins(chrom, FALSE);
-boolean isOverlapped = FALSE;
-if (bins != NULL)
-    isOverlapped = (binKeeperFindLowest(bins, start, end) != NULL);
-
-if (SELTBL_DEBUG)
-    fprintf(stderr, "selectOverlapsGenomic: %s: %s %d-%d => %s\n", dbgName,chrom, start, end,
-            (isOverlapped ? "yes" : "no"));
-
-return isOverlapped;
-}
-
-boolean selectOverlapsStrand(char* chrom, int start, int end, char strand, char *dbgName)
-/* determine if a range is overlapped considering strand */
+boolean selectIsOverlapped(unsigned options, char *name, char* chrom, int start, int end, char strand)
+/* determine if a range is overlapped */
 {
 boolean isOverlapped = FALSE;
-struct binKeeper* bins = selectGetChromBins(chrom, FALSE);
+struct binKeeper* bins = selectGetChromBins(chrom, FALSE, NULL);
 if (bins != NULL)
     {
-    /* check strand */
+    /* check each element */
     struct binElement* overlapping = binKeeperFind(bins, start, end);
     struct binElement* o;
     for (o = overlapping; (o != NULL) && !isOverlapped; o = o->next)
         {
         struct selectRange* range = o->val;
-        if (strand == range->strand)
+        if ((!(options & SEL_USE_STRAND) || ((strand == range->strand)))
+            && (!(options & SEL_EXCLUDE_SELF) || !sameString(name, range->name)))
             isOverlapped = TRUE;
         }
     slFreeList(&overlapping);
     }
 if (SELTBL_DEBUG)
-    fprintf(stderr, "selectOverlapsStrand: %s: %s %d-%d, %c => %s\n", dbgName, chrom, start, end, strand,
+    fprintf(stderr, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", name, chrom, start, end, strand,
             (isOverlapped ? "yes" : "no"));
-
 return isOverlapped;
 }
 

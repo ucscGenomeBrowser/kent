@@ -2,6 +2,10 @@
 #ifndef SELECT_TABLE_H
 #define SELECT_TABLE_H
 
+/* options to select fuctions */
+#define SEL_EXCLUDE_SELF 0x01
+#define SEL_USE_STRAND   0x02
+
 void selectAddPsls(char* pslFile);
 /* add records from a psl file to the select table */
 
@@ -11,10 +15,7 @@ void selectAddGenePreds(char* genePredFile);
 void selectAddBeds(char* bedFile);
 /* add records from a bed file to the select table */
 
-boolean selectOverlapsGenomic(char* chrom, int start, int end, char *dbgName);
-/* determine if a range is overlapped without considering strand */
-
-boolean selectOverlapsStrand(char* chrom, int start, int end, char strand, char *dbgName);
+boolean selectIsOverlapped(unsigned options, char *name, char* chrom, int start, int end, char strand);
 /* determine if a range is overlapped considering strand */
 
 #endif

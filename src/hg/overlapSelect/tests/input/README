@@ -21,3 +21,7 @@
     - no overlap with the refGene sequences (they overlap each other):
         BC040840 AK124136
 
+- mrna-self1.psl
+    - two that don't overlap
+- mrna-self2.psl
+    - three that overlap, one with no overlap
