@@ -45,6 +45,13 @@ if (changeVis != -2)
 	}
     }
 
+hPrintf(
+"<SCRIPT LANGUAGE=\"JavaScript\">\n"
+"function testResults() {\n"
+"   alert('I was there');\n"
+"}\n"
+"</SCRIPT>\n"
+);
 
 cgiMakeHiddenVar(configGroupTarget, "none");
 hTableStart();
@@ -55,7 +62,7 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList == NULL)
 	continue;
 
-    if (changeVis != -2 && (groupToChange == NULL || group->name == groupToChange))
+    if (changeVis != -2 && (groupToChange == NULL || sameString(group->name,groupToChange)))
         {
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
@@ -70,20 +77,17 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("<TR>");
     hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
-#ifdef SOON
-    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
-           // "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
-           "onClick=\"document.mainForm.submit();\">",
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
+	   "onClick=\"document.mainForm.%s.value='%s';\">", 
 	   configHideAll, "Hide All", configGroupTarget, group->name);
     hPrintf(" ");
-    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
-           "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
+	   "onClick=\"document.mainForm.%s.value='%s';\">", 
 	   configShowAll, "Show All", configGroupTarget, group->name);
     hPrintf(" ");
-    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
-           "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
+	   "onClick=\"document.mainForm.%s.value='%s';\">", 
 	   configDefaultAll, "Default", configGroupTarget, group->name);
-#endif /* SOON */
     hPrintf(" ");
     cgiMakeButton("submit", "Submit");
     hPrintf("</TH>\n");
@@ -148,13 +152,10 @@ struct dyString *title = dyStringNew(0);
 char *group = NULL;
 
 /* Fetch group if any from CGI, and remove var so it doesn't get used again. */
-#ifdef SOON
 group = cloneString(cartUsualString(cart, configGroupTarget, ""));
-uglyf("group='%s', vis=%d<BR>\n", group, vis);
 cartRemove(cart, configGroupTarget);
 if (sameString(group, "none"))
     freez(&group);
-#endif
 
 dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
