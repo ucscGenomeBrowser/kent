@@ -21,6 +21,8 @@ if (fileExists(regionSource))
     char *row[4];
     while (lineFileRow(IN, row))
 	{
+	if (startsWith(row[3], "MEN"))
+	    continue;
 	if (sameString(row[0], "chrom"))
 	    continue;
 	if (excludeRandoms && (startsWith(row[0], "chrUn") || endsWith(row[0], "random")))
