@@ -2621,6 +2621,7 @@ while (<STDIN>) {
    }
 }
 '_EOF_'
+    # << this line makes emacs coloring happy
 
     # convert data to bed file format 
     # copy parse_ecotigs.pl from rn3
@@ -2629,4 +2630,127 @@ while (<STDIN>) {
     perl ../processEcotigs.pl < ecotigCT.format > ecotigCT.format2
     perl ../parse_ecotig.pl < ecotigCT.format2 > ecotigCT.bed
     hgLoadBed -tab galGal2 ecoresTetraodon ecotigCT.bed
+
+
+# PHASTCONS ELEMENTS (DONE 8/17/04 angie)
+    # Convert net to maf (would normally do this for multiz, but this time 
+    # we're running phastCons on only 2 species!)
+    ssh kksilo
+    ln -s blastz.hg16.swap.2004-02-25 /cluster/data/galGal2/bed/blastz.hg16
+    cd /cluster/data/galGal2/bed/blastz.hg16/axtChain
+    netSplit human.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/galGal2/nib \
+        /cluster/data/hg16/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/galGal2/chrom.sizes /cluster/data/hg16/chrom.sizes \
+            $maf -tPrefix=galGal2. -qPrefix=hg16.
+    end
+
+    # Make .ss input for phastCons
+    mkdir /cluster/data/galGal2/bed/phastCons2way
+    cd /cluster/data/galGal2/bed/phastCons2way
+    set WINSIZE=1000000
+    set WINOVERLAP=0
+    mkdir SS
+    foreach f (/cluster/data/galGal2/bed/blastz.hg16/mafNet/*.maf)
+      set chr=$f:t:r
+      set c=`echo $chr | sed 's/chr//; s/_random//;'`
+      echo $f $chr $c
+      mkdir SS/$chr
+      /cluster/bin/phast/msa_split $f -i MAF -o SS \
+        -O galGal2,hg16 -M /cluster/data/galGal2/$c/$chr.fa \
+        -w ${WINSIZE},${WINOVERLAP} -r SS/$chr/$chr -I 1000 -d 1 -B 5000
+    end
+    # save some space and I/O time:
+    gzip SS/*/*.ss
+
+    # Run phastCons --viterbi to get conserved elements only (no postProbs).
+    ssh kk9
+    cd /cluster/data/galGal2/bed/phastCons2way
+    # Pare down hg17 8-way tree and use same --transitions, but use nrates=20
+    # instead of 40, to get more coverage.  
+    /cluster/bin/phast/tree_doctor --rename '1->hg17; 6->galGal2' \
+      /cluster/data/hg17/bed/multiz8way/cons/run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod \
+    | /cluster/bin/phast/tree_doctor --prune-all-but galGal2,hg17 - \
+    | perl -wpe 's/TREE: \(hg17:(\d+\.\d+),(gal\S+)\)/TREE: ($2,hg16:$1)/' \
+    > rev-dg.mod
+    cat << '_EOF_' > doElements
+#!/bin/csh -fe
+
+set PHAST=/cluster/bin/phast
+set TMP=/scratch/phastCons
+
+set file=$1
+set root = $file:t:r:r
+set chrom = $root:r
+
+mkdir -p $TMP
+mkdir -p PREDICTIONS/$chrom
+cp $file $TMP/$root.ss.gz
+zcat $TMP/$root.ss.gz \
+| $PHAST/phastCons - rev-dg.mod --nrates 20 \
+  --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs \
+  --transitions 0.080,0.008 --quiet --seqname $chrom
+rm $TMP/$root.ss.gz
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod 775 doElements
+    rm -f jobs.els.lst
+    foreach f (SS/*/*.ss.gz)
+      echo 'doElements {check in exists+ '$f'}' >> jobs.els.lst
+    end
+    para create jobs.els.lst
+    para try ; para push ; etc....
+#Completed: 800 of 800 jobs
+#Average job time:                  16s       0.26m     0.00h    0.00d
+#Longest job:                       22s       0.37m     0.01h    0.00d
+#Submission to last job:           155s       2.58m     0.04h    0.00d
+    # Create bed track; we want to tweak the scores and the names.
+    # Scores are transformed as follows, for a reasonable-looking 
+    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
+    # (here x_max  = 2383) and let x_med be the median score (here x_med =
+    # 42).  The  scores are transformed via the function f(x) = a *
+    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
+    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
+    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
+    # 309.259, b = -1404.83.
+    # better done on kksilo:
+    # get max:
+    cat PREDICTIONS/*/*.bed > raw.bed
+    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
+#2383
+    # get median:
+    set lineCount = `cat raw.bed | wc -l`
+    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
+    set med = `awk '{print $5;}' raw.bed | sort -n \
+               | tail +$medOffset | head -1`
+#42
+    # b and a:
+    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
+#-1404.83
+    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
+#309.259
+    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
+            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/phastCons2way
+    hgLoadBed galGal2 phastConsElements all.bed
+    featureBits galGal2 phastConsElements
+#26455025 bases of 1054197620 (2.509%) in intersection
+
+    # make top-5000 list and launcher on Adam's home page:
+    sort -k5,5nr raw.bed | head -5000 > top5000.bed
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/gg-top5000-2way \
+      "top 5000 conserved elements (2way)" galGal2
+
 
