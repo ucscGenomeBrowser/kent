@@ -6918,6 +6918,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	featureBits hg16 chainMm4
     #	2828363353 bases of 2865248791 (98.713%) in intersection
 
+
 # NET MM5 (DONE - 2004-07-02 - Hiram)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm5/axtChain
@@ -7086,6 +7087,25 @@ cat > makeMaf.csh << '_EOF_'
     hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
+
+
+# ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
+    ssh hgwdev
+    cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/mouse.chain.gz
+    cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/mouse.net.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/mouse.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+    cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.chain.gz
+    cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/rat.net.gz \
+      /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
 
 # SWAP BLASTZ ZEBRAFISH-HUMAN (danRer1-hg17) to HUMAN-ZEBRAFISH (hg17-danRer1)
 # USE RESCORED ALIGNMENTS (see makeDanRer1.doc)
@@ -7941,6 +7961,54 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
 
+
+# GENEID GENE PREDICTIONS (DONE 7/30/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/geneid
+    cd /cluster/data/hg17/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/geneid_v1.2/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200405/geneid_v1.2/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    cp /dev/null geneid.fa
+    foreach f (chr*.prot)
+      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> geneid.fa
+    end
+    ldHgGene -gtf -genePredExt hg17 geneid *.gtf 
+    hgPepPred hg17 generic geneidPep geneid.fa
+
+
+# MITOPRED DATA FOR HGGENE (DONE 7/30/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/mitopred
+    cd /cluster/data/hg17/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/hum_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' hum_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql hg17 < mitopred.sql
+    hgsql hg17 -e 'load data local infile "mitopred.tab" into table mitopred'
+
+
+# NUCLEAR PROTEIN DATABASE (IN PROGRESS 7/30/04 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/npd
+    cd /cluster/data/hg17/bed/npd
+    wget ftp://ftp.hgu.mrc.ac.uk/pub/npd/database.zip
+    unzip database.zip
+    # OK, it's one big .mdb (Microsoft Access DB) file.  
+    # Googling... can buy a converter for $40... free trial .exe...
+
+
 # CREATING REFFULL (DONE - 2004-08-02 - Hiram)
 
     ssh to eieio
@@ -8015,3 +8083,5 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     ssh hgwdev
     cd /cluster/data/hg17/bed/refFull
     hgLoadPsl hg17 -tNameIx refFullAli.psl
+
+
