@@ -1683,5 +1683,7 @@ CREATING THE mm3Rn2L SAMPLE TRACK (a.k.a WIGGLE TRACK)
 ------------------------------------------------------
 o - refer to the script at src/hg/sampleTracks/makeMm3Rn2.doc
 
-
+# create MGC Genes track (markd 13 may 2003)
+# this will be automated in the incremental genbank update
+/cluster/store5/genbank/bin/i386/mgcDbLoad mm3 /cluster/store5/genbank/data/download/mgc/2003.05.06/mgcFullStatus.tab.gz 
 
