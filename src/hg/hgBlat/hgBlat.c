@@ -250,7 +250,7 @@ else
 if (pslOut)
     {
     printf("<TT><PRE>");
-    if (!sameString(output, "psl no head"))
+    if (!sameString(output, "psl no header"))
 	pslWriteHead(stdout);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
