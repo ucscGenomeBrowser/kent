@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.29 2004/03/03 18:15:22 sugnet Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.30 2004/04/24 19:04:50 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -509,5 +509,17 @@ if (--dot <= 0)
     putc('.', stderr);
     fflush(stderr);
     dot = _dotForUserMod;
+    }
+}
+
+void spaceToUnderbar(char *s)
+/* Convert white space to underbar. */
+{
+char c;
+while ((c = *s) != 0)
+    {
+    if (isspace(c))
+        *s = '_';
+    ++s;
     }
 }

@@ -102,4 +102,7 @@ void dotForUserInit(int dotMod);
 void dotForUser();
 /* Write out a dot every _dotForUserMod times this is called. */
 
+void spaceToUnderbar(char *s);
+/* Convert white space to underbar. */
+
 #endif /* OBSCURE_H */
