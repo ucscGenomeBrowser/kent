@@ -1212,3 +1212,16 @@ priority 160
 visibility hide
 type psl .
 
+track haplotype
+shortLabel Haplotype Blocks
+longLabel Common Haplotype Blocks.  
+group varRep
+priority 161
+visibility dense
+chromosomes chr22,
+color 0,0,0
+altColor 0,0,0
+spectrum on
+type bed 12
+
+
