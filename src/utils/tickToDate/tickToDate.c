@@ -10,15 +10,20 @@ void usage()
 errAbort(
   "tickToDate - Convert seconds since 1970 to time and date\n"
   "usage:\n"
-  "   tickToDate XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "   tickToDate ticks\n"
+  "Use 'now' for current ticks and date\n"
   );
 }
 
-void tickToDate(char *XXX)
+void tickToDate(char *tickString)
 /* tickToDate - Convert seconds since 1970 to time and date. */
 {
+time_t ticks;
+if (sameString(tickString, "now"))
+    ticks = time(NULL);
+else
+    ticks = atol(tickString);
+printf("%s", ctime(&ticks));
 }
 
 int main(int argc, char *argv[])
