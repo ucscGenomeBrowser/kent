@@ -2,7 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "fa.h"
@@ -14,6 +14,7 @@
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
+boolean orLogic = FALSE;  /* Do ors instead of ands? */
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +30,7 @@ errAbort(
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
+  "   -or               Or tables together instead of anding them\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N  Break into exons and add N to each end of each exon\n"
@@ -285,13 +287,16 @@ for (i=0; i<tableCount; ++i)
 	orTable(bits, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(bits, chromSize);
-	bitAnd(acc, bits, chromSize);
+	if (orLogic)
+	    bitOr(acc, bits, chromSize);
+	else
+	    bitAnd(acc, bits, chromSize);
 	}
     }
 *retChromBits = bitCountRange(acc, 0, chromSize);
 if (bedFile != NULL || faFile != NULL)
     {
-    minSize = cgiUsualInt("minSize", minSize);
+    minSize = optionInt("minSize", minSize);
     bitsToBed(acc, chrom, chromSize, bedFile, faFile, minSize);
     }
 bitFree(&acc);
@@ -349,7 +354,7 @@ void featureBits(char *database, int tableCount, char *tables[])
 /* featureBits - Correlate tables via bitmap projections and booleans. */
 {
 struct sqlConnection *conn = NULL;
-char *bedName = cgiOptionalString("bed"), *faName = cgiOptionalString("fa");
+char *bedName = optionVal("bed", NULL), *faName = optionVal("fa", NULL);
 FILE *bedFile = NULL, *faFile = NULL;
 struct slName *allChroms = NULL, *chrom = NULL;
 boolean faIndependent = FALSE;
@@ -359,7 +364,7 @@ if (bedName)
     bedFile = mustOpen(bedName, "w");
 if (faName)
     {
-    boolean faMerge = cgiBoolean("faMerge");
+    boolean faMerge = optionExists("faMerge");
     faFile = mustOpen(faName, "w");
     if (tableCount > 1)
         {
@@ -370,7 +375,6 @@ if (faName)
     faIndependent = (!faMerge);
     }
 
-clChrom = cgiUsualString("chrom", clChrom);
 if (sameWord(clChrom, "all"))
     allChroms = hAllChromNames();
 else
@@ -410,7 +414,9 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
+clChrom = optionVal("chrom", clChrom);
+orLogic = optionExists("or");
 if (argc < 3)
     usage();
 featureBits(argv[1], argc-2, argv+2);
