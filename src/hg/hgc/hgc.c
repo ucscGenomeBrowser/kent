@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.745 2004/09/10 22:21:16 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.746 2004/09/10 23:02:24 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1894,7 +1894,7 @@ if (nullSubset)
 else
     printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside of the window.<BR>\n");
+printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
 if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
     {
@@ -2102,7 +2102,7 @@ if (net->tEnd >= 0)
     printLabeledNumber(org, "size", net->tEnd - net->tStart);
 if (net->qEnd >= 0)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside of the window.<BR>\n");
+printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);
 }
 
