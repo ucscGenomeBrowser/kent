@@ -526,7 +526,12 @@ wiggle chr7_phyloHMMcons_CFTR
 yLineOnOff Off
 pairwise CFTR 20
 autoScaleDefault Off
-speciesOrder chimp orangutan baboon macaque vervet lemur rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fr1
+treeImage phylo/cftr25.gif
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp orangutan baboon macaque vervet lemur 
+sGroup_placental rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog 
+sGroup_mammal opossum dunnart platypus 
+sGroup_vertebrate chicken zfish tetra fr1
 
 track lineageMutations
 shortLabel LineageMutations
