@@ -464,6 +464,8 @@ int newAliCount = 0;
 int totalFfCount = 0;
 int trimCount = mrnaSeq->size/200 + 1000;
 
+if (bundle->ffList == NULL)
+    return;
 
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     totalFfCount += ffAliCount(ffl->ff);

@@ -13,7 +13,7 @@
 #include "errabort.h"
 #include "nib.h"
 
-struct sockaddr_in sai;		/* Some system socket info. */
+static struct sockaddr_in sai;		/* Some system socket info. */
 
 static int setupSocket(char *hostName, char *portName)
 /* Set up our socket. */
@@ -140,7 +140,9 @@ for (;;)
     {
     gfRecieveString(sd, buf);
     if (sameString(buf, "end"))
+	{
 	break;
+	}
     else
 	{
 	rowSize = chopLine(buf, row);
@@ -233,7 +235,7 @@ fclose(f);
 return target;
 }
 
-static void alignComponents(struct gfRange *combined, struct ssBundle *bun, 
+static boolean alignComponents(struct gfRange *combined, struct ssBundle *bun, 
 	enum ffStringency stringency)
 /* Align each piece of combined->components and put result in
  * bun->ffList. */
@@ -244,6 +246,7 @@ struct ssFfItem *ffi;
 struct ffAli *ali;
 int qStart, qEnd, tStart, tEnd;
 int extra = 250;
+boolean gotAny = FALSE;
 
 for (range = combined->components; range != NULL; range = range->next)
     {
@@ -278,8 +281,10 @@ for (range = combined->components; range != NULL; range = range->next)
 	ffi->ff = ali;
 	ffi->score = ffScore(ali, stringency);
 	slAddHead(&bun->ffList, ffi);
+	gotAny = TRUE;
 	}
     }
+return gotAny;
 }
 
 static void saveAlignments(char *chromName, int chromSize, int chromOffset, 
@@ -325,7 +330,7 @@ for (range = rangeList; range != NULL; range = range->next)
     alignComponents(range, bun, stringency);
     ssStitch(bun, stringency);
     saveAlignments(chromName, chromSize, range->tStart, 
-    	bun, outData, isRc, stringency, minMatch, outFunction);
+	bun, outData, isRc, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     freeDnaSeq(&targetSeq);
     }
