@@ -288,14 +288,14 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* If we are looking at a zoo database then show the zoo database list */
     if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
+        strstrNoCase(cur->name, "zoo"))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
         numAssemblies++;
         }
     else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
+             !strstrNoCase(cur->name, "zoo") &&
              (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
@@ -310,9 +310,6 @@ for (cur = dbList; cur != NULL; cur = cur->next)
        }
     }
 
-if (javascript == NULL)
-    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, NULL);
-else
     cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly, javascript);
 }
 
@@ -369,14 +366,14 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* If we are looking at a zoo database then show the zoo database list */
     if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
+        strstrNoCase(cur->name, "zoo"))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
         numAssemblies++;
         }
     else if ( !strstrNoCase(cur->organism, "archae") &&
-                !strstrNoCase(cur->description, "zoo") &&
+                !strstrNoCase(cur->name, "zoo") &&
                 !strstrNoCase(cur->description, "Aug. 2001") &&
                 !strstrNoCase(cur->description, "April 2002") &&
              (cur->active || strstrNoCase(cur->name, db)))

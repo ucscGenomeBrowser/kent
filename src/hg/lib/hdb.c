@@ -1372,7 +1372,7 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 /* Scan through dbDb table, loading into list */
-sr = sqlGetResult(conn, "select * from dbDb");
+sr = sqlGetResult(conn, "select * from dbDb where active = 1 order by orderKey");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -1519,11 +1519,11 @@ if (strstrNoCase(organism, "mouse"))
     }
 else if (strstrNoCase(organism, "zoo"))
     {
-    result = "zooBaboon1";
+    result = "zooChimp2";
     }
 else if (strstrNoCase(organism, "human"))
     {
-    result = "hg10";
+    result = "hg12";
     }
 
 return result;
