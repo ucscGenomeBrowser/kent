@@ -359,30 +359,6 @@ spectrum on
 type chain ce1
 otherDb ce1
 
-track chesMammal
-shortLabel MammalNotHuman tblastn
-longLabel tblastn of MammalNotHuman Seeds
-priority 1100
-group x
-visibility hide
-type bed 5
-
-track chesChordata
-shortLabel ChordataNotHuman tblastn
-longLabel tblastn of ChordataNotHuman Seeds
-priority 1100
-group x
-visibility hide
-type bed 5
-
-track chesMammalPsl
-shortLabel Mammal blastToPsl
-longLabel blastToPsl of MammalNotHuman tblast
-group x
-priority 1101
-visibility hide
-type psl protein
-
 track pfamSeeds
 shortLabel pfamSeeds BLAT
 longLabel pfam-A Domain Seeds
@@ -391,43 +367,3 @@ priority 1101.12
 visibility hide
 type psl protein
 
-track chesChordataPsl
-shortLabel Chordata blastToPsl
-longLabel blastToPsl of ChordataNotHuman tblast
-group x
-priority 1101
-visibility hide
-type psl protein
-
-track chesMammalBlat
-shortLabel Mammal BLAT
-longLabel Blat of mammalNotHuman
-group x
-priority 1102
-visibility hide
-type psl protein
-
-track chesChordataBlat
-shortLabel Chordata BLAT
-longLabel Blat of chordataNotMammal
-group x
-priority 1102
-visibility hide
-type psl protein
-
-track chesSimpleRepeat
-shortLabel Filtered Simple Repeats
-longLabel Filtered Simple Tandem Repeats (period <= 12)
-group x
-priority 148
-visibility hide
-type bed 4 +
-
-track chesMamHmm
-shortLabel PFam Hmm hits
-longLabel  PFam Hmm hits
-group x
-priority 148
-visibility hide
-spectrum on
-type bed 6 +
