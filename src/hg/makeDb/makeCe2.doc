@@ -71,7 +71,7 @@ exit; # don't actually run this like a script :)
 # Filesystem            Size  Used Avail Use% Mounted on
 # /dev/sdc1             1.8T  280G  1.4T  17% /var/lib/mysql    
 
-# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2003-03-31 - hartera)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2004-03-31 - hartera)
     # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
@@ -2147,6 +2147,8 @@ rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
     # 53654286 bases of 100277784 (53.506%) in intersection
 
     # Create Self blastp table - sangerBlastTab (DONE, 2004-05-24, hartera)
+    # Reload blastp data into sangerBlastTab and drop knownBlastTab 
+    # - table given the wrong name (DONE, 2004-05-28, hartera)
     # Get sangerPep peptide sequences fasta file from sangerPep dir
     # and create a blast database out of them.
     mkdir -p /cluster/data/ce2/bed/blastp
@@ -2212,7 +2214,7 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
     # Load into database.  
     ssh hgwdev
     cd /cluster/data/ce2/bed/blastp/self/run/out
-    hgLoadBlastTab ce2 knownBlastTab *.tab
+    hgLoadBlastTab ce2 sangerBlastTab *.tab
 
 # CREATE EXPRESSION DISTANCE TABLES FOR  
 # KIM LAB EXPRESSION DATA (DONE, 2004-05-24, hartera) 
@@ -2225,7 +2227,9 @@ hgMapToGene ce2 refGene sangerGene sangerToRefSeq
 
 # CREATE TABLE TO MAP BETWEEN SANGER GENES AND PFAM DOMAINS
 # sangerToPfam (DONE, 2004-05-24, hartera)
-hgMapViaSwissProt ce2 sangerGene name proteinID Pfam knownToPfam
+# Drop table knownToPfam - wrong table name.
+# Reload data into sangerToPfam (DONE, 2004-05-28, hartera)
+hgMapViaSwissProt ce2 sangerGene name proteinID Pfam sangerToPfam
 
 # CREATE MAPPING OF SANGER GENES TO KIM LAB EXPRESSION DATA GENES 
 # sangerToKim (DONE, 2004-05-27, hartera)
@@ -2237,6 +2241,11 @@ hgMapViaSwissProt ce2 sangerGene name proteinID Pfam knownToPfam
 # alternate names or names that no longer exist or withdrawn sequences.
 hgMapToGene ce2 sangerGene sangerGene sangerToKim
 
+# SET dbDb TABLE ENTRY FOR GENE SORTER (DONE, 2004-05-25, hartera)
+# set hgNearOk to 1 on hgcentraltest to make Ce2 Gene Sorter viewable
+
+hgsql -h hgwbeta -e 'update dbDb set hgNearOk = 1 where name = "Ce2";' \
+         hgcentraltest
 
 
 
