@@ -29,6 +29,10 @@
 #include "bits.h"
 #endif
 
+#ifndef AXT_H
+#include "axt.h"
+#endif
+
 enum gfConstants {
     gfMinMatch = 2,
     gfMaxGap = 2,
@@ -165,14 +169,6 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
 /* This is the type of a client provided function to save an alignment. */
 
-#ifdef NOWSTATIC
-void gfAlignDnaClumps(struct genoFind *gf, struct gfClump *clumpList, 
-    struct dnaSeq *seq, boolean isRc,  int minMatch, GfSaveAli outFunction, 
-    void *outData, boolean fastN);
-/* Convert gfClumps to an actual alignment that gets saved via 
- * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
- * a FILE as outData in this case.. */
-#endif /* NOWSTATIC */
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
     boolean isRc,  int minMatch,  GfSaveAli outFunction, void *outData);
@@ -184,12 +180,6 @@ void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Has
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 
-#ifdef NOWSTATIC
-void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, int minMatch,  GfSaveAli outFunction, void *outData, boolean isRna);
-/* Look for alignment to three translations of qSeq in three translated reading frames. 
- * Save alignment via outFunction/outData. */
-#endif /* NOWSTATIC */
 
 /* ---  Some routines for dealing with gfServer at a low level ---- */
 
@@ -214,9 +204,9 @@ struct gfSavePslxData
     boolean targetRc;		/* Is target reverse complemented? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
     int minGood;		/* Minimum sequence identity in parts per thousand. */
-    boolean saveSeq;		/* Save sequence too? */
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
+    boolean saveSeq;		/* Save sequence too? */
     };
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
@@ -224,6 +214,39 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
+
+struct gfAxtBundle
+/* A bunch of axt's on the same query/target sequence. */
+    {
+    struct gfAxtBundle *next;
+    struct axt *axtList;	/* List of alignments */
+    int tSize;			/* Size of target. */
+    int qSize;			/* Size of query. */
+    };
+
+void gfAxtBundleFree(struct gfAxtBundle **pObj);
+/* Free a gfAxtBundle. */
+
+void gfAxtBundleFreeList(struct gfAxtBundle **pList);
+/* Free a list of gfAxtBundles. */
+
+struct gfSaveAxtData
+/* This data structure passed as output data for gfSaveWuBlast and
+ * possibly others. */
+    {
+    struct gfSaveAxtData *next;
+    struct gfAxtBundle *bundleList;	/* List of bundles. */
+    int minGood;	 /* Minimum sequence identity in parts per thousand. */
+    boolean qIsProt;		/* Query is peptide. */
+    boolean tIsProt;		/* Target is peptide. */
+    int queryIx;		/* Index of query */
+    };
+
+void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
+/* Analyse one alignment and if it looks good enough save it in gfAxtBundle. */
+
 
 void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);

@@ -57,6 +57,9 @@ int axtCmpQuery(const void *va, const void *vb);
 int axtCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target position. */
 
+int axtCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score. */
+
 struct axtScoreScheme
 /* A scoring scheme or DNA alignment. */
     {
