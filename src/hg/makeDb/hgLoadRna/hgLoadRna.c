@@ -523,6 +523,8 @@ char *type, *symName;
 hgSetDb(database);
 if (strstr(raFile, "est.ra"))
     type = "EST";
+else if (strstr(raFile, "xenoRna.ra"))
+    type = "xenoRna";
 else
     type = "mRNA";
 addRna(faPath, type, raFile, type);

@@ -16,11 +16,16 @@ errAbort(
   "   freen hgN\n");
 }
 
+void freen(char *text)
+{
+printf("%s = %d\n", text, intExp(text));
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-uglyAbort(". is %d, 45 is %c", '.', 45);
 if (argc != 2 )
     usage();
+freen(argv[1]);
 return 0;
 }

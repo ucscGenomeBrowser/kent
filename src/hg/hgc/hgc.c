@@ -669,14 +669,27 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-boolean isEst;
 boolean hasBin;
 char splitTable[64];
+char *table;
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
 
-isEst = (stringIn("est", track) || stringIn("Est", track));
-type = (isEst ? "est" : "mrna");
+if (stringIn("est", track) || stringIn("Est", track))
+    {
+    type = "EST";
+    table = "all_est";
+    }
+else if (sameString("xenoMrna", track))
+    {
+    type = "non-Human RNA";
+    table = "xenoMrna";
+    }
+else 
+    {
+    type = "mRNA";
+    table = "all_mrna";
+    }
 
 /* Print non-sequence info. */
 hgcStart(acc);
@@ -684,10 +697,9 @@ hgcStart(acc);
 printRnaSpecs(acc);
 
 /* Get alignment info. */
-sprintf(splitTable, "all_%s", type);
-hFindSplitTable(seqName, splitTable, splitTable, &hasBin);
+hFindSplitTable(seqName, table, splitTable, &hasBin);
 
-sprintf(query, "select * from %s where qName = '%s'", splitTable, acc);
+sprintf(query, "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -698,9 +710,9 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 
 htmlHorizontalLine();
-printf("<H3>%s/Genomic Alignments</H3>", (isEst ? "EST" : "mRNA"));
+printf("<H3>%s/Genomic Alignments</H3>", type);
 
-printAlignments(pslList, start, "htcCdnaAli", type, acc);
+printAlignments(pslList, start, "htcCdnaAli", table, acc);
 }
 
 void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
@@ -1241,7 +1253,10 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-showSomeAlignment(psl, rnaSeq, gftDna);
+if (sameString("xenoMrna", table))
+    showSomeAlignment(psl, rnaSeq, gftDnaX);
+else
+    showSomeAlignment(psl, rnaSeq, gftDna);
 }
 
 void htcUserAli(char *fileNames)
@@ -3195,9 +3210,11 @@ if (ct == NULL)
     errAbort("Couldn't find %s in %s", trackId, fileName);
 for (bed = ct->bedList; bed != NULL; bed = bed->next)
     {
-    if (bed->chromStart == start && sameString(seqName, bed->chrom) &&
-         sameString(itemName, bed->name) )
-         break;
+    if (bed->chromStart == start && sameString(seqName, bed->chrom))
+         {
+	 if (bed->name == NULL || sameString(itemName, bed->name) )
+	     break;
+	 }
     }
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
@@ -3253,7 +3270,8 @@ if (sameWord(track, "getDna"))
     doGetDna();
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
-	sameWord(track, "est") || sameWord(track, "intronEst"))
+	sameWord(track, "est") || sameWord(track, "intronEst") || 
+	sameWord(track, "xenoRna"))
     {
     doHgRna(track, item);
     }

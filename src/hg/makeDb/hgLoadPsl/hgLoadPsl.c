@@ -21,7 +21,8 @@ errAbort(
   "It will create a table for each psl file.\n"
   "options:\n"
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
-  "   -tNameIx  add target name index");
+  "   -tNameIx  add target name index\n"
+  "   -nobin Repress binning");
 }
 
 char *createString = 

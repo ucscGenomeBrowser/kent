@@ -167,14 +167,11 @@ if (bt->shortLabel == NULL)
     bt->shortLabel = cloneString(bt->tableName);
 if (bt->longLabel == NULL)
     bt->longLabel = cloneString(bt->shortLabel);
-if (bt->colorR != 0 || bt->colorG != 0 || bt->colorB != 0)
+if (bt->altColorR == 0 && bt->altColorG == 0 && bt->altColorB == 0)
     {
-    if (bt->altColorR == 0 && bt->altColorG == 0 && bt->altColorB == 0)
-        {
-	bt->altColorR = (255+bt->colorR)/2;
-	bt->altColorG = (255+bt->colorG)/2;
-	bt->altColorB = (255+bt->colorB)/2;
-	}
+    bt->altColorR = (255+bt->colorR)/2;
+    bt->altColorG = (255+bt->colorG)/2;
+    bt->altColorB = (255+bt->colorB)/2;
     }
 if (bt->type == NULL)
     bt->type = cloneString("");

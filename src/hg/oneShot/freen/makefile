@@ -7,6 +7,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = freen.o
 
-freen: $O 
+compile: freen.o
 	gcc -o freen $O $(MYLIBS) $L
 
