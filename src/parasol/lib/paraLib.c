@@ -5,8 +5,8 @@
 #include "paraLib.h"
 
 
-char paraSig[16] = "0d2f070562685f29";  /* Mild security measure. */
-int paraSigSize = ArraySize(paraSig);
+char paraSig[17] = "0d2f070562685f29";  /* Mild security measure. */
+int paraSigSize = 16;
 int paraPort = 0x46DC;		      /* Our port */
 
 boolean sendWithSig(int fd, char *string)
