@@ -87,6 +87,17 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
 3. Execute make in jksrc/hg/lib
 4. Execute make in the directory containing the
    application you wish to build.
+5. See also: http://genome.ucsc.edu/admin/jk-install.html
+   and more documentation in this source tree about setting up
+   a working browser in README files:
+   jksrc/product/README.building.source
+   jksrc/product/README.cvs.access
+   jksrc/product/README.mysql.setup
+   jksrc/product/README.install
+   jksrc/product/README.trackDb
+   jksrc/hg/makeDb/trackDb/README
+   There are numerous README files in the source tree describing
+	functions or modules in that area of the source tree.
 
 MAJOR MODULES
 
