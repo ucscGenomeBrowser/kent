@@ -336,3 +336,12 @@ spectrum on
 type chain hg15
 otherDb hg15
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
