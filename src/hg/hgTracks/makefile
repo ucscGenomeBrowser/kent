@@ -15,11 +15,8 @@ O = $A.o altGraphXTrack.o chainTrack.o contigTrack.o \
 
 include ../../inc/cgi_build_rules.mk
 
-mgsc: compile
+mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 compile: $O 
-	${CC} $O ${MYLIBS} ${L}
-	mv a.out $A
-	strip $A
-	chmod a+rx $A
+	${CC} -o $A $O ${MYLIBS} ${L}
