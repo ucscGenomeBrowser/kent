@@ -2,6 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
 	<TITLE>Contact Information</TITLE>
 	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
 </HEAD>
@@ -50,10 +51,16 @@
 	mailing list.  
 	<P>
 	<A HREF="http://www.soe.ucsc.edu/mailman/listinfo/genome">Subscribe</A> 
-	to the genome mailing list. 
-	Search the <A HREF ="https://www.soe.ucsc.edu/pipermail/genome/" TARGET=_blank>
-	genome mailing list archives</A>. 
-	<BR>
+	to the Genome mailing list.
+<FORM name=googleForm method=GET action=http://www.google.com/search>
+Search the Genome maling list 
+<A HREF ="https://www.soe.ucsc.edu/pipermail/genome/" TARGET=_blank>Archives</A>: &nbsp;
+<input type="hidden" name="q" value="">
+<input type="hidden" name="num" value="15">
+<input type="hidden" name="filter" value="0">
+<INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+<input TYPE="submit" VALUE="Submit" onClick="document.googleForm.q.value=document.googleForm.qq.value+'   inurl:www.cse.ucsc.edu/pipermail/genome' ; document.googleForm.submit();">
+</FORM>
 	<HR>
 	Server errors or other problems accessing the UCSC Genome Browser or 
 	BLAT server: 
