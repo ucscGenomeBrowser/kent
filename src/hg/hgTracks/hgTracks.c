@@ -1863,7 +1863,7 @@ for (i=0; i<count; ++i)
 static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense clone items. */
+/* Draw dense items doing color averaging items. */
 {
 int baseWidth = seqEnd - seqStart;
 double scale = scaleForPixels(width);
@@ -10374,6 +10374,7 @@ void zoomToBaseLevel()
 /* Set things so that it's zoomed to base level. */
 {
 zoomToSize(insideWidth/tl.mWidth);
+cartSetString(cart, "ruler", "on");
 }
 
 void relativeScroll(double amount)
