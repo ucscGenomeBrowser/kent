@@ -181,8 +181,9 @@ while(namePt != 0)
 	    carefulClose(&f);
 
 	    snprintf(varNameFilename, 256, "%s__data", namePt);
+
 	    AllocVar(filenameEl);
-	    filenameEl->val = uploadedFile.forCgi;
+	    filenameEl->val = cloneString(uploadedFile.forCgi);
 	    slAddHead(&list, filenameEl);
 	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
 	} else {
