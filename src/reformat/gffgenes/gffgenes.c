@@ -1,10 +1,21 @@
 /* gffgenes - Creates files that say extents of genes from gff files. */
 
+#include	<stdio.h>
 #include "common.h"
 #include "sig.h"
 #include "wormdna.h"
 #include "hash.h"
 
+#ifdef GZ_FILENAMES
+static char *inNames[] = {
+    "CHROMOSOME_I.gff.gz",
+    "CHROMOSOME_II.gff.gz",
+    "CHROMOSOME_III.gff.gz",
+    "CHROMOSOME_IV.gff.gz",
+    "CHROMOSOME_V.gff.gz",
+    "CHROMOSOME_X.gff.gz",
+};
+#else
 static char *inNames[] = {
     "CHROMOSOME_I.gff",
     "CHROMOSOME_II.gff",
@@ -13,6 +24,7 @@ static char *inNames[] = {
     "CHROMOSOME_V.gff",
     "CHROMOSOME_X.gff",
 };
+#endif
 
 static char *chromNames[] = {
     "i", "ii", "iii", "iv", "v", "x",
@@ -125,16 +137,42 @@ return s+1;
 char *unquoteSequence(char *s, int lineCount, char *fileName)
 /* Remove quotes and preceding 'Sequence' from string. */
 {
-char *header = "Sequence ";
+int missed = 0;
+char *header0 = "Sequence ";
+char *header1 = "Transcript ";
 s = trimSpaces(s);
-if (!startsWith(header, s))
+if (!startsWith(header0, s)) { ++missed; }
+if (!startsWith(header1, s)) { ++missed; }
+if ( 2 == missed)
     errAbort("Expecting Sequence before gene name line %d of %s", lineCount, fileName);
-return unquote(s + strlen(header), lineCount, fileName);
+if (startsWith(header0, s)) {
+	return unquote(s + strlen(header0), lineCount, fileName);
+    } else {
+	return unquote(s + strlen(header1), lineCount, fileName);
+    }
 }
+
+#ifdef GZ_FILENAMES
+static FILE *
+pipeOpen(char * fileName)
+{
+	char cmd[1024];
+	FILE * fh;
+
+	strcpy(cmd, "gzip -dc ");  /* use "gzip -c" for zwrite */
+	strncat(cmd, fileName, sizeof(cmd)-strlen(cmd));
+	fh = popen(cmd, "r");  /* use "w" for zwrite */
+	return fh;
+}
+#endif
 
 void procOne(char *inName, UBYTE chromIx, FILE *c2g, FILE *gl)
 {
+#ifdef GZ_FILENAMES
+FILE *in = pipeOpen(inName);
+#else
 FILE *in = mustOpen(inName, "r");
+#endif
 struct gene *geneList = NULL, *g = NULL;
 struct exon *exon;
 char line[1024];
@@ -147,6 +185,9 @@ char *source;
 char *geneName;
 struct hash *geneHash = newHash(15);
 
+if ( (FILE *) NULL == in ) {
+    errAbort("gffgenes - can not open: %s\n", inName );
+}
 printf("Processing %s\n", inName);
 while (fgets(line, sizeof(line), in))
     {
@@ -160,10 +201,45 @@ while (fgets(line, sizeof(line), in))
 	    continue;
 	source = words[1];
         type = words[2];
-	if (sameString(source, "Genomic_cannonical") || sameString(source, "Link"))
-	    continue;
-        if (sameString(type, "exon"))
+	/*	When type (feature) "exon" is found, check
+	*	the "Source" types to skip.  Do not want all exons.
+	 *	As of April 2004, the following "Source" types are found
+	 *		on the "exon" Feature
+	 *	curated
+	 *	Pseudogene
+	 *	tRNAscan-SE-1.11
+	 *	RNA
+	 *	snRNA
+	 *	miRNA
+	 *	hand_built
+	 *	rRNA
+	 */
+        if (sameString(type, "exon") || sameString(type, "coding_exon"))
             {
+		if (sameString(source, "Genomic_cannonical") ||
+			sameString(source, "Pseudogene") ||
+			sameString(source, "curated") ||
+			sameString(source, "Genefinder") ||
+			sameString(source, "Coding_transcript") ||
+			sameString(source, "non-coding_transcript") ||
+			sameString(source, "history") ||
+			sameString(source, "Transposon") ||
+			sameString(source, "hand_built") ||
+			sameString(source, "mRNA") ||
+			sameString(source, "rRNA") ||
+			sameString(source, "scRNA") ||
+			sameString(source, "snRNA") ||
+			sameString(source, "snoRNA") ||
+			sameString(source, "stRNA") ||
+			sameString(source, "miRNA") ||
+			sameString(source, "tRNA") ||
+			sameString(source, "tRNAscan-SE-1.23") ||
+			sameString(source, "tRNAscan-SE-1.11") ||
+			sameString(source, "Link"))
+		    {
+	    	    continue;
+		    }
+	    /*	This leaves curated, RNA, and hand_built to be counted */
 	    ++exonCount;
 	    geneName = unquoteSequence(words[8], lineCount, inName);
 	    if ((g = hashFindVal(geneHash, geneName)) == NULL)
@@ -195,7 +271,11 @@ for (g = geneList; g != NULL; g=g->next)
     slSort(&g->exons, cmpExons);
     writeGene(g, c2g, gl);
     }
+#ifdef GZ_FILENAMES
+pclose(in);
+#else
 fclose(in);
+#endif
 }
 
 int main(int argc, char *argv[])
