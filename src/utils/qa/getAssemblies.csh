@@ -53,7 +53,7 @@ endif
 echo 
 if ($machine == hgwdev || $machine == hgwbeta) then
   # hgsql -N $host -e "SHOW DATABASES"  proteins > $machine.databases
-  set dbs=`hgsql -N $host -e "SHOW DATABASES"  proteins`
+  set dbs=`hgsql -N $host -e "SHOW DATABASES"`
 else
   set host=""
   set dbs=`getRRdatabases.csh $machine`
