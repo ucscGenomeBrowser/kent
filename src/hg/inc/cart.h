@@ -198,6 +198,10 @@ void cartWebStart(struct cart *theCart, char *format, ...);
 /* Print out pretty wrapper around things when working
  * from cart. Balance this with cartWebEnd. */
 
+void cartVaWebStart(struct cart *cart, char *format, va_list args);
+/* Print out pretty wrapper around things when working
+ * from cart. */
+
 void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
