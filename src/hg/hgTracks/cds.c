@@ -474,10 +474,7 @@ int getCdsDrawOptionNum(char *mapName)
     char optionStr[128];
     safef(optionStr, 128,"%s.cds.draw", mapName);
     drawOption = cartUsualString(cart, optionStr, CDS_DRAW_DEFAULT);
-    if(sameString(drawOption,"genomic codons (w/ exonFrames)"))
-        return(cdsColorPlusStringToEnum(drawOption));
-    else
-        return(cdsColorStringToEnum(drawOption));
+    return(cdsColorStringToEnum(drawOption));
 }
 
 
@@ -774,7 +771,7 @@ struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures *
   cdsEnd. It only relies on the genomic sequence to determine the
   frame so it works with any gene prediction track*/
 {
-    if(notGenomic && gp->optFields >= genePredExonFramesFld)
+    if(gp->optFields >= genePredExonFramesFld)
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
                     gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames));
     else
