@@ -255,33 +255,43 @@ static int altGraphXCalcHeight(struct track *tg, enum trackVisibility vis)
  */
 {
 int rows = 0;
+boolean tooMany = FALSE;
 if(vis == tvFull)
     {
     tg->lineHeight  = 2 * tl.fontHeight+1;
     tg->heightPer = tg->lineHeight -1;
     /* Try to layout the track in ultra full mode. */
     rows = altGraphXLayoutTrack(tg, 3*maxItemsInFullTrack+1);
+    tg->height = rows * tg->lineHeight;
+    /* If there are too many rows, spoof like we were
+       called in pack mode. */
     if(rows >= altGraphXMaxRows) 
 	{
-	struct hash *tmp = NULL;
-	vis = tvPack;
+	tooMany = TRUE;
+	tg->visibility = tvPack;
 	}
-    tg->height = rows * tg->lineHeight;
     }
-if(vis != tvFull)
+if(tooMany || vis != tvFull)
     {
     tg->drawItemAt = altGraphXDrawAt;
     tg->drawItems = genericDrawItems;
     tg->totalHeight = tgFixedTotalHeight;
     tg->itemHeight = tgFixedItemHeight;
+    /* Using the standard way to compute height needed, allows
+       features like to pack, squish, etc. However, it assigns height
+       to be too small for altGraphX in pack mode. */
     vis = limitVisibility(tg);
-    if(vis == tvPack)
+    if(tg->limitedVis == tvPack)
 	{
 	tg->lineHeight = 2 * tl.fontHeight + 1;
         tg->heightPer = tg->lineHeight - 1;
 	tg->height = 2 * tg->height;
 	}
     }
+/* If we're pretending to be in pack mode, remember
+   that we're really in full. */
+if(tooMany)
+    tg->visibility = tvFull;
 return tg->height;
 }
 
