@@ -3383,6 +3383,7 @@ cat `ls -1 *.lav | sort -g` \
 #   no need to reload
 
 # CHAIN DANRER1 BLASTZ (DONE, 2004-08-03, hartera)
+# FILTERED WITH A HIGHER MINSCORE THRESHOLD (DONE, 2004-08-04, hartera)
     # Re do chains with rescored blastz danRer1
     # Run axtChain on little cluster
     ssh kki
@@ -3434,15 +3435,22 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
+    # filter again to use minScore of 7500 (see featureBits below) (2004-08-04)
+    mv all.chain all.chain.filt5k
+    chainFilter -minScore=7500 all.chain.filt5k > all.chain
+    # remove old chains
+    rm -r chain
     chainSplit chain all.chain
-# take a look at score distr's,try also with larger bin size.
+    gzip all.chain.filt5k
+
+# take a look at score distr's,try also with smaller bin size.
     foreach f (chain/*.chain)
       grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
       echo $f:t:r >> hist.out
       textHistogram -binSize=10000 /tmp/score.$f:t:r >> hist.out
       echo ""
     end
-    # looks good so load into database
+    # also hist5000.out has bin size 5000. looks good so load into database
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer1/axtChain/chain
     foreach i (*.chain)
@@ -3450,6 +3458,145 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
         hgLoadChain mm5 ${c}_chainDanRer1 $i
         echo done $c
     end
+# featureBits still shows good coverage and enrichment
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Link -enrichment
+# refGene:cds 0.763%, chainDanRer1Link 2.246%, both 0.508%, cover 66.61%, 
+# enrich 29.65x
+# Human Parameters Blastz Chain with minScore = 5,000 filter:
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1HPLink -enrichment
+# refGene:cds 0.763%, chainDanRer1HPLink 1.208%, both 0.484%, cover 63.43%, 
+# enrich 52.49x
+# L=5000 Blastz Chain with minScore = 5,000 filter:
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1L5kLink -enrichment
+# refGene:cds 0.763%, chainDanRer1L5kLink 4.137%, both 0.534%, cover 69.96%, 
+# enrich 16.91x
+# L=5000 Blastz Chain with minScore =10,000 filter:
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1L5k10kLink -enrichment
+# refGene:cds 0.763%, chainDanRer1L5k10kLink 1.038%, both 0.448%, cover 58.69%,
+# enrich 56.54x
+# filter too stringent, coverage has dropped a lot
+# with less filtering of blastzDanRer1 where minScore =3000
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Filt3kLink -enrichment
+# refGene:cds 0.763%, chainDanRer1Filt3kLink 2.487%, both 0.509%, cover 66.78%,
+# enrich 26.86x
+# with more filtering, minScore = 6000
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Filt6kLink -enrichment
+# refGene:cds 0.763%, chainDanRer1Filt6kLink 2.172%, both 0.508%, cover 66.54%, # enrich 30.64x
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Filt7500Link -enrichment
+# refGene:cds 0.763%, chainDanRer1Filt75kLink 2.022%, both 0.504%, cover 66.10%,# enrich 32.70x
+
+# rows in database table:
+# chr1_blastzDanRer1Link: 515119
+# chr1_chainDanRer1L5kLink: 1241480
+# chr1_chainDanRer1L5k10kLink: 74963
+# chr1_chainDanRer1HPLink: 309740
+# chr1_chainDanRer1Filt3k: 594057
+# chr1_chainDanRer1Filt6kLink: 479368 
+# chr1_chainDanRer1Filt7500Link: 378954
+# Using the original parameters is a good compromise between high coverage
+# and high enrichment but a filter of 7500 on the score produces only a tiny
+# reduction in coverage with higher enrichment as there are a lot less 
+# alignments of low score of the same regions or other low scoring alignments.
+
+# NET DANRER1 BLASTZ (DONE, 2004-08-04, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 103493632, utime 668 s/100, stime 127
+
+# Add classification info using db tables:
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    mkdir -p /cluster/bluearc/danRer1/linSpecRep.notInMouse
+    cp /iscratch/i/mm5/linSpecRep.notInZebrafish/* \
+       /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    cp /iscratch/i/danRer1/linSpecRep.notInMouse/* \
+       /cluster/bluearc/danRer1/linSpecRep.notInMouse
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    time netClass noClass.net mm5 danRer1 danRer1.net \
+         -tNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish \
+         -qNewR=/cluster/bluearc/danRer1/linSpecRep.notInMouse -noAr
+    # 77.700u 46.610s 3:05.75 66.9%   0+0k 0+0io 215pf+0w
+    netFilter -minGap=10 danRer1.net |  hgLoadNet mm5 netDanRer1 stdin
+
+# EXTRACT AXTs AND MAFs FROM ZEBRAFISH (danRer1) NET
+# (DONE, 2004-08-04, hartera)
+    ssh eieio
+    # create axts
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    netSplit danRer1.net danRer1Net
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (danRer1Net/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt danRer1Net/$c.net chain/$c.chain \
+                 /cluster/data/mm5/mixedNib \
+                 /cluster/data/danRer1/nib ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+                                                                                
+    chmod +x axtNet.csh
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+
+    # sort axts before making mafs - must be sorted for multiz
+    cd /cluster/data/mm5/bed/blastz.danRer1
+    mv axtNet axtNet.unsorted
+    mkdir axtNet
+    foreach f (axtNet.unsorted/*.axt)
+        set c = $f:t:r
+        echo "Sorting $c"
+        axtSort $f axtNet/$c.axt
+    end
+    # create maf
+    ssh eieio
+    cd /cluster/data/mm5/bed/blastz.danRer1
+    cd axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.danRer1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/mm5/chrom.sizes /cluster/data/danRer1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=mm5.  -qPrefix=danRer1.
+    end
+'EOF'
+    chmod +x makeMaf.csh
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+ 
+# BLASTZ DANRER1 CLEAN UP (in progress, 2004-08-04, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer1
+    nice rm -rf raw &
+    nice rm -rf lav &
+    nice rm -rf axtChrom.orig &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
 
 # UPDATE BACEND SEQUENCES (DONE - 2004-07-20 - Fan)
 
