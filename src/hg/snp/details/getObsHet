@@ -20,15 +20,15 @@ while (<>)
 		{   # alleles should be read into hash for compatibility 
 		    # with triallelic polymorphisms; reset variables if null
 		    $a2 = "$a1/$a2";
-		    $a1 = "not_biallelic";
+		    $a1 = "(not_biallelic)";
 		}
 
-		if ($seq5  eq "") {$seq5  = "n";              }
-		if ($seq3  eq "") {$seq3  = "n";              }
-		if ($valid eq "") {$valid = "no-information"; }
-		if ($a1    eq "") {$a1    = "?";              }
-		if ($a2    eq "") {$a2    = "?";              }
-		if ($func  eq "") {$func  = "X,";             }
+		if ($seq5  eq "") {$seq5  = "n";               }
+		if ($seq3  eq "") {$seq3  = "n";               }
+		if ($valid eq "") {$valid = "no-information,"; }
+		if ($a1    eq "") {$a1    = "?";               }
+		if ($a2    eq "") {$a2    = "?";               }
+		if ($func  eq "") {$func  = "X,";              }
 
 		substr($valid, -1) = ""; # remove last character
 		substr($func,  -1) = ""; # remove last character
@@ -55,7 +55,6 @@ while (<>)
 	        {$hetSE += $2;}
 	    elsif (/<(NSE-rs_validated-)(\S+) value=\"true\"\/>/)   
 	        {if (index($valid,$2)== -1) {$valid .= "$2,";}}
-#	        {$valid .= $2;}
 	    elsif (/<(NSE-FxnSet_fxn-class-contig value=\")(\S+)\"\/>/)
 	        {if (index($func,$2)== -1) {$func .= "$2,";}}
 	}

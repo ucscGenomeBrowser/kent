@@ -31,7 +31,8 @@ void calxy(int xin, int yin, int *outxp, int *outyp)
 *outyp = yin         + currentYoffset;
 }
 
-// original calxy without trackOrigOffset, may be useful if track names needed at the left
+/* original calxy without trackOrigOffset, may be useful 
+   if track names needed at the left */
 void calxy0(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
    drawing coordinate with scaling and minor adjustments */
@@ -60,7 +61,6 @@ cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
 void mapBoxTrackTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-//hPrintf("HREF=\"../goldenPath/help/pb%s.shtml\"", tagName);
 hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
@@ -92,13 +92,13 @@ int abnormal;
 int ia = -1;
 double pctLow[20], pctHi[20];
 
-// count frequency for each residue for current protein
+/* count frequency for each residue for current protein */
 chp = aa;
 for (j=0; j<20; j++) 
     {
     aaResCnt[j] = 0;
        
-    // get cutoff threshold value pairs
+    /* get cutoff threshold value pairs */
     sprintf(cond_str, "AA='%c'", aaAlphabet[j]);
     answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
     pctLow[j] = (double)(atof(answer));
@@ -140,7 +140,7 @@ for (index=0; index < len; index++)
 	    }
 	}
 
-    //skip non-standard AA alphabets
+    /* skip non-standard AA alphabets */
     if (ia == -1) break;
 
     calxy(index, *yOffp, &xx, &yy);
@@ -169,12 +169,12 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "pepAnom");
 
-// update y offset
+/* update y offset */
 *yOffp = *yOffp + 15;
 }
 
 void doCharge(char *aa, int len, int *yOffp)
-// draw polarity track
+/* draw polarity track */
 {
 char res;
 int index;
@@ -223,7 +223,7 @@ vgTextRight(g_vg, xx-14, yy, 10, 10, pbRed, g_font, "-");
 }
 
 void doHydrophobicity(char *aa, int len, int *yOffp)
-// draw Hydrophobicity track
+/* draw Hydrophobicity track */
 {
 char res;
 int index;
@@ -284,7 +284,7 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle
 }
 
 void doCysteines(char *aa, int len, int *yOffp)
-// draw track for Cysteines and Glycosylation
+/* draw track for Cysteines and Glycosylation */
 {
 char res;
 int index;
@@ -347,12 +347,12 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+8, trackTitleLen*6+12, 12, trackTitle
 }
 
 void doAAScale(int len, int *yOffp, int top_bottom)
-// draw the track to show AA scale
+/* draw the track to show AA scale */
 {
 char res;
 int index;
    
-int tb;	// top or bottom flag
+int tb;	/* top or bottom flag */
   
 int xx, yy;
 int h;
@@ -409,11 +409,11 @@ if (markedIndex != len)
     {
     calxy(len, *yOffp, &xx, &yy);
     
-    // make the end tick a little taller than regular tick
+    /* make the end tick a little taller than regular tick */
     vgBox(g_vg, xx-pbScale/2, yy-14*tb, 1, 14, MG_BLACK);
     sprintf(scale_str, "%d", len);
 
-    // label the end tick with a vertical offset so that it won't overlap with regular ticks
+    /* label the end tick with a vertical offset so that it won't overlap with regular ticks */
     vgText(g_vg, xx-pbScale/2+4, yy+12-28*tb, MG_BLACK, g_font, scale_str);
     }
 
@@ -432,7 +432,7 @@ void mapBoxExon(int xIn, int y, int width, int height, char *mrnaID,
 		int exonNum, char *chrom, int exonGenomeStartPos, int exonGenomeEndPos)
 {
 int x;
-// prevent the mapBox spill over to the label
+/* prevent the mapBox spill over to the label */
 x = xIn;
 if (x < 120) x = 120;
 
@@ -450,7 +450,7 @@ hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 }
 
 int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
-// calculate the appropriate X offset for the previous Genome Browser position range
+/* calculate the appropriate X offset for the previous Genome Browser position range */
 {
 int xx, yy, xx0;
 int i, j;
@@ -469,7 +469,7 @@ int jPrevExonPos = 0;
 int prevGBOffset;
 int jcnt = 0;
 
-// The imaginary mRNA length is 3 times of aaLen
+/* The hypothetical mRNA length is 3 times of aaLen */
 mrnaLen = aaLen * 3;
 
 jPrevStart = mrnaLen-1;
@@ -496,7 +496,7 @@ if (strand == '-')
 	    }
     	}
 
-    // handle special cases at both ends when previous GB position is outside CDS
+    /* handle special cases at both ends when previous GB position is outside CDS */
     if (prevGBStartPos < blockGenomeStartPositive[exonCount-1]) 
     	jPrevExonPos = blockEndPositive[exonCount-1] + 3;
     if (prevGBEndPos > blockGenomeStartPositive[0]) 
@@ -514,7 +514,7 @@ else
 	    }
     	}
 
-    // handle special cases at both ends when previous GB position is outside CDS
+    /* handle special cases at both ends when previous GB position is outside CDS */
     if (prevGBStartPos < blockGenomeStartPositive[0]) 
     	jPrevExonPos = blockStartPositive[0];
     if (prevGBEndPos > blockGenomeEndPositive[exonCount-1]) 
@@ -572,7 +572,7 @@ return(prevGBOffset);
 }
 
 void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
-// draw the previous Genome Browser position range
+/* draw the previous Genome Browser position range */
 {
 int xx, yy, xx0;
 int i, j;
@@ -596,7 +596,7 @@ int jPrevExonPos = 0;
 Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-// The imaginary mRNA length is 3 times of aaLen
+/* The imaginary mRNA length is 3 times of aaLen */
 mrnaLen = aaLen * 3;
 
 exonColor[0] = pbBlue;
@@ -623,12 +623,12 @@ if (strand == '-')
 	    {
 	    iPrevExon = i;
 	    jPrevExonPos = blockStartPositive[i+1];
-    	    //printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], 
-	    //prevGBStartPos, blockGenomeStartPositive[i]);fflush(stdout);
+    	    /*printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], */
+	    /*prevGBStartPos, blockGenomeStartPositive[i]);fflush(stdout); */
 	    }
     	}
 
-    // handle special cases at both ends when previous GB position is outside CDS
+    /* handle special cases at both ends when previous GB position is outside CDS */
     if (prevGBStartPos < blockGenomeStartPositive[exonCount-1]) 
     	jPrevExonPos = blockEndPositive[exonCount-1] + 3;
     if (prevGBEndPos > blockGenomeStartPositive[0]) 
@@ -646,7 +646,7 @@ else
 	    }
     	}
 
-    // handle special cases at both ends when previous GB position is outside CDS
+    /* handle special cases at both ends when previous GB position is outside CDS */
     if (prevGBStartPos < blockGenomeStartPositive[0]) 
     	jPrevExonPos = blockStartPositive[0];
     if (prevGBEndPos > blockGenomeEndPositive[exonCount-1]) 
@@ -719,7 +719,7 @@ if (jcnt > 0)
     }
 else
     {
-    //calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
+    /*calxy(jPrevExonPos/3, *yOffp, &xx, &yy); */
     if (jPrevExonPos <= 0)
 	{
         calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
@@ -765,7 +765,7 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-15, trackTitleLen*6+12, 14, trackTitl
 }
 
 void doExon(int exonCount, char *chrom, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
-// draw the track for exons
+/* draw the track for exons */
 {
 int xx, yy;
 int i, j;
@@ -782,7 +782,7 @@ Color exonColor[2];
 Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-// The hypothetical mRNA length is 3 times of aaLen
+/* The hypothetical mRNA length is 3 times of aaLen */
 mrnaLen = aaLen * 3;
 
 exonColor[0] = pbBlue;
@@ -896,12 +896,15 @@ char *chp, *chp2;
 int  i,l;
 int  ii = 0;
 int  int_start, int_end;
-    
+
+   
+if (!hTableExists("sfAssign")) return(0);
+ 
 conn  = hAllocConn();
 conn2 = hAllocConn();
 
-// two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
-// valid translation_name
+/* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
+   valid translation_name */
 sprintf(cond_str, "external_name='%s'", protDisplayID);
 transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
 if (transcriptName == NULL)
@@ -934,12 +937,12 @@ while (row != NULL)
     region   = row[3];
     eValue   = row[4];
     sfID     = row[5];
-    //sfDesc   = row[6];
-    // !!! the recent Suprefamily sfAssign table does not have valid sf description
+    /* sfDesc   = row[6]; */
+    /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
     sprintf(cond_str, "id=%s;", sfID);
     sfDesc = sqlGetField(conn2, database, "sfDes", "description", cond_str);
 
-    //!!! refine logic here later to be defensive against illegal syntax
+    /* !!! refine logic here later to be defensive against illegal syntax */
     chp = region;
     done = 0;
     while (!done)
@@ -1000,7 +1003,7 @@ vgBox(vg, x+width, 	y-1, 		1, 		height+2, MG_BLACK);
 }
 
 void doSuperfamily(char *pepName, int sf_cnt, int *yOffp)
-// draw the Superfamily track
+/* draw the Superfamily track */
 {
 int xx, yy;
 int h;
@@ -1011,7 +1014,7 @@ int sf_len, name_len;
 int show_name;
 Color sfColor;
     
-//sfColor = vgFindColorIx(g_vg, 0xf7, 0xe8, 0xaa);
+/* sfColor = vgFindColorIx(g_vg, 0xf7, 0xe8, 0xaa); */
 sfColor = MG_YELLOW;
    
 currentYoffset = *yOffp;
@@ -1061,7 +1064,7 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle
 }
 
 void doResidues(char *aa, int len, int *yOffp)
-// draw track for AA residue
+/* draw track for AA residue */
 {
 char res;
 int index;
@@ -1085,7 +1088,7 @@ for (index=0; index < len; index++)
     res_str[0] = aa[index];
     calxy(index+1, *yOffp, &xx, &yy);
 	
-    //vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    /* vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str); */
     if (pbScale >= 18)
 	{
 	vgTextRight(g_vg, xx-3-16, yy, 10, 10, MG_BLACK, g_font, res_str);
@@ -1109,7 +1112,7 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle
 }
 
 void doDnaTrack(char *chrom, char strand, int exonCount, int len, int *yOffp)
-// draw track for AA residue
+/* draw track for AA residue */
 {
 char res;
 int index;
@@ -1139,7 +1142,7 @@ int dnaLen;
 Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-//exonColor[0] = pbBlue;
+/* exonColor[0] = pbBlue; */
 exonColor[0] = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
 exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
 
@@ -1149,7 +1152,7 @@ currentYoffset = *yOffp;
 
 calxy(0, *yOffp, &xx, &yy);
 
-// The imaginary mRNA length is 3 times of aaLen
+/* The hypothetical mRNA length is 3 times of aaLen */
 mrnaLen = len * 3;
             
 exonNumber = 1;
@@ -1347,7 +1350,7 @@ dnaUtilOpen();
 
 l=strlen(aa);
 
-// initialize AA properties
+/* initialize AA properties */
 aaPropertyInit(&hasResFreq);
 
 sfCount = getSuperfamilies(proteinID);
@@ -1361,20 +1364,21 @@ if (mrnaID != NULL)
 	trackOrigOffset = prevGBOffsetSav;
     	if (trackOrigOffset > (protSeqLen*pbScale - 600))
 	    trackOrigOffset = protSeqLen*pbScale - 600;
-	// prevent negative value
+	/* prevent negative value */
 	if (trackOrigOffset < 0) trackOrigOffset = 0;
 	}
 
-    // if this if for PDF/Postscript, the trackOrigOffset is already calculated previously,
-    // use the saved value
+    /* if this if for PDF/Postscript, the trackOrigOffset is already calculated previously,
+        use the saved value */
     if (psOutput != NULL)
     	{
     	trackOrigOffset = atoi(cartOptionalString(cart, "pbt.trackOffset"));
     	}
     }
 
-//printf("<br>%d %d<br>%d %d\n", prevGBStartPos, prevGBEndPos, 
-//	blockGenomeStartPositive[exCount-1], blockGenomeStartPositive[0]); fflush(stdout);
+/*printf("<br>%d %d<br>%d %d\n", prevGBStartPos, prevGBEndPos, 
+	blockGenomeStartPositive[exCount-1], blockGenomeStartPositive[0]); fflush(stdout);
+*/
 if (strand == '-')
     {
     if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
@@ -1414,7 +1418,7 @@ pixHeight = 260;
 
 if (sfCount > 0) pixHeight = pixHeight + 20;
 
-//make room for individual residues display
+/* make room for individual residues display */
 if (pbScale >=6)  pixHeight = pixHeight + 20;
 if (pbScale >=18) pixHeight = pixHeight + 30;
 
@@ -1468,7 +1472,7 @@ hPrintf("<MAP Name=%s>\n", mapName);
 
 vgSetClip(vg, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
 
-// start drawing indivisual tracks
+/* start drawing indivisual tracks */
 
 doAAScale(l, yOffp, 1);
 
@@ -1503,7 +1507,7 @@ vgClose(&vg);
 /* Finish map and save out picture and tell html file about it. */
 hPrintf("</MAP>\n");
 
-// put tracks image here
+/* put tracks image here */
 
 hPrintf(
 "\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
@@ -1515,12 +1519,12 @@ hPrintf("Explanation of Protein Tracks</A><br>");
 sprintf(trackOffset, "%d", trackOrigOffset);
 cgiMakeHiddenVar("trackOffset", trackOffset);
 
-//remember where the AA base origin is so that it can be passed to next PB page
+/* remember where the AA base origin is so that it can be passed to next PB page */
 aaOrigOffset = trackOrigOffset/pbScale;
 sprintf(aaOrigOffsetStr, "%d", aaOrigOffset);
 cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
 
-// save the following state variables, to be used by PDF/Postcript processing
+/* save the following state variables, to be used by PDF/Postcript processing */
 cartSetString(cart,"pbt.pbScaleStr", pbScaleStr);
 cartSetString(cart,"pbt.trackOffset", trackOffset);
 cartSaveSession(cart);

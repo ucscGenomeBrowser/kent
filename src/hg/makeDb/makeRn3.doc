@@ -3003,7 +3003,7 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # ecoresFr1.html and ecoresTetraodon.html
 
 # Affymetrix RAE230 GeneChip track - affyRAE230
-# [DONE, hartera, 2003-03-26]
+# [DONE, hartera, 2004-03-26]
 
     mkdir /projects/compbio/data/microarray/affyRat
     # Download RAE230A and RAE230B consensus sequences from Affymetrix web site
@@ -3181,4 +3181,284 @@ sys     16m13.770s
 	wigData5_1K/*.wig
     # and symlink these .wib files into /gbdb
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/rn3/wib/gc5Base
+######## PROTEOME BROWSER BUILD #######  (PARTIALLY DONE - 2004-04-14 - Fan)
 
+o Create the working directory
+
+  mkdir /cluster/store3/rn3/bed/pb
+  cd /cluster/store3/rn3/bed/pb 
+
+o save old PB tables (if they exist) to the backup DB, kgRn3Sav
+
+From mysql prompt:
+
+alter table rn3.pepCCntDist rename as kgRn3Sav.pepCCntDist;
+alter table rn3.pepExonCntDist rename as kgRn3Sav.pepExonCntDist;
+alter table rn3.pepHydroDist rename as kgRn3Sav.pepHydroDist;
+alter table rn3.pepIPCntDist rename as kgRn3Sav.pepIPCntDist;
+alter table rn3.pepMolWtDist rename as kgRn3Sav.pepMolWtDist;
+alter table rn3.pepMwAa rename as kgRn3Sav.pepMwAa;
+alter table rn3.pepPi rename as kgRn3Sav.pepPi;
+alter table rn3.pepPiDist rename as kgRn3Sav.pepPiDist;
+alter table rn3.pepResDist rename as kgRn3Sav.pepResDist;
+
+alter table rn3.pbAaDistA rename as kgRn3Sav.pbAaDistA;
+alter table rn3.pbAaDistC rename as kgRn3Sav.pbAaDistC;
+alter table rn3.pbAaDistD rename as kgRn3Sav.pbAaDistD;
+alter table rn3.pbAaDistE rename as kgRn3Sav.pbAaDistE;
+alter table rn3.pbAaDistF rename as kgRn3Sav.pbAaDistF;
+alter table rn3.pbAaDistG rename as kgRn3Sav.pbAaDistG;
+alter table rn3.pbAaDistH rename as kgRn3Sav.pbAaDistH;
+alter table rn3.pbAaDistI rename as kgRn3Sav.pbAaDistI;
+alter table rn3.pbAaDistK rename as kgRn3Sav.pbAaDistK;
+alter table rn3.pbAaDistL rename as kgRn3Sav.pbAaDistL;
+alter table rn3.pbAaDistM rename as kgRn3Sav.pbAaDistM;
+alter table rn3.pbAaDistN rename as kgRn3Sav.pbAaDistN;
+alter table rn3.pbAaDistP rename as kgRn3Sav.pbAaDistP;
+alter table rn3.pbAaDistQ rename as kgRn3Sav.pbAaDistQ;
+alter table rn3.pbAaDistR rename as kgRn3Sav.pbAaDistR;
+alter table rn3.pbAaDistS rename as kgRn3Sav.pbAaDistS;
+alter table rn3.pbAaDistT rename as kgRn3Sav.pbAaDistT;
+alter table rn3.pbAaDistV rename as kgRn3Sav.pbAaDistV;
+alter table rn3.pbAaDistW rename as kgRn3Sav.pbAaDistW;
+alter table rn3.pbAaDistY rename as kgRn3Sav.pbAaDistY;
+alter table rn3.pbAnomLimit rename as kgRn3Sav.pbAnomLimit;
+alter table rn3.pbResAvgStd rename as kgRn3Sav.pbResAvgStd;
+alter table rn3.pbStamp rename as kgRn3Sav.pbStamp;
+
+
+o Define pep* tables in rn3 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+  First edit out pepPred table definition, then
+
+	hgsql rn3 < pepAll.sql
+
+
+o Build the pepMwAa table
+
+  hgsql proteins040315 -e "select info.acc, molWeight, aaSize from sp040315.info, sp040315.accToTaxon where accToTaxon.taxon=10116 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+
+hgsql rn3 <<end
+load data local infile "pepMwAa.tab" into table rn3.pepMwAa ignore 1 lines;
+end
+
+o Build the pepPi table
+
+  hgsql proteins040315 -e "select info.acc from sp040315.info, sp040315.accToTaxon where accToTaxon.taxon=10116 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp040315 pepPi.tab
+
+hgsql rn3 <<end
+load data local infile "pepPi.tab" into table rn3.pepPi;
+end
+
+o Calculate and load pep distributions
+
+  pbCalDist sp040315 proteins040315 10116 rn3
+
+  From mysql prompt:
+
+use rn3;
+
+load data local infile "pepExonCntDist.tab" into table rn3.pepExonCntDist;
+load data local infile "pepCCntDist.tab" into table rn3.pepCCntDist;
+load data local infile "pepHydroDist.tab" into table rn3.pepHydroDist;
+load data local infile "pepMolWtDist.tab" into table rn3.pepMolWtDist;
+load data local infile "pepResDist.tab" into table rn3.pepResDist;
+load data local infile "pepIPCntDist.tab" into table rn3.pepIPCntDist;
+load data local infile "pepPiDist.tab" into table rn3.pepPiDist;
+
+o Calculate frequency distributions
+
+  pbCalResStd sp040315 proteins040315 10116 rn3
+
+o Create pbAaDistX tables
+
+  cat  ~/kent/src/hg/lib/pbAaDist*.sql >pbAaAll.sql
+  hgsql rn3 < pbAaAll.sql
+
+  From mysql prompt:
+
+  use rn3;
+
+load data local infile "pbAaDistC.tab" into table rn3.pbAaDistC;
+load data local infile "pbAaDistM.tab" into table rn3.pbAaDistM;
+load data local infile "pbAaDistH.tab" into table rn3.pbAaDistH;
+load data local infile "pbAaDistY.tab" into table rn3.pbAaDistY;
+load data local infile "pbAaDistN.tab" into table rn3.pbAaDistN;
+load data local infile "pbAaDistF.tab" into table rn3.pbAaDistF;
+load data local infile "pbAaDistI.tab" into table rn3.pbAaDistI;
+load data local infile "pbAaDistD.tab" into table rn3.pbAaDistD;
+load data local infile "pbAaDistQ.tab" into table rn3.pbAaDistQ;
+load data local infile "pbAaDistK.tab" into table rn3.pbAaDistK;
+load data local infile "pbAaDistR.tab" into table rn3.pbAaDistR;
+load data local infile "pbAaDistT.tab" into table rn3.pbAaDistT;
+load data local infile "pbAaDistV.tab" into table rn3.pbAaDistV;
+load data local infile "pbAaDistP.tab" into table rn3.pbAaDistP;
+load data local infile "pbAaDistG.tab" into table rn3.pbAaDistG;
+load data local infile "pbAaDistE.tab" into table rn3.pbAaDistE;
+load data local infile "pbAaDistA.tab" into table rn3.pbAaDistA;
+load data local infile "pbAaDistA.tab" into table rn3.pbAaDistL;
+load data local infile "pbAaDistA.tab" into table rn3.pbAaDistS;
+
+o Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql rn3 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql rn3 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql rn3 -e 'load data local infile "pbResAvgStd.tab" into table rn3.pbResAvgStd;'
+   hgsql rn3 -e 'load data local infile "pbAnomLimit.tab" into table rn3.pbAnomLimit;'
+
+
+o Download data files from Ensembl and create ensGeneXref and ensTranscript tables
+
+     mkdir /cluster/bluearc/fan/ensembl/19_3bR
+     cd /cluster/bluearc/fan/ensembl/19_3bR
+
+     wget --timestamping \
+"ftp://ftp.ensembl.org/pub/rat-19.3b/data/mysql/rattus_norvegicus_lite_19_3b/gene_xref.txt.table.gz"
+
+     wget --timestamping \
+"ftp://ftp.ensembl.org/pub/rat-19.3b/data/mysql/rattus_norvegicus_lite_19_3b/transcript.txt.table.gz"
+
+     wget --timestamping \
+"ftp://ftp.ensembl.org/pub/rat-19.3b/data/mysql/rattus_norvegicus_lite_19_3b/rattus_norvegicus_lite_19_3b.sql.gz"
+
+     gzip -d *.gz
+
+  If rn3.ensGeneXref table already exists
+
+     alter table rn3.ensGeneXref rename as kgRn3Sav.ensGeneXref;
+
+  ENSEMBL IS KNOWN FOR CHANGING THEIR TABLE DEFINTION AND CONTENT!!!
+  So, first check if the table definition of gene_xref in rattus_norvegicus_lite_19_3b.sql
+  is the same as ~/src/hg/lib/ensGeneXref.sql.  If they are not the same, some
+  programming change to hgTracks.c and possibly other programs may be needed. 
+
+  If they are the same, create gensGeneXref table in rn3 by:
+
+     hgsql rn3 < ~/src/hg/lib/ensGeneXref.sql
+
+     hgsql rn3 -e 'load data local infile "gene_xref.txt.table" into table rn3.ensGeneXref;'
+
+  If rn3.ensTranscript exists
+
+  	alter table rn3.ensTranscript rename as kgRn3Sav.ensTranscript;
+ 
+  Again, check if the table definition of transcript in rattus_norvegicus_lite_19_3b.sql.gz
+  is the same as ~/src/hg/lib/ensTranscript.sql.  If they are not the same, some
+  programming change to hgTracks.c and possibly other programs may be needed. 
+
+  If they are the same, create gensTranscript table in rn3 by:
+
+     hgsql rn3 < ~/src/hg/lib/ensTranscript.sql
+ 
+     hgsql rn3 -e 'load data local infile "transcript.txt.table" into table rn3.ensTranscript;'
+
+
+o Download Superfamily data files and build the Superfamily DB
+  
+  Make sure an index on id is created for the des table of superfam040321.
+
+  Skip this step if it is already done.
+
+  	mkdir /cluster/store1/superFamily/040321
+	cd /cluster/store1/superFamily/040321
+
+  ftp over the following two files:
+
+	ass_28-Mar-2004.tab.gz
+	supfam_21-Mar-2004.sql.gz
+		
+   	hgsql superfam040321 < ~/src/hg/lib/sfAssign.sql
+
+   	hgsql superfam040321 -e \
+	   "load data local infile "ass_28-Mar-2004.tab" into table superfam040321.sfAssign;"
+
+o Build or rebuild Superfamily track and create sf tables needed for PB 
+  (TO BE DONE, Superfamily track needs Ensembl Genes track (ensGene table) to be created first)
+
+  If rn3.superfamily already exists
+
+	alter table rn3.superfamily rename as kgRn3Sav.superfamily;
+
+  hgSuperfam rn3 superfam040321 >doSf.log
+   
+  It is normal that many proteins does not have corresponding Superfamily entries.
+
+   	hgLoadBed rn3 superfamily sf.tab -tab
+
+   If rn3.sfDescription exists,
+
+   	alter table rn3.sfDescription rename as kgRn3Sav.sfDescription;
+
+   hgsql rn3 < ~/src/hg/lib/sfDescription.sql
+
+   hgsql rn3 -e 'LOAD DATA local INFILE "sfDesc.tab"  into table rn3.sfDescription;'
+
+   hgsql rn3 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/store1/superFamily/040331
+   
+   hgsql rn3 -e 'load data local infile "ass_28-Mar-2004.tab" into table rn3.sfAssign;'
+
+   If rn3.sfDes already exists,
+
+   	alter table rn3.sfDes rename as kgRn3Sav.sfDes;
+
+   hgsql superfam040321 -e "select * from des" >des.tab
+
+   hgsql rn3 < ~/src/hg/lib/sfDes.sql
+
+   hgsql rn3 -e 'load data local infile "des.tab" into table rn3.sfDes ignore 1 lines'
+
+o Create pbStamp table for PB
+   
+  If rn3.pbStamp already exists,
+
+  	hgsql rn3 -e "alter table rn3.pbStamps rename as kgRn3Sav.pbStamp;"
+
+  Create pbStam table
+
+	hgsql rn3 < ~/src/hg/lib/pbStamp.sql
+
+  cd ~/kent/src/hg/protein/pbTracks
+  hgsql rn3 -e 'load data local infile "pbStampRn3.tab" into table rn3.pbStamp;'
+
+o Enable Proteome Browser
+
+  if ~/kent/src/hg/hgGene/hgGeneData/Rat/links.ra does not exist:
+
+     cd ~/kent/src/hg/hgGene/hgGeneData/Rat
+     mkdir rn3
+     cd rn3
+
+     Create links.ra with the following content
+-----------------------------
+# rn3 link info.
+
+name protBrowser
+shortLabel Proteome Browser
+tables kgXref
+idSql select spDisplayID from kgXref where kgID = '%s'
+nameSql select spId from kgXref where kgID = '%s'
+url ../cgi-bin/pbTracks?proteinID=%s
+hgsid on
+dbInUrl on
+priority 12
+-----------------------------
+     cd ../..
+     make 
+
+o Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) by updating the pbStampMouse.tab 
+  file and then reload the pbStamp table. 
+
+o Perform preliminary review of Proteome Browser for rn3
+
+o Notify QA for formal review, when all PB build steps done.

@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.6 2004/03/04 07:58:53 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.7 2004/04/08 17:03:33 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1205,10 +1205,12 @@ for (tag = startTag; tag != endTag; tag = tag->next)
 	    tagAbort(page, tag, "</TR> outside of TABLE");
 	if (table->row == NULL)
 	    tagAbort(page, tag, "</TR> with no <TR>");
+#ifdef LEGAL_ACTUALLY
 	if (table->row->inTd)
 	    {
 	    tagAbort(page, tag, "</TR> while <TD> is open");
 	    }
+#endif /* LEGAL_ACTUALLY */
 	if (table->row->tdCount == 0)
 	    tagAbort(page, tag, "Empty row in <TABLE>");
 	freez(&table->row);
@@ -1219,9 +1221,13 @@ for (tag = startTag; tag != endTag; tag = tag->next)
 	    tagAbort(page, tag, "<%s> outside of <TABLE>", tag->name);
 	if ((row = table->row) == NULL)
 	    tagAbort(page, tag, "<%s> outside of <TR>", tag->name);
+#ifdef LEGAL_ACTUALLY
 	if (row->inTd)
+	    {
 	    tagAbort(page, tag, "<%s>...<%s> with no </%s> in between", 
 	    	tag->name, tag->name, tag->name);
+	    }
+#endif /* LEGAL_ACTUALLY */
 	row->inTd = TRUE;
 	row->tdCount += 1;
 	}

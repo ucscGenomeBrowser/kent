@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.39 2004/04/05 05:47:32 angie Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.41 2004/04/16 15:28:43 heather Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -149,7 +149,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word);
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word); 
 }
 
 static void checkChromName(char *word, int lineIx)

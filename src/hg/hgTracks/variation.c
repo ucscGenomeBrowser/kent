@@ -86,7 +86,7 @@ switch (snpColor)
  	return MG_RED;
  	break;
     case snpSourceGreen:
- 	return MG_GREEN;
+ 	return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
  	break;
     case snpSourceBlue:
  	return MG_BLUE;
@@ -106,25 +106,17 @@ struct snpMap *sm = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)sm->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)sm->chromEnd-winStart)*scale) + xOff;
-int w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 Color itemColor = tg->itemColor(tg, sm, vg);
 Color itemNameColor = tg->itemNameColor(tg, sm, vg);
 
-w = x2-x1;
-if (w < 1)
-    w = 1;
-vgBox(vg, x1, y, w, heightPer, itemColor);
+vgBox(vg, x1, y, 1, heightPer, itemColor);
 if (tg->drawName && vis != tvSquish)
     {
     /* Clip here so that text will tend to be more visible... */
     char *s = tg->itemName(tg, sm);
-    w = x2-x1;
-    printf("<BR>>%s:%d<",s,(int)itemNameColor);
-    if (w > mgFontStringWidth(font, s))
-	vgTextCentered(vg, x1, y, w, heightPer, itemNameColor, font, s);
     mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, x2 - x1, heightPer,
 	     tg->mapName, tg->mapItemName(tg, sm), NULL);
     }
@@ -201,7 +193,8 @@ else
         {
 	Color itemColor = tg->itemColor(tg, item, vg);
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
-        if (vis == tvFull) y += lineHeight;
+        if (vis == tvFull) 
+	    y += lineHeight;
         } 
     }
 }

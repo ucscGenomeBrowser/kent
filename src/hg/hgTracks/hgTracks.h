@@ -508,7 +508,7 @@ void pslMethods(struct track *track, struct trackDb *tdb,
 /* Load up psl type methods. */
 
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
-	int sizeMul, boolean isXeno, boolean nameGetsPos, char *mapName);
+	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg);
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 

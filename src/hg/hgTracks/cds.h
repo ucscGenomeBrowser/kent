@@ -30,7 +30,7 @@ struct simpleFeature *splitGenePredByCodon( char *chrom,
   cdsEnd. It only relies on the genomic sequence to determine the
   frame so it works with any gene prediction track*/
 
-int getCdsDrawOptionNum(char *mapName);
+int getCdsDrawOptionNum(struct track *tg);
 /*query the cart for the current track's CDS coloring option. See
  * cdsColors.h for return value meanings*/
 

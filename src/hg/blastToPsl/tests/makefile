@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest
+test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest
 
 
 protMrnaTest: mkdirs
@@ -27,6 +27,12 @@ blockBugTest: mkdirs
 	../blastToPsl input/blockBug.blast output/blockBugTest.psl
 	pslCheck output/blockBugTest.psl
 	diff -u expected/blockBugTest.psl output/blockBugTest.psl
+
+# handle id
+identityBugTest: mkdirs
+	../blastToPsl input/identityBug.blast output/identityBugTest.psl
+	pslCheck output/identityBugTest.psl
+	diff -u expected/identityBugTest.psl output/identityBugTest.psl
 
 clean::
 	rm -rf output

@@ -147,7 +147,7 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfExonSelTest fromGxfExonSelFrameTest \
 	fromGxfVegaTest fromGxfVegaFrameTest fromGxfVegaPseudoTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
-	fromGxfNcbiTest
+	fromGxfNcbiTest fromGxfRegressTest
 
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
@@ -182,6 +182,13 @@ fromGxfAcemblyFrameTest:
 # this crashed ldHgLoad gene
 fromGxfNcbiTest:
 	${doFromGxfTest} id=$@ what=fromGff inBase=ncbi.gff opts="-name2Fld -cdsStatFld -exonFramesFld -idFld -exonSelectWord=exon"
+
+# bug regression:
+#   - stop_codon wiping out frame on last CDS 
+#   - stop_codon being the only codon in an exon didn't get frame right
+fromGxfRegressTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=regress.gtf opts="-cdsStatFld -exonFramesFld"
+
 
 # recursive target for GFF/GTF tests
 #  id - test id

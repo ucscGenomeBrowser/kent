@@ -453,7 +453,6 @@ identifier chain[${chainDest}]Id
     $gbd.chain[].id $split
     $gbd.chain[]Link.chainId $split full
     $gbd.net[].chainId exclude=0
-    $gbd.allChain[].id full unique
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
@@ -524,8 +523,8 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
     $gbd.gbSeq.acc 
-    $gbd.mrna.acc full unique
     $gbd.gbStatus.acc full unique
+    $gbd.mrna.acc unique
     $gbd.imageClone.acc
     $gbd.altGraphX.mrnaRefs comma
 
@@ -1091,7 +1090,7 @@ dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRat
 dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
 dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRatio
 dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
-dependency $hg.gnfAtlasDistance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
+dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle

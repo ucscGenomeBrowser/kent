@@ -58,6 +58,7 @@ CREATE TABLE snp (
     strand     enum ('?','+','-') not null default '?',
     alleles    varchar(255)      not null,	# the sequence of the observed alleles
     source     enum (
+		 'dbSnp',               # generic dbSnp
 		 'BAC_OVERLAP',         # dbSnp
 		 'MIXED',               # dbSnp
 		 'RANDOM',              # dbSnp
@@ -68,21 +69,14 @@ CREATE TABLE snp (
 		 )               not null default 'unknown',
     class      enum (
 		 'unknown',             # default value
-		 'SNP',                 # Single Nucleotide Polymorphism
-		 'INDEL',               # Insertion or Deletion
-		 'SEGMENTAL'            # Segmental Duplication
+		 'snp',                 # Single Nucleotide Polymorphism
+		 'in-del',              # Insertion / Deletion
+		 'microsat',            # Microsatellite
+		 'named',               # Named mutation (mostly LAEGEDELETION and  LARGEINSERTION)
+		 'mnp',                 # Multiple Nucleotide Polymorphism (segmental, some should be mixed)
+		 'het',                 # heterozygous
+		 'mixed'                # multiple classes
 		 )               not null default 'unknown',
-    func       set (
-		 'unknown',   		# no functional classification
-		 'coding-synon',    	# synonymous mutation
-		 'coding-nonsynon', 	# non-synonymous mutation
-		 'mrna-utr',        	# untranslated region
-		 'intron',          	# intronic region
-		 'splice-site',     	# splice site
-		 'exception',       	# alignment gap
-		 'reference',       	# 
-		 'locus-region'    	# locus region
-		 ) 	         not null default 'unknown',
     valid      set (
 		 'no-information',	# no validation information
 		 'by-2hit-2allele',	# each allele seen in at least two individuals
@@ -92,6 +86,18 @@ CREATE TABLE snp (
 		 ) 	         not null default 'no-information',
     avHet      float             not null,	# the average heterozygosity from all observations
     avHetSE    float             not null,	# the Standard Error for the average heterozygosity
+    func       set (
+		 'unknown',   		# no functional classification
+		 'coding',    		# unknown coding mutation
+		 'coding-synon',    	# synonymous mutation
+		 'coding-nonsynon', 	# non-synonymous mutation
+		 'mrna-utr',        	# untranslated region
+		 'intron',          	# intronic region
+		 'splice-site',     	# splice site
+		 'exception',       	# alignment gap
+		 'reference',       	# 
+		 'locus-region'    	# locus region
+		 ) 	         not null default 'unknown',
               #Indices
     INDEX(chrom,bin),
     INDEX(chrom,chromStart),

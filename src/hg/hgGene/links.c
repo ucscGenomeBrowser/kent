@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.14 2004/04/09 16:56:10 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.15 2004/04/14 00:25:29 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -132,7 +132,11 @@ if (row != NULL)
     if (link->useHgsid)
 	dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
     if (link->useDb)
+	{
         dyStringPrintf(dy, "&db=%s", database);
+	if (stringIn("hgNear", link->url))
+	    dyStringPrintf(dy, "&near.oldOrg=%s", genome);
+	}
     url = cloneString(dy->string);
     dyStringFree(&dy);
     freez(&name);

@@ -57,6 +57,7 @@ searchName bdgpGenePrefix
 searchTable bdgpGene
 searchMethod exact
 termRegex CG[0-9]+
+dontCheck CG[0-9]+-R[A-Z]
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 searchPriority 16
 
@@ -80,6 +81,7 @@ searchName bdgpNonCodingPrefix
 searchTable bdgpNonCoding
 searchMethod exact
 termRegex (TE|CR)[0-9]+
+dontCheck (TE|CR)[0-9]+-R[A-Z]
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 searchPriority 19
 

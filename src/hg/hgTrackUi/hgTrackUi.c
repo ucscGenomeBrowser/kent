@@ -14,7 +14,10 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.95 2004/04/09 11:37:44 weber Exp $";
+#define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
+
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.97 2004/04/13 15:57:29 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -242,15 +245,32 @@ printf(" red/blue ");
 }
 
 
-void cdsColorOptions(char *tableName, int value)
+void cdsColorOptions(struct trackDb *tdb, int value)
 /*Codon coloring options*/
 {
     char *drawOption;
+    char *drawOptionsDefault;
+    char *cdsDrawDefault;
     char cdsColorVar[128];
+    boolean isGenePred = (value >= 0);
+    
+    if (isGenePred)
+        drawOptionsDefault = "enabled";
+    else
+        drawOptionsDefault = "disabled";
+    if(sameString(trackDbSettingOrDefault(tdb,
+                  "cdsDrawOptions", drawOptionsDefault), "disabled"))
+        return;
+    
     printf("<p>Color track by codons:</b>");
-    safef(cdsColorVar, 128, "%s.cds.draw", tableName );
-    drawOption = cartUsualString(cart, cdsColorVar, CDS_DRAW_DEFAULT);
+    safef(cdsColorVar, 128, "%s.cds.draw", tdb->tableName );
+    cdsDrawDefault = trackDbSettingOrDefault(tdb, "cdsDrawDefault", CDS_DRAW_DEFAULT);
+    drawOption = cartUsualString(cart, cdsColorVar, cdsDrawDefault);
     cdsColorDropDown(cdsColorVar, drawOption, value);
+    if(value>0)
+        printf("(<a href=%s>genePred coloring help</a>)<br>",CDS_HELP_PAGE);
+    else
+        printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
 }
 
 void refGeneUI(struct trackDb *tdb)
@@ -263,8 +283,7 @@ radioButton("refGene.label", refGeneLabel, "accession");
 radioButton("refGene.label", refGeneLabel, "both");
 radioButton("refGene.label", refGeneLabel, "none");
 
-cdsColorOptions(tdb->tableName, 2);
-
+cdsColorOptions(tdb, 2);
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
@@ -300,6 +319,7 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
+cdsColorOptions(tdb, -1);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -782,14 +802,13 @@ else
     wordCount = chopLine(typeLine, words);
     
     if (sameWord(words[0], "genePred"))
-	        cdsColorOptions(tdb->tableName, 2);
+	        cdsColorOptions(tdb, 2);
     else if (sameWord(words[0], "psl"))
                 {
                 if (wordCount == 3)
                         if(sameWord(words[1], "xeno"))
 	                        crossSpeciesUi(tdb);
-
-                /*cdsColorOptions(tdb->tableName,-1);*/
+                cdsColorOptions(tdb,-1);
                 }
     freeMem(typeLine);
     }

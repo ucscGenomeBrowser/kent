@@ -13,11 +13,12 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.5 2004/04/09 03:22:38 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.6 2004/04/13 17:53:58 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
 #define REGEX_OPTIONS (REG_NOSUB | REG_EXTENDED | REG_ICASE)
+#define REGEX_SUBSTR_OPTIONS (REG_EXTENDED | REG_ICASE)
 
 static regex_t *compileRegex(char *exp, char *what, int compileFlags)
 /* Compile exp (or die with an informative-as-possible error message). 
@@ -56,6 +57,17 @@ boolean matchRegex(char *name, char *exp)
 regex_t *compiledExp = compileRegex(exp, "Regular expression", REGEX_OPTIONS);
 return(regexec(compiledExp, name, 0, NULL, 0) == 0);
 }
+
+boolean matchRegexSubstr(char *name, char *exp, regmatch_t substrArr[],
+			 size_t substrArrSize)
+/* Return TRUE if name matches exp (case insensitive); regexec fills in 
+ * substrArr with substring offsets. */
+{
+regex_t *compiledExp = compileRegex(exp, "Regular expression w/substrings",
+				    REGEX_SUBSTR_OPTIONS);
+return(regexec(compiledExp, name, substrArrSize, substrArr, 0) == 0);
+}
+
 
 static void anchorTermRegex(struct hgFindSpec *hfs)
 /* termRegex must match the whole term.  If it doesn't already start with 

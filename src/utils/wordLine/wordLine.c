@@ -2,8 +2,15 @@
  * word to each line. */
 #include "common.h"
 #include "linefile.h"
+#include "options.h"
+#include "tokenizer.h"
 
-static char const rcsid[] = "$Id: wordLine.c,v 1.3 2003/05/06 07:41:09 kate Exp $";
+static char const rcsid[] = "$Id: wordLine.c,v 1.4 2004/04/09 05:20:56 kent Exp $";
+
+static struct optionSpec optionSpecs[] = {
+    {"csym", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -13,7 +20,10 @@ errAbort(
  "word to each line.\n"
  "usage:\n"
  "    wordLine inFile(s)\n"
- "Output will go to stdout.");
+ "Output will go to stdout."
+ "Options:\n"
+ "    -csym - Break up words based on C symbol rules rather than white space\n"
+ );
 }
 
 void wordLine(char *file)
@@ -36,13 +46,33 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
+void tokenLine(char *file)
+/* tokenLine - chop up words by c-tokens and output one per line. */
+{
+struct tokenizer *tok = tokenizerNew(file);
+char *s;
+
+tok->leaveQuotes = TRUE;
+tok->uncommentC = TRUE;
+tok->uncommentShell = TRUE;
+while ((s = tokenizerNext(tok)) != NULL)
+    puts(s);
+tokenizerFree(&tok);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 int i;
+optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
 for (i=1; i<argc; ++i)
-    wordLine(argv[i]);
+    {
+    if (optionExists("csym"))
+	tokenLine(argv[i]);
+    else
+	wordLine(argv[i]);
+    }
 return 0;
 }

@@ -41,7 +41,9 @@ DBS = 	hg13 hg15 hg16 \
 	pyrHor1 \
 	geoSul1 \
 	deiRad1 \
-	haloSp1
+	haloSp1 \
+	synSp1 \
+	vibCho1
 
 MGC_DBS = \
 	hg15 hg16 \

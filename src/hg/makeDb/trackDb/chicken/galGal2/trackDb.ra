@@ -240,6 +240,16 @@ altColor 255,220,100
 spectrum on
 type bed 6
 
+track unAnnotated
+shortLabel unAnnotated
+longLabel Regions not annotated as genes/mRNAs/ESTs/CpG/repeats/gaps
+group x
+priority 129.5
+visibility hide
+color 20,0,50
+spectrum on
+type bed 4
+
 
 
 searchTable bgiSnp

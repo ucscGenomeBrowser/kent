@@ -34,11 +34,14 @@ int main(int argc, char *argv[])
 char  SWISS_DB[20] = {"SWISS"};
 char TREMBL_DB[20] = {"TrEMBL"};
 char *bioDB;
+
+char *skippedKgId;
+char *lastValidKgId;
     
-struct sqlConnection *conn, *conn2, *conn3, *conn4;
-struct sqlResult *sr, *sr2, *sr3, *sr4;
-char query[256], query2[256], query3[256], query4[256];
-char **row, **row2, **row3, **row4;
+struct sqlConnection *conn2, *conn3;
+struct sqlResult *sr2, *sr3;
+char query2[256], query3[256];
+char **row, **row2, **row3;
     
 char *proteinID;
 FILE   *o3, *o7;
@@ -70,7 +73,7 @@ char *sp, *ep;
 int  aalen;
 int  cdsS, cdsE;
 int  eS, eE;
-  
+ 
 if (argc != 3) usage();
     
 proteinDataDate = argv[1];
@@ -81,34 +84,37 @@ sprintf(proteinsDB, "proteins%s", proteinDataDate);
  
 o3 = fopen("j.dat", "w");
 o7 = fopen("jj.dat", "w");
+
 conn2= hAllocConn();
 conn3= hAllocConn();
-conn4= hAllocConn();
     
 inf  = mustOpen("sorted.lis", "r");
 
 strcpy(oldInfo, "");
 
-isDuplicate   = 0;
-oldMrnaStr    = NULL;
-oldAlignStr   = NULL;
-oldProteinStr = NULL;
+skippedKgId   = strdup("");
+lastValidKgId = strdup("");
 
-mrnaStr       = NULL;
-proteinStr    = NULL;
-alignStr      = NULL;
+isDuplicate   = 0;
+oldMrnaStr    = strdup("");
+oldAlignStr   = strdup("");
+oldProteinStr = strdup("");
+
+mrnaStr       = strdup("");
+proteinStr    = strdup("");
+alignStr      = strdup("");
 
 while (fgets(line_in, 10000, inf) != NULL)
     {
     strcpy(line, line_in);
 
-    chp = strstr(line, "\t");	//chrom
+    chp = strstr(line, "\t");	/* chrom */
     chp ++;
 
-    chp = strstr(chp, "\t");	//cds block start position
+    chp = strstr(chp, "\t");	/* cds block start position */
     chp ++;
 
-    chp = strstr(chp, "\t");	//cds block end   position
+    chp = strstr(chp, "\t");	/* cds block end   position */
     *chp = '\0';
     chp++;
     strcpy(newInfo, line);
@@ -130,38 +136,41 @@ while (fgets(line_in, 10000, inf) != NULL)
 	isDuplicate = 0;
 	}
 
-    chp = strstr(chp, "\t");	//priority score
+    chp = strstr(chp, "\t");	/* priority score */
     chp ++;
 		
-    chp = strstr(chp, "\t");	//mRNA transcription length 
+    chp = strstr(chp, "\t");	/* mRNA transcription length */ 
     chp ++;
 		
-    chp = strstr(chp, "\t");	//mRNA date
+    chp = strstr(chp, "\t");	/* mRNA date */
     chp ++;
 	
     mrnaStr = chp;	
-    chp = strstr(chp, "\t");	//mRNA ID
+    chp = strstr(chp, "\t");	/* mRNA ID */
     *chp = '\0';
     chp ++;
     mrnaStr = strdup(mrnaStr);
 
     proteinStr = chp;	
-    chp = strstr(chp, "\t");	//protein ID
+    chp = strstr(chp, "\t");	/* protein ID */
     *chp = '\0';
     chp ++;
     proteinStr = strdup(proteinStr);
 
     alignID = chp;
 
-    // get rid of "end-of-line" character at the end of the string
+    /* get rid of "end-of-line" character at the end of the string */
     chp = strstr(alignID, "\n");
     *chp = '\0';
     alignStr = strdup(alignID);
 
     if (isDuplicate)
 	{
-	fprintf(o7, "%s\t%s\t%s\t%s\n", 
-		oldMrnaStr, oldProteinStr, mrnaStr, proteinStr);
+	/* only put out records for valid KG entries */
+	if ((strcmp(oldMrnaStr, skippedKgId) != 0) || (strcmp(oldMrnaStr, lastValidKgId) == 0))
+	    {
+	    fprintf(o7, "%s\t%s\t%s\t%s\n", oldMrnaStr, oldProteinStr, mrnaStr, proteinStr);
+	    }
 	}
     else
 	{
@@ -259,10 +268,12 @@ while (fgets(line_in, 10000, inf) != NULL)
 			
 			proteinID,
 			alignID);
+		lastValidKgId = strdup(name);
 		}
 	    else
 		{
 		printf("skipping %s %d \n", name, cdsLen);
+		skippedKgId = strdup(name);
 		} 
 	    row2 = sqlNextRow(sr2);
 	    }
@@ -270,6 +281,7 @@ while (fgets(line_in, 10000, inf) != NULL)
 	}
     }
 hFreeConn(&conn2);
+hFreeConn(&conn3);
 fclose(o3);
 fclose(o7);
     

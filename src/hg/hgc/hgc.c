@@ -38,6 +38,7 @@
 #include "cpgIsland.h"
 #include "cpgIslandExt.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "pepPred.h"
 #include "wabAli.h"
 #include "genomicDups.h"
@@ -134,7 +135,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.607 2004/04/12 23:26:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.610 2004/04/13 17:47:50 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -183,6 +184,7 @@ struct customTrack *theCtList = NULL;
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 void printAlignments(struct psl *pslList, 
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
+char *getPredMRnaProtSeq(struct genePred *gp);
 
 void hgcStart(char *title)
 /* Print out header of web page with title.  Set
@@ -1482,18 +1484,32 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(pepName, pepTable))
+if (pepTable != NULL)
+    {
+    if (hGenBankHaveSeq(pepName, pepTable))
+        {
+        puts("<LI>\n");
+        hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+        printf("Predicted Protein</A> \n"); 
+        puts("</LI>\n");
+        }
+    }
+else
     {
     puts("<LI>\n");
-    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("Predicted Protein</A> \n"); 
+    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
+    printf("Translated Protein</A> from predicted mRNA \n"); 
     puts("</LI>\n");
     }
 
 puts("<LI>\n");
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("%s</A> may be different from the genomic sequence.\n", 
-       mrnaDescription);
+/* ugly hack to put out a correct message describing the mRNA */
+if (sameString(mrnaClick, "htcGeneMrna"))
+    printf("%s</A> from genomic sequence.\n", mrnaDescription);
+else
+    printf("%s</A> may be different from the genomic sequence.\n", 
+           mrnaDescription);
 puts("</LI>\n");
 
 puts("<LI>\n");
@@ -3324,6 +3340,21 @@ if (statusDesc != NULL)
 hFreeConn(&conn);
 }
 
+void htcDisplayMrna(char *acc)
+/* Display mRNA available from genback or seq table.. */
+{
+struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
+if (seq == NULL)
+    errAbort("mRNA sequence %s not found", acc);
+
+hgcStart("mRNA sequence");
+printf("<PRE><TT>");
+faWriteNext(stdout, seq->name, seq->dna, seq->size);
+printf("</TT></PRE>");
+dnaSeqFree(&seq);
+}
+
+
 void printRnaSpecs(struct trackDb *tdb, char *acc)
 /* Print auxiliarry info on RNA. */
 {
@@ -3453,6 +3484,12 @@ if (row != NULL)
 	{
 	printStanSource(acc, type);
 	}
+    if (hGenBankHaveSeq(acc, NULL))
+        {
+        printf("<B>%s sequence:</B> ", type); 
+        hgcAnchorSomewhere("htcDisplayMrna", acc, tdb->tableName, seqName);
+        printf("%s</A><BR>\n", acc); 
+        }
     }
 else
     {
@@ -3463,7 +3500,6 @@ sqlFreeResult(&sr);
 freeDyString(&dy);
 hgFreeConn(&conn);
 }
-
 
 void printAlignments(struct psl *pslList, 
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn)
@@ -5560,12 +5596,56 @@ if (name == NULL)
 return name;
 }
 
+void displayProteinPrediction(char *pepName, char *pepSeq)
+/* display a protein prediction. */
+{
+printf("<PRE><TT>");
+printf(">%s\n", pepName);
+printLines(stdout, pepSeq, 50);
+printf("</TT></PRE>");
+}
 
-void htcTranslatedProtein(char *geneName)
+void htcTranslatedProtein(char *pepName)
 /* Display translated protein. */
 {
+char *table = cartString(cart, "o");
 hgcStart("Protein Translation");
-showProteinPrediction(geneName, cartString(cart, "o"));
+/* checks both gbSeq and table */
+aaSeq *seq = hGenBankGetPep(pepName, table);
+if (seq == NULL)
+    {
+    warn("Predicted peptide %s is not avaliable", pepName);
+    }
+else
+    {
+    displayProteinPrediction(pepName, seq->dna);
+    dnaSeqFree(&seq);
+    }
+}
+
+void htcTranslatedPredMRna(struct trackDb *tdb, char *geneName)
+/* Translate virtual mRNA defined by genePred to protein and display it. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct genePred *gp = NULL;
+char where[256];
+char protName[256];
+char *prot = NULL;
+
+hgcStart("Protein Translation");
+
+safef(where, sizeof(where), "name = \"%s\"", geneName);
+gp = genePredReaderDoQuery(conn, tdb->tableName, where);
+hFreeConn(&conn);
+if (gp == NULL)
+    errAbort("%s not found in %s when translating to protein",
+             geneName, tdb->tableName);
+prot = getPredMRnaProtSeq(gp);
+safef(protName, sizeof(protName), "%s_prot", geneName);
+displayProteinPrediction(protName, prot);
+
+freez(&prot);
+genePredFree(&gp);
 }
 
 void getCdsInMrna(struct genePred *gp, int *retCdsStart, int *retCdsEnd)
@@ -5626,8 +5706,48 @@ freeDnaSeq(&genoSeq);
 return cdnaSeq;
 }
 
+struct dnaSeq *getCdsSeq(struct genePred *gp)
+/* Load in genomic CDS sequence associated with gene prediction. */
+{
+struct dnaSeq *genoSeq = hDnaFromSeq(gp->chrom, gp->cdsStart, gp->cdsEnd,  dnaLower);
+struct dnaSeq *cdsSeq;
+int cdsSize = genePredCodingBases(gp);
+int cdsOffset = 0, exonStart, exonEnd, exonSize, exonIx;
+
+AllocVar(cdsSeq);
+cdsSeq->dna = needMem(cdsSize+1);
+cdsSeq->size = cdsSize;
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    genePredCdsExon(gp, exonIx, &exonStart, &exonEnd);
+    exonSize = (exonEnd - exonStart);
+    if (exonSize > 0)
+        {
+        memcpy(cdsSeq->dna + cdsOffset, genoSeq->dna + (exonStart - gp->cdsStart), exonSize);
+        cdsOffset += exonSize;
+        }
+    }
+assert(cdsOffset == cdsSeq->size);
+freeDnaSeq(&genoSeq);
+if (gp->strand[0] == '-')
+    reverseComplement(cdsSeq->dna, cdsSeq->size);
+return cdsSeq;
+}
+
+char *getPredMRnaProtSeq(struct genePred *gp)
+/* Get the predicted mRNA from the genome and translate it to a
+ * protein. free returned string. */
+{
+struct dnaSeq *cdsDna = getCdsSeq(gp);
+int protBufSize = (cdsDna->size/3)+4;
+char *prot = needMem(protBufSize);
+dnaTranslateSome(cdsDna->dna, prot, protBufSize);
+dnaSeqFree(&cdsDna);
+return prot;
+}
+
 void htcGeneMrna(char *geneName)
-/* Display associated cDNA. */
+/* Display cDNA predicted from genome */
 {
 char *table = cartString(cart, "o");
 char query[512];
@@ -7356,6 +7476,9 @@ printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
 printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
 printf("<p><B>Axt Score:</B> %d \n",pg->axtScore);
+printf("<B>old Score:</B> %d \n",pg->oldScore);
+printf("<B>intron Count:</B> %d / %d\n",pg->intronCount, pg->oldIntronCount);
+printf("<B>intron scores:</B> %s \n",pg->intronScores);
 htmlHorizontalLine();
 printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
 
@@ -7448,67 +7571,52 @@ printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks i
 safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
 if (hTableExists(chainTable_chrom) )
     {
-    /* lookup chain if not stored */
-    if (pg->chainId == 0 && pg->gStrand != NULL)
-        {
+    /* lookup chain */
+    dyStringPrintf(dy,
+        "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
+        chrom, chainTable);
+    hAddBinToQuery(chromStart, chromEnd, dy);
+    if (sameString(pg->gStrand,pg->strand))
         dyStringPrintf(dy,
-            "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
-            chrom, chainTable);
-        hAddBinToQuery(chromStart, chromEnd, dy);
-        if (sameString(pg->gStrand,pg->strand))
-            dyStringPrintf(dy,
-                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
-                chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
-        else
-            {
-            dyStringPrintf(dy,
-                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
-                chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
-                hChromSize(pg->gChrom)-(pg->gStart));
-            }
-        dyStringAppend(dy, " order by qStart");
-        sr = sqlGetResult(conn, dy->string);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            int chainId, score;
-            unsigned int qStart, qEnd, qSize;
-            char qStrand;
-            chainId = sqlUnsigned(row[0]);
-            score = sqlUnsigned(row[1]);
-            qStart = sqlUnsigned(row[2]);
-            qEnd = sqlUnsigned(row[3]);
-            qStrand =row[4][0];
-            qSize = sqlUnsigned(row[5]);
-            if (qStrand == '-')
-                {
-                unsigned int tmp = qSize - qEnd;
-                qEnd = qSize - qStart;
-                qStart = tmp;
-                }
-            if (pg->chainId == 0) pg->chainId = chainId;
-            puts("<LI>\n");
-            hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
-                    pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
-            printf("Annotated alignment using chainId: %d </A> \n", chainId);
-            printf("score: %d \n", score);
-            hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-            printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
-            puts("</LI>\n");
-            }
-        sqlFreeResult(&sr);
-        }
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
     else
         {
-        puts("<LI>\n");
-        hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-        printf("Raw alignment %s:%d-%d</A> \n", pg->gChrom,pg->gStart,pg->gEnd);
-        puts("</LI>\n<b>");
+        dyStringPrintf(dy,
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+            hChromSize(pg->gChrom)-(pg->gStart));
+        }
+    dyStringAppend(dy, " order by qStart");
+    sr = sqlGetResult(conn, dy->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        int chainId, score;
+        unsigned int qStart, qEnd, qSize;
+        char qStrand;
+        chainId = sqlUnsigned(row[0]);
+        score = sqlUnsigned(row[1]);
+        qStart = sqlUnsigned(row[2]);
+        qEnd = sqlUnsigned(row[3]);
+        qStrand =row[4][0];
+        qSize = sqlUnsigned(row[5]);
+        if (qStrand == '-')
+            {
+            unsigned int tmp = qSize - qEnd;
+            qEnd = qSize - qStart;
+            qStart = tmp;
+            }
+        //if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
         hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
-                pg->gChrom, pg->kStart, pg->kEnd, pg->chainId, pg->assembly);
-        printf("Annotated alignment %s %s to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+                pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
+        printf("Annotated alignment using chainId: %d </A> \n", chainId);
+        printf("score: %d \n", score);
+        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
         puts("</LI>\n");
         }
+    sqlFreeResult(&sr);
     }
 }
 
@@ -14045,6 +14153,14 @@ else if (sameWord(track, "htcTranslatedProtein"))
     {
     htcTranslatedProtein(item);
     }
+else if (sameWord(track, "htcTranslatedPredMRna"))
+    {
+    char *table = cartString(cart, "table");
+    tdb = hashFindVal(trackHash, table);
+    if (tdb == NULL)
+        errAbort("no trackDb entry for %s", table);
+    htcTranslatedPredMRna(tdb, item);
+    }
 else if (sameWord(track, "htcGeneMrna"))
     {
     htcGeneMrna(item);
@@ -14052,6 +14168,10 @@ else if (sameWord(track, "htcGeneMrna"))
 else if (sameWord(track, "htcRefMrna"))
     {
     htcRefMrna(item);
+    }
+else if (sameWord(track, "htcDisplayMrna"))
+    {
+    htcDisplayMrna(item);
     }
 else if (sameWord(track, "htcKnownGeneMrna"))
     {

@@ -342,6 +342,10 @@ struct dbDb *hDbDbList();
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */
 
+struct dbDb *hArchiveDbDbList();
+/* Return list of databases in archive central dbDb.
+ * Free this with dbDbFree. */
+
 boolean hIsPrivateHost();
 /* Return TRUE if this is running on private web-server. */
 
@@ -418,6 +422,10 @@ boolean hFindSplitTableDb(char *db, char *chrom, char *rootName,
 boolean hTrackExists(char *trackName);
 /* Return TRUE if track exists. */
 
+struct slName *hSplitTableNames(char *rootName);
+/* Return a list of all split tables for rootName, or of just rootName if not 
+ * split, or NULL if no such tables exist. */
+
 int hBinLevels();
 /* Return number of levels to bins. */
 
@@ -493,6 +501,15 @@ struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */
 
+struct dbDb *hGetLiftOverFromDatabases();
+/* Get list of databases for which there is at least one liftOver chain file
+ * Dispose of this with dbDbFreeList. */
+
+struct dbDb *hGetLiftOverToDatabases(char *fromDb);
+/* Get list of databases for which there are liftOver chain files 
+ * to convert from the fromDb assembly.
+ * Dispose of this with dbDbFreeList. */
+
 struct dbDb *hGetAxtInfoDbs();
 /* Get list of db's where we have axt files listed in axtInfo . 
  * The db's with the same organism as organism go last.
@@ -544,6 +561,9 @@ char *hFreezeDate(char *database);
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */
+
+char *hPreviousAssembly(char *database);
+/* Return previous assembly for the genome associated with database. */
 
 void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
 /* Add substitution variables associated with database to list. */

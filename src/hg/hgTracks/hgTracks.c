@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.706 2004/04/09 02:48:11 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.710 2004/04/15 00:13:59 galt Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2054,7 +2054,7 @@ while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg->mapName);
+	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
@@ -2124,7 +2124,7 @@ struct genePred *gp = NULL;
 
 int drawOptionNum = 0; //off
 if (table != NULL)
-    drawOptionNum = getCdsDrawOptionNum(table);
+    drawOptionNum = getCdsDrawOptionNum(tg);
 
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
@@ -7474,6 +7474,8 @@ registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("llaPfuPrintA",llArrayMethods);
 registerTrackHandler("llaPaePrintA",llArrayMethods);
 registerTrackHandler("BlastPEuk",llBlastPMethods);
+registerTrackHandler("BlastPBac",llBlastPMethods);
+registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -7934,22 +7936,6 @@ pos = trimSpaces(pos);
 return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
 }
 
-char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
-/* Use hgFind if necessary; return NULL 
- * if we had to display the gateway page or hgFind's selection page. */
-{
-if (! isGenome(pos))
-    {
-    struct hgPositions *hgp = hgPositionsFind(pos, "", "", cart);
-
-    if ((hgp == NULL) || (hgp->singlePos == NULL))
-	{
-	return NULL;
-	}
-    }
-return(pos);
-}
-
 
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
@@ -7972,10 +7958,13 @@ if((position == NULL) || sameString(position, ""))
 
 chromName = NULL;
 winStart = 0;
-if (NULL == (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
+if (isGenome(position) ||
+    NULL ==
+    (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
     {
     if (winStart == 0)	/* number of positions found */
-	hgp = findGenomePos(defaultPosition, &chromName, &winStart, &winEnd, cart);
+	hgp = findGenomePos(defaultPosition, &chromName, &winStart, &winEnd,
+			    cart);
     }
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
@@ -8219,6 +8208,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v59", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v60", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

@@ -26,17 +26,21 @@
 #include "scoredRef.h"
 #include "maf.h"
 #include "ra.h"
+#include "liftOver.h"
+#include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.174 2004/04/06 23:26:29 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.178 2004/04/15 00:49:59 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
 
+
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
+static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
                                                
 
@@ -506,6 +510,29 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(centralCc, pConn);
+}
+
+struct sqlConnection *hConnectArchiveCentral()
+/* Connect to central database for archives.
+ * Free this up with hDisconnectCentralArchive(). */
+{
+if (centralArchiveCc == NULL)
+    {
+    char *database = cfgOption("archivecentral.db");
+    char *host = cfgOption("archivecentral.host");
+    char *user = cfgOption("archivecentral.user");
+    char *password = cfgOption("archivecentral.password");;
+    if (database == NULL || host == NULL || user == NULL || password == NULL)
+	errAbort("Please set central options in the hg.conf file.");
+    centralArchiveCc = sqlNewRemoteConnCache(database, host, user, password);
+    }
+return sqlAllocConnection(centralArchiveCc);
+}
+
+void hDisconnectArchiveCentral(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlFreeConnection(centralArchiveCc, pConn);
 }
 
 struct sqlConnection *hConnectCart()
@@ -1562,6 +1589,7 @@ hDisconnectCentral(&conn);
 return res;
 }
 
+
 char *hDbDbField(char *database, char *field)
 /* Look up field in dbDb table keyed by database.
  * Free this string when you are done. */
@@ -1726,7 +1754,7 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
-sr = sqlGetResult(conn, "select * from dbDb");
+sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -1741,6 +1769,31 @@ sqlFreeResult(&sr);
 hashFree(&hash);
 hDisconnectCentral(&conn);
 slReverse(&dbList);
+return dbList;
+}
+
+struct dbDb *hArchiveDbDbList()
+/* Return list of databases in archive central dbDb.
+ * Free this with dbDbFree. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+struct dbDb *dbList = NULL, *db;
+
+conn = hConnectArchiveCentral();
+if (conn)
+    {
+    sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        db = dbDbLoad(row);
+        slAddHead(&dbList, db);
+        }
+    sqlFreeResult(&sr);
+    hDisconnectArchiveCentral(&conn);
+    slReverse(&dbList);
+    }
 return dbList;
 }
 
@@ -1759,6 +1812,31 @@ for (db = dbList; db != NULL; db = db->next)
     }
 dbDbFree(&dbList);
 return nList;
+}
+
+char *hPreviousAssembly(char *database)
+/* Return previous assembly for the genome associated with database.
+ * Must free returned string */
+
+{
+struct dbDb *dbList = NULL, *db, *prevDb, *lastDb;
+char *prev = NULL;
+
+/* NOTE: relies on this list being ordered descendingly */
+dbList = hDbDbList();
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (sameString(db->name, database))
+        {
+        prevDb = db->next;
+        if (prevDb)
+            prev = cloneString(prevDb->name);
+        break;
+        }
+    }
+if (dbList)
+    dbDbFreeList(&dbList);
+return prev;
 }
 
 
@@ -2203,6 +2281,43 @@ boolean hTrackExists(char *track)
 /* Return TRUE if track exists. */
 {
 return hFindSplitTable(NULL, track, NULL, NULL);
+}
+
+struct slName *hSplitTableNames(char *rootName)
+/* Return a list of all split tables for rootName, or of just rootName if not 
+ * split, or NULL if no such tables exist. */
+{
+struct slName *matchingTables = NULL, *tableList = NULL;
+struct slName *tPtr = NULL, *tNext = NULL;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+
+safef(query, sizeof(query), "show tables like '%%\\_%s'", rootName);
+matchingTables = sqlQuickList(conn, query);
+if (matchingTables == NULL && sqlTableExists(conn, rootName))
+    tableList = newSlName(rootName);
+else
+    {
+    for (tPtr = matchingTables;  tPtr != NULL;  tPtr = tNext)
+	{
+	char *p = tPtr->name + strlen(tPtr->name) - (strlen(rootName) + 1);
+	tNext = tPtr->next;
+	*p = 0;
+	if (hgOfficialChromName(tPtr->name) != NULL)
+	    {
+	    *p = '_';
+	    slAddHead(&tableList, tPtr);
+	    }
+	else
+	    {
+	    freez(&tPtr);
+	    }
+	}
+    }
+
+hFreeConn(&conn);
+slReverse(&tableList);
+return(tableList);
 }
 
 boolean hIsMgscHost()
@@ -2734,6 +2849,99 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct dbDb *hGetLiftOverFromDatabases()
+/* Get list of databases for which there is at least one liftOver chain file
+ * from this assembly to another.
+ * Dispose of this with dbDbFreeList. */
+{
+struct dbDb *currentDbList = NULL, *archiveDbList = NULL;
+struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
+struct liftOverChain *chainList = NULL, *chain;
+struct hash *hash = newHash(0);
+
+/* Get list of all liftOver chains in central database */
+chainList = liftOverChainList();
+
+/* Create hash of databases having liftOver chains from this database */
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    if (!hashFindVal(hash, chain->fromDb))
+        {
+        hashAdd(hash, chain->fromDb, chain->fromDb);
+        }
+    }
+
+/* Get list of all current databases */
+currentDbList = hDbDbList();
+/* Get list of all archived databases */
+archiveDbList = hArchiveDbDbList();
+
+/* Create a new dbDb list of all entries in the liftOver hash */
+for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
+    {
+    /* current dbDb entries */
+    nextDbDb = dbDb->next;
+    if (hashFindVal(hash, dbDb->name))
+        slAddHead(&liftOverDbList, dbDb);
+    else
+        dbDbFree(&dbDb);
+    }
+for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
+    {
+    /* archived dbDb entries */
+    nextDbDb = dbDb->next;
+    if (hashFindVal(hash, dbDb->name))
+        slAddHead(&liftOverDbList, dbDb);
+    else
+        dbDbFree(&dbDb);
+    }
+
+hashFree(&hash);
+liftOverChainFreeList(&chainList);
+slReverse(&liftOverDbList);
+return liftOverDbList;
+}
+
+struct dbDb *hGetLiftOverToDatabases(char *fromDb)
+/* Get list of databases for which there are liftOver chain files 
+ * to convert from the fromDb assembly.
+ * Dispose of this with dbDbFreeList. */
+{
+struct dbDb *allDbList = NULL, *liftOverDbList = NULL, *dbDb, *nextDbDb;
+struct liftOverChain *chainList = NULL, *chain;
+struct hash *hash = newHash(0);
+
+/* Get list of all liftOver chains in central database */
+chainList = liftOverChainList();
+
+/* Create hash of databases having liftOver chains from the fromDb */
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    if (sameString(fromDb, chain->fromDb))
+        hashAdd(hash, chain->toDb, chain->toDb);
+    }
+/* Get list of all current databases */
+allDbList = hDbDbList();
+
+/* Create a new dbDb list of all entries in the liftOver hash */
+for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
+    {
+    nextDbDb = dbDb->next;
+    if (hashFindVal(hash, dbDb->name))
+        slAddHead(&liftOverDbList, dbDb);
+    else
+        dbDbFree(&dbDb);
+    }
+hashFree(&hash);
+liftOverChainFreeList(&chainList);
+slReverse(&liftOverDbList);
+return liftOverDbList;
+}
+
+struct dbDb *hGetAxtInfoDbs()
+/* Get list of db's where we have axt files listed in axtInfo . 
+ * The db's with the same organism as current db go last.
+
 
 struct dbDb *hGetAxtInfoDbs()
 /* Get list of db's where we have axt files listed in axtInfo . 
@@ -2819,7 +3027,7 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	    dyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
-dyStringPrintf(query, ") order by orderKey desc");
+dyStringPrintf(query, ") order by orderKey, name desc");
 if (count > 0)
     {
     sr = sqlGetResult(conn, query->string);

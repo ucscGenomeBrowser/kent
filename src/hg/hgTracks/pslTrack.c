@@ -236,20 +236,17 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
 
 
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
-	int sizeMul, boolean isXeno, boolean nameGetsPos, char *mapName)
+	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 {
 struct simpleFeature *sfList = NULL;
 int grayIx = pslGrayIx(psl, isXeno, maxShade);
+int drawOptionNum;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
 
-int drawOptionNum = 0; //off
-if (mapName != NULL)
-    drawOptionNum = getCdsDrawOptionNum(mapName);
-
-
+drawOptionNum = getCdsDrawOptionNum(tg);
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
 lf->grayIx = grayIx;
@@ -329,7 +326,7 @@ if (sqlCountColumns(sr) < 21+rowOffset)
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
-    lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg->mapName);
+    lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }

@@ -40,6 +40,14 @@ void printGenomeListHtml(char *selOrganism, char *onChangeText);
  * onChange javascript.
  */
 
+void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText);
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
+
 void webPushErrHandlers();
 /* Push warn and abort handler for errAbort(). */
 
@@ -63,6 +71,30 @@ assemblies to choose from.
 param curDb - The assembly (the database name) to choose as selected. 
 If NULL, no default selection.
 param javascript - The javascript text for the select box
+ */
+
+void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript);
+/* Find all assemblies from the list that are active, and print
+ * HTML to render dropdown list 
+ * param db - default assembly.  If NULL, no default selection */
+
+void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                char *dbCgi, bool activeOnly, char *javascript);
+/* Prints to stdout the HTML to render a dropdown list containing the list 
+of all possible assemblies to choose from.
+param db - The default assembly (the database name) to choose as selected. 
+                If NULL, no default selection.
+param active - if set, print only active assemblies with databases
+ */
+
+void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                        char *dbCgi, char *javascript);
+/* Find all the assemblies from the list that are active.
+Prints to stdout the HTML to render a dropdown list containing the list 
+of the possible assemblies to choose from.
+
+param db - The default assembly (the database name) to choose as selected. 
+                If NULL, no default selection.
  */
 
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);

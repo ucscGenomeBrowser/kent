@@ -12,5 +12,6 @@ CREATE TABLE bdgpGeneInfo (
     cytorange varchar(255) not null,	# cytorange
     cdna_clone varchar(255) not null,	# comma-sep list of cdna clone IDs
               #Indices
-    PRIMARY KEY(bdgpName)
+    PRIMARY KEY(bdgpName),
+    INDEX(flyBaseId(11))
 );

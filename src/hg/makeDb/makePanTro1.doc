@@ -1429,3 +1429,20 @@ ldHgGene panTro1 twinscan chr*.gtf -gtf -frame -geneName
         #34198 gene predictions
     hgPepPred panTro1 generic geneidPep download/*-fixed.prot
 
+# REVISED HUMAN DELETIONS (kpollard, 4/13/04)
+# new file emailed from Tarjei: humanDels.new.dat
+# with corrected coordinates (based on chimp agp)
+# saved in /cluster/data/panTro1/bed/indels
+
+    cd /cluster/data/panTro1/bed/indels
+    #has chr start end, need to add names
+    pr -t -n humanDels.new.dat > temp  
+    cat temp | gawk '{size=$4 - $3; print $2"\t"$3"\t"$4"\t""HD"$1"_"size}' > humanDels.new.bed
+
+    #load track into chimp browser
+    ln -s  /cluster/data/panTro1/bed/indels/humanDels.new.bed /gbdb/panTro1/humanDels
+    hgsql panTro1
+    	delete from humanDels;
+    	exit
+    cd /cluster/data/panTro1/bed/indels
+    /cluster/bin/i386/hgLoadBed panTro1 humanDels humanDels.new.bed

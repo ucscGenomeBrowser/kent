@@ -8,8 +8,11 @@
 #include "bed.h"
 #include "genePred.h"
 #include "sample.h"
+#include "hdb.h"
+#include "liftOverChain.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.4 2004/03/25 23:55:06 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.9 2004/04/15 19:37:34 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -28,32 +31,6 @@ else if (c == '+')
 else
     return c;
 }
-
-/*
-void readLiftOverTable(char *db, char *tableName, struct hash *chainHash)
-/* Read map file into hashes. */
-/*
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct chain *chain;
-struct chromMap *map;
-int chainCount = 0;
-
-struct sqlConnect *conn = = hAllocConn();
-while ((chain = chainRead(lf)) != NULL)
-    {
-    if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
-	{
-	AllocVar(map);
-	map->bk = binKeeperNew(0, chain->tSize);
-	hashAddSaveName(chainHash, chain->tName, map, &map->name);
-	}
-    binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
-    ++chainCount;
-    }
-hFreeConn(&conn);
-}
-*/
 
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
@@ -774,7 +751,7 @@ return ct;
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
-                                double minMatch,  double minBlocks, bool fudgeThick,
+                        double minMatch,  double minBlocks, bool fudgeThick,
                                 FILE *f, FILE *unmapped, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
@@ -800,6 +777,80 @@ if (lineFileNextReal(lf, &line))
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
                                 fudgeThick, f, unmapped, errCt);
     }
+lineFileClose(&lf);
+return ct;
+}
+
+#define LIFTOVER_FILE_PREFIX    "liftOver"
+#define BEDSTART_TO_POSITION(coord)     (coord+1)
+
+int liftOverPositions(char *fileName, struct hash *chainHash, 
+                        double minMatch,  double minBlocks, bool fudgeThick,
+                                FILE *mapped, FILE *unmapped, int *errCt)
+/* Create bed file from positions (chrom:start-end) and lift.
+ * Then convert back to positions.  (TODO: line-by-line instead of by file)
+ * Return the number of records successfully converted */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+char *words[16];
+int ct = 0;
+struct tempName bedTn, mappedBedTn, unmappedBedTn;
+FILE *bedFile;
+char *chrom;
+int start, end;
+FILE *mappedBed, *unmappedBed;
+
+/* OK to use forCgi here ?? What if used from command-line ? */
+makeTempName(&bedTn, LIFTOVER_FILE_PREFIX, ".bed");
+bedFile = mustOpen(bedTn.forCgi, "w");
+
+/* Convert input to bed file */
+while (lineFileNextReal(lf, &line))
+    {
+    if (hgParseChromRangeDb(line, &chrom, &start, &end, FALSE))
+        fprintf(bedFile, "%s\t%d\t%d\n", chrom, start, end);
+    }
+carefulClose(&bedFile);
+chmod(bedTn.forCgi, 0666);
+lineFileClose(&lf);
+
+/* Set up temp bed files for output, and lift to those */
+lf = lineFileOpen(bedTn.forCgi, TRUE);
+makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
+makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
+mappedBed = mustOpen(mappedBedTn.forCgi, "w");
+unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
+ct = bedOverSmall(lf, 3, chainHash, minMatch, mappedBed, unmappedBed, errCt);
+carefulClose(&mappedBed);
+chmod(mappedBedTn.forCgi, 0666);
+carefulClose(&unmappedBed);
+chmod(unmappedBedTn.forCgi, 0666);
+lineFileClose(&lf);
+
+/* Convert output files back to positions */
+lf = lineFileOpen(mappedBedTn.forCgi, TRUE);
+while (lineFileNextReal(lf, &line))
+    {
+    sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+    fprintf(mapped, "%s:%d-%d\n", chrom, BEDSTART_TO_POSITION(start), end);
+    }
+carefulClose(&mapped);
+lineFileClose(&lf);
+
+lf = lineFileOpen(unmappedBedTn.forCgi, TRUE);
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] == '#')
+        fprintf(unmapped, "%s\n", line);
+    else
+        {
+        sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
+        fprintf(unmapped, "%s:%d-%d\n", chrom, 
+                        BEDSTART_TO_POSITION(start), end);
+        }
+    }
+carefulClose(&unmapped);
 lineFileClose(&lf);
 return ct;
 }
@@ -1200,4 +1251,56 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+struct liftOverChain *liftOverChainList()
+/* Get list of all liftOver chains in the central database */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct liftOverChain *list = NULL;
 
+if (conn)
+    {
+    list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
+    hDisconnectCentral(&conn);
+    }
+return list;
+}
+
+char *liftOverChainFile(char *fromDb, char *toDb)
+/* Get filename of liftOver chain */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct liftOverChain *chain = NULL;
+char query[1024];
+char *path = NULL;
+
+if (conn)
+    {
+    safef(query, sizeof(query), 
+            "select * from liftOverChain where fromDb='%s' and toDb='%s'",
+                        fromDb, toDb);
+    chain = liftOverChainLoadByQuery(conn, query);
+    if (chain != NULL)
+        {
+        path = cloneString(chain->path);
+        liftOverChainFree(&chain);
+        }
+    hDisconnectCentral(&conn);
+    }
+return path;
+}
+
+char *liftOverErrHelp()
+/* Help message explaining liftOver failures */
+{
+    return
+    "Deleted in new:\n"
+    "    None of sequence intersects with any alignment chain for the region\n"
+    "Partially deleted in new:\n"
+    "    Sequence intersects with part of a single alignment chain in the region\n"
+    "Split in new\n"
+    "    Sequence partially intersects multiple chains in the region\n"
+    "Duplicated in new\n"
+    "    Sequence completely intersects multiple chains in the region\n"
+    "Boundary problem\n"
+    "    Missing start or end base in an exon\n";
+}

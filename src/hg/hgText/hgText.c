@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.134 2004/04/12 06:05:32 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.137 2004/04/14 21:59:23 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2033,6 +2033,9 @@ struct hTableInfo *ctToHti(struct customTrack *ct)
 {
 struct hTableInfo *hti;
 
+if (ct == NULL)
+    return(NULL);
+
 AllocVar(hti);
 hti->rootName = cloneString(ct->tdb->tableName);
 hti->isPos = TRUE;
@@ -2074,10 +2077,10 @@ if (ct->fieldCount >= 12)
 return(hti);
 }
 
-struct hTableInfo *getHti(char *db, char *table)
+struct hTableInfo *maybeGetHti(char *db, char *table)
 /* Return primary table info. */
 {
-struct hTableInfo *hti;
+struct hTableInfo *hti = NULL;
 
 if (sameString(customTrackPseudoDb, db))
     {
@@ -2093,6 +2096,13 @@ else
 	track = table;
     hti = hFindTableInfoDb(db, chrom, track);
     }
+return(hti);
+}
+
+struct hTableInfo *getHti(char *db, char *table)
+/* Return primary table info. */
+{
+struct hTableInfo *hti = maybeGetHti(db, table);
 
 if (hti == NULL)
     webAbort("Error", "Could not find table info for table %s in db %s",
@@ -2150,6 +2160,19 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     }
 return(hti);
 }
+
+boolean isWiggle(char *db, char *table)
+/* Return TRUE if db.table is a wiggle. */
+{
+boolean typeWiggle = FALSE;
+if (db != NULL && table != NULL)
+    {
+    struct hTableInfo *hti = maybeGetHti(db, table);
+    typeWiggle = (hti != NULL && HTI_IS_WIGGLE);
+    }
+return(typeWiggle);
+}
+
 
 void doOutputOptions()
 /* print out a form with output table format & filtering options */
@@ -2367,6 +2390,7 @@ int i;
 
 if (! tableExists(fullTableName, db))
     return NULL;
+
 constraints = constrainFields(NULL);
 if (ignoreConstraints ||
     ((constraints != NULL) && (constraints[0] == 0)))
@@ -2397,8 +2421,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	}
     else
 	{
-	if (typeWiggle && (bedListWig[WIG_TABLE_1] == (struct bed *)NULL))
-	    wigFetchAndProcess(db, fullTableName, chrom, winStart, winEnd,
+	if (typeWiggle)
+	    wigMakeBedList(db, fullTableName, chromPtr->name,
 		constraints, WIG_TABLE_1);
 	if (typeWiggle && (bedListWig[WIG_TABLE_1] != (struct bed *)NULL))
 	    bedListT1 = bedListWig[WIG_TABLE_1];
@@ -2464,13 +2488,16 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    char *db2 = getTable2Db();
 	    struct hTableInfo *hti2 = getHti(db2, table2);
 
-	    if (typeWiggle2 && (bedListWig[WIG_TABLE_2] == (struct bed *)NULL))
-		wigFetchAndProcess(db2, table2, chrom, winStart, winEnd,
-		    constraints2, WIG_TABLE_2);
+	    if (typeWiggle2)
+		wigMakeBedList(db2, table2, chromPtr->name, constraints2,
+		    WIG_TABLE_2);
 
 	    if ((typeWiggle2) && (bedListWig[WIG_TABLE_2] !=(struct bed *)NULL))
+		{
 		fbListT2 = fbFromBed(track2, hti2, bedListWig[WIG_TABLE_2],
 		    winStart, winEnd, FALSE, FALSE);
+		bedFreeList(&bedListWig[WIG_TABLE_2]);
+		}
 	    else
 		fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart,
 			    winEnd, constraints2, FALSE, FALSE);
@@ -2482,11 +2509,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    // Base-pair-wise operation: get featureBits for primary table too
 	    struct featureBits *fbListT1;
 	    Bits *bitsT1;
-	    if (typeWiggle && (bedListWig[WIG_TABLE_1] != (struct bed *)NULL))
-		fbListT1 = fbFromBed(track, hti, bedListWig[WIG_TABLE_1],
-		    winStart, winEnd, FALSE, FALSE);
-	    else
-		fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
+	    fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
 				 FALSE, FALSE);
 	    bitsT1 = bitAlloc(chromSize+8);
 	    fbOrBits(bitsT1, chromSize, fbListT1, 0);
@@ -3788,7 +3811,7 @@ else if (doCt)
 	   redirDelay, browserUrl);
     }
 bedFreeList(&bedList);
-}
+}	/*	void doGetBedCt(boolean doCt)	*/
 
 
 void doGetBrowserLinks()
@@ -3871,8 +3894,7 @@ if (! sameString(outputType, seqOptionsPhase) &&
 
 hti = getHti(db2, table2);
 
-if (HTI_IS_WIGGLE)
-    typeWiggle2 = TRUE;
+typeWiggle2 = isWiggle(db2, table2);
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
@@ -4229,7 +4251,6 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
-struct hTableInfo *hti2 = NULL;
 boolean typeWiggle2 = FALSE;
 boolean wiggleDone = FALSE;
 
@@ -4239,12 +4260,7 @@ saveIntersectOptionsState();
 if (op == NULL)
     table2 = NULL;
 
-if ((db2 != NULL) && (table2 != NULL))
-    {
-    hti2 = getHti(db2, table2);
-    if (hti2->spanField[0] !=0)
-	typeWiggle2 = TRUE;
-    }
+typeWiggle2 = isWiggle(db2, table2);
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4339,9 +4355,6 @@ if (typeWiggle)
 	    printf("<P> data value constraint: %s %g\n",
 		wigConstraint[0], wigDataConstraint[0][0]);
 	}
-    wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1,
-	constraints);
-    wiggleDone = TRUE;
     }
 
 if (table2 != NULL)
@@ -4395,8 +4408,6 @@ if (table2 != NULL)
 		printf("<P> data value constraint: %s %g\n",
 		    wigConstraint[1], wigDataConstraint[1][0]);
 	    }
-	wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2,
-	    constraints2);
 	}
     }
 
@@ -4408,6 +4419,7 @@ for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
     struct bed *bedListConstr, *bed;
     int count;
     getFullTableName(fullTableName, chromPtr->name, table);
+
     bedListConstr = getBedList(FALSE, chrom);
     count = slCount(bedListConstr);
 
@@ -4432,6 +4444,7 @@ for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
     if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
 	{
 	struct bed *bedListUnc = getBedList(TRUE, chrom);
+
 	count = slCount(bedListUnc);
 
 	itemUncCounts[0] += count;
@@ -4524,7 +4537,17 @@ if (hti->hasBlocks)
     getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
     }
 
-if (1 || ! wiggleDone)
+if (typeWiggle)
+    {
+    wigDoStats(database, table, chromList, WIG_TABLE_1, constraints);
+    wiggleDone = TRUE;
+    }
+if (typeWiggle2)
+    {
+    wigDoStats(db2, table2, chromList, WIG_TABLE_2, constraints2);
+    }
+
+if (! wiggleDone)
     {
     // For some reason BORDER=1 does not work in our web.c nested table scheme.
     // So use web.c's trick of using an enclosing table to provide a border.  
@@ -4873,24 +4896,11 @@ database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
 
-if (db != NULL && table != NULL)
-    {
-    struct hTableInfo *hti = NULL;
-    hti = getHti(db, table);
-
-    if (HTI_IS_WIGGLE)
-	typeWiggle = TRUE;
-    }
 if ((table2 != NULL) && sameString(table2, "Choose table"))
     table2 = NULL;
-if (db2 != NULL && table2 != NULL)
-    {
-    struct hTableInfo *hti = NULL;
-    hti = getHti(db2, table2);
 
-    if (HTI_IS_WIGGLE)
-	typeWiggle2 = TRUE;
-    }
+typeWiggle = isWiggle(db, table);
+typeWiggle2 = isWiggle(db2, table2);
 
 freezeName = hFreezeFromDb(database);
 if (freezeName == NULL)

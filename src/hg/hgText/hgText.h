@@ -1,6 +1,6 @@
 /* hgText.h generic item to be shared between source files in this dir
  *
- *	$Id: hgText.h,v 1.3 2004/04/05 22:44:30 hiram Exp $
+ *	$Id: hgText.h,v 1.5 2004/04/14 21:58:43 hiram Exp $
  */
 
 #ifndef HGTEXT_H
@@ -85,18 +85,17 @@ extern void preserveConstraints(char *fullTblName, char *db, char *tableId);
 extern void preserveTable2();
 extern void displayPosition();
 extern char *customTrackPseudoDb;
+extern struct slName *getOrderedChromList();
 extern struct cart *cart;
 extern char *freezeName;
 extern char fullTableName[256];
 extern char *httpFormMethod;
 
 /*	in hgWigText.c	*/
-extern void wigProcessData(struct wiggleData *wigData, char * table,
-    int tableId, boolean statsOut);
-extern void wigFetchAndProcess(char *db, char *table, char *chrom,
-    int winStart, int winEnd, char * constraints, int tableId);
+extern void wigMakeBedList(char *db, char *table, char *chrom,
+    char * constraints, int tableId);
 extern void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd, int tableId, char *constraints);
+    int tableId, char *constraints);
 extern void wiggleConstraints(char *cmp, char *pat, int tableIndex);
 extern void doGetWiggleData(boolean doCt, boolean wigBED);
 extern void doWiggleCtOptions(boolean doCt);

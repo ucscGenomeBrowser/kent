@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility hide
+type bed 3 +
+
 track wabaCbr
 shortLabel Briggsae Waba
 longLabel C. briggsae Waba Alignments

@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.3 2004/04/06 23:27:59 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.4 2004/04/13 17:59:25 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -171,7 +171,8 @@ if (ptr == NULL)
 return(trimSpaces(field));
 }
 
-static boolean checkRegexOnTableField(char *exp, char *table, char *field)
+static boolean checkRegexOnTableField(char *exp, char *altExp, char *table,
+				      char *field, char *searchName)
 /* Return TRUE and complain if any values of table.field do not match exp. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -185,13 +186,23 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (! matchRegex(row[0], exp))
 	{
+	if (isNotEmpty(altExp) && matchRegex(row[0], altExp))
+	    continue;
 	if (errCount < 1 ||
 	    (errCount < 10 && verboseLevel() > 1))
-	    printf("Error: %s.%s value \"%s\" doesn't match termRegex \"%s\"\n",
+	    {
+	    printf("Error: %s.%s value \"%s\" doesn't match termRegex \"%s\"",
 		   table, field, row[0], exp);
+	    if (isNotEmpty(altExp))
+		printf(" or dontCheck \"%s\"", altExp);
+	    printf(" for search %s\n", searchName);
+	    }
 	errCount++;
 	}
     }
+if (errCount > 0)
+    verbose(2, "Search %s: %d values of %s.%s overlooked.\n",
+	    searchName, errCount, table, field);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return(errCount > 0);
@@ -233,6 +244,7 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 	    char *termPrefix = hgFindSpecSetting(hfs, "termPrefix");
 	    char *field = getFieldFromQuery(query, hfs->searchName);
 	    char *termRegex = hfs->termRegex;
+	    char *altRegex = hgFindSpecSetting(hfs, "dontCheck");
 	    if (termPrefix != NULL && startsWith(termPrefix, termRegex+1))
 		termRegex += strlen(termPrefix)+1;
 	    verbose(2, "Checking termRegex \"%s\" for table %s (search %s).\n",
@@ -245,14 +257,14 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 		    char fullTableName[256];
 		    safef(fullTableName, sizeof(fullTableName), "%s_%s",
 			  cn->name, table);
-		    gotError |= checkRegexOnTableField(termRegex,
-						       fullTableName, field);
+		    gotError |= checkRegexOnTableField(termRegex, altRegex,
+				       fullTableName, field, hfs->searchName);
 		    }
 		}
 	    else
 		{
-		gotError |= checkRegexOnTableField(termRegex, table,
-						   field);
+		gotError |= checkRegexOnTableField(termRegex, altRegex, table,
+						   field, hfs->searchName);
 		}
 	    }
 	}

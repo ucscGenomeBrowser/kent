@@ -8,7 +8,7 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.5 2004/03/02 23:20:52 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.7 2004/04/12 22:49:46 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -35,7 +35,9 @@ errAbort(
   "   -strand=<+|-> - limit to only one strand.  Default is both.\n"
   "   -bedOutput - output bed format (this is the default)\n"
   "   -wigOutput - output wiggle data format instead of bed file\n"
-  "   NOTE: motif must be longer than 4 characters, less than 17"
+  "   -verbose=N - set information level [1-4]\n"
+  "   NOTE: motif must be longer than 4 characters, less than 17\n"
+  "   -verbose=4 - will display gaps as bed file data lines to stderr"
   );
 }
 
@@ -67,6 +69,8 @@ unsigned long long posPreviousPosition = 0;
 unsigned long long negPreviousPosition = 0;
 register unsigned long long posNeedle = motifVal;
 register unsigned long long negNeedle = complementVal;
+unsigned long long enterGap = 1;
+unsigned long long gapCount = 0;
 
 nibOpenVerify(nibFile, &nf, &chromSize);
 mask = 3;
@@ -94,7 +98,18 @@ for (start=0; start<chromSize; start = end)
 	    case G_BASE_VAL:
     		incomingVal = mask & ((incomingVal << 2) | val);
 		if (! incomingLength)
-		    verbose(3, "#\treturn from gap at %llu\n", chromPosition);
+		    {
+		    if ((chromPosition - enterGap) > 0)
+			{
+			++gapCount;
+			verbose(3,
+			    "#\treturn from gap at %llu, gap length: %llu\n",
+			    chromPosition, chromPosition - enterGap);
+			verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
+			    chrom, enterGap-1, chromPosition-1, gapCount,
+			    chromPosition - enterGap, "+");
+			}
+		    }
 		++incomingLength;
 
 		if (doPlusStrand && (incomingLength >= motifLen)
@@ -128,7 +143,10 @@ verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", chrom, negPreviousPosition, ch
 
 	    default:
 		if (incomingLength)
+		    {
 		    verbose(3, "#\tenter gap at %llu\n", chromPosition);
+		    enterGap = chromPosition;
+		    }
     		incomingVal = 0;
     		incomingLength = 0;
 		break;

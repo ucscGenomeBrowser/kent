@@ -381,10 +381,11 @@ e = max(a,b);
 *endRet = max(e, *endRet);
 }
 
-struct blastBlock *blastFileNextBlock(struct blastFile *bf, 
-	struct blastQuery *bq, struct blastGappedAli *bga)
-/* Read in next blast block.  Return NULL at EOF or end of
- * gapped alignment. */
+static struct blastBlock *nextBlock(struct blastFile *bf, struct blastQuery *bq,
+                                    struct blastGappedAli *bga, boolean *skipRet)
+/* Read in next blast block.  Return NULL at EOF or end of gapped
+ * alignment. If an unparsable block is found, set skipRet to TRUE and return
+ * NULL. */
 {
 struct blastBlock *bb;
 char *line;
@@ -396,6 +397,7 @@ static struct dyString *qString = NULL, *tString = NULL;
 
 if (DEBUG_TRACE)
     fprintf(stderr, "blastFileNextBlock\n");
+*skipRet = FALSE;
 
 /* Seek until get something like:
  *   Score = 8770 bits (4424), Expect = 0.0
@@ -428,11 +430,23 @@ bb->eVal = evalToDouble(words[7]);
  *             or
  *   Identities = 10/19 (52%), Positives = 15/19 (78%), Frame = +2
  *     (wu-tblastn)
+ *
+ * Handle weird cases where the is only a `Score' line, with no `Identities'
+ * lines by skipping the alignment; they seem line small, junky alignments.
  */
 line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if (wordCount < 3 || !sameWord("Identities", words[0]))
+    {
+    if (wordCount > 1 || sameWord("Score", words[0]))
+        {
+        /* ugly hack to skip block with no identities */
+        *skipRet = TRUE;
+        blastBlockFree(&bb);
+        return NULL;
+        }
     bfError(bf, "Expecting identity count");
+    }
 partCount = chopByChar(words[2], '/', parts, ArraySize(parts));
 if (partCount != 2 || !isdigit(parts[0][0]) || !isdigit(parts[1][0]))
     bfSyntax(bf);
@@ -536,6 +550,20 @@ if (bb->tStrand < 0)
     reverseIntRange(&bb->tStart, &bb->tEnd, bga->targetSize);
 bb->qSym = cloneMem(qString->string, qString->stringSize+1);
 bb->tSym = cloneMem(tString->string, tString->stringSize+1);
+return bb;
+}
+
+struct blastBlock *blastFileNextBlock(struct blastFile *bf, 
+	struct blastQuery *bq, struct blastGappedAli *bga)
+/* Read in next blast block.  Return NULL at EOF or end of
+ * gapped alignment. */
+{
+struct blastBlock *bb = NULL;
+boolean skip = FALSE;
+
+while (((bb = nextBlock(bf, bq, bga, &skip)) == NULL) && skip)
+    continue; /* skip to next one */
+
 return bb;
 }
 

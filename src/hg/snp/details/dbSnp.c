@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.14 2004/03/21 20:29:34 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.15 2004/04/09 02:04:46 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -26,9 +26,9 @@ errAbort("dbSnp - Get the top strand allele from the current assembly\n"
 	 "Use getObsHet to parse dbSnp XML files into correct input format.\n"
 	 "Usage:\n  \tdbSnp database fileBase          >& logfile &\n"
 	 "Example:\n\tdbSnp hg16     dbSnpRsHg16Snp119 >& dbSnpLog &\n"
-	 "\nwhere\tfileBase.obs is read as input, "
-	 "\n\tfileBase.out is output, and "
-	 "\n\tfileBase.err shows failures.\n");
+	 "\nwhere\tfileBase.obs is read as input (from getObsHet), "
+	 "\n\tfileBase.out is formatted for loading in hgFixed.dbSnpRsXX, and "
+	 "\n\tfileBase.err shows errors.\n");
 }
 
 struct dbInfo
@@ -88,7 +88,7 @@ struct slName *list = NULL;
 struct slName *el = NULL;
 char  *queryString = "select   chrom "
                      "from     chromInfo "
-                     "where    chrom not like '%random' "
+                     "where    chrom not like '%random' " 
 /*                     "where    chrom = 'chrY' " */
                      "order by size desc";
 sr = sqlGetResult(conn, queryString);
@@ -131,7 +131,8 @@ unsigned long int snpCount = 0;
 dyStringPrintf(query, "select chromStart, "
 	       "       name "
 	       "from   %s "
-	       "where  chrom = '%s'", 
+	       "where  chrom = '%s' "
+	       "  and  source not like 'A%%' ", 
 	       snpTable, chromName);
 sr = sqlGetResult(conn, query->string);
 while ((row=sqlNextRow(sr)))
@@ -186,8 +187,16 @@ fi->avgHetSE = atof(row[2]);
 strcpy(fi->valid,   row[3]);
 strcpy(fi->allele1, row[4]);
 strcpy(fi->allele2, row[5]);
-strcpy(fi->seq5,    row[6]);
-strcpy(fi->seq3,    row[7]);
+if (strcmp(fi->allele1,"(NOT_BIALLELIC)"))
+    {
+    strcpy(fi->seq5,    row[6]);
+    strcpy(fi->seq3,    row[7]);
+    }
+else
+    {
+    ZeroVar(fi->seq5);
+    ZeroVar(fi->seq3);
+    }
 strcpy(fi->func,    row[8]);
 
 /* post warnings if alleles are too long */
@@ -427,13 +436,12 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
     inputSnpCount++; 
     parseInputLine(row, fi, e);
     db = hashFindVal(snpHash, fi->rsId+2);
-    if (!db) /* rsId not found in database */
+    if (!db) /* rsId not found in the database */
 	fprintf(e,"%s not found in %s. (%ld)\n",fi->rsId, database, ++notFoundInDb);
-    else /* db was found in the hash from the database */
+    else /* rsId was found in the database */
 	{
 	matchType = findMatch(fi, db->region);
 	resetGaps(fi);
-	printOut(f, fi);
 	if (matchType == smtAlleleError)
 	    {
 	    largeAlleles++;
@@ -444,6 +452,12 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	    sequenceMismatch++;
 	    printErr(fi, db->region+FLANK-(strlen(fi->seq5)), e, database);
 	    }
+	if (!strcmp(fi->allele1,"(NOT_BIALLELIC)"))
+	    {
+	    strcpy(fi->observed, "-");
+	    strcpy(fi->alternate,"-");
+	    }
+	printOut(f, fi);
 	} /* else - db was found in the hash from the database */
     } /* while - reading lines of the file */
 
@@ -456,7 +470,8 @@ printf("Total SNPs:            %ld\n",  inputSnpCount);
 printf("SNPs not in database:  %ld\n",  notFoundInDb);
 printf("Flank Mismatches:      %ld\n",  sequenceMismatch);
 printf("Large Alleles (>%3dbp) %ld\n",  ALLELE, largeAlleles);
-printf("SNPs with details:     %ld\n",  inputSnpCount-notFoundInDb-sequenceMismatch-largeAlleles);
+/* printf("SNPs with details:     %ld\n",  inputSnpCount-notFoundInDb-sequenceMismatch-largeAlleles); */
+printf("SNPs with details:     %ld\n",  inputSnpCount-notFoundInDb);
 }
 
 int main(int argc, char *argv[])

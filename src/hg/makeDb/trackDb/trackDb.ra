@@ -503,6 +503,7 @@ priority 54
 visibility pack
 spectrum on
 type psl .
+cdsDrawOptions enabled
 
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
@@ -512,6 +513,7 @@ priority 54
 visibility hide
 spectrum on
 type psl .
+cdsDrawOptions enabled
 
 track tightMrna
 shortLabel Tight mRNAS
@@ -557,6 +559,7 @@ priority 63
 visibility hide
 spectrum on
 type psl xeno
+cdsDrawOptions enabled
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
@@ -1223,6 +1226,16 @@ shortCircuit 1
 termRegex EN[rm][0-9]+
 searchPriority 11
 
+searchName snpMapShort
+searchTable snpMap
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 5000
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -1294,10 +1307,12 @@ searchTable mrna
 searchType mrnaKeyword
 searchPriority 15
 
+searchName snpMapLong
 searchTable snpMap
 searchMethod exact
 searchType bed
-termRegex (rs|SNP_A-)?[0-9]+(_[0-9]+)?
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
 padding 5000
 

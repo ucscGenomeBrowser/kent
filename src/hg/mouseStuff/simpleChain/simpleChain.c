@@ -8,6 +8,7 @@
 #include "dystring.h"
 
 int maxGap=250000;
+boolean outPsl = FALSE;
  
 void usage()
 /* Explain usage and exit. */
@@ -18,24 +19,16 @@ errAbort(
   "   simpleChain psls outChains \n"
   "options:\n"
   "   -maxGap=N    defines max gap possible (default 250,000)\n"
+  "   -outPsl      output psl format instead of chain\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"maxGap", OPTION_INT},
+   {"outPsl", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-struct cseqPair
-/* Pair of sequences. */
-    {
-    struct cseqPair *next;
-    char *name;	                /* Allocated in hash */
-    char *qName;		/* Name of query sequence. */
-    char *tName;		/* Name of target sequence. */
-    char qStrand;		/* Strand of query sequence. */
-    struct chain *chain;
-    };
 struct seqPair
 /* Pair of sequences. */
     {
@@ -44,6 +37,7 @@ struct seqPair
     char *qName;		/* Name of query sequence. */
     char *tName;		/* Name of target sequence. */
     char qStrand;		/* Strand of query sequence. */
+    unsigned tSize, qSize;
     struct psl *psl;
     };
 
@@ -205,6 +199,91 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     
     }
 }
+
+void chainToPslWrite(struct chain *inChain, FILE *outFile, int tSize, int qSize)
+/* write out a chain in psl format */
+{
+int lastTEnd=0, lastQEnd=0;
+struct psl psl;
+struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+int qInsert, tInsert;
+int blockNum;
+static unsigned *blockSizes = NULL;
+static unsigned *qStarts = NULL;
+static unsigned *tStarts = NULL;
+static int maxCount = 0;
+
+memset(&psl, 0, sizeof(psl));
+
+psl.strand[0] = inChain->qStrand;
+psl.qName = inChain->qName;
+psl.tName = inChain->tName;
+psl.tSize = tSize;
+psl.qSize = qSize;
+psl.tStart = inChain->tStart;
+psl.tEnd = inChain->tEnd;
+
+
+if (inChain->qStrand == '-')
+    {
+    psl.qStart = qSize - inChain->qEnd;
+    psl.qEnd = qSize - inChain->qStart;
+    }
+else
+    {
+    psl.qStart = inChain->qStart;
+    psl.qEnd = inChain->qEnd;
+    }
+
+for(chainBlock = inChain->blockList; chainBlock; chainBlock = chainBlock->next)
+    psl.blockCount++;
+
+if (psl.blockCount > maxCount)
+    {
+    maxCount = psl.blockCount + 100;
+    blockSizes = realloc(blockSizes, maxCount);
+    qStarts = realloc(qStarts, maxCount);
+    tStarts = realloc(tStarts, maxCount);
+    }
+psl.blockSizes = blockSizes;
+psl.qStarts = qStarts;
+psl.tStarts = tStarts;
+
+
+prevChainBlock = NULL;
+blockNum = 0;
+for(chainBlock = inChain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = chainBlock->next)
+    {
+    if (prevChainBlock != NULL)
+	{
+	tInsert = chainBlock->tStart - lastTEnd;
+	if (tInsert)
+	    {
+	    psl.tNumInsert++;
+	    psl.tBaseInsert += tInsert;
+	    psl.misMatch += tInsert;
+	    }
+
+	qInsert = chainBlock->qStart - lastQEnd;
+	if (qInsert)
+	    {
+	    psl.qNumInsert++;
+	    psl.qBaseInsert += qInsert;
+	    }
+	}
+
+    lastTEnd = chainBlock->tEnd;
+    lastQEnd = chainBlock->qEnd;
+    blockSizes[blockNum] = chainBlock->tEnd - chainBlock->tStart;
+    psl.match += blockSizes[blockNum];
+    tStarts[blockNum] = chainBlock->tStart;
+    qStarts[blockNum] = chainBlock->qStart;
+    blockNum++;
+    }
+
+pslTabOut(&psl, outFile);
+}
+
 void simpleChain(char *psls,  char *outChainName)
 /* simpleChain - Stitch psls into chains. */
 {
@@ -215,7 +294,6 @@ struct psl *fakePslList;
 int jj;
 int deletedBases, addedBases;
 FILE *outChains = mustOpen(outChainName, "w");
-struct cseqPair *cspList = NULL, *csp = NULL;
 struct seqPair *spList = NULL, *sp;
 struct lineFile *pslLf = pslFileOpen(psls);
 struct dyString *dy = newDyString(512);
@@ -242,6 +320,8 @@ while ((psl = pslNext(pslLf)) != NULL)
 	sp->qName = cloneString(psl->qName);
 	sp->tName = cloneString(psl->tName);
 	sp->qStrand = psl->strand[0];
+	sp->tSize = psl->tSize;
+	sp->qSize = psl->qSize;
 	}
 
     slAddHead(&sp->psl, psl);
@@ -258,6 +338,7 @@ for(sp = spList; sp; sp = sp->next)
     //slReverse(&sp->psl);
     slSort(&sp->psl,pslCmpScoreDesc);
 
+    /*
     AllocVar(csp);
     slAddHead(&cspList, csp);
     csp->qName = cloneString(sp->psl->qName);
@@ -266,6 +347,7 @@ for(sp = spList; sp; sp = sp->next)
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", csp->qName, csp->qStrand, csp->tName);
     hashAddSaveName(chainHash, dy->string, csp, &csp->name);
+    */
 
     for(psl = sp->psl; psl ;  psl = nextPsl)
 	{
@@ -321,7 +403,12 @@ for(sp = spList; sp; sp = sp->next)
 	}
 
     for(chain = aggregateChains(chainList); chain ;  chain = chain->next)
-	chainWrite(chain, outChains);
+	{
+	if (outPsl)
+	    chainToPslWrite(chain, outChains, sp->tSize, sp->qSize);
+	else
+	    chainWrite(chain, outChains);
+	}
     }
 
 fclose(outChains);
@@ -337,6 +424,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 maxGap = optionInt("maxGap", maxGap);
+outPsl = optionExists("outPsl");
 simpleChain(argv[1], argv[2]);
 return 0;
 }
