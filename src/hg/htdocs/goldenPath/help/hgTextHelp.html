@@ -1,0 +1,817 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>UCSC Genome Bioinformatics: Table Browser User Guide</TITLE>
+	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+<TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+
+<!--HOTLINKS BAR-->
+<TR><TD COLSPAN=2 HEIGHT=40>
+	<TABLE bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><TR bgcolor="2636D1"><TD valign="middle">
+	<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
+			<TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp; 
+			&nbsp;<A href="/index.html" class="topbar">
+				Home</A> &nbsp; - &nbsp;
+			<A href="/cgi-bin/hgGateway" class="topbar">
+				Genome Browser</A> &nbsp; - &nbsp; 
+			<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
+				Blat Search</A> &nbsp; - &nbsp; 
+			<A HREF="/FAQ.html" class="topbar">
+				FAQ</A> &nbsp; - &nbsp; 
+			<A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">
+				User Guide</A> &nbsp;</font></TD>
+	</TR></TABLE>
+	</TD></TR></TABLE>
+</TD></TR>
+
+<!--Content Tables-->  
+<TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
+<TR><TD CELLPADDING=10>	
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><B>&nbsp;Table Browser User Guide </B></FONT> 
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+			
+<CENTER>
+<TABLE BGCOLOR="ffffdd" BORDERCOLOR="cccc99" BORDER=1 CELLPADDING=3>
+<TR><TD><FONT SIZE="2">
+<CENTER>
+Web tool created by 
+<A HREF="http://www.soe.ucsc.edu/~kent">Jim Kent</A>, 
+<A HREF="http://www.soe.ucsc.edu/~sugnet">Charles Sugnet</A>, 
+<A HREF="http://www.soe.ucsc.edu/~booch">Terry Furey</A>, 
+<A HREF="http://www.soe.ucsc.edu/~haussler">David Haussler</A>, 
+<A HREF="mailto:matt@soe.ucsc.edu">Matt Schwartz</A>, 
+<A HREF="mailto:angie@soe.ucsc.edu">Angie Hinrichs</A>, 
+<A HREF="mailto:donnak@soe.ucsc.edu">Donna Karolchik</A>, 
+<A HREF="mailto:heather@soe.ucsc.edu">Heather Trumbower</A>, 
+and the Genome Bioinformatics Group of UC Santa Cruz.
+<BR>
+Copyright 2001 The Regents of the University of California. 
+All rights reserved.
+</CENTER>
+</FONT></TD></TR></TABLE></CENTER>
+
+<H3> Table of Contents: </H3>
+<UL><B>
+  <LI><A CLASS="toc" HREF="#Introduction">
+      Introduction</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#Purpose">
+        What can the Table Browser do?</A>
+        <LI><A CLASS="toc" HREF="#Tables">
+        About the Genome Browser databases and tables</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#Pages">
+      Table Browser Forms</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#Gateway">
+        Choose Organism &amp; Assembly</A>
+        <LI><A CLASS="toc" HREF="#ChooseTable">
+        Choose a Table</A>
+        <LI><A CLASS="toc" HREF="#AdvancedQuery">
+        Advanced Query</A>
+        <LI><A CLASS="toc" HREF="#IntersectOptions">
+        Intersect Results</A>
+        <LI><A CLASS="toc" HREF="#BEDOptions">
+        BED/Custom Track Options</A>
+        <LI><A CLASS="toc" HREF="#FASTAOptions">
+        FASTA (DNA sequence) Options</A>
+        <LI><A CLASS="toc" HREF="#ChooseFields">
+        Choose Fields</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#Formats">
+      Output Data Formats</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#BED">
+        BED/CustomTrack</A>
+        <LI><A CLASS="toc" HREF="#FASTA">
+        FASTA (DNA Sequence)</A>
+        <LI><A CLASS="toc" HREF="#GTF">
+        GTF</A>
+        <LI><A CLASS="toc" HREF="#Hyperlinks">
+        Hyperlinks to Genome Browser</A>
+        <LI><A CLASS="toc" HREF="#TabSep">
+        Tab Separated</A>
+        <LI><A CLASS="toc" HREF="#Stats">
+        Summary/Statistics</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#Constraints">
+      Filtering Results by Constraining Field Values</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#WhatConstrain">
+        What can constraints on fields do?</A>
+        <LI><A CLASS="toc" HREF="#StringConstraints">
+        Constraints on strings</A>
+        <LI><A CLASS="toc" HREF="#NumericConstraints">
+        Constraints on numbers</A>
+        <LI><A CLASS="toc" HREF="#FreeFormConstraints">
+        Free-Form Query</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#Intersection">
+      Filtering Results by Comparing Two Tables</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#WhatIntersect">
+	What can comparing two tables do?</A>
+        <LI><A CLASS="toc" HREF="#Preserving">
+        Comparisons that preserve primary table structure</A>
+        <LI><A CLASS="toc" HREF="#BaseByBase">
+        Base-by-base comparisons</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#FeatureBits">
+      Retrieving Upstream/Downstream/Blocks of Genes/Alignments</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#FBGenePred">
+	Subregions of gene predictions</A>
+        <LI><A CLASS="toc" HREF="#FBPSL">
+	Subregions of alignments</A>
+        <LI><A CLASS="toc" HREF="#FBBed8">
+	Subregions of "thick/thin" records</A>
+        <LI><A CLASS="toc" HREF="#FBBed4">
+	Subregions of simple records</A>
+      </UL>
+  <LI><A CLASS="toc" HREF="#Examples">
+      Example Uses of the Table Browser</A>
+      <UL>
+        <LI><A CLASS="toc" HREF="#getDna">
+        Get DNA sequence for RefSeq genes</A>
+        <LI><A CLASS="toc" HREF="#matchGeneName">
+        Get locations of all RefSeq genes that start with "HOX"</A>
+        <LI><A CLASS="toc" HREF="#blastz">
+        Get human alignments to mouse at ESPN</A>
+        <LI><A CLASS="toc" HREF="#repeatRefGene">
+        Get locations of repeats identified on exons of RefSeq genes</A>
+        <LI><A CLASS="toc" HREF="#tabSep">
+        Download the contents of a table for local processing</A>
+      </UL>
+</B></UL>
+</TD><TD WIDTH=15></TD></TR></TABLE>
+<BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Introduction"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+
+<FONT SIZE="4"><B>&nbsp; Introduction </B></FONT>
+
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+The Table Browser provides a query interface to the Genome Browser 
+database tables.  
+Because the Table Browser uses the same database as the Genome Browser, 
+the two views are always consistent.  
+
+<A NAME="Purpose"></A>
+<H4> What can the Table Browser do? </H4>
+
+The Table Browser can retrieve DNA sequence data or annotation data, 
+for Genome Browser tracks or for intersections/unions of tracks, over 
+a given position range or over the whole genome.  
+It can display some basic statistics calculated over selected data.  
+It can generate a 
+<A HREF="/goldenPath/help/customTracks.html">custom track</A> and 
+automatically add it to the user's session, so that it can be graphically 
+displayed in the genome browser.  
+
+<P>
+One goal of the Table Browser is to provide an extremely flexible 
+query interface.  The user can specify constraints on the values 
+of fields, to narrow down the set of results.  The output format 
+is also highly configurable.  
+
+<P>
+Some things that the Table Browser cannot do (yet) include 
+retrieving data from multiple positions simultaneously and 
+joining together relational tables in a unified interface.  
+The Table Browser is not as powerful as running MySQL on a 
+<A HREF="/downloads.html">local installation of the database itself</A>.  
+
+
+<A NAME="Tables"></A>
+<H4> About the Genome Browser databases and tables </H4>
+
+The 
+<A HREF="/goldenPath/gbdDescriptions.html">
+Genome Browser Database</A> actually consists of several separate 
+databases, one for each genome assembly.  
+The Table Browser gateway page asks the user to select the organism, 
+genome assembly and genomic position.  To retrieve data from the 
+entire genome, enter <B>"genome"</B> as the position.  
+
+<A NAME="Positional"></A>
+<P>
+The Table Browser divides the tables in a database into two categories:
+<B>positional</B> and <B>non-positional</B>.  
+Some output formats and query options are only applicable to positional 
+tables, thus the distinction.
+<UL>
+<LI> <B>Positional</B> tables contain data associated with specific locations 
+     in the genome.  mRNA alignments, gene predictions, cross-species 
+     alignments, and other annotations are stored in positional tables.  
+     Each Genome Browser track is based on a positional table (but may 
+     incorporate information from non-positional tables).  
+<LI> <B>Non-positional</B> tables contain data not tied to genomic locations. 
+     For example, a table that relates a Genethon marker name to a 
+     Marshfield marker name is non-positional.  
+     Many tables relate internal numeric mRNA IDs to 
+     information such as author, tissue, keyword, etc.  
+     Some "meta" tables contain information about the structure of the 
+     database itself or describe external files containing sequence data.  
+</UL>
+
+<P>
+Positional tables can be further subdivided into several categories 
+based on the type of data they describe.  Some tables 
+describe alignments, so they describe a block structure for each element.  
+Other tables do not describe a block structure (only a start and an end).  
+Some tables specify a translation start &amp; end in addition to a 
+transcription start &amp; end.  Some tables specify the strand, some don't.  
+Most, but not all, give a name for each element.  Based on what 
+a table describes, different query and output formatting options may be 
+offered.  
+
+<P>
+Descriptions of the database tables are available 
+<A HREF="/goldenPath/gbdDescriptions.html">here</A>.  
+
+
+</TD><TD WIDTH=15></TD></TR></TABLE>
+<BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Pages"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+
+<FONT SIZE="4"><B>&nbsp; Table Browser Forms </B></FONT>
+
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+The following sections describe the Table Browser pages with the 
+given titles.  
+
+
+<A NAME="Gateway"></A>
+<H4> Choose Organism &amp; Assembly </H4>
+
+This page prompts the user to select the organism (e.g. "Human"), 
+assembly (e.g. "Nov. 2002"), and position (e.g. "USP18", "genome").  
+This is the gateway page for the Table Browser; it will appear when 
+the user clicks on the "Tables" link from the main page of the 
+genome server, or whenever the Table Browser is invoked without 
+specifying which genome assembly to use.  
+
+
+<A NAME="ChooseTable"></A>
+<H4> Choose a Table </H4>
+
+This page is the entry point for the Table Browser when the genome 
+assembly has already been specified (for example, when the user 
+follows the "Tables" link from the Genome Browser).  
+It allows the user to change the position if desired.  
+It lists the 
+<A HREF="#Positional">positional and non-positional</A> 
+database tables, and prompts the user to select one.  
+Having selected a table, the user can click a button to 
+"Get all fields" or specify an "Advanced Query".  
+
+<P>
+The positional table selection takes precedence over non-positional.  
+If the user selects both a positional table and a non-positional table,
+then the positional table will be used and the non-positional table will 
+be ignored.  
+
+<P>
+"Get all fields" is the quickest way to get output.  It simply retrieves 
+all elements from the table (at the specified position, if the table is 
+positional), and prints them out as 
+<A HREF="#TabSep">tab-separated plain text</A>.  
+
+<P>
+The "Advanced Query" button leads to the page described in the next section:
+
+
+<A NAME="AdvancedQuery"></A>
+<H4> Advanced Query </H4>
+
+This page offers choices for 
+<A HREF="#Formats">output format</A> and 
+<A HREF="#Constraints">filtering of results</A> 
+in several sections:
+<UL>
+<LI> <B>position</B><BR>
+     If the selected table is positional, then the position can be changed 
+     on this page.  
+<LI> <B>Select Output Format for <I>table</I></B><BR>
+     <A HREF="#Formats">Output format</A> choices for positional tables are 
+     <UL>
+     <LI> <A HREF="#BEDOptions">Bed/Custom Track...</A>
+     <LI> <A HREF="#FASTAOptions">FASTA (DNA sequence)...</A>
+     <LI> <A HREF="#GTF">GTF</A>
+     <LI> <A HREF="#Hyperlinks">Hyperlinks to Genome Browser</A>
+     <LI> <A HREF="#TabSep">Tab-separated</A>, All Fields
+     <LI> <A HREF="#TabSep">Tab-separated</A>,
+          <A HREF="#ChooseFields">Choose Fields...</A>
+     <LI> <A HREF="#Stats">Summary/Statistics</A>
+     </UL>
+     For non-positional tables, the choices are fewer:
+     <UL>
+     <LI> <A HREF="#TabSep">Tab-separated</A>, All Fields
+     <LI> <A HREF="#TabSep">Tab-separated</A>,
+          <A HREF="#ChooseFields">Choose Fields...</A>
+     <LI> <A HREF="#Stats">Summary/Statistics</A>
+     </UL>
+<LI> <B>(Optional) Filter <I>table</I> Records by Field Values</B><BR>
+     This section allows the user to set 
+     <A HREF="#Constraints">constraints</A> 
+     on the values of most table fields.  
+     If no values are modified from the defaults, then no constraining or 
+     filtering (other than position for positional tables) is done.  
+<LI> <B>(Optional) Intersect Results with Another Table</B><BR>
+     Here the user may select a second positional table and click the 
+     "Intersect Results" button, which leads to the form described 
+     <A HREF="#IntersectOptions">below</A>.  
+     The Table Browser will remember the output format and filtering 
+     constraints from above, and apply them after the "Intersect Results" 
+     form is completed.       
+     This section appears only when the primary table is  positional, 
+     because the 
+     <A HREF="#Intersection">intersection/union</A> 
+     is performed on the positions contained in the selected tables.  
+</UL>
+
+For convenience, the "Get results" button (for non-intersected results) 
+appears in both the output format section and the filtering section.  
+It is the same button (same action), 
+offered in two places to save the user some scrolling.  
+
+
+<A NAME="IntersectOptions"></A>
+<H4> Intersect Results </H4>
+
+At this point the user has specified two positional tables, as well 
+as filtering constraints (if any) on the primary table.  The output 
+format has also been selected -- for intersection of results, the 
+output format must be 
+<A HREF="#FASTA">FASTA</A>,
+<A HREF="#BED">BED/Custom Track</A>,
+<A HREF="#Hyperlinks">Hyperlinks</A>,
+<A HREF="#GTF">GTF</A>, or
+<A HREF="#Stats">Summary/Statistics</A>.  
+Now, the user may specify filtering constraints on the secondary table, 
+and must choose a mode for combining the results from each table:
+
+<UL>
+<LI> <B>Specify how to combine tables <I>table1</I> and <I>table2</I></B><BR>
+     Here the user selects a 
+     <A HREF="#Intersection">mode of combining</A> 
+     primary table results and secondary table results based on position.  
+     <UL>
+     <LI> <A HREF="#AnyOverlap">any overlap</A>
+     <LI> <A HREF="#NoOverlap">no overlap</A>
+     <LI> <A HREF="#OverOverlap">overlap over a specified threshold</A>
+     <LI> <A HREF="#UnderOverlap">overlap under a specified threshold</A>
+     <LI> <A HREF="#BaseByBaseAND">base-by-base positional intersection (AND)</A>
+     <LI> <A HREF="#BaseByBaseOR">base-by-base positional union (OR)</A>
+     </UL>
+     The last two combinations (base-by-base positional intersection/union) 
+     can be applied to the 
+     <A HREF="#BaseByBaseNOT">base-by-base positional complement</A> 
+     of either or both tables.  
+<LI> <B>(Optional) Filter <I>table2</I> Records by Field Values</B><BR>
+     This section allows the user to set 
+     <A HREF="#Constraints">constraints</A> 
+     on the values of secondary table fields.  
+     If no values are modified from the defaults, then no constraining or 
+     filtering of the secondary table (other than position) is done.  
+</UL>
+
+
+<A NAME="BEDOptions"></A>
+<H4> BED/Custom Track Options </H4>
+
+When the user has selected the <A HREF="#BED">BED/Custom Track format</A>, 
+the Table Browser prompts for a few additional parameters:
+
+<UL>
+<LI> <B>Include 
+        <A HREF="/goldenPath/help/customTrack.html">custom track</A>
+	header:</B><BR>
+     If this box is checked, then a custom track 
+     <A HREF="/goldenPath/help/customTrack.html#TRACK">"track" header line</A> 
+     will be generated with the name, description, visibility, and url fields. 
+     Defaults are supplied, so the user does not have to enter any values;
+     however, if 
+<LI> If the user has chosen to include a custom track header in the output, 
+     then the user can also check 
+     <B>Load this custom track into my session</B> 
+     so that the results of the query will be locally stored (until 4 hours 
+     after last usage).  To view the custom track in the Genome Browser, 
+     click the "Get BED" button and view (or save) the resulting BED data; 
+     then click your web browser's "Back" button, then click 
+     the "Genome Browser" link in the blue bar at the top of the page.  
+<LI> <B>Create one BED record per:</B><BR>
+     Here the user has the option to retrieve BED just for certain 
+     components of each record, or from upstream/downstream of each record.
+     <A HREF="#FeatureBits">The options</A> are different for each type of 
+     table.
+</UL>
+
+
+<A NAME="FASTAOptions"></A>
+<H4> FASTA (DNA sequence) Options </H4>
+
+This form prompts the user for additional parameters of 
+<A HREF="#FASTA">FASTA (DNA sequence)</A> output:
+
+<UL>
+<LI> <B>Sequence Retrieval Region Options:</B><BR>
+     If the table is a gene prediction or alignment table, i.e. specifying 
+     exon, translation or block structure, then 
+     the user can select which 
+     <A HREF="#FeatureBits">subregions</A> 
+     of table records are 
+     used to fetch DNA sequence.  The user also has the choice to 
+     concatenate the chunks of DNA sequence for each selected subregion  
+     into one sequence, or to retrieve a separate sequence for each 
+     selected subregion.  (Concatenating is useful when all regions are 
+     selected, or when exons are selected and introns are unselected 
+     to see spliced mRNA sequence.)  
+<LI> <B>Sequence Formatting Options:</B><BR>
+     The user can select upper or lower case (for some subregions if 
+     the table specifies structures), and can mask locations of 
+     repetitive sequences (RepeatMasker) if desired.  
+</UL>
+
+
+<A NAME="ChooseFields"></A>
+<H4> Choose Fields </H4>
+
+This form prompts the user to select which fields of the table to 
+include in 
+<A HREF="#TabSep">tab-separated</A> output when the user has selected 
+the "Tab Separated, Choose Fields..." output format.  
+
+
+</TD><TD WIDTH=15></TD></TR></TABLE>
+<BR></TD></TR></TABLE>
+</TD></TR></TABLE>
+
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Formats"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+<FONT SIZE="4"><B>&nbsp; Output Data Formats </B></FONT>
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<A NAME="BED"></A>
+<H4> BED/CustomTrack </H4>
+
+
+<A NAME="FASTA"></A>
+<H4> FASTA (DNA Sequence) </H4>
+
+
+<A NAME="GTF"></A>
+<H4> GTF </H4>
+
+
+<A NAME="Hyperlinks"></A>
+<H4> Hyperlinks to Genome Browser </H4>
+
+
+<A NAME="TabSep"></A>
+<H4> Tab Separated </H4>
+
+
+<A NAME="Stats"></A>
+<H4> Summary/Statistics </H4>
+
+
+
+</TD></TR></TABLE>
+<BR></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Constraints"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+<FONT SIZE="4"><B>&nbsp; Filtering Results by Constraining Field Values </B></FONT>
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<A NAME="WhatConstrain"></A>
+<H4> What can constraints on fields do? </H4>
+
+
+<A NAME="StringConstraints"></A>
+<H4> Constraints on strings </H4>
+
+
+<A NAME="NumericConstraints"></A>
+<H4> Constraints on numbers </H4>
+
+
+<A NAME="FreeFormConstraints"></A>
+<H4> Free-Form Query </H4>
+
+
+
+</TD></TR></TABLE>
+<BR></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Intersection"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+<FONT SIZE="4"><B>&nbsp; Filtering Results by Comparing Two Tables </B></FONT>
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<A NAME="WhatIntersect"></A>
+<H4> What can comparing two tables do? </H4>
+
+
+<A NAME="Preserving"></A>
+<H4> Comparisons that preserve primary table structure </H4>
+
+<A NAME="AnyOverlap"></A>
+<A NAME="NoOverlap"></A>
+<A NAME="OverOverlap"></A>
+<A NAME="UnderOverlap"></A>
+
+<A NAME="BaseByBase"></A>
+<H4> Base-by-base comparisons </H4>
+
+<A NAME="BaseByBaseAND"></A>
+<A NAME="BaseByBaseOR"></A>
+<A NAME="BaseByBaseNOT"></A>
+
+
+</TD></TR></TABLE>
+<BR></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="FeatureBits"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+<FONT SIZE="4"><B>&nbsp; Retrieving Upstream/Downstream/Blocks of Genes/Alignments </B></FONT>
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<A NAME="FBGenePred"></A>
+<H4> Subregions of gene predictions </H4>
+A gene prediction table specifies both exon structure 
+and translated region.  The choices of granularity are
+<UL>
+<LI> <B>Whole Gene:</B> the block structure and translated region 
+        will be preserved in the BED data.  
+<LI> <B>Upstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 5' end of the gene to <I>N</I> bases away.  
+	If the strand is '+', the 5' end is the low coordinate 
+	("start").  If the strand is '-', the 5' end is the 
+	high coordinate ("end").  
+	Block structure and translated region info will be lost.  
+<LI> <B>Exons plus <I>N</I> bases at each end:</B> the BED data 
+        will contain one simple record per exon, subtracting 
+	<I>N</I> from the start and adding <I>N</I> to the end.  
+	(<I>N</I> can be negative to make the region smaller 
+	instead of larger.)
+<LI> <B>Introns plus <I>N</I> bases at each end:</B> the BED data 
+        will contain one simple record per intron, subtracting 
+	<I>N</I> from the start and adding <I>N</I> to the end.  
+	(<I>N</I> can be negative to make the region smaller 
+	instead of larger.)
+<LI> <B>5' UTR Exons:</B> the BED data 
+        will contain one simple record per 5' UTR exon.  
+	Depending on the value of the strand, 5' may start at 
+	the low coordinate "start" and proceed up (+), or it may 
+	start at the high coordinate "end" and proceed down (-).
+<LI> <B>Coding Exons:</B> the BED data 
+        will contain one simple record per coding exon.  
+	(If the translated region boundaries fall in the middle 
+	of exons, then the exons will be split at those boundaries.)
+<LI> <B>3' UTR Exons:</B> the BED data 
+        will contain one simple record per 3' UTR exon.  
+	Depending on the value of the strand, 3' may start at 
+	the high coordinate "end" and proceed down (+), or it may 
+	start at the low coordinate "start" and proceed up (-);
+<LI> <B>Downstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 3' end of the gene to <I>N</I> bases away.  
+	If the strand is '+', the 3' end is the high coordinate 
+	("end").  If the strand is '-', the 3' end is the 
+	low coordinate ("start").  
+	Block structure and translated region info will be lost.
+</UL>
+
+<A NAME="FBPSL"></A>
+<H4> Subregions of alignments </H4>
+An alignment table specifies block structure, but not translated region.
+<UL>
+<LI> <B>Whole Alignment:</B> the block structure 
+        will be preserved in the BED data.
+<LI> <B>Upstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 5' end of the alignment to <I>N</I> bases away.  
+	If the strand is '+', the 5' end is the low coordinate 
+	("start").  If the strand is '-', the 5' end is the 
+	high coordinate ("end").  
+<LI> <B>Blocks plus <I>N</I> bases at each end:</B> the BED data 
+        will contain one simple record per block, subtracting 
+	<I>N</I> from the start and adding <I>N</I> to the end.  
+	(<I>N</I> can be negative to make the region smaller 
+	instead of larger.)
+<LI> <B>Regions between blocks plus <I>N</I> bases at each end:</B>
+        the BED data 
+        will contain one simple record per intron, subtracting 
+	<I>N</I> from the start and adding <I>N</I> to the end.  
+	(<I>N</I> can be negative to make the region smaller 
+	instead of larger.)
+<LI> <B>Downstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 3' end of the gene to <I>N</I> bases away.  
+	If the strand is '+', the 3' end is the high coordinate 
+	("end").  If the strand is '-', the 3' end is the 
+	low coordinate ("start").  
+	Block structure and translated region info will be lost.
+</UL>
+
+
+<A NAME="FBBed8"></A>
+<H4> Subregions of "thick/thin" records </H4>
+A thick/thin table specifies a "thick" region in 
+the middle of each feature (surrounded by "thin" regions, as 
+displayed in the Genome Browser).  The "thick" region usually 
+refers to translated region (but note that this type of table 
+does not specify block structure).  
+<UL>
+<LI> <B>Whole Gene:</B> the "thick" (translated) region information 
+        will be preserved in the BED data.  
+<LI> <B>Upstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 5' end of the record to <I>N</I> bases away.  
+	If the strand is '+', the 5' end is the low coordinate 
+	("start").  If the strand is '-', the 5' end is the 
+	high coordinate ("end").  
+<LI> <B>5' UTR:</B> the BED data 
+        will contain one simple record per 5' UTR.  
+	Depending on the value of the strand, 5' may start at 
+	the low coordinate "start" and proceed up to the "thick" 
+	region (+), or it may 
+	start at the high coordinate "end" and proceed down (-) to 
+	the "thick" region.
+<LI> <B>CDS:</B> the BED data 
+        will contain one simple record (the "thick" region).  
+<LI> <B>3' UTR:</B> the BED data 
+        will contain one simple record per 3' UTR.  
+	Depending on the value of the strand, 3' may start at 
+	the high coordinate "end" and proceed up to the "thick" 
+	region (+), or it may 
+	start at the low coordinate "start" and proceed down (-) to 
+	the "thick" region.
+<LI> <B>Downstream by <I>N</I> bases:</B> </UL> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 3' end of the record to <I>N</I> bases away.  
+	If the strand is '+', the 3' end is the high coordinate 
+	("end").  If the strand is '-', the 3' end is the 
+	low coordinate ("start").  
+
+<A NAME="FBBed4"></A>
+<H4> Subregions of simple records </H4>
+A simple table specifies on the the start and end position (no 
+block structure or thick/thin region).  However, upstream and 
+downstream regions are available.  If a strand is specified, 
+then the meaning of upstream and downstream depend on the strand.  
+<UL>
+<LI> <B>Whole Gene:</B> simple records (with strand and score, if 
+        the table specifies strand and score) are output.  
+<LI> <B>Upstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 5' end of the record to <I>N</I> bases away.  
+	If the strand is '+', the 5' end is the low coordinate 
+	("start").  If the strand is '-', the 5' end is the 
+	high coordinate ("end").  
+<LI> <B>Downstream by <I>N</I> bases:</B> the BED data will contain 
+        one simple (chrom/start/end/name) record per feature, 
+	from the 3' end of the record to <I>N</I> bases away.  
+	If the strand is '+', the 3' end is the high coordinate 
+	("end").  If the strand is '-', the 3' end is the 
+	low coordinate ("start").  
+</UL>
+
+
+</TD></TR></TABLE>
+<BR></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+<!--outer table is for border purposes-->
+<P>
+<A NAME="Examples"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TR><TD>
+<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+<TR><TD>
+<FONT SIZE="4"><B>&nbsp; Example Uses of the Table Browser </B></FONT>
+</TD></TR></TABLE>
+<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<A NAME="getDna"></A>
+<H4> Get DNA sequence for RefSeq genes </H4>
+
+<A NAME="matchGeneName"></A>
+<H4> Get locations of all RefSeq genes that start with "HOX" </H4>
+
+<A NAME="blastz"></A>
+<H4> Get human alignments to mouse at ESPN </H4>
+
+<A NAME="repeatRefGene"></A>
+<H4> Get locations of repeats identified on exons of RefSeq genes </H4>
+
+<A NAME="tabSep"></A>
+<H4> Download the contents of a table for local processing </H4>
+
+
+</TD></TR></TABLE>
+<BR></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+
+
+</TD></TR></TABLE>
+</BODY></HTML>
+
