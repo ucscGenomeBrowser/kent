@@ -87,6 +87,7 @@ makeC(name, description, fileName);
 
 sprintf(fileName, "%s/makefile", name);
 makeMakefile(name, fileName);
+printf("Don't forget to add %s to CVS\n", name);
 }
 
 int main(int argc, char *argv[])
