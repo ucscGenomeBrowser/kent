@@ -12,7 +12,7 @@
 #include "liftOverChain.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.9 2004/04/15 19:37:34 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.10 2004/04/20 23:41:27 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -188,7 +188,10 @@ else
 static int bedOverSmall(struct lineFile *lf, int fieldCount, 
                         struct hash *chainHash,
                         double minMatch, FILE *mapped, FILE *unmapped, int *errCt)
-/* Do a bed without a block-list. */
+/* Do a bed without a block-list.
+ * NOTE: it would be preferable to have all or the lift
+ * functions work at the line level, rather than the file level. */
+
 {
 int i, wordCount, s, e;
 char *words[20], *chrom;
