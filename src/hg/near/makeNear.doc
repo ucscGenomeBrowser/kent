@@ -14,18 +14,18 @@ cd $dbDir/bed/near
 pepPredToFa $db knownGenePep known.faa
 mkdir blastDb
 cd blastDb
-formatdb -i known.faa -p T -t known -n known
+formatdb -i ../known.faa -p T -t known -n known
 cd ..
 
 # Copy over database to iscratch/i
-mkdir -p /iscratch/i/$db
+ssh kkr1u00
 if (-e /iscratch/i/$db/known) then
    rm -r /iscratch/i/$db/known
 endif
-cp -r known /iscratch/i/$db
+mkdir -p /iscratch/i/$db/known
+cp $dbDir/bed/near/blastDb/known.* /iscratch/i/$db/known
 
 # Load up iscratch/i with blastp and related files
-ssh kkr1u00
 mkdir -p /iscratch/i/blast
 cp /projects/compbio/bin/i686/blastall /iscratch/i/blast
 mkdir -p /iscratch/i/blast/data
@@ -77,3 +77,6 @@ hgLoadBlastTab $db knownBlastTab *.tab
 # the nice affyUcla expression data.
 hgMapBedToGene $db knownGene affyUcla knownToAffyUcla
 
+# Create expression distance table.  This will take about an hour.
+cd ~/src/hg/near/hgExpDistance
+hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToAffyUcla
