@@ -1,6 +1,7 @@
+#ifndef RETROGENE_H
+#define RETROGENE_H
 
 #include "common.h"
-#include "hCommon.h"
 #include "linefile.h"
 #include "portable.h"
 #include "memalloc.h"
@@ -9,19 +10,11 @@
 #include "dystring.h"
 #include "hash.h"
 #include "jksql.h"
-#include "gfxPoly.h"
-#include "memgfx.h"
-#include "vGfx.h"
 #include "chromColors.h"
-#include "browserGfx.h"
-#include "htmshell.h"
-#include "cart.h"
 #include "hdb.h"
-#include "spDb.h"
-#include "hui.h"
-#include "hgFind.h"
 #include "hgTracks.h"
 #include "pseudoGeneLink.h"
+#endif /* RETROGENE_H */
 
 extern char *protDbName;               /* Name of proteome database for this genome. */
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg);
@@ -39,4 +32,5 @@ void loadRetroGene(struct track *tg);
 
 void retroGeneMethods(struct track *tg);
 /* Make track of retroGenes from bed */
+
 
