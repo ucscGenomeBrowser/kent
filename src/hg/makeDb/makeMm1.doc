@@ -123,7 +123,9 @@ o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Make sure that /scratch/hg/gs.11/build28/contigs is loaded
-      with NT_*.fa and pushed to the cluster nodes.
+      with NT_*.fa and pushed to the cluster nodes.  The following
+      cshell script needs updating.
+
 	  cd ~/mm/bed
 	  foreach i (refSeq mrna est)
 	      mkdir $i
@@ -135,6 +137,7 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
 	      jabba make hut spec
 	      jabba push hut
 	  end 
+
     check on progress with jabba check hut in mrna, est, and refSeq
     directories.
 
@@ -197,14 +200,12 @@ o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.127/refSeq.
 o - Unpack this into fa files and get extra info with:
        cd /cluster/store1/mrna.127/refSeq
-       gunzip hs.gbff
-       gunzip hs.faa.gz
-       gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta
-o - Align refSeq.fa to genome as described under mRNA/EST alignments above.
+       gunzip mouse.gbff.gz
+       gunzip mouse.faa.gz
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/mm/bed/refSeq
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2acc 
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
 o - Similarly download refSeq proteins in fasta format to refSeq.pep
 o - Align these by processes described under mRNA/EST alignments above.
@@ -212,7 +213,7 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/mm/bed/refSeq
        ln -s /cluster/store1/mrna.127 mrna
-       hgRefSeqMrna mm1 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2acc mrna/refSeq/hs.faa mim2loc
+       hgRefSeqMrna mm1 mrna/mouseRefSeq.fa mrna/mouseRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/mouse.faa mim2loc
 o - Add Jackson labs info
      cd ~/mm/bed
      mkdir jaxOrtholog
