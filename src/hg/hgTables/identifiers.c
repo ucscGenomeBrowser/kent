@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.4 2004/10/14 19:52:17 kent Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.5 2004/10/23 01:20:06 kent Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -66,6 +66,7 @@ if (idText != NULL && idText[0] != 0)
     f = mustOpen(tn.forCgi, "w");
     mustWrite(f, idText, strlen(idText));
     carefulClose(&f);
+    cartSetString(cart, hgtaIdentifierTable, curTable);
     cartSetString(cart, hgtaIdentifierFile, tn.forCgi);
     if (strlen(idText) > 64 * 1024)
          cartRemove(cart, hgtaPastedIdentifiers);
@@ -83,7 +84,10 @@ char *identifierFileName()
 /* File name identifiers are in, or NULL if no such file. */
 {
 char *fileName = cartOptionalString(cart, hgtaIdentifierFile);
+char *identifierTable = cartOptionalString(cart, hgtaIdentifierTable);
 if (fileName == NULL)
+    return NULL;
+if (identifierTable != NULL && !sameString(identifierTable, curTable))
     return NULL;
 if (fileExists(fileName))
     return fileName;
