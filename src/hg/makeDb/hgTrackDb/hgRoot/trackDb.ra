@@ -848,15 +848,25 @@ visibility full
 spectrum on
 type netAlign mm2
 
-track blastzChain
-shortLabel blastz Chain 
-longLabel Blastz chained alignments
+track chainMouse
+shortLabel Mouse Chain 
+longLabel Chained Blastz Mouse/Human Alignments
 priority 25.814
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type chain 
+type chain mm2
+
+track blastzChain
+shortLabel blastz Chain 
+longLabel Blastz chained alignments
+priority 25.8141
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain mm2
 
 track blastzTightMouse
 shortLabel Tight Mouse 
