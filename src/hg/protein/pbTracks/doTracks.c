@@ -167,22 +167,22 @@ for (index=0; index < len; index++)
 
     if (aa_attrib[(int)res] == CHARGE_POS)
 	{
-	vgBox(g_vg, xx, yy-9, 1*pbScale, 9, MG_RED);
+	vgBox(g_vg, xx, yy-9, 1*pbScale, 9, MG_BLUE);
 	}
     else
     if (aa_attrib[(int)res] == CHARGE_NEG)
 	{
-	vgBox(g_vg, xx, yy, 1*pbScale, 9, MG_BLUE);
+	vgBox(g_vg, xx, yy, 1*pbScale, 9, MG_RED);
 	}
     else
     if (aa_attrib[(int)res] == POLAR)
 	{
-	vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_BLUE);
+	vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_RED);
 	}
     else
     if (aa_attrib[(int)res] == NEUTRAL)
 	{
-	vgBox(g_vg, xx, yy, 1*pbScale, 1, MG_BLUE);
+	vgBox(g_vg, xx, yy, 1*pbScale, 1, MG_BLACK);
 	}
     }
 
@@ -193,8 +193,8 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "polarity");
 
-vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_RED,  g_font, "+");
-vgTextRight(g_vg, xx-14, yy, 10, 10, MG_BLUE, g_font, "-");
+vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_BLUE,  g_font, "+");
+vgTextRight(g_vg, xx-14, yy, 10, 10, MG_RED, g_font, "-");
 
 *yOffp = *yOffp + 15;
 }
@@ -279,7 +279,7 @@ for (index=0; index < len; index++)
     calxy(index, *yOffp, &xx, &yy);
     if (res == 'C')
 	{
-	vgBox(g_vg, xx, yy-9+1, 1*pbScale, 9, MG_RED);
+	vgBox(g_vg, xx, yy-9+1, 1*pbScale, 9, MG_BLUE);
 	}
     else
 	{
@@ -296,7 +296,7 @@ for (index=1; index < (len-2); index++)
 	    {
 	    if ((aa[index+1] != 'C') && (aa[index+2] != 'P'))
 		{
-		vgBox(g_vg, xx-1, yy, 3*pbScale, 9, MG_BLUE);
+		vgBox(g_vg, xx-1, yy, 3*pbScale, 9, MG_RED);
 		}
 	    }
 	}
@@ -306,17 +306,17 @@ calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
 
 trackTitle = cloneString("Cysteines");
-vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLUE, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-10, trackTitleLen*6+12, 12, trackTitle, "cCntTr");
 
 trackTitle = cloneString("Predicted");
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_RED, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy, trackTitleLen*6+12, 12, "Glycosylation", "glycosylation");
 
 trackTitle = cloneString("Glycosylation");
-vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_RED, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+8, trackTitleLen*6+12, 12, trackTitle, "glycosylation");
     
