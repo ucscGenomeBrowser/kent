@@ -19,7 +19,7 @@ gbCheckLock() {
     local lockFile=$1
     if [ -e $lockFile ] ; then
         # compare modification time, first work in file contains modtime
-        awk -v "lockFile=$lockFile" '{
+        gawk -v "lockFile=$lockFile" '{
            modTime=$1;
            if (systime() > modTime+(60*60*24)) {
                 print "Error: lock or stop file more than 1 day old: " lockFile  > "/dev/stderr"
@@ -55,8 +55,8 @@ gbCmpTimeFiles() {
     if [ ! -e "$timeFile2" ] ; then
         return 0  # time2 out-of-date
     fi
-    local time1=`awk '{print $1}' $timeFile1`
-    local time2=`awk '{print $1}' $timeFile2`
+    local time1=`gawk '{print $1}' $timeFile1`
+    local time2=`gawk '{print $1}' $timeFile2`
     if [ $time1 -gt $time2 ] ; then
         return 0  # time2 out-of-date
     else
