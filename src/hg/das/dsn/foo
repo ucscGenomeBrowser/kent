@@ -1,9 +1,0 @@
-<?xml version="1.0" standalone="no"?>
- <!DOCTYPE DASDSN SYSTEM "dasdsn.dtd">
- <DASDSN>
-   <DSN>
-     <SOURCE id="ucscSplicedEsts" version="hg7">UCSC Spliced ESTs</SOURCE>
-     <MAPMASTER>http://servlet.sanger.ac.uk:8080/das/ensembl110</MAPMASTER>
-     <DESCRIPTION>UCSC Spliced ESTs on April 2001</DESCRIPTION>
-   </DSN>
- </DASDSN>

@@ -72,14 +72,17 @@ for (fel = fileList; fel != NULL; fel = fel->next)
     sprintf(contigDir, "%s/%s/%s", ooDir, chrom, contig);
     sprintf(faName, "%s/%s.fa", contigDir, contig);
     sprintf(jobName, "%s_%s", chrom, contig);
-    fprintf(con, "log = %s/%s.%s\n", logDir, jobName, cdna);
-    fprintf(con, "error = %s/%s.%s\n", errDir, jobName, cdna);
-    fprintf(con, "output = %s/%s.%s\n", outDir, jobName, cdna);
-    makeSimpleIn(inDir, jobName, faName);
-    fprintf(con, 
-	"arguments = %s/%s %s/%s mrna /var/tmp/hg/h/10.ooc %s/%s.%s.psl\n",
-	inDir, jobName, inDir, cdna, pslSubDir, contig, cdna);
-    fprintf(con, "queue 1\n\n");
+    if (fileExists(faName))
+	{
+	fprintf(con, "log = %s/%s.%s\n", logDir, jobName, cdna);
+	fprintf(con, "error = %s/%s.%s\n", errDir, jobName, cdna);
+	fprintf(con, "output = %s/%s.%s\n", outDir, jobName, cdna);
+	makeSimpleIn(inDir, jobName, faName);
+	fprintf(con, 
+	    "arguments = %s/%s %s/%s mrna /var/tmp/hg/h/10.ooc %s/%s.%s.psl\n",
+	    inDir, jobName, inDir, cdna, pslSubDir, contig, cdna);
+	fprintf(con, "queue 1\n\n");
+	}
     }
 }
 

@@ -437,7 +437,7 @@ struct dbObject *obType;
 
 fprintf(f, "struct %s\n", dbObj->name);
 fprintf(f, "/* %s */\n", dbObj->comment);
-fprintf(f, "    {\n", dbObj->name);
+fprintf(f, "    {\n");
 if (!dbObj->isSimple)
     fprintf(f, "    struct %s *next;  /* Next in singly linked list. */\n", dbObj->name);
 for (col = dbObj->columnList; col != NULL; col = col->next)
@@ -533,6 +533,8 @@ else if (lt->stringy)
     fprintf(f, "%sret->%s%s = sqlStringComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->isUnsigned)
     fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
+else if (lt->type == t_float)
+    fprintf(f, "%sret->%s%s = sqlFloatComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_char)
     {
     fprintf(f, "%ssqlFixedStringComma(&s, ret->%s%s, sizeof(ret->%s%s));\n",
@@ -614,7 +616,7 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct column *ls;
 		fprintf(f, "sql%s%sArray(row[%d], &ret->%s, &sizeOne);\n",
-			   lName, staDyn, colIx, col->name, col->fixedSize); 
+			   lName, staDyn, colIx, col->name); 
 		if ((ls = col->linkedSize) != NULL)
 		    fprintf(f, "assert(sizeOne == ret->%s);\n", ls->name);
 		}
@@ -802,7 +804,7 @@ fprintf(f, "}\n\n");
 }
 
 void dynamicLoadRow(struct dbObject *table, FILE *f, FILE *hFile)
-/* Create C code to load a static instance from a row into dynamically
+/* Create C code to load an instance from a row into dynamically
  * allocated memory. */
 {
 int i;
@@ -833,6 +835,75 @@ for (tfIx = 0; tfIx < 2; ++tfIx)
 	}
     }
 fprintf(f, "return ret;\n");
+fprintf(f, "}\n\n");
+}
+
+void dynamicLoadAll(struct dbObject *table, FILE *f, FILE *hFile)
+/* Create C code to load a all objects from a tab separated file. */
+{
+char *tableName = table->name;
+
+fprintf(hFile, "struct %s *%sLoadAll(char *fileName);\n", tableName, tableName);
+fprintf(hFile, "/* Load all %s from a tab-separated file.\n", tableName);
+fprintf(hFile, " * Dispose of this with %sFreeList(). */\n\n", tableName);
+
+fprintf(f, "struct %s *%sLoadAll(char *fileName) \n", tableName, tableName);
+fprintf(f, "/* Load all %s from a tab-separated file.\n", tableName);
+fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
+fprintf(f, "{\n");
+fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
+fprintf(f, "struct lineFile *lf = lineFileOpen(fileName, TRUE);\n");
+fprintf(f, "char *row[%d];\n", slCount(table->columnList));
+fprintf(f, "\n");
+fprintf(f, "while (lineFileRow(lf, row))\n");
+fprintf(f, "    {\n");
+fprintf(f, "    el = %sLoad(row);\n", tableName);
+fprintf(f, "    slAddHead(&list, el);\n");
+fprintf(f, "    }\n");
+fprintf(f, "lineFileClose(&lf);\n");
+fprintf(f, "slReverse(&list);\n");
+fprintf(f, "return list;\n");
+fprintf(f, "}\n\n");
+}
+
+void dynamicLoadWherePrintPrototype(char *tableName, FILE *f, boolean addSemi)
+/* Print out function prototype and opening comment. */
+{
+fprintf(f, 
+   "struct %s *%sLoadWhere(struct sqlConnection *conn, char *table, char *where)%s\n", 
+    tableName, tableName,
+    (addSemi ? ";" : ""));
+fprintf(f, "/* Load all %s from table that satisfy where clause. The\n", tableName);
+fprintf(f, " * where clause may be NULL in which case whole table is loaded\n");
+fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
+}
+
+void dynamicLoadWhere(struct dbObject *table, FILE *f, FILE *hFile)
+/* Create C code to build a list from a query. */
+{
+char *tableName = table->name;
+dynamicLoadWherePrintPrototype(tableName, hFile, TRUE);
+fprintf(hFile, "\n");
+dynamicLoadWherePrintPrototype(tableName, f, FALSE);
+fprintf(f, "{\n");
+fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
+fprintf(f, "struct dyString *query = dyStringNew(256);\n");
+fprintf(f, "struct sqlResult *sr;\n");
+fprintf(f, "char **row;\n");
+fprintf(f, "\n");
+fprintf(f, "dyStringPrintf(query, \"select * from %%s\", table);\n");
+fprintf(f, "if (where != NULL)\n");
+fprintf(f, "    dyStringPrintf(query, \" where %%s\", where);\n");
+fprintf(f, "sr = sqlGetResult(conn, query->string);\n");
+fprintf(f, "while ((row = sqlNextRow(sr)) != NULL)\n");
+fprintf(f, "    {\n");
+fprintf(f, "    el = %sLoad(row);\n", tableName);
+fprintf(f, "    slAddHead(&list, el);\n");
+fprintf(f, "    }\n");
+fprintf(f, "slReverse(&list);\n");
+fprintf(f, "sqlFreeResult(&sr);\n");
+fprintf(f, "dyStringFree(&query);\n");
+fprintf(f, "return list;\n");
 fprintf(f, "}\n\n");
 }
 
@@ -875,7 +946,11 @@ for (col = table->columnList; col != NULL; col = col->next)
 	if (col->isList)
 	    {
 	    if (lt->stringy)
-		fprintf(f, "freeMem(el->%s[0]);\n", colName);
+		{
+		fprintf(f, "/* All strings in %s are allocated at once, so only need to free first. */\n", colName);
+		fprintf(f, "if (el->%s != NULL)\n", colName);
+		fprintf(f, "    freeMem(el->%s[0]);\n", colName);
+		}
 	    if (!col->fixedSize)
 		fprintf(f, "freeMem(el->%s);\n", colName);
 	    }
@@ -953,7 +1028,7 @@ for (col = table->columnList; col != NULL; col = col->next)
     enum lowTypes type = lt->type;
     struct dbObject *obType = col->obType;
     char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
-    char outChar;
+    char outChar = 0;
     boolean mightNeedQuotes = FALSE;
 
     switch(type)
@@ -1047,8 +1122,8 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-	    fprintf(f, "fprintf(f, \"%%%c\", el->%s, %s);\n", outChar, 
-		colName, lineEnd);
+	    fprintf(f, "fprintf(f, \"%%%c\", el->%s);\n", outChar, 
+		colName);
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
 	    fprintf(f, "fputc(%s,f);\n", lineEnd);
@@ -1089,13 +1164,13 @@ sqlFile = mustOpen(dotSql, "w");
 /* Print header comment in all files. */
 fprintf(hFile, 
    "/* %s was originally generated by the autoSql program, which also \n"
-   " * generated %s and %s.  This header links the database and the RAM \n"
-   " * representation of objects. */\n\n",
+   " * generated %s and %s.  This header links the database and\n"
+   " * the RAM representation of objects. */\n\n",
    dotH, dotC, dotSql);
 fprintf(cFile, 
    "/* %s was originally generated by the autoSql program, which also \n"
-   " * generated %s and %s.  This module links the database and the RAM \n"
-   " * representation of objects. */\n\n",
+   " * generated %s and %s.  This module links the database and\n"
+   " * the RAM representation of objects. */\n\n",
    dotC, dotH, dotSql);
 fprintf(sqlFile, 
    "# %s was originally generated by the autoSql program, which also \n"
@@ -1113,6 +1188,8 @@ fprintf(hFile, "#define %s\n\n", defineName);
 /* Put the usual includes in .c file, and also include .h file we are
  * generating. */
 fprintf(cFile, "#include \"common.h\"\n");
+fprintf(cFile, "#include \"linefile.h\"\n");
+fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
@@ -1128,6 +1205,8 @@ for (obj = objList; obj != NULL; obj = obj->next)
 	if (!objectHasVariableLists(obj) && !objectHasSubObjects(obj))
 	    staticLoadRow(obj, cFile, hFile);
 	dynamicLoadRow(obj, cFile, hFile);
+	dynamicLoadAll(obj, cFile, hFile);
+	dynamicLoadWhere(obj, cFile, hFile);
 	}
     makeCommaIn(obj, cFile, hFile);
     if (!obj->isSimple)
@@ -1141,4 +1220,5 @@ for (obj = objList; obj != NULL; obj = obj->next)
 
 /* Finish off H file bracket. */
 fprintf(hFile, "#endif /* %s */\n\n", defineName);
+return 0;
 }

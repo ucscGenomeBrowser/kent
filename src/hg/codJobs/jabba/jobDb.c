@@ -21,12 +21,21 @@ if (ret == NULL)
 ret->id = sqlStringComma(&s);
 ret->errFile = sqlStringComma(&s);
 ret->outFile = sqlStringComma(&s);
-ret->submitError = sqlSignedComma(&s);
-ret->inQueue = sqlSignedComma(&s);
-ret->queueError = sqlSignedComma(&s);
-ret->running = sqlSignedComma(&s);
-ret->crashed = sqlSignedComma(&s);
-ret->ranOk = sqlSignedComma(&s);
+ret->cpuTime = sqlFloatComma(&s);
+ret->submitTime = sqlStringComma(&s);
+ret->startTime = sqlStringComma(&s);
+ret->endTime = sqlStringComma(&s);
+ret->retVal = sqlSignedComma(&s);
+ret->gotRetVal = sqlUnsignedComma(&s);
+ret->submitError = sqlUnsignedComma(&s);
+ret->inQueue = sqlUnsignedComma(&s);
+ret->queueError = sqlUnsignedComma(&s);
+ret->trackingError = sqlUnsignedComma(&s);
+ret->running = sqlUnsignedComma(&s);
+ret->crashed = sqlUnsignedComma(&s);
+ret->slow = sqlUnsignedComma(&s);
+ret->hung = sqlUnsignedComma(&s);
+ret->ranOk = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -41,6 +50,9 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->id);
 freeMem(el->errFile);
 freeMem(el->outFile);
+freeMem(el->submitTime);
+freeMem(el->startTime);
+freeMem(el->endTime);
 freez(pEl);
 }
 
@@ -73,17 +85,41 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->outFile);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->submitError);
+fprintf(f, "%f", el->cpuTime);
 fputc(sep,f);
-fprintf(f, "%d", el->inQueue);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->submitTime);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->queueError);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->startTime);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->running);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->endTime);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->crashed);
+fprintf(f, "%d", el->retVal);
 fputc(sep,f);
-fprintf(f, "%d", el->ranOk);
+fprintf(f, "%u", el->gotRetVal);
+fputc(sep,f);
+fprintf(f, "%u", el->submitError);
+fputc(sep,f);
+fprintf(f, "%u", el->inQueue);
+fputc(sep,f);
+fprintf(f, "%u", el->queueError);
+fputc(sep,f);
+fprintf(f, "%u", el->trackingError);
+fputc(sep,f);
+fprintf(f, "%u", el->running);
+fputc(sep,f);
+fprintf(f, "%u", el->crashed);
+fputc(sep,f);
+fprintf(f, "%u", el->slow);
+fputc(sep,f);
+fprintf(f, "%u", el->hung);
+fputc(sep,f);
+fprintf(f, "%u", el->ranOk);
 fputc(lastSep,f);
 }
 
@@ -183,6 +219,7 @@ for (i=0; i<ret->submissionCount; ++i)
 slReverse(&ret->submissionList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+ret->spec = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -197,6 +234,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->command);
 checkFreeList(&el->checkList);
 submissionFreeList(&el->submissionList);
+freeMem(el->spec);
 freez(pEl);
 }
 
@@ -254,6 +292,10 @@ fputc(sep,f);
         }
     if (sep == ',') fputc('}',f);
     }
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->spec);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

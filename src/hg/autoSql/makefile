@@ -1,7 +1,7 @@
 .c.o:
-	gcc -ggdb -Wimplicit -I../inc -I../../inc -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -c $*.c
 
-L = $(MYSQLLIBS) -lm 
+L = -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -13,7 +13,7 @@ autoSql: $(O)
 	strip $(HOME)/bin/$(MACHTYPE)/autoSql
 
 test: test.o testHarness.o
-	gcc -o test testHarness.o test.o ../../lib/$(MACHTYPE)/jkweb.a $(L)
+	gcc -o test testHarness.o test.o $(MYLIBS) $(MYSQLLIBS)
 
 lib:
 	cd ../../lib; make
