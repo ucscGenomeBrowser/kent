@@ -86,7 +86,7 @@ puts(
 "<td>\n"
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<table><tr>\n"
-"<td align=center>&nbsp; genome &nbsp;\n"
+"<td align=center valign=baseline>genome\n"
 );
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -103,13 +103,13 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, 
                            organism, onChangeText);
 printf("</td>\n");
-printf("<td align=center>&nbsp; assembly &nbsp;\n");
+printf("<td align=center valign=baseline>assembly\n");
 
 /* Find all the assemblies that pertain to the selected genome */
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* If we are looking at a zoo database then show the zoo database list */
-    if (strstrNoCase(organism, "zoo") && 
+    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
         strstrNoCase(cur->description, "zoo"))
         {
         assemblyList[numAssemblies] = cur->description;
@@ -135,13 +135,13 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
 printf("</td>\n");
 
-printf("<td align=center>&nbsp; position &nbsp;\n");
+printf("<td align=center valign=baseline>position\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
 freez(&defaultPosition);
 position = NULL;
 
-printf("<td align=center>&nbsp; pixel width &nbsp;\n");
+printf("<td align=center valign=baseline>pixel width\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
 printf("</td>\n");
 printf("<td align=center>");
