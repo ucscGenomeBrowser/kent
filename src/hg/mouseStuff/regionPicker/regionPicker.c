@@ -18,7 +18,7 @@ int bigWinSize = 500000;
 int bigStepSize = 100000;
 int smallWinSize = 125;
 double threshold = 0.8;
-int picksPer = 6;
+int picksPer = 5;
 char *htmlOutput = NULL;
 char *avoidFile = NULL;
 int randSeed = 12345;
@@ -45,6 +45,7 @@ errAbort(
   "   -bigStepSize=N - default %d\n"
   "   -smallWinSize=N - default %d\n"
   "   -theshold=0.N - minimum base identity in small window. default %2.1f\n"
+  "   -chromLimit=file - File that has limits for picks per chromosome\n"
   "   -picksPer=N - number of picks per strata, default %d\n",
        bigWinSize, bigStepSize, smallWinSize, threshold, picksPer
   );
@@ -69,6 +70,16 @@ struct scoredWindow
     double consRatio;   /* Conserved not transcribed density. */
     };
 
+struct chromLimit
+/* Structure to help us limit number of picks per 
+ * chromosome. */
+    {
+    struct chromLimit *next;
+    char *name;		/* Chromosome name - allocated in hash */
+    int size;		/* Chromosome size. */
+    int maxPicks;	/* Maximum number of picks. */
+    int curPicks;	/* Current number of picks. */
+    };
 
 /* This is the ratio of genome on which we make cuts. */
 #define strataCount 3
@@ -464,8 +475,20 @@ slFreeList(&ccList);
 hashFree(&hash);
 }
 
+boolean withinChromLimits(struct hash *chromLimitHash, char *chrom)
+/* Return TRUE if this pick would not over-represent this
+ * chromosome (and increment current pick count on that
+ * chromosome). */
+{
+struct chromLimit *cl = hashFindVal(chromLimitHash, chrom);
+if (cl->curPicks >= cl->maxPicks)
+    return FALSE;
+++cl->curPicks;
+return TRUE;
+}
+
 void outputPicks(struct scoredWindow *winList,  char *database,
-	struct stats *stats, FILE *f)
+	struct hash *chromLimitHash, struct stats *stats, FILE *f)
 /* Output picked regions. */
 {
 struct scoredWindow *strata[strataCount][strataCount];
@@ -484,12 +507,16 @@ if (htmlOutput != NULL)
     html = mustOpen(htmlOutput, "w");
     htmStart(html, "Random Regions for 1% Project");
     }
+fprintf(f, "Cuts at:\n");
 calcCuts(stats->consCounts, histSize, 
 	stats->totalConsCount, 1.0, consCuts, strataCount);
 uglyf("cons %f %f %f\n", consCuts[0], consCuts[1], consCuts[2]);
+fprintf(f, "cons %f %f %f\n", consCuts[0], consCuts[1], consCuts[2]);
 calcCuts(stats->geneCounts, histSize, 
 	stats->totalGeneCount, 1.0/geneScale, geneCuts, strataCount);
 uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
+f, uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
+fprintf(f, "\n");
 
 
 /* Move winList to strata. */
@@ -505,9 +532,9 @@ for (win = winList; win != NULL; win = next)
 
 /* Shuffle strata and output first picks in each. */
 srand(randSeed);
-for (consIx=0; consIx<strataCount; ++consIx)
+for (consIx=strataCount-1; consIx>=0; --consIx)
     {
-    for (geneIx=0; geneIx<strataCount; ++geneIx)
+    for (geneIx=strataCount-1; geneIx>=0; --geneIx)
         {
 	int cs=0, gs=0;
 	if (geneIx>0)
@@ -530,25 +557,28 @@ for (consIx=0; consIx<strataCount; ++consIx)
 	    int end = win->start + bigWinSize;
 	    if (!hitsRegions(win->chrom, win->start, end, avoidList))
 		{
-		AllocVar(avoid);
-		avoid->chrom = cloneString(win->chrom);
-		avoid->start = win->start;
-		avoid->end = end;
-		slAddHead(&avoidList, avoid);
-		fprintf(f, "%s:%d-%d\t", win->chrom, win->start+1, end);
-		fprintf(f, "consNonTx %4.1f%%, gene %4.1f%%\n",
-			100*win->consRatio, 100*win->geneRatio);
-		if (html)
+		if (withinChromLimits(chromLimitHash, win->chrom))
 		    {
-		    fprintf(html, "<A HREF=\"http://genome.ucsc.edu/cgi-bin/");
-		    fprintf(html, "hgTracks?db=%s&position=%s:%d-%d\">",
-			    database, win->chrom, win->start+1, end);
-		    fprintf(html, "%s:%d-%d</A>", win->chrom, win->start+1, end);
-		    fprintf(html, "\tconsNonTx %4.1f%%, gene %4.1f%%<BR>\n",
+		    AllocVar(avoid);
+		    avoid->chrom = cloneString(win->chrom);
+		    avoid->start = win->start;
+		    avoid->end = end;
+		    slAddHead(&avoidList, avoid);
+		    fprintf(f, "%s:%d-%d\t", win->chrom, win->start+1, end);
+		    fprintf(f, "consNonTx %4.1f%%, gene %4.1f%%\n",
 			    100*win->consRatio, 100*win->geneRatio);
+		    if (html)
+			{
+			fprintf(html, "<A HREF=\"http://genome.ucsc.edu/cgi-bin/");
+			fprintf(html, "hgTracks?db=%s&position=%s:%d-%d\">",
+				database, win->chrom, win->start+1, end);
+			fprintf(html, "%s:%d-%d</A>", win->chrom, win->start+1, end);
+			fprintf(html, "\tconsNonTx %4.1f%%, gene %4.1f%%<BR>\n",
+				100*win->consRatio, 100*win->geneRatio);
+			}
+		    if (++pickIx >= picksPer)
+			break;
 		    }
-		if (++pickIx >= picksPer)
-		    break;
 		}
 	    }
 	fprintf(f, "\n");
@@ -561,6 +591,53 @@ if (html)
     }
 }
 
+
+struct hash *getChromLimits()
+/* Get hash full of chromosome limits. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(8);
+struct chromLimit *clList = NULL, *cl;
+double sum = 0;
+char *limitFile = optionVal("chromLimit", NULL);
+
+/* Read in chromosome info from database. */
+sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(cl);
+    hashAddSaveName(hash, row[0], cl, &cl->name);
+    cl->size = atoi(row[1]);
+    sum += cl->size;
+    slAddHead(&clList, cl);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+/* Calculate max picks. */
+for (cl = clList; cl != NULL; cl = cl->next)
+    {
+    cl->maxPicks = round(60.0*cl->size/sum);
+    }
+
+/* Override max picks based on chromLimits file if any. */
+if (limitFile != NULL)
+    {
+    struct lineFile *lf = lineFileOpen(limitFile, TRUE);
+    char *row[2];
+    while (lineFileRow(lf, row))
+        {
+	cl = hashFindVal(hash, row[0]);
+	cl->maxPicks = lineFileNeedNum(lf, row, 1);
+	}
+    lineFileClose(&lf);
+    }
+
+return hash;
+}
+
 void regionPicker(char *database, char *axtBestDir, char *output)
 /* regionPicker - Code to pick regions to annotate deeply.. */
 {
@@ -570,9 +647,11 @@ struct region *regionList = NULL, *region;
 FILE *f = mustOpen(output, "w");
 struct stats *stats;
 struct scoredWindow *winList = NULL, *win;
+struct hash *chromLimitHash = NULL;
 
 AllocVar(stats);
 hSetDb(database);
+chromLimitHash = getChromLimits();
 
 /* Figure out which regions to process from command line.
  * By default will do whole genome. */
@@ -623,7 +702,7 @@ fprintf(f, "\n");
 
 uglyf("Got %d windows with no gaps\n", slCount(winList));
 countChromWindows(winList, f);
-outputPicks(winList, database, stats, f);
+outputPicks(winList, database, chromLimitHash, stats, f);
 }
 
 
