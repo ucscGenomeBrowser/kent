@@ -736,6 +736,19 @@ ret = atof(s);
 return ret;
 }
 
+double sqlDoubleComma(char **pS)
+/* Return signed number at *pS.  Advance *pS past comma at end */
+{
+char *s = *pS;
+char *e = strchr(s, ',');
+double ret;
+
+*e++ = 0;
+*pS = e;
+ret = atof(s);
+return ret;
+}
+
 
 static char *findStringEnd(char *start, char endC)
 /* Return end of string. */
