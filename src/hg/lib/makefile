@@ -39,7 +39,7 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o uPennClones.o \
     dbSnpRS.o
 
-../../lib/$(MACHTYPE)/jkhgap.a: clean $(O) 
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 	ranlib ../../lib/$(MACHTYPE)/jkhgap.a
 
