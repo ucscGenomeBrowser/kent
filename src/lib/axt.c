@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.33 2004/07/02 06:23:16 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.34 2004/07/06 16:58:03 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -579,8 +579,8 @@ ss = axtScoreSchemeFromProteinText(blosumText, "blosum62");
 for (i=0; i<128; ++i)
     for (j=0; j<128; ++j)
         ss->matrix[i][j] *= 19;
-ss->gapOpen = 11;
-ss->gapExtend = 1;
+ss->gapOpen = 11 * 19;
+ss->gapExtend = 1 * 19;
 return ss;
 }
 

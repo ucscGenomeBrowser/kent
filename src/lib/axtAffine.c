@@ -7,7 +7,7 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.1 2004/07/02 06:23:16 kent Exp $";
+static char const rcsid[] = "$Id: axtAffine.c,v 1.2 2004/07/06 16:58:03 kent Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)
@@ -155,9 +155,7 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
             startState(iq);
             qSlipState(iq, gapExt);
             qSlipState(hf, gapStart);            
-#ifdef SOON_I_HOPE
 	    qSlipState(it, gapStart);	/* Allow double gaps, T first always. */
-#endif /* SOON_I_HOPE */
             shortEndState(iq);
             }
         
