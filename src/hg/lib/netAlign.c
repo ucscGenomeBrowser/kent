@@ -15,30 +15,31 @@ void netAlignStaticLoad(char **row, struct netAlign *ret)
 int sizeOne,i;
 char *s;
 
-ret->type = row[0];
+ret->level = sqlUnsigned(row[0]);
 ret->tName = row[1];
-ret->level = sqlUnsigned(row[2]);
-ret->tStart = sqlUnsigned(row[3]);
-ret->tEnd = sqlUnsigned(row[4]);
+ret->tStart = sqlUnsigned(row[2]);
+ret->tEnd = sqlUnsigned(row[3]);
+strcpy(ret->strand, row[4]);
 ret->qName = row[5];
-strcpy(ret->strand, row[6]);
-ret->qStart = sqlUnsigned(row[7]);
-ret->qEnd = sqlUnsigned(row[8]);
-ret->score = sqlUnsigned(row[9]);
-ret->chainId = sqlUnsigned(row[10]);
-ret->qOver = sqlUnsigned(row[11]);
-ret->qFar = sqlUnsigned(row[12]);
-ret->qDup = sqlUnsigned(row[13]);
-ret->tN = sqlUnsigned(row[14]);
-ret->qN = sqlUnsigned(row[15]);
-ret->tR = sqlUnsigned(row[16]);
-ret->qR = sqlUnsigned(row[17]);
-ret->tNewR = sqlUnsigned(row[18]);
-ret->qNewR = sqlUnsigned(row[19]);
-ret->tOldR = sqlUnsigned(row[20]);
-ret->qOldR = sqlUnsigned(row[21]);
-ret->tTrf = sqlUnsigned(row[22]);
-ret->qTrf = sqlUnsigned(row[23]);
+ret->qStart = sqlUnsigned(row[6]);
+ret->qEnd = sqlUnsigned(row[7]);
+ret->chainId = sqlUnsigned(row[8]);
+ret->ali = sqlUnsigned(row[9]);
+ret->score = atof(row[10]);
+ret->qOver = sqlSigned(row[11]);
+ret->qFar = sqlSigned(row[12]);
+ret->qDup = sqlSigned(row[13]);
+ret->type = row[14];
+ret->tN = sqlSigned(row[15]);
+ret->qN = sqlSigned(row[16]);
+ret->tR = sqlSigned(row[17]);
+ret->qR = sqlSigned(row[18]);
+ret->tNewR = sqlSigned(row[19]);
+ret->qNewR = sqlSigned(row[20]);
+ret->tOldR = sqlSigned(row[21]);
+ret->qOldR = sqlSigned(row[22]);
+ret->tTrf = sqlSigned(row[23]);
+ret->qTrf = sqlSigned(row[24]);
 }
 
 struct netAlign *netAlignLoad(char **row)
@@ -50,30 +51,31 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->type = cloneString(row[0]);
+ret->level = sqlUnsigned(row[0]);
 ret->tName = cloneString(row[1]);
-ret->level = sqlUnsigned(row[2]);
-ret->tStart = sqlUnsigned(row[3]);
-ret->tEnd = sqlUnsigned(row[4]);
+ret->tStart = sqlUnsigned(row[2]);
+ret->tEnd = sqlUnsigned(row[3]);
+strcpy(ret->strand, row[4]);
 ret->qName = cloneString(row[5]);
-strcpy(ret->strand, row[6]);
-ret->qStart = sqlUnsigned(row[7]);
-ret->qEnd = sqlUnsigned(row[8]);
-ret->score = sqlUnsigned(row[9]);
-ret->chainId = sqlUnsigned(row[10]);
-ret->qOver = sqlUnsigned(row[11]);
-ret->qFar = sqlUnsigned(row[12]);
-ret->qDup = sqlUnsigned(row[13]);
-ret->tN = sqlUnsigned(row[14]);
-ret->qN = sqlUnsigned(row[15]);
-ret->tR = sqlUnsigned(row[16]);
-ret->qR = sqlUnsigned(row[17]);
-ret->tNewR = sqlUnsigned(row[18]);
-ret->qNewR = sqlUnsigned(row[19]);
-ret->tOldR = sqlUnsigned(row[20]);
-ret->qOldR = sqlUnsigned(row[21]);
-ret->tTrf = sqlUnsigned(row[22]);
-ret->qTrf = sqlUnsigned(row[23]);
+ret->qStart = sqlUnsigned(row[6]);
+ret->qEnd = sqlUnsigned(row[7]);
+ret->chainId = sqlUnsigned(row[8]);
+ret->ali = sqlUnsigned(row[9]);
+ret->score = atof(row[10]);
+ret->qOver = sqlSigned(row[11]);
+ret->qFar = sqlSigned(row[12]);
+ret->qDup = sqlSigned(row[13]);
+ret->type = cloneString(row[14]);
+ret->tN = sqlSigned(row[15]);
+ret->qN = sqlSigned(row[16]);
+ret->tR = sqlSigned(row[17]);
+ret->qR = sqlSigned(row[18]);
+ret->tNewR = sqlSigned(row[19]);
+ret->qNewR = sqlSigned(row[20]);
+ret->tOldR = sqlSigned(row[21]);
+ret->qOldR = sqlSigned(row[22]);
+ret->tTrf = sqlSigned(row[23]);
+ret->qTrf = sqlSigned(row[24]);
 return ret;
 }
 
@@ -83,7 +85,7 @@ struct netAlign *netAlignLoadAll(char *fileName)
 {
 struct netAlign *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[24];
+char *row[25];
 
 while (lineFileRow(lf, row))
     {
@@ -92,31 +94,6 @@ while (lineFileRow(lf, row))
     }
 lineFileClose(&lf);
 slReverse(&list);
-return list;
-}
-
-struct netAlign *netAlignLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all netAlign from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
- * Dispose of this with netAlignFreeList(). */
-{
-struct netAlign *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
-
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = netAlignLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -130,30 +107,31 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->type = sqlStringComma(&s);
-ret->tName = sqlStringComma(&s);
 ret->level = sqlUnsignedComma(&s);
+ret->tName = sqlStringComma(&s);
 ret->tStart = sqlUnsignedComma(&s);
 ret->tEnd = sqlUnsignedComma(&s);
-ret->qName = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->qName = sqlStringComma(&s);
 ret->qStart = sqlUnsignedComma(&s);
 ret->qEnd = sqlUnsignedComma(&s);
-ret->score = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
-ret->qOver = sqlUnsignedComma(&s);
-ret->qFar = sqlUnsignedComma(&s);
-ret->qDup = sqlUnsignedComma(&s);
-ret->tN = sqlUnsignedComma(&s);
-ret->qN = sqlUnsignedComma(&s);
-ret->tR = sqlUnsignedComma(&s);
-ret->qR = sqlUnsignedComma(&s);
-ret->tNewR = sqlUnsignedComma(&s);
-ret->qNewR = sqlUnsignedComma(&s);
-ret->tOldR = sqlUnsignedComma(&s);
-ret->qOldR = sqlUnsignedComma(&s);
-ret->tTrf = sqlUnsignedComma(&s);
-ret->qTrf = sqlUnsignedComma(&s);
+ret->ali = sqlUnsignedComma(&s);
+ret->score = sqlDoubleComma(&s);
+ret->qOver = sqlSignedComma(&s);
+ret->qFar = sqlSignedComma(&s);
+ret->qDup = sqlSignedComma(&s);
+ret->type = sqlStringComma(&s);
+ret->tN = sqlSignedComma(&s);
+ret->qN = sqlSignedComma(&s);
+ret->tR = sqlSignedComma(&s);
+ret->qR = sqlSignedComma(&s);
+ret->tNewR = sqlSignedComma(&s);
+ret->qNewR = sqlSignedComma(&s);
+ret->tOldR = sqlSignedComma(&s);
+ret->qOldR = sqlSignedComma(&s);
+ret->tTrf = sqlSignedComma(&s);
+ret->qTrf = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -165,9 +143,9 @@ void netAlignFree(struct netAlign **pEl)
 struct netAlign *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->type);
 freeMem(el->tName);
 freeMem(el->qName);
+freeMem(el->type);
 freez(pEl);
 }
 
@@ -188,61 +166,65 @@ void netAlignOutput(struct netAlign *el, FILE *f, char sep, char lastSep)
 /* Print out netAlign.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->type);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->level);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tName);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->level);
 fputc(sep,f);
 fprintf(f, "%u", el->tStart);
 fputc(sep,f);
 fprintf(f, "%u", el->tEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->qName);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand);
+fprintf(f, "%s", el->qName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", el->qEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->score);
-fputc(sep,f);
 fprintf(f, "%u", el->chainId);
 fputc(sep,f);
-fprintf(f, "%u", el->qOver);
+fprintf(f, "%u", el->ali);
 fputc(sep,f);
-fprintf(f, "%u", el->qFar);
+fprintf(f, "%f", el->score);
 fputc(sep,f);
-fprintf(f, "%u", el->qDup);
+fprintf(f, "%d", el->qOver);
 fputc(sep,f);
-fprintf(f, "%u", el->tN);
+fprintf(f, "%d", el->qFar);
 fputc(sep,f);
-fprintf(f, "%u", el->qN);
+fprintf(f, "%d", el->qDup);
 fputc(sep,f);
-fprintf(f, "%u", el->tR);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->type);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->qR);
+fprintf(f, "%d", el->tN);
 fputc(sep,f);
-fprintf(f, "%u", el->tNewR);
+fprintf(f, "%d", el->qN);
 fputc(sep,f);
-fprintf(f, "%u", el->qNewR);
+fprintf(f, "%d", el->tR);
 fputc(sep,f);
-fprintf(f, "%u", el->tOldR);
+fprintf(f, "%d", el->qR);
 fputc(sep,f);
-fprintf(f, "%u", el->qOldR);
+fprintf(f, "%d", el->tNewR);
 fputc(sep,f);
-fprintf(f, "%u", el->tTrf);
+fprintf(f, "%d", el->qNewR);
 fputc(sep,f);
-fprintf(f, "%u", el->qTrf);
+fprintf(f, "%d", el->tOldR);
+fputc(sep,f);
+fprintf(f, "%d", el->qOldR);
+fputc(sep,f);
+fprintf(f, "%d", el->tTrf);
+fputc(sep,f);
+fprintf(f, "%d", el->qTrf);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

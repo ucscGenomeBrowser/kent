@@ -3,32 +3,33 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#alignment portion of net file
+#Database representation of a net of alignments.
 CREATE TABLE netAlign (
-    type varchar(255) not null,	# fill or gap
-    tName varchar(255) not null,	# Human Chrom
-    level int unsigned not null,	# level of alignment
-    tStart int unsigned not null,	# Start on Human
-    tEnd int unsigned not null,	# End on Human
-    qName varchar(255) not null,	# Mouse Chromosome
-    strand char(1) not null,	# + direction matches - opposite
-    qStart int unsigned not null,	# Start on Mouse
-    qEnd int unsigned not null,	# End on Mouse
-    score int unsigned not null,	# score
-    chainId int unsigned not null,	# chain Id
-    qOver int unsigned not null,	# overlap with parent gap on query side(inverts)
-    qFar int unsigned not null,	# local or tandem
-    qDup int unsigned not null,	# two or more copies in query region
-    tN int unsigned not null,	# unsequenced bases on target
-    qN int unsigned not null,	# unsequenced bases on query
-    tR int unsigned not null,	# repeatMasker bases on target
-    qR int unsigned not null,	# repeatMasker bases on query
-    tNewR int unsigned not null,	# lineage specific repeats on target
-    qNewR int unsigned not null,	# lineage specific repeats on query
-    tOldR int unsigned not null,	# bases of ancient repeats on target
-    qOldR int unsigned not null,	# bases of ancient repeats on query
-    tTrf int unsigned not null,	# bases of Tandam repeats on target
-    qTrf int unsigned not null,	# bases of Tandam repeats on query
+    level int unsigned not null,	# Level of alignment
+    tName varchar(255) not null,	# Target chromosome
+    tStart int unsigned not null,	# Start on target
+    tEnd int unsigned not null,	# End on target
+    strand char(1) not null,	# Orientation of query. + or -
+    qName varchar(255) not null,	# Query chromosome
+    qStart int unsigned not null,	# Start on query
+    qEnd int unsigned not null,	# End on query
+    chainId int unsigned not null,	# Associated chain Id with alignment details
+    ali int unsigned not null,	# Bases in gap-free alignments
+    score double not null,	# Score - a number proportional to 100x matching bases
+    qOver int not null,	# Overlap with parent gap on query side. -1 for undefined
+    qFar int not null,	# Distance from parent gap on query side. -1 for undefined
+    qDup int not null,	# Bases with two or more copies in query. -1 for undefined
+    type varchar(255) not null,	# Syntenic type: gap/top/syn/nonsyn/inv
+    tN int not null,	# Unsequenced bases on target. -1 for undefined
+    qN int not null,	# Unsequenced bases on query. -1 for undefined
+    tR int not null,	# RepeatMasker bases on target. -1 for undefined
+    qR int not null,	# RepeatMasker bases on query. -1 for undefined
+    tNewR int not null,	# Lineage specific repeats on target. -1 for undefined
+    qNewR int not null,	# Lineage specific repeats on query. -1 for undefined
+    tOldR int not null,	# Bases of ancient repeats on target. -1 for undefined
+    qOldR int not null,	# Bases of ancient repeats on query. -1 for undefined
+    tTrf int not null,	# Bases of Tandam repeats on target. -1 for undefined
+    qTrf int not null,	# Bases of Tandam repeats on query. -1 for undefined
               #Indices
-    PRIMARY KEY(type)
+    PRIMARY KEY(level)
 );

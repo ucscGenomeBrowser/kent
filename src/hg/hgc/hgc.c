@@ -1370,7 +1370,8 @@ int tSize, qSize;
 
 hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
-	"select * from %s where tName = '%s' and tStart <= %d and tEnd > %d and level = %s",
+	"select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
+	"and level = %s",
 	table, seqName, start, start, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -1379,13 +1380,13 @@ netAlignStaticLoad(row+rowOffset, &net);
 tSize = net.tEnd - net.tStart;
 qSize = net.qEnd - net.qStart;
 printf("<B>type:</B> %s<BR>\n", net.type);
-printf("<B>level:</B> %d<BR>\n", net.level);
+printf("<B>level:</B> %d<BR>\n", net.level/2 + 1);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
 	org, net.tName, net.tStart+1, net.tEnd);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
 	otherOrg, net.qName, net.qStart+1, net.qEnd);
 printf("<B>strand:</B> %c<BR>\n", net.strand[0]);
-printf("<B>score:</B> %u<BR>\n", net.score);
+printf("<B>score:</B> %1.1f<BR>\n", net.score);
 if (net.chainId)
     printf("<B>chain ID:</B> %u<BR>\n", net.chainId);
 printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net.qOver);

@@ -45,6 +45,14 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+int cnFillCmpTarget(const void *va, const void *vb)
+/* Compare to sort based on target. */
+{
+const struct cnFill *a = *((struct cnFill **)va);
+const struct cnFill *b = *((struct cnFill **)vb);
+return a->tStart - b->tStart;
+}
+
 void chainNetFree(struct chainNet **pNet)
 /* Free up a chromosome net. */
 {

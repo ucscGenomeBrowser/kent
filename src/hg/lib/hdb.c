@@ -251,17 +251,25 @@ if (startsWith("chr", table))
     }
 }
 
-
-int hChromSize(char *chromName)
-/* Return size of chromosome. */
+int hdbChromSize(struct sqlConnection *conn, char *chromName)
+/* Get chromosome size from given database connection. */
 {
-struct sqlConnection *conn;
 int size;
 char query[256];
 
 conn = hAllocConn();
-sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
+snprintf(query, sizeof(query), 	
+	"select size from chromInfo where chrom = '%s'", chromName);
 size = sqlQuickNum(conn, query);
+return size;
+}
+
+
+int hChromSize(char *chromName)
+/* Return size of chromosome. */
+{
+struct sqlConnection *conn = hAllocConn();
+int size = hdbChromSize(conn, chromName);
 hFreeConn(&conn);
 return size;
 }
@@ -269,13 +277,8 @@ return size;
 int hChromSize2(char *chromName)
 /* Return size of chromosome. */
 {
-struct sqlConnection *conn;
-int size;
-char query[256];
-
-conn = hAllocConn2();
-sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
-size = sqlQuickNum(conn, query);
+struct sqlConnection *conn = hAllocConn2();
+int size = hdbChromSize(conn, chromName);
 hFreeConn2(&conn);
 return size;
 }
@@ -2080,43 +2083,43 @@ else if (strstrNoCase(genome, "human"))
 return result;
 }
 
-/* get a single field from the database, given database name, 
-   table name, field name, and a condition string */
 char *sqlGetField(struct sqlConnection *connIn, 
    	          char *dbName, char *tblName, char *fldName, 
   	          char *condition)
+/* get a single field from the database, given database name, 
+ * table name, field name, and a condition string */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *answer;
+
+// allocate connection if given NULL
+if (connIn == NULL)
     {
-    struct sqlConnection *conn;
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    char *answer;
-
-    // allocate connection if given NULL
-    if (connIn == NULL)
-    	{
-	conn = hAllocConn();
-	}
-    else
-	{
-        conn = connIn;
-        }
-
-    answer = NULL;
-    sprintf(query, "select %s from %s.%s  where %s;",
-            fldName, dbName, tblName, condition);
-    //printf("<br>%s\n", query); fflush(stdout);
-    sr  = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-                
-    if (row != NULL)
-	{
-	answer = strdup(row[0]);
-	}
-    
-    sqlFreeResult(&sr);
-    if (connIn == NULL) hFreeConn(&conn);
-			
-    return(answer);
+    conn = hAllocConn();
     }
+else
+    {
+    conn = connIn;
+    }
+
+answer = NULL;
+sprintf(query, "select %s from %s.%s  where %s;",
+	fldName, dbName, tblName, condition);
+//printf("<br>%s\n", query); fflush(stdout);
+sr  = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+	    
+if (row != NULL)
+    {
+    answer = strdup(row[0]);
+    }
+
+sqlFreeResult(&sr);
+if (connIn == NULL) hFreeConn(&conn);
+		    
+return(answer);
+}
 

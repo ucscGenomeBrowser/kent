@@ -831,16 +831,6 @@ priority 25.80
 visibility dense
 type genePred
 
-track blastzMouseSyn
-shortLabel Net Synteny  
-longLabel Blastz Net and Synteny
-priority 25.81
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
 track mouseNet
 shortLabel Mouse Net
 longLabel Mouse/Human Alignment Net
@@ -857,11 +847,19 @@ visibility hide
 spectrum on
 type netAlign mm2
 
-track blastzNetOld
-shortLabel Net Align old
-longLabel Blastz Mouse Best in Genome Alignments with chaining and netting old version 1.0
-priority 25.813
-visibility full
+track mouseNet2
+shortLabel Mouse Net2
+longLabel Mouse/Human Alignment Net2
+priority 25.8111
+visibility hide
+spectrum on
+type netAlign mm2
+
+track mouseSynNet2
+shortLabel Syntenic Net2
+longLabel Mouse/Human Syntenic Alignment Net2
+priority 25.8121
+visibility hide
 spectrum on
 type netAlign mm2
 

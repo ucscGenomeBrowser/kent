@@ -66,6 +66,9 @@ void cnFillFree(struct cnFill **pFill);
 void cnFillFreeList(struct cnFill **pList);
 /* Free up a list of fills. */
 
+int cnFillCmpTarget(const void *va, const void *vb);
+/* Compare to sort based on target. */
+
 struct cnFill *cnFillRead(struct chainNet *net, struct lineFile *lf);
 /* Recursively read in list and children from file. */
 

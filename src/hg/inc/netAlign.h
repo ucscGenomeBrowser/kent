@@ -6,33 +6,34 @@
 #define NETALIGN_H
 
 struct netAlign
-/* alignment portion of net file */
+/* Database representation of a net of alignments. */
     {
     struct netAlign *next;  /* Next in singly linked list. */
-    char *type;	/* fill or gap */
-    char *tName;	/* Human Chrom */
-    unsigned level;	/* level of alignment */
-    unsigned tStart;	/* Start on Human */
-    unsigned tEnd;	/* End on Human */
-    char *qName;	/* Mouse Chromosome */
-    char strand[2];	/* + direction matches - opposite */
-    unsigned qStart;	/* Start on Mouse */
-    unsigned qEnd;	/* End on Mouse */
-    unsigned score;	/* score */
-    unsigned chainId;	/* chain Id */
-    unsigned qOver;	/* overlap with parent gap on query side(inverts) */
-    unsigned qFar;	/* local or tandem */
-    unsigned qDup;	/* two or more copies in query region */
-    unsigned tN;	/* unsequenced bases on target */
-    unsigned qN;	/* unsequenced bases on query */
-    unsigned tR;	/* repeatMasker bases on target */
-    unsigned qR;	/* repeatMasker bases on query */
-    unsigned tNewR;	/* lineage specific repeats on target */
-    unsigned qNewR;	/* lineage specific repeats on query */
-    unsigned tOldR;	/* bases of ancient repeats on target */
-    unsigned qOldR;	/* bases of ancient repeats on query */
-    unsigned tTrf;	/* bases of Tandam repeats on target */
-    unsigned qTrf;	/* bases of Tandam repeats on query */
+    unsigned level;	/* Level of alignment */
+    char *tName;	/* Target chromosome */
+    unsigned tStart;	/* Start on target */
+    unsigned tEnd;	/* End on target */
+    char strand[2];	/* Orientation of query. + or - */
+    char *qName;	/* Query chromosome */
+    unsigned qStart;	/* Start on query */
+    unsigned qEnd;	/* End on query */
+    unsigned chainId;	/* Associated chain Id with alignment details */
+    unsigned ali;	/* Bases in gap-free alignments */
+    double score;	/* Score - a number proportional to 100x matching bases */
+    int qOver;	/* Overlap with parent gap on query side. -1 for undefined */
+    int qFar;	/* Distance from parent gap on query side. -1 for undefined */
+    int qDup;	/* Bases with two or more copies in query. -1 for undefined */
+    char *type;	/* Syntenic type: gap/top/syn/nonsyn/inv */
+    int tN;	/* Unsequenced bases on target. -1 for undefined */
+    int qN;	/* Unsequenced bases on query. -1 for undefined */
+    int tR;	/* RepeatMasker bases on target. -1 for undefined */
+    int qR;	/* RepeatMasker bases on query. -1 for undefined */
+    int tNewR;	/* Lineage specific repeats on target. -1 for undefined */
+    int qNewR;	/* Lineage specific repeats on query. -1 for undefined */
+    int tOldR;	/* Bases of ancient repeats on target. -1 for undefined */
+    int qOldR;	/* Bases of ancient repeats on query. -1 for undefined */
+    int tTrf;	/* Bases of Tandam repeats on target. -1 for undefined */
+    int qTrf;	/* Bases of Tandam repeats on query. -1 for undefined */
     };
 
 void netAlignStaticLoad(char **row, struct netAlign *ret);
@@ -45,11 +46,6 @@ struct netAlign *netAlignLoad(char **row);
 
 struct netAlign *netAlignLoadAll(char *fileName);
 /* Load all netAlign from a tab-separated file.
- * Dispose of this with netAlignFreeList(). */
-
-struct netAlign *netAlignLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all netAlign from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
  * Dispose of this with netAlignFreeList(). */
 
 struct netAlign *netAlignCommaIn(char **pS, struct netAlign *ret);
@@ -72,6 +68,8 @@ void netAlignOutput(struct netAlign *el, FILE *f, char sep, char lastSep);
 
 #define netAlignCommaOut(el,f) netAlignOutput(el,f,',',',');
 /* Print out netAlign as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* NETALIGN_H */
 
