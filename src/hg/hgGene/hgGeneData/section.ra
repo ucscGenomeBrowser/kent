@@ -3,7 +3,7 @@ shortLabel Quick Links
 longLabel Quick Links to Tools and Databases
 priority 10
 
-name uniProtComments
+name swissProtComments
 shortLabel UniProt Comments
 longLabel Comments and Description Text from UniProt (Swiss-Prot/TrEMBL)
 priority 20
