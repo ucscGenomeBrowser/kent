@@ -51,5 +51,14 @@ void xapIndent(int count, FILE *f);
 void xapSkip(struct xap *xp);
 /* Skip current tag and any children.  Called from startHandler. */
 
+void xapParseAny(char *fileName, char *type, 
+	void *(*startHandler)(struct xap *xp, char *name, char **atts),
+	void (*endHandler)(struct xap *xp, char *name),
+	char **retType, void *retObj);
+/* Parse any object out of an XML file. 
+ * If type parameter is non-NULL, force type.
+ * example:
+ *     xapParseAny("file.xml", "das", dasStartHandler, dasEndHandler, &type, &obj); */
+
 #endif /* XAP_H */
 

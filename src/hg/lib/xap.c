@@ -139,3 +139,23 @@ void xapSkip(struct xap *xp)
 xp->skipDepth = xp->stackDepth;
 }
 
+void xapParseAny(char *fileName, char *type, 
+	void *(*startHandler)(struct xap *xp, char *name, char **atts),
+	void (*endHandler)(struct xap *xp, char *name),
+	char **retType, void *retObj)
+/* Parse any object out of an XML file. 
+ * If type parameter is non-NULL, force type.
+ * example:
+ *     xapParseAny("file.xml", "das", dasStartHandler, dasEndHandler, &type, &obj); */
+{
+struct xap *xp = xapNew(startHandler, endHandler);
+void **pObj = retObj;
+xapParse(xp, fileName);
+if (type != NULL && !sameString(xp->topType, type))
+    xapError(xp, "Got %s, expected %s\n", xp->topType, type);
+if (retType != NULL)
+    *retType = cloneString(xp->topType);
+*pObj = xp->topObject;
+xapFree(&xp);
+}
+
