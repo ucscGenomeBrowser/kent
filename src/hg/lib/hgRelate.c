@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.17 2004/01/30 22:34:12 hartera Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.18 2004/02/18 01:37:51 kent Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -125,9 +125,9 @@ void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
 {
 struct dyString *query = newDyString(256);
 va_list args;
-va_start(args, comment);
 static boolean initialized = FALSE;
 
+va_start(args, comment);
 /* create history table if it does not exist already */
 if (!initialized)
     {
