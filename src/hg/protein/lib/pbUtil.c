@@ -1,6 +1,7 @@
 /* pbUtil.c various utility functions for Proteome Browser */
 #include "common.h"
 #include "hCommon.h"
+#include "string.h"
 #include "portable.h"
 #include "memalloc.h"
 #include "jksql.h"
@@ -882,7 +883,7 @@ while (row3 != NULL)
 	    hPrintf(
 		"<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
 		displayID, gDatabase);
-	    if (sameWord(spID, displayID))
+	    if (sameWord(spID, displayID) || (strstr(displayID, spID) != NULL)) 
 		{
 		hPrintf("%s</A> %s\n", spID, desc);
 		}
@@ -978,15 +979,20 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    {
 	    if (sameWord(protAcc, protDisp))
 		{
-		//hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
 		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
 		hPrintf("%s</A> %s\n", protAcc, protDesc);
 		}
 	    else
 		{
-		//hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">",protDisp);
 		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
-		hPrintf("%s</A> (aka %s) %s\n", protAcc, protDisp, protDesc);
+		if (strstr(protDisp, protAcc) != NULL) 
+		    {
+		    hPrintf("%s</A> %s\n", protAcc, protDesc);
+		    }
+	        else
+		    {
+	    	    hPrintf("%s</A> (aka %s) %s\n", protAcc, protDisp, protDesc);
+		    }
 		}
 	    }
 	oldOrg = strdup(protOrg);
