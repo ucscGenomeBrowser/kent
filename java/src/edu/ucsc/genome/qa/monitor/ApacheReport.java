@@ -43,6 +43,12 @@ public class ApacheReport {
 
       String filename = outpath + year + getMonth(month) + day + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
+      String url = "/usr/local/apache/htdocs/";
+      if (outpath.startsWith(url)) {
+        String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
+        System.out.println("\nTry the URL directly: \n" + 
+                           urlpath + year + getMonth(month) + day + ".html");
+      }
       FileWriter fout = new FileWriter(filename);
       PrintWriter pw = new PrintWriter(fout);
       return(pw);
