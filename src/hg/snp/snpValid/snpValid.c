@@ -17,8 +17,9 @@
 */
 
 #include "hdb.h"
-
 #include "snpMap.h"
+
+#include "axt.h"
 
 #include <time.h>
 
@@ -28,7 +29,9 @@ static char const rcsid[] = "";
 char *db  = NULL;	/* DB from command line */
 char *chr = NULL;	/* chr name from command line e.g "chr1" */
 
-int threshold = 8;  /* number of mismatched bases tolerated as a match */
+int threshold = 70;  /* minimum score for match */
+
+int Verbose = 0;    /* set to 1 to see more detailed output (used upper case because var name collision in namespace) */
 
 void usage()
 /* Explain usage and exit. */
@@ -39,14 +42,16 @@ errAbort(
   "   snpValid db \n"
   "options:\n"
   "   -chr=name - Use chrom name (e.g chr1) to limit validation, default all chromosomes.\n"
-  "   -threshold=number - Use threshold number of tolerated mismatches for snp context, default %u.\n"
-  , threshold);
+  "   -threshold=number - Use threshold as minimum score 0-99, default %u.\n"
+  "   -verbose=number - Use verbose=1 to see all output mismatches, default %u.\n"
+  , threshold, Verbose);
 }
 
 
 static struct optionSpec options[] = {
-   { "threshold", OPTION_INT    },
    { "chr"      , OPTION_STRING },
+   { "threshold", OPTION_INT    },
+   { "verbose"  , OPTION_STRING },
    { NULL       , 0             },
 };
 
@@ -353,6 +358,48 @@ if ((*s1!=0) && (toupper(*s1)==toupper(*s2)))
 return (toupper(*s1) - toupper(*s2));
 }
 
+boolean allNs(char *s1)
+/* check for all Ns */
+{
+if ((*s1!=0) && (toupper(*s1)=='N')) 
+    while ((*s1!=0) && (toupper(*++s1)=='N')) ;
+return (*s1 == 0);
+}
+
+int leftFlank(char *s1)
+/* look for length of lowercase left flank */
+{
+char *s2 = s1;
+while ((*s1!=0) && (toupper(*s1)!=*s1))
+    {
+    ++s1;
+    }
+return (s1 - s2);
+}
+
+int lengthOneDash(char *s1)
+/* get length, count at most one dash */
+{
+int dash = 0;
+int cnt = 0;
+while (*s1!=0) 
+    {
+    if (*s1 == '-')
+	{
+	if (!dash)
+	    ++dash;
+	}
+    else
+	{
+	++cnt;
+	}
+    ++s1;
+    }
+return (cnt + dash);
+}
+
+
+
 
 int misses(char *dna1, char *dna2)
 /*  compare two short dna strands of equal length, 
@@ -365,12 +412,12 @@ int i = 0;
 int len = len1;
 if (len2 < len)
   len = len2;
-toUpperN(dna1, len1);
-toUpperN(dna2, len2);
+//toUpperN(dna1, len1);
+//toUpperN(dna2, len2);
 
 for(i=0;i<len;i++)
     {
-    if (dna1[i] != dna2[i])
+    if (toupper(dna1[i]) != toupper(dna2[i]))
 	{
 	++misscnt;
 	}
@@ -386,6 +433,7 @@ void snpValid()
 {
 
 
+char *Org;
 char *dbSnpTbl = NULL;
 
 struct dbSnpRs *dbSnps = NULL;
@@ -397,19 +445,23 @@ struct affy10KDetails *affy10  = NULL;
 struct affy120KDetails *affy120s = NULL;
 struct affy120KDetails *affy120  = NULL;
 
-int match = 0;
-int mismatch = 0;
-int missing = 0;
-int goodrc = 0;
+struct axtScoreScheme *simpleDnaScheme = NULL;
+
+int match = 0;         /* good match of minimal acceptable quality */
+int mismatch = 0;      /* unacceptable match quality */
+int missing = 0;       /* unable to find rsId in dbSnpRs/affy */
+int goodrc = 0;        /* matches after reverse-complement */
+int assemblyDash = 0;  /* assembly context is just a single dash - (complex cases) */
+int gapNib = 0;        /* nib returns n's, we are in the gap */
 
 int totalMatch = 0;
 int totalMismatch = 0;
 int totalMissing = 0;
 int totalGoodrc = 0;
+int totalAssemblyDash = 0;
+int totalGapNib = 0;
 
-int context=20;  /* # bases before and after the snp for context*/
-
-bool affy = FALSE;
+boolean affy = FALSE;
 
 int mode = 3;  
 void *next = NULL;
@@ -417,11 +469,24 @@ char *id   = NULL;
 char *seq  = NULL;
 char affy120id[12];
 
+int matchScore = 100;
+int misMatchScore = 100;
+int gapOpenPenalty = 400;
+int gapExtendPenalty = 1; // 50;
+
+
 /* controls whether affy120k, affy10k, or dbSnpRs is used 
    currently affys are human only
 */
+if (!hDbIsActive(db))
+    {
+    printf("Currently no support for db %s\n", db);
+    return;
+    }
 
-char *Org = hOrganism(db);
+hSetDb(db);
+
+Org = hOrganism(db);
 
 if (sameWord(Org,"Human"))
     affy = TRUE;
@@ -435,15 +500,16 @@ else if (sameWord(Org,"Rat"))
     dbSnpTbl = "dbSnpRsRn";
 else 
     {
-    printf("Currently no support for Org %s\n",Org);
+    printf("Currently no support for Org %s\n", Org);
     return;
     }
-    
+
+simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
+
 uglyf("dbSnp Table=%s \n",dbSnpTbl);
 
 uglyf("Affy=%s \n", affy ? "TRUE" : "FALSE" );
 
-hSetDb(db);
 
 dbSnps = readDbSnps(dbSnpTbl);
 printf("read hgFixed.%s \n",dbSnpTbl);
@@ -497,12 +563,10 @@ if (!cns)
 if (affy)
     {
     mode=1; /* start on affy120 with numbers in snpMap.rsId */
-    context=16;
     }
 else
     {
     mode=2; /* start on dbSnps with "rs*" in snpMap.rsId */
-    context=20;
     }
     
 for (cn = cns; cn != NULL; cn = cn->next)
@@ -532,14 +596,14 @@ for (cn = cns; cn != NULL; cn = cn->next)
     for (snp = snps; snp != NULL; snp = snp->next)
 	{
 	int cmp = -1;
-	char *temp=NULL;
+	char *nibDna=NULL;
 	/* 
     	printf("%s %s %u %u %s\n",
 	  snp->name,
 	  snp->chrom,
 	  snp->chromStart,
 	  snp->chromEnd,
-	  temp
+	  nibDna
 	  );
 	*/
 
@@ -562,14 +626,12 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    switch (mode)
 			{
 			case 1:
-			    ++mode; context = 20; break;
+			    ++mode; break;
 			case 2:
-			    ++mode; context = 16; break;
+			    ++mode; break;
 			case 3:
 			    cmp = 1; break;
 			}
-		    //debug
-		    //uglyf("next=NULL, advanced to mode %d context=%d \n",mode,context);
 		    }
 		else
 		    {
@@ -613,30 +675,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int strand=1;
 	    char *rc = NULL;
 	    int m = 0;
-	    if ((snp->chromStart - context) < 0) 
-		{
-		printf("bed error chromStart < 0 : %s %s %u %u \n",
-		    snp->name,
-		    snp->chrom,
-		    snp->chromStart,
-		    snp->chromEnd
-		    );
-		continue;
-		}
-	    if ((snp->chromStart + context + 1)  > chromSeq->size) 
-		{
-		printf("bed error chromStart + context + 1 > chromSeq->size : %s %s %u %u  chr-size: %u \n",
-		    snp->name,
-		    snp->chrom,
-		    snp->chromStart,
-		    snp->chromEnd,
-		    chromSeq->size
-		    );
-		continue;
-		}
-	
-	    temp=cloneStringZ(chromSeq->dna + snp->chromStart - context, (2*context) + 1);
-	
+	    int lf = 0;  /* size of left flank context (lower case dna) */
+	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
+	    
 	    switch (mode)
 		{
 		case 1:
@@ -646,10 +687,68 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		case 3:
 		    seq = affy10->sequenceA; break; 
 		}
-	    m = misses(seq,temp);
-	    if (m > threshold)
+		
+            if (sameString(seq,"-"))
 		{
-		rc = cloneString(temp);
+		++assemblyDash;
+		if (Verbose)
+		printf("(no assembly context) rsId=%s chrom=%s %u %u \n assembly=%s \n\n",
+		  id,
+		  snp->chrom,
+		  snp->chromStart,
+		  snp->chromEnd,
+		  seq
+		  );
+		continue;
+		}
+	
+            ls = lengthOneDash(seq);
+	    lf = leftFlank(seq);
+	    
+	    if ((snp->chromStart - lf) < 0) 
+		{
+		printf("snpMap error (chromStart - leftFlank) < 0 : %s %s %u %u %d \n",
+		    snp->name,
+		    snp->chrom,
+		    snp->chromStart,
+		    snp->chromEnd,
+		    lf
+		    );
+		continue;
+		}
+	    if ((snp->chromStart - lf + ls)  > chromSeq->size) 
+		{
+		printf("bed error chromStart - leftFlank + seqlen > chromSeq->size : %s %s %u %u  chr-size: %u \n",
+		    snp->name,
+		    snp->chrom,
+		    snp->chromStart,
+		    snp->chromEnd,
+		    chromSeq->size
+		    );
+		continue;
+		}
+	
+	    nibDna=cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
+	
+            if (allNs(nibDna))
+		{
+		++gapNib;
+		if (Verbose)
+		printf("(nib gap) rsId=%s chrom=%s %u %u \n assembly=%s \n  snpMap=%s \n\n",
+		  id,
+		  snp->chrom,
+		  snp->chromStart,
+		  snp->chromEnd,
+		  seq,
+		  nibDna
+		  );
+		continue;
+		}
+		
+	    m = misses(seq,nibDna);
+	    if (m > 1)
+		{
+		rc = cloneString(nibDna);
 		reverseComplement(rc,strlen(rc));
 		int n = misses(seq, rc);
 		if (n < m) 
@@ -658,7 +757,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    m = n;
 		    }
 		}
-	    if (m <= threshold)
+	    if (m <= 1)
 		{
 		match++;
 		if (strand < 1)
@@ -666,18 +765,66 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		}
 	    else
 		{
-		mismatch++;
-		printf("misses=%u strand=%d rsId=%s chrom=%s %u %u \n assembly=%s \n   snpMap=%s\nrc snpMap=%s \n\n",
-		  m,
-		  strand,
-		  id,
-		  snp->chrom,
-		  snp->chromStart,
-		  snp->chromEnd,
-		  seq,
-		  temp,
-		  rc
-		  );
+		struct dnaSeq query, target;
+		struct axt *axtAln = NULL;
+		int bestScore = 0; 
+		ZeroVar(&query);
+		query.dna = seq;
+		query.size = strlen(query.dna);
+		
+		ZeroVar(&target);
+		target.dna = nibDna;
+		target.size = strlen(target.dna);
+		axtAln = axtAffine(&query, &target, simpleDnaScheme);
+		strand = 1;
+		if (axtAln) 
+		    {
+		    bestScore = axtAln->score / ls;
+		    }
+		axtFree(&axtAln);
+		
+		if (bestScore < threshold)
+		    {
+		    ZeroVar(&target);
+		    target.dna = rc;
+		    target.size = strlen(target.dna);
+		    axtAln = axtAffine(&query, &target, simpleDnaScheme);
+		    if ((axtAln) && (bestScore < (axtAln->score / ls)))
+			{
+			strand = -1;
+			bestScore = axtAln->score / ls;
+			}
+		    axtFree(&axtAln);
+		    }
+		
+		if (bestScore < threshold)
+		    {
+    		    mismatch++;
+		    }
+		
+		if ((bestScore < threshold) || Verbose) 
+		    {
+		    printf(
+			"score=%d misses=%u strand=%d rsId=%s chrom=%s %u %u lf=%d ls=%d \n"
+			" assembly=%s \n"
+			"   snpMap=%s \n"
+			"rc snpMap=%s \n"
+			"\n",
+		      bestScore,
+		      m,
+		      strand,
+		      id,
+		      snp->chrom,
+		      snp->chromStart,
+		      snp->chromEnd,
+		      lf,
+		      ls,
+		      seq,
+		      nibDna,
+		      rc
+		      );
+		     } 
+		
 		}
 	    freez(&rc);
 	    }
@@ -689,7 +836,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    }
 	
 	
-	freez(&temp);
+	freez(&nibDna);
     
 	// debug: cut it short for testing only
 	//break;
@@ -703,14 +850,18 @@ for (cn = cns; cn != NULL; cn = cn->next)
     printf("             matches: %u \n ",match);
     printf("          mismatches: %u \n",mismatch);
     printf("missing from dbSnpRs: %u \n",missing);
-    printf("   rev compl matches: %u \n\n",goodrc);
+    printf("   rev compl matches: %u \n",goodrc);
+    printf("        assembly = -: %u \n",assemblyDash);
+    printf("         nib in gap : %u \n",gapNib);
      
-    printf("\n=========================================\n");
+    printf("\n\n=========================================\n");
     
     totalMatch    += match;
     totalMismatch += mismatch;
     totalMissing  += missing;
     totalGoodrc   += goodrc;
+    totalAssemblyDash += assemblyDash;
+    totalGapNib   += gapNib;
     
     match = 0;
     mismatch = 0;
@@ -735,13 +886,17 @@ if (affy)
     affy120KDetailsFreeList(&affy120s);
     }
 
+axtScoreSchemeFree(&simpleDnaScheme);
+
 printf("\n\n\n Grand Totals:  \n ");
 printf("             matches: %u \n ",totalMatch);
 printf("          mismatches: %u \n",totalMismatch);
 printf("missing from dbSnpRs: %u \n",totalMissing);
-printf("   rev compl matches: %u \n\n",totalGoodrc);
+printf("   rev compl matches: %u \n",totalGoodrc);
+printf("        assembly = -: %u \n",totalAssemblyDash);
+printf("         nib in gap : %u \n",totalGapNib);
     
-
+printf("\n\n=========================================\n");
 
 }
 
@@ -760,8 +915,9 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 db = argv[1];
-chr       = optionVal("chr"      , chr );
+chr       = optionVal("chr"      , chr      );
 threshold = optionInt("threshold", threshold);
+Verbose   = optionInt("verbose"  , Verbose  );
 
 snpValid();
 

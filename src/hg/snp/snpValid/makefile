@@ -9,11 +9,14 @@ O = ${X}.o
 
 ${X}: $O ${MYLIBS}
 	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
-#	strip ${X}
-#	cp ${X} ${HOME}/bin/${MACHTYPE}/${X} 
+	strip ${X}
+	cp ${X} ${HOME}/bin/${MACHTYPE}/${X} 
 
 test:
-	${X} hg16 -chr=chr1 > hg16.log
+	${X} hg16 -chr=chr1 > hg16-chr1.log
+
+test2:
+	${X} mm4 -chr=chr1 > mm4-chr1.log
 
 backup: clean
 	date +%Y-%m-%d-%H-%M | gawk '{printf("zip snpValid-%s.zip *\n",$$1);}' > tempX
