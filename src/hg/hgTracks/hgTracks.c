@@ -1086,7 +1086,8 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     int midY = y + midLineOff;
     int compCount = 0;
     int w;
-    int prevEnd = -1;
+    /* int prevEnd = -1; */
+    int prevEnd = lfs->start;
 
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
@@ -1165,6 +1166,16 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
                 }
             }
         }
+    if ((isFull) && (prevEnd != -1) && !lfs->noLine && (prevEnd < lfs->end)) 
+	{
+        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+        x2 = round((double)((int)lfs->end-winStart)*scale) + xOff;
+        w = x2-x1;
+	mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
+			       lfs->orientation, bColor, TRUE);
+	mgDrawBox(mg, x1, midY, w, 1, color);
+	}
+
     if (isFull) y += lineHeight;
     } 
 }
@@ -1651,7 +1662,8 @@ AllocArray(useCounts, width);
 memset(useCounts, 0, width * sizeof(useCounts[0]));
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
-    int prevEnd = -1;
+    /* int prevEnd = -1; */
+    int prevEnd = lfs->start;
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
 	if (prevEnd != -1)
@@ -2485,6 +2497,19 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadFosEndPairs;
 }
 
+void loadFosEndPairsBad(struct trackGroup *tg)
+/* Load up fosmid end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairsBad", winStart, winEnd, chromName);
+}
+
+
+void fosEndPairsBadMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairsBad;
+}
 
 struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom, int start, int end, boolean isXeno)
 /* Return a linked list of structures that have a pair of linked features for 5' and 3' ESTs from range of table. */
@@ -9741,6 +9766,7 @@ withRuler = sameWord(s, "on");
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
+registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
