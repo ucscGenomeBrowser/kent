@@ -25,13 +25,43 @@ errAbort(
   "             .fa files.  In this case .fa files must be named\n"
   "             accession.fa and only have one record\n"
   "   -subDirs=predraft,draft,fin,extras  Explicitly specify comma separated\n"
-  "             list of freeze subdirectories."
+  "             list of freeze subdirectories.\n"
+  "   -simpleMulti - treat freezeDir as a single file, multi-record FASTA\n"
+  "                  which contains all fragment records.\n"
   );
 }
 
 
 /* Overridable options. */
 char *subDirs = "extras,fin,draft,predraft";
+
+void simpleMultiFillInSequence(char *seqFile, struct agpFrag *agpList,
+    DNA *dna, int dnaSize)
+/* Fill in DNA array with sequences from one multi-record fasta file. */
+{
+struct hash *fragHash = newHash(17);
+struct agpFrag *agp;
+struct dnaSeq *seq;
+FILE *f;
+
+f = mustOpen(seqFile, "r");
+while (faReadNext(f, "bogus", TRUE, NULL, &seq))
+    {
+    hashAdd(fragHash, seq->name, seq);
+    }
+
+for (agp = agpList; agp != NULL; agp = agp->next)
+    {
+    int size;
+    seq = hashFindVal(fragHash, agp->frag);
+    if (seq == NULL)
+	errAbort("Couldn't find %s in %s", agp->frag, seqFile);
+    size = agp->fragEnd - agp->fragStart;
+    if (agp->strand[0] == '-')
+	reverseComplement(seq->dna + agp->fragStart, size);
+    memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
+    }
+}
 
 void simpleFillInSequence(char *seqDir, struct agpFrag *agpList,
     DNA *dna, int dnaSize)
@@ -236,7 +266,11 @@ if (lastPos == 0)
 dna = needLargeMem(lastPos+1);
 memset(dna, 'n', lastPos);
 dna[lastPos] = 0;
-if (cgiVarExists("simple"))
+if (cgiVarExists("simpleMulti"))
+    {
+    simpleMultiFillInSequence(seqDir, agpList, dna, lastPos);
+    }
+else if (cgiVarExists("simple"))
     {
     simpleFillInSequence(seqDir, agpList, dna, lastPos);
     }
