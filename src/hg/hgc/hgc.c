@@ -24,6 +24,8 @@
 #include "hui.h"
 #include "hgRelate.h"
 #include "psl.h"
+#include "cogs.h"
+#include "cogsxra.h"
 #include "bed.h"
 #include "cgh.h" 
 #include "agpFrag.h"
@@ -111,6 +113,7 @@
 #include "scoredRef.h"
 #include "minGeneInfo.h"
 #include "tigrCmrGene.h"
+#include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
 #include "rnaGenes.h"
@@ -145,7 +148,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.760 2004/09/27 19:20:15 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.761 2004/09/29 21:46:17 kschneid Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12838,6 +12841,157 @@ return bedWSList;
 }
 
 /* Lowe Lab additions */
+
+void doSargassoSea(struct trackDb *tdb, char *trnaName)
+{
+struct bed *cb=NULL;
+struct sargassoSeaXra *cbs=NULL, *cbs2, *list=NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *track = tdb->tableName;
+char query[512];
+char *dupe, *type, *code, *words[16];
+char **row;
+char tempstring[255]="";
+int i, flag,  z, dashes,wordCount,rowOffset,currentGI=0;
+int start = cartInt(cart, "o"), num = 0, flag2=0;
+float sequenceLength, dashlength=60;
+
+genericHeader(tdb,trnaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, trnaName, start, num);
+rowOffset = hOffsetPastBin(seqName, track);
+
+sprintf(query, "select * from %s where name = '%s'", track, trnaName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cb=bedLoadN(row+1, 6);
+    }
+    
+sequenceLength=(cb->chromEnd - cb->chromStart);
+if(sequenceLength<0){ sequenceLength=sequenceLength*-1;}
+sequenceLength=sequenceLength/3;
+dashlength=sequenceLength/60;
+
+/*Query the database for the extrainfo file for sargassoSea*/
+conn=hAllocConn();/*sqlConnect(dupe);*/  
+safef(tempstring, sizeof(tempstring),"select * from sargassoSeaXra where qname = '%s'", trnaName);
+sr = sqlGetResult(conn, tempstring);
+ 
+/*Load the required data from the database*/
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cbs=sargassoSeaXraLoad(row);
+    slAddHead(&list, cbs);
+    }
+slReverse(&list);
+/*Print out the table for the alignments*/
+printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
+printf("</td>\n    </tr>\n    <tr>");
+printf("     <td style=\"vertical-align: top;\">%s where each - is approx. %f amino acids", trnaName, dashlength);
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<code>\n");
+for(z=0; z<60; z++)
+{
+	printf("-");
+}
+printf("</code>");
+
+printf("</td>\n    </tr>\n    <tr>");
+flag=0;
+flag2=0;
+
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {		    
+    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+    dashes=cbs2->queryseqstart-cbs2->queryseqend;
+    if(dashes<0) dashes=dashes*-1;          
+    printf("<a name=\"%i-align\"></a>",cbs2->GI);
+    printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species,cbs2->qName);
+    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("<code>\n");
+    dashes=dashes/dashlength;
+    if(cbs2->queryseqstart>cbs2->queryseqend)
+	for(z=0; z<((cbs2->queryseqend)/dashlength); z++)
+	    {
+	    printf("&nbsp;");
+	    }
+    else
+        for(z=0; z<((cbs2->queryseqstart)/dashlength); z++)
+	    {
+	    printf("&nbsp;");
+	    }
+    if(dashes<1) printf("-");
+    for(z=0; z<dashes; z++) printf("-");
+    printf("</code>");
+    printf("</td>\n    </tr>\n");
+    flag=0;
+	
+                     
+    }
+   
+/*Print out table with Blast information*/
+
+printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Nucleotides \naligned begin</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Nucelotides \naligned end</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Link</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Evalue</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Percent Identity</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Alignment Length</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Gap openings</b>");
+printf("</td>\n    </tr>\n    <tr>");
+
+flag=0;
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {
+    printf("\n      \n      <td style=\"vertical-align: top;\">");
+    printf("<a name=\"%i-desc\"></a>",cbs2->GI);	
+    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%i",cbs2->thisseqstart);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%i",cbs2->thisseqend);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%s",cbs2->evalue);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%f",cbs2->PI);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%i",cbs2->length);
+    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("%i",cbs2->gap);
+    printf("<br></td>\n    </tr>\n");
+    flag=0;	    
+    }	
+printf("  <br><br></tbody>\n</table>  \n");
+printf("  </tbody>\n</table>  \n");
+
+/*Free the data*/
+
+hFreeConn(&conn);
+sargassoSeaXraFree(&cbs);
+printTrackHtml(tdb);
+}
+
+
 /*Function to print out full code name from code letter*/
 void printCode(char code)
 {
@@ -12887,7 +13041,10 @@ void printCode(char code)
     	    break;	
 	case 'l':
 	    printf("Halophile");
-    	    break;		
+    	    break;
+	default:
+	    printf("Bad code");
+	    break;
        }
 }
 
@@ -12969,9 +13126,8 @@ dashlength=sequenceLength/60;
 
 /*Query the database for the extrainfo file for codeBlast*/
 conn=hAllocConn();/*sqlConnect(dupe);*/  
-strcat(tempstring, "select * from codeBlastScore where qname = '");
-strcat(tempstring, trnaName);
-strcat(tempstring, "'");
+safef(tempstring, sizeof(tempstring), "select * from codeBlastScore where qname = '%s'", trnaName);
+
 sr = sqlGetResult(conn, tempstring);
  
 /*Load the required data from the database*/
@@ -13002,7 +13158,7 @@ flag2=0;
 
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {		    
-    if(strcmp(trnaName,cbs2->qName)==0);
+    if(sameString(trnaName, cbs2->qName));
         {
 	if(flag==0)
 	    {
@@ -13068,7 +13224,7 @@ printf("</td>\n    </tr>\n    <tr>");
 flag=0;
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {
-    if(strcmp(trnaName,cbs2->qName)==0)
+    if(sameString(trnaName, cbs2->qName))
         {
 	if(flag==0)
 	    {
@@ -13129,14 +13285,19 @@ void llDoCodingGenes(struct trackDb *tdb, char *item,
 {
 struct minGeneInfo ginfo;
 char query[256];
-struct sqlResult *sr;
-char **row;
+char query2[256];
+struct sqlResult *sr, *sr2;
+char **row, **row2;
 char *dupe, *type, *words[16];
 char title[256];
-int wordCount;
+int wordCount,x, length;
 int start = cartInt(cart, "o"), num = 0;
 struct sqlConnection *conn = hAllocConn();
-
+struct sqlConnection *conn2;
+struct COG *COG=NULL;
+struct COGXra *COGXra=NULL;
+char *temparray[160];
+char *temparray2[160];
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
@@ -13171,6 +13332,37 @@ if (extraTable != NULL && hTableExists(extraTable))
 	printf("<B>Note: </B>%s<BR>\n", ginfo.note);
 	}
     sqlFreeResult(&sr);
+    }
+if (hTableExists("COG"))
+    { 
+    conn = hAllocConn();
+    sprintf(query, "select * from COG where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL) 
+	{
+	COG = COGLoad(row);
+	if(COG!=NULL)
+	    { 
+     	    length=chopString(COG->COG, "," , temparray, 999);
+   	    for(x=0; x<length; x++)
+		{
+		conn2 = hAllocConn();
+		sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
+                sr2 = sqlGetResult(conn2, query2);
+		while ((row2 = sqlNextRow(sr2)) != NULL) 
+	    	    {
+		    COGXra=COGXraLoad(row2);
+		    if(COGXra!=NULL)
+		        printf("<B>COG: </B>%s <B>INFO: </B>%s<BR>\n", COGXra->name, COGXra->info); 
+		    }
+		    sqlFreeResult(&sr2);
+		    hFreeConn(&conn2);
+	        }
+		
+		
+	     }
+		
+  	 }
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -15139,6 +15331,10 @@ else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon")
 else if (sameWord(track, "gbProtCode"))
     {
     llDoCodingGenes(tdb, item,"gbProtCodePep","gbProtCodeXra");
+    }
+else if (sameWord(track, "sargassoSea"))
+    {
+    doSargassoSea(tdb, item);
     }
 else if (sameWord(track, "tigrCmrORFs"))
     {
