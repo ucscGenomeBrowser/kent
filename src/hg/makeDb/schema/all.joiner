@@ -1588,6 +1588,7 @@ tablesIgnored go
     source_audit
 
 tablesIgnored $gbd
+    NIAGene
     ancientRepeat
     axtInfo
     blatFr1
