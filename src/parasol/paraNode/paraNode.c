@@ -112,6 +112,7 @@ for (i=0, el=list; i<envCount; ++i, el = el->next)
     newEnv[i] = cloneString(dy->string);
     }
 freeDyString(&dy);
+hashElFreeList(&list);
 return newEnv;
 }
 
@@ -183,10 +184,13 @@ void changeUid(char *name, char **retDir)
 /* Try and change process user (and group) id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
-setgid(pw->pw_gid);
-setuid(pw->pw_uid);
-if (retDir != NULL)
-   *retDir = pw->pw_dir;
+if (pw != NULL)
+    {
+    setgid(pw->pw_gid);
+    setuid(pw->pw_uid);
+    if (retDir != NULL)
+       *retDir = pw->pw_dir;
+    }
 }
 
 static int grandChildId = 0;
@@ -260,12 +264,13 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 if ((grandChildId = fork()) == 0)
     {
     int newStdin, newStdout, newStderr, execErr;
-    char *homeDir;
+    char *homeDir = "";
 
     /* Change to given user and dir. */
     changeUid(user, &homeDir);
     chdir(dir);
-    setpgid(0,0);
+    setsid();
+    // setpgid(0,0);
     umask(umaskVal); 
 
     /* Update environment. */
@@ -527,7 +532,7 @@ if (fileName != NULL)
         {
 	FILE *f = fopen(fileName, "r");
 	if (f == NULL)
-	    warn("Couldn't open %s", fileName);
+	    warn("Couldn't open %s %s", fileName, strerror(errno));
 	else
 	    {
 	    char buf[4*1024];
@@ -579,7 +584,8 @@ if (busyProcs > 0)
         dyStringPrintf(dy, " %d", job->jobId);
 	}
     }
-write(connectionHandle, dy->string, dy->stringSize);
+if (write(connectionHandle, dy->string, dy->stringSize) < 0)
+    logIt("doStatus write error: %s", strerror(errno));
 dyStringFree(&dy);
 }
 
