@@ -2501,6 +2501,92 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
+# PRODUCE FUGU BLAT ALIGNMENT (WORKING - 2004-07-07 - Hiram)
+
+    # Use masked scaffolds from fr1 assembly (same sequence as
+    # previous BlatFugu, however it's repeat and TRF-masked).
+
+    ssh kk
+    mkdir /cluster/data/hg17/bed/blatFr1
+    cd /cluster/data/hg17/bed/blatFr1
+    mkdir psl 
+    # next time, use N?_?????? (to pick up NG_ contigs)
+    foreach f ( `cat /cluster/data/hg17/contig.lst` )
+      set c=$f:t:r
+      echo $c
+      mkdir psl/$c
+    end
+
+    # create cluster job
+    mkdir run
+    cd run
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > human.lst
+cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/hg17/bed/blatFr1/psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << keep emacs happy
+    gensub2 human.lst fugu.lst gsub jobList
+    para create spec
+       # 219640 jobs  
+    para try
+    para check
+    para push -maxQueue=300000 -maxPush=220000
+    para check
+XXXX - running 2004-07-07 14:30
+        # cd psl
+        # count files with aligments
+        # find . -not -size 427c | wc -l
+        # 89878
+        # count files with no aligments
+        # find . -size 427c | wc -l
+        # 195265
+
+   # When cluster run is done, sort alignments
+   # into chrom directory
+    ssh eieio
+    cd /cluster/data/hg17/bed/blatFr1
+    pslCat -dir psl/N?_?????? | \
+      liftUp -type=.psl stdout \
+        /cluster/data/hg17/jkStuff/liftAll.lft warn stdin | \
+      pslSortAcc nohead chrom temp stdin
+        # 15 minutes ?
+        # Processed 855648 lines into 4 temp files
+
+    # Rename to correspond with tables and load into database:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blatFr1/chrom
+    rm -f chr*_blatFr1.psl
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        echo $r
+        mv $i ${r}_blatFr1.psl
+    end
+
+    # Next assembly, lift fugu scaffolds to Fugu browser chrUn,
+    # so you can link to other browser.  And don't need to load sequence
+    # liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
+    hgLoadPsl hg17 *.psl
+        # $ featureBits hg17 blatFr1 refGene:CDS
+        # 12787423 bases of 2865248791 (0.446%) in intersection
+        # $ featureBits hg15 blatFugu refGene:CDS
+        # 12427544 bases of 2866466359 (0.434%) in intersection
+
+    # Edit trackDb.ra to include blatFr1
+    # NOTE: already in top-level trackDb.ra
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    # NOTE: don't need to do this in next assembly
+    mkdir /gbdb/hg17/fuguSeq
+    cd /gbdb/hg17/fuguSeq
+    ln -s /cluster/data/fr1/fugu_v3.masked.fa
+    # hide .tab file
+    cd /cluster/store2/tmp
+    hgLoadSeq hg17 /gbdb/hg17/fuguSeq/fugu_v3.masked.fa
+
 #  BLASTZ RAT RN3 (DONE - 2004-06-14 - Hiram)
 
     ssh kk
@@ -2573,7 +2659,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     #	the file server to its knees.  Run this on the small cluster.
     ssh kki
     cd /cluster/data/hg17/bed/blastz.rn3
-    source DEF
     # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
     #	fixup machine check, should be kki, not kk
     /cluster/data/hg17/jkStuff/BlastZ_run1.sh
@@ -2587,7 +2672,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 # Submission to last job:           590s       9.83m     0.16h    0.01d
 
     #	Third cluster run to convert lav's to axt's
-    source DEF
     cd /cluster/data/hg17/bed/blastz.rn3
     #	The copy of this in mm4 was broken, fixed here
     /cluster/data/hg17/jkStuff/BlastZ_run2.sh
@@ -3002,7 +3086,6 @@ SEQ2_LEN=$BASE/S2.len
     ssh kk
     cd /cluster/data/hg17/bed/blastz.galGal2
     bash
-    source DEF
     # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run0.sh
     #	it is a generic script and works for any assembly
     /cluster/data/hg17/jkStuff/BlastZ_run0.sh
@@ -3021,7 +3104,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     ssh kki
     cd /cluster/data/hg17/bed/blastz.galGal2
     bash
-    source DEF
     # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
     #	fixup machine check, should be kki, not kk
     /cluster/data/hg17/jkStuff/BlastZ_run1.sh
@@ -3035,7 +3117,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 # Submission to last job:           590s       9.83m     0.16h    0.01d
 
     #	Third cluster run to convert lav's to axt's
-    source DEF
     cd /cluster/data/hg17/bed/blastz.galGal2
     #	The copy of this in mm4 was broken, fixed here
     /cluster/data/hg17/jkStuff/BlastZ_run2.sh
@@ -5057,9 +5138,9 @@ rm $TMP/$root.pp
     bash
     for f in `cat /cluster/data/hg17/contig.lst`
     do
-      egrep '[ACGT]' /cluster/data/hg17/$f > /dev/null
+      egrep '[ACGT]' /cluster/data/hg17/$f.masked > /dev/null
 	if [ $? = 0 ]; then
-	    echo /cluster/data/hg17/$f >> genome.list
+	    echo /cluster/data/hg17/$f.masked >> genome.list
 	fi
     done
     # exit your bash shell if you are [t]csh ...
@@ -5084,6 +5165,7 @@ rm $TMP/$root.pp
     para try
     para check
     para push
+XXX - running - 2004-07-07 12:40
 # Completed: 370 of 380 jobs
 # Crashed: 10 jobs
 # CPU time in finished jobs:      69632s    1160.53m    19.34h    0.81d  0.002 y
@@ -5725,4 +5807,191 @@ SEQ2_LEN=$BASE/S2.len
     #	jobs the default push limit.  Also be aware of maxQueue limits
     #	on the KK, may need something more than the default of 200000 if
     #	the KK is busy.
-XXX - running 2004-07-01 11:26
+# Completed: 116281 of 116281 jobs
+# CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
+# IO & Wait Time:               2319383s   38656.39m   644.27h   26.84d  0.074 y
+# Average job time:                 207s       3.46m     0.06h    0.00d
+# Longest job:                    22063s     367.72m     6.13h    0.26d
+# Submission to last job:         83402s    1390.03m    23.17h    0.97d
+
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/hg17/bed/blastzSelf
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       6344s     105.73m     1.76h    0.07d  0.000 y
+# IO & Wait Time:                  5413s      90.22m     1.50h    0.06d  0.000 y
+# Average job time:                  34s       0.57m     0.01h    0.00d
+# Longest job:                      505s       8.42m     0.14h    0.01d
+# Submission to last job:          4521s      75.35m     1.26h    0.05d
+
+    #	Third cluster run to convert lav's to axt's
+
+    #	These self alignments do not work well as the usual third cluster job.
+    #	Instead, a specialized job here that includes a DropSelf
+    #	operation, and in individual lav pieces to avoid out of memory
+    #	problems during axtSort
+    ssh kki
+    cd /cluster/data/hg17/bed/blastzSelf
+    mkdir axtChrom run.2
+    cd run.2
+    cat << '_EOF_' > runLavToAxt.sh
+#!/bin/sh
+
+BASE=/cluster/data/hg17/bed/blastzSelf
+SEQ1_DIR=/cluster/bluearc/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ2_DIR=/cluster/bluearc/scratch/hg/gs.18/build35/bothMaskedNibs
+
+CHR=$1
+OUT=axtChrom/$CHR.axt
+cd ${BASE}/lav/${CHR}
+for D in *.lav
+do
+    smallout=$D.axt
+    lavToAxt  $D $SEQ1_DIR $SEQ2_DIR stdout \
+	| axtDropSelf stdin stdout \
+	| axtSort stdin $smallout
+done
+cat `ls -1 *.lav.axt | sort -g` > $BASE/$OUT
+'_EOF_'
+    # << keep emacs coloring happy
+    chmod +x runLavToAxt.sh
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runLavToAxt.sh $(path1) {check out line ../axtChrom/$(path1).axt}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs coloring happy
+
+    ls ../lav > chrList
+    gensub2 chrList single gsub jobList
+    para create jobList
+    para try
+    para push
+    #	This is a tough load on eieio.  Managable, but the load should
+    #	be monitored to make sure it isn't severe.  I saw about 100 to 150
+    #	the chr19 job will not finish, even in parts it takes up too
+    #	much memory and the node it runs on ends up swapping endlessly.
+    #	Need to go to kolossus to do chr19
+    para stop
+    para recover jobList chr19JobList
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastzSelf/run.2
+    time ./runLavToAxt.sh chr19
+    #	real    43m14.797s
+    #	user    12m56.670s
+    #	sys     3m13.590s
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf
+    mkdir pslChrom
+    set tbl = "blastzSelf"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 70 minutes
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/pslChrom
+    bash # if a csh/tcsh user
+    for I in *.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done: ${I}"
+    done
+    # exit bash if you are tcsh
+    #	This is an 80 minute job
+
+    #	Check results
+    #	featureBits hg17 blastzSelf
+    #	252256266 bases of 2866216770 (8.801%) in intersection
+
+    #	real    40m49.573s
+    #	user    21m14.200s
+    #	sys     2m10.420s
+XXX - need to do hg16 2004-07-07 16:40
+    #	featureBits hg16 blastzSelf
+
+
+# CHAIN SELF BLASTZ (WORKING - 2004-07-07 - Hiram)
+
+# The axtChain is best run on the small kluster, or the kk9 kluster
+    ssh kki
+    mkdir -p /cluster/data/hg17/bed/blastzSelf/axtChain/run1
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/hg17/bed/blastzSelf/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(root1).out
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+#  May need -minScore=5000 for all chroms if chr19 won't finish on kolossus
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
+	/iscratch/i/gs.18/build35/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+
+    # 46 jobs
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+XXXX - running 2004-07-07 15:40
+    para push # ... etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       4856s      80.94m     1.35h    0.06d  0.000 y
+# IO & Wait Time:                 20083s     334.71m     5.58h    0.23d  0.001 y
+# Average job time:                 542s       9.04m     0.15h    0.01d
+# Longest job:                     2929s      48.82m     0.81h    0.03d
+# Submission to last job:          2929s      48.82m     0.81h    0.03d
+
+
+    # now on the file server, sort chains
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+    #	real    8m42.853s
+    #	user    5m59.100s
+    #	sys     0m40.320s
+
+    time chainSplit chain all.chain
+    #	real    10m52.224s
+    #	user    5m52.360s
+    #	sys     0m34.870s
+
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain/chain
+    bash	#	for tcsh users
+    for i in *.chain
+    do
+        c=${i/.chain/}
+        hgLoadChain hg17 ${c}_chainSelf $i
+        echo done $c
+    done
+    # exit bash if you are tcsh
+    #	This is a 50 minute job
+
+    #	featureBits hg17 chainSelf
+
