@@ -2752,7 +2752,7 @@ hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
 #############################################################################
 
 #  BLASTZ RAT RN3 (DONE - 2004-07-15 - Fan)
-#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-30. Fan.
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2004-08-30. Fan.
     ssh kk
     mkdir -p /cluster/data/mm5/bed/blastz.rn3.2004-07-14
     cd /cluster/data/mm5/bed
@@ -2933,7 +2933,7 @@ done
     # 57158006 bases of 81388777 (70.228%) in intersection
     
 # CHAIN RN3 BLASTZ (DONE - 2004-07-22 - Fan)
-#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-30. Fan.
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2004-08-30. Fan.
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -3006,7 +3006,7 @@ out/$(root1).out
     # 60676019 bases of 86658738 (70.017%) in intersection
 
 # NET RN3 (DONE - 2004-07-23 - Fan)
-#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-31. Fan.
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2004-08-31. Fan.
 
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.rn3/axtChain
@@ -3196,7 +3196,7 @@ cat << 'EOF' > makeMaf.csh
     hgsql mm5 < axtInfoInserts.sql
 
 # BLASTZ RN3 CLEAN UP (DONE - 2004-07-26 - Fan)
-#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-31. Fan.
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2004-08-31. Fan.
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.rn3
     nice rm -rf raw &
