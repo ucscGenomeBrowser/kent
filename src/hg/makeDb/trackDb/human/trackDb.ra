@@ -182,7 +182,7 @@ shortLabel Affymetrix 120K SNP
 longLabel Affymetrix 120K SNP Release Oct 2003
 group varRep
 priority 146
-visibility pack
+visibility hide
 type bed 4 .
 
 track affy10K
@@ -190,6 +190,6 @@ shortLabel Affy 10K SNPs
 longLabel Affymetrix Mapping 10K SNPs
 group varRep
 priority 146.1
-visibility pack
+visibility hide
 type bed 4 .
 

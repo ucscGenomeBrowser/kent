@@ -205,7 +205,7 @@ shortLabel Chimp All Chains
 longLabel Chimp (Nov 03) All Chained Blastz & BLAT Alignments
 group compGeno
 priority 145.1
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -216,7 +216,7 @@ shortLabel Chimp Net
 longLabel Chimp (Nov 03) Reciprocal Best Net
 group compGeno
 priority 145.5
-visibility dense
+visibility hide
 spectrum on
 type netAlign seq chainPt0
 
@@ -225,7 +225,7 @@ shortLabel Chimp Best Chains
 longLabel Chimp (Nov 03) Reciprocal Best Chained Alignments
 group compGeno
 priority 145.6
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -237,6 +237,8 @@ longLabel Human/Mouse/Rat Humor Alignments (mm3-Feb03, rn3-Jun 03)
 group compGeno
 priority 146
 visibility full
+color 100,0,0
+altColor 100,0,0
 type maf
 
 track multizMm3Rn3Gg0
@@ -294,7 +296,7 @@ shortLabel Chicken Blastz
 longLabel Chicken Blastz
 group compGeno
 priority 116.2
-visibility pack
+visibility hide
 color 0,60,120
 altColor 200,220,255
 type psl xeno
@@ -429,7 +431,7 @@ shortLabel Fish CFTR
 longLabel CFTR Region TBA Alignments (human,fugu,tetra)
 group compGeno
 priority 146.5
-visibility full
+visibility hide
 altColor 0,160,0
 type maf
 pairwise maf
@@ -440,7 +442,7 @@ shortLabel 9 Species CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
 group compGeno
 priority 147
-visibility full
+visibility hide
 type maf
 
 track tbaFishBirdCFTR
@@ -448,7 +450,7 @@ shortLabel Non-Mammal CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
 group compGeno
 priority 147.5
-visibility full
+visibility hide
 type maf
 
 track tba25CFTR
@@ -456,7 +458,7 @@ shortLabel 25 Species CFTR
 longLabel CFTR Region TBA Alignments (25 vertebrates)
 group compGeno
 priority 148.1
-visibility full
+visibility hide
 altColor 0,160,0
 type maf
 pairwise maf
@@ -621,37 +623,6 @@ visibility hide
 chromosomes chr22,
 type bed 6
 
-track exoMouse
-shortLabel Exonerate Mouse
-longLabel Mouse/Human Evolutionarily Conserved Regions (Exonerate)
-group x
-priority 152
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 6 +
-
-track phMouse
-shortLabel PH Mouse Ecores
-longLabel Pattern Hunter Mouse/Human Evolutionarily Conserved Regions
-group x
-priority 153
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 6
-
-track fiberMouse
-shortLabel Fiberglass Mouse
-longLabel Mouse/Human Evolutionarily Conserved Regions (Fiberglass)
-group x
-priority 154
-visibility hide
-color 100,50,0
-type bed 4 .
-
 track mouseOrtho
 shortLabel Mouse Ortholog
 longLabel Mouse Orthology Using Fgenesh++ Gene Predictions (top 4 reciprocal best)
@@ -683,42 +654,6 @@ spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
-
-track mouseRefHCons
-shortLabel HighCon MouseRef
-longLabel Highly Conserved Reference Mouse Alignments
-group x
-priority 160
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
-
-track mouseRefMDup
-shortLabel ModDup MouseRef
-longLabel Moderately Duplicated Reference Mouse Alignments
-group x
-priority 161
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
-
-track phMouseAli
-shortLabel PH Mouse Align
-longLabel Pattern Hunter Human/Mouse Alignments
-group x
-priority 162
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
 
 track ancientR
 shortLabel Ancient Repeats
@@ -829,7 +764,7 @@ longLabel ENCODE Summary
 group encode
 priority 170.1
 color 100,100,0
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeDNAseI
@@ -838,7 +773,7 @@ longLabel ENCODE DNAse I Hypersensitivity
 group encode
 priority 170.2
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeBinding
@@ -847,7 +782,7 @@ longLabel ENCODE DNA Binding
 group encode
 priority 170.3
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeInVitroFoot
@@ -856,7 +791,7 @@ longLabel ENCODE In Vitro Footprinting
 group encode
 priority 170.4
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErge5race
@@ -865,7 +800,7 @@ longLabel ENCODE 5' RACE Promoters
 group encode
 priority 170.5
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeMethProm
@@ -874,7 +809,7 @@ longLabel ENCODE Methylated Promoters
 group encode
 priority 170.6
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeExpProm
@@ -883,7 +818,7 @@ longLabel ENCODE Experimental Promoters
 group encode
 priority 170.7
 color 0,55,255
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeTransTransf
@@ -892,7 +827,7 @@ longLabel ENCODE Transient Transfection
 group encode
 priority 170.8
 color 100,50,0
-visibility pack
+visibility hide
 type bed 12+ .
 
 track encodeErgeStableTransf
@@ -901,7 +836,7 @@ longLabel ENCODE Stable Transfection
 group encode
 priority 170.9
 color 100,50,0
-visibility pack
+visibility hide
 type bed 12+ .
 
 track uniGene_2
@@ -965,7 +900,7 @@ shortLabel Mm4 Net
 longLabel Mouse (Oct 03/Mm4)/$Organism Alignment Net
 group compGeno
 priority 129.1
-visibility dense
+visibility hide
 spectrum on
 type netAlign mm4 chainMm4
 otherDb mm4

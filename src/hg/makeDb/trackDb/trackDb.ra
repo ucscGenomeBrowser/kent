@@ -3,7 +3,7 @@ shortLabel STS Markers
 longLabel Various STS Markers
 group map
 priority 2
-visibility dense
+visibility hide
 type bed 5 +
 
 track stsMarker
@@ -511,7 +511,7 @@ shortLabel Superfamily
 longLabel Superfamily/SCOP: Proteins Having Homologs with Known Structure/Function
 group genes
 priority 53
-visibility dense
+visibility hide
 color 150,0,0
 type bed 4 +
 url http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?seqid=$$
@@ -794,7 +794,7 @@ shortLabel TSSW Promoters
 longLabel TSSW Promoter Predictions
 group regulation
 priority 83
-visibility dense
+visibility hide
 color 0,100,0
 type bed 5 +
 
@@ -811,7 +811,7 @@ shortLabel GNF
 longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
 group regulation
 priority 85
-visibility dense
+visibility hide
 type bed 15 +
 
 track affyRatio
@@ -840,7 +840,7 @@ shortLabel Rosetta
 longLabel Rosetta Experimental Confirmation of Chr22 Exons
 group regulation
 priority 88
-visibility dense
+visibility hide
 chromosomes chr22,
 type bed 15 +
 
@@ -1200,26 +1200,6 @@ altColor 255,240,200
 spectrum on
 type bed 6 +
 
-track phMouse
-shortLabel PH Mouse Ecores
-longLabel Pattern Hunter Mouse/Human Evolutionarily Conserved Regions
-group x
-priority 153
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 6
-
-track fiberMouse
-shortLabel Fiberglass Mouse
-longLabel Mouse/Human Evolutionarily Conserved Regions (Fiberglass)
-group x
-priority 154
-visibility hide
-color 100,50,0
-type bed 4 .
-
 track mouseOrtho
 shortLabel Mouse Ortholog
 longLabel Mouse Orthology Using Fgenesh++ Gene Predictions (top 4 reciprocal best)
@@ -1251,42 +1231,6 @@ spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
-
-track mouseRefHCons
-shortLabel HighCon MouseRef
-longLabel Highly Conserved Reference Mouse Alignments
-group x
-priority 160
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
-
-track mouseRefMDup
-shortLabel ModDup MouseRef
-longLabel Moderately Duplicated Reference Mouse Alignments
-group x
-priority 161
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
-
-track phMouseAli
-shortLabel PH Mouse Align
-longLabel Pattern Hunter Human/Mouse Alignments
-group x
-priority 162
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-chromosomes chr22,
-type bed 5 +
 
 track ancientR
 shortLabel Ancient Repeats
