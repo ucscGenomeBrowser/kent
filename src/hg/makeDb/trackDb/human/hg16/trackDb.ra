@@ -200,7 +200,7 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
-track allChainPt0
+track chainPt0
 shortLabel Chimp All Chains
 longLabel Chimp (Nov 03) All Chained Blastz & BLAT Alignments
 group compGeno
@@ -218,7 +218,7 @@ group compGeno
 priority 145.5
 visibility dense
 spectrum on
-type netAlign seq allChainPt0
+type netAlign seq chainPt0
 
 track chainRxBestPt0
 shortLabel Chimp Best Chains
