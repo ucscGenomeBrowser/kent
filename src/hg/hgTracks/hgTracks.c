@@ -7497,7 +7497,10 @@ return aV - bV;
 }
 
 void loadHumMusL(struct trackGroup *tg)
-    /* Load humMusL track with 2 zoom levels and one normal level. */
+    /* Load humMusL track with 2 zoom levels and one normal level. 
+	Also used for loading the musHumL track (called Human Cons) 
+	on the mm2 mouse browser. It decides which of 4 tables to
+	load based on how large of a window the user is looking at*/
 {
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr;
