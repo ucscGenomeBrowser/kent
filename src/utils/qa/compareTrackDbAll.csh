@@ -8,40 +8,44 @@
 #  Checks all fields (except html) in trackDb
 ###############################################
 
-if ($#argv < 1 || $#argv > 4) then
+if ($#argv < 1 || $#argv > 3) then
  echo ""
- echo "  checks all fields (except html) in trackDb"
- echo "  this will break when hgText is removed."
+ echo "  checks all fields in trackDb"
+ echo "  this will break when hgText is replaced by hgTables."
  echo
- echo "    usage: database, machine1, machine2"
+ echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
  echo ""
  exit 1
 endif
 
 #set machine1 = "hgwdev"
-#set machine1 = "hgwbeta"
-#set machine2 = "hgw1"
+set machine1 = "hgw1"
+set machine2 = "hgwbeta"
 
-set db = $1
-set machine1 = $2
-set machine2 = $3
+set db = $argv[1]
+if ( $#argv == 3 ) then
+  set machine1 = $argv[2]
+  set machine2 = $argv[3]
+endif
 
-set validMach1=`echo $machine1 | grep "hgw" | wc -l`
-set validMach2=`echo $machine2 | grep "hgw" | wc -l`
-
-if ($validMach1 == 0 || $validMach2 == 0) then
+checkMachineName.csh $machine1
+if ( $status ) then
+  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
   echo
-  echo "    These are not valid machine names: $machine1 $machine2"
-  echo "    usage: database, machine1, machine2"
+  exit 1
+endif
+
+checkMachineName.csh $machine2
+if ( $status ) then
+  echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
   echo
   exit 1
 endif
 
 set table = "trackDb"
+set fields=`hgsql -N -e "DESC $table" $db | gawk '{print $1}'`
 
-set fields=`hgsql -N -e "DESC $table" $db | gawk '{print $1}' | grep -v "html"`
-
-foreach field ($fields)
+foreach field ( $fields )
   compareTrackDbs.csh $machine1 $machine2 $db $field
 end
 
