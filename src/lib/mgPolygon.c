@@ -251,7 +251,7 @@ return;
 static int *xdda_ebuf(int *ebuf, int x1, int y1, int x2, int y2)
 /* Calculate the x-positions of a line from x1,y1  to x2/y2  */
 {
-int incx;
+int incx, incy;
 int x;
 int duty_cycle;
 int delta_x, delta_y;
@@ -259,11 +259,12 @@ int dots;
 
 delta_y = y2-y1;
 delta_x = x2-x1;
-incx =  1;
+incx =  incy = 1;
 x = x1;
 if (delta_y < 0) 
    {
    delta_y = -delta_y;
+   incy = -1;
    }
 
 if (delta_x < 0) 
@@ -272,101 +273,45 @@ if (delta_x < 0)
    incx = -1;
    }
 
-duty_cycle = delta_x - delta_y/2;
-dots = delta_y;
-
-if (incx >= 0)
+duty_cycle = (delta_x - delta_y)/2;
+if (delta_x >= delta_y)
     {
+    int lasty = y1-1;
+    dots = delta_x+1;
     while (--dots >= 0)
 	{
-	 while (duty_cycle > 0)
-	   {
-	   duty_cycle -= delta_y;
-	   x++;
-	   }
-	duty_cycle += delta_x;	  /* update duty cycle */
-	*ebuf++ = x;
+	if (lasty != y1)
+	    {
+	    *ebuf++ = x1;
+	    lasty = y1;
+	    }
+	duty_cycle -= delta_y;
+	x1 += incx;
+	if (duty_cycle < 0)
+	    {
+	    duty_cycle += delta_x;	  /* update duty cycle */
+	    y1+=incy;
+	    }
 	}
     }
 else
     {
+    dots = delta_y+1;
     while (--dots >= 0)
 	{
-	 while (duty_cycle > 0)
-	   {
-	   duty_cycle -= delta_y;
-	   --x;
-	   }
-	 duty_cycle += delta_x;	  /* update duty cycle */
-	 *ebuf++ = x;
-	 }
+	*ebuf++ = x1;
+	duty_cycle += delta_x;
+	y1+=incy;
+	if (duty_cycle > 0)
+	    {
+	    duty_cycle -= delta_y;	  /* update duty cycle */
+	    x1 += incx;
+	    }
+	}
     }
 return(ebuf);
 }
 #endif /* SOME_OFF_BY_ONE_PROBLEMS */
-
-#ifdef CRASHES
-static int *xdda_ebuf(int *ebuf, int x1, int y1, int x2, int y2)
-/* Calculate the x-positions of a line from x1,y1  to x2/y2  */
-{
-WORD height;
-UBYTE rot;
-int   duty_cycle;
-int   delta_x, delta_y;
-int dots;
-int swap;
-
-if (x1 > x2)
-    {
-    swap = x1;
-    x1 = x2;
-    x2 = swap;
-    swap = y1;
-    y1 = y2;
-    y2 = swap;
-    }
-delta_y = y2-y1;
-delta_x = x2-x1;
-rot = ((unsigned)0x80) >> (x1&7);
-
-
-if (delta_y < 0) 
-    {
-    delta_y = -delta_y;
-    }
-duty_cycle = (delta_x - delta_y)/2;
-*ebuf++ = x1;
-if (delta_x < delta_y)
-    {
-    dots = delta_y;
-    while (--dots >= 0)
-	{
-	*ebuf++ = x1;
-	duty_cycle += delta_x;	  /* update duty cycle */
-	if (duty_cycle > 0)
-	    {
-	    duty_cycle -= delta_y;
-	    x1 += 1;
-	    }
-	}
-    }
-else
-    {
-    dots = delta_x;
-    while (--dots >= 0)
-	{
-	duty_cycle -= delta_y;	  /* update duty cycle */
-	if (duty_cycle < 0)
-	    {
-	    *ebuf++ = x1;
-	    duty_cycle += delta_x;
-	    }
-	x1 += 1;
-	}
-    }
-return ebuf;
-}
-#endif /* CRASHES */
 
 
 #ifdef CONVEX_OPTIMIZATION
@@ -376,21 +321,22 @@ int *fill_ebuf(struct gfxPoint *thread, int count, int *ebuf)
  * total height of thread.  Returns next free space in ebuf. */
 {
 int x, y, ox, oy;
+int i;
 
-ox = *ebuf++ = thread->x;
+ox = thread->x;
 oy = thread->y;
 
-while (--count >= 0)
+for (i=0; i<count; ++i)
    {
    thread = thread->next;
    x = thread->x;
    y = thread->y;
    if (y!=oy)
-      ebuf = xdda_ebuf(ebuf,ox,oy,x,y);
+      ebuf = xdda_ebuf(ebuf,ox,oy,x,y) - 1;
    ox = x;
    oy = y;
    }
-return(ebuf);
+return(ebuf+1);
 }
 
 static void blast_hlines(struct memGfx *mg, 
