@@ -1362,6 +1362,42 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
+static void findZooGenes(char *spec, struct hgPositions *hgp)
+/* Look up zoo gene names in manual annotation table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row = NULL;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+if (sqlTableExists(conn, "pjt_gene"))
+    {
+    dyStringPrintf(ds, "select * from pjt_gene where name like '%%%s%%'", spec);
+    }
+
+AllocVar(table);
+slAddHead(&hgp->tableList, table);
+table->description = cloneString("Curated Genes");
+table->name = cloneString("pjt_gene");
+
+sr = sqlGetResult(conn, ds->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(pos);
+    slAddHead(&table->posList, pos);
+    pos->name = cloneString(row[3]);
+    pos->description = cloneString(row[3]);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = sqlUnsigned(row[6]);
+    pos->chromEnd = sqlUnsigned(row[7]);
+    }
+
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
 static boolean isAffyProbeName(char *name)
 /* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
 {
@@ -1660,6 +1696,7 @@ else
     findBacEndPairs(query, hgp);
     findStsPos(query, hgp);
     findMrnaKeys(query, hgp, hgAppName, cart);
+    findZooGenes(query, hgp);
     }
 
 slReverse(&hgp->tableList);
@@ -1763,8 +1800,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		    hgAppName, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s\">%s at %s</A>",
-		    extraCgi, pos->name, range);
+		fprintf(f, "%s&%s=full\">%s at %s</A>",
+		    extraCgi, table->name, pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);
