@@ -880,12 +880,22 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     # contig_overlaps.agp - 2004-06-18 - this is beginning to come
     # together and there is now a contig_overlaps.agp file
     cd /cluster/store5/gs.18/build35
+    #	combine the various psLayout attempts on different sections of
+    #	clones
     ./combineContigOverlaps.sh
-    ./fixPhase.pl contig_overlaps.placed_and_splits.agp > contig_overlaps.agp
-
+    #	Turn contig_overlaps.agp into gl files
     ~hiram/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
     # Create chromosome gl files  (had to fix liftUp to do the NC_ properly)
     jkStuff/liftGl.csh contig.gl
+    #
+    #	Need to remove these PAR clone names from chrY.gl
+    rm -f /tmp/chrY.gl
+    sed -e "/^AL954722.18/d; /^BX537334.4/d; /^BX000483.7/d; \
+	/^BX908402.3/d; /^BX649635.3/d; /^BX119919.5/d; \
+	/^AC079176.15/d; /^AC097314.27/d; /^AC006209.25/d; \
+	/^AJ271735.1/d; /^AJ271736.1/d" Y/chrY.gl > /tmp/chrY.gl
+    rm -f Y/chrY.gl
+    mv /tmp/chrY.gl Y/chrY.gl
 
 #  After contig.gl files have been made from contig_overlaps.agp
 #	The sed fixes the Celera clones that are marked phase W
@@ -897,23 +907,19 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 #	clones that got left in by mistake at NCBI
     #	AC004491.1=AC004491.2 AC004921.1=AC004921.2 AC004983.2=AC004983.3
     #	AC005088.2=AC005088.3 AC006014.2=AC006014.3 AC099654.4=AC099654.5 
+#	And finally the grep selects only those things for_assembly
     cd /cluster/data/hg17
-    sed -e "s/\tW\t/\t3\t/" \
-	-e "/^AACC010000.*/d" \
-	-e "/^AC004491.1.*/d" \
-	-e "/^AC004921.1.*/d" \
-	-e "/^AC004983.2.*/d" \
-	-e "/^AC005088.2.*/d" \
-	-e "/^AC006014.2.*/d" \
-	-e "/^AC099654.4.*/d" \
-	-e "s/AC018743.27\t31791062\t466818\t1\tD\tUn\t-\tBCM\tRP11-289M22\tSIZE:2big/AC018743.27\t31791062\t466818\t1\t-\t(12)\t-\tBCM\tRP11-289M22\tfor_assembly/" \
-	/cluster/store5/gs.18/ncbi/sequence.inf \
+    egrep "for_assembly|AC018743" /cluster/store5/gs.18/ncbi/sequence.inf | \
+    sed -e "s/\tW\t/\t3\t/; /^AACC010000.*/d; /^AC004491.1.*/d; \
+	/^AC004921.1.*/d; /^AC004983.2.*/d; /^AC005088.2.*/d; \
+	/^AC006014.2.*/d; /^AC099654.4.*/d; \
+	s/AC018743.27\t31791062\t466818\t1\tD\tUn\t-\tBCM\tRP11-289M22\tSIZE:2big/AC018743.27\t31791062\t466818\t1\t-\t(12)\t-\tBCM\tRP11-289M22\tfor_assembly/" \
 	> sequence.inf
-    cd /cluster/store5/gs.18/build35
-    hgGoldGapGl -chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
     cd /cluster/data/hg17
+    hgGoldGapGl -chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
     $HOME/bin/i386/hgClonePos -chromLst=chrom.lst hg17 \
-	/cluster/data/hg17 ./sequence.inf /cluster/store5/gs.18 -maxErr=3
+	/cluster/data/hg17 ./sequence.inf /cluster/store5/gs.18 -maxErr=3 \
+	2> clone.pos.errors
     #	We have the following errors
 # Processing /cluster/data/hg17/Y/chrY.gl
 # Clone BX640545 is on chromosomes chrX and chrY.  Ignoring chrY
@@ -1478,7 +1484,7 @@ cat > gsub << 'EOF'
         # 158588 sequences
 
 
-# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2004-06-04 - Hiram)
+# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (DONE - 2004-07-12 - Hiram)
     ssh eieio
     mkdir /cluster/data/hg17/bed/contig_overlaps
     cd /cluster/data/hg17/bed/contig_overlaps
@@ -1780,9 +1786,161 @@ exit ${RET}
 '_EOF_'
     # << this line makes emacs coloring happy
 
--
     gensub2 unPlaced.clone.list contig.list gsub jobList
 
+   # XXXX - some time later ... 2004-07-12
+    # Bringing this sequence to a close.  Difficulties encountered:
+    #	Placed clones that did not survive the psLayout filter:
+    #	AC006040.3 AC006328.5 AC007039.6 AC007241.3 AC007965.3
+    #	AC009947.2 AC010682.2 AC012005.4 AC016707.2 AC016728.4
+    #	AC016752.2 AC017005.7 AC025226.4 AC025246.6 AC055713.29
+    #	AC068541.7 AC068601.8 AC068704.4 AC073649.3 AC073962.5
+    #	AC091175.11 AC095381.1 AC104597.3 AC130223.2 AC130814.3
+    #	AC133883.6 AC139103.3 AF003627.3 AF135405.3 AL021878.2
+    #	AL137064.6 AL356803.2 AL390801.4 AL591480.8 AL901608.1
+    #	AP005814.2 BX322790.2 Z84489.1 Z84814.1
+    #	And placed clones that broken into two pieces during their
+    #	psLayout alignment:
+    #	AC006982.3 AC007742.4 AC023342.3 AC024183.4 AC025735.4
+    #	AC095380.1 AL646104.4 BX293536.4
+    #	For the above clones, their assignments in ref_placed.agp were
+    #	used instead of trying to adjust the psLayout process.
+
+    #	The PAR clones are a problem.  They were placed properly, but
+    #	during their load with hgClonePos there was a warning issued
+    #	about their dual existance.  hgClonePos said they were only
+    #	going to be placed on chrX and not on chrY.  However in the
+    #	browser when chrY is viewed it issues errors about these not
+    #	having proper coordinates in the clonePos table.  These were
+    #	removed from the coverage track to eliminate that error.
+    #	AL954722.18 BX537334.4 BX000483.7 BX908402.3 BX649635.3 BX119919.5
+    #	AC079176.15 AC097314.27 AC006209.25 AJ271735.1 AJ271736.1
+    #
+    #	And finally, after many different types of alignment attempts,
+    #	there remain 1489 un-placed clones that could not be located.
+
+    #	While trying to figure out which contigs many clones belonged
+    #	to, the following cluster run script was used to take a survey
+    #	using blat:
+#!/bin/sh
+#       runBlat.sh <clone> <contig>
+#       <clone> is one of the .fa.gz files in
+#               /scratch/hg/gs.18/build35/clones/
+#               without the .fa.gz extension
+#       <contig> is one of the contigs found in:
+#               /iscratch/i/gs.18/build35/maskedContigs
+#   
+# ./runBlat.sh unPlaced/AB000876.1.fa.gz NT_005612.fa {check out line+
+# psl/NT_005612.fa/unPlaced/AB000876.1.fa.gz.psl}
+#
+HERE=`pwd`
+CLONE=$1 
+CLONEDIR=`dirname ${CLONE}`
+CLONENAME=`basename ${CLONE}`
+CLONESRC=/iscratch/i/gs.18/build35/clones/${CLONE}.fa.gz
+CONTIG=$2
+CONTIGBASE=${CONTIG/.fa/}
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}
+if [ ! -s ${CLONESRC} ]; then
+        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+mkdir -p /tmp/${CLONEDIR}/${CLONENAME}
+zcat ${CLONESRC} > /tmp/${CLONEDIR}/${CLONENAME}/${CLONENAME}.fa
+cd /tmp/${CLONEDIR}
+/cluster/data/hg17/bed/contig_overlaps/FfaSplit/faToFfa ${CLONENAME}
+ECOUNT=`cat error.convert | wc -l`
+if [ "${ECOUNT}" -ne 0 ]; then
+        echo "Error during faToFfa, error.convert not empty" 1>/dev/stderr
+        exit 255
+fi
+rm -f error.convert
+B=${CLONENAME/\.*/}
+cd /tmp/${CLONEDIR}/${CLONENAME}
+faSplit byname ${CLONENAME}.fa .
+RET=0
+export RET
+for F in ${CLONENAME}_*.fa
+do
+    FA=${F/_*.fa/}
+    A=${FA/.[0-9]*/}
+    P=${F/.fa/}
+    N=${P##*_}
+    rm -f t.fa
+    mv ${F} t.fa
+    cat t.fa | faSplit -oneFile size stdin 3000 ${A}_${N}
+    rm -f t.fa
+    blat ${TARGET} ${A}_${N}.fa -ooc=/scratch/hg/h/11.ooc ${A}_${N}.psl \
+        -t=dna -q=dna -fastMap -noHead
+    RET=$?
+    if [ "$RET" -ne 0 ]; then
+        echo "Error during blat ${TARGET} ${A}_${N}.fa" 1>/dev/stderr
+        break
+    fi
+done
+rm -f ${CLONENAME}.fa
+rm -f ${B}_*.fa
+cd ${HERE}
+mkdir -p psl/${CONTIGBASE}
+sed -e "s/${A}/${CLONENAME}/" /tmp/${CLONEDIR}/${CLONENAME}/*.psl > \
+        psl/${CONTIGBASE}/${CLONENAME}.psl
+rm -f /tmp/${CLONEDIR}/${CLONENAME}/*.psl
+rmdir --ignore-fail-on-non-empty /tmp/${CLONEDIR}/${CLONENAME}
+rmdir --ignore-fail-on-non-empty /tmp/${CLONEDIR}
+exit ${RET}
+
+    #	The alignment with psLayout were done with the following cluster
+    #	run script:
+
+#!/bin/sh
+#       kkiPsLayout.sh <clone> <contig>
+#       <clone> is one of the .fa.gz files in
+#               /scratch/hg/gs.18/build35/clones/unPlaced
+#               without the .fa.gz extension
+#       <contig> is one of the contigs found in:
+#               /iscratch/i/gs.18/build35/maskedContigs
+#
+# ./runPsLayout.sh unPlaced/AP001966.2 NT_016354 {check out exists
+# psl/NT_016354/AP001966.2.psl}
+#
+HERE=`pwd`
+CLONE=$1
+CONTIG=$2
+CLONEDIR=`dirname ${CLONE}`
+CLONENAME=`basename ${CLONE}`
+RESULT=psl/${CONTIG}/${CLONENAME}.psl
+CLONESRC=/iscratch/i/gs.18/build35/clones/${CLONE}.fa.gz
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}.fa
+OOC=/iscratch/i/gs.18/build35/contigOoc10/${CONTIG}.10.ooc
+if [ ! -s ${CLONESRC} ]; then
+        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}" 1>/dev/stderr
+        exit 255
+fi
+mkdir -p /tmp/${CONTIG}/${CLONEDIR}/${CLONENAME}
+zcat ${CLONESRC} > /tmp/${CONTIG}/${CLONEDIR}/${CLONENAME}.fa
+cd /tmp/${CONTIG}
+/cluster/data/hg17/bed/contig_overlaps/FfaSplit/faToFfa ${CLONEDIR}
+cd ${HERE}
+mkdir -p psl/${CONTIG}
+$HOME/bin/i386/psLayout ${TARGET} /tmp/${CONTIG}/${CLONEDIR}/${CLONENAME}.fa genomic ${OOC} ${RESULT}
+RET=$?
+rm -f /tmp/${CONTIG}/${CLONEDIR}/${CLONENAME}.fa /tmp/${CONTIG}/error.convert
+rmdir --ignore-fail-on-non-empty /tmp/${CONTIG}/${CLONEDIR}/${CLONENAME}
+rmdir --ignore-fail-on-non-empty /tmp/${CONTIG}/${CLONEDIR}/
+rmdir --ignore-fail-on-non-empty /tmp/${CONTIG}
+exit ${RET}
 
 # BUILD KNOWN GENES TABLES (DONE 6/8/04 Fan)
 
