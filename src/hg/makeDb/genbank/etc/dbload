@@ -81,7 +81,7 @@ else
 fi
 
 # update databases
-gbDbLoadStep $verb $typeArg -workdir=$workdir -downloadUpdate $databases
+gbDbLoadStep $verb $typeArg -workdir=$workdir $databases
 
 # on success, save time load completely and build time we started with
 mv -f $lastTimeTmp $lastTime

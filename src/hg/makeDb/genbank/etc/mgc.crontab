@@ -5,12 +5,9 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# during the week only load mRNAs
-# poll hourly 16:30 - 21:30
-30 16-21 * * 1-5	/genbank/etc/mgc-dbload
-
-# on weekends, both mRNAs and ESTS
-# poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 6	/genbank/etc/mgc-dbload -inclEsts
-30 0-18 * * 0	/genbank/etc/mgc-dbload -inclEsts
+# during the week and weekends we do both mRNAs and ESTs.  Only on this
+# machine, MGC needs current ESTs and this is also nice sanity check for other
+# machines.
+# daily, 22:00-4:00
+30 22-04 * * *	/genbank/etc/mgc-dbload -inclEsts
 
