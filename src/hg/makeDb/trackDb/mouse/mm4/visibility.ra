@@ -24,9 +24,3 @@ visibility      dense
 
 track           refGene
 visibility      pack
-
-track		phyloHMM_leptin
-visibility	full
-
-track		leptinMouse90
-visibility	pack
