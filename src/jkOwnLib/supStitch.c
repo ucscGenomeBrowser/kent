@@ -14,7 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.22 2004/06/03 21:14:35 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.23 2004/07/07 04:13:13 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -229,7 +229,8 @@ else
 	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
 	    if (newLeft != NULL)
 	        {
-		forceMonotonic(newLeft);
+		if (!bundle->isProt)
+		    forceMonotonic(newLeft);
 		newRight = ffRightmost(newLeft);
                 if (left != NULL)
                     {
@@ -512,7 +513,8 @@ static void ssFindBestSmall(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 {
 struct ssGraph *graph = ssGraphMake(ffList, qSeq, stringency, isProt, t3List);
 ssGraphFindBest(graph, retBestAli, retScore, retLeftovers);
-forceMonotonic(*retBestAli);
+if (!isProt)
+    forceMonotonic(*retBestAli);
 ssGraphFree(&graph);
 }
 
