@@ -2100,7 +2100,7 @@ cat > split.csh << 'EOF'
     iSync
 
 
-# STS MARKERS (WORKING 2004-07-13 kate)
+# STS MARKERS (DONE 2004-07-21 kate)
     # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
     # remove this after verifying the newer version
 
@@ -2323,7 +2323,7 @@ cat > template << 'EOF'
     wc -l stsMarkers.extra.found
         #   149 out of 3142 attempted
         # out of 92674 total sequences
-    cp stsMarkers.final stsMarkers.*lifted.psl.initial* stsMarkers.found \
+    cp stsMarkers.final stsMarkers.lifted.psl stsMarkers.*lifted.psl.initial* stsMarkers.found \
                 /cluster/data/hg17/bed/sts
 
     # primers
@@ -2496,27 +2496,25 @@ cat > template << 'EOF'
     /cluster/bin/scripts/createSTSbed /cluster/data/ncbi/sts.9/stsInfo2.bed \
                 stsMarkers_pos.rdb > stsMap.bed
 
-# GOT HERE
-
     # Set up sequence files
     ssh hgwdev
     mkdir -p /gbdb/hg17/sts.9/
     ln -s /cluster/data/ncbi/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.STS.fa
-    # TODO: relink this (it's currently linked to sts.terry
-    ln -s /cluster/data/ncbi/sts.9/all.primers.fa /gbdb/hg17/sts.9/all.primers.fa
+    ln -s /cluster/data/ncbi/sts.9/all.primers.fa \
+        /gbdb/hg17/sts.9/all.primers.fa
 
     # Load all files
     cd /cluster/data/hg17/bed/sts
     hgLoadSeq hg17 /gbdb/hg17/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.primers.fa
     hgsql hg17 < ~kent/src/hg/lib/stsInfo2.sql
     hgsql hg17 < ~kent/src/hg/lib/stsAlias.sql
-    hgsql hg17
+    cp /cluster/data/ncbi/sts.9/{stsInfo2.bed,stsAlias.bed} .
     mysql> load data local infile 'stsInfo2.bed' into table stsInfo2;
     mysql> load data local infile 'stsAlias.bed' into table stsAlias;
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
 	hg17 stsMap stsMap.bed
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
-    hgLoadPsl -nobin -table=all_sts_seq hg17 run/stsMarkers.lifted.psl
+    hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
 
     
 # RECOMBINATION RATES (2004-07-13 Terry)
@@ -2531,6 +2529,7 @@ cat > template << 'EOF'
 	cd recombRate
 
 # Copy other necessary files here (in future, can take from previous version)
+# NOTE: these are stable, and could be saved in a permanent spot
     cp /projects/hg2/booch/psl/info/decode_all .
     cp /projects/hg2/booch/psl/info/marshfield_all .
     cp /projects/hg2/booch/psl/info/genethon_all .
@@ -2577,8 +2576,6 @@ cat > template << 'EOF'
     /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
         marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
                 > recombRate.bed
-
-        # GOT HERE
     hgLoadBed -noBin -tab \
         -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
 	    hg17 recombRate recombRate.bed
