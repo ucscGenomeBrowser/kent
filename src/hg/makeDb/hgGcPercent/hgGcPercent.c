@@ -7,8 +7,9 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 #include "options.h"
+#include "twoBit.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.11 2004/04/02 04:38:34 baertsch Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.12 2004/10/13 23:59:59 heather Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -18,6 +19,7 @@ char *chr = (char *)NULL;	/* process only chromosome listed */
 boolean noDots = FALSE;	/* TRUE == do not display ... progress */
 boolean doGaps = FALSE;	/* TRUE == process gaps correctly */
 int overlap = 0;                /* overlap size */
+boolean useTwoBit = TRUE;  /* TRUE == use 2bit file; if not found use 4bit nibs */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -28,6 +30,7 @@ static struct optionSpec optionSpecs[] = {
     {"noDots", OPTION_BOOLEAN},
     {"doGaps", OPTION_BOOLEAN},
     {"overlap", OPTION_INT},
+    {"useTwoBit", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -47,6 +50,7 @@ errAbort(
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
   "   -overlap=N - overlap windows by N bases (default 0)\n"
+  "   -useTwoBit - use 2bit sequence (if not found, use 4bit sequence)\n"
   "   -verbose=N - display details to stderr during processing");
 }
 
@@ -63,20 +67,36 @@ char *createTable =
     "INDEX(chrom(12), chromEnd)\n"
 ");\n";
 
-void makeGcTab(char *nibFile, char *chrom, FILE *f)
+void makeGcTab(char *nibFile, char *chrom, int chromSize, FILE *f)
 /* Scan through nib file and write out GC percentage info in
  * 20 kb windows. */
 {
-int chromSize, start = 0, end, oneSize;
+int start = 0, end, oneSize;
 int minCount = winSize/4;
 int i, count, gcCount, val, ppt, gapCount;
 struct dnaSeq *seq = NULL;
 FILE *nf = NULL;
+struct twoBitFile *tbf;
 DNA *dna;
 int dotMod = 0;
+boolean twoBit = FALSE;
 
 printf("#	Calculating gcPercent with window size %d\n",winSize);
-nibOpenVerify(nibFile, &nf, &chromSize);
+
+if (twoBitIsFile(nibFile))
+    {
+    twoBit = TRUE;
+    }
+
+if (twoBit)
+    {
+    tbf = twoBitOpen(nibFile);
+    }
+else
+    {
+    nibOpenVerify(nibFile, &nf, &chromSize);
+    }
+
 end = start + winSize;
 for (start=0; start<chromSize && end < chromSize; start =  end - overlap)
     {
@@ -92,7 +112,14 @@ for (start=0; start<chromSize && end < chromSize; start =  end - overlap)
     if (end > chromSize)
         end = chromSize;
     oneSize = end - start;
-    seq = nibLdPart(nibFile, nf, chromSize, start, oneSize);
+    if (twoBit) 
+        {
+	seq = twoBitReadSeqFrag(tbf, chrom, start, end);
+	}
+    else 
+        {
+        seq = nibLdPart(nibFile, nf, chromSize, start, oneSize);
+	}
     dna = seq->dna;
     gapCount = count = gcCount = 0;
     for (i=0; i<oneSize; ++i)
@@ -121,22 +148,36 @@ for (start=0; start<chromSize && end < chromSize; start =  end - overlap)
 	    fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
 	}
     else
+        {
 	fprintf(f, "%s\t%d\t%d\t%s\t%d\n", chrom, start, end, "GC", ppt);
+	}
     }
-carefulClose(&nf);
+if (twoBit)
+    {
+    twoBitClose(&tbf);
+    }
+else
+    {
+    carefulClose(&nf);
+    }
 printf("\n");
 }
 
 void hgGcPercent(char *database, char *nibDir)
 /* hgGcPercent - Calculate GC Percentage in 20kb windows on all chromosomes. */
 {
-struct fileInfo *nibList = listDirX(nibDir, "*.nib", TRUE), *nibEl;
+struct fileInfo *nibList, *nibEl;
 char dir[256], chrom[128], ext[64];
 char *tabFileName = "gcPercent.bed";
 FILE *tabFile = (FILE *) NULL;
 struct sqlConnection *conn;
 char query[256];
+struct sqlResult *sr;
+char **row;
+char twoBitFile[256];
+struct slName *twoBitNames, *el;
 
+// output file
 if (file)
     tabFileName = file;
 
@@ -144,26 +185,49 @@ tabFile = mustOpen(tabFileName, "w");
 
 verbose(2, "writing to file %s\n", tabFileName);
 
-/* Create tab file with all GC percent data. */
-for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
+sprintf(twoBitFile, "%s/%s.2bit", nibDir, database);
+if (fileExists(twoBitFile) && useTwoBit)
     {
-    splitPath(nibEl->name, dir, chrom, ext);
-    if (chr)
-	{
-	char chrNib[256];
-	safef(chrNib, ArraySize(chrNib), "%s/%s.nib", nibDir, chr);
-	verbose(2, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
-	if (sameString(chrNib,nibEl->name))
+    printf("Using twoBit: %s\n", twoBitFile);
+    // twoBitSeqNames not giving me what I'd like
+    // twoBitNames = twoBitSeqNames(twoBitFile);
+    // for (el = twoBitNames; el != NULL; el = el->next)
+    conn = sqlConnect(database);
+    sprintf(query, "select chrom, size from chromInfo");
+    sr = sqlMustGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+            printf("Processing twoBit %s\n", row[0]);
+            makeGcTab(twoBitFile, row[0], atoi(row[1]), tabFile);
+	}
+    }
+  
+else
+    {
+    nibList = listDirX(nibDir, "*.nib", TRUE);
+
+    /* Create tab file with all GC percent data. */
+    for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
+        {
+        splitPath(nibEl->name, dir, chrom, ext);
+        if (chr)
 	    {
-	    printf("Processing %s\n", nibEl->name);
-	    makeGcTab(nibEl->name, chrom, tabFile);
+	    char chrNib[256];
+	    safef(chrNib, ArraySize(chrNib), "%s/%s.nib", nibDir, chr);
+	    verbose(2, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
+	    if (sameString(chrNib,nibEl->name))
+	        {
+	        printf("Processing %s\n", nibEl->name);
+	        makeGcTab(nibEl->name, chrom, 0, tabFile);
+	        }
 	    }
-	}
-    else
-	{
-    printf("Processing %s\n", nibEl->name);
-    makeGcTab(nibEl->name, chrom, tabFile);
-	}
+        else
+	    {
+                printf("Processing %s\n", nibEl->name);
+                makeGcTab(nibEl->name, chrom, 0, tabFile);
+	    }
+        }
+    slFreeList(&nibList);
     }
 carefulClose(&tabFile);
 printf("File %s created\n",tabFileName);
@@ -180,7 +244,6 @@ if (!noLoad)
     sqlDisconnect(&conn);
     }
 
-slFreeList(&nibList);
 }
 
 int main(int argc, char *argv[])
