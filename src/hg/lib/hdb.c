@@ -437,7 +437,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char query[256];
     struct sqlResult *sr;
     char **row;
-    long size;
+    off_t size;
     char *path;
 
     /* Query database to find full path name and size file should be. */
@@ -1317,15 +1317,22 @@ return hFindBed12FieldsAndBinDb(db, table,
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
 {
-static struct hash *hash;
+static struct hash *dbHash;	/* Values are hashes of tables. */
+struct hash *hash;
 struct hTableInfo *hti;
 char fullName[64];
 boolean isSplit = FALSE;
 
 if (chrom == NULL)
     chrom = "chr1";
+if (dbHash == NULL)
+    dbHash = newHash(8);
+hash = hashFindVal(dbHash, db);
 if (hash == NULL)
-    hash = newHash(7);
+    {
+    hash = newHash(8);
+    hashAdd(dbHash, db, hash);
+    }
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
     sprintf(fullName, "%s_%s", chrom, rootName);
@@ -1382,12 +1389,12 @@ return hFindTableInfoDb(hGetDb(), chrom, rootName);
 }
 
 
-boolean hFindSplitTable(char *chrom, char *rootName, 
+boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin)
-/* Find name of table that may or may not be split across chromosomes. 
- * Return FALSE if table doesn't exist.  */
+/* Find name of table in a given database that may or may not 
+ * be split across chromosomes. Return FALSE if table doesn't exist.  */
 {
-struct hTableInfo *hti = hFindTableInfo(chrom, rootName);
+struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootName);
 if (hti == NULL)
     return FALSE;
 if (retTableBuf != NULL)
@@ -1400,6 +1407,14 @@ if (retTableBuf != NULL)
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
 return TRUE;
+}
+
+boolean hFindSplitTable(char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin)
+/* Find name of table that may or may not be split across chromosomes. 
+ * Return FALSE if table doesn't exist.  */
+{
+return hFindSplitTableDb(hGetDb(), chrom, rootName, retTableBuf, hasBin);
 }
 
 boolean hIsMgscHost()

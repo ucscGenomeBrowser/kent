@@ -245,6 +245,11 @@ boolean hFindSplitTable(char *chrom, char *rootName,
 /* Find name of table that may or may not be split across chromosomes. 
  * Return FALSE if table doesn't exist.  */
 
+boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin);
+/* Find name of table in a given database that may or may not 
+ * be split across chromosomes. Return FALSE if table doesn't exist.  */
+
 int hBinLevels();
 /* Return number of levels to bins. */
 

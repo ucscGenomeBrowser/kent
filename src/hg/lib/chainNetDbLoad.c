@@ -1,11 +1,15 @@
 /* chainNetDbLoad - This will load a database representation of
- * a net into a chainNet representation. */
+ * a net into a chainNet representation.  Also helps database
+ * representation of chain into chain. */
 
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "chain.h"
+#include "chainDb.h"
+#include "chainLink.h"
 #include "chainNet.h"
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
@@ -189,5 +193,85 @@ sqlFreeResult(&sr);
 net->size = hdbChromSize(conn, chrom);
 sqlDisconnect(&conn);
 return net;
+}
+
+static void chainLinkAddResult(struct sqlResult *sr, int rowOffset, struct chain *chain)
+/* Add links that we get from sr to chain. */
+{
+char **row;
+struct boxIn *list = NULL, *b;
+struct chainLink link;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    chainLinkStaticLoad(row+rowOffset, &link);
+    AllocVar(b);
+    b->tStart = link.tStart;
+    b->tEnd = link.tEnd;
+    b->qStart = link.qStart;
+    b->qEnd = link.qStart + (link.tEnd - link.tStart);
+    slAddHead(&list, b);
+    }
+slSort(&list, boxInCmpTarget);
+chain->blockList = list;
+}
+
+static struct chain *chainLoadIdSome(char *database, char *track, char *chrom, 
+	int start, int end, int id, boolean loadAll)
+/* Load some or all of chain. */
+{
+int rowOffset;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char table[64];
+boolean hasBin;
+struct chain *chain;
+char query[256];
+
+/* Load chain header. */
+if (!hFindSplitTableDb(database, chrom, track, table, &hasBin))
+   errAbort("%s table is not in %s", track, database);
+conn = sqlConnect(database);
+snprintf(query, sizeof(query),
+	"select * from %s where id = %d", table, id);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("chain %d is not in %s", id, table);
+chain = chainHeadLoad(row+hasBin);
+sqlFreeResult(&sr);
+
+/* Load links. */
+if (loadAll)
+    {
+    snprintf(query, sizeof(query),
+	 "select * from %sLink where chainId = %d", table, id);
+    }
+else
+    {
+    snprintf(query, sizeof(query),
+	 "select * from %sLink where chainId = %d and tStart < %d and tEnd > %d", 
+	 table, id, end, start);
+    }
+sr = sqlGetResult(conn, query);
+chainLinkAddResult(sr, hasBin, chain);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return chain;
+}
+
+struct chain *chainLoadIdRange(char *database, char *track, char *chrom, 
+	int start, int end, int id)
+/* Load parts of chain of given ID from database.  Note the chain header
+ * including score, tStart, tEnd, will still reflect the whole chain,
+ * not just the part in range.  However only the blocks of the chain
+ * overlapping the range will be loaded. */
+{
+return chainLoadIdSome(database, track, chrom, start, end, id, FALSE);
+}
+
+struct chain *chainLoadId(char *database, char *track, char *chrom, int id)
+/* Load chain of given ID from database. */
+{
+return chainLoadIdSome(database, track, chrom, 0, 0, id, TRUE);
 }
 

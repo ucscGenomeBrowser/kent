@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "chain.h"
 #include "chainLink.h"
 
 void chainLinkStaticLoad(char **row, struct chainLink *ret)

@@ -31,57 +31,60 @@ struct lm *lm = lmInit(1024*4);
 char **row;
 double scale = ((double)(winEnd - winStart))/width;
 
-/* Make up a hash of all linked features keyed by
- * id, which is held in the extras field.  To
- * avoid burning memory on full chromosome views
- * we'll just make a single simple feature and
- * exclude from hash chains less than three pixels wide, 
- * since these would always appear solid. */
-for (lf = tg->items; lf != NULL; lf = lf->next)
+if (tg->items != NULL)
     {
-    double pixelWidth = scale * (lf->end - lf->start);
-    if (pixelWidth >= 2.5)
+    /* Make up a hash of all linked features keyed by
+     * id, which is held in the extras field.  To
+     * avoid burning memory on full chromosome views
+     * we'll just make a single simple feature and
+     * exclude from hash chains less than three pixels wide, 
+     * since these would always appear solid. */
+    for (lf = tg->items; lf != NULL; lf = lf->next)
 	{
-	hashAdd(hash, lf->extra, lf);
+	double pixelWidth = scale * (lf->end - lf->start);
+	if (pixelWidth >= 2.5)
+	    {
+	    hashAdd(hash, lf->extra, lf);
+	    }
+	else
+	    {
+	    lmAllocVar(lm, sf);
+	    sf->start = lf->start;
+	    sf->end = lf->end;
+	    sf->grayIx = lf->grayIx;
+	    lf->components = sf;
+	    }
 	}
-    else
-        {
-	lmAllocVar(lm, sf);
-	sf->start = lf->start;
-	sf->end = lf->end;
-	sf->grayIx = lf->grayIx;
-	lf->components = sf;
-	}
-    }
 
-/* Make up range query. */
-dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
-	chromName, tg->mapName);
-hAddBinToQuery(seqStart, seqEnd, query);
-dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
-sr = sqlGetResult(conn, query->string);
+    /* Make up range query. */
+    dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
+	    chromName, tg->mapName);
+    hAddBinToQuery(seqStart, seqEnd, query);
+    dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
+    sr = sqlGetResult(conn, query->string);
 
-/* Loop through making up simple features and adding them
- * to the corresponding linkedFeature. */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    lf = hashFindVal(hash, row[0]);
-    if (lf != NULL)
+    /* Loop through making up simple features and adding them
+     * to the corresponding linkedFeature. */
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	lmAllocVar(lm, sf);
-	sf->start = sqlUnsigned(row[1]);
-	sf->end = sqlUnsigned(row[2]);
-	sf->grayIx = maxShade;
-	slAddHead(&lf->components, sf);
+	lf = hashFindVal(hash, row[0]);
+	if (lf != NULL)
+	    {
+	    lmAllocVar(lm, sf);
+	    sf->start = sqlUnsigned(row[1]);
+	    sf->end = sqlUnsigned(row[2]);
+	    sf->grayIx = maxShade;
+	    slAddHead(&lf->components, sf);
+	    }
 	}
+
+    /* Someday we may need to put in a sort on the simple features
+     * here.  For now though nobody cares. */
+
+    linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	    font, color, vis);
+
     }
-
-/* Someday we may need to put in a sort on the simple features
- * here.  For now though nobody cares. */
-
-linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
-	font, color, vis);
-
 /* Cleanup time. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     lf->components = NULL;
@@ -110,7 +113,7 @@ int qs;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char buf[16];
-    chainStaticLoad(row + rowOffset, &chain);
+    chainHeadStaticLoad(row + rowOffset, &chain);
     AllocVar(lf);
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;

@@ -5,6 +5,10 @@
 #ifndef CHAINLINK_H
 #define CHAINLINK_H
 
+#ifndef CHAIN_H
+#include "chain.h"
+#endif
+
 struct chainLink
 /* alignment block in chain */
     {

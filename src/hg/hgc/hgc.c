@@ -92,6 +92,9 @@
 #include "jaxQTL.h"
 #include "hgSeq.h"
 #include "chain.h"
+#include "chainDb.h"
+#include "chainNetDbLoad.h"
+#include "chainToPsl.h"
 #include "netAlign.h"
 #include "hgc.h"
 
@@ -254,6 +257,12 @@ void hgcAnchor(char *group, char *item, char *other)
  * and other parameters. */
 {
 hgcAnchorSomewhere(group, item, other, seqName);
+}
+
+void writeFramesetType()
+/* Write document type that shows a frame set, rather than regular HTML. */
+{
+fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n", stdout);
 }
 
 boolean clipToChrom(int *pStart, int *pEnd)
@@ -1279,9 +1288,10 @@ if (tdb->html != NULL && tdb->html[0] != 0)
 }
 
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, char *otherDb)
+    char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
+char *track = tdb->tableName;
 char *thisOrg = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
 char table[64];
@@ -1290,17 +1300,18 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct chain chain;
+int chainWinSize;
 int qs, qe;
 
-if (!hFindSplitTable(seqName, tdb->tableName, table, &rowOffset))
-    errAbort("No %s track in database", tdb->tableName);
+if (!hFindSplitTable(seqName, track, table, &rowOffset))
+    errAbort("No %s track in database", track);
 snprintf(query, sizeof(query), 
 	"select * from %s where id = %s", table, item);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find %s in %s", item, table);
-chainStaticLoad(row + rowOffset, &chain);
+chainHeadStaticLoad(row + rowOffset, &chain);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
     thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
 printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
@@ -1319,9 +1330,58 @@ printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&
     qs, qe, chain.qEnd - chain.qStart);
 printf("<B>chain id:</B> %s<BR>\n", item);
 printf("<B>score:</B> %1.0f<BR>\n", chain.score);
+printf("<BR>\n");
 
+chainWinSize = min(winEnd-winStart, chain.tEnd - chain.tStart);
+if (chainWinSize < 1000000)
+    {
+    hgcAnchorSomewhere("htcChainAli", item, "o", chain.tName);
+    printf("View details of parts of chain within browser window.</A><BR>\n");
+    }
+else
+    {
+    printf("Zoom so that browser window covers 1,000,000 bases or less "
+           "and return here to see alignment details.<BR>\n");
+    }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
+}
+
+char *trackTypeInfo(char *track)
+/* Return type info on track. You can freeMem result when done. */
+{
+char *trackDb = hTrackDbName();
+struct sqlConnection *conn = hAllocConn();
+char buf[512];
+char query[256];
+snprintf(query, sizeof(query), 
+	"select type from %s where tableName = '%s'",  trackDb, track);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) == NULL)
+    errAbort("%s isn't in %s", track, trackDb);
+hFreeConn(&conn);
+return cloneString(buf);
+}
+
+void findNib(char *db, char *chrom, char nibFile[512])
+/* Find nib file corresponding to chromosome in given database. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+char query[256];
+
+snprintf(query, sizeof(query),
+	"select fileName from chromInfo where chrom = '%s'", chrom);
+if (sqlQuickQuery(conn, query, nibFile, 512) == NULL)
+    errAbort("Sequence %s isn't in database %s", chrom, db);
+sqlDisconnect(&conn);
+}
+
+struct dnaSeq *loadGenomePart(char *db, 
+	char *chrom, int start, int end)
+/* Load genomic dna from given database and position. */
+{
+char nibFile[512];
+findNib(db, chrom, nibFile);
+return nibLoadPart(nibFile, start, end - start);
 }
 
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -1641,7 +1701,6 @@ else
     return(tdb);
     }
 }
-
 
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
@@ -3266,7 +3325,7 @@ int start;
 boolean hasBin;
 
 /* Print start of HTML. */
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
+writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
 
@@ -3293,6 +3352,49 @@ else
     showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL);
 }
 
+void htcChainAli(char *item)
+/* Draw detailed alignment representation of a chain. */
+{
+struct chain *chain;
+struct psl *fatPsl, *psl = NULL;
+int id = atoi(item);
+char *track = cartString(cart, "table");
+char *type = trackTypeInfo(track);
+char *typeWords[2];
+char *otherDb, *org, *otherOrg;
+struct dnaSeq *qSeq;
+char name[128];
+
+/* Figure out other database. */
+if (chopLine(type, typeWords) < ArraySize(typeWords))
+    errAbort("type line for %s is short in trackDb", track);
+otherDb = typeWords[1];
+otherOrg = hOrganism(otherDb);
+org = hOrganism(database);
+
+/* Load up subset of chain and convert it to part of psl
+ * that just fits inside of window. */
+chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, id);
+if (chain->blockList == NULL)
+    {
+    printf("None of chain is actually in the window");
+    return;
+    }
+fatPsl = chainToPsl(chain);
+chainFree(&chain);
+psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
+pslFree(&fatPsl);
+
+qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+writeFramesetType();
+puts("<HTML>");
+sprintf(name, "%s.%s", otherOrg, psl->qName);
+printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
+	otherOrg, psl->qName, org, psl->tName );
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->tEnd, name);
+}
+
+
 void htcUserAli(char *fileNames)
 /* Show alignment for accession. */
 {
@@ -3305,7 +3407,7 @@ enum gfType tt, qt;
 boolean isProt;
 
 /* Print start of HTML. */
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
+writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
@@ -3350,7 +3452,7 @@ char fullTable[64];
 boolean hasBin;
 
 /* Print start of HTML. */
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", stdout);
+writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
 
@@ -5244,7 +5346,6 @@ void longXenoPsl1Given(struct trackDb *tdb, char *item,
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file, AND psl record is given. */
 {
-
 int hgsid = cartSessionId(cart);
 struct psl *trimmedPsl = NULL;
 char otherString[256];
@@ -5587,34 +5688,25 @@ char *otherChromTable = cgiString("otherChromTable");
 char *otherOrg = cgiString("otherOrg");
 char *otherDb = cgiString("otherDb");
 struct psl *psl = loadPslFromRangePair(pslTable,  item);
-char nibFile[512];
-char query[256];
-char name[256];
 char *qChrom;
 char *ptr;
-struct dnaSeq *musSeq = NULL;
-//struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 ;
-hSetDb2(otherDb);
-conn2 = hAllocConn2();
+char name[128];
+struct dnaSeq *qSeq = NULL;
 
 psl = pslTrimToTargetRange(psl, winStart, winEnd);
+
 /* In hg10 tables, psl->qName can be org.chrom.  Strip it down to just 
  * the chrom: */
-qChrom = cloneString(psl->qName);
+qChrom = psl->qName;
 if ((ptr = strchr(qChrom, '.')) != NULL)
-    strcpy(qChrom, ptr+1);
-sprintf(query, "select fileName from %s where chrom = '%s'", 
-	otherChromTable, qChrom);
-if (sqlQuickQuery(conn2, query, nibFile, sizeof(nibFile)) == NULL)
-    errAbort("Sequence %s isn't in %s in database %s", qChrom, otherChromTable, otherDb);
-musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
+    qChrom = ptr+1;
+
+qSeq = loadGenomePart(otherDb, qChrom, psl->qStart, psl->qEnd);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
-fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n", stdout);
+writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
-showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd, name);
-hFreeConn2(&conn2);
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 }
 
 void doBlatFish(struct trackDb *tdb, char *itemName)
@@ -9248,25 +9340,24 @@ if (dy == NULL)
 return dy->string; 
 }
 
-void printWindow( struct psl *thisPsl, int thisWinStart, int
+void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
         thisWinEnd, char *winStr, char *otherOrg, char *otherDb, 
         char *pslTableName )
 {
+char otherString[256];
+char pslItem[1024];
+char *cgiPslItem;
 
-    char otherString[256];
-    char pslItem[1024];
-    char *cgiPslItem;
-
-    sprintf( pslItem, "%s:%d-%d %s:%d-%d", thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
-    cgiPslItem = cgiEncode(pslItem);
-    sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart, 
-    pslTableName, otherOrg, "chromInfo" , otherDb );
-    if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
-        {
-        hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
-                thisWinEnd, otherString, thisPsl->tName);
-        printf("%s</A>\n", winStr );
-        }
+sprintf( pslItem, "%s:%d-%d %s:%d-%d", thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
+cgiPslItem = cgiEncode(pslItem);
+sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart, 
+pslTableName, otherOrg, "chromInfo" , otherDb );
+if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
+    {
+    hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
+	    thisWinEnd, otherString, thisPsl->tName);
+    printf("%s</A>\n", winStr );
+    }
 }
                                                         
 
@@ -9274,14 +9365,14 @@ void firstAndLastPosition( int *thisStart, int *thisEnd, struct psl *thisPsl )
 /*return the first and last base of a psl record (not just chromStart
  * and chromEnd but the actual blocks.*/
 {
-        *thisStart = thisPsl->tStarts[0];
-        *thisEnd = thisPsl->tStarts[thisPsl->blockCount - 1];
-        if( thisPsl->strand[1] == '-' )
-        {
-            *thisStart = thisPsl->tSize - *thisStart;
-            *thisEnd = thisPsl->tSize - *thisEnd;
-        }
-        *thisEnd += thisPsl->blockSizes[thisPsl->blockCount - 1];
+*thisStart = thisPsl->tStarts[0];
+*thisEnd = thisPsl->tStarts[thisPsl->blockCount - 1];
+if( thisPsl->strand[1] == '-' )
+{
+    *thisStart = thisPsl->tSize - *thisStart;
+    *thisEnd = thisPsl->tSize - *thisEnd;
+}
+*thisEnd += thisPsl->blockSizes[thisPsl->blockCount - 1];
 }
 
 boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
@@ -9290,30 +9381,30 @@ boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
  * record start and end positions */
 {
 
-            if( smp->chromStart + smp->samplePosition[i] -
-                   humMusWinSize / 2 + 1< left
-            &&  smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < left ) 
-                return(0);
-           
-           if( smp->chromStart + smp->samplePosition[i] -
-                   humMusWinSize / 2  + 1< thisStart 
-            && smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  ) 
-               return(0);
+if( smp->chromStart + smp->samplePosition[i] -
+       humMusWinSize / 2 + 1< left
+&&  smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < left ) 
+    return(0);
 
-            if( smp->chromStart + smp->samplePosition[i] -
-                   humMusWinSize / 2 + 1> right
-               && smp->chromStart + smp->samplePosition[i] +
-               humMusWinSize / 2  > right )
-                return(0);
-           
+if( smp->chromStart + smp->samplePosition[i] -
+       humMusWinSize / 2  + 1< thisStart 
+&& smp->chromStart + smp->samplePosition[i] + humMusWinSize / 2 < thisStart  ) 
+   return(0);
 
-            if( smp->chromStart + smp->samplePosition[i] -
-                   humMusWinSize / 2 + 1 > thisEnd 
-                && smp->chromStart + smp->samplePosition[i] +
-                humMusWinSize / 2  > thisEnd  ) 
-                return(0);
+if( smp->chromStart + smp->samplePosition[i] -
+       humMusWinSize / 2 + 1> right
+   && smp->chromStart + smp->samplePosition[i] +
+   humMusWinSize / 2  > right )
+    return(0);
 
-            return(1);
+
+if( smp->chromStart + smp->samplePosition[i] -
+       humMusWinSize / 2 + 1 > thisEnd 
+    && smp->chromStart + smp->samplePosition[i] +
+    humMusWinSize / 2  > thisEnd  ) 
+    return(0);
+
+return(1);
 }
  
 static double whichNum( double tmp, double min0, double max0, int n)
@@ -9327,7 +9418,6 @@ void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
     char *pslTableName, boolean printWindowFlag )
 /* Handle click in humMus sample (wiggle) track. */
 {
-
 int humMusWinSize = 50;
 int flag;
 int i;
@@ -9360,109 +9450,97 @@ int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 
 
- char *winOn = cartUsualString( cart, "win", "F" );
+char *winOn = cartUsualString( cart, "win", "F" );
 //errAbort( "(%s), (%s)\n", pslTableName, pslTableName );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
-        table, item, seqName);
+table, item, seqName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (firstTime)
-        firstTime = FALSE;
+	firstTime = FALSE;
     else
-        htmlHorizontalLine();
+	htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
 
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" 
-,
-        table, smp->chrom, smp->chromStart+smp->samplePosition[0],
-        smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+	, table, smp->chrom, smp->chromStart+smp->samplePosition[0]
+	, smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
 
     pslSr = sqlGetResult(conn2, query);
-    
+
     if(!sameString(winOn,"T"))
-    {
-    while(( pslRow = sqlNextRow(pslSr)) != NULL )
-    {
-        thisPsl = pslLoad( pslRow+hasBin );
+	{
+	while(( pslRow = sqlNextRow(pslSr)) != NULL )
+	    {
+	    thisPsl = pslLoad( pslRow+hasBin );
+	    firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
 
-        firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
+	    snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
+	    thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
+	    thisPsl->tStart, thisPsl->tEnd );
 
-        snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
-                thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
-                thisPsl->tStart, thisPsl->tEnd );
+	    cgiItem = cgiEncode(thisItem);
+	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
+	     otherDb, thisPsl, pslTableName );
 
-
-        cgiItem = cgiEncode(thisItem);
-        longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
-                 otherDb, thisPsl, pslTableName );
-
-
-
-        sprintf(otherString, "%d&win=T", thisPsl->tStart );
-        hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
-        printf("View individual alignment windows\n</a>");
-        printf("<br><br>");
-    }
-
-   // htmlHorizontalLine();
-    }
+	    sprintf(otherString, "%d&win=T", thisPsl->tStart );
+	    hgcAnchorSomewhere( tdb->tableName, cgiEncode(item), otherString, thisPsl->tName );
+	    printf("View individual alignment windows\n</a>");
+	    printf("<br><br>");
+	    }
+	}
     else
-    {
+	{
+	cartSetString( cart, "win", "F" );
+	printf("<h3>Alignments Windows </h3>\n"
+	   "<b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop"
+	   "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
 
-    cartSetString( cart, "win", "F" );
-    printf("<h3>Alignments Windows </h3>
-            <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
 
+	while(( pslRow = sqlNextRow(pslSr)) != NULL )
+	    {
+	    thisPsl = pslLoad( pslRow+hasBin );
 
-    while(( pslRow = sqlNextRow(pslSr)) != NULL )
-    {
-        thisPsl = pslLoad( pslRow+hasBin );
+	    firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
 
-        firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
+	    for( i=0; i<smp->sampleCount; i++ )
+		{
+		if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
+			thisStart, thisEnd ) )
+		    continue;
 
-        for( i=0; i<smp->sampleCount; i++ )
-        {
+		snprintf( str, 256, 
+		    "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+		max( smp->chromStart + smp->samplePosition[i] -
+		humMusWinSize / 2 + 1, thisStart + 1),
+		min(smp->chromStart +  smp->samplePosition[i] +
+		humMusWinSize / 2, thisEnd ),
+		whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
 
-            if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
-                        thisStart, thisEnd ) )
-                continue;
-
-            snprintf( str, 256, 
-"%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
-                max( smp->chromStart + smp->samplePosition[i] -
-                humMusWinSize / 2 + 1, thisStart + 1),
-                min(smp->chromStart +  smp->samplePosition[i] +
-                humMusWinSize / 2, thisEnd ),
-                whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
-
-            printWindow( thisPsl,
-                    smp->chromStart + smp->samplePosition[i] -
-                    humMusWinSize / 2,
-                    smp->chromStart + smp->samplePosition[i] +
-                    humMusWinSize / 2,
-                    str, otherOrg, otherDb, pslTableName );
-        }
-
-        printf("<br>");
+		printSampleWindow( thisPsl,
+		    smp->chromStart + smp->samplePosition[i] -
+		    humMusWinSize / 2,
+		    smp->chromStart + smp->samplePosition[i] +
+		    humMusWinSize / 2,
+		    str, otherOrg, otherDb, pslTableName );
+		}
+	    printf("<br>");
+	    }
+	}
     }
-    }
-
-}
 }
 
 void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
 {
-
 int humMusWinSize = 50;
 int flag;
 int i;
@@ -9483,7 +9561,7 @@ char pslItem[1024];
 char str[256];
 char thisItem[256];
 char *cgiPslItem;
-    char filename[10000];
+char filename[10000];
 
 char pslTableName[128] = "blastzBestMouse";
 
@@ -9491,15 +9569,15 @@ struct sqlResult *pslSr;
 struct sqlConnection *conn2 = hAllocConn();
 
 int thisStart, thisEnd;
- int offset;
- int motifid;
- 
+int offset;
+int motifid;
+
 int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'",
-        table, item);
+    table, item);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -9512,23 +9590,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     sscanf(smp->name,"footPrinter.%d.%d",&offset,&motifid);
     sprintf(filename,"../zoo_blanchem/new_raw2_offset%d.fa.main.html?motifID=%d",offset,motifid);
-   
- 
-  //printf("<HEAD><META HTTP-EQUIV=\"REFRESH\"\nCONTENT=\"2;URL=%s\"><TITLE>Reset Cart</TITLE>\n</HEAD>",filename);
 
-    
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
-        table, smp->chrom, smp->chromStart+smp->samplePosition[0],
-        smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
+	table, smp->chrom, smp->chromStart+smp->samplePosition[0],
+	smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
- printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
-  printf("location.replace('%s')\n",filename); 
-  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <b><a href=\"%s\">continue</a></b> for the requested GenBank report. </NOSCRIPT>\n",filename); 
-
-    
-
+    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+    printf("location.replace('%s')\n",filename); 
+    printf("</SCRIPT> <NOSCRIPT> No JavaScript support. "
+           "Click <b><a href=\"%s\">continue</a></b> for "
+	   "the requested GenBank report. </NOSCRIPT>\n", 
+	   filename); 
     }
 
 }
@@ -9941,61 +10015,65 @@ else if (sameWord(track, "tigrGeneIndex"))
     doTigrGeneIndex(tdb, item);
     }
  else if (sameWord(track, "mgc_mrna"))
-   {
-     doMgcMrna(track, item);
-   }
+    {
+    doMgcMrna(track, item);
+    }
  else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")))
-   {
-     doLinkedFeaturesSeries(track, item, tdb);
-   }
+    {
+    doLinkedFeaturesSeries(track, item, tdb);
+    }
 else if ((sameWord(track, "fosEndPairs")) || (sameWord(track, "fosEndPairsBad")) || (sameWord(track, "fosEndPairsLong")))
-   {
-     doLinkedFeaturesSeries(track, item, tdb);
-   }
+    {
+    doLinkedFeaturesSeries(track, item, tdb);
+    }
  else if (sameWord(track, "cgh"))
-   {
-     doCgh(track, item, tdb);
-   }
+    {
+    doCgh(track, item, tdb);
+    }
  else if (sameWord(track, "mcnBreakpoints"))
-   {
-     doMcnBreakpoints(track, item, tdb);
-   }
+    {
+    doMcnBreakpoints(track, item, tdb);
+    }
+else if (sameWord(track, "htcChainAli"))
+    {
+    htcChainAli(item);
+    }
 else if (sameWord(track, "htcCdnaAli"))
-   {
-   htcCdnaAli(item);
-   }
+    {
+    htcCdnaAli(item);
+    }
 else if (sameWord(track, "htcUserAli"))
-   {
-   htcUserAli(item);
-   }
+    {
+    htcUserAli(item);
+    }
 else if (sameWord(track, "htcBlatXeno"))
-   {
-   htcBlatXeno(item, cartString(cart, "aliTrack"));
-   }
+    {
+    htcBlatXeno(item, cartString(cart, "aliTrack"));
+    }
 else if (sameWord(track, "htcExtSeq"))
-   {
-   htcExtSeq(item);
-   }
+    {
+    htcExtSeq(item);
+    }
 else if (sameWord(track, "htcTranslatedProtein"))
-   {
-   htcTranslatedProtein(item);
-   }
+    {
+    htcTranslatedProtein(item);
+    }
 else if (sameWord(track, "htcGeneMrna"))
-   {
-   htcGeneMrna(item);
-   }
+    {
+    htcGeneMrna(item);
+    }
 else if (sameWord(track, "htcRefMrna"))
-   {
-   htcRefMrna(item);
-   }
+    {
+    htcRefMrna(item);
+    }
 else if (sameWord(track, "htcGeneInGenome"))
-   {
-   htcGeneInGenome(item);
-   }
+    {
+    htcGeneInGenome(item);
+    }
 else if (sameWord(track, "htcDnaNearGene"))
-   {
-   htcDnaNearGene(item);
-   }
+    {
+    htcDnaNearGene(item);
+    }
 else if (sameWord(track, "getMsBedAll"))
     {
     getMsBedExpDetails(tdb, item, TRUE);
@@ -10099,15 +10177,12 @@ cartHtmlEnd();
 struct hash *orgDbHash = NULL;
 
 void initOrgDbHash()
-/* 
-Function to initialize a has of organism names that hash to a database ID.
-This is used to show alignments by hashing the organism associated with the track to the
-database name where the chromInfo is stored. For example, the mousBlat track in the 
-human browser would hash to the mm2 database.
-*/
+/* Function to initialize a hash of organism names that hash to a database ID.
+ * This is used to show alignments by hashing the organism associated with the 
+ * track to the database name where the chromInfo is stored. For example, the 
+ * mousBlat track in the human browser would hash to the mm2 database. */
 {
-orgDbHash = hashNew(4); // 16 entries max so far
-
+orgDbHash = hashNew(8); 
 }
 
 void cartDoMiddle(struct cart *theCart)
