@@ -310,7 +310,6 @@ for (i=0; i<blockCount; i++)
     	blockGenomeEndPositive[i]     = blockGenomeEnd[i];
 	}
     }
-
 *exonCount = blockCount;
 *chrom     = tNameStr;
 }
@@ -452,5 +451,137 @@ if (mrnaID != NULL)
     }
 }
 
+void doPathwayLinks(char *proteinID, char *mrnaName)
+/* Show pathway links */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[128];
+char *mapID, *locusID, *mapDescription;
+char *geneID;
+char *geneSymbol;
+char *cgapID, *biocMapID, *biocMapDesc, *biocMapName;
+boolean hasPathway;
 
+if (hTableExists("kgXref"))
+    {
+    sprintf(cond_str, "kgID='%s'", mrnaName);
+    geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+    if (geneSymbol == NULL)
+        {
+        geneSymbol = mrnaName;
+        }
+    }
+else
+    {
+    geneSymbol = mrnaName;
+    }
 
+// Show Pathway links if any exists
+hasPathway = FALSE;
+cgapID     = NULL;
+
+//Process BioCarta Pathway link data
+if (sqlTableExists(conn, "cgapBiocPathway"))
+    {
+    sprintf(cond_str, "alias='%s'", geneSymbol);
+    cgapID = sqlGetField(conn2, database, "cgapAlias", "cgapID", cond_str);
+
+    if (cgapID != NULL)
+	{
+    	sprintf(query, "select mapID from %s.cgapBiocPathway where cgapID = '%s'", database, cgapID);
+    	sr = sqlGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    if (!hasPathway)
+	        {
+	        printf("<B>Pathways</B><UL>");
+	        hasPathway = TRUE;
+	    	}
+	    }
+    	while (row != NULL)
+	    {
+	    biocMapID = row[0];
+	    printf("<LI><B>BioCarta:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
+	    row = sqlNextRow(sr);
+	    }
+        sqlFreeResult(&sr);
+	}
+    }
+
+//Process KEGG Pathway link data
+if (sqlTableExists(conn, "keggPathway"))
+    {
+    sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            locusID = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>KEGG:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+// Process SRI BioCyc link data
+if (sqlTableExists(conn, "bioCycPathway"))
+    {
+    sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<BR><B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            geneID  = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>BioCyc:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+		   mapID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+if (hasPathway)
+    {
+    printf("</UL>\n");
+    }
+
+hFreeConn(&conn);
+hFreeConn(&conn2);
+}
