@@ -1554,9 +1554,10 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
-track encode_UCSD_ChIP_RNAP_HELA
-shortLabel ChIP/LI Pol2 HeLa
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
+track encode_UCSD_ChIP_RNAP
+compositeTrack on
+shortLabel ChIP/LI Pol2
+longLabel Ludwig Institute, UCSD ChIP/Chip Pol II in ENCODE Regions
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1565,44 +1566,36 @@ type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 
+track encode_UCSD_ChIP_RNAP_HELA
+subTrack encode_UCSD_ChIP_RNAP
+shortLabel Pol2 HELA
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HELA) in ENCODE Regions
+priority 1
+
 track encode_UCSD_ChIP_RNAP_THP1
-shortLabel ChIP/LI Pol2 THP1
+subTrack encode_UCSD_ChIP_RNAP
+shortLabel Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
-group encode
-priority 30.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 2
 color 12,12,125
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_IMR90
-shortLabel ChIP/LI Pol2 IMR90
+subTrack encode_UCSD_ChIP_RNAP
+shortLabel Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
-group encode
-priority 30.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 3
 color 125,12,12
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_HCT116
-shortLabel ChIP/LI Pol2 HCT116
+subTrack encode_UCSD_ChIP_RNAP
+shortLabel Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
-group encode
-priority 30.4
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 4
 color 12,125,12
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
-track encode_UCSD_ChIP_TAF250_HELA
-shortLabel ChIP/LI TAF1 HeLa
+track encode_UCSD_ChIP_TAF250
+compositeTrack on
+shortLabel ChIP/LI TAF1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) in ENCODE Regions
 group encode
 priority 30.5
@@ -1612,41 +1605,32 @@ type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 
+track encode_UCSD_ChIP_TAF250_HELA
+subTrack encode_UCSD_ChIP_TAF250
+shortLabel TAF1 HELA
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HELA) in ENCODE Regions
+priority 1
+
 track encode_UCSD_ChIP_TAF250_THP1
-shortLabel ChIP/LI TAF1 THP1
+subTrack encode_UCSD_ChIP_TAF250
+shortLabel TAF1 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) in ENCODE Regions
-group encode
-priority 30.6
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 2
 color 12,12,125
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
 track encode_UCSD_ChIP_TAF250_IMR90
-shortLabel ChIP/LI TAF1 IMR90
+subTrack encode_UCSD_ChIP_TAF250
+shortLabel TAF1 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) in ENCODE Regions
-group encode
-priority 30.7
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 3
 color 125,12,12
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
 track encode_UCSD_ChIP_TAF250_HCT116
-shortLabel ChIP/LI TAF1 HCT116
+subTrack encode_UCSD_ChIP_TAF250
+shortLabel TAF1 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
-group encode
-priority 30.8
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
+priority 4
 color 12,125,12
-type wig 0.0 16.0
-maxHeightPixels 128:16:16
-autoScaleDefault Off
 
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
@@ -1656,7 +1640,7 @@ group encode
 color 10,10,130
 altColor 50,50,50
 priority 47.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
@@ -1693,7 +1677,7 @@ shortLabel ChIp/Affy Pol2 Sites
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) Sites in ENCODE Regions
 group encode
 priority 47.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 10,10,130
 altColor 50,50,50
@@ -1731,7 +1715,7 @@ group encode
 color 130,10,10
 altColor 50,50,50
 priority 48.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
@@ -1768,7 +1752,7 @@ shortLabel RNA/Affy Sites
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60 cells) Sites in ENCODE Regions
 group encode
 priority 48.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 130,10,10
 altColor 50,50,50
