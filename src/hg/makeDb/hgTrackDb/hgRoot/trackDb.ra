@@ -567,10 +567,10 @@ type bed 15 +
 
 track ancientR
 shortLabel Ancient Repeats
-longLabel Ancient Mouse Repeats
+longLabel Human/Mouse Ancient Repeats
 priority 41
 visibility dense
-color 0,0,255
+color 20,20,170
 altColor 255,240,200
 spectrum on
 chromosomes chr1,
