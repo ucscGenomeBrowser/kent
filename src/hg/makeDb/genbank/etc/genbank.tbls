@@ -1,50 +1,62 @@
-all_est
-all_mrna
+# genbank and refseq metadata
+mrna
 author
 cds
 cell
-chr.+_est
-chr.+_intronEst
-chr.+_mrna
-chr.+_random_est
-chr.+_random_intronEst
-chr.+_random_mrna
-chromInfo
 description
 development
-estOrientInfo
-gbExtFile
-gbLoaded
-gbSeq
-gbStatus
 geneName
-imageClone
 keyword
 library
-mgcFullMrna
-mgcFullStatus
-mgcGenes
-mrna
 mrnaClone
-mrnaOrientInfo
-ncbiGenes
 organism
 productName
-refFlat
-refGene
-refLink
-refSeqAli
-refSeqStatus
 sex
 source
 tissue
-trackDb
-twinscan
-twinscanPep
-xenoEst
+imageClone
+
+# refseq metadata
+refSeqStatus
+refLink
+
+# file tables
+gbSeq
+gbExtFile
+
+# bookkeeping tables
+gbStatus
+gbLoaded
+
+# mrna alignments and orientation
+all_mrna
+chr.+_mrna
 xenoMrna
+mrnaOrientInfo
+
+# est alignments and orientation
+all_est
+chr.+_est
+chr.+_intronEst
+xenoEst
+estOrientInfo
+
+# refseq alignments
+refGene
+refSeqAli
+refFlat
+xenoRefGene
+xenoRefSeqAli
+xenoRefFlat
+
+# MGC metadata
+mgcFullStatus
+mgcStatus
+
+# MGC alignments
+mgcFullMrna
+mgcGenes
 mgcFailedEst
 mgcIncompleteMrna
 mgcPickedEst
-mgcStatus
 mgcUnpickedEst

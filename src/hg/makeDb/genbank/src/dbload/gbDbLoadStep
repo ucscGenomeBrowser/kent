@@ -83,10 +83,18 @@ sub loadMgc($$) {
 sub dumpGenbankTables($) {
     my($db) = @_;
 
-    # build modo regexp with regexps matching genbank tables
-    my $tblREStr = "^("
-        . join("|", (split("\n", readFile("etc/genbank.tbls"))))
-        . "\)\$";
+    # build modo regexp with regexps matching genbank tables.  Don't
+    # include blank lines or comments.
+    my $tblREStr = "^(";
+    my $sep = "";
+    foreach my $line (split("\n", readFile("etc/genbank.tbls"))) {
+        $line =~ s/\s+//g;
+        if (!(($line =~ /^$/) || ($line =~ /^\#.*/))) {
+            $tblREStr .= $sep . $line;
+            $sep = "|";
+        }
+    }
+    $tblREStr .= "\)\$";
     my $tblRE = qr/$tblREStr/;
 
     # get list of genbank tables 
