@@ -883,13 +883,8 @@ void expRatioMethods(struct track *tg)
 /* Set up methods for expRatio type tracks in general. */
 {
 struct trackDb *tdb = tg->tdb;
-char *expScale = trackDbSetting(tdb, "expScale");
-char *expTable = trackDbSetting(tdb, "expTable");
-
-if (expScale == NULL)
-   errAbort("Missing expScale field in trackDb for %s", tg->mapName);
-if (expTable == NULL)
-   errAbort("Missing expTable field in trackDb for %s", tg->mapName);
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expTable = trackDbRequiredSetting(tdb, "expTable");
 tg->expScale = atof(expScale);
 tg->expTable = expTable;
 linkedFeaturesSeriesMethods(tg);
