@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.648 2004/06/01 17:50:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.649 2004/06/01 19:52:37 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14183,6 +14183,58 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+void doScaffoldEcores(struct trackDb *tdb, char *item)
+/* Creates details page and gets the scaffold co-ordinates for unmapped */
+/* genomes for display and to use to create the correct outside link URL */
+{
+char *dupe, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+int num;
+char table[64];
+struct bed *bed = NULL;
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *scaffoldName;
+int scaffoldStart, scaffoldEnd;
+struct dyString *d, *itemUrl;
+char *old = "_";
+char *new = "";
+                                                                                
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+/* get bed size */
+num = 0;
+num = atoi(words[1]);
+                                                                                
+/* get data for this item */
+sprintf(query, "select * from %s where name = '%s' and chromStart = %d", tdb->tableName, item, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    bed = bedLoadNBin(row, num);
+                                                                                
+genericHeader(tdb, item);
+/* convert chromosome co-ordinates to scaffold position and make into item for URL */
+if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName, &scaffoldStart, &scaffoldEnd) )
+   {
+   dyStringPrintf(d, "%s:%d-%d", scaffoldName, scaffoldStart, scaffoldEnd);
+   /* remove underscore in scaffold name */
+   itemUrl = dyStringSub(d->string, old, new);
+   dyStringFree(&d);
+   printCustomUrl(tdb, itemUrl->string, TRUE);
+   }
+                                                                                
+genericBedClick(conn, tdb, item, start, num);
+printTrackHtml(tdb);
+                                                                                
+dyStringFree(&itemUrl);
+freez(&dupe);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -14886,6 +14938,10 @@ else if (startsWith("deweySynt", track))
 else if (startsWith("eponine", track))
     {
     doBed6FloatScore(tdb, item);
+    }
+else if (sameWord(organism, "fugu") && startsWith("ecores", track))
+    {
+    doScaffoldEcores(tdb, item);
     }
 else if (tdb != NULL)
     {
