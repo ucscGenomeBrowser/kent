@@ -119,7 +119,7 @@ alpha:
 		fi ; \
 	    fi ; \
 	done
-	cmd="../../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
+	cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
 strict:
 	${CVS} up -d -P .
