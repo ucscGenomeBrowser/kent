@@ -90,6 +90,9 @@ void dnaMotifMakeProbabalistic(struct dnaMotif *motif);
 /* Change motif, which may be score or count based, to 
  * probabalistic one, where each column adds to 1.0 */
 
+void dnaMotifPrintProb(struct dnaMotif *motif, FILE *f);
+/* Print DNA motif probabilities. */
+
 void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, 
 	char *fileName);
 /* Write logo corresponding to motif to postScript file. */

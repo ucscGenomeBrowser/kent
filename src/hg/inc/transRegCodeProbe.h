@@ -5,7 +5,7 @@
 #ifndef TRANSREGCODEPROBE_H
 #define TRANSREGCODEPROBE_H
 
-#define TRANSREGCODEPROBE_NUM_COLS 6
+#define TRANSREGCODEPROBE_NUM_COLS 7
 
 struct transRegCodeProbe
 /* CHIP/CHIP Probe and Transcription Factor Binding Info */
@@ -17,6 +17,7 @@ struct transRegCodeProbe
     char *name;	/* Name of probe */
     unsigned tfCount;	/* Count of bound transcription factors_conditions */
     char **tfList;	/* List of bound transcription factors_conditions */
+    float *bindVals;	/* E values for factor binding (lower is better) */
     };
 
 struct transRegCodeProbe *transRegCodeProbeLoad(char **row);

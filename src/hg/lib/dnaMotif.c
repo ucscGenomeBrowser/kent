@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.7 2004/09/13 16:19:39 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.8 2004/09/26 06:30:08 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -319,6 +319,25 @@ if (dnaMotifIsScoreBased(motif))
     dnaMotifScoreToProb(motif);
 else
     dnaMotifNormalize(motif);
+}
+
+static void printProbRow(FILE *f, char *label, float *p, int pCount)
+/* Print one row of a probability profile. */
+{
+int i;
+fprintf(f, "%s ", label);
+for (i=0; i < pCount; ++i)
+    fprintf(f, "%5.2f ", p[i]);
+printf("\n");
+}
+
+void dnaMotifPrintProb(struct dnaMotif *motif, FILE *f)
+/* Print DNA motif probabilities. */
+{
+printProbRow(f, "A", motif->aProb, motif->columnCount);
+printProbRow(f, "C", motif->cProb, motif->columnCount);
+printProbRow(f, "G", motif->gProb, motif->columnCount);
+printProbRow(f, "T", motif->tProb, motif->columnCount);
 }
 
 

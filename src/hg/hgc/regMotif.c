@@ -17,16 +17,6 @@
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
 
-static void printProbRow(char *label, float *p, int pCount)
-/* Print one row of a probability profile. */
-{
-int i;
-printf("%s ", label);
-for (i=0; i < pCount; ++i)
-    printf("%5.2f ", p[i]);
-printf("\n");
-}
-
 static void printSpacedDna(char *dna, int size)
 /* Print string with spaces between each letter. */
 {
@@ -90,6 +80,7 @@ hFreeConn(&conn);
 return motif;
 }
 
+
 static void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
 /* Print out section about motif. */
 {
@@ -115,10 +106,7 @@ if (motif != NULL)
     {
     printConsensus(motif);
     printf("motif consensus\n");
-    printProbRow("A", motif->aProb, motif->columnCount);
-    printProbRow("C", motif->cProb, motif->columnCount);
-    printProbRow("G", motif->gProb, motif->columnCount);
-    printProbRow("T", motif->tProb, motif->columnCount);
+    dnaMotifPrintProb(motif, stdout);
     }
 printf("</PRE>");
 }
