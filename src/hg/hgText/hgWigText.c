@@ -800,9 +800,6 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		    bedFreeList(&bedListWig[WIG_TABLE_1]);
 		    bedLength = 0;
 		}
-	    else
-		if (!doCt)
-		    printf("#\tno data in this block ?  (may be a data table ERROR)\n");
 	    }
 	wigFreeData(&wigData);
 	}
