@@ -168,9 +168,9 @@ to <A HREF="#Download">download</A>.
 The UCSC Genome Bioinformatics <A HREF="http://genome.ucsc.edu" TARGET=_blank>home
 page</A>
 provides access to Genome Browsers on several different genome assemblies. 
-To get started, select the organism type from the list in the left sidebar, then
+To get started, select the genome type from the list in the left sidebar, then
 click the Browser link directly below it. This will take you
-to a Gateway page for the selected organism. 
+to a Gateway page for the selected genome. 
 <P>
 <B>Opening the Genome Browser at a specific position</B><BR> 
 To get oriented in using the Genome Browser, try viewing a gene or region of the genome with 
@@ -683,9 +683,7 @@ The Table Browser can be accessed in two different ways:
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	Click the Tables link on the UCSC Genome Bioinformatics home page to open up 
-	the Table Browser Gateway page. On this page, select a date from the
-	<I>Freeze</I> menu and
-	enter the position of the genome that you would like to view, then click the
+	the Table Browser Gateway page. On this page, select the genome and assembly from the menus, enter the position in the genome that you would like to view, then click the
 	<I>Submit</I> button. The Gateway page contains several examples of valid position
 	queries.  <TD></TR> 
 
@@ -1144,8 +1142,8 @@ that correspond to the feature names in your web page.
 
 <P><B><I>Example:</I></B><BR>
 Here is an example of a file in which the <I>url</I> attribute has been set to
-point to the file <A HREF="http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html"
-TARGET=_blank>http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
+point to the file <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/clones.html"
+TARGET=_blank>http://genome.cse.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
 appended to the end of the file name in the example points to the HTML NAME tag within the file that 
 matches the name of the feature (cloneA, cloneB, etc.). 
 NOTE: The track line in this example has been split over 3 lines for 
@@ -1156,7 +1154,7 @@ the browser, you must remove the line breaks to display the track successfully.
 browser hide all
 track name=clones description="Clones" visibility=2
 color=0,128,0 useScore=1 
-url="http://genome-test.cse.ucsc.edu/goldenPath/help/clones.html#$$"
+url="http://genome.cse.ucsc.edu/goldenPath/help/clones.html#$$"
 chr22 1000 5000 cloneA 960 
 chr22 2000 6000 cloneB 200 
 chr22 5000 9000 cloneC 700 
@@ -1193,8 +1191,8 @@ coordinates. Examples of this include: position=chr22, position=chr22:15916196-3
 of the form <tt>hgt.customText=URL</tt>, where
 <I>URL</I> points to the annotation file on your website. An example of an
 annotation file URL is <font color="000099"><A
-HREF="http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed"
-TARGET=_blank>http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed</A></font>.  
+HREF="http://genome.cse.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_blank>http://genome.cse.ucsc.edu/goldenPath/help/test.bed</A></font>.  
 </UL>
 
 <P>Combine the above pieces of information into a URL of the following
@@ -1209,8 +1207,8 @@ human genome (hg11), and will display the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
 <font color="000099"><A HREF="
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed"
-TARGET=_blank><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome-test.cse.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome.cse.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_blank><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome.cse.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P>If you'd like to share your annotation track with a broader audience, send the URL for your track - along with a description of 
 the format, methods, and data used - to the UCSC Genome mailing list 
@@ -1374,6 +1372,46 @@ the short p arm. The coordinates differ between assemblies.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	None.</TD></TR>
+</TABLE></P>
+
+<P><B>Mouse Blat </B><BR>
+This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on Blat alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows the display conventions for BLAT tracks.</TD></TR>	
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item will show details on the chimp sequence fragment and 
+	alignment details, as well as a link to more information on the track data. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chimpBac</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Chimp Blat </B><BR>
+This track displays alignments of the chimp genome (Pan troglodytes) to human, based on Blat alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows the display conventions for BLAT tracks.</TD></TR>	
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item will show details on the chimp sequence fragment and 
+	alignment details, as well as a link to more information on the track data. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chimpBlat</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
 <P><B>Chromosome Band</B><BR>
@@ -1699,6 +1737,32 @@ isochore concept in conflict with human genome sequence data.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Gene Bounds</B><BR>
+This track shows the boundaries of genes and the direction of transcription as 
+deduced from clustering spliced ESTs and mRNAs against the genome. When there 
+are many spliced variants of the same gene, this track shows the variant that 
+spans the greatest distance in the genome. 
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track uses the display conventions for EST tracks. As with other
+	tracks in this category, it may be necessary to zoom in to 
+	display entries in full display mode due to the 300 line display 
+	limit.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full mode provides position, size, and score 
+	information, and a link to dsplay the DNA sequence associated with this 
+	feature.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>rnaCluster</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#rnaCluster"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Geneid Gene Predictions</B><BR>
 This track shows gene predictions from the geneid program, which is
 being developed at the Grup de Recerca en Informatica Biomedica at IMIM
@@ -1721,6 +1785,31 @@ and genes.
 	<I>geneid</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>GenMapDB Clones</B><BR>
+This track shows BAC clones from the 
+<A HREF="http://genomics.med.upenn.edu/genmapdb/" TARGET=_blank>GenMapDB</A> 
+database placed on the draft sequence using BAC end sequence information and 
+confirmed using STS markers by Vivian Cheung's lab at the Department of 
+Pediatrics, University of Pennsylvania. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	The clone positions are shown in black. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode brings up basic position
+	information and additional information about the clones and STS markers. 
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>genMapDb</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#genMapDb"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1988,6 +2077,48 @@ kept.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Mouse Cons </B><BR>
+This track displays the conservation between the human and mouse genomes for 
+50bp windows in the human genome that have at least 15bp aligned to mouse. The 
+score for a window reflects the probability that the level of observed 
+conservation in that 50bp region would occur by chance under neutral evolution. 
+It is given on a logarithmic scale, and thus it is called the "L-score". An 
+L-score of 1 means there is a 1/10 probability that the observed conservation 
+level would occur by chance, an L-score of 2 means a 1/100 probability, an 
+L-score of 3 means a 1/1000 probability, etc. The L-scores display as 
+"mountain ranges".
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	The L-scores in this track display as "mountain ranges". 
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track filter:</I></B> 
+	Clicking on the mini-button to the left of the track will display the track
+	description page which contains a filter to fine-tune the track display.
+	The filter allows the user to configure several aspects of the track 
+	display, including the interpolation, anti-aliasing, block fill, and the 
+	track height.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on one of the peaks in the track when in full display mode will 
+	show human genome 
+	position information for the window, as well as position information for 
+	the corresponding region in the mouse genome. The details page provides 
+	links to the underlying sequence for the alignment and to the sequence 
+	underlying the individual alignment windows. In full mode in 
+	a zoomed-out display, detailed information may not be accessible for an 
+	individual feature. In this case, zoom in and try again. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>mouseCons</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#mouseCons"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Mouse mRNA </B><BR>
 This track displays translated BLAT alignments of mouse mRNA 
 from Genbank against the genome. The alignments were passed through a 
@@ -2210,6 +2341,37 @@ Consortium</A>.
 </TABLE></P>
 
 
+<P><B>Recomb Rate</B><BR> 
+This track shows calculated sex-averaged rates of recombination based on either 
+the deCODE, Marshfield, or Genethon genetic maps. The deCODE map rates are 
+displayed by default.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	Each 1Mb window represents the average recombination rate of the bases 
+	contained within that window. Darker shades of gray correspond to higher
+	recombination rates.
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track filter:</I></B> 
+	Clicking on the mini-button to the left of the track will display the track
+	description page which contains a filter to select the map distances (sex averaged 
+	distance, female distance, or male distance) for the 3 different types of 
+	maps.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+ 	Clicking in full mode shows position information 
+ 	and a list of all the recombination rate values for that 1Mb window.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>recombRate</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#recombRate"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+
 <P><B>RefSeq Genes </B><BR>
 The RefSeq Gene track shows known protein coding genes taken from mRNA
 reference sequences compiled at LocusLink. Refseq mRNAs are aligned against the 
@@ -2333,8 +2495,8 @@ of nearby exons.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Sanger 22</B><BR>
-This track contains the Sanger Centre annotations of chromosome 22. 
+<P><B>Sanger 22 and Sanger 22 Pseudo</B><BR>
+These tracks contain the Sanger Centre annotations of chromosome 22. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -2497,6 +2659,26 @@ indices for mouse, rat, cow, and pig also contribute to this track.
 	<I>tigrGeneIndex</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Whitehead Synteny</B><BR>
+This track shows orthologous (syntenic) regions between mouse and human chromosomes based on data from Michael Kamal at the Whitehead Institute.
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for synteny tracks.</TD></TR>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full display mode will show details of the
+	mouse-human correspondence, as well links to genomic dotplots, 
+	additional information, and an alternative synteny map based on 
+	orthologous genes. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>mouseSynWhd</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#mouseSynWhd"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
