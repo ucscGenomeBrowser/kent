@@ -43,6 +43,9 @@ struct dlList
 struct dlList *newDlList();
 /* Return a new doubly linked list. */
 
+#define dlListNew newDlList
+/* Add object-first synonym. */
+
 void dlListInit(struct dlList *dl);
 /* Initialize list to be empty */
 
