@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.24 2003/06/25 06:10:49 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.25 2003/06/25 06:29:41 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -388,7 +388,7 @@ hPrintf("</TR>\n<TR><TD ALIGN=CENTER>");
 /* Make getDna, getText, advancedSearch buttons */
     {
     hPrintf(" ");
-    cgiMakeButton(getSeqVarName, "sequence");
+    cgiMakeButton(getSeqVarName, "as sequence");
     hPrintf(" ");
     cgiMakeButton(getTextVarName, "as text");
     hPrintf(" ");
@@ -798,11 +798,12 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
-void bigTable(struct sqlConnection *conn, struct column *colList)
+void bigTable(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
 /* Put up great big table. */
 {
 struct column *col;
-struct genePos *geneList = getNeighbors(conn), *gene;
+struct genePos *gene;
 
 if (geneList == NULL)
     return;
@@ -844,13 +845,19 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 hPrintf("</TABLE>");
 }
 
-void doGetText(struct sqlConnection *conn, struct column *colList)
+void doGetText(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
 /* Put up great big table. */
 {
-struct genePos *geneList = getNeighbors(conn), *gene;
+struct genePos *gene;
 struct column *col;
 boolean first = TRUE;
 
+if (geneList == NULL)
+    {
+    hPrintf("empty table");
+    return;
+    }
 hPrintf("<TT><PRE>");
 /* Print labels. */
 hPrintf("#");
@@ -890,29 +897,41 @@ hPrintf("</PRE></TT>");
 #endif /* SOON */
 }
 
-void doMain(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
-/* The put up main page at given single position. */
+void doGetSeq(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
+/* Put up the get sequence page. */
 {
+hPrintf("Eventually this page will let you get protein, mRNA, and genomic "
+        "sequence associated with the displayed gene list. ");
+}
+
+void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
+	struct genePos *geneList)
+/* Put up the main family browser display - a control panel followed by 
+ * a big table. */
+{
+char buf[128];
+safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
+makeTitle(buf, "hgNear.html");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+controlPanel(curGeneId);
+if (geneList != NULL)
+    bigTable(conn, colList,geneList);
+}
+
+void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
+/* Display data in neighborhood of gene. */
+{
+struct genePos *geneList = NULL;
 curGeneId = gp;
+if (gp)
+    geneList = getNeighbors(conn);
 if (cartVarExists(cart, getTextVarName))
-    {
-    if (curGeneId == NULL)
-        hPrintf("Empty table");
-    else
-	doGetText(conn, colList);
-    }
+    doGetText(conn, colList, geneList);
+else if (cartVarExists(cart, getSeqVarName))
+    doGetSeq(conn, colList, geneList);
 else
-    {
-    char buf[128];
-    safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
-    makeTitle(buf, "hgNear.html");
-    hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
-    controlPanel(gp);
-    if (curGeneId != NULL)
-	{
-	bigTable(conn, colList);
-	}
-    }
+    doMainDisplay(conn, colList, geneList);
 }
 
 void doFixedId(struct sqlConnection *conn, struct column *colList)
@@ -927,7 +946,7 @@ if (cartVarExists(cart, idPosVarName))
     	&gp->chrom, &gp->start, &gp->end);
     gp->chrom = cloneString(gp->chrom);
     }
-doMain(conn, colList, gp);
+displayData(conn, colList, gp);
 }
 
 
@@ -957,6 +976,8 @@ else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
 else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
+else if (cartVarExists(cart, advSearchVarName))
+    doAdvancedSearch(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else

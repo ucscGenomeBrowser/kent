@@ -206,12 +206,15 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
 /* ---- Create high level pages. ---- */
-void doMain(struct sqlConnection *conn, struct column *colList, struct genePos *gp);
-/* The put up main page at given single position. */
+void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);
+/* Display data in neighborhood of gene. */
 
 void doSearch(struct sqlConnection *conn, struct column *colList, char *search);
 /* Search.  If result is unambiguous call doMain, otherwise
  * put up a page of choices. */
+
+void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
+/* Put up advanced search page. */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
