@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.161 2004/01/13 20:05:29 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.162 2004/01/29 09:17:40 genbank Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -36,6 +36,8 @@ static char const rcsid[] = "$Id: hdb.c,v 1.161 2004/01/13 20:05:29 angie Exp $"
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
+static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
+                                               
 
 static char *hdbHost = NULL;
 static char *hdbName = NULL;
@@ -476,7 +478,7 @@ if (centralCc == NULL)
     char *user = cfgOption("central.user");
     char *password = cfgOption("central.password");;
 
-    if (host == NULL || user == NULL || password == NULL)
+    if (database == NULL || host == NULL || user == NULL || password == NULL)
 	errAbort("Please set central options in the hg.conf file.");
     centralCc = sqlNewRemoteConnCache(database, host, user, password);
     }
@@ -487,6 +489,47 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(centralCc, pConn);
+}
+
+struct sqlConnection *hConnectCart()
+/* Connect to cart database.  Defaults to the central connection
+ * unless cart.db or cart.host are configured. Free this
+ * up with hDisconnectCart(). */
+{
+if (cartCc == NULL)
+    {
+    if ((cfgOption("cart.db") != NULL) || (cfgOption("cart.host") != NULL)
+        || (cfgOption("cart.user") != NULL) || (cfgOption("cart.password") != NULL))
+        {
+        /* use explict cart options */
+        char *database = cfgOption("cart.db");
+        char *host = cfgOption("cart.host");
+        char *user = cfgOption("cart.user");
+        char *password = cfgOption("cart.password");;
+
+        if (database == NULL || host == NULL || user == NULL || password == NULL)
+            errAbort("Must specify either or none of the cart options in the hg.conf file.");
+        cartCc = sqlNewRemoteConnCache(database, host, user, password);
+        }
+    else
+        {
+        /* use centralCc */
+        if (centralCc == NULL)
+            {
+            /* force creation of central cache */
+            struct sqlConnection *conn = hConnectCentral();
+            hDisconnectCentral(&conn);
+            }
+        cartCc = centralCc;
+        }
+    }
+return sqlAllocConnection(cartCc);
+}
+
+void hDisconnectCart(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlFreeConnection(cartCc, pConn);
 }
 
 boolean hTableExistsDb(char *db, char *table)

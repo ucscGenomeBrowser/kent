@@ -12,13 +12,13 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.32 2003/11/19 15:02:25 braney Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.33 2004/01/29 09:17:39 genbank Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
 
-DbConnector cartDefaultConnector = hConnectCentral;
-DbDisconnect cartDefaultDisconnector = hDisconnectCentral;
+DbConnector cartDefaultConnector = hConnectCart;
+DbDisconnect cartDefaultDisconnector = hDisconnectCart;
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -796,17 +796,15 @@ htmlEnd();
 }
 
 void cartSetDbConnector(DbConnector connector) 
-/* Set the connector that will be used by the cart to connect
- * to the database. Due to the module's legacy the default connector
- * is hConnectCentral */
+/* Set the connector that will be used by the cart to connect to the
+ * database. Default connector is hConnectCart */
 {
 cartDefaultConnector = connector;
 }
 
 void cartSetDbDisconnector(DbDisconnect disconnector) 
-/* Set the connector that will be used by the cart to disconnect
- * from the database. Due to the module's legacy the default connector
- * is hDisconnectCentral */
+/* Set the connector that will be used by the cart to disconnect from the
+ * database. Default disconnector is hDisconnectCart */
 {
 cartDefaultDisconnector = disconnector;
 }
