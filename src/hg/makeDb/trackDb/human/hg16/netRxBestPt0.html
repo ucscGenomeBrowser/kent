@@ -23,13 +23,20 @@ Individual track features are categorized as one of four types
 (other than gap):
 <UL>
 <LI><B>Top</B> - the best, longest match. Displayed on Level 1.
-<LI><B>Syn</B> - aligns to the same chromosome as the gap in the level
+<LI><B>Syn</B> - aligns to the same scaffold as the gap in the level
     above it.
-<LI><B>Inv</B> - aligns to the same chromosome as the gap above it, but in the
+<LI><B>Inv</B> - aligns to the same scaffold as the gap above it, but in the
     opposite orientation.
-<LI><B>NonSyn</B> - matches a chromosome different from the gap in the level 
+<LI><B>NonSyn</B> - matches a different scaffold from the gap in the level 
 above it.
 </UL></P>
+<P>
+<B>Note:</B> The chimp data set used to generate this track is based on 
+scaffolds rather than chromosomes. Because of this, the track coloring scheme 
+does not correspond to the chromosome color key displayed on the track page. 
+A somewhat random scheme (scaffold# modulo #colors) was used to color this
+track simply to make the scaffold boundaries easier to distinguish.
+</P>
 <H2>Methods</H2>
 These alignments were generated using <A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" 
 TARGET=_blank>blastz</A> and blat alignments of chimpanzee
