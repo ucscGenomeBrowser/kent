@@ -5774,8 +5774,8 @@ if(max < 0)
     
 if(val > max) 
     val = max;
-colorIndex = (int)(val * maxRGBShade/max);
-return shadesOfBlue[colorIndex];
+colorIndex = (int)(val * maxShade/max);
+return shadesOfSea[colorIndex];
 }
 
 Color affyColor(struct trackGroup *tg, void *item, struct memGfx *mg)
@@ -5788,6 +5788,26 @@ if(tg->visibility == tvDense)
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
 return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
+}
+
+Color affyRatioColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Does the score->color conversion for affymetrix arrays using ratios,
+ * if dense do an intensity color in blue based on score value otherwise do
+ * red/green display from expScores */
+{
+struct linkedFeatures *lf = item;
+float score = lf->score;
+if(!exprBedColorsMade)
+    makeRedGreenShades(mg);
+if(tg->visibility == tvDense)
+    {
+    score = score/10;
+    return getColorForAffyExpssn(score, 262144/16); /* 262144 == 2^18 */
+    }
+else
+    {
+    return expressionColor(tg, item, mg, 1.0, 3.0);
+    }
 }
 
 void loadMultScoresBed(struct trackGroup *tg)
@@ -5916,6 +5936,18 @@ void affyMethods(struct trackGroup *tg)
 {
 linkedFeaturesSeriesMethods(tg);
 tg->itemColor = affyColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
+void affyRatioMethods(struct trackGroup *tg)
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = affyRatioColor;
 tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyBed;
 tg->mapItem = lfsMapItemName;
@@ -7032,6 +7064,7 @@ registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
+registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("wiggle", wiggleMethods );
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
