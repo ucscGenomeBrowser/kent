@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.3 2005/03/24 21:46:05 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.4 2005/03/25 00:23:33 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
 /* Return a linked feature from a retroGene. */
@@ -90,8 +90,8 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         if (org != NULL)
             dyStringPrintf(name, "%0.7s ", org);
         }
-    /* prepend ret- to retrogene name */
-    dyStringAppend(name, "ret-");
+    /* prepend retro- to parent gene name */
+    dyStringAppend(name, "retro");
     /* lookup name using knowngene method */
     if ((useGeneName) && hTableExists("refLink") && hTableExists("knownGeneLink"))
         {
@@ -175,7 +175,6 @@ lfRetroGene(tg);
 if (vis != tvDense)
     {
     lookupRetroNames(tg);
-    //lookupKnownGeneNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
@@ -184,7 +183,7 @@ vis = limitVisibility(tg);
 Color retroGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw retroGene in. */
 {
-return vgFindColorIx(vg, CHROM_13_R, CHROM_13_G, CHROM_13_B);
+return vgFindColorIx(vg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
 }
 void retroGeneMethods(struct track *tg)
 /* Make track of retroGenes from bed */
