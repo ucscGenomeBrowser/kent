@@ -2,6 +2,7 @@
 #include "common.h"
 #include "sample.h"
 #include "hdb.h"
+#include "options.h"
 #include <string.h>
 
 
@@ -9,29 +10,34 @@
 void usage()
 {
 errAbort("averageZoomLevels - takes a sorted sample file and creates averaged\n"
-	 "'zoomed-out' summaries for a few different levels.\n"
-	 "Basic idea is to get the size of a chromosome, divide it by 2000 as that is\n"
-	 "about how many pixels there may be and then caclulate an average for each\n"
-	 "of those 2000 bins. Then reduce size of each bin by maginification and \n"
-	 "calculate average for each of those bins, etc. until we are less than\n"
-	 "magnification times the minimum separation in the file or we are at maxZoom\n."
-     "The -max option uses the maximum score to summarize each bin rather than the mean.\n"
-	 "usage:\n\t"
-	 "averageZoomLevels <magnification int> <maxZoom int> <database - 'hg6','hg7',etc> <sample file> [-max]\n");
-
+"'zoomed-out' summaries for a few different levels.\n"
+"Basic idea is to get the size of a chromosome, divide it by 2000 as that is\n"
+"about how many pixels there may be and then caclulate an average for each\n"
+"of those 2000 bins. Then reduce size of each bin by maginification and \n"
+"calculate average for each of those bins, etc. until we are less than\n"
+"magnification times the minimum separation in the file or we are at maxZoom\n."
+"The -max option uses the maximum score to summarize each bin rather than the mean.\n"
+"usage:\n"
+"    averageZoomLevels magnification maxZoom database sampleFile\n"
+"options:\n"
+"    -max  Use max rather than average in zoomed files\n"
+"example:\n"
+"     averageZoom 50 2500 hg13 sample.bed\n");
 }
 
 struct bin 
 /* One averaged point. */
-{
+    {
     struct bin *next;         /* Next in list. */
     char *chrom;              /* chromosome */
     int chromStart, chromEnd; /* bin start and end on chrom. */
     char *name;               /* Name of experiment for bin. */
     float aveScore;           /* Average score over the range. */
     int sampleCount;          /* How many samples were in this bin. */
-    int pinStart, pinEnd;     /* Coordinates of the sample closest to middle of bin. Don't want to put a value where there isn't one. */
-};
+    int pinStart, pinEnd;     /* Coordinates of the sample closest to 
+    			       * middle of bin. Don't want to put a value 
+			       * where there isn't one. */
+    };
 
 struct bin *newBin(char *name, char *chrom, int chromStart, int chromEnd)
 /* Create a bin structure. */
@@ -136,7 +142,8 @@ for(i = 0; i < binCount; i++)
 		
 
 
-void averageZoomLevels(int mag, int maxZoom, char *db, char *inputFile, boolean useMax )
+void averageZoomLevels(int mag, int maxZoom, char *db, 
+	char *inputFile, boolean useMax )
 /* Main function, zooms through at different levels */
 {
 int currentZoom = 0;
@@ -150,6 +157,8 @@ char *buff = NULL;
 int maxDensity = 0;
 FILE *out = NULL;
 int i;
+
+
 hSetDb(db);
 warn("Loading file %s\n", inputFile);
 if( useMax )
@@ -161,18 +170,24 @@ for(currentZoom = 1; currentZoom <= maxZoom; currentZoom *= mag)
     {
     warn("Doing zoom level %d", currentZoom);
     boundarySamp = sampList;   /* First boundary is start */
-    snprintf(buff, (strlen(inputFile) + 100), "%s.zoom_%d", inputFile, currentZoom);
+    snprintf(buff, (strlen(inputFile) + 100), "zoom%d_%s", 
+    	currentZoom, inputFile);
     out = mustOpen(buff, "w");
     warn("Opened file: %s", buff);
     while(boundarySamp != NULL)
 	{
 	chromSize = hChromSize(boundarySamp->chrom);
+	uglyf("%s size %d\n", boundarySamp->chrom, chromSize);
 	binSize = chromSize/(currentZoom == 1 ? MAX_WINDOW_SIZE : MAX_WINDOW_SIZE * currentZoom);
+	if (binSize < 1)
+	    binSize = 1;
 	binCount = chromSize/binSize +1;
 	AllocArray(pBin, binCount);
 	for(i=0; i<binCount; i++)
 	    pBin[i] = newBin(boundarySamp->name, boundarySamp->chrom, i*binSize, ((i+1)*binSize) -1);
-	for(samp = boundarySamp; samp != NULL && sameString(samp->chrom, boundarySamp->chrom); samp = samp->next )
+	for(samp = boundarySamp; 
+		samp != NULL && sameString(samp->chrom, boundarySamp->chrom); 
+		samp = samp->next )
 	    {
 	    for(i =0; i<samp->sampleCount; i++)
 		{
@@ -194,13 +209,14 @@ sampleFreeList(&sampList);
 
 int main(int argc, char *argv[])
 {
-if(argc < 5)
+optionHash(&argc, argv);
+if(argc != 5)
     usage();
 else
     {
     int mag = atoi(argv[1]);
     int maxZoom = atoi(argv[2]);
-    averageZoomLevels(mag, maxZoom, argv[3], argv[4], argc == 6 && sameString(argv[5], "-max" ));
+    averageZoomLevels(mag, maxZoom, argv[3], argv[4], optionExists("max"));
     }
 return 0;
 }

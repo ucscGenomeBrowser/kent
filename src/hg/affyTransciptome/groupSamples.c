@@ -1,11 +1,19 @@
 #include "common.h"
+#include "options.h"
+#include "linefile.h"
 #include "sample.h"
 
 void usage()
 {
-errAbort("groupSamples - Group samples together into one sample.\n"
-	 "usage:\n\t"
-	 "groupSamples <gouping size - int> <input file> <output file>\n");
+errAbort(
+    "groupSamples - Group samples together into one sample.\n"
+    "Samples must be sorted by chromosome position (you can\n"
+    "use bedSort first if they are not).\n"
+    "usage:\n"
+    "   groupSamples <grouping size - int> <input file> <output file>\n"
+    "options:\n"
+    "   -sort - sort samples (otherwise it assumes they are sorted already)\n"
+    );
 }
 
 void addSampleToCurrent(struct sample *target, struct sample *samp, int grouping)
@@ -34,13 +42,23 @@ if(diff == 0)
 return diff;
 }
 
-struct sample *groupByPosition(int grouping , struct sample *sampList)
+struct sample *sampleNext(struct lineFile *lf)
+/* Return next sample in file, or NULL at EOF. */
 {
-struct sample *groupedList = NULL, *samp = NULL, *currSamp = NULL, *sampNext=NULL;
+char *row[9];
+if (!lineFileRow(lf, row))
+    return NULL;
+return sampleLoad(row);
+}
+
+void groupByPosition(int grouping , struct lineFile *lf, FILE *out)
+/* Group together samples into a larger bundle. */
+{
+struct sample *groupedList = NULL, *samp = NULL, *currSamp = NULL;
 int count = 0;
-for(samp = sampList; samp != NULL; samp = sampNext)
+while ((samp = sampleNext(lf)) != NULL)
     {
-    sampNext = samp->next;
+    int lastStart = samp->chromStart;
     AllocVar(currSamp);
     currSamp->chrom = cloneString(samp->chrom);
     currSamp->chromStart = samp->chromStart;
@@ -51,6 +69,9 @@ for(samp = sampList; samp != NULL; samp = sampNext)
     count = 0;
     while(samp != NULL && count < grouping && sameString(samp->chrom,currSamp->chrom))
 	{
+	if (samp->chromStart < lastStart)
+	    errAbort("%s is not sorted line %d", lf->fileName, lf->lineIx);
+	lastStart = samp->chromStart;
 	if(sameString(currSamp->name, "Empty") && differentString(samp->name, "Empty"))
 	    {
 	    freez(&currSamp->name);
@@ -58,42 +79,33 @@ for(samp = sampList; samp != NULL; samp = sampNext)
 	    }
 	addSampleToCurrent(currSamp, samp, grouping);
 	count += samp->sampleCount;
-	sampNext = samp->next;
 	sampleFree(&samp);
-	samp = sampNext;
+	samp = sampleNext(lf);
 	}
     if(count != 0)
 	currSamp->score = currSamp->score / count;
+    currSamp->sampleCount = count;
     currSamp->chromEnd = currSamp->chromStart + currSamp->samplePosition[count -1];
-    slAddHead(&groupedList, currSamp);
+    sampleTabOut(currSamp, out);
+    sampleFree(&currSamp);
     }
-slReverse(&groupedList);
-return groupedList;
 }
 
 
 void groupSamples(int grouping, char  *input, char *output)
 /* Pack together samples. */
 {
-FILE *out = NULL;
-struct sample *sampList = NULL, *groupedList = NULL, *samp = NULL;
-sampList = sampleLoadAll(input);
-slSort(&sampList, sampleCoordCmp);
-groupedList = groupByPosition(grouping, sampList);
-out = mustOpen(output, "w");
-for(samp = groupedList; samp != NULL; samp = samp->next)
-    {
-    sampleTabOut(samp, out);
-    }
+FILE *out = mustOpen(output, "w");
+struct lineFile *lf = lineFileOpen(input, TRUE);
+groupByPosition(grouping, lf, out);
 carefulClose(&out);
-//sampleFreeList(&sampList);
-sampleFreeList(&groupedList);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 int grouping = 0;
+optionHash(&argc, argv);
 if(argc != 4)
     usage();
 grouping = atoi(argv[1]);
