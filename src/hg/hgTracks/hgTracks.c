@@ -376,7 +376,7 @@ snprintf( o1, 128, "%s.heightPer", tg->mapName);
 if( vis == tvDense )
     heightFromCart = 10;
 else
-    heightFromCart = atoi(cartUsualString(cart, o1, "75"));
+    heightFromCart = atoi(cartUsualString(cart, o1, "40"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
@@ -3366,6 +3366,7 @@ typedef struct slList *(*ItemLoader)(char **row);
 void bedLoadItem(struct trackGroup *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
 {
+  
 struct sqlConnection *conn = hAllocConn();
 int rowOffset;
 struct sqlResult *sr = hRangeQuery(conn, table, chromName, 
@@ -3404,6 +3405,7 @@ int midLineOff = heightPer/2;
 int midY = y + midLineOff;
 int dir;
 Color *shades = tg->colorShades;
+
 
 for (item = tg->items; item != NULL; item = item->next)
     {
@@ -8805,6 +8807,7 @@ if (withCenterLabels)
         }
     }
 
+
 /* Draw tracks. */
 y = yAfterRuler;
 for (group = groupList; group != NULL; group = group->next)
@@ -9189,9 +9192,9 @@ lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE);
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
 /* Fill in various function pointers in group from type field of tdb. */
 {
+
 char *typeLine = tdb->type, *words[8], *type;
 int wordCount;
-
 if (typeLine == NULL)
     return;
 wordCount = chopLine(typeLine, words);
@@ -10149,7 +10152,6 @@ if (winBaseCount <= 0)
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
-
 doTrackForm();
 }
 
