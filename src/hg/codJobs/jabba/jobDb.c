@@ -21,7 +21,7 @@ if (ret == NULL)
 ret->id = sqlStringComma(&s);
 ret->errFile = sqlStringComma(&s);
 ret->outFile = sqlStringComma(&s);
-ret->cpuTime = sqlSignedComma(&s);
+ret->cpuTime = sqlFloatComma(&s);
 ret->submitTime = sqlStringComma(&s);
 ret->startTime = sqlStringComma(&s);
 ret->endTime = sqlStringComma(&s);
