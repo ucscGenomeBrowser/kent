@@ -802,7 +802,7 @@ longLabel Mouse/Human Alignment Net
 priority 25.811
 visibility hide
 spectrum on
-type netAlign
+type netAlign mm2
 
 track mouseSynNet
 shortLabel Syntenic Net
@@ -810,7 +810,7 @@ longLabel Mouse/Human Syntenic Alignment Net
 priority 25.812
 visibility hide
 spectrum on
-type netAlign
+type netAlign mm2
 
 track blastzNetOld
 shortLabel Net Align old
@@ -818,7 +818,7 @@ longLabel Blastz Mouse Best in Genome Alignments with chaining and netting old v
 priority 25.813
 visibility full
 spectrum on
-type netAlign
+type netAlign mm2
 
 track blastzChain
 shortLabel blastz Chain 
