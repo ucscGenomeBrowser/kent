@@ -17,7 +17,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-void joinerFieldFree(struct joinerField **pJf)
+static void joinerFieldFree(struct joinerField **pJf)
 /* Free up memory associated with joinerField. */
 {
 struct joinerField *jf = *pJf;
@@ -35,7 +35,7 @@ if (jf != NULL)
     }
 }
 
-void joinerFieldFreeList(struct joinerField **pList)
+static void joinerFieldFreeList(struct joinerField **pList)
 /* Free up memory associated with list of joinerFields. */
 {
 struct joinerField *el, *next;
@@ -48,7 +48,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void joinerSetFree(struct joinerSet **pJs)
+static void joinerSetFree(struct joinerSet **pJs)
 /* Free up memory associated with joinerSet. */
 {
 struct joinerSet *js = *pJs;
@@ -64,7 +64,7 @@ if (js != NULL)
     }
 }
 
-void joinerSetFreeList(struct joinerSet **pList)
+static void joinerSetFreeList(struct joinerSet **pList)
 /* Free up memory associated with list of joinerSets. */
 {
 struct joinerSet *el, *next;
@@ -73,6 +73,31 @@ for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
     joinerSetFree(&el);
+    }
+*pList = NULL;
+}
+
+static void joinerIgnoreFree(struct joinerIgnore **pIg)
+/* Free up memory associated with joinerIgnore. */
+{
+struct joinerIgnore *ig = *pIg;
+if (ig != NULL)
+    {
+    slFreeList(&ig->dbList);
+    slFreeList(&ig->tableList);
+    freez(pIg);
+    }
+}
+
+static void joinerIgnoreFreeList(struct joinerIgnore **pList)
+/* Free up memory associated with list of joinerIgnores. */
+{
+struct joinerIgnore *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    joinerIgnoreFree(&el);
     }
 *pList = NULL;
 }
@@ -87,6 +112,9 @@ if (joiner != NULL)
     joinerSetFreeList(&joiner->jsList);
     freeHashAndVals(&joiner->symHash);
     hashFreeList(&joiner->exclusiveSets);
+    freeHash(&joiner->databasesChecked);
+    freeHash(&joiner->databasesIgnored);
+    joinerIgnoreFreeList(&joiner->tablesIgnored);
     freez(pJoiner);
     }
 }
@@ -231,8 +259,8 @@ if (val == NULL)
 return cloneString(val);
 }
 
-static struct joinerSet *parseOneJoiner(struct lineFile *lf, char *line, 
-	struct hash *symHash, struct dyString *dyBuf)
+static struct joinerSet *parseIdentifierSet(struct lineFile *lf, 
+	char *line, struct hash *symHash, struct dyString *dyBuf)
 /* Parse out one joiner record - keep going until blank line or
  * end of file. */
 {
@@ -403,6 +431,29 @@ slReverse(&js->fieldList);
 return js;
 }
 
+static struct joinerIgnore *parseTablesIgnored(struct lineFile *lf, 
+	char *line, struct hash *symHash, struct dyString *dyBuf)
+/* Parse out one tables ignored record - keep going until blank line or
+ * end of file. */
+{
+struct joinerIgnore *ig;
+struct slName *table;
+
+AllocVar(ig);
+ig->dbList = slNameListFromComma(trimSpaces(line));
+while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
+    {
+    /* Keep grabbing until we get a blank line. */
+    line = skipLeadingSpaces(line);
+    if (line[0] == 0)
+        break;
+    table = slNameNew(trimSpaces(line));
+    slAddHead(&ig->tableList, table);
+    }
+slReverse(&ig->tableList);
+return ig;
+}
+
 void addCommasToHash(struct hash *hash, char *s)
 /* Add contents of comma-separated list to hash. */
 {
@@ -412,16 +463,18 @@ for (el = list; el != NULL; el = el->next)
 slFreeList(&list);
 }
 
-static struct joiner *joinerParsePassOne(struct lineFile *lf)
+static struct joiner *joinerParsePassOne(char *fileName)
 /* Do first pass parsing of joiner file and return list of
  * joinerSets. */
 {
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 struct dyString *dyBuf = dyStringNew(0);
 struct joiner *joiner;
-struct joinerSet *jsList = NULL, *js;
+struct joinerSet *js;
 
 AllocVar(joiner);
+joiner->fileName = cloneString(fileName);
 joiner->symHash = newHash(9);
 joiner->databasesChecked = newHash(8);
 joiner->databasesIgnored = newHash(8);
@@ -443,9 +496,9 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	    }
 	else if (sameString("identifier", word))
 	    {
-	    js = parseOneJoiner(lf, line, joiner->symHash, dyBuf);
+	    js = parseIdentifierSet(lf, line, joiner->symHash, dyBuf);
 	    if (js != NULL)
-	        slAddHead(&jsList, js);
+	        slAddHead(&joiner->jsList, js);
 	    }
 	else if (sameString("exclusiveSet", word))
 	    {
@@ -455,11 +508,17 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	    }
 	else if (sameString("databasesChecked", word))
 	    {
-	    addCommasToHash(joiner->databasesChecked, word);
+	    addCommasToHash(joiner->databasesChecked, line);
 	    }
 	else if (sameString("databasesIgnored", word))
 	    {
-	    addCommasToHash(joiner->databasesIgnored, word);
+	    addCommasToHash(joiner->databasesIgnored, line);
+	    }
+	else if (sameString("tablesIgnored", word))
+	    {
+	    struct joinerIgnore *ig;
+	    ig = parseTablesIgnored(lf, line, joiner->symHash, dyBuf);
+	    slAddHead(&joiner->tablesIgnored, ig);
 	    }
         else
             {
@@ -468,18 +527,19 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
             }
 	}
     }
+lineFileClose(&lf);
 dyStringFree(&dyBuf);
-slReverse(&jsList);
-joiner->jsList = jsList;
+slReverse(&joiner->jsList);
+slReverse(&joiner->tablesIgnored);
 return joiner;
 }
 
-static struct joinerSet *joinerExpand(struct joinerSet *jsList, char *fileName)
+static void joinerExpand(struct joiner *joiner)
 /* Expand joiners that have [] in them. */
 {
 struct joinerSet *js, *nextJs, *newJs, *newList = NULL;
 
-for (js=jsList; js != NULL; js = nextJs)
+for (js=joiner->jsList; js != NULL; js = nextJs)
     {
     char *startBracket, *endBracket;
     nextJs = js->next;
@@ -491,7 +551,7 @@ for (js=jsList; js != NULL; js = nextJs)
 	struct dyString *dy = dyStringNew(0);
 	endBracket = strchr(startBracket, ']');
 	if (endBracket == NULL)
-	    errAbort("[ without ] line %s of %s", js->lineIx, fileName);
+	    errAbort("[ without ] line %s of %s", js->lineIx, joiner->fileName);
 	dbCommaList = cloneStringZ(startBracket+1, endBracket - startBracket - 1);
 	dbStart = dbCommaList;
 	while (dbStart != NULL)
@@ -506,7 +566,7 @@ for (js=jsList; js != NULL; js = nextJs)
 	       }
 	    if (dbStart[0] == 0)
 	       errAbort("Empty element in comma separated list line %d of %s",
-	       	   js->lineIx, fileName);
+	       	   js->lineIx, joiner->fileName);
 
 	    /* Make up name for new joiner. */
 	    dyStringClear(dy);
@@ -547,7 +607,7 @@ for (js=jsList; js != NULL; js = nextJs)
 		    be = strchr(bs, ']');
 		if (bs == NULL || be == NULL)
 		    errAbort("Missing [] in field '%s' line %d of %s",
-		    	jf->table, jf->lineIx, fileName);
+		    	jf->table, jf->lineIx, joiner->fileName);
 		dyStringClear(dy);
 		dyStringAppendN(dy, jf->table, bs - jf->table);
 		dyStringAppend(dy, dbStart);
@@ -573,22 +633,22 @@ for (js=jsList; js != NULL; js = nextJs)
     }
 
 slReverse(&newList);
-return newList;
+joiner->jsList = newList;
 }
 
-static void joinerParsePassTwo(struct joinerSet *jsList, char *fileName)
+static void joinerParsePassTwo(struct joiner *joiner)
 /* Go through and link together parents and children. */
 {
 struct joinerSet *js, *parent;
 struct hash *hash = newHash(0);
-for (js = jsList; js != NULL; js = js->next)
+for (js = joiner->jsList; js != NULL; js = js->next)
     {
     if (hashLookup(hash, js->name))
         errAbort("Duplicate joiner %s line %d of %s",
-		js->name, js->lineIx, fileName);
+		js->name, js->lineIx, joiner->fileName);
     hashAdd(hash, js->name, js);
     }
-for (js = jsList; js != NULL; js = js->next)
+for (js = joiner->jsList; js != NULL; js = js->next)
     {
     char *typeOf = js->typeOf;
     if (typeOf != NULL)
@@ -596,33 +656,69 @@ for (js = jsList; js != NULL; js = js->next)
 	js->parent = hashFindVal(hash, typeOf);
 	if (js->parent == NULL)
 	    errAbort("%s not define line %d of %s", 
-	    	typeOf, js->lineIx, fileName);
+	    	typeOf, js->lineIx, joiner->fileName);
 	refAdd(&js->parent->children, js);
 	}
     }
-for (js = jsList; js != NULL; js = js->next)
+for (js = joiner->jsList; js != NULL; js = js->next)
     {
     for (parent = js->parent; parent != NULL; parent = parent->parent)
         {
 	if (parent == js)
 	    errAbort("Circular typeOf dependency on joiner %s line %d of %s", 
-	    	js->name, js->lineIx, fileName);
+	    	js->name, js->lineIx, joiner->fileName);
 	}
     slReverse(&js->children);
+    }
+}
+
+void checkIgnoreBalance(struct joiner *joiner)
+/* Check that databases in fields are in the checked list.
+ * Check that there is no overlap between checked and ignored
+ * list. */
+{
+struct joinerSet *js;
+struct joinerField *jf;
+struct slName *db;
+struct hashEl *ignoreList, *ignore;
+
+/* Check that there is no overlap between databases ignored
+ * and databases checked. */
+ignoreList = hashElListHash(joiner->databasesIgnored);
+for (ignore=ignoreList; ignore != NULL; ignore = ignore->next)
+    {
+    if (hashLookup(joiner->databasesChecked, ignore->name))
+        errAbort("%s is in both databasesChecked and databasesIgnored",
+		ignore->name);
+    }
+slFreeList(&ignoreList);
+
+/* Check that all databases mentioned in fields are in 
+ * databasesChecked. */
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+        {
+	for (db = jf->dbList; db != NULL; db = db->next)
+	    {
+	    if (!hashLookup(joiner->databasesChecked, db->name))
+	        {
+		errAbort("database %s line %d of %s is not in databasesChecked",
+			db->name, jf->lineIx, joiner->fileName);
+		}
+	    }
+	}
     }
 }
 
 struct joiner *joinerRead(char *fileName)
 /* Read in a .joiner file. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *jeList = NULL;
-struct joiner *joiner = joinerParsePassOne(lf);
-
-lineFileClose(&lf);
-joiner->jsList = joinerExpand(joiner->jsList, fileName);
-joinerParsePassTwo(joiner->jsList, fileName);
-joiner->fileName = cloneString(fileName);
+struct joiner *joiner = joinerParsePassOne(fileName);
+joinerExpand(joiner);
+joinerParsePassTwo(joiner);
+checkIgnoreBalance(joiner);
 return joiner;
 }
 
@@ -637,7 +733,7 @@ dtf->field = cloneString(field);
 return dtf;
 }
 
-void joinerDtfFree(struct joinerDtf **pDtf)
+static void joinerDtfFree(struct joinerDtf **pDtf)
 /* Free up resources associated with joinerDtf. */
 {
 struct joinerDtf *dtf = *pDtf;
@@ -650,7 +746,7 @@ if (dtf != NULL)
     }
 }
 
-void joinerDtfFreeList(struct joinerDtf **pList)
+static void joinerDtfFreeList(struct joinerDtf **pList)
 /* Free up memory associated with list of joinerDtfs. */
 {
 struct joinerDtf *el, *next;
@@ -741,7 +837,8 @@ slReverse(&list);
 return list;
 }
 
-static struct joinerPair *joinerToField(char *aDatabase, struct joinerField *aJf,
+static struct joinerPair *joinerToField(
+	char *aDatabase, struct joinerField *aJf,
 	char *bDatabase, struct joinerField *bJf)
 /* Construct joiner pair linking from a to b. */
 {
@@ -803,7 +900,8 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 			    {
 			    if (tableExists(db->name, jf->table))
 				{
-				jp = joinerToField(database, jfBase, db->name, jf);
+				jp = joinerToField(database, jfBase, 
+					db->name, jf);
 				slAddHead(&jpList, jp);
 				}
 			    }

@@ -32,12 +32,6 @@ struct joinerField
     struct slName *exclude;	/* List of keys to exclude from verification */
     };
 
-void joinerFieldFree(struct joinerField **pJf);
-/* Free up memory associated with joinerField. */
-
-void joinerFieldFreeList(struct joinerField **pList);
-/* Free up memory associated with list of joinerFields. */
-
 struct joinerSet
 /* Information on a set of fields that can be joined together. */
     {
@@ -54,11 +48,13 @@ struct joinerSet
     boolean expanded;		/* True if an expanded set. */
     };
 
-void joinerSetFree(struct joinerSet **pJs);
-/* Free up memory associated with joinerSet. */
-
-void joinerSetFreeList(struct joinerSet **pList);
-/* Free up memory associated with list of joinerSets. */
+struct joinerIgnore
+/* A list of tables to ignore. */
+    {
+    struct joinerIgnore *next;	/* Next in list. */
+    struct slName *dbList;	/* List of databases. */
+    struct slName *tableList;	/* List of tables. */
+    };
 
 struct joiner
 /* Manage joining identifier information across all databases. */
@@ -70,6 +66,7 @@ struct joiner
     struct hash *exclusiveSets; /* List of hashes of exclusive databases. */
     struct hash *databasesChecked; /* List of databases to check. */
     struct hash *databasesIgnored; /* List of database to ignore. */
+    struct joinerIgnore *tablesIgnored;	/* List of tables to ignore. */
     };
 
 void joinerFree(struct joiner **pJoiner);
@@ -92,12 +89,6 @@ struct joinerDtf
     char *table;		/* Table. */
     char *field;		/* Field. */
     };
-
-void joinerDtfFree(struct joinerDtf **pDtf);
-/* Free up resources associated with joinerDtf. */
-
-void joinerDtfFreeList(struct joinerDtf **pList);
-/* Free up memory associated with list of joinerDtfs. */
 
 struct joinerPair
 /* A pair of linked fields. */
