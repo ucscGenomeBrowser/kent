@@ -385,12 +385,22 @@ if(!allLetters(table))
 	
 /* get the name of the start and end fields */
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
-	{
-	snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+    {
+        if(sameString(chromFieldName, ""))
+            {
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s >= %d AND %s <= %d",
+		table, startName, winStart, endName, winEnd);
+            }
+        else
+            {
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
 		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
-	}
+            }
+    }
 else
+    {
 	snprintf(query, 256, "SELECT * FROM %s ", table);
+    }
 
 conn = hAllocConn();
 //puts(query);
