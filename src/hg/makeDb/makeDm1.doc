@@ -2779,4 +2779,56 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
 # LOAD ENSEMBL GENES (NEVER MIND 6/16/04 angie)
     # OK, never mind, Ensembl just imported the BDGP / Flybase genes.
 
+# BLAT FlyBase predicted DM proteins against DM
+    ssh hgwdev
+    cd /cluster/data/dm1/bed
+    mkdir blat.dm1FB
+    pepPredToFa dm1 bdgpGenePep dm1FB.fa
+    grep ">" dm1FB.fa | sed "s/>//" > dm1FB.lst
+    fbName dm1 dm1FB.lst dm1FB.mapNames
+    ssh kk
+    cd /cluster/data/hg17/bed/blat.dm1FB
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /iscratch/i/dm1/nib/*.nib > bug.lst
+    mkdir fbfas
+    cd fbfas
+    faSplit sequence ../dm1FB.fa 5000 kg
+    cd ..
+    ls -1S fbfas/*.fa > fb.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../bug.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+53361 jobs in batch
+Completed: 53361 of 53361 jobs
+CPU time in finished jobs:     640171s   10669.52m   177.83h    7.41d  0.020 y
+IO & Wait Time:                144105s    2401.75m    40.03h    1.67d  0.005 y
+Average job time:                  15s       0.24m     0.00h    0.00d
+Longest job:                     1924s      32.07m     0.53h    0.02d
+Submission to last job:          3506s      58.43m     0.97h    0.04d
+
+    ssh eieio
+    cd /cluster/data/dm1/bed/blat.dm1FB
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cov90.psl /dev/null
+    pslUniq cov90.psl dm1FB.psl
+    pslxToFa dm1FB.psl dm1FB_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    sed "s/>.*/&p/" dm1FB.fa > dm1FBp.fa
 
