@@ -26,6 +26,7 @@
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
+    {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
     {"mismatches", OPTION_BOOLEAN},
     {"codonsub", OPTION_BOOLEAN},
@@ -56,6 +57,7 @@ struct clone
 #define INDEL    1
 #define MISMATCH 2
 #define CODONSUB 3
+#define UNALIGNED 4
 
 struct evid
 {
@@ -123,6 +125,7 @@ struct pslInfo
   int indelCount;
   int indels[256];
   struct indel *indelList;
+  struct indel *unaliList;
   int snp;
   int thirdPos;
   int synSub;
@@ -917,8 +920,9 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 {
   int i, j;
   int unaligned=0, prevqend=0, prevtend=0, qstart=0, tstart=0;
-  struct indel *ni, *niList=NULL;
+  struct indel *ni, *niList=NULL, *uiList=NULL;
   int cdsS = pi->cdsStart, cdsE = pi->cdsEnd;
+  boolean unali = FALSE;
   
   /* Check all blocks for indels */
   for (i = 1; i < pi->psl->blockCount; i++)
@@ -942,20 +946,27 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	  prevtend = tstart;
 	  }
 	unaligned = qstart - prevqend;
+	if (unaligned == (tstart - prevtend))
+	    unali = TRUE;
+	else
+	    unali = FALSE;
 	/* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
 	if (unaligned > 30)
 	  pi->cdsGap += unaligned;
 	/* Check if there is an indel */
 	else if (unaligned > 0)
 	  {
-	    if (unaligned == 1) 
-	      pi->singleIndel++;
-	    if ((unaligned%3) == 0) 
-	      pi->tripleIndel += unaligned/3;
-	    pi->totalIndel += unaligned;
+	    if (!unali)
+	        {
+	        if (unaligned == 1) 
+	            pi->singleIndel++;
+		if ((unaligned%3) == 0) 
+	            pi->tripleIndel += unaligned/3;
+	        pi->totalIndel += unaligned;
+	        pi->indels[pi->indelCount] = unaligned;
+	        pi->indelCount++;
+		}
 	    pi->unalignedCds += unaligned;
-	    pi->indels[pi->indelCount] = unaligned;
-	    pi->indelCount++;
 	    /*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
 	      indels[unaligned]++;*/
 	    if (pi->indelCount > 256) 
@@ -969,7 +980,10 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    if (indelReport) 
 	        {
 		ni = createIndel(conn, pi->psl->qName, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId); 
-		slAddHead(&niList,ni);
+		if (unali)
+		    slAddHead(&uiList, ni);
+		else
+		    slAddHead(&niList,ni);
 		}
 	  }
       }
@@ -993,11 +1007,15 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	  prevtend = tstart;
 	  }
 	unaligned = tstart - prevtend;
+	if (unaligned == (qstart - prevqend))
+	    unali = TRUE;
+	else
+	    unali = FALSE;
 	/* Check if unaligned part is an intron */
 	if (unaligned > 30)
 	  pi->cdsGap += unaligned;
 	/* Check if there is an indel */
-	else if (unaligned != 0) 
+	else if ((unaligned != 0) && (!unali)) 
 	  {
 	    if (unaligned == 1) 
 	      pi->singleIndel++;
@@ -1028,6 +1046,8 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
       { 
       slReverse(&niList);
       pi->indelList = niList;
+      slReverse(&uiList);
+      pi->unaliList = uiList;
       }
 }
 
@@ -1108,6 +1128,10 @@ for (indel = iList; indel != NULL; indel=indel->next)
     indel->chrom, indel->chromStart, indel->chromEnd);*/
     if (type == INDEL)
         fprintf(of, "Indel of size %d in %s:%d-%d vs. %s:%d-%d\n",
+		indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
+		indel->chrom, indel->chromStart, indel->chromEnd);
+    else if (type == UNALIGNED)
+        fprintf(of, "Unaligned bases of size %d in %s:%d-%d vs. %s:%d-%d\n",
 		indel->size, indel->mrna, indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == MISMATCH)
@@ -1207,7 +1231,7 @@ for (indel = iList; indel != NULL; indel=indel->next)
     }
 }
 
-void writeOut(FILE *of, FILE *in, FILE *mm, FILE* cs, struct pslInfo *pi)
+void writeOut(FILE *of, FILE *in, FILE *mm, FILE* cs, FILE* un, struct pslInfo *pi)
 /* Output results of the mRNA alignment analysis */
 {
 struct indel *indel;
@@ -1230,8 +1254,9 @@ fprintf(of, "\n");
 if (indelReport) 
     {
     if (verbose)
-        printf("Writing out indels\n");
+        printf("Writing out indels and unaligned regions\n");
     writeList(in, pi->indelList, INDEL, NULL);
+    writeList(un, pi->unaliList, UNALIGNED, NULL);
     }
 
 /* Write out detailed records of mismatches, if requested */
@@ -1250,7 +1275,7 @@ if (codonSubReport)
     }
 }
  
-void doFile(struct lineFile *pf, FILE *of, FILE *in, FILE *mm, FILE* cs)
+void doFile(struct lineFile *pf, FILE *of, FILE *in, FILE *mm, FILE* cs, FILE* un)
 /* Process all records in a psl file of mRNA alignments */
 {
 int lineSize;
@@ -1269,7 +1294,7 @@ while (lineFileNext(pf, &line, &lineSize))
     psl = pslLoad(words);
     pi = processPsl(conn, psl);
     slAddHead(&piList, pi);
-    writeOut(of, in, mm, cs, pi);
+    writeOut(of, in, mm, cs, un, pi);
     pslInfoFree(&pi);
     }
 hFreeConn(&conn);
@@ -1278,7 +1303,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 {
 struct lineFile *pf, *cf, *lf;
-FILE *of, *in=NULL, *mm=NULL, *cs=NULL;
+FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
 char *faFile, *db, filename[64];
 
 optionInit(&argc, argv, optionSpecs);
@@ -1305,6 +1330,8 @@ if (indelReport)
     {
     sprintf(filename, "%s.indel", argv[5]);
     in = mustOpen(filename, "w");
+    sprintf(filename, "%s.unali", argv[5]);
+    un = mustOpen(filename, "w");
     }
 if (mismatchReport)
     {
@@ -1330,7 +1357,7 @@ if (verbose)
 readLoci(lf);
 if (verbose)
     printf("Processing psl file\n");
-doFile(pf, of, in, mm, cs);
+doFile(pf, of, in, mm, cs, un);
 
 lineFileClose(&pf);
 fclose(of);
