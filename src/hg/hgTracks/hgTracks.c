@@ -6734,15 +6734,6 @@ tg->loadItems = loadUniGeneAli;
 tg->colorShades = shadesOfGray;
 }
 
-char *snpName(struct track *tg, void *item)
-/* prepend 'rs' to the rdId */
-{
-struct bed *bed = item;
-char name[20];
-snprintf(name, sizeof(name), "rs%s", bed->name);
-return (cloneString(name));
-}
-
 char *perlegenName(struct track *tg, void *item)
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 {
@@ -8230,12 +8221,6 @@ void perlegenMethods(struct track *tg)
 tg->itemName = perlegenName;
 tg->drawItems = haplotypeLinkedFeaturesDraw;
 tg->colorShades = shadesOfSea;
-}
-
-void snpMethods(struct track *tg)
-/* setup special methods for SNP tracks */
-{
-tg->itemName = snpName;
 }
 
 void loadAncientR(struct track *tg)
@@ -10116,8 +10101,6 @@ registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("haplotype",haplotypeMethods);
-registerTrackHandler("snpNih", snpMethods);
-registerTrackHandler("snpTsc", snpMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
