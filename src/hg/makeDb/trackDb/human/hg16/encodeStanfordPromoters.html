@@ -1,0 +1,50 @@
+<H2>Description</H2>
+This track displays expression levels of predicted promoters in the ENCODE regions, based on Luciferase reporter assays.  Expression level is indicated by color, ranging from black (no activity) to red.  Experiments were performed on 14 cell lines:
+<P>
+<TABLE BORDER=2 CELLSPACING=2 CELLPADDING=2>
+<TR><TD>Snu182</TD><TD>hepatocellular carcinoma</TD><TD>liver</TR>
+<TR><TD>AGS</TD><TD>adenocarcinoma </TD><TD>stomach</TR>
+<TR><TD>U87</TD><TD>glioblastoma-astrocytoma </TD><TD>brain</TR>
+<TR><TD><A HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,1324722,CRL-1690&text=glioblastoma&max=20">CRL1690</A></TD><TD>glioblastoma</TD><TD>brain</TR>
+<TR><TD>G402</TD><TD>&nbsp;</TD><TD>muscle</TR>
+<TR><TD><A HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,360353,CCL-247&text=HCT116&max=20">HCT116</A></TD><TD>colorectal carcinoma</TD><TD>colon</TR>
+<TR><TD><A HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,4585011,CRL-9607&text=HMCB&max=20">HMCB</A> </TD><TD>melanoma </TD><TD>skin</TR>
+<TR><TD>HT1080</TD><TD>fibrosarcoma</TD><TD>&nbsp;</TR>
+<TR><TD>Hela </TD><TD>adenocarcinoma </TD><TD>cervix</TR>
+<TR><TD>HepG2</TD><TD> hepatocellular carcinoma </TD><TD>liver</TR>
+<TR><TD><A HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,5920078,HTB-36&text=choriocarcinoma&max=20">JEG3</A></TD><TD> choriocarcinoma</TD><TD>placenta</TR>
+<TR><TD>MG63</TD><TD> osteosarcoma </TD><TD>bone</TR>
+<TR><TD><A HREF="http://www.atcc.org/SearchCatalogs/longview.cfm?view=ce,172892,CCL-171&text=MRC5&max=20">MRC5</A></TD><TD> fibroblast </TD><TD>lung</TR>
+<TR><TD>Panc1 </TD><TD>carcinoma </TD><TD>pancreas</TR>
+</TABLE>
+<H2>Methods</H2>
+<P>
+Using a variation on methods previously described we predicted all promoters in the ENCODE region (Trinklein, et al. 2003, Trinklein et al. 2004).  We took all human cDNAs in the database and merged any cDNAs with at least one base pair of exon overlap. This generated our gene models. To predict transcription start sites, we started with the 5-most end of each gene model as well as other 5 ends that were at least 500 base pairs away from the 5-most end. Promoters were identified as the approximately 600 base pairs upstream and 100 base pairs downstream of each transcription start site. 
+<P>
+Primer3 was used to pick primers yielding approximately 500 base pair fragments containing the transcription start site.  Each fragment of DNA represented in this track was cloned into a luciferase reporter vector (pGL3-Basic, Promega) using the BD Clonetech Infusion Cloning System. We used the Dual Luciferase system (Promega) to transfect the experimental DNA with a control plasmid expressing Renilla in 96-well format into one of the fourteen cell types using Fugene Transfection Reagent (Roche).  Each transfection was done in duplicate. 
+<P>
+Values here represent averages of the Luciferase to Renilla ratio. To determine fold increase, we have also cloned and tested 96 random fragments in the genome. We used the average values of these 96 to determine a threshold (3 standard deviations) for functional promoters. 
+<P>
+Any promoters that did not meet the threshold for function have a value of zero and those that are positive have been scaled to show graded color on the browser.
+
+<H2>Verification</H2>
+<P>
+Data was verified by repeating the preparation and measurement of 48 random fragments. We saw no significant variation between the original preparation and the second preparation of these fragments. 
+
+<H2>Credits</H2>
+<P>
+This work was done in collaboration at the <A HREF="http://www-shgc.stanford.edu/myerslab/" TARGET=_BLANK> Myers Lab</A> at Stanford. 
+The following people contributed: 
+Sara J. Hartman,
+Nathan D. Trinklein,
+Elizabeth D. Anton,
+Loan Nguyen,
+Simone S. Marticke, and
+Richard M. Myers
+
+<H2>References</H2>
+<P>
+Trinklein ND, Aldred SJ, Saldanha AJ, Myers RM. <I>Identification and functional analysis of human transcriptional promoters</I>. Genome Res. 2003 Feb;13(2):308-12.
+<P>
+Trinklein ND, Aldred SF, Hartman SJ, Schroeder DI, Otillar RP, Myers RM. <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=14707170&dopt=Abstract" TARGET=_BLANK><I>An abundance of bidirectional promoters in the human genome</I></A>
+Genome Res. 2004 Jan;14(1):62-6.
