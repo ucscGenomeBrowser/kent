@@ -24,7 +24,7 @@ boolean verboseDotsEnabled();
  * verbosity is > 0, stderr is a tty and we don't appear to be running an
  * emacs shell. */
 
-int verboseLevel();
+int verboseLevel(void);
 /* Get verbosity level. */
 
 void verboseSetLevel(int verbosity);
