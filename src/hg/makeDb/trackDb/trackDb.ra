@@ -457,11 +457,20 @@ visibility pack
 spectrum on
 type psl .
 
+track mrnaBlastz
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank aligned with Blastz
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+
 track mrnaLoose
 shortLabel loose mRNAs
 longLabel $Organism mRNAs from Genbank  Loose alignments
 group rna
-priority 54
+priority 55
 visibility pack
 spectrum on
 type psl .
