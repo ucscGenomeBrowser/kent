@@ -50,8 +50,8 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     insert->chrom = chromInserts;
     }
 lineFileClose(&lf);
-slReverse(&chromInserts);
-return chromInserts;
+slReverse(&chromInsertsList);
+return chromInsertsList;
 }
 
 struct bigInsert *bigInsertBeforeContig(struct chromInserts *chromInserts, 
