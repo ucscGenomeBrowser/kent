@@ -649,6 +649,7 @@ if (-e /tmp/hg16/$2/$2.tbl) /bin/cp /tmp/hg16/$2/$2.tbl ./
 /bin/rmdir --ignore-fail-on-non-empty /tmp/hg16/$2
 /bin/rmdir --ignore-fail-on-non-empty /tmp/hg16
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x jkStuff/RMHuman
 
     ssh eieio
@@ -755,6 +756,7 @@ cp -p /tmp/$outputFN/$outputFN $outpath
 rm -fr /tmp/$outputFN/*
 rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x runTrf
 
     cat << '_EOF_' > gsub
@@ -762,6 +764,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 ./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
     ls -1S /iscratch/i/gs.17/build34/contigs/*.fa > genome.lst
     gensub2 genome.lst single gsub spec
@@ -1032,6 +1035,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 /cluster/home/hiram/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
     para try
@@ -1112,6 +1116,7 @@ width = $3-$2;
 printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
   $1,$2,$3,$5,$6,width,$6,width*$7*0.01,100.0*2*$6/($3-$2),$7);}
 '_EOF_'
+    # << this line makes emacs coloring happy
     awk -f filter.awk chr*.cpg > cpgIsland.bed
     ssh hgwdev
     cd /cluster/data/hg16/bed/cpgIsland
@@ -1222,6 +1227,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 # Save the DEF file in the current standard place
     DS=`date -I`
@@ -1325,6 +1331,7 @@ SEQ2_LEN=$BASE/S2.len
 /cluster/bin/scripts/blastz-chromlav2axt /cluster/store4/gs.17/build34/bed/blastz.mm3/lav/$(root1) {check out line+ /cluster/store4/gs.17/build34/bed/blastz.mm3/axtChrom/$(root1).axt} /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/mm3.RM030619/mixedNib/
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     ls -1S /cluster/store4/gs.17/build34/bed/blastz.mm3/lav > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
@@ -1672,6 +1679,7 @@ sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastz.mm3/S1.len \
 	/cluster/data/hg16/bed/blastz.mm3/S2.len $4
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x doBestAxt
     cd ../axtChrom
     ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
@@ -1683,6 +1691,7 @@ sleep 1
 doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom/$(root1).axt} {check out line+ /cluster/data/hg16/bed/blastz.mm3/axtBest/$(root1).axt} {check out line+  /cluster/data/hg16/bed/blastz.mm3/pslBest/$(root1)_blastzBestMm3.psl}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 chrom.list single gsub jobList
     wc -l jobList
         # 41 jobs
@@ -1825,6 +1834,7 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 #    axtFilter -notQ=chrUn_random $1 | axtChain stdin
 
@@ -1834,6 +1844,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 	/iscratch/i/gs.17/build34/bothMaskedNibs \
 	/iscratch/i/mm3.RM030619/mixedNib $2 > $3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
     mkdir out chain
 
@@ -1964,6 +1975,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 # Save the DEF file in the current standard place
     DS=`date -I`
@@ -2065,6 +2077,7 @@ SEQ2_LEN=$BASE/S2.len
 /cluster/bin/scripts/blastz-chromlav2axt /cluster/store4/gs.17/build34/bed/blastz.rn3/lav/$(root1) {check out line+ /cluster/store4/gs.17/build34/bed/blastz.rn3/axtChrom/$(root1).axt} /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     ls -1S /cluster/store4/gs.17/build34/bed/blastz.rn3/lav > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
@@ -2148,6 +2161,7 @@ sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastz.rn3/S1.len \
 	/cluster/data/hg16/bed/blastz.rn3/S2.len $4
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x doBestAxt
     cd ../axtChrom
     ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
@@ -2159,6 +2173,7 @@ sleep 1
 doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom/$(root1).axt} {check out line+ /cluster/data/hg16/bed/blastz.rn3/axtBest/$(root1).axt} {check out line+  /cluster/data/hg16/bed/blastz.rn3/pslBest/$(root1)_blastzBestRn3.psl}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 chrom.list single gsub jobList
     wc -l jobList
         # 41 jobs
@@ -2290,6 +2305,7 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 #    axtFilter -notQ=chrUn_random $1 | axtChain stdin
 
@@ -2299,6 +2315,7 @@ axtFilter $1 | axtChain stdin \
 	/iscratch/i/gs.17/build34/bothMaskedNibs \
 	/iscratch/i/rn3/bothMaskedNibs $2 > $3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
     mkdir out chain
 
@@ -2728,6 +2745,7 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 # Save the DEF file in the current standard place
     DS=`date -I`
@@ -2830,6 +2848,7 @@ Submission to last job:        344744s    5745.73m    95.76h    3.99d
 /cluster/bin/scripts/blastz-chromlav2axt /cluster/store4/gs.17/build34/bed/blastzSelf/lav/$(root1) {check out line+ /cluster/store4/gs.17/build34/bed/blastzSelf/axtChrom/$(root1).axt} /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/gs.17/build34/bothMaskedNibs
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     ls -1S /cluster/store4/gs.17/build34/bed/blastzSelf/lav > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
@@ -2944,6 +2963,7 @@ cat << 'EOF' > gsub
 /cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/hg16/bed/blatFr1/psl/$(root1)/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
+    # << this line makes emacs coloring happy
     gensub2 human.lst fugu.lst gsub spec
     para create spec
        # 283798 jobs  
@@ -3022,6 +3042,7 @@ sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastzSelf/S1.len \
 	/cluster/data/hg16/bed/blastzSelf/S2.len $4
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x doBestAxt
     cd ../axtChrom
     ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
@@ -3033,6 +3054,7 @@ sleep 1
 doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastzSelf/axtChrom/$(root1).axt} {check out line+ /cluster/data/hg16/bed/blastzSelf/axtBest/$(root1).axt} {check out line+  /cluster/data/hg16/bed/blastzSelf/pslBest/$(root1)_blastzBestMm3.psl}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
     gensub2 chrom.list single gsub jobList
     wc -l jobList
         # 42 jobs
@@ -3158,6 +3180,7 @@ Out of memory - request size 973662824 bytes
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
 #	The -notQ_random (new argument to axtFilter) will omit any
 #	*_random from the query.
@@ -3168,6 +3191,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 	/iscratch/i/gs.17/build34/bothMaskedNibs \
 	/iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
     mkdir out chain
 
@@ -3195,6 +3219,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {check out line+ out/$(root1).$(path2).out}
 #ENDLOOP
 '_EOF_'
+    # << this line makes emacs coloring happy
 
     cat << '_EOF_' > doChainQ.sh
 #!/bin/sh
@@ -3202,6 +3227,7 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
 	/cluster/store4/gs.17/build34/nib \
 	/cluster/store4/gs.17/build34/nib $3 > $4
 '_EOF_'
+    # << this line makes emacs coloring happy
     chmod +x doChainQ.sh
     #  This is a mistake, this should have been chr19.axt only
   ls -1S /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt > input.lst
