@@ -64,7 +64,6 @@ alpha:
 	cp fugu/fr1/description.html /gbdb/fr1/html
 
 strict:
-	cvs up -d -P .
 	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes human hg15 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes human hg16 trackDb ../../lib/trackDb.sql .
