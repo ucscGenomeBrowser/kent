@@ -729,6 +729,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToSuper.gene
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
+    $kgDb.blastKGPep00.name
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
@@ -993,6 +994,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     $dm.scBlastTab.query
     $dm.fbTranscript.transcriptId minCheck=0.95
     $dm.hgBlastTab.query
+    $dm.blastFBPep00.name
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
