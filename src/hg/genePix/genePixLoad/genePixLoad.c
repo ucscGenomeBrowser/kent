@@ -107,7 +107,7 @@ safef(query, sizeof(query),
       "and publication = \"%s\" "
       "and pubUrl = '%s' and setUrl = '%s' and itemUrl = '%s'"
       , contributors, publication, pubUrl, setUrl, itemUrl);
-uglyf("query %s\n", query);
+verbose(2, "query %s\n", query);
 return sqlQuickNum(conn, query);
 }
 
@@ -124,7 +124,7 @@ if (id == 0)
     {
     safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
     	table, value);
-    uglyf("%s\n", query);
+    verbose(2, "%s\n", query);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     }
@@ -150,7 +150,7 @@ else
 	dyStringPrintf(dy, " id=default,\n");
 	dyStringPrintf(dy, " name=\"%s\",\n", name);
 	dyStringPrintf(dy, " url=\"%s\"\n", url);
-	uglyf("%s\n", dy->string);
+	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	id = sqlLastAutoId(conn);
 	}
@@ -180,7 +180,7 @@ dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
 dyStringPrintf(dy, " journal = %d,\n", journalId);
 dyStringPrintf(dy, " setUrl = \"%s\",\n", setUrl);
 dyStringPrintf(dy, " itemUrl = \"%s\"\n", itemUrl);
-uglyf("%s\n", dy->string);
+verbose(2, "%s\n", dy->string);
 sqlUpdate(conn, dy->string);
 submissionSetId = sqlLastAutoId(conn);
 
@@ -192,7 +192,7 @@ for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     safef(query, sizeof(query),
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
-    uglyf("%s\n", query);
+    verbose(2, "%s\n", query);
     sqlUpdate(conn, query);
     }
 slFreeList(&contribList);
@@ -279,7 +279,6 @@ char **row;
 
 /* Make sure that at least one field specifying gene is
  * specified. */
- uglyf("1.1\n");
 if (gene[0] == 0 && locusLink[0] == 0 && refSeq[0] == 0
     && uniProt[0] == 0 && genbank[0] == 0)
     errAbort("No gene, locusLink, refSeq, uniProt, or genbank "
@@ -294,16 +293,14 @@ needOr = optionallyAddOr(dy, "refSeq", refSeq, needOr);
 needOr = optionallyAddOr(dy, "uniProt", uniProt, needOr);
 needOr = optionallyAddOr(dy, "genbank", genbank, needOr);
 dyStringPrintf(dy, ")");
-uglyf("query %s\n", dy->string);
+verbose(2, "query %s\n", dy->string);
 
- uglyf("1.2\n");
 /* Loop through query results finding ID that best matches us.
  * The locusLink/refSeq ID's are worth 8,  the genbank 4, the
  * uniProt 2, and the name 1.  This scheme will allow different
  * genes with the same name and even the same uniProt ID to 
  * cope with alternative splicing.  */
 sr = sqlGetResult(conn, dy->string);
- uglyf("1.3\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
@@ -343,12 +340,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	geneId = id;
 	}
     }
- uglyf("1.4\n");
 sqlFreeResult(&sr);
 
 if (geneId == 0)
    {
-   uglyf("ok A1\n");
    dyStringClear(dy);
    dyStringAppend(dy, "insert into gene set\n");
    dyStringPrintf(dy, " id = default,\n");
@@ -358,56 +353,44 @@ if (geneId == 0)
    dyStringPrintf(dy, " genbank = '%s',\n", genbank);
    dyStringPrintf(dy, " uniProt = '%s',\n", uniProt);
    dyStringPrintf(dy, " taxon = %s\n", taxon);
-   uglyf("%s\n", dy->string);
+   verbose(2, "%s\n", dy->string);
    sqlUpdate(conn, dy->string);
    geneId = sqlLastAutoId(conn);
-   uglyf("ok A9\n");
    }
 else
    {
    char *oldName;
 
-   uglyf("ok B1\n");
    /* Handle updating name field - possibly creating a synonym. */
    dyStringClear(dy);
    dyStringPrintf(dy, "select name from gene where id = %d", geneId);
-   uglyf("ok B2\n");
    oldName = sqlQuickString(conn, dy->string);
    if (gene[0] != 0)
        {
        if (oldName[0] == 0)
 	   {
-	   uglyf("ok B2a1\n");
 	   dyStringClear(dy);
-	   uglyf("ok B2a1.1\n");
 	   dyStringPrintf(dy, "update gene set" );
-	   uglyf("ok B2a1.2\n");
 	   dyStringPrintf(dy, " name = '%s'", gene);
-	   uglyf("ok B2a1.3\n");
 	   dyStringPrintf(dy, " where id = %d", geneId);
-	   uglyf("ok B2a2.4\n");
-	   uglyf("%s\n", dy->string);
+	   verbose(2, "%s\n", dy->string);
 	   sqlUpdate(conn, dy->string);
 	   }
        else if (differentString(oldName, gene))
 	   {
-	   uglyf("ok B2b1\n");
 	   dyStringClear(dy);
 	   dyStringAppend(dy, "select count(*) from geneSynonym where ");
 	   dyStringPrintf(dy, "gene = %d and name = '%s'", geneId, gene);
-	   uglyf("ok B2b2\n");
 	   if (sqlQuickNum(conn, dy->string) == 0)
 	       {
 	       dyStringClear(dy);
 	       dyStringPrintf(dy, "insert into geneSynonym "
 			     "values(%d,\"%s\")", geneId, gene);
-	       uglyf("%s\n", dy->string);
+	       verbose(2, "%s\n", dy->string);
 	       sqlUpdate(conn, dy->string);
 	       }
-	   uglyf("ok B2b3\n");
 	   }
        }
-   uglyf("ok B2\n");
 
    /* Update other fields. */
    dyStringClear(dy);
@@ -422,13 +405,11 @@ else
        dyStringPrintf(dy, " uniProt = '%s',", uniProt);
    dyStringPrintf(dy, " taxon = %s", taxon);
    dyStringPrintf(dy, " where id = %d", geneId);
-   uglyf("%s\n", dy->string);
+   verbose(2, "%s\n", dy->string);
    sqlUpdate(conn, dy->string);
    geneId = geneId;
    freez(&oldName);
-   uglyf("ok B9\n");
    }
- uglyf("1.5\n");
 dyStringFree(&dy);
 return geneId;
 }
@@ -487,7 +468,7 @@ if (abName[0] != 0)
 	dyStringPrintf(dy, " name = '%s',\n", abName);
 	dyStringPrintf(dy, " description = \"%s\",\n", abDescription);
 	dyStringPrintf(dy, " taxon = %s", abTaxon);
-	uglyf("%s\n", dy->string);
+	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
         antibodyId = sqlLastAutoId(conn);
 	}
@@ -499,7 +480,7 @@ if (abName[0] != 0)
 	    dyStringPrintf(dy, "update antibody set description = \"%s\"",
 		    abDescription);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
-	    uglyf("%s\n", dy->string);
+	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }
 	if (abTaxon[0] != 0)
@@ -507,7 +488,7 @@ if (abName[0] != 0)
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
-	    uglyf("%s\n", dy->string);
+	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }
 	}
@@ -552,7 +533,7 @@ if (probeTypeId == 0)
     dyStringClear(dy);
     dyStringPrintf(dy, "insert into probeType values(default, '%s')", 
     	probeType);
-    uglyf("%s\n", dy->string);
+    verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeTypeId  = sqlLastAutoId(conn);
     }
@@ -618,7 +599,7 @@ if (probeId == 0)
     dyStringPrintf(dy, " fPrimer='%s',\n", fPrimer);
     dyStringPrintf(dy, " rPrimer='%s',\n", rPrimer);
     dyStringPrintf(dy, " seq='%s'\n", seq);
-    uglyf("%s\n", dy->string);
+    verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeId = sqlLastAutoId(conn);
     }
@@ -629,7 +610,7 @@ else
 	dyStringClear(dy);
 	dyStringPrintf(dy, "update probe set antibody=%d", antibodyId);
 	dyStringPrintf(dy, " where id=%d", probeId);
-	uglyf("%s\n", dy->string);
+	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
     if (gotPrimers)
@@ -639,7 +620,7 @@ else
 	dyStringPrintf(dy, "fPrimer = '%s', ", fPrimer);
 	dyStringPrintf(dy, "rPrimer = '%s'", rPrimer);
 	dyStringPrintf(dy, " where id=%d", probeId);
-	uglyf("%s\n", dy->string);
+	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
     if (seq[0] != 0)
@@ -649,7 +630,7 @@ else
 	dyStringAppend(dy, seq);
 	dyStringAppend(dy, "'");
 	dyStringPrintf(dy, " where id=%d", probeId);
-	uglyf("%s\n", dy->string);
+	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
     }
@@ -682,7 +663,7 @@ if (imageFileId == 0)
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
     dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
     dyStringPrintf(dy, " submitId = '%s'\n", submitId);
-    uglyf("%s\n", dy->string);
+    verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     imageFileId = sqlLastAutoId(conn);
     }
@@ -712,7 +693,7 @@ if (needUpdate)
     dyStringPrintf(dy, " image=%d,", imageId);
     dyStringPrintf(dy, " probe=%d,", probeId);
     dyStringPrintf(dy, " probeColor=%d\n", probeColor);
-    uglyf("%s\n", dy->string);
+    verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     }
 
@@ -832,9 +813,9 @@ while (lineFileNextRowTab(lf, words, rowSize))
     int imageId = 0;
 
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
-    uglyf("ok 1\n");
+    verbose(2, "ok 1\n");
     geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
-    uglyf("ok 2\n");
+    verbose(2, "ok 2\n");
     antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
     probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
     imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,
@@ -874,7 +855,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     dyStringPrintf(dy, " treatment = %d\n", treatment);
     if (imageId != 0)
         dyStringPrintf(dy, "where id = %d", imageId);
-    uglyf("%s\n", dy->string);
+    verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     if (imageId == 0)
 	imageId = sqlLastAutoId(conn);
