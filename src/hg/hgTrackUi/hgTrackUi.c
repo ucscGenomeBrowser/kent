@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.113 2004/06/13 21:05:57 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.114 2004/06/13 21:52:19 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -892,7 +892,7 @@ else
     /* if bed has score then show optional filter based on score */
     if (sameWord(words[0], "bed") && wordCount == 3)
                 {
-                if (atoi(words[1]) >= 4)
+                if (atoi(words[1]) > 4)
                     scoreUi(tdb);
                 }
     else if (sameWord(words[0], "psl"))
