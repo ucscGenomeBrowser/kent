@@ -9,8 +9,9 @@
 #include "hgRelate.h"
 #include "obscure.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.6 2004/10/07 15:52:44 kent Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.7 2005/01/27 21:20:14 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
