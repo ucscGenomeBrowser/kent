@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.12 2004/03/04 07:28:56 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.13 2004/03/04 07:53:59 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -530,26 +530,28 @@ char accFilter[256];
 safef(accFilter, sizeof(accFilter), "near.as.%s.wild", accColumn);
 
 /* Start out with filter page. */
-struct htmlPage *page = quickSubmit(dbPage, NULL, org, db, NULL, NULL,
+struct htmlPage *page = quickSubmit(dbPage, NULL, org, db, accColumn, NULL,
 	"accOneFilterPage", advFilterVarName, "on");
 verbose(1, "testFilters %s %s\n", org, db);
 if (page == NULL)
     return;
 
 /* Set up to filter exactly one gene. */
-htmlPageSetVar(page, NULL, accFilter, geneList->name);
-htmlPageSetVar(page, NULL, searchVarName, geneList->name);
-serialSubmit(&page, NULL, org, db, NULL, NULL,
-        "accOneFilterSubmit", "Submit", "on");
-if (page == NULL)
-    return;
-
-/* Make sure really got one gene. */
-rowCount = nearCountRows(page);
-if (rowCount != 1)
     {
-    qaStatusSoftError(nearTestList->status, 
-    	"Acc exact filter returned %d items", rowCount);
+    htmlPageSetVar(page, NULL, accFilter, geneList->name);
+    htmlPageSetVar(page, NULL, searchVarName, geneList->name);
+    serialSubmit(&page, NULL, org, db, accColumn, geneList->name,
+	    "accOneFilterSubmit", "Submit", "on");
+    if (page == NULL)
+	return;
+
+    /* Make sure really got one gene. */
+    rowCount = nearCountRows(page);
+    if (rowCount != 1)
+	{
+	qaStatusSoftError(nearTestList->status, 
+	    "Acc exact filter returned %d items", rowCount);
+	}
     }
 
 /* Set up filter for all genes in list. */
@@ -559,18 +561,39 @@ if (rowCount != 1)
     for (gene = geneList; gene != NULL; gene = gene->next)
 	dyStringPrintf(dy, "%s ", gene->name);
     htmlPageSetVar(page, NULL, accFilter, dy->string);
-    dyStringFree(&dy);
-    serialSubmit(&page, NULL, org, db, NULL, NULL,
+    serialSubmit(&page, NULL, org, db, accColumn, dy->string,
 	    "accMultiFilterSubmit", "Submit", "on");
+    dyStringFree(&dy);
     if (page == NULL)
 	return;
     rowCount = nearCountRows(page);
     if (rowCount != geneCount)
 	{
 	qaStatusSoftError(nearTestList->status, 
-	    "Acc multi filter expecting %d, tog %d items", geneCount, rowCount);
+	    "Acc multi filter expecting %d, got %d items", geneCount, rowCount);
 	}
     }
+
+/* Set up filter for wildcard in list. */
+    {
+    struct dyString *dy = newDyString(0);
+    char len = strlen(geneList->name);
+    dyStringAppendN(dy, geneList->name, len-1);
+    dyStringAppendC(dy, '*');
+    htmlPageSetVar(page, NULL, accFilter, dy->string);
+    serialSubmit(&page, NULL, org, db, accColumn, dy->string,
+	    "accWildFilterSubmit", "Submit", "on");
+    dyStringFree(&dy);
+    if (page == NULL)
+	return;
+    rowCount = nearCountRows(page);
+    if (rowCount < 1)
+	{
+	qaStatusSoftError(nearTestList->status, 
+	    "Acc wild filter no match");
+	}
+    }
+
 
 /* Clear out advanced filters. */
     {
@@ -722,6 +745,7 @@ else
 	}
     }
 htmlPageFree(&rootPage);
+slReverse(&nearTestList);
 reportSummary(nearTestList, stdout);
 reportAll(nearTestList, f);
 fprintf(f, "---------------------------------------------\n");
