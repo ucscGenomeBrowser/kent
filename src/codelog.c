@@ -659,3 +659,4 @@
 400 - gfServer takes tileSize and minMatch command line parameters.  Various
       other Intronerator update stuff.  Made hgBlat produce big input
       box.
+401 - (Not yet saved) fixed Y chromosome bug in assembly.
