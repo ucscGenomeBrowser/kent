@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.152 2004/11/17 23:37:13 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.153 2004/12/08 20:03:59 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -721,7 +721,11 @@ else
 hFreeConn(&conn);
 return ret;
 }
-static struct psl *findAllAli(char *acc, char *lowerType)
+
+static struct psl *findAllAli(char *acc, char *lowerType, boolean *retIsXeno)
+/* Return a list of alignmentts to the given accession.  lowerType tells 
+ * whether to look in mrna or est tables; if acc is found in a xeno table, 
+ * set *retIsXeno to TRUE. */
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
@@ -730,13 +734,6 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char **tables, *table;
-
-/*
-if (type[0] == 0)
-   /* older databases have empty column for xeno mrna's ?
-   table = "xenoMrna";
-else
-*/
 
 if (sameWord(lowerType, "mrna"))
     tables = mrnaTables;
@@ -760,8 +757,17 @@ while ((table = *tables++) != NULL)
             slAddTail(&pslList, psl);
             }
         if (pslList != NULL) 
+	    {
+	    if (retIsXeno != NULL)
+		{
+		if (startsWith("xeno", table))
+		    *retIsXeno = TRUE;
+		else
+		    *retIsXeno = FALSE;
+		}
             /* for speed -- found proper table, so don't need to look farther */
             break;
+	    }
 	}
     }
 hFreeConn(&conn);
@@ -817,10 +823,11 @@ else
     struct hgPosTable *table;
     struct hgPos *pos;
     char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+    boolean isXeno = FALSE;
 
     strncpy(suffix, type, sizeof(suffix));
     tolowers(suffix);
-    pslList = psl = findAllAli(acc, suffix);
+    pslList = psl = findAllAli(acc, suffix, &isXeno);
     pslCount = slCount(pslList);
     if (pslCount <= 0)
 	return FALSE;
@@ -828,13 +835,14 @@ else
         {
 	struct dyString *dy = newDyString(1024);
 	
-        if (NULL == type)
+        if (isXeno)
             {
-            strncpy(tableName, "xenoMrna", sizeof(tableName));
+	    safef(tableName, sizeof(tableName), "xeno%s", suffix);
+	    toUpperN(tableName+strlen("xeno"), 1);
             }
         else
             {
-            snprintf(tableName, sizeof(tableName), "%s", suffix);      
+            safef(tableName, sizeof(tableName), "%s", suffix);      
             }
 
 	AllocVar(table);
