@@ -444,6 +444,13 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
 /* Draw evenly spaced letters in string. */
 
+void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
+                        Color color, MgFont *font, char *s, char *match,
+                        int count);
+/* Draw evenly spaced letters in string.  For multiple alignments,
+ * supply a non-NULL match string, and then matching letters will be colored
+ * with the main color, mismatched letters will have alt color */
+
 void contigMethods(struct track *tg);
 /* Make track for contig */
 

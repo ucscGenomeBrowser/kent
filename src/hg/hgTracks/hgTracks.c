@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.676 2004/02/27 06:43:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.677 2004/02/28 01:27:20 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6029,13 +6029,29 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, char *s, int count)
-/* Draw evenly spaced letters in string. */
+Color lighterColor(struct vGfx *vg, Color color)
+/* Get lighter shade of a color */ 
+{
+struct rgbColor rgbColor =  vgColorIxToRgb(vg, color);
+rgbColor.r = (rgbColor.r+255)/2;
+rgbColor.g = (rgbColor.g+255)/2;
+rgbColor.b = (rgbColor.b+255)/2;
+return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
+                        Color color, MgFont *font, char *s, char *match,
+                        int count)
+/* Draw evenly spaced letters in string.  For multiple alignments,
+ * supply a non-NULL match string, and then matching letters will be colored
+ * with the main color, mismatched letters will have alt color */
 {
 char c[2];
 int i;
 int x1,x2;
+
+Color noMatchColor = lighterColor(vg, color);
+Color clr;
 
 c[1] = 0;	/* Put zero tag on string. */
 for (i=0; i<count; ++i)
@@ -6043,8 +6059,19 @@ for (i=0; i<count; ++i)
     x1 = i * width / count;
     x2 = (i+1) * width/count;
     c[0] = s[i];
-    vgTextCentered(vg,x1+x,y,x2-x1,height,color,font,c);
+    clr = color;
+    if (match != NULL && match[i])
+        if (s[i] != match[i])
+            clr = noMatchColor;
+    vgTextCentered(vg,x1+x,y,x2-x1,height,clr,font,c);
     }
+}
+
+void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+	                Color color, MgFont *font, char *s, int count)
+/* Draw evenly spaced letters in string. */
+{
+    spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
