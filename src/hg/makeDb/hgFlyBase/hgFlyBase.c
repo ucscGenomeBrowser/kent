@@ -53,7 +53,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.3 2003/10/28 20:15:38 kent Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.4 2003/10/29 06:35:32 kent Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -220,6 +220,16 @@ sqlRemakeTable(conn, "fbGene",
 "    INDEX(geneName(12))\n"
 ")\n");
 
+sqlRemakeTable(conn, "fbTranscript", 
+"#Links FlyBase gene IDs and BDGP transcripts\n"
+"CREATE TABLE fbTranscript (\n"
+"    geneId varchar(255) not null,	# FlyBase ID\n"
+"    transcriptId varchar(255) not null,	# BDGP Transcript ID\n"
+"              #Indices\n"
+"    PRIMARY KEY(transcriptId(11)),\n"
+"    INDEX(transcriptId(11))\n"
+")\n");
+
 sqlRemakeTable(conn, "fbSynonym", 
 "#Links all the names we call a gene to it's flybase ID\n"
 "CREATE TABLE fbSynonym (\n"
@@ -273,6 +283,70 @@ sqlRemakeTable(conn, "fbPhenotype",
 ")\n");
 }
 
+struct geneAlt
+/* Gene and list of isoforms. */
+    {
+    struct geneAlt *next;
+    char *fbName;		/* Flybase gene name. */
+    char *bdgpName;		/* BDGP Gene name. */
+    struct slName *isoformList;	/* List of BDGP isoforms. */
+    };
+
+void getAllSplices(char *database, FILE *f)
+/* Write out table linking flybase genes with BDGP
+ * transcripts. */
+{
+struct slName *geneList = NULL, *gene;
+struct sqlConnection *conn = sqlConnect(database);
+struct sqlResult *sr;
+char query[256], **row;
+struct geneAlt *altList = NULL, *alt;
+struct hash *bdgpHash = newHash(16);	/* Keyed by bdgp gene id. */
+struct slName *n;
+
+/* First build up list of all genes with flybase and bdgp ids. */
+safef(query, sizeof(query), "select bdgpName,flyBaseId from bdgpGeneInfo");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(alt);
+    alt->bdgpName = cloneString(row[0]);
+    alt->fbName = cloneString(row[1]);
+    slAddHead(&altList, alt);
+    hashAdd(bdgpHash, alt->bdgpName, alt);
+    }
+sqlFreeResult(&sr);
+slReverse(&altList);
+
+/* Now associate splicing variants. */
+safef(query, sizeof(query), "select name from bdgpGene");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *s = row[0];
+    char *e = strchr(row[0], '-');
+    int size = e - s;
+    char bdgpGene[16];
+    if (size >= sizeof(bdgpGene))
+        errAbort("'%s' too big", s);
+    memcpy(bdgpGene, s, size);
+    bdgpGene[size] = 0;
+    alt = hashFindVal(bdgpHash, bdgpGene);
+    n = slNameNew(s);
+    slAddTail(&alt->isoformList, n);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+
+for (alt = altList; alt != NULL; alt = alt->next)
+    {
+    for (n = alt->isoformList; n != NULL; n = n->next)
+	fprintf(f, "%s\t%s\n", alt->fbName, n->name);
+    }
+freeHash(&bdgpHash);
+}
+
+
 void hgFlyBase(char *database, char *genesFile)
 /* hgFlyBase - Parse FlyBase genes.txt file and turn it into a couple of 
  * tables. */
@@ -283,12 +357,14 @@ char *tAllele = "fbAllele";
 char *tRef = "fbRef";
 char *tRole = "fbRole";
 char *tPhenotype = "fbPhenotype";
+char *tTranscript = "fbTranscript";
 FILE *fGene = hgCreateTabFile(tabDir, tGene);
 FILE *fSynonym = hgCreateTabFile(tabDir, tSynonym);
 FILE *fAllele = hgCreateTabFile(tabDir, tAllele);
 FILE *fRef = hgCreateTabFile(tabDir, tRef);
 FILE *fRole = hgCreateTabFile(tabDir, tRole);
 FILE *fPhenotype = hgCreateTabFile(tabDir, tPhenotype);
+FILE *fTranscript = hgCreateTabFile(tabDir, tTranscript);
 struct lineFile *lf = lineFileOpen(genesFile, TRUE);
 struct hash *refHash = newHash(19);
 int nextRefId = 0;
@@ -300,6 +376,9 @@ struct slName *synList = NULL, *syn;
 int curAllele = 0, curRef = 0;
 struct ref *ref = NULL;
 struct sqlConnection *conn;
+
+/* Make table from flybase genes to BGDP transcripts. */
+getAllSplices(database, fTranscript);
 
 /* Make dummy reference for flybase itself. */
 fprintf(fRef, "0\tFlyBase\n");
@@ -419,6 +498,8 @@ if (doLoad)
     {
     printf("Loading %s\n", tGene);
     hgLoadTabFile(conn, tabDir, tGene, &fGene);
+    printf("Loading %s\n", tTranscript);
+    hgLoadTabFile(conn, tabDir, tTranscript, &fTranscript);
     printf("Loading %s\n", tSynonym);
     hgLoadTabFile(conn, tabDir, tSynonym, &fSynonym);
     printf("Loading %s\n", tAllele);
@@ -430,6 +511,7 @@ if (doLoad)
     printf("Loading %s\n", tPhenotype);
     hgLoadTabFile(conn, tabDir, tPhenotype, &fPhenotype);
     hgRemoveTabFile(tabDir, tGene);
+    hgRemoveTabFile(tabDir, tTranscript);
     hgRemoveTabFile(tabDir, tSynonym);
     hgRemoveTabFile(tabDir, tAllele);
     hgRemoveTabFile(tabDir, tRef);
