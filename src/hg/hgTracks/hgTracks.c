@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.640 2003/12/11 16:41:59 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.641 2003/12/17 20:40:57 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7142,8 +7142,11 @@ if (!hideControls)
     hButton("hgt.dinkRR", " > ");
     hPrintf("<TR></TABLE>\n");
     smallBreak();
+    hPrintf("</FORM>\n");
 
     /* Display bottom control panel. */
+    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+    cartSaveSession(cart);
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
@@ -7172,7 +7175,9 @@ if (!hideControls)
     // smallBreak();
     // hPrintf("<B>Track Controls:</B>");
     // hPrintf("</th></tr>\n");
-    hPrintf("<tr><td colspan='5' align='middle' nowrap>Note: "
+    hPrintf("<tr><td colspan='5' align='middle' nowrap>"
+	   "Use drop down controls below and press refresh to alter tracks "
+	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
@@ -7219,6 +7224,7 @@ if (!hideControls)
 	}
     endControlGrid(&cg);
     }
+hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
 
 
