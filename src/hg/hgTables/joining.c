@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.12 2004/07/17 18:29:10 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.13 2004/07/17 19:35:13 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -697,15 +697,15 @@ tableJoinerFreeList(&tjList);
 return joined;
 }
 
-void tabOutFields(
+void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
 	struct slName *fieldList)	/* List of db.table.field */
-/* Do tab-separated output. */
+/* Do tab-separated output on selected fields, which may
+ * or may not include multiple tables. */
 {
 struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
 
-carefulCheckHeap();
 if (joinerDtfAllSameTable(dtfList))
     {
     struct sqlConnection *conn = sqlConnect(dtfList->database);
@@ -717,17 +717,12 @@ if (joinerDtfAllSameTable(dtfList))
 else
     {
     struct joiner *joiner = joinerRead("all.joiner");
-    carefulCheckHeap();
     struct joinedTables *joined = joinedTablesCreate(joiner, 
     	primaryDb, primaryTable, dtfList, 1000000);
-    carefulCheckHeap();
     joinedTablesTabOut(joined);
-    carefulCheckHeap();
     joinedTablesFree(&joined);
-    carefulCheckHeap();
     }
 joinerDtfFreeList(&dtfList);
-carefulCheckHeap();
 }
 
 void doTest(struct sqlConnection *conn)
@@ -753,13 +748,13 @@ slAddTail(&fieldList, field);
 
 field = slNameNew("hg16.ensGene.name");
 slAddTail(&fieldList, field);
-field = slNameNew("hg16.ensGtp.protein");
+field = slNameNew("hg16.kgXref.description");
 slAddTail(&fieldList, field);
 // field = slNameNew("hg16.ensGtp.gene");
 // slAddTail(&fieldList, field);
 
 textOpen();
-tabOutFields("hg16", "ensGene", fieldList);
+tabOutSelectedFields("hg16", "ensGene", fieldList);
 }
 
 

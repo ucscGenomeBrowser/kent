@@ -102,6 +102,14 @@ struct hTableInfo *getHti(char *db, char *table);
 boolean htiIsPositional(struct hTableInfo *hti);
 /* Return TRUE if hti looks like it's from a positional table. */
 
+/* ------------- Functions related to joining ------------*/
+void tabOutSelectedFields(
+	char *primaryDb,		/* The primary database. */
+	char *primaryTable, 		/* The primary table. */
+	struct slName *fieldList);	/* List of db.table.field */
+/* Do tab-separated output on selected fields, which may
+ * or may not include multiple tables. */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from
