@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.11 2003/12/24 06:52:32 markd Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.12 2003/12/24 07:27:46 markd Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -277,7 +277,7 @@ size_t aliSize;
 
 if (newAlloced > carefulMaxToAlloc)
     errAbort("Allocated too much memory - more than %ld bytes", carefulMaxToAlloc);
- carefulAlloced = newAlloced;
+carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);
 cmb->size = size;
@@ -315,6 +315,7 @@ if (vpt != NULL)
     {
     struct carefulMemBlock *cmb = ((struct carefulMemBlock *)vpt)-1;
     memcpy(newBlk, vpt, cmb->size);
+    carefulFree(vpt);
     }
 return newBlk;
 }
