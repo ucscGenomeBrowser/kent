@@ -376,8 +376,7 @@ void doGateway()
 char *oldDb;
 
 position = cartCgiUsualString(cart, "position", hDefaultPos(database));
-webStart(cart, "Table Browser: %s: Choose Organism &amp; Assembly",
-	 freezeName);
+webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
 handleDbChange();
 
@@ -832,7 +831,7 @@ void doChooseTable()
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
 
-webStart(cart, "Table Browser: %s: Choose a table", freezeName);
+webStart(cart, "Table Browser: %s %s: Choose a table", hOrganism(database),freezeName);
 handleDbChange();
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
@@ -1089,7 +1088,7 @@ char *db = getTableDb();
 
 saveChooseTableState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
+webStart(cart, "Table Browser: %s %s: %s",  hOrganism(database),freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
        hgTextName());
@@ -2583,7 +2582,7 @@ boolean clearAll;
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
+webStart(cart, "Table Browser: %s %s: Choose Fields of %s", hOrganism(database),freezeName, table);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
        hgTextName());
@@ -2631,7 +2630,7 @@ char *outputType = cgiUsualString("outputType", cgiString("phase"));
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, seqOptionsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
        hgTextName());
@@ -2900,7 +2899,7 @@ char buf[256];
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
        hgTextName());
@@ -3101,7 +3100,7 @@ int itemCount;
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, linksPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, linksPhase);
 bedList = getBedList(FALSE, NULL);
 
 printf("<H3> Links to Genome Browser from %s </H3>\n", getTableName());
@@ -3154,7 +3153,7 @@ boolean gotFirst;
 
 saveOutputOptionsState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, intersectOptionsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, intersectOptionsPhase);
 checkTableExists(fullTableName);
 if (table2 == NULL)
     webAbort("Missing table selection",
@@ -3306,7 +3305,7 @@ int numRows;
 
 saveOutputOptionsState();
 
-webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, statsPhase);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
        hgTextName());
@@ -3586,7 +3585,7 @@ blockCountStats = needMem((numChroms+1) * sizeof(struct intStats));
 blockSizeArrs = needMem((numChroms+1) * sizeof(int *));
 blockSizeStats = needMem((numChroms+1) * sizeof(struct intStats));
 
-webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, statsPhase);
 checkTableExists(fullTableName);
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
@@ -3974,7 +3973,7 @@ int maxFreq, freq;
 int i;
 double scale;
 
-webStart(cart, "Table Browser: %s: %s", freezeName, histPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, histPhase);
 checkTableExists(fullTableName);
 count = chopLine(phase, words);
 if (count < 4)
