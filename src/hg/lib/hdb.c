@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.180 2004/04/30 05:44:55 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.181 2004/05/12 22:04:53 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -487,23 +487,41 @@ else
     sqlDisconnect(pConn);
 }
 
+static struct sqlConnCache *getCentralCcFromCfg(char *prefix)
+/* Given a prefix for config settings for a central database connection, 
+ * get the settings and make a connection cache for that database. */
+{
+char *database, *host, *user, *password;
+char setting[128];
+safef(setting, sizeof(setting), "%s.db", prefix);
+database = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.host", prefix);
+host = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.user", prefix);
+user = cfgOption(setting);
+safef(setting, sizeof(setting), "%s.password", prefix);
+password = cfgOption(setting);;
+
+if (database == NULL || host == NULL || user == NULL || password == NULL)
+    errAbort("Please set %s options in the hg.conf file.", prefix);
+return sqlNewRemoteConnCache(database, host, user, password);
+}
+
 struct sqlConnection *hConnectCentral()
 /* Connect to central database where user info and other info
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 {
+struct sqlConnection *conn = NULL;
 if (centralCc == NULL)
+    centralCc = getCentralCcFromCfg("central");
+conn = sqlMayAllocConnection(centralCc, FALSE);
+if (conn == NULL)
     {
-    char *database = cfgOption("central.db");
-    char *host = cfgOption("central.host");
-    char *user = cfgOption("central.user");
-    char *password = cfgOption("central.password");;
-
-    if (database == NULL || host == NULL || user == NULL || password == NULL)
-	errAbort("Please set central options in the hg.conf file.");
-    centralCc = sqlNewRemoteConnCache(database, host, user, password);
+    centralCc = getCentralCcFromCfg("backupcentral");
+    conn = sqlAllocConnection(centralCc);
     }
-return sqlAllocConnection(centralCc);
+return(conn);
 }
 
 void hDisconnectCentral(struct sqlConnection **pConn)
@@ -517,15 +535,7 @@ struct sqlConnection *hConnectArchiveCentral()
  * Free this up with hDisconnectCentralArchive(). */
 {
 if (centralArchiveCc == NULL)
-    {
-    char *database = cfgOption("archivecentral.db");
-    char *host = cfgOption("archivecentral.host");
-    char *user = cfgOption("archivecentral.user");
-    char *password = cfgOption("archivecentral.password");;
-    if (database == NULL || host == NULL || user == NULL || password == NULL)
-	errAbort("Please set central options in the hg.conf file.");
-    centralArchiveCc = sqlNewRemoteConnCache(database, host, user, password);
-    }
+    centralArchiveCc = getCentralCcFromCfg("archivecentral");
 return sqlAllocConnection(centralArchiveCc);
 }
 
