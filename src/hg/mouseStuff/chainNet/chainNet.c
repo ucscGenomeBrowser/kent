@@ -198,7 +198,7 @@ for (b = startBlock; b != NULL; b = b->next)
     if (s >= inEnd)
         break;
     if (s < inStart) s = inStart;
-    if (e > inEnd) s = inEnd;
+    if (e > inEnd) e = inEnd;
     if (start > s) start = s;
     if (end < e) end = e;
     }
@@ -226,6 +226,8 @@ AllocVar(fill);
 fill->start = s;
 fill->end = e;
 fill->chain = chain;
+//uglyf("fillSpace %s%c%s\n", chain->tName, chain->qStrand, chain->qName);
+//uglyf("  old %d,%d\n", space->start, space->end);
 rbTreeRemove(chrom->spaces, space);
 if (s - space->start >= minSpace)
     {
@@ -234,7 +236,9 @@ if (s - space->start >= minSpace)
     lSpace->start = space->start;
     lSpace->end = s;
     rbTreeAdd(chrom->spaces, lSpace);
+ //   uglyf("  left %d,%d\n", lSpace->start, lSpace->end);
     }
+//uglyf("  mid %d,%d\n", fill->start, fill->end);
 if (space->end - e >= minSpace)
     {
     AllocVar(rSpace);
@@ -242,6 +246,7 @@ if (space->end - e >= minSpace)
     rSpace->start = e;
     rSpace->end = space->end;
     rbTreeAdd(chrom->spaces, rSpace);
+//    uglyf("  right %d,%d\n", rSpace->start, rSpace->end);
     }
 slAddHead(&space->gap->fillList, fill);
 return fill;
@@ -321,7 +326,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 		slAddHead(&fill->gapList, gap);
 		}
 	    }
-	freez(&ref->val);
+	freez(&ref->val);	/* aka space */
 	}
     }
 slFreeList(&spaceList);
@@ -379,7 +384,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 		slAddHead(&fill->gapList, gap);
 		}
 	    }
-	freez(&ref->val);
+	freez(&ref->val);	/* aka space */
 	}
     }
 slFreeList(&spaceList);
