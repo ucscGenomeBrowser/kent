@@ -56,9 +56,11 @@ errAbort("psLayout - generate alignments for contig layout programs.\n"
 	 "    genomeListFile - A text file containing a list of .fa files that are\n"
 	 "        generally genomic.  This may contain up to 5 million bases total.\n"
 	 "        The program expects a .fa.out file (from RepeatMasker) to exist\n"
-	 "        for each .fa file in the genomeListFile.\n"
+	 "        for each .fa file in the genomeListFile.  This parameter can\n"
+	 "        also just be a .fa file.\n"
 	 "    otherListFile - A text file containing a list of .fa files that may be\n"
-	 "        genomic or mRNA. These may be of unlimited size\n"
+	 "        genomic or mRNA. These may be of unlimited size.  This parameter can\n"
+	 "        also just be a .fa file.\n"
 	 "    type - either the word 'mRNA' or 'genomic' depending on whether\n"
 	 "        you want to allow introns in the alignment or not. g2g is like\n"
 	 "        genomic but only puts out very tight matches. asm is like genomic\n"
@@ -362,6 +364,31 @@ for (i=0; i<oldCount; ++i)
 *pFileCount = okFileCount;
 }
 
+void readAllWordsOrFa(char *fileName, char ***retFiles, int *retFileCount, 
+   char **retBuf)
+/* Open a file and check if it is .fa.  If so return just that
+ * file in a list of one.  Otherwise read all file and treat file
+ * as a list of filenames.  */
+{
+FILE *f = mustOpen(fileName, "r");
+char c = fgetc(f);
+
+fclose(f);
+if (c == '>')
+    {
+    char **files;
+    *retFiles = AllocArray(files, 1);
+    *retBuf = files[0] = cloneString(fileName);
+    *retFileCount = 1;
+    return;
+    }
+else
+    {
+    readAllWordsOrFa(fileName, retFiles, retFileCount, retBuf);
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
 char *genoListName;
@@ -451,7 +478,7 @@ else
     usage();
     }
 
-readAllWords(genoListName, &genoList, &genoListSize, &genoListBuf);
+readAllWordsOrFa(genoListName, &genoList, &genoListSize, &genoListBuf);
 filterMissingFiles(genoList, &genoListSize);
 if (genoListSize <= 0)
     errAbort("There are no files that exist in %s\n", genoListName);
