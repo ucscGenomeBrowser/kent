@@ -19,6 +19,7 @@
 
 boolean isFromWeb;          /* True if run as CGI. */
 boolean isMotifMatcher;     /* True if run from motifMatcher.html. */
+FILE *htmlOut;		    /* Where to send output. */
 
 int scaleShift = 13;
 int slogScale = 8192;
@@ -66,6 +67,11 @@ vaProgress(format, args);
 va_end(args);
 }
 
+void horizontalLine()
+/* Make horizontal line across html. */
+{
+fprintf(htmlOut, "<P><HR ALIGN=\"CENTER\"></P>");
+}
 
 char *amemeDir()
 /* Return directory name ameme files are in. */
@@ -78,7 +84,7 @@ if (!initted)
     initted = TRUE;
     if ((jkwebDir = getenv("JKWEB")) == NULL)
         jkwebDir = "";
-    sprintf(dir, "%sameme.dir", jkwebDir);
+    snprintf(dir, sizeof(dir), "%sameme.dir", jkwebDir);
     firstWordInFile(dir, dir, sizeof(dir));
     }
 return dir;
@@ -288,7 +294,7 @@ if (nullModel == nmCoding)
     {
     char codFileName[512];
     struct codonBias *cb;
-    sprintf(codFileName, "%s%s", amemeDir(), "ce.cod");
+    snprintf(codFileName, sizeof(codFileName), "%s%s", amemeDir(), "ce.cod");
     cb = codonLoadBias(codFileName);
     for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
         {
@@ -1792,7 +1798,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
     }
 progress("\n");
 slSort(&profileList, cmpProfiles);
-htmlHorizontalLine();
+horizontalLine();
 return profileList;
 }
 
@@ -1970,33 +1976,33 @@ void dumpMark2Table(double mark2Table[5][5][5], int slogMark2Table[5][5][5], cha
 {
 int i,j,k;
 
-printf("<PRE><TT>\n%s\n", name);
+fprintf(htmlOut, "<PRE><TT>\n%s\n", name);
 for (i=1; i<5; ++i)
     {
     for (j=1; j<5; ++j)
         {
         for (k=1; k<5; ++k)
             {
-            printf("%1.3f ", mark2Table[i][j][k]);
+            fprintf(htmlOut, "%1.3f ", mark2Table[i][j][k]);
             }
-        printf("   ");
+        fprintf(htmlOut, "   ");
         }
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
-printf("\n");
+fprintf(htmlOut, "\n");
 for (i=1; i<5; ++i)
     {
     for (j=1; j<5; ++j)
         {
         for (k=1; k<5; ++k)
             {
-            printf("%6d ", slogMark2Table[i][j][k]);
+            fprintf(htmlOut, "%6d ", slogMark2Table[i][j][k]);
             }
-        printf("   ");
+        fprintf(htmlOut, "   ");
         }
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
-printf("\n");
+fprintf(htmlOut, "\n");
 }
 #endif /* JUSTDEBUG */
 
@@ -2069,7 +2075,7 @@ for (el = seqList; el != NULL; el = el->next)
             bestScore = score;
         }
     freePositionList(&posList);
-    printf("%5.2f %-*s %s\n", invSlogScale*totalScore, nameSize, seq->name, uppered);
+    fprintf(htmlOut, "%5.2f %-*s %s\n", invSlogScale*totalScore, nameSize, seq->name, uppered);
     }
 freeMem(uppered);
 *retBestScore = bestScore;
@@ -2159,15 +2165,15 @@ for (repIx = 0; repIx < repCount; ++repIx)
     progress("\n");
     slSort(&newList, cmpProfiles);
     bestProf = newList;
-    printProfile(stdout,bestProf);
+    printProfile(htmlOut,bestProf);
     if (logFile)
         printProfile(logFile, bestProf);
-    htmlHorizontalLine();
+    horizontalLine();
     if (considerRc)
         rcProf = rcProfileCopy(bestProf);
     showProfHits(bestProf, rcProf, goodSeq, goodSeqElSize, goodSeqNameSize, &bestProf->bestIndividualScore);
     writeProfile(f, bestProf);
-    htmlHorizontalLine();
+    horizontalLine();
     maskProfileFromSeqList(bestProf, rcProf, goodSeq, goodSeqElSize);
     freeProfile(&rcProf);
     freeProfileList(&profList);
@@ -2304,8 +2310,8 @@ if (color.r != lastColor.r || color.b != lastColor.b || color.g != lastColor.g)
     if (firstTextColorSwitch)
         firstTextColorSwitch = FALSE;
     else
-        printf("</FONT>");
-    printf("<FONT COLOR=#%02X%02X%02X>",color.r, color.g, color.b);
+        fprintf(htmlOut, "</FONT>");
+    fprintf(htmlOut, "<FONT COLOR=#%02X%02X%02X>",color.r, color.g, color.b);
     lastColor = color;
     }
 }
@@ -2321,10 +2327,11 @@ void colorTextOut(char c, struct rgbColor color)
 /* Print out one character in color to html file. */
 {
 setFontColor(color);
-fputc(c, stdout);
+fputc(c, htmlOut);
 }
 
-void colorProfiles(struct profile *profList, struct seqList *seqList, int seqSize, boolean considerRc)
+void colorProfiles(struct profile *profList, struct seqList *seqList, 
+	int seqSize, boolean considerRc)
 /* Display profiles in color on sequences. */
 {
 int profCount = slCount(profList);
@@ -2355,6 +2362,7 @@ int coff;
 Color mappedCol;
 int x1, x2;
 struct tempName gifTn;
+char *gifName = cgiOptionalString("gif");
 struct position ***posMatrix;
 struct position *pos, *posList;
 int nameSize = maxSeqNameSize(seqList);
@@ -2389,18 +2397,18 @@ for (i=0,prof=profList; prof != NULL; ++i,prof=prof->next)
     freeProfile(&rcProf);
     }
 
-printf("<H3>Color Coding for Profiles</H3>\n");
+fprintf(htmlOut, "<H3>Color Coding for Profiles</H3>\n");
 for (colorIx = 0, prof = profList; prof != NULL; prof = prof->next)
     {
     setFontColor(distinctColors[colorIx]);
-    printProfile(stdout, prof);
+    printProfile(htmlOut, prof);
     colorIx = (colorIx+1)%ArraySize(distinctColors);
     };
 blackText();
-htmlHorizontalLine();
+horizontalLine();
 
-printf("<H3>Colored Text View of Profiles</H3>\n");
-printf("Different colors represent different profiles. Darker colors\n"
+fprintf(htmlOut, "<H3>Colored Text View of Profiles</H3>\n");
+fprintf(htmlOut, "Different colors represent different profiles. Darker colors\n"
        "represent stronger matches to profile.\n\n");
 
 /* Want to draw most significant last. */
@@ -2461,7 +2469,7 @@ for (seqEl=seqList,i=0; seqEl != NULL; seqEl=seqEl->next,i+=1)
             }
         }
     blackText();
-    printf("%-*s ", nameSize, seq->name);
+    fprintf(htmlOut, "%-*s ", nameSize, seq->name);
     for (j=0; j<seqSize; ++j)
         {
         DNA base = dna[j];
@@ -2470,21 +2478,25 @@ for (seqEl=seqList,i=0; seqEl != NULL; seqEl=seqEl->next,i+=1)
         colorTextOut(base, colors[j]);
         }
     yoff += barHeight + border;
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
 
 /* Tell .html where the gif is. */
-htmlHorizontalLine();
+horizontalLine();
 blackText();
-printf("<H3>Graphical Summary of Profile Hits</H3>\n");
-printf("Colors represent different profiles. Darker colors represent\n"
+fprintf(htmlOut, "<H3>Graphical Summary of Profile Hits</H3>\n");
+fprintf(htmlOut, "Colors represent different profiles. Darker colors represent\n"
        "stronger matches to profile.\n");
-makeTempName(&gifTn, "imp", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
-chmod(gifTn.forCgi, 0666);
+if (gifName == NULL)
+    {
+    makeTempName(&gifTn, "imp", ".gif");
+    gifName = gifTn.forCgi;
+    }
+mgSaveGif(mg, gifName);
+chmod(gifName, 0666);
 mgFree(&mg);
-printf("<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",
-    gifTn.forCgi, pixWidth, pixHeight);
+fprintf(htmlOut, "<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",
+    gifName, pixWidth, pixHeight);
 
 freeMem(colors);
 
@@ -2524,8 +2536,16 @@ return rand() * randScale;
 void initRandom()
 /* Initialize random number generator */
 {
-/* Set up random number generator. */
-srand( (unsigned)time( NULL ) );
+/* Set up random number generator with seed depending on time and host. */
+unsigned seed = (unsigned)time(NULL);
+char *host = getenv("HOST");
+if (host == NULL)
+    host = getenv("JOB_ID");
+uglyf("host = %s\n", host); /* uglyf */
+fprintf(htmlOut, "host = %p\n", host); /* uglyf */
+if (host != NULL)
+    seed += hashCrc(host);
+srand(seed);
 randScale = 1.0/RAND_MAX;
 }
 
@@ -2690,33 +2710,34 @@ goodSeqNameSize = maxSeqNameSize(goodSeq);
 
 makeTempName(&tn, "imp", ".pfl");
 
-printf("<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n", 
+fprintf(htmlOut, "<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n", 
     numMotifs, goodSeqListSize, goodSeqElSize);
-printf("<P>Settings are %s location; %sinclude reverse complement; %d occurrences per sequence; %s align; ", 
+fprintf(htmlOut, "<P>Settings are %s location; %sinclude reverse complement; %d occurrences per sequence; %s align; ", 
     (useLocation ? "use" : "ignore"), 
     (considerRc ? "" : "don't "), maxOcc,
     (leftAlign ? "left" : "right") );
-printf("restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",
+fprintf(htmlOut, "restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",
     constrainer, startScanLimit);
 backgroundName = bgSource;
 if (backgroundName == NULL)
     backgroundName = badName;
 if (backgroundName == NULL)
     backgroundName = "same as foreground";
-printf("background model %s; background data %s;</P>", 
+fprintf(htmlOut, "background model %s; background data %s;</P>", 
     (nullModelCgiName == NULL ? "Markov 0" : nullModelCgiName),
     backgroundName);
     
 approxTime = calcApproximateTime(considerRc);
 progress("This run would take about %2.2f minutes on a lightly loaded vintage 1999 web server.",
     approxTime);
-printf("<TT><PRE>\n");
-htmlHorizontalLine();
+fprintf(htmlOut, "<TT><PRE>\n");
+horizontalLine();
 
 doTopTiles(numMotifs, tn.forCgi, logFile, considerRc);
 
 loadAndColorProfiles(tn.forCgi, goodSeq, goodSeqElSize, considerRc);
-printf("</TT></PRE>\n");
+remove(tn.forCgi);
+fprintf(htmlOut, "</TT></PRE>\n");
 
 freeSeqList(&goodSeq);
 }
@@ -2732,7 +2753,7 @@ int i;
 
 makeTempName(&randTn, "rand", ".fa");
 
-printf("<TT><PRE>\n");
+fprintf(htmlOut, "<TT><PRE>\n");
 for (seqLen = 100; seqLen <= 500; seqLen += 100)
     for (seqCount = 100; seqCount <= 100; seqCount += 10)
         {
@@ -2764,7 +2785,7 @@ FILE *motifOutFile = NULL;
 char *motifOutName;
 
 startTime = clock1000();
-printf("<H2>Improbizer Results</H2>\n");
+fprintf(htmlOut, "<H2>Improbizer Results</H2>\n");
 leftAlign = cgiBoolean("leftAlign");
 if (cgiVarExists(nullModelCgi))
     {
@@ -2851,8 +2872,8 @@ if (isControlRun)
     goodName = randomSpoof(goodName);
 if (isRandomTest )
     {
-    puts("<P>Random test mode - this will take a good long time.  Be sure to kill "
-         "the process if you get impatient.</P>\n");
+    fprintf(htmlOut, "<P>Random test mode - this will take a good long time.  Be sure to kill "
+         "the process if you get impatient.</P>\n\n");
     doRandomTest(premade, considerRc);
     }
 else
@@ -2877,7 +2898,7 @@ else
                numMotifs, startScanLimit
                );
         }
-    puts("<P>Improbizer will display the results in parts.  First it will "
+    fprintf(htmlOut, "<P>Improbizer will display the results in parts.  First it will "
          "display the profiles (consensus sequences with the probability of "
          "each base at each position) individually as they are calculated. The "
          "position of a profile in a sequence is indicated by upper case. The "
@@ -2888,12 +2909,14 @@ else
          "has it's own color and the stronger the profile matches the darker "
          "it will appear in the sequence. Finally there will be a graphic "
          "summary of all the profiles at the end, using the same color "
-         "conventions.</P>");
+         "conventions.</P>\n");
     oneSearchSet(premade, motifOutFile, considerRc);
     endTime = clock1000();
-    htmlHorizontalLine();
-    printf("Calculation time was %4.3f minutes\n", 0.001*(endTime-startTime)/60);
+    horizontalLine();
+    fprintf(htmlOut, "Calculation time was %4.3f minutes\n", 0.001*(endTime-startTime)/60);
     }
+if (isControlRun)
+    remove(goodName);
 }
 
 void explainMotif()
@@ -3095,7 +3118,7 @@ char *seqFileName;
 
 if ((motifOutName = cgiOptionalString("motifOutput")) != NULL)
     motifOutFile = mustOpen(motifOutName, "w"); 
-printf("<TT><PRE>");
+fprintf(htmlOut, "<TT><PRE>");
 
 /* Get some CGI variables. */
 if (cgiVarExists("maxOcc"))
@@ -3138,7 +3161,7 @@ else
     /* Collect the motifs that are actually present into an array. */
     for (i=1; i<=ArraySize(rawMotifs); ++i)
         {
-        sprintf(motifVarName, "motif%d", i);
+        snprintf(motifVarName, sizeof(motifVarName), "motif%d", i);
         rawMotifs[motifCount] = rm = cgiString(motifVarName);
         if ((prof = parseMotifs(rm, useLocation)) != NULL)
             {
@@ -3159,14 +3182,14 @@ for (prof = profList; prof != NULL; prof = prof->next)
     if (considerRc)
         rcProf = rcProfileCopy(prof);
     prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, NULL, NULL, FALSE);  
-    htmlHorizontalLine();
-    printProfile(stdout, prof);
+    horizontalLine();
+    printProfile(htmlOut, prof);
     if (motifOutFile)
         printProfile(motifOutFile, prof);
     showProfHits(prof, rcProf, seqList, seqElSize, nameSize, &prof->bestIndividualScore);
     freeProfile(&rcProf);
     }
-htmlHorizontalLine();
+horizontalLine();
 colorProfiles(profList, seqList, seqElSize, considerRc);
 }
 
@@ -3186,17 +3209,18 @@ char *programName;
 
 //pushCarefulMemHandler();
 
+
 initProfileMemory();
 dnaUtilOpen();
 statUtilOpen();
-initRandom();
 
 isFromWeb = cgiIsOnWeb();
+
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     {
     errAbort("ameme - find common patterns in DNA\n"
              "usage\n"
-             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName]\n"
+             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif]\n"
              "where goodIn.fa is a multi-sequence fa file containing instances\n"
 	     "of the motif you want to find, badIn.fa is a file containing similar\n"
 	     "sequences but lacking the motif, numMotifs is the number of motifs\n"
@@ -3205,6 +3229,17 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 	     "expect to find in a single sequence and motifOutput is the name of a"
              "file to store just the motifs in.\n");
     }
+
+/* Figure out where to put html output. */
+if (cgiVarExists("html"))
+    {
+    char *fileName = cgiString("html");
+    htmlOut = mustOpen(fileName, "w");
+    }
+else
+    htmlOut = stdout;
+    
+initRandom(); /* This one needs to be after htmlOut set up. */
 
 /* Figure out if we're going to find a pattern in sequences, or just display
  * where a pre-computed pattern occurs in sequences. */
@@ -3215,16 +3250,20 @@ else
     programName = "Improbizer";
 
 /* Print out html header.  Make background color brilliant white. */
-puts("Content-Type:text/html\n");
-printf("<HEAD>\n<TITLE>%s Results</TITLE>\n</HEAD>\n\n", programName);
-puts("<BODY BGCOLOR=#FFFFFF>\n");
+if (isFromWeb)
+    puts("Content-Type:text/html\n");
+fprintf(htmlOut, "<HEAD>\n<TITLE>%s Results</TITLE>\n</HEAD>\n\n", programName);
+fprintf(htmlOut, "<BODY BGCOLOR=#FFFFFF>\n\n");
 
 /* Wrap error handling et. around doMiddle. */
-htmEmptyShell(doMiddle, NULL);
+if (isFromWeb)
+    htmEmptyShell(doMiddle, NULL);
+else
+   doMiddle();
 
 //carefulCheckHeap();
 
 /* Write end of html. */
-htmlEnd();
+htmEnd(htmlOut);
 return 0;
 }
