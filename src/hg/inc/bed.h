@@ -168,6 +168,7 @@ enum charFilterType
     cftSingleLiteral = 1,
     cftMultiLiteral = 2,
     };
+
 enum stringFilterType
     {
     sftIgnore = 0,
@@ -176,6 +177,7 @@ enum stringFilterType
     sftSingleRegexp = 3,
     sftMultiRegexp = 4,
     };
+
 enum numericFilterType
     {
     nftIgnore = 0,
@@ -188,6 +190,7 @@ enum numericFilterType
     nftInRange = 7,
     nftNotInRange = 8,
     };
+
 struct bedFilter
     {
     enum stringFilterType chromFilter;
@@ -218,6 +221,9 @@ struct bedFilter
     enum numericFilterType compareStartsFilter;
     enum numericFilterType compareEndsFilter;
     };
+
+boolean bedFilterOne(struct bedFilter *bf, struct bed *bed);
+/* Return TRUE if bed passes filter. */
 
 struct bed *bedFilterListInRange(struct bed *bedListIn, struct bedFilter *bf,
 				 char *chrom, int winStart, int winEnd);

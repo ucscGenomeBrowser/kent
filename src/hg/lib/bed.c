@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.26 2004/04/20 23:00:58 angie Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.27 2004/07/19 17:46:20 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -824,16 +824,60 @@ switch (nft)
 	return(value > *filterValues);
 	break;
     case (nftInRange):
-	return((value >= *filterValues) && (value <= *(filterValues+1)));
+	return((value >= *filterValues) && (value < *(filterValues+1)));
 	break;
     case (nftNotInRange):
-	return(! ((value >= *filterValues) && (value <= *(filterValues+1))));
+	return(! ((value >= *filterValues) && (value < *(filterValues+1))));
 	break;
     default:
 	errAbort("illegal numericFilterType: %d", nft);
 	break;
     }
 return(FALSE);
+}
+
+boolean bedFilterOne(struct bedFilter *bf, struct bed *bed)
+/* Return TRUE if bed passes filter. */
+{
+int cmpValues[2];
+if (bf == NULL)
+    return TRUE;
+if (!filterString(bed->chrom, bf->chromFilter, bf->chromVals, bf->chromInvert))
+    return FALSE;
+if (!filterInt(bed->chromStart, bf->chromStartFilter, bf->chromStartVals))
+    return FALSE;
+if (!filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals))
+    return FALSE;
+if (!filterString(bed->name, bf->nameFilter, bf->nameVals, bf->nameInvert))
+    return FALSE;
+if (!filterInt(bed->score, bf->scoreFilter, bf->scoreVals))
+    return FALSE;
+if (!filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+		    bf->strandInvert))
+    return FALSE;
+if (!filterInt(bed->thickStart, bf->thickStartFilter,
+		    bf->thickStartVals))
+    return FALSE;
+if (!filterInt(bed->thickEnd, bf->thickEndFilter,
+		    bf->thickEndVals))
+    return FALSE;
+if (!filterInt(bed->blockCount, bf->blockCountFilter,
+		    bf->blockCountVals))
+    return FALSE;
+if (!filterInt((bed->chromEnd - bed->chromStart),
+		    bf->chromLengthFilter, bf->chromLengthVals))
+    return FALSE;
+if (!filterInt((bed->thickEnd - bed->thickStart),
+		    bf->thickLengthFilter, bf->thickLengthVals))
+    return FALSE;
+cmpValues[0] = cmpValues[1] = bed->thickStart;
+if (!filterInt(bed->chromStart, bf->compareStartsFilter,
+		    cmpValues))
+    return FALSE;
+cmpValues[0] = cmpValues[1] = bed->thickEnd;
+if (!filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues))
+    return FALSE;
+return TRUE;
 }
 
 struct bed *bedFilterListInRange(struct bed *bedListIn, struct bedFilter *bf,
@@ -843,43 +887,19 @@ struct bed *bedFilterListInRange(struct bed *bedListIn, struct bedFilter *bf,
  * the constraints.  If chrom is NULL, position range is ignored. */
 {
 struct bed *bedListOut = NULL, *bed;
-int cmpValues[2];
 
 for (bed=bedListIn;  bed != NULL;  bed=bed->next)
     {
     boolean passes = TRUE;
     if (chrom != NULL)
+	{
 	passes &= (sameString(bed->chrom, chrom) &&
 		   (bed->chromStart < winEnd) &&
 		   (bed->chromEnd   > winStart));
-    if (bf != NULL)
+        }
+    if (bf != NULL && passes)
 	{
-	passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
-			       bf->chromInvert);
-	passes &= filterInt(bed->chromStart, bf->chromStartFilter,
-			    bf->chromStartVals);
-	passes &= filterInt(bed->chromEnd, bf->chromEndFilter,
-			    bf->chromEndVals);
-	passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
-			       bf->nameInvert);
-	passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
-	passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
-			     bf->strandInvert);
-	passes &= filterInt(bed->thickStart, bf->thickStartFilter,
-			    bf->thickStartVals);
-	passes &= filterInt(bed->thickEnd, bf->thickEndFilter,
-			    bf->thickEndVals);
-	passes &= filterInt(bed->blockCount, bf->blockCountFilter,
-			    bf->blockCountVals);
-	passes &= filterInt((bed->chromEnd - bed->chromStart),
-			    bf->chromLengthFilter, bf->chromLengthVals);
-	passes &= filterInt((bed->thickEnd - bed->thickStart),
-			    bf->thickLengthFilter, bf->thickLengthVals);
-	cmpValues[0] = cmpValues[1] = bed->thickStart;
-	passes &= filterInt(bed->chromStart, bf->compareStartsFilter,
-			    cmpValues);
-	cmpValues[0] = cmpValues[1] = bed->thickEnd;
-	passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+	passes &= bedFilterOne(bf, bed);
 	}
     if (passes)
 	{
