@@ -18,13 +18,20 @@ USE_DIRS = $(DIRS)
 
 BAD_DIRS = \
 	altGraph \
+	autoXml \
+	cgiExample \
+	checkAgpAndFa \
 	geneBounds \
 	geneOverlap \
+	hgBatch \
 	makePai \
 	makeSeqs \
+	maskOutFa \
 	mouseStuff \
 	ooCloneOverlaps \
+	oneShot \
 	orthoMap \
+	pslCrudeCmp \
 	synMap \
 	wikiPlot 
 
@@ -80,7 +87,6 @@ DIRS = \
 	agpToFa \
 	agpToGl \
 	autoSql \
-	autoXml \
 	barger \
 	bedIntersect \
 	bedSort \
@@ -88,8 +94,6 @@ DIRS = \
 	borfBig \
 	cartDump \
 	cartReset \
-	cgiExample \
-	checkAgpAndFa \
 	checkDbSync \
 	checkGoldDupes \
 	checkN \
@@ -125,7 +129,6 @@ DIRS = \
 	gpToGtf \
 	gpcrParser \
 	gsBig \
-	hgBatch \
 	hgBlat \
 	hgCoordConv \
 	hgGateway \
@@ -141,13 +144,11 @@ DIRS = \
 	liftOver \
 	liftUp \
 	makeDb \
-	maskOutFa \
 	mdToNcbiLift \
 	mendMap \
 	mrnaToGene \
 	nci60 \
 	ntGoldGl \
-	oneShot \
 	ooChains \
 	ooCloneEnds \
 	ooCloneInfo \
@@ -164,7 +165,6 @@ DIRS = \
 	pslCat \
 	pslCheck \
 	pslCoverage \
-	pslCrudeCmp \
 	pslDropOverlap \
 	pslFilter \
 	pslGlue \
