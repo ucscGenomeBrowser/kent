@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.34 2005/01/07 21:56:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.35 2005/03/22 21:24:35 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -413,7 +413,8 @@ if (chr)
 if (position)
     {
     char *startEnd[2];
-    char *stripped = stripCommas(position);
+    char *clonePosition = cloneString(position);
+    char *stripped = stripCommas(clonePosition);
     
     /*	allow chrN: or not	*/
     if (2 == chopByChar(stripped, ':', startEnd, 2))
@@ -436,11 +437,16 @@ if (position)
 	}
     if (2 != chopByChar(stripped, '-', startEnd, 2))
 	errAbort("can not parse position: '%s' '%s'", position, stripped);
+    if (sqlSigned(startEnd[0]) < 1)
+	errAbort("ERROR: illegal chromStart: %d in specified position: %s", sqlSigned(startEnd[0]), position);
+    if (sqlSigned(startEnd[1]) < 1)
+	errAbort("ERROR: illegal chromEnd: %d in specified position: %s", sqlSigned(startEnd[1]), position);
     winStart = BASE_0(sqlUnsigned(startEnd[0])); /* !!! 1-relative coming in */
     winEnd = sqlUnsigned(startEnd[1]);
     freeMem(stripped);
     wds->setPositionConstraint(wds, winStart, winEnd);
     verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", BASE_1(wds->winStart), wds->winEnd);
+    freeMem(clonePosition);
     }
 wds->offset = lift;
 if (lift > 0)
