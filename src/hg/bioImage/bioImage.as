@@ -44,6 +44,7 @@ table submissionSet
 "Info on a batch of images submitted at once"
     (
     int id;			"ID of submission set"
+    lstring contributers;	"Comma separated list of contributers in format Kent W.J., Wu F.Y."
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     lstring setUrl;		"URL for whole set"

@@ -58,6 +58,7 @@ CREATE TABLE contributer (
 #Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
+    contributers longblob not null;	# Comma separated list of contributers in format Kent W.J., Wu F.Y.
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     setUrl longblob not null,	# URL for whole set
