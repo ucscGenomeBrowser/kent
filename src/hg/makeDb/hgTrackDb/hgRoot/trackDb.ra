@@ -111,7 +111,7 @@ type bed 5+
 
 track synteny100000
 shortLabel UCSC Synteny
-longLabel Mouse Synteny using blastz single coverage with 100,000 base window
+longLabel Human/Mouse Synteny using blastz single coverage with 100,000 base window
 priority 4.3
 visibility hide
 color 0,100,0
