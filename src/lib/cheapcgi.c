@@ -300,7 +300,6 @@ else
     cgiParseInput(inputString, &inputHash, &inputList);
 
 /* now parse the cookies */
-puts("parsing cookies");
 parseCookies(&cookieHash, &cookieList);
 }
 

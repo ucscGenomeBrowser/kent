@@ -140,7 +140,6 @@ else
 void htmlStart(char *title)
     {
 puts("Content-Type:text/html");
-//htmlSetCookie("greeting", "hell world", NULL, NULL, NULL, 0);
 puts("\n");
 
 _htmStart(stdout, title);
