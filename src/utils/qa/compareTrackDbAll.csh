@@ -80,7 +80,7 @@ wget -q -O $machine.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$fi
 
 "diff" $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then
- echo "\nDifferences are found in $table found between $machine1 and $machine2"
+ echo "\nDifferences above were found in $table found between $machine1 and $machine2"
 else
   echo
   echo " No differences in $table.$field."
