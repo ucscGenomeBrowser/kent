@@ -9803,7 +9803,10 @@ if (sameString(database, "hg12"))
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor();
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    }
+if (sameString(database, "hg13"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
