@@ -471,3 +471,9 @@
 
 - iserver directories not group write?  need to doc cleaning this
   up.
+
+- need to selective rsync aligned for various databases.
+
+- add summary status to mgc (call state): unpicked, pending, full, error
+
+- check for loading with old table (string crc column works)

@@ -38,3 +38,50 @@
 # align rn2
   bin/gbAlignStep -verbose=1 -initial -parahost=kkr9u01 -iserver=kkr9u01 rn2 '/scratch/hg/rn2/chromTrfMixedNib/*.nib' /cluster/store4/rn2/jkStuff/liftAll.lft 
 
+==============================================================================
+2003/06/17: loading rn2:
+
+# rsync subset of gbdb from hgwdev
+        rsync -r --copy-links hgwdev:/gbdb/rn2/nib  /gbdb/rn2
+        rsync -r --copy-links hgwdev:/gbdb/rn2/bacends.1  /gbdb/rn2
+        rsync -r --copy-links hgwdev:/gbdb/rn2/fuguSeq  /gbdb/rn2
+        rsync -r --copy-links hgwdev:/gbdb/rn2/squirtSeq  /gbdb/rn2
+        rsync -r --copy-links hgwdev:/gbdb/rn2/stsMarker /gbdb/rn2
+
+#  clean up seq and extTables to remove any genbank stuff:
+        # get the tables as tab files
+         mkdir seq_tmp
+         chmod a+w seq_tmp
+         hgcat-mysqldump -T $cwd/seq_tmp rn2 seq extFile
+         cd seq_tmp
+
+        # put this awk script in seq-filter.awk
+
+BEGIN {
+    FS="\t"; OFS="\t";
+    while (getline <"extFile.txt") {
+        ids[$1] = 1;
+    }
+}
+ids[$5] {print $0}
+
+        # delete mrna entries from extFile.txt with an editor
+        mv seq.txt seq.old
+        awk -f seq-filter.awk seq.old >seq.txt
+        
+        # drop old tables, recreate, and import
+        echo "drop table seq;drop table extFile;" | hgcat-mysql rn2
+        hgcat-mysql rn2 <seq.sql
+        hgcat-mysql rn2 <extFile.sql
+        hgcat-mysqlimport rn2 seq.txt extFile.txt
+
+# go the genbank root
+    cd /scratch/genbank
+
+# drop old versions of tables that will be replaced.
+    ./bin/i386/gbLoadRna -drop rn2
+
+# do initial load of the database
+    ./bin/gbDbLoadStep -verbose=1 -initialLoad rn2&
+    # this takes hours
+
