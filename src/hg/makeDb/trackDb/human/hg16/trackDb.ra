@@ -918,7 +918,7 @@ pairwise hmrg
 speciesOrder mouse rat chicken
 
 track mzPt1Mm3Rn3Gg2_pHMM
-shortLabel Hu/Chp/Mo/Ra/Chk
+shortLabel Conservation
 longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
 group compGeno
 priority 100
@@ -933,7 +933,7 @@ pairwise hmrg
 speciesOrder chimp mouse rat chicken
 
 track pHMM_5_WayTop5
-shortLabel Top 5% 5-Way
+shortLabel Most Conserved
 longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 100.1
 group compGeno
