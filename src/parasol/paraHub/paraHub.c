@@ -102,6 +102,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "    nextJobId=N  Starting job ID number\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
+	 "    logFlush Flush log with every write\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -128,6 +129,9 @@ struct dlList *unqueuedUsers;   /* Users with no jobs in queue. */
 struct resultQueue *resultQueues; /* Result files. */
 int finishedJobCount = 0;		/* Number of finished jobs. */
 int crashedJobCount = 0;		/* Number of crashed jobs. */
+
+char *jobIdFileName = "parasol.jid";	/* File name where jobId file is. */
+FILE *jobIdFile = NULL;			/* Handle to jobId file. */
 
 char *hubHost;	/* Name of machine running this. */
 
@@ -571,6 +575,17 @@ for (node = busySpokes->head; !dlEnd(node); node = next)
     }
 }
 
+void flushResults()
+/* Flush all results files. */
+{
+struct resultQueue *rq;
+for (rq = resultQueues; rq != NULL; rq = rq->next)
+    {
+    if (rq->f != NULL)
+       fflush(rq->f);
+    }
+}
+
 void writeJobResults(struct job *job, time_t now, char *status,
 	char *uTime, char *sTime)
 /* Write out job results to output queue.  This
@@ -603,7 +618,6 @@ if (rq->f != NULL)
 	uTime, sTime, 
 	job->submitTime, job->startTime, now,
 	job->user->name, job->err, job->cmd);
-    fflush(rq->f);
     if (sameString(status, "0"))
         ++finishedJobCount;
     else
@@ -624,9 +638,10 @@ if (rq != NULL)
     }
 }
 
+
 void sweepResults(time_t now)
 /* Get rid of result queues that haven't been accessed for
- * a while. */
+ * a while. Flush all results. */
 {
 struct resultQueue *newList = NULL, *rq, *next;
 for (rq = resultQueues; rq != NULL; rq = next)
@@ -644,6 +659,34 @@ for (rq = resultQueues; rq != NULL; rq = next)
     }
 slReverse(&newList);
 resultQueues = newList;
+flushResults();
+}
+
+void saveJobId()
+/* Save job ID. */
+{
+rewind(jobIdFile);
+writeOne(jobIdFile, nextJobId);
+fflush(jobIdFile);
+}
+
+void openJobId()
+/* Open file with jobID in it and read jobId.  Bump it
+ * by 250000 in case we crashed to avoid reusing job
+ * id's, but do reuse every 2 billion. Let command line
+ * overwrite this though . */
+{
+jobIdFile = fopen(jobIdFileName, "r+");
+if (jobIdFile != NULL)
+    {
+    readOne(jobIdFile, nextJobId);
+    nextJobId += 250000;
+    }
+else
+    jobIdFile = mustOpen(jobIdFileName, "w");
+if (nextJobId < 0)
+    nextJobId = 0;
+nextJobId = optionInt("nextJobId", nextJobId);
 }
 
 void processHeartbeat()
@@ -662,6 +705,8 @@ if (spokesToUse > 0)
     graveDigger(spokesToUse, now);
     hangman(spokesToUse, now);
     sweepResults(now);
+    flushLog();
+    saveJobId();
     }
 }
 
@@ -1009,6 +1054,7 @@ char *machName;
 char *s;
 char *state = (running ? "r" : "q");
 
+flushResults();
 for (node = list->head; !dlEnd(node); node = node->next)
     {
     job = node->val;
@@ -1211,7 +1257,12 @@ socketHandle = netAcceptingSocket(paraPort, 500);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
+openJobId();
+
+printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
+
 /* Bump up our priority to just shy of real-time. */
+nice(-40);
 nice(-40);
 
 /* Main event loop. */
@@ -1289,6 +1340,7 @@ for (;;)
 endHeartbeat();
 killSpokes();
 close(socketHandle);
+saveJobId();
 }
 
 void notGoodSubnet(char *sns)
@@ -1333,7 +1385,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
-nextJobId = optionInt("nextJobId", nextJobId);
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
