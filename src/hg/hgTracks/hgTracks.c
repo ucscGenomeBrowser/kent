@@ -53,6 +53,7 @@
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
+boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
 /* end Chuck code */
@@ -3875,7 +3876,7 @@ it was necessary to write this function which is essentially
 a duplication of exprBedTotalHeight */
 {
 if(exp != NULL) 
-    return 2*exp->numExp+1;
+    return 2*exp->numExp;
 else
     return 0;
 }
@@ -3900,7 +3901,7 @@ int numItems = slCount(tg->items);
 if(tg->items != item) 
     return cloneString("");
 else 
-    return cloneString("Rosetta Data");
+    return cloneString(tg->shortLabel);
 }
 
 static int exprBedItemHeight(struct trackGroup *tg, void *item)
@@ -3909,9 +3910,9 @@ static int exprBedItemHeight(struct trackGroup *tg, void *item)
 int minHeight;
 struct exprBed *exp = item;
 if(tg->limitedVis == tvFull) 
-    minHeight = (2*calcExprBedFullSize(exp)) + (2*mgFontLineHeight(tl.font));
+    minHeight = calcExprBedFullSize(exp);
 else 
-    minHeight = mgFontLineHeight(tl.font)+1;
+    minHeight = mgFontLineHeight(tl.font);
 
 if(tg->items == item) 
     return minHeight;
@@ -3928,12 +3929,13 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = tg->lineHeight = tg->heightPer = (2*calcExprBedFullSize(exp) + 2*mgFontLineHeight(tl.font));
+	tg->lineHeight = tg->heightPer = calcExprBedFullSize(exp);
+	tg->height = tg->lineHeight +1;
 	break;
     case tvDense:
-	tg->height = mgFontLineHeight(tl.font)+1;
-	tg->lineHeight = tg->height;
+	tg->lineHeight = mgFontLineHeight(tl.font);
 	tg->heightPer = tg->lineHeight;
+	tg->height = tg->lineHeight+1;;
 	break;
     } 
 return tg->height;
@@ -3953,6 +3955,7 @@ for(i=0; i<=maxShade; i++)
     shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
     shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
     }
+exprBedColorsMade = TRUE;
 }
 
 
@@ -4030,71 +4033,97 @@ int baseWidth = seqEnd - seqStart;
 struct exprBed *item;
 int y = yOff;
 struct exprBed *exp;
-int heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
 int fontHeight = mgFontLineHeight(font);
-int insideHeight = fontHeight-1;
 exp = tg->items;
-heightPer = calcExprBedFullSize(exp);
 
-makeRedGreenShades(mg);
-if(vis == tvFull)
-    {
-    mgTextCentered(mg, xOff, y+1, width, insideHeight, color, font, "Confirmed Exons");
-    y += fontHeight;
-    }
+if(!exprBedColorsMade)
+    makeRedGreenShades(mg);
 for (item = tg->items; item != NULL; item = item->next)
     {
-    if(strstr(item->name, "_te"))
-	{
-	x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-	x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-	w = x2-x1;
-	if (tg->itemColor != NULL)
-	    color = tg->itemColor(tg, item, mg);
-	if (w < 1)
-	    w = 1;
-	mgExprBedBox(mg, x1, y, w, heightPer, item);
-	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, 
-		 tg->mapName, item->name, item->name); 
-	}
-    }
-if(vis == tvFull) 
-    {
-    y += heightPer;
-    mgTextCentered(mg, xOff, y+1, width, insideHeight, color, font, "Predicted Exons");
-    y += fontHeight;
-    }
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    if(strstr(item->name, "_pe")) 
-	{
-	x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-	x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-	w = x2-x1;
-	if (tg->itemColor != NULL)
-	    color = tg->itemColor(tg, item, mg);
-	if (w < 1)
-	    w = 1;
-	mgExprBedBox(mg, x1, y, w, heightPer, item);
-	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, 
-		 tg->mapName, item->name, item->name); 
-	}
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
+	color = tg->itemColor(tg, item, mg);
+    if (w < 1)
+	w = 1;
+    mgExprBedBox(mg, x1, y, w, lineHeight, item);
+    mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
+	     tg->mapName, item->name, item->name); 
+    
     }
 }
-void loadExprBed(struct trackGroup *tg)
-/* Load up exprBed from database table to trackGroup items. */
+
+void loadRosettaPeBed(struct trackGroup *tg)
+/* Load up exprBed from database table rosettaPe to trackgroup items. */
 {
-bedLoadItem(tg, "exprBed", (ItemLoader)exprBedLoad);
+bedLoadItem(tg, "rosettaPe", (ItemLoader)exprBedLoad);
 }
+
+void loadRosettaTeBed(struct trackGroup *tg)
+/* Load up exprBed from database table rosettaTe to trackgroup items. */
+{
+bedLoadItem(tg, "rosettaTe", (ItemLoader)exprBedLoad);
+}
+
 
 void freeExprBed(struct trackGroup *tg)
 /* Free up exprBed items. */
 {
 exprBedFreeList((struct exprBed**)&tg->items);
+}
+
+
+struct trackGroup *rosettaPeTg()
+/* Make track group for Rosetta Track Predicted Exons. */
+{
+struct trackGroup *tg = bedTg();
+
+tg->mapsSelf = TRUE;
+tg->drawItems = exprBedDraw;
+tg->mapName = "rosettaPe";
+tg->visibility = tvDense;
+tg->itemHeight = exprBedItemHeight;
+tg->itemName = exprBedItemName;
+tg->totalHeight = exprBedTotalHeight;
+tg->longLabel = "Rosetta Predicted Exon Data";
+tg->shortLabel = "Rosetta P.E.";
+tg->loadItems = loadRosettaPeBed;
+tg->freeItems = freeExprBed;
+return tg;
+}
+struct trackGroup *rosettaTeTg()
+/* Make track group for Rosetta Track Predicted Exons. */
+{
+struct trackGroup *tg = bedTg();
+
+tg->mapsSelf = TRUE;
+tg->drawItems = exprBedDraw;
+tg->mapName = "rosettaTe";
+tg->visibility = tvDense;
+tg->itemHeight = exprBedItemHeight;
+tg->itemName = exprBedItemName;
+tg->totalHeight = exprBedTotalHeight;
+tg->longLabel = "Rosetta Confirmed Exon Data";
+tg->shortLabel = "Rosetta T.E.";
+tg->loadItems = loadRosettaTeBed;
+tg->freeItems = freeExprBed;
+return tg;
+}
+#endif /*CHUCK_CODE*/
+
+
+/* The next two functions are being phased out as the Rosetta data
+set is split into two tracks instead of one large one. */
+#ifdef ALL_ROSETTA
+void loadExprBed(struct trackGroup *tg)
+/* Load up exprBed from database table to trackGroup items. */
+{
+bedLoadItem(tg, "exprBed", (ItemLoader)exprBedLoad);
 }
 
 struct trackGroup *exprBedTg()
@@ -4115,9 +4144,8 @@ tg->loadItems = loadExprBed;
 tg->freeItems = freeExprBed;
 return tg;
 }
+#endif /*ALL_ROSETTA*/
 
-/* end chuck */
-#endif /*CHUCK_CODE*/
 
 #ifdef SOMEDAY
 /* These next three vars are used to communicate info from the
@@ -4558,9 +4586,6 @@ if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
-#ifdef CHUCK_CODE
-if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
-#endif /*CHUCK_CODE*/
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
@@ -4571,6 +4596,16 @@ if (hTableExists("snpNih")) slSafeAddHead(&tGroupList, snpNihTg());
 if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
 if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
+#ifdef CHUCK_CODE
+if (hTableExists("rosettaTe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaTeTg());   
+if (hTableExists("rosettaPe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
+#endif /*CHUCK_CODE*/
+/* This next track is being phased out as the Rosetta data is being split into
+   two data sets, keep this one around for a little while for debugging */
+#ifdef ALL_ROSETTA
+if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
+#endif /* ALL_ROSETTA */
+
 slReverse(&tGroupList);
 
 /* Get visibility values if any from ui. */
