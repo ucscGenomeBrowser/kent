@@ -2527,19 +2527,20 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 
 /* Get linked features */
 for (i = 0; i < lfsbed->lfCount; i++)  
-{
-  AllocVar(lf);
-  sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
-  sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
-  if ((row = sqlNextRow(sr)) != NULL)
-  {
-    struct psl *psl = pslLoad(row);
-    lf = lfFromPsl(psl, FALSE);
-    slAddHead(&lfList, lf);
-    pslFree(&psl);
-  }
-  sqlFreeResult(&sr);
-}
+    {
+    AllocVar(lf);
+    sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, 
+    	lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct psl *psl = pslLoad(row);
+	lf = lfFromPsl(psl, FALSE);
+	slAddHead(&lfList, lf);
+	pslFree(&psl);
+	}
+    sqlFreeResult(&sr);
+    }
 slReverse(&lfList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -2825,7 +2826,6 @@ lineFileClose(&f);
 tg->items = lfList;
 }
 
-
 struct trackGroup *userPslTg()
 /* Make track group of user pasted sequence. */
 {
@@ -2839,8 +2839,6 @@ tg->mapItemName = mapNameFromLfExtra;
 tg->priority = 11;
 return tg;
 }
-
-
 
 struct linkedFeatures *connectedLfFromGenePredInRange(
         struct sqlConnection *conn, char *table, 
@@ -2996,15 +2994,6 @@ if (startsWith("AK.", lf->name))
 	colIx = vgFindColorIx(vg, 0, 120, 200);
     return colIx;
     }
-#ifdef SOMETIMES
-else if (lf->extra)
-    {
-    static int colIx = 0;
-    if (!colIx)
-	colIx = vgFindColorIx(vg, 200, 0, 0);
-    return colIx;
-    }
-#endif /* SOMETIMES */
 else
     {
     return tg->ixColor;
@@ -3811,32 +3800,6 @@ tg->itemName = isochoreName;
 					/*Royden fun test code*/
 /******************************************************************/
 
-#ifdef OLD2
-struct celeraDupPositive *filterOldDupes(struct celeraDupPositive *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct celeraDupPositive *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD2 */
-
 void loadCeleraDupPositive(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
@@ -3898,34 +3861,6 @@ tg->itemColor = celeraDupPositiveColor;
 			/*Royden fun test code CeleraCoverage*/
 /******************************************************************/
 
-#ifdef OLD3
-
-
-
-struct celeraCoverage *filterOldCoverage(struct celeraCoverage *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct celeraCoverage *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD3 */
 
 void loadCeleraCoverage(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
@@ -3984,33 +3919,6 @@ tg->itemColor = celeraCoverageColor;
 /******************************************************************/
 		/*end of Royden test Code celeraCoverage */
 /******************************************************************/
-#ifdef OLD4
-
-
-struct genomicSuperDups *filterOldCoverage(struct genomicSuperDups *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct genomicSuperDups *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-
-    /*if (dup->score > 980) */
-    /*    {  */
-    	slAddHead(&newList, dup);
-    /*	} */
-    /*else */
-    /*    { */
-    /*	celeraDupPositiveFree(&dup); */
-    /* } */
-
-
-    }
-slReverse(&newList);
-return newList;
-}
-
-#endif /* OLD4 */
 
 void loadGenomicSuperDups(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
@@ -4733,28 +4641,6 @@ tg->drawItems = drawChr18deletions;
 
 /* Make track group for simple repeats. */
 
-#ifdef OLD
-struct genomicDups *filterOldDupes(struct genomicDups *oldList)
-/* Get rid of all but recent/artifact dupes. */
-{
-struct genomicDups *newList = NULL, *dup, *next;
-for (dup = oldList; dup != NULL; dup = next)
-    {
-    next = dup->next;
-    if (dup->score > 980)
-        {
-	slAddHead(&newList, dup);
-	}
-    else
-        {
-	genomicDupsFree(&dup);
-	}
-    }
-slReverse(&newList);
-return newList;
-}
-#endif /* OLD */
-
 void loadGenomicDups(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
@@ -4935,24 +4821,25 @@ tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
 Color getChromColor(char *name, struct vGfx *vg)
+/* Return color index corresponding to chromosome name. */
 {
-    int chromNum = 0;
-    Color colorNum = 0;
-    if(!chromosomeColorsMade)
-        makeChromosomeShades(vg);
-    if (atoi(name) != 0)
-        chromNum =  atoi(name);
-    else if (!strcmp(name,"X"))
-        chromNum = 23;
-    else if (!strcmp(name,"X "))
-        chromNum = 23;
-    else if (!strcmp(name,"Y"))
-        chromNum = 24;
-    else if (!strcmp(name,"Y "))
-        chromNum = 24;
-    if (chromNum > 24) chromNum = 0;
-    colorNum = chromColor[chromNum];
-    return colorNum;
+int chromNum = 0;
+Color colorNum = 0;
+if(!chromosomeColorsMade)
+    makeChromosomeShades(vg);
+if (atoi(name) != 0)
+    chromNum =  atoi(name);
+else if (!strcmp(name,"X"))
+    chromNum = 23;
+else if (!strcmp(name,"X "))
+    chromNum = 23;
+else if (!strcmp(name,"Y"))
+    chromNum = 24;
+else if (!strcmp(name,"Y "))
+    chromNum = 24;
+if (chromNum > 24) chromNum = 0;
+colorNum = chromColor[chromNum];
+return colorNum;
 }
 
 void netLoad(struct trackGroup *tg)
@@ -4999,6 +4886,8 @@ return ((Color)getChromColor(chromStr, vg));
 static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
+/* Draw routine for netAlign type tracks.  This will load
+ * the items as well as drawing them. */
 {
 int baseWidth = seqEnd - seqStart;
 struct netItem *ni;
@@ -5187,7 +5076,7 @@ else
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
 	dyStringPrintf(query, "tStart<%u and tEnd>%u", winEnd, winStart);
-    sr = sqlGetResult(conn, query->string);
+	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int start = sqlUnsigned(row[0]);
@@ -5197,9 +5086,9 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-        strncpy(chromStr,row[2]+3,2);
-        chromStr[2] = '\0';
-        col = getChromColor(chromStr, vg);
+	    strncpy(chromStr,row[2]+3,2);
+	    chromStr[2] = '\0';
+	    col = getChromColor(chromStr, vg);
 	    vgBox(vg, x1, yOff, w, heightPer, col);
 	    }
 	}
@@ -5263,7 +5152,6 @@ static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
  * the chainLink table, calls linkedFeaturesDraw, and then
  * frees the simple features again. */
 {
-char buf[16];
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct hash *hash = newHash(0);	/* Hash of chain ids. */
@@ -5273,10 +5161,6 @@ struct sqlResult *sr = NULL;
 struct lm *lm = lmInit(1024*4);
 char **row;
 double scale = ((double)(winEnd - winStart))/width;
-
-/* Make sure this is sorted if in full mode. */
-if (vis == tvFull)
-    slSort(&tg->items, linkedFeaturesCmpStart);
 
 /* Make up a hash of all linked features keyed by
  * id, which is held in the extras field.  To
@@ -5289,8 +5173,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     double pixelWidth = scale * (lf->end - lf->start);
     if (pixelWidth >= 2.5)
 	{
-	sprintf(buf, "%d", ptToInt(lf->extra));
-	hashAdd(hash, buf, lf);
+	hashAdd(hash, lf->extra, lf);
 	}
     else
         {
@@ -5357,6 +5240,7 @@ int qs;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    char buf[16];
     chainStaticLoad(row + rowOffset, &chain);
     AllocVar(lf);
     lf->start = lf->tallStart = chain.tStart;
@@ -5378,11 +5262,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     	chain.qName, chain.qStrand, qs/1000);
     snprintf(lf->popUp, sizeof(lf->name), "%s %c start %d size %d",
     	chain.qName, chain.qStrand, qs, chain.qEnd - chain.qStart);
-    lf->extra = intToPt(chain.id);
+    snprintf(buf, sizeof(buf), "%d", chain.id);
+    lf->extra = cloneString(buf);
     slAddHead(&list, lf);
     }
-slReverse(&list);
+
+/* Make sure this is sorted if in full mode. */
+if (tg->visibility == tvFull && limitVisibility(tg, tg->items) == tvFull)
+    slSort(&list, linkedFeaturesCmpStart);
+else
+    slReverse(&list);
 tg->items = list;
+
+/* Clean up. */
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -5403,6 +5295,7 @@ else
     tg->itemColor = NULL;
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
+tg->mapItemName = mapNameFromLfExtra;
 }
 
 void loadRnaGene(struct trackGroup *tg)
