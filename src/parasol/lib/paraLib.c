@@ -1,3 +1,4 @@
+#include <sys/utsname.h>
 #include "common.h"
 #include "paraLib.h"
 
@@ -13,7 +14,13 @@ if (host == NULL)
     {
     host = getenv("HOST");
     if (host == NULL)
-	errAbort("Couldn't find HOST environment variable");
+	{
+	struct utsname unamebuf;
+	if (uname(&unamebuf) < 0)
+	    errAbort("Couldn't find HOST environment variable or good uname");
+	host = unamebuf.nodename;
+	}
+    host = cloneString(host);
     }
 return host;
 }
