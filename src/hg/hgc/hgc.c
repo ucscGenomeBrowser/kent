@@ -3803,10 +3803,7 @@ if(tdb == NULL)
     errAbort("TrackDb entry null for perlegen, item=%s\n", item);
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    puts(tdb->html);
-    }
+
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
@@ -3830,6 +3827,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",(bed->score/100 -1));
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
+    }
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    puts(tdb->html);
     }
 hFreeConn(&conn);
 webEnd();
