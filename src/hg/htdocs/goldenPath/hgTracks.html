@@ -1,0 +1,86 @@
+<HTML><HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Human Genome Browser Gateway</TITLE>
+</HEAD><BODY BACKGROUND="http://genome.ucsc.edu/images/floret.jpg"> 
+
+<FORM ACTION="../cgi-bin/hgTracks" METHOD="GET">
+<CENTER><H2>Human Genome Browser</H2>
+<PRE>Web tool created by <A HREF="http://www.cse.ucsc.edu/~kent">Jim Kent</A> of UC Santa Cruz
+12 Dec 2000 <A HREF="http://genome.cse.ucsc.edu/index.html">draft assembly</A> of the human genome
+</PRE></CENTER>
+<P>
+Please enter a position in the genome, set your preferred window width, and press the submit button:
+(Use <A HREF="../cgi-bin/hgBlat?db=hg6">BLAT Search</A> to locate a particular sequence in the genome.)
+
+<CENTER><P>genome position: 
+<INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr2:213373283-213377671"> 
+ pixel width 
+<INPUT TYPE="TEXT" NAME="pix" SIZE="4" VALUE="610"> 
+<INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Submit"> 
+<INPUT TYPE="HIDDEN" NAME="db" VALUE="hg6">
+
+</P></CENTER>
+
+<P>A genome position can be specified by the accession number of a sequenced human genomic clone, an mRNA or EST or STS marker, or 
+a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help. 
+<P>
+
+<P>
+<CENTER> <TABLE  border=0 CELLPADDING=2 >
+<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br>
+<br>
+chr19<br>
+20p13<br>
+4q28<br>
+chr3:1-1000000<br>
+<br>
+D16S3046<br>
+AA205474<br>
+ctg13698<br>
+AP001670<br>
+<br>
+AF083811<br>
+PRNP <br>
+<br>
+pseudogene mRNA<br>
+homeobox caudal<br>
+valyl-tRNA<br>
+zinc finger<br>
+kruppel zinc finger<br>
+huntington<br>
+zahler<br>
+Evans,J.E.<br>
+
+<TD VALIGN=Top NOWRAP ><B>Genome Browser Response:</B><br>
+<br>
+Displays all of chromosome 19<br>
+Displays region for band p13 on chr 20<br>
+Displays band q28 on chr 4, gene region determining red hair color<br>
+Displays first million bases of chr 3, counting from p arm telomere<br>
+<br>
+Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
+(open "STS Markers" track by clicking to see this marker)<br>
+Displays region of EST with GenBank acc. AA205474 in BRCA1 cancer gene on chr 17
+(open "spliced ESTs" track by clicking to see this EST)<br>
+Displays region of the fingerprint clone contig ctg13698 from the Wash. U. map
+(set "FPC contigs" track to "dense" and refresh to see FPC contigs)<br>
+Displays region of clone with GenBank accession AP001670
+(open "coverage" track by clicking to see this clone)<br>
+<br>
+Offers 2 coordinate choices on chr 7 and chr 22 for this mitotic checkpoint mRNA<br>
+Offers coordinates choices for nested mRNAs for prion gene, chr 20p<br>
+<br>
+Lists transcribed pseudogenes but not cDNAs<br>
+Lists mRNAs for caudal homeobox genes<br>
+Lists mRNAs for valyl tRNA synthetases but not unsubmitted tRNA<br>
+Lists many zinc finger mRNAs<br>
+Lists only kruppel-like zinc fingers<br>
+Lists candidate genes associated with Huntington's disease<br>
+Lists mRNAs deposited by scientist named Zahler<br>
+Lists mRNAs deposited by co-author J.E. Evans<br>
+
+<TR><TD COLSPAN="2" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E. internally.
+</TABLE></CENTER>
+<P>
+</FORM></BODY></HTML>
