@@ -1137,7 +1137,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 1000 );
             y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
             if( prevEnd == -5 && gapPrevEnd >= 0 )
-	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, 10, shadesOfGray[2]);
+	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
             prevEnd = -5; /*connect next point with gray bar too*/
             continue;
 	        }
