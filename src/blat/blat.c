@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.100.14.1 2005/02/23 02:14:33 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.100.14.2 2005/04/04 18:18:33 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -264,6 +264,34 @@ if (trimA)
     }
 }
 
+
+Bits *maskQuerySeq(struct dnaSeq *seq, boolean isProt, 
+	boolean maskQuery, boolean lcMask)
+/* Massage query sequence a bit, converting it to correct
+ * case (upper for protein/lower for DNA) and optionally
+ * returning upper/lower case info , and trimming poly A. */
+{
+Bits *qMaskBits = NULL;
+verbose(2, "%s\n", seq->name);
+if (isProt)
+    faToProtein(seq->dna, seq->size);
+else
+    {
+    if (maskQuery)
+	{
+	if (lcMask)
+	    toggleCase(seq->dna, seq->size);
+	qMaskBits = maskFromUpperCaseSeq(seq);
+	}
+    faToDna(seq->dna, seq->size);
+    }
+if (seq->size > qWarnSize)
+    {
+    warn("Query sequence %d has size %d, it might take a while.", seq->name, seq->size);
+    }
+return qMaskBits;
+}
+	    
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
 	boolean isProt, struct hash *maskHash, FILE *outFile, boolean showStatus)
 /* Search all sequences in all files against single genoFind index. */
@@ -293,12 +321,7 @@ for (i=0; i<fileCount; ++i)
 	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
-	if (maskQuery)
-	    {
-	    toggleCase(seq->dna, seq->size);
-	    qMaskBits = maskFromUpperCaseSeq(seq);
-	    }
-	faToDna(seq->dna, seq->size);
+	qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
 	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
 	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
@@ -307,30 +330,32 @@ for (i=0; i<fileCount; ++i)
 	count += 1;
 	bitFree(&qMaskBits);
 	}
+    else if (twoBitIsFile(fileName))
+        {
+	struct twoBitFile *tbf = twoBitOpen(fileName);
+	struct twoBitIndex *index;
+	if (isProt)
+	    errAbort("%s is a two bit file , which doesn't work for proteins.", 
+	    	fileName);
+	for (index = tbf->indexList; index != NULL; index = index->next)
+	    {
+	    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
+	    Bits *qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
+	    trimSeq(seq, &trimmedSeq);
+	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
+	    totalSize += seq->size;
+	    count += 1;
+	    dnaSeqFree(&seq);
+	    bitFree(&qMaskBits);
+	    }
+	}
     else
         {
 	static struct dnaSeq seq;
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
-	    Bits *qMaskBits = NULL;
-	    verbose(2, "%s\n", seq.name);
-	    if (isProt)
-		faToProtein(seq.dna, seq.size);
-	    else
-	        {
-		if (maskQuery)
-		    {
-		    if (lcMask)
-		        toggleCase(seq.dna, seq.size);
-		    qMaskBits = maskFromUpperCaseSeq(&seq);
-		    }
-		faToDna(seq.dna, seq.size);
-		}
-	    if (seq.size > qWarnSize)
-	        {
-		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
-		}
+	    Bits *qMaskBits = maskQuerySeq(&seq, isProt, maskQuery, lcMask);
 	    trimSeq(&seq, &trimmedSeq);
 	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 	    totalSize += seq.size;
