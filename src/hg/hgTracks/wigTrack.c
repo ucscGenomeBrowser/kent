@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.48 2004/05/05 22:47:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.49 2004/05/06 23:06:06 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -685,10 +685,14 @@ if (wigCart->smoothingWindow > 0)
 
 for (i = preDrawZero; i < preDrawZero+width; ++i)
     {
-    if (preDraw[i].max > overallUpperLimit)
-	overallUpperLimit = preDraw[i].max;
-    if (preDraw[i].min < overallLowerLimit)
-	overallLowerLimit = preDraw[i].min;
+    /*	count is non-zero meaning valid data exists here	*/
+    if (preDraw[i].count)
+	{
+	if (preDraw[i].max > overallUpperLimit)
+	    overallUpperLimit = preDraw[i].max;
+	if (preDraw[i].min < overallLowerLimit)
+	    overallLowerLimit = preDraw[i].min;
+	}
     }
 overallRange = overallUpperLimit - overallLowerLimit;
 
@@ -698,10 +702,14 @@ if (autoScale == wiggleScaleAuto)
     overallLowerLimit = 1.0e+300;
     for (i = preDrawZero; i < preDrawZero+width; ++i)
 	{
-	if (preDraw[i].smooth > overallUpperLimit)
-	    overallUpperLimit = preDraw[i].smooth;
-	if (preDraw[i].smooth < overallLowerLimit)
-	    overallLowerLimit = preDraw[i].smooth;
+	/*	count is non-zero meaning valid data exists here	*/
+	if (preDraw[i].count)
+	    {
+	    if (preDraw[i].smooth > overallUpperLimit)
+		overallUpperLimit = preDraw[i].smooth;
+	    if (preDraw[i].smooth < overallLowerLimit)
+		overallLowerLimit = preDraw[i].smooth;
+	    }
 	}
     overallRange = overallUpperLimit - overallLowerLimit;
     if (overallRange == 0.0)
@@ -1090,4 +1098,5 @@ track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
+
 }	/*	wigMethods()	*/
