@@ -393,3 +393,52 @@ for (group = gff->groupList; group != NULL; group = group->next)
     }
 }
 
+void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep) 
+/* Print out GTF.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->seq);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->source);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->feature);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->start+1);
+fputc(sep,f);
+fprintf(f, "%u", el->end);
+fputc(sep,f);
+fprintf(f, "%f", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%c", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%c", el->frame);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+if (el->geneId != NULL)
+    fprintf(f, "gene_id = %s\"%s%s\"; ",
+	    (sep == ',') ? "\\" : "",
+	    el->geneId,
+	    (sep == ',') ? "\\" : "");
+fprintf(f, "transcript_id = %s\"%s%s\"; ",
+	(sep == ',') ? "\\" : "",
+	el->group,
+	(sep == ',') ? "\\" : "");
+if (el->exonId != NULL)
+    fprintf(f, "exon_id = %s\"%s%s\"; ",
+	    (sep == ',') ? "\\" : "",
+	    el->exonId,
+	    (sep == ',') ? "\\" : "");
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+

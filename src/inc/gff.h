@@ -119,6 +119,15 @@ void gffFileFree(struct gffFile **pGff);
 int gffLineCmp(const void *va, const void *vb);
 /* Compare two gffLines (for use in slSort, etc.) . */
 
+void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep);
+/* Print out GTF.  Separate fields with sep. Follow last field with lastSep. */
+
+#define gffTabOut(el,f) gffOutput(el,f,'\t','\n');
+/* Print out GTF as a line in a tab-separated file. */
+
+#define gffCommaOut(el,f) gffOutput(el,f,',',',');
+/* Print out GTF as a comma separated list including final comma. */
+
 
 #endif /* GFF_H */
 
