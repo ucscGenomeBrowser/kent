@@ -75,6 +75,15 @@ visibility off
 type lookup knownToEnsembl name value
 search prefix
 
+name HInv
+shortLabel HInv
+longLabel HInv ID
+priority 2.6
+visibility off
+type lookup knownToHInv name value
+search prefix
+
+
 name esRegModule
 shortLabel Module
 longLabel Eran Segal's Transcriptional Regulation Module
