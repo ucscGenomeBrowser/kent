@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.41 2004/07/21 00:30:23 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.42 2004/07/21 03:28:46 kent Exp $";
 
 
 void usage()
@@ -447,11 +447,12 @@ if (track == NULL)
 return track;
 }
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, struct grp *group)
+struct trackDb *findSelectedTrack(struct trackDb *trackList, 
+	struct grp *group, char *varName)
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 {
-char *name = cartOptionalString(cart, hgtaTrack);
+char *name = cartOptionalString(cart, varName);
 struct trackDb *track = NULL;
 
 if (name != NULL)
@@ -728,7 +729,7 @@ hSetDb(database);
 freezeName = hFreezeFromDb(database);
 conn = hAllocConn();
 fullTrackList = getFullTrackList();
-curTrack = findSelectedTrack(fullTrackList, NULL);
+curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
 
 /* Go figure out what page to put up. */
 dispatch(conn);

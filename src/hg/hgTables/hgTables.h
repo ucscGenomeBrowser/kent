@@ -7,6 +7,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef DYSTRING_H
+#include "dystring.h"
+#endif
+
 #ifndef GRP_H
 #include "grp.h"
 #endif
@@ -55,6 +59,46 @@ void hTableStart();
 void hTableEnd();
 /* Close out table started with hTableStart() */
 
+/* ---------- Javascript stuff. ----------------------*/
+
+void jsCreateHiddenForm(char **vars, int varCount);
+/* Create a hidden form with the given variables */
+
+char *jsOnChangeEnd(struct dyString **pDy);
+/* Finish up javascript onChange command. */
+
+void jsDropDownCarryOver(struct dyString *dy, char *var);
+/* Add statement to carry-over drop-down item to dy. */
+
+void jsTextCarryOver(struct dyString *dy, char *var);
+/* Add statement to carry-over text item to dy. */
+
+void jsTrackingVar(char *jsVar, char *val);
+/* Emit a little Javascript to keep track of a variable. 
+ * This helps especially with radio buttons. */
+
+void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar);
+/* Carry over tracked variable (radio button?) to hidden form. */
+
+void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar, 
+	char *val, char *selVal);
+/* Make a radio button that also sets tracking variable
+ * in javascript. */
+
+void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal);
+/* Make a check box filling in with existing value and
+ * putting a javascript tracking variable on it. */
+
+/* ---------- Other UI stuff. ----------------------*/
+
+void printMainHelp();
+/* Put up main page help info. */
+
+struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, char *trackScript, struct sqlConnection *conn);
+/* Show group & track row of controls.  Returns selected track */
+
+
 /* --------- Utility functions --------------------- */
 
 struct region *getRegions();
@@ -76,9 +120,10 @@ struct grp *makeGroupList(struct sqlConnection *conn,
 	struct trackDb *trackList);
 /* Get list of groups that actually have something in them. */
 
-struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
-/* Find user-selected group if possible.  If not then
- * go to various levels of defaults. */
+struct trackDb *findSelectedTrack(struct trackDb *trackList, 
+	struct grp *group, char *varName);
+/* Find selected track - from CGI variable if possible, else
+ * via various defaults. */
 
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
@@ -94,7 +139,8 @@ struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, struct grp *group);
+struct trackDb *findSelectedTrack(struct trackDb *trackList, 
+	struct grp *group, char *varName);
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 
@@ -225,10 +271,22 @@ boolean anyIntersection();
 #define hgtaCtDesc "hgta_ctDesc"
 #define hgtaCtVis "hgta_ctVis"
 #define hgtaCtUrl "hgta_ctUrl"
+
+   /* These intersection page vars come in pairs so we can cancel. */
 #define hgtaIntersectGroup "hgta_intersectGroup"
-#define hgtaIntersectTrack "hgta_intersectTrack"
 #define hgtaNextIntersectGroup "hgta_nextIntersectGroup"
+#define hgtaIntersectTrack "hgta_intersectTrack"
 #define hgtaNextIntersectTrack "hgta_nextIntersectTrack"
+#define hgtaIntersectOp "hgta_intersectOp"
+#define hgtaNextIntersectOp "hgta_nextIntersectOp"
+#define hgtaMoreThreshold "hgta_moreThreshold"
+#define hgtaNextMoreThreshold "hgta_nextMoreThreshold"
+#define hgtaLessThreshold "hgta_lessThreshold"
+#define hgtaNextLessThreshold "hgta_nextLessThreshold"
+#define hgtaInvertTable "hgta_invertTable"
+#define hgtaNextInvertTable "hgta_nextInvertTable"
+#define hgtaInvertTable2 "hgta_invertTable2"
+#define hgtaNextInvertTable2 "hgta_nextInvertTable2"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -392,18 +450,6 @@ void doGetCustomTrack(struct sqlConnection *conn);
 
 void doGetCustomTrackFile(struct sqlConnection *conn);
 /* Get Custom Track file output (UI has already told us how). */
-
-/* Other UI stuff. */
-
-void printMainHelp();
-/* Put up main page help info. */
-
-void createHiddenForm(char **vars, int varCount);
-/* Create a hidden form with the given variables */
-
-void showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, struct sqlConnection *conn);
-/* Show group & track row of controls */
 
 #endif /* HGTABLES_H */
 

@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.17 2004/07/21 00:30:23 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.18 2004/07/21 03:28:46 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -104,41 +104,17 @@ const struct trackDb *b = *((struct trackDb **)vb);
 return strcmp(a->shortLabel, b->shortLabel);
 }
 
-void jsDropDownCarryOver(struct dyString *dy, char *var)
-/* Add statement to carry-over drop-down item to dy. */
-{
-dyStringPrintf(dy, "document.hiddenForm.%s.value=", var);
-dyStringPrintf(dy, "document.mainForm.%s.options", var);
-dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value; ", var);
-}
-
-void jsTextCarryOver(struct dyString *dy, char *var)
-/* Add statement to carry-over text item to dy. */
-{
-dyStringPrintf(dy, 
-    "document.hiddenForm.%s.value=document.mainForm.%s.value; ",
-    var, var);
-}
-
-struct dyString *onChangeStart()
+static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
-dyStringAppend(dy, 
-	"document.hiddenForm.hgta_regionType.value=regionType; ");
+jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
 jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
 return dy;
-}
-
-char *onChangeEnd(struct dyString **pDy)
-/* Finish up javascript onChange command. */
-{
-dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
-return dyStringCannibalize(pDy);
 }
 
 static char *onChangeOrg()
@@ -147,7 +123,7 @@ static char *onChangeOrg()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-return onChangeEnd(&dy);
+return jsOnChangeEnd(&dy);
 }
 
 static char *onChangeDb()
@@ -155,7 +131,7 @@ static char *onChangeDb()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
-return onChangeEnd(&dy);
+return jsOnChangeEnd(&dy);
 }
 
 static char *onChangeGroup()
@@ -164,29 +140,26 @@ static char *onChangeGroup()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
-return onChangeEnd(&dy);
+return jsOnChangeEnd(&dy);
 }
 
 void makeRegionButton(char *val, char *selVal)
 /* Make region radio button including a little Javascript
  * to save selection state. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", hgtaRegionType);
-hPrintf(" VALUE=\"%s\"", val);
-hPrintf(" onClick=\"regionType='%s';\"", val);
-if (sameString(val, selVal))
-    hPrintf(" CHECKED");
-hPrintf(">");
+jsMakeTrackingRadioButton(hgtaRegionType, "regionType", val, selVal);
 }
 
-void showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, struct sqlConnection *conn)
-/* Show group & track row of controls */
+struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, char *trackScript, struct sqlConnection *conn)
+/* Show group & track row of controls.  Returns selected track */
 {
 struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
-struct trackDb *track;
+struct trackDb *track, *selTrack;
 
+if (trackScript == NULL)
+    trackScript = "";
 hPrintf("<TR><TD><B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
 for (group = groupList; group != NULL; group = group->next)
@@ -202,17 +175,18 @@ if (selGroup != NULL && sameString(selGroup->name, "all"))
     selGroup = NULL;
 if (selGroup == NULL) /* All Tracks */
     slSort(&fullTrackList, trackDbCmpShortLabel);
-curTrack = findSelectedTrack(fullTrackList, selGroup);
-hPrintf("<SELECT NAME=%s>\n", trackVar);
+selTrack = findSelectedTrack(fullTrackList, selGroup, trackVar);
+hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
 for (track = fullTrackList; track != NULL; track = track->next)
     {
     if (selGroup == NULL || sameString(selGroup->name, track->grp))
 	hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
-	    (track == curTrack ? " SELECTED" : ""),
+	    (track == selTrack ? " SELECTED" : ""),
 	    track->shortLabel);
     }
 hPrintf("</SELECT>\n");
 hPrintf("</TD></TR>\n");
+return selTrack;
 }
 
 void showMainControlTable(struct sqlConnection *conn)
@@ -230,7 +204,7 @@ hPrintf("<TABLE BORDER=0>\n");
     }
 
 /* Print group and track line. */
-showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, conn);
+curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
 
 /* Region line */
     {
@@ -245,9 +219,7 @@ showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, conn);
         sameString(regionType, "range") ||
 	(doEncode && sameString(regionType, "encode") ) ) )
 	regionType = "genome";
-    hPrintf("<SCRIPT>\n");
-    hPrintf("var regionType='%s';\n", regionType);
-    hPrintf("</SCRIPT>\n");
+    jsTrackingVar("regionType", regionType);
     makeRegionButton("genome", regionType);
     hPrintf(" genome ");
     if (doEncode)
@@ -304,6 +276,7 @@ showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, conn);
         {
 	cgiMakeButton(hgtaDoIntersectPage, "Create");
 	}
+    hPrintf(" <I>Note: intersection still in development</I>");
     hPrintf("</TD></TR>\n");
     }
 
@@ -345,22 +318,7 @@ showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, conn);
 #endif /* SOMETIMES */
     hPrintf("</TD></TR>\n");
     }
-
 hPrintf("</TABLE>\n");
-hPrintf("<BR><I>Note: buttons and fields in parenthesis are not yet implemented.</I>\n");
-}
-
-void createHiddenForm(char **vars, int varCount)
-/* Create a hidden form with the given variables */
-{
-int i;
-hPrintf(
-    "<FORM ACTION=\"../cgi-bin/hgTables\" "
-    "METHOD=\"GET\" NAME=\"hiddenForm\">\n");
-cartSaveSession(cart);
-for (i=0; i<varCount; ++i)
-    hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", vars[i]);
-puts("</FORM>");
 }
 
 void mainPageAfterOpen(struct sqlConnection *conn)
@@ -384,7 +342,7 @@ hPrintf("</FORM>\n");
     static char *saveVars[] = {
       "org", "db", hgtaGroup, hgtaTrack, hgtaRegionType,
       hgtaRange, hgtaOutputType, };
-    createHiddenForm(saveVars, ArraySize(saveVars));
+    jsCreateHiddenForm(saveVars, ArraySize(saveVars));
     }
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
