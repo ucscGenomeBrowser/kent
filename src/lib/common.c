@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.57 2004/03/12 09:38:42 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.58 2004/03/13 05:38:03 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -196,7 +196,10 @@ void *slPopHead(void *vListPt)
 struct slList **listPt = (struct slList **)vListPt;
 struct slList *el = *listPt;
 if (el != NULL)
+    {
     *listPt = el->next;
+    el->next = NULL;
+    }
 return el;
 }
 
