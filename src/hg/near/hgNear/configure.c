@@ -10,6 +10,14 @@
 #include "web.h"
 #include "hgNear.h"
 
+static char const rcsid[] = "$Id: configure.c,v 1.2 2003/06/18 16:22:57 kent Exp $";
+
+static char *onOffString(boolean on)
+/* Return "on" or "off". */
+{
+return on ? "on" : "off";
+}
+
 static void configTable(struct column *colList, struct sqlConnection *conn)
 /* Write out configuration table */
 {
@@ -38,7 +46,7 @@ for (col = colList; col != NULL; col = col->next)
     /* Do on/off dropdown. */
     hPrintf("<TD>");
     safef(varName, sizeof(varName), "near.col.%s", col->name);
-    onOffVal = cartUsualString(cart, varName, "on");
+    onOffVal = cartUsualString(cart, varName, onOffString(col->on));
     cgiMakeDropList(varName, onOffMenu, ArraySize(onOffMenu), onOffVal);
     hPrintf("</TD>");
 
@@ -57,10 +65,70 @@ for (col = colList; col != NULL; col = col->next)
 hPrintf("</TABLE>\n");
 }
 
-static void bumpColList(char *bumpHow)
+static void savePriorities(struct column *colList)
+/* Save priority list. */
+{
+struct dyString *dy = dyStringNew(4*1024);
+struct column *col;
+
+for (col = colList; col != NULL; col = col->next)
+    dyStringPrintf(dy, "%s %f ", col->name, col->priority);
+cartSetString(cart, colOrderVar, dy->string);
+dyStringFree(&dy);
+}
+
+static void bumpColList(char *bumpHow, struct column **pColList)
 /* Bump a column one way or another */
 {
-uglyf("%s", bumpHow);
+char *dupe = cloneString(bumpHow);
+char *words[4], *upDown, *colName;
+
+if (chopString(dupe, ".", words, ArraySize(words)) != 3)
+    {
+    cartRemove(cart, bumpHow);
+    errAbort("Strange bumpHow value %s in bumpColList", bumpHow);
+    }
+upDown = words[1];
+colName = words[2];
+
+if (sameString(upDown, "up"))
+    {
+    struct column *col, *prev = NULL;
+    for (col = *pColList; col != NULL; col = col->next)
+        {
+	if (sameString(col->name, colName))
+	    {
+	    if (prev != NULL)
+	        {
+		float swap = prev->priority;
+		prev->priority = col->priority;
+		col->priority = swap;
+		}
+	    break;
+	    }
+	prev = col;
+	}
+    }
+else
+    {
+    struct column *col, *next = NULL;
+    for (col = *pColList; col != NULL; col = col->next)
+        {
+	if (sameString(col->name, colName))
+	    {
+	    if ((next = col->next) != NULL)
+	        {
+		float swap = next->priority;
+		next->priority = col->priority;
+		col->priority = swap;
+		}
+	    break;
+	    }
+	}
+    }
+freez(&dupe);
+slSort(pColList, columnCmpPriority);
+savePriorities(*pColList);
 }
 
 void doConfigure(char *bumpVar)
@@ -69,14 +137,12 @@ void doConfigure(char *bumpVar)
 struct sqlConnection *conn = hAllocConn();
 struct column *colList = getColumns(conn);
 if (bumpVar)
-    bumpColList(bumpVar);
+    bumpColList(bumpVar, &colList);
 makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton(defaultConfName, "Default Configuration");
-hPrintf(" ");
-printf("<INPUT TYPE=RESET NAME=\"%s\" VALUE=\"%s\">", "near.reset", "Reset");
 hPrintf(" ");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD>");
@@ -88,6 +154,7 @@ void doDefaultConfigure()
 /* Do configuration starting with defaults. */
 {
 cartRemoveLike(cart, "near.col.*");
+cartRemove(cart, colOrderVar);
 doConfigure(NULL);
 }
 

@@ -20,6 +20,7 @@ struct column
    char *name;			/* Column name, not allocated here. */
    char *label;			/* Column label. */
    boolean on;			/* True if turned on. */
+   float priority;		/* Order displayed. */
 
    /* -- Methods -- */
    boolean (*exists)(struct column *col, struct sqlConnection *conn);
@@ -52,7 +53,8 @@ extern int displayCount;  /* Number of items to display. */
 #define countVarName "near.count"	/* How many items to display. */
 #define searchVarName "near.search"	/* Search term. */
 #define geneIdVarName "near.geneId"     /* Purely cart, not cgi. Last valid geneId */
-#define sortVarName "near.sort"		/* Sort scheme. */
+#define groupVarName "near.group"	/* Grouping scheme. */
+#define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
 
@@ -71,6 +73,12 @@ void makeTitle(char *title, char *helpName);
 
 struct column *getColumns(struct sqlConnection *conn);
 /* Return list of columns for big table. */
+
+int columnCmpPriority(const void *va, const void *vb);
+/* Compare to sort columns based on priority. */
+
+struct hash *hashColumns(struct column *colList);
+/* Return a hash of columns keyed by name. */
 
 void doConfigure(char *bumpVar);
 /* Configuration page. */

@@ -10,6 +10,8 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
+static char const rcsid[] = "$Id: colGenePred.c,v 1.2 2003/06/18 16:22:57 kent Exp $";
+
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
 {

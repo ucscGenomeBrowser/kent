@@ -9,6 +9,8 @@
 #include "cart.h"
 #include "hgNear.h"
 
+static char const rcsid[] = "$Id: colBlast.c,v 1.3 2003/06/18 16:22:57 kent Exp $";
+
 static char *blastVal(struct column *col, char *geneId, struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 {

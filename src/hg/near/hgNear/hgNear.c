@@ -11,8 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.3 2003/06/18 07:15:02 kent Exp $";
-
+static char const rcsid[] = "$Id: hgNear.c,v 1.4 2003/06/18 16:22:57 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -23,7 +22,7 @@ struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *organism;		/* Name of organism - mouse, human, etc. */
 char *curGeneId;	/* Identity of current gene. */
-char *sortOn;		/* Current sort strategy. */
+char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 
 
@@ -169,11 +168,11 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     }
 
 /* Do sort by drop-down */
-sortOn = cartUsualString(cart, sortVarName, "homology");
+groupOn = cartUsualString(cart, groupVarName, "homology");
     {
     static char *menu[] = {"homology", "expression", "chromosome"};
-    hPrintf("sort on ");
-    cgiMakeDropList(sortVarName, menu, ArraySize(menu), sortOn);
+    hPrintf("group by ");
+    cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
     }
 
 /* Do items to display drop-down */
@@ -250,64 +249,150 @@ return list;
 struct slName *getNeighbors(struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
-if (sameString(sortOn, "homology"))
+if (sameString(groupOn, "homology"))
     return getHomologyNeighbors(conn);
 else
     {
-    errAbort("Unknown sort value %s", sortOn);
+    errAbort("Unknown sort value %s", groupOn);
     return NULL;
+    }
+}
+
+int columnCmpPriority(const void *va, const void *vb)
+/* Compare to sort columns based on priority. */
+{
+const struct column *a = *((struct column **)va);
+const struct column *b = *((struct column **)vb);
+float dif = a->priority - b->priority;
+if (dif < 0)
+    return -1;
+else if (dif > 0)
+    return 1;
+else
+    return 0;
+}
+
+static void refinePriorities(struct column *colList)
+/* Consult colOrderVar if it exists to reorder priorities. */
+{
+char *orig = cartOptionalString(cart, colOrderVar);
+if (orig != NULL)
+    {
+    char *dupe = cloneString(orig);
+    char *s = dupe;
+    char *name, *val;
+    struct hash *colHash = hashColumns(colList);
+    struct column *col;
+    while ((name = nextWord(&s)) != NULL)
+        {
+	if ((val = nextWord(&s)) == NULL || !isdigit(val[0]))
+	    {
+	    warn("Bad priority list: %s", orig);
+	    cartRemove(cart, colOrderVar);
+	    break;
+	    }
+	col = hashFindVal(colHash, name);
+	if (col != NULL)
+	    col->priority = atof(val);
+	}
+    hashFree(&colHash);
+    freez(&dupe);
+    }
+}
+
+void refineVisibility(struct column *colList)
+/* Consult cart to set on/off visibility. */
+{
+char varName[128], *val;
+struct column *col;
+
+for (col = colList; col != NULL; col = col->next)
+    {
+    safef(varName, sizeof(varName), "near.col.%s", col->name);
+    val = cartOptionalString(cart, varName);
+    if (val != NULL)
+	col->on = sameString(val, "on");
     }
 }
 
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
-struct column *list = NULL, *col;
+struct column *colList = NULL, *col;
 
 AllocVar(col);
 col->name = "num";
 col->label = "#";
+col->priority = 1;
+col->on = FALSE;
 numberMethods(col);
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
 AllocVar(col);
 col->name = "acc";
 col->label = "Accession";
+col->priority = 2;
+col->on = TRUE;
 accMethods(col);
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
 AllocVar(col);
 col->name = "bitScore";
-col->label = "Bit Score";
+col->label = "Bits";
+col->priority = 3;
+col->on = TRUE;
 bitScoreMethods(col);
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
 AllocVar(col);
 col->name = "eVal";
 col->label = "E Value";
+col->priority = 4;
+col->on = FALSE;
 eValMethods(col);
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
 AllocVar(col);
 col->name = "percentId";
 col->label = "%ID";
+col->priority = 5;
+col->on = TRUE;
 percentIdMethods(col);
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
 AllocVar(col);
 col->name = "knownPos";
 col->label = "Genome Position";
 knownPosMethods(col);
+col->priority = 6;
+col->on = TRUE;
 if (col->exists(col, conn))
-    slAddHead(&list, col);
+    slAddHead(&colList, col);
 
-slReverse(&list);
-return list;
+refinePriorities(colList);
+refineVisibility(colList);
+
+slSort(&colList, columnCmpPriority);
+return colList;
+}
+
+struct hash *hashColumns(struct column *colList)
+/* Return a hash of columns keyed by name. */
+{
+struct column *col;
+struct hash *hash = hashNew(8);
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (hashLookup(hash, col->name))
+        warn("duplicate %s in column list", col->name);
+    hashAdd(hash, col->name, col);
+    }
+return hash;
 }
 
 void bigTable()
@@ -324,7 +409,8 @@ hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
 for (col = colList; col != NULL; col = col->next)
     {
     char *colName = col->label;
-    hPrintf("<TD><B>%s</B></TD>", colName); 
+    if (col->on)
+	hPrintf("<TD><B>%s</B></TD>", colName); 
     }
 hPrintf("</TR>\n");
 
@@ -339,10 +425,13 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     for (col = colList; col != NULL; 
     		col = col->next)
         {
-	if (col->cellPrint == NULL)
-	    hPrintf("<TD></TD>");
-	else
-	    col->cellPrint(col,geneId,conn);
+	if (col->on)
+	    {
+	    if (col->cellPrint == NULL)
+		hPrintf("<TD></TD>");
+	    else
+		col->cellPrint(col,geneId,conn);
+	    }
 	}
     hPrintf("</TR>");
     }
@@ -365,7 +454,6 @@ if (curGeneId != NULL)
     bigTable();
     }
 }
-
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
