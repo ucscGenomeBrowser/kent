@@ -64,7 +64,7 @@ type psl .
 
 track gbProtAnn
 shortLabel GenBank Protein Annotations
-longLabel Proteins Annotated in GenBank NP_828849
+longLabel Proteins Annotated in GenBank NP_828849, Structual Analysis and Predictions
 group genes
 priority 35
 color 12,12,120
