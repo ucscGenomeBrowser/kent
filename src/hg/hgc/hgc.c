@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.854 2005/03/21 23:56:16 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.855 2005/03/22 02:12:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10914,6 +10914,7 @@ seqNib  = nibLoadPartMasked(0, nibFile, start, end-start);
 strand  = cloneString(snp.strand);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
+
 printf("<font face=courier><BR><B>dbSnp:&nbsp;</B>%s    </font>", seqDbSnp->dna);
 printf("<font face=courier><BR><B>nib:&nbsp;&nbsp;&nbsp;</B>%s</font>", seqNib->dna);
 
@@ -10951,7 +10952,7 @@ while ((row = sqlNextRow(sr))!=NULL)
 	chrom = cloneString(snp.chrom);
 	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
-	printSnpAlignment(snp);
+	/*printSnpAlignment(snp);*/
 	printf("<BR>\n");
 	firstOne=0;
 	}
@@ -10962,7 +10963,7 @@ printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
 doSnpEntrezGeneLink(tdb, itemName);
-printLsSnpLinks(snp);
+/*printLsSnpLinks(snp);*/
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
