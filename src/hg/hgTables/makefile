@@ -26,7 +26,6 @@ alpha::
 	chmod g+w ${CGI_BIN}/all.joiner
 	wget --quiet -O ${CGI_BIN}/galaAvail.tab \
 	  http://gala.cse.psu.edu/cgi-bin/live_versions
-	cp ${CGI_BIN}/galaAvail.tab ${CGI_BIN}-${USER}
 
 beta::
 	rm -f ${CGI_BIN}-beta/all.joiner
