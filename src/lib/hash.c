@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.22 2004/04/15 07:27:55 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.23 2004/07/16 19:04:54 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -76,6 +76,7 @@ memcpy(el->name, name, nameSize);
 el->val = val;
 el->next = hash->table[hashVal];
 hash->table[hashVal] = el;
+hash->elCount += 1;
 return el;
 }
 
@@ -101,7 +102,8 @@ if (hel == NULL)
     return NULL;
     }
 ret = hel->val;
-slRemoveEl(pBucket, hel);
+if (slRemoveEl(pBucket, hel))
+    hash->elCount -= 1;
 return ret;
 }
 

@@ -22,6 +22,7 @@ struct hash
     int powerOfTwoSize;		/* Size of table as a power of two. */
     int size;			/* Size of table. */
     struct lm *lm;	/* Local memory pool. */
+    int elCount;		/* Count of elements. */
     };
 
 #define hashMaxSize 24
