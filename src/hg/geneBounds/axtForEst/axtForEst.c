@@ -3,12 +3,16 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "hdb.h"
 #include "binRange.h"
 #include "axt.h"
 #include "psl.h"
 
 char *clChrom = "all";
+char *track = "est";
+char *estLibrary = NULL;
+boolean isRefSeq = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +23,11 @@ errAbort(
   "   axtForEst database axtDir output.axt\n"
   "options:\n"
   "   -chrom=chrN - restrict to a specific chromosome\n"
+  "   -track=track - Use a track other than est\n"
+  "   -lib=libWildCard (SQL format where % is like * normally)\n"
+  "   -refSeq - Don't correct indels in EST, treat as refSeq\n"
+  "To get MGC est's for Dec 2001 human do:\n"
+  "axtForEst hg10 ~/bz/axtBest mgcEst.axt -track=tightEst -lib=NIH_MGC%\n"
   );
 }
 
@@ -39,6 +48,8 @@ struct mrnaBlock *mrnaBlockFromPsl(struct psl *psl)
 struct mrnaBlock *mbList = NULL, *mb = NULL;
 int i;
 int maxGap = 5;
+if (isRefSeq)
+    maxGap = 0;
 for (i=0; i<psl->blockCount; ++i)
     {
     int qStart = psl->qStarts[i];
@@ -99,25 +110,27 @@ slReverse(&axtList);
 return axtList;
 }
 
-struct hash *makeMgcEstHash(struct sqlConnection *conn)
+struct hash *makeLibEstHash(struct sqlConnection *conn, char *lib)
 /* Make hash of all MGC est's. */
 {
 struct hash *hash = newHash(20);
 struct sqlResult *sr;
 char **row;
 int count = 0;
-sr = sqlGetResult(conn, 
-	"select mrna.acc from mrna,library "
-	"where mrna.library = library.id "
-	"and library.name like 'NIH_MGC%'"
-	);
+struct dyString *query = newDyString(512);
+
+dyStringPrintf(query, "select mrna.acc from mrna,library "
+		   "where mrna.library = library.id "
+		   "and library.name like '%s'", lib);
+sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
     hashStore(hash, row[0]);
     }
 sqlFreeResult(&sr);
-printf("%d mgc ESTs\n", count);
+printf("%d %s ESTs\n", count, lib);
+dyStringFree(&query);
 return hash;
 }
 
@@ -300,7 +313,7 @@ freeDnaSeq(&genoSeq);
 }
 
 void oneChrom(char *chrom, struct sqlConnection *conn, 
-	struct hash *mgcEstHash, char *inAxtFile, FILE *f)
+	struct hash *libEstHash, char *inAxtFile, FILE *f)
 /* Process one chromosome */
 {
 int chromSize = hChromSize(chrom);
@@ -310,23 +323,23 @@ struct psl *psl;
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-int spliEstCount = 0, mgcCount = 0;
+int spliEstCount = 0, libCount = 0;
 
 printf("Read in %d axts from %s\n", slCount(inAxtList), inAxtFile);
-sr = hChromQuery(conn, "tightEst", chrom, NULL, &rowOffset);
+sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++spliEstCount;
     psl = pslLoad(row + rowOffset);
-    if (hashLookup(mgcEstHash, psl->qName))
+    if (libEstHash == NULL || hashLookup(libEstHash, psl->qName))
         {
-	++mgcCount;
+	++libCount;
 	outputOne(psl, bk, f); 
 	}
     pslFree(&psl);
     }
 sqlFreeResult(&sr);
-printf("Read %d spliced EST's, %d MGC\n", spliEstCount, mgcCount);
+printf("Read %d spliced EST's, %d in library\n", spliEstCount, libCount);
 binKeeperFree(&bk);
 axtFreeList(&inAxtList);
 }
@@ -339,12 +352,16 @@ struct slName *chromList = NULL, *chromEl = NULL;
 FILE *f = mustOpen(outFile, "w");
 char inAxtFile[512];
 struct sqlConnection *conn;
-struct hash *mgcEstHash = NULL;
+struct hash *libEstHash = NULL;
 
 hSetDb(database);
 conn = hAllocConn();
-mgcEstHash = makeMgcEstHash(conn);
+if (estLibrary != NULL)
+   libEstHash = makeLibEstHash(conn, estLibrary);
+track = optionVal("track", track);
+estLibrary = optionVal("lib", estLibrary);
 clChrom = optionVal("chrom", clChrom);
+isRefSeq = optionExists("refSeq");
 if (sameWord(clChrom, "all"))
     chromList = hAllChromNames();
 else
@@ -353,7 +370,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     char *chrom = chromEl->name;
     sprintf(inAxtFile, "%s/%s.axt", axtDir, chrom);
-    oneChrom(chrom, conn, mgcEstHash, inAxtFile, f);
+    oneChrom(chrom, conn, libEstHash, inAxtFile, f);
     }
 hFreeConn(&conn);
 }
