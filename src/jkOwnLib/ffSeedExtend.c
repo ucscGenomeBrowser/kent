@@ -1135,14 +1135,24 @@ else
     return 0;
 }
 
-static int trimGapPenalty(int hGap, int nGap)
+static int trimGapPenalty(int hGap, int nGap, char *iStart, char *iEnd, int orientation)
 /* Calculate gap penalty for routine below. */
 {
-int penalty =  ffCalcGapPenalty(hGap, nGap, ffCdna) + 2;
-if (nGap > 0 && hGap > 2)
-     penalty += 3;
+int penalty =  ffCalcGapPenalty(hGap, nGap, ffCdna);
+if (hGap > 2 || nGap > 2)	/* Not just a local extension. */
+				/* Score gap to favor introns. */
+    {
+    penalty <<= 1;
+    if (nGap > 0)	/* Intron gaps are not in n side at all. */
+	 penalty += 3;
+    			/* Good splice sites give you bonus 2,
+			 * bad give you penalty of six. */
+    penalty += 6 - 2*ffScoreIntron(iStart[0], iStart[1], 
+    	iEnd[-2], iEnd[-1], orientation);
+    }
 return penalty;
 }
+
 
 static struct ffAli *trimFlakyEnds(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	struct ffAli *ffList)
@@ -1171,9 +1181,7 @@ while (right != NULL)
     iStart = left->hEnd;
     iEnd = right->hStart;
     gapPenalty = trimGapPenalty(iEnd-iStart, 
-    	right->nStart - left->nEnd);
-    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
-    	iEnd[-2], iEnd[-1], orientation);
+    	right->nStart - left->nEnd, iStart, iEnd, orientation);
     if (gapPenalty >= blockScore)
         {
 	freeMem(left);
@@ -1198,9 +1206,7 @@ while (left != NULL)
     iStart = left->hEnd;
     iEnd = right->hStart;
     gapPenalty = trimGapPenalty(iEnd-iStart, 
-    	right->nStart - left->nEnd) + 4;
-    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
-    	iEnd[-2], iEnd[-1], orientation);
+    	right->nStart - left->nEnd, iStart, iEnd, orientation);
     if (gapPenalty >= blockScore)
         {
 	freeMem(right);
