@@ -1,7 +1,7 @@
 .c.o:
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
-L = -lm
+L = -lm $(MYSQLLIBS)
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -9,4 +9,4 @@ O = bedCons.o
 
 bedCons: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedCons $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/bedCons
+#	strip $(HOME)/bin/$(MACHTYPE)/bedCons
