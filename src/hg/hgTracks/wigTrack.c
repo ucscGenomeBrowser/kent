@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.31 2004/01/20 20:02:10 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.32 2004/01/20 20:39:08 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -94,12 +94,6 @@ for (el = *pList; el != NULL; el = next)
  *	is a Span found in the data (==zoom level indication)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
-
-#if defined(DEBUG)
-#define DBGMSGSZ	1023
-extern char dbgMsg[DBGMSGSZ+1];
-extern void wigDebugPrint(char * name);
-#endif
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -833,13 +827,13 @@ AllocVar(wigCart);
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL, wordCount, words);
-wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL,
-	wordCount, words);
-wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL, wordCount, words);
+wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
 
-wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight,
-	wordCount, words);
+wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
+
+wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
+	
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;

@@ -81,16 +81,22 @@ extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
 /* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
 extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
-    int *Default, int wordCount, char *words[]);
+    int *Default);
 /* return pixels heights allowable from trackDb or cart in lib/wiggleCart.c */
 extern enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
-    char **optString, int wordCount, char *words[]);
+    char **optString);
 /* return horizontalGrid setting	*/
 extern enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb,
-    char **optString, int wordCount, char *words[]);
+    char **optString);
 /* return autoScale setting	*/
 extern enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb,
-	char **optString, int wordCount, char **words);
+	char **optString);
 /* return graph type, line(points) or bar graph	*/
+
+#if defined(DEBUG)
+#define DBGMSGSZ	1023
+extern char dbgMsg[DBGMSGSZ+1];
+extern void wigDebugPrint(char * name);
+#endif
 
 #endif /* WIGGLE_H */

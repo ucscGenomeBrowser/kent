@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.80 2004/01/20 19:41:42 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.81 2004/01/20 20:41:38 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -379,12 +379,11 @@ snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
 snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
 snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
 
-wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight,
-    wordCount, words);
+wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
-(void) wigFetchHorizontalGrid(tdb, &horizontalGrid, wordCount, words);
-(void) wigFetchAutoScale(tdb, &autoScale, wordCount, words);
-(void) wigFetchGraphType(tdb, &lineBar, wordCount, words);
+(void) wigFetchHorizontalGrid(tdb, &horizontalGrid);
+(void) wigFetchAutoScale(tdb, &autoScale);
+(void) wigFetchGraphType(tdb, &lineBar);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
