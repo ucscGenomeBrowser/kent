@@ -2,6 +2,10 @@
 #ifndef MAF_H
 #define MAF_H
 
+#ifndef COMMON_H
+#include "common.h"
+#endif
+
 #ifndef AXT_H
 #include "axt.h"
 #endif
@@ -97,6 +101,20 @@ void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
  * is still owned by the axt.  Furthermore the next call to
  * this function will invalidate the previous temp value.
  * It's sort of a kludge, but quick to run and easy to implement. */
+
+double mafScoreMultiz(struct mafAli *maf);
+/* Return score of a maf (calculated rather than what is
+ * stored in the structure. */
+
+double mafScoreRangeMultiz(struct mafAli *maf, int start, int size);
+/* Return score of a subset of an alignment.  Parameters are:
+ *    maf - the alignment
+ *    start - the (zero based) offset to start calculating score
+ *    size - the size of the subset
+ * The following relationship should hold:
+ *   scoreRange(maf,start,size) =
+ *	scoreRange(maf,0,start+size) - scoreRange(maf,0,start)
+ */
 
 #endif /* MAF_H */
 
