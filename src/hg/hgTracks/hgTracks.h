@@ -622,5 +622,16 @@ void drawScaledBoxSample(struct vGfx *vg,
         
 struct track *trackFromTrackDb(struct trackDb *tdb);
 
+int leftLabelX;			/* Start of area to draw left labels on. */
+int leftLabelWidth;		/* Width of area to draw left labels on. */
+
+boolean trackWantsHgGene(struct track *tg);
+/* Return TRUE if track wants hgGene on details page. */
+
+void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
+		       char *track, char *item, char *statusLine, boolean doHgGene);
+/* Print out image map rectangle that would invoke the hgc (human genome click)
+ * program. */
+
 #endif /* HGTRACKS_H */
 
