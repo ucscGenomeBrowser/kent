@@ -55,6 +55,7 @@ exit; # don't actually run this like a script :)
     echo 'create database sacCer1' | hgsql ''
     cd /cluster/data/sacCer1
     hgNibSeq sacCer1 /cluster/data/sacCer1/nib */*.fa
+    faSize -detailed */*.fa > chrom.sizes
     mkdir -p /gbdb/sacCer1/nib
     ln -s /cluster/data/sacCer1/nib/*.nib /gbdb/sacCer1/nib
     # Create a read-only alias in your .cshrc or .profile
@@ -241,15 +242,116 @@ sacCer1.downloadDir = sacCer1
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
 
-# ADDING LOCALIZATION AND ABUNDANCE INFO FROM SGD AND
-# http://yeastgfp.ucsf.edu
-	ssh hgwdef
+# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST
+# Grab sequence from all six yeast and massage
+# it so that fasta records all start with sacXXX
+# in the directory /cluster/data/sacCer1/bed/otherYeast/align
+       ssh kkr1u00
+       cd /cluster/data/sacCer1/bed/otherYeast/align
+
+       # Create directory full of size info
+       mkdir sizes
+       foreach i (sac*)
+           faSize $i -detailed > sizes/$i
+       end
+
+       # Create some working directories
+       mkdir lav axtAll axtBest mafIn mafRawOut mafOut
+
+       # Create little shell script to do blastz alignments
+       cat > bz << end
+#!/bin/csh -ef
+blastz \$1 \$2 > \$3
+end
+       chmod a+x bz
+
+       # Create job spec to do all blastz alignments
+       ls -1 ../../../*/chr*.fa > sacCer.lst
+       ls -1 sac??? > other.lst
+       cat > gsub << end
+#LOOP
+bz \$(path1) \$(path2) {check out line+ lav/\$(root1).\$(root2)}
+#ENDLOOP
+end
+       gensub2 sacCer.lst other.lst gsub spec
+
+       # Do parasol blastz run
+       para create spec
+       para try
+       # Do some para checks and if all is well
+       para push
+#Completed: 102 of 102 jobs
+#CPU time in finished jobs:      43279s     721.31m    12.02h    0.50d  0.001 y
+#IO & Wait Time:                   540s       9.00m     0.15h    0.01d  0.000 y
+#Average job time:                 430s       7.16m     0.12h    0.00d
+#Longest job:                     1458s      24.30m     0.41h    0.02d
+#Submission to last job:          3994s      66.57m     1.11h    0.05d
+
+       # Convert from lav to axt
+       cd lav
+       foreach i (sacPar sacMik sacKud sacBay sacCas sacKlu)
+           foreach j (*.$i)
+	       lavToAxt $j ../../../../nib ../$i ../axtAll/$j -fa
+	   end
+	   echo done $i
+       end
+       cd ..
+
+       # Run axtBest
+       cd axtAll
+       foreach i (sacPar sacMik sacKud sacBay sacCas sacKlu)
+           foreach j (*.$i)
+	       axtBest $j $j:r ../axtBest/$j
+	   end
+	   echo done $i
+       end
+       cd ..
+
+       # Convert to maf
+       cd axtBest
+       foreach i (sacPar sacMik sacKud sacBay sacCas sacKlu)
+           foreach j (*.$i)
+	       axtToMaf $j ../../../../chrom.sizes ../sizes/$i ../mafIn/$j -tPrefix=sacCer1.
+	   end
+	   echo done $i
+       end
+       cd ..
+
+
+       # Run multiz
+       cd mafIn
+       set mz = /cluster/bin/penn/tba.9.13/multiz
+       foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M)
+          set c = chr$i
+	  $mz $c.sacPar $c.sacMik - > ../mafRawOut/$c.maf
+	  echo done $c.sacMik
+	  foreach s (sacKud sacBay sacCas sacKlu)
+	      $mz $c.$s ../mafRawOut/$c.maf - > ../mafRawOut/tmp
+	      mv ../mafRawOut/tmp ../mafRawOut/$c.maf
+	      echo done $c.$s
+	  end
+       end
+       cd ..
+
+       #Load into database
+       ssh hgwdev
+       cd /cluster/data/sacCer1/bed/otherYeast/align
+       ln -s /cluster/store6/sacCer1/bed/otherYeast/align/mafOut /gbdb/sacCer1/multizYeast
+       hgLoadMaf sacCer1 multizYeast
+
+       # Clean up
+       cd mafRawOut
+       foreach i (*.maf)
+           mafFilter -minScore=100 $i > ../mafOut/$i
+       rm -r axtAll axtBest lav err mafRawOut multizYeast.tab
+
+
+# ADDING LOCALIZATION AND ABUNDANCE INFO FROM SGD AND 
+# http://yeastgfp.ucsf.edu  				(DONE 2003-11-24 - Jim)
+	ssh hgwdev
 	cd /cluster/data/sacCer1/bed
 	mkdir sgdLocalization
 	cd sgdLocalization
-	hgSgdGfp ../../download/systematic_results/localization/OS*.tab .
-        # Put a # to comment out any lines the program complains about
-	# and run again.
 	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
 
 # UPDATE GO DATABASE

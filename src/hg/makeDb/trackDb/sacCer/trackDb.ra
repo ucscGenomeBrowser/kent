@@ -26,21 +26,34 @@ visibility pack
 color 30,130,210
 type bed 4 +
 
-track sgdGeneBad
-shortLabel Bad SGD Genes
-longLabel Bad Protein-Coding Genes from Sacchromyces Genome Database
-group genes
-priority 45.6
-visibility pack
-color 100,100,180
-type genePred sgdPep
-#hgGene on
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility hide
+spectrum on
+type psl est
+intronGap 30
 
-track sgdOtherBad
-shortLabel Bad SGD Other
-longLabel Bad Other Features from Sacchromyces Genome Database
-group genes
-priority 46.1
-visibility pack
-color 130,130,210
-type bed 4 +
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility dense
+spectrum on
+type psl est
+intronGap 30
+
+
+track multizYeast 
+shortLabel Multiz Yeast
+longLabel S. cerevisia/paradoxus/mikatae/kudriavzevii/kluyveri/castelli Alignments
+group compGeno
+priority 146
+visibility full
+type maf
+color 0,0,20
+altColor 0,0,20
+
