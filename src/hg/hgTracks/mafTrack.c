@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.18 2003/12/16 18:58:32 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.19 2003/12/16 19:20:30 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -156,6 +156,8 @@ AllocVar(mi);
 mi->name = cloneString("Score");
 mi->height = scoreHeight;
 slAddHead(&miList, mi);
+
+if (trackDbSetting(tg->tdb, "pairwise") != NULL)
 
 /* Make up items for other organisms by scanning through
  * all mafs and looking at database prefix to source. */
