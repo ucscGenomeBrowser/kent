@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.15 2004/07/21 19:45:15 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.16 2004/10/27 07:55:19 kent Exp $";
 
 /* Command line options */
 
@@ -189,11 +189,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
                 if (warnVerboseOption)
                     verbose(1, msg);
                 }
-            else
-                errAbort(msg);
-            mafAliFree(&maf);
-            /* don't add this alignment to tab file */
-            continue;
+	    mr.score = 0.001;
             }
 	if (mr.score > 1.0) mr.score = 1.0;
 	mafCount++;
