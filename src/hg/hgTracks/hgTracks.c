@@ -78,6 +78,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
+#include "tfbsConsSites.h"
 #include "itemAttr.h"
 #include "encode.h"
 #include "variation.h"
@@ -85,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.846 2004/12/03 13:31:58 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.847 2004/12/06 17:53:07 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3961,7 +3962,112 @@ tg->tdb = tdb;
 return tg;
 }
 
+static Color tfbsConsShades[3];
 
+void tfbsConsSitesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+{
+char * colorLoString = trackDbSettingOrDefault(tg->tdb, "colorLo", "0,0,0");
+char * colorMidString = trackDbSettingOrDefault(tg->tdb, "colorMid", "255,255,0");
+char * colorHighString = trackDbSettingOrDefault(tg->tdb, "colorHigh", "255,0,0");
+int colorLoRgb = bedParseRgb(colorLoString);
+int colorMidRgb = bedParseRgb(colorMidString);
+int colorHighRgb = bedParseRgb(colorHighString);
+
+tg->colorShades = tfbsConsShades;
+
+tg->colorShades[0] = vgFindColorIx(vg, (colorLoRgb & 0xff0000) >> 16, 
+    (colorLoRgb & 0xff00) >> 8, (colorLoRgb & 0xff));
+tg->colorShades[1] = vgFindColorIx(vg, (colorMidRgb & 0xff0000) >> 16, 
+    (colorMidRgb & 0xff00) >> 8, (colorMidRgb & 0xff));
+tg->colorShades[2] = vgFindColorIx(vg, (colorHighRgb & 0xff0000) >> 16, 
+    (colorHighRgb & 0xff00) >> 8, (colorHighRgb & 0xff));
+
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
+}
+
+void tfbsConsSitesDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct tfbsConsSites *ro = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)ro->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)ro->chromEnd-winStart)*scale) + xOff;
+int w;
+struct trackDb *tdb = tg->tdb;
+
+color = tg->colorShades[ro->score];
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, ro);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHc(ro->chromStart, ro->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, ro), NULL);
+	}
+    }
+if (tg->subType == lfWithBarbs || tg->exonArrows)
+    {
+    int dir = 0;
+    if (ro->strand[0] == '+')
+	dir = 1;
+    else if(ro->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
+    }
+}
+
+void loadTfbsConsSites(struct track *tg)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char *lastName = NULL;
+struct tfbsConsSites *ro, *list = NULL;
+struct linkedFeatures *lfList = NULL, *lf;
+struct simpleFeature *sf, *sfList = NULL;
+double scoreMid = atof(trackDbSettingOrDefault(tg->tdb, "scoreMid", "1.93"));
+double scoreHigh = atof(trackDbSettingOrDefault(tg->tdb, "scoreHigh", "2.47"));
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ro = tfbsConsSitesLoad(row+rowOffset);
+
+    if (ro->zScore >= scoreHigh)
+	ro->score = 2;
+    else if (ro->zScore >= scoreMid)
+	ro->score = 1;
+    else
+	ro->score = 0;
+    slAddHead(&list, ro);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = list;
+}
 
 void loadTfbsCons(struct track *tg)
 {
@@ -3988,6 +4094,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
+}
+
+void tfbsConsSitesMethods(struct track *tg)
+{
+    bedMethods(tg);
+    tg->loadItems = loadTfbsConsSites;
+    tg->drawItems = tfbsConsSitesDraw;
+    tg->drawItemAt = tfbsConsSitesDrawAt;
 }
 
 void tfbsConsMethods(struct track *tg)
@@ -9130,6 +9244,7 @@ registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("wabaCbr", cbrWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
+registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
@@ -9168,6 +9283,7 @@ registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
+registerTrackHandler("scoreMm5",valAlMethods);
 registerTrackHandler("scoreMm2X",valAlMethods);
 registerTrackHandler("scoreMm3X",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
@@ -9199,6 +9315,7 @@ registerTrackHandler("altGraphXT6Con", altGraphXMethods );
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
+registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
