@@ -39,3 +39,14 @@ prt - Protein product accession and version.
 prs - protein product sequence size.
 pfo - protein product fasta offset
 pfs - protein product fasta size
+rsu - RefSeq summary from comment;
+rsc - RefSeq completeness from comment.
+        cmpl5   = complete on the 5' end.
+        cmpl3   = complete on the 3' end.
+        full    = full length.
+        incmpl  = incomplete on both ends.
+        incmpl5 = incomplete on the 5' end.
+        incmpl3 = incomplete on the 3' end.
+        part    = not full length.
+        unk     = unknown
+        

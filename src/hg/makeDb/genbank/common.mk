@@ -3,17 +3,11 @@
 OPT= -ggdb
 
 KENT = ${GBROOT}/../../..
-ifneq ($(wildcard ${GBROOT}/extern/lib/libmysqlclient.a),)
-    # for now, we use statis executables because of the RH 7/9 and libc pains
-    OPT += -static
-
-    export MYSQLINC=${GBROOT}/extern/include/mysql
-    ABSGBROOT=$(shell cd ${GBROOT} && pwd)
-    export MYSQLLIBS=${ABSGBROOT}/extern/lib/libmysqlclient.a
-else
-    # redhat 9
-    export MYSQLINC=/usr/include/mysql
-    export MYSQLLIBS=-L/usr/lib -lmysqlclient
+ifeq (${MYSQLINC},)
+$(error must set MYSQLINC env var)
+endif
+ifeq (${MYSQLLIBS},)
+$(error must set MYSQLLIBS env var)
 endif
 
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc -I$(MYSQLINC)

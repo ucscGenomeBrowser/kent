@@ -238,8 +238,8 @@ struct gbPipeline *gbPipelineCreate(char ***cmds, unsigned options,
 {
 struct gbPipeline *pipeline;
 int pipeFds[2];
-unsigned flags;
-char *mode;
+unsigned flags = 0;
+char *mode = NULL;
 if (options & PIPELINE_READ)
     {
     flags = O_RDONLY;

@@ -139,6 +139,8 @@ runMySql("$tbldir/refLink.tbl", $refLinkSel);
 
 runMySql("$tbldir/refSeqStatus.tbl",
          "SELECT mrnaAcc,status FROM refSeqStatus ORDER BY mrnaAcc");
+runMySql("$tbldir/refSeqSummary.tbl",
+         "SELECT mrnaAcc,completeness,summary FROM refSeqSummary ORDER BY mrnaAcc");
 
 runMySql("$tbldir/refSeqAli.tbl",
          "SELECT * FROM refSeqAli ORDER BY tName,tStart,tEnd,qName,qStart,qEnd");

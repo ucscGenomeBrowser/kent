@@ -19,7 +19,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbIndex.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: gbIndex.c,v 1.3 2003/10/14 06:03:52 markd Exp $";
 
 unsigned gbTypeFromName(char* fileName, boolean checkSpecies)
 /* Determine the type flags for a filename based on the naming conventions.
@@ -144,8 +144,8 @@ if (index != NULL)
     gbGenomeFree(&index->genome);
     for (relIdx = 0; relIdx < GB_NUM_SRC_DB; relIdx++)
         gbReleaseFree(&index->rels[relIdx]);
-    freeMem(&index->gbRoot);
-    freeMem(&index);
+    freez(&index->gbRoot);
+    freez(&index);
     *indexPtr = NULL;
     }
 }

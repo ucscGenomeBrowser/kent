@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.5 2003/07/19 21:26:34 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.6 2003/10/14 06:03:52 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -109,15 +109,23 @@ char savedExt[32];
 int len;
 savedExt[0] = '\0';
 strcpy(tmpPath, path);
-if (gbGetCompressor(tmpPath, "r") != NULL)
+/* don't add extension for special names */
+if (!(sameString(path, "stdin")
+      || sameString(path, "stdout")
+      || sameString(path, "/dev/stdin")
+      || sameString(path, "/dev/stdout")
+      || sameString(path, "/dev/null")))
     {
-    char *last = strrchr(tmpPath, '.');
-    strcpy(savedExt, last);
-    *last = '\0';
+    if (gbGetCompressor(tmpPath, "r") != NULL)
+        {
+        char *last = strrchr(tmpPath, '.');
+        strcpy(savedExt, last);
+        *last = '\0';
+        }
+    len = strlen(tmpPath);
+    safef(tmpPath+len, PATH_LEN-len, ".%d.%s.tmp%s", getpid(), getHost(),
+          savedExt);
     }
-len = strlen(tmpPath);
-safef(tmpPath+len, PATH_LEN-len, ".%d.%s.tmp%s", getpid(), getHost(),
-      savedExt);
 }
 
 FILE* gbMustOpenOutput(char* path)
@@ -357,7 +365,7 @@ static char *BZ2_WRITE[] = {
     "bzip2", "-c1", NULL
 };
 
-boolean isRead;
+boolean isRead = FALSE;
 if (sameString(mode, "r"))
     isRead = TRUE;
 else if (sameString(mode, "w") || sameString(mode, "a"))

@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.12 2003/08/25 05:12:59 genbank Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.13 2003/10/14 06:03:52 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -100,6 +100,16 @@ static char* refLinkCreate =
 "    index(geneName)\n"
 ")";
 
+static char* refSeqSummaryCreate = 
+"CREATE TABLE refSeqSummary ("
+"  mrnaAcc varchar(255) not null,"
+"  completeness enum('Unknown', 'Complete5End', "
+"    'Complete3End', 'FullLength', 'IncompleteBothEnds',"
+"    'Incomplete5End', 'Incomplete3End', 'Partial') not null,"
+"  summary text not null,"
+"  PRIMARY KEY(mrnaAcc))";
+
+
 /* list of the names of the id to string tables */
 static char *raFieldTables[] =
     {
@@ -122,6 +132,7 @@ static struct imageCloneTbl* imageCloneTbl = NULL;
 static struct sqlUpdater* allUpdaters = NULL; /* list of tab files */
 static struct sqlUpdater* mrnaUpd = NULL;
 static struct sqlUpdater* refSeqStatusUpd = NULL;
+static struct sqlUpdater* refSeqSummaryUpd = NULL;
 static struct sqlUpdater* refLinkUpd = NULL;
 
 /* other state objects */
@@ -138,6 +149,8 @@ static unsigned raFaSize;
 static time_t raModDate;
 static short raVersion;
 static char *raRefSeqStatus;
+static char *raRefSeqCompleteness;
+static struct dyString* raRefSeqSummary = NULL;
 static unsigned raLocusLinkId;
 static unsigned raOmimId;
 static char raCds[8192];  /* Big due to join() specification.  FIXME: make dstring */
@@ -337,7 +350,11 @@ if (gSrcDb == GB_REFSEQ)
     if (refSeqStatusUpd == NULL)
         refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (verbose >= 2),
                                         &allUpdaters);
-
+    if (!sqlTableExists(conn, "refSeqSummary"))
+        sqlUpdate(conn, refSeqSummaryCreate);
+    if (refSeqSummaryUpd == NULL)
+        refSeqSummaryUpd = sqlUpdaterNew("refSeqSummary", gTmpDir, (verbose >= 2),
+                                         &allUpdaters);
     if (!sqlTableExists(conn, "refLink"))
         sqlUpdate(conn, refLinkCreate);
     if (refLinkUpd == NULL)
@@ -369,7 +386,7 @@ return extFileTblGet(extFiles, conn, path);
 static char *parseRefSeqStatus(char *rss)
 /* parse the refseq status field */
 {
-if (rss == NULL)
+if ((rss == NULL) || sameString(rss, "unk"))
     return "Unknown";
 else if (sameString(rss, "rev"))
     return "Reviewed";
@@ -381,10 +398,32 @@ else if (sameString(rss, "pre"))
     return "Predicted";
 else if (sameString(rss, "inf"))
     return "Inferred";
-else if (sameString(rss, "unk"))
-    return "Unknown";
 else
     errAbort("invalid value for ra rss field \"%s\"", rss);
+return NULL; /* don't make it here */
+}
+
+static char *parseRefSeqCompletness(char *rsc)
+/* parse the refseq completeness field */
+{
+if ((rsc == NULL) || sameString(rsc, "unk"))
+    return "Unknown";
+else if (sameString(rsc, "cmpl5"))
+    return "Complete5End";
+else if (sameString(rsc, "cmpl3"))
+    return "Complete3End";
+else if (sameString(rsc, "full"))
+    return "FullLength";
+else if (sameString(rsc, "incmpl"))
+    return "IncompleteBothEnds";
+else if (sameString(rsc, "incmpl5"))
+    return "Incomplete5End";
+else if (sameString(rsc, "incmpl3"))
+    return "Incomplete3End";
+else if (sameString(rsc, "part"))
+    return "Partial";
+else
+    errAbort("invalid value for ra rsc field \"%s\"", rsc);
 return NULL; /* don't make it here */
 }
 
@@ -406,6 +445,10 @@ raFaSize = 0;
 raModDate = NULL_DATE;
 raVersion = NULL_VERSION;
 raRefSeqStatus = NULL;
+raRefSeqCompleteness = NULL;
+if (raRefSeqSummary == NULL)
+    raRefSeqSummary = dyStringNew(1024);
+dyStringClear(raRefSeqSummary);
 raLocusLinkId = 0;
 raOmimId = 0;
 raCds[0] = '\0';
@@ -462,6 +505,10 @@ for (;;)
         raProtFaSize = gbParseUnsigned(raLf, val);
     else if (sameString(tag, "rss"))
         raRefSeqStatus = parseRefSeqStatus(val);
+    else if (sameString(tag, "rsc"))
+        raRefSeqCompleteness = parseRefSeqCompletness(val);
+    else if (sameString(tag, "rsu"))
+        dyStringAppend(raRefSeqSummary, val);
     else if (sameString(tag, "loc"))
         raLocusLinkId = gbParseUnsigned(raLf, val);
     else if (sameString(tag, "mim"))
@@ -593,6 +640,27 @@ else if (status->stateChg & GB_META_CHG)
                      raRefSeqStatus, raAcc);
 }
 
+static void refSeqSummaryUpdate(struct gbStatus* status)
+/* Update the refSeqSummary table for the current entry */
+{
+/* only add to table if we actually have something */
+if ((raRefSeqSummary->stringSize > 0) || (raRefSeqCompleteness != NULL))
+    {
+    char* summary = sqlEscapeString2(alloca(2*raRefSeqSummary->stringSize+1), 
+                                     raRefSeqSummary->string);
+    if (raRefSeqCompleteness == NULL)
+        raRefSeqCompleteness = "Unknown";
+    
+    if (status->stateChg & GB_NEW)
+        sqlUpdaterAddRow(refSeqSummaryUpd, "%s\t%s\t%s", raAcc, raRefSeqCompleteness,
+                         summary);
+    else if (status->stateChg & GB_META_CHG)
+        sqlUpdaterModRow(refSeqSummaryUpd, 1, "completeness='%s', summary='%s'"
+                         " WHERE mrnaAcc='%s'", raRefSeqCompleteness,
+                         summary, raAcc);
+    }
+}
+
 static void refLinkUpdate(struct sqlConnection *conn, struct gbStatus* status)
 /* Update the refLink table for the current entry */
 {
@@ -658,6 +726,7 @@ imageCloneUpdate(status, conn);
 if (gSrcDb == GB_REFSEQ)
     {
     refSeqStatusUpdate(status);
+    refSeqSummaryUpdate(status);
     refLinkUpdate(conn, status);
     refSeqPepUpdate(conn, pepFaId);
     }
@@ -898,7 +967,7 @@ struct slName* gbMetaDataListTables(struct sqlConnection *conn)
 /* Get a list of metadata tables that exist in the database */
 {
 static char* TABLE_NAMES[] = {
-    "gbSeq", "gbExtFile", "mrna", "refSeqStatus", "refLink",
+    "gbSeq", "gbExtFile", "mrna", "refSeqStatus", "refSeqSummary", "refLink",
     "imageClone", NULL
 };
 struct slName* tables = NULL;

@@ -28,7 +28,8 @@
 /* FIXME: the output file selection is very convoluted.
  * FIXME: doesn't use gbOpenOutput mechanism for ra files; this is
  * due to the reopening of the files for by-prefix output.
- * FIXME: BAC stuff is untested.
+ * FIXME: BAC, contig stuff is untested, should probably just move it to
+ * another program.
  */
 #include "common.h"
 #include "portable.h"
@@ -47,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.4 2003/10/12 21:26:21 genbank Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.5 2003/10/14 06:03:52 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -69,6 +70,7 @@ static struct kvt *kvt;
  * of kvt memory is in tables in gbParse. (all yuk) */
 static struct dyString *dbXrefBuf = NULL;
 static struct dyString *omimIdBuf = NULL;
+static struct dyString *summaryBuf = NULL;
 static char locusLinkId[64];
 static char faOffStr[128], faSizeStr[64];
 static char pepSizeStr[64], pepFaOffStr[128], pepFaSizeStr[64];
@@ -909,7 +911,7 @@ while (xref != NULL)
 slFreeList(&head);
 }
 
-void parseRefSeq()
+void parseRefSeqStatus()
 /* Check the comment field to see if it contains the RefSeq status.
  * It's annoying this isn't just a field. */
 {
@@ -936,6 +938,78 @@ if ((stat == NULL)
     }
 if (stat != NULL)
     kvtAdd(kvt, "rss", stat);
+}
+
+void parseRefSeqSummary()
+/* Extact the refseq summary from the comment field if present. */
+{
+if (gbCommentField->val != NULL)
+    {
+    char *summary = strstr(gbCommentField->val->string, "Summary:");
+    if (summary != NULL)
+        {
+        char* completeness = NULL;
+        summary += 8;
+        if (summaryBuf == NULL)
+            summaryBuf = dyStringNew(1024);
+        dyStringClear(summaryBuf);
+        dyStringAppend(summaryBuf, summary);
+        /* remove COMPLETENESS: section if it's next */
+        completeness = strstr(summaryBuf->string, "COMPLETENESS:");
+        if (completeness != NULL)
+            completeness[-1] = '\0';
+        kvtAdd(kvt, "rsu", trimSpaces(summaryBuf->string));
+        }
+    }
+}
+
+void parseRefSeqCompleteness()
+/* Extact the refseq completeness information from the comment.
+ * The following values were observed in the refseq data files
+ *     complete on the 5' end.
+ *     complete on the 3' end.
+ *     full length.
+ *     incomplete on both ends.
+ *     incomplete on the 5' end.
+ *     incomplete on the 3' end.
+ *     not full length.
+ */
+{
+if (gbCommentField->val != NULL)
+    {
+    char *completeness = strstr(gbCommentField->val->string, "COMPLETENESS:");
+    if (completeness != NULL)
+        {
+        char* cmpl;
+        completeness += 14;
+        /* strstr is used to allow for stray spaces, etc */
+        if (strstr(completeness, "complete on the 5' end") != NULL)
+            cmpl = "cmpl5";
+        else if (strstr(completeness, "complete on the 3' end") != NULL)
+            cmpl = "cmpl3";
+        else if (strstr(completeness, "full length") != NULL)
+            cmpl = "full";
+        else if (strstr(completeness, "incomplete on both ends") != NULL)
+            cmpl = "incmpl";
+        else if (strstr(completeness, "incomplete on the 5' end") != NULL)
+            cmpl = "incmpl5";
+        else if (strstr(completeness, "incomplete on the 3' end") != NULL)
+            cmpl = "incmpl3";
+        else if (strstr(completeness, "not full length") != NULL)
+            cmpl = "part";
+        else
+            cmpl = "unk";
+        kvtAdd(kvt, "rsc", cmpl);
+        }
+    }
+}
+
+void parseRefSeq()
+/* Parse refSeq specific data */
+{
+parseRefSeqStatus();
+parseRefSeqSummary();
+parseRefSeqCompleteness();
 }
 
 void writePepSeq()
@@ -1180,8 +1254,7 @@ void usage()
 /* Explain usage and exit */
 {
 errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\n"
-         "the sequence data, an ra file containing other relevant info and\n"
-         "a ta file containing summary statistics.\n"
+         "the sequence data, and a ra file containing other relevant info.\n"
          "usage:\n"
          "   gbProcess [options] faFile raFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
