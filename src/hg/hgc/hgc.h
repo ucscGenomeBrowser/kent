@@ -71,6 +71,13 @@ void genericHeader(struct trackDb *tdb, char *item);
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
 
+void abbr(char *s, char *fluff);
+/* Cut out fluff from s. */
+
+void printTableHeaderName(char *name, char *clickName, char *url);
+/* creates a table to display a name vertically,
+ * basically creates a column of letters */
+
 /* ----Routines in other modules in the same directory---- */
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
@@ -79,3 +86,28 @@ void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb,
 void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, char *otherDb);
 /* Display details for AXT tracks. */
+
+void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start);
+/* Display details for expRatio tracks. */
+
+void rosettaDetails(struct trackDb *tdb, char *item);
+/* Set up details for rosetta. */
+
+void affyDetails(struct trackDb *tdb, char *item);
+/* Set up details for affy. */
+
+void gnfExpRatioDetails(struct trackDb *tdb, char *item);
+/* Put up details on some gnf track. */
+
+void affyUclaDetails(struct trackDb *tdb, char *item);
+/* Set up details for affyUcla. */
+
+void cghNci60Details(struct trackDb *tdb, char *item);
+/* Set up details for cghNci60. */
+
+void nci60Details(struct trackDb *tdb, char *item);
+/* Set up details for nci60. */
+
+void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all);
+/* Create tab-delimited output to download */

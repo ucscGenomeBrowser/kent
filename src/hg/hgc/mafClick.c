@@ -9,6 +9,8 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
+static char const rcsid[] = "$Id: mafClick.c,v 1.7 2003/09/23 20:28:06 kent Exp $";
+
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
 static char *autoSubmit = "onchange=\"document.gpForm.submit();\"";

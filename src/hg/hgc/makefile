@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgc
 
-O = $A.o mafClick.o
+O = $A.o expClick.o mafClick.o
 
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
