@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.38 2005/02/09 23:26:42 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.41 2005/02/12 00:22:46 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -831,12 +831,29 @@ for (dtf = filterTables; dtf != NULL; dtf = dtf->next)
 return TRUE;
 }
 
-boolean joinRequired(struct slName *fieldList,
+static boolean isPrimary(char *db, char *table)
+/* Return TRUE if db.table is the primary table in this query. */
+{
+if (sameString(db, database) && sameString(table, curTable))
+    return TRUE;
+else
+    {
+    char dbTable[256];
+    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+    if (sameString(dbTable, curTable))
+	return TRUE;
+    }
+return FALSE;
+}
+
+boolean joinRequired(char *db, char *table,
+		     struct slName *fieldList,
 		     struct joinerDtf **pDtfList,
 		     struct joinerDtf **pFilterTables)
 /* Given a list of db.table.field values, determine whether a joining query 
  * will be required.  Consider not only the tables to be queried but also 
- * the tables to be filtered (which can be a different set).  
+ * the tables to be filtered (which can be a different set).  If db.table 
+ * is not the primary db.table in the search, no tables are to be filtered.
  * If pDtfList is not null, make it point to the list of joinerDtfs 
  * derived from fieldList. 
  * If pFilterTables is not null, make it point to the list of joinerDtfs 
@@ -844,7 +861,13 @@ boolean joinRequired(struct slName *fieldList,
 {
 struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
 struct joinerDtf *filterTables = filteringTables();
-boolean ret = (! allSameTable(dtfList, filterTables));
+boolean ret = FALSE;
+
+/* Ignore filterTables() if this query is not on the primary table. */
+if (! isPrimary(db, table))
+    joinerDtfFreeList(&filterTables);
+
+ret = (! allSameTable(dtfList, filterTables));
 
 if (pDtfList != NULL)
     *pDtfList = dtfList;
@@ -867,7 +890,8 @@ void tabOutSelectedFields(
 {
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;
-boolean doJoin = joinRequired(fieldList, &dtfList, &filterTables);
+boolean doJoin = joinRequired(primaryDb, primaryTable,
+			      fieldList, &dtfList, &filterTables);
 
 if (! doJoin)
     {
@@ -906,7 +930,9 @@ char *words[16];
 char dtf[256];
 int i;
 bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
-chopCommas(fields, words);
+/* Update our notion of fieldCount -- the chrom field is omitted, and 
+ * (if applicable) the reserved field is omitted too: */
+fieldCount = chopCommas(fields, words);
 for (i=fieldCount-1;  i >= 0;  i--)
     {
     if (sameString(words[i], "0"))
@@ -1021,7 +1047,8 @@ struct hTableInfo *hti = hFindTableInfoDb(database, NULL, table);
 struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
 struct joinerDtf *dtfList = NULL;
 struct joinerDtf *filterTables = NULL;
-boolean doJoin = joinRequired(fieldList, &dtfList, &filterTables);
+boolean doJoin = joinRequired(database, table,
+			      fieldList, &dtfList, &filterTables);
 struct region *region;
 struct bed *bedList = NULL;
 struct hash *idHash = identifierHash();

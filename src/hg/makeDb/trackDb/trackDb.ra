@@ -572,6 +572,7 @@ group rna
 priority 56
 visibility dense
 spectrum on
+intronGap 30
 type psl est
 
 track est
@@ -581,6 +582,7 @@ group rna
 priority 57
 visibility hide
 spectrum on
+intronGap 30
 type psl est
 
 track tightEst

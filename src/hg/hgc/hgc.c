@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.832 2005/02/09 23:38:31 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.833 2005/02/10 20:45:16 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -259,7 +259,14 @@ static void printSwissProtProteinUrl(FILE *f, char *accession)
 char *spAcc;
 /* make sure accession number is used (not display ID) when linking to Swiss-Prot */
 spAcc = uniProtFindPrimAcc(accession);
-fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", spAcc);
+if (spAcc != NULL)
+    {
+    fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", spAcc);
+    }
+else
+    {
+    fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
+    }
 }
 
 static void printEntrezUniSTSUrl(FILE *f, char *name)
@@ -13779,6 +13786,7 @@ char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
 char *ptr;
 char *buffer;
+char *spAcc;
 boolean isDm = FALSE;
 boolean isSacCer = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
@@ -13867,7 +13875,16 @@ if (!isDm && (prot != NULL) && !sameString("(null)", prot))
     printf("<B>UniProt:</B> ");
     printf("<A HREF=");
     printSwissProtProteinUrl(stdout, prot);
-    printf(" TARGET=_blank>%s</A></B><BR>\n", uniProtFindPrimAcc(prot));
+
+    spAcc = uniProtFindPrimAcc(prot);
+    if (spAcc == NULL)
+    	{
+	printf(" TARGET=_blank>%s</A></B><BR>\n", prot);
+    	}
+    else
+    	{
+	printf(" TARGET=_blank>%s</A></B><BR>\n", spAcc);
+    	}
     }
 printf("<B>Protein length:</B> %d<BR>\n",pslList->qSize);
 

@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.30 2004/11/13 17:52:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.31 2005/02/10 23:38:31 angie Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -364,9 +364,9 @@ outPage = quickSubmit(tablePage, org, db, group, track, table,
     "outHyperlinks", hgtaDoTopSubmit, "submit");
 if (outPage != NULL)
     {
-    char *s = stringIn("<!--Content", outPage->htmlText);
+    char *s = stringIn("<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->", outPage->htmlText);
     int rowCount;
-    if (s == NULL) errAbort("Can't find <!-Content");
+    if (s == NULL) errAbort("Can't find <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->");
     rowCount = countTagsBetween(outPage, s, NULL, "A");
     if (rowCount != expectedRows)
 	qaStatusSoftError(tablesTestList->status, 
@@ -568,6 +568,8 @@ struct htmlFormVar *tableVar;
 struct slName *table;
 int tableIx;
 
+if (trackPage == NULL)
+    errAbort("Couldn't select track %s", track);
 if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on trackPage");
 if ((tableVar = htmlFormVarGet(mainForm, hgtaTable)) == NULL)
