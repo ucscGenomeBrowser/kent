@@ -42,7 +42,7 @@ errAbort("\n%s",
          "\n" 
          "Options:\n"
          "   -multiOnly - omit queries with only one alignment from output.\n"
-         "   -nonZero - omit queries with zero values.");
+         "   -nonZero - omit queries with zero values.\n");
 }
 
 boolean shouldOutput(struct pslQuery *query)
