@@ -10,7 +10,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.4 2003/06/22 07:46:36 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.5 2003/06/23 17:21:44 kent Exp $";
 
 
 static char *expRatioCellVal(struct column *col, char *geneId, 
@@ -77,30 +77,75 @@ else
 static boolean expRatioUseBlue = FALSE;
 static int expSubcellWidth = 16;
 
-void printRatioShades(struct column *col, int repCount, int *reps, int valCount, float *vals)
+static void startExpCell()
+/* Print out start of expression cell, which contains a table. */
+{
+hPrintf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
+}
+
+static void endExpCell()
+/* Print out end of expression cell, closing up internal table. */
+{
+hPrintf("</TR></TABLE></TD>");
+}
+
+static void restartExpCell()
+/* End expression cell and begin a new one. */
+{
+endExpCell();
+startExpCell();
+}
+
+
+static void printRatioShades(struct column *col, int repCount, 
+	int *reps, int valCount, float *vals)
 /* Print out representatives in shades of color in table background. */
 {
 int i;
 float scale = col->expScale;
 float val;
-hPrintf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
+startExpCell();
 for (i=0; i<repCount; ++i)
     {
     int ix = reps[i];
     if (ix > valCount)
         errAbort("Representative larger than biggest experiment in %s", col->name);
-    val = vals[ix];
-    if (val <= -9999)
-        hPrintf("<TD WIDTH=%d>&nbsp;</TD>", expSubcellWidth);
+    if (ix == -1)
+        {
+	restartExpCell();
+	}
     else
 	{
-	hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
-	colorVal(val*scale, FALSE);
-	hPrintf("\">&nbsp;</TD>");
-//	hPrintf("<TD>%d:%3.2f </TD", ix, val*scale);
+	val = vals[ix];
+	if (val <= -9999)
+	    hPrintf("<TD WIDTH=%d>&nbsp;</TD>", expSubcellWidth);
+	else
+	    {
+	    hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
+	    colorVal(val*scale, FALSE);
+	    hPrintf("\">&nbsp;</TD>");
+	    }
 	}
     }
-hPrintf("</TR></TABLE></TD>");
+endExpCell();
+}
+
+static void replicate(char *s, int repCount, int *reps)
+/* Replicate s in cells of table */
+{
+int i;
+startExpCell();
+hPrintf("%s", s);
+for (i=0; i<repCount; ++i)
+    {
+    int ix = reps[i];
+    if (ix == -1)
+        {
+	restartExpCell();
+	hPrintf("%s", s);
+	}
+    }
+endExpCell();
 }
 
 void expRatioCellPrint(struct column *col, char *geneId, 
@@ -117,14 +162,14 @@ safef(query, sizeof(query), "select value from %s where name = '%s'",
 	col->table, geneId);
 if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
     {
-    hPrintf("<TD>n/a</TD>");
+    replicate("n/a", col->representativeCount, col->representatives);
     return;
     }
 safef(query, sizeof(query), "select expScores from %s where name = '%s'",
 	col->posTable, expName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    hPrintf("<TD>n/a???</TD>");
+    replicate("n/a???", col->representativeCount, col->representatives);
 else 
     {
     int idCount, valCount;
@@ -134,7 +179,6 @@ else
     	valCount, vals);
     }
 sqlFreeResult(&sr);
-
 }
 
 static char **getExperimentNames(char *database, char *table, int expCount, int *expIds)
@@ -143,18 +187,40 @@ static char **getExperimentNames(char *database, char *table, int expCount, int 
 char **names, *name;
 int i;
 struct sqlConnection *conn = sqlConnect(database);
-char query[256], nameBuf[64];
+char query[256], nameBuf[128];
+int maxLen = 0, len;
 
+/* Read into array and figure out longest name. */
 AllocArray(names, expCount);
 for (i=0; i<expCount; ++i)
     {
-    safef(query, sizeof(query), "select name from %s where id = %d", 
-    	table, expIds[i]);
-    if ((name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf))) == NULL)
-        name = "unknown";
-    names[i] = cloneString(name);
+    int ix = expIds[i];
+    if (ix == -1)
+        names[i] = NULL;
+    else
+	{
+	safef(query, sizeof(query), "select name from %s where id = %d", 
+	    table, expIds[i]);
+	if ((name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf))) == NULL)
+	    name = "unknown";
+	names[i] = cloneString(name);
+	len = strlen(name);
+	if (len > maxLen) maxLen = len;
+	}
     }
 sqlDisconnect(&conn);
+
+/* Right justify names. */
+for (i=0; i<expCount; ++i)
+    {
+    char *name = names[i];
+    if (name != NULL)
+        {
+	safef(nameBuf, sizeof(nameBuf), "%*s", maxLen, name);
+	freeMem(name);
+	names[i] = cloneString(nameBuf);
+	}
+    }
 return names;
 }
 
@@ -162,37 +228,45 @@ void expRatioLabelPrint(struct column *col)
 /* Print out labels of various experiments. */
 {
 int i, numExpts = col->representativeCount;
+boolean doGreen = FALSE;
 char **experiments = getExperimentNames("hgFixed", col->expTable, numExpts,
 	col->representatives);
-hPrintf("<TH><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>\n");
+startExpCell();
 for (i=0; i<numExpts; ++i)
     {
-    boolean doGreen = (i&1);
     char *label = experiments[i], c;
-    hPrintf("<TD VALIGN=BOTTOM ALIGN=MIDDLE");
-    if (doGreen)
-	hPrintf(" BGCOLOR=\"#E0FFE0\"");
-    hPrintf(">");
-    hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
-    while ((c = *label++) != 0)
+    if (label == NULL)
         {
-	char cString[2], *s;
-	if (c == ' ')
-	    {
-	    s = "&nbsp;";
-	    }
-	else
-	    {
-	    s = cString;
-	    s[0] = c;
-	    s[1] = 0;
-	    }
-	hPrintf(" <TR ><TD ALIGN=MIDDLE WIDTH=%d", expSubcellWidth);
-	hPrintf(">%s</TD></TR>\n", s);
+	restartExpCell();
 	}
-    hPrintf("</TABLE></TD>\n");
+    else
+	{
+	hPrintf("<TD VALIGN=BOTTOM ALIGN=MIDDLE");
+	if (doGreen)
+	    hPrintf(" BGCOLOR=\"#FFC8C8\"");
+	hPrintf(">");
+	hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
+	while ((c = *label++) != 0)
+	    {
+	    char cString[2], *s;
+	    if (c == ' ')
+		{
+		s = "&nbsp;";
+		}
+	    else
+		{
+		s = cString;
+		s[0] = c;
+		s[1] = 0;
+		}
+	    hPrintf(" <TR ><TD ALIGN=MIDDLE WIDTH=%d", expSubcellWidth);
+	    hPrintf(">%s</TD></TR>\n", s);
+	    }
+	hPrintf("</TABLE></TD>\n");
+	doGreen = 1 - doGreen;	/* Toggle value */
+	}
     }
-hPrintf("</TR></TABLE></TH>\n");
+endExpCell();
 
 /* CLean up */
 for (i=0; i<numExpts; ++i)
@@ -224,7 +298,7 @@ if (repList != NULL)
     int *reps, i;
     AllocArray(reps, repCount);
     for (i=0; i<repCount; ++i)
-        reps[i] = sqlUnsigned(repStrings[i]);
+        reps[i] = sqlSigned(repStrings[i]);
     col->representativeCount = repCount;
     col->representatives = reps;
     freez(&dupe);

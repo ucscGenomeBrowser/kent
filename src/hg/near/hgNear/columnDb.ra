@@ -17,7 +17,7 @@ shortLabel Short Expression
 longLabel Selected UCLA expression data
 priority 2.5
 visibility on
-type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExpsJk
+type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 9,37,24,17,34,12,19,21,22,35,
 
@@ -26,9 +26,9 @@ shortLabel Long Expression
 longLabel All UCLA expression data
 priority 2.6
 visibility off
-type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExpsJk
+type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
 max 1.0
-representatives 3,4,9,2,8,36,5,6,1,20,23,25,33,37,24,0,29,38,7,17,31,41,34,10,18,30,32,11,12,13,39,26,14,19,15,21,16,22,35,27,28,40,
+representatives 3,4,9,2,8,36,5,6,-1,1,20,23,25,33,37,-1,24,0,29,38,-1,7,17,31,41,-1,34,10,18,30,32,-1,11,12,13,39,26,-1,14,19,15,21,16,22,-1,35,27,28,40,
 
 name acc
 shortLabel Accession

@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.15 2003/06/22 04:33:30 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.16 2003/06/23 17:21:44 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -629,7 +629,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     {
     char *geneId = gene->name;
     if (sameString(geneId, curGeneId))
-        hPrintf("<TR BGCOLOR=\"#E0FFE0\">");
+        hPrintf("<TR BGCOLOR=\"#D0FFD0\">");
     else
         hPrintf("<TR>");
     for (col = colList; col != NULL; 
