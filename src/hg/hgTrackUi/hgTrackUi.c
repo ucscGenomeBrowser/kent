@@ -324,6 +324,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("Track Settings", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("Track Settings", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
