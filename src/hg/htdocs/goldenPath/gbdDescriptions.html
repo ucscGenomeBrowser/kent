@@ -222,7 +222,7 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#MoreKnown">knownMore</A> 
   - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
-  (Oct. 2000 and earlier known gene track) 
+  (Oct. 2000 and earlier known (RefSeq) gene track) 
   <LI><A 
   href="#MouseSyn">mouseSyn</A> 
   - Synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
@@ -237,14 +237,14 @@ stored in a single table rather than one table per chromosome:</P>
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
   <LI><A 
   href="#RefFlat">refFlat</A> 
-  - Known Genes (from RefSeq), with additional name (as it appears in genome browser) field  </LI>
+  - RefSeq Genes, with additional name (as it appears in genome browser) field  </LI>
   <LI><A 
   href="#GenePredictions">refGene</A> 
-  - Known Genes (from RefSeq) </LI>
+  - RefSeq Genes </LI>
   <LI><A 
   href="#GenePredictions">refKnown</A> 
   - Known genes as derived from alignments of RefSeq mRNA (Dec 2000 and later 
-  known gene track) 
+  known (RefSeq) gene track) 
   <LI><A 
   href="#PepPredictions">refPep</A> 
   - RefSeq translated proteins (Dec. 2000 and later) 
@@ -610,7 +610,7 @@ Last used Apr. 2001.
    uint   gcPpt;        ":Average number of G and C per 1000 bases"
    )                                                                            
 </PRE>
-<H3><A name=GenePredictions></A>Gene Predictions and Known Genes</H3>
+<H3><A name=GenePredictions></A>Gene Predictions and RefSeq Genes</H3>
 The following definition is used for the acembly, ensGene, geneid, genieAlt, genScan, genscanSubopt, refGene, sanger20, sanger22, softberryGene, tigrGeneIndex 
 and similar tables. In alternative splicing situations
 each transcript has a row in this table.
@@ -650,7 +650,7 @@ each transcript has a row in this table.
   )
 </PRE>
 
-<H3><A name=PepPredictions></A>Gene Predictions and Known Genes Amino Acid Translations</H3>
+<H3><A name=PepPredictions></A>Gene Predictions and RefSeq Genes Amino Acid Translations</H3>
 <PRE>table pepPred
 "A predicted peptide - linked to a predicted gene."
     (
@@ -702,7 +702,7 @@ bacEndPairs uses all fields.
    string[lfCount] lfNames;   "Comma separated list of names of linked features"
    )
 </PRE>
-<H3><A name=RefFlat></A>Gene Predictions and Known Genes</H3>
+<H3><A name=RefFlat></A>Gene Predictions and RefSeq Genes</H3>
 In alternative splicing situations each transcript has a row in this table.
 <PRE>table refFlat
 "A gene prediction with additional geneName field."
@@ -737,7 +737,7 @@ First used Dec. 2000
 </PRE>
 
 
-<H3><A name=MoreKnown></A>Known Gene IDs in Other Databases</H3>
+<H3><A name=MoreKnown></A>Known (RefSeq) Gene IDs in Other Databases</H3>
 Last used Oct. 2000 <BR><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
 <TR><TD><PRE>table knownMore  </TD></TR>
@@ -766,7 +766,7 @@ Last used Oct. 2000 <BR><BR>
 <TR><TD><PRE>    string gdbId;         "NCBI GDB database ID"   </TD></TR>
 <TR><TD><PRE>    )  </TD></TR>                                                                              
 </TABLE>
-<H3><A name=OtherKnown></A>Other Known Gene Information</H3>
+<H3><A name=OtherKnown></A>Other Known (RefSeq) Gene Information</H3>
 Last used Oct. 2000
 <PRE>table knownInfo
 "Auxiliary info about a known gene"
