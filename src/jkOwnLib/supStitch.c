@@ -481,7 +481,8 @@ lmCleanup(&lm);
 }
 
 
-int ssStitch(struct ssBundle *bundle, enum ffStringency stringency)
+int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
+	int minScore)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
@@ -501,7 +502,10 @@ boolean firstTime = TRUE;
 if (bundle->ffList == NULL)
     return 0;
 
-
+/* The score may improve when we stitch together more alignments,
+ * so don't let minScore be too harsh at this stage. */
+if (minScore > 20)
+    minScore = 20;
 
 /* Create ffAlis for all in bundle and move to one big list. */
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
@@ -535,7 +539,7 @@ while (ffList != NULL)
 	ffSlideIntrons(bestPath);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    if (score >= 20)
+    if (score >= minScore)
 	{
 	AllocVar(ffl);
 	ffl->ff = bestPath;
@@ -626,7 +630,7 @@ cdna = cSeq->dna;
 
 for (bun = bundleList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, stringency);
+    ssStitch(bun, stringency, 20);
     }
 return bundleList;
 }
