@@ -1,0 +1,3 @@
+name global
+nameSql select geneSymbol from kgXref where kgId = '%s'
+descriptionSql select description from kgXref where kgId = '%s'

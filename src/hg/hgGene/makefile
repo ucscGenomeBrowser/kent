@@ -10,6 +10,23 @@ O = hgGene.o
 
 include ../../inc/cgi_build_rules.mk
 
+my::
+	chmod -R a+r hgGeneData
+	chmod a+rx hgGeneData
+	find hgGeneData -type d -exec /bin/chmod -f a+rx {} \;
+	rsync -ar --delete hgGeneData ${CGI_BIN}-${USER}/
+	find ${CGI_BIN}-${USER}/hgGeneData -type d -name CVS | xargs rm -fr
+
+alpha::
+	rm -fr ${CGI_BIN}/hgGeneData
+	rsync -ar --delete hgGeneData ${CGI_BIN}/
+	find ${CGI_BIN}/hgGeneData -type d -name CVS | xargs rm -fr
+
+beta::
+	rm -fr ${CGI_BIN}-beta/hgGeneData
+	rsync -ar --delete hgGeneData ${CGI_BIN}-beta/
+	find ${CGI_BIN}-beta/hgGeneData -type d -name CVS | xargs rm -fr
+
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv a.out $A
