@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.19 2004/03/03 18:14:03 sugnet Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.20 2004/03/12 23:09:25 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -195,7 +195,7 @@ struct hash *hash = needMem(sizeof(*hash));
 int memBlockPower = 16;
 if (powerOfTwoSize == 0)
     powerOfTwoSize = 12;
-assert(powerOfTwoSize <= 24 && powerOfTwoSize > 0);
+assert(powerOfTwoSize <= hashMaxSize && powerOfTwoSize > 0);
 hash->powerOfTwoSize = powerOfTwoSize;
 hash->size = (1<<powerOfTwoSize);
 /* Make size of memory block for allocator vary between

@@ -24,6 +24,8 @@ struct hash
     struct lm *lm;	/* Local memory pool. */
     };
 
+#define hashMaxSize 24
+
 struct hashCookie
 /* used by hashFirst/hashNext in tracking location in traversing hash */
     {
