@@ -38,7 +38,7 @@ shortLabel Gap
 longLabel Gap Locations
 priority 11
 group map
-visibility dense
+visibility hide
 type bed 3 +
 
 track jaxQTL
@@ -259,7 +259,7 @@ shortLabel Chicken Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 180.1
-visibility dense
+visibility hide
 spectrum on
 type netAlign galGal2 chainGalGal2
 otherDb galGal2
@@ -269,7 +269,7 @@ shortLabel Opossum Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 190.1
-visibility dense
+visibility hide
 spectrum on
 type netAlign monDom1 chainMonDom1
 otherDb monDom1
@@ -289,10 +289,20 @@ shortLabel Dog Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 230.1
-visibility dense
+visibility hide
 spectrum on
 type netAlign canFam1 chainCanFam1
 otherDb canFam1
+
+track netPanTro1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+group compGeno
+priority 240.1
+visibility hide
+spectrum on
+type netAlign panTro1 chainPanTro1
+otherDb panTro1
 
 track chainHg17
 shortLabel Human Chain 
@@ -333,7 +343,7 @@ shortLabel Rat Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 260.1
-visibility hide 
+visibility dense 
 spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
