@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <sys/times.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <netinet/in.h>
 #include <pwd.h>
 #include "common.h"
@@ -24,6 +25,7 @@ int busyProcs = 0;		/* Number of processers in use. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
 int socketHandle;		/* Main message queue socket. */
 int connectionHandle;		/* A connection accepted. */
+int umaskVal = 0002;		/* File creation mask. */
 
 struct job
 /* Info on one job in this node. */
@@ -53,6 +55,7 @@ errAbort("paraNode - parasol node serve.\n"
 	 "options:\n"
 	 "    log=file - file may be 'stdout' to go to console\n"
 	 "    hub=host - restrict access to connections from hub\n"
+	 "    umask=000 - set umask to run under, default 002\n"
 	 "    cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
@@ -100,6 +103,7 @@ void changeUid(char *name)
 /* Try and change process user id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
+setgid(pw->pw_gid);
 setuid(pw->pw_uid);
 }
 
@@ -118,6 +122,7 @@ if (fork() == 0)
     /* Change to given user and dir. */
     changeUid(user);
     chdir(dir);
+    umask(umaskVal); 
 
     /* Redirect standard io.  There has to  be a less
      * cryptic way to do this. Close all open files, then
@@ -477,6 +482,7 @@ optionHash(&argc, argv);
 if (argc != 2)
     usage();
 maxProcs = optionInt("cpu", 1);
+umaskVal = optionInt("umask", 0002);
 
 /* Look up IP addresses. */
 localIp = lookupIp("localhost");
