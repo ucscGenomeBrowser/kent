@@ -1,4 +1,4 @@
-include ../../inc/makefile.h
+include ../../inc/common.mk
 
 
 chrom2gene: chrom2gene.o

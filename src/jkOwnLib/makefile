@@ -1,4 +1,4 @@
-include ../inc/makefile.h
+include ../inc/common.mk
 
 O = crudeali.o fuzzyFind.o genoFind.o gfClientLib.o gfOut.o ooc.o \
 patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 

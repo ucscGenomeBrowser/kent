@@ -1,4 +1,4 @@
-include ../../inc/makefile.h
+include ../../inc/common.mk
 
 
 L = /projects/cc/hg/jk/outSrc/expat/lib/.libs/libexpat.a -lm

@@ -1,5 +1,5 @@
 XINC = -I $(MYSQLINC)
-include ../../inc/makefile.h
+include ../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)

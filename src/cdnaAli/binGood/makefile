@@ -1,4 +1,4 @@
-include ../../inc/makefile.h
+include ../../inc/common.mk
 
 
 O =  binGood.o ../lib/cdnaAli.o

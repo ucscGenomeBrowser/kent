@@ -1,4 +1,4 @@
-include ../inc/makefile.h
+include ../inc/common.mk
 
 O = aliType.o axt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \

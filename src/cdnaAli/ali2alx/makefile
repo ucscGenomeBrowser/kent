@@ -1,4 +1,4 @@
-include ../../inc/makefile.h
+include ../../inc/common.mk
 
 O =  ali2alx.o ../lib/cdnaAli.o
 
