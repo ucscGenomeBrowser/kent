@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.12 2003/08/06 04:57:09 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.13 2003/08/13 04:38:47 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -261,29 +261,42 @@ if (chain->qStrand == '-')
     }
 }
 
-struct hash *chainReadAllSwap(char *fileName, boolean qChain)
-/* Read chains into a hash keyed by id. */
+struct hash *chainReadUsedSwap(char *fileName, boolean swapQ, Bits *bits)
+/* Read chains that are marked as used in the 
+ * bits array (which may be NULL) into a hash keyed by id. */
 {
 char nameBuf[16];
 struct hash *hash = hashNew(18);
 struct chain *chain;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int count = 0;
+int usedCount = 0, count = 0;
 
 while ((chain = chainRead(lf)) != NULL)
     {
+    ++count;
+    if (bits != NULL && !bitReadOne(bits, chain->id))
+	{
+	chainFree(&chain);
+        continue;
+	}
     sprintf(nameBuf, "%x", chain->id);
     if (hashLookup(hash, nameBuf))
         errAbort("Duplicate chain %d ending line %d of %s", 
 		chain->id, lf->lineIx, lf->fileName);
-    if (qChain)
+    if (swapQ)
         chainSwap(chain);
     hashAdd(hash, nameBuf, chain);
-    ++count;
+    ++usedCount;
     }
 lineFileClose(&lf);
-fprintf(stderr, "read %d chains in %s\n", count, fileName);
+fprintf(stderr, "read %d of %d chains in %s\n", usedCount, count, fileName);
 return hash;
+}
+
+struct hash *chainReadAllSwap(char *fileName, boolean swapQ)
+/* Read chains into a hash keyed by id. */
+{
+return chainReadUsedSwap(fileName, swapQ, NULL);
 }
 
 struct hash *chainReadAll(char *fileName)

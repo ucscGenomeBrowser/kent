@@ -13,6 +13,10 @@
 #include "boxClump.h"	/* Include so can share boxIn structure */
 #endif
 
+#ifndef BITS_H
+#include "bits.h"
+#endif
+
 struct chain
 /* A chain of blocks.  Used for output of chainBlocks. */
     {
@@ -68,9 +72,13 @@ void chainIdNext(struct chain *chain);
 void chainSwap(struct chain *chain);
 /* Swap target and query side of chain. */
 
-struct hash *chainReadAllSwap(char *fileName, boolean qChain);
+struct hash *chainReadUsedSwap(char *fileName, boolean swapQ, Bits *bits);
+/* Read chains that are marked as used in the 
+ * bits array (which may be NULL) into a hash keyed by id. */
+
+struct hash *chainReadAllSwap(char *fileName, boolean swapQ);
 /* Read chains into a hash keyed by id. 
- * Set qChain to True to read chain by query. */
+ * Set swapQ to True to read chain by query. */
     
 struct hash *chainReadAll(char *fileName);
 /* Read chains into a hash keyed by id. */
