@@ -1209,8 +1209,8 @@ paraStopAll(batch);
 void printTimes(char *title, double seconds,  boolean showYears)
 /* Print out times in seconds, hours, days, maybe years. */
 {
-printf("%-27s %9ds %10.2fm %8.2fh %7.2fd", 
-   title, round(seconds), seconds/60, seconds/3600, seconds/(3600*24));
+printf("%-27s %9llds %10.2fm %8.2fh %7.2fd", 
+   title, roundll(seconds), seconds/60, seconds/3600, seconds/(3600*24));
 if (showYears)
      printf(" %6.3f y", seconds/(3600*24*365));
 printf("\n");
@@ -1278,7 +1278,7 @@ int runningCount = 0;
 int timedCount = 0;
 int crashCount = 0;
 int queueCount = 0;
-int runTime = 0;
+double runTime = 0;
 int otherCount = 0;
 struct hash *resultsHash;
 long now = time(NULL);
@@ -1315,7 +1315,10 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       {
 	       ++timedCount;
 	       totalCpu += jrCpuTime(jr);
-	       oneWall = jr->endTime - jr->startTime;
+               /* note jr->*Time are unsigned, so we need to convert to double
+                * before subtracking or time moving backwards is not detected
+                */
+	       oneWall = ((double)jr->endTime) - ((double)jr->startTime);
 	       if (oneWall < 0)	/* Protect against clock reset. */
 		   {
 		   warn("End before start job %s host %s", sub->id, jr->host);
@@ -1336,6 +1339,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   }
 	}
     }
+
 printf("Completed: %d of %d jobs\n", timedCount, jobCount);
 if (runningCount > 0)
     printf("Jobs currently running: %d\n", runningCount);
