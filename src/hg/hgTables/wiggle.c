@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.25 2004/10/05 23:03:17 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.26 2004/10/05 23:21:35 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -623,9 +623,11 @@ if (1 == regionCount)
 	span, valuesMatched, table2);
     /* 3 X TRUE = sort results, html table output, with header,
      *	the FALSE means close the table after printing, no more rows to
-     *	come
+     *	come.  The case in the if() statement was already taken care of
+     *	in the statsPreamble() printout.  No need to do that again.
      */
-    if ( (valuesMatched > 0) && !table2 )
+
+    if ( ! ((valuesMatched == 0) && table2) )
 	wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
     }
 else
