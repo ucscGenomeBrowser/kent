@@ -40,7 +40,6 @@ DIRS = \
 	hgLoadNet \
 	hgLoadOut \
 	hgLoadPsl \
-	hgLoadRna \
 	hgLoadSeq \
 	hgLoadSample \
 	hgLoadWiggle \
@@ -50,8 +49,6 @@ DIRS = \
 	hgPepPred \
 	hgPhMouse \
 	hgRatioMicroarray \
-	hgRefSeqMrna \
-	hgRefSeqStatus \
 	hgRnaGenes \
 	hgSanger20 \
 	hgSanger22 \
