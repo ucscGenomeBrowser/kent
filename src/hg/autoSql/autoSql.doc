@@ -140,6 +140,7 @@ The following basic field are supported.
     ushort - 16 bit unsigned integer
     byte - 8 bit signed integer
     ubyte - 8 bit unsigned integer
+    bigint - 64 bit integer
     float - single precision IEEE floating point
     char - 8 bit character (can only be used in an array)
     string - variable length string up to 255 bytes long.
