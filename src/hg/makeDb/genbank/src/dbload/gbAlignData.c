@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.12 2004/03/29 02:26:15 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.13 2004/07/07 00:36:41 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -710,30 +710,33 @@ if (select->release->srcDb & GB_GENBANK)
 struct slName* gbAlignDataListTables(struct sqlConnection *conn)
 /* Get list of alignment tables from database. */
 {
-static char* TABLE_NAMES[] = {
-    "all_mrna", "all_est", "xenoMrna", "xenoEst", "mrnaOrientInfo",
-    "estOrientInfo", "refSeqAli", "refGene", "refFlat",
+/* includes table that exist only when perChrom tables not created */
+static char* singleTableNames[] = {
+    "all_mrna", "all_est", "intronEst", "xenoMrna", "xenoEst",
+    "mrnaOrientInfo", "estOrientInfo", "refSeqAli", "refGene", "refFlat",
     "xenoRefSeqAli", "xenoRefGene", "xenoRefFlat",
+    NULL
+};
+
+/* patterns for per-chrom tables */
+static char *perChromTableLikes[] = {
+    "%_mrna", "%_est", "%_intronEst",
     NULL
 };
 struct slName* tables = NULL;
 int i;
-char table[64];
-struct slName* chrom;
-if (gChroms == NULL)
-    gChroms = hAllChromNames();
 
-for (i = 0; TABLE_NAMES[i] != NULL; i++)
-    gbAddTableIfExists(conn, TABLE_NAMES[i], &tables);
+for (i = 0; singleTableNames[i] != NULL; i++)
+    gbAddTableIfExists(conn, singleTableNames[i], &tables);
 
-for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
+for (i = 0; perChromTableLikes[i] != NULL; i++)
     {
-    safef(table, sizeof(table), "%s_mrna", chrom->name);
-    gbAddTableIfExists(conn, table, &tables);
-    safef(table, sizeof(table), "%s_est", chrom->name);
-    gbAddTableIfExists(conn, table, &tables);
-    safef(table, sizeof(table), "%s_intronEst", chrom->name);
-    gbAddTableIfExists(conn, table, &tables);
+    struct slName* tbls = gbSqlListTablesLike(conn, perChromTableLikes[i]);
+    struct slName* tbl;
+    for (tbl = tbls; tbl != NULL; tbl = tbl->next)
+        if (!(sameString(tbl->name, "all_mrna") || sameString(tbl->name, "all_est")))
+            gbAddTableIfExists(conn, tbl->name, &tables);
+    slFreeList(&tbls);
     }
 return tables;
 }

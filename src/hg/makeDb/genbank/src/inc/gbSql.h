@@ -17,6 +17,9 @@ unsigned gbSqlUnsignedNull(char *s);
 int gbSqlSignedNull(char *s);
 /* parse an int, allowing empty string to return zero */
 
+struct slName* gbSqlListTablesLike(struct sqlConnection *conn, char *like);
+/* get list of tables matching a pattern */
+
 #endif
 
 /*

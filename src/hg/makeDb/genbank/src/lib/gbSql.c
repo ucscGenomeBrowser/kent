@@ -54,6 +54,13 @@ else
     return sqlSigned(s);
 }
 
+struct slName* gbSqlListTablesLike(struct sqlConnection *conn, char *like)
+/* get list of tables matching a pattern */
+{
+char query[256];
+safef(query, sizeof(query), "show tables like '%s'", like);
+return sqlQuickList(conn, query);
+}
 
 /*
  * Local Variables:
