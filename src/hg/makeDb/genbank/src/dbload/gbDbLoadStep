@@ -26,7 +26,7 @@
 #   -reloadList=file - Force the reload of sequences list in this file.
 #   -gbdbGenBank=dir - Use dir instead of /gbdb/genbank, for testing.
 #
-# $Id: gbDbLoadStep,v 1.18 2003/10/06 05:01:35 markd Exp $
+# $Id: gbDbLoadStep,v 1.19 2003/10/28 17:06:58 genbank Exp $
 #
 use strict;
 use warnings;
@@ -127,8 +127,10 @@ sub makeDownloadSeqs($) {
     my($db) = @_;
     createSeqZip($db, "genbank", "mrna", "native", "mrna");
     createSeqZip($db, "genbank", "mrna", "xeno", "xenoMrna");
+    #createSeqZip($db, "genbank", "est", "native", "est");
     createSeqZip($db, "refseq", "mrna", "native", "refMrna");
-    #FIXME: not supported in: createSeqZip($db, "native", "refseq", "mrna", "refPep");
+    #FIXME: not supported gbGetSeqs:
+    #createSeqZip($db, "native", "refseq", "mrna", "refPep");
 }
 
 # get download time file for a db
