@@ -419,11 +419,64 @@ shortLabel ACGaps
 longLabel ACGaps
 priority 570
 visibility hide
-<<<<<<< trackDb.ra
 color 0,60,120
-type bed 3 .
+type bed 4 .
 
+track chimpSeq
+shortLabel ChimpSeq 
+longLabel Chimp Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
 
+track baboonSeq
+shortLabel BaboonSeq 
+longLabel Baboon Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track catSeq
+shortLabel CatSeq 
+longLabel Cat Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track dogSeq
+shortLabel DogSeq 
+longLabel Dog Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track cowSeq
+shortLabel CowSeq 
+longLabel Cow Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track ratSeq
+shortLabel RatSeq 
+longLabel Rat Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
+
+track mouseSeq
+shortLabel MouseSeq 
+longLabel Mouse Sequence
+priority 571
+visibility hide
+color 0,60,120
+type bed 4 .
 
 track ctgPos
 shortLabel Map Contigs
