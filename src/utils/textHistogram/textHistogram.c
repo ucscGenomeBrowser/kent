@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.11 2003/12/12 18:22:56 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.12 2004/01/05 22:55:09 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -17,6 +17,7 @@ static struct optionSpec optionSpecs[] = {
     {"aveCol", OPTION_INT},
     {"real", OPTION_BOOLEAN},
     {"autoscale", OPTION_INT},
+    {"pValues", OPTION_BOOLEAN},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -29,6 +30,7 @@ int minVal = 0;
 double minValR = 0.0;
 boolean doLog = FALSE;
 boolean noStar = FALSE;
+boolean pValues = FALSE;
 int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
@@ -52,8 +54,9 @@ errAbort(
   "   -col=N - Which column to use. Default 1\n"
   "   -aveCol=N - A second column to average over. The averages\n"
   "             will be output in place of counts of primary column.\n"
-  "   -autoscale=N - autoscale to N # of bins\n"
   "   -real - Data input are real values (default is integer)\n"
+  "   -autoscale=N - autoscale to N # of bins\n"
+  "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
   "   -verbose - extra outputs during processing\n"
   );
 }
@@ -140,6 +143,7 @@ double maxCount = 0;
 double maxCt;
 int truncation = 0;
 int begin, end;
+unsigned long long totalCounts = 0;
 
 /* Allocate histogram and optionally space for
  * second column totals. */
@@ -245,6 +249,28 @@ if (verbose)
     begin = 0;
     end = maxBinCount;
     }
+
+if (pValues)
+    {
+    totalCounts = 0;
+    for (i=begin; i<end; ++i)
+	totalCounts += hist[i];
+    if (verbose)
+	printf("#\ttotal data values: %llu\n", totalCounts);
+    if (totalCounts < 1)
+	errAbort("ERROR: No bins with any data ?\n");
+    }
+
+if (verbose)
+    {
+    if (noStar) {
+	if (pValues)
+	    printf("# bin\tValue\tCount\t\tp-Value\t\tlog2(p-Value)\n");
+	else
+	    printf("# bin  Value	ascii graph\n");
+    } else
+	printf("# bin  Value	ascii graph\n");
+    }
 /* Output results. */
 for (i=begin; i<end; ++i)
     {
@@ -273,10 +299,17 @@ for (i=begin; i<end; ++i)
 	ct = log(ct);
     if (noStar)
 	{
+	if (verbose)
+	    printf("%2d\t", i);
 	if (real)
-	    printf("%3d %g:%g\t%f\n", i, binStartR, binStartR+binSizeR, ct);
+	    printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
 	else
-	    printf("%d\t%f\n", binStart, ct);
+	    printf("%d\t%f", binStart, ct);
+	if (pValues)
+	    printf("\t%f\t%f\n", (double)ct/(double)totalCounts,
+		log((double)ct/(double)totalCounts)/log(2.0) );
+	else
+	    printf("\n");
 	}
     else
 	{
@@ -311,11 +344,15 @@ maxBinCount = optionInt("maxBinCount", 25);
 minValStr = optionVal("minVal", "0");
 doLog = optionExists("log");
 noStar = optionExists("noStar");
+pValues = optionExists("pValues");
 col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
 verbose = optionExists("verbose");
+
+/*	pValues turns on noStar too	*/
+if (pValues) noStar = TRUE;
 
 if (real)
     {
@@ -361,6 +398,7 @@ if (verbose)
 	fprintf(stderr, "#\tautoscaling to %d bins\n", autoscale);
     else
 	fprintf(stderr, "#\tautoscale: not selected\n");
+    fprintf(stderr, "#\tshow p-Values: %s\n", pValues ? "YES" : "NO" );
     }
 
 /*	to autoscale stdin we would need to keep all the data read in
