@@ -148,7 +148,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.761 2004/09/29 21:46:17 kschneid Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.762 2004/10/05 15:27:20 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1969,7 +1969,7 @@ struct dnaSeq *loadGenomePart(char *db,
 {
 char nibFile[512];
 findNib(db, chrom, nibFile);
-return nibLoadPart(nibFile, start, end - start);
+return fetchSeq(nibFile, chrom, start, end);
 }
 
 void printLabeledNumber(char *org, char *label, long long number)
