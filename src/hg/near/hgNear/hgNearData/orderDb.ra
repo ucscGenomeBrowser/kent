@@ -1,7 +1,12 @@
-name knownExp
-shortLabel Expression
+name knownExpUcla
+shortLabel Expression (UCLA)
 longLabel Difference in expression with selected gene
 type pair knownExpDistance query target distance 1
+
+name knownExpGnf
+shortLabel Expression (GNF)
+longLabel Difference in expression with selected gene
+type pair knownGnfDistance query target distance 1
 
 name blastp
 shortLabel Protein Homology

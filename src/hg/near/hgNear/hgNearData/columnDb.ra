@@ -49,6 +49,20 @@ type lookup knownToEnsembl name value
 search prefix
 itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
+name expId
+shortLabel U133 ID
+longLabel ID of Associated Affymetrix U133 expression data 
+priority 2.61
+visibility off
+type lookup knownToU133 name value
+
+name u95Id
+shortLabel U95 ID
+longLabel ID of Associated Affymetrix U95 expression data 
+priority 2.62
+visibility off
+type lookup knownToU95 name value
+
 name expDense
 shortLabel Short Expression
 longLabel Selected UCLA expression data.
@@ -74,12 +88,32 @@ priority 2.9
 visibility off
 type distance knownExpDistance query target distance
 
-name expId
-shortLabel U133 ID
-longLabel ID of Associated Affymetrix U133 expression data 
+name gnfDense
+shortLabel Short GNF
+longLabel Selected GNF expression data from normal tissues on U95 chip.
 priority 3.0
 visibility off
-type lookup knownToAffyUcla name value
+type expRatio knownToU95 affyRatio hgFixed.affyExps
+max 4.0
+representatives 30,6,29,10,53,35,11,12,13,4,
+skipName 7
+
+name gnfAll
+shortLabel Long GNF
+longLabel All GNF expression data from normal tissues on U95 chip.
+priority 3.1
+visibility off
+type expRatio knownToU95 affyRatio hgFixed.affyExps
+max 4.0
+representatives 9,18,64,76,1,30,31,-1,66,67,68,77,78,62,65,55,-1,0,79,60,33,36,69,70,-1,16,39,6,7,20,22,21,38,-1,71,61,74,56,59,82,57,72,-1,8,23,29,17,-1,10,37,34,52,19,-1,28,15,53,26,-1,35,54,11,24,3,13,-1,12,25,63,75,-1,4,5,32,51,48,49,50,14,27,-1,2,81,84,58,73,83,-1,40,44,42,43,41,45,46,47,
+skipName 7
+
+name gnfDistance
+shortLabel GNF Delta
+longLabel Normalized difference in GNF expression from selected gene.
+priority 3.2
+visibility off
+type distance knownGnfDistance query target distance
 
 name bitScore
 shortLabel Bits
