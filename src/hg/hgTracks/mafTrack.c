@@ -51,41 +51,6 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
-	char *chrom, int start, int end)
-/* Return list of alignments in region. */
-{
-char **row;
-unsigned int extFileId = 0;
-struct mafAli *maf, *mafList = NULL;
-struct mafFile *mf = NULL;
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
-    start, end, NULL, &rowOffset);
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct scoredRef ref;
-    scoredRefStaticLoad(row + rowOffset, &ref);
-    if (ref.extFile != extFileId)
-	{
-	char *path = hExtFileName("extFile", ref.extFile);
-	mafFileFree(&mf);
-	mf = mafOpen(path);
-	extFileId = ref.extFile;
-	}
-    lineFileSeek(mf->lf, ref.offset, SEEK_SET);
-    maf = mafNext(mf);
-    if (maf == NULL)
-        internalErr();
-    slAddHead(&mafList, maf);
-    }
-sqlFreeResult(&sr);
-mafFileFree(&mf);
-slReverse(&mafList);
-return mafList;
-}
-
 static void dbPartOfName(char *name, char *retDb, int retDbSize)
 /* Parse out just database part of name (up to but not including
  * first dot). */
@@ -393,6 +358,8 @@ static void mafDraw(struct track *tg, int seqStart, int seqEnd,
 enum mafState display = tg->customInt;
 if (display == mafBases)
     mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+    tg->mapName, NULL);
 }
 
 void mafMethods(struct track *tg)

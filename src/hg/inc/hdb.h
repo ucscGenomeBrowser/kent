@@ -407,4 +407,8 @@ char *sqlGetField(struct sqlConnection *connIn,
 /* Return a single field from the database, given database name, 
    table name, field name, and a condition string */
 
+struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end);
+/* Return list of alignments in region. */
+
 #endif /* HDB_H */

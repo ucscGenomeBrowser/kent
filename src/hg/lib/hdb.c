@@ -21,6 +21,8 @@
 #include "blatServers.h"
 #include "bed.h"
 #include "defaultDb.h"
+#include "scoredRef.h"
+#include "maf.h"
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -2303,5 +2305,40 @@ sqlFreeResult(&sr);
 if (connIn == NULL) hFreeConn(&conn);
 		    
 return(answer);
+}
+
+struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end)
+/* Return list of alignments in region. */
+{
+char **row;
+unsigned int extFileId = 0;
+struct mafAli *maf, *mafList = NULL;
+struct mafFile *mf = NULL;
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
+    start, end, NULL, &rowOffset);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct scoredRef ref;
+    scoredRefStaticLoad(row + rowOffset, &ref);
+    if (ref.extFile != extFileId)
+	{
+	char *path = hExtFileName("extFile", ref.extFile);
+	mafFileFree(&mf);
+	mf = mafOpen(path);
+	extFileId = ref.extFile;
+	}
+    lineFileSeek(mf->lf, ref.offset, SEEK_SET);
+    maf = mafNext(mf);
+    if (maf == NULL)
+        internalErr();
+    slAddHead(&mafList, maf);
+    }
+sqlFreeResult(&sr);
+mafFileFree(&mf);
+slReverse(&mafList);
+return mafList;
 }
 

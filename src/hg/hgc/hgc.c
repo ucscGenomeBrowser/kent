@@ -103,6 +103,7 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "scoredRef.h"
+#include "maf.h"
 #include "hgc.h"
 
 
@@ -1617,6 +1618,32 @@ if (net.chainId != 0)
     }
 }
 
+void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start)
+{
+if (winEnd - winStart > 20000)
+    {
+    printf("Zoom so that window is 20000 bases or less to see base-by-base alignments\n");
+    }
+else
+    {
+    struct mafAli *mafList, *maf;
+    char dbChrom[64];
+    mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
+    safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
+    printf("<TT><PRE>");
+    for (maf = mafList; maf != NULL; maf = maf->next)
+        {
+	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
+	if (subset != NULL)
+	    {
+	    subset->score = mafScoreMultiz(subset);
+	    mafWrite(stdout, subset);
+	    }
+	}
+    printf("</PRE></TT>");
+    }
+}
 
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
@@ -1679,7 +1706,10 @@ if (wordCount > 0)
 	    errAbort("Missing field in chain track type field");
 	genericChainClick(conn, tdb, item, start, words[1]);
 	}
-
+    else if (sameString(type, "maf"))
+        {
+	genericMafClick(conn, tdb, item, start);
+	}
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -10805,6 +10835,8 @@ freeMem(path);
 return lf;
 }
 
+#define JK_TESTING_ONLY
+#ifdef JK_TESTING_ONLY
 void doHmrConservation(struct trackDb *tdb, char *item)
 /* Details page for human/mouse/rat alignments. */
 {
@@ -10855,6 +10887,7 @@ else
     }
 webEnd();
 }
+#endif /* JK_TESTING_ONLY */
 
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings.
@@ -11655,10 +11688,12 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
+#ifdef JK_TESTING_ONLY
 else if (sameWord(track, "HMRConservation"))
     {
     doHmrConservation(tdb, item);
     }
+#endif /* JK_TESTING_ONLY */
 
 /*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
