@@ -10,11 +10,12 @@
 #include "dnautil.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: stageMultiz.c,v 1.8 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: stageMultiz.c,v 1.9 2003/05/07 16:23:54 kent Exp $";
 
 int winSize = 1010000;
 int overlapSize = 10000;
 boolean noDieMissing = FALSE;
+boolean chromOut = FALSE;
 char *hPrefix = "";
 char *mPrefix = "";
 boolean verbose = FALSE;
@@ -43,8 +44,9 @@ errAbort(
   "   -verbose - If set be more verbose with diagnostic output\n"
   "   -hPrefix=hgN. - Prefix hgN. to each human sequence name in output\n"
   "   -mPrefix=mmN. - Prefix for mouse sequence names\n"
-  "   -rPrefix=ratN. - Prefix for rat sequence\n",
-  winSize, overlapSize
+  "   -rPrefix=ratN. - Prefix for rat sequence\n"
+  "   -chromOut - If set output is one per chromosome.\n"
+  , winSize, overlapSize
   );
 }
 
@@ -68,11 +70,14 @@ struct binKeeper *loadAxtsIntoRange(char *fileName, char *tPrefix, char *qPrefix
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct binKeeper *bk = binKeeperNew(0, maxChromSize);
 struct axt *axt;
+int count = 0;
 
 while ((axt = axtRead(lf)) != NULL)
     {
     binKeeperAdd(bk, axt->tStart, axt->tEnd, axt);
+    ++count;
     }
+uglyf("LOaded %d from %s\n", count, fileName);
 lineFileClose(&lf);
 return bk;
 }
@@ -269,6 +274,8 @@ char humanChromName[256];
 
 makeDir(outputDir);
 splitPath(humanAxtFile, NULL, humanChromName, NULL);
+if (chromOut)
+    winSize = hashIntVal(hSizeHash, humanChromName);
 
 for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
     {
@@ -281,12 +288,15 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
     if (humanList != NULL)
 	{
 	/* Make output directory and create output file names. */
-	sprintf(dirName, "%s/%s.%d", outputDir, humanChromName, hStart);
+	if (chromOut)
+	    sprintf(dirName, "%s", outputDir);
+	else
+	    sprintf(dirName, "%s/%s.%d", outputDir, humanChromName, hStart);
 	if (verbose)
 	    printf("Making %s\n", dirName);
 	makeDir(dirName);
-	sprintf(hmName, "%s/hm.maf", dirName);
-	sprintf(mrName, "%s/mr.maf", dirName);
+	sprintf(hmName, "%s/12.maf", dirName);
+	sprintf(mrName, "%s/23.maf", dirName);
 
 	/* Write human/mouse file. */
 	f = mustOpen(hmName, "w");
@@ -334,6 +344,7 @@ verbose = optionExists("verbose");
 hPrefix = optionVal("hPrefix", hPrefix);
 mPrefix = optionVal("mPrefix", mPrefix);
 rPrefix = optionVal("rPrefix", rPrefix);
+chromOut = optionExists("chromOut");
 
 stageMultiz(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
