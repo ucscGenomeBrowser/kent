@@ -118,6 +118,7 @@
 #include "codeBlast.h"
 #include "rnaGenes.h"
 #include "tigrOperon.h"
+#include "easyGene.h"
 #include "llaInfo.h"
 #include "loweTrnaGene.h"
 #include "blastTab.h"
@@ -149,7 +150,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.769 2004/10/12 08:11:53 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.770 2004/10/12 13:22:21 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13193,6 +13194,54 @@ printTrackHtml(tdb);
 rnaGenesFree(&trna);
 }
 
+
+void doEasyGenes(struct trackDb *tdb, char *egName)
+{
+char *track = tdb->tableName;
+struct easyGene *egList = NULL, *eg;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb,egName);
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where name = '%s'", track, egName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    slAddTail(&egList,easyGeneLoad(row+rowOffset));
+slReverse(&egList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+for (eg = egList; eg != NULL; eg = eg->next)
+    {
+    if (eg->genbank[0] == 'Y')
+	printf("<FONT COLOR=\"#FF0000\">\n");
+    else
+	printf("<FONT COLOR=\"#000000\">\n");
+    printf("<B>Item:</B> %s<BR>\n",eg->name);
+    printf("<B>Feature identifier:</B> %s<BR>\n",eg->feat);
+    printf("<B>Start codon:</B> %s<BR>\n",eg->startCodon);
+    printf("<B>EasyGene descriptor:</B> %s<BR>\n",eg->descriptor);
+    if (eg->R >= 0.001)
+	printf("<B>R value:</B> %.3f<BR>\n",eg->R);
+    else 
+	printf("<B>R value:</B> %.2e<BR>\n",eg->R);
+    printf("<B>Log-odds :</B> %.1f<BR>\n",eg->logOdds);
+    printf("<B>Frame:</B> %d<BR>\n",eg->frame);
+    printf("<B>Swiss-Prot match:</B> %s<BR>\n",eg->swissProt);
+    printf("<B>ORF identifier:</B> %s<BR>\n",eg->orf);
+    printPos(eg->chrom, eg->chromStart, eg->chromEnd, eg->strand, TRUE, eg->name);
+    printf("</FONT>\n");
+    if (eg->next != NULL)
+	printf("<hr>\n");
+    }
+printTrackHtml(tdb);
+easyGeneFreeList(&egList);
+}
+
 void doCodeBlast(struct trackDb *tdb, char *trnaName)
 {
 struct codeBlast *cb=NULL;
@@ -13241,7 +13290,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     cbs=codeBlastScoreLoad(row);
     slAddHead(&list, cbs);
     }
-
 
 /*Print out table with Blast information*/
 printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
@@ -15464,6 +15512,10 @@ else if (sameWord(track,"codeBlast"))
 else if (sameWord(track,"rnaGenes"))
     {
     doRnaGenes(tdb, item);
+    }
+else if (sameWord(track,"easyGene"))
+    {
+    doEasyGenes(tdb, item);
     }
 
 /*Evan's stuff*/
