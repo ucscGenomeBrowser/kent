@@ -110,7 +110,7 @@ char formQ[] =
 "Size(MB):\n"
 "</td>\n"
 "<td>\n"
-"<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"60\" VALUE=\"<!sizeMB>\">\n"
+"<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"10\" VALUE=\"<!sizeMB>\">\n"
 "&nbsp;\n"
 "&nbsp;\n"
 "&nbsp;\n"

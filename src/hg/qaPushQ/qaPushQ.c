@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.24 2004/05/18 07:47:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.25 2004/05/18 08:24:14 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -44,7 +44,7 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 26
+#define MAXCOLS 27
 
 #define TITLE "Push Queue v"VERSION
 
@@ -593,7 +593,19 @@ strcpy(q.extSource ,"");
 q.openIssues   = "";
 q.notes   = "";
 strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
- 
+
+if (sameString(myUser.role,"dev"))
+    {
+    safef(msg, sizeof(msg), "%s", 
+	"Developer: Please leave priority and date alone. "
+	"Do specify if the track is new, and enter the ShortLabel for the track name. "
+	"Be sure to fill out the database, tables,  and external files if any. "
+	"If cgis have changed since last branch, please list them. "
+	"Leave the other fields for QA. You may leave a note for QA staff in notes field. "
+	"Thanks very much!"
+	);
+    }
+
 replacePushQFields(&q, TRUE);  /* new rec = true */
 
 }
@@ -1403,7 +1415,7 @@ if (isRedo)
 
 if (sameString(bouncebutton,"bounce")) 
     {
-    safef(q.priority,sizeof(q.priority),"B");
+    safef(newPriority, sizeof(newPriority), "B");
     strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
     q.bounces++;
     }
@@ -2499,7 +2511,7 @@ printf("v - click to lower the  priority.<br>\n");
 printf("<br>\n");
 printf("Queue Id - click to edit or see the details page for the record.<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ\" onClick=\"window.close();\" >CLOSE</a> <br>\n");
+printf("<a href=\"javascript:window.close();\" >CLOSE</a> <br>\n");
 }
 
 
@@ -2542,7 +2554,7 @@ printf("delete button - delete this push queue record and return to main display
 printf("push requested button - press only if you are QA staff and about to submit the push-request. It will try to verify that required entries are present.<br>\n");
 printf("clone button - press if you wish to split the original push queue record into multiple parts. Saves typing, used rarely.<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\"  onClick=\"window.close();\">CLOSE</a> <br>\n",q.qid);
+printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n",q.qid);
 }
 
 
@@ -2568,7 +2580,7 @@ printf("RETURN - click to return to the details/edit page.<br>\n");
 printf("Set Size As - click to set size to that found, and return to the details/edit page. Saves typing. Be sure to press submit to save changes.<br>\n");
 printf("<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=showSizes&qid=%s\" onClick=\"window.close();\">CLOSE</a> <br>\n",q.qid);
+printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n",q.qid);
 }
 
 
@@ -2814,17 +2826,18 @@ else if (sameString(action,"reset"))
     doCookieReset();      /* cant start htmShell until cookie is re-set */
     }
 
-else if (sameString(action,"showDisplayHelp" )) /* The help screens open in a separate window and don't hurt anything. Only displays text. Ignore cb. */
+/* The help screens open in a separate window and don't hurt anything. Only displays text. Ignore cb. */
+else if (sameString(action,"showDisplayHelp" )) 
     {
-    htmShell(TITLE, doShowDisplayHelp, NULL);
+    htmShell(TITLE, doShowDisplayHelp , NULL);
     }
-else if (sameString(action,"showEditHelp" )) 
+else if (sameString(action,"showEditHelp"    )) 
     {
-    htmShell(TITLE, doShowEditHelp, NULL);
+    htmShell(TITLE, doShowEditHelp    , NULL);
     }
-else if (sameString(action,"showSizesHelp" )) 
+else if (sameString(action,"showSizesHelp"   )) 
     {
-    htmShell(TITLE, doShowSizesHelp, NULL);
+    htmShell(TITLE, doShowSizesHelp   , NULL);
     }
 
 else
