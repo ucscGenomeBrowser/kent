@@ -1135,3 +1135,89 @@ chainSome $(path1)
   # add bosTau1 to list of databases to align in
   #  /cluster/data/genbank/etc/align-genbank
 
+
+# SWAP human(target)/cow(query) alignments to make bosTau1.chainHg17
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed
+    mv blastz.swap blastz.nov28
+    mkdir blastz
+    mkdir blastz/axtChain
+    /cluster/bin/i386/chainSwap zb.hg17/axtChain/all.chain.jan5.filtered blastz/axtChain/all.chain
+    cp all.chain all.chain.backup
+
+#   out of memory loading in one piece
+#   can't split by scaffold, too many files
+#   solution: split into 2 pieces
+    cd blastz/axtChain
+    mkdir split-2
+    /cluster/bin/i386/chainSplit -lump=2 split-2 all.chain 
+
+    ssh hgwdev
+    hgsql bosTau1
+    drop table chainHg17
+    drop table chainHg17Link
+    cd split-2
+    # each of these takes about 4 hours
+    /cluster/bin/i386/hgLoadChain -tIndex bosTau1 chainHg17 000.chain
+    /cluster/bin/i386/hgLoadChain -tIndex -oldTable bosTau1 chainHg17 001.chain
+
+    # cleanup
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    rm all.chain.backup
+
+#   bosTau1.netHg17
+
+    ssh kolossus
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+
+    # PRE
+    /cluster/bin/x86_64/chainPreNet all.chain ../../zb.hg17/S2.len ../../zb.hg17/S1.len chainPreNet.out
+
+    # chainNet
+    /cluster/bin/x86_64/chainNet chainPreNet.out 
+      -minSpace=1 ../../zb.hg17/S2.len ../../zb.hg17/S1.len hg17.net.raw /dev/null
+
+    # syntenic (using revision 1.7)
+    /cluster/home/heather/bin/x86_64/netSyntenic hg17.net.raw hg17.net.syn
+    # memory usage 2733064192, utime 5681 s/100, stime 617
+
+    # gzip
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    gzip chainPreNet.out
+    gzip bosTau1.net.raw
+
+    # netClass
+    # lots of feedback as each scaffold is processed; should have redirected output
+    # takes about an hour
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/netClass -noAr hg17.net.syn bosTau1 hg17 hg17.net 
+
+    # load
+    # again, lots of feedback as each scaffold is processed
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet bosTau1 netHg17 stdin 
+
+    # generate axts 
+    # don't need to split?
+    # kksilo or kolossus?
+    # yet again, lots of feedback as each scaffold is processed
+    # WORKING HERE
+    ssh kksilo
+    mkdir ../axtNet
+    /cluster/bin/i386/netToAxt hg17.net.syn all.chain /cluster/data/bosTau1/bosTau1.2bit /cluster/data/hg17/nib ../axtNet/all.axt
+
+    # sort?
+
+    # cleanup, compress, etc.
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    gzip all.chain
+    gzip hg17.net.syn
+    rm chain.tab link.tab
+
+    cd /cluster/data/bosTau1/bed/blastz/axtNet
+    cp all.axt all.axt.backup
