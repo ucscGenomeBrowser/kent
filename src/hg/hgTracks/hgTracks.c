@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.891 2005/02/05 22:19:28 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.892 2005/02/05 22:52:44 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9565,7 +9565,7 @@ char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 long thisTime = 0, lastTime = 0;
-char *clade = cartUsualString(cart, "clade", "");
+char *clade = hClade(hGenome(database));
 
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
