@@ -126,10 +126,12 @@
 #include "sgdClone.h"
 #include "tfbsCons.h"
 #include "simpleNucDiff.h"
+#include "bgiGeneInfo.h"
+#include "bgiSnp.h"
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.582 2004/03/16 23:39:11 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.583 2004/03/17 00:55:30 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7815,6 +7817,184 @@ printf("</UL>\n");
 printTrackHtml(tdb);
 }
 
+void doBGIGene(struct trackDb *tdb, char *geneName)
+/* Show Beijing Genomics Institute gene annotation info. */
+{
+struct bgiGeneInfo *bgi = NULL;
+struct flyBaseSwissProt *fbsp = NULL;
+char *geneTable = tdb->tableName;
+char infoTable[128];
+char pepTable[128];
+char query[512];
+
+safef(infoTable, sizeof(infoTable), "%sInfo", geneTable);
+
+genericHeader(tdb, geneName);
+
+if (hTableExists(infoTable))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query),
+	  "select * from %s where name = \"%s\";", infoTable, geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	bgi = bgiGeneInfoLoad(row);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+printCustomUrl(tdb, geneName, FALSE);
+showGenePos(geneName, tdb);
+if (bgi != NULL)
+    {
+    printf("<B>Annotation source:</B> %s<BR>\n", bgi->source);
+    if (bgi->go != NULL && bgi->go[0] != 0 && !sameString(bgi->go, "None"))
+	{
+	struct sqlConnection *goConn = sqlMayConnect("go");
+	char *goTerm = NULL;
+	char *words[16];
+	char buf[512];
+	int wordCount = chopCommas(bgi->go, words);
+	int i;
+	puts("<B>Gene Ontology terms from BGI:</B> <BR>");
+	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
+	    {
+	    if (i > 0 && sameWord(words[i], words[i-1]))
+		continue;
+	    goTerm = "";
+	    if (goConn != NULL)
+		{
+		safef(query, sizeof(query),
+		      "select name from term where acc = 'GO:%s';",
+		      words[i]);
+		goTerm = sqlQuickQuery(goConn, query, buf, sizeof(buf));
+		if (goTerm == NULL)
+		    goTerm = "";
+		}
+	    printf("&nbsp;&nbsp;&nbsp;GO:%s: %s<BR>\n",
+		   words[i], goTerm);
+	    }
+	sqlDisconnect(&goConn);
+	}
+    if (bgi->ipr != NULL && bgi->ipr[0] != 0 && !sameString(bgi->ipr, "None"))
+	{
+	char *words[16];
+	int wordCount = chopByChar(bgi->ipr, ';', words, ArraySize(words));
+	int i;
+	printf("<B>Interpro terms from BGI:</B> <BR>\n");
+	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
+	    {
+	    printf("&nbsp;&nbsp;&nbsp;%s<BR>\n", words[i]);
+	    }
+	}
+    if (bgi->snp != NULL && bgi->snp[0] != 0)
+	{
+	char *words[16];
+	int wordCount = chopCommas(bgi->snp, words);
+	int i;
+	printf("<B>BGI SNPs associated with gene %s:</B> <BR>\n", geneName);
+	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
+	    {
+	    printf("&nbsp;&nbsp;&nbsp;<A HREF=%s?%s&g=bgiSnp&i=%s&db=%s&c=%s>%s</A><BR>\n",
+		   hgcName(), cartSidUrlString(cart), words[i], database,
+		   seqName, words[i]);
+	    }
+	}
+    }
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+
+safef(pepTable, sizeof(pepTable), "%sPep", geneTable);
+if (hGenBankHaveSeq(geneName, pepTable))
+    {
+    puts("<LI>\n");
+    hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
+		       seqName);
+    printf("Predicted Protein</A> \n"); 
+    puts("</LI>\n");
+    }
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+printf("%s</A> may be different from the genomic sequence.\n", 
+       "Predicted mRNA");
+puts("</LI>\n");
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+
+if (hTableExists("axtInfo"))
+    {
+    puts("<LI>\n");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
+    }
+printf("</UL>\n");
+printTrackHtml(tdb);
+}
+
+
+void doBGISnp(struct trackDb *tdb, char *itemName)
+/* Put up info on a Beijing Genomics Institute SNP. */
+{
+char *table = tdb->tableName;
+struct bgiSnp snp;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where name = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bgiSnpStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    printf("<B>SNP Type:</B> %s<BR>\n",
+	   (snp.snpType[0] == 'S') ? "Substitution" : 
+	   (snp.snpType[0] == 'I') ? "Insertion" : "Deletion");
+    printf("<B>SNP Sequence:</B> %s<BR>\n", snp.snpSeq);
+    printf("<B>SNP in Broiler?:</B> %s<BR>\n", snp.inBroiler);
+    printf("<B>SNP in Layer?:</B> %s<BR>\n", snp.inLayer);
+    printf("<B>SNP in Silkie?:</B> %s<BR>\n", snp.inSilkie);
+    if (snp.geneName[0] != 0)
+	{
+	printf("<B>Associated gene:</B> <A HREF=%s?%s&g=bgiGene&i=%s&c=%s&db=%s>%s</A><BR>\n",
+	       hgcName(), cartSidUrlString(cart), snp.geneName,
+	       seqName, database, snp.geneName);
+	printf("<B>Relationship to gene:</B> %s<BR>\n", snp.geneAssoc);
+	if (snp.codonChange[0] != 0)
+	    printf("<B>Effect of SNP:</B> %s<BR>\n", snp.codonChange);
+	if (snp.phase[0] != 0)
+	    printf("<B>Phase of SNP:</B> %c<BR>\n", snp.phase[0]);
+	}
+    printf("<B>Quality Scores:</B> %d in reference, %d in read<BR>\n", 
+	   snp.qualChr, snp.qualReads);
+    printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
+    printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
+    if (snp.snpType[0] != 'S')
+	printf("<B>Indel Confidence</B>: %c<BR>\n", snp.questionM[0]);
+    if (snp.extra[0] != 0)
+	printf("<B>Comment:</B> %s<BR>\n", snp.extra);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
 {
@@ -13723,6 +13903,14 @@ else if (sameWord(track, "gbProtAnn"))
 else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
     {
     doBDGPGene(tdb, item);
+    }
+else if (sameWord(track, "bgiGene"))
+    {
+    doBGIGene(tdb, item);
+    }
+else if (sameWord(track, "bgiSnp"))
+    {
+    doBGISnp(tdb, item);
     }
 else if (sameWord(track, "encodeRegions"))
     {
