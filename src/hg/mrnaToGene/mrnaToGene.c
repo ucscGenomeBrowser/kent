@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.10 2004/05/05 20:30:38 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.11 2004/09/05 18:26:38 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -57,12 +57,12 @@ errAbort(
   "  -cdsFile=file - get CDS from this database, psl is a file.\n"
   "   File is table seperate with accession as the first column and\n"
   "   CDS the second\n"
-  "  -smallInsertSize=5 - Merge inserts smaller than this many bases (default 5)\n"
+  "  -smallInsertSize=%d - Merge inserts smaller than this many bases (default %d)\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
   "  -genePredExt - create a extended genePred, including frame information.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
-  "\n");
+  "\n", genePredStdInsertMergeSize, genePredStdInsertMergeSize);
 }
 
 void loadCdsFile(char *cdsFile)
@@ -273,7 +273,7 @@ db = optionVal("db", NULL);
 cdsDb = optionVal("cdsDb", NULL);
 cdsFile = optionVal("cdsFile", NULL);
 gRequireUtr = optionExists("requireUtr");
-gSmallInsertSize = optionInt("smallInsertSize", 5);
+gSmallInsertSize = optionInt("smallInsertSize", genePredStdInsertMergeSize);
 gGenePredExt = optionExists("genePredExt");
 gKeepInvalid = optionExists("keepInvalid");
 gQuiet = optionExists("quiet");
