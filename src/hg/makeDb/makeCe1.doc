@@ -60,8 +60,6 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
     echo 'create database ce1' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
 	echo 'drop database ce1' | hgsql ce1
-    # make a semi-permanent read-only alias:
-    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
     # Use df to ake sure there is at least 5 gig free on 
     df -h /var/lib/mysql
 # Before loading data:
