@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.71 2004/02/03 17:50:31 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.72 2004/02/25 07:42:29 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -341,6 +341,7 @@ boolean txTxBoth = FALSE;
 struct gfOutput *gvo;
 boolean qIsProt = FALSE;
 enum gfType qType, tType;
+struct hash *tFileCache = gfFileCacheNew();
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -462,15 +463,16 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     else
 	{
-	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, gvo);
+	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, tFileCache, gvo);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, gvo);
+	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, tFileCache, gvo);
 	}
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
 showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType);
+gfFileCacheFree(&tFileCache);
 }
 
 void askForSeq()

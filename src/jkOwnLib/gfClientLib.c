@@ -13,9 +13,10 @@
 #include "gfInternal.h"
 #include "errabort.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.26 2004/02/18 00:55:30 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.27 2004/02/25 07:42:31 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -427,7 +428,8 @@ if (respectFrame)
 range->tEnd = x;
 }
 
-static struct dnaSeq *expandAndLoad(struct gfRange *range, char *nibDir, int querySize, int *retNibSize, boolean respectFrame, boolean isRc)
+static struct dnaSeq *expandAndLoad(struct gfRange *range, char *tSeqDir, 
+	int querySize, int *retNibSize, boolean respectFrame, boolean isRc)
 /* Expand range to cover an additional 500 bases on either side.
  * Load up target sequence and return. (Done together because don't
  * know target size before loading.) */
@@ -438,7 +440,7 @@ FILE *f = NULL;
 int nibSize;
 int s, e;
 
-sprintf(nibFileName, "%s/%s", nibDir, range->tName);
+sprintf(nibFileName, "%s/%s", tSeqDir, range->tName);
 nibOpenVerify(nibFileName, &f, &nibSize);
 if (isRc)
     {
@@ -461,6 +463,67 @@ fclose(f);
 *retNibSize = nibSize;
 return target;
 }
+
+static struct dnaSeq *expandAndLoadCached(struct gfRange *range, 
+	struct hash *tFileCache, char *tSeqDir, int querySize, 
+	int *retTotalSeqSize, boolean respectFrame, boolean isRc)
+/* Expand range to cover an additional 500 bases on either side.
+ * Load up target sequence and return. (Done together because don't
+ * know target size before loading.) */
+{
+struct dnaSeq *target = NULL;
+char fileName[PATH_LEN+256];
+
+safef(fileName, sizeof(fileName), "%s/%s", tSeqDir, range->tName);
+if (nibIsFile(fileName))
+    {
+    struct nibInfo *nib = hashFindVal(tFileCache, fileName);
+    if (nib == NULL)
+        {
+	nib = nibInfoNew(fileName);
+	hashAdd(tFileCache, fileName, nib);
+	}
+    if (isRc)
+	reverseIntRange(&range->tStart, &range->tEnd, nib->size);
+    expandRange(range, querySize, nib->size, respectFrame);
+    target = nibLdPart(fileName, nib->f, nib->size, 
+    	range->tStart, range->tEnd - range->tStart);
+    if (isRc)
+	{
+	reverseComplement(target->dna, target->size);
+	reverseIntRange(&range->tStart, &range->tEnd, nib->size);
+	}
+    *retTotalSeqSize = nib->size;
+    }
+else
+    {
+    struct twoBitFile *tbf = NULL;
+    char *tSeqName = strchr(fileName, ':');
+    int tSeqSize = 0;
+    if (tSeqName == NULL)
+        errAbort("No colon in .2bit response from gfServer");
+    *tSeqName++ = 0;
+    tbf = hashFindVal(tFileCache, fileName);
+    if (tbf == NULL)
+        {
+	tbf = twoBitOpen(fileName);
+	hashAdd(tFileCache, fileName, tbf);
+	}
+    tSeqSize = twoBitSeqSize(tbf, tSeqName);
+    if (isRc)
+	reverseIntRange(&range->tStart, &range->tEnd, tSeqSize);
+    expandRange(range, querySize, tSeqSize, respectFrame);
+    target = twoBitReadSeqFragLower(tbf, tSeqName, range->tStart, range->tEnd);
+    if (isRc)
+	{
+	reverseComplement(target->dna, target->size);
+	reverseIntRange(&range->tStart, &range->tEnd, tSeqSize);
+	}
+    *retTotalSeqSize = tSeqSize;
+    }
+return target;
+}
+
 
 static boolean alignComponents(struct gfRange *combined, struct ssBundle *bun, 
 	enum ffStringency stringency)
@@ -530,9 +593,43 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     }
 }
 
+struct hash *gfFileCacheNew()
+/* Create hash for storing info on .nib and .2bit files. */
+{
+return hashNew(0);
+}
 
-void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
-    boolean isRc, int minMatch, struct gfOutput *out)
+static void gfFileCacheFreeEl(struct hashEl *el)
+/* Free up one file cache info. */
+{
+char *name = el->name;
+if (nibIsFile(name))
+    {
+    struct nibInfo *nib = el->val;
+    nibInfoFree(&nib);
+    }
+else
+    {
+    struct twoBitFile *tbf = el->val;
+    twoBitClose(&tbf);
+    }
+el->val = NULL;
+}
+
+void gfFileCacheFree(struct hash **pCache)
+/* Free up resources in cache. */
+{
+struct hash *cache = *pCache;
+if (cache != NULL)
+    {
+    hashTraverseEls(cache, gfFileCacheFreeEl);
+    hashFree(pCache);
+    }
+}
+
+
+void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
+    boolean isRc, int minMatch, struct hash *tFileCache, struct gfOutput *out)
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -551,7 +648,8 @@ rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
     splitPath(range->tName, dir, chromName, ext);
-    targetSeq = expandAndLoad(range, nibDir, seq->size, &range->tTotalSize, FALSE, FALSE);
+    targetSeq = expandAndLoadCached(range, tFileCache, tSeqDir, 
+    	seq->size, &range->tTotalSize, FALSE, FALSE);
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;

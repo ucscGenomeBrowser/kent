@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.5 2004/02/25 05:42:02 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.6 2004/02/25 07:42:31 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -349,8 +349,17 @@ for (;;)
     }
 }
 
+static void twoBitSeekTo(struct twoBitFile *tbf, char *name)
+/* Seek to start of named record.  Abort if can't find it. */
+{
+struct twoBitIndex *index = hashFindVal(tbf->hash, name);
+if (index == NULL)
+     errAbort("%s is not in %s", name, tbf->fileName);
+fseek(tbf->f, index->offset, SEEK_SET);
+}
+
 static struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
-	int fragStart, int fragEnd, boolean doMask)
+	int fragStart, int fragEnd, boolean doMask, int *retFullSize)
 /* Read part of sequence from .2bit file.  To read full
  * sequence call with start=end=0.  Sequence will be lower
  * case if doMask is false, mixed case (repeats in lower)
@@ -363,7 +372,6 @@ bits32 *nStarts = NULL, *nSizes = NULL;
 bits32 *maskStarts = NULL, *maskSizes = NULL;
 boolean isSwapped = tbf->isSwapped;
 FILE *f = tbf->f;
-struct twoBitIndex *index;
 int i;
 int packByteCount, packedStart, packedEnd, remainder, midStart, midEnd;
 int outSize;
@@ -372,10 +380,7 @@ DNA *dna;
 
 /* Find offset in index and seek to it */
 dnaUtilOpen();
-index = hashFindVal(tbf->hash, name);
-if (index == NULL)
-     errAbort("%s is not in %s", name, tbf->fileName);
-fseek(f, index->offset, SEEK_SET);
+twoBitSeekTo(tbf, name);
 
 /* Read in seqSize. */
 seqSize = readBits32(f, isSwapped);
@@ -552,6 +557,8 @@ freez(&nStarts);
 freez(&nSizes);
 freez(&maskStarts);
 freez(&maskSizes);
+if (retFullSize != NULL)
+    *retFullSize = seqSize;
 return seq;
 }
 
@@ -562,14 +569,21 @@ struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
  * be mixed case, with repeats in lower case and rest in
  * upper case. */
 {
-return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, TRUE);
+return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, TRUE, NULL);
 }
 
 struct dnaSeq *twoBitReadSeqFragLower(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd)
 /* Same as twoBitReadSeqFrag, but sequence is returned in lower case. */
 {
-return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, FALSE);
+return twoBitReadSeqFragExt(tbf, name, fragStart, fragEnd, FALSE, NULL);
+}
+
+int twoBitSeqSize(struct twoBitFile *tbf, char *name)
+/* Return size of sequence in two bit file in bases. */
+{
+twoBitSeekTo(tbf, name);
+return readBits32(tbf->f, tbf->isSwapped);
 }
 
 

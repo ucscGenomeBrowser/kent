@@ -9,7 +9,7 @@ X = gfServer.27x1
 
 gfServer: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/gfServer
+	strip $(HOME)/bin/$(MACHTYPE)/$X
 
 test:
 	${MKDIR} tests/output

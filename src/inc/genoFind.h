@@ -300,8 +300,15 @@ int gfReadMulti(int sd, void *vBuf, size_t size);
 
 /* ---  Some routines for dealing with gfServer at a high level ---- */
 
+struct hash *gfFileCacheNew();
+/* Create hash for storing info on .nib and .2bit files. */
+
+void gfFileCacheFree(struct hash **pCache);
+/* Free up resources in cache. */
+
 void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
-    boolean isRc,  int minMatch, struct gfOutput *out);
+    boolean isRc,  int minMatch, 
+    struct hash *tFileCache, struct gfOutput *out);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
