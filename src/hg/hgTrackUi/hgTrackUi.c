@@ -18,7 +18,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.99 2004/04/19 18:34:52 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.100 2004/04/20 22:06:13 markd Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -277,12 +277,15 @@ void cdsColorOptions(struct trackDb *tdb, int value)
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
-char *refGeneLabel = cartUsualString(cart, "refGene.label", "gene");
+char varName[64];
+char *refGeneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+refGeneLabel = cartUsualString(cart, varName, "gene");
 printf("<B>Label:</B> ");
-radioButton("refGene.label", refGeneLabel, "gene");
-radioButton("refGene.label", refGeneLabel, "accession");
-radioButton("refGene.label", refGeneLabel, "both");
-radioButton("refGene.label", refGeneLabel, "none");
+radioButton(varName, refGeneLabel, "gene");
+radioButton(varName, refGeneLabel, "accession");
+radioButton(varName, refGeneLabel, "both");
+radioButton(varName, refGeneLabel, "none");
 
 cdsColorOptions(tdb, 2);
 }

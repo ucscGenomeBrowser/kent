@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.711 2004/04/20 19:35:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.712 2004/04/20 22:06:13 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2770,7 +2770,7 @@ struct linkedFeatures *lf = item;
 return lf->name;
 }
 
-void lookupRefNames(struct linkedFeatures *lfList)
+void lookupRefNames(struct track *tg)
 /* This converts the refSeq accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
@@ -2778,7 +2778,8 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 char *newName;
 boolean isMgc = hIsMgcServer();
-char *refGeneLabel = cartUsualString(cart, "refGene.label", "gene");
+boolean isNative = sameString(tg->mapName, "refGene");
+char *refGeneLabel = cartUsualString(cart, (isNative ? "refGene.label" : "xenoRefGene.label"), "gene");
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
 boolean useAcc = sameString(refGeneLabel, "accession")
@@ -2790,7 +2791,7 @@ if (hTableExists("refLink"))
     struct sqlResult *sr;
     char **row;
 
-    for (lf = lfList; lf != NULL; lf = lf->next)
+    for (lf = tg->items; lf != NULL; lf = lf->next)
 	{
 	sprintf(query, "select name from refLink where mrnaAcc = '%s'", lf->name);
 	sr = sqlGetResult(conn, query);
@@ -2828,19 +2829,11 @@ void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
 enum trackVisibility vis = tg->visibility;
-char *refGene = "refGene";
-char *xenoRefGene = "xenoRefGene";
 struct sqlConnection *conn = hAllocConn();
-
-if (!sqlTableExists(conn, refGene))
-    if (sqlTableExists(conn, xenoRefGene))
-	refGene = xenoRefGene;
-hFreeConn(&conn);
-
-tg->items = lfFromGenePredInRange(tg, refGene, chromName, winStart, winEnd);
+tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 if (vis != tvDense)
     {
-    lookupRefNames(tg->items);
+    lookupRefNames(tg);
     slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
@@ -7470,9 +7463,8 @@ registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
-registerTrackHandler("xenoRefGene", refGeneMethods);
-registerTrackHandler("mappedRefSeq", refGeneMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("xenoRefGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);

@@ -135,7 +135,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.610 2004/04/13 17:47:50 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.611 2004/04/20 22:06:13 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7009,7 +7009,6 @@ char *sqlRnaName = rnaName;
 struct refLink *rl;
 struct genePred *gp;
 int start = cartInt(cart, "o");
-struct psl *pslList = NULL;
 
 /* Make sure to escape single quotes for DB parseability */
 if (strchr(rnaName, '\''))
@@ -7157,16 +7156,10 @@ htmlHorizontalLine();
 
 /* print alignments that track was based on */
 {
-char *refSeqAli = "refSeqAli";
-char *xenoRefSeqAli = "xenoRefSeqAli";
-
-if (!sqlTableExists(conn, refSeqAli))
-    if (sqlTableExists(conn, xenoRefSeqAli))
-	refSeqAli = xenoRefSeqAli;
-
-pslList = getAlignments(conn, refSeqAli, rl->mrnaAcc);
+char *aliTbl = (sameString(track, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
+struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", refSeqAli, rl->mrnaAcc);
+printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
 }
 
 htmlHorizontalLine();
