@@ -13,7 +13,7 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.7 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: ggCluster.c,v 1.8 2004/01/29 01:27:33 sugnet Exp $";
 
 
 
@@ -96,7 +96,9 @@ return mc;
 
 
 struct ggMrnaCluster *ggMrnaClusterOfOne(struct ggMrnaAli *ma, struct dnaSeq *genoSeq)
-/* Make up a ggMrnaCluster with just one thing on it. */
+/* Make up a ggMrnaCluster with just one thing on it. Looks at each
+ intron to see if it is good before determining which type a vertex
+ should be (hard or soft) */
 {
 static struct ggVertex *vertices = NULL;	/* Resized array. */
 static int vAlloc = 0;
@@ -113,36 +115,7 @@ struct ggMrnaCluster *mc;
 struct maRef *ref;
 struct ggAliInfo *da;
 
-if (blockCount == 1)
-    {
-    startGood = 0;
-    endGood = 1;
-    }
-else
-    {
-    /* This does a little filtering along with the translation from ggMrnaAli
-     * structure to ggAliInfo.  It throws out any initial blocks that
-     * are separated by non-intron gaps.  Then it translates.  When it
-     * comes to the next non-intron gap it stops translating.  (This
-     * strategy works because small gaps have already been merged 
-     * by ggHgapIn. */
-    for (i=0; i<endBlockIx; ++i)
-	{
-	if (isGoodIntron(genoSeq, blocks+i, blocks+i+1, isRev))
-	    break;
-	}
-    startGood = i;
-    if (startGood == endBlockIx)
-	return NULL;
-    for (i=startGood+1; i<endBlockIx; ++i)
-	{
-	if (!isGoodIntron(genoSeq, blocks+i, blocks+i+1, isRev))
-	    break;
-	}
-    endGood = i+1;
-    }
-/* Translate the good blocks into two vertices each. */
-for (i=startGood; i<endGood; ++i)
+for(i=0; i<blockCount; i++) 
     {
     struct ggMrnaBlock *block = blocks+i;
     if (vCount+2 > vAlloc)
@@ -153,14 +126,22 @@ for (i=startGood; i<endGood; ++i)
 	    vAlloc <<= 1;
 	ExpandArray(vertices, vCount, vAlloc);
 	}
+    /* Enter first vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tStart;
-    v->type = (i==startGood ? ggSoftStart : ggHardStart);
+    if(i == 0 || !isGoodIntron(genoSeq, block-1, block, isRev))
+	v->type = ggSoftStart;
+    else
+	v->type = ggHardStart;
+
+    /* Enter second vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tEnd;
-    v->type = (i==endGood-1 ? ggSoftEnd : ggHardEnd);
+    if(i == blockCount-1 || !isGoodIntron(genoSeq, block, block+1, isRev))
+	v->type = ggSoftEnd;
+    else
+	v->type = ggHardEnd;
     }
-
 /* Allocate and fill in ggMrnaCluster. */
 return finishClusterOfOne(ma, genoSeq, vertices, vCount);
 }
