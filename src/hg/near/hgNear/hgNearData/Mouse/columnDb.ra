@@ -1,7 +1,7 @@
 name ensembl
 itemUrl http://www.ensembl.org/Mus_musculus/geneview?transcript=%s
 
-name knownToMOE430
+name moe430Id
 shortLabel MOE430 ID
 longLabel Affymetrix MOE430 ID
 priority 2.614
@@ -67,7 +67,6 @@ longLabel Maximum Expression Value of Rinn Sex Expression Data
 priority 2.81
 visibility off
 type expMax knownToMOE430A mouseRinnSexMedian
-
 
 name gnfU74a
 shortLabel GNF U74a
