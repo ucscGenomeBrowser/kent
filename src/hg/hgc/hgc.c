@@ -10779,6 +10779,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
+         sameWord(track, "xenoBlastzMrna") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
          sameWord(track, "mgcIncompleteMrna") ||
