@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.424 2003/06/04 23:05:23 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.425 2003/06/06 01:07:06 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -637,9 +637,10 @@ void resetClassStr(struct dyString *dy, int track)
 stopColorStr(dy,track);
 }
 
-boolean isColor(char *s)
-/* check for <a href name=class</a> to see if this is a colored coding region*/
+boolean isBlue(char *s)
+/* check for <a href name=class</a> to see if this is colored blue (coding region)*/
 {
+    /* check for blue */
     if (strstr(s,"6699FF") == NULL)
         return FALSE;
     else
@@ -1128,7 +1129,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         dyStringAppendC(dyTprot,'\n');
 
         /* skip regions with no alignment and no colored coding regions */
-        if ( numberOfGaps(q,oneSize) < oneSize || isColor(dyT->string)) 
+        if ( numberOfGaps(q,oneSize) < oneSize || isBlue(dyT->string)) 
             {
             fputs(dyTprot->string,f);
             fputs(dyT->string,f);
