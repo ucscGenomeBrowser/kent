@@ -632,7 +632,7 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%%%s%%'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, localName);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -645,14 +645,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 		table->name = cloneString(query->string);
 		slAddHead(&hgp->tableList, table);
 		}
-    snpStaticLoad(row+rowOffset, &snp);
-    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
-		errAbort("Internal Database error: Odd chromosome name '%s' in %s", snp.chrom, tableName); 
+
     AllocVar(pos);
-    pos->chrom = chrom;
-    pos->chromStart = snp.chromStart - 5000;
-    pos->chromEnd = snp.chromEnd + 5000;
-    pos->name = cloneString(snp.name);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL)
