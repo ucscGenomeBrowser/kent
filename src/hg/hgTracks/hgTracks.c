@@ -1401,7 +1401,7 @@ tg->freeItems = estFreePair;
 tg->mapName = "hgEstPairs";
 tg->itemName = getEstPairName;
 tg->mapItemName = getEstPairName;
-tg->visibility = tvDense;
+tg->visibility = tvHide;
 tg->longLabel = "5'(blue) - 3'(red) EST pairs";
 tg->shortLabel = "EST pairs";
 tg->color.r = 67;
@@ -3393,7 +3393,7 @@ struct trackGroup *snpTg(char *table)
 struct trackGroup *tg = bedTg();
 
 tg->mapName = table;
-tg->visibility = tvDense;
+tg->visibility = tvHide;
 tg->longLabel = "SNP";
 tg->shortLabel = "Single Nucleotide Polymorphisms (SNP)";
 tg->loadItems = loadSnp;
