@@ -113,6 +113,11 @@ int winEnd;			/* End of window in sequence. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 char *ctFileName = NULL;	/* Custom track file. */
 
+/* These variables are set by getPositionFromCustomTracks() at the very 
+ * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
+struct customTrack *ctList = NULL;  /* Custom tracks. */
+struct slName *browserLines = NULL; /* Custom track "browser" lines. */
+
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
@@ -9443,14 +9448,6 @@ tg->mapItemName = ctMapItemName;
 return tg;
 }
 
-boolean bogusMacEmptyChars(char *s)
-/* Return TRUE if it looks like this is just a buggy
- * Mac browser putting in bogus chars into empty text box. */
-{
-char c = *s;
-return c != '_' && !isalnum(c);
-}
-
 char *getPositionFromCustomTracks()
 /*
   Parses custom track data to get the position variable
@@ -9459,31 +9456,9 @@ return - The first chromosome position variable found in the
  */
 {
 char *pos = NULL;
-char *customText = cloneString(cgiOptionalString("hgt.customText"));
-char *fileName = cloneString(cgiOptionalString("ct"));
-struct slName *browserLines = NULL;
 struct slName *bl = NULL;
-struct customTrack *ctList = NULL;
 
-customText = skipLeadingSpaces(customText);
-if (NULL != customText && bogusMacEmptyChars(customText))
-    {
-    customText = NULL;
-    }
-
-if (NULL == customText || 0 == customText[0])
-    {
-    customText = cloneString(cgiOptionalString("hgt.customFile"));
-    }
-
-if (NULL != customText && 0 != customText[0])
-    {
-    ctList = customTracksParse(customText, FALSE, &browserLines);
-    }
-else if (fileName != NULL && fileExists(fileName))
-    {
-    ctList = customTracksParse(fileName, TRUE, &browserLines);
-    }
+ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -9503,72 +9478,17 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         }
     }
 
-freez(&fileName);
-freez(&customText);
-
 return pos;
 }
 
 void loadCustomTracks(struct trackGroup **pGroupList)
 /* Load up custom tracks and append to list. */
 {
-struct customTrack *ctList = NULL, *ct;
+struct customTrack *ct;
 struct trackGroup *tg;
-char *customText = cartOptionalString(cart, "hgt.customText");
-char *fileName = cartOptionalString(cart, "ct");
-struct slName *browserLines = NULL, *bl;
+struct slName *bl;
 
-customText = skipLeadingSpaces(customText);
-if (customText != NULL && bogusMacEmptyChars(customText))
-    customText = NULL;
-if (customText == NULL || customText[0] == 0)
-    customText = cartOptionalString(cart, "hgt.customFile");
-customText = skipLeadingSpaces(customText);
-if (customText != NULL && customText[0] != 0)
-    {
-    static struct tempName tn;
-    makeTempName(&tn, "ct", ".bed");
-    ctList = customTracksParse(customText, FALSE, &browserLines);
-    ctFileName = tn.forCgi;
-    customTrackSave(ctList, tn.forCgi);
-    cartSetString(cart, "ct", tn.forCgi);
-    cartRemove(cart, "hgt.customText");
-    cartRemove(cart, "hgt.customFile");
-    }
-else if (fileName != NULL)
-    {
-    if (!fileExists(fileName))	/* Cope with expired tracks. */
-        {
-	fileName = NULL;
-	cartRemove(cart, "ct");
-	}
-    else
-        {
-	ctList = customTracksParse(fileName, TRUE, &browserLines);
-	ctFileName = fileName;
-	}
-    }
-
-if (customTrackNeedsLift(ctList))
-    {
-    /* Load up hash of contigs and lift up tracks. */
-    struct hash *ctgHash = newHash(0);
-    struct ctgPos *ctg, *ctgList = NULL;
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-       {
-       ctg = ctgPosLoad(row);
-       slAddHead(&ctgList, ctg);
-       hashAdd(ctgHash, ctg->contig, ctg);
-       }
-    customTrackLift(ctList, ctgHash);
-    ctgPosFreeList(&ctgList);
-    hashFree(&ctgHash);
-    }
-
-
+/* The loading is now handled by getPositionFromCustomTracks(). */
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
