@@ -90,6 +90,7 @@
 #include "axt.h"
 #include "axtInfo.h"
 #include "jaxQTL.h"
+#include "gbProtAnn.h"
 #include "hgSeq.h"
 #include "chain.h"
 #include "chainDb.h"
@@ -7908,6 +7909,38 @@ hFreeConn(&conn);
 }
 
 
+void doGbProtAnn(struct trackDb *tdb, char *item)
+/* Show extra info for GenBank Protein Annotations track. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256];
+char **row;
+int start = cartInt(cart, "o");
+struct gbProtAnn *gbProtAnn;
+char band[64];
+
+genericHeader(tdb, item);
+sprintf(query, "select * from gbProtAnn where name = '%s' and chrom = '%s' and chromStart = %d",
+    	item, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    gbProtAnn = gbProtAnnLoad(row);
+    printf("<B>Product:</B> %s<BR>\n", gbProtAnn->product);
+    if (gbProtAnn->note[0] != 0)
+	printf("<B>Note:</B> %s <BR>\n", gbProtAnn->note);
+    printf("<B>GenBank Protein:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=%s\" TARGET=_BLANK>%s</A><BR>\n",
+	   gbProtAnn->proteinId, gbProtAnn->proteinId);
+    printPos(seqName, gbProtAnn->chromStart, gbProtAnn->chromEnd, "+", TRUE);
+    }
+printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void printOtherLFS(char *clone, char *table, int start, int end)
 /* Print out the other locations of this clone */
 {
@@ -11186,6 +11219,10 @@ else if( sameWord( track, "footPrinter" ))
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
+    }
+else if (sameWord(track, "gbProtAnn"))
+    {
+    doGbProtAnn(tdb, item);
     }
 else if (tdb != NULL)
     {
