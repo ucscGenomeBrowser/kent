@@ -40,7 +40,7 @@ longLabel Vega Annotations
 group genes
 priority 37
 visibility hide
-chromosomes chr14,chr20,chr22,
+chromosomes chr6,chr7,chr9,chr10,chr13,chr14,chr20,chr22,
 color 0,100,180
 type genePred vegaPep
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
@@ -51,7 +51,7 @@ longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
 priority 37.1
 visibility hide
-chromosomes chr14,chr20,chr22,
+chromosomes chr6,chr7,chr9,chr10,chr13,chr14,chr20,chr22,
 color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
