@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.41 2004/02/11 18:38:19 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.42 2004/02/12 18:47:25 kate Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -141,7 +141,7 @@ else
     return 0;
 }
 
-static int wigTotalHeight(struct track *tg, enum trackVisibility vis)
+int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
    as defined in the cart */
 {
@@ -990,6 +990,7 @@ track->itemName = wigName;
 track->mapItemName = wigName;
 track->totalHeight = wigTotalHeight;
 track->itemHeight = tgFixedItemHeight;
+
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;

@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.19 2003/12/16 19:20:30 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.20 2004/02/12 18:47:25 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -131,7 +131,6 @@ slAddHead(&miList, mi);
 	}
     hashFree(&hash);
     }
-
 /* Make up item that will show the score as grayscale. */
 AllocVar(mi);
 mi->name = cloneString("Score");
@@ -503,7 +502,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void drawMafRegionDetails(struct mafAli *mafList, int height,
+void drawMafRegionDetails(struct mafAli *mafList, int height,
         int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
         enum trackVisibility vis, boolean isAxt)
