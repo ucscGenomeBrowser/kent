@@ -7550,7 +7550,7 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     #  387166 build123/updateExceptionList.sql
     #  383759 build124/updateExceptionList.sql
 
-# Add Affy SNPs from snpMap table.
+# Add Affy SNPs from new submission
 
     #!/bin/csh -fe
 
