@@ -9189,7 +9189,7 @@ if (gotBlat)
     {
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg11"))
+if (sameString(database, "hg12"))
     {
     fputs("<TD ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
@@ -9429,7 +9429,7 @@ if (!hideControls)
 
     printf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
     	tl.picWidth, 27);
-    printf("<TD COLSPAN=6 ALIGN=CENTER>");
+    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     printf("move start<BR>");
     cgiMakeButton("hgt.dinkLL", " < ");
     cgiMakeTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -9437,9 +9437,9 @@ if (!hideControls)
     printf("<TD COLSPAN=15>");
     fputs("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options." 
+	  "Click on left mini-buttons for track-specific options" 
 	  , stdout);
-    printf("<TD COLSPAN=6 ALIGN=CENTER>");
+    printf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     printf("move end<BR>");
     cgiMakeButton("hgt.dinkRL", " < ");
     cgiMakeTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
