@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.725 2004/08/25 18:09:54 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.726 2004/08/25 23:38:33 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14269,7 +14269,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
 		   "%s</A><BR>\n", gNum, stripped, psc->geneIds[i]);
 	    }
-	printf("<B>Gene%s delta:</B> %d<BR>\n", gNum, psc->geneDeltas[i]);
 	}
     pscreenFree(&psc);
     }
