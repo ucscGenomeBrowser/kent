@@ -139,6 +139,7 @@ struct wigAsciiData
     char *chrom;		/*	chrom name for this set of data */
     unsigned span;		/*	span for this set of data	*/
     unsigned count;		/*	number of values in this block */
+    double dataRange;		/*	for resolution calculation */
     struct asciiDatum *data;	/*	individual data items here */
     };
 
