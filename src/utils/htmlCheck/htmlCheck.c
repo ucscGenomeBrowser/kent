@@ -7,9 +7,10 @@
 #include "options.h"
 #include "dystring.h"
 #include "obscure.h"
+#include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.15 2004/02/29 18:15:30 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.16 2004/03/01 03:59:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,10 @@ errAbort(
   "   getVars - print the form variables to stdout\n"
   "   getLinks - print links\n"
   "   getTags - print out just the tags\n"
+  "   checkLinks - check links in page (non-recursively)\n"
+  "   checkAllLinks - check links in page and all subpages in same host\n"
+//  "   checkLocalLinks - check local links in page (non-recursively)\n"
+//  "   checkAllLinks - check local links in page and all subpages in same host\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
   );
 }
@@ -38,8 +43,9 @@ static struct optionSpec options[] = {
 struct httpStatus
 /* HTTP version and status code. */
     {
-    char *version;
-    int status;
+    struct httpStatus *next;	/* Next in list. */
+    char *version;		/* Usually something like HTTP/1.1 */
+    int status;			/* HTTP status code.  200 is good. */
     };
 
 struct htmlAttribute
@@ -56,18 +62,18 @@ struct htmlTag
     struct htmlTag *next;
     char *name;	/* Tag name. */
     struct htmlAttribute *attributes;  /* Attribute list. */
-    char *start;  /* Start of this tag. */
-    char *end;	  /* End of tag (one past closing '>') */
+    char *start;  /* Start of this tag.  Not allocated here.*/
+    char *end;	  /* End of tag (one past closing '>')  Not allocated here.*/
     };
 
 struct htmlFormVar
 /* A variable within an html form - from input, button, etc. */
     {
     struct htmlFormVar *next;	/* Next in list. */
-    char *name;			/* Variable name. */
-    char *tagName;		/* Name of tag. */
-    char *type;			/* Variable type. */
-    char *curVal;		/* Current value if any. */
+    char *name;			/* Variable name.  Not allocated here.*/
+    char *tagName;		/* Name of tag.  Not allocated here. */
+    char *type;			/* Variable type. Not allocated here. */
+    char *curVal;		/* Current value if any.  Allocated here. */
     struct slName *values;	/* List of available values.  Null if textBox. */
     struct slRef *tags;	        /* List of references associated tags. */
     };
@@ -76,11 +82,11 @@ struct htmlForm
 /* A form within an html page. */
     {
     struct htmlForm *next;	/* Next form in list. */
-    char *name;			/* Name (or "" if not defined). */
-    char *action;		/* Action attribute value. */
-    char *method;		/* Method attribute value.  Defaults to "GET" */
-    struct htmlTag *startTag;	/* Tag that holds <FORM> */
-    struct htmlTag *endTag;	/* Tag one past </FORM> */
+    char *name;			/* Name (n/a if not defined).  Not allocated here. */
+    char *action;		/* Action attribute value.  Not allocated here. */
+    char *method;		/* Defaults to "GET". Not allocated here.  */
+    struct htmlTag *startTag;	/* Tag that holds <FORM>. Not allocated here.  */
+    struct htmlTag *endTag;	/* Tag one past </FORM> . Not allocated here. */
     struct htmlFormVar *vars; /* List of form variables. */
     };
 
@@ -88,6 +94,7 @@ struct htmlPage
 /* A complete html page parsed out. */
     {
     struct htmlPage *next;
+    char *url;				/* Url that produced this page. */
     struct httpStatus *status;		/* Version and status */
     char *fullText;			/* Full unparsed text including headers. */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
@@ -95,6 +102,160 @@ struct htmlPage
     struct htmlTag *tags;		/* List of tags in this page. */
     struct htmlForm *forms;		/* List of all forms. */
     };
+
+void httpStatusFree(struct httpStatus **pStatus)
+/* Free up resources associated with status */
+{
+struct httpStatus *status = *pStatus;
+if (status != NULL)
+    {
+    freeMem(status->version);
+    freez(pStatus);
+    }
+}
+
+void httpStatusFreeList(struct httpStatus **pList)
+/* Free a list of dynamically allocated httpStatus's */
+{
+struct httpStatus *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    httpStatusFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlAttributeFree(struct htmlAttribute **pAttribute)
+/* Free up resources associated with attribute. */
+{
+struct htmlAttribute *att = *pAttribute;
+if (att != NULL)
+    {
+    freeMem(att->name);
+    freeMem(att->val);
+    freez(pAttribute);
+    }
+}
+
+void htmlAttributeFreeList(struct htmlAttribute **pList)
+/* Free a list of dynamically allocated htmlAttribute's */
+{
+struct htmlAttribute *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlAttributeFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlTagFree(struct htmlTag **pTag)
+/* Free up resources associated with tag. */
+{
+struct htmlTag *tag = *pTag;
+if (tag != NULL)
+    {
+    htmlAttributeFreeList(&tag->attributes);
+    freeMem(tag->name);
+    freez(pTag);
+    }
+}
+
+void htmlTagFreeList(struct htmlTag **pList)
+/* Free a list of dynamically allocated htmlTag's */
+{
+struct htmlTag *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlTagFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlFormVarFree(struct htmlFormVar **pVar)
+/* Free up resources associated with form variable. */
+{
+struct htmlFormVar *var = *pVar;
+if (var != NULL)
+    {
+    freeMem(var->curVal);
+    slFreeList(&var->values);
+    slFreeList(&var->tags);
+    freez(pVar);
+    }
+}
+
+void htmlFormVarFreeList(struct htmlFormVar **pList)
+/* Free a list of dynamically allocated htmlFormVar's */
+{
+struct htmlFormVar *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlFormVarFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlFormFree(struct htmlForm **pForm)
+/* Free up resources associated with form variable. */
+{
+struct htmlForm *form = *pForm;
+if (form != NULL)
+    {
+    htmlFormVarFreeList(&form->vars);
+    freez(pForm);
+    }
+}
+
+void htmlFormFreeList(struct htmlForm **pList)
+/* Free a list of dynamically allocated htmlForm's */
+{
+struct htmlForm *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlFormFree(&el);
+    }
+*pList = NULL;
+}
+
+void htmlPageFree(struct htmlPage **pPage)
+/* Free up resources associated with htmlPage. */
+{
+struct htmlPage *page = *pPage;
+if (page != NULL)
+    {
+    httpStatusFree(&page->status);
+    freez(&page->url);
+    freez(&page->fullText);
+    freeHashAndVals(&page->header);
+    htmlTagFreeList(&page->tags);
+    htmlFormFreeList(&page->forms);
+    freez(pPage);
+    }
+}
+
+void htmlPageFreeList(struct htmlPage **pList)
+/* Free a list of dynamically allocated htmlPage's */
+{
+struct htmlPage *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    htmlPageFree(&el);
+    }
+*pList = NULL;
+}
+
 
 static int findLineNumber(char *start, char *pos)
 /* Figure out line number of given position relative to start. */
@@ -140,6 +301,35 @@ va_end(args);
 noWarnAbort();
 }
 
+struct httpStatus *httpStatusParse(char **pText)
+/* Read in status from first line.  Update pText to point to next line. 
+ * Note unlike many routines here, this does not insert zeros into text. */
+{
+char *text = *pText;
+char *end = strchr(text, '\n');
+struct httpStatus *status;
+if (end != NULL)
+   *pText = end+1;
+else
+   *pText = text + strlen(text);
+end = skipToSpaces(text);
+if (end == NULL)
+    {
+    warn("Short status line.");
+    return NULL;
+    }
+AllocVar(status);
+status->version = cloneStringZ(text, end-text);
+end = skipLeadingSpaces(end);
+if (!isdigit(end[0]))
+    {
+    warn("Not a number in status field");
+    return NULL;
+    }
+status->status = atoi(end);
+return status;
+}
+
 static char *nextCrLfLine(char **pS)
 /* Return zero-terminated line and advance *pS to start of
  * next line.  Return NULL at end of file.  Warn if there is
@@ -162,34 +352,6 @@ else
     }
 *pS = e;
 return s;
-}
-
-struct httpStatus *httpStatusParse(char **pText)
-/* Read in status from first line.  Update pText to point to next line. */
-{
-char *line = nextCrLfLine(pText);
-char *word;
-struct httpStatus *status;
-if (line == NULL)
-    {
-    warn("Empty http output.");
-    return NULL;
-    }
-AllocVar(status);
-status->version = nextWord(&line);
-word = nextWord(&line);
-if (word == NULL)
-    {
-    warn("Short status line.");
-    return NULL;
-    }
-if (!isdigit(word[0]))
-    {
-    warn("Not a number in status field");
-    return NULL;
-    }
-status->status = atoi(word);
-return status;
 }
 
 struct hash *htmlHeaderRead(char **pHtml)
@@ -242,13 +404,15 @@ if (val == NULL)
 return val;
 }
 
-struct htmlTag *htmlTagScan(char *html)
-/* Scan HTML for tags and return a list of them. */
+struct htmlTag *htmlTagScan(char *html, char *dupe)
+/* Scan HTML for tags and return a list of them. 
+ * Html is the text to scan, and dupe is a copy of it
+ * which this routine will insert 0's in in the course of
+ * parsing.*/
 {
-char *dupe = cloneString(html);
 char *s = dupe, c, *e, *tagName;
 struct slName *list = NULL, *link;
-struct htmlTag *tagList, *tag;
+struct htmlTag *tagList = NULL, *tag;
 struct htmlAttribute *att;
 int pos;
 
@@ -387,7 +551,6 @@ for (;;)
 	    }
 	}
     }
-freeMem(dupe);
 slReverse(&tagList);
 return tagList;
 }
@@ -444,12 +607,12 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
 		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN"))
 	    {
-	    var->curVal = value;
+	    var->curVal = cloneString(value);
 	    }
 	else if (sameWord(type, "CHECKBOX") || sameWord(type, "RADIO"))
 	    {
 	    if (tagAttributeVal(page, tag, "CHECKED", NULL) != NULL)
-	        var->curVal = value;
+	        var->curVal = cloneString(value);
 	    }
 	else if ( sameWord(type, "RESET") || sameWord(type, "BUTTON") ||
 		sameWord(type, "SUBMIT") || sameWord(type, "IMAGE") ||
@@ -482,6 +645,8 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 			if (e != NULL)
 			    selVal = cloneStringZ(subTag->end, e - subTag->end);
 			}
+		    else
+		        selVal = cloneString(selVal);
 		    if (selVal != NULL)
 			var->curVal = selVal;
 		    }
@@ -541,31 +706,37 @@ for (form = formList; form != NULL; form = form->next)
 return formList;
 }
 
-struct htmlPage *htmlPageParse(char *fullText)
+struct htmlPage *htmlPageParse(char *url, char *fullText)
 /* Parse out page and return. */
 {
 struct htmlPage *page;
 char *dupe = cloneString(fullText);
 char *s = dupe;
 struct httpStatus *status = httpStatusParse(&s);
+char *contentType;
 
 if (status == NULL)
     return NULL;
 AllocVar(page);
+page->url = cloneString(url);
 page->fullText = fullText;
 page->status = status;
 page->header = htmlHeaderRead(&s);
-page->htmlText = fullText + (s - dupe);
+contentType = hashFindVal(page->header, "Content-Type:");
+if (startsWith("text/html", contentType))
+    {
+    page->htmlText = fullText + (s - dupe);
+    page->tags = htmlTagScan(fullText, s);
+    page->forms = htmlParseForms(page, page->tags, NULL);
+    }
 freez(&dupe);
-page->tags = htmlTagScan(fullText);
-page->forms = htmlParseForms(page, page->tags, NULL);
 return page;
 }
 
-struct htmlPage *htmlPageParseOk(char *fullText)
+struct htmlPage *htmlPageParseOk(char *url, char *fullText)
 /* Parse out page and return only if status ok. */
 {
-struct htmlPage *page = htmlPageParse(fullText);
+struct htmlPage *page = htmlPageParse(url, fullText);
 if (page == NULL)
    noWarnAbort();
 if (page->status->status != 200)
@@ -681,7 +852,6 @@ for (form = page->forms; form != NULL; form = form->next)
     }
 }
 
-
 void getTags(struct htmlPage *page)
 /* Print out all tags. */
 {
@@ -702,10 +872,10 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     }
 }
 
-struct htmlRow
+struct htmlTableRow
 /* Data on a row */
     {
-    struct htmlRow *next;
+    struct htmlTableRow *next;
     int tdCount;
     int inTd;
     };
@@ -714,7 +884,7 @@ struct htmlTable
 /* Data on a table. */
     {
     struct htmlTable *next;
-    struct htmlRow *row;
+    struct htmlTableRow *row;
     int rowCount;
     };
 
@@ -724,7 +894,7 @@ void validateTables(struct htmlPage *page,
  * are no empty rows. */
 {
 struct htmlTable *tableStack = NULL, *table;
-struct htmlRow *row;
+struct htmlTableRow *row;
 struct htmlTag *tag;
 
 for (tag = startTag; tag != endTag; tag = tag->next)
@@ -1033,20 +1203,228 @@ validateCgiUrls(page);
 verbose(1, "ok\n");
 }
 
+char *htmlExpandUrl(char *base, char *url)
+/* Expand URL that is relative to base to stand on it's own. 
+ * Return NULL if it's not http or https. */
+{
+struct dyString *dy = NULL;
+char *hostName, *pastHostName;
+
+/* In easiest case URL is actually absolute and begins with
+ * protocol.  Just return clone of url. */
+if (startsWith("http:", url) || startsWith("https:", url))
+    return cloneString(url);
+
+/* If it's got a colon, but no http or https, then it's some
+ * protocol we don't understand, like a mailto.  Just return NULL. */
+if (strchr(url, ':') != NULL)
+    return NULL;
+
+/* Figure out first character past host name. Load up
+ * return string with protocol (if any) and host name. */
+dy = dyStringNew(256);
+if (startsWith("http:", base) || startsWith("https:", base))
+    hostName = (strchr(base, ':') + 3);
+else
+    hostName = base;
+pastHostName = strchr(hostName, '/');
+if (pastHostName == NULL)
+    pastHostName = hostName + strlen(hostName);
+dyStringAppendN(dy, base, pastHostName - base);
+
+/* Add url to return string after host name. */
+if (startsWith("/", url))	/* New URL is absolute, just append to hostName */
+    {
+    dyStringAppend(dy, url);
+    }
+else
+    {
+    char *curDir = pastHostName;
+    char *endDir;
+    if (curDir[0] == '/')
+        curDir += 1;
+    dyStringAppendC(dy, '/');
+    endDir = strrchr(curDir, '/');
+    if (endDir == NULL)
+	endDir = curDir;
+    if (startsWith("../", url))
+	{
+	char *dir = cloneStringZ(curDir, endDir-curDir);
+	char *path = expandRelativePath(dir, url);
+	if (path != NULL)
+	     {
+	     dyStringAppend(dy, path);
+	     }
+	freez(&dir);
+	freez(&path);
+	}
+    else
+	{
+	dyStringAppendN(dy, curDir, endDir-curDir);
+	if (lastChar(dy->string) != '/')
+	    dyStringAppendC(dy, '/');
+	dyStringAppend(dy, url);
+	}
+    }
+return dyStringCannibalize(&dy);
+}
+
+char *skipOverProtocol(char *s)
+/* Skip over http:// or ftp:// or https:// */
+{
+char *p;
+if ((p = stringIn("://", s)) != NULL)
+    return p+3;
+else
+    return s;
+}
+
+int hostNameSize(char *s)
+/* Return size of host name (not including last slash) */
+{
+char *e = strchr(s, '/');
+if (e == NULL)
+    return strlen(s);
+else
+    return e - s;
+}
+
+boolean sameHost(char *a, char *b)
+/* Given URLs a and b, return TRUE if they refer to same host. */
+{
+int aSize, bSize;
+a = skipOverProtocol(a);
+b = skipOverProtocol(b);
+aSize = hostNameSize(a);
+bSize = hostNameSize(b);
+if (aSize != bSize)
+    return FALSE;
+return (memcmp(a, b, aSize) == 0);
+}
+
+static struct htmlTag *findNamedAnchor(struct htmlPage *page, char *name)
+/* Find anchor of given name. */
+{
+struct htmlTag *tag;
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (sameWord(tag->name, "A"))
+        {
+	char *anchorName = tagAttributeVal(page, tag, "name", NULL);
+	if (anchorName != NULL && sameWord(anchorName, name))
+	    return tag;
+	}
+    }
+return NULL;
+}
+
+static jmp_buf recoverJumpBuf;
+
+static void recoverAbort()
+/* semiAbort */
+{
+longjmp(recoverJumpBuf, -1);
+}
+
+char *slurpUrl(char *url)
+/* Grab url.  If there's a problem report error and return NULL */
+{
+int status;
+char *retVal = NULL;
+pushAbortHandler(recoverAbort);
+status = setjmp(recoverJumpBuf);
+if (status == 0)    /* Always true except after long jump. */
+    {
+    struct dyString *dy = netSlurpUrl(url);
+    retVal = dyStringCannibalize(&dy);
+    }
+popAbortHandler();
+return retVal;
+}
+
+void checkRecursiveLinks(struct hash *uniqHash, struct htmlPage *page, 
+	boolean recurse, boolean justLocal)
+/* Check links recursively up to depth. */
+{
+struct slName *linkList = htmlPageLinks(page), *link;
+for (link = linkList; link != NULL; link = link->next)
+    {
+    if (link->name[0] == '#')
+        {
+	if (findNamedAnchor(page, link->name+1) == NULL)
+	    {
+	    warn("%s%s doesn't exist", page->url, link->name);
+	    }
+	}
+    else
+	{
+	char *url = htmlExpandUrl(page->url, link->name);
+	if (url != NULL)
+	    {
+	    boolean isLocal = sameHost(page->url, url);
+	    if (isLocal || !justLocal)
+		{
+		if (!hashLookup(uniqHash, url))
+		    {
+		    char *fullText = slurpUrl(url);
+		    if (fullText)
+			{
+			char *s = fullText;
+			struct httpStatus *status = httpStatusParse(&s);
+			hashAdd(uniqHash, url, NULL);
+			if (status->status != 200 && status->status != 302 
+			    && status->status != 301)
+			     warn("%d from %s", status->status, url);
+			else
+			    {
+			    if (recurse && isLocal)
+				{
+				struct htmlPage *newPage = 
+				   htmlPageParseOk(url, fullText);
+				if (newPage != NULL)
+				    {
+				    fullText = NULL;
+				    uglyf("Recursing into %s\n", url);
+				    checkRecursiveLinks(uniqHash, newPage, 
+					recurse, justLocal);
+				    htmlPageFree(&newPage);
+				    }
+				}
+			    }
+			freez(&fullText);
+			}
+		    }
+		}
+	    freez(&url);
+	    }
+	}
+    }
+slFreeList(&linkList);
+}
+
+void checkLinks(struct htmlPage *page, boolean recurse, boolean justLocal)
+/* Check links (just one level deep. */
+{
+struct hash *uniqHash = hashNew(0);
+hashAdd(uniqHash, page->url, NULL);
+checkRecursiveLinks(uniqHash, page, recurse, justLocal);
+hashFree(&uniqHash);
+}
+
 void htmlCheck(char *command, char *url)
 /* Read url. Switch on command and dispatch to appropriate routine. */
 {
 struct dyString *dy = netSlurpUrl(url);
-char *fullText = dy->string;
+char *fullText = dyStringCannibalize(&dy);
 if (sameString(command, "getAll"))
-    mustWrite(stdout, dy->string, dy->stringSize);
+    mustWrite(stdout, fullText, strlen(fullText));
 else if (sameString(command, "ok"))
     checkOk(fullText);
 else if (sameString(command, "getHeader"))
     getHeader(fullText);
 else /* Do everything that requires full parsing. */
     {
-    struct htmlPage *page = htmlPageParseOk(fullText);
+    struct htmlPage *page = htmlPageParseOk(url, fullText);
     if (sameString(command, "getHtml"))
         fputs(page->htmlText, stdout);
     else if (sameString(command, "getLinks"))
@@ -1059,8 +1437,262 @@ else /* Do everything that requires full parsing. */
 	getTags(page);
     else if (sameString(command, "validate"))
 	validate(page);	
+    else if (sameString(command, "checkLinks"))
+        checkLinks(page, FALSE, FALSE);
+    else if (sameString(command, "checkAllLinks"))
+        checkLinks(page, TRUE, FALSE);
+    else if (sameString(command, "checkLocalLinks"))
+        checkLinks(page, FALSE, TRUE);
+    else if (sameString(command, "checkAllLocalLinks"))
+        checkLinks(page, TRUE, TRUE);
     else
 	errAbort("Unrecognized command %s", command);
+    htmlPageFree(&page);
+    }
+}
+
+static void testExpandRelativeUrl()
+/* DO some testing of expandRelativeUrl. */
+{
+    {
+    char *oldUrl = "genome.ucsc.edu";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "genome.ucsc.edu";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "genome.ucsc.edu";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "genome.ucsc.edu";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "genome.ucsc.edu";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/index.html";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/index.html";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/index.html";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/index.html";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/index.html";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/downloads.html";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/downloads.html";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/downloads.html";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/downloads.html";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/downloads.html";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/index.html";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/index.html";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/index.html";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/index.html";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/goldenPath/hg16/index.html";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/";
+    char *relUrl = "credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/";
+    char *relUrl = "/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/";
+    char *relUrl = "../credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/";
+    char *relUrl = "../news/chimp.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
+    }
+    {
+    char *oldUrl = "http://genome.ucsc.edu/";
+    char *relUrl = "http://test.org/credits.html";
+    char *newUrl = htmlExpandUrl(oldUrl, relUrl);
+    printf("%s %s -> %s\n", oldUrl, relUrl, newUrl);
     }
 }
 
@@ -1068,8 +1700,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *commmand, *url;
+pushCarefulMemHandler(200000000);
 if (argc != 3)
     usage();
 htmlCheck(argv[1], argv[2]);
+carefulCheckHeap();
 return 0;
 }
