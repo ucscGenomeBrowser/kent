@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.26 2004/05/19 21:51:06 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.27 2004/05/20 00:22:41 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -655,6 +655,8 @@ struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 char dbChrom[64];
 char buf[1024];
+// TODO: cleanup
+boolean complementBases = cartUsualBoolean(cart, "complement", FALSE);
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -757,6 +759,12 @@ for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
        * NOTE: want to make sure that all sequences are soft-masked
        * if we do this */
     toUpperN(line, winBaseCount);
+    if (complementBases)
+        {
+        seq = newDnaSeq(line, strlen(line), "");
+        complement(seq->dna, seq->size);
+        line = seq->dna;
+        }
     /* draw sequence letters for alignment */
     spreadAlignString(vg, x, y, width, mi->height-1, color,
                             font, line, selfLine, winBaseCount);
