@@ -500,7 +500,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
             }
         }
     fprintf(f, "&title=cDNA+Near+%s\">", gene->name);
-    fprintf(f, "%-14s</A>  %s   %s   %s   %5d %5d %5d %5d", 
+    fprintf(f, "%-18s</A>  %s   %s   %s   %5d %5d %5d %5d", 
         gene->name, 
         boos(gene->skippedExon, "EX", "  "), 
         boos(gene->skippedIntron, "IN", "  "), 
