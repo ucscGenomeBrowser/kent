@@ -2852,7 +2852,6 @@ seq = hExtSeq(readName);
 showSomeAlignment(psl, seq, gftDnaX, 0, seq->size, NULL);
 }
 
-
 void writeMatches(FILE *f, char *a, char *b, int count)
 /* Write a | where a and b agree, a ' ' elsewhere. */
 {
@@ -4701,7 +4700,42 @@ printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
 }
 
+void doTSS(struct trackDb *tdb, char *itemName)
+/* Handle click on DBTSS track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl = NULL;
+struct dnaSeq *seq = NULL;
+boolean hasBin = TRUE;
+char *table = "refFullAli"; /* Table with the pertinent PSL data */
 
+cartWebStart(cart, itemName);
+printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("Sequence</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row + hasBin);
+    slAddHead(&pslList, psl);
+    }
+
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcCdnaAli", track, itemName);
+printTrackHtml(tdb);
+}
 
 void doEst3(char *itemName)
 /* Handle click on EST 3' end track. */
@@ -8570,15 +8604,20 @@ else if (sameWord(track, "htcGetDnaExtended1"))
    doGetDnaExtended1();
    }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
-	sameWord(track, "est") || sameWord(track, "intronEst") || 
-	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-	sameWord(track, "xenoEst") || sameWord(track, "psu") ||
-	sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-	sameWord(track, "mgcNcbiPicks") ||
-        sameWord(track, "mgcNcbiSplicedPicks") ||
-	sameWord(track, "mgcUcscPicks"))
+         sameWord(track, "est") || sameWord(track, "intronEst") || 
+         sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
+         sameWord(track, "xenoEst") || sameWord(track, "psu") ||
+         sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
+         sameWord(track, "mgcNcbiPicks") ||
+         sameWord(track, "mgcNcbiSplicedPicks") ||
+         sameWord(track, "mgcUcscPicks")
+         )
     {
     doHgRna(tdb, item);
+    }
+else if (sameWord(track, "refFullAli"))
+    {
+    doTSS(tdb, item);
     }
 else if (sameWord(track, "rikenMrna"))
     {
