@@ -80,6 +80,8 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define	BASE_1(x)	(x+1)
 #define DEFAULT_MIN_Yv	0.0
 #define DEFAULT_MAX_Yv	127.0
+#define DEFAULT_MIN_BED_GRAPH	0.0
+#define DEFAULT_MAX_BED_GRAPH	1000.0
 #define DEFAULT_HEIGHT_PER	"128"
 #define MIN_HEIGHT_PER	11
 #define WIG_NO_DATA	128
@@ -172,6 +174,9 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
 /* return min,max Y ranges from trackDb or cart */
+extern void wigFetchMinMaxLimits(struct trackDb *tdb, double *min, double *max,
+    double *tDbMin, double *tDbMax);
+/* for bedGraph types, return min,max Y ranges from trackDb or cart */
 extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
     int *Default);
 /* return pixels heights allowable from trackDb or cart */
@@ -203,6 +208,8 @@ int *wiggleSpanList(struct trackDb *tdb);
 #define DEFAULTVIEWLIMITS "defaultViewLimits"
 #define MIN_Y "minY"
 #define MAX_Y "maxY"
+#define MIN_LIMIT "minLimit"
+#define MAX_LIMIT "maxLimit"
 #define MAXHEIGHTPIXELS "maxHeightPixels"
 #define HEIGHTPER "heightPer"
 #define HORIZGRID "horizGrid"
