@@ -10,6 +10,9 @@ struct ancientRref
     {
     struct ancientRref *next;  /* Next in singly linked list. */
     char *id;	/* Unique id for each repeat */
+    char *name;	/* human repeat name  */
+    char *class;	/* repeat class */
+    char *family;	/* repeat family */
     char *hseq;	/* Human sequence with gaps */
     char *mseq;	/* mouse sequence with gaps */
     };
