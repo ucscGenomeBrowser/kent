@@ -701,9 +701,10 @@ char *chrom, *start, *end;
 char buf[256];
 int iStart, iEnd;
 
-strncpy(buf, spec, sizeof(buf));
+strncpy(buf, spec, 256);
 chrom = buf;
 start = strchr(chrom, ':');
+
 if (start == NULL)
     {
     /* If just chromosome name cover all of it. */

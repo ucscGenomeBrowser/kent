@@ -1108,7 +1108,11 @@ int start,end;
 char *chrom;
 
 AllocVar(hgp);
+
 query = trimSpaces(query);
+if(query == 0)
+    return hgp;
+
 hgp->query = cloneString(query);
 hgp->database = hGetDb();
 if (extraCgi == NULL)
@@ -1167,6 +1171,7 @@ else
     findRefGenes(query, hgp);
     findMrnaKeys(query, hgp, useHgTracks);
     }
+
 slReverse(&hgp->tableList);
 fixSinglePos(hgp);
 return hgp;
