@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.7 2004/01/18 17:46:30 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.8 2004/01/25 20:22:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -179,8 +179,11 @@ if (gGetState == GB_PROCESSED)
 else
     {
     struct gbAligned *aligned = entry->aligned;
-    entry->selectVer = aligned->version;
-    aligned->update->selectProc = TRUE;
+    if (aligned != NULL)
+        {
+        entry->selectVer = aligned->version;
+        aligned->update->selectProc = TRUE;
+        }
     }
 }
 
@@ -438,6 +441,7 @@ if (!(sameString(gGetWhat, "seq")
              gGetWhat);
 if ((sameString(gGetWhat, "psl") || sameString(gGetWhat, "intronPsl")))
     {
+    errAbort("gbGetSeq -what=%s is currently broken, try obtaining from database", gGetWhat);
     if (gDatabase == NULL)
         errAbort("must specify -db to get psl alignments");
     gGetState = GB_ALIGNED;
