@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.5 2004/01/09 22:08:39 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.6 2004/01/13 21:38:19 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
@@ -21,10 +21,10 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->Span = sqlUnsigned(row[4]);
-ret->Count = sqlUnsigned(row[5]);
-ret->Offset = sqlUnsigned(row[6]);
-ret->File = row[7];
+ret->span = sqlUnsigned(row[4]);
+ret->count = sqlUnsigned(row[5]);
+ret->offset = sqlUnsigned(row[6]);
+ret->file = row[7];
 ret->lowerLimit = atof(row[8]);
 ret->dataRange = atof(row[9]);
 ret->validCount = sqlUnsigned(row[10]);
@@ -45,10 +45,10 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->Span = sqlUnsigned(row[4]);
-ret->Count = sqlUnsigned(row[5]);
-ret->Offset = sqlUnsigned(row[6]);
-ret->File = cloneString(row[7]);
+ret->span = sqlUnsigned(row[4]);
+ret->count = sqlUnsigned(row[5]);
+ret->offset = sqlUnsigned(row[6]);
+ret->file = cloneString(row[7]);
 ret->lowerLimit = atof(row[8]);
 ret->dataRange = atof(row[9]);
 ret->validCount = sqlUnsigned(row[10]);
@@ -107,10 +107,10 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->Span = sqlUnsignedComma(&s);
-ret->Count = sqlUnsignedComma(&s);
-ret->Offset = sqlUnsignedComma(&s);
-ret->File = sqlStringComma(&s);
+ret->span = sqlUnsignedComma(&s);
+ret->count = sqlUnsignedComma(&s);
+ret->offset = sqlUnsignedComma(&s);
+ret->file = sqlStringComma(&s);
 ret->lowerLimit = sqlDoubleComma(&s);
 ret->dataRange = sqlDoubleComma(&s);
 ret->validCount = sqlUnsignedComma(&s);
@@ -129,7 +129,7 @@ struct wiggle *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->File);
+freeMem(el->file);
 freez(pEl);
 }
 
@@ -162,14 +162,14 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->Span);
+fprintf(f, "%u", el->span);
 fputc(sep,f);
-fprintf(f, "%u", el->Count);
+fprintf(f, "%u", el->count);
 fputc(sep,f);
-fprintf(f, "%u", el->Offset);
+fprintf(f, "%u", el->offset);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->File);
+fprintf(f, "%s", el->file);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->lowerLimit);

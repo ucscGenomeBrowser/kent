@@ -9,10 +9,10 @@ CREATE TABLE wiggle (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item
-    Span int unsigned not null,	# each value spans this many bases
-    Count int unsigned not null,	# number of values in this block
-    Offset int unsigned not null,	# offset in File to fetch data
-    File varchar(255) not null,	# path name to data file, one byte per value
+    span int unsigned not null,	# each value spans this many bases
+    count int unsigned not null,	# number of values in this block
+    offset int unsigned not null,	# offset in File to fetch data
+    file varchar(255) not null,	# path name to data file, one byte per value
     lowerLimit double not null,	# lowest data value in this block
     dataRange double not null,	# lowerLimit + dataRange = upperLimit
     validCount int unsigned not null,	# number of valid data values in this block
