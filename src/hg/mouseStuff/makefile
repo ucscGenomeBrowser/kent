@@ -37,6 +37,7 @@ DIRS = \
 	axtToPsl \
 	bedCoverage \
 	calcGap \
+	chainAntiRepeat \
 	chainDbToFile \
 	chainFilter \
 	chainMergeSort \
