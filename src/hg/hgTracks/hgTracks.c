@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.921 2005/03/03 07:22:15 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.922 2005/03/04 02:51:49 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8714,7 +8714,7 @@ char *typeLine = tdb->type, *words[8], *type;
 int wordCount;
 if (typeLine == NULL)
     return;
-wordCount = chopLine(typeLine, words);
+wordCount = chopLine(cloneString(typeLine), words);
 if (wordCount <= 0)
     return;
 type = words[0];
