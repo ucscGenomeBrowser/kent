@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.11 2003/05/16 15:25:19 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.12 2003/10/25 08:24:00 kent Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -443,7 +443,7 @@ struct mafComp *mcMaster = mafFindComponent(maf, componentSource);
 if (mcMaster->strand == '-')
     reverseIntRange(&newStart, &newEnd, mcMaster->srcSize);
 
-return newStart > mcMaster->start && newEnd < mcMaster->start + mcMaster->size;
+return newStart > mcMaster->start || newEnd < mcMaster->start + mcMaster->size;
 }
 
 void mafFlipStrand(struct mafAli *maf)
