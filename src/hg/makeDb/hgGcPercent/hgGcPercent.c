@@ -9,7 +9,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.15 2004/10/26 21:29:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.16 2004/11/18 22:56:11 hiram Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -192,6 +192,12 @@ for (el = twoBitNames; el != NULL; el = el->next)
     int start = 0, end = 0;
     int chromSize = twoBitSeqSize(tbf, el->name);
     char *chrom = el->name;
+    if (chr)
+	{
+	verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
+	if (! sameString(chrom, chr))
+	    continue;
+	}
     verbose(2, "#\tProcessing twoBit sequence %s\n", chrom);
     for (start=0, end=0;  start < chromSize && end < chromSize;  
 	 start = end - overlap)
