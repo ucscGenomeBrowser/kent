@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.67 2004/10/12 14:19:21 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.68 2004/11/05 06:11:14 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1182,6 +1182,7 @@ void sqlFreeConnection(struct sqlConnCache *cache, struct sqlConnection **pConn)
 struct sqlConnection *conn;
 int connAlloced = cache->connAlloced;
 struct sqlConnection **connArray = cache->connArray;
+boolean gotIt = FALSE;
 
 if ((conn = *pConn) != NULL)
     {
@@ -1191,9 +1192,13 @@ if ((conn = *pConn) != NULL)
 	if (connArray[ix] == conn)
 	    {
 	    cache->connUsed[ix] = FALSE;
+	    gotIt = TRUE;
 	    break;
 	    }
 	}
+    if (! gotIt)
+	errAbort("sqlFreeConnection called on cache (%s) that doesn't contain "
+		 "the given connection", cache->database);
     *pConn = NULL;
     }
 }
