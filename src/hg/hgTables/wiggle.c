@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.9 2004/09/02 18:03:25 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.10 2004/09/02 19:28:49 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -42,105 +42,6 @@ if (db != NULL && table != NULL)
 	}
     }
 return(typeWiggle);
-}
-
-void wigDataHeader(char *name, char *description, char *visibility)
-/* Write out custom track header for this wiggle region. */
-{
-hPrintf("track type=wiggle_0");
-if (name != NULL)
-    hPrintf(" name=\"%s\"", name);
-if (description != NULL)
-    hPrintf(" description=\"%s\"", description);
-if (visibility != NULL)
-    hPrintf(" visibility=%s", visibility);
-hPrintf("\n");
-}
-
-int wigOutDataRegion(char *table, struct sqlConnection *conn,
-	struct region *region, int maxOut)
-/* Write out wig data in region.  Write up to maxOut elements. 
- * Returns number of elements written. */
-{
-char splitTableOrFileName[256];
-struct customTrack *ct;
-boolean isCustom = FALSE;
-struct wiggleDataStream *wDS = NULL;
-unsigned span = 0;
-unsigned long long valuesMatched = 0;
-int operations = wigFetchAscii;
-
-if (isCustomTrack(table))
-    {
-    ct = lookupCt(table);
-    if (! ct->wiggle)
-	{
-	warn("doSummaryStatsWiggle: called to do wiggle stats on a custom track that isn't wiggle data ?");
-	htmlClose();
-	return 0;
-	}
-
-    safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s",
-		ct->wigFile);
-    isCustom = TRUE;
-    }
-
-wDS = newWigDataStream();
-
-wDS->setMaxOutput(wDS, maxOut);
-wDS->setChromConstraint(wDS, region->chrom);
-wDS->setPositionConstraint(wDS, region->start, region->end);
-
-if (isCustom)
-    {
-    valuesMatched = wDS->getData(wDS, NULL,
-	    splitTableOrFileName, operations);
-    /*  XXX We need to properly get the smallest span for custom tracks */
-    /*	This is not necessarily the correct answer here	*/
-    if (wDS->stats)
-	span = wDS->stats->span;
-    else
-	span = 1;
-    }
-else
-    {
-    boolean hasBin;
-
-    if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
-	{
-	span = minSpan(conn, splitTableOrFileName, region->chrom,
-	    region->start, region->end, cart);
-	wDS->setSpanConstraint(wDS, span);
-	valuesMatched = wDS->getData(wDS, database,
-	    splitTableOrFileName, operations);
-	}
-    }
-
-wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
-
-destroyWigDataStream(&wDS);
-
-return valuesMatched;
-}
-
-void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
-/* Save as wiggle data. */
-{
-struct region *regionList = getRegions(), *region;
-/*int maxOut = 100000, oneOut, curOut = 0;*/
-int maxOut = 100, oneOut, curOut = 0;
-textOpen();
-
-wigDataHeader(track->shortLabel, track->longLabel, NULL);
-for (region = regionList; region != NULL; region = region->next)
-    {
-    oneOut = wigOutDataRegion(track->tableName, conn, region, maxOut - curOut);
-    curOut += oneOut;
-    if (curOut >= maxOut)
-        break;
-    }
-if (curOut >= maxOut)
-    warn("Only fetching first %d data values, please make region smaller", curOut);
 }
 
 static boolean checkWigDataFilter(char *db, char *table,
@@ -218,6 +119,120 @@ if (cmp && pat)
     }
 else
     return FALSE;
+}	/*	static boolean checkWigDataFilter()	*/
+
+void wigDataHeader(char *name, char *description, char *visibility)
+/* Write out custom track header for this wiggle region. */
+{
+hPrintf("track type=wiggle_0");
+if (name != NULL)
+    hPrintf(" name=\"%s\"", name);
+if (description != NULL)
+    hPrintf(" description=\"%s\"", description);
+if (visibility != NULL)
+    hPrintf(" visibility=%s", visibility);
+hPrintf("\n");
+}
+
+int wigOutDataRegion(char *table, struct sqlConnection *conn,
+	struct region *region, int maxOut)
+/* Write out wig data in region.  Write up to maxOut elements. 
+ * Returns number of elements written. */
+{
+char splitTableOrFileName[256];
+struct customTrack *ct;
+boolean isCustom = FALSE;
+struct wiggleDataStream *wDS = NULL;
+unsigned span = 0;
+unsigned long long valuesMatched = 0;
+int operations = wigFetchAscii;
+char *dataConstraint;
+double ll = 0.0;
+double ul = 0.0;
+
+if (isCustomTrack(table))
+    {
+    ct = lookupCt(table);
+    if (! ct->wiggle)
+	{
+	warn("doSummaryStatsWiggle: called to do wiggle stats on a custom track that isn't wiggle data ?");
+	htmlClose();
+	return 0;
+	}
+
+    safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s",
+		ct->wigFile);
+    isCustom = TRUE;
+    }
+
+wDS = newWigDataStream();
+
+wDS->setMaxOutput(wDS, maxOut);
+wDS->setChromConstraint(wDS, region->chrom);
+wDS->setPositionConstraint(wDS, region->start, region->end);
+
+if (checkWigDataFilter(database, table, &dataConstraint, &ll, &ul))
+    wDS->setDataConstraint(wDS, dataConstraint, ll, ul);
+
+if (isCustom)
+    {
+    valuesMatched = wDS->getData(wDS, NULL,
+	    splitTableOrFileName, operations);
+    /*  XXX We need to properly get the smallest span for custom tracks */
+    /*	This is not necessarily the correct answer here	*/
+    if (wDS->stats)
+	span = wDS->stats->span;
+    else
+	span = 1;
+    }
+else
+    {
+    boolean hasBin;
+
+    if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
+	{
+	span = minSpan(conn, splitTableOrFileName, region->chrom,
+	    region->start, region->end, cart);
+	wDS->setSpanConstraint(wDS, span);
+	valuesMatched = wDS->getData(wDS, database,
+	    splitTableOrFileName, operations);
+	}
+    }
+
+wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
+
+destroyWigDataStream(&wDS);
+
+return valuesMatched;
+}
+
+void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
+/* Save as wiggle data. */
+{
+struct region *regionList = getRegions(), *region;
+int maxOut = 100000, oneOut, curOut = 0;
+char *name;
+extern char *maxOutMenu[];
+char *maxOutput = maxOutMenu[0];
+
+name = filterFieldVarName(database, curTable, "", filterMaxOutputVar);
+maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
+stripChar(maxOutput, ',');
+maxOut = sqlUnsigned(maxOutput);
+
+textOpen();
+
+wigDataHeader(track->shortLabel, track->longLabel, NULL);
+
+for (region = regionList; region != NULL; region = region->next)
+    {
+    oneOut = wigOutDataRegion(track->tableName, conn, region, maxOut - curOut);
+    curOut += oneOut;
+    if (curOut >= maxOut)
+        break;
+    }
+if (curOut >= maxOut)
+    warn("Only fetching first %d data values, please make region smaller,\n\tor set a higher output line limit.", curOut);
 }
 
 void doSummaryStatsWiggle(struct sqlConnection *conn)
