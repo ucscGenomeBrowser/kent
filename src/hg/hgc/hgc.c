@@ -249,10 +249,10 @@ struct sqlConnection *conn = hgAllocConn();
 struct sqlResult *sr;
 char **row;
 char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
-     *development,*cell,*cds,*description, *author,*geneName,*productName;
+     *development,*cell,*cds,*description, *author,*geneName,
+     *date,*productName;
 int seqSize,fileSize;
 long fileOffset;
-char *date;
 char *ext_file;
 
 /* This sort of query and having to keep things in sync between
@@ -319,6 +319,7 @@ if (row != NULL)
     printf("<B>clone:</B> %s<BR>\n", clone);
     if (direction[0] != '0') printf("<B>read direction:</B> %s'<BR>\n", direction);
     printf("<B>cds:</B> %s<BR>\n", cds);
+    printf("<B>date:</B> %s<BR>\n", date);
     }
 else
     {
@@ -967,7 +968,7 @@ else
     return "blatMouse";
 }
 
-void htcBlatMouse(char *readName)
+void htcBlatMouse(char *readName, char *table)
 /* Show alignment for accession. */
 {
 char *pslName, *faName, *qName;
@@ -989,7 +990,7 @@ puts("<HTML>");
 
 start = cgiInt("o");
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
-    blatMouseTable(), readName, seqName, start);
+    table, readName, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
@@ -2094,7 +2095,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doBlatMouse(char *itemName)
+void doBlatMouse(char *itemName, char *tableName)
 /* Handle click on blatMouse track. */
 {
 char query[256];
@@ -2119,7 +2120,7 @@ puts(
  "contaminants in the mouse data). </P>");
 htmlHorizontalLine();
 /* Get alignment info. */
-sprintf(query, "select * from %s where qName = '%s'", blatMouseTable(), itemName);
+sprintf(query, "select * from %s where qName = '%s'", tableName, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2129,7 +2130,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&pslList);
 
-printAlignments(pslList, start, "htcBlatMouse", "blatMouse", itemName);
+printAlignments(pslList, start, "htcBlatMouse", tableName, itemName);
 htmlHorizontalLine();
 puts(
  "<B>Conditions of Data Release</B><BR>"
@@ -2854,7 +2855,15 @@ else if (sameWord(group, "hgExoMouse"))
     }
 else if (sameWord(group, "hgBlatMouse"))
     {
-    doBlatMouse(item);
+    doBlatMouse(item, blatMouseTable());
+    }
+else if (sameWord(group, "hgMus7of8"))
+    {
+    doBlatMouse(item, "mus7of8");
+    }
+else if (sameWord(group, "hgMusPairOf4"))
+    {
+    doBlatMouse(item, "musPairOf4");
     }
 else if (sameWord(group, "hgEst3"))
     {
@@ -2898,7 +2907,7 @@ else if (sameWord(group, "htcUserAli"))
    }
 else if (sameWord(group, "htcBlatMouse"))
    {
-   htcBlatMouse(item);
+   htcBlatMouse(item, cgiString("type"));
    }
 else if (sameWord(group, "htcTranslatedProtein"))
    {
