@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.24 2004/04/29 15:16:13 heather Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.25 2004/04/29 15:35:10 heather Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -760,9 +760,12 @@ struct boxIn *b;
 int totalBases = 0;
 double maxPerBase = 100, maxScore;
 int gapCount = 0;
+int size = 0;
+int gaplessScore = 0;
+int oneScore = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     if (size != b->tEnd - b->tStart)
         abortChain(chain, "q/t size mismatch");
     totalBases += b->qEnd - b->qStart;
@@ -771,12 +774,10 @@ for (b = chain->blockList; b != NULL; b = b->next)
 maxScore = totalBases * maxPerBase;
 if (maxScore < chain->score)
     {
-    int gaplessScore = 0;
-    int oneScore = 0;
     verbose(1, "maxScore %f, chainScore %f\n", maxScore, chain->score);
     for (b = chain->blockList; b != NULL; b = b->next)
         {
-	int size = b->qEnd - b->qStart;
+	size = b->qEnd - b->qStart;
 	oneScore = scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
         verbose(1, " q %d, t %d, size %d, score %d\n",
              b->qStart, b->tStart, size, oneScore);
@@ -794,9 +795,10 @@ double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 {
 struct boxIn *b, *a = NULL;
 double score = 0;
+int size = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     score += scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, 
     	size, matrix);
     if (a != NULL)
@@ -814,6 +816,7 @@ void chainPair(struct seqPair *sp,
 struct chain *chainList, *chain, *next;
 struct boxIn *b;
 long startTime, dt;
+int size = 0;
 
 verbose(1, "chainPair %s\n", sp->name);
 
@@ -825,7 +828,7 @@ scoreData.ss = scoreScheme;
 /* Score blocks. */
 for (b = sp->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     b->score = axtScoreUngapped(scoreData.ss, 
     	qSeq->dna + b->qStart, tSeq->dna + b->tStart, size);
     }
