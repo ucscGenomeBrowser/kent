@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.67 2004/11/24 20:22:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.68 2004/11/29 00:22:08 sugnet Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1408,63 +1408,27 @@ if (bedList && *bedList)
 	}
     else
 	{
-	char *chrName = NULL;
-	struct bed *bed;
-	unsigned long bedStart = 0;	/* current start and end */
-	unsigned long bedEnd = 0;	/* for chrName	*/
-
-	/*	no need to clone the name, it remains there, we are just
-	 *	pointing to it.
-	 */
-	bedStart = (*bedList)->chromStart;
-	chrName = (*bedList)->chrom;
+	struct bed *bed = NULL;
 	for (bed = *bedList; bed; bed = bed->next)
 	    {
-	    if (differentString(chrName, bed->chrom)) /* finish chrName */
-		{
-		/*  out of order bed file ?  Maybe already saw this name */
-		if (hashLookup(chromSizes, chrName) != NULL)
-		    {
-		    chrStartEnd = hashFindVal(chromSizes, chrName); 
-		    chrStartEnd->chrStart = min(bedStart,chrStartEnd->chrStart);
-		    chrStartEnd->chrEnd = max(bedEnd,chrStartEnd->chrEnd);
-		    hashRemove(chromSizes,chrName);
-		    hashAdd(chromSizes, chrName, chrStartEnd);
-		    }
-		else
-		    {
-		    chr = newSlName(chrName);
-		    slAddHead(&chromList, chr);
-		    AllocVar(chrStartEnd);
-		    chrStartEnd->chrStart = bedStart;
-		    chrStartEnd->chrEnd = bedEnd;
-		    hashAdd(chromSizes, chrName, chrStartEnd);
-		    }
-		bedStart = bed->chromStart;
-		chrName = bed->chrom;
-		}
-	    bedEnd = max(bedEnd,bed->chromEnd); /* always move out */
-	    }
-	    /*	and the last one remains to be done	*/
 	    /*  out of order bed file ?  Maybe already saw this name */
-	    if (hashLookup(chromSizes, chrName) != NULL)
+	    if (hashLookup(chromSizes, bed->chrom) != NULL)
 		{
-		chrStartEnd = hashFindVal(chromSizes, chrName); 
-		chrStartEnd->chrStart = min(bedStart,chrStartEnd->chrStart);
-		chrStartEnd->chrEnd = max(bedEnd,chrStartEnd->chrEnd);
-		hashRemove(chromSizes,chrName);
-		hashAdd(chromSizes, chrName, chrStartEnd);
+		chrStartEnd = hashFindVal(chromSizes, bed->chrom); 
+		chrStartEnd->chrStart = min(bed->chromStart,chrStartEnd->chrStart);
+		chrStartEnd->chrEnd = max(bed->chromEnd, chrStartEnd->chrEnd);
 		}
 	    else
 		{
-		chr = newSlName(chrName);
+		chr = newSlName(bed->chrom);
 		slAddHead(&chromList, chr);
 		AllocVar(chrStartEnd);
-		chrStartEnd->chrStart = bedStart;
-		chrStartEnd->chrEnd = bedEnd;
-		hashAdd(chromSizes, chrName, chrStartEnd);
+		chrStartEnd->chrStart = bed->chromStart;
+		chrStartEnd->chrEnd = bed->chromEnd;
+		hashAdd(chromSizes, bed->chrom, chrStartEnd);
 		}
-	    slReverse(&chromList);
+	    }
+	slReverse(&chromList);
 	}
 
     /*	OK, the chromList and chromSizes hash have been created, run
