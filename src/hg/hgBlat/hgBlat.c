@@ -11,7 +11,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 
-char *defaultDatabase = "hg6";	/* Default database. */
+char *defaultDatabase = "hg7";	/* Default database. */
 
 struct serverTable
 /* Information on a server. */
@@ -24,7 +24,7 @@ struct serverTable
    char *nibDir;	/* Directory of sequence files. */
    };
 
-char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000", "April 1, 2001"};
+char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000", "April 1, 2001", "Aug. 6, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
@@ -36,6 +36,8 @@ struct serverTable serverTable[] =  {
 {"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
 {"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
+{"hg8", "Aug. 6, 2001", TRUE, "cc", "17778", "/projects/hg3/gs.8/oo.31/nib"},
+{"hg8", "Aug. 6, 2001", FALSE, "cc", "17779", "/projects/hg3/gs.8/oo.31/nib"},
 };
 
 struct serverTable *findServer(char *db, boolean isTrans)

@@ -172,7 +172,8 @@ void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
 /* Print position lines.  'strand' argument may be null. */
 {
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
-printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
+if (hTableExists("cytoBand"))
+    printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
 printf("<B>Begin in Chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in Chromosome:</B> %d<BR>\n", end);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
@@ -555,7 +556,10 @@ if (row != NULL)
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
     medlineLinkedLine("author", author, dy->string);
-    printf("<B>organism:</B> %s<BR>\n", organism);
+    printf("<B>organism:</B> ");
+    printf("<A href=\"http://www.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wgetorg?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
+    	cgiEncode(organism));
+    printf("%s</A><BR>\n", organism);
     printf("<B>tissue:</B> %s<BR>\n", tissue);
     printf("<B>development stage:</B> %s<BR>\n", development);
     printf("<B>cell type:</B> %s<BR>\n", cell);
