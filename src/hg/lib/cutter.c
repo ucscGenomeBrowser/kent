@@ -6,9 +6,11 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "dnaseq.h"
+#include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.1 2005/03/14 22:56:43 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.2 2005/03/17 00:42:32 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -473,4 +475,204 @@ while (numWords=lineFileChop(lf,words))
 slReverse(&enzList);
 lineFileClose(&lf);
 return enzList;
+}
+
+boolean matchingBase(char enzBase, char seqBase)
+/* An enzyme matching */
+{
+switch (seqBase)
+    {
+    /* Ignore hard-masked and gaps for now. */
+    case 'A': 
+	{
+	switch (enzBase)
+	    {
+	    case 'A': 
+	    case 'R':
+	    case 'M':
+	    case 'W':
+	    case 'H':
+	    case 'V':
+	    case 'D': 
+	    case 'N': return TRUE;
+	    default: return FALSE;
+	    }
+	}
+    case 'C': 
+	{
+	switch (enzBase)
+	    {
+	    case 'C': 
+	    case 'Y':
+	    case 'M':
+	    case 'S':
+	    case 'H':
+	    case 'B':
+	    case 'V': 
+	    case 'N': return TRUE;
+	    default: return FALSE;
+	    }
+	}
+    case 'G':
+	{
+	switch (enzBase)
+	    {
+	    case 'G': 
+	    case 'R':
+	    case 'K':
+	    case 'S':
+	    case 'B':
+	    case 'V':
+	    case 'D': 
+	    case 'N': return TRUE;
+	    default: return FALSE;
+	    }
+	}
+    case 'T':
+	{
+	switch (enzBase)
+	    {
+	    case 'T': 
+	    case 'Y':
+	    case 'K':
+	    case 'W':
+	    case 'H':
+	    case 'B':
+	    case 'D': 
+	    case 'N': return TRUE;
+	    default: return FALSE;
+	    }
+	}
+    }
+return FALSE;
+}
+
+struct bed *allocBedEnz(struct cutter *enz, char *seqName, int seqPos, char strand)
+{
+struct bed *newbed = NULL;
+AllocVar(newbed);
+newbed->chrom = cloneString(seqName);
+newbed->chromStart = seqPos;
+newbed->chromEnd = seqPos + enz->size;
+newbed->name = cloneString(enz->name);
+newbed->score = 1000;
+newbed->strand[0] = strand;
+return newbed;
+}
+
+struct bed *matchEnzymes(struct cutter *cutters, struct dnaSeq *seq, char strand, boolean searchPalindromes, int startOffset)
+/* Match the enzymes to sequence and return a bed list in all cases. */
+{
+struct hash *sixers = newHash(8);
+struct cutter *enz, *A = NULL, *C = NULL, *G = NULL, *T = NULL, *other = NULL;
+struct bed *bedList = NULL;
+int seqPos = 0, i;
+
+/* Put each of the enzymes in either a hash table of six-cutters or */
+
+enz = cutters;
+while (enz != NULL)
+    {
+    int acgtCount = 0;
+    struct cutter *next = enz->next, *garb = NULL;
+    if (!searchPalindromes && enz->palindromic)
+	{
+	enz = next;
+	continue;
+	}
+    acgtCount = countChars(enz->seq,'A') + countChars(enz->seq,'C') + 
+                countChars(enz->seq,'G') + countChars(enz->seq,'T');
+    if (enz->size==6 && acgtCount==6)
+	hashAdd(sixers, enz->seq, enz);
+    else
+	{
+	if (enz->seq[0] == 'A')
+	    slAddHead(&A, enz);
+	else if (enz->seq[0] == 'C')
+	    slAddHead(&C, enz);
+	else if (enz->seq[0] == 'G')
+	    slAddHead(&G, enz);
+	else if (enz->seq[0] == 'T')
+	    slAddHead(&T, enz);
+	else 
+	    slAddHead(&other, enz);
+	}
+    enz = next;
+    }
+A = slCat(A, other);
+C = slCat(C, other);
+G = slCat(G, other);
+T = slCat(T, other);
+for (seqPos = 0; seqPos < seq->size; seqPos++)
+    {
+    struct cutter *enzList = NULL;
+    boolean inHash = FALSE;
+    char sixer[7];
+    if (seq->size - seqPos >= 6)
+	{
+	struct hashEl *el = NULL;
+	sixer[6] = '\0';
+	memcpy(sixer, seq->dna+seqPos, 6);
+	el = hashLookup(sixers, sixer);
+	if (el)
+	    {
+	    struct bed *add;
+	    inHash = TRUE;
+	    enz = el->val;
+	    add = allocBedEnz(enz, seq->name, seqPos, strand);
+	    slAddHead(&bedList, add);
+	    while (el = hashLookupNext(el))
+		{
+		enz = el->val;
+		add = allocBedEnz(enz, seq->name, seqPos, strand);
+		slAddHead(&bedList, add);
+		}
+	    }
+	}
+    if (seq->dna[seqPos] == 'A')
+	enzList = A;
+    else if (seq->dna[seqPos] == 'C')
+	enzList = C;
+    else if (seq->dna[seqPos] == 'G')
+	enzList = G;
+    else if (seq->dna[seqPos] == 'T')
+	enzList = T;
+    for (enz = enzList; enz != NULL; enz = enz->next)
+	{
+	int enzPos = 0;
+	int seqCurPos = seqPos;	
+	while (enzPos < enz->size && seqCurPos < seq->size && matchingBase(enz->seq[enzPos],seq->dna[seqCurPos]))
+	    {
+	    enzPos++; seqCurPos++;
+	    }
+	if (enzPos == enz->size)
+	    {
+	    struct bed *add = allocBedEnz(enz, seq->name, seqPos + startOffset, strand);
+	    slAddHead(&bedList, add);
+	    }
+	}
+    }
+slReverse(&bedList);
+return bedList;
+}
+
+void cullCutters(struct cutter *enzList, boolean semicolon, struct slName *includes, struct slName *excludes, int matchSize)
+/* Reduce the list of enzymes based on different options. */
+{
+struct cutter *enz = enzList, *next, *prev = NULL;
+while (enz != NULL)
+    {
+    next = enz->next;
+    if ((slNameInList(excludes, enz->name)) || 
+       ((enz->matchSize < matchSize) && (!slNameInList(includes, enz->name))) || 
+       (!semicolon && enz->semicolon && !slNameInList(includes, enz->name)))
+	{
+	if (prev)
+	    prev->next = next;
+	cutterFree(&enz);
+	}
+    else 
+	prev = enz;
+    enz = next;
+    }
 }
