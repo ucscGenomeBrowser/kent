@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.36 2004/09/03 16:53:52 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.37 2004/09/03 17:56:02 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -289,8 +289,8 @@ if (wDS->db)
     fprintf (fh, "#\tdb: '%s', track: '%s', output date: %s UTC\n",
 	wDS->db, wDS->tblName, dateStamp);
 if (wDS->isFile)
-    fprintf (fh, "#\tfrom file input, track: '%s', output date: %s UTC\n",
-	wDS->tblName, dateStamp);
+    fprintf (fh, "#\tfrom file input, output date: %s UTC\n",
+	dateStamp);
 
 freeMem(dateStamp);
 }
