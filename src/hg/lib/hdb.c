@@ -23,7 +23,7 @@ static struct sqlConnCache *hdbCc = NULL;
 static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost;
-static char *hdbName = "hg10";
+static char *hdbName = "hg11";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
@@ -1197,3 +1197,25 @@ hDisconnectCentral(&conn);
 return &st;
 }
 
+char *hDefaultDbForOrganism(char *organism)
+/*
+Purpose: Return the default database matching the organism.
+
+param organism - The organism for which we are trying to get the 
+    default database.
+return - The default database name for this organism
+ */
+{
+char *result = hGetDb();
+
+if (strstrNoCase(organism, "mouse"))
+    {
+    result = "mm2";
+    }
+else if (strstrNoCase(organism, "zoo"))
+    {
+    result = "zooBaboon1";
+    }
+
+return result;
+}

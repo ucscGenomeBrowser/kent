@@ -252,4 +252,13 @@ char *hLookupStringVars(char *in, char *database);
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */
 
+char *hDefaultDbForOrganism(char *organism);
+/*
+Purpose: Return the default database matching the organism.
+
+param organism - The organism for which we are trying to get the 
+    default database.
+return - The default database name for this organism
+ */
+
 #endif /* HDB_H */
