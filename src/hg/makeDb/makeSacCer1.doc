@@ -55,6 +55,8 @@ exit; # don't actually run this like a script :)
     echo 'create database sacCer1' | hgsql ''
     cd /cluster/data/sacCer1
     hgNibSeq sacCer1 /cluster/data/sacCer1/nib */*.fa
+    mkdir -p /gbdb/sacCer1/nib
+    ln -s /cluster/data/sacCer1/nib/*.nib /gbdb/sacCer1/nib
     # Create a read-only alias in your .cshrc or .profile
     alias sacCer1 mysql -u hguser -phguserstuff -A sacCer1
     # Use df to ake sure there is at least 5 gig of free mySql table space
@@ -74,7 +76,7 @@ exit; # don't actually run this like a script :)
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk) values \
-        ("sacCer1", "Oct. 2003", "/gbdb/sacCer/nib", "Yeast", \
+        ("sacCer1", "Oct. 2003", "/gbdb/sacCer1/nib", "Yeast", \
                "chr2:827700-845800", 1, 65, "Yeast", \
                 "Saccharomyces cerevisiea", "/gbdb/sacCer1/html/description.html", \
                 0);' \
@@ -145,9 +147,8 @@ exit; # don't actually run this like a script :)
     scp 'hgwdev:/cluster/data/sacCer1/nib/*.nib' sacCer1Nib
     # Ask admins to set up blat servers and ask which ports they assign.
     ssh hgwdev
-    # Get appropriate hostname from cluster admins
-    echo 'insert into blatServers values("sacCer1", "blat10", "177??", "1"); \
-          insert into blatServers values("sacCer1", "blat10", "177??", "0");' \
+    echo 'insert into blatServers values("sacCer1", "blat10", "17788", "0"); \
+          insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
       | hgsql -h genome-testdb hgcentraltest
 
 # AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
