@@ -93,6 +93,37 @@ void htmlSetBackground(char *imageFile)
 htmlBackground = imageFile;
 }
 
+//static char *htmlCookieString = NULL;
+
+void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
+/* create a cookie with the given stats */
+{
+char* encoded_name;
+char* encoded_value;
+char* encoded_path;
+
+encoded_name = cgiEncode(name);
+encoded_value = cgiEncode(value);
+if(path != NULL)
+	encoded_path = cgiEncode(path);
+
+printf("Set-Cookie: %s=%s; ", encoded_name, encoded_value);
+
+if(expires != NULL)
+	printf("expires=%s; ", expires);
+
+if(path != NULL)
+	printf("path=%s; ", encoded_path);
+
+if(path != domain)
+	printf("domain=%s; ", domain);
+
+if(isSecure == TRUE)
+	printf("secure");
+
+printf("\n");
+}
+
 void _htmStart(FILE *f, char *title)
 /* Write out bits of header that both stand-alone .htmls
  * and CGI returned .htmls need. */
@@ -108,7 +139,10 @@ else
 /* Write the start of an html from CGI */
 void htmlStart(char *title)
     {
-puts("Content-Type:text/html\n");
+puts("Content-Type:text/html");
+//htmlSetCookie("greeting", "hell world", NULL, NULL, NULL, 0);
+puts("\n");
+
 _htmStart(stdout, title);
 }
 

@@ -27,6 +27,10 @@ static char *inputString = NULL;
 static struct hash *inputHash = NULL;
 static struct cgiVar *inputList = NULL;
 
+static boolean haveCookiesHash = FALSE;
+static struct hash *cookieHash = NULL;
+static struct cgiVar *cookieList = NULL;
+
 boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
@@ -154,6 +158,67 @@ slReverse(&list);
 *retHash = hash;
 }
 
+static void parseCookies(struct hash **retHash, struct cgiVar **retList)
+/* parses any cookies and puts them into the given hash and list */
+{
+char* str;
+char *namePt, *dataPt, *nextNamePt;
+struct hash *hash;
+struct cgiVar *list = NULL, *el;
+
+/* don't build the hash table again */
+if(haveCookiesHash == TRUE)
+	return;
+
+hash = newHash(6);
+
+str = getenv("HTTP_COOKIE");
+if(str == NULL) /* don't have a cookie */
+	return;
+
+namePt = str;
+while (namePt != NULL)
+    {
+    dataPt = strchr(namePt, '=');
+    if (dataPt == NULL)
+	errAbort("Mangled Cookie input string %s", namePt);
+    *dataPt++ = 0;
+    nextNamePt = strchr(dataPt, ';');
+    if (nextNamePt != NULL)
+	{
+         *nextNamePt++ = 0;
+         nextNamePt++;
+	}
+    cgiDecode(dataPt,dataPt,strlen(dataPt));
+    AllocVar(el);
+    el->val = dataPt;
+    slAddHead(&list, el);
+    hashAddSaveName(hash, namePt, el, &el->name);
+
+    namePt = nextNamePt;
+
+    }
+
+haveCookiesHash = TRUE;
+
+slReverse(&list);
+*retList = list;
+*retHash = hash;
+}
+
+char *findCookieData(char *varName)
+/* Get the string associated with varName from the cookie string. */
+{
+struct cgiVar *var;
+
+/* make sure that the cookie hash table has been created */
+parseCookies(&cookieHash, &cookieList);
+
+if ((var = hashFindVal(cookieHash, varName)) == NULL)
+    return NULL;
+return var->val;
+}
+
 static char *cgiInputSource(char *s)
 /* For NULL sources make a guess as to real source. */
 {
@@ -233,6 +298,10 @@ if (s != NULL && startsWith("multipart/form-data", s))
     cgiParseMultipart(inputString, &inputHash, &inputList);
 else
     cgiParseInput(inputString, &inputHash, &inputList);
+
+/* now parse the cookies */
+puts("parsing cookies");
+parseCookies(&cookieHash, &cookieList);
 }
 
 static char *findVarData(char *varName)
