@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.416 2003/05/16 02:59:50 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.417 2003/05/17 06:35:27 kent Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -1694,6 +1694,10 @@ if (wordCount > 0)
     else if (sameString(type, "maf"))
         {
 	genericMafClick(conn, tdb, item, start);
+	}
+    else if (sameString(type, "axt"))
+        {
+	genericAxtClick(conn, tdb, item, start, words[1]);
 	}
     }
 printTrackHtml(tdb);

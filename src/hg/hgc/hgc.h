@@ -75,3 +75,7 @@ void printTrackHtml(struct trackDb *tdb);
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
 /* Display details for MAF tracks. */
+
+void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, char *otherDb);
+/* Display details for AXT tracks. */

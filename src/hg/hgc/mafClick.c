@@ -1,4 +1,4 @@
-/* Handle details pages for maf tracks. */
+/* Handle details pages for maf tracks and axt tracks. */
 
 #include "common.h"
 #include "hash.h"
@@ -269,9 +269,27 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 }
 
-void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start)
-/* Display details for MAF tracks. */
+static struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn, 
+	struct trackDb *tdb, char *chrom, int start, int end,
+	char *axtOtherDb)
+/* Load mafs from region, either from maf or axt file. */
+{
+if (axtOtherDb != NULL)
+    {
+    struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
+    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
+    	chrom, start, end,
+	database, axtOtherDb, hChromSize(chrom), qSizeHash);
+    hashFree(&qSizeHash);
+    return mafList;
+    }
+else
+    return mafLoadInRegion(conn, tdb->tableName, chrom, start, end);
+}
+
+
+static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
+/* Display details for MAF or AXT tracks. */
 {
 if (winEnd - winStart > 20000)
     {
@@ -285,7 +303,8 @@ else
     struct slName *dbList = NULL, *dbEl;
     char *capTrack;
 
-    mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
+    mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
+    	axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
@@ -313,7 +332,7 @@ else
     mafAliFreeList(&mafList);
     if (subList != NULL)
 	{
-	printf("Multiple alignments between");
+	printf("Alignments between");
 	for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
 	    {
 	    char *org = hOrganism(dbEl->name);
@@ -365,5 +384,19 @@ else
 	}
     printf("</PRE></TT>");
     }
+}
+
+void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start)
+/* Display details for MAF tracks. */
+{
+mafOrAxtClick(conn, tdb, NULL); 
+}
+
+void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, char *otherDb)
+/* Display details for AXT tracks. */
+{
+mafOrAxtClick(conn, tdb, otherDb); 
 }
 
