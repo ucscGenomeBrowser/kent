@@ -465,16 +465,18 @@ struct gfRange *rangeList = NULL, *range;
 struct gfClump *clump;
 struct dnaSeq *seq;
 char *name;
+int tOff;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
+    tOff = clump->target->start;
     AllocVar(range);
     range->qStart = clump->qStart;
     range->qEnd = clump->qEnd;
     name = clumpTargetName(clump);
     range->tName = cloneString(name);
-    range->tStart = clump->tStart;
-    range->tEnd = clump->tEnd;
+    range->tStart = clump->tStart - tOff;
+    range->tEnd = clump->tEnd - tOff;
     range->tSeq = clump->target->seq;
     slAddHead(&rangeList, range);
     }

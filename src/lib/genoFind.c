@@ -484,8 +484,6 @@ struct gfSeqSource *ss;
 struct dnaSeq *seq;
 struct trans3 *t3;
 
-uglyf("gfIndexTransNibs nibCount %d, tileSize %d, minMatch %d\n", nibCount, tileSize, minMatch);
-
 /* Allocate indices for all reading frames. */
 for (isRc=0; isRc <= 1; ++isRc)
     {
@@ -516,19 +514,19 @@ for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
     seq = nibLoadAll(nibName);
-    uglyf("Loaded %s\n", nibName);
+    printf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
 	{
 	if (isRc)
 	    {
 	    reverseComplement(seq->dna, seq->size);
-	    uglyf("Reverse complemented\n %s", nibName);
+	    printf("Reverse complemented\n %s", nibName);
 	    }
 	t3 = trans3New(seq);
 	for (frame = 0; frame < 3; ++frame)
 	    {
 	    gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
-	    uglyf("Counted frame %d\n", frame);
+	    printf("Counted frame %d\n", frame);
 	    }
 	trans3Free(&t3);
 	}
@@ -554,20 +552,20 @@ for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
     seq = nibLoadAll(nibName);
-    uglyf("Loaded %s\n", nibName);
+    printf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
 	{
 	if (isRc)
 	    {
 	    reverseComplement(seq->dna, seq->size);
-	    uglyf("Reverse complemented\n %s", nibName);
+	    printf("Reverse complemented\n %s", nibName);
 	    }
 	t3 = trans3New(seq);
 	for (frame = 0; frame < 3; ++frame)
 	    {
 	    gf = transGf[isRc][frame];
 	    gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
-	    uglyf("Added frame %d\n", frame);
+	    printf("Added frame %d\n", frame);
 	    ss = gf->sources+i;
 	    ss->fileName = nibName;
 	    ss->start = offset[isRc][frame];

@@ -331,7 +331,7 @@ FILE *pslOut = mustOpen(outFile, "w");
 struct lineFile *lf = NULL;
 struct hash *t3Hash = NULL;
 
-uglyf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
+printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
 if (!noHead)
     pslWriteHead(pslOut);
