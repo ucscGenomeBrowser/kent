@@ -14,6 +14,15 @@ group map
 visibility hide
 altColor 180,180,180 
 
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene Annotations 
+group genes
+priority 38
+visibility hide
+color 0,100,180
+type genePred ECgenePep
+
 track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations 
