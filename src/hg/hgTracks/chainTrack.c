@@ -14,12 +14,13 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.24 2004/10/25 21:04:48 kent Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.25 2004/11/20 19:45:23 baertsch Exp $";
 
 
 struct cartOptions
     {
     enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    int scoreFilter ; /* filter chains by score if > 0 */
     };
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
@@ -256,6 +257,7 @@ struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
 char optionChr[128]; /* Option -  chromosome filter */
+char optionScore[128]; /* Option -  score filter */
 char *optionChrStr;
 char extraWhere[128] ;
 struct cartOptions *chainCart;
@@ -266,13 +268,27 @@ snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
     {
-    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    snprintf(extraWhere, sizeof(extraWhere), 
+            "qName = \"%s\" and score > %d",optionChrStr, 
+            chainCart->scoreFilter);
+    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+            extraWhere, &rowOffset);
     }
 else
     {
-    snprintf(extraWhere, sizeof(extraWhere), " ");
-    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, NULL, &rowOffset);
+    if (chainCart->scoreFilter > 0)
+        {
+        snprintf(extraWhere, sizeof(extraWhere), 
+                "score > \"%d\"",chainCart->scoreFilter);
+        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+                extraWhere, &rowOffset);
+        }
+    else
+        {
+        snprintf(extraWhere, sizeof(extraWhere), " ");
+        sr = hRangeQuery(conn, track, chromName, winStart, winEnd, 
+                NULL, &rowOffset);
+        }
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -362,6 +378,7 @@ void chainMethods(struct track *tg, struct trackDb *tdb,
 
 boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
+char scoreOption[256];
 
 AllocVar(chainCart);
 
@@ -369,6 +386,10 @@ normScoreAvailable = chainDbNormScoreAvailable(chromName, tg->mapName, NULL);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);
+
+snprintf( scoreOption, sizeof(scoreOption), "%s.scoreFilter", tdb->tableName);
+chainCart->scoreFilter = cartUsualInt(cart, scoreOption, 0);
+
 
 linkedFeaturesMethods(tg);
 tg->itemColor = lfChromColor;	/*	default coloring option */
