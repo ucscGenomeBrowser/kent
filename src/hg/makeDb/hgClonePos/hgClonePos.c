@@ -211,27 +211,28 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount < 8)
         errAbort("Expecting 8 words line %d of %s", lf->lineIx, lf->fileName);
     gsSeqInfoStaticLoad(words, &gs);
-    if (gs.phase != 0)
-        {
-	chopSuffix(gs.acc);
-	if ((clone = hashFindVal(cloneHash, gs.acc)) == NULL)
+    /* TSF - Phase 0 clones now included in contig_overlaps.agp 4/23/2003 */
+    /*if (gs.phase != 0)
+      {*/
+    chopSuffix(gs.acc);
+    if ((clone = hashFindVal(cloneHash, gs.acc)) == NULL)
+	{
+	if (warnsLeft > 0)
 	    {
-	    if (warnsLeft > 0)
-	       {
-	       --warnsLeft;
-	       warn("%s is in %s but not in ooDir/*/*.gl", gs.acc, seqInfoName);
-	       }
-	    else if (warnsLeft == 0)
-		{
-		--warnsLeft;
-		warn("(Truncating additional warnings)");
-		}
-	    continue;
+	    --warnsLeft;
+	    warn("%s is in %s but not in ooDir/*/*.gl", gs.acc, seqInfoName);
 	    }
-	clone->seqSize = gs.size;
-	clone->phase = gs.phase;
-	clone->stage[0] = stages[atoi(words[3])];
+	else if (warnsLeft == 0)
+	    {
+	    --warnsLeft;
+	    warn("(Truncating additional warnings)");
+	    }
+	continue;
 	}
+    clone->seqSize = gs.size;
+    clone->phase = gs.phase;
+    clone->stage[0] = stages[atoi(words[3])];
+    /* } */
     }
 lineFileClose(&lf);
 }
