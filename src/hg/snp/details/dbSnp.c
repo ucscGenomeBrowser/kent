@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.11 2004/02/20 04:57:34 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.12 2004/02/22 01:05:18 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -357,7 +357,8 @@ void addGaps(struct fileInfo *fi)
 /* magnitude and direction of size difference between two alleles */
 int  alleleDiff = strlen(fi->observed)-strlen(fi->alternate);
 
-if (alleleDiff)
+if ( alleleDiff && /* indels only, doesn't work for segmental */
+     (!strncmp(fi->allele1,"-",1) || !strncmp(fi->allele2,"-",1)))
     {
     char obsPtr[REGION+1];
     char altPtr[REGION+1];
