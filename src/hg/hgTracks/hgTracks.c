@@ -723,11 +723,11 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return b->grayIx - a->grayIx;
 }
 
-static int linkedFeaturesSeriesCmpStart(const void *va, const void *vb)
+static int linkedFeaturesCmpStart(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
-const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
-const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
@@ -761,10 +761,6 @@ if (tg->itemColor)	/* Item color overrides spectrum processing. */
 
 if (vis == tvDense)
     slSort(&tg->items, cmpLfWhiteToBlack);
-else
-    {
-    slSort(&tg->items, linkedFeaturesSeriesCmpStart);
-    }
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
     int midY = y + midLineOff;
@@ -5252,12 +5248,16 @@ void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, FALSE);
+if (tg->visibility == tvFull)
+    slSort(&tg->items, linkedFeaturesCmpStart);
 }
 
 void loadXenoPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
 tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, TRUE);
+if (tg->visibility == tvFull)
+    slSort(&tg->items, linkedFeaturesCmpStart);
 }
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
