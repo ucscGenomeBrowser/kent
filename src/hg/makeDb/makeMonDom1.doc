@@ -2099,6 +2099,62 @@ chainSome $(path1)
     rm -rf blastOut
 # End tblastn
 
+# MAKE Human Known Gene mRNAs Mapped by BLATZ track (hg17 DONE 2005-1-14 JK)
+
+    # Create working directory and extract known gene mrna from database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed
+    mkdir blatz.hg17KG
+    cd blatz.hg17KG
+    pepPredToFa hg17 knownGeneMrna known.fa
+
+    # Split known genes into pieces and load on /iscratch/i temp device
+    ssh kkr1u00
+    cd /iscratch/i/hg17
+    mkdir knownRna
+    cd knownRna
+    faSplit sequence /cluster/data/monDom1/bed/blatz.hg17KG known.fa 9 known
+    iSync
+    rm /cluster/data/monDom1/bed/blatz.hg17KG/known.fa
+
+    # Do parasol job to align via blatz
+    ssh kk
+    cd /cluster/data/monDom1/bed/blatz.hg17KG
+    mkdir run0
+    cd run0
+    mkdir psl
+    awk '{print $1;}' /cluster/data/monDom1/chrom.sizes > genome.lst
+    ls -1 /iscratch/i/hg17/knownRna/*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=3000 /scratch/monDom1/monDom1.2bit:$(file1) $(path2) -out=psl {check out line psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # Note, I recommend -minScore=6000 next time.
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    # Then do usual para try/para push/para time
+Completed: 174132 of 174132 jobs
+CPU time in finished jobs:    9399737s  156662.29m  2611.04h  108.79d  0.298 y
+IO & Wait Time:               2143618s   35726.96m   595.45h   24.81d  0.068 y
+Average job time:                  66s       1.10m     0.02h    0.00d
+Longest job:                     2437s      40.62m     0.68h    0.03d
+Submission to last job:         13892s     231.53m     3.86h    0.16d
+
+    # Do sort and near-besting on file server
+    ssh eieio
+    cd /cluster/data/monDom1/bed/blatz.hg17KG/run0
+    catDir psl | pslFilter -minScore=100 -minAli=255 | sort -k 10 > ../filtered.psl
+    cd ..
+    pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
+    sort -k 14 nearBest.psl > blatzHg17KG.psl
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/blatz.hg17KG
+    hgLoadPsl monDom1 blatzHg17KG.psl 
+
 
 # ALIGN TO ZEBRAFISH (WORKING - 2004-12-17 - Hiram)
 #	NAMING CONVENTION: the zb.danRer2 directory will be the Opossum
