@@ -874,7 +874,8 @@ XXX - Come back to this after contig_overlaps.agp has been created
 
 #  gc5Base wiggle TRACK (DONE - 2004-05-22 - Hiram)
     #	This previously was a script that ran through each nib
-    #	Recently transformed into a mini cluster run
+    #	Recently transformed into a mini cluster run.
+    #	Re-DONE with the new randoms - 2004-06-04
     ssh kki
     mkdir /cluster/data/hg17/bed/gc5Base
     cd /cluster/data/hg17/bed/gc5Base
@@ -888,7 +889,7 @@ chrom=${chr#chr}
 hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
         /iscratch/i/gs.18/build35/bothMaskedNibs | \
     grep -w GC | \
-    awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
     wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
         -wibFile=wigData5/gc5Base_${chrom} \
             -name=${chrom} stdin 2> dataLimits5/${chr}
@@ -908,18 +909,16 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     para create jobList
     para try, check, ... etc
 # Completed: 46 of 46 jobs
-# CPU time in finished jobs:       4555s      75.91m     1.27h    0.05d  0.000 y
-# IO & Wait Time:                   113s       1.89m     0.03h    0.00d  0.000 y
-# Average job time:                 101s       1.69m     0.03h    0.00d
-# Longest job:                      382s       6.37m     0.11h    0.00d
-# Submission to last job:           422s       7.03m     0.12h    0.00d
-
+# CPU time in finished jobs:       5251s      87.51m     1.46h    0.06d  0.000 y
+# IO & Wait Time:                   130s       2.17m     0.04h    0.00d  0.000 y
+# Average job time:                 117s       1.95m     0.03h    0.00d
+# Longest job:                      413s       6.88m     0.11h    0.00d
+# Submission to last job:           475s       7.92m     0.13h    0.01d
 
     # load the .wig files back on hgwdev:
     ssh hgwdev
     cd /cluster/data/hg17/bed/gc5Base
-    $HOME/bin/i386/hgLoadWiggle -verbose=3 \
-	-pathPrefix=/gbdb/hg17/wib/gc5Base hg17 gc5Base wigData5/*.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base hg17 gc5Base wigData5/*.wig
     # and symlink the .wib files into /gbdb
     mkdir /gbdb/hg17/wib/gc5Base
     ln -s `pwd`/wigData5/*.wib /gbdb/hg17/wib/gc5Base
@@ -939,7 +938,7 @@ chrom=${chr#chr}
 hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
         /iscratch/i/gs.18/build35/bothMaskedNibs | \
     grep -w GC | \
-    awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
     wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
 	-chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
             -name=${chrom} stdin 2> dataLimits5_1K/${chr}
@@ -958,16 +957,15 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     para create jobListZoom
     para try ... check ... etc ...
 # Completed: 46 of 46 jobs
-# CPU time in finished jobs:       4505s      75.08m     1.25h    0.05d  0.000 y
-# IO & Wait Time:                    73s       1.22m     0.02h    0.00d  0.000 y
-# Average job time:                 100s       1.66m     0.03h    0.00d
-# Longest job:                      383s       6.38m     0.11h    0.00d
-# Submission to last job:           422s       7.03m     0.12h    0.00d
-
+# CPU time in finished jobs:       5216s      86.93m     1.45h    0.06d  0.000 y
+# IO & Wait Time:                    34s       0.57m     0.01h    0.00d  0.000 y
+# Average job time:                 114s       1.90m     0.03h    0.00d
+# Longest job:                      415s       6.92m     0.12h    0.00d
+# Submission to last job:           469s       7.82m     0.13h    0.01d
 
     #	Then load these .wig files into the same database as above
     ssh hgwdev
-    $HOME/bin/i386/hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base \
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base \
 	-oldTable hg17 gc5Base wigData5_1K/*.wig
     # and symlink these .wib files into /gbdb
     mkdir -p /gbdb/hg17/wib/gc5Base
@@ -1168,15 +1166,84 @@ done
     /cluster/bin/iSync
     # request rsync of /cluster/bluearc/scratch to the KiloKluster /scratch
 
-# COPY DATA TO GOLDEN PATH LOCATIONS (WORKING - 2004-05-25 - Hiram)
+# COPY DATA TO GOLDEN PATH LOCATIONS (DONE - 2004-06-04 - Hiram)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
     cd /cluster/data/hg17
+    #	Beware, this backgrounding of the gzips can be hard on hgwdev.
+    #	You could wait until after the copy then run one gzip to do them all
     foreach chrom ( `cat chrom.lst` )
 	cp -p ${chrom}/*.fa /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
+	gzip \
+	/usr/local/apache/htdocs/goldenPath/hg17/chromosomes/chr${chrom}*.fa &
 	echo "done ${chrom}"
     end
     cd /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
-    gzip *.fa
-    md5sum * > md5sum.txt
+    md5sum *.fa.gz > md5sum.txt
 
+# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2004-06-04 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/contig_overlaps
+    cd /cluster/data/hg17/bed/contig_overlaps
+    #	find all the clones that were used in the assembly
+    sed -e "/^#.*/d" /cluster/data/hg17/ncbi_build35.agp | \
+        awk '{if (!match($5,"N")) {print $6}}' | \
+        sort -u > placed_in_assembly.list
+    wc -l placed_in_assembly.list
+    #	26872 placed_in_assembly.list
+    #	These may be available from the phases files at:
+    #	ftp://ftp.ncbi.nih.gov/genbank/genomes/H_sapiens
+    #	Which are easily fetched with wget.  However I took a look
+    #	at those and could not find all the clones in them.  There may
+    #	be a versioning problem because these phases files are often
+    #	updated.
+    #	Fetch them from Genbank with the following three PERL scripts:
+    #	[hiram@hgwdev /cluster/data/hg17/bed/contig_overlaps] ls -og *.pl
+    #	-rwxrwxr-x    1     3047 May 24 18:43 bioPerlFetch.pl
+    #	-rwxrwxr-x    1     2370 Jun  4 15:21 fetchGenbank.pl
+    #	-rwxrwxr-x    1      700 May 24 21:47 foldEm.pl
+
+    #	Which takes about 4 days ...
+    #	Example, 
+    cat << '_EOF_' > terrys.list
+AC011841.7
+AC018692.9
+AC018743.27
+AC037482.14
+AL163540.11
+'_EOF_'
+    # << this line makes emacs coloring happy
+    #	only works on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/contig_overlaps
+    mkdir fasta
+    time ./fetchGenbank.pl terrys.list > fetchResult.out 2>&1
+
+    ssh eieio
+    #	And then make a list of all clones considered for assembly:
+    sed -e "/^#.*/d" /cluster/store5/gs.18/ncbi/sequence.inf | \
+	grep for_assembly | awk '{print $1}' | sort -u > sequence.list
+    wc -l sequence.list
+    #	46733 sequence.list
+    #	Verify overlaps are correct:
+    comm -12 placed_in_assembly.list sequence.list > inBoth
+    comm -23 placed_in_assembly.list sequence.list > inAssemblyNotSequence
+    comm -13 placed_in_assembly.list sequence.list > inSequenceNotAssembly
+    wc in*
+    #	    1       1      12 inAssemblyNotSequence
+    #	26871   26871  301709 inBoth
+    #	19862   19862  219050 inSequenceNotAssembly
+    #	46734   46734  520771 total
+    #	This stray one is from Terry's five additions in the final fixup
+    #	phase with Greg:
+    cat inAssemblyNotSequence
+    #	AC018743.27
+    #	Terry added: AC011841.7 AC018692.9 AC018743.27 AC037482.14 AL163540.11
+    #
+    #	Generate a listing that relates clones to their contigs
+    sed -e "/^#.*/d" /cluster/store5/gs.18/build35/ncbi_build35.agp | \
+	./contigAcc.pl > disburseEm.list
+    #
+    #	Using that list, sort the downloaded clones into their
+    #	respective chrom directories:
+    ./disburse.sh
