@@ -5,6 +5,9 @@
 #include "linefile.h"
 #include "blastParse.h"
 
+/* enable to print lines as they are read */
+#define DEBUG_TRACE FALSE
+
 struct blastFile *blastFileReadAll(char *fileName)
 /* Read all blast alignment in file. */
 {
@@ -34,12 +37,31 @@ static void bfSyntax(struct blastFile *bf)
 bfError(bf, "Can't cope with BLAST output syntax");
 }
 
-static void bfNeedNextLine(struct blastFile *bf, char **retLine, int *retLineSize)
+static char *bfNextLine(struct blastFile *bf)
+/* Fetch next line of input trying, or NULL if not found */
+{
+char *line = NULL;
+if (lineFileNext(bf->lf, &line, NULL))
+    {
+    if (DEBUG_TRACE)
+        fprintf(stderr, "\t%s\n", line);
+    return line;
+    }
+else
+    {
+    if (DEBUG_TRACE)
+        fprintf(stderr, "\tEOF\n");
+    return NULL;
+    }
+}
+
+static char *bfNeedNextLine(struct blastFile *bf)
 /* Fetch next line of input or die trying. */
 {
-struct lineFile *lf = bf->lf;
-if (!lineFileNext(lf, retLine, retLineSize))
+char *line = bfNextLine(bf);
+if (line == NULL)
     errAbort("Unexpected end of file in %s\n", bf->fileName);
+return line;
 }
 
 static void bfBadHeader(struct blastFile *bf)
@@ -54,7 +76,6 @@ struct blastFile *blastFileOpenVerify(char *fileName)
 {
 struct blastFile *bf;
 char *line;
-int lineSize;
 char *words[16];
 int wordCount;
 struct lineFile *lf;
@@ -64,7 +85,7 @@ bf->lf = lf = lineFileOpen(fileName, TRUE);
 bf->fileName = cloneString(fileName);
 
 /* Parse first line - something like: */
-bfNeedNextLine(bf, &line, &lineSize);
+line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if (wordCount < 3)
     bfBadHeader(bf);
@@ -99,18 +120,19 @@ for (;;)
 struct blastQuery *blastFileNextQuery(struct blastFile *bf)
 /* Read all alignments associated with next query.  Return NULL at EOF. */
 {
-struct lineFile *lf = bf->lf;
 char *line;
-int lineSize;
 char *words[16];
 int wordCount;
 struct blastQuery *bq;
 char *s, *e;
 struct blastGappedAli *bga;
 
+if (DEBUG_TRACE)
+    fprintf(stderr, "blastFileNextQuery\n");
 for (;;)
     {
-    if (!lineFileNext(lf, &line, &lineSize))
+    line = bfNextLine(bf);
+    if (line == NULL)
 	return NULL;
     if (startsWith("Query=", line))
 	break;
@@ -131,10 +153,10 @@ bq->query = cloneString(words[1]);
  */
 for (;;)
     {
-    bfNeedNextLine(bf, &line, &lineSize);
+    line = bfNeedNextLine(bf);
     s = skipLeadingSpaces(line);
-	if (startsWith("        (",line))
-	break;
+    if (s[0] == '(')
+        break;
     }
 if (!isdigit(s[1]))
     {
@@ -161,7 +183,7 @@ uglyf("Query %s has %d bases\n", bq->query, bq->queryBaseCount);
  * and process it. */
 for (;;)
     {
-    bfNeedNextLine(bf, &line, &lineSize);
+    line = bfNeedNextLine(bf);
     if (startsWith("Database:", line))
 	break;
     }
@@ -173,7 +195,7 @@ bq->database = cloneString(words[1]);
 /* Process something like:
  *        977 sequences; 95,550,797 total letters
  */
-bfNeedNextLine(bf, &line, &lineSize);
+line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if (wordCount < 3 || !isdigit(words[0][0]) || !isdigit(words[2][0]))
     bfError(bf, "Expecting database info");
@@ -186,10 +208,10 @@ bq->dbBaseCount = atoi(words[2]);
 /* Seek to beginning of first gapped alignment. */
 for (;;)
     {
-    bfNeedNextLine(bf, &line, &lineSize);
+    line = bfNeedNextLine(bf);
     if (line[0] == '>')
 	{
-	lineFileReuse(lf);
+	lineFileReuse(bf->lf);
 	break;
 	}
     }
@@ -207,20 +229,21 @@ struct blastGappedAli *blastFileNextGapped(struct blastFile *bf, struct blastQue
 /* Read in next gapped alignment.   Does *not* put it on bf->gapped list. 
  * Return NULL at EOF or end of query. */
 {
-struct lineFile *lf = bf->lf;
 char *line;
-int lineSize;
 char *words[16];
 int wordCount;
 struct blastGappedAli *bga;
 struct blastBlock *bb;
 int lenSearch;
 
+if (DEBUG_TRACE)
+    fprintf(stderr, "blastFileNextGapped\n");
 AllocVar(bga);
 bga->query = bq;
 
 /* First line should be query. */
-if (!lineFileNext(lf, &line, &lineSize))
+line = bfNextLine(bf);
+if (line == NULL)
     return NULL;
 if (startsWith("  Database:", line))
     return NULL;
@@ -234,7 +257,7 @@ bga->targetName = cloneString(line+1);
  */
 for (lenSearch=0; lenSearch<3; lenSearch++)
 	{
-	bfNeedNextLine(bf, &line, &lineSize);
+	line = bfNeedNextLine(bf);
 	wordCount = chopLine(line, words);
 	if (wordCount >= 3 && isdigit(words[2][0]))
 		break;
@@ -273,11 +296,10 @@ static boolean nextBlockLine(struct blastFile *bf, char **retLine)
 {
 struct lineFile *lf = bf->lf;
 char *line;
-int lineSize;
 
-if (!lineFileNext(lf, retLine, &lineSize))
+*retLine = line = bfNextLine(bf);
+if (line == NULL)
     return FALSE;
-line = *retLine;
 if (line[0] == '>' || startsWith("Query=", line) || startsWith("  Database:", line))
     {
     lineFileReuse(lf);
@@ -302,20 +324,43 @@ else
     }
 }
 
+static void parseBlockLine(struct blastFile *bf, int *startRet, int *endRet,
+                           struct dyString *seq)
+/* read and parse the next target or query line, like:
+ * Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
+ */
+{
+char* line = bfNeedNextLine(bf);
+int a, b, s, e;
+char *words[16];
+int wordCount = chopLine(line, words);
+
+if ((wordCount != 4) || !isdigit(words[1][0]) || !isdigit(words[3][0]))
+    bfSyntax(bf);
+a = atoi(words[1]);
+b = atoi(words[3]);
+s = min(a,b);
+e = max(a,b);
+*startRet = min(s, *startRet);
+*endRet = max(e, *endRet);
+dyStringAppend(seq, words[2]);
+}
+
 struct blastBlock *blastFileNextBlock(struct blastFile *bf, 
 	struct blastQuery *bq, struct blastGappedAli *bga)
 /* Read in next blast block.  Return NULL at EOF or end of
  * gapped alignment. */
 {
-struct lineFile *lf = bf->lf;
 struct blastBlock *bb;
 char *line;
-int lineSize;
 char *words[16];
 int wordCount;
 char *parts[3];
 int partCount;
 static struct dyString *qString = NULL, *tString = NULL;
+
+if (DEBUG_TRACE)
+    fprintf(stderr, "blastFileNextBlock\n");
 
 /* Seek until get something like:
  *   Score = 8770 bits (4424), Expect = 0.0
@@ -345,7 +390,7 @@ bb->eVal = evalToDouble(words[7]);
  *             or
  *   Identities = 8320/9618 (86%)
  */
-bfNeedNextLine(bf, &line, &lineSize);
+line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if (wordCount < 3 || !sameWord("Identities", words[0]))
     bfError(bf, "Expecting identity count");
@@ -362,27 +407,36 @@ if (wordCount >= 7 && sameWord("Gaps", words[4]))
     }
 
 /* Process something like:
- *     Strand = Plus / Plus
- 	But not if it's BLASTp
+ *     Strand = Plus / Plus (blastn)
+ *     Frame = +1           (tblastn)
+ *     <blank line>         (blastp)
  */
-if (!sameWord("BLASTP",bf->program))
-	{
-	bfNeedNextLine(bf, &line, &lineSize);
-	wordCount = chopLine(line, words);
-	if (wordCount < 5 || !sameWord("Strand", words[0]))
-	    bfError(bf, "Expecting Strand info");
-	bb->qStrand = getStrand(bf, words[2]);
-	bb->tStrand = getStrand(bf, words[4]);
-	}
-else
+line = bfNeedNextLine(bf);
+wordCount = chopLine(line, words);
+if ((wordCount >= 5) && sameWord("Strand", words[0]))
     {
-	bb->qStrand = '+';
-	bb->tStrand = '+';
-	}
+    bb->qStrand = getStrand(bf, words[2]);
+    bb->tStrand = getStrand(bf, words[4]);
+    }
+else if ((wordCount >= 3) && sameWord("Frame", words[0]))
+    {
+    bb->qStrand = '+';
+    bb->tStrand = words[2][0];
+    bb->frame = atoi(words[2]+1);
+    }
+else if (wordCount == 0)
+    {
+    bb->qStrand = '+';
+    bb->tStrand = '+';
+    }
+else
+    bfError(bf, "Expecting Strand, Frame or blank line");
+
+
 /* Process alignment lines.  They come in groups of three
  * separated by a blank line - something like:
  * Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
- *           |||||| |||||||||| ||| ||||||||||||||||||||||| || || ||||||||
+ *              |||||| |||||||||| ||| ||||||||||||||||||||||| || || ||||||||
  * Sbjct: 62966 taccttaacattcctcaatgtttcatcatcgttctctcctccaaatggtgaaagtccgga 63025
  */
 bb->qStart = bb->tStart = 0x3fffffff;
@@ -399,7 +453,6 @@ else
     }
 for (;;)
     {
-    int a, b, qs, ts, qe, te;
     /* Fetch next first line. */
     for (;;)
 	{
@@ -407,38 +460,20 @@ for (;;)
 	    goto DONE;
 	if (startsWith(" Score", line))
 	    {
-	    lineFileReuse(lf);
+	    lineFileReuse(bf->lf);
 	    goto DONE;
 	    }
 	if (startsWith("Query:", line))
 	    break;
 	}
-    wordCount = chopLine(line, words);
-    if (wordCount != 4 || !isdigit(words[1][0]) || !isdigit(words[3][0]))
-	bfSyntax(bf);
-    a = atoi(words[1]);
-    b = atoi(words[3]);
-    qs = min(a,b);
-    qe = max(a,b);
-    bb->qStart = min(qs, bb->qStart);
-    bb->qEnd = max(qe, bb->qEnd);
-    dyStringAppend(qString, words[2]);
+    lineFileReuse(bf->lf);
+    parseBlockLine(bf, &bb->qStart, &bb->qEnd, qString);
 
     /* Skip next line. */
-    bfNeedNextLine(bf, &line, &lineSize);
+    line = bfNeedNextLine(bf);
 
     /* Fetch target sequence line. */
-    bfNeedNextLine(bf, &line, &lineSize);
-    wordCount = chopLine(line, words);
-    if (wordCount != 4 || !isdigit(words[1][0]) || !isdigit(words[3][0]))
-	bfSyntax(bf);
-    a = atoi(words[1]);
-    b = atoi(words[3]);
-    ts = min(a,b);
-    te = max(a,b);
-    bb->tStart = min(ts, bb->tStart);
-    bb->tEnd = max(te, bb->tEnd);
-    dyStringAppend(tString, words[2]);
+    parseBlockLine(bf, &bb->tStart, &bb->tEnd, tString);
     }
 DONE:
 bb->tEnd += 1;
