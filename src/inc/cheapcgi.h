@@ -107,6 +107,9 @@ char *cgiEncode(char *inString);
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
+void cgiMakeOptionalButton(char *name, char *value, boolean disabled);
+/* Make 'submit' type button that can be disabled. */
+
 void cgiMakeRadioButton(char *name, char *value, boolean checked);
 /* Make radio type button.  A group of radio buttons should have the
  * same name but different values.   The default selection should be
