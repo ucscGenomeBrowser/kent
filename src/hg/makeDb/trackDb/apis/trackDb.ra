@@ -13,6 +13,7 @@ group rna
 priority 57
 visibility hide
 spectrum on
+intronGap 30
 type psl est
 
 track all_mrna
