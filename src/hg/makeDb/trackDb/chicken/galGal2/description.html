@@ -2,8 +2,7 @@
 <P>
 The February 2004 chicken draft sequence (UCSC version galGal2) 
 was produced by the Chicken Genome Sequencing Consortium. 
-The sequence covers about ?? percent of the genome,
-and has been sequenced to 6.63X coverage.
+The genome has been sequenced to 6.63X coverage.
 Approximately 88% of the sequence has been anchored to a chromosome; 
 the remaining contigs have been concatenated into the virtual chromosome 
 &quot;chrUn&quot; separated by gaps of 10,000 bp.  The chicken mitochondrial 
@@ -22,10 +21,9 @@ to the success of this release.
 <H3>Sample position queries</H3>
 <P>
 A genome position can be specified by the accession number of a
-sequenced genomic clone, an mRNA or EST or STS marker, or
-a cytological band, a chromosomal coordinate range, or keywords from 
+sequenced genomic supercontig, an mRNA or EST, a chromosomal coordinate range, or keywords from 
 the GenBank description of an mRNA. The following list shows 
-examples of valid position queries for the chicken genome.
+examples of valid position queries for the $organism genome.
 See the
 <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>
 User's Guide</A> for more information.
@@ -35,13 +33,70 @@ User's Guide</A> for more information.
        	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD>
     </TR>
     <TR><TD VALIGN=Top><BR></TD></TR>
-    <TR><TD VALIGN=Top NOWRAP>chr11</TD>
+    <TR><TD VALIGN=Top NOWRAP>chrZ</TD>
         <TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays all of chromosome 11</TD>
+       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
     </TR>
     <TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3,
-	     counting from p arm telomere</TD>
+       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>BX950328</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number BX950328</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>BU335953</TD>
+       	<TD WIDTH=14></TD>
+      	<TD VALIGN=Top>Displays region of EST with GenBank accession BU335953 on chr Z</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>chr13_3.145</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays region of genome containing Genscan gene prediction chr13_3.145</TD>
+    </TR> 
+<!--
+    <TR><TD VALIGN=Top NOWRAP>PRNP</TD>
+       	<TD WIDTH=14></TD>
+       	<TD>Displays region of genome with HUGO identifier PRNP</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top NOWRAP>NM_017414</TD>
+	<TD><BR></TD>
+	<TD VALIGN=Top>Displays the region of genome with RefSeq identifier NM_017414</TD>
+    </TR>
+    <TR>
+	<TD VALIGN=Top NOWRAP>11274</TD>
+	<TD><BR></TD>
+	<TD VALIGN=Top NOWRAP>Displays the region of genome with LocusLink identifier 11274</TD>
+    </TR>
+-->
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>zhang</TD>
+       	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+    </TR>
+    <TR><TD VALIGN=Top NOWRAP>Taguchi,T.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD COLSPAN="3"> Use this last format for author queries. Although GenBank 
+			requires the search format <em>Taguchi T</em>, internally it uses 
+			the format <em>Taguchi,T.</em>.</TD>
     </TR>
 </TABLE>
