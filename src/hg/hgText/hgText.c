@@ -1773,7 +1773,12 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 	cgiMakeHiddenVar(current->name, current->val);
     snprintf(varName, sizeof(varName), "rawQuery%s", tableId);
     if (sameString(varName, current->name))
+	{
+	// Replace " with ' in rawQuery; the value will be double-quoted 
+	// in the form, and double-quotes in the value really mess it up.
+	subChar(current->val, '"', '\'');
 	cgiMakeHiddenVar(current->name, current->val);
+	}
     }
 }
 
