@@ -565,7 +565,7 @@ chromosomes chr22,
 type bed 15 +
 
 
-track ancientR_chr1
+track ancientR
 shortLabel Ancient Repeats
 longLabel Ancient Mouse Repeats
 priority 41
