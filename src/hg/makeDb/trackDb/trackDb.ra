@@ -355,6 +355,16 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
+track slam
+shortLabel Slam
+longLabel SLAM gene predictions using human/mouse homology
+group genes
+priority 45.5
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred 
+
 track genomeScan
 shortLabel NCBI GenomeScan
 longLabel $Organism GenomeScan Models from NCBI
@@ -692,6 +702,17 @@ priority 82
 visibility hide
 color 30,130,210
 type bed 4 .
+
+track slamNonCoding
+shortLabel Slam Non Coding 
+longLabel SLAM predictions of human/mouse conserved non-coding regions
+group regulation
+priority 82
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 
 
 track softPromoter
 shortLabel TSSW Promoters
