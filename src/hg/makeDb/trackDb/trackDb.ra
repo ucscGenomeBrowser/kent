@@ -866,16 +866,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track musHumL
-shortLabel Human Cons
-longLabel Mouse/Human Evolutionary Conservation Score
-group compGeno
-color 100,50,0
-altColor 175,150,128
-priority 119
-visibility full
-type sample 0 8
-
 track HMRConservation
 shortLabel HMRConservation
 longLabel Mouse/Human/Rat Evolutionary Conservation Score
