@@ -12,6 +12,69 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from Genbank 
 group rna
 priority 54
-visibility pack
+visibility dense
 spectrum on
 type psl mrna
+
+track humanKnownGene
+shortLabel Human Known Genes
+longLabel  Human Known Genes
+group compGeno
+priority 171
+visibility dense
+type psl mrna
+
+track blatCb1
+shortLabel C. briggsae Blat
+longLabel  C. briggsae Blat
+group compGeno
+priority 50
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatCe1
+shortLabel C. elegans Blat
+longLabel  C. elegans Blat
+group compGeno
+priority 49
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatMm3
+shortLabel Mouse Blat
+longLabel  Translated blat of Mm3
+group compGeno
+priority 148
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatRn2
+shortLabel Rat Blat
+longLabel  Rat Blat
+group compGeno
+priority 149
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatHg15
+shortLabel Human Blat
+longLabel  Human Blat
+group compGeno
+priority 149
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
