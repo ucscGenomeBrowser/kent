@@ -2893,7 +2893,8 @@ struct trackGroup *tg = bedTg();
 
 tg->mapName = "hgExoFish";
 tg->visibility = tvDense;
-tg->longLabel = "Exofish Tetraodon/Human Evolutionarily Conserved Regions (ecores)";
+tg->longLabel = "Exofish Tetraodon/Human Conserved Regions (ecores)";
+/* tg->longLabel = "Exofish Tetraodon/Human Evolutionarily Conserved Regions (ecores)"; */
 tg->shortLabel = "Exofish ecores";
 tg->loadItems = loadExoFish;
 tg->freeItems = freeExoFish;
@@ -4760,10 +4761,47 @@ for(table = *tableList; table != NULL; table = table->next)
 	}
     }
 }
-	   
+	
+struct trackGroup *createTrackGroup(struct browserTable *table,
+				    struct trackGroup *(*tgConstructor)())
+/* Currently we're going to trust the constructor for most of this stuff except
+   the version. */
+{
+struct trackGroup *tg = NULL;
+char *buff = NULL;
+tg=tgConstructor();
+buff = needMem(sizeof(char) *(strlen(tg->longLabel) + strlen(table->version) + 10));
+sprintf(buff, "%s [%s]", tg->longLabel, table->version);
+tg->longLabel = cloneString(buff);
+freez(&buff);
+return tg;
+}
+   
+void createAndAddTrack(char *trackType,
+		       struct trackGroup **tGroupList,
+		       struct browserTable **tableList,
+		       struct trackGroup *(*tgConstructor)())
+{
+/* Searches through list of tables in browser table to see if 
+ it contains information for this track. If it does use it 
+ to create the new track. Otherwise just use the constructor */
+struct trackGroup *tg = NULL;
+struct browserTable *table = NULL;
+for(table = *tableList; table != NULL; table=table->next)
+    {
+    if(sameString(table->trackType, trackType))
+	{
+	slSafeAddHead(tGroupList, createTrackGroup(table, tgConstructor));
+	slRemoveEl(tableList, table);
+	browserTableFree(&table);
+	return;
+	}
+    }
+slSafeAddHead(tGroupList, tgConstructor());
+}
+
 
 #endif /*CHUCK_CODE*/
-
 
 /* The next two functions are being phased out as the Rosetta data
 set is split into two tracks instead of one large one. */
@@ -5205,8 +5243,10 @@ void doForm()
 {
 struct trackGroup *group;
 struct browserTable *tableList = NULL, *table = NULL;
-
+char *freezeName = NULL;
 int controlColNum=0;
+
+
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
 if (userSeqString != NULL)
@@ -5259,9 +5299,11 @@ if (privateVersion())
     }
 if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
-if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
+/* if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg()); */
+if (hTableExists("exoFish")) createAndAddTrack("exoFish", &tGroupList, &tableList, exoFishTg);
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
-if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());
+/* if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg()); */
+if(hTableExists("rnaGene")) createAndAddTrack("rnaGene", &tGroupList, &tableList, rnaGeneTg);
 if (hTableExists("snpNih")) slSafeAddHead(&tGroupList, snpNihTg());
 if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
 if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
@@ -5315,8 +5357,10 @@ printf("<CENTER>\n");
 if (!hideControls)
     {
     /* Show title . */
-    printf("<H2>Chromosome %s, Bases %d-%d, Size %d, Database %s.</H2>", skipChr(chromName), 
-	    winStart+1, winEnd, winEnd - winStart, database);
+    freezeName = hFreezeFromDb(database);
+    if(freezeName == NULL)
+	freezeName = "Unknown";
+    printf("<H2>UCSC Genome Browser on %s Freeze</H2>\n",freezeName); 
 
     /* Put up scroll and zoom controls. */
     fputs("move ", stdout);
@@ -5340,12 +5384,11 @@ if (!hideControls)
 	{
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
+	printf("  Size %d ", winEnd-winStart);
 	fputs(" pixel width ", stdout);
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
 	cgiMakeButton("submit", "jump");
-	printf(" <A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A>");
-	fputs("<BR>\n", stdout);
 	}
     }
 
@@ -5354,14 +5397,15 @@ makeActiveImage(tGroupList);
 
 if (!hideControls)
     {
-    fputs("</CENTER>", stdout);
     fputs("Click on an item in a track to view more information on that item. "
 	  "Click center label to toggle between full and dense display of "
 	  "that track.  Tracks with more than 300 items are always displayed "
 	  "densely.  Click on base position to zoom in by 3x around where you "
 	  "clicked.<BR>",
 	  stdout);
-    fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
+
+    /* Add the table with links to Ensembl, */ 
+    printf("<TABLE BORDER=\"1\" WIDTH=\"100%%\"><TR><TD><P ALIGN=CENTER>");
     printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
 	  "View DNA</A></TD>",  hgcName(),
 	  winStart, chromName, winStart, winEnd, database);
@@ -5373,9 +5417,12 @@ if (!hideControls)
 	}
     if (sameString(database, "hg5") || sameString(database, "hg6") || sameString(database, "hg7"))
 	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
-    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
+    printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
+    printf("<td align=center><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A></td>\n");
     fputs("</TR>", stdout);
-    fputs("</TABLE><CENTER>\n", stdout);
+    fputs("</TABLE>\n", stdout);
+
+
 
     /* Display bottom control panel. */
     fputs("Chromosome ", stdout);
@@ -5429,6 +5476,8 @@ if (!hideControls)
     for( ; controlColNum < MAX_CONTROL_COLUMNS; controlColNum++)
 	printf("<td>&nbsp</td>\n");
     printf("</tr>\n</table>\n");
+
+
     }
 saveHiddenVars();
 
