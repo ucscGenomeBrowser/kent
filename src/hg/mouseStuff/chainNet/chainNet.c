@@ -76,16 +76,6 @@ const struct fill *b = *((struct fill **)vb);
 return a->start - b->start;
 }
 
-int cmpSpaceRef(const void *va, const void *vb)
-/* Compare to sort based on start. */
-{
-const struct slRef *ra = *((struct slRef **)va);
-const struct slRef *rb = *((struct slRef **)vb);
-struct space *a = ra->val;
-struct space *b = rb->val;
-return a->start - b->start;
-}
-
 
 int spaceCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -184,7 +174,8 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
-boolean innerBounds(struct chain *chain, boolean isQ, 
+boolean innerBounds(struct chain *chain, struct boxIn *startBlock,
+	boolean isQ, boolean isRev,
 	int inStart, int inEnd, int *retStart, int *retEnd)
 /* Return the portion of chain which is between inStart and
  * inEnd.  Only considers blocks inbetween inStart and inEnd.  
@@ -193,10 +184,9 @@ boolean innerBounds(struct chain *chain, boolean isQ,
 struct boxIn *b;
 int start = BIGNUM, end = -BIGNUM;
 char strand = (isQ ? chain->qStrand : '+');
-boolean isRev = (strand == '-');
 if (isRev)
     reverseIntRange(&inStart, &inEnd, chain->qSize);
-for (b = chain->blockList; b != NULL; b = b->next)
+for (b = startBlock; b != NULL; b = b->next)
     {
     int s, e;
     if (isQ)
@@ -228,7 +218,8 @@ return TRUE;
 }
 
 struct fill *fillSpace(struct chrom *chrom, struct space *space, 
-	struct chain *chain, boolean isQ)
+	struct chain *chain, struct boxIn *startBlock, 
+	boolean isQ, boolean isRev)
 /* Fill in space with chain, remove existing space from chrom,
  * and add smaller spaces on either side if big enough. */
 {
@@ -236,7 +227,7 @@ struct fill *fill;
 int s, e;
 struct space *lSpace, *rSpace;
 
-if (!innerBounds(chain, isQ, space->start, space->end, &s, &e))
+if (!innerBounds(chain, startBlock, isQ, isRev, space->start, space->end, &s, &e))
     return NULL;
 assert(s < e);
 AllocVar(fill);
@@ -272,21 +263,6 @@ void fsAdd(void *item)
 refAdd(&fsList, item);
 }
 
-void checkSort(struct slRef *spaceRefList)
-/* Check that list is really sorted. */
-{
-int lastStart = -BIGNUM;
-struct slRef *ref;
-struct space *space;
-for (ref = spaceRefList; ref != NULL; ref = ref->next)
-    {
-    space = ref->val;
-    if (space->start < lastStart)
-        errAbort("space list is not sorted after rbTreeTraverseRange");
-    lastStart = space->start;
-    }
-}
-
 struct slRef *findSpaces(struct rbTree *tree, int start, int end)
 /* Return a list of subGaps that intersect interval between start
  * and end. */
@@ -300,6 +276,65 @@ slReverse(&fsList);
 return fsList;
 }
 
+void reverseBlocksQ(struct boxIn **pList, int qSize)
+/* Reverse qside of blocks. */
+{
+struct boxIn *b;
+slReverse(pList);
+for (b = *pList; b != NULL; b = b->next)
+    reverseIntRange(&b->qStart, &b->qEnd, qSize);
+}
+
+
+void addChainT(struct chrom *chrom, struct chain *chain)
+/* Add T side of chain to fill/gap tree of chromosome. 
+ * This is the easier case since there are no strand
+ * issues to worry about. */
+{
+struct slRef *spaceList;
+struct slRef *ref;
+struct boxIn *startBlock, *block, *nextBlock;
+struct gap *gap;
+struct fill *fill = NULL;
+
+spaceList = findSpaces(chrom->spaces,chain->tStart,chain->tEnd);
+startBlock = chain->blockList;
+uglyf("Got %d tSpaces\n", slCount(spaceList));
+for (ref = spaceList; ref != NULL; ref = ref->next)
+    {
+    struct space *space = ref->val;
+    struct fill *fill;
+    int gapStart, gapEnd;
+    for (;;)
+        {
+	nextBlock = startBlock->next;
+	if (nextBlock == NULL)
+	    break;
+	gapEnd = nextBlock->tStart;
+	if (gapEnd > space->start)
+	    break;
+	startBlock = nextBlock;
+	}
+    if ((fill = fillSpace(chrom, space, chain, startBlock, FALSE, FALSE)) != NULL)
+	{
+	for (block = startBlock; ; block = nextBlock)
+	    {
+	    nextBlock = block->next;
+	    if (nextBlock == NULL)
+		break;
+	    gapStart = block->tEnd;
+	    gapEnd = nextBlock->tStart;
+	    if ((gap = addGap(chrom, '+', space->start, space->end, gapStart, gapEnd)) != NULL)
+		{
+		slAddHead(&fill->gapList, gap);
+		}
+	    }
+	freez(&ref->val);
+	}
+    }
+slFreeList(&spaceList);
+}
+
 void addChain(struct chrom *qChrom, struct chrom *tChrom, struct chain *chain)
 /* Add as much of chain as possible to chromosomes. */
 {
@@ -307,6 +342,7 @@ struct slRef *spaceList;
 struct slRef *ref;
 struct boxIn *block, *nextBlock;
 struct gap *gap;
+struct fill *fill = NULL;
 boolean isRev = (chain->qStrand == '-'); 
 int qStart = chain->qStart, qEnd = chain->qEnd;
 
@@ -314,11 +350,13 @@ if (isRev)
     reverseIntRange(&qStart, &qEnd, chain->qSize);
 spaceList = findSpaces(qChrom->spaces,qStart,qEnd);
 uglyf("Got %d qSpaces\n", slCount(spaceList));
+
+
 for (ref = spaceList; ref != NULL; ref = ref->next)
     {
     struct space *space = ref->val;
     struct fill *fill;
-    if ((fill = fillSpace(qChrom, space, chain, TRUE)) != NULL)
+    if ((fill = fillSpace(qChrom, space, chain, chain->blockList, TRUE, isRev)) != NULL)
 	{
 	for (block = chain->blockList; ; block = nextBlock)
 	    {
@@ -335,28 +373,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
     }
 slFreeList(&spaceList);
 
-spaceList = findSpaces(tChrom->spaces,chain->tStart,chain->tEnd);
-uglyf("Got %d tSpaces\n", slCount(spaceList));
-for (ref = spaceList; ref != NULL; ref = ref->next)
-    {
-    struct space *space = ref->val;
-    struct fill *fill;
-    if ((fill = fillSpace(tChrom, space, chain, FALSE)) != NULL)
-	{
-	for (block = chain->blockList; ; block = nextBlock)
-	    {
-	    nextBlock = block->next;
-	    if (nextBlock == NULL)
-		break;
-	    if ((gap = addGap(tChrom, '+', space->start, space->end, block->tEnd, nextBlock->tStart)) != NULL)
-		{
-		slAddHead(&fill->gapList, gap);
-		}
-	    }
-	freez(&ref->val);
-	}
-    }
-slFreeList(&spaceList);
+addChainT(tChrom, chain);
 }
 
 int rOutDepth = 0;
@@ -517,23 +534,22 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 }
 
 void printMem()
-/* Print out memory used. */
+/* Print out memory used and other stuff from linux. */
 {
 struct lineFile *lf = lineFileOpen("/proc/self/stat", TRUE);
 char *line, *words[50];
 int wordCount;
 if (lineFileNext(lf, &line, NULL))
     {
-    printf("/proc/stat reads:\n");
-    puts(line);
     wordCount = chopLine(line, words);
-    if (wordCount >= 22)
+    if (wordCount >= 23)
         printf("memory usage %s, utime %s s/100, stime %s\n", words[22], words[13], words[14]);
     }
 lineFileClose(&lf);
 }
 
-void chainNet(char *chainFile, char *tSizes, char *qSizes, char *tNet, char *qNet)
+void chainNet(char *chainFile, char *tSizes, char *qSizes
+	, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
 struct lineFile *lf = lineFileOpen(chainFile, TRUE);
@@ -550,6 +566,8 @@ while ((chain = chainRead(lf)) != NULL)
     if (chain->score < minScore) 
     	break;
     uglyf("chain %f (%d els) %s %d-%d %c %s %d-%d\n", chain->score, slCount(chain->blockList), chain->tName, chain->tStart, chain->tEnd, chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
+    // uglier = (sameString(chain->tName, "chr5") && sameString(chain->qName, "chr15"));
+    if (uglier) uglyf("uglier!!\n");
     qChrom = hashMustFindVal(qHash, chain->qName);
     if (qChrom->size != chain->qSize)
         errAbort("%s is %d in %s but %d in %s", chain->qName, 
