@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.25 2004/07/06 22:36:41 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.26 2004/07/19 23:53:46 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -308,6 +308,8 @@ for(se = rep->seList; se != NULL; se = se->next)
     orthoSpliceEdgeTabOut(se, edgeFile);
     }
 }
+
+
 
 enum ggEdgeType getEdgeType(struct altGraphX *ag, int v1, int v2)
 /* Return edge type. */
@@ -947,6 +949,12 @@ for(se = seList; se != NULL; se = se->next)
 boolean isHardVertex(struct altGraphX *ag, int vertex)
 {
 return (ag->vTypes[vertex] == ggHardStart || ag->vTypes[vertex] == ggHardEnd);
+}
+
+boolean isSoftEdge(struct altGraphX *ag, int v1, int v2)
+/* Is either v1 or v2 a soft edge? */
+{
+return !(isHardVertex(ag, v1) && isHardVertex(ag, v2));
 }
 
 void outputSpeciesExon(struct altGraphX *ag, int v1, int v2)
@@ -1686,7 +1694,9 @@ for(i=0;i<vCount; i++)
 /* 		if(match == TRUE && possibleExons != NULL) */
 /* 		    match = (!overlapsPossibleExon(ag, i, j)); */
 		}
-	    else if(trumpValue(oldEv, ag) >= trumpNum)
+	    else if(trumpValue(oldEv, ag) >= trumpNum && !isSoftEdge(ag, i, j))
+		match = TRUE;
+	    else if(trumpValue(oldEv, ag) >= round(1.5*trumpNum) && isSoftEdge(ag, i, j))
 		match = TRUE;
 	    else if(possibleExons != NULL)
 		match |= isExactPossibleExon(ag, i, j);
