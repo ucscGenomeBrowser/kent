@@ -242,51 +242,10 @@ if (!allLetters(word))
 }
 
 
-static boolean findPositionInGenome(char *spec, char **retChromName, 
-				    int *retWinStart, int *retWinEnd)
-/* process the position information given in spec and gives a chrom name
- * as well as a start and end values on that chrom */
-/* NOTE: this is very close to hgFind's findGenomePos, but it handles 
- * the web headers and says hgText instead of hgTracks.
- */
-{ 
-struct hgPositions *hgp;
-struct hgPos *pos;
-
-hgp = hgPositionsFind(spec, "", FALSE, NULL);
-
-if (hgp == NULL || hgp->posCount == 0)
-    {
-    hgPositionsFree(&hgp);
-    webAbort("Not found", "Sorry, couldn't locate %s in genome database\n",
-	     spec);
-    return TRUE;
-    }
-if ((pos = hgp->singlePos) != NULL)
-    {
-    *retChromName = pos->chrom;
-    *retWinStart = pos->chromStart;
-    *retWinEnd = pos->chromEnd;
-    hgPositionsFree(&hgp);
-    return TRUE;
-    }
-else
-    {
-    webStart(cart, "Table Browser: %s: Select Position",
-	     freezeName);
-    hgPositionsHtml(hgp, stdout, FALSE, NULL);
-    hgPositionsFree(&hgp);
-    webEnd();
-    return FALSE;
-    }
-}
-
-
 char *getPosition(char **retChrom, int *retStart, int *retEnd)
 {
 char *pos = cgiOptionalString("position");
 
-/* if the position information is not given, get it */
 if (pos == NULL)
     pos = "";
 if (pos[0] == '\0')
@@ -294,9 +253,11 @@ if (pos[0] == '\0')
     doGateway();
     return NULL;
     }
-if (strcmp(pos, "genome"))
+if (! sameString(pos, "genome"))
     {
-    if (! findPositionInGenome(pos, retChrom, retStart, retEnd))
+    struct hgPositions *hgp = findGenomePosWeb(pos, retChrom, retStart, retEnd,
+					       cart, TRUE, hgTextName());
+    if ((hgp == NULL) || (hgp->singlePos == NULL))
 	return NULL;
     }
 return(pos);
