@@ -10058,7 +10058,7 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-tracksDisplay);
+tracksDisplay();
 }
 
 void doDown(struct cart *cart)
