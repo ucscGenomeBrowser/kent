@@ -4861,11 +4861,15 @@ if (url != NULL && url[0] != 0)
 	{
     	sprintf(cond_str, "transcript_name='%s'", itemName);    
     	proteinID = sqlGetField(conn, database, "ensemblXref", "translation_name", cond_str);
-   
-        printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-           genomeStrEnsembl,proteinID);
-        printf("%s</A><BR>\n", proteinID);
+       
+        if (proteinID != NULL)
+            {
+            printf("<B>Ensembl Protein: </B>");
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>",
+                    genomeStrEnsembl,proteinID);
+            printf("%s</A><BR>\n", proteinID);
+            }
+
     	// get genomeStr to be used in Superfamily URL */ 
     	if (sameWord(organism, "human"))
 	    {
