@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.26 2003/06/25 15:20:43 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.27 2003/06/25 15:58:39 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -893,8 +893,6 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     hPrintf("\n");
     }
 hPrintf("</PRE></TT>");
-#ifdef SOON
-#endif /* SOON */
 }
 
 void doGetSeq(struct sqlConnection *conn, struct column *colList, 

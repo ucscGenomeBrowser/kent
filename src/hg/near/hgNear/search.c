@@ -107,7 +107,7 @@ void doSearch(struct sqlConnection *conn, struct column *colList, char *search)
  * put up a page of choices. */
 {
 search = trimSpaces(search);
-if (sameString(search, ""))
+if (search != NULL && sameString(search, ""))
     search = NULL;
 if (search == NULL)
     displayData(conn, colList, NULL);
