@@ -231,7 +231,7 @@ for (image = imageList; image != NULL; image = image->next)
     printf("<TD>");
     printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\">", hgGenePixCgiName(), 
     	sidUrl, hgpId, id, hgpDoImage);
-    printf("<IMG SRC=\"/%s\"></A><BR>\n", imageFile);
+    printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
     
     smallCaption(conn, id);
     printf("<BR>\n");
@@ -318,7 +318,7 @@ printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
 printf("<A HREF=\"");
 printf("../cgi-bin/%s?%s=%d&%s=on", hgGenePixCgiName(), hgpId, imageId, hgpDoFullSized);
 printf("\" target=_PARENT>");
-printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixScreenSizePath(conn, imageId));
+printf("<IMG SRC=\"%s\"></A><BR>\n", genePixScreenSizePath(conn, imageId));
 printf("\n");
 printf("<A NAME=\"caption\"></A>");
 printCaption(conn, imageId, geneList);
@@ -385,7 +385,7 @@ htmStart(stdout, "do image");
 printf("<A HREF=\"");
 printf("../cgi-bin/%s?%s=%d", hgGenePixCgiName(), hgpId, imageId);
 printf("\" target=_PARENT>");
-printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixFullSizePath(conn, imageId));
+printf("<IMG SRC=\"%s\"></A><BR>\n", genePixFullSizePath(conn, imageId));
 printf("</A><BR>\n");
 printCaption(conn, imageId, geneList);
 htmlEnd();
