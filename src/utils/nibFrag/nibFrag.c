@@ -2,6 +2,7 @@
 #include "common.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "options.h"
 #include "fa.h"
 
 void usage()
@@ -14,6 +15,7 @@ errAbort(
   "options:\n"
   "   -masked - use lower case characters for masked-out bases\n"
   "   -upper - use uppper case characters for all bases\n"
+  "   -name=name Use given name after '>' in output sequence\n"
   );
 }
 
@@ -34,7 +36,7 @@ if (strand == '-')
     reverseComplement(seq->dna, seq->size);
 if (optUpper == 1)
     touppers(seq->dna);
-faWrite(faFile, seq->name, seq->dna, seq->size);
+faWrite(faFile, optionVal("name", seq->name), seq->dna, seq->size);
 }
 
 int main(int argc, char *argv[])
