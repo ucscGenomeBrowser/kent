@@ -4,12 +4,14 @@
 O = crudeali.o fuzzyFind.o genoFind.o gfClientLib.o ooc.o \
 patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 
 
-$(MACHTYPE)/jkOwnLib.a: $(O) $(MACHTYPE)
-	ar rcu $(MACHTYPE)/jkOwnLib.a $(O)
-	ranlib $(MACHTYPE)/jkOwnLib.a
+T = ../lib/$(MACHTYPE)/jkOwnLib.a
 
-$(MACHTYPE):
-	mkdir $(MACHTYPE)
+$(T): $(O) ../lib/$(MACHTYPE)
+	ar rcu $(T) $(O)
+	ranlib $(T)
+
+../lib/$(MACHTYPE):
+	mkdir ../lib/$(MACHTYPE)
 
 clean:
 	rm -f ${O} $(MACHTYPE)/jkOwnLib.a
