@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.12 2003/12/24 07:27:46 markd Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.13 2003/12/24 08:28:33 markd Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -412,14 +412,19 @@ memTracker->parent->free(node);
 static void *memTrackerRealloc(void *vpt, size_t size)
 /* Resize a memory block from memTrackerAlloc. */
 {
-struct dlNode *node = ((struct dlNode *)vpt)-1;
-size += sizeof (*node);
-dlRemove(node);
-node = memTracker->parent->realloc(node, size);
-if (node == NULL)
-    return node;
-dlAddTail(memTracker->list, node);
-return (void*)(node+1);
+if (vpt == NULL)
+    return memTrackerAlloc(size);
+else
+    {
+    struct dlNode *node = ((struct dlNode *)vpt)-1;
+    size += sizeof(*node);
+    dlRemove(node);
+    node = memTracker->parent->realloc(node, size);
+    if (node == NULL)
+        return node;
+    dlAddTail(memTracker->list, node);
+    return (void*)(node+1);
+    }
 }
 
 void memTrackerStart()
