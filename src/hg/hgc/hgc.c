@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.563 2004/02/10 16:07:02 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.564 2004/02/12 04:05:57 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13004,6 +13004,11 @@ else if (sameWord(track, "xenoRefGene"))
     doRefGene(tdb, item);
     }
 else if (sameWord(track, "refGene"))
+    {
+    doRefGene(tdb, item);
+    }
+else if (sameWord(track, "mappedRefSeq"))
+    // human refseqs on chimp browser
     {
     doRefGene(tdb, item);
     }
