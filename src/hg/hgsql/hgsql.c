@@ -4,7 +4,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgsql.c,v 1.6 2004/07/19 18:13:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgsql.c,v 1.7 2004/07/19 18:13:54 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -61,7 +61,6 @@ return (WEXITSTATUS(rc));
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int rc;
 if (argc <= 1)
     usage();
 return (hgsql(argc-1, argv+1));
