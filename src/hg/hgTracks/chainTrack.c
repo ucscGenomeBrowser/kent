@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.12 2003/07/10 00:40:42 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.13 2003/07/10 13:28:14 braney Exp $";
 
 
 static void doQuery(struct sqlConnection *conn, 
@@ -84,12 +84,6 @@ conn = hAllocConn();
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     double pixelWidth = (lf->end - lf->start) / scale;
-    /*
-	    printf(" g %d %d %d\n",winEnd,winStart,width);
-	    printf(" f %d %d\n",lf->end,lf->start);
-	    printf(" small %g\n",pixelWidth);
-	    printf(" scale %g\n",scale);
-	    */
     if (pixelWidth >= 2.5)
 	{
 	hashAdd(hash, lf->extra, lf);
@@ -99,7 +93,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	lmAllocVar(lm, sf);
 	sf->start = lf->start;
 	sf->end = lf->end;
-	sf->grayIx = maxShade;
+	sf->grayIx = lf->grayIx;
 	lf->components = sf;
 	}
     }
@@ -145,7 +139,7 @@ if (hash->size)
 	    start = seqStart - extra; 
 	    while((lf->start < start) && 
 		(lf->components->start > seqStart))
-	    {
+		{
 		extra *= 10;
 		end = start;
 		start = end - extra;
@@ -153,7 +147,6 @@ if (hash->size)
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    }
-
 	}
     }
 linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width,
