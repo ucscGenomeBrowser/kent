@@ -34,7 +34,7 @@ type psl est
 
 track blastzBestMm3
 shortLabel Mouse Best
-longLabel Blastz Mouse (mm3/Feb 03)/$Organism(hg16/Jul 03) Best in Genome Alignments
+longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best in Genome Alignments
 group compGeno
 priority 126
 visibility hide
@@ -45,7 +45,7 @@ type psl xeno mm3
 
 track blastzMm3
 shortLabel Mouse Blastz
-longLabel Blastz All Mouse (Feb. 03/mm3) Alignments
+longLabel Blastz All Mouse (mm3-Feb 03) Alignments
 group compGeno
 priority 127
 visibility hide
@@ -57,7 +57,7 @@ otherDb mm3
 
 track chainMm3
 shortLabel Mouse Chain 
-longLabel Chained Blastz Mouse(mm3/Feb 03)/$Organism(hg16/Jul 03) Alignments
+longLabel Chained Blastz Mouse (mm3-Feb 03)/$Organism Alignments
 group compGeno
 priority 128
 visibility hide
@@ -69,7 +69,7 @@ otherDb mm3
 
 track netMm3
 shortLabel Mouse Net
-longLabel Mouse(mm3/Feb 03)/$Organism(hg16/Jul 03) Alignment Net
+longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
 group compGeno
 priority 129
 visibility dense
@@ -79,7 +79,7 @@ otherDb mm3
 
 track syntenyMm3
 shortLabel Mouse Synteny
-longLabel Human(hg16/Jul 03)/Mouse(mm3/Feb 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel Human/Mouse (mm3-Feb 03) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 129
 visibility hide
@@ -89,7 +89,7 @@ type bed 4 .
 
 track syntenyNetMm3
 shortLabel Mouse Syntenic Net
-longLabel Mouse (mm3/Feb 03) Syntenic Alignment Net
+longLabel Mouse (mm3-Feb 03) Syntenic Alignment Net
 group compGeno
 priority 130
 visibility hide
@@ -99,7 +99,7 @@ otherDb mm3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (rn3/Jun 03)/$Organism(hg16/Jul 03) Best in Genome Alignments
+longLabel Blastz Rat (rn3-Jun 03)/$Organism Best in Genome Alignments
 group compGeno
 priority 140
 visibility hide
@@ -110,7 +110,7 @@ type psl xeno rn3
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel Blastz Rat (June 03/rn3) Alignments
+longLabel Blastz Rat (rn3-Jun 03) Alignments
 group compGeno
 priority 141
 visibility hide
@@ -122,7 +122,7 @@ otherDb rn3
 
 track chainRn3
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat(rn3/Jun 03)/$Organism(hg16/Jul 03) Alignments
+longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
 group compGeno
 priority 142
 visibility hide
@@ -134,7 +134,7 @@ otherDb rn3
 
 track netRn3
 shortLabel Rat Net
-longLabel Rat(rn3/Jun 03)/$Organism(hg16/Jul 03) Alignment Net
+longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
 group compGeno
 priority 143
 visibility dense
@@ -144,7 +144,7 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $Organism(hg16/Jul 03)/Rat(rn3/Jun 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 144
 visibility hide
@@ -154,7 +154,7 @@ type bed 4 +
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel Rat (rn3/Jun 03) Syntenic Alignment Net
+longLabel Rat (rn3-Jun 03) Syntenic Alignment Net
 group compGeno
 priority 145
 visibility hide
