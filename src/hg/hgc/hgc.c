@@ -1683,6 +1683,10 @@ printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
+cgiContinueHiddenVar("o");
+cgiContinueHiddenVar("t");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
 puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
 
@@ -7945,17 +7949,20 @@ if (cgiVarExists("o"))
 
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
-	   dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
-			  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.chromStart,
-		  dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
+	   dup.chrom, dup.chromStart+1, dup.chromEnd);
+	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
+			  "View DNA for this feature</A><BR>\n",
+	       hgcPathAndSettings(), dup.chromStart, dup.chromEnd,
+	       dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
 
 
 	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
-	   dup.otherChrom, dup.otherStart, dup.otherEnd);
-	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
-				  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.otherStart,
-			  dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand, database, tbl);
+	   dup.otherChrom, dup.otherStart+1, dup.otherEnd);
+	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
+				  "View DNA for this feature</A><BR>\n",
+	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd,
+	       dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand,
+	       database, tbl);
 
 	//printf("<B>Name:</B>%s<BR>\n",dup.name);
 	//printf("<B>Score:</B>%d<BR>\n",dup.score);
