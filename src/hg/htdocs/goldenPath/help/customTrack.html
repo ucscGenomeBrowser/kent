@@ -99,9 +99,11 @@ format. The track displays paired features with a thick end and thin
 end, and hatch marks indicating the direction of transcription. The track
 labels display in green (0,128,0), and the gray level of the each feature
 reflects the score value of that line. NOTE: The track name line in this example
-has been
-split over 2 lines for documentation purposes. If you paste this example into
-the Genome Browser, you must remove the line break to display the track successfully.
+has been split over 2 lines for documentation purposes. 
+If you paste this example into the Genome Browser, you must remove the line 
+break to display the track successfully. 
+Click <A HREF ="pairedReads.txt">
+here</A> for a copy of this example that can be pasted into the browser without editing. 
 <PRE><TT>browser position chr22:1000-10000
 browser hide all
 track name=pairedReads description="Clone Paired Reads" visibility=2
@@ -152,7 +154,9 @@ matches the name of the feature (cloneA, cloneB, etc.).
 NOTE: The track line in this example has been split over 2 lines for 
 documentation purposes. If you paste this example into
 the browser, you must remove the line break to display the track successfully.
-<BR><BR>
+Click <A HREF ="clones.txt">
+here</A> for a copy of this example that can be pasted into browser without editing. 
+<BR>
 <PRE><TT>browser position chr22:1000-10000
 browser hide all
 track name=clones description="Clones" visibility=2
@@ -402,17 +406,19 @@ required on each data line within a PSL file:
 <LI><B>tStarts</B> - Comma-separated list of starting positions of each block in target
 </OL>
 <P><B><I>Example:</I></B><BR>
-Here is an example of an annotation track in PSL format (note that line
+Here is an example of an annotation track in PSL format. Note that line
 breaks have been inserted into the PSL lines in this example for
-documentation display purposes):
+documentation display purposes.
+ Click <A HREF ="fishBlats.txt">
+here</A> for a copy of this example that can be pasted into the browser without editing. 
 
 <PRE><TT>track name=fishBlats description=&quot;Fish BLAT&quot; useScore=1
 59 9 0 0 1 823 1 96 +- FS_CONTIG_48080_1 1955 171 1062 chr22 
     47748585 13073589 13073753 2 48,20,  171,1042,  34674832,34674976,
 59 7 0 0 1 55 1 55 +- FS_CONTIG_26780_1 2825 2456 2577 chr22 
     47748585 13073626 13073747 2 21,45,  2456,2532,  34674838,34674914,
-59 7 0 0 1 55 1 55 -+ FS_CONTIG_26780_1 2825 2455 2576 chr22 
-    47748585 13073627 13073748 2 45,21,  249,349,  13073627,13073727,
+59 7 0 0 1 55 1 55 -+ FS_CONTIG_26780_1 2825 2455 2676 chr22 
+    47748585 13073727 13073848 2 45,21,  249,349,  13073727,13073827,
 </TT></PRE>
 
 <P>Be aware that the coordinates for a negative strand in a PSL line are handled in a special way. In the 
@@ -496,9 +502,11 @@ Here is a brief description of the GFF fields:</P>
 </OL>
 
 <P><B><I>Example:</I></B><BR>
-Here's an example of a GFF-based track. NOTE: If you paste this example into
-the Genome Browser, check that all fields remain tab-separated (some cut and
-paste operations may inadvertently replace the tabs with spaces).</P>
+Here's an example of a GFF-based track. 
+Click <A HREF ="regulatory.txt">
+here</A> for a copy of this example that can be pasted into the browser without editing. 
+NOTE: Some paste operations will replace tabs with spaces. If you paste this example into
+the Genome Browser, check that all fields remain tab-separated. 
 
 <PRE><TT>track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot;
 chr22  TeleGene	enhancer  1000000  1001000  500	+  .  touch1
