@@ -526,7 +526,11 @@ if (!checked)
     haveSnpTbl = sqlTableExists(conn, "snpTsc");
     checked = TRUE;
     if (!haveSnpTbl)
-        fprintf(stderr, "warning: no snpTsc table in this databsae\n");
+      {
+        haveSnpTbl = sqlTableExists(conn, "snpNih");
+	if (!haveSnpTbl)        
+	  fprintf(stderr, "warning: no snpTsc table in this databsae\n");
+      }
     }
 return haveSnpTbl;
 }
