@@ -70,12 +70,12 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
 	echo "dropped indices on $i"
     end
     foreach i (all_mrna intronEst all_est xenoMrna)
-	echo "create index tName on $i (tName, bin) ;" 
-	echo "create index tName on $i (tName, bin) ;" | hgsql ci1
-	echo "create index tName_2 on $i  (tName, tStart);"
-	echo "create index tName_2 on $i  (tName, tStart);" | hgsql ci1
-	echo "create index tName_3 on $i  (tName, tEnd);" 
-	echo "create index tName_3 on $i  (tName, tEnd);" | hgsql ci1
+	echo "create index tName on $i (tName(13), bin) ;" 
+	echo "create index tName on $i (tName(13), bin) ;" | hgsql ci1
+	echo "create index tName_2 on $i  (tName(13), tStart);"
+	echo "create index tName_2 on $i  (tName(13), tStart);" | hgsql ci1
+	echo "create index tName_3 on $i  (tName(13), tEnd);" 
+	echo "create index tName_3 on $i  (tName(13), tEnd);" | hgsql ci1
 	echo "created indices on $i"
     end
 
@@ -90,15 +90,15 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     hgsql ci1 < ~/kent/src/hg/lib/gap.sql   
     hgLoadBed -oldTable ci1 gap gap.bed
     echo "drop index bin on gap ;" | hgsql ci1
-    echo "create index chrom on gap (chrom, bin) ;" | hgsql ci1
-    echo "create index chrom_2 on gap  (chrom, chromStart);" | hgsql ci1
-    echo "create index chrom_3 on gap  (chrom, chromEnd);" | hgsql ci1
+    echo "create index chrom on gap (chrom(13), bin) ;" | hgsql ci1
+    echo "create index chrom_2 on gap  (chrom(13), chromStart);" | hgsql ci1
+    echo "create index chrom_3 on gap  (chrom(13), chromEnd);" | hgsql ci1
     echo "drop table rmsk;" | hgsql ci1
     hgsql ci1 < ~/kent/src/hg/lib/rmskOut.sql   
     echo "rename table rmskOut to rmsk;" | hgsql ci1 
     echo "load data local infile 'rmsk.out' into table rmsk;" | hgsql ci1 
-    echo "create index chrom_2 on rmsk  (genoName, genoStart);" | hgsql ci1
-    echo "create index chrom_3 on rmsk  (genoName, genoEnd);" | hgsql ci1
+    echo "create index chrom_2 on rmsk  (genoName(13), genoStart);" | hgsql ci1
+    echo "create index chrom_3 on rmsk  (genoName(13), genoEnd);" | hgsql ci1
 
 # JGI ciona genes
     ssh hgwdev
@@ -185,16 +185,18 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     scoreSort allQ0.psl allQ0.bscore allProts.psl allProts.bscore
     pslUniq allProts.psl uniqProts.psl
     sort -n --key=16 uniqProts.psl | sort --key=14 | uniq > bestHg16KG.psl
-    cp bestHg16KG.psl blastHg16KG.psl
+    # cp bestHg16KG.psl blastHg16KG.psl
+    protDat bestHg16KG.psl /cluster/data/hg16/bed/blat.*7/hg16KG.psl /cluster/data/hg16/bed/blat.*7/kg.mapNames blastHg16KG.psl
+
     hgLoadPsl ci1 blastHg16KG.psl     
     echo "drop index bin on blastHg16KG ;" | hgsql ci1
     echo "drop index tStart on blastHg16KG ;" | hgsql ci1
     echo "drop index tEnd on blastHg16KG ;" | hgsql ci1
     echo "drop index qName on blastHg16KG ;" | hgsql ci1
-    echo "create index tName on blastHg16KG (tName, bin) ;" | hgsql ci1
-    echo "create index tName_2 on blastHg16KG  (tName, tStart);" | hgsql ci1
-    echo "create index tName_3 on blastHg16KG  (tName, tEnd);" | hgsql ci1
-    echo "create index qName on blastHg16KG  (qName);" | hgsql ci1
+    echo "create index tName on blastHg16KG (tName(13), bin) ;" | hgsql ci1
+    echo "create index tName_2 on blastHg16KG  (tName(13), tStart);" | hgsql ci1
+    echo "create index tName_3 on blastHg16KG  (tName(13), tEnd);" | hgsql ci1
+    echo "create index qName on blastHg16KG  (qName(10));" | hgsql ci1
 
     foreach i ( kg?? )
 	findExons uniqProts.psl ts.$i.psl x.$i.psl xa.$i.psl
