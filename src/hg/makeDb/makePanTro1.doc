@@ -96,7 +96,6 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     para try, para check, para check, para push, para check,...
 
 
-
 # TRF: Tandem Repeat Finder (DONE 2004-01-19 kate)
     # create job list of 5MB chunks
     # Redoing this instead of using the pt0 trf beds, so as to
@@ -642,6 +641,14 @@ cat > jkStuff/hardMaskChrom.csh << 'EOF'
     csh jkStuff/hardMaskChrom.csh >&! jkStuff/hardMaskChrom.log &
     tail -100f jkStuff/hardMaskChrom.log
 
+    # copy to bluearc for cluster runs
+    ssh kksilo
+    cd /cluster/data/panTro1
+    mkdir -p /cluster/bluearc/panTro1/trfFa
+    foreach d (*/chr*_?{,?})
+      cp $d/$d:t.fa /cluster/bluearc/panTro1/trfFa
+    end
+
 
 # DOWNLOADS (IN PROGRESS 2003-01-23 kate)
 
@@ -687,6 +694,63 @@ zip -j zip/chromOut.zip */chr*.fa.out
       tail -1 $f.test
     end
     wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/panTro1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/panTro1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+
+    # quality scores
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cat << '_EOF_' > jkStuff/zipQuals.csh
+foreach f (?{,?}/*.qac)
+    echo $f
+    set b = $f:r
+    echo $b
+    qacToQa $f $b.qa
+end
+rm -rf zip
+mkdir zip
+ehco "zipping zip/chromQuals.zip"
+zip -j zip/chromQuals.zip ?{,?}/chr*.qa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh jkStuff/zipQuals.csh >&! zip/zipQuals.log &
+    tail -100f zip/zipQuals.log
+    #- Look at zipQuals.log to make sure all file lists look reasonable.  
+
+    # cleanup uncompressed quality files
+    rm (?{,?}/chr*.qac)
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/panTro1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/panTro1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+
+    # other downloadables
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cat << '_EOF_' > jkStuff/zipMost.csh
+rm -rf zip
+mkdir zip
+zip -j zip/chromAgp.zip ?{,?}/chr*.agp
+zip -j zip/chromFa.zip ?{,?}/chr?{,?}{,_random}.fa
+zip -j zip/chromFaMasked.zip ?{,?}/chr*.fa.hmsk
+zip -j zip/scaffolds.lft.zip jkStuff/scaffolds.lft
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh jkStuff/zipMost.csh >&! zip/zipMost.log &
+    tail -100f zip/zipMost.log
+    #- Look at zipQuals.log to make sure all file lists look reasonable.  
 
     #- Copy the .zip files to hgwdev:/usr/local/apache/...
     ssh hgwdev
@@ -770,10 +834,14 @@ zip -j zip/chromOut.zip */chr*.fa.out
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
 
 
-# GENSCAN PREDICTIONS (IN PROGRESS - 2004-01-24 kate)
+# GENSCAN PREDICTIONS (IN PROGRESS - 2004-02-11 kate)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/panTro1/bed/genscan
+    cd /cluster/data/panTro1/bed/genscan
+    cvs co hg3rdParty/genscanlinux
 
     ssh kksilo
-    mkdir -p /cluster/data/panTro1/bed/genscan
     cd /cluster/data/panTro1/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir -p gtf pep subopt
@@ -787,7 +855,7 @@ zip -j zip/chromOut.zip */chr*.fa.out
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/home/kate/bin/RH7/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/home/kate/bin/RH7/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1060,7 +1128,7 @@ done
     #	create symlinks for .wib files
     ln -s `pwd`/*.wib /gbdb/panTro1/wib
 
-# HUMAN ALIGNMENTS (IN PROGRESS 2004-02-10 kate)
+# HUMAN ALIGNMENTS (DONE 2004-02-11 kate)
 
     ssh kksilo
     cd /cluster/data/panTro1
@@ -1120,37 +1188,74 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     para try
     para push
 
-    # net the chains
-    ssh kksilo
-    cd /cluster/data/panTro1
-    cd bed/blastz-blatHg16.pt0.swap/pslChain
-cat > net.csh << 'EOF'
-    chainMergeSort run/chain/*.chain | chainPreNet stdin \
-      /cluster/data/panTro1/chrom.sizes /cluster/data/hg16/chrom.sizes stdout\
-            chainNet stdin  -minScore=0 -minSpace=1 \
-                         /cluster/data/panTro1/chrom.sizes  \
-                        /cluster/data/hg16/chrom.sizes ../chimp.net ../human.net
-'EOF'
-    # << this line makes emacs coloring happy
-    csh net.csh >&! net.log &
-    tail -100f net.log
-
-    # load chimp-reference chains and net into the browser
+    # merge chains to give unique chain ID's in preparation for netting
     ssh kksilo
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap
-    chainMergeSort all.chain | chainSplit chain stdin
+    chainMergeSort pslChain/run/chain/*.chain | chainSplit netChain stdin
 
+    # load chains into browser
     ssh hgwdev
     cd /cluster/data/panTro1
-    cd bed/blastz-blatHg16.pt0.swap
-    cd chain
+    cd bed/blastz-blatHg16.pt0.swap/netChain
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain panTro1 ${c}_chainHg16 $i
         echo done $c
     end
-    netSyntenic ../chimp.net stdout | hgLoadNet -warn panTro1 netHg16 stdin
+
+    # net the chains
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/netChain
+    # needs Angie's mod to chainNet to suppress info messages
+cat > net.csh << 'EOF'
+    chainMergeSort -saveId *.chain | \
+        chainPreNet stdin \
+                /cluster/data/panTro1/chrom.sizes \
+                /cluster/data/hg16/chrom.sizes stdout | \
+        ~kate/bin/i386/chainNet stdin -minSpace=1 \
+                /cluster/data/panTro1/chrom.sizes  \
+                /cluster/data/hg16/chrom.sizes stdout /dev/null | \
+        netSyntenic stdin hNoClass.net
+'EOF'
+    # << this line makes emacs coloring happy
+    csh net.csh >&! net.log &
+    tail -100f net.log
+    
+    ssh hgwdev
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/netChain
+    netClass hNoClass.net panTro1 hg16 human.net
+
+    # load net into the browser
+    ssh hgwdev
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/netChain
+    hgLoadNet -warn panTro1 netHg16 human.net
+    rm -r hNoClass.net
+
+    # Make AXT files from the net, for a track that displays alignments at
+    # base level, and for download
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap
+    mkdir chimpNet chimpNetAxt
+    netSplit chimpSyn.2.net chimpNet
+    cd chimpNet
+cat > makeAxt.csh << 'EOF'
+    foreach f (*.net)
+        set i = $f:r
+        echo $i.net
+        netToAxt $i.net ../all.chain \
+                /cluster/data/panTro1/nib /cluster/data/hg16/nib \
+                ../chimpNetAxt/$i.axt
+    end
+'EOF'
+    # << this line makes emacs coloring happy
+    csh -f makeAxt.csh >&! makeAxt.log &
+    tail -100f makeAxt.log
+
 
 
 # Genbank ESTs completed, but needed to redo native ESTs/mRNAs with 
@@ -1167,7 +1272,6 @@ cat > net.csh << 'EOF'
     ssh hgwdev
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
 
-=======
 
 # HUMAN REFSEQ MAPPINGS (Writeup incomplete, in progress jk)
 liftOver ../../../bedOverHg16/refGene2/hg16.refGene.gtf ../../humanTarget.chain new.gtf unmapped.gtf -minMatch=0.5 -gff
