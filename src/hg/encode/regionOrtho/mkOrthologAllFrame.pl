@@ -8,6 +8,30 @@
 
 #use strict;
 
+# countBases <db> <chr> <start> <end>
+#       counts non-N bases in a range
+sub countBases {
+    my ($db, $chr, $start, $end) = @_;
+    my $nibDir;
+    if (-d "/cluster/data/$db/mixedNib") {
+        $nibDir = mixedNib;
+    } elsif (-d "/cluster/data/$db/softNib") {
+        $nibDir = softNib;
+    } elsif (-d "/cluster/data/$db/nib") {
+        $nibDir = nib;
+    } else {
+        die "can't find nib dir for $db\n";
+    }
+
+    my $faSize = 
+            `nibFrag /cluster/data/$db/$nibDir/$chr.nib $start $end + stdout | faSize stdin`;
+    $faSize =~ /.* bases .* N's ([0-9]+) real/;
+    my $bases = $1;
+    return $bases;
+}
+
+# MAIN
+
 @ARGV == 7 or die "usage: mkOrthologFrame <description-file> <position-file> <header-file> <assembly> <consensus-bed-file> <liftOver-bed-file> <Mercator-bed-file>\n";
 my ($descriptionFile, $positionFile, $headerFile, $genome, $consensusFile, $liftOverFile, $MercatorFile) = @ARGV;
 my $baseTracks = "&amp;netHg16=full&amp;refGene=pack&amp;encodeRegionConsensus=full&amp;encodeRegions2=full&amp;encodeRegionMercator=full";
@@ -96,7 +120,7 @@ while (<MERCATOR>) {
 
 # print table header
 print "<table border cellpadding=\"2\">\n";
-print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus <FONT COLOR=green>$genome</FONT><TH>Size (Mb)<TH>Ratio<TH>LiftOver<TH>Size (Mb)<TH>Mercator<TH>Size (Mb)<TH>Diff (Kb)</TR>\n";
+print "<TR><TH>Region<TH>Description<TH>Chr<TH>Size (Mb)<TH>Consensus <FONT COLOR=green>$genome</FONT><TH>Size (Mb)<TH>Ratio<TH>LiftOver<TH>Size (Mb)<TH>Non-N Size<TH>Mercator<TH>Size (Mb)<TH>Non-N Size<TH>Diff (Kb)</TR>\n";
 
 # print table entries
 foreach $region (sort keys %descriptions) {
@@ -140,13 +164,17 @@ foreach $region (sort keys %descriptions) {
         my ($chr, $range) = split (/:/, $LORegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
+        $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
         printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
 		$genome, $LORegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $LOlength = $length;
+    my $LOnonNlength = $LOnonNlength;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TD>\n", $length;
+    $nonNlength = $nonNlength/1000;
+    $nonNlength = $nonNlength/1000;
+    printf "<TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
 
     # Mercator regions in ortholog browser - region links, size, diff
     @parts = split (/,/, $MCRegionParts{$region});
@@ -156,14 +184,18 @@ foreach $region (sort keys %descriptions) {
         my ($chr, $range) = split (/:/, $MCRegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
+        $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
         printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
 		$genome, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $diff = $length - $LOlength;
+    my $nonNdiff = $length - $LOnonNlength;
     $diff = $diff/1000;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TD>\n", $length;
+    $nonNlength = $nonNlength/1000;
+    $nonNlength = $nonNlength/1000;
+    printf "<TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
     printf "<TD ALIGN=right>";
     if ($diff > 100 || $diff < -100) {
         printf("<FONT COLOR=red>");
