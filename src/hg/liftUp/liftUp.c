@@ -54,10 +54,12 @@ struct liftSpec
 /* How to lift coordinates. */
     {
     struct liftSpec *next;	/* Next in list. */
-    char *oldName;		/* Name in source file. */
     int offset;			/* Offset to add. */
+    char *oldName;		/* Name in source file. */
+    int oldSize;                /* Size of old sequence. */
     char *newName;		/* Name in dest file. */
-    int size;                   /* Size of new sequence. */
+    int newSize;                   /* Size of new sequence. */
+    char strand;                /* Strand of contig relative to chromosome. */
     };
 
 struct liftSpec *readLifts(char *fileName)
@@ -71,17 +73,29 @@ struct liftSpec *list = NULL, *el;
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     char *offs;
-    lineFileExpectWords(lf, 5, wordCount);
+    if (wordCount < 5)
+        errAbort("Need at least 5 words line %d of %s", lf->lineIx, lf->fileName);
     offs = words[0];
     if (!isdigit(offs[0]) && !(offs[0] == '-' && isdigit(offs[1])))
 	errAbort("Expecting number in first field line %d of %s", lf->lineIx, lf->fileName);
     if (!isdigit(words[4][0]))
 	errAbort("Expecting number in fifth field line %d of %s", lf->lineIx, lf->fileName);
     AllocVar(el);
-    el->oldName = cloneString(words[1]);
     el->offset = atoi(offs);
+    el->oldName = cloneString(words[1]);
+    el->oldSize = atoi(words[2]);
     el->newName = cloneString(words[3]);
-    el->size = atoi(words[4]);
+    el->newSize = atoi(words[4]);
+    if (wordCount >= 6)
+        {
+	char c = words[5][0];
+	if (c == '+' || c == '-')
+	    el->strand = c;
+	else
+	    errAbort("Expecting + or - field 6, line %d of %s", lf->lineIx, lf->fileName);
+	}
+    else
+        el->strand = '+';
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -112,13 +126,17 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-struct hash *hashLift(struct liftSpec *list)
+struct hash *hashLift(struct liftSpec *list, boolean revOk)
 /* Return a hash of the lift spec. */
 {
 struct hash *hash = newHash(0);
 struct liftSpec *el;
 for (el = list; el != NULL; el = el->next)
+    {
+    if (!revOk && el->strand != '+')
+        errAbort("Can't lift from minus strand contigs (like %s) on this file type", el->oldName);
     hashAdd(hash, el->oldName, el);
+    }
 return hash;
 }
 
@@ -243,7 +261,7 @@ for (i=0; i<sourceCount; ++i)
 	    {
 	    begin += spec->offset;
 	    end += spec->offset;
-	    left = spec->size - end;
+	    left = spec->newSize - end;
 	    newName = spec->newName;
 	    }
 	sprintf(leftString, "(%d)", left);
@@ -359,7 +377,7 @@ for (i=0; i<sourceCount; ++i)
 		    {
 		    int tr = seqSize - starts[j];
 		    tr += offset;
-		    starts[j] = spec->size - tr;
+		    starts[j] = spec->newSize - tr;
 		    }
 		}
 	    else
@@ -369,12 +387,12 @@ for (i=0; i<sourceCount; ++i)
 		}
 	    if (querySide)
 	        {
-		psl->qSize = spec->size;
+		psl->qSize = spec->newSize;
 		psl->qName = spec->newName;
 		}
 	    else
 	        {
-		psl->tSize = spec->size;
+		psl->tSize = spec->newSize;
 		psl->tName = spec->newName;
 		}
 	    }
@@ -541,7 +559,8 @@ return m;
 void liftTabbed(char *destFile, struct hash *liftHash, 
    int sourceCount, char *sources[],
    int ctgWord, int startWord, int endWord, 
-   boolean doubleLift, int ctgWord2, int startWord2, int endWord2)
+   boolean doubleLift, int ctgWord2, int startWord2, int endWord2,
+   int startOffset, int strandWord)
 /* Generic lift a tab-separated file with contig, start, and end fields. */
 {
 int minFieldCount = max3(startWord, endWord, ctgWord) + 1;
@@ -596,6 +615,20 @@ for (i=0; i<sourceCount; ++i)
 	else
 	    {
 	    chrom = spec->newName;
+	    if (spec->strand == '-')
+		{
+		int s = start - startOffset,  e = end;
+		start = spec->oldSize - e + startOffset;
+		end = spec->oldSize - s;
+		if (strandWord >= 0 && strandWord < wordCount)
+		    {
+		    char strand = words[strandWord][0];
+		    if (strand == '+')
+		        words[strandWord] = "-";
+		    else if (strand == '-')
+		        words[strandWord] = "+";
+		    }
+		}
 	    start += spec->offset;
 	    end += spec->offset;
 	    }
@@ -668,19 +701,19 @@ void liftBed(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
  * separated file where first three fields are 
  * seq, start, end.  This also sorts the result. */
 {
-liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0);
+liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0, 0, 5);
 }
 
 void liftGff(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift up coordinates of a .gff or a .gtf file. */
 {
-liftTabbed(destFile, liftHash, sourceCount, sources, 0, 3, 4, FALSE, 0, 0, 0);
+liftTabbed(destFile, liftHash, sourceCount, sources, 0, 3, 4, FALSE, 0, 0, 0, 1, 6);
 }
 
 void liftGdup(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift up coordinates of a .gdup. */
 {
-liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 6, 7, 8);
+liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 6, 7, 8, 1, -1);
 }
 
 
@@ -778,49 +811,49 @@ lifts = readLifts(liftFile);
 if (endsWith(destType, ".out"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftOut(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftPsl(destFile, liftHash, sourceCount, sources, 
     	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl"));
     }
 else if (endsWith(destType, ".agp"))
     {
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftAgp(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".gl"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftGl(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".gff") || endsWith(destType, ".gtf"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, TRUE);
     liftGff(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".gdup"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftGdup(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".bed"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
     }
 else if (strstr(destType, "gold"))
     {
     rmChromPart(lifts);
-    liftHash = hashLift(lifts);
+    liftHash = hashLift(lifts, FALSE);
     liftAgp(destFile, liftHash, sourceCount, sources);
     }
 else 
