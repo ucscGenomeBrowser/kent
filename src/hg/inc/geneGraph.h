@@ -139,8 +139,6 @@ struct ggMrnaInput *ggGetMrnaForBac(char *bacAcc);
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 /* Make a list of clusters from ci. */
 
-
-
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 
@@ -196,7 +194,7 @@ boolean matricesInSync(struct geneGraph *gg);
 /* return TRUE if edge and evidence matrices are in synch, FALSE otherwise */
 
 boolean checkEvidenceMatrix(struct geneGraph *gg);
-/* check to make sure that now edge has more weight than possible */
+/* check to make sure that no edge has more weight than possible */
 
 void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc);
 /* load up the library and tissue information for mrnas. */
