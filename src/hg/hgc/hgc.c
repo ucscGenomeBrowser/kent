@@ -5386,7 +5386,7 @@ char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
-cartWebStart(cart, "Recombination Rate based on deCODE Genetic Map");
+cartWebStart(cart, "Recombination Rates");
 
 
 /* Find the instance of the object in the bed table */ 
