@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.14 2004/07/14 23:15:09 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.15 2004/07/14 23:23:27 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,7 @@ struct optionSpec options[] = {
    {"minScore", OPTION_INT},
    {"minOutSize", OPTION_INT},
    {"matrix", OPTION_STRING},
+   {"quiet", OPTION_BOOLEAN},
    {NULL,0}
 };
 
@@ -45,6 +46,7 @@ struct optionSpec options[] = {
 int winSize = 10000;
 int minScore = 1000;
 int minOutSize = 10;
+bool quiet = FALSE;
 
 /* Variables to keep statistics on aligments. */
 int writeCount = 0;	/* Keep track of number actually written. */
@@ -360,13 +362,15 @@ struct axt *axt, *nextAxt, *goodList = NULL;
 int i;
 if (axtList == NULL)
     {
-    //printf("Empty %s\n", inName);
+    if (!quiet)
+        printf("Empty %s\n", inName);
     return;
     }
 chromRange(axtList, &chromStart, &chromEnd);
 rangeSize = chromEnd - chromStart;
 bk = bestKeepNew(chromStart, chromEnd);
-//printf("Allocated %d elements in array\n", rangeSize);
+if (!quiet)
+    printf("Allocated %d elements in array\n", rangeSize);
 
 
 /* Find local best in big soft window and get rid of
@@ -393,8 +397,8 @@ for (axt = axtList; axt != NULL; axt = nextAxt)
     }
 slReverse(&goodList);
 axtList = NULL;
-//printf("%d elements in after soft filter.\n", slCount(goodList));
-
+if (!quiet)
+    printf("%d elements in after soft filter.\n", slCount(goodList));
 
 /* Find local best alignments in big hard window and
  * output them. */
@@ -432,12 +436,16 @@ if (sameString(chromName,"all"))
 else
     {
     axtList = readAllAxt(inName, ss, minScore, chromName);
-    printf("Read %d elements from %s\n", slCount(axtList), inName);
+    if (!quiet)
+        printf("Read %d elements from %s\n", slCount(axtList), inName);
     axtBestList(axtList, inName, ss, f);
     }
-printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
-printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
-	100.0 * baseOutCount / baseInCount);
+if (!quiet)
+    {
+    printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+    printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+            100.0 * baseOutCount / baseInCount);
+    }
 }
 
 
@@ -447,6 +455,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+quiet = optionExists("quiet");
 winSize = optionInt("winSize", winSize);
 minScore = optionInt("minScore", minScore);
 minOutSize = optionInt("minOutSize", minOutSize);
