@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.11 2004/09/05 18:27:07 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.12 2004/09/18 00:38:45 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -278,7 +278,7 @@ tabFh = mustOpen(tabFile, "w");
  * of "n/a" */
 safef(query, sizeof(query),
       "SELECT cds.name,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts "
-      "FROM cds,%s,mrna WHERE (%s.qName = mrna.acc) AND (mrna.cds = cds.id)",
+      "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
       MGC_FULL_MRNA_TMP, MGC_FULL_MRNA_TMP);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
