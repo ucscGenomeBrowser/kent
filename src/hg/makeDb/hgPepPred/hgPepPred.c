@@ -13,7 +13,12 @@ errAbort(
   "hgPepPred - Load peptide predictions from Ensembl or Genie\n"
   "usage:\n"
   "   hgPepPred database type file(s)\n"
-  "where type is either 'ensembl' or 'genie' or 'softberry'");
+  "where type is either 'ensembl' or 'genie' or 'softberry'\n"
+  "or\n"
+  "   hgPepPred database generic table files(s)\n"
+  "which will load the given table assuming the peptide name is\n"
+  "in the fasta record"
+  );
 }
 
 
@@ -50,7 +55,7 @@ char *createString =
 "    name varchar(255) not null,	# Name of gene - same as in genePred\n"
 "    seq longblob not null,	# Peptide sequence\n"
 "              #Indices\n"
-"    PRIMARY KEY(name)\n"
+"    PRIMARY KEY(name(32))\n"
 ")\n";
 
 char *findEnsTrans(struct lineFile *lf, char *line)
@@ -287,6 +292,8 @@ else if (sameWord(type, "genie"))
     geniePepPred(argv[1], argc-3, argv+3);
 else if (sameWord(type, "softberry"))
     softberryPepPred(argv[1], argc-3, argv+3);
+if (sameWord(type, "generic"))
+    genericPepPred(argv[1], argc-4, argv+4, argv[3]);
 else
     usage();
 return 0;
