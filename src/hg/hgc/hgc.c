@@ -3904,18 +3904,6 @@ geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProte
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 printTrackHtml(tdb);
-
-/*puts(
-   "<P>RefSeq genes are derived from the "
-   "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/refseq.html\" TARGET=_blank>"
-   "RefSeq</A> mRNA database. "
-   "These mRNAs were mapped to the draft "
-   "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
-   "Jim Kent's</A> BLAT software.</P>\n");
-puts(
-   "<P>Additional information may be available by clicking on the "
-   "mRNA associated with this gene in the main browser window.</P>");
-*/
 hFreeConn(&conn);
 }
 
