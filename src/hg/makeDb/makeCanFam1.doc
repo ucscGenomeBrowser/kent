@@ -276,6 +276,36 @@ while (<>) {
     hgsql canFam1 -e "create table chrM_gap select * from chr1_gap where 0=1"
 
 
+# ACCESSIONS FOR CONTIGS (DONE 2004-09-15 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/canFam1/bed
+    mkdir -p contigAcc
+    cd contigAcc
+
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, file, and click "send to".
+    # output to file <species>.acc
+    # 59927 items
+
+    contigAccession dog.acc > contigAcc.tab
+        #  59927 contigAcc.tab
+    wc -l contigAcc.tab
+    
+    # verify this corresponds with the Assembly table
+    # get summary stats for chrN_gold, using table browser 
+    # items matching query    59927 
+
+    # load into database
+    hgsql canFam1 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql canFam1
+    hgsql canFam1 -e "SELECT COUNT(*) FROM contigAcc"
+
+
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CANFAM1 (DONE 7/7/04 angie)
     ssh hgwdev
     # Make trackDb table so browser knows what tracks to expect:
