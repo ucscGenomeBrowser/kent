@@ -12,7 +12,7 @@
 #include "axtInfo.h"
 #include "gff.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.6 2003/06/11 21:38:49 baertsch Exp $";
+static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.7 2003/07/14 19:14:48 baertsch Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 
@@ -713,7 +713,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 
     verifyAlist(axtList);
-    safef(chainIdStr,sizeof(chainStr),"%d",chainId);
+    safef(chainIdStr,sizeof(chainIdStr),"%d",chainId);
     /*gp = genePredLoad(row + hasBin);*/
     AllocVar(gp);
     gp->exonCount = sqlUnsigned(row[7]);
