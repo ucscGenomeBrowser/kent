@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.16 2003/10/15 20:33:19 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.17 2003/11/07 01:03:06 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -47,6 +47,11 @@ struct wigItem
     unsigned Count;     /* number of values to use */
     unsigned Offset;    /* offset in File to fetch data */
     char *File; /* path name to data file, one byte per value */
+    double lowerLimit;  /* lowest data value in this block */
+    double dataRange;   /* lowerLimit + dataRange = upperLimit */
+    unsigned validCount;        /* number of valid data values in this block */
+    double average;     /* average of the data valeus, we may need this later */
+    double stddev;      /* standard deviation, we may need this later */
     };
 
 static void wigItemFree(struct wigItem **pEl)
@@ -81,6 +86,7 @@ for (el = *pList; el != NULL; el = next)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
+#if defined(DEBUG)
 /****           some simple debug output during development	*/
 static char dbgFile[] = "/tmp/wig.dbg";
 static boolean debugOpened = FALSE;
@@ -108,6 +114,7 @@ if (debugOpened)
     dbgMsg[0] = (char) NULL;
     fflush(dF);
 }
+#endif
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -286,6 +293,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->Span = wiggle->Span;
 	wi->Count = wiggle->Count;
 	wi->Offset = wiggle->Offset;
+	wi->lowerLimit = wiggle->lowerLimit;
+	wi->dataRange = wiggle->dataRange;
+	wi->validCount = wiggle->validCount;
+	wi->average = wiggle->average;
+	wi->stddev = wiggle->stddev;
 
 	el = hashLookup(trackSpans, wi->name);
 	if ( el == NULL)
@@ -306,7 +318,7 @@ tg->items = wiList;
 }	/*	wigLoadItems()	*/
 
 static void wigFreeItems(struct track *tg) {
-#ifdef DEBUG
+#if defined(DEBUG)
 snprintf(dbgMsg, DBGMSGSZ, "I haven't seen wigFreeItems ever called ?");
 wigDebugPrint("wigFreeItems");
 #endif
