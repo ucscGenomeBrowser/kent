@@ -326,6 +326,11 @@ if (totalPsl->strand[1] == '-')
     psl.tEnd = psl.tSize - psl.tStarts[0];
     psl.tStart = psl.tSize - (psl.tStarts[blockNum - 1] + 3*psl.blockSizes[blockNum - 1]);
     }
+else
+    {
+    psl.tStart = psl.tStarts[0];
+    psl.tEnd = psl.tStarts[blockNum - 1] + 3*psl.blockSizes[blockNum - 1];
+    }
 pslTabOut(&psl, outFile);
 }
 
