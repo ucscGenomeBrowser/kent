@@ -18,6 +18,36 @@ scoreMin 900
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
+track regPotential3X
+shortLabel 3x Reg Potential
+longLabel 3-Way Regulatory Potential - Human, Mouse (May 2004/mm5), Rat (June 2003/rn3)
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.413 0.68
+
+track regPotential2X
+shortLabel 2x Reg Potential
+longLabel 2-Way Regulatory Potential - Human (hg17), Mouse (May 2004/mm5)
+group regulation
+priority 91.1
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.285 0.53
+
 track multiz8way
 shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
@@ -755,4 +785,3 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
-
