@@ -659,16 +659,16 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+printf("<SELECT ALIGN=CENTER NAME=\"%s\">\n", name);
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
-    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
-printf("</SELECT>");
+printf("</SELECT>\n");
 }
 
 void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length)
@@ -679,16 +679,16 @@ void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int 
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT MULTIPLE SIZE=%d ALIGN=CENTER NAME=\"%s\">", length, name);
+printf("<SELECT MULTIPLE SIZE=%d ALIGN=CENTER NAME=\"%s\">\n", length, name);
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
-    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
-printf("</SELECT>");
+printf("</SELECT>\n");
 }
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], 
@@ -701,11 +701,11 @@ if (checked == NULL) checked = menu[0];
 
 if (NULL != extraAttribs)
     {
-    printf("<SELECT NAME=\"%s\" %s>", name, extraAttribs);
+    printf("<SELECT NAME=\"%s\" %s>\n", name, extraAttribs);
     }
 else
     {
-    printf("<SELECT NAME=\"%s\">", name);
+    printf("<SELECT NAME=\"%s\">\n", name);
     }
 
 for (i=0; i<menuSize; ++i)
@@ -714,9 +714,9 @@ for (i=0; i<menuSize; ++i)
         selString = " SELECTED";
     else
         selString = "";
-    printf("<OPTION%s VALUE=\"%s\">%s</OPTION>", selString, values[i], menu[i]);
+    printf("<OPTION%s VALUE=\"%s\">%s</OPTION>\n", selString, values[i], menu[i]);
     }
-printf("</SELECT>");
+printf("</SELECT>\n");
 }
 
 
