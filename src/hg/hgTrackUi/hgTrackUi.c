@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.78 2004/01/09 22:09:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.79 2004/01/12 22:26:17 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -418,27 +418,27 @@ horizontalGrid = cartUsualString(cart, &options[7][0], "OFF");
 lineBar = cartUsualString(cart, &options[8][0], "Bar");
 autoScale = cartUsualString(cart, &options[9][0], "Auto-Scale to data view");
 
-printf("<TABLE BORDER=0><TR><TD>\n");
+printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
-printf("<b>Type of graph: </b> ");
+printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar );
-printf("</TD><TD>\n");
+printf("</TD><TD ALIGN=LEFT>\n");
 
-printf("<b>Show y=0.0 line: </b> ");
+printf("<b>Show y=0.0 line:&nbsp;</b>");
 wiggleGridDropDown(&options[7][0], horizontalGrid );
-printf(" </TD></TR><TR><TD COLSPAN=2>\n");
+printf(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
-printf("<b>Track Height</b>:&nbsp;&nbsp;");
+printf("<b>Track height:&nbsp;</b>");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
 printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)",
 	MIN_HEIGHT_PER, maxHeightPixels);
-printf("</TD></TR><TR><TD COLSPAN=2>\n");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
-printf("<b>Vertical Viewing Range</b>:&nbsp;&nbsp;\nmin:");
+printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
 cgiMakeDoubleVar(&options[4][0], minYc, 6 );
-printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
-printf("&nbsp;&nbsp;&nbsp;&nbsp;Data view scaling:");
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>Data view scaling:&nbsp;</b>");
 wiggleScaleDropDown(&options[9][0], autoScale );
 printf("<BR>(data range limits:&nbsp;[%g:%g])", minY, maxY);
 printf("</TD></TR></TABLE>\n");
