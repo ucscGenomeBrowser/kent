@@ -543,6 +543,7 @@ SEQ2_LEN=$BASE/S2.len
   cp /cluster/data/galGal2/chrom.sizes $BASE/S1.len
   cp /cluster/data/xenTro1/chrom.sizes $BASE/S2.len
   /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  # (Next time use /cluster/bin/scripts/blastz-make-joblist instead)
   sh ./xdir.sh
   cd run.0
   sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
