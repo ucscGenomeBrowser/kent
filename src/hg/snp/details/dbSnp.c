@@ -1,5 +1,4 @@
 /* dbSnp.c - prepare details for snps from dbSnp */
-
 #include "common.h"
 #include "errabort.h"
 #include "linefile.h"
@@ -12,11 +11,11 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.8 2004/02/13 07:40:12 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.9 2004/02/14 01:27:40 daryl Exp $";
 
-#define FLANK  20
-#define ALLELE 80
-#define REGION ((FLANK*2)+ALLELE)
+#define FLANK  20                 /* Amount of flanking sequence on each side */
+#define ALLELE 210                /* Maximum supported allele length */
+#define REGION ((FLANK*2)+ALLELE) /* Maximum length of the region */
 
 void usage()
 /* Explain usage and exit. */
@@ -24,8 +23,11 @@ void usage()
 errAbort("dbSnp - Get the top strand allele from the current assembly\n"
 	 "based on a specification file including the rs#s for the SNPs.\n"
 	 "Use getObsHet to parse dbSnp XML files into correct input format.\n"
-	 "Usage:\n  \tdbSnp database infile     outfile     errorfile >& logfile &\n"
-	 "Example:\n\tdbSnp hg16     dbSnpInput dbSnpOutput dbSnp.err >& dnSnpLog &\n");
+	 "Usage:\n  \tdbSnp database fileBase          >& logfile &\n"
+	 "Example:\n\tdbSnp hg16     dbSnpRsHg16Snp119 >& dnSnpLog &\n"
+	 "\nwhere\tfileBase.obs is read as input, "
+	 "\n\tfileBase.out is output, and "
+	 "\n\tfileBase.err shows failures.\n");
 }
 
 struct dbInfo
@@ -66,11 +68,12 @@ struct fileInfo
 enum snpMatchType
 /* How a snp from the XML files agrees with the assembly */
 {
-    smtNoMatch     = 0, /* No match */
-    smtObserved    = 1, /* Matches observed */
-    smtAlternate   = 2, /* Matches alternate */
-    smtObservedRC  = 3, /* Matches observed reverse complement */
-    smtAlternateRC = 4, /* Matches alternate reverse complement*/
+    smtAlleleError = -1, /* Oversized alleles */
+    smtNoMatch     =  0, /* No match */
+    smtObserved    =  1, /* Matches observed */
+    smtAlternate   =  2, /* Matches alternate */
+    smtObservedRC  =  3, /* Matches observed reverse complement */
+    smtAlternateRC =  4, /* Matches alternate reverse complement*/
 };
 
 struct slName *getChromList()
@@ -295,8 +298,10 @@ int obslen     = strlen(fi->observed);
 int altlen     = strlen(fi->alternate);
 int gaplen     = getGapLen(fi->allele1);
 
+if (allele1len>ALLELE) 
+    return smtAlleleError; /* Allele too big to fit in database */
 /* start comparisons to determine reference and alternate alleles in browser */
-if      (!strncmp(fi->obsLow, region+FLANK-seq5len+gaplen, obslen-allele1len))
+else if (!strncmp(fi->obsLow, region+FLANK-seq5len+gaplen, obslen-allele1len))
     return smtObserved; /* database matches observed */
 else if (!strncmp(fi->altLow, region+FLANK-seq5len, altlen-allele2len))
     { /* database matches alternate - swap observed and alternate */
@@ -408,6 +413,7 @@ struct hash      *snpHash = NULL; /* stores all SNPs from the database */
 unsigned long int inputSnpCount    = 0; /* snp and error counters */
 unsigned long int notFoundInDb     = 0;
 unsigned long int sequenceMismatch = 0;
+unsigned long int largeAlleles     = 0;
 struct dbInfo     *db; /* SNP information from the database */
 struct fileInfo   *fi; /* SNP information from the input file */
 enum snpMatchType matchType = smtNoMatch;
@@ -426,8 +432,13 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	{
 	matchType = findMatch(fi, db->region);
 	resetGaps(fi);
-	if (matchType != smtNoMatch) /* match was found between database and file */
+	if (matchType > smtNoMatch) /* match was found between database and file */
 	    printOut(f, fi);
+	else if (matchType == smtAlleleError)
+	    {
+	    largeAlleles++;
+	    fprintf(e, "%s has an oversized allele (length > %d)",fi->rsId, ALLELE);
+	    }
 	else /* failed to find a match */
 	    {
 	    sequenceMismatch++;
@@ -444,25 +455,26 @@ printf("Error file:           %s\n",  errors);
 printf("\nTotal SNPs:         %ld\n", inputSnpCount);
 printf("SNPs not in database: %ld\n", notFoundInDb);
 printf("Flank Mismatches:     %ld\n", sequenceMismatch);
-printf("SNPs with details:    %ld\n", inputSnpCount-notFoundInDb-sequenceMismatch);
+printf("Large Alleles (>%dbp) %ld\n", ALLELE, largeAlleles);
+printf("SNPs with details:    %ld\n", inputSnpCount-notFoundInDb-sequenceMismatch-largeAlleles);
 }
 
 int main(int argc, char *argv[])
 /* error check, process command line input, and call getSnpDetails */
 {
 char *database;
-char *input;
-char *output;
-char *errorFile;
-if (argc != 5)
+char  input[64];
+char  output[64];
+char  errors[64];
+if (argc != 3)
     {
     usage();
     return 1;
     }
-database  = argv[1];
-input     = argv[2];
-output    = argv[3];
-errorFile = argv[4];
-getSnpDetails(database, input, output, errorFile);
+database = argv[1];
+sprintf(input,  "%s.obs",argv[2]);
+sprintf(output, "%s.out",argv[2]);
+sprintf(errors, "%s.err",argv[2]);
+getSnpDetails(database, input, output, errors);
 return 0;
 }
