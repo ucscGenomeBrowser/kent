@@ -4,7 +4,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgsqldump.c,v 1.2 2003/09/08 21:24:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgsqldump.c,v 1.3 2004/08/19 19:11:37 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,10 +38,11 @@ while ((c = *s++) != 0)
 return FALSE;
 }
 
-void hgsqldump(int argc, char *argv[])
+int hgsqldump(int argc, char *argv[])
 /* hgsqldump - Execute mysqldump using passwords from .hg.conf. */
 {
 int i;
+int rc;
 struct dyString *command = newDyString(1024);
 char *password = cfgOption("db.password");
 char *user = cfgOption("db.user");
@@ -56,7 +57,8 @@ for (i=0; i<argc; ++i)
     if (hasSpace)
 	dyStringAppendC(command, '\'');
     }
-system(command->string);
+rc = system(command->string);
+return(WEXITSTATUS(rc));
 }
 
 int main(int argc, char *argv[])
@@ -64,6 +66,5 @@ int main(int argc, char *argv[])
 {
 if (argc <= 1)
     usage();
-hgsqldump(argc-1, argv+1);
-return 0;
+return(hgsqldump(argc-1, argv+1));
 }

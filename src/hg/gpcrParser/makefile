@@ -8,10 +8,6 @@ MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 #JKLIBDIR = ${JKSRCDIR}/lib/${MACHTYPE}
 # MYLIBS =  ${JKLIBDIR}/jkhgap.a ${JKLIBDIR}/jkweb.a
 
-#.c.o:
-#	${CC} ${COPT} ${CFLAGS} -Wimplicit -I${JKSRCDIR}/inc -I${JKSRCDIR}/hg/inc -c $*.c
-
-
 O = gpcrParser.o
 
 gpcrParser: $O 

@@ -63,7 +63,16 @@ lnkColumn name
 proColumn name
 
 
-#name C.intestinalis
+name C.intestinalis
+
+name ci1
+method 1
+dna xenoRefGene
+lnk refLink
+pro 
+dnaColumn name
+lnkColumn mrnaAcc
+proColumn name
 
 
 name D.melanogaster

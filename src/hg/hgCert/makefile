@@ -1,11 +1,5 @@
 
-# For performance
-#.c.o:
-#	${CC} ${COPT} ${CFLAGS} -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
-
-#For debugging:
-.c.o:
-	${CC} ${COPT} ${CFLAGS} -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+include ../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)

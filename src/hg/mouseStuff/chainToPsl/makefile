@@ -1,5 +1,4 @@
-.c.o:
-	${CC} ${COPT} ${CFLAGS} -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+include ../../../inc/common.mk
 
 L = -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
