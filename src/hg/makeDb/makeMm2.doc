@@ -348,13 +348,13 @@ o - Load into the database as so:
      hgLoadBed mm2 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (done 6/3/02 - pep 6/7/02)
+TWINSCAN GENE PREDICTIONS (done 6/10/02)
 
     mkdir -p ~/mm2/bed/twinscan
     cd ~/mm2/bed/twinscan
-    wget http://genes.cs.wustl.edu/mouse/AllChr.tgz
+    wget http://genes.cs.wustl.edu/mouse/Gtf.tgz
     wget http://genes.cs.wustl.edu/mouse/Ptx.tgz
-    gunzip -c AllChr.tgz | tar xvf -
+    gunzip -c Gtf.tgz | tar xvf -
     gunzip -c Ptx.tgz | tar xvf -
     ldHgGene mm2 twinscan chr*.gtf -exon=CDS
     - pare down to id:
