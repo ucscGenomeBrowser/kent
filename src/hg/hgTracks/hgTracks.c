@@ -556,14 +556,20 @@ if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
 }
+
 void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 int i;
-int x1 = round((double)(chromStart-winStart)*scale) + xOff;
-int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-int w = x2-x1;
+int x1, x2, w;
+
+x1 = round((double)(chromStart-winStart)*scale) + xOff;
+x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+if (x2 >= MAXPIXELS)
+    x2 = MAXPIXELS - 1;
+w = x2-x1;
+
 if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
