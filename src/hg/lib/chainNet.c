@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.8 2003/08/13 04:39:31 kent Exp $";
 
 struct cnFill *cnFillNew()
 /* Return fill structure with some basic stuff filled in */
@@ -259,5 +259,31 @@ net->size = lineFileNeedNum(lf, words, 2);
 net->nameHash = hashNew(6);
 net->fillList = cnFillRead(net, lf);
 return net;
+}
+
+
+static void rMarkUsed(struct cnFill *fillList, Bits *bits, int maxId)
+/* Recursively mark bits that are used. */
+{
+struct cnFill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    if (fill->chainId != 0)
+	{
+	if (fill->chainId >= maxId)
+	    errAbort("chainId %d, can only handle up to %d", 
+	    	fill->chainId, maxId);
+        bitSetOne(bits, fill->chainId);
+	}
+    if (fill->children != NULL)
+	rMarkUsed(fill->children, bits, maxId);
+    }
+}
+
+void chainNetMarkUsed(struct chainNet *net, Bits *bits, int bitCount)
+/* Fill in a bit array with 1's corresponding to
+ * chainId's used in net file. */
+{
+rMarkUsed(net->fillList, bits, bitCount);
 }
 

@@ -4,6 +4,10 @@
 #ifndef CHAINNET_H
 #define CHAINNET_H
 
+#ifndef BITS_H
+#include "bits.h"
+#endif
+
 struct chainNet
 /* A net on one chromosome. */
     {
@@ -79,6 +83,10 @@ struct cnFill *cnFillFromLine(struct hash *nameHash,
 
 void cnFillWrite(struct cnFill *fillList, FILE *f, int depth);
 /* Recursively write out fill list. */
+
+void chainNetMarkUsed(struct chainNet *net, Bits *bits, int bitCount);
+/* Fill in a bit array with 1's corresponding to
+ * chainId's used in net file. */
 
 #endif /* CHAINNET_H */
 
