@@ -35,6 +35,10 @@ struct section
     /* Some section-specific data. */
     char *raFile;	/* Ra file to load additional info from. */
     void *items;	/* Some list of items. */
+
+    /* Domain specific stuff. */
+    struct slName *pfamDomains;
+    struct slName *interproDomains;
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -73,6 +77,14 @@ struct section *altSpliceSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create altSplice section. */
 
+struct section *domainsSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create domains section. */
+
+struct section *pathwaysSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create pathways section. */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
@@ -103,11 +115,11 @@ void hPrintLinkCellStart();
 void hPrintLinkCellEnd();
 /* Print link cell end in our colors. */
 
+void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
+/* Fill out partially empty last row. */
+
 struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 /* Read in ra in root, root/org, and root/org/database. */
-
-char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId);
-/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.*/
 
 int gpRangeIntersection(struct genePred *gp, int start, int end);
 /* Return number of bases range start,end shares with genePred. */
@@ -144,4 +156,5 @@ extern char *curGeneName;		/* Biological name of gene. */
 extern char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
-
+struct sqlConnection *spConn;	/* Connection to SwissProt database. */
+char *swissProtAcc;		/* SwissProt accession (may be NULL). */

@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.10 2003/10/13 04:48:27 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.11 2003/10/14 06:29:54 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -27,6 +27,8 @@ char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
+struct sqlConnection *spConn;	/* Connection to SwissProt database. */
+char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 
 
 void usage()
@@ -81,24 +83,20 @@ if (!sameString(name, "global"))
 genomeSettings = hash;
 }
 
-char *swissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, char *geneId)
+static char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, 
+	char *geneId)
 /* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
  * spConn is existing SwissProt database conn.  May be NULL. */
 {
 char *proteinSql = genomeSetting("proteinSql");
 char query[256];
 char *someAcc, *primaryAcc = NULL;
-struct sqlConnection *lConn = NULL;
 safef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL)
     return NULL;
-if (spConn == NULL)
-    spConn = lConn = sqlMayConnect("swissProt");
-if (spConn != NULL)
-    primaryAcc = spFindAcc(spConn, someAcc);
+primaryAcc = spFindAcc(spConn, someAcc);
 freeMem(someAcc);
-sqlDisconnect(&lConn);
 return primaryAcc;
 }
 
@@ -174,6 +172,20 @@ void hPrintLinkCellEnd()
 /* Print link cell end in our colors. */
 {
 hPrintf("</TD>");
+}
+
+void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
+/* Fill out partially empty last row. */
+{
+if (rowIx != 0 && itemPos < maxPerRow)
+    {
+    int i;
+    for (i=itemPos; i<maxPerRow; ++i)
+        {
+	hPrintLinkCellStart();
+	hPrintLinkCellEnd();
+	}
+    }
 }
 
 
@@ -305,7 +317,8 @@ addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(domainsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 
 slSort(&sectionList, sectionCmpPriority);
@@ -316,24 +329,32 @@ void printIndex(struct section *sectionList)
 /* Print index to section. */
 {
 int maxPerRow = 6, itemPos = 0;
+int rowIx = 0;
 struct section *section;
 
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
 hPrintLinkTableStart();
+#ifdef SOMETIMES
+hPrintf("<TD BGCOLOR=\"#000000\"><FONT COLOR=\"#D9E4F8\">&nbsp;&nbsp;Index&nbsp;&nbsp;</FONT></TD>");
+itemPos += 1;
+#endif /* SOMETIMES */
 for (section=sectionList; section != NULL; section = section->next)
     {
     if (++itemPos > maxPerRow)
         {
-	hPrintLinkTableEnd();
-	hPrintLinkTableStart();
+	hPrintf("</TR><TR>");
+	// hPrintLinkTableEnd();
+	// hPrintLinkTableStart();
 	itemPos = 1;
+	++rowIx;
 	}
     hPrintLinkCellStart();
     hPrintf("<A HREF=\"#%s\" class=\"toc\">%s</A>", 
     	section->name, section->shortLabel);
     hPrintLinkCellEnd();
     }
+hFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
 hPrintLinkTableEnd();
 }
 
@@ -447,6 +468,8 @@ getGenomeSettings();
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
+spConn = sqlConnect("swissProt");
+swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
 /* Check command variables, and do the ones that
  * don't want to put up the hot link bar etc. */
@@ -457,7 +480,7 @@ else if (cartVarExists(cart, hggDoGetProteinSeq))
 else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Gene %s Details", genome, curGeneName);
+    cartWebStart(cart, "%s Gene %s Description and Index", genome, curGeneName);
     webMain(conn);
     cartWebEnd();
     }

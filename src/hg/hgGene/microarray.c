@@ -89,8 +89,9 @@ for (ra = raList; ra != NULL; ra = raNext)
     char *type = nextWord(&s);
     raNext = ra->next;
 
-    if (sameString("expRatio", type) || sameString("expMulti", type))
+    if ((sameString("expRatio", type) || sameString("expMulti", type)) && !hashLookup(ra, "hgGeneHide"))
         {
+	char *name = hashMustFindVal(ra, "name");
 	char *lookup = nextWord(&s);
 	char *probe;
 	if (lookup == NULL)
@@ -190,7 +191,6 @@ char *dupe = NULL, *s;
 char *expTable, *ratioTable, *absTable, *repString;
 int representativeCount, *representatives = NULL;
 
-uglyf("absoluteMax = %f<BR>\n", absoluteMax);
 if (subType == NULL)
     {
     subName = "all";

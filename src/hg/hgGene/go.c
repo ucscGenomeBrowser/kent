@@ -12,7 +12,7 @@ static boolean goExists(struct section *section,
 /* Return TRUE if GO database exists and has something
  * on this one. */
 {
-return swissProtAcc(conn, NULL, geneId) != NULL 
+return swissProtAcc != NULL 
 	&& sqlDatabaseExists("go") && sqlTableExists(conn, "go.goaPart");
 }
 
@@ -21,7 +21,7 @@ static void goPrint(struct section *section,
 /* Print out GO annotations. */
 {
 struct sqlConnection *goConn = sqlConnect("go");
-char *acc = swissProtAcc(conn, NULL, geneId);
+char *acc = swissProtAcc;
 char query[512];
 struct sqlResult *sr;
 char **row;

@@ -197,16 +197,7 @@ for (link = linkList; link != NULL; link = link->next)
 	freez(&url);
 	}
     }
-if (rowIx != 0 && itemPos < maxPerRow)
-/* Fill out partially empty last row. */
-    {
-    int i;
-    for (i=itemPos; i<maxPerRow; ++i)
-        {
-	hPrintLinkCellStart();
-	hPrintLinkCellEnd();
-	}
-    }
+hFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
 hPrintLinkTableEnd();
 }
 

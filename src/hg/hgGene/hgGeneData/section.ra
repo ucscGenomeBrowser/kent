@@ -8,11 +8,6 @@ shortLabel Sequence
 longLabel Sequence
 priority 20
 
-name otherOrgs
-shortLabel Other Species
-longLabel Homologous Genes in Other Species (BLASTP Best Hit)
-priority 30
-
 name microarray
 shortLabel Microarray
 longLabel Microarray Expression Data
@@ -33,6 +28,11 @@ shortLabel Alt-splicing
 longLabel Alternative Splicing
 priority 70
 
+name otherOrgs
+shortLabel Other Species
+longLabel Homologous Genes in Other Species (BLASTP Best Hit)
+priority 75
+
 name multipleAlignments
 shortLabel Multiple Alignments
 longLabel Multiple Alignments of Homologs in Other Organisms
@@ -48,7 +48,18 @@ shortLabel GO Annotations
 longLabel Gene Ontology (GO) Annotations with Structured Vocabulary
 priority 100
 
+name domains
+shortLabel Protein Domains
+longLabel Protein Domains
+priority 110
+
 name mrnaDescriptions
 shortLabel mRNA Descriptions
 longLabel Descriptions from all associated mRNAs.
-priority 110
+priority 120
+
+name pathways
+shortLabel Pathways
+longLabel Biochemical Pathways
+priority 130
+

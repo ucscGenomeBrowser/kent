@@ -102,9 +102,3 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
 priority 110
 
-name kegg
-shortLabel KEGG
-tables keggPathway
-idSql select mapID,locusID from keggPathway where kgID = '%s'
-url http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s
-priority 120
