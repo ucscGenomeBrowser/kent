@@ -1121,12 +1121,12 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->genoSeq = targetSeq;
 	bun->data = range;
 	bun->ffList = rangesToFfItem(range->components, qSeq);
-	ssStitch(bun, ffLoose);
+	ssStitch(bun, ffTight);
 	outData->targetRc = tIsRc;
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
-	    bun, outData, qIsRc, ffLoose, minMatch, outFunction);
+	    bun, outData, qIsRc, ffTight, minMatch, outFunction);
 	ssBundleFree(&bun);
 	}
 
@@ -1189,9 +1189,9 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, qSeq);
-    ssStitch(bun, ffLoose);
+    ssStitch(bun, ffTight);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, ffLoose, minMatch, outFunction);
+	bun, outData, isRc, ffTight, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 for (qFrame = 0; qFrame<3; ++qFrame)
