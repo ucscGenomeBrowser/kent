@@ -78,3 +78,23 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+
+track xenoMrna
+shortLabel Non-ciona mRNA
+longLabel Non$organism mRNAs from Genbank
+group rna
+priority 63
+visibility dense
+spectrum on
+type psl xeno
+
+track xenoEst
+shortLabel Non-ciona EST
+longLabel Non$organism ESTs from Genbank 
+group rna
+priority 65
+visibility hide
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
