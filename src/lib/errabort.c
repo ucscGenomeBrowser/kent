@@ -96,6 +96,17 @@ vaErrAbort(format, args);
 va_end(args);
 }
 
+void errnoAbort(char *format, ...)
+/* Prints error message from UNIX errno first, then does errAbort. */
+{
+char fbuf[512];
+va_list args;
+va_start(args, format);
+sprintf(fbuf, "%s\n%s", strerror(errno), format);
+vaErrAbort(fbuf, args);
+va_end(args);
+}
+
 void pushAbortHandler(AbortHandler handler)
 /* Set abort handler */
 {

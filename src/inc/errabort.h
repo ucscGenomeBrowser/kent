@@ -25,6 +25,9 @@ void errAbort(char *format, ...);
 void vaErrAbort(char *format, va_list args);
 /* Abort function, with optional (vprintf formatted) error message. */
 
+void errnoAbort(char *format, ...);
+/* Prints error message from UNIX errno first, then does errAbort. */
+
 typedef void (*AbortHandler)();
 /* Function that can abort. */
 

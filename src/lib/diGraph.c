@@ -153,6 +153,7 @@ for (con = conList; con != NULL; con = con->next)
 return NULL;
 }
 
+
 struct dgEdge *dgConnect(struct diGraph *dg, struct dgNode *a, struct dgNode *b)
 /* Connect node a to node b.  Returns connecting edge. 
  * Not an error to reconnect.  However all connects can 
@@ -196,15 +197,6 @@ con->node = a;
 con->edgeOnList = edgeOnList;
 slAddHead(&b->prevList, con);
 
-return edge;
-}
-
-struct dgEdge *dgConnectUnflippable(struct diGraph *dg, struct dgNode *a, struct dgNode *b,
-    void *val)
-/* Connect a to b with an edge than can't be flipped. */
-{
-struct dgEdge *edge = dgConnectWithVal(dg, a, b, val);
-edge->unflippable = TRUE;
 return edge;
 }
 
@@ -362,35 +354,25 @@ return FALSE;
 }
 
 struct dgNodeRef *rRefList;
-bool rRespectFlipper;			/* Set to TRUE if rFindConnected only to
+bool rMustHaveVal;			/* Set to TRUE if rFindConnected only to
                                          * consider nodes with values in connections. */
 
 static void rFindConnected(struct dgNode *a)
 /* Find all things connected to a directly or not that haven't
  * already been visited and put them on rRefList. */
 {
-if (!a->conn)
+if (!a->conn && (!rMustHaveVal || a->val))
     {
     struct dgNodeRef *ref;
     struct dgConnection *con;
-    struct dgEdge *edge;
-
     AllocVar(ref);
     ref->node = a;
     slAddHead(&rRefList, ref);
     a->conn = TRUE;
     for (con = a->nextList; con != NULL; con = con->next)
-	{
-	edge = con->edgeOnList->val;
-	if (!rRespectFlipper || !edge->unflippable)
-	    rFindConnected(con->node);
-	}
+	rFindConnected(con->node);
     for (con = a->prevList; con != NULL; con = con->next)
-	{
-	edge = con->edgeOnList->val;
-	if (!rRespectFlipper || !edge->unflippable)
-	    rFindConnected(con->node);
-	}
+	rFindConnected(con->node);
     }
 }
 
@@ -412,26 +394,26 @@ for (a=dg->nodeList; a != NULL; a = a->next)
 if (a == NULL)
     return NULL;
 rRefList = NULL;
-rRespectFlipper = FALSE;
+rMustHaveVal = FALSE;
 rFindConnected(a);
 return rRefList;
 }
 
-struct dgNodeRef *dgFindNextFlippableConnected(struct diGraph *dg)
+struct dgNodeRef *dgFindNextConnectedWithVals(struct diGraph *dg)
 /* Like dgFindConnected, but only considers graph nodes that
- * are conencted by a flippable edge. */
+ * have a val attatched. */
 {
 struct dgNode *a;
 
 for (a=dg->nodeList; a != NULL; a = a->next)
     {
-    if (!a->conn)
+    if (!a->conn && a->val != NULL)
 	break;
     }
 if (a == NULL)
     return NULL;
 rRefList = NULL;
-rRespectFlipper = TRUE;
+rMustHaveVal = TRUE;
 rFindConnected(a);
 return rRefList;
 }
@@ -450,7 +432,7 @@ for (;;)
     {
     for (; a != NULL; a = a->next)
 	{
-	if (!a->conn)
+	if (!a->conn && (!rMustHaveVal || a->val))
 	    break;
 	}
     if (a == NULL)
@@ -471,16 +453,16 @@ int dgConnectedComponents(struct diGraph *dg)
 /* Count number of connected components and set component field
  * of each node to reflect which component it is in. */
 {
-rRespectFlipper = FALSE;
+rMustHaveVal = FALSE;
 connectedComponents(dg);
 }
 
-int dgConnectedFlippableComponents(struct diGraph *dg)
+int dgConnectedComponentsWithVals(struct diGraph *dg)
 /* Count number of connected components and set component field
  * of each node to reflect which component it is in. Only
- * consider components connected by flippable edges. */
+ * consider components with values. */
 {
-rRespectFlipper = TRUE;
+rMustHaveVal = TRUE;
 connectedComponents(dg);
 }
 
@@ -489,18 +471,17 @@ struct dgNodeRef *dgFindNewConnected(struct diGraph *dg, struct dgNode *a)
  * including a. */
 {
 rRefList = NULL;
-rRespectFlipper = FALSE;
+rMustHaveVal = FALSE;
 rFindConnected(a);
 return rRefList;
 }
 
-struct dgNodeRef *dgFindNewFlippableConnected(struct diGraph *dg, struct dgNode *a)
+struct dgNodeRef *dgFindNewConnectedWithVals(struct diGraph *dg, struct dgNode *a)
 /* Find a connected component guaranteed not to be covered before 
- * that includes a.  Connected components must be connected by flippable
- * edges. */
+ * that includes a.  Connected components must have values*/
 {
 rRefList = NULL;
-rRespectFlipper = TRUE;
+rMustHaveVal = TRUE;
 rFindConnected(a);
 return rRefList;
 }
@@ -664,10 +645,8 @@ slReverse(&refList);
 return refList;
 }
 
-struct dgEdgeRef *dgFindSubEdges(struct diGraph *dg, struct dgNodeRef *subGraph,
-	boolean onlyFlippable)
-/* Return list of edges in graph that connected together nodes in subGraph. 
- * Optionally return only flippable edges. */
+struct dgEdgeRef *dgFindSubEdges(struct diGraph *dg, struct dgNodeRef *subGraph)
+/* Return list of edges in graph that connected together nodes in subGraph. */
 {
 struct hash *hash = newHash(0);
 struct dgNodeRef *nr;
@@ -690,13 +669,9 @@ for (nr = subGraph; nr != NULL; nr = nr->next)
 	{
 	if (hashLookup(hash, con->node->name))
 	    {
-	    edge = con->edgeOnList->val;
-	    if (!onlyFlippable || !edge->unflippable)
-		{
-		AllocVar(er);
-		er->edge = con->edgeOnList->val;
-		slAddHead(&erList, er);
-		}
+	    AllocVar(er);
+	    er->edge = con->edgeOnList->val;
+	    slAddHead(&erList, er);
 	    }
 	}
     }

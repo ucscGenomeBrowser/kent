@@ -58,6 +58,12 @@ void *needLargeMem(size_t size);
 void *needLargeZeroedMem(long size);
 /* Request a large block of memory and zero it. */
 
+void *needHugeMem(size_t size);
+/* No checking on size.  Memory not initted to 0. */
+
+void *needHugeZeroedMem(long size);
+/* Request a large block of memory and zero it. */
+
 void *needMoreMem(void *old, size_t copySize, size_t newSize);
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
 

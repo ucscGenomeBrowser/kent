@@ -475,7 +475,8 @@ if (trimCount > 8000)	/* This is all the memory we can spare, sorry. */
     trimCount = 8000;
 if (totalFfCount > trimCount)
     {
-    warn("In %s vs. %s trimming from %d to %d blocks", mrnaSeq->name, genoSeq->name, totalFfCount, trimCount);
+    if (totalFfCount > 4*trimCount)
+	warn("In %s vs. %s trimming from %d to %d blocks", mrnaSeq->name, genoSeq->name, totalFfCount, trimCount);
     trimBundle(bundle, trimCount, stringency);
     }
 
