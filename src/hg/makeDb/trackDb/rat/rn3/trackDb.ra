@@ -8,11 +8,33 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
+track blastzTightHg15
+shortLabel Tight Human
+longLabel Blastz Human (Jun. 03) Tight Subset of Best Alignments
+group compGeno
+priority 112
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg15
+
+track blastzBestHg15
+shortLabel Best Human
+longLabel Blastz Human (Jun. 03) Best in Genome Alignments
+group compGeno
+priority 113
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg15
+
 track blastzHg15
 shortLabel Human Blastz
 longLabel All BLASTZ Human alignments
 group compGeno
-priority 111
+priority 114
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -23,7 +45,7 @@ track chainHg15
 shortLabel Human Chain 
 longLabel Chained Human/$Organism Alignments
 group compGeno
-priority 125
+priority 115
 visibility dense
 color 100,50,0
 altColor 255,240,200
@@ -34,27 +56,16 @@ track netHg15
 shortLabel Human Net
 longLabel Human/$Organism Alignment Net
 group compGeno
-priority 126
+priority 116
 visibility dense
 spectrum on
 type netAlign hg15 humanChain
-
-track blastzBestHg15
-shortLabel Best Human
-longLabel Blastz Human (Jun. 03) Best in Genome Alignments
-group compGeno
-priority 112
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno hg15
 
 track hg15SynNet
 shortLabel Human Syntenic Net
 longLabel Human/Rat Syntenic Alignment Net
 group compGeno
-priority 136
+priority 117
 visibility hide
 spectrum on
 type netAlign hg15
