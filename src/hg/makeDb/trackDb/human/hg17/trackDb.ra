@@ -1295,11 +1295,9 @@ termRegex [BCPORU][A-Z]+[0-9]+(_H)?
 searchMethod prefix
 searchPriority 50
 
-searchName acemblyExactOrDot
 searchTable acembly
 searchType genePred
-shortCircuit 1
-query select chrom,txStart,txEnd,name from %s where name rlike "^%s(\\\\..+)?$"
+searchMethod prefix
 termRegex [^[:space:]]+
 searchPriority 50
 
