@@ -5,7 +5,7 @@
 # panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
 
 # Define databases used for various organisms
-set hg hg13,hg15,hg16,hg17
+set hg hg13,hg15,hg16
 set mm mm3,mm4
 set rn rn2,rn3
 set fr fr1
@@ -41,7 +41,7 @@ databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralb
 # Define various non-self chains
 set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2,Fr1
 
-# Define databases that support known genes and proteome browser
+# Define databases that support known genes
 set kgDb $hg,$mm,$rn
 set pbDb hg16,mm4,rn3
 
@@ -317,17 +317,6 @@ identifier affyU74
     $mm.affyGnfU74C.name
     $mm.knownToU74.value
 
-identifier affyMOE430
-"Affymetrix Mouse MOE430 chip identifiers"
-    $mm.affyMOE430.qName 
-    $mm.knownToMOE430.value
-    $mm.knownToMOE430A.value
-    $mm.rinnSex.name
-    hgFixed.mouseRinnSex.name
-    hgFixed.mouseRinnSexMedian.name
-    hgFixed.mouseRinnSexRatio.name
-    hgFixed.mouseRinnSexMedianRatio.name
-
 identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
     $rn.affyRAE230.qName dupeOk
@@ -453,18 +442,6 @@ identifier gnfU74cMedianSampleId
      hgFixed.gnfMouseU74cMedianExps.id
      hgFixed.gnfMouseU74cMedian.expScores comma indexOf full
      hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf full
-
-identifier rinnSexSampleId
-"Identifiers of RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
-     hgFixed.mouseRinnSexExps.id
-     hgFixed.mouseRinnSex.expScores comma indexOf full
-     hgFixed.mouseRinnSexRatio.expScores comma indexOf full
-
-identifier rinnSexMedianSampleId
-"Identifiers of median RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
-     hgFixed.mouseRinnSexMedianExps.id
-     hgFixed.mouseRinnSexMedian.expScores comma indexOf full
-     hgFixed.mouseRinnSexMedianRatio.expScores comma indexOf full
 
 identifier arbFlyLifeAllSampleId
 "Identifiers of RNA samples used in Arbeitman fly life cycle experiments"
@@ -1021,11 +998,23 @@ identifier ensemblGeneId external=Ensembl
     $gbd.ensGeneXref.gene_name
     mm3,hg13.ensemblXref.gene_name
 
+identifier ensemblGeneId3 external=Ensembl
+"Ensemble Gene ID"
+    $gbd.ensemblXref3.gene dupeOk
+    $gbd.ensGtp.gene chopAfter=. 
+
 identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensTranscript.translation_name dupeOk
     $gbd.ensGtp.protein chopAfter=.
     mm3.ensemblXref2.translation_name
+    $gbd.sfDescription.proteinID minCheck=0.10
+    $gbd.sfAssign.seqID minCheck=0.01
+
+identifier ensemblProteinId3 external=Ensembl
+"Ensemble Translated Protein ID"
+    $gbd.ensemblXref3.protein dupeOk
+    $gbd.ensGtp.protein chopAfter=.
     $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
@@ -1044,6 +1033,16 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
+
+identifier ensemblTranscriptId3 external=Ensembl dependency
+"Ensembl Transcript ID"
+    $gbd.ensemblXref3.transcript dupeOk
+    $gbd.ensGene.name chopAfter=.
+    $gbd.superfamily.name
+    $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.98
+    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.98
+    $kgDb.knownToEnsembl.value chopAfter=.
+    $gbd.sfDescription.name chopAfter=.
 
 # Protein Family Identifiers
 
