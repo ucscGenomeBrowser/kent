@@ -628,7 +628,7 @@ longLabel Wiggle Test Track
 priority 41
 visibility hide
 chromosomes chr21,
-type sample 12
+type sample 9
 
 track altGraph
 shortLabel altGraph
