@@ -5,4 +5,4 @@ Amino acids present in excess are shown above the line in red, and deficient
 residues are shown below the line in blue. 
 <P>
 See the <A HREF="pbpepAnomalies.shtml">Amino Acid Anomalies histogram</A> to view amino 
-acid abundances in the June '02 human assembly, based on 1,759,768 amino acids. 
+acid abundances in this assembly, based on the [FIXME - add table name] table.

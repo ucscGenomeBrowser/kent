@@ -38,7 +38,8 @@ Tables of amino acid usage are available elsewhere for other species
 TARGET=_blank>SwissProt</A> as a 
 whole. 
 <P>
-<B>Abundances based on 1,759,768 amino acids in June 2002 refPep table.</B>
+<B>Amino acid abundances based on the [FIXME - add table
+name] table (July 2003 human assembly)</B>
 <BR>
 <TABLE cellSpacing=5 cellPadding=5>
     <TR>
