@@ -237,7 +237,7 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 void gfIndexTransNibs(struct genoFind *transGf[2][3], 
     int nibCount, char *nibNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch);
+    boolean allowOneMismatch, boolean mask);
 /* Make translated (6 frame) index for all nib files. */
 
 /* -------- Routines to scan index for homolgous areas ------------ */

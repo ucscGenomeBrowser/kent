@@ -532,9 +532,25 @@ for (i=0; i<20; ++i)
     }
 }
 
+struct dnaSeq *readMaskedNib(char *fileName, boolean mask)
+/* Read nib, optionally turning masked bits to N's. 
+ * Result is lower case where not masked. */
+{
+struct dnaSeq *seq;
+if (mask)
+    {
+    seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+    toggleCase(seq->dna, seq->size);
+    upperToN(seq->dna, seq->size);
+    }
+else
+    seq = nibLoadAll(fileName);
+return seq;
+}
+
 void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch)
+    boolean allowOneMismatch, boolean maskNib)
 /* Make translated (6 frame) index for all nib files. */
 {
 FILE *f = NULL;
@@ -566,7 +582,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
-    seq = nibLoadAll(nibName);
+    seq = readMaskedNib(nibName, maskNib);
     printf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
 	{
@@ -604,7 +620,7 @@ for (isRc=0; isRc <= 1; ++isRc)
 for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
-    seq = nibLoadAll(nibName);
+    seq = readMaskedNib(nibName, maskNib);
     printf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
 	{

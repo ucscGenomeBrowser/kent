@@ -30,6 +30,7 @@ int repMatch = 1024;
 int maxGap = gfMaxGap;
 FILE *logFile = NULL;
 boolean seqLog = FALSE;
+boolean maskNib = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -62,6 +63,7 @@ errAbort(
   "   -trans  Translate database to protein in 6 frames.  Note: it is best\n"
   "           to run this on RepeatMasked data in this case.\n"
   "   -log=logFile keep a log file that records server requests.\n"
+  "   -mask      Use masking from nib file.\n"
   "   -seqLog    Include sequences in log file\n"
   );
 
@@ -289,7 +291,7 @@ if (doTrans)
     {
     logIt("setting up translated index\n");
     gfIndexTransNibs(transGf, nibCount, nibFiles, 
-    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch);
+    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, maskNib);
     }
 else
     {
@@ -622,6 +624,7 @@ tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
 repMatch = cgiOptionalInt("repMatch", repMatch);
 seqLog = cgiBoolean("seqLog");
+maskNib = cgiBoolean("mask");
 if (argc < 2)
     usage();
 if (sameWord(command, "direct"))

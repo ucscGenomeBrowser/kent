@@ -549,6 +549,23 @@ while (--n >= 0)
     *s++ = tolower(*s);
 }
 
+void toggleCase(char *s, int size)
+/* toggle upper and lower case chars in string. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (isupper(c))
+        c = tolower(c);
+    else if (islower(c))
+        c = toupper(c);
+    s[i] = c;
+    }
+}
+
+
 void touppers(char *s)
 /* Convert entire string to upper case. */
 {

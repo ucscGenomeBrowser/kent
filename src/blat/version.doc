@@ -1,6 +1,7 @@
 17 - Added -minScore -minIdentity and -prot command line options
      to gfClient.  gfClient uses same protein default minScore as 
-     blat does. Made -mask=lower work with nib files in blat.
+     blat does. Made -mask=lower work with nib files in blat, 
+     and -mask do the same thing in gfServer.
 16 - Fixed case where program would abort with 'Negative gap size'
      message on some legitimate protein/translated alignments in modes
      using blast, wublast, axt, or maf output.   Fixed bug where

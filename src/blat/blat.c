@@ -165,35 +165,6 @@ else
     }
 }
 
-void toggleCase(char *s, int size)
-/* toggle upper and lower case chars in string. */
-{
-char c;
-int i;
-for (i=0; i<size; ++i)
-    {
-    c = s[i];
-    if (isupper(c))
-        c = tolower(c);
-    else if (islower(c))
-        c = toupper(c);
-    s[i] = c;
-    }
-}
-
-void upperToN(char *s, int size)
-/* Turn upper case letters to N's. */
-{
-char c;
-int i;
-for (i=0; i<size; ++i)
-    {
-    c = s[i];
-    if (isupper(c))
-        s[i] = 'n';
-    }
-}
-
 void unmaskNucSeqList(struct dnaSeq *seqList)
 /* Unmask all sequences. */
 {

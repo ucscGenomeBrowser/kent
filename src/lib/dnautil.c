@@ -465,6 +465,19 @@ void aaFilter(char *in, DNA *out)
 dnaOrAaFilter(in, out, aaChars);
 }
 
+void upperToN(char *s, int size)
+/* Turn upper case letters to N's. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (isupper(c))
+        s[i] = 'n';
+    }
+}
+
 
 void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4])
 /* Count up frequency of occurance of each base and store 

@@ -335,6 +335,9 @@ void toUpperN(char *s, int n);
 void toLowerN(char *s, int n);
 /* Convert a section of memory to lower case. */
 
+void toggleCase(char *s, int size);
+/* toggle upper and lower case chars in string. */
+
 void touppers(char *s);
 /* Convert entire string to upper case. */
 
