@@ -26,7 +26,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.21 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.22 2003/05/17 02:01:56 sugnet Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -49,7 +49,7 @@ char *newGenome = NULL;       /* name of genome converting to */
 char *origGenome = NULL;      /* name of genome converting from */
 char *defaultPos = "chr22:17045228-17054909"; /* default position */
 char *origDb = NULL;          /* name of genome to use as from genome, optional */
-
+char *organism = "Human";     /* Only do human for now. */
 struct dyString *webWarning = NULL; /* set this string with warnings for user, 
 				       displayed on results page */
 
@@ -181,7 +181,6 @@ if(blatOnly)
 else
     dbList = hGetIndexedDatabases();
 count = humanCount(dbList);
-
 if (count == 0)
     errAbort("No active %s servers in database", (blatOnly ? "blat" : "nib" ));
 AllocArray(array, count);
@@ -237,6 +236,33 @@ tmp2++;
 *e = atoi(tmp2);
 }
 
+static char *ccFreezeDbConversion(char *database, char *freeze, char *org)
+/* Find freeze given database or vice versa.  Pass in NULL
+ * for parameter that is unknown and it will be returned
+ * as a result.  This result can be freeMem'd when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char *ret = NULL;
+struct dyString *dy = newDyString(128);
+
+if (database != NULL)
+    dyStringPrintf(dy, "select description from dbDb where name = '%s' and genome like '%s'", database, org);
+else if (freeze != NULL)
+    dyStringPrintf(dy, "select name from dbDb where description = '%s' and genome like '%s'", freeze, org);
+else
+    internalErr();
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+freeDyString(&dy);
+return ret;
+}
+
+
 void checkArguments() 
 /** setup our parameters depending on whether we've been called as a
     cgi script or from the command line */ 
@@ -268,9 +294,9 @@ if (chromStart > chromEnd)
 
 /* convert the genomes requested to hgN format */
 if(origGenome != NULL)
-    origGenome = hDbFromFreeze(origGenome);
+    origGenome = ccFreezeDbConversion(NULL, origGenome, organism);
 if(newGenome != NULL) 
-    newGenome = hDbFromFreeze(newGenome);
+    newGenome = ccFreezeDbConversion(NULL, newGenome, organism);
 
 /* make sure that we've got valid arguments */
 if((newGenome == NULL || origGenome == NULL || chrom == NULL || chromStart == -1 || chromEnd == -1) && (calledSelf)) 
@@ -280,7 +306,8 @@ if( origGenome != NULL && sameString(origGenome, newGenome))
     {
     struct dyString *warning = newDyString(1024);
     dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?", 
-		   hFreezeFromDb(origGenome), hFreezeFromDb(newGenome));
+		   ccFreezeDbConversion(origGenome, NULL, organism), \
+		   ccFreezeDbConversion(newGenome, NULL, organism));
     appendWarningMsg(warning->string);
     dyStringFree(&warning);
     }
@@ -674,14 +701,14 @@ int i;
 if(db1 != NULL) 
     {
     if(strstr(db1, "hg") == db1)
-	return hFreezeFromDb(db1);
+	return ccFreezeDbConversion(db1, NULL, organism);
     else
 	return db1;
     }
 else 
     {
     if(strstr(db2, "hg") == db2)
-	return hFreezeFromDb(db2);
+	return ccFreezeDbConversion(db2, NULL, organism);
     else
 	return db2;
     }
