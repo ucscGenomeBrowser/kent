@@ -16,6 +16,15 @@ visibility dense
 altColor 200,150,150
 type bed 4 +
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using D. melanogaster/pseudoobscura Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
+
 track flyreg
 shortLabel FlyReg
 longLabel FlyReg: Drosophila DNase I Footprint Database
