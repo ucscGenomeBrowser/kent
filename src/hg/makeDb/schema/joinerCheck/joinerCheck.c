@@ -9,16 +9,16 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.21 2004/03/19 16:46:39 hiram Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.22 2004/03/19 20:06:41 kent Exp $";
 
 /* Variable that are set from command line. */
-boolean parseOnly; 
 char *fieldListIn;
 char *fieldListOut;
 char *identifier;
 char *database;
 boolean foreignKeys;	/* "keys" command line variable. */
 boolean checkTimes;	/* "times" command line variable. */
+boolean checkFields;	/* "fields" command line variable. */
 boolean tableCoverage;
 boolean dbCoverage;
 
@@ -30,28 +30,30 @@ errAbort(
   "usage:\n"
   "   joinerCheck file.joiner\n"
   "options:\n"
-  "   -parseOnly just parse joiner file, don't check database.\n"
-  "   -fieldListOut=file - List all fields in all databases to file.\n"
-  "   -fieldListIn=file - Get list of fields from file rather than mysql.\n"
   "   -identifier=name - Just validate given identifier.\n"
   "   -database=name - Just validate given database.\n"
+  "   -fields - Check fields in joiner file exist, faster with -fieldListIn\n"
+  "      -fieldListOut=file - List all fields in all databases to file.\n"
+  "      -fieldListIn=file - Get list of fields from file rather than mysql.\n"
   "   -keys - Validate (foreign) keys.  Takes about an hour.\n"
-  "   -noTableCoverage - No check that all tables are mentioned in joiner file\n"
-  "   -noDbCoverage - No check that all databases are mentioned in joiner file\n"
-  "   -noTimes - Check update times of tables are after tables they depend on\n"
+  "   -tableCoverage - Check that all tables are mentioned in joiner file\n"
+  "   -dbCoverage - Check that all databases are mentioned in joiner file\n"
+  "   -times - Check update times of tables are after tables they depend on\n"
+  "   -all - Do all tests: -fields -keys -tableCoverage -dbCoverage -times\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"parseOnly", OPTION_BOOLEAN},
    {"fieldListIn", OPTION_STRING},
    {"fieldListOut", OPTION_STRING},
    {"identifier", OPTION_STRING},
    {"database", OPTION_STRING},
    {"keys", OPTION_BOOLEAN},
-   {"noTimes", OPTION_BOOLEAN},
-   {"noTableCoverage", OPTION_BOOLEAN},
-   {"noDbCoverage", OPTION_BOOLEAN},
+   {"times", OPTION_BOOLEAN},
+   {"fields", OPTION_BOOLEAN},
+   {"tableCoverage", OPTION_BOOLEAN},
+   {"dbCoverage", OPTION_BOOLEAN},
+   {"all", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -329,12 +331,29 @@ for (chop = jf->chopAfter; chop != NULL; chop = chop->next)
 return id;
 }
 
+struct keyHitInfo
+/* Information on how many times a key is hit. */
+    {
+    struct keyHitInfo *next;
+    char *name;	/* Name - not allocated here. */
+    int count;	/* Hit count. */
+    };
+
+void keyHitInfoClear(struct keyHitInfo *khiList)
+/* Clear out counts in list. */
+{
+struct keyHitInfo *khi;
+for (khi = khiList; khi != NULL; khi = khi->next)
+    khi->count = 0;
+}
+
 struct hash *readKeyHash(char *db, struct joiner *joiner, 
-	struct joinerField *keyField)
+	struct joinerField *keyField, struct keyHitInfo **retList)
 /* Read key-field into hash.  Check for dupes if need be. */
 {
 struct sqlConnection *conn = sqlWarnConnect(db);
 struct hash *keyHash = NULL;
+struct keyHitInfo *khiList = NULL, *khi;
 if (conn == NULL)
     {
     return NULL;
@@ -368,7 +387,7 @@ else
 		char *id = doChops(keyField, row[0]);
 		if (hashLookup(keyHash, id))
 		    {
-		    if (!keyField->dupeOk)
+		    if (keyField->unique)
 			{
 			if (keyField->exclude == NULL || 
 				!slNameInList(keyField->exclude, id))
@@ -381,7 +400,9 @@ else
 		    }
 		else
 		    {
-		    hashAdd(keyHash, id, NULL);
+		    AllocVar(khi);
+		    hashAddSaveName(keyHash, id, khi, &khi->name);
+		    slAddHead(&khiList, khi);
 		    ++itemCount;
 		    }
 		}
@@ -399,6 +420,7 @@ else
     slFreeList(&tableList);
     }
 sqlDisconnect(&conn);
+*retList = khiList;
 return keyHash;
 }
 
@@ -409,20 +431,64 @@ static void addHitMiss(struct hash *keyHash, char *id, struct joinerField *jf,
 id = doChops(jf, id);
 if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
     {
-    if (hashLookup(keyHash, id))
-	++(*pHits);
+    struct keyHitInfo *khi;
+    if ((khi = hashFindVal(keyHash, id)) != NULL)
+	{
+	*pHits += 1;
+	khi->count += 1;
+	}
     else
 	{
 	if (*pMiss == NULL)
 	    *pMiss = cloneString(id);
 	}
-    ++(*pTotal);
+    *pTotal += 1;
     }
 }
 
-void doMinCheck(char *db, struct joiner *joiner, struct joinerSet *js, 
-	struct hash *keyHash, struct joinerField *keyField,
-	struct joinerField *jf)
+void checkUniqueAndFull(struct joiner *joiner, struct joinerSet *js, 
+	char *db, struct joinerField *jf, struct joinerField *keyField,
+	struct keyHitInfo *khiList)
+/* Make sure that unique and full fields really are so. */
+{
+struct keyHitInfo *khi;
+int keyCount = 0, missCount = 0, doubleCount = 0;
+char *missExample = NULL, *doubleExample = NULL;
+
+for (khi = khiList; khi != NULL; khi = khi->next)
+    {
+    ++keyCount;
+    if (khi->count == 0)
+	 {
+         ++missCount;
+	 missExample = khi->name;
+	 }
+    else if (khi->count > 1)
+	{
+        ++doubleCount;
+	doubleExample = khi->name;
+	}
+    }
+if (jf->full && missCount != 0)
+    warn("Error: %d of %d elements of key %s.%s are not in 'full' %s.%s.%s line %d of %s\n"
+	 "    Example miss: %s"
+	, missCount, keyCount
+	, keyField->table, keyField->field
+	, db, jf->table, jf->field
+	, jf->lineIx, joiner->fileName, missExample);
+if (jf->unique && doubleCount != 0)
+    warn("Error: %d of %d elements of %s.%s.%s are not unique line %d of %s\n"
+	 "    Example: %s"
+	, doubleCount, keyCount
+	, db, jf->table, jf->field
+	, jf->lineIx, joiner->fileName, doubleExample);
+}
+
+void doKeyChecks(char *db, struct joiner *joiner, struct joinerSet *js, 
+	struct hash *keyHash, struct keyHitInfo *khiList,
+	struct joinerField *keyField, struct joinerField *jf)
+/* Check that at least minimum is covered, and that full and
+ * unique tags are respected. */
 {
 struct sqlConnection *conn = sqlMayConnect(db);
 if (conn != NULL)
@@ -432,6 +498,7 @@ if (conn != NULL)
     struct slName *table;
     struct slName *tableList = getTablesForField(conn,jf->splitPrefix,
     						 jf->table, jf->splitSuffix);
+    keyHitInfoClear(khiList);
     for (table = tableList; table != NULL; table = table->next)
 	{
 	char query[256], **row;
@@ -453,14 +520,14 @@ if (conn != NULL)
 		list = slNameListFromString(row[0], jf->separator[0]);
 		for (el = list, ix=0; el != NULL; el = el->next, ++ix)
 		    {
-		    char *id;
+		    char *id = el->name;
 		    char buf[16];
 		    if (jf->indexOf)
 			{
 		        safef(buf, sizeof(buf), "%d", ix);
 			id = buf;
 			}
-		    addHitMiss(keyHash, el->name, jf, &hits, &miss, &total);
+		    addHitMiss(keyHash, id, jf, &hits, &miss, &total);
 		    }
 		slFreeList(&list);
 		}
@@ -479,19 +546,22 @@ if (conn != NULL)
 		, keyField->table, keyField->field
 		, jf->lineIx, joiner->fileName, miss);
 	    }
-	freez(&miss);
-	sqlDisconnect(&conn);
 	}
+    if (jf->unique || jf->full)
+	checkUniqueAndFull(joiner, js, db, jf, keyField, khiList);
+    freez(&miss);
     slFreeList(&tableList);
+    sqlDisconnect(&conn);
     }
 }
 
 void jsValidateKeysOnDb(struct joiner *joiner, struct joinerSet *js,
-	char *db, struct hash *keyHash)
+	char *db, struct hash *keyHash, struct keyHitInfo *khiList)
 /* Validate keys pertaining to this database. */
 {
 struct joinerField *jf;
 struct hash *localKeyHash = NULL;
+struct keyHitInfo *localKhiList = NULL;
 struct joinerField *keyField;
 
 if (js->isFuzzy)
@@ -518,17 +588,22 @@ if (keyHash == NULL)
 	    return;
 	    }
 	}
-    keyHash = localKeyHash = readKeyHash(keyDb, joiner, keyField);
+    keyHash = localKeyHash = readKeyHash(keyDb, joiner, keyField, 
+    	&localKhiList);
+    khiList = localKhiList;
     }
 if (keyHash != NULL)
     {
     for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	{
 	if (jf != keyField && slNameInList(jf->dbList, db))
-	    doMinCheck(db, joiner, js, keyHash, keyField, jf);
+	    {
+	    doKeyChecks(db, joiner, js, keyHash, khiList, keyField, jf);
+	    }
 	}
     }
 hashFree(&localKeyHash);
+slFreeList(&localKhiList);
 }
 
 void jsValidateKeys(struct joiner *joiner, struct joinerSet *js, 
@@ -538,22 +613,23 @@ void jsValidateKeys(struct joiner *joiner, struct joinerSet *js,
 {
 struct joinerField *keyField;
 struct hash *keyHash = NULL;
+struct keyHitInfo *khiList = NULL;
 
 /* If key is found in a single database then make hash here
  * rather than separately for each database. */
 if ((keyField = js->fieldList) == NULL)
     return;
 if (slCount(keyField->dbList) == 1)
-    keyHash = readKeyHash(keyField->dbList->name, joiner, keyField);
+    keyHash = readKeyHash(keyField->dbList->name, joiner, keyField, &khiList);
 
 /* Check key for database(s) */
 if (preferredDb)
-    jsValidateKeysOnDb(joiner, js, preferredDb, keyHash);
+    jsValidateKeysOnDb(joiner, js, preferredDb, keyHash, khiList);
 else
     {
     struct slName *db, *dbList = jsAllDb(js);
     for (db = dbList; db != NULL; db = db->next)
-        jsValidateKeysOnDb(joiner, js, db->name, keyHash);
+        jsValidateKeysOnDb(joiner, js, db->name, keyHash, khiList);
     slFreeList(&dbList);
     }
 hashFree(&keyHash);
@@ -755,20 +831,20 @@ void joinerCheck(char *fileName)
 /* joinerCheck - Parse and check joiner file. */
 {
 struct joiner *joiner = joinerRead(fileName);
-if (!parseOnly)
+if (dbCoverage)
+    joinerCheckDbCoverage(joiner);
+if (tableCoverage)
+    joinerCheckTableCoverage(joiner, database);
+if (checkTimes)
+    joinerCheckDependencies(joiner, database);
+if (checkFields)
     {
     struct hash *fieldHash;
-    if (dbCoverage)
-	joinerCheckDbCoverage(joiner);
-    if (tableCoverage)
-	joinerCheckTableCoverage(joiner, database);
     fieldHash = processFieldHash(fieldListIn, fieldListOut);
     joinerValidateFields(joiner, fieldHash, identifier);
-    if (checkTimes)
-	joinerCheckDependencies(joiner, database);
-    if (foreignKeys)
-	joinerValidateKeys(joiner, identifier, database);
     }
+if (foreignKeys)
+    joinerValidateKeys(joiner, identifier, database);
 }
 
 int main(int argc, char *argv[])
@@ -777,15 +853,19 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-parseOnly = optionExists("parseOnly");
 fieldListIn = optionVal("fieldListIn", NULL);
 fieldListOut = optionVal("fieldListOut", NULL);
 identifier = optionVal("identifier", NULL);
 database = optionVal("database", NULL);
+checkFields = optionExists("fields");
 foreignKeys = optionExists("keys");
-checkTimes = !optionExists("noTimes");
-dbCoverage = !optionExists("noDbCoverage");
-tableCoverage = !optionExists("noTableCoverage");
+dbCoverage = optionExists("dbCoverage");
+tableCoverage = optionExists("tableCoverage");
+checkTimes = optionExists("times");
+if (optionExists("all"))
+    {
+    checkFields = foreignKeys = dbCoverage = tableCoverage = checkTimes = TRUE;
+    }
 joinerCheck(argv[1]);
 return 0;
 }

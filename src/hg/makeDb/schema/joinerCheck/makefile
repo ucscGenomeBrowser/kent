@@ -14,10 +14,10 @@ clean:
 	rm -f $O
 
 test: 
-	joinerCheck -parseOnly ../all.joiner
+	joinerCheck ../all.joiner
 
 foo:
 	joinerCheck -fieldListIn=hgwdev.fields -identifier=swissProtId -database=hg16 ../all.joiner
 
 ensembl:
-	joinerCheck -fieldListIn=hgwbeta.fields -identifier=ensemblTranscriptId ../all.joiner -keys -noTableCoverage -noDbCoverage -noTimes -database=hg16
+	joinerCheck -fieldListIn=hgwbeta.fields -identifier=ensemblTranscriptId ../all.joiner -keys -fields -database=hg16
