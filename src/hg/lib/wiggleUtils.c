@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.30 2004/09/15 17:14:26 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.31 2004/09/15 18:57:52 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -41,7 +41,7 @@ else
     printf("#\t%d bin histogram on %u values (zero count bins not shown)\n",
 	histoResults->binCount - 1, histoResults->count);
     printf("# bin    range   count  pValue   log2(pValue)  CPD   1.0 - CPD\n");
-    printf("#      min:max\n");
+    printf("#      [min max)\n");
     }
 
 if (histoResults)
@@ -69,7 +69,7 @@ if (histoResults)
 				histoResults->binCounts[i] );
 		}
 	    else
-		printf ("%02d\t%g:%g %u", i, min, max,
+		printf ("%02d %g %g %u", i, min, max,
 			histoResults->binCounts[i]);
 
 	    if (histoResults->binCounts[i] > 0)
