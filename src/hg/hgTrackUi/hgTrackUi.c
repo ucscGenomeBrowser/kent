@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.106 2004/05/29 00:29:45 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.107 2004/06/02 22:05:30 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -544,7 +544,7 @@ void rulerUi(struct trackDb *tdb)
 {
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
-puts("<B>Zoom:</B>");
+puts("<P><B>Zoom:</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 }
 
@@ -557,6 +557,7 @@ char *species[100];
 int speciesCt = chopLine(speciesOrder, species);
 int i;
 char option[64];
+char *currentCodonMode;
 puts("<p><b>Pairwise alignments:</b><br>" );
 puts("<TABLE><TR>");
 for (i = 0; i < speciesCt; i++)
@@ -564,26 +565,50 @@ for (i = 0; i < speciesCt; i++)
     if (i != 0 && (i % 6) == 0)
         puts("</TR><TR>");
     puts("<TD>");
-    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
     cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
     printf ("%s<br>", species[i]);
     puts("</TD>");
     }
 puts("</TR></TABLE><BR>");
 
-puts("<p><b>Base-level display:</b></P>" );
+safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafCodon");
 
+#ifdef CODON_HIGHLIGHT
+puts("<p><b>Base-level codon highlighting:</b></p>" );
+currentCodonMode = cartCgiUsualString(cart, option, "Gene");
+
+/* Dissable codon highlighting */
+puts("&nbsp; &nbsp; None &nbsp;");
+cgiMakeRadioButton(option, "0", sameString("0", currentCodonMode));
+
+/* User-specified frames 1-3 */
+puts("&nbsp; &nbsp; Frame 1 &nbsp;");
+cgiMakeRadioButton(option, "1", sameString("1", currentCodonMode));
+puts("&nbsp; &nbsp; Frame 2 &nbsp;");
+cgiMakeRadioButton(option, "2", sameString("2", currentCodonMode));
+puts("&nbsp; &nbsp; Frame 3 &nbsp;");
+cgiMakeRadioButton(option, "3", sameString("3", currentCodonMode));
+puts("<br>");
+
+/* Use gene pred */
+puts("&nbsp; &nbsp; CDS-annotated frame &nbsp;");
+cgiMakeRadioButton(option, "Gene", sameString("Gene", currentCodonMode));
+puts("&nbsp; &nbsp; based on &nbsp;");
+safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafGenePred");
+genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
+
+#else
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
 puts ("&nbsp; Alternate colors every");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
 puts ("bases<br>");
-
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
                         BASE_COLORS_OFFSET_VAR);
 puts ("&nbsp; Offset alternate colors by");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
 puts ("bases<br>");
-
+#endif
 
 puts("<p><b>Multiple alignment:</b>" );
 wigUi(tdb);

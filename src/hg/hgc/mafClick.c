@@ -9,125 +9,13 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 #include "hgMaf.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.15 2004/06/01 22:19:20 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.16 2004/06/02 22:05:30 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
 static char *autoSubmit = "onchange=\"document.gpForm.submit();\"";
-
-struct nameAndLabel
-/* Store track name and label. */
-   {
-   struct nameAndLabel *next;
-   char *name;	/* Name (not allocated here) */
-   char *label; /* Label (not allocated here) */
-   };
-
-static int nameAndLabelCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
-{
-const struct nameAndLabel *a = *((struct nameAndLabel **)va);
-const struct nameAndLabel *b = *((struct nameAndLabel **)vb);
-return strcmp(a->label, b->label);
-}
-
-static char *findLabel(struct nameAndLabel *list, char *label)
-/* Try to find label in list. Return NULL if it's
- * not there. */
-{
-struct nameAndLabel *el;
-for (el = list; el != NULL; el = el->next)
-    {
-    if (sameString(el->label, label))
-        return label;
-    }
-return NULL;
-}
-
-static char *genePredDropDown(char *varName)
-/* Make gene-prediction drop-down().  Return track name of
- * currently selected one.  Return NULL if no gene tracks. */
-{
-struct trackDb *curTrack = NULL;
-char *cartTrack = cartOptionalString(cart, varName);
-struct hashEl *trackList, *trackEl;
-char *selectedName = NULL;
-struct nameAndLabel *nameList = NULL, *name;
-char *trackName = NULL;
-
-/* Make alphabetized list of all genePred track names. */
-trackList = hashElListHash(trackHash);
-for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
-    {
-    struct trackDb *tdb = trackEl->val;
-    char *dupe = cloneString(tdb->type);
-    char *type = firstWordInLine(dupe);
-    if (sameString(type, "genePred"))
-	{
-	AllocVar(name);
-	name->name = tdb->tableName;
-	name->label = tdb->shortLabel;
-	slAddHead(&nameList, name);
-	}
-    freez(&dupe);
-    }
-slSort(&nameList, nameAndLabelCmp);
-
-/* No gene tracks - not much we can do. */
-if (nameList == NULL)
-    {
-    slFreeList(&trackList);
-    return NULL;
-    }
-
-/* Try to find current track - from cart first, then
- * knownGenes, then refGenes. */
-if (cartTrack != NULL)
-    selectedName = findLabel(nameList, cartTrack);
-if (selectedName == NULL)
-    selectedName = findLabel(nameList, "Known Genes");
-if (selectedName == NULL)
-    selectedName = findLabel(nameList, "SGD Genes");
-if (selectedName == NULL)
-    selectedName = findLabel(nameList, "BDGP Genes");
-if (selectedName == NULL)
-    selectedName = findLabel(nameList, "WormBase Genes");
-if (selectedName == NULL)
-    selectedName = findLabel(nameList, "RefSeq Genes");
-if (selectedName == NULL)
-    selectedName = nameList->name;
-
-/* Make drop-down list. */
-    {
-    int nameCount = slCount(nameList);
-    char **menu;
-    int i;
-
-    AllocArray(menu, nameCount);
-    for (name = nameList, i=0; name != NULL; name = name->next, ++i)
-	{
-	menu[i] = name->label;
-	}
-    cgiMakeDropListFull(varName, menu, menu, 
-    	nameCount, selectedName, autoSubmit);
-    freez(&menu);
-    }
-
-/* Convert to track name */
-for (name = nameList; name != NULL; name = name->next)
-    {
-    if (sameString(selectedName, name->label))
-        trackName = name->name;
-    }
-        
-
-/* Clean up and return. */
-slFreeList(&nameList);
-slFreeList(&trackList);
-return trackName;
-}
-
 
 static void mafPrettyHeader(FILE *f, struct mafAli *maf)
 /* Write out summary. */
@@ -441,7 +329,8 @@ else
 	cgiMakeDropListFull(codeVarName, codeAll, codeAll, 
 	    ArraySize(codeAll), codeVarVal, autoSubmit);
 	printf("exons based on ");
-	capTrack = genePredDropDown("hgc.multiCapTrack");
+	capTrack = genePredDropDown(cart, trackHash, 
+                                        "gpForm", "hgc.multiCapTrack");
 	printf("<BR>\n");
 	printf("</FORM>\n");
 	printf("<TT><PRE>");

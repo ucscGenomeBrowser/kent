@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.42 2004/05/30 17:10:28 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.43 2004/06/02 22:05:29 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1099,3 +1099,136 @@ addMrnaFilter(mud, track, "description", "des", "description");
 return mud;
 }
 
+int trackNameAndLabelCmp(const void *va, const void *vb)
+/* Compare to sort on label. */
+{
+const struct trackNameAndLabel *a = *((struct trackNameAndLabel **)va);
+const struct trackNameAndLabel *b = *((struct trackNameAndLabel **)vb);
+return strcmp(a->label, b->label);
+}
+
+char *trackFindLabel(struct trackNameAndLabel *list, char *label)
+/* Try to find label in list. Return NULL if it's
+ * not there. */
+{
+struct trackNameAndLabel *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (sameString(el->label, label))
+        return label;
+    }
+return NULL;
+}
+
+char *genePredDropDown(struct cart *cart, struct hash *trackHash,  
+                                        char *formName, char *varName)
+/* Make gene-prediction drop-down().  Return track name of
+ * currently selected one.  Return NULL if no gene tracks.
+ * If formName isn't NULL, it's the form for auto submit (onchange attr).
+ * If formName is NULL, no submit occurs when menu is changed */
+{
+struct trackDb *curTrack = NULL;
+char *cartTrack = cartOptionalString(cart, varName);
+struct hashEl *trackList, *trackEl;
+char *selectedName = NULL;
+struct trackNameAndLabel *nameList = NULL, *name;
+char *trackName = NULL;
+
+/* Make alphabetized list of all genePred track names. */
+trackList = hashElListHash(trackHash);
+for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
+    {
+    struct trackDb *tdb = trackEl->val;
+    char *dupe = cloneString(tdb->type);
+    char *type = firstWordInLine(dupe);
+    if (sameString(type, "genePred"))
+	{
+	AllocVar(name);
+	name->name = tdb->tableName;
+	name->label = tdb->shortLabel;
+	slAddHead(&nameList, name);
+	}
+    freez(&dupe);
+    }
+slSort(&nameList, trackNameAndLabelCmp);
+
+/* No gene tracks - not much we can do. */
+if (nameList == NULL)
+    {
+    slFreeList(&trackList);
+    return NULL;
+    }
+
+/* Try to find current track - from cart first, then
+ * knownGenes, then refGenes. */
+if (cartTrack != NULL)
+    selectedName = trackFindLabel(nameList, cartTrack);
+if (selectedName == NULL)
+    selectedName = trackFindLabel(nameList, "Known Genes");
+if (selectedName == NULL)
+    selectedName = trackFindLabel(nameList, "SGD Genes");
+if (selectedName == NULL)
+    selectedName = trackFindLabel(nameList, "BDGP Genes");
+if (selectedName == NULL)
+    selectedName = trackFindLabel(nameList, "WormBase Genes");
+if (selectedName == NULL)
+    selectedName = trackFindLabel(nameList, "RefSeq Genes");
+if (selectedName == NULL)
+    selectedName = nameList->name;
+
+/* Make drop-down list. */
+    {
+    char javascript[64], *autoSubmit;
+    int nameCount = slCount(nameList);
+    char **menu;
+    int i;
+
+    AllocArray(menu, nameCount);
+    for (name = nameList, i=0; name != NULL; name = name->next, ++i)
+	{
+	menu[i] = name->label;
+	}
+    if (formName == NULL)
+        autoSubmit = NULL;
+    else
+        { 
+        safef(javascript, sizeof(javascript), 
+                "onchange=\"document.%s.submit();\"", formName);
+        autoSubmit = javascript;
+        }
+    cgiMakeDropListFull(varName, menu, menu, 
+    	                        nameCount, selectedName, autoSubmit);
+    freez(&menu);
+    }
+
+/* Convert to track name */
+for (name = nameList; name != NULL; name = name->next)
+    {
+    if (sameString(selectedName, name->label))
+        trackName = name->name;
+    }
+
+/* Clean up and return. */
+slFreeList(&nameList);
+slFreeList(&trackList);
+return trackName;
+}
+
+struct hash *makeTrackHash(char *database, char *chrom)
+/* Make hash of trackDb items for this chromosome. */
+{
+struct trackDb *tdbs = hTrackDb(chrom);
+struct hash *trackHash = newHash(7);
+
+while (tdbs != NULL)
+    {
+    struct trackDb *tdb = slPopHead(&tdbs);
+    hLookupStringsInTdb(tdb, database);
+    if (hTrackOnChrom(tdb, chrom))
+	hashAdd(trackHash, tdb->tableName, tdb);
+    else
+        trackDbFree(&tdb);
+    }
+
+return trackHash;
+}

@@ -604,6 +604,24 @@ struct mrnaUiData *newBedUiData(char *track);
 struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno);
 /* Make a new  in extra-ui data structure for mRNA. */
 
+struct trackNameAndLabel
+/* Store track name and label. */
+   {
+   struct trackNameAndLabel *next;
+   char *name;	/* Name (not allocated here) */
+   char *label; /* Label (not allocated here) */
+   };
+
+int trackNameAndLabelCmp(const void *va, const void *vb);
+/* Compare to sort on label. */
+
+struct hash *makeTrackHash(char *database, char *chrom);
+/* Make hash of trackDb items for this chromosome. */
+
+char *genePredDropDown(struct cart *cart, struct hash *trackHash,  
+                                        char *formName, char *varName);
+/* Make gene-prediction drop-down().  Return track name of
+ * currently selected one.  Return NULL if no gene tracks. */
 
 #endif /* HUI_H */
 

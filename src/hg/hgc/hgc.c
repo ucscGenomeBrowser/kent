@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.654 2004/06/02 21:13:19 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.655 2004/06/02 22:05:29 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8111,25 +8111,6 @@ if (gotAny)
 sqlFreeResult(&sr);
 }
 
-struct hash *makeTrackHash(char *chrom)
-/* Make hash of trackDb items for this chromosome. */
-{
-struct trackDb *tdbs = hTrackDb(chrom);
-struct hash *trackHash = newHash(7);
-
-while (tdbs != NULL)
-    {
-    struct trackDb *tdb = slPopHead(&tdbs);
-    hLookupStringsInTdb(tdb, database);
-    if (hTrackOnChrom(tdb, chrom))
-	hashAdd(trackHash, tdb->tableName, tdb);
-    else
-        trackDbFree(&tdb);
-    }
-
-return trackHash;
-}
-
 void doMouseOrtho(struct trackDb *tdb, char *geneName)
 /* Handle click on MouseOrtho gene track. */
 {
@@ -14265,7 +14246,7 @@ protDbName = hPdbFromGdb(database);
 seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
-trackHash = makeTrackHash(seqName);
+trackHash = makeTrackHash(database, seqName);
 tdb = hashFindVal(trackHash, track);
 if (sameWord(track, "getDna"))
     {
