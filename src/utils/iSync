@@ -2,7 +2,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/iSync instead.
 
-# $Id: iSync,v 1.4 2004/06/23 19:41:18 hiram Exp $
+# $Id: iSync,v 1.5 2004/12/08 19:06:32 hiram Exp $
 
 set RUNNING = `ps -ef | grep rsync | grep -v grep | wc -l`
 
@@ -25,10 +25,3 @@ $rsync -v /iscratch/i/ kkr2u00:/iscratch/i/
 echo waiting for other machines
 wait
 echo done iSync
-echo "to setup the Rack 9 /iscratch/i/ go to kk9 and perform an rsync"
-echo "on the directory of interest for your job."
-echo "\t$ ssh kk9"
-echo "\t$ mkdir -p /iscratch/i/<your directory of interest>"
-echo "\t$ cd /iscratch/i/<your directory of interest>"
-echo "\t$ rsync -arlv kkr1u00:/iscratch/i/<your directory of interest>/ ."
-echo "\t(That trailing / at the end of the directory name is critical !)"

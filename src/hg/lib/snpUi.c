@@ -129,10 +129,10 @@ char *snpColorSourceDataName[] = {
     "snpColor",
 };
 char *snpColorSourceDefault[] = {
-    "source",
+    "snpColorSourceFunc",
 };
 char *snpColorSourceCart[] = {
-    "source",
+    "snpColorSourceFunc",
 };
 
 int snpColorSourceLabelsSize   = ArraySize(snpColorSourceLabels);
@@ -215,14 +215,14 @@ char *snpMolTypeDefault[] = {
     "black",
     "blue",
     "green",
-    "green",
+    "exclude",
 };
 char *snpMolTypeCart[] = {
     "red",
     "black",
     "blue",
     "green",
-    "green",
+    "exclude",
 };
 
 int snpMolTypeLabelsSize   = ArraySize(snpMolTypeLabels);
@@ -396,7 +396,7 @@ char *snpFuncDataName[] = {
 char *snpFuncDefault[] = {
     "black",
     "black",
-    "black",
+    "blue",
     "green",
     "red",
     "blue",
@@ -408,7 +408,7 @@ char *snpFuncDefault[] = {
 char *snpFuncCart[] = {
     "black",
     "black",
-    "black",
+    "blue",
     "green",
     "red",
     "blue",

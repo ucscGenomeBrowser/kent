@@ -78,6 +78,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
+#include "tfbsConsSites.h"
 #include "itemAttr.h"
 #include "encode.h"
 #include "variation.h"
@@ -85,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.845 2004/12/01 20:31:23 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.853 2004/12/13 02:26:32 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3961,7 +3962,108 @@ tg->tdb = tdb;
 return tg;
 }
 
+static Color tfbsConsShades[3];
 
+void tfbsConsSitesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+{
+char * colorLoString = trackDbSettingOrDefault(tg->tdb, "colorLo", "0,0,0");
+char * colorMidString = trackDbSettingOrDefault(tg->tdb, "colorMid", "255,255,0");
+char * colorHighString = trackDbSettingOrDefault(tg->tdb, "colorHigh", "255,0,0");
+int colorLoRgb = bedParseRgb(colorLoString);
+int colorMidRgb = bedParseRgb(colorMidString);
+int colorHighRgb = bedParseRgb(colorHighString);
+
+tg->colorShades = tfbsConsShades;
+
+tg->colorShades[0] = vgFindColorIx(vg, (colorLoRgb & 0xff0000) >> 16, 
+    (colorLoRgb & 0xff00) >> 8, (colorLoRgb & 0xff));
+tg->colorShades[1] = vgFindColorIx(vg, (colorMidRgb & 0xff0000) >> 16, 
+    (colorMidRgb & 0xff00) >> 8, (colorMidRgb & 0xff));
+tg->colorShades[2] = vgFindColorIx(vg, (colorHighRgb & 0xff0000) >> 16, 
+    (colorHighRgb & 0xff00) >> 8, (colorHighRgb & 0xff));
+
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
+}
+
+void tfbsConsSitesDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct tfbsConsSites *ro = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)ro->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)ro->chromEnd-winStart)*scale) + xOff;
+int w;
+
+color = tg->colorShades[ro->score];
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, ro);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHc(ro->chromStart, ro->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, ro), NULL);
+	}
+    }
+if (tg->subType == lfWithBarbs || tg->exonArrows)
+    {
+    int dir = 0;
+    if (ro->strand[0] == '+')
+	dir = 1;
+    else if(ro->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = contrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	}
+    }
+}
+
+void loadTfbsConsSites(struct track *tg)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct tfbsConsSites *ro, *list = NULL;
+double scoreMid = atof(trackDbSettingOrDefault(tg->tdb, "scoreMid", "1.93"));
+double scoreHigh = atof(trackDbSettingOrDefault(tg->tdb, "scoreHigh", "2.47"));
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ro = tfbsConsSitesLoad(row+rowOffset);
+
+    if (ro->zScore >= scoreHigh)
+	ro->score = 2;
+    else if (ro->zScore >= scoreMid)
+	ro->score = 1;
+    else
+	ro->score = 0;
+    slAddHead(&list, ro);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = list;
+}
 
 void loadTfbsCons(struct track *tg)
 {
@@ -3988,6 +4090,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
+}
+
+void tfbsConsSitesMethods(struct track *tg)
+{
+    bedMethods(tg);
+    tg->loadItems = loadTfbsConsSites;
+    tg->drawItems = tfbsConsSitesDraw;
+    tg->drawItemAt = tfbsConsSitesDrawAt;
 }
 
 void tfbsConsMethods(struct track *tg)
@@ -4985,6 +5095,7 @@ void xenoMrnaMethods(struct track *tg)
 {
 tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
+tg->totalHeight = tgFixedTotalHeightUsingOverflow;
 }
 
 void xenoRefGeneMethods(struct track *tg)
@@ -7107,7 +7218,9 @@ static bool isCompositeTrack(struct track *track)
 /* Determine if this is a composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 {
-return (track->subtracks && differentString(track->tdb->type, "wigMaf"));
+if (track->tdb)
+    return trackDbIsComposite(track->tdb);
+return FALSE;
 }
 
 static bool subtrackVisible(char *tableName)
@@ -7156,6 +7269,8 @@ int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
+/* Start a global track hash. */
+trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
@@ -7178,6 +7293,7 @@ if (rulerMode != RULER_MODE_OFF)
 
 for (track = trackList; track != NULL; track = track->next)
     {
+    hashAddUnique(trackHash, track->mapName, track);
     if (track->visibility != tvHide)
 	{
         if (isCompositeTrack(track))
@@ -8330,18 +8446,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
         subtrack->loadItems(subtrack);
 }
 
-static void compositeDraw(struct track *track, int seqStart, int seqEnd,
-                        struct vGfx *vg, int xOff, int yOff, int width,
-                        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw subtracks */
-{
-struct track *subtrack;
-for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack->mapName))
-        subtrack->drawItems(subtrack, seqStart, seqEnd, vg, xOff, yOff, width,
-                                font, color, vis);
-}
-
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of composite track */
 {
@@ -8354,18 +8458,14 @@ track->height = height;
 return height;
 }
 
-static void compositeFree(struct track *track)
-/* Dummy function */
-{
-}
-
 static void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
 {
 unsigned char finalR = track->color.r, finalG = track->color.g, 
                             finalB = track->color.b;
-unsigned char thisR = 50, thisG = 50, thisB = 50;
+unsigned char altR = track->altColor.r, altG = track->altColor.g, 
+                            altB = track->altColor.b;
 unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
 struct trackDb *subTdb;
 /* number of possible subtracks for this track */
@@ -8373,16 +8473,15 @@ int subtrackCt = slCount(tdb->subtracks);
 
 /* setup function handlers for composite track */
 track->loadItems = compositeLoad;
-track->drawItems = compositeDraw;
 track->totalHeight = compositeTotalHeight;
 
 if (finalR || finalG || finalB)
     {
     /* not black -- make a color gradient for the subtracks,
                 from black, to the specified color */
-    deltaR = (finalR - 50) / (subtrackCt-1);
-    deltaG = (finalG - 50) / (subtrackCt-1);
-    deltaB = (finalB - 50) / (subtrackCt-1);
+    deltaR = (finalR - altR) / (subtrackCt-1);
+    deltaG = (finalG - altG) / (subtrackCt-1);
+    deltaB = (finalB - altB) / (subtrackCt-1);
     }
 
 /* count number of visible subtracks for this track */
@@ -8413,15 +8512,15 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     subtrack->longLabel = subTdb->longLabel;
     if (finalR || finalG || finalB)
         {
-        subtrack->color.r = thisR;
-        subtrack->altColor.r = (255+thisR)/2;
-        thisR += deltaR;
-        subtrack->color.g = thisG;
-        subtrack->altColor.g = (255+thisG)/2;
-        thisG += deltaG;
-        subtrack->color.b = thisB;
-        subtrack->altColor.b = (255+thisB)/2;
-        thisB += deltaB;
+        subtrack->color.r = altR;
+        subtrack->altColor.r = (255+altR)/2;
+        altR += deltaR;
+        subtrack->color.g = altG;
+        subtrack->altColor.g = (255+altG)/2;
+        altG += deltaG;
+        subtrack->color.b = altB;
+        subtrack->altColor.b = (255+altB)/2;
+        altB += deltaB;
         }
     else
         {
@@ -8446,10 +8545,8 @@ struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
-struct trackDb *subTdb;
 char *iatName = NULL;
 char *exonArrows;
-int subtrackCt;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -8511,8 +8608,6 @@ TrackHandler handler;
 tdbList = hTrackDb(chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (trackDbSetting(tdb, "compositeTrack"))
-        verbose(5, "composite");
     track = trackFromTrackDb(tdb, TRUE);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
@@ -8818,7 +8913,7 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", orgEnc, wrapWhiteFont("Home"));
 
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s\">%s</A></TD>", orgEnc, database, uiVars->string, wrapWhiteFont("Genomes"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\">%s</A></TD>", orgEnc, database, wrapWhiteFont("Genomes"));
 
 if (gotBlat)
     {
@@ -9130,6 +9225,7 @@ registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("wabaCbr", cbrWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
+registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
@@ -9168,6 +9264,7 @@ registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
+registerTrackHandler("scoreMm5",valAlMethods);
 registerTrackHandler("scoreMm2X",valAlMethods);
 registerTrackHandler("scoreMm3X",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
@@ -9199,6 +9296,7 @@ registerTrackHandler("altGraphXT6Con", altGraphXMethods );
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
+registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 

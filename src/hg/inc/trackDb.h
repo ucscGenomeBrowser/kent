@@ -107,7 +107,9 @@ char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
 
-
+bool trackDbIsComposite(struct trackDb *tdb);
+/* Determine if this is a composite track. This is currently defined
+ * as a top-level dummy track, with a list of subtracks of the same type */
 
 #endif /* TRACKDB_H */
 

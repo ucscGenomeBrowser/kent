@@ -7,4 +7,6 @@ dynAlign: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
 	chmod a+x a.out
 	chmod g-w a.out
+	
+push:	
 	mv a.out ${CGI_BIN}-${USER}/dynAlign.exe

@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.226 2004/12/01 20:49:54 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.227 2004/12/07 17:59:52 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2940,7 +2940,6 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
  * add it to the list, otherwise free it */
 {
 char splitTable[64];
-struct trackDb *compositeTdb;
 hLookupStringsInTdb(tdb, database);
 if ((!tdb->private || privateHost) && hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
 #ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE

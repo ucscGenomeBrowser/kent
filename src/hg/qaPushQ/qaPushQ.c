@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.64 2004/11/29 21:38:34 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.65 2004/12/08 01:23:24 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -523,7 +523,7 @@ if (ki->sizeMB == 0)
 replaceInStr(html, sizeof(html) , "<!qid>"         , ki->qid       ); 
 replaceSelectOptions("priority" , "A,B,C,D,L"      , ki->priority  );
 replaceInStr(html, sizeof(html) , "<!qadate>"      , ki->qadate    ); 
-replaceSelectOptions("newYN"    ,"Y,N"             , ki->newYN     );
+replaceSelectOptions("newYN"    ,"Y,N,X"           , ki->newYN     );
 replaceInStr(html, sizeof(html) , "<!track>"       , ki->track     ); 
 replaceInStr(html, sizeof(html) , "<!dbs>"         , ki->dbs       ); 
 replaceInStr(html, sizeof(html) , "<!tbls>"        , ki->tbls      ); 
@@ -532,10 +532,10 @@ replaceInStr(html, sizeof(html) , "<!files>"       , ki->files     );
 replaceInStr(html, sizeof(html) , "<!sizeMB>"      , tempSizeMB    ); 
 replaceInStr(html, sizeof(html) , "<!currLoc>"     , ki->currLoc   ); 
 replaceSelectOptions("currLoc"  , "hgwdev,hgwbeta" , ki->currLoc   );
-replaceSelectOptions("makeDocYN", "Y,N"            , ki->makeDocYN );
+replaceSelectOptions("makeDocYN", "Y,N,X"          , ki->makeDocYN );
 replaceInStr(html, sizeof(html) , "<!onlineHelp>"  , ki->onlineHelp); 
-replaceSelectOptions("ndxYN"    , "Y,N"            , ki->ndxYN     );
-replaceSelectOptions("joinerYN" , "Y,N"            , ki->joinerYN  );
+replaceSelectOptions("ndxYN"    , "Y,N,X"          , ki->ndxYN     );
+replaceSelectOptions("joinerYN" , "Y,N,X"          , ki->joinerYN  );
 replaceInStr(html, sizeof(html) , "<!stat>"        , ki->stat      ); 
 replaceInStr(html, sizeof(html) , "<!sponsor>"     , ki->sponsor   ); 
 replaceInStr(html, sizeof(html) , "<!reviewer>"    , ki->reviewer  ); 
@@ -1433,6 +1433,9 @@ else
     }
 }
 
+
+
+
 void doShowSizes();  /* forward reference needed */
 
 void doEdit();       /* forward reference needed */
@@ -1648,19 +1651,19 @@ if ((sameString(pushbutton,"push requested"))&&(!sameString(q.currLoc,"hgwbeta")
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(!sameString(q.makeDocYN,"Y")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q.makeDocYN,"N")))
     {
     safef(msg,sizeof(msg),"MakeDoc not verified. <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(!sameString(q.ndxYN,"Y")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q.ndxYN,"N")))
     {
     safef(msg,sizeof(msg),"Index not verified. <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(!sameString(q.joinerYN,"Y")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q.joinerYN,"N")))
     {
     safef(msg,sizeof(msg),"All.Joiner not verified. <br>\n");
     isRedo = TRUE;

@@ -55,6 +55,7 @@ DIRS = \
 	faCmp \
 	faCount \
 	faFilterN \
+	faFilter \
 	faFlyBaseToUcsc \
 	faFrag \
 	faNcbiToUcsc \

@@ -1195,20 +1195,21 @@ danRer1.downloadDir = danRer1
     # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
     # not xeno RefSeq
     cvs commit -m "Added danRer1" etc/genbank.conf
-    # Edit ~/kent/hg/makeDb/genbnank/src/align/gbBlat 
+    # Edit $HOME/kent/src/hg/makeDb/genbank/src/align/gbBlat 
     # to add /iscratch/i/danRer1/11.ooc
     # Add line:  DANRER_OOC=/iscratch/i/danRer1/11.ooc
-    # Add line:  danRer*) oocOpt="-ooc=${DANRER_OOC}" ;;
+    # Add line:  danRer*) oocOpt="-ooc=${DANRER_OOC}" ;
 
     cvs diff src/align/gbBlat
     make
     cvs commit -m "Added 11.ooc for danRer1." src/align/gbBlat
-    # Edit src/lib/gbGenome.c to add new genome
+    # Edit $HOME/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c to add new genome
     # ADD: static char *danRerNames[] = {"Danio rerio", NULL};
     # ADD: {"danRer", danRerNames, NULL},
     # to static struct dbToSpecies dbToSpeciesMap[]
     cvs commit -m "Added zebrafish, danRer1." lib/gbGenome.c
     # Install to /cluster/data/genbank:
+    cd $HOME/kent/src/hg/makeDb/genbank
     make install-server
                                                                                 
     ssh eieio
@@ -1266,6 +1267,7 @@ danRer1.downloadDir = danRer1
     # Save as ensemblGene.gtf.gz
 # Need to get lift files for each chrom from supercontig to chrom level
     ssh kksilo
+    mkdir -p /cluster/data/danRer1/bed/ensembl/liftSupertoChrom
     cd /cluster/data/danRer1/bed/ensembl/liftSupertoChrom
     foreach c (NA Un Finished)
        set b = "/cluster/data/danRer1"
@@ -1301,6 +1303,7 @@ danRer1.downloadDir = danRer1
      sed -e "s/^/chr/" all.gtf > ensGene.gtf
      # load into database
      ssh hgwdev
+     cd /cluster/data/danRer2/bed/ensembl
      /cluster/bin/i386/ldHgGene danRer1 ensGene \
             /cluster/data/danRer1/bed/ensembl/ensGene.gtf
 # Read 30783 transcripts in 554794 lines in 1 files
@@ -2460,7 +2463,7 @@ zip -j est.zip est.fa
     mv /cluster/data/danRer1/zip/fr1*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
-                                                                                
+                                                                           
 # TBLASTN HG16 KNOWN GENES TRACK (DONE, 2004-07-23, hartera)
     # Collaboration with Anthony DiBiase and Yi Zhou of Leonard Zon's lab at 
     # the Childrens Hospital, Boston - part of the Zebrafish Genome Initiative
@@ -3003,6 +3006,121 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
     hgLoadPsl danRer1 blastHg16KG.psl
 #end Human Proteins
 
+# RH MAP TRACK (DONE, 2004-07-26, hartera)
+    # Data from Leonard Zon's lab at the Childrens Hospital, Boston
+    # Rh map data consists of 8707 genomic sequences:
+    #   (1) 2835 BAC clone ends (Max Planck Inst.  Robert
+    #   Geisler's lab, Tuebingen, Germany,
+    #   (2) 2015 NCBI ESTs (submitted from around the planet,
+    #   (3) 171 RH shotgun sequences (Max Planck Inst. & Children^?s
+    #   Hosp. Boston,
+    #   (4) 3686  WZ compiled ESTs from WashU
+    #
+    # Repeatmasked Zv3 supercontigs BLASTn 8707 RH map genomic sequences
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/rhmap
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap
+                                                                                
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/rhmap/seq
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap/seq
+    ls -1S /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+                                                                                
+    # Put the unmasked sequence data in rhDevSeq dir
+                                                                                
+    unzip rhSeqAll.zip
+    foreach f (rhSeqAll/*/*.txt)
+       mv $f .
+    end
+    rm -r rhSeqAll
+                                                                                
+    foreach s (*.txt)
+      tr '[a-z]' '[A-Z]' < $s >> rhcontigs.fa
+    end
+                                                                                
+    mkdir -p /iscratch/i/danRer1/rhmap
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap/seq
+    # fasplit sequence rhcontigs.fa 20 /iscratch/i/danRer1/rhmap
+    # remove ^M at end of each line
+    perl stripEndChar.pl < rhcontigs.fa > rhcontigsNoEndChar.fa
+    # also remove long headers and just keep first and second accession
+    grep '>'  rhcontigsNoEndChar.fa > rhcontigsFa.headers
+    cat << '_EOF_' > formatFastaHeader.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+while(<>) {
+   if (/>/) {
+      my @f = split(/\|/);
+      print "$f[0].$f[1]\n";
+   }
+   elsif ($_ eq "") { }
+   else {
+      print;
+   }
+}
+'_EOF_'
+    chmod +x formatFastaHeader.pl
+    perl formatFastaHeader.pl<  rhcontigsNoEndChar.fa > rhcontigsFormat.fa
+    mv rhcontigsFormat.fa rhcontigs.fa
+    rm rhcontigsNoEndChar.fa
+    grep '>' rhcontigs.fa | wc -l
+    # 8690 sequences, (~15500 for Affy zebrafish) so do not split
+    cp rhcontigs.fa /iscratch/i/danRer1/rhmap
+    iSync
+                                                                                
+    ssh kk
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap
+    mkdir psl
+    ls -1S  /iscratch/i/danRer1/rhmap/rhcontigs.fa > rhmap.lst
+    ls -1S /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+# try same parameters as for bacEnds
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -tileSize=10 -ooc=/iscratch/i/danRer1/10.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+     gensub2 genome.lst rhmap.lst gsub spec
+     para create spec
+     para try
+     para check
+     para push, try ... etc.
+# para time
+# Completed: 310 of 310 jobs
+# CPU time in finished jobs:       7256s     120.93m     2.02h    0.08d  0.000 y
+# IO & Wait Time:                   987s      16.45m     0.27h    0.01d  0.000 y# Average job time:                  27s       0.44m     0.01h    0.00d
+# Longest job:                       38s       0.63m     0.01h    0.00d
+# Submission to last job:           196s       3.27m     0.05h    0.00d
+                                                                                
+    # Make & check the psl table
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create rhmap.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least 80% identity in aligned region.
+    # these are the parameters used for STS markers
+    pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+            contig.psl /dev/null
+    # Processed 646182 alignments
+    liftUp rhMap.psl /cluster/data/danRer1/jkStuff/liftAll.lft warn contig.psl
+    pslCheck rhMap.psl
+                                                                                
+    # Load sequence alignments into database.
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap
+    echo "drop table rhMap;" | hgsql danRer1
+    hgLoadPsl danRer1 rhMap.psl
+    hgsql -N -e "select qName from rhMap;" danRer1 | sort | uniq | wc
+    # 8380 out of 8690 sequences aligned (96%)
+                                                                                
+    # Add RH Map sequences
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/danRer1/rhmap
+    ln -s \
+      /cluster/data/danRer1/bed/ZonLab/rhmap/seq/rhcontigs.fa \
+       /gbdb/danRer1/rhmap
+    cd /cluster/data/danRer1/bed/ZonLab/rhmap/seq
+    hgLoadSeq danRer1 /gbdb/danRer1/rhmap/rhcontigs.fa
+
 # BLASTZ SWAP FOR mm5 vs danRer1 BLASTZ TO CREATE danRer1 vs mm5 BLASTZ
 # USE RESCORED ALIGNMENTS (see makeMm5.doc)
 # CONVERT AXTs TO PSL AND LOAD INTO DATABASE
@@ -3513,6 +3631,12 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
     end
     mv /cluster/data/ncbi/UniSTS.2004-10-06/danRer1/danRer1STSMaps.txt \
        /cluster/data/danRer1/bed/STSmarkers/downloads
+    
+    # Need to download zebrafish ZFIN IDs mapped to GenBank
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    wget --timestamp http://zfin.org/data_transfer/Downloads/genbank.txt 
+    # Download ZFIN IDs and mapping panels
+    wget --timestamp http://zfin.org/data_transfer/Downloads/mappings.txt
     # Create new tables for STS so there are less columns in Info table
  
     # make a .as file for stsMarkers which is similar to the hg17 stsInfo2 table
@@ -3582,7 +3706,9 @@ table stsMapPos
     # stsAlias already exists in $HOME/kent/src/hg/lib/
     # COMMIT THESE LATER
     # do make to check it works and commit the .as, .sql, .c and .h file to CVS
-
+    # Need to download zebrafish ZFIN IDs mapped to GenBank
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    wget 
     # cluster run of zebrafish sts sequences
     
     ssh kksilo

@@ -22,12 +22,12 @@ public class HGGeneCheck {
   */
  static void usage() {
     System.out.println(
-      "\nHGGeneCheck - do some basic automatic tests on hgGene cgi\n" +
+      "\nHGGeneCheck - do some basic automatic tests on hgGene cgi.\n" +
       "usage:\n" +
       "   HGGeneCheck propertiesFile\n" +
       "where properties files may contain machine, database, quick.\n" +
       "\n   HGGeneCheck default\n" +
-      "will use the default properties\n"
+      "will use the default properties (hg17)\n"
       );
     System.exit(-1);
  }
@@ -57,8 +57,15 @@ public class HGGeneCheck {
 
     /* Process command line properties, and load them
      * into machine and table. */
-    if (args.length != 1)
+    if (args.length < 1 || args.length > 2) {
         usage();
+    }
+    // for allowing full KG list search (not yet implemented).
+    boolean full = false;
+    if (args.length == 2) {
+        full = true;
+        usage();  // for now
+    }
     TestTarget target = new TestTarget(args[0]);
 
     // make sure CLASSPATH has been set for JDBC driver

@@ -71,7 +71,6 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 Color col;
-int ix = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;

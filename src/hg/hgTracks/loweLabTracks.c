@@ -213,7 +213,7 @@ struct linkedFeatures *lfFromBed6(struct codeBlast *bed, int scoreMin,
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
-struct simpleFeature *sf, *sfList = NULL;
+struct simpleFeature *sf;
 int grayIx = grayInRange(bed->score, scoreMin, scoreMax);
 AllocVar(lf);
 lf->grayIx = grayIx;
@@ -236,23 +236,19 @@ void loadCodeBlast(struct track *tg)
 {
 struct linkedFeaturesSeries *lfs = NULL, *originalLfs, *codeLfs, *lfsList = NULL;
 struct linkedFeatures *lf;
-struct slName *codes = NULL, *code, *track=NULL, *tracks, *scores=NULL, *otherscores;
-struct codeBlast *bed,  *bedList;
+struct slName *codes = NULL, *track=NULL, *scores=NULL;
+struct codeBlast *bedList;
 struct codeBlast *cb, *list=NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
-char  *score;
 
 char **temparray3;
 char *temparray[16];
 char *temparray2;
 char query[256];
-char *temp="a";
 char **row;
 char *tempstring;
-int rowOffset;
-int length, x, y, z;
-char codeList[18] = {'g', 'z', 'c','e','o','b','v','u', 'y', 't','h','d','k','l', 'm','a','n','r'};
+int x;
 char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", "eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anerobe or aerobe"}; int i;
  
 sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
@@ -260,8 +256,6 @@ sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *thecode = NULL;
-    struct slName *tmp = NULL;
     cb = codeBlastLoad(row);
     slAddHead(&list, cb);
     }
@@ -453,8 +447,14 @@ for (bed = list; bed != NULL; bed = bed->next)
     struct simpleFeature *sf;
     int i;
     lf = lfFromBed(bed);
-    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
-	sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+    sf = lf->components;  
+    for (i = 0; i < bed->expCount; i++) 
+        {
+	if (sf == NULL)
+           break;
+        sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+        sf = sf->next;
+        }
     slAddHead(&lfList,lf);
     }
 tg->items = lfList;
@@ -469,11 +469,9 @@ struct linkedFeatures *lf = item;
 struct simpleFeature *sf;
 int heightPer = tg->heightPer;
 int x1,x2;
-int s, e, e2, s2;
+int s, e;
 Color *shades = tg->colorShades;
 int midY = y + (heightPer>>1);
-int midY1 = midY - (heightPer>>2);
-int midY2 = midY + (heightPer>>2);
 int w;
 
 color = tg->ixColor;

@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.19 2004/11/21 17:44:53 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.21 2004/12/10 04:07:19 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -233,72 +233,12 @@ else
     return(count);
 }
 
-#ifdef OLD_AND_SLOW
 static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
 	char *chrom, int minSize, int rangeStart, int rangeEnd,
 	struct lm *lm)
 /* Translate ranges of set bits to bed 4 items. */
 {
 struct bed *bedList = NULL, *bed;
-int i;
-boolean thisBit, lastBit;
-int start = 0;
-int end;
-int id = 0;
-char name[128];
-
-if (rangeStart < 0)
-    rangeStart = 0;
-if (rangeEnd > bitSize)
-    rangeEnd = bitSize;
-
-/* We depend on extra zero BYTE at end in case bitNot was used on bits. */
-thisBit = FALSE;
-for (i=0;  i < bitSize+8;  ++i)
-    {
-    lastBit = thisBit;
-    thisBit = bitReadOne(bits, i);
-    if (thisBit)
-	{
-	if (!lastBit)
-	    start = i;
-	}
-    else
-        {
-	end = i;
-	if (end >= bitSize)
-	    end = bitSize - 1;
-	// Lop off elements that go all the way to the beginning/end of the 
-	// chrom... unless our range actually includes the beginning/end.
-	// (That can happen with the AND/OR of two NOT's...)
-	if (lastBit &&
-	    ((end - start) >= minSize) &&
-	    ((rangeStart == 0) || (start > 0)) &&
-	    ((rangeEnd == bitSize) || (end < bitSize)))
-	    {
-	    lmAllocVar(lm, bed);
-	    bed->chrom = cloneString(chrom);
-	    bed->chromStart = start;
-	    bed->chromEnd = end;
-	    snprintf(name, sizeof(name), "%s.%d", chrom, ++id);
-	    bed->name = lmCloneString(lm, name);
-	    slAddHead(&bedList, bed);
-	    }
-	}
-    }
-
-slReverse(&bedList);
-return(bedList);
-}
-#endif /* OLD_AND_SLOW */
-
-static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
-	char *chrom, int minSize, int rangeStart, int rangeEnd,
-	struct lm *lm)
-/* Translate ranges of set bits to bed 4 items. */
-{
-struct bed *bedList = NULL, *bed;
-boolean thisBit, lastBit;
 int start = 0;
 int end = 0;
 int id = 0;
@@ -360,7 +300,7 @@ struct hTableInfo *hti2 = getHti(database, table2);
 struct trackDb *track2 = findTrack(table2, fullTrackList);
 struct lm *lm2 = lmInit(64*1024);
 struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2, 
-	retFieldCount);
+	NULL);
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
 struct featureBits *fbList2 = NULL;

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.24 2004/12/01 22:24:00 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.25 2004/12/03 13:54:48 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -244,7 +244,7 @@ static void showTableButtons(char *db, char *table, boolean withGetButton)
 hPrintf("<BR>\n");
 if (withGetButton)
     {
-    cgiMakeButton(hgtaDoPrintSelectedFields, "Get Fields");
+    cgiMakeButton(hgtaDoPrintSelectedFields, "Get Output");
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "Cancel");
     hPrintf(" ");

@@ -162,40 +162,42 @@ while (row2 != NULL)
     	}
 
     /* process flanking markers to get regionStart and regionEnd if both flanking markers exist */
-    if (!sameWord(flank1, "") && !sameWord(flank2,"")) 
-    for (iFlank=0; iFlank<2; iFlank++)
-        {
-        if (flanks[iFlank] != NULL)
+    if (!sameWord(flank1, "") && !sameWord(flank2,""))
+	{
+	for (iFlank=0; iFlank<2; iFlank++)
 	    {
-	    qtlValid = 1;
-	    identNo = getStsId(conn3, database, flanks[iFlank]);
-	    if (identNo != NULL)
-	    	{
-	    	sprintf(query3,"select * from %s.stsMapMouseNew where identNo=%s",database,identNo);
+	    if (flanks[iFlank] != NULL)
+		{
+		qtlValid = 1;
+		identNo = getStsId(conn3, database, flanks[iFlank]);
+		if (identNo != NULL)
+		    {
+		    sprintf(query3,"select * from %s.stsMapMouseNew where identNo=%s",database,identNo);
 
-            	sr3 = sqlMustGetResult(conn3, query3);
-            	row3 = sqlNextRow(sr3);
-    
-    		/* only a few has mulitple answers, so just grab the first one */
-	    	flankChrom 	= row3[0];
-       	    	flankChromStart = row3[1];	 
-            	flankChromEnd   = row3[2];
+		    sr3 = sqlMustGetResult(conn3, query3);
+		    row3 = sqlNextRow(sr3);
+	
+		    /* only a few has mulitple answers, so just grab the first one */
+		    flankChrom 	= row3[0];
+		    flankChromStart = row3[1];	 
+		    flankChromEnd   = row3[2];
 
-		/* if this QTL does not have a peak, use flanking marker's chrom */
-		if (sameWord(qtlChrom,na)) qtlChrom = strdup(flankChrom);
-		
-	    	pos = atoi(flankChromStart);
-		/* initialize regionStart if not initialized */
-		if (regionStart == 0)  regionStart = pos;
-		
-		if (pos < regionStart) regionStart = pos;
-	    	if (pos > regionEnd)   regionEnd   = pos;
-		
-	    	pos = atoi(flankChromEnd);
-	    	if (pos < regionStart) regionStart = pos;
-	    	if (pos > regionEnd)   regionEnd   = pos;
-		
-		sqlFreeResult(&sr3);
+		    /* if this QTL does not have a peak, use flanking marker's chrom */
+		    if (sameWord(qtlChrom,na)) qtlChrom = strdup(flankChrom);
+		    
+		    pos = sqlUnsigned(flankChromStart);
+		    /* initialize regionStart if not initialized */
+		    if (regionStart == 0)  regionStart = pos;
+		    
+		    if (pos < regionStart) regionStart = pos;
+		    if (pos > regionEnd)   regionEnd   = pos;
+		    
+		    pos = sqlUnsigned(flankChromEnd);
+		    if (pos < regionStart) regionStart = pos;
+		    if (pos > regionEnd)   regionEnd   = pos;
+		    
+		    sqlFreeResult(&sr3);
+		    }
 		}
 	    }
 	}

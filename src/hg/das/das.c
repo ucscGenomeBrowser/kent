@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.31 2004/08/20 00:37:52 angie Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.32 2004/12/06 22:56:09 hiram Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -689,7 +689,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     int s = psl->tStarts[i];
     int e = s + psl->blockSizes[i];
-    int qs, qe, qStart, qEnd;
+    int qStart, qEnd;
     int start,end;
     if (psl->strand[1] == '-')
         {
@@ -776,10 +776,8 @@ struct segment *segmentList = dasSegmentList(TRUE), *segment;
 struct hash *trackHash = hashOfTracks();
 struct trackTable *tt;
 struct tableDef *tdList = getTables(), *td;
-struct slName *typeList = cgiStringList("type"), *typeEl;
 struct regExp *category = regExpFromCgiVar("category");
 struct regExp *type = regExpFromCgiVar("type");
-char *parts[3];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;

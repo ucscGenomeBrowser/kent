@@ -19,12 +19,13 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	mm2X mm3X \
 	rn2 rn3 \
 	bosTau1 \
+	monDom1 \
 	galGal2 \
 	xenTro1 \
         tetNig1 \
 	fr1 \
 	cioSav1 \
-	danRer1 \
+	danRer1 danRer2 \
 	dm1 dm2 \
 	dp1 dp2 dp3 \
 	droYak1 \

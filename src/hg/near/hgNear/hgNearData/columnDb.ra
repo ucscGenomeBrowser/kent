@@ -34,6 +34,14 @@ type lookup kgXref kgID spDisplayID
 search fuzzy
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
+name proteinAcc
+shortLabel SP Acc
+longLabel SwissProt Protein Accession
+priority 2.15
+visibility off
+type lookup kgXref kgID spID
+itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+
 name refSeq
 shortLabel RefSeq
 longLabel NCBI RefSeq Gene Accession
@@ -110,6 +118,26 @@ longLabel NCBI Blastp Percent Identity
 priority 6
 visibility off
 type distance knownBlastTab query target identity
+itemUrl ../cgi-bin/hgNear?near_search=%s
+urlOtherGeneVar near.do.affineAli
+hgsid on
+
+name rankProp
+shortLabel Rankprop
+longLabel Rankprop Score
+priority 6.2
+visibility on
+type distance rankProp qKgId tKgId score
+itemUrl ../cgi-bin/hgNear?near_search=%s
+urlOtherGeneVar near.do.affineAli
+hgsid on
+
+name spPsiBlast
+shortLabel PSI-BLAST
+longLabel PSI-BLAST E-Value
+priority 6.3
+visibility off
+type distance spPsiBlast kgId1 kgId2 eval
 itemUrl ../cgi-bin/hgNear?near_search=%s
 urlOtherGeneVar near.do.affineAli
 hgsid on
@@ -276,4 +304,3 @@ search fuzzy
 noKeys on
 searchLabel Known Gene Descriptions
 colWidth 50
-

@@ -59,21 +59,22 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 
-echo
-echo "Building src/blat."
-cd $WEEKLYBLD/kent/src/blat
-make >& make.log
-sed -i -e "s/-DJK_WARN//" make.log
-sed -i -e "s/-Werror//" make.log
-#-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.log`
-set wc = `echo "$res" | wc -w` 
-if ( "$wc" != "0" ) then
- echo "errs found:"
- echo "$res"
- $WEEKLYBLD/unsymtrick.csh
- exit 1
-endif
+#this is redundant now as make utils in /kent/src does it automatically now
+#echo
+#echo "Building src/blat."
+#cd $WEEKLYBLD/kent/src/blat
+#make >& make.log
+#sed -i -e "s/-DJK_WARN//" make.log
+#sed -i -e "s/-Werror//" make.log
+##-- to check for errors: 
+#set res = `/bin/egrep -y "error|warn" make.log`
+#set wc = `echo "$res" | wc -w` 
+#if ( "$wc" != "0" ) then
+# echo "errs found:"
+# echo "$res"
+# $WEEKLYBLD/unsymtrick.csh
+# exit 1
+#endif
 
 #this is redundant now as make utils in /kent/src does it automatically now
 #echo
@@ -92,21 +93,22 @@ endif
 # exit 1
 #endif
 
-echo
-echo "Building src/utils."
-cd $WEEKLYBLD/kent/src/utils
-make >& make.log
-sed -i -e "s/-DJK_WARN//" make.log
-sed -i -e "s/-Werror//" make.log
-#-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.log`
-set wc = `echo "$res" | wc -w` 
-if ( "$wc" != "0" ) then
- echo "errs found:"
- echo "$res"
- $WEEKLYBLD/unsymtrick.csh
- exit 1
-endif
+#this is redundant now as make utils in /kent/src does it automatically now
+#echo
+#echo "Building src/utils."
+#cd $WEEKLYBLD/kent/src/utils
+#make >& make.log
+#sed -i -e "s/-DJK_WARN//" make.log
+#sed -i -e "s/-Werror//" make.log
+##-- to check for errors: 
+#set res = `/bin/egrep -y "error|warn" make.log`
+#set wc = `echo "$res" | wc -w` 
+#if ( "$wc" != "0" ) then
+# echo "errs found:"
+# echo "$res"
+# $WEEKLYBLD/unsymtrick.csh
+# exit 1
+#endif
 
 
 # Undo Symlink trick

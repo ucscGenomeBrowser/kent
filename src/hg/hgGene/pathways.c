@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.6 2004/10/01 16:48:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.7 2004/12/03 21:54:15 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -96,7 +96,7 @@ static char *getCgapId(struct sqlConnection *conn)
 {
 char query[256];
 safef(query, sizeof(query), 
-	"select cgapId from cgapAlias where alias='%s'", curGeneName);
+	"select cgapId from cgapAlias where alias=\"%s\"", curGeneName);
 return sqlQuickString(conn, query);
 }
 

@@ -99,8 +99,6 @@ void layoutCloneAli(struct cloneInfo *ci)
 {
 struct spaceSaver *ss;
 struct cloneFragPos *cfa;
-int start = 0x3fffffff;
-int end = 0;
 
 ss = ci->ss = spaceSaverNew(winStart, winEnd, 100);
 for (cfa = ci->cfaList; cfa != NULL; cfa = cfa->next)
@@ -175,6 +173,10 @@ switch (vis)
 	tg->heightPer = tg->lineHeight - 1;
 	tg->height = tg->lineHeight;
 	break;
+    case tvHide:
+    case tvPack:
+    case tvSquish:
+        break;
     }
 return tg->height;
 }
@@ -323,7 +325,6 @@ static void cloneDenseDraw(struct track *tg, int seqStart, int seqEnd,
 int baseWidth = seqEnd - seqStart;
 UBYTE *useCounts;
 UBYTE *aveCounts;
-int i;
 int lineHeight = mgFontLineHeight(font);
 struct cloneInfo *ci;
 struct cloneFragPos *cfa;   /* List of alignments. */
@@ -526,7 +527,6 @@ void glLoadInWindow()
 {
 if (glCloneList == NULL)
     {
-    char query[256];
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr = NULL;
     char **row;

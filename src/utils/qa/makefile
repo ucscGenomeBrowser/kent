@@ -20,4 +20,6 @@ install:
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
+	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
+	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 

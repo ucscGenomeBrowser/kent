@@ -83,13 +83,9 @@ static void altGraphXDrawPackTrack(struct track *tg, int seqStart, int seqEnd,
 			 MgFont *font, Color color, enum trackVisibility vis)
 /* Draws the blocks for an alt-spliced gene and the connections */
 {
-int baseWidth = seqEnd - seqStart;
-int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
-int maxLevels = 0;
 if(vis == tvFull) 
     {
     vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
@@ -107,8 +103,6 @@ Color altGraphXColorForEdge(struct vGfx *vg, struct altGraphX *ag, int eIx)
 {
 int confidence = altGraphConfidenceForEdge(ag, eIx);
 Color c = shadesOfGray[maxShade/4];
-struct geneGraph *gg = NULL;
-struct ggEdge *edges = NULL;
 if(confidence == 1) 
     c = shadesOfGray[maxShade/3];
 else if(confidence == 2) 
@@ -151,7 +145,6 @@ static void altGraphXDrawAt(struct track *tg, void *item, struct vGfx *vg,
 int i = 0;
 int s =0, e=0;
 int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
 int start = 0, end = 0;
 struct altGraphX *ag = item;
 int width = 0;
@@ -346,7 +339,6 @@ if(tg->limitedVis == tvDense || tg->customPt == NULL)
 else if(tg->limitedVis == tvFull)
     {
     char key[128];
-    struct spliceEdge *se = NULL;
     safef(key, sizeof(key), "%d", slIxFromElement(tg->items, item));
     return (hashIntVal((struct hash*)tg->customPt, key)) * tg->lineHeight;
     }

@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.16 2004/09/10 18:56:38 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.17 2004/12/07 01:59:41 kent Exp $";
 
 struct netItem
 /* A net track item. */
@@ -126,7 +126,6 @@ if (w > 1)
     if (rNextLine > 0)	 /* Put up click info in full mode. */
 	{
 	struct dyString *bubble = newDyString(256);
-	char popUp[128];
 	char depth[8];
 	snprintf(depth, sizeof(depth), "%d", level);
 	dyStringPrintf(bubble, "%s %c %dk ", 
@@ -159,7 +158,6 @@ w = x2-x1;
 if (w >= 1)
     {
     struct dyString *bubble = newDyString(256);
-    char popUp[128];
     char depth[8];
     int midY = y + rMidLineOff;
     clippedBarbs(rVg, x1, midY, w, 2, 5, orientation, color, FALSE);

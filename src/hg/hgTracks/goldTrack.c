@@ -81,7 +81,6 @@ int midLineOff = heightPer/2;
 boolean isFull = (vis == tvFull);
 Color brown = color;
 Color gold = tg->ixAltColor;
-Color col;
 Color pink = 0;
 Color pink1 = vgFindColorIx(vg, 240, 140, 140);
 Color pink2 = vgFindColorIx(vg, 240, 100, 100);

@@ -13,7 +13,7 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.7 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.1 2004/12/03 04:29:02 kent Exp $";
 
 enum parentPos
 /* Record of parant positions. */

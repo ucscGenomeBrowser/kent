@@ -7,4 +7,6 @@ getgene.exe: $(O)
 	mv a.out getgene.exe
 	chmod a+rx getgene.exe
 	chmod g-w getgene.exe
+
+push:	
 	mv getgene.exe $(HOME)/.html/cgi-bin

@@ -7,4 +7,6 @@ primeMate.exe: $(O)
 	mv a.out primeMate.exe
 	chmod a+rx primeMate.exe
 	chmod g-w primeMate.exe
+
+push:	
 	mv primeMate.exe $(HOME)/.html/cgi-bin

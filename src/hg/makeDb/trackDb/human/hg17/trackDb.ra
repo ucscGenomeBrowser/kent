@@ -126,7 +126,7 @@ altColor 255,128,0
 defaultViewLimits 0.0:0.01
 type wig -0.285 0.53
 
-track tfbsCons
+track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
 priority 94
@@ -134,10 +134,11 @@ group regulation
 visibility hide
 type bed 6+
 spectrum on
-scoreMin 830
-scoreMax 1000
-zScoreBreak 2.0
-zScoreTop 5.0
+colorLo 0,0,0
+colorMid 255,255,0
+colorHigh 255,0,0
+scoreMid 1.93
+scoreHigh 2.47
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
@@ -1036,6 +1037,14 @@ shortLabel  Mm2X Red
 longLabel  Mm2X Red
 group x
 priority 201.9
+visibility hide
+type bed 14 .
+
+track blackMm5
+shortLabel Mm5 Black
+longLabel Mm5 Black
+group x
+priority 200.9
 visibility hide
 type bed 14 .
 

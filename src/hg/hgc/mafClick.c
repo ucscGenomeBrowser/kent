@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.21 2004/10/19 20:14:46 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.22 2004/12/07 18:16:45 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -319,7 +319,6 @@ else
 	    {
 	    char *chrom = cartCgiUsualString(cart, "c", "chr7");
 	    char other[128];
-	    char *pix = cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH );
 	    safef(other, ArraySize(other), "%d", winStart);
 	    printf("<P><B>See also: </B>");
 	    printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s&parentWigMaf=%s\" TARGET=\"_blank\">",

@@ -138,6 +138,8 @@
 #include "sgdClone.h"
 #include "tfbsCons.h"
 #include "tfbsConsMap.h"
+#include "tfbsConsSites.h"
+#include "tfbsConsFactors.h"
 #include "simpleNucDiff.h"
 #include "bgiGeneInfo.h"
 #include "bgiSnp.h"
@@ -151,7 +153,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.793 2004/12/02 17:53:57 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.797 2004/12/07 18:16:44 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2186,6 +2188,115 @@ if (net->qEnd >= 0)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);
+}
+
+void tfbsConsSites(struct trackDb *tdb, char *item)
+/* detail page for tfbsConsSites track */
+{
+boolean printedPlus = FALSE;
+boolean printedMinus = FALSE;
+char *dupe, *words[16];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct tfbsConsSites *tfbsConsSites;
+struct tfbsConsSites *tfbsConsSitesList = NULL;
+struct tfbsConsFactors *tfbsConsFactor;
+struct tfbsConsFactors *tfbsConsFactorList = NULL;
+boolean firstTime = TRUE;
+char *mappedId = NULL;
+boolean haveProtMap = hTableExists("kgProtMap");
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsSites = tfbsConsSitesLoad(row+hasBin);
+    slAddHead(&tfbsConsSitesList, tfbsConsSites);
+    }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsSitesList);
+
+hFindSplitTable(seqName, "tfbsConsFactors", table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' ", table, item);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsFactor = tfbsConsFactorsLoad(row+hasBin);
+    slAddHead(&tfbsConsFactorList, tfbsConsFactor);
+    }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsFactorList);
+
+if (tfbsConsFactorList)
+    mappedId = cloneString(tfbsConsFactorList->ac);
+
+printf("<B><font size=\"5\">Transcription Factor Binding Site information:</font></B><BR><BR><BR>");
+for(tfbsConsSites=tfbsConsSitesList ; tfbsConsSites != NULL ; tfbsConsSites = tfbsConsSites->next)
+    {
+    /* print each strand only once */
+    if ((printedMinus && (tfbsConsSites->strand[0] == '-')) || (printedPlus && (tfbsConsSites->strand[0] == '+')))
+	continue;
+
+    if (!firstTime)
+	htmlHorizontalLine(); 
+    else
+	firstTime = FALSE;
+
+    printf("<B>Item:</B> %s<BR>\n", tfbsConsSites->name);
+    if (mappedId != NULL)
+	printCustomUrl(tdb, mappedId, FALSE);
+    printf("<B>Score:</B> %d<BR>\n", tfbsConsSites->score );
+    printf("<B>zScore:</B> %.2f<BR>\n", tfbsConsSites->zScore );
+    printf("<B>Strand:</B> %s<BR>\n", tfbsConsSites->strand);
+    printPos(tfbsConsSites->chrom, tfbsConsSites->chromStart, tfbsConsSites->chromEnd, NULL, TRUE, tfbsConsSites->name);
+    printedPlus = printedPlus || (tfbsConsSites->strand[0] == '+');
+    printedMinus = printedMinus || (tfbsConsSites->strand[0] == '-');
+    }
+
+if (tfbsConsFactorList)
+    {
+    htmlHorizontalLine(); 
+    printf("<B><font size=\"5\">Transcription Factors known to bind to this site:</font></B><BR><BR>");
+    for(tfbsConsFactor =tfbsConsFactorList ; tfbsConsFactor  != NULL ; tfbsConsFactor  = tfbsConsFactor ->next)
+	{
+	if (!sameString(tfbsConsFactor->species, "N"))
+	    {
+	    printf("<BR><B>Factor:</B> %s<BR>\n", tfbsConsFactor->factor);
+	    printf("<B>Species:</B> %s<BR>\n", tfbsConsFactor->species);
+	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbsConsFactor->id, "N")? "unknown": tfbsConsFactor->id);
+
+	    /* Only display link if entry exists in protein browser */
+	    if (haveProtMap)
+		{
+		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbsConsFactor->id );
+		sr = sqlGetResult(conn, query); 
+		if ((row = sqlNextRow(sr)) != NULL)                                                         
+		    {
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR>",  tfbsConsFactor->id);
+		    sqlFreeResult(&sr); 
+		    }
+		}
+	    }
+	}
+    }
+
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
 }
 
 void tfbsCons(struct trackDb *tdb, char *item)
@@ -10999,20 +11110,24 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<BR>\n");
 	firstOne=0; /* rs5886636 is good to test this */
 	}
-    if (strcmp((&snp)->strand,"?")) {printf("<B>Strand: </B>%s\n", (&snp)->strand);}
-    printf("<BR><B>Observed: </B>%s\n",          (&snp)->observed);
-    printf("<BR><B>Source: </B>%s\n",            (&snp)->source);
-    printf("<BR><B>Molecule Type: </B>%s\n",     (&snp)->molType);
-    printf("<BR><B>Variant Class: </B>%s\n",     (&snp)->class);
-    printf("<BR><B>Validation Status: </B>%s\n", (&snp)->valid);
-    printf("<BR><B>Function: </B>%s\n",          (&snp)->func);
-    if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
-    printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
-/*   printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
- *   if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
- *   if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}
- *   if ((&snp)->contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", (&snp)->contigHits);}
- *   if ((&snp)->seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", (&snp)->seqHits);} */
+    if (strcmp(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
+    printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
+    printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
+    printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
+    printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
+    printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
+    printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
+    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
+    if (snp.avHet>0)
+	printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+/*    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" target=\"_blank\">Validation Status</A>: </B>%s\n", snp.valid);
+ *    printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" target=\"_blank\">Function</A>: </B>%s\n",          snp.func);
+ *    if (snp.avHet>0) {printf("<BR><B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);} */
+/*   printf("<BR><B>Hit Quality: </B>%s\n",       snp.hitQuality);
+ *   if (snp.mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", snp.mapWeight);}
+ *   if (snp.chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", snp.chromHits);}
+ *   if (snp.contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", snp.contigHits);}
+ *   if (snp.seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", snp.seqHits);} */
     printf("<P>\n");
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
@@ -11202,11 +11317,9 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", 
 	       snp->rsId, snp->rsId);
 	}
-
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
 	   snp->tscId, snp->tscId);
-
     doSnpLocusLink(tdb, name);
     }
 /* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
@@ -14857,7 +14970,11 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
-else if (stringIn(track, "tfbsCons"))
+else if (sameWord(track, "tfbsConsSites"))
+    {
+    tfbsConsSites(tdb, item);
+    }
+else if (sameWord(track, "tfbsCons"))
     {
     tfbsCons(tdb, item);
     }

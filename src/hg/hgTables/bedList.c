@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.28 2004/12/02 00:09:09 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.29 2004/12/03 20:36:07 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -697,6 +697,7 @@ void doGetCustomTrackTb(struct sqlConnection *conn)
 /* Get Custom Track output (UI has already told us how). */
 {
 doGetBedOrCt(conn, TRUE, FALSE, FALSE);
+flushCustomTracks();
 initGroupsTracksTables(conn);
 doMainPage(conn);
 }

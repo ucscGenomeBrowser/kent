@@ -1,0 +1,105 @@
+track gold
+shortLabel Scaffolds
+longLabel Assembly Scaffolds (Supercontigs)
+group map
+priority 9
+visibility hide 
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10
+visibility hide
+
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
+
+track affyZebrafish
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 80
+visibility hide
+type psl .
+                                                                                
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|BX|AL)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]\._]+
+searchPriority 8
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex ENSDART[0-9]+\.[0-9]+
+searchPriority 50
+                                                                                
+searchName ensGeneNoSuffix
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+termRegex ENSDART[0-9]+
+dontCheck ENSDART[0-9]+\.[0-9]+
+searchPriority 50
+                                                                                
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex ENSDARG[0-9]+(\.[0-9]+)?
+searchPriority 50
+                                                                                
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex ENSDARP[0-9]+(\.[0-9]+)?
+searchPriority 50
+                                                                                
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishAbbrev
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+

@@ -7,4 +7,6 @@ wormAli.exe: $(O)
 	mv a.out wormAli.exe
 	chmod g-w wormAli.exe
 	chmod a+rx wormAli.exe
+
+push:	
 	mv wormAli.exe $(HOME)/.html/cgi-bin

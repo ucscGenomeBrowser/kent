@@ -75,7 +75,7 @@ long score = 0;
 long contigScore = 0;
 long bestContigScore = 0;
 int contigCount = 0;
-int baseScore;
+int baseScore = 0;
 boolean inMatch = FALSE;
 char a,b;
 

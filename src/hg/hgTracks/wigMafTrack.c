@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.51 2004/11/30 18:08:22 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.52 2004/12/07 00:36:42 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -66,22 +66,6 @@ struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn,
 {
     return mafLoadInRegion(conn, table, chrom, start, end);
 }
-
-static boolean dbPartOfName(char *name, char *retDb, int retDbSize)
-/* Parse out just database part of name (up to but not including
- * first dot). If dot found, return entire name */
-{
-int len;
-char *e = strchr(name, '.');
-/* Put prefix up to dot into buf. */
-len = (e == NULL ? strlen(name) : e - name);
-if (len >= retDbSize)
-     len = retDbSize-1;
-memcpy(retDb, name, len);
-retDb[len] = 0;
-return TRUE;
-}
-
 
 static struct wigMafItem *newMafItem(char *s, int g)
 /* Allocate and initialize a maf item. Species param can be a db or name */
@@ -172,7 +156,6 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 {
 struct wigMafItem *miList = NULL, *speciesList = NULL, *mi;
 struct sqlConnection *conn = hAllocConn();
-int i;
 
 /* load up mafs */
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
@@ -711,7 +694,7 @@ static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
 /* Draw base-by-base view, return new Y offset. */
 {
 struct wigMafItem *mi;
-struct mafAli *mafList, *maf, *sub, *infoMaf;
+struct mafAli *mafList, *maf, *sub;
 struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
@@ -786,7 +769,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
     if (sub != NULL)
         {
-	char db[64];
 	int subStart,subEnd;
 	int lineOffset, subSize;
         struct sqlConnection *conn;

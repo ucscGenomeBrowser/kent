@@ -10,5 +10,7 @@ dnadust.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
 	mv a.out dnadust.exe
 	chmod a+rx dnadust.exe
+
+push:
 	mv dnadust.exe ${CGI_BIN}-${USER}
 

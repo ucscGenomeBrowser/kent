@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.25 2004/10/20 15:35:45 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.26 2004/12/07 01:32:29 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -376,7 +376,6 @@ int textIx, outIx = 0;
 double maxScore, minScore;
 double scoreScale;
 double score;
-int shade;
 
 mafColMinMaxScore(maf, &minScore, &maxScore);
 scoreScale = 1.0/(maxScore - minScore);
@@ -431,7 +430,7 @@ if (numScores >= masterSize)	 /* More pixels than bases */
     }
 else	/* More bases than pixels. */
     {
-    int b1=0,b2, deltaB, delta;
+    int b1=0,b2, deltaB;
     int t1=0,t2, deltaT;
     for (i=0; i<numScores; ++i)
         {
@@ -465,7 +464,6 @@ static void mafDrawOverview(struct track *tg, int seqStart, int seqEnd,
  * the scoredRefs. */
 {
 char **row;
-unsigned int extFileId = 0;
 int rowOffset;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, 
@@ -509,7 +507,7 @@ void drawMafRegionDetails(struct mafAli *mafList, int height,
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
 struct mafAli *full, *sub = NULL, *maf = NULL;
-struct mafComp *mcMaster, mc;
+struct mafComp *mcMaster;
 char dbChrom[64];
 int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
@@ -517,8 +515,6 @@ int ixMafAli = 0;       /* alignment index, to allow alternating color */
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
     {
-    double scoreScale;
-    int mafStartOff;
     int mafPixelStart, mafPixelEnd, mafPixelWidth;
     int i;
     double *pixelScores = NULL;
@@ -566,11 +562,9 @@ static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
         Color color, enum trackVisibility vis, boolean isAxt)
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
-int seqSize = seqEnd - seqStart;
 struct mafAli *mafList;
 struct sqlConnection *conn = hAllocConn();
 struct mafItem *miList = tg->items, *mi = miList;
-char buf[64];
 char *suffix;
 
 mafList = tg->customPt;
@@ -630,25 +624,15 @@ else
 // mafDrawPairwise(tg, seqStart, seqEnd, vg, xOff, yOff, font, width, color, vis);
 }
 
-static void mafDrawPairwise(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-{
-//NOTE: must load this from blastz tables
-struct mafAli *mafList = tg->customPt;
-// draw a line for each loaded maf item (species)
-// reuse species ordering from multiple alignment
-}
-
 static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw base-by-base view. */
 {
 struct mafItem *miList = tg->items, *mi;
-struct mafAli *mafList = tg->customPt, *maf, *sub;
+struct mafAli *mafList = NULL, *maf, *sub;
 int lineCount = slCount(miList);
-char **lines = NULL, *scoreLine, *selfLine, *insertLine;
+char **lines = NULL, *selfLine, *insertLine;
 double *scores;  /* per base scores */
 int *ixMafAli;   /* per base alignment index */
 double scoreScale;

@@ -41,7 +41,6 @@ struct linkedFeatures *lf, *next, *newList = NULL, *oldList = NULL;
 struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 char *type;
-int i = 0;
 boolean anyFilter = FALSE;
 boolean colorIx = 0;
 boolean isExclude = FALSE;
@@ -50,7 +49,6 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
-boolean isDense;
 
 if (*pLfList == NULL || mud == NULL)
     return;
@@ -350,16 +348,6 @@ connectedLfFromPslsInRange(conn, tg, start, end, chromName,
 hFreeConn(&conn);
 }
 
-static void lfFromPslsInRangeAndFilter(struct track *tg, int start, int end, 
-	char *chromName, boolean isXeno, boolean nameGetsPos)
-/* Return linked features from range of table. */
-{
-struct sqlConnection *conn = hAllocConn();
-connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
-	isXeno, nameGetsPos, 1);
-hFreeConn(&conn);
-}
-
 static void loadXenoPslWithPos(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
@@ -370,8 +358,6 @@ void pslChromMethods(struct track *tg, char *colorChromDefault)
 /* Fill in custom parts of xeno psl <otherdb> track */
 {
 char option[128]; /* Option -  rainbow chromosome color */
-char optionChr[128]; /* Option -  chromosome filter */
-char *optionChrStr; 
 char *optionStr ;
 safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, colorChromDefault);
@@ -422,7 +408,6 @@ else if (sameString(subType, "xeno"))
     track->loadItems = loadXenoPsl;
     if (argc >= 3)
 	{
-	char *otherDb = argv[2];
 	pslChromMethods(track, 
                     trackDbSettingOrDefault(tdb, "colorChromDefault", "on"));
 	}

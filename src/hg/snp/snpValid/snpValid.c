@@ -10,14 +10,12 @@
 #include "fa.h"
 #include "nib.h"
 
-/* we made modified derivitives to save mem selecting minimum fields.
-#include "dbSnpRs.h"
-#include "affy10KDetails.h"
-#include "affy120KDetails.h"
-*/
-
 #include "hdb.h"
-#include "snpMap.h"
+
+/* we have defined it our self, use only needed fields, 
+   so we don't need this.
+#include "snp.h"
+*/
 
 #include "axt.h"
 
@@ -66,7 +64,7 @@ static struct optionSpec options[] = {
 };
 
 
-// ==========================================================================
+/* ========================================================================== */
 
 
 /* --- save memory by defining just the fields needed from flank file  ---- */
@@ -141,7 +139,10 @@ char *row[4];
 int rowCount=4;
 char *ch = &chrom[3];
 
-// safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
+/*
+example flankPath:
+    /cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz
+*/
 
 safef(fileName,sizeof(fileName),"%s/ds_ch%s.xml.contig.seq.gz",flankPath,ch);
 
@@ -177,7 +178,9 @@ struct snp
     int chromStart;             /* start */
     int chromEnd;               /* end   */
     char *name;		        /* name  */
-    char *strand;		/* strand*/
+    char *strand;		/* strand */
+    char *observed;		/* observed variants (usually slash-separated list) */
+    char *locType;		/* location Type */
     };
 
 struct snp *snpLoad(char **row)
@@ -192,6 +195,8 @@ ret->chromStart =        atoi(row[1]);
 ret->chromEnd   =        atoi(row[2]);
 ret->name       = cloneString(row[3]);
 ret->strand     = cloneString(row[4]);
+ret->observed   = cloneString(row[5]);
+ret->locType    = cloneString(row[6]);
 return ret;
 }
 
@@ -205,6 +210,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->strand);
+freeMem(el->observed);
+freeMem(el->locType);
 freez(pEl);
 }
 
@@ -230,7 +237,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand "
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed, locType "
 "from snp where chrom='%s' order by name", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -244,251 +251,6 @@ slReverse(&list);  /* could possibly skip if it made much difference in speed. *
 return list;
 }
 
-
-/* ------------------------------------------------ */
-
-struct snpMap *readSnpMap(char *chrom)
-/* Slurp in the snpMap rows for one chrom */
-{
-struct snpMap *list=NULL, *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-safef(query, sizeof(query), "select * from snpMap where chrom='%s' order by name", chrom);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = snpMapLoad(&row[1]);
-    slAddHead(&list,el);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
-return list;
-}
-
-
-/* --- save memory by defining just the fields needed from dbSnpRs  ---- */
-
-struct dbSnpRs
-/* Information from dbSNP at the reference SNP level */
-    {
-    struct dbSnpRs *next;  	/* Next in singly linked list. */
-    char *rsId;			/* dbSnp reference snp (rs) identifier */
-    char *assembly;		/* the sequence in the assembly */
-    };
-
-struct dbSnpRs *dbSnpRsLoad(char **row)
-/* Load a dbSnpRs from row fetched with select * from dbSnpRs
- * from database.  Dispose of this with dbSnpRsFree(). */
-{
-struct dbSnpRs *ret;
-int sizeOne,i;
-char *s;
-
-AllocVar(ret);
-ret->rsId = cloneString(row[0]);
-ret->assembly = cloneString(row[1]);
-return ret;
-}
-
-void dbSnpRsFree(struct dbSnpRs **pEl)
-/* Free a single dynamically allocated dbSnpRs such as created
- * with dbSnpRsLoad(). */
-{
-struct dbSnpRs *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->rsId);
-freeMem(el->assembly);
-freez(pEl);
-}
-
-void dbSnpRsFreeList(struct dbSnpRs **pList)
-/* Free a list of dynamically allocated dbSnpRs's */
-{
-struct dbSnpRs *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    dbSnpRsFree(&el);
-    }
-*pList = NULL;
-}
-
-struct dbSnpRs *readDbSnps(char *tbl)
-/* Slurp in the entire dbSnpRs table */
-{
-struct dbSnpRs *list=NULL, *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-safef(query, sizeof(query), "select rsId, assembly from hgFixed.%s order by rsId", tbl);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = dbSnpRsLoad(row);
-    slAddHead(&list,el);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
-return list;
-}
-
-
-/* --- save memory by defining just the fields needed from affy10KDetails  ---- */
-
-
-struct affy10KDetails
-/* Information from affy10KDetails representing the Affymetrix 10K Mapping Array */
-    {
-    struct affy10KDetails *next;  /* Next in singly linked list. */
-    char *affyId;	/* Affymetrix SNP id */
-    char *rsId;	/* RS identifier (some are null) */
-    char sequenceA[35];	/* The A allele with flanking sequence */
-    };
-
-
-struct affy10KDetails *affy10KDetailsLoad(char **row)
-/* Load a affy10KDetails from row fetched with select * from affy10KDetails
- * from database.  Dispose of this with affy10KDetailsFree(). */
-{
-struct affy10KDetails *ret;
-int sizeOne,i;
-char *s;
-
-AllocVar(ret);
-ret->affyId = cloneString(row[0]);
-ret->rsId = cloneString(row[1]);
-strcpy(ret->sequenceA, row[2]);
-return ret;
-}
-
-
-void affy10KDetailsFree(struct affy10KDetails **pEl)
-/* Free a single dynamically allocated affy10KDetails such as created
- * with affy10KDetailsLoad(). */
-{
-struct affy10KDetails *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->affyId);
-freeMem(el->rsId);
-freez(pEl);
-}
-
-void affy10KDetailsFreeList(struct affy10KDetails **pList)
-/* Free a list of dynamically allocated affy10KDetails's */
-{
-struct affy10KDetails *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    affy10KDetailsFree(&el);
-    }
-*pList = NULL;
-}
-
-
-struct affy10KDetails *readAffy10()
-/* Slurp in the entire affy10KDetails table */
-{
-struct affy10KDetails *list=NULL, *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy10KDetails order by affyId");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = affy10KDetailsLoad(row);
-    slAddHead(&list,el);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
-return list;
-}
-
-
-/* --- save memory by defining just the fields needed from affy120KDetails  ---- */
-
-struct affy120KDetails
-/* Information from affyGenoDetails representing the Affymetrix 120K SNP Genotyping array */
-    {
-    struct affy120KDetails *next;  /* Next in singly linked list. */
-    int affyId;	/* Affymetrix SNP id */
-    char *rsId;	/* RS identifier (some are null) */
-    char sequenceA[35];	/* The A allele with flanking sequence */
-    };
-
-
-struct affy120KDetails *affy120KDetailsLoad(char **row)
-/* Load a affy120KDetails from row fetched with select * from affy120KDetails
- * from database.  Dispose of this with affy120KDetailsFree(). */
-{
-struct affy120KDetails *ret;
-int sizeOne,i;
-char *s;
-
-AllocVar(ret);
-ret->affyId = sqlSigned(row[0]);
-ret->rsId = cloneString(row[1]);
-strcpy(ret->sequenceA, row[2]);
-return ret;
-}
-
-void affy120KDetailsFree(struct affy120KDetails **pEl)
-/* Free a single dynamically allocated affy120KDetails such as created
- * with affy120KDetailsLoad(). */
-{
-struct affy120KDetails *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->rsId);
-freez(pEl);
-}
-
-void affy120KDetailsFreeList(struct affy120KDetails **pList)
-/* Free a list of dynamically allocated affy120KDetails's */
-{
-struct affy120KDetails *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    affy120KDetailsFree(&el);
-    }
-*pList = NULL;
-}
-
-struct affy120KDetails *readAffy120()
-/* Slurp in the entire affy10KDetails table */
-{
-struct affy120KDetails *list=NULL, *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-/* added cast in order by clause because we must match the sort order of snpMap.name which is a string */
-safef(query, sizeof(query), "select affyId, rsId, sequenceA from hgFixed.affy120KDetails order by cast(affyId as char)");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = affy120KDetailsLoad(row);
-    slAddHead(&list,el);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
-return list;
-}
 
 
 /* --- -----------------------------------------------------------  ---- */
@@ -509,29 +271,6 @@ if ((*s1!=0) && (toupper(*s1)=='N'))
 return (*s1 == 0);
 }
 
-int leftFlank(char *s1)
-/* look for length of lowercase left flank */
-{
-char *s2 = s1;
-while ((*s1!=0) && (toupper(*s1)!=*s1))
-    {
-    ++s1;
-    }
-return (s1 - s2);
-}
-
-int rightFlank(char *s1)
-/* look for length of lowercase right flank */
-{
-char *st = s1;
-char *se = st+strlen(st)-1;  /* position at last actual char before zero term */
-s1 = se;
-while ((s1>=st) && (toupper(*s1)!=*s1))
-    {
-    --s1;
-    }
-return (se - s1);
-}
 
 void stripDashes(char *s1)
 /* remove all Dashes from string inplace */
@@ -549,30 +288,6 @@ while (*s1!=0)
 }
 
 
-// NOT USED. this function is now probably not needed can remove
-int lengthOneDash(char *s1)
-/* get length, count at most one dash */
-{
-int dash = 0;
-int cnt = 0;
-while (*s1!=0) 
-    {
-    if (*s1 == '-')
-	{
-	if (!dash)
-	    ++dash;
-	}
-    else
-	{
-	++cnt;
-	}
-    ++s1;
-    }
-return (cnt + dash);
-}
-
-
-
 
 int misses(char *dna1, char *dna2)
 /*  compare two short dna strands of equal length, 
@@ -585,9 +300,6 @@ int i = 0;
 int len = len1;
 if (len2 < len)
   len = len2;
-//toUpperN(dna1, len1);
-//toUpperN(dna2, len2);
-
 for(i=0;i<len;++i)
     {
     if (toupper(dna1[i]) != toupper(dna2[i]))
@@ -599,14 +311,12 @@ misscnt += abs(len2-len1);
 return misscnt;
 }
 
-//debug changed:
-//char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snpMap *snp, int lf, int ls)
 char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snp *snp, int lf, int ls)
 /* fetch nib return string to be freed later. Reports if segment exceends ends of chromosome. */
 {
 if ((snp->chromStart - lf) < 0) 
     {
-    printf("snpMap error (chromStart - offset) < 0 : %s %s %u %u %d \n",
+    printf("snp error (chromStart - offset) < 0 : %s %s %u %u %d \n",
 	snp->name,
 	snp->chrom,
 	snp->chromStart,
@@ -630,22 +340,15 @@ if ((snp->chromStart - lf + ls)  > chromSeq->size)
 return cloneStringZ(chromSeq->dna + snp->chromStart - lf, ls);
 }
 
+
+/* ---------------------------------------------------------------- */
+
 void snpValid()
-/* Test snpMap --> dbSnpRs/affy for one assembly. */
+/* Test snp for one assembly. */
 {
 
 
 char *Org;
-char *dbSnpTbl = NULL;
-
-struct dbSnpRs *dbSnps = NULL;
-struct dbSnpRs *dbSnp = NULL;
-
-struct affy10KDetails *affy10s = NULL;
-struct affy10KDetails *affy10  = NULL;
-
-struct affy120KDetails *affy120s = NULL;
-struct affy120KDetails *affy120  = NULL;
 
 struct axtScoreScheme *simpleDnaScheme = NULL;
 
@@ -665,27 +368,22 @@ int totalAssemblyDash = 0;
 int totalGapNib = 0;
 int totalStrandMismatch = 0; 
 
-boolean affy = FALSE;
 
-int mode = 3;  
 void *next = NULL;
 char *id   = NULL;
 char *seq  = NULL;
-char affy120id[12];
 
 int matchScore = 100;
 int misMatchScore = 100;
-int gapOpenPenalty = 400;  // was 400, tried 250 ok
-int gapExtendPenalty = 5; // was 50, reducing for new snp version.
+int gapOpenPenalty = 400;  
+int gapExtendPenalty = 5; /* was 50, reducing for new snp version. */
 
 int noDna = 0;
-//int snpMapRows = 0;
 int snpRows = 0;
 
+int goodExact = 0;
+int badExact = 0;
 
-/* controls whether affy120k, affy10k, or dbSnpRs is used 
-   currently affys are human only
-*/
 if (!hDbIsActive(db))
     {
     printf("Currently no support for db %s\n", db);
@@ -696,71 +394,7 @@ hSetDb(db);
 
 Org = hOrganism(db);
 
-if (sameWord(Org,"Human"))
-    affy = TRUE;
-
-//debug:
-affy=FALSE;
-
-
-if (sameWord(Org,"Human"))
-    dbSnpTbl = "dbSnpRsHg";
-else if (sameWord(Org,"Mouse"))
-    dbSnpTbl = "dbSnpRsMm";
-else if (sameWord(Org,"Rat"))
-    dbSnpTbl = "dbSnpRsRn";
-else 
-    {
-    printf("Currently no support for Org %s\n", Org);
-    return;
-    }
-
 simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
-
-//uglyf("dbSnp Table=%s \n",dbSnpTbl);
-
-uglyf("Affy=%s \n", affy ? "TRUE" : "FALSE" );
-
-//debug: disabled
-//dbSnps = readDbSnps(dbSnpTbl);
-//printf("read hgFixed.%s \n",dbSnpTbl);
-
-if (affy)
-    {
-    affy10s = readAffy10();
-    printf("read hgFixed.affy10KDetails \n");
-
-    affy120s = readAffy120();
-    printf("read hgFixed.affy120KDetails \n");
-    }
-
-
-
-int bogus = 0;
-
-// debug
-if (0) 
-    {
-    printf("rsId     assembly-sequence                     \n");
-    printf("---------------------------------------------- \n");
-    for (dbSnp = dbSnps; dbSnp != NULL; dbSnp = dbSnp->next)
-	{
-    	printf("%s %s \n",
-	  dbSnp->rsId,
-	  dbSnp->assembly
-	  );
-    
-	// debug: cut it short for testing only
-	if (++bogus > 1)
-    	    break;
-    
-	}
-    printf("\n");
-    printf("\n");
-    }
-	
-
-bogus=0;
 
 struct slName *cns = hAllChromNames();
 struct slName *cn=NULL;
@@ -771,24 +405,12 @@ if (!cns)
     }
 
 
-if (affy)
-    {
-    mode=1; /* start on affy120 with numbers in snpMap.rsId */
-    }
-else
-    {
-    mode=2; /* start on dbSnps with "rs*" in snpMap.rsId */
-    }
-
 printf("maxFlank = %d \n",maxFlank);
 printf("threshold = %d \n",threshold);
 
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;
-    //debug: removed
-    //struct snpMap *snps = NULL;
-    //struct snpMap *snp = NULL;
     struct snp *snps = NULL;
     struct snp *snp = NULL;
 
@@ -819,26 +441,17 @@ for (cn = cns; cn != NULL; cn = cn->next)
     chromSeq = hLoadChrom(cn->name);
     printf("chrom %s :  size (%u) \n",cn->name,chromSeq->size);
     
-    //debug: removed
-    //snps = readSnpMap(cn->name);
-    //printf("read %s.snpMap where chrom=%s \n",db,cn->name);
-    
     snps = readSnp(cn->name);
     printf("read %s.snp done for chrom=%s \n",db,cn->name);
         
     flank   = flanks; 
-    //dbSnp   = dbSnps; 
-    affy10  = affy10s;
-    affy120 = affy120s;
     
     printf("=========================================================\n");
     for (snp = snps; snp != NULL; snp = snp->next)
 	{
 	int cmp = -1;
 	char *nibDna=NULL;
-	char *nibDnaRc=NULL;
 
-	//++snpMapRows;
 	++snpRows;
 
 	
@@ -854,32 +467,65 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    }
 	/* continue; */
 
+	/* add check for Heather for specific case locType=exact and size=1 */
+	if (sameString(snp->locType,"exact") && (snp->chromEnd == (snp->chromStart + 1)))
+	    {
+	    char *obs=cloneString(snp->observed);
+            int  n = chopString(obs, "/", NULL, 0); 
+            char **obsvd = needMem(n*sizeof(char*)); 
+	    char *exactDna = checkAndFetchNib(chromSeq, snp, 0, 1);
+	    int i=0;
+	    boolean found = FALSE;
+	    if (sameString(snp->strand,"-"))
+		{
+		reverseComplement(exactDna,strlen(exactDna));
+		}
+	    chopString(obs, "/", obsvd, n);
+	    if (exactDna==NULL) 
+		{
+		printf("exactDna=NULL for %s %s %u %u (%s) %s \n",
+		    snp->name,
+		    snp->chrom,
+		    snp->chromStart,
+		    snp->chromEnd,
+		    snp->observed,
+		    snp->locType
+		    );
+		}
+		
+	    uglyf("%s: exactDna=%s obs=%s \n",snp->name,exactDna,snp->observed);
+	    
+	    for(i=0; i<n; i++)
+		{
+		if (strlen(obsvd[i]) > 1)
+		    {
+		    printf("%s: incorrect length of observed %s <> 1 \n",
+			snp->name, obsvd[i]
+			);
+		    }
+		if (sameWord(obsvd[i],exactDna))
+		    {
+		    found = TRUE;
+		    }
+		}
+	    if (found) { goodExact++; }
+	    else { badExact++; 
+	      uglyf("id: %s exact %s not found in observed %s \n",snp->name,exactDna,snp->observed); 
+	      }
+	    freez(&obsvd);
+	    freez(&obs);
+	    freez(&exactDna);
+	    }
+	
 	
         while (cmp < 0)
 	    {
 	    while (cmp < 0)
 		{
-    		switch (mode)
-		    {
-		    case 1:
-			next = affy120; break;
-		    case 2:
-			//next = dbSnp; break;
-			next = flank; break;
-		    case 3:
-			next = affy10; break;
-		    }
+		next = flank;
 		if (next == NULL) 
 		    {
-		    switch (mode)
-			{
-			case 1:
-			    ++mode; break;
-			case 2:
-			    ++mode; break;
-			case 3:
-			    cmp = 1; break;
-			}
+		    cmp = 1;
 		    }
 		else
 		    {
@@ -889,34 +535,13 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		
 	    if (cmp < 0)
 		{
-		switch (mode)
-		    {
-		    case 1:
-			/* have int type but want string */
-			safef(affy120id, sizeof(affy120id), "%d", affy120->affyId); 
-			id = affy120id;
-			break;
-		    case 2:
-			//id = dbSnp->rsId; break;
-			id = flank->rsId; break;
-		    case 3:
-			id = affy10->affyId; break;
-		    }
+		id = flank->rsId;
 		cmp=mystrcmp(id, snp->name);
 		}
 		
 	    if (cmp < 0) 
 		{
-		switch (mode)
-		    {
-		    case 1:
-			affy120 = affy120->next; break;
-		    case 2:
-			//dbSnp = dbSnp->next; break;
-			flank = flank->next; break;
-		    case 3:
-			affy10 = affy10->next; break;
-		    }
+		flank = flank->next; 
 		}
 	    }	
 	    
@@ -931,40 +556,31 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
 	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
 	    int flankSize = 0;
+	
+	    lf=strlen(flank->leftFlank);
+	    rf=strlen(flank->rightFlank);
 	    
-	    switch (mode)
+	    /* if flanks exceed maxFlank, truncate */
+	    if (lf>maxFlank) 
 		{
-		case 1:
-		    seq = affy120->sequenceA; break;
-		case 2:
-		    //seq = dbSnp->assembly; break;
-		    lf=strlen(flank->leftFlank);
-		    rf=strlen(flank->rightFlank);
-		    
-		    /* if flanks exceed maxFlank, truncate */
-		    if (lf>maxFlank) 
-			{
-			char *temp=flank->leftFlank;
-			flank->leftFlank=cloneString(temp+lf-maxFlank);
-			lf = maxFlank;
-			freez(&temp);
-			}
-		    if (rf>maxFlank) 
-			{
-			rf = maxFlank;
-			flank->rightFlank[rf]=0;
-			}
-		    /* at Daryl's request, upper case */
-		    toUpperN(flank->leftFlank , lf);
-		    toUpperN(flank->rightFlank, rf);
-		    
-		    flankSize = lf+1+rf;
-		    seq = needMem(flankSize+1);
-		    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
-		    break;
-		case 3:
-		    seq = affy10->sequenceA; break; 
+		char *temp=flank->leftFlank;
+		flank->leftFlank=cloneString(temp+lf-maxFlank);
+		lf = maxFlank;
+		freez(&temp);
 		}
+	    if (rf>maxFlank) 
+		{
+		rf = maxFlank;
+		flank->rightFlank[rf]=0;
+		}
+	    /* at Daryl's request, try to make them same case */
+	    toLowerN(flank->leftFlank , lf);
+	    toLowerN(flank->rightFlank, rf);
+	    
+	    flankSize = lf+1+rf;
+	    seq = needMem(flankSize+1);
+	    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
+	
 		
             if (sameString(seq,"-"))
 		{
@@ -982,17 +598,11 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		}
 	
 	    origSeq = seq;
-	    if (mode != 2)
-		{
-    		lf = leftFlank(origSeq);
-    		rf = rightFlank(origSeq);
-		}
 	    
 	    seq = cloneString(origSeq);
 	    /* remove dashes indicating insert to simplify and correct processing of nib data */
 	    stripDashes(seq);     
 	    
-            //oldway: ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
 	    ls = lf + rf + (snp->chromEnd - snp->chromStart);
 	    
 	    nibDna = checkAndFetchNib(chromSeq, snp, lf, ls);
@@ -1071,7 +681,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		strand = 1;
 		if (axtAln) 
 		    {
-		    bestScore = axtAln->score / (lf+rf);   // was  ls;
+		    bestScore = axtAln->score / (lf+rf); 
 		    }
 		axtFree(&axtAln);
 		
@@ -1081,10 +691,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    target.dna = rc;
 		    target.size = strlen(target.dna);
 		    axtAln = axtAffine(&query, &target, simpleDnaScheme);
-		    if ((axtAln) && (bestScore < (axtAln->score / (lf+rf))))  // was ls
+		    if ((axtAln) && (bestScore < (axtAln->score / (lf+rf))))  
 			{
 			strand = -1;
-			bestScore = axtAln->score / (lf+rf);  // was ls;
+			bestScore = axtAln->score / (lf+rf); 
 			}
 		    axtFree(&axtAln);
 		    }
@@ -1134,40 +744,24 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    freez(&rc);
 	    freez(&seq);
 	    
-	    if (mode==2)
-		freez(&origSeq);
+	    freez(&origSeq);
 	    
 	
-	    }
-	else
+	    }	    
+	else   /* if (cmp==0) */
 	    {
 	    char snpLkup[10] = "";
-	    /* this id is missing from dbSnpRs/affy! */
+	    /* this id is missing from flanks */
 	    ++missing;
-	    switch (mode)
-		{
-		case 1:
-		    safef(snpLkup,sizeof(snpLkup),"%s","affy120"); break;
-		case 2:
-		    //safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
-		    safef(snpLkup,sizeof(snpLkup),"flnk%s",snp->chrom); break;
-		case 3:
-		    safef(snpLkup,sizeof(snpLkup),"%s","affy10"); break;
-		}
+	    safef(snpLkup,sizeof(snpLkup),"flnk%s",snp->chrom); 
 	    if (Verbose)		    
-    		//printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
     		printf("snp.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
 	    }
 	
 	
 	freez(&nibDna);
     
-	// debug: cut it short for testing only
-	//break;
-    
 	}
-    //debug: removed	    
-    //snpMapFreeList(&snps);
     snpFreeList(&snps);
     
     flankFreeList(&flanks);
@@ -1199,9 +793,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
     goodrc       = 0;
     assemblyDash = 0;
     gapNib       = 0;
-    // debug: cut it to just one or two chrom for testing
-    //if (++bogus > 1)
-    //    break;
     
     printf("\n");
     printf("\n");
@@ -1209,14 +800,6 @@ for (cn = cns; cn != NULL; cn = cn->next)
     }
 
 slFreeList(&cns);
-
-//debug: removed
-//dbSnpRsFreeList(&dbSnps);
-if (affy) 
-    {
-    affy10KDetailsFreeList(&affy10s);
-    affy120KDetailsFreeList(&affy120s);
-    }
 
 axtScoreSchemeFree(&simpleDnaScheme);
 
@@ -1230,9 +813,11 @@ printf("        assembly = -: %u \n",totalAssemblyDash);
 printf("         nib in gap : %u \n",totalGapNib);
 
 
-//printf("\n       Total rows in snpMap: %u \n ",snpMapRows);
 printf("\n          Total rows in snp: %u \n ",snpRows);
 printf("\n        # no dna found for : %u \n ",noDna);
+
+printf("\n          Total goodExact: %u \n ",goodExact);
+printf("\n          Total  badExact: %u \n ",badExact);
 
 printf("\n\n=========================================\n");
 
@@ -1243,7 +828,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 
-//pushCarefulMemHandler(200000000);
+/*
+pushCarefulMemHandler(200000000);
+*/
 
 /* Set initial seed */
 srand( (unsigned)time( NULL ) );

@@ -9984,6 +9984,12 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     delete from gdbPdb where genomeDb='hg17';
     insert into gdbPdb values('hg17', 'proteins041115');
 
+# Create hg17GeneList.html (to be used by Google and other users).
+# This step was done 12/08/04.
+
+    wget -O hg17GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=hg17"
+    cp -p hg17GeneList.html /usr/local/apache/goldenpath
+# Check this html file into CVS.
 
 # UPDATE TABLES NEEDED BY hgGene (DONE 11/30/04 Fan)
 
@@ -10206,7 +10212,7 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 # Create expression distance table - takes about an hour
     hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
     	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
-	-lookup=knownToGnfAtlas2
+	-lookup=knownToGnfAtlas2 &
 # Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
 # Got 36373 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
 
@@ -10223,7 +10229,7 @@ hgMapToGene "-type=bed 12" hg17 affyUclaNorm knownGene knownToU133
 cd /tmp
 cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
 time hgExpDistance hg17 affyUclaNorm affyUclaExp knownExpDistance \
-	-weights=affyUcla.weight -lookup=knownToU133
+	-weights=affyUcla.weight -lookup=knownToU133 &
 # Have 43039 elements in affyUclaNorm
 # 211 genes, 42 weights, 26.500000 total wieght
 # Got 37299 unique elements in affyUclaNorm
@@ -10235,7 +10241,7 @@ hgMapToGene hg17 affyU95 knownGene knownToU95
 #	row count changed to 18791
 #	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
 hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
-	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95 &
 # Have 11545 elements in hgFixed.gnfHumanU95MedianRatio
 # Got 17682 unique elements in hgFixed.gnfHumanU95MedianRatio
 #	row count changed to 17682000 
@@ -10246,7 +10252,7 @@ hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
 hgMapToGene hg17 affyGnf1h knownGene knownToGnf1h
 hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
-	-lookup=knownToGnf1h
+	-lookup=knownToGnf1h &
 # Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
 # Got 10273 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
 
@@ -10812,35 +10818,6 @@ end
 
     pbCalResStd 041115 9606 hg17
 
-# Create pbAaDistX tables
-
-    cat  ~/kent/src/hg/lib/pbAaDist*.sql >pbAaAll.sql
-    hgsql hg17 < pbAaAll.sql
-
-    hgsql hg17
-
-load data local infile "pbAaDistW.tab" into table hg17.pbAaDistW;
-load data local infile "pbAaDistC.tab" into table hg17.pbAaDistC;
-load data local infile "pbAaDistM.tab" into table hg17.pbAaDistM;
-load data local infile "pbAaDistH.tab" into table hg17.pbAaDistH;
-load data local infile "pbAaDistY.tab" into table hg17.pbAaDistY;
-load data local infile "pbAaDistN.tab" into table hg17.pbAaDistN;
-load data local infile "pbAaDistF.tab" into table hg17.pbAaDistF;
-load data local infile "pbAaDistI.tab" into table hg17.pbAaDistI;
-load data local infile "pbAaDistD.tab" into table hg17.pbAaDistD;
-load data local infile "pbAaDistQ.tab" into table hg17.pbAaDistQ;
-load data local infile "pbAaDistK.tab" into table hg17.pbAaDistK;
-load data local infile "pbAaDistR.tab" into table hg17.pbAaDistR;
-load data local infile "pbAaDistT.tab" into table hg17.pbAaDistT;
-load data local infile "pbAaDistV.tab" into table hg17.pbAaDistV;
-load data local infile "pbAaDistP.tab" into table hg17.pbAaDistP;
-load data local infile "pbAaDistG.tab" into table hg17.pbAaDistG;
-load data local infile "pbAaDistE.tab" into table hg17.pbAaDistE;
-load data local infile "pbAaDistA.tab" into table hg17.pbAaDistA;
-load data local infile "pbAaDistL.tab" into table hg17.pbAaDistL;
-load data local infile "pbAaDistS.tab" into table hg17.pbAaDistS;
-quit
-
 # Create pbAnomLimit and pbResAvgStd tables
 
    hgsql hg17 < ~/src/hg/lib/pbAnomLimit.sql
@@ -10864,3 +10841,41 @@ quit
 
 # Perform preliminary review of Proteome Browser for hg17, then
   notify QA for formal review.
+
+#### TIGR GENE INDEX (DONE 2004-12-04 Fan)
+    mkdir -p /cluster/data/hg17/bed/tigr
+    cd /cluster/data/hg17/bed/tigr
+    wget -timestamp ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_build35.tgz
+    tar xvzf TGI*.tgz
+
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/tigr
+    hgsql hg17 -e "drop table tigrGeneIndex"
+    hgsql hg17 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC hg17 tigrGeneIndex $f
+        hgsql hg17 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 401322 entries created in tigrGeneIndex table.
+
+    hgsql hg17 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql hg17 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords hg17 tigrGeneIndex
+
+    gzip *.gff *TCs

@@ -44,7 +44,6 @@ static char *cytoBandName(struct track *tg, void *item)
 {
 struct cytoBand *band = item;
 static char buf[32];
-int len;
 
 sprintf(buf, "%s%s", (IS_DMEL ? "" : skipChr(band->chrom)), band->name);
 return buf;
@@ -138,7 +137,6 @@ static void cytoBandDrawAt(struct track *tg, void *item,
 struct cytoBand *band = item;
 int heightPer = tg->heightPer;
 int x1,x2,w;
-int midLineOff = heightPer/2;
 Color col, textCol;
 char *s;
 
@@ -207,11 +205,9 @@ double scale = 0;
 int xBorder = 4;
 int lineHeight = 0;
 int heightPer = 0;
-int s, e;
 int cenLeft = 0, cenMid = 0, cenRight = 0;
-int y, x1, x2, w;
+int x1, x2;
 int yBorder = 0;
-int halfHeight = 0;
 int chromSize = hChromSize(chromName);
 struct cytoBand *cbList = NULL, *cb = NULL;
 scale = (double) (width - (2 * xBorder)) / chromSize;

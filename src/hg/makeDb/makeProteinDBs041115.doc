@@ -75,28 +75,7 @@
 
        pbCalResStdGlobal 041115
 
-# Load all distribution tables:
-
-        hgsql proteins041115 -e 'load data local infile "pbAaDistW.tab" into table pbAaDistW'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistC.tab" into table pbAaDistC'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistM.tab" into table pbAaDistM'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistH.tab" into table pbAaDistH'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistY.tab" into table pbAaDistY'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistN.tab" into table pbAaDistN'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistF.tab" into table pbAaDistF'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistI.tab" into table pbAaDistI'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistD.tab" into table pbAaDistD'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistQ.tab" into table pbAaDistQ'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistK.tab" into table pbAaDistK'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistR.tab" into table pbAaDistR'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistT.tab" into table pbAaDistT'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistV.tab" into table pbAaDistV'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistP.tab" into table pbAaDistP'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistG.tab" into table pbAaDistG'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistE.tab" into table pbAaDistE'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistA.tab" into table pbAaDistA'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistL.tab" into table pbAaDistL'
-        hgsql proteins041115 -e 'load data local infile "pbAaDistS.tab" into table pbAaDistS'
+# Load distribution tables:
 
         hgsql proteins041115 -e 'load data local infile "pbAnomLimit.tab" into table pbAnomLimit'
         hgsql proteins041115 -e 'load data local infile "pbResAvgStd.tab" into table pbResAvgStd'

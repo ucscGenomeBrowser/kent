@@ -1,0 +1,130 @@
+<H2>Description</H2>
+<P>
+This track contains the location and score of transcription factor
+binding sites conserved in the human/mouse/rat alignment.  A binding
+site is considered to be conserved across the alignment if its score
+meets the threshold score for that binding site in all 3 species.
+The score and threshold are computed with the Transfac Matrix Database (v8.3) created by
+<A HREF="http://www.gene-regulation.com/pub/databases.html" TARGET=blank>Biobase</A>. 
+The data are purely computational, and as such not all binding sites
+listed here are biologically functional binding sites.
+</P>
+<P>
+In the graphical display, each box represents one conserved tfbs. Clicking on
+a box brings up detailed information on the binding site, namely its
+Transfac I.D., a link to its Transfac Matrix (free registration with Transfac
+required), its location in the human genome (chromosome, start, end,
+and strand), its length in bases, its raw score, and its Z score.\
+</P>
+<P>
+All binding factors that are known to bind to the particular binding site
+are listed along with their species, SwissProt ID, and a link to that
+factor's page on the UCSC Protein Browser if such an entry exists.
+</P>
+
+<H2>Methods</H2>
+
+<P>
+The Transfac Matrix Database contains position-weight matrices for 
+735 transcription factor binding sites, as characterized through
+experimental results in the scientific literature.  A typical (in this
+case ficticious) matrix (call it mat) will look something like:</P>
+<BLOCKQUOTE>
+<PRE>
+        A      C      G      T
+01     15     15     15     15      N
+02     20     10     15     15      N
+03      0      0     60      0      G
+04     60      0      0      0      A
+05      0      0      0     60      T
+</PRE>
+</BLOCKQUOTE>
+The above matrix specifies the results of 60 (the sum of each row)
+experiments.  In the experiments, the first position of the binding site
+was A 15 times, C 15 times, G 15 times, and T 15 times (and so on for
+each position.)  The consensus sequence of the above binding site as
+characterized by the matrix is NNGAT.  The format of the consensus sequence
+is the deduced consensus in the IUPAC 15-letter code.
+</P>
+<P>
+In the general case, the goal is to find all matches to a matrix of length n
+that are conserved across n<sub>s</sub> sequences.  For this example, n=5 and 
+n<sub>s</sub>=3 (human, mouse, and rat.)  Denote the multispecies alignment s,
+such that s<sub>ji</sub> is the nucleotide at position i of species j.  Also,
+define an n<sub>s</sub> x 4 background matrix (call it back) giving the background 
+frequencies of each nucleotide in each species.  A sliding window (of length n)
+calculates the "species score" for each species at each position:<br><br>
+
+From this, a log-odds score is calculated for each species (normalizing by the
+length of the matrix and the number of species in the alignment):<br><br>
+
+These scores are then summed for all species, yielding a final log-odds score for
+the current position:<br><br>
+
+Note that the log-odds score of each species must exceed the threshold for that 
+species.  The threshold is calculated for each species such that the only hits
+that will be reported will have a Z score (to be discussed later) of 1.0 or 
+higher in each species.  Next, the maximum and minimum possible log-odds scores
+are computed and summed across all species for the given binding matrix:<br><br>
+These are then used to normalize the final, raw log-odds score so that its range is
+between 0 and 1:<br><br>
+Next, the best raw score for each binding site is calculated for the 1,000 base 
+upstream region of each human RefSeq gene (taken from the RefGene table for hg17.)
+The mean and standard deviation for each binding site are then calculated across
+all RefSeq genes.  These are then used to create the threshold for each binding site,
+namely, one standard deviation above the mean.  Tfloc is then run with this threshold
+on each chromosome for the 3-way multiz alignments.  Finally, a Z score is calculated 
+for each binding site hit h to matrix m according to the following formula:<br><br>
+This final score can be interpreted as the number of standard deviations above the
+mean raw score for that binding site across the upstream regions of all RefSeq genes.
+</P>
+<P>
+It should be noted that the positions of many of these conserved binding
+sites coincide with known exons and other highly conserved regions.
+Regions such as these are more likely to contain false positive matches,
+as the high sequence identity across the alignment increases the likelihood of
+a short motif that looks like a binding site to be conserved.  Conversely,
+matches found in introns and intergenic regions are more likely to be real
+binding sites, since these regions are mostly poorly conserved.
+</P>
+<P>
+These data were obtained by running the program tfloc (Transcription Factor binding 
+site LOCater) on multiz alignments of the May 2004 (mm5) mouse genome assembly 
+and the June 2003 rat assembly (rn3) to the May 2004 human genome assembly (hg17.)  
+Transcription factor information was culled from the Transfac Factor database.
+</P>
+<H2>Table Format</H2>
+<P>
+The format of the sql table is:<br>
+<BLOCKQUOTE>
+<PRE>
+chr1    165245  165258  V$OCT1_03       890     -       human   Oct-1   P14851  1.07
+chr1    165245  165258  V$OCT1_03       890     -       mouse   Oct-1A  P25425  1.07
+chr1    165245  165258  V$OCT1_03       890     -       rat     Oct-1   P31503  1.07
+chr1    166943  166950  V$SRY_01        900     +       human   SRY     Q05066  1.45
+chr1    168982  168997  V$TATA_01       860     +       human   TBP     P20226  1.25
+chr1    168982  168997  V$TATA_01       860     +       mouse   TBP     P29037  1.25
+chr1    170940  170948  F$STRE_01       890     -       N       N       N       2.01
+</PRE>
+</BLOCKQUOTE>
+The columns are (from left to right): chromosome, from, to, binding site ID, raw score,
+strand, transcription factor species, transcription factor name, transcription factor id,
+Z score.  When no factor species, name, or id information exists in the transfac factor 
+database for a binding site, an 'N' appears in the corresponding column(s).  Notice also
+that each transcription factor gets its own line, so multiple lines can exist for one
+binding site.
+</P>
+<P>
+<H2>Credits</H2>
+<P>
+These data were generated using the Transfac Matrix and Factor databases created by
+<A HREF="http://www.gene-regulation.com/pub/databases.html" TARGET=blank>Biobase</A>.
+</P>
+<P>
+The tfloc program was developed at The Pennsylvania State University (with numerous 
+updates done at UCSC) by Matt Weirauch.
+</P>
+<P>
+This track was created by Matt Weirauch and Brian Raney at The
+University of California at Santa Cruz.
+</P>

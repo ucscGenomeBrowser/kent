@@ -30,6 +30,13 @@ if (theCtList == NULL)
 return(theCtList);
 }
 
+void flushCustomTracks()
+/* Flush custom track list. */
+{
+theCtList = NULL;
+}
+
+
 struct customTrack *lookupCt(char *name)
 /* Find named custom track. */
 {

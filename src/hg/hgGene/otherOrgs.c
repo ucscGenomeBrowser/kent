@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.10 2004/11/23 18:08:37 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.11 2004/12/03 13:51:02 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -111,17 +111,9 @@ static char *otherOrgId(struct otherOrg *otherOrg, struct sqlConnection *conn,
 	char *geneId)
 /* Return gene ID in other organism or NULL if it doesn't exist. */
 {
-char query[512];
-struct sqlResult *sr;
-char **row;
-char *otherId = NULL;
+char query[256];
 safef(query, sizeof(query), otherOrg->idSql, geneId);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    otherId = cloneString(row[0]);
-sqlFreeResult(&sr);
-return otherId;
+return sqlQuickString(conn, query);
 }
 
 static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *conn,
@@ -134,52 +126,38 @@ if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL)
     {
     struct sqlConnection *conn = sqlConnect(otherOrg->db);
     char query[512];
-    struct sqlResult *sr;
-    char **row;
     safef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	freez(&otherId);
-	protId = cloneString(row[0]);
-	}
-    sqlFreeResult(&sr);
+    protId = sqlQuickString(conn, query);
     sqlDisconnect(&conn);
     }
-else
+if (protId == NULL)
+    {
     protId = otherId;
+    otherId = NULL;
+    }
+freez(&otherId);
 return protId;
 }
 
 static char *otherOrgExternalId(struct otherOrg *otherOrg, char *localId)
 /* Convert other organism UCSC id to external database ID. */
 {
-char *otherId;
+char *otherId = NULL;
 if (otherOrg->otherIdSql)
     {
     struct sqlConnection *conn = sqlConnect(otherOrg->db);
     char query[512];
-    struct sqlResult *sr;
-    char **row;
     safef(query, sizeof(query), otherOrg->otherIdSql, localId);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	freez(&otherId);
-	otherId = cloneString(row[0]);
-	}
-    sqlFreeResult(&sr);
+    otherId = sqlQuickString(conn, query);
     sqlDisconnect(&conn);
     }
-else
+if (otherId == NULL)
     otherId = cloneString(localId);
 return otherId;
 }
 
 static void otherOrgPrintLink(struct otherOrg *otherOrg,  
-	char *label,  char *missingLabel, boolean useHgsid,
+	char *label,  char *missingLabel, boolean internalLink,
 	char *otherId, char *urlFormat)
 /* If label and urlFormat exist then print up a link.  Otherwise print n/a. */
 {
@@ -190,11 +168,10 @@ if (urlFormat != NULL && label != NULL)
         {
 	hPrintf("<A HREF=\"");
 	hPrintf(urlFormat, otherId);
-	if (useHgsid)
-	    hPrintf("&%s&db=%s", cartSidUrlString(cart), otherOrg->db);
+	if (internalLink)
+	    hPrintf("&db=%s", otherOrg->db);
 	hPrintf("\"");
-	if (!useHgsid)
-	    hPrintf(" TARGET=_blank");
+	hPrintf(" TARGET=_blank");
 	hPrintf(" class=\"toc\">");
 	hPrintf("%s", label);
 	hPrintf("</A>");
