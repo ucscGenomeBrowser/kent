@@ -106,7 +106,7 @@ Color shadesOfRed[16];
 boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
-struct pslWScore *sageExpList = NULL;
+struct bed *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
@@ -7307,17 +7307,24 @@ else
     }
 }
 
-struct sageExp *loadSageExps(char *tableName, struct pslWScore  *psList)
+struct sageExp *loadSageExps(char *tableName, struct bed  *bedist)
 /* load the sage experiment data. */
 {
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
-struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+struct sqlConnection *sc = NULL;
+//struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
 char query[256];
 struct sageExp *seList = NULL, *se=NULL;
 char **row;
 struct sqlResult *sr = NULL;
 char *tmp= cloneString("select * from sageExp order by num");
+if(hTableExists(tableName))
+    sc = hAllocConn();
+else
+    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+
+
 
 sprintf(query,"%s",tmp);
 sr = sqlGetResult(sc,query);
@@ -7328,34 +7335,41 @@ while((row = sqlNextRow(sr)) != NULL)
     }
 freez(&tmp);
 sqlFreeResult(&sr);
-sqlDisconnect(&sc);
+if(hTableExists(tableName))
+    hFreeConn(&sc);
+else
+    sqlDisconnect(&sc);
 slReverse(&seList);
 return seList;
 }
 
-struct sage *loadSageData(char *table, struct pslWScore* pslList)
-/* load the sage data by constructing a query based on the qNames of the pslList
+struct sage *loadSageData(char *table, struct bed* bedList)
+/* load the sage data by constructing a query based on the qNames of the bedList
  */
 {
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
-struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+struct sqlConnection *sc = NULL;
 struct dyString *query = newDyString(2048);
 struct sage *sgList = NULL, *sg=NULL;
-struct pslWScore *psl=NULL;
+struct bed *bed=NULL;
 char **row;
 int count=0;
 struct sqlResult *sr = NULL;
+if(hTableExists(table))
+    sc = hAllocConn();
+else
+    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
 dyStringPrintf(query, "%s", "select * from sage where ");
-for(psl=pslList;psl!=NULL;psl=psl->next)
+for(bed=bedList;bed!=NULL;bed=bed->next)
     {
     if(count++) 
 	{
-	dyStringPrintf(query," or uni=%d ", atoi(psl->qName + 3 ));
+	dyStringPrintf(query," or uni=%d ", atoi(bed->name + 3 ));
 	}
     else 
 	{
-	dyStringPrintf(query," uni=%d ", atoi(psl->qName + 3));
+	dyStringPrintf(query," uni=%d ", atoi(bed->name + 3));
 	}
     }
 sr = sqlGetResult(sc,query->string);
@@ -7365,22 +7379,25 @@ while((row = sqlNextRow(sr)) != NULL)
     slAddHead(&sgList,sg);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&sc);
+if(hTableExists(table))
+    hFreeConn(&sc);
+else
+    sqlDisconnect(&sc);
 slReverse(&sgList);
 freeDyString(&query);
 return sgList;
 }
 
-int sagePslWSListIndex(struct pslWScore *pslList, int uni)
-/* find the index of a psl by the unigene identifier in a psl list */
+int sageBedWSListIndex(struct bed *bedList, int uni)
+/* find the index of a bed by the unigene identifier in a bed list */
 {
-struct pslWScore *psl;
+struct bed *bed;
 int count =0;
 char buff[128];
 sprintf(buff,"Hs.%d",uni);
-for(psl = pslList; psl != NULL; psl = psl->next)
+for(bed = bedList; bed != NULL; bed = bed->next)
     {
-    if(sameString(psl->qName,buff))
+    if(sameString(bed->name,buff))
 	return count;
     count++;
     }
@@ -7388,12 +7405,12 @@ errAbort("Didn't find the unigene tag %s",buff);
 return 0;
 }
 
-int sortSageByPslOrder(const void *e1, const void *e2)
-/* used by slSort to sort the sage experiment data using the order of the psls */
+int sortSageByBedOrder(const void *e1, const void *e2)
+/* used by slSort to sort the sage experiment data using the order of the beds */
 {
 const struct sage *s1 = *((struct sage**)e1);
 const struct sage *s2 = *((struct sage**)e2);
-return(sagePslWSListIndex(sageExpList,s1->uni) - sagePslWSListIndex(sageExpList,s2->uni));
+return(sageBedWSListIndex(sageExpList,s1->uni) - sageBedWSListIndex(sageExpList,s2->uni));
 }
 
 void printSageGraphUrl(struct sage *sgList)
@@ -7408,7 +7425,9 @@ for(sg = sgList; sg != NULL; sg = sg->next)
 	printf("u=%d", sg->uni);
     else 
 	printf("u=%d&", sg->uni);
+    
     }
+printf("&db=%s",database);
 printf("\">here</a>");
 printf(" to see the data as a graph.\n");
 }
@@ -7420,7 +7439,7 @@ puts(
      "is a quantative measurement gene expression. Data is presented for every cluster contained "
      "in the browser window and the selected cluster name is highlighted in red. All data is from "
      "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
-     "project downloaded Jul 26, 2001. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
+     "project downloaded Jul 26, 2002. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
 printSageGraphUrl(sgList);
 puts(
      "<p><b>Brief Methodology:</b> SAGE counts are produced "
@@ -7438,16 +7457,16 @@ puts(
 );
 }
 
-void sagePrintTable(struct pslWScore *pslList, char *itemName) 
-/* load up the sage experiment data using psl->qNames and display it as a table */
+void sagePrintTable(struct bed *bedList, char *itemName) 
+/* load up the sage experiment data using bed->qNames and display it as a table */
 {
 struct sageExp *seList = NULL, *se =NULL;
 struct sage *sgList=NULL, *sg=NULL;
 int featureCount;
 int count=0;
-seList=loadSageExps("sageExp",pslList);
-sgList = loadSageData("sage", pslList);
-slSort(&sgList,sortSageByPslOrder);
+seList=loadSageExps("sageExp",bedList);
+sgList = loadSageData("sage", bedList);
+slSort(&sgList,sortSageByBedOrder);
 
 printSageReference(sgList);
 printSageGraphUrl(sgList);
@@ -7505,29 +7524,29 @@ printf("</table>\n");
 }
 
 
-struct pslWScore *pslWScoreLoadByChrom(char *table, char *chrom, int start, int end)
+struct bed *bedWScoreLoadByChrom(char *table, char *chrom, int start, int end)
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
-struct pslWScore *pslWS, *pslWSList = NULL;
+struct bed *bedWS, *bedWSList = NULL;
 char **row;
 int rowOffset;
 sr = hRangeQuery(conn,table,seqName,winStart,winEnd,NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    pslWS = pslWScoreLoad(row);
-    slAddHead(&pslWSList, pslWS);
+    bedWS = bedLoad12(row+rowOffset);
+    slAddHead(&bedWSList, bedWS);
     }
-slReverse(&pslWSList);
+slReverse(&bedWSList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return pslWSList;
+return bedWSList;
 }
 
 
 void doSageDataDisp(char *tableName, char *itemName)
 {
-struct pslWScore *sgList = NULL;
+struct bed *sgList = NULL;
 char buff[64];
 char *s=NULL;
 int sgCount=0;
@@ -7535,7 +7554,7 @@ chuckHtmlStart("Sage Data Requested");
 printf("<h2>Sage Data for: %s %d-%d</h2>\n", seqName, winStart, winEnd);
 puts("<table cellpadding=0 cellspacing=0><tr><td>\n");
 
-sgList = pslWScoreLoadByChrom("uniGene", seqName, winStart, winEnd);
+sgList = bedWScoreLoadByChrom("uniGene", seqName, winStart, winEnd);
 
 sgCount = slCount(sgList);
 if(sgCount > 50)
