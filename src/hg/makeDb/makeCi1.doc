@@ -62,6 +62,23 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     cd /cluster/store5/genbank
     ./bin/gbDbLoadStep -noPerChrom=ci1 -initialLoad ci1 
     # ./bin/i386/gbLoadRna -drop ci1
+# drop too short indices
+    foreach i (all_mrna intronEst all_est xenoMrna)
+	echo "drop index tName on $i ;" | hgsql ci1
+	echo "drop index tName_2 on $i ;" | hgsql ci1
+	echo "drop index tName_3 on $i ;" | hgsql ci1
+	echo "dropped indices on $i"
+    end
+    foreach i (all_mrna intronEst all_est xenoMrna)
+	echo "create index tName on $i (tName, bin) ;" 
+	echo "create index tName on $i (tName, bin) ;" | hgsql ci1
+	echo "create index tName_2 on $i  (tName, tStart);"
+	echo "create index tName_2 on $i  (tName, tStart);" | hgsql ci1
+	echo "create index tName_3 on $i  (tName, tEnd);" 
+	echo "create index tName_3 on $i  (tName, tEnd);" | hgsql ci1
+	echo "created indices on $i"
+    end
+
 
 
 # GAP table
