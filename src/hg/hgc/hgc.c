@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.786 2004/11/23 02:41:57 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.787 2004/11/23 18:13:05 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11578,7 +11578,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     jaxQTL = jaxQTL3Load(row);
     printf("<B>Jax/MGI Link: </B>");
-    printf("<a href=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</a><BR>\n", 
+    printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</a><BR>\n", 
     	   jaxQTL->mgiID, jaxQTL->mgiID);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
