@@ -18,9 +18,9 @@ enum {qSizeMax = 20000};
 /* Variables that can be set from command line. */
 int tileSize = 11;
 int minMatch = 2;
-int minScore = 40;
+int minScore = 30;
 int maxGap = 2;
-int repMatch = 1024;
+int repMatch = 1024*4;
 int dotEvery = 0;
 boolean oneOff = FALSE;
 boolean noHead = FALSE;
@@ -59,7 +59,7 @@ errAbort(
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
   "               it is masked.  Typically this is 1024 for tileSize 12,\n"
   "               4096 for tile size 11, 16384 for tile size 10.\n"
-  "               Default is 16384\n"
+  "               Default is 4096\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
   "               the tileSize\n"
@@ -497,7 +497,7 @@ if ((dIsProtLike ^ qIsProtLike) != 0)
 if (dIsProtLike)
     {
     tileSize = 4;
-    minMatch = 3;
+    minMatch = 2;
     maxGap = 0;
     }
 
