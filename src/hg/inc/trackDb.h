@@ -15,7 +15,7 @@ struct trackDb
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
     char *longLabel;	/* Long label displayed in middle */
-    unsigned char visibility;	/* 0=hide, 1=dense, 2=full, 3=pack */
+    unsigned char visibility;	/* 0=hide, 1=dense, 2=full, 3=pack, 4=squish */
     float priority;	/* 0-100 - where to position.  0 is top */
     unsigned char colorR;	/* Color red component 0-255 */
     unsigned char colorG;	/* Color green component 0-255 */
