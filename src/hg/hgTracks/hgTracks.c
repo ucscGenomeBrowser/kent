@@ -5699,7 +5699,7 @@ if (hgp == NULL || hgp->posCount == 0)
     errAbort("Sorry, couldn't locate %s in genome database\n", spec);
     return TRUE;
     }
-if ((pos = hgp->singlePos) != NULL)
+if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
     {
     *retChromName = pos->chrom;
     *retWinStart = pos->chromStart;
