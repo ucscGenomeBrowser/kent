@@ -1,6 +1,10 @@
 #include "common.h"
 #include "hCommon.h"
+#include "linefile.h"
 #include "cheapcgi.h"
+#include "genePred.h"
+#include "dnaseq.h"
+#include "dystring.h"
 #include "htmshell.h"
 #include "jksql.h"
 #include "knownInfo.h"
@@ -10,6 +14,20 @@
 #include "hash.h"
 #include "hdb.h"
 #include "fa.h"
+#include "psl.h"
+#include "nib.h"
+
+/* Variables used by getFeatDna code */
+char *database = NULL;		/* Which database? */
+int chromStart = 0;		/* Start of range to select from. */
+int chromEnd = BIGNUM;          /* End of range. */
+char *where = NULL;		/* Extra selection info. */
+boolean breakUp = FALSE;	/* Break up things? */
+int merge = -1;			/* Merge close blocks? */
+char *outputType = "fasta";	/* Type of output. */
+
+static int blockIx = 0;	/* Index of block written. */
+
 
 static boolean existsAndEqual(char* var, char* value)
 /* returns true is the given CGI var exists and equals value */
@@ -20,66 +38,6 @@ static boolean existsAndEqual(char* var, char* value)
 		return FALSE;
 }
 
-static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
-        char retChrom[32], char retStart[32], char retEnd[32])
-/* Return TRUE if chrom/start/end are in hash.
- * If so copy them to retChrom, retStart, retEnd, if they are all not null
- * Helper routine for findChromStartEndFields below. */
-{
-if (hashLookup(hash, chrom) && hashLookup(hash, start) && hashLookup(hash, end))
-    {
-	if(retChrom != 0 && retStart != 0 && retEnd != 0)
-		{
-    	strcpy(retChrom, chrom);
-    	strcpy(retStart, start);
-    	strcpy(retEnd, end);
-	}
-    return TRUE;
-    }
-else
-    return FALSE;
-}
-
-static boolean hFindChromStartEndFields(char *table,
-        char retChrom[32], char retStart[32], char retEnd[32])
-/* Given a table return the fields for selecting chromosome, start, and end.
- *  If no such fields returns FALSE. */
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct hash *hash = newHash(6);
-struct sqlConnection *conn = hAllocConn();
-boolean isPos = TRUE;
-
-/* Read table description into hash. */
-sprintf(query, "describe %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    hashAdd(hash, row[0], NULL);
-sqlFreeResult(&sr);
-
-/* Look for bed-style names. */
-if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart,
-retEnd))
-    ;
-/* Look for psl-style names. */
-else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
-    ;
-/* Look for gene prediction names. */
-else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart,
-retEnd))
-    ;
-/* Look for repeatMasker names. */
-else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart,
-retEnd))
-    ;
-else
-    isPos = FALSE;
-freeHash(&hash);
-hFreeConn(&conn);
-return isPos;
-}
 
 static boolean findGenomePos(char *spec, char **retChromName, 
 		    int *retWinStart, int *retWinEnd)
@@ -126,7 +84,8 @@ return TRUE;
 }
 
 static void printTables(struct hashEl *hel)
-/* this function iterates over a hash table and prints out the name in a input form */
+/* this function is used to iterates over a hash table and prints out
+ * the name in a input form */
 {
 	printf("<OPTION>%s\n", hel->name);
 }
@@ -145,9 +104,7 @@ return strcmp(a->name, b->name);
 void getTable()
 /* get the a talbe selection from the user */
 {
-char* table;
 char* database;
-struct cgiVar* current;
 
 char *chromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
@@ -165,7 +122,6 @@ struct hash *tableHash = newHash(7);
 struct hashEl *tableList;
 struct hashEl *currentListEl;
 
-current = cgiVarList();
 position = cgiOptionalString("position");
 
 /* select the database */
@@ -210,22 +166,23 @@ puts("<P>");
 
 /* iterate through all the tables and store the positional ones in a list */
 strcpy(query, "SHOW TABLES");
+//puts(query);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
 	{
 	/* if they are positional, print them */
-	if(hFindChromStartEndFields(row[0], 0, 0, 0))
+	if(hFindChromStartEndFields(row[0], query, query, query))
 		{
 		char chrom[32];
 		char post[32];
 		char key[32];
 
 		/* if table name is of the form, chr*_random_* or chr*_* */
-		if(sscanf(row[0], "chr%[^_]_random_%s", chrom, post) == 2 ||
-			sscanf(row[0], "chr%[^_]_%s", chrom, post) == 2)
+		if(sscanf(row[0], "chr%32[^_]_random_%32s", chrom, post) == 2 ||
+			sscanf(row[0], "chr%32[^_]_%32s", chrom, post) == 2)
 			{
 			/* parse the name into chrN_* */
-			sprintf(key, "chrN_%s", post);
+			snprintf(key, 32, "chrN_%s", post);
 			/* and insert it into the hash table if it is not already there */
 			hashStoreName(tableHash, key);
 			}
@@ -258,19 +215,6 @@ puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
 
 puts("</FORM>");
 
-/* some debuging information */
-/*pnts-uts("<TABLE>");
-while(current != 0)
-	{
-	puts("\t<TR>");
-	printf("\t\t<TD>%s</TD><TD>%s</TD>\n", current->name, current->val);
-	puts("\t</TR>");
-
-	current = current->next;
-	}
-printf("%s from %d to %d\n", chromName, winStart, winEnd);
-puts("</TABLE>");*/
-
 hashElFreeList(&tableList);
 
 puts("</CENTER>");
@@ -285,21 +229,20 @@ char selectChro[64];
 char chro[64];
 char post[64];
 
-sscanf(chrom_name, "chr%s", selectChro);
+sscanf(chrom_name, "chr%64s", selectChro);
 
-if(sscanf(table, "chrN_%s", post) == 1)
+if(sscanf(table, "chrN_%64s", post) == 1)
 	{
-	sprintf(dest, "chr%s_%s", selectChro, post);
+	snprintf(dest, 256, "chr%s_%s", selectChro, post);
 	}
 else
-	strcpy(dest, table);
+	snprintf(dest, 256, "%s", table);
 }
 
 
 void getAllFields()
 /* downloads and all the fields of the selected table */
 {
-struct cgiVar* current = cgiVarList();
 char table[256];
 char query[256];
 int i;
@@ -348,10 +291,11 @@ if(!allLetters(table))
 	
 /* get the name of the start and end fields */
 hFindChromStartEndFields(table, chromFieldName, startName, endName);
-sprintf(query, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
+snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
 		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 
 conn = hAllocConn();
+//puts(query);
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
@@ -447,7 +391,7 @@ if(!allGenome)
 	}
 else	/* if all the genome */
 	{
-	strcpy(table, cgiString("table"));
+	strncpy(table, cgiString("table"), 255);
 	/* take table of the form chrN_* to chr1_* and uses chr1_* as prototypical table */
 	if(table[0] == 'c' && table[1] == 'h' && table[2] == 'r' && table[3] == 'N' && table[4] == '_')
 		table[3] = '1';
@@ -469,7 +413,8 @@ cgiMakeHiddenVar("phase", "Choose fields");
 /* print the name of the selected table */
 printf("<H3>Track: %s</H3>\n", cgiString("table"));
 
-sprintf(query, "DESCRIBE %s", table);
+snprintf(query, 256, "DESCRIBE %s", table);
+//puts(query);
 sr = sqlGetResult(conn, query);
 
 printf("<INPUT TYPE=\"hidden\" NAME=\"table\" VALUE=\"%s\">\n", cgiString("table"));
@@ -490,7 +435,7 @@ void getSomeFields()
 {
 struct cgiVar* current = cgiVarList();
 char table[1024];
-char query[256];
+char query[4096];
 int i;
 int numberColumns;
 struct sqlConnection *conn;
@@ -531,9 +476,8 @@ if(!allLetters(table))
 /* get the name of the start and end fields */
 hFindChromStartEndFields(table, chromFieldName, startName, endName);
 
-strcpy(query, "SELECT");
-
 /* build the SQL command */
+strcpy(query, "SELECT");
 
 /* the first field selected is special */
 while(current != 0)
@@ -580,11 +524,12 @@ while(current != 0)
 sprintf(query, "%s FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d", query, table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
 
 conn = hAllocConn();
+//puts(query);
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
 printf("Content-Type: text/plain\n\n");
-/*puts(query);*/
+//puts(query);
 /* print the field names */
 printf("#");
 while((field = sqlFieldName(sr)) != 0)
@@ -674,11 +619,12 @@ while(current != 0)
 sprintf(query, "%s FROM %s", query, table);
 
 conn = hAllocConn();
+//puts(query);
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
 
 printf("Content-Type: text/plain\n\n");
-puts(query);
+//puts(query);
 /* print the field names */
 printf("#");
 while((field = sqlFieldName(sr)) != 0)
@@ -811,50 +757,50 @@ table = strstr(table, "_");
 
 printf("Content-type: text/plain\n\n");
 
-sprintf(parsedTableName, "chr%d%s", 1, table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%d%s", 1, table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, TRUE);
 
-sprintf(parsedTableName, "chr%d_random%s", 1, table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%d_random%s", 1, table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 for(c  = 2; c <= 22; c++)
 	{
-	sprintf(parsedTableName, "chr%d%s", c, table); 
-	sprintf(query, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(parsedTableName, 256, "chr%d%s", c, table); 
+	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
 	outputTabData(query, parsedTableName, conn, FALSE);
-	sprintf(parsedTableName, "chr%d_random%s", c, table); 
-	sprintf(query, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(parsedTableName, 256, "chr%d_random%s", c, table); 
+	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
 	outputTabData(query, parsedTableName, conn, FALSE);
 	}
 
-sprintf(parsedTableName, "chr%s%s", "X", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s%s", "X", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "X", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-
-sprintf(parsedTableName, "chr%s%s", "Y", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "Y", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s_random%s", "X", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
-sprintf(parsedTableName, "chr%s%s", "NA", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s%s", "Y", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "NA", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s_random%s", "Y", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
-sprintf(parsedTableName, "chr%s%s", "UL", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s%s", "NA", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "UL", table);
-sprintf(query, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(parsedTableName, 256, "chr%s_random%s", "NA", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+
+snprintf(parsedTableName, 256, "chr%s%s", "UL", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+snprintf(parsedTableName, 256, "chr%s_random%s", "UL", table);
+snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 }
 
@@ -896,7 +842,7 @@ if(!allLetters(table))
 	}
 
 /* get the name of the start and end fields */
-sprintf(query, "SELECT * FROM %s", table);
+snprintf(query, 256, "SELECT * FROM %s", table);
 
 conn = hAllocConn();
 
@@ -928,69 +874,52 @@ table = strstr(table, "_");
 
 printf("Content-type: text/plain\n\n");
 
-sprintf(parsedTableName, "chr%d%s", 1, table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%d%s", 1, table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, TRUE);
 
-sprintf(parsedTableName, "chr%d_random%s", 1, table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%d_random%s", 1, table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 for(c  = 2; c <= 22; c++)
 	{
-	sprintf(parsedTableName, "chr%d%s", c, table); 
-	sprintf(query, "SELECT * FROM %s", parsedTableName); 
+	snprintf(parsedTableName, 256, "chr%d%s", c, table); 
+	snprintf(query, 256, "SELECT * FROM %s", parsedTableName); 
 	outputTabData(query, parsedTableName, conn, FALSE);
-	sprintf(parsedTableName, "chr%d_random%s", c, table); 
-	sprintf(query, "SELECT * FROM %s", parsedTableName); 
+	snprintf(parsedTableName, 256, "chr%d_random%s", c, table); 
+	snprintf(query, 256, "SELECT * FROM %s", parsedTableName); 
 	outputTabData(query, parsedTableName, conn, FALSE);
 	}
 
-sprintf(parsedTableName, "chr%s%s", "X", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%s%s", "X", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "X", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-
-sprintf(parsedTableName, "chr%s%s", "Y", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "Y", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%s_random%s", "X", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
-sprintf(parsedTableName, "chr%s%s", "NA", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%s%s", "Y", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "NA", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-
-sprintf(parsedTableName, "chr%s%s", "UL", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
-outputTabData(query, parsedTableName, conn, FALSE);
-sprintf(parsedTableName, "chr%s_random%s", "UL", table);
-sprintf(query, "SELECT * FROM %s", parsedTableName);
+snprintf(parsedTableName, 256, "chr%s_random%s", "Y", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
 outputTabData(query, parsedTableName, conn, FALSE);
 
+snprintf(parsedTableName, 256, "chr%s%s", "NA", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+snprintf(parsedTableName, 256, "chr%s_random%s", "NA", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+snprintf(parsedTableName, 256, "chr%s%s", "UL", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
+snprintf(parsedTableName, 256, "chr%s_random%s", "UL", table);
+snprintf(query, 256, "SELECT * FROM %s", parsedTableName);
+outputTabData(query, parsedTableName, conn, FALSE);
 }
-
 
 void getAllFieldsGenome()
 {
@@ -1017,39 +946,306 @@ else
 }
 
 
+char *makeFaStartLine(char *chrom, char *table, int start, int size)
+/* Create fa start line. */
+{
+char faName[128];
+static char faStartLine[512];
+
+++blockIx;
+if (startsWith("chr", table))
+    sprintf(faName, "%s_%d", table, blockIx);
+else
+    sprintf(faName, "%s_%s_%d", chrom, table, blockIx);
+sprintf(faStartLine, "%s %s %s %d %d", 
+	faName, database, chrom, start, start+size);
+return faStartLine;
+}
+
+void writeOut(FILE *f, char *chrom, int start, int size, char strand, DNA *dna, char *faHeader)
+/* Write output to file */
+{
+if (sameWord(outputType, "pos"))
+    fprintf(f, "%s\t%d\t%d\t%c\n", chrom, start, start+size, strand);
+else if (sameWord(outputType, "fasta"))
+    faWriteNext(f, faHeader, dna, size);
+else
+    errAbort("Unknown output type %s\n", outputType);
+}
+
+
+void outputDna(FILE *f, char *chrom, char *table, int start, int size, char *dna, 
+	char *nibFileName, FILE *nibFile, int nibSize, char strand)
+/* Output DNA either directly from nib or by upper-casing DNA. */
+{
+if (merge >= 0)
+    toUpperN(dna + start, size);
+else
+    {
+    struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
+    if (strand == '-')
+        reverseComplement(seq->dna, size);
+    writeOut(f, chrom, start, size, strand, seq->dna, makeFaStartLine(chrom, table, start, size));
+    freeDnaSeq(&seq);
+    }
+}
+
+
+void chromFeatDna(char *table, char *chrom, FILE *f)
+/* chromFeatDna - Get dna for a type of feature on one chromosome. */
+{
+/* Get chromosome in lower case case.  If merging set bits that 
+ * are part of feature of interest to upper case, and then scan 
+ * for blocks of lower upper case and output them. If not merging
+ * then just output dna for features directly. */
+struct dyString *query = newDyString(512);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char chromField[32], startField[32], endField[32];
+struct dnaSeq *seq = NULL;
+DNA *dna = NULL;
+int s,e,sz,i,size;
+boolean lastIsUpper = FALSE, isUpper = FALSE;
+int last;
+char nibFileName[512];
+FILE *nibFile = NULL;
+int nibSize;
+
+s = size = 0;
+
+if (!hFindChromStartEndFields(table, chromField, startField, endField))
+    errAbort("Couldn't find chrom/start/end fields in table %s", table);
+
+if (merge >= 0)
+    {
+    seq = hLoadChrom(chrom);
+    dna = seq->dna;
+    size = seq->size;
+    }
+else
+    {
+    hNibForChrom(chrom, nibFileName);
+    nibOpenVerify(nibFileName, &nibFile, &nibSize);
+    }
+
+if (breakUp)
+    {
+    if (sameString(startField, "tStart"))
+	{
+	dyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
+	    table, chromStart, chromEnd);
+	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+	if (where != NULL)
+	    dyStringPrintf(query, " and %s", where);
+	sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct psl *psl = pslLoad(row);
+	    if (psl->strand[1] == '-')	/* Minus strand on target */
+		{
+		int tSize = psl->tSize;
+		for (i=0; i<psl->blockCount; ++i)
+		     {
+		     sz = psl->blockSizes[i];
+		     s = tSize - (psl->tStarts[i] + sz);
+		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '-');
+		     }
+		}
+	    else
+		{
+		for (i=0; i<psl->blockCount; ++i)
+		     outputDna(f, chrom, table, psl->tStarts[i], psl->blockSizes[i], 
+			    dna, nibFileName, nibFile, nibSize, '+');
+		}
+	    pslFree(&psl);
+	    }
+	}
+    else if (sameString(startField, "txStart"))
+        {
+	dyStringPrintf(query, "select * from %s where txStart >= %d and txEnd < %d",
+	    table, chromStart, chromEnd);
+	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+	if (where != NULL)
+	    dyStringPrintf(query, " and %s", where);
+	sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct genePred *gp = genePredLoad(row);
+	    for (i=0; i<gp->exonCount; ++i)
+		 {
+		 s = gp->exonStarts[i];
+		 sz = gp->exonEnds[i] - s;
+		 outputDna(f, chrom, table, 
+		    s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0]);
+		 }
+	    genePredFree(&gp);
+	    }
+	}
+    else
+        {
+        errAbort("Can only use breakUp parameter with psl or genePred formatted tables");
+	}
+    }
+else
+    {
+    dyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
+	    startField, endField, table,
+	    startField, chromStart, endField, chromEnd);
+    dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
+    if (where != NULL)
+	dyStringPrintf(query, " and %s", where);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	s = sqlUnsigned(row[0]);
+	e = sqlUnsigned(row[1]);
+	sz = e - s;
+	if (seq != NULL && (sz < 0 || e >= size))
+	    errAbort("Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
+	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
+	}
+    }
+
+/* Merge nearby upper case blocks. */
+if (merge > 0)
+    {
+    e = -merge-10;		/* Don't merge initial block. */
+    for (i=0; i<=size; ++i)
+	{
+	isUpper = isupper(dna[i]);
+	if (isUpper && !lastIsUpper)
+	    {
+	    s = i;
+	    if (s - e <= merge)
+	        {
+		toUpperN(dna+e, s-e);
+		}
+	    }
+	else if (!isUpper && lastIsUpper)
+	    {
+	    e = i;
+	    }
+	lastIsUpper = isUpper;
+	}
+    }
+
+if (merge >= 0)
+    {
+    for (i=0; i<=size; ++i)
+	{
+	isUpper = isupper(dna[i]);
+	if (isUpper && !lastIsUpper)
+	    s = i;
+	else if (!isUpper && lastIsUpper)
+	    {
+	    e = i;
+	    sz = e - s;
+	    writeOut(f, chrom, s, sz, '+', dna+s, makeFaStartLine(chrom, table, s, sz));
+	    }
+	lastIsUpper = isUpper;
+	}
+    }
+
+hFreeConn(&conn);
+freeDnaSeq(&seq);
+carefulClose(&nibFile);
+}
+
+
+void getFeatDna(char *table, char *chrom, char *outName)
+/* getFeatDna - Get dna for a type of feature an all relevant chromosomes. */
+{
+char chrTableBuf[256];
+struct slName *chromList = NULL, *chromEl;
+boolean chromSpecificTable = !hTableExists(table);
+char *chrTable = (chromSpecificTable ? chrTableBuf : table);
+FILE *f = mustOpen(outName, "w");
+boolean toStdout = (sameString(outName, "stdout"));
+
+if (sameWord(chrom, "all"))
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+
+for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
+    {
+    chrom = chromEl->name;
+    if (chromSpecificTable)
+        {
+	sprintf(chrTable, "%s_%s", chrom, table);
+	if (!hTableExists(table))
+	    errAbort("table %s (and %s) don't exist in %s", table, 
+	         chrTable, database);
+	}
+    if (!toStdout)
+        printf("Processing %s %s\n", chrTable, chrom);
+    chromFeatDna(chrTable, chrom, f);
+    }
+carefulClose(&f);
+if (!toStdout)
+    printf("%d features extracted to %s\n", blockIx, outName);
+}
+
+
+
 
 void getDNA()
 /* get the DNA for the given position */
 {
-char *chromName;        /* Name of chromosome sequence . */
-int winStart;           /* Start of window in sequence. */
-int winEnd;         /* End of window in sequence. */
-char* position;
-struct dnaSeq *seq;
-char dnaName[256];
-
-/* if the position information is not given, get it */
-position = cgiOptionalString("position");
-if(position == NULL)
-	position = "";
-if(position != NULL && position[0] != 0)
+/* if they haven't choosen a table, tell them */
+if(existsAndEqual("table", "Choose table"))
 	{
-	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
-		return;
+	errAbort("Please choose a table.");
+	exit(0);
 	}
-findGenomePos(position, &chromName, &winStart, &winEnd);
+	
+if(existsAndEqual("position", "genome"))
+	{
+	puts("getting DNA from genome");
+	}
+else
+	{
+	char* table = cgiString("table");
+	char parsedTableName[256];
+	char command[256];
+	char start[64];
+	char end[64];
+	char *choosenChromName;        /* Name of chromosome sequence . */
+	int winStart;           /* Start of window in sequence. */
+	int winEnd;         /* End of window in sequence. */
+	char* position;
 
+	/* select the database */
+	database = cgiOptionalString("db");
+	if (database == NULL)
+	    database = "hg6";
+	
+	/* if the position information is not given, get it */
+	position = cgiOptionalString("position");
+	if(position == NULL)
+		position = "";
+	if(position != NULL && position[0] != 0)
+		{
+		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+			return;
+		}
+	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
 
+	/* get the real name of the table */
+	parseTableName(parsedTableName, choosenChromName);
 
-sprintf(dnaName, "%s:%d-%d", chromName, winStart, winEnd);
-puts(dnaName);
-seq = hDnaFromSeq(chromName, winStart, winEnd, dnaMixed);
-printf("<TT><PRE>");
-faWriteNext(stdout, dnaName, seq->dna, seq->size);
-printf("</TT></PRE>");
-freeDnaSeq(&seq);
+	/* make sure that the table name doesn't have anything "weird" in it */
+	if(!allLetters(table))
+		errAbort("Malformated table name.");
+
+	chromStart = winStart;
+	chromEnd = winEnd;
+	puts("<PRE>");
+	getFeatDna(parsedTableName, choosenChromName, "stdout");
+	puts("</PRE>");
+	}
 }
-
 
 
 /* the main body of the program */
@@ -1090,7 +1286,7 @@ else
 	else if(existsAndEqual("phase", "Get DNA"))
 		{
 		htmlSetBackground("../images/floret.jpg");
-		htmShell("DNA Sequence", getDNA, NULL);
+		htmShell("DNA Sequence", getDNA, NULL);;
 		}
 	}
 }
