@@ -80,7 +80,7 @@ example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	@if [ ! -d ${install_dir}/example ]; then \
 		${MKDIR} "${install_dir}/example"; \
 	fi
-	cp -p ex.InstallExample "${install_dir}/example/InstallExample"
+	cp -p ex.InstallExample "${install_dir}/example/InstallExample.sh"
 	cp -p ex.hgcentral.sql "${install_dir}/example/hgcentral.sql"
 	cp -p ex.CleanTrash.sh "${install_dir}/example/CleanTrash.sh"
 	cp -p ex.cvsup.pl "${install_dir}/example/cvsup.pl"
@@ -88,6 +88,9 @@ example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" \
 		ex.MySQLUserPerms.sh >"${install_dir}/example/MySQLUserPerms.sh"
 	chmod 755 "${install_dir}/example/MySQLUserPerms.sh"
+	chmod 755 "${install_dir}/example/CleanTrash.sh"
+	chmod 755 "${install_dir}/example/cvsup.pl"
+	chmod 755 "${install_dir}/example/InstallExample.sh"
 	touch example
 
 gbdb:
