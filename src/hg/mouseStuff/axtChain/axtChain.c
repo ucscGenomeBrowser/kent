@@ -14,7 +14,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.29 2004/10/21 21:34:33 kent Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.30 2004/11/09 06:45:32 angie Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -1066,7 +1066,7 @@ gapFileName = optionVal("linearGap", NULL);
 scoreSchemeName = optionVal("scoreScheme", NULL);
 if (scoreSchemeName != NULL)
     {
-    printf("Reading scoring matrix from %s\n", scoreSchemeName);
+    verbose(1, "Reading scoring matrix from %s\n", scoreSchemeName);
     scoreScheme = axtScoreSchemeRead(scoreSchemeName);
     }
 else
