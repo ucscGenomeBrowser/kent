@@ -11,7 +11,11 @@ hgTrackDb: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgTrackDb $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/hgTrackDb
 
-update:
+old_update:
 	hgTrackDb hg6 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg7 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg8 ../../lib/trackDb.sql hgRoot
+
+update:
+	hgTrackDb hg9 ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg10 ../../lib/trackDb.sql hgRoot
