@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.597 2003/09/19 19:20:43 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.598 2003/09/20 01:40:10 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6693,7 +6693,7 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDown(track->mapName, track->visibility, track->canPack);
+	    hTvDropDownClass(track->mapName, track->visibility, track->canPack, (track->visibility == tvHide)? "hiddenText" : "normalText" );
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
