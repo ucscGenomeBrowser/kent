@@ -3,14 +3,6 @@
 #ifndef HCOMMON_H
 #define HCOMMON_H
 
-extern char *hgChromNames[]; /* Array of all human chromosome names (including _randoms) */
-extern int hgChromCount;  /* Size of above array. */
-
-char *hgOfficialChromName(char *chrom);
-/* Returns "cannonical" name of chromosome (from hgChromNames) or NULL
- * if not a chromosome. */
-
-
 char *hgcName();
 /* Relative URL to click processing program. */
 
