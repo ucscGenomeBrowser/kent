@@ -220,6 +220,7 @@ AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, psl->tName);
 bed->chromStart = chromStart = psl->tStart;
 bed->chromEnd = psl->tEnd;
+
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
 strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
@@ -240,6 +241,9 @@ if (psl->strand[1] == '-')
     for (i=0; i<blockCount; ++i)
 	chromStarts[i] = chromSize - chromStarts[i];
     }
+
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
 
 /* Convert coordinates to relative. */
 for (i=0; i<blockCount; ++i)
