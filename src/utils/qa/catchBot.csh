@@ -32,14 +32,14 @@ if ($#argv == 2) then
 endif
 
 # get whole list from access_log
-hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
-sort remote_host | uniq -c | sort -nr > xxUserCountxx
+#### hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
+#### sort remote_host | uniq -c | sort -nr > xxUserCountxx
 set totalHits=`wc -l remote_host | gawk '{print $1}'`
 
 set checked=0
 set max=0
 
-# write header ot file
+# write header to file
 rm -f $output
 echo "\nfrom apachelogs.access_log" >> $output
 echo "\ntotal hits: $totalHits" >> $output
@@ -77,15 +77,29 @@ while ($checked < $size)
        $1, $2, $3, $4, $5) }' >> $output
   @ checked ++
 end
-
 echo >> $output
+
+# get IPs of largest hitter and fastest hitter
+set largest=`sort -nr $output | sed -e "2,$ d" | gawk '{print $2}'`
+set fastest=`sort -nr +4 $output | sed -e "2,$ d" | gawk '{print $2}'`
+
+echo "largest hitter = $largest" >> $output
+echo >> $output
+ipw $largest | sed -e "10,$ d" >> $output
+echo >> $output
+
+echo "fastest hitter = $fastest" >> $output
+echo >> $output
+ipw $fastest | sed -e "10,$ d" >> $output
+echo >> $output
+
 if ($max > $threshhold) then
   cat $output
 else
   # stay quiet
 endif
 
-rm xxUserCountxx
-rm  $output
+#### rm xxUserCountxx
+#### rm  $output
 
 exit
