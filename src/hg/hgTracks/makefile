@@ -5,7 +5,7 @@ L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgTracks.o hgFind.o
+O = hgTracks.o
 
 hgTracks: $O 
 	gcc $O $(MYLIBS) $(L) 
