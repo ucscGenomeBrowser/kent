@@ -12,7 +12,7 @@ shortLabel Chromosome Band
 longLabel Chromosome Bands Based On ISCN Lengths
 group map
 priority 1
-visibility dense
+visibility hide
 altColor 150,50,50
 type bed 4 +
 
@@ -91,7 +91,13 @@ color 100,50,0
 altColor 175,150,128
 type genePred 
 
-
+track altGraphX
+shortLabel Alt-Splicing
+longLabel Alternative Splicing from ESTs/mRNAs
+group rna
+priority 74
+visibility hide
+type bed 3
 
 track gnfAtlas2
 shortLabel GNF Atlas 2

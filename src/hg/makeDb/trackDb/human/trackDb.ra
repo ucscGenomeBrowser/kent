@@ -12,7 +12,7 @@ shortLabel Chromosome Band
 longLabel Chromosome Bands Localized by FISH Mapping Clones
 group map
 priority 1
-visibility dense
+visibility hide
 altColor 150,50,50
 type bed 4 +
 

@@ -12,7 +12,7 @@ shortLabel Chromosome Band
 longLabel Chromosome Bands
 group map
 priority .1
-visibility dense
+visibility hide
 altColor 200,150,150
 type bed 4 +
 
