@@ -183,3 +183,14 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 url http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/gp_F14Nov02/Riken-be/$S/$$.html
+
+track vegaGene
+shortLabel VEGA Genes
+longLabel VEGA Annotations from Sanger, Genoscope
+group genes
+priority 36
+visibility hide
+chromosomes chr14,chr20,chr22,
+color 0,100,180
+type genePred vegaPep
+url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
