@@ -5637,6 +5637,6 @@ char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrac
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc,argv);
-cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars);
+cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

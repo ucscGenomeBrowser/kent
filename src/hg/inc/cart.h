@@ -33,9 +33,11 @@ struct cart
    struct cartDb *sessionInfo;	/* Info on session. */
    };
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude);
+struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
+	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
- * strings to not include */
+ * strings to not include. oldVars is an optional hash to put in values
+ * that were just overwritten by cgi-variables. */
 
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
@@ -122,10 +124,13 @@ void cartEarlyWarningHandler(char *format, va_list args);
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner);
 /* Wrap error and warning handlers around doMiddl. */
 
-void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
+	char **exclude, struct hash *oldVars);
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
- * cartHtmlEnd(), as well as writing the body of the HTML. */
+ * cartHtmlEnd(), as well as writing the body of the HTML. 
+ * oldVars - those in cart that are overlayed by cgi-vars are
+ * put in optional hash oldVars. */
 
 void cartHtmlStart(char *title);
 /* Write HTML header and put in normal error handler. Needed with cartEmptyShell,
@@ -139,13 +144,15 @@ void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
-void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
+void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
+	char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
  * comma-separated list of variables that you don't want to save in the cart between
- * invocations of the cgi-script. */
+ * invocations of the cgi-script. oldVars is an optional hash that will get values
+ * of things in the cart that were overwritten by cgi-variables. */
 
-struct cart *cartAndCookie(char *cookieName, char **exclude);
+struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 

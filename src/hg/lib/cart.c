@@ -96,7 +96,8 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude)
+struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
+	char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
@@ -123,6 +124,12 @@ for (cv = cvList; cv != NULL; cv = cv->next)
         {
 	char *booVar = cv->name + booSize;
 	char *val = (cgiVarExists(booVar) ? "1" : "0");
+	if (oldVars != NULL)
+	    {
+	    char *s = hashFindVal(cart->hash, booVar);
+	    if (s != NULL)
+	        hashAdd(oldVars, booVar, cloneString(s));
+	    }
 	cartSetString(cart, booVar, val);
 	hashAdd(booHash, booVar, NULL);
 	}
@@ -132,7 +139,15 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
     if (!startsWith(booShadow, cv->name) && !hashLookup(booHash, cv->name))
+	{
+	if (oldVars != NULL)
+	    {
+	    char *s = hashFindVal(cart->hash, cv->name);
+	    if (s != NULL)
+	        hashAdd(oldVars, cv->name, cloneString(s));
+	    }
 	cartSetString(cart, cv->name, cv->val);
+	}
     }
 
 if (exclude != NULL)
@@ -445,14 +460,14 @@ clearDbContents(conn, "sessionDb", hgsid);
 cartDefaultDisconnector(&conn);
 }
 
-struct cart *cartAndCookie(char *cookieName, char **exclude)
+struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 {
 /* Get the current cart from cookie and cgi session variable. */
 int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
-struct cart *cart = cartNew(hguid, hgsid, exclude);
+struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 
 /* Remove some internal variables from cart permanent storage. */
 cartExclude(cart, sessionVar);
@@ -524,23 +539,27 @@ htmlEnd();
 popWarnHandler();
 }
 
-void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
+	char **exclude, struct hash *oldVars)
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
- * cartHtmlEnd(), as well as writing the body of the HTML. */
+ * cartHtmlEnd(), as well as writing the body of the HTML. 
+ * oldVars - those in cart that are overlayed by cgi-vars are
+ * put in optional hash oldVars. */
 {
-struct cart *cart = cartAndCookie(cookieName, exclude);
+struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
 
-void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
+void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, 
+	char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 {
-struct cart *cart = cartAndCookie(cookieName, exclude);
+struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 int status;
 
 htmStart(stdout, title);

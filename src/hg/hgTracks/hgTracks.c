@@ -7600,7 +7600,7 @@ char *cookieName = hUserCookie();
 int sessionId = cgiUsualInt(cartSessionVarName(), 0);
 char *hguidString = findCookieData(cookieName);
 int userId = (hguidString == NULL ? 0 : atoi(hguidString));
-struct cart *oldCart = cartNew(userId, sessionId, NULL);
+struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
@@ -7614,7 +7614,7 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v10", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("UCSC Genome Browser v10", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
 
