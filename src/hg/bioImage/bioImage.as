@@ -80,7 +80,7 @@ table image
     string locusLink;	"Locus link ID or blank if none"
     string refSeq;	"RefSeq ID or blank if none"
     string genbank;	"Genbank accession or blank if none"
-    byte isDefault;	"Set to 1 if this is default for gene"
+    float priority;	"Lower priorities are displayed first"
     int taxon;		"NCBI taxon ID of organism"
     byte isEmbryo;	"TRUE if embryonic.  Age will be relative to conception"
     float age;		"Age in days since birth or conception depending on isEmbryo"

@@ -273,7 +273,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
     char *refSeq = getVal("refSeq", raHash, rowHash, words, "");
     char *genbank = getVal("genbank", raHash, rowHash, words, "");
-    char *isDefault = getVal("isDefault", raHash, rowHash, words, "0");
+    char *priority = getVal("priority", raHash, rowHash, words, "200");
     int sectionId = 0;
     int oldId;
     // char *xzy = getVal("xzy", raHash, rowHash, words, xzy);
@@ -324,7 +324,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     dyStringPrintf(dy, " locusLink = '%s',\n", locusLink);
     dyStringPrintf(dy, " refSeq = '%s',\n", refSeq);
     dyStringPrintf(dy, " genbank = '%s',\n", genbank);
-    dyStringPrintf(dy, " isDefault = %s,\n", isDefault);
+    dyStringPrintf(dy, " priority = %s,\n", priority);
     dyStringPrintf(dy, " taxon = %s,\n", taxon);
     dyStringPrintf(dy, " isEmbryo = %s,\n", isEmbryo);
     dyStringPrintf(dy, " age = %s,\n", age);

@@ -98,7 +98,7 @@ CREATE TABLE image (
     locusLink varchar(255) not null,	# Locus link ID or blank if none
     refSeq varchar(255) not null,	# RefSeq ID or blank if none
     genbank varchar(255) not null,	# Genbank accession or blank if none
-    isDefault tinyint not null,	# Set to 1 if this is default for gene
+    priority float not null,	# Set to 1 if this is default for gene
     taxon int not null,	# NCBI taxon ID of organism
     isEmbryo tinyint not null,	# TRUE if embryonic.  Age will be relative to conception
     age float not null,	# Age in days since birth or conception depending on isEmbryo

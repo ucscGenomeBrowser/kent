@@ -45,7 +45,7 @@ fprintf(f, "%s",
 "fullDir ../bioImage/full/inSitu/Mouse/mahoney/wholeMount\n"
 "screenDir ../bioImage/700/inSitu/Mouse/mahoney/wholeMount\n"
 "thumbDir ../bioImage/200/inSitu/Mouse/mahoney/wholeMount\n"
-"isDefault 1\n"
+"priority 10\n"
 "isEmbryo 1\n"
 "age 10.5\n"
 "bodyPart whole\n"
@@ -65,6 +65,7 @@ fprintf(f, "%s",
 "fullDir ../bioImage/full/inSitu/Mouse/mahoney/slices\n"
 "screenDir ../bioImage/700/inSitu/Mouse/mahoney/slices\n"
 "thumbDir ../bioImage/200/inSitu/Mouse/mahoney/slices\n"
+"priority 100\n"
 "bodyPart brain\n"
 "sliceType horizontal\n"
 );

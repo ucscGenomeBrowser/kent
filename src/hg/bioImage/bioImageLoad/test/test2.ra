@@ -1,7 +1,7 @@
 fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/slices
 screenDir /gbdb/bioImage/700/inSitu/Mouse/mahoney/slices
 thumbDir /gbdb/bioImage/200/inSitu/Mouse/mahoney/slices
-isDefault 1
+priority 100
 taxon 10090
 bodyPart brain
 sliceType horizontal

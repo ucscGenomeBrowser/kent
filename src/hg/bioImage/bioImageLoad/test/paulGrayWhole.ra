@@ -1,7 +1,7 @@
 fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/wholeMount
 screenDir /gbdb/bioImage/700/inSitu/Mouse/mahoney/wholeMount
 thumbDir /gbdb/bioImage/200/inSitu/Mouse/mahoney/wholeMount
-isDefault 1
+priority 10
 taxon 10090
 isEmbryo 1
 age 10.5
