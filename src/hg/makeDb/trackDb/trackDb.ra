@@ -556,6 +556,16 @@ spectrum on
 type psl .
 cdsDrawOptions enabled
 
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
 track tightMrna
 shortLabel Tight mRNAS
 longLabel Tightly Filtered $Organism mRNAs from GenBank
@@ -572,6 +582,7 @@ group rna
 priority 56
 visibility dense
 spectrum on
+intronGap 30
 type psl est
 
 track est
@@ -581,6 +592,17 @@ group rna
 priority 57
 visibility hide
 spectrum on
+intronGap 30
+type psl est
+
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
 type psl est
 
 track tightEst
