@@ -1198,7 +1198,20 @@ void innerLine(struct vGfx *vg, int x, int y, int w, Color color)
  * hurt elsewhere. */
 {
 if (w > 1)
-   vgLine(vg, x+1, y, x+w-1, y, color);
+   {
+   /* Do some clipping here for the benefit of
+    * PostScript.   Illustrator has
+    * problems if you don't do this when you save
+    * as web for some reason.  Can't hurt though in
+    * a perfect world it would not be necessary, and
+    * it's not necessary for ghostView. */
+   int x1 = x+1;
+   int x2 = x + w - 1;
+   if (x1 < 0) x1 = 0;
+   if (x2 > vg->width) x2 = vg->width;
+   if (x2-x1 > 0)
+       vgLine(vg, x1, y, x2, y, color);
+   }
 }
 
 static void lfColors(struct track *tg, struct linkedFeatures *lf, 
@@ -8732,7 +8745,7 @@ for (track = trackList; track != NULL; track = track->next)
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 /* Draw mini-buttons. */
-if (withLeftLabels)
+if (withLeftLabels && psOutput == NULL)
     {
     int butOff;
     y = gfxBorder;
