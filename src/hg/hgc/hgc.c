@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.459 2003/07/25 22:43:00 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.460 2003/07/26 16:33:56 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11787,6 +11787,83 @@ printCustomUrl(ct->tdb, itemName, TRUE);
 bedPrintPos(bed, ct->fieldCount);
 }
 
+void chesProtein(struct trackDb *tdb, char *itemName)
+/* Show protein to translated dna alignment for accession. */
+{
+struct lineFile *lf;
+struct psl *psl;
+enum gfType tt = gftDnaX, qt = gftProt;
+boolean isProt = 1;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq;
+char query[256], **row;
+char fullTable[64];
+boolean hasBin;
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+
+//start = cartInt(cart, "o");
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+sprintf(query, "select * from %s where qName = '%s' and tName = '%s'",
+	fullTable, itemName, seqName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s", itemName);
+psl = pslLoad(row+hasBin);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+seq = hPepSeq(itemName);
+#if 0
+    {
+struct baf baf;
+int i,j;
+int tbafStart = psl->tStart;
+int qbafStart = psl->qStart;
+int qbafEnd   = psl->qEnd;
+struct dnaSeq *dnaSeq = NULL;
+int tStart = psl->tStart;
+int tEnd = psl->tEnd;
+int dnaSize;
+boolean qIsRc = FALSE;
+boolean tIsRc = FALSE;
+
+dnaSeq = hDnaFromSeq(psl->tName, tStart, tEnd, dnaLower);
+freez(&dnaSeq->name);
+dnaSeq->name = cloneString(psl->tName);
+dnaSize = dnaSeq->size;
+
+bafInit(&baf, seq->dna, qbafStart, qIsRc,
+	dnaSeq->dna, tbafStart, tIsRc, stdout, 60, TRUE);
+    for (i=0; i<psl->blockCount; ++i)
+	{
+	int qs = psl->qStarts[i] - psl->qStart;
+	int ts = psl->tStarts[i] - psl->tStart;
+	int sz = psl->blockSizes[i];
+
+printf("here %d %d %d",qs,ts,sz);
+return;
+	bafSetPos(&baf, qs, ts);
+	bafStartLine(&baf);
+	for (j=0; j<sz; ++j)
+	    {
+	    AA aa = seq->dna[qs+j];
+	    int codonStart = ts + 3*j;
+	    DNA *codon = &dnaSeq->dna[codonStart];
+	    bafOut(&baf, ' ', codon[0]);
+	    bafOut(&baf, aa, codon[1]);
+	    bafOut(&baf, ' ', codon[2]);
+	    }
+	bafFlushLine(&baf);
+	}
+    }
+#endif
+showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -11890,6 +11967,10 @@ else if (sameWord(track, "rmsk"))
 else if (sameWord(track, "isochores"))
     {
     doHgIsochore(tdb, item);
+    }
+else if (sameWord(track, "chesSimpleRepeat"))
+    {
+    doSimpleRepeat(tdb, item);
     }
 else if (sameWord(track, "simpleRepeat"))
     {
@@ -12004,13 +12085,18 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
-else if (sameWord(track, "chesChordataPsl") )
+else if (sameWord(track, "chesChordataBlat"))
     {
-    doBlatCompGeno(tdb, item, "Chordata not Mammal BoneHead chain");
+    chesProtein(tdb, item);
     }
-else if (sameWord(track, "chesMammalPsl") )
+else if ( sameWord(track, "chesMammalBlat") )
     {
-    doBlatCompGeno(tdb, item, "Mammal not Human BoneHead chain");
+    chesProtein(tdb, item);
+    }
+else if (sameWord(track, "chesChordataPsl") || 
+	 sameWord(track, "chesMammalPsl") )
+    {
+    chesProtein(tdb, item);
     }
 else if (sameWord(track, "hg15PepPsl") )
     {
@@ -12353,5 +12439,3 @@ cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
-
-
