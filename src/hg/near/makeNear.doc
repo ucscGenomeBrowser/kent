@@ -19,10 +19,10 @@ cd ..
 
 # Copy over database to iscratch/i
 ssh kkr1u00
-if (-e /iscratch/i/$db/known) then
-   rm -r /iscratch/i/$db/known
+if (-e /iscratch/i/$db/blastp) then
+   rm -r /iscratch/i/$db/blastp
 endif
-mkdir -p /iscratch/i/$db/known
+mkdir -p /iscratch/i/$db/blastp
 if (-e /iscratch/i/$db/blastp) then
    rm -r /iscratch/i/$db/blastp
 endif
@@ -98,7 +98,6 @@ hgMapToGene $db refGene knownGene knownToRefSeq
 hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToU133
 
 # Create expression distance table.  This will take about an hour.
-### TODO for hg16
 cd ~/src/hg/near/hgExpDistance
 hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToU133
 
@@ -111,8 +110,6 @@ hgExpDistance $db affyRatio affyExp knownGnfDistance -lookup=knownToU95
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
-
-#### DONE TO HERE FOR HG16 ####
 
 # Create knownToEnsembl column
 hgMapToGene $db ensGene knownGene knownToEnsembl
