@@ -15,8 +15,8 @@ void axtInfoStaticLoad(char **row, struct axtInfo *ret)
 int sizeOne,i;
 char *s;
 
-ret->species = row[0];
-ret->alignment = row[1];
+strcpy(ret->species, row[0]);
+strcpy(ret->alignment, row[1]);
 ret->chrom = row[2];
 ret->fileName = row[3];
 }
@@ -30,8 +30,8 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->species = cloneString(row[0]);
-ret->alignment = cloneString(row[1]);
+strcpy(ret->species, row[0]);
+strcpy(ret->alignment, row[1]);
 ret->chrom = cloneString(row[2]);
 ret->fileName = cloneString(row[3]);
 return ret;
@@ -90,8 +90,8 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->species = sqlStringComma(&s);
-ret->alignment = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->species, sizeof(ret->species));
+sqlFixedStringComma(&s, ret->alignment, sizeof(ret->alignment));
 ret->chrom = sqlStringComma(&s);
 ret->fileName = sqlStringComma(&s);
 *pS = s;
@@ -105,8 +105,6 @@ void axtInfoFree(struct axtInfo **pEl)
 struct axtInfo *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->species);
-freeMem(el->alignment);
 freeMem(el->chrom);
 freeMem(el->fileName);
 freez(pEl);

@@ -1,8 +1,8 @@
 table axtInfo
 "Axt alignment names and sizes"
     (
-    string species; "long name of species"
-    string alignment; "name of alignment"
+    char[25] species; "long name of species"
+    char[35] alignment; "name of alignment"
     string chrom;	"chromosome name"
     string fileName;    "axt  file name "
     )

@@ -9,8 +9,8 @@ struct axtInfo
 /* Axt alignment names and sizes */
     {
     struct axtInfo *next;  /* Next in singly linked list. */
-    char *species;	/* long name of species */
-    char *alignment;	/* name of alignment */
+    char species[26];	/* long name of species */
+    char alignment[36];	/* name of alignment */
     char *chrom;	/* chromosome name */
     char *fileName;	/* axt  file name  */
     };
