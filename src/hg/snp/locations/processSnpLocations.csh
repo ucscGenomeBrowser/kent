@@ -73,10 +73,10 @@ else
     # chromosome names are changed (chrMT->chrM, chrUn is ignored)
 
     echo `date` Making snpNih.bed
-    gunzip $inputFile | createMouseSnpNihBed > snpNih.bed
+    gunzip $inputFile | $LOCDIR/createMouseSnpNihBed > snpNih.bed
 
     echo `date` Making snpMap.bed
-    gunzip $inputFile | createMouseSnpMapBed > snpMap.bed
+    gunzip $inputFile | $LOCDIR/createMouseSnpMapBed > snpMap.bed
 
 endif
 
@@ -89,17 +89,22 @@ hgLoadBed $database snpMap snpMap.bed \
     -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
 
 # useful data checks:
-foreach table in ( $tables )
-    wc -l $table.bed; 
-    echo "select count(*) from $table"  | hgsql $database
-    echo "select * from $table limit 5" | hgsql $database
-    echo "desc $table"                  | hgsql $database
-    echo "show indexes from $table"     | hgsql $database
+foreach table ( $tables )
+    echo "=================================="
+    echo $database $organism $table
+    echo wc -l $table.bed
+    echo select count\(\*\) from $table  | hgsql $database
+    echo
+    echo desc $table                   | hgsql $database
+    echo
+    echo show indexes from $table     | hgsql $database
+    echo
+    echo select \* from $table limit 5 | hgsql $database
+    echo
 end
 
 # clean up
 echo `date` Zipping input files
-rm -f bed.tab
 gzip $inputFile* snp*.bed
+rm -f bed.tab
 echo `date` Done.
-
