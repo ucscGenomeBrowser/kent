@@ -68,7 +68,9 @@ printf ("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
  * So use web.c's trick of using an enclosing table to provide a border.  
  */
 puts("<P><!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+     "<TABLE BGCOLOR=\"#"
+	HG_COL_BORDER
+	"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 
 /*	output statistics table	*/
 wDS->statsOut(wDS, "stdout", TRUE, TRUE);
@@ -103,13 +105,24 @@ histoGramResult = histoGram(valuesArray, valueCount,
 		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange));
 
 /*	global enclosing table row, add a blank line	*/
-puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\"> &nbsp </TD></TR><TR><TD>\n");
+puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\"> &nbsp </TD></TR>\n");
 
-puts ("<TABLE ALIGN=CENTER COLS=7 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-printf ("<TR><TH ALIGN=CENTER COLSPAN=7> Histogram on %u values (zero count bins not shown)</TH><TR>\n",
+/*	And then the row to enclose the histogram table	*/
+puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\">\n");
+
+puts ("<TABLE ALIGN=CENTER COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
+
+printf ("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH><TR>\n",
 	valueCount);
-puts ("<TR><TH ALIGN=CENTER> bin </TH>\n");
-puts ("    <TH ALIGN=CENTER> bin range <BR> [min:max) </TH>\n");
+puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
+puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
+puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
+puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
+puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range </TH></TR>\n");
+puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
+puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
+puts ("      </TABLE>\n");
+puts ("    </TD>\n");
 puts ("    <TH ALIGN=CENTER> count </TH>\n");
 puts ("    <TH ALIGN=CENTER> p Value </TH>\n");
 puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution </TH>\n");
@@ -132,8 +145,8 @@ if (histoGramResult)
 				histoGramResult->binZero;
 	    max = min + histoGramResult->binSize;
 
-	    printf ("<TR><TD ALIGN=RIGHT> %d </TD>\n", i );
-	    printf ("    <TD ALIGN=CENTER> %g : %g </TD>\n", min, max);
+	    printf ("<TR><TD ALIGN=LEFT> %d </TD>\n", i );
+	    printf ("    <TD ALIGN=RIGHT> %g </TD><TD ALIGN=RIGHT> %g </TD>\n", min, max);
 	    printf ("    <TD ALIGN=RIGHT> %u </TD>\n",
 			    histoGramResult->binCounts[i] );
 	    if (histoGramResult->binCounts[i] > 0)
@@ -157,7 +170,7 @@ if (histoGramResult)
 	}
     }
 else
-    puts ("<TR><TD COLSPAN=7 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
+    puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
 
 printf ("</TABLE>\n");
 
