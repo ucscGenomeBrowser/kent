@@ -115,7 +115,7 @@ url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track blatFish
 shortLabel Tetraodon Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 14
 visibility dense
@@ -126,7 +126,7 @@ type psl xeno
 
 track blatTetra
 shortLabel Tetra Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 15
 visibility dense

@@ -893,7 +893,7 @@ type psl xeno
 
 track blatTetra
 shortLabel Tetra Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 114
 visibility dense

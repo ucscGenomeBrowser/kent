@@ -40,7 +40,7 @@ type genePred
 
 track blatFish
 shortLabel Tetraodon Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 112
 visibility dense
