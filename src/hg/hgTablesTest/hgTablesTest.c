@@ -14,11 +14,14 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.20 2004/11/09 22:17:37 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.21 2004/11/10 02:11:50 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
 char *clDb = NULL;	/* DB from command line */
+char *clGroup = NULL;	/* Group from command line. */
+char *clTrack = NULL;	/* Track from command line. */
+char *clTable = NULL;	/* Table from command line. */
 int clGroups = BIGNUM;	/* Number of groups to test. */
 int clTracks = 2;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
@@ -37,12 +40,15 @@ errAbort(
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
   "   -db=hg17 - Restrict to particular database\n"
+  "   -group=genes - Restrict to a particular group\n"
+  "   -track=knownGene - Restrict to a particular track\n"
+  "   -table=knownGeneMrna - Restrict to a particular table\n"
   "   -orgs=N - Number of organisms to test.  Default %d\n"
   "   -dbs=N - Number of databases per organism to test. Default %d\n"
   "   -groups=N - Number of groups to test (default all)\n"
   "   -tracks=N - Number of tracks per group to test (default %d)\n"
   "   -tables=N - Number of tables per track to test (deault %d)\n"
-  "   -verbose=N - Set to 0 for silent operation, 2 for debugging\n"
+  "   -verbose=N - Set to 0 for silent operation, 2 or 3 for debugging\n"
   , clOrgs, clDbs, clTracks, clTables);
 }
 
@@ -51,6 +57,9 @@ FILE *logFile;	/* Log file. */
 static struct optionSpec options[] = {
    {"org", OPTION_STRING},
    {"db", OPTION_STRING},
+   {"group", OPTION_STRING},
+   {"track", OPTION_STRING},
+   {"table", OPTION_STRING},
    {"orgs", OPTION_INT},
    {"dbs", OPTION_INT},
    {"search", OPTION_STRING},
@@ -230,6 +239,7 @@ int testAllFields(struct htmlPage *tablePage, struct htmlForm *mainForm,
 struct htmlPage *outPage;
 int rowCount = 0;
 
+carefulCheckHeap();
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "primaryTable");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "allFields", hgtaDoTopSubmit, "submit");
@@ -551,7 +561,8 @@ for (table = tableVar->values, tableIx = 0;
 	table != NULL && tableIx < maxTables; 
 	table = table->next, ++tableIx)
     {
-    testOneTable(trackPage, org, db, group, track, table->name);
+    if (clTable == NULL || sameString(clTable, table->name))
+	testOneTable(trackPage, org, db, group, track, table->name);
     }
 /* Clean up. */
 htmlPageFree(&trackPage);
@@ -576,7 +587,8 @@ for (track = trackVar->values, trackIx = 0;
 	track != NULL && trackIx < maxTracks; 
 	track = track->next, ++trackIx)
     {
-    testOneTrack(groupPage, org, db, group, track->name, clTables);
+    if (clTrack == NULL || sameString(track->name, clTrack))
+	testOneTrack(groupPage, org, db, group, track->name, clTables);
     }
 
 /* Clean up. */
@@ -600,7 +612,10 @@ for (group = groupVar->values, groupIx=0;
 	group = group->next, ++groupIx)
     {
     if (!sameString("allTables", group->name))
-        testOneGroup(dbPage, org, db, group->name, clTracks);
+	{
+	if (clGroup == NULL || sameString(clGroup, group->name))
+	    testOneGroup(dbPage, org, db, group->name, clTracks);
+	}
     }
 }
 
@@ -648,9 +663,8 @@ htmlPageFree(&dbPage);
 }
 
 
-void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org, char *forceDb)
-/* Test on organism.  If forceDb is non-null, only test on
- * given database. */
+void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org)
+/* Test on organism.  */
 {
 struct htmlPage *orgPage;
 struct htmlForm *mainForm;
@@ -658,21 +672,25 @@ struct htmlFormVar *dbVar;
 struct slName *db;
 int dbIx;
 
+/* Get page with little selected beyond organism.  This page
+ * will get whacked around a little by testDb, so set range
+ * position and db to something safe each time through. */
 htmlPageSetVar(rootPage, rootForm, "org", org);
-if (forceDb)
-    htmlPageSetVar(rootPage, rootForm, "db", forceDb);
-else
-   htmlPageSetVar(rootPage, rootForm, "db", "0");
+htmlPageSetVar(rootPage, NULL, "db", NULL); 
+htmlPageSetVar(rootPage, NULL, hgtaRegionType, NULL); 
+htmlPageSetVar(rootPage, NULL, "position", NULL); 
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
+    {
+    uglyf("%s\n", orgPage->htmlText);
     errAbort("Couldn't get main form on orgPage");
+    }
 if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
     errAbort("Couldn't get org var");
 for (db = dbVar->values, dbIx=0; db != NULL && dbIx < clDbs; 
 	db = db->next, ++dbIx)
     {
-    if (forceDb == NULL || sameString(forceDb, db->name))
-	testDb(orgPage, org, db->name);
+    testDb(orgPage, org, db->name);
     }
 htmlPageFree(&orgPage);
 }
@@ -730,7 +748,6 @@ if (allPage != NULL)
     {
     if (allPage->forms == NULL)
         {
-	uglyf("%s\n", allPage->htmlText);
 	errAbort("swissProt page with no form");
 	}
     else
@@ -949,6 +966,7 @@ for (test = list; test != NULL; test = test->next)
 void hgTablesTest(char *url, char *logName)
 /* hgTablesTest - Test hgTables web page. */
 {
+/* Get default page, and open log. */
 struct htmlPage *rootPage = htmlPageGet(url);
 logFile = mustOpen(logName, "w");
 htmlPageValidateOrAbort(rootPage);
@@ -965,7 +983,7 @@ else
     if ((orgVar = htmlFormVarGet(mainForm, "org")) == NULL)
 	errAbort("Couldn't get org var");
     if (clOrg != NULL)
-	testOrg(rootPage, mainForm, clOrg, clDb);
+	testOrg(rootPage, mainForm, clOrg);
     else
 	{
 	struct slName *org;
@@ -973,7 +991,7 @@ else
 	for (org = orgVar->values, orgIx=0; org != NULL && orgIx < clOrgs; 
 		org = org->next, ++orgIx)
 	    {
-	    testOrg(rootPage, mainForm, org->name, clDb);
+	    testOrg(rootPage, mainForm, org->name);
 	    }
 	}
     }
@@ -991,12 +1009,15 @@ reportSummary(tablesTestList, logFile);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(300000000);
+pushCarefulMemHandler(500000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 clDb = optionVal("db", clDb);
 clOrg = optionVal("org", clOrg);
+clGroup = optionVal("group", clGroup);
+clTrack = optionVal("track", clTrack);
+clTable = optionVal("table", clTable);
 clDbs = optionInt("dbs", clDbs);
 clOrgs = optionInt("orgs", clOrgs);
 clGroups = optionInt("groups", clGroups);
