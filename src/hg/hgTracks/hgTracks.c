@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.584 2003/08/21 01:55:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.585 2003/08/25 20:12:37 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -6095,18 +6095,18 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     {
     char *words[96];
     int wordCount;
+    char *dupe = cloneString(bl->name);
 
-    wordCount = chopLine(bl->name, words);
+    wordCount = chopLine(dupe, words);
     if (wordCount >= 3)
         {
         char *command = words[1];
         if (sameString(command, "position"))
-            {
-            /* Return the first position found */
             pos = words[2];
-            break;
-            }
         }
+    freez(&dupe);
+    if (pos != NULL)
+        break;
     }
 return pos;
 }
