@@ -12,7 +12,8 @@ test:   pslSelectTests \
 	idOutputTests \
 	statsOutputTests \
 	thresholdTests \
-	similarityTests
+	similarityTests \
+	aggregateTests
 
 ###
 # selecting PSLs
@@ -379,6 +380,67 @@ gp_gp_similarityCds100: mkout
 	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarityCds100Rev.ids
 	${DIFF} expected/gp_gp_similarityCds100.ids output/gp_gp_similarityCds100.ids
 	${DIFF} expected/gp_gp_similarityCds100Rev.ids output/gp_gp_similarityCds100Rev.ids
+
+###
+# aggregate threshold tests
+###
+aggregateTests: psl_gp_aggregate  psl_gp_non_aggregate \
+	gp_gp_aggregate95 gp_gp_aggregate75 gp_gp_aggregate100 \
+	gp_gp_aggregateCds95 gp_gp_aggregateCds75 gp_gp_aggregateCds100
+
+# select psls overlaping NM_015110 with gp and overlapThreshold
+psl_gp_aggregate: mkout
+	${OVERSEL} -aggregate -overlapThreshold=0.4 -dropped=output/psl_gp_aggregate.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_aggregate.psl
+	${DIFF} expected/psl_gp_aggregate.psl output/psl_gp_aggregate.psl
+	${DIFF} expected/psl_gp_aggregate.drop.psl output/psl_gp_aggregate.drop.psl
+
+# select psls overlaping not NM_015110 with gp and overlapThreshold
+psl_gp_non_aggregate: mkout
+	${OVERSEL} -aggregate -overlapThreshold=0.4 -nonOverlapping -dropped=output/psl_gp_non_aggregate.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_non_aggregate.psl
+	${DIFF} expected/psl_gp_non_aggregate.psl output/psl_gp_non_aggregate.psl
+	${DIFF} expected/psl_gp_non_aggregate.drop.psl output/psl_gp_non_aggregate.drop.psl
+
+# 95% aggregate
+gp_gp_aggregate95: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate95.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate95Rev.ids
+	${DIFF} expected/gp_gp_aggregate95.ids output/gp_gp_aggregate95.ids
+	${DIFF} expected/gp_gp_aggregate95Rev.ids output/gp_gp_aggregate95Rev.ids
+
+# 75% aggregate
+gp_gp_aggregate75: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate75.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate75Rev.ids
+	${DIFF} expected/gp_gp_aggregate75.ids output/gp_gp_aggregate75.ids
+	${DIFF} expected/gp_gp_aggregate75Rev.ids output/gp_gp_aggregate75Rev.ids
+
+# 100% aggregate
+gp_gp_aggregate100: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate100.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate100Rev.ids
+	${DIFF} expected/gp_gp_aggregate100.ids output/gp_gp_aggregate100.ids
+	${DIFF} expected/gp_gp_aggregate100Rev.ids output/gp_gp_aggregate100Rev.ids
+
+# 95% CDS aggregate
+gp_gp_aggregateCds95: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds95.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds95Rev.ids
+	${DIFF} expected/gp_gp_aggregateCds95.ids output/gp_gp_aggregateCds95.ids
+	${DIFF} expected/gp_gp_aggregateCds95Rev.ids output/gp_gp_aggregateCds95Rev.ids
+
+# 75% CDS aggregate
+gp_gp_aggregateCds75: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds75.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds75Rev.ids
+	${DIFF} expected/gp_gp_aggregateCds75.ids output/gp_gp_aggregateCds75.ids
+	${DIFF} expected/gp_gp_aggregateCds75Rev.ids output/gp_gp_aggregateCds75Rev.ids
+
+# 100% CDS aggregate
+gp_gp_aggregateCds100: mkout
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds100.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds100Rev.ids
+	${DIFF} expected/gp_gp_aggregateCds100.ids output/gp_gp_aggregateCds100.ids
+	${DIFF} expected/gp_gp_aggregateCds100Rev.ids output/gp_gp_aggregateCds100Rev.ids
 
 mkout:
 	@${MKDIR} output

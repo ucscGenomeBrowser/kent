@@ -37,4 +37,7 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
  * a list of the line form of overlaping select records is returned.  Free
  * with slFreelList. */
 
+float selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
+/* Compute the aggregate overlap of a chromAnn */
+
 #endif

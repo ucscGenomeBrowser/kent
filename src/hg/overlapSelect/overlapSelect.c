@@ -25,13 +25,19 @@ static struct optionSpec optionSpecs[] = {
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
-    {"merge", OPTION_BOOLEAN},
-    {"mergeOutput", OPTION_BOOLEAN},
     {"overlapThreshold", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
+    {"merge", OPTION_BOOLEAN},
+    {"mergeOutput", OPTION_BOOLEAN},
     {"statsOutput", OPTION_BOOLEAN},
     {"idOutput", OPTION_BOOLEAN},
+    {"aggregate", OPTION_BOOLEAN},
     {NULL, 0}
+};
+/* incompatible with aggregate */
+static char *aggIncompatible[] =
+{
+    "overlapSimilarity", "merge", "mergeOutput", NULL
 };
 
 /* file format constants */
@@ -48,6 +54,7 @@ unsigned selectOpts = 0;
 unsigned inCaOpts = 0;
 unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
+boolean useAggregate = FALSE;
 boolean nonOverlapping = FALSE;
 boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
@@ -122,7 +129,7 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
 
 static void outputStats(struct chromAnn* inCa, struct ioFiles *ioFiles,
                         struct slRef *overlappingRecs)
-/* output for the -idOutput option; pairs of inRec and overlap ids */
+/* output for the -statOutput option; pairs of inRec and overlap ids */
 {
 struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
@@ -133,9 +140,9 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
     }
 }
 
-static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
-/* Check if a chromAnn object is overlapped given the criteria, and if so
- * output */
+static void doItemOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+/* Do individual item overlap process of chromAnn object given the criteria,
+ * and if so output */
 {
 struct slRef *overlappingRecs = NULL;
 struct slRef **overlappingRecsPtr = NULL;  /* used to indicate if recs should be collected */
@@ -165,6 +172,44 @@ else if (ioFiles->dropFh != NULL)
     }
 
 slFreeList(&overlappingRecs);
+}
+
+static void doAggregateOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+/* Do agreate overlap process of chromAnn object given the criteria,
+ * and if so output */
+{
+float overlap = selectAggregateOverlap(selectOpts, inCa);
+boolean overlaps;
+if (overlapThreshold <= 0.0)
+    overlaps = (overlap > 0.0); /* any overlap */
+else
+    overlaps = (overlap >= overlapThreshold);
+if ((nonOverlapping) ? !overlaps : overlaps)
+    {
+    if (idOutput)
+        fprintf(ioFiles->outFh, "%s\n", getPrintId(inCa));
+    else if (statsOutput)
+        fprintf(ioFiles->outFh, "%s\t%0.3g\n", getPrintId(inCa), overlap);
+    else
+        fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
+    }
+else if (ioFiles->dropFh != NULL)
+    {
+    if (idOutput)
+        fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
+    else
+        fprintf(ioFiles->dropFh, "%s\n", inCa->recLine);
+    }
+}
+
+static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
+/* Check if a chromAnn object is overlapped given the criteria, and if so
+ * output */
+{
+if (useAggregate)
+    doAggregateOverlap(inCa, ioFiles);
+else
+    doItemOverlap(inCa, ioFiles);
 }
 
 void pslSelect(struct ioFiles *ioFiles)
@@ -313,6 +358,9 @@ errAbort("%s:\n"
          "  -nonOverlapping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
          "  -excludeSelf - don't compare alignments with the same coordinates and name.\n"
+         "  -aggregate - instead of computing overlap bases on individual select entries, \n"
+         "      compute it based on the total number of inFile bases overlap by select file\n"
+         "      records. Some other options will not work with this aggregate counting.\n"
          "  -overlapThreshold=0.0 - minimun fraction of an inFile block that\n"
          "      must be overlapped by a single select record to be considered overlapping.\n"
          "      Note that this is only coverage by a single select record, not total coverage.\n"
@@ -327,13 +375,16 @@ errAbort("%s:\n"
          "         inId selectId inOverlap selectOverlap \n"
          "      Where inOverlap is the fraction of the inFile record overlapped by the select file\n"
          "      record and selectOverlap is the fraction of the select record overlap by the in file\n"
-         "      record.\n"
+         "      record.  With -aggregate, output is:\n"
+         "         inId inOverlap\n"
          "  -mergeOutput - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
          "         inRec<tab>selectRec.\n"
          "      if multiple select records hit, inRec is repeated.\n"
          "      This will increase the memory required\n"
-         "  -idOutput - output a list of pairs of inId<tab>selectId\n"
+         "  -idOutput - output a table seprate file of pairs of\n"
+         "        inId selectId\n"
+         "      with -aggregate, omly a single column of inId is written\n"
          "  -dropped=file  - output rows that were dropped to this file.\n"
          "  -verbose=n - verbose > 1 prints some details\n",
          msg);
@@ -394,6 +445,7 @@ if (inCaOpts & chromAnnCds)
     }
 
 /* select options */
+useAggregate = optionExists("aggregate");
 nonOverlapping = optionExists("nonOverlapping");
 if (optionExists("strand"))
     selectOpts |= selUseStrand;
@@ -418,8 +470,18 @@ if (mergeOutput)
         errAbort("can't use -mergeOutput with -nonOverlapping");
     selectOpts |= selSaveLines;
     }
-
 dropFile = optionVal("dropped", NULL);
+
+/* check for options incompatible with aggregate mode */
+if (useAggregate)
+    {
+    int i;
+    for (i = 0; aggIncompatible[i] != NULL; i++)
+        {
+        if (optionExists(aggIncompatible[i]))
+            errAbort("-%s is not allowed -aggregate", aggIncompatible[i]);
+        }
+    }
 
 overlapSelect(selectFile, inFile, outFile, dropFile);
 return 0;

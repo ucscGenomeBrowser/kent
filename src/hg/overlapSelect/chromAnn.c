@@ -21,10 +21,17 @@ if (end < start)
 caBlk->ca = ca;;
 caBlk->start = start;
 caBlk->end = end;
-if (start < ca->start)
+
+if (ca->blocks == NULL)
+    {
     ca->start = start;
-if (end > ca->end)
     ca->end = end;
+    }    
+else
+    {
+    ca->start = min(ca->start, start);
+    ca->end = max(ca->end, end);
+    }
 ca->totalSize += (end - start);
 slAddHead(&ca->blocks, caBlk);
 return caBlk;
@@ -48,10 +55,16 @@ ca->chrom = cloneString(chrom);
 ca->strand = strand;
 if (name != NULL)
     ca->name = cloneString(name);
-ca->start = BIGNUM;
+ca->start = 0;
 ca->end = 0; 
 ca->recLine = recLine;
 return ca;
+}
+
+static void chromAnnFinish(struct chromAnn* ca)
+/* finish creation of a chromAnn after all blocks are added */
+{
+slReverse(&ca->blocks);
 }
 
 void chromAnnFree(struct chromAnn **caPtr)
@@ -108,8 +121,8 @@ else
             chromAnnBlkNew(ca, start, end);
         }
     }
+chromAnnFinish(ca);
 bedFree(&bed);
-slReverse(&ca->blocks);
 return ca;
 }
 
@@ -144,8 +157,8 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     if (start < end)
         chromAnnBlkNew(ca, start, end);
     }
+chromAnnFinish(ca);
 genePredFree(&gp);
-slReverse(&ca->blocks);
 return ca;
 }
 
@@ -181,8 +194,8 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
         reverseIntRange(&start, &end, psl->tSize);
     chromAnnBlkNew(ca, start, end);
     }
+chromAnnFinish(ca);
 pslFree(&psl);
-slReverse(&ca->blocks);
 return ca;
 }
 

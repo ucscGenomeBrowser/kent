@@ -253,3 +253,67 @@ if (verboseLevel() >= 2)
 return hit;
 }
 
+static void addToAggregateMap(Bits *overMap, int mapOff, struct chromAnn *ca1,
+                              struct chromAnn *ca2)
+/* set bits based on overlap between two chromAnn */
+{
+struct chromAnnBlk *ca1Blk, *ca2Blk;
+
+for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
+    {
+    for (ca2Blk = ca2->blocks; ca2Blk != NULL; ca2Blk = ca2Blk->next)
+        {
+        if ((ca1Blk->start < ca2Blk->end) && (ca1Blk->end > ca2Blk->start))
+            {
+            int start = max(ca1Blk->start, ca2Blk->start);
+            int end = min(ca1Blk->end, ca2Blk->end);
+            bitSetRange(overMap, start-mapOff, end-start);
+            }
+        }
+    }
+}
+
+static float computeAggregateOverlap(unsigned opts, struct chromAnn *inCa,
+                                     struct binElement* overlapping)
+/* Compute the aggregate overlap */
+{
+
+int mapOff = inCa->start;
+int mapLen = (inCa->end - inCa->start);
+Bits *overMap;
+struct binElement* o;
+int numOver;
+assert(mapLen >= 0);
+if (mapLen == 0)
+    return 0.0;  /* no CDS */
+
+overMap = bitAlloc(mapLen);
+
+for (o = overlapping; o != NULL; o = o->next)
+    {
+    struct chromAnn* selCa = o->val;
+    if (passCriteria(opts, inCa, selCa))
+        addToAggregateMap(overMap, mapOff, inCa, selCa);
+    }
+numOver = bitCountRange(overMap, 0, mapLen);
+bitFree(&overMap);
+return ((float)numOver) / ((float)inCa->totalSize);
+}
+
+float selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
+/* Compute the aggregate overlap of a chromAnn */
+{
+float overlap = 0.0;
+struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
+if (bins != NULL)
+    {
+    struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
+    overlap = computeAggregateOverlap(opts, inCa, overlapping);
+    slFreeList(&overlapping);
+    }
+if (verboseLevel() >= 2)
+    verboseLevel(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
+            ((inCa->strand == '\0') ? '?' : inCa->strand), overlap);
+return overlap;
+}
+
