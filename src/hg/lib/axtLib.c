@@ -262,7 +262,7 @@ struct axt *createAxtGap(char *nibFile, char *chrom,
 /* return an axt alignment with the query all deletes - null aligment */
 {
 struct axt *axt;
-int size = end-start+1;
+int size = end-start;
 char *gapPt = needLargeMem(size+1);
 char *p;
 struct dnaSeq *seq = NULL;
