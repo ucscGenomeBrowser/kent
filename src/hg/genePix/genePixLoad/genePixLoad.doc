@@ -30,7 +30,7 @@ isEmbryo - 1 if it's an embryo, 0 otherwise
 age - days since birth (or since fertilization for embryo)
 bodyPart - Name of part of body depicted in image.  Use "whole" for whole 
     mounts.  
-sliceType - whole mount, sagittal, transverse, etc.
+sliceType - whole mount, frontal, sagittal, transverse, etc.
 probeColor - color of probe
 
 OPTIONAL FIELDS (WITH DEFAULT VALUES IF ANY IN BRACKETS)
