@@ -120,5 +120,13 @@ void affyGenoDetailsOutput(struct affyGenoDetails *el, FILE *f, char sep, char l
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct affyGenoDetails *affyGenoDetailsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all affyGenoDetails from table that satisfy the query given. 
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with dbSnpRSFreeList(). */
+
+
 #endif /* AFFYGENODETAILS_H */
 
