@@ -325,6 +325,9 @@
 93 - Ported to Linux.
      2.38 chain 1310598 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
      0:30.66 chain 8324871 human 2000000 + 361721 1947371 mouse 1120000 + 8735 1116037 1
+     2:12 chr21 vs mouse rna.
+     11:42 chr1 + chr21 vs mouse rna.
+     18:55 chr1 + chr2 + chr21 vs mouse rna.
 
     
 time blat chr21.nib humanPlusRna.fa blatHuman.psl -ooc=$HOME/src/blat/11.ooc -q=rna
