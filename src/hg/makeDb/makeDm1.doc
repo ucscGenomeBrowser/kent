@@ -525,75 +525,6 @@ exit; # don't actually run this like a script :)
     | hgsql dm1
 
 
-# FLYBASE PROTEIN BLASTP (TODO)
-    # (Instructions taken from hg/near/makeNear.doc)
-    mkdir /cluster/data/dm1/bed/blastp
-    cd /cluster/data/dm1/bed/blastp
-    # First make SwissProt protein database and copy it to iscratch/i
-    # if it doesn't exist already:
-    wget ftp://ftp.ebi.ac.uk/pub/databases/SPproteomes/fasta_files/proteomes/7227.FASTAC
-    mv 7227.FASTAC swissProt.faa
-    formatdb -i swissProt.faa -t swissProt -n swissProt
-    # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
-    wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
-    zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
-    formatdb -i flyBase.faa -t flyBase -n flyBase
-    ssh kkr1u00
-    if (-e /iscratch/i/dm1/blastp) then
-      rm -r /iscratch/i/dm1/blastp
-    endif
-    mkdir -p /iscratch/i/dm1/blastp
-    cp /cluster/data/dm1/bed/blastp/flyBase.p?? /iscratch/i/dm1/blastp
-    iSync
-
-    # Make parasol run directory 
-    ssh kk
-    mkdir -p /cluster/data/dm1/bed/blastp/dm1
-    cd /cluster/data/dm1/bed/blastp/dm1
-    mkdir run
-    cd run
-    mkdir out
-
-    # Make blast script
-    cat > blastSome <<end
-#!/bin/csh
-setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/flyBase -i \$1 -o \$2 -e 0.01 -m 8 -b 1
-end
-    chmod a+x blastSome
-
-    # Make gensub2 file
-    cat > gsub <<end
-#LOOP
-blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
-#ENDLOOP
-end
-
-    # Create parasol batch
-    echo ../../split/*.fa | wordLine stdin > split.lst
-    gensub2 split.lst single gsub spec
-    para create spec
-    para try
-
-    # Wait a couple of minutes, and do a para check,  if all is good
-    # then do a
-    para push
-
-#Results of this:
-#Completed: 5814 of 5814 jobs
-#CPU time in finished jobs:      62285s    1038.09m    17.30h    0.72d  0.002 y
-#IO & Wait Time:                 23056s     384.26m     6.40h    0.27d  0.001 y
-#Average job time:                  15s       0.24m     0.00h    0.00d
-#Longest job:                      152s       2.53m     0.04h    0.00d
-#Submission to last job:           290s       4.83m     0.08h    0.00d
-
-
-    # Load into database.  
-    ssh hgwdev
-    cd /cluster/data/dm1/bed/blastp/dm1/run/out
-    hgLoadBlastTab dm1 dmBlastTab -maxPer=1 *.tab
-
-
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 10/9/03 angie)
 
     # Put the nib's on /cluster/bluearc:
@@ -958,5 +889,411 @@ PRODUCING GENSCAN PREDICTIONS (DONE 10/14/03 angie)
     ldHgGene dm1 genscan genscan.gtf
     hgPepPred dm1 generic genscanPep genscan.pep
     hgLoadBed dm1 genscanSubopt genscanSubopt.bed
+
+
+# EXTEND BDGPGENE FOR HGNEAR (DONE 10/15/03 angie)
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/bdgpAnnotations
+    # Create a table bdgpGene2, which is just like bdgpGene but with 
+    # a proteinID field.  The create statement is from 
+    # mysqldump -u hguser -phguserstuff dm1 bdgpGene 
+    # but edited to change the table name to bdgpGene2 and 
+    # to include the proteinId field.  The insert statement copies 
+    # the bdgpGene data into bdgpGene2.  
+    cat << '_EOF_' > bdgpGene2.sql
+CREATE TABLE bdgpGene2 (
+  name varchar(255) NOT NULL default '',
+  chrom varchar(255) NOT NULL default '',
+  strand char(1) NOT NULL default '',
+  txStart int(10) unsigned NOT NULL default '0',
+  txEnd int(10) unsigned NOT NULL default '0',
+  cdsStart int(10) unsigned NOT NULL default '0',
+  cdsEnd int(10) unsigned NOT NULL default '0',
+  exonCount int(10) unsigned NOT NULL default '0',
+  exonStarts longblob NOT NULL,
+  exonEnds longblob NOT NULL,
+  proteinID varchar(255) NOT NULL default 'n/a',
+  KEY name (name(16)),
+  KEY chrom (chrom(8),txStart),
+  KEY chrom_2 (chrom(8),txEnd)
+) TYPE=MyISAM;
+insert into bdgpGene2 select *,'n/a' from bdgpGene;
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # The update statements populate the proteinID fields with SwissProt IDs 
+    # where possible:
+    perl -we '%bName2id = (); \
+              open(P, "echo select bdgpGeneInfo.bdgpName,flyBaseSwissProt.swissProtId from bdgpGeneInfo,flyBaseSwissProt where bdgpGeneInfo.flyBaseId = flyBaseSwissProt.flyBaseId | hgsql -N dm1|") || die; \
+              while (<P>) { \
+                chop; @words = split("\t"); \
+                $bName2id{$words[0]} = $words[1]; \
+              } \
+              close(P); \
+              open(P, "echo select name from bdgpGene | hgsql -N dm1|") ||die; \
+              while (<P>) { \
+                chop; $name = $_; \
+                $bName = $name;  $bName =~ s/-R.*//; \
+                $id = $bName2id{$bName}; \
+                print "update bdgpGene2 set proteinID = \"$id\" where name = \"$name\";\n" if (defined $id); \
+                 \
+              } \
+              close(P); ' \
+      >> bdgpGene2.sql
+    # Create bdgpGene2:
+    hgsql dm1 < bdgpGene2.sql
+    # Now examine bdgpGene2 vs. bdgpGene manually, carefully.  
+    # Do they have the same # rows?  
+    #   select count(*) from bdgpGene;
+    #   select count(*) from bdgpGene2;
+    # Are most proteinID fields non-"n/a"? 
+    #   select count(*) from bdgpGene2 where proteinID = "n/a";
+    # Spot-check some genes... are the fields of bdgpGene2 identical to 
+    # the fields of bdgpGene, except for the new proteinIDs?  
+    #  select * from bdgpGene limit 3;
+    #  select * from bdgpGene2 limit 3;
+    # If so, then go ahead:
+    echo "drop table bdgpGene; rename table bdgpGene2 to bdgpGene;" | hgsql dm1
+    # and check the new bdgpGene manually.
+
+
+#############################################################################
+# MAKE HGNEAR
+# adapted from makeHgNear.doc; split into sections.
+
+# BLASTP SELF, CLUSTER GENES, MAP TO EXP.DATA FOR HGNEAR (IN PROGRESS 10/15/03 angie)
+    ssh hgwdev
+    # Now that bdgpGene has proteinID, use hgClusterGenes to cluster
+    # together various alt-splicing isoforms, creating the tables
+    # bdgpIsoforms and bdgpCanonical.  
+    hgClusterGenes dm1 bdgpGene bdgpIsoforms bdgpCanonical
+    # Extract peptides from bdgpGenes into fasta file
+    # and create a blast database out of them.
+    mkdir -p /cluster/data/dm1/bed/blastp
+    cd /cluster/data/dm1/bed/blastp
+    pepPredToFa dm1 bdgpGenePep bdgp.faa
+    formatdb -i bdgp.faa -t bdgp -n bdgp
+    cd ..
+
+    # Copy over database to iscratch/i
+    ssh kkr1u00
+    if (-e /iscratch/i/dm1/blastp) then
+      rm -r /iscratch/i/dm1/blastp
+    endif
+    mkdir -p /iscratch/i/dm1/blastp
+    if (-e /iscratch/i/dm1/blastp) then
+      rm -r /iscratch/i/dm1/blastp
+    endif
+    mkdir -p /iscratch/i/dm1/blastp
+    cp /cluster/data/dm1/bed/blastp/bdgp.* /iscratch/i/dm1/blastp
+
+    # Load up iscratch/i with blastp and related files
+    # if necessary
+    if (! -e /iscratch/i/blast/blastall) then
+      mkdir -p /iscratch/i/blast
+      cp /projects/compbio/bin/i686/blastall /iscratch/i/blast
+      mkdir -p /iscratch/i/blast/data
+      cp /projects/compbio/bin/i686/data/* /iscratch/i/blast/data
+    endif
+    iSync
+
+    # Split up fasta file into bite sized chunks for cluster
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastp
+    mkdir split
+    faSplit sequence bdgp.faa 6000 split/bg
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/self/run/out
+    cd /cluster/data/dm1/bed/blastp/self/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/bdgp -i \$1 -o \$2 -e 0.01 -m 8 -b 1000
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+#Completed: 5817 of 5817 jobs
+#Average job time:                   9s       0.15m     0.00h    0.00d
+#Longest job:                      312s       5.20m     0.09h    0.00d
+#Submission to last job:           312s       5.20m     0.09h    0.00d
+
+    # Load into database.  This took only ~3 minutes for dm1.
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/self/run/out
+    time hgLoadBlastTab dm1 bdgpBlastTab *.tab
+    # Create table that maps between bdgp genes and RefSeq
+    hgMapToGene dm1 refGene bdgpGene bdgpToRefSeq
+TODO
+    # Create a table that maps between bdgp genes and the 
+    # Stanford Microarray Project expression data. (see makeHgFixed.doc)
+    hgExpDistance dm1 arbLifeCycleMedian arbFlyLifeCycleMedian arbExpDistance
+
+    # Make sure that GO database is up to date.
+    See README in /cluster/store1/geneOntology.
+
+    # Leaving this in for now, just in case we add SNPs - ???
+    # Make bdgpToCdsSnp column.  This is a little complicated by
+    # having to merge data form the snpTsc and the snpNih tracks.
+    hgMapToGene dm1 snpTsc bdgpGene bdgpToCdsSnp -createOnly -all -cds
+    hgMapToGene dm1 snpTsc bdgpGene snp1 -noLoad -all -cds
+    hgMapToGene dm1 snpNih bdgpGene snp2 -noLoad -all -cds
+    sort snp1.tab snp2.tab > bdgpToCdsSnp.tab
+    rm snp1.tab snp2.tab
+    echo "load data local infile 'bdgpToCdsSnp.tab' into table bdgpToCdsSnp" \
+    | hgsql dm1
+
+
+# C.ELEGANS BLASTP FOR HGNEAR (TODO)
+    # Make C. elegans ortholog column using blastp on wormpep.
+    # First make C. elegans protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    cd /cluster/data/ce1/bed
+    mkdir blastp
+    cd blastp
+    wget ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep
+    mv wormpep wormPep.faa
+    formatdb -i wormPep.faa -t wormPep -n wormPep
+    ssh kkr1u00
+    if (-e /iscratch/i/ce1/blastp) then
+    rm -r /iscratch/i/ce1/blastp
+    endif
+    mkdir -p /iscratch/i/ce1/blastp
+    cp /cluster/data/ce1/bed/blastp/wormPep.p?? /iscratch/i/ce1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/ce1/run/out
+    cd /cluster/data/dm1/bed/blastp/ce1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce1/blastp/wormPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+#Submission to last job:           561s       9.35m     0.16h    0.01d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/ce1/run/out
+    hgLoadBlastTab dm1 ceBlastTab -maxPer=1 *.tab
+
+
+# MOUSE BLASTP FOR HGNEAR (TODO)
+    # Make mouse ortholog column using blastp on mouse known genes.
+    # First make mouse protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    cd /cluster/data/mm3/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa mm3 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+    ssh kkr1u00
+    if (-e /iscratch/i/mm3/blastp) then
+      rm -r /iscratch/i/mm3/blastp
+    endif
+    mkdir -p /iscratch/i/mm3/blastp
+    cp /cluster/data/mm3/bed/blastp/known.p?? /iscratch/i/mm3/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/mm3/run/out
+    cd /cluster/data/dm1/bed/blastp/mm3/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/mm3/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/mm3/run/out
+    hgLoadBlastTab dm1 mmBlastTab -maxPer=1 *.tab
+
+
+# HUMAN BLASTP FOR HGNEAR (TODO)
+    # Make human ortholog column using blastp on human known genes.
+    # First make human protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    cd /cluster/data/hg16/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa hg16 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+    ssh kkr1u00
+    if (-e /iscratch/i/hg16/blastp) then
+      rm -r /iscratch/i/hg16/blastp
+    endif
+    mkdir -p /iscratch/i/hg16/blastp
+    cp /cluster/data/hg16/bed/blastp/known.p?? /iscratch/i/hg16/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/hg16/run/out
+    cd /cluster/data/dm1/bed/blastp/hg16/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg16/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/hg16/run/out
+    hgLoadBlastTab dm1 mmBlastTab -maxPer=1 *.tab
+
+
+# ZEBRAFISH BLASTP FOR HGNEAR (TODO)
+    # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    cd /cluster/data/dm1/bed
+    mkdir blastp
+    cd blastp
+    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH2.pep.fa.gz 
+    zcat Dan*.pep.fa.gz > ensembl.faa
+    echo "Translation:" > subs.in
+    subs -e ensembl.faa > /dev/null
+    formatdb -i ensembl.faa -t ensembl -n ensembl
+    ssh kkr1u00
+    if (-e /iscratch/i/dr1/blastp) then
+    rm -r /iscratch/i/dr1/blastp
+    endif
+    mkdir -p /iscratch/i/dr1/blastp
+    cp /cluster/data/dr1/bed/blastp/ensembl.p?? /iscratch/i/dr1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/dr1/run/out
+    cd /cluster/data/dm1/bed/blastp/dr1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dr1/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/dr1/run/out
+    hgLoadBlastTab dm1 drBlastTab -maxPer=1 *.tab
+
+
+# YEAST BLASTP FOR HGNEAR (TODO)
+    # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on 
+    # RefSeq.  First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    cd /cluster/data/sc1/bed
+    mkdir blastp
+    cd blastp
+    wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+    zcat orf_trans.fasta.gz > sgd.faa
+    echo "ORFP:|" > subs.in
+    subs -e sgd.faa > /dev/null
+    formatdb -i sgd.faa -t sgd -n sgd
+    ssh kkr1u00
+    if (-e /iscratch/i/sc1/blastp) then
+      rm -r /iscratch/i/sc1/blastp
+    endif
+    mkdir -p /iscratch/i/sc1/blastp
+    cp /cluster/data/sc1/bed/blastp/sgd.p?? /iscratch/i/sc1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/dm1/bed/blastp/sc1/run/out
+    cd /cluster/data/dm1/bed/blastp/sc1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sc1/blastp/sgd -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S ../../split/*.fa > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastp/sc1/run/out
+    hgLoadBlastTab dm1 scBlastTab -maxPer=1 *.tab
+
+
+# END OF HGNEAR STUFF
+#############################################################################
 
 
