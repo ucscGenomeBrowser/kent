@@ -1,7 +1,0 @@
-import math
-
-flow unitCircle(float radians) into (float x, float y)
-    {
-    x = math.cos(radians);
-    y = math.sin(radians);
-    }
