@@ -5,45 +5,57 @@
 #include "cheapcgi.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faRc.c,v 1.4 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faRc.c,v 1.5 2004/12/07 09:52:01 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
-  "faRc - Reverse complement a FA file\n"
-  "usage:\n"
-  "   faRc in.fa out.fa\n"
-  "In.fa and out.fa may be the same file.\n"
-  "options:\n"
-  "   -keepName - keep name identical (don't prepend RC)\n"
-  );
+  errAbort(
+		   "faRc - Reverse complement a FA file\n"
+		   "usage:\n"
+		   "   faRc in.fa out.fa\n"
+		   "In.fa and out.fa may be the same file.\n"
+		   "options:\n"
+		   "   -keepName - keep name identical (don't prepend RC)\n"
+		   "   -justReverse - prepends R unless asked to keep name\n"
+		   "   -justComplement - prepends C unless asked to keep name\n"
+		   "                     (cannot appear together with -justReverse)\n"
+		   );
 }
 
-void faRc(char *in, char *out)
+void faRc(char *in, char *out, boolean revOnly, boolean compOnly)
 /* faRc - Reverse complement a FA file. */
 {
-struct dnaSeq *seqList = NULL, *seq;
-FILE *f;
-char buf[512];
-char *prefix = (cgiBoolean("keepName") ? "" : "RC_");
+  struct dnaSeq *seqList = NULL, *seq;
+  FILE *f;
+  char buf[512];
+  char *prefix = (cgiBoolean("keepName") ? "" : (revOnly ? "R_" : (compOnly ? "C_" : "RC_")));
 
-seqList = faReadAllDna(in);
-f = mustOpen(out, "w");
-for (seq = seqList; seq != NULL; seq = seq->next)
+  seqList = faReadAllDna(in);
+  f = mustOpen(out, "w");
+  for (seq = seqList; seq != NULL; seq = seq->next)
     {
-    reverseComplement(seq->dna, seq->size);
-    sprintf(buf, "%s%s", prefix, seq->name);
-    faWriteNext(f, buf,  seq->dna, seq->size);
+	  if (revOnly)
+		reverseBytes(seq->dna, seq->size);
+	  else if (compOnly)
+		complement(seq->dna, seq->size);
+	  else
+		reverseComplement(seq->dna, seq->size);
+	  sprintf(buf, "%s%s", prefix, seq->name);
+	  faWriteNext(f, buf,  seq->dna, seq->size);
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-if (argc != 3)
+  boolean revOnly, compOnly;
+
+  cgiSpoof(&argc, argv);
+  revOnly  = cgiBoolean("justReverse");
+  compOnly = cgiBoolean("justComplement");
+  if (argc != 3 || (revOnly && compOnly))
     usage();
-faRc(argv[1], argv[2]);
-return 0;
+  faRc(argv[1], argv[2], revOnly, compOnly);
+  return 0;
 }
