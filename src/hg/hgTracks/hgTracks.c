@@ -5399,7 +5399,7 @@ if (gotBlat)
     {
     printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg7"))
+if (sameString(database, "hg8"))
     {
     fputs("<TD><P ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
