@@ -445,9 +445,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	{
 	if (sameString(bed->chrom, region->chrom))
 	    {
-	    if (region->end == 0 || 
-	       (bed->chromStart < region->end 
-	       && bed->chromEnd > region->start))
+	    if (bed->chromStart < region->end && bed->chromEnd > region->start)
 		{
 		if (bf == NULL || bedFilterOne(bf, bed))
 		    {

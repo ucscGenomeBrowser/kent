@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.86 2004/11/17 23:27:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.87 2004/11/19 05:53:01 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -225,16 +225,22 @@ return dif;
 struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
-struct slName *chrom, *chromList = hAllChromNames();
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
 struct region *region, *regionList = NULL;
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+
+sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
-    region->chrom = cloneString(chrom->name);
+    region->chrom = cloneString(row[0]);
+    region->end = sqlUnsigned(row[1]);
+    region->fullChrom = TRUE;
     slAddHead(&regionList, region);
     }
 slSort(&regionList, regionCmp);
-slFreeList(&chromList);
+hFreeConn(&conn);
 return regionList;
 }
 
@@ -257,8 +263,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-/*	do not sort, leave them in order by their Encode names */
-/*slSort(&list, regionCmp);*/
 return list;
 }
 
@@ -350,32 +354,6 @@ if (sameString(region, "range"))
 return region;
 }
 
-void regionFillInChromEnds(struct region *regionList, int limit)
-/* Fill in end fields if set to zero to be whole chrom up
-	to limit number of regions, limit=0 == no limit, all chroms */
-{
-struct region *region;
-int regionCount=0;
-
-for (region = regionList;
-	(region != NULL) && (!(limit && (regionCount >= limit)));
-	    region = region->next, ++regionCount)
-    {
-    if (region->end == 0)
-        region->end = hChromSize(region->chrom);
-    }
-}
-
-
-struct region *getRegionsWithChromEnds()
-/* Get list of regions.  End field is set to chrom size rather
- * than zero for full chromosomes. */
-{
-struct region *regionList = getRegions();
-regionFillInChromEnds(regionList, 0);
-return regionList;
-}
-
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere)
@@ -398,7 +376,7 @@ if (isPositional)
 	if (!sqlTableExists(conn, fullTableName))
 	    return NULL;
 	}
-    if (region->end == 0) /* Full chromosome. */
+    if (region->fullChrom) /* Full chromosome. */
 	{
 	sr = hExtendedChromQuery(conn, table, region->chrom, 
 		extraWhere, FALSE, fields, NULL);

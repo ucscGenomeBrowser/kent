@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.15 2004/11/17 23:27:56 hiram Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.16 2004/11/19 05:53:01 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -33,10 +33,7 @@ for (region = regionList;
 	(region != NULL) && (!(limit && (regionCount >= limit)));
 	    region = region->next, ++regionCount)
     {
-    if (region->end == 0)
-        total += hChromSize(region->chrom);
-    else
-	total += region->end - region->start;
+    total += region->end - region->start;
     }
 return total;
 }
@@ -99,10 +96,7 @@ cov->region = region;
 cov->minBases = BIGNUM;
 if (region != NULL)
     {
-    int end = region->end;
-    if (end == 0) 
-	end = hChromSize(region->chrom);
-    cov->bits = bitAlloc(end - region->start);
+    cov->bits = bitAlloc(region->end - region->start);
     }
 return cov;
 }
@@ -268,7 +262,6 @@ for (region = regionList; region != NULL; region = region->next)
     struct lm *lm = lmInit(64*1024);
     startTime = clock1000();
     bedList = cookedBedList(conn, curTable, region, lm);
-    if (region->end == 0) region->end = hChromSize(region->chrom);
     midTime = clock1000();
     loadTime += midTime - startTime;
 

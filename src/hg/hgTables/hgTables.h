@@ -37,7 +37,8 @@ struct region
     struct region *next;
     char *chrom;		/* Chromosome. */
     int start;			/* Zero-based. */
-    int end;			/* Non-inclusive.  If zero means full chromosome. */
+    int end;			/* Non-inclusive. */
+    boolean fullChrom;		/* If TRUE it's full chromosome. */
     };
 
 /* Global variables - generally set during initialization and then read-only. */
@@ -144,14 +145,6 @@ struct region *getRegionsFullGenome();
 
 char *getRegionName();
 /* Get a name for selected region.  Don't free this. */
-
-struct region *getRegionsWithChromEnds();
-/* Get list of regions.  End field is set to chrom size rather
- * than zero for full chromosomes. */
-
-void regionFillInChromEnds(struct region *regionList, int limit);
-/* Fill in end fields if set to zero to be whole chrom up
-	to limit number of regions, limit=0 == no limit, all chroms */
 
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */

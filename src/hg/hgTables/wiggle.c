@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.33 2004/11/18 20:00:25 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.34 2004/11/19 05:53:01 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -691,13 +691,11 @@ else
     if (regionsDone >= MAX_REGION_DISPLAY)
 	{
 	regionSize = basesInRegion(regionList,MAX_REGION_DISPLAY);
-	regionFillInChromEnds(regionList, MAX_REGION_DISPLAY);
 	gapTotal = gapsInRegion(conn, regionList,MAX_REGION_DISPLAY);
 	}
     else
 	{
 	regionSize = basesInRegion(regionList,0);
-	regionFillInChromEnds(regionList, 0);
 	gapTotal = gapsInRegion(conn, regionList,0);
 	}
     realSize = regionSize - gapTotal;
