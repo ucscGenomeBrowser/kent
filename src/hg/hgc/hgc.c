@@ -163,9 +163,9 @@
 #include "flyreg.h"
 #include "putaInfo.h"
 #include "gencodeIntron.h"
+#include "cutter.h"
 
-
-static char const rcsid[] = "$Id: hgc.c,v 1.862 2005/03/29 00:14:53 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.863 2005/03/29 03:10:09 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14583,6 +14583,59 @@ readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 }
 
+static void doCutters(char *item)
+/* Print info about a restriction enzyme. */
+{
+struct sqlConnection *conn;
+struct cutter *cut = NULL;
+char query[100];
+
+hSetDb2("hgFixed");
+conn = hAllocConn2();
+safef(query, sizeof(query), "select * from cutters where name=\'%s\'", item);
+cut = cutterLoadByQuery(conn, query);  
+char helpName[PATH_LEN], *helpBuf;
+cartWebStart(cart, "Restriction Enzymes from REBASE");
+if (cut)
+    {
+    printf("<B>Enzyme Name:</B> %s<BR>\n", cut->name);
+    printf("<B>Recognition Sequence: </B>%s<BR>\n", cut->seq);
+    printf("<B>Palindromic: </B>%s<BR>\n", (cut->palindromic) ? "YES" : "NO");
+    if (cut->numSciz > 0)
+	{
+	int i;
+	printf("<B>Isoscizomers: </B>");
+	for (i = 0; i < cut->numSciz-1; i++)
+	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
+	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
+	}
+    if (cut->numRefs > 0)
+	{
+	int i, count = 1;
+	char **row;
+	struct sqlResult *sr;
+	printf("<B>References:</B><BR>\n");
+	safef(query, sizeof(query), "select * from rebaseRefs");
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int refNum = atoi(row[0]);
+	    for (i = 0; i < cut->numRefs; i++) 
+		{
+		if (refNum == cut->refs[i])
+		    printf("%d. %s<BR>\n", count++, row[1]);
+		}
+	    }
+	sqlFreeResult(&sr);
+	}    
+    }
+htmlHorizontalLine();
+safef(helpName, 256, "%s/%s.html", HELP_DIR, CUTTERS_TRACK_NAME);
+readInGulp(helpName, &helpBuf, NULL);
+puts(helpBuf);
+cutterFree(&cut);
+hFreeConn2(&conn);
+}
 
 void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart, 
 			int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS, int cdsE)
@@ -15659,6 +15712,10 @@ else if (startsWith("flyreg", track))
 else if (startsWith("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
+    }
+else if (sameString("cutters", track))
+    {
+    doCutters(item);
     }
 else if (tdb != NULL)
     {
