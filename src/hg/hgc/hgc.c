@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.730 2004/08/26 17:33:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.731 2004/08/26 18:28:03 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2826,6 +2826,10 @@ void doGetDna2()
 char *tbl = cgiUsualString("table", "");
 char *action = cgiUsualString("submit", "");
 int itemCount;
+char *pos = NULL;
+char *chrom = NULL;
+int start = 0;
+int end = 0;
 
 if (sameString(action, "Extended case/color options"))
     {
@@ -2837,11 +2841,6 @@ hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
-    char *pos = NULL;
-    char *chrom = NULL;
-    int start = 0;
-    int end = 0;
-
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
          hgParseChromRange(pos, &chrom, &start, &end))
@@ -2859,6 +2858,16 @@ else
     struct hTableInfo *hti = NULL;
     char rootName[256];
     char parsedChrom[32];
+
+    /* use the values from the dnaPos dialog box */
+    if (!( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
+         hgParseChromRange(pos, &chrom, &start, &end)))
+	 {
+	 /* if can't get DnaPos from dialog box, use "o" and "t" */
+	 start = cartInt(cart, "o");
+	 end = cartInt(cart, "t");
+	 }
+
     /* Table might be a custom track; if it's not in the database, 
      * just get DNA as if no table were given. */
     hParseTableName(tbl, rootName, parsedChrom);
@@ -2866,8 +2875,7 @@ else
     if (hti == NULL)
 	{
 	itemCount = 1;
-	hgSeqRange(seqName, cartInt(cart, "o"), cartInt(cart, "t"),
-		   '?', tbl);
+	hgSeqRange(seqName, start, end, '?', tbl);
 	}
     else
 	{
@@ -2879,8 +2887,7 @@ else
 	    safef(buf, sizeof(buf), "%s = '%s'", hti->nameField, item);
 	    where = buf;
 	    }
-	itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
-				      cartInt(cart, "t"), where);
+	itemCount = hgSeqItemsInRange(tbl, seqName, start, end, where);
 	}
     }
 if (itemCount == 0)
