@@ -12,7 +12,7 @@
 #define WINDOW 25               /* default window size */
 #define LINESIZE 50             /* default fa output line size */
 
-#define MAXREADSIZE 8192
+#define MAXREADSIZE 10*1024
 #define INTSPERLINE 20 /* number of qual scores per line */
 /* modes for parsing regions of sequence */
 #define START 0
