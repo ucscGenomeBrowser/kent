@@ -2,9 +2,24 @@ track multiz5way
 shortLabel Conservation
 longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
 group compGeno
-priority 150
-visibility dense
-type maf
+priority 110
+visibility squish
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5
+yLinOnOff Off
+autoScaleDefault Off
+speciesOrder chicken human mouse zebrafish
+
+track mostConserved
+shortLabel Most Conserved
+longLabel Most Conserved (Top 3% of Genome) Elements
+group compGeno
+priority 111
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track chainGalGal2
 shortLabel $o_Organism Chain 
