@@ -28,10 +28,12 @@ static struct sqlConnCache *centralCc = NULL;
 #define DEFAULT_HUMAN "hg12"
 #define DEFAULT_MOUSE "mm2"
 #define DEFAULT_ZOO   "zooHuman3"
+#define DEFAULT_RAT   "rn1"
 
 static char *defaultHuman = DEFAULT_HUMAN;
 static char *defaultMouse = DEFAULT_MOUSE;
 static char *defaultZoo   = DEFAULT_ZOO;
+static char *defaultRat   = DEFAULT_RAT;
 
 static char *hdbHost;
 static char *hdbName = DEFAULT_HUMAN;
@@ -1937,6 +1939,10 @@ else if (strstrNoCase(organism, "zoo"))
 else if (strstrNoCase(organism, "human"))
     {
     result = defaultHuman;
+    }
+else if (strstrNoCase(organism, "rat"))
+    {
+    result = defaultRat;
     }
 
 return result;

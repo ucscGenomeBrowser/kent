@@ -285,8 +285,7 @@ char *values [128];
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     /* Only add mouse or human to menu */
-    if (!hashFindVal(hash, cur->organism) && 
-        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
+    if (!hashFindVal(hash, cur->organism))
         {
         hashAdd(hash, cur->organism, cur);
         orgList[numOrganisms] = cur->organism;
