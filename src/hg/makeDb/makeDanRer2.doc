@@ -1423,6 +1423,178 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # 86.150u 50.120s 3:50.89 59.0%   0+0k 0+0io 200pf+0w
     # load net into database
     netFilter -minGap=10 humanhg17.net |  hgLoadNet danRer2 netHg17 stdin
-    
 
+# BLASTZ SWAP FOR mm5 vs danRer2 BLASTZ TO CREATE danRer2 vs mm5 BLASTZ
+# (DONE, 2004-12-13, hartera)
 
+    ssh kolossus
+    mkdir -p /cluster/data/danRer2/bed/blastz.mm5.swap
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap
+    # use rescored axtChrom from blastzDanRer1 on mm5
+    set aliDir = /cluster/data/mm5/bed/blastz.danRer2
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 919M    /cluster/data/mm5/bed/blastz.danRer2/axtChrom
+    # 921M    unsorted
+    # 919M    axtChrom
+    rm -r unsorted
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap
+    mkdir -p pslChrom
+    set tbl = "blastzMm5"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer2 $f
+      echo "$f Done"
+    end
+
+# CHAIN MOUSE (mm5) BLASTZ (DONE, 2004-12-13, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/danRer2/bed/blastz.mm5.swap/axtChrom/*.axt \
+                    > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+
+    # << this line makes emacs coloring happy
+
+# Reuse gap penalties from hg16 vs chicken run.
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V 72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+tGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V  16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+# create chains with only default filtering on score - minScore = 1000
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/danRer2/nib \
+    /cluster/bluearc/scratch/mus/mm5/softNib $2 >& $3
+'_EOF_'
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       2405s      40.08m     0.67h    0.03d  0.000 y
+# IO & Wait Time:                   447s       7.46m     0.12h    0.01d  0.000 y
+# Average job time:                 102s       1.70m     0.03h    0.00d
+# Longest job:                      147s       2.45m     0.04h    0.00d
+# Submission to last job:           523s       8.72m     0.15h    0.01d
+
+   # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # only chrUn and chrNA have >100,000 chains with score <=5000
+    # filter on minScore=5000
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chainFilt5k
+    rm -r chain
+    chainSplit chain all.chainFilt5k
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer2 ${c}_chainMm5 $i
+        echo done $c
+    end
+
+# featureBits -chrom=chr1 danRer2 refGene:cds chainMm5 -enrichment
+# refGene:cds 0.512%, chainMm5 34.341%, both 0.436%, cover 85.08%, enrich 2.48x
+# featureBits -chrom=chr1 danRer2 refGene:cds chainMm5Link -enrichment
+# refGene:cds 0.512%, chainMm5Link 4.588%, both 0.395%, cover 77.08%, 
+# enrich 16.80x
+# featureBits -chrom=chr1 danRer1 refGene:cds chainMm5 -enrichment
+# refGene:cds 0.529%, chainMm5 42.554%, both 0.459%, cover 86.70%, enrich 2.04x
+# featureBits -chrom=chr1 danRer1 refGene:cds chainMm5Link -enrichment
+# refGene:cds 0.529%, chainMm5Link 7.948%, both 0.412%, cover 77.80%, 
+# enrich 9.79x
+
+# NET MOUSE (mm5) BLASTZ (DONE, 2004-12-13, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 122568704, utime 857 s/100, stime 82
+    # Add classification info using db tables:
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    mkdir -p /cluster/bluearc/danRer2/linSpecRep.notInMouse
+    cp /iscratch/i/mm5/linSpecRep.notInZebrafish/* \
+       /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    cp /iscratch/i/danRer2/linSpecRep.notInMouse/* \
+       /cluster/bluearc/danRer2/linSpecRep.notInMouse
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.mm5.swap/axtChain
+    time netClass noClass.net danRer2 mm5 mouseMm5.net \
+          -tNewR=/cluster/bluearc/danRer2/linSpecRep.notInMouse \
+          -qNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish -noAr
+    # 106.160u 62.900s 5:15.30 53.6%  0+0k 0+0io 201pf+0w
+    netFilter -minGap=10 mouseMm5.net |  hgLoadNet danRer2 netMm5 stdin
+
+# featureBits danRer2 refGene:cds netMm5 -enrichment
+# refGene:cds 0.468%, netMm5 30.706%, both 0.404%, cover 86.40%, enrich 2.81x
+# featureBits danRer1 refGene:cds netMm5 -enrichment
+# refGene:cds 0.461%, netMm5 36.622%, both 0.395%, cover 85.70%, enrich 2.34x
+# add html and trackDb.ra entries 
