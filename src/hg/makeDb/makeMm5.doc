@@ -4515,7 +4515,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.prot
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene -gtf mm5 geneid download/*.gtf
+    ldHgGene -genePredExt -gtf mm5 geneid download/*.gtf
     hgPepPred mm5 generic geneidPep download/*-fixed.prot
 
 # PRODUCING GENSCAN PREDICTIONS (DONE 08-03-04 Fan)
@@ -4577,7 +4577,7 @@ tmp=/tmp -window=1200000
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/mm5/bed/genscan
-    ldHgGene mm5 genscan genscan.gtf
+    ldHgGene mm5 -genePredExt genscan genscan.gtf
     hgPepPred mm5 generic genscanPep genscan.pep
     hgLoadBed mm5 genscanSubopt genscanSubopt.bed
 
