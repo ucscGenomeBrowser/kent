@@ -503,9 +503,9 @@ void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
-struct lm *lm = lmInit(64*1024);
-struct bed *bed, *bedList = getAllIntersectedBeds(conn, track, lm);
+struct region *regionList = getRegions(), *region;
 struct slName *chosenFields, *field;
+int count = 0;
 if (fields == NULL)
     {
     struct customTrack *ct = lookupCt(track->tableName);
@@ -523,11 +523,19 @@ for (field = chosenFields; field != NULL; field = field->next)
     }
 hPrintf("\n");
 
-for (bed = bedList; bed != NULL; bed = bed->next)
-    tabBedRow(bed, chosenFields);
-if (bedList == NULL)
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct lm *lm = lmInit(64*1024);
+    struct bed *bed, *bedList = cookedBedList(conn, track, region, lm);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	tabBedRow(bed, chosenFields);
+	++count;
+	}
+    lmCleanup(&lm);
+    }
+if (count == 0)
     explainWhyNoResults();
-lmCleanup(&lm);
 }
 
 
