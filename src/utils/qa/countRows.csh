@@ -29,7 +29,8 @@ else
 endif
 
 echo
-echo "database: $db"
+# echo "database: $db"
+
 
 echo
 if (-e $tablelist) then
@@ -79,7 +80,7 @@ rm -f xxtablelistxx
 
 # show results
 if (-e $db.$outname.rowcounts) then
-  echo "dev first"
+  # echo "dev first"
   echo
   cat $db.$outname.rowcounts
 else
