@@ -20,12 +20,11 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.105 2004/05/28 21:27:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.106 2004/05/29 00:29:45 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
 char *chromosome = NULL;	/* Chromosome. */
-
 
 void radioButton(char *var, char *val, char *ourVal)
 /* Print one radio button */
@@ -521,7 +520,7 @@ printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
 cgiMakeDoubleVar(&options[4][0], minY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 cgiMakeDoubleVar(&options[5][0], maxY, 6);
-printf("<BR>\n(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
+printf("<BR>\n&nbsp; &nbsp;(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
     tDbMinY, tDbMaxY);
 printf("<BR>\n<b>Data view scaling:&nbsp;</b>");
 wiggleScaleDropDown(&options[9][0], autoScale);
@@ -538,6 +537,15 @@ printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
 
+}
+
+void rulerUi(struct trackDb *tdb)
+/* UI for base position (ruler) */
+{
+/* Configure zoom when click occurs */
+char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
+puts("<B>Zoom:</B>");
+zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 }
 
 void wigMafUi(struct trackDb *tdb)
@@ -561,21 +569,23 @@ for (i = 0; i < speciesCt; i++)
     printf ("%s<br>", species[i]);
     puts("</TD>");
     }
-puts("</TR></TABLE><P>");
+puts("</TR></TABLE><BR>");
 
-puts("<p><b>Base-level display:</b><br>" );
+puts("<p><b>Base-level display:</b></P>" );
+
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
-puts ("Alternate colors every");
+puts ("&nbsp; Alternate colors every");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
 puts ("bases<br>");
 
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
                         BASE_COLORS_OFFSET_VAR);
-puts ("Offset alternate colors by");
+puts ("&nbsp; Offset alternate colors by");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
 puts ("bases<br>");
 
-puts("<p><b>Multiple alignment:</b><br>" );
+
+puts("<p><b>Multiple alignment:</b>" );
 wigUi(tdb);
 }
 
@@ -813,6 +823,8 @@ else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
 else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
+else if (sameString(track, RULER_TRACK_NAME))
+    rulerUi(tdb);
 else 
     {
     /* handle all tracks with type "psl xeno <otherDb>" */
