@@ -286,12 +286,29 @@ if (columns > 1)
 printf(">%s</TH>", label);
 }
 
+struct tfCond
+/* Condition tested under. */
+   {
+   struct tfCond *next;
+   char *name;	/* Condition name. */
+   double binding;	/* Binding e-val. */
+   };
+
+static int tfCondCmpName(const void *va, const void *vb)
+/* Compare two tfData names. */
+{
+const struct tfCond *a = *((struct tfCond **)va);
+const struct tfCond *b = *((struct tfCond **)vb);
+return strcmp(a->name, b->name);
+}
+
+
 struct tfData
 /* Data associated with one transcription factor. */
    {
    struct tfData *next;
    char *name;	/* Transcription factor name. */
-   struct slName *conditionList;	/* List of growth conditions. */
+   struct tfCond *conditionList;	/* List of growth conditions. */
    struct transRegCode *trcList;	/* List of binding sites. */
    };
 
@@ -301,6 +318,120 @@ static int tfDataCmpName(const void *va, const void *vb)
 const struct tfData *a = *((struct tfData **)va);
 const struct tfData *b = *((struct tfData **)vb);
 return strcmp(a->name, b->name);
+}
+
+static boolean tfBindAtLevel(struct tfData *tf, double minVal, double maxVal)
+/* Return TRUE if transcription factor binding between minVal and maxVal
+ * for any condition. */
+{
+struct tfCond *cond;
+for (cond = tf->conditionList; cond != NULL; cond = cond->next)
+    {
+    if (minVal <= cond->binding && cond->binding < maxVal)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean anyTfBindAtLevel(struct tfData *tfList, double minVal, double maxVal)
+/* Return true if some item in tfList binds at level. */
+{
+struct tfData *tf;
+for (tf = tfList; tf != NULL; tf = tf->next)
+    {
+    if (tfBindAtLevel(tf, minVal, maxVal))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static void tfBindLevelSection(char *label, double minVal, double maxVal, 
+	struct tfData *tfList, struct sqlConnection *conn, char *motifTable)
+/* Print info on individual transcription factors that bind
+ * with e-val between minVal and maxVal. */
+{
+struct tfData  *tf;
+struct transRegCode *trc;
+
+/* Make sure we have something to say first. */
+if (!anyTfBindAtLevel(tfList, minVal, maxVal))
+     return;
+
+webNewSection("Experiments with %s Enrichment After IP", label);
+hTableStart();
+printf("<TR>");
+colLabel("Transcription", 1);
+colLabel("Growth", 1);
+colLabel("Motif Information", 3);
+printf("</TR>\n");
+printf("<TR>");
+colLabel("Factor", 1);
+colLabel("Conditions", 1);
+colLabel("Hits", 1);
+colLabel("Scores", 1);
+colLabel("Conservation (2 max)", 1);
+printf("</TR>\n");
+
+for (tf = tfList; tf != NULL; tf = tf->next)
+    {
+    if (tfBindAtLevel(tf, minVal, maxVal))
+	{
+	struct tfCond *cond;
+	boolean isFirst = TRUE;
+	printf("<TR>");
+
+	/* Print transcription factor and growth conditions. */
+	printf("<TD>");
+	sacCerHgGeneLinkName(conn, tf->name);
+	printf("</TD>");
+	printf("<TD>");
+	slSort(&tf->conditionList, tfCondCmpName);
+	for (cond = tf->conditionList; cond != NULL; cond = cond->next)
+	    {
+	    if (minVal <= cond->binding && cond->binding < maxVal)
+		{
+		if (isFirst)
+		    isFirst = FALSE;
+		else
+		    printf(", ");
+		printf("%s", cond->name);
+		}
+	    }
+	printf("</TD>");
+
+
+	/* Print motif info. */
+	if (tf->trcList == NULL)
+	    printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
+	else
+	    {
+	    printf("<TD>%d</TD>", slCount(tf->trcList));
+	    /* Print scores. */
+	    printf("<TD>");
+	    for (trc = tf->trcList; trc != NULL; trc = trc->next)
+		{
+		double score;
+		if (trc != tf->trcList)
+		    printf(", ");
+		score = motifScoreHere(
+		    trc->chrom, trc->chromStart, trc->chromEnd,
+		    trc->name, motifTable);
+		transRegCodeAnchor(trc);
+		printf("%3.1f</A>", score);
+		}
+	    printf("</TD><TD>");
+	    for (trc = tf->trcList; trc != NULL; trc = trc->next)
+		{
+		if (trc != tf->trcList)
+		    printf(", ");
+		printf("%d", trc->consSpecies);
+		}
+	    printf("</TD>");
+	    }
+	printf("</TR>\n");
+	}
+    }
+hTableEnd();
 }
 
 void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
@@ -313,7 +444,6 @@ char **row;
 int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
 struct sqlConnection *conn = hAllocConn();
 struct transRegCodeProbe *probe = NULL;
-struct transRegCode *trc;
 
 cartWebStart(cart, "CHIP/CHIP Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
@@ -341,6 +471,7 @@ if (probe != NULL)
 	/* Parse out factor and condition. */
 	char *tfName = probe->tfList[i];
 	char *condition = strchr(tfName, '_');
+	struct tfCond *cond;
 	if (condition != NULL)
 	    *condition++ = 0;
 	else
@@ -352,7 +483,10 @@ if (probe != NULL)
 	    hashAddSaveName(tfHash, tfName, tf, &tf->name);
 	    slAddHead(&tfList, tf);
 	    }
-	slNameAddHead(&tf->conditionList, condition);
+	AllocVar(cond);
+	cond->name = cloneString(condition);
+	cond->binding = probe->bindVals[i];
+	slAddHead(&tf->conditionList, cond);
 	}
     slSort(&tfList, tfDataCmpName);
 
@@ -371,80 +505,13 @@ if (probe != NULL)
 	    }
 	sqlFreeResult(&sr);
 	}
-
-    /* Print info on individual transcription factors. */
-    webNewSection("Experiments with Significant Enrichment After IP");
     if (tfList == NULL)
-        printf("No significant immunoprecipitation of this probe.");
+	printf("No significant immunoprecipitation at this level.");
     else
-        {
-	hTableStart();
-	printf("<TR>");
-	colLabel("Transcription", 1);
-	colLabel("Growth", 1);
-	colLabel("Motif Information", 3);
-	printf("</TR>\n");
-	printf("<TR>");
-	colLabel("Factor", 1);
-	colLabel("Conditions", 1);
-	colLabel("Hits", 1);
-	colLabel("Scores", 1);
-	colLabel("Conservation (2 max)", 1);
-	printf("</TR>\n");
-
-	for (tf = tfList; tf != NULL; tf = tf->next)
-	    {
-	    struct slName *cond;
-	    printf("<TR>");
-
-	    /* Print transcription factor and growth conditions. */
-	    printf("<TD>");
-	    sacCerHgGeneLinkName(conn, tf->name);
-	    printf("</TD>");
-	    printf("<TD>");
-	    slSort(&tf->conditionList, slNameCmp);
-	    for (cond = tf->conditionList; cond != NULL; cond = cond->next)
-	        {
-		if (cond != tf->conditionList)
-		    printf(", ");
-		printf("%s", cond->name);
-	         }
-	    printf("</TD>");
-
-
-	    /* Print motif info. */
-	    if (tf->trcList == NULL)
-	        printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
-	    else
-	        {
-		printf("<TD>%d</TD>", slCount(tf->trcList));
-		/* Print scores. */
-		printf("<TD>");
-		for (trc = tf->trcList; trc != NULL; trc = trc->next)
-		    {
-		    double score;
-		    if (trc != tf->trcList)
-		        printf(", ");
-		    score = motifScoreHere(
-		    	trc->chrom, trc->chromStart, trc->chromEnd,
-			trc->name, motifTable);
-		    transRegCodeAnchor(trc);
-		    printf("%3.1f</A>", score);
-		    }
-		printf("</TD><TD>");
-		for (trc = tf->trcList; trc != NULL; trc = trc->next)
-		    {
-		    if (trc != tf->trcList)
-		        printf(", ");
-		    printf("%d", trc->consSpecies);
-		    }
-		printf("</TD>");
-		}
-	    printf("</TR>\n");
-	    }
-	hTableEnd();
+	{
+	tfBindLevelSection("Good", 0.000, 0.004, tfList, conn, motifTable);
+	tfBindLevelSection("Weak", 0.004, 0.010, tfList, conn, motifTable);
 	}
-    printf("<BR>\n");
     transRegCodeProbeFree(&probe);
     }
 hFreeConn(&conn);
