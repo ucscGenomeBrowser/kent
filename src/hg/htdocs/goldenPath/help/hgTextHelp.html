@@ -143,7 +143,7 @@ All rights reserved.
         <LI><A CLASS="toc" HREF="#getDna">
         Get DNA sequence for RefSeq genes</A>
         <LI><A CLASS="toc" HREF="#matchGeneName">
-        Get locations of all RefSeq genes that start with "HOX"</A>
+        Get locations of all RefSeq genes that start with HOX</A>
         <LI><A CLASS="toc" HREF="#blastz">
         Get human alignments to mouse at ESPN</A>
         <LI><A CLASS="toc" HREF="#repeatRefGene">
@@ -1014,20 +1014,124 @@ then the meaning of upstream and downstream depend on the strand.
 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
+All of these examples assume that the user has already selected a 
+genome assembly (for example, Human Nov. 2002).  
+
+
 <A NAME="getDna"></A>
 <H4> Get DNA sequence for RefSeq genes </H4>
 
+<UL>
+<LI> If there is a particular gene of interest, enter the gene's 
+     <B>NM_??????</B> accession number
+     and click on the <B>Look up</B> button.  <BR>
+     Otherwise, enter a position range, e.g. <B>chr22:15500000-15750000</B>
+<LI> Select <B>refGene</B> from the "Positional tables" menu.  <BR>
+     Click on the <B>Advanced query...</B> button.  
+<LI> Select <B>FASTA (DNA Sequence)</B> from the output format menu.  <BR>
+     Click on the <B>Get results</B> button.
+<LI> Review the subregion and formatting options.  <BR>
+     Click on the <B>Get sequence</B> button.  
+</UL>
+
+FASTA for all RefSeq genes in the position range will be displayed.  
+
+
 <A NAME="matchGeneName"></A>
-<H4> Get locations of all RefSeq genes that start with "HOX" </H4>
+<H4> Get locations of all RefSeq genes that start with HOX </H4>
+
+The refGene table contains the location of RefSeq genes, indexed by 
+accession number (NM_??????).  The refFlat table contains the same 
+information, but indexed by gene name.  
+
+<UL>
+<LI> To find all RefSeq genes that start with HOX in the whole genome, 
+     change the position to <B>genome</B>.  
+<LI> Select <B>refFlat</B> from the "Positional tables" menu.  <BR>
+     Click on the <B>Advanced query...</B> button.  
+<LI> Select Hyperlinks to the  from the output format menu.  <BR>
+     In the "Filter refFlat records" section, 
+     enter <B>HOX*</B> in the box at the end of the line for the name field 
+     ('name [does] match ...').  <BR>
+     Click on the <B>Get results</B> button.  
+</UL>
+
+A page of links into the Genome Browser at the location of each HOX* 
+gene will appear.  
+
 
 <A NAME="blastz"></A>
 <H4> Get human alignments to mouse at ESPN </H4>
 
+<B>Note:</B> This example assumes the existence of the blastzBestMouse track 
+in the current genome assembly/database, and the existence of the ESPN gene 
+in the current assembly's RefSeq Genes (refGene/refFlat) track.  Before 
+starting this example, make sure the current database is set to Human, 
+June 2002 or later.
+
+<UL>
+<LI> Set position to <B>ESPN</B> and click the <B>Look up</B> button.  
+<LI> Select <B>chrN_blastzBestMouse</B> from the "Positional tables" menu. <BR>
+     Click on the <B>Get all fields</B> button.  
+</UL>
+
+The contents of the chr1_blastzBestMouse table that fall at least partly 
+in the selected position range will be printed out as 
+<A HREF="#TabSep">tab-separated text</A>.  
+The format used by the genome browser for tables containing alignments 
+(such as chrN_blastzBestMouse) is 
+<A HREF="/goldenPath/help/customTrack.html#PSL">PSL</A>.  
+
+
 <A NAME="repeatRefGene"></A>
-<H4> Get locations of repeats identified on exons of RefSeq genes </H4>
+<H4> Get locations of repeats identified on exons of chr21 RefSeq genes </H4>
+
+<UL>
+<LI> Set position to <B>chr21</B> and click the <B>Look up</B> button.  
+<LI> Select <B>chrN_rmsk</B> from the "Positional tables" menu. <BR>
+     Click on the <B>Advanced query...</B> button.  
+<LI> Select <B>BED/Custom Track</B> from the output format menu. <BR>
+     Scroll down to the "(Optional) Intersect Results" section.  <BR>
+     Select <B>refGene</B> from the "Positional tables" menu.  <BR>
+     Click the <B>Intersect Results...</B> button.
+<LI> Select <B>All chrN_rmsk records that have any overlap with refGene</B>
+     as the way to combine the tables.  <BR>
+     Scroll down to the bottom of the page and click on the 
+     <B>BED/Custom Track</B> button.  
+<LI> Experiment with the BED options form by clicking the <B>Get BED</B> 
+     button, looking at the results, then using your web browser's Back 
+     button to return to the form and try other settings.  
+</UL>
+
+If you choose the <B>Load this custom track into my session</B> option 
+when experimenting with BED/Custom Track options, then the results will 
+be kept temporarily (until 8 hours after last usage) on the server.  
+To view your custom track, click your web browser's Back button, 
+then click the "Genome Browser" link on the blue bar near the top of 
+the page.  Click the <B>Submit</B> button, and your Table Browser 
+generated custom track will appear at or near the top of the browser 
+tracks image.  
 
 <A NAME="tabSep"></A>
 <H4> Download the contents of a table for local processing </H4>
+
+<UL>
+<LI> Enter the <B>position</B> range (or gene name, accession, etc.) of 
+     interest and click on the <B>Look up</B> button.  
+<LI> Select a <B>table</B> from either the "Positional tables" menu or the 
+     "Non-positional tables" menu.  <BR>
+     Click the <B>Get all fields</B> button.  
+</UL>
+
+Please don't set the position to "genome" very often with this method 
+unless you are also filtering the results with 
+<A HREF="#Constraints">constraints on field values</A> (or 
+<A HREF="#Intersection">comparison to another table</A>).  
+The amount of data could be very large, could take a long time, 
+and could unnecessarily and unfairly load the server.  
+Instead, if you need to download the entire contents of tables, 
+see the 
+<A HREF="/downloads.html">downloads page</A>.  
 
 
 </TD></TR></TABLE>
