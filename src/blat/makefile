@@ -16,7 +16,7 @@ all:
 tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h
 
-test:
+test::
 	blat hCrea.geno hCrea.mrna testRna.psl
 	cmp testRna.psl refRna.psl
 	blat -prot hCrea.pep mCrea.pep testProt.psl
