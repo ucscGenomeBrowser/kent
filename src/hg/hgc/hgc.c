@@ -7307,8 +7307,6 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    if ((sameString("bacEndPairs", track))) 
-    {
     if (sameString("bacEndPairs", track)) 
 	{
 	printf("<H2><A HREF=");
@@ -7317,9 +7315,8 @@ if (row != NULL)
 	}
     else 
 	{
-	printf("%s\n", clone);
+	printf("<B>%s</B>\n", clone);
 	}
-    }
     /*printf("<H2>%s - %s</H2>\n", type, clone);*/
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
@@ -7355,31 +7352,31 @@ if (row != NULL)
     webNewSection(title);
     
     for (i = 0; i < lfs->lfCount; i++) 
-      {
-      sqlFreeResult(&sr);
-      sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
+	{
+	sqlFreeResult(&sr);
+	sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
 	        lfs->pslTable, lfs->lfNames[i]);  
-      sr = sqlMustGetResult(conn, query);
-      while ((row1 = sqlNextRow(sr)) != NULL)
-          {
-          psl = pslLoad(row1);
-          slAddHead(&pslList, psl);
-      }
-      slReverse(&pslList);
-      if (!sameString("fosEndPairs", track)) 
-	  {
-	  printf("<H3><A HREF=");
-	  printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-	  printf(">%s</A></H3>\n",lfs->lfNames[i]);
-	  }
-      else 
-	  {
-	  printf("<B>%s</B>\n", lfs->lfNames[i]);
-	  }
-      printAlignments(pslList, lfs->lfStarts[i], "htcCdnaAli", lfs->pslTable, lfs->lfNames[i]);
-      htmlHorizontalLine();
-      pslFreeList(&pslList);
-      }
+	sr = sqlMustGetResult(conn, query);
+	while ((row1 = sqlNextRow(sr)) != NULL)
+	    {
+	    psl = pslLoad(row1);
+	    slAddHead(&pslList, psl);
+	    }
+	slReverse(&pslList);
+	if (!sameString("fosEndPairs", track)) 
+	    {
+	    printf("<H3><A HREF=");
+	    printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
+	    printf(">%s</A></H3>\n",lfs->lfNames[i]);
+	    }
+	else 
+	    {
+	    printf("<B>%s</B>\n", lfs->lfNames[i]);
+	    }
+	printAlignments(pslList, lfs->lfStarts[i], "htcCdnaAli", lfs->pslTable, lfs->lfNames[i]);
+	htmlHorizontalLine();
+	pslFreeList(&pslList);
+	}
     }
 else
     {
