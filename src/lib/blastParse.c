@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: blastParse.c,v 1.4 2003/05/05 06:45:31 kate Exp $";
+
 /* blastParse - read in blast output into C data structure. */
 
 #include "common.h"

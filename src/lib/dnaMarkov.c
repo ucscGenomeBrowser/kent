@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: dnaMarkov.c,v 1.2 2003/05/05 06:45:32 kate Exp $";
+
 /* dnaMarkov - stuff to build 1st, 2nd, 3rd, and coding
  * 3rd degree Markov models for DNA. */
 

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: hugefnt.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
+
 #include "common.h"
 #include "memgfx.h"
 #include "gemfont.h"

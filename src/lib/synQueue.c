@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: synQueue.c,v 1.2 2003/05/05 06:45:37 kate Exp $";
+
 /* synQueue - a sychronized message queue for messages between
  * threads. */
 

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: ra.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
+
 /* Stuff to parse .ra files. Ra files are simple text databases.
  * The database is broken into records by blank lines. 
  * Each field takes a line.  The name of the field is the first

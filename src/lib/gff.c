@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: gff.c,v 1.10 2003/05/05 06:45:33 kate Exp $";
+
 /* gff - routines to read many types of gff and gtf files
  * and turn them into a relatively easy to deal with form
  * in memory.

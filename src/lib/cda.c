@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: cda.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
+
 /* cda.c - cDNA Alignment structure.  This stores all the info except
  * the bases themselves on an cDNA alignment. 
  * 

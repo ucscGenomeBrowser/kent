@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: boxClump.c,v 1.3 2003/05/05 06:45:31 kate Exp $";
+
 /* boxClump - put together 2 dimensional boxes that
  * overlap with each other into clumps. */
 

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: rudp.c,v 1.10 2003/05/05 06:45:36 kate Exp $";
+
 /* rudp - (semi) reliable UDP communication.  This adds an
  * acknowledgement and resend layer on top of UDP. 
  *

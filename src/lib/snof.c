@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: snof.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
+
 /* Snof.c Sorted Name Offset File.
  * This accesses a file of name/offset pairs that are sorted by
  * name.  Does a binary search of file to find the offset given name.

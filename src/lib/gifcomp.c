@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: gifcomp.c,v 1.5 2003/05/05 06:45:33 kate Exp $";
+
 /* comprs.c - LZW compression code for GIF */
 
 /*

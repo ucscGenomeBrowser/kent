@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: servcl.c,v 1.4 2003/05/05 06:45:36 kate Exp $";
+
 /* "Web Server" for command line execution. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

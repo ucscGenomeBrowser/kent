@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: linefile.c,v 1.19 2003/05/05 06:45:34 kate Exp $";
+
 /* lineFile - stuff to rapidly read text files and parse them into
  * lines. 
  *

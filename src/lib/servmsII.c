@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: servmsII.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
+
 /* Stuff that's specific for the MS II Web Server goes here. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

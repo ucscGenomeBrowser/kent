@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: browserGfx.c,v 1.5 2003/05/05 06:45:32 kate Exp $";
+
 /* Browser graphics - stuff for drawing graphics displays that
  * are reasonably browser (human and intronerator) specific. */
 

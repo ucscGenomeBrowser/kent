@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: chainBlock.c,v 1.13 2003/05/05 06:45:32 kate Exp $";
+
 /* chainBlock - Chain together scored blocks from an alignment
  * into scored chains.  Internally this uses a kd-tree and a
  * varient of an algorithm suggested by Webb Miller and further

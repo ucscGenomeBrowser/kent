@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: ffAli.c,v 1.7 2003/05/05 06:45:33 kate Exp $";
+
 /* Some relatively small utility functions that act on ffAlis.
  * (Separated from fuzzyFinder.c so people can do light ffAli 
  * work without including 100k of fuzzyFinder object code.) 

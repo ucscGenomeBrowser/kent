@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: snofsig.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
+
 /* snofSig - signature (first 16 bytes) of a snof format file. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

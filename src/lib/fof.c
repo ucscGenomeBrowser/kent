@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: fof.c,v 1.4 2003/05/05 06:45:33 kate Exp $";
+
 /* fofFa - create a fof index for a list of FA files. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

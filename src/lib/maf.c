@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: maf.c,v 1.8 2003/05/05 06:45:34 kate Exp $";
+
 /* maf.c - Read/write maf format. */
 #include "common.h"
 #include "linefile.h"

@@ -1,3 +1,6 @@
+static char const rcsid[] = "$Id: common.c,v 1.40 2003/05/05 06:45:32 kate Exp $";
+
+#pragma comment(exestr, "@(#) UCSC Hg $Id: common.c,v 1.40 2003/05/05 06:45:32 kate Exp $")
 /* Commonly used routines in a wide range of applications.
  * Strings, singly-linked lists, and a little file i/o.  
  *

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: md5.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
+
 /*
  * RFC 1321 compliant MD5 implementation,
  * by Christophe Devine <devine@cr0.net>;

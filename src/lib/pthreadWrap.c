@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: pthreadWrap.c,v 1.2 2003/05/05 06:45:35 kate Exp $";
+
 /* pthreadWrap - error checking wrappers around Posix
  * thread functions.  Most of the errors here are invariably
  * fatal, but shouldn't happen unless the kernal or

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: internet.c,v 1.6 2003/05/05 06:45:34 kate Exp $";
+
 /* internet - some stuff to make it easier to use
  * internet sockets and the like. */
 #include "common.h"

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: binRange.c,v 1.10 2003/05/05 06:45:31 kate Exp $";
+
 /* binRange Stuff to handle binning - which helps us restrict 
  * our attention to the parts of database that contain info
  * about a particular window on a chromosome. This scheme

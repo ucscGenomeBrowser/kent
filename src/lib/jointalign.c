@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: jointalign.c,v 1.10 2003/05/05 06:45:34 kate Exp $";
+
 /* jointalign.c - routines for printing a joint alignment in html. 
  *
  * This file is copyright 2002 Ryan Weber, but license is hereby

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: colHash.c,v 1.2 2003/05/05 06:45:32 kate Exp $";
+
 /* colHash - stuff for fast lookup of index given an
  * rgb value. */
 

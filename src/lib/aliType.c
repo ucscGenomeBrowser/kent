@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: aliType.c,v 1.3 2003/05/05 06:45:31 kate Exp $";
+
 /* aliType - some definitions for type of alignment. */
 #include "common.h"
 #include "aliType.h"

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: memgfx.c,v 1.33 2003/05/05 06:45:35 kate Exp $";
+
 /* memgfx - routines for drawing on bitmaps in memory.
  * Currently limited to 256 color bitmaps. 
  *

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: obscure.c,v 1.15 2003/05/05 06:45:35 kate Exp $";
+
 /* Obscure stuff that is handy every now and again. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

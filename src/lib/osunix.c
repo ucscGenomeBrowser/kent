@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: osunix.c,v 1.16 2003/05/05 06:45:35 kate Exp $";
+
 /* Some wrappers around operating-system specific stuff. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.45 2003/05/05 06:45:32 kate Exp $";
+
 /* Routines for getting variables passed in from web page
  * forms via CGI. 
  *

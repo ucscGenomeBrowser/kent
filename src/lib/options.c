@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: options.c,v 1.8 2003/05/05 06:45:35 kate Exp $";
+
 /* Options.c - stuff to handle command line options.
  * This is smaller and more flexible than the cgiSpoof
  * routines we used to use - though cgiSpoof is still the

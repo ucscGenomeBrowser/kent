@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: mafScore.c,v 1.3 2003/05/05 06:45:34 kate Exp $";
+
 /* Score mafs and subsets of maf. 
  * This module is from Webb Miller at PSU. */
 

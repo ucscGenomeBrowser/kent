@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: portimpl.c,v 1.7 2003/05/05 06:45:35 kate Exp $";
+
 /* Implementation file for some portability stuff mostly aimed
  * at making the same code run under different web servers.
  *

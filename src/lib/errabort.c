@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: errabort.c,v 1.9 2003/05/05 06:45:33 kate Exp $";
+
 /* ErrAbort.c - our error handler. 
  *
  * This maintains two stacks - a warning message printer

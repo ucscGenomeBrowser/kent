@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: subText.c,v 1.5 2003/05/05 06:45:37 kate Exp $";
+
 /* subText - Stuff to do text substitutions. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: rle.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
+
 /* rle - byte oriented run length encoding. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: intExp.c,v 1.5 2003/05/05 06:45:34 kate Exp $";
+
 /* Below is the worlds sleaziest little numerical expression
  * evaluator. Used to do only ints, now does doubles as well. 
  *

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: sqlList.c,v 1.13 2003/05/05 06:45:37 kate Exp $";
+
 /* Stuff for processing comma separated lists - a little long so
  * in a separate module from jksql.c though interface is still
  * in jksql.c. 

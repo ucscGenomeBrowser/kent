@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: xap.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
+
 /* xap - XML Automatic Parser - together with autoXml this helps automatically
  * read in automatically generated data structures.  Calls lower level routine
  * in xp module, which originally was just a thin shell around expat. 

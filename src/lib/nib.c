@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: nib.c,v 1.13 2003/05/05 06:45:35 kate Exp $";
+
 /* Nib - nibble (4 bit) representation of nucleotide sequences. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

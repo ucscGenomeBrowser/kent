@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: vGif.c,v 1.3 2003/05/05 06:45:37 kate Exp $";
+
 /* vGif - a virtual graphic object wrapper around
  * an in-memory buffer destined to become a 
  * 256-color GIF file. */

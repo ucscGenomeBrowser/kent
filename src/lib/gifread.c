@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: gifread.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
+
 /* gifread.c - The high level GIF reading routines.  See writegif for the
    write side.  Also gifdecode.c for lower level GIF reading code. */
 

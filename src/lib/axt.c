@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: axt.c,v 1.21 2003/05/05 06:45:31 kate Exp $";
+
 /* AXT - A simple alignment format with four lines per
  * alignment.  The first specifies the names of the
  * two sequences that align and the position of the

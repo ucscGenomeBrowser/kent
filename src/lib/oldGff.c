@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: oldGff.c,v 1.4 2003/05/05 06:45:35 kate Exp $";
+
 /* oldGff - module for reading GFFs.  This is largely if not
  * entirely superceded by the gff module. 
  *

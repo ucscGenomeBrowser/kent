@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: xp.c,v 1.7 2003/05/05 06:45:37 kate Exp $";
+
 /* xp - A minimal non-verifying xml parser.  It's
  * stream oriented much like expas.  It's a bit faster
  * and smaller than expas.  I'm not sure it handles unicode

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: emblParse.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
+
 /* Parse EMBL formatted files. EMBL files are basically line
  * oriented.  Each line begins with a short (usually two letter)
  * type word.  Adjacent lines with the same type are generally

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: fixColor.c,v 1.2 2003/05/05 06:45:33 kate Exp $";
+
 /* Fixed colors - always in color map. */
 #include "common.h"
 #include "memgfx.h"

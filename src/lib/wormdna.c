@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: wormdna.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
+
 /* wormDna - Stuff for finding worm DNA and annotation features.
  * This is pretty much the heart of the cobbled-together 'database'
  * behind the intronerator. 

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: bits.c,v 1.9 2003/05/05 06:45:31 kate Exp $";
+
 /* bits - handle operations on arrays of bits. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

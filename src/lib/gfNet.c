@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: gfNet.c,v 1.6 2003/05/05 06:45:33 kate Exp $";
+
 /* gfNet.c - Network dependent stuff for blat server. */
 
 #include "common.h"

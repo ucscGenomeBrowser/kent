@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: hash.c,v 1.12 2003/05/05 06:45:34 kate Exp $";
+
 /* Hash.c - implements hashing. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

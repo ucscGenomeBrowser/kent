@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: kxTok.c,v 1.8 2003/05/05 06:45:34 kate Exp $";
+
 /* kxTok - quick little tokenizer for stuff first
  * loaded into memory.  Originally developed for
  * "Key eXpression" evaluator. 

@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: keys.c,v 1.8 2003/05/05 06:45:34 kate Exp $";
+
 /* keys.c - Stuff to manage a little key/value pair table and
  * evaluate expressions on it. 
  *

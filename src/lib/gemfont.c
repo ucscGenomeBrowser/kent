@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: gemfont.c,v 1.5 2003/05/05 06:45:33 kate Exp $";
+
 /* gemfont.c - Raster Font stuff, draws text based on a blit and a font
    in a format that some day may approach Ventura Publisher, but currently
    looks much more like GEM on the ST with some Mac-like mutations. */

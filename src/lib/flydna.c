@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: flydna.c,v 1.3 2003/05/05 06:45:33 kate Exp $";
+
 /* flydna.c - routines for accessing fly genome and cDNA sequences. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

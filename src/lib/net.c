@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: net.c,v 1.24 2003/05/05 06:45:35 kate Exp $";
+
 /* net.c some stuff to wrap around net communications. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

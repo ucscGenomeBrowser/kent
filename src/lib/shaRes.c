@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: shaRes.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
+
 /* ShaRes.c - implementation of shared resources 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

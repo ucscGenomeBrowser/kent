@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.7 2003/05/05 06:45:35 kate Exp $";
+
 /* pscmGfx - routines for making postScript output seem a
  * lot like 256 color bitmap output. 
  *

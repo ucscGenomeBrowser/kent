@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: xa.c,v 1.4 2003/05/05 06:45:37 kate Exp $";
+
 /* xao.c - Manage cross-species alignments in Intronerator database. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

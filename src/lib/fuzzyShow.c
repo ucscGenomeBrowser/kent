@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.10 2003/05/05 06:45:33 kate Exp $";
+
 /* fuzzyShow - routines to show ffAli alignments in text
  * or html. 
  *

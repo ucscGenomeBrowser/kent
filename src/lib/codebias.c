@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: codebias.c,v 1.4 2003/05/05 06:45:32 kate Exp $";
+
 /* codebias.c - stuff for managing codons and codon bias. 
  *
  * This file is copyright 2002 Jim Kent, but license is hereby

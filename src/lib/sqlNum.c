@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: sqlNum.c,v 1.6 2003/05/05 06:45:37 kate Exp $";
+
 /* sqlnum.c - Routines to convert from ascii to integer
  * representation of numbers. 
  *

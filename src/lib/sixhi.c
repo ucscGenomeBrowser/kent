@@ -1,3 +1,5 @@
+static char const rcsid[] = "$Id: sixhi.c,v 1.3 2003/05/05 06:45:36 kate Exp $";
+
 /* sixhi.c - the data for the compiled-in Vpaint font. */
 
 #include "common.h"
