@@ -52,8 +52,11 @@ GENERAL INSTALL INSTRUCTIONS
 INSTALL INSTRUCTIONS FOR BLAT
 
 1. Follow the general install instructions above.
-2. If you're on a non-Linux system do a:
+2. If you're on an alpha system do a:
      setenv SOCKETLIB -lxnet
+   on Solaris do
+     setenv SOCKETLIB "-lsocket -lnsl"
+   on Linux you can skip this step.
 3. Execute make in each of the following directories:
      jksrc/gfServer
      jksrc/gfClient
