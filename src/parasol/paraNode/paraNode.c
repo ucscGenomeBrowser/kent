@@ -1,7 +1,10 @@
 /* paraNode - parasol node server. */
 #include <signal.h>
+#include <netdb.h>
 #include <sys/wait.h>
 #include <sys/times.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "common.h"
 #include "errabort.h"
 #include "dystring.h"
@@ -13,6 +16,8 @@
 #include "net.h"
 
 char *hostName;			/* Name of this host. */
+char *hubName;			/* Name of hub machine, may be NULL. */
+in_addr_t hubIp;		/* Hub IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
 int maxProcs = 1;		/* Number of processers allowed to use. */
 int socketHandle;		/* Main message queue socket. */
@@ -45,6 +50,7 @@ errAbort("paraNode - parasol node serve.\n"
 	 "    paraNode start\n"
 	 "options:\n"
 	 "    log=file - file may be 'stdout' to go to console\n"
+	 "    hub=host - restrict access to connections from hub\n"
 	 "    cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
@@ -136,7 +142,7 @@ else
 
     wait(&status);
     sd = netConnect(hostName, paraPort);
-    if (sd > 0)
+    if (sd >= 0)
         {
 	char buf[256];
 	struct tms tms;
@@ -145,8 +151,7 @@ else
 	snprintf(buf, sizeof(buf), 
 		"jobDone %s %s %d %lu %lu", managingHost, jobIdString, 
 		status, tms.tms_cutime, tms.tms_cstime);
-	write(sd, paraSig, strlen(paraSig));
-	netSendLongString(sd, buf);
+	sendWithSig(sd, buf);
 	close(sd);
 	}
     }
@@ -181,8 +186,8 @@ if (sd >= 0)
     {
     char buf[256];
     snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, line);
-    write(sd, paraSig, strlen(paraSig));
-    netSendLongString(sd, buf);
+    sendWithSig(sd, buf);
+    close(sd);
     }
 }
 
@@ -230,8 +235,7 @@ if (jobIdString != NULL)
 	char *status = (job != NULL  ? "busy" : "free");
 	char buf[256];
 	snprintf(buf, sizeof(buf), "checkIn %s %s %s", hostName, jobIdString, status);
-	write(sd, paraSig, strlen(paraSig));
-	netSendLongString(sd, buf);
+	sendWithSig(sd, buf);
 	close(sd);
 	}
     }
@@ -246,8 +250,7 @@ if (managingHost != NULL)
     int sd = netConnect(managingHost, paraPort);
     char buf[256];
     snprintf(buf, sizeof(buf), "alive %s", hostName);
-    write(sd, paraSig, strlen(paraSig));
-    netSendLongString(sd, buf);
+    sendWithSig(sd, buf);
     close(sd);
     }
 }
@@ -369,37 +372,44 @@ if (socketHandle < 0)
 /* Event loop. */
 for (;;)
     {
-    connectionHandle = netAccept(socketHandle);
+    struct sockaddr_in hubAddress;
+    int len_inet = sizeof(hubAddress);
+    connectionHandle = accept(socketHandle, 
+    	(struct sockaddr *)&hubAddress, &len_inet);
     if (connectionHandle >= 0)
 	{
-	if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
+	if (hubName == NULL || hubAddress.sin_addr.s_addr == hubIp)
 	    {
-	    signature[sigLen] = 0;
-	    if (sameString(paraSig, signature))
+	    if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
 		{
-		line = buf = netGetLongString(connectionHandle);
-		if (line != NULL)
+		signature[sigLen] = 0;
+		if (sameString(paraSig, signature))
 		    {
-		    logIt("node  %s: %s\n", hostName, line);
-		    command = nextWord(&line);
-		    if (command != NULL)
+		    line = buf = netGetLongString(connectionHandle);
+		    if (line != NULL)
 			{
-			if (sameString("quit", command))
-			    break;
-			else if (sameString("run", command))
-			    doRun(line);
-			else if (sameString("jobDone", command))
-			    jobDone(line);
-			else if (sameString("status", command))
-			    doStatus();
-			else if (sameString("kill", command))
-			    doKill(line);
-			else if (sameString("check", command))
-			    doCheck(line);
-			else if (sameString("resurrect", command))
-			    doResurrect(line);
+			logIt("node  %s: %s\n", hostName, line);
+			command = nextWord(&line);
+			if (command != NULL)
+			    {
+			    if (sameString("quit", command))
+				break;
+			    else if (sameString("run", command))
+				doRun(line);
+			    else if (sameString("jobDone", command))
+				jobDone(line);
+			    else if (sameString("status", command))
+				doStatus();
+			    else if (sameString("kill", command))
+				doKill(line);
+			    else if (sameString("check", command))
+				doCheck(line);
+			    else if (sameString("resurrect", command))
+				doResurrect(line);
+			    }
+			freez(&buf);
 			}
-		    freez(&buf);
+		    logIt("node  %s: done command\n", hostName, line);
 		    }
 		}
 	    }
@@ -444,6 +454,20 @@ optionHash(&argc, argv);
 if (argc != 2)
     usage();
 maxProcs = optionInt("cpu", 1);
+
+/* Look up hub IP address. */
+hubName = optionVal("hub", NULL);
+if (hubName != NULL)
+    {
+    struct hostent *hostent = gethostbyname(hubName);
+    struct sockaddr_in hubAddress;	
+    if (hostent == NULL)
+	errAbort("Couldn't find hub %s", hostName);
+    memcpy(&hubAddress.sin_addr.s_addr, hostent->h_addr_list[0], 
+    	sizeof(hubAddress.sin_addr.s_addr));
+    hubIp = hubAddress.sin_addr.s_addr;
+    }
+
 paraFork();
 return 0;
 }
