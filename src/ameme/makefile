@@ -1,6 +1,8 @@
 include ../inc/common.mk
 O = ameme.o fragFind.o
+ifdef GS_PATH
 CFLAGS = -DGS_PATH='${GS_PATH}'
+endif
 # set location of gs on webserver with: make GS_PATH='"/full_path"' cgi
 
 alpha: $(O)
