@@ -704,7 +704,7 @@ AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
     ssh eieio
     cd /cluster/store5/genbank
     set db = rn3
-    set nibGlob = '/cluster/bluearc/rat/rn3/bothMaskedNibs/chr*.nib'
+    set nibGlob = '/cluster/bluearc/rat/rn3/softNib/chr*.nib'
     set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
     # the iservers were acting up, the following uses the bluearc instead
     # make sure 'ssh localhost' works before running this:
@@ -1283,25 +1283,13 @@ LOAD MGI IDs (TO DO)
       - At mysql> prompt type
           quit
 
-LOAD CHROMOSOME BANDS (TO DO )
-      - login to hgwdev
-      cd /cluster/store3/rn3/bed
-      mkdir cytoBands
-      cp /projects/cc/hg/mapplots/data/tracks/build28/cytobands.bed cytoBands
-      rn3 < ~/src/hg/lib/cytoBand.sql
-      Enter database with "rn3" command.
-      - At mysql> prompt type in:
-          load data local infile 'cytobands.bed' into table cytoBand;
-      - At mysql> prompt type
-          quit
-
-LOAD RATREF TRACK (todo)
+LOAD RATREF TRACK (TO DO)
     First copy in data from kkstore to ~/rn3/bed/ratRef.  
     Then substitute 'genome' for the appropriate chromosome 
     in each of the alignment files.  Finally do:
        hgRefAlign webb rn3 ratRef *.alignments
 
-LOAD AVID RAT TRACK (todo)
+LOAD AVID RAT TRACK (TO DO)
       ssh cc98
       cd ~/rn3/bed
       mkdir avidRat
@@ -1357,7 +1345,7 @@ LOAD ENSEMBLE GENES (TO DO)
        rat-ensembl-fixed.pep
      hgPepPred rn3 generic ensPep rat-ensembl-fixed.pep
 
-LOAD RNAGENES (todo)
+LOAD RNAGENES (TO DO)
       - login to hgwdev
       - cd ~kent/src/hg/lib
       - rn3 < rnaGene.sql
@@ -1369,7 +1357,7 @@ LOAD RNAGENES (todo)
       - liftUp chrom.gff ../../jkStuff/liftAll.lft carry ncrna-oo27.gff
       - hgRnaGenes rn3 chrom.gff
 
-LOAD EXOFISH (todo)
+LOAD EXOFISH (TO DO)
      - login to hgwdev
      - cd /cluster/store3/rn3/bed
      - mkdir exoFish
@@ -1402,7 +1390,7 @@ LOAD GENIE CLONE BOUNDS (TO DO)
      end
      hgLoadBed rn3 genieBounds *-fixed.bed
 
-LOAD SOFTBERRY GENES (todo)
+LOAD SOFTBERRY GENES (TO DO)
      - ln -s /cluster/store3/rn3 ~/rn3
      - cd ~/rn3/bed
      - mkdir softberry
@@ -1412,7 +1400,7 @@ LOAD SOFTBERRY GENES (todo)
      hgPepPred rn3 softberry *.protein
      hgSoftberryHom rn3 *.protein
 
-LOAD GENOMIC DUPES (todo)
+LOAD GENOMIC DUPES (TO DO)
 o - Load genomic dupes
     ssh hgwdev
     cd ~/rn3/bed
@@ -1438,31 +1426,3 @@ LOAD RGD CURATED GENES TRACK
         In mysql for the rn3 database do:
         create table rgdLink (id int primary key, name varchar(32) not null);
         LOAD DATA LOCAL INFILE 'RGD.links' into table rgdLink; 
-     
-
-FAKING DATA FROM PREVIOUS VERSION
-(This is just for until proper track arrives.  Rescues about
-97% of data  Just an experiment, not really followed through on).
-
-o - Rescuing STS track:
-     - log onto hgwdev
-     - mkdir ~/rn3/rescue
-     - cd !$
-     - mkdir sts
-     - cd sts
-     - bedDown hg3 mapGenethon sts.fa sts.tab
-     - echo ~/rn3/sts.fa > fa.lst
-     - pslOoJobs ~/rn3 ~/rn3/rescue/sts/fa.lst ~/rn3/rescue/sts g2g
-     - log onto cc01
-     - cc ~/rn3/rescue/sts
-     - split all.con into 3 parts and condor_submit each part
-     - wait for assembly to finish
-     - cd psl
-     - mkdir all
-     - ln ?/*.psl ??/*.psl *.psl all
-     - pslSort dirs raw.psl temp all
-     - pslReps raw.psl contig.psl /dev/null
-     - rm raw.psl
-     - liftUp chrom.psl ../../../jkStuff/liftAll.lft carry contig.psl
-     - rm contig.psl
-     - mv chrom.psl ../convert.psl
