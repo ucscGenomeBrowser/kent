@@ -21,7 +21,6 @@ DIRS = \
 	axtDropSelf \
 	axtFilter \
 	axtIndex \
-	chainInfo \
 	axtPretty \
 	axtQueryCount \
 	axtRecipBest \
@@ -32,8 +31,6 @@ DIRS = \
 	axtToMaf \
 	axtToPsl \
 	bedCoverage \
-	blastzPaper \
-	blastzScripts \
 	calcGap \
 	chainFilter \
 	chainMergeSort \
@@ -44,8 +41,6 @@ DIRS = \
 	chainSwap \
 	correctEst \
 	gcForBed \
-	ggcPic \
-	knownVsBlat \
 	lavToAxt \
 	lavToPsl \
 	libScan \
@@ -65,7 +60,5 @@ DIRS = \
 	regionPicker \
 	rikenBestInCluster \
 	splitSim \
-	subsetAxt \
-	subsetRef \
 	subsetTraces \
 	whyConserved 
