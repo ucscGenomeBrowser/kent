@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.49 2003/06/21 02:45:50 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.50 2003/06/21 03:04:53 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -125,11 +125,6 @@ puts("</td>\n");
 puts("<td align=center>\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
-
-cartSetString(cart, "position",position);
-cartSetString(cart, "db",db);
-cartSetString(cart, "org",organism);
-
 
 puts("<td align=center>\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
