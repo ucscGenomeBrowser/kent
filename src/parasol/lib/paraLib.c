@@ -73,11 +73,11 @@ sprintf(errFile, "%s/para%d.err", tempDir, jobId);
 }
 
 char* paraFormatIp(bits32 ip)
-/* format a binary IP added into dotted quad format.  Warning:
- * static return. */
+/* format a binary IP added into dotted quad format.  ip should be
+ * in network byte order. Warning: static return. */
 {
 static char dottedQuad[32];
-if (!internetIpToDottedQuad(ip, dottedQuad))
+if (!internetIpToDottedQuad(ntohl(ip), dottedQuad))
     safef(dottedQuad, sizeof(dottedQuad), "<invalid-ip:0x%x>", ip);
 return dottedQuad;
 }

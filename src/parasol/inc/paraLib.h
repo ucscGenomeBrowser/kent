@@ -52,8 +52,8 @@ void findNow();
 /* Just set now to current time. */
 
 char* paraFormatIp(bits32 ip);
-/* format a binary IP added into dotted quad format.  Warning:
- * static return */
+/* format a binary IP added into dotted quad format.  ip should be
+ * in network byte order. Warning: static return. */
 
 void paraDaemonize(char *progName);
 /* daemonize parasol server process, closing open file descriptors and
