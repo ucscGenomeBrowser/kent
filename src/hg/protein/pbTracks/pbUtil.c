@@ -523,7 +523,7 @@ if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
     hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s%s\"", mrnaID, hgsidStr);
-    hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
+    hPrintf(" TARGET=_BLANK>%s</A></LI></UL>\n", mrnaID);
     }
 }
 
