@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.13 2004/02/02 01:13:39 markd Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.14 2004/02/02 15:13:31 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -530,7 +530,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    thisSize = gapStart;
 
 	sprintf(numOut, "%s%0*d", noPath, digits, pieceIx++);
-	if (bitCountRange(bits, pos, thisSize) <= maxN)
+	if (thisSize > 0 && bitCountRange(bits, pos, thisSize) <= maxN)
 	    {
 	    if (!oneFile)
 	        {
