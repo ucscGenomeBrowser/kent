@@ -24,13 +24,17 @@ struct chain
     int tStart,tEnd;		  /* Range covered in query. */
     };
 
-typedef int (*ConnectCost)(struct boxIn *a, struct boxIn *b);
+typedef int (*GapCost)(int dq, int dt);
 /* A function that returns gap cost (gaps can be in both dimensions
- * at once! */
+ * at once!) */
+
+typedef int (*ConnectCost)(struct boxIn *a, struct boxIn *b);
+/* A function that returns gap cost as well as any penalty
+ * from a and b overlapping. */
 
 struct chain *chainBlocks(char *qName, int qSize, char qStrand,
-	char *tName, int tSize,
-	struct boxIn **pBlockList, ConnectCost connectCost);
+	char *tName, int tSize, struct boxIn **pBlockList, 
+	ConnectCost connectCost, GapCost gapCost);
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
  * The chain returned is sorted by score. 

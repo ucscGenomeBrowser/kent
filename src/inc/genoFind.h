@@ -199,7 +199,7 @@ struct gfOutput *gfOutputAxtMem(int goodPpt, boolean qIsProt,
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	boolean isWu, FILE *f);
+	boolean isWu, boolean isXml, FILE *f);
 /* Setup output for blast/wublast format. */
 
 void gfOutputQuery(struct gfOutput *out, FILE *f);

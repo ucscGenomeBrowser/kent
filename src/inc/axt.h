@@ -134,7 +134,7 @@ void axtBundleFreeList(struct axtBundle **pList);
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	boolean isWu, char *ourId);
+	boolean isWu, boolean isXml, char *ourId);
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
@@ -142,6 +142,7 @@ void axtBlastOut(struct axtBundle *abList,
  *   databaseSeqCount - number of sequences in database
  *   databaseLetterCount - number of bases or aa's in database
  *   isWu - TRUE if want wu-blast rather than blastall format
+ *   isXml - TRUE if want xml format
  *   ourId - optional (may be NULL) thing to put in header
  */
 

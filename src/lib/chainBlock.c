@@ -13,13 +13,15 @@ struct kdBranch
     struct kdLeaf *leaf;      /* Extra info for leaves on tree. */
     int cutCoord;	      /* Coordinate (in some dimension) to cut on */
     int maxScore;	      /* Max score of any leaf below us. */
+    int maxQ;		      /* Maximum qEnd of any leaf below us. */
+    int maxT;		      /* Maximum tEnd of any leaf below us. */
     };
 
 struct kdLeaf
 /* A leaf in our kdTree. */
     {
     struct kdLeaf *next;	/* Next in list. */
-    struct boxIn *cb;	/* Start position and score from user. */
+    struct boxIn *cb;	        /* Start position and score from user. */
     struct kdBranch *bestPred;	/* Best predecessor. */
     int totalScore;		/* Total score of chain up to here. */
     bool hit;			/* This hit? Used by system internally. */
@@ -149,6 +151,8 @@ if (nodeCount == 1)
     {
     struct kdLeaf *leaf = lists[0]->head->val;
     branch->leaf = leaf;
+    branch->maxQ = leaf->cb->qEnd;
+    branch->maxT = leaf->cb->tEnd;
     }
 else
     {
@@ -168,6 +172,8 @@ else
     /* Recurse on each side. */
     branch->lo = kdBuild(nodeCount - newCount, lists, nextDim, lm);
     branch->hi = kdBuild(newCount, newLists, nextDim, lm);
+    branch->maxQ = max(branch->lo->maxQ, branch->hi->maxQ);
+    branch->maxT = max(branch->lo->maxT, branch->hi->maxT);
     }
 return branch;
 }
@@ -219,16 +225,26 @@ struct predScore
 static struct predScore bestPredecessor(
 	struct kdLeaf *lonely,	    /* We're finding this leaf's predecessor */
 	ConnectCost connectCost,    /* Cost to connect two leafs. */
+	GapCost gapCost,	    /* Lower bound on gap cost. */
 	int dim,		    /* Dimension level of tree splits on. */
 	struct kdBranch *branch,    /* Subtree to explore */
 	struct predScore bestSoFar) /* Best predecessor so far. */
 {
 struct kdLeaf *leaf;
+int maxScore = branch->maxScore + lonely->cb->score;
 
 /* If best score in this branch of tree wouldn't be enough
- * (even without gaps) don't bother exploring it. */
-if (branch->maxScore + lonely->cb->score < bestSoFar.score)
+ * don't bother exploring it. First try without calculating
+ * gap score in case gap score is a little expensive to calculate. */
+if (maxScore < bestSoFar.score)
     return bestSoFar;
+#ifdef SOON
+#endif /* SOON */
+maxScore -= gapCost(lonely->cb->qStart - branch->maxQ, 
+	lonely->cb->tStart - branch->maxT);
+if (maxScore < bestSoFar.score)
+    return bestSoFar;
+
 
 /* If it's a terminal branch, then calculate score to connect
  * with it. */
@@ -258,9 +274,9 @@ else
      * scores.  However only explore it if it can have things starting
      * before us. */
     if (dimCoord > branch->cutCoord)
-         bestSoFar = bestPredecessor(lonely, connectCost, newDim, 
+         bestSoFar = bestPredecessor(lonely, connectCost, gapCost, newDim, 
 	 	branch->hi, bestSoFar);
-    bestSoFar = bestPredecessor(lonely, connectCost, newDim, 
+    bestSoFar = bestPredecessor(lonely, connectCost, gapCost, newDim, 
     	branch->lo, bestSoFar);
     return bestSoFar;
     }
@@ -283,7 +299,7 @@ if (branch->leaf == NULL)
 }
 
 static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList, 
-	ConnectCost connectCost)
+	ConnectCost connectCost, GapCost gapCost)
 /* Find best predecessor for each block. */
 {
 static struct predScore noBest;
@@ -294,7 +310,7 @@ int bestScore = 0;
 for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     {
     struct predScore best;
-    best = bestPredecessor(leaf, connectCost, 0, tree->root, noBest);
+    best = bestPredecessor(leaf, connectCost, gapCost, 0, tree->root, noBest);
     if (best.score > leaf->totalScore)
         {
 	leaf->totalScore = best.score;
@@ -366,8 +382,8 @@ return chainList;
 }
 
 struct chain *chainBlocks(char *qName, int qSize, char qStrand,
-	char *tName, int tSize,
-	struct boxIn **pBlockList, ConnectCost connectCost)
+	char *tName, int tSize, struct boxIn **pBlockList, 
+	ConnectCost connectCost, GapCost gapCost)
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
  * The chain returned is sorted by score. 
@@ -400,7 +416,7 @@ for (block = *pBlockList; block != NULL; block = block->next)
 /* Figure out chains. */
 slSort(&leafList, kdLeafCmpT);
 tree = kdTreeMake(leafList, lm);
-findBestPredecessors(tree, leafList, connectCost);
+findBestPredecessors(tree, leafList, connectCost, gapCost);
 slSort(&leafList, kdLeafCmpTotal);
 chainList = peelChains(qName, qSize, qStrand, tName, tSize, leafList);
 
