@@ -5,12 +5,14 @@
 
 #SNP positions from various sources
 CREATE TABLE snpMap (
-    chrom varchar(255) not null,	# Chromosome or 'unknown'
-    chromStart int not null,	# Start position in chrom - negative 1 if unpositioned
-    chromEnd int unsigned not null,	# End position in chrom
-    name varchar(255) not null,	# Name of SNP
-    source varchar(255) not null,	# BAC_OVERLAP | MIXED | RANDOM | OTHER
-    type varchar(255) not null,	# SNP | INDEL | SEGMENTAL
+    chrom      varchar(255) not null,	# Chromosome or 'unknown'
+    chromStart int          not null,	# Start position in chrom - negative 1 if unpositioned
+    chromEnd   int unsigned not null,	# End position in chrom
+    name       varchar(255) not null,	# Name of SNP
+    source     varchar(255) not null,	# BAC_OVERLAP | MIXED | RANDOM | OTHER
+    type       varchar(255) not null,	# SNP | INDEL | SEGMENTAL
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(12),chromStart),
+    INDEX(chrom(12),chromEnd),
+    INDEX(name)
 );
