@@ -1549,12 +1549,6 @@ else if (isAffyProbeName(query))
     findAffyProbePos(query, &chrom, &start, &end);
     singlePos(hgp, "GNF Ratio Expression data", NULL, query, chrom, start, end);
     }
-else if (isAncientRName(query))
-    {
-    findAncientRPos( query, &chrom, &start, &end );
-    singlePos( hgp, "Human/Mouse Ancient Repeats", NULL, query, chrom, start, end );
-    }
-
 else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
     {
     if (relativeFlag == TRUE)
