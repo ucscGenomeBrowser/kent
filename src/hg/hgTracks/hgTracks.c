@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.919 2005/03/02 18:54:36 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.920 2005/03/02 22:11:54 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3244,10 +3244,15 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 		}
 	    if (useSprot)
 		{
+		char *alias = uniProtFindPrimAcc(row[2]);
+
 		if (added)
 		    strcat(lf->extra, "/");
 		added = TRUE;
-		strcat(lf->extra, uniProtFindPrimAcc(row[2]));
+		if (alias != NULL)
+		    strcat(lf->extra, alias);
+		else
+		    strcat(lf->extra, row[2]);
 		}
 	    if (usePos)
 		{
