@@ -16,6 +16,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include <assert.h>
 #include <setjmp.h>
