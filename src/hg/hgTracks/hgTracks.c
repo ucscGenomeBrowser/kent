@@ -61,6 +61,7 @@
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
 
+boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
@@ -895,6 +896,18 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	        {
 	        drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
 		++compCount;
+		}
+	    if(hgDebug)
+		{
+		char buff[16];
+		int textWidth;
+		int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
+		int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
+		int sw = sx2 - sx1;
+		snprintf(buff, sizeof(buff), "%.2f", lf->score);
+		textWidth = mgFontStringWidth(font, buff);
+		if (textWidth <= sw )
+		    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
 		}
 	    }
 	}
@@ -4845,13 +4858,20 @@ return lfs;
 }
 
 
+struct slInt {
+    /* list of ints, should probably switch to slRef but harder to debug */
+    struct slInt *next;
+    int val;
+};
+
 void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, 
 		       struct expRecord *erList,  int index, char *filter, int filterIndex)
 /* creates two hashes which contain a mapping from 
    experiment to type and from type to lists of experiments */
 {
 struct expRecord *er = NULL;
-struct slRef *srList=NULL, *sr=NULL, *val=NULL;
+struct slRef *val=NULL;
+struct slInt *sr=NULL, *srList = NULL;
 struct hash *seen = newHash(2);
 char buff[256];
 int unique = 0;
@@ -4864,15 +4884,15 @@ for(er = erList; er != NULL; er = er->next)
 	    {
 	    /* if this type is new 
 	       save the index for this type */
-	    AllocVar(sr);
+	    AllocVar(val);
 	    snprintf(buff, sizeof(buff), "%d", unique);
 	    hashAdd(expIndexesToNames, buff, er->extras[index]);
-	    sr->val = buff;
-	    hashAdd(seen, er->extras[index], sr);
+	    val->val = cloneString(buff);
+	    hashAdd(seen, er->extras[index], val);
 
 	    /* save the indexes associated with this index */
 	    AllocVar(sr);
-	    sr->val = &er->id;
+	    sr->val = er->id;
 	    hashAdd(indexes, buff, sr);
 	    unique++;
 	    }
@@ -4882,7 +4902,7 @@ for(er = erList; er != NULL; er = er->next)
 	       tack the new index on the end of the list */
 	    AllocVar(sr);
 	    srList = hashMustFindVal(indexes, val->val);
-	    sr->val = &er->id;
+	    sr->val = er->id;
 	    slAddTail(&srList,sr);
 	    }
 	}
@@ -4933,7 +4953,7 @@ struct hash *expTypes;
 struct hash *expIndexesToNames;
 int numIndexes = 0, currentIndex, i;
 struct expRecord *erList = NULL, *er=NULL;
-struct slRef *srList = NULL, *sr=NULL;
+struct slInt *srList = NULL, *sr=NULL;
 char buff[256];
 struct bed *bed;
 
@@ -4950,7 +4970,7 @@ expTypes = newHash(2);
 expIndexesToNames = newHash(2);
 
 /* load the experiment information */
-snprintf(buff, sizeof(buff), "select * from %s", table);
+snprintf(buff, sizeof(buff), "select * from %s order by id asc", table);
 erList = expRecordLoadByQuery(conn, buff);
 if(erList == NULL)
     errAbort("hgTracks::msBedGroupByIndex() - can't get any records for %s in table %s\n", buff, table);
@@ -4992,7 +5012,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	 in form of a slRef list */
 	snprintf(buff, sizeof(buff), "%d", i);
 	srList = hashMustFindVal(indexes, buff);
-	currentIndex = *((int *)srList->val);
+	currentIndex = srList->val;
 
 	/* create the linked features */
 	lf = lfFromBed(bed);
@@ -5001,7 +5021,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	   tissue type */
 	for(sr = srList; sr != NULL; sr = sr->next)
 	    {
-	    currentIndex = *((int *)sr->val);
+	    currentIndex = sr->val;
 	    if( bed->expScores[currentIndex] != -10000) 
 		{
 		aveScores += bed->expScores[currentIndex];
@@ -7049,9 +7069,13 @@ doTrackForm();
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
+char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 database = cartOptionalString(cart, "db");
+debugTmp = cartUsualString(cart, "hgDebug", "off");
+if(sameString(debugTmp, "on"))
+    hgDebug = TRUE;
 if (database == NULL)
     database = hGetDb();
 hSetDb(database);
@@ -7106,6 +7130,7 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
+
 cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
