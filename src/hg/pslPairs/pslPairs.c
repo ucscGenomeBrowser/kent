@@ -19,6 +19,7 @@
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"verbose", OPTION_BOOLEAN},
     {"slop", OPTION_BOOLEAN},
     {"short", OPTION_BOOLEAN},
     {"long", OPTION_BOOLEAN},
@@ -85,8 +86,6 @@ struct clone
 {
   struct clone *next;
   char name[32];
-  char endName1[32];
-  char endName2[32];
   struct pslAli *end1;
   struct pslAli *end2;
   struct pslPair *pairs;
@@ -99,7 +98,8 @@ struct clone
 } *cloneList = NULL;
 
 struct hash *clones = NULL;
-struct hash *endNames = NULL;
+struct hash *leftNames = NULL;
+struct hash *rightNames = NULL;
 
 void pslAliFree(struct pslAli **pa)
 {
@@ -172,8 +172,6 @@ struct clone *createClone(char *name, char *eName1, char *eName2)
   AllocVar(clone);
   clone->next = NULL;
   sprintf(clone->name,"%s",name);
-  sprintf(clone->endName1, "%s",eName1);
-  sprintf(clone->endName2, "%s",eName2);
   clone->end1 = NULL;
   clone->end2 = NULL;
   clone->pairs = NULL;
@@ -216,10 +214,11 @@ struct pslPair *createPslPair(struct pslAli *e1, struct pslAli *e2)
 void readPairFile(struct lineFile *prf)
 /* Read in pairs and initialize clone list */
 {
-  int lineSize;
+  int lineSize, i;
   char *line;
   char *words[4];
-  int wordCount;
+  char *names[16];
+  int wordCount, nameCount;
   struct clone *clone;
   struct cloneName *cloneName;
   
@@ -230,21 +229,19 @@ void readPairFile(struct lineFile *prf)
 	errAbort("Bad line %d of %s\n", prf->lineIx, prf->fileName);
       if (!hashLookup(clones, words[2])) 
 	{
-	  char *test;
-	  AllocVar(cloneName);
-	  clone = createClone(words[2],words[0],words[1]);
+	  clone = createClone(words[2],NULL,NULL);
 	  hashAdd(clones, words[2], clone);
-	  sprintf(cloneName->name, "%s", words[2]);
-	  hashAdd(endNames, words[0], cloneName);
-	  test = hashMustFindVal(endNames, words[0]);
-	  if (strcmp(test, words[2]))
-	    errAbort("%s ne %s for %s\n",test,words[2],words[0]);
-	  hashAdd(endNames, words[1], cloneName);
-	  test = hashMustFindVal(endNames, words[1]);
-	  if (strcmp(test, words[2]))
-	    errAbort("%s ne %s for %s\n",test,words[2],words[1]);
 	  slAddHead(&cloneList,clone);
 	}
+      char *test;
+      AllocVar(cloneName);
+      sprintf(cloneName->name, "%s", words[2]);
+      nameCount = chopCommas(words[0],names);
+      for (i = 0; i < nameCount; i++) 
+	hashAdd(leftNames, names[i], cloneName);
+      nameCount = chopCommas(words[1],names);
+      for (i = 0; i < nameCount; i++) 
+	hashAdd(rightNames, names[i], cloneName);
     }     
 }
 
@@ -266,18 +263,20 @@ void readPslFile(struct lineFile *pf)
      if (wordCount != 21)
        errAbort("Bad line %d of %s\n", pf->lineIx, pf->fileName);
      psl = pslLoad(words);
-     if (hashLookup(endNames, psl->qName))
+     if (hashLookup(leftNames, psl->qName))
+       cloneName = hashMustFindVal(leftNames, psl->qName);
+     else if (hashLookup(rightNames, psl->qName))
+       cloneName = hashMustFindVal(rightNames, psl->qName);
+     else
+       continue;
+     clone = hashMustFindVal(clones, cloneName->name);
+     if ((psl->tBaseInsert < TINSERT) && ((!NORANDOM) || (strlen(psl->tName) < 7))) 
        {
-	 cloneName = hashMustFindVal(endNames, psl->qName);
-	 clone = hashMustFindVal(clones, cloneName->name);
-	 if ((psl->tBaseInsert < TINSERT) && ((!NORANDOM) || (strlen(psl->tName) < 7))) 
-	   {
-	     pa = createPslAli(psl);
-	     if (!strcmp(psl->qName, clone->endName1))
-	       slAddHead(&(clone->end1), pa);
-	     else
-	       slAddHead(&(clone->end2), pa);
-	   }
+	 pa = createPslAli(psl);
+	 if (hashLookup(leftNames, psl->qName))
+	   slAddHead(&(clone->end1), pa);
+	 else
+	   slAddHead(&(clone->end2), pa);
        }
    }
 }
@@ -365,7 +364,7 @@ void printBed(FILE *out, struct pslPair *ppList, struct clone *clone, char *pslT
 
       if (count != 1)
 	score = 1500/count;
-      if (!strcmp(clone->endName1,pp->f->psl->qName))
+      if (hashLookup(leftNames, pp->f->psl->qName))
 	strand = "+";
       else 
 	strand = "-";
@@ -402,8 +401,8 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *ps
 
       if (count != 1)
 	score = 1500/count;
-      if (((!strcmp(clone->endName1,pa->psl->qName)) && (pa->psl->strand[0] == '+')) ||
-	  ((!strcmp(clone->endName2,pa->psl->qName)) && (pa->psl->strand[0] == '-')))
+      if (((hashLookup(leftNames,pa->psl->qName)) && (pa->psl->strand[0] == '+')) ||
+	  ((hashLookup(rightNames,pa->psl->qName)) && (pa->psl->strand[0] == '-')))
 	{
 	strand = "+";
 	genStart = pa->psl->tStart;
@@ -520,7 +519,8 @@ int main(int argc, char *argv[])
   if (VERBOSE)
     printf("Reading pair file\n");
   clones = newHash(23);
-  endNames = newHash(23);
+  leftNames = newHash(23);
+  rightNames = newHash(23);
   readPairFile(prf);
   if (VERBOSE)
     printf("Reading psl file\n");
