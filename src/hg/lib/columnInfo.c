@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "columnInfo.h"
 
-static char const rcsid[] = "$Id: columnInfo.c,v 1.3 2003/09/14 23:09:07 sugnet Exp $";
+static char const rcsid[] = "$Id: columnInfo.c,v 1.4 2004/07/19 23:50:27 sugnet Exp $";
 
 void columnInfoStaticLoad(char **row, struct columnInfo *ret)
 /* Load a row from columnInfo table into ret.  The contents of ret will
@@ -75,7 +75,7 @@ int i = 0;
 int colCount = 0; 
 sr = sqlGetResult(conn, query);
 colCount = sqlCountColumns(sr);
-touppers(query);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* The colCount check makes sure that we are compatible
