@@ -11,7 +11,7 @@
 #include "nib.h"
 #include "psl.h"
 #include "sig.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "obscure.h"
 #include "genoFind.h"
 #include "trans3.h"
@@ -763,19 +763,19 @@ argv = words;
 }
 #endif /* DEBUG */
 
-cgiFromCommandLine(&argc, argv, FALSE);
+optionHash(&argc, argv);
 if (argc != 4)
     usage();
 
 /* Get database and query sequence types and make sure they are
  * legal and compatable. */
-if (cgiVarExists("prot"))
+if (optionExists("prot"))
     qType = tType = gftProt;
-if (cgiVarExists("t"))
-    tType = gfTypeFromName(cgiString("t"));
-trimA = cgiBoolean("trimA") || cgiBoolean("trima");
-trimT = cgiBoolean("trimT") || cgiBoolean("trimt");
-trimHardA = cgiBoolean("trimHardA");
+if (optionExists("t"))
+    tType = gfTypeFromName(optionVal("t", NULL));
+trimA = optionExists("trimA") || optionExists("trima");
+trimT = optionExists("trimT") || optionExists("trimt");
+trimHardA = optionExists("trimHardA");
 switch (tType)
     {
     case gftProt:
@@ -790,11 +790,11 @@ switch (tType)
         errAbort("Illegal value for 't' parameter");
 	break;
     }
-if (cgiVarExists("q"))
-    qType = gfTypeFromName(cgiString("q"));
+if (optionExists("q"))
+    qType = gfTypeFromName(optionVal("q", NULL));
 if (qType == gftRnaX || qType == gftRna)
     trimA = TRUE;
-if (cgiVarExists("noTrimA"))
+if (optionExists("noTrimA"))
     trimA = FALSE;
 switch (qType)
     {
@@ -822,13 +822,13 @@ if (dIsProtLike)
 
 /* Get tile size and related parameters from user and make sure
  * they are within range. */
-tileSize = cgiOptionalInt("tileSize", tileSize);
-minMatch = cgiOptionalInt("minMatch", minMatch);
-oneOff = cgiVarExists("oneOff");
-minScore = cgiOptionalInt("minScore", minScore);
-maxGap = cgiOptionalInt("maxGap", maxGap);
-minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
-minIdentity = cgiUsualDouble("minIdentity", minIdentity);
+tileSize = optionInt("tileSize", tileSize);
+minMatch = optionInt("minMatch", minMatch);
+oneOff = optionExists("oneOff");
+minScore = optionInt("minScore", minScore);
+maxGap = optionInt("maxGap", maxGap);
+minRepDivergence = optionFloat("minRepDivergence", minRepDivergence);
+minIdentity = optionFloat("minIdentity", minIdentity);
 gfCheckTileSize(tileSize, dIsProtLike);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
@@ -839,8 +839,8 @@ if (maxGap > 100)
 
 /* Set repMatch parameter from command line, or
  * to reasonable value that depends on tile size. */
-if (cgiVarExists("repMatch"))
-    repMatch = cgiInt("repMatch");
+if (optionExists("repMatch"))
+    repMatch = optionInt("repMatch", repMatch);
 else
     {
     if (dIsProtLike)
@@ -882,13 +882,13 @@ else
     }
 
 /* Gather last few command line options. */
-noHead = cgiBoolean("noHead");
-ooc = cgiOptionalString("ooc");
-makeOoc = cgiOptionalString("makeOoc");
-mask = cgiOptionalString("mask");
-qMask = cgiOptionalString("qMask");
-outputFormat = cgiUsualString("out", outputFormat);
-dotEvery = cgiOptionalInt("dots", 0);
+noHead = optionExists("noHead");
+ooc = optionVal("ooc", NULL);
+makeOoc = optionVal("makeOoc", NULL);
+mask = optionVal("mask", NULL);
+qMask = optionVal("qMask", NULL);
+outputFormat = optionVal("out", outputFormat);
+dotEvery = optionInt("dots", 0);
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
