@@ -115,13 +115,17 @@ exit; # don't actually run this like a script :)
   # create trackDb/cow/bosTau1/gap.html
 
 # CREATE CHROMINFO TABLE
-
+# an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
-  cd kent/src/hg/lib
-  # allow size and fileName to be null
-  hgsql bosTau1 < chromInfo2.sql
-  cd /cluster/data/bosTau1/download/scaffolds
-  hgsql bosTau1
-  load data local infile 'id.fa' into table chromInfo
-  update chromInfo set size = <largenum>
+  cd /cluster/data/bosTau1
+  # get coordinates from agp and put in database table
+  getcoords.pl < downloads/contigs/Btau_v1.0_20040927.agp > scaffolds.coords
+  hgsql bosTau1 < coords.sql
+  load data local infile 'scaffolds.coords' into table scaffoldCoords
+  # calculate maximum coords; check that start coord is always 1
+  java -Xms256m -Xmx512m getMaxCoord > getMaxCoord.bosTau1
+  # edit chromInfo.sql; allow fileName to be null
+  cp ~heather/kent/src/hg/lib/chromInfo.sql .
+  hgsql bosTau1 < chromInfo.sql
+  load data local infile 'getMaxCoord.bosTau1' into table chromInfo
   update chromInfo set fileName = "/gbdb/bosTau1/nib/bosTau1.2bit"
