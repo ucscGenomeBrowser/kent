@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.21 2003/12/17 04:25:32 baertsch Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.22 2004/02/07 02:14:01 angie Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -31,6 +31,7 @@ errAbort(
   "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
+  "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
   "   -linearGap=filename Read piecewise linear gap from tab delimited file\n"
   "   sample linearGap file \n"
   "tablesize 11\n"
@@ -253,6 +254,17 @@ char *ltStart = tSeq->dna + left->tEnd - overlap;
 int i;
 double score, bestScore, rScore, lScore;
 
+/* Make sure overlap is not larger than either block size: */
+if (overlap > (left->tEnd - left->tStart) ||
+    overlap > (right->tEnd - right->tStart))
+    errAbort("overlap is %d -- too large for one of these:\n"
+	     "qSize=%d  tSize=%d\n"
+	     "left: qStart=%d qEnd=%d  tStart=%d tEnd=%d\n"
+	     "right: qStart=%d qEnd=%d  tStart=%d tEnd=%d\n",
+	     overlap, qSeq->size, tSeq->size,
+	     left->qStart, left->qEnd, left->tStart, left->tEnd,
+	     right->qStart, right->qEnd, right->tStart, right->tEnd);
+
 score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
 lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
 for (i=0; i<overlap; ++i)
@@ -278,6 +290,7 @@ struct scoreData
     double gapPower;		/* Power to raise gap size to. */
     };
 struct scoreData scoreData;
+struct axtScoreScheme *scoreScheme = NULL;
 
 int interpolate(int x, int *s, double *v, int sCount)
 /* Find closest value to x in s, and then lookup corresponding
@@ -626,11 +639,21 @@ do
 	nextB = b->next;
 	if (nextB != NULL)
 	    {
-	    int dq = nextB->qStart - b->qEnd;
-	    int dt = nextB->tStart - b->tEnd;
-	    if (dq < 0 || dt < 0)
+	    int oq = rangeIntersection(b->qStart, b->qEnd,
+				       nextB->qStart, nextB->qEnd);
+	    int ot = rangeIntersection(b->tStart, b->tEnd,
+				       nextB->tStart, nextB->tEnd);
+	    /* If nextB's t or q is a subset of b's, make nextB a */
+	    /* "dried up husk" to be removed by removeNegativeBlocks(). */
+	    /* Otherwise we could lose coverage by finding crossover. */
+	    if (nextB->tEnd < b->tEnd || nextB->qEnd < b->qEnd)
+		{
+		nextB->tEnd = nextB->tStart;
+		nextB->qEnd = nextB->qStart;
+		}
+	    else if (oq > 0 || ot > 0)
 	       {
-	       int overlap = -min(dq, dt);
+	       int overlap = max(oq, ot);
 	       int crossover, invCross, overlapAdjustment;
 	       findCrossover(b, nextB, scoreData.qSeq, scoreData.tSeq, overlap, 
 		    scoreData.ss->matrix,
@@ -721,7 +744,7 @@ uglyf("chainPair %s\n", sp->name);
 /* Set up info for connect function. */
 scoreData.qSeq = qSeq;
 scoreData.tSeq = tSeq;
-scoreData.ss = axtScoreSchemeDefault();
+scoreData.ss = scoreScheme;
 scoreData.gapPower = 1.0/2.5;
 
 /* Score blocks. */
@@ -906,10 +929,19 @@ uglyf("%d %d cost %d\n", 6489540 + 2746361 + 72, 84240 + 1075188 + 72, gapCost(8
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *scoreSchemeName = NULL;
 optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
 detailsName = optionVal("details", NULL);
 gapFileName = optionVal("linearGap", NULL);
+scoreSchemeName = optionVal("scoreScheme", NULL);
+if (scoreSchemeName != NULL)
+    {
+    printf("Reading scoring matrix from %s\n", scoreSchemeName);
+    scoreScheme = axtScoreSchemeRead(scoreSchemeName);
+    }
+else
+    scoreScheme = axtScoreSchemeDefault();
 dnaUtilOpen();
 initGapAid(gapFileName);
 // testGaps();
