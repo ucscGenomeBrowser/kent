@@ -709,9 +709,9 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blastzHgRef
-shortLabel Blastz Human Ref
-longLabel Blastz Human Human Reference Alignment 
+track blastzHg
+shortLabel Blastz Human
+longLabel Blastz Human Human Alignment (no filtering)
 priority 25.86
 visibility hide
 color 100,50,0
@@ -719,17 +719,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blastzHgTop
-shortLabel Blastz Human Top
-longLabel Blastz Human Human Top Scoring Alignments
-priority 25.87
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track avidUnique
 shortLabel AVID Mouse
 longLabel Regions Conserved in AVID Mouse/Human Alignments
 priority 25.9
