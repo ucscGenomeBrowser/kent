@@ -6,7 +6,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "aveCols - Add together columns\n"
+  "aveCols - average together columns\n"
   "usage:\n"
   "   aveCols file\n"
   "File may be stdin.");

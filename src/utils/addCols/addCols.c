@@ -6,7 +6,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "addCols - Add together columns\n"
+  "addCols - Sum columns in a text file.\n"
   "usage:\n"
   "   addCols XXX\n");
 }
