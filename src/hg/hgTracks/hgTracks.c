@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.801 2004/09/10 18:53:56 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.802 2004/09/13 04:03:06 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7458,7 +7458,8 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char optionScoreStr[128]; /* Option -  score filter */
-int optionScore;
+char *optionScoreVal;
+int optionScore = 0;
 char extraWhere[128] ;
 
 if (tg->bedSize <= 3)
@@ -7470,7 +7471,10 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
+if (optionScoreVal != NULL)
+    optionScore = atoi(optionScoreVal);
+optionScore = cartUsualInt(cart, optionScoreStr, optionScore);
 if (optionScore > 0) 
     {
     safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);

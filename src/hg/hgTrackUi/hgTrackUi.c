@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.139 2004/09/03 22:38:02 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.140 2004/09/13 04:03:11 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -516,9 +516,13 @@ void scoreUi(struct trackDb *tdb)
 char scoreVar[256];
 int scoreSetting;
 int scoreVal = 0;
+char *scoreValString = trackDbSetting(tdb, "scoreFilter");
 char tempScore[256];
+
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
+if (scoreValString != NULL)
+    scoreVal = atoi(scoreValString);
 printf("<p><b>Only Show items that score at or above </b>: ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
