@@ -13,7 +13,7 @@
 #
 #	2005-02-02 - Created - Hiram
 #
-#	"$Id: hexToHtml.pl,v 1.2 2005/02/02 23:35:03 hiram Exp $"
+#	"$Id: hexToHtml.pl,v 1.3 2005/02/04 00:32:24 hiram Exp $"
 #
 
 use warnings;
@@ -82,6 +82,18 @@ while ($palettesDone < $paletteCount)
 
     $colsThisTable = 0;
 
+    #	and a column header title line
+    for (my $i=$colTotal; ($i < $paletteCount) &&
+		($colsThisTable < $maxColPerTable); ++$i)
+	{
+	print "    <TH> <TABLE BORDER=1 WIDTH=100%><TR><TH>color</TH><TH>name</TH><TH>r,g,b</TH></TR></TABLE> </TH>\n";
+	++$colsThisTable;
+	}
+    print "</TR><TR>\n";
+
+    $colsThisTable = 0;
+
+
     #	Now, going through each palette, make its display table
     for (my $i=$colTotal; ($i < $paletteCount) &&
 		($colsThisTable < $maxColPerTable); ++$i)
@@ -112,4 +124,8 @@ while ($palettesDone < $paletteCount)
 	}
     print "</TR></TABLE>\n";
     }
+my $date = `date -u`;
+chomp $date;
+print "<H4>Generated page, do not edit.  See also: src/oneShot/colorPalettes/</H4>\n";
+print "Page updated: $date\n";
 print "</BODY></HTML>\n";
