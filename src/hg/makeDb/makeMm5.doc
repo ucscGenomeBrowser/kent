@@ -6039,3 +6039,140 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     nice featureBits mm5 miRNA
     # 17957 bases of 2615483787 (0.001%) in intersection
  
+# BLASTZSELF Done (Tue Oct 19 18:06:45 PDT 2004) sugnet
+
+    # blastzSelf run for mm5. This took about a week due to
+    # being busy with other things and some crashed jobs in a
+    # few places. Think all of the instructions ended up here.
+    # based off of Hiram's instructions for blastzSelf in hg16 & hg17
+    mkdir -p /cluster/store6/mm5/bed/blastzSelf
+    cd /cluster/store6/mm5/bed/blastzSelf
+    
+    # Create the definitions file.
+    cat << '_EOF_' > DEF
+    # mouse vs. mouse
+    export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+    
+    ALIGN=blastz-run
+    BLASTZ=blastz
+    BLASTZ_H=2000
+    BLASTZ_ABRIDGE_REPEATS=1
+    
+    # TARGET
+    # Mouse
+    SEQ1_DIR=/scratch/mus/mm5/softNib
+    # RMSK not currently used
+    SEQ1_RMSK=/scratch/mus/mm5/rmsk
+    # FLAG not currently used
+    SEQ1_FLAG=-rodent
+    SEQ1_SMSK=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInMouse
+    SEQ1_IN_CONTIGS=0
+    SEQ1_CHUNK=10000000
+    SEQ1_LAP=10000
+    
+    # QUERY
+    # Mouse
+    SEQ2_DIR=/scratch/mus/mm5/softNib
+    # RMSK not currently used
+    SEQ2_RMSK=/scratch/mus/mm5/rmsk
+    # FLAG not currently used
+    SEQ2_FLAG=-rodent
+    SEQ2_SMSK=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInMouse
+    SEQ2_IN_CONTIGS=0
+    SEQ2_CHUNK=30000000
+    SEQ2_LAP=0
+    
+    BASE=/cluster/data/mm5/bed/blastzSelf
+    
+    DEF=$BASE/DEF
+    RAW=$BASE/raw
+    CDBDIR=$BASE
+    SEQ1_LEN=$BASE/S1.len
+    SEQ2_LEN=$BASE/S2.len
+    '_EOF_'
+        # << this line makes emacs coloring happy
+    
+    ssh kk
+    cd /cluster/store6/mm5/bed/blastzSelf
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, push, check
+    
+    # on mini-cluster, otherwise I/O gets very demanding....
+    ssh kki
+    cd /cluster/store6/mm5/bed/blastzSelf
+    mkdir -p run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > run.1/jobList
+    cd run.1
+    wc -l jobList 
+    #    341 jobList
+    head jobList 
+    para create jobList 
+    para try
+    
+    #	Third cluster run to convert lav's to axt's
+    mkdir run.2
+    cd run.2
+    cat << '_EOF_' > gsub
+    #LOOP
+    /cluster/bin/scripts/blastz-chromlav2axt /cluster/data/mm5/bed/blastzSelf/lav/$(root1) {check out line+ /cluster/data/mm5/bed/blastzSelf/axtChrom/$(root1).axt} /scratch/mus/mm5/softNib /scratch/mus/mm5/softNib
+    #ENDLOOP
+    '_EOF_'
+    ls -1S /cluster/data/mm5/bed/blastzSelf/lav > chrom.list
+    gensub2 chrom.list single gsub jobList
+    para create
+    para push
+    # This seems to beat up on the file server a little, load up to 56 on kksilo
+    
+    # Number of jobs died, unsure why. Try them on kksilo:
+    ssh kksilo
+    cat << '_EOF_' > doStragglers.csh
+    #!/bin/tcsh
+    
+    cd /cluster/store6/mm5/bed/blastzSelf
+    set base=/cluster/data/hg16/bed/blastzSelf
+    set seq1_dir=/cluster/data/mm5/nib
+    set seq2_dir=/cluster/data/mm5/nib
+    foreach c (lav/chr17  lav/chr2  lav/chr3  lav/chr7  lav/chrUn_random  lav/chrX  lav/chrY)
+      echo "Doing $c"
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropSelf stdin stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` > $base/$out
+      popd
+    end
+    '_EOF_'
+    
+    #  Need to drop overlaps to eliminate diagonals
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "doing $c"
+      /cluster/bin/i386/axtDropOverlap axtChrom/$c.axt chromSizes.tab chromSizes.tab \
+	 	/cluster/store6/mm5/bed/blastzSelf/axtChromDropped/$c.axt
+      echo "Done: $c"
+    end
+    cd axtChromDropped
+    gzip *.axt
+
+    # Translate to psls
+    cd /cluster/data/mm5/bed/blastzSelf
+    mkdir pslChrom
+    set tbl = "blastzSelf"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      zcat /cluster/data/mm5/bed/blastzSelf/axtChromDropped/${c}.axt.gz | \
+       /cluster/bin/i386/axtToPsl stdin S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load files into the database
+    /cluster/bin/i386/hgLoadPsl -noTNameIx mm5  *_blastzSelf.psl
+
+# end BLASTZSELF
