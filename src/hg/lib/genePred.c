@@ -14,7 +14,7 @@
 /* FIXME: remove when bugs fixes */
 #define WARN_BLAT_BUGS 1
 
-static char const rcsid[] = "$Id: genePred.c,v 1.58 2004/12/11 06:25:10 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.59 2005/01/07 00:36:47 angie Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -655,6 +655,35 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         }
     }
 gp->exonCount = i+1;
+
+if (optFields & genePredExonFramesFld)
+    {
+    static boolean alreadyWarned = FALSE;
+    static boolean foundReal = FALSE;
+    /* Complain if we have a CDS but exonFrames are all -1: */
+    if (cdsStart < cdsEnd && !alreadyWarned && !foundReal)
+	{
+	for (i = 0;  i < exonCount;  i++)
+	    {
+	    if (gp->exonFrames[i] >= 0 && gp->exonFrames[i] <= 2)
+		{
+		foundReal = TRUE;
+		break;
+		}
+	    }
+	if (! foundReal)
+	    {
+	    warn("Warning: exonFrames field is being added, but I found a "
+		 "gene (%s) with CDS but no valid frames.  "
+		 "This can happen if ldHgGene is invoked with -genePredExt "
+		 "but no valid frames are given in the file.  If the 8th "
+		 "field of the file is always a placeholder, then don't use "
+		 "-genePredExt.",
+		 gp->name);
+	    alreadyWarned = TRUE;
+	    }
+	}
+    }
 
 /* only fix frame if some entries in the gene had frame */
 if (haveFrame)
