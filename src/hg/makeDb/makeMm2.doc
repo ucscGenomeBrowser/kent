@@ -1007,7 +1007,7 @@ SGP GENE PREDICTIONS (DONE 01/29/03)
     hgPepPred mm2 generic sgpPep download/*-fixed.prot
 
 
-TIGR GENE INDEX (DONE 2/26/03)
+TIGR GENE INDEX (REDONE 3/31/03)
   o mkdir -p ~/mm2/bed/tigr    
     cd ~/mm2/bed/tigr  
     wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Feb2003.tgz
