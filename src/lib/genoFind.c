@@ -1420,7 +1420,6 @@ for (i=0; i<=lastStart; ++i)
 return hitList;
 }
 
-
 static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
 	int *retHitCount)
 /* Find hits associated with one sequence in general case in a segmented
@@ -1440,6 +1439,7 @@ bits32 qStart, tStart;
 bits16 *endList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
+
 
 for (i=0; i<=lastStart; ++i)
     {
@@ -1463,6 +1463,7 @@ for (i=0; i<=lastStart; ++i)
 	    slAddHead(&hitList, hit);
 	    ++hitCount;
 	    }
+	endList += 3;
 	}
     }
 *retHitCount = hitCount;
@@ -1494,6 +1495,7 @@ char oldChar, zeroChar, badChar;
 int headPosMul, tailPosMul, avoid;
 boolean modTail;
 int *seqValLookup;
+
 
 if (gf->isPep)
     {
@@ -1549,6 +1551,7 @@ for (i=0; i<=lastStart; ++i)
 			    slAddHead(&hitList, hit);
 			    ++hitCount;
 			    }
+			endList += 3;
 			}
 		    }
 		if (modTail)
