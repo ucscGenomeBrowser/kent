@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.4 2003/10/12 21:26:21 genbank Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.5 2004/10/26 01:05:38 markd Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
@@ -104,8 +104,8 @@ if (select->release->genome != NULL)
         {
         /* change orgCat, this is bad */
         errAbort("entry %s %s organism previously specified as \"%s\" (%s), is specfied as \"%s\" (%s) in %s, add one to ignored.idx",
-                 entry->acc, gbFormatDate(modDate), organism,
-                 gbFmtSelect(entry->orgCat), select->release->genome->organism,
+                 entry->acc, gbFormatDate(modDate), entry->processed->organism,
+                 gbFmtSelect(entry->orgCat), organism,
                  gbFmtSelect(newOrgCat), lf->fileName);
         }
     }
