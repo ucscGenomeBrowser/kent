@@ -19,8 +19,9 @@
 #include "web.h"
 #include "hash.h"
 #include "botDelay.h"
+#include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.4 2004/03/22 22:43:41 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.5 2004/03/24 02:37:33 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -43,33 +44,24 @@ char *genomeList[] = {"Human", 0};
 char *origAssemblyList[] = {"April 2003"};
 char *newAssemblyList[] = {"July 2003"};
 
-void webMain(struct sqlConnection *conn)
+void webMain(struct sqlConnection *conn, char *err)
 /* set up page for entering data */
 {
-char *userData;
-char *db, *organism;
+if (err != NULL)
+    printf("<H4 ALIGN=CENTER>ERROR: %s</H4>\n", err); 
 
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
     "The input data can be pasted into the text box, or uploaded from a file."
     "");
-/* Get data to convert - from userData variable, or if 
- * that is empty from a file. */
-/*
-userData = cartOptionalString(cart, "hglft.userData");
-if(userData != 0 && userData[0] == '\0')
-    {
-    userData = cartOptionalString(cart, "hglft.dataFile");
-    }
-    */
 
 /* create HMTL form */
 printf("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
        " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cgiMakeHiddenVar(HGLFT_USERDATA_VAR, "");
 cgiMakeHiddenVar(HGLFT_DATAFILE_VAR, "");
-cgiMakeHiddenVar(HGLFT_DATAFILE_VAR, "BED");
+cgiMakeHiddenVar(HGLFT_DATAFORMAT_VAR, "BED");
 cgiMakeHiddenVar(HGLFT_SHOWPAGE_CMD, "true");
 cartSaveSession(cart);
 
@@ -151,7 +143,7 @@ cgiParagraph("&nbsp;Or upload data from a file:");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-printf("<TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Submit File\"></TD>\n");
+printf("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 
@@ -169,22 +161,100 @@ printf("</UL>");
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
+char *userData;
+char *dataFile;
+char *db, *organism;    
+char *showPage = FALSE;
+char *err = NULL;
 struct sqlConnection *conn = NULL;
 cart = theCart;
 conn = hAllocConn();
 
 //getDbAndGenome(cart, &db, &organism);
-cart = theCart;
-cartWebStart(cart, "Lift Genome Annotations");
-webMain(conn);
-cartWebEnd();
 
+/* Get data to convert - from userData variable, or if 
+ * that is empty from a file. */
+
+if (cartOptionalString(cart, "SubmitFile"))
+    userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
+else
+    userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
+showPage = cartOptionalString(cart, "showPage");
+
+if (showPage || userData == NULL || userData[0] == '\0')
+    {
+    /* display main form to enter input annotation data */
+    cartWebStart(cart, "Lift Genome Annotations");
+    webMain(conn, err);
+    }
+else 
+    {
+    struct hash *chainHash = newHash(0);
+    struct tempName oldTn, mappedTn, unmappedTn;
+    FILE *old, *mapped, *unmapped;
+    char *line;
+    int lineSize;
+    struct lineFile *errFile;
+    int ct;
+    int errCt;
+
+    /* read in user data and save to file */
+    makeTempName(&oldTn, "hglft", ".user");
+    old = mustOpen(oldTn.forCgi, "w");
+    fputs(userData, old);
+    carefulClose(&old);
+    chmod(oldTn.forCgi, 0666);
+
+    /* setup output files -- one for converted lines, the other
+     * for lines that could not be mapped */
+    makeTempName(&mappedTn, "hglft", ".bed");
+    makeTempName(&unmappedTn, "hglft", ".err");
+    mapped = mustOpen(mappedTn.forCgi, "w");
+    chmod(mappedTn.forCgi, 0666);
+    unmapped = mustOpen(unmappedTn.forCgi, "w");
+    chmod(unmappedTn.forCgi, 0666);
+
+    //readLiftOverTable("hg16", "chainHg15", chainHash);
+    readLiftOverMap("/usr/local/apache/htdocs/encode/hg15toHg16.chain", 
+                        chainHash);
+    ct = liftOverBed(
+                oldTn.forCgi, chainHash, LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
+                                 mapped, unmapped, &errCt);
+    cartWebStart(cart, "Lift Results");
+    if (ct)
+        {
+        /* some records succesfully converted */
+        cgiParagraph("");
+        printf("Successfully converted %d record(s):", ct);
+        printf("<A HREF=%s>Mapped File</A>\n", mappedTn.forCgi);
+        }
+    if (errCt)
+        {
+        /* some records not converted */
+        cgiParagraph("");
+        printf("Conversion failed on %d record(s): ", errCt);
+        printf("<A HREF=%s>Unmapped File</A>\n", unmappedTn.forCgi);
+        fclose(unmapped);
+        errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
+        printf("<PRE>");
+        while (lineFileNext(errFile, &line, &lineSize))
+            {
+            puts(line);
+            }
+        printf("</PRE>");
+        }
+
+    /* remove temp files */
+    //remove(oldTn.forCgi);
+    cartRemove(cart, HGLFT_USERDATA_VAR);
+    }
 cartRemovePrefix(cart, HGLFT_CMD_PREFIX);
+cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", 
+char *excludeVars[] = {"Submit", "submit", "SubmitFile",
                         HGLFT_USERDATA_VAR,
                         HGLFT_DATAFILE_VAR,
                         HGLFT_SHOWPAGE_CMD,
