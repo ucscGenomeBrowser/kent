@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.215 2004/11/04 23:29:51 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.216 2004/11/04 23:45:16 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -994,19 +994,7 @@ return hDnaFromSeq(chromName, 0, size, dnaLower);
 struct slName *hAllChromNames()
 /* Get list of all chromosome names. */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-struct slName *list = NULL, *el;
-
-cookie = hashFirst(hdbChromInfoHash(0));
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    el = newSlName(hel->name);
-    slAddHead(&list, el);
-    }
-
-slSort(&list, slNameCmp);
-return list;
+return hAllChromNamesDb(hdbName);
 }
 
 struct slName *hAllChromNamesDb(char *db)
