@@ -1219,6 +1219,8 @@ identifier extFileId
     hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
     hg15.multizMm3Rn2.extFile
     rn3.multizHg15Mm3.extFile
+    mm5.multiz5way.extFile
+    hg17.multiz8way.extFile
     $sacCer.multizYeast.extFile
 
 identifier gbExtFileId
