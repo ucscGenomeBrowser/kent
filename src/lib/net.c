@@ -11,18 +11,32 @@
 
 
 int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai)
-/* Set up our socket. */
+/* Set up a socket.  Warn and return error code if there's a problem. */
 {
 int sd;
 struct hostent *hostent;
 
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
-    errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
+    {
+    warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+    return -1;
+    }
 sai->sin_family = AF_INET;
 sai->sin_port = htons(port);
 memcpy(&sai->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai->sin_addr.s_addr));
 sd = socket(AF_INET, SOCK_STREAM, 0);
+if (sd < 0)
+    warn("Could't open INET socket code %d", sd);
+return sd;
+}
+
+int netMustSetupSocket(char *hostName, int port, struct sockaddr_in *sai)
+/* Set up our socket. Abort if a problem. */
+{
+int sd = netSetupSocket(hostName, port, sai);
+if (sd < 0)
+    noWarnAbort();
 return sd;
 }
 
@@ -37,7 +51,6 @@ ZeroVar(&sai);
 sd = netSetupSocket(hostName, port, &sai);
 if (sd < 0)
     {
-    warn("Couldn't setup socket %s %d", hostName, port);
     return sd;
     }
 if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)

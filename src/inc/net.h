@@ -12,7 +12,10 @@
 #endif /* DYSTRING_H */
 
 int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
-/* Set up our socket. */
+/* Set up a socket.  Warn and return error code if there's a problem. */
+
+int netMustSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
+/* Set up our socket. Abort if a problem. */
 
 int netConnect(char *hostName, char *portName);
 /* Start connection with server. */

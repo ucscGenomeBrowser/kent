@@ -10,7 +10,7 @@ O = aliType.o bits.o binRange.o \
     hmmstats.o htmshell.o hugefnt.o intExp.o jointalign.o\
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     medfnt.o memalloc.o memgfx.o net.o nib.o \
-    nt4.o obscure.o oldGff.o ooc.o osunix.o patSpace.o \
+    nt4.o obscure.o oldGff.o ooc.o options.o osunix.o patSpace.o \
     portimpl.o psl.o ra.o repMask.o rle.o sailfnt.o seqOut.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
