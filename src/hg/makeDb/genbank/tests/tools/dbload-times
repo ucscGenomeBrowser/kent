@@ -31,7 +31,7 @@ BEGIN {
     if ($6 ~ /^mrna/) {
         type = "mrna";
     } else if ($6 ~ /^est/) {
-        srcDb = "est";
+        type = "est";
     } else {
         die("can't parse est: " $0);
     }
@@ -48,15 +48,17 @@ BEGIN {
     seqChgCnt[key] += parts[2];
     metaChrCnt[key] += parts[3];
     extChgCnt[key] += parts[4];
-    orphanCnt[key] += parts[5];
-    noChgCnt[key] += parts[6];
+    newCnt[key] += parts[5];
+    orphanCnt[key] += parts[6];
+    noChgCnt[key] += parts[7];
 
     deleteTotalCnt += parts[1];
     seqChgTotalCnt += parts[2];
     metaChrTotalCnt += parts[3];
     extChgTotalCnt += parts[4];
-    orphanTotalCnt += parts[5];
-    noChgTotalCnt += parts[6];
+    newTOtalCnt += parts[5];
+    orphanTotalCnt += parts[6];
+    noChgTotalCnt += parts[7];
 }
 
 # load time
@@ -72,9 +74,9 @@ BEGIN {
 END {
     # report by type
 
-    print "db","srcdb","type", "delete","seqChg","metaChr","extChg","orphan","noChg","hours";
+    print "db","srcdb","type", "delete","seqChg","metaChr","extChg","new","orphan","noChg","hours";
     for (key in deleteCnt) {
-        print key, deleteCnt[key], seqChgCnt[key], metaChrCnt[key], extChgCnt[key], orphanCnt[key], noChgCnt[key],getHours(dbLoadTime[key]);
+        print key, deleteCnt[key], seqChgCnt[key], metaChrCnt[key], extChgCnt[key], newCnt[key], orphanCnt[key], noChgCnt[key],getHours(dbLoadTime[key]);
     }
-    print "total","","", deleteTotalCnt, seqChgTotalCnt, metaChrTotalCnt, extChgTotalCnt, orphanTotalCnt, noChgTotalCnt,getHours(dbLoadTotalTime);;
+    print "total","","", deleteTotalCnt, seqChgTotalCnt, metaChrTotalCnt, extChgTotalCnt, newTotalCnt, orphanTotalCnt, noChgTotalCnt,getHours(dbLoadTotalTime);;
 }
