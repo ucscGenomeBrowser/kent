@@ -22,6 +22,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "stsMapMouse.h"
+#include "stsMapMouseNew.h"
 #include "stsMapRat.h"
 #include "knownInfo.h"
 #include "cart.h"
@@ -976,9 +977,10 @@ boolean ok = FALSE;
 char *alias = NULL, *temp;
 struct stsMap sm;
 struct stsMapMouse smm;
+struct stsMapMouseNew smm_n;
 struct stsMapRat smr;
 char *tableName, *tableAlias;
-boolean newFormat = FALSE, mouse = FALSE, rat = FALSE;
+boolean newFormat = FALSE, mouse = FALSE, rat = FALSE, mouse_n=FALSE;
 char *chrom;
 char buf[64];
 struct hgPosTable *table = NULL;
@@ -990,6 +992,12 @@ if (hTableExists("stsMapMouse"))
     tableName = "stsMapMouse";
     tableAlias = "stsAliasMouse";
     }
+else if (hTableExists("stsMapMouseNew"))
+   {
+     mouse_n = TRUE;
+     tableName = "stsMapMouseNew";
+     tableAlias = "stsAlias";
+   }
 else if (hTableExists("stsMapRat"))
      {
      rat = TRUE;
@@ -1046,10 +1054,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     if (mouse)
 	stsMapMouseStaticLoad(row, &smm);
+    else if (mouse_n)
+      stsMapMouseNewStaticLoad(row, &smm_n);
     else if (rat)
-	stsMapRatStaticLoad(row, &smr);
+      stsMapRatStaticLoad(row, &smr);
     else if (newFormat)
-	stsMapStaticLoad(row, &sm);
+      stsMapStaticLoad(row, &sm);
     else
         {
 	struct stsMarker oldSm;
@@ -1062,6 +1072,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
 		 smm.chrom, tableName);
 	}
+    else if (mouse_n)
+      {
+        if ((chrom = hgOfficialChromName(smm_n.chrom)) == NULL)
+	  errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		   smm_n.chrom, tableName);
+      }
     else if (rat) 
 	{
 	if ((chrom = hgOfficialChromName(smr.chrom)) == NULL)
@@ -1081,6 +1097,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	pos->chromStart = smm.chromStart - 100000;
 	pos->chromEnd = smm.chromEnd + 100000;
 	}
+    else if (mouse_n)
+      {
+        pos->chromStart = smm_n.chromStart - 100000;
+        pos->chromEnd = smm_n.chromEnd + 100000;
+      }
     else if (rat) 
 	{
 	pos->chromStart = smr.chromStart - 100000;

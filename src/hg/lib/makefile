@@ -35,6 +35,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o stsAlias.o stsInfo.o stsInfo2.o \
     stsMap.o stsMapMouse.o stsMarker.o stsInfoMouse.o synteny100000.o\
+    stsMapMouseNew.o stsInfoMouseNew.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackDb.o trackTable.o wabAli.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
