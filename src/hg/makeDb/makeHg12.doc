@@ -1,4 +1,4 @@
-This file describes how we made the browser database on 
+eThis file describes how we made the browser database on 
 NCBI build 30 (July, 2002 freeze)
 
 [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
@@ -240,10 +240,10 @@ Note: for build30, Terry specially requested these files from NCBI:
   extras.ffa.gz
 For future builds, we should try to modify hgClonePos to just use *.finf 
 and not the *.ffa files.
-Patrick unpacked the *.ffa.gz into gs.13/{fin,draft,predraft,extra}/fa/*
+Patrick unpacked the *.ffa.gz into gs.13/{fin,draft,predraft,extras}/fa/*
 using /cluster/bin/scripts/unPackffa .
      cd /cluster/store1/gs.13/build30
-     jkStuff/liftGl.sh dummyArg
+     jkStuff/liftGl.sh contig.gl
      hgGoldGapGl hg12 /cluster/store1/gs.13 build30 
      cd /cluster/store1/gs.13
      hgClonePos hg12 build30 ffa/sequence.inf /cluster/store1/gs.13 -maxErr=3
@@ -349,8 +349,8 @@ Using the bash shell do:
               ls -1 /scratch/hg/mrna.130/$i/$i.fa > mrna.lst
               mkdir -p psl
               # Note: build30/bed/refSeq directory not writeable, so I had to 
-              # create a bed/refSeq.angie/psl and change the gsub
-              mkdir -p /cluster/store1/gs.13/build30/bed/refSeq.angie/psl
+              # create a bed/refSeq/psl and change the gsub
+              mkdir -p /cluster/store1/gs.13/build30/bed/refSeq/psl
               gensub2 genome.lst mrna.lst gsub spec
               para create spec
               cd ..
@@ -361,7 +361,7 @@ Using the bash shell do:
 
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
-      cd refSeq.angie
+      cd refSeq
       pslSort dirs raw.psl /tmp psl
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
       liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
@@ -384,7 +384,7 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
 
 o - Load refSeq alignments into database
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/refSeq.angie
+      cd /cluster/store1/gs.13/build30/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg12 -tNameIx refSeqAli.psl
 
@@ -483,7 +483,7 @@ o - Get extra info from NCBI and produce refGene table as so:
        cd ~/oo/bed
        mkdir refSeq
        cd refSeq
-       # Note: downloaded these to refSeq.angie (refSeq dir perms)
+       # Note: downloaded these to refSeq (refSeq dir perms)
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc 
 o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa.
@@ -492,11 +492,11 @@ o - RefSeq should have already been aligned to the genome by processes
         described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
-       cd ~/oo/bed/refSeq.angie
+       cd ~/oo/bed/refSeq
        ln -s /cluster/store1/mrna.130 mrna
 TODO:
 #
-# NOTE: hgRefSeqMrna is losing refLink's protAcc field, I think due to 
+# NOTE: If hgRefSeqMrna is losing refLink's protAcc field, I think it's due to 
 # a format-change issue with .-suffixes in mrna acc's
 #
        hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl \
@@ -520,7 +520,7 @@ o - Add Jackson labs info
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK (IN PROGRESS)
+SIMPLE REPEAT TRACK (DONE)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -1344,9 +1344,10 @@ LOAD ENSEMBL GENES (todo)
      mkdir ensembl
      cd ensembl
      Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
-     predictions) here. (e.g.
-     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
-     gunzip xxx.gtf.gz
+     predictions) here.
+     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
+     gunzip ftp//ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
+
 TODO TO HERE
      Starting from Hg10, ensembl seems to have done their own lifting,
      so just collect all chromosome .gtf files.
@@ -1470,38 +1471,42 @@ LOAD GENEID GENES (todo)
      ldHgGene hg12 geneid download/*.gtf -exon=CDS
      hgPepPred hg12 generic geneidPep download/*.prot
 
-LOAD ACEMBLY (TODO 05/31/02)
+LOAD ACEMBLY (IN PROGRESS 9/3/02)
     mkdir -p ~/oo/bed/acembly
     cd ~/oo/bed/acembly
+    
     - Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
-    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_29.human.genes/acembly.ncbi_29.genes.gff.tar.gz
-    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_29.human.genes/acembly.ncbi_29.genes.proteins.fasta.tar.gz
-    gunzip -c acembly.ncbi_29.genes.gff.tar.gz | tar xvf -
-    gunzip -c acembly.ncbi_29.genes.proteins.fasta.tar.gz | tar xvf -
-    cd acembly.ncbi_29.genes.gff
-    - Strip out floating-contig features (lines with *|NT_?????? as the chr ID),
-      and add 'chr' prefix to all chr nums:
+    wget ftp://ftp.ncbi.nlm.nih.gov/repository/acedb/ncbi_30.human.genes/acembly.ncbi_30.genes.gff.tar.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/repository/acedb/ncbi_30.human.genes/acembly.ncbi_30.genes.proteins.fasta.tar.gz 
+    gunzip -c acembly.ncbi_30.genes.gff.tar.gz | tar xvf -
+    gunzip -c acembly.ncbi_30.genes.proteins.fasta.tar.gz | tar xvf -
+    cd acembly.ncbi_30.genes.gff
+    #- Strip out floating-contig features (lines with *|NT_?????? as the chr ID),
+    #  and add 'chr' prefix to all chr nums:
     foreach f (acemblygenes.*.gff)
       egrep -v '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
         perl -wpe 's/^(\w)/chr$1/' > $f:r-fixed.gff
     end
-    - Save just the floating-contig features to different files for lifting 
-    - and lift up the floating-contig features to chr*_random coords:
+    #- Save just the floating-contig features to different files for lifting 
+    #- and lift up the floating-contig features to chr*_random coords:
     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un M)
       egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' acemblygenes.$c.gff | \
         perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > $c-random-ctg.gff
-      liftUp $c-random-lifted.gff ../../../$c/lift/random.lft warn $c-random-ctg.gff
+    if (-e ../../../$c/lift/random.lft) then
+         liftUp $c-random-lifted.gff ../../../$c/lift/random.lft warn $c-random-ctg.gff
+    endif
     end
 
-    cd ../acembly.ncbi_29.genes.proteins.fasta
-    - Remove G_t*_ prefixes from acemblyproteins.*.fasta:
+    cd ../acembly.ncbi_30.genes.proteins.fasta
+    #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
     foreach f (acemblyproteins.*.fasta)
       perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > $f:r-fixed.fasta
     end
-    - Load into database as so:
+
+    #- Load into database as so:
     cd ..
-    ldHgGene hg12 acembly acembly.ncbi_29.genes.gff/*-fixed.gff acembly.ncbi_29.genes.gff/*-lifted.gff
-    hgPepPred hg12 generic acemblyPep acembly.ncbi_29.genes.proteins.fasta/*-fixed.fasta
+    ldHgGene hg12 acembly acembly.ncbi_30.genes.gff/*-fixed.gff acembly.ncbi_30.genes.gff/*-lifted.gff
+    hgPepPred hg12 generic acemblyPep acembly.ncbi_30.genes.proteins.fasta/*-fixed.fasta
 
 LOAD GENOMIC DUPES (todo)
 o - Load genomic dupes
@@ -1881,6 +1886,22 @@ ssh hgwbeta
 cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
 zip ../bigZips/database.zip *
 
+SGP GENE PREDICTIONS (IN PROGRESS)
+     cd ~/oo/bed
+     mkdir sgp
+     cd sgp
+     mkdir download
+     cd download
+   Now download *.gtf and *.prot from 
+   wget -r http://www1.imim.es/genepredictions/H.sapiens/golden_path_20010806/SGP
+   Copy all the downloaded .gtf and .prot files to download
+   Get rid of the extra .N in the transcripts with subs.  
+     cd ..
+     cp ~/lastMm/bed/sgp/subs .
+    # Check subs to make sure it is ok.
+     subs -e download/*.gtf > /dev/null
+     ldHgGene hg12 sgpGene download/*.gtf -exon=CDS
+     hgPepPred hg12 generic sgpPep download/*.prot
 
 ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ
     cd ~/oo/bed
