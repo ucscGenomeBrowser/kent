@@ -563,15 +563,15 @@ boolean hIsPrivateHost()
 /* Return TRUE if this is running on private web-server. */
 {
 static boolean gotIt = FALSE;
-static boolean private = FALSE;
+static boolean priv = FALSE;
 if (!gotIt)
     {
     char *t = getenv("HTTP_HOST");
     if (t != NULL && startsWith("genome-test", t))
-        private = TRUE;
+        priv = TRUE;
     gotIt = TRUE;
     }
-return private;
+return priv;
 }
 
 
@@ -957,6 +957,29 @@ sqlFreeResult(&sr);
 return tdb;
 }
 
+struct dbDb *hGetIndexedDatabases()
+/* Get list of databases for which there is a nib dir. 
+ * Dispose of this with dbDbFreeList. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row;
+struct dbDb *dbList = NULL, *db;
+
+/* Scan through dbDb table, loading into list */
+sr = sqlGetResult(conn, "select * from dbDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    slAddHead(&dbList, db);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slReverse(&dbList);
+return dbList;
+}
+
+
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */
@@ -1004,4 +1027,48 @@ sprintf(query, "select name from dbDb where name = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
+}
+
+struct serverTable *hFindBlatServer(char *db, boolean isTrans)
+/* Return server for given database.  Db can either be
+ * database name or description. Ponter returned is owned
+ * by this function and shouldn't be modified */
+{
+static struct serverTable st;
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char dbActualName[32];
+
+/* If necessary convert database description to name. */
+sprintf(query, "select name from dbDb where name = '%s'", db);
+if (!sqlExists(conn, query))
+    {
+    sprintf(query, "select name from dbDb where description = '%s'", db);
+    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
+        db = dbActualName;
+    }
+
+/* Do a little join to get data to fit into the serverTable. */
+sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
+               ",blatServers.host,blatServers.port,dbDb.nibPath "
+	       "from dbDb,blatServers where blatServers.isTrans = %d and "
+	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
+	       isTrans, db);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    {
+    errAbort("Can't find a server for %s database %s\n",
+	    (isTrans ? "translated" : "DNA"), db);
+    }
+st.db = cloneString(row[0]);
+st.genome = cloneString(row[1]);
+st.isTrans = atoi(row[2]);
+st.host = cloneString(row[3]);
+st.port = cloneString(row[4]);
+st.nibDir = cloneString(row[5]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return &st;
 }
