@@ -5,7 +5,7 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.9 2004/01/10 05:43:50 markd Exp $";
+static char const rcsid[] = "$Id: dlist.c,v 1.10 2005/01/10 00:17:30 kent Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */
@@ -232,10 +232,11 @@ if (len > 1)
     }
 }
 
+
 boolean dlEmpty(struct dlList *list)
 /* Return TRUE if list is empty. */
 {
-return (list->head->next == NULL);
+return dlIsEmpty(list);
 }
 
 struct dlNode *dlGetBeforeHead(struct dlList *list)

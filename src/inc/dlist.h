@@ -106,6 +106,9 @@ int dlCount(struct dlList *list);
 boolean dlEmpty(struct dlList *list);
 /* Return TRUE if list is empty. */
 
+#define dlIsEmpty(list) ((list)->head->next == NULL)
+/* Return TRUE if list is empty.  Macro version of above. */
+
 struct dlNode *dlGetBeforeHead(struct dlList *list);
 /* Get the node before the head of the list */
 
