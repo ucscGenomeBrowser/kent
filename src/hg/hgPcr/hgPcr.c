@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.4 2004/06/08 18:07:11 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.5 2004/06/09 00:47:44 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -226,7 +226,8 @@ if (!gotDb)
 }
 
 void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,
-	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood)
+	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood,
+	boolean flipReverse)
 /* Put up form to get primers. */
 {
 struct pcrServer *server;
@@ -272,17 +273,18 @@ cgiMakeIntVar("wp_size", maxSize, 5);
 printf("%s", "</TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Perfect Match Size: ");
+printf(" Min Perfect Match: ");
 cgiMakeIntVar("wp_perfect", minPerfect, 2);
 printf("%s", "</TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" Min Good Match Size: ");
+printf(" Min Good Match: ");
 cgiMakeIntVar("wp_good", minGood, 2);
 printf("%s", "</TD>\n");
 
 printf("%s", "<TD><CENTER>\n");
-printf(" <A HREF=\"../cgi-bin/hgPcr?wp_help=on\" TARGET=\"_blank\">User Guide</A> \n");
+printf(" Flip Reverse Primer: ");
+cgiMakeCheckBox("wp_flipReverse", flipReverse);
 printf("%s", "</TD>\n");
 printf("</TR></TABLE><BR>");
 
@@ -302,15 +304,28 @@ printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"orgForm\">"
        "<input type=\"hidden\" name=\"wp_showPage\" value=\"true\">\n");
 cartSaveSession(cart);
 printf("</FORM>\n");
+webNewSection("About In-Silico PCR");
+printf("%s", "<P>In-Silico PCR was written by "
+"<A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
+"Interactive use on this web server is free to all.\n"
+"Sources and executables to run batch jobs on your own server are available free\n"
+"for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
+"licenses are also available.  Contact Jim for details.</P>\n");
+webNewSection("User Guide");
+doHelp();
 }
 
 boolean doPcr(struct pcrServer *server,
-	char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood)
+	char *fPrimer, char *rPrimer, 
+	int maxSize, int minPerfect, int minGood, boolean flipReverse)
 /* Do the PCR, and show results. */
 {
 struct errCatch *errCatch = errCatchNew();
 boolean ok = FALSE;
 
+hgBotDelay();
+if (flipReverse)
+    reverseComplement(rPrimer, strlen(rPrimer));
 if (errCatchStart(errCatch))
     {
     struct gfPcrInput *gpi;
@@ -344,6 +359,8 @@ if (errCatch->gotError)
      warn(errCatch->message->string);
      }
 errCatchFree(&errCatch); 
+if (flipReverse)
+    reverseComplement(rPrimer, strlen(rPrimer));
 return ok;
 }
 
@@ -358,6 +375,7 @@ int minPerfect = 15;
 int minGood = 15;
 char *fPrimer = cartUsualString(cart, "wp_f", "");
 char *rPrimer = cartUsualString(cart, "wp_r", "");
+boolean flipReverse = cartUsualBoolean(cart, "wp_flipReverse", FALSE);
 struct pcrServer *serverList = getServerList();
 
 getDbAndGenome(cart, &db, &organism);
@@ -373,21 +391,17 @@ if (minGood < minPerfect)
 
 /* Decide based on transient variables what page to put up. 
  * By default put up get primer page. */
-if (cartVarExists(cart, "wp_help"))
-    {
-    doHelp();
-    return;
-    }
-else if (cartVarExists(cart, "wp_f") && cartVarExists(cart, "wp_r") &&
+if (cartVarExists(cart, "wp_f") && cartVarExists(cart, "wp_r") &&
 	!cartVarExists(cart, "wp_showPage"))
     {
     fPrimer = gfPcrMakePrimer(fPrimer);
     rPrimer = gfPcrMakePrimer(rPrimer);
-    if (doPcr(findServer(db, serverList), fPrimer, rPrimer, maxSize, minPerfect, minGood))
+    if (doPcr(findServer(db, serverList), fPrimer, rPrimer, maxSize, minPerfect, minGood,
+    	flipReverse))
          return;
     }
 doGetPrimers(db, organism, serverList,
-	fPrimer, rPrimer, maxSize, minPerfect, minGood);
+	fPrimer, rPrimer, maxSize, minPerfect, minGood, flipReverse);
 }
 
 void doMiddle(struct cart *theCart)
@@ -401,8 +415,7 @@ cartWebEnd();
 }
 
 
-char *excludeVars[] = {"Submit", "submit", 
-	"wp_f", "wp_r", "wp_help", "wp_showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "wp_f", "wp_r", "wp_showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
