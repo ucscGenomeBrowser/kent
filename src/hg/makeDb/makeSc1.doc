@@ -337,3 +337,15 @@ chainToPsl chain/filter.chain S1.len S2.len ../../nib/chr1.nib query.lst psl/xen
 cd psl
 hgLoadPsl sc1 xenoBlastzMrna.psl
 
+
+DOWNLOADS (done 10/8/04)
+ssh hgwdev
+cd /usr/local/apache/htdocs/goldenPath/scApr2003/bigZips
+# done 6/5/04:
+zip -j otherSARS.fa.zip /cluster/data/sc1/bed/otherSARS/otherSARS.fa
+zip -j viralProt.fa.zip /cluster/data/sc1/bed/swissprot/viralProt.fa
+zip -j viralany.fa.zip /cluster/data/sc1/bed/genbank/viralany.fa
+# done 10/8/04:
+zip -j SARS.fa.zip /cluster/data/sc1/chr1.fa
+
+
