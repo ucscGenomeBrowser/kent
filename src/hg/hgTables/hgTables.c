@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.19 2004/07/16 18:21:43 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.20 2004/07/16 20:28:27 kent Exp $";
 
 
 void usage()
@@ -205,6 +205,7 @@ else
     char query[256];
     safef(query, sizeof(query), 
 	    "select %s from %s", fields, table);
+    uglyf("query: %s\n", query);
     sr = sqlGetResult(conn, query);
     }
 return sr;
@@ -514,8 +515,8 @@ for (region = regionList; region != NULL; region = region->next)
 	    ++outCount;
 	    }
 	}
-
-    if (!hti->chromField[0])
+    sqlFreeResult(&sr);
+    if (!isPositional)
         break;	/* No need to iterate across regions in this case. */
     }
 

@@ -8,9 +8,10 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.1 2004/07/16 18:21:43 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.2 2004/07/16 20:28:27 kent Exp $";
 
 struct joinableRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -31,7 +32,21 @@ struct joinableTable
     char **keyNames;	/* Names of keys. */
     int keyCount;	/* Number of keys. */
     struct joinableRow *rowList;	/* Rows. */
+    int rowCount;	/* Number of rows. */
     };
+
+void dumpJt(struct joinableTable *jt)
+/* Write out fields. */
+{
+struct joinableRow *jr;
+for (jr = jt->rowList; jr != NULL; jr = jr->next)
+    {
+    int i;
+    for (i=0; i<jt->fieldCount; ++i)
+        printf("\t%s", jr->fields[i]);
+    printf("\n");
+    }
+}
 
 struct joinableTable *joinableTableNew(char *table, 
 	char *fields, 	    /* Comma separated field list, no terminal comma. */
@@ -82,14 +97,15 @@ for (i=0; i<jt->fieldCount; ++i)
     jr->fields[i] = lmCloneString(lm, row[i]);
 row += jt->fieldCount;
 for (i=0; i<jt->keyCount; ++i)
-    jr->keys[i] = row[i];
+    jr->keys[i] = lmCloneString(lm, row[i]);
 slAddHead(&jt->rowList, jr);
+jt->rowCount += 1;
 return jr;
 }
 
 struct joinableTable *fetchKeyedFields(struct region *regionList,
-	struct sqlConnection *conn, char *table, boolean isPositional,
-	char *fields, char *keyIn, struct hash *keyInHash, 
+	struct sqlConnection *conn, char *table, boolean isPositional, char *fields, 
+	char *keyIn, struct hash *keyInHash, char *chopBefore, char *chopAfter,
 	struct slName *keyOutList)
 /* This returns a list of keyedRows filtering out those that
  * don't match on keyIn.  */
@@ -97,6 +113,9 @@ struct joinableTable *fetchKeyedFields(struct region *regionList,
 struct joinableTable *jt = joinableTableNew(table, fields, keyOutList);
 struct dyString *fieldSpec = dyStringNew(0);
 struct slName *keyOut;
+struct region *region;
+int chopBeforeSize = 0;
+int keyInField = -1;
 
 uglyf("fetchKeyFields from %s,  fields %s, keyIn %s\n",
 	table, fields, keyIn);
@@ -104,9 +123,65 @@ dyStringAppend(fieldSpec, fields);
 for (keyOut = keyOutList; keyOut != NULL; keyOut = keyOut->next)
     dyStringPrintf(fieldSpec, ",%s", keyOut->name);
 if (keyIn != NULL)
+    {
     dyStringPrintf(fieldSpec, ",%s", keyIn);
+    uglyf("jt->keyCount = %d, jt->fieldCount = %d\n", jt->keyCount, jt->fieldCount);
+    keyInField = jt->keyCount + jt->fieldCount;
+    assert(keyInHash != NULL);
+    }
+if (chopBefore != NULL)
+    chopBeforeSize = strlen(chopBefore);
 uglyf("fieldSpec = %s\n", fieldSpec->string);
-return NULL;
+uglyf("keyInField = %d\n", keyInField);
+
+for (region = regionList; region != NULL; region = region->next)
+    {
+    char **row;
+    struct sqlResult *sr = regionQuery(conn, table, 
+    	fieldSpec->string, region, isPositional);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (keyInField < 0)
+	    jrAddRow(jt, row);
+	else
+	    {
+	    char *key = row[keyInField];
+	    char *e;
+	    if (chopBefore != NULL && startsWith(key, chopBefore))
+	        key += chopBeforeSize;
+	    if (chopAfter != NULL && (e = stringIn(chopAfter, key)) != NULL)
+	        *e = 0;
+	    if (hashLookup(keyInHash, key))
+		jrAddRow(jt, row);
+	    }
+	}
+    sqlFreeResult(&sr);
+    if (!isPositional)
+        break;
+    }
+slReverse(&jt->rowList);
+return jt;
+}
+
+struct hash *hashKeyField(struct joinableTable *jt, char *keyField)
+/* Make a hash based on key field. */
+{
+int ix = stringArrayIx(keyField, jt->keyNames, jt->keyCount);
+int hashSize = digitsBaseTwo(jt->rowCount);
+struct hash *hash = NULL;
+struct joinableRow *jr;
+
+if (hashSize > 20)
+    hashSize = 20;
+hash = newHash(hashSize);
+if (ix < 0)
+    internalErr();
+for (jr = jt->rowList; jr != NULL; jr = jr->next)
+    {
+    uglyf("Adding %s to hash\n", jr->keys[ix]);
+    hashAdd(hash, jr->keys[ix], jr);
+    }
+return hash;
 }
 
 void doTest(struct sqlConnection *conn)
@@ -115,6 +190,11 @@ void doTest(struct sqlConnection *conn)
 struct slName *keysOut = NULL, *key;
 struct hash *keyInHash = NULL;
 struct region *regionList = getRegions(conn);
+struct joinableTable *jt = NULL, *jt2;
+struct hash *hash2;
+struct joiner *joiner = joinerRead("all.joiner");
+
+/* Open for text output. */
 textOpen();
 
 /* Put together output key list. */
@@ -130,7 +210,15 @@ hashAdd(keyInHash, "5264", NULL);
 hashAdd(keyInHash, "5265", NULL);
 hashAdd(keyInHash, "5266", NULL);
 
-fetchKeyedFields(regionList, conn, "ensGene", TRUE, "name,chrom,id,strand", 
-	"id", keyInHash, keysOut);
+jt = fetchKeyedFields(regionList, conn, "ensGene", 
+	TRUE, "name,chrom,id,strand", "id", keyInHash, NULL, NULL, keysOut);
+dumpJt(jt);
+uglyf("Fetched %d rows from %s\n\n", slCount(jt->rowList), jt->tableName);
+
+hash2 = hashKeyField(jt, "name");
+jt2 = fetchKeyedFields(regionList, conn, "ensGtp", 
+	FALSE, "gene,protein", "transcript", hash2, NULL, ".", NULL);
+uglyf("Fetched %d rows from %s\n", slCount(jt2->rowList), jt2->tableName);
+dumpJt(jt2);
 }
 
