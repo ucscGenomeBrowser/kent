@@ -83,7 +83,7 @@ type netAlign cb1 chainCb1
 otherDb cb1
 
 track axtNetCb1
-shortLabel Briggase Aligns
+shortLabel Briggsae Aligns
 longLabel C. briggsae/C. elegans Blastz Alignments from Net
 group compGeno
 priority 127
