@@ -2826,7 +2826,7 @@ zcat ../pslParts/$1.*.psl.gz \
 #Submission to last job:           987s      16.45m     0.27h    0.01d
 
 
-# CHAIN SELF BLASTZ (TODO 2/2/05 angie)
+# CHAIN SELF BLASTZ (DONE 2/3/05 angie)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
@@ -2843,6 +2843,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
 
     cat << '_EOF_' > doChain
 #!/bin/csh -ef
+setenv PATH $HOME/bin/x86_64:$PATH
 axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
                             /iscratch/i/canFam1/newRMNib stdout \
 | chainAntiRepeat /iscratch/i/canFam1/newRMNib /iscratch/i/canFam1/newRMNib \
@@ -2853,6 +2854,13 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
+    # chrUn crashed it... too bad for chrUn (not viewed as interesting 
+    # for self chains anyway).
+#Completed: 40 of 41 jobs
+#Crashed: 1 jobs
+#Average job time:                 185s       3.09m     0.05h    0.00d
+#Longest job:                      490s       8.17m     0.14h    0.01d
+#Submission to last job:         74789s    1246.48m    20.77h    0.87d
 
     # now on the cluster server, sort chains
     ssh kolossus
@@ -2874,10 +2882,14 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     foreach f (chain/*.chain)
       chainFilter -minScore=20000 $f > chainFilt/$f:t
     end
+    gzip -c all.chain > all.chain.unfiltered.gz
+    rm -r chain
+    mv chainFilt chain
+    chainMergeSort -saveId chain/*.chain > all.chain
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain/chainFilt
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
@@ -2885,7 +2897,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     end
 
 
-# NET SELF BLASTZ (TODO 2/2/05 angie)
+# NET SELF BLASTZ (DONE 2/3/05 angie)
     ssh kolossus
     cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -2902,7 +2914,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     # Add entries for chainSelf, netSelf to dog/canFam1 trackDb
 
 
-# MAKE VSSELF DOWNLOADABLES (TODO 2/2/05 angie)
+# MAKE VSSELF DOWNLOADABLES (DONE 2/3/05 angie)
     ssh kolossus
     cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
     gzip all.chain self.net
@@ -2913,7 +2925,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     cp -p /cluster/data/canFam1/bed/blastz.canFam1/axtChain/all.chain.gz \
       self.chain.gz
     cp -p /cluster/data/canFam1/bed/blastz.canFam1/axtChain/self.net.gz .
-    md5sum *.zip > md5sum.txt
+    md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
