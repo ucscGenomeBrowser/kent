@@ -964,6 +964,12 @@ dtf->field = cloneString(field);
 return dtf;
 }
 
+struct joinerDtf *joinerDtfClone(struct joinerDtf *dtf)
+/* Return duplicate (deep copy) of joinerDtf. */
+{
+return joinerDtfNew(dtf->database, dtf->table, dtf->field);
+}
+
 static void notTriple(char *s)
 /* Complain that s is not in dotted triple format. */
 {
@@ -1178,13 +1184,13 @@ slReverse(&jpList);
 return jpList;
 }
 
-static struct joinerPair *joinerPairDupe(struct joinerPair *jp)
+static struct joinerPair *joinerPairClone(struct joinerPair *jp)
 /* Return duplicate (deep copy) of joinerPair. */
 {
 struct joinerPair *dupe;
 AllocVar(dupe);
-dupe->a = joinerDtfNew(jp->a->database, jp->a->table, jp->a->field);
-dupe->b = joinerDtfNew(jp->b->database, jp->b->table, jp->b->field);
+dupe->a = joinerDtfClone(jp->a);
+dupe->b = joinerDtfClone(jp->b);
 dupe->identifier = jp->identifier;
 return dupe;
 }
@@ -1225,7 +1231,7 @@ for (jp = jpList; jp != NULL; jp = jp->next)
     {
     if (joinerDtfSameTable(jp->b, b))
 	{
-	path = joinerPairDupe(jp);
+	path = joinerPairClone(jp);
 	break;
 	}
     }
@@ -1240,8 +1246,8 @@ if (path == NULL && level < maxLevel)
 	    path = rFindRoute(joiner, jp->b, b, level+1, maxLevel);
 	    if (path != NULL)
 		{
-		struct joinerPair *jpDupe = joinerPairDupe(jp);
-		slAddHead(&path, jpDupe);
+		struct joinerPair *jpClone = joinerPairClone(jp);
+		slAddHead(&path, jpClone);
 		break;
 		}
 	    }
@@ -1329,7 +1335,7 @@ if (first->next == NULL)
     return NULL;
 for (dtf = first->next; dtf != NULL; dtf = dtf->next)
     {
-    if (!inRoute(fullRoute, dtf))
+    if (!inRoute(fullRoute, dtf) && !joinerDtfSameTable(first, dtf))
 	{
 	pairRoute = joinerFindRoute(joiner, first, dtf);
 	fullRoute = slCat(fullRoute, pairRoute);

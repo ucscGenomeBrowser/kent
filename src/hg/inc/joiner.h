@@ -123,6 +123,9 @@ struct joinerDtf
 struct joinerDtf *joinerDtfNew(char *database, char *table, char *field);
 /* Get new joinerDtf. */
 
+struct joinerDtf *joinerDtfClone(struct joinerDtf *dtf);
+/* Return duplicate (deep copy) of joinerDtf. */
+
 void joinerDtfFree(struct joinerDtf **pDtf);
 /* Free up memory associated with joinerDtf. */
 
