@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.19 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.20 2003/06/18 16:22:27 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
@@ -294,6 +294,22 @@ hashFree(&exceptHash);
 hashElFreeList(&list);
 }
 
+char *cartRemoveLike(struct cart *cart, char *wildCard)
+/* Remove all variable from cart that match wildCard. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+char *val = NULL;
+
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (wildMatch(wildCard, el->name))
+	cartRemove(cart, el->name);
+    }
+hashElFreeList(&el);
+return val;
+}
+
 
 char *cartString(struct cart *cart, char *var)
 /* Return string valued cart variable. */
@@ -463,6 +479,26 @@ slSort(&elList, hashElCmp);
 for (el = elList; el != NULL; el = el->next)
     cartDumpItem(el);
 hashElFreeList(&el);
+}
+
+char *cartFindLike(struct cart *cart, char *wildCard)
+/* Find name of first variable that matches wildCard in cart. 
+ * Return NULL if none. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+char *name = NULL;
+
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (wildMatch(wildCard, el->name))
+	{
+	name = el->name;
+	break;
+	}
+    }
+hashElFreeList(&el);
+return name;
 }
 
 static char *cookieDate()

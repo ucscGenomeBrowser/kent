@@ -62,6 +62,9 @@ void cartRemoveExcept(struct cart *cart, char **except);
  * from cart.  Except array may be NULL in which case all
  * are removed. */
 
+char *cartRemoveLike(struct cart *cart, char *wildCard);
+/* Remove all variable from cart that match wildCard. */
+
 char *cartString(struct cart *cart, char *var);
 /* Return string valued cart variable. */
 
@@ -126,6 +129,10 @@ void cartSaveSession(struct cart *cart);
 
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
+
+char *cartFindLike(struct cart *cart, char *wildCard);
+/* Find name of first variable that matches wildCard in cart. 
+ * Return NULL if none. */
 
 void cartResetInDb(char *cookieName);
 /* Clear cart in database. */
