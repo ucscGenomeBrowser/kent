@@ -11,10 +11,11 @@
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.16 2003/08/13 04:42:15 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.17 2003/12/12 11:20:52 kate Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
+boolean noCache = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "   -qChain - net is with respect to the q side of chains.\n"
   "   -maxGap=N - maximum size of gap before breaking. Default %d\n"
   "   -gapOut=gap.tab - Output gap sizes to file\n"
+  "   -noCache - suppress nib cacheing -- use if too many open files\n"
   ,  maxGap
   );
 }
@@ -66,12 +68,23 @@ struct dnaSeq *qSeq;
 boolean isRev = (chain->qStrand == '-');
 struct chain *subChain, *chainToFree;
 int qOffset;
+char path[PATH_LEN];
 
 /* Get query sequence fragment. */
     {
-    struct nibInfo *nib = nibInfoFromCache(qChromHash, nibDir, fill->qName);
+    struct nibInfo *nib;
+    if (noCache)
+        {
+        safef(path, sizeof(path), "%s/%s.nib", nibDir, fill->qName);
+        nib = nibInfoNew(path);
+        }
+    else
+        nib = nibInfoFromCache(qChromHash, nibDir, fill->qName);
     qSeq = nibLoadPartMasked(NIB_MASK_MIXED, nib->fileName, 
     	fill->qStart, fill->qSize);
+    if (noCache)
+        //nibInfoFree(&nib);
+        carefulClose(&nib->f);
     if (isRev)
 	{
         reverseComplement(qSeq->dna, qSeq->size);
@@ -165,6 +178,7 @@ dnaUtilOpen();
 optionHash(&argc, argv);
 qChain = optionExists("qChain");
 maxGap = optionInt("maxGap", maxGap);
+noCache = optionExists("noCache");
 if (argc != 6)
     usage();
 netToAxt(argv[1], argv[2], argv[3], argv[4], argv[5]);
