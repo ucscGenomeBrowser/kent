@@ -5414,3 +5414,41 @@ while (<>) {
     # featureBits mm3 ctgPos
     # 2500661074 bases of 2505900260 (99.791%) in intersection
 
+# FUGU BLAT ALIGNMENTS (DONE 2004-09-08 Fan)
+    ssh kk
+    mkdir /cluster/data/mm5/bed/blatFr1
+    cd /cluster/data/mm5/bed/blatFr1
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/mus/mm5/softNib/*.nib > mouse.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 mouse.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+Completed: 24854 of 24854 jobs
+CPU time in finished jobs:    8215774s  136929.56m  2282.16h   95.09d  0.261 y
+IO & Wait Time:               1415723s   23595.39m   393.26h   16.39d  0.045 y
+Average job time:                 388s       6.46m     0.11h    0.00d
+Longest job:                    46761s     779.35m    12.99h    0.54d
+Submission to last job:         46761s     779.35m    12.99h    0.54d
+
+    # Sort alignments:
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blatFr1
+    pslCat -dir psl | pslSortAcc nohead chrom temp stdin
+    # Processed 1116383 lines into 5 temp files
+    # lift query side to Fugu browser chrUn coordinates
+    liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blatFr1
+    hgLoadPsl -fastLoad -table=blatFr1 mm5 all.psl
+    # Processing all.psl
+    # load of blatFr1 did not go as planned: 1116383 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
+    # a record is already in trackDb as type xeno psl fr1, with colorChromDefault off
