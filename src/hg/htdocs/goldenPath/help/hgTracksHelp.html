@@ -21,7 +21,7 @@
 		<A HREF="/cgi-bin/hgGateway" class="topbar">
 			Genome Browser</A> &nbsp; - &nbsp; 
 		<A HREF="/cgi-bin/hgNear" class="topbar">
-			Family Browser</A> &nbsp; - &nbsp; 
+			Gene Sorter</A> &nbsp; - &nbsp; 
 		<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
 			Blat </A> &nbsp; - &nbsp; 
 		<A HREF="/cgi-bin/hgText?command=start" class="topbar">
@@ -150,7 +150,7 @@ fast sequence-alignment tool similar to BLAST. <A HREF="#BLATAlign">Read more</A
 convenient text-based access to the database underlying the Genome Browser. 
 <A HREF="http://genome.ucsc.edu/goldenPath/help/hgTextHelp.html">Read
 more</A>.
-<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgNear">Gene Family Browser</A> - 
+<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgNear">Gene Sorter</A> - 
 expression, homology, and other information on groups of genes that can
 be related in many ways. 
 <A HREF="http://genome.ucsc.edu/goldenPath/help/hgNearHelp.html">Read more</A>.
@@ -936,7 +936,7 @@ Genome data can be downloaded in two different ways:
 	ftp:</B>The UCSC Genome Bioinformatics ftp site contains download
 	directories for all genome versions currently accessible in the
 	Genome Browser. The ftp command
-	<tt>ftp://genome.ucsc.edu/goldenPath/</tt> will take you to a
+	<tt>ftp://hgdownload.cse.ucsc.edu/goldenPath/</tt> will take you to a
 	directory that contains the genome download directories. This 
 	download method is recommended if you plan to download a large file
 	or multiple files from a single directory. Use the <I>mget</I> command
@@ -1853,6 +1853,38 @@ mapping to band staining is still a megabase or more.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Conservation</B><BR>
+This track shows a measure of evolutionary conservation among several species, 
+based on a phylogenetic hidden Markov model (phylo-HMM). The multiz 
+alignments of the various assemblies were used to generate the annotation.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	In full display mode, the track displays pairwise alignments of several
+	species aligned to the human genome. The pairwise alignments 
+	are displayed in standard UCSC browser "dense" mode using a grey-scale 
+	density gradient.  When zoomed-in to the base-display level, the track 
+	shows the base composition of each alignment. The numbers and symbols on 
+	the "human gap" line indicate the lengths of gaps in the human sequence 
+	at those alignment positions. If the gap size is greater than 9, the 
+	"+" symbol is displayed. The track must be zoomed-in to 30,000
+	or fewer bases to access detailed information about the 
+	alignments at a specific position.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show detailed alignment 
+	information for each of the 4 organisms. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>multizMm3Rn3GalGal2_phyloHMM</I> position table in the Table Browser. 
+	To view the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#MultizAlign"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Coverage</B><BR>
 Shows the coverage level and positions of all clones in the genome.
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -2528,6 +2560,32 @@ GenScan</A> program written by Chris Burge.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>GNF Atlas 2</B><BR>
+This track shows expression data from the GNF (The Genomics Institute of the
+Novartis Research Foundation) Gene Expression Atlas 2. The data contains 2 
+replicates each of 61 mouse tissues and 79 human tissues run over Affymetrix 
+microarrays. For more
+information about the experiments, refer to the description page for this track.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for mRNA tracks. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	In dense or packed display mode, the track shows averages of related
+	tissus. In full display mode, all tissues are displayed. Clicking on an 
+	individual tissue entry shows a gene expression map for all tissues in 
+	the experiment. 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>gnfAtlas2</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>GNF Ratio</B><BR>
 This track shows expression data from GNF (The Genomics Institute of the
 Novartis Research Foundation) using Affymetrix GeneChips. For more
@@ -2586,39 +2644,6 @@ Dawson E. et. al. (2002), "<A HREF="http://bioinformatics.well.ox.ac.uk/~lon/chr
 	<I>haplotype</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
-	TARGET=_blank>here</A>.</TD></TR>
-</TABLE></P>
-
-<P><B>Hu/Mouse/Rat/Chick</B><BR>
-This track shows a measure of evolutionary conservation in human, mouse, rat, 
-and chicken based on a phylogenetic hidden Markov model (phylo-HMM). The multiz 
-alignments of the human, mouse, rat, and chicken genome assemblies were used to 
-generate the annotation.
-
-<TABLE CELLPADDING=0 CELLSPACING=0>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Display conventions:</I></B>
-	In full display mode, the track displays pairwise alignments of mouse, 
-	rat, and chicken aligned to the human genome. The pairwise alignments 
-	are displayed in standard UCSC browser "dense" mode using a grey-scale 
-	density gradient.  When zoomed-in to the base-display level, the track 
-	shows the base composition of each alignment. The numbers and symbols on 
-	the "human gap" line indicate the lengths of gaps in the human sequence 
-	at those alignment positions. If the gap size is greater than 9, the 
-	"+" symbol is displayed. The track must be zoomed-in to 30,000
-	or fewer bases to access detailed information about the 
-	alignments at a specific position.
-	</TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Track details:</I></B> 
-	Clicking on an entry in full display mode will show detailed alignment 
-	information for each of the 4 organisms. </TD></TR>
-		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>multizMm3Rn3GalGal2_phyloHMM</I> position table in the Table Browser. 
-	To view the table definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#MultizAlign"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 

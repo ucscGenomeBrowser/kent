@@ -29,7 +29,7 @@
                         <A HREF="/cgi-bin/hgGateway" class="topbar">
                                 Genome Browser</A> &nbsp; - &nbsp;
                         <A HREF="/cgi-bin/hgNear" class="topbar">
-                                Family Browser</A> &nbsp; - &nbsp;
+                                Gene Sorter</A> &nbsp; - &nbsp;
                         <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
                                 Blat </A> &nbsp; - &nbsp;
                         <A HREF="/cgi-bin/hgText?command=start" class="topbar">
@@ -166,8 +166,8 @@
 				the Genome Browser Known Genes details page for the gene associated with 
 				this protein. 
 				<LI>
-				<B>Gene Family Browser link:</B> Click on the accession number to open 
-				up a Family Browser window displaying the gene associated with this mRNA, 
+				<B>Gene Sorter link:</B> Click on the accession number to open 
+				up a Gene Sorter window displaying the gene associated with this mRNA, 
 				along with a set of related genes.
 				</UL>
 				<P>
