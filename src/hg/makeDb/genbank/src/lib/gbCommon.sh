@@ -48,7 +48,11 @@ gbMkTimeFile() {
 # out-of-date
 gbCmpTimeFiles() {
     local timeFile1=$1 timeFile2=$2
-    if [ ! -e $timeFile2 ] ; then
+    if [ ! -e "$timeFile1" ] ; then
+        echo "gbCmpTimeFiles: $timeFile1 doesn't exist" >&2
+        exit 1
+    fi
+    if [ ! -e "$timeFile2" ] ; then
         return 0  # time2 out-of-date
     fi
     local time1=`awk '{print $1}' $timeFile1`
