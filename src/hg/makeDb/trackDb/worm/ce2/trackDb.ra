@@ -161,6 +161,17 @@ autoScaleDefault Off
 pairwise pwMaf
 speciesOrder c_briggsae
 
+track phastConsElements
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (C. briggsae)
+group compGeno
+priority 105
+visibility hide
+spectrum on
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track blastzSelf
 shortLabel Self Blastz
 longLabel Blastz C. elegans (self)
