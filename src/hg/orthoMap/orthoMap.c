@@ -13,7 +13,7 @@
 #include "psl.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.3 2003/07/22 02:42:25 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.4 2003/07/31 20:23:03 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] =
     {"pslFile", OPTION_STRING},
     {"pslTable", OPTION_STRING},
     {"altGraphXFile", OPTION_STRING},
+    {"altGraphXTable", OPTION_STRING},
     {"netTable", OPTION_STRING},
     {"chainFile", OPTION_STRING},
     {"outBed", OPTION_STRING},
@@ -42,6 +43,7 @@ static char *optionDescripts[] =
     "File containing psl alignments.",
     "Table containing psl alignments.",
     "File containing altGraphX records.",
+    "Table containing altGraphX records.",
     "Datbase table containing net records, i.e. mouseNet.",
     "File containing the chains. Usually I do this on a chromosome basis.",
     "File to output beds to.",
@@ -379,6 +381,9 @@ for(i=0; i<agNew->vertexCount && i>= 0; i++)
 	    if(agNew->edgeStarts[j] == i || agNew->edgeEnds[j] == i)
 		{
 		edgeCountNew--;
+		/* Remove evidence. */
+		ev = slElementFromIx(agNew->evidence, j);
+		slRemoveEl(&agNew->evidence, ev);
 		for(k=j; k<agNew->edgeCount -1; k++)
 		    {
 		    agNew->edgeStarts[k] = agNew->edgeStarts[k+1];
@@ -397,9 +402,6 @@ for(i=0; i<agNew->vertexCount && i>= 0; i++)
 	    if(agNew->edgeEnds[j] > i)
 		agNew->edgeEnds[j]--; 
 	    }
-	/* Remove evidence. */
-	ev = slElementFromIx(agNew->evidence, i);
-	slRemoveEl(&agNew->evidence, ev);
 	i--;
 	agNew->vertexCount--;
 	}
@@ -435,8 +437,8 @@ if(reverse)
 return agNew;
 }
 
-void mapAltGraphXFile(struct sqlConnection *conn, char *db, char *orthoDb, 
-		      char *netTable, char *altGraphXFileName, 
+void mapAltGraphXFile(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom,
+		      char *netTable, char *altGraphXFileName, char *altGraphXTableName,
 		      FILE *agxOut, int *foundCount, int *notFoundCount)
 /* Map over altGraphX Structures from one organism to
 another. Basically create a mapping for the vertices and then reverse
@@ -444,7 +446,17 @@ them if on '-' strand.*/
 {
 struct bed *bed = NULL;
 struct altGraphX *agList = NULL, *ag = NULL, *agNew = NULL;
-agList = altGraphXLoadAll(altGraphXFileName);
+if(altGraphXFileName != NULL)
+    agList = altGraphXLoadAll(altGraphXFileName);
+else if(altGraphXTableName != NULL)
+    {
+    char query[256];
+    safef(query, sizeof(query), "select * from %s where tName like '%s'", altGraphXTableName, chrom);
+    agList = altGraphXLoadByQuery(conn, query);
+    }
+else
+    errAbort("orthoMap::mapAlGraphXFile() - Need a table name or file name to load altGraphX records");
+
 for(ag = agList; ag != NULL; ag = ag->next)
     {
     agNew = mapAltGraphX(ag, conn, db, netTable);
@@ -467,6 +479,7 @@ char *pslFileName = NULL;
 char *outBedName = NULL;
 char *agxOutName = NULL;
 char *altGraphXFileName = NULL;
+char *altGraphXTableName = NULL;
 char *db = NULL;
 char *orthoDb = NULL;
 char *netTable = NULL;
@@ -478,6 +491,7 @@ int foundCount=0, notFoundCount=0;
 char *chrom = NULL;
 agxOutName = optionVal("altGraphXOut", NULL);
 altGraphXFileName = optionVal("altGraphXFile", NULL);
+altGraphXTableName = optionVal("altGraphXTable", NULL);
 pslTableName  = optionVal("pslTable", NULL);
 pslFileName = optionVal("pslFile", NULL);
 outBedName = optionVal("outBed", NULL);
@@ -488,18 +502,18 @@ chrom = optionVal("chrom", NULL);
 
 if(orthoDb == NULL || db == NULL || netTable == NULL || chrom == NULL || 
    (outBedName == NULL && agxOutName == NULL) ||
-   (pslTableName == NULL && pslFileName == NULL && altGraphXFileName == NULL))
+   (pslTableName == NULL && pslFileName == NULL && altGraphXFileName == NULL && altGraphXTableName == NULL))
     usage();
 hSetDb(db);
 hSetDb2(orthoDb);
 conn = hAllocConn();
-if(altGraphXFileName != NULL)
+if(altGraphXFileName != NULL || altGraphXTableName != NULL)
     {
     FILE *agxOut = NULL;
     if(agxOutName == NULL)
 	errAbort("Must specify altGraphXOut if specifying altGraphXFile. Use -help for help");
     agxOut = mustOpen(agxOutName, "w");
-    mapAltGraphXFile(conn, db, orthoDb, netTable, altGraphXFileName, agxOut, &foundCount, &notFoundCount);
+    mapAltGraphXFile(conn, db, orthoDb, chrom, netTable, altGraphXFileName, altGraphXTableName, agxOut, &foundCount, &notFoundCount);
     carefulClose(&agxOut);
     }
 else 
