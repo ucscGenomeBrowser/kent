@@ -9,7 +9,10 @@ O = blat.o
 
 blat: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
-#strip $(HOME)/bin/$(MACHTYPE)/blat
+	strip $(HOME)/bin/$(MACHTYPE)/blat
 
+all:
+	cd ../lib; make
+	make
 tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h
