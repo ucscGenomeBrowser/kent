@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.9 2004/01/20 02:52:15 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.10 2004/01/20 05:29:05 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,7 +24,7 @@ errAbort(
   "   -weird - only get ones with weird splice sites\n"
   "   -cdsUpper - output CDS in update case\n"
   "   -cdsOut=file - write CDS to this tab-separated file, in the form\n"
-  "      acc  start..end\n"
+  "      acc  start  end\n"
   "    where start..end are genbank style, one-based coordinates\n"
   "   -pslOut=psl - output a PSLs for the virtual mRNAs.  Allows virtual\n"
   "    mRNA to be analyzed by tools that work on PSLs\n"
@@ -109,14 +109,14 @@ if (cdsUpper)
     toUpperN(dnaBuf->string+cdsStart, (cdsEnd-cdsStart));
 
 if (cdsFh != NULL)
-    fprintf(cdsFh,"%s\t%d..%d\n", gp->name, cdsStart+1, cdsEnd);
+    fprintf(cdsFh,"%s\t%d\t%d\n", gp->name, cdsStart+1, cdsEnd);
 }
 
 void writePsl(struct genePred *gp, FILE* pslFh)
 /* create a PSL for the virtual mRNA */
 {
 int rnaSize = genePredBases(gp);
-int iRna = 0, iExon;
+int qStart = 0, iExon;
 struct psl psl;
 ZeroVar(&psl);
 
@@ -140,10 +140,7 @@ psl.tStarts = psl.qStarts + gp->exonCount;
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
     int exonSize = gp->exonEnds[iExon] - gp->exonStarts[iExon];
-    int qStart = iRna;
     int qEnd = qStart + exonSize;
-    if (gp->strand[0] == '-')
-        reverseIntRange(&qStart, &qEnd, rnaSize);
     psl.blockSizes[iExon] = exonSize;
     psl.qStarts[iExon] = qStart;
     psl.tStarts[iExon] = gp->exonStarts[iExon];
@@ -152,7 +149,10 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
         /* count intron as bases inserted */
         psl.tBaseInsert += gp->exonStarts[iExon]-gp->exonEnds[iExon-1];
         }
+    psl.blockCount++;
+    qStart = qEnd;
     }
+assert(qStart == rnaSize);
 
 pslTabOut(&psl, pslFh);
 freeMem(psl.blockSizes);
