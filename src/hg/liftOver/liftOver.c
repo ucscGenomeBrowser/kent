@@ -9,9 +9,10 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.9 2003/07/10 17:50:08 baertsch Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.10 2003/12/08 23:02:05 angie Exp $";
 
 double minMatch = 0.95;
+double minBlocks = 1.00;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,7 +32,11 @@ errAbort(
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
   "   -pslT - File is in psl format, map target side only\n"
-  , minMatch
+  "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map.\n"
+  "                  Default %3.2f\n"
+  "   -fudgeThick  If thickStart/thickEnd is not mapped, use the closest \n"
+  "                mapped base.  Recommended if using -minBlocks.\n"
+  , minMatch, minBlocks
   );
 }
 
@@ -425,9 +430,12 @@ int bDiff, rStart = 0;
 bool gotStart = FALSE;
 int rCount = slCount(r), goodCount = 0;
 int thickStart = *pThickStart, thickEnd = *pThickEnd;
+int fudgeThickStart = 0, fudgeThickEnd = 0;
 bool gotThickStart = FALSE, gotThickEnd = FALSE;
+bool gotFudgeThickStart = FALSE;
 bool needThick = (thickStart != thickEnd);
 boolean done = FALSE;
+static char bErr[512];
 char *err = NULL;
 
 *pRangeList = NULL;
@@ -442,6 +450,7 @@ if (b == NULL)
     *retGood = NULL;
     *retBad = r;
     *retError = "Empty block list in intersecting chain";
+    return;
     }
 nextR = r->next;
 for (;;)
@@ -477,11 +486,23 @@ for (;;)
 	    {
 	    *pThickStart = thickStart + b->qStart - b->tStart;
 	    gotThickStart = TRUE;
+	    fudgeThickStart = *pThickStart;
+	    gotFudgeThickStart = TRUE;
 	    }
 	if (b->tStart <= thickEnd && thickEnd <= b->tEnd)
 	    {
 	    *pThickEnd = thickEnd + b->qStart - b->tStart;
 	    gotThickEnd = TRUE;
+	    fudgeThickEnd = *pThickEnd;
+	    }
+	if (!gotFudgeThickStart && thickStart < b->tEnd)
+	    {
+	    fudgeThickStart = b->qStart;
+	    gotFudgeThickStart = TRUE;
+	    }
+	if (b->tEnd <= thickEnd)
+	    {
+	    fudgeThickEnd = b->qEnd;
 	    }
 	}
     if (b->tStart <= r->start && r->start < b->tEnd && !gotStart)
@@ -531,9 +552,27 @@ slReverse(&goodList);
 slReverse(&badList);
 if (needThick)
     {
-    if (!gotThickStart || !gotThickEnd)
+    if (goodList != NULL && !gotFudgeThickStart)
+	fudgeThickStart = fudgeThickEnd = goodList->start;
+    if (!gotThickStart)
 	{
-	err = "Can't find thickStart/thickEnd";
+	if (optionExists("fudgeThick"))
+	    {
+	    if (goodList != NULL)
+		*pThickStart = fudgeThickStart;
+	    }
+	else
+	    err = "Can't find thickStart/thickEnd";
+	}
+    if (!gotThickEnd)
+	{
+	if (optionExists("fudgeThick"))
+	    {
+	    if (goodList != NULL)
+		*pThickEnd = fudgeThickEnd;
+	    }
+	else
+	    err = "Can't find thickStart/thickEnd";
 	}
     }
 else
@@ -542,7 +581,16 @@ else
         *pThickStart = *pThickEnd = goodList->start;
     }
 if (goodCount != rCount)
-    err = "Boundary problem";
+    {
+    double goodRatio = (double)goodCount / rCount;
+    if (goodRatio < minBlocks)
+	{
+	safef(bErr, sizeof(bErr),
+	      "Boundary problem: need %d, got %d, diff %d, mapped %.1f",
+	      rCount, goodCount, rCount - goodCount, goodRatio);
+	err = bErr;
+	}
+    }
 *retGood = goodList;
 *retBad = badList;
 *retError = err;
@@ -1140,6 +1188,7 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 minMatch = optionFloat("minMatch", minMatch);
+minBlocks = optionFloat("minBlocks", minBlocks);
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], argv[3], argv[4]);
