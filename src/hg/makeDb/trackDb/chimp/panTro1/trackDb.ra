@@ -74,4 +74,4 @@ longLabel Deletions in Human (hg16-Jul 03) Relative to Chimp
 group compGeno
 priority 147
 visibility hide
-type bed
+type bed 4 .
