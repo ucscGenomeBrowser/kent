@@ -16,9 +16,10 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "hgSeq.h"
+#include "agpGap.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.1 2004/07/20 20:47:40 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.2 2004/07/20 21:49:53 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -33,6 +34,36 @@ for (region = regionList; region != NULL; region = region->next)
 	total += region->end - region->start;
     }
 return total;
+}
+
+long long gapsInRegion(struct sqlConnection *conn, struct region *regionList)
+/* Return count of gaps in all regions. */
+{
+long long gapBases = 0;
+char *splitTable = chromTable(conn, "gap");
+if (sqlTableExists(conn, splitTable))
+    {
+    struct region *region;
+    for (region = regionList; region != NULL; region = region->next)
+	{
+	int rowOffset;
+	char **row;
+	struct agpGap gap;
+	struct sqlResult *sr = hRangeQuery(conn, "gap", 
+		region->chrom, region->start, region->end, 
+		NULL, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    agpGapStaticLoad(row + rowOffset, &gap);
+	    if (gap.chromStart < region->start) gap.chromStart = region->start;
+	    if (gap.chromEnd > region->end) gap.chromEnd = region->end;
+	    gapBases += gap.chromEnd - gap.chromStart;
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+freez(&splitTable);
+return gapBases;
 }
 
 struct covStats
@@ -55,7 +86,9 @@ AllocVar(cov);
 cov->region = region;
 cov->minBases = BIGNUM;
 if (region != NULL)
+    {
     cov->bits = bitAlloc(region->end - region->start);
+    }
 return cov;
 }
 
@@ -123,7 +156,8 @@ for (cov = list; cov != NULL; cov = cov->next)
 return tot;
 }
 
-void covStatsInitOnRegions(struct region *regionList, 
+void covStatsInitOnRegions(
+	struct region *regionList, 
 	struct covStats **retList,
 	struct hash **retHash)	/* Hash is keyed by chrom */
 /* Make up list/hash of covsStats, one for each region. */
@@ -214,7 +248,8 @@ static void percentStatRow(char *label, long long p, long long q)
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
 printLongWithCommas(stdout, p);
-hPrintf(" (%3.2f%%)", 100.0 * p/q);
+if (q != 0)
+    hPrintf(" (%3.2f%%)", 100.0 * p/q);
 hPrintf("</TD></TR>\n");
 }
 
@@ -238,19 +273,28 @@ void doOutSummaryStats(struct trackDb *track, struct sqlConnection *conn)
 struct bed *bedList;
 struct region *regionList = getRegionsWithChromEnds();
 long long regionSize = basesInRegion(regionList);
+long long gapTotal = gapsInRegion(conn, regionList);
+long long realSize = regionSize - gapTotal;
+long startTime, loadTime, calcTime;
 struct covStats *covList, *cov;
 struct hTableInfo *hti = getHti(database, track->tableName);
 int fieldCount = hTableInfoBedFieldCount(hti);
+
+
 htmlOpen("Summary Stats for %s", track->shortLabel);
+startTime = clock1000();
 bedList = getFilteredBedsInRegion(conn, track);
+loadTime = clock1000() - startTime;
 
 hTableStart();
-numberStatRow("bases in region", regionSize);
-numberStatRow("item count", slCount(bedList));
+startTime = clock1000();
 covList = calcSpanOverRegions(regionList, bedList);
 cov = covStatsSum(covList);
-percentStatRow("item bases", cov->basesCovered, regionSize);
-percentStatRow("item total", cov->sumBases, regionSize);
+numberStatRow("bases in region", regionSize);
+numberStatRow("bases in gaps", gapTotal);
+numberStatRow("item count", slCount(bedList));
+percentStatRow("item bases", cov->basesCovered, realSize);
+percentStatRow("item total", cov->sumBases, realSize);
 numberStatRow("smallest item", cov->minBases);
 numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
 numberStatRow("biggest item", cov->maxBases);
@@ -266,14 +310,18 @@ if (fieldCount >= 12)
     hPrintf("<TR><TD>block count</TD><TD ALIGN=RIGHT>");
     printLongWithCommas(stdout, cov->itemCount);
     hPrintf("</TD><TR>\n");
-    percentStatRow("block bases", cov->basesCovered, regionSize);
-    percentStatRow("block total", cov->sumBases, regionSize);
+    percentStatRow("block bases", cov->basesCovered, realSize);
+    percentStatRow("block total", cov->sumBases, realSize);
     numberStatRow("smallest block", cov->minBases);
     numberStatRow("average block", round((double)cov->sumBases/cov->itemCount));
     numberStatRow("biggest block", cov->maxBases);
     covStatsFreeList(&covList);
     hTableEnd();
     }
+calcTime = clock1000() - startTime;
+
+hPrintf("load time: %5.3f  calculation time: %5.3f<BR>\n",
+	0.001*loadTime, 0.001*calcTime);
 htmlClose();
 }
 
