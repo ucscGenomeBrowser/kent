@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.5 2004/03/24 01:01:18 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.6 2004/03/24 16:54:56 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -175,7 +175,8 @@ wd->next = (struct wiggleData *)NULL;	/*	redundant safety	*/
 
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, int tableId,
-	boolean (*wiggleCompare)(int tableId, double value))
+	boolean (*wiggleCompare)(int tableId, double value),
+	    char *constraints)
 /*  return linked list of wiggle data between winStart, winEnd */
 {
 struct wiggleData *ret = (struct wiggleData *) NULL;
@@ -198,12 +199,27 @@ int spanCount = 0;
 struct hashCookie cookie;
 struct wiggleData *wigData = (struct wiggleData *) NULL;
 struct wiggleData *wdList = (struct wiggleData *) NULL;
+boolean bewareConstraints = FALSE;
 
 spans = newHash(0);	/*	a listing of all spans found here	*/
 
-snprintf(query, sizeof(query),
-    "SELECT span from %s where chrom = '%s' group by span",
-    tableName, chromName );
+/*	Are the constraints going to interfere with our span search ? */
+if (constraints)
+    {
+    char *c = cloneString(constraints);
+    tolowers(c);
+    if (stringIn("span",c))
+	bewareConstraints = TRUE;
+    }
+
+if (bewareConstraints)
+    snprintf(query, sizeof(query),
+	"SELECT span from %s where chrom = '%s' AND %s group by span",
+	tableName, chromName, constraints );
+else
+    snprintf(query, sizeof(query),
+	"SELECT span from %s where chrom = '%s' group by span",
+	tableName, chromName );
 
 /*	make sure table exists before we try to talk to it
  *	If it does not exist, we return a null result
@@ -239,7 +255,14 @@ sqlFreeResult(&sr);
 cookie = hashFirst(spans);
 while ((el = hashNext(&cookie)) != NULL)
     {
-    snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
+    if (bewareConstraints)
+	{
+	snprintf(whereSpan, sizeof(whereSpan), "span = %s AND %s", el->name,
+	    constraints);
+	}
+    else
+	snprintf(whereSpan, sizeof(whereSpan), "span = %s", el->name);
+
     sr = hOrderedRangeQuery(conn, tableName, chromName, winStart, winEnd,
         whereSpan, &rowOffset);
     rowCount = 0;
