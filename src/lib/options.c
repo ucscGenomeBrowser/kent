@@ -99,17 +99,36 @@ if (ret == NULL)
 return ret;
 }
 
+static char *optGetNum(char *name)
+/* Make sure option is numerical if it exists. */
+{
+char *s = optGet(name);
+if (s != NULL)
+    {
+    char c = s[0];
+    if (!(isdigit(s[0]) || (s[0] == '-' && isdigit(s[1]))))
+	errAbort("option %s has to be numerical", name);
+    }
+return s;
+}
+
 int optionInt(char *name, int defaultVal)
 /* Return integer value of named option, or default value
  * if not set. */
 {
-char *s = optGet(name);
+char *s = optGetNum(name);
 if (s == NULL)
     return defaultVal;
-if ((s[0] == '-' && isdigit(s[1])) || isdigit(s[0]))
-    return atoi(s);
-errAbort("option %s has to be integer valued", name);
-return 0;
+return atoi(s);
+}
+
+float optionFloat(char *name, float defaultVal)
+/* Return float value of named option or default. */
+{
+char *s = optGetNum(name);
+if (s == NULL)
+    return defaultVal;
+return atof(s);
 }
 
 boolean optionExists(char *name)
