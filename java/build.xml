@@ -87,7 +87,7 @@
     </target>
 
     <target name="fullTest" depends="init,setFullTest,someTest"
-	   description="Full automated test of site.">
+	   description="Overnight automated test of site.">
     </target>
 
 
