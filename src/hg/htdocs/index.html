@@ -113,7 +113,9 @@
 		    Browser zooms and scrolls over chromosomes, showing the work of annotators 
 		    worldwide.  The Family Browser shows expression, homology and other 
 		    information on groups of genes that can be related in many ways.  
-		    The Table Browser provides convenient access to the underlying database.  
+		    The Proteome Browser displays protein property data and
+		    links to a wealth of related information. The Table Browser 
+		    provides convenient access to the underlying database.  
 		    Blat quickly maps your sequence to the genome.
 	            </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
@@ -139,83 +141,72 @@
                     <TR><TD WIDTH=10></TD>
                     <TD>
 	            <P> 
+		    <FONT FACE="courier" SIZE=3><B>10 Mar. 2004  - Introducing the UCSC Proteome Browser</B></FONT><BR>
+		    <P>
+		    We are proud to announce a new addition to the
+		    UCSC family of genome browsing and analysis tools.  The UCSC Proteome 
+		    Browser presents a rich set of useful protein properties as well as 
+		    links to several protein and genomic data sources 
+		    on the Web. For the first time, Genome Browser users can have 
+		    both the genome and proteome worlds at their fingertips 
+		    simultaneously. The browser is accessible from the Genome
+		    Browser via the &quot;Proteome 
+		    Browser&quot; link on the details page of any gene in the 
+		    Known Genes track. The initial release is available only on
+		    Human Build 34 (hg16); Proteome Browsers for the latest mouse
+		    and rat assemblies will follow.
+		    <P>
+		    For each protein, the browser displays the corresponding 
+		    genomic exon structure and its amino acid sequence. 
+		    Several protein property tracks are aligned to the sequence 
+		    to help a user pinpoint regions of interest. 
+		    Additional properties are plotted with histograms against 
+		    genome-wide protein data to 
+		    highlight significant trends and anomalies. 
+		    <P>
+		    The Proteome Browser is tightly coupled with the UCSC Genome
+		    Browser and UCSC Gene Family Browser, allowing easy navigation 
+		    among the tools. For example, clicking on an exon in the
+		    Proteome Browser tracks display brings up the Genome Browser tracks
+		    page showing 
+		    the genomic region of the exon together with a wealth of
+		    relevant data. Similarly, clicking on the Proteome Browser's 
+		    &quot;Family Browser&quot; link
+		    displays related gene family information. 
+		    <P>
+		    The v1.0 release of the browser offers a variety of 
+		    data tracks, including amino acid and DNA sequence, exon 
+		    boundaries, hydrophobicity, polarity, cysteine and predicted 
+		    glycosylation sites, Superfamily/SCOP domains, and amino acid 
+		    anomalies. In addition, the browser includes histograms of 
+		    several properties on a genome-wide scale: pI, molecular 
+		    weight, exon count, number of cysteines, InterPro domain 
+		    counts, hydrophobicity, amino acid frequencies and anomalies.
+		    <P>
+		    The Proteome Browser also provides links to a variety of
+		    external sites containing supplementary information on the protein,
+		    including SwissProt, InterPro and 
+		    Pfam domains, 3-D structures at PDB and UCSF ModBase, and 
+		    pathway maps of KEGG, BioCarta (CGAP), and BioCyc.
+		    <P>
+		    We'd like to thank SwissProt for sharing their high quality 
+		    protein data and the pI calculation algorithm, as well as the other
+		    external data sites linked to by the Proteome Browser.
+		    We'd also like to acknowledge the hard work of Fan Hsu, lead 
+		    engineer on the project, and Jim Kent, Tom Pringle,
+		    Donna Karolchik, and Robert Kuhn. The project received
+		    technical input, review and support from several other members of 
+		    the UCSC Bioinformatics group.</P>
+		    <HR>
 		    <FONT FACE="courier" SIZE=3><B>1 Mar. 2004  - Chicken Draft Assembly Available</B></FONT><BR>
 		    <P>
 	   	    We've added the chicken genome to the collection of assemblies available
-		    in the UCSC Genome Browser and Blat Server.
+		    in the UCSC Genome Browser and Blat Server. 
 		    The Feb. 2004 assembly (UCSC version galGal2) was produced by 
 	 	    the Genome Sequencing Center at the Washington University 
-		    School of Medicine in St. Louis. The source of
-		    this sequence was a female inbred Red Jungle Fowl (<em>Gallus 
-		    gallus</em>), the ancestor of domestic chickens. The chicken
-		    genome is the first of the avian genomes to be sequenced.
+		    School of Medicine in St. Louis. 
+		    <A HREF="/goldenPath/newsarch.html#030104">Read more</A>.
 		    <P>
-		    The genome has been sequenced 
-		    to 6.63X coverage. Approximately 88% of the sequence has been 
-		    anchored to chromosomes, which include autosomes 1-24, 26-28,
-		    and 32, and sex chromosomes W and Z. (In contrast to mammals,
-		    the female chicken is heterogametic (ZW) and the male is 
-		    homogametic (ZZ).) The remaining unanchored
-	            contigs have been concatenated into the virtual chromosome 
-		    &quot;chrUn&quot;, separated by gaps of 10,000 bp. The 
-		    chicken mitochondrial sequence is also available as the 
-		    virtual chromosome &quot;chrM&quot;. 
-		    <P>
-		    Washington University School of Medicine in St. Louis
-		    created the physical map for this release. Genetic 
-		    mapping and linkage analysis were produced through a 
-		    collaborative effort led by Martien Groenen at Wageningen 
-		    University in the Netherlands.
-		    SNP data based on three strains of domestic
-		    chickens will soon be available in GenBank from an 
-		    international team of scientists led by the Beijing Genomics 
-		    Institute in China and supported by the Wellcome Trust in 
-		    Britain. 
-		    <P>
-		    The chicken is considered to be the premier non-mammalian
-		    vertebrate model organism. It plays an important role in 
-		    the research of viruses and cancer, and is a primary 
-		    model for the study of embryology and development. From an 
-		    evolutionary standpoint, the chicken's position
-		    provides a good intermediate data point between mouse and
-		    fugu. Comparative genomics analyses between the chicken and
-		    other sequenced organisms should yield valuable
-		    information on the evolution of gene order and 
-		    arrangement, thus improving our understanding of the
-		    structure and function of genes.
-		    <P>
-		    To facilitate comparative genomics studies, 
-		    alignments of the chicken sequence to the human genome 
-		    will be available in the Genome Browser later this week. 
-		    Downloads of the comparative data are currently 
-		    available through the Downloads page (see below).
-		    <P>
-		    For more information about the release of the chicken genome 
-		    assembly, see the NHGRI 
-		    <A HREF="http://www.nhgri.nih.gov/11510730" 
-		    TARGET=_blank>press release</A>. 
-		    Additional background on the rationale behind the chicken genome
-		    sequencing effort can be found in the  
-		    <A HREF="http://www.genome.wustl.edu/projects/chicken/Chicken_Genome.pdf" 	
-		    TARGET=_blank>sequencing proposal</A>.
-		    <P>
-		    Bulk downloads of the chicken sequence and annotations may be obtained from 
-		    the Genome Browser 
-		    <A HREF="ftp://genome.cse.ucsc.edu/goldenPath/galGal2/">FTP server</A> or 
-		    <A HREF="/downloads.html#chicken">Downloads</A> page. These data have
-		    <A HREF="/goldenPath/credits.html#chicken_use">specific conditions for use</A>.
-		    <P>
-                    We'd like to thank the Genome Sequencing Center at the Washington University
-		    School of Medicine in St. Louis, Wageningen University, and 
-		    the Chicken Mapping Consortium for providing these data. 
-                    The chicken browser annotation tracks were generated by UCSC and 
-		    collaborators worldwide. See the 
-		    <A HREF="/goldenPath/credits.html#chicken_credits">Credits</A> 
-		    page for a detailed list of acknowledgements. The UCSC Chicken Genome Browser
-		    was produced by Angie Hinrichs, Heather Trumbower, Rachel Harte, and Donna
-	   	    Karolchik.
-		    <P></P>
-		    <HR>
 		    <FONT FACE="courier" SIZE=3><B>23 Feb. 2004  - Chimpanzee Draft Assembly Released: </B></FONT>
 		    We are happy to announce the release of a Genome Browser and Blat server for the
 		    chimpanzee (<EM>Pan troglodytes</EM>). 
@@ -236,11 +227,6 @@
 		    We've discovered a handful of hg16 chrN_random_gap 
 		    and chrN_random_gold tables on our public server that are 
 		    out of date. <A HREF="/goldenPath/newsarch.html#011604">Read more</A>.
-		    <P>
-		    <FONT FACE="courier" SIZE=3><B>14 Jan. 2004 - Yeast Genome Released:</B></FONT>
-		    We are proud to add yeast
-		    (<em>S. cerevisiae</em>) to our growing list
-		    of genome assemblies. <A HREF="/goldenPath/newsarch.html#011404">Read more</A>.
     	            </TD><TD WIDTH=15>
                  </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
