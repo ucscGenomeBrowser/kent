@@ -17,6 +17,7 @@ int count=0;
 hSetDb(db);
 names = hAllChromNames();
 chromCount = slCount(names);
+assert(chromNames == NULL && chromRanges == NULL);
 AllocArray(chromNames, chromCount);
 AllocArray(chromRanges, chromCount);
 for(name=names; name != NULL; name = name->next)
@@ -27,6 +28,24 @@ for(name=names; name != NULL; name = name->next)
     count++;
     }
 slFreeList(&names);
+}
+
+void chromKeeperInitChroms(struct slName *nameList, int maxChromSize)
+/* Initialize a chrom keeper with a list of names and a size that
+   will be used for each one. */
+{
+struct slName *name = NULL;
+int count=0;
+chromCount = slCount(nameList);
+assert(chromNames == NULL && chromRanges == NULL);
+AllocArray(chromNames, chromCount);
+AllocArray(chromRanges, chromCount);
+for(name=nameList; name != NULL; name = name->next)
+    {
+    chromRanges[count] = binKeeperNew(0,maxChromSize);
+    chromNames[count] = cloneString(name->name);
+    count++;
+    }
 }
 
 void chromKeeperAdd(char *chrom, int chromStart, int chromEnd, void *val)
@@ -66,4 +85,19 @@ for(i=0; i<chromCount; i++)
 if(!found)
     errAbort("chromKeeper::chromKeeperFind() - Don't recognize chrom %s", chrom);
 return be;
+}
+
+void chromKeeperRemove(char *chrom, int chromStart, int chromEnd, void *val)
+/* Remove the item from the proper chromKeeper. */
+{
+int i=0;
+boolean added = FALSE;
+for(i=0; i<chromCount; i++)
+    {
+    if(sameString(chrom,chromNames[i])) 
+	{
+	binKeeperRemove(chromRanges[i], chromStart, chromEnd, val);
+	break;
+	}
+    }
 }
