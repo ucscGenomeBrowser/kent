@@ -1316,9 +1316,9 @@ if (dotQ)
 return ret;
 }
 
-void oneJobList(struct paraMessage *pm, struct dlList *list, 
+boolean oneJobList(struct paraMessage *pm, struct dlList *list, 
 	boolean sinceStart)
-/* Write out one job list. */
+/* Write out one job list. Return FALSE if there is a problem. */
 {
 struct dlNode *el;
 struct job *job;
@@ -1337,8 +1337,10 @@ for (el = list->head; !dlEnd(el); el = el->next)
     else
         appendLocalTime(pm, job->submitTime);
     pmPrintf(pm, " %s", job->cmd);
-    pmSend(pm, rudpOut);
+    if (!pmSend(pm, rudpOut))
+        return FALSE;
     }
+return TRUE;
 }
 
 void listJobs(struct paraMessage *pm)
@@ -1349,20 +1351,23 @@ struct user *user;
 struct dlNode *bNode;
 struct batch *batch;
 
-oneJobList(pm, runningJobs, TRUE);
+if (!oneJobList(pm, runningJobs, TRUE))
+    return;
 for (user = userList; user != NULL; user = user->next)
     {
     for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
         {
 	batch = bNode->val;
-	oneJobList(pm, batch->jobQueue, FALSE);
+	if (!oneJobList(pm, batch->jobQueue, FALSE))
+	    return;
 	}
     }
 pmSendString(pm, rudpOut, "");
 }
 
 boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running)
-/* Write out one job list in pstat format. */
+/* Write out one job list in pstat format.  Return FALSE if there is
+ * a problem. */
 {
 struct dlNode *node;
 struct job *job;
