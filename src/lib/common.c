@@ -1193,8 +1193,8 @@ return - A pointer to the first occurence of the desired substring
 char *haystackCopy = NULL;
 char *needleCopy = NULL;
 int index = 0;
-int haystackLen = NULL;
-int needleLen = NULL;
+int haystackLen = 0;
+int needleLen = 0;
 
 if (NULL == haystack) 
     {
