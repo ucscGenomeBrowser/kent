@@ -986,6 +986,14 @@ altColor 160,0,0
 visibility hide
 type sample 9
 
+track binomialCons2
+shortLabel Binomial2
+longlabel Binomial2 Conservation Scores
+priority 41.0021
+color 100,100,100
+altColor 0,160,0
+visibility hide
+type sample 9
 
 track zoo
 shortLabel ZooSeq
