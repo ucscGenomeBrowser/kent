@@ -17,15 +17,15 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.20 2004/04/20 19:23:53 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.21 2004/04/20 23:45:09 kate Exp $";
 
 /* CGI Variables */
-#define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
-#define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
-#define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
-#define HGLFT_FROMDB_VAR "fromDb"               /* FROM assembly */
-#define HGLFT_TODB_VAR "toDb"                   /* TO assembly */
-#define ERROR_HELP      "errorHelp"
+#define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
+#define HGLFT_DATAFILE_VAR "hglft_dataFile"     /* file of data to convert */
+#define HGLFT_DATAFORMAT_VAR "hglft_dataFormat" /* format of data to convert */
+#define HGLFT_FROMDB_VAR "hglft_fromDb"         /* FROM assembly */
+#define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
+#define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
 
 
 /* Global Variables */
@@ -48,10 +48,9 @@ char *formatList[] =
 /* Javascript to support New Assembly pulldown when Orig Assembly changes */
 /* Copies selected value from the Original Assembly pulldown to a hidden form
 */
-//char *onChangeFromDb = "onchange=\"document.dbForm.fromDb.value = document.mainForm.fromDb.options[document.mainForm.fromDb.selectedIndex].value; document.dbForm.toDb.value = 0; document.dbForm.submit();\"";
 char *onChangeFromDb = 
-"onchange=\"document.dbForm.fromDb.value = "
-"document.mainForm.fromDb.options[document.mainForm.fromDb.selectedIndex].value;"
+"onchange=\"document.dbForm.hglft_fromDb.value = "
+"document.mainForm.hglft_fromDb.options[document.mainForm.hglft_fromDb.selectedIndex].value;"
 "document.dbForm.submit();\"";
 
 void webMain(char *organism, char *fromDb, char *toDb, char *dataFormat)
@@ -91,7 +90,7 @@ cgiTableFieldEnd();
 /* from assembly */
 cgiSimpleTableFieldStart();
 printAllAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, 
-                                FALSE, onChangeFromDb);
+                                TRUE, onChangeFromDb);
 cgiTableFieldEnd();
 
 /* to assembly */
@@ -99,7 +98,7 @@ cgiSimpleTableFieldStart();
 if (dbList)
     dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(fromDb);
-printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, FALSE, "");
+printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -167,8 +166,10 @@ printf("</FORM>\n");
 /* Hidden form to support menu pulldown behavior */
 printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
        " METHOD=\"GET\" NAME=\"dbForm\">"
-       "<input type=\"hidden\" name=\"fromDb\" value=\"%s\">\n", fromDb);
-printf("<input type=\"hidden\" name=\"toDb\" value=\"%s\">\n", toDb);
+       "<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
+                        HGLFT_FROMDB_VAR, fromDb);
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
+                        HGLFT_TODB_VAR, toDb);
 cartSaveSession(cart);
 puts("</FORM><BR>");
 
@@ -233,7 +234,7 @@ char *fromDb, *toDb;
 char *err = NULL;
 cart = theCart;
 
-if (cgiOptionalString(ERROR_HELP))
+if (cgiOptionalString(HGLFT_ERRORHELP_VAR))
     {
     puts("<PRE>");
     puts(liftOverErrHelp());
@@ -339,7 +340,7 @@ if (userData != NULL && userData[0] != '\0')
             }
         puts("</PRE>\n");
         puts("</BLOCKQUOTE>\n");
-        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", ERROR_HELP);
+        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", HGLFT_ERRORHELP_VAR);
         }
     }
 webDataFormats();
@@ -352,6 +353,7 @@ cartWebEnd();
 char *excludeVars[] = {"Submit", "submit", "SubmitFile",
                         HGLFT_USERDATA_VAR,
                         HGLFT_DATAFILE_VAR,
+                        HGLFT_ERRORHELP_VAR,
                         NULL};
 
 int main(int argc, char *argv[])
