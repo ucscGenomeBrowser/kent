@@ -25,7 +25,6 @@ BAD_DIRS = \
 	geneBounds \
 	geneOverlap \
 	hgBatch \
-	makePai \
 	makeSeqs \
 	ooCloneOverlaps \
 	oneShot \
