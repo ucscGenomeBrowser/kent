@@ -534,6 +534,14 @@ spectrum on
 type bed 12
 url http://www.perlegen.com/haplotype/blk/$$.html
 
+track ancientR
+shortLabel Ancient Repeats
+longLabel Human/Mouse Ancient Repeats
+priority 33.5
+visibility hide
+spectrum on
+type bed 12
+private on
 
 track rmsk
 shortLabel RepeatMasker
@@ -571,13 +579,4 @@ priority 40
 visibility dense
 chromosomes chr22,
 type bed 15 +
-
-track ancientR
-shortLabel Ancient Repeats
-longLabel Human/Mouse Ancient Repeats
-priority 41
-visibility dense
-spectrum on
-type bed 12
-private on
 
