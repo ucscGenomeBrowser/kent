@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.30 2004/12/02 00:41:36 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.31 2004/12/03 17:58:05 kent Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -400,7 +400,7 @@ else
 		    dupeCount, db, keyField->table, keyField->field, dupe);
 	    freez(&dupe);
 	    }
-	verbose(1, "%s.%s.%s - %d unique identifiers\n", 
+	verbose(2, " %s.%s.%s - %d unique identifiers\n", 
 		db, keyField->table, keyField->field, itemCount);
 	}
     slFreeList(&tableList);
@@ -522,7 +522,7 @@ if (conn != NULL)
 	}
     if (tableList != NULL)
 	{
-	verbose(1, "%s.%s.%s - hits %d of %d\n", db, jf->table, jf->field, hits, total);
+	verbose(1, " %s.%s.%s - hits %d of %d\n", db, jf->table, jf->field, hits, total);
 	hitsNeeded = round(total * jf->minCheck);
 	if (hits < hitsNeeded)
 	    {
@@ -583,11 +583,10 @@ if (keyHash == NULL)
 	    keyDb = keyField->dbList->name;
 	else
 	    {
-	    warn("Error line %d of %s:\n"
-		 "Key (first) field contains multiple databases\n"
-		 "but not all databases in other fields."
-		 , keyField->lineIx, joiner->fileName);
-	    return;
+	    struct slName *lastDb = slLastEl(keyField->dbList);
+	    keyDb = lastDb->name;
+	    verbose(1, " note - using %s database as reference for identifier %s\n",
+	    	keyDb, js->name);
 	    }
 	}
     keyHash = localKeyHash = readKeyHash(keyDb, joiner, keyField, 
@@ -622,7 +621,12 @@ struct keyHitInfo *khiList = NULL;
 if ((keyField = js->fieldList) == NULL)
     return;
 if (slCount(keyField->dbList) == 1)
-    keyHash = readKeyHash(keyField->dbList->name, joiner, keyField, &khiList);
+    {
+    if (sameString(keyField->dbList->name, preferredDb))
+	keyHash = readKeyHash(keyField->dbList->name, joiner, keyField, &khiList);
+    else
+        return;
+    }
 
 /* Check key for database(s) */
 if (preferredDb)
@@ -639,13 +643,15 @@ hashFree(&keyHash);
 
 void joinerValidateKeys(struct joiner *joiner, 
 	char *oneIdentifier, char *oneDatabase)
-/* Make sure that joiner refers to fields that exist at
- * least somewhere. */
+/* Validate all keys in joiner.  If oneDatabase is non-NULL then do it on
+ * that database.  Otherwise do it on all databases. */
 {
 struct joinerSet *js;
 int validations = 0;
+verbose(1, "Checking keys on database %s\n", oneDatabase);
 for (js = joiner->jsList; js != NULL; js = js->next)
     {
+    verbose(2, "identifier %s\n", js->name);
     if (oneIdentifier == NULL || wildMatch(oneIdentifier, js->name))
 	{
         jsValidateKeys(joiner, js, oneDatabase);
