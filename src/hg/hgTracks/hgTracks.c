@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.669 2004/02/07 18:44:38 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.670 2004/02/12 04:02:09 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6575,7 +6575,7 @@ for (track = trackList; track != NULL; track = track->next)
 		y += fontHeight;
 	    start = 1;
 	    if( track->subType == lfSubSample && track->items == NULL )
-		y += track->lineHeight;
+		 y += track->lineHeight;
 
 	    for (item = track->items; item != NULL; item = item->next)
 		{
@@ -6845,6 +6845,7 @@ wordCount = chopLine(typeLine, words);
 if (wordCount <= 0)
     return;
 type = words[0];
+
 if (sameWord(type, "bed"))
     {
     int fieldCount = 3;
@@ -6870,6 +6871,10 @@ if (sameWord(type, "bed"))
 else if (sameWord(type, "wig"))
     {
     wigMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "wigMaf"))
+    {
+    wigMafMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "sample"))
     {
@@ -7430,6 +7435,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("xenoRefGene", refGeneMethods);
+registerTrackHandler("mappedRefSeq", refGeneMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
