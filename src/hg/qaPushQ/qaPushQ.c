@@ -29,7 +29,7 @@
 #include "dbDb.h"
 
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.39 2004/05/24 17:29:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.40 2004/05/24 18:12:29 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2942,7 +2942,7 @@ webStart(NULL, "Track and Table Releases");
 
 //printf("%s %s %s %s</br>\n",centraldb, host, user, password);
 
-// is this necessary? it sucks!
+// is this necessary? only allowed one connection at a time?
 sqlDisconnect(&conn);
 
 betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
@@ -2967,24 +2967,21 @@ sqlFreeResult(&sr);
 dbDbTemp.name        = cloneString("zoo1");
 dbDbTemp.description = cloneString("Jun. 2002");
 dbDbTemp.organism    = cloneString("NISC (Zoo)");
+dbDbTemp.genome      = cloneString("NISC (Zoo)");
 slAddHead(&kiList, &dbDbTemp);
 
 slReverse(&kiList);
 sqlDisconnect(&betaconn);
 
-// is this necessary? it sucks! are we really only allowed one remoteconn at a time?
+// is this necessary? are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
-    if (strncmp(ki->organism,"Worm",4)==0)
+    if (!sameString(ki->organism, ki->genome))
 	{
-	safef(tempName,sizeof(tempName),ki->scientificName);
-	}
-    if (strncmp(ki->organism,"Yeast",5)==0)
-	{
-	safef(tempName,sizeof(tempName),ki->scientificName);
+	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
     printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>",
 	ki->name,tempName,ki->description,ki->name);
@@ -2997,13 +2994,9 @@ printf(" For more information about the tracks and tables listed on this page, r
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
-    if (strncmp(ki->organism,"Worm",4)==0)
+    if (!sameString(ki->organism, ki->genome))
 	{
-	safef(tempName,sizeof(tempName),ki->scientificName);
-	}
-    if (strncmp(ki->organism,"Yeast",5)==0)
-	{
-	safef(tempName,sizeof(tempName),ki->scientificName);
+	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
     
     webNewSection("<A NAME=%s></A>%s %s (%s)", 
