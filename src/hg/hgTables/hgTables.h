@@ -138,6 +138,16 @@ char *filterClause(char *db, char *table);
 /* Get filter clause (something to put after 'where')
  * for table */
 
+char *filterFieldVarName(char *db, char *table, char *field, char *type);
+/* Return variable name for filter page. */
+
+/* Some types of filter vars. */
+#define filterDdVar "dd"
+#define filterCmpVar "cmp"
+#define filterPatternVar "pat"
+#define filterRawLogicVar "rawLogic"
+#define filterRawQueryVar "rawQuery"
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from
@@ -184,7 +194,8 @@ char *filterClause(char *db, char *table);
 #define hgtaFieldSelectPrefix "hgta_fs."
 /* Prefix for variables managed by filter page. */
 #define hgtaFilterPrefix "hgta_fil."
-
+/* Prefix for variables containing filters themselves. */
+#define hgtaFilterVarPrefix hgtaFilterPrefix "v."
 
 /* Output types. */
 #define outPrimaryTable "primaryTable"
@@ -287,7 +298,6 @@ void doFilterSubmit(struct sqlConnection *conn);
 
 void doClearFilter(struct sqlConnection *conn);
 /* Respond to click on clear filter. */
-
 
 void printMainHelp();
 /* Put up main page help info. */

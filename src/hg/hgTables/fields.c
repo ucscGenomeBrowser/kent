@@ -15,7 +15,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: fields.c,v 1.20 2004/07/19 15:58:45 kent Exp $";
+static char const rcsid[] = "$Id: fields.c,v 1.21 2004/07/19 17:47:08 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -441,19 +441,13 @@ doSelectFieldsMore();
 /* ------- Filter Page Stuff ----------*/
 
 #define filterLinkedTablePrefix hgtaFilterPrefix "linked."
-#define filterVarPrefix hgtaFilterPrefix "v."
-#define filterDdVar "dd"
-#define filterCmpVar "cmp"
-#define filterPatternVar "pat"
-#define filterRawLogicVar "rawLogic"
-#define filterRawQueryVar "rawQuery"
 
-static char *filterFieldVarName(char *db, char *table, char *field, char *type)
+char *filterFieldVarName(char *db, char *table, char *field, char *type)
 /* Return variable name for filter page. */
 {
 static char buf[256];
 safef(buf, sizeof(buf), "%s%s.%s.%s.%s",
-	filterVarPrefix, db, table, field, type);
+	hgtaFilterVarPrefix, db, table, field, type);
 return buf;
 }
 
@@ -552,10 +546,10 @@ hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
 puts(" is ");
 name = filterFieldVarName(db, table, field, filterCmpVar);
 cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
-		cgiUsualString(name, eqOpMenu[0]));
+		cartUsualString(cart, name, eqOpMenu[0]));
 /* make a dummy pat_ CGI var for consistency with other filter options */
 name = filterPatternVarName(db, table, field);
-cgiMakeHiddenVar(name, "");
+cgiMakeHiddenVar(name, "0");
 hPrintf("</TD><TD>\n");
 hPrintf("%s\n", fieldLabel2);
 if (logOp == NULL)
@@ -669,7 +663,7 @@ if (ct->fieldCount >= 8)
     }
 puts("</TABLE>");
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "(Submit)");
+cgiMakeButton(hgtaDoFilterSubmit, "Submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
@@ -896,7 +890,7 @@ boolean needAnd = FALSE;
  * NULL if no filter on us. */
 if (!anyFilter())
     return NULL;
-safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", filterVarPrefix, db, table);
+safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
@@ -1028,6 +1022,8 @@ if (dy->stringSize == 0)
 else
     return dyStringCannibalize(&dy);
 }
+
+
 
 void doTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */

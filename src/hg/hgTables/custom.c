@@ -92,15 +92,6 @@ if (ct->fieldCount >= 12)
 return(hti);
 }
 
-#ifdef NEVER
-Some useful custom track routines from hgText:
-
-void filterOptionsCustomTrack(char *table, char *tableId)
-/* Print out an HTML table with form inputs for constraints on custom track */
-
-
-#endif /* NEVER */
-
 struct slName *getBedFields(int fieldCount)
 /* Get list of fields for bed of given size. */
 {
@@ -201,6 +192,214 @@ for (field = fieldList; field != NULL; field = field->next)
 hPrintf("\n");
 }
 
+static void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
+		     char **retVals, boolean *retInv)
+/* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+{
+char *vals, *ptrs[32];
+int numWords;
+int i;
+
+assert(retCft != NULL);
+assert(retVals != NULL);
+assert(retInv != NULL);
+assert(sameString(dd, "does") || sameString(dd, "doesn't"));
+
+/* catch null-constraint cases.  ? will be treated as a literal match, 
+ * which would make sense for bed strand and maybe other single-char things: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*"))
+    {
+    *retCft = cftIgnore;
+    return;
+    }
+
+*retCft = cftMultiLiteral;
+numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
+vals = needMem((numWords+1) * sizeof(char));
+for (i=0;  i < numWords;  i++)
+    vals[i] = ptrs[i][0];
+vals[i] = 0;
+*retVals = vals;
+*retInv = sameString("doesn't", dd);
+}
+
+static void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
+		       char ***retVals, boolean *retInv)
+/* Given a "does/doesn't" and a (list of) regexps from CGI, fill in 
+ * retCft, retVals and retInv to make a filter. */
+{
+char **vals, *ptrs[32];
+int numWords;
+int i;
+
+assert(retSft != NULL);
+assert(retVals != NULL);
+assert(retInv != NULL);
+assert(sameString(dd, "does") || sameString(dd, "doesn't"));
+
+/* catch null-constraint cases: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*"))
+    {
+    *retSft = sftIgnore;
+    return;
+    }
+
+*retSft = sftMultiRegexp;
+numWords = chopByWhite(pat, ptrs, ArraySize(ptrs));
+vals = needMem((numWords+1) * sizeof(char *));
+for (i=0;  i < numWords;  i++)
+    vals[i] = cloneString(ptrs[i]);
+vals[i] = NULL;
+*retVals = vals;
+*retInv = sameString("doesn't", dd);
+}
+
+static void cgiToIntFilter(char *cmp, char *pat, enum numericFilterType *retNft,
+		    int **retVals)
+/* Given a comparison operator and a (pair of) integers from CGI, fill in 
+ * retNft and retVals to make a filter. */
+{
+char *ptrs[3];
+int *vals;
+int numWords;
+
+assert(retNft != NULL);
+assert(retVals != NULL);
+
+/* catch null-constraint cases: */
+if (pat == NULL)
+    pat = "";
+pat = trimSpaces(pat);
+if ((pat[0] == 0) || sameString(pat, "*") || sameString(cmp, "ignored"))
+    {
+    *retNft = nftIgnore;
+    return;
+    }
+else if (sameString(cmp, "in range"))
+    {
+    *retNft = nftInRange;
+    numWords = chopString(pat, " \t,", ptrs, ArraySize(ptrs));
+    if (numWords != 2)
+	errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
+    vals = needMem(2 * sizeof(int)); 
+    vals[0] = atoi(ptrs[0]);
+    vals[1] = atoi(ptrs[1]);
+    if (vals[0] > vals[1])
+	{
+	int tmp = vals[0];
+	vals[0] = vals[1];
+	vals[1] = tmp;
+	}
+    *retVals = vals;
+   }
+else
+    {
+    if (sameString(cmp, "<"))
+	*retNft = nftLessThan;
+    else if (sameString(cmp, "<="))
+	*retNft = nftLTE;
+    else if (sameString(cmp, "="))
+	*retNft = nftEqual;
+    else if (sameString(cmp, "!="))
+	*retNft = nftNotEqual;
+    else if (sameString(cmp, ">="))
+	*retNft = nftGTE;
+    else if (sameString(cmp, ">"))
+	*retNft = nftGreaterThan;
+    else
+	errAbort("Unrecognized comparison operator %s", cmp);
+    vals = needMem(sizeof(int));
+    vals[0] = atoi(pat);
+    *retVals = vals;
+    }
+}
+
+struct bedFilter *bedFilterForCustomTrack(char *ctName)
+/* If the user specified constraints, then translate them to a bedFilter. */
+{
+struct hashEl *var, *varList = cartFindPrefix(cart, hgtaFilterVarPrefix);
+int prefixSize = strlen(hgtaFilterVarPrefix);
+struct bedFilter *bf = NULL;
+boolean gotAny = FALSE;
+int *trash;	
+
+for (var = varList; var != NULL; var = var->next)
+    {
+    char *dbTrackFieldType = cloneString(var->name + prefixSize);
+    char *parts[4];
+    int partCount;
+    partCount = chopByChar(dbTrackFieldType, '.', parts, ArraySize(parts));
+    if (partCount == 4 && sameString(parts[1], ctName))
+	{
+	char *db = parts[0];
+	char *table = parts[1];
+	char *field = parts[2];
+	char *type = parts[3];
+	if (sameString(type, filterPatternVar))
+	    {
+	    char *pat = cloneString(var->val);
+	    char *varName, *dd, *cmp;
+	    if (bf == NULL)
+	        AllocVar(bf);
+	    varName = filterFieldVarName(db, table, field, filterDdVar);
+	    dd = cartOptionalString(cart, varName);
+	    varName = filterFieldVarName(db, table, field, filterCmpVar);
+	    cmp = cartOptionalString(cart, varName);
+	    if (sameString("chrom", field))
+		cgiToStringFilter(dd, pat, &(bf->chromFilter), &(bf->chromVals),
+				  &(bf->chromInvert));
+	    else if (sameString("chromStart", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->chromStartFilter), &(bf->chromStartVals));
+	    else if (sameString("chromEnd", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->chromEndFilter), &(bf->chromEndVals));
+	    else if (sameString("name", field))
+		cgiToStringFilter(dd, pat, &(bf->nameFilter), &(bf->nameVals),
+				  &(bf->nameInvert));
+	    else if (sameString("score", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->scoreFilter), &(bf->scoreVals));
+	    else if (sameString("strand", field))
+		cgiToCharFilter(dd, pat, &(bf->strandFilter), &(bf->strandVals),
+				&(bf->strandInvert));
+	    else if (sameString("thickStart", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->thickStartFilter), &(bf->thickStartVals));
+	    else if (sameString("thickEnd", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->thickEndFilter), &(bf->thickEndVals));
+	    else if (sameString("blockCount", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->blockCountFilter), &(bf->blockCountVals));
+	    else if (sameString("chromLength", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->chromLengthFilter), &(bf->chromLengthVals));
+	    else if (sameString("thickLength", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->thickLengthFilter), &(bf->thickLengthVals));
+	    else if (sameString("compareStarts", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->compareStartsFilter), &trash);
+	    else if (sameString("compareEnds", field))
+		cgiToIntFilter(cmp, pat,
+			       &(bf->compareEndsFilter), &trash);
+	    freez(&pat);
+	    }
+	}
+    }
+
+hashElFreeList(&varList);
+return bf;
+}
+
 void doTabOutCustomTracks(struct customTrack *ct, char *fields)
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
@@ -213,9 +412,7 @@ boolean gotResults = FALSE;
 struct hash *idHash = NULL;
 
 
-#ifdef SOON
-bf = constrainBedFields(NULL);
-#endif
+bf = bedFilterForCustomTrack(ct->tdb->tableName);
 
 if (fields == NULL)
     chosenFields = getBedFields(ct->fieldCount);
@@ -238,7 +435,7 @@ if (fullGenomeRegion())
         {
 	if (idHash == NULL || hashLookup(idHash, bed->name))
 	    {
-	    if (bf == NULL)  // or passes filter
+	    if (bf == NULL || bedFilterOne(bf, bed))
 		{
 		tabBedRow(bed, chosenFields);
 		gotResults = TRUE;
@@ -259,7 +456,7 @@ else
 		    if (region->end == 0 || 
 		       (bed->chromStart < region->end && bed->chromEnd > region->start))
 			{
-			if (bf == NULL)  // or passes filter
+			if (bf == NULL || bedFilterOne(bf, bed))
 			    {
 			    tabBedRow(bed, chosenFields);
 			    gotResults = TRUE;
@@ -275,6 +472,8 @@ if (!gotResults)
     hPrintf("# No results");
     if (idHash != NULL)
 	hPrintf(" matching identifier list");
+    if (bf != NULL)
+        hPrintf(" passing filter");
     hPrintf(".");
     }
 }
