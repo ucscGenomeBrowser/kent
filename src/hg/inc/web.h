@@ -47,6 +47,15 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
+void printBlatAssemblyListHtml(char *curDb);
+/*
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from that have blat servers available.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+
 void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism);
 /*
   The order of preference here is as follows:

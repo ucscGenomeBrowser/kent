@@ -515,7 +515,7 @@ printf("Organism:<BR>");
 printOrgListHtml(db, onChangeText);
 printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Freeze:<BR>");
-printAssemblyListHtml(db);
+printBlatAssemblyListHtml(db);
 printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);

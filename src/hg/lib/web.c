@@ -325,7 +325,7 @@ If NULL, no default selection.
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
+struct dbDb *dbList = hGetBlatIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *organism = hOrganism(db);
