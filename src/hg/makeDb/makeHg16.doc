@@ -1381,6 +1381,14 @@ SEQ2_LEN=$BASE/S2.len
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     #	That takes about 20 minutes
+    #	chr19 came along later
+    ssh kkr1u00
+    set tbl = "blastzMm3"
+    foreach f (axtChrom/chr19.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
 
     # Load database tables
     ssh hgwdev
@@ -1388,6 +1396,8 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/hg16/bed/blastz.mm3/pslChrom
     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
     # This takes 30 minutes to an hour
+    # and later chr19
+    /cluster/bin/i386/hgLoadPsl hg16 chr19_${tbl}.psl
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 #	track blastzMm3
 #	shortLabel Mouse Blastz
@@ -1411,6 +1421,8 @@ SEQ2_LEN=$BASE/S2.len
     
     # copy chrom axt's to bluearc, to avoid hitting fileserver too hard
     cp -p *.axt /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
+    # chr19 came along later:
+    cp -p chr19.axt /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
 
     ssh kk
     cd /cluster/data/hg16/bed/blastz.mm3
@@ -1440,7 +1452,7 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
 '_EOF_'
     gensub2 chrom.list single gsub jobList
     wc -l jobList
-        # 40 jobs
+        # 41 jobs
     head jobList
 
     ssh kk
