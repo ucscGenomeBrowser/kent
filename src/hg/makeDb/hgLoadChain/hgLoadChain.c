@@ -166,8 +166,29 @@ while (lineFileNext(lf, &line, &lineSize))
         }
     else  
         {
-        if (wordCount < 3)
+        if (wordCount < 1)
             continue;
+        if (wordCount == 1)
+            /* end of chain */
+            {
+            AllocVar(g);
+            size = lineFileNeedNum(lf, row, 0);
+            g->tStart = prevTstart;
+            g->tEnd = g->tStart + size;
+            g->qStart = prevQstart;
+            g->tSize = size;
+            g->chainId = c->id;
+            if (g->tStart < 0)
+                errAbort("start mismatch %d vs %d line %d of %s\n", 
+                    g->tStart, 0, lf->lineIx, lf->fileName);
+            if (g->tEnd > c->tSize)
+                errAbort("tEend mismatch %d vs %d line %d of %s\n", 
+                    g->tEnd, c->tSize, lf->lineIx, lf->fileName);
+            writeGap(g,c->tName, gf);
+            prevTstart = 0;
+            prevQstart = 0;
+            continue;
+            }
         /*
             errAbort("Expecting 3 words line %d of %s\n", 
             lf->lineIx, lf->fileName);
