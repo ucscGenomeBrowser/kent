@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.57 2004/08/27 20:32:03 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.58 2004/08/30 19:36:23 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -333,8 +333,6 @@ struct hash *spans = NULL;	/* Spans encountered during load */
 if (tg->customPt == (void *)NULL)
     errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
 
-/*	turn off maps self until we properly handle wiggle tracks in hgc */
-tg->mapsSelf = FALSE;
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
@@ -1023,8 +1021,21 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 
 /*	Map this wiggle area if we are self mapping	*/
 if (tg->mapsSelf)
+    {
+    char *itemName;
+    if (tg->customPt)
+	{
+	struct customTrack *ct = tg->customPt;
+	itemName = (char *)needMem(128 * sizeof(char));
+	safef(itemName, 128, "%s %s", ct->wigFile, tg->mapName);
+	}
+    else
+	itemName = cloneString(tg->mapName);
+
     mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
-            tg->mapName, NULL);
+            itemName, NULL);
+    freeMem(itemName);
+    }
 
 freez(&colorArray);
 freeMem(preDraw);
