@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.57 2005/02/06 04:17:34 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.58 2005/02/15 01:18:54 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -460,6 +460,35 @@ void nci60DropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, nci60Options, ArraySize(nci60Options), 
 	curVal);
+}
+
+/****** Some stuff for base labeling of EST like track related controls *****/
+
+static char *baseColorOptions[] = {
+    "OFF",
+    "all",
+    "different"
+    };
+
+enum baseColorOptEnum baseColorStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, baseColorOptions);
+if (x < 0)
+   errAbort("hui::baseColorOptEnum() - Unknown option %s", string);
+return x;
+}
+
+char *baseColorEnumToString(enum baseColorOptEnum x)
+/* Convert from enum to string representation. */
+{
+return baseColorOptions[x];
+}
+
+void baseColorDropDown(char *var, char* curVal)
+/* Make drop down of options for coloring mRNAs and printing bases. */
+{
+cgiMakeDropList(var, baseColorOptions, ArraySize(baseColorOptions), curVal);
 }
 
 /****** Some stuff for cdsColoring of mrna track related controls *******/
