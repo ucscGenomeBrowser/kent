@@ -527,15 +527,26 @@ the files. <BR>
 The source tree can also be obtained via <A HREF="cvs.html"> CVS </A>
 </OL>
 
-<B>Existing Mirror Sites: Note the Schema for Hgcentral HAS CHANGED.
-You are advised to drop the hgcentral database and reload it.
-This will result in the loss of user settings. If this is a problem,
-contact us for an incremental fix.
-</B>
 <P>
 
 <H4><A NAME="step7"></A>
 7. Set up the "hgcentral" tables </H4>
+
+<B>Existing Mirror Sites: Please note the change history for the
+hgcentral database.  Table structure changes have corresponding
+structure changes in the source code.  The browser version can
+be seen in the title window decoration of the genome browser display
+page.  Or the source tree file <em> src/hg/inc/versionInfo.h </em>
+since v62.
+</B>
+<H5> Change history for hgcentral database tables: </H5>
+<UL>
+<LI> 2004-04-16 table liftOverChain added (browser version v60)
+<LI> 2004-06-01 table dbDb has hgNearOk, hgPbOk and sourceName fields added
+	(browser version v66)
+<LI> 2004-08-02 table blatServers has canPcr field added
+	(browser version v74)
+</UL>
 
 <OL type="a">
 <LI>Download the schema for the hgcentral database <A HREF="http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql"> here</A>.
@@ -678,7 +689,7 @@ mysql&gt; create database swissProt
 &#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
 </em>.
 <!-- above address is genome-mirror at cse.ucsc.edu -->
-<BR><em>Last Modified: 2004-10-20 - 20 October 2004</em>
+<BR><em>Last Modified: 2004-11-18 - 18 November 2004</em>
 <BR>
 			</TD>
 		    <TD WIDTH=15></TD></TR>
