@@ -122,8 +122,12 @@ void selectTrack()
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
 
-// puts("<FORM ACTION=\"/cgi-bin/hgBatch\" NAME=\"mainForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
 puts("<FORM ACTION=\"/cgi-bin/hgBatch\" NAME=\"mainForm\" METHOD=\"GET\">\n");
+printf("<H2>Batch Download Database Info</H2>\n");
+printf("Use this form when you want to grab many items from the database "
+       "all at once.  This is most frequently used with GenBank accession "
+       "numbers as the keys.<BR>\n");
+printf("<BR>");
 
 printf("organism: ");
 printGenomeListHtml(db, onChangeOrg);
@@ -134,10 +138,11 @@ printTrackDropList(db, autoSubmit);
 printf("key field: ");
 printFieldList(db, autoSubmit);
 printf("<BR>");
+printf("<BR>");
 printf("<CENTER>");
-cgiMakeButton("hgb.pasteKeys", "Paste Keys");
+cgiMakeButton("hgb.pasteKeys", "Paste in Keywords");
 printf(" ");
-cgiMakeButton("hgb.uploadKeys", "Upload Keys");
+cgiMakeButton("hgb.uploadKeys", "Upload Keyword File");
 printf("</CENTER>");
 cartSaveSession(cart);
 printf("</FORM>");
