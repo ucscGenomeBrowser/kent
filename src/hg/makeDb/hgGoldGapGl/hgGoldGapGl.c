@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "ntContig.h"
 #include "glDbRep.h"
+#include "hdb.h"
 
 
 void usage()
@@ -23,6 +24,7 @@ errAbort(
 
 char *createGold =
 "CREATE TABLE %s (\n"
+"   bin smallint not null,"
 "   chrom varchar(255) not null,        # which chromosome\n"
 "   chromStart int unsigned not null,   # start position in chromosome\n"
 "   chromEnd int unsigned not null,     # end position in chromosome\n"
@@ -33,6 +35,7 @@ char *createGold =
 "   fragEnd int unsigned not null,      # end position in frag\n"
 "   strand char(1) not null,    # + or - (orientation of fragment)\n"
 "             #Indices\n"
+"   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
 "   UNIQUE(chromEnd),\n"
 "   INDEX(frag(14))\n"
@@ -40,6 +43,7 @@ char *createGold =
 
 char *createGap = 
 "CREATE TABLE %s (\n"
+"   bin smallint not null,"
 "   chrom varchar(255) not null,	# which chromosome\n"
 "   chromStart int unsigned not null,	# start position in chromosome\n"
 "   chromEnd int unsigned not null,	# end position in chromosome\n"
@@ -49,34 +53,23 @@ char *createGap =
 "   type varchar(255) not null,	# contig, clone, fragment, etc.\n"
 "   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
 "             #Indices\n"
+"   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
 "   UNIQUE(chromEnd)\n"
 ")\n";
 
 char *createGl = 
 "CREATE TABLE %s (\n"
+"    bin smallint not null,"
 "    frag varchar(255) not null,	# Fragment name\n"
 "    start int unsigned not null,	# Start position in golden path\n"
 "    end int unsigned not null,	# End position in golden path\n"
 "    strand char(1) not null,	# + or - for strand\n"
 "              #Indices\n"
+"   INDEX(bin),\n"
 "    PRIMARY KEY(frag(20))\n"
 ")\n";
 
-
-boolean isGapLine(char *line, int lineSize)
-/* Return TRUE if line represents a gap. */
-{
-char buf[256], *words[16];
-int wordCount;
-
-if (lineSize >= sizeof(buf))
-    errAbort("Line too long");
-memcpy(buf, line, lineSize);
-buf[lineSize] = 0;
-wordCount = chopTabs(buf, words);
-return (wordCount >= 5 && sameWord(words[4], "N"));
-}
 
 void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
 /* Read in .agp files in chromDir and use them to create the
@@ -114,21 +107,43 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     lf = lineFileOpen(agpName, FALSE);
     while (lineFileNext(lf, &line, &lineSize))
         {
-	if (isGapLine(line, lineSize))
+	char buf[256], *words[16];
+	int wordCount;
+	int start, end;
+
+	if (lineSize >= sizeof(buf))
+	    errAbort("Line too long");
+	memcpy(buf, line, lineSize);
+	buf[lineSize] = 0;
+	wordCount = chopTabs(buf, words);
+	if (wordCount < 5)
+	    errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
+	start = sqlUnsigned(words[1])-1;
+	end = sqlUnsigned(words[2]);
+	if (sameWord(words[4], "N"))
+	    {
+	    fprintf(gapTab, "%u\t", hFindBin(start, end));
 	    mustWrite(gapTab, line, lineSize);
+	    }
 	else
+	    {
+	    fprintf(gapTab, "%u\t", hFindBin(start, end));
 	    mustWrite(goldTab, line, lineSize);
+	    }
 	}
     lineFileClose(&lf);
     fclose(goldTab);
     fclose(gapTab);
 
     /* Create gold table and load it up. */
+    if (sqlTableExists(conn, goldName))
+	{
+	dyStringClear(ds);
+	dyStringPrintf(ds, "drop table %s", goldName);
+	sqlUpdate(conn, ds->string);
+	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGold, goldName);
-    sqlMaybeMakeTable(conn, goldName, ds->string);
-    dyStringClear(ds);
-    dyStringPrintf(ds, "DELETE from %s", goldName);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
@@ -137,12 +152,15 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     remove(goldTabName);
 
     /* Create gap table and load it up. */
+    if (sqlTableExists(conn, gapName))
+	{
+	dyStringClear(ds);
+	dyStringPrintf(ds, "DROP table %s", gapName);
+	sqlUpdate(conn, ds->string);
+	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGap, gapName);
     sqlMaybeMakeTable(conn, gapName, ds->string);
-    dyStringClear(ds);
-    dyStringPrintf(ds, "DELETE from %s", gapName);
-    sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         gapTabName, gapName);
@@ -152,6 +170,26 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 freeDyString(&ds);
 }
 
+void addGlBin(char *in, char *out)
+/* Copy in to out, but adding bin field in first column. */
+{
+char *row[4];
+int i, start, end;
+struct lineFile *lf = lineFileOpen(in, TRUE);
+FILE *f = mustOpen(out, "w");
+
+while (lineFileRow(lf, row))
+    {
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[2]);
+    fprintf(f, "%u", hFindBin(start, end));
+    for (i=0; i<ArraySize(row); ++i)
+        fprintf(f, "\t%s", row[i]);
+    fprintf(f, "\n");
+    }
+carefulClose(&f);
+lineFileClose(&lf);
+}
 
 void makeGl(struct sqlConnection *conn, char *chromDir, 
 	 struct hash *cloneVerHash)
@@ -163,6 +201,7 @@ struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char *glFileName;
 char glTable[128];
+char *tab = "gl.tab";
 
 fiList = listDirX(chromDir, "*.gl", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
@@ -172,15 +211,19 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 
     splitPath(glFileName, dir, chrom, ext);
     sprintf(glTable, "%s_gl", chrom);
+    if (sqlTableExists(conn, glTable))
+	{
+	dyStringClear(ds);
+	dyStringPrintf(ds, "DROP table %s", glTable);
+	sqlUpdate(conn, ds->string);
+	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGl, glTable);
     sqlMaybeMakeTable(conn, glTable, ds->string);
     dyStringClear(ds);
-    dyStringPrintf(ds, "DELETE from %s", glTable);
-    sqlUpdate(conn, ds->string);
-    dyStringClear(ds);
+    addGlBin(glFileName, tab);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
-        glFileName, glTable);
+        tab, glTable);
     sqlUpdate(conn, ds->string);
     }
 freeDyString(&ds);

@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (cgiVarExists("test"))
     {
-    doTest(30000000,30200000);
+    doTest(atoi(argv[1]),atoi(argv[2]));
     exit(0);
     }
 if (argc != 4)
