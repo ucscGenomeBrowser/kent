@@ -3678,6 +3678,12 @@ while (my $line = <>) {
     #Adding /gbdb/mm5/bacends/BACends.fa
     #452237 sequences
     #Updating seq table
+    
+    # One additional step 9/10/04 Fan.
+    # Create a composite index to speed up hgTracks display when BAC Ends track selected.
+    hgsql mm5 -e 'create index bacIndex2 on all_bacends(bin, qName(8));'
+    # This will take hours.
+    
     #All done
 
 # BACEND SEQUENCE ALIGNMENTS (DONE - 2004-07-23 - Fan)
