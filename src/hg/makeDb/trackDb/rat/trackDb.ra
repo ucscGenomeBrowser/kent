@@ -124,3 +124,11 @@ altColor 200,220,255
 spectrum on
 type psl xeno 
 
+track affyRAE230
+shortLabel Affymetrix RAE230
+longLabel Alignments of Affymetrix Consensus Sequences from RAE230
+group regulation
+priority 90
+visibility hide
+type psl .
+
