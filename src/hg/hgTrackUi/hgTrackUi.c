@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.86 2004/02/06 09:41:32 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.87 2004/02/19 01:27:15 daryl Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -97,6 +97,8 @@ char *snpTypeCart[snpTypeCount];
 int   snpSource = 0;
 int   snpType = 0;
 
+if (strncmp(database,"hg",2))
+    return;
 printf("<BR><B>Variant Sources:</B><BR>\n");
 for (snpSource=0; snpSource<snpSourceCount; snpSource++)
     {
@@ -715,17 +717,17 @@ else
     /* handle all tracks with type "psl xeno <otherDb>" */
     if (tdb->type != NULL)
         typeLine = cloneString(tdb->type);
-        wordCount = chopLine(typeLine, words);
-
-        if (sameWord(words[0], "genePred"))
-                cdsColorOptions(tdb->tableName,2);
-
-        if (wordCount == 3)
-            {
-            if (sameWord(words[0], "psl") && sameWord(words[1], "xeno"))
-                crossSpeciesUi(tdb);
-            }
-        freeMem(typeLine);
+    wordCount = chopLine(typeLine, words);
+    
+    if (sameWord(words[0], "genePred"))
+	cdsColorOptions(tdb->tableName,2);
+    
+    if (wordCount == 3)
+	{
+	if (sameWord(words[0], "psl") && sameWord(words[1], "xeno"))
+	    crossSpeciesUi(tdb);
+	}
+    freeMem(typeLine);
     }
 }
 
