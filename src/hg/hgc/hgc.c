@@ -26,6 +26,7 @@
 #include "bed.h"
 #include "cgh.h"
 #include "agpFrag.h"
+#include "agpGap.h"
 #include "ctgPos.h"
 #include "clonePos.h"
 #include "rmskOut.h"
@@ -321,7 +322,7 @@ char **row;
 boolean firstTime = TRUE;
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-if (bedSize < 3)
+if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
     sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -1212,16 +1213,15 @@ pslFreeList(&pslList);
 webEnd();
 }
 
-void doHgGold(char *track, char *fragName)
+void doHgGold(struct trackDb *tdb, char *fragName)
 /* Click on a fragment of golden path. */
 {
+char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 struct sqlResult *sr;
 char **row;
 struct agpFrag frag;
-struct dnaSeq *seq;
-char dnaName[256];
 int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
@@ -1234,40 +1234,49 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
-printf("Fragment %s bases %d-%d strand %s makes up draft sequence of bases %d-%d of chromosome %s<BR>\n",
-	frag.frag, frag.fragStart+1, frag.fragEnd, frag.strand,
-	frag.chromStart+1, frag.chromEnd, skipChr(frag.chrom));
-htmlHorizontalLine();
+printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
+printf("<B>Clone Bases:</B> %d-%d\n", frag.fragStart+1, frag.fragEnd);
+printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, TRUE);
+printTrackHtml(tdb);
 
-sprintf(dnaName, "%s:%d-%d", frag.chrom, frag.chromStart, frag.chromEnd);
-seq = hDnaFromSeq(frag.chrom, frag.chromStart, frag.chromEnd, dnaMixed);
-printf("<TT><PRE>");
-faWriteNext(stdout, dnaName, seq->dna, seq->size);
-printf("</TT></PRE>");
-
-freeDnaSeq(&seq);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 webEnd();
 }
 
-void doHgGap(char *table, char *gapType)
+void doHgGap(struct trackDb *tdb, char *gapType)
 /* Print a teeny bit of info about a gap. */
 {
-char *words[2];
-int wordCount;
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct agpGap gap;
+int start = cartInt(cart, "o");
+boolean hasBin;
+char splitTable[64];
 
 cartWebStart("Gap in Sequence");
-wordCount = chopByChar(gapType, '_', words, ArraySize(words));
-if (wordCount == 1)
-    wordCount = chopByChar(gapType, ' ', words, ArraySize(words));
-printf("This is a gap between %ss.<BR>", words[0]);
-if (sameString(words[1], "no"))
-    printf("This gap is not bridged by an mRNA, EST or BAC end pair.\n"); 
-else
-    printf("This gap is bridged by mRNA, EST or BAC end pairs.\n");
+hFindSplitTable(seqName, track, splitTable, &hasBin);
+sprintf(query, "select * from %s where chromStart = %d", 
+	splitTable, start);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Couldn't find gap at %s:%d", seqName, start);
+agpGapStaticLoad(row+hasBin, &gap);
+
+printf("<B>Gap Type:</B> %s<BR>\n", gap.type);
+printf("<B>Bridged:</B> %s<BR>\n", gap.bridge);
+printPos(gap.chrom, gap.chromStart, gap.chromEnd, NULL, FALSE);
+printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 webEnd();
 }
+
 
 void selectOneRow(struct sqlConnection *conn, char *table, char *query, 
 	struct sqlResult **retSr, char ***retRow)
@@ -1284,6 +1293,7 @@ if ((row = sqlNextRow(*retSr)) == NULL)
     errAbort("No match to query '%s'", query);
 *retRow = row + hasBin;
 }
+
 
 void doHgContig(struct trackDb *tdb, char *ctgName)
 /* Click on a contig. */
@@ -1331,9 +1341,10 @@ switch (stage[0])
    }
 }
 
-void doHgCover(char *track, char *cloneName)
+void doHgCover(struct trackDb *tdb, char *cloneName)
 /* Respond to click on clone. */
 {
+char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 struct sqlResult *sr;
@@ -1364,15 +1375,16 @@ printf("<BR>\n");
 hgcAnchor("htcCloneSeq", cloneName, "");
 printf("Fasta format sequence</A><BR>\n");
 hFreeConn(&conn);
+printTrackHtml(tdb);
 webEnd();
 }
 
-void doHgClone(char *fragName)
+void doHgClone(struct trackDb *tdb, char *fragName)
 /* Handle click on a clone. */
 {
 char cloneName[128];
 fragToCloneVerName(fragName, cloneName);
-doHgCover("clonePos", cloneName);
+doHgCover(tdb, cloneName);
 }
 
 void htcCloneSeq(char *cloneName)
@@ -4562,19 +4574,20 @@ else if (sameWord(track, "ctgPos"))
     }
 else if (sameWord(track, "clonePos"))
     {
-    doHgCover(track, item);
+    doHgCover(tdb, item);
     }
 else if (sameWord(track, "hgClone"))
     {
-    doHgClone(item);
+    tdb = hashFindVal(trackHash, "clonePos");
+    doHgClone(tdb, item);
     }
 else if (sameWord(track, "gold"))
     {
-    doHgGold(track, item);
+    doHgGold(tdb, item);
     }
 else if (sameWord(track, "gap"))
     {
-    doHgGap(track, item);
+    doHgGap(tdb, item);
     }
 else if (sameWord(track, "tet_waba"))
     {
