@@ -6,7 +6,7 @@
 #include "common.h"
 #include "subText.h"
 
-static char const rcsid[] = "$Id: subText.c,v 1.7 2004/02/03 22:16:15 braney Exp $";
+static char const rcsid[] = "$Id: subText.c,v 1.8 2004/02/04 15:46:05 braney Exp $";
 
 struct subText *subTextNew(char *in, char *out)
 /* Make new substitution structure. */
@@ -62,10 +62,10 @@ static struct subText *firstInList(struct subText *l, char *name)
 /* Return first element in Sub list who's in string matches the
  * first part of name. */
 {
-register struct subText *text = l;
-register char *start;
-register char *end;
-register char *cmp;
+struct subText *text = l;
+char *start;
+char *end;
+char *cmp;
 
 for(; text; text = text->next)
     {
