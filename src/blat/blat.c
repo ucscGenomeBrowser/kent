@@ -38,6 +38,7 @@ int dotEvery = 0;
 boolean oneOff = FALSE;
 boolean noHead = FALSE;
 boolean trimA = FALSE;
+boolean trimHardA = FALSE;
 boolean trimT = FALSE;
 char *makeOoc = NULL;
 char *ooc = NULL;
@@ -119,6 +120,7 @@ errAbort(
   "   -prot       Synonymous with -d=prot -q=prot\n"
   "   -trimT      Trim leading poly-T\n"
   "   -noTrimA    Don't trim trailing poly-A\n"
+  "   -trimHardA  Remove poly-A tail from qSize as well as alignments in psl output\n"
   , version
   );
 }
@@ -559,7 +561,14 @@ if (trimA)
 	    break;
 	}
     if (aSize >= 4)
+	{
 	memset(dna + size - aSize, 'n', aSize);
+	if (trimHardA)
+	    {
+	    trimmed->size -= aSize;
+	    dna[size-aSize] = 0;
+	    }
+	}
     }
 }
 
@@ -891,6 +900,7 @@ if (cgiVarExists("t"))
     tType = gfTypeFromName(cgiString("t"));
 trimA = cgiBoolean("trimA") || cgiBoolean("trima");
 trimT = cgiBoolean("trimT") || cgiBoolean("trimt");
+trimHardA = cgiBoolean("trimHardA");
 switch (tType)
     {
     case gftProt:
