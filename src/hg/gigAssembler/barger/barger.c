@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: barger.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: barger.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 FILE *logFile;	/* File to write decision steps to. */
 
@@ -606,7 +606,7 @@ fixCloneBargePointers(dupe);
 return dupe;
 }
 
-struct barge unpdupeBarge(struct barge **pBarge)
+void unpdupeBarge(struct barge **pBarge)
 /* Free up a partially duped barge. */
 {
 struct barge *barge = *pBarge;
@@ -824,7 +824,7 @@ boolean needsFlipping(struct barge *barge)
 {
 float tendency = 0.0;
 boolean first = TRUE;
-float pos, lastPos;
+float pos, lastPos = 0;
 struct dlNode *cNode;
 struct oogClone *clone;
 
@@ -1409,5 +1409,6 @@ int main(int argc, char *argv[])
 if (argc != 6)
     usage();
 barger(argv[1], argv[2], argv[3], argv[4], argv[5]);
+return 0;
 }
 

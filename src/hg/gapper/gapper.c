@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gapper.c,v 1.2 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: gapper.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 FILE *logFile;		/* Report stuff here. */
 struct lm *lm;		/* Fast local memory pool. */
@@ -381,7 +381,7 @@ char *line, *words[20];
 char chromName[32];
 char lastChromName[32];
 char *s;
-struct gChromosome *chrom;
+struct gChromosome *chrom = NULL;
 struct lineFile *in = lineFileOpen(fileName, TRUE);
 boolean isOrdered;
 
@@ -1749,7 +1749,7 @@ for (i=1; i<10; ++i)
 	countBargeConns(2, i, 0, no, maybe, maybe), i);
     }
 fprintf(f, "%4d connections between barges total\n",
-    countBargeConns(2, 100000, 0, no, maybe, maybe), i);
+    countBargeConns(2, 100000, 0, no, maybe, maybe));
 fprintf(f, "\n");
 
 
@@ -1759,7 +1759,7 @@ for (i=1; i<10; ++i)
 	countUlNa(2, i, 0, maybe, maybe, no, no), i);
     }
 fprintf(f, "%4d cross-chromosome barge connections total\n",
-	countUlNa(2, 100000, 0, maybe, maybe, no, no), i);
+	countUlNa(2, 100000, 0, maybe, maybe, no, no));
 fprintf(f, "\n");
 
 for (i=1; i<10; ++i)
@@ -1870,4 +1870,5 @@ int main(int argc, char *argv[])
 if (argc != 7)
     usage();
 gapper(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+return 0;
 }

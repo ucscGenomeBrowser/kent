@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: fqToQac.c,v 1.2 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: fqToQac.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 FILE *errLog;
 
@@ -114,8 +114,8 @@ printf("Made %d .qac files in %s\n", outFileCount, outDir);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-struct lineFile *lf;
-char *dir;
+struct lineFile *lf = NULL;
+char *dir = NULL;
 
 if (argc == 2)
     {
@@ -130,4 +130,5 @@ else if (argc == 3)
 else
     usage();
 fqToQa(lf, dir);
+return 0;
 }

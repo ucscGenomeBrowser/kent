@@ -5,7 +5,7 @@
 #include "fa.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fragPart.c,v 1.2 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: fragPart.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 char *faDirs[] = 
     {
@@ -112,6 +112,7 @@ if (argc >= 5)
     }
 dnaUtilOpen();
 fragPart(argv[1], strand, start, end);
+return 0;
 }
 
 
