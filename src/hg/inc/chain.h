@@ -18,11 +18,6 @@ struct chain *chainLoadAll(char *fileName);
 /* Load all chain from a tab-separated file.
  * Dispose of this with chainFreeList(). */
 
-struct chain *chainLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all chain from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
- * Dispose of this with chainFreeList(). */
-
 struct chain *chainCommaIn(char **pS, struct chain *ret);
 /* Create a chain out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -43,6 +38,13 @@ void chainOutput(struct chain *el, FILE *f, char sep, char lastSep);
 
 #define chainCommaOut(el,f) chainOutput(el,f,',',',');
 /* Print out chain as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct chain *chainLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all chain from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with chainFreeList(). */
 
 #endif /* CHAIN_H */
 
