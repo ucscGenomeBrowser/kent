@@ -80,26 +80,6 @@ memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr
 return socket(AF_INET, SOCK_STREAM, 0);
 }
 
-int readLarge(int sd, void *vBuf, size_t size)
-/* Read in until all is read or there is an error. */
-{
-char *buf = vBuf;
-size_t totalRead = 0;
-size_t oneRead;
-
-while (totalRead < size)
-    {
-    oneRead = read(sd, buf + totalRead, size - totalRead);
-    if (oneRead < 0)
-        {
-	perror("Couldn't finish large read");
-	break;
-	}
-    totalRead += oneRead;
-    }
-return totalRead;
-}
-
 void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
 /* Load up index and hang out in RAM. */
 {
@@ -109,6 +89,8 @@ char *line, *command;
 int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
 long baseCount = 0, queryCount = 0;
+int warnCount = 0;
+int noSigCount = 0;
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
@@ -124,7 +106,7 @@ for (;;)
     buf[readSize] = 0;
     if (!startsWith(gfSignature(), buf))
         {
-	warn("Connection without gfSignature\n%s", buf);
+	++noSigCount;
 	continue;
 	}
     line = buf + strlen(gfSignature());
@@ -142,6 +124,10 @@ for (;;)
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "bases %ld", baseCount);
 	gfSendString(connectionHandle, buf);
+	sprintf(buf, "noSig %d", noSigCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "warnings %d", warnCount);
+	gfSendString(connectionHandle, buf);
 	gfSendString(connectionHandle, "end");
 	}
     else if (sameString("query", command))
@@ -151,6 +137,7 @@ for (;;)
 	if (s == NULL || !isdigit(s[0]))
 	    {
 	    warn("Expecting query size after query command");
+	    ++warnCount;
 	    }
 	else
 	    {
@@ -165,9 +152,10 @@ for (;;)
 		++queryCount;
 		baseCount += seq.size;
 		seq.dna = needLargeMem(seq.size);
-		if (readLarge(connectionHandle, seq.dna, seq.size) != seq.size)
+		if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
 		    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
+		    ++warnCount;
 		    }
 		else
 		    {
@@ -207,6 +195,7 @@ for (;;)
     else
         {
 	warn("Unknown command %s", command);
+	++warnCount;
 	}
     close(connectionHandle);
     connectionHandle = 0;
@@ -255,7 +244,8 @@ write(sd, buf, strlen(buf));
 
 for (;;)
     {
-    gfRecieveString(sd, buf);
+    if (gfGetString(sd, buf) == NULL)
+        break;
     if (sameString(buf, "end"))
         break;
     else
@@ -290,7 +280,8 @@ write(sd, seq->dna, seq->size);
 
 for (;;)
     {
-    gfRecieveString(sd, buf);
+    if (gfGetString(sd, buf) == NULL)
+        break;
     if (sameString(buf, "end"))
 	{
 	printf("%d matches\n", matchCount);
@@ -323,13 +314,14 @@ sprintf(buf, "%sfiles", gfSignature());
 write(sd, buf, strlen(buf));
 
 /* Get count of files, and then each file name. */
-gfRecieveString(sd, buf);
-fileCount = atoi(buf);
-for (i=0; i<fileCount; ++i)
+if (gfGetString(sd, buf) != NULL)
     {
-    printf("%s\n", gfRecieveString(sd, buf));
+    fileCount = atoi(buf);
+    for (i=0; i<fileCount; ++i)
+	{
+	printf("%s\n", gfRecieveString(sd, buf));
+	}
     }
-
 close(sd);
 }
 
