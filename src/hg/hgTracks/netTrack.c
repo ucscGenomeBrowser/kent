@@ -1,3 +1,7 @@
+/* netTrack - stuff to handle loading and display of
+ * netAlign type tracks in browser. Nets are derived
+ * from cross-species alignments usually. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

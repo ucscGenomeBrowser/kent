@@ -12,6 +12,10 @@
 #include "hui.h"
 #endif
 
+#ifndef CART_H
+#include "cart.h"
+#endif
+
 struct trackGroup
 /* Structure that displays a group of tracks. The central data structure
  * of the graphical genome browser. */
@@ -285,6 +289,16 @@ void linkedFeaturesMethods(struct trackGroup *tg);
 /* Fill in track group methods for linked features. 
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
+
+Color lfChromColor(struct trackGroup *tg, void *item, struct vGfx *vg);
+/* Return color of chromosome for linked feature type items
+ * where the chromosome is listed somewhere in the lf->name. */
+
+char *lfMapNameFromExtra(struct trackGroup *tg, void *item);
+/* Return map name of item from extra field. */
+
+void chainMethods(struct trackGroup *tg);
+/* Return name of item from extra field. */
 
 void netMethods(struct trackGroup *tg);
 /* Make track group for chain/net alignment. */
