@@ -1,7 +1,7 @@
 /* wigBedToBinary - Convert a BED file, formatted <chrom><start><end><value> to
  *                      wiggle binary format */
 
-static char const rcsid[] = "$Id: wigBedToBinary.c,v 1.2 2004/12/15 20:17:56 hiram Exp $";
+static char const rcsid[] = "$Id: wigBedToBinary.c,v 1.3 2004/12/15 20:54:21 hiram Exp $";
 
 #include "common.h"
 #include	"options.h"
@@ -43,7 +43,7 @@ if (! obsolete)
     {
     verbose(1,"ERROR: This loader is obsolete.  Please use: 'wigEncode'\n");
     verbose(1,"\t(use -obsolete flag to run this encoder despite it being obsolete)\n");
-    errAbort("ERROR: wigBedToBianry is obsolete, use 'wigEncode' instead");
+    errAbort("ERROR: wigBedToBinary is obsolete, use 'wigEncode' instead");
     }
 
 if (argc < 4)
