@@ -375,7 +375,7 @@ struct trackDb *hTrackDbForTrack(char *track);
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
  * used if it exists. */
 
-void hFindDefaultChrom(char *db, char defaultChrom[64]);
+char *hFindDefaultChrom(char *db, char defaultChrom[64]);
 /* Find chromosome to use if none specified. */
 
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);

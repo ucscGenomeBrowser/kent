@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.196 2004/07/18 01:07:51 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.197 2004/07/18 01:14:09 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2326,10 +2326,7 @@ boolean isSplit = FALSE;
 char defaultChrom[64];
 
 if (chrom == NULL)
-    {
-    hFindDefaultChrom(db, defaultChrom);
-    chrom = defaultChrom;
-    }
+    chrom = hFindDefaultChrom(db, defaultChrom);
 if (dbHash == NULL)
     dbHash = newHash(8);
 hash = hashFindVal(dbHash, db);
@@ -2340,10 +2337,13 @@ if (hash == NULL)
     }
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
-    sprintf(fullName, "%s_%s", chrom, rootName);
-    if (hTableExistsDb(db, fullName))
-	isSplit = TRUE;
-    else
+    if (chrom != NULL)
+	{
+	sprintf(fullName, "%s_%s", chrom, rootName);
+	if (hTableExistsDb(db, fullName))
+	    isSplit = TRUE;
+	}
+    if (!isSplit)
         {
 	strcpy(fullName, rootName);
 	if (!hTableExistsDb(db, fullName))
