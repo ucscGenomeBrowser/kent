@@ -21,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.5 2004/06/09 00:47:44 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.6 2004/07/07 21:00:36 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -102,24 +102,25 @@ void doHelp()
 /* Print up help page */
 {
 puts(
-"<H1>In-Silico PCR User Guide</H1>\n"
 "In-Silico PCR searches a sequence database with a pair of\n"
 "PCR primers.  It uses an indexing strategy to do this quickly.\n"
 "\n"
-"<H2>Controls</H2>\n"
-"<B>Forward Primer</B> - The primers must be at least 15 bases long.<BR>\n"
-"<B>Reverse Primer</B> - This is on the opposite strand from the forward primer.<BR>\n"
+"<H3>Configuration Options</H3>\n"
+"<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
+"<B>Forward Primer</B> - Must be at least 15 bases in length.<BR>\n"
+"<B>Reverse Primer</B> - On the opposite strand from the forward primer. Minimum 
+length of 15 bases.<BR>\n"
 "<B>Max Product Size</B> - Maximum size of amplified region.<BR>\n"
-"<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Must be at least 15.<BR>\n"
+"<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Minimum match size is 15.<BR>\n"
 "<B>Min Good Match</B> - Number of bases on 3' end of primers where at least 2 out of 3 bases match.<BR>\n"
-"<B>Database</B> - Which sequence database to search.<BR>\n"
+"<B>Flip Reverse Primer</B> - Invert the sequence order and reverse complement the reverse primer.<BR>\n"
 "\n"
-"<H2>Output</H2>\n"
-"When the search is successful the output is a fasta format sequence\n"
-"file containing all the regions in the database that lie between the \n"
+"<H3>Output</H3>\n"
+"When successful, the search returns a sequence output file in fasta format \n"
+"containing all regions in the database that lie between the \n"
 "primer pair.  The fasta header describes the region in the database\n"
-"and the primers.  The fasta body is capitalized where the primer\n"
-"sequence matches the database sequence and lowercase elsewhere.  Here\n"
+"and the primers.  The fasta body is capitalized in areas where the primer\n"
+"sequence matches the database sequence and in lower-case elsewhere.  Here\n"
 "is an example:<BR>\n"
 "<TT><PRE>\n"
 ">chr22:31000551+31001000  TAACAGATTGATGATGCATGAAATGGG CCCATGAGTGGCTCCTAAAGCAGCTGC\n"
@@ -133,7 +134,7 @@ puts(
 "aaattggcttcacttttaaggtgaatccagaacccagatgtcagagctcc\n"
 "aagcactttgctctcagctccacGCAGCTGCTTTAGGAGCCACTCATGaG\n"
 "</PRE></TT>\n"
-"The + between the coordinates in the fasta header indicates that\n"
+"The + between the coordinates in the fasta header indicates \n"
 "this is on the positive strand.  \n"
 );
 }
@@ -305,14 +306,14 @@ printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"orgForm\">"
 cartSaveSession(cart);
 printf("</FORM>\n");
 webNewSection("About In-Silico PCR");
+doHelp();
+printf("%s", "<P><H3>Author</H3>\n");
 printf("%s", "<P>In-Silico PCR was written by "
 "<A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
 "Interactive use on this web server is free to all.\n"
 "Sources and executables to run batch jobs on your own server are available free\n"
 "for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
 "licenses are also available.  Contact Jim for details.</P>\n");
-webNewSection("User Guide");
-doHelp();
 }
 
 boolean doPcr(struct pcrServer *server,
