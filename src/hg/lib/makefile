@@ -41,8 +41,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
     affyAtlas.o imageClone.o stanMad.o jaxQTL.o hgSeq.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
-	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
-	ranlib ../../lib/$(MACHTYPE)/jkhgap.a
+	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 clean:
 	rm -f $(O);
