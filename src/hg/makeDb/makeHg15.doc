@@ -3422,7 +3422,7 @@ hgLoadBed -noBin hg15 syntenyCow in.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
-# COW BACENDS (In progress, Heather, Mar. 8, 2005)
+# COW BACENDS (Done, Heather, Mar. 8, 2005)
 
 ssh hgwdev
 cd /cluster/data/hg15/bed
