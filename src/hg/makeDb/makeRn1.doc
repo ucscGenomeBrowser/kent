@@ -264,7 +264,7 @@ GOLD AND GAP TRACKS (DONE 11/26/02)
     hgGoldGapGl -noGl rn1 /cluster/store4/rn1 .
 
 
-CREATE RELATIONAL MRNA DATABASE (DONE)
+CREATE RELATIONAL MRNA DATABASE (DONE 11/27/02)
     ssh hgwdev
     # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
     mkdir -p /gbdb/rn1/mrna.132
@@ -299,7 +299,7 @@ hide mol
         gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (IN PROGRESS) DONE FOR ALL REFSEQ STEPS
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE 11/28/02)
 
 
     # Use BLAT to generate refSeq, mRNA and EST alignments as so:
@@ -321,14 +321,12 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (IN PROGRESS) DONE FOR ALL REFSEQ ST
     # check on progress with para check in mrna, est, and refSeq directories.
     # report on runtime when finished:
       para create spec
-# DONE TO HERE - WAITING FOR CLUSTER
       para try
       para push
     para time > time
-
       
     # Process refSeq, mRNA, and EST alignments into near best in genome.
-    ssh eieio - DONE FOR REFSEQ
+    ssh eieio
     cd ~/rn1/bed
     cd refSeq
     pslSort dirs raw.psl /cluster/store2/temp psl
@@ -382,14 +380,14 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (IN PROGRESS) DONE FOR ALL REFSEQ ST
     cd ~/rn1/bed/est/intronEst
     hgLoadPsl rn1 *.psl
 
-    # Load refSeq alignments into database - DONE FOR REFSEQ
+    # Load refSeq alignments into database
     ssh hgwdev
     cd ~/rn1/bed/refSeq
     pslCat -dir chrom > refSeqAli.psl
     hgLoadPsl rn1 -tNameIx refSeqAli.psl
 
 
-PRODUCING ESTORIENTINFO TABLE
+PRODUCING ESTORIENTINFO TABLE (DONE 12/2/02 -MATT)
 
 This table is needed for proper orientation of ESTs in the
 browser.  Many will appear on the wrong strand without it.
@@ -397,23 +395,26 @@ This involves a cluster run.  First load the EST psl files
 as so:
      ssh eieio
      cd ~/rn1/bed/est
-     pslSortAcc nohead contig /cluster/store2/temp contig.psl
+     pslSortAcc nohead contigs /cluster/store2/temp contig.psl
+     ssh kkstore
      mkdir /scratch/hg/rn1/est
-     cp -r contig /scratch/hg/rn1/est
-     sudo /cluster/install/utilities/updateLocal
+     cd ~/rn1/bed/est
+     cp -r contigs /scratch/hg/rn1/est
+
 Wait for these to finish.
      cd ..
      mkdir estOrientInfo
      cd estOrientInfo
      mkdir ei
-     ls -1S /scratch/hg/rn1/est/contig > psl.lst
-     cp ~/lastRn/bed/estOrientInfo/gsub .
+     ls -1S /scratch/hg/rn1/est/contigs/* > psl.lst
+     cp ~/mm2/bed/estOrientInfo/gsub .
 Update gsub to refer to rat contig sequence currently on
-/scratch, and rat ESTs on /scratch.
+/scratch/hg/rn1/contigs.1126, and rat ESTs on /scratch/hg/rn1/est/contigs
+and the rat est in ./scratch/hg/mrna.132/Rattus_norvegicus/est/fa.
      gensub2 psl.lst single gsub spec
+     ssh kk
      para create spec
 Then run the  job on the cluster
-     ssh kk
      cd ~/rn1/bed/estOrientInfo
      para try
      sleep 60
@@ -427,7 +428,7 @@ Load them into database as so:
      cd ~/rn1/bed/estOrientInfo
      hgLoadBed rn1 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
      
-CREATE RNACLUSTER TABLE (TODO)
+CREATE RNACLUSTER TABLE (DONE 12/2/02 - MATT)
  Make sure that refSeqAli and estOrientInfo tables are made already
  (see above).
 
@@ -442,7 +443,7 @@ CREATE RNACLUSTER TABLE (TODO)
    end
    hgLoadBed rn1 rnaCluster est/*.bed
 
-PRODUCING KNOWN GENES (IN PROGRESS)
+PRODUCING KNOWN GENES (DONE 11/26/02 - MATT)
 
 o - Download everything from ftp://ftp.ncbi.nih.gov/refseq/cumulative
     into /cluster/store1/refSeqCum/112602
@@ -471,9 +472,7 @@ Get the rat proteins:
         /cluster/store1/refSeqCum/112602/rat.faa \
         /cluster/store1/refSeqCum/112602/mim2loc
 o - Add RefSeq status info 
-    hgRefSeqStatus rn1 /cluster/store1/refSeqCum/112602/loc2ref
-
-REFFLAT - DONE
+    hgRefSeqStatus rn1 /cluster/store1/refSeqCum/112602/loc2refE
 
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn1
