@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.16 2004/09/21 00:05:07 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.17 2004/09/25 05:38:37 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -113,7 +113,7 @@ if (fieldCount < 4)
 bed->name = lmCloneString(lm, row[2]);
 if (fieldCount < 5)
     return bed;
-bed->score = sqlSigned(row[3]);
+bed->score = atoi(row[3]);
 if (fieldCount < 6)
     return bed;
 strand = row[4];

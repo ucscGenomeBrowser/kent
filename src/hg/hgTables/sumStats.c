@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.11 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.12 2004/09/25 05:38:37 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -251,7 +251,6 @@ long long sumScores = 0;
 
 
 htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
-cartSaveSession(cart);
 
 for (region = regionList; region != NULL; region = region->next)
     {

@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.71 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.72 2004/09/25 05:38:37 kent Exp $";
 
 
 void usage()
@@ -185,7 +185,6 @@ static struct trackDb *getFullTrackList()
 struct trackDb *list = hTrackDb(NULL), *tdb;
 struct customTrack *ctList, *ct;
 
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 /* Change the mrna track to all_mrna to avoid confusion elsewhere. */
 for (tdb = list; tdb != NULL; tdb = tdb->next)
     {
@@ -194,7 +193,6 @@ for (tdb = list; tdb != NULL; tdb = tdb->next)
 	tdb->tableName = cloneString("all_mrna");
 	}
     }
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();

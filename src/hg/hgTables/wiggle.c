@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.23 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.24 2004/09/25 05:38:37 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -514,14 +514,17 @@ char *table2 = NULL;
 boolean fullGenome = FALSE;
 boolean statsHeaderDone = FALSE;
 boolean gotSome = FALSE;
+char *shortLabel = table;
 
 startTime = clock1000();
+if (track != NULL)
+     shortLabel = track->shortLabel;
 
 /*	Count the regions, when only one, we can do more stats */
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
 
-htmlOpen("%s (%s) Wiggle Summary Statistics", track->shortLabel, table);
+htmlOpen("%s (%s) Wiggle Summary Statistics", shortLabel, table);
 
 fullGenome = fullGenomeRegion();
 
