@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.152 2003/10/25 08:21:33 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.153 2003/10/29 00:05:33 braney Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2941,7 +2941,7 @@ if (!hgParseChromRangeDb(position, &chromName, &winStart, &winEnd, FALSE))
     strncpy(buffer, position, sizeof(buffer) - 1);
 else
     {
-    sprintLongWithCommas(num1Buf, winStart);
+    sprintLongWithCommas(num1Buf, winStart + 1);
     sprintLongWithCommas(num2Buf, winEnd);
     safef(buffer, sizeof(buffer) - 1, "%s:%s-%s",chromName, num1Buf,  num2Buf);
     }
