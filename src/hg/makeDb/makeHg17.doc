@@ -11492,6 +11492,13 @@ done
     hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 # create and edit wgRna.html under src/hg/makeDb/trackDb/human/hg17.
 
+# RELOADED wgRna DATA USING wgRNA_corrected.txt SENT BY MICHEL WEBER
+# Manually removed the first header line and the first column of the bin field and removed 
+# the last empty line.
+
+    cut -f 2- wgRNA_corrected.txt >wgRna.tab
+    vi wgRna.tab
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 
 # 11-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2004-12-16 kate)
     ssh eieio
