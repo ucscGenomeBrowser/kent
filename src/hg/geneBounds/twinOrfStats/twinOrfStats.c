@@ -124,6 +124,12 @@ struct oddsMatrix
     double odds[7][7];
     };
 
+struct c2Counts
+/* Counts of adjacent columns in alignment */
+    {
+    int counts[7*7][7*7];
+    };
+
 struct codonCounts
 /* A matrix for codon counts */
    {
@@ -154,6 +160,17 @@ int count = 0;
 for (i=0; i<7; ++i)
     for (j=0; j<7; ++j)
         count += cm->counts[i][j];
+return count;
+}
+
+int c2CountsTotal(struct c2Counts *m)
+/* Count total number in matrix */
+{
+int i,j;
+int count = 0;
+for (i=0; i<7*7; ++i)
+    for (j=0; j<7*7; ++j)
+        count += m->counts[i][j];
 return count;
 }
 
@@ -284,20 +301,20 @@ for (;symIx < axt->symCount; ++symIx)
 	      }
 	  cm->counts[tIx][qIx] += 1;
 	  codIx = 0;
-	  // uglyf("%s %s %d %d\n", tCod, qCod, tIx, qIx);
 	  }
        ++tPos;
        }
     }
 }
 
-void addRange(struct countMatrix *cm, struct axt *axt, int startT, int endT)
+void addRange(struct countMatrix *cm, struct c2Counts *m,
+	struct axt *axt, int startT, int endT)
 /* Add range of values to matrix. */
 {
 int symIx = tIxToSymIx(axt, startT);
 int tPos = startT;
 char t,q;
-int tIx, qIx;
+int tIx, qIx, lastTix = -1, lastQix = -1;
 
 for (;symIx < axt->symCount; ++symIx)
     {
@@ -308,9 +325,17 @@ for (;symIx < axt->symCount; ++symIx)
     tIx = symToIx[t];
     qIx = symToIx[q];
     if (tIx >= 0 && qIx >= 0)
+	{
 	cm->counts[tIx][qIx] += 1;
+	if (lastTix >= 0 && lastQix >= 0)
+	    {
+	    m->counts[lastTix*7+lastQix][tIx*7+qIx] += 1;
+	    }
+	}
     if (t != '-' && t != '.')
        ++tPos;
+    lastTix = tIx;
+    lastQix = qIx;
     }
 }
 
@@ -340,7 +365,7 @@ for (symIx = 0; symIx < axt->symCount; ++symIx)
 }
 
 
-void dumpPos(FILE *f, struct countMatrix *cm, char *label)
+void dumpCounts(FILE *f, struct countMatrix *cm, char *label)
 /* Dump out position. */
 {
 int q, t;
@@ -367,7 +392,41 @@ fprintf(f, "\n");
 fprintf(f, "\n");
 }
 
+void dumpM1(FILE *f, struct c2Counts *m, char *label)
+/* Dump first order markov matrix. */
+{
+int q, t, t1, t2;
+int counts = c2CountsTotal(m);
+
+fprintf(f, "%s %d\n", label, counts);
+t = 0;
+fprintf(f, "#   ");
+for (t1=0; t1<7; ++t1)
+   {
+   for (t2=0; t2<7; ++t2)
+       {
+       fprintf(f, "   %c%c     ", ixToSym[t1], ixToSym[t2]);
+       }
+    }
+fprintf(f,"\n");
+
+for (t1=0; t1<7; ++t1)
+    {
+    for (t2=0; t2<7; ++t2)
+	{
+	fprintf(f, "%c%c", ixToSym[t1], ixToSym[t2]);
+	for (q=0; q<7*7; ++q)
+	   fprintf(f, " %8.7f", (double)m->counts[t][q]/counts);
+	fprintf(f, "\n");
+	++t;
+	}
+    }
+fprintf(f, "\n");
+}
+
+
 void dumpCodon(FILE *f, struct codonCounts *cm, char *label)
+/* Dump codon matrix */
 {
 int q, t, t1, t2, t3;
 int counts = countCodonMatrixTotal(cm);
@@ -487,6 +546,7 @@ struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct axt *axt;
 static struct countMatrix kozak[10], all, utr5, utr3, cds;
+static struct c2Counts c2All, c2Utr5, c2Utr3, c2Cds;
 char label[64];
 char *predictFile = optionVal("predict", NULL);
 int i;
@@ -504,24 +564,28 @@ while ((axt = axtRead(lf)) != NULL)
 	    {
 	    for (i=0; i<10; ++i)
 		addPos(&kozak[i], axt, rsi->cdsStart - 5 + i);
-	    addRange(&all, axt, 0, rsi->size);
-	    addRange(&utr5, axt, 0, rsi->cdsStart);
-	    addRange(&cds, axt, rsi->cdsStart, rsi->cdsEnd);
-	    addRange(&utr3, axt, rsi->cdsEnd, rsi->size);
+	    addRange(&all, &c2All, axt, 0, rsi->size);
+	    addRange(&utr5, &c2Utr5, axt, 0, rsi->cdsStart);
+	    addRange(&cds, &c2Cds, axt, rsi->cdsStart, rsi->cdsEnd);
+	    addRange(&utr3, &c2Utr3, axt, rsi->cdsEnd, rsi->size);
 	    addCodons(&codons, axt, rsi->cdsStart, rsi->cdsEnd-3);
 	    }
 	}
     axtFree(&axt);
     }
 lineFileClose(&lf);
-dumpPos(f, &all, "all");
-dumpPos(f, &utr5, "utr5");
-dumpPos(f, &cds, "cds");
-dumpPos(f, &utr3, "utr3");
+dumpCounts(f, &all, "all");
+dumpCounts(f, &utr5, "utr5");
+dumpCounts(f, &cds, "cds");
+dumpCounts(f, &utr3, "utr3");
+dumpM1(f, &c2All, "c2_all");
+dumpM1(f, &c2Utr5, "c2_utr5");
+dumpM1(f, &c2Cds, "c2_cds");
+dumpM1(f, &c2Utr3, "c2_utr3");
 for (i=0; i<10; ++i)
     {
     sprintf(label, "kozak[%d]", i-5);
-    dumpPos(f, &kozak[i], label);
+    dumpCounts(f, &kozak[i], label);
     }
 dumpCodon(f, &codons, "codon");
 if (predictFile)
