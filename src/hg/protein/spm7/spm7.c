@@ -89,6 +89,7 @@ inf  = mustOpen("sorted.lis", "r");
 
 strcpy(oldInfo, "");
 
+isDuplicate   = 0;
 oldMrnaStr    = NULL;
 oldAlignStr   = NULL;
 oldProteinStr = NULL;
@@ -110,9 +111,7 @@ while (fgets(line_in, 10000, inf) != NULL)
     chp = strstr(chp, "\t");	//cds block end   position
     *chp = '\0';
     chp++;
-
     strcpy(newInfo, line);
-    isDuplicate=0;
 
     if (strcmp(oldInfo, newInfo) == 0)
 	{
@@ -120,10 +119,15 @@ while (fgets(line_in, 10000, inf) != NULL)
 	}
     else
 	{
+	// remember previous record as old only if it is not a duplicate
+	if (!isDuplicate)
+	    {
+	    oldMrnaStr 	  = mrnaStr;
+	    oldProteinStr = proteinStr;
+	    oldAlignStr	  = alignStr;
+	    }
 	strcpy(oldInfo, newInfo);
-	oldMrnaStr 	= mrnaStr;
-	oldProteinStr	= proteinStr;
-	oldAlignStr	= alignStr;
+	isDuplicate = 0;
 	}
 
     chp = strstr(chp, "\t");	//priority score
@@ -153,7 +157,7 @@ while (fgets(line_in, 10000, inf) != NULL)
     chp = strstr(alignID, "\n");
     *chp = '\0';
     alignStr = strdup(alignID);
-    	
+
     if (isDuplicate)
 	{
 	fprintf(o7, "%s\t%s\t%s\t%s\n", 
