@@ -93,7 +93,6 @@ strict:
 	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes human hg15 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes human hg16 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes mouse mm3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes mouse mm4 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes rat rn2 trackDb ../../lib/trackDb.sql .
@@ -105,7 +104,6 @@ strict:
 	hgTrackDb -strict=yes drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes sacCer sacCer1 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes chicken galGal1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes chicken galGal2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes chimp panTro1 trackDb ../../lib/trackDb.sql .
 
