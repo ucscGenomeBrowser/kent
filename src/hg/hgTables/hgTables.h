@@ -7,6 +7,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef LOCALMEM_H
+#include "localmem.h"
+#endif
+
 #ifndef DYSTRING_H
 #include "dystring.h"
 #endif
@@ -116,6 +120,9 @@ struct region *getRegionsWithChromEnds();
 /* Get list of regions.  End field is set to chrom size rather
  * than zero for full chromosomes. */
 
+void regionFillInChromEnds(struct region *regionList);
+/* Fill in end fields if set to zero to be whole chrom. */
+
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
 
@@ -176,18 +183,18 @@ void doTabOutTable(char *database, char *table,
 /* Do tab-separated output on table. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region);
+	struct trackDb *track, struct region *region, struct lm *lm);
 /* Get list of beds on single region that pass filtering. */
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track);
+	struct trackDb *track, struct lm *lm);
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 
 struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
-	struct trackDb *track);
-/* get list of beds in selected regions that pass intersection
- * (and filtering). */
+	struct trackDb *track, struct lm *lm);
+/* Get list of beds in selected regions that pass intersection
+ * (and filtering). Do lmCleanup (not bedFreeList) when done. */
 
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
@@ -379,7 +386,7 @@ struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	boolean *retGotFilter, boolean *retGotIds);
+	struct lm *lm, boolean *retGotFilter, boolean *retGotIds);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done.  

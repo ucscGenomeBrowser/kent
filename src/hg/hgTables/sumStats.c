@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.8 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.9 2004/07/23 08:18:12 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -88,7 +88,10 @@ cov->region = region;
 cov->minBases = BIGNUM;
 if (region != NULL)
     {
-    cov->bits = bitAlloc(region->end - region->start);
+    int end = region->end;
+    if (end == 0) 
+	end = hChromSize(region->chrom);
+    cov->bits = bitAlloc(end - region->start);
     }
 return cov;
 }
@@ -281,22 +284,28 @@ static void doSummaryStatsBed(struct sqlConnection *conn)
  * or that is bed-format custom. */
 {
 struct trackDb *track = curTrack;
-struct bed *bedList;
+struct bed *bedList = NULL;
+struct region *regionList = getRegions();
+#ifdef OLD
 struct region *regionList = getRegionsWithChromEnds();
+#endif
 char *regionName = getRegionName();
-long long regionSize = basesInRegion(regionList);
-long long gapTotal = gapsInRegion(conn, regionList);
-long long realSize = regionSize - gapTotal;
+long long regionSize, gapTotal, realSize;
 long startTime, loadTime, calcTime;
 struct covStats *covList, *cov;
 int itemCount;
 struct hTableInfo *hti = getHti(database, track->tableName);
+struct lm *lm = lmInit(64*1024);
 
 
 htmlOpen("%s (%s) Summary Statistics", track->shortLabel, track->tableName);
 cartSaveSession(cart);
 startTime = clock1000();
-bedList = getAllIntersectedBeds(conn, track);
+bedList = getAllIntersectedBeds(conn, track, lm);
+regionFillInChromEnds(regionList);
+regionSize = basesInRegion(regionList);
+gapTotal = gapsInRegion(conn, regionList);
+realSize = regionSize - gapTotal;
 loadTime = clock1000() - startTime;
 
 
@@ -364,8 +373,8 @@ floatStatRow("calculation time", 0.001*calcTime);
 stringStatRow("filter", (anyFilter() ? "on" : "off"));
 stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
-
 htmlClose();
+lmCleanup(&lm);
 }
 
 void doSummaryStats(struct sqlConnection *conn)

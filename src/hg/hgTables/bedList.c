@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "cheapcgi.h"
@@ -16,58 +17,246 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.6 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.7 2004/07/23 08:18:12 kent Exp $";
+
+
+struct bed *getRegionAsBed(
+	char *db, char *table, 	/* Database and table. */
+	struct region *region,  /* Region to get data for. */
+	char *filter, 		/* Filter to add to SQL where clause if any. */
+	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+	struct lm *lm)		/* Where to allocate memory. */
+/* Return a bed list of all items in the given range in table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+{
+struct dyString *fields = newDyString(0);
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+struct hTableInfo *hti;
+struct bed *bedList=NULL, *bed;
+char **row;
+char rangeStr[32];
+char *strand, tStrand, qStrand;
+int i, blockCount;
+int fieldCount;
+boolean isPsl, isGenePred, isBedWithBlocks;
+boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
+
+/* Caller can give us either a full table name or root table name. */
+hti = hFindTableInfoDb(db, region->chrom, table);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s", table);
+fieldCount = hTableInfoBedFieldCount(hti);
+isPsl = sameString("tStarts", hti->startsField);
+isGenePred = sameString("exonEnds", hti->endsSizesField);
+isBedWithBlocks = (sameString("chromStarts", hti->startsField) 
+         && sameString("blockSizes", hti->endsSizesField));
+
+/* All beds have at least chrom,start,end.  We omit the chrom
+ * form the query since we already know it. */
+dyStringPrintf(fields, "%s,%s", hti->startField, hti->endField);
+if (fieldCount >= 4)
+    {
+    if (hti->nameField[0] != 0)
+	dyStringPrintf(fields, ",%s", hti->nameField);
+    else /* Put in . as placeholder. */
+	dyStringPrintf(fields, ",'.'");  
+    }
+if (fieldCount >= 5)
+    {
+    if (hti->scoreField[0] != 0)
+	dyStringPrintf(fields, ",%s", hti->scoreField);
+    else
+	dyStringPrintf(fields, ",0", hti->startField);  
+    }
+if (fieldCount >= 6)
+    {
+    if (hti->strandField[0] != 0)
+	dyStringPrintf(fields, ",%s", hti->strandField);
+    else
+	dyStringPrintf(fields, ",'.'");  
+    }
+if (fieldCount >= 8)
+    {
+    if (hti->cdsStartField[0] != 0)
+	dyStringPrintf(fields, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
+    else
+	dyStringPrintf(fields, ",%s,%s", hti->startField, hti->endField);  
+    }
+if (fieldCount >= 12)
+    {
+    dyStringPrintf(fields, ",%s,%s,%s", hti->countField, 
+        hti->endsSizesField, hti->startsField);
+    }
+if (isPsl)
+    {
+    /* For psl format we need to know chrom size as well
+     * to handle reverse strand case. */
+    dyStringPrintf(fields, ",tSize");
+    }
+sr = regionQuery(conn, table, fields->string, region, TRUE, filter);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* If have a name field apply hash filter. */
+    if (fieldCount >= 4 && idHash != NULL)
+        if (!hashLookup(idHash, row[2]))
+	    continue;
+    lmAllocVar(lm, bed);
+    slAddHead(&bedList, bed);
+    bed->chrom = region->chrom;
+    bed->chromStart = sqlUnsigned(row[0]);
+    bed->chromEnd = sqlUnsigned(row[1]);
+    if (fieldCount < 4)
+        continue;
+    bed->name = lmCloneString(lm, row[2]);
+    if (fieldCount < 5)
+        continue;
+    bed->score = sqlSigned(row[3]);
+    if (fieldCount < 6)
+        continue;
+    strand = row[4];
+    qStrand = strand[0];
+    tStrand = strand[1];
+    if (tStrand == 0)
+        bed->strand[0] = qStrand;
+    else
+        {
+	/* psl: use XOR of qStrand,tStrand if both are given. */
+	if (tStrand == qStrand)
+	    bed->strand[0] = '+';
+	else
+	    bed->strand[0] = '-';
+	}
+    if (fieldCount < 8)
+        continue;
+    bed->thickStart = sqlUnsigned(row[5]);
+    bed->thickEnd   = sqlUnsigned(row[6]);
+    if (fieldCount < 12)
+        continue;
+    bed->blockCount = blockCount = sqlUnsigned(row[7]);
+    lmAllocArray(lm, bed->blockSizes, blockCount);
+    sqlUnsignedArray(row[8], bed->blockSizes, blockCount);
+    lmAllocArray(lm, bed->chromStarts, blockCount);
+    sqlUnsignedArray(row[9], bed->chromStarts, blockCount);
+    if (isGenePred)
+        {
+	/* Translate end coordinates to sizes. */
+	for (i=0; i<bed->blockCount; ++i)
+	    bed->blockSizes[i] -= bed->chromStarts[i];
+	}
+    else if (isPsl)
+        {
+	if (!pslKnowIfProtein)
+	    {
+	    /* Figure out if is protein using a rather elaborate but
+	     * working test I think Angie or Brian must have figured out. */
+	    if (tStrand == '-')
+	        {
+		int tSize = sqlUnsigned(row[10]);
+		pslIsProtein = 
+		       (bed->chromStart == 
+			tSize - (3*bed->blockSizes[bed->blockCount - 1]  + 
+			bed->chromStarts[bed->blockCount - 1]));
+		}
+	    else
+	        {
+		pslIsProtein = (bed->chromEnd == 
+			3*bed->blockSizes[bed->blockCount - 1]  + 
+			bed->chromStarts[bed->blockCount - 1]);
+		}
+	    pslKnowIfProtein = TRUE;
+	    }
+	if (pslIsProtein)
+	    {
+	    /* if protein then blockSizes are in protein space */
+	    for (i=0; i<blockCount; ++i)
+		bed->blockSizes[i] *= 3;
+	    }
+	if (tStrand == '-')
+	    {
+	    /* psl: if target strand is '-', flip the coords.
+	     * (this is the target part of pslRcBoth from src/lib/psl.c) */
+	    int tSize = sqlUnsigned(row[10]);
+	    for (i=0; i<blockCount; ++i)
+		{
+		bed->chromStarts[i] = tSize - 
+			(bed->chromStarts[i] + bed->blockSizes[i]);
+		}
+	    reverseInts(bed->chromStarts, bed->blockCount);
+	    reverseInts(bed->blockSizes, bed->blockCount);
+	    }
+	}
+    if (!isBedWithBlocks)
+	{
+	/* non-bed: translate absolute starts to relative starts */
+	for (i=0;  i < bed->blockCount;  i++)
+	    bed->chromStarts[i] -= bed->chromStart;
+	}
+    }
+dyStringFree(&fields);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+slReverse(&bedList);
+return(bedList);
+}
 
 static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList)
+	struct trackDb *track, struct region *regionList, struct lm *lm)
 /* getBed - get list of beds from database in region that pass filtering. */
 {
 struct region *region;
-struct bed *bedList = NULL;
+struct bed *bedList = NULL, *bed;
 char *table = track->tableName;
-char *filter = filterClause(database, table);
+struct hash *idHash = identifierHash();
+char *filter = filterClause(database, track->tableName);
 
 for (region = regionList; region != NULL; region = region->next)
     {
-    int end = region->end;
-    if (end == 0)
-         end = hChromSize(region->chrom);
-    struct bed *bedListRegion = hGetBedRangeDb(database, table, 
-    	region->chrom, region->start, end, filter);
-    bedList = slCat(bedList, bedListRegion);
+    struct bed *nextBed;
+    struct bed *bedListRegion = getRegionAsBed(database, table, 
+        region, filter, idHash, lm);
+    for (bed = bedListRegion; bed != NULL; bed = nextBed)
+        {
+	nextBed = bed->next;
+	slAddHead(&bedList, bed);
+	}
     }
+slReverse(&bedList);
+
 freez(&filter);
+hashFree(&idHash);
 return bedList;
 }
 
 struct bed *getFilteredBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList)
+	struct trackDb *track, struct region *regionList, struct lm *lm)
 /* get list of beds in regionList that pass filtering. */
 {
 if (isCustomTrack(track->tableName))
-    return customTrackGetFilteredBeds(track->tableName, regionList, NULL, NULL);
+    return customTrackGetFilteredBeds(track->tableName, regionList, 
+    	lm, NULL, NULL);
 else
-    return dbGetFilteredBedsOnRegions(conn, track, regionList);
+    return dbGetFilteredBedsOnRegions(conn, track, regionList, lm);
 }
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region)
+	struct trackDb *track, struct region *region, struct lm *lm)
 /* Get list of beds on single region that pass filtering. */
 {
 struct region *oldNext = region->next;
-struct bed *bedList;
+struct bed *bedList = NULL;
 region->next = NULL;
-bedList = getFilteredBedsOnRegions(conn, track, region);
+bedList = getFilteredBedsOnRegions(conn, track, region, lm);
 region->next = oldNext;
 return bedList;
 }
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track)
+	struct trackDb *track, struct lm *lm)
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 {
-return getFilteredBedsOnRegions(conn, track, getRegions());
+return getFilteredBedsOnRegions(conn, track, getRegions(), lm);
 }
 
 /* Droplist menu for custom track visibility: */
@@ -178,13 +367,14 @@ char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields;
 boolean gotResults = FALSE;
+struct lm *lm = lmInit(64*1024);
 
 if (!doCt)
     {
     textOpen();
     }
 
-bedList = getAllIntersectedBeds(conn, curTrack);
+bedList = getAllIntersectedBeds(conn, curTrack, lm);
 
 fields = hTableInfoBedFieldCount(hti);
 
@@ -288,7 +478,7 @@ else if (doCt)
 	   "<A HREF=\"%s\">click here to continue</A>.\n",
 	   redirDelay, browserUrl);
     }
-bedFreeList(&bedList);
+lmCleanup(&lm);
 }
 
 void doGetBed(struct sqlConnection *conn)

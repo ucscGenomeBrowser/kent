@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.3 2004/07/21 08:15:50 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.4 2004/07/23 08:18:12 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -224,9 +224,10 @@ int itemCount;
 // make an options page for just one param... any others?  
 // ? exon / CDS ?
 boolean gtf2StopCodons = FALSE;
+struct lm *lm = lmInit(64*1024);
 
 textOpen();
-bedList = getAllIntersectedBeds(conn, track);
+bedList = getAllIntersectedBeds(conn, track, lm);
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;
@@ -240,5 +241,6 @@ for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
 slFreeList(&gffList);
 if (itemCount == 0)
     hPrintf("\n# No results returned from query.\n\n");
+lmCleanup(&lm);
 }
 

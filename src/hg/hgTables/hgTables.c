@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.47 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.48 2004/07/23 08:18:12 kent Exp $";
 
 
 void usage()
@@ -228,11 +228,14 @@ else if (sameString(regionType, "range"))
     {
     char *range = cartString(cart, hgtaRange);
     regionList = AllocVar(region);
-    if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
-        {
-	errAbort("%s is not a chromosome range.  "
-	         "Please go back and enter something like chrX:1000000-1100000 "
-		 "in the range control.", range);
+    if ((region->chrom = hgOfficialChromName(range)) == NULL)
+	{
+	if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
+	    {
+	    errAbort("%s is not a chromosome range.  "
+		     "Please go back and enter something like chrX:1000000-1100000 "
+		     "in the range control.", range);
+	    }
 	}
     }
 else if (sameString(regionType, "encode"))
@@ -257,17 +260,24 @@ if (sameString(region, "range"))
 return region;
 }
 
-
-struct region *getRegionsWithChromEnds()
-/* Get list of regions.  End field is set to chrom size rather
- * than zero for full chromosomes. */
+void regionFillInChromEnds(struct region *regionList)
+/* Fill in end fields if set to zero to be whole chrom. */
 {
-struct region *region, *regionList = getRegions();
+struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
     if (region->end == 0)
         region->end = hChromSize(region->chrom);
     }
+}
+
+
+struct region *getRegionsWithChromEnds()
+/* Get list of regions.  End field is set to chrom size rather
+ * than zero for full chromosomes. */
+{
+struct region *regionList = getRegions();
+regionFillInChromEnds(regionList);
 return regionList;
 }
 
@@ -651,8 +661,9 @@ struct bed *bedList, *bed;
 char *table = track->tableName;
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
 char posBuf[64];
+struct lm *lm = lmInit(64*1024);
 htmlOpen("Hyperlinks to Genome Browser");
-bedList = getAllIntersectedBeds(conn, track);
+bedList = getAllIntersectedBeds(conn, track, lm);
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     char *name;
@@ -678,6 +689,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 if (bedList == NULL)
     hPrintf("\n# No results returned from query.\n\n");
 htmlClose();
+lmCleanup(&lm);
 }
 
 void doTopSubmit(struct sqlConnection *conn)
