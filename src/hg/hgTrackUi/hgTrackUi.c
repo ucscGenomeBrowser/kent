@@ -92,18 +92,18 @@ void rosettaUi(struct trackDb *tdb)
 {
 char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
 char *col = cartUsualString(cart, "rosetta.color", "rg");
-
 char *exonTypesOpts[] = {
     "Confirmed Only",
     "Predicted Only",
     "All",
 };
+char *exonTypes = cartUsualString(cart, "rosetta.et",  exonTypesOpts[0]);
 
 printf("<p><b>Cell Lines: </b> ");
 rosettaDropDown("rosetta.type", rosettaMap);
 printf("  ");
 printf("<b>Exons Shown:</b> ");
-cgiMakeDropList("rosetta.et", exonTypesOpts, ArraySize(exonTypesOpts), exonTypesOpts[0]);
+cgiMakeDropList("rosetta.et", exonTypesOpts, ArraySize(exonTypesOpts), exonTypes);
 printf(" <b>Color Scheme</b>: ");
 cgiMakeRadioButton("rosetta.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
