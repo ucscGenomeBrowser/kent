@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.19 2004/11/06 22:06:02 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.20 2005/02/08 17:14:00 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -38,6 +38,7 @@ errAbort(
   "    names.\n"
   "   -requiredTracks=tracks - only output clusters that contain genes from\n"
   "    all of a whitespace or comma seperated list of tracks.\n"
+  "   -clusterBed=bed - output BED file for each cluster\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -51,6 +52,7 @@ static struct optionSpec options[] = {
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
    {"requiredTracks", OPTION_STRING},
+   {"clusterBed", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -136,7 +138,7 @@ struct clusterGene
 /* A gene in a cluster */
 {
     struct clusterGene* next;
-    struct track* track;       /* aka table for gene */
+    struct track* track;         /* aka table for gene */
     struct genePred* gp;
     struct slRef *exonConflicts; /* list of genes in cluster that don't share
                                   * exons with this gene */
@@ -183,6 +185,7 @@ struct cluster
     struct cluster *next;	/* Next in list. */
     int id;                     /* id assigned to cluster */
     struct clusterGene *genes;  /* Associated genes. */
+    char *chrom;                /* chrom, memory not owned */
     int start,end;		/* Range covered by cluster. */
     boolean hasExonConflicts;   /* does this cluster have conflicts? */
     boolean hasCdsConflicts;
@@ -300,6 +303,7 @@ if (cg == NULL)
     }
 if (cluster->start == cluster->end)
     {
+    cluster->chrom = gp->chrom;
     cluster->start = start;
     cluster->end = end;
     }
@@ -637,7 +641,7 @@ fprintf(f, "\n");
 }
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
-                          char *chrom, char strand, FILE *f)
+                          char *chrom, char strand, FILE *outFh, FILE *clBedFh)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -654,8 +658,12 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
         {
         struct clusterGene *cg;
         for (cg = cluster->genes; cg != NULL; cg = cg->next)
-            prGene(f, cluster, cg);
+            prGene(outFh, cluster, cg);
         ++totalClusterCount;
+        if (clBedFh != NULL)
+            fprintf(clBedFh, "%s\t%d\t%d\tcl%d\n",
+                    cluster->chrom, cluster->start, cluster->end,
+                    cluster->id);
         }
 
 genePredFreeList(&gpList);
@@ -698,11 +706,9 @@ slReverse(&tracks);
 return tracks;
 }
 
-void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
-/* clusterGenes - Cluster genes from genePred tracks. */
+FILE *openOutput(char *outFile)
+/* open the output file and write the header */
 {
-struct slName *chromList, *chrom;
-struct sqlConnection *conn;
 FILE *f = mustOpen(outFile, "w");
 fputs("#"
       "cluster\t"
@@ -716,6 +722,16 @@ fputs("#"
       "hasCdsConflicts\t"
       "exonConflicts\t"
       "cdsConflicts\n", f);
+return f;
+}
+
+void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
+/* clusterGenes - Cluster genes from genePred tracks. */
+{
+struct slName *chromList, *chrom;
+struct sqlConnection *conn;
+FILE *outFh = NULL;
+FILE *clBedFh = NULL;
 
 hSetDb(database);
 gTracks  = buildTrackList(specCount, specs);
@@ -728,11 +744,18 @@ else
     chromList = hAllChromNames();
 slNameSort(&chromList);
 conn = hAllocConn();
+
+outFh = openOutput(outFile);
+if (optionExists("clusterBed"))
+    clBedFh = mustOpen(optionVal("clusterBed", NULL), "w");
+
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, chrom->name, '+', f);
-    clusterGenesOnStrand(conn, chrom->name, '-', f);
+    clusterGenesOnStrand(conn, chrom->name, '+', outFh, clBedFh);
+    clusterGenesOnStrand(conn, chrom->name, '-', outFh, clBedFh);
     }
+carefulClose(&clBedFh);
+carefulClose(&outFh);
 }
 
 void parseRequiredTracks()

@@ -11,8 +11,9 @@ test: refSeqTest refSeqCdsTest trackNamesTest selectTrackTest select2TracksTest
 #  chr4:71,201,777-71,250,403 - a merged cluster
 
 refSeqTest: mkout
-	clusterGenes output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	clusterGenes -clusterBed=output/refSeqTest.bed output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
 	diff -u expected/refSeqTest.gl output/refSeqTest.gl
+	diff -u expected/refSeqTest.bed output/refSeqTest.bed
 
 refSeqCdsTest: mkout
 	clusterGenes -cds output/refSeqCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
