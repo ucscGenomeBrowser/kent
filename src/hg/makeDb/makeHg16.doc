@@ -8735,7 +8735,135 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgMapToGene hg16 HInvGeneMrna knownGene knownToHInv
 
 
+# GENERATE GALGAL2 MAF FOR MULTIZ FROM NET (DONE 5/10/04 angie)
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
+    netSplit human.net net
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/hg16/nib \
+        /cluster/data/galGal2/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.hg.maf
+      axtToMaf $f \
+            /cluster/data/hg16/chrom.sizes /cluster/data/galGal2/chrom.sizes \
+            $maf -tPrefix=hg16. -qPrefix=galGal2.
+    end
 
+
+# MULTIZ HUMAN/MOUSE/RAT/GALGAL2 WITH NET MAF FOR ALL (DONE 5/10/04 angie)
+# (galGal2 net maf added to human/mouse/rat alignments described above [HUMOR])
+    # put the MAFs on bluearc
+    ssh eieio
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hmr
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hg
+    cp /cluster/data/hg16/bed/humor.2003-09-08/hmr/*.maf \
+      /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hmr
+    cp /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafNet/*.maf \
+      /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hg
+
+    ssh kki
+    mkdir /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2.allNet
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2.allNet
+    mkdir hmrg
+    # Wrapper script required because of stdout redirect:
+    cat << '_EOF_' > doMultiz
+#!/bin/csh
+/cluster/bin/penn/multiz $1 $2 - > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doMultiz
+    rm -f jobList
+    foreach file (/cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hmr/*.maf) 
+      set root=$file:t:r:r
+      echo "doMultiz /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet/hg/${root}.hg.maf $file /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2.allNet/hmrg/${root}.maf" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 40 of 41 jobs
+#Crashed: 1 jobs
+#Average job time:                  84s       1.40m     0.02h    0.00d
+#Longest job:                      267s       4.45m     0.07h    0.00d
+#Submission to last job:           290s       4.83m     0.08h    0.00d
+    # The crash was due to empty hg/chr18_random.hg.maf -- OK.
+
+    # clean up bluearc (these are big files!)
+    rm -r /cluster/bluearc/multiz.hg16mm3rn3galGal2.allNet
+
+    # put this out there for Glenn Tesler (not a browser track!)
+    ssh eieio
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2.allNet/hmrg
+    gzip *
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/angie/hg16.multizMm3Rn3GalGal2.allNet
+    foreach f (/cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2.allNet/hmrg/*)
+      ln -s $f /usr/local/apache/htdocs/angie/hg16.multizMm3Rn3GalGal2.allNet
+    end
+
+
+# EPONINE TSS PREDICTION (DONE 5/21/04 angie)
+    # Eponine runs fine on 2.5Mb contig, but barfs on much larger contig;
+    # chop up sequence at gaps into ~2.5Mb chunks for cluster run.
+    ssh eieio
+    mkdir /cluster/bluearc/hg16/chunks
+    cd /cluster/data/hg16
+    # Note: faSplit seems to ignore the ".chunk_" suffix below:
+    foreach f (?{,?}/NT_*/NT_??????.fa)
+      set ctg = $f:t:r
+      faSplit -minGapSize=10 -lift=/cluster/bluearc/hg16/chunks/$ctg.lft \
+        gap $f 2500000 /cluster/bluearc/hg16/chunks/$ctg.chunk_
+    end
+    mkdir /cluster/data/hg16/bed/eponine
+    cd /cluster/data/hg16/bed/eponine
+    wget http://www.sanger.ac.uk/Software/analysis/eponine/eponine-scan.jar
+    cat << '_EOF_' > doEpo
+#!/bin/csh
+set path=(/usr/java/j2re1.4.1_01/bin $path)
+java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doEpo
+    cp /dev/null jobList
+    foreach f (/cluster/bluearc/hg16/chunks/NT*.fa)
+      echo "./doEpo {check in line+ $f} {check out exists out/$f:t:r.gff}" \
+      >> jobList
+    end
+    mkdir out
+    ssh kk9
+    cd /cluster/data/hg16/bed/eponine
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 1588 of 1588 jobs
+#Average job time:                 208s       3.47m     0.06h    0.00d
+#Longest job:                      447s       7.45m     0.12h    0.01d
+#Submission to last job:          3591s      59.85m     1.00h    0.04d
+
+    # lift chunks -> contigs
+    mkdir contigs/
+    foreach l (/cluster/bluearc/hg16/chunks/*.lft)
+      set ctg = $l:t:r
+      liftUp contigs/$ctg.gff $l warn out/${ctg}*.gff
+    end
+    # lift contigs -> chrom
+    liftUp eponine.gff ../../jkStuff/liftAll.lft warn contigs/NT_*.gff
+    # Translate to bed 4 + float-score -- it would be a shame to lose 
+    # those scores in genePred or bed 5 (int score)
+    awk 'BEGIN {i=0;} \
+         {printf "%s\t%d\t%d\t%s.%d\t%s\t%s\n", $1, $4-1, $5, $1, i, $6, $7; \
+          i = i + 1;}' \
+      eponine.gff > eponine.bed
+    # load up
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/eponine
+    sed -e 's/bed6FloatScore/eponine/g' \
+      $HOME/kent/src/hg/lib/bed6FloatScore.sql > eponine.sql
+    hgLoadBed hg16 eponine eponine.bed -tab -sqlTable=eponine.sql
 
 
 # RELOAD ENSEMBL GENES WITH VERSION 34d (DONE 2004/05/20 baertsch)
