@@ -129,6 +129,7 @@ struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
+boolean withPopUps = TRUE;		/* Display PopUps? */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
@@ -563,9 +564,8 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-hPrintf("onMouseOver=\"javascript:void(popup('%s controls'));\">\n"
-/*hPrintf(" ALT=\"%s controls\">\n"*/
-    , tg->shortLabel);
+if( withPopUps ) 
+    hPrintf(" onMouseOver=\"javascript:popup('%s controls');\" onMouseOut=\"javascript:popupoff();\">\n", tg->shortLabel);
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -589,14 +589,11 @@ hPrintf("HREF=\"%s?position=%s:%d-%d",
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 
-if (toggleGroup)
-    hPrintf("onMouseOver=\"javascript:void(popup('Change between dense and full view of %s track'));\">\n",
-           toggleGroup->shortLabel);
-    /*hPrintf(" ALT=\"Change between dense and full view of %s track\">\n", 
-           toggleGroup->shortLabel);*/
+if (toggleGroup && withPopUps)
+        hPrintf(" onMouseOver=\"javascript:popup('Change between dense and full view of %s track');\" onMouseOut=\"javascript:popupoff();\">\n", toggleGroup->shortLabel);
 else
-    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\">\n",message);
-    /*hPrintf(" ALT=\"jump to %s\">\n", message);*/
+    if( withPopUps ) 
+        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\">\n",message);
 }
 
 
@@ -638,7 +635,8 @@ hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 /*if (start !=-1)*/
-    hPrintf(" onMouseOver=\"javascript:void(popup('%s'));\">\n",statusLine);
+if( withPopUps ) 
+    hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\">\n",statusLine);
 freeMem(encodedItem);
 }
 
@@ -773,6 +771,7 @@ struct linkedFeatures
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
+    char popUp[NAME_LEN];		/* text for popup */
     };
 
 struct linkedFeaturesPair
@@ -2226,6 +2225,7 @@ if (nameGetsPos)
     	psl->tName, psl->tStart, psl->tEnd);
     lf->extra = cloneString(buf);
     snprintf(lf->name, sizeof(lf->name), "%s %dk", psl->qName, psl->qStart/1000);
+    snprintf(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
     }
 else
     strncpy(lf->name, psl->qName, sizeof(lf->name));
@@ -9579,7 +9579,7 @@ vgClose(&vg);
 smallBreak();
 smallBreak();
 hPrintf(
-    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
+    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>\n",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 }
 
@@ -10359,6 +10359,7 @@ if (!hideControls)
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
@@ -10634,6 +10635,8 @@ if (!hideControls)
     hCheckBox("leftLabels", withLeftLabels);
     hPrintf("center ");
     hCheckBox("centerLabels", withCenterLabels);
+    hPrintf("popUp ");
+    hCheckBox("popUps", withPopUps);
     hPrintf(" ");
     hButton("submit", "refresh");
     hPrintf("<BR>\n");
