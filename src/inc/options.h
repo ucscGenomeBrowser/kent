@@ -6,10 +6,11 @@
 #ifndef OPTIONS_H
 
 /* Types for options */
-#define OPTION_BOOLEAN  0x01
-#define OPTION_STRING   0x02
-#define OPTION_INT      0x04
-#define OPTION_FLOAT    0x10
+#define OPTION_BOOLEAN    0x01
+#define OPTION_STRING     0x02
+#define OPTION_INT        0x04
+#define OPTION_FLOAT      0x10
+#define OPTION_LONG_LONG  0x20
 
 struct optionSpec
 /* Specification of a single option.  An array of these are passed
@@ -24,6 +25,10 @@ char *optionVal(char *name, char *defaultVal);
 
 int optionInt(char *name, int defaultVal);
 /* Return integer value of named option, or default value
+ * if not set. */
+
+long long optionLongLong(char *name, long long defaultVal);
+/* Return long long value of named option, or default value
  * if not set. */
 
 float optionFloat(char *name, float defaultVal);

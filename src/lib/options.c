@@ -10,11 +10,10 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.10 2003/05/11 20:27:42 markd Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.11 2003/05/22 15:20:53 markd Exp $";
 
 /* mask for type in optionSpec.flags */
-#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT)
-
+#define OPTION_TYPE_MASK (OPTION_BOOLEAN|OPTION_STRING|OPTION_INT|OPTION_FLOAT|OPTION_LONG_LONG)
 
 static void validateOption(char *name, char *val, struct optionSpec *optionSpecs)
 /* validate an option against a list of values */
@@ -43,6 +42,14 @@ case OPTION_INT:
     strtol(val, &valEnd, 10);
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid integer: \"%s\"",
+                 name, val);
+    break;
+case OPTION_LONG_LONG:
+    if (val == NULL)
+        errAbort("int option -%s must have a value", name);
+    strtoll(val, &valEnd, 10);
+    if ((*val == '\0') || (*valEnd != '\0'))
+        errAbort("value of -%s is not a valid long long: \"%s\"",
                  name, val);
     break;
 case OPTION_FLOAT:
@@ -220,6 +227,23 @@ if (sameString(s,"on"))
 val = strtol(s, &valEnd, 10);
 if ((*s == '\0') || (*valEnd != '\0'))
     errAbort("value of -%s is not a valid integer: \"%s\"", name, s);
+return val;
+}
+
+long long optionLongLong(char *name, long long defaultVal)
+/* Return long long value of named option, or default value
+ * if not set. */
+{
+char *s = optGet(name);
+char *valEnd;
+long long val;
+if (s == NULL)
+    return defaultVal;
+if (sameString(s,"on"))
+    return defaultVal;
+val = strtoll(s, &valEnd, 10);
+if ((*s == '\0') || (*valEnd != '\0'))
+    errAbort("value of -%s is not a valid long long: \"%s\"", name, s);
 return val;
 }
 
