@@ -134,3 +134,12 @@ priority 48
 visibility dense
 color 0,100,0
 type genePred softberryPep
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using briggsae/elegans Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
