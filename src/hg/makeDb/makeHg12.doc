@@ -278,8 +278,6 @@ format.
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin -byOrganism=org
 
-  o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz /cluster/store1/genbank.129/gbmam*.gz /cluster/store1/genbank.129/gbrod*.gz /cluster/store1/genbank.129/gbvrt*.gz /cluster/store1/genbank.129/gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin -byOrganism=org
-
   o - cd /cluster/store1/genbank.129
   o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
 
@@ -585,6 +583,42 @@ o - Load into the database as so:
      hgPepPred hg12 generic genscanPep genscan.pep
      hgLoadBed hg12 genscanSubopt genscanSubopt.bed > /dev/null
 
+
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (IN PROGRESS - Done 7/22/02)
+
+Make sure that the NT*.fa files are lower-case repeat masked.
+Do something much like the simpleRepeat track, but only
+masking out stuff with a period of 12 or less as so:
+    ssh kk
+    mkdir -p ~/oo/bed/trfMask
+    cd ~/oo/bed/trfMask
+    cp ~/cluster/store1/gs.12/build29/bed/trfMask/gsub .
+    mkdir trf
+    ls -1S /scratch/hg/gs.13/build30/contig/*.fa > genome.lst
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+When that is done do:
+    ssh kkstore
+    mkdir /scratch/hg/gs.13/build30/trfFa
+    cd ~/oo
+NOTE:Below is a tcsh script
+    foreach i (? ??)
+	cd $i
+        foreach j (NT*)
+        echo Processing $i/$j ...
+	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.13/build30/trfFa/$j.fa.trf
+	echo done $i/$j
+	end
+	cd ..
+    end
+
+
+Then ask admins to do a binrsync.
+
+
 CREATE GOLDEN TRIANGLE (todo)
 
 Make sure that rnaCluster table is in place.   Then
@@ -849,54 +883,26 @@ CREATE CHROMOSOME REPORTS
 CREATE STS MAP COMPARISON PLOTS
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (IN PROGRESS)
-
-Make sure that the NT*.fa files are lower-case repeat masked.
-Do something much like the simpleRepeat track, but only
-masking out stuff with a period of 12 or less as so:
-    ssh kk
-    mkdir -p ~/oo/bed/trfMask
-    cd ~/oo/bed/trfMask
-    cp ~/hg11/bed/trfMask/gsub .
-    mkdir trf
-    ls -1S /scratch/hg/gs.13/build30/contig/*.fa > genome.lst
-    gensub2 genome.lst single gsub spec
-    para create spec
-    para try
-    para check
-    para push
-When that is done do:
-    ssh kkstore
-    mkdir /scratch/hg/gs.13/build30/trfFa
-    cd ~/oo
-NOTE:Below is a tcsh script
-    foreach i (? ??)
-	cd $i
-        foreach j (NT*)
-	    maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd /scratch/hg/gs.13/build30/trfFa/$j.fa.trf
-	echo done $i/$j
-	end
-	cd ..
-    end
-Then ask admins to do a binrsync. TODO
-
-
-DOING HUMAN/MOUSE ALIGMENTS (todo)
+DOING HUMAN/MOUSE ALIGMENTS (IN PROGRESS 7/23/02)
 
 o - Start with the mouse assembly in 1 Mb chunks lower-case
     repeat and tandem-repeat masked on kkstore by copying files there
     in the following way.
 
+ssh kk
+Check the destination directories below and make sure they are current.
+If not, do the steps below.
+
 Mouse contigs:
 mkdir /scratch/hg/mm2/rmsk
-cp bed/rmsk/out/* /scratch/hg/mm2/rmsk
+cp /cluster/store2/mm.2002.02/bed/rmsk/out/* /scratch/hg/mm2/rmsk
 cp -R /cluster/store2/mm.2002.02/mm2/trfFa/ /scratch/hg/mm2/
 
 Human contigs:
 mkdir /scratch/hg/gs.13/build30/rmsk
 cp /cluster/store1/gs.13/build30/?/*/*.out /scratch/hg/gs.13/build30/rmsk
 cp /cluster/store1/gs.13/build30/??/*/*.out /scratch/hg/gs.13/build30/rmsk
-cp -R /cluster/store2/gs.13/build30/bed/trfFa /scratch/hg/gs.13/build30/trfFa
+cp -R /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa
 
     Then
         ssh kkstore
@@ -906,7 +912,7 @@ cp -R /cluster/store2/gs.13/build30/bed/trfFa /scratch/hg/gs.13/build30/trfFa
 	ls -1 /scratch/hg/mm2/trfFa/*.fa.trf > mouseAll
 	mkdir mm
 	cd mm
-	splitFile ../mouseAll 50 mmsplitFile ../smallH 4 small
+	splitFile ../mouseAll 50 mmsplitFile
 	cd ..
 	ls -1 mm/* > mouse.lst
     Then bundle up the human into pieces of less than 12
@@ -919,7 +925,7 @@ cp -R /cluster/store2/gs.13/build30/bed/trfFa /scratch/hg/gs.13/build30/trfFa
 	mkdir hs
 	cd hs
 	splitFile ../bigH 1 big
-	rm big32 # Note, this is just an empty file that the splitFile program erroneously created
+	rm bigXX # Note, this is just an empty file that the splitFile program erroneously created. Remove the last one.
 	splitFile ../smallH 4 small
 	rm small504
         cd ..
@@ -935,9 +941,12 @@ o - Do the cluster run as so
        ssh kk
        cd ~/oo/bed/blatMus
        mkdir psl
-       para create specE
+       para create spec
+DONE TO HERE
        para try
-    and then do para push/check/push/check/shove etc.
+       para push
+         in progress
+    and then do para check etc.
 
 o - Sort alignments as so 
        ssh kkstore
@@ -1079,7 +1088,7 @@ Load into database as so:
     
 TODO
 
-PRODUCING FISH ALIGNMENTS (TODO)
+PRODUCING FISH ALIGNMENTS (DONE 7/23/02)
 
 o - Do fish/human alignments.
        ssh kk
@@ -1089,11 +1098,10 @@ o - Do fish/human alignments.
        mkdir psl
        ls -1S /scratch/hg/fish/*.fa > fish.lst
        ls -1S /scratch/hg/gs.13/build30/trfFa/*.fa.trf > human.lst
-     Copy over gsub from previous version and edit paths to
-     point to current assembly.
+       # Copy over gsub from previous version.
        gensub2 human.lst fish.lst gsub spec
-       para create spec TODO
-       para try
+       para create spec 
+       para try TODO
      Make sure jobs are going ok with para check.  Then
        para push
      wait about 2 hours and do another
@@ -1102,7 +1110,7 @@ o - Do fish/human alignments.
      or use para shove.
 o - Sort alignments as so 
        pslCat -dir psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
-o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
+o - Rename to correspond with tables as so and 
     load into database:
        ssh hgwdev
        cd ~/oo/bed/blatFish/chrom
@@ -1113,8 +1121,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadPsl hg12 *.psl
 
 Now load the fish seqeuence data
-hgLoadRna addSeq hg12 /projects/hg3/fish/tet6/tet*.fa
-TODO
+hgLoadRna addSeq hg12 /cluster/store3/tetFish/tet*.fa
 
 
 TIGR GENE INDEX (todo)
@@ -1485,10 +1492,12 @@ hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?/chr*.fa ??/chr*.fa
 
 MAKING THE DOWNLOADABLE DATABASE FILES - TODO
 
-mkdir /usr/local/apache/htdocs/goldenPath/05apr2002
-mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/chromosomes
-mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
-mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/database
+ssh hgwdev
+
+mkdir /usr/local/apache/htdocs/goldenPath/28jun2002
+mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
+mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
+mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/database
 
 o zip up the chromosomes individually
 ssh kkstore (we use kkstore because no NFS traffic via kkstore = faster data transfer)
@@ -1502,7 +1511,7 @@ In tcsh run this script
 
 Then do:  
 ssh hgwdev
-mv */chr*.zip /usr/local/apache/htdocs/goldenPath/05apr2002/chromosomes
+mv */chr*.zip /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
 
 Request that the admins push this to hgwbeta.
 
@@ -1510,47 +1519,47 @@ o Make the big zips
 
  - Make database.zip
 ssh hgwbeta
-cd /usr/local/apache/htdocs/goldenPath/05apr2002/database
+cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
 zip ../bigZips/database.zip *
 
 ssh hgwdev
 cd ~/oo
 
- - Make chromAgp.zip
+ # Make chromAgp.zip
 zip chromAgp.zip */chr*.agp
-mv chromAgp.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv chromAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make chromFa.zip
+ # Make chromFa.zip
 zip chromFa.zip */chr*.fa
-mv chromFa.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv chromFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make chromOut.zip
+ # Make chromOut.zip
 zip chromOut.zip */chr*.out
-mv chromOut.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv chromOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make contigAgp.zip
+ # Make contigAgp.zip
 zip contigAgp.zip */*/*.agp
-mv contigAgp.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv contigAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make contigFa.zip
+ # Make contigFa.zip
 zip contigFa.zip */*/*.fa
-mv contigFa.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv contigFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make contigOut.zip
+ # Make contigOut.zip
 zip contigOut.zip */*/*.out
-mv contigOut.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv contigOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make liftAll.zip
+ # Make liftAll.zip
 zip liftAll.zip jkStuff/liftAll.lft
-mv liftAll.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mv liftAll.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- - Make mrna.zip
+ # Make mrna.zip
 zip mrna.zip /cluster/store1/mrna.129/mrna.fa
-mv mrna.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZip
+mv mrna.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZip
 
 o Dump the database
 ssh hgwbeta
-We dump the database on hgwbeta in order to only dump the most accurate datbase state.
+We dump the database on hgwbeta in order to only dump the most accurate database state.
 
 There is one trick here: mysqldump becomes the mysql user
 and the directory you want to dump to must have that
@@ -1569,5 +1578,4 @@ When it is done do:
 
 cd /var/tmp/hg12-dump
 gzip *.txt
-mv * /usr/local/apache/htdocs/goldenPath/05apr2002/database
-
+mv * /usr/local/apache/htdocs/goldenPath/28jun2002/database
