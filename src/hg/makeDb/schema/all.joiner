@@ -3,9 +3,10 @@
 #
 # So far have looked through hg13,hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
 # panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
+# Adding hg17 June 1, 2004 (heather)
 
 # Define databases used for various organisms
-set hg hg13,hg15,hg16
+set hg hg13,hg15,hg16,hg17
 set mm mm3,mm4
 set rn rn2,rn3
 set fr fr1
@@ -1387,7 +1388,7 @@ type idName
     $gbd.source
     $gbd.organism
     $gbd.library
-    $gbd.mrnaCloen
+    $gbd.mrnaClone
     $gbd.sex
     $gbd.tissue
     $gbd.development
