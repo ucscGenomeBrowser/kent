@@ -1,5 +1,6 @@
 /* wabToSt - Convert WABA output to something Intronerator understands better. */
 #include "common.h"
+#include "hash.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +32,14 @@ if (ferror(d))
     }
 }
 
+struct cosmidAli
+/* Keeps track of alignments to one cosmid. */
+    {
+    struct cosmidAli *next;	/* Next in list. */
+    char *name;			/* Cosmid name. */
+    int aliCount;		/* Number of alignments. */
+    };
+
 void wabToSt(char *outName, int inCount, char *inNames[])
 /* wabToSt - Convert WABA output to something Intronerator understands better. */
 {
@@ -38,10 +47,13 @@ FILE *in, *out = mustOpen(outName, "w");
 int i, len, wordCount, partCount;
 char *inName;
 char buf[1024], *row[16], *parts[4];
+char *cosmidName;
 char *s;
 int lineCount = 0;
 char dir[256], file[128], ext[64];
 char dir2[256], file2[128], ext2[64];
+struct cosmidAli *ca;
+struct hash *hash = newHash(0);
 
 for (i=0; i<inCount; ++i)
     {
@@ -50,15 +62,28 @@ for (i=0; i<inCount; ++i)
     lineCount = 0;
     for (;;)
         {
-	/* Parse header line and print first fields unchanged. */
+	/* Parse header line and make sure it's got the right word count. */
 	if (fgets(buf, sizeof(buf)-1, in) == NULL)
 	    break;
 	++lineCount;
 	wordCount = chopLine(buf, row);
 	if (wordCount != 10)
 	    errAbort("Expecting 10 words line %d of %s", lineCount, inName);
-	fprintf(out, "%s %s %s %s %s ",
-	   row[0], row[1], row[2], row[3], row[4]);
+
+	/* Rework the count in the .C# suffix to name, since merging indepent runs. */
+	cosmidName = row[0];
+	chopSuffix(cosmidName);
+	if ((ca = hashFindVal(hash, cosmidName)) == NULL)
+	    {
+	    AllocVar(ca);
+	    hashAddSaveName(hash, cosmidName, ca, &ca->name);
+	    }
+	ca->aliCount += 1;
+	fprintf(out, "%s.c%d ", cosmidName, ca->aliCount);
+
+	/* Print next four fields unchanged. */
+	fprintf(out, "%s %s %s %s ",
+	   row[1], row[2], row[3], row[4]);
 
 	/* Chop off all but last directory of briggsae file and print. */
 	splitPath(row[5], dir, file, ext);

@@ -3,7 +3,7 @@
 
 L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = wabToSt.o
 
