@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.5 2004/03/23 17:31:38 hiram Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.6 2004/09/25 00:14:50 fanhsu Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -41,7 +41,7 @@ fi
 
 DATE=`date "+%y%m%d"`
 
-PDB="prot${SPDB_DATE}"
+PDB="proteins${SPDB_DATE}"
 SPDB=sp"${SPDB_DATE}"
 
 export DATE PDB SPDB
@@ -56,14 +56,14 @@ fi
 
 echo "Creating Db: ${PDB}"
 
-if [ -d "$DATE" ]; then
+if [ -d "$SPDB_DATE" ]; then
 	echo "WARNING: ${PDB} already exists."
 	echo -e "Do you want to remove it and recreate ? (ynq) \c"
 	read YN
 	if [ "${YN}" = "Y" -o "${YN}" = "y" ]; then
 	echo "Recreating ${PDB}"
 	rm -fr ./${SPDB_DATE}
-	hgsql -e "drop database ${PDB}" proteins072003
+	hgsql -e "drop database ${PDB}" proteins040315
 	else
 	echo "Will not recreate at this time."
 	exit 255
@@ -72,9 +72,9 @@ fi
 
 mkdir ${TOP}/${SPDB_DATE}
 cd ${TOP}/${SPDB_DATE}
-echo hgsql -e "create database ${PDB};" proteins072003
-hgsql -e "create database ${PDB};" proteins072003
-hgsqldump -d proteins072003 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
+echo hgsql -e "create database ${PDB};" proteins040315
+hgsql -e "create database ${PDB};" proteins040315
+hgsqldump -d proteins040315 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
 echo "hgsql ${PDB} < proteins.sql"
 hgsql ${PDB} < proteins.sql
 
@@ -91,14 +91,7 @@ echo spToProteins ${SPDB_DATE}
 spToProteins ${SPDB_DATE}
 cd ${TOP}/${SPDB_DATE}
 hgsql -e 'LOAD DATA local INFILE "spXref2.tab" into table spXref2;' ${PDB}
-hgsql -e 'create index i1 on spXref2(accession);' ${PDB}
-hgsql -e 'create index i2 on spXref2(displayID);' ${PDB}
-hgsql -e 'create index i3 on spXref2(extAC);' ${PDB}
-hgsql -e 'create index i4 on spXref2(bioentryID);' ${PDB}
 hgsql -e 'LOAD DATA local INFILE "spXref3.tab" into table spXref3;' ${PDB}
-hgsql -e 'create index ii1 on spXref3(accession);' ${PDB}
-hgsql -e 'create index ii2 on spXref3(displayID);' ${PDB}
-hgsql -e 'create index ii3 on spXref3(hugoSymbol);' ${PDB}
 hgsql -e 'LOAD DATA local INFILE "spOrganism.tab" into table spOrganism;' ${PDB}
 
 #	Build spSecondaryID table
@@ -136,3 +129,13 @@ hgsql -e "select comment.acc, displayId.val, commentVal.val from \
 	and commentVal.id=comment.commentVal and displayId.acc=comment.acc;" \
 	${SPDB} | sed -e "1d" > spDisease.tab
 hgsql -e 'LOAD DATA local INFILE "spDisease.tab" into table spDisease;' ${PDB}
+
+# create swInterPro table
+wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2interpro.dat.gz"
+gzip -d protein2interpro.dat.gz
+hgsql ${PDB} -e 'load data local infile "protein2interpro.dat" into table interProXref;'
+#hgsql ${PDB} -e "drop table ${PDB}.swInterPro"
+hgsql --skip-column-names ${PDB} -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
+hgsql ${PDB} -e 'load data local infile "swInterPro.tab" into table swInterPro;'
+ 
+
