@@ -150,6 +150,7 @@ group rna
 priority 56
 visibility hide
 spectrum on
+intronGap 30
 type psl est
 
 track xenoEst
