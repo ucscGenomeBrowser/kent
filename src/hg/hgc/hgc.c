@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.594 2004/03/25 06:44:41 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.595 2004/03/25 20:32:03 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7321,8 +7321,8 @@ else
     {
     /* display mrna */
     printf("<LI><B>mRna:</B> %s \n", pg->gene);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
-    printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
 if (!sameString(pg->mgc,"noMgc"))
