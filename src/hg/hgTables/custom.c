@@ -459,7 +459,8 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 }
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	struct lm *lm, boolean *retGotFilter, boolean *retGotIds)
+	struct lm *lm, boolean *retGotFilter, boolean *retGotIds, 
+	int *retFieldCount)
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done.  
@@ -472,6 +473,7 @@ struct bedFilter *bf = NULL;
 struct bed *bedList = NULL;
 struct hash *idHash = NULL;
 struct region *region;
+int fieldCount;
 
 if (ct == NULL)
     errAbort("Can't find custom track %s", name);
@@ -491,10 +493,12 @@ if (ct->wiggle)
 	    }
 	bedFree(&wigBedList);
 	}
+    fieldCount = 4;
     }
 else
     {
     /* Figure out how to filter things. */
+    fieldCount = ct->fieldCount;
     bf = bedFilterForCustomTrack(name);
     if (ct->fieldCount > 3)
 	idHash = identifierHash();
@@ -511,7 +515,8 @@ else
     hashFree(&idHash);
     slReverse(&bedList);
     }
-
+if (retFieldCount != NULL)
+    *retFieldCount = fieldCount;
 return bedList;
 }
 
@@ -544,7 +549,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bed, *bedList = cookedBedList(conn, track->tableName, 
-    	region, lm);
+    	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	tabBedRow(bed, chosenFields);

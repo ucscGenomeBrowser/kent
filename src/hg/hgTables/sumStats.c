@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.16 2004/11/19 05:53:01 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.17 2004/11/19 20:59:49 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -253,6 +253,9 @@ int itemCount = 0;
 struct hTableInfo *hti = getHti(database, curTable);
 int minScore = BIGNUM, maxScore = -BIGNUM;
 long long sumScores = 0;
+boolean hasBlocks = hti->hasBlocks;
+boolean hasScore = (hti->scoreField[0] != 0);
+int fieldCount;
 
 
 htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
@@ -261,7 +264,11 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     startTime = clock1000();
-    bedList = cookedBedList(conn, curTable, region, lm);
+    bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
+    if (fieldCount < 12)
+         hasBlocks = FALSE;
+    if (fieldCount < 5)
+         hasScore = FALSE;
     midTime = clock1000();
     loadTime += midTime - startTime;
 
@@ -271,7 +278,7 @@ for (region = regionList; region != NULL; region = region->next)
 	regionSize += region->end - region->start;
 	cov = calcSpanOverRegion(region, bedList);
 	slAddHead(&itemCovList, cov);
-	if (hti->hasBlocks)
+	if (hasBlocks)
 	    {
 	    cov = calcBlocksOverRegion(region, bedList);
 	    slAddHead(&blockCovList, cov);
@@ -313,7 +320,7 @@ if (itemCount > 0)
     numberStatRow("biggest item", cov->maxBases);
     }
 
-if (hti->hasBlocks && itemCount > 0)
+if (hasBlocks && itemCount > 0)
     {
     cov = covStatsSum(blockCovList);
     hPrintf("<TR><TD>block count</TD><TD ALIGN=RIGHT>");
@@ -326,7 +333,7 @@ if (hti->hasBlocks && itemCount > 0)
     numberStatRow("biggest block", cov->maxBases);
     }
 
-if (hti->scoreField[0] != 0 && itemCount > 0 && sumScores != 0)
+if (hasScore != 0 && itemCount > 0 && sumScores != 0)
     {
     numberStatRow("smallest score", minScore);
     numberStatRow("average score", round((double)sumScores/itemCount));

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.26 2004/11/10 04:39:46 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.27 2004/11/19 20:59:49 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -202,7 +202,8 @@ static struct bed *getRegionAsBed(
 	struct region *region,  /* Region to get data for. */
 	char *filter, 		/* Filter to add to SQL where clause if any. */
 	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
-	struct lm *lm)		/* Where to allocate memory. */
+	struct lm *lm,		/* Where to allocate memory. */
+	int *retFieldCount)	/* Number of fields. */
 /* Return a bed list of all items in the given range in table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 {
@@ -221,7 +222,10 @@ if (hti == NULL)
     errAbort("Could not find table info for table %s", table);
 
 if (isWiggle(db, table))
+    {
     bedList = getWiggleAsBed(db, table, region, filter, idHash, lm, conn);
+    fieldCount = 4;
+    }
 else
     {
     bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
@@ -250,11 +254,14 @@ else
     sqlDisconnect(&conn);
     slReverse(&bedList);
     }
+if (retFieldCount)
+    *retFieldCount = fieldCount;
 return(bedList);
 }
 
 static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount)
 /* getBed - get list of beds from database in region that pass filtering. */
 {
 struct region *region;
@@ -266,7 +273,7 @@ for (region = regionList; region != NULL; region = region->next)
     struct bed *nextBed;
     char *filter = filterClause(database, table, region->chrom);
     struct bed *bedListRegion = getRegionAsBed(database, table, 
-        region, filter, idHash, lm);
+        region, filter, idHash, lm, retFieldCount);
     for (bed = bedListRegion; bed != NULL; bed = nextBed)
         {
 	nextBed = bed->next;
@@ -281,35 +288,36 @@ return bedList;
 }
 
 struct bed *getFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount)
 /* get list of beds in regionList that pass filtering. */
 {
 if (isCustomTrack(table))
     return customTrackGetFilteredBeds(table, regionList, 
-    	lm, NULL, NULL);
+    	lm, NULL, NULL, retFieldCount);
 else
-    return dbGetFilteredBedsOnRegions(conn, table, regionList, lm);
+    return dbGetFilteredBedsOnRegions(conn, table, regionList, lm, retFieldCount);
 }
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	char *table, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get list of beds on single region that pass filtering. */
 {
 struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
 
-bedList = getFilteredBedsOnRegions(conn, table, region, lm);
+bedList = getFilteredBedsOnRegions(conn, table, region, lm, retFieldCount);
 region->next = oldNext;
 return bedList;
 }
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	char *table, struct lm *lm)
+	char *table, struct lm *lm, int *retFieldCount)
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 {
-return getFilteredBedsOnRegions(conn, table, getRegions(), lm);
+return getFilteredBedsOnRegions(conn, table, getRegions(), lm, retFieldCount);
 }
 
 /* Droplist menu for custom track visibility: */
@@ -475,7 +483,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     else
 	{
-	bedList = cookedBedList(conn, curTable, region, lm);
+	bedList = cookedBedList(conn, curTable, region, lm, &fields);
 	}
 
     /*	this is a one-time only initial creation of the custom track

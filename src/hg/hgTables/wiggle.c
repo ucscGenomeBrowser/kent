@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.35 2004/11/19 14:58:35 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.36 2004/11/19 20:59:49 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -210,7 +210,7 @@ if (table2)
     /* Load up intersecting bedList2 (to intersect with) */
     struct trackDb *track2 = findTrack(table2, fullTrackList);
     struct lm *lm2 = lmInit(64*1024);
-    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2);
+    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
     }
 
 
@@ -410,7 +410,7 @@ if (table2)
     /* Load up intersecting bedList2 (to intersect with) */
     struct trackDb *track2 = findTrack(table2, fullTrackList);
     struct lm *lm2 = lmInit(64*1024);
-    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2);
+    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
     }
 
 
@@ -558,7 +558,7 @@ for (region = regionList; region != NULL; region = region->next)
 	/* Load up intersecting bedList2 (to intersect with) */
 	struct trackDb *track2 = findTrack(table2, fullTrackList);
 	struct lm *lm2 = lmInit(64*1024);
-	intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2);
+	intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
 	}
 
     operations = wigFetchStats;

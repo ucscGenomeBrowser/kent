@@ -220,11 +220,12 @@ void doTabOutTable(char *database, char *table,
 /* Do tab-separated output on table. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	char *table, struct region *region, struct lm *lm);
+	char *table, struct region *region, struct lm *lm,
+	int *retFieldCount);
 /* Get list of beds on single region that pass filtering. */
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	char *table, struct lm *lm);
+	char *table, struct lm *lm, int *retFieldCount);
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 
@@ -260,12 +261,14 @@ struct bed *getAllIntersectedBeds(struct sqlConnection *conn,
  * (and filtering). Do lmCleanup (not bedFreeList) when done. */
 
 struct bed *cookedBedList(struct sqlConnection *conn,
-	char *table, struct region *region, struct lm *lm);
+	char *table, struct region *region, struct lm *lm,
+	int *retFieldCount);
 /* Get data for track in region after all processing steps (filtering
- * intersecting etc.) in BED format. */
+ * intersecting etc.) in BED format.  */
 
 struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm);
+	char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount);
 /* Get cooked beds on all regions. */
 
 struct hTableInfo *getHti(char *db, char *table);
@@ -514,7 +517,8 @@ struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	struct lm *lm, boolean *retGotFilter, boolean *retGotIds);
+	struct lm *lm, boolean *retGotFilter, boolean *retGotIds, 
+	int *retFieldCount);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done.  

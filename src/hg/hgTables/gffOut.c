@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.12 2004/11/08 17:59:37 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.13 2004/11/19 20:59:49 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -91,8 +91,10 @@ if ((i == startIndx) && (bed->strand[0] == '-'))
 
 
 struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
-			      char *source, boolean gtf2StopCodons)
-/* Translate a (list of) bed into list of gffLine elements. */
+			      int fieldCount, char *source, boolean gtf2StopCodons)
+/* Translate a (list of) bed into list of gffLine elements. 
+ * Note that field count (perhaps reduced by bitwise intersection)
+ * can in effect override hti. */
 {
 struct hash *nameHash = newHash(20);
 struct gffLine *gffList = NULL;
@@ -123,7 +125,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
         {
 	safef(txName, sizeof(txName), "tx%d\n", ++namelessIx);
 	}
-    if (hti->hasBlocks && hti->hasCDS)
+    if (hti->hasBlocks && hti->hasCDS && fieldCount > 4)
 	{
 	char *frames = needMem(bed->blockCount);
 	boolean gotFirstCds = FALSE;
@@ -195,7 +197,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    }
 	freeMem(frames);
 	}
-    else if (hti->hasBlocks)
+    else if (hti->hasBlocks && fieldCount > 4)
 	{
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
@@ -205,7 +207,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 			      txName);
 	    }
 	}
-    else if (hti->hasCDS)
+    else if (hti->hasCDS && fieldCount > 4)
 	{
 	if (bed->thickStart > bed->chromStart)
 	    {
@@ -249,8 +251,9 @@ itemCount = 0;
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    bedList = cookedBedList(conn, table, region, lm);
-    gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
+    int fieldCount;
+    bedList = cookedBedList(conn, table, region, lm, &fieldCount);
+    gffList = bedToGffLines(bedList, hti, fieldCount, source, gtf2StopCodons);
     bedList = NULL;
     lmCleanup(&lm);
     for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)

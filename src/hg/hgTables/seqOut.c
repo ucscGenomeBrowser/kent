@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.12 2004/11/08 18:28:28 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.13 2004/11/19 20:59:49 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -154,8 +154,9 @@ void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
 char *typeWords[3];
 char *table;
 struct lm *lm = lmInit(64*1024);
+int fieldCount;
 struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTable, getRegions(),
-	lm);
+	lm, &fieldCount);
 int typeWordCount;
 
 textOpen();
@@ -231,11 +232,12 @@ void doGenomicDna(struct sqlConnection *conn)
 {
 struct region *region, *regionList = getRegions();
 struct hTableInfo *hti = getHti(database, curTable);
+int fieldCount;
 textOpen();
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm);
+    struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
     hgSeqBed(hti, bedList);
     lmCleanup(&lm);
     }

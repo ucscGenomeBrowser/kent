@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.88 2004/11/19 14:58:35 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.89 2004/11/19 20:59:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -965,7 +965,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bedList, *bed;
-    bedList = cookedBedList(conn, table, region, lm);
+    bedList = cookedBedList(conn, table, region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	char *name;

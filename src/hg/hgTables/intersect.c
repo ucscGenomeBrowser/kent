@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.17 2004/11/19 05:53:01 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.18 2004/11/19 20:59:49 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -231,6 +231,7 @@ else
     return(count);
 }
 
+#ifdef OLD_AND_SLOW
 static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
 	char *chrom, int minSize, int rangeStart, int rangeEnd,
 	struct lm *lm)
@@ -287,6 +288,48 @@ for (i=0;  i < bitSize+8;  ++i)
 slReverse(&bedList);
 return(bedList);
 }
+#endif /* OLD_AND_SLOW */
+
+static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
+	char *chrom, int minSize, int rangeStart, int rangeEnd,
+	struct lm *lm)
+/* Translate ranges of set bits to bed 4 items. */
+{
+struct bed *bedList = NULL, *bed;
+boolean thisBit, lastBit;
+int start = 0;
+int end = 0;
+int id = 0;
+char name[128];
+
+if (rangeStart < 0)
+    rangeStart = 0;
+if (rangeEnd > bitSize)
+    rangeEnd = bitSize;
+end = rangeStart;
+
+/* We depend on extra zero BYTE at end in case bitNot was used on bits. */
+for (;;)
+    {
+    start = bitFindSet(bits, end, rangeEnd);
+    if (start >= rangeEnd)
+        break;
+    end = bitFindClear(bits, start, rangeEnd);
+    if (end - start >= minSize)
+	{
+	lmAllocVar(lm, bed);
+	bed->chrom = chrom;
+	bed->chromStart = start;
+	bed->chromEnd = end;
+	snprintf(name, sizeof(name), "%s.%d", chrom, ++id);
+	bed->name = lmCloneString(lm, name);
+	slAddHead(&bedList, bed);
+	}
+    }
+slReverse(&bedList);
+return(bedList);
+}
+
 
 
 
@@ -296,7 +339,8 @@ static struct bed *intersectOnRegion(
 	char *table1,			/* Table input list is from. */
 	struct bed *bedList1,	/* List before intersection, should be
 	                                 * all within region. */
-	struct lm *lm)	   /* Local memory pool. */
+	struct lm *lm,	   /* Local memory pool. */
+	int *retFieldCount)	   /* Field count. */
 /* Intersect bed list, consulting CGI vars to figure out
  * with what table and how.  Return intersected result,
  * which is independent from input.  This potentially will
@@ -313,7 +357,8 @@ char *table2 = cartString(cart, hgtaIntersectTrack);
 struct hTableInfo *hti2 = getHti(database, table2);
 struct trackDb *track2 = findTrack(table2, fullTrackList);
 struct lm *lm2 = lmInit(64*1024);
-struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2);
+struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2, 
+	retFieldCount);
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
 struct featureBits *fbList2 = NULL;
@@ -365,6 +410,8 @@ if (isBpWise)
     /* translate back to bed */
     intersectedBedList = bitsToBed4List(bits1, chromSize, 
     	region->chrom, 1, region->start, region->end, lm);
+    if (retFieldCount != NULL)
+	*retFieldCount = 4;
     bitFree(&bits1);
     }
 else
@@ -407,15 +454,16 @@ return intersectedBedList;
 }
 
 static struct bed *getIntersectedBeds(struct sqlConnection *conn,
-	char *table, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get list of beds in region that pass intersection
  * (and filtering) */
 {
-struct bed *bedList = getFilteredBeds(conn, table, region, lm);
+struct bed *bedList = getFilteredBeds(conn, table, region, lm, retFieldCount);
 /*	wiggle tracks have already done the intersection if there was one */
 if (!isWiggle(database, table) && anyIntersection())
     {
-    struct bed *iBedList = intersectOnRegion(conn, region, table, bedList, lm);
+    struct bed *iBedList = intersectOnRegion(conn, region, table, bedList, 
+    	lm, retFieldCount);
     return iBedList;
     }
 else
@@ -423,23 +471,25 @@ else
 }
 
 struct bed *cookedBedList(struct sqlConnection *conn,
-	char *table, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get data for track in region after all processing steps (filtering
- * intersecting etc.) in BED format. */
+ * intersecting etc.) in BED format.  The pFields variable will be
+ * updated if the cooking process takes us down to bed 4 (which happens)
+ * with bitwise intersections. */
 {
-return getIntersectedBeds(conn, table, region, lm);
+return getIntersectedBeds(conn, table, region, lm, retFieldCount);
 }
 
 
 struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm, int *retFieldCount)
 /* Get cooked beds on all regions. */
 {
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    struct bed *rBedList = getIntersectedBeds(conn, table, region, lm);
+    struct bed *rBedList = getIntersectedBeds(conn, table, region, lm, retFieldCount);
     bedList = slCat(bedList, rBedList);
     }
 return bedList;
