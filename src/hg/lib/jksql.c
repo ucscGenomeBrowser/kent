@@ -310,10 +310,16 @@ return sqlUseOrStore(sc,query,mysql_store_result, TRUE);
 char **sqlNextRow(struct sqlResult *sr)
 /* Get next row from query result. */
 {
-if (sr == NULL)
-    return NULL;
-else
-    return mysql_fetch_row(sr->result);
+char** row = NULL;
+if (sr != NULL)
+    {
+    row = mysql_fetch_row(sr->result);
+    if (mysql_errno(sr->conn->conn) != 0)
+        {
+        sqlAbort(sr->conn, "nextRow failed");
+        }
+    }
+return row;
 }
 
 /* repeated calls to this function returns the names of the fields 
