@@ -874,7 +874,7 @@ color 100,50,0
 altColor 175,150,128
 priority 119.1
 visibility hide
-type sample 0 8
+type sample 0 .466217
 
 track syntenyHuman
 shortLabel Human Synteny
