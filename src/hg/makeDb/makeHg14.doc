@@ -1,3 +1,6 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
 # This file describes how we made the browser database on 
 # NCBI build 32 (March, 2003 freeze)
 
@@ -101,7 +104,7 @@
 # done after repeat masking and distributing to cluster nodes)
 
 
-# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (IN PROGRESS)
+# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (DONE 03/15/03)
     # Run this just before the sequence gets here!  It's OK to work on 
     # this in parallel with Terry's steps above, or in parallel with 
     # RepeatMasker below, but DO NOT let this hold up RepeatMasker.  
@@ -138,14 +141,20 @@
       cd refseq/cumulative
       mget *.Z
       quit
+    # Get extra info & human proteins from NCBI:
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
+    wget ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/hs.faa.gz
+    gunzip hs.faa.gz
     # Unpack this into species-specific fa files and get extra info with:
     cd /cluster/store5/mrna.134/refSeq
+    cp /cluster/store2/mrna.133/*.fil ..
     gunzip -c rscu.gbff.Z \
     | gbToFaRa -byOrganism=org ../anyRna.fil refSeq.{fa,ra,ta} stdin
 
     # Now unpack and organize the larger genbank mrna/est sequences...
     ssh eieio
-TODO    cd /cluster/store5/mrna.134
+    cd /cluster/store5/mrna.134
     # Make the RNAs for all organisms
     gunzip -c \
       /cluster/store5/genbank.134/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
@@ -170,11 +179,26 @@ TODO    cd /cluster/store5/mrna.134
     | gbToFaRa humanXenoRna.fil humanXenoEst.{fa,ra,ta} stdin
     # Split the really large ones into smaller pieces for more efficient 
     # cluster runs.  
-    faSplit about xenoRna.fa 9000000 xenoRnaSplit
-    faSplit about xenoEst.fa 70000000 xenoEstSplit
+    mkdir humanXenoRnaSplit humanXenoEstSplit
+    faSplit about humanXenoRna.fa 10000000 humanXenoRnaSplit/xenoRna
+    faSplit about humanXenoEst.fa 70000000 humanXenoEstSplit/xenoEst
     cd org/Homo_sapiens
-    faSplit about est.fa 250000000 estSplit
-
+    mkdir estSplit
+    faSplit about est.fa 250000000 estSplit/est
+    # Distribute the files to /iscratch/i/ so they're all ready to be aligned.
+    ssh kkr1u00
+    mkdir -p /iscratch/i/mrna.134/Homo_sapiens
+    cp -p /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.fa \
+      /iscratch/i/mrna.134/Homo_sapiens/
+    cp -p /cluster/store5/mrna.134/org/Homo_sapiens/mrna.fa \
+      /iscratch/i/mrna.134/Homo_sapiens/
+    cp -p /cluster/store5/mrna.134/org/Homo_sapiens/estSplit/*.fa \
+      /iscratch/i/mrna.134/Homo_sapiens/
+    cp -p /cluster/store5/mrna.134/humanXenoRnaSplit/*.fa \
+      /iscratch/i/mrna.134/Homo_sapiens/
+    cp -p /cluster/store5/mrna.134/humanXenoEstSplit/*.fa \
+      /iscratch/i/mrna.134/Homo_sapiens/
+    ~kent/bin/iSync
 
 
 # REPEAT MASKING (TODO)
@@ -317,19 +341,16 @@ TODO    cd /cluster/store5/mrna.134
 
 
 # REFSEQ ALIGNMENTS AND REFGENE TRACK PREP (TODO)
-    # Load up /iscratch/i disks with refSeq.fa
-    # from /cluster/store5/mrna.134 into /iscratch/i/mrna.134
-    ssh kkr1u00
-    mkdir /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/refSeq.fa /iscratch/i/mrna.134
-    ~kent/bin/iSync
+    # Make sure contigs have been distributed to /iscratch/i/ (should have 
+    # been done for simpleRepeat/TRF above)
+    # Make sure refSeq.fa is under /iscratch/i too (GENBANK above)
     ssh kk
     mkdir ~/hg14/bed/refSeq
     cd ~/hg14/bed/refSeq
-    ls -1S /iscratch/i/gs.15/build32/contigs/*.fa > genome.lst
-    ls -1 /iscratch/i/mrna.134/$i*.fa > mrna.lst
-    cp ~/hg13/bed/refSeq/gsub .
     mkdir psl
+    ls -1S /iscratch/i/gs.15/build32/contigs/*.fa > genome.lst
+    ls -1 /iscratch/i/mrna.134/Homo_sapiens/refSeq.fa > mrna.lst
+    cp ~/hg13/bed/refSeq/gsub .
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
     para try, para check, para push, para check....
@@ -343,12 +364,6 @@ TODO    cd /cluster/store5/mrna.134
     liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
     pslSortAcc nohead chrom /tmp all_refSeq.psl
     pslCat -dir chrom > refSeqAli.psl
-    # Get extra info & human proteins from NCBI:
-    cd /cluster/store5/mrna.134/refSeq
-    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
-    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
-    wget ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/hs.faa.gz
-    gunzip hs.faa.gz
     # After the database has been created, go to "LOAD REFGENE" below...
 
 
@@ -604,20 +619,14 @@ TODO    cd /cluster/store5/mrna.134
 # MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO)
     # Make sure that /scratch/hg/gs.15/build32/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
-    # Load up /iscratch/i disks with mrna.fa and split-up estSplit*.fa
-    # from /cluster/store5/mrna.134 into /iscratch/i/mrna.134
-    ssh kkr1u00
-    mkdir /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/mrna.fa /iscratch/i/mrna.134
-    cp -p /cluster/store5/mrna.134/estSplit*.fa /iscratch/i/mrna.134
-    ~kent/bin/iSync
+    # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
     ssh kk
     cd ~/hg14/bed
     foreach i (mrna est)
       mkdir -p $i
       cd $i
       ls -1S /scratch/hg/gs.15/build32/trfFa/* > genome.lst
-      ls -1 /iscratch/i/mrna.134/$i*.fa > mrna.lst
+      ls -1 /iscratch/i/mrna.134/Homo_sapiens/$i*.fa > mrna.lst
       cp ~/hg13/bed/$i/gsub .
       mkdir psl
       gensub2 genome.lst mrna.lst gsub spec
@@ -1215,106 +1224,81 @@ o - Update the index.html to include links to these new plots, and delete oldest
         *** Make sure to check into CVS ***
 
 
-PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (TODO)
+# PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (TODO)
+    # Make sure masked contigs are in /scratch/hg/gs.15/build32/trfFa 
+    # Make sure split-up xenoRna sequence is under /iscratch too (GENBANK)
+    ssh kkstore
+    mkdir -p ~/hg14/bed/xenoMrna
+    cd ~/hg14/bed/xenoMrna
+    mkdir psl
+    ls -1S /scratch/hg/gs.15/build32/trfFa/*.fa.trf > human.lst
+    ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoRna*.fa > mrna.lst
+    cp ~/hg13/bed/xenoMrna/gsub .
+    gensub2 human.lst mrna.lst gsub spec
+    para create spec
+    ssh kk
+    cd ~/hg14/bed/xenoMrna
+    para try
+    para check
+    para push 
+    # Do para check until the run is done, doing para push if necessary
+    # Sort xeno mRNA alignments as so:
+    ssh eieio
+    cd ~/hg14/bed/xenoMrna
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
+    pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+    pslCat -dir chrom > xenoMrna.psl
+    rm -r chrom raw.psl cooked.psl chrom.psl
+    # Load into database as so:
+    ssh hgwdev
+    cd ~/hg14/bed/xenoMrna
+    hgLoadPsl hg14 xenoMrna.psl -tNameIx
 
-Here you align vertebrate mRNAs against the masked genome on the
-cluster you set up during the previous step.
-
-o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from 
-    Genbank into /cluster/store1/genbank.134 (in GETTING FRESH mRNA AND 
-    EST SEQUENCE FROM GENBANK step)
-
-o - Process these out of genbank flat files as so:
-       ssh kkstore
-       cd /cluster/store5/mrna.134
-       faSplit sequence xenoRna.fa 2 xenoRna
-       mkdir -p /scratch/hg/mrna.134
-       cp /cluster/store5/mrna.134/xenoRna*.* /scratch/hg/mrna.134
-    Request binrysnc of /scratch/hg/mrna.134 from the admins
-
-Set up cluster run.  First make sure genome is in
-kkstore:/scratch/hg/gs.15/build32/trfFa.1204 in RepeatMasked + trf form.
-(This is probably done already in mouse alignment stage).  Also make
-sure /scratch/hg/mrna.134 is loaded with xenoRna.fa Then do:
-
-       ssh kkstore
-       mkdir -p ~/hg14/bed/xenoMrna
-       cd ~/hg14/bed/xenoMrna
-       mkdir psl
-       ls -1S /scratch/hg/gs.15/build32/trfFa.1204/*.fa.trf > human.lst
-       ls -1S /scratch/hg/mrna.134/Homo_sapiens/xenoRna*.fa > mrna.lst
-       cp ~/hg13/bed/xenoMrna/gsub .
-       gensub2 human.lst mrna.lst gsub spec
-       para create spec
-       ssh kk
-       cd ~/hg14/bed/xenoMrna
-       para try
-       para check
-       para push 
-
-Do para check until the run is done, doing para push if
-necessary on occassion.
-
-Sort xeno mRNA alignments as so:
-       ssh eieio
-       cd ~/hg14/bed/xenoMrna
-       pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
-       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoMrna.psl
-       rm -r chrom raw.psl cooked.psl chrom.psl
-
-Load into database as so:
-       ssh hgwdev
-       cd ~/hg14/bed/xenoMrna
-       hgLoadPsl hg14 xenoMrna.psl -tNameIx
-
-    # Load the RNA and EST data
+    # Make /gbdb/ link to xenoRna.fa; Load sequence info
     cd /gbdb/hg14/mrna.134
     ln -s /cluster/store5/mrna.134/humanXenoRna.fa
-    ln -s /cluster/store5/mrna.134/humanXenoEst.fa
     cd /cluster/store2/tmp
     hgLoadRna add -type=xenoRna hg14 /gbdb/hg14/mrna.134/xenoRna.fa \
       /cluster/store5/mrna.134/humanXenoRna.ra
+
+
+# PRODUCING CROSS_SPECIES EST ALIGNMENTS (TODO)
+    # Make sure masked contigs are in /scratch/hg/gs.15/build32/trfFa 
+    # Make sure split-up xenoRna sequence is under /iscratch too (GENBANK)
+    ssh kkstore
+    mkdir -p ~/hg14/bed/xenoEst
+    cd ~/hg14/bed/xenoEst
+    mkdir psl
+    ls -1S /scratch/hg/gs.15/build32/trfFa/*.fa.trf > human.lst
+    ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoEst*.fa > mrna.lst
+    cp ~/hg13/bed/xenoEst/gsub .
+    gensub2 human.lst mrna.lst gsub spec
+    ssh kk
+    cd ~/hg14/bed/xenoEst
+    para create spec
+    para try, para check, para push, para check, ...
+    # Sort xenoEst alignments:
+    ssh eieio
+    cd ~/hg14/bed/xenoEst
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.10
+    liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
+    pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+    pslCat -dir chrom > xenoEst.psl
+    rm -r chrom raw.psl cooked.psl chrom.psl
+    # Load into database as so:
+    ssh hgwdev
+    cd ~/hg14/bed/xenoEst
+    hgLoadPsl hg14 xenoEst.psl -tNameIx
+    # Make /gbdb/ link to xenoEst.fa; Load sequence info
+    cd /gbdb/hg14/mrna.134
+    ln -s /cluster/store5/mrna.134/humanXenoEst.fa
+    cd /cluster/store2/tmp
     hgLoadRna add -type=xenoEst hg14 /gbdb/hg14/mrna.134/xenoEst.fa \
       /cluster/store5/mrna.134/humanXenoEst.ra
 
-Similarly do xenoEst aligments:
-   Prepare the est data:
-        ssh kkstore
-        cd /scratch/hg/mrna.134/Homo_sapiens
-        faSplit sequence  /cluster/store5/mrna.134/xenoEst.fa 16 xenoEst    
-
-       cd /cluster/store5/gs.15/build32/bed
-       mkdir xenoEst
-       cd xenoEst
-       mkdir psl
-       ls -1S /scratch/hg/gs.15/build32/trfFa.1204/*.fa.trf > human.lst
-       ls -1S /scratch/hg/mrna.134/Homo_sapiens/xenoEst?*.fa > mrna.lst
-       cp ~/hg13/bed/xenoEst/gsub .
-
-Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.134
-When done, do:
-       ssh kk
-       gensub2 human.lst mrna.lst gsub spec
-       para create spec
-       para push
-
-Sort xenoEst alignments:
-       ssh eieio
-       cd ~/hg14/bed/xenoEst
-       pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.10
-       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoEst.psl
-       rm -r chrom raw.psl cooked.psl chrom.psl
-
-Load into database as so:
-       ssh hgwdev
-       cd ~/hg14/bed/xenoEst
-       hgLoadPsl hg14 xenoEst.psl -tNameIx
 
 # PRODUCING FUGU ALIGNMENTS (TODO)
     # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
@@ -1323,7 +1307,7 @@ Load into database as so:
     mkdir /iscratch/i/fugu
     cp -p /cluster/store3/fuguSeq/split2.5Mb/*.fa /iscratch/i/fugu
     ~kent/bin/iSync
-
+DONE TO HERE
     ssh kk
     mkdir ~/hg14/bed/blatFugu
     cd ~/hg14/bed/blatFugu
@@ -2165,19 +2149,6 @@ foreach chr (?{,?})
 end
 
 
-MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
-
-Download the fasta file from http://www.gen.emory.edu/MITOMAP/mitomapRCRS.fasta
-Put it in /cluster/store5/mrna.134
-ssh hgwdev
-cd ~/hg14
-mkdir M
-cp /cluster/store5/mrna.134/mitomapRCRS.fasta M/chrM.fa
-Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file list
-tcsh jkStuff/makeNib.sh
-hgNibSeq -preMadeNib hg14 /cluster/store5/gs.15/build32/nib ?/chr*.fa ??/chr*.fa
-
-
 TWINSCAN GENE PREDICTIONS (TODO)
     mkdir -p ~/hg14/bed/twinscanchr_gtf
     cd ~/hg14/bed/twinscan
@@ -2195,40 +2166,44 @@ TWINSCAN GENE PREDICTIONS (TODO)
     ldHgGene hg14 twinscan chr*-fixed.gtf -exon=CDS
     hgPepPred hg14 generic twinscanPep chr*-fixed.fa
 
-LOAD CHIMP DATA
 
-# Load Ingo Ebersber's chimp BLAT alignments
-cd ~/hg14
-mkdir bed/blatChimp
-cd bed/blatChimp
+# LOAD CHIMP DATA (TODO)
+    # Download the chimp sequence and distribute to /iscratch/i
+    ssh hgwdev
+    mkdir /cluster/store1/chimpSeq
+    cd /cluster/store1/chimpSeq
+    wget http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/downloads/mpi-aligned_seqparts_jun02.fa.gz
+    gunzip *.gz
+    ssh kkr1u00
+    mkdir /iscratch/i/chimp
+    cp -p /cluster/store1/chimpSeq/*.fa /iscratch/i/chimp/
+    # Make sure it unpacked OK
+    ~kent/bin/iSync
+DONE TO HERE
+    ssh kk
+    mkdir ~/hg14/bed/blatChimp
+    cd ~/hg14/bed/blatChimp
+    cp ~/hg13/bed/blatChimp/gsub .
+    ls -1S /iscratch/i/chimp/*.fa > chimp.lst
+    ls -1S /scratch/hg/gs.15/build32/trfFa.1204/*.fa.trf > human.lst
+    mkdir psl
+    gensub2 human.lst chimp.lst gsub spec
+    para create spec
+    para try
+    para push
+    para check
 
-# Get the chimp sequence
-wget http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/downloads/mpi-aligned_seqparts_jun02.fa.gz
+    # Sort alignments as so
+    ssh eieio
+    cd ~/hg14/bed/blatChimp
+    pslCat -dir psl \
+    | liftUp -type=.psl stdout ~/hg14/jkStuff/liftAll.lft warn stdin \
+    | pslSortAcc nohead chrom temp stdin
+    pslCat -dir chrom > blatChimp.psl
 
-cp ~/hg13/bed/blatChimp/gsub .
-mkdir -p /mnt/scratch/hg/chimp
-cp ./mpi-aligned_seqparts_jun02.fa /mnt/scratch/hg/chimp/chimp.fa
-ls -1S /mnt/scratch/hg/chimp/chimp.fa > chimp.lst
-ls -1S /mnt/scratch/hg/gs.15/build32/trfFa.1204/*.fa.trf > human.lst
-
-mkdir psl
-gensub2 human.lst chimp.lst gsub spec
-para create spec
-para try
-para push
-para check
-
-o - Sort alignments as so
-        ssh eieio
-        cd ~/hg14/bed/blatChimp
-         pslCat -dir psl | \
-         liftUp -type=.psl stdout ~/hg14/jkStuff/liftAll.lft warn stdin | \
-         pslSortAcc nohead chrom temp stdin
-         pslCat -dir chrom > blatChimp.psl
-
-ssh hgwdev
-cd hg14/bed/blatChimp
-hgLoadPsl hg14 blatChimp.psl         
+    ssh hgwdev
+    cd ~/hg14/bed/blatChimp
+    hgLoadPsl hg14 blatChimp.psl         
 
 
 SGP GENE PREDICTIONS (TODO)
