@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.516 2003/11/18 23:33:18 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.517 2003/11/18 23:48:48 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2735,11 +2735,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	safef(buf, sizeof(buf), "%s_case", track);
 	hasSettings |= cgiBoolean(buf);
 	safef(buf, sizeof(buf), "%s_red", track);
-	hasSettings |= (cgiInt(buf) != 0);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
 	safef(buf, sizeof(buf), "%s_green", track);
-	hasSettings |= (cgiInt(buf) != 0);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
 	safef(buf, sizeof(buf), "%s_blue", track);
-	hasSettings |= (cgiInt(buf) != 0);
+	hasSettings |= (cgiOptionalInt(buf, 0) != 0);
 	if (! hasSettings)
 	    continue;
 
