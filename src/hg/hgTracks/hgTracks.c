@@ -8391,7 +8391,8 @@ if (withLeftLabels)
 
             rootName = cloneString( name );
             beforeFirstPeriod( rootName );
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, rootName);
+			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+                    group->ixColor, font, "Mouse Cons    ");
             freeMem( rootName );
 
 			/* Reset the clipping rectangle to its original proportions */
