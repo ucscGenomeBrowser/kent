@@ -424,17 +424,46 @@ int getCdsDrawOptionNum(struct track *tg)
     /*query the cart for the current track's CDS coloring option. See
      * cdsColors.h for return value meanings*/
 {
-    char *defaultDrawOption;
-    char optionStr[128];
-    if(tg == NULL) return(0);
+int ret = 0;
+char *defaultDrawOption;
+char optionStr[128];
+boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
+
+if (!pslSequenceBases && tg->tdb)
+	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
+		PSL_SEQUENCE_BASES));
+
+if(tg == NULL) return(ret);
+if (pslSequenceBases)
+    {
+    enum baseColorOptEnum bcEnum;
     if (tg->tdb != NULL)
-        defaultDrawOption = trackDbSettingOrDefault(tg->tdb, "cdsDrawDefault", 
-                                                    CDS_DRAW_DEFAULT);
+	defaultDrawOption = trackDbSettingOrDefault(tg->tdb, PSL_SEQUENCE_BASES,
+	    PSL_SEQUENCE_DEFAULT);
     else
-        defaultDrawOption = CDS_DRAW_DEFAULT;
+	defaultDrawOption = PSL_SEQUENCE_DEFAULT;
+    safef(optionStr, 128, "%s.%s", tg->mapName, PSL_SEQUENCE_BASES);
+    defaultDrawOption = cartUsualString(cart, optionStr, defaultDrawOption);
+    bcEnum = baseColorStringToEnum(defaultDrawOption);
+    /* translate 1 and 2 to be 4 and 5 to be equivalent meaning as
+     *	cdsColorOptEnum below
+     */
+    if (bcEnum > 0)
+	ret = bcEnum + 3;
+    }
+else
+    {
+    enum cdsColorOptEnum cdEnum;
+    if (tg->tdb != NULL)
+	defaultDrawOption = trackDbSettingOrDefault(tg->tdb, "cdsDrawDefault", 
+						CDS_DRAW_DEFAULT);
+    else
+	defaultDrawOption = CDS_DRAW_DEFAULT;
     safef(optionStr, 128,"%s.cds.draw", tg->mapName);
-    return(cdsColorStringToEnum(cartUsualString(cart, optionStr,
-                                                defaultDrawOption)));
+    cdEnum = cdsColorStringToEnum(cartUsualString(cart, optionStr,
+					    defaultDrawOption));
+    }
+return(ret);
 }
 
 
@@ -961,10 +990,14 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf,
  * alternate light/dark blue colors. These are defined in
  * cdsColors.h*/
 {
-
+boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 char codon[2] = " ";
 Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, 
                                                 originalColor);
+
+if (!pslSequenceBases && tg->tdb)
+	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
+		PSL_SEQUENCE_BASES));
 
 if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
     /*any track in the genes category, with the genomic
@@ -975,6 +1008,7 @@ if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
                                 winStart, maxPixels );
 else if (sameString(tg->mapName,"mrna") || 
 	 sameString(tg->mapName,"xenoMrna")||
+	 pslSequenceBases ||
          sameString(tg->mapName,"mrnaBlastz"))
     /*one of the chosen psl tracks with associated
      * sequences in a database*/
@@ -1007,10 +1041,15 @@ int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
  * sequence and psl for mRNA, EST, or xenoMrna.
  * returns drawOptionNum, mrnaSeq, psl, errorColor*/
 {
+boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 //get coloring options
 int drawOptionNum;
 drawOptionNum = getCdsDrawOptionNum(tg);
 if(drawOptionNum == 0) return(0);
+
+if (!pslSequenceBases && tg->tdb)
+	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
+		PSL_SEQUENCE_BASES));
 
 /*allocate colors for coding coloring*/
 if (!cdsColorsMade)
@@ -1023,6 +1062,7 @@ if(drawOptionNum>0 && zoomedToCodonLevel)
     {
     if (sameString(tg->mapName,"mrna")   ||
 	sameString(tg->mapName,"xenoMrna") ||
+	pslSequenceBases ||
         sameString(tg->mapName,"mrnaBlastz"))
 	{
         char *database = cartUsualString(cart, "db", hGetDb());
