@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.9 2004/09/21 16:35:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.10 2004/09/21 17:06:52 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -143,6 +143,7 @@ struct spLitRef
     struct hashEl *rcList; /* TISSUE=XXX X; STRAIN=YYY; parsed out. */
     char *pubMedId;	/* pubMed ID, may be NULL. */
     char *medlineId;	/* Medline ID, may be NULL. */
+    char *doiId;	/* DOI ID, may be NULL. */
     };
 
 static void spParseComment(struct lineFile *lf, char *line, 
@@ -328,6 +329,7 @@ slReverse(&lit->rxList);
 /* Look up medline/pubmed IDs. */
 lit->pubMedId = hashElFindVal(lit->rxList, "PubMed");
 lit->medlineId = hashElFindVal(lit->rxList, "MEDLINE");
+lit->doiId     = hashElFindVal(lit->rxList, "DOI");
 slAddHead(&spr->literatureList, lit);
 }
 
@@ -932,9 +934,9 @@ for (;;)
 		hashAddInt(referenceUni->hash, ref->cite, refId);
 		if (ref->title)
 		    subChar(ref->title, '\t', ' ');
-		fprintf(reference, "%d\t%s\t%s\t%s\t%s\n", 
+		fprintf(reference, "%d\t%s\t%s\t%s\t%s\t%s\n", 
 		    refId, blankForNull(ref->title), ref->cite, 
-		    blankForNull(ref->pubMedId), blankForNull(ref->medlineId));
+		    blankForNull(ref->pubMedId), blankForNull(ref->medlineId), blankForNull(ref->doiId));
 		for (n = ref->authorList; n != NULL; n = n->next)
 		    {
 		    int authorId = uniqueStore(authorUni, n->name);
