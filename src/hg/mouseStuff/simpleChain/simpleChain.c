@@ -84,7 +84,7 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	{
 	if  (prevChainBlock && !((prevChainBlock->tEnd <= tStart) && (prevChainBlock->qEnd <= qStart)))
 	    return FALSE;
-	if  (chainBlock && !((chainBlock->tStart > tEnd) && (chainBlock->qStart > qEnd)))
+	if  (chainBlock && !((chainBlock->tStart >= tEnd) && (chainBlock->qStart >= qEnd)))
 	    return FALSE;
 
 	break;
