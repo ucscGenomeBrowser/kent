@@ -5922,7 +5922,6 @@ void loadAncientR(struct trackGroup *tg)
  * filtering out those below a certain length threshold,
    in number of aligned bases. */
 {
-globalAncientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
 bedLoadItem(tg, "ancientR", (ItemLoader)bedLoad12);
 lfFromAncientRBed(tg);
 }
