@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.704 2004/07/26 20:04:35 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.705 2004/07/26 23:30:04 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11581,9 +11581,9 @@ void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 {
 char query[256];
 char title[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
-char **row, **row1, **row2;
+struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL, *srb = NULL;
+char **row, **row1, **row2, **rowb;
 char *type = NULL, *lfLabel = NULL;
 char *table = NULL;
 int start = cartInt(cart, "o");
@@ -11667,10 +11667,35 @@ if (row != NULL)
     lfs = lfsLoad(row+hasBin);
     if (sameString("bacEndPairs", track)) 
 	{
-	printf("<H2><A HREF=");
-	printCloneRegUrl(stdout, clone);
-	printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
-	}
+        if (sameString("Zebrafish", organism) )
+            {
+            /* query to bacCloneXRef table to get Genbank accession */
+            /* and external name for clones in the NCBI Clone Registry */      
+            sprintf(query, "SELECT acc FROM bacCloneXRef WHERE extName = '%s'"
+                   , clone);  
+            srb = sqlMustGetResult(conn1, query);
+            rowb = sqlNextRow(srb);
+            if (rowb != NULL)
+                {
+	        printf("<H2><A HREF=");
+	        printCloneRegUrl(stdout, clone);
+	        printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+                printf("<H3>Genbank Accession: <A HREF=");
+                printEntrezNucleotideUrl(stdout, rowb[0]);
+                printf(" TARGET=_BLANK>%s</A></H3>\n", rowb[0]);
+                }
+            else
+                {
+                printf("<H2>%s</H2>\n", clone);
+                }
+            }
+        else 
+            {
+	    printf("<H2><A HREF=");
+	    printCloneRegUrl(stdout, clone);
+	    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+	    }
+        }
     else 
 	{
 	printf("<B>%s</B>\n", clone);
@@ -11697,7 +11722,7 @@ if (row != NULL)
 	}
     printf("</TABLE>\n");
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
-    if (lfs->score == 1000 && sameString("bacEndSingles", track))
+    if (lfs->score == 1000 && (!sameString("bacEndSingles", track)) )
         {
 	printf("<H4>This is the only location found for %s</H4>\n",clone);
 	}
@@ -11768,9 +11793,13 @@ else
     warn("Couldn't find %s in %s table", clone, table);
     }
 sqlFreeResult(&sr);
+sqlFreeResult(&sr1);
+sqlFreeResult(&sr2);
+sqlFreeResult(&srb);
 webNewSection("Notes:");
 puts(tdb->html);
 hgFreeConn(&conn);
+hgFreeConn(&conn1);
 } 
 
 void fillCghTable(int type, char *tissue, boolean bold)
