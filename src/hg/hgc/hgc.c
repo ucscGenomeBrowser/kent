@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.497 2003/10/13 04:50:55 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.498 2003/10/13 19:03:36 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3049,7 +3049,7 @@ void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
 /* print status information for MGC mRNA or EST; must have imageId */
 {
 struct sqlConnection *conn = hgAllocConn();
-char *mgcOrganism, *statusDesc;
+char *mgcOrganism = NULL, *statusDesc;
 
 /* link to MGC site only for full-length mRNAs */
 if (sameString(tdb->tableName, "mgcGenes"))
