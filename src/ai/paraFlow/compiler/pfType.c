@@ -205,13 +205,16 @@ else
     if (pt->base != type->base)
 	{
 	boolean ok = FALSE;
-	if (pt->isTuple && slCount(pt->children) == 1 && pt->children->base == type->base)
+	if (pt->base == NULL)
 	    {
-	    ok = TRUE;
-	    }
-	else if (type->isTuple && slCount(pt->children) == 1 && type->children->base == pt->base)
-	    {
-	    ok = TRUE;
+	    if (pt->isTuple)
+	        {
+		if (pt->children == NULL)
+		    errAt(pp->tok, "using void value");
+		else
+		    errAt(pp->tok, 
+		    	"expecting single value, got %d values", slCount(pt->children));
+		}
 	    }
 	else if (type->base == pfc->bitType && pt->base == pfc->stringType)
 	    {
@@ -261,6 +264,8 @@ if (tupSize != typeSize)
     errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
     	typeSize, tupSize);
     }
+if (tupSize == 0)
+    return;
 pos = &tuple->children;
 type = types->children;
 for (;;)
@@ -285,7 +290,10 @@ struct pfType *functionType = functionVar->ty;
 struct pfType *inputType = functionType->children;
 struct pfType *outputType = inputType->next;
 coerceTuple(pfc, paramTuple, inputType);
-pp->ty = outputType;
+if (outputType->children != NULL && outputType->children->next == NULL)
+    pp->ty = outputType->children;
+else
+    pp->ty = outputType;
 }
 
 static void coerceWhile(struct pfCompile *pfc, struct pfParse *pp)

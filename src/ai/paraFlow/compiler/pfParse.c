@@ -310,6 +310,7 @@ if (pp->name != NULL)
 switch (pp->type)
     {
     case pptConstUse:
+    case pptConstBit:
     case pptConstByte:
     case pptConstShort:
     case pptConstInt:
