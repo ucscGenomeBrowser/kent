@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.102 2003/08/08 19:03:36 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.103 2003/08/08 21:03:38 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3056,9 +3056,7 @@ if (strstrNoCase(organism, "human"))
 "There are 2,843,433,602 finished sequenced bases in the \n"
 "ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
 "percent, or approximately 11 Mb, over the Build 33 assembly. \n"
-"The missing portions are essentially contained in approximately \n"
-"301 defined gaps in the euchromatic region representing DNA regions with unusual structures \n"
-"that can't be reliably sequenced using current technology. The reference \n"
+"The reference \n"
 "sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
 "the sequence is highly accurate (with fewer than one error per 10,000 \n"
 "bases) and highly contiguous (with the only remaining gaps corresponding \n"
