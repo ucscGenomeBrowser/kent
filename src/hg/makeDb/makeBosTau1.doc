@@ -64,7 +64,7 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze >& check.out
   /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
 
-# SELECTED DOWNLOAD FILES
+# SELECTED DOWNLOAD FILES (DONE, Feb. 9, 2005, Heather)
 
   ssh hgwdev
 
@@ -295,6 +295,19 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/maskOutFa bosTau1.softmask2.fa hard bosTau1.hardmask.fa
   mkdir hardmask-split
   /cluster/bin/i386/faSplit about bosTau1.hardmask.fa 2000000 hardmask-split
+
+# DOWNLOAD FILES (DONE, Feb. 9, 2005, Heather)
+
+  ssh hgwdev
+  cd /cluster/data/bosTau1
+  cp bosTau1.softmask.fa /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+  cp bosTau1.softmask2.fa /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+  cp bosTau1.hardmask.fa /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+
+  cd /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+  nice gzip bosTau1.softmask.fa
+  nice gzip bosTau1.softmask2.fa
+  nice gzip bosTau1.hardmask.fa
 
 # REGENERATE 2BIT NIB (DONE, Oct. 10, 2004, Heather)
   ssh kksilo
