@@ -31,7 +31,10 @@ char *chr = NULL;	/* chr name from command line e.g "chr1" */
 
 int threshold = 70;  /* minimum score for match */
 
-int Verbose = 0;    /* set to 1 to see more detailed output (used upper case because var name collision in namespace) */
+int Verbose = 0;    /* set to 1 to see more detailed output 
+(used upper case because var name collision in namespace) */
+
+int maxFlank = 25;  /* maximum length of each flanking sequence, left and right. */
 
 void usage()
 /* Explain usage and exit. */
@@ -44,14 +47,16 @@ errAbort(
   "   -chr=name - Use chrom name (e.g chr1) to limit validation, default all chromosomes.\n"
   "   -threshold=number - Use threshold as minimum score 0-99, default %u.\n"
   "   -verbose=number - Use verbose=1 to see all output mismatches, default %u.\n"
-  , threshold, Verbose);
+  "   -maxFlank=number - Use maxFlank as maximum length of each flank, default %u.\n"
+  , threshold, Verbose, maxFlank);
 }
 
 
 static struct optionSpec options[] = {
    { "chr"      , OPTION_STRING },
    { "threshold", OPTION_INT    },
-   { "verbose"  , OPTION_STRING },
+   { "verbose"  , OPTION_INT    },
+   { "maxFlank" , OPTION_INT    },
    { NULL       , 0             },
 };
 
@@ -134,6 +139,10 @@ char *ch = &chrom[3];
 safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
 
 lf=lineFileMayOpen(fileName, TRUE);
+if (lf == NULL)
+    {
+    return NULL;
+    }
 
 while (lineFileNextRowTab(lf, row, rowCount))
     {
@@ -757,6 +766,8 @@ else
     mode=2; /* start on dbSnps with "rs*" in snpMap.rsId */
     }
 
+uglyf("maxFlank = %d \n",maxFlank);
+
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;
@@ -783,11 +794,19 @@ for (cn = cns; cn != NULL; cn = cn->next)
     //printf("read %s.snpMap where chrom=%s \n",db,cn->name);
     
     snps = readSnp(cn->name);
-    printf("read %s.snp where chrom=%s \n",db,cn->name);
+    printf("read %s.snp done for chrom=%s \n",db,cn->name);
         
     flanks = readFlank(cn->name);
+    printf("readFlank done for chrom %s \n",cn->name);
+    if (flanks == NULL)
+	{
+	errAbort("readFlank returned NULL for chrom %s.\n",cn->name);
+	}
+    
+    printf("slCount(flanks)=%d for chrom %s \n",slCount(flanks),cn->name);
+
     slSort(&flanks, slFlankCmp);
-    printf("readFlanks,slSort: chrom %s \n",cn->name);
+    printf("slSort done for chrom %s \n",cn->name);
 
     
     flank   = flanks; 
@@ -806,15 +825,17 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	++snpRows;
 
 	
-	//debug: 
-    	printf("debug %s %u %u %s %s\n",
-	  snp->chrom,
-	  snp->chromStart,
-	  snp->chromEnd,
-	  snp->name,
-	  snp->strand
-	  );
-	//continue;
+	if (Verbose)
+	    {
+	    printf("debug %s %u %u %s %s\n",
+	      snp->chrom,
+	      snp->chromStart,
+	      snp->chromEnd,
+	      snp->name,
+	      snp->strand
+	      );
+	    }
+	/* continue; */
 
 	
         while (cmp < 0)
@@ -900,9 +921,28 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    seq = affy120->sequenceA; break;
 		case 2:
 		    //seq = dbSnp->assembly; break;
-		    flankSize = strlen(flank->leftFlank)+1+strlen(flank->rightFlank);
+		    lf=strlen(flank->leftFlank);
+		    rf=strlen(flank->rightFlank);
+		    
+		    /* if flanks exceed maxFlank, truncate */
+		    if (lf>maxFlank) 
+			{
+			char *temp=flank->leftFlank;
+			flank->leftFlank=cloneString(temp+lf-maxFlank);
+			lf = maxFlank;
+			freez(&temp);
+			}
+		    if (rf>maxFlank) 
+			{
+			rf = maxFlank;
+			flank->rightFlank[rf]=0;
+			}
+		    
+		    flankSize = lf+1+rf;
 		    seq = needMem(flankSize+1);
 		    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
+		    //debug
+		    //uglyf("flanks together=%s \n",seq);
 		    break;
 		case 3:
 		    seq = affy10->sequenceA; break; 
@@ -923,8 +963,15 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		}
 	
 	    origSeq = seq;
-	    lf = leftFlank(origSeq);
-	    rf = rightFlank(origSeq);
+	    if (mode != 2)
+		{
+    		lf = leftFlank(origSeq);
+    		rf = rightFlank(origSeq);
+		}
+	    
+	    //debug
+	    //uglyf("flanks lf=%d, rf=%d \n",lf,rf);
+	    
 	    seq = cloneString(origSeq);
 	    /* remove dashes indicating insert to simplify and correct processing of nib data */
 	    stripDashes(seq);      
@@ -1051,14 +1098,15 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		if ((bestScore < threshold) || Verbose) 
 		    {
 		    printf(
-			"score=%d misses=%u strand=%d rsId=%s chrom=%s %u %u lf=%d ls=%d \n"
-			" assembly=%s \n"
-			"   snpMap=%s \n"
-			"rc snpMap=%s \n"
+			"score=%d misses=%u strand=%d repstr=%s rsId=%s chrom=%s %u %u lf=%d ls=%d \n"
+			"   flanks=%s \n"
+			"      chr=%s \n"
+			"   rc chr=%s \n"
 			"\n",
 		      bestScore,
 		      m,
-		      strand,
+		      strand,       /* best match found */
+		      snp->strand,  /* reported from snp table */
 		      id,
 		      snp->chrom,
 		      snp->chromStart,
@@ -1119,7 +1167,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
     printf("\n\n\n Total matches for chrom %s:\n ",cn->name);
     printf("             matches: %u \n ",match);
     printf("          mismatches: %u \n",mismatch);
-    printf("missing from dbSnpRs: %u \n",missing);
+    printf(" missing from flanks: %u \n",missing);
     printf("   rev compl matches: %u \n",goodrc);
     printf("        assembly = -: %u \n",assemblyDash);
     printf("         nib in gap : %u \n",gapNib);
@@ -1163,7 +1211,7 @@ axtScoreSchemeFree(&simpleDnaScheme);
 printf("\n\n\n Grand Totals:  \n ");
 printf("             matches: %u \n ",totalMatch);
 printf("          mismatches: %u \n",totalMismatch);
-printf("missing from dbSnpRs: %u \n",totalMissing);
+printf(" missing from flanks: %u \n",totalMissing);
 printf("   rev compl matches: %u \n",totalGoodrc);
 printf("        assembly = -: %u \n",totalAssemblyDash);
 printf("         nib in gap : %u \n",totalGapNib);
@@ -1194,6 +1242,7 @@ db = argv[1];
 chr       = optionVal("chr"      , chr      );
 threshold = optionInt("threshold", threshold);
 Verbose   = optionInt("verbose"  , Verbose  );
+maxFlank  = optionInt("maxFlank" , maxFlank );
 
 snpValid();
 
