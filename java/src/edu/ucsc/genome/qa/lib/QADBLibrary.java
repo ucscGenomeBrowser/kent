@@ -85,6 +85,33 @@ public class QADBLibrary {
   }
 
  /**
+  *  See if a table exists in the given database.
+  *  @param  dbinfo    The machine, database, user and password.
+  *  @param  table     The table.  
+  * 
+  *  @return  true if table exists.
+  */
+  public static boolean tableExists(HGDBInfo dbinfo, String table) throws Exception {
+
+    boolean exists = false;
+    String dbURL = jdbcURL(dbinfo);
+    Connection con = DriverManager.getConnection(dbURL);
+    Statement stmt = con.createStatement();
+    try {
+	ResultSet rs = stmt.executeQuery("select count(*) from " + table);
+	if (rs.next()) {
+	    exists = true;
+	}
+    } catch (Exception e) {
+       // Do nothing, we'll just report table as not existing. 
+    }
+    stmt.close();
+    con.close();
+    return exists;
+  }
+
+
+ /**
   *  Get default position for database.
   *
   *  @param  dbinfo    The machine, database, user and password.

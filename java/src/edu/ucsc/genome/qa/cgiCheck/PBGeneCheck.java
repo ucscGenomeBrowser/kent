@@ -58,18 +58,29 @@ public class PBGeneCheck {
     HGDBInfo metadbinfo, dbinfo; 
     try {
       metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
-      dbinfo = new HGDBInfo(target.machine, target.dbSpec);
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
     }
     if (!metadbinfo.validate()) return;
 
-    if (!dbinfo.validate()) {
-      System.out.println("Cannot connect to database for " + target.dbSpec);
-      return;
-    }
 
-    HgTracks.pbgene(dbinfo, target.machine, target.dbSpec, table, target.quickOn);
+    ArrayList assemblyList = QADBLibrary.getDatabaseOrAll(metadbinfo, target.dbSpec);
+    Iterator assemblyIter = assemblyList.iterator();
+    while (assemblyIter.hasNext()) {
+      try {
+        String assembly = (String) assemblyIter.next();
+        dbinfo = new HGDBInfo(target.machine, assembly);
+	if (!dbinfo.validate()) {
+	  System.out.println("Cannot connect to database for " + assembly);
+	  continue;
+	}
+	if (QADBLibrary.tableExists(dbinfo, "knownGene") )
+	  HgTracks.pbgene(dbinfo, target.machine, assembly, table, target.quickOn);
+      } catch (Exception e) {
+        // Catch, print, and ignore errors.
+	System.out.println(e.toString());
+      }
+    }
   }
 }
