@@ -2188,3 +2188,52 @@ while (<>) {
 	VALUES ("mm4","proteins031112");' \
 	-h genome-testdb hgcentraltest
 
+# STS MARKERS TRACK (WORKING - 2003-11-20 - Hiram)
+
+    ssh kk9
+    mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
+    mkdir -p /cluster/data/mm4/bed/STSmarkers/ePCR
+    cd /cluster/data/mm4/bed/STSmarkers/primer
+    echo "/cluster/bluearc/scratch/mus/mm4/musPrimer.fa" > primers.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat.2 $(path1) $(path2) -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    mkdir primers.out
+    /cluster/bin/scripts/splitContigList -mouse -scratch \
+	/cluster/bluearc/scratch/mus/mm4/trfFa 1
+    /cluster/bin/i386/gensub2 contig.lst primers.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 599 of 599 jobs
+# CPU time in finished jobs:     184360s    3072.66m    51.21h    2.13d  0.006 y
+# IO & Wait Time:                  1734s      28.90m     0.48h    0.02d  0.000 y
+# Average job time:                 311s       5.18m     0.09h    0.00d
+# Longest job:                      417s       6.95m     0.12h    0.00d
+# Submission to last job:          2132s      35.53m     0.59h    0.02d
+
+    cd /cluster/data/mm4/bed/STSmarkers/ePCR
+    ls -1S /cluster/bluearc/scratch/mus/mm4/trfFa > contig.lst
+    mkdir epcr.out
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
+#ENDLOOP
+'_EOF_'
+    echo "/cluster/bluearc/scratch/mus/mm4/mmPrimer.info" > epcr.lst
+    gensub2 epcr.lst contig.lst template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 599 of 599 jobs
+# CPU time in finished jobs:      65528s    1092.14m    18.20h    0.76d  0.002 y
+# IO & Wait Time:                  1841s      30.68m     0.51h    0.02d  0.000 y
+# Average job time:                 112s       1.87m     0.03h    0.00d
+# Longest job:                      159s       2.65m     0.04h    0.00d
+# Submission to last job:           791s      13.18m     0.22h    0.01d
