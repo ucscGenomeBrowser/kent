@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.702 2004/07/26 19:02:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.703 2004/07/26 19:26:53 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3907,23 +3907,59 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
-void doRHmap(struct trackDb *tdb, char *item) 
+void doRHmap(struct trackDb *tdb, char *itemName) 
 /* Put up RHmap information for Zebrafish */
 {
 char *dupe, *type, *words[16];
+char buffer[1024];
 char title[256];
+char *item = NULL;
+char *ext = NULL;
+char *accType = NULL;
+char *id = NULL;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
-if (itemForUrl == NULL)
-    itemForUrl = item;
 dupe = cloneString(tdb->type);
-genericHeader(tdb, item);
+genericHeader(tdb, itemName);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
+strcpy(buffer, itemName);
+item = buffer;
+if ((ext = strchr(item, '.')) != NULL)
+    {
+    *ext++ = 0;
+    if ((accType = strchr(ext, '.')) != NULL)
+	{
+	*accType++ = 0;
+	}
+        if (startsWith("EMB",accType) && ((id = strchr(accType, ':')) != NULL) ) 
+            {
+            *id++ = 0;
+            }
+    }
+/* Print non-sequence info */
+cartWebStart(cart, title);
 
+if (item != NULL) 
+    {
+    genericHeader(tdb, item);
+    }
+else 
+    {
+    genericHeader(tdb, itemName);
+    }
+
+if (id != NULL)
+    {
+    printf("<H3>Genbank Accession: <A HREF=\"");
+    printEntrezNucleotideUrl(stdout, id);
+    printf("\" TARGET=_blank>%s</A><BR></H3>", id);
+    }
+
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
 if (wordCount > 0)
     {
     type = words[0];
@@ -3933,7 +3969,7 @@ if (wordCount > 0)
 	char *subType = ".";
 	if (wordCount > 1)
 	    subType = words[1];
-        printPslFormat(conn, tdb, item, start, subType);
+        printPslFormat(conn, tdb, itemName, start, subType);
 	}
     }
 printTrackHtml(tdb);
@@ -14388,6 +14424,10 @@ else if(sameWord(track, "stsMapRat"))
 else if (sameWord(track, "stsMap"))
     {
     doStsMarker(tdb, item);
+    }
+else if (sameWord(track, "rhMap")) 
+    {
+    doRHmap(tdb, item);
     }
 else if (sameWord(track, "recombRate"))
     {
