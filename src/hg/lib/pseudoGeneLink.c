@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.8 2004/03/08 00:18:53 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.9 2004/03/23 19:21:07 baertsch Exp $";
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
 /* Load a row from pseudoGeneLink table into ret.  The contents of ret will
@@ -48,16 +48,17 @@ ret->coverage = sqlUnsigned(row[27]);
 ret->label = sqlUnsigned(row[28]);
 ret->milliBad = sqlUnsigned(row[29]);
 ret->chainId = sqlUnsigned(row[30]);
-ret->refSeq = row[31];
-ret->rStart = sqlUnsigned(row[32]);
-ret->rEnd = sqlUnsigned(row[33]);
-ret->mgc = row[34];
-ret->mStart = sqlUnsigned(row[35]);
-ret->mEnd = sqlUnsigned(row[36]);
-ret->kgName = row[37];
-ret->kStart = sqlUnsigned(row[38]);
-ret->kEnd = sqlUnsigned(row[39]);
-ret->kgId = sqlUnsigned(row[40]);
+ret->axtScore = sqlSigned(row[31]);
+ret->refSeq = row[32];
+ret->rStart = sqlUnsigned(row[33]);
+ret->rEnd = sqlUnsigned(row[34]);
+ret->mgc = row[35];
+ret->mStart = sqlUnsigned(row[36]);
+ret->mEnd = sqlUnsigned(row[37]);
+ret->kgName = row[38];
+ret->kStart = sqlUnsigned(row[39]);
+ret->kEnd = sqlUnsigned(row[40]);
+ret->kgId = sqlUnsigned(row[41]);
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
@@ -100,16 +101,17 @@ ret->coverage = sqlUnsigned(row[27]);
 ret->label = sqlUnsigned(row[28]);
 ret->milliBad = sqlUnsigned(row[29]);
 ret->chainId = sqlUnsigned(row[30]);
-ret->refSeq = cloneString(row[31]);
-ret->rStart = sqlUnsigned(row[32]);
-ret->rEnd = sqlUnsigned(row[33]);
-ret->mgc = cloneString(row[34]);
-ret->mStart = sqlUnsigned(row[35]);
-ret->mEnd = sqlUnsigned(row[36]);
-ret->kgName = cloneString(row[37]);
-ret->kStart = sqlUnsigned(row[38]);
-ret->kEnd = sqlUnsigned(row[39]);
-ret->kgId = sqlUnsigned(row[40]);
+ret->axtScore = sqlSigned(row[31]);
+ret->refSeq = cloneString(row[32]);
+ret->rStart = sqlUnsigned(row[33]);
+ret->rEnd = sqlUnsigned(row[34]);
+ret->mgc = cloneString(row[35]);
+ret->mStart = sqlUnsigned(row[36]);
+ret->mEnd = sqlUnsigned(row[37]);
+ret->kgName = cloneString(row[38]);
+ret->kStart = sqlUnsigned(row[39]);
+ret->kEnd = sqlUnsigned(row[40]);
+ret->kgId = sqlUnsigned(row[41]);
 return ret;
 }
 
@@ -119,7 +121,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[41];
+char *row[42];
 
 while (lineFileRow(lf, row))
     {
@@ -137,7 +139,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[41];
+char *row[42];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -190,6 +192,7 @@ ret->coverage = sqlUnsignedComma(&s);
 ret->label = sqlUnsignedComma(&s);
 ret->milliBad = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
+ret->axtScore = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
 ret->rStart = sqlUnsignedComma(&s);
 ret->rEnd = sqlUnsignedComma(&s);
@@ -319,6 +322,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->milliBad);
 fputc(sep,f);
 fprintf(f, "%u", el->chainId);
+fputc(sep,f);
+fprintf(f, "%d", el->axtScore);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refSeq);

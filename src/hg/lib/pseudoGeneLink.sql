@@ -5,7 +5,7 @@
 
 #links a gene/pseudogene prediction to an ortholog or paralog.
 CREATE TABLE pseudoGeneLink (
-    bin smallint not null,	# bin for browser speedup
+    bin smallint not null,	# bin for browser speedup 
     chrom varchar(255) not null,	# Chromosome name for pseudogene
     chromStart int unsigned not null,	# pseudogene alignment start position
     chromEnd int unsigned not null,	# pseudogene alignment end position
@@ -36,6 +36,7 @@ CREATE TABLE pseudoGeneLink (
     label int unsigned not null,	# 1=pseudogene,-1 not pseudogene
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
+    axtScore int not null,	# blastz score, gene mrna aligned to pseudogene
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
     rStart int unsigned not null,	# refSeq alignment start position
     rEnd int unsigned not null,	# refSeq alignment end position
@@ -49,4 +50,5 @@ CREATE TABLE pseudoGeneLink (
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))
+
 );

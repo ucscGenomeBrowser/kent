@@ -1,6 +1,7 @@
 table pseudoGeneLink
 "links a gene/pseudogene prediction to an ortholog or paralog."
     (
+    short bin;	        "bin for fast query"
     string chrom;	"Chromosome name for pseudogene"
     uint chromStart;	"pseudogene alignment start position"
     uint chromEnd;      "pseudogene alignment end position"
@@ -31,6 +32,7 @@ table pseudoGeneLink
     uint label;         "1=pseudogene,-1 not pseudogene"
     uint milliBad;      "milliBad score, pseudogene aligned to genome"
     uint chainId;       "chain id of gene/pseudogene alignment"
+    int axtScore;       "blastz score, gene mrna aligned to pseudogene"
     string refSeq;	"Name of closest regSeq to gene"
     uint rStart;	"refSeq alignment start position"
     uint rEnd;          "refSeq alignment end position"

@@ -5,13 +5,13 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 41
+#define PSEUDOGENELINK_NUM_COLS 42
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
     {
     struct pseudoGeneLink *next;  /* Next in singly linked list. */
-    short bin;	/* bin for browser speedup */
+    short bin;	/* bin for fast query */
     char *chrom;	/* Chromosome name for pseudogene */
     unsigned chromStart;	/* pseudogene alignment start position */
     unsigned chromEnd;	/* pseudogene alignment end position */
@@ -42,6 +42,7 @@ struct pseudoGeneLink
     unsigned label;	/* 1=pseudogene,-1 not pseudogene */
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
+    int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
     char *refSeq;	/* Name of closest regSeq to gene */
     unsigned rStart;	/* refSeq alignment start position */
     unsigned rEnd;	/* refSeq alignment end position */
