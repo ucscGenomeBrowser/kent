@@ -133,7 +133,7 @@ fprintf(out,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 	"match", "mismatch", "notAlign", "percentId", "dna", "matchesSize", "matches");
 }
 
-void writeAxt(FILE *out, struct bed *bed, struct binElement *beList)
+void writeAxt(FILE *out, struct bed *bed, struct binElement *beList, boolean qrnaStyle)
 {
 struct dyString *outSeq = newDyString(bed->chromEnd - bed->chromStart+100);
 struct dyString *outSeqOrtho = newDyString(bed->chromEnd - bed->chromStart+100);
@@ -205,13 +205,25 @@ if(bed->strand[0] == '-')
     reverseComplement(outSeq->string, outSeq->stringSize);
     reverseComplement(outSeqOrtho->string, outSeqOrtho->stringSize);
     }
-fprintf(out, "%s\n", outSeq->string);
-fprintf(out, "%s\n", outSeqOrtho->string);
+
+if(qrnaStyle)
+    {
+    writeSeqWithBreaks(out, outSeq->string, outSeq->stringSize, 50);
+    fprintf(out, ">%s.%d.%s.%s:%d-%d-Ortho\n", 
+	    bed->name, bed->score, bed->strand, 
+	    bed->chrom, bed->chromStart,bed->chromEnd);
+    writeSeqWithBreaks(out, outSeqOrtho->string, outSeqOrtho->stringSize, 50);
+    }
+else
+    {
+    fprintf(out, "%s\n", outSeq->string);
+    fprintf(out, "%s\n", outSeqOrtho->string);
+    }
 dyStringFree(&outSeq);
 dyStringFree(&outSeqOrtho);
 }
 
-void countMatches(struct bed *bed, FILE *out, FILE *axtOut)
+void countMatches(struct bed *bed, FILE *out, FILE *axtOut, FILE *qrnaOut)
 /* Count up the matches for a particular bed. */
 {
 struct axt *axtList = NULL, *axt;
@@ -235,9 +247,11 @@ for(be = beList; be != NULL; be = be->next)
     } 
 
 if(axtOut != NULL && slCount(beList) != 0 )
-    {
-    writeAxt(axtOut, bed, beList);
-    }
+    writeAxt(axtOut, bed, beList, FALSE);
+
+if(qrnaOut != NULL && slCount(beList) != 0)
+    writeAxt(qrnaOut, bed, beList, TRUE);
+
 else
     {
     warn("Nothing for %s %s:%d-%d", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
@@ -294,7 +308,9 @@ struct bed *bedList = NULL, *bed = NULL;
 struct rbTree *axtTree = NULL;
 FILE *out = NULL;
 FILE *axtOut = NULL;
+FILE *qrnaOut = NULL;
 char *axtOutName = optionVal("axtOut", NULL);
+char *qrnaOutName = optionVal("qrnaOut", NULL);
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 char **row;
@@ -315,19 +331,27 @@ outputHeader(out);
 axtChromFile = newDyString(strlen(axtFile)+100);
 if(axtOutName != NULL)
     axtOut = mustOpen(axtOutName, "w");
+if(qrnaOutName != NULL)
+    qrnaOut = mustOpen(qrnaOutName, "w");
 dotForUserInit(1);
 warn("Reading axts.");
 while((row = sqlNextRow(sr)) != NULL)
     {
     dyStringClear(axtChromFile);
     dyStringPrintf(axtChromFile, "%s/%s.axt", axtFile, row[0]);
+    /* If the .axt isn't there try to find a gzipped version. */
+    if(!fileExists(axtChromFile->string)) 
+	{
+	dyStringClear(axtChromFile);
+	dyStringPrintf(axtChromFile, "%s/%s.axt.gz", axtFile, row[0]);
+	}
     dotForUser();
     chromKeeperForAxt(axtChromFile->string, db);
     for(bed = bedList; bed != NULL; bed = bed->next)
 	{
 	if(differentString(bed->chrom, row[0]))
 	    continue;
-	countMatches(bed, out, axtOut);
+	countMatches(bed, out, axtOut, qrnaOut);
 	}
     cleanUpChromKeeper();
     }
