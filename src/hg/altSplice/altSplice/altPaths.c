@@ -8,14 +8,16 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.1 2004/07/08 01:05:35 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.2 2004/07/10 19:30:05 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
     {"help", OPTION_BOOLEAN},
+    {"saveGraphs", OPTION_STRING},
     {"dumpDistMatrix", OPTION_STRING},
     {"dumpPathBeds", OPTION_STRING},
+    {"oldClassification", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -23,8 +25,11 @@ static char *optionDescripts[] =
 /* Description of our options for usage summary. */
 {
     "Display this message.",
+    "Save the sub-graphs records in this file.",
     "Dump out the distance matrix to this file (for debugging and testing)",
     "Dump out the paths as a bed file (for debugging and testing)",
+    "Use the older style of classifying events (like altAnalysis).",
+    
 };
 
 FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
@@ -32,6 +37,20 @@ FILE *distMatrixFile = NULL; /* File to dump out distance matrixes to
 
 FILE *pathBedFile = NULL;    /* File to dump out paths in bed form for
 				debugging and testing. */
+boolean oldClassification = FALSE; /* Use altAnalysis style of classification. */
+
+/* Keep track of how many of each event are occuring. */
+static int alt5Flipped = 0;
+static int alt3Flipped = 0;
+static int alt5PrimeCount = 0;
+static int alt3PrimeCount = 0;
+static int alt3Prime3bpCount = 0;
+static int altCassetteCount = 0;
+static int altRetIntCount = 0;
+static int altOtherCount = 0;
+static int alt3PrimeSoftCount = 0;
+static int alt5PrimeSoftCount = 0;
+static int altMutExclusiveCount = 0;
 
 void usage() 
 /* How to use the program. */
@@ -48,8 +67,58 @@ for(i=0; i<ArraySize(optionSpecs) -1; i++)
 errAbort("");
 }
 
-boolean connected(struct altGraphX *agx, bool **em, int v1, int v2, 
-		  int source, int sink)
+void logSpliceType(enum altSpliceType type, int size)
+/* Log the different types of splicing. */
+{
+switch (type) 
+    {
+    case alt5Prime:
+	alt5PrimeCount++;
+	break;
+    case alt3Prime: 
+	alt3PrimeCount++;
+	if(size == 3)
+	    alt3Prime3bpCount++;
+	break;
+    case altCassette:
+	altCassetteCount++;
+	break;
+    case altRetInt:
+	altRetIntCount++;
+	break;
+    case altOther:
+	altOtherCount++;
+	break;
+    case alt5PrimeSoft:
+	alt5PrimeSoftCount++;
+	break;
+    case alt3PrimeSoft:
+	alt3PrimeSoftCount++;
+	break;
+    case altMutExclusive:
+	altMutExclusiveCount++;
+	break;
+    default:
+	errAbort("logSpliceType() - Don't recognize type %d", type);
+    }
+}
+
+void printSpliceTypeInfo(int totalLoci, int altSpliceLoci, int totalSplices)
+{
+fprintf(stderr, "alt 5' Count:\t%d (%d on '-' strand)\n", alt5PrimeCount, alt3Flipped);
+fprintf(stderr, "alt 3' Count:\t%d (%d on '-' strand, %d are 3bp)\n", alt3PrimeCount, alt5Flipped, alt3Prime3bpCount);
+fprintf(stderr, "alt Cass Count:\t%d\n", altCassetteCount);
+fprintf(stderr, "alt Ret. Int. Count:\t%d\n", altRetIntCount);
+fprintf(stderr, "alt Mutual Exclusive Count:\t%d\n", altMutExclusiveCount);
+fprintf(stderr, "alt Txn Start Count:\t%d\n", alt5PrimeSoftCount);
+fprintf(stderr, "alt Txn End Count:\t%d\n", alt3PrimeSoftCount);
+fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
+fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
+	totalSplices, totalLoci, (float)totalSplices/altSpliceLoci);
+}
+
+boolean connected(struct altGraphX *agx, bool **em, int *adjStartCounts, int *adjEndCounts, 
+		  int v1, int v2, int source, int sink)
 /* Return whether or not two edges are connected in 
    the graph. */
 {
@@ -64,10 +133,12 @@ else if(v1 == source && v2 == sink)
 else if(v1 != source && v2 != sink && em[v1][v2])
     return TRUE;
 /* All soft starts are connected to source. */
-else if(v1 == source && agx->vTypes[v2] == ggSoftStart)
+else if(v1 == source && 
+	(agx->vTypes[v2] == ggSoftStart || adjEndCounts[v2] == 0))
     return TRUE;
 /* All soft ends are connected to sink. */
-else if(v2 == sink && agx->vTypes[v1] == ggSoftEnd)
+else if(v2 == sink && 
+	(agx->vTypes[v1] == ggSoftEnd || adjStartCounts[v1] == 0))
     return TRUE;
 return FALSE;
 }
@@ -123,6 +194,18 @@ int **createDistanceMatrix(struct altGraphX *agx, bool **em, int source, int sin
 int **D = NULL;
 int vC = agx->vertexCount + 2;
 int i = 0, j = 0, k = 0;
+int **adjList = NULL;   /* Adjacency list. */
+int *adjStartCounts = NULL;  /* Number of vertices in the adj list. */
+int *adjEndCounts = NULL;  /* Number of vertices in the adj list. */
+
+/* Allocate some memory. */
+AllocArray(adjStartCounts, vC);
+AllocArray(adjEndCounts, vC);
+for(i = 0; i < agx->edgeCount; i++)
+    {
+    adjStartCounts[agx->edgeStarts[i]]++;
+    adjEndCounts[agx->edgeEnds[i]]++;
+    }
 
 /* Allocate and initialize D matrix. */
 AllocArray(D, vC);
@@ -136,7 +219,8 @@ for(i = 0; i < vC; i++)
 	   BIGNUM (infinity) otherwise. */
 	if(i == j)
 	    D[i][j] = 0;
-	else if(connected(agx, em, i-1, j-1, source, sink))
+	else if(connected(agx, em, adjStartCounts, adjEndCounts, 
+			  i-1, j-1, source, sink))
 	    D[i][j] = 1;
 	else
 	    D[i][j] = BIGNUM;
@@ -164,6 +248,10 @@ for(k = source; k <= sink; k++)
     }
 if(distMatrixFile != NULL)
     writeDistMatrix(distMatrixFile, D, source, sink, agx->name);
+
+/* Cleanup some memory. */
+freez(&adjStartCounts);
+freez(&adjEndCounts);
 return D;
 }
 
@@ -298,6 +386,18 @@ const struct path *b = *((struct path **)vb);
 return a->bpCount - b->bpCount;
 }
 
+int spliceCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct splice *a = *((struct splice **)va);
+const struct splice *b = *((struct splice **)vb);
+int dif;
+dif = strcmp(a->tName, b->tName);
+if (dif == 0)
+    dif = a->tStart - b->tStart;
+return dif;
+}
+
 struct bed *bedForPath(struct path *path, struct splice *splice,
 		       struct altGraphX *ag, int source, int sink, boolean spoofEnds)
 /* Construct a bed for the path. If spoofEnds is TRUE,
@@ -321,7 +421,8 @@ AllocArray(bed->chromStarts, path->vCount);
 AllocArray(bed->blockSizes, path->vCount);
 
 /* If necessary tack on a fake exon. */
-if(spoofEnds && altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != ggExon)
+if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
+   altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
     bed->chromStarts[bed->blockCount] = vPos[verts[vertIx]] - 1;
@@ -349,7 +450,8 @@ for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
 
 /* if spoofing ends tack on a 1bp exon as necessary. */
 vertIx = path->vCount - 2;
-if(spoofEnds && altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != ggExon)
+if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
+   altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
     bed->chromStarts[bed->blockCount] = vPos[verts[vertIx+1]] - 1;
@@ -361,7 +463,10 @@ if(spoofEnds && altGraphXEdgeVertexType(ag, verts[vertIx], verts[vertIx+1]) != g
 /* Fix up the name and adjust the chromStarts. */
 dyStringPrintf(buff, "%s.%d.", splice->name, slIxFromElement(splice->paths, path));
 for(i = 0; i < path->vCount; i++)
-    dyStringPrintf(buff, "%d,", path->vertices[i]);
+    {
+    if(path->vertices[i] != sink && path->vertices[i] != source)
+	dyStringPrintf(buff, "%d,", path->vertices[i]);
+    }
 bed->name = cloneString(buff->string);
 for(i = 0; i < bed->blockCount; i++)
     bed->chromStarts[i] -= bed->chromStart;
@@ -396,14 +501,7 @@ for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
 	}
     }
 
-/* If writing beds finish off the bed and write it out. */
-if(pathBedFile != NULL)
-    {
-    struct bed *bed = bedForPath(path, splice, ag, source, sink, TRUE);
-    if(bed != NULL)
-	bedTabOutN(bed, 12, pathBedFile);
-    bedFree(&bed);
-    }
+
 return bpCount;
 }
 	    
@@ -436,10 +534,10 @@ int pathFindDownstreamVertex(struct path *path, struct altGraphX *ag,
    end of the path. */
 {
 int i = 0;
-int endPath = path->vertices[path->vCount-1];
-for(i = path->vertices[endPath] + 1; i <= sink; i++)
+int endIx = path->vCount-1;
+for(i = path->vertices[endIx] + 1; i <= sink; i++)
     {
-    if(distance[path->vertices[endPath]][i] == 1)
+    if(distance[path->vertices[endIx]][i] == 1)
 	return i;
     }
 return -1;
@@ -451,18 +549,66 @@ void simplifyAndOrderPaths(struct splice *splice, int **distance,
    array size to the minimum possible size. */
 {
 struct path *path = NULL;
+int *vPos = ag->vPositions;
 for(path = splice->paths; path != NULL; path = path->next)
     {
     int *tmpPath = CloneArray(path->vertices, path->vCount);
+    int endIx = path->vCount - 1;
     freez(&path->vertices);
     path->vertices = tmpPath;
     path->maxVCount = path->vCount;
     path->upV = pathFindUpstreamVertex(path, ag, distance, source, sink);
     path->downV = pathFindDownstreamVertex(path, ag, distance, source, sink);
     path->bpCount = calcBpLength(path, splice, ag, source, sink);
+    path->tName = cloneString(ag->tName);
+    /* Set the chromosome starts and ends, but
+       ignore source and sink. */
+    if(path->vertices[0] == source)
+	path->tStart = vPos[path->vertices[1]];
+    else
+	path->tStart = vPos[path->vertices[0]];
+    if(path->vertices[endIx] == sink)
+	path->tEnd = vPos[path->vertices[endIx - 1]];
+    else
+	path->tEnd = vPos[path->vertices[endIx]];
     }
 slSort(&splice->paths, pathBpCountCmp);
 }
+
+boolean cassettePaths(struct splice *splice, struct altGraphX *ag, bool **em,
+		       int source, int sink)
+/* Return TRUE if paths are mutally exclusive and the longer
+   path forms a cassette exon. */
+{
+/* short and long refer to bpCount. */
+struct path *shortPath = splice->paths; 
+struct path *longPath = splice->paths->next;
+int *shortVerts = shortPath->vertices;
+int *longVerts = longPath->vertices;
+
+int endVert = longPath->vCount-1;
+int startVert = 0;
+int *verts = longPath->vertices;
+boolean cassette = FALSE;
+unsigned char *vTypes = ag->vTypes;
+
+/* Cassettes have 4 vertices in their path.
+   Cassettes don't start with the source or end with the sink. */
+if(endVert != 3 || verts[startVert] == source || verts[endVert] == sink)
+    return FALSE;
+
+/* Check to see if the path is an exon inclusion and then
+   that they are mutually exclusive. */
+if(shortPath->vCount == 2 && longPath->vCount == 4 && 
+   vTypes[verts[0]] == ggHardEnd && 
+   vTypes[verts[1]] == ggHardStart &&
+   vTypes[verts[2]] == ggHardEnd &&
+   vTypes[verts[3]] == ggHardStart &&
+   isMutallyExclusive(splice, ag, em, source,sink))
+    cassette = TRUE;
+return cassette;
+}
+
 
 boolean isCassettePath(struct splice *splice, struct altGraphX *ag, bool **em,
 		       int source, int sink)
@@ -478,9 +624,45 @@ boolean cassette = FALSE;
    Cassettes don't start with the source or end with the sink. */
 if(endVert != 3 || verts[startVert] == source || verts[endVert] == sink)
     return FALSE;
-cassette = agxIsCassette(ag, em, verts[0], verts[1], verts[3],
-			 &altStart, &altEnd, &startV, &endV);
+
+if(oldClassification)
+    cassette = agxIsCassette(ag, em, verts[0], verts[1], verts[3],
+			     &altStart, &altEnd, &startV, &endV);
+else
+    cassette = cassettePaths(splice, ag, em, source, sink);
 return cassette;
+}
+
+boolean retIntPaths(struct splice *splice, struct altGraphX *ag, bool **em,
+		   int source, int sink)
+/* Return TRUE if splice is an retInt exon, FALSE otherwise. */
+{
+/* short and long refer to bpCount. */
+struct path *shortPath = splice->paths; 
+struct path *longPath = splice->paths->next;
+int *shortVerts = shortPath->vertices;
+int *longVerts = longPath->vertices;
+unsigned char *vTypes = ag->vTypes;
+boolean retInt = FALSE;
+/* RetInts have 2 vertices in their long path and 4 in the short path.
+   RetInts don't start with the source or end with the sink. */
+if(longPath->vCount != 2 || shortPath->vCount != 4 ||
+   shortVerts[0] == source || shortVerts[3] == sink)
+    return FALSE;
+assert(shortVerts[0] == longVerts[0] && shortVerts[3] == longVerts[1]);
+
+/* If one path has an intron and the other doesn't and are mutally
+   exclusive they are retInt. */
+if(shortPath->vCount == 4 && longPath->vCount == 2 &&
+   vTypes[shortVerts[0]] == ggHardStart &&
+   vTypes[shortVerts[1]] == ggHardEnd &&
+   vTypes[shortVerts[2]] == ggHardStart &&
+   vTypes[shortVerts[3]] == ggHardEnd &&
+   vTypes[longVerts[0]] == ggHardStart &&
+   vTypes[longVerts[1]] == ggHardEnd &&
+   isMutallyExclusive(splice, ag, em, source,sink))
+    retInt = TRUE;
+return retInt;
 }
 
 boolean isRetIntPath(struct splice *splice, struct altGraphX *ag, bool **em,
@@ -500,9 +682,44 @@ if(longPath->vCount != 2 || shortPath->vCount != 4 ||
    shortVerts[0] == source || shortVerts[3] == sink)
     return FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[3] == longVerts[1]);
-retInt = agxIsRetainIntron(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
+
+if(oldClassification)
+    retInt = agxIsRetainIntron(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
 			   &altStart, &altEnd);
+else
+    retInt = retIntPaths(splice, ag, em, source, sink);
 return retInt;
+}
+
+boolean alt5Paths(struct splice *splice, struct altGraphX *ag, bool **em,
+		   int source, int sink)
+/* Return TRUE if splice is an alt5 exon, FALSE otherwise. */
+{
+/* short and long refer to bpCount. */
+struct path *shortPath = splice->paths; 
+struct path *longPath = splice->paths->next;
+int *shortVerts = shortPath->vertices;
+int *longVerts = longPath->vertices;
+unsigned char *vTypes = ag->vTypes;
+boolean alt5 = FALSE;
+/* Alt5s have 3 vertices in both paths.
+   Alt5s don't start with the source or end with the sink. */
+if( shortPath->vCount != 3 || longPath->vCount != 3 || 
+    shortVerts[0] == source || shortVerts[2] == sink ||
+    longVerts[0] == source || longVerts[2] == sink)
+    return FALSE;
+assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
+
+/* If both paths form an exon end and are mutally
+   exclusive they are alt5. */
+if(shortPath->vCount == 3 && longPath->vCount == 3 &&
+   vTypes[shortVerts[0]] == ggHardStart &&
+   vTypes[shortVerts[1]] == ggHardEnd &&
+   vTypes[shortVerts[2]] == ggHardStart &&
+   vTypes[longVerts[1]] == ggHardEnd &&
+   isMutallyExclusive(splice, ag, em, source,sink))
+    alt5 = TRUE;
+return alt5;
 }
 
 boolean isAlt5Path(struct splice *splice, struct altGraphX *ag, bool **em,
@@ -523,9 +740,44 @@ if( shortPath->vCount != 3 || longPath->vCount != 3 ||
     longVerts[0] == source || longVerts[2] == sink)
     return FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
-alt5 = agxIsAlt5Prime(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
+
+if(oldClassification)
+    alt5 = agxIsAlt5Prime(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
 		      &altStart, &altEnd, &startV, &endV);
+else
+    alt5 = alt5Paths(splice, ag, em, source, sink);
 return alt5;
+}
+
+boolean alt3Paths(struct splice *splice, struct altGraphX *ag, bool **em,
+		   int source, int sink)
+/* Return TRUE if splice is an alt3 exon, FALSE otherwise. */
+{
+/* short and long refer to bpCount. */
+struct path *shortPath = splice->paths; 
+struct path *longPath = splice->paths->next;
+int *shortVerts = shortPath->vertices;
+int *longVerts = longPath->vertices;
+unsigned char *vTypes = ag->vTypes;
+boolean alt3 = FALSE;
+/* Alt3s have 3 vertices in both paths.
+   Alt3s don't start with the source or end with the sink. */
+if( shortPath->vCount != 3 || longPath->vCount != 3 || 
+    shortVerts[0] == source || shortVerts[2] == sink ||
+    longVerts[0] == source || longVerts[2] == sink)
+    return FALSE;
+assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
+
+/* If both paths form an exon end and are mutally
+   exclusive they are alt3. */
+if(shortPath->vCount == 3 && longPath->vCount == 3 &&
+   vTypes[shortVerts[0]] == ggHardEnd &&
+   vTypes[shortVerts[1]] == ggHardStart &&
+   vTypes[shortVerts[2]] == ggHardEnd &&
+   vTypes[longVerts[1]] == ggHardStart &&
+   isMutallyExclusive(splice, ag, em, source,sink))
+    alt3 = TRUE;
+return alt3;
 }
 
 boolean isAlt3Path(struct splice *splice, struct altGraphX *ag, bool **em,
@@ -546,8 +798,11 @@ if( shortPath->vCount != 3 || longPath->vCount != 3 ||
     longVerts[0] == source || longVerts[2] == sink)
     return FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
-alt3 = agxIsAlt3Prime(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
+if(oldClassification)
+    alt3 = agxIsAlt3Prime(ag, em, shortVerts[0], shortVerts[1], longVerts[1],
 		      &altStart, &altEnd, &startV, &endV);
+else
+    alt3 = alt3Paths(splice, ag, em, source, sink);
 return alt3;
 }
 
@@ -588,7 +843,16 @@ boolean isAltTxStart(struct splice *splice, struct altGraphX *ag, bool **em,
 /* Return TRUE if starting vertex is source and paths
    are mutally exclusive. */
 {
-if(splice->paths->vertices[0] == source &&
+unsigned char *vTypes = ag->vTypes;
+int *verts = splice->paths->vertices;
+struct path *path = NULL;
+int softStartCount = 0;
+/* Count how many soft starts are attached to the source. */
+for(path = splice->paths; path != NULL; path = path->next)
+    if(vTypes[path->vertices[1]] == ggSoftStart)
+	softStartCount++;
+
+if(verts[0] == source && softStartCount > 1 &&
    isMutallyExclusive(splice, ag, em, source, sink))
     return TRUE;
 return FALSE;
@@ -601,7 +865,14 @@ boolean isAltTxEnd(struct splice *splice, struct altGraphX *ag, bool **em,
 {
 struct path *path = splice->paths;
 int endIx = path->vCount - 1;
-if(path->vertices[endIx] == sink &&
+unsigned char *vTypes = ag->vTypes;
+int *verts = splice->paths->vertices;
+int softEndCount = 0;
+/* Count how many soft starts are attached to the source. */
+for(path = splice->paths; path != NULL; path = path->next)
+    if(vTypes[path->vertices[path->vCount - 2]] == ggSoftEnd)
+	softEndCount++;
+if(verts[endIx] == sink && softEndCount > 1 &&
    isMutallyExclusive(splice, ag, em, source, sink))
     return TRUE;
 return FALSE;
@@ -632,8 +903,8 @@ else if(isMutallyExclusive(splice, ag, em, source, sink))
 /* Fix the strand. */
 if(ag->strand[0] == '-')
     {
-    if(type == alt5Prime) type = alt3Prime;
-    else if(type == alt3Prime) type = alt5Prime;
+    if(type == alt5Prime) { alt5Flipped++; type = alt3Prime; }
+    else if(type == alt3Prime) { alt3Flipped++; type = alt5Prime; }
     else if(type == alt5PrimeSoft) type = alt3PrimeSoft;
     else if(type == alt3PrimeSoft) type = alt5PrimeSoft;
     }
@@ -653,13 +924,20 @@ int *altStarts = NULL;
 int altCount = 0;
 int i = 0;
 char buff[256];
+struct path *path = NULL;
 
 /* Allocate and initialize the splice. */
 AllocVar(splice);
+splice->tName = cloneString(ag->tName);
+splice->tStart = BIGNUM;
+splice->tEnd = -1;
 splice->agxId = ag->id;
-safef(buff, sizeof(buff), "%s.%d", ag->name, vertIx);
+if(vertIx == source)
+    safef(buff, sizeof(buff), "%s.s", ag->name, vertIx);
+else
+    safef(buff, sizeof(buff), "%s.%d", ag->name, vertIx);
 splice->name = cloneString(buff);
-splice->agx = ag;
+
 slAddHead(spliceList, splice);
 
 /* Find all of the splice sites that vertIx connects
@@ -675,6 +953,7 @@ for(i = vertIx + 1; i <= sink; )
     int connections = vertConnect(distance, source, sink, i, altStarts, altCount);
     if(connections == altCount)
 	{
+	int altBpSize = 0;
 	/* Found end of altsplice event. Enumerate all the paths
 	   between it and end vertex. */
 	*endIx = i;
@@ -683,6 +962,13 @@ for(i = vertIx + 1; i <= sink; )
 	splice->pathCount = slCount(splice->paths);
 	simplifyAndOrderPaths(splice, distance, ag, source, sink);
 	splice->type = typeForSplice(splice, ag, em, source, sink);
+	/* For now just keep track of difference between first
+	   two paths. That way can find 3bp differences. */
+	if(splice->pathCount >= 2)
+	    altBpSize = splice->paths->next->bpCount - splice->paths->bpCount;
+	else
+	    altBpSize = splice->paths->bpCount;
+	logSpliceType(splice->type, altBpSize);
 	break;
 	}
     else if(connections > 0)
@@ -700,6 +986,22 @@ for(i = vertIx + 1; i <= sink; )
 	}
     else /* No connections, try the next vertex. */
 	i++;
+    }
+
+/* Loop through paths and get the min and max chromosomal
+   coordinates. */
+for(path = splice->paths; path != NULL; path = path->next)
+    {
+    splice->tStart = min(splice->tStart, path->tStart);
+    splice->tEnd = max(splice->tEnd, path->tEnd);
+    /* If writing beds, create the bed and write it out. */
+    if(pathBedFile != NULL)
+	{	
+	struct bed *bed = bedForPath(path, splice, ag, source, sink, TRUE);
+	if(bed != NULL)
+	    bedTabOutN(bed, 12, pathBedFile);
+	bedFree(&bed);
+	}
     }
 freez(&altStarts);
 }
@@ -722,8 +1024,9 @@ freez(&D);
 *pD = NULL;
 }
 
-void doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
-/* Examine each altGraphX record for splicing events. */
+int doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
+/* Examine each altGraphX record for splicing events. Return number
+ of alt events in graph. */
 {
 bool **em = altGraphXCreateEdgeMatrix(agx);
 int source = -1, sink = agx->vertexCount;
@@ -731,6 +1034,7 @@ int vC = agx->vertexCount + 2;
 int *vPos = agx->vPositions;
 int **distance = createDistanceMatrix(agx, em, source, sink);
 int vertIx = 0;
+int numAltEvents = 0;
 struct splice *splice = NULL, *spliceList = NULL;
 for(vertIx = source; vertIx <= sink; )
     {
@@ -740,7 +1044,8 @@ for(vertIx = source; vertIx <= sink; )
 	{
 	int nextVertIx = vertIx;
 	findAltSplicesFromVertice(agx, source, sink, em, distance, &spliceList, vertIx, &nextVertIx);
-	assert(vertIx < nextVertIx);
+	if(vertIx >= nextVertIx) 
+	    errAbort("vertIx = %d and nextVertIx = %d in agx: %s", vertIx, nextVertIx, agx->name);
 	vertIx = nextVertIx;
 	}
     else /* Try the next vertex. */
@@ -749,7 +1054,10 @@ for(vertIx = source; vertIx <= sink; )
 	}
     }
 
+numAltEvents = slCount(spliceList);
+
 /* Output the alternative splicing events. */
+slSort(&spliceList, spliceCmp);
 for(splice = spliceList; splice != NULL; splice = splice->next)
     {
     spliceTabOut(splice, spliceOut);
@@ -759,19 +1067,52 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
 spliceFreeList(&spliceList);
 freeDistanceMatrix(&distance, source, sink);
 altGraphXFreeEdgeMatrix(&em, agx->vertexCount);
+return numAltEvents;
 }
 
 void altPaths(char *fileIn, char *fileOut)
 /* Loop through each graph and output alternative splicing paths. */
 {
 struct altGraphX *agx = NULL, *agxList = NULL;
-FILE *out = NULL;
+FILE *out = NULL, *subOut = NULL;
+int altGraphCount = 0, numAlts = 0;
+int totalAltCount = 0;
+int idCount = 0;
+char *subOutName = optionVal("saveGraphs", NULL);
+warn("Loading graphs from %s", fileIn);
 agxList = altGraphXLoadAll(fileIn);
 out = mustOpen(fileOut, "w");
+if(subOutName != NULL)
+    subOut = mustOpen(subOutName, "w");
+dotForUserInit(max(slCount(agxList)/20, 1));
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
-    doAltPathsAnalysis(agx, out);
+    struct altGraphX *subAgx = NULL, *subAgxList = NULL;
+    boolean counted = FALSE;
+    dotForUser();
+    /* Break the graph into connected components, 
+       with the orthologous graphs it is possible that the
+       graph is not connected. */
+    subAgxList = agxConnectedComponents(agx);
+    for(subAgx = subAgxList; subAgx != NULL; subAgx = subAgx->next)
+	{
+	subAgx->id = idCount++;
+	if(subOut != NULL)
+	    altGraphXTabOut(subAgx, subOut);
+	numAlts = doAltPathsAnalysis(subAgx, out);
+	totalAltCount += numAlts;
+	if(numAlts > 0 && !counted)
+	    {
+	    altGraphCount++;
+	    counted = TRUE;
+	    }
+	}
+    altGraphXFreeList(&subAgxList);
     }
+warn("");
+carefulClose(&subOut);
+printSpliceTypeInfo(slCount(agxList), altGraphCount, totalAltCount);
+warn("Cleaning up.");
 altGraphXFreeList(&agxList);
 }
 
@@ -803,6 +1144,8 @@ if(optionExists("dumpDistMatrix"))
     initDumpDistMatrix();
 if(optionExists("dumpPathBeds"))
     initPathBeds();
+if(optionExists("oldClassification"))
+    oldClassification = TRUE;
 altPaths(argv[1], argv[2]);
 carefulClose(&distMatrixFile);
 carefulClose(&pathBedFile);
