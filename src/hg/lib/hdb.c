@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.134 2003/09/03 21:57:10 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.135 2003/09/03 23:00:11 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1448,7 +1448,7 @@ slAddHead(pList, sub);
 }
 
 
-static void addDbSubVars(char *prefix, char *database, struct subText **pList)
+void hAddDbSubVars(char *prefix, char *database, struct subText **pList)
 /* Add substitution variables associated with database to list. */
 {
 char *organism = hOrganism(database);
@@ -1500,7 +1500,7 @@ if (oldDatabase != NULL && !sameString(database, oldDatabase))
     oldDatabase = cloneString(database);
     }
 if (subList == NULL)
-    addDbSubVars("", database, &subList);
+    hAddDbSubVars("", database, &subList);
 subOutAll(tdb, subList);
 
 if (tdb->settings != NULL && tdb->settings[0] != 0)
@@ -1511,7 +1511,7 @@ if (tdb->settings != NULL && tdb->settings[0] != 0)
     if (blurb != NULL)
 	addSubVar("", "blurb", blurb, &subList);
     if (otherDb != NULL)
-	addDbSubVars("o_", otherDb, &subList);
+	hAddDbSubVars("o_", otherDb, &subList);
     subOutAll(tdb, subList);
     subTextFreeList(&subList);
     }

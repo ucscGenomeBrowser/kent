@@ -15,6 +15,10 @@
 #include "dystring.h"
 #endif
 
+#ifndef SUBTEXT_H
+#include "subText.h"
+#endif
+
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif 
@@ -473,6 +477,9 @@ char *hFreezeDate(char *database);
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */
+
+void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
+/* Add substitution variables associated with database to list. */
 
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */
