@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.617 2004/04/28 16:40:25 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.618 2004/04/28 20:09:23 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6848,12 +6848,19 @@ if (url != NULL && url[0] != 0)
 	    	{
 		genomeStr = "mm";
 	    	}
-	    else
-	    	{
-	    	warn("Organism %s not found!", organism); 
-	    	return;
-	    	}
-	    }
+            else
+                {
+	        if (sameWord(organism, "rat"))
+                    {
+                    genomeStr = "rn";
+                    }
+                else
+                    {
+                    warn("Organism %s not found!", organism);
+                    return;
+                    }
+                }
+            }
     	sprintf(cond_str, "name='%s'", shortItemName);    
     	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     	if (ans != NULL)
@@ -6913,7 +6920,7 @@ if (url != NULL && url[0] != 0)
     char supfamURL[1024];
     char cond_str[256];
     char *proteinID;
-    char genomeStr[10];
+    char *genomeStr;
 
     struct sqlConnection *conn = hAllocConn();
     char query[256];
@@ -6940,18 +6947,25 @@ if (url != NULL && url[0] != 0)
 
     if (sameWord(organism, "human"))
 	{
-        strcpy(genomeStr, "hs");
+        genomeStr = "hs";
 	}
     else
 	{
     	if (sameWord(organism, "mouse"))
 	    {
-	    strcpy(genomeStr, "mm");
+	    genomeStr = "mm";
 	    }
 	else
 	    {
-	    printf("<br>Organism %s not found!!!", organism); fflush(stdout);
-	    return;
+	    if (sameWord(organism, "rat"))
+            	{
+                genomeStr = "rn";
+                }
+            else
+                {
+                warn("Organism %s not found!", organism);
+                return;
+		}
 	    }
 	}
 
