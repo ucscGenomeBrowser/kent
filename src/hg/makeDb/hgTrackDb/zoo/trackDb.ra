@@ -154,7 +154,7 @@ type sample 9
 
 
 track binomialCons2
-shortLabel Conservation Score
+shortLabel Binomial Conservation Score
 longlabel Binomial_25 Conservation Scores
 priority 410
 altColor 160,0,0
@@ -170,8 +170,8 @@ color 0,0,160
 type bed 3 .
 
 track parsPValues
-shortLabel parsPValues
-longlabel Parsimony PValues Conservation Score
+shortLabel parsimony P-Values
+longlabel Parsimony P-Values Conservation Score
 priority 430
 altColor 0,0,160
 visibility full
@@ -186,7 +186,7 @@ color 0,120,0
 type bed 3 .
 
 track uniformPValues
-shortLabel uniformPValues
+shortLabel uniform P-Values
 longlabel Uniform PValues Conservation Score
 priority 435
 altColor 0,120,0
