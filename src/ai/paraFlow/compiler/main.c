@@ -855,11 +855,9 @@ tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
 scope = pfScopeNew(scope, 0);
 
-uglyf("ok 1\n");
 if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
-uglyf("ok 2\n");
 if (tok->type == ')')
     {
     input = emptyTuple(pp, tok);
