@@ -1114,8 +1114,6 @@ while (readGbInfo(lf))
     struct keyVal *seqKey, *sizeKey;
     boolean doneSequence = FALSE;
 
-    printf ("ORGANISM: %s\n", org);
-
     if (gByOrganism) 
         {
         if (!hashLookup(raHash, org))
@@ -1132,22 +1130,14 @@ while (readGbInfo(lf))
                 {
                 orgDir = replaceChars(org, ' ', '.');
                 }
-
+            
             sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
             system(command);
-
-            printf("OUTPUT DIR: %s\n", gOutputDir);
-            printf("ORG DIR: %s\n", orgDir);
-            printf("RA FILE: %s\n", raName);
 
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, raName); 
             printf ("RA PATH: %s\n", path);
             fflush(stdout);
             raFile = mustOpen(path, "wb");
-
-            printf("OUTPUT DIR: %s\n", gOutputDir);
-            printf("ORG DIR: %s\n", orgDir);
-            printf("FA FILE: %s\n", faDir);
 
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, faDir); 
             printf ("FA PATH: %s\n", path);
@@ -1677,6 +1667,7 @@ makeGbStruct();
 
 faHash = newHash(10);
 raHash = newHash(10);
+ta = mustOpen(taName, "wb");
 
 if (gByOrganism) 
     {
@@ -1687,7 +1678,6 @@ if (gByOrganism)
 else
     {
     ra = mustOpen(raName, "wb");
-    ta = mustOpen(taName, "wb");
     if (formatType != ftBac)
         {
         fa = mustOpen(faName, "wb");
