@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.74 2003/11/08 00:09:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.75 2003/11/13 00:23:04 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -308,11 +308,13 @@ double minYc;	/*	from cart */
 double maxYc;	/*	from cart */
 double minY;	/*	from the typeLine	*/
 double maxY;	/*	from the typeLine	*/
-int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
+int thisHeightPer;	/*	pixels per item	*/
 char *interpolate;	/*	points only, or interpolate	*/
 char *horizontalGrid;	/*	Grid lines, off by default */
 char *lineBar;	/*	Line or Bar graph */
 char *autoScale;	/*	Auto scaling on or off */
+int maxHeightPixels = atoi(trackDbSettingOrDefault(tdb,
+				"maxHeightPixels", DEFAULT_HEIGHT_PER));
 
 minY = DEFAULT_MIN_Yv;
 maxY = DEFAULT_MAX_Yv;
@@ -338,7 +340,8 @@ minY_str = cartOptionalString(cart, &options[4][0]);
 maxY_str = cartOptionalString(cart, &options[5][0]);
 
 heightPer = cartOptionalString(cart, &options[0][0]);
-if( heightPer ) thisHeightPer = min( atoi(heightPer), DEFAULT_HEIGHT_PER );
+thisHeightPer = maxHeightPixels;
+if( heightPer ) thisHeightPer = min( atoi(heightPer), maxHeightPixels );
 if( thisHeightPer < MIN_HEIGHT_PER ) thisHeightPer = MIN_HEIGHT_PER;
 
 if( minY_str ) minYc = max( minY, atof(minY_str));
@@ -366,12 +369,12 @@ printf("</TD><TD>\n");
 
 printf("<b>Horizontal Grid Lines: </b> ");
 wiggleGridDropDown(&options[7][0], horizontalGrid );
-printf("</TD></TR><TR><TD COLSPAN=2>\n");
+printf(" (currently meaningless)</TD></TR><TR><TD COLSPAN=2>\n");
 
 printf("<b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
 printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)",
-	MIN_HEIGHT_PER, DEFAULT_HEIGHT_PER);
+	MIN_HEIGHT_PER, maxHeightPixels);
 printf("</TD></TR><TR><TD COLSPAN=2>\n");
 
 printf("<b>Vertical Viewing Range</b>:&nbsp;&nbsp;\nmin:");
