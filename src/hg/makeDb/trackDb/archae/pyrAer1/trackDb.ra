@@ -47,11 +47,3 @@ visibility pack
 spectrum on
 type bed 6 .
 
-track BlastPEuk
-shortLabel BLASTP Euk
-longLabel  BLASTP of Eukaryotic Proteins
-group compGeno
-priority 4.2
-visibility pack
-spectrum on
-type bed 6 .
