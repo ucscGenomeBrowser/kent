@@ -1,5 +1,5 @@
-/* Below is the worlds sleaziest little integer expression
- * evaluator. */
+/* Below is the worlds sleaziest little numerical expression
+ * evaluator. Used to do only ints, now does doubles as well. */
 #include "common.h"
 #include "kxTok.h"
 
@@ -26,26 +26,26 @@ tok = tok->next;
 #endif /* DEBUG */
 
 
-static int expression();
+static double expression();
 /* Forward declaration of main expression handler. */
 
-static int number()
+static double number()
 /* Return number. */
 {
-int val;
+double val;
 if (tok == NULL)
     errAbort("Parse error in numerical expression");
 if (!isdigit(tok->string[0]))
-    errAbort("Expecting integer, got %s", tok->string);
-val = atoi(tok->string);
+    errAbort("Expecting number, got %s", tok->string);
+val = atof(tok->string);
 nextTok();
 return val;
 }
 
-static int atom()
+static double atom()
 /* Return parenthetical expression or number. */
 {
-int val;
+double val;
 if (tok->type == kxtOpenParen)
     {
     nextTok();
@@ -66,10 +66,10 @@ else
 }
 
 
-static int uMinus()
+static double uMinus()
 /* Unary minus. */
 {
-int val;
+double val;
 if (tok->type == kxtSub)
     {
     nextTok();
@@ -80,10 +80,10 @@ else
     return atom();
 }
 
-static int mulDiv()
+static double mulDiv()
 /* Multiplication or division. */
 {
-int val = uMinus();
+double val = uMinus();
 for (;;)
     {
     if (tok->type == kxtMul)
@@ -102,10 +102,10 @@ for (;;)
 return val;
 }
 
-static int addSub()
+static double addSub()
 /* Addition or subtraction. */
 {
-int val;
+double val;
 val = mulDiv();
 for (;;)
     {
@@ -125,19 +125,24 @@ for (;;)
 return val;
 }
 
-static int expression()
+static double expression()
 /* Wraps around lowest level of expression. */
 {
 return addSub();
 }
 
-int intExp(char *text)
-/* Convert text to integer expression and evaluate. */
+double doubleExp(char *text)
+/* Convert text to double expression and evaluate. */
 {
-int val;
+double val;
 struct kxTok *tokList = tok = kxTokenize(text, FALSE);
 val = expression();
 slFreeList(&tokList);
 return val;
 }
 
+int intExp(char *text)
+/* Convert text to int expression and evaluate. */
+{
+return round(doubleExp(text));
+}

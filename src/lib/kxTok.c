@@ -46,7 +46,7 @@ for (;;)
         for (;;)
             {
             c = *s;
-            if (isalnum(c) || c == ':' || c == '_')
+            if (isalnum(c) || c == ':' || c == '_' || c == '.')
                 ++s;
             else if (c == '?' || (wildAst && c == '*'))
                 {
