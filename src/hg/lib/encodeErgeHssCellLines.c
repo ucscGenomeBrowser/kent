@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "encodeErgeHssCellLines.h"
 
-static char const rcsid[] = "$Id: encodeErgeHssCellLines.c,v 1.1 2003/12/15 16:12:28 daryl Exp $";
+static char const rcsid[] = "$Id: encodeErgeHssCellLines.c,v 1.2 2003/12/16 13:36:20 daryl Exp $";
 
 struct encodeErgeHssCellLines *encodeErgeHssCellLinesLoad(char **row)
 /* Load a encodeErgeHssCellLines from row fetched with select * from encodeErgeHssCellLines
@@ -210,7 +210,7 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct encodeErge *encodeErgeHssCellLinesLoadByQuery(struct sqlConnection *conn, char *query)
+struct encodeErgeHssCellLines *encodeErgeHssCellLinesLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all encodeErge from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
