@@ -2209,7 +2209,8 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     ldHgGene rn3 sgpGene download/*.gtf -exon=CDS
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
-# TIGR GENE INDEX (RE-DONE 2004-05018 Fan)
+
+# TIGR GENE INDEX (DONE 2004-05020 Fan)
     mkdir -p /cluster/data/rn3/bed/tigr
     cd /cluster/data/rn3/bed/tigr
     wget ftp://ftp.tigr.org/pub/data/tgi/Rattus_norvegicus/TGI_track_RatGenome_rn3_05-2004.tgz
@@ -2239,6 +2240,9 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
         hgsql rn3 -e "select count(*) from tigrGeneIndex"
     end
     # Total of 308616 entries created in tigrGeneIndex table.
+
+    hgsql rn3 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql rn3 -e "update tigrGeneIndex set cdsEnd = txEnd;"
     
     # Perform some coordinate checking
     checkTableCoords rn3 tigrGeneIndex
