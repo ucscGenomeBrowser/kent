@@ -963,3 +963,14 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# MAKE GCPERCENT (DONE 10/5/04 angie)
+     ssh hgwdev
+     mkdir /cluster/data/anoGam1/bed/gcPercent
+     cd /cluster/data/anoGam1/bed/gcPercent
+     # create and load gcPercent table
+     hgsql anoGam1  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent anoGam1 ../../nib
+
+
