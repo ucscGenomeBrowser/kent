@@ -19,7 +19,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
     jaxOrtholog.o jaxQTL.o jksql.o \
-    knownInfo.o knownMore.o lfs.o mafRef.o \
+    knownInfo.o knownMore.o lfs.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
