@@ -10,6 +10,9 @@
 #include "genoFind.h"
 #include "trans3.h"
 
+static int blockSize = 1024;
+static int blockShift = 10;
+
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
  * server from confused clients. */
@@ -490,6 +493,22 @@ for (isRc=0; isRc <= 1; ++isRc)
 	}
     }
 
+/* Mask simple AA repeats. */
+for (i=0; i<20; ++i)
+    {
+    int j;
+    int tile = 0;
+    for (j=0; j<tileSize; ++j)
+        {
+	tile *= 20;
+	tile += i;
+	}
+    for (isRc = 0; isRc <= 1; ++isRc)
+        {
+	for (frame = 0; frame < 3; ++frame)
+	    transGf[isRc][frame]->listSizes[tile] = maxPat;
+	}
+    }
 /* Scan through nib files once counting tiles. */
 for (i=0; i<nibCount; ++i)
     {
@@ -686,6 +705,22 @@ else
     return -1;
 }
 
+static int gfHitCmpTarget(const void *va, const void *vb)
+/* Compare to sort based on target offset. */
+{
+const struct gfHit *a = *((struct gfHit **)va);
+const struct gfHit *b = *((struct gfHit **)vb);
+
+if (a->tStart > b->tStart)
+    return 1;
+else if (a->tStart == b->tStart)
+    return 0;
+else
+    return -1;
+}
+
+
+
 
 static int gfClumpCmpHitCount(const void *va, const void *vb)
 /* Compare to sort based on hit count. */
@@ -782,6 +817,67 @@ else
     }
 }
 
+static struct gfClump *clumpNear(struct genoFind *gf, struct gfClump *oldClumps, int minMatch)
+/* Go through clump list and make sure hits are also near each other.
+ * If necessary divide clumps. */
+{
+struct gfClump *newClumps = NULL, *clump, *nextClump;
+struct gfHit *hit, *nextHit;
+int tileSize = gf->tileSize;
+int lastT;
+
+for (clump = oldClumps; clump != NULL; clump = nextClump)
+    {
+    struct gfHit *newHits = NULL, *oldHits = clump->hitList;
+    int clumpSize = 0;
+    clump->hitCount = 0;
+    clump->hitList = NULL;	/* Clump no longer owns list. */
+    nextClump = clump->next;
+    slSort(&oldHits, gfHitCmpTarget);
+    lastT = oldHits->tStart;
+    for (hit = oldHits; hit != NULL; hit = nextHit)
+        {
+	nextHit = hit->next;
+	if (hit->tStart - lastT > 512)
+	     {
+	     if (clumpSize >= minMatch)
+	         {
+		 uglyf("Breaking clump hit->tStart %d, lastT %d<BR>\n", hit->tStart, lastT);
+		 slReverse(&newHits);
+		 clump->hitList = newHits;
+		 newHits = NULL;
+		 clump->hitCount = clumpSize;
+		 findClumpBounds(clump, tileSize);
+		 targetClump(gf, &newClumps, clump);
+		 AllocVar(clump);
+		 }
+	     else
+	         {
+		 slFreeList(&newHits);
+		 clump->hitCount = 0;
+		 }
+	     clumpSize = 0;
+	     }
+	lastT = hit->tStart;
+	slAddHead(&newHits, hit);
+	++clumpSize;
+	}
+    slReverse(&newHits);
+    clump->hitList = newHits;
+    if (clumpSize >= minMatch)
+        {
+	clump->hitCount = clumpSize;
+	findClumpBounds(clump, tileSize);
+	targetClump(gf, &newClumps, clump);
+	}
+    else
+        {
+	gfClumpFree(&clump);
+	}
+    }
+return newClumps;
+}
+
 static struct gfClump *clumpHits(struct genoFind *gf, struct gfHit *hitList, int minMatch)
 /* Clump together hits according to parameters in gf. */
 {
@@ -800,8 +896,7 @@ for (hit = hitList; ; hit = nextHit)
 	if (clumpSize >= minMatch)
 	    {
 	    clump->hitCount = clumpSize;
-	    findClumpBounds(clump, tileSize);
-	    targetClump(gf, &clumpList, clump);
+	    slAddHead(&clumpList, clump);
 	    }
 	else
 	    {
@@ -821,9 +916,10 @@ for (hit = hitList; ; hit = nextHit)
     clumpSize += 1;
     lastHit = hit;
     }
+clumpList = clumpNear(gf, clumpList, minMatch);
 slSort(&clumpList, gfClumpCmpHitCount);
 #ifdef DEBUG
-uglyf("Dumping clumps\n");
+uglyf("Dumping clumps B\n");
 for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
     {
     uglyf(" %d %d %s %d %d (%d hits)\n", clump->qStart, clump->qEnd, clump->target->seq->name,   clump->tStart, clump->tEnd, clump->hitCount);
