@@ -304,6 +304,11 @@ if (matrixName == NULL)
 else
     ss = axtScoreSchemeRead(matrixName);
 axtList = readAllAxt(inName, ss, minScore, chromName);
+if (axtList == NULL)
+    {
+    printf("Empty %s\n", inName);
+    return;
+    }
 printf("Read %d elements from %s\n", slCount(axtList), inName);
 chromRange(axtList, &chromStart, &chromEnd);
 rangeSize = chromEnd - chromStart;
@@ -345,8 +350,8 @@ bestKeepInitScores(bk);
 for (axt = goodList; axt != NULL; axt = axt->next)
     markBest(axt, bk, chromStart, rangeSize, ss, winSize, FALSE);
 outputBestRanges(bk, chromStart, rangeSize, ss, f);
-uglyf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
-uglyf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
 	100.0 * baseOutCount / baseInCount);
 }
 
