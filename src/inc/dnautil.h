@@ -52,7 +52,7 @@ extern int ntVal5[256];
 
 /* Inverse array - takes X_BASE_VAL int to a DNA char
  * value. */
-extern DNA valToNt[5];
+extern DNA valToNt[];
 
 /* Similar array that doesn't convert to lower case. */
 extern DNA ntMixedCaseChars[256];

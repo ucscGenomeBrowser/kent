@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.29 2004/04/02 06:34:14 daryl Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.30 2004/05/19 02:42:45 markd Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -24,7 +24,7 @@ struct codonTable
     AA protCode;	/* Upper case. */
     };
 
-struct codonTable codonTable [64] = 
+struct codonTable codonTable[] = 
 /* The master codon/protein table. */
 {
     {"ttt", 'F',},
@@ -121,7 +121,7 @@ int ntVal[256];
 int ntValLower[256];	/* NT values only for lower case. */
 int ntVal5[256];
 int ntValNoN[256]; /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent ones. */
-DNA valToNt[5];
+DNA valToNt[(N_BASE_VAL|MASKED_BASE_BIT)+1];
 
 /* convert tables for bit-4 indicating masked */
 int ntValMasked[256];
