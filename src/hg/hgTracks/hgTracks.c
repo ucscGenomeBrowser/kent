@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.506 2003/05/07 01:05:14 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.507 2003/05/07 23:52:50 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9915,7 +9915,7 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
 cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
