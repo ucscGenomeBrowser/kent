@@ -57,7 +57,7 @@ puts(
 "Web tool created by "
 "<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,"
+"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>, "
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>, "
 "<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>, "
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
