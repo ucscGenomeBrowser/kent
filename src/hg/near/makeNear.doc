@@ -108,6 +108,8 @@ hgMapToGene $db affyRatio knownGene knownToU95
 cd ~/src/hg/near/hgExpDistance
 hgExpDistance $db affyRatio affyExp knownGnfDistance -lookup=knownToU95
 
+#For worm did instead
+hgExpDistance ce1 kimLifeCycleMedian kimWormLifeCycleMedian kimExpDistance
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
