@@ -206,8 +206,8 @@ track bgiGene
 shortLabel BGI Genes
 longLabel Gene Annotations from Beijing Genomics Institute
 group genes
-priority 33
-visibility pack
+priority 41
+visibility hide
 color 20,20,170
 type genePred
 
@@ -336,6 +336,15 @@ visibility hide
 color 0,0,255
 useScore 1
 type bed 5
+
+track contamination
+shortLabel Contamination
+longLabel Locations of Maize/E.coli/vector contamination
+group map
+priority 25
+visibility hide
+color 170,0,50
+type bed 4 +
 
 
 
