@@ -544,7 +544,7 @@ PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 11/27/02)
     # ask for binrsync, or sudo /cluster/install/utilities/updateLocal
 
 
-MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/27/02)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PREPARING SEQUENCE" step above.
@@ -557,12 +557,21 @@ MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
     #- Rebuild the .zip files
-    ./jkStuff/zipAll.sh
+    ./jkStuff/zipAll.sh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
 
     #- Copy the .zip files to hgwdev:/usr/local/apache/...
     ssh hgwdev
     cd ~/rn1
     ./jkStuff/cpToWeb.sh
+    cd /usr/local/apache/htdocs/goldenPath/rnNov2002
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
 PRODUCING GENSCAN PREDICTIONS (TODO)
@@ -842,43 +851,6 @@ NCBI GENOMESCAN MODELS (TODO)
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
     hgPepPred rn1 generic genomeScanPep GS_prot.fsa
 
-PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for blastz (TODO)
-
-    # lift trfMask output to chrom-level... this is a pain because all 
-    # trf output was put in the same dir.  maybe next time around, we 
-    # can preserve chrom dir structure...
-    ssh eieio
-    cd ~/rn1
-    foreach c (?{,?})
-     if (-e $c/lift/ordered.lst) then
-       set ntlist = ()
-       foreach n (`cat $c/lift/ordered.lst`)
-         set ntlist = ($ntlist bed/simpleRepeat/trf/$n.bed)
-       end
-       liftUp $c/chr$c.trf.bed jkStuff/liftAll.lft warn $ntlist
-     endif
-    end
-    # make trf-masked chrom-level .fa
-    foreach c (?{,?})
-      cd $c
-      if (-e chr$c.trf.bed) then
-        echo masking $c...
-        cp chr$c.fa chr$c.trf.fa
-        maskOutFa -softAdd chr$c.trf.fa chr$c.trf.bed chr$c.trf.fa
-      endif
-      cd ..
-    end
-    # make nib
-    mkdir trfMixedNib
-    foreach c (?{,?})
-      if (-e $c/chr$c.trf.fa) then
-        faToNib -softMask $c/chr$c.trf.fa trfMixedNib/chr$c.nib
-      endif
-    end
-    rm -rf /scratch/hg/rn1/chromTrfMixedNib
-    cp -pR trfMixedNib /scratch/hg/rn1/chromTrfMixedNib
-
-
 DOING HUMAN/RAT ALIGMENTS (todo)
 
 o - Download the lower-case-masked assembly and put it in
@@ -1053,46 +1025,58 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq rn1 /cluster/store2/fish/seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (TODO)
+PRODUCING FUGU FISH ALIGNMENTS (DONE 11/27/02)
 
-o - Download sequence to /cluster/store3/fuguSeq from ... and put it on the cluster local disk
-    at /scratch/hg/fugu on kkstore.
-Sequence was downloaded from:
-ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_mask.fasta.Z
-ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_prot.fasta.Z
+    # (Already done, for mm2:)
+    # Download sequence to /cluster/store3/fuguSeq from ... and put it on the 
+    # cluster local disk at /scratch/hg/fugu on kkstore.
+    # Sequence was downloaded from:
+    # ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_mask.fasta.Z
+    # ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_prot.fasta.Z
+    #
+    # faSplit sequence ../fugu_v3_mask.fasta 1000 fuguSplit
 
-faSplit sequence ../fugu_v3_mask.fasta 1000 fuguSplit
-o - Do fish/rat alignments.
-       ssh kk
-       cd ~/rn1/bed
-       mkdir blatFugu
-       cd blatFugu
-       mkdir psl
-       ls -1S /scratch/hg/fugu/* > fugu.lst
-       ls -1S /scratch/hg/rn1/trfFa.0802/* > rat.lst
-       # Run mkdirs.sh
-       # Edit gsub to fit the dir srtucture
-       gensub2 rat.lst fugu.lst gsub spec
-       para create spec
-       para try
-     Make sure jobs are going ok with para check.  Then
-       para push
-     wait about 2 hours and do another
-       para push
-       do para checks and if necessary para pushes until done
-     or use para shove.
-o - Sort alignments as so 
-       pslCat -dir psl/* | liftUp -type=.psl stdout ~/rn1/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom /oldscratch stdin
-o - ssh hgwdev
-    load into database:
-       ssh hgwdev
-       cd ~/rn1/bed/blatFugu/chrom
-       foreach i (chr?{,?}{,_random}.psl)
-           set r = $i:r
-           mv $i ${r}_blatFugu.psl
-       end
-       hgLoadPsl rn1 *.psl
-       hgLoadRna addSeq rn1 /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+    ssh kk
+    cd ~/rn1/bed
+    mkdir blatFugu
+    cd blatFugu
+    ls -1S /scratch/hg/fugu/* > fugu.lst
+    ls -1S /scratch/hg/rn1/trfFa.1127/* > rat.lst
+    cp ~/lastRn/bed/blatFugu/gsub .
+    mkdir psl
+    foreach f (~/rn1/?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa)
+      set c=$f:t
+      mkdir psl/$c
+    end
+    gensub2 rat.lst fugu.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    # do another para check in about 2 hours; if it looks good:
+    para push -maxPush=500000
+    # do para checks and if necessary para pushes until done or use para shove.
+
+    # Sort alignments:
+    ssh eieio
+    cd ~/rn1/bed/blatFugu
+    pslCat -dir psl/* \
+      | liftUp -type=.psl stdout ~/rn1/jkStuff/liftAll.lft warn stdin \
+      | pslSortAcc nohead chrom /cluster/store2/temp stdin
+
+    # load into database:
+    ssh hgwdev
+    cd ~/rn1/bed/blatFugu/chrom
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        mv $i ${r}_blatFugu.psl
+    end
+    hgLoadPsl rn1 *.psl
+    mkdir -p /gbdb/rn1/fuguSeq
+    cd /gbdb/rn1/fuguSeq
+    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+    cd /cluster/store2/temp
+    hgLoadRna addSeq rn1 /gbdb/rn1/fuguSeq/fugu_v3_mask.fasta
 
 
 LOAD GENEID GENES (TODO)
