@@ -171,6 +171,12 @@ enum snpTypeEnum snpTypeStateStringToEnum(char *string);
 char *snpTypeStateEnumToString(enum snpTypeEnum x);
 /* Convert from enum to string representation. */
 
+enum snpTypeEnum snpTypeDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeDefaultEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
 enum snpTypeEnum snpTypeDataStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
@@ -206,6 +212,12 @@ enum snpSourceEnum snpSourceColorStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
 char *snpSourceColorEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceDefaultEnumToString(enum snpSourceEnum x);
 /* Convert from enum to string representation. */
 
 enum snpSourceEnum snpSourceDataStringToEnum(char *string);
