@@ -2496,12 +2496,11 @@ mkdir syntenyMouse
 
 ./syntenicBest.pl -db=hg15 -table=blastzBestMm3
 ./smooth.pl
-DONE TO HERE - MATT
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg15 -table=blastzBestMm3
 ./synteny2bed.pl
 hgLoadBed hg15 syntenyMouse ucsc100k.bed
-DONE TO HERE - MATT - RUNNING LONG TIME 
+DONE TO HERE - MATT
 
 syntenicBest.pl -db=hg15 -table=blastzBestRn2
 smooth.pl
