@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.9 2003/10/10 21:47:01 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.10 2003/10/14 22:19:48 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -120,7 +120,8 @@ char * fileName;			/* the basename of the input file */
 char *line = (char *) NULL;		/* to receive data input line	*/
 char *words[2];				/* to split data input line	*/
 int wordCount = 0;			/* result of split	*/
-int lineCount = 0;			/* counting input lines	*/
+int lineCount = 0;			/* counting all input lines	*/
+int validLines = 0;			/* counting only lines with data */
 unsigned long long previousOffset = 0;	/* for data missing detection */
 unsigned long long bincount = 0;	/* to count binsize for wig file */
 unsigned long long Offset = 0;		/* from data input	*/
@@ -195,6 +196,8 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	}
 
     if( verbose ) printf("output files: %s, %s\n", binfile, wigfile);
+    lineCount = 0;	/* to count all lines	*/
+    validLines = 0;	/* to count only lines with data */
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
     maxScore = 0;	/* max score in this bin */
@@ -210,6 +213,8 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	chopPrefixAt(line, '#'); /* ignore any comments starting with # */
 	if( strlen(line) < 3 )	/*	anything left on this line */
 	    continue;		/*	no, go to next line	*/
+
+	++validLines;
 	wordCount = chopByWhite(line, words, 2);
 	if( wordCount < 2 )
 errAbort("Expecting at least two words at line %d, found %d", lineCount, wordCount);
@@ -234,17 +239,17 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	if( score < minScore )
 	    minScore = score;
 	/* see if this is the first time through, establish chromStart 	*/
-	if( lineCount == 1 )
+	if( validLines == 1 )
 	    chromStart = Offset;
 	/* if we are working on a zoom level and the data is not exactly
 	 * spaced according to the span, then we need to put each value
 	 * in its own row in order to keep positioning correct for these
 	 * data values.
 	 */
-	if( (lineCount != 1) && (dataSpan > 1) && (Offset != (previousOffset + dataSpan) ) )
+	if( (validLines != 1) && (dataSpan > 1) && (Offset != (previousOffset + dataSpan) ) )
 	    {
 	    if( verbose )
-printf("data not spanning %llu bases, prev: %llu, this: %llu\n", dataSpan, previousOffset, Offset );
+printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lineCount );
 	    OUTPUT_ROW;
 	    }
 	/*	Check to see if data is being skipped	*/
