@@ -34,8 +34,11 @@
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
+#include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.14 2003/07/30 23:04:42 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.15 2003/08/18 15:59:10 sugnet Exp $";
+static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
+static char *workingChrom = NULL;      /* Chromosme we are working on. */
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -92,8 +95,10 @@ static struct optionSpec optionSpecs[] =
     {"help", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
     {"orthoDb", OPTION_STRING},
+    {"chrom", OPTION_STRING},
     {"altInFile", OPTION_STRING},
     {"netTable", OPTION_STRING},
+    {"netFile", OPTION_STRING},
     {"chainFile", OPTION_STRING},
     {"reportFile", OPTION_STRING},
     {"commonFile", OPTION_STRING},
@@ -108,8 +113,10 @@ static char *optionDescripts[] =
     "Display this message.",
     "Database (i.e. hg15) that altInFile comes from.",
     "Database (i.e. mm3) to look for orthologous splicing in.",
+    "Chromosome to map (i.e. chr1).",
     "File containing altGraphX records to look for.",
     "Datbase table containing net records, i.e. mouseNet.",
+    "File containing net records.",
     "File containing the chains. Usually I do this on a chromosome basis.",
     "File name to print individual reports to.",
     "File name to print common altGraphX records to.",
@@ -282,6 +289,35 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
+
+int cnFillRangeCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct cnFill *a = va;
+struct cnFill *b = vb;
+if (a->tStart + a->tSize <= b->tStart)
+    return -1;
+else if (b->tStart + b->tSize <= a->tStart)
+    return 1;
+else
+    return 0;
+}
+
+struct rbTree *rbTreeFromNetFile(char *fileName)
+/* Build an rbTree from a net file */
+{
+struct rbTree *rbTree = rbTreeNew(cnFillRangeCmp);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct chainNet *cn = chainNetRead(lf);
+struct cnFill *fill = NULL;
+for(fill=cn->fillList; fill != NULL; fill = fill->next)
+    {
+    rbTreeAdd(rbTree, fill);
+    }
+return rbTree;
+}
+
 struct hash *allChainsHash(char *fileName)
 /** Hash all the chains in a given file by their ids. */
 {
@@ -312,6 +348,8 @@ if(chainHash == NULL)
 	errAbort("orthoSplice::chainFromId() - Can't find file for 'chainFile' parameter");
     chainHash = allChainsHash(chainFile);
     }
+if(id == 0)
+    return NULL;
 safef(key, sizeof(key), "%d", id);
 chain =  hashFindVal(chainHash, key);
 if(chain == NULL)
@@ -345,11 +383,170 @@ chainDbAddBlocks(chain, track, conn);
 return chain;
 }
 
+int chainBlockCoverage(struct chain *chain, int start, int end,
+		       int* blockStarts, int *blockSizes, int blockCount)
+/* Calculate how many of the blocks are in a chain. */
+{
+struct boxIn *boxIn = NULL, *boxInList=NULL;
+int blocksCovered = 0;
+int i=0;
+
+/* Find the part of the chain of interest to us. */
+for(boxIn = chain->blockList; boxIn != NULL; boxIn = boxIn->next)
+    {
+    if(boxIn->tEnd >= start)
+	{
+	boxInList = boxIn;
+	break;
+	}
+    }
+/* Check to see how many of our exons the boxInList contains covers. 
+   For each block check to see if the blockStart and blockEnd are 
+   found in the boxInList. */
+for(i=0; i<blockCount; i++)
+    {
+    boolean startFound = FALSE;
+    int blockStart = blockStarts[i];
+    int blockEnd = blockStarts[i] + blockSizes[i];
+    for(boxIn = boxInList; boxIn != NULL && boxIn->tStart < end; boxIn = boxIn->next)
+	{
+	if(boxIn->tStart < blockStart && boxIn->tEnd > blockStart)
+	    startFound = TRUE;
+	if(startFound && boxIn->tStart < blockEnd && boxIn->tEnd > blockEnd)
+	    {
+	    blocksCovered++;
+	    break;
+	    }
+	}
+    }
+return blocksCovered;
+}
+
+boolean betterChain(struct chain *chain, int start, int end,
+		    int* blockStarts, int *blockSizes, int blockCount,
+		    struct chain **bestChain, int *bestCover)
+/* Return TRUE if chain is a better fit than bestChain. If TRUE
+   fill in bestChain and bestCover. */
+{
+struct chain *subChain=NULL, *toFree=NULL;
+int blocksCovered = 0;
+boolean better = FALSE;
+/* Check for easy case. */
+if(chain == NULL || chain->tStart > end || chain->tStart + chain->tSize < start)
+    return FALSE;
+blocksCovered = chainBlockCoverage(chain, start, end, blockStarts, blockSizes, blockCount);
+if(blocksCovered > (*bestCover))
+    {
+    *bestChain = chain;
+    *bestCover = blocksCovered;
+    better = TRUE;
+    }
+return better;
+}
+
+void lookForBestChain(struct cnFill *list, int start, int end,
+		      int* blockStarts, int *blockSizes, int blockCount,
+		      struct chain **bestChain, int *bestCover)
+/* Recursively look for the best chain. Best is defined as the chain
+   that covers the most number of blocks found in starts and sizes. This
+   will be stored in bestChain and number of blocks that it covers will
+   be stored in bestCover. */
+{
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+
+struct chain *chain = NULL;
+for(fill = list; fill != NULL; fill = fill->next)
+    {
+    chain = chainFromId(fill->chainId);
+    betterChain(chain, start, end, blockStarts, blockSizes, blockCount, bestChain, bestCover);
+    for(gap = fill->children; gap != NULL; gap = gap->next)
+	{
+	chain = chainFromId(gap->chainId);
+	betterChain(chain, start, end, blockStarts, blockSizes, blockCount, bestChain, bestCover);
+	if(gap->children)
+	    {
+	    lookForBestChain(gap->children, start, end, 
+				       blockStarts, blockSizes, blockCount,
+				       bestChain, bestCover);
+	    }
+	}
+    }
+}
+
+void chainNetGetRange(char *db, char *netTable, char *chrom,
+		      int start, int end, char *extraWhere, struct cnFill **fill,
+		      struct chainNet **toFree)
+/* Load up the appropriate chainNet list for this range. */
+{
+struct cnFill *searchHi=NULL, *searchLo = NULL;
+struct slRef *refList = NULL, *ref = NULL;
+
+(*fill) = NULL;
+(*toFree) = NULL;
+if(differentString(workingChrom, chrom))
+    return;
+if(netTree != NULL)
+    {
+    AllocVar(searchLo);
+    searchLo->tStart = start;
+    searchLo->tSize = 0;
+    AllocVar(searchHi);
+    searchHi->tStart = end;
+    searchHi->tSize = 0;
+    refList = rbTreeItemsInRange(netTree, searchLo, searchHi);
+    for(ref = refList; ref != NULL; ref = ref->next)
+	{
+	slSafeAddHead(fill, ((struct slList *)ref->val));
+	}
+    slReverse(fill);
+    freez(&searchHi);
+    freez(&searchLo);
+    (*toFree) = NULL;
+    }
+else
+    {
+    struct chainNet *net =chainNetLoadRange(db, netTable, chrom,
+					   start, end, NULL);
+    if(net != NULL)
+	(*fill) = net->fillList;
+    else
+	(*fill) = NULL;
+    (*toFree) = net;
+    }
+}
+
+struct chain *chainForBlocks(struct sqlConnection *conn, char *db, char *netTable, 
+			     char *chrom, int start, int end,
+			     int *blockStarts, int *blockSizes, int blockCount)
+/** Load the chain in the database for this position from the net track. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+struct chain *subChain=NULL, *toFree=NULL;
+struct chain *chain = NULL;
+struct chainNet *net = NULL;
+int bestOverlap = 0;
+chainNetGetRange(db, netTable, chrom,
+		 start, end, NULL, &fill, &net);
+if(fill != NULL)
+    lookForBestChain(fill, start, end, 
+		     blockStarts, blockSizes, blockCount, 
+		     &chain, &bestOverlap);
+chainNetFreeList(&net);
+return chain;
+}
+
 boolean checkChain(struct chain *chain, int start, int end)
 /** Return true if chain covers start, end, false otherwise. */
 {
 struct chain *subChain=NULL, *toFree=NULL;
 boolean good = FALSE;
+if(chain == NULL || chain->tStart > end || chain->tStart + chain->tSize < start)
+    return FALSE;
 chainSubsetOnT(chain, start, end, &subChain, &toFree);    
 if(subChain != NULL)
     good = TRUE;
@@ -372,15 +569,15 @@ for(fill = list; fill != NULL; fill = fill->next)
 	return chain;
     for(gap = fill->children; gap != NULL; gap = gap->next)
 	{
-	chain = chainFromId(fill->chainId);
+	chain = chainFromId(gap->chainId);
 	if(checkChain(chain, start,end))
 	    return chain;
-/* 	if(gap->children) */
-/* 	    { */
-/* 	    chain = lookForChain(gap->children, start, end); */
-/* 	    if(checkChain(chain, start, end)) */
-/* 		return chain; */
-/* 	    } */
+	if(gap->children)
+	    {
+	    chain = lookForChain(gap->children, start, end);
+	    if(checkChain(chain, start, end))
+		return chain;
+	    }
 	}
     }
 return chain;
@@ -1035,8 +1232,26 @@ struct chain *chain = NULL;
 struct chain *subChain = NULL, *toFree = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct orthoSpliceEdge *seList = NULL, *se = NULL;
+int i;
 int qs = 0, qe = 0;
-chain = chainForPosition(conn, db, netTable, chainFile, ag->tName, ag->tStart, ag->tEnd);
+int *starts = NULL, *sizes = NULL;
+int blockCount =0;
+/* Find the best chain (one that overlaps the most exons. */
+AllocArray(starts, ag->edgeCount);
+AllocArray(sizes, ag->edgeCount);
+for(i=0; i<ag->edgeCount; i++)
+    {
+    if(getSpliceEdgeType(ag, i) == ggExon)
+	{
+	starts[blockCount] = ag->vPositions[ag->edgeStarts[i]];
+	sizes[blockCount] = ag->vPositions[ag->edgeEnds[i]] - ag->vPositions[ag->edgeStarts[i]];
+	blockCount++;
+	}
+    }
+chain = chainForBlocks(conn, db, netTable, ag->tName, ag->tStart, ag->tEnd,
+		       starts, sizes, blockCount);
+freez(&starts);
+freez(&sizes);
 hFreeConn(&conn);
 if(chain == NULL)
     return NULL;
@@ -1062,14 +1277,15 @@ char *commonFileName = optionVal("commonFile", NULL);
 char *reportFileName = optionVal("reportFile", NULL);
 char *edgeFileName = optionVal("edgeFile", NULL);
 FILE *cFile = NULL;
-
+char *netFile = optionVal("netFile", NULL);
+char *chrom = optionVal("chrom", NULL);
 int foundOrtho=0, noOrtho=0;
 
 trumpNum = optionInt("trumpNum", BIGNUM); 
 if(altIn == NULL)
     errAbort("orthoSplice - must specify altInFile.");
-if(netTable == NULL)
-    errAbort("orthoSplice - must specify netTable.");
+if(netTable == NULL && netFile == NULL)
+    errAbort("orthoSplice - must specify netTable or netFile.");
 if(chainFile == NULL)
     errAbort("orthoSplice - must specify chainFile.");
 if(commonFileName == NULL)
@@ -1078,10 +1294,20 @@ if(reportFileName == NULL)
     errAbort("orthoSplice - must specify reportFile.");
 if(edgeFileName == NULL)
     errAbort("orthoSplice - must specify edgeFile.");
+if(chrom == NULL)
+    errAbort("Must specify -chrom");
+workingChrom = chrom;
+if(netFile != NULL)
+    {
+    warn("Loading net info from file %s", netFile);
+    netTree = rbTreeFromNetFile(netFile);
+    }
+
 /* Want to read in and process each altGraphX record individually
    to save memory, so figure out how many columns in each row we have currently and
    load them one by one. */
 lf = lineFileOpen(altIn, TRUE);
+
 lineFileNextReal(lf, &line);
 lineFileReuse(lf);
 rowCount = countChars(line, '\t') +1;
