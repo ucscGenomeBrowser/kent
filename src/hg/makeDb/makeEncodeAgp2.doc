@@ -1,0 +1,208 @@
+#!/bin/csh -f
+# "Make doc" for creating AGP files for ENCODE ortholog regions based on
+#  coordinates in bed files in the "consensus" directory
+
+# TODO: contigAcc files should go in $outDir (neater this way)
+
+set orthoDir     = /cluster/data/encode/ortho2
+set agpDir       = $orthoDir/agp
+set consensusDir = $orthoDir/consensus
+set downloadDir  = /usr/local/apache/htdocs/encode/downloads/EncodeAgps2
+set regionAgp    = /cluster/home/kate/bin/i386/regionAgp
+mkdir -p $agpDir $downloadDir
+chmod o+rx $downloadDir
+rm -rf $agpDir/* $downloadDir/*
+cd $agpDir
+
+########################################################################
+# create script to run AGP-maker on an  assembly
+rm -rf genomeAgps.csh >& /dev/null
+cat > genomeAgps.csh << 'EOF'
+# create AGP's for a genome assembly
+
+if ($#argv != 3) then
+    echo "usage: $0 <db> <org> <outdir>"
+    exit 1
+endif
+echo
+echo command line: $0 $1 $2 $3
+echo working dir:  `pwd`
+
+set consensusDir = /cluster/data/encode/ortho2/consensus
+set db = $1
+set org = $2
+set outDir = $3
+set buildDir = /cluster/data/$db
+set bedFile = $consensusDir/$db.bed5
+set regionAgp = /cluster/home/kate/bin/i386/regionAgp
+mkdir -p $outDir
+
+if (-f $org.contig.tab) then
+    set contigArg = "-contigFile=$org.contig.tab"
+else
+    set contigArg = ""
+endif
+
+if (-f $buildDir/chrom.lst) then
+    cat $buildDir/chrom.lst | \
+    xargs -iX cat $buildDir/X/chr{X,X_random}.agp | \
+    $regionAgp  $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir
+else
+    cat $buildDir/?{,?}/*.agp | \
+    $regionAgp $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir
+endif
+'EOF'
+# << this line makes emacs coloring happy
+
+rm -f *.contig.tab */*.packing.list >& /dev/null
+
+########################################################################
+# MOUSE
+set mouse = mm5
+
+# Create AGP's
+csh genomeAgps.csh $mouse mouse $mouse
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+        $consensusDir/$mouse.bed5 $mouse mouse "Mus musculus" 10090 C57BL/6J MAY-2004 \
+        $mouse "NCBI Build 33" > $mouse/$mouse.packing.list
+
+# Copy  to downloads area
+cp -f $mouse/$mouse.packing.list $downloadDir
+tar cvfz $downloadDir/$mouse.agp.tar.gz $mouse/*.agp
+
+hgsql -e "select count(*) from $mouse.encodeRegionConsensus"
+tar tvfz $downloadDir/$mouse.agp.tar.gz | wc -l
+grep Region $downloadDir/$mouse.packing.list | wc -l
+
+########################################################################
+# RAT
+set rat = rn3
+
+# Get contig to accession map
+hgsql $rat -s -e "select * from contigAcc" > rat.contig.tab
+
+# Create AGP's
+csh genomeAgps.csh $rat rat $rat
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $consensusDir/$rat.bed5 $rat  rat "Rattus norvegicus" \
+    10116  BN/SsNHsdMCW JUN-2003 $rat "Baylor HGSC v3.1" > $rat/$rat.packing.list
+
+# Copy  to downloads area
+cp -f $rat/$rat.packing.list $downloadDir
+tar cvfz $downloadDir/$rat.agp.tar.gz $rat/*.agp
+
+hgsql -e "select count(*) from $rat.encodeRegionConsensus"
+tar tvfz $downloadDir/$rat.agp.tar.gz | wc -l
+grep Region $downloadDir/$rat.packing.list | wc -l
+
+########################################################################
+# CHICKEN
+set chicken = galGal2
+
+#reversed order here to make $chicken.contig.tab before making agps
+# Get contig to accession mapping (documented in makeGalGal2.doc) 
+hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
+
+# Create AGP's
+# errors here: missing /cluster/data/galGal2/chr*_random.agp and chrM.agp files
+csh genomeAgps.csh $chicken chicken $chicken
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $consensusDir/$chicken.bed5 $chicken chicken "Gallus gallus" \
+    9031 N/A FEB-2004 $chicken "CGSC Feb. 2004" > $chicken/$chicken.packing.list
+
+# Copy  to downloads area
+cp -f $chicken/$chicken.packing.list $downloadDir
+tar cvfz $downloadDir/$chicken.agp.tar.gz $chicken/*.agp
+
+hgsql -e "select count(*) from $chicken.encodeRegionConsensus"
+tar tvfz $downloadDir/$chicken.agp.tar.gz | wc -l
+grep Region $downloadDir/$chicken.packing.list | wc -l
+
+########################################################################
+# DOG
+set dog = canFam1
+
+#reversed order here to make $dog.contig.tab before making agps
+# Get contig to accession mapping (documented in makeGalGal2.doc) 
+hgsql $dog -s -e "select * from contigAcc" > dog.contig.tab
+
+# Create AGP's
+# errors here: missing /cluster/data/galGal2/chr*_random.agp and chrM.agp files
+csh genomeAgps.csh $dog dog $dog
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $consensusDir/$dog.bed5 $dog dog "Canis Familiaris" \
+    9615 N/A JUL-2004 $dog "Broad Institute v. 1.0" > $dog/$dog.packing.list
+
+# Copy  to downloads area
+cp -f $dog/$dog.packing.list $downloadDir
+tar cvfz $downloadDir/$dog.agp.tar.gz $dog/*.agp
+
+hgsql -e "select count(*) from $dog.encodeRegionConsensus"
+tar tvfz $downloadDir/$dog.agp.tar.gz | wc -l
+grep Region $downloadDir/$dog.packing.list | wc -l
+
+########################################################################
+# CHIMP
+set chimp = panTro1
+mkdir -p $chimp
+echo
+echo CHIMP
+
+# Get contig to accession map
+hgsql $chimp -s -e "select * from contigAcc" > chimp.contig.tab
+
+# Create AGP's
+# NOTE: next time, put chimpChromContigs.agp into $outDir
+cat /cluster/data/$chimp/?{,?}/*.agp | \
+   chimpChromContigAgp stdin /cluster/data/$chimp/assembly.agp chimpChromContigs.agp
+$regionAgp -contigFile=chimp.contig.tab -namePrefix=chimp_ \
+    $consensusDir/$chimp.bed5 chimpChromContigs.agp -dir $chimp
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList $consensusDir/$chimp.bed5 \
+    $chimp  chimp "Pan troglodytes" 9598 N/A NOV-2003 $chimp \
+    "NCBI Build 1 v1" > $chimp/$chimp.packing.list
+
+# Copy  to downloads area
+cp -f $chimp/$chimp.packing.list $downloadDir
+tar cvfz $downloadDir/$chimp.agp.tar.gz $chimp/*.agp
+
+hgsql -e "select count(*) from $chimp.encodeRegionConsensus"
+tar tvfz $downloadDir/$chimp.agp.tar.gz | wc -l
+grep Region $downloadDir/$chimp.packing.list | wc -l
+
+########################################################################
+# cleanup
+
+chmod -R o+r $downloadDir/* >& /dev/null
+exit
+
+########################################################################
+# TESTS 
+
+rm -fr testMouse
+mkdir -p testMouse
+cat /cluster/data/$mouse/{6,11}/*.agp | $regionAgp tests/test.bed \
+    stdin -namePrefix=mouse_ -dir testMouse
+/cluster/data/encode/bin/scripts/encodeRegionPackingList tests/test.bed \
+    testMouse mouse "Mus musculus" 10090 C57BL/6J MAY-2004 $mouse "NCBI Build 33"
+
+rm -fr testChicken
+mkdir -p testChicken
+rm -f $chicken.contig.tab
+hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
+cat /cluster/data/$chicken/{1,13}/*.agp | \
+    $regionAgp tests/test.chicken.bed stdin -namePrefix=chicken_ \
+    -dir testChicken -contigFile=chicken.contig.tab
+
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    tests/test.chicken.bed testChicken chicken "Gallus gallus" \
+    9031 N/A FEB-2004 $chicken "CGSC Feb. 2004"
