@@ -12,31 +12,42 @@ autoScaleDefault Off
 pairwise mypa
 speciesOrder droYak1 dp2 anoGam1
 
-track flybaseGene
+track flyBaseGene
 shortLabel FlyBase
-longLabel FlyBase Gene Annotations (Mapped Proteins)
+longLabel FlyBase Protein-Coding Genes
 group genes
 priority 34
 visibility pack
 color 0,100,180
-type genePred flybasePep
+type genePred flyBasePep
+symbolTable flyBase2004Xref
+
+track flyBaseNoncoding
+shortLabel FB Noncoding
+longLabel FlyBase Noncoding Genes
+group genes
+priority 35
+visibility pack
+color 30,130,210
+type bed 12 .
+symbolTable flyBase2004Xref
 
 track bdgpLiftGene
 shortLabel BDGP 3.2 Genes
 longLabel $o_Organism ($o_date/$o_db) BDGP 3.2 Genes Mapped to New Assembly ($date/$db)
 group genes
 priority 45.5
-visibility pack
+visibility dense
 color 0,100,180
 type genePred bdgpLiftGenePep
 otherDb dm1
 
 track bdgpLiftNonCoding
-shortLabel BDGP 3.2 NonCoding
-longLabel $o_Organism ($o_date/$o_db) BDGP 3.2 NonCoding Genes Mapped to New Assembly ($date/$db)
+shortLabel BDGP 3.2 Noncoding
+longLabel $o_Organism ($o_date/$o_db) BDGP 3.2 Noncoding Genes Mapped to New Assembly ($date/$db)
 group genes
 priority 45.5
-visibility pack
+visibility hide
 color 0,100,180
 type genePred
 otherDb dm1
