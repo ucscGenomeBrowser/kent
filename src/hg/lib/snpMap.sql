@@ -10,8 +10,21 @@ CREATE TABLE snpMap (
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd   int unsigned not null,	# End position in chrom
     name       varchar(255) not null,	# Name of SNP - rsId or Affy name
-    source     varchar(255) not null,	# BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K
-    type       varchar(255) not null,	# SNP | INDEL | SEGMENTAL
+    source     enum (
+		 'BAC_OVERLAP',         # dbSnp
+		 'MIXED',               # dbSnp
+		 'RANDOM',              # dbSnp
+		 'OTHER',               # dbSnp
+		 'Affy10K',             # Affymetrix
+		 'Affy120K',            # Affymetrix
+		 'unknown'              # default value
+		 ) not null default 'unknown',
+    type       enum (
+		 'SNP',                 # Single Nucleotide Polymorphism
+		 'INDEL',               # Insertion or Deletion
+		 'SEGMENTAL',           # Segmental Duplication
+		 'unknown'              # default value
+		 ) not null default 'unknown',
               #Indices
     INDEX(chrom(12),bin),
     INDEX(chrom(12),chromStart),
