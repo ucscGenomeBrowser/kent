@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.18 2004/01/09 22:06:43 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.19 2004/01/14 19:41:52 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -105,7 +105,6 @@ static FILE *binout;	/*	file handle for binary data file	*/
 static char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
 static char featureName[254];			/* the name of this feature */
 static unsigned long long rowCount = 0;	/* to count rows output */
-static char spanName[64];		/* short-hand name for dataSpan */
 static off_t fileOffsetBegin = 0;	/* where this bin started in binary */
 static char *binfile = (char *) NULL;	/* file name of binary data file */
 static unsigned long long Offset = 0;	/* from data input	*/
@@ -161,7 +160,7 @@ if (bincount)
 	int byteOutput;	/* should be unsigned char, but fputc() wants int */
 	if (validData[i])
 	    {
-		if (dataRange > 0.0 )
+		if (dataRange > 0.0)
 		    {
 			byteOutput = MAX_BYTE_VALUE *
 				((data_values[i] - lowerLimit)/dataRange);
@@ -177,14 +176,14 @@ if (bincount)
     chromEnd = chromStart + (bincount * dataSpan);
     if (verbose)
 	{
-    printf("row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, fileOffsetBegin );
+    printf("row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, fileOffsetBegin);
 	}
     fprintf( wigout,
-"%s\t%llu\t%llu\t%s.%llu_%s\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
+"%s\t%llu\t%llu\t%s.%llu\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
 	chromName, chromStart+add_offset, chromEnd+add_offset,
-	featureName, rowCount, spanName, dataSpan, bincount,
+	featureName, rowCount, dataSpan, bincount,
 	fileOffsetBegin, basename(binfile), lowerLimit,
-	dataRange, validCount, sumData, sumSquares );
+	dataRange, validCount, sumData, sumSquares);
     ++rowCount;
     }
 bincount = 0;	/* to count up to binsize	*/
@@ -192,7 +191,7 @@ for (i=0; i < binsize; ++i)	/*	reset valid indicator	*/
 	validData[i] = FALSE;
 chromStart = Offset + dataSpan;
     if (verbose)
-printf("next chromStart = %llu = %llu + %llu\n", chromStart, Offset, dataSpan );
+printf("next chromStart = %llu = %llu + %llu\n", chromStart, Offset, dataSpan);
 fileOffsetBegin = fileOffset;
 
 }	/*	static void output_row()	*/
@@ -212,49 +211,35 @@ double dataValue = 0.0;				/* from data input	*/
 char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
 
 /*	for each input data file	*/
-for (i = 1; i < argc; ++i )
+for (i = 1; i < argc; ++i)
     {
     if (verbose) printf("translating file: %s\n", argv[i]);
-    /* let's shorten the dataSpan name which will be used in the
-     * "Name of item" column
-     */
+
     fileName = basename(argv[i]);
-    if ( dataSpan < 1024 )
+    if (name)		/*	Is the name of this feature specified ?	*/
 	{
-	    snprintf( spanName, sizeof(spanName)-1, "%llu", dataSpan );
-	} else if ( dataSpan < 1024*1024 ) {
-	    snprintf( spanName, sizeof(spanName)-1, "%lluK", dataSpan/1024 );
-	} else if ( dataSpan < 1024*1024*1024 ) {
-	    snprintf( spanName, sizeof(spanName)-1, "%lluM",
-		    dataSpan/(1024*1024) );
-	} else {
-	    snprintf( spanName, sizeof(spanName)-1, "%lluG",
-		    dataSpan/(1024*1024*1024) );
+	    snprintf( featureName, sizeof(featureName) - 1, "%s", name);
 	}
-    if (name )		/*	Is the name of this feature specified ?	*/
-	{
-	    snprintf( featureName, sizeof(featureName) - 1, "%s", name );
-	}
-    if (chrom )		/*	Is the chrom name specified ? */
+    if (chrom)		/*	Is the chrom name specified ? */
 	{
 	chromName = cloneString(chrom);
-	if (! name )	/*	that names the feature too if not already */
-	    snprintf( featureName, sizeof(featureName) - 1, "%s", chrom );
+	if (! name)	/*	that names the feature too if not already */
+	    snprintf( featureName, sizeof(featureName) - 1, "%s", chrom);
 	}
     /*	Name mangling to determine output file name */
-    if (wibFile )	/*	when specified, simply use it	*/
+    if (wibFile)	/*	when specified, simply use it	*/
 	{
 	binfile = addSuffix(wibFile, ".wib");
 	wigfile = addSuffix(wibFile, ".wig");
 	} else {	/*	not specified, construct from input names */
-	if (startsWith("chr",fileName) )
+	if (startsWith("chr",fileName))
 	    {
 	    char *tmpString;
 	    tmpString = cloneString(fileName);
 	    chopSuffix(tmpString);
 	    binfile = addSuffix(tmpString, ".wib");
 	    wigfile = addSuffix(tmpString, ".wig");
-	    if (! chrom )	/*	if not already taken care of	*/
+	    if (! chrom)	/*	if not already taken care of	*/
 		chromName = cloneString(tmpString);
 	    if (! name && ! chrom)	/*	if not already done	*/
 		snprintf(featureName, sizeof(featureName) - 1, "%s", tmpString);
@@ -289,12 +274,12 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 
 	++lineCount;
 	chopPrefixAt(line, '#'); /* ignore any comments starting with # */
-	if (strlen(line) < 3 )	/*	anything left on this line */
+	if (strlen(line) < 3)	/*	anything left on this line */
 	    continue;		/*	no, go to next line	*/
 
 	++validLines;
 	wordCount = chopByWhite(line, words, 2);
-	if (wordCount < 2 )
+	if (wordCount < 2)
 	    errAbort("Expecting at least two words at line %d, found %d",
 		lineCount, wordCount);
 	Offset = atoll(words[0]);
@@ -302,12 +287,12 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	dataValue = strtod(val, &valEnd);
 	if ((*val == '\0') || (*valEnd != '\0'))
 	    errAbort("Not a valid float at line %d: %s\n", lineCount, words[1]);
-	if (Offset < 1 )
+	if (Offset < 1)
 	    errAbort("Illegal offset: %llu at line %d, dataValue: %g", Offset, 
-		    lineCount, dataValue );
+		    lineCount, dataValue);
 	Offset -= 1;	/* our coordinates are zero relative half open */
 	/* see if this is the first time through, establish chromStart 	*/
-	if (validLines == 1 ) {
+	if (validLines == 1) {
 	    chromStart = Offset;
 	    if (verbose)
 		printf("first offset: %llu\n", chromStart);
@@ -333,7 +318,7 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	if (readingFrameSlipped)
 	    {
 	    if (verbose)
-printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lineCount );
+printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lineCount);
 	    output_row();
 	    chromStart = Offset;	/*	a full reset here	*/
 	    }
@@ -351,12 +336,12 @@ printf("data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", da
 	     */
 	    fillSize = (Offset - (previousOffset + dataSpan)) / dataSpan;
 	    if (verbose)
-		printf("filling NO_DATA for %llu bytes\n", fillSize );
+		printf("filling NO_DATA for %llu bytes\n", fillSize);
 	    if (fillSize + bincount >= binsize)
 		{
 		if (verbose)
 		    {
-printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount );
+printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount);
 		    printf("Offset: %llu, previousOffset: %llu\n",
 			Offset, previousOffset);
 		    }
@@ -366,21 +351,21 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
 		fillSize = 0;
 		/*	fill missing data with NO_DATA indication	*/
 		for (off = previousOffset + dataSpan; off < Offset;
-			off += dataSpan )
+			off += dataSpan)
 		    {
 		    ++fillSize;
 		    ++fileOffset;
 		    ++bincount;	/*	count scores in this bin */
-		    if (bincount >= binsize ) break;
+		    if (bincount >= binsize) break;
 		    }
 	    if (verbose)
-		printf("filled NO_DATA for %llu bytes\n", fillSize );
+		printf("filled NO_DATA for %llu bytes\n", fillSize);
 		/*	If that finished off this bin, output it
 		 *	This most likely should not happen here.  The
 		 *	check above: if (fillSize + bincount >= binsize) 
 		 *	should have caught this case already.
 		 */
-		    if (bincount >= binsize )
+		    if (bincount >= binsize)
 			{
 			output_row();
 			chromStart = Offset;	/* a full reset here */
@@ -395,7 +380,7 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
 	++fileOffset;
 	++bincount;	/*	count scores in this bin */
 	/*	Is it time to output a row definition ? */
-	if (bincount >= binsize )
+	if (bincount >= binsize)
 	    {
 	    output_row();
 	    }
@@ -408,7 +393,7 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
 	}
     if (verbose)
 	printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
-	    argv[i], lineCount, rowCount, fileOffset );
+	    argv[i], lineCount, rowCount, fileOffset);
     printf("%s: data limits: [%g:%g], range: %g\n", chromName,
 	overallLowerLimit, overallUpperLimit,
 	overallUpperLimit - overallLowerLimit);
@@ -444,15 +429,15 @@ if (verbose)
     {
     printf("options: -verbose, offset= %llu, binsize= %llu, dataSpan= %llu\n",
 	add_offset, binsize, dataSpan);
-    if (chrom )
+    if (chrom)
 	{
 	printf("-chrom=%s\n", chrom);
 	}
-    if (wibFile )
+    if (wibFile)
 	{
 	printf("-wibFile=%s\n", wibFile);
 	}
-    if (name )
+    if (name)
 	{
 	printf("-name=%s\n", name);
 	}
