@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: splice.c,v 1.2 2004/08/03 02:20:25 sugnet Exp $";
+static char const rcsid[] = "$Id: splice.c,v 1.3 2004/12/27 20:24:22 sugnet Exp $";
 
 struct path *pathCommaIn(char **pS, struct path *ret)
 /* Create a path out of a comma separated string. 
@@ -350,7 +350,7 @@ AllocArray(bed->chromStarts, path->vCount);
 AllocArray(bed->blockSizes, path->vCount);
 
 /* If necessary tack on a fake exon. */
-if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
+if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] <= splice->vCount &&
    pathEdgeType(vTypes, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
@@ -363,7 +363,7 @@ if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
 /* For each edge that is an exon count up the base pairs. */
 for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
     {
-    if(verts[vertIx] != source && verts[vertIx] != sink)
+    if(verts[vertIx] != source && verts[vertIx] <= splice->vCount)
 	{
 	/* If exon add up the base pairs. */
 	if(pathEdgeType(vTypes, verts[vertIx], verts[vertIx+1]) == ggExon)
@@ -379,7 +379,7 @@ for(vertIx = 0; vertIx < path->vCount - 1; vertIx++)
 
 /* if spoofing ends tack on a 1bp exon as necessary. */
 vertIx = path->vCount - 2;
-if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
+if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] <= splice->vCount &&
    pathEdgeType(vTypes, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
@@ -393,7 +393,7 @@ if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] != sink &&
 dyStringPrintf(buff, "%s.%d.", splice->name, slIxFromElement(splice->paths, path));
 for(i = 0; i < path->vCount; i++)
     {
-    if(path->vertices[i] != sink && path->vertices[i] != source)
+    if(path->vertices[i] != sink && path->vertices[i] <= splice->vCount)
 	dyStringPrintf(buff, "%d,", path->vertices[i]);
     }
 if(splice->type == alt5Prime || splice->type == alt3Prime ||
