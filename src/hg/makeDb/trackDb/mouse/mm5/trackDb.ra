@@ -15,22 +15,11 @@ priority 100
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle multiz5wayCons
+wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
 speciesOrder rat human dog chicken
-
-track phastCons
-shortLabel PhastCons New
-longLabel PhastCons Conservation Score, New Version
-group compGeno
-priority 100.01
-visibility hide
-color 0,10,100
-maxHeightPixels 40
-type wig 0.0 1.0
-autoScaleDefault off
 
 track phastConsElements
 shortLabel Most Conserved
