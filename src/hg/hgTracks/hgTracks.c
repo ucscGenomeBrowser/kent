@@ -6195,6 +6195,9 @@ if (winStart < 0)
     winStart = 0;
 if (winEnd > seqBaseCount)
     winEnd = seqBaseCount;
+if (winStart >= seqBaseCount)
+    errAbort("Can't start at %d.  %s only has %d bases!",
+        winStart, chromName, seqBaseCount);
 
 winBaseCount = winEnd - winStart;
 if (winBaseCount == 0)
