@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.9 2003/09/09 00:05:45 kent Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.10 2004/01/08 20:39:55 kent Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -210,6 +210,21 @@ else
 return pos;
 }
 
+static int calcDigitCount(struct axt *axt, int tSize, int qSize)
+/* Figure out how many digits needed for blast position display. */
+{
+int tDig, qDig;
+if (axt->qStrand == '-')
+    qDig = digitsBaseTen(qSize - axt->qStart + 1);
+else
+    qDig = digitsBaseTen(axt->qEnd);
+if (axt->tStrand == '-')
+    tDig = digitsBaseTen(tSize - axt->tStart + 1);
+else
+    tDig = digitsBaseTen(axt->tEnd);
+return max(tDig, qDig);
+}
+
 static void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize, 
 	int lineSize, boolean isProt)
 /* Output base-by-base part of alignment in blast-like fashion. */
@@ -217,9 +232,7 @@ static void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize,
 int tOff = axt->tStart;
 int qOff = axt->qStart;
 int lineStart, lineEnd, i;
-int tDig = digitsBaseTen(axt->tEnd);
-int qDig = digitsBaseTen(axt->qEnd);
-int digits = max(tDig, qDig);
+int digits = calcDigitCount(axt, tSize, qSize);
 struct axtScoreScheme *ss = NULL;
 
 if (isProt)
@@ -661,7 +674,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2003/09/09 00:05:45 $";
+    char * rcsDate = "$Date: 2004/01/08 20:39:55 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
