@@ -9,6 +9,8 @@
 #include "chromAnn.h"
 #include "verbose.h"
 
+extern FILE *fractionFh;
+
 /* tables are never freed */
 static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeeper of
                                               * chromAnn objects */
@@ -147,8 +149,11 @@ static boolean checkOverlap(struct chromAnn *inCa, struct chromAnn *selCa,
 {
 int inBases = 0;
 int threshBases = 0, overBases = 0;
+boolean result;
 struct chromAnnBlk *inCaBlk, *selCaBlk;
+float cdsOverlap;
 
+result = FALSE;
 if (overlapThreshold > 0.0)
     {
     /* determine total required for overlap */
@@ -164,11 +169,19 @@ for (inCaBlk = inCa->blocks; inCaBlk != NULL; inCaBlk = inCaBlk->next)
             overBases += min(inCaBlk->end, selCaBlk->end)
                 - max(inCaBlk->start, selCaBlk->start);
             if (overBases >= threshBases)
-                return TRUE;
+                result = TRUE;
             }
         }
     }
-return FALSE;
+if (fractionFh != NULL)
+    {
+    cdsOverlap = (float)overBases / (float)inBases;
+    if (overBases >= threshBases)
+    	{
+    	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap);
+    	}
+    }
+return result;
 }
 
 static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa,
