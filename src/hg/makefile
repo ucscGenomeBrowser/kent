@@ -114,8 +114,6 @@ DIRS = \
 	fakeOut \
 	featureBits \
 	ffaToFa \
-	foldDb \
-	foldGfx \
 	fqToQa \
 	fqToQac \
 	fragPart \
