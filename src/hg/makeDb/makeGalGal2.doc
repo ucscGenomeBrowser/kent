@@ -3140,7 +3140,7 @@ chainSome $(path1)
     cp -p Gallus_gallus.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
 
-# MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
+# MAKE Human Proteins track (DONE 2005-1-15 braney)
     ssh kksilo
     mkdir -p /cluster/data/galGal2/blastDb
     cd /cluster/data/galGal2/blastDb
