@@ -1236,8 +1236,7 @@ group genes
 priority 50.9
 visibility hide
 color 173,17,162
-exonArrows on
-type bed 12
+type genePred
 
 track chainFr1ProtEx
 shortLabel chainFr1ProtEx
