@@ -1,7 +1,7 @@
-/** \page orthoPickIntron.c Pick an intron for RACE PCR based off of the mapped mouse mRNAs records loaded.
+/** \page orthoPickIntron.c Pick an intron for RACE PCR using both mouse and human transcript data.
 
 <h2>Overview:</h2>
-<p>Mouse mRNAs were mapped orthologous locations in the human
+<p>Mouse mRNAs were mapped to orthologous locations in the human
 genome using blastz nets and chains created by Jim
 Kent. Individual introns and flanking exons were chosen as
 candidates for RACE PCR by the size of the coding region in the
@@ -23,6 +23,7 @@ href="http://mgc.cse.ucsc.edu/cgi-bin/hgTrackUi?&c=chr14&g=mouseNet">
 net/chain mapping</a> of the mouse and human genomes to the human
 genome. By using the net/chain mapping we can take into account
 more sequence than just the individual mRNA.</li>
+
 <li>Mapped mouse mRNAs are evaluated for coding potential in human
 using Victor Solovyev's bestorf program.</li>
 
@@ -36,8 +37,8 @@ coding potential of mapped mRNA, and number of supporting native
 transcripts.</li>
 
 <li>Individual introns are selected and the loci are remembered so
-that only one intron is chosen from each loci. Also introns are
-skipped if they overlap with a current MGC pick or MGC A List pick.
+that only one intron is chosen from each loci. Also, introns are
+skipped if they overlap with a current MGC pick or MGC A-List pick.
 Introns are also examined to see if they overlap with a RefSeq gene
 or if they overlap a MGC incomplete mRNA or an MGC failed EST.</li>
 </ul>
@@ -70,7 +71,7 @@ are classified as follows:
 #include "dnautil.h"
 #include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.4 2003/06/25 06:21:12 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.5 2003/07/22 02:45:09 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
