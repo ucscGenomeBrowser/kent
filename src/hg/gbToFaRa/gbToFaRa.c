@@ -988,6 +988,24 @@ else
 fclose(f);
 }
 
+boolean isThreePrime(char *s)
+/* Return TRUE if s looks to have words three prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("3'", s) || stringIn("Three prime", s) 
+	|| stringIn("three prime", s) || stringIn("3 prime", s);
+}
+
+boolean isFivePrime(char *s)
+/* Return TRUE if s looks to have words five prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("5'", s) || stringIn("Five prime", s) 
+	|| stringIn("five prime", s) || stringIn("5 prime", s);
+}
+
 void procOneGbFile(char *inName, FILE *faFile, char *faDir, FILE *raFile, 
     struct hash *uniqueNameHash, struct hash *estAuthorHash, struct filter *filter)
 /* Process one genBank file into fa and ra files. */
@@ -1114,17 +1132,13 @@ while (readGbInfo(lf))
             {
             /* Try and figure out if it's a 3' or 5' EST */
             char *def = definitionField->val;
-            char *threePrime = "3'";
-            char *fivePrime = "5'";
             boolean gotThreePrime;
             boolean gotFivePrime;
-            gotThreePrime =  ( (def != NULL && strstr(def, threePrime) ) ||
-                 (com != NULL && strstr(com, threePrime) ) );
-            gotFivePrime = ( (def != NULL && strstr(def, fivePrime) ) ||
-                 (com != NULL && strstr(com, fivePrime) ) );
+	    gotThreePrime = (isThreePrime(def) || isThreePrime(com));
+	    gotFivePrime = (isFivePrime(def) || isFivePrime(com));
             if (gotThreePrime ^ gotFivePrime)
                 {
-                kvtAdd(kvt, "dir", (gotThreePrime ? threePrime : fivePrime));
+                kvtAdd(kvt, "dir", (gotThreePrime ? "3'" : "5'"));
                 }
             isEst = TRUE;
             }
