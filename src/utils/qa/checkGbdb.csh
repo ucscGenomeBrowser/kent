@@ -7,7 +7,8 @@
 #
 ####################
 
-set db="all"
+set filePath=""
+set db=""
 set errFlag=0
 set debug="true"
 set debug="false"
@@ -19,15 +20,17 @@ if ($#argv != 1) then
   echo "    ignores scaffolds unless a db that uses them is specified."
   echo "    ignores: description genbank axtNetDp1 ci1 zoo."
   echo
-  echo '      usage:  database (will use "all")'
+  echo '      usage:  database or path (will use "all")'
   echo
   exit
 else
-  set db=$argv[1]
+  set filePath=$argv[1]
+  set outpath=`echo $filePath | sed -e 's/\//./'`
+  set db=`echo $filePath | sed -e 's/\/.*//'`
 endif
 
-set output=$db.gbdb.out
-set output2=$db.gbdb.list
+set output=$outpath.gbdb.out
+set output2=$outpath.gbdb.list
 
 rm -f $output
 rm -f $output2
@@ -63,11 +66,11 @@ if ($db == "all") then
   end
   echo "no assemblies with scaffolds are checked\n" >> $output
 else
-  if (-e /gbdb/$db) then
-    ssh hgwbeta find /gbdb/$db -type f -print \
+  if (-e /gbdb/$filePath) then
+    ssh hgwbeta find /gbdb/$filePath -type f -print \
          | grep -v description > xxDirlistxx
   else
-    echo "\ndirectory /gbdb/$db does not exist\n"
+    echo "\ndirectory /gbdb/$filePath does not exist\n"
     exit
   endif
 endif
