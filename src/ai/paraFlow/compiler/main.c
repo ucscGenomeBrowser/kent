@@ -502,6 +502,7 @@ slReverse(&ctList);
 return ctList;
 }
 
+#ifdef OLD
 static void parseAssign(struct pfParse *parent, char *varName,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse assignment statement. */
@@ -514,6 +515,7 @@ pp->children = pfParseExpression(pp, &tok, scope);
 slAddHead(&parent->children, pp);
 *pTokList = tok;
 }
+#endif /* OLD */
 
 
 static void parseVarDeclaration(struct pfParse *parent, 
@@ -649,23 +651,26 @@ while (tok->type == '+' || tok->type == '-')
 return pp;
 }
 
-static void parseAssignOrCall(struct pfParse *parent,
+static void parseAssignOrExpression(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse assignment or call statements. */
 {
+struct pfParse *pp = pfParseExpression(parent, pTokList, scope);
 struct pfToken *tok = *pTokList, *opTok;
-char *varName = tok->val.s;
 int op;
-tok = tok->next;
 op = tok->type;
 if (op == '=')
-    parseAssign(parent, varName, &tok, scope);
-#ifdef SOON
-else if (op == '(')
-    parseCall(parent, varName, &tok, scope);
-#endif /* SOON */
-else
-    syntaxError(tok);
+    {
+    struct pfParse *left = pp;
+    struct pfParse *right;
+    pp = pfParseNew(pptAssignment, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = pfParseExpression(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+slAddHead(&parent->children, pp);
 *pTokList = tok;
 }
 
@@ -691,7 +696,7 @@ else if (tok->type == pftName)
     else if (baseType != NULL)
         parseVarDeclaration(parent, baseType, pTokList, scope);
     else
-        parseAssignOrCall(parent, pTokList, scope);
+        parseAssignOrExpression(parent, pTokList, scope);
 #ifdef SOON
     else if (sameString(s, "to"))
         parseTo(parent, pTokList, scope);

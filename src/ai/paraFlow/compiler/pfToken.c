@@ -745,5 +745,3 @@ switch (tok->type)
 fprintf(f, "\n");
 }
 
-#ifdef SOON
-#endif /* SOON */

@@ -64,8 +64,12 @@ expression: constant
 	| expression '&' expression
 	| expression '|' expression
 	| expression ',' expression
+	| expression '&&' expression # only allowed in if/while
+	| expression '||' expression # only allowed in if/while
 	| expression '==' expression # only allowed in if/while
 	| expression '!=' expression # only allowed in if/while
+	| expression '>=' expression # only allowed in if/while
+	| expression '<=' expression # only allowed in if/while
 	| '-' expression
 
 expTuple: '(' expList ')'
