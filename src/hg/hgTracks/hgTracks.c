@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.595 2003/09/18 18:43:03 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.596 2003/09/18 23:16:55 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -98,9 +98,6 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
-/*
-int maxChromShade = CHROMOSOME_SHADES - 1;
-*/
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
