@@ -448,14 +448,30 @@ return(pbStampPtr);
 void mapBoxStamp(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+if (proteinInSupportedGenome)
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+    }
+else
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pb%s.shtml\"", tagName);
+    }
+
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
 void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+if (proteinInSupportedGenome)
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
+    }
+else
+    {
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pb%s.shtml\"", tagName);
+    }
+
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
