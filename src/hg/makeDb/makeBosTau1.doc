@@ -446,10 +446,14 @@ SEQ2_LEN=$BASE/S2.len
 '_EOF_'
   # << this line keeps emacs coloring happy
   bash
+  cd /cluster/data/hg17/bed/blastz.bosTau1
   source DEF
   mkdir $RAW run.0
   # create S2.len so make-joblist doesn't have to
   /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
   # check how many lines in j
   sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
   para try, push check, para push, para check....
