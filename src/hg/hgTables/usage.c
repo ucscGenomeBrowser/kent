@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.2 2004/07/18 23:52:56 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.3 2004/07/20 09:31:52 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -41,33 +41,6 @@ hPrintf("%s",
 "   <LI><B>filter: </B>You can restrict the query to only items that\n"
 "   match certain criteria by creating a filter. For instance you\n"
 "   could restrict your attention only to genes of a single exon.</LI>\n"
-"   \n"
-"   <LI><B>offset: </B>In many cases the output of the track\n"
-"   intersector is a list of regions in the genome or DNA&nbsp;from\n"
-"   these regions. The offset control lets you adjust the final output\n"
-"   relative to these regions. The 'start' field specifies the\n"
-"   relative offset of the starting position. A negative number here\n"
-"   will make the region bigger, a positive number will make it\n"
-"   smaller. A positive number in the end field makes the region\n"
-"   bigger. The 'relative to' control has three values. If it is\n"
-"   'start' then both start and end offsets are relative to the start\n"
-"   position in the original region. Similarly if it is 'end' then the\n"
-"   offsets are relative to the end position in the original region.\n"
-"   If the 'relative to' control is 'both' (the default)&nbsp;then the\n"
-"   start is relative to the original start position, and the end is\n"
-"   relative to the original end position. Here are some examples of\n"
-"   common usages:\n"
-"   \n"
-"   <UL>\n"
-"      <LI>Promoters: start: -1000 end: 50 relative to: start</LI>\n"
-"      \n"
-"      <LI>10,000 bases on either side of a gene: start: -10000 end\n"
-"      10000 relative to:&nbsp;both</LI>\n"
-"      \n"
-"      <LI>The last 50 bases of a gene: start: -50 end: 0 relative to:\n"
-"      end</LI>\n"
-"   </UL>\n"
-"   </LI>\n"
 "   \n"
 "   <LI><B>output: </B>This controls the output format. Options\n"
 "   include:\n"
