@@ -540,11 +540,11 @@ struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
+char *alias, *temp;
 struct stsMap sm;
 char *tableName;
 boolean newFormat;
 char *chrom;
-char *alias;
 char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
@@ -568,8 +568,13 @@ if (hTableExists("stsAlias"))
     dyStringPrintf(query, 
         "select trueName from stsAlias where alias = '%s'", spec);
     alias = sqlQuickQuery(conn, query->string, buf, sizeof(buf));
-    if (alias != NULL)
+    if ((alias != NULL) && (!sameString(alias, spec)))
+        {
+	hgp->useAlias = TRUE;
+	temp = spec;
 	spec = alias;
+	alias = temp;
+	}
     }
 dyStringClear(query);
 dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
@@ -581,7 +586,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ok = TRUE;
 	AllocVar(table);
 	dyStringClear(query);
-	dyStringPrintf(query, "STS %s Positions", spec);
+	if (hgp->useAlias)
+	    dyStringPrintf(query, "STS %s uses name %s in browser", alias, spec);
+	else
+	    dyStringPrintf(query, "STS %s Positions", spec);
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
@@ -1109,6 +1117,7 @@ char *chrom;
 
 AllocVar(hgp);
 
+hgp->useAlias = FALSE;
 query = trimSpaces(query);
 if(query == 0)
     return hgp;
