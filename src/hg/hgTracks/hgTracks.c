@@ -8169,6 +8169,7 @@ registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
+registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
 registerTrackHandler("mgcNcbiPicks", estMethods);
