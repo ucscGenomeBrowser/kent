@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.23 2004/08/18 19:08:42 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.24 2004/08/18 20:08:05 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1190,6 +1190,7 @@ if (bedList && *bedList)
 	unsigned statsCount = 0;		/*	stats accumulators */
 	long int chromStart = -1;		/*	stats accumulators */
 	long int chromEnd = 0;			/*	stats accumulators */
+	size_t dataArraySize = 0;
 
 	doDataArray = operations & wigFetchDataArray;
 
@@ -1342,6 +1343,8 @@ if (bedList && *bedList)
 	    struct asciiDatum *asciiOut = NULL;
 		/* to address data[] in wigAsciiData */
 
+	    dataArraySize = wDS->array->winEnd - wDS->array->winStart;
+
 	    if (verboseLevel() > VERBOSE_PER_VALUE_LEVEL)
 		dataArrayOut(wDS, "stdout", FALSE, TRUE);
 
@@ -1357,7 +1360,7 @@ if (bedList && *bedList)
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
 		wigAscii->data = (struct asciiDatum *) needMem((size_t)
-		    (sizeof(struct asciiDatum) * valuesFound));
+		    (sizeof(struct asciiDatum) * dataArraySize));
 			/*	maximum area needed, may use less 	*/
 		asciiOut = wigAscii->data;	/* ptr to data area	*/
 		slAddHead(&wDS->ascii,wigAscii);
@@ -1435,7 +1438,7 @@ if (bedList && *bedList)
 	     *	the results to a smaller area.  Could be huge savings on
 	     *	very sparse result sets.
 	     */
-	    if (doAscii && ((valuesFound - wigAscii->count) > 100000))
+	    if (doAscii && ((dataArraySize - wigAscii->count) > 100000))
 		{
 		struct asciiDatum *smallerDataArea;
 		size_t newSize;
