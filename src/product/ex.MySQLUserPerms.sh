@@ -14,7 +14,7 @@ fi
 
 echo "Testing your password:"
 
-mysql ${SQL_USER} -p${SQL_PASSWORD} "show tables;" mysql
+mysql ${SQL_USER} -p${SQL_PASSWORD} -e "show tables;" mysql
 
 if [ "$?" -ne 0 ]; then
 	echo "I gave that a try, it did not work."
