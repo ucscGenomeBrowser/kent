@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.457 2003/07/23 02:24:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.458 2003/07/23 16:32:26 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11998,6 +11998,18 @@ else if (sameWord(track, "htcGenePsl"))
 else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
+    }
+else if (sameWord(track, "chesChordataPsl") )
+    {
+    doBlatCompGeno(tdb, item, "Chordata not Mammal BoneHead chain");
+    }
+else if (sameWord(track, "chesMammalPsl") )
+    {
+    doBlatCompGeno(tdb, item, "Mammal not Human BoneHead chain");
+    }
+else if (sameWord(track, "hg15PepPsl") )
+    {
+    doBlatCompGeno(tdb, item, "Human Protein");
     }
 else if (sameWord(track, "hg15repeats") )
     {
