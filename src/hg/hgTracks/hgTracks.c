@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.679 2004/03/02 05:00:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.680 2004/03/03 16:22:38 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8255,10 +8255,11 @@ static boolean initted = FALSE;
 if (!initted)
     {
     htmlStart("Very Early Error");
-    printf("<!-- HGERROR -->\n");
     initted = TRUE;
     }
+printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
+printf("%s", htmlWarnEndPattern());
 }
 
 void veryEarlyAbortHandler()

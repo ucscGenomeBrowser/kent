@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.22 2003/11/13 16:13:32 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.23 2004/03/03 16:22:20 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -64,13 +64,25 @@ void htmHorizontalLine(FILE *f)
 fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
 }
 
+char *htmlWarnStartPattern()
+/* Return starting pattern for warning message. */
+{
+return "<!-- HGERROR-START -->\n";
+}
+
+char *htmlWarnEndPattern()
+/* Return ending pattern for warning message. */
+{
+return "<!-- HGERROR-END -->\n";
+}
 
 void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
 htmlHorizontalLine();
+printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
-printf("<!-- HGERROR -->\n");
+printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
 }
 
