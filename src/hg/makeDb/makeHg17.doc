@@ -11290,3 +11290,18 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     tar xvzf acembly.ncbi_35.genes.proteins.fasta.tar.gz
     cd acembly.ncbi_35.genes.gff
 
+# BUILD WGRNA TRACK (DONE, 2004-12-13, Fan)
+
+# Grab data from original miRNA track and convert them into wgRna .tab format.
+    hgsql hg17 --skip-column-names -e 'select * from miRNA' >miRNA.out
+    cat miRNA.out  | awk {'print $2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t""miRna"'} >wgRna.tab
+
+# Break the original custom track data file, hsa-snoRNA_track.txt, into two files j1 and j2, 
+# then remove header and blank lines.
+    cat j1 | awk {'print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"0"\t"0"\t""CDBox"'} >>wgRna.tab
+    cat j2 | awk {'print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"0"\t"0"\t""HAcaBox"'} >>wgRna.tab
+
+# load into wgRna table
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+# create and edit wgRna.html under src/hg/makeDb/trackDb/human/hg17.
+
