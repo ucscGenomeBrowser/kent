@@ -40,6 +40,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef ALITYPE_H
+#include "aliType.h"
+#endif
+
 struct ffAli
 /* Node of a doubly linked list that will contain one
  * allignment. Contains information on a matching
@@ -50,15 +54,6 @@ struct ffAli
     char *nStart, *nEnd;          /* Needle start and end. (1/2 open interval) */
     char *hStart, *hEnd;          /* Haystack start and end. */
     int startGood, endGood; /* Number that match perfectly on ends. */
-    };
-
-enum ffStringency
-/* How tight of a match is required. */
-    {
-    ffExact = 0,
-    ffCdna = 1,
-    ffTight = 2,
-    ffLoose = 3,
     };
 
 /************* Functions that client modules are likely to use ****************/

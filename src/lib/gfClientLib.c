@@ -759,7 +759,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = TRUE;
     bun->t3List = t3;
     ssStitch(bun, stringency);
-    saveAlignments(targetSeq->name, targetSeq->size, 0, 
+    saveAlignments(targetSeq->name, t3->seq->size, 0, 
 	bun, outData, FALSE, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     }
@@ -867,7 +867,6 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	    ss->start = t3->start/3;
 	    ss->end = t3->end/3;
 	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList);
-	    /* ~~~ */
 	    }
 	}
     slReverse(&rangeList);
@@ -887,7 +886,8 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	ssStitch(bun, ffCdna);
 	outData->targetRc = isRc;
 	outData->t3Hash = t3Hash;
-	saveAlignments(targetSeq->name, t3->nibSize/3, 0, 
+	splitPath(range->tName, dir, chromName, ext);
+	saveAlignments(chromName, t3->nibSize, 0, 
 	    bun, outData, FALSE, ffCdna, minMatch, outFunction);
 	ssBundleFree(&bun);
 	}
@@ -1002,19 +1002,36 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-static int t3Offset(char *pt, bioSeq *seq, struct hash *t3Hash)
+#ifdef OLD
+static int t3Offset(char *pt, bioSeq *seq, struct trans3 *t3List)
 /* Return offset of pt within sequence or within triple 
- * sequence in t3Hash. */
+ * sequence in t3List. */
 {
-if (t3Hash != NULL)   
+if (t3List != NULL)   
     {
-    struct trans3 *t3List = hashMustFindVal(t3Hash, seq->name);
     int frame, offset;
     trans3Offset(t3List, pt, &offset, &frame);
     return offset;
     }
 else
     return pt - seq->dna;
+}
+#endif /* OLD */
+
+static int t3GenoPos(char *pt, bioSeq *seq, struct trans3 *t3List)
+/* Convert from position in one of three translated frames in
+ * t3List to genomic offset. */
+{
+int offset, frame;
+if (t3List != NULL)
+    {
+    trans3Offset(t3List, pt, &offset, &frame);
+    return offset*3 + frame;
+    }
+else
+   {
+   return pt - seq->dna;
+   }
 }
 
 void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
@@ -1024,17 +1041,15 @@ void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format (or pslX format - if t3Hash is non-NULL).  */
 {
-/* This function was stolen from psLayout and slightly modified (mostly because 
- * we don't
- * have repeat data). */
+/* This function was stolen from psLayout and slightly extensively to cope
+ * with protein as well as DNA aligments. */
 struct ffAli *ff, *nextFf;
 struct ffAli *right = ffRightmost(ali);
 DNA *needle = otherSeq->dna;
 DNA *hay = genoSeq->dna;
 int nStart = ali->nStart - needle;
 int nEnd = right->nEnd - needle;
-int hStart = t3Offset(ali->hStart, genoSeq, t3Hash);
-int hEnd = t3Offset(right->hEnd, genoSeq, t3Hash);
+int hStart, hEnd; 
 int nInsertBaseCount = 0;
 int nInsertCount = 0;
 int hInsertBaseCount = 0;
@@ -1048,6 +1063,13 @@ int blockSize;
 int i;
 int badScore;
 struct trans3 *t3 = NULL;
+struct trans3 *t3List = NULL;
+
+
+if (t3Hash != NULL)
+    t3List = hashMustFindVal(t3Hash, genoSeq->name);
+hStart = t3GenoPos(ali->hStart, genoSeq, t3List) + chromOffset;
+hEnd = t3GenoPos(right->hEnd, genoSeq, t3List) + chromOffset;
 
 /* Count up matches, mismatches, inserts, etc. */
 for (ff = ali; ff != NULL; ff = nextFf)
@@ -1080,7 +1102,7 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	if (ff->hEnd != nextFf->hStart)
 	    {
 	    ++hInsertCount;
-	    hInsertBaseCount += t3Offset(nextFf->hStart, genoSeq, t3Hash) - t3Offset(ff->hEnd, genoSeq, t3Hash);
+	    hInsertBaseCount += t3GenoPos(nextFf->hStart, genoSeq, t3List) - t3GenoPos(ff->hEnd, genoSeq, t3List);
 	    }
 	}
     }
@@ -1120,17 +1142,8 @@ if (matchCount >= minMatch)
 	fprintf(out, "%d,", ff->nStart - needle);
     fprintf(out, "\t");
     for (ff = ali; ff != NULL; ff = ff->right)
-	fprintf(out, "%d,", t3Offset(ff->hStart, genoSeq, t3Hash) + chromOffset);
-    if (t3Hash != NULL)
-        {
-	struct trans3 *t3List = hashMustFindVal(t3Hash, genoSeq->name);
-	int offset, frame;
-	fprintf(out, "\t");
-	for (ff = ali; ff != NULL; ff = ff->right)
-	    {
-	    trans3Offset(t3List, ff->hStart, &offset, &frame);
-	    fprintf(out, "%d,", frame);
-	    }
+	{
+	fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List) + chromOffset);
 	}
     fprintf(out, "\n");
     if (ferror(out))
@@ -1144,6 +1157,7 @@ if (matchCount >= minMatch)
 void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
+/* Save psl for simple nucleotide/nucleotide alignments. */
 {
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
     isRc, stringency, minMatch, outputData, NULL, FALSE, FALSE);
@@ -1152,6 +1166,7 @@ gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
+/* Save psl for more complex alignments. */
 {
 struct gfSavePslxData *data = outputData;
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,

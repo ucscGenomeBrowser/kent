@@ -10,6 +10,7 @@
 #include "linefile.h"
 #include "dnaseq.h"
 #include "fuzzyFind.h"
+#include "aliType.h"
 
 struct psl *pslLoad(char **row)
 /* Load a psl from row fetched with select * from psl
@@ -46,6 +47,7 @@ sqlUnsignedDynamicArray(row[20], &ret->tStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 return ret;
 }
+
 
 struct psl *pslCommaIn(char **pS, struct psl *ret)
 /* Create a psl out of a comma separated string. 
@@ -249,16 +251,28 @@ return dif;
 }
 
 
-void pslWriteHead(FILE *f)
-/* Write head of psl. */
+static void pslLabelColumns(FILE *f)
+/* Write column info. */
 {
-fputs(
-"psLayout version 3\n"
-"\n"
+fputs("\n"
 "match\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   \tT    \tT  \tblockSizes \tqStarts\t tStarts\n"
 "     \tmatch\tmatch\t   \tcount\tbases\tcount\tbases\t      \tname     \tsize\tstart\tend\tname     \tsize\tstart\tend\n" 
 "---------------------------------------------------------------------------------------------------------------------------------------------------------------\n",
 f);
+}
+
+void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType)
+/* Write header for extended (possibly protein) psl file. */
+{
+fprintf(f, "psLayout version 4 %s %s\n", gfTypeName(qType), gfTypeName(tType));
+pslLabelColumns(f);
+}
+
+void pslWriteHead(FILE *f)
+/* Write head of psl. */
+{
+fputs("psLayout version 3\n", f);
+pslLabelColumns(f);
 }
 
 void pslWriteAll(struct psl *pslList, char *fileName, boolean writeHeader)
@@ -275,32 +289,71 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 fclose(f);
 }
 
+void pslxFileOpen(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf)
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle. */
+{
+char *line;
+int lineSize;
+char *words[30];
+char *version;
+int wordCount;
+int i;
+enum gfType qt = gftRna,  tt = gftDna;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+
+if (!lineFileNext(lf, &line, &lineSize))
+    warn("%s is empty", fileName);
+else
+    {
+    if (startsWith("psLayout version", line))
+	{
+	wordCount = chopLine(line, words);
+	if (wordCount < 3)
+	    errAbort("%s is not a psLayout file", fileName);
+	version = words[2];
+	if (sameString(version, "3"))
+	    {
+	    }
+	else if (sameString(version, "4"))
+	    {
+	    qt = gfTypeFromName(words[3]);
+	    tt = gfTypeFromName(words[4]);
+	    }
+	else
+	    {
+	    errAbort("%s is version %s of psLayout, this program can only handle through version 4",
+		fileName,  version);
+	    }
+	for (i=0; i<4; ++i)
+	    {
+	    if (!lineFileNext(lf, &line, &lineSize))
+		errAbort("%s severely truncated", fileName);
+	    }
+	}
+    else
+        {
+	char *s = strdup(line);
+	wordCount = chopLine(s, words);
+	if (wordCount < 21 || wordCount > 22 || (words[8][0] != '+' && words[8][0] != '-'))
+	    errAbort("%s is not a psLayout file", fileName);
+	else
+	    lineFileReuse(lf); 
+	freeMem(s);
+	}
+    }
+*retQueryType = qt;
+*retTargetType = tt;
+*retLf = lf;
+}
+
 struct lineFile *pslFileOpen(char *fileName)
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
 {
-char *line;
-int lineSize;
-char *words[4];
-int wordCount;
-int i;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-
-if (!lineFileNext(lf, &line, &lineSize))
-    errAbort("%s is empty", fileName);
-if (!startsWith("psLayout version", line))
-    errAbort("%s is not a psLayout file", fileName);
-wordCount = chopLine(line, words);
-if (wordCount < 3)
-    errAbort("%s is not a psLayout file", fileName);
-if (atoi(words[2]) != 3)
-    errAbort("%s is version %s of psLayout, this program can only handle version 3",
-    	fileName,  words[2]);
-for (i=0; i<4; ++i)
-    {
-    if (!lineFileNext(lf, &line, &lineSize))
-	errAbort("%s severely truncated", fileName);
-    }
+enum gfType qt, tt;
+struct lineFile *lf;
+pslxFileOpen(fileName, &qt, &tt, &lf);
 return lf;
 }
 
@@ -327,7 +380,7 @@ if (lineSize >= lineAlloc)
     }
 memcpy(chopBuf, line, lineSize+1);
 wordCount = chopLine(chopBuf, words);
-if (wordCount == 21)
+if (wordCount >= 21)
     {
     return pslLoad(words);
     }

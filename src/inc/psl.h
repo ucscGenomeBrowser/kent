@@ -34,7 +34,7 @@ struct psl
     int qBaseInsert;	/* Number of bases inserted in query */
     unsigned tNumInsert;	/* Number of inserts in target */
     int tBaseInsert;	/* Number of bases inserted in target */
-    char strand[2];	/* + or - for strand */
+    char strand[3];	/* + or - for strand */
     char *qName;	/* Query sequence name */
     unsigned qSize;	/* Query sequence size */
     int qStart;	/* Alignment start position in query */
@@ -89,12 +89,20 @@ struct psl *pslLoadLm(char **row, struct lm *lm);
 void pslWriteHead(FILE *f);
 /* Write head of psl. */
 
+void pslxWriteHead(FILE *f, enum gfType qType, enum gfType tType);
+/* Write head of pslx (extended psl). */
+
 void pslWriteAll(struct psl *pslList, char *fileName, boolean writeHeader);
 /* Write a psl file from list. */
 
 struct lineFile *pslFileOpen(char *fileName);
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
+
+void pslxFileOpen(char *fileName, enum gfType *retQueryType, 
+	enum gfType *retTargetType, struct lineFile **retLf);
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle. */
 
 int pslCmpQuery(const void *va, const void *vb);
 /* Compare to sort based on query. */

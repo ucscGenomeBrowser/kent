@@ -16,15 +16,9 @@
 #include "hash.h"
 #endif
 
-enum gfType
-/* Types of sequence genoFind deals with. */
-    {
-    gftDna = 0,		/* DNA (genomic) */
-    gftRna = 1,		/* RNA */
-    gftProt = 2,         /* Protein. */
-    gftDnaX = 3,		/* Genomic DNA translated to protein */
-    gftRnaX = 4,         /* RNA translated to protein */
-    };
+#ifndef ALITYPE_H
+#include "aliType.h"
+#endif
 
 enum gfConstants {
     gfMinMatch = 3,

@@ -36,6 +36,9 @@ aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop);
  * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
  * represent stop codons as 'Z'). */
 
+boolean seqIsDna(bioSeq *seq);
+/* Make educated guess whether sequence is DNA or protein. */
+
 bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters);
 /* Figure out which if any sequence letters is in. */
 

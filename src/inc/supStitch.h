@@ -69,4 +69,5 @@ struct ssBundle *ssFindBundles(struct patSpace *ps, struct dnaSeq *cSeq,
 	char *cName, enum ffStringency stringency, boolean avoidSelfSelf);
 /* Find patSpace alignments on cSeq and bundle them together. */
 
-#endif SUPSTITCH_H
+#endif /* SUPSTITCH_H */
+

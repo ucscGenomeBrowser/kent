@@ -1,7 +1,7 @@
 .c.o:
 	gcc -Wimplicit -ggdb -O -I../inc -c $*.c
 
-O = bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
+O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     dgRange.o diGraph.o dlist.o dnaseq.o dnautil.o dystring.o errabort.o \
     fa.o ffAli.o flydna.o fof.o fuzzyFind.o fuzzyShow.o gdf.o \
     gemfont.o genoFind.o gfClientLib.o gfNet.o gff.o \

@@ -45,6 +45,22 @@ for (seq = *pSeqList; seq != NULL; seq = next)
 *pSeqList = NULL;
 }
 
+boolean seqIsDna(bioSeq *seq)
+/* Make educated guess whether sequence is DNA or protein. */
+{
+int size = seq->size, i;
+char *poly = seq->dna;
+
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if (!ntChars[poly[i]]) 
+    	return FALSE;
+    }
+return TRUE;
+}
+
+
 aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop)
 /* Return a translated sequence.  Offset is position of first base to
  * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
