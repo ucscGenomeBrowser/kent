@@ -382,6 +382,7 @@ enum gfType qt, tt;
 
 htmlStart("BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
+printf("<H3>Click over a line to see detailed letter by letter display</H3>");
 parseSs(item, &pslName, &faName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
@@ -562,9 +563,11 @@ int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType)
 /* Show protein/DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
-int tStart = psl->tStart, tEnd = psl->tEnd;
 boolean tIsRc = (psl->strand[1] == '-');
+boolean qIsRc = (psl->strand[0] == '-');
 boolean isProt = (qType == gftProt);
+int tStart = psl->tStart, tEnd = psl->tEnd;
+int qStart = 0;
 
 
 /* Load dna sequence. */
@@ -579,10 +582,15 @@ if (tIsRc)
     tEnd = psl->tSize - tStart;
     tStart = temp;
     }
+if (qIsRc)
+    {
+    reverseComplement(oSeq->dna, oSeq->size);
+    qStart = oSeq->size;
+    }
 
 fprintf(f, "<TT><PRE>");
-fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (psl->strand[0] == '-'  ? " (reverse complemented)" : ""));
-/* Display amino acid sequence. */
+fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse complemented)" : ""));
+/* Display query sequence. */
     {
     struct cfm cfm;
     char *colorFlags = needMem(oSeq->size);
@@ -615,7 +623,7 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (psl->strand[0] == '-
 		}
 	    }
 	}
-    cfmInit(&cfm, 10, 60, TRUE, FALSE, f, 0);
+    cfmInit(&cfm, 10, 60, TRUE, qIsRc, f, qStart);
     for (i=0; i<oSeq->size; ++i)
 	cfmOut(&cfm, oSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
     cfmCleanup(&cfm);
@@ -688,7 +696,8 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     struct baf baf;
     int i,j;
 
-    bafInit(&baf, oSeq->dna, 0, dnaSeq->dna, psl->tStart, tIsRc, f, 60, isProt);
+    bafInit(&baf, oSeq->dna, qStart, qIsRc,
+    	dnaSeq->dna, psl->tStart, tIsRc, f, 60, isProt);
     for (i=0; i<psl->blockCount; ++i)
 	{
 	int qs = psl->qStarts[i];
@@ -719,6 +728,8 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
 	}
     }
 fprintf(f, "</TT></PRE>");
+if (qIsRc)
+    reverseComplement(oSeq->dna, oSeq->size);
 return psl->blockCount;
 }
 
@@ -1815,9 +1826,19 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     exoFishStaticLoad(row, &el);
+    if (!sameString(el.name, "."))
+         {
+	 printf("<B>Exofish ID:</B> "
+	        "<A HREF=\"http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=%s&Mode=Id\">"
+		"%s</A><BR>\n", 
+		 el.name, el.name);
+	 }
     printf("<B>score:</B> %d<BR>\n", el.score);
     bedPrintPos((struct bed *)&el);
     htmlHorizontalLine();
+    if (!sameString(el.name, "."))
+        {
+	}
     }
 
 puts("<P>The Exofish track shows regions of homology with the "
