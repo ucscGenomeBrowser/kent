@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: nibTwo.c,v 1.2 2004/10/24 04:03:39 kent Exp $";
+static char const rcsid[] = "$Id: nibTwo.c,v 1.3 2004/12/11 17:17:34 markd Exp $";
 
 struct nibTwoCache *nibTwoCacheNew(char *pathName)
 /* Get something that will more or less transparently get sequence from 
@@ -58,7 +58,7 @@ if (ntc->isTwoBit)
 else
     {
     struct nibInfo *nib = nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName);
-    return nibLdPart(nib->fileName, nib->f, 0, nib->size, nib->size);
+    return nibLdPart(nib->fileName, nib->f, nib->size, 0, nib->size);
     }
 }
 
