@@ -4,6 +4,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 #include "hCommon.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "linefile.h"
 #include "dnautil.h"
@@ -20,7 +21,7 @@
 #include "web.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.1 2004/06/07 22:32:01 kent Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.2 2004/06/07 23:02:57 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -208,14 +209,6 @@ printf("Genome: ");
 showGenomes(organism, serverList);
 printf("Assembly: ");
 showAssemblies(organism, db, serverList);
-#ifdef OLD
-printf("<SELECT NAME=\"wp_db\">\n");
-for (server = serverList; server != NULL; server = server->next)
-    printf("  <OPTION%s>%s %s</OPTION>\n", 
-	(server == serverList ? " SELECTED" : ""),
-    	server->genome, server->description);
-printf("</SELECT>\n");
-#endif /* OLD */
 printf(" <A HREF=\"../cgi-bin/hgPcr?wp_help=on\" TARGET=\"_blank\">User Guide</A> \n");
 cgiMakeButton("Submit", "Submit");
 printf("</FORM>\n");
@@ -257,10 +250,16 @@ if (errCatchStart(errCatch))
     	server->seqDir, gpi, maxSize, minPerfect, minGood);
     if (gpoList != NULL)
 	{
+	struct dyString *url = newDyString(0);
+	dyStringPrintf(url, "%s?%s&db=%s", 
+	    hgTracksName(), cartSidUrlString(cart), server->db);
+	dyStringAppend(url, "&position=%s:%d-%d");
+
 	printf("<TT><PRE>");
-	gfPcrOutputWriteAll(gpoList, "fa", "stdout");
+	gfPcrOutputWriteAll(gpoList, "fa", url->string, "stdout");
 	printf("</PRE></TT>");
         ok = TRUE;
+	dyStringFree(&url);
 	}
     else
 	errAbort("No matches to %s %s in %s %s", fPrimer, rPrimer, 
