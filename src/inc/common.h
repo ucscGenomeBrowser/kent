@@ -251,6 +251,10 @@ void slNameSort(struct slName **pList);
 boolean slNameInList(struct slName *list, char *string);
 /* Return true if string is in name list */
 
+void *slNameFind(void *list, char *string);
+/* Return first element of slName list (or any other list starting
+ * with next/name fields) that matches string. */
+
 char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */

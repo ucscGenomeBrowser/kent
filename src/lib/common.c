@@ -407,6 +407,17 @@ for (el = list; el != NULL; el = el->next)
 return FALSE;
 }
 
+void *slNameFind(void *list, char *string)
+/* Return first element of slName list (or any other list starting
+ * with next/name fields) that matches string. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameWord(string, el->name))
+        return el;
+return NULL;
+}
+
 char *slNameStore(struct slName **pList, char *string)
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
