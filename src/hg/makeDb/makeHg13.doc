@@ -700,6 +700,19 @@ PREPARE CLUSTER FOR BLASTZ RUN (DONE 12/4/02)
     cp -p mixedNib/chr*.nib /scratch/hg/gs.14/build31/chromTrfMixedNib
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
+    # Jim's comments Feb 12 '03 about the order in which to run blastz:
+    # In general we should do
+    # 1) hg/mm
+    # 2) mm/rn
+    # 3) rn/hg
+    # 4) hg/hg
+    # 5) mm/mm
+    # 6) rn/rn
+    # There is now an 'axtSwap' program that might let us
+    # get out of having to run the inverse of 1,2 & 3,  though
+    # 2 in particular is so fast perhaps it's just as well to
+    # do the inverse explicitly.
+
 
 PRODUCING GENSCAN PREDICTIONS (DONE 12/5/02)
 
