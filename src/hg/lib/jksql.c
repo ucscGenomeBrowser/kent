@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.36 2003/09/08 09:00:44 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.37 2003/09/09 21:09:00 baertsch Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -195,13 +195,7 @@ char* user = getCfgValue("HGDB_USER", "db.user");
 char* password = getCfgValue("HGDB_PASSWORD", "db.password");
 
 if(host == 0 || user == 0 || password == 0)
-    {
-    host = getCfgValue("HGDB_HOST", "ro.host");
-    user = getCfgValue("HGDB_USER", "ro.user");            
-    password = getCfgValue("HGDB_PASSWORD", "ro.password");   
-    if (host == 0 || user == 0 || password == 0)
-        errAbort("Could not read hostname, user, or password to the database from configuration file.");
-    }
+    sqlConnectReadOnly(database);
 return sqlConnRemote(host, user, password, database, abort);
 }
 
