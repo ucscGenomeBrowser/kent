@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.5 2004/01/29 00:36:55 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.6 2004/02/04 19:04:59 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -540,7 +540,7 @@ fi
 #	to create kgXref.tab
 if [ ! -s kgXref.tab ]; then
     echo "`date` running kgXref ${DB} ${PDB}"
-    kgXref ${DB} ${PDB}
+    kgXref ${DB} ${PDB} ${RO_DB}
 fi
 
 if [ ! -s kgXref.tab ]; then
