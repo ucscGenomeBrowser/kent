@@ -6,8 +6,72 @@
 #include "dystring.h"
 #include "hdb.h"
 #include "wiggle.h"
+#include "hCommon.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.18 2004/08/05 22:49:00 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.19 2004/08/24 23:42:45 hiram Exp $";
+
+int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
+	int winStart, int winEnd, struct cart *cart)
+/*	determine span used during hgTracks display	*/
+{
+struct sqlResult *sr;
+char query[256];
+char **row;
+float basesPerPixel = 0.0;
+int spanInUse = 0;
+struct hashCookie cookie;
+int insideWidth;
+int minSpan = BIGNUM;
+int maxSpan = 0;
+int spanCount = 0;
+struct hash *spans = newHash(0);	/*	list of spans in this table */
+struct hashEl *el;
+int insideX = hgDefaultGfxBorder;
+int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
+boolean withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
+
+/*	We need to take this span finding business into the library */
+safef(query, ArraySize(query),
+    "SELECT span from %s where chrom = '%s' group by span", table, chrom);
+
+sr = sqlMustGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {   
+    char spanName[128];
+    unsigned span = sqlUnsigned(row[0]);
+
+    safef(spanName, ArraySize(spanName), "%u", span);
+    el = hashLookup(spans, spanName);
+    if ( el == NULL)
+	{
+	if (span > maxSpan) maxSpan = span;
+	if (span < minSpan) minSpan = span;
+	++spanCount;
+	hashAddInt(spans, spanName, span);
+	}
+    }
+sqlFreeResult(&sr);
+
+spanInUse = minSpan;
+
+if (withLeftLabels)
+	insideX += hgDefaultLeftLabelWidth + hgDefaultGfxBorder;
+
+insideWidth = pixWidth - insideX - hgDefaultGfxBorder;
+
+basesPerPixel = (winEnd - winStart) / insideWidth;
+cookie = hashFirst(spans);
+
+while ((el = hashNext(&cookie)) != NULL)
+    {
+    int span = sqlSigned(el->name);
+    
+    if ((float) span <= basesPerPixel) 
+	spanInUse = span;
+    }
+
+return spanInUse;
+}	/*	int spanInUse()	*/
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
