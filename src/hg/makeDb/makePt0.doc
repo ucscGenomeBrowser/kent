@@ -403,7 +403,7 @@ cat << 'EOF' > runChainRandom.csh
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain hg16 ${c}_chainPt0 $i
-        echo done $c
+        eco done $c
     end
     
     # optionally: rm run1/chain/*.chain
@@ -492,6 +492,34 @@ cat << 'EOF' > runChainRandom.csh
     cd ../axtBest
     tar cvfz humanChimpAxtBest.gz *.ax
     mv humanChimpAxtBest.gz /usr/local/apache/htdocs/kate/chimp
+
+# REVERSE NET -- additional file for LaDeana
+
+    ssh kolossus 
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    /cluster/home/kate/bin/x86_64/chainNet all.chain -minSpace=10 /cluster/data/hg16/chrom.sizes /cluster/data/pt0/scaffold.sizes chimpGap10.net humanGap10.net
+    # takes a few minutes
+    grep -v gap humanGap10.net > humanFill10.net
+    cp humanFill10.net /usr/local/apache/htdocs/kate
+
+# REVERSE CHAIN -- additional file for Tarjei
+
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    #mkdir humanNet
+    #time netSplit humanGap10.net humanNet
+    #cd humanNet
+    mkdir humanChainSubset
+    /cluster/home/kate/bin/x86_64/netChainSubset humanGap10.net all.chain humanChainSubset/all.chain
+    
+    foreach f (*.net)
+        set c = $f:r
+        #/cluster/home/kate/bin/x86_64/netChainSubset $f ../chain/$c.chain ../humanChainSubset/$c.chain
+        netChainSubset $f ../chain/$c.chain ../humanChainSubset/$c.chain
+    end
+    cd ../humanChainSubset
+    tar cvfz chimpHumanChain.gz *.chain
+    mv chimpHumanChain.gz /usr/local/apache/htdocs/kate/chimp
 
 
 
