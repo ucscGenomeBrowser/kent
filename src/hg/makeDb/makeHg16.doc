@@ -4238,3 +4238,44 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     ldHgGene -exon=TC hg16 tigrGeneIndex *.gff
         #245154 gene predictions
     gzip *.gff *TCs
+
+LOAD VEGA GENES AND PSEUDOGENES (DONE except peptides   2003-11-03 braney )
+    mkdir ~/hg16/bed/vega
+    cd ~/hg16/bed/vega
+    
+    wget "http://www.sanger.ac.uk/Users/keenan/vega_homo_sapiens_core_4_0.gtf.gz"
+    gunzip vega_homo_sapiens_core_4_0.gtf.gz
+
+# Load genes and Immunoglobulin/Pseudogenes into 2 separate tracks
+    awk '$2 != "Pseudogene" && $2 != "Ig_Pseudogene_Segment" && $2 != "Ig_Segment" {print "chr"$0}' \
+	vega_homo_sapiens_core_4_0.gtf  > vega_fixed.gtf
+    awk '$2 == "Pseudogene" || $2 == "Ig_Pseudogene_Segment" || $2 == "Ig_Segment" {print "chr"$0}' \
+    	vega_homo_sapiens_core_4_0.gtf  > vega_pseudo.gtf
+    ldHgGene hg16 vegaGene vega_fixed.gtf -gtf
+    ldHgGene hg16 vegaPseudoGene vega_pseudo.gtf -gtf
+
+# Peptides not re-loaded....using hg13 versions
+
+    # The pep files need their not-yet-stable otter ID's translated to 
+    # the transcript_id's used in the GTF.  
+    # foreach f (chr*.fa)
+    #   set c = `echo $f:t:r | awk -F_ '{print $1;}'`
+    #   set g = ${c}_from_ev.gtf
+    #   ./fixOtterIds.pl $g $f > $f:r-fixed.fa
+    # end
+    # hgPepPred hg13 generic vegaPep chr*-fixed.fa
+
+    vegaBuildInfo vega_homo_sapiens_core_4_0.gtf vegaInfo.tab
+    hgsql hg16 < ~/kent/src/hg/lib/vegaInfo.sql
+    echo "load data local infile 'vegaInfo.tab' into table vegaInfo" | hgsql hg16
+
+# Set cdsStart and cdsEnd to 0 if method is Novel_Transcript
+    foreach ntname (`echo 'select name from vegaGene,vegaInfo \
+                           where vegaGene.name = vegaInfo.transcriptId AND \
+                                 vegaInfo.method = "Novel_Transcript"' \
+                     | hgsql -N hg16`)
+      echo "update vegaGene set cdsStart = 0 where name = '$ntname'" \
+      | hgsql hg16
+      echo "update vegaGene set cdsEnd = 0 where name = '$ntname'" \
+      | hgsql hg16
+    end
