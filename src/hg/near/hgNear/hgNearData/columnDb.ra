@@ -156,6 +156,18 @@ protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
 protDb proteins072003
 
+name pdb
+shortLabel PDB
+longLabel Protein Data Bank
+priority 9.5
+visibility off
+type association proteins072003.pdbSP
+protKey on
+queryFull select sp,pdb from proteins072003.pdbSP
+queryOne select pdb,pdb from proteins072003.pdbSP where sp = '%s'
+invQueryOne select sp from proteins072003.pdbSP where pdb = '%s'
+itemUrl http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s
+
 name go
 shortLabel Gene Ontology
 longLabel Gene Ontology (GO) Terms Associated with Gene
