@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.27 2004/10/26 18:15:43 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.28 2004/10/26 23:05:59 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -609,8 +609,9 @@ for (region = regionList; region != NULL; region = region->next)
      *	prevent any timeout since this could take a while.
      *	(worst case test is quality track on panTro1)
      */
-    statsItemCount += wds->stats->count;
-    if ((regionCount > 1) && (valuesMatched > 0))
+    if (wds->stats)
+	statsItemCount += wds->stats->count;
+    if (wds->stats && (regionCount > 1) && (valuesMatched > 0))
 	{
 	double sumData = wds->stats->mean * wds->stats->count;
 	double sumSquares;
