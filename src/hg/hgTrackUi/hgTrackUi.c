@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.90 2004/03/11 15:40:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.91 2004/03/31 20:24:26 kent Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -204,10 +204,15 @@ printf(" red/blue ");
 void affyUi(struct trackDb *tdb)
 /* put up UI for the affy track from stanford track */
 {
-char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
-char *col = cartUsualString(cart, "exprssn.color", "rg");
+char *affyMap;
+char *col;
+char varName[128];
+
+safef(varName, sizeof(varName), "%s.%s", tdb->tableName, "type");
+affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
+col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
-affyDropDown("affy.type", affyMap);
+affyDropDown(varName, affyMap);
 printf(" <b>Color Scheme</b>: ");
 cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
