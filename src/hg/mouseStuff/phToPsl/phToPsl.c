@@ -49,6 +49,29 @@ void *val = hashMustFindVal(hash, name);
 return ptToInt(val);
 }
 
+void countInserts(char *s, int size, int *retNumInsert, int *retBaseInsert)
+/* Count up number and total size of inserts in s. */
+{
+char c, lastC = s[0];
+int i;
+int baseInsert = 0, numInsert = 0;
+if (lastC == '-')
+    errAbort("%s starts with -", s);
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (c == '-')
+        {
+	if (lastC != '-')
+	     numInsert += 1;
+	baseInsert += 1;
+	}
+    lastC = c;
+    }
+*retNumInsert = numInsert;
+*retBaseInsert = baseInsert;
+}
+
 void aliStringToPsl(struct lineFile *lf, char *qName, char *tName, 
 	char *qString, char *tString, 
 	int qSize, int tSize, int aliSize, 
@@ -85,50 +108,19 @@ if (qStart < 0)
     }
 
 /* First count up number of blocks and inserts. */
+countInserts(qString, aliSize, &qNumInsert, &qBaseInsert);
+countInserts(tString, aliSize, &tNumInsert, &tBaseInsert);
+blockCount = 1 + qNumInsert + tNumInsert;
+
+/* Count up match/mismatch. */
 for (i=0; i<aliSize; ++i)
     {
     q = qString[i];
     t = tString[i];
-    if (q == '-' || t == '-')
-        {
-	if (!eitherInsert)
-	    {
-	    ++blockCount;
-	    eitherInsert = TRUE;
-	    }
-	if (t == '-')
-	    {
-	    if (!qInInsert)
-	        {
-		++qNumInsert;
-		qInInsert = TRUE;
-		}
-	    ++qBaseInsert;
-	    }
-	else
-	    qInInsert = FALSE;
-	if (q == '-')
-	    {
-	    if (!tInInsert)
-	        {
-		++tNumInsert;
-		tInInsert = TRUE;
-		}
-	    ++tBaseInsert;
-	    }
-	else
-	    tInInsert = FALSE;
-	}
+    if (q == t)
+	++match;
     else
-        {
-	eitherInsert = FALSE;
-	tInInsert = FALSE;
-	qInInsert = FALSE;
-	if (q == t)
-	    ++match;
-	else
-	    ++misMatch;
-	}
+	++misMatch;
     }
 
 /* Deal with minus strand. */
@@ -188,6 +180,21 @@ for (i=0; i<aliSize; ++i)
 	    tStarts[blockIx] = ts;
 	    ++blockIx;
 	    eitherInsert = TRUE;
+	    }
+	else if (i > 0)
+	    {
+	    /* Handle cases like
+	     *     aca---gtagtg
+	     *     acacag---gtg
+	     */
+	    if ((q == '-' && tString[i-1] == '-') || 
+	    	(t == '-' && qString[i-1] == '-'))
+	        {
+		blocks[blockIx] = 0;
+		qStarts[blockIx] = qe;
+		tStarts[blockIx] = te;
+		++blockIx;
+		}
 	    }
 	if (q != '-')
 	   qe += 1;
