@@ -82,7 +82,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.686 2004/03/21 21:55:21 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.687 2004/03/22 21:48:12 donnak Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8034,8 +8034,9 @@ cartSaveSession(cart);
 puts(
 "<P>Display your own annotation tracks in the browser using \n"
 "the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations may be stored in files or\n"
-"pasted in. You can also paste in a URL or a list of URLs which refer to \n"
+"procedure described here</A>.  Annotations may be uploaded from files or\n"
+"pasted into the text box below. You can also paste a URL or a list of URLs \n"
+"into the large text box that refer to \n"
 "files in one of the supported formats.</P>\n"
 "Click \n"
 "<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
