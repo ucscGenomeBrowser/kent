@@ -40,10 +40,22 @@ ret->tSize = sqlUnsigned(row[14]);
 ret->tStart = sqlUnsigned(row[15]);
 ret->tEnd = sqlUnsigned(row[16]);
 sqlUnsignedDynamicArray(row[18], &ret->blockSizes, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne bloxksizes %d bs %d block=%s\n",sizeOne, ret->blockCount,row[18]);
+    }
 assert(sizeOne == ret->blockCount);
 sqlUnsignedDynamicArray(row[19], &ret->qStarts, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne qStarts %d bs %d\n",sizeOne, ret->blockCount);
+    }
 assert(sizeOne == ret->blockCount);
 sqlUnsignedDynamicArray(row[20], &ret->tStarts, &sizeOne);
+if (sizeOne != ret->blockCount)
+    {
+    printf("sizeOne tStarts %d bs %d\n",sizeOne, ret->blockCount);
+    }
 assert(sizeOne == ret->blockCount);
 return ret;
 }
