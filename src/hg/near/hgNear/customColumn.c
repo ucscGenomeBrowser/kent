@@ -42,7 +42,7 @@ void doCustomPage(struct sqlConnection *conn, struct column *colList)
 {
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\">\n");
 cartSaveSession(cart);
-makeTitle("Set Up Custom Columns for Gene Sorter", 
+makeTitle("Setup Custom Columns for Gene Sorter", 
 	"hgNearHelp.html#Custom");
 
 

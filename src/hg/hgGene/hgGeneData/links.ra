@@ -11,7 +11,7 @@ dbInUrl on
 priority 10
 
 name family
-shortLabel Family Browser
+shortLabel Gene Sorter
 tables kgXref
 idSql select kgID from kgXref where kgID = '%s'
 url ../cgi-bin/hgNear?near_search=%s
