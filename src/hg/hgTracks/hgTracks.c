@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.621 2003/10/25 00:43:57 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.622 2003/10/27 23:06:55 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1926,7 +1926,7 @@ tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
 tg->priority = 100;
 tg->groupName = "map";
-tdb->tableName = tg->mapName;;
+tdb->tableName = tg->mapName;
 tdb->shortLabel = tg->shortLabel;
 tdb->longLabel = tg->longLabel;
 tdb->type = cloneString("psl");
