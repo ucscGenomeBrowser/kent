@@ -15,6 +15,7 @@ oneTest() {
 
     if [ "${T}" != "$result" ]; then
 	echo "${C} FAIL: $cmd"
+	echo "expected: '$result' got: '$T'"
 	failures=`expr $failures + 1`
     else
 	if [ -n "${verbose}" ]; then
@@ -52,6 +53,18 @@ oneTest "$HGWIGGLE -doStats -position=chrM:4000-10000 -dataConstraint=\"in range
 oneTest "$HGWIGGLE -doStats -doBed -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "06015     6"
 oneTest "$HGWIGGLE -span=5 -doHistogram -hBinSize=10 -hBinCount=10 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=3 -ul=90 -db=ce2 gc5Base" "44411     1"
 oneTest "$HGWIGGLE -bedFile=mm5.miRNA.bed -dataConstraint=\">\" -ll=0.85 -chr=chr2 -doStats -db=mm5 phastCons" "62191     1"
+
+TF=/tmp/hgWiggle_test_$$.bed
+rm -f "${TF}"
+echo -e "chr7\t73016533\t73016543\tname0" > "${TF}"
+echo -e "chr1\t2500\t2510\tname1" >> "${TF}"
+echo -e "chr10\t200000\t200010\tname2" >> "${TF}"
+echo -e "chr1\t1500\t1510\tname3" >> "${TF}"
+
+oneTest "$HGWIGGLE -bedFile=${TF} -db=hg16 phastCons" "65159     1"
+
+rm -f "${TF}"
+
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`
