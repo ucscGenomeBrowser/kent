@@ -144,6 +144,10 @@ struct wiggleDataStream
     unsigned spanLimit;		/*	for span==spanLimit on file reads */
     int winStart;		/*	for fetches between winStart, winEnd */
     int winEnd;			/*	for fetches between winStart, winEnd */
+    void (*freeData)(struct wiggleDataStream *wDS);
+    void (*freeBed)(struct wiggleDataStream *wDS);
+    void (*freeStats)(struct wiggleDataStream *wDS);
+    void (*freeConstraints)(struct wiggleDataStream *wDS);
     boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
 	double upper);		/*	for comparing with SQL row values */
     boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
@@ -167,7 +171,7 @@ struct wiggleDataStream
 	    /*      read next wig row from sql query or lineFile
 	     *      FALSE return on no more data    */
     void (*closeWigConn)(struct wiggleDataStream *wDS);
-				/*	close a connection	*/
+				/*	close a connection, leaves data here */
     void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
 				/*	start a connection	*/
     };
@@ -278,5 +282,6 @@ void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
 
 /*	in lib/wigDataStream.c	*/
 struct wiggleDataStream *newWigDataStream();
+void destroyWigDataStream(struct wiggleDataStream **wDS);
 
 #endif /* WIGGLE_H */
