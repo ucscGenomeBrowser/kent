@@ -2086,7 +2086,7 @@ cat > split.csh << 'EOF'
     mkdir -p /cluster/bluearc/hg17/sts/sts/out
 cat > template << 'EOF'
 #LOOP
-/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root1).$(root2).psl}
+/cluster/bin/i386/blat $(path1) $(path2) -stepSize=5 {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 contigs.lst sts.lst template jobList
@@ -2150,7 +2150,7 @@ cat > template << 'EOF'
 
 cat > template << 'EOF'
 #LOOP
-/cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  $(path1) $(path2) {check out line /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
+/cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  -stepSize=5 $(path1) $(path2) {check out line /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
