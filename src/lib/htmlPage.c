@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.17 2005/02/04 21:05:43 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.18 2005/02/12 00:36:39 angie Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -907,6 +907,8 @@ void htmlFormVarSet(struct htmlForm *form, char *name, char *val)
 /* Set variable to given value. Create it if it doesn't exist*/
 {
 struct htmlFormVar *var;
+if (form == NULL)
+    errAbort("Null form passed to htmlFormVarSet");
 var = htmlFormVarGet(form, name);
 if (var == NULL)
     {
@@ -932,6 +934,8 @@ return htmlFormVarGet(form, name);
 void htmlPageSetVar(struct htmlPage *page, struct htmlForm *form, char *name, char *val)
 /* Set variable to given value.  If form is NULL, first form in page is used. */
 {
+if (page == NULL)
+    errAbort("Null page passed to htmlPageSetVar");
 if (form == NULL)
     form = page->forms;
 htmlFormVarSet(form, name, val);
