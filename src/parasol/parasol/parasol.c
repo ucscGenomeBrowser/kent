@@ -29,10 +29,12 @@ void usage()
 errAbort(
   "parasol - Parasol program - for launching programs in parallel on a computer cluster\n"
   "usage:\n"
-  "   parasol add machine machineName\n"
+  "   parasol add machine machineName localTempDir\n"
   "   parasol remove machine machineName\n"
   "   parasol [options] add job command-line\n"
-  "         options: -out=out -in=in -err=err -dir=dir\n"
+  "         options: -out=out -in=in -dir=dir -results=file\n"
+  "   parasol [options] qsub command-line\n"
+  "         options: -out=out -in=in -dir=dir -results=file\n"
   "   parasol remove job id\n"
   "   parasol close (close down system - kill paraHub, but not paraNodes on remote machines)\n"
   "   parasol ping [count]\n"
@@ -98,91 +100,41 @@ for (ref = list; ref != NULL; ref = ref->next)
 }
 
 
-void addMachine(char *machine)
+void addMachine(char *machine, char *tempDir)
 /* Tell hub about a new machine. */
 {
 char buf[512];
-sprintf(buf, "%s %s", "addMachine", machine);
+sprintf(buf, "%s %s %s", "addMachine", machine, tempDir);
 commandHub(buf);
 }
 
-#ifdef OLD
-int pushJob(int argc, char *argv[])
+void addJob(int argc, char *argv[], boolean printId)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
-char dirBuf[512] ;
+char curDir[512];
+char defaultResults[512];
 char *in = optionVal("in", "/dev/null"), 
      *out = optionVal("out", "/dev/null"), 
-     *err = optionVal("err", "/dev/null"), 
-     *dir = optionVal("dir", dirBuf);
-int jobId, i;
+     *dir = optionVal("dir", curDir),
+     *results = optionVal("results", defaultResults);
 char *jobIdString;
+int i;
 
-
-getcwd(dirBuf, sizeof(dirBuf));
-dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
+getcwd(curDir, sizeof(curDir));
+sprintf(defaultResults, "%s/results", curDir);
+dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, results);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
 jobIdString = hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
-if (report)
+if (printId)
     {
     printf("your job %s (\"%s", jobIdString, argv[0]);
     for (i=1; i<argc; ++i)
 	 printf(" %s", argv[i]);
     printf("\") has been submitted\n");
     }
-jobId = atoi(jobIdString);
-freez(&jobIdString);
-return jobId
-}
-#endif /* OLD */
-
-void addJob(int argc, char *argv[])
-/* Tell hub about a new job. */
-{
-struct dyString *dy = newDyString(1024);
-char dirBuf[512] ;
-char *in = optionVal("in", "/dev/null"), 
-     *out = optionVal("out", "/dev/null"), 
-     *err = optionVal("err", "/dev/null"), 
-     *dir = optionVal("dir", dirBuf);
-int i;
-
-getcwd(dirBuf, sizeof(dirBuf));
-dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
-for (i=0; i<argc; ++i)
-    dyStringPrintf(dy, " %s", argv[i]);
-freeMem(hubCommandGetReciept(dy->string));
-dyStringFree(&dy);
-}
-
-void runJob(int argc, char *argv[])
-/* Tell hub about new job,  print job id in qsub format. 
- * Set output to approximate 'runJob' output.  Eventually
- * we might replace this with something cleaner.  I hope so
- * anyway.... */
-{
-struct dyString *dy = newDyString(1024);
-char dirBuf[512] ;
-char *in = optionVal("in", "/dev/null"), 
-     *out = "out/runJob.o$JOB_ID",
-     *err = "err/runJob.e$JOB_ID",
-     *dir = optionVal("dir", dirBuf);
-int i;
-char *jobIdString;
-
-getcwd(dirBuf, sizeof(dirBuf));
-dyStringPrintf(dy, "runJob %s %s %s %s %s", getlogin(), dir, in, out, err);
-for (i=0; i<argc; ++i)
-    dyStringPrintf(dy, " %s", argv[i]);
-jobIdString = hubCommandGetReciept(dy->string);
-dyStringFree(&dy);
-printf("your job %s (\"%s", jobIdString, argv[0]);
-for (i=1; i<argc; ++i)
-     printf(" %s", argv[i]);
-printf("\") has been submitted\n");
 freez(&jobIdString);
 }
 
@@ -370,11 +322,11 @@ void parasol(char *command, int argc, char *argv[])
 char *subType = argv[0];
 atexit(closeHubFd);
 reopenHub();
-if (sameString(command, "runJob"))
+if (sameString(command, "qsub"))
     {
     if (argc < 1)
 	usage;
-    runJob(argc, argv);
+    addJob(argc, argv, TRUE);
     }
 else if (sameString(command, "add"))
     {
@@ -382,15 +334,15 @@ else if (sameString(command, "add"))
         usage();
     if (sameString(subType, "machine"))
 	{
-	if (argc != 2)
+	if (argc != 3)
 	    usage();
-	addMachine(argv[1]);
+	addMachine(argv[1], argv[2]);
 	}
     else if (sameString(subType, "job"))
 	{
 	if (argc < 2)
 	    usage;
-        addJob(argc-1, argv+1);
+        addJob(argc-1, argv+1, FALSE);
 	}
     else if (sameString(subType, "spoke"))
         addSpoke();

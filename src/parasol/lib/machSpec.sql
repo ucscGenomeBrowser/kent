@@ -8,8 +8,9 @@ CREATE TABLE machSpec (
     name varchar(255) not null,	# Network name
     cpus int not null,	# Number of CPUs we can use
     ramSize int not null,	# Megabytes of memory
-    scratchDir varchar(255) not null,	# Location of (local) scratch dir
-    scratchSize int not null,	# Megabytes of local disk
+    tempDir varchar(255) not null,	# Location of (local) temp dir
+    localDir varchar(255) not null,	# Location of local data dir
+    localSize int not null,	# Megabytes of local disk
     switchName varchar(255) not null,	# Name of switch this is on
               #Indices
     PRIMARY KEY(name)

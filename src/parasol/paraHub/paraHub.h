@@ -13,11 +13,10 @@ struct job
     char *in;			/* Stdin. */
     char *out;			/* Stdout. */
     char *err;			/* Stderr. */
+    char *results;		/* File to append results to. */
     time_t submitTime;          /* Time job submitted. */
     time_t startTime;           /* Start job run time in seconds past 1972 */
     struct machine *machine;	/* Machine it's running on if any. */
-    bool runJobExtra;		/* Put a little wrapper around it's output
-                                 * in format like Patrick's runJob? */
     };
 
 struct machine
@@ -30,6 +29,7 @@ struct machine
     int errCount;               /* Number of errors. */
     time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
     boolean isDead;		/* True if machine dead. */
+    char *tempDir;		/* Name of local temp dir. */
     };
 
 struct spoke

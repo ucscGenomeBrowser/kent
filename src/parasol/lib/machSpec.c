@@ -5,9 +5,9 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "machSpec.h"
 #include "sqlList.h"
 #include "sqlNum.h"
+#include "machSpec.h"
 
 void machSpecStaticLoad(char **row, struct machSpec *ret)
 /* Load a row from machSpec table into ret.  The contents of ret will
@@ -19,9 +19,10 @@ char *s;
 ret->name = row[0];
 ret->cpus = sqlSigned(row[1]);
 ret->ramSize = sqlSigned(row[2]);
-ret->scratchDir = row[3];
-ret->scratchSize = sqlSigned(row[4]);
-ret->switchName = row[5];
+ret->tempDir = row[3];
+ret->localDir = row[4];
+ret->localSize = sqlSigned(row[5]);
+ret->switchName = row[6];
 }
 
 struct machSpec *machSpecLoad(char **row)
@@ -36,9 +37,10 @@ AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->cpus = sqlSigned(row[1]);
 ret->ramSize = sqlSigned(row[2]);
-ret->scratchDir = cloneString(row[3]);
-ret->scratchSize = sqlSigned(row[4]);
-ret->switchName = cloneString(row[5]);
+ret->tempDir = cloneString(row[3]);
+ret->localDir = cloneString(row[4]);
+ret->localSize = sqlSigned(row[5]);
+ret->switchName = cloneString(row[6]);
 return ret;
 }
 
@@ -48,7 +50,7 @@ struct machSpec *machSpecLoadAll(char *fileName)
 {
 struct machSpec *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -59,6 +61,33 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
+
+#ifdef USING_SQL
+struct machSpec *machSpecLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all machSpec from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with machSpecFreeList(). */
+{
+struct machSpec *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = machSpecLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
+}
+#endif /* USING_SQL */
 
 struct machSpec *machSpecCommaIn(char **pS, struct machSpec *ret)
 /* Create a machSpec out of a comma separated string. 
@@ -73,8 +102,9 @@ if (ret == NULL)
 ret->name = sqlStringComma(&s);
 ret->cpus = sqlSignedComma(&s);
 ret->ramSize = sqlSignedComma(&s);
-ret->scratchDir = sqlStringComma(&s);
-ret->scratchSize = sqlSignedComma(&s);
+ret->tempDir = sqlStringComma(&s);
+ret->localDir = sqlStringComma(&s);
+ret->localSize = sqlSignedComma(&s);
 ret->switchName = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -88,7 +118,8 @@ struct machSpec *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
-freeMem(el->scratchDir);
+freeMem(el->tempDir);
+freeMem(el->localDir);
 freeMem(el->switchName);
 freez(pEl);
 }
@@ -119,10 +150,14 @@ fputc(sep,f);
 fprintf(f, "%d", el->ramSize);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->scratchDir);
+fprintf(f, "%s", el->tempDir);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->scratchSize);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->localDir);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->localSize);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->switchName);

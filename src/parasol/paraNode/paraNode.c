@@ -87,7 +87,7 @@ char **env = envExpand(1);
 *env = envPair(name, val);
 }
 
-void execProc(char *managingHost, char *jobIdString, char *runJobExtra,
+void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
 /* This routine is the child process of doExec.
@@ -95,7 +95,6 @@ void execProc(char *managingHost, char *jobIdString, char *runJobExtra,
  * work and waits on it.  It sends message to the
  * main message loop here when done. */
 {
-close(connectionHandle);
 if (fork() == 0)
     {
     int newStdin, newStdout, newStderr;
@@ -105,22 +104,17 @@ if (fork() == 0)
 
     /* Redirect standard io.  There has to  be a less
      * cryptic way to do this. Close all open files, then
-     * open/dupe so they fall into first three file
-     * descriptors. */
-    close(socketHandle);
+     * open in/out/err in order so they have descriptors
+     * 0,1,2. */
     logClose();
-    newStdin = open(in, O_RDONLY);
+    close(socketHandle);
+    close(connectionHandle);
     close(0);
-    dup(newStdin);
-    newStdout = open(out, O_WRONLY | O_CREAT, 0666);
     close(1);
-    dup(newStdout);
-    newStderr = open(err, O_WRONLY | O_CREAT, 0666);
     close(2);
-    dup(newStderr);
-    close(newStdin);
-    close(newStdout);
-    close(newStderr);
+    open(in, O_RDONLY);
+    open(out, O_WRONLY | O_CREAT, 0666);
+    open(err, O_WRONLY | O_CREAT, 0666);
 
     /* Add jobId to environment. */
     addEnv("JOB_ID", jobIdString);
@@ -144,7 +138,7 @@ else
     if (sd > 0)
         {
 	char buf[256];
-	sprintf(buf, "jobDone %s %s %d", managingHost, jobIdString, status);
+	snprintf(buf, sizeof(buf), "jobDone %s %s %d", managingHost, jobIdString, status);
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, buf);
 	close(sd);
@@ -238,7 +232,7 @@ void doRun(char *line)
 /* Execute command. */
 {
 static char *args[1024];
-char *managingHost, *jobIdString, *runJobExtra, *user, *dir, *in, 
+char *managingHost, *jobIdString, *reserved, *user, *dir, *in, 
 	*out, *err, *cmd;
 int argCount;
 if (line == NULL)
@@ -250,7 +244,7 @@ else if (busyProcs < maxProcs)
 
     managingHost = nextWord(&line);
     jobIdString = nextWord(&line);
-    runJobExtra = nextWord(&line);
+    reserved = nextWord(&line);
     user = nextWord(&line);
     dir = nextWord(&line);
     in = nextWord(&line);
@@ -275,7 +269,7 @@ else if (busyProcs < maxProcs)
 	    for (i=0; i<argCount; ++i)
 	        args[i] = subTextString(st, args[i]);
 
-	    execProc(managingHost, jobIdString, runJobExtra,
+	    execProc(managingHost, jobIdString, reserved,
 		user, dir, in, out, err, args[0], args);
 	    }
 	else
@@ -390,17 +384,18 @@ void paraFork()
  * removes dependence of paraNode daemon on terminal. 
  * Set up log file if any here as well. */
 {
+char *log = optionVal("log", NULL);
+
+/* Close standard file handles. */
+close(0);
+if (log == NULL || !sameString(log, "stdout"))
+    close(1);
+close(2);
+
 if (fork() == 0)
     {
     /* Set up log handler. */
-    char *log = optionVal("log", NULL);
     setupDaemonLog(log);
-
-    /* Close standard file handles. */
-    close(0);
-    if (log == NULL || !sameString(log, "stdout"))
-	close(1);
-    close(2);
 
     /* Execute daemon. */
     paraNode();

@@ -274,14 +274,18 @@ void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 {
 struct dyString *dy = newDyString(1024);
 int sd = spokeGetSocket(spoke);
+char *reserved = "0";	/* An extra parameter to fill in some day */
 
 if (sd > 0)
     {
+    char err[512];
+    sprintf(err, "%s/para%d.err", machine->tempDir, job->id);
+    job->err = cloneString(err);
     spoke->machine = cloneString(machine->name);
     dyStringPrintf(dy, "%s %s", machine->name, runCmd);
     dyStringPrintf(dy, " %s", hubHost);
     dyStringPrintf(dy, " %d", job->id);
-    dyStringPrintf(dy, " %d", job->runJobExtra);
+    dyStringPrintf(dy, " %s", reserved);
     dyStringPrintf(dy, " %s", job->user);
     dyStringPrintf(dy, " %s", job->dir);
     dyStringPrintf(dy, " %s", job->in);

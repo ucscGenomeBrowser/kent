@@ -10,6 +10,7 @@
 #include "net.h"
 #include "paraLib.h"
 #include "paraHub.h"
+#include "machSpec.h"
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -111,12 +112,13 @@ while (--count >= 0)
         break;
 }
 
-struct machine *machineNew(char *name)
+struct machine *machineNew(char *name, char *tempDir)
 /* Create a new machine structure. */
 {
 struct machine *mach;
 AllocVar(mach);
 mach->name = cloneString(name);
+mach->tempDir = cloneString(tempDir);
 AllocVar(mach->node);
 mach->node->val = mach;
 return mach;
@@ -130,20 +132,30 @@ if (mach != NULL)
     {
     freeMem(mach->node);
     freeMem(mach->name);
+    freeMem(mach->tempDir);
     freez(pMach);
     }
 }
 
-void addMachine(char *name)
+void doAddMachine(char *name, char *tempDir)
 /* Add machine to pool. */
 {
 struct machine *mach;
-
-name = trimSpaces(name);
-mach = machineNew(name);
+mach = machineNew(name, tempDir);
 dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
-runner(1);
+}
+
+void addMachine(char *line)
+/* Process message to add machine to pool. */
+{
+char *name = nextWord(&line);
+char *tempDir = nextWord(&line);
+if (tempDir != NULL)
+    {
+    doAddMachine(name, tempDir);
+    runner(1);
+    }
 }
 
 struct machine *findMachine(char *name)
@@ -315,6 +327,7 @@ if (job != NULL)
     freeMem(job->in);
     freeMem(job->out);
     freeMem(job->err);
+    freeMem(job->results);
     freez(pJob);
     }
 }
@@ -533,10 +546,10 @@ else
     runner(1);
 }
 
-int runOrAddJob(char *line, boolean runJobExtra)
-/* Do either run or add job. */
+int addJob(char *line)
+/* Add job to queues. */
 {
-char *user, *dir, *in, *out, *err, *command;
+char *user, *dir, *in, *out, *results, *command;
 struct job *job;
 
 if ((user = nextWord(&line)) == NULL)
@@ -547,28 +560,26 @@ if ((in = nextWord(&line)) == NULL)
     return 0;
 if ((out = nextWord(&line)) == NULL)
     return 0;
-if ((err = nextWord(&line)) == NULL)
+if ((results = nextWord(&line)) == NULL)
     return 0;
 if (line == NULL || line[0] == 0)
     return 0;
 command = line;
-job = jobNew(command, user, dir, in, out, err);
+job = jobNew(command, user, dir, in, out, results);
 job->submitTime = time(NULL);
-job->runJobExtra = runJobExtra;
 dlAddTail(pendingJobs, job->node);
-runner(1);
 return job->id;
 }
 
-
-void addJobAcknowledge(char *line, int connectionHandle, boolean runJobExtra)
-/* Add job.  Line format is <user> <dir> <stdin> <stdout> <stderr> <command> 
- * Returns job ID or 0 if a problem.  Send 'ok' or 'err' back to client. */
+void addJobAcknowledge(char *line, int connectionHandle)
+/* Add job.  Line format is <user> <dir> <stdin> <stdout> <results> <command> 
+ * Returns job ID or 0 if a problem.  Send jobId back to client. */
 {
-int id = runOrAddJob(line, runJobExtra);
+int id = addJob(line);
 char jobIdString[16];
 sprintf(jobIdString, "%d", id);
 netSendLongString(connectionHandle, jobIdString);
+runner(1);
 }
 
 void respondToPing(int connectionHandle)
@@ -848,13 +859,14 @@ void startMachines(char *fileName)
 /* If they give us a beginning machine list use it here. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[7];
 while (lineFileRow(lf, row))
     {
-    char *name = row[0];
-    int cpus = lineFileNeedNum(lf, row, 1);
-    while (--cpus >= 0)
-	addMachine(name);
+    struct machSpec ms;
+    int i;
+    machSpecStaticLoad(row, &ms);
+    for (i=0; i<ms.cpus; ++i)
+	doAddMachine(ms.name, ms.tempDir);
     }
 lineFileClose(&lf);
 }
@@ -915,9 +927,7 @@ for (;;)
     else if (sameWord(command, "heartbeat"))
          processHeartbeat();
     else if (sameWord(command, "addJob"))
-         addJobAcknowledge(line, connectionHandle, FALSE);
-    else if (sameWord(command, "runJob"))
-         addJobAcknowledge(line, connectionHandle, TRUE);
+         addJobAcknowledge(line, connectionHandle);
     else if (sameWord(command, "nodeDown"))
          nodeDown(line);
     else if (sameWord(command, "alive"))
