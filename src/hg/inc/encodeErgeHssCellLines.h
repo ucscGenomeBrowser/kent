@@ -67,7 +67,7 @@ void encodeErgeHssCellLinesOutput(struct encodeErgeHssCellLines *el, FILE *f, ch
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct encodeErge *encodeErgeHssCellLinesLoadByQuery(struct sqlConnection *conn, char *query);
+struct encodeErgeHssCellLines *encodeErgeHssCellLinesLoadByQuery(struct sqlConnection *conn, char *query);
 /* Load all encodeErge from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
