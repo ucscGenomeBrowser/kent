@@ -6,7 +6,7 @@ if ($#argv < 3 || $#argv > 4) then
  echo "  optionally compares another field instead of tableName."
  echo "  this will break when hgText is replaced by hgTables."
  echo
- echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
+ echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
  echo ""
  exit 1
 endif
@@ -24,14 +24,14 @@ set allMachines=" hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc "
 set mach1Ok=`echo $allMachines | grep -w "$machine1"`
 if ($status) then
   echo "\n $machine1 is not a valid machine.\n"
-  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
+  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
   exit 1
 endif
 
 set mach2Ok=`echo $allMachines | grep -w "$machine2"`
 if ($status) then
   echo "\n $machine2 is not a valid machine.\n"
-  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)\n"
+  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
   exit 1
 endif
 
@@ -40,7 +40,7 @@ set dbOk=`hgsql -t -e "SHOW databases" | grep " $db " | wc -l`
 if ($dbOk == 0) then
   echo
   echo " $db is not a valid database on hgwdev."
-  echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
+  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
   echo
   exit 1
 endif
@@ -56,7 +56,7 @@ if ($#argv == 4) then
   if ($fieldOk == 0) then
     echo
     echo " $field is not a valid field for $table"
-    echo "    usage: machine1, machine2, database, [field] (defaults to tableName)"
+    echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
     echo
     exit 1
   endif
