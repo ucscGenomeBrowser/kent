@@ -764,7 +764,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
-    $kgDb.blastKGPep00.name minCheck=0.95
+    $kgDb.blastKGPep00.name minCheck=0.90
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
