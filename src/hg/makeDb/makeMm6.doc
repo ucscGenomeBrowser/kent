@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.1 2005/03/09 18:34:21 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.2 2005/03/10 01:16:40 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -30,4 +30,128 @@
 	ftp://ftp-private.ncbi.nih.gov/mouse_34
 #	Downloaded: 1,586,892,564 bytes in 57 files
 #
-#
+#  No chrM or chrMT was delivered.  Pick up NC_005089.1 fasta file
+#	for chrM sequence from NCBI and place in this ncbi download
+#	directory as chrM in both chrfasta and contigfasta
+#	with a fixed up header line to be like all the others:
+#	>lcl|chrM.fa gi|34538597|ref|NC_005089.1| Mus musculus mitochondrion, complete genome
+
+#  Fixup the agp and contig.idmap files to add chrM
+    cd /cluster/data/mm6
+    zcat ncbi/allrefcontig.chr.agp.gz > allrefcontig.chr.agp
+    echo -e "chrM\t1\t16299\t1\tF\tAY172335.1\t1\t16299\t+" >> \
+	allrefcontig.chr.agp
+    gzip allrefcontig.chr.agp
+    zcat ncbi/allcontig.agp.gz > allcontig.agp
+    echo -e "NC_005089\t1\t16299\t1\tF\tAY172335\t\t1\t16299\t+" >> \
+	allcontig.agp
+    gzip allcontig.agp
+    zcat ncbi/seq_contig.md.gz | sed -e "6991i\
+10090\tM\t0\t0\t+\tstart\t-1\tCONTIG\tC57BL/6J\t10\n\
+10090\tM\t1\t16299\t+\tNC_005089\tGI:34538597\tCONTIG\tC57BL/6J\tna\n\
+10090\tM\t16299\t16299\t+\tend\t-2\tCONTIG\tC57BL/6J\t10" > seq_contig.md
+    #	The line number 6991 was found by checking the contents of
+    #	ncbi/seq_contig.md.gz and it was the line starting with:
+    #	10090^IUn|NT_039766^I1^I4412^
+    #	Wanted this chrM information before that line.  I tried to get
+    #	this work with a match and insert, but for some unknown reason
+    #	it would not function:
+    #	sed -e "#NT_039769#i\
+    #		....  this is supposed to work, I don't know why it does not
+    gzip seq_contig.md
+#   summarize sequence counts
+    mkdir faCounts
+    time faCount ncbi/chrfasta/chr*.fa.gz > faCounts/chrfasta.faCount 2>&1 &
+    time faCount ncbi/contigfasta/chr*.fa.gz > \
+	faCounts/contigfasta.faCount 2>&1 &
+    #	about 3 minutes each for the above two faCounts
+    time zcat ncbi/chrfasta/chr*.fa.gz | grep "^>" > \
+	faCounts/chrfasta.headers 2>&1 &
+    time zcat ncbi/contigfasta/chr*.fa.gz | grep "^>" > \
+	faCounts/contigfasta.headers 2>&1 &
+    #	about 2 minutes each for the above two zcat/greps
+
+#  BREAK UP SEQUENCE INTO 5 MB CHUNKS at NON-BRIDGED CONTIGS
+#			(DONE - 2005-03-09 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm6
+    for F in ncbi/chrfasta/chr*.fa.gz
+    do
+	CHR=`basename ${F} | sed -e "s/.fa.gz//; s/chr//"`
+	echo ${CHR} ${F}
+	mkdir -p "${CHR}"
+	zcat allrefcontig.chr.agp.gz | \
+	    perl -we "while(<>){if (/^chr${CHR}\t/) {print;}}" > \
+		${CHR}/chr${CHR}.agp
+	zcat ncbi/chrfasta/chr${CHR}.fa.gz | \
+	    perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' | \
+		splitFaIntoContigs ${CHR}/chr${CHR}.agp \
+		    stdin /cluster/data/mm6 -nSize=5000000
+    done
+    #	The above loop takes about 5 minutes
+
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2005-03-09 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/mm6/jkStuff
+    mkdir /cluster/data/mm6/Un
+    cd /cluster/data/mm6
+    cp -p /cluster/data/mm5/jkStuff/ncbiFixAgp ./jkStuff
+    zcat allrefcontig.chr.agp.gz | ./jkStuff/ncbiFixAgp /dev/stdin | gzip > \
+	allrefcontig.chr.ordered.agp.gz
+    sed -e "s/buildNum = 33/buildNum = 34/" \
+	/cluster/data/mm5/jkStuff/ncbiToRandomAgps > \
+	    jkStuff/ncbiToRandomAgps
+    chmod +x jkStuff/ncbiToRandomAgps
+    gunzip seq_contig.md.gz allrefcontig.chr.ordered.agp.gz
+    ./jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
+                        ncbi/contig.idmap .
+    #  The chrUn_random.agp created by this is too large with the 5000
+    #  gaps.  it will work with 1000 gaps, so fixup the chrUn_random
+    #  agp:
+    ./jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
+	seq_contig.md allrefcontig.chr.ordered.agp ncbi/contig.idmap .
+    for C in ? ??
+    do
+	if [ -s ${C}/chr${C}_random.ctg.agp ]; then
+	    echo "building ${C}/chr${C}_random.fa"
+	    rm -f ./tmp.fa
+	    zcat ncbi/contigfasta/chr${C}.fa.gz | \
+		perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' > ./tmp.fa
+	    $HOME/bin/i386/agpToFa -simpleMulti \
+		${C}/chr${C}_random.ctg.agp chr${C}_random \
+		    ${C}/chr${C}_random.fa ./tmp.fa
+	    rm -f ./tmp.fa
+	fi
+    done > agpToFa.out 2>&1
+    #	got a segfault on chrY_random.fa
+    #	There is some kind of problem with the coordinates in the
+    #	seq_contig.md and contig.idmap files
+XXXXX - awaiting answer from Deanna - 2005-03-09 17:16
+    # Clean these up to avoid confusion later... they're easily rebuilt
+    #   with the ncbiToRandomAgps script above
+    rm ?/*_random.ctg.agp ??/*_random.ctg.agp
+    gzip seq_contig.md allrefcontig.chr.ordered.agp
+
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
+#					(DONE 2005-03-09 - Hiram)
+    ssh kksilo
+    cd /cluster/data/mm6
+    for C in ? ??
+    for C in Y
+    do
+	if [ -s ${C}/chr${C}_random.ctg.agp ]; then
+	    splitFaIntoContigs ${C}/chr${C}_random.agp \
+		${C}/chr${C}_random.fa . -nSize=5000000
+	    mkdir -p ${C}/lift
+	    mv ${C}_random/lift/oOut.lst ${C}/lift/rOut.lst
+	    mv ${C}_random/lift/ordered.lft ${C}/lift/random.lft
+	    mv ${C}_random/lift/ordered.lst ${C}/lift/random.lst
+	    rmdir ${C}_random/lift
+	    rm ${C}_random/chr${C}_random.agp ${C}_random/chr${C}_random.fa
+	    mv ${C}_random/chr${C}_random_* $C
+	    rmdir ${C}_random
+	fi
+    done
+    #  This has a lot of output.  It is difficult to see if anything
+    #   goes wrong.
+
