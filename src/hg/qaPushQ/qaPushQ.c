@@ -22,15 +22,13 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.13 2004/05/10 21:57:50 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.14 2004/05/11 18:08:52 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
 
 #define BUFMAX 65536
 char html[BUFMAX];
-
-#define LOCKFILE "../trash/qaPushQ.lock"
 
 char *database = NULL;
 char *host     = NULL;
@@ -221,44 +219,52 @@ else
 
 
 
-char * errno_string(int e)
-/* convert errno to string */
+void cleanUp();  /* needed for forward reference */
+
+void doMsg()
+/* callable from htmShell */
 {
-switch (e)
-    {
-    case EPERM    : return "Not owner";
-    case ENOENT   : return "No such file or directory";
-    case ESRCH    : return "No such process";
-    case ENXIO    : return "No such device or address";
-    case ENOEXEC  : return "Exec format error";
-    case EBADF    : return "Bad file number";
-    case ECHILD   : return "No children";
-    case ENOMEM   : return "Not enough core";
-    case EACCES   : return "Permission denied";
-    case EFAULT   : return "Bad address";
-    case ENOTBLK  : return "Block device required";
-    case EBUSY    : return "Mount device busy";
-    case EEXIST   : return "File exists";
-    case EXDEV    : return "Cross-device link";
-    case ENODEV   : return "No such device";
-    case ENOTDIR  : return "Not a directory";
-    case EISDIR   : return "Is a directory";
-    case EINVAL   : return "Invalid argument";
-    case ENFILE   : return "File table overflow";
-    case EMFILE   : return "Too many open files";
-    case ENOTTY   : return "Not a typewriter";
-    case ETXTBSY  : return "Text file busy";
-    case EFBIG    : return "File too large";
-    case ENOSPC   : return "No space left on device";
-    case ESPIPE   : return "Illegal seek";
-    case EROFS    : return "Read-only file system";
-    case EMLINK   : return "Too many links";
-    case EPIPE    : return "Broken pipe";
-    case ELOOP    : return "Too many levels of symbolic links";
-    case ENAMETOOLONG: return "File name too long";
-    }
+printf("%s",msg);
+cleanUp();
 }
 
+
+bool mySqlGetLock(char *name)
+/* Sets an advisory lock on the process for 10 seconds.
+ *  note: mysql returns 1 if successful,
+ *   0 if name already locked or NULL if error occurred 
+ *   blocks another client from obtaining a lock with the same name */
+{
+char query[256];
+struct sqlResult *rs;
+char **row = NULL;
+bool result = FALSE;
+
+safef(query, sizeof(query), "select get_lock('%s', 10)", name);
+rs = sqlGetResult(conn, query);
+row=sqlNextRow(rs);
+if (row[0] == NULL)
+    {
+    safef(msg, sizeof(msg), "Attempt to GET_LOCK of %s caused an error\n",name);
+    htmShell(TITLE, doMsg, NULL);
+    exit(0);
+    }
+if (sameWord(row[0], "1"))
+    result = TRUE;
+else if (sameWord(row[0], "0"))
+    result = FALSE;
+sqlFreeResult(&rs);
+return result;
+}
+
+void mySqlReleaseLock(char *name)
+/* Releases an advisory lock created by GET_LOCK in mySqlGetLock */
+{
+char query[256];
+safef(query, sizeof(query), "select release_lock('%s')", name);
+sqlUpdate(conn, query);
+}
+                                                                                
 
 
 void setLock()
@@ -267,42 +273,27 @@ void setLock()
 
 /* creat may be set to fail if the file exists, allowing a simple lock mechanism */
 int retries = 0;
-int fd = 0;
 
 /* note: only retry 2 times with sleep 5 secs between, then assume failure and push ahead */
 while (retries < 2)
     {
-    fd = open( LOCKFILE, O_CREAT|O_WRONLY|O_TRUNC|O_EXCL, 0660);
-
-    /* 
-    if (fd < 0) 
+    if (mySqlGetLock("qapushq"))    /* just an advisory semaphore, really */
 	{
-	safef(msg, sizeof(msg),
-	    "error creating lockfile, fd==%d, errno=%d, err_string=%s",
-	    fd, errno, errno_string (errno));
-	    htmShell(TITLE, doMsg, NULL);
 	return;
 	}
-    */
     
-    if (fd >= 0) 
-	{
-	close(fd);
-	return;
-	}
     sleep(5);
     retries++;
     }
 }
 
 void releaseLock()
-/* release the simple lock */
+/* release the advisory lock */
 {
-unlink(LOCKFILE);
+mySqlReleaseLock("qapushq");
 }
 
 
-void cleanUp();  /* needed for forward reference */
 
 enum colEnum mapFieldToEnum(char *f)
 {
@@ -333,14 +324,6 @@ safef(s,ssize,"%s",temp);
 freez(&temp);
 }
 
-
-
-void doMsg()
-/* callable from htmShell */
-{
-printf("%s",msg);
-cleanUp();
-}
 
 
 
@@ -1044,11 +1027,6 @@ dyStringPrintf(update,
 	qid
 	);
 
-//debug
-//safef(msg, sizeof(msg), update->string);
-//htmShell(TITLE, doMsg, NULL);
-//exit(0);
-
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&qid);
@@ -1239,11 +1217,6 @@ safef(q.extSource , sizeof(q.extSource ), cgiString("extSource" ));
 
 q.openIssues = cgiString("openIssues");
 q.notes      = cgiString("notes"     );
-
-/*
-safef(q.reqdate   , sizeof(q.reqdate   ), cgiString("reqdate"   ));
-safef(q.pushedYN  , sizeof(q.pushedYN  ), cgiString("pushedYN"  ));
-*/
 
 /* debug!
 safef(msg, sizeof(msg), "Got to past loading q.qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
@@ -1800,6 +1773,8 @@ for (c=0; c<MAXCOLS; c++)
 	}
     }
 
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a><br>"); 
 cleanUp();
 }
 
@@ -1883,8 +1858,8 @@ void cleanUp()
 /* save anything needing it, release resources */
 {
 saveMyUser();
-sqlDisconnect(&conn);
 releaseLock();
+sqlDisconnect(&conn);
 }
 
 
@@ -2102,6 +2077,7 @@ char tbl[256] = "";
 char  db[256] = "";
 unsigned long size = 0;
 long long totalsize = 0;
+unsigned long sizeMB = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
@@ -2299,12 +2275,17 @@ mySprintWithCommas(nicenumber, sizeof(nicenumber), totalsize);
 printf(" Total size of all: %s <br>\n",nicenumber);
 
 printf(" <br>\n");
-sprintLongWithCommas(nicenumber, totalsize / (1024 * 1024) );
+sizeMB = totalsize / (1024 * 1024);
+if ((sizeMB == 0) && (totalsize > 0))
+    {
+    sizeMB = 1;
+    }
+sprintLongWithCommas(nicenumber, sizeMB );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%d\">"
-       "Set Size as %s MB</a> <br>\n",newQid,(int)(totalsize/(1024*1024)),nicenumber);
+       "Set Size as %s MB</a> <br>\n",newQid,sizeMB,nicenumber);
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",newQid);
 cleanUp();
 }
@@ -2440,19 +2421,17 @@ user     = cfgOption("pq.user"    );
 password = cfgOption("pq.password");
 
 
-setLock();
-
 /* debug 
 safef(msg,sizeof(msg),"db='%s', host='%s', user='%s', password='%s' <br>\n",database,host,user,password);
 htmShell("Push Queue debug", doMsg, NULL);
-return 0;
+exit(0);
 */
 
 conn = sqlConnectRemote(host, user, password, database);
 
+setLock();
 
 qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
-
 
 action = cgiUsualString("action","display");  /* get action, defaults to display of push queue */
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
