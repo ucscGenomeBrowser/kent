@@ -258,7 +258,7 @@ struct dyString *cmd = newDyString(256);
 int machineCount;
 int machinesFinished = 0;
 char *thisHost = getenv("HOST");
-long size;
+off_t size;
 int goodMachines;
 double grandTotal;
 
