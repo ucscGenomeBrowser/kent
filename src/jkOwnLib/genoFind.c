@@ -16,7 +16,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.11 2004/02/25 05:42:02 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.12 2004/02/25 08:48:34 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -492,6 +492,14 @@ for (i=0; i<tileSpaceSize; ++i)
     }
 }
 
+long long maxTotalBases()
+/* Return maximum bases we can index. */
+{
+long long maxBases = 1024*1024;
+maxBases *= 4*1024;
+return maxBases;
+}
+
 struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
 	boolean allowOneMismatch)
@@ -509,12 +517,10 @@ int i;
 bits32 offset = 0, nibSize;
 char *fileName;
 struct gfSeqSource *ss;
-long long totalBases = 0, warnAt;
+long long totalBases = 0, warnAt = maxTotalBases();
 int totalSeq = 0;
 
 /* Warn if they exceed 4 gig. */
-warnAt = 1024*1024;
-warnAt *= 4*1024;	
 if (allowOneMismatch)
     errAbort("Don't currently support allowOneMismatch in gfIndexNibsAndTwoBits");
 for (i=0; i<fileCount; ++i)
@@ -533,7 +539,7 @@ for (i=0; i<fileCount; ++i)
 	totalSeq += 1;
 	}
     else
-        errAbort("Unrecognized file %s", fileName);
+        errAbort("Unrecognized file type %s", fileName);
     if (totalBases >= warnAt)
 	errAbort("Exceeding 4 billion bases, sorry gfServer can't handle that.");
     }
@@ -624,9 +630,76 @@ else
 return seq;
 }
 
-void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3], int fileCount, char *fileNames[], 
+struct dnaSeq *readMaskedTwoBit(struct twoBitFile *tbf, char *seqName,
+	boolean mask)
+/* Read seq from twoBitFile, optionally turning masked bits to N's. 
+ * Result is lower case where not masked. */
+{
+struct dnaSeq *seq;
+if (mask)
+    {
+    seq = twoBitReadSeqFrag(tbf, seqName, 0, 0);
+    toggleCase(seq->dna, seq->size);
+    upperToN(seq->dna, seq->size);
+    }
+else
+    seq = twoBitReadSeqFragLower(tbf, seqName, 0, 0);
+return seq;
+}
+
+
+static void transCountBothStrands(struct dnaSeq *seq, 
+    struct genoFind *transGf[2][3])
+/* Count (unmasked) tiles in both strand of sequence. 
+ * As a side effect this will reverse-complement seq. */
+{
+int isRc, frame;
+struct trans3 *t3;
+for (isRc=0; isRc <= 1; ++isRc)
+    {
+    if (isRc)
+	reverseComplement(seq->dna, seq->size);
+    t3 = trans3New(seq);
+    for (frame = 0; frame < 3; ++frame)
+	gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
+    trans3Free(&t3);
+    }
+}
+
+static void transIndexBothStrands(struct dnaSeq *seq, 
+    struct genoFind *transGf[2][3], bits32 offset[2][3],
+    struct gfSeqSource *ss, char *fileName)
+/* Add unmasked tiles on both strands of sequence to
+ * index.  As a side effect this will reverse-complement seq. */
+{
+int isRc, frame;
+struct trans3 *t3;
+for (isRc=0; isRc <= 1; ++isRc)
+    {
+    if (isRc)
+	{
+	reverseComplement(seq->dna, seq->size);
+	printf("Reverse complemented\n");
+	}
+    t3 = trans3New(seq);
+    for (frame = 0; frame < 3; ++frame)
+	{
+	struct genoFind *gf = transGf[isRc][frame];
+	gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
+	printf("Added frame %d\n", frame);
+	ss->fileName = fileName;
+	ss->start = offset[isRc][frame];
+	offset[isRc][frame] += t3->trans[frame]->size;
+	ss->end = offset[isRc][frame];
+	}
+    trans3Free(&t3);
+    }
+}
+
+void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3], 
+    int fileCount, char *fileNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch, boolean maskNib)
+    boolean allowOneMismatch, boolean doMask)
 /* Make translated (6 frame) index for all .nib and .2bit files. */
 {
 FILE *f = NULL;
@@ -637,7 +710,8 @@ bits32 offset[2][3];
 char *fileName;
 struct gfSeqSource *ss;
 struct dnaSeq *seq;
-struct trans3 *t3;
+int sourceCount = 0;
+long long totalBases = 0, warnAt = maxTotalBases();
 
 if (allowOneMismatch)
     errAbort("Don't currently support allowOneMismatch in gfIndexTransNibsAndTwoBits");
@@ -646,7 +720,8 @@ for (isRc=0; isRc <= 1; ++isRc)
     {
     for (frame = 0; frame < 3; ++frame)
 	{
-	transGf[isRc][frame] = gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile, TRUE, allowOneMismatch);
+	transGf[isRc][frame] = gf = gfNewEmpty(minMatch, maxGap, 
+		tileSize, maxPat, oocFile, TRUE, allowOneMismatch);
 	}
     }
 
@@ -654,28 +729,38 @@ for (isRc=0; isRc <= 1; ++isRc)
 for (isRc = 0; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	maskSimplePepRepeat(transGf[isRc][frame]);
-/* Scan through nib files once counting tiles. */
+
+/* Scan through .nib and .2bit files once counting tiles. */
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
-    seq = readMaskedNib(fileName, maskNib);
-    printf("Loaded %s\n", fileName);
-    for (isRc=0; isRc <= 1; ++isRc)
+    printf("Counting %s\n", fileName);
+    if (nibIsFile(fileName))
 	{
-	if (isRc)
-	    {
-	    reverseComplement(seq->dna, seq->size);
-	    printf("Reverse complemented\n %s", fileName);
-	    }
-	t3 = trans3New(seq);
-	for (frame = 0; frame < 3; ++frame)
-	    {
-	    gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
-	    printf("Counted frame %d\n", frame);
-	    }
-	trans3Free(&t3);
+	seq = readMaskedNib(fileName, doMask);
+	transCountBothStrands(seq, transGf);
+	sourceCount += 1;
+	totalBases += seq->size;
+	freeDnaSeq(&seq);
 	}
-    freeDnaSeq(&seq);
+    else if (twoBitIsFile(fileName))
+        {
+	struct twoBitFile *tbf = twoBitOpen(fileName);
+	struct twoBitIndex *index;
+	for (index = tbf->indexList; index != NULL; index = index->next)
+	    {
+	    seq = readMaskedTwoBit(tbf, index->name, doMask);
+	    transCountBothStrands(seq, transGf);
+	    sourceCount += 1;
+	    totalBases += seq->size;
+	    freeDnaSeq(&seq);
+	    }
+	twoBitClose(&tbf);
+	}
+    else 
+	errAbort("Unrecognized file type %s", fileName);
+    if (totalBases >= warnAt)
+	errAbort("Exceeding 4 billion bases, sorry gfServer can't handle that.");
     }
 
 /* Get space for entries in indexed of all reading frames. */
@@ -686,40 +771,38 @@ for (isRc=0; isRc <= 1; ++isRc)
 	gf = transGf[isRc][frame];
 	gfAllocLists(gf);
 	gfZeroNonOverused(gf);
-	AllocArray(gf->sources, fileCount);
-	gf->sourceCount = fileCount;
+	AllocArray(gf->sources, sourceCount);
+	gf->sourceCount = sourceCount;
 	offset[isRc][frame] = 0;
 	}
     }
 
 /* Scan through nibs a second time building index. */
+ss = gf->sources;
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
-    seq = readMaskedNib(fileName, maskNib);
-    printf("Loaded %s\n", fileName);
-    for (isRc=0; isRc <= 1; ++isRc)
+    printf("Indexing %s\n", fileName);
+    if (nibIsFile(fileName))
 	{
-	if (isRc)
-	    {
-	    reverseComplement(seq->dna, seq->size);
-	    printf("Reverse complemented\n %s", fileName);
-	    }
-	t3 = trans3New(seq);
-	for (frame = 0; frame < 3; ++frame)
-	    {
-	    gf = transGf[isRc][frame];
-	    gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
-	    printf("Added frame %d\n", frame);
-	    ss = gf->sources+i;
-	    ss->fileName = fileName;
-	    ss->start = offset[isRc][frame];
-	    offset[isRc][frame] += t3->trans[frame]->size;
-	    ss->end = offset[isRc][frame];
-	    }
-	trans3Free(&t3);
+	seq = readMaskedNib(fileName, doMask);
+	transIndexBothStrands(seq, transGf, offset, ss, fileName);
+	ss += 1;
+	freeDnaSeq(&seq);
 	}
-    freeDnaSeq(&seq);
+    else	/* .2bit file */
+        {
+	struct twoBitFile *tbf = twoBitOpen(fileName);
+	struct twoBitIndex *index;
+	for (index = tbf->indexList; index != NULL; index = index->next)
+	    {
+	    seq = readMaskedTwoBit(tbf, index->name, doMask);
+	    transIndexBothStrands(seq, transGf, offset, ss, fileName);
+	    ss += 1;
+	    freeDnaSeq(&seq);
+	    }
+	twoBitClose(&tbf);
+	}
     }
 
 printf("Done adding\n");
@@ -1846,6 +1929,12 @@ for (i=0; i<fileCount; ++i)
     if (nibIsFile(inName))
         {
 	seqList = nibLoadAll(inName);
+	}
+    else if (twoBitIsFile(inName))
+        {
+	seqList = twoBitLoadAll(inName);
+	for (seq = seqList; seq != NULL; seq = seq->next)
+	    toLowerN(seq->dna, seq->size);
 	}
     else
         {
