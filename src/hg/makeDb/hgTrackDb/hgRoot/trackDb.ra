@@ -251,6 +251,7 @@ shortLabel UCSC Mouse Syn.
 longLabel Mouse Synteny using Fgenesh++ Gene Predictions
 priority 4.1
 visibility hide
+spectrum on
 color 0,100,0
 type bed 5+
 
