@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.521 2003/05/22 21:11:49 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.522 2003/05/25 19:43:29 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -8644,7 +8644,7 @@ pixWidth = tl.picWidth;
 pixHeight = gfxBorder;
 if (withRuler)
     {
-    if (zoomedToBaseLevel);
+    if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
     yAfterRuler += basePositionHeight;
     pixHeight += basePositionHeight;
