@@ -49,8 +49,10 @@
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
+#include "lfs.h"
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
+#define FUREY_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -2637,6 +2639,104 @@ puts("<P>This track shows locations of Single Nucleotide Polymorphisms. "
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+#ifdef FUREY_CODE
+
+void printOtherLFS(char *clone, char *table, int start, int end)
+/* Print out the other locations of this clone */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct lfs *lfs;
+
+printf("<H4>Other locations found for %s in the genome:</H4>\n", clone);
+printf("<TABLE>\n");
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                AND (chrom != '%s'
+                OR chromStart != %d OR chromEnd != %d)",
+	table, clone, seqName, start, end); 
+sr = sqlGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+      lfs = lfsLoad(row+1);
+      printf("<TR><TD>%s:</TD><TD>%d</TD><TD>-</TD><TD>%d</TD></TR>\n",
+	     lfs->chrom, lfs->chromStart, lfs->chromEnd);
+      lfsFree(&lfs);
+    }
+printf("</TABLE>\n"); 
+sqlFreeResult(&sr);
+hgFreeConn(&conn);
+}
+
+void doLinkedFeaturesSeries(char *track, char *clone)
+/* Create detail page for linked features series tracks */ 
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char *type = NULL, *lfLabel = NULL;
+char *table = NULL, *pslTable;
+int start = cgiInt("o");
+int end = cgiInt("t");
+struct lfs *lfs, *lfsList = NULL;
+struct psl *pslList = NULL, *psl;
+
+
+/* Determine type */
+if (sameString("bacEndPairs", track)) 
+    {
+    type = "BAC End Pairs";
+    pslTable = "bacends";
+    lfLabel = "BAC ends";
+    table = track;
+    }
+
+/* Print out non-sequence info */
+hgcStart(clone);
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        table, clone, seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    lfs = lfsLoad(row+1);
+    printf("<H2>%s - %s\n", type, clone);
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
+    printf("</TABLE>\n");
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+    if (lfs->score == 1000)
+        {
+	printf("<H4>This is the only location found for %s</H4>\n",clone);
+	}
+    else
+        {
+	printOtherLFS(clone, table, start, end);
+	}
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+    printf("<H4>Genome alignments of %s:</H4>\n", lfLabel);
+    }
+else
+    {
+    warn("Couldn't find %s in %s table", clone, table);
+    }
+sqlFreeResult(&sr);
+
+
+hgFreeConn(&conn);
+} 
+#endif /* FUREY_CODE */
+
+
 #ifdef ROGIC_CODE
 
 void doMgcMrna(char *track, char *acc)
@@ -3395,6 +3495,12 @@ else if (sameWord(track, "uniGene"))
      doMgcMrna(track, item);
    }
 #endif /*ROGIC_CODE*/
+#ifdef FUREY_CODE
+ else if (sameWord(track, "bacEndPairs"))
+   {
+     doLinkedFeaturesSeries(track, item);
+   }
+#endif /*FUREY_CODE*/
 else if (sameWord(track, "htcCloneSeq"))
     {
     htcCloneSeq(item);
