@@ -140,7 +140,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 /* Make sure this is sorted if in full mode. */
-if (tg->visibility == tvFull && limitVisibility(tg) == tvFull)
+if (tg->visibility != tvDense)
     slSort(&list, linkedFeaturesCmpStart);
 else
     slReverse(&list);
