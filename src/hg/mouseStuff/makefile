@@ -27,6 +27,7 @@ DIRS = \
 	axtPretty \
 	axtQueryCount \
 	axtRecipBest \
+	axtRescore \
 	axtSort \
 	axtSplitByTarget \
 	axtSwap \
