@@ -1,0 +1,257 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+                                                                                
+# Danio Rerio (zebrafish) from Sanger, version Zv4 (released 6/30/04)
+#  Project website:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#  Assembly notes:
+#    http://www.sanger.ac.uk/Projects/D_rerio/Zv4_assembly_information.shtml
+
+# DOWNLOAD SEQUENCE (DONE, 2004-10-18, hartera)
+     ssh kksilo
+     mkdir /cluster/store8/danRer2
+     ln -s /cluster/store8/danRer2 /cluster/data
+     cd /cluster/data/danRer2
+     wget --timestamp \
+       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/README
+     wget --timestamp \
+       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/stats
+     wget --timestamp \
+       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/Zv4.chunks.agp
+     wget --timestamp \
+       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/Zv4.scaffolds.agp
+     wget --timestamp \
+       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/Zv4.fasta
+
+# DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-10-18, hartera)
+     mkdir -p /cluster/data/danRer2/M
+     cd /cluster/data/danRer2/M
+     # go to http://www.ncbi.nih.gov/ and search Nucleotide for
+     # "Danio mitochondrion genome".  That shows the gi number:
+     # 8576324 for the accession, AC024175
+ # Use that number in the entrez linking interface to get fasta:
+     wget -O chrM.fa \
+      'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=8576324&dopt=FASTA'
+     # Edit chrM.fa: make sure the header line says it is the
+     # Danio Rerio mitochondrion complete genome, and then replace the
+     # header line with just ">chrM".
+     perl -pi.bak -e 's/>.+/>chrM/' chrM.fa
+     rm *.bak                                                         
+     # Make a "pseudo-contig" for processing chrM too:
+     mkdir ./chrM_1
+     sed -e 's/chrM/chrM_1/' ./chrM.fa > ./chrM_1/chrM_1.fa
+     mkdir ./lift
+     echo "chrM_1/chrM_1.fa.out" > ./lift/oOut.lst
+     echo "chrM_1" > ./lift/ordered.lst
+     echo "0     M/chrM_1        16596   chrM    16596" > ./lift/ordered.lft
+# create a .agp file for chrM as hgGoldGapGl and other
+# programs require a .agp file so create chrM.agp
+    cat << '_EOF_' > ./chrM.agp
+chrM       1       16596   1       F       AC024175.3      1       16596   +
+'_EOF_'
+
+# Create list of chromsosomes (DONE, 2004-10-18, hartera)
+# Add "M" for mitochondrion chromosome (2004-10-25, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer2
+     awk '{print $1;}' Zv4.scaffolds.agp | sort -n | uniq > chrom.lst
+     # add NA - these are contigs in the chunks agp
+     echo "NA" >> chrom.lst
+     # add chrM
+     echo "M" >> chrom.lst
+
+# SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-10-19, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer2
+     # There are 2 .agp files: one for scaffolds (supercontigs on danRer1) and 
+     # then one for chunks (contigs on danRer1) showing how they map on to 
+     # scaffolds.
+     # add "chr" prefix for the agp files
+     perl -pi -e 's/^([0-9]+)/chr$1/' ./*.agp
+     # for chromosomes:
+     foreach c (`cat chrom.lst`)
+       mkdir $c
+       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+         ./Zv4.chunks.agp \
+         > $c/chr$c.chunks.agp
+       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+         ./Zv4.scaffolds.agp \
+         > $c/chr$c.scaffolds.agp
+     end
+
+# CREATE AGP AND FASTA FOR chrNA (DONE, 2004-10-25, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer2
+     # for NA make agp files
+     grep "Zv4_NA" Zv4.chunks.agp > NA.chunks.agp
+     # make a scaffolds agp for NA - use first 9 fields of chunks file
+     # and remove ".1" from 6th field
+     awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $4, $5, $6, $7, $8, $9}' \
+         NA.chunks.agp | perl -pi.bak -e 's/(Zv4_NA[0-9]+)\.1+/$1/' \
+         > NA.scaffolds.agp 
+     # move agps to NA directory created above
+     mv NA.scaffolds.agp NA.chunks.agp ./NA
+     # from scaffolds agp, get name of scaffolds to get from FASTA file for NA
+     foreach c (NA)
+       awk '{print $1;}' $c/$c.scaffolds.agp > $c/chr$c.scaffolds.lst
+       $HOME/bin/i386/faSomeRecords /cluster/data/danRer2/Zv4.fasta \
+          $c/chr$c.scaffolds.lst $c/chr$c.fa
+     end
+     # create agp with 1000Ns between scaffolds as contig gaps for chrNA
+     foreach c (NA)
+        $HOME/bin/i386/scaffoldFaToAgp $c/chr$c.fa
+        mv $c/chr$c.fa $c/chr$c.scaffolds.fa
+        perl -pi -e "s/chrUn/chr$c/" $c/chr$c.*
+     end 
+     # change the type to "W" in the agp for WGS
+     perl -pi.bak -e "s/D/W/;" NA/chrNA.agp
+     mv chrNA.agp chrNA.scaffolds.agp
+     rm *.bak
+     # use this chrNA.scaffolds.agp to create chrNA.chunks.agp
+cat << '_EOF_' > createChunksAgp.pl
+#!/usr/bin/perl -w
+use strict;
+
+# input is chrN.scaffolds.agp with Ns.
+                                                                                
+my $scaf = $ARGV[0];
+open (SCAFS, $scaf) || die "Can not open $scaf: $!";
+                                                                                
+my $s;
+while (my $line = <SCAFS>) {
+   chomp $line;
+   my @f = split(/\t/, $line);
+   if ($f[4] ne "N") {
+      $line =~ s/(Zv4_NA[0-9]+)/$1\.1/;
+      print $line;
+      print "\t$f[5]\t$f[6]\t$f[7]";
+   }
+   else {
+      print $line;
+   }
+   print "\n";
+}
+
+   chmod +x createChunksAgp.pl
+   perl createChunksAgp.pl chrNA.scaffolds.agp > chrNA.chunks.agp
+
+# BUILD CHROM-LEVEL SEQUENCE (DONE, 2004-10-21, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer2
+     # Sequence is already in upper case so no need to change
+     foreach c (`cat chrom.lst`)
+       echo "Processing ${c}"
+       $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.scaffolds.agp $c \
+         $c/chr$c.fa ./Zv4.fasta
+       echo "${c} - DONE"
+     end
+     # some Ns in sequence files are in lower case so change to upper case
+     foreach c (`cat chrom.lst`) 
+        cat $c/chr${c}.fa | tr 'n' 'N' > $c/chr${c}.fa.tr
+        cp $c/chr${c}.fa.tr $c/chr${c}.fa
+     end
+     # check files and them remove chrN.fa.tr files 
+     foreach c (`cat chrom.lst`)
+        rm $c/chr${c}.fa.tr
+     end
+
+# CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2004-10-21, hartera)
+     # Check that the size of each chromosome .fa file is equal to the
+     # last coord of the .agp:
+     ssh hgwdev
+     cd /cluster/data/danRer2
+     foreach c (`cat chrom.lst`)
+       foreach f ( $c/chr$c.scaffolds.agp )
+         set agpLen = `tail -1 $f | awk '{print $3;}'`
+         set h = $f:r
+         set g = $h:r
+         echo "Getting size of $g.fa"
+         set faLen = `faSize $g.fa | awk '{print $1;}'`
+         if ($agpLen == $faLen) then
+           echo "   OK: $f length = $g length = $faLen"
+         else
+           echo "ERROR:  $f length = $agpLen, but $g length = $faLen"
+         endif
+       end
+     end
+     # all are the OK so FASTA files are the expected size
+
+# BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
+# (DONE, 2004-10-25, hartera)
+                                                                                
+     ssh kksilo
+     cd /cluster/data/danRer2
+     foreach c (`cat chrom.lst`)
+       foreach agp ($c/chr$c.{,chunks.}agp)
+         if (-e $agp) then
+           set fa = $c/chr$c.fa
+           echo splitting $agp and $fa
+           cp -p $agp $agp.bak
+           cp -p $fa $fa.bak
+           splitFaIntoContigs $agp $fa . -nSize=5000000
+         endif
+       end
+     end
+
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2004-10-25, hartera)
+    # This used to hold scripts -- better to keep them inline here
+    # Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
+    mkdir /cluster/data/danRer2/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/danRer2/bed
+
+# CREATING DATABASE (DONE, 2004-10-25, hartera)
+    # Create the database.
+    # next machine
+    ssh hgwdev
+    echo 'create database danRer2' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+    echo 'drop database danRer2' | hgsql danRer2
+    # Use df to make sure there is at least 10 gig free on
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  637G 1023G  39% /var/lib/mysql
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2004-10-25, hartera)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #  grp in the database danRer1 to the new database danRer2
+    echo "create table grp (PRIMARY KEY(NAME)) select * from danRer1.grp" \
+      | hgsql danRer2
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+    echo 'drop table grp;' | hgsql danRer2
+
+# REPEAT MASKING - Run RepeatMasker on chroms (in progress, 2004-10-25, hartera)
+#- Split contigs into 500kb chunks, at gaps if possible:
+# There is a new Repeat library at WUSTL that has new repeats for Danio rerio
+# This is Dr.repeats.020501
+# Add a README about these repeats
+    ssh kksilo
+    cd /cluster/data/danRer2
+    wget --timestamp \
+         http://www.genetics.wustl.edu/fish_lab/repeats/Dr.repeats.020501
+    mv Dr.repeats.020501 /cluster/bluearc/RepeatMasker/Libraries/danioRW.lib
+    # add danioRW.lib to danio.lib
+    cd /cluster/bluearc/RepeatMasker/Libraries
+    cp danio.lib danioRMandRW.lib
+    cat danioRW.lib >> danioRMandRW.lib
+    # add type as "unknown" to this file as these repeats are not classified
+    perl -pi.bak -e 's/^(>Dr[0-9]+)/$1#Unknown/' danioRMandRW.lib
+    # Add a README about these repeats from WUSTL
+    wget --timestamp \
+          http://www.genetics.wustl.edu/fish_lab/repeats/Readme.txt
+
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        ~/bin/i386/faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
+    end
+
