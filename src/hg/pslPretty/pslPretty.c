@@ -545,13 +545,16 @@ if (qName == NULL || !sameString(qName, psl->qName))
     if (qIsNib && psl->strand[0] == '-')
 	    qOffset = psl->qSize - psl->qEnd;
     }
-freeDnaSeq(&tSeq);
-freez(&tName);
-tName = cloneString(psl->tName);
-readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
-    tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
+    {
+    freeDnaSeq(&tSeq);
+    freez(&tName);
+    tName = cloneString(psl->tName);
+    readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
+	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+    }
 if (tIsNib && psl->strand[1] == '-')
-	tOffset = psl->tSize - psl->tEnd;
+    tOffset = psl->tSize - psl->tEnd;
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
@@ -595,7 +598,7 @@ if (checkFile != NULL)
     }
 if (psl->strand[0] == '-' && !qIsNib)
     reverseComplement(qSeq->dna, qSeq->size);
-if (psl->strand[1] == '-')
+if (psl->strand[1] == '-' && !tIsNib)
     reverseComplement(tSeq->dna, tSeq->size);
 
 if(q->stringSize != t->stringSize)
@@ -611,6 +614,8 @@ dyStringFree(&q);
 dyStringFree(&t);
 if (qIsNib)
     freez(&qName);
+if (tIsNib)
+    freez(&tName);
 }
 
 void pslPretty(char *pslName, char *targetList, char *queryList, 
