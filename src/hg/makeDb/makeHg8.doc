@@ -543,12 +543,14 @@ o - Load Ensembl peptides:
      hgPepPred hg8 generic ensPep ensembl.pep
 
 o - Load Sanger22 genes:
-      cd ~/oo/bed
-      mkdir sanger22
-      cd sanger22
-      # not sure where these came from...
-      sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
+      - cd ~/oo/bed
+      - mkdir sanger22
+      - cd sanger22
+      - not sure where these files were downloaded from
+      - sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
         | ldHgGene hg8 sanger22 stdin
+      - sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
+        | ldHgGene hg8 sanger22pseudo stdin
 
 o - Load rnaGene table
       - login to cc94
