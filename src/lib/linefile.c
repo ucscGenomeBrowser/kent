@@ -133,7 +133,23 @@ while (!gotLf)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
     readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
-    if (readSize <= 0)
+    if ((readSize == 0) && (endIx > oldEnd))
+	{
+	/* If there is no newline at end of file, we will end up here. */
+	endIx++;
+	if (lf->zTerm)
+	    {
+	    buf[endIx-1] = 0;
+	    }
+	lf->lineStart = newStart = lf->lineEnd;
+	lf->lineEnd = endIx;
+	++lf->lineIx;
+	if (retSize != NULL)
+	    *retSize = endIx - newStart;
+	*retStart = buf + newStart;
+	return TRUE;
+	}
+    else if (readSize <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
 	return FALSE;
