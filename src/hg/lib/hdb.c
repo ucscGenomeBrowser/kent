@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.189 2004/06/17 00:53:18 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.190 2004/06/22 19:46:20 galt Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -75,6 +75,7 @@ struct chromInfoEntry
     char *fileName;
 };
 
+
 struct hash *hdbChromInfoHashConn(char **defaultChrom, 
 		struct sqlConnection *conn)
 /* create a hash of chromInfo contents */
@@ -99,6 +100,7 @@ sqlFreeResult(&sr);
 
 return hash;
 }
+
 
 struct hash *hdbChromInfoHash()
 /* return hash or make it if it doesn't exist for db 1*/
@@ -908,14 +910,14 @@ slSort(&list, slNameCmp);
 return list;
 }
 
-char *hExtFileName(char *extFileTable, unsigned extFileId)
+
+static char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
  * Abort if the id is not in the table or if the file
  * fails size check.  Please freeMem the result when you 
- * are done with it. */
+ * are done with it. (requires conn passed in) */
 {
-struct sqlConnection *conn = hgAllocConn();
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -936,9 +938,26 @@ if (dbSize != diskSize)
    	path, dbSize, diskSize, strerror(errno));
     }
 sqlFreeResult(&sr);
+return path;
+}
+
+
+char *hExtFileName(char *extFileTable, unsigned extFileId)
+/* Get external file name from table and ID.  Typically
+ * extFile table will be 'extFile' or 'gbExtFile'
+ * Abort if the id is not in the table or if the file
+ * fails size check.  Please freeMem the result when you 
+ * are done with it. */
+{
+struct sqlConnection *conn = hgAllocConn();
+char *path=hExtFileNameC(conn,extFileTable,extFileId);
 hgFreeConn(&conn);
 return path;
 }
+
+
+
+
 
 /* Constants for selecting seq/extFile or gbSeq/gbExtFile */
 #define SEQ_TBL_SET   1
@@ -960,11 +979,12 @@ struct largeSeqFile
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
 
-static struct largeSeqFile *largeFileHandle(char *db, HGID extId, int seqTblSet)
+static struct largeSeqFile *largeFileHandle(struct sqlConnection *conn, HGID extId, int seqTblSet)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
 char *extTable = (seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile";
+char *db = sqlGetDatabase(conn); 
 
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
@@ -977,7 +997,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     {
     struct largeSeqFile *lsf;
     AllocVar(lsf);
-    lsf->path = hExtFileName(extTable, extId);
+    lsf->path = hExtFileNameC(conn, extTable, extId);
     lsf->seqTblSet = seqTblSet;
     lsf->db = cloneString(db);
     lsf->id = extId;
@@ -1055,10 +1075,10 @@ size = sqlUnsigned(row[3]);
 if (gbDate != NULL)
     strcpy(gbDate, row[4]);
     
-
-lsf = largeFileHandle(sqlGetDatabase(conn), extId, seqTblSet);
-buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 sqlFreeResult(&sr);
+
+lsf = largeFileHandle(conn, extId, seqTblSet);
+buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 return buf; 
 }
 
@@ -1199,7 +1219,9 @@ sqlFreeResult(&sr);
 return seq;
 }
 
-struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
+
+
+struct dnaSeq *hGenBankGetMrnaC(struct sqlConnection *conn, char *acc, char *compatTable)
 /* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
  * This handles compatibility between pre-incremental genbank databases where
  * refSeq sequences were stored in tables and the newer scheme that keeps all
@@ -1208,7 +1230,6 @@ struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
  * tables are checked.
  */
 {
-struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq = NULL;
 
 /* If we have the compat table, get the sequence from there, otherwise from
@@ -1224,11 +1245,28 @@ else
         seq = faFromMemText(buf);
     }
 
+return seq;
+}
+
+
+struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable)
+/* Get a GenBank or RefSeq mRNA or EST sequence or NULL if it doesn't exist.
+ * This handles compatibility between pre-incremental genbank databases where
+ * refSeq sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
+ * tables are checked.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq = hGenBankGetMrnaC(conn, acc, compatTable);
 hFreeConn(&conn);
 return seq;
 }
 
-aaSeq *hGenBankGetPep(char *acc, char *compatTable)
+
+
+aaSeq *hGenBankGetPepC(struct sqlConnection *conn, char *acc, char *compatTable)
 /* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
  * compatibility between pre-incremental genbank databases where refSeq
  * sequences were stored in tables and the newer scheme that keeps all
@@ -1237,7 +1275,6 @@ aaSeq *hGenBankGetPep(char *acc, char *compatTable)
  * tables are checked.
  */
 {
-struct sqlConnection *conn = hAllocConn();
 aaSeq *seq = NULL;
 
 
@@ -1253,9 +1290,26 @@ else
     if (buf != NULL)
         seq = faSeqFromMemText(buf, FALSE);
     }
+return seq;
+}
+
+
+aaSeq *hGenBankGetPep(char *acc, char *compatTable)
+/* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
+ * compatibility between pre-incremental genbank databases where refSeq
+ * sequences were stored in tables and the newer scheme that keeps all
+ * sequences in external files.  If compatTable is not NULL and the table
+ * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
+ * tables are checked.
+ */
+{
+struct sqlConnection *conn = hAllocConn();
+aaSeq *seq = hGenBankGetPepC(conn, acc, compatTable);
 hFreeConn(&conn);
 return seq;
 }
+
+
 
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints)

@@ -307,6 +307,9 @@ struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
  * tables are checked.
  */
 
+struct dnaSeq *hGenBankGetMrnaC(struct sqlConnection *conn, char *acc, char *compatTable);
+/* Same as above, but can pass in connection to any db */
+
 aaSeq *hGenBankGetPep(char *acc, char *compatTable);
 /* Get a RefSeq peptide sequence or NULL if it doesn't exist.  This handles
  * compatibility between pre-incremental genbank databases where refSeq
@@ -315,6 +318,9 @@ aaSeq *hGenBankGetPep(char *acc, char *compatTable);
  * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
  * tables are checked.
  */
+
+aaSeq *hGenBankGetPepC(struct sqlConnection *conn, char *acc, char *compatTable);
+/* Same as above, but can pass in connection to any db */
 
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
