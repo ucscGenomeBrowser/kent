@@ -1,0 +1,332 @@
+/* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
+#include "common.h"
+#include "portable.h"
+#include "linefile.h"
+#include "dystring.h"
+#include "hash.h"
+#include "jksql.h"
+#include "ntContig.h"
+#include "glDbRep.h"
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "hgGoldGapGl - Put chromosome .agp and .gl files into browser database.\n"
+  "usage:\n"
+  "   hgGoldGapGl database gsDir ooSubDir\n"
+  "example:\n"
+  "   hgGoldGapGl hg5 /projects/hg/gs.5 oo.21\n");
+}
+
+char *createGold =
+"CREATE TABLE %s (\n"
+"   chrom varchar(255) not null,        # which chromosome\n"
+"   chromStart int unsigned not null,   # start position in chromosome\n"
+"   chromEnd int unsigned not null,     # end position in chromosome\n"
+"   ix int not null,    # ix of this fragment (useless)\n"
+"   type char(1) not null,      # (P)redraft, (D)raft, (F)inished or (O)ther\n"
+"   frag varchar(255) not null, # which fragment\n"
+"   fragStart int unsigned not null,    # start position in frag\n"
+"   fragEnd int unsigned not null,      # end position in frag\n"
+"   strand char(1) not null,    # + or - (orientation of fragment)\n"
+"             #Indices\n"
+"   UNIQUE(chromStart),\n"
+"   UNIQUE(chromEnd),\n"
+"   INDEX(frag(14))\n"
+")\n";
+
+char *createGap = 
+"CREATE TABLE %s (\n"
+"   chrom varchar(255) not null,	# which chromosome\n"
+"   chromStart int unsigned not null,	# start position in chromosome\n"
+"   chromEnd int unsigned not null,	# end position in chromosome\n"
+"   ix int not null,	# ix of this fragment (useless)\n"
+"   n char(1) not null,	# always 'N'\n"
+"   size int unsigned not null,	# size of gap\n"
+"   type varchar(255) not null,	# contig, clone, fragment, etc.\n"
+"   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
+"             #Indices\n"
+"   UNIQUE(chromStart),\n"
+"   UNIQUE(chromEnd)\n"
+")\n";
+
+char *createGl = 
+"CREATE TABLE %s (\n"
+"    frag varchar(255) not null,	# Fragment name\n"
+"    start int unsigned not null,	# Start position in golden path\n"
+"    end int unsigned not null,	# End position in golden path\n"
+"    strand char(1) not null,	# + or - for strand\n"
+"              #Indices\n"
+"    PRIMARY KEY(frag(20))\n"
+")\n";
+
+
+boolean isGapLine(char *line, int lineSize)
+/* Return TRUE if line represents a gap. */
+{
+char buf[256], *words[16];
+int wordCount;
+
+if (lineSize >= sizeof(buf))
+    errAbort("Line too long");
+memcpy(buf, line, lineSize);
+buf[lineSize] = 0;
+wordCount = chopTabs(buf, words);
+return (wordCount >= 5 && sameWord(words[4], "N"));
+}
+
+void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
+/* Read in .agp files in chromDir and use them to create the
+ * gold and gap tables for the corresponding chromosome(s). */
+{
+struct dyString *ds = newDyString(2048);
+struct fileInfo *fiList, *fi;
+char dir[256], chrom[128], ext[64];
+char goldName[128], gapName[128];
+char goldTabName[L_tmpnam], gapTabName[L_tmpnam];
+char *agpName;
+FILE *goldTab, *gapTab;
+struct lineFile *lf;
+int lineSize;
+char *line;
+char oLine[512];
+
+fiList = listDirX(chromDir, "*.agp", TRUE);
+for (fi = fiList; fi != NULL; fi = fi->next)
+    {
+    /* Get full path name of .agp file and process it
+     * into table names. */
+    agpName = fi->name;
+    printf("Processing %s\n", agpName);
+    splitPath(agpName, dir, chrom, ext);
+    sprintf(goldName, "%s_gold", chrom);
+    sprintf(gapName, "%s_gap", chrom);
+
+    /* Scan through .agp file splitting it into gold
+     * and gap components. */
+    tmpnam(goldTabName);
+    tmpnam(gapTabName);
+    goldTab = mustOpen(goldTabName, "w");
+    gapTab = mustOpen(gapTabName, "w");
+    lf = lineFileOpen(agpName, FALSE);
+    while (lineFileNext(lf, &line, &lineSize))
+        {
+	if (isGapLine(line, lineSize))
+	    mustWrite(gapTab, line, lineSize);
+	else
+	    mustWrite(goldTab, line, lineSize);
+	}
+    lineFileClose(&lf);
+    fclose(goldTab);
+    fclose(gapTab);
+
+    /* Create gold table and load it up. */
+    dyStringClear(ds);
+    dyStringPrintf(ds, createGold, goldName);
+    sqlMaybeMakeTable(conn, goldName, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "DELETE from %s", goldName);
+    sqlUpdate(conn, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+        goldTabName, goldName);
+    sqlUpdate(conn, ds->string);
+    remove(goldTabName);
+
+    /* Create gap table and load it up. */
+    dyStringClear(ds);
+    dyStringPrintf(ds, createGap, gapName);
+    sqlMaybeMakeTable(conn, gapName, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "DELETE from %s", gapName);
+    sqlUpdate(conn, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+        gapTabName, gapName);
+    sqlUpdate(conn, ds->string);
+    remove(gapTabName);
+    }
+freeDyString(&ds);
+}
+
+void lowerNtFrag(struct ntContig *ntc, struct gl *glIn, struct hash *cloneVerHash, FILE *f)
+/* Convert glIn from nt to clone coordinates and write to f. 
+ * In some cases this might involve splitting the input into
+ * multiple lines of output. */
+{
+int start = glIn->start, end = glIn->end;
+struct ntClonePos *clone, *nextClone;
+struct gl glOut;
+boolean isRev = FALSE;
+char fakeVer[64];
+char fragName[64];
+char *s;
+
+//uglyf("lower NT frag %s (%d %d %s %d) %d\n", glIn->frag, glIn->start, glIn->end,
+ //   glIn->strand, glIn->end - glIn->start, ntc->size);
+
+if (glIn->strand[0] == '-')
+    {
+    isRev = TRUE;
+    slReverse(&ntc->cloneList);
+    }
+for (clone = ntc->cloneList; clone != NULL; clone = clone->next)
+    {
+    if (clone->orientation < 0)
+        errAbort("Sorry, can't handle reversed clones in NT contigs (%s in %s)", 
+	    clone->name, ntc->name);
+    s = hashFindVal(cloneVerHash, clone->name);
+    if (s == NULL)
+        {
+	warn("Faking version for %s", clone->name);
+	sprintf(fakeVer, "%s.1", clone->name);
+	s = fakeVer;
+	}
+    sprintf(fragName, "%s_1", s);
+    glOut.frag = fragName;
+    if (isRev)
+        {
+	glOut.end = start + ntc->size - clone->pos;
+	glOut.start = glOut.end - clone->size;
+	}
+    else
+        {
+	glOut.start = start + clone->pos;
+	glOut.end = glOut.start + clone->size;
+	}
+    strcpy(glOut.strand, glIn->strand);
+    glTabOut(&glOut, f);
+    }
+if (isRev)
+    slReverse(&ntc->cloneList);
+}
+
+void lowerNtInGl(char *liftedName, char *loweredName, 
+	struct hash *ntContigHash, struct hash *cloneVerHash)
+/* Read in GL file and convert from NT back to clone coordinates. */
+{
+struct lineFile *lf = lineFileOpen(liftedName, TRUE);
+FILE *f = mustOpen(loweredName, "w");
+char *row[4];
+struct gl gl;
+struct ntContig *ntc;
+
+while (lineFileRow(lf, row))
+    {
+    glStaticLoad(row, &gl);
+    if ((ntc = hashFindVal(ntContigHash, gl.frag)) != NULL)
+        {
+	lowerNtFrag(ntc, &gl, cloneVerHash, f);
+	}
+    else
+        {
+	glTabOut(&gl, f);
+	}
+    }
+lineFileClose(&lf);
+fclose(f);
+}
+
+
+void makeGl(struct sqlConnection *conn, char *chromDir, 
+	struct hash *ntContigHash, struct hash *cloneVerHash)
+/* Read in .gl files in chromDir and use them to create the
+ * gl tables for the corresponding chromosome(s). */
+{
+struct dyString *ds = newDyString(2048);
+struct fileInfo *fiList, *fi;
+char dir[256], chrom[128], ext[64];
+char *glFileName;
+char glTable[128];
+char gl2Name[512];
+
+fiList = listDirX(chromDir, "*.gl", TRUE);
+for (fi = fiList; fi != NULL; fi = fi->next)
+    {
+    glFileName = fi->name;
+    printf("Processing %s\n", glFileName);
+
+    /* Replace NT contigs. */
+    strcpy(gl2Name, glFileName);
+    chopSuffix(gl2Name);
+    strcat(gl2Name, ".gl2");
+    lowerNtInGl(glFileName, gl2Name, ntContigHash, cloneVerHash);
+
+    splitPath(glFileName, dir, chrom, ext);
+    sprintf(glTable, "%s_gl", chrom);
+    dyStringClear(ds);
+    dyStringPrintf(ds, createGl, glTable);
+    sqlMaybeMakeTable(conn, glTable, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "DELETE from %s", glTable);
+    sqlUpdate(conn, ds->string);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+        gl2Name, glTable);
+    sqlUpdate(conn, ds->string);
+    }
+freeDyString(&ds);
+}
+
+void makeCloneVerHash(char *fileName, struct hash *cloneVerHash)
+/* Make up a hash indexed by clone accession that has accession.version
+ * values. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[8];
+char acc[32];
+
+while (lineFileRow(lf, row))
+    {
+    strncpy(acc, row[0], sizeof(acc));
+    chopSuffix(acc);
+    hashAdd(cloneVerHash, acc, cloneString(row[0]));
+    }
+lineFileClose(&lf);
+}
+
+void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir)
+/* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
+{ 
+struct fileInfo *chrFiList, *chrFi; 
+struct sqlConnection *conn = sqlConnect(database);
+char ooDir[512];
+char pathName[512];
+struct hash *ntCloneHash = newHash(0);
+struct hash *ntContigHash = newHash(0);
+struct hash *cloneVerHash = newHash(0);
+
+struct ntContig *ntContigList = NULL;
+
+sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
+
+sprintf(pathName, "%s/ffa/sequence.inf", gsDir);
+makeCloneVerHash(pathName, cloneVerHash);
+
+sprintf(pathName, "%s/nt.all", ooDir);
+ntContigList = readNtFile(pathName, ntContigHash, ntCloneHash);
+printf("Read %d ntContigs in %s\n", slCount(ntContigList), pathName);
+
+chrFiList = listDirX(ooDir, "*", FALSE);
+for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
+    {
+    if (chrFi->isDir && strlen(chrFi->name) <= 2)
+        {
+	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
+	makeGoldAndGap(conn, pathName);
+	makeGl(conn, pathName, ntContigHash, cloneVerHash);
+        }
+    }
+slFreeList(&chrFiList);
+sqlDisconnect(&conn);
+}
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+if (argc != 4)
+    usage();
+hgGoldGapGl(argv[1], argv[2], argv[3]);
+return 0;
+}
