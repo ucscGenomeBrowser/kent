@@ -371,7 +371,7 @@ while (lineFileNext(in, &line, &lineSize))
 	{
 	char *phase = words[wordCount-2];
 	char c = phase[0];
-	if (c != 0 && c != 1 && c != 2 && c != 3)
+	if (c != '0' && c != '1' && c != '2' && c != '3')
 	    errAbort("Expecting phase in second to last word line %d of %s",
 	        in->lineIx, in->fileName);
 	cName = newSlName(line);
@@ -728,18 +728,20 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     slAddHead(&list, nccp);
     hashAddSaveName(ntCloneHash, cloneName, nccp, &nccp->acc);
     nccp->nt = cloneString(row[0]);
-    if (wordCount >= 9)
+    // if (wordCount >= 9)
 	{
 	nccp->start = lineFileNeedNum(lf, row, 2) - 1;
 	nccp->end = lineFileNeedNum(lf, row, 3);
 	nccp->strand = row[4][0];
 	}
+#ifdef OLD
     else
 	{
 	nccp->start = lineFileNeedNum(lf, row, 3) - 1;
 	nccp->end = lineFileNeedNum(lf, row, 4);
 	nccp->strand = row[5][0];
 	}
+#endif /* OLD */
     if (nccp->strand != '+' && nccp->strand != '-')
         errAbort("Expecting + or - in strand field line %d of %s", lf->lineIx, lf->fileName);
     }
