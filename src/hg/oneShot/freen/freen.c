@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "jksql.h"
-#include "chainNet.h"
+#include "chainBlock.h"
 #include "chainNetDbLoad.h"
 #include "hdb.h"
 
@@ -13,18 +13,14 @@ void usage()
 errAbort("usage: freen file");
 }
 
-
 void freen(char *fileName)
 /* Print status code. */
 {
-int rowOffset;
-struct sqlConnection *conn;
-struct sqlResult *sr;
-struct chainNet *net = chainNetLoadChrom("hg13", "mouseNet3", "chr10", NULL);
+struct chain *chain = chainLoadId("hg13", "mouseChain", "chr1", 2681);
 FILE *f = mustOpen(fileName, "w");
-chainNetWrite(net, f);
+chain = chainLoadIdRange("hg13", "mouseChain", "chr1", 11000, 12000, 2681);
+chainWrite(chain, f);
 }
-
 
 
 int main(int argc, char *argv[])
