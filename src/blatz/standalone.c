@@ -3,6 +3,7 @@
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
+#include "hash.h"
 #include "options.h"
 #include "errabort.h"
 #include "memalloc.h"
@@ -36,16 +37,14 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void alignAll(struct bzp *bzp, struct dnaSeq *targetList, 
+static void alignAll(struct bzp *bzp, struct blatzIndex *indexList, 
         struct dnaLoad *queryDl, char *outFile)
 /* Make up neighorhood index for queryList, and use it to scan
  * targetList.  Put output in outFile */
 {
 FILE *f = mustOpen(outFile, "w");
-struct blatzIndex *indexList = blatzIndexAll(targetList, bzp->weight);
 struct dnaSeq *query;
 
-bzpTime("Made index");
 while ((query = dnaLoadNext(queryDl)) != NULL)
     {
     double bestScore = 0;
@@ -72,24 +71,38 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 carefulClose(&f);
 }
 
+static struct blatzIndex *blatzIndexDl(struct bzp *bzp,
+	struct dnaLoad *dl)
+/* Cycle through everything in dl, save it, and make an
+ *index for it. */
+{
+struct dnaSeq *seq;
+struct blatzIndex *indexList = NULL, *index;
+while ((seq = dnaLoadNext(dl)) != NULL)
+    {
+    int offset = dnaLoadCurOffset(dl);
+    int size = dnaLoadCurSize(dl);
+    if (bzp->unmask)
+	toUpperN(seq->dna, seq->size);
+    index = blatzIndexOne(seq, offset, size, bzp->weight);
+    slAddHead(&indexList, index);
+    }
+slReverse(&indexList);
+return indexList;
+}
+
 static void loadAndAlignAll(struct bzp *bzp, 
         char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
-struct dnaSeq *targetList = dnaLoadAll(target);
 struct dnaLoad *queryDl = dnaLoadOpen(query);
-struct blatzIndex *index;
-bzpTime("loaded DNA");
+struct dnaLoad *targetDl = dnaLoadOpen(target);
+struct blatzIndex *indexList = blatzIndexDl(bzp, targetDl);
+bzpTime("loaded and indexed target DNA");
 
-verbose(2, "Loaded %d in %s, opened %s\n", slCount(targetList), target,
+verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
         query);
-if (bzp->unmask)
-    {
-    struct dnaSeq *seq;
-    for (seq = targetList; seq != NULL; seq = seq->next)
-	toUpperN(seq->dna, seq->size);
-    }
-alignAll(bzp, targetList, queryDl, output);
+alignAll(bzp, indexList, queryDl, output);
 }
 
 int main(int argc, char *argv[])

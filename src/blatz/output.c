@@ -13,12 +13,12 @@
 
 
 static struct hash *hashTargetsFromIndex(struct blatzIndex *indexList)
-/* Scan index-list and use it to create a hash of target dnaSeq's. */
+/* Scan index-list and use it to create a hash indexed by target->name. */
 {
 struct hash *hash = newHash(0);
 struct blatzIndex *index;
 for (index = indexList; index != NULL; index = index->next)
-    hashAdd(hash, index->target->name, index->target);
+    hashAdd(hash, index->target->name, index);
 return hash;
 }
 
@@ -31,7 +31,8 @@ struct dnaSeq *rQuery = cloneDnaSeq(query);
 reverseComplement(rQuery->dna, rQuery->size);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    struct dnaSeq *target = hashMustFindVal(targetHash, chain->tName);
+    struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
+    struct dnaSeq *target = index->target;
     struct psl *psl = chainToFullPsl(chain, query, rQuery, target);
 #ifdef NOREP /* Work around bug in blat for comparison */
     psl->match += psl->repMatch;
@@ -49,7 +50,6 @@ void chainWriteAllAsAxtOrMaf(struct chain *chainList, char *format,
 /* Write chainList to file in either axt or maf according to
  * format string. */
 {
-struct dnaSeq *target;
 struct dnaSeq *rQuery = cloneDnaSeq(query);
 struct chain *chain;
 if (mafQ == NULL) mafQ = "";
@@ -59,7 +59,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct axt *axtList, *axt;
     struct dnaSeq *qSeq = (chain->qStrand == '-' ? rQuery : query);
-    target = hashMustFindVal(targetHash, chain->tName);
+    struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
+    struct dnaSeq *target = index->target;
     axtList = chainToAxt(chain, qSeq, 0, target, 0, 40, BIGNUM);
     for (axt = axtList; axt != NULL; axt = axt->next)
         {
@@ -84,8 +85,8 @@ struct hashEl *el, *elList = hashElListHash(seqHash);
 long long total = 0;
 for (el = elList; el != NULL; el = el->next)
     {
-    struct dnaSeq *seq = el->val;
-    total += seq->size;
+    struct blatzIndex *index = el->val;
+    total += index->target->size;
     }
 slFreeList(&elList);
 return total;
@@ -95,7 +96,6 @@ void chainWriteAllAsBlast(struct chain *chainList, char *blastType,
         struct dnaSeq *query, struct hash *targetHash,  FILE *f)
 /* Write chainList to file in a blat variant */
 {
-struct dnaSeq *target;
 struct dnaSeq *rQuery = cloneDnaSeq(query);
 long long dbSize = sumSeqSizes(targetHash);
 struct chain *chain;
@@ -105,7 +105,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     struct axt *axtList, *axt;
     struct dnaSeq *qSeq = (chain->qStrand == '-' ? rQuery : query);
     struct axtBundle *bun = NULL;
-    target = hashMustFindVal(targetHash, chain->tName);
+    struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
+    struct dnaSeq *target = index->target;
     AllocVar(bun);
     bun->qSize = qSeq->size;
     bun->tSize = target->size;
@@ -116,6 +117,32 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 dnaSeqFree(&rQuery);
 }
 
+static void blatzOffsetChainTargets(struct chain *chainList, 
+	struct hash *targetHash, boolean reverse)
+/* Add targetHash[tName]->targetOffset to chainList. */
+{
+struct chain *chain;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
+    struct cBlock *block;
+    int offset = index->targetOffset;
+    int size = index->targetParentSize;
+    if (reverse)
+	{
+        offset = -offset;
+	size = index->target->size;
+	}
+    chain->tStart += offset;
+    chain->tEnd += offset;
+    chain->tSize = size;
+    for (block = chain->blockList; block != NULL; block = block->next)
+        {
+	block->tStart += offset;
+	block->tEnd += offset;
+	}
+    }
+}
         
 void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
         struct dnaSeq *query, struct blatzIndex *targetIndexList, 
@@ -125,6 +152,7 @@ void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
 struct hash *targetHash = hashTargetsFromIndex(targetIndexList);
 char *out = bzp->out;
 
+blatzOffsetChainTargets(chainList, targetHash, FALSE);
 if (sameString(out, "chain"))
     chainWriteAll(chainList, f);
 else if (sameString(out, "psl"))
@@ -137,6 +165,7 @@ else if (sameString(out, "wublast") || sameString(out, "blast") ||
    chainWriteAllAsBlast(chainList, out, query, targetHash, f);
 else 
     errAbort("blatzWriteChains doesn't recognize format %s", bzp->out);
+blatzOffsetChainTargets(chainList, targetHash, TRUE);
 hashFree(&targetHash);
 }
 

@@ -28,11 +28,14 @@ struct blatzIndex
     int seedSpan;		/* Total bases spanned by seed. */
     int *seedOffsets;		/* Offsets to bases seed cares about. */
     struct dnaSeq *target;	/* Target sequence.  Not allocated here. */
+    int targetOffset;		/* Offset of target in parent sequence. */
+    int targetParentSize;	/* Size of parent sequence. */
     bits32 *posBuf;		/* This holds memory for positions in all slots. */
     };
 
-struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int seedWeight);
-/* Create a new index of given seed weight populated by seqList. */
+struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int offset, int parentSize, 
+	int weight);
+/* Create a new index of given seed weight populated by seq. */
 
 struct blatzIndex *blatzIndexAll(struct dnaSeq *seqList, int seedWeight);
 /* Return a list of indexes, one for each seq on seqList */

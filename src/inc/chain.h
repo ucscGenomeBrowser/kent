@@ -33,6 +33,9 @@ int cBlockCmpBoth(const void *va, const void *vb);
 int cBlockCmpDiagQuery(const void *va, const void *vb);
 /* Compare to sort based on diagonal, then query. */
 
+void cBlocksAddOffset(struct cBlock *blockList, int qOff, int tOff);
+/* Add offsets to block list. */
+
 struct chain
 /* A chain of blocks.  Used for output of chainBlocks. */
     {

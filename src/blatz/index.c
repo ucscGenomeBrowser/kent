@@ -47,7 +47,8 @@ struct seqPos
     };
 
 
-struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int weight)
+struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int offset, int parentSize, 
+	int weight)
 /* Create a new index of given seed weight populated by seq. */
 {
 struct lm *lm = lmInit(0);
@@ -86,6 +87,8 @@ index->seedWeight = weight;
 index->seedSpan = seedSpan;
 index->seedOffsets = seedOffsets;
 index->target = seq;
+index->targetOffset = offset;
+index->targetParentSize = parentSize;
 if (posCount > 0)
     {
     index->posBuf = posBuf = needHugeMem(posCount * sizeof(posBuf[0]));
@@ -118,7 +121,7 @@ struct blatzIndex *indexList = NULL, *index;
 struct dnaSeq *seq;
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
-    index = blatzIndexOne(seq, seedWeight);
+    index = blatzIndexOne(seq, 0, seq->size, seedWeight);
     slAddHead(&indexList, index);
     }
 slReverse(&indexList);

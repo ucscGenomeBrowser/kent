@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.18 2005/01/10 00:12:39 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.19 2005/01/14 09:58:39 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -66,6 +66,19 @@ dif = (a->tStart - a->qStart) - (b->tStart - b->qStart);
 if (dif == 0)
     dif = a->qStart - b->qStart;
 return dif;
+}
+
+void cBlocksAddOffset(struct cBlock *blockList, int qOff, int tOff)
+/* Add offsets to block list. */
+{
+struct cBlock *block;
+for (block = blockList; block != NULL; block = block->next)
+    {
+    block->tStart += tOff;
+    block->tEnd += tOff;
+    block->qStart += qOff;
+    block->qEnd += qOff;
+    }
 }
 
 int chainCmpScore(const void *va, const void *vb)
