@@ -573,6 +573,18 @@ done
 
     nice ./bin/gbAlignStep -initial -type=mrna -verbose=1 \
 	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+    # this failed in the alignment step due to /scratch problems, to continue:
+    ssh kk
+    cd /cluster/bluearc/genbank/work/initial.mm4/align
+    para recover align.jobs recover_align.jobs
+    para create recover_align.jobs
+    para try, push, check, etc ...
+    # then
+    ssh eieio
+    cd /cluster/data/genbank
+    nice ./bin/gbAlignStep -initial -continue=finish -type=mrna -verbose=1 \
+	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
+
     nice ./bin/gbAlignStep -initial -type=est -verbose=1 \
 	-clusterRootDir=/cluster/bluearc/genbank -iserver=no mm4
 
@@ -621,7 +633,9 @@ BLASTZ_ABRIDGE_REPEATS=1
 # TARGET
 # Human
 SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# RMSK not currently used
 SEQ1_RMSK=/iscratch/i/gs.17/build34/rmsk
+# FLAG not currently used
 SEQ1_FLAG=-primate
 SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
 SEQ1_IN_CONTIGS=0
@@ -631,7 +645,9 @@ SEQ1_LAP=10000
 # QUERY
 # Mouse
 SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
 SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
 SEQ2_FLAG=-rodent
 SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInHuman
 SEQ2_IN_CONTIGS=0
@@ -685,7 +701,9 @@ BLASTZ_ABRIDGE_REPEATS=1
 # TARGET
 # Rat
 SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs
+# RMSK not currently used
 SEQ1_RMSK=/cluster/bluearc/rat/rn3/rmsk
+# FLAG not currently used
 SEQ1_FLAG=-rodent
 SEQ1_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
 SEQ1_IN_CONTIGS=0
@@ -695,7 +713,9 @@ SEQ1_LAP=10000
 # QUERY
 # Mouse
 SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
 SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
 SEQ2_FLAG=-rodent
 SEQ2_SMSK=/scratch/mus/mm4/linSpecRep.notInRat
 SEQ2_IN_CONTIGS=0
@@ -728,6 +748,134 @@ SEQ2_LEN=$BASE/S2.len
     para create j
     para try, check, push, check, ....
 
+
+# BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
+
+    ssh kk
+    #	Create artifical linSpecRep.notInMouse
+    # The procedure for lineage spec business with self is to simply
+    # use the actual repeat masker output for this mouse assembly as
+    # the lineage specific repeats for itself.  Thus, merely make
+    # symlinks to the repeat masker out files and name them as expected
+    # for blastz.  In this case they are called notInMouse but they
+    # really mean InMouse.  When asked what to use for this,
+    #	Scott Schwartz says:
+    #	It depends on what you want to do with the results.
+    #	If you don't mind never having any RepeatMasker stuff
+    #	align, then it should be fine.   But one could imagine
+    #	other cases.  
+
+    cd /cluster/bluearc/scratch/mus/mm4
+    mkdir linSpecRep.notInMouse
+    cd linSpecRep.notInMouse
+
+    foreach f (../rmsk/*.fa.out)
+	set base = $f:t:r:r
+	echo $base.out.spec
+	ln -s $f $base.out.spec
+    end
+
+
+    mkdir -p /cluster/data/mm4/bed/blastzSelf
+    cd /cluster/data/mm4/bed/blastzSelf
+
+    cat << '_EOF_' > DEF
+# mouse vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Mouse
+SEQ1_DIR=/scratch/mus/mm4/softNib
+# RMSK not currently used
+SEQ1_RMSK=/scratch/mus/mm4/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/iscratch/i/mm4/softNib
+# RMSK not currently used
+SEQ2_RMSK=/iscratch/i/mm4/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm4/bed/blastzSelf
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    #	Setup first cluster run
+    ../../jkStuff/BlastZ.run0.sh
+
+# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-10-22 - Hiram)
+    
+    #	Must run this on the small cluster (or rack 9) since this
+    #	process requires more memory than is found in the KK nodes
+    ssh kkr1u00
+    mkdir -p /cluster/data/mm4/bed/genscan
+    cd /cluster/data/mm4/bed/genscan
+    # Make subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+       
+    ls -1S /cluster/data/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
+      > genome.list
+    # Create template file, gsub, for gensub2.
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+XXXX - running 2003-10-22 10:40
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+    para check
+    # If there were out-of-memory problems (run "para problems"), then
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.
+    # chr7_15
+
+    # Convert these to chromosome level files as so:
+    ssh eieio
+    cd ~/mm4/bed/genscan
+    liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
+    liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/mm4/bed/genscan
+    ldHgGene mm4 genscan genscan.gtf
+        # Read 50447 transcripts in 357519 lines in 1 files
+          # 50447 groups 43 seqs 1 sources 1 feature types
+        # 50447 gene predictions
+    hgPepPred mm4 generic genscanPep genscan.pep
+    hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
+
 # MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-10-21 Hiram)
     ssh kksilo
     cd /cluster/data/mm4
@@ -735,7 +883,6 @@ SEQ2_LEN=$BASE/S2.len
     # Build the .zip files
     jkStuff/zipAll.sh >&! zipAll.log &
     #	bash:	./jkStuff/zipAll.sh > zipAll.log 2>&1 &
-XXX
     tail -f zipAll.log
     mkdir zip
     mv *.zip zip
@@ -747,27 +894,51 @@ XXX
       tail -1 $f.test
     end
     wc -l *.zip.test
-     # 46 chromAgp.zip.test
-     # 45 chromFaMasked.zip.test
-     # 45 chromFa.zip.test
-     # 45 chromOut.zip.test
-     # 45 chromTrf.zip.test
-     # 604 contigAgp.zip.test
-     # 604 contigFaMasked.zip.test
-     # 604 contigFa.zip.test
-     # 604 contigOut.zip.test
-     # 604 contigTrf.zip.test
-     # 3246 total
+    #  47 chromAgp.zip.test
+    #  46 chromFa.zip.test
+    #  46 chromFaMasked.zip.test
+    #  46 chromOut.zip.test
+    #  46 chromTrf.zip.test
+    # 601 contigAgp.zip.test
+    # 601 contigFa.zip.test
+    # 601 contigFaMasked.zip.test
+    # 601 contigOut.zip.test
+    # 601 contigTrf.zip.test
+    #3236 total
 
-    # Copy the .zip files to hgwdev:/usr/local/apache/...
     ssh hgwdev
-    cd ~/mm4/zip
-    # edit copy program for mouse
-    # TODO: make this generic
-    ../jkStuff/cpToWeb.sh
-    cd /usr/local/apache/htdocs/goldenPath/mmJun2003
+    cd /cluster/data/mm4/jkStuff
+    # create generic copy program
+    cat << '_EOF_' > cpToWeb.sh
+#!/bin/sh
+if [ $# -ne 1 ]; then
+	echo "usage: cpToWeb.sh <goldenPath download directory>"
+	echo -e "\texample: cpToWeb.sh mm4"
+	exit 255
+fi
+GP=/usr/local/apache/htdocs/goldenPath/$1
+mkdir -p ${GP}
+mkdir -p ${GP}/chromosomes
+for f in ../?/*.fa ../??/*.fa
+do
+    BN=`basename ${f}`
+    zip -j ${GP}/chromosomes/${BN}.zip ${f}
+    echo "zipped: ${BN}"
+done
+mkdir -p ${GP}/bigZips
+for Z in *.zip
+do
+	cp -p ${Z} ${GP}/bigZips
+	echo "copied: ${Z}"
+done
+'_EOF_'
+    chmod +x cpToWeb.sh
+    cd /cluster/data/mm4/zip
+    ../jkStuff/cpToWeb.sh mm4
+    cd /usr/local/apache/htdocs/goldenPath/mm4
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
+XXX - waiting here for these refGene sequences to become available
     # Make the upstream sequence files.
     # NOTE: must be redone due to bad gap track
     cd bigZips
@@ -780,7 +951,7 @@ XXX
     featureBits mm4 refGene:upstream:5000 -fa=upstream5000.fa
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
-    # mrna zips -- how ?
+    # mrna zips -- auto dump process takes care of this
 
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXX  -----   all below is old data for reference only  XXXXXXXXXX
@@ -905,61 +1076,3 @@ XXXX	The sections below will be deleted as they are performed above
     para check
     para push
     etc.
-
-# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-07-09 - kate)
-    
-    ssh eieio
-    mkdir -p ~/mm4/bed/genscan
-    cd ~/mm4/bed/genscan
-    # NOTE: next time, make a "run" subdir for para job
-    # Make 3 subdirectories for genscan to put their output files in
-    mkdir -p gtf pep subopt
-       
-    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
-    # big cluster, due to limitation of memory and swap space on each
-    # processing node).
-    # NOTE: running on rack 9
-    ssh kkr9u01
-    cd ~/mm4/bed/genscan
-    ls -1S /cluster/store5/mm.2003.06/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
-      > genome.list
-    # Create template file, gsub, for gensub2.  For example (3-line file):
-    # Note: I changed this to 1800000 in this build because some jobs were
-    # taking so long I thought they had crashed.
-#LOOP
-/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=1800000
-#ENDLOOP
-    echo "" > dummy.list
-    gensub2 genome.list dummy.list gsub jobList
-    para create jobList
-    para try
-    para check
-    para push
-    # Issue either one of the following two commands to check the
-    # status of the cluster and your jobs, until they are done.
-    parasol status
-    para check
-    # If there were out-of-memory problems (run "para problems"), then
-    # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.
-    # chr7_15
-
-    # Convert these to chromosome level files as so:
-    ssh eieio
-    cd ~/mm4/bed/genscan
-    liftUp genscan.gtf ../../liftAll.lft warn gtf/chr*.gtf
-    liftUp genscanSubopt.bed ../../liftAll.lft warn subopt/chr*.bed > \
-      /dev/null
-    cat pep/*.pep > genscan.pep
-
-    # Load into the database as so:
-    ssh hgwdev
-    cd ~/mm4/bed/genscan
-    ldHgGene mm4 genscan genscan.gtf
-        # Read 50447 transcripts in 357519 lines in 1 files
-          # 50447 groups 43 seqs 1 sources 1 feature types
-        # 50447 gene predictions
-    hgPepPred mm4 generic genscanPep genscan.pep
-    hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
-
