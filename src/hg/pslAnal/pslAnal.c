@@ -28,6 +28,7 @@ static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"verbose", OPTION_STRING},
     {"der", OPTION_STRING},
+    {"versions", OPTION_STRING},
     {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
     {"unaligned", OPTION_BOOLEAN},
@@ -37,6 +38,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+int verb = 0;
 boolean indelReport = FALSE;
 boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
@@ -528,9 +530,11 @@ int ret = 0;
 static boolean checked = FALSE;
 static boolean haveSnp = FALSE;
 
+verbose(4, "\tchecking for snp\n");
 if (!checked)
     {
     haveSnp = sqlTableExists(conn, "snp");
+    haveSnp = sqlTableExists(conn, "snp_bak");
     checked = TRUE;
     if (!haveSnp)
         fprintf(stderr, "warning: no snp table in this databsae\n");
@@ -539,10 +543,13 @@ if (!checked)
 /* the new table is snp, replacing snpTsc and snpNih+hgFixed.dsSnpRS */
 if (haveSnp)
     {
-    sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);
+    verbose(4, "\tquerying snp table\n");
+    /* sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);*/
+    sr = hRangeQuery(conn, "snp_bak", chr, position, position+1, NULL, &rowOff);
     while ((row = sqlNextRow(sr)) != NULL) 
         {
         struct snp snp;
+	verbose(4, "\tloading snp info\n");
         snpStaticLoad(row+rowOff, &snp);
 	/* Check if this is a snp, not a indel */
         if (sameString(snp.class, "snp"))
@@ -1268,6 +1275,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
     int tstart = pi->psl->tStarts[i] - pi->psl->tStarts[0];
 
     /* Compare each base */
+    verbose(4, "\tcomparing block %d\n", i);
     for (j = 0; j < pi->psl->blockSizes[i]; j++) 
       {
 	/* Determine genome base */
@@ -1318,6 +1326,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
 	    codonValid += valid;
 	    if ((mismatchReport) && (inCds))
 	      {
+		verbose(4, "\tcreating mismatch - 1\n");
 		mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE, valid, inCds, r[qstart+j], d[tstart+j]);
 		slAddHead(&miList,mi);
 	      }
@@ -1328,6 +1337,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
 	      pi->cdsMismatch++;
 	    if ((mismatchReport) && (inCds))
 	      {
+		verbose(4, "\tcreating mismatch - 2\n");
 		mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE, FALSE, inCds, r[qstart+j], d[tstart+j]);
 		slAddHead(&miList,mi);
 	      }
@@ -1369,6 +1379,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
 	      }
 	    if (codonSubReport)
 	      {
+		verbose(4, "\tcreating codon sub\n");
 		codonSub = createCodonSub(conn, qstart+j,
 					  rCodon, pi->psl->tName, codonGenPos,
 					  dCodon, rna, pi->psl->strand, 
@@ -1710,11 +1721,13 @@ verbose(1, "Processing %s\n", name);
 /* Create the accession for the query */
 acc = createAcc(name);
 /* Compare the actual aligned parts */
+verbose(3, "\tcomparing cds alignment\n");
 cdsCompare(conn, pi, rna, dna);
 pi->cdsPctId = (float)(pi->cdsMatch)/(pi->cdsMatch + pi->cdsMismatch);
 pi->cdsCoverage = (float)(pi->cdsMatch + pi->cdsMismatch)/(pi->cdsSize);
 
 /* Determine indels in the alignment */
+verbose(3, "\tanalyzing indels\n");
 cdsIndels(conn, pi, rna);
 } 
 
@@ -1726,6 +1739,7 @@ struct dnaSeq *rnaSeq;
 struct dnaSeq *dnaSeq;
 char *name = cloneString(psl->qName);
 
+verbose(3, "\tprocessing psl record\n");
 AllocVar(pi);
 pi->psl = psl;
 pi->mrna = createAcc(name);
@@ -1754,26 +1768,32 @@ else
   pi->refseq = NULL;
 
 /* Get the corresponding sequences */
+verbose(3, "\tretrieving rna and dna sequences\n");
 rnaSeq = hashMustFindVal(rnaSeqs, pi->mrna->name);
 dnaSeq = hDnaFromSeq(psl->tName, psl->tStart, psl->tEnd, dnaLower);
 
 /* Reverse compliment genomic and psl record if aligned on opposite strand */
 if (psl->strand[0] == '-') 
   {
+   verbose(3, "\treverse complementing\n");
    reverseComplement(dnaSeq->dna, dnaSeq->size);
    pslRcBoth(pi->psl);
   }
 
 /* Analyze the coding region */
+verbose(3, "\tcounting splice sites\n");
 pi->stdSplice = countStdSplice(psl, dnaSeq->dna, pi);
+verbose(3, "\tanalyzing cds region\n");
 processCds(conn, pi, rnaSeq, dnaSeq);
 
 /* Revert back to original psl record for printing */
 if (psl->strand[0] == '-') 
   {
+   verbose(3, "\treverse complementing back\n");
    pslRcBoth(pi->psl);
   }
 
+verbose(3, "\tdone with psl record\n");
 freeDnaSeq(&dnaSeq);
 return(pi);
 }
@@ -2005,7 +2025,6 @@ struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
 char *faFile, *db, filename[PATH_LEN], *vfName = NULL, *dfName = NULL;
 char *user, *password;
-int verb = 0;
 
 /* try read-only first */
 user = cfgOption("ro.user");
@@ -2015,18 +2034,30 @@ password = cfgOption("ro.password");
 if (password == NULL)
     password = cfgOption("db.password");
 
-verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     {
-    fprintf(stderr, "USAGE: pslAnal [-db=db -ver=<mrna versions> -noVersions -der=<refseq derived accs> -verbose=<level> -xeno -indels -unaligned -mismatches -codonsub] <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "USAGE: pslAnal  <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "Options:\n");
+    fprintf(stderr, "\t-db=db\n");
+    fprintf(stderr, "\t-versions=<mrna versions>\n");
+    fprintf(stderr, "\t-noVersions\n");
+    fprintf(stderr, "\t-der=<refseq derived accs>\n");
+    fprintf(stderr, "\t-verbose=<level>\n");
+    fprintf(stderr, "\t-xeno\n");
+    fprintf(stderr, "\t-indels\n");
+    fprintf(stderr, "\t-unaligned\n");
+    fprintf(stderr, "\t-mismatches\n");
+    fprintf(stderr, "\t-codonsub\n");
     return 1;
     }
 db = optionVal("db", "hg15");
-vfName = optionVal("ver", NULL);
-dfName = optionVal("der", NULL);
 verb = optionInt("verbose", 0);
+fprintf(stderr, "verbose = %d\n", verb);
 verboseSetLevel(verb);
+/*verboseSetLevel(5);*/
+vfName = optionVal("versions", NULL);
+dfName = optionVal("der", NULL);
 indelReport = optionExists("indels");
 unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
