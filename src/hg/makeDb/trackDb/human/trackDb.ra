@@ -213,7 +213,7 @@ longLabel Chimp Simple Differences in Regions of High Quality Sequence
 group compGeno
 priority 145.8
 visibility hide
-type bed 4+
+type bed 3+
 
 
 track affyGeno
