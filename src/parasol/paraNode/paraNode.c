@@ -625,25 +625,30 @@ struct dlNode *node;
 
 pmClear(&pmIn);
 pmPrintf(&pmIn, "%d running", dlCount(jobsRunning));
-pmSend(&pmIn, mainRudp);
+if (!pmSend(&pmIn, mainRudp))
+    return;
 for (node = jobsRunning->head; !dlEnd(node); node=node->next)
     {
     job = node->val;
     pmClear(&pmIn);
     pmPrintf(&pmIn, "%s", job->startMessage);
-    pmSend(&pmIn, mainRudp);
+    if (!pmSend(&pmIn, mainRudp))
+        return;
     }
 pmClear(&pmIn);
 pmPrintf(&pmIn, "%d recent", dlCount(jobsFinished));
-pmSend(&pmIn, mainRudp);
+if (!pmSend(&pmIn, mainRudp))
+    return;
 for (node = jobsFinished->head; !dlEnd(node); node=node->next)
     {
     job = node->val;
     pmClear(&pmIn);
     pmPrintf(&pmIn, "%s", job->startMessage);
-    pmSend(&pmIn, mainRudp);
+    if (!pmSend(&pmIn, mainRudp))
+        return;
     pmPrintf(&pmIn, "%s", job->doneMessage);
-    pmSend(&pmIn, mainRudp);
+    if (!pmSend(&pmIn, mainRudp))
+        return;
     }
 }
 
