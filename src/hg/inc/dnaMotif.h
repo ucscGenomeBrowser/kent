@@ -17,6 +17,8 @@ struct dnaMotif
     float *tProb;	/* Probability of T's in each column. */
     };
 
+#define dnaMotifRowSize 6  /* Number of stored fields, not including next */
+
 struct dnaMotif *dnaMotifLoad(char **row);
 /* Load a dnaMotif from row fetched with select * from dnaMotif
  * from database.  Dispose of this with dnaMotifFree(). */
