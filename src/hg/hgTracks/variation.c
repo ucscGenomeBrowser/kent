@@ -6,6 +6,12 @@
 void filterSnpMapItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
 /* Filter out items from track->itemList. */
 {
+filterSnpItems(tg, filter);
+}
+
+void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
+/* Filter out items from track->itemList. */
+{
 struct slList *newList = NULL, *el, *next;
 
 for (el = tg->items; el != NULL; el = next)
@@ -42,21 +48,6 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
  	if (strcmp(snpMapTypeCart[snpMapType], "exclude"))
  	    return TRUE;
 return FALSE;
-}
-
-void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
-/* Filter out items from track->itemList. */
-{
-struct slList *newList = NULL, *el, *next;
-
-for (el = tg->items; el != NULL; el = next)
-    {
-    next = el->next;
-    if (filter(tg, el))
- 	slAddHead(&newList, el);
-    }
-slReverse(&newList);
-tg->items = newList;
 }
 
 boolean snpSourceFilterItem(struct track *tg, void *item)
@@ -131,11 +122,9 @@ void loadSnpMap(struct track *tg)
 int  snpMapSource, snpMapType;
 
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
-    snpMapSourceCart[snpMapSource] = cartUsualString(cart, 
-       snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
+    snpMapSourceCart[snpMapSource] = cartUsualString(cart, snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
-    snpMapTypeCart[snpMapType] = cartUsualString(cart, 
-       snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
+    snpMapTypeCart[snpMapType] = cartUsualString(cart, snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
 if (strncmp(database,"hg",2))
     return;
@@ -163,8 +152,7 @@ for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
 for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
-if (strncmp(database,"hg",2))
-    return;
+
 filterSnpItems(tg, snpSourceFilterItem);
 filterSnpItems(tg, snpMolTypeFilterItem);
 filterSnpItems(tg, snpClassFilterItem);
@@ -188,9 +176,8 @@ Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snpMap track item. */
 {
 struct snpMap *el = item;
-enum   snpColorEnum thisSnpColor;
+enum   snpColorEnum thisSnpColor = stringArrayIx(snpMapSourceCart[stringArrayIx(el->source,snpMapSourceDataName,snpMapSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
 
-thisSnpColor = stringArrayIx(snpMapSourceCart[stringArrayIx(el->source,snpMapSourceDataName,snpMapSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
 switch (thisSnpColor)
     {
     case snpColorRed:
@@ -537,8 +524,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (vis==tvSquish)
 	drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
     else
-	drawScaledBox(vg, s, e, scale, xOff,
-		      y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
+	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
     }
 }
 
@@ -556,5 +542,3 @@ void perlegenMethods(struct track *tg)
 haplotypeMethods(tg);
 tg->itemName = perlegenName;
 }
-
-
