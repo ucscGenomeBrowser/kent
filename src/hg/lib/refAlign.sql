@@ -12,14 +12,13 @@ CREATE TABLE refAlign (
     score int unsigned not null,	# Score from 0-1000
     matches int unsigned not null,	# Number of bases that match
     misMatches int unsigned not null,	# Number of bases that don't match
-    aNumInsert int unsigned not null,	# Number of inserts in aligned seq
-    aBaseInsert int not null,	# Number of bases inserted in query
     hNumInsert int unsigned not null,	# Number of inserts in human
     hBaseInsert int not null,	# Number of bases inserted in human
+    aNumInsert int unsigned not null,	# Number of inserts in aligned seq
+    aBaseInsert int not null,	# Number of bases inserted in query
     humanSeq varchar(255) not null,	# Human sequence, contains - for aligned seq inserts
     alignSeq varchar(255) not null,	# Aligned sequence, contains - for human seq inserts
+    attribs varchar(255) not null,	# Comma seperated list of attribute names
               #Indices
-    PRIMARY KEY(name),
-    UNIQUE(chrom(8),chromStart),
-    UNIQUE(chrom(8),chromEnd)
+    PRIMARY KEY(chrom)
 );

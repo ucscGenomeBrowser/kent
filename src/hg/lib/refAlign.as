@@ -8,10 +8,11 @@ table refAlign
     uint   score;      "Score from 0-1000"
     uint matches;      "Number of bases that match"
     uint misMatches;   "Number of bases that don't match"
-    uint aNumInsert;   "Number of inserts in aligned seq"
-    int aBaseInsert;   "Number of bases inserted in query"
     uint hNumInsert;   "Number of inserts in human"
     int hBaseInsert;   "Number of bases inserted in human"
+    uint aNumInsert;   "Number of inserts in aligned seq"
+    int aBaseInsert;   "Number of bases inserted in query"
     string humanSeq;   "Human sequence, contains - for aligned seq inserts"
     string alignSeq;   "Aligned sequence, contains - for human seq inserts"
+    string attribs;    "Comma seperated list of attribute names"
    ) 

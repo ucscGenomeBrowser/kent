@@ -21,12 +21,13 @@ ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 ret->matches = sqlUnsigned(row[5]);
 ret->misMatches = sqlUnsigned(row[6]);
-ret->aNumInsert = sqlUnsigned(row[7]);
-ret->aBaseInsert = sqlSigned(row[8]);
-ret->hNumInsert = sqlUnsigned(row[9]);
-ret->hBaseInsert = sqlSigned(row[10]);
+ret->hNumInsert = sqlUnsigned(row[7]);
+ret->hBaseInsert = sqlSigned(row[8]);
+ret->aNumInsert = sqlUnsigned(row[9]);
+ret->aBaseInsert = sqlSigned(row[10]);
 ret->humanSeq = row[11];
 ret->alignSeq = row[12];
+ret->attribs = row[13];
 }
 
 struct refAlign *refAlignLoad(char **row)
@@ -45,12 +46,13 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 ret->matches = sqlUnsigned(row[5]);
 ret->misMatches = sqlUnsigned(row[6]);
-ret->aNumInsert = sqlUnsigned(row[7]);
-ret->aBaseInsert = sqlSigned(row[8]);
-ret->hNumInsert = sqlUnsigned(row[9]);
-ret->hBaseInsert = sqlSigned(row[10]);
+ret->hNumInsert = sqlUnsigned(row[7]);
+ret->hBaseInsert = sqlSigned(row[8]);
+ret->aNumInsert = sqlUnsigned(row[9]);
+ret->aBaseInsert = sqlSigned(row[10]);
 ret->humanSeq = cloneString(row[11]);
 ret->alignSeq = cloneString(row[12]);
+ret->attribs = cloneString(row[13]);
 return ret;
 }
 
@@ -60,7 +62,7 @@ struct refAlign *refAlignLoadAll(char *fileName)
 {
 struct refAlign *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -89,12 +91,13 @@ ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 ret->matches = sqlUnsignedComma(&s);
 ret->misMatches = sqlUnsignedComma(&s);
-ret->aNumInsert = sqlUnsignedComma(&s);
-ret->aBaseInsert = sqlSignedComma(&s);
 ret->hNumInsert = sqlUnsignedComma(&s);
 ret->hBaseInsert = sqlSignedComma(&s);
+ret->aNumInsert = sqlUnsignedComma(&s);
+ret->aBaseInsert = sqlSignedComma(&s);
 ret->humanSeq = sqlStringComma(&s);
 ret->alignSeq = sqlStringComma(&s);
+ret->attribs = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -110,6 +113,7 @@ freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->humanSeq);
 freeMem(el->alignSeq);
+freeMem(el->attribs);
 freez(pEl);
 }
 
@@ -148,13 +152,13 @@ fprintf(f, "%u", el->matches);
 fputc(sep,f);
 fprintf(f, "%u", el->misMatches);
 fputc(sep,f);
-fprintf(f, "%u", el->aNumInsert);
-fputc(sep,f);
-fprintf(f, "%d", el->aBaseInsert);
-fputc(sep,f);
 fprintf(f, "%u", el->hNumInsert);
 fputc(sep,f);
 fprintf(f, "%d", el->hBaseInsert);
+fputc(sep,f);
+fprintf(f, "%u", el->aNumInsert);
+fputc(sep,f);
+fprintf(f, "%d", el->aBaseInsert);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->humanSeq);
@@ -162,6 +166,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->alignSeq);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->attribs);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

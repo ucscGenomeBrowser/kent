@@ -16,12 +16,13 @@ struct refAlign
     unsigned score;	/* Score from 0-1000 */
     unsigned matches;	/* Number of bases that match */
     unsigned misMatches;	/* Number of bases that don't match */
-    unsigned aNumInsert;	/* Number of inserts in aligned seq */
-    int aBaseInsert;	/* Number of bases inserted in query */
     unsigned hNumInsert;	/* Number of inserts in human */
     int hBaseInsert;	/* Number of bases inserted in human */
+    unsigned aNumInsert;	/* Number of inserts in aligned seq */
+    int aBaseInsert;	/* Number of bases inserted in query */
     char *humanSeq;	/* Human sequence, contains - for aligned seq inserts */
     char *alignSeq;	/* Aligned sequence, contains - for human seq inserts */
+    char *attribs;	/* Comma seperated list of attribute names */
     };
 
 void refAlignStaticLoad(char **row, struct refAlign *ret);
