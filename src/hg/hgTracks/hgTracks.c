@@ -4376,7 +4376,7 @@ if (sameString(database, "hg5"))
     printEnsemblAnchor();
     fputs("Visit Ensembl</A></TD>", stdout);
     }
-fputs("<TD><P ALIGN=CENTER><A HREF=\"../goldenPath/hgBlat.html\">BLAT Search</A></TD></TR>", stdout);
+fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD></TR>", database);
 fputs("</TABLE><CENTER>\n", stdout);
 
 /* Display bottom control panel. */

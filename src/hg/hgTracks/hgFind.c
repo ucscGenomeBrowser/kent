@@ -415,8 +415,8 @@ fprintf(f, "This aligns in multiple positions.  Click on a hyperlink to ");
 fprintf(f, "go to tracks display at a particular alignment.<BR>");
 
 fprintf(f, "<TT><PRE>");
-fprintf(f, " SIZE IDENTITY  CHROMOSOME   START     END       cDNA   START  END  TOTAL\n");
-fprintf(f, "-------------------------------------------------------------------------\n");
+fprintf(f, " SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
+fprintf(f, "------------------------------------------------------------------------------\n");
 }
 
 static void mrnaHtmlEnd(struct hgPosTable *table, FILE *f)
@@ -478,10 +478,10 @@ else
 	    pos->name = cloneString(psl->qName);
 	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s%s\">",
 	        browserUrl, hgPosBrowserRange(pos, NULL), extraCgi);
-	    dyStringPrintf(dy, "%5d  %5.1f%%  %9s  %9d %9d  %8s %5d %5d %5d</A>",
+	    dyStringPrintf(dy, "%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		skipChr(psl->tName), psl->tStart + 1, psl->tEnd,
+		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
 		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
 	    dyStringPrintf(dy, "\n");
 	    pos->description = cloneString(dy->string);
