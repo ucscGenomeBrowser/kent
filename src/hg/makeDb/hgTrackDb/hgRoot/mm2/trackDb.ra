@@ -1,0 +1,10 @@
+track rikenMrna
+shortLabel Riken mRNA
+longLabel Riken Full Length Mouse mRNAs
+priority 18
+visibility full
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+
