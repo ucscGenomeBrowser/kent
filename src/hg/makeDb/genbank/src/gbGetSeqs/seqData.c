@@ -41,7 +41,8 @@ short version = gbSplitAccVer(inFa->id, acc);
 
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version == entry->selectVer))
+if ((entry != NULL) && (version == entry->selectVer)
+    && !entry->clientFlags)
     {
     /* selected, output if it appears valid */
     if (isValidMrnaSeq(inFa))
@@ -49,6 +50,7 @@ if ((entry != NULL) && (version == entry->selectVer))
         if (!gInclVersion)
             strcpy(inFa->id, acc);  /* remove version */
         gbFaWriteFromFa(gOutFa, inFa, NULL);
+        entry->clientFlags = TRUE; /* flag so only gotten once */
         }
     else
         {

@@ -58,8 +58,12 @@ static void processRecord(struct gbSelect* select,  char acc[GB_ACC_BUFSZ],
 {
 
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version == entry->selectVer))
+if ((entry != NULL) && (version == entry->selectVer)
+    && !entry->clientFlags)
+    {
     fputs(rec, gOutFh);
+    entry->clientFlags = TRUE; /* flag so only gotten once */
+    }
 
 /* trace if enabled */
 if (verbose >= 3)

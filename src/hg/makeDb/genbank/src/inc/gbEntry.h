@@ -26,6 +26,8 @@ struct gbEntry
                                       * set. */
     UBYTE type;                      /* mRNA or, EST */
     UBYTE orgCat;                    /* GB_NATIVE or GB_XENO */
+    UBYTE clientFlags;               /* byte of flags that can be used
+                                      * by client */
     struct gbProcessed* processed;   /* entry processed/, newest first */
     struct gbAligned* aligned;       /* aligned object, newest first */
 };
