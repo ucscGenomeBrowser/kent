@@ -1278,7 +1278,6 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
-
 boolean handleTwoSites(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
 
@@ -1300,6 +1299,9 @@ boolean secondSuccess;
 
 firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
 secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
+
+/*
+
 commaspot = strcspn(spec,",");
 strncpy(firststring,spec,commaspot);
 firststring[commaspot] = '\0';
@@ -1330,6 +1332,8 @@ if (strcmp(firstChromName,secondChromName) != 0)
 *retWinStart = min(firstWinStart,secondWinStart);
 *retWinEnd = max(firstWinEnd,secondWinEnd);
 return TRUE;
+
+*/
 }
 
 
