@@ -17,24 +17,14 @@
 &nbsp;
 </td>
 <td>
-<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\">
-&nbsp;
-&nbsp;
+<!submitbutton>
 <!delbutton>
-&nbsp;
-&nbsp;
 <!pushbutton>
-&nbsp;
-&nbsp;
 <!clonebutton>
-&nbsp;
-&nbsp;
 <!bouncebutton>
-&nbsp;
-&nbsp;
-<a href=\"/cgi-bin/qaPushQ?cb=<!cb>\">CANCEL</a>
-&nbsp;
-&nbsp;
+<!lockbutton>
+<!refreshlink>
+<!cancellink>
 <a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>&cb=<!cb>\" target=\"_blank\">HELP</a>
 </td></tr>
 
@@ -42,7 +32,7 @@
 Priority:
 </td>
 <td>
-<select NAME=\"priority\" SIZE=1>
+<select NAME=\"priority\" SIZE=1 <!DISABLED>>
 <option <!sel-priority-A> value=\"A\">A</option>
 <option <!sel-priority-B> value=\"B\">B</option>
 <option <!sel-priority-C> value=\"C\">C</option>
@@ -56,7 +46,7 @@ Priority:
 Date Opened:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"qadate\" SIZE=\"10\" VALUE=\"<!qadate>\">
+<input TYPE=\"text\" NAME=\"qadate\" SIZE=\"10\" VALUE=\"<!qadate>\" <!READONLY>>
 &nbsp;&nbsp;&nbsp;&nbsp;Initial submission: <!initdate>
 </td></tr>
 
@@ -64,7 +54,7 @@ Date Opened:
 New track?:
 </td>
 <td>
-<select NAME=\"newYN\" SIZE=1>
+<select NAME=\"newYN\" SIZE=1 <!DISABLED>>
 <option <!sel-newYN-N> value=\"N\">N</option>
 <option <!sel-newYN-Y> value=\"Y\">Y</option>
 </select>
@@ -74,54 +64,49 @@ New track?:
 Track:
 </td>
 <td>
-<TEXTAREA NAME=\"track\", ROWS=\"4\", COLS=\"60\"><!track></TEXTAREA>
+<TEXTAREA NAME=\"track\", ROWS=\"4\", COLS=\"60\" <!READONLY>><!track></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Databases:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"dbs\" SIZE=\"60\" VALUE=\"<!dbs>\">
+<input TYPE=\"text\" NAME=\"dbs\" SIZE=\"60\" VALUE=\"<!dbs>\" <!READONLY>>
 </td></tr>
 
 <tr><td align=\"right\">
 Tables:
 </td>
 <td>
-<TEXTAREA NAME=\"tbls\", ROWS=\"5\", COLS=\"60\"><!tbls></TEXTAREA>
+<TEXTAREA NAME=\"tbls\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!tbls></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 CGIs:
 </td>
 <td>
-<TEXTAREA NAME=\"cgis\", ROWS=\"5\", COLS=\"60\"><!cgis></TEXTAREA>
+<TEXTAREA NAME=\"cgis\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!cgis></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Files:
 </td>
 <td>
-<TEXTAREA NAME=\"files\", ROWS=\"5\", COLS=\"60\"><!files></TEXTAREA>
+<TEXTAREA NAME=\"files\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!files></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Size(MB):
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"10\" VALUE=\"<!sizeMB>\">
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">
+<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"10\" VALUE=\"<!sizeMB>\" <!READONLY>>
+<!sizesbutton>
 </td></tr>
 
 <tr><td align=\"right\">
 Current Location:
 </td><td>
-<select NAME=\"currLoc\" SIZE=1>
+<select NAME=\"currLoc\" SIZE=1 <!DISABLED>>
 <option <!sel-currLoc-hgwdev> value=\"hgwdev\">hgwdev</option>
 <option <!sel-currLoc-hgwbeta> value=\"hgwbeta\">hgwbeta</option>
 </select>
@@ -131,7 +116,7 @@ Current Location:
 <tr><td align=\"right\">
 Makedoc verified?: </td>
 <td>
-<select NAME=\"makeDocYN\" SIZE=1>
+<select NAME=\"makeDocYN\" SIZE=1 <!DISABLED>>
 <option <!sel-makeDocYN-N> value=\"N\">N</option>
 <option <!sel-makeDocYN-Y> value=\"Y\">Y</option>
 </select>
@@ -141,7 +126,7 @@ Makedoc verified?: </td>
 Online Help:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"onlineHelp\" SIZE=\"60\" VALUE=\"<!onlineHelp>\">
+<input TYPE=\"text\" NAME=\"onlineHelp\" SIZE=\"60\" VALUE=\"<!onlineHelp>\" <!READONLY>>
 </select>
 
 </td></tr>
@@ -149,7 +134,7 @@ Online Help:
 <tr><td align=\"right\">
 Index verified?: </td>
 <td>
-<select NAME=\"ndxYN\" SIZE=1>
+<select NAME=\"ndxYN\" SIZE=1 <!DISABLED>>
 <option <!sel-ndxYN-N> value=\"N\">N</option>
 <option <!sel-ndxYN-Y> value=\"Y\">Y</option>
 </select>
@@ -158,7 +143,7 @@ Index verified?: </td>
 <tr><td align=\"right\">
 All.Joiner verified?: </td>
 <td>
-<select NAME=\"joinerYN\" SIZE=1>
+<select NAME=\"joinerYN\" SIZE=1 <!DISABLED>>
 <option <!sel-joinerYN-N> value=\"N\">N</option>
 <option <!sel-joinerYN-Y> value=\"Y\">Y</option>
 </select>
@@ -168,66 +153,56 @@ All.Joiner verified?: </td>
 Status:  
 </td>
 <td>
-<TEXTAREA NAME=\"stat\", ROWS=\"5\", COLS=\"60\"><!stat></TEXTAREA>
+<TEXTAREA NAME=\"stat\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!stat></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Sponsor (local):
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"sponsor\" SIZE=\"60\" VALUE=\"<!sponsor>\">
+<input TYPE=\"text\" NAME=\"sponsor\" SIZE=\"60\" VALUE=\"<!sponsor>\" <!READONLY>>
 </td></tr>
 
 <tr><td align=\"right\">
 Reviewer:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"reviewer\" SIZE=\"60\" VALUE=\"<!reviewer>\">
+<input TYPE=\"text\" NAME=\"reviewer\" SIZE=\"60\" VALUE=\"<!reviewer>\" <!READONLY>>
 </td></tr>
 
 <tr><td align=\"right\">
 External Source <br>or Collaborator:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"extSource\" SIZE=\"60\" VALUE=\"<!extSource>\">
+<input TYPE=\"text\" NAME=\"extSource\" SIZE=\"60\" VALUE=\"<!extSource>\" <!READONLY>>
 </td></tr>
 
 <tr><td align=\"right\">
 Open Issues:
 </td>
 <td>
-<TEXTAREA NAME=\"openIssues\", ROWS=\"5\", COLS=\"60\"><!openIssues></TEXTAREA>
+<TEXTAREA NAME=\"openIssues\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!openIssues></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Notes:
 </td>
 <td>
-<TEXTAREA NAME=\"notes\", ROWS=\"5\", COLS=\"60\"><!notes></TEXTAREA>
+<TEXTAREA NAME=\"notes\", ROWS=\"5\", COLS=\"60\" <!READONLY>><!notes></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 &nbsp;
 </td>
 <td>
-<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\">
-&nbsp;
-&nbsp;
+<!submitbutton>
 <!delbutton>
-&nbsp;
-&nbsp;
 <!pushbutton>
-&nbsp;
-&nbsp;
 <!clonebutton>
-&nbsp;
-&nbsp;
 <!bouncebutton>
-&nbsp;
-&nbsp;
-<a href=\"/cgi-bin/qaPushQ?cb=<!cb>\">CANCEL</a>
-&nbsp;
-&nbsp;
+<!lockbutton>
+<!refreshlink>
+<!cancellink>
 <a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>&cb=<!cb>\" target=\"_blank\">HELP</a>
 </td></tr>
 
