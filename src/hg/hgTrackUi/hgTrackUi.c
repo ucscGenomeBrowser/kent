@@ -316,10 +316,44 @@ printf(" off ");
 printf("<br><br>");
 }
 
+
+void binomialConsUi(struct trackDb *tdb)
+/* put up UI for the GC percent track (a sample track)*/
+{
+int binomialConsHeightPer = atoi(cartUsualString(cart, "binomialCons.heightPer", "30"));
+char *interpolate = cartUsualString(cart, "binomialCons.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "binomialCons.anti.alias", "on");
+char *fill = cartUsualString(cart, "binomialCons.fill", "1");
+int binomialConsLineGap = atoi(cartUsualString(cart, "binomialCons.interp.gap", "25000"));
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("binomialCons.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("binomialCons.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("binomialCons.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("binomialCons.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("binomialCons.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("binomialCons.heightPer", binomialConsHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+
 void zooUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
 {
-int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "100"));
+int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "30"));
 char *interpolate = cartUsualString(cart, "zoo.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "zoo.anti.alias", "on");
 char *fill = cartUsualString(cart, "zoo.fill", "1");
@@ -345,11 +379,6 @@ printf(" off ");
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("zoo.heightPer", zooHeightPer, 5 );
 printf("&nbsp;pixels");
-
-printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("zoo.interp.gap", zooLineGap, 10 );
-printf("&nbsp;bases");
-
 
 }
 
@@ -492,6 +521,8 @@ else if (sameString(track, "GCwiggle"))
     GCwiggleUi(tdb);
 else if (sameString(track, "zoo"))
     zooUi(tdb);
+else if (sameString(track, "binomialCons"))
+    binomialConsUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "humMus"))
