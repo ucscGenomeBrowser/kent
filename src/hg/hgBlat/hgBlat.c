@@ -360,6 +360,8 @@ int oneSize, totalSize = 0;
 boolean isTx = FALSE;
 boolean isTxTx = FALSE;
 boolean txTxBoth = FALSE;
+struct gfOutput *gvo;
+boolean qIsProt = FALSE;
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -378,6 +380,7 @@ else if (sameWord(type, "protein"))
     {
     seqList = faSeqListFromMemText(seqLetters, FALSE);
     isTx = TRUE;
+    qIsProt = TRUE;
     }
 else 
     {
@@ -407,6 +410,7 @@ makeTempName(&faTn, "hgSs", ".fa");
 faWriteAll(faTn.forCgi, seqList);
 
 /* Create a temporary .psl file with the alignments against genome. */
+gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(genome, isTx);
 makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
@@ -446,34 +450,29 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     conn = gfConnect(serve->host, serve->port);
     if (isTx)
 	{
-	static struct gfSavePslxData outForm;
-	outForm.f = f;
-	outForm.reportTargetStrand = TRUE;
+	gvo->reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &outForm, !txTxBoth);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &outForm, FALSE);
+		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, gvo, FALSE);
 		}
 	    }
 	else
 	    {
-	    outForm.qIsProt = TRUE;
-	    gfAlignTrans(&conn, serve->nibDir, seq, 5, gfSavePslx, &outForm);
+	    gfAlignTrans(&conn, serve->nibDir, seq, 5, gvo);
 	    }
 	}
     else
 	{
-	static struct gfSavePslxData outForm;
-	outForm.f = f;
-	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, gvo);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, gvo);
 	}
+    gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
 
