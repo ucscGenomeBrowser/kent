@@ -1,6 +1,7 @@
 #	Common set of build rules for CGI binaries
 
 my:: compile
+	chmod a+rx $A
 	mv $A ${CGI_BIN}-${USER}/$A
 
 alpha:: strip
@@ -11,9 +12,10 @@ beta:: strip
 
 strip::  compile
 	strip $A
+	chmod g+w $A
+	chmod a+rx $A
 
-install::        compile
-	strip $A
+install::  strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
