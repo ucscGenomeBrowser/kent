@@ -3030,6 +3030,7 @@ char *table = getTableName();
 char *track = getTrackName();
 char *track2 = getTrack2Name();
 char track2CGI[128];
+char posBuf[64];
 int itemCount;
 
 saveOutputOptionsState();
@@ -3051,8 +3052,12 @@ for (bedPtr = bedList;  bedPtr != NULL;  bedPtr = bedPtr->next)
     printf("<A HREF=\"%s?db=%s&position=%s:%d-%d&%s=full%s&hgsid=%d\"",
 	   hgTracksName(), hGetDb(), bedPtr->chrom, bedPtr->chromStart+1,
 	   bedPtr->chromEnd, track, track2CGI, cartSessionId(cart));
-    printf(" TARGET=_blank> %s %s:%d-%d <BR>\n", bedPtr->name, bedPtr->chrom,
-	   bedPtr->chromStart+1, bedPtr->chromEnd);
+    snprintf(posBuf, sizeof(posBuf), "%s:%d-%d", bedPtr->chrom,
+	     bedPtr->chromStart+1, bedPtr->chromEnd);
+    if (sameString(bedPtr->name, posBuf))
+	printf(" TARGET=_blank> %s <BR>\n", posBuf);
+    else
+	printf(" TARGET=_blank> %s %s <BR>\n", bedPtr->name, posBuf);
     itemCount++;
     }
 bedFreeList(&bedList);
