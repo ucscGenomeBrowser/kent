@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.4 2004/02/26 18:01:11 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.5 2004/02/28 08:58:10 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,8 +19,9 @@ errAbort(
   "   htmlCheck how url\n"
   "where how is:\n"
   "   ok - just check for 200 return.  Print error message and exit -1 if no 200\n"
-  "   read - read the url and print to stdout\n"
-  "   header - read the header and print to stdout\n"
+  "   printAll - read the url (header and html) and print to stdout\n"
+  "   printHeader - read the header and print to stdout\n"
+  "   printHtml - print the html, but not the header to stdout\n"
   "   printLinks - print links\n"
   "   printTags - print out just the tags\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
@@ -52,7 +53,8 @@ struct httpTag
     struct httpTag *next;
     char *name;	/* Tag name. */
     struct httpAttribute *attributes;  /* Attribute list. */
-    char context[70];	/* Characters following tag. */
+    char *start;  /* Start of this tag. */
+    char *end;	  /* End of tag (one past closing '>') */
     };
 
 struct httpPage
@@ -60,6 +62,8 @@ struct httpPage
     {
     struct httpPage *next;
     struct httpStatus *status;		/* Version and status */
+    char *fullText;			/* Full unparsed text including headers. */
+    char *htmlText;			/* Text unparsed after header. */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
     struct httpTag *tags;		/* List of tags in this page. */
     struct slName *links;		/* List of all links. */
@@ -191,11 +195,14 @@ for (;;)
 	    tag->name = cloneString(tagName);
 	    slAddHead(&tagList, tag);
 	    pos = tagName - dupe - 1;
-	    strncpy(tag->context, html+pos, sizeof(tag->context));
+	    tag->start = html+pos;
 
 	    /* If already got end tag (or EOF) stop processing tag. */
 	    if (c == '>' || c == 0)
+		{
+		tag->end = html + (e - dupe);
 	        continue;
+		}
 
 	    /* Process name/value pairs until get end tag. */
 	    for (;;)
@@ -206,7 +213,12 @@ for (;;)
 		/* Check for end tag. */
 		s = skipLeadingSpaces(s);
 		if (s[0] == '>' || s[0] == 0)
+		    {
+		    tag->end = html + (s - dupe);
+		    if (s[0] == '>')
+			tag->end += 1;
 		    break;
+		    }
 
 		/* Get name - everything up to equals. */
 		e = strchr(s, '=');
@@ -233,6 +245,7 @@ for (;;)
 			    {
 			    gotEnd = TRUE;
 			    *e++ = 0;
+			    tag->end = html + (e - dupe);
 			    break;
 			    }
 			else if (isspace(c))
@@ -272,8 +285,10 @@ struct httpStatus *status = httpStatusParse(&s);
 if (status == NULL)
     return NULL;
 AllocVar(page);
+page->fullText = html;
 page->status = status;
 page->header = httpHeaderRead(&s);
+page->htmlText = html + (s - dupe);
 page->tags = httpTagScan(s);
 freeMem(dupe);
 return page;
@@ -345,10 +360,9 @@ while ((line = nextCrLfLine(&html)) != NULL)
     }
 }
 
-void printLinks(char *html)
+void printLinks(struct httpPage *page)
 /* Print out all links. */
 {
-struct httpPage *page = httpPageParseOk(html);
 struct slName *link, *linkList = httpPageLinks(page);
 for (link = linkList; link != NULL; link = link->next)
     {
@@ -356,14 +370,14 @@ for (link = linkList; link != NULL; link = link->next)
     }
 }
 
-void printTags(char *html)
+void printTags(struct httpPage *page)
 /* Print out all tags. */
 {
-struct httpPage *page = httpPageParseOk(html);
 struct httpTag *tag;
 struct httpAttribute *att;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
+    mustWrite(stdout, tag->start, tag->end - tag->start);
     printf("%s", tag->name);
     for (att = tag->attributes; att != NULL; att = att->next)
         {
@@ -396,14 +410,17 @@ struct httpTable
 void tagAbort(struct httpTag *tag, char *format, ...)
 /* Print abort message and some context of tag. */
 {
+char context[80];
 va_list args;
 va_start(args, format);
-warn("Error near: %s", tag->context);
+strncpy(context, tag->start, sizeof(context));
+context[sizeof(context)-1] = 0;
+warn("Error: %s", context);
 vaErrAbort(format, args);
 va_end(args);
 }
 
-void validateTables(struct httpTag *startTag, struct httpTag *endTag)
+void httpValidateTables(struct httpTag *startTag, struct httpTag *endTag)
 /* Validate <TABLE><TR><TD> are all properly nested, and that there
  * are no empty rows. */
 {
@@ -498,14 +515,13 @@ for (tag = startTag; tag != NULL; tag = tag->next)
     }
 if (endTag == NULL)
     errAbort("Missing </BODY>");
-validateTables(startTag, endTag);
+httpValidateTables(startTag, endTag);
 return endTag->next;
 }
 
-void validate(char *html)
+void validate(struct httpPage *page)
 /* Do some basic validations. */
 {
-struct httpPage *page = httpPageParseOk(html);
 struct httpTag *tag;
 boolean gotTitle;
 
@@ -539,21 +555,28 @@ verbose(1, "ok\n");
 void htmlCheck(char *command, char *url)
 /* Read url. Switch on command and dispatch to appropriate routine. */
 {
-struct dyString *htmlText = netSlurpUrl(url);
-if (sameString(command, "read"))
-    mustWrite(stdout, htmlText->string, htmlText->stringSize);
+struct dyString *dy = netSlurpUrl(url);
+char *fullText = dy->string;
+if (sameString(command, "printAll"))
+    mustWrite(stdout, dy->string, dy->stringSize);
 else if (sameString(command, "ok"))
-    checkOk(htmlText->string);
-else if (sameString(command, "header"))
-    printHeader(htmlText->string);
-else if (sameString(command, "printLinks"))
-    printLinks(htmlText->string);
-else if (sameString(command, "printTags"))
-    printTags(htmlText->string);
-else if (sameString(command, "validate"))
-    validate(htmlText->string);	
-else
-    errAbort("Unrecognized command %s", command);
+    checkOk(fullText);
+else if (sameString(command, "printHeader"))
+    printHeader(fullText);
+else /* Do everything that requires full parsing. */
+    {
+    struct httpPage *page = httpPageParseOk(fullText);
+    if (sameString(command, "printHtml"))
+        fputs(page->htmlText, stdout);
+    else if (sameString(command, "printLinks"))
+	printLinks(page);
+    else if (sameString(command, "printTags"))
+	printTags(page);
+    else if (sameString(command, "validate"))
+	validate(page);	
+    else
+	errAbort("Unrecognized command %s", command);
+    }
 }
 
 int main(int argc, char *argv[])
