@@ -142,7 +142,7 @@ group compGeno
 priority 16
 visibility dense
 color 160,0,0
-type bed 5 .
+type bed 4 .
 
 track binomialCons
 shortLabel Binomial
@@ -169,7 +169,7 @@ group compGeno
 priority 19
 visibility dense
 color 0,0,160
-type bed 3 .
+type bed 4 .
 
 track parsPValues
 shortLabel Parsimony P-Values
@@ -466,17 +466,17 @@ shortLabel Parsimony P-Values HMM
 longLabel Parsimony P-Values HMM
 group compGeno
 priority 49
-altColor 0,0,160
+altColor 160,0,0
 visibility full
 type sample
 
 track longMCS
-shortLabel Long MCSs
-longLabel Long MCSs
+shortLabel Intersecting MCSs
+longLabel Intersecting MCSs
 group compGeno
 priority 50
 visibility hide
-color 0,0,160
+color 0,160,0
 type bed 4 .
 
 track dhs
