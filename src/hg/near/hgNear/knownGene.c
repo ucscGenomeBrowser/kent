@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colKnownGene.c,v 1.5 2003/06/21 00:08:28 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.1 2003/06/21 04:53:18 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
