@@ -12,5 +12,7 @@ CREATE TABLE ctgPos2 (
     chromEnd int unsigned not null,	# End in chromosome
     type char(1) not null,	# (W)GS contig, (F)inished, (P)redraft, (D)raft, (O)ther
               #Indices
-    PRIMARY KEY(contig)
+    PRIMARY KEY(contig(14)),
+    UNIQUE(chrom(16),chromStart),
+    UNIQUE(chrom(16),chromEnd)
 );
