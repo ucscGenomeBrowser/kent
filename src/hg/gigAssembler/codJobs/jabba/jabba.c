@@ -437,7 +437,7 @@ dyStringFree(&cmd);
 void statusOutputChanged()
 /* Complain about status output format change and die. */
 {
-errAbort("%s output format changed, please update markQueuedJobs in jabba.c", 
+errAbort("\n%s output format changed, please update markQueuedJobs in jabba.c", 
 	statusCommand);
 }
 
@@ -455,11 +455,13 @@ int wordCount;
 int queueSize = 0;
 
 /* Execute qstat system call. */
+printf("jobs (everybody's) in Codine queue: ");
+fflush(stdout);
 dyStringAppend(cmd, statusCommand);
 dyStringPrintf(cmd, " > %s", tempName);
 err = system(cmd->string);
 if (err != 0)
-    errAbort("Couldn't execute '%s'", cmd->string);
+    errAbort("\nCouldn't execute '%s'", cmd->string);
 
 /* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
@@ -508,6 +510,7 @@ if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
 lineFileClose(&lf);
 freeHash(&hash);
 dyStringFree(&cmd);
+printf("%d\n", queueSize);
 return queueSize;
 }
 
@@ -771,7 +774,6 @@ boolean finished = FALSE;
 makeDir("err");
 makeDir("out");
 queueSize = markQueuedJobs(db);
-printf("jobs already in Codine queue: %d\n", queueSize);
 markRunJobStatus(db);
 
 for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
@@ -868,7 +870,6 @@ struct jobDb *db = readBatch(batch);
 int queueSize;
 
 queueSize = markQueuedJobs(db);
-printf("jobs (everybody's) in Codine queue: %d\n", queueSize);
 markRunJobStatus(db);
 reportOnJobs(db);
 
@@ -979,8 +980,8 @@ printf("command: %s\n", job->command);
 printf("jobId: %s\n", sub->id);
 printf("host: %s\n", rjo->host);
 printf("start time: %s\n", rjo->startTime);
-printf("run time so far: %d sec,  %4.2f hours,  %4.2f days\n", 
-	duration, duration/3600.0,  duration/(3600.0*24.0));
+printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
+	duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
 printErrFile(sub);
 printf("\n");
 hashFree(&hash);
@@ -1032,8 +1033,8 @@ writeBatch(db, batch);
 void printTimes(double seconds,  boolean showYears)
 /* Print out times in seconds, hours, days, maybe years. */
 {
-printf("%d s %4.2f h %4.2f d", 
-   round(seconds), seconds/3600, seconds/(3600*24));
+printf("%d s %4.2f m %4.2f h %4.2f d", 
+   round(seconds), seconds/60, seconds/3600, seconds/(3600*24));
 if (showYears)
      printf(" %5.3f y", seconds/(3600*24*365));
 printf("\n");
@@ -1114,7 +1115,13 @@ for (job = db->jobList; job != NULL; job = job->next)
 	if (sub->running)
 	   {
 	   struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-	   runTime += nowInSeconds() - dateToSeconds(rjo->startTime);
+	   int oneTime = nowInSeconds() - dateToSeconds(rjo->startTime);
+	   if (oneTime < 0)
+	       {
+	       warn("Strange start time in %s: %s", rjo->host, rjo->startTime);
+	       }
+	   else
+	       runTime += oneTime;
 	   ++runningCount;
 	   }
 	else if (sub->inQueue)
