@@ -139,7 +139,7 @@ type bed 12 .
 
 track pseudoYale
 shortLabel Yale Pseudo
-longLabel Processed Pseudogenes from yale 
+longLabel Yale Pseudogenes.
 group genes
 priority 53
 visibility hide
