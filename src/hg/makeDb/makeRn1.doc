@@ -1168,16 +1168,16 @@ SGP GENE PREDICTIONS (DONE 02/10/03)
     hgPepPred rn1 generic sgpPep download/*-fixed.prot
 
 
-TIGR GENE INDEX (TODO)
-    mkdir -p ~/rn1/bed/tigr
-    cd ~/rn1/bed/tigr
-    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_RatGenome_Feb2002.tgz
-    gunzip -c TGI_track_RatGenome_Feb2002.tgz | tar xvf -
+TIGR GENE INDEX (DONE 2/26/03)
+  o mkdir -p ~/rn1/bed/tigr    
+    cd ~/rn1/bed/tigr  
+    wget ftp://ftp.tigr.org/private/NHGI_rgi_dashu/TGI_track_RatGenome_Feb2003.tgz 
+    tar xvzf TGI*.tgz
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
     end
-    foreach o (rat cow human pig rat)
+    foreach o (mouse cow human pig rat)
       setenv O $o
       foreach f (chr*_$o*s)
         tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff

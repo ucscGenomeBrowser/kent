@@ -1460,60 +1460,23 @@ Now load the Fugu sequence data
        hgLoadRna addSeq hg13 /gbdb/hg13/fuguSeq/fugu_v3_mask.fasta
 
 
-PRODUCING FISH ALIGNMENTS (TO DO)
-o - Do fish/human alignments.
-       ssh kk
-       cd ~/oo/bed
-       mkdir blatFish
-       cd blatFish
-       mkdir psl
-       ls -1S /scratch/hg/fish/*.fa > fish.lst
-       ls -1S /scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
-       # Copy over gsub from previous version.
-       gensub2 human.lst fish.lst gsub spec
-       para create spec 
-       para try
-     Make sure jobs are going ok with para check.  Then
-       para push
-     wait about 2 hours and do another
-       para push
-     do para checks and if necessary para pushes until done
-     or use para shove.
-o - Sort alignments as so 
-       pslCat -dir psl | \
-         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
-         pslSortAcc nohead chrom temp stdin
-o - Rename to correspond with tables as so and 
-    load into database:
-       ssh hgwdev
-       cd ~/oo/bed/blatFish/chrom
-       rm -f chr*_blatFish.psl
-       foreach i (*.psl)
-           set r = $i:r
-           mv $i ${r}_blatFish.psl
-       end
-       hgLoadPsl hg13 *.psl
+TIGR GENE INDEX (DONE 2/26/03)
+  o mkdir -p ~/hg13/bed/tigr    
+    cd ~/hg13/bed/tigr  
+    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build31.tgz
+    tar xvzf TGI*.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC hg13 tigrGeneIndex *.gff
 
-Now load the fish seqeuence data
-       hgLoadRna addSeq hg13 /cluster/store3/tetFish/tet*.fa
-
-
-TIGR GENE INDEX (todo)
-
-  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
-      ~/oo.29/bed/tgi and then execute the following commands:
-          cd ~/oo.29/bed/tgi
-	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
-	      mkdir $i
-	      cd $i
-	      gtar -zxf ../${i}*.tgz
-	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
-	      cd ..
-	  end
-	  mv human.gff human.bak
-	  sed s/THCs/TCs/ human.bak > human.gff
-	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
 
 
 LOAD STS MAP (todo) TODO BY TERRY I BELIEVE - HE WILL UPDATE THIS
@@ -2381,35 +2344,74 @@ LOAD CHIMP DATA
 
 # Load Ingo Ebersber's chimp BLAT alignments
 cd ~/oo
-mkdir bed/chimpBlat
-cd bed/chimpBlat
+mkdir bed/blatChimp
+cd bed/blatChimp
 
-#!/bin/sh
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
-do
-  wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_jun02/chr${i}_gp_F25Jun02.psl
-done
+# Get the chimp sequence
+wget http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/downloads/mpi-aligned_seqparts_jun02.fa.gz
 
-Remove the first line from each psl file to prepare them for pslCat using the fixFile.sh shell script.
-./fixFile.sh
-pslCat *.psl > chimpBlat.psl
-hgLoadPsl hg13 chimpBlat.psl
+cp ~/hg12/bed/blatChimp/gsub .
+mkdir -p /mnt/scratch/hg/chimp
+cp ./mpi-aligned_seqparts_jun02.fa /mnt/scratch/hg/chimp/chimp.fa
+ls -1S /mnt/scratch/hg/chimp/chimp.fa > chimp.lst
+ls -1S /mnt/scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
+
+mkdir psl
+gensub2 human.lst chimp.lst gsub spec
+para create spec
+para try
+para push
+para check
+
+o - Sort alignments as so
+        ssh eieio
+        cd ~/hg13/bed/blatChimp
+         pslCat -dir psl | \
+         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
+         pslSortAcc nohead chrom temp stdin
+         pslCat -dir chrom > blatChimp.psl
+
+ssh hgwdev
+cd hg13/bed/blatChimp
+hgLoadPsl hg13 blatChimp.psl         
+
+Make fugu symlink
+cd /gbdb/hg13
+mkdir fuguSeq
+cd fuguSeq
+ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
+Now load the Fugu sequence data
+       hgLoadRna addSeq hg13 /gbdb/hg13/fuguSeq/fugu_v3_mask.fasta
+
+hgLoadPsl hg13 blatChimp.psl
+
 
 o Load the chimp BAC data
+cd ~/oo
+mkdir bed/bacChimp
+cd bed/bacChimp
+wget http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/downloads/riken-aligned_seqparts_jun02.fa.gz
 
-#!/bin/sh
-for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
-do
-        wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/Riken-be_jun02/chr${i}_gp_F25Jun02.psl
-done
+cp ~/hg12/bed/bacChimp/gsub .
 
-Remove the first line from each psl file to prepare them for pslCat using the fixFile.sh shell script.
-./fixFile.sh
-pslCat *.psl > chimpBac.psl
-hgLoadPsl hg13 chimpBac.psl
+mkdir -p /mnt/scratch/hg/chimp
+cp ./riken-aligned_seqparts_jun02.fa /mnt/scratch/hg/chimp/chimpBac.fa
+ls -1S /mnt/scratch/hg/chimp/chimpBac.fa > chimp.lst
+ls -1S /mnt/scratch/hg/gs.14/build31/trfFa.1204/*.fa.trf > human.lst
 
+mkdir psl
+gensub2 human.lst chimp.lst gsub spec
+para create spec
+para try
+para push
+para check
+
+hgLoadPsl hg13 bacChimp.psl
+
+
+DATABASE DUMP, FYI
 # For the first database table dump
-do (it'a automated after that):
+do (it's automated after that):
 
 ssh hgwbeta
 mkdir /usr/local/apache/htdocs/goldenPath/14nov2002/database
@@ -2426,7 +2428,6 @@ When it is done do:
 cd /var/tmp/hg13-dump
 gzip *.txt
 mv * /usr/local/apache/htdocs/goldenPath/14nov2002/database
-DONE TO HERE
 
  - Make database.zip
 ssh hgwbeta
