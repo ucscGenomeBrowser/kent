@@ -15,10 +15,10 @@ struct wiggle
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
-    unsigned Span;	/* each value spans this many bases */
-    unsigned Count;	/* number of values in this block */
-    unsigned Offset;	/* offset in File to fetch data */
-    char *File;	/* path name to data file, one byte per value */
+    unsigned span;	/* each value spans this many bases */
+    unsigned count;	/* number of values in this block */
+    unsigned offset;	/* offset in File to fetch data */
+    char *file;	/* path name to data file, one byte per value */
     double lowerLimit;	/* lowest data value in this block */
     double dataRange;	/* lowerLimit + dataRange = upperLimit */
     unsigned validCount;	/* number of valid data values in this block */
