@@ -1062,7 +1062,6 @@ done
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     netClass -noAr noClass.net hg17 monDom1 human.net
     #	41 minutes
-    rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
@@ -1119,7 +1118,6 @@ done
     cd /cluster/data/monDom1/bed/bz.hg17/axtChain
     netClass -noAr noClass.net monDom1 hg17 monDom1.net
     #	16 minutes
-    rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netHg17 stdin
     #	6 minutes
 
@@ -1139,17 +1137,20 @@ done
     featureBits monDom1 netHg17
     #	3223616544 bases of 3492108230 (92.311%) in intersection
 
-# BLASTZ HUMAN CLEAN UP (TBD)
+# BLASTZ HUMAN CLEAN UP (DONE - 2005-01-12 - Hiram)
     ssh eieio
-    cd /cluster/data/monDom1/bed/zb
-    rm run1/chain/*.chain
-    rm -r noClass
-    rm chain.tab link.tab
-    rm noClass.net
+    cd /cluster/data/monDom1/bed/zb.hg17/axtChain
+    nice rm -rf noClass.net chain/chain.tab chain/link.tab chain.run1 \
+	chainRaw out &
+    nice gzip chain/* &
+    nice gzip human.net &
+    nice gzip all.chain &
+
+    cd /cluster/data/monDom1/bed/zb.hg17
     nice rm -rf raw &
-    nice rm axtChain/run1/chain/* &
-    nice rm -fr axtChain/n1 axtChain/hNoClass.net &
-    nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
+    nice gzip axtChrom/maf/* &
+    nice gzip axtChrom/*.axt &
+    nice gzip pslChrom/* lav/*/* &
 
 # LOAD CPGISSLANDS (DONE - 2004-12-13 - Hiram)
     ssh hgwdev
@@ -1476,14 +1477,12 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     exit		#	back to csh if you are csh normally
 
     cd ..
-    rm -r noClass
     
     # Add classification info using db tables: 
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     netClass -noAr noClass.net galGal2 monDom1 chicken.net
     #	56 minutes
-    rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
@@ -1535,7 +1534,6 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
     netClass -noAr noClass.net monDom1 galGal2 monDom1.net
     #	31 minutes
-    rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netGalGal2 stdin
     #	4 minutes
 
@@ -1552,8 +1550,20 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits monDom1 chainGalGal2
     #	2437546469 bases of 3492108230 (69.802%) in intersection
 
-# BLASTZ CHICKEN CLEAN UP (TBD)
-    rm chain.tab link.tab
+# BLASTZ CHICKEN CLEAN UP (DONE - 2005-01-12 - Hiram)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    nice rm -rf run1/out run1/chainRaw chain/chain.tab chain/link.tab \
+	noClass.net chainBeforeMerge noClass &
+    nice gzip chain/* &
+    nice gzip chicken.net &
+    nice gzip all.chain &
+
+    cd /cluster/data/monDom1/bed/zb.galGal2
+    nice rm -rf raw &
+    nice gzip axtNet/*.axt &
+    nice gzip axtChrom/*.axt &
+    nice gzip pslChrom/* lav/*/* &
 
 # ALIGN TO MOUSE (DONE - 2004-12-16 - Hiram)
 #	NAMING CONVENTION: the zb.mm5 directory will be the Opossum
@@ -1821,7 +1831,6 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     netClass -noAr noClass.net mm5 monDom1 mouse.net
     #	41 minutes
-    rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
@@ -1882,7 +1891,6 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     cd /cluster/data/monDom1/bed/bz.mm5/axtChain
     netClass -noAr noClass.net monDom1 mm5 monDom1.net
     #	13 minutes
-    rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netMm5 stdin
     #	3 minutes
 
@@ -1901,8 +1909,21 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits monDom1 netMm5
     #	2889580530 bases of 3492108230 (82.746%) in intersection
 
-# BLASTZ MOUSE CLEAN UP (TBD)
-    rm chain.tab link.tab
+# BLASTZ MOUSE CLEAN UP (DONE - 2005-01-12 - Hiram)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    nice rm -rf run1/out run1/chainRaw chain/chain.tab chain/link.tab \
+	noClass.net chainBeforeMerge noClass &
+    nice gzip chain/* &
+    nice gzip mouse.net &
+    nice gzip all.chain &
+
+    cd /cluster/data/monDom1/bed/zb.mm5
+    nice rm -rf raw &
+    nice gzip axtNet/*.axt &
+    nice gzip axtChrom/*.axt &
+    nice gzip pslChrom/* lav/*/* &
+
 
 # MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
     ssh eieio
@@ -2297,7 +2318,6 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
     netClass -noAr noClass.net danRer2 monDom1 zfish.net
     #	39 minutes
-    rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
@@ -2360,7 +2380,6 @@ XXX - TBD - 2004-12-19 20:15
     cd /cluster/data/monDom1/bed/bz.danRer2/axtChain
     netClass -noAr noClass.net monDom1 danRer2 ZFish.net
     #	12 minutes
-    rm noClass.net
     netFilter -minGap=10 ZFish.net | hgLoadNet monDom1 netDanRer2 stdin
     #	1 minute
 
@@ -2383,8 +2402,20 @@ XXX - TBD - 2004-12-19 20:15
     #	2437546469 bases of 3492108230 (69.802%) in intersection
     featureBits monDom1 chainMm5Link
 
-# BLASTZ ZEBRAFISH CLEAN UP (TBD)
-    rm chain.tab link.tab
+# BLASTZ ZEBRAFISH CLEAN UP (DONE - 2005-01-12 - Hiram)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    nice rm -rf run1/out run1/chainRaw chain/chain.tab chain/link.tab \
+	noClass.net chainBeforeMerge noClass &
+    nice gzip chain/* &
+    nice gzip zfish.net &
+    nice gzip all.chain &
+
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    nice rm -rf raw &
+    nice gzip axtNet/*.axt &
+    nice gzip axtChrom/*.axt &
+    nice gzip pslChrom/* lav/*/* &
 
 # 5-WAY VAR_MULTIZ - ALIGNMENTS Hg17, Mm5, MonDom1, GalGal2, DanRer2
 #		DONE - 2005-01-04 - Hiram
