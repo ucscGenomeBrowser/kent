@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.19 2003/09/13 19:00:26 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.20 2003/09/25 08:46:57 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -339,7 +339,7 @@ hPrintf("<TD>");
     {
     char *varName = scaleVarName(col);
     char *val = cartUsualString(cart, varName, "1.0");
-    hPrintf("scale: ");
+    hPrintf("brightness: ");
     cgiMakeTextVar(varName, val, 3);
     }
 hPrintf("</TD>");
