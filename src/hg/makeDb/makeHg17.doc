@@ -8477,3 +8477,25 @@ for i in `cat chrom.lst` ; do mafFilter -minScore=1000 maf/$i.maf > mafFilter/$i
 cd mafFilter
 for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov ; echo done $i ; done   
 
+
+#  Load firstEF track (DONE 2004-08-18 braney)
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/firstEF
+    cd /cluster/data/hg17/bed/firstEF
+    wget "http://bioinformatics.med.ohio-state.edu/downloads/firstEFMay04.bed.gz"
+    gunzip firstEFMay04.bed.gz
+    cat << '_EOF_' > sedScript
+s/chr23/chrX/g
+s/chr24/chrY/g
+/^>/d
+/^$/d
+/^No/d
+'_EOF_'
+
+    sed -f sedScript  firstEFMay04.bed.gz > firstEF.bed
+    hgLoadBed hg17 firstEF firstEF.bed
+    rm firstEF.tab
+    gzip *.bed
+#done firstEF
+
+
