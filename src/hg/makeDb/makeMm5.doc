@@ -2363,6 +2363,60 @@ hgLoadBlastTab mm5 knownBlastTab *.tab
     #	user    3m8.980s
     #	sys     0m28.800s
 
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes an hour.)
+# DONE (04-07-18 Fan)
+
+hgMapToGene mm5 affyGnf1m knownGene knownToGnf1m
+hgExpDistance mm5 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1m
+
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm5 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene mm5 affyU74  knownGene knownToU74
+hgMapToGene mm5 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm5 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm5/bed/rinnSex
+cd !$
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+    ../affyMOE430/affyMOE430.psl
+hgLoadBed mm5 rinnSex rinnSex.bed
+
+# Format and load the GNF data
+mkdir /cluster/data/mm5/bed/affyGnf95
+cd /cluster/data/mm5/bed/affyGnf95
+affyPslAndAtlasToBed -newType ../affyU95.psl \
+	/projects/compbio/data/microarray/affyGnfHuman/data_public_U95 \
+	affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+
+#	this .sql load was in preceeding instructions, but this .sql file
+#	appears to not exist and it doesn't seem to be needed anyway.
+#	Everything below this seems to create tables OK.
+#  hgsql mm5 < ~/kent/src/hg/affyGnf/affyGnfU95.sql
+
+# Create table that gives distance in expression space between 
+# GNF genes.  These commands take about 15 minutes each
+#	The affyGnfU74?Exps arguments appear to be unused in 
+hgExpDistance
+hgExpDistance mm5 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance \
+	-lookup=knownToU74
+# Got 13593 unique elements in affyGnfU74A
+hgExpDistance mm5 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance \
+	-lookup=knownToU74
+# Got 8512 unique elements in affyGnfU74B
+hgExpDistance mm5 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance \
+	-lookup=knownToU74
+# Got 2318 unique elements in affyGnfU74C
+
+
 # C.ELEGANS BLASTP FOR GENE SORTER (DONE 7/20/04 Fan)
     # Make C. elegans ortholog column using blastp on wormpep.
     # First make C. elegans protein database and copy it to iscratch/i
