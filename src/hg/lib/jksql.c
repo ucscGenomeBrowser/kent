@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.41 2003/10/15 08:40:12 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.42 2003/10/23 17:43:37 sugnet Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -397,7 +397,7 @@ void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors. 
  * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
- * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT */
+ * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT, SQL_TAB_TRANSACTION_SAFE */
 {
 char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
@@ -407,7 +407,10 @@ const char *info;
 struct sqlResult *sr;
 /* at least mysql 4.0 */
 boolean isMySql4 = (conn->conn->server_version[0] > '3');
-
+/* Doing an "alter table disable keys" command implicitly commits the current
+   transaction. Don't want to use that optimization if we need to be transaction
+   safe. */
+boolean doDisableKeys = !(options & SQL_TAB_TRANSACTION_SAFE);
 
 /* Ocassionally mysql_info() from return NULL on long loads.  It was
  * believed that this was due to the connection timing out during load.
@@ -444,7 +447,7 @@ if (options & SQL_TAB_FILE_CONCURRENT)
 else
     {
     concurrentOpt = "";
-    if (isMySql4)
+    if (isMySql4 && doDisableKeys)
         {
         /* disable update of indexes during load. Inompatible with concurrent,
          * since enable keys locks other's out. */
@@ -483,7 +486,7 @@ if ((numSkipped > 0) || (numWarnings > 0))
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
     }
-if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && isMySql4)
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && isMySql4 && doDisableKeys)
     {
     /* reenable update of indexes */
     safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
