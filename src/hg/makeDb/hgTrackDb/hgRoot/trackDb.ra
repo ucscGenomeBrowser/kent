@@ -776,11 +776,11 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blastzNetAlign
+track blastzNet
 shortLabel Net Align
-longLabel Blastz Mouse Best in Genome Alignments with chaining and netting @ 25 bp
+longLabel Blastz Mouse Best in Genome Alignments with chaining and netting
 priority 25.81
-visibility dense
+visibility full
 spectrum on
 type netAlign
 
