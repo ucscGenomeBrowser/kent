@@ -815,7 +815,7 @@ char *dupe = cloneString(htmlText);
 struct htmlPage *page;
 AllocVar(page);
 page->url = cloneString(url);
-page->htmlText = htmlText;
+page->fullText = page->htmlText = htmlText;
 page->tags = htmlTagScan(page->htmlText, dupe);
 page->forms = htmlParseForms(page, page->tags, NULL);
 freez(&dupe);
@@ -829,6 +829,23 @@ struct htmlPage *page = htmlPageParse(url, fullText);
 if (page == NULL)
    noWarnAbort();
 return page;
+}
+
+struct htmlPage *htmlPageGet(char *url)
+/* Get page from URL (may be a file). */
+{
+if (fileExists(url))
+    {
+    char *buf;
+    readInGulp(url, &buf, NULL);
+    return htmlPageParseNoHead(url, buf);
+    }
+else
+    {
+    struct dyString *dyText = netSlurpUrl(url);
+    char *buf = dyStringCannibalize(&dyText);
+    return htmlPageParse(url, buf);
+    }
 }
 
 void htmlFormVarPrint(struct htmlFormVar *var, FILE *f, char *prefix)
@@ -949,8 +966,7 @@ if (buttonName != NULL)
 for (var = form->vars; var != NULL; var = var->next)
     {
     if (sameWord(var->tagName, "SELECT") || var->type != NULL &&
-        (sameWord(var->type, "CHECKBOX") || sameWord(var->type, "SELECT")
-    	|| sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
+    	( sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
 	|| sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
 	|| sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))
         {
@@ -958,6 +974,11 @@ for (var = form->vars; var != NULL; var = var->next)
 	if (val == NULL)
 	    val = "";
 	appendCgiVar(dy, var->name, val);
+	}
+    else if (var->type != NULL && sameWord(var->type, "CHECKBOX"))
+        {
+	if (var->curVal != NULL)
+	    appendCgiVar(dy, var->name, var->curVal);
 	}
     }
 return dyStringCannibalize(&dy);
@@ -1018,11 +1039,10 @@ else if (sameWord(form->method, "POST"))
     }
 dyText = netSlurpFile(sd);
 close(sd);
-newPage = htmlPageParse(url, dyText->string);
+newPage = htmlPageParse(url, dyStringCannibalize(&dyText));
 freez(&url);
 dyStringFree(&dyUrl);
 dyStringFree(&dyHeader);
-dyStringFree(&dyText);
 return newPage;
 }
 
