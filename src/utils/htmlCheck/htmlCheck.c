@@ -6,11 +6,12 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
+#include "cheapcgi.h"
 #include "obscure.h"
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.23 2004/03/03 02:18:16 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.24 2004/03/03 03:36:53 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -310,7 +311,6 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
-
 
 static int findLineNumber(char *start, char *pos)
 /* Figure out line number of given position relative to start. */
@@ -775,7 +775,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	else if (sameWord(type, "CHECKBOX"))
 	    {
 	    if (tagAttributeVal(page, tag, "CHECKED", NULL) != NULL)
-	        var->curVal = cloneString(value);
+	        var->curVal = cloneString("on");
 	    }
 	else if (sameWord(type, "RADIO"))
 	    {
@@ -920,6 +920,138 @@ if (page == NULL)
 if (page->status->status != 200)
    errAbort("Page returned with status code %d", page->status->status);
 return page;
+}
+
+char *htmlExpandUrl(char *base, char *url)
+/* Expand URL that is relative to base to stand on it's own. 
+ * Return NULL if it's not http or https. */
+{
+struct dyString *dy = NULL;
+char *hostName, *pastHostName;
+
+/* In easiest case URL is actually absolute and begins with
+ * protocol.  Just return clone of url. */
+if (startsWith("http:", url) || startsWith("https:", url))
+    return cloneString(url);
+
+/* If it's got a colon, but no http or https, then it's some
+ * protocol we don't understand, like a mailto.  Just return NULL. */
+if (strchr(url, ':') != NULL)
+    return NULL;
+
+/* Figure out first character past host name. Load up
+ * return string with protocol (if any) and host name. */
+dy = dyStringNew(256);
+if (startsWith("http:", base) || startsWith("https:", base))
+    hostName = (strchr(base, ':') + 3);
+else
+    hostName = base;
+pastHostName = strchr(hostName, '/');
+if (pastHostName == NULL)
+    pastHostName = hostName + strlen(hostName);
+dyStringAppendN(dy, base, pastHostName - base);
+
+/* Add url to return string after host name. */
+if (startsWith("/", url))	/* New URL is absolute, just append to hostName */
+    {
+    dyStringAppend(dy, url);
+    }
+else
+    {
+    char *curDir = pastHostName;
+    char *endDir;
+    if (curDir[0] == '/')
+        curDir += 1;
+    dyStringAppendC(dy, '/');
+    endDir = strrchr(curDir, '/');
+    if (endDir == NULL)
+	endDir = curDir;
+    if (startsWith("../", url))
+	{
+	char *dir = cloneStringZ(curDir, endDir-curDir);
+	char *path = expandRelativePath(dir, url);
+	if (path != NULL)
+	     {
+	     dyStringAppend(dy, path);
+	     }
+	freez(&dir);
+	freez(&path);
+	}
+    else
+	{
+	dyStringAppendN(dy, curDir, endDir-curDir);
+	if (lastChar(dy->string) != '/')
+	    dyStringAppendC(dy, '/');
+	dyStringAppend(dy, url);
+	}
+    }
+return dyStringCannibalize(&dy);
+}
+
+static void appendCgiVar(struct dyString *dy, char *name, char *value)
+/* Append cgiVar with cgi-encoded value to dy. */
+{
+char *enc = NULL;
+if (value == NULL)
+    value = "";
+enc = cgiEncode(value);
+if (dy->stringSize == 0)
+    dyStringAppendC(dy, '?');
+else
+    dyStringAppendC(dy, '&');
+dyStringAppend(dy, name);
+dyStringAppendC(dy, '=');
+dyStringAppend(dy, enc);
+freez(&enc);
+}
+
+char *cgiVarsFromForm(struct htmlPage *page, struct htmlForm *form, 
+	char *buttonName, char *buttonVal)
+/* Return cgi vars in name=val format from use having pressed
+ * submit button of given name and value. */
+{
+struct dyString *dy = newDyString(0);
+struct htmlFormVar *var;
+
+if (buttonName != NULL)
+    appendCgiVar(dy, buttonName, buttonVal);
+for (var = form->vars; var != NULL; var = var->next)
+    {
+    if (sameWord(var->tagName, "SELECT") || var->type != NULL &&
+        (sameWord(var->type, "CHECKBOX") || sameWord(var->type, "SELECT")
+    	|| sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
+	|| sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
+	|| sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))
+        {
+	char *val = var->curVal;
+	if (val == NULL)
+	    val = "";
+	appendCgiVar(dy, var->name, val);
+	}
+    }
+return dyStringCannibalize(&dy);
+}
+
+struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
+	char *buttonName, char *buttonVal)
+/* Return a new htmlPage based on response to pressing indicated button
+ * on indicated form in origPage. */
+{
+char *cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+char *url = htmlExpandUrl(origPage->url, form->action);
+struct htmlPage *newPage = NULL;
+uglyf("GET %s%s\n", url, cgiVars);
+freez(&url);
+return newPage;
+}
+
+void quickSubmit(struct htmlPage *page)
+/* Just press submit on first form. */
+{
+struct htmlPage *newPage;
+if (page->forms == NULL)
+    errAbort("No forms on %s", page->url);
+newPage = htmlPageFromForm(page, page->forms, "submit", "Submit");
 }
 
 struct slName *htmlPageScanAttribute(struct htmlPage *page, 
@@ -1398,72 +1530,6 @@ validateCgiUrls(page);
 verbose(1, "ok\n");
 }
 
-char *htmlExpandUrl(char *base, char *url)
-/* Expand URL that is relative to base to stand on it's own. 
- * Return NULL if it's not http or https. */
-{
-struct dyString *dy = NULL;
-char *hostName, *pastHostName;
-
-/* In easiest case URL is actually absolute and begins with
- * protocol.  Just return clone of url. */
-if (startsWith("http:", url) || startsWith("https:", url))
-    return cloneString(url);
-
-/* If it's got a colon, but no http or https, then it's some
- * protocol we don't understand, like a mailto.  Just return NULL. */
-if (strchr(url, ':') != NULL)
-    return NULL;
-
-/* Figure out first character past host name. Load up
- * return string with protocol (if any) and host name. */
-dy = dyStringNew(256);
-if (startsWith("http:", base) || startsWith("https:", base))
-    hostName = (strchr(base, ':') + 3);
-else
-    hostName = base;
-pastHostName = strchr(hostName, '/');
-if (pastHostName == NULL)
-    pastHostName = hostName + strlen(hostName);
-dyStringAppendN(dy, base, pastHostName - base);
-
-/* Add url to return string after host name. */
-if (startsWith("/", url))	/* New URL is absolute, just append to hostName */
-    {
-    dyStringAppend(dy, url);
-    }
-else
-    {
-    char *curDir = pastHostName;
-    char *endDir;
-    if (curDir[0] == '/')
-        curDir += 1;
-    dyStringAppendC(dy, '/');
-    endDir = strrchr(curDir, '/');
-    if (endDir == NULL)
-	endDir = curDir;
-    if (startsWith("../", url))
-	{
-	char *dir = cloneStringZ(curDir, endDir-curDir);
-	char *path = expandRelativePath(dir, url);
-	if (path != NULL)
-	     {
-	     dyStringAppend(dy, path);
-	     }
-	freez(&dir);
-	freez(&path);
-	}
-    else
-	{
-	dyStringAppendN(dy, curDir, endDir-curDir);
-	if (lastChar(dy->string) != '/')
-	    dyStringAppendC(dy, '/');
-	dyStringAppend(dy, url);
-	}
-    }
-return dyStringCannibalize(&dy);
-}
-
 #ifdef TEST
 static void testHtmlExpandUrl()
 /* DO some testing of expandRelativeUrl. */
@@ -1884,6 +1950,8 @@ else /* Do everything that requires full parsing. */
 	getTags(page);
     else if (sameString(command, "getCookies"))
         getCookies(page);
+    else if (sameString(command, "submit"))
+        quickSubmit(page);
     else if (sameString(command, "validate"))
 	validate(page);	
     else if (sameString(command, "checkLinks"))
