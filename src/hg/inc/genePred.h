@@ -94,5 +94,11 @@ int genePredBases(struct genePred *gp);
 int genePredCodingBases(struct genePred *gp);
 /* Count up the number of coding bases in gene prediction. */
 
+
+void findCdsStartEndInGenome(struct psl *psl,
+                                    int rnaCdsStart, int rnaCdsEnd,
+                                    int *retCdsStart, int *retCdsEnd);
+/* Convert cdsStart/End from mrna to genomic coordinates. */
+
 #endif /* GENEPRED_H */
 
