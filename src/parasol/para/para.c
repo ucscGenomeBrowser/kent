@@ -15,47 +15,51 @@ void usage()
 {
 errAbort(
   "para - Manage a batch of jobs in parallel on a compute cluster.\n"
-  "Normal usage is to do a 'para make' followed by 'para push' until\n"
+  "Normal usage is to do a 'para create' followed by 'para push' until\n"
   "job is done.  Use 'para check' to check status\n"
   "usage:\n"
-  "   para command batch [command-specific arguments]\n"
+  "   para command [command-specific arguments]\n"
   "The commands are:\n"
-  "para make batch jobList\n"
+  "\n"
+  "para create jobList\n"
   "   This makes the job-tracking database from a text file with the\n"
   "   command line for each job on a separate line\n"
-  "para push batch\n"
-  "   This pushes forward the batch of jobs by submitting jobs to codine\n"
-  "   It will try and keep the codine queue a size that is efficient for\n"
-  "   codine, and retry failed jobs\n"
+  "para push \n"
+  "   This pushes forward the batch of jobs by submitting jobs to parasol\n"
+  "   It will limit parasol queue size to something not too big and\n"
+  "   retry failed jobs\n"
   "   options:\n"
   "      -retries=N   Number of retries per job - default 4.\n"
   "      -maxQueue=N  Number of jobs to allow on parasol queue - default 100000\n"
   "      -minPush=N  Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
-  "      -maxPush=N  Maximum number of jobs to queue - default 100000\n"
-  "      -warnTime=N Number of minutes job can run before hang warning - default 4320 (3 days)\n"
-  "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
-  "para shove batch\n"
-  "   Push jobs until can't push any more.  Options as with push and also:\n"
-  "      -sleepTime=N  Number of seconds to sleep between pushes\n"
-  "para try batch\n"
-  "      This is like para push, but only submits up to 10 jobs\n"
-  "para check batch\n"
+  "      -maxPush=N  Maximum number of jobs to queue - default 10000\n"
+  "      -warnTime=N Number of minutes job runs before hang warning - default 4320 (3 days)\n"
+  "      -killTime=N Number of minutes job runs before push kills it - default 20160 (2 weeks)\n"
+  "para try \n"
+  "   This is like para push, but only submits up to 10 jobs\n"
+  "para shove\n"
+  "   Push jobs in this database until all are done or one fails after N retries\n"
+  "para make jobList\n"
+  "   Create database and run all jobs in it if possible.  If one job\n"
+  "   failes repeatedly this will fail.  Suitable for inclusion in makefiles\n"
+  "   Same as a 'create' followed by a 'shove'.\n"
+  "para check \n"
   "   This checks on the progress of the jobs.\n"
-  "para stop batch\n"
+  "para stop \n"
   "   This stops all the jobs in the batch\n"
-  "para finished batch\n"
+  "para finished \n"
   "   List jobs that have finished\n"
-  "para hung batch\n"
+  "para hung \n"
   "   List hung jobs in the batch\n"
-  "para crashed batch\n"
-  "   List jobs that crashed or failed output checks\n"
-  "para failed batch\n"
-  "   List jobs that crashed or hung\n"
-  "para problems batch\n"
+  "para crashed \n"
+  "   List jobs that crashed or failed output checks the last time they were run.\n"
+  "para failed \n"
+  "   List jobs that crashed after repeated restarts.\n"
+  "para problems \n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
-  "para running batch\n"
+  "para running \n"
   "   Print info on currently running jobs\n"
-  "para time batch\n"
+  "para time \n"
   "   List timing information\n"
   );
 }
@@ -65,10 +69,10 @@ errAbort(
 int retries = 4;
 int maxQueue = 100000;
 int minPush = 1;
-int maxPush = 100000;
+int maxPush = 10000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
-int sleepTime = 20*60;
+int sleepTime = 5*60;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
@@ -333,8 +337,8 @@ return db;
 }
 
 
-void paraMake(char *batch, char *jobList)
-/* Make a batch database from a job list. */
+void paraCreate(char *batch, char *jobList)
+/* Create a batch database from a job list. */
 {
 struct lineFile *lf = lineFileOpen(jobList, TRUE);
 char *line;
@@ -343,6 +347,7 @@ struct jobDb *db;
 struct job *job;
 char backup[512];
 
+makeDir("err");
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
     {
@@ -406,6 +411,7 @@ if (err != 0)
 else
     {
     fillInSub(tempName, sub);
+    sub->inQueue = TRUE;
     }
 dyStringFree(&cmd);
 }
@@ -457,6 +463,7 @@ while (lineFileRow(lf, row))
     char *state = row[0], *jobId = row[1], *user = row[2],
          *exe = row[3], *ticks = row[4], *host = row[5];
     time_t t = atol(ticks);
+    ++queueSize;
     if ((sub = hashFindVal(hash, jobId)) != NULL)
 	{
 	if (sameString(state, "r"))
@@ -491,6 +498,24 @@ if (fileExists(fileName))
 return hash;
 }
 
+void freeResults(struct hash **pHash)
+/* Free up results hash and elements in it. */
+{
+struct hash *hash = *pHash;
+struct hashEl *list, *el;
+struct jobResult *jr;
+if ((hash = *pHash) != NULL)
+    {
+    list = hashElListHash(hash);
+    for (el = list; el != NULL; el = el->next)
+	{
+	jr = el->val;
+	jobResultFree(&jr);
+	}
+    hashElFreeList(&list);
+    hashFree(pHash);
+    }
+}
 
 void killSubmission(struct submission *sub)
 /* Kill a submission. */
@@ -585,9 +610,8 @@ if (sub == NULL)
 return sub->submitError || sub->queueError || sub->crashed || sub->trackingError;
 }
 
-int paraPush(char *batch)
-/* Push a batch of jobs forward - submit jobs.  Return number of jobs
- * pushed. */
+struct jobDb *paraCycle(char *batch)
+/* Cycle forward through batch.  Return database. */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
@@ -595,10 +619,10 @@ int queueSize;
 int pushCount = 0, retryCount = 0;
 int tryCount;
 boolean finished = FALSE;
+struct hash *resultsHash;
 
-makeDir("err");
 queueSize = markQueuedJobs(db);
-markRunJobStatus(db);
+resultsHash = markRunJobStatus(db);
 
 for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
     {
@@ -627,23 +651,72 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	}
     }
 writeBatch(db, batch);
-jobDbFree(&db);
 if (pushCount > 0)
-   printf("\n");
-printf("Pushed Jobs: %d\n", pushCount);
+    {
+    printf("\n");
+    printf("Pushed Jobs: %d\n", pushCount);
+    }
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
-return pushCount;
+freeResults(&resultsHash);
+return db;
+}
+
+void paraPush(char *batch)
+/* Push forward batch one time. */
+{
+struct jobDb *db = paraCycle(batch);
+jobDbFree(&db);
 }
 
 void paraShove(char *batch)
-/* Keep pushing jobs until finished. */
+/* Push batch of jobs and keep pushing until it's finished, polling
+ * parasol every 5 minutes. */
 {
-while (paraPush(batch) > 0)
+struct jobDb *db;
+struct job *job;
+struct submission *sub;
+int maxSleep = 5*60;
+int curSleep = 60;
+time_t start = time(NULL), now;
+
+for (;;)
     {
-    printf("Sleeping until next push - hit <control>C to quit shoving\n");
-    sleep(sleepTime);
+    boolean anyUnfinished = FALSE;
+    db = paraCycle(batch);
+    for (job = db->jobList; job != NULL; job = job->next)
+        {
+	if ((sub = job->submissionList) == NULL)
+	    anyUnfinished = TRUE;
+	else
+	    {
+	    enum jaState state = figureState(job);
+	    if (job->submissionCount >= retries)
+	        {
+		if (state != jaUnsubmitted && state != jaQueued && state != jaRunning)
+		    errAbort("Batch failed after %d tries on %s", retries, job->command);
+		}
+	    if (state != jaFinished)
+	        anyUnfinished = TRUE;
+	    }
+	}
+    jobDbFree(&db);
+    if (!anyUnfinished)
+        break;
+    sleep(curSleep);
+    if (curSleep < maxSleep)
+        curSleep += 60;
+    now = time(NULL);
+    printf("Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
+printf("Successful batch!\n");
+}
+
+void paraMake(char *batch, char *spec)
+/* Do a create and then a shove. */
+{
+paraCreate(batch, spec);
+paraShove(batch);
 }
 
 void reportOnJobs(struct jobDb *db)
@@ -883,14 +956,17 @@ struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
 markQueuedJobs(db);
+markRunJobStatus(db);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     sub = job->submissionList;
     if (sub != NULL)
         {
 	if (sub->inQueue || sub->running)
-	   killSubmission(sub);
-	sub->crashed = TRUE;
+	    {
+	    killSubmission(sub);
+	    sub->crashed = TRUE;
+	    }
 	}
     }
 writeBatch(db, batch);
@@ -1055,7 +1131,7 @@ char *command;
 char *batch;
 
 optionHash(&argc, argv);
-if (argc < 3)
+if (argc < 2)
     usage();
 retries = optionInt("retries",  retries);
 maxQueue = optionInt("maxQueue",  maxQueue);
@@ -1064,14 +1140,14 @@ maxPush = optionInt("maxPush",  maxPush);
 warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
 command = argv[1];
-batch = argv[2];
+batch = "batch";
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
-if (sameString(command, "make"))
+if (sameString(command, "create"))
     {
-    if (argc != 4)
+    if (argc != 3)
         usage();
-    paraMake(batch, argv[3]);
+    paraCreate(batch, argv[2]);
     }
 else if (sameString(command, "check"))
     {
@@ -1085,9 +1161,15 @@ else if (sameString(command, "shove"))
     {
     paraShove(batch);
     }
+else if (sameString(command, "make"))
+    {
+    if (argc != 3)
+        usage();
+    paraMake(batch, argv[2]);
+    }
 else if (sameString(command, "try"))
     {
-    maxPush = 20;
+    maxPush = 10;
     paraPush(batch);
     }
 else if (sameString(command, "stop"))
