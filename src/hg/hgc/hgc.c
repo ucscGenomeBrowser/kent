@@ -5876,6 +5876,7 @@ char *type = NULL, *lfLabel = NULL;
 char *table = NULL;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
+int length = end - start;
 int i;
 struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
@@ -5890,6 +5891,12 @@ if (sameString("bacEndPairs", track))
     table = track;
     }
 if (sameString("fosEndPairs", track)) 
+    {
+    sprintf(title, "Location of %s using fosmid end sequences", clone);
+    lfLabel = "Fosmid ends";
+    table = track;
+    }
+if (sameString("fosEndPairsBad", track)) 
     {
     sprintf(title, "Location of %s using fosmid end sequences", clone);
     lfLabel = "Fosmid ends";
@@ -5927,6 +5934,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     gotS = hChromBand(seqName, start, sband);
     gotB = hChromBand(seqName, end, eband);
@@ -8895,6 +8903,10 @@ else if (sameWord(track, "tigrGeneIndex"))
      doLinkedFeaturesSeries(track, item, tdb);
    }
  else if (sameWord(track, "fosEndPairs"))
+   {
+     doLinkedFeaturesSeries(track, item, tdb);
+   }
+ else if (sameWord(track, "fosEndPairsBad"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
