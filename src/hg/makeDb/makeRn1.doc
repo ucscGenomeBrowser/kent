@@ -1,6 +1,32 @@
 # This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, November 2002 build.
 
+CREATING DATABASE (DONE 11/25/02)
+
+    # Create the database.
+    ssh hgwdev
+    # Enter mysql via:
+    mysql -u hgcat -pbigsecret
+    # At mysql prompt type:
+      create database rn1;
+      quit
+    # make a semi-permanent read-only alias:
+    alias rn1 "mysql -u hguser -phguserstuff -A rn1"
+    # Use df to ake sure there is at least 5 gig free on 
+    # hgwdev:/var/lib/mysql
+
+
+COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE 11/25/02)
+
+    ssh eieio
+    ln -s /cluster/store4/rn1 ~/rn1
+    # This is the first rat, so use mm2 as the previous "rat" build:
+    ln -s /cluster/store2/mm.2002.02/mm2 ~/lastRn
+    cd ~/rn1
+    cp -Rp ~/lastRn/jkStuff .
+    rm jkStuff/*.{out,lst,lft} jkStuff/*~
+
+
 BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (DONE 11/25/02)
 
     # This version of the rat sequence data is in /cluster/store4/rn1.
@@ -8,7 +34,6 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (DONE 11/25/02)
     # with AGP.  Use agpToFA to make chromosome .fa files, then use 
     # splitFaIntoContigs to make contig chromosome files.
     ssh eieio
-    ln -s /cluster/store4/rn1 ~/rn1
     cd ~/rn1
     foreach c (?{,?})
       agpToFa -simpleMulti $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
@@ -59,6 +84,23 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (DONE 11/25/02)
         rmdir ${c}_random
       endif
     end
+    # Make sure the reconstructed .fa jives with the original:
+    foreach f ( */*.fa.bak )
+      echo $f:r
+      diff $f $f:r | wc -l
+    end
+    # The .agp goes through a slight format change, but make sure it 
+    # at least ends up with the same number of lines:
+    foreach f ( */*.agp.bak )
+      set l1 = `wc -l $f | awk '{print $1;}'`
+      set l2 = `wc -l $f:r | awk '{print $1;}'`
+      if ($l1 == $l2) then
+        echo "$f and $f:r have the same #lines"
+      else
+        echo Error\!\!\!  $f has $l1 lines, but $f:r has $l2
+      endif
+    end
+
 
 
 REPEAT MASKING (IN PROGRESS)
@@ -169,22 +211,6 @@ EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
     cd ..
     cp -R linSpecRep /scratch/hg/rn1
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
-
-
-CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARY INFO 
-
-o - Create the database.
-     - ssh hgwdev
-     - Enter mysql via:
-           mysql -u hgcat -pbigsecret
-     - At mysql prompt type:
-        create database rn1;
-        quit
-     - make a semi-permanent read-only alias:
-        alias rn1 "mysql -u hguser -phguserstuff -A rn1"
-o - Use df to ake sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
-o - Store the mRNA (non-alignment) info in database.
-    (Matt - pleas update this section... )
 
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TODO)
@@ -784,7 +810,7 @@ o - Do fish/rat alignments.
        mkdir psl
        ls -1S /scratch/hg/fish/* > fish.lst
        ls -1S /scratch/hg/rn1/trfFa/* > rat.lst
-       cp ~/lastMm/blatFish/gsub .
+       cp ~/lastRn/blatFish/gsub .
        gensub2 rat.lst fish.lst gsub spec
        para create spec
        para try
@@ -860,7 +886,7 @@ LOAD GENEID GENES (TODO)
    http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/geneid_v1.1
    Get rid of the extra .N in the transcripts with subs.  
      cd ..
-     cp ~/lastMm/bed/geneid/subs .
+     cp ~/lastRn/bed/geneid/subs .
      subs -e download/*.gtf > /dev/null
      ldHgGene rn1 geneid download/*.gtf -exon=CDS
      hgPepPred rn1 generic geneidPep download/*.prot
@@ -875,7 +901,7 @@ SGP GENE PREDICTIONS (TODO)
    http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/
    Get rid of the extra .N in the transcripts with subs.  
      cd ..
-     cp ~/lastMm/bed/sgp/subs .
+     cp ~/lastRn/bed/sgp/subs .
      subs -e download/*.gtf > /dev/null
      ldHgGene rn1 sgpGene download/*.gtf -exon=CDS
      hgPepPred rn1 generic sgpPep download/*.prot
