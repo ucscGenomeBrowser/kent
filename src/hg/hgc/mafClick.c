@@ -21,7 +21,7 @@ struct nameAndLabel
    char *label; /* Label (not allocated here) */
    };
 
-int nameAndLabelCmp(const void *va, const void *vb)
+static int nameAndLabelCmp(const void *va, const void *vb)
 /* Compare to sort on label. */
 {
 const struct nameAndLabel *a = *((struct nameAndLabel **)va);
@@ -29,7 +29,7 @@ const struct nameAndLabel *b = *((struct nameAndLabel **)vb);
 return strcmp(a->label, b->label);
 }
 
-char *findLabel(struct nameAndLabel *list, char *label)
+static char *findLabel(struct nameAndLabel *list, char *label)
 /* Try to find label in list. Return NULL if it's
  * not there. */
 {
@@ -142,6 +142,36 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 }
 
+static void blueCapWrite(FILE *f, char *s, int size)
+/* Write with capital letters in blue. */
+{
+boolean isBlue = FALSE;
+int i;
+for (i=0; i<size; ++i)
+    {
+    char c = s[i];
+    if (isupper(c))
+        {
+	if (!isBlue)
+	    {
+	    fprintf(f, "<FONT COLOR=\"#0000FF\">");
+	    isBlue = TRUE;
+	    }
+	}
+    else if (islower(c))
+        {
+	if (isBlue)
+	    {
+	    fprintf(f, "</FONT>");
+	    isBlue = FALSE;
+	    }
+	}
+    fprintf(f, "%c", c);
+    }
+if (isBlue)
+    fprintf(f, "</FONT>");
+}
+
 static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize)
 /* Print MAF base by base with line-breaks. */
 {
@@ -165,7 +195,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     for (mc = maf->components; mc != NULL; mc = mc->next)
         {
 	fprintf(f, "%-*s ", srcChars, mc->src);
-	mustWrite(f, mc->text + lineStart, lineEnd - lineStart);
+	blueCapWrite(f, mc->text + lineStart, lineEnd - lineStart);
 	fprintf(f, "\n");
 	}
     fprintf(f, "\n");
@@ -190,35 +220,59 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     tolowers(mc->text);
 }
 
-static void capAliRange(char *ali, int aliSize, int start, int end)
-/* Capitalize bases between start and end ignoring inserts. */
+static boolean findAliRange(char *ali, int aliSize, int start, int end,
+	int *retStart, int *retEnd)
+/* Convert start/end in sequence coordinates to alignment
+ * coordinates (that include dashes).  Return FALSE if
+ * no intersection. */
 {
 int i, baseIx=0;
 char c;
+int rStart = 0, rEnd = 0;
 
 if (start >= end)
-    return;
+    return FALSE;
 for (i=0; i<aliSize; ++i)
     {
     c = ali[i];
     if (c != '-')
         {
-	if (baseIx >= start)
-	    ali[i] = toupper(c);
+	if (baseIx == start)
+	    rStart = i;
 	++baseIx;
-	if (baseIx >= end)
+	if (baseIx == end)
+	    {
+	    rEnd = i+1;
 	    break;
+	    }
 	}
     }
+if (rStart >= rEnd)
+    return FALSE;
+*retStart = rStart;
+*retEnd = rEnd;
+return TRUE;
 }
 
-static void capAliTextOnTrack(char *ali, int aliSize, 
-	char *db, char *chrom, int start, int end, 
+static void capAliRange(char *ali, int aliSize, int start, int end)
+/* Capitalize bases between start and end ignoring inserts. */
+{
+int s, e;
+
+if (findAliRange(ali, aliSize, start, end, &s, &e))
+    toUpperN(ali+s, e-s);
+}
+
+static void capAliTextOnTrack(struct mafAli *maf,
+	char *db, char *chrom, 
 	char *track, boolean onlyCds)
 /* Capitalize exons in alignment. */
 {
 int rowOffset;
 struct sqlConnection *conn = sqlConnect(db);
+struct mafComp *selfMc = maf->components, *mc;
+int start = selfMc->start;
+int end = start + selfMc->size;
 struct sqlResult *sr = hRangeQuery(conn, track, chrom, start, end, 
 		NULL, &rowOffset);
 char **row;
@@ -238,7 +292,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	if (s < start) s = start;
 	if (e > end) e = end;
-	capAliRange(ali, aliSize, s - start, e - start);
+	if (findAliRange(selfMc->text, maf->textSize, s-start, e-start, &s, &e))
+	    {
+	    for (mc = maf->components; mc != NULL; mc = mc->next)
+		toUpperN(mc->text + s, e-s);
+	    }
 	}
     genePredFree(&gp);
     }
@@ -252,28 +310,10 @@ static void capMafOnTrack(struct mafAli *maf, char *track, boolean onlyCds)
 {
 char dbOnly[64];
 char *chrom;
-struct mafComp *mc;
-for (mc = maf->components; mc != NULL; mc = mc->next)
-    {
-    strncpy(dbOnly, mc->src, sizeof(dbOnly));
-    chrom = chopPrefix(dbOnly);
-    if (sameString(dbOnly, database))
-        {
-	int start = mc->start;
-	int end = start + mc->size;
-	if (mc->strand == '-')
-	    {
-	    reverseIntRange(&start, &end, mc->srcSize);
-	    reverseComplement(mc->text, maf->textSize);
-	    }
-	capAliTextOnTrack(mc->text, maf->textSize, dbOnly, 
-		chrom, start, end, track, onlyCds);
-	if (mc->strand == '-')
-	    {
-	    reverseComplement(mc->text, maf->textSize);
-	    }
-	}
-    }
+struct mafComp *mc = maf->components;
+strncpy(dbOnly, mc->src, sizeof(dbOnly));
+chrom = chopPrefix(dbOnly);
+capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
 
 static struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn, 
@@ -302,9 +342,9 @@ static char *codeAll[] = {
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
 {
-if (winEnd - winStart > 20000)
+if (winEnd - winStart > 30000)
     {
-    printf("Zoom so that window is 20000 bases or less to see base-by-base alignments\n");
+    printf("Zoom so that window is 30,000 bases or less to see base-by-base alignments\n");
     }
 else
     {
@@ -322,8 +362,13 @@ else
 	if (subset != NULL)
 	    {
 	    struct mafComp *mc;
-	    subset->score = mafScoreMultiz(subset);
+	    /* Reformat MAF if needed so that sequence from current
+	     * database is the first component and on the
+	     * plus strand. */
 	    mafMoveComponentToTop(subset, dbChrom);
+	    if (subset->components->strand == '-')
+		mafFlipStrand(subset);
+	    subset->score = mafScoreMultiz(subset);
 	    slAddHead(&subList, subset);
 	    ++realCount;
 	    }
