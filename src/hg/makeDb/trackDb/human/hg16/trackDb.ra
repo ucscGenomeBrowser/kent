@@ -1238,6 +1238,15 @@ visibility hide
 color 173,17,162
 type genePred
 
+track exoniphyGene
+shortLabel Exoniphy Genes
+longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 track chainFr1ProtEx
 shortLabel chainFr1ProtEx
 longLabel chainFr1ProtEx
