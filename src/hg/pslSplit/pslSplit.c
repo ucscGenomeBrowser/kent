@@ -6,9 +6,9 @@
 #include "portable.h"
 #include "linefile.h"
 #include "psl.h"
-#include "cheapcgi.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.1 2003/08/04 06:22:32 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.2 2003/08/04 07:16:47 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 
@@ -188,7 +188,7 @@ int midFileCount = 0;
 FILE *f;
 struct lineFile *lf;
 char *line;
-char *prev = "first";
+char *prev = cloneString("first");
 int lineSize;
 struct psl *psl, *pslList = NULL;
 boolean noHead = (sameWord(command, "nohead"));
@@ -219,6 +219,7 @@ for (i = 0; i<inFileCount; ++i)
 	    printf(".");
 	    fflush(stdout);
 	    }
+        //freeMem(&prev);
         prev = cloneString(psl->qName);
 	}
     printf("\n");
@@ -232,9 +233,10 @@ printf("Processed %d lines into %d output files\n", totalLineCount, midFileCount
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc < 4)
     usage();
+chunkSize = optionInt("chunkSize", chunkSize);
 pslSplit(argv[1], argv[2], &argv[3], argc-3);
-chunkSize = cgiUsualInt("chunkSize", chunkSize);
 return 0;
 }
