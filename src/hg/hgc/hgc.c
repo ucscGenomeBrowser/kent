@@ -3742,6 +3742,59 @@ void doMgcMrna(char *track, char *acc)
 #endif /* ROGIC_CODE */
 #ifdef CHUCK_CODE
 
+
+void perlegenDetails(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cgiInt("o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+char *itemForUrl = item;
+if(tdb == NULL)
+    errAbort("TrackDb entry null for perlegen, item=%s\n", item);
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    puts(tdb->html);
+    }
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+    	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name;
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 12);
+    name = strstr(bed->name, "/");
+    if(name == NULL)
+	name = bed->name;
+    else
+	name++;
+    printf("<B>Block:</B> %s<BR>\n", name);
+    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",(bed->score/100 -1));
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    bedPrintPos(bed);
+    }
+hFreeConn(&conn);
+webEnd();
+}
+
+
 void chuckHtmlStart(char *title) 
 /* Prints the header appropriate for the title
  * passed in. Links html to chucks stylesheet for 
@@ -4559,6 +4612,10 @@ else if (sameWord(track, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
    }
+else if (sameWord(track, "perlegen"))
+    {
+    perlegenDetails(tdb, item);
+    }
 else if (tdb != NULL)
    {
    genericClickHandler(tdb, item, NULL);
