@@ -486,6 +486,9 @@ int differentWord(char *s1, char *s2);
 #define sameString(a,b) (strcmp(a,b)==0)
 /* Returns TRUE if two strings same. */
 
+#define sameStringN(a,b,c) (strncmp(a,b,c)==0)
+/* Returns TRUE if two strings start with the same c characters. */
+
 #define isEmpty(string) (string == NULL || string[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
