@@ -1192,6 +1192,15 @@ shortCircuit 1
 termRegex [a-z][a-z0-9]_?[0-9]+\.[0-9]+
 searchPriority 7
 
+searchName clonePosNoVers
+searchTable clonePos
+searchMethod prefix
+shortCircuit 1
+termRegex [a-z][a-z0-9]_?[0-9]+
+query select chrom,chromStart,chromEnd,name from %s where name like '%s.%%'
+dontCheck [a-z][a-z0-9]_?[0-9]+\.[0-9]+
+searchPriority 7
+
 searchTable gold
 searchMethod exact
 searchType gold
