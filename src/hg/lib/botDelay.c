@@ -38,7 +38,7 @@ if (ip != NULL)
 		   "of our bandwidth we are putting in a delay of %3.1f seconds "
 		   "before we service your request.  This delay will slowly "
 		   "decrease as activity returns to normal.  This high volume "
-		   "of traffic is likely to be due to program driven rather than "
+		   "of traffic is likely to be due to program-driven rather than "
 		   "interactive access.  If it is your program please write "
 		   "genome@cse.ucsc.edu and inquire to see if there are more "
 		   "efficient ways to access our data.  If you are sharing an IP "
