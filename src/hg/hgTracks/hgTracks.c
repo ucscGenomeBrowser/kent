@@ -6848,8 +6848,8 @@ int x1 = 0;
 int x2 = 0;
 int w = 0;
 int heightPer = tg->heightPer;
-int shortOff = 2;
-int shortHeight = heightPer - 4;
+//int shortHeight = heightPer - 4;
+int shortHeight = heightPer / 2;
 int s = 0;
 int e = 0;
 Color *shades = tg->colorShades;
@@ -6863,15 +6863,22 @@ if (lf->components != NULL && !hideLine)
     x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
     w = x2 - x1;
     color =  shades[lf->grayIx+isXeno];
-    vgBox(vg, x1, y+shortOff+1, w, shortHeight-2, color);
+    vgBox(vg, x1, y+3, w, shortHeight-2, color);
+    if (vis==tvSquish)
+      vgBox(vg, x1, y+1, w, tg->heightPer/2, color);
+    else
+      vgBox(vg, x1, y+3, w, shortHeight-1, color);
   }
 for (sf = lf->components; sf != NULL; sf = sf->next)
   {
     s = sf->start;
     e = sf->end;
     heightPer = haplotypeHeight(tg, lf, sf);
-    drawScaledBox(vg, s, e, scale, xOff, 
-		  y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
+    if (vis==tvSquish)
+      drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
+    else
+      drawScaledBox(vg, s, e, scale, xOff, 
+		    y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
   }
 }
 
