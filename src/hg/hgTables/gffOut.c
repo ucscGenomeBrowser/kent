@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.5 2004/07/23 22:09:05 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.6 2004/07/23 22:20:09 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -233,7 +233,7 @@ itemCount = 0;
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    bedList = getAllIntersectedBeds(conn, track, lm);
+    bedList = cookedBedList(conn, track, region, lm);
     gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
     bedList = NULL;
     lmCleanup(&lm);
