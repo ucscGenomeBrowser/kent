@@ -4,20 +4,12 @@
 
 #include "common.h"
 
-#define ldCeuDefault   TRUE
-#define ldHcbDefault   FALSE
-#define ldJptDefault   FALSE
-#define ldYriDefault   FALSE
 #define ldValueDefault "lod"
 #define ldPosDefault   "red"
 #define ldNegDefault   "blue"
 #define ldOutDefault   "black"
 #define ldTrimDefault  TRUE
 
-extern boolean  ldCeu;
-extern boolean  ldHcb;
-extern boolean  ldJpt;
-extern boolean  ldYri;
 extern char    *ldValue;
 extern char    *ldPos;
 extern char    *ldNeg;
