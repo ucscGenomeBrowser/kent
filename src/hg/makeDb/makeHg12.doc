@@ -687,15 +687,59 @@ NOTE:Below is a tcsh script
 
 Then ask admins to do a binrsync.
 
-PREPARING CHROM-LEVEL MIXED NIBs for mouse blastz (DONE 7/31/02)
+PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for mouse blastz (DONE 11/6/02)
 
-Edited jkStuff/makeNib.sh to include a -softMask run into mixedNib.
-I'm calling the /scratch dir .0729 because that's when the soft-masking 
-was done (after RepeatMasking)... it'll be consistent with contig.0729.
-   cd ~/oo
-   mkdir mixedNib
-   tcsh jkStuff/makeNib.sh
-   cp -Rp mixedNib /scratch/hg/gs.13/build30/chromMixedNib.0729
+    # lift trfMask output to chrom-level... this is a pain because all 
+    # trf output was put in the same dir.  maybe next time around, we 
+    # can preserve chrom dir structure...
+    ssh kkstore
+    cd ~/oo
+    foreach c (?{,?})
+     if (-e $c/lift/ordered.lst) then
+       set ntlist = ()
+       foreach n (`cat $c/lift/ordered.lst`)
+         set ntlist = ($ntlist bed/trfMask/trf/$n.bed)
+       end
+       liftUp $c/chr$c.trf.bed jkStuff/liftAll.lft warn $ntlist
+     endif
+     if (-e $c/lift/random.lst) then
+       set ntlist = ()
+       foreach n (`cat $c/lift/random.lst`)
+         set ntlist = ($ntlist bed/trfMask/trf/$n.bed)
+       end
+       liftUp $c/chr${c}_random.trf.bed jkStuff/liftAll.lft warn $ntlist
+     endif
+    end
+    # make trf-masked chrom-level .fa
+    foreach c (?{,?})
+      cd $c
+      if (-e chr$c.trf.bed) then
+        echo masking $c...
+        cp chr$c.fa chr$c.trf.fa
+        maskOutFa -softAdd chr$c.trf.fa chr$c.trf.bed chr$c.trf.fa
+      endif
+      if (-e chr${c}_random.trf.bed) then
+        echo masking ${c}_random...
+        cp chr${c}_random.fa chr${c}_random.trf.fa
+        maskOutFa -softAdd chr${c}_random.trf.fa chr${c}_random.trf.bed \
+          chr${c}_random.trf.fa
+      endif
+      cd ..
+    end
+    # make nib
+    mkdir trfMixedNib
+    foreach c (?{,?})
+      if (-e $c/chr$c.trf.fa) then
+        faToNib -softMask $c/chr$c.trf.fa trfMixedNib/chr$c.nib
+      endif
+      if (-e $c/chr${c}_random.trf.fa) then
+        faToNib -softMask $c/chr${c}_random.trf.fa \
+          trfMixedNib/chr${c}_random.nib
+      endif
+    end
+    rm -rf /scratch/hg/gs.13/build30/chromTrfMixedNib
+    cp -pR trfMixedNib /scratch/hg/gs.13/build30/chromTrfMixedNib
+
 
 CREATE GOLDEN TRIANGLE (todo)
 

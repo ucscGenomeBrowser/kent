@@ -548,6 +548,43 @@ and do
    # sudo /cluster/install/utilities/updateLocal
 
 
+PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for blastz (DONE 11/6/02)
+
+    # lift trfMask output to chrom-level... this is a pain because all 
+    # trf output was put in the same dir.  maybe next time around, we 
+    # can preserve chrom dir structure...
+    ssh kkstore
+    cd ~/mm2
+    foreach c (?{,?})
+     if (-e $c/lift/ordered.lst) then
+       set ntlist = ()
+       foreach n (`cat $c/lift/ordered.lst`)
+         set ntlist = ($ntlist bed/simpleRepeat/trf/$n.bed)
+       end
+       liftUp $c/chr$c.trf.bed jkStuff/liftAll.lft warn $ntlist
+     endif
+    end
+    # make trf-masked chrom-level .fa
+    foreach c (?{,?})
+      cd $c
+      if (-e chr$c.trf.bed) then
+        echo masking $c...
+        cp chr$c.fa chr$c.trf.fa
+        maskOutFa -softAdd chr$c.trf.fa chr$c.trf.bed chr$c.trf.fa
+      endif
+      cd ..
+    end
+    # make nib
+    mkdir trfMixedNib
+    foreach c (?{,?})
+      if (-e $c/chr$c.trf.fa) then
+        faToNib -softMask $c/chr$c.trf.fa trfMixedNib/chr$c.nib
+      endif
+    end
+    rm -rf /scratch/hg/mm2/chromTrfMixedNib
+    cp -pR trfMixedNib /scratch/hg/mm2/chromTrfMixedNib
+
+
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
 o - Download the lower-case-masked assembly and put it in
