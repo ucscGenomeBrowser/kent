@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.20 2004/03/01 17:19:46 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.21 2004/03/02 21:00:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,10 +42,10 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct httpStatus
+struct htmlStatus
 /* HTTP version and status code. */
     {
-    struct httpStatus *next;	/* Next in list. */
+    struct htmlStatus *next;	/* Next in list. */
     char *version;		/* Usually something like HTTP/1.1 */
     int status;			/* HTTP status code.  200 is good. */
     };
@@ -97,7 +97,7 @@ struct htmlPage
     {
     struct htmlPage *next;
     char *url;				/* Url that produced this page. */
-    struct httpStatus *status;		/* Version and status */
+    struct htmlStatus *status;		/* Version and status */
     char *fullText;			/* Full unparsed text including headers. */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
     char *htmlText;			/* Text unparsed after header. */
@@ -105,10 +105,10 @@ struct htmlPage
     struct htmlForm *forms;		/* List of all forms. */
     };
 
-void httpStatusFree(struct httpStatus **pStatus)
+void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
 {
-struct httpStatus *status = *pStatus;
+struct htmlStatus *status = *pStatus;
 if (status != NULL)
     {
     freeMem(status->version);
@@ -116,15 +116,15 @@ if (status != NULL)
     }
 }
 
-void httpStatusFreeList(struct httpStatus **pList)
-/* Free a list of dynamically allocated httpStatus's */
+void htmlStatusFreeList(struct htmlStatus **pList)
+/* Free a list of dynamically allocated htmlStatus's */
 {
-struct httpStatus *el, *next;
+struct htmlStatus *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    httpStatusFree(&el);
+    htmlStatusFree(&el);
     }
 *pList = NULL;
 }
@@ -205,6 +205,14 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+void htmlFormVarAddValue(struct htmlFormVar *var, char *value)
+/* Add value to list of predefined values for var. */
+{
+struct slName *name = slNameNew(value);
+slAddTail(&var->values, name);
+}
+
+
 void htmlFormFree(struct htmlForm **pForm)
 /* Free up resources associated with form variable. */
 {
@@ -235,7 +243,7 @@ void htmlPageFree(struct htmlPage **pPage)
 struct htmlPage *page = *pPage;
 if (page != NULL)
     {
-    httpStatusFree(&page->status);
+    htmlStatusFree(&page->status);
     freez(&page->url);
     freez(&page->fullText);
     freeHashAndVals(&page->header);
@@ -303,13 +311,13 @@ va_end(args);
 noWarnAbort();
 }
 
-struct httpStatus *httpStatusParse(char **pText)
+struct htmlStatus *htmlStatusParse(char **pText)
 /* Read in status from first line.  Update pText to point to next line. 
  * Note unlike many routines here, this does not insert zeros into text. */
 {
 char *text = *pText;
 char *end = strchr(text, '\n');
-struct httpStatus *status;
+struct htmlStatus *status;
 if (end != NULL)
    *pText = end+1;
 else
@@ -495,6 +503,8 @@ for (;;)
 		        break;
 		    else if (c == 0)
 		        break;
+		    else if (isspace(c))
+		        break;
 		    e += 1;
 		    }
 		if (c == 0)
@@ -510,6 +520,10 @@ for (;;)
 		    val = "";
 		    gotEnd = TRUE;
 		    tag->end = html + (e - dupe);
+		    }
+		else if (isspace(c))
+		    {
+		    val = "";
 		    }
 		else
 		    {
@@ -599,13 +613,16 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
     {
     if (sameWord(tag->name, "INPUT"))
         {
-	char *type = tagAttributeNeeded(page, tag, "TYPE");
+	char *type = tagAttributeVal(page, tag, "TYPE", NULL);
 	char *varName = tagAttributeVal(page, tag, "NAME", NULL);
 	char *value = tagAttributeVal(page, tag, "VALUE", NULL);
+	if (type == NULL)
+	    type = "TEXT";
 	if (varName == NULL)
 	    {
 	    if (!sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
-	    	&& !sameWord(type, "BUTTON") && !sameWord(type, "RESET"))
+	    	&& !sameWord(type, "BUTTON") && !sameWord(type, "RESET")
+		&& !sameWord(type, "IMAGE"))
 		tagWarn(page, tag, "Missing NAME attribute");
 	    varName = "n/a";
 	    }
@@ -619,10 +636,16 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    {
 	    var->curVal = cloneString(value);
 	    }
-	else if (sameWord(type, "CHECKBOX") || sameWord(type, "RADIO"))
+	else if (sameWord(type, "CHECKBOX"))
 	    {
 	    if (tagAttributeVal(page, tag, "CHECKED", NULL) != NULL)
 	        var->curVal = cloneString(value);
+	    }
+	else if (sameWord(type, "RADIO"))
+	    {
+	    if (tagAttributeVal(page, tag, "CHECKED", NULL) != NULL)
+	        var->curVal = cloneString(value);
+	    htmlFormVarAddValue(var, value);
 	    }
 	else if ( sameWord(type, "RESET") || sameWord(type, "BUTTON") ||
 		sameWord(type, "SUBMIT") || sameWord(type, "IMAGE") ||
@@ -643,23 +666,30 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	for (subTag = tag->next; subTag != form->endTag; subTag = subTag->next)
 	    {
 	    if (sameWord(subTag->name, "/SELECT"))
-	        break;
+		{
+		if (var->curVal == NULL && var->values != NULL)
+		    {
+		    var->curVal = cloneString(var->values->name);
+		    }
+		break;
+		}
 	    else if (sameWord(subTag->name, "OPTION"))
 	        {
+		char *val = cloneString(tagAttributeVal(page, subTag, "VALUE", NULL));
+		if (val == NULL)
+		    {
+		    char *e = strchr(subTag->end, '<');
+		    if (e != NULL)
+			val = cloneStringZ(subTag->end, e - subTag->end);
+		    }
+		if (val != NULL)
+		    htmlFormVarAddValue(var, val);
 		if (tagAttributeVal(page, subTag, "SELECTED", NULL) != NULL)
 		    {
-		    char *selVal = tagAttributeVal(page, subTag, "VALUE", NULL);
-		    if (selVal == NULL)
-		        {
-			char *e = strchr(subTag->end, '<');
-			if (e != NULL)
-			    selVal = cloneStringZ(subTag->end, e - subTag->end);
-			}
-		    else
-		        selVal = cloneString(selVal);
-		    if (selVal != NULL)
-			var->curVal = selVal;
+		    if (val != NULL)
+			var->curVal = cloneString(val);
 		    }
+		freez(&val);
 		}
 	    }
 	}
@@ -674,7 +704,9 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
     }
 slReverse(&varList);
 for (var = varList; var != NULL; var = var->next)
+    {
     slReverse(&var->tags);
+    }
 return varList;
 }
 
@@ -722,7 +754,7 @@ struct htmlPage *htmlPageParse(char *url, char *fullText)
 struct htmlPage *page;
 char *dupe = cloneString(fullText);
 char *s = dupe;
-struct httpStatus *status = httpStatusParse(&s);
+struct htmlStatus *status = htmlStatusParse(&s);
 char *contentType;
 
 if (status == NULL)
@@ -790,7 +822,7 @@ return htmlPageScanAttribute(page, NULL, "HREF");
 void checkOk(char *fullText)
 /* Parse out first line and check it's ok. */
 {
-struct httpStatus *status = httpStatusParse(&fullText);
+struct htmlStatus *status = htmlStatusParse(&fullText);
 if (status == NULL)
     noWarnAbort();
 if (status->status != 200)
@@ -827,6 +859,18 @@ if (s == NULL)
 return s;
 }
 
+static void printVar(char *prefix, struct htmlFormVar *var)
+/* Print out variable. */
+{
+struct htmlTag *tag = var->tags->val;
+struct slName *val;
+printf("%s%s\t%s\t%s\t%s\n", prefix, var->name, var->tagName, 
+	naForNull(var->type), 
+	naForNull(var->curVal));
+for (val = var->values; val != NULL; val = val->next)
+     printf("%s\t%s\n", prefix, val->name);
+}
+
 void getForms(struct htmlPage *page)
 /* Print out all forms. */
 {
@@ -836,12 +880,7 @@ for (form = page->forms; form != NULL; form = form->next)
     {
     printf("%s\t%s\t%s\n", form->name, form->method, form->action);
     for (var = form->vars; var != NULL; var = var->next)
-        {
-	struct htmlTag *tag = var->tags->val;
-	printf("\t%s\t%s\t%s\t%s\n", var->name, var->tagName, 
-		naForNull(var->type), 
-		naForNull(var->curVal));
-	}
+	printVar("\t", var);
     }
 }
 
@@ -853,12 +892,7 @@ struct htmlFormVar *var;
 for (form = page->forms; form != NULL; form = form->next)
     {
     for (var = form->vars; var != NULL; var = var->next)
-        {
-	struct htmlTag *tag = var->tags->val;
-	printf("%s\t%s\t%s\t%s\n", var->name, var->tagName, 
-		naForNull(var->type), 
-		naForNull(var->curVal));
-	}
+	printVar("", var);
     }
 }
 
