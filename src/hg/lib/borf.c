@@ -12,7 +12,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.3 2003/08/14 17:16:31 sugnet Exp $";
+static char const rcsid[] = "$Id: borf.c,v 1.4 2004/09/01 14:14:24 baertsch Exp $";
 static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
 static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 
@@ -171,7 +171,10 @@ fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->feature);
+if (el->feature != NULL)
+    fprintf(f, "%s", el->feature);
+else
+    fprintf(f, "NA");
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->cdsStart);
@@ -191,7 +194,10 @@ fprintf(f, "%s", el->frame);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->protein);
+if (el->protein != NULL)
+    fprintf(f, "%s", el->protein);
+else
+    fprintf(f, "NA");
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -281,9 +287,9 @@ struct dnaSeq *seq = NULL;
 struct dyString *cmd = newDyString(256);
 int retVal = 0;
 if(tmpFa == NULL)
-    tmpFa = rTempName("/tmp", "borf", ".fa");
+    tmpFa = cloneString(rTempName("/tmp", "borf", ".fa"));
 if(tmpOrf == NULL)
-    tmpOrf = rTempName("/tmp", "borf", ".out");
+    tmpOrf = cloneString(rTempName("/tmp","borf", ".out"));
 seq = hSeqForBed(bed);
 faWrite(tmpFa, seq->name, seq->dna, seq->size);
 dyStringClear(cmd);
