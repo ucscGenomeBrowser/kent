@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.599 2003/09/21 19:50:32 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.600 2003/09/22 18:04:40 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5894,6 +5894,10 @@ if (sameWord(type, "bed"))
 	linkedFeaturesMethods(track);
 	track->loadItems = loadGappedBed;
 	}
+    }
+else if (sameWord(type, "wig"))
+    {
+    wigMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "sample"))
     {

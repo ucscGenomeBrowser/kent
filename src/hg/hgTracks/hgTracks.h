@@ -467,6 +467,9 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
+void wigMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
+/* Make track group for wig - wiggle tracks. */
+
 void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Load up methods for a generic sample type track. */
 
