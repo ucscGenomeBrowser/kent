@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.85 2005/02/25 21:31:52 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.86 2005/02/25 21:57:28 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -547,12 +547,16 @@ updateUserPriority(user);
 updateUserMaxNode(user);
 }
 
-void removeMachine(char *name)
+void removeMachine(char *line)
 /* Remove machine from pool. */
 {
 struct machine *mach;
-name = trimSpaces(name);
-while ((mach = findMachine(name)) != NULL)
+char *machName = nextWord(&line);
+char *user = nextWord(&line);
+char *reason = line;
+machName = trimSpaces(machName);
+logInfo("hub: user %s removed machine %s because: %s",user,machName,reason);
+while ((mach = findMachine(machName)) != NULL)
     {
     if (mach->job != NULL)
 	requeueJob(mach->job);
