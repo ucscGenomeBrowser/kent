@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.39 2004/11/22 23:04:41 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.40 2005/01/10 00:08:38 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -728,7 +728,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt)
+void axtAddBlocksToBoxInList(struct cBlock **pList, struct axt *axt)
 /* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
  * Note: list will be in reverse order of axt blocks. */
 {
@@ -758,7 +758,7 @@ for (i=0; i<=axt->symCount; ++i)
 	    assert(size == tPos - tStart);
 	    if (size > 0)
 	        {
-		struct boxIn *b;
+		struct cBlock *b;
 		AllocVar(b);
 		b->qStart = qStart;
 		b->qEnd = qPos;

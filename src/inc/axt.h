@@ -28,7 +28,9 @@
 #include "dnaseq.h"
 #endif
 
-#include "boxClump.h"
+#ifndef CHAIN_H
+#include "chain.h"
+#endif
 
 struct axt
 /* This contains information about one xeno alignment. */
@@ -216,7 +218,7 @@ struct axt *axtAffine2Level(bioSeq *query, bioSeq *target, struct axtScoreScheme
    
 */
 
-void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt);
+void axtAddBlocksToBoxInList(struct cBlock **pList, struct axt *axt);
 /* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
  * Note: list will be in reverse order of axt blocks. */
 
