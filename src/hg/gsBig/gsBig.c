@@ -578,11 +578,11 @@ if (suboptName != NULL)
 if (transName != NULL)
     transFile = mustOpen(transName, "w");
 if (exeName != NULL)
-    exePath = strdup(exeName);
+    exePath = cloneString(exeName);
 if (parName != NULL)
-        parPath = strdup(parName);	
+        parPath = cloneString(parName);	
 if (tmpDirName != NULL)
-        tmpDir = strdup(tmpDirName);
+        tmpDir = cloneString(tmpDirName);
 	
 if (optionExists("prerun"))
     {
@@ -601,9 +601,9 @@ else
     splitPath(faName, dir1, root1, ext1);
     
     sprintf(temp_str, "%s/temp_gsBig_%d_%s.fa", tmpDir, getpid(), root1);
-    tempFa = strdup(temp_str);		    
+    tempFa = cloneString(temp_str);		    
     sprintf(temp_str,"%s/temp_gsBig_%d_%s.genscan", tmpDir, getpid(), root1);
-    tempGs = strdup(temp_str);	
+    tempGs = cloneString(temp_str);	
     
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	{
@@ -613,17 +613,37 @@ else
 
 	for (offset = 0; offset < seq.size; offset += stepSize)
 	    {
+	    boolean allN = TRUE;
+	    int i;
 	    sizeOne = seq.size - offset;
 	    if (sizeOne > winSize) sizeOne = winSize;
-	    faWrite(tempFa, "split", seq.dna + offset, sizeOne); 
-	    dyStringClear(dy);
-	    dyStringPrintf(dy, "%s %s %s", exePath, parPath, tempFa);
-	    if (suboptName != NULL)
-	       dyStringPrintf(dy, " -subopt");
-	    dyStringPrintf(dy, " > %s", tempGs);
-	    system(dy->string);
-	    seg = parseSegment(tempGs, offset, offset+sizeOne, NULL);
-	    slAddHead(&segList, seg);
+	    /* Genscan hangs forever if a chunk is all-N's... if so, 
+	     * then skip this chunk. */
+	    for (i=offset;  i < (offset+sizeOne);  i++)
+		{
+		if (seq.dna[i] != 'N' && seq.dna[i] != 'n')
+		    {
+		    allN = FALSE;
+		    break;
+		    }
+		}
+	    if (allN)
+		{
+		printf("\ngsBig: skipping %s[%d:%d] -- it's all N's.\n\n",
+		       root1, offset, (offset+sizeOne-1));
+		}
+	    else
+		{
+		faWrite(tempFa, "split", seq.dna + offset, sizeOne); 
+		dyStringClear(dy);
+		dyStringPrintf(dy, "%s %s %s", exePath, parPath, tempFa);
+		if (suboptName != NULL)
+		    dyStringPrintf(dy, " -subopt");
+		dyStringPrintf(dy, " > %s", tempGs);
+		system(dy->string);
+		seg = parseSegment(tempGs, offset, offset+sizeOne, NULL);
+		slAddHead(&segList, seg);
+		}
 	    }
 	slReverse(&segList);
 	seg = mergeSegs(segList);
