@@ -2648,7 +2648,6 @@ cat > template << 'EOF'
 	hg17 fishClones fishClones.bed
             # Loaded 10601 elements of size 16
 
-
 # CHROMOSOME BANDS TRACK (2004-07-13 Terry)
 
 # This must wait until the Fish Clones tracks is done
@@ -2684,6 +2683,57 @@ cat > template << 'EOF'
 # Load ideogram table
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
 	hg17 cytoBandIdeo cytobands.bed
+
+
+# CHROMOSOME BANDS TRACK REDO (2004-07-22 Kate)
+#       Just to make sure we know the proper steps.
+#       The tables were not reloaded, as Terry has already
+#       sent the data to NCBI
+
+# This must wait until the Fish Clones tracks is done
+    ssh kolossus
+    mkdir -p /cluster/data/hg17/bed/cytoband.kate
+    cd /cluster/data/hg17/bed/cytoband.kate
+
+# Copy in some necessary files (usually from previous version)
+    cp /projects/hg2/booch/psl/cytobands/pctSetBands.txt .
+    cp /projects/hg2/booch/psl/cytobands/ISCN800.txt .
+
+# Create some preliminary information files
+    /cluster/bin/scripts/createSetBands pctSetBands.txt \
+	/cluster/data/hg17/inserts /cluster/data/hg17  100 > setBands.txt
+    /cluster/bin/scripts/makeBands ISCN800.txt \
+        /cluster/data/hg17 > cytobands.pct.bed
+    /cluster/bin/scripts/makeBandRanges cytobands.pct.bed \
+        > cytobands.pct.ranges
+
+# Reformat fishClones file
+    /cluster/bin/scripts/createBanderMarkers \
+	/cluster/data/hg17/bed/fishClones/fishClones.bed > fishClones.txt
+
+# Create bed file
+    /cluster/bin/scripts/runBander fishClones.txt \
+	ISCN800.txt setBands.txt /cluster/data/hg17
+# cat: chr[1,2,3,4,5,6,7,8,9].bed: No such file or directory
+# cat: chr1[0,1,2,3,4,5,6,7,8,9].bed: No such file or directory
+# cat: chr2[0,1,2].bed: No such file or directory
+# cat: chr[X,Y].bed: No such file or directory
+# rm: cannot lstat `chr*.bed': No such file or directory
+
+# GOT HERE
+
+    # Should be 862 bands
+    wc cytobands.bed
+    # 862    4310   30748 cytobands.bed
+
+# Load track
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
+	hg17 cytoBand cytobands.bed
+	    
+# Load ideogram table
+    #hgLoadBed -noBin -tab \
+        # -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
+	# hg17 cytoBandIdeo cytobands.bed
 
 
 # LOAD AFFYRATIO (DONE - 2004-07-14 - Hiram)
