@@ -5,8 +5,9 @@
 #include "linefile.h"
 #include "dnautil.h"
 #include "chain.h"
+#include <stdint.h>
 
-static char const rcsid[] = "$Id: chain.c,v 1.6 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.7 2003/05/25 16:21:25 baertsch Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -39,7 +40,7 @@ int chainCmpScore(const void *va, const void *vb)
 {
 const struct chain *a = *((struct chain **)va);
 const struct chain *b = *((struct chain **)vb);
-double diff = b->score - a->score;
+unsigned long long diff = b->score - a->score;
 if (diff < 0) return -1;
 else if (diff > 0) return 1;
 else return 0;
@@ -53,6 +54,20 @@ const struct chain *b = *((struct chain **)vb);
 return a->tStart - b->tStart;
 }
 
+#define FACTOR 300000000
+
+int chainCmpQuery(const void *va, const void *vb)
+/* Compare to sort based on query chrom and target position. */
+{
+const struct chain *a = *((struct chain **)va);
+const struct chain *b = *((struct chain **)vb);
+int dif;                                                                        
+
+dif = strcmp(a->qName, b->qName);                                               
+if (dif == 0)                                                                   
+    dif = a->qStart - b->qStart;                                                
+return dif;                       
+}
 
 static int nextId = 1;
 

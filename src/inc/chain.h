@@ -42,6 +42,9 @@ int chainCmpScore(const void *va, const void *vb);
 int chainCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target position. */
 
+int chainCmpQuery(const void *va, const void *vb);
+/* Compare to sort based on query chrom and start osition. */
+
 void chainWrite(struct chain *chain, FILE *f);
 /* Write out chain to file in dense format. */
 
