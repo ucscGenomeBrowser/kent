@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.772 2004/10/12 21:15:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.773 2004/10/13 17:49:30 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15162,11 +15162,13 @@ else if (sameWord(track, "chimpSimpleDiff"))
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track) || startsWith("tblast", track) || endsWith(track, "Blastz"))
+else if (startsWith("map", track) ||startsWith("blastz", track) || startsWith("blat", track) || startsWith("tblast", track) || endsWith(track, "Blastz"))
     {
     char *genome = "Unknown";
     if (startsWith("tblast", track))
         genome = &track[6];
+    if (startsWith("map", track))
+        genome = &track[3];
     if (startsWith("blat", track))
         genome = &track[4];
     if (startsWith("blastz", track))
