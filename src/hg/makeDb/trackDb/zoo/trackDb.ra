@@ -69,7 +69,7 @@ type bed 12 .
 
 track mrna
 shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from Genbank 
+longLabel $Organism mRNAs from GenBank 
 group rna
 priority 9
 visibility hide
@@ -95,8 +95,8 @@ spectrum on
 type psl est
 
 track xenoMrna
-shortLabel Non$organism mRNAs
-longLabel Non$organism mRNAs from Genbank
+shortLabel Non-$Organism mRNAs
+longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 12
 visibility hide
@@ -104,8 +104,8 @@ spectrum on
 type psl xeno
 
 track xenoEst
-shortLabel Non$organism ESTs
-longLabel Non$organism ESTs from Genbank 
+shortLabel Non-$Organism ESTs
+longLabel Non-$Organism ESTs from GenBank 
 group rna
 priority 13
 visibility hide
