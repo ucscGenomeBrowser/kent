@@ -194,6 +194,7 @@ CREATE TABLE feature (
     end int not null,	# End coordinate (non-inclusive)
     featureClass int not null,	# ID of featureClass
     featureType int not null,	# ID of featureType
+    softEndBits char not null,  # 1 for start <, 2 for start ?, 4 for end >, 8 for end ?
               #Indices
     INDEX(acc)
 );

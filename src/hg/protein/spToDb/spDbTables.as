@@ -157,6 +157,7 @@ table feature
     int end;	"End coordinate (non-inclusive)"
     int featureClass;	"ID of featureClass"
     int featureType;    "ID of featureType"
+    byte softEndBits;  "1 for start <, 2 for start ?, 4 for end >, 8 for end ?"
     )
 
 table author

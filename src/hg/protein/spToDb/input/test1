@@ -87,10 +87,10 @@ DR   InterPro; IPR003612; AAI.
 DR   Pfam; PF00234; tryp_alpha_amyl; 1.
 DR   SMART; SM00499; AAI; 1.
 KW   Signal.
-FT   SIGNAL        1     30       POTENTIAL.
-FT   CHAIN        31    102       PROTEIN 108.
-FT   DISULFID     41     77       BY SIMILARITY.
-FT   DISULFID     51     66       BY SIMILARITY.
+FT   SIGNAL        <1     30       POTENTIAL.
+FT   CHAIN        ?31    102       PROTEIN 108.
+FT   DISULFID     41     >77       BY SIMILARITY.
+FT   DISULFID     51     ?66       BY SIMILARITY.
 FT   DISULFID     67     92       BY SIMILARITY.
 FT   DISULFID     79     99       BY SIMILARITY.
 SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
