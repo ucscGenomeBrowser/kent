@@ -1304,4 +1304,6 @@ priority 50
 visibility hide
 spectrum on
 type bed 6
+scoreMin 500
+scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
