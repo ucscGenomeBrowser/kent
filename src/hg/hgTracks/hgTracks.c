@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.730 2004/05/12 03:28:15 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.731 2004/05/12 18:38:41 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1171,7 +1171,7 @@ Color bColor;
 int intronGap = 0;
 boolean chainLines = ((vis != tvDense)&&(tg->subType == lfSubChain));
 boolean hideLine = ((tg->subType == lfSubChain) || 
-	((vis == tvDense) && (tg->subType == lfSubXeno)));
+	        ((vis == tvDense) && (tg->subType == lfSubXeno)));
 int midY = y + (heightPer>>1);
 int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
@@ -1257,7 +1257,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score );
 
-            if (exonArrows && 
+            if (exonArrows && vis != tvDense &&
                 /* Display barbs only if no intron is visible on the item.
                    This occurs when the exon completely spans the window,
                    or when it is the first or last intron in the feature and
@@ -1273,7 +1273,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                     }
             }
 	}
-
 
     if ((intronGap || chainLines) && sf->next != NULL)
 	{
