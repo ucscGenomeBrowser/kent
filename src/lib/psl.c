@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.42 2004/02/20 07:43:24 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.43 2004/02/21 21:09:04 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -691,7 +691,7 @@ return sizeMul * (psl->match + ( psl->repMatch>>1)) -
 	sizeMul * psl->misMatch - psl->qNumInsert - psl->tNumInsert;
 }
 
-int pslCmpScore(const void *va, const void *vb)
+int pslCmpScoreAsc(const void *va, const void *vb)
 /* Compare to sort based on query then score. */
 {
 const struct psl *a = *((struct psl **)va);

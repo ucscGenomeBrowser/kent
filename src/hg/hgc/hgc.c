@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.569 2004/02/20 07:44:15 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.570 2004/02/21 21:11:19 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3513,7 +3513,7 @@ pslList = getAlignments(conn, table, acc);
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 if (sameString(tdb->tableName, "mrnaBlastz"))
-    slSort(&pslList, pslCmpScore);
+    slSort(&pslList, pslCmpScoreAsc);
 
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
@@ -7330,7 +7330,7 @@ struct dyString *query = newDyString(1024);
 
 /* Get alignment info. */
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
-slSort(&pslList, pslCmpScore);
+slSort(&pslList, pslCmpScoreAsc);
 
 /* print header */
 genericHeader(tdb, acc);

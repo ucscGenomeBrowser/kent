@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.8 2004/02/20 07:43:54 baertsch Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.9 2004/02/21 21:14:25 baertsch Exp $";
 
 /* #define DEBUG */
 
@@ -295,7 +295,7 @@ void dropNotBest(struct psl **pslList)
 {
 struct psl *tail = NULL;
 int bestScore =0;
-slSort(pslList, pslCmpScore);
+slSort(pslList, pslCmpScoreAsc);
 if(pslList == NULL) 
     return;
 bestScore = pslScore(*pslList);
