@@ -6054,12 +6054,26 @@ if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
-    ~~~
-    printf("<TABLE border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+    printf("<TABLE BORDER=0 CELLSPACING=2 CELLPADDING=2 WIDTH=%d COLS=%d><TR>\n", 
+    	CONTROL_TABLE_WIDTH, 12);
+    printf("<TD COLSPAN=2 ALIGN=CENTER>");
+    printf("dink left end<BR>");
+    cgiMakeButton("hgt.dinkLL", " < ");
+    cgiMakeTextVar("dinkLP", cartUsualString(cart, "dinkLP", "5%"), 4);
+    cgiMakeButton("hgt.dinkLR", " > ");
+    printf("</TD>");
+    printf("<TD COLSPAN=8>");
     fputs("Click on object to view more information on that object. "
 	  "Click on base position to zoom in by 3x around where you "
-	  "clicked.<BR>",
+	  "clicked.",
 	  stdout);
+    printf("<TD COLSPAN=2 ALIGN=CENTER>");
+    printf("dink right end<BR>");
+    cgiMakeButton("hgt.dinkRL", " < ");
+    cgiMakeTextVar("dinkRP", cartUsualString(cart, "dinkRP", "5%"), 4);
+    cgiMakeButton("hgt.dinkRR", " > ");
+    printf("</TD>");
+    printf("<TR></TABLE>\n");
     smallBreak();
 
     /* Display bottom control panel. */
@@ -6182,6 +6196,40 @@ winStart += offset;
 winEnd += offset;
 }
 
+void dinkWindow(boolean start, int dinkAmount)
+/* Move one end or other of window a little. */
+{
+if (start)
+   {
+   winStart += dinkAmount;
+   if (winStart < 0) winStart = 0;
+   }
+else
+   {
+   winEnd += dinkAmount;
+   if (winEnd > seqBaseCount)
+       winEnd = seqBaseCount;
+   }
+}
+
+int dinkSize(char *var)
+/* Return size to dink. */
+{
+char *stringVal = cartOptionalString(cart, var);
+if (stringVal == NULL || !isdigit(stringVal[0]))
+    {
+    stringVal = "5%";
+    cartSetString(cart, var, stringVal);
+    }
+if (lastChar(stringVal) == '%')
+    {
+    double x = atof(stringVal);
+    return round(0.01 * x * (winEnd - winStart));
+    }
+else
+    return atoi(stringVal);
+}
+
 boolean findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
 {
@@ -6235,26 +6283,7 @@ position = cartString(cart, "position");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd))
     return;
 
-/* Clip chromosomal position to fit. */
 seqBaseCount = hChromSize(chromName);
-if (winEnd < winStart)
-    {
-    int temp = winEnd;
-    winEnd = winStart;
-    winStart = temp;
-    }
-else if (winStart == winEnd)
-    {
-    winStart -= 1000;
-    winEnd += 1000;
-    }
-if (winStart < 0)
-    winStart = 0;
-if (winEnd > seqBaseCount)
-    winEnd = seqBaseCount;
-winBaseCount = winEnd - winStart;
-if (winBaseCount <= 0)
-    errAbort("Window out of range on %s", chromName);
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
@@ -6281,6 +6310,35 @@ else if (cgiVarExists("hgt.out2"))
     zoomAroundCenter(3.0);
 else if (cgiVarExists("hgt.out3"))
     zoomAroundCenter(10.0);
+else if (cgiVarExists("hgt.dinkLL"))
+    dinkWindow(TRUE, -dinkSize("dinkLP"));
+else if (cgiVarExists("hgt.dinkLR"))
+    dinkWindow(TRUE, dinkSize("dinkLP"));
+else if (cgiVarExists("hgt.dinkRL"))
+    dinkWindow(FALSE, -dinkSize("dinkRP"));
+else if (cgiVarExists("hgt.dinkRR"))
+    dinkWindow(FALSE, dinkSize("dinkRP"));
+
+/* Clip chromosomal position to fit. */
+if (winEnd < winStart)
+    {
+    int temp = winEnd;
+    winEnd = winStart;
+    winStart = temp;
+    }
+else if (winStart == winEnd)
+    {
+    winStart -= 1000;
+    winEnd += 1000;
+    }
+if (winStart < 0)
+    winStart = 0;
+if (winEnd > seqBaseCount)
+    winEnd = seqBaseCount;
+winBaseCount = winEnd - winStart;
+if (winBaseCount <= 0)
+    errAbort("Window out of range on %s", chromName);
+
 
 /* Chuck code for synching with different frames */
 otherFrame = cartOptionalString(cart, "of");
@@ -6307,6 +6365,7 @@ char *excludeVars[] = { "submit", "Submit",
 	"hgt.out1", "hgt.out2", "hgt.out3",
 	"hgt.left1", "hgt.left2", "hgt.left3", 
 	"hgt.right1", "hgt.right2", "hgt.right3", 
+	"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
 	"hgt.customText", "hgt.customFile",
 	NULL };
 
