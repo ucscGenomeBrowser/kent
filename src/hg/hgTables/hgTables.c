@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.46 2004/07/21 21:03:50 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.47 2004/07/22 01:36:22 kent Exp $";
 
 
 void usage()
@@ -247,6 +247,16 @@ else
 // for (region=regionList;region!=NULL;region=region->next) uglyf("%s:%d-%d\n", region->chrom, region->start, region->end);
 return regionList;
 }
+
+char *getRegionName()
+/* Get a name for selected region.  Don't free this. */
+{
+char *region = cartUsualString(cart, hgtaRegionType, "genome");
+if (sameString(region, "range"))
+    region = cartUsualString(cart, hgtaRange, "n/a");
+return region;
+}
+
 
 struct region *getRegionsWithChromEnds()
 /* Get list of regions.  End field is set to chrom size rather

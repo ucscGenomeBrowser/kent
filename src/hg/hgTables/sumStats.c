@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.7 2004/07/21 21:03:50 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.8 2004/07/22 01:36:22 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -242,7 +242,7 @@ freeHash(&chromHash);
 return covList;
 }
 
-static void percentStatRow(char *label, long long p, long long q)
+void percentStatRow(char *label, long long p, long long q)
 /* Print label, p, and p/q */
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
@@ -252,7 +252,7 @@ if (q != 0)
 hPrintf("</TD></TR>\n");
 }
 
-static void numberStatRow(char *label, long long x)
+void numberStatRow(char *label, long long x)
 /* Print label, x in table. */
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
@@ -260,7 +260,7 @@ printLongWithCommas(stdout, x);
 hPrintf("</TD><TR>\n");
 }
 
-static void floatStatRow(char *label, double x)
+void floatStatRow(char *label, double x)
 /* Print label, x in table. */
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
@@ -269,18 +269,21 @@ hPrintf("</TD><TR>\n");
 }
 
 
-static void twoStringRow(char *label, char *val)
+void stringStatRow(char *label, char *val)
 /* Print label, string value. */
 {
 hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
-void doSummaryStats(struct sqlConnection *conn)
-/* Put up page showing summary stats for track. */
+
+static void doSummaryStatsBed(struct sqlConnection *conn)
+/* Put up page showing summary stats for track that is in database
+ * or that is bed-format custom. */
 {
 struct trackDb *track = curTrack;
 struct bed *bedList;
 struct region *regionList = getRegionsWithChromEnds();
+char *regionName = getRegionName();
 long long regionSize = basesInRegion(regionList);
 long long gapTotal = gapsInRegion(conn, regionList);
 long long realSize = regionSize - gapTotal;
@@ -350,23 +353,28 @@ if (hti->scoreField[0] != 0 && itemCount > 0)
 calcTime = clock1000() - startTime;
 hTableEnd();
 
+/* Show region and time stats part of stats page. */
 webNewSection("Region and Timing Statistics");
 hTableStart();
-/* Print out region and filter status. */
-    {
-    char *region = cartUsualString(cart, hgtaRegionType, "genome");
-    if (sameString(region, "range"))
-        region = cartUsualString(cart, hgtaRange, "n/a");
-    twoStringRow("region", region);
-    }
+stringStatRow("region", regionName);
 numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load time", 0.001*loadTime);
 floatStatRow("calculation time", 0.001*calcTime);
-twoStringRow("filter", (anyFilter() ? "on" : "off"));
-twoStringRow("intersection", (anyIntersection() ? "on" : "off"));
+stringStatRow("filter", (anyFilter() ? "on" : "off"));
+stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
 
 htmlClose();
 }
+
+void doSummaryStats(struct sqlConnection *conn)
+/* Put up page showing summary stats for track. */
+{
+if (isWiggle(database, curTrack->tableName))
+    doSummaryStatsWiggle(conn);
+else
+    doSummaryStatsBed(conn);
+}
+
 

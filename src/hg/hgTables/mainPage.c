@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.22 2004/07/21 21:03:50 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.23 2004/07/22 01:36:22 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -209,7 +209,7 @@ hPrintf("</SELECT>\n");
 hPrintf("</TD></TR>\n");
 }
 
-static void showOutputTypeRow()
+static void showOutputTypeRow(boolean isWig)
 /* Print output line. */
 {
 static char *usualTypes[] = 
@@ -231,16 +231,14 @@ static char *usualLabels[] =
 static char *wigTypes[] = 
      {
      outWigData, 
-     outBed, 
-     outCustomTrack,
      };
 static char *wigLabels[] =
-    {"data points", 
-     "thresholded BED - browser extensible data", 
-     "custom track", };
+    {
+    "data points", 
+    };
 
 hPrintf("<TR><TD><B>output:</B>\n");
-if (isWiggle(database, curTrack->tableName))
+if (isWig)
     showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
 else
     showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
@@ -250,6 +248,7 @@ else
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
+boolean isWig;
 hPrintf("<TABLE BORDER=0>\n");
 
 /* Print genome and assembly line. */
@@ -264,6 +263,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
 curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack, 
 	onChangeGroupOrTrack(), conn);
+isWig = isWiggle(database, curTrack->tableName);
 
 /* Region line */
     {
@@ -293,6 +293,7 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack,
     }
 
 /* Select identifiers line. */
+if (!isWig)
     {
     hPrintf("<TR><TD><B>select identifiers</B> (names/accessions):\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
@@ -307,6 +308,7 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack,
     }
 
 /* Filter line. */
+if (!isWig)
     {
     hPrintf("<TR><TD><B>filter:</B>\n");
     if (anyFilter())
@@ -323,6 +325,7 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack,
     }
 
 /* Intersection line. */
+if (!isWig)
     {
     hPrintf("<TR><TD><B>intersection:</B>\n");
     if (anyIntersection())
@@ -339,13 +342,14 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack,
     }
 
 /* Print group and track line. */
-showOutputTypeRow();
+showOutputTypeRow(isWig);
 
 hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output.</I><BR>");
+    if (!isWig)
+	hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output.</I><BR>");
     cgiMakeButton(hgtaDoTopSubmit, "Get Output");
     hPrintf(" ");
     cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");

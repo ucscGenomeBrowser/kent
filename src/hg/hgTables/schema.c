@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.15 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.16 2004/07/22 01:36:22 kent Exp $";
 
 
 void describeFields(char *db, char *table, 
@@ -188,10 +188,16 @@ webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
 }
 
-static void showSchemaCt(char *table)
-/* Show schema on custom track. */
+static void showSchemaCtWiggle(char *table, struct customTrack *ct)
+/* Show schema on wiggle format custom track. */
 {
-struct customTrack *ct = lookupCt(table);
+hPrintf("<B>Wiggle Custom Track ID:</B> %s<BR>\n", table);
+hPrintf("Wiggle custom tracks are stored in a dense binary format.");
+}
+
+static void showSchemaCtBed(char *table, struct customTrack *ct)
+/* Show schema on bed format custom track. */
+{
 struct bed *bed;
 int count = 0;
 
@@ -206,6 +212,16 @@ hPrintf("<TT><PRE>");
 for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
     bedTabOutN(bed, ct->fieldCount, stdout);
 hPrintf("</PRE></TT>\n");
+}
+
+static void showSchemaCt(char *table)
+/* Show schema on custom track. */
+{
+struct customTrack *ct = lookupCt(table);
+if (ct->wiggle)
+    showSchemaCtWiggle(table, ct);
+else
+    showSchemaCtBed(table, ct);
 }
 
 static void showSchema(char *db, char *table)

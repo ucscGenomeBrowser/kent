@@ -104,11 +104,13 @@ struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
     char *trackVar, char *trackScript, struct sqlConnection *conn);
 /* Show group & track row of controls.  Returns selected track */
 
-
 /* --------- Utility functions --------------------- */
 
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
+
+char *getRegionName();
+/* Get a name for selected region.  Don't free this. */
 
 struct region *getRegionsWithChromEnds();
 /* Get list of regions.  End field is set to chrom size rather
@@ -230,10 +232,11 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define filterRawLogicVar "rawLogic"
 #define filterRawQueryVar "rawQuery"
 
-/* Functions related to intersecting. */
+/* --------- Functions related to intersecting. --------------- */
 
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
+
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -328,7 +331,7 @@ boolean anyIntersection();
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
 
-/* Identifier list handling stuff. */
+/* --------- Identifier list handling stuff. ------------ */
 
 char *identifierFileName();
 /* File name identifiers are in, or NULL if no such file. */
@@ -336,12 +339,34 @@ char *identifierFileName();
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
 
+/* --------- Summary and stats stuff -------------- */
+long long basesInRegion(struct region *regionList);
+/* Count up all bases in regions. */
+
+long long gapsInRegion(struct sqlConnection *conn, struct region *regionList);
+/* Return count of gaps in all regions. */
+
+void percentStatRow(char *label, long long p, long long q);
+/* Print label, p, and p/q */
+
+void numberStatRow(char *label, long long x);
+/* Print label, x in table. */
+
+void floatStatRow(char *label, double x);
+/* Print label, x in table. */
+
+void stringStatRow(char *label, char *val);
+/* Print label, string value. */
+
 /* ----------- Wiggle stuff. -------------------- */
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
 void doOutWigData(struct trackDb *track, struct sqlConnection *conn);
 /* Save as wiggle data. */
+
+void doSummaryStatsWiggle(struct sqlConnection *conn);
+/* Put up page showing summary stats for wiggle track. */
 
 /* ----------- Custom track stuff. -------------- */
 boolean isCustomTrack(char *table);
