@@ -86,6 +86,7 @@
 #include "sample.h"
 #include "axt.h"
 #include "axtInfo.h"
+#include "jaxQTL.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -5788,40 +5789,37 @@ genericClickHandler(tdb, item, buf);
 
 
 void doJaxQTL(struct trackDb *tdb, char *item)
-/* Put up info on tigr gene index item. */
+/* Put up info on Quantitative Trait Locus from Jackson Labs. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
-char query[128];
+char query[256];
 char **row;
-char acc[64];
-char desc[256];
-char *dupe, *type, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
-int bedSize = 6;
+struct jaxQTL *jaxQTL;
+char band[64];
 
-// look up mgiID and description fields
-acc[0] = 0;
-desc[0] = 0;
-snprintf(query, sizeof(query),
-	 "select mgiID,description from jaxQTL where name = '%s'",
-	 item);
+genericHeader(tdb, item);
+sprintf(query, "select * from jaxQTL where name = '%s' and chrom = '%s' and chromStart = %d",
+    	item, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    if (row[0] != NULL)
-        strncpy(acc, row[0], sizeof(acc));
-    if (row[1] != NULL)
-        strncpy(desc, row[1], sizeof(desc));
+    jaxQTL = jaxQTLLoad(row);
+    printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
+    printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
+    printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
+    printf("<B>cM position of marker associated with peak LOD score:</B> %.1f<BR>\n", jaxQTL->cMscore);
+    printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
+	   jaxQTL->marker);
+    printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
+    if (hChromBand(seqName, start, band))
+	printf("<B>Band:</B> %s<BR>\n", band);
+    printf("<B>Start of marker in chromosome:</B> %d<BR>\n", start+1);
     }
-sqlFreeResult(&sr);
-
-genericHeader(tdb, item);
-printCustomUrl(tdb, acc, FALSE);
-printf("<b>Description:</b> %s <BR>\n", desc);
-genericBedClick(conn, tdb, item, start, bedSize);
 printTrackHtml(tdb);
+
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
