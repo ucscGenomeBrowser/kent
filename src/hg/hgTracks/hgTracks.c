@@ -123,6 +123,8 @@ int winEnd;			/* End of window in sequence. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 char *ctFileName = NULL;	/* Custom track file. */
 
+char *protDbName;               /* Name of proteome database for this genome. */
+
 /* These variables are set by getPositionFromCustomTracks() at the very 
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
 struct customTrack *ctList = NULL;  /* Custom tracks. */
@@ -3008,6 +3010,327 @@ tg->itemName = genieName;
 tg->itemColor = genieKnownColor;
 }
 
+char *knownGeneName(struct trackGroup *tg, void *item)
+{
+static char cat[128];
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) 
+    {
+    sprintf(cat,"%s",(char *)lf->extra);
+    return cat;
+    }
+else 
+    return lf->name;
+}
+
+char *knownGeneMapName(struct trackGroup *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupKnownGeneNames(struct linkedFeatures *lfList)
+/* This converts the known gene name to a gene name where possible via refLink. */
+{
+struct linkedFeatures *lf;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+char *newName;
+
+char *proteinID;
+char *hugoID;
+char cond_str[256];
+
+if (hTableExists("refLink"))
+    {
+    struct sqlResult *sr;
+    char **row;
+
+    for (lf = lfList; lf != NULL; lf = lf->next)
+	{
+	sprintf(cond_str, "mrnaID='%s'", lf->name);
+	proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
+ 
+        sprintf(cond_str, "displayID = '%s'", proteinID);
+	hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
+	if (!((hugoID == NULL) || (*hugoID == '\0')) )
+		{
+		lf->extra = cloneString(hugoID);
+		}
+	else
+	    {
+	    sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s';",  
+		    database, lf->name);
+
+	    sr = sqlGetResult(conn, query);
+	    row = sqlNextRow(sr);
+	    if (row != NULL)
+    	    	{
+    	    	sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+    	    	sqlFreeResult(&sr);
+    	    	sr = sqlGetResult(conn, query); 
+    	    	if ((row = sqlNextRow(sr)) != NULL)
+        	    {
+		    lf->extra = cloneString(row[0]);
+		    }
+            	sqlFreeResult(&sr);
+	    	}
+	    else
+            	{
+	    	sqlFreeResult(&sr);
+	    	}
+	    }
+	}
+    } 
+hFreeConn(&conn);
+}
+
+void loadknownGene(struct trackGroup *tg)
+/* Load up known genes. */
+{
+tg->items = lfFromGenePredInRange("knownGene", chromName, winStart, winEnd);
+if (limitVisibility(tg, tg->items) == tvFull)
+    {
+    lookupKnownGeneNames(tg->items);
+    }
+}
+
+Color knownGeneColor(struct trackGroup *tg, void *item, struct vGfx *vg)
+/* Return color to draw known gene in. */
+{
+struct linkedFeatures *lf = item;
+int col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char cond_str[256];
+char *proteinID;
+char *pdbID;
+char *ans;
+char *refAcc;
+
+/* color scheme:
+
+	Black: 		If the gene has a corresponding PDB entry
+	Dark blue: 	If the gene has a corresponding SWISS-PROT entry
+			or has a corresponding "reviewed" RefSeq entry
+	Lighter blue:  	If the gene has a corresponding "provisional" RefSeq entry
+	Lightest blue: 	Eveything else
+*/
+
+// set default to the lightest color
+lightest.r = (1*normal->r + 2*255) / 3;
+lightest.g = (1*normal->g + 2*255) / 3;
+lightest.b = (1*normal->b + 2*255) / 3;
+col = vgFindColorIx(vg, lightest.r, lightest.g, lightest.b);
+
+// set color first according to RefSeq status (if there is a corresponding RefSeq)
+sprintf(cond_str, "mrna='%s' ", lf->name);
+refAcc = sqlGetField(conn, database, "mrnaRefseq", "refseq", cond_str);
+if (refAcc != NULL)
+    {
+    if (hTableExists("refSeqStatus"))
+    	{
+    	sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
+            {
+	    if (startsWith("Reviewed", row[0]))
+	    	{
+	    	/* Use the usual color */
+	    	col = tg->ixColor;
+	    	}
+	    else
+		{ 
+	    	if (startsWith("Provisional", row[0]))
+	    	    {
+	    	    lighter.r = (6*normal->r + 4*255) / 10;
+	    	    lighter.g = (6*normal->g + 4*255) / 10;
+	    	    lighter.b = (6*normal->b + 4*255) / 10;
+	    	    col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
+	    	    }
+		}	   
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+/* if a corresponding SWISS-PROT entry exists, set it to dark blue */
+sprintf(cond_str, "name='%s'", (char *)(lf->name));
+proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
+if (proteinID != NULL)
+    {
+    sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
+    ans= sqlGetField(conn, protDbName, "spXref2", "displayID", cond_str);
+    if (ans != NULL) 
+    	{
+    	col = tg->ixColor;
+    	}
+    }
+
+/* if a corresponding PDB entry exists, set it to black */
+sprintf(cond_str, "sp='%s'", proteinID);
+pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+if (pdbID != NULL) 
+    {
+    col = MG_BLACK;
+    }
+
+hFreeConn(&conn);
+return(col);
+}
+
+void knownGeneMethods(struct trackGroup *tg)
+/* Make track group of known genes. */
+{
+tg->loadItems 	= loadknownGene;
+tg->itemName 	= knownGeneName;
+tg->mapItemName = knownGeneMapName;
+tg->itemColor 	= knownGeneColor;
+}
+
+static void superfamilyDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items for superfamily track */
+{
+int baseWidth = seqEnd - seqStart;
+struct bed *item;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int invPpt;
+int midLineOff = heightPer/2;
+int midY = y + midLineOff;
+int dir;
+Color *shades = tg->colorShades;
+
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, vg);
+    else
+	{
+        if (shades)
+            {
+            color = shades[grayInRange(item->score, 0, 1000)];
+            }
+	}
+
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, item);
+	if (x1 < xOff)
+	    x1 = xOff;
+	if (x2 > xOff + width)
+	    x2 = xOff + width;
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
+	}
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+char *superfamilyMapName(struct trackGroup *tg, void *item)
+/* Return map name of the track item (used by hgc). */
+{
+char *name;
+char *proteinName;
+char *genomeName;
+struct sqlConnection *conn = hAllocConn();
+char conditionStr[256];
+
+struct bed *sw = item;
+
+sprintf(conditionStr, "transcript_name='%s'", sw->name);
+proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+name = strdup(proteinName);
+hFreeConn(&conn);
+
+return(name);
+}
+
+// assuming no more than 100 domains in a protein
+char sfDesc[100][256];
+char sfBuffer[25600];
+
+char *superfamilyName(struct trackGroup *tg, void *item)
+/* Return domain names of an entry of a Superfamily track item, 
+   each item may have multiple names 
+   due to possibility of multiple domains. */
+{
+struct bed *sw = item;
+struct sqlConnection *conn;
+struct linkedFeatures *lf = item;
+int sfCnt;
+char *desc;
+char query[256];
+struct sqlResult *sr, *sr2;
+char **row;
+char *chp;
+int i;
+
+conn = hAllocConn();
+sprintf(query, 
+	"select description from sfDescription where name='%s';", 
+	sw->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+sfCnt = 0;
+while (row != NULL)
+    {      
+    desc = row[0];
+    sprintf(sfDesc[sfCnt], "%s", desc);
+    
+    row = sqlNextRow(sr);
+    sfCnt++;
+    if (sfCnt >= 100) break;
+    }
+
+chp = sfBuffer;
+for (i=0; i<sfCnt; i++)
+    {
+    if (i != 0)
+	{
+	sprintf(chp, "; ");
+	chp++;chp++;
+	}
+    sprintf(chp, "%s", sfDesc[i]);
+    chp = chp+strlen(sfDesc[i]);
+    }
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+    
+return(sfBuffer);
+}
+
+void superfamilyMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->drawItems 	= superfamilyDraw;
+tg->itemName  	= superfamilyName;
+tg->mapItemName = superfamilyMapName;
+tg->drawName  	= TRUE;
+}
+
 char *refGeneName(struct trackGroup *tg, void *item)
 /* Return abbreviated genie name. */
 {
@@ -3126,7 +3449,6 @@ tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
 }
-
 
 char *ensGeneName(struct trackGroup *tg, void *item)
 /* Return abbreviated ensemble gene name. */
@@ -10452,6 +10774,8 @@ registerTrackHandler("gap", gapMethods);
 registerTrackHandler("genomicDups", genomicDupsMethods);
 registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
+registerTrackHandler("knownGene", knownGeneMethods);
+registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
@@ -11019,6 +11343,8 @@ cart = theCart;
 
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
+
+protDbName = hPdbFromGdb(database);
 
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
