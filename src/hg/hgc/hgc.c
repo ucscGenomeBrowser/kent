@@ -114,7 +114,7 @@
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.502 2003/10/16 23:17:36 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.503 2003/10/17 19:49:18 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5771,6 +5771,8 @@ if (proteinID == NULL)
     }
 
 sprintf(cond_str, "displayID='%s'", proteinID);
+proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+sprintf(cond_str, "displayID='%s'", proteinID);
 proteinDesc = sqlGetField(conn, protDbName, "spXref3", "description", cond_str);
 if (proteinDesc != NULL) printf("%s\n", proteinDesc);
 sprintf(cond_str, "sp='%s'", proteinID);
@@ -5796,7 +5798,7 @@ if (pdbID != NULL)
 
 printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
 printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
-       proteinID, proteinID);
+       proteinAC, proteinID);
 
 // print more protein links if there are other proteins correspond to this mRNA
 sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
