@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.5 2003/09/25 08:29:35 kent Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.6 2004/04/24 19:07:03 kent Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -22,18 +22,6 @@ char *buf = needMem(aLen + bLen + 1);
 memcpy(buf, a, aLen);
 memcpy(buf+aLen, b, bLen);
 return buf;
-}
-
-static void spaceToUnderbar(char *s)
-/* Convert white space to underbars. */
-{
-char c;
-while ((c = *s) != 0)
-    {
-    if (isspace(c))
-        *s = '_';
-    ++s;
-    }
 }
 
 static char *settingsVarName(char *prefix, char *label)
