@@ -1,0 +1,13 @@
+
+clone production onto beta?
+
+cron job to backup hgsqldump the qapushq database on beta.
+dev will have just a testing version for the new stuff.
+
+add &junk=random to URL and db to suppress back-button messups.
+
+just give in and use the cart
+
+monthly reports in easy-to-use format
+add ability to query old logs more fully (later)
+
