@@ -15,7 +15,7 @@ struct lineFile
     char *fileName;		/* Name of file. */
     int fd;			/* File handle. */
     int bufSize;		/* Size of buffer. */
-    int bufOffsetInFile;	/* Offset in file of first buffer byte. */
+    off_t bufOffsetInFile;	/* Offset in file of first buffer byte. */
     int bytesInBuf;		/* Bytes read into buffer. */
     int lastReadSize;		/* Size of last read. */
     int lineIx;			/* Current line. */
@@ -77,11 +77,19 @@ boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
 #define lineFileRow(lf, words) lineFileNextRow(lf, words, ArraySize(words))
 /* Read in line chopped into fixed size word array. */
 
+boolean lineFileNextRowTab(struct lineFile *lf, char *words[], int wordCount);
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * at tabs. Returns FALSE at EOF.  Aborts on error. */
+
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords);
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
 
 #define lineFileChop(lf, words) lineFileChopNext(lf, words, ArraySize(words))
 /* Ease-of-usef macro for lineFileChopNext above. */
+
+int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords);
+/* Return next non-blank line that doesn't start with '#' chopped into words
+ * on tabs */
 
 int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return
