@@ -384,6 +384,14 @@ priority 165
 visibility hide
 type maf
 
+track multiz9way
+shortLabel 9way Multiz
+longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish/Elephant Multiz Alignments 
+group compGeno
+priority 165
+visibility hide
+type maf
+
 track blastzElephant
 shortLabel Elephant Blastz
 longLabel Human/Elephant Blastz (Loxodonta Africana Sep 2004 trimmed reads) 
@@ -1031,6 +1039,15 @@ priority 201.9
 visibility hide
 type bed 14 .
 
+track redMm5
+shortLabel Mm5 Red
+longLabel Mm5 Red
+group x
+priority 200.9
+visibility hide
+type bed 14 .
+
+
 track scoreMm3X
 shortLabel Mm3X Scored
 longLabel Mm3X Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
@@ -1064,6 +1081,14 @@ priority 202
 visibility hide
 type psl xeno mm2X
 otherDb mm2X
+
+track scoreMm5
+shortLabel  Mm5 Scored
+longLabel  Mm5 Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
+group x
+priority 201.95
+visibility hide
+type bed 14 .
 
 track blastzBestElephant
 shortLabel Elephant Best
