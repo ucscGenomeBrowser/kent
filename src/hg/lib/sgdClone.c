@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "sgdClone.h"
 
-static char const rcsid[] = "$Id: sgdClone.c,v 1.2 2004/01/17 20:55:44 braney Exp $";
+static char const rcsid[] = "$Id: sgdClone.c,v 1.3 2004/01/23 16:48:04 braney Exp $";
 
 void sgdCloneStaticLoad(char **row, struct sgdClone *ret)
 /* Load a row from sgdClone table into ret.  The contents of ret will
@@ -22,20 +22,6 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->atccName = row[4];
-}
-
-void sgdCloneStaticLoadWBin(char **row, struct sgdClone *ret)
-/* Load a row from sgdClone table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-int sizeOne,i;
-char *s;
-
-ret->chrom = row[1];
-ret->chromStart = sqlUnsigned(row[2]);
-ret->chromEnd = sqlUnsigned(row[3]);
-ret->name = row[4];
-ret->atccName = row[5];
 }
 
 struct sgdClone *sgdCloneLoad(char **row)
