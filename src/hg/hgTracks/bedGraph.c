@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.5 2005/02/09 21:54:18 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.6 2005/02/09 22:48:59 hiram Exp $";
 
 /*	bedGraphCartOptions structure - to carry cart options from
  *	bedGraphMethods to all the other methods via the
@@ -313,16 +313,10 @@ static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
 struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
-Color drawColor = vgFindColorIx(vg, 0, 0, 0);
 int itemCount = 0;
 struct bedGraphCartOptions *bedGraphCart;
-enum wiggleGridOptEnum horizontalGrid;
-enum wiggleGraphOptEnum lineBar;
-enum wiggleScaleOptEnum autoScale;
-enum wiggleWindowingEnum windowingFunction;
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
-Color black = vgFindColorIx(vg, 0, 0, 0);
 struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
@@ -341,10 +335,6 @@ bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
 if(sameString(tg->mapName, "affyTranscription"))
     bedGraphCart->colorTrack = "affyTransfrags";
 
-horizontalGrid = bedGraphCart->horizontalGrid;
-lineBar = bedGraphCart->lineBar;
-autoScale = bedGraphCart->autoScale;
-windowingFunction = bedGraphCart->windowingFunction;
 yLineOnOff = bedGraphCart->yLineOnOff;
 yLineMark = bedGraphCart->yLineMark;
 
@@ -427,11 +417,12 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-preDrawWindowFunction(preDraw, preDrawSize, windowingFunction);
+preDrawWindowFunction(preDraw, preDrawSize, bedGraphCart->windowingFunction);
 preDrawSmoothing(preDraw, preDrawSize, bedGraphCart->smoothingWindow);
 overallRange = preDrawLimits(preDraw, preDrawZero, width,
     &overallUpperLimit, &overallLowerLimit);
-graphRange = preDrawAutoScale(preDraw, preDrawZero, width, autoScale,
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+    bedGraphCart->autoScale,
     &overallUpperLimit, &overallLowerLimit,
     &graphUpperLimit, &graphLowerLimit,
     &overallRange, &epsilon, tg->lineHeight,
@@ -454,187 +445,20 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 colorArray = allocColorArray(preDraw, width, preDrawZero,
     bedGraphCart->colorTrack, tg, vg);
 
-/*	right now this is a simple pixel by pixel loop.  Future
- *	enhancements will smooth this data and draw boxes where pixels
- *	are all the same height in a run.
- */
-for (x1 = 0; x1 < width; ++x1)
-    {
-    int preDrawIndex = x1 + preDrawZero;
-    /*	count is non-zero meaning valid data exists here	*/
-    if (preDraw[preDrawIndex].count)
-	{
-	int h = tg->lineHeight;	/*	the height of our drawing window */
-	int boxHeight;		/*	the size of our box to draw	*/
-	int boxTop;		/*	box top starts here	*/
-	int y1;			/*	y coordinate of data point */
-	int y0;			/*	y coordinate of data = 0.0 */
-	int yPointGraph;	/*	y coordinate of data for point style */
-	double dataValue;	/*	the data value in data space	*/
+graphPreDraw(preDraw, preDrawZero, width,
+    tg, vg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    epsilon, colorArray, vis, bedGraphCart->lineBar);
 
-	/*	The graphing coordinate conversion situation is:
-	 *	graph coordinate y = 0 is graphUpperLimit data space
-	 *	and total graph height is h which is graphRange in data space
-	 *	The Y axis is positive down, negative up.
-	 *
-	 *	Taking a simple coordinate conversion from data space
-	 *	to the graphing space, the data value is at:
-	 *	h * ((graphUpperLimit - dataValue)/graphRange)
-	 *	and a data value zero line is at:
-	 *	h * (graphUpperLimit/graphRange)
-	 *	These may end up to be negative meaning they are above
-	 *	the upper graphing limit, or be very large, meaning they
-	 *	are below the lower graphing limit.  This is OK, the
-	 *	clipping will be taken care of by the vgBox() function.
-	 */
+drawZeroLine(vis, bedGraphCart->horizontalGrid,
+    graphUpperLimit, graphLowerLimit,
+    vg, xOff, yOff, width, tg->lineHeight);
 
-	/*	data value has been picked by previous scanning.
-	 *	Could be smoothed, maybe not.
-	 */
-	dataValue = preDraw[preDrawIndex].smooth;
+drawArbitraryYLine(vis, bedGraphCart->yLineOnOff,
+    graphUpperLimit, graphLowerLimit,
+    vg, xOff, yOff, width, tg->lineHeight, bedGraphCart->yLineMark, graphRange,
+    bedGraphCart->yLineOnOff);
 
-	y1 = h * ((graphUpperLimit - dataValue)/graphRange);
-	yPointGraph = yOff + y1 - 1;
-	y0 = h * ((graphUpperLimit)/graphRange);
-	boxHeight = abs(y1 - y0);
-	boxTop = min(y1,y0);
-	/*	special case where dataValue is on the zero line, it
- 	 *	needs to have a boxHeight of 1, otherwise it disappears into
- 	 *	zero nothingness
-	 */
-	if (fabs(dataValue) < epsilon)
-	    {
-	    boxHeight = 1;
-	    }
-	/*	Last pixel (bottom) is a special case of a closed interval */
-	if ((boxTop == h) && (boxHeight == 0))
-	    {
-	    boxTop = h - 1;
-	    boxHeight = 1;
-	    }
-	/*	Special case data value on upper limit line	*/
-	if ((boxTop+boxHeight) == 0)
-	    boxHeight += 1;
-	/*	Special case data value is below the lower view limit,
- 	 *	should still show a 1 pixel wide line at the bottom */
-	if ((graphLowerLimit >= 0.0) && (dataValue < graphLowerLimit))
-	    {
-	    boxTop = h - 1;
-	    boxHeight = 1;
-	    }
-	/*	Special case data value is above the upper view limit,
- 	 *	should still show a 1 pixel wide line at the top */
-	if ((graphUpperLimit <= 0.0) && (dataValue > graphUpperLimit))
-	    {
-	    boxTop = 0;
-	    boxHeight = 1;
-	    }
-
-
-	drawColor = colorArray[x1];
-/* 	/\*	negative data is the alternate color	*\/ */
-/* 	if (dataValue < 0.0) */
-/* 	    drawColor = tg->ixAltColor; */
-/* 	else */
-/* 	    drawColor = tg->ixColor; */
-
-	/*	vgBox will take care of clipping.  No need to worry
-	 *	about coordinates or height of line to draw.
-	 *	We are actually drawing single pixel wide lines here.
-	 */
-	if (vis == tvFull)
-	    {
-	    if (lineBar == wiggleGraphBar)
-		{
-		vgBox(vg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
-		}
-	    else
-		{	/*	draw a 3 pixel height box	*/
-		vgBox(vg, x1+xOff, yPointGraph, 1, 3, drawColor);
-		}
-	    }	/*	vis == tvFull	*/
-	else if (vis == tvDense)
-	    {
-	    double dataValue;
-	    int grayIndex;
-	    dataValue = preDraw[preDrawIndex].smooth - graphLowerLimit;
-	    grayIndex = (dataValue/graphRange) * MAX_WIG_VALUE;
-
-	    drawColor =
-		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
-
-	    boxHeight = tg->lineHeight;
-	    vgBox(vg, x1+xOff, yOff, 1,
-		boxHeight, drawColor);
-	    }	/*	vis == tvDense	*/
-	}	/*	if (preDraw[].count)	*/
-    }	/*	for (x1 = 0; x1 < width; ++x1)	*/
-
-/*	Do we need to draw a zero line ?
- *	This is to be generalized in the future to allow horizontal grid
- *	lines, perhaps user specified to indicate thresholds.
- */
-if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
-    {
-    int x1, x2, y1, y2;
-
-    x1 = xOff;
-    x2 = x1 + width;
-
-    /*	Let's see if the zero line can be drawn	*/
-    if ((0.0 <= graphUpperLimit) && (0.0 >= graphLowerLimit))
-	{
-	int zeroOffset;
-	drawColor = vgFindColorIx(vg, 0, 0, 0);
-	zeroOffset = (int)((graphUpperLimit * tg->lineHeight) /
-			(graphUpperLimit - graphLowerLimit));
-	y1 = yOff + zeroOffset;
-	if (y1 >= (yOff + tg->lineHeight)) y1 = yOff + tg->lineHeight - 1;
-	y2 = y1;
-	vgLine(vg,x1,y1,x2,y2,black);
-	}
-
-    }	/*	drawing horizontalGrid	*/
-
-/*	Optionally, a user requested Y marker line at some value */
-if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
-    {
-    int x1, x2, y1, y2;
-
-    x1 = xOff;
-    x2 = x1 + width;
-
-    /*	Let's see if this marker line can be drawn	*/
-    if ((yLineMark <= graphUpperLimit) && (yLineMark >= graphLowerLimit))
-	{
-	int Offset;
-	drawColor = vgFindColorIx(vg, 0, 0, 0);
-	Offset = tg->lineHeight * ((graphUpperLimit - yLineMark)/graphRange);
-	y1 = yOff + Offset;
-	if (y1 >= (yOff + tg->lineHeight)) y1 = yOff + tg->lineHeight - 1;
-	y2 = y1;
-	vgLine(vg,x1,y1,x2,y2,black);
-	}
-
-    }	/*	drawing y= line marker	*/
-
-/*	Map this wiggle area if we are self mapping	*/
-if (tg->mapsSelf)
-    {
-    char *itemName;
-    if (tg->customPt)
-	{
-	struct customTrack *ct = tg->customPt;
-	itemName = (char *)needMem(128 * sizeof(char));
-	safef(itemName, 128, "%s %s", ct->wigFile, tg->mapName);
-	}
-    else
-	itemName = cloneString(tg->mapName);
-
-    mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
-            itemName, NULL);
-    freeMem(itemName);
-    }
+wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
 
 freez(&colorArray);
 freeMem(preDraw);

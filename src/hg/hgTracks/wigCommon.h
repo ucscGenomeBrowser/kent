@@ -45,4 +45,28 @@ Color * allocColorArray(struct preDrawElement *preDraw, int width,
     int preDrawZero, char *colorTrack, struct track *tg, struct vGfx *vg);
 /*	allocate and fill in a coloring array based on another track */
 
+void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
+    struct track *tg, struct vGfx *vg, int xOff, int yOff,
+    double graphUpperLimit, double graphLowerLimit, double graphRange,
+    double epsilon, Color *colorArray, enum trackVisibility vis,
+    enum wiggleGraphOptEnum lineBar);
+/*	graph the preDraw array */
+
+void drawZeroLine(enum trackVisibility vis,
+    enum wiggleGridOptEnum horizontalGrid,
+    double graphUpperLimit, double graphLowerLimit,
+    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight);
+/*	draw a line at y=0 on the graph	*/
+
+void drawArbitraryYLine(enum trackVisibility vis,
+    enum wiggleGridOptEnum horizontalGrid,
+    double graphUpperLimit, double graphLowerLimit,
+    struct vGfx *vg, int xOff, int yOff, int width, int lineHeight,
+    double yLineMark, double graphRange, enum wiggleYLineMarkEnum yLineOnOff);
+/*	draw a line at y=yLineMark on the graph	*/
+
+void wigMapSelf(struct track *tg, int seqStart, int seqEnd,
+    int xOff, int yOff, int width);
+/*	if self mapping, create the mapping box	*/
+
 #endif /* WIGCOMMON_H */
