@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.48 2005/03/11 18:37:01 markd Exp $
+# $Id: gbBlat,v 1.49 2005/03/16 00:49:17 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -521,9 +521,14 @@ set outOi $outPrefix.oi
 set outIntronPsl $outPrefix.intronPsl
 
 # include user name in tmpDir name, since stale directories from another
-# user can't be removed
+# user can't be removed.  Prefer /scratch/tmp, an fall back to /var/tmp
 set user $env(USER)
-set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
+
+if {[file isdirectory /scratch/tmp]} {
+    set tmpDir /scratch/tmp/gbBlat.$user.[pid].tmp
+} else {
+    set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
+}
 
 # skip if output file already exists
 if {[file exists $outPsl] && !$overwrite} {
