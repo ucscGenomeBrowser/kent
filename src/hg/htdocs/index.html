@@ -10,7 +10,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 
-var theDb = 'hg12';
+var theDb = 'human';
 
 function setDb()
 {
@@ -22,6 +22,7 @@ function initDb()
   theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
   var queryString = document.location.search.substring(1, document.location.search.length);
   var dbIndex = queryString.indexOf('db=');
+
   if (dbIndex >= 0)
   {
     theDb = queryString.substring(dbIndex + 3);
@@ -49,7 +50,7 @@ function sameOrganism(db1, db2)
 
 function dbGo(theUrl)
 {
-document.location = theUrl + 'db=' + theDb;
+document.location = theUrl + 'org=' + theDb;
 }
 
 //-->
@@ -95,9 +96,9 @@ document.location = theUrl + 'db=' + theDb;
 				<FONT CLASS="leftbar">Genome</FONT>
 			</td></tr><tr valign="bottom"><td valign="bottom">
 					<SELECT NAME="genome" onChange="setDb();">
-						<OPTION VALUE="hg12">Human
-						<OPTION VALUE="mm2">Mouse 
-						<OPTION VALUE="zooHuman3">Zoo
+						<OPTION VALUE="human">Human
+						<OPTION VALUE="mouse">Mouse 
+						<OPTION VALUE="zoo">Zoo
 					</SELECT>
 			</td></tr></table><hr>
 			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
