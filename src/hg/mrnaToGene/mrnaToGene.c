@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.12 2004/09/17 05:58:35 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.13 2005/04/04 23:55:01 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -137,7 +137,6 @@ struct genePred* pslToGenePred(struct psl *psl, char *cdsStr)
  * if should be skipped.  cdsStr maybe NULL if not available. */
 {
 struct genbankCds cds;
-unsigned cdsStart = -1, cdsEnd = -1;
 unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
 
 if (cdsStr == NULL)
