@@ -7,6 +7,7 @@
 #include <time.h>
 #include <dirent.h>
 #include <sys/utsname.h>
+#include <sys/time.h>
 #include "common.h"
 #include "portable.h"
 #include "portimpl.h"
@@ -30,14 +31,17 @@ return size;
 long clock1000()
 /* A millisecond clock. */
 {
-static double scale = 1000.0/CLOCKS_PER_SEC;
-return round(scale*clock());
+struct timeval tv;
+gettimeofday(&tv, NULL);
+return tv.tv_sec + tv.tv_usec / 1000;
 }
 
 long clock1()
 /* A seconds clock. */
 {
-return clock()/CLOCKS_PER_SEC;
+struct timeval tv;
+gettimeofday(&tv, NULL);
+return tv.tv_sec;
 }
 
 void uglyfBreak()
