@@ -188,4 +188,43 @@ shortCircuit 1
 termRegex ENSRNOT[0-9]+[.][0-9]
 searchPriority 50
 
+searchTable affyRAE230
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex RAE230[A|B]:.+
+searchPriority 15
+termPrefix RAE230
 
+searchName affyRAE230NoChip
+searchTable affyRAE230
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [A|B]:.+
+searchPriority 15
+
+searchTable affyU34A
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex RG-U34A:.+
+searchPriority 16
+termPrefix RG-U34A:
+
+searchName affyU34ANoChip
+searchTable affyU34A
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex A:.+
+searchPriority 15
+termPrefix A:
+
+searchName affyU34AAbbrev
+searchTable affyU34A
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [A-Z0-9]+[[:alnum:]_]*_at
+searchPriority 15
