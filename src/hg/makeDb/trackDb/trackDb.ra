@@ -839,138 +839,6 @@ priority 119
 visibility full
 type sample 9 
 
-track blatMus
-shortLabel Mouse Blat
-longLabel Mouse Translated Blat Alignments
-group compGeno
-priority 120
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blatMouse
-shortLabel Mouse Blat
-longLabel Mouse Translated Blat Alignments
-group compGeno
-priority 121
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blatHuman
-shortLabel Human Blat
-longLabel Human Translated Blat Alignments
-group compGeno
-priority 122
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzTightMouse
-shortLabel Tight Mouse 
-longLabel Blastz Mouse, Tight Subset of Best Alignments
-group compGeno
-priority 123
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzTightHuman
-shortLabel Blastz Tight Human June
-longLabel Blastz Human, Tight Subset of Alignments June
-group compGeno
-priority 124
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzRecipBest
-shortLabel Reciprocal Best
-longLabel Blastz reciprocal best Human Mouse
-group compGeno
-priority 125
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzBestMouse
-shortLabel Best Mouse 
-longLabel Blastz Mouse Best in Genome Alignments
-group compGeno
-priority 126
-visibility dense
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzBestHuman
-shortLabel Blastz Best Human June
-longLabel Blastz Human Best in Genome Alignments  June
-group compGeno
-priority 127
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzMouse
-shortLabel Blastz Mouse
-longLabel All Blastz Mouse Alignments
-group compGeno
-priority 128
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 5 +
-
-track blastzHuman
-shortLabel Blastz Human
-longLabel Blastz Human Alignments
-group compGeno
-priority 129
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzMm2
-shortLabel Blastz Mouse
-longLabel All Blastz Mouse Alignments
-group compGeno
-priority 130
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
-track blastzMmHg
-shortLabel Blastz Human
-longLabel Merged Blastz Human Dec Freeze Alignments
-group compGeno
-priority 131
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
 track mouseChain
 shortLabel Mouse Chain 
 longLabel Chained Blastz Mouse/Human Alignments
@@ -1223,17 +1091,6 @@ visibility hide
 color 100,50,0
 type bed 4 .
 
-track bestMouse
-shortLabel Mouse Best Blat
-longLabel Mouse Best Translated Blat Alignments
-group x
-priority 155
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
-
 track mouseOrtho
 shortLabel Mouse Ortholog
 longLabel Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)
@@ -1265,17 +1122,6 @@ spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
-
-track aarMm2
-shortLabel Ancient Repeats
-longLabel Aligned Human/Mouse Ancient Repeats
-group x
-priority 159
-visibility hide
-color 0,0,0
-altColor 255,240,200
-spectrum on
-type psl xeno
 
 track mouseRefHCons
 shortLabel HighCon MouseRef

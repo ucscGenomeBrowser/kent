@@ -118,3 +118,26 @@ color 100,50,0
 altColor 0,0,255
 chromosomes chr22,chr21
 type sample 9
+
+track blatMouse
+shortLabel Mouse Blat
+longLabel Mouse Translated Blat Alignments
+group compGeno
+priority 121
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm1
+
+track bestMouse
+shortLabel Mouse Best Blat
+longLabel Mouse Best Translated Blat Alignments
+group x
+priority 155
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm1
+
