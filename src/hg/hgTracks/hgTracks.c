@@ -1291,11 +1291,11 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "zooCons" ) )
     {
-    minRange = 300.0;
+    minRange = 1.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( 300.0, -11.37750, 5.53297, 1000 );
-    max0 = whichNum( 1000.0, -11.37750, 5.53297, 1000 );
+    min0 = whichNum( 1.0, -6.30436, 5.53297, 1000 );
+    max0 = whichNum( 1000.0, -6.30436, 5.53297, 1000 );
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     tmp = -whichBin( 0.0, min0, max0, 1000 );
@@ -7845,8 +7845,8 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "zooCons" ) )
 	    {
-	    sprintf( minRangeStr, "%g", whichNum( 300.0, -11.37750, 5.53297, 1000 ));
-	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -11.37750, 5.53297, 1000 ));
+	    sprintf( minRangeStr, "%g", whichNum( 1.0, -6.30436, 5.53297, 1000 ));
+	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -6.30436, 5.53297, 1000 ));
 	    }
 	else
 	    {
