@@ -1,13 +1,19 @@
 <h3>Description</h3>
 <p>Expression data from <a href="http://www.rii.com">Rosetta Inpharmatics</a>.
-See the paper "<a href="http://www.rii.com/tech/pubs/nature_shoemaker.htm">
-Experimental Annotation of the Human Genome Using Microarray Technology</a>"
-[<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract">medline</a>]
-<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for
-each exon as described by the Sanger center for the October 2000 draft of the genome.
-Exons are labeled according whether they are predicted (pe) or confirmed (true->te) exons, the
-relative position in the genome, and the contig name. <b>Please note:</b> in the browser 
-window the hybridization names are too long to fit and have been abbreviated.
+See the paper "<a href="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract">Experimental Annotation of the Human Genome Using Microarray Technology</a>"
+<i>Nature</i> Feb. 2001, vol 409 pp 922-7 for more
+information. Briefly, Rosetta created DNA probes for each exon as
+described by the Sanger center for the October 2000 draft of the
+genome and used them to explore expression leves over 69 different
+experiments. As in the original paper exons are labeled according to
+contig name, relative position in the contig, and whether they were
+predicted (pe) or confirmed (true->te) exons at the time of
+publication. For example, AC000097_256_te is the 256th exon on
+AC000097 predicted by Genescan which was confirmed
+independently. Hybridization names refer to the sources of the two
+mRNA populations used for the experiment.
+<b>Please note:</b> in the browser window the hybridization names
+are too long to fit and have been abbreviated.
 
 <h3>Display Options</h3>
 The track can be configured with a few different options:
@@ -33,14 +39,18 @@ genes, others are predictions. This option determines whether data is
 shown for probes corresponding to confirmed, predicted, or all exons
 are shown.
 
-<br><b>Color Scheme: </b> Data are presented using two color false display. By default
-the Brown/Botstein colors of red -> positive log ratio, green -> negative log ratio are used.
-However, blue can be substituted for green for those who are color blind.
+<br><b>Color Scheme: </b> Data are presented using two color false
+display. By default the Brown/Botstein colors of red -> positive log
+ratio, green -> negative log ratio are used.  However, blue can be
+substituted for green for those who are color blind. Gray values
+indicate missing data.  Please note that due to technical limitations
+the details page will have many more color shades possible than those used
+on the browser image and thus may not match exactly.
 
 <h3>Details Page</h3>
 On the details page the probes presented correspond to those contained
 in window range seen on the Genome Browser, the exon probe selected is highlighted
 in blue. The detail display table is actually an average of many data
 points. It is possible to see the full data for each experiment
-graphically by select the check-boxes for the experiments of interest
+graphically by selecting the check-boxes for the experiments of interest
 and clicking the submit value button.
