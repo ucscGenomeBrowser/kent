@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.699 2004/04/01 15:40:12 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.700 2004/04/01 17:11:12 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1184,7 +1184,7 @@ boolean errorColor = FALSE;
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
-if (zoomedToCdsColorLevel)
+if (zoomedToCdsColorLevel && (vis != tvDense))
     drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
 
@@ -1242,7 +1242,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	}
     if (e > s)
 	{
-        if (zoomedToCdsColorLevel && drawOptionNum>0 && 
+        if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
             e + 6 >= winStart && s - 6 < winEnd && e-s <= 3) 
                 drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
@@ -2138,7 +2138,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     lf->orientation = orientFromChar(gp->strand[0]);
 
     if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
-        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL,FALSE);
+        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL,
+                gp->optFields >= genePredExonFramesFld);
     else
         lf->components = sfFromGenePred(gp, grayIx);
 

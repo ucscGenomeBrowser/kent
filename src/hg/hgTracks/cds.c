@@ -401,7 +401,7 @@ struct simpleFeature *sfList = NULL, *sf;
 struct genePred *gp = NULL;
 unsigned cdsStart, cdsEnd;
 unsigned *retGaps = NULL;
-boolean notGenomic = (displayOption != CDS_DRAW_GENOMIC_CODONS);
+boolean extraInfo = (displayOption != CDS_DRAW_GENOMIC_CODONS);
 
 struct genbankCds cds;
 
@@ -411,15 +411,8 @@ struct psl *pslOne = NULL;
 mustGetMrnaStartStop(psl->qName, &cdsStart, &cdsEnd);
 cds.start = cdsStart;
 cds.end = cdsEnd;
-
-/*
-if(psl->strand[1] != '\0') 
-    pslOne = pslFromTranslatedBlatPsl(psl);
-else
-*/
-    pslOne = psl;
-
-if(notGenomic)
+pslOne = psl;
+if(extraInfo)
         gp = genePredFromPsl2(pslOne, 12, &cds, -1);
 else
         gp = genePredFromPsl2(pslOne, 12, &cds, 0);
@@ -434,7 +427,7 @@ else
     {
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, notGenomic);
+    sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo);
     }
 
 return(sfList);
@@ -583,6 +576,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
 
     int i0, iN, iInc;
     boolean posStrand;
+
 
     if (lf->orientation > 0) //positive strand
     {
@@ -764,14 +758,14 @@ static struct simpleFeature *splitByCodon( char *chrom,
 }
 
 struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures *lf,
-        struct genePred *gp, unsigned *gaps, boolean notGenomic)
+        struct genePred *gp, unsigned *gaps, boolean extraInfo)
 /*divide a genePred record into a linkedFeature, where each simple
   feature is a 3-base codon (or a partial codon if on a gap boundary).
   It starts at the cdsStarts position on the genome and goes to 
   cdsEnd. It only relies on the genomic sequence to determine the
   frame so it works with any gene prediction track*/
 {
-    if(gp->optFields >= genePredExonFramesFld)
+    if(extraInfo)
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
                     gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames));
     else
@@ -834,38 +828,34 @@ if(mrnaS >= 0)
 
             int idx = -1;
             int newIdx = -1;
-            int *gaps = malloc(sizeof(int)*(psl->blockCount+2));
+            int *gaps = NULL;
             boolean appendAtStart = FALSE;
+            AllocArray(gaps, psl->blockCount+2);
 
             for(i=0; i<psl->blockCount; i++)
                 {
                 unsigned tStart = psl->tStarts[i];
                 unsigned tEnd = tStart + psl->blockSizes[i];
-               if (psl->strand[1] == '-') 
+                if (psl->strand[1] == '-') 
                         reverseIntRange(&tStart, &tEnd, psl->tSize);
 
                 if (s == tStart)
-                {
-                    idx = i;
-                    appendAtStart = TRUE;
-                    break;
-                }
+                        {
+                        idx = i;
+                        appendAtStart = TRUE;
+                        break;
+                        }
                 else if (e == tEnd)
-                {
-                    idx = i+1;
-                    appendAtStart = FALSE;
-                    break;
+                        {
+                        idx = i+1;
+                        appendAtStart = FALSE;
+                        break;
+                        }
                 }
 
-                if(i==0)
-                        gaps[0] = psl->qStarts[0] - psl->qStart;
-                else
-                        gaps[i] = psl->qStarts[i] - 
-	                          (psl->qStarts[i-1] + psl->blockSizes[i-1]);
-            }
-            gaps[psl->blockCount] = psl->qSize - 
-                                    (psl->qStarts[psl->blockCount-1] + 
-                                     psl->blockSizes[psl->blockCount-1]);
+            getHiddenGaps( psl, gaps);
+            if(idx >= 0 && gaps[idx] > 0)
+                genomicInsertion = TRUE;
 
             if (!appendAtStart)
             {
@@ -877,8 +867,6 @@ if(mrnaS >= 0)
                 newIdx = mrnaS-(3-size);
 	        snprintf(saveStr,4,"%s%s", &mrnaSeq->dna[newIdx], ds2->string);
             }
-            if(idx >= 0 && gaps[idx] > 0)
-                genomicInsertion = TRUE;
         }
 	strncpy(tempStr,saveStr,4);
         }
