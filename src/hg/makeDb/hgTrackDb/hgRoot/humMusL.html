@@ -11,8 +11,7 @@
    means a 1/1000 probability, etc. The L-scores display as
    "mountain ranges". Clicking on a mountain range, a detail page is
    displayed from which you can access the base level alignments, both
-   for the whole region and for the individual 50bp windows, which are
-   summarized by position and L-score. 
+   for the whole region and for the individual 50bp windows.
   
 </p>
 
@@ -42,6 +41,15 @@
 <center>
    L = -log_10(1 - CDF(S)).
 <br>
+<br>
+The L-score
+provides a frequentist confidence assessment. A Bayesian
+calculation of the probability that a window is under
+selection can also be made using a mixture decomposition of
+the empirical density of the scores for all windows
+genome-wide into a neutral and a selected component. Details
+are given in a manuscript in preparation. The results are
+summarized in the table below.
 <br><br>
 <pre>
 L-score       Frequentist probability       Bayesian probability
@@ -54,7 +62,11 @@ L-score       Frequentist probability       Bayesian probability
    1                0.1                          0.324 
   2                0.01                         0.752
   3                0.001                        0.941
-
+  4                0.0001                       0.971
+  5                0.00001                      0.982
+  6                0.000001                     0.991
+   7                0.0000001                    0.994 
+  8                0.00000001                   0.996
 </pre>
 </center>
 <br>
