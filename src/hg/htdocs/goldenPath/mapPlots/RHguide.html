@@ -6,7 +6,8 @@
 
 <H1>User Guide for RH, genetic and YAC Map Comparison</H1>
 <P>We give one plot for each chromosome that shows the data for the
-Genethon, Marshfield, GeneMap99, G3, TNG and Whitehead-YAC maps. These
+Genethon, Marshfield, GeneMap99 GB4, GeneMap99 G3, Stanford TNG, Whitehead RH
+and Whitehead-YAC maps. These
 plots are scaled to fit the entire chromosome on one page. Another set
 of plots covers the genome in fixed scale 50mb windows, and a third set
 of plots covers the genome in 10mb windows. </P>
@@ -16,7 +17,7 @@ as described in the legend in the upper right corner. The horizontal
 position of the point is the location of the marker on the working draft
 sequence of the chromosome in megabases. The vertical position of the
 point is the distance of the marker along the chromosome as determined
-by one of the six maps. All six maps are scaled to have comparable
+by one of the seven maps. All seven maps are scaled to have comparable
 distance ranges to facilitate comparison. Some markers map to different
 chromosomes entirely. These are shown at the top of the display.</P>
 
@@ -34,7 +35,7 @@ information on the TNG markers, which was not available in Schuler's
 data files. For each marker, you will get not only the records showing
 that this marker maps to this accession, but also all other records for
 that marker, some of which may also map it to accessions on other
-chromosomes. Markers that mapped to more than 5 positions were
+chromosomes. Markers that mapped to more than 3 positions were
 eliminated entirely.</P>
 
 <H2>Caveats:</H2>
@@ -42,13 +43,12 @@ eliminated entirely.</P>
 	<LI>Due to the resolution, it is hard to pinpoint the fingerprint clone contig for some
 markers. Go to a higher resolution plot if it appears that the marker
 you clicked on is not included in the report you get.
-	<LI>We set e-pcr to allow one mismatch in each primer, and up to 50 base
-deviation in the expected length of the product, so that we would be
-able to place most markers on the draft. This will cause some false
+	<LI>We use BLAT to place STS markers, but do not require an exact match of the STS sequence
+and/or primer sequences.  This will cause some false
 positive placements, and some false negatives as well, mainly due to the
 draft nature of the sequence.
 	<LI>We have not yet incorporated LOD scores for the markers. 
-	<LI>There are limitations of the accuracy of each of the six
+	<LI>There are limitations of the accuracy of each of the seven
 	maps, for more details see 
 	"<A HREF="http://www.nature.com/genomics/human/papers/409860a0_fs_1.html">Initial sequencing and analysis of the human genome</A>,"
 	by the International Human Genome Sequencing Consortium, Nature,
