@@ -65,6 +65,11 @@ printf(
   "               and external file.  This will increase the speed\n"
   "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
+  "   Subranges of nib files may specified using the syntax:\n"
+  "      /path/file.nib:seqid:start-end\n"
+  "   or\n"
+  "      /path/file.nib:start-end\n"
+  "   With the second form, a sequence id of file:start-end will be used.\n"
   "options:\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
@@ -291,10 +296,7 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (isNib(fileName))
         {
-	char root[128];
-	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
-	splitPath(fileName, NULL, root, NULL);
-	seq->name = cloneString(root);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
 	totalSize += seq->size;
@@ -468,8 +470,6 @@ for (i=0; i<fileCount; ++i)
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
 	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
-	freez(&seq->name);
-	seq->name = cloneString(fileName);
 	if (maskQuery)
 	    {
 	    toggleCase(seq->dna, seq->size);
