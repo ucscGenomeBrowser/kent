@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.9 2004/08/27 15:50:42 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.10 2004/08/28 21:50:37 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -74,12 +74,11 @@ void doIntersectMore(struct sqlConnection *conn)
 /* Continue working in intersect page. */
 {
 struct trackDb *iTrack;
-char *name = curTrack->shortLabel;
+char *name = curTableLabel();
 char *iName;
 char *onChange = onChangeEither();
 char *op, *setting;
 htmlOpen("Intersect with %s", name);
-
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -280,7 +279,7 @@ return(bedList);
 static struct bed *intersectOnRegion(
 	struct sqlConnection *conn,	/* Open connection to database. */
 	struct region *region, 		/* Region to work inside */
-	struct trackDb *track1,		/* Track input list is from. */
+	char *table1,			/* Table input list is from. */
 	struct bed *bedList1,	/* List before intersection, should be
 	                                 * all within region. */
 	struct lm *lm)	   /* Local memory pool. */
@@ -300,9 +299,8 @@ char *table2 = cartString(cart, hgtaIntersectTrack);
 struct hTableInfo *hti2 = getHti(database, table2);
 struct trackDb *track2 = findTrack(table2, fullTrackList);
 struct lm *lm2 = lmInit(64*1024);
-struct bed *bedList2 = getFilteredBeds(conn, track2, region, lm2);
+struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2);
 /* Set up some other local vars. */
-char *table1 = track1->tableName;
 struct hTableInfo *hti1 = getHti(database, table1);
 struct featureBits *fbList2 = NULL;
 struct bed *bed;
@@ -395,14 +393,14 @@ return intersectedBedList;
 }
 
 static struct bed *getIntersectedBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm)
 /* Get list of beds in region that pass intersection
  * (and filtering) */
 {
-struct bed *bedList = getFilteredBeds(conn, track, region, lm);
+struct bed *bedList = getFilteredBeds(conn, table, region, lm);
 if (anyIntersection())
     {
-    struct bed *iBedList = intersectOnRegion(conn, region, track, bedList, lm);
+    struct bed *iBedList = intersectOnRegion(conn, region, table, bedList, lm);
     return iBedList;
     }
 else
@@ -410,23 +408,23 @@ else
 }
 
 struct bed *cookedBedList(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm)
 /* Get data for track in region after all processing steps (filtering
  * intersecting etc.) in BED format. */
 {
-return getIntersectedBeds(conn, track, region, lm);
+return getIntersectedBeds(conn, table, region, lm);
 }
 
 
 struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm)
 /* Get cooked beds on all regions. */
 {
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    struct bed *rBedList = getIntersectedBeds(conn, track, region, lm);
+    struct bed *rBedList = getIntersectedBeds(conn, table, region, lm);
     bedList = slCat(bedList, rBedList);
     }
 return bedList;

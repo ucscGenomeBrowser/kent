@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.26 2004/08/28 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.27 2004/08/28 21:50:37 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -289,7 +289,7 @@ hPrintf("</SELECT>\n");
 hPrintf("</TD></TR>\n");
 }
 
-static void showOutputTypeRow(boolean isWig)
+static void showOutputTypeRow(boolean isWig, boolean isPositional)
 /* Print output line. */
 {
 static char *usualTypes[] = 
@@ -308,6 +308,13 @@ static char *usualLabels[] =
      "BED - browser extensible data", 
      "custom track",
      "hyperlinks to Genome Browser"};
+static char *tracklessTypes[] = 
+    {outPrimaryTable, 
+     outSelectedFields};
+static char *tracklessLabels[] =
+    {"all fields from primary table", 
+     "selected fields from related tables"};
+    
 static char *wigTypes[] = 
      {
      outWigData, 
@@ -320,8 +327,10 @@ static char *wigLabels[] =
 hPrintf("<TR><TD><B>output:</B>\n");
 if (isWig)
     showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
-else
+else if (isPositional)
     showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+else
+    showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
 }
 
 
@@ -329,7 +338,7 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig;
+boolean isWig, isPositional = FALSE;
 hPrintf("<TABLE BORDER=0>\n");
 
 /* Print genome and assembly line. */
@@ -353,6 +362,11 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("<TR><TD>");
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     curTable = showTableField(curTrack);
+    if (strchr(curTable, '.') == NULL)  /* In same database */
+        {
+	struct hTableInfo *hti = getHti(database, curTable);
+	isPositional = htiIsPositional(hti);
+	}
     isWig = isWiggle(database, curTable);
     hPrintf("</TD></TR>\n");
     }
@@ -417,7 +431,7 @@ if (!isWig)
     }
 
 /* Intersection line. */
-if (!isWig)
+if (isPositional && !isWig)
     {
     hPrintf("<TR><TD><B>intersection:</B>\n");
     if (anyIntersection())
@@ -433,8 +447,8 @@ if (!isWig)
     hPrintf("</TD></TR>\n");
     }
 
-/* Print group and track line. */
-showOutputTypeRow(isWig);
+/* Print output type line. */
+showOutputTypeRow(isWig, isPositional);
 
 hPrintf("</TABLE>\n");
 
@@ -450,8 +464,11 @@ hPrintf("</TABLE>\n");
         }
     cgiMakeButton(hgtaDoTopSubmit, "Get Output");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
-    hPrintf(" ");
+    if (isPositional)
+	{
+	cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
+	hPrintf(" ");
+	}
     cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
 #ifdef SOMETIMES
     hPrintf(" ");

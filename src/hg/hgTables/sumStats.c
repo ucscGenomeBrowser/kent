@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.10 2004/07/23 09:12:50 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.11 2004/08/28 21:50:37 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -237,7 +237,6 @@ static void doSummaryStatsBed(struct sqlConnection *conn)
 /* Put up page showing summary stats for track that is in database
  * or that is bed-format custom. */
 {
-struct trackDb *track = curTrack;
 struct bed *bedList = NULL;
 struct region *regionList = getRegions(), *region;
 char *regionName = getRegionName();
@@ -246,19 +245,19 @@ long startTime, midTime, endTime;
 long loadTime = 0, calcTime = 0, freeTime = 0;
 struct covStats *itemCovList = NULL, *blockCovList = NULL, *cov;
 int itemCount = 0;
-struct hTableInfo *hti = getHti(database, track->tableName);
+struct hTableInfo *hti = getHti(database, curTable);
 int minScore = BIGNUM, maxScore = -BIGNUM;
 long long sumScores = 0;
 
 
-htmlOpen("%s (%s) Summary Statistics", track->shortLabel, track->tableName);
+htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
 cartSaveSession(cart);
 
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     startTime = clock1000();
-    bedList = cookedBedList(conn, track, region, lm);
+    bedList = cookedBedList(conn, curTable, region, lm);
     if (region->end == 0) region->end = hChromSize(region->chrom);
     midTime = clock1000();
     loadTime += midTime - startTime;
@@ -352,7 +351,7 @@ htmlClose();
 void doSummaryStats(struct sqlConnection *conn)
 /* Put up page showing summary stats for track. */
 {
-if (isWiggle(database, curTrack->tableName))
+if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
 else
     doSummaryStatsBed(conn);

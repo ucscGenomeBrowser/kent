@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.7 2004/08/25 15:35:44 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.8 2004/08/28 21:50:37 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -40,13 +40,13 @@ static void addCdsStartStop(struct gffLine **pGffList, struct bed *bed,
 			    int i, int startIndx, int stopIndx,
 			    boolean gtf2StopCodons, char *txName)
 {
-// start_codon (goes first for + strand) overlaps with CDS
+/* start_codon (goes first for + strand) overlaps with CDS */
 if ((i == startIndx) && (bed->strand[0] != '-'))
     {
     addGffLineFromBed(pGffList, bed, source, "start_codon",
 		      s, s+3, '.', txName);
     }
-// stop codon does not overlap with CDS as of GTF2
+/* stop codon does not overlap with CDS as of GTF2 */
 if ((i == stopIndx) && gtf2StopCodons)
     {
     if (bed->strand[0] == '-')
@@ -69,7 +69,7 @@ else
     addGffLineFromBed(pGffList, bed, source, "CDS", s, e,
 		      frames[i], txName);
     }
-// start_codon (goes last for - strand) overlaps with CDS
+/* start_codon (goes last for - strand) overlaps with CDS */
 if ((i == startIndx) && (bed->strand[0] == '-'))
     {
     addGffLineFromBed(pGffList, bed, source, "start_codon",

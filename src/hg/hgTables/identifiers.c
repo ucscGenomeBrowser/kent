@@ -11,13 +11,13 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.1 2004/07/14 19:02:50 kent Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.2 2004/08/28 21:50:37 kent Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
 /* Respond to paste identifiers button. */
 {
-htmlOpen("Paste In Identifiers for %s", curTrack->shortLabel);
+htmlOpen("Paste In Identifiers for %s", curTableLabel());
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.<BR>\n");
@@ -33,7 +33,7 @@ htmlClose();
 void doUploadIdentifiers(struct sqlConnection *conn)
 /* Respond to upload identifiers button. */
 {
-htmlOpen("Upload Identifiers for %s", curTrack->shortLabel);
+htmlOpen("Upload Identifiers for %s", curTableLabel());
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
 hPrintf("Please enter the name of a file from your computer that contains a ");

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.7 2004/07/23 22:32:29 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.8 2004/08/28 21:50:37 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -155,7 +155,7 @@ char *dupType = cloneString(curTrack->type);
 char *typeWords[3];
 char *table;
 struct lm *lm = lmInit(64*1024);
-struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTrack, getRegions(),
+struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTable, getRegions(),
 	lm);
 int typeWordCount;
 
@@ -191,7 +191,7 @@ if (sqlTableExists(conn, table))
     sqlFreeResult(&sr);
     hashFree(&hash);
     }
-else if (isRefGeneTrack(curTrack->tableName))
+else if (isRefGeneTrack(curTable))
     {
     if (typeIx == 1) /* Protein */
         doRefGeneProteinSequence(conn, bedList);
@@ -210,8 +210,8 @@ lmCleanup(&lm);
 void genomicFormatPage(struct sqlConnection *conn)
 /* Put up page asking for what sort of genomic sequence. */
 {
-struct hTableInfo *hti = getHti(database, curTrack->tableName);
-htmlOpen("%s Genomic Sequence", curTrack->shortLabel);
+struct hTableInfo *hti = getHti(database, curTable);
+htmlOpen("%s Genomic Sequence", curTableLabel());
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
@@ -227,12 +227,12 @@ void doGenomicDna(struct sqlConnection *conn)
 /* Get genomic sequence (UI has already told us how). */
 {
 struct region *region, *regionList = getRegions();
-struct hTableInfo *hti = getHti(database, curTrack->tableName);
+struct hTableInfo *hti = getHti(database, curTable);
 textOpen();
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, curTrack, region, lm);
+    struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	hgSeqBed(hti, bed);
     lmCleanup(&lm);
@@ -242,7 +242,7 @@ for (region = regionList; region != NULL; region = region->next)
 void doGenePredSequence(struct sqlConnection *conn)
 /* Output genePred sequence. */
 {
-char *table = curTrack->tableName;
+char *table = curTable;
 char *type = cartString(cart, hgtaGeneSeqType);
 
 if (sameWord(type, "protein"))

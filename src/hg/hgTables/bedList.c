@@ -17,7 +17,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.10 2004/08/24 17:15:48 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.11 2004/08/28 21:50:37 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -245,14 +245,13 @@ return(bedList);
 }
 
 static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm)
 /* getBed - get list of beds from database in region that pass filtering. */
 {
 struct region *region;
 struct bed *bedList = NULL, *bed;
-char *table = track->tableName;
 struct hash *idHash = identifierHash();
-char *filter = filterClause(database, track->tableName);
+char *filter = filterClause(database, table);
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -273,34 +272,34 @@ return bedList;
 }
 
 struct bed *getFilteredBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList, struct lm *lm)
+	char *table, struct region *regionList, struct lm *lm)
 /* get list of beds in regionList that pass filtering. */
 {
-if (isCustomTrack(track->tableName))
-    return customTrackGetFilteredBeds(track->tableName, regionList, 
+if (isCustomTrack(table))
+    return customTrackGetFilteredBeds(table, regionList, 
     	lm, NULL, NULL);
 else
-    return dbGetFilteredBedsOnRegions(conn, track, regionList, lm);
+    return dbGetFilteredBedsOnRegions(conn, table, regionList, lm);
 }
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region, struct lm *lm)
+	char *table, struct region *region, struct lm *lm)
 /* Get list of beds on single region that pass filtering. */
 {
 struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
-bedList = getFilteredBedsOnRegions(conn, track, region, lm);
+bedList = getFilteredBedsOnRegions(conn, table, region, lm);
 region->next = oldNext;
 return bedList;
 }
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track, struct lm *lm)
+	char *table, struct lm *lm)
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 {
-return getFilteredBedsOnRegions(conn, track, getRegions(), lm);
+return getFilteredBedsOnRegions(conn, table, getRegions(), lm);
 }
 
 /* Droplist menu for custom track visibility: */
@@ -411,7 +410,7 @@ slReverse(&newList);
 void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, boolean doCtFile)
 /* Actually output bed or custom track. */
 {
-char *table = curTrack->tableName;
+char *table = curTable;
 struct hTableInfo *hti = getHti(database, table);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
@@ -436,7 +435,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *bedList, *bed;
     struct lm *lm = lmInit(64*1024);
-    bedList = cookedBedList(conn, curTrack, region, lm);
+    bedList = cookedBedList(conn, curTable, region, lm);
     if (doCtHdr && (bedList != NULL) && !gotResults)
 	{
 	int visNum = (int) hTvFromStringNoAbort(ctVis);

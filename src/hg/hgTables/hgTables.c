@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.55 2004/08/28 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.56 2004/08/28 21:50:37 kent Exp $";
 
 
 void usage()
@@ -109,6 +109,15 @@ if (!fullGenomeRegion())
 if (anyIntersection())
     hPrintf(" after intersection");
 hPrintf(".");
+}
+
+char *curTableLabel()
+/* Return label for current table - track short label if it's a track */
+{
+if (sameString(curTrack->tableName, curTable))
+    return curTrack->shortLabel;
+else
+    return curTable;
 }
 
 /* --------------- Text Mode Helpers ----------------- */
@@ -506,6 +515,38 @@ if (track == NULL)
 return track;
 }
 
+char *findSelectedTable(struct trackDb *track, char *var)
+/* Find selected table.  Default to main track table if none
+ * found. */
+{
+if (isCustomTrack(track->tableName))
+    return track->tableName;
+else
+    {
+    char *table = cartUsualString(cart, var, track->tableName);
+    struct joinerPair *jpList, *jp;
+    if (sameString(track->tableName, table))
+        return track->tableName;
+    jpList = joinerRelate(allJoiner, database, track->tableName);
+    for (jp = jpList; jp != NULL; jp = jp->next)
+        {
+	if (sameString(database, jp->b->database))
+	    {
+	    if (sameString(jp->b->table, table))
+	        return table;
+	    }
+	else
+	    {
+	    char buf[256];
+	    safef(buf, sizeof(buf), "%s.%s", jp->b->database, jp->b->table);
+	    if (sameString(buf, table))
+	        return table;
+	    }
+	}
+    }
+return track->tableName;
+}
+
 
 
 void addWhereClause(struct dyString *query, boolean *gotWhere)
@@ -675,7 +716,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bedList, *bed;
-    bedList = cookedBedList(conn, track, region, lm);
+    bedList = cookedBedList(conn, track->tableName, region, lm);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	char *name;
@@ -826,6 +867,7 @@ freezeName = hFreezeFromDb(database);
 conn = hAllocConn();
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
+curTable = findSelectedTable(curTrack, hgtaTable);
 
 /* Go figure out what page to put up. */
 dispatch(conn);

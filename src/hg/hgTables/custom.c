@@ -526,7 +526,8 @@ hPrintf("\n");
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, track, region, lm);
+    struct bed *bed, *bedList = cookedBedList(conn, track->tableName, 
+    	region, lm);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	tabBedRow(bed, chosenFields);

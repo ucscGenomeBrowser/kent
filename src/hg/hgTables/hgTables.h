@@ -72,6 +72,10 @@ void textOpen();
 void explainWhyNoResults();
 /* Put up a little explanation to user of why they got nothing. */
 
+char *curTableLabel();
+/* Return label for current table - track short label if it's a track,
+ * otherwise track name. */
+
 /* ---------- Javascript stuff. ----------------------*/
 
 void jsCreateHiddenForm(char **vars, int varCount);
@@ -189,11 +193,11 @@ void doTabOutTable(char *database, char *table,
 /* Do tab-separated output on table. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region, struct lm *lm);
+	char *table, struct region *region, struct lm *lm);
 /* Get list of beds on single region that pass filtering. */
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track, struct lm *lm);
+	char *table, struct lm *lm);
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 
@@ -224,17 +228,17 @@ struct bed *bedFromRow(
  * of the bedSqlFieldsExceptForChrom function. */
 
 struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
-	struct trackDb *track, struct lm *lm);
+	char *table, struct lm *lm);
 /* Get list of beds in selected regions that pass intersection
  * (and filtering). Do lmCleanup (not bedFreeList) when done. */
 
 struct bed *cookedBedList(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region, struct lm *lm);
+	char *table, struct region *region, struct lm *lm);
 /* Get data for track in region after all processing steps (filtering
  * intersecting etc.) in BED format. */
 
 struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList, struct lm *lm);
+	char *table, struct region *regionList, struct lm *lm);
 /* Get cooked beds on all regions. */
 
 struct hTableInfo *getHti(char *db, char *table);

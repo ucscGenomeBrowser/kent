@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.20 2004/08/28 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.21 2004/08/28 21:50:37 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -326,10 +326,15 @@ htmlClose();
 void doSchema(struct sqlConnection *conn)
 /* Show schema around current track. */
 {
-struct trackDb *track = curTrack;
-char *table = connectingTableForTrack(track);
-htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
-showSchema(database, table);
-htmlClose();
+if (sameString(curTrack->tableName, curTable))
+    {
+    struct trackDb *track = curTrack;
+    char *table = connectingTableForTrack(track);
+    htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
+    showSchema(database, table);
+    htmlClose();
+    }
+else
+    doTableSchema(database, curTable, conn);
 }
 
