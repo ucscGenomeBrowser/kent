@@ -1038,6 +1038,14 @@ color 100,50,0
 altColor 0,0,255
 type sample
 
+track snp
+shortLabel SNPs
+longLabel Simple Nucleotide Polymorphisms (SNPs)
+group varRep
+priority 143
+visibility hide
+type bed 4+ .
+
 track snpMap
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
