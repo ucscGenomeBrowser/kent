@@ -9652,7 +9652,7 @@ rm $TMP/$root.pp
    cd /cluster/store6/weber/affy/transfrags/transfragsLabeled/
    mkdir hg16
    cd hg16
-   liftOver ../SK_phase2_tfgs_final /cluster/store4/gs.17/build34/bed/bedOver/33to34.chain \ 
+   liftOver ../SK_phase2_tfgs_final.biggerThan50bp.tab /cluster/store4/gs.17/build34/bed/bedOver/33to34.chain \ 
       SK_phase2_tfgs_final.hg16.bed SK_phase2_tfgs_final.err.bed
    # check to make sure that most lifted...
    wc *.bed

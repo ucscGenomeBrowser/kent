@@ -4162,7 +4162,7 @@ tail -100f split.log
 # affyTranfrag track: SK_phase2_tfgs_final file emailed from 
 # Hari at Affymetrix.
     cd /cluster/store6/weber/affy/transfrags/transfragsLabeled
-    hgLoadBed hg15 affyTransfrags SK_phase2_tfgs_final 
+    hgLoadBed hg15 affyTransfrags SK_phase2_tfgs_final.biggerThan50bp.tab
 
 # affyTranscription track: Wiggle track of hybridization levels
 # for every 5bp in genome. Quite a lot of data.
