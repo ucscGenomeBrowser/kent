@@ -20,7 +20,13 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.10 2004/09/02 19:28:49 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.11 2004/09/03 16:57:18 hiram Exp $";
+
+enum wigOutputType 
+/*	type of output requested	*/
+    {
+    wigOutData, wigOutBed,
+    };
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -121,7 +127,7 @@ else
     return FALSE;
 }	/*	static boolean checkWigDataFilter()	*/
 
-void wigDataHeader(char *name, char *description, char *visibility)
+static void wigDataHeader(char *name, char *description, char *visibility)
 /* Write out custom track header for this wiggle region. */
 {
 hPrintf("track type=wiggle_0");
@@ -134,21 +140,32 @@ if (visibility != NULL)
 hPrintf("\n");
 }
 
-int wigOutDataRegion(char *table, struct sqlConnection *conn,
-	struct region *region, int maxOut)
+static int wigOutRegion(char *table, struct sqlConnection *conn,
+	struct region *region, int maxOut, enum wigOutputType wigOutType)
 /* Write out wig data in region.  Write up to maxOut elements. 
  * Returns number of elements written. */
 {
+int linesOut = 0;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wDS = NULL;
-unsigned span = 0;
 unsigned long long valuesMatched = 0;
 int operations = wigFetchAscii;
 char *dataConstraint;
 double ll = 0.0;
 double ul = 0.0;
+
+switch (wigOutType)
+    {
+    case wigOutBed:
+	operations = wigFetchBed;
+	break;
+    default:
+    case wigOutData:
+	operations = wigFetchAscii;
+	break;
+    };
 
 if (isCustomTrack(table))
     {
@@ -178,12 +195,6 @@ if (isCustom)
     {
     valuesMatched = wDS->getData(wDS, NULL,
 	    splitTableOrFileName, operations);
-    /*  XXX We need to properly get the smallest span for custom tracks */
-    /*	This is not necessarily the correct answer here	*/
-    if (wDS->stats)
-	span = wDS->stats->span;
-    else
-	span = 1;
     }
 else
     {
@@ -191,23 +202,36 @@ else
 
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
+	/* XXX TBD, watch for a span limit coming in as an SQL filter */
+/*
 	span = minSpan(conn, splitTableOrFileName, region->chrom,
 	    region->start, region->end, cart);
 	wDS->setSpanConstraint(wDS, span);
+*/
 	valuesMatched = wDS->getData(wDS, database,
 	    splitTableOrFileName, operations);
 	}
     }
 
-wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
+switch (wigOutType)
+    {
+    case wigOutBed:
+	linesOut = wDS->bedOut(wDS, "stdout", TRUE);/* TRUE == sort output */
+	break;
+    default:
+    case wigOutData:
+	linesOut = wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
+	break;		/* TRUE == sort output, FALSE == not raw data out */
+    };
+
 
 destroyWigDataStream(&wDS);
 
-return valuesMatched;
+return linesOut;
 }
 
-void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
-/* Save as wiggle data. */
+static void doOutWig(struct trackDb *track, struct sqlConnection *conn,
+	enum wigOutputType wigOutType)
 {
 struct region *regionList = getRegions(), *region;
 int maxOut = 100000, oneOut, curOut = 0;
@@ -226,13 +250,26 @@ wigDataHeader(track->shortLabel, track->longLabel, NULL);
 
 for (region = regionList; region != NULL; region = region->next)
     {
-    oneOut = wigOutDataRegion(track->tableName, conn, region, maxOut - curOut);
+    oneOut = wigOutRegion(track->tableName, conn, region, maxOut - curOut,
+	wigOutType);
     curOut += oneOut;
     if (curOut >= maxOut)
         break;
     }
 if (curOut >= maxOut)
-    warn("Only fetching first %d data values, please make region smaller,\n\tor set a higher output line limit.", curOut);
+    warn("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", curOut);
+}
+
+void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
+/* Return wiggle data in variableStep format. */
+{
+doOutWig(track, conn, wigOutData);
+}
+
+void doOutWigBed(struct trackDb *track, struct sqlConnection *conn)
+/* Return wiggle data in bed format. */
+{
+doOutWig(track, conn, wigOutBed);
 }
 
 void doSummaryStatsWiggle(struct sqlConnection *conn)

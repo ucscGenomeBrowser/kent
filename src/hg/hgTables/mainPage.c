@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.31 2004/09/02 19:28:13 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.32 2004/09/03 16:57:18 hiram Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -317,10 +317,12 @@ static char *tracklessLabels[] =
 static char *wigTypes[] = 
      {
      outWigData, 
+     outWigBed, 
      };
 static char *wigLabels[] =
     {
     "data points", 
+    "bed format", 
     };
 
 hPrintf("<TR><TD><B>output:</B>\n");
