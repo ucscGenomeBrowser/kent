@@ -45,6 +45,7 @@
 #include "recombRate.h"
 #include "stsInfo.h"
 #include "mouseSyn.h"
+#include "mouseSynWhd.h"
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp.h"
@@ -1394,7 +1395,7 @@ return (sameString("cytoBand", track) ||
     sameString("gcPercent", track) ||
     sameString("gold", track) ||
     sameString("gap", track) ||
-    sameString("mouseSyn", track));
+    startsWith("mouseSyn", track));
 }
 
 
@@ -1557,7 +1558,7 @@ else
     boolean isRc = cartBoolean(cart, "hgc.dna.rc");
 
     sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, 
-    	(isRc ? "(reverse complement)" : ""));
+	(isRc ? "(reverse complement)" : ""));
     hgcStart(name);
     seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
     if (sameString(outType, "uc"))
@@ -3676,7 +3677,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         reverseComplement(seq->dna, seq->size);
     printf("<TT><PRE>");
     sprintf(faLine, "%s:%d-%d %s exons in upper case",
-    	gp->chrom, start+1, end,
+	gp->chrom, start+1, end,
 	(isRev ? "(reverse complemented)" : "") );
     faWriteNext(stdout, faLine, seq->dna, seq->size);
     printf("</TT></PRE>");
@@ -5569,9 +5570,10 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doMouseOrthoDetail(char *track, char *itemName)
+void doMouseOrthoDetail(struct trackDb *tdb, char *itemName)
 /* Handle click on mouse synteny track. */
 {
+char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -5589,27 +5591,23 @@ rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    htmlHorizontalLine();
     mouseSynStaticLoad(row+rowOffset, &el);
     printf("<B>mouse chromosome:</B> %s<BR>\n", el.name+6);
     printf("<B>human chromosome:</B> %s<BR>\n", skipChr(el.chrom));
     printf("<B>human starting base:</B> %d<BR>\n", el.chromStart);
     printf("<B>human ending base:</B> %d<BR>\n", el.chromEnd);
     printf("<B>size:</B> %d<BR>\n", el.chromEnd - el.chromStart);
-    htmlHorizontalLine();
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-
-puts("<P>This track syntenous (corresponding) regions between human "
-     "and mouse chromosomes.  This track was created by looking for "
-     "homology to known mouse genes in the draft assembly. The method" 
-     "used was to align Fgenesh++ predictions using BLAT (protein alignment)"
-     "comparing the Dec 2001 Human assembly with the Nov 2001 Mouse draft assembly."
-     "For more information on the methods used please contact <A HREF=\"mailto:baertsch@cse.ucsc.edu\">Robert Baertsch</A> at UCSC.");
+printTrackHtml(tdb);
 }
-void doMouseSyn(char *track, char *itemName)
+
+void doMouseSyn(struct trackDb *tdb, char *itemName)
 /* Handle click on mouse synteny track. */
 {
+char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -5627,24 +5625,56 @@ rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    htmlHorizontalLine();
     mouseSynStaticLoad(row+rowOffset, &el);
     printf("<B>mouse chromosome:</B> %s<BR>\n", el.name+6);
     printf("<B>human chromosome:</B> %s<BR>\n", skipChr(el.chrom));
     printf("<B>human starting base:</B> %d<BR>\n", el.chromStart);
     printf("<B>human ending base:</B> %d<BR>\n", el.chromEnd);
     printf("<B>size:</B> %d<BR>\n", el.chromEnd - el.chromStart);
-    htmlHorizontalLine();
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+printTrackHtml(tdb);
+}  
 
-puts("<P>This track syntenous (corresponding) regions between human "
-     "and mouse chromosomes.  This track was created by looking for "
-     "homology to known mouse genes in the draft assembly.  The data "
-     "for this track was kindly provided by "
-     "<A HREF=\"mailto:church@ncbi.nlm.nih.gov\">Deanna Church</A> at NCBI. Please "
-     "visit <A HREF=\"http://www.ncbi.nlm.nih.gov/Homology/\" TARGET = _blank>"
-     "http://www.ncbi.nlm.nih.gov/Homology/</A> for more details.");
+void doMouseSynWhd(struct trackDb *tdb, char *itemName)
+/* Handle click on Whitehead mouse synteny track. */
+{
+char *track = tdb->tableName;
+struct mouseSynWhd el;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+
+cartWebStart(cart, "Mouse Synteny (Whitehead)");
+printf("<H2>Mouse Synteny (Whitehead)</H2>\n");
+
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
+    track, seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    htmlHorizontalLine();
+    mouseSynWhdStaticLoad(row+rowOffset, &el);
+    printf("<B>mouse chromosome:</B> %s<BR>\n", el.name);
+    printf("<B>mouse starting base:</B> %d<BR>\n", el.mouseStart+1);
+    printf("<B>mouse ending base:</B> %d<BR>\n", el.mouseEnd);
+    printf("<B>human chromosome:</B> %s<BR>\n", skipChr(el.chrom));
+    printf("<B>human starting base:</B> %d<BR>\n", el.chromStart+1);
+    printf("<B>human ending base:</B> %d<BR>\n", el.chromEnd);
+    printf("<B>strand:</B> %s<BR>\n", el.strand);
+    printf("<B>segment label:</B> %s<BR>\n", el.segLabel);
+    printf("<B>size:</B> %d (mouse), %d (human)<BR>\n",
+	   (el.mouseEnd - el.mouseStart), (el.chromEnd - el.chromStart));
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }  
 
 void doDbSnpRS(char *name)
@@ -8542,11 +8572,9 @@ else if (sameWord(track, "blatMus"))
     {
     doBlatMus(tdb, item);
     }
-else if (sameWord("blastzMm2", track)
-         || sameWord("blastzMm2Sc", track)
-         || sameWord("blastzMm2Ref", track)
-	 || sameWord("blastzBestMouse", track)
-         || (sameWord("aarMm2", track))
+else if (startsWith("blastzMm2", track)
+	 || startsWith("blastzBestMouse", track)
+	 || sameWord("aarMm2", track)
          || sameWord("blastzStrictChainMouse", track))
     {
     doBlatMus(tdb, item);
@@ -8620,9 +8648,13 @@ else if (sameWord(track, "genMapDb"))
     {
     doGenMapDb(tdb, item);
     }
+else if (sameWord(track, "mouseSynWhd"))
+    {
+    doMouseSynWhd(tdb, item);
+    }
 else if (sameWord(track, "mouseSyn"))
     {
-    doMouseSyn(track, item);
+    doMouseSyn(tdb, item);
     }
 else if (sameWord(track, "mouseOrtho"))
     {
