@@ -218,8 +218,6 @@ gf->isPep = isPep;
 gf->allowOneMismatch = allowOneMismatch;
 if (segSize > 0)
     {
-    uglyf("Allocating segmented index:  tileSize %d, tileSpaceSize %d, isPep %d\n",
-    	tileSize, tileSpaceSize, isPep);
     gf->endLists = needHugeZeroedMem(tileSpaceSize * sizeof(gf->endLists[0]));
     maxPat = BIGNUM;	/* Don't filter out overused on the big ones.  It is
                          * unnecessary and would be quite complex. */
@@ -739,7 +737,6 @@ bits32 offset = 0, nibSize;
 char *nibName;
 struct gfSeqSource *ss;
 
-uglyf("gfLargeIndexSeq\n");
 for (seq = seqList; seq != NULL; seq = seq->next)
     gfCountSeq(gf, seq);
 gfAllocLargeLists(gf);
@@ -758,9 +755,6 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
 return gf;
-#ifdef SOON
-uglyAbort("All for now");
-#endif /* SOON */
 }
 
 
@@ -1361,7 +1355,6 @@ int alphabetSize;
 char oldChar, zeroChar, badChar;
 int posMul;
 
-uglyf("gfStraightFindNearHits\n");
 if (gf->isPep)
     {
     makeTile = gfPepTile;
@@ -1385,25 +1378,25 @@ for (i=0; i<=lastStart; ++i)
 	poly[i+varPos] = zeroChar;
 	tile = makeTile(poly+i, tileSize);
 	poly[i+varPos] = oldChar;
-	if (tile < 0)
-	    continue;
-
-	/* Look up all possible values of variable position. */
-	for (varVal=0; varVal<alphabetSize; ++varVal)
+	if (tile >= 0)
 	    {
-	    listSize = gf->listSizes[tile];
-	    qStart = i;
-	    tList = gf->lists[tile];
-	    for (j=0; j<listSize; ++j)
+	    /* Look up all possible values of variable position. */
+	    for (varVal=0; varVal<alphabetSize; ++varVal)
 		{
-		lmAllocVar(lm,hit);
-		hit->qStart = qStart;
-		hit->tStart = tList[j];
-		hit->diagonal = hit->tStart + size - qStart;
-		slAddHead(&hitList, hit);
-		++hitCount;
+		listSize = gf->listSizes[tile];
+		qStart = i;
+		tList = gf->lists[tile];
+		for (j=0; j<listSize; ++j)
+		    {
+		    lmAllocVar(lm,hit);
+		    hit->qStart = qStart;
+		    hit->tStart = tList[j];
+		    hit->diagonal = hit->tStart + size - qStart;
+		    slAddHead(&hitList, hit);
+		    ++hitCount;
+		    }
+		tile += posMul;
 		}
-	    tile += posMul;
 	    }
 	posMul *= alphabetSize;
 	}
@@ -1433,7 +1426,6 @@ bits16 *endList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
-uglyf("gfSegmentedFindHits\n");
 for (i=0; i<=lastStart; ++i)
     {
     tileHead = makeTile(poly+i, tileHeadSize);
@@ -1458,10 +1450,96 @@ for (i=0; i<=lastStart; ++i)
 	    }
 	}
     }
-uglyf("a ok!\n");
 *retHitCount = hitCount;
 return hitList;
 }
+
+static struct gfHit *gfSegmentedFindNearHits(struct genoFind *gf, 
+	aaSeq *seq, struct lm *lm, int *retHitCount)
+/* Find hits associated with one sequence in a segmented
+ * index where one mismatch is allowed. */
+{
+struct gfHit *hitList = NULL, *hit;
+int size = seq->size;
+int tileSize = gf->tileSize;
+int tileTailSize = gf->segSize;
+int tileHeadSize = gf->tileSize - tileTailSize;
+int lastStart = size - tileSize;
+char *poly = seq->dna;
+int i, j;
+int tileHead, tileTail;
+int listSize;
+bits32 qStart, tStart;
+bits16 *endList;
+int hitCount = 0;
+int varPos, varVal;	/* Variable position. */
+int (*makeTile)(char *poly, int n); 
+int alphabetSize;
+char oldChar, zeroChar, badChar;
+int headPosMul, tailPosMul;
+boolean modTail;
+
+if (gf->isPep)
+    {
+    makeTile = gfPepTile;
+    alphabetSize = 20;
+    zeroChar = 'A';
+    }
+else
+    {
+    makeTile = gfDnaTile;
+    alphabetSize = 4;
+    zeroChar = 't';
+    }
+
+for (i=0; i<=lastStart; ++i)
+    {
+    headPosMul = tailPosMul = 1;
+    for (varPos = tileSize-1; varPos >= 0; --varPos)
+	{
+	/* Make a tile that has zero value at variable position. */
+	modTail = (varPos >= tileHeadSize);
+	oldChar = poly[i+varPos];
+	poly[i+varPos] = zeroChar;
+	tileHead = makeTile(poly+i, tileHeadSize);
+	tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
+	poly[i+varPos] = oldChar;
+
+	if (tileHead >= 0 && tileTail >= 0)
+	    {
+	    for (varVal=0; varVal<alphabetSize; ++varVal)
+		{
+		listSize = gf->listSizes[tileHead];
+		qStart = i;
+		endList = gf->endLists[tileHead];
+		for (j=0; j<listSize; ++j)
+		    {
+		    if (endList[0] == tileTail)
+			{
+			lmAllocVar(lm,hit);
+			hit->qStart = qStart;
+			hit->tStart = (endList[1]<<16) + endList[2];
+			hit->diagonal = hit->tStart + size - qStart;
+			slAddHead(&hitList, hit);
+			++hitCount;
+			}
+		    }
+		if (modTail)
+		    tileTail += tailPosMul;
+		else 
+		    tileHead += headPosMul;
+		}
+	    }
+	if (modTail)
+	    tailPosMul *= alphabetSize;
+	else 
+	    headPosMul *= alphabetSize;
+	}
+    }
+*retHitCount = hitCount;
+return hitList;
+}
+
 
 struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, int *retHitCount)
 /* Find clump whether its peptide or dna.  Call fast routine if possible.*/
@@ -1481,11 +1559,9 @@ else
 	}
     else
 	{
-#ifdef SOON
 	if (gf->allowOneMismatch)
 	    hitList = gfSegmentedFindNearHits(gf, seq, lm, retHitCount);
 	else
-#endif
 	    hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
 	}
     }
@@ -1544,11 +1620,10 @@ FILE *f = mustOpen(outName, "w");
 
 if (gf->segSize > 0)
     uglyAbort("Don't yet know how to make ooc files for large tile sizes.");
-uglyf("Making %s maxPat %u tileSize %d\n", outName, maxPat, tileSize);
 for (i=0; i<fileCount; ++i)
     {
     inName = files[i];
-    uglyf("Loading %s\n", inName);
+    printf("Loading %s\n", inName);
     if (isNib(inName))
         {
 	seqList = nibLoadAll(inName);
@@ -1557,7 +1632,7 @@ for (i=0; i<fileCount; ++i)
         {
 	seqList = faReadSeq(inName, tType != gftProt);
 	}
-    uglyf("Counting %s\n", inName);
+    printf("Counting %s\n", inName);
     for (seq = seqList; seq != NULL; seq = seq->next)
 	{
 	int isRc;
@@ -1587,7 +1662,7 @@ for (i=0; i<fileCount; ++i)
 	}
     freeDnaSeqList(&seqList);
     }
-uglyf("Writing %s\n", outName);
+printf("Writing %s\n", outName);
 writeOne(f, sig);
 writeOne(f, psz);
 for (i=0; i<tileSpaceSize; ++i)
@@ -1600,6 +1675,6 @@ for (i=0; i<tileSpaceSize; ++i)
     }
 carefulClose(&f);
 genoFindFree(&gf);
-uglyf("Wrote %d overused %d-mers to %s\n", oocCount, tileSize, outName);
+printf("Wrote %d overused %d-mers to %s\n", oocCount, tileSize, outName);
 }
 
