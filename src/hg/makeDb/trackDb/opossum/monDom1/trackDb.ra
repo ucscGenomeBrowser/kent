@@ -38,7 +38,6 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
-<<<<<<< trackDb.ra
 
 track chainMm5
 shortLabel $o_Organism Chain 
@@ -85,8 +84,8 @@ type netAlign galGal2 chainGalGal2
 otherDb galGal2
 
 track blastHg17KG
-shortLabel Hg17  Proteins
-longLabel Hg17 Proteins
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
 group compGeno
 priority 142
 visibility pack
