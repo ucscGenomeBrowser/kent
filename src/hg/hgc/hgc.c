@@ -105,7 +105,8 @@ char *db = NULL;
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-//char *onChangeText = "onchange=\"document.orgForm.org.value = document.compareForm.org.options[document.compareForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeText = "onchange=\"document.orgForm.org.value = document.compareForm.org.options[document.compareForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeAssemblyText = "onchange=\"document.orgForm.db2.value = document.compareForm.db2.options[document.compareForm.db2.selectedIndex].value; document.orgForm.submit();\"";
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
 int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
@@ -1026,7 +1027,7 @@ axt->tSym = cloneMem(seq->dna, size+1);
 axt->qSym = cloneMem(gapPt, size+1);
 return axt;
 }
-void axtGenePrettyHtml(struct genePred *gp, char *table, char *nib)
+void axtGenePrettyHtml(struct genePred *gp, char *table, char *nib, char *db)
 /* axtPretty - Convert axt to more human readable format.. */
 {
 struct lineFile *lf ;
@@ -1042,12 +1043,13 @@ struct sqlConnection *conn = hAllocConn();
 char **row;
 int tmp;
 
-sprintf(query, "select * from %s where chrom = '%s'", table, gp->chrom);
+sprintf(query, "select * from %s where chrom = '%s' and species = '%s'", table, gp->chrom, db);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ai = axtInfoLoad(row );
     }
+printf("file = %s\n",ai->fileName);
 lf = lineFileOpen(ai->fileName, TRUE);
 while ((axt = axtRead(lf)) != NULL)
     {
@@ -4554,6 +4556,8 @@ char *left = cartString(cart, "l");
 char *right = cartString(cart, "r");
 char *trackName = cartString(cart, "g");
 char *seqName = cartOptionalString(cart, "i");
+char *alignment = "Blastz"; //cartOptionalString(cart, "alignment");
+char *db2 = cartOptionalString(cart, "db2");
 char table[64];
 char title[256];
 struct hash *trackHash;
@@ -4567,19 +4571,40 @@ struct genePred *gp = NULL;
 int white = WHITE;
 boolean hasBin; 
 char *oldDb = NULL;
-char *alignment = "Blastz";
+struct dbDb *dbList = hGetIndexedDatabases();
 
 
 database = cartUsualString(cart, "db", hGetDb());
 database2 = cartUsualString(cart, "db2", hGetDb2());
 
-db = "hg10";// cartUsualString(cart, "db", hGetDb());
-organism = hOrganism(database);
+db = cartUsualString(cart, "db", hGetDb());
+organism = cgiOptionalString(orgCgiName);
+if (organism == NULL)
+    organism = hOrganism(db);
 ///hDefaultConnect(); 	/* set up default connection settings */
 //hSetDb(database);
 //
-chrom = cartString(cart, "c");
+//chrom = cartString(cart, "c");
 
+
+    if (db2==NULL)
+        {
+        db2 = hDefaultDbForOrganism(organism);
+        }
+    else
+        {
+//        db2 = cartUsualString(cart, dbCgiName, hGetDb());
+        organism = hOrganism(db2);
+        }
+
+    if (strlen(db2) < 2)
+        db2 = hDefaultDbForOrganism(organism);
+if (organism == NULL)
+    {
+    organism = hOrganism(db2);
+    }
+
+chrom = cartString(cart, "c");
 sprintf(query, "select fileName from %s where chrom = '%s'", 
 	chromTable, chrom);
 if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
@@ -4595,69 +4620,82 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlSetBgColor(&white);
     htmStart(stdout, "alignment");
     fprintf(stdout, "<TT><PRE>");
-    fprintf(stdout, "<H3>Alignment of %s in %s </H3>", seqName, database);
-//puts(
-//"<TABLE bgcolor=\"FFFEF3\" border=0>\n"
-//"<tr>\n"
-//"<td>\n"
-//"<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"compareForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-//"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
-//"<TABLE><tr>\n"
+    fprintf(stdout, "<H3>Alignment of %s in %s to %s </H3>", seqName, hOrganism(db), organism);
+puts(
+"<TABLE bgcolor=\"FFFEF3\" border=0>\n"
+"<tr>\n"
+"<td>\n"
+"<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"compareForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
+"<TABLE><tr>\n"
 //"<td align=center valign=baseline>genome</td>\n"
-//"<td align=center valign=baseline>assembly</td>\n"
-//"<td align=center valign=baseline>alignment</td>\n"
-//"<td align=center valign=baseline>exon</td>\n"
-//);
+"<td align=center valign=baseline>genome/version</td>\n"
+"<td align=center valign=baseline>alignment</td>\n"
+"<td align=center valign=baseline>exon</td>\n"
+);
 
-//cgiMakeTextVar("i", seqName, 30);
-//cgiMakeTextVar("hgsid", hgsid, 30);
-//cgiMakeTextVar("g", trackName, 30);
-//cgiMakeTextVar("o", track, 30);
-//cgiMakeTextVar("c", chrom, 30);
-//puts("<tr><td align=center>\n");
-//printOrgListHtml(db, onChangeText);
+cgiMakeHiddenVar("i", seqName);
+cgiMakeHiddenVar("hgsid", hgsid);
+cgiMakeHiddenVar("g", trackName);
+cgiMakeHiddenVar("o", track);
+cgiMakeHiddenVar("org", organism);
+cgiMakeHiddenVar("c", chrom);
+
+//cgiMakeTextVar("l", left, 30);
+//cgiMakeTextVar("r", right, 30);
+////"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
+
+
+puts("<tr>\n");
+//puts("<td align=center>\n");
+//printOrgListHtml(db2, onChangeText);
 //puts("</td>\n");
 
-//puts("<td align=center>\n");
-//printAssemblyListHtml(db);
-//puts("</td>\n");
+puts("<td align=center>\n");
+printOrgAssemblyListHtmlParm(db2,dbList, "db2",onChangeAssemblyText);
+puts("</td>\n");
 
-//puts("<td align=center>\n");
-//cgiMakeTextVar("alignment", alignment, 30);
-//printf("</td>\n");
+puts("<td align=center>\n");
+printAlignmentListHtml(db2);
+//cgiMakeTextVar("alignment",alignment, 30);
+printf("</td>\n");
 
 freez(&alignment);
 alignment = NULL;
 
-//puts("<td align=center>\n");
-//cgiMakeIntVar("exon", cartUsualInt(cart, "exon", 1), 4);
-//printf("</td>\n");
-//printf("<td align=center>");
-//cgiMakeButton("Submit", "Submit");
-//printf("</td>\n");
 
-//puts(
-//"</tr></TABLE>\n"
-//"</td></tr><tr><td><center>\n"
-//"</td></tr></TABLE>\n"
-//"</center>\n"
-//);
+puts("<td align=center>\n");
+cgiMakeIntVar("exon", cartUsualInt(cart, "exon", 1), 4);
+printf("</td>\n");
+printf("<td align=center>");
+cgiMakeButton("Submit", "Submit");
+printf("</td>\n");
+
+puts(
+"</tr></TABLE>\n"
+"</td></tr><tr><td><center>\n"
+"</td></tr></TABLE>\n"
+"</center>\n"
+);
     fprintf(stdout, "<TT><PRE>");
     fprintf(stdout, "<TABLE>");
-    axtGenePrettyHtml( gp ,"axtInfo", nibFile);
+    axtGenePrettyHtml( gp ,"axtInfo", nibFile, db2);
     fprintf(stdout, "</TABLE>");
-//fprintf(stdout,"</FORM>\n");
-//printf("<FORM ACTION=\"/cgi-bin/hgc\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
-//printf("<input type=\"hidden\" name=\"g\" value=\"htcGenePsl\">\n");
-//printf("<input type=\"hidden\" name=\"i\" value=\"%s\">\n",seqName);
-//printf("<input type=\"hidden\" name=\"c\" value=\"%s\">\n",chrom);
-//printf("<input type=\"hidden\" name=\"l\" value=\"%s\">\n",left);
-//printf("<input type=\"hidden\" name=\"r\" value=\"%s\">\n",right);
-//printf("<input type=\"hidden\" name=\"o\" value=\"%s\">\n",track);
-//printf("<input type=\"hidden\" name=\"hgsid\" value=\"%s\">\n",hgsid);
-////cartSaveSession(cart);
-//puts("</FORM>"
-        //"\n");
+fprintf(stdout,"</FORM>\n");
+printf("<FORM ACTION=\"/cgi-bin/hgc\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+//cartSaveSession(cart);
+printf("<input type=\"hidden\" name=\"g\" value=\"htcGenePsl\">\n");
+printf("<input type=\"hidden\" name=\"i\" value=\"%s\">\n",seqName);
+printf("<input type=\"hidden\" name=\"db2\" value=\"\">\n");
+printf("<input type=\"hidden\" name=\"c\" value=\"%s\">\n",chrom);
+printf("<input type=\"hidden\" name=\"l\" value=\"%s\">\n",left);
+printf("<input type=\"hidden\" name=\"r\" value=\"%s\">\n",right);
+printf("<input type=\"hidden\" name=\"o\" value=\"%s\">\n",track);
+printf("<input type=\"hidden\" name=\"alignment\" value=\"%s\">\n",alignment);
+printf("<input type=\"hidden\" name=\"exon\" value=\"1\">\n");
+printf("<input type=\"hidden\" name=\"hgsid\" value=\"%s\">\n",hgsid);
+puts("</FORM>"
+"\n");
 ////"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
 ////"	</TD></TR></TABLE>\n"
 ////"			\n"
