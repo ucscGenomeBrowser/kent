@@ -9006,10 +9006,167 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
 # creates 32542 rows in knownToSuper
 
 
+<<<<<<< makeHg16.doc
+# RUN BLASTZ VS. MACACA MULATTA
+
+#get sequence from trace repository
+cd /cluster/bluearc/macaca
+for i in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 ; do echo $i ; wget ftp://ftp.ncbi.nih.gov/pub/TraceDB/macaca_mulatta/fasta.macaca_mulatta.0$i.gz ; done
+
+# distribute contigs to bluearc and /iscratch/i for cluster run
+#split the sequence into 1mb chunks (about 13k reads per file)
+ssh kksilo
+mkdir -p /cluster/bluearc/macaca/split
+for i in 001 002 003 004 005 006 007 008 009 010 011 012 013 014 ; do faSplit about macacca_mulatta.$i.fa 10000000 split/$i/mac ; done
+find split -name \*.fa > mac.lst
+hgsql hg16 -N < chromLen.sql > S1.len
+#flatten directory structure for Angie's scripts
+for i in `ls` ; do cd /iscratch/i/macaca/$i ; for j in `ls` ; do mv $j ../$i.$j ; done ; done
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/macaca/
+    df /iscratch/i
+    cp /cluster/bluearc/macaca/split/* /iscratch/i/macaca
+    /cluster/bin/scripts/iSync
+
+# make DEF file for blastz
+    ssh kksilo
+    cd /cluster/bluearc/macaca
+
+# NOTE: need schwartzbin below for utils still not in penn bin
+
+cat << '_EOF_' > DEF
+# human vs. macaca mulatta
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/blastz/human_mulatta.q
+
+
+BLASTZ_ABRIDGE_REPEATS=0
+
+SEQ1_DIR=/scratch/hg/gs.17/build34/bothMaskedNibs/
+SEQ1_RMSK=/scratch/hg/gs.17/build34/rmsk/
+SEQ1_SMSK=
+SEQ1_FLAG=-primate
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+SEQ2_DIR=/iscratch/i/macaca/
+SEQ2_RMSK=
+SEQ2_SMSK=
+SEQ2_FLAG=-primate
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/bluearc/macaca
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+DEBUG=0
+
+'_EOF_'
+
+    # << this line makes emacs coloring happy
+
+# Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.hg16-rm0.`date -I`
+
+    ssh kk
+    cd /cluster/bluearc/macaca
+    # source the DEF file to establish environment for following commands
+    bash
+    source ./DEF
+    cp /cluster/data/mm4/jkStuff/BlastZ_run0.sh .
+    ./BlastZ_run0.sh
+    cd run.1
+    para try
+    para check
+    para push
+
+    #   Second cluster run to convert the .out's to .lav's
+    cp /cluster/data/mm4/jkStuff/BlastZ_run1.sh . 
+    ssh kk
+    cd /cluster/data/pt0/bed/blastz.hg16
+    bash
+    source DEF
+    ./BlastZ_run1.sh
+    cd run.2
+    para try
+    para check
+    para push
+
+    #   Prepare third cluster run script to convert lav's to axt's
+    cd /cluster/bluearc/macaca/
+cat << '_EOF_' > ../../jkStuff/BlastZ_run2.sh
+#!/bin/sh
+#       prepare third cluster run for blastz processing
+# NOTE: should run this on iservers (4G), 
+# with chr19 and chr1 on kolossus (8G)
+M=`uname -n`
+if [ "$M" != "kk" ]; then
+    echo "ERROR: you are on machine: '$M'"
+    echo -e "\tthis script expects machine kk"
+    exit 255
+fi
+source DEF
+mkdir axtChrom
+mkdir run.2
+cd run.2
+# usage:  blastz-contiglav2axt lav-dir axt-file seq1-dir seq2-file
+echo '#LOOP' > gsub
+echo '/cluster/bin/scripts/blastz-contiglav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR}' /cluster/bluearc/macaca/split/'${path2} >> gsub
+echo '#ENDLOOP' >> gsub
+ls -1S ${BASE}/lav > chrom.list
+gensub2 chrom.list ../mac.lst gsub jobList
+wc -l jobList
+echo "running 'para create'"
+para create jobList
+echo "Ready for cluster run.  para try, check, push, etc ..."
+'_EOF_'
+    chmod +x ../../jkStuff/BlastZ_run2.sh
+    #   Third cluster run to convert lav's to axt's
+    source DEF
+    ../../jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+    # NOTE: ran this on kolossus and mini-cluster
+    # 30 min. to 2 hrs. per chrom
+    # Wrapper script required because of stdout redirect:
+
+    cd /cluster/bluearc/macaca
+    cat << '_EOF_' > doMultiz
+#!/bin/csh
+/cluster/bin/penn/multiz $1 $2 - > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doMultiz
+    rm -f jobList
+    foreach file (/cluster/data/pt0/bed/blastz-blatHg16.2003-11-24/maf/*.maf) 
+      set root=$file:t:r:r
+      echo "doMultiz /cluster/data/pt0/bed/blastz-blatHg16.2003-11-24/maf/${root}.maf $file /cluster/bluearc/macaca/blastz.hg16/${root}.maf" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+=======
 # seq table acc field is too small; up the max to match new hgLoadSeq 
 # schema (2004/05/22 markd)
 
     alter table modify column `acc` varchar(128) NOT NULL default '';
+<<<<<<< makeHg16.doc
+>>>>>>> 1.167
+=======
 
 ####  Blat knownGene proteins to determine exons (braney 2004-06-02)
     ssh kk
@@ -9052,3 +9209,4 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
     pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
 
+>>>>>>> 1.171
