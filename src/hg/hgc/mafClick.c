@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.20 2004/10/12 21:36:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.21 2004/10/19 20:14:46 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -331,6 +331,7 @@ else
 	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
+	cgiContinueHiddenVar("c");
 	printf("Capitalize ");
 	cgiMakeDropListFull(codeVarName, codeAll, codeAll, 
 	    ArraySize(codeAll), codeVarVal, autoSubmit);
