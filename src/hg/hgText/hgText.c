@@ -824,17 +824,6 @@ if ((*tok)->type == kxtString)
 				 fieldName);
 	dyStringAppend(q, (*tok)->string);
 	*tok = (*tok)->next;
-	if (*tok != NULL && (*tok)->type == kxtDot &&
-		(*tok)->next != NULL && (*tok)->next->type == kxtString)
-	    {
-		dyStringAppend(q, (*tok)->string);
-		*tok = (*tok)->next;
-		if (! isdigit((*tok)->string[0]))
-		    webAbort("Error", "Parse error when reading number for field %s.",
-					 fieldName);
-		dyStringAppend(q, (*tok)->string);
-		*tok = (*tok)->next;
-		}
 	}
 else
     {
@@ -1596,7 +1585,7 @@ else
 }
 
 
-char *makeFaStartLine(char *chrom, char *table, int start, int size)
+char *makeFaStartLine(char *chrom, char *table, char *name, int start, int size, char strand)
 /* Create fa start line. */
 {
 char faName[128];
@@ -1604,11 +1593,15 @@ static char faStartLine[512];
 
 ++blockIx;
 if (startsWith("chr", table))
-    sprintf(faName, "%s_%d", table, blockIx);
+    sprintf(faName, "%s", table);
 else
-    sprintf(faName, "%s_%s_%d", chrom, table, blockIx);
-sprintf(faStartLine, "%s %s %s %d %d", 
-	faName, database, chrom, start, start+size);
+    sprintf(faName, "%s_%s", chrom, table);
+if (name != NULL)
+    sprintf(faName, "%s_%s", faName, name);
+sprintf(faName, "%s_%d", faName, blockIx);
+sprintf(faStartLine, "%s %s %s %d %d%s", 
+	faName, database, chrom, start+1, start+size,
+		(strand == '-' ? " (reverse complemented)" : ""));
 return faStartLine;
 }
 
@@ -1625,7 +1618,7 @@ else
 
 
 void outputDna(FILE *f, char *chrom, char *table, int start, int size, char *dna, 
-	char *nibFileName, FILE *nibFile, int nibSize, char strand)
+	char *nibFileName, FILE *nibFile, int nibSize, char strand, char *name)
 /* Output DNA either directly from nib or by upper-casing DNA. */
 {
 if (merge >= 0)
@@ -1635,7 +1628,8 @@ else
     struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
     if (strand == '-')
         reverseComplement(seq->dna, size);
-    writeOut(f, chrom, start, size, strand, seq->dna, makeFaStartLine(chrom, table, start, size));
+    writeOut(f, chrom, start, size, strand, seq->dna,
+			 makeFaStartLine(chrom, table, name, start, size, strand));
     freeDnaSeq(&seq);
     }
 }
@@ -1653,6 +1647,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char chromField[32], startField[32], endField[32];
+char nameField[32], strandField[32];
 struct dnaSeq *seq = NULL;
 DNA *dna = NULL;
 int s,e,sz,i,size;
@@ -1664,7 +1659,8 @@ int nibSize;
 
 s = size = 0;
 
-if (!hFindChromStartEndFields(table, chromField, startField, endField))
+if (!hFindMoreFields(table, chromField, startField, endField, nameField,
+					 strandField))
     webAbort("Missing field in table", "Couldn't find chrom/start/end fields in table");
 
 if (merge >= 0)
@@ -1705,14 +1701,15 @@ if (breakUp)
 		     {
 		     sz = psl->blockSizes[i];
 		     s = tSize - (psl->tStarts[i] + sz);
-		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '-');
+		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile,
+					   nibSize, '-', NULL);
 		     }
 		}
 	    else
 		{
 		for (i=0; i<psl->blockCount; ++i)
 		     outputDna(f, chrom, table, psl->tStarts[i], psl->blockSizes[i], 
-			    dna, nibFileName, nibFile, nibSize, '+');
+					   dna, nibFileName, nibFile, nibSize, '+', NULL);
 		}
 	    pslFree(&psl);
 	    }
@@ -1733,7 +1730,8 @@ if (breakUp)
 		 s = gp->exonStarts[i];
 		 sz = gp->exonEnds[i] - s;
 		 outputDna(f, chrom, table, 
-		    s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0]);
+				   s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0],
+				   NULL);
 		 }
 	    genePredFree(&gp);
 	    }
@@ -1745,22 +1743,29 @@ if (breakUp)
     }
 else
     {
-    dyStringPrintf(query, "select %s,%s from %s where %s >= %d and %s < %d", 
-	    startField, endField, table,
-	    startField, chromStart, endField, chromEnd);
+	char strand;
+    dyStringPrintf(query, "select %s,%s", startField, endField);
+	if (strandField[0] != 0)
+	    dyStringPrintf(query, ",%s", strandField);
+	dyStringPrintf(query, " from %s where %s >= %d and %s < %d", 
+				   table, startField, chromStart, endField, chromEnd);
     dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
     if (where != NULL)
-	dyStringPrintf(query, " and %s", where);
+	    dyStringPrintf(query, " and %s", where);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	s = sqlUnsigned(row[0]);
-	e = sqlUnsigned(row[1]);
-	sz = e - s;
-	if (seq != NULL && (sz < 0 || e >= size))
-	    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
-	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
-	}
+	    {
+	    s = sqlUnsigned(row[0]);
+		e = sqlUnsigned(row[1]);
+		strand = '?';
+		if (strandField[0] != 0 && row[2] != NULL)
+		    strand = row[2][0];
+		sz = e - s;
+		if (seq != NULL && (sz < 0 || e >= size))
+		    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
+		outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize,
+				  strand, NULL);
+		}
     }
 
 /* Merge nearby upper case blocks. */
@@ -1797,7 +1802,8 @@ if (merge >= 0)
 	    {
 	    e = i;
 	    sz = e - s;
-	    writeOut(f, chrom, s, sz, '+', dna+s, makeFaStartLine(chrom, table, s, sz));
+	    writeOut(f, chrom, s, sz, '+', dna+s,
+				 makeFaStartLine(chrom, table, NULL, s, sz, '+'));
 	    }
 	lastIsUpper = isUpper;
 	}
