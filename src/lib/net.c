@@ -465,3 +465,135 @@ if (s == NULL)
 return s;
 }
 
+struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu)
+/* Parse URL and open an HTTP socket for it but don't send a request yet. */
+{
+int sd;
+struct lineFile *lf;
+
+/* Parse the URL and try to connect. */
+AllocVar(*npu);
+netParseUrl(url, *npu);
+if (!sameString((*npu)->protocol, "http"))
+    errAbort("Sorry, can only netOpen http's currently");
+sd = netConnect((*npu)->host, atoi((*npu)->port));
+if (sd < 0)
+    return NULL;
+
+/* Return handle. */
+lf = lineFileAttatch(url, TRUE, sd);
+return lf;
+} /* netHttpLineFileMayOpen */
+
+
+void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
+		boolean keepAlive)
+/* Send a GET request, possibly with Keep-Alive. */
+{
+struct dyString *dy = newDyString(512);
+
+/* Ask remote server for the file/query. */
+dyStringPrintf(dy, "GET %s HTTP/1.1\r\n", npu->file);
+dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
+dyStringPrintf(dy, "Host: %s:%s\r\n", npu->host, npu->port);
+dyStringAppend(dy, "Accept: */*\r\n");
+if (keepAlive)
+  {
+    dyStringAppend(dy, "Connection: Keep-Alive\r\n");
+    dyStringAppend(dy, "Connection: Persist\r\n");
+  }
+else
+    dyStringAppend(dy, "Connection: close\r\n");
+dyStringAppend(dy, "\r\n");
+write(lf->fd, dy->string, dy->stringSize);
+/* Clean up. */
+dyStringFree(&dy);
+} /* netHttpGet */
+
+int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
+		       void (*responseCB)(void *userData, char *req,
+					  char *hdr, struct dyString *body))
+/* Given an URL which is the base of all requests to be made, and a 
+ * linked list of queries to be appended to that base and sent in as 
+ * requests, send the requests as a batch and read the HTTP response 
+ * headers and bodies.  If not all the requests get responses (i.e. if 
+ * the server is ignoring Keep-Alive or is imposing a limit), try again 
+ * until we can't connect or until all requests have been served. 
+ * For each HTTP response, do a callback. */
+{
+  struct slName *qStart;
+  struct slName *qPtr;
+  struct lineFile *lf;
+  struct netParsedUrl *npu;
+  struct dyString *dyQ    = newDyString(512);
+  struct dyString *body;
+  char *base;
+  char *req;
+  char *hdr;
+  int qCount;
+  int qTotal;
+  int numParseFailures;
+  int contentLength;
+  boolean chunked;
+  boolean done;
+  boolean keepAlive;
+
+  /* Find out how many queries we'll need to do so we know how many times 
+   * it's OK to run into end of file in case server ignores Keep-Alive. */
+  qTotal = 0;
+  for (qPtr = queries;  qPtr != NULL;  qPtr = qPtr->next)
+    {
+      qTotal++;
+    }
+
+  done = FALSE;
+  qCount = 0;
+  numParseFailures = 0;
+  qStart = queries;
+  while ((! done) && (qStart != NULL))
+    {
+      lf = netHttpLineFileMayOpen(url, &npu);
+      if (lf == NULL)
+	{
+	  done = TRUE;
+	  break;
+	}
+      base = cloneString(npu->file);
+      /* Send all remaining requests with keep-alive. */
+      for (qPtr = qStart;  qPtr != NULL;  qPtr = qPtr->next)
+	{
+	  dyStringClear(dyQ);
+	  dyStringAppend(dyQ, base);
+	  dyStringAppend(dyQ, qPtr->name);
+	  strcpy(npu->file, dyQ->string);
+	  keepAlive = (qPtr->next == NULL) ? FALSE : TRUE;
+	  netHttpGet(lf, npu, keepAlive);
+	}
+      /* Get as many responses as we can; call responseCB() and 
+       * advance qStart for each. */
+      for (qPtr = qStart;  qPtr != NULL;  qPtr = qPtr->next)
+        {
+	  if (lineFileParseHttpHeader(lf, &hdr, &chunked, &contentLength))
+	    {
+	      body = lineFileSlurpHttpBody(lf, chunked, contentLength);
+	      dyStringClear(dyQ);
+	      dyStringAppend(dyQ, base);
+	      dyStringAppend(dyQ, qPtr->name);
+	      responseCB(userData, dyQ->string, hdr, body);
+	      qStart = qStart->next;
+	      qCount++;
+	    }
+	  else
+	    {
+	      if (numParseFailures++ > qTotal) {
+		done = TRUE;
+	      }
+	      break;
+	    }
+	}
+    }
+
+  return qCount;
+} /* netHttpMultipleQueries */
+
+
