@@ -10,8 +10,9 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.10 2004/02/18 21:49:17 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.11 2004/02/23 17:18:22 hiram Exp $"
 #
+#	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
 #		into a shell script.  For future use on other
@@ -29,9 +30,6 @@
 #	on kk will take about 5 minutes.
 #	It will continue after the cluster run has produced the output files
 #
-#	Also a second argument should be added to specify the database to
-#	work on.  Right now it is specified below as "DB=mm4"
-
 
 ###########################  subroutines  ############################
 
@@ -171,7 +169,14 @@ if [ ! -s all_mrna.psl ]; then
     echo "`date` fetch all_mrna.psl sequences from ${RO_DB}"
 #    /cluster/data/genbank/bin/i386/gbGetSeqs -get=psl -native -db=${RO_DB} \
 #	-gbRoot=/cluster/data/genbank genbank mrna all_mrna.psl
-    hgsql -N -e 'select * from all_mrna' ${RO_DB} | cut -f 2-30 >all_mrna.psl
+#	hg15 doesn't have the bin column, no cut necessary
+    case ${RO_DB} in
+	hg15) hgsql -N -e 'select * from all_mrna' ${RO_DB}  > all_mrna.psl
+	    ;;
+	*) hgsql -N -e 'select * from all_mrna' ${RO_DB} \
+		| cut -f 2-30 >all_mrna.psl
+	    ;;
+    esac
     rm -f tight_mrna.psl
 fi
 
@@ -359,9 +364,9 @@ ln -s ../protein.lis . 2> /dev/null
 #	and the ${DB}Temp.spMrna table to generate a hierarchy
 #	of data directories to be used in the cluster run.
 if [ ! -d clusterRun ]; then
-	echo "`date` Preparing cluster run data and jobList"
+	echo "`date` Preparing kgPrepBestMrna cluster run data and jobList"
 	kgPrepBestMrna ${DATE} ${DB} 2> jobList > Prep.out
-	echo "`date` Cluster Run has been prepared."
+	echo "`date` Cluster Run kgPrepBestMrna has been prepared."
 	echo "on machine kk in: "`pwd`
 	echo "perform:"
 	echo "para create jobList"
@@ -375,7 +380,7 @@ fi
 #	kgResultBestMrna processes the results of the cluster run
 cd ${TOP}/kgBestMrna
 if [ ! -s best.lis ]; then
-	echo "`date` Assuming cluster run done, Running analysis of output."
+	echo "`date` Assuming kgPrepBestMrna cluster run done."
 	echo "`date` kgResultBestMrna ${DATE} ${DB} ${RO_DB}"
 	$HOME/bin/i386/kgResultBestMrna ${DATE} ${DB} ${RO_DB} > ResultBest.out 2>&1
 fi
@@ -786,8 +791,7 @@ if [ ! -s jobList ]; then
 fi
 
 if [ ! -d psl.tmp ]; then
-    echo "`date` cluster run data has been prepared."
-    echo "`date` Cluster Run has been prepared."
+    echo "`date` Cluster Run kgProtMap has been prepared."
     echo "on machine kk in: "`pwd`
     echo "perform:"
     echo "para create jobList"
@@ -797,25 +801,30 @@ if [ ! -d psl.tmp ]; then
 fi
 
 if [ ! -s psl.tmp/kgProtMrna.psl ]; then
-    echo "`date` Assuming cluster run done, Running analysis of output."
+    echo "`date` Assuming kgProtMap cluster run done."
     echo "`date` creating psl.tmp/kgProtMrna.psl"
     find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
 	pslReps -nohead -singleHit -minAli=0.9 stdin \
 		psl.tmp/kgProtMrna.psl /dev/null
+    rm -f psl.tmp/kgProtMap.psl
 fi
 
 if [ ! -s psl.tmp/refSeqAli.psl ]; then
     hgsql -N -e 'select * from refSeqAli' ${RO_DB} | cut -f 2-30 > \
 	psl.tmp/refSeqAli.psl
+    rm -f psl.tmp/kgProtMap.psl
 fi
 
 if [ ! -s psl.tmp/kgProtMap.psl ]; then
     echo "`date` creating psl.tmp/kgProtMap.psl"
-    cd psl.tmp
+    cd ${TOP}/kgProtMap/psl.tmp
     cat ${TOP}/tight_mrna.psl refSeqAli.psl > both.psl
     (pslMap kgProtMrna.psl both.psl stdout | \
 	sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
+    hgsql -e "drop table kgProtMap;" ${DB} 2> /dev/null
 fi
+
+cd ${TOP}/kgProtMap
 
 TablePopulated "kgProtMap" ${DB} || { \
     echo "`date` creating table kgProtMap"; \
@@ -841,6 +850,7 @@ if [ ! -s ${SPECIES}_GeneData.dat ]; then
     echo "`date` fetching ${SPECIES}_GeneData.dat from nci.nih.gov"
     wget --timestamping -O ${SPECIES}_GeneData.dat \
 	"ftp://ftp1.nci.nih.gov/pub/CGAP/${SPECIES}_GeneData.dat"
+    rm -f cgapAlias.tab
 fi
 
 #	hgCGAP reads GeneData.dat and creates a bunch of cgap*.tab files
@@ -848,6 +858,9 @@ if [ ! -s cgapAlias.tab ]; then
     echo "`date` running hgCGAP ${SPECIES}_GeneData.dat"
     hgCGAP ${SPECIES}_GeneData.dat
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab > cgapAlias.tab
+    hgsql -e "drop table cgapBiocPathway;" ${DB} 2> /dev/null
+    hgsql -e "drop table cgapBiocDesc;" ${DB} 2> /dev/null
+    hgsql -e "drop table cgapAlias;" ${DB} 2> /dev/null
 fi
 
 TablePopulated "cgapBiocPathway" ${DB} || { \
