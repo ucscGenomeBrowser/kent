@@ -2194,6 +2194,13 @@ while (<>) {
     mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
     mkdir -p /cluster/data/mm4/bed/STSmarkers/ePCR
     cd /cluster/data/mm4/bed/STSmarkers/primer
+    # concerning the question of where musPrimer.fa comes from, according
+    # to Yontao:
+    # Usually there is not much new data, as I know. There are two place to
+    # check, one is dbsts from NCBI the other is MGI. But after large scale of
+    # mapping project, these markers is usually stable and not many new stuff.  
+    # But it is good to check after a while and then adding any new ones to the
+    # current version.
     echo "/cluster/bluearc/scratch/mus/mm4/musPrimer.fa" > primers.lst
     cat << '_EOF_' > template
 #LOOP
@@ -2216,6 +2223,17 @@ while (<>) {
 # Longest job:                      417s       6.95m     0.12h    0.00d
 # Submission to last job:          2132s      35.53m     0.59h    0.02d
 
+    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+
+XXX next step needs all.epcr
+    /projects/compbio/usr/booch/booch/scripts/filterPrimers -mouse \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed primers.psl \
+	/cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	all.epcr > primers.psl.filter.blat
+
+
+    # 
+
     cd /cluster/data/mm4/bed/STSmarkers/ePCR
     ls -1S /cluster/bluearc/scratch/mus/mm4/trfFa > contig.lst
     mkdir epcr.out
@@ -2224,6 +2242,8 @@ while (<>) {
 /cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
 #ENDLOOP
 '_EOF_'
+    # Same comment as above from Yontao.  I don't know where these files
+    # came from exactly.
     echo "/cluster/bluearc/scratch/mus/mm4/mmPrimer.info" > epcr.lst
     gensub2 epcr.lst contig.lst template jobList
     para create jobList
@@ -2237,3 +2257,7 @@ while (<>) {
 # Average job time:                 112s       1.87m     0.03h    0.00d
 # Longest job:                      159s       2.65m     0.04h    0.00d
 # Submission to last job:           791s      13.18m     0.22h    0.01d
+
+# SET defaultDb in hgcentraltest to move from mm3 to mm4
+    hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
+	-h genome-testdb hgcentraltest
