@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.112 2004/06/13 20:55:03 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.113 2004/06/13 21:05:57 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -396,15 +396,17 @@ void scoreUi(struct trackDb *tdb)
 /* Put up UI for filtering bed track based on a score threshold */
 {
 char scoreVar[256];
-char *scoreSetting;
+int scoreSetting;
 int scoreVal = 0;
+char tempScore[256];
 /* initial value of score theshold is 0, unless
  * overridden by the scoreDefault setting in the track */
 char *scoreDefault = trackDbSettingOrDefault(tdb, "scoreDefault", "0");
 printf("<p><b>Only Show items that score above </b>: ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
-cgiMakeTextVar( scoreVar, cartUsualInt(cart,  scoreVar, 0), 4);
+safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
+cgiMakeTextVar( scoreVar, tempScore, 4);
 }
 
 void zooWiggleUi(struct trackDb *tdb )
