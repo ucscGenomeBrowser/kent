@@ -21,7 +21,7 @@ alpha: compile
 
 compile: $O $(MYLIBS)
 	gcc -ggdb -o $X $O $(MYLIBS) $L
-#	strip $X
+	strip $X
 	chmod a+rx $X
 
 clean:
