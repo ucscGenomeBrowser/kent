@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.11 2003/06/04 13:59:50 braney Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.12 2003/10/07 18:50:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -33,9 +33,12 @@ errAbort(
   "   faSplit size input.fa 2000 outRoot\n"
   "This breaks up input.fa into 2000 base chunks\n"
   "   faSplit about est.fa 20000 outRoot\n"
-  "This will break up est.fa into files of about 20000 bytes each.\n"
+  "This will break up est.fa into files of about 20000 bytes each by record.\n"
   "   faSplit byname scaffolds.fa outRoot \n"
   "This breaks up scaffolds.fa using sequence names as file names.\n"
+  "   faSplit gap chrN.fa 20000 outRoot\n"
+  "This breaks up chrN.fa into files of at most 20000 bases each, \n"
+  "at gap boundaries if possible.\n"
   "\n"
   "Options:\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
@@ -43,7 +46,10 @@ errAbort(
   "    -oneFile - Put output in one file. Only used with size\n"
   "    -out=outFile Get masking from outfile.  Only used with size.\n"
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
-  "                   pieces in file.lft.  Only used with size\n");
+  "                   pieces in file.lft.  Only used with size and gap.\n"
+  "    -minGapSize=X Consider a block of Ns to be a gap if block size >= X.\n"
+  "                  Only used with gap."
+);
 
 }
 
@@ -392,16 +398,159 @@ lineFileClose(&lf);
 printf("%d pieces of %d written\n", writeCount, pieceIx);
 }
 
+boolean findLastGap(DNA *dna, int stopOffset, int endOffset, int minGapSize,
+		    int *retGapStart, int *retGapSize)
+/* Find the last gap (block of at least minGapSize N's) in dna that starts 
+ * before stopOffset.  If we reach stopOffset while in a block of N's, keep 
+ * counting N's unless we hit endOffset.  If a gap is found, return true. */
+{
+boolean gotGap = FALSE;
+int gapStart = 0;
+int gapSize = 0;
+int nStart = 0;
+int nSize = 0;
+int i = 0;
+
+for (i=0;  i < stopOffset;  i++)
+    {
+    if (dna[i] == 'n' || dna[i] == 'N')
+	{
+	if (nSize == 0)
+	    nStart = i;
+	nSize++;
+	}
+    else
+	{
+	if (nSize > 0)
+	    {
+	    if (nSize > minGapSize)
+		{
+		gotGap   = TRUE;
+		gapStart = nStart;
+		gapSize  = nSize;
+		}
+	    nSize = 0;
+	    }
+	}
+    }
+
+if (nSize > 0)
+    {
+    while ((dna[i] == 'n' || dna[i] == 'N') &&
+	   i < endOffset)
+	{
+	nSize++;
+	i++;
+	}
+    if (nSize > minGapSize)
+	{
+	gotGap   = TRUE;
+	gapStart = nStart;
+	gapSize  = nSize;
+	}
+    }
+
+*retGapStart = gapStart;
+*retGapSize  = gapSize;
+return(gotGap);
+}
+
+void splitByGap(char *inName, int pieceSize, char *outRoot, int estSize)
+/* Split up file into pieces at most pieceSize bases long, at gap boundaries 
+ * if possible. */
+{
+unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
+int digits = digitsBaseTen(pieces);
+int minGapSize = optionInt("minGapSize", 1000);
+int maxN = optionInt("maxN", pieceSize-1);
+boolean oneFile = optionExists("oneFile");
+char fileName[512];
+char dirOnly[256], noPath[128];
+int pos, pieceIx = 0, writeCount = 0;
+struct dnaSeq seq;
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+FILE *f = NULL;
+Bits *bits = NULL;
+int seqCount = 0;
+char *outFile = optionVal("out", NULL);
+char *liftFile = optionVal("lift", NULL);
+FILE *lift = NULL;
+ZeroVar(&seq);
+
+splitPath(outRoot, dirOnly, noPath, NULL);
+if (oneFile)
+    {
+    sprintf(fileName, "%s.fa", outRoot);
+    f = mustOpen(fileName, "w");
+    }
+if (liftFile)
+    lift = mustOpen(liftFile, "w");
+
+while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+    {
+    bits = bitAlloc(seq.size);
+    setBitsN(seq.dna, seq.size, bits);
+    ++seqCount;
+    if (outFile != NULL)
+        {
+	if (seqCount > 1)
+	    errAbort("Can only handle in files with one sequence using out option");
+	bitsForOut(outFile, seq.size, bits);
+	}
+    pos = 0;
+    while (pos < seq.size)
+        {
+	char numOut[128];
+	boolean gotGap = FALSE;
+	int gapStart = 0;
+	int gapSize  = 0;
+	int endSize  = seq.size - pos;
+	int thisSize = min(endSize, pieceSize);
+	gotGap = findLastGap(&(seq.dna[pos]), thisSize, endSize,
+			     minGapSize, &gapStart, &gapSize);
+	if (gotGap)
+	    thisSize = gapStart;
+
+	sprintf(numOut, "%s%0*d", noPath, digits, pieceIx++);
+	if (bitCountRange(bits, pos, thisSize) <= maxN)
+	    {
+	    if (!oneFile)
+	        {
+		sprintf(fileName, "%s%s.fa", dirOnly, numOut);
+		f = mustOpen(fileName, "w");
+		}
+	    faWriteNext(f, numOut, seq.dna + pos, thisSize);
+	    if (lift)
+	        fprintf(lift, "%d\t%s\t%d\t%s\t%d\n",
+		    pos, numOut, thisSize, seq.name, seq.size);
+	    ++writeCount;
+	    if (!oneFile)
+	        carefulClose(&f);
+	    }
+	pos += thisSize;
+	if (gotGap)
+	    pos += gapSize;
+	}
+    bitFree(&bits);
+    }
+carefulClose(&f);
+carefulClose(&lift);
+lineFileClose(&lf);
+printf("%d pieces of %d written\n", writeCount, pieceIx);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 unsigned long estSize;
-char *how = argv[1];
-char *inName = argv[2];
+char *how = NULL;
+char *inName = NULL;
 int count;
 char *outRoot;
 
 optionHash(&argc, argv);
+how = argv[1];
+inName = argv[2];
 
 if (argc < 4 )
     usage();
@@ -433,6 +582,8 @@ else
 	splitByCount(inName, count, outRoot, estSize);
     else if (sameWord(how, "about"))
 	splitAbout(inName, count, outRoot);
+    else if (sameWord(how, "gap"))
+	splitByGap(inName, count, outRoot, estSize);
     else
 	usage();
     }
