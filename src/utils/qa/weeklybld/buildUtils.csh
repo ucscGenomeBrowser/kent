@@ -1,13 +1,7 @@
 #!/bin/tcsh
-# Build utils into /cluster/bin/$MACHTYPE on hgwdev
+# Build utils into /cluster/bin/$MACHTYPE on beta or kolossus from branch or tip
 
 cd $WEEKLYBLD
-
-# for cron job
-#source .cshrc
-#setenv SHELL /bin/tcsh
-#setenv PATH /bin:/usr/bin:/usr/local/bin:/cluster/bin/${MACHTYPE}:~/bin/${MACHTYPE}
-#setenv HOSTNAME $HOST
 
 if ( "$MACHTYPE" == "i386" ) then
     if ( "$HOST" != "hgwbeta" ) then
@@ -16,13 +10,22 @@ if ( "$MACHTYPE" == "i386" ) then
     endif
 endif
 if ( "$MACHTYPE" == "x86_64" ) then
-    if (( "$HOST" != "kolossus" ) && ( "$HOST" != "kkr1u00" )) then
-	echo "error: you must run this script on kolossus or kkr1u00!"
+    if ( "$HOST" != "kolossus" ) then
+	echo "error: you must run this script on kolossus!"
 	exit 1
     endif
 endif
 
 set branch=v${BRANCHNN}_branch
+
+if ( "$1" == "tip" ) then
+    set base=$WEEKLYBLD
+    cd $base/kent
+    cvs up -dP
+    cd $WEEKLYBLD
+else
+    set base=$BUILDDIR/$branch
+endif
 
 if ( -d ~/bin/${MACHTYPE}.orig ) then
  echo "restoring from last failed symlink."
@@ -40,13 +43,13 @@ echo "Symlink Trick."
 if ( "$MACHTYPE" == "x86_64" ) then
     echo
     echo "Doing make clean on src."
-    cd $BUILDDIR/$branch/kent/src
+    cd $base/kent/src
     make clean>& make.clean.log
 endif
 
 echo
 echo "Building src utils."
-cd $BUILDDIR/$branch/kent/src
+cd $base/kent/src
 make utils >& make.utils.log
 sed -i -e "s/-DJK_WARN//" make.utils.log
 sed -i -e "s/-Werror//" make.utils.log
@@ -60,58 +63,6 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 
-#this is redundant now as make utils in /kent/src does it automatically now
-#echo
-#echo "Building src/blat."
-#cd $BUILDDIR/$branch/kent/src/blat
-#make >& make.log
-#sed -i -e "s/-DJK_WARN//" make.log
-#sed -i -e "s/-Werror//" make.log
-##-- to check for errors: 
-#set res = `/bin/egrep -y "error|warn" make.log`
-#set wc = `echo "$res" | wc -w` 
-#if ( "$wc" != "0" ) then
-# echo "errs found:"
-# echo "$res"
-# $WEEKLYBLD/unsymtrick.csh
-# exit 1
-#endif
-
-#this is redundant now as make utils in /kent/src does it automatically now
-#echo
-#echo "Building src/hg utils."
-#cd $BUILDDIR/$branch/kent/src/hg
-#make utils >& make.utils.log
-#sed -i -e "s/-DJK_WARN//" make.utils.log
-#sed -i -e "s/-Werror//" make.utils.log
-##-- to check for errors: 
-#set res = `/bin/egrep -y "error|warn" make.utils.log`
-#set wc = `echo "$res" | wc -w` 
-#if ( "$wc" != "0" ) then
-# echo "errs found:"
-# echo "$res"
-# $WEEKLYBLD/unsymtrick.csh
-# exit 1
-#endif
-
-#this is redundant now as make utils in /kent/src does it automatically now
-#echo
-#echo "Building src/utils."
-#cd $BUILDDIR/$branch/kent/src/utils
-#make >& make.log
-#sed -i -e "s/-DJK_WARN//" make.log
-#sed -i -e "s/-Werror//" make.log
-##-- to check for errors: 
-#set res = `/bin/egrep -y "error|warn" make.log`
-#set wc = `echo "$res" | wc -w` 
-#if ( "$wc" != "0" ) then
-# echo "errs found:"
-# echo "$res"
-# $WEEKLYBLD/unsymtrick.csh
-# exit 1
-#endif
-
-
 # Undo Symlink trick
 $WEEKLYBLD/unsymtrick.csh
 echo "Restore: undoing Symlink Trick."
@@ -119,7 +70,7 @@ echo "Restore: undoing Symlink Trick."
 if ( "$MACHTYPE" == "x86_64" ) then
     echo
     echo "Doing make clean on src."
-    cd $BUILDDIR/$branch/kent/src
+    cd $base/kent/src
     make clean>& make.clean.log
 endif
 
