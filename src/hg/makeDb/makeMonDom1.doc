@@ -663,9 +663,17 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     #	55986178 bases of 2866216770 (1.953%) in intersection
 
     # Clean up
+    #	Save a copy of the hardMask for later .zip prep:
+    ssh kksilo
+    cp -p /cluster/bluearc/monDom1/hardMaskedScaffolds.fa .
     ssh eieio
     cd /cluster/bluearc/monDom1
     rm -fr hardChunks hardMaskedScaffolds.fa
+    #	This kolossus clean up was actually left until much later.
+    #	I found these copies here to be useful later on.
+    ssh kolossus
+    cd /scratch/monDom1
+    rm -f *
 
 # BLAT SERVER SETUP (DONE - 2004-12-07 - Hiram)
 
@@ -2687,3 +2695,70 @@ doPhast $(file1) $(root1)
 
     cp -p Monodelphis_domestica.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (WORKING, 2005-01-06, Hiram)
+ssh kksilo
+cd /cluster/data/monDom1
+#- Build the .zip files
+rm -rf zip
+mkdir zip
+# soft masked scaffold fasta
+zip -j zip/softMask.fa.zip maskedScaffolds.fa &
+# RepeatMasker library
+zip -j zip/novel.RM.lib.fa.zip jkStuff/monDom1.novel.RM.lib &
+# hard masked scaffold fasta
+zip -j zip/hardMask.fa.zip hardMaskedScaffolds.fa &
+
+# TRF output files
+cd bed/simpleRepeat
+zip ../../zip/trf.bed.zip trfMask.bed &
+
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=monDom1 -native GenBank mrna \
+        /cluster/data/monDom1/zip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=monDom1 -xeno GenBank mrna \
+        /cluster/data/monDom1/zip/xenoMrna.fa &
+# THERE ARE NO native ESTs - skip this - get native GenBank ESTs
+# ./bin/i386/gbGetSeqs -db=monDom1 -native GenBank est \
+# /cluster/data/monDom1/zip/est.fa &
+
+cd /cluster/data/monDom1/zip
+# zip GenBank native and xeno mRNAs and native ESTs, 
+# after the above gbGetSeqs jobs are done.
+zip -j mrna.fa.zip mrna.fa 
+zip -j xenoMrna.fa.zip xenoMrna.fa 
+# zip -j est.fa.zip est.fa 
+rm -f mrna.fa xenoMrna.fa est.fa
+
+#	RepeatMasker out files, we don't have this as traditionally delivered
+#	since the process involved turning the data into the database
+#	representation so they could be sorted and uniqued.  So instead
+#	of delivering the usual files, simply dump the database
+ssh hgwdev
+mkdir -p /usr/local/apache/htdocs/goldenPath/monDom1/bigZips
+cd /usr/local/apache/htdocs/goldenPath/monDom1/bigZips
+hgsqldump monDom1 rmsk -T .
+zip -j rmsk.txt.zip rmsk.txt &
+rm rmsk.txt
+
+ssh hgwdev
+cd /usr/local/apache/htdocs/goldenPath/monDom1
+rsync -a --progress /cluster/data/monDom1/zip/ .
+
+# Check zip file integrity
+for i in *.zip
+do
+    unzip -t $i | tail -1
+done
+#	No errors detected in compressed data of hardMask.fa.zip.
+#	No errors detected in compressed data of mrna.fa.zip.
+#	No errors detected in compressed data of novel.RM.lib.fa.zip.
+#	No errors detected in compressed data of rmsk.txt.zip.
+#	No errors detected in compressed data of softMask.fa.zip.
+#	No errors detected in compressed data of trf.bed.zip.
+#	No errors detected in compressed data of xenoMrna.fa.zip.
+
+md5sum *.zip > md5sum.txt
+# update README.txt.
