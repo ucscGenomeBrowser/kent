@@ -15,3 +15,16 @@ priority 11
 group map
 visibility hide
 type bed 3 +
+
+track blastzHg17
+shortLabel Hg17 Blastz
+longLabel Blastz Human (hg17-May 04) Alignments
+group compGeno
+priority 124
+visibility hide
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno hg17
+otherDb hg17
+
