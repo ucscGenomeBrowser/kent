@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.118 2003/11/13 17:54:24 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.119 2003/12/02 02:10:43 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1612,32 +1612,43 @@ static char *defaultHgNearDb(char *genome)
  * You can freeMem the returned value when done. */
 {
 char *dbName = NULL;
+struct dbDb *db = NULL, *dbList = NULL;
 
 if (genome != NULL)
     {
-    hDefaultDbForGenome(genome);
+    dbName = hDefaultDbForGenome(genome);
     if (dbName != NULL && hgNearOk(dbName))
 	 return dbName;
+    freez(&dbName);
+    // Find first db with given genome and hgNearOk in ordered list:
+    dbList = hGetIndexedDatabases();
+    for (db = dbList; db != NULL; db = db->next)
+	{
+	if (sameString(genome, db->genome) && db->hgNearOk)
+	    {
+	    dbName = cloneString(db->name);
+	    dbDbFree(&dbList);
+	    return dbName;
+	    }
+	}
     }
 freez(&dbName);
 dbName = hDefaultDb();
 if (dbName != NULL && hgNearOk(dbName))
      return dbName;
 freez(&dbName);
-
-/* Find first in list then. */
+// Find first db with hgNearOk in ordered list:
+if (dbList == NULL)
+    dbList = hGetIndexedDatabases();
+for (db = dbList; db != NULL; db = db->next)
     {
-    struct dbDb *db, *dbList = hGetIndexedDatabases();
-    for (db = dbList; db != NULL; db = db->next)
-        {
-	if (db->hgNearOk)
-	    {
-	    dbName = cloneString(db->name);
-	    break;
-	    }
+    if (db->hgNearOk)
+	{
+	dbName = cloneString(db->name);
+	break;
 	}
-    dbDbFree(&dbList);
     }
+dbDbFree(&dbList);
 return dbName;
 }
 
