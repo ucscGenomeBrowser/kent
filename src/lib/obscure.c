@@ -1,8 +1,5 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Obscure stuff that is handy every now and again. */
+
 #include "common.h"
 #include "portable.h"
 #include "hash.h"

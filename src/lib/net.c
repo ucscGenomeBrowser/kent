@@ -95,7 +95,7 @@ if ((sd = netStreamSocket()) < 0)
     return sd;
 if (!netFillInAddress(host, port, &sai))
     return -1;
-if (bind(sd, &sai, sizeof(sai)) == -1)
+if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
     warn("Couldn't bind socket to %d", port);
     close(sd);

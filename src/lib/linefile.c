@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* lineFile - stuff to rapidly read text files and parse them into
  * lines. */
 
@@ -17,7 +12,7 @@ struct lineFile *lf;
 AllocVar(lf);
 lf->fileName = cloneString(fileName);
 lf->fd = fd;
-lf->bufSize = 256*1024;
+lf->bufSize = 64*1024;
 lf->zTerm = zTerm;
 lf->buf = needMem(lf->bufSize+1);
 return lf;

@@ -1,3 +1,5 @@
+/* Stuff to do text substitutions. */
+
 #include "common.h"
 #include "subText.h"
 
