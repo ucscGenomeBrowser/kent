@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.6 2004/09/13 15:48:30 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.7 2004/09/13 16:19:39 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -408,12 +408,15 @@ double x = xStart, y = yStart, w = width, h;
 for (lp = lpList; lp != NULL; lp = lp->next)
     {
     h = totalHeight * lp->prob;
-    fprintf(f, "%cColor ", tolower(lp->letter));
-    fprintf(f, "%3.2f ", x);
-    fprintf(f, "%3.2f ", y);
-    fprintf(f, "%3.2f ", x + w);
-    fprintf(f, "%3.2f ", y + h);
-    fprintf(f, "(%c) textInBox\n", lp->letter);
+    if (h >= 1.0)
+	{
+	fprintf(f, "%cColor ", tolower(lp->letter));
+	fprintf(f, "%3.2f ", x);
+	fprintf(f, "%3.2f ", y);
+	fprintf(f, "%3.2f ", x + w);
+	fprintf(f, "%3.2f ", y + h);
+	fprintf(f, "(%c) textInBox\n", lp->letter);
+	}
     y += h;
     }
 fprintf(f, "\n");
