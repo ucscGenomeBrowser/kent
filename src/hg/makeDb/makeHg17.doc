@@ -11821,14 +11821,16 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     # filter out alignment blocks with no alignments in non-reference species,
     # and low-scoring alignments based on Webb Miller's latest
     # recommendations (score < -5 * ncol^2 * nrow)
-    mkdir -p mafFiltered
-    cd ../mafGlued
-    foreach f (*.maf)
-        set c = $f:r
-        echo "filtering $f"
-        ~kate/bin/i386/mafFilter -factor $f > ../mafFiltered/$c.maf
-    end
-    cd ..
+    # NOTE: Webb hasn't approved the filtered alignments yet,
+    # so leaving them in for now.
+    #mkdir -p mafFiltered
+    #cd ../mafGlued
+    #foreach f (*.maf)
+        #set c = $f:r
+        #echo "filtering $f"
+        #~kate/bin/i386/mafFilter -factor $f > ../mafFiltered/$c.maf
+    #end
+    #cd ..
 
     grep score mafGlued/chr1.maf | wc -l
     grep score mafFiltered/chr1.maf | wc -l
@@ -11999,6 +12001,11 @@ echo "Done" >> ${WINDOWS}/$c.done
 
     # generate models from random sample of genome (use 90 1Mb windows,
     # to conveniently run on rack 9 100-node cluster)
+    # On first pass, used parameters from 8way alignment:
+    #   expected-lengths 12 -taret-coverage .17
+    # NOTE: there may be a cleverer way to select the first length param
+    # On second pass, used parameters below, based on consEntropy
+    # and featureBits coverage of elements, below
     cat << 'EOF' > doEstimate.sh
 #!/bin/sh
 zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.424 --nrates 1,1 --no-post-probs --ignore-missing --expected-lengths 11 --target-coverage 0.20 --quiet --log $2 --estimate-trees $3
@@ -12024,6 +12031,9 @@ zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.424 --nrates 1
 # this is probably OK, but I've notified Adam
 # Average job time:                1055s      17.58m     0.29h    0.01d
 # Longest job:                     3647s      60.78m     1.01h    0.04d
+
+    # NOTE: should have ave.noncons.mod to improve parameter estimation
+    # cp nave.noncons.mod starting-tree.mod
 
     ls TREES/*.cons.mod > cons.txt
     /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
@@ -12112,8 +12122,20 @@ rm $tmpfile
     # create wiggle data files
     ssh eieio
     cd /cluster/data/hg17/bed/multiz10way.v8/cons
-    find /cluster/bluearc/hg17/multiz10way.v8/phastCons/POSTPROBS -type f \
-        | xargs zcat | wigEncode stdin phastCons10way.wig phastCons10way.wib
+    # sort post-prob files by chrom position using filename, then 
+    #  use wigEncode to create binary files for wiggle
+    find /cluster/bluearc/hg17/multiz10way.v8/phastCons/POSTPROBS \
+        -name "*.pp.gz" | sort -t\. -k2,2n | xargs zcat | \
+        wigEncode stdin phastCons10way.wig phastCons10way.wib
+
+    hgWiggle -db=hg17 -doHistogram -hBinSize=0.001 \
+        -hBinCount=1000 -hMinVal=0.0 -db=hg17 phastCons >histo.8way.data
+    hgWiggle -db=hg17 -doHistogram -hBinSize=0.001 \
+        -hBinCount=1000 -hMinVal=0.0 -db=hg17 phastCons10way >histo.10way.data
+    hgWiggle -db=hg17 -doStats \
+         phastCons > stats.8way.data
+    hgWiggle -db=hg17 -doStats \
+         phastCons10way > stats.10way.data
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
@@ -12126,7 +12148,83 @@ rm $tmpfile
 
     # create tree image:
         # edit tree.nh to create species.nh with common names
-        /cluster/bin/phast/draw_tree -b -s species.nh > tree.ps
+        /cluster/bin/phast/draw_tree -b -s species.nh > species10.ps
         # photoshop to enhance, then save as gif/jpg
-        cp /cluster/data/hg17/bed/multiz10way.v8/tree10.jpg \
+        cp /cluster/data/hg17/bed/multiz10way.v8/species10.jpg \
         /usr/local/apache/htdocs/images/phylo
+
+    # get stats on the track
+    ssh hgwdev
+        
+    featureBits hg17 -enrichment refGene:cds phastConsElements10way
+        # refGene:cds 1.020%, phastConsElements10way 5.003%, both 0.711%, cover 69.73%, enrich 13.94x
+        # compare to previous elements (generated from 8way)
+    featureBits hg17 -enrichment refGene:cds phastConsElements
+        # refGene:cds 1.020%, phastConsElements 4.810%, both 0.747%, cover 73.22%, enrich 15.22x
+
+    # see how gluing reduces number of alignments
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    mkdir stats
+    grep score maf/chr22.maf | grep -v 0.0 | wc -l
+        #179576
+    grep score mafGlued/chr22.maf | grep -v 0.0 | wc -l
+        #110550
+
+    # look at distribution of alignment sizes after gluing
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    mkdir mafTemp
+    ln -s `pwd`/maf/chr1.maf mafTemp
+    # load temp table
+    hgLoadMaf hg17 -pathPrefix=mafTemp multiz10wayChr1
+        #Loaded 1246727 mafs
+    # again, compare to glued:
+    echo "SELECT COUNT(*) FROM multiz10way"
+        # 738030
+        # again, ~40% fewer
+
+    cd stats
+    echo "SELECT chromEnd - chromStart FROM multiz10way WHERE chrom='chr1'" | \
+        hgsql -N hg17 | sort -n > chr1.maf.glued.sizes
+    echo "SELECT chromEnd - chromStart FROM multiz10wayChr1"| \
+        hgsql -N hg17 | sort -n > chr1.maf.sizes
+    # cleanup
+    hgsql hg17 -e "DROP TABLE multiz10wayChr1"
+
+    # coverage of multiple alignment, and pairs
+    ssh kolossus
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    cd stats
+    nice mafRanges -notAllOGap ../mafGlued/chr1.maf hg17 \
+                hg17.chr1.mafRanges.bed
+    nice mafRanges -notAllOGap /cluster/data/hg17/bed/multiz8way/maf/chr1.maf \
+                hg17 hg17.8way.chr1.mafRanges.bed
+    foreach db (panTro1 canFam1 mm5 rn3 galGal2 xenTro1 fr1 tetNig1 danRer1)
+        echo $db
+        nice mafRanges /cluster/data/hg17/bed/blastz.$db/mafNet/chr1.*maf \
+               -notAllOGap hg17 $db.chr1.mafRanges.bed
+        ls /cluster/data/hg17/bed/blastz.$db/mafNet/chr1.*maf
+    end
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz10way.v8/stats
+    nice featureBits -chrom=chr1 hg17 refGene:cds hg17.chr1.mafRanges.bed -enrichment
+# refGene:cds 1.308%, hg17.chr1.mafRanges.bed 95.725%, both 1.307%, cover 99.94%, enrich 1.04x
+    nice featureBits -chrom=chr1 hg17 refGene:cds hg17.8way.chr1.mafRanges.bed -enrichment
+# refGene:cds 1.308%, hg17.8way.chr1.mafRanges.bed 95.742%, both 1.307%, cover 99.97%, enrich 1.04x
+
+    foreach db (panTro1 canFam1 mm5 rn3 galGal2 xenTro1 fr1 tetNig1 danRer1)
+        nice featureBits -chrom=chr1 -enrichment hg17 refGene:cds $db.chr1.mafRanges.bed
+    end
+
+#refGene:cds 1.308%, panTro1.chr1.mafRanges.bed 93.472%, both 1.264%, cover 96.65%, enrich 1.03x
+#refGene:cds 1.308%, canFam1.chr1.mafRanges.bed 55.377%, both 1.277%, cover 97.64%, enrich 1.76x
+#refGene:cds 1.308%, mm5.chr1.mafRanges.bed 37.342%, both 1.280%, cover 97.92%, enrich 2.62x
+#refGene:cds 1.308%, rn3.chr1.mafRanges.bed 35.429%, both 1.257%, cover 96.14%, enrich 2.71x
+#refGene:cds 1.308%, galGal2.chr1.mafRanges.bed 3.840%, both 0.936%, cover 71.61%, enrich 18.65x
+#refGene:cds 1.308%, xenTro1.chr1.mafRanges.bed 3.059%, both 0.881%, cover 67.36%, enrich 22.02x
+#refGene:cds 1.308%, fr1.chr1.mafRanges.bed 1.892%, both 0.854%, cover 65.29%, enrich 34.50x
+#refGene:cds 1.308%, tetNig1.chr1.mafRanges.bed 1.384%, both 0.805%, cover 61.57%, enrich 44.50x
+#refGene:cds 1.308%, danRer1.chr1.mafRanges.bed 2.716%, both 0.847%, cover 64.81%, enrich 23.86x
+
