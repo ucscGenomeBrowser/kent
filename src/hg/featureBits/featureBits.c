@@ -14,11 +14,30 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.26 2004/06/28 21:21:43 kent Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.27 2004/08/23 05:59:37 markd Exp $";
+
+static struct optionSpec optionSpecs[] =
+/* command line option specifications */
+{
+    {"bed", OPTION_STRING},
+    {"fa", OPTION_STRING},
+    {"faMerge", OPTION_BOOLEAN},
+    {"minSize", OPTION_INT},
+    {"chrom", OPTION_STRING},
+    {"or", OPTION_BOOLEAN},
+    {"not", OPTION_BOOLEAN},
+    {"countGaps", OPTION_BOOLEAN},
+    {"noRandom", OPTION_BOOLEAN},
+    {"minFeatureSize", OPTION_INT},
+    {"enrichment", OPTION_BOOLEAN},
+    {"where", OPTION_STRING},
+    {NULL, 0}
+};
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */
+boolean notResults = FALSE;   /* negate results? */
 char *where = NULL;		/* Extra selection info. */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
@@ -39,9 +58,10 @@ errAbort(
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
+  "   -not              Output negation of resultsing bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
-  "   -minFeatureSize   Don't include bits of the track that are smaller than\n"
+  "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
@@ -376,6 +396,8 @@ for (i=0; i<tableCount; ++i)
 	    bitAnd(acc, bits, chromSize);
 	}
     }
+if (notResults)
+    bitNot(acc, chromSize);    
 *retChromBits = bitCountRange(acc, 0, chromSize);
 if (bedFile != NULL || faFile != NULL)
     {
@@ -549,19 +571,25 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 clChrom = optionVal("chrom", clChrom);
 orLogic = optionExists("or");
+notResults = optionExists("not");
 countGaps = optionExists("countGaps");
 noRandom = optionExists("noRandom");
 where = optionVal("where", NULL);
 calcEnrichment = optionExists("enrichment");
 if (calcEnrichment && argc != 4)
-    errAbort("You must specify two tables with enrichment option");
+    errAbort("You must specify two tables with -enrichment");
 if (calcEnrichment && orLogic)
-    errAbort("You can't use orLogic with enrichment option");
+    errAbort("You can't use -or with -enrichment");
+if (calcEnrichment && notResults)
+    errAbort("You can't use -not with -enrichment");
+if (notResults && optionExists("fa") && !optionExists("faMerge"))
+    errAbort("Must specify -faMerge if using -not with -fa");
+
 featureBits(argv[1], argc-2, argv+2);
 return 0;
 }
