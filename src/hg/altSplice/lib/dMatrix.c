@@ -16,6 +16,7 @@ int rowCount =0;
 int rowMax = 1000;
 char **rowNames = NULL;
 char **colNames = NULL;
+char *cleanName = NULL;
 struct hash *iHash = newHash(12);
 char buff[256];
 char *tmp;
@@ -28,7 +29,8 @@ AllocArray(colNames, colCount);
 AllocArray(words, colCount+1);
 AllocArray(rowNames, rowMax);
 AllocArray(M, rowMax);
-tmp = cloneString(line);
+/* tmp = cloneString(line);*/
+tmp = replaceChars(line, "\"", "");
 chopByChar(tmp, '\t', colNames, colCount);
 while(lineFileNextRow(lf, words, colCount+1))
     {
@@ -47,8 +49,9 @@ while(lineFileNextRow(lf, words, colCount+1))
 	assert(tmp);
 	tmp[0]='\0';
 	}
-    hashAddInt(iHash, buff, rowCount);
-    rowNames[rowCount] = cloneString(words[0]);
+    rowNames[rowCount] = replaceChars(words[0], "\"","");
+    hashAddInt(iHash, rowNames[rowCount], rowCount);
+/*     rowNames[rowCount] = cloneString(words[0]); */
     AllocArray(M[rowCount], colCount);
     for(i=1; i<=colCount; i++) /* Starting at 1 here as name is 0. */
 	{
