@@ -126,6 +126,9 @@ void freez(void *ppt);
 void errAbort(char *format, ...);
 /* Abort function, with optional (printf formatted) error message. */
 
+void errnoAbort(char *format, ...);
+/* Prints error message from UNIX errno first, then does errAbort. */
+
 #define internalErr()  errAbort("Internal error %s %d", __FILE__, __LINE__)
 /* Generic internal error message */
 
