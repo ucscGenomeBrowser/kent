@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.16 2004/02/24 22:04:14 kent Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.17 2004/02/29 00:23:14 daryl Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -449,5 +449,16 @@ if (nib == NULL)
     hashAdd(hash, path, nib);
     }
 return nib;
+}
+
+int nibGetSize(char* nibFile)
+/* Get the sequence length of a nib */
+{
+FILE* fh;
+int size;
+
+nibOpenVerify(nibFile, &fh, &size);
+carefulClose(&fh);
+return size;
 }
 
