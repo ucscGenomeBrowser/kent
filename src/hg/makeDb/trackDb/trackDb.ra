@@ -1334,6 +1334,11 @@ searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50
 
+searchTable geneid
+searchType genePred
+termRegex (chr)?.*_[0-9]+\.[0-9]+
+searchPriority 50
+
 searchTable ECgene
 searchType genePred
 termRegex [[:alnum:]_]+\.[0-9]+
