@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.592 2004/03/24 19:38:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.593 2004/03/24 21:16:59 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10543,6 +10543,8 @@ if (rsId) /* a valid rsId exists */
 	    printf("<BR>\n<B>Average Heterozygosity:</B> Not Known<BR>\n");
 	    printf("<B>Standard Error of Avg. Het.: </B> Not Known<BR>\n");
 	    }
+/*	printf("<B>Functional Status:</B> <font face=\"Courier\">%s<BR></font>\n",
+	snp->func); */
 	printf("<B>Validation Status:</B> <font face=\"Courier\">%s<BR></font>\n",
 	       snp->valid);
 	printf("<B>Allele1:          </B> <font face=\"Courier\">%s<BR></font>\n",
