@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.662 2004/01/30 19:09:54 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.663 2004/01/31 01:08:22 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1817,7 +1817,7 @@ for (i = 0; i < lfsbed->lfCount; i++)
     	lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
-	struct psl *psl = pslLoad(row);
+	struct psl *psl = pslLoad(row+rowOffset);
 	lf = lfFromPsl(psl, FALSE);
 	slAddHead(&lfList, lf);
 	pslFree(&psl);
