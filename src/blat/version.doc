@@ -3,6 +3,9 @@
        sequence name.
 
 29:
+     o Created webBlat, a CGI script that blats and nicely displays the
+       results without requiring the whole UCSC browser and database to
+       work.
      o Made -out=blast9 and -out=blast8 report e values in format
        that will print 1.3e-123 instead of 0.00000.
      o Made non-psl output for gfClient show the chromosome name
@@ -14,9 +17,6 @@
      o Put in some code to remove out of order exons that were generated
        in some rare situations.  This was a side effect of the second change
        in version 26.
-     o Created webBlat, a CGI script that blats and nicely displays the
-       results without requiring the whole UCSC browser and database to
-       work.
 
 28:
      o Blat, gfClient, and gfServer now work with .2bit files.
