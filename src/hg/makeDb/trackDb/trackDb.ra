@@ -52,7 +52,7 @@ type bed 6 +
 
 track recombRate
 shortLabel Recomb Rate
-longLabel Recombination Rate based on deCODE, Marshfield, or Genethon map (default - deCODE)
+longLabel Recombination Rate from deCODE, Marshfield, or Genethon maps (deCODE default)
 group map
 priority 8
 visibility hide
