@@ -9,7 +9,6 @@ CREATE TABLE bgiGeneInfo (
     source varchar(255) not null,	# Source of gene annotation
     go longblob not null,	# comma-sep list of GO numeric IDs
     ipr longblob not null,	# semicolon-sep list of IPR numeric IDs and comments
-    snp longblob not null,	# comma-sep list of BGI SNP IDs
               #Indices
-    PRIMARY KEY(name(32))
+    PRIMARY KEY(name(20))
 );

@@ -5,5 +5,4 @@ table bgiGeneInfo
     string source;	"Source of gene annotation"
     lstring go;		"comma-sep list of GO numeric IDs"
     lstring ipr;	"semicolon-sep list of IPR numeric IDs and comments"
-    lstring snp;	"comma-sep list of BGI SNP IDs"
     )

@@ -5,7 +5,7 @@
 #ifndef BGISNP_H
 #define BGISNP_H
 
-#define BGISNP_NUM_COLS 23
+#define BGISNP_NUM_COLS 19
 
 struct bgiSnp
 /* Beijing Genomics Institute SNP information as bed 4 + */
@@ -30,10 +30,6 @@ struct bgiSnp
     char *primerR;	/* Right primer sequence */
     char questionM[2];	/* L for dubious indels, H for other indels and SNPs */
     char *extra;	/* Additional information */
-    char *geneName;	/* Name of associated gene (if any) */
-    char *geneAssoc;	/* Association to gene (if applicable): upstream, utr, exon, etc */
-    char *codonChange;	/* Changes to codon (if applicable).  If geneAssoc is Splice Site, splice site change. */
-    char phase[2];	/* Phase of SNP in codon (if applicable) */
     };
 
 void bgiSnpStaticLoad(char **row, struct bgiSnp *ret);

@@ -5,7 +5,7 @@
 #ifndef BGIGENEINFO_H
 #define BGIGENEINFO_H
 
-#define BGIGENEINFO_NUM_COLS 5
+#define BGIGENEINFO_NUM_COLS 4
 
 struct bgiGeneInfo
 /* Beijing Genomics Institute Genes track additional information */
@@ -15,7 +15,6 @@ struct bgiGeneInfo
     char *source;	/* Source of gene annotation */
     char *go;	/* comma-sep list of GO numeric IDs */
     char *ipr;	/* semicolon-sep list of IPR numeric IDs and comments */
-    char *snp;	/* comma-sep list of BGI SNP IDs */
     };
 
 void bgiGeneInfoStaticLoad(char **row, struct bgiGeneInfo *ret);

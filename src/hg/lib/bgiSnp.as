@@ -20,8 +20,4 @@ table bgiSnp
     string primerR;	"Right primer sequence"
     char[1] questionM;	"L for dubious indels, H for other indels and SNPs"
     string extra;	"Additional information"
-    string geneName;	"Name of associated gene (if any)"
-    string geneAssoc;	"Association to gene (if applicable): upstream, utr, exon, etc"
-    string codonChange;	"Changes to codon (if applicable).  If geneAssoc is Splice Site, splice site change."
-    char[1] phase;	"Phase of SNP in codon (if applicable)"
     )

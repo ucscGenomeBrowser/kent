@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "bgiGeneInfo.h"
 
-static char const rcsid[] = "$Id: bgiGeneInfo.c,v 1.1 2004/03/17 00:51:32 angie Exp $";
+static char const rcsid[] = "$Id: bgiGeneInfo.c,v 1.2 2004/03/19 03:35:39 angie Exp $";
 
 void bgiGeneInfoStaticLoad(char **row, struct bgiGeneInfo *ret)
 /* Load a row from bgiGeneInfo table into ret.  The contents of ret will
@@ -21,7 +21,6 @@ ret->name = row[0];
 ret->source = row[1];
 ret->go = row[2];
 ret->ipr = row[3];
-ret->snp = row[4];
 }
 
 struct bgiGeneInfo *bgiGeneInfoLoad(char **row)
@@ -37,7 +36,6 @@ ret->name = cloneString(row[0]);
 ret->source = cloneString(row[1]);
 ret->go = cloneString(row[2]);
 ret->ipr = cloneString(row[3]);
-ret->snp = cloneString(row[4]);
 return ret;
 }
 
@@ -47,7 +45,7 @@ struct bgiGeneInfo *bgiGeneInfoLoadAll(char *fileName)
 {
 struct bgiGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -65,7 +63,7 @@ struct bgiGeneInfo *bgiGeneInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct bgiGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -91,7 +89,6 @@ ret->name = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
 ret->go = sqlStringComma(&s);
 ret->ipr = sqlStringComma(&s);
-ret->snp = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -107,7 +104,6 @@ freeMem(el->name);
 freeMem(el->source);
 freeMem(el->go);
 freeMem(el->ipr);
-freeMem(el->snp);
 freez(pEl);
 }
 
@@ -142,10 +138,6 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ipr);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->snp);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

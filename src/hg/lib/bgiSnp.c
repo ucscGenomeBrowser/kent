@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "bgiSnp.h"
 
-static char const rcsid[] = "$Id: bgiSnp.c,v 1.1 2004/03/17 00:52:00 angie Exp $";
+static char const rcsid[] = "$Id: bgiSnp.c,v 1.2 2004/03/19 03:35:39 angie Exp $";
 
 void bgiSnpStaticLoad(char **row, struct bgiSnp *ret)
 /* Load a row from bgiSnp table into ret.  The contents of ret will
@@ -36,10 +36,6 @@ ret->primerL = row[15];
 ret->primerR = row[16];
 strcpy(ret->questionM, row[17]);
 ret->extra = row[18];
-ret->geneName = row[19];
-ret->geneAssoc = row[20];
-ret->codonChange = row[21];
-strcpy(ret->phase, row[22]);
 }
 
 struct bgiSnp *bgiSnpLoad(char **row)
@@ -70,10 +66,6 @@ ret->primerL = cloneString(row[15]);
 ret->primerR = cloneString(row[16]);
 strcpy(ret->questionM, row[17]);
 ret->extra = cloneString(row[18]);
-ret->geneName = cloneString(row[19]);
-ret->geneAssoc = cloneString(row[20]);
-ret->codonChange = cloneString(row[21]);
-strcpy(ret->phase, row[22]);
 return ret;
 }
 
@@ -83,7 +75,7 @@ struct bgiSnp *bgiSnpLoadAll(char *fileName)
 {
 struct bgiSnp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[23];
+char *row[19];
 
 while (lineFileRow(lf, row))
     {
@@ -101,7 +93,7 @@ struct bgiSnp *bgiSnpLoadAllByChar(char *fileName, char chopper)
 {
 struct bgiSnp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[23];
+char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -142,10 +134,6 @@ ret->primerL = sqlStringComma(&s);
 ret->primerR = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->questionM, sizeof(ret->questionM));
 ret->extra = sqlStringComma(&s);
-ret->geneName = sqlStringComma(&s);
-ret->geneAssoc = sqlStringComma(&s);
-ret->codonChange = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->phase, sizeof(ret->phase));
 *pS = s;
 return ret;
 }
@@ -164,9 +152,6 @@ freeMem(el->readName);
 freeMem(el->primerL);
 freeMem(el->primerR);
 freeMem(el->extra);
-freeMem(el->geneName);
-freeMem(el->geneAssoc);
-freeMem(el->codonChange);
 freez(pEl);
 }
 
@@ -249,22 +234,6 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->extra);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneAssoc);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->codonChange);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->phase);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

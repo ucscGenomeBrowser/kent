@@ -25,10 +25,6 @@ CREATE TABLE bgiSnp (
     primerR varchar(255) not null,	# Right primer sequence
     questionM char(1) not null,	# L for dubious indels, H for other indels and SNPs
     extra varchar(255) not null,	# Additional information
-    geneName varchar(255) not null,	# Name of associated gene (if any)
-    geneAssoc varchar(255) not null,	# Association to gene (if applicable): upstream, utr, exon, etc
-    codonChange varchar(255) not null,	# Changes to codon (if applicable).  If geneAssoc is Splice Site, splice site change.
-    phase char(1) not null,	# Phase of SNP in codon (if applicable)
               #Indices
     INDEX(chrom(12),bin),
     INDEX(name(18))
