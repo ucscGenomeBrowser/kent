@@ -40,7 +40,7 @@ track multiz5way
 shortLabel Conservation
 longLabel Conservation in Opossum/Chicken/Human/Mouse/Zebrafish
 group compGeno
-priority 55
+priority 54.5
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
