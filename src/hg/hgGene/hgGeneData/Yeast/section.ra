@@ -1,7 +1,0 @@
-# Yeast-specific sections.
-
-name sgdLocalization
-shortLabel Localization
-longLabel Protein Localization and Abundance
-priority 101
-
