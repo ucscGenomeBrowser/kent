@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.700 2004/07/26 17:40:44 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.701 2004/07/26 17:59:53 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3904,6 +3904,39 @@ if (wordCount > 0)
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
+}
+
+void doRHmap(struct trackDb *tdb, char *item) 
+/* Put up RHmap information for Zebrafish */
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+if (itemForUrl == NULL)
+    itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+
+if (wordCount > 0)
+    {
+    type = words[0];
+
+    if (sameString(type, "psl"))
+        {
+	char *subType = ".";
+	if (wordCount > 1)
+	    subType = words[1];
+        printPslFormat(conn, tdb, item, start, subType);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
 }
 
 void doRikenRna(struct trackDb *tdb, char *item)
@@ -13664,7 +13697,6 @@ if ((pos = strchr(acc, '.')) != NULL)
 	    *prot++ = 0;
 	}
     }
-printf("Acc is %s\n", acc);
 cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
