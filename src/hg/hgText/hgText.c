@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.142 2004/04/29 22:28:28 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.143 2004/05/05 22:54:53 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -44,7 +44,7 @@ char *customTrackPseudoDb = "customTrack";
 struct customTrack *theCtList = NULL;
 struct slName *browserLines = NULL;
 
-/* can change this to "GET" for debugging, "POST" for production */
+/* can change this to "GET" for debugging, "POST" for production  dbg */
 char *httpFormMethod = "POST";
 
 /* doMiddle() sets these: */
@@ -3668,7 +3668,9 @@ ct->fieldCount = fields;
 ct->needsLift = FALSE;
 ct->fromPsl = FALSE;
 ct->wiggle = FALSE;
-ct->wigData = (char *)NULL;
+ct->wigAscii = (char *)NULL;
+ct->wigFile = (char *)NULL;
+ct->wibFile = (char *)NULL;
 return(ct);
 }
 

@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.721 2004/05/05 22:19:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.722 2004/05/05 22:54:04 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3882,57 +3882,6 @@ grayLevel = grayInRange(ppt, gcPercentMin, gcPercentMax);
 return shadesOfGray[grayLevel];
 }
 
-static void gcPercentDenseDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw gcPercent items. */
-{
-int baseWidth = seqEnd - seqStart;
-UBYTE *useCounts;
-UBYTE *aveCounts;
-int i;
-int lineHeight = mgFontLineHeight(font);
-struct gcPercent *gc;
-int s, e, w;
-int log2 = digitsBaseTwo(baseWidth);
-int shiftFactor = log2 - 17;
-int sampleWidth;
-
-if (shiftFactor < 0)
-    shiftFactor = 0;
-sampleWidth = (baseWidth>>shiftFactor);
-AllocArray(useCounts, sampleWidth);
-AllocArray(aveCounts, width);
-memset(useCounts, 0, sampleWidth * sizeof(useCounts[0]));
-for (gc = tg->items; gc != NULL; gc = gc->next)
-    {
-    s = ((gc->chromStart - seqStart)>>shiftFactor);
-    e = ((gc->chromStart - seqStart)>>shiftFactor);
-    if (s < 0) s = 0;
-    if (e > sampleWidth) e = sampleWidth;
-    w = e - s;
-    if (w > 0)
-	memset(useCounts+s, grayInRange(gc->gcPpt, gcPercentMin, gcPercentMax), w);
-    }
-resampleBytes(useCounts, sampleWidth, aveCounts, width);
-grayThreshold(aveCounts, width);
-vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
-freeMem(useCounts);
-freeMem(aveCounts);
-}
-
-static void gcPercentDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw gcPercent items. */
-{
-if (vis == tvDense)
-   gcPercentDenseDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-else
-   bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-}
-
-
 void gcPercentMethods(struct track *tg)
 /* Make track for simple repeats. */
 {
@@ -7171,21 +7120,27 @@ struct track *newCustomTrack(struct customTrack *ct)
 struct track *tg;
 char buf[64];
 tg = trackFromTrackDb(ct->tdb);
-if (ct->fieldCount < 8)
-    {
-    tg->loadItems = ctLoadSimpleBed;
-    }
-else if (ct->fieldCount < 12)
-    {
-    tg->loadItems = ctLoadBed8;
-    }
+
+if (ct->wiggle)
+    tg->loadItems = ctWigLoadItems;
 else
     {
-    tg->loadItems = ctLoadGappedBed;
+    if (ct->fieldCount < 8)
+	{
+	tg->loadItems = ctLoadSimpleBed;
+	}
+    else if (ct->fieldCount < 12)
+	{
+	tg->loadItems = ctLoadBed8;
+	}
+    else
+	{
+	tg->loadItems = ctLoadGappedBed;
+	}
+    tg->mapItemName = ctMapItemName;
+    tg->canPack = TRUE;
     }
 tg->customPt = ct;
-tg->mapItemName = ctMapItemName;
-tg->canPack = TRUE;
 return tg;
 }
 
@@ -7291,13 +7246,25 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
-    tg = newCustomTrack(ct);
-    vis = cartOptionalString(cart, tg->mapName);
-    if (vis != NULL)
-	tg->visibility = hTvFromString(vis);
-    slAddHead(pGroupList, tg);
+    if (!ct->wiggle)
+	{
+	tg = newCustomTrack(ct);
+	vis = cartOptionalString(cart, tg->mapName);
+	if (vis != NULL)
+	    tg->visibility = hTvFromString(vis);
+	slAddHead(pGroupList, tg);
+	}
+    else
+	{
+	tg = newCustomTrack(ct);
+	vis = cartOptionalString(cart, tg->mapName);
+	if (vis != NULL)
+	    tg->visibility = hTvFromString(vis);
+
+	slAddHead(pGroupList, tg);
+	}
     }
-}
+}	/*	void loadCustomTracks(struct track **pGroupList)	*/
 
 void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
@@ -8272,6 +8239,13 @@ cgiMakeResetButton();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
+
+#if defined(NOT)	/*	NOT YET	*/
+puts("<BR>\n");
+cgiMakeCheckBox("hgt.customAppend", cgiBooleanDefined("hgt.customAppend"));
+puts("Check box to add this sequence to existing custom tracks<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
+#endif
+
 puts("</FORM>");
 }
 
