@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.77 2005/03/21 23:40:10 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.78 2005/03/24 21:21:20 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -98,6 +98,8 @@ if (withHttpHeader)
 
 if (withHtmlHeader)
     {
+    char *newString, *ptr1, *ptr2;
+
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
     puts(
 	"<HTML>" "\n"
@@ -108,7 +110,21 @@ if (withHtmlHeader)
 	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
 	 "\t<TITLE>"
 	 );
-    htmlTextOut(textOutBuf);
+    /* we need to take any HTML formatting out of the titlebar string */
+    newString = cloneString(textOutBuf);
+
+    for(ptr1=newString, ptr2=textOutBuf; *ptr2 ; ptr2++)
+	{
+	if (*ptr2 == '<')
+	    {
+	    for(; *ptr2 && (*ptr2 != '>'); ptr2++)
+		;
+	    }
+	else
+	    *ptr1++ = *ptr2;
+	}
+    *ptr1 = 0;
+    htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
 	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
