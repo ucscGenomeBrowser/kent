@@ -8246,82 +8246,81 @@ CREATE TABLE mitopred (
     # are being kept under /cluster/bin/penn/var_multiz
 
     # script for creating the 5-way alignments for a given chromosome
+    # (acs, 8/20/04) below revised after e-mail exchange with Minmei
     cat << '_EOF_' > doVarMultiz.csh
 #!/bin/csh -fe
 
 set chr = $1			# may include _random or _hla_hap[12]
 
 set REF = hg17.$chr
-set RAT = /cluster/data/hg17/bed/blastz.rn3/mafNet/$chr.maf
-set MOUSE = /cluster/data/hg17/bed/blastz.mm5/mafNet/$chr.maf
-set CHICKEN = /cluster/data/hg17/bed/blastz.galGal2/mafNet/$chr.hg.maf
-set FISH = /cluster/data/hg17/bed/blastz.fr1/mafNet/$chr.maf
+set RAT = /cluster/bluearc/hg17/multiz8way/rn3/$chr.maf
+set MOUSE = /cluster/bluearc/hg17/multiz8way/mm5/$chr.maf
+set CHICKEN = /cluster/bluearc/hg17/multiz8way/galGal2/$chr.maf
+set FISH = /cluster/bluearc/hg17/multiz8way/fr1/$chr.maf
 set DEST = /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/$chr.maf
 
-# FIXME: now use versions in /cluster/bin/penn/var_multiz instead
-set VMZ = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/var_multiz
-set PROJECT = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/maf_project
+set VMZ = /cluster/bin/penn/var_multiz
+set PROJECT = /cluster/bin/penn/var_multiz.2004.08.12/maf_project
 
 mkdir -p $DEST:h
 
-if ( -e $RAT && -e $MOUSE ) then 
+if ( -s $RAT && -s $MOUSE ) then 
     echo "Aligning $RAT $MOUSE..."
-    $VMZ $RAT $MOUSE 1 0 > /scratch/$chr.tmp1.maf
+    $VMZ $RAT $MOUSE 0 0 > /scratch/$chr.tmp1.maf
     echo "Projecting on $REF..."
     $PROJECT /scratch/$chr.tmp1.maf $REF > /scratch/$chr.hrm.maf
-else if ( -e $RAT ) then
+else if ( -s $RAT ) then
     cp $RAT /scratch/$chr.hrm.maf
-else if ( -e $MOUSE ) then
+else if ( -s $MOUSE ) then
     cp $MOUSE /scratch/$chr.hrm.maf
 endif
 
-if ( -e $CHICKEN && -e /scratch/$chr.hrm.maf ) then
+if ( -s $CHICKEN && -s /scratch/$chr.hrm.maf ) then
     echo "Adding $CHICKEN..."
     $VMZ /scratch/$chr.hrm.maf $CHICKEN 1 0 > /scratch/$chr.tmp2.maf
     echo "Projecting on $REF..."
     $PROJECT /scratch/$chr.tmp2.maf $REF > /scratch/$chr.hrmc.maf
-else if ( -e $CHICKEN ) then
+else if ( -s $CHICKEN ) then
     cp $CHICKEN /scratch/$chr.hrmc.maf
-else if ( -e /scratch/$chr.hrm.maf ) then
+else if ( -s /scratch/$chr.hrm.maf ) then
     cp /scratch/$chr.hrm.maf /scratch/$chr.hrmc.maf
 endif 
 
-if ( -e $FISH && -e /scratch/$chr.hrmc.maf ) then
+if ( -s $FISH && -s /scratch/$chr.hrmc.maf ) then
     echo "Adding $FISH..."
     $VMZ /scratch/$chr.hrmc.maf $FISH 1 0 > /scratch/$chr.tmp3.maf
     echo "Projecting on $REF..."
     $PROJECT /scratch/$chr.tmp3.maf $REF > $DEST
-else if ( -e $FISH ) then
+else if ( -s $FISH ) then
     cp $FISH $DEST
-else if ( -e /scratch/$chr.hrmc.maf ) then
+else if ( -s /scratch/$chr.hrmc.maf ) then
     cp /scratch/$chr.hrmc.maf $DEST
 endif 
 
 
 echo "Done."
 rm /scratch/$chr.tmp[123].maf /scratch/$chr.hrm.maf /scratch/$chr.hrmc.maf
-
-
 '_EOF_'
     # << keep emacs coloring happy    
     chmod 755 doVarMultiz.csh
 
-    for file in `find /cluster/data/hg17/bed/blastz.rn3/mafNet /cluster/data/hg17/bed/blastz.mm5/mafNet /cluster/data/hg17/bed/blastz.galGal2/mafNet /cluster/data/hg17/bed/blastz.fr1/mafNet -name "chr*.maf" | grep -v '\.hg\.'` ; do echo `basename $file .maf` ; done | sort -u > chrlist
+    for file in `find /cluster/bluearc/hg17/multiz8way/rn3 /cluster/bluearc/hg17/multiz8way/mm5 /cluster/bluearc/hg17/multiz8way/galGal2 /cluster/bluearc/hg17/multiz8way/fr1 -name "chr*.maf"` ; do echo `basename $file .maf` ; done | sort -u > chrlist
     rm -f jobs.lst
     for chr in `cat chrlist` ; do echo "doVarMultiz.csh $chr" >> jobs.lst ; done
 
     # run cluster job
-    ssh kk9 ; cd /cluster/data/hg17/bed/var_multiz.2004-08-12; para create jobs.lst ; para try ; para push 
+    ssh kk ; cd /cluster/data/hg17/bed/var_multiz.2004-08-12; para create jobs.lst ; para try ; para push 
     # (etc.)
 
-# Completed: 46 of 46 jobs
-# CPU time in finished jobs:      19833s     330.56m     5.51h    0.23d  0.001 y
-# IO & Wait Time:                 22220s     370.33m     6.17h    0.26d  0.001 y
-# Average job time:                 914s      15.24m     0.25h    0.01d
-# Longest job:                     3208s      53.47m     0.89h    0.04d
-# Submission to last job:          3208s      53.47m     0.89h    0.04d
+Completed: 46 of 46 jobs
+CPU time in finished jobs:      71302s    1188.36m    19.81h    0.83d  0.002 y
+IO & Wait Time:                  1162s      19.37m     0.32h    0.01d  0.000 y
+Average job time:                1575s      26.26m     0.44h    0.02d
+Longest job:                     6353s     105.88m     1.76h    0.07d
+Submission to last job:          6362s     106.03m     1.77h    0.07d
 
     # for now just create an ordinary maf track (conservation later)
+    rm -rf /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
     mkdir -p /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
     ln -s /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/*.maf /gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
     /cluster/bin/i386/hgLoadMaf hg17 -warn varMultizMm5Rn3GalGal2Fr1 -pathPrefix=/gbdb/hg17/varMultiz/maf/varMultizMm5Rn3GalGal2Fr1
@@ -8477,75 +8476,176 @@ for i in `cat chrom.lst` ; do mafFilter -minScore=1000 maf/$i.maf > mafFilter/$i
 cd mafFilter
 for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov ; echo done $i ; done   
 
-# 8-WAY phastConsElements (acs 8/18/04)
+# 8-WAY phastConsElements (acs 8/28/04)
 # picking up under Kate's PHYLO-HMM CONSERVATION FOR 8-WAY MM5
+# NOTE: main goal here is to produce the conserved elements track, but
+# I'll also compute the conservation scores.  In the future, most people
+# will want to do both at the same time.
 
+    ssh hgwdev
     cd /cluster/data/hg17/bed/multiz.2004-07-13/cons
     mkdir run.elements
-    cat << 'EOF' > doElements.sh
+
+    # first produce a rough starting model; in this case, we can just
+    # use the model previously estimated, renaming leaves to match the
+    # alignment.  
+    tree_doctor ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1;6->galGal2;7->fr1;8->danRer1" > starting-tree.mod
+    # In other cases, it would be sufficient to choose an
+    # arbitrary input file and run phyloFit on it with the correct
+    # tree topology, e.g., 
+    # phyloFit -i SS datafile.ss --tree \
+    # "(((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),(fr1,danRer1))" \
+    # --out-root starting-tree
+
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments
+    cat << 'EOF' > doEstimate.sh
+#!/bin/sh
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --target-coverage 0.125 --nrates 1,1 --conserved-scale 0.3 --no-post-probs --quiet --lnl $2 --log $3 --estimate-trees $4
+EOF
+    # Notice the 0.125.  We actually want 5% coverage but we have to
+    # consider the fact that we only have roughly 40% alignment
+    # coverage (excluding chimp, which doesn't help us much in
+    # identifying conserved regions).  As far as phastCons is
+    # concerned, we want to aim for 0.05 / 0.40 = 0.125 coverage.  (The
+    # other 60% of sites will essentially be ignored.)
+
+    chmod u+x doEstimate.sh
+
+    rm -fr LOG LNL TREES
+    mkdir -p LOG LNL TREES
+    rm -f jobs.lst
+    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do \
+	root=`basename $f .ss.gz` ;\
+	echo doEstimate.sh $f LNL/$root.lnl LOG/$root.log TREES/$root >> jobs.lst ;\
+    done
+
+    # run cluster job
+    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
+    # takes a couple hours
+
+    # Now combine parameter estimates.  First, average the 'p' parameter
+    # from the .lnl files.  We don't care about 'q' because we're
+    # using --target-coverage (see phastCons help page)
+    cat LNL/* | egrep -v 'lnL|nan' | awk '{print $3}' | sed 's/[,]/ /g' > stats.txt
+    # (look over to see if estimates all look reasonable.  They're
+    # typically in the ballpark of 0.01, at least for mammalian
+    # genomes.  If there are any 0s or absurdly high values (e.g., 
+    # >0.5), they can probably be thrown out; they're likely the result
+    # of sparse data or other problems)
+    awk '{sum += $1} END { printf "p = %f\n", sum/NR}' stats.txt
+
+    # Next average the .mod files using phyloBoot.  This must be
+    # done separately for the conserved and nonconserved models
+    ls TREES/*.cons.mod > cons.txt
+    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+    # look over the files cons_summary.txt and noncons_summary.txt.
+    # The stdevs should be reasonably small compared to the means,
+    # particularly for rate matrix parameters (at bottom) and for
+    # branches to the leaves of the tree for which there's ample data.
+    # The stdevs will tend to be larger for the conserved models
+    # because of sparse data; that's okay.  Also, they may be fairly
+    # high for branches near the root of the tree; that's okay too.
+    # Some min values may be 0 for some parameters.  That's okay, but
+    # watch out for very high values in the max column (e.g.,
+    # estimates going to infinity); these can bias the mean.  If you
+    # see any signs of bad outliers, you may have to track down the
+    # responsible .mod files and throw them out.  Another thing to
+    # check is that the means and medians are roughly equal.
+
+    # NOTE: it's actually probably overkill to use the the entire
+    # genome in parameter estimation.  A random sample of several
+    # hundred to a thousand alignment fragments (say, a number equal
+    # to the number of available cluster nodes) would be more than
+    # sufficient.  If pressed for time, use this strategy.
+
+    # Now we have estimates of all parameters and are ready to set up
+    # the cluster job for computing the conservation scores and 
+    # predicted elements.
+
+    # (don't forget to substitute the value of p estimated above into
+    # the script below [--transitions option])
+    cat << 'EOF' > doPhastCons.sh
 #!/bin/sh
 
-PHAST=/cluster/bin/phast
-TMP=/tmp/phastCons
+mkdir -p /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --transitions 0.015959 --target-coverage 0.125 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/hg17/phastCons/ELEMENTS/$pref.bed --score --min-informative-types 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/hg17/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+EOF
+    chmod u+x doPhastCons.sh
 
-file=$1
-root=`basename $file .ss.gz`
+    rm -fr POSTPROBS ELEMENTS
+    rm -f jobs2.lst
+    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
 
-mkdir -p ELEMENTS
-zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod --nrates 40 --no-post-probs --transitions 0.080,0.008 --quiet --viterbi ELEMENTS/$root.bed
-'EOF'
+    # run cluster job
+    ssh kk, cd /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements, para create, ...
+    logout
+    # takes about 20 minutes
 
-    chmod u+x doElements.sh
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    find /cluster/bluearc/hg17/phastCons/ELEMENTS -name "*.bed" > files
+    rm -f splitfiles* all.raw.bed
+    split files splitfiles
+    for s in splitfiles* ; do awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed ; done
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    rm files splitfiles* 
 
-    # get version of .mod file with names rather than numbers (won't
-    # be necessary in the future)
-    tree_doctor ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.mod --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1;6->galGal2;7->fr1;8->danRer1" > hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod
-
-    rm -fr ELEMENTS
-    rm -f jobList
-    for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doElements.sh $f >> jobList ; done
-
-    # Scores are transformed as follows, for a reasonable-looking
-    # "spectrum".  Let x_max be the maximum score and let x_med be the
-    # median score.  The scores are transformed via the function f(x)
-    # = a * log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.
-    # Solving for a and b, you get b = (300 log x_max - 1000 log
-    # x_med) / (log x_max - log x_med), a = (1000 - b) / log x_max.
-
-    cat ELEMENTS/*.bed | awk '{print $5}' | sort -nr > sorted_scores
-    len=`wc -l sorted_scores | awk '{print $1}'`
-    export x_max=`head -1 sorted_scores`
-    mididx=`expr $len / 2`
-    export x_med=`head -$mididx sorted_scores | tail -1`
-
-    cat ELEMENTS/*.bed | \
-	awk 'BEGIN { b = (300 * log(ENVIRON["x_max"]) - 1000 * log(ENVIRON["x_med"])) / \
-	    (log(ENVIRON["x_max"]) - log(ENVIRON["x_med"])) ;\
-	    a = (1000 - b) / log(ENVIRON["x_max"]) ;\
-	    printf "a = %f; b = %f\n", a, b > "/dev/stderr" } \
-	    { printf "%s\t%s\t%s\tlod=%d\t%d\n", \
-	    $1, $2, $3, $5, a * log($5) + b}' > all.bed
-
-    # double check scores: max should be about 1000, median should be
-    # about 300
-    
     hgLoadBed hg17 phastConsElements all.bed
-    rm sorted_scores
+
+    # check coverage
+    featureBits hg17 phastConsElements
+#161618945 bases of 2866216770 (5.639%) in intersection
+    # (should be close enough)
+
+    # set up wiggle
+    mkdir -p /cluster/bluearc/hg17/phastCons/wib
+    cat << 'EOF' > doWigAsciiToBinary.sh
+#!/bin/sh
+chr=$1
+zcat `ls /cluster/bluearc/hg17/phastCons/POSTPROBS/$chr.*.pp.gz | sort -t\. -k2,2n` | wigAsciiToBinary -chrom=$chr -wibFile=/cluster/bluearc/hg17/phastCons/wib/${chr}_phastConsNew stdin 
+EOF
+    chmod u+x doWigAsciiToBinary.sh
+
+    rm -f jobs3.lst
+    for chr in `ls /cluster/bluearc/hg17/phastCons/POSTPROBS | awk -F\. '{print $1}' | sort -u` ; do echo doWigAsciiToBinary.sh $chr >> jobs3.lst ; done
+
+    # run cluster job
+    ssh kk, etc.
+
+    # copy wibs and wigs from bluearc
+    rsync -av /cluster/bluearc/hg17/phastCons/wib .
+
+    # load track
+    hgLoadWiggle hg17 phastConsNew -pathPrefix=/gbdb/hg17/phastConsNew/wib \
+                wib/chr*_phastConsNew.wig
+    mkdir -p /gbdb/hg17/phastConsNew/wib
+    rm -f /gbdb/hg17/phastConsNew/wib/chr*phastConsNew.wib
+    ln -s /cluster/data/hg17/bed/multiz.2004-07-13/cons/run.elements/wib/*.wib /gbdb/hg17/phastConsNew/wib
+    chmod 775 . wib /gbdb/hg17/phastConsNew /gbdb/hg17/phastConsNew/wib
+    chmod 664 wib/*.wib
 
     # trackDb.ra entry
 # track phastConsElements
-# shortLabel Cons Elements
-# longLabel phastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+# shortLabel Most Conserved
+# longLabel Phastcons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
 # group compGeno
 # priority 109.1
 # visibility hide
 # spectrum on
-# exonArrows off
-# type bed 6 .
+# type bed 5 .
 
     # also do conserved noncoding (CNS) track
     featureBits hg17 -bed=possibleCoding.bed -or twinscan:exon xenoMrna mrna intronEst 
-    # (add SGP, exoniphy possib. others if available)
+    # (add SGP, exoniphy, possib. others if available)
     # now filter out all phastCons elements that overlap
     overlapSelect -nonOverlapping possibleCoding.bed all.bed cns.bed
     hgLoadBed hg17 cns cns.bed
@@ -8556,7 +8656,11 @@ zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.
 # priority 109.11
 # group compGeno
 # visibility hide
-# type bed 4
+# type bed 5 .
+
+    # move postprobs over and clean up bluearc
+    rsync -av /cluster/bluearc/hg17/phastCons/POSTPROBS .
+    rm -r /cluster/bluearc/hg17/phastCons/ELEMENTS /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/wib
 
 
 #  Load firstEF track (DONE 2004-08-18 braney)
