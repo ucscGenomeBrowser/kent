@@ -2,6 +2,7 @@
 #include "common.h"
 #include "portable.h"
 #include "hash.h"
+#include "binRange.h"
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -594,29 +595,6 @@ return hti->hasBin;
  * of bins with the chromosome itself being the final bin.
  * Features are put in the finest bin they'll fit in. */
 
-static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
-#define binFirstShift 17
-#define binNextShift 3
-
-
-int hBinLevels()
-/* Return number of levels to bins. */
-{
-return ArraySize(binOffsets);
-}
-
-int hBinFirstShift()
-/* Return amount to shift a number to get to finest bin. */
-{
-return binFirstShift;
-}
-
-int hBinNextShift()
-/* Return amount to shift a numbe to get to next coarser bin. */
-{
-return binNextShift;
-}
-
 int hFindBin(int start, int end)
 /* Given start,end in chromosome coordinates assign it
  * a bin.   There's a bin for each 128k segment, for each
@@ -624,38 +602,29 @@ int hFindBin(int start, int end)
  * and for each chromosome (which is assumed to be less than
  * 512M.)  A range goes into the smallest bin it will fit in. */
 {
-int startBin = start, endBin = end-1, i;
-startBin >>= binFirstShift;
-endBin >>= binFirstShift;
-for (i=0; i<ArraySize(binOffsets); ++i)
-    {
-    if (startBin == endBin)
-        return binOffsets[i] + startBin;
-    startBin >>= binNextShift;
-    endBin >>= binNextShift;
-    }
-errAbort("start %d, end %d out of range in findBin (max is 512M)", start, end);
-return 0;
+return binFromRange(start, end);
 }
 
 void hAddBinToQuery(int start, int end, struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
-int startBin = (start>>binFirstShift), endBin = ((end-1)>>binFirstShift);
-int i;
+int bFirstShift = binFirstShift(), bNextShift = binNextShift();
+int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
+int i, levels = binLevels();
 
 dyStringAppend(query, "(");
-for (i=0; i<ArraySize(binOffsets); ++i)
+for (i=0; i<levels; ++i)
     {
+    int offset = binOffset(i);
     if (i != 0)
         dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "bin=%u", startBin + binOffsets[i]);
+        dyStringPrintf(query, "bin=%u", startBin + offset);
     else
         dyStringPrintf(query, "bin>=%u and bin<=%u", 
-		startBin + binOffsets[i], endBin + binOffsets[i]);
-    startBin >>= 3;
-    endBin >>= 3;
+		startBin + offset, endBin + offset);
+    startBin >>= bNextShift;
+    endBin >>= bNextShift;
     }
 dyStringAppend(query, ")");
 dyStringAppend(query, " and ");

@@ -6848,7 +6848,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
 		        {
 			if (toAll || sameString(s, tg->mapName))
-			    cgiVarSet(tg->mapName, command);
+			    cartSetString(cart, tg->mapName, command);
 			}
 		    }
 		}
@@ -6933,11 +6933,20 @@ if (gotBlat)
     {
     printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
+#ifdef SOON
 if (sameString(database, "hg8"))
     {
     fputs("<TD><P ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
     printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    }
+#endif /* SOON */
+if (sameString(database, "hg10"))
+    {
+    fputs("<TD><P ALIGN=CENTER>", stdout);
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    	skipChr(chromName), winStart+1, winEnd);
+    printf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
 printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
 fputs("</TR></TABLE>", stdout);
@@ -7018,6 +7027,7 @@ registerTrackHandler("affy", affyMethods);
 registerTrackHandler("wiggle", wiggleMethods );
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
+
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&tGroupList);
@@ -7413,7 +7423,7 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("UCSC Human Genome Browser v9", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
 
