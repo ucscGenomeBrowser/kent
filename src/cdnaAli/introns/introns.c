@@ -171,6 +171,7 @@ else
 void writeIntron(FILE *f, struct feature *intron, DNA *dna, int dnaSize, char strand, int startExtra, int intronSize, int insideIntronSize)
 {
 int i;
+int countRefs = 0;
 struct cdnaRef *ref;
 fprintf(f, "%d %s %d %d %c %s ",
     intron->cdnaCount, intron->chrom, intron->start, intron->end, strand,
@@ -186,8 +187,12 @@ for (i=startExtra + intronSize - insideIntronSize; i<startExtra+intronSize; ++i)
 fputc(' ', f);
 for (i=startExtra+intronSize; i<dnaSize; ++i)
     fputc(dna[i], f);
-for (ref = intron->cdnaRefs; ref != NULL; ref = ref->next)
+
+countRefs = 0;
+for (ref = intron->cdnaRefs; ref != NULL; ref = ref->next) {
     fprintf(f, " %s", ref->ali->cdna->name);
+    if( ++countRefs > 10 ) break;
+}
 fputc('\n', f);
 }
 
@@ -482,12 +487,13 @@ struct cdnaRef *ref;
 char *chrom;
 int start, end;
 struct hiRange *hiList, *hi;
+int GenesPrinted = 0;
 
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
     ++geneCount;
     findRefRange(gene->cdnaRefs, &chrom, &start, &end);
-    fprintf(f, "<A HREF=\"../cgi-bin/tracks.exe?where=%s:%d-%d", chrom, start, end);
+    fprintf(f, "<A HREF=\"../../cgi-bin/tracksWS120.exe?where=%s:%d-%d", chrom, start, end);
     if (gene->hi != NULL)
         {
         fputs("&hilite=", f);
@@ -507,8 +513,12 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         boos(gene->notGenomicContamination, "NG", "  "),
         gene->altIntronStart, gene->altIntronEnd, gene->intronExonOverlap,
         gene->intronIntronOverlap);
-    for (ref = gene->cdnaRefs; ref != NULL; ref = ref->next)
+    GenesPrinted = 0;
+    for (ref = gene->cdnaRefs; ref != NULL; ref = ref->next) {
         fprintf(f, " %s", ref->ali->cdna->name);
+	++GenesPrinted;
+	if ( GenesPrinted > 10 ) break;
+    }
     fprintf(f, "\n");
     if (gene->skippedExon) ++cse;
     if (gene->skippedIntron) ++csi;
@@ -552,7 +562,6 @@ FILE *justGenes = mustOpen(justGenesName, "w");
 struct hash *altHash = newHash(12);
 int altGeneCount = 0;
 struct gene *geneList = NULL, *gene;
-int farEnd = -1;
 struct feature *segList, *seg;
 struct hashEl *hel;
 struct hiRange *hi;

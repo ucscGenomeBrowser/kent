@@ -1,9 +1,12 @@
 include ../../inc/common.mk
 
+O =  introns.o
 
-O =  introns.o ../lib/cdnaAli.o
+${HOME}/bin/${MACHTYPE}/introns: ${O}  
+	${CC} -o ${HOME}/bin/${MACHTYPE}/introns $O ../lib/cdnaAli.o \
+		../../lib/${MACHTYPE}/jkweb.a
+	strip ${HOME}/bin/${MACHTYPE}/introns
 
-$(HOME)/bin/$(MACHTYPE)/introns: $(O)  
-	gcc -o $(HOME)/bin/$(MACHTYPE)/introns $O ../../lib/$(MACHTYPE)/jkweb.a
-
+clean:
+	rm -f introns.o
 
