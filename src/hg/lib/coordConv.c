@@ -249,7 +249,7 @@ struct psl *pslList = NULL;
 int conn =0, count =0;
 struct tempName pslTn;
 FILE *f = NULL;
-static struct gfSavePslxData outForm;
+struct gfOutput *gvo;
 
 
 if(seq == NULL || db == NULL)
@@ -261,19 +261,20 @@ if(strstr(seq->dna, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
   return NULL; 
 makeTempName(&pslTn,"ccR", ".psl");
 f = mustOpen(pslTn.forCgi, "w");
-pslxWriteHead(f, gftDna, gftDna);
+gvo = gfOutputPsl(920, FALSE, FALSE, f, FALSE, FALSE);
+gfOutputHead(gvo, f);
 
 /* align to genome, both strands */
-outForm.f = f;
-outForm.minGood = 920;
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
+gfAlignStrand(&conn, nibDir, seq, FALSE, 20, gvo);
 reverseComplement(seq->dna, seq->size);
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , gfSavePslx, &outForm);
+gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , gvo);
+gfOutputQuery(gvo, f);
 carefulClose(&f);
 pslList = pslLoadAll(pslTn.forCgi);
 remove(pslTn.forCgi);
+gfOutputFree(&gvo);
 return pslList;
 }
 
