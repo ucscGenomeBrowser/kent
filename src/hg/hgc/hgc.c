@@ -3478,6 +3478,15 @@ void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
+//errAbort("(%s)\n", item );
+longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
+}
+
+void doBlatMus2(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+//errAbort("(%s)\n", item );
 longXenoPsl1(tdb, item, "Mouse", "mouseChrom");
 }
 
@@ -6581,10 +6590,13 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMus(tdb, item);
     }
-else if (startsWith("blastzMm2", track) || startsWith("aarMm2", track))
+else if (startsWith("blastzMm2", track))
     {
-    /* markd: tmp hack, mm2 not loader in db, also no code to display xAli */
     genericHeader(tdb, item);
+    }
+else if (startsWith("aarMm2", track))
+    {
+    doBlatMus2( tdb, item );
     }
 else if (sameWord(track, "blatHuman"))
     {
