@@ -476,6 +476,24 @@ SEQ2_LEN=$BASE/S2.len
   para check
   para push
 
+# ALIGN TO HUMAN (BLASTZ) again
+
+    # too many errors from blastz and out2lav
+    # repeat in /cluster/data/bosTau1/bed/blastz
+    # use same jobList, DEF file, etc.
+
+    # lavToAxt
+
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz
+    mkdir axtTemp
+    cd lav
+    foreach i (*)
+        /cluster/bin/i386/catDir $i | /cluster/bin/i386/lavToAxt stdin /cluster/data/hg17/nib \
+	  /cluster/data/bosTau1/bosTau1.2bit ../axtTemp/$i.axt
+	echo done $i
+    end
+
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
     mkdir /cluster/data/bosTau1/bed/gc5Base
