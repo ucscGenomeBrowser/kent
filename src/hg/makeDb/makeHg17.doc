@@ -957,3 +957,90 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	Sorted
     #	Saving bed.tab
     #	Loading hg17
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE - 2004-05-25 - Heather)
+    ssh hgwdev
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans) \
+	VALUES("hg17", "blat12", "17778", "1"); \
+	INSERT INTo blatServers (db, host, port, isTrans) \
+	VALUES("hg17", "blat12", "17779", "0");' \
+	-h genome-testdb hgcentraltest
+
+# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-08-05 - Hiram)
+
+    ssh eieio
+    mkdir /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
+    ln -s ../rmsk/*.out .
+    cat << '_EOF_' > runArian.sh
+#!/bin/sh
+for FN in *.out
+do
+    echo ${FN}
+    /cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
+	${FN} -query human -comp rat -comp mouse
+done
+'_EOF_'
+    chmod +x runArian.sh
+
+    #  The following will mark each line for rat and mouse
+    #	Rat first will column 1, Mouse second will be column 2
+    foreach outfl ( *.out )
+	echo "$outfl"
+	/cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
+	${outfl} -query human -comp rat -comp mouse
+    end
+    #	Now extract each one, 1 = Rat, 2 = Mouse
+    cd /cluster/bluearc/scratch/hg/gs.17/build34
+    mkdir linSpecRep.notInRat
+    mkdir linSpecRep.notInMouse
+    foreach f (rmsk/*.out_rat_mus)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInRat/$base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 2 $f > \
+                        linSpecRep.notInMouse/$base.out.spec
+    end
+    #  That produced no difference at all between those two targets.
+    #  Have requested confirmation from Arian
+
+# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-10-21 - Hiram)
+
+    ssh kksilo
+    mkdir -p /cluster/bluearc/mm4/rmsk.spec
+    cd /cluster/bluearc/mm4/rmsk.spec
+    ln -s ../rmsk/*.out .
+    cat << '_EOF_' > runArian.sh
+#!/bin/sh
+for FN in *.out
+do
+    echo ${FN}
+    /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
+	${FN} -query mouse -comp human -comp rat
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runArian.sh
+    ./runArian.sh
+
+    cd /cluster/bluearc/mm4
+    mkdir linSpecRep.notInHuman
+    mkdir linSpecRep.notInRat
+    foreach f (rmsk.spec/*.out_hum_rat)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInHuman/$base.out.spec
+    end
+    foreach f (rmsk.spec/*.out_hum_rat)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 2 $f > \
+                        linSpecRep.notInRat/$base.out.spec
+    end
+
+    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInHuman /cluster/bluearc/scratch/mus/mm4
+    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInRat /cluster/bluearc/scratch/mus/mm4
+    #	Request rsync of /scratch to the KiloKluster
+
