@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.28 2005/02/08 00:28:14 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.29 2005/02/11 19:45:35 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -675,8 +675,7 @@ if (isWiggle(db, table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
-    name = filterFieldVarName(db, rootTable, "",
-	filterMaxOutputVar);
+    name = filterFieldVarName(db, rootTable, "_", filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
 		cartUsualString(cart, name, maxOutMenu[0]));
     hPrintf("&nbsp;lines</TD></TR></TABLE>\n");
@@ -760,8 +759,7 @@ if (ct->wiggle)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
-    name = filterFieldVarName("ct", table, "",
-	filterMaxOutputVar);
+    name = filterFieldVarName("ct", table, "_", filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
 		cartUsualString(cart, name, maxOutMenu[0]));
     hPrintf("&nbsp;lines</TD></TR></TABLE>\n");

@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.41 2005/02/07 20:40:33 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.42 2005/02/11 19:45:35 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -225,7 +225,7 @@ for (el = bedList; el != NULL; el=el->next)
 	start = el->chromEnd - 1;	/*	reset to no element yet */
 	end = start;
 	}
-    lastEnd = el->chromEnd;
+    lastEnd = max(lastEnd,el->chromEnd);
     }
 
 /*	A last element ?	*/
@@ -415,9 +415,9 @@ int maxOut;
 char *maxOutput = NULL;
 
 if (isCustomTrack(table))
-    name = filterFieldVarName("ct", curTable, "", filterMaxOutputVar);
+    name = filterFieldVarName("ct", curTable, "_", filterMaxOutputVar);
 else
-    name = filterFieldVarName(db, curTable, "", filterMaxOutputVar);
+    name = filterFieldVarName(db, curTable, "_", filterMaxOutputVar);
 
 maxOutputStr = cartOptionalString(cart, name);
 /*	Don't modify(stripChar) the values sitting in the cart hash	*/
