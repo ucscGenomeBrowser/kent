@@ -15,7 +15,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 		http://localhost/
 	    Provides the Apache default home page from your machine
 	b. MySQL database is installed and working
-		$ echo 'show tables;' | mysql -pgenome mysql
+		$ mysql -pgenome -e 'show tables;' mysql
 	    MySQL can be run from the command line, and
 	    the tables from the database mysql can be displayed.
         c. MySQL development package is installed (mysql-devel)
@@ -23,13 +23,24 @@ The example mysql user here is: "browser" with a password of: "genome"
 	    And the library: /usr/lib/mysql/libmysqlclient.a exists
 	    (your exact pathnames may vary depending upon your installation)
 
-2.  Set MySQL database access permissions.  The examples mentioned
+2.  Mount the CD-ROM if it isn't already:
+	mount /mnt/cdrom
+	Set CDROM to its path for commands to follow
+	CDROM=/mnt/cdrom
+	export CDROM
+
+3.  Set MySQL database access permissions.  The examples mentioned
 	in the README.mysql.setup.txt instructions will allow this
 	setup to function as described here.
 
-3.  Find the location of your Apache WEB server DocumentRoot
+	To setup the example user accounts as mentioned in these
+	instructions, run the script:
+
+	${CDROM}/example/MySQLUserPerms.sh
+
+4.  Find the location of your Apache WEB server DocumentRoot
 	and cgi-bin directory.
-	Typical locations are:
+	Typical locations are:  /var/www and /usr/local/apache
 		/var/www/html
 		/var/www/cgi-bin
 	The directory where these are located is referred to as
@@ -46,13 +57,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 	Until these path names are corrected, the browser will
 	only function in this location.
 
-4.  Create a 'trash' directory in WEBROOT for use by the
-	browser's cgi-bin binaries and set its write permission
-	to allow the Apache WEB server to write files:
-	mkdir ${WEBROOT}/trash
-	chmod 777 ${WEBROOT}/trash
-
-	If the directories html and cgi-bin do not exist:
+5.  Create html, cgi-bin and trash directories:
 	mkdir ${WEBROOT}/html
 	mkdir ${WEBROOT}/cgi-bin
 	chmod 755 ${WEBROOT}/cgi-bin
@@ -60,19 +65,20 @@ The example mysql user here is: "browser" with a password of: "genome"
 	    by "Premature end of script headers" errors in the Apache
 	    error_log.  Your cgi binaries should also be 755 permissions.)
 
+	mkdir ${WEBROOT}/trash
+	chmod 777 ${WEBROOT}/trash
 	ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
-	(There seems to be a requirement for both of these ?)
 
 	A cron job should be set to periodically clean the files in trash.
-
-5.  Mount the CD-ROM:
-	mount /mnt/cdrom
+	The browser creates .gif files in the trash directory.
+	The 'chmod 777' allows the Apache WEB server to write into
+	that directory.
 
 6.  Copy static WEB page content:
-	cp -Rp /mnt/cdrom/webrootHTML/* ${WEBROOT}/html
+	cp -Rp ${CDROM}/webrootHTML/* ${WEBROOT}/html
 
 7.  Copy CGI binaries:
-	cp -p /mnt/cdrom/built_CGI-BIN/* ${WEBROOT}/cgi-bin
+	cp -p ${CDROM}/built_CGI-BIN/* ${WEBROOT}/cgi-bin
 
 	These binaries were built on a Red Hat Linux release 7.3
 	with gcc version 2.96
@@ -83,21 +89,25 @@ The example mysql user here is: "browser" with a password of: "genome"
 	database that allows the browser to find specific organism
 	databases.
 
-	echo "create database hgcentral;" | mysql -pgenome
-	mysql -pgenome hgcentral < /mnt/cdrom/example/hgcentral.sql
+	mysql -pgenome -e "create database hgcentral;"
+	mysql -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
 
 	Please note, it is possible to create alternative hgcentral
 	databases.  For example, for test purposes.  In this
 	case use a unique name for the hgcentral database, such
 	as "hgcentraltest", and it can be specified in the hg.conf
-	file as mentioned in the next step.
+	file as mentioned in the next step.  To create a second copy
+	of the hgcentral database:
+
+	mysql -pgenome -e "create database hgcentraltest;"
+	mysql -pgenome hgcentraltest < ${CDROM}/example/hgcentral.sql
 
 9.  Create the hg.conf file in ${WEBROOT}/cgi-bin/hg.conf
 	to allow the CGI binaries to find the hgcentral database
 	(or specifically named hgcentraltest for example)
 
 	Copy the sample hg.conf:
-	cp /mnt/cdrom/example/hg.conf ${WEBROOT}/cgi-bin
+	cp ${CDROM}/example/hg.conf ${WEBROOT}/cgi-bin
 
 	Adjust the db.user,db.password, central.user and
 	central.password entries.
@@ -116,21 +126,27 @@ The example mysql user here is: "browser" with a password of: "genome"
 10.  Copy the sample C. briggsae organism database and generic
 	hgFixed database text files:
 	
-	cp -Rp /mnt/cdrom/goldenPath ${WEBROOT}/html
+	cp -Rp ${CDROM}/goldenPath ${WEBROOT}/html
 
 11.  Copy the gbdb data to /gbdb
 	The directory /gbdb is a location where the browser finds
 	large data files that do not conveniently fit into the
 	database.  This directory can be a symlink to a filesystem
 	other than root where data space is available.
+	A fully loaded genome browser with all databases can occupy
+	more than 200 Gb of data.  This example requires only 200 Mb
 
-	mkdir <filesystem with space available>/gbdb
-	ln -s <filesystem with space available>/gbdb /gbdb
-	cp -Rp /mnt/cdrom/gdbd /
+	GBDB=/<filesystem with 200 Mb space available>
+	export GBDB
+	mkdir ${GBDB}/gbdb
+	ln -s ${GBDB}/gbdb /gbdb
+	cp -Rp ${CDROM}/gbdb /${GBDB}
 
 12.  Load the hgFixed database (a database common to all organisms)
-	echo "create database hgFixed;" | mysql -pgenome
+
+	mysql -pgenome -e "create database hgFixed;"
 	cd ${WEBROOT}/html/goldenPath/hgFixed/database
+
 	# Create tables in hgFixed:
 	for file in *.sql
 	do
@@ -154,7 +170,7 @@ The example mysql user here is: "browser" with a password of: "genome"
 
 13.  Load the example C. briggsae organism database.
 
-	echo "create database cb1;" | mysql -pgenome
+	mysql -pgenome -e "create database cb1;"
 	cd ${WEBROOT}/html/goldenPath/cbJul2002/database
 	# Create tables in cb1:
 	for file in *.sql

@@ -9,7 +9,7 @@ include ../inc/common.mk
 
 #	This version string needs to be raised for a release
 
-VER=34
+VER=36
 
 DESTDIR=.
 install_dir=${DESTDIR}/install_image
@@ -29,7 +29,7 @@ version:
 	touch ${install_dir}/Version_${VER}.`date -I`
 
 COPYRIGHT.txt:	COPYRIGHT INST_DIR
-	sed -e "s/DATE_STAMP/`date -I`/" COPYRIGHT | \
+	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" COPYRIGHT | \
 	unix2dos > ${install_dir}/$@
 	@chmod 644 ${install_dir}/$@
 
@@ -75,13 +75,17 @@ source_built: source_tar
 		make install DESTDIR=$$DD CGI_BIN=/built_CGI-BIN)
 	touch source_built
 
-example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh
+example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
+	ex.InstallExample
 	@if [ ! -d ${install_dir}/example ]; then \
 		${MKDIR} "${install_dir}/example"; \
 	fi
+	cp -p ex.InstallExample "${install_dir}/example/InstallExample"
 	cp -p ex.hgcentral.sql "${install_dir}/example/hgcentral.sql"
 	cp -p ex.hg.conf "${install_dir}/example/hg.conf"
-	cp -p ex.MySQLUserPerms.sh "${install_dir}/example/MySQLUserPerms.sh"
+	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" \
+		ex.MySQLUserPerms.sh "${install_dir}/example/MySQLUserPerms.sh"
+	chmod 755 "${install_dir}/example/MySQLUserPerms.sh"
 	touch example
 
 gbdb:
@@ -90,6 +94,7 @@ gbdb:
 		${MKDIR} "${install_dir}/gbdb/hgFixed"; \
 	fi
 	cp -pLR /gbdb/cb1 "${install_dir}/gbdb"
+	rm -fr "${install_dir}/gbdb/cb1/wib"
 	cp -pLR /gbdb/hgFixed/dbSnpRS.txt.gz "${install_dir}/gbdb/hgFixed"
 	touch gbdb
 
@@ -107,6 +112,8 @@ goldenPath:
 	rm -f "${install_dir}/goldenPath/cbJul2002/sanger/cb25.agp8.supercontigs.fasta.gz"
 	rm -f "${install_dir}/goldenPath/cbJul2002/sanger/cb25.agp8.supercontigs.fasta.qual.gz"
 	rm -fr "${install_dir}/goldenPath/cbJul2002/chromosomes"
+	rm -fr "${install_dir}/goldenPath/cbJul2002/extFile"
+	rm -fr "${install_dir}/goldenPath/cbJul2002/database/trackDb_*"
 	cp -p /cluster/data/cb1/sanger/README "${install_dir}/goldenPath/cbJul2002/sanger/"
 	touch goldenPath
 

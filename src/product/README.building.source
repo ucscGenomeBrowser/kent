@@ -30,7 +30,7 @@ To build the source tree.
 	the mysql-devel RPM to obtain the mysql development
 	environment.
 
-3.  In the source tree, perform the following:
+4.  In the source tree, perform the following:
 	$ cd kent/src
 	$ make libs
 	$ cd hg
@@ -48,4 +48,4 @@ To build the source tree.
 
 	to install binaries in "/destination/prefix/cgi-bin/path"
 
-	[NOTE:  These 'make' command assume gnu make is being used]
+	[NOTE:  These 'make' commands assume gnu make is being used]

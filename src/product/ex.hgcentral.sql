@@ -1,42 +1,52 @@
 -- MySQL dump 8.22
 --
--- Host: localhost    Database: hgcentral
+-- Host: genome-testdb    Database: hgcentraltest
 ---------------------------------------------------------
 -- Server version	3.23.54
 
 --
--- Table structure for table 'sessionDb'
+-- Table structure for table 'blatServers'
 --
 
-CREATE TABLE sessionDb (
-  id int(10) unsigned NOT NULL auto_increment,
-  contents longblob NOT NULL,
-  reserved tinyint(4) NOT NULL default '0',
-  firstUse datetime NOT NULL default '0000-00-00 00:00:00',
-  lastUse datetime NOT NULL default '0000-00-00 00:00:00',
-  useCount int(11) NOT NULL default '0',
-  PRIMARY KEY  (id)
-) TYPE=MyISAM PACK_KEYS=1;
+CREATE TABLE blatServers (
+  db char(32) NOT NULL default '',
+  host char(128) NOT NULL default '',
+  port int(11) NOT NULL default '0',
+  isTrans tinyint(4) NOT NULL default '0'
+) TYPE=MyISAM;
 
 --
--- Table structure for table 'userDb'
+-- Dumping data for table 'blatServers'
 --
 
-CREATE TABLE userDb (
-  id int(10) unsigned NOT NULL auto_increment,
-  contents longblob NOT NULL,
-  reserved tinyint(4) NOT NULL default '0',
-  firstUse datetime NOT NULL default '0000-00-00 00:00:00',
-  lastUse datetime NOT NULL default '0000-00-00 00:00:00',
-  useCount int(11) NOT NULL default '0',
-  PRIMARY KEY  (id)
-) TYPE=MyISAM PACK_KEYS=1;
 
--- MySQL dump 8.22
+INSERT INTO blatServers (db, host, port, isTrans) VALUES ('cb1','blat10',17782,0);
+INSERT INTO blatServers (db, host, port, isTrans) VALUES ('cb1','blat10',17783,1);
+
 --
--- Host: localhost    Database: hgcentral
----------------------------------------------------------
--- Server version	3.23.54
+-- Table structure for table 'dbDb'
+--
+
+CREATE TABLE dbDb (
+  name varchar(32) NOT NULL default '',
+  description varchar(255) NOT NULL default '',
+  nibPath varchar(255) NOT NULL default '',
+  organism varchar(255) NOT NULL default '',
+  defaultPos varchar(255) NOT NULL default '',
+  active int(1) NOT NULL default '0',
+  orderKey int(11) NOT NULL default '1000000',
+  genome varchar(255) NOT NULL default '',
+  scientificName varchar(255) NOT NULL default '',
+  htmlPath varchar(255) NOT NULL default '',
+  hgNearOk tinyint(1) NOT NULL default '0'
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'dbDb'
+--
+
+
+INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, htmlPath, hgNearOk) VALUES ('cb1','July 2002','/gbdb/cb1/nib','Worm','chrUn:74980670-74998831',1,70,'C. briggsae','Caenorhabditis briggsae','/gbdb/cb1/html/description.html',0);
 
 --
 -- Table structure for table 'defaultDb'
@@ -52,69 +62,44 @@ CREATE TABLE defaultDb (
 -- Dumping data for table 'defaultDb'
 --
 
-
 INSERT INTO defaultDb (genome, name) VALUES ('C. briggsae','cb1');
 
+-- MySQL dump 8.22
 --
--- Table structure for table 'blatServers'
---
-
-CREATE TABLE blatServers (
-  db varchar(32) NOT NULL default '',
-  host varchar(128) NOT NULL default '',
-  port int(11) NOT NULL default '0',
-  isTrans tinyint(4) NOT NULL default '0',
-  KEY db (db)
-) TYPE=MyISAM PACK_KEYS=1;
+-- Host: genome-testdb    Database: hgcentraltest
+---------------------------------------------------------
+-- Server version	3.23.54
 
 --
--- Dumping data for table 'blatServers'
+-- Table structure for table 'userDb'
 --
 
+CREATE TABLE userDb (
+  id int(10) unsigned NOT NULL auto_increment,
+  contents longblob NOT NULL,
+  reserved tinyint(4) NOT NULL default '0',
+  firstUse datetime NOT NULL default '0000-00-00 00:00:00',
+  lastUse datetime NOT NULL default '0000-00-00 00:00:00',
+  useCount int(11) NOT NULL default '0',
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;
 
-INSERT INTO blatServers (db, host, port, isTrans) VALUES ('cb1','blat10.cse.ucsc.edu',17782,0);
-INSERT INTO blatServers (db, host, port, isTrans) VALUES ('cb1','blat10.cse.ucsc.edu',17783,1);
+-- MySQL dump 8.22
+--
+-- Host: genome-testdb    Database: hgcentraltest
+---------------------------------------------------------
+-- Server version	3.23.54
 
 --
--- Table structure for table 'dbDb'
+-- Table structure for table 'sessionDb'
 --
 
-CREATE TABLE dbDb (
-  name varchar(32) NOT NULL default '',
-  description varchar(255) NOT NULL default '',
-  nibPath varchar(255) NOT NULL default '',
-  organism varchar(255) default NULL,
-  defaultPos varchar(255) NOT NULL default '',
-  active int(1) default '0',
-  orderKey int(11) default '1000000',
-  genome varchar(255) NOT NULL default '',
-  scientificName varchar(255) default NULL,
-  htmlPath varchar(255) NOT NULL default '',
-  hgNearOk tinyint(1) NOT NULL default '0'
-  UNIQUE KEY name (name)
-) TYPE=MyISAM PACK_KEYS=1;
-
---
--- Dumping data for table 'dbDb'
---
-
-INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, htmlPath, hgNearOk) VALUES ('cb1','July 2002','/gbdb/cb1/nib','Worm','chrUn:74980670-74998831',1,70,'C. briggsae','Caenorhabditis briggsae','/gbdb/cb1/html/description.html',0);
-
-
---
--- Table structure for table 'gdbPdb'
---
-
-#CREATE TABLE gdbPdb (
-#  genomeDb char(32) NOT NULL default '',
-#  proteomeDb char(32) NOT NULL default ''
-#  KEY genomeDb (genomeDb),
-#  KEY proteomeDb (proteomeDb)
-#) TYPE=MyISAM;
-
---
--- Dumping data for table 'gdbPdb'
---
-
-# INSERT INTO gdbPdb (genomeDb, proteomeDb) VALUES ('default','proteins0405');
-
+CREATE TABLE sessionDb (
+  id int(10) unsigned NOT NULL auto_increment,
+  contents longblob NOT NULL,
+  reserved tinyint(4) NOT NULL default '0',
+  firstUse datetime NOT NULL default '0000-00-00 00:00:00',
+  lastUse datetime NOT NULL default '0000-00-00 00:00:00',
+  useCount int(11) NOT NULL default '0',
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;

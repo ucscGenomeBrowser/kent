@@ -44,7 +44,7 @@ has access to the mysql database.  You should be able
 to perform the following at a root login prompt:
 
 # export SQL_PASSWORD=mysql_root_password
-# echo "show tables;" | mysql -p${SQL_PASSWORD} mysql
+# mysql -p${SQL_PASSWORD} -e "show tables;" mysql
 
 Create a MySQL user called "browser" with password
 "genome" and give access to selected MySQL commands
@@ -52,16 +52,14 @@ for the following list of databases.  When you add other
 databases, you will need to add these permissions to your
 databases.
 
-for DBVERSION in hgFixed cb1 hgcentral hgcentraltest
+for DB in hgFixed cb1 hgcentral hgcentraltest
 do
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO browser@localhost \
-	IDENTIFIED BY 'genome';" | \
-	mysql -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO browser@\"%\" \
-	IDENTIFIED BY 'genome';" | \
-	mysql -p${SQL_PASSWORD} mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
+	CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
+	IDENTIFIED BY 'genome';" mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
+	CREATE, DROP, ALTER  on ${DB}.* TO browser@\"%\" \
+	IDENTIFIED BY 'genome';" mysql
 done
 
 The above granted permissions are recommended for browser
@@ -70,30 +68,26 @@ need "GRANT SELECT" permissions.  For example, you could
 create a special user for the browser genome databases only.
 In this example, user: "readonly" with password: "access"
 
-for DBVERSION in cb1 hgFixed
+for DB in cb1 hgFixed
 do
-    echo "GRANT SELECT on ${DBVERSION}.* TO readonly@localhost \
-	IDENTIFIED BY 'access';" | \
-	mysql -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT on ${DBVERSION}.* TO readonly@\"%\" \
-	IDENTIFIED BY 'access';" | \
-	mysql -p${SQL_PASSWORD} mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT on ${DB}.* TO readonly@localhost \
+	IDENTIFIED BY 'access';" mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT on ${DB}.* TO readonly@\"%\" \
+	IDENTIFIED BY 'access';" mysql
 done
 
 A third MySQL user can be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"
 with password: "update"
 
-for DBVERSION in hgcentral hgcentraltest
+for DB in hgcentral hgcentraltest
 do
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO readwrite@localhost \
-	IDENTIFIED BY 'update';" | \
-	mysql -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO readwrite@\"%\" \
-	IDENTIFIED BY 'update';" | \
-	mysql -p${SQL_PASSWORD} mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
+	CREATE, DROP, ALTER on ${DB}.* TO readwrite@localhost \
+	IDENTIFIED BY 'update';" mysql
+    mysql -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
+	CREATE, DROP, ALTER on ${DB}.* TO readwrite@\"%\" \
+	IDENTIFIED BY 'update';" mysql
 done
 
 The cgi-bin binaries obtain their MySQL identities from
@@ -160,5 +154,5 @@ central.password=genome
 
 To test this access with your ~/.hg.conf file in place:
 
-$ echo "show tables;" | hgsql hgcentral
+$ hgsql -e "show tables;" hgcentral
 

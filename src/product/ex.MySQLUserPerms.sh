@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-#	UCSC Genome Browser - Version 30 - MySQL user permissions setup
+#	UCSC Genome Browser - Version VER DATE_STAMP
+#		MySQL user permissions setup
 #
 
 SQL_USER=	# set this to "-u<user_name>" if different than your login name
@@ -13,7 +14,7 @@ fi
 
 echo "Testing your password:"
 
-echo "show tables;" | mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
+mysql ${SQL_USER} -p${SQL_PASSWORD} "show tables;" mysql
 
 if [ "$?" -ne 0 ]; then
 	echo "I gave that a try, it did not work."
@@ -37,43 +38,37 @@ fi
 #	using an alternative hgcentral database.  These will be
 #	specified in the cgi-bin/hg.conf file
 #
-for DBVERSION in cb1 hgcentral hgcentraltest hgFixed
+for DB in cb1 hgcentral hgcentraltest hgFixed
 do
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO browser@localhost \
-	IDENTIFIED BY 'genome';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO browser@\"%\" \
-	IDENTIFIED BY 'genome';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
+	IDENTIFIED BY 'genome';" mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@\"%\" \
+	IDENTIFIED BY 'genome';" mysql
 done
 
 #
 #	Read only access to genome databases for the browser CGI binaries
 #
-for DBVERSION in cb1 hgFixed
+for DB in cb1 hgFixed
 do
-    echo "GRANT SELECT on ${DBVERSION}.* TO readonly@localhost \
-	IDENTIFIED BY 'access';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT on ${DBVERSION}.* TO readonly@\"%\" \
-	IDENTIFIED BY 'access';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT on \
+	${DB}.* TO readonly@localhost IDENTIFIED BY 'access';" mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT on \
+	${DB}.* TO readonly@\"%\" IDENTIFIED BY 'access';" mysql
 done
 
 #
 #	Readwrite access to hgcentral for browser CGI binaries to
 #	maintain user's "shopping" cart cookie settings
 #
-for DBVERSION in hgcentral hgcentraltest
+for DB in hgcentral hgcentraltest
 do
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO readwrite@localhost \
-	IDENTIFIED BY 'update';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER \
-	on ${DBVERSION}.* TO readwrite@\"%\" \
-	IDENTIFIED BY 'update';" | \
-	mysql ${SQL_USER} -p${SQL_PASSWORD} mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+	DELETE, CREATE, DROP, ALTER on ${DB}.* TO readwrite@localhost \
+	IDENTIFIED BY 'update';" mysql
+    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+	DELETE, CREATE, DROP, ALTER on ${DB}.* TO readwrite@\"%\" \
+	IDENTIFIED BY 'update';" mysql
 done
