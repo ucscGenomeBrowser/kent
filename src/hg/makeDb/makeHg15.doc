@@ -2162,17 +2162,17 @@ LOAD ACEMBLY (5/30/03 KRR)
       acembly.$build.genes.proteins.fasta/chr*.fa
     unset build
 
-LOAD GENOMIC DUPES (todo)
+LOAD GENOMIC DUPES (DONE - 2003-09-02 - Hiram)
 o - Load genomic dupes
     ssh hgwdev
-    cd ~/hg15/bed
-    mkdir genomicDups
-    cd genomicDups
-    wget http://codon/jab/web/takeoff/hg1533_dups_for_kent.zip
+    mkdir -p /cluster/data/hg15/bed/segmentalDups
+    cd /cluster/data/hg15/bed/segmentalDups
+    wget http://humanparalogy.gene.cwru.edu/build33/files_for_ucsc/genomicSuperDups.txt.gz
     unzip *.zip
-    awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
-    mysql -u hgcat -pbigSECRET hg15 < ~/src/hg/lib/genomicDups.sql
-    hgLoadBed hg15 -oldTable genomicDups genomicDupes.bed
+    hgsql hg15 < ~kent/src/hg/lib/genomicSuperDups.sql
+    hgsql -e 'load data local infile "genomicSuperDups.txt" into table genomicSuperDups;' hg15
+    #  The standard hgLoad commands do not work on this file.  This data
+    #  is organized differently than any of our standard formats.
 
 LOAD NCI60 (DONE: sugnet - Wed Apr 30 10:25:02 PDT 2003 )
 o - # ssh hgwdev
