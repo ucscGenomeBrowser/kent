@@ -9558,14 +9558,14 @@ root=`basename $file .ss.gz`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP PREDICTIONS/$chrom PHASTCONS/$chrom
-zcat $file | $PHAST/phastCons - hpmrc_rev_dg.mod --rates-cut 1 --nrates 20 --suppress-missing --cut-params 0.018,0.002 --viterbi PREDICTIONS/$chrom/$root.bed --score --seqname $chrom --quiet > ${TMP}/$root.pp
+zcat $file | $PHAST/phastCons - hpmrc_rev_dg.mod --nrates 20 --transitions 0.018,0.002 --viterbi PREDICTIONS/$chrom/$root.bed --score --seqname $chrom --quiet > ${TMP}/$root.pp
 gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
 '_EOF_'
     chmod u+x doPhastCons
 
-    # the --cut-params arguments are approximate maximum likelihood
-    # estimates obtained by running the program *without* --cut-params
+    # the --transitions arguments are approximate maximum likelihood
+    # estimates obtained by running the program *without* --transitions
     # (causes estimation by EM) on five randomly selected 1M bp
     # windows.  All estimates were in the same ballpark (took a rough average)
 
@@ -9634,6 +9634,8 @@ rm $TMP/$root.pp
 #altColor 200,220,255
 #exonArrows off
 #type bed 12 .
+
+
 # Ensembl 34d GENE PREDICTIONS (2004-07-13 baertsch)
 ## reloaded ensGene to add frame info, no change to data
     /cluster/bin/i386/ldHgGene -gtf -genePredExt hg16 ensGene \

@@ -2423,7 +2423,7 @@ root=`basename $file .ss`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP
-$PHAST/phastCons $file rev-dg.mod --cut-at 2 --nrates 10 --suppress-missing --transitions 0.030,0.015 --quiet > ${TMP}/$root.pp
+$PHAST/phastCons $file rev-dg.mod --cut-at 2 --nrates 10 --transitions 0.030,0.015 --quiet > ${TMP}/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
@@ -2659,7 +2659,7 @@ mkdir -p $TMP
 cp $file $TMP/$root.ss.gz
 zcat $TMP/$root.ss.gz \
 | $PHAST/phastCons - rev-dg.mod --cut-at 2 --nrates 10 \
-  --suppress-missing --transitions 0.030,0.015 --quiet \
+  --transitions 0.030,0.015 --quiet \
   > ${TMP}/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz

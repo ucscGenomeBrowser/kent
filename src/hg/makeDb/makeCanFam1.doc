@@ -1318,7 +1318,7 @@ mkdir -p $TMP
 cp $file $TMP/$root.ss.gz
 zcat $TMP/$root.ss.gz \
 | $PHAST/phastCons - rev-dg.mod --nrates 40 \
-  --suppress-missing --quiet --log ${TMP}/$root.log --no-post-probs --quiet
+  --quiet --log ${TMP}/$root.log --no-post-probs --quiet
 mkdir -p MLE/$chrom
 set lc = `wc -l < $TMP/$root.log`
 set pq = `tail -1 $TMP/$root.log | awk '{print $3 " " $4;}'`
@@ -1378,7 +1378,7 @@ mkdir -p PREDICTIONS/$chrom
 cp $file $TMP/$root.ss.gz
 zcat $TMP/$root.ss.gz \
 | $PHAST/phastCons - rev-dg.mod --nrates 40 \
-  --suppress-missing --quiet --viterbi PREDICTIONS/$chrom/$root.bed --score \
+  --quiet --viterbi PREDICTIONS/$chrom/$root.bed --score \
   --transitions 0.08,0.008 > $TMP/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
