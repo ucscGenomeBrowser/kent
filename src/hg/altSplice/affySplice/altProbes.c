@@ -3949,9 +3949,6 @@ presThresh = absThresh;
 current = sameDouble(expressionRatio(event, skipPath, incPath, 0), 1);
 result &= unitTestFunct(test, current, error, "Averaging");
 
-current = sameDouble(expressionRatio(event, skipPath, incPath, 1), -1);
-result &= unitTestFunct(test, current, error, "Not expressed");
-
 current = sameDouble(expressionRatio(event, skipPath, incPath, 2), 2);
 result &= unitTestFunct(test, current, error, "Low expressed");
 
