@@ -1,0 +1,10 @@
+track jgiFilteredModels
+shortLabel JGI Genes
+longLabel JGI Filtered Genes
+group genes
+priority 35.5
+visibility pack
+color 12,120,12
+type genePred
+url http://genome.jgi-psf.org/cgi-bin/dispGeneModel.v4?db=Xentr3&id=$$
+
