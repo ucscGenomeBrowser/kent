@@ -24,18 +24,8 @@ visibility hide
 spectrum on
 type bed 4 +
 
-track vegaGene
-shortLabel Vega Genes
-longLabel Vega Annotations 
-group genes
-priority 37
-visibility hide
-color 0,100,180
-type genePred vegaPep
-url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
-
 track vegaGene2
-shortLabel Vega Genes
+shortLabel Vega Genes2
 longLabel Vega Annotations from Sanger, Genoscope
 group genes
 priority 36
