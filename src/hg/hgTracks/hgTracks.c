@@ -1233,6 +1233,18 @@ return x;
 }
 
 
+static void mgDrawWiggleHorizontalLine( struct memGfx *mg, double where, double min0,
+        double max0, int binNum, int y, double hFactor, int heightPer,
+        Color lineColor )
+/*draws a blue horizontal line on a wiggle track at a specified
+ * location based on the range and number of bins*/
+{
+        int tmp;
+        double y1;
+        tmp = -whichBin( where, min0, max0, binNum ); 
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        mgDrawHorizontalLine( mg, y1, lineColor );
+}
 
 
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
@@ -1243,6 +1255,7 @@ static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int se
    and it looks at the cart to decide whether to interpolate, fill blocks,
    and use anti-aliasing.*/
 {
+int i;
 int baseWidth = seqEnd - seqStart;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
@@ -1262,6 +1275,7 @@ int prevEndSave = -1;
 double prevY = -1;
 int ybase;
 int tmp;
+int binNum = 999;
 
 int currentX, currentXEnd, currentWidth;
 
@@ -1327,17 +1341,12 @@ if( sameString( tg->mapName, "humMus" ) )
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     if( isFull )
     {
-    tmp = -whichBin( 0.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 2.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 5.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+            mgDrawWiggleHorizontalLine( mg, 0.0, min0, max0, binNum, 
+                                    y, hFactor, heightPer, lineColor );     
+            mgDrawWiggleHorizontalLine( mg, 2.0, min0, max0, binNum, 
+                                    y, hFactor, heightPer, lineColor );     
+            mgDrawWiggleHorizontalLine( mg, 5.0, min0, max0, binNum, 
+                                    y, hFactor, heightPer, lineColor );     
     }
     
     }
@@ -1356,24 +1365,9 @@ if( sameString( tg->mapName, "humMus" ) )
 
         if( isFull )
         {   
-        
-
-            
-        tmp = -whichBin( 1.0, min0, max0, 999 );
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
-
-        tmp = -whichBin( 2.0, min0, max0, 999 );
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
-
-        tmp = -whichBin( 3.0, min0, max0, 999 );
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
-
-        tmp = -whichBin( 8.0, min0, max0, 999 );
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
+        for( i=1; i<=8; i++ )
+            mgDrawWiggleHorizontalLine( mg, (double)i, min0, max0, binNum, 
+                                    y, hFactor, heightPer, lineColor );     
         }
     }
     else if( sameString( tg->mapName, "zoo" ) )
@@ -1418,7 +1412,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         /*mapping or sequencing gap*/
         if( (sf->start - sf->end) == 0 ) 
 	        {
-            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 999 );
+            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, binNum );
             y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
             if( gapPrevEnd >= 0 )
 	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
@@ -1435,7 +1429,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             continue;
 	        }
 	
-        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 999 );
+        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, binNum );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         ybase = (int)((double)y+hFactor+(double)heightPer);
@@ -8315,6 +8309,10 @@ if (withLeftLabels)
         printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
+        printYAxisLabel( mg, y+5, group, "4.0", min0, max0 );
+        printYAxisLabel( mg, y+5, group, "5.0", min0, max0 );
+        printYAxisLabel( mg, y+5, group, "6.0", min0, max0 );
+        printYAxisLabel( mg, y+5, group, "7.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "8.0", min0, max0 );
         }
         
