@@ -4453,7 +4453,7 @@ void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
+longXenoPsl1(tdb, item, "Mouse", "mouseChrom", "mm2");
 }
 
 
@@ -4492,7 +4492,7 @@ void doBlatHuman(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-longXenoPsl1(tdb, item, "Human", "chromInfo", "hg10");
+longXenoPsl1(tdb, item, "Human", "humanChrom", "hg12");
 }
 
 void doBlatHuman12(struct trackDb *tdb, char *item)
@@ -8239,10 +8239,9 @@ boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
             return(1);
 }
  
-
-void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int smpSize, char *otherOrg, char *otherDb,
-    char *pslTableName )
+void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
+    char *item, int start, int smpSize, char *otherOrg, char *otherDb,
+    char *pslTableName, boolean printWindowFlag )
 /* Handle click in humMus sample (wiggle) track. */
 {
 
@@ -8265,9 +8264,9 @@ struct psl *thisPsl;
 char pslItem[1024];
 char str[256];
 char thisItem[256];
-char *cgiPslItem;
+char *cgiItem;
+char otherString[256] = "";
 
-//char pslTableName[128] = "blastzBestMouse";
 
 struct sqlResult *pslSr;
 struct sqlConnection *conn2 = hAllocConn();
@@ -8277,6 +8276,8 @@ int thisStart, thisEnd;
 int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 
+
+ char *winOn = cartUsualString( cart, "win", "F" );
 //errAbort( "(%s), (%s)\n", pslTableName, pslTableName );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
@@ -8287,58 +8288,59 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (firstTime)
-	    firstTime = FALSE;
+        firstTime = FALSE;
     else
-	    htmlHorizontalLine();
+        htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
 
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
     hFindSplitTable(seqName, pslTableName, table, &hasBin);
-    sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
+    sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" 
+,
         table, smp->chrom, smp->chromStart+smp->samplePosition[0],
         smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
 
     pslSr = sqlGetResult(conn2, query);
-
+    
+    if(!sameString(winOn,"T"))
+    {
     while(( pslRow = sqlNextRow(pslSr)) != NULL )
     {
-        thisPsl = pslLoad( pslRow+hasBin ); 
+        thisPsl = pslLoad( pslRow+hasBin );
 
         firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
-        
+
         snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
                 thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
                 thisPsl->tStart, thisPsl->tEnd );
-        flag = 0;
 
-        for( i=0; i<smp->sampleCount; i++ )
-        {
-            if( !sampleClickRelevant( smp, i, left, right, humMusWinSize,
-                        thisStart, thisEnd ) )
-                continue;
 
-           flag = 1;
-            break;
-        }
+        cgiItem = cgiEncode(thisItem);
+        longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
+                 otherDb, thisPsl, pslTableName );
 
-        if( flag ) 
-            longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
-                    otherDb, thisPsl, pslTableName );
-        printf("<br>");
+
+        sprintf(otherString, "%d&win=T", thisPsl->tStart );
+        hgcAnchorSomewhere("humMusL", cgiEncode(item), otherString, thisPsl->tName );
+        printf("View individual alignment windows\n</a>");
+        printf("<br><br>");
     }
 
-    htmlHorizontalLine();
+   // htmlHorizontalLine();
+    }
+    else
+    {
+
+    cartSetString( cart, "win", "F" );
     printf("<h3>Alignments Windows </h3>
             <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
 
 
-
-    pslSr = sqlGetResult(conn2, query);
     while(( pslRow = sqlNextRow(pslSr)) != NULL )
     {
-        thisPsl = pslLoad( pslRow+hasBin ); 
+        thisPsl = pslLoad( pslRow+hasBin );
 
         firstAndLastPosition( &thisStart, &thisEnd, thisPsl );
 
@@ -8349,16 +8351,17 @@ while ((row = sqlNextRow(sr)) != NULL)
                         thisStart, thisEnd ) )
                 continue;
 
-            snprintf( str, 256, "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+            snprintf( str, 256, 
+"%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
                 max( smp->chromStart + smp->samplePosition[i] -
                 humMusWinSize / 2 + 1, thisStart + 1),
                 min(smp->chromStart +  smp->samplePosition[i] +
                 humMusWinSize / 2, thisEnd ),
                 whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
 
-            printWindow( thisPsl, 
+            printWindow( thisPsl,
                     smp->chromStart + smp->samplePosition[i] -
-                    humMusWinSize / 2, 
+                    humMusWinSize / 2,
                     smp->chromStart + smp->samplePosition[i] +
                     humMusWinSize / 2,
                     str, otherOrg, otherDb, pslTableName );
@@ -8366,14 +8369,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 
         printf("<br>");
     }
-
-    hFreeConn(&conn2);
-    printf("<BR><BR>Note: these alignments can extend beyond
-            the browser's current viewing window.<BR>");
-
     }
 
 }
+}
+
+
 
 void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int smpSize)
@@ -8450,7 +8451,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
-void humMusClickHandler(struct trackDb *tdb, char *item, boolean reverse )
+void humMusClickHandler(struct trackDb *tdb, char *item, boolean
+        reverse, boolean printWindowFlag )
 /* Put up generic track info. */
 {
 char *dupe, *type, *words[16];
@@ -8474,10 +8476,10 @@ if (wordCount > 0)
 
     if( !reverse )
         humMusSampleClick(conn, tdb, item, start, num,
-            "Mouse", "mm2", "blastzBestMouse" );
+            "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
     else
         humMusSampleClick( conn, tdb, item, start, num,
-            "Human", "hg10", "blastzBestHuman" );
+            "Human", "hg12", "blastzBestHuman", printWindowFlag );
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -8968,11 +8970,11 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     }
 else if( sameWord( track, "humMusL" ))
     {
-    humMusClickHandler( tdb, item, 0);
+    humMusClickHandler( tdb, item, 0, 0);
     }
 else if( sameWord( track, "musHumL" ) )
     {
-    humMusClickHandler( tdb, item, 1);
+    humMusClickHandler( tdb, item, 1, 0);
     }
 else if( sameWord( track, "footPrinter" ))
     {
