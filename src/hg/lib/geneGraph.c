@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.11 2003/12/10 22:33:03 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.12 2004/01/29 01:29:54 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -528,7 +528,7 @@ for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
     for (j=0; j<totalVertexCount; ++j)
-	if (waysOut[j])
+	if (waysOut[j] && gg->vertices[j].type != ggUnused)
 	    ++edgeCount;
     }
 AllocVar(ag);
@@ -576,8 +576,10 @@ edgeCount = 0;
 for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
+    if(gg->vertices[i].type == ggUnused)
+	continue;
     for (j=0; j<totalVertexCount; ++j)
-	if (waysOut[j])
+	if (waysOut[j] && gg->vertices[j].type != ggUnused)
 	    {
 	    struct evidence *e;
 	    int count =0;
