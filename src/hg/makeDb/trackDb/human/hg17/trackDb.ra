@@ -10,7 +10,7 @@ track multiz8way
 shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
-priority 149
+priority 109
 visibility pack
 #color 0, 10, 100
 type wigMaf 0.0 1.0
