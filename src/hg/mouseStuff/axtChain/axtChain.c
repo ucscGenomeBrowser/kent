@@ -226,7 +226,11 @@ dv = v[sCount-1] - v[sCount-2];
 return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
 }
 
-/* Tables that define piecewise linear gap costs. */
+/* Tables that define piecewise linear gap costs. 
+ * These were created by looking at the 'main chain'
+ * of alignments between human chromosome 22 and mouse
+ * chromosome 2 using a preliminary gap cost of
+ * 400 * pow(dq+dt, 0.4) */
 static int gapInitPos[29] = { 1,2,3,4,5,6,7,8,9,10,15,20,30,40,
 	60,80,100,150,200,300,400,500,1000,2000,5000,10000,20000,
 	50000,100000,};
@@ -236,33 +240,19 @@ static int gapInitQGap[24] = { -397,-454,-478,-497,-532,-558,-578,
 static int gapInitTGap[25] = { -359,-412,-443,-467,-492,-512,-528,
 	-540,-555,-565,-619,-669,-763,-842,-956,-1022,-1078,-1148,
 	-1177,-1037,-1192,-1253,-1344,-1426,-1630,};
-static int gapInitBothGap[29] = { 0,-1186,-1186,-1137,-1186,-1137,
-	-1186,-1137,-1038,-955,-886, -840,-826,-829,-868,-891,-914,
-	-944,-949,-966,-972,-1004,-1069,-1138, -1223,-1312,-1403,
-	-1584,-1765,};
-
-int oldCost(int dq, int dt)
-/* Figure out gap costs. */
-{
-if (dq == 0)
-    return interpolate(dt, gapInitPos, gapInitTGap, ArraySize(gapInitTGap));
-else if (dt == 0)
-    return interpolate(dq, gapInitPos, gapInitQGap, ArraySize(gapInitQGap));
-else
-    {
-    int both = dq + dt;
-    return interpolate(both, gapInitPos, gapInitBothGap, ArraySize(gapInitBothGap));
-    }
-}
+static int gapInitBothGap[29] = { 0,-1000,-1010,-1020,-1030,-1040,
+	-1050,-1060,-1070,-1080,-1090, -1100,-1110,-1120,-1130,-1140,-1150,
+	-1160,-1170,-1180,-1190,-1200,-1269,-1338, -1423,-1512,-2000,
+	-3000,-5000,};
 
 struct gapAid
 /* A structure that bundles together stuff to help us
  * calculate gap costs quickly. */
     {
-    int smallSize;	/* Size of tables for doing quick lookup of small gaps. */
-    int *qSmall;    /* Table for small gaps in q; */
-    int *tSmall;	/* Table for small gaps in t. */
-    int *bSmall;    /* Table for small gaps in either. */
+    int smallSize; /* Size of tables for doing quick lookup of small gaps. */
+    int *qSmall;   /* Table for small gaps in q; */
+    int *tSmall;   /* Table for small gaps in t. */
+    int *bSmall;   /* Table for small gaps in either. */
     int *longPos;/* Table of positions to interpolate between for larger gaps. */
     int *qLong;	/* Values to interpolate between for larger gaps in q. */
     int *tLong;	/* Values to interpolate between for larger gaps in t. */
@@ -271,13 +261,30 @@ struct gapAid
     int qPosCount;	/* Number of long positions in q. */
     int tPosCount;	/* Number of long positions in t. */
     int bPosCount;	/* Number of long positions in b. */
+    int qLastPos;	/* Maximum position we have data on in q. */
+    int tLastPos;	/* Maximum position we have data on in t. */
+    int bLastPos;	/* Maximum position we have data on in b. */
+    double qLastPosVal;	/* Value at max pos. */
+    double tLastPosVal;	/* Value at max pos. */
+    double bLastPosVal;	/* Value at max pos. */
+    double qLastSlope;	/* What to add for each base after last. */
+    double tLastSlope;	/* What to add for each base after last. */
+    double bLastSlope;	/* What to add for each base after last. */
     } aid;
+
+double calcSlope(double y2, double y1, double x2, double x1)
+/* Calculate slope of line from x1/y1 to x2/y2 */
+{
+return (y2-y1)/(x2-x1);
+}
 
 void initGapAid()
 /* Initialize gap aid structure for faster gap
  * computations. */
 {
 int i, startLong = -1;
+
+/* Set up to handle small values */
 aid.smallSize = 100;
 AllocArray(aid.qSmall, aid.smallSize);
 AllocArray(aid.tSmall, aid.smallSize);
@@ -289,6 +296,8 @@ for (i=1; i<100; ++i)
     aid.bSmall[i] = interpolate(i, gapInitPos, 
     	gapInitBothGap, ArraySize(gapInitBothGap));
     }
+
+/* Set up to handle intermediate values. */
 for (i=0; i<ArraySize(gapInitPos); ++i)
     {
     if (aid.smallSize == gapInitPos[i])
@@ -308,22 +317,22 @@ aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(int));
 aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(int));
 aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(int));
 
-uglyf("longPos (%d): ", aid.longCount);
-for (i=0; i<aid.longCount; ++i)
-    uglyf("%d,", aid.longPos[i]);
-uglyf("\n");
-uglyf("qLong (%d): ", aid.qPosCount);
-for (i=0; i<aid.qPosCount; ++i)
-    uglyf("%d,", aid.qLong[i]);
-uglyf("\n");
-uglyf("tLong (%d): ", aid.tPosCount);
-for (i=0; i<aid.tPosCount; ++i)
-    uglyf("%d,", aid.tLong[i]);
-uglyf("\n");
-uglyf("bLong (%d): ", aid.bPosCount);
-for (i=0; i<aid.bPosCount; ++i)
-    uglyf("%d,", aid.bLong[i]);
-uglyf("\n");
+/* Set up to handle huge values. */
+aid.qLastPos = aid.longPos[aid.qPosCount-1];
+aid.tLastPos = aid.longPos[aid.tPosCount-1];
+aid.bLastPos = aid.longPos[aid.bPosCount-1];
+aid.qLastPosVal = aid.qLong[aid.qPosCount-1];
+aid.tLastPosVal = aid.tLong[aid.tPosCount-1];
+aid.bLastPosVal = aid.bLong[aid.bPosCount-1];
+aid.qLastSlope = calcSlope(aid.qLastPosVal, aid.qLong[aid.qPosCount-2],
+			   aid.qLastPos, aid.longPos[aid.qPosCount-2]);
+aid.tLastSlope = calcSlope(aid.tLastPosVal, aid.tLong[aid.tPosCount-2],
+			   aid.tLastPos, aid.longPos[aid.tPosCount-2]);
+aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
+			   aid.bLastPos, aid.longPos[aid.bPosCount-2]);
+uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
+uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
+uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
 }
 
 int gapCost(int dq, int dt)
@@ -333,6 +342,8 @@ if (dt == 0)
     {
     if (dq < aid.smallSize)
         return aid.qSmall[dq];
+    else if (dq >= aid.qLastPos)
+        return aid.qLastPosVal + aid.qLastSlope * (dq-aid.qLastPos);
     else
         return interpolate(dq, aid.longPos, aid.qLong, aid.qPosCount);
     }
@@ -340,6 +351,8 @@ else if (dq == 0)
     {
     if (dt < aid.smallSize)
         return aid.tSmall[dt];
+    else if (dt >= aid.tLastPos)
+        return aid.tLastPosVal + aid.tLastSlope * (dt-aid.tLastPos);
     else
         return interpolate(dt, aid.longPos, aid.tLong, aid.tPosCount);
     }
@@ -348,25 +361,11 @@ else
     int both = dq + dt;
     if (both < aid.smallSize)
         return aid.bSmall[both];
+    else if (both >= aid.bLastPos)
+        return aid.bLastPosVal + aid.bLastSlope * (both-aid.bLastPos);
     else
         return interpolate(both, aid.longPos, aid.bLong, aid.bPosCount);
     }
-}
-
-void testGaps()
-{
-int i, g;
-for (i=1; i<ArraySize(gapInitPos); ++i)
-    {
-    g = (gapInitPos[i-1] + gapInitPos[i])/2;
-    printf("%d: %d %d %d\n", g, gapCost(g,0), gapCost(0,g), gapCost(g/2,g-g/2));
-    printf("%d: %d %d %d\n", g, oldCost(g,0), oldCost(0,g), oldCost(g/2,g-g/2));
-    }
-g = 200000;
-printf("%d: %d %d %d\n", g, gapCost(g,0), gapCost(0,g), gapCost(g/2,g-g/2));
-g = 1000000;
-printf("%d: %d %d %d\n", g, gapCost(g,0), gapCost(0,g), gapCost(g/2,g-g/2));
-uglyAbort("All for now");
 }
 
 static int connCount = 0;
@@ -391,9 +390,8 @@ if (dq < 0 || dt < 0)
    dt += overlap;
    ++overlapCount;
    }
-gap = gapCost(dq, dt);
-uglyf("%d %d cost %d\n", dq, dt, gap);
 ++connCount;
+gap = gapCost(dq, dt);
 return overlapAdjustment - gap;
 // return 400 * pow(dt+dq, scoreData.gapPower) + overlapAdjustment;
 }
@@ -596,7 +594,15 @@ optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
 dnaUtilOpen();
 initGapAid();
-testGaps();
+   {
+   int i;
+   for (i=1; ; i *= 10)
+       {
+       uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
+       if (i == 1000000000)
+           break;
+       }
+    }
 if (argc != 5)
     usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);
