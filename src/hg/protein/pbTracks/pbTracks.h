@@ -97,6 +97,7 @@ extern int blockGenomeEnd[], blockGenomeEndPositive[];
 extern int trackOrigOffset;        //current track display origin offset
 
 extern struct vGfx *vg, *vg2;
+extern Color bkgColor;
 
 void hWrites(char *string);
 void hButton(char *name, char *label);
