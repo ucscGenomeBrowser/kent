@@ -254,6 +254,36 @@ spectrum on
 type netAlign fr1 chainFr1
 otherDb fr1
 
+track netGalGal2
+shortLabel Chicken Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 180.1
+visibility dense
+spectrum on
+type netAlign galGal2 chainGalGal2
+otherDb galGal2
+
+track netMonDom1
+shortLabel Opossum Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 190.1
+visibility dense
+spectrum on
+type netAlign monDom1 chainMonDom1
+otherDb monDom1
+
+track netCanFam1
+shortLabel Dog Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 230.1
+visibility dense
+spectrum on
+type netAlign canFam1 chainCanFam1
+otherDb canFam1
+
 track chainHg17
 shortLabel Human Chain 
 longLabel Human ($o_date/$o_db) Chained Blastz Alignments
