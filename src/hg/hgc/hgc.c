@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.464 2003/08/06 20:58:00 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.465 2003/08/08 01:01:27 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12667,7 +12667,7 @@ else if (sameWord(track, "humanKnownGene"))
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track))
+else if (startsWith("blastz", track) || startsWith("blat", track) || (endsWith(track, "Blastz")))
     {
     doAlignmentOtherDb(tdb, item);
     }
