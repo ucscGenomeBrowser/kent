@@ -19,7 +19,7 @@ if ($#argv != 1) then
   echo "  gets the names of all databases on an RR (or mgc) machine"
   echo "  using mark's genbank dumps."
   echo
-  echo "    usage: machine"
+  echo "    usage: RRmachine"
   echo
   exit
 else
