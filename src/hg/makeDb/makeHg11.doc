@@ -143,10 +143,20 @@ format.
   o - Log onto server and change to your genbank directory.
   o - cd /cluster/store1
   o - mkdir mrna.129
+
   o - cd mrna.129
   o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz | gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
-  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
+  o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz | gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin -byOrganism=org
 
+  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
+  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin -byOrganism=org
+
+  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
+  o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin -byOrganism=org
+
+  o - cd /cluster/store1/genbank.129
+  o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
+  o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin -byOrganism=org
 
 STORING mRNA/EST SEQUENCE AND AUXILIARY INFO  (DONE)
 
@@ -154,6 +164,7 @@ o - Store the mRNA (non-alignment) info in database.
      hgLoadRna new hg11
      hgLoadRna add hg11 /cluster/store1/mrna.129/mrna.fa /cluster/store1/mrna.129/mrna.ra
      hgLoadRna add hg11 /cluster/store1/mrna.129/est.fa /cluster/store1/mrna.129/est.ra
+
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
 
@@ -547,7 +558,6 @@ o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank i
 o - Process these out of genbank flat files as so:
        ssh kkstore
        cd /cluster/store1/genbank.129
-       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
        cd ../mrna.129
        faSplit sequence xenoRna.fa 2 xenoRna
        ssh kks00
@@ -591,12 +601,10 @@ Load into database as so:
        hgLoadPsl hg11 xenoMrna.psl -tNameIx
        cd /cluster/store1/mrna.129
        hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa /cluster/store1/hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
-xenoRna.ra
+
 DONE
 Similarly do xenoEst aligments:
    Prepare the est data:
-        cd /cluster/store1/genbank.129
-        gunzip -c gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoEst.fa ../mrna.129/xenoEst.ra ../mrna.129/xenoEst.ta stdin
         cd /cluster/store1/mrna.129
         faSplit sequence xenoEst.fa 16 xenoEst    
 
@@ -625,17 +633,16 @@ Sort xenoEst alignments:
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoEst.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
-IN PROGRESS
 
 Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoEst
-       hgLoadPsl hg11 xenoEst.psl -tNameIx
-       cd /cluster/store1/mrna.129
-       foreach i (xenoEst*.fa)
-	   echo processing $i
-	   hgLoadRna add hg11 /cluster/store1/mrna.129/$i $i:r.ra
+       hgLoadPsl hg11 xenoEst.psl -tNameIx DONE
+TODO       cd /cluster/store1/mrna.129
+       foreach i (org/*)
+	   echo processing org/$i/xenoEst.fa  
        end
+ hgLoadRna add matt /cluster/store1/mrna.129/org/$i/xenoEst.fa /cluster/store1/mrna.129/org/$i/xenoEst.ra
 
 
 PRODUCING FISH ALIGNMENTS (DONE)
@@ -670,9 +677,10 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl hg11 *.psl
-DONE
+
 Now load the fish seqeuence data
-hgLoadRna hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
+hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
+DONE
 
 
 TIGR GENE INDEX (todo)
@@ -1015,3 +1023,92 @@ cp /cluster/store1/mrna.129/mitomapRCRS.fasta M/chrM.fa
 Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file list
 tcsh jkStuff/makeNib.sh
 hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
+
+
+MAKING THE DOWNLOADABLE DATABASE FILES
+
+mkdir /usr/local/apache/htdocs/goldenPath/05apr2002
+mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/chromosomes
+mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+mkdir /usr/local/apache/htdocs/goldenPath/05apr2002/database
+
+o zip up the chromosomes individually
+ssh kkstore (we use kkstore because no NFS traffic via kkstore = faster data transfer)
+
+cd ~/oo
+In tcsh run this script
+  foreach i (*/chr*.fa)
+      echo zip $i:r.zip $i
+      zip $i:r.zip $i
+  end
+
+Then do:  
+ssh hgwdev
+mv */chr*.zip /usr/local/apache/htdocs/goldenPath/05apr2002/chromosomes
+
+Request that the admins push this to hgwbeta.
+
+o Make the big zips
+
+ - Make database.zip
+ssh hgwbeta
+cd /usr/local/apache/htdocs/goldenPath/05apr2002/database
+zip ../bigZips/database.zip *
+
+ssh hgwdev
+cd ~/oo
+
+ - Make chromAgp.zip
+zip chromAgp.zip */chr*.agp
+mv chromAgp.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make chromFa.zip
+zip chromFa.zip */chr*.fa
+mv chromFa.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make chromOut.zip
+zip chromOut.zip */chr*.out
+mv chromOut.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make contigAgp.zip
+zip contigAgp.zip */*/*.agp
+mv contigAgp.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make contigFa.zip
+zip contigFa.zip */*/*.fa
+mv contigFa.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make contigOut.zip
+zip contigOut.zip */*/*.out
+mv contigOut.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make liftAll.zip
+zip liftAll.zip jkStuff/liftAll.lft
+mv liftAll.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZips
+
+ - Make mrna.zip
+zip mrna.zip /cluster/store1/mrna.129/mrna.fa
+mv mrna.zip /usr/local/apache/htdocs/goldenPath/05apr2002/bigZip
+
+o Dump the database
+ssh hgwbeta
+We dump the database on hgwbeta in order to only dump the most accurate datbase state.
+
+There is one trick here: mysqldump becomes the mysql user
+and the directory you want to dump to must have that
+user the ability to write to it.
+
+Here's what to do:
+
+cd /var/tmp
+mkdir hg11-dump
+chmod 777 hg11-dump      (since you aren't root this is quickest)
+cd hg11-dump
+mysqldump --user=root --password=mysql4cc --all --tab=. hg11
+
+Then, that directory will quickly fill with .sql and .txt files
+When it is done do:
+
+cd /var/tmp/hg11-dump
+gzip *.txt
+mv * /usr/local/apache/htdocs/goldenPath/05apr2002/database
