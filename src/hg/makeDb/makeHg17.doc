@@ -1410,6 +1410,8 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
 
 # BUILD KNOWN GENES TABLES (DONE 6/8/04 Fan)
 
+  Build sp040515 and proteins040515 DBs first.
+  
   hgsql hg17 -e "create database kgHg17"
   
   cd /cluster/store6/kgDB/bed
@@ -1450,6 +1452,11 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
    	featureBits hg16 knownGene
    	63781799 bases of 2865248791 (2.226%) in intersection
   
+  Connect to genome-testdb and use hgcentraltest DB.
+  Add a new entry in gdbPdb table:
+ 
+        insert into gdbPdb values('hg17', 'proteins040515');
+
 # CREATE LINEAGE-SPECIFIC REPEATS FOR BLASTZ WITH ZEBRAFISH
 # (DONE, 2004-06-08, hartera)
     # Treat all repeats as lineage-specific
