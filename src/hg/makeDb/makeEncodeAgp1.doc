@@ -38,6 +38,7 @@ else
                   -namePrefix=${org}_ $bedFile stdin -dir $outDir
 endif
 'EOF'
+    # << this line makes emacs coloring happy
 
 # MOUSE
 
