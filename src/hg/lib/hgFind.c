@@ -151,8 +151,9 @@ hFreeConn(&conn);
 }
 
 
-static void findContigPos(char *contig, char **retChromName, 
+void findContigPos(char *contig, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
+
 /* Find position in genome of contig.  Don't alter
  * return variables if some sort of error. */
 {
@@ -1287,6 +1288,10 @@ struct hgPosTable *table;
 struct hgPos *pos;
 int start,end;
 char *chrom;
+boolean relativeFlag;
+char buf[256];
+char *startOffset,*endOffset;
+int iStart = 0, iEnd = 0;
 
 AllocVar(hgp);
 
@@ -1301,19 +1306,60 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
+/* MarkE offset code */
+
+relativeFlag = FALSE;
+strncpy(buf, query, 256);
+startOffset = strchr(buf, ':');
+if (startOffset != NULL) 
+    {
+    *startOffset++ = 0;
+    endOffset = strchr(startOffset, '-');
+    if (endOffset != NULL)
+	{
+	*endOffset++ = 0;
+	startOffset = trimSpaces(startOffset);
+	endOffset = trimSpaces(endOffset);
+	if ((isdigit(startOffset[0])) && (isdigit(endOffset[0])))
+	    {
+	    iStart = atoi(startOffset)-1;
+	    iEnd = atoi(endOffset);
+	    relativeFlag = TRUE;
+	    *(strchr(query,':')) = '\0';
+	    }
+	}
+    }
+
+/* end MarkE offset code */
+
+
+
+
 if (hgIsChromRange(query))
     {
     hgParseChromRange(query, &chrom, &start, &end);
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
     }
+
 else if (isAncientRName(query))
     {
     findAncientRPos( query, &chrom, &start, &end );
     singlePos( hgp, "Human/Mouse Ancient Repeats", NULL, query, chrom, start, end );
     }
+
 else if (isContigName(query))
     {
     findContigPos(query, &chrom, &start, &end);
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
     singlePos(hgp, "FPC Contig", NULL, query, chrom, start, end);
     }
 else if (hgFindCytoBand(query, &chrom, &start, &end))
@@ -1322,6 +1368,11 @@ else if (hgFindCytoBand(query, &chrom, &start, &end))
     }
 else if (hgFindClonePos(query, &chrom, &start, &end))
     {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
     singlePos(hgp, "Genomic Clone", NULL, query, chrom, start, end);
     }
 else if (findMrnaPos(query, hgp, useHgTracks, cart))

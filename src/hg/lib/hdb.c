@@ -16,7 +16,6 @@
 
 static struct sqlConnCache *hdbCc = NULL;
 static struct sqlConnCache *centralCc = NULL;
-
 struct dbConv
 /* Pair for converting database to assembly and vice-versa */
 {
@@ -846,6 +845,68 @@ boolean hgIsChromRange(char *spec)
 {
 return hgParseChromRange(spec, NULL, NULL, NULL);
 }
+
+boolean hgParseContigRange(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Parse something of form contig:start-end into pieces. */
+{
+char *contig, *start,*end;
+char buf[256];
+char contigName[256];
+int iStart, iEnd;
+size_t colinspot;
+char *chrom;
+int contigstart,contigend;
+int spot;
+
+strncpy(buf, spec, 256);
+contig = buf;
+start = strchr(contig, ':');
+
+if (startsWith("ctg",contig) == FALSE)
+    return FALSE;
+
+if (start == NULL)
+    return FALSE;
+else 
+    {
+    spot = strcspn(contig,":");
+    strncpy(contigName,contig,spot);
+    contigName[spot] = '\0';
+    findContigPos(contigName,&chrom,&contigstart,&contigend);
+    *start++ = 0;
+    end = strchr(start, '-');
+    if (end == NULL)
+	return FALSE;
+    else
+    *end++ = 0;
+    contig = trimSpaces(contig);
+    start = trimSpaces(start);
+    end = trimSpaces(end);
+    if (!isdigit(start[0]))
+	return FALSE;
+    if (!isdigit(end[0]))
+	return FALSE;
+/*    if ((contig = hgOfficialChromName(contig)) == NULL)
+      return FALSE; */
+    iStart = atoi(start)-1;
+    iEnd = atoi(end);
+    }
+if (retChromName != NULL)
+    *retChromName = chrom;
+if (retWinStart != NULL)
+    *retWinStart = contigstart + iStart;
+if (retWinEnd != NULL)
+    *retWinEnd = contigstart + iEnd;
+return TRUE; 
+}
+
+boolean hgIsContigRange(char *spec)
+/* Returns TRUE if spec is chrom:N-M for some human
+ * chromosome chrom and some N and M. */
+{
+return hgParseContigRange(spec, NULL, NULL, NULL);
+}  
 
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
 /* Look up track in database. */

@@ -6390,7 +6390,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    int start, end;
 	    if (wordCount < 3)
 	        errAbort("Expecting 3 words in browser position line");
-	    if (!hgIsChromRange(words[2]))
+	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
 	    }
@@ -6779,6 +6779,10 @@ return round(x*guideBases);
 
 boolean findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
+/* Search for positions in genome that match user query.   
+Return TRUE if the query results in a unique position.  
+Otherwise display list of positions and return FALSE. */
+
 {
 struct hgPositions *hgp;
 struct hgPos *pos;
@@ -6787,10 +6791,10 @@ char firststring[512];
 char secondstring[512];
 int commaspot;
 char *firstChromName;
-int firstWinStart;
+int firstWinStart = 0;
 int firstWinEnd;
 char *secondChromName;
-int secondWinStart;
+int secondWinStart = 0;
 int secondWinEnd;
 boolean firstSuccess;
 boolean secondSuccess;
@@ -6799,20 +6803,27 @@ boolean secondSuccess;
 
 if (strstr(spec,",") != NULL)
     {
+    firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
+    secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
     commaspot = strcspn(spec,",");
     strncpy(firststring,spec,commaspot);
     firststring[commaspot] = '\0';
     strncpy(secondstring,spec + commaspot + 1,strlen(spec));
     firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd);
     secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd); 
+    if (firstSuccess == FALSE && secondSuccess == FALSE)
+	{
+	errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
+	return TRUE;
+	}
     if (firstSuccess == FALSE)
 	{
-	errAbort("%s not uniquely determined.",firststring);
+	errAbort("%s not uniquely determined: %d locations.",firststring,firstWinStart);
 	return TRUE;
 	}
     if (secondSuccess == FALSE)
 	{
-	errAbort("%s not uniquely determined.",secondstring);
+	errAbort("%s not uniquely determined: %d locations.",secondstring,secondWinStart);
 	return TRUE;
 	}
     if (strcmp(firstChromName,secondChromName) != 0)
@@ -6844,11 +6855,13 @@ if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
     }
 else
     {
-    hgPositionsHtml(hgp, stdout, TRUE, cart);
+    if (*retWinStart != 1)
+	hgPositionsHtml(hgp, stdout, TRUE, cart);
+    else
+	*retWinStart = hgp->posCount;
     hgPositionsFree(&hgp);
     return FALSE;
     }
-freeDyString(&ui);
 }
 
 void tracksDisplay()
