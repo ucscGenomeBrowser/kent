@@ -143,13 +143,30 @@ enum nci60OptEnum {
    nci60Unknown = 13
 };
 
-enum cghNci60OptEnum nci60StringToEnum(char *string);
+enum nci60OptEnum nci60StringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *nci60EnumToString(enum cghNci60OptEnum x);
+char *nci60EnumToString(enum nci60OptEnum x);
 /* Convert from enum to string representation. */
 
 void nci60DropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/*** Some Stuff for the AFFY track ***/
+
+enum affyOptEnum {
+    affyChipType = 0,
+    affyId = 1,
+    affyTissue = 2,
+};
+
+enum affyOptEnum affyStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *affyEnumToString(enum affyOptEnum x);
+/* Convert from enum to string representation. */
+
+void affyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 /****** Some stuff for Rosetta related controls *******/

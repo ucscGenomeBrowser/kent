@@ -89,6 +89,14 @@ cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
+void affyUi(struct trackDb *tdb)
+/* put up UI for the affy track from stanford track */
+{
+char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(0));
+printf("<p><b>Experiment Display: </b> ");
+affyDropDown("affy.type", affyMap);
+}
+
 void rosettaUi(struct trackDb *tdb)
 /* put up UI for the rosetta track */
 {
@@ -170,6 +178,8 @@ else if (sameString(track, "xenoEst"))
     mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
+else if (sameString(track, "affy"))
+    affyUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)

@@ -243,6 +243,36 @@ cgiMakeDropList(var, nci60Options, ArraySize(nci60Options),
 	curVal);
 }
 
+/****** Some stuff for affy related controls *******/
+
+static char *affyOptions[] = {
+    "Chip Type",
+    "Chip ID",
+    "Tissue Averages"
+    };
+
+enum affyOptEnum affyStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, affyOptions);
+if (x < 0)
+   errAbort("hui::affyStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *affyEnumToString(enum affyOptEnum x)
+/* Convert from enum to string representation. */
+{
+return affyOptions[x];
+}
+
+void affyDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, affyOptions, ArraySize(affyOptions), 
+	curVal);
+}
+
 /****** Some stuff for Rosetta related controls *******/
 
 static char *rosettaOptions[] = {
