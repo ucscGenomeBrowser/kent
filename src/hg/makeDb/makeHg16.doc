@@ -9051,7 +9051,8 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
     pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
 
-# RUN BLASTZ VS. MACACA MULATTA
+
+### RUN BLASTZ VS. MACACA MULATTA
 
 #get sequence from trace repository
 cd /cluster/bluearc/macaca
@@ -9203,3 +9204,68 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     end
     para create jobList
     para try, check, push, check
+## end of blastz macaca mulatta alignment
+
+#### mrnaBlastz track - all mrnas aligned using blastz  Robert 2/20/2004
+mkdir /cluster/data/hg16/bed/mrnaBlastz
+cd /cluster/data/hg16/bed/mrnaBlastz
+/cluster/data/genbank/bin/i386/gbGetSeqs -gbRoot=/cluster/data/genbank genbank mrna mrna.fa -db=hg16 -native
+faTrimPolyA mrna.fa hg16Mrna.fa
+faSize hg16Mrna.fa -detailed=on > S2.len
+mkdir /cluster/bluearc/hg/mrnaHg16
+faSplit sequence hg16Mrna.fa 100 /cluster/bluearc/hg/mrnaHg16/mrna
+ls -1 /cluster/bluearc/scratch/hg/mrnaHg16/ > mrna.lst
+hgsql hg16 < chromInfo.sql > S1.len
+awk '{print $1}' S1.len |grep -v random >  S1.lst
+cd /cluster/bluearc/hg/gs.17/build34/mrnaBlastz
+make-joblist
+para create spec
+para push
+~angie/hummus/do.out2lav DEF > j
+para create j
+para push
+#!/bin/tcsh
+set base="/cluster/bluearc/hg/gs.17/build34/mrnaBlastz"
+
+    cd $base
+    mkdir -p pslRaw
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/pslRaw/$chr.psl
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToPsl stdin stdout \
+        | sed -e 's@scratch/hg/gs.17/build34/bothMaskedNibs//@@' | sed -e 's/\.nib:[0-9]*-[0-9]*//' > $out 
+      popd
+    end
+
+for i in `ls pslRaw/` ; do echo sortIt.sh pslRaw/$i pslSort/$i >> spec.sort ; done
+para create spec.sort - sorts pslRaw to pslSort
+
+for i in `awk '{print $1}' S1.len` ; do echo pslFilterDups pslSort/$i.psl pslFilter/$i.psl  >> spec.dup ; done
+para create spec.dup - filters pslSort to pslFilter using pslFilterDups
+
+for i in `awk '{print $1}' S1.len` ; do echo axtChain -linearGap=linearGap.txt -psl pslFilter/$i.psl /scratch/hg/gs.17/build34/bothMaskedNibs/ -faQ /cluster/data/hg16/bed/mrnaBlastz/hg16Mrna.fa chain/$i.chain >> spec.chain ; done
+para create spec.chain - chains pslFilter to chain
+
+mkdir chainFilter
+for i in `awk '{print $1}' S1.len` ; do echo doFilter ../chain/$i.chain ../chainFilter/$i.chain >> spec.filter ; done
+spec.filter - filters chain to chainFilter using doFilter
+
+mkdir -p preNet
+
+cd chainFilter
+foreach i ( *.chain)
+chainPreNet $i ../S1.len ../S2.len ../preNet/$i
+end
+
+ls /cluster/data/hg16/nib/*.nib > S1.lst
+
+for i in `awk '{print $1}' S1.len`; do chainToPsl ../preNet/$i.chain ../S1.len ../S2.len ../S1.lst /cluster/data/hg16/bed/mrnaBlastz/hg16Mrna.fa ../psl/$i.psl >> spec.chain2psl.new ; echo $i done chainToPsl ; done
+ssh kk9-10
+para create spec.chain2psl.new
+
+for i in `awk '{print $1}' S1.len`; do hgLoadPsl hg16 -table=${i}_mrnaBlastz psl/$i.psl ; echo $i done ; done
+
+## end of blastz Mrna track
