@@ -1052,14 +1052,15 @@ puts("<TABLE>\n");
 gotFirst = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (! strstr(row[1], "blob"))
+    if (! sameWord(row[1], "longblob"))
 	{
 	if (! gotFirst)
 	    gotFirst = TRUE;
 	else
 	    puts(" AND </TD></TR>\n");
 	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
-	if (strstr(row[1], "char"))
+	if (strstr(row[1], "char") || strstr(row[1], "text") ||
+	    strstr(row[1], "blob"))
 	    {
 	    snprintf(name, sizeof(name), "dd%s_%s", tableId, row[0]);
 	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
@@ -1350,8 +1351,8 @@ for (i=0;  i < ddOpMenuSize;  i++)
 if (! legit)
     webAbort("Error", "Illegal does/doesn't value \"%s\"", dd);
 
-/* tokenize (do allow wildcards) */
-tokList = kxTokenize(pat, TRUE);
+/* tokenize (do allow wildcards, SQL wildcards, hyphens) */
+tokList = kxTokenizeFancy(pat, TRUE, TRUE, TRUE);
 
 /* The subterms are joined by OR if dd="does", AND if dd="doesn't" */
 or  = sameString(dd, "does") ? " OR " : " AND ";
@@ -1413,7 +1414,7 @@ if ((rawQuery == NULL) || (rawQuery[0] == 0))
 
 /* tokenize (do allow wildcards, and include quotes.) */
 kxTokIncludeQuotes(TRUE);
-tokList = kxTokenize(rawQuery, TRUE);
+tokList = kxTokenizeFancy(rawQuery, TRUE, TRUE, TRUE);
 
 /* to be extra conservative, wrap the whole expression in parens. */
 dyStringAppend(clause, "(");
