@@ -2895,9 +2895,9 @@ hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
     hgLoadSeq mm4 /gbdb/hgFixed/affyProbes/gnf1m.fa
 
     # Load up track
-    affyPslAndAtlasToBed affyGnf1m.psl \
-      /projects/compbio/data/microarray/geneAtlas2/mouse/GNF1M_20030403.AD.txt \
-      gnfAtlas2.bed /dev/null -newType -chip=GNF1M
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfMouseAtlas2MedianRatio \
+    	affyGnf1m.psl
+    # Note that the unmapped 5000 records are from all-N sequences.
     hgLoadBed mm4 gnfAtlas2 gnfAtlas2.bed
 
     # Create known gene mapping table and distance table.
