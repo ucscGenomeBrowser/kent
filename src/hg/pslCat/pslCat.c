@@ -15,10 +15,11 @@ errAbort(
   "   -check parses input.  Detects more errors but slower\n"
   "   -nohead omit psl header\n"
   "   -dir  files are directories (concatenate all in dirs)\n"
+  "   -out=file put output to file rather than stdout\n"
   "   -ext=.xxx  limit files in directories to those with extension\n");
 }
 
-void catOnePsl(char *fileName, boolean check)
+void catOnePsl(char *fileName, boolean check, FILE *out)
 /* Write one .psl file to standard out.  Don't write header. */
 {
 struct lineFile *lf = pslFileOpen(fileName);
@@ -31,7 +32,7 @@ if (check)
 
     while ((psl = pslNext(lf)) != NULL)
         {
-	pslTabOut(psl, stdout);
+	pslTabOut(psl, out);
 	pslFree(&psl);
 	}
     }
@@ -40,21 +41,24 @@ else
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	mustWrite(stdout, line, lineSize-1);
-	fputc('\n', stdout);
+	fputc('\n', out);
 	}
     }
 lineFileClose(&lf);
 }
 
 void pslCat(int fileCount, char *fileNames[], 
-	boolean check, boolean doDir, char *extension)
+	boolean check, boolean doDir, char *extension, char *out)
 /* pslCat - concatenate psl files. */
 {
 int i;
 char *fileName;
+FILE *f = stdout;
 
+if (out != NULL)
+    f = mustOpen(out, "w");
 if (!cgiBoolean("nohead"))
-    pslWriteHead(stdout);
+    pslWriteHead(f);
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
@@ -65,13 +69,13 @@ for (i=0; i<fileCount; ++i)
 	for (el = list; el != NULL; el = el->next)
 	    {
 	    if (extension == NULL || endsWith(el->name, extension))
-	        catOnePsl(el->name, check);
+	        catOnePsl(el->name, check, f);
 	    }
 	slFreeList(&list);
 	}
     else
         {
-	catOnePsl(fileName, check);
+	catOnePsl(fileName, check, f);
 	}
     }
 }
@@ -84,6 +88,7 @@ if (argc < 2)
     usage();
 pslCat(argc-1, argv+1, 
 	cgiBoolean("check"), 
-	cgiBoolean("dir"), cgiOptionalString("ext"));
+	cgiBoolean("dir"), cgiOptionalString("ext"),
+	cgiOptionalString("out"));
 return 0;
 }

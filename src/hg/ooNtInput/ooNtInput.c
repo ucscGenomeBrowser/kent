@@ -74,7 +74,9 @@ struct clone *clone;
 while (lineFileRow(lf, words))
     {
     splitPath(words[0], dir, base, ext);
-    clone = hashMustFindVal(cloneHash, base);
+    clone = hashFindVal(cloneHash, base);
+    if (clone == NULL)
+        errAbort("%s is in %s but not hash\n", base, fileName);
     clone->faFile = cloneString(words[0]);
     }
 lineFileClose(&lf);
@@ -111,10 +113,12 @@ while (lineFileRow(lf, words))
 	hashAddSaveName(ntHash, ntName, nt, &nt->name);
 	nt->cloneList = newDlList();
 	}
-    clone = hashMustFindVal(cloneHash, words[1]);
-    clone->nt = nt;
-    dlAddValTail(nt->cloneList, clone);
-    nt->cloneCount += 1;
+    if ((clone = hashFindVal(cloneHash, words[1])) != NULL)
+	{
+	clone->nt = nt;
+	dlAddValTail(nt->cloneList, clone);
+	nt->cloneCount += 1;
+	}
     }
 lineFileClose(&lf);
 slReverse(&ntList);
@@ -133,6 +137,8 @@ struct ntContig *ntList = NULL, *nt;
 char fileName[512];
 char infoHeader[128];
 FILE *f = NULL;
+
+uglyf("%s %s %s\n", dir, chrom, contig);
 
 /* Read in input three files. */
 sprintf(fileName, "%s/info.noNt", dir);
