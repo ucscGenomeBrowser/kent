@@ -197,6 +197,26 @@ if (!hashLookup(contigHash, ctg))
 	ctg, chrom);
 }
 
+void outputLifts(char *ooDir, struct contigInfo *ciList,
+    char *chromName, char *shortName, char *type, char *shortType,
+    struct chromInserts *chromInserts)
+/* Write out ciList in various forms to output files. */
+{
+char liftDir[512];
+char fileName[512];
+
+sprintf(liftDir, "%s/%s/lift", ooDir, shortName);
+mkdir(liftDir, 0777);
+sprintf(fileName, "%s/%s.lst", liftDir, type);
+writeList(fileName, ciList);
+sprintf(fileName, "%s/%s.lft", liftDir, type);
+writeLift(fileName, ciList, chromInserts, chromName, shortName);
+sprintf(fileName, "%s/%sOut.lst", liftDir, shortType);
+writeListType(fileName, ciList, ".fa.out");
+sprintf(fileName, "%s/%sAgp.lst", liftDir, shortType);
+writeListType(fileName, ciList, ".agp");
+}
+
 
 void ooLiftSpec(char *mapName, char *inserts, char *ooDir)
 /* This will make ordered.lft and random.lft 'lift specifications' in
@@ -210,9 +230,7 @@ char shortName[32];
 boolean isOrdered;
 char *chrom;
 struct contigInfo *ciList, *ci;
-char fileName[512];
 char *shortType, *type, *suffix;
-char liftDir[512];
 boolean gotSizes = FALSE;
 struct hash *insertsHash = newHash(8);
 struct hash *contigHash = newHash(0);
@@ -271,16 +289,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	hashStore(contigHash, ci->name);
     gotSizes |= fillInSizes(ciList, ooDir, shortName);
 
-    sprintf(liftDir, "%s/%s/lift", ooDir, shortName);
-    mkdir(liftDir, 0777);
-    sprintf(fileName, "%s/%s.lst", liftDir, type);
-    writeList(fileName, ciList);
-    sprintf(fileName, "%s/%s.lft", liftDir, type);
-    writeLift(fileName, ciList, chromInserts, chromName, shortName);
-    sprintf(fileName, "%s/%sOut.lst", liftDir, shortType);
-    writeListType(fileName, ciList, ".fa.out");
-    sprintf(fileName, "%s/%sAgp.lst", liftDir, shortType);
-    writeListType(fileName, ciList, ".agp");
+    outputLifts(ooDir, ciList, chromName, shortName, 
+    	type, shortType, chromInserts);
     }
 if (!gotSizes)
     warn("All contigs size 0??? Maybe you need to run goldToAgp.", chrom);
