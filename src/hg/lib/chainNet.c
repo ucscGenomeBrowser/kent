@@ -126,6 +126,8 @@ for (;;)
 		int iVal = lineFileNeedNum(lf, words, i+1);
 		if (sameString(name, "id"))
 		    fill->chainId = iVal;
+		else if (sameString(name, "ali"))
+		    fill->ali = iVal;
 		else if (sameString(name, "tN"))
 		    fill->tN = iVal;
 		else if (sameString(name, "qN"))
@@ -174,6 +176,8 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " id %d", fill->chainId);
     if (fill->score > 0)
         fprintf(f, " score %1.0f", fill->score);
+    if (fill->ali > 0)
+        fprintf(f, " ali %d", fill->ali);
     if (fill->qOver >= 0)
         fprintf(f, " qOver %d", fill->qOver);
     if (fill->qFar >= 0)

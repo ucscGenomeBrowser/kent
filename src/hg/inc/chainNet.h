@@ -27,6 +27,7 @@ struct cnFill
 	/* Optional fields. */
     int chainId;   /* Chain id.  0 for a gap. */
     double score;  /* Score of associated chain. 0 if undefined. */
+    int ali;       /* Bases in non-gapped alignments. */
     int qOver;     /* Overlap with parent in query if syntenic or inverted. */
     int qFar;      /* How far away is parent in query if syntenic or inverted. */
     int qDup;	   /* Number of bases that are duplicated. */
