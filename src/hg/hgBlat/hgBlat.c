@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.76 2004/06/07 23:09:48 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.77 2004/06/09 01:03:55 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -301,6 +301,7 @@ FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize, maxSeqCount;
+int minSingleSize = 18;
 char *genome = cgiString("db");
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
@@ -406,6 +407,11 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	warn("Sequence %s is %d letters long (max is %d), skipping",
 	    seq->name, seq->size, maxSingleSize);
 	continue;
+	}
+    if (oneSize < 18)
+        {
+	warn("Sequence %s is %d letters long (min is %d), skipping", 
+		seq->name, seq->size, minSingleSize);
 	}
     totalSize += oneSize;
     if (totalSize > maxTotalSize)
