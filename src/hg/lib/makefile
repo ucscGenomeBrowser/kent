@@ -18,7 +18,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     featureBits.o fishClones.o flyBaseSwissProt.o gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o genomicSuperDups.o \
     ggCluster.o ggDbIo.o ggGraph.o goa.o goaPart.o grp.o \
-    hCommon.o hdb.o hgConfig.o hgFind.o \
+    hCommon.o hdb.o hgConfig.o hgExp.o hgFind.o \
     hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
     jaxOrtholog.o jaxQTL.o jksql.o \
     knownInfo.o knownMore.o lfs.o \
