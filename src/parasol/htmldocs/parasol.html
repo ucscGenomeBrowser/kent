@@ -28,11 +28,6 @@ http://www.soe.ucsc.edu/~kent/src/parasol.tgz
 </a>
 .
 
-</body>
-
-</html>
-
-
 <h2>
 PARASOL QUICK START
 </h2>
@@ -335,7 +330,7 @@ To start up the Parasol system do the following:
   paraNodeStart machineList hub=parasolHost 
     userPath=bin sysPath=/share/bin:/usr/local/bin 
 
-  paraHub machineList &
+  paraHub machineList &amp;
 
 </pre>
 You may well want to customize the userPath and sysPath according to 
@@ -353,7 +348,7 @@ For further security use the -subnet parameter to paraHub which will restrict in
 A common example of this would be
 <pre>
 
-  paraHub machineList -subnet=124.168 &
+  paraHub machineList -subnet=124.168 &amp;
 
 </pre>
  
@@ -395,7 +390,8 @@ Para reads the results file written by paraHub to determine
 which jobs have finished or failed.
 <br>
 <br>
-<img src="./parasol_files/image002.gif"><br>
+<img src="./parasol_files/image002.gif" 
+alt="diagram of parasol scheduling system"><br>
 <br>
 
 Figure 1.  
@@ -567,6 +563,8 @@ The code to read and write this database was generated with AutoSql.
 <i>para</i> will avoid loading the hub with more than 100,000 jobs at a time,  
 and will only submit failed jobs three times before giving up on them.   
 
+
+
 <h2>
 PARASOL  COMMAND REFERENCE
 </h2>
@@ -575,12 +573,16 @@ PARASOL  COMMAND REFERENCE
 Note that all commands will produce a usage summary if run with no arguments.  
 In general this summary will be more up to date than the descriptions here.
 
+</pre>
 <h3>para</h3>
+<pre>
     Manage a batch of jobs in parallel on a compute cluster.
     Normal usage is to do a 'para create' followed by 'para push' until job is done.  
     Use 'para check' to check status.
 
+</pre>
 <h4>Command Line</h4>
+<pre>
     usage:
 	para command [command-specific arguments]
 
@@ -672,9 +674,11 @@ para priority 999
    Set batch priority. Values explained under 'push' options above.
 
 	 
+</pre>
 <h4>
 Para Job Lists
 </h4>
+<pre>
 Job lists are files with one command per line.  
 The following two lines would be a simple job list:
 
@@ -717,13 +721,15 @@ The paraNode daemon runs the commandline specified in the job,
 but it has no shell features of its own.
 
 
+</pre>
 <h3>
 gensub2
 </h3>
+<pre>
 Generate job submission file from template and two file lists.
 
 usage:
-    gensub2 <file list 1> <file list 2> <template file> <output file>
+    gensub2 [file list 1] [file list 2] [template file] [output file]
 
 This will substitute each file in the file lists for $(path1) 
 
@@ -773,9 +779,11 @@ The following options can change this:
        -group2 - write elements in order Aa Ba Ca Ab Bb Cb Ac Bc Cc
 
 
+</pre>
 <h3>
 parasol
 </h3>
+<pre>
 Parasol is the name given to the overall system for managing jobs on
 a computer cluster and to this specific program.  This program is
 intended primarily for system administrators, and some options of this command 
@@ -826,10 +834,10 @@ ADMINISTRATIVE COMMAND REFERENCE
 </h2>
 
 
-<pre>
 <h3>
 paraHub
 </h3>
+<pre>
 paraHub - parasol hub server.
 
 usage:
@@ -862,17 +870,21 @@ options:
 
  
 
+</pre>
 <h3>
 paraHubStop
 </h3>
+<pre>
 paraHubStop - Shut down paraHub daemon.
 
 usage:
    paraHubStop now
 
+</pre>
 <h3>
 paraNode
 </h3>
+<pre>
 paraNode - parasol node server.
 
 usage:
@@ -902,9 +914,11 @@ options:
 
  
 
+</pre>
 <h3>
 paraNodeStart
 </h3>
+<pre>
 paraNodeStart - Start up parasol node daemons on a list of machines.
 
 usage:
@@ -940,17 +954,21 @@ options:
              For example ssh. Default rsh.
 	     
 
+</pre>
 <h3>
 paraNodeStop
 </h3>
+<pre>
 paraNodeStop - Shut down parasol node daemons on a list of machines.
 
 usage:
     paraNodeStop machineList
 
+</pre>
 <h3>
 paraNodeStatus
 </h3>
+<pre>
 paraNodeStatus - Check status of paraNode on a list of machines.
 
 usage:
