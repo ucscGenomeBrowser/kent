@@ -17,6 +17,7 @@ cgi-alpha: libs
 
 cgi-beta: libs
 	cd hg; make beta; cd ..
+
 clean:
 	cd lib; make clean; cd .. 
 	cd hg; make clean; cd ..
