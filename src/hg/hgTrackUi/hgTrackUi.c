@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.61 2003/06/18 19:03:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.62 2003/06/19 12:38:24 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -391,6 +391,7 @@ void specificUi(struct trackDb *tdb)
 		 sameString( track, "musHumL") ||
 		 sameString( track, "regpotent") ||
 		 sameString( track, "mm3Rn2L" )	 ||
+		 sameString( track, "mm3Hg15L" ) ||
 		 sameString( track, "hg15Mm3L" ))
 		humMusUi(tdb,7);
 else if (startsWith("blastz", track))
