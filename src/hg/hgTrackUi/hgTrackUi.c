@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.118 2004/07/04 00:22:56 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.119 2004/07/06 20:53:09 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -293,13 +293,13 @@ usePos= cartUsualBoolean(cart, posName, FALSE);
 
 printf("<P><B>Label elements by: </B> ");
 cgiMakeCheckBox(geneName, useGene);
-printf("Gene ");
+printf("Human Gene ");
 cgiMakeCheckBox(accName, useAcc);
-printf("mRNA ");
+printf("Human mRNA ");
 cgiMakeCheckBox(sprotName, useSprot);
-printf("SwissProt ");
+printf("SwissProt ID ");
 cgiMakeCheckBox(posName, usePos);
-printf("Human Position ");
+printf("Human Position");
 
 cdsColorOptions(tdb, 2);
 }
