@@ -67,11 +67,12 @@
 #include "celeraCoverage.h"
 #include "web.h"
 #include "grp.h"
+#include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.590 2003/09/04 17:19:33 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.591 2003/09/05 23:14:57 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
-#define CHROMOSOME_SHADES 4
+#define CHROM_COLORS 26
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -87,9 +88,8 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
-Color chromColor[CHROMOSOME_SHADES * 8];
-/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 
- * colors allocated */
+Color chromColor[CHROM_COLORS+1];
+/* Declare colors for chromosome coloring, +1 for unused chrom 0 color */
 
 /* Have the 3 shades of 8 chromosome colors been allocated? */
 boolean chromosomeColorsMade = FALSE; 
@@ -98,7 +98,9 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
+/*
 int maxChromShade = CHROMOSOME_SHADES - 1;
+*/
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
@@ -910,88 +912,39 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
+/*	See inc/chromColors.h for color defines	*/
 void makeChromosomeShades(struct vGfx *vg) 
 /* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
 {
-static struct rgbColor blk = {0, 0, 0};
-static struct rgbColor white = {255, 255, 255};
-static struct rgbColor chrom1 = {255, 0, 0};  /* red */
-static struct rgbColor chrom2 = {255, 153, 0}; /* orange */
-static struct rgbColor chrom3 = {255, 255, 0}; /* yellow */
-static struct rgbColor chrom4 = {0, 255, 0}; /* green */
-static struct rgbColor chrom5 = {0, 255, 255}; /* cyan? aka lt blue */
-static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
-static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
-static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
+    /*	color zero is for error conditions only	*/
+chromColor[0] = vgFindColorIx(vg, 0, 0, 0);
+chromColor[1] = vgFindColorIx(vg, CHROM_1_R, CHROM_1_G, CHROM_1_B);
+chromColor[2] = vgFindColorIx(vg, CHROM_2_R, CHROM_2_G, CHROM_2_B);
+chromColor[3] = vgFindColorIx(vg, CHROM_3_R, CHROM_3_G, CHROM_3_B);
+chromColor[4] = vgFindColorIx(vg, CHROM_4_R, CHROM_4_G, CHROM_4_B);
+chromColor[5] = vgFindColorIx(vg, CHROM_5_R, CHROM_5_G, CHROM_5_B);
+chromColor[6] = vgFindColorIx(vg, CHROM_6_R, CHROM_6_G, CHROM_6_B);
+chromColor[7] = vgFindColorIx(vg, CHROM_7_R, CHROM_7_G, CHROM_7_B);
+chromColor[8] = vgFindColorIx(vg, CHROM_8_R, CHROM_8_G, CHROM_8_B);
+chromColor[9] = vgFindColorIx(vg, CHROM_9_R, CHROM_9_G, CHROM_9_B);
+chromColor[10] = vgFindColorIx(vg, CHROM_10_R, CHROM_10_G, CHROM_10_B);
+chromColor[11] = vgFindColorIx(vg, CHROM_11_R, CHROM_11_G, CHROM_11_B);
+chromColor[12] = vgFindColorIx(vg, CHROM_12_R, CHROM_12_G, CHROM_12_B);
+chromColor[13] = vgFindColorIx(vg, CHROM_13_R, CHROM_13_G, CHROM_13_B);
+chromColor[14] = vgFindColorIx(vg, CHROM_14_R, CHROM_14_G, CHROM_14_B);
+chromColor[15] = vgFindColorIx(vg, CHROM_15_R, CHROM_15_G, CHROM_15_B);
+chromColor[16] = vgFindColorIx(vg, CHROM_16_R, CHROM_16_G, CHROM_16_B);
+chromColor[17] = vgFindColorIx(vg, CHROM_17_R, CHROM_17_G, CHROM_17_B);
+chromColor[18] = vgFindColorIx(vg, CHROM_18_R, CHROM_18_G, CHROM_18_B);
+chromColor[19] = vgFindColorIx(vg, CHROM_19_R, CHROM_19_G, CHROM_19_B);
+chromColor[20] = vgFindColorIx(vg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
+chromColor[21] = vgFindColorIx(vg, CHROM_21_R, CHROM_21_G, CHROM_21_B);
+chromColor[22] = vgFindColorIx(vg, CHROM_22_R, CHROM_22_G, CHROM_22_B);
+chromColor[23] = vgFindColorIx(vg, CHROM_X_R, CHROM_X_G, CHROM_X_B);
+chromColor[24] = vgFindColorIx(vg, CHROM_Y_R, CHROM_Y_G, CHROM_Y_B);
+chromColor[25] = vgFindColorIx(vg, CHROM_M_R, CHROM_M_G, CHROM_M_B);
+chromColor[26] = vgFindColorIx(vg, CHROM_Un_R, CHROM_Un_G, CHROM_Un_B);
 
-chromColor[0] = vgFindColorIx(vg, 0,0, 0); /*black*/
-chromColor[1] = vgFindColorIx(vg, 0xff,0xcc, 0xcc);  /* light red */
-chromColor[2] = vgFindColorIx(vg, 0xcc,0, 0);      /* med red */
-chromColor[3] = vgFindColorIx(vg, 0xff,0, 0);      /* bright red */
-
-chromColor[4] = vgFindColorIx(vg, 0xff,0x66,0);     /* bright orange */
-chromColor[5] = vgFindColorIx(vg, 0xff,0x99,0);
-chromColor[6] = vgFindColorIx(vg, 0xff,0,0xcc);     /* magenta */
-
-chromColor[7] = vgFindColorIx(vg, 0xff,0xff,0x0);     /* bright yellow  */
-chromColor[8] = vgFindColorIx(vg, 0xcc,0xcc,0x99);     /* olive green*/
-chromColor[9] = vgFindColorIx(vg, 0x99,0x66,0x0);   /* brown */
-
-chromColor[10] = vgFindColorIx(vg, 0,0xff,0);      /*bt gr*/
-chromColor[11] = vgFindColorIx(vg, 0xcc,0xff,0);    /* yellow green */
-chromColor[12] = vgFindColorIx(vg, 0x66,0x66,0);  /* dark  green*/
-
-chromColor[13] = vgFindColorIx(vg, 0xcc,0xff,0xff);  /*lt cyan*/
-chromColor[14] = vgFindColorIx(vg, 0,0xff,0xff);    /*med cyan*/
-chromColor[15] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
-
-chromColor[16] = vgFindColorIx(vg, 0x99,0xcc,0xff);  /*light med blue */
-chromColor[17] = vgFindColorIx(vg, 0x66,0x99,0xff);  /* med blue */
-chromColor[18] = vgFindColorIx(vg, 0,0 ,0xcc);     /* deep blue */
-
-chromColor[19] = vgFindColorIx(vg, 0xcc,0x99,0xff);  /*lt violet*/
-chromColor[20] = vgFindColorIx(vg, 0xcc,0x33,0xff);  /* med violet */
-chromColor[21] = vgFindColorIx(vg, 0x99,0,0xcc);    /* dark violet */
-
-chromColor[22] = vgFindColorIx(vg, 0xcc,0xcc,0xcc); /* light gray */
-chromColor[23] = vgFindColorIx(vg, 0x99,0x99,0x99); /* med gray */
-chromColor[24] = vgFindColorIx(vg, 0x66,0x66,0x66);  /* med gray */
-
-chromColor[25] = vgFindColorIx(vg, 0x0,0x0,0x0); /* black */
-/*
-vgMakeColorGradient(vg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
-vgMakeColorGradient(vg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
-vgMakeColorGradient(vg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
-vgMakeColorGradient(vg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
-vgMakeColorGradient(vg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
-vgMakeColorGradient(vg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
-vgMakeColorGradient(vg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
-vgMakeColorGradient(vg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
-chromColor[0] = kshadesOfChrom1[LOW];
-chromColor[1] = shadesOfChrom1[MEDIUM];
-chromColor[2] = shadesOfChrom1[BRIGHT];
-chromColor[3] = shadesOfChrom2[LOW];
-chromColor[4] = shadesOfChrom2[MEDIUM];
-chromColor[5] = shadesOfChrom2[BRIGHT];
-chromColor[6] = shadesOfChrom3[LOW];
-chromColor[7] = shadesOfChrom3[MEDIUM];
-chromColor[8] = shadesOfChrom3[BRIGHT];
-chromColor[9] = shadesOfChrom4[LOW];
-chromColor[10] = shadesOfChrom4[MEDIUM];
-chromColor[11] = shadesOfChrom4[BRIGHT];
-chromColor[12] = shadesOfChrom5[LOW];
-chromColor[13] = shadesOfChrom5[MEDIUM];
-chromColor[14] = shadesOfChrom5[BRIGHT];
-chromColor[15] = shadesOfChrom6[LOW];
-chromColor[16] = shadesOfChrom6[MEDIUM];
-chromColor[17] = shadesOfChrom6[BRIGHT];
-chromColor[18] = shadesOfChrom7[LOW];
-chromColor[19] = shadesOfChrom7[MEDIUM];
-chromColor[20] = shadesOfChrom7[BRIGHT];
-chromColor[21] = shadesOfChrom8[LOW];
-chromColor[22] = shadesOfChrom8[MEDIUM];
-chromColor[23] = shadesOfChrom8[BRIGHT];
-*/
 chromosomeColorsMade = TRUE;
 }
 
@@ -3816,6 +3769,14 @@ else if (!strcmp(name,"Y"))
     chromNum = 24;
 else if (!strcmp(name,"Y "))
     chromNum = 24;
+else if (!strcmp(name,"M"))
+    chromNum = 25;
+else if (!strcmp(name,"M "))
+    chromNum = 25;
+else if (!strcmp(name,"Un"))
+    chromNum = 26;
+else if (!strcmp(name,"Un "))
+    chromNum = 26;
 else if (!strcmp(name,"I"))
     chromNum = 1;
 else if (!strcmp(name,"I "))
@@ -3836,7 +3797,7 @@ else if (!strcmp(name,"V"))
     chromNum = 5;
 else if (!strcmp(name,"V "))
     chromNum = 5;
-if (chromNum > 24) chromNum = 0;
+if (chromNum > CHROM_COLORS) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
 }
@@ -6657,7 +6618,7 @@ if (!hideControls)
     if( chromosomeColorsMade )
         {
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
-        hPrintf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=551 HEIGHT=18 ><BR>\n");
+        hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
         }
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     // hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
