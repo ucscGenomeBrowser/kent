@@ -64,4 +64,5 @@ DIRS = \
 	hgMrnaRefseq \
 	hgCGAP \
 	schema \
+	tfbsConsLoc \
 	tfbsConsSort
