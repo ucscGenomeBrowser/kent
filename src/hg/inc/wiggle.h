@@ -261,4 +261,7 @@ void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
  *	limits for all the data
  */
 
+/*	in lib/wigDataStream.c	*/
+struct wiggleDataStream *newWigDataStream();
+
 #endif /* WIGGLE_H */
