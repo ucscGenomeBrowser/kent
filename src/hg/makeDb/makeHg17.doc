@@ -4133,3 +4133,146 @@ cat `ls -1 *.lav | sort -g` \
 #Average job time:                  38s       0.64m     0.01h    0.00d
 #Longest job:                      147s       2.45m     0.04h    0.00d
 #Submission to last job:           147s       2.45m     0.04h    0.00d
+
+
+# RESCORE CHICKEN BLASTZ (DONE 6/23/04 angie)
+    # Webb noticed low scores when using non-default BLASTZ_Q scoring matrix 
+    # and repeats abridged --
+    # PSU's restore_rpts program rescored alignments with default matrix 
+    # instead of BLASTZ_Q matrix.  Rescore them here so the chainer sees 
+    # the higher scores:
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+      axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.preRescore
+    mv axtChrom.rescore axtChrom
+
+
+# CHAIN CHICKEN BLASTZ (DONE 6/23/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -minScore=5000 $1 \
+    /iscratch/i/hg17/bothMaskedNibs \
+    /iscratch/i/galGal2/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+    # axtChrom/chr18_random.axt is empty, so the {out line +} check failed:
+#Completed: 45 of 46 jobs
+#Crashed: 1 jobs
+#Average job time:                  46s       0.76m     0.01h    0.00d
+#Longest job:                      273s       4.55m     0.08h    0.00d
+#Submission to last job:           519s       8.65m     0.14h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain hg17 ${c}_chainGalGal2 $i
+    end
+
+
+# NET HUMAN BLASTZ (DONE 6/23/04 angie)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    netClass noClass.net hg17 galGal2 human.net
+
+    # Make a 'syntenic' subset:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netGalGal2 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 netSyntenyGalGal2 stdin
+    # Add entries for chainGalGal2, netGalGal2, syntenyGalGal2 to 
+    # human/hg17 trackDb
+
+
+# GENERATE GALGAL2 MAF FOR MULTIZ FROM NET (DONE 6/23/04 angie)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    netSplit human.net net
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/hg17/nib \
+        /cluster/data/galGal2/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.hg.maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/galGal2/chrom.sizes \
+            $maf -tPrefix=hg17. -qPrefix=galGal2.
+    end
+
+
+# MAKE VSGALGAL2 DOWNLOADABLES (DONE 6/23/04 angie)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
+    ln all.chain chicken.chain
+    zip /cluster/data/hg17/zip/chicken.chain.zip chicken.chain
+    rm chicken.chain
+    ln human.net chicken.net
+    zip /cluster/data/hg17/zip/chicken.net.zip chicken.net
+    rm chicken.net
+    ln humanSyn.net chickenSyn.net
+    zip /cluster/data/hg17/zip/chickenSyn.net.zip chickenSyn.net
+    rm chickenSyn.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
+    mv /cluster/data/hg17/zip/chicken*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
