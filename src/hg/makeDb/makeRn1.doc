@@ -160,21 +160,14 @@ REPEAT MASKING (DONE 11/26/02)
         cd ~/rn1
         ./jkStuff/liftOut5.sh
 
-        #- Load the .out files into the database with:
-        ssh hgwdev
-        cd ~/rn1
-        hgLoadOut rn1 ?{,?}/*.fa.out
-
-        ssh eieio
-        cd ~/rn1
-        #- Soft-mask (lower-case) the contig and chr .fa's
-        ./jkStuff/makeFaMasked.sh
-        #- Make hard-masked .fa.masked files as well:
-        ./jkStuff/makeHardMasked.sh
-        #- Rebuild the nib, mixedNib, maskedNib files:
-        ./jkStuff/makeNib.sh
-        #- Rebuild the .zip files
-        ./jkStuff/zipAll.sh
+	# soft-mask contig .fa's with .out's
+        foreach i (?{,?})
+            foreach j ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa \
+                       $i/chr${i}_random_?{,?}/chr${i}_random_?{,?}.fa)
+                maskOutFa $j $j.out $j -soft
+            end
+            echo done $i
+        end
 
         #- copy the contig .fa's to the appropriate place on /scratch
         ssh kkstore
@@ -182,13 +175,14 @@ REPEAT MASKING (DONE 11/26/02)
         cp -p ~/rn1/?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa \
           /scratch/hg/rn1/contigs.1126
 
-TODO        #- Copy the .zip files to hgwdev:/usr/local/apache/...
+        #- Load the .out files into the database with:
         ssh hgwdev
         cd ~/rn1
-        ./jkStuff/cpToWeb.sh
+        hgLoadOut rn1 ?{,?}/*.fa.out
 
 
-VERIFY REPEATMASKER RESULTS (IN PROGRESS)
+VERIFY REPEATMASKER RESULTS (DONE 11/26/02)
+
     # Run featureBits on rn1 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits rn1 rmsk
@@ -196,23 +190,38 @@ VERIFY REPEATMASKER RESULTS (IN PROGRESS)
     featureBits mm2 rmsk
     # --> 1037964664 bases of 2726995854 (38.063%) in intersection
 
+    # Run RepeatMasker manually on a couple mini-contigs, verify that 
+    # they appear in the chrom .out and are masked in the sequence file. 
+
+    # Look at the DNA sequence of some RepeatMasker elements in the 
+    # genome browser;  visually compare them to the RepeatMasker library 
+    # elements and make sure an alignment is plausible.  
+
 
 MAKE LIFTALL.LFT (DONE 11/26/02)
+
     cd ~/rn1
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 11/26/02)
 
-Load chromosome sequence info into database and save size info.
+     # Load chromosome sequence info into database and save size info.
      ssh hgwdev
      hgsql rn1  < ~/src/hg/lib/chromInfo.sql
      cd ~/rn1
      hgNibSeq -preMadeNib rn1 /cluster/store4/rn1/nib \
        ?{,?}/chr?{,?}{,_random}.fa
      echo "select chrom,size from chromInfo" | hgsql rn1 > chrom.sizes
+     # Make /gbdb/rn1/nib directory
+     mkdir -p /gbdb/rn1/nib
+     cd /gbdb/rn1/nib
+     foreach f ( /cluster/store4/rn1/nib/chr*.nib )
+       ln -s $f
+     end
 
-Make and load GC percent table
+
+MAKE GCPERCENT (DONE 11/26/02)
      ssh hgwdev
      cd /cluster/store4/rn1/bed
      mkdir gcPercent
@@ -239,38 +248,95 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN1 (DONE 11/26/02)
     cvs commit makefile
 
 
+GOLD AND GAP TRACKS (DONE 11/26/02)
+    ssh hgwdev
+    cd ~/rn1
+    hgGoldGapGl -noGl rn1 /cluster/store4/rn1 .
+
+
+GETTING FRESH mRNA, EST, REFSEQ SEQUENCE FROM GENBANK. (IN PROGRESS)
+
+This will create a genbank.132 directory containing compressed
+GenBank flat files and a mrna.132 containing unpacked sequence
+info and auxiliary info in a relatively easy to parse (.ra) 
+format.
+
+    # Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
+    # look at the README.genbank.  Figure out the current release number
+    # (which is 132).
+    # Consider deleting one of the older genbank releases.  It's
+    # good to at least keep one previous release though.
+    # Where there is space make a new genbank directory.  Create a
+    # symbolic link to it:
+    ssh kkstore
+    mkdir /cluster/store2/genbank.132
+    cd /cluster/store2/genbank.132
+    ftp ftp.ncbi.nih.gov
+      # (do anonymous log-in).
+      cd genbank
+      prompt
+      mget README.genbank gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv* \
+        gbbct* gbhtc* gbpat* gbphg* gbpln*
+      quit
+    # This will take at least 2 hours.
+    # Download files to /cluster/store1/refSeqCum/112602 (Matt)
+    mkdir -p /cluster/store1/refSeqCum/112602
+    cd /cluster/store1/refSeqCum/112602
+    ftp ftp.ncbi.nih.gov
+      # (do anonymous log-in).
+      cd refseq/cumulative
+      prompt
+      mget rscu.bna.Z rscu.fsa.Z rscu.fsa_nt.Z rscu.gbff.Z rscu.gnp.Z
+      quit
+    # Make sure you have the latest version of gbToFaRa in your path.
+    # Unpack the refSeq data with gbToFaRa:
+    uncompress *.Z
+    gbToFaRa -byOrganism=???? (Matt)
+    # Unpack the mrna data with gbToFaRa:
+    mkdir -p /cluster/store2/mrna.132
+    cd /cluster/store2/mrna.132
+    gunzip -c ../genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* | \
+      gbToFaRa -byOrganism=org \
+        ~kent/hg/h/xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin
+    gunzip -c ../genbank.132/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* | \
+      gbToFaRa -byOrganism=org \
+        ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
+    # This stuff is for human, but we need to do it when we download seq:
+    gunzip -c /cluster/store2/genbank.132/gbpri*.gz | \
+      gbToFaRa ~kent/hg/h/mrna.fil mrna.fa mrna.ra mrna.ta stdin
+    gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+      gbToFaRa ~kent/hg/h/mrna.fil est.fa est.ra est.ta stdin
+    gunzip -c /cluster/store2/genbank.132/gbest*.gz | \
+      gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
+
+
 COPY GENBANK MRNA DATA TO THE CLUSTER (already done)
    ssh kkstore
    # Copy the rna data to the cluster if it isn't there already:
-   mkdir /scratch/hg/mrna.130
-   cp -r /cluster/store1/mrna.130/org /scratch/hg/mrna.130
+   mkdir /scratch/hg/mrna.132
+   cp -r /cluster/store2/mrna.132/org /scratch/hg/mrna.132
    # Distribute this data to the local nodes: ask sysadmins, or run:
    sudo /cluster/install/utilities/updateLocal
 
 
-CREATE RELATIONAL MRNA DATABASE (MRNA/EST DONE 11/26/02; REFSEQ TODO)
+CREATE RELATIONAL MRNA DATABASE (TODO)
     ssh hgwdev
-    hgLoadRna new rn1
-    mkdir -p /gbdb/rn1/mrna.130
-    cd /gbdb/rn1/mrna.130
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/mrna.fa
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/mrna.ra
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/est.fa
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/est.ra
-    # TODO: this has not yet been loaded:
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/refSeq.fa
-    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/refSeq.ra
-
+    # Make symbolic links from hgwdev's /gbdb to the real .fa locations:
+    mkdir -p /gbdb/rn1/mrna.132
+    cd /gbdb/rn1/mrna.132
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.fa
+    ln -s /cluster/store2/mrna.132/org/Rattus_norvegicus/est.fa
+    ln -s /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.fa
+    # Call hgLoadRna with the /gbdb locations:
     cd /cluster/store2/temp
-    hgLoadRna add rn1 /gbdb/rn1/mrna.130/mrna.fa \
-      /gbdb/rn1/mrna.130/mrna.ra
+    hgLoadRna new rn1
+    hgLoadRna add rn1 /gbdb/rn1/mrna.132/mrna.fa \
+      /cluster/store2/mrna.132/org/Rattus_norvegicus/mrna.ra
     # This est load will take quite some time to complete:
-    hgLoadRna add rn1 /gbdb/rn1/mrna.130/est.fa \
-      /gbdb/rn1/mrna.130/est.ra
-
-    # TODO: this has not yet been loaded:
-    hgLoadRna add -type=refSeq rn1 /gbdb/rn1/mrna.130/refSeq.fa \
-      /gbdb/rn1/mrna.130/refSeq.ra
+    hgLoadRna add rn1 /gbdb/rn1/mrna.132/est.fa \
+      /cluster/store2/mrna.132/org/Rattus_norvegicus/est.ra
+    hgLoadRna add -type=refSeq rn1 /gbdb/rn1/mrna.132/refSeq.fa \
+      /cluster/store1/refSeqCum/112602/org/Rattus_norvegicus/refSeq.ra
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
@@ -284,7 +350,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
       mkdir -p $i
       cd $i
       ls -1S /scratch/hg/rn1/contigs.1126/* > genome.lst
-      ls -1 /scratch/hg/mrna.130/Rattus_norvegicus/$i.fa > mrna.lst
+      ls -1 /scratch/hg/mrna.132/Rattus_norvegicus/$i.fa > mrna.lst
       cp ~/lastRn/bed/$i/gsub .
       mkdir psl
       gensub2 genome.lst mrna.lst gsub spec
@@ -438,17 +504,90 @@ o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn1
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TODO)
+SIMPLE REPEAT TRACK (DONE* 11/26/02)
+ * 18 of the 590 contigs were re-run with TRF version 2 (trf.2) due to 
+   crash/hang problems with TRF v3.01 (trf).  
 
-Make sure that the contig files are lower-case repeat masked
-then do
-   ssh eieio
-   cd ~/rn1
-   source jkStuff/makeTrfFa.sh
-Then make sure there is enough space available on /scratch
-and do
-   cp -Rp ~/rn1/trfFa /scratch/hg/rn1/trfFa.0802
-   # sudo /cluster/install/utilities/updateLocal
+    ssh kk
+    mkdir ~/rn1/bed/simpleRepeat
+    cd ~/rn1/bed/simpleRepeat
+    cp ~/lastRn/bed/simpleRepeat/gsub .
+    mkdir trf
+    ls -1 /scratch/hg/rn1/contigs.1126/*.fa > genome.lst
+    touch single
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para push 
+    # When job is done do:
+    liftUp simpleRepeat.bed ~/rn1/jkStuff/liftAll.lft warn trf/*.bed
+
+    # Load this into the database as so
+    ssh hgwdev
+    cd ~/rn1/bed/simpleRepeat
+    hgLoadBed rn1 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 11/27/02)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd ~/rn1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd ~/rn1
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+        $c/lift/ordered.lst > $c/lift/oTrf.lst
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+      endif
+      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+        jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      if (-e $c/lift/rTrf.lst) then
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+    # Make a trfMasked version of the contigs:
+    cd ~/rn1
+    mkdir trfFa
+    foreach f (?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa)
+      set c = $f:t:r
+      maskOutFa -softAdd $f bed/simpleRepeat/trfMask/$c.bed trfFa/$c.fa.trf
+    end
+    # Then make sure there is enough space available on /scratch and do
+    ssh kkstore
+    cp -Rp ~/rn1/trfFa /scratch/hg/rn1/trfFa.1127
+    # ask for binrsync, or sudo /cluster/install/utilities/updateLocal
+
+
+MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
+
+    # This used to be done right after RepeatMasking.  Now, we mask with 
+    # TRF as well, so do this after the "PREPARING SEQUENCE" step above.
+    ssh eieio
+    cd ~/rn1
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    ./jkStuff/makeFaMasked.sh
+    #- Make hard-masked .fa.masked files as well:
+    ./jkStuff/makeHardMasked.sh
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    ./jkStuff/makeNib.sh
+    #- Rebuild the .zip files
+    ./jkStuff/zipAll.sh
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/rn1
+    ./jkStuff/cpToWeb.sh
 
 
 PRODUCING GENSCAN PREDICTIONS (TODO)
@@ -521,28 +660,6 @@ o - Load into the database as so:
      ldHgGene rn1 genscan genscan.gtf
      hgPepPred rn1 generic genscanPep genscan.pep
      hgLoadBed rn1 genscanSubopt genscanSubopt.bed
-
-
-SIMPLE REPEAT TRACK (TODO)
-
-o - Create cluster parasol job like so:
-        ssh kk
-        cd ~/rn1/bed
-        mkdir simpleRepeat
-        cd simpleRepeat
-        cp ~/lastOo/bed/simpleRepeat/gsub
-        mkdir trf
-        ls -1 /scratch/hg/rn1/contigs/*.fa > genome.lst
-        gensub2 genome.lst single gsub spec
-        para make spec
-        para push 
-     When job is done do:
-        liftUp simpleRepeat.bed ~/rn1/jkStuff/liftAll.lft warn trf/*.bed
-
-o - Load this into the database as so
-        ssh hgwdev
-        cd ~/rn1/bed/simpleRepeat
-        hgLoadBed rn1 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
 EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
@@ -879,7 +996,7 @@ Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store1/genbank.130 and unpacked by organism into /cluster/store1/mrna.130/org. 
+/cluster/store2/genbank.132 and unpacked by organism into /cluster/store2/mrna.132/org. 
 
 Set up cluster run more or less as so:
       ssh kk
@@ -887,7 +1004,7 @@ Set up cluster run more or less as so:
       mkdir xenoMrna
       cd xenoMrna
       ls -1S /scratch/hg/rn1/mContigs/* > genome.lst
-      ls -1S /scratch/hg/mrna.130/org/*/mrna.fa > allMrna
+      ls -1S /scratch/hg/mrna.132/org/*/mrna.fa > allMrna
 Then edit allMrna removing the Mus.musculus line,  and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
@@ -916,10 +1033,10 @@ Load into database as so:
        cd ~/rn1/bed/xenoMrna
        hgLoadPsl rn1 xenoMrna.psl -tNameIx
 Load other RNA into database as so:
-       cd /cluster/store1/mrna.130/topOrg
+       cd /cluster/store2/mrna.132/topOrg
 Note - need to describe how topOrg was made.  See topOrg/README...
        foreach i (*/mrna.fa)
-           hgLoadRna add rn1 /cluster/store1/mrna.130/org/$i $i:r.ra -type=$i:r
+           hgLoadRna add rn1 /cluster/store2/mrna.132/org/$i $i:r.ra -type=$i:r
            echo done $i
         end
 
